@@ -1,0 +1,45 @@
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+import PressTeaserComponent, { PressTeaser } from "./press-teaser";
+import PageTitle from "../components/page-title";
+
+export default function Presse() {
+  const files = fs.readdirSync(path.join("app/presse/content"));
+
+  const pressTeaserList: PressTeaser[] = files.map((filename) => {
+    const markdownWithMeta = fs.readFileSync(
+      path.join("app/presse/content", filename),
+      "utf-8"
+    );
+    const frontmatter = matter(markdownWithMeta);
+    const pressTeaser: PressTeaser = {
+      slug: filename.replace(".md", ""),
+      title: frontmatter.data.title,
+      abstract: frontmatter.data.abstract,
+      date: new Date(frontmatter.data.date),
+      link: frontmatter.data.link,
+      author: frontmatter.data.author,
+      categories: frontmatter.data.categories,
+      imageName: frontmatter.data.image,
+    };
+
+    return pressTeaser;
+  });
+
+  pressTeaserList.sort((a, b) => b.date.getTime() - a.date.getTime());
+
+  return (
+    <>
+      <PageTitle text="Medienberichte im Überblick" />
+
+      {pressTeaserList.map((teaser, index) => (
+        <PressTeaserComponent
+          key={teaser.slug}
+          teaser={teaser}
+          color={index % 2 === 0 ? "white" : "black"}
+        />
+      ))}
+    </>
+  );
+}

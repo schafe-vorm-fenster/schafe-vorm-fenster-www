@@ -1,0 +1,43 @@
+{
+  "name": "schafe-vorm-fenster-www",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Schafe vorm Fenster project website.",
+  "author": {
+    "name": "Schafe vorm Fenster UG",
+    "email": "jan@schafe-vorm-fenster.de"
+  },
+  "scripts": {
+    "build": "yarn images && next build",
+    "dev": "next dev --turbopack",
+    "images": "cp app/presse/img/*.* public/img/presse/ && cp app/funktionen/img/*.* public/img/funktionen/ && cp app/hilfe/content/img/hilfe/*.* public/img/hilfe/",
+    "lint": "next lint",
+    "start": "next start"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "embla-carousel-autoplay": "^8.5.1",
+    "embla-carousel-react": "^8.5.1",
+    "gray-matter": "^4.0.3",
+    "interweave": "^13.1.0",
+    "markdown-it": "^14.1.0",
+    "next": "15.0.3",
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0-rc-66855b96-20241106"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "15.0.3",
+    "interweave-ssr": "^2.0.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}
