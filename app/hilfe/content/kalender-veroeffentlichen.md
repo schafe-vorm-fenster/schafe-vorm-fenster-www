@@ -3,19 +3,16 @@ title: Wie kann ich meinen Kalender veröffentlichen?
 category: "Erste Schritte"
 ---
 
-Damit wir deine Termine anzeigen können, musst du deinen Kalender veröffentlichen. Das ist
-nur einmal am Anfang nötig - später wenn du neue Termine einstellst, brauchst du dich hierum
-nicht mehr zu kümmern.
+Damit wir deine Termine anzeigen können, musst du **deinen Kalender veröffentlichen**. Dies ist nur einmal zu Beginn nötig – neue Termine werden später automatisch übernommen, ohne dass du dich erneut darum kümmern musst.
 
-Hierzu musst du in die Einstellungen deines Kalenders gehen.
+### So veröffentlichst du deinen Kalender
 
-Dort gibt es einen Abschnitt "Zugriffsberechtigungen für Termine". Aktiviere die
-Einstellung "Öffentlich freigeben" und achte darauf, dass rechts in der Auswahl
-"Alle Termindetails anzeigen" steht.
+- Gehe in die **Einstellungen** deines Kalenders.
+- Im Abschnitt **„Zugriffsberechtigungen für Termine“** aktiviere die Option **„Öffentlich freigeben“**.
+- Stelle sicher, dass in der rechten Auswahl **„Alle Termindetails anzeigen“** ausgewählt ist.
 
-Weiter unten bei "Kalender integrieren" findest du dieKalender-IDdeines Kalenders für den nächsten Schritt: die Anmeldung bei uns.
+![Google Kalender veröffentlichen](/img/hilfe/Google-Kalender-veröffentlichen.jpg)
+
+Im Bereich **„Kalender integrieren“** findest du die **Kalender-ID** deines Kalenders. Diese benötigst du für den nächsten Schritt: die Anmeldung bei uns.
 
 ![Google Kalender ID finden](/img/hilfe/Google-Kalender-Id-finden.jpg)
-Hier findest du auch Möglichkeiten deinen Kalenderauf deiner eigenen
-Webseiteeinzubinden. Hierzu findest du mehr weiter unter auf dieser Seite bei
-"Nutzen und verbreiten".

@@ -3,13 +3,8 @@ title: Ist das Angebot wirklich kostenlos?
 category: "Tarife und Preise"
 ---
 
-Ja, aber.Wichtig für das Zusammenleben und den Austausch ist der offene
-Zugang zu Informationen - und zwar nicht nur zum Lesen, sondern auch um selbst etwas
-beizutragen. Die Dorfkalender sind dezentral gedacht, weil es nicht möglich ist über eine
-zentrale Redaktion die Vielfalt an Angeboten auf Dörfern zusammen zu tragen. Deswegen ist es
-aber auch unerlässlich, dass eskeine Hürde im Sinne einer Gebührgibt.
-Füreinfache Termineinträgeist undbleibt das Angebot
-kostenlos.
+Ja, aber: Ein offener Zugang zu Informationen ist essenziell für das Zusammenleben und den Austausch – nicht nur, um Informationen lesen zu können, sondern auch, um selbst aktiv etwas beizutragen. Die Dorfkalender sind bewusst dezentral gestaltet, da es unmöglich ist, die Vielfalt der Angebote in den Dörfern zentral zu erfassen.
 
-Aber natürlich müssen auch wir unsere Kosten decken und die Plattform weiter entwickeln. Wie
-ziehen die Grenze dort, wo nicht mehr nur eine Information veröffentlicht wird,sondern eine Bewerbung erfolgt. Dazu haben wirkostenpflichtige Tarife.
+Aus diesem Grund ist es uns wichtig, dass es **keine Hürde in Form einer Gebühr** gibt. Das **Einstellen einfacher Termine** ist und bleibt daher **kostenlos**.
+
+Natürlich müssen auch wir unsere Kosten decken und die Plattform weiterentwickeln. Deshalb ziehen wir die Grenze dort, wo es nicht mehr nur um die Veröffentlichung von Informationen geht, sondern um **Werbung**. Für solche Einträge bieten wir **kostenpflichtige Tarife** an.

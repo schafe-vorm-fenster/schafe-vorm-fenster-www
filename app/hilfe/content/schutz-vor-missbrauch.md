@@ -3,13 +3,10 @@ title: Wie verhindert ihr den Missbrauch?
 category: "Sonstiges"
 ---
 
-Häufig werden wir gefragt, wie wir den Missbrauch der Plattform verhindern. Meist besteht die
-Vorstellung, dass das ganz kompliziert sei - vermutlich aufgrund der fragwürdigen
-Entwicklungen auf den großen Social Media Plattformen.
+Häufig werden wir gefragt, wie wir den Missbrauch der Plattform verhindern. Oft wird angenommen, dass dies sehr kompliziert sei – vermutlich aufgrund der fragwürdigen Entwicklungen auf großen Social-Media-Plattformen.
 
-Dabei ist es ganz einfach: Von unseren Akteuren - also den Anbietern von Terminen über
-öffentliche Kalender -erfassen und prüfen wirbei der Anmeldungalle nötigen Kontaktdaten. Fast immer haben wir zu Beginn auch einenpersönlichen Kontakt. So können zwar viele Akteure Informationen bei uns
-veröffentlichen - aber wirkennen uns immer gegenseitig. So gab es bishernoch keinen einzigen Falldes Missbrauchs.
+Dabei ist es überraschend einfach: Von unseren **Akteuren** – also den Anbietern von Terminen über öffentliche Kalender – erfassen und prüfen wir bei der Anmeldung **alle erforderlichen Kontaktdaten**. In den meisten Fällen gibt es zu Beginn sogar einen **persönlichen Kontakt**.
 
-Zusätzlich sindunsere Nutzer sehr aufmerksam. Das merken wir vor allem
-daran, wenn wir Fragen, Rückmeldungen und Korrekturbitten zu den Terminen erhalten.
+Das bedeutet, dass viele Akteure zwar Informationen bei uns veröffentlichen können, wir uns aber **immer gegenseitig kennen**. Bislang gab es **keinen einzigen Fall** von Missbrauch.
+
+Zusätzlich tragen unsere **Nutzer** zur Sicherheit bei, da sie sehr aufmerksam sind. Das zeigt sich vor allem durch die vielen **Fragen, Rückmeldungen** und **Korrekturbitten** zu den veröffentlichten Terminen.

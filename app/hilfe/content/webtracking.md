@@ -3,14 +3,8 @@ title: Welche Daten von mir werden verwendet?
 category: "Sonstiges"
 ---
 
-Bei der Nutzung der Dorfkalender verwendet wir eindatenschutz-konformes Webtrackingdes Hamburger
-AnbieterseTracker. Dabei wird nur eine anonymisierte
-IP-Adresse verwendet. Es kommen keine Cookies zum Einsatz. Wir wissen also nichts über
-unsere Nutzer und nehmen nur statistische Auswertung der Nutzung vor.
+Bei der Nutzung der Dorfkalender setzen wir auf ein **datenschutzkonformes Webtracking** des Hamburger Anbieters **etracker**. Dabei wird ausschließlich eine **anonymisierte IP-Adresse** verwendet, und es kommen **keine Cookies** zum Einsatz. Das bedeutet, wir speichern keine persönlichen Informationen über unsere Nutzer und führen lediglich eine **statistische Auswertung** der Nutzung durch.
 
-Das unterscheidet Schafe vorm Fenster wesentlich von anderen Plattformen, die versuchen den
-Austausch zu unterstützen - dafür aber im Gegenzug Daten sammeln und Benutzerprofile
-erstellen.
+Das unterscheidet „Schafe vorm Fenster“ deutlich von anderen Plattformen, die zwar den Austausch fördern, dafür aber **Daten sammeln** und **Benutzerprofile erstellen**.
 
-Von unseren Akteuren - also den Anbietern von Terminen über öffentliche Kalender - erfassen
-wir natürlich auch alle nötigen Kontaktdaten - aber keinerlei Nutzungsdaten.
+Von unseren **Akteuren** – also den Anbietern von Terminen über öffentliche Kalender – erheben wir selbstverständlich die **notwendigen Kontaktdaten**, jedoch keinerlei Nutzungsdaten.

@@ -3,18 +3,17 @@ title: Wie kann ich ein PDF an einen Termin anhängen?
 category: "Termine optimal anlegen"
 ---
 
-Manchmal kann es sinnvoll sein, einePDF-Dateimit dem Termin zusammen zu
-veröffentlichen. Bei formalen Sitzungen kann dies dieEinladungund dieAgendasein. Oder bei geschlossenen oder kostenpflichtigen Veranstaltungen
-einAnmeldeformular.
+Manchmal kann es sinnvoll sein, eine **PDF-Datei** zusammen mit einem Termin zu veröffentlichen. Bei formalen Sitzungen könnte dies die **Einladung** und **Agenda** sein, oder bei geschlossenen oder kostenpflichtigen Veranstaltungen ein **Anmeldeformular**.
 
-Das funktioniert genauso wie bei Bildern - bitte schau dir diedetaillierte Anleitung
-für Bilderan.
+Das Vorgehen ist ähnlich wie bei Bildern – schau dir dazu unsere **detaillierte Anleitung für Bilder** an.
 
-Kurz zusammengefasst: Um ein PDF im Termin zu platzieren benötigst du eine PDF-Datei. Klicke
-in derTerminmaskeauf das Feld "Beschreibung"
-auf "Anhang". Hierlädst du nun deine Datei hoch.
-Nachdem sie in der Beschreibung angezeigt wird, musst du die Datei noch unbedingtöffentlich freigeben.
+### Kurz zusammengefasst
 
-Bitte denke daran, dennoch einenguten Beschreibungstexteinzugeben. Die
-PDF-Datei sollte nur ergänzende Details enthalten. Die meisten Nutzer werden nur den
-Beschreibungstext sehen und lesen.
+- Du benötigst eine **PDF-Datei**.
+- Klicke in der **Terminmaske** auf das Feld **„Beschreibung“** und dann auf **„Anhang“**.
+- Lade deine Datei hoch.
+- Sobald die Datei in der Beschreibung angezeigt wird, stelle sicher, dass sie **öffentlich freigegeben** ist.
+
+### Wichtiger Hinweis
+
+Vergiss nicht, einen **aussagekräftigen Beschreibungstext** einzugeben. Die PDF-Datei sollte nur **ergänzende Details** enthalten. Die meisten Nutzer sehen und lesen in erster Linie den **Beschreibungstext**.

@@ -3,11 +3,8 @@ title: Wie kann ich einen Link verschicken?
 category: "Nutzen und verbreiten"
 ---
 
-Jeder Dorfterminkalender hateine feste Adresse. Somit kannst du einfach den
-Link zu deinem Dorfterminkalender beliebig verschicken.
+Jeder **Dorfterminkalender** hat eine feste Adresse, sodass du den Link zu deinem Kalender ganz einfach weitergeben kannst.
 
-Auf dem Smartphone im Browser gibt es i.d.R. einTeilen-Icon, was dir das
-Versenden einfacher macht.
+Auf dem Smartphone findest du in der Regel ein **Teilen-Icon** im Browser, das das Versenden noch einfacher macht.
 
-Ein sehr guter Weg ist es, den Link mit einem lieben Gruß über die bestehendenSignal- oder WhatsApp-Chatgruppezu verbreiten. Du kannst ihn aber auch perE-Mailversenden, beiFacebookposten oder auf anderen
-wegen weitergeben.
+Ein guter Weg ist, den Link mit einem freundlichen Gruß in bestehenden **Signal-** oder **WhatsApp-Gruppen** zu teilen. Alternativ kannst du ihn per **E-Mail** verschicken, bei **Facebook** posten oder auf anderen Wegen weitergeben.

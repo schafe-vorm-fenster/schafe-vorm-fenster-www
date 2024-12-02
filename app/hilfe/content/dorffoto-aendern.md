@@ -3,27 +3,33 @@ title: Wie kann ich das Dorffoto selbst ändern?
 category: "Daten und offene Daten"
 ---
 
-Der schnellste Weg ist es, wenn du selbst ein tolles Foto schießt. Dieseslädst du dann bei Wikimedia Commons hoch. Dabei
-wirst du nach einigen Angaben zum Bild gefragt - sehr wichtig ist, dass der Ort mit
-angegeben ist.Falls du noch kein Login hast, benötigst du einenAccount bei Wikimedia Commons. Anschließend schickst
-du uns den Link zu deinem Foto (dieser sieht in etwa so auf
-<https://commons.wikimedia.org/wiki/File:%C3%96tlingen_-_Panoramaansicht_klein.jpg)Schicken>
-kannst du uns denLink zum Bildam besten per E-Mail <anhallo@schafe-vorm-fenster.de>.
+Der schnellste Weg, ein tolles Foto zu deinem Dorf hinzuzufügen, ist es, selbst eines zu machen und es bei **Wikimedia Commons** hochzuladen.
 
-Klasse. Natürlich kannst du alle Einstellungen selbst in offenen Datenbanken erledigen. Das
-Bild ist ja schon bei Wikimedia Commons (siehe oben).Als nächsten Schritt muss das Bild
-im Wikidata-Eintrag deines Dorfes verlinkt sein. Hier ist bspw. der Eintrag zu Bröllin:<https://www.wikidata.org/wiki/Q107076254>. Dein Dorf
-kannst du einfach suchen. Unter "Bild"/"Image" kannst du ein Bild zuordnen. Die Suche hier
-erfolgt direkt in Wikimedia Commons und dein Bild sollte gut zu finden sein. Achte darauf,
-dass dein Bild das erste ist - derzeit verwenden wir immer das erste. Geschafft?Als
-letztes sollte die Zuordnung von geonames.org zu Wikidata geprüft werden. Meistens ist diese
-schon vorhanden. Und auch wir arbeiten mit daran, diese Verknüpfungen nachzupflegen, wenn
-sie fehlen. Hierzu gehst du aufhttps://www.geonames.org/. Dort kannst du per
-Dorfnamen dein Dorf suchen, bspw.<https://www.geonames.org/2943903/broellin.htmlfür>
-Bröllin. Unter dem Reiter "Alternate names" sollte ein Eintrag mit dem "code" "wkdt"
-und als "alternate name" die Wikidata Id (bspw. Q107076254 für Bröllin). Ist das
-so, ist alles gut. Wenn nicht, dann kannst du genau hier den "wkdt" Eintrag
-anlegen.Danach dauert es eine Weile (oft leider mehrere Tage) bis die Daten von
-geonames.org bereitgestellt werden und wir die Fotos importiert haben.
+### **Schritt 1: Foto hochladen**
 
-Wenn du ungeduldig bist, schreibe uns eine Nachricht.
+- Lade dein Foto bei [Wikimedia Commons](https://commons.wikimedia.org/) hoch.
+- Während des Hochladens wirst du nach einigen Angaben gefragt – besonders wichtig ist die **Angabe des Ortes**.
+- Falls du noch keinen Account hast, erstelle einen **Wikimedia Commons-Account**.
+- Anschließend schickst du uns den **Link zu deinem Foto**, z. B.:  
+  [https://commons.wikimedia.org/wiki/File:%C3%96tlingen\_-_Panoramaansicht_klein.jpg](https://commons.wikimedia.org/wiki/File:%C3%96tlingen_-_Panoramaansicht_klein.jpg)  
+  Den Link kannst du uns am besten per E-Mail an **<hallo@schafe-vorm-fenster.de>** senden.
+
+### **Schritt 2: Bild im Wikidata-Eintrag verlinken**
+
+- Dein Foto sollte im **Wikidata-Eintrag** deines Dorfes verlinkt werden. Beispiel:  
+  [Eintrag zu Bröllin](https://www.wikidata.org/wiki/Q107076254).
+- Suche deinen Ort in [Wikidata](https://www.wikidata.org/) und füge unter **„Bild“/„Image“** dein hochgeladenes Foto hinzu.
+- Die Suche erfolgt direkt in Wikimedia Commons, und dein Bild sollte leicht zu finden sein.
+- **Achte darauf, dass dein Bild das erste in der Liste ist**, da wir immer das erste Bild verwenden.
+
+### **Schritt 3: Verknüpfung mit GeoNames prüfen**
+
+- Überprüfe, ob dein Dorf in **GeoNames.org** mit Wikidata verknüpft ist.  
+  Beispiel: [Eintrag zu Bröllin](https://www.geonames.org/2943903/broellin.html).
+- Gehe zum Reiter **„Alternate Names“**. Dort sollte ein Eintrag mit dem **Code „wkdt“** und der entsprechenden **Wikidata-ID** (z. B. Q107076254 für Bröllin) stehen.
+- Ist dieser Eintrag nicht vorhanden, kannst du ihn anlegen.
+
+### **Wartezeit und Unterstützung**
+
+- Nach dem Anlegen dauert es leider oft mehrere Tage, bis GeoNames.org die Daten bereitstellt und wir die Fotos importieren können.
+- Wenn du ungeduldig bist, schreib uns eine Nachricht – wir helfen dir gern weiter!

@@ -3,40 +3,42 @@ title: Wie platziere ich ein Bild in einem Termin?
 category: "Termine optimal anlegen"
 ---
 
-Um einBild in einem Terminzu platzieren sind (leider) mehrere Schritte
-notwendig.
+Um ein **Bild in einem Termin** zu platzieren, sind (leider) mehrere Schritte notwendig.
 
-Dein Bild sollte deinenTermine möglichst gut repräsentieren. Manchmal kann
-man einen vorhandenen Flyer verwenden - oft ist es aber sinnvoller, eine vereinfachte
-Version zu erstellen. Achte darauf, dass möglichstkein Text auf dem Bildist. Schreibe alle Informationen in die Terminbeschreibung. Denke auch daran, dass fast alle
-Nutzer den Kalender auf demSmartphoneansehen - nutze also ein Motiv, dass
-auch dann noch gut zu erkennen ist und möglichst imQuerformatvorliegt.
+### **Ein passendes Bild auswählen**
 
-Das Bild oder Foto sollte im JPG- , PNG- oder einem anderen gängigen Grafikformat sein. Das
-ist aber fast immer der Fall.
+- Wähle ein Bild, das deinen Termin gut repräsentiert.
+- Ein vorhandener Flyer kann hilfreich sein, aber oft ist eine vereinfachte Version sinnvoller.
+- Vermeide **Text auf dem Bild** – alle wichtigen Informationen gehören in die **Terminbeschreibung**.
+- Denke daran, dass die meisten Nutzer den Kalender auf ihrem **Smartphone** ansehen. Wähle daher ein Motiv, das auch auf kleinen Bildschirmen gut erkennbar ist, und verwende bevorzugt das **Querformat**.
 
-Klicke in derTerminmaskeauf das FeldBeschreibungbzw.
-Anhang.Klicke auf "Anhang hinzufügen"und setze dort dein Foto
-ein.
+Das Bild sollte im **JPG-, PNG- oder einem anderen gängigen Grafikformat** vorliegen. Das ist in der Regel der Fall.
 
-Über diese Funktion kannst du ein Bild von deinem Computer in dein Google Drive hochladen.
-Wenn deine Bilder bereits dort liegen - bspw. weil du deine Flyer-Dateien eh im Google Drive
-ablegst - dann kannst du natürlich auch eine bereits bestehende Datei auswählen.
+### **Bild in den Termin einfügen**
 
-Das Bild wird nun so in der Beschreibung angezeigt.
+- Klicke in der **Terminmaske** auf das Feld **Beschreibung** oder **Anhang**.
+- Wähle **„Anhang hinzufügen“** und lade dein Foto von deinem Computer hoch.
+  - Falls deine Bilder bereits in **Google Drive** gespeichert sind, kannst du sie direkt dort auswählen.
+- Das Bild wird nun in der Terminbeschreibung angezeigt.
 
-Denke daran außerdem einen Beschreibungstext anzulegen, damit die Google Suche deinen
-Termin besser lesen kann und deine Mitmenschen besser verstehen, worum es bei deinem
-Termin geht.
+![Bild im Termin platzieren](/img/hilfe/Google-Kalender-Termin-Bild-oder-Anhang.jpg)
+![Bild in der Terminbeschreibung](/img/hilfe/Google-Kalender-Termin-Bild-im-Text.jpg)
 
-Damit dein Bild auch angezeigt wird, muss esunbedingt öffentlich erreichbar
-sein. Das passiert leidernicht automatisch.
+### **Wichtiger Hinweis**
 
-So kannst du das einzelne Bild veröffentlichen. Klickein der Beschreibung auf das
-Bild.
+Damit das Bild auch angezeigt wird, muss es **öffentlich zugänglich** sein. Das passiert nicht automatisch.
 
-Das Bild öffnet sich und oben rechts kannst du hinter dendrei Punktendie
-Einstellung zum "Freigeben" finden.
+### **Bild öffentlich machen**
 
-Stelle hier ein, dass "Jeder, der über den Link verfügt" das Bild
-sehen darf.
+- Klicke in der Terminbeschreibung auf das hochgeladene Bild, um es zu öffnen.
+- Klicke oben rechts auf die **drei Punkte** und wähle **„Freigeben“** aus.
+- Stelle ein, dass **„Jeder, der über den Link verfügt“** das Bild sehen darf.
+
+![Bild freigeben](/img/hilfe/Google-Kalender-Bild-freigeben.jpg)
+![Bild für alle veröffentlichen](/img/hilfe/Google-Kalender-Bild-oeffentlich-machen.jpg)
+
+### **Zusätzlicher Tipp**
+
+Ergänze immer einen **Beschreibungstext** zu deinem Termin. Das verbessert die Auffindbarkeit in der **Google-Suche** und hilft den Nutzern, den Termin besser zu verstehen.
+
+[Warum brauche ich einen guten Beschreibungstext?](/hilfe/beschreibung)

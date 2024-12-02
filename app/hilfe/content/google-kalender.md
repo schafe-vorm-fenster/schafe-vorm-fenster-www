@@ -16,3 +16,5 @@ Gib für jeden Termin einen klaren **Titel**, eine **aussagekräftige Beschreibu
 
 **Noch einfacher geht es mit deinem Smartphone:**  
 Nutze die Google Kalender-App für Android oder iOS, um Termine direkt unterwegs zu erstellen und zu verwalten.
+
+![Google Kalender erstellen](/img/hilfe/Google-Kalender-neuen-Kalender-erstellen.jpg)

@@ -3,17 +3,16 @@ title: Kann ich meinen eigenen Kalender auch in meine Wordpress-Webseite einbind
 category: Nutzen und verbreiten
 ---
 
-Die Grundidee und der Charme unseres Ansatzes ist es, dass du deinen eigenen Kalender
-verwaltest.
+Die Grundidee und der Charme unseres Ansatzes liegen darin, dass du **deinen eigenen Kalender** selbst verwaltest.
 
-Deinen eigenen Google Kalender kannst du natürlich auch für deine Zwecke beliebig verwendet.
-Zum Beispiel um in einer Gruppe von Organisatoren Termine besser abzustimmen.
+Deinen Google-Kalender kannst du natürlich auch vielseitig für deine eigenen Zwecke nutzen, z. B. um in einer Gruppe von Organisatoren Termine besser abzustimmen.
 
-Das tolle an einem digitalen Kalender ist, dass man ihn auch vielfältig weiter verwenden
-kann. So ist ein Google Kalender sehr einfach in eine Wordpress Webseite einzubinden. Das
-geht einfach überverschiedene Wordpress Plugins.
+Das Tolle an einem digitalen Kalender ist seine **Vielseitigkeit**. Ein Google-Kalender lässt sich ganz einfach in eine **WordPress-Website** einbinden – beispielsweise mithilfe verschiedener WordPress-Plugins.
 
-Auch für größere Terminmengen klappt das wunderbar.
+![Wordpress Kalender Plugins](/img/hilfe/wordpress-google-kalender-plugins.jpeg)
 
-Die Kirche Anklam hat bspw. auch über verschiedene Google Kalender ihreGottestdienste und Konzerte in die
-Wordpress-Webseiteeingebunden.
+Auch bei größeren Terminmengen funktioniert das reibungslos.
+
+Ein Beispiel: Die **Kirche Anklam** hat ihre **Gottesdienste** und **Konzerte** über verschiedene Google-Kalender in ihre WordPress-Website integriert.
+
+![Kirche Anklam](/img/hilfe/kirche-anklam-termine-wordpress-webseite.jpeg)

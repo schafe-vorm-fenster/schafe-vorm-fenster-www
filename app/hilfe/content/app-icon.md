@@ -1,19 +1,10 @@
 ---
-title: App Icon
+title: Wie kann ich den Kalender als App-Icon speichern?
 category: "Nutzen und verbreiten"
 ---
 
-# AppIcon
+Erstelle einen **Shortcut** deines Dorfkalenders und setze ihn auf den Homescreen deines Smartphones.
 
-**Category**: Nutzen und verbreiten
+Dazu gehst du einfach im Browser auf deinem Smartphone auf dein Dorf und nutzt dann die **„Teilen“**-Funktion, um die Seite auf dem Homescreen zu speichern.
 
-## Wie kann ich den Kalender als App Icon speichern?
-
-Erstelle einen"Shortcut" deines Dorfkalendersund setze diesen auf
-den Homescreen deines Smartphones.
-
-Dazu gehst du einfachim Browser auf dem Smartphone auf dein Dorf. Und dann
-nutzt du die"Teilen"-Funktionund speicherst die Seite auf dem
-Homescreen.
-
-So kommst du mit einem klick an die aktuellen Termine.
+So gelangst du mit einem Klick zu den aktuellen Terminen.

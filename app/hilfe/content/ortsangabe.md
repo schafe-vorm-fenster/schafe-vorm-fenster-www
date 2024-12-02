@@ -1,13 +1,12 @@
 ---
 title: Wie sieht eine gute Ortsangabe aus?
-category: "Erste Schritte"
+category: "Termine optimal anlegen"
 ---
 
-Eine Ortsangabe zu deinen Terminen istunerlässlich. Woher sollen sonst wir
-oder die Nutzer wissen, wo dein Termin stattfindet? Wichtig ist, dass die Ortsangabe korrekt
-ist.
+Eine **Ortsangabe** zu deinen Terminen ist **unerlässlich**. Wie sollen wir oder die Nutzer sonst wissen, wo dein Termin stattfindet? Wichtig ist, dass die Ortsangabe **korrekt** und eindeutig ist.
 
-Am besten du verwendest den Ort so, wie ihn dir Google bei der Eingabe vorschlägt.
+Am besten verwendest du den Ort genauso, wie er dir von **Google** bei der Eingabe vorgeschlagen wird.
 
-Zum Testen, ob die Ortsangabe eindeutig ist, kannst du einfach einmal rauf klicken. Der
-gefundene Ort wird die im Google Kalender gleich auf Google Maps angezeigt.
+Du kannst die Ortsangabe testen, indem du einfach darauf klickst. Der angegebene Ort wird dann im **Google Kalender** direkt auf **Google Maps** angezeigt.
+
+![](/img/hilfe/Termin-Ortsangabe.jpg)
