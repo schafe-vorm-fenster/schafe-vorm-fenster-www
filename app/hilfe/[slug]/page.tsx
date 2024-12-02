@@ -6,15 +6,16 @@ import markdownit from "markdown-it";
 import { Interweave } from "interweave";
 import { polyfill } from "interweave-ssr";
 import Script from "next/script";
+import { Metadata } from "next";
 
 polyfill();
 
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
-}) {
-  const slug = params.slug;
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const slug = (await params).slug;
   const filename = "/app/hilfe/content/" + `${slug}.md`;
   const markdownWithMeta = await fs.readFile(process.cwd() + filename, "utf8");
   const { data: frontmatter } = matter(markdownWithMeta);
