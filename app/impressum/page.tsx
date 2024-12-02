@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import PageTitle from "../components/page-title";
 import Section from "../components/section";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Impressum und Datenschutz - Schafe vorm Fenster",
@@ -17,6 +18,17 @@ export const metadata: Metadata = {
 export default function Impressum() {
   return (
     <>
+      <Script
+        id="_etValues"
+        type="text/javascript"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            var et_pagename: 'Impressum und Datenschutz';
+            var et_areas: 'About';
+          `,
+        }}
+      />
       <PageTitle text="Impressum & Datenschutz" />
       <Section color="white">
         <p>
