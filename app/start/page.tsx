@@ -4,7 +4,7 @@ import Section from "../components/section";
 import { NewLeadForm } from "./form";
 
 export const metadata: Metadata = {
-  title: "Kalender anmelden und Termine veröffentlichen - Schafe vorm Fenster",
+  title: "Kalender anmelden und Termine veröffentlichen",
   description:
     "Veröffentliche deine Termine direkt aus deinem Kalender heraus in alle relevanten Dörfern. Lege jetzt los und melde deinen ersten Kalender an.",
   keywords: [

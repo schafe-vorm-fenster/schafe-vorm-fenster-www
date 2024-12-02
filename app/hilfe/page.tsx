@@ -6,10 +6,9 @@ import PageTitle from "../components/page-title";
 import matter from "gray-matter";
 import Section from "../components/section";
 import { Metadata } from "next";
-import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "Hilfe und Anleitungen - Schafe vorm Fenster",
+  title: "Hilfe und Anleitungen",
   description:
     "Wie erstelle ich einen digitalen Kalender? Wie kann ich diesen veröffentlichen? Kann ich auch Bilder verwenden? Hier findest du Antworten und Anleitungen.",
   keywords: [
@@ -89,17 +88,7 @@ export default function Hilfe() {
   return (
     <>
       <PageTitle text="Hier findest du Antworten auf deine Fragen." />
-      <Script
-        id="_etValues"
-        type="text/javascript"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            var et_pagename: 'Hilfe und Anleitungen';
-            var et_areas: 'About';
-          `,
-        }}
-      />
+
       <Section color="white">
         {helpArticleGroups.map((group, index) => (
           <div key={index} className="mb-12">

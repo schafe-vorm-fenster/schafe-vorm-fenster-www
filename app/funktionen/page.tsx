@@ -5,10 +5,9 @@ import matter from "gray-matter";
 import PageTitle from "../components/page-title";
 import FeatureTeaserComponent, { FeatureTeaser } from "./feature-teaser";
 import { Metadata } from "next";
-import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "Alle Funktionen der digitalen Terminliste - Schafe vorm Fenster",
+  title: "Alle Funktionen",
   description:
     "Deinen eigener Google Kalender, Termine mit Bild und Anhang, Veröffentlichung für Dorf, Gemeinde oder Umgebung, Regeltermine, ganze Routen, in Google Maps, ausdrucken für den Aushang, ...",
   keywords: [
@@ -42,17 +41,6 @@ export default function Funktionen() {
 
   return (
     <>
-      <Script
-        id="_etValues"
-        type="text/javascript"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            var et_pagename: 'Alle Funktionen der digitalen Terminliste';
-            var et_areas: 'About';
-          `,
-        }}
-      />
       <PageTitle text="Alle Funktionen im Überblick" />
       {featureTeaserList.map((teaser, index) => (
         <FeatureTeaserComponent

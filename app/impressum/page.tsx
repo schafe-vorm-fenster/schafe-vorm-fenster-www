@@ -4,7 +4,7 @@ import Section from "../components/section";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "Impressum und Datenschutz - Schafe vorm Fenster",
+  title: "Impressum und Datenschutz",
   description: "Schafe vorm Fenster UG",
   keywords: [
     "Schafe vorm Fenster",

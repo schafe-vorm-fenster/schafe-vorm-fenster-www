@@ -8,11 +8,9 @@ import CommunitiesCarousel from "./components/home/communities";
 import Team from "./components/home/team";
 import HowItWorks from "./components/home/how-it-works";
 import Partners from "./components/home/partners";
-import Script from "next/script";
 
 export const metadata: Metadata = {
-  title:
-    "Im Dorf ist was los, nur du weißt noch nichts davon? - Schafe vorm Fenster",
+  title: "Im Dorf ist was los, nur du weißt noch nichts davon?",
   description:
     "Erfahre was wann wo in deinem Dorf los ist - einfach per Smartphone. Dafür entsteht hier eine Digitale Terminliste für die Dörfer in Vorpommern-Greifswald.",
   keywords: [
@@ -27,17 +25,6 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <Script
-        id="_etValues"
-        type="text/javascript"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            var et_pagename: 'Im Dorf ist was los, nur du weißt noch nichts davon?';
-            var et_areas: 'About';
-          `,
-        }}
-      />
       <Section color="green">
         <Intro />
       </Section>
