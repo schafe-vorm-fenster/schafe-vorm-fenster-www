@@ -8,9 +8,8 @@
     "email": "jan@schafe-vorm-fenster.de"
   },
   "scripts": {
-    "build": "yarn images && next build",
+    "build": "next build",
     "dev": "next dev --turbopack",
-    "images": "cp app/presse/img/*.* public/img/presse/ && cp app/funktionen/img/*.* public/img/funktionen/ && cp app/hilfe/content/img/hilfe/*.* public/img/hilfe/",
     "lint": "next lint",
     "start": "next start"
   },
