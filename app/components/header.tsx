@@ -9,13 +9,13 @@ export default function Header() {
   const path = usePathname();
   return (
     <header className={path === "/" ? "bg-primary" : "bg-white"}>
-      <nav>
-        <ul className="flex justify-center list-none p-0">
+      <nav className="pb-4 md:pb-0 border-b-2 border-black md:border-0">
+        <ul className="flex flex-col md:flex-row justify-center list-none p-0">
           {mainMenu.map((item) => (
-            <li key={item.name} className="mx-2 my-4">
+            <li key={item.name} className="md:mx-2 md:my-4">
               <Link
                 href={item.href}
-                className={`block text-sm text-black px-0 py-1 mx-2 ${
+                className={`inline-block md:block text-sm text-black px-0 py-1 mx-2 ${
                   (item.href !== "/" && path.startsWith(item.href)) ||
                   path === item.href
                     ? "border-b-2 border-black"

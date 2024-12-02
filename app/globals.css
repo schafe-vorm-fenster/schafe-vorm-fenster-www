@@ -19,4 +19,32 @@ body {
   background: var(--background);
   font-family: Catamaran, Arial, Helvetica, sans-serif;
   font-size: larger;
+  @apply w-full max-w-full overflow-x-hidden;
+}
+
+.prose {
+  @apply text-black;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-2xl font-medium;
+  }
+
+  img {
+    @apply rounded-md max-w-2xl w-full mx-auto border-2 border-gray-200;
+  }
+
+  a {
+    @apply text-blue-500 underline;
+  }
+
+  ul {
+  }
+  li {
+    @apply list-disc ml-8;
+  }
 }

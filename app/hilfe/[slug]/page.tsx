@@ -90,8 +90,10 @@ export default async function HilfeArtikel({
       />
       <PageTitle text="Anleitungen" />
       <Section color="white">
-        <h2 className="text-4xl mb-8">{frontmatter.title}</h2>
-        <div className="flex flex-col space-y-4">
+        <h2 className="text-4xl mb-8 max-w-2xl w-full mx-auto">
+          {frontmatter.title}
+        </h2>
+        <div className="prose flex flex-col space-y-4 max-w-2xl w-full mx-auto">
           <Interweave
             content={html}
             allowList={ALLOW}
