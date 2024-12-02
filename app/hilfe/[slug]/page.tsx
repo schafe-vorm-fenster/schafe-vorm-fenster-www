@@ -1,5 +1,4 @@
-import fs from "fs";
-import path from "path";
+import { promises as fs } from "fs";
 import matter from "gray-matter";
 import PageTitle from "@/app/components/page-title";
 import Section from "@/app/components/section";
@@ -15,15 +14,11 @@ export default async function HilfeArtikel({
   params: Promise<{ slug: string }>;
 }) {
   const slug = (await params).slug;
-  const markdownWithMeta = fs.readFileSync(
-    path.join("app/hilfe/content", `${slug}.md`),
-    "utf-8"
-  );
+  const filename = "/app/hilfe/content/" + `${slug}.md`;
+  const markdownWithMeta = await fs.readFile(process.cwd() + filename, "utf8");
   const { data: frontmatter, content } = matter(markdownWithMeta);
   const md = markdownit();
   const html = md.render(content);
-  console.log(html);
-  // render content by markdown-it
 
   const ALLOW = [
     "p",
