@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Section from "./components/section";
 import Facts from "./components/home/facts";
 import Testimonials from "./components/home/testimonials";
@@ -7,6 +8,20 @@ import CommunitiesCarousel from "./components/home/communities";
 import Team from "./components/home/team";
 import HowItWorks from "./components/home/how-it-works";
 import Partners from "./components/home/partners";
+
+export const metadata: Metadata = {
+  title:
+    "Im Dorf ist was los, nur du weißt noch nichts davon? - Schafe vorm Fenster",
+  description:
+    "Erfahre was wann wo in deinem Dorf los ist - einfach per Smartphone. Dafür entsteht hier eine Digitale Terminliste für die Dörfer in Vorpommern-Greifswald.",
+  keywords: [
+    "Schafe vorm Fenster",
+    "digitale Terminliste",
+    "Veranstaltungen",
+    "Dorfleben",
+    "Termine",
+  ],
+};
 
 export default function Home() {
   return (

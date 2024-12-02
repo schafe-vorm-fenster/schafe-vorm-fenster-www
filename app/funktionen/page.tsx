@@ -4,6 +4,20 @@ import matter from "gray-matter";
 
 import PageTitle from "../components/page-title";
 import FeatureTeaserComponent, { FeatureTeaser } from "./feature-teaser";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Alle Funktionen der digitalen Terminliste - Schafe vorm Fenster",
+  description:
+    "Deinen eigener Google Kalender, Termine mit Bild und Anhang, Veröffentlichung für Dorf, Gemeinde oder Umgebung, Regeltermine, ganze Routen, in Google Maps, ausdrucken für den Aushang, ...",
+  keywords: [
+    "Schafe vorm Fenster",
+    "digitale Terminliste",
+    "Veranstaltungen",
+    "Dorfleben",
+    "Termine",
+  ],
+};
 
 export default function Funktionen() {
   const files = fs.readdirSync(path.join("app/funktionen/content"));

@@ -3,6 +3,20 @@ import path from "path";
 import matter from "gray-matter";
 import PressTeaserComponent, { PressTeaser } from "./press-teaser";
 import PageTitle from "../components/page-title";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Medienberichte und Presse - Schafe vorm Fenster",
+  description:
+    "Hier findest du alle Medienberichte und Pressemitteilungen zu Schafe vorm Fenster. Erfahre mehr über die digitale Terminliste für die Dörfer in Vorpommern-Greifswald.",
+  keywords: [
+    "Schafe vorm Fenster",
+    "digitale Terminliste",
+    "Veranstaltungen",
+    "Dorfleben",
+    "Termine",
+  ],
+};
 
 export default function Presse() {
   const files = fs.readdirSync(path.join("app/presse/content"));

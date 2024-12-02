@@ -1,5 +1,18 @@
+import { Metadata } from "next";
 import PageTitle from "../components/page-title";
 import Section from "../components/section";
+
+export const metadata: Metadata = {
+  title: "Impressum und Datenschutz - Schafe vorm Fenster",
+  description: "Schafe vorm Fenster UG",
+  keywords: [
+    "Schafe vorm Fenster",
+    "digitale Terminliste",
+    "Veranstaltungen",
+    "Dorfleben",
+    "Termine",
+  ],
+};
 
 export default function Impressum() {
   return (

@@ -5,7 +5,20 @@ import Link from "next/link";
 import PageTitle from "../components/page-title";
 import matter from "gray-matter";
 import Section from "../components/section";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Hilfe und Anleitungen - Schafe vorm Fenster",
+  description:
+    "Wie erstelle ich einen digitalen Kalender? Wie kann ich diesen veröffentlichen? Kann ich auch Bilder verwenden? Hier findest du Antworten und Anleitungen.",
+  keywords: [
+    "Schafe vorm Fenster",
+    "digitale Terminliste",
+    "Veranstaltungen",
+    "Dorfleben",
+    "Termine",
+  ],
+};
 interface HelpArticleLink {
   title: string;
   category: string;

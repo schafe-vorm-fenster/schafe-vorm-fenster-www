@@ -14,7 +14,7 @@ export default function Intro() {
           </p>
           <div className="mt-8">
             <Button
-              link="/dorfterminkalender"
+              link="https://schafe-vorm-fenster.de/"
               label="Finde dein Dorf"
               color="white"
             />
