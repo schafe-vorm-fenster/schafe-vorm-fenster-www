@@ -1,13 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# compiled content
-/public/img/funktionen
-!/public/img/funktionen/.keep
-/public/img/presse
-!/public/img/presse/.keep
-/public/img/hilfe
-!/public/img/hilfe/.keep
-
 # dependencies
 /node_modules
 /.pnp
