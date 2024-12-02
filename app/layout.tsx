@@ -4,6 +4,7 @@ import "./globals.css";
 import { Catamaran } from "next/font/google";
 import Header from "./components/header";
 import Footer from "./components/footer";
+import Head from "next/head";
 
 const catamaran = Catamaran({
   subsets: ["latin"],
@@ -23,10 +24,20 @@ export default function Layout({
 }) {
   return (
     <html lang="de" className={`${catamaran.variable} `}>
+      <Head>
+        <script
+          id="_etLoader"
+          type="text/javascript"
+          data-block-cookies="true"
+          data-secure-code="i9strK"
+          src="//code.etracker.com/code/e.js"
+          async
+        ></script>
+      </Head>
       <body>
-        <Header /> {/* Füge den Header hier hinzu */}
+        <Header />
         {children}
-        <Footer /> {/* Füge den Footer hier hinzu */}
+        <Footer />
       </body>
     </html>
   );
