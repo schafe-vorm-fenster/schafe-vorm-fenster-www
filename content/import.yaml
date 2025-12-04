@@ -1,0 +1,11 @@
+import:
+  documents:
+    - id: 1R7oSvHOTsSjqbxgGf8mGTETgFFOr5XbFBEwUIOGo14g
+      target: content/impressum.md
+    - id: 1-URmf4C4c4RDf1BfYsBQkIGjtkVVQFUekqUoa_cFxiE
+      target: content/datenschutzerklaerung.md
+    - id: 17TBVHDmIJNpZg4ZCxit8w0uEpO-tWVTEV3SBnD15G98
+      target: content/nutzungsrichtlinien.md
+  # files:
+  #   - id: 1IFtlbePABBieA6Ml17ka4WKf2iLuEVNI
+  #     target: content/nutzungsrichtlinien.pdf
