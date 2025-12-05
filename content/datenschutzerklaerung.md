@@ -1,66 +1,158 @@
 # Datenschutzerklärung
 
-Stand: 4. Dezember 2025
+Stand: 5. Dezember 2025
 
-Diese Erklärung informiert dich über den Schutz und die Nutzung deiner personenbezogenen Daten, wenn du die Internetseite(n) der Schafe vorm Fenster UG aufrufst oder per E-Mail Kontakt aufnimmst.
+Datenschutz ist für uns keine lästige Pflicht, sondern die Basis für vertrauensvolle lokale Kommunikation. Wir wollen, dass du dich bei uns sicher fühlst – egal, ob du nur kurz Termine nachschaust, selbst Veranstaltungen einträgst oder unsere Technik auf deiner eigenen Webseite nutzt.
 
-## 1. Sicherheit und Hosting
+In dieser Erklärung schlüsseln wir transparent auf, was mit deinen Daten passiert. Dabei unterscheiden wir technisch genau zwischen unserer öffentlichen Webseite („Dorfkalender“) und unserer eingebetteten Software („Portalize“).
 
-### 1.1 SSL-Verschlüsselung
+## 1. Wer ist verantwortlich?
 
-Um die Sicherheit deiner Daten bei der Übertragung zu schützen, verwenden wir dem aktuellen Stand der Technik entsprechende Verschlüsselungsverfahren über SSL/HTTPS.
+Verantwortlich für die Datenverarbeitung auf dieser Webseite und in unseren Diensten ist:
 
-### 1.2 Hosting und Server-Logfiles
+Schafe vorm Fenster UG (haftungsbeschränkt)  
+Schlatkow 6  
+17390 Schmatzin OT Schlatkow
 
-Wir nutzen den Anbieter **Vercel** für das Hosting unserer Internetseite(n) (alle Ansichten unterhalb der Domains *.schafe-vorm-fenster.de). Die primären Rechenzentren befinden sich in Europa.
+Tel: +49 156 78204630  
+E-Mail: [jan@schafe-vorm-fenster.de](mailto:jan@schafe-vorm-fenster.de)
 
-Wenn du unsere Webseite aufrufst, werden automatisch allgemeine Informationen in Server-Logfiles ausgetauscht. Diese sind technisch notwendig, um die Inhalte korrekt auszuliefern. Dabei werden Informationen wie der verwendete Webbrowser oder das Betriebssystem erzeugt. Hierbei handelt es sich ausschließlich um Informationen, welche **keine Rückschlüsse auf deine Person zulassen**.
+Hast du Fragen zum Datenschutz oder möchtest deine Rechte wahrnehmen? Schreib uns einfach eine E-Mail.
 
-Die Logfiles werden **automatisiert nach maximal 10 Tagen gelöscht**.
+## 2. Grundlegende Technik & Hosting
 
-## 2. Nutzungsanalyse und Tracking (etracker)
+Egal welchen unserer Dienste du nutzt, wir setzen auf eine sichere Infrastruktur, die deine Daten schützt.
 
-### 2.1 Statistisches Tracking
+### 2.1 Hosting bei Vercel
 
-Wir nutzen ein Webtracking der etracker GmbH aus Hamburg, um unser Online-Angebot und unseren Webauftritt zu optimieren.
+Unsere Webseiten und Dienste werden von **Vercel Inc.** gehostet.
 
-- **Keine personenbezogene Daten:** Wir erheben und verarbeiten **nur statistische Daten**. Daten, die möglicherweise einen Bezug zu einer einzelnen Person zulassen (wie die IP-Adresse), werden **frühestmöglich anonymisiert oder pseudonymisiert**. Eine Wiedererkennung deiner Person ist damit ausgeschlossen.
-- **Keine Cookies/Technologien:** Für die Web-Analyse **werden keine Cookies** oder ähnliche Technologien (wie Local Storages oder Browser Fingerprinting) verwendet.
-- **Keine Weitergabe:** Die Tracking-Daten werden weder zusammengeführt noch an Dritte weitergegeben.
-- **Rechtsgrundlage:** Die Verarbeitung erfolgt auf Basis unseres **berechtigten Interesses** (Art. 6 Abs. 1 lit. f DSGVO) an der Optimierung unseres Angebots.
-- **Speicherung:** Die Daten werden ausschließlich in Deutschland verarbeitet und gespeichert.
-- **Widerspruchsrecht:** Du kannst der Datenverarbeitung jederzeit widersprechen. Weitere Informationen findest du hier.
+#### Standort
 
-### 2.2 Ausnahme: Kalendereinbettung per „Portalize“
+Wir haben unsere Systeme so konfiguriert, dass die Datenverarbeitung primär auf Servern innerhalb der **Europäischen Union** (Regionen: Frankfurt, Paris, Stockholm) stattfindet.
 
-Das spezielle Feature "Portalize" dient zur Einbettung konfigurierter Kalender in deine eigene Webseite und wird ebenfalls über Domains von *schafe-vorm-fenster.de* gehostet. 
+#### Datenschutz-Garantie
 
-Damit bezwecken wir, dass die User deiner eigenen Webseite durch die Kalendereinbettung keine unnötige Datenübertragung oder Tracking erfahren. Deshalb erfolgt über Portalize keinerlei Tracking, auch kein statistisches Tracking über etracker. 
+Da Vercel ein US-Unternehmen ist, lässt sich ein technischer Zugriff aus den USA nicht gänzlich ausschließen. Vercel ist jedoch nach dem EU-U.S. Data Privacy Framework (DPF) zertifiziert. Das garantiert, dass deine Daten auch dort nach europäischen Standards geschützt sind.
 
-Wichtig: Wenn du einen Kalender in deine Webseite einbettest, überprüfe bitte deine eigene Datenschutzerklärung und ergänze dort gegebenenfalls einen Hinweis auf die Nutzung von Portalize.
+#### Content Delivery Network (CDN)
 
-## 3. Externe Inhalte und Content Curation
+Damit unsere Seiten auch auf dem Dorf schnell laden, werden statische Dateien (wie Bilder oder Skripte) über das weltweite Netzwerk von Vercel verteilt.
 
-Im Sinne der Content Curation nutzen wir Inhalte, die von externen Plattformen stammen - bspw. Bilder von Wikimedia Commons oder Terminanbietern.
+### 2.2 Proxy-Lösung für externe Inhalte
 
-- **Ladevorgang:** Die Dateien werden von den externen Quellen bezogen, aber **nicht direkt** von dort in die Website geladen. Stattdessen werden sie immer **über unsere eigenen Server von Vercel** (Domain *schafe-vorm-fenster.de*) bereitgestellt.
-- **Keine externen Verlinkungen:** Dadurch erfolgt **keine direkte Verlinkung** externer, unbekannter Webseiten.
-- **Beispiele:** Bilder externer Webseiten zu Terminen und auch die Dorfbilder werden immer von der **eigenen Domain** geladen.
+Wir binden Bilder oder Daten externer Quellen (z. B. Wikimedia, Open Data) ein, um unsere Kalender bunt und informativ zu gestalten. Dabei schützen wir deine Privatsphäre mit einer technischen „Schutzwand“ (Proxy): Dein Browser lädt diese Bilder nicht direkt von der fremden Quelle (wodurch deine IP dort sichtbar wäre), sondern immer über unsere Server. Für die externe Quelle sieht es so aus, als ob wir das Bild abrufen, nicht du. Deine IP-Adresse bleibt also bei uns und wandert nicht unkontrolliert durchs Netz.
 
-## 4. E-Mail-Kommunikation und Kontakt
+### 2.3 Server-Logfiles
 
-Die Schafe vorm Fenster UG ist per E-Mail erreichbar. Die dabei bereitgestellten persönlichen Daten sowie die Korrespondenz werden im Rahmen der geschäftlichen Kommunikation gespeichert und für diesen Zweck genutzt. Wir geben deine Daten nicht an Dritte weiter und nutzen sie auch nicht für andere Zwecke.
+Damit unsere Dienste stabil laufen und wir Angriffe (z. B. DDoS-Attacken) abwehren können, fallen technisch bedingt Verbindungsdaten an (IP-Adresse, Browser, Zeitstempel).
 
-## 5. Deine Rechte und Kontakt
+#### Filterung und Löschung
 
-### 5.1 Löschung bzw. Sperrung der Daten
+Obwohl diese Daten technisch kurzzeitig anfallen, werden IP-Adressen in den für uns einsehbaren Analyse-Protokollen standardmäßig bereits **herausgefiltert** oder gar nicht erst angezeigt. Die zugrundeliegenden technischen Zugriffsprotokolle der Infrastruktur werden zu Sicherheitszwecken für maximal **7 Tage** vorgehalten und danach automatisch und unwiderruflich gelöscht.
 
-Wir speichern deine personenbezogenen Daten nur so lange, wie dies zur Erreichung der genannten Zwecke erforderlich ist oder wie es die gesetzlichen Speicherfristen vorsehen. Wir halten uns an die Grundsätze der Datenvermeidung und Datensparsamkeit. Nach Wegfall des Zweckes bzw. Ablauf der Fristen werden die Daten gesperrt oder gelöscht.
+#### Rechtsgrundlage
 
-### 5.2 Deine Rechte
+Art. 6 Abs. 1 lit. f DSGVO (Unser berechtigtes Interesse an der Sicherheit und Stabilität der Plattform).
 
-Du hast das Recht, jederzeit Auskunft über deine bei uns gespeicherten personenbezogenen Daten zu erhalten. Ebenso hast du das Recht auf **Berichtigung, Sperrung oder Löschung** deiner Daten (abgesehen von der gesetzlich vorgeschriebenen Speicherung zur Geschäftsabwicklung).
+## 3. Wenn du unsere öffentliche Webseite besuchst („Dorfkalender“)
 
-### 5.3 Ansprechpartner
+Dieser Abschnitt gilt, wenn du auf schafe-vorm-fenster.de (oder unseren regionalen Portalen) surfst.
 
-Bitte wende dich bei Fragen zum Datenschutz oder zur Geltendmachung deiner Rechte direkt per E-Mail an unseren Datenschutzbeauftragten unter [datenschutz@schafe-vorm-fenster.de](mailto:datenschutz@schafe-vorm-fenster.de).
+### Statistische Analyse (eTracker)
+
+Wir möchten verstehen, welche Termine für die Gemeinschaft interessant sind. Dafür nutzen wir den Analysedienst etracker aus Hamburg. Uns ist wichtig: Wir interessieren uns für Themen, nicht für dich als Person.
+
+#### Cookie-less
+
+Wir setzen standardmäßig keine Analyse-Cookies.
+
+#### Anonymisierung
+
+Deine IP-Adresse wird frühestmöglich gekürzt. Eine Wiedererkennung deiner Person ist ausgeschlossen.
+
+#### Kein Datenexport
+
+Alle Daten bleiben in Deutschland und werden nicht mit anderen Daten verknüpft.
+
+#### Rechtsgrundlage
+
+Art. 6 Abs. 1 lit. f DSGVO (Berechtigtes Interesse an der Reichweitenmessung unter Wahrung deiner Anonymität). Du kannst dieser Verarbeitung jederzeit widersprechen (siehe unten „Deine Rechte“).
+
+## 4. Wenn du unseren eingebetteten Kalender siehst („Portalize“)
+
+Viele Kommunen und Vereine binden unseren Kalender direkt auf ihrer eigenen Webseite ein. Wenn du dort unseren Kalender siehst, gelten besonders strenge Datenschutz-Standards („Privacy by Design“):
+
+- Kein Tracking: In der eingebetteten Ansicht findet keinerlei Analyse deines Nutzerverhaltens statt. Kein Google Analytics, kein eTracker, kein Matomo.
+- Keine Cookies: Wir setzen in dieser Ansicht keine Cookies auf deinem Gerät.
+- Keine Drittanbieter: Es werden keine Skripte von Werbenetzwerken oder anderen Dritten nachgeladen.
+Es wird lediglich deine IP-Adresse kurzzeitig verarbeitet, um die Kalenderdaten technisch an deinen Browser auszuliefern. Auch hier gilt, wie unter Punkt 2.3 beschrieben: IP-Adressen tauchen in unseren Protokollen gar nicht erst auf und die technischen Logs werden nach 7 Tagen gelöscht.
+
+## 5. Wenn du dich registrierst („Akteur“)
+
+Wenn du selbst Veranstaltungen eintragen möchtest, legst du ein Nutzerkonto an. Dabei verarbeiten wir:
+
+- Stammdaten: Name, Vorname, E-Mail-Adresse.
+- Zugangsdaten: Dein Passwort (verschlüsselt gespeichert).
+- Deine Inhalte: Die Termine, Texte und Bilder, die du veröffentlichst (User Generated Content).
+
+#### Zweck
+
+Wir benötigen diese Daten, um dir den Zugang zu gewähren, deine Einträge zuzuordnen und dich bei Rückfragen (z. B. wenn ein Termin unklar ist) zu erreichen.
+
+#### Eingesetzte Tools (Verwaltung & Kommunikation)
+
+Zur Verwaltung deiner Stammdaten und zur Kommunikation nutzen wir professionelle Dienstleister, mit denen wir Auftragsverarbeitungsverträge geschlossen haben:
+
+- Mateo: Zur Verwaltung unserer Kontakte und Nachrichten.
+- Google Workspace: Für unsere E-Mail-Kommunikation und Terminverwaltung.
+
+#### Speicherdauer
+
+Dein Konto bleibt bestehen, solange du es nutzt. Wir behalten uns vor, Konten nach 12 Monaten Inaktivität zu löschen. Öffentliche Termine bleiben ggf. als historische Information im Kalender erhalten, jedoch ohne Verknüpfung zu deinen privaten Kontaktdaten.
+
+#### Rechtsgrundlage
+
+Art. 6 Abs. 1 lit. b DSGVO (Erfüllung des Nutzungsvertrags).
+
+## 6. Kommunikation & B2B (Partner)
+
+Wenn du Kunde bei uns bist (z. B. als Kommune „Portalize“ buchst) oder uns per E-Mail kontaktierst, verarbeiten wir deine Kontaktdaten (Name, Firma, E-Mail, Telefon) zur Vertragsabwicklung und Kommunikation.
+
+### Eingesetzte Tools
+
+Auch hier nutzen wir zur effizienten Bearbeitung und sicheren Speicherung unsere Dienstleister:
+
+- Mateo: Als unser zentrales System für Kundenbeziehungen (CRM).
+- Google Workspace: Für E-Mails, Dokumente und Kalender.
+Wichtig: Wir speichern keine Passwörter unserer Kunden im Klartext und nutzen diese Tools nicht für die Daten der Webseitenbesucher (Logfiles).
+
+### Aufbewahrung
+
+Wir löschen geschäftliche Kommunikation in der Regel nach 3 Jahren, buchungsrelevante Belege (Rechnungen) bewahren wir gesetzlich verpflichtend 10 Jahre auf.
+
+## 7. Sicherheit im Netz (DSA & Moderation)
+
+Da wir eine Plattform für nutzergenerierte Inhalte sind, müssen wir nach dem **Digital Services Act (DSA)** sicherstellen, dass bei uns keine illegalen Inhalte verbreitet werden.
+
+### Meldungen & Beschwerden
+
+Wenn du uns einen Inhalt meldest (z. B. wegen Hassrede) oder wir Maßnahmen gegen deinen Account ergreifen müssen (z. B. Sperrung), speichern wir:
+
+- Den Vorgang und die Begründung,
+- Deine Kontaktadresse (zur Information über die Entscheidung).
+Wir nutzen diese Daten ausschließlich, um unseren gesetzlichen Pflichten nachzukommen und im Fall von Beschwerden transparent Auskunft geben zu können.
+
+### Rechtsgrundlage
+
+Art. 6 Abs. 1 lit. c DSGVO (Rechtliche Verpflichtung).
+
+## 8. Deine Rechte
+
+Deine Daten gehören dir. Du hast jederzeit das Recht:
+
+- Auskunft darüber zu verlangen, was wir über dich wissen (Art. 15 DSGVO).
+- Falsche Daten korrigieren zu lassen (Art. 16 DSGVO).
+- Die Löschung deiner Daten zu fordern (Art. 17 DSGVO), sofern wir sie nicht z. B. für die Steuer aufbewahren müssen.
+- Der Verarbeitung zu widersprechen (Art. 21 DSGVO), insbesondere wenn wir Daten auf Basis von „berechtigtem Interesse“ verarbeiten.
+Möchtest du eines dieser Rechte nutzen? Eine einfache E-Mail an [datenschutz@schafe-vorm-fenster.de](mailto:datenschutz@schafe-vorm-fenster.de) genügt.
