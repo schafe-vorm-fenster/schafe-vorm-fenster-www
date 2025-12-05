@@ -14,6 +14,8 @@ const FILES = [
   "impressum.md",
   "datenschutzerklaerung.md",
   "nutzungsrichtlinien.md",
+  "nutzungsbedingungen.md",
+  "avv.md",
 ];
 
 export async function getLegalContent(): Promise<LegalSection[]> {

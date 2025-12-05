@@ -1,4 +1,4 @@
-# Nutzungsrichtlinien & Community Guidelines
+# Nutzungsrichtlinien
 
 Stand: 4. Dezember 2025
 

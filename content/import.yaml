@@ -2,10 +2,14 @@ import:
   documents:
     - id: 1R7oSvHOTsSjqbxgGf8mGTETgFFOr5XbFBEwUIOGo14g
       target: content/impressum.md
-    - id: 1-URmf4C4c4RDf1BfYsBQkIGjtkVVQFUekqUoa_cFxiE
+    - id: 1jvjBhxtEsl7RPY3AXQ-Lqpl4FDu_LukR_e3yZYETZQc
       target: content/datenschutzerklaerung.md
-    - id: 17TBVHDmIJNpZg4ZCxit8w0uEpO-tWVTEV3SBnD15G98
+    - id: 1FJ-PZRf-V6c7WsCTmhbnPqjnLD6ov4lLul18flxatp0
       target: content/nutzungsrichtlinien.md
+    - id: 1ZsEc4HiofEDlgsHkpoD6WtdYGsDkNZBraZAPWFjNkgc
+      target: content/nutzungsbedingungen.md
+    - id: 1DkXR9EnYNkvdo3RHYXF0q1imp0QU0gSBE0ohoEokRFo
+      target: content/avv.md
   # files:
   #   - id: 1IFtlbePABBieA6Ml17ka4WKf2iLuEVNI
   #     target: content/nutzungsrichtlinien.pdf
