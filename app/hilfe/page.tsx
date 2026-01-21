@@ -40,7 +40,7 @@ export default function Hilfe() {
     (filename) => {
       const markdownWithMeta = fs.readFileSync(
         path.join("app/hilfe/content", filename),
-        "utf-8"
+        "utf-8",
       );
       const frontmatter = matter(markdownWithMeta);
       const helpArticleLink: HelpArticleLink = {
@@ -50,7 +50,7 @@ export default function Hilfe() {
       };
 
       return helpArticleLink;
-    }
+    },
   );
 
   const helpArticleGroups: HelpArticleGroup[] = helpArticleList.reduce(
@@ -68,16 +68,17 @@ export default function Hilfe() {
 
       return groups;
     },
-    [] as HelpArticleGroup[]
+    [] as HelpArticleGroup[],
   );
 
-  // sort groups as follows: 1: Erste Schritte, 2: Termine optimal anlegen, 3: Nutzen und verbreiten, 4: Daten und offene Daten, 5: Tarife und Preise, 6: Sonstiges
+  // sort groups as follows: 1: Erste Schritte, 2: Termine optimal anlegen, 3: Nutzen und verbreiten, 4: Daten und offene Daten, 5: Kalendereinbindung "Portalize", 6: Tarife und Preise, 7: Sonstiges
   helpArticleGroups.sort((a, b) => {
     const order = [
       "Erste Schritte",
       "Termine optimal anlegen",
       "Nutzen und verbreiten",
       "Daten und offene Daten",
+      'Kalendereinbindung "Portalize"',
       "Tarife und Preise",
       "Sonstiges",
     ];
