@@ -1,6 +1,6 @@
 {
   "name": "schafe-vorm-fenster-www",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "description": "Schafe vorm Fenster project website.",
   "author": {
@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "next build",
+    "check": "pnpm lint && pnpm lint:md && pnpm build",
     "dev": "next dev --turbopack",
     "lint": "next lint",
     "lint:md": "markdownlint \"content/**/*.md\"",
@@ -20,20 +21,19 @@
     "env:pull:prod": "vercel env pull --environment=production .env.production"
   },
   "dependencies": {
-    "@types/markdown-it-anchor": "^7.0.0",
     "clsx": "^2.1.1",
-    "dotenv": "^17.2.3",
     "embla-carousel-autoplay": "^8.5.1",
     "embla-carousel-react": "^8.5.1",
-    "googleapis": "^167.0.0",
+    "googleapis": "^171.4.0",
     "gray-matter": "^4.0.3",
     "interweave": "^13.1.0",
+    "interweave-ssr": "^2.0.0",
     "js-yaml": "^4.1.1",
     "markdown-it": "^14.1.0",
     "markdown-it-anchor": "^9.2.0",
     "next": "15.5.7",
-    "react": "19.2.1",
-    "react-dom": "19.2.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -43,10 +43,10 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "dotenv": "^17.2.4",
     "eslint": "^8",
     "eslint-config-next": "15.5.7",
-    "interweave-ssr": "^2.0.0",
-    "markdownlint-cli": "^0.46.0",
+    "markdownlint-cli": "^0.47.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.21.0",
