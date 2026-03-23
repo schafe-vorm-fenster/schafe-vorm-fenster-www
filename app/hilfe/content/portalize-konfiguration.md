@@ -28,4 +28,15 @@ Um dein Logo und den Claim anzuzeigen, füge diesen Zusatz zum Widget-Code hinzu
 ></div>
 ```
 
+**Filter-Leiste ausblenden:**
+
+Falls du die Kategorie-Filter nicht anzeigen möchtest (z.B. weil du nur eine einzige Kategorie darstellst), kannst du sie über ein Daten-Attribut deaktivieren:
+
+```html
+<div
+  data-portalize-widget
+  data-show-filter="false"
+></div>
+```
+
 Möchtest du die Konfiguration später ändern? Schreibe uns einfach eine E-Mail an **jan@schafe-vorm-fenster.de**.

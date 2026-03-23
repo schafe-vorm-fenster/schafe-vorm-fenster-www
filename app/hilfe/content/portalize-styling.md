@@ -122,6 +122,25 @@ Füge CSS-Regeln auf deiner Seite hinzu, die den Selektor `[data-portalize-widge
 }
 ```
 
+**Filter-Leisten-Layout (Scrollen vs. Umbruch):**
+
+Standardmäßig werden die Filter-Buttons auf Mobilgeräten in mehreren Zeilen angezeigt, damit alle Kategorien auf einmal sichtbar sind. Du kannst dies ändern, sodass die Leiste scrollbar wird (ähnlich wie bei Instagram-Stories).
+
+```css
+[data-portalize-widget] {
+  /* Scrollen erzwingen statt Umbruch */
+  --portalize-filter-flex-wrap: nowrap;
+  
+  /* Buttons zentrieren (standardmäßig linksbündig) */
+  --portalize-filter-justify-content: center;
+  
+  /* Scrollbalken anzeigen, wenn nötig */
+  --portalize-filter-overflow-x: auto;
+}
+```
+
+*Hinweis:* Responsive Anpassungen (z.B. anderes Verhalten auf dem Desktop) bleiben erhalten, da wir CSS-Variablen verwenden. Diese "tunneln" auch durch die technische Abgrenzung des Widgets (Shadow DOM).
+
 **Probleme beim Styling?**
 
 - Prüfe, dass die CSS-Variablennamen exakt stimmen (z.B. `--portalize-title-color`)
