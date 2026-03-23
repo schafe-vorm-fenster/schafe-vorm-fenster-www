@@ -39,4 +39,29 @@ Falls du die Kategorie-Filter nicht anzeigen möchtest (z.B. weil du nur eine ei
 ></div>
 ```
 
+**Zeitraum einschränken:**
+
+Standardmäßig werden alle zukünftigen Termine angezeigt. Du kannst den angezeigten Zeitraum begrenzen (z. B. auf 4 Wochen oder 52 Wochen), indem du die Anzahl der Wochen angibst:
+
+```html
+<div
+  data-portalize-widget
+  data-weeks-ahead="4"
+></div>
+```
+
+**Kombiniertes Beispiel:**
+
+Du kannst natürlich mehrere Einstellungen kombinieren:
+
+```html
+<div
+  id="schafe-vorm-fenster-portalize-widget"
+  data-portalize-widget
+  data-weeks-ahead="52"
+  data-show-branding="true"
+  data-show-filter="false"
+></div>
+```
+
 Möchtest du die Konfiguration später ändern? Schreibe uns einfach eine E-Mail an **jan@schafe-vorm-fenster.de**.
