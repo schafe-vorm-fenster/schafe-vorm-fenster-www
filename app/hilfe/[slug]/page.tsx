@@ -7,6 +7,7 @@ import { Interweave } from "interweave";
 import { polyfill } from "interweave-ssr";
 import Script from "next/script";
 import { Metadata } from "next";
+import React from "react";
 
 polyfill();
 
@@ -80,6 +81,19 @@ export default async function HilfeArtikel({
     ],
   };
 
+  const transform = (node: HTMLElement, children: React.ReactNode[]) => {
+    if (node.tagName === "A") {
+      const href = node.getAttribute("href");
+      if (href && href.startsWith("http")) {
+        return (
+          <a href={href} target="_blank" rel="noopener noreferrer">
+            {children}
+          </a>
+        );
+      }
+    }
+  };
+
   return (
     <>
       <Script
@@ -98,8 +112,7 @@ export default async function HilfeArtikel({
           <Interweave
             content={html}
             allowList={ALLOW}
-            noWrap
-            transformOnlyAllowList
+            transform={transform}
           />
         </div>
       </Section>

@@ -52,6 +52,10 @@ body {
 
   img {
     @apply rounded-md max-w-2xl w-full mx-auto border-2 border-gray-200;
+
+    &[src*="pengueen-logo.png"] {
+      @apply border-none shadow-none bg-transparent w-auto;
+    }
   }
 
   a {
