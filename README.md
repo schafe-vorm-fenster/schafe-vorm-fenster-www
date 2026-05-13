@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Schafe vorm Fenster Website
 
-## Getting Started
+This repository contains the official website for Schafe vorm Fenster.
 
-First, run the development server:
+The site is currently in a reset phase. The previous implementation was removed from the repository root so the website can be rebuilt from scratch with a new content model and a new tech stack.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Current State
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- The active website implementation has not been recreated yet.
+- The previous website was archived instead of deleted.
+- The repository root is intentionally light so a new stack can be introduced cleanly.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Legacy Content
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+All relevant material from the previous website lives in `legacy-content/`.
 
-## Learn More
+That archive includes:
 
-To learn more about Next.js, take a look at the following resources:
+- route and component files that still contain useful copy
+- markdown content and imported legal texts
+- public images and other media assets
+- helper code used to import or render legacy content
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+See `legacy-content/README.md` for the archive layout.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Repository Documents
 
-## Deploy on Vercel
+- `AGENTS.md` describes repo context and working rules for coding agents
+- `CONTRIBUTING.md` describes the current contribution workflow
+- `legacy-content/README.md` explains what was preserved from the old website
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Intended Direction
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This repository will become the source for the next official website.
+
+Until the new stack is added, most work will fall into one of these categories:
+
+- content review and migration planning
+- information architecture and feature planning
+- design and technical foundation work for the rebuild
+- selective extraction of useful legacy copy or assets from the archive
