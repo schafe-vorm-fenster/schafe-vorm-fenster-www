@@ -1,108 +1,137 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import yaml from "js-yaml";
-import { google } from "googleapis";
+import { docs_v1, google } from "googleapis";
 import dotenv from "dotenv";
-import { docs_v1 } from "googleapis";
 
-dotenv.config({ path: ".env.local" });
+const workspaceRoot = findWorkspaceRoot(process.cwd());
+
+dotenv.config({ path: path.join(workspaceRoot, ".env.local") });
 
 const SCOPES = [
   "https://www.googleapis.com/auth/documents.readonly",
   "https://www.googleapis.com/auth/drive.readonly",
 ];
 
-const CLIENT_EMAIL = process.env.GOOGLEAPI_CLIENT_EMAIL;
-const PRIVATE_KEY = process.env.GOOGLEAPI_PRIVATE_KEY?.replace(/\\n/g, "\n");
-
-if (!CLIENT_EMAIL || !PRIVATE_KEY) {
-  console.error(
-    "Missing GOOGLEAPI_CLIENT_EMAIL or GOOGLEAPI_PRIVATE_KEY env vars"
-  );
-  process.exit(1);
+interface CliOptions {
+  configPath: string;
+  dryRun: boolean;
 }
 
-const auth = new google.auth.JWT({
-  email: CLIENT_EMAIL,
-  key: PRIVATE_KEY,
-  scopes: SCOPES,
-});
+interface ImportTarget {
+  id: string;
+  target: string;
+  source?: string;
+  status?: string;
+}
 
-console.log(`\n🔐 Authenticating as: ${CLIENT_EMAIL}`);
-console.log("   (Make sure this email has access to the documents/files)\n");
-
-const docs = google.docs({ version: "v1", auth });
-const drive = google.drive({ version: "v3", auth });
+interface GoogleClients {
+  docs: ReturnType<typeof google.docs>;
+  drive: ReturnType<typeof google.drive>;
+}
 
 interface ImportConfig {
   import: {
-    documents?: { id: string; target: string }[];
-    files?: { id: string; target: string }[];
+    documents?: ImportTarget[];
+    files?: ImportTarget[];
   };
 }
 
 async function main() {
-  const importYamlPath = path.join(process.cwd(), "content/import.yaml");
+  const options = parseCliOptions(process.argv.slice(2));
+  const importYamlPath = resolveWorkspacePath(options.configPath);
+
   if (!fs.existsSync(importYamlPath)) {
     console.error(`File not found: ${importYamlPath}`);
     process.exit(1);
   }
 
+  console.log(
+    `Using import config: ${path.relative(workspaceRoot, importYamlPath)}`,
+  );
+  if (options.dryRun) {
+    console.log(
+      "Dry run enabled; no Google Workspace content will be downloaded.",
+    );
+  }
+
   const fileContents = fs.readFileSync(importYamlPath, "utf8");
   const config = yaml.load(fileContents) as ImportConfig;
+  const clients = options.dryRun ? null : createGoogleClients();
 
   if (config.import.documents) {
     console.log("Processing documents...");
     for (const doc of config.import.documents) {
-      await processDocument(doc.id, doc.target);
+      await processDocument(doc, clients, options);
     }
   }
 
   if (config.import.files) {
     console.log("Processing files...");
     for (const file of config.import.files) {
-      await processFile(file.id, file.target);
+      await processFile(file, clients, options);
     }
   }
 }
 
-async function processDocument(id: string, targetPath: string) {
+async function processDocument(
+  target: ImportTarget,
+  clients: GoogleClients | null,
+  options: CliOptions,
+) {
+  const source = target.source || getGoogleDocUrl(target.id);
+
   try {
-    console.log(`Fetching document ${id}...`);
-    const res = await docs.documents.get({ documentId: id });
+    if (options.dryRun) {
+      logDryRunTarget("document", target.target, source);
+      return;
+    }
+
+    if (!clients) {
+      throw new Error("Google clients are required for document imports");
+    }
+
+    console.log(`Fetching document ${target.id}...`);
+    const res = await clients.docs.documents.get({ documentId: target.id });
     const doc = res.data;
     const markdown = convertDocToMarkdown(doc);
 
-    const outputPath = path.join(process.cwd(), targetPath);
-
-    // Ensure directory exists
-    fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-
-    fs.writeFileSync(outputPath, markdown);
-    console.log(`Saved document to ${targetPath}`);
+    writeImportedMarkdown(target, markdown, source);
   } catch (error) {
-    console.error(`Error processing document ${id}:`, error);
+    console.error(`Error processing document ${target.id}:`, error);
   }
 }
 
-async function processFile(id: string, targetPath: string) {
+async function processFile(
+  target: ImportTarget,
+  clients: GoogleClients | null,
+  options: CliOptions,
+) {
   try {
-    console.log(`Fetching file info ${id}...`);
-    const fileMetadata = await drive.files.get({
-      fileId: id,
+    if (options.dryRun) {
+      logDryRunTarget("file", target.target, target.source || target.id);
+      return;
+    }
+
+    if (!clients) {
+      throw new Error("Google clients are required for file imports");
+    }
+
+    console.log(`Fetching file info ${target.id}...`);
+    const fileMetadata = await clients.drive.files.get({
+      fileId: target.id,
       fields: "name, mimeType",
     });
     const originalName = fileMetadata.data.name || "downloaded-file";
 
-    console.log(`Downloading ${originalName} to ${targetPath}...`);
-    const res = await drive.files.get(
-      { fileId: id, alt: "media" },
-      { responseType: "stream" }
+    console.log(`Downloading ${originalName} to ${target.target}...`);
+    const res = await clients.drive.files.get(
+      { fileId: target.id, alt: "media" },
+      { responseType: "stream" },
     );
 
-    const outputPath = path.join(process.cwd(), targetPath);
+    const outputPath = resolveWorkspacePath(target.target);
 
-    // Ensure directory exists
     fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 
     const dest = fs.createWriteStream(outputPath);
@@ -110,18 +139,179 @@ async function processFile(id: string, targetPath: string) {
     await new Promise<void>((resolve, reject) => {
       res.data
         .on("end", () => {
-          console.log(`Saved file to ${targetPath}`);
+          console.log(`Saved file to ${target.target}`);
           resolve();
         })
-        .on("error", (err) => {
+        .on("error", (err: Error) => {
           console.error("Error downloading file:", err);
           reject(err);
         })
         .pipe(dest);
     });
   } catch (error) {
-    console.error(`Error processing file ${id}:`, error);
+    console.error(`Error processing file ${target.id}:`, error);
   }
+}
+
+function createGoogleClients(): GoogleClients {
+  const clientEmail = process.env.GOOGLEAPI_CLIENT_EMAIL;
+  const privateKey = process.env.GOOGLEAPI_PRIVATE_KEY?.replaceAll(
+    String.raw`\n`,
+    "\n",
+  );
+
+  if (!clientEmail || !privateKey) {
+    console.error(
+      "Missing GOOGLEAPI_CLIENT_EMAIL or GOOGLEAPI_PRIVATE_KEY env vars",
+    );
+    process.exit(1);
+  }
+
+  const auth = new google.auth.JWT({
+    email: clientEmail,
+    key: privateKey,
+    scopes: SCOPES,
+  });
+
+  console.log(`\nAuthenticating as: ${clientEmail}`);
+  console.log(
+    "Make sure this email has access to the Google Workspace files.\n",
+  );
+
+  return {
+    docs: google.docs({ version: "v1", auth }),
+    drive: google.drive({ version: "v3", auth }),
+  };
+}
+
+function parseCliOptions(argv: string[]): CliOptions {
+  const options: CliOptions = {
+    configPath: "content/legal/import.yaml",
+    dryRun: false,
+  };
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+
+    if (arg === "--dry-run") {
+      options.dryRun = true;
+      continue;
+    }
+
+    if (arg === "--config") {
+      const value = argv[index + 1];
+      if (!value) {
+        throw new Error("Missing value for --config");
+      }
+      options.configPath = value;
+      index += 1;
+      continue;
+    }
+
+    if (arg.startsWith("--config=")) {
+      options.configPath = arg.slice("--config=".length);
+      continue;
+    }
+
+    throw new Error(`Unknown argument: ${arg}`);
+  }
+
+  return options;
+}
+
+function findWorkspaceRoot(startDir: string): string {
+  let currentDir = path.resolve(startDir);
+
+  while (true) {
+    if (fs.existsSync(path.join(currentDir, "AGENTS.md"))) {
+      return currentDir;
+    }
+
+    const parentDir = path.dirname(currentDir);
+    if (parentDir === currentDir) {
+      return startDir;
+    }
+
+    currentDir = parentDir;
+  }
+}
+
+function resolveWorkspacePath(targetPath: string): string {
+  return path.resolve(workspaceRoot, targetPath);
+}
+
+function getGoogleDocUrl(documentId: string): string {
+  return `https://docs.google.com/document/d/${documentId}/edit`;
+}
+
+function logDryRunTarget(kind: string, targetPath: string, source: string) {
+  const mode = fs.existsSync(resolveWorkspacePath(targetPath))
+    ? "update"
+    : "create";
+
+  console.log(
+    `[dry-run] Would ${mode} ${kind} target ${targetPath} from ${source}`,
+  );
+}
+
+function writeImportedMarkdown(
+  target: ImportTarget,
+  markdown: string,
+  source: string,
+) {
+  const outputPath = resolveWorkspacePath(target.target);
+  const normalizedContent = `${markdown.trim()}\n`;
+
+  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+
+  if (path.extname(outputPath) === ".md") {
+    const existingContent = fs.existsSync(outputPath)
+      ? fs.readFileSync(outputPath, "utf8")
+      : "";
+    const { data } = parseMarkdownFrontmatter(existingContent);
+    const nextData = {
+      ...data,
+      status: target.status || "imported",
+      sources: [source],
+    };
+
+    fs.writeFileSync(
+      outputPath,
+      serializeMarkdownDocument(nextData, normalizedContent),
+    );
+  } else {
+    fs.writeFileSync(outputPath, normalizedContent);
+  }
+
+  console.log(`Saved document to ${target.target}`);
+}
+
+function parseMarkdownFrontmatter(markdown: string): {
+  data: Record<string, unknown>;
+} {
+  const frontmatterMatch = /^---\n([\s\S]*?)\n---\n?/.exec(markdown);
+
+  if (!frontmatterMatch) {
+    return { data: {} };
+  }
+
+  const parsed = yaml.load(frontmatterMatch[1]);
+  if (!parsed || typeof parsed !== "object") {
+    return { data: {} };
+  }
+
+  return { data: parsed as Record<string, unknown> };
+}
+
+function serializeMarkdownDocument(
+  data: Record<string, unknown>,
+  markdown: string,
+): string {
+  const serializedFrontmatter = yaml
+    .dump(data, { lineWidth: -1, noRefs: true })
+    .trimEnd();
+
+  return `---\n${serializedFrontmatter}\n---\n\n${markdown.trim()}\n`;
 }
 
 function convertDocToMarkdown(doc: docs_v1.Schema$Document): string {
@@ -156,7 +346,6 @@ function processParagraph(paragraph: docs_v1.Schema$Paragraph): string {
 
   // Handle lists
   if (paragraph.bullet) {
-    const listId = paragraph.bullet.listId;
     const nestingLevel = paragraph.bullet.nestingLevel || 0;
     const prefix = "  ".repeat(nestingLevel) + "- ";
     return prefix + text + "\n";
@@ -193,7 +382,7 @@ function processTextRun(textRun: docs_v1.Schema$TextRun): string {
   content = content.replace(/\n$/, "");
 
   // Replace vertical tabs (soft line breaks) with markdown hard line breaks
-  content = content.replace(/\u000b/g, "  \n");
+  content = content.replaceAll(String.fromCodePoint(11), "  \n");
 
   if (content === "") return "";
 
@@ -211,15 +400,6 @@ function processTextRun(textRun: docs_v1.Schema$TextRun): string {
     if (style.strikethrough) {
       content = `~~${content}~~`;
     }
-    // Note: The Google Docs API v1 Schema$TextStyle does not have a direct 'code' property
-    // in the type definition provided by googleapis, although it might be present in the API response.
-    // We can check for a monospaced font family if we really need code detection,
-    // but for now let's remove this property access to fix the build error.
-    /*
-    if (style.code) {
-      content = `\`${content}\``;
-    }
-    */
   }
   return content;
 }

@@ -34,3 +34,5 @@ yarn-error.log*
 
 # agents
 .github/agents
+.vercel
+.env*.local

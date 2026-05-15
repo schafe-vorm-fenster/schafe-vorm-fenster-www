@@ -39,3 +39,15 @@ Until the new stack is added, most work will fall into one of these categories:
 - information architecture and feature planning
 - design and technical foundation work for the rebuild
 - selective extraction of useful legacy copy or assets from the archive
+
+## Legal Import Script
+
+The repository now includes a Google Workspace import path for the normalized legal content in `content/legal/`.
+
+- Install tooling with `pnpm install`.
+- Run `pnpm env:pull` to refresh `.env.local` from the linked Vercel project before importing.
+- Add `GOOGLEAPI_CLIENT_EMAIL` and `GOOGLEAPI_PRIVATE_KEY` to `.env.local` in the repository root.
+- Run `pnpm import:legal-content:dry-run` to validate the manifest and target files without downloading content.
+- Run `pnpm import:legal-content` to pull the current legal texts from Google Workspace into `content/legal/` while preserving frontmatter.
+
+The document manifest for that workflow lives in `content/legal/import.yaml`.

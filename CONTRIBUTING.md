@@ -43,7 +43,15 @@ Useful contributions right now include:
 
 ## Local Development
 
-There is currently no standard local development command because the new website stack has not been set up yet.
+There is currently no standard frontend development command because the new website stack has not been set up yet.
+
+The repository does include one supported content-tooling workflow:
+
+- Install dependencies with `pnpm install`.
+- Use `pnpm env:pull` to sync `.env.local` from the linked Vercel project.
+- Put `GOOGLEAPI_CLIENT_EMAIL` and `GOOGLEAPI_PRIVATE_KEY` into `.env.local` at the repository root.
+- Use `pnpm import:legal-content:dry-run` before a real import to validate `content/legal/import.yaml` and the current targets.
+- Use `pnpm import:legal-content` to refresh the normalized legal files in `content/legal/` directly from Google Workspace.
 
 When that changes, this file should be updated with at least:
 

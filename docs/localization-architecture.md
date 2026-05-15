@@ -1,0 +1,569 @@
+# Localization & Multi-Domain Architecture
+
+## 1. Overview
+
+The Community Calendar operates across **multiple country-code TLD domains**, each defaulting to that country's primary language. Users can override the language via a URL path prefix. The system supports 5 languages across 3 TLD domains plus Vercel fallback domains.
+
+### Supported Languages
+
+| Code | Language  | Has TLD? | Reachable via                  |
+| ---- | --------- | -------- | ------------------------------ |
+| `de` | German    | `.de`    | TLD default on `.de` and `.at` |
+| `pl` | Polish    | `.pl`    | TLD default on `.pl`           |
+| `en` | English   | No       | URL prefix only (`/en/...`)    |
+| `uk` | Ukrainian | No       | URL prefix only (`/uk/...`)    |
+| `ru` | Russian   | No       | URL prefix only (`/ru/...`)    |
+
+### Domain Matrix
+
+| Environment    | `.de` domain                     | `.pl` domain                   | `.at` domain                   | Vercel fallback                            |
+| -------------- | -------------------------------- | ------------------------------ | ------------------------------ | ------------------------------------------ |
+| **Production** | `next.schafe-vorm-fenster.de`    | `next.owcezaoknem.pl`          | `next.schafvormfenster.at`     | `community-calendar-production.vercel.app` |
+| **Preview**    | `preview.schafe-vorm-fenster.de` | `preview.owcezaoknem.pl`       | `preview.schafvormfenster.at`  | `community-calendar-preview.vercel.app`    |
+| **Local dev**  | `local.schafe-vorm-fenster.de`   | `local.schafe-vorm-fenster.pl` | `local.schafe-vorm-fenster.at` | `localhost:4321`                           |
+
+> **Note:** `next.*` prefixes are temporary pre-launch. They will become `www.*` or be removed.
+
+---
+
+## 2. Locale Determination Model
+
+The language for any given page request is determined **entirely server-side** from two signals:
+
+| Priority    | Signal              | Source      | Scope       | Examples               |
+| ----------- | ------------------- | ----------- | ----------- | ---------------------- |
+| 1 (highest) | **URL path prefix** | URL segment | Per-request | `/en/m/slug.id` → `en` |
+| 2 (lowest)  | **TLD default**     | Hostname    | Per-domain  | `.de` → `de`           |
+
+These are the **only** inputs the server uses. There is no middleware, no cookies, no sessionStorage, and no `Accept-Language` inspection at render time. The resulting language is final — it determines `<html lang>`, all API `language` parameters, content selection, and hreflang generation.
+
+### 2.1 Server-Side Rendering Language (SSR)
+
+Every Astro page determines its language in the frontmatter:
+
+1. **URL path prefix present** (e.g., `/en/m/slug.id`) → language = `en`
+2. **No prefix** (e.g., `/m/slug.id`) → language = `detectLocaleFromTld(Astro.url.hostname)`
+
+This is simple, deterministic, and stateless. No other signal participates in the server-side decision.
+
+### 2.2 Language Switching
+
+The user switches language or country by **navigating to a different URL**. There are two mechanisms:
+
+| Action                             | URL change                 | Example                              |
+| ---------------------------------- | -------------------------- | ------------------------------------ |
+| **Switch language on same domain** | Add/change language prefix | `.de/m/slug.id` → `.de/en/m/slug.id` |
+| **Switch country (domain)**        | Navigate to different TLD  | `.de/m/slug.id` → `.pl/m/slug.id`    |
+
+Both are standard `<a href="...">` link navigations — no client-side JavaScript required. The language switcher UI (e.g., a footer language list or hreflang-derived links) renders simple anchor tags. When the user clicks, the next server render picks up the new URL/TLD and renders in the correct language.
+
+**Consequence:** Language preference is encoded in the URL. There is no separate "preference storage" — the URL IS the preference. Session storage for language is not needed.
+
+### 2.3 Browser Language Suggestion (Separate Feature)
+
+A first-time visitor may arrive on a domain/language that doesn't match their browser settings (e.g., a Ukrainian speaker visiting `.de` without a language prefix sees German content).
+
+This is a separate, additive feature — not part of the core locale determination. A lightweight client-side Svelte island (`client:idle`) detects the mismatch between `navigator.languages` and `<html lang>`, and shows a non-intrusive suggestion banner with a link to the language-prefixed URL. The server is never involved; sessionStorage is used only to suppress repeat suggestions within a session.
+
+See **[Story 031 — Browser Language Suggestion Banner](../stories/031-browser-language-suggestion.md)** for the full specification, acceptance criteria, and test plan.
+
+### 2.4 Avoiding "Language Context Lost" (CC-1)
+
+**Root cause:** When a user navigates on a non-default language (e.g., `/en/m/slug.id`), internal links generated by `buildBreadcrumbHref()`, `buildOrganizerPath()`, and `buildEventDetailPath()` strip the language prefix because they don't accept a `lang` parameter.
+
+**Solution:** All link-generating functions must propagate the current language prefix. Since the URL is the sole carrier of language state, every server-rendered link must preserve it.
+
+The route link facade (ADR-003) receives the current `lang` and `tldDefault` from the page. It passes `lang` to underlying path builders **only when `lang !== tldDefault`** (non-default language paths need the prefix; default language paths are bare). Helpers always include `lang` when provided — they don't need to know the TLD context.
+
+> **Rule:** Every internal link generated by the application must preserve the current language context. If the user is viewing content in a non-default language, all navigation links must include the language prefix.
+
+---
+
+## 3. Astro i18n Integration — Spike Decision Gate
+
+> **⚠️ This spike must be completed before implementing IG-1 through IG-9 and IG-13.** The outcome determines whether the `[lang]/` folder duplication, `detectLocaleFromTld()`, and `buildHreflangTags()` are replaced by Astro-native equivalents, or whether the custom approach is extended. Starting implementation before the spike resolves these areas risks rework.
+
+### 3.1 Why a Spike Is Needed
+
+Astro has a built-in `i18n` routing system including a `domains` feature (v4.9.0+) designed precisely for multi-TLD setups. If it handles the `.at` → `de` edge case cleanly, it eliminates significant custom code. If it doesn't, the current custom approach is extended with targeted improvements only.
+
+### 3.2 What the Spike Must Answer
+
+| Question                                                                                       | Implication if Yes                                                       | Implication if No                                                 |
+| ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| Does `i18n.domains` work with `.at` mapping to the same locale as `.de`?                       | Replace `TLD_LANGUAGE_MAP` + custom `detectLocaleFromTld()` entirely     | Keep custom TLD detection; adopt `astro:i18n` helpers selectively |
+| Does `Astro.currentLocale` correctly resolve from both domain and path prefix?                 | Remove per-page `detectLocaleFromTld()` calls; use `Astro.currentLocale` | Keep per-page detection                                           |
+| Does `getAbsoluteLocaleUrl()` generate correct cross-domain hreflang URLs for all 5 languages? | Replace `buildHreflangTags()` with Astro-native generation               | Keep and fix `buildHreflangTags()` for cross-domain output        |
+| Can Astro i18n routing coexist with the custom dynamic `[slug]` pattern?                       | Reduce `[lang]/` page duplication                                        | Keep page duplication, wrap with Astro i18n config only           |
+
+### 3.3 Potential `astro.config.mjs` (Spike Target)
+
+```javascript
+export default defineConfig({
+  site: "https://schafe-vorm-fenster.de",
+  output: "server",
+  adapter: vercel(),
+  i18n: {
+    locales: ["de", "en", "pl", "uk", "ru"],
+    defaultLocale: "de",
+    routing: {
+      prefixDefaultLocale: false, // /m/slug.id — no /de/ prefix for German
+    },
+    domains: {
+      pl: "https://owcezaoknem.pl",
+      // .at is the open question — Astro maps one locale to one domain.
+      // .at also serves "de" — needs verification whether it can be listed
+      // as a second domain for the same locale, or requires TLD_LANGUAGE_MAP fallback.
+    },
+  },
+});
+```
+
+### 3.4 What Always Remains Custom
+
+Regardless of spike outcome, the following is never replaced by Astro i18n:
+
+- Self-healing slug redirects (301 to canonical URL)
+- Legacy slug mapping
+- Route link facade (ADR-003) for all internal link generation
+- Client-side category/scope locale lookup (`getCategoryName`, `getScopeName`)
+- Browser language suggestion banner (Section 2.3)
+
+### 3.3 System Texts
+
+**Current state:** There is **no translation system** for UI text. No `i18next`, no `t()` function, no message catalogs. All UI strings are hardcoded in German or English.
+
+**Target:** For system texts (button labels, error messages, navigation labels, meta descriptions), the project needs a lightweight translation approach.
+
+#### Option A: Astro Content Collections for System Texts
+
+Use Astro content collections with one JSON/YAML file per language:
+
+```text
+src/content/translations/
+├── de.json    # { "filter.all": "Alle", "nav.home": "Startseite", ... }
+├── en.json
+├── pl.json
+├── uk.json
+└── ru.json
+```
+
+**Pros:** Zero dependencies, Astro-native, type-safe with Zod.
+**Cons:** No pluralization, no interpolation beyond simple strings.
+
+#### Option B: Lightweight i18n Library (`paraglide-js`) ✅ Decided
+
+Use a compile-time i18n library that tree-shakes unused translations.
+
+**Pros:** Pluralization, interpolation, ICU message format, strong typing, compile-time completeness check, Astro + Svelte compatible.
+**Cons:** Additional dependency, requires Inlang project config.
+
+#### Option C: Simple Key-Value Map Module
+
+A plain TypeScript module exporting a `Record<SupportedLanguage, Record<string, string>>` with a `t(key, lang)` helper.
+
+**Pros:** Zero dependencies, trivial to implement.
+**Cons:** No build-time check for missing keys — a key absent in one language silently falls back to German at runtime.
+
+#### Decision
+
+**Option B — paraglide-js** (`@inlang/paraglide-js` + `@inlang/paraglide-astro`).
+
+Message catalogs live in `apps/web/messages/*.json` (one file per language). Paraglide compiles them to strongly-typed `m.*` functions at build time. Untranslated keys cause a build error rather than silently degrading. Plural forms use ICU syntax within paraglide's supported subset.
+
+See **[ADR-006](../adr/006-paraglide-js-for-system-texts.md)** for full rationale, usage patterns, and affected files.
+
+---
+
+## 4. Naming and Responsibilities
+
+### 4.1 Rename `detectLocale()` → `detectLocaleFromTld()`
+
+The current name `detectLocale()` is ambiguous — it implies a general locale detection capability. The function only performs one specific operation: extracting the TLD from a hostname and mapping it to a language. Rename it to make the signal source explicit and prevent future callers from misunderstanding its scope.
+
+```typescript
+// Before
+export function detectLocale(hostname: string): SupportedLanguage;
+
+// After — files: detect-locale-from-tld.ts / detect-locale-from-tld.test.ts
+export function detectLocaleFromTld(hostname: string): SupportedLanguage;
+```
+
+All call sites (`m/[slug].astro`, `d/[slug].astro`, `c/[slug].astro`, `s/[slug].astro`, `[slug].astro`, `org/[slug].astro`, `BaseLayout.astro`) are updated. _This rename is blocked by the Astro i18n spike (Section 3) — if the spike succeeds, this function may be removed entirely._
+
+### 4.2 New Function: `detectBrowserLocale()` (for suggestion banner)
+
+Used exclusively by the browser language suggestion feature (Section 2.3). Runs client-side only, inside a Svelte island.
+
+```typescript
+// apps/web/src/helpers/locale/detect-browser-locale.ts
+// [client-side only — never import in Astro frontmatter]
+export function detectBrowserLocale(): SupportedLanguage | undefined {
+  if (typeof navigator === "undefined") return undefined;
+
+  const browserLanguages = navigator.languages ?? [navigator.language];
+
+  for (const browserLang of browserLanguages) {
+    const code = browserLang.split("-")[0]; // "pl-PL" → "pl"
+    if (SUPPORTED_LANGUAGES.includes(code as SupportedLanguage)) {
+      return code as SupportedLanguage;
+    }
+  }
+
+  return undefined;
+}
+```
+
+### 4.3 Separation of Concerns
+
+```text
+Server-side (SSR — Astro frontmatter only):
+  ├── detectLocaleFromTld(hostname)  → SupportedLanguage         determines rendering language from TLD
+  └── extractLangPrefix(path)        → { lang, remainingPath }   determines rendering language from URL
+
+Client-side (Svelte islands only — browser):
+  ├── detectBrowserLocale()          → SupportedLanguage | undefined   reads navigator.languages
+  └── sessionStorage cc_locale_suggestion_dismissed                     dismissal flag for suggestion banner
+
+Link generation (SSR — route link facade, ADR-003):
+  └── facade(lang, tldDefault, ...)  → href string               preserves lang prefix in all links
+
+System texts (universal — both SSR and islands):
+  └── t(key, lang)                   → string                    looks up translated UI string
+```
+
+There is no `resolveEffectiveLocale()` function with a 4-signal priority chain. The rendering language comes from the URL alone (deterministic, server-side). The browser suggestion banner is a separate, additive client-side concern with no influence on rendering.
+
+---
+
+## 5. Language Context in Links (CC-1 Resolution)
+
+### 5.1 Problem
+
+Three link-building helpers generate paths **without** language prefixes:
+
+| Helper                   | Generated path                | Missing             |
+| ------------------------ | ----------------------------- | ------------------- |
+| `buildBreadcrumbHref()`  | `/m/slug.id`                  | No `lang` parameter |
+| `buildOrganizerPath()`   | `/org/slug.id`                | No `lang` parameter |
+| `buildEventDetailPath()` | `/org/slug.id/e/date-slug.id` | No `lang` parameter |
+
+When a user is on `/en/m/slug.id`, clicking any of these links drops them back to TLD-default language.
+
+### 5.2 Solution
+
+All three helpers must accept an optional `lang` parameter and always include it in the generated path when provided.
+
+The route link facade (ADR-003) is the integration point. It receives both `lang` (the current rendering language) and `tldDefault` (the default language for this domain) from the page. The facade passes `lang` to helpers **only when `lang !== tldDefault`**:
+
+- On `.de` with `lang = "de"` → no prefix (bare path: `/m/slug.id`)
+- On `.de` with `lang = "en"` → prefix included: `/en/m/slug.id`
+- On `.pl` with `lang = "pl"` → no prefix (bare path: `/m/slug.id`)
+- On `.pl` with `lang = "de"` → prefix included: `/de/m/slug.id`
+
+The helpers themselves don't need to know the TLD context — the facade handles that decision.
+
+The centralized route link facade (ADR-003) is the correct integration point. The facade:
+
+1. Receives `lang` and `tldDefault` from the page/layout
+2. Computes whether a prefix is needed (`lang !== tldDefault`)
+3. Passes `lang` to helpers only when a prefix is needed
+4. Ensures no link is ever generated without language context
+
+### 5.3 Rule
+
+> **Every internal link generated by the application must preserve the current language context.** If the user is viewing content in a non-default language, all navigation links must include the language prefix.
+
+---
+
+## 6. Hreflang and Cross-Domain References (CC-2 Resolution)
+
+### 6.1 Current Behavior
+
+`buildHreflangTags()` generates hreflang tags pointing to the **same domain**:
+
+```html
+<!-- On schafe-vorm-fenster.de -->
+<link
+  rel="alternate"
+  hreflang="de"
+  href="https://schafe-vorm-fenster.de/m/slug.id"
+/>
+<link
+  rel="alternate"
+  hreflang="pl"
+  href="https://schafe-vorm-fenster.de/pl/m/slug.id"
+/>
+<link
+  rel="alternate"
+  hreflang="en"
+  href="https://schafe-vorm-fenster.de/en/m/slug.id"
+/>
+```
+
+### 6.2 Decision Needed
+
+**Question:** Should Polish hreflang on `.de` point to the `.pl` domain?
+
+| Approach                  | Hreflang `pl` on `.de`                | Hreflang `de` on `.pl`             |
+| ------------------------- | ------------------------------------- | ---------------------------------- |
+| **Same-domain** (current) | `schafe-vorm-fenster.de/pl/m/slug.id` | `owcezaoknem.pl/de/m/slug.id`      |
+| **Cross-domain**          | `owcezaoknem.pl/m/slug.id`            | `schafe-vorm-fenster.de/m/slug.id` |
+
+**Recommendation:** Use **cross-domain** hreflang. Each TLD domain's native language gets the bare path; cross-references use the other domain. This is the SEO-correct approach for multi-domain setups and is exactly what Astro's `i18n.domains` + `getAbsoluteLocaleUrl()` provides.
+
+### 6.3 Hreflang Matrix (Target)
+
+For page `/m/ivenack.2895545` on `.de` domain:
+
+```html
+<link
+  rel="alternate"
+  hreflang="de"
+  href="https://schafe-vorm-fenster.de/m/ivenack.2895545"
+/>
+<link
+  rel="alternate"
+  hreflang="pl"
+  href="https://owcezaoknem.pl/m/ivenack.2895545"
+/>
+<link
+  rel="alternate"
+  hreflang="en"
+  href="https://schafe-vorm-fenster.de/en/m/ivenack.2895545"
+/>
+<link
+  rel="alternate"
+  hreflang="uk"
+  href="https://schafe-vorm-fenster.de/uk/m/ivenack.2895545"
+/>
+<link
+  rel="alternate"
+  hreflang="ru"
+  href="https://schafe-vorm-fenster.de/ru/m/ivenack.2895545"
+/>
+<link
+  rel="alternate"
+  hreflang="x-default"
+  href="https://schafe-vorm-fenster.de/m/ivenack.2895545"
+/>
+```
+
+### 6.4 Hreflang Matrix — `.at` Domain
+
+The `.at` domain serves the same `de` locale as `.de`. It is a regional variant (Austria vs. Germany), not a separate language. Its hreflang set must explicitly cross-reference both German domains and all language variants:
+
+For page `/m/ivenack.2895545` on `.at` domain:
+
+```html
+<!-- .at self-reference for de (Austrian German) -->
+<link
+  rel="alternate"
+  hreflang="de-AT"
+  href="https://schafvormfenster.at/m/ivenack.2895545"
+/>
+<!-- Cross-reference to .de for de (German) -->
+<link
+  rel="alternate"
+  hreflang="de-DE"
+  href="https://schafe-vorm-fenster.de/m/ivenack.2895545"
+/>
+<!-- Cross-reference to .pl for pl -->
+<link
+  rel="alternate"
+  hreflang="pl"
+  href="https://owcezaoknem.pl/m/ivenack.2895545"
+/>
+<!-- Non-TLD languages — hosted on .de -->
+<link
+  rel="alternate"
+  hreflang="en"
+  href="https://schafe-vorm-fenster.de/en/m/ivenack.2895545"
+/>
+<link
+  rel="alternate"
+  hreflang="uk"
+  href="https://schafe-vorm-fenster.de/uk/m/ivenack.2895545"
+/>
+<link
+  rel="alternate"
+  hreflang="ru"
+  href="https://schafe-vorm-fenster.de/ru/m/ivenack.2895545"
+/>
+<!-- x-default points to the primary German domain -->
+<link
+  rel="alternate"
+  hreflang="x-default"
+  href="https://schafe-vorm-fenster.de/m/ivenack.2895545"
+/>
+```
+
+**Key points:**
+
+- `.at` uses `hreflang="de-AT"` to signal Austrian German (distinct from `de-DE` on `.de`)
+- `x-default` points to `.de`, not `.at` — `.de` is the primary German domain
+- `buildHreflangTags()` (or its Astro i18n replacement) must be aware of which domain it's running on to generate the correct regional hreflang codes
+- **This is a second open question for the Astro i18n spike** — whether `i18n.domains` supports regional locale variants (`de-AT` vs `de-DE`) or whether that requires custom handling.
+
+### 6.5 Decision Gate
+
+The final hreflang implementation strategy — same-domain vs. cross-domain, `de` vs. `de-DE`/`de-AT` regional codes — is resolved as part of the **Astro i18n spike (Section 3)**. Do not rewrite `buildHreflangTags()` before the spike completes.
+
+---
+
+## 7. API Locale Propagation
+
+### 7.1 Current State
+
+| API Client                              | Accepts `language`?            | Actually passed by services?                   |
+| --------------------------------------- | ------------------------------ | ---------------------------------------------- |
+| Events API `searchEvents()`             | Yes (`options.language`)       | **No** — `searchFilteredEvents` never sets it  |
+| Events API `searchEventsByOrganizers()` | Yes (`options.language`)       | **No** — `searchOrganizerEvents` never sets it |
+| Events API `getEvent()`                 | Yes (`language` param)         | **Yes** — `composeEventDetailLayout` passes it |
+| Events API `getCategories()`            | No (returns all localizations) | N/A                                            |
+| Geo API `getCommunity()`                | No                             | N/A — API has no language parameter            |
+| Geo API `resolveSlug()`                 | No                             | N/A — API has no language parameter            |
+| Calendar API `getOrganizer()`           | No                             | N/A — API has no language parameter            |
+| Classification API `getCategories()`    | No (returns all localizations) | N/A                                            |
+| Classification API `getScopes()`        | No (returns all localizations) | N/A                                            |
+
+### 7.2 Gaps to Close
+
+**Must fix — language-aware APIs not receiving locale:**
+
+1. **`searchFilteredEvents` service** — must accept `language` parameter and pass it to `searchEvents(community, { language, scope, category })`
+2. **`searchOrganizerEvents` service** — must accept `language` parameter and pass it to `searchEventsByOrganizers({ organizers, language })`
+3. **`composeSeriesLayout`** — must pass `locale` to the event search call
+4. **`composePlaceLayout`** — must pass `locale` through `searchFilteredEvents`
+5. **`composeOrganizerLayout`** — must pass `locale` through `searchOrganizerEvents`
+
+**Not fixable (API limitation):**
+
+- Geo API returns place names in a single locale (the API doesn't support language selection). Place names are geographic proper nouns and may not need localization.
+- Calendar API returns organizer data in a single locale. Organizer names are proper nouns.
+
+### 7.3 Categories and Scopes — Classification API
+
+**Current problem:** `categories.ts` and `scopes.ts` are build-time generated with only `de` and `en` localizations.
+
+**Reality:** The Classification API `/api/categories` and `/api/scopes` endpoints return **all available localizations** — the API already supports multilingual data. The build-time fetch script (`fetch-build-data.mjs`) retrieves them but the live API may return more locales than just `de`/`en`.
+
+**Solution:**
+
+1. Verify what locales the Classification API actually returns (check live response)
+2. The `fetch-build-data.mjs` script already fetches all localizations — it just needs to write them all to the generated files (it already does, the issue is the API may only provide `de`/`en` currently)
+3. If the API provides `pl`, `uk`, `ru` — the generated files will automatically include them
+4. If the API doesn't provide them yet — track as an upstream dependency
+5. The `getCategoryName(id, locale)` and `getScopeName(id, locale)` fallback functions already handle missing locales by falling back to the first available translation
+
+---
+
+## 8. Gap Summary and Closure Plan
+
+### 8.1 Implementation Gaps
+
+> Items marked **[post-spike]** must not be started until the Astro i18n spike (Section 3) is complete. The spike outcome determines their implementation approach.
+
+| ID        | Gap                                                          | Severity | Spike?     | Resolution                                                                |
+| --------- | ------------------------------------------------------------ | -------- | ---------- | ------------------------------------------------------------------------- |
+| **IG-0**  | Astro i18n spike — evaluate `i18n.domains` for multi-TLD     | Critical | —          | Run spike; answer questions in Section 3.2; then proceed with IG-1 onward |
+| **IG-1**  | `buildBreadcrumbHref()` drops language prefix                | Critical | post-spike | Add `lang` parameter, delegate through `buildCanonicalPath({ lang })`     |
+| **IG-2**  | `buildOrganizerPath()` drops language prefix                 | Critical | post-spike | Add `lang` parameter, prepend `/{lang}` when provided                     |
+| **IG-3**  | `buildEventDetailPath()` drops language prefix               | Critical | post-spike | Add `lang` parameter, prepend `/{lang}` when provided                     |
+| **IG-4**  | `searchFilteredEvents` doesn't pass language to Events API   | High     | no         | Add `language` to service interface, pass through to client               |
+| **IG-5**  | `searchOrganizerEvents` doesn't pass language to Events API  | High     | no         | Add `language` to service interface, pass through to client               |
+| **IG-6**  | `composeSeriesLayout` doesn't pass locale to event search    | High     | no         | Thread `locale` through to search call                                    |
+| **IG-7**  | `composePlaceLayout` doesn't pass locale to event search     | High     | no         | Thread `locale` through `searchFilteredEvents`                            |
+| **IG-8**  | `composeOrganizerLayout` doesn't pass locale to event search | High     | no         | Thread `locale` through `searchOrganizerEvents`                           |
+| **IG-9**  | Hreflang tags are same-domain only, `.at` unaccounted for    | Medium   | post-spike | Implement cross-domain hreflang per Section 6.3 and 6.4                   |
+| **IG-10** | No system text translation mechanism                         | Medium   | no         | Implement `t(key, lang)` module (see Section 3.3)                         |
+| **IG-11** | No browser language suggestion banner                        | Medium   | no         | Add Svelte island for first-visit suggestion (see Section 2.3)            |
+| **IG-12** | `detectLocale()` name is ambiguous                           | Low      | post-spike | Rename to `detectLocaleFromTld()` — or remove if spike replaces it        |
+| **IG-13** | Legal pages not localized (`/impressum`, `/datenschutz`)     | Low      | post-spike | Add `[lang]/` variants after spike resolves page route structure          |
+| **IG-14** | Category/scope translations may be incomplete                | Low      | no         | Verify Classification API response; track as upstream if missing          |
+
+### 8.2 Unit Test Gaps
+
+| ID        | Gap                                                                   | File to change                    | Spike?     |
+| --------- | --------------------------------------------------------------------- | --------------------------------- | ---------- |
+| **UT-1**  | `buildBreadcrumbHref` — no language prefix test                       | `build-breadcrumb-href.test.ts`   | post-spike |
+| **UT-2**  | `buildOrganizerPath` — no language prefix test                        | `build-organizer-path.test.ts`    | post-spike |
+| **UT-3**  | `buildEventDetailPath` — no language prefix test                      | `build-event-detail-path.test.ts` | post-spike |
+| **UT-4**  | `extractLangPrefix` — missing `uk`, `ru` test cases                   | `extract-lang-prefix.test.ts`     | no         |
+| **UT-5**  | `buildHreflangTags` — no `.pl` base URL, `.at`, or cross-domain tests | `build-hreflang-tags.test.ts`     | post-spike |
+| **UT-6**  | `buildCanonicalPath` — missing `d`, `c`, `s` with lang prefix         | `build-canonical-path.test.ts`    | no         |
+| **UT-7**  | `detectLocaleFromTld` — missing `.app`, `.com`, hostname-with-port    | `detect-locale-from-tld.test.ts`  | post-spike |
+| **UT-8**  | Layout composers tested only with `locale: "de"`                      | `compose-*-layout.test.ts`        | no         |
+| **UT-9**  | No test for `supported-languages.ts` data consistency                 | new test file                     | no         |
+| **UT-10** | Services don't test locale forwarding to API clients                  | service test files                | no         |
+| **UT-11** | `detectBrowserLocale` — needs tests for `pl-PL`, `uk-UA`, no match    | new test file                     | no         |
+
+### 8.3 E2E Test Gaps
+
+| ID         | Scenario                                                               | Priority |
+| ---------- | ---------------------------------------------------------------------- | -------- |
+| **E2E-1**  | `.de` domain → `<html lang="de">`                                      | P0       |
+| **E2E-2**  | `.pl` domain → `<html lang="pl">`                                      | P0       |
+| **E2E-3**  | `.at` domain → `<html lang="de">`                                      | P0       |
+| **E2E-4**  | `/en/m/slug.id` on `.de` → `<html lang="en">`                          | P0       |
+| **E2E-5**  | Invalid lang prefix `/xx/m/slug.id` → 404                              | P1       |
+| **E2E-6**  | Hreflang tags present for all 5 languages + `x-default`                | P1       |
+| **E2E-7**  | Hreflang self-reference matches current page language                  | P1       |
+| **E2E-8**  | Navigation links preserve language prefix (`/en/` page → `/en/` links) | P0       |
+| **E2E-9**  | Breadcrumb links preserve language prefix                              | P1       |
+| **E2E-10** | Organizer links preserve language prefix                               | P1       |
+| **E2E-11** | Event detail links preserve language prefix                            | P1       |
+| **E2E-12** | `.vercel.app` domain → `<html lang="de">` (German fallback)            | P2       |
+| **E2E-13** | Self-healing redirect preserves language prefix                        | P2       |
+| **E2E-14** | Category/scope labels match page language                              | P2       |
+
+### 8.4 E2E CI Strategy
+
+**Current problem:** Locale-specific Playwright projects are disabled in CI (`isCI ? [] : [...]`) because CI doesn't have `/etc/hosts` entries.
+
+**Solution — Two-tier strategy:**
+
+1. **PR checks (CI-B):** Use `--add-host` in GitHub Actions via a service container or a setup step that writes to `/etc/hosts`:
+
+   ```yaml
+   - name: Setup local domains
+     run: |
+       echo "127.0.0.1 local.schafe-vorm-fenster.de" | sudo tee -a /etc/hosts
+       echo "127.0.0.1 local.schafe-vorm-fenster.pl" | sudo tee -a /etc/hosts
+       echo "127.0.0.1 local.schafe-vorm-fenster.at" | sudo tee -a /etc/hosts
+   ```
+
+   Then run locale E2E projects against the local dev server.
+
+2. **Post-deploy checks (CI-A):** After preview deployment, run E2E against real preview domains (`preview.schafe-vorm-fenster.de`, `preview.owcezaoknem.pl`, `preview.schafvormfenster.at`).
+
+---
+
+## 9. Architecture Decisions Referenced
+
+| ADR                                                          | Relevance                                                                         |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| [ADR-001](adr/001-consumer-owned-zod-schemas.md)             | Schema ownership — localization schemas in classification-api client              |
+| [ADR-002](adr/002-per-domain-services-intent-layouts.md)     | Pipeline: page → intent → layout → services — locale threads through this         |
+| [ADR-003](adr/003-centralized-route-link-facade.md)          | Route link facade must propagate language context to all helpers                  |
+| [ADR-004](adr/004-app-local-api-clients.md)                  | API clients are app-local — language param additions stay within `apps/web`       |
+| [ADR-005](adr/005-events-api-timestamps-and-localization.md) | Events API localization: `localizeEventData()` pattern for single-event responses |
+
+---
+
+## 10. Concept Requirements Traceability
+
+| Requirement ID      | Description                                       | Status                                                               |
+| ------------------- | ------------------------------------------------- | -------------------------------------------------------------------- |
+| REQ-I18N-5.0        | Domain-level language mapping via TLD             | ✅ Implemented (`detectLocale` + `TLD_LANGUAGE_MAP`)                 |
+| REQ-I18N-5.0        | Hreflang tags for all supported languages         | ⚠️ Partial — same-domain only; cross-domain + `.at` blocked on spike |
+| REQ-I18N-5.1        | Non-standard language prefix injection            | ✅ Implemented (`/[lang]/` page routes)                              |
+| CON-ROU-4.0         | Canonical URL with permanent geonameId            | ✅ Implemented                                                       |
+| REQ-ROU-4.1         | Self-healing slug redirects                       | ✅ Implemented (301 redirects)                                       |
+| REQ-REG-3.1         | Administrative level prefix routing               | ✅ Implemented (`m`, `d`, `c`, `s`)                                  |
+| REQ-I18N-5.0 + CC-1 | Language context preserved through navigation     | ❌ Missing — links drop prefix; fix via facade after spike           |
+| REQ-I18N-5.0 + CC-2 | Cross-domain hreflang with `.at` regional variant | ❌ Missing — blocked on Astro i18n spike                             |
+| REQ-TCH-9.1         | Astro SSR + Svelte islands                        | ✅ Implemented (SSR only; no islands hydrated yet)                   |
+| —                   | System text translations                          | ❌ Missing — implement `t(key, lang)` module                         |
+| —                   | API calls use correct language                    | ❌ Partial — only `getEvent()` passes locale; IG-4 through IG-8      |
+| —                   | Browser language suggestion on first visit        | ❌ Missing — separate feature, implement as Svelte island (IG-11)    |

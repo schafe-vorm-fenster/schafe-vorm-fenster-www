@@ -1,0 +1,31 @@
+{
+  "name": "schafe-vorm-fenster-www",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "env:pull": "vercel env pull .env.local --environment development",
+    "import:legal-content": "tsx legacy-content/scripts/import-content.ts",
+    "import:legal-content:dry-run": "tsx legacy-content/scripts/import-content.ts --dry-run",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.26.0",
+  "dependencies": {
+    "dotenv": "latest",
+    "googleapis": "latest",
+    "js-yaml": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@schafe-vorm-fenster/cli": "^0.2.0",
+    "@schafe-vorm-fenster/config-engineering": "^0.2.0",
+    "@types/js-yaml": "latest",
+    "@types/node": "latest",
+    "tsx": "latest",
+    "typescript": "latest",
+    "vercel": "latest"
+  }
+}

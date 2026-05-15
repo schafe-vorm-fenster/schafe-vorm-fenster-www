@@ -1,0 +1,22 @@
+import:
+  documents:
+    - id: 1yNedBUBjkUnqrWCICi02NzwYs7Vp1mftVolAg26G2ZU
+      target: content/legal/imprint.md
+      source: https://docs.google.com/document/d/1yNedBUBjkUnqrWCICi02NzwYs7Vp1mftVolAg26G2ZU/edit
+      status: imported
+    - id: 1jvjBhxtEsl7RPY3AXQ-Lqpl4FDu_LukR_e3yZYETZQc
+      target: content/legal/privacy-policy.md
+      source: https://docs.google.com/document/d/1jvjBhxtEsl7RPY3AXQ-Lqpl4FDu_LukR_e3yZYETZQc/edit
+      status: imported
+    - id: 1FJ-PZRf-V6c7WsCTmhbnPqjnLD6ov4lLul18flxatp0
+      target: content/legal/community-guidelines.md
+      source: https://docs.google.com/document/d/1FJ-PZRf-V6c7WsCTmhbnPqjnLD6ov4lLul18flxatp0/edit
+      status: imported
+    - id: 1ZsEc4HiofEDlgsHkpoD6WtdYGsDkNZBraZAPWFjNkgc
+      target: content/legal/terms-of-use.md
+      source: https://docs.google.com/document/d/1ZsEc4HiofEDlgsHkpoD6WtdYGsDkNZBraZAPWFjNkgc/edit
+      status: imported
+    - id: 1DkXR9EnYNkvdo3RHYXF0q1imp0QU0gSBE0ohoEokRFo
+      target: content/legal/dpa.md
+      source: https://docs.google.com/document/d/1DkXR9EnYNkvdo3RHYXF0q1imp0QU0gSBE0ohoEokRFo/edit
+      status: imported
