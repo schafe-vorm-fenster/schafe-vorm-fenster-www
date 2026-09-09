@@ -1,0 +1,44 @@
+---
+artefact: rtm
+status: DRAFT
+date: 2026-09-09
+---
+
+# Requirements Traceability Matrix
+
+Coarse-grained by area; per-requirement locators live in the requirement
+files themselves.
+
+| Area (file) | IDs | Sources | Decisions | Open questions |
+| --- | --- | --- | --- | --- |
+| jobs-and-navigation | WEB-F-001–009 | SRC-001, SRC-003 | — | — |
+| pages | WEB-F-010–022 | SRC-003, SRC-008 | — | Q-005, Q-006, Q-007, Q-017, Q-022 |
+| relevance-and-proof | WEB-F-030–039 | SRC-001, SRC-002 | — | Q-002, Q-003, Q-004, Q-014, Q-019 |
+| live-data | WEB-F-040–045 | SRC-001, SRC-002, SRC-003, SRC-011 | DEC-021 | Q-015 (Rest) |
+| personalization | WEB-F-050–056 | SRC-001, SRC-002, SRC-006 | — | Q-008 |
+| localization | WEB-F-060–069 | SRC-006, SRC-007 | DEC-003, DEC-005, DEC-006 | Q-001, Q-010, Q-011 |
+| seo | WEB-F-070–079 | SRC-006, SRC-010 | DEC-018 | Q-009, Q-016 |
+| content-pipeline | WEB-F-080–089 | SRC-006, SRC-009 | DEC-012, DEC-020 | Q-018 |
+| forms-and-leads | WEB-F-090–096 | SRC-003 | DEC-009–013 | Q-017, Q-020, Q-022 |
+| rendering-and-resilience | WEB-F-100–105 | SRC-002 | DEC-019 | — |
+| performance | WEB-Q-001–008 | SRC-006, SRC-007 | DEC-007 | — |
+| accessibility | WEB-Q-010–019, 026–027 | SRC-006 | DEC-012 | Q-013, Q-021 |
+| privacy | WEB-Q-020–025, 028 | SRC-001, SRC-006 | DEC-004, DEC-016 | Q-008 |
+| security | WEB-Q-030–036 | SRC-006 | DEC-014, DEC-015, DEC-017 | Q-022 |
+| technical constraints | WEB-C-001–006 | SRC-006, SRC-008 | DEC-002 | — |
+| scope boundaries | WEB-C-010–016 | SRC-001, SRC-003 | — | Q-006, Q-012 |
+
+## Tactical layer
+
+| Tactical spec | Implements |
+| --- | --- |
+| TS-001 locale-routing | WEB-F-060–069 |
+| TS-002 accessibility | WEB-Q-010–019, 026–027 |
+| TS-003 performance | WEB-Q-001–008, WEB-F-105 |
+
+## Chain upward
+
+Goals: `go-to-market-os/strategy/business-goals/` · Needs: audience
+`communication_goals` / `information_needs` in `go-to-market-os/audiences/`
+· Conversions: `go-to-market-os/strategy/conversion-goals/`. See
+`ssd/website-relaunch.ssd.md`.
