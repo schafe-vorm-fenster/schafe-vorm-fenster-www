@@ -8,15 +8,18 @@
     "import:legal-content": "tsx legacy-content/scripts/import-content.ts",
     "import:legal-content:dry-run": "tsx legacy-content/scripts/import-content.ts --dry-run",
     "check:frontmatter": "tsx scripts/check-frontmatter.ts",
-    "check": "pnpm check:frontmatter",
+    "check": "pnpm check:frontmatter && pnpm check:specs",
     "prepare": "husky",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check:specs": "tsx scripts/check-specs.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.26.0",
   "dependencies": {
+    "@schafe-vorm-fenster/design-tokens": "^0.1.0",
+    "@schafe-vorm-fenster/model-offerings": "^0.1.0",
     "dotenv": "latest",
     "googleapis": "latest",
     "js-yaml": "latest",

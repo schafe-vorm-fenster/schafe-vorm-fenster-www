@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@schafe-vorm-fenster/design-tokens':
+        specifier: ^0.1.0
+        version: 0.1.0
+      '@schafe-vorm-fenster/model-offerings':
+        specifier: ^0.1.0
+        version: 0.1.0(zod@4.4.3)
       dotenv:
         specifier: latest
         version: 17.4.2
@@ -685,6 +691,14 @@ packages:
 
   '@schafe-vorm-fenster/config-engineering@0.2.0':
     resolution: {integrity: sha512-ldALsjh1fwu/HJ2KcKbnP6wSdpRj3D/ZGtY8iCe0ChTmGxGWpPW4TQKZZ1D/9aV8z9jJzRkE7hUBqNObQ4po1w==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/config-engineering/0.2.0/0730c14f461fae2ef0db61b5296222a07f5d394a}
+
+  '@schafe-vorm-fenster/design-tokens@0.1.0':
+    resolution: {integrity: sha512-NqLFJr09V/Qi0i2WQ1pcF9oJ2uQp42+HMAhKMFms4NQyGZY/wrSHxI/Zo/iPEL7BK0ouz8ou2Y+RaSmSjKKGLQ==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/design-tokens/0.1.0/8f496a8a746a11271a10c8445dcf7bc2f8bd8d70}
+
+  '@schafe-vorm-fenster/model-offerings@0.1.0':
+    resolution: {integrity: sha512-J0yOG0sXmhlxwYMrPTslIwQuvICeA9cr15mdlCWnRC9mq5JyR/Dk3Tutvo0Uz1XpbczLQQTNtfNJ519ghpvAuQ==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/model-offerings/0.1.0/ffe47b6f34ee084a14734670e6fca1411e5e7a0c}
+    peerDependencies:
+      zod: ^4.0.0
 
   '@schafe-vorm-fenster/playbook-dependency-update@0.2.0':
     resolution: {integrity: sha512-2y/7hOUzwiyZ6d0smhDt/DkF425kRwjwrNJcWnAgpchG+tOZVsSjvc05+dFJ7DA8sHEtmZSiSeB6jjAy5qmiZQ==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/playbook-dependency-update/0.2.0/7358d030e01fa248b45d2d62e25b12d27b9e7618}
@@ -2307,6 +2321,12 @@ snapshots:
       '@schafe-vorm-fenster/playbook-dependency-update': 0.2.0
       '@schafe-vorm-fenster/playbook-rebase-on-main': 0.2.0
       '@schafe-vorm-fenster/skill-github-issues': 0.2.0
+
+  '@schafe-vorm-fenster/design-tokens@0.1.0': {}
+
+  '@schafe-vorm-fenster/model-offerings@0.1.0(zod@4.4.3)':
+    dependencies:
+      zod: 4.4.3
 
   '@schafe-vorm-fenster/playbook-dependency-update@0.2.0':
     dependencies:
