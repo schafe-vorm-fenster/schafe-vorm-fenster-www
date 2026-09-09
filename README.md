@@ -1,48 +1,54 @@
 # Schafe vorm Fenster Website
 
-This repository contains the official website for Schafe vorm Fenster.
+This repository is the home of the relaunch of the official Schafe vorm
+Fenster website.
 
-The site is currently in a reset phase. The previous implementation was removed from the repository root so the website can be rebuilt from scratch with a new content model and a new tech stack.
+The website is being rebuilt from scratch. Everything currently in this
+repository predates the relaunch and is archive material, not a
+specification and not a starting point.
 
-## Current State
+## The Relaunch Runs in Three Phases
 
-- The active website implementation has not been recreated yet.
-- The previous website was archived instead of deleted.
-- The repository root is intentionally light so a new stack can be introduced cleanly.
+**1 — Concept · done.** The binding concept lives in `go-to-market-os`:
+communication principles, relevance model, and information architecture.
+See [`concept/README.md`](concept/README.md) for the links. The clickable
+prototype for those documents is in [`concept/v1.0/`](concept/v1.0/).
 
-## Legacy Content
+**2 — Specification · current phase.** Specs are derived from the concept
+documents, the information architecture, and the wireframes, and are
+written to [`specs/`](specs/). This is where the work happens right now.
 
-All relevant material from the previous website lives in `legacy-content/`.
+**3 — Content · after the specs.** Page copy and content are produced once
+the specs exist, not before. `go-to-market-os` is the single source of
+truth for content
+([ADR-001](https://github.com/schafe-vorm-fenster/go-to-market-os/blob/main/handbook/decisions/001-content-source-of-truth.adr.md)).
 
-That archive includes:
+The order is deliberate. Writing content before the specification produces
+copy with nowhere to live, and a specification bent around copy that
+already exists.
 
-- route and component files that still contain useful copy
-- markdown content and imported legal texts
-- public images and other media assets
-- helper code used to import or render legacy content
+## What Is Archive
 
-See `legacy-content/README.md` for the archive layout.
+`legacy-content/` and `content/` are pre-relaunch material. They
+are kept for lookup — a phrase worth reusing, a legal text, a support
+article — and nothing more.
+
+They do not define the target state. Do not reconcile new work against
+them, and do not treat a difference between them and the concept documents
+as a defect to fix.
 
 ## Repository Documents
 
-- `AGENTS.md` describes repo context and working rules for coding agents
-- `CONTRIBUTING.md` describes the current contribution workflow
-- `legacy-content/README.md` explains what was preserved from the old website
-
-## Intended Direction
-
-This repository will become the source for the next official website.
-
-Until the new stack is added, most work will fall into one of these categories:
-
-- content review and migration planning
-- information architecture and feature planning
-- design and technical foundation work for the rebuild
-- selective extraction of useful legacy copy or assets from the archive
+- `AGENTS.md` — repository context and working rules for agents
+  (`CLAUDE.md` and `GEMINI.md` are symlinks to it)
+- `concept/README.md` — where the binding website concept lives
+- `specs/README.md` — how specs are written
+- `CONTRIBUTING.md` — contribution workflow
 
 ## Legal Import Script
 
-The repository now includes a Google Workspace import path for the normalized legal content in `content/legal/`.
+The repository includes a Google Workspace import path for the normalized
+legal content in `content/legal/`.
 
 - Install tooling with `pnpm install`.
 - Run `pnpm env:pull` to refresh `.env.local` from the linked Vercel project before importing.
