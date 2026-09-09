@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><meta name="design_doc_mode" content="canvas"><style>
+@font-face{font-family:Catamaran;src:url(assets/fonts/catamaran-300.woff2) format("woff2");font-weight:300}
+@font-face{font-family:Catamaran;src:url(assets/fonts/catamaran-400.woff2) format("woff2");font-weight:400}
+@font-face{font-family:Catamaran;src:url(assets/fonts/catamaran-600.woff2) format("woff2");font-weight:600}
+@font-face{font-family:Catamaran;src:url(assets/fonts/catamaran-900.woff2) format("woff2");font-weight:900}
+body{margin:0;background:#EFEEE9;font-family:Catamaran,system-ui,sans-serif;color:#1C2118}
+a{color:#4F6A0E}a:hover{color:#3C5209}
+.ph::-webkit-scrollbar{width:0}
+</style></helmet>
+
+<div style="display:flex;gap:32px;align-items:flex-start;padding:36px 40px 60px">
+
+  <div style="width:320px;display:flex;flex-direction:column;gap:16px;position:sticky;top:24px">
+    <div>
+      <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#6B7361">Klickdummy · Mobile</div>
+      <div style="font-size:24px;font-weight:900;line-height:1.1;margin-top:4px">Wireframes<br>Schafe vorm Fenster</div>
+      <p style="font-size:13px;font-weight:300;line-height:1.45;color:#4A5142;margin:8px 0 0">Inhalte sind echt (media-echo, proof, offerings) oder als Platzhalter markiert. Die Steuerung unten gehört nicht zur Website – sie simuliert, was die Seite über den Besucher weiß.</p>
+    </div>
+
+    <div style="background:#fff;border:1px solid #DDDCD3;border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#6B7361;margin-bottom:8px">Seiten</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <sc-for list="{{ pages }}" as="p" hint-placeholder-count="7">
+          <button onClick="{{ p.go }}" style="{{ p.style }}">{{ p.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="background:#1C2118;color:#fff;border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#B4CF39;margin-bottom:10px">Prototyp-Steuerung</div>
+
+      <div style="font-size:12px;font-weight:600;margin-bottom:5px">Standort (Stufe 1)</div>
+      <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:12px">
+        <sc-for list="{{ regionOpts }}" as="o" hint-placeholder-count="3">
+          <button onClick="{{ o.go }}" style="{{ o.style }}">{{ o.label }}</button>
+        </sc-for>
+      </div>
+
+      <div style="font-size:12px;font-weight:600;margin-bottom:5px">Einstieg (Stufe 2)</div>
+      <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:12px">
+        <sc-for list="{{ entryOpts }}" as="o" hint-placeholder-count="5">
+          <button onClick="{{ o.go }}" style="{{ o.style }}">{{ o.label }}</button>
+        </sc-for>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button onClick="{{ toggleEmpty }}" style="{{ emptyStyle }}">Ort ohne Termine (Leerfall)</button>
+        <button onClick="{{ toggleAnn }}" style="{{ annStyle }}">Konzept-Anmerkungen</button>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #DDDCD3;border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#6B7361;margin-bottom:8px">Diese Seite</div>
+      <div style="font-size:13px;font-weight:300;line-height:1.5">
+        <div style="margin-bottom:4px"><strong style="font-weight:600">Fokus-Job:</strong> {{ meta.job }}</div>
+        <div style="margin-bottom:4px"><strong style="font-weight:600">Primär-Conversion:</strong> <span style="font-family:ui-monospace,monospace;font-size:11px;background:#F1F0EA;padding:1px 5px;border-radius:3px">{{ meta.conv }}</span></div>
+        <div style="margin-bottom:4px"><strong style="font-weight:600">Zielgruppen:</strong> {{ meta.aud }}</div>
+        <div><strong style="font-weight:600">Wissensstufe:</strong> {{ stageLabel }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px;align-items:center">
+    <div style="width:412px;height:812px;background:#2A2A28;border-radius:44px;padding:11px;box-shadow:0 18px 40px rgba(0,0,0,.18)">
+      <div class="ph" style="width:390px;height:790px;background:#fff;border-radius:34px;overflow-y:auto;overflow-x:hidden;position:relative">
+
+        <div style="position:sticky;top:0;z-index:5;background:#fff">
+          <div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:11px;font-weight:600;color:#6B7361"><span>9:41</span><span>▮▮▮ ◍ ▰</span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid #E7E6E0">
+            <div onClick="{{ goHome }}" style="display:flex;align-items:center;gap:7px;cursor:pointer"><img src="assets/svf-logo-calendar-green.png" alt="Schafe vorm Fenster" style="height:26px"><span style="font-size:13px;font-weight:600;line-height:1.05">Schafe vorm<br>Fenster</span></div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="font-size:12px;font-weight:600;background:#B4CF39;padding:7px 10px;border-radius:6px">Kalender</div>
+              <div style="width:34px;height:34px;border:1px solid #DDDCD3;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px">≡</div>
+            </div>
+          </div>
+        </div>
+
+        <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="01 Startseite">
+          <div style="padding:22px 16px 20px;background:#F7F7F4;border-bottom:1px solid #E7E6E0">
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:12px">{{ annHero }}</div></sc-if>
+            <h1 style="font-size:28px;font-weight:900;line-height:1.08;margin:0 0 8px;text-wrap:pretty">{{ heroTitle }}</h1>
+            <p style="font-size:15px;font-weight:300;line-height:1.4;margin:0 0 14px;color:#3A4034">{{ heroSub }}</p>
+            <sc-if value="{{ noRegion }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;gap:6px;margin-bottom:10px">
+                <div style="flex:1;height:48px;border:1.5px solid #1C2118;border-radius:8px;display:flex;align-items:center;padding:0 12px;font-size:14px;color:#8A9080;background:#fff">Deinen Ort eingeben …</div>
+                <div style="height:48px;background:#1C2118;color:#fff;border-radius:8px;display:flex;align-items:center;padding:0 16px;font-size:14px;font-weight:600">Nachsehen</div>
+              </div>
+              <div style="font-size:12.5px;font-weight:300;color:#5A6151">Oder: <span style="font-weight:600;color:#4F6A0E">Orte in meiner Nähe zeigen</span></div>
+            </sc-if>
+            <sc-if value="{{ hasRegion }}" hint-placeholder-val="{{ false }}">
+              <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:10px">Job „Wissen, was los ist" ist kein Klickziel mehr – er passiert hier, live · Radius {{ liveRadius }}</div></sc-if>
+              <div style="background:#fff;border:1px solid #E2E1D9;border-radius:10px;padding:12px;margin-bottom:10px">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+                  <div style="font-size:13px;font-weight:600;color:#6B7361">Diese Woche in {{ place }} und drumherum</div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <sc-for list="{{ liveEvents }}" as="e" hint-placeholder-count="3">
+                    <div style="display:flex;gap:10px;align-items:center">
+                      <div style="width:38px;text-align:center;flex:none"><div style="font-size:16px;font-weight:900;line-height:1">{{ e.day }}</div><div style="font-size:9.5px;font-weight:600;color:#6B7361;text-transform:uppercase">{{ e.mon }}</div></div>
+                      <div style="border-left:1px solid #E7E6E0;padding-left:10px;flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600;line-height:1.2">{{ e.title }}</div><div style="font-size:11.5px;font-weight:300;color:#5A6151;margin-top:1px">{{ e.meta }}</div></div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div onClick="{{ goReader }}" style="margin-top:10px;background:#1C2118;color:#fff;border-radius:8px;padding:12px;text-align:center;font-size:14.5px;font-weight:600">Kalender von {{ place }} öffnen</div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+                <span style="font-size:12px;font-weight:600;color:#6B7361">Nicht dein Ort?</span>
+                <sc-for list="{{ nearPlaces }}" as="pl" hint-placeholder-count="3">
+                  <div onClick="{{ goPlace }}" style="border:1px solid #DDDCD3;border-radius:999px;padding:5px 11px;font-size:12.5px;background:#fff">{{ pl }}</div>
+                </sc-for>
+                <span style="font-size:12.5px;font-weight:600;color:#4F6A0E">anderer Ort</span>
+              </div>
+            </sc-if>
+          </div>
+
+          <div style="padding:20px 16px 8px">
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:10px">P1 · Drei Szenen statt Zielgruppen-Karten · Reihenfolge nach Einstieg ({{ entryLabel }})</div></sc-if>
+            <div style="font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#6B7361;margin-bottom:12px">{{ scenesTitle }}</div>
+          </div>
+
+          <div style="padding:0 16px 20px;display:flex;flex-direction:column;gap:14px">
+            <sc-for list="{{ scenes }}" as="sc" hint-placeholder-count="3">
+              <div onClick="{{ sc.go }}" style="{{ sc.style }}">
+                <sc-if value="{{ sc.isWhatsapp }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#E9EFDD;border-radius:8px 8px 0 0;padding:12px 12px 10px;display:flex;flex-direction:column;gap:6px">
+                    <div style="align-self:flex-end;max-width:78%;background:#DCF3C3;border-radius:10px 10px 2px 10px;padding:7px 9px;font-size:11.5px;line-height:1.3"><div style="height:44px;background:repeating-linear-gradient(45deg,#C9DE7A,#C9DE7A 6px,#B4CF39 6px,#B4CF39 12px);border-radius:4px;margin-bottom:4px;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:600;color:#3C5209">Foto: Aushang Feuerwehrfest</div>Hallo, das ist am Freitag – bitte in den Kalender 🙏</div>
+                    <div style="align-self:flex-start;max-width:78%;background:#fff;border-radius:10px 10px 10px 2px;padding:7px 9px;font-size:11.5px;line-height:1.3">Steht drin: <strong style="font-weight:600">Fr 12.9., 18 Uhr, Feuerwehrfest {{ place }}</strong> ✓</div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ sc.isOwn }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:#EFEEE9;border-radius:8px 8px 0 0;padding:12px 12px 0">
+                    <div style="background:#fff;border:1px solid #DDDCD3;border-bottom:none;border-radius:6px 6px 0 0;padding:8px 10px 0">
+                      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px"><div style="font-size:10.5px;font-weight:900">{{ ownSiteName }}</div><div style="display:flex;gap:6px;font-size:8.5px;color:#8A9080"><span>Rathaus</span><span>Bürgerservice</span><span style="color:#1C2118;font-weight:600">Veranstaltungen</span></div></div>
+                      <div style="display:flex;flex-direction:column;gap:3px;padding-bottom:8px">
+                        <sc-for list="{{ ownEvents }}" as="e" hint-placeholder-count="3"><div style="display:flex;gap:6px;font-size:9.5px"><span style="color:#6B7361;width:34px;flex:none">{{ e.short }}</span><span style="font-weight:600">{{ e.title }}</span><span style="color:#8A9080">· {{ e.actor }}</span></div></sc-for>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ sc.isWhy }}" hint-placeholder-val="{{ false }}">
+                  <img src="assets/open-air-stage.jpeg" alt="Open-Air-Bühne im Dorf" style="width:100%;height:110px;object-fit:cover;border-radius:8px 8px 0 0;display:block">
+                </sc-if>
+                <div style="padding:12px 13px 13px">
+                  <div style="font-size:16.5px;font-weight:900;line-height:1.2;margin-bottom:5px;text-wrap:pretty">{{ sc.aha }}</div>
+                  <p style="font-size:13.5px;font-weight:300;line-height:1.4;margin:0 0 9px;color:#3A4034">{{ sc.body }}</p>
+                  <div style="font-size:13.5px;font-weight:600;color:#4F6A0E">{{ sc.cta }} →</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="padding:20px 16px">
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:10px">P3/P4 · Proof-Strom: {{ streamPattern }}</div></sc-if>
+            <div style="font-size:17px;font-weight:900;margin-bottom:4px">{{ streamTitle }}</div>
+            <p style="font-size:13px;font-weight:300;line-height:1.4;color:#4A5142;margin:0 0 12px">{{ streamSub }}</p>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ stream }}" as="s" hint-placeholder-count="5">
+                <div style="border:1px solid #E2E1D9;border-radius:8px;overflow:hidden;display:flex">
+                  <sc-if value="{{ s.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ s.img }}" alt="" style="width:86px;object-fit:cover;object-position:top;flex:none;align-self:stretch"></sc-if>
+                  <div style="padding:10px 12px;min-width:0;flex:1">
+                    <div style="display:flex;gap:6px;align-items:center;margin-bottom:3px;flex-wrap:wrap">
+                      <span style="{{ s.geoStyle }}">{{ s.geoLabel }}</span>
+                      <span style="font-size:10px;font-weight:600;color:#8A9080;text-transform:uppercase;letter-spacing:.05em">{{ s.type }} · {{ s.date }}</span>
+                    </div>
+                    <div style="font-size:13.5px;font-weight:400;line-height:1.35">{{ s.label }}</div>
+                    <sc-if value="{{ s.hasLogo }}" hint-placeholder-val="{{ false }}"><img src="{{ s.logo }}" alt="" style="height:16px;margin-top:6px;display:block"></sc-if>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #C9C6B8;background:#F7F7F4;color:#5A6151;font-size:10.5px;font-weight:400;padding:6px 8px;border-radius:4px;margin-top:9px;line-height:1.4">{{ filterNote }}</div></sc-if>
+          </div>
+
+          <div style="padding:18px 16px;background:#1C2118;color:#fff">
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;color:#B4CF39;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:10px">P2 · Kontext-Band: die anderen Jobs, geordnet statt versteckt</div></sc-if>
+            <div style="font-size:17px;font-weight:900;margin-bottom:3px">Du bist Leserin, Vereinsvorstand und im Amt – gleichzeitig?</div>
+            <p style="font-size:13px;font-weight:300;line-height:1.4;margin:0 0 12px;color:#C9C6B8">Kennen wir. Deshalb führt von hier alles überall hin.</p>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <sc-for list="{{ contextBand }}" as="c" hint-placeholder-count="3">
+                <div onClick="{{ c.go }}" style="border:1px solid #4A5142;border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px">
+                  <div><div style="font-size:14px;font-weight:600">{{ c.title }}</div><div style="font-size:12px;font-weight:300;color:#C9C6B8;margin-top:1px">{{ c.sub }}</div></div><div style="font-size:16px">→</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isReader }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="02 Was ist los">
+          <div style="padding:20px 16px 16px">
+            <div style="font-size:12px;font-weight:600;color:#6B7361;margin-bottom:6px">Dein Ort</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px">
+              <h1 style="font-size:28px;font-weight:900;margin:0;line-height:1.05">{{ place }}</h1>
+              <div style="font-size:12px;font-weight:600;border:1px solid #DDDCD3;border-radius:999px;padding:5px 10px">ändern</div>
+            </div>
+            <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+              <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:10px">Leerfall · einziger Moment, in dem eine Seite den Fokus-Job wechselt: „Termine veröffentlichen"</div></sc-if>
+              <div style="border:1.5px solid #1C2118;border-radius:10px;padding:14px">
+                <div style="font-size:18px;font-weight:900;line-height:1.15;margin-bottom:5px">In {{ place }} ist noch nichts eingetragen.</div>
+                <p style="font-size:14px;font-weight:300;line-height:1.4;margin:0 0 12px">Du könntest die Erste sein. Ein Termin genügt – der Kalender startet damit.</p>
+                <div onClick="{{ goPublish }}" style="background:#B4CF39;border-radius:8px;padding:13px;text-align:center;font-size:15px;font-weight:600">Ersten Termin eintragen</div>
+              </div>
+              <div style="font-size:13px;font-weight:600;color:#6B7361;margin:16px 0 8px">Dafür ist in der Umgebung was los</div>
+            </sc-if>
+            <sc-if value="{{ notEmpty }}" hint-placeholder-val="{{ true }}">
+              <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:10px">P5 · Radius 1: der Ort selbst · P7 · CTA = save-calendar-to-homescreen</div></sc-if>
+              <div style="font-size:13px;font-weight:600;color:#6B7361;margin-bottom:8px">Die nächsten Termine</div>
+            </sc-if>
+            <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:16px">
+              <sc-for list="{{ readerEvents }}" as="e" hint-placeholder-count="4">
+                <div style="border:1px solid #E2E1D9;border-radius:8px;padding:10px 12px;display:flex;gap:10px;align-items:center">
+                  <div style="width:42px;text-align:center;flex:none"><div style="font-size:17px;font-weight:900;line-height:1">{{ e.day }}</div><div style="font-size:10px;font-weight:600;color:#6B7361;text-transform:uppercase">{{ e.mon }}</div></div>
+                  <div style="border-left:1px solid #E7E6E0;padding-left:10px;flex:1;min-width:0"><div style="font-size:14px;font-weight:600;line-height:1.2">{{ e.title }}</div><div style="font-size:12px;font-weight:300;color:#5A6151;margin-top:2px">{{ e.meta }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="border:1px solid #E2E1D9;border-radius:10px;padding:14px;background:#F7F7F4">
+              <div style="font-size:16px;font-weight:900;margin-bottom:5px">Immer dabei, ohne App-Store</div>
+              <p style="font-size:13.5px;font-weight:300;line-height:1.4;margin:0 0 12px">Auf den Homescreen legen – dann öffnet sich {{ place }} mit einem Tipp. Kostenlos, ohne Konto.</p>
+              <div style="display:flex;gap:8px;margin-bottom:10px">
+                <div style="flex:1;height:78px;background:repeating-linear-gradient(45deg,#E7E6E0,#E7E6E0 8px,#DEDDD6 8px,#DEDDD6 16px);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#5A6151;text-align:center;padding:4px">Screenshot iOS<br>„Zum Home-Bildschirm"</div>
+                <div style="flex:1;height:78px;background:repeating-linear-gradient(45deg,#E7E6E0,#E7E6E0 8px,#DEDDD6 8px,#DEDDD6 16px);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10.5px;color:#5A6151;text-align:center;padding:4px">Screenshot Android<br>„App installieren"</div>
+              </div>
+              <div style="background:#1C2118;color:#fff;border-radius:8px;padding:13px;text-align:center;font-size:15px;font-weight:600">Kalender öffnen &amp; speichern</div>
+            </div>
+          </div>
+
+          <div style="padding:6px 16px 4px">
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:10px">Mehrwert als Mini-Stories: Aspekt → echtes Beispiel aus {{ place }} → warum das zählt · Zitate aus proof/ (Freigabe ausstehend)</div></sc-if>
+            <div style="font-size:19px;font-weight:900;line-height:1.15;margin-bottom:4px">Nicht nur Feste. Alles, was den Tag im Dorf bestimmt.</div>
+            <p style="font-size:13.5px;font-weight:300;line-height:1.4;margin:0 0 14px;color:#4A5142">Ein Dorfkalender lebt nicht von zehn Veranstaltungen im Jahr, sondern von dem, was jede Woche passiert.</p>
+          </div>
+
+          <div style="padding:0 16px 18px;display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ valueStories }}" as="v" hint-placeholder-count="4">
+              <div style="border:1px solid #E2E1D9;border-radius:10px;overflow:hidden">
+                <div style="display:flex;gap:10px;padding:12px 13px 10px">
+                  <div style="{{ v.iconStyle }}">{{ v.icon }}</div>
+                  <div style="flex:1;min-width:0">
+                    <div style="font-size:15.5px;font-weight:900;line-height:1.2">{{ v.title }}</div>
+                    <p style="font-size:13px;font-weight:300;line-height:1.4;margin:4px 0 0;color:#3A4034">{{ v.story }}</p>
+                  </div>
+                </div>
+                <div style="margin:0 13px 10px;background:#F7F7F4;border-radius:8px;padding:9px 11px;display:flex;gap:9px;align-items:baseline">
+                  <div style="font-size:11px;font-weight:600;color:#6B7361;width:44px;flex:none">{{ v.exShort }}</div>
+                  <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600;line-height:1.2">{{ v.exTitle }}</div><div style="font-size:11.5px;font-weight:300;color:#5A6151">{{ v.exMeta }}</div></div>
+                  <div style="font-size:10px;font-weight:600;color:#4F6A0E;background:#EAF3C6;padding:1px 6px;border-radius:999px;flex:none">live</div>
+                </div>
+                <sc-if value="{{ v.hasQuote }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin:0 13px 12px;border-left:2px solid #B4CF39;padding-left:10px">
+                    <div style="font-size:13px;font-weight:300;line-height:1.4;font-style:italic">„{{ v.quote }}"</div>
+                    <div style="font-size:11.5px;font-weight:600;color:#5A6151;margin-top:3px">{{ v.who }} <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><span style="font-weight:400;color:#8A9080">· Freigabe ausstehend</span></sc-if></div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="padding:0 16px 18px">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ readerProof }}" as="s" hint-placeholder-count="2">
+                <div style="border:1px solid #E2E1D9;border-radius:8px;padding:11px 12px;display:flex;gap:10px">
+                  <div style="{{ s.dotStyle }}"></div>
+                  <div><div style="display:flex;gap:6px;align-items:center;margin-bottom:3px"><span style="{{ s.geoStyle }}">{{ s.geoLabel }}</span><span style="font-size:10px;font-weight:600;color:#8A9080;text-transform:uppercase">{{ s.type }} · {{ s.date }}</span></div><div style="font-size:13.5px;line-height:1.35">{{ s.label }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:18px 16px;background:#1C2118;color:#fff">
+            <div style="font-size:17px;font-weight:900;margin-bottom:3px">Fehlt was in {{ place }}?</div>
+            <p style="font-size:13px;font-weight:300;line-height:1.4;margin:0 0 12px;color:#C9C6B8">Wer im Ort etwas organisiert, trägt es selbst ein – Verein, Feuerwehr, Kirche, Bäckerwagen.</p>
+            <div onClick="{{ goPublish }}" style="border:1px solid #B4CF39;color:#B4CF39;border-radius:8px;padding:11px;text-align:center;font-size:14px;font-weight:600;margin-bottom:7px">Wir organisieren was → eintragen</div>
+            <div onClick="{{ goSell }}" style="border:1px solid #4A5142;border-radius:8px;padding:11px;text-align:center;font-size:14px;font-weight:600">Ich verantworte eine Website → Portalize</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isPublish }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="03 Gefunden werden">
+          <div style="padding:22px 16px 18px">
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:12px">Fokus-Job „Termine veröffentlichen" · Primär: register-as-publisher</div></sc-if>
+            <h1 style="font-size:27px;font-weight:900;line-height:1.1;margin:0 0 8px;text-wrap:pretty">Flyer abfotografieren, per WhatsApp schicken. Fertig.</h1>
+            <p style="font-size:15px;font-weight:300;line-height:1.42;margin:0 0 16px;color:#3A4034">Der Termin steht dann im Dorfkalender von {{ place }}, auf der Gemeinde-Website und bei allen, die den Kalender auf dem Handy haben. Heute tippt ihr ihn in sechs Kanäle – und die Hälfte des Ortes erfährt trotzdem nichts.</p>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:18px">
+              <div style="display:flex;gap:8px;align-items:flex-start;font-size:13.5px;font-weight:300;line-height:1.35"><span style="color:#8A9080;font-weight:600">✕</span>Zettel im Schaukasten – nur wer vorbeigeht</div>
+              <div style="display:flex;gap:8px;align-items:flex-start;font-size:13.5px;font-weight:300;line-height:1.35"><span style="color:#8A9080;font-weight:600">✕</span>WhatsApp-Gruppe – nur wer drin ist</div>
+              <div style="display:flex;gap:8px;align-items:flex-start;font-size:13.5px;font-weight:300;line-height:1.35"><span style="color:#8A9080;font-weight:600">✕</span>Amtsblatt – Redaktionsschluss war letzte Woche</div>
+              <div style="display:flex;gap:8px;align-items:flex-start;font-size:13.5px;font-weight:300;line-height:1.35"><span style="color:#8A9080;font-weight:600">✕</span>Vereinsseite – nur wer euch schon folgt</div>
+            </div>
+            <div style="font-size:17px;font-weight:900;margin-bottom:10px">Drei Wege, den Termin loszuwerden</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="border:1px solid #E2E1D9;border-radius:8px;padding:12px;display:flex;gap:11px;align-items:flex-start"><div style="width:34px;height:34px;background:#EAF3C6;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#4F6A0E">1</div><div><div style="font-size:14.5px;font-weight:600">Flyer per WhatsApp schicken</div><div style="font-size:13px;font-weight:300;line-height:1.35;margin-top:2px">Foto vom Aushang an unsere Nummer. Den Rest machen wir.</div></div></div>
+              <div style="border:1px solid #E2E1D9;border-radius:8px;padding:12px;display:flex;gap:11px;align-items:flex-start"><div style="width:34px;height:34px;background:#EAF3C6;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#4F6A0E">2</div><div><div style="font-size:14.5px;font-weight:600">Eigener Google Kalender</div><div style="font-size:13px;font-weight:300;line-height:1.35;margin-top:2px">Ihr pflegt weiter euren Kalender, wir holen die Termine automatisch.</div></div></div>
+              <div style="border:1px solid #E2E1D9;border-radius:8px;padding:12px;display:flex;gap:11px;align-items:flex-start"><div style="width:34px;height:34px;background:#EAF3C6;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#4F6A0E">3</div><div><div style="font-size:14.5px;font-weight:600">Eigene Website als Quelle</div><div style="font-size:13px;font-weight:300;line-height:1.35;margin-top:2px">Ihr nennt die Adresse, wir lesen die Termine ein. <span style="font-size:11px;font-weight:600;color:#8A9080">(alpha)</span></div></div></div>
+            </div>
+          </div>
+
+          <div style="padding:18px 16px;background:#F7F7F4;border-top:1px solid #E7E6E0;border-bottom:1px solid #E7E6E0">
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:10px">P5 · Live: ein echter Ort als Vorbild, nicht eine Behauptung</div></sc-if>
+            <div style="font-size:17px;font-weight:900;margin-bottom:3px">So sieht ein Ort aus, in dem es läuft</div>
+            <p style="font-size:13px;font-weight:300;line-height:1.4;margin:0 0 12px;color:#4A5142">{{ exampleNote }}</p>
+            <div style="background:#fff;border:1px solid #E2E1D9;border-radius:10px;padding:12px">
+              <div style="font-size:15px;font-weight:900;margin-bottom:8px">{{ examplePlace }}</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <sc-for list="{{ exampleEvents }}" as="e" hint-placeholder-count="4">
+                  <div style="display:flex;gap:9px;align-items:baseline;border-bottom:1px solid #F1F0EA;padding-bottom:5px"><div style="font-size:11.5px;font-weight:600;color:#6B7361;width:44px;flex:none">{{ e.short }}</div><div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600;line-height:1.2">{{ e.title }}</div><div style="font-size:11.5px;font-weight:300;color:#5A6151">{{ e.actor }}</div></div></div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:20px 16px">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ publishProof }}" as="s" hint-placeholder-count="3">
+                <div style="border:1px solid #E2E1D9;border-radius:8px;padding:11px 12px;display:flex;gap:10px">
+                  <div style="{{ s.dotStyle }}"></div>
+                  <div><div style="display:flex;gap:6px;align-items:center;margin-bottom:3px"><span style="{{ s.geoStyle }}">{{ s.geoLabel }}</span><span style="font-size:10px;font-weight:600;color:#8A9080;text-transform:uppercase">{{ s.type }} · {{ s.date }}</span></div><div style="font-size:13.5px;line-height:1.35">{{ s.label }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:0 16px 18px">
+            <div onClick="{{ goRegister }}" style="background:#B4CF39;border-radius:8px;padding:15px;text-align:center;font-size:16px;font-weight:600;margin-bottom:8px">Kalender anmelden – kostenlos</div>
+            <p style="font-size:12px;font-weight:300;text-align:center;color:#5A6151;margin:0">Dauerhaft kostenlos für Vereine und Ehrenamt. Keine Kosten, keine Werbung.</p>
+          </div>
+
+          <div style="padding:16px;background:#1C2118;color:#fff">
+            <div style="font-size:15px;font-weight:900;margin-bottom:8px">Noch ein anderer Hut?</div>
+            <div onClick="{{ goSell }}" style="border:1px solid #4A5142;border-radius:8px;padding:11px;font-size:13.5px;font-weight:600;margin-bottom:6px">Wir wollen die Termine auch auf unserer eigenen Website zeigen</div>
+            <div onClick="{{ goReader }}" style="border:1px solid #4A5142;border-radius:8px;padding:11px;font-size:13.5px;font-weight:600;margin-bottom:6px">Erst mal nur gucken, was in {{ place }} los ist</div>
+            <div onClick="{{ goWhy }}" style="border:1px solid #4A5142;border-radius:8px;padding:11px;font-size:13.5px;font-weight:600">Wer steckt dahinter?</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isRegister }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="04 Registrieren">
+          <div style="padding:22px 16px">
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:12px">register-as-publisher → publish-first-event · Übergabe an die App nach Schritt 3</div></sc-if>
+            <div style="display:flex;gap:5px;margin-bottom:16px">
+              <div style="flex:1;height:4px;background:#1C2118;border-radius:2px"></div><div style="flex:1;height:4px;background:#DDDCD3;border-radius:2px"></div><div style="flex:1;height:4px;background:#DDDCD3;border-radius:2px"></div>
+            </div>
+            <div style="font-size:12px;font-weight:600;color:#6B7361;margin-bottom:4px">Schritt 1 von 3</div>
+            <h1 style="font-size:25px;font-weight:900;line-height:1.1;margin:0 0 6px">Für welchen Ort tragt ihr ein?</h1>
+            <p style="font-size:14px;font-weight:300;line-height:1.4;margin:0 0 14px;color:#3A4034">Auch ein Ortsteil zählt – die Leute identifizieren sich mit dem Dorf, nicht mit der Gemeinde.</p>
+            <div style="height:46px;border:1.5px solid #1C2118;border-radius:8px;display:flex;align-items:center;padding:0 12px;font-size:14px;color:#8A9080;margin-bottom:8px">{{ placeholderPlace }}</div>
+            <sc-if value="{{ hasRegion }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px">
+                <sc-for list="{{ nearPlaces }}" as="pl" hint-placeholder-count="3"><div style="border:1px solid #DDDCD3;border-radius:999px;padding:6px 12px;font-size:13px;background:#F7F7F4">{{ pl }}</div></sc-for>
+              </div>
+            </sc-if>
+            <div style="border-top:1px solid #E7E6E0;padding-top:14px;margin-top:6px">
+              <div style="font-size:13px;font-weight:600;color:#6B7361;margin-bottom:8px">Danach</div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="border:1px solid #E2E1D9;border-radius:8px;padding:11px 12px;opacity:.6"><div style="font-size:14px;font-weight:600">2 · Wer trägt ein?</div><div style="font-size:12.5px;font-weight:300;margin-top:2px">Name des Vereins oder der Initiative, Kontakt für Rückfragen.</div></div>
+                <div style="border:1px solid #E2E1D9;border-radius:8px;padding:11px 12px;opacity:.6"><div style="font-size:14px;font-weight:600">3 · Wie wollt ihr eintragen?</div><div style="font-size:12.5px;font-weight:300;margin-top:2px">WhatsApp · Google Kalender · eigene Website</div></div>
+                <div style="border:1px dashed #C9C6B8;border-radius:8px;padding:11px 12px;background:#F7F7F4"><div style="font-size:14px;font-weight:600">Weiter in der App</div><div style="font-size:12.5px;font-weight:300;margin-top:2px">Bestätigung, Anleitung und erster Termin passieren in app.schafe-vorm-fenster.de – die Website hört hier auf.</div></div>
+              </div>
+            </div>
+            <div style="background:#B4CF39;border-radius:8px;padding:15px;text-align:center;font-size:16px;font-weight:600;margin-top:18px">Weiter</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isSell }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="05 Selbst anbieten">
+          <div style="padding:22px 16px 18px">
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:12px">Fokus-Job „Einen eigenen Kalender betreiben" · Kommunen = Institutionen, eine Seite</div></sc-if>
+            <h1 style="font-size:26px;font-weight:900;line-height:1.1;margin:0 0 8px;text-wrap:pretty">Ihr Veranstaltungskalender. Ihre Website. Ihr Name. Und im Amt tippt niemand mehr Termine ab.</h1>
+            <p style="font-size:15px;font-weight:300;line-height:1.42;margin:0 0 16px;color:#3A4034">Die Vereine, die Feuerwehr, der Bäckerwagen schicken ihre Termine per WhatsApp oder Kalender-Anbindung ein. Sie zeigen sie – gefiltert auf Ihre Orte, unter Ihrem Logo, auf Ihrer Seite. So macht es die Stiftung Lebendiges Lehre für 17 Orte.</p>
+            <div style="display:flex;flex-direction:column;gap:0;border:1px solid #E2E1D9;border-radius:10px;overflow:hidden;margin-bottom:18px">
+              <div style="display:flex;background:#F7F7F4;font-size:11px;font-weight:600;color:#6B7361;text-transform:uppercase;letter-spacing:.05em"><div style="flex:1;padding:8px 10px">Heute</div><div style="flex:1;padding:8px 10px;border-left:1px solid #E2E1D9">Mit Portalize</div></div>
+              <div style="display:flex;border-top:1px solid #E2E1D9;font-size:12.5px;font-weight:300;line-height:1.35"><div style="flex:1;padding:10px">Eventmodul im CMS = Website-Projekt mit leerer Datenbank</div><div style="flex:1;padding:10px;border-left:1px solid #E2E1D9;background:#FCFDF7">Gefilterte Ansicht auf einen gefüllten Datenpool</div></div>
+              <div style="display:flex;border-top:1px solid #E2E1D9;font-size:12.5px;font-weight:300;line-height:1.35"><div style="flex:1;padding:10px">Redaktionelle Pflege braucht eine Person, die es nicht gibt</div><div style="flex:1;padding:10px;border-left:1px solid #E2E1D9;background:#FCFDF7">Akteure pflegen selbst, Ihre Ansicht ist als Nebeneffekt aktuell</div></div>
+              <div style="display:flex;border-top:1px solid #E2E1D9;font-size:12.5px;font-weight:300;line-height:1.35"><div style="flex:1;padding:10px">Ihr Kalender endet an der Gemeindegrenze</div><div style="flex:1;padding:10px;border-left:1px solid #E2E1D9;background:#FCFDF7">Orte, Postleitzahlen oder ein Landkreis – Sie wählen den Zuschnitt</div></div>
+            </div>
+          </div>
+
+          <div style="padding:18px 16px;background:#F7F7F4;border-top:1px solid #E7E6E0;border-bottom:1px solid #E7E6E0">
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:10px">P5 · Embed-Demo statt Screenshot: gefiltert auf {{ demoPlace }}</div></sc-if>
+            <div style="font-size:17px;font-weight:900;margin-bottom:3px">So würde es bei Ihnen aussehen</div>
+            <p style="font-size:13px;font-weight:300;line-height:1.4;margin:0 0 10px;color:#4A5142">Live-Vorschau, gefiltert auf {{ demoPlace }}. Design passt sich Ihrer Website an.</p>
+            <div style="border:1.5px dashed #B4CF39;border-radius:10px;padding:9px;background:#fff">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font-size:11px;font-weight:600;color:#4F6A0E;text-transform:uppercase;letter-spacing:.06em">Eingebetteter Kalender</div><div style="font-size:10.5px;font-weight:600;color:#8A9080">2 Zeilen JavaScript</div></div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <sc-for list="{{ demoEvents }}" as="e" hint-placeholder-count="4">
+                  <div style="display:flex;gap:9px;align-items:baseline;border-bottom:1px solid #F1F0EA;padding-bottom:5px"><div style="font-size:11.5px;font-weight:600;color:#6B7361;width:44px;flex:none">{{ e.short }}</div><div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600;line-height:1.2">{{ e.title }}</div><div style="font-size:11.5px;font-weight:300;color:#5A6151">{{ e.actor }}</div></div></div>
+                </sc-for>
+              </div>
+              <div style="font-size:10.5px;color:#8A9080;margin-top:8px">Ihr Logo · Ihr Claim · Ihr Link – Sie sind der Absender</div>
+            </div>
+          </div>
+
+          <div style="padding:20px 16px 6px">
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:10px">Drei Stufen, eine Frage: Für wen soll der Kalender sein? · CTAs sprechen Mehrwert, nicht Vertrag</div></sc-if>
+            <div style="font-size:19px;font-weight:900;line-height:1.15;margin-bottom:3px">Für wen soll der Kalender sein?</div>
+            <p style="font-size:13.5px;font-weight:300;line-height:1.4;margin:0 0 14px;color:#4A5142">Für euren Ort ist er sowieso da. Ab dem Moment, in dem er unter Ihrem Namen laufen soll, kostet er etwas.</p>
+          </div>
+
+          <div style="padding:0 16px 20px;display:flex;flex-direction:column;gap:10px">
+            <div style="border:1px solid #E2E1D9;border-radius:12px;padding:14px;background:#F7F7F4">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px"><div style="font-size:12px;font-weight:600;color:#6B7361;text-transform:uppercase;letter-spacing:.06em">Für euren Ort</div><div style="font-size:16px;font-weight:900">kostenlos</div></div>
+              <div style="font-size:15.5px;font-weight:900;line-height:1.2;margin-bottom:4px">Der Dorfkalender von {{ place }}</div>
+              <p style="font-size:13px;font-weight:300;line-height:1.4;margin:0 0 9px">Lesen ohne Konto, eintragen nach einmaliger Anmeldung. Für immer – das haben wir 2022 öffentlich zugesagt.</p>
+              <div style="display:flex;gap:8px"><div onClick="{{ goReader }}" style="flex:1;border:1.5px solid #1C2118;border-radius:8px;padding:10px;text-align:center;font-size:13.5px;font-weight:600">Kalender öffnen</div><div onClick="{{ goPublish }}" style="flex:1;border:1.5px solid #1C2118;border-radius:8px;padding:10px;text-align:center;font-size:13.5px;font-weight:600">Termine eintragen</div></div>
+            </div>
+
+            <div style="border:2px solid #1C2118;border-radius:12px;padding:16px;position:relative">
+              <div style="position:absolute;top:-10px;left:14px;background:#B4CF39;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px">Für Gemeinden, Ämter, Stiftungen, Vereine mit Website</div>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;margin:6px 0 4px"><div style="font-size:12px;font-weight:600;color:#6B7361;text-transform:uppercase;letter-spacing:.06em">Unter Ihrem Namen</div><div style="font-size:24px;font-weight:900;line-height:1">480 €<span style="font-size:12px;font-weight:300;color:#5A6151"> / Jahr</span></div></div>
+              <div style="font-size:16.5px;font-weight:900;line-height:1.2;margin-bottom:5px">Ihr eigener Veranstaltungskalender auf Ihrer Website</div>
+              <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:12px">
+                <div style="font-size:13.5px;font-weight:300;line-height:1.35">✓ Ihre Orte, Ihre Kategorien, Ihre Akteure – Sie legen den Zuschnitt fest</div>
+                <div style="font-size:13.5px;font-weight:300;line-height:1.35">✓ Ihr Logo, Ihr Claim, Ihr Link – Sie sind der Absender</div>
+                <div style="font-size:13.5px;font-weight:300;line-height:1.35">✓ Zwei Zeilen Code, Design Ihrer Website, kein Tracking</div>
+                <div style="font-size:13.5px;font-weight:300;line-height:1.35">✓ Gefüllt vom ersten Tag – die Termine sind schon da</div>
+              </div>
+              <div onClick="{{ goBuy }}" style="background:#1C2118;color:#fff;border-radius:8px;padding:14px;text-align:center;font-size:15.5px;font-weight:600;margin-bottom:7px">Meinen Kalender zusammenstellen</div>
+              <div style="text-align:center;font-size:13.5px;font-weight:600;color:#4F6A0E">Lieber erst 30 Minuten sprechen? Briefing buchen →</div>
+              <div style="font-size:11.5px;font-weight:300;color:#6B7361;text-align:center;margin-top:8px">Netto, verlängert sich jährlich, kündbar zum Laufzeitende. Rechnung an die Verwaltung.</div>
+            </div>
+
+            <div onClick="{{ goEnterprise }}" style="border:1px solid #E2E1D9;border-radius:12px;padding:14px;cursor:pointer">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px"><div style="font-size:12px;font-weight:600;color:#6B7361;text-transform:uppercase;letter-spacing:.06em">Für eine ganze Region</div><div style="font-size:13px;font-weight:600">auf Anfrage</div></div>
+              <div style="font-size:15.5px;font-weight:900;line-height:1.2;margin-bottom:4px">Kalender und Karte für den Landkreis</div>
+              <p style="font-size:13px;font-weight:300;line-height:1.4;margin:0 0 8px">Achtzig Orte lassen sich nicht redaktionell pflegen. Hier fragen die Leute „Was ist in meiner Nähe?" – über Gemeindegrenzen hinweg. Dafür gibt es die Karte.</p>
+              <div style="font-size:13.5px;font-weight:600;color:#4F6A0E">Für Landkreise, Landesbehörden, Netzwerke →</div>
+            </div>
+          </div>
+
+          <div style="padding:0 16px 18px">
+            <div style="font-size:16px;font-weight:900;margin-bottom:10px">{{ sellProofTitle }}</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ sellProof }}" as="s" hint-placeholder-count="4">
+                <div style="border:1px solid #E2E1D9;border-radius:8px;overflow:hidden;display:flex">
+                  <sc-if value="{{ s.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ s.img }}" alt="" style="width:78px;object-fit:cover;flex:none;align-self:stretch"></sc-if>
+                  <div style="padding:10px 12px;min-width:0"><div style="display:flex;gap:6px;align-items:center;margin-bottom:3px;flex-wrap:wrap"><span style="{{ s.geoStyle }}">{{ s.geoLabel }}</span><span style="font-size:10px;font-weight:600;color:#8A9080;text-transform:uppercase">{{ s.type }} · {{ s.date }}</span></div><div style="font-size:13.5px;line-height:1.35">{{ s.label }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #C9C6B8;background:#F7F7F4;color:#5A6151;font-size:10.5px;padding:6px 8px;border-radius:4px;margin-top:9px;line-height:1.4">{{ filterNote }}</div></sc-if>
+          </div>
+
+          <div style="padding:0 16px 20px">
+            <div style="border:1px solid #E2E1D9;border-radius:10px;padding:13px;background:#F7F7F4">
+              <div style="font-size:14.5px;font-weight:900;margin-bottom:4px">Datenschutz, Betrieb, KI</div>
+              <p style="font-size:13px;font-weight:300;line-height:1.4;margin:0 0 8px">Kein Tracking im Embed, Verarbeitung in Deutschland, dokumentierter KI-Einsatz beim Termin-Import.</p>
+              <div style="font-size:13px;font-weight:600;color:#4F6A0E">Unterlagen ansehen →</div>
+            </div>
+          </div>
+
+          <div style="padding:16px;background:#1C2118;color:#fff">
+            <div style="font-size:15px;font-weight:900;margin-bottom:8px">Noch ein anderer Hut?</div>
+            <div onClick="{{ goPublish }}" style="border:1px solid #4A5142;border-radius:8px;padding:11px;font-size:13.5px;font-weight:600;margin-bottom:6px">Wir wollen erst mal nur unsere eigenen Termine veröffentlichen</div>
+            <div onClick="{{ goWhy }}" style="border:1px solid #4A5142;border-radius:8px;padding:11px;font-size:13.5px;font-weight:600">Wer steckt dahinter?</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isBuy }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="06 Lizenz abschließen">
+          <div style="padding:22px 16px">
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:12px">buy-calendar-licence · Ausstieg zu Briefing bleibt auf jedem Schritt sichtbar</div></sc-if>
+            <div style="display:flex;gap:5px;margin-bottom:16px"><div style="flex:1;height:4px;background:#1C2118;border-radius:2px"></div><div style="flex:1;height:4px;background:#1C2118;border-radius:2px"></div><div style="flex:1;height:4px;background:#DDDCD3;border-radius:2px"></div><div style="flex:1;height:4px;background:#DDDCD3;border-radius:2px"></div></div>
+            <div style="font-size:12px;font-weight:600;color:#6B7361;margin-bottom:4px">Schritt 2 von 4 · Ihr Zuschnitt</div>
+            <h1 style="font-size:24px;font-weight:900;line-height:1.1;margin:0 0 6px">Welche Orte gehören in Ihren Kalender?</h1>
+            <p style="font-size:13.5px;font-weight:300;line-height:1.4;margin:0 0 12px;color:#4A5142">Was Sie hier anhaken, sehen Ihre Besucher – und zwar schon jetzt in der Vorschau unten.</p>
+            <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px">
+              <sc-for list="{{ buyPlaces }}" as="b" hint-placeholder-count="4">
+                <div style="border:1px solid #E2E1D9;border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center"><div style="font-size:14px;font-weight:600">{{ b.name }}</div><div style="{{ b.box }}">{{ b.mark }}</div></div>
+              </sc-for>
+            </div>
+            <div style="font-size:13px;font-weight:600;color:#4F6A0E;margin-bottom:18px">+ Postleitzahl oder Landkreis statt Einzelorte</div>
+            <div style="font-size:13px;font-weight:600;color:#6B7361;margin-bottom:8px">Vorschau mit Ihrer Auswahl</div>
+            <div style="border:1px solid #E2E1D9;border-radius:10px;padding:11px;margin-bottom:16px">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <sc-for list="{{ demoEvents }}" as="e" hint-placeholder-count="3">
+                  <div style="display:flex;gap:9px;align-items:baseline"><div style="font-size:11.5px;font-weight:600;color:#6B7361;width:44px;flex:none">{{ e.short }}</div><div style="font-size:13px;font-weight:600;line-height:1.2">{{ e.title }}</div></div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="border-top:1px solid #E7E6E0;padding-top:14px;display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+              <div style="border:1px solid #E2E1D9;border-radius:8px;padding:11px 12px;opacity:.6"><div style="font-size:14px;font-weight:600">3 · Rechnungsdaten</div><div style="font-size:12.5px;font-weight:300;margin-top:2px">Träger, Anschrift, Bestellnummer für die Verwaltung.</div></div>
+              <div style="border:1px solid #E2E1D9;border-radius:8px;padding:11px 12px;opacity:.6"><div style="font-size:14px;font-weight:600">4 · Einbettungscode</div><div style="font-size:12.5px;font-weight:300;margin-top:2px">Zwei Zeilen JavaScript, direkt nach Abschluss.</div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid #1C2118;padding-top:10px;margin-bottom:12px"><div style="font-size:14px;font-weight:600">Ihr Kalender, ein Jahr</div><div style="font-size:20px;font-weight:900">480 € netto</div></div>
+            <div style="background:#1C2118;color:#fff;border-radius:8px;padding:15px;text-align:center;font-size:16px;font-weight:600;margin-bottom:8px">Weiter – Rechnung an die Verwaltung</div>
+            <div style="text-align:center;font-size:13.5px;font-weight:600;color:#4F6A0E">Lieber erst sprechen? Briefing buchen →</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isEnterprise }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="08 Landkreis">
+          <div style="padding:22px 16px 18px">
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:12px">Fokus-Job „Einen eigenen Kalender betreiben" · Primär: request-licence-quote · Preis 4.000 € bewusst nicht öffentlich</div></sc-if>
+            <div style="font-size:12px;font-weight:600;color:#6B7361;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Für Landkreise, Landesbehörden, Netzwerke</div>
+            <h1 style="font-size:26px;font-weight:900;line-height:1.1;margin:0 0 8px;text-wrap:pretty">Achtzig Orte. Ein Kalender. Eine Karte. Und niemand muss sie füllen.</h1>
+            <p style="font-size:15px;font-weight:300;line-height:1.42;margin:0 0 16px;color:#3A4034">Im Landkreis fragt niemand „Was ist in Gemeinde X los?", sondern „Was ist in meiner Nähe?" – dreißig Kilometer weit, über Gemeindegrenzen hinweg. Eine chronologische Liste kann das nicht. Eine Karte schon.</p>
+          </div>
+          <div style="padding:0 16px 18px">
+            <div style="border:1.5px dashed #B4CF39;border-radius:10px;padding:9px;background:#F7F7F4">
+              <div style="font-size:11px;font-weight:600;color:#4F6A0E;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Karte + Kalender · eingebettet in Ihre Website</div>
+              <div style="height:150px;background:repeating-linear-gradient(45deg,#E7E6E0,#E7E6E0 8px,#DEDDD6 8px,#DEDDD6 16px);border-radius:6px;position:relative;margin-bottom:8px">
+                <div style="position:absolute;left:22%;top:30%;width:12px;height:12px;border-radius:50%;background:#B4CF39;border:2px solid #1C2118"></div>
+                <div style="position:absolute;left:48%;top:55%;width:12px;height:12px;border-radius:50%;background:#B4CF39;border:2px solid #1C2118"></div>
+                <div style="position:absolute;left:70%;top:25%;width:12px;height:12px;border-radius:50%;background:#B4CF39;border:2px solid #1C2118"></div>
+                <div style="position:absolute;left:60%;top:72%;width:12px;height:12px;border-radius:50%;background:#B4CF39;border:2px solid #1C2118"></div>
+                <div style="position:absolute;left:12px;bottom:8px;font-size:10px;color:#5A6151">Karte: {{ demoPlace }} · alle aktiven Orte</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <sc-for list="{{ demoEvents }}" as="e" hint-placeholder-count="3"><div style="display:flex;gap:9px;align-items:baseline"><div style="font-size:11px;font-weight:600;color:#6B7361;width:44px;flex:none">{{ e.short }}</div><div style="font-size:13px;font-weight:600">{{ e.title }} <span style="font-weight:300;color:#5A6151">· {{ e.meta }}</span></div></div></sc-for>
+              </div>
+            </div>
+          </div>
+          <div style="padding:0 16px 18px">
+            <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px">
+              <div style="font-size:13.5px;font-weight:300;line-height:1.35">✓ Alles aus dem 480-€-Paket, plus Kartenansicht mit denselben Filtern</div>
+              <div style="font-size:13.5px;font-weight:300;line-height:1.35">✓ Zuschnitt auf ein Gebiet statt einer Ortsliste – der ganze Landkreis</div>
+              <div style="font-size:13.5px;font-weight:300;line-height:1.35">✓ Sofort verfügbar – kein Projekt, keine Ausschreibung, keine Einführung</div>
+              <div style="font-size:13.5px;font-weight:300;line-height:1.35;color:#6B7361">+ Anbindung eigener Veranstaltungsdatenbanken als einmalige Integration</div>
+            </div>
+            <div style="border:1.5px solid #1C2118;border-radius:12px;padding:14px">
+              <div style="font-size:15px;font-weight:900;margin-bottom:4px">Angebot für Ihr Gebiet</div>
+              <p style="font-size:13px;font-weight:300;line-height:1.4;margin:0 0 10px">Sie nennen uns Landkreis und Website, wir schicken Ihnen binnen zwei Werktagen ein Angebot mit Vorschau auf Ihr Gebiet.</p>
+              <div style="background:#1C2118;color:#fff;border-radius:8px;padding:14px;text-align:center;font-size:15.5px;font-weight:600;margin-bottom:7px">Angebot für unseren Landkreis anfragen</div>
+              <div style="text-align:center;font-size:13.5px;font-weight:600;color:#4F6A0E">Oder erst ein Briefing, 30 Minuten →</div>
+            </div>
+          </div>
+          <div style="padding:0 16px 18px">
+            <div style="font-size:16px;font-weight:900;margin-bottom:10px">Wer auf dieser Ebene mit uns arbeitet</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ entProof }}" as="s" hint-placeholder-count="3">
+                <div style="border:1px solid #E2E1D9;border-radius:8px;overflow:hidden;display:flex">
+                  <sc-if value="{{ s.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ s.img }}" alt="" style="width:78px;height:auto;object-fit:cover;flex:none;align-self:stretch"></sc-if>
+                  <div style="padding:10px 12px;min-width:0"><div style="display:flex;gap:6px;align-items:center;margin-bottom:3px;flex-wrap:wrap"><span style="{{ s.geoStyle }}">{{ s.geoLabel }}</span><span style="font-size:10px;font-weight:600;color:#8A9080;text-transform:uppercase">{{ s.type }} · {{ s.date }}</span></div><div style="font-size:13.5px;line-height:1.35">{{ s.label }}</div></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="padding:16px;background:#1C2118;color:#fff">
+            <div style="font-size:15px;font-weight:900;margin-bottom:8px">Noch ein anderer Hut?</div>
+            <div onClick="{{ goSell }}" style="border:1px solid #4A5142;border-radius:8px;padding:11px;font-size:13.5px;font-weight:600;margin-bottom:6px">Erst mal eine Gemeinde, nicht der ganze Kreis</div>
+            <div onClick="{{ goWhy }}" style="border:1px solid #4A5142;border-radius:8px;padding:11px;font-size:13.5px;font-weight:600">Wer steckt dahinter?</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isWhy }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="07 Warum wir">
+          <div style="padding:22px 16px 16px">
+            <sc-if value="{{ ann }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #B4CF39;background:#F6FAE8;color:#4F6A0E;font-size:10px;font-weight:600;padding:4px 7px;border-radius:4px;margin-bottom:12px">P4 · Kein Archiv, ein Strom · Muster: {{ streamPattern }}</div></sc-if>
+            <img src="assets/proof/portrait-selfie-platform.jpg" alt="Gründer mit der Plattform" style="width:100%;height:190px;object-fit:cover;border-radius:10px;display:block;margin-bottom:14px">
+            <h1 style="font-size:26px;font-weight:900;line-height:1.1;margin:0 0 8px;text-wrap:pretty">Gebaut in einem Dorf, betrieben aus einem Dorf.</h1>
+            <p style="font-size:15px;font-weight:300;line-height:1.42;margin:0 0 6px;color:#3A4034">Ein Ort mit vierhundert Einwohnern kann sich keinen Dienst leisten, der einen Vertriebler braucht. Deshalb ist der Dorfkalender kostenlos und bleibt es – und deshalb kostet Portalize 480 € statt eines Projektbudgets.</p>
+            <p style="font-size:13.5px;font-weight:300;line-height:1.4;color:#5A6151;margin:0">Der Gründer war ehrenamtlicher Bürgermeister der Gemeinde, in der der Kalender startete.</p>
+          </div>
+
+          <div style="padding:0 16px 18px">
+            <div style="font-size:17px;font-weight:900;margin-bottom:10px">{{ whyStreamTitle }}</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ whyStream }}" as="s" hint-placeholder-count="7">
+                <div style="border:1px solid #E2E1D9;border-radius:10px;overflow:hidden">
+                  <sc-if value="{{ s.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ s.img }}" alt="" style="width:100%;height:140px;object-fit:cover;object-position:top;display:block"></sc-if>
+                  <div style="padding:11px 12px;display:flex;gap:10px">
+                    <div style="{{ s.dotStyle }}"></div>
+                    <div style="min-width:0;flex:1">
+                      <div style="display:flex;gap:6px;align-items:center;margin-bottom:3px;flex-wrap:wrap"><span style="{{ s.geoStyle }}">{{ s.geoLabel }}</span><span style="font-size:10px;font-weight:600;color:#8A9080;text-transform:uppercase">{{ s.type }} · {{ s.date }}</span></div>
+                      <div style="font-size:13.5px;line-height:1.35">{{ s.label }}</div>
+                      <sc-if value="{{ s.hasLogo }}" hint-placeholder-val="{{ false }}"><img src="{{ s.logo }}" alt="" style="height:18px;margin-top:7px;display:block"></sc-if>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="border:1.5px dashed #C9C6B8;border-radius:8px;padding:11px 12px;background:#F7F7F4">
+                <div style="font-size:11px;font-weight:600;color:#8A9080;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px">Platzhalter · Slot bleibt leer</div>
+                <div style="font-size:13px;font-weight:300;line-height:1.35">Für Baden-Württemberg liegt noch kein Beleg vor (Ziel <span style="font-family:ui-monospace,monospace;font-size:11px">baden-wuerttemberg-field-experience</span>). Nach Prinzip 4 wird hier nichts erfunden.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:0 16px 18px">
+            <div style="border:1px solid #E2E1D9;border-radius:10px;padding:13px">
+              <div style="font-size:14.5px;font-weight:900;margin-bottom:4px">Vollständiges Archiv</div>
+              <p style="font-size:12.5px;font-weight:300;line-height:1.4;margin:0 0 8px">Presse, Auszeichnungen, Förderungen und Auftritte seit 2018 – für Presse und Förderer, die es suchen.</p>
+              <div style="font-size:13px;font-weight:600;color:#4F6A0E">Alle Einträge chronologisch →</div>
+            </div>
+          </div>
+
+          <div style="padding:0 16px 20px">
+            <div style="font-size:17px;font-weight:900;margin-bottom:10px">Das Team</div>
+            <div style="display:flex;gap:10px">
+              <div style="flex:1"><img src="assets/proof/portrait-working-on-the-go.jpg" alt="" style="width:100%;height:96px;object-fit:cover;border-radius:8px;margin-bottom:6px;display:block"><div style="font-size:13.5px;font-weight:600">Jan-Henrik Hempel</div><div style="font-size:12px;font-weight:300;color:#5A6151;line-height:1.3">Technik · Bürgermeister a. D.</div></div>
+              <div style="flex:1"><div style="height:96px;background:repeating-linear-gradient(45deg,#E7E6E0,#E7E6E0 8px,#DEDDD6 8px,#DEDDD6 16px);border-radius:8px;margin-bottom:6px;display:flex;align-items:flex-end;justify-content:center;font-size:10px;color:#5A6151;padding-bottom:6px">Porträt vorhanden</div><div style="font-size:13.5px;font-weight:600">Christian Sauer</div><div style="font-size:12px;font-weight:300;color:#5A6151;line-height:1.3">Projekte · Kommunikation</div></div>
+            </div>
+          </div>
+
+          <div style="padding:16px;background:#1C2118;color:#fff">
+            <div style="font-size:15px;font-weight:900;margin-bottom:8px">Was möchtest du tun?</div>
+            <div onClick="{{ goReader }}" style="border:1px solid #4A5142;border-radius:8px;padding:11px;font-size:13.5px;font-weight:600;margin-bottom:6px">Wissen, was bei uns los ist</div>
+            <div onClick="{{ goPublish }}" style="border:1px solid #4A5142;border-radius:8px;padding:11px;font-size:13.5px;font-weight:600;margin-bottom:6px">Unsere Termine per WhatsApp veröffentlichen</div>
+            <div onClick="{{ goSell }}" style="background:#B4CF39;color:#1C2118;border-radius:8px;padding:12px;font-size:14px;font-weight:600;text-align:center">Einen eigenen Kalender für unsere Website</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <div style="padding:16px;background:#F1F0EA;font-size:11px;font-weight:300;color:#6B7361;line-height:1.5">
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;font-weight:600"><span>Was ist los</span><span>Termine veröffentlichen</span><span>Eigener Kalender</span><span>Warum wir</span><span>Kontakt</span></div>
+          <div>Newsletter: einmal im Monat, was im Kalender passiert.</div>
+          <div style="margin-top:6px">Impressum · Datenschutz · © 2026 Schafe vorm Fenster UG</div>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:#6B7361;font-weight:300">390 × 790 px · Klickbar: Szenen, Kontext-Bänder, CTAs, Ortschips, Angebotsstufen · Bilder aus media-echo/verified</div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1400,&quot;height&quot;:900}}">
+const PROOF = [
+  {id:'lelender', type:'reference-case', date:'2026', geo:{muni:'lehre', county:'helmstedt', state:'ns'}, label:'„Wir betreiben den Kalender für alle 17 Orte der Gemeinde unter unserem Namen – ohne eine Redaktion." Stiftung Lebendiges Lehre, LeLender', jobs:['sell','why','ent'], cleared:true},
+  {id:'abend-engagierten', type:'conference', date:'08/2026', geo:{muni:'lehre', county:'helmstedt', state:'ns'}, label:'Abend der Engagierten im Sportheim Flechtorf: 70 Ehrenamtliche aus 17 Orten, jeder Ort mit eigenem Flyer', jobs:['publish','why'], cleared:true},
+  {id:'noerd-2026', type:'award', date:'05/2026', geo:{muni:'rostock', county:'rostock', state:'mv'}, label:'NØRD Award 2026, Kategorie Smart Community – Digitalpreis des Landes Mecklenburg-Vorpommern, Rostock', jobs:['sell','why','publish','ent'], cleared:true, img:'assets/proof/noerd-award-stage.png'},
+  {id:'nordkurier-award', type:'press', date:'04/2026', geo:{muni:null, county:'mseenplatte', state:'mv'}, label:'Nordkurier: „Dorfkalender aus Schlatkow gewinnt Landes-Digitalpreis"', jobs:['why'], cleared:true, img:'assets/proof/noerd-award-nordkurier.jpg'},
+  {id:'opentransfer', type:'conference', date:'04/2026', geo:{muni:'berlin', county:'berlin', state:'de'}, label:'openTransfer Camp #ZUSAMMEN, Berlin: Session „Wie ein Dorf seinen Kalender selbst füllt"', jobs:['publish','why'], cleared:true, img:'assets/proof/opentransfer-camp.jpg'},
+  {id:'zukunftswege-ost', type:'portrait', date:'01/2026', geo:{muni:null, county:null, state:'de'}, label:'Zukunftswege Ost porträtiert den Gründer als „Vollblutdigitalisierer"', jobs:['why'], cleared:true, img:'assets/proof/zukunftswege-ost.png', logo:'assets/proof/zukunftswege-ost-logo.png'},
+  {id:'dorfmoderation', type:'conference', date:'10/2025', geo:{muni:'neubrandenburg', county:'mseenplatte', state:'mv'}, label:'Dorfmoderation Neubrandenburg: Vortrag vor Dorfmoderatorinnen', jobs:['publish','why'], cleared:true},
+  {id:'fachtag-kultur', type:'conference', date:'04/2025', geo:{muni:'greifswald', county:'vg', state:'mv'}, label:'Fachtag Kultur des Landkreises Vorpommern-Greifswald: Vortrag zum regionalen Kalender', jobs:['sell','why','ent'], cleared:true},
+  {id:'kulturlandbuero-vhs', type:'press', date:'09/2024', geo:{muni:'fahrenwalde', county:'vg', state:'mv'}, label:'Kulturlandbüro und Volkshochschule Vorpommern-Greifswald veröffentlichen ihr Programm über den Kalender', jobs:['sell','publish','ent'], cleared:true},
+  {id:'leader', type:'award', date:'2022', geo:{muni:null, county:'vg', state:'mv'}, label:'LEADER-Förderung der EU für den Aufbau der regionalen Terminliste', jobs:['why','ent'], cleared:true, img:'assets/proof/leader-foerderung.jpg'},
+  {id:'nordkurier-2022', type:'press', date:'02/2022', geo:{muni:null, county:'vg', state:'mv'}, label:'Nordkurier: „Plattform für Dörfer bleibt kostenlos" – das öffentliche Versprechen', jobs:['why','publish'], cleared:true, img:'assets/proof/nordkurier-plattform-doerfer.jpg'},
+  {id:'ihk-podcast', type:'podcast', date:'02/2022', geo:{muni:'neubrandenburg', county:'mseenplatte', state:'mv'}, label:'IHK to go: Podcast-Folge über Schafe vorm Fenster', jobs:['why','sell'], cleared:true},
+  {id:'ndr', type:'tv', date:'11/2021', geo:{muni:null, county:null, state:'de'}, label:'NDR/ARD-Themenwoche Stadt.Land.Wandel: Fernsehbeitrag über den Dorfkalender', jobs:['why'], cleared:true},
+  {id:'kfw', type:'award', date:'08/2021', geo:{muni:null, county:null, state:'de'}, label:'KfW Award Gründen 2021 – Landessieger Mecklenburg-Vorpommern', jobs:['why','sell','ent'], cleared:true},
+  {id:'nordkurier-2019', type:'press', date:'09/2019', geo:{muni:'anklam', county:'vg', state:'mv'}, label:'Nordkurier: „Schafe sollen Dorfleben ins Internet bringen"', jobs:['why'], cleared:true, img:'assets/proof/nordkurier-2019.png'},
+  {id:'bundespraesidialamt', type:'recognition', date:'09/2018', geo:{muni:null, county:null, state:'de'}, label:'Antwort des Bundespräsidialamts auf das Projekt', jobs:['why'], cleared:true},
+  {id:'wendt-rubkow', type:'testimonial', date:'2022', geo:{muni:'rubkow', county:'vg', state:'mv'}, label:'Bürgermeister Holger Wendt, Rubkow: „reduziert den Arbeitsaufwand unserer Gemeinde"', jobs:['sell'], cleared:false},
+  {id:'kurzweg', type:'testimonial', date:'2022', geo:{muni:'rothenklempenow', county:'vg', state:'mv'}, label:'Bäckerei Kurzweg: Fahrtrouten werden im Dorf sichtbar', jobs:['publish'], cleared:false},
+  {id:'kulturlandbuero', type:'testimonial', date:'2020', geo:{muni:'fahrenwalde', county:'vg', state:'mv'}, label:'Kulturlandbüro Uecker-Randow, Schloss Bröllin', jobs:['sell','publish'], cleared:false},
+  {id:'zschiesche', type:'testimonial', date:'2022', geo:{muni:'gross-kiesow', county:'vg', state:'mv'}, label:'Bürgermeisterin Dr. Zschiesche, Groß Kiesow: mobile Händler und Landbevölkerung gewinnen', jobs:['sell'], cleared:false},
+  {id:'eichler', type:'testimonial', date:'2020', geo:{muni:'gross-polzin', county:'vg', state:'mv'}, label:'Uwe Eichler, Wasserschloss Quilow: Angebote im Flächenland zusammensuchen ist frustrierend', jobs:['publish'], cleared:false}
+];
+
+const REGIONS = {
+  unknown: {label:'unbekannt', state:null, county:null, muni:null, places:[], stage:0},
+  vg: {label:'Vorpommern-Greifswald', state:'mv', county:'vg', muni:'schmatzin', muniLabel:'Gemeinde Schmatzin', place:'Schlatkow',
+       places:['Schlatkow','Bröllin','Stolpe an der Peene','Krenzow','Quilow'],
+       events:[
+         {day:'12',mon:'Sep',short:'Fr 12.9.',title:'Feuerwehrfest',meta:'Schlatkow · Freiwillige Feuerwehr',actor:'Freiwillige Feuerwehr',cat:'fest'},
+         {day:'13',mon:'Sep',short:'Sa 13.9.',title:'Bäckerwagen Kurzweg',meta:'Schlatkow · 8:30 Dorfplatz',actor:'Bäckerei Kurzweg',cat:'baker'},
+         {day:'14',mon:'Sep',short:'So 14.9.',title:'Tanzabend im Schloss',meta:'Bröllin · Kulturlandbüro',actor:'Schloss Bröllin',cat:'culture'},
+         {day:'17',mon:'Sep',short:'Mi 17.9.',title:'Gemeindevertretersitzung',meta:'Schmatzin · Gemeinde · TOP Spielplatz',actor:'Gemeinde Schmatzin',cat:'council'},
+         {day:'20',mon:'Sep',short:'Sa 20.9.',title:'Hofführung Wasserschloss',meta:'Quilow · Stiftung',actor:'Wasserschloss Quilow',cat:'neighbour'}
+       ]},
+  lehre: {label:'Gemeinde Lehre, Niedersachsen', state:'ns', county:'helmstedt', muni:'lehre', muniLabel:'Gemeinde Lehre', place:'Flechtorf',
+       places:['Flechtorf','Wendhausen','Essenrode','Beienrode','Hondelage'],
+       events:[
+         {day:'11',mon:'Sep',short:'Do 11.9.',title:'Chorprobe MGV',meta:'Flechtorf · Sportheim',actor:'MGV Flechtorf',cat:'culture'},
+         {day:'13',mon:'Sep',short:'Sa 13.9.',title:'Erntefest',meta:'Wendhausen · Dorfgemeinschaft',actor:'Dorfgemeinschaft',cat:'fest'},
+         {day:'16',mon:'Sep',short:'Di 16.9.',title:'Blutspende DRK',meta:'Essenrode · Gemeindehaus',actor:'DRK Ortsverein',cat:'health'},
+         {day:'18',mon:'Sep',short:'Do 18.9.',title:'Hofladen-Wagen Bauer Meyer',meta:'Flechtorf · 11:30 Kirchplatz',actor:'Hof Meyer',cat:'baker'},
+         {day:'19',mon:'Sep',short:'Fr 19.9.',title:'Kino im Dorf',meta:'Beienrode · Stiftung Lebendiges Lehre',actor:'Stiftung Lebendiges Lehre',cat:'neighbour'},
+         {day:'23',mon:'Sep',short:'Di 23.9.',title:'Ratssitzung Gemeinde Lehre',meta:'Lehre · Rathaus · TOP Radweg Flechtorf',actor:'Gemeinde Lehre',cat:'council'}
+       ]}
+};
+
+const ENTRIES = {
+  direct:    {label:'Direktaufruf', start:[], job:'reader', stage:0, note:'Standardfall: breiteste Streuung, aktuellste zuerst'},
+  instagram: {label:'Instagram / WhatsApp', start:['conference','social-media'], job:'reader', stage:2, note:'eventgetrieben: Auftritte und Termine zuerst'},
+  linkedin:  {label:'LinkedIn', start:['reference-case','testimonial','award'], job:'sell', stage:2, note:'prüfend: Referenz und Auszeichnung zuerst'},
+  qr:        {label:'Print-QR im Ort', start:['conference','testimonial'], job:'reader', stage:2, note:'steht im Ort: heute und hier zuerst'},
+  search:    {label:'Suche „Kalender Website"', start:['reference-case','partner','metric'], job:'sell', stage:2, note:'Kaufabsicht: Referenz und Betrieb zuerst'}
+};
+
+const TIER_W = {municipality:1, county:0.75, state:0.5, national:0.2};
+const TIER_DIST = {municipality:0, county:1, state:2, national:3};
+
+class Component extends DCLogic {
+  state = {page:'home', region:'unknown', entry:'direct', empty:false, ann:true};
+
+  set(k, v) { this.setState({[k]: v}); }
+
+  geo(el) {
+    const r = REGIONS[this.state.region];
+    const g = el.geo;
+    if (!r.state) return {tier:'national', label:this.stateLabel(g.state), dist:3};
+    if (r.muni && g.muni && g.muni === r.muni) return {tier:'municipality', label:'in ' + r.muniLabel, dist:0};
+    if (r.county && g.county && g.county === r.county) return {tier:'county', label:'in deinem Landkreis', dist:1};
+    if (g.state === r.state) return {tier:'state', label:'in ' + this.stateLabel(g.state), dist:2};
+    return {tier:'national', label:this.stateLabel(g.state), dist:3};
+  }
+
+  stateLabel(st) {
+    if (st === 'mv') return 'Mecklenburg-Vorpommern';
+    if (st === 'ns') return 'Niedersachsen';
+    return 'bundesweit';
+  }
+
+  freshness(el) {
+    const y = parseInt(String(el.date).slice(-4), 10);
+    if (y >= 2026) return 1; if (y >= 2025) return 0.7; if (y >= 2022) return 0.4; return 0.2;
+  }
+
+  stream(job, n) {
+    const ent = ENTRIES[this.state.entry];
+    const knowsGeo = this.state.region !== 'unknown';
+    const wGeo = knowsGeo ? 0.35 : 0, wCtx = 0.25, wJob = 0.25, wTime = knowsGeo ? 0.15 : 0.5;
+    const scored = PROOF.filter(e => e.cleared).map(e => {
+      const g = this.geo(e);
+      const ctx = ent.start.length === 0 ? 0.6 : (ent.start.indexOf(e.type) >= 0 ? 1 : 0.35);
+      const jf = e.jobs.indexOf(job) >= 0 ? 1 : 0.3;
+      return {el:e, g, score: wGeo*TIER_W[g.tier] + wCtx*ctx + wJob*jf + wTime*this.freshness(e)};
+    }).sort((a,b) => b.score - a.score);
+
+    const out = scored.splice(0, Math.min(2, scored.length));
+    let wantFar = true;
+    while (out.length < n && scored.length) {
+      const best = scored[0];
+      let pick = 0;
+      if (wantFar) {
+        const centre = out.reduce((s,o) => s + o.g.dist, 0) / out.length;
+        let bestGap = -1;
+        scored.forEach((c, i) => {
+          const gap = Math.abs(c.g.dist - centre);
+          if (c.score >= 0.5 * best.score && gap > bestGap) { bestGap = gap; pick = i; }
+        });
+      }
+      out.push(scored.splice(pick, 1)[0]);
+      wantFar = !wantFar;
+    }
+    return out.map(o => ({
+      label:o.el.label, type:o.el.type, date:o.el.date, geoLabel:o.g.label,
+      hasImg: !!o.el.img, img: o.el.img || '', hasLogo: !!o.el.logo, logo: o.el.logo || '',
+      geoStyle: 'font-size:10px;font-weight:600;padding:2px 6px;border-radius:999px;white-space:nowrap;' +
+        (o.g.dist === 0 ? 'background:#B4CF39;color:#1C2118' : o.g.dist === 1 ? 'background:#EAF3C6;color:#4F6A0E' : o.g.dist === 2 ? 'background:#F1F0EA;color:#5A6151' : 'background:#fff;color:#8A9080;border:1px solid #DDDCD3'),
+      dotStyle: 'width:6px;flex:none;border-radius:3px;' +
+        (o.g.dist === 0 ? 'background:#B4CF39' : o.g.dist === 1 ? 'background:#C9DE7A' : o.g.dist === 2 ? 'background:#DDDCD3' : 'background:#EFEEE9')
+    }));
+  }
+
+  navBtn(active) {
+    return 'text-align:left;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;padding:8px 10px;border-radius:6px;border:1px solid ' +
+      (active ? '#1C2118;background:#1C2118;color:#fff' : '#DDDCD3;background:#fff;color:#1C2118');
+  }
+  simBtn(active) {
+    return 'text-align:left;cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;padding:7px 9px;border-radius:6px;border:1px solid ' +
+      (active ? '#B4CF39;background:#B4CF39;color:#1C2118' : '#4A5142;background:transparent;color:#C9C6B8');
+  }
+
+  renderVals() {
+    const s = this.state, r = REGIONS[s.region], ent = ENTRIES[s.entry];
+    const knowsGeo = s.region !== 'unknown';
+    const stage = Math.max(knowsGeo ? 1 : 0, ent.stage);
+    const place = knowsGeo ? r.place : 'Schlatkow';
+    const events = (r.events || REGIONS.vg.events);
+    const focusJob = ent.job;
+
+    const pageDefs = [
+      {id:'home', label:'01 · Startseite'},
+      {id:'reader', label:'02 · Was ist los (Leser)'},
+      {id:'publish', label:'03 · Termine veröffentlichen'},
+      {id:'register', label:'04 · Registrieren'},
+      {id:'sell', label:'05 · Eigener Kalender'},
+      {id:'buy', label:'06 · Kalender zusammenstellen'},
+      {id:'enterprise', label:'07 · Landkreis (Enterprise)'},
+      {id:'why', label:'08 · Warum wir'}
+    ];
+
+    const sceneDefs = {
+      publish: {isWhatsapp:true,
+        aha:'Flyer abfotografieren, per WhatsApp schicken – und der Termin steht im Kalender?',
+        body:'Ja. Oder ihr verbindet euren Google-Kalender, dann kommt alles von selbst. Kostenlos für Verein, Feuerwehr, Kirche, Bäckerwagen.',
+        cta:'Wie das in echt geht'},
+      sell: {isOwn:true,
+        aha:'Ein eigener Veranstaltungskalender auf unserer Website – und im Amt tippt niemand mehr Termine ab?',
+        body:'Genau. Die Vereine tragen selbst ein, Sie zeigen es unter Ihrem Namen. ' + (knowsGeo && r.state === 'ns' ? 'Die Gemeinde Lehre macht das schon.' : 'Die Gemeinde Lehre macht das für 17 Orte.') + ' 480 € im Jahr.',
+        cta:'Wie das bei Ihnen aussieht'},
+      why: {isWhy:true,
+        aha:'Wer macht das eigentlich – und warum kostet der Dorfkalender nichts?',
+        body:'Ein ehemaliger ehrenamtlicher Bürgermeister aus einem Dorf mit 400 Einwohnern. Seit 2018, inzwischen mit NØRD Award.',
+        cta:'Die Geschichte'}
+    };
+    const sceneOrder = focusJob === 'sell' ? ['sell','publish','why'] : ['publish','sell','why'];
+    const scenes = sceneOrder.map((id, i) => Object.assign({}, sceneDefs[id], {
+      go:() => this.set('page', id),
+      style:'cursor:pointer;border-radius:10px;overflow:hidden;' + (i === 0 ? 'border:2px solid #1C2118' : 'border:1px solid #E2E1D9')
+    }));
+
+    const bandDefs = [
+      {id:'publish', title:'Wir organisieren selbst was im Ort', sub:'Termine per WhatsApp oder Kalender veröffentlichen – kostenlos'},
+      {id:'sell', title:'Wir wollen die Termine auf unserer eigenen Website', sub:'Eigener Kalender unter Ihrem Namen, 480 €/Jahr'},
+      {id:'why', title:'Wer steckt dahinter?', sub:'Herkunft, Referenzen, Auszeichnungen'}
+    ].map(j => ({title:j.title, sub:j.sub, go:() => this.set('page', j.id)}));
+
+    const metaByPage = {
+      home:{job:'wechselt mit dem Einstieg', conv:'—', aud:'alle, nach Einstieg sortiert'},
+      reader:{job:'Wissen, was los ist', conv:'save-calendar-to-homescreen', aud:'1 Einwohner:innen · 2 Akteure'},
+      publish:{job:'Termine veröffentlichen', conv:'register-as-publisher', aud:'1 Akteure · 2 Kommunen als Publisher'},
+      register:{job:'Termine veröffentlichen', conv:'publish-first-event', aud:'1 Akteure'},
+      sell:{job:'Einen eigenen Kalender betreiben', conv:'buy-calendar-licence', aud:'1 Kommunen · 2 Institutionen · 3 Landkreise'},
+      buy:{job:'Einen eigenen Kalender betreiben', conv:'buy-calendar-licence', aud:'1 Kommunen, Institutionen'},
+      enterprise:{job:'Einen eigenen Kalender betreiben', conv:'request-licence-quote', aud:'1 Landkreise · 2 Landesbehörden, Netzwerke'},
+      why:{job:'Wer dahintersteckt', conv:'stützt die drei anderen', aud:'1 Kommunen, Förderer · 2 alle'}
+    };
+
+    const blocked = PROOF.filter(e => !e.cleared).length;
+
+    const ex = (cat) => events.find(e => e.cat === cat) || events[0];
+    const nearPlace = r.places ? (r.places[2] || r.places[1] || place) : place;
+    const iconStyle = 'width:36px;height:36px;border-radius:8px;background:#EAF3C6;color:#4F6A0E;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex:none;letter-spacing:.02em';
+    const valueStories = [
+      {icon:'BÄCK', iconStyle,
+       title:'Der Bäckerwagen steht drin – mit Uhrzeit.',
+       story:'Wenn die Route sichtbar ist, kommen nicht nur die Rentner um neun, sondern auch die aus dem Homeoffice in der Mittagspause. Das ist der Grund, warum der Kalender überhaupt entstanden ist.',
+       exShort: ex('baker').short, exTitle: ex('baker').title, exMeta: ex('baker').meta,
+       hasQuote:true, quote:'Mit der Terminliste werden die Fahrtrouten anderer Unternehmen transparenter.', who:'Elisabeth Kurzweg, Bäckerei Kurzweg'},
+      {icon:'AMT', iconStyle,
+       title:'Die Gemeindevertretersitzung – bevor sie stattfand.',
+       story:'Wer wusste, dass am Mittwoch über den Spielplatz entschieden wird, hätte hingehen können. Im Kalender steht die Sitzung neben dem Feuerwehrfest, nicht im Aushang am Amt.',
+       exShort: ex('council').short, exTitle: ex('council').title, exMeta: ex('council').meta,
+       hasQuote:true, quote:'Die selbstverwaltete Bereitstellung der Termindaten reduziert den Arbeitsaufwand unserer Gemeinde.', who:'Holger Wendt, Bürgermeister Rubkow'},
+      {icon:'KULT', iconStyle,
+       title:'Kultur, die sonst niemand findet.',
+       story:'Ein Schloss, ein Kulturlandbüro, ein Chor – jeder hat sein Publikum, keiner die Reichweite. Im Ortskalender stehen sie neben dem Blutspendetermin, und plötzlich sieht sie jemand, der nie danach gesucht hätte.',
+       exShort: ex('culture').short, exTitle: ex('culture').title, exMeta: ex('culture').meta,
+       hasQuote:true, quote:'Der Dienst hilft dabei, Angebote in einem Flächenland besser sichtbar und auffindbar zu machen.', who:'Uwe Eichler, Wasserschloss Quilow'},
+      {icon:'±15', iconStyle,
+       title:'Und die Nachbardörfer gleich mit.',
+       story:'Auf dem Land ist „bei uns" nicht das Dorf, sondern der Umkreis von fünfzehn Minuten. Dein Kalender zeigt ' + place + ' zuerst – und was in ' + nearPlace + ' und drumherum los ist, darunter.',
+       exShort: ex('neighbour').short, exTitle: ex('neighbour').title, exMeta: ex('neighbour').meta,
+       hasQuote:true, quote:'Für dieses Projekt sehe ich unsere Landbevölkerung, aber auch mobile Händler als Gewinner.', who:'Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow'}
+    ];
+
+    return {
+      pages: pageDefs.map(p => ({label:p.label, go:() => this.set('page', p.id), style:this.navBtn(s.page === p.id)})),
+      regionOpts: Object.keys(REGIONS).map(k => ({label:REGIONS[k].label, go:() => this.set('region', k), style:this.simBtn(s.region === k)})),
+      entryOpts: Object.keys(ENTRIES).map(k => ({label:ENTRIES[k].label, go:() => this.set('entry', k), style:this.simBtn(s.entry === k)})),
+      toggleEmpty: () => this.set('empty', !s.empty),
+      toggleAnn: () => this.set('ann', !s.ann),
+      emptyStyle: this.simBtn(s.empty),
+      annStyle: this.simBtn(s.ann),
+
+      isHome: s.page === 'home', isReader: s.page === 'reader', isPublish: s.page === 'publish',
+      isRegister: s.page === 'register', isSell: s.page === 'sell', isBuy: s.page === 'buy', isWhy: s.page === 'why', isEnterprise: s.page === 'enterprise',
+      goEnterprise: () => this.set('page', 'enterprise'),
+      entProof: this.stream('ent', 3),
+      ann: s.ann, empty: s.empty, notEmpty: !s.empty,
+      meta: metaByPage[s.page],
+      stageLabel: 'Stufe ' + stage + ' — ' + (stage === 0 ? 'nichts bekannt' : stage === 1 ? 'Standort bekannt' : 'Standort + Einstieg (' + ent.label + ')'),
+
+      goHome: () => this.set('page', 'home'),
+      goReader: () => this.set('page', 'reader'),
+      goPublish: () => this.set('page', 'publish'),
+      goRegister: () => this.set('page', 'register'),
+      goSell: () => this.set('page', 'sell'),
+      goBuy: () => this.set('page', 'buy'),
+      goWhy: () => this.set('page', 'why'),
+      goPlace: () => this.set('page', 'reader'),
+
+      heroTitle: knowsGeo ? 'Für ' + r.place + ' gibt es schon einen Dorfkalender.' : 'Gibt es für deinen Ort schon einen Dorfkalender?',
+      heroSub: knowsGeo
+        ? 'Feuerwehrfest, Bäckerwagen, Gemeindevertretersitzung – alles, was in ' + r.place + ' passiert, an einem Ort. Auch ' + r.places.slice(1,3).join(' und ') + ' sind dabei.'
+        : 'Feuerwehrfest, Bäckerwagen, Gemeindevertretersitzung – alles, was im Dorf passiert, an einem Ort. Kostenlos. Sieh nach:',
+      noRegion: !knowsGeo,
+      entryLabel: ent.label,
+      scenesTitle: knowsGeo ? 'Und was noch geht' : 'Was hier geht',
+      ownSiteName: knowsGeo ? (r.state === 'ns' ? 'gemeinde-lehre.de' : 'amt-zuessow.de') : 'ihre-gemeinde.de',
+      ownEvents: (knowsGeo ? events : REGIONS.lehre.events).slice(0, 3),
+      annHero: 'P6 · ' + (stage === 0 ? 'Stufe 0: Standardfall ohne jede Annahme' : stage === 1 ? 'Stufe 1: Standort bekannt → Inhalte starten nah' : 'Stufe ' + stage + ': ' + ent.note),
+      hasRegion: knowsGeo,
+      nearPlaces: knowsGeo ? r.places.slice(0, 3) : [],
+      placeholderPlace: knowsGeo ? r.place : 'Ort oder Postleitzahl',
+      place,
+
+      scenes, contextBand: bandDefs,
+
+      liveRadius: knowsGeo ? 'Umgebung, ~15 km' : 'alle Regionen',
+      liveEvents: events.slice(0, 3),
+      readerEvents: s.empty ? events.slice(1, 4) : events.slice(0, 4),
+      valueStories,
+
+      streamTitle: knowsGeo ? 'Das gibt es hier nicht erst seit gestern' : 'Was andere über uns sagen',
+      streamSub: knowsGeo
+        ? 'Zwei Belege aus deiner Nähe, dann die Breite: ' + (r.state === 'mv' ? 'MV, bundesweit, andere Bundesländer.' : 'Niedersachsen, MV, bundesweit.')
+        : 'Aktuellste zuerst, über Regionen gestreut — solange wir nicht wissen, wo du bist.',
+      streamPattern: knowsGeo ? 'nah · nah · fern · nah · sehr fern' : 'aktuell · gestreut (Stufe 0)',
+      stream: this.stream(focusJob, 5),
+      readerProof: this.stream('publish', 2),
+      publishProof: this.stream('publish', 3),
+      sellProof: this.stream('sell', 4),
+      sellProofTitle: knowsGeo ? 'Wer in deiner Nähe damit arbeitet' : 'Wer damit arbeitet',
+      whyStream: this.stream('why', 7),
+      whyStreamTitle: knowsGeo ? 'Von ' + r.place + ' aus in die Breite' : 'Seit 2018 im Gespräch',
+      filterNote: blocked + ' Testimonials sind nicht sichtbar: usage_rights unverified (Prinzip 4 — harter Filter, keine Gewichtung).',
+
+      examplePlace: knowsGeo ? r.place : 'Flechtorf, Gemeinde Lehre',
+      exampleNote: knowsGeo
+        ? 'Echte Einträge aus ' + r.place + ' — eingetragen von den Akteuren selbst.'
+        : 'Flechtorf gehört zur Gemeinde Lehre: 17 Orte, ein Kalender, betrieben von der Stiftung.',
+      exampleEvents: (knowsGeo ? events : REGIONS.lehre.events).slice(0, 4),
+
+      demoPlace: knowsGeo ? (r.state === 'mv' ? 'Landkreis Vorpommern-Greifswald' : 'Gemeinde Lehre') : 'Gemeinde Lehre',
+      demoEvents: (knowsGeo ? events : REGIONS.lehre.events).slice(0, 4),
+      buyPlaces: (knowsGeo ? r.places : REGIONS.lehre.places).slice(0, 4).map((n, i) => ({
+        name:n, mark: i < 3 ? '✓' : '',
+        box:'width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;' + (i < 3 ? 'background:#B4CF39' : 'border:1.5px solid #DDDCD3')
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

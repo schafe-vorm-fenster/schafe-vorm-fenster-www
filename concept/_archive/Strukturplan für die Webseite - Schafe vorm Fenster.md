@@ -1,3 +1,7 @@
+ACHTUNG: vermutlich veraltet!!!
+
+---
+
 Alles klar, danke für die Korrektur\! Das ergibt natürlich sofort ein viel sympathischeres Bild – die **„Schafe vorm Fenster“** als Inbegriff der ländlichen Idylle.
 
 Hier ist die angepasste Struktur mit dem korrekten Markennamen:
