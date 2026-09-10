@@ -41,3 +41,5 @@ of the spec.
 | TS-001 | `locale-routing.tactical.md` | system | WEB-F-060–069 |
 | TS-002 | `accessibility.tactical.md` | rule | WEB-Q-010–019, 026–027 |
 | TS-003 | `performance.tactical.md` | rule | WEB-Q-001–008, WEB-F-105 |
+| TS-004 | `url-and-routing.tactical.md` | system | routes, navigation, BFF, error pages |
+| TS-005 | `relevance-engine.tactical.md` | system | proof/live scoring, ordering, segmentation |

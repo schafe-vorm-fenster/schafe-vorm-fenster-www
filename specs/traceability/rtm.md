@@ -12,7 +12,7 @@ files themselves.
 | Area (file) | IDs | Sources | Decisions | Open questions |
 | --- | --- | --- | --- | --- |
 | jobs-and-navigation | WEB-F-001–009 | SRC-001, SRC-003 | — | — |
-| pages | WEB-F-010–022 | SRC-003, SRC-008 | — | Q-005, Q-006, Q-007, Q-017, Q-022 |
+| pages | WEB-F-010–022, 026–029 | SRC-003, SRC-008 | DEC-032, DEC-034, DEC-039 | Q-005, Q-006, Q-007, Q-017, Q-022 |
 | relevance-and-proof | WEB-F-030–039 | SRC-001, SRC-002 | — | Q-002, Q-003, Q-004, Q-014, Q-019 |
 | live-data | WEB-F-040–045 | SRC-001, SRC-002, SRC-003, SRC-011 | DEC-021 | Q-015 (Rest) |
 | personalization | WEB-F-050–056 | SRC-001, SRC-002, SRC-006 | — | Q-008 |
@@ -20,11 +20,13 @@ files themselves.
 | seo | WEB-F-070–079 | SRC-006, SRC-010 | DEC-018 | Q-009, Q-016 |
 | content-pipeline | WEB-F-080–089 | SRC-006, SRC-009 | DEC-012, DEC-020 | Q-018 |
 | forms-and-leads | WEB-F-090–096 | SRC-003 | DEC-009–013 | Q-017, Q-020, Q-022 |
-| rendering-and-resilience | WEB-F-100–105 | SRC-002 | DEC-019 | — |
+| rendering-and-resilience | WEB-F-100–106 | SRC-002 | DEC-019, DEC-033 | — |
+| place-search | WEB-F-023, 046–049 | SRC-003, SRC-011, entre | DEC-024, DEC-028, DEC-029, DEC-036, DEC-037 | Q-025, Q-028 |
+| delivery-pipeline | WEB-C-020–023 | SRC-012 | DEC-031 | Q-027 |
 | performance | WEB-Q-001–008 | SRC-006, SRC-007 | DEC-007 | — |
 | accessibility | WEB-Q-010–019, 026–027 | SRC-006 | DEC-012 | Q-013, Q-021 |
 | privacy | WEB-Q-020–025, 028 | SRC-001, SRC-006 | DEC-004, DEC-016 | Q-008 |
-| security | WEB-Q-030–036 | SRC-006 | DEC-014, DEC-015, DEC-017 | Q-022 |
+| security | WEB-Q-030–038 | SRC-006 | DEC-014, DEC-015, DEC-017, DEC-025 | Q-022 |
 | technical constraints | WEB-C-001–006 | SRC-006, SRC-008 | DEC-002 | — |
 | scope boundaries | WEB-C-010–016 | SRC-001, SRC-003 | — | Q-006, Q-012 |
 
@@ -35,6 +37,8 @@ files themselves.
 | TS-001 locale-routing | WEB-F-060–069 |
 | TS-002 accessibility | WEB-Q-010–019, 026–027 |
 | TS-003 performance | WEB-Q-001–008, WEB-F-105 |
+| TS-004 url-and-routing | WEB-F-002, 010–018, 021, 026–027, 047–048, 067, 073, 079 · WEB-Q-037–038 |
+| TS-005 relevance-engine | WEB-F-024, 030–036, 038, 042, 052, 055 |
 
 ## Chain upward
 

@@ -85,17 +85,17 @@ per BFSG requirements; maintained like a legal page (WEB-F-088 pipeline).
 
 ## Acceptance criteria
 
-| # | Check |
-| --- | --- |
-| A1 | axe-core: zero violations on every page, in all three themes. |
-| A2 | Lighthouse accessibility = 100 (mobile + desktop). |
-| A3 | Automated contrast check of the token set passes for all themes. |
-| A4 | Keyboard-only walkthrough reaches every conversion (all four jobs) — manual, per release. |
-| A5 | Screen-reader spot check (VoiceOver iOS + NVDA) on home, `/dein-ort`, one sell page — manual, per release. |
-| A6 | envoy widget passes A1/A4 inside the page context. |
-| A7 | 320px viewport: no horizontal scroll on any page. |
-| A8 | `/barrierefreiheit` exists, footer-linked, content current. |
-| A9 | With `prefers-reduced-motion`: no animation beyond opacity. |
+| ID | Level | Check |
+| --- | --- | --- |
+| TS-002-A1 | tool | axe-core: zero violations on every page, in all three themes. |
+| TS-002-A2 | tool | Lighthouse accessibility = 100 (mobile + desktop). |
+| TS-002-A3 | static | Automated contrast check of the token set passes for all themes. |
+| TS-002-A4 | manual | Keyboard-only walkthrough reaches every conversion (all four jobs) — manual, per release. |
+| TS-002-A5 | manual | Screen-reader spot check (VoiceOver iOS + NVDA) on home, `/dein-ort`, one sell page — manual, per release. |
+| TS-002-A6 | tool | envoy widget passes A1/A4 inside the page context. |
+| TS-002-A7 | e2e | 320px viewport: no horizontal scroll on any page. |
+| TS-002-A8 | integration | `/barrierefreiheit` exists, footer-linked, content current. |
+| TS-002-A9 | e2e | With `prefers-reduced-motion`: no animation beyond opacity. |
 
 ## Coverage
 

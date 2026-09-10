@@ -25,13 +25,16 @@ by every page.
 | `www.schafe-vorm-fenster.de` | `de` | full site | `de` (bare), `en` (`/en/…`) |
 | `www.owcezaoknem.pl` | `pl` | landing page only | `pl` |
 | `www.schafvormfenster.at` | `de` | landing page only | `de` |
-| international (TLD open, Q-001) | `en` | landing page only | `en` |
+| `www.sheepoutside.com` | `en` | landing page only (DNS wiring pending) | `en` |
 | `*.vercel.app`, `localhost`, unknown | `de` | mirror of `.de` behaviour | as `.de` |
 
-### D2 — Canonical host [PROPOSED]
+### D2 — Canonical host [FIXED: DEC-035; phasing]
 
-`www.` is the canonical host on every domain; apex and `http` redirect
-301 to `https://www.` No other hostname variants are served.
+`www.` is the canonical host on every domain; `http` redirects 301 to
+`https://www.` **Phasing for the `.de` apex:** it serves the village
+calendars until they move to `app.*`; only then does apex 301 to `www.`,
+and the website forwards inherited `/:community` paths onward to `app.*`
+(WEB-F-048).
 
 ### D3 — Detection algorithm [FIXED: DEC-005, SRC-007]
 
@@ -41,9 +44,11 @@ Per request, server-side, in this order — nothing else participates:
    (e.g. `/en/`) → that language.
 2. Otherwise → the domain's TLD default (D1).
 
-No cookies, no session, no `Accept-Language` at render time. The result
-sets `<html lang>`, content selection, all API `language` parameters, and
-`og:locale`.
+The rendered language is a pure function of the URL — no cookies, no
+session, no `Accept-Language` at render time. The reason is cacheability:
+pages must stay statically cacheable, and a request header that varies
+the output would break that. The result sets `<html lang>`, content
+selection, all API `language` parameters, and `og:locale`.
 
 ### D4 — URL grammar [FIXED: SRC-007]
 
@@ -94,16 +99,16 @@ language must not require code changes [PROPOSED].
 
 ## Acceptance criteria
 
-| # | Check |
-| --- | --- |
-| A1 | `GET .de/mitmachen` → `de`, `<html lang="de">`, all internal links bare. |
-| A2 | `GET .de/en/mitmachen` → `en`, `<html lang="en">`, all internal links prefixed `/en/`. |
-| A3 | `GET .de/uk/mitmachen` → 404. `GET .de/de/mitmachen` → 301 `/mitmachen`. |
-| A4 | `GET http://schafe-vorm-fenster.de/x` → 301 `https://www.schafe-vorm-fenster.de/x`. |
-| A5 | Every full-site page carries the D6 hreflang set + self-canonical. |
-| A6 | `GET <preview>.vercel.app/…` behaves exactly like `.de`. |
-| A7 | Switching language on any page keeps the visitor on the equivalent page (D5), never the home page. |
-| A8 | No `Set-Cookie`, no locale storage anywhere in the response chain. |
+| ID | Level | Check |
+| --- | --- | --- |
+| TS-001-A1 | integration | `GET .de/mitmachen` → `de`, `<html lang="de">`, all internal links bare. |
+| TS-001-A2 | integration | `GET .de/en/mitmachen` → `en`, `<html lang="en">`, all internal links prefixed `/en/`. |
+| TS-001-A3 | integration | `GET .de/uk/mitmachen` → 404. `GET .de/de/mitmachen` → 301 `/mitmachen`. |
+| TS-001-A4 | e2e | `GET http://schafe-vorm-fenster.de/x` → 301 `https://www.schafe-vorm-fenster.de/x`. |
+| TS-001-A5 | integration | Every full-site page carries the D6 hreflang set + self-canonical. |
+| TS-001-A6 | integration | `GET <preview>.vercel.app/…` behaves exactly like `.de`. |
+| TS-001-A7 | e2e | Switching language on any page keeps the visitor on the equivalent page (D5), never the home page. |
+| TS-001-A8 | integration | No `Set-Cookie`, no locale storage anywhere in the response chain. |
 
 ## Coverage
 
@@ -124,6 +129,5 @@ open per Q-011; it would extend D3 as an additive client feature.
 
 ## Open points
 
-- Q-001 (international TLD) blocks the fourth D1 row's domain name only.
-- D2/D4-404/D7-no-code-change are [PROPOSED] and need a confirmation at
+- D4-404 and D7-no-code-change are [PROPOSED] and need a confirmation at
   the next decision point.

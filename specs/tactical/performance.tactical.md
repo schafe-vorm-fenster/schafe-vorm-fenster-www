@@ -34,8 +34,8 @@ must not compete:
 | `/` | place-search block (text/input, no image) |
 | `/dein-ort` | place name + next dates (text) |
 | `/mitmachen` | WhatsApp scene image |
-| `/eigener-kalender` | ownership headline (text) |
-| `/warum-wir` | founder photo |
+| `/dein-kalender` | ownership headline (text) |
+| `/ueber-uns` | founder photo |
 
 Text-first LCP wherever the brief allows — images never above the fold
 without being the declared LCP element.
@@ -64,6 +64,7 @@ Vercel SWR semantics per DEC-019 (serve cached, revalidate behind):
 | active places / map | 1 h | 7 d |
 | live counters (`/api/stats`) | 15 min | 24 h — beyond: hide (WEB-F-104) |
 | proof stream input (`media-echo`, build data) | build-time | until next deploy |
+| proof stream per segment (`{municipality, trait, job, isoWeek}`) | 1 week | until the ISO week turns (tagged, TS-005 D7) |
 | pages (HTML, ISR) | 1 h | until next deploy |
 | landing-only domains | static | until next deploy |
 
@@ -79,7 +80,7 @@ module renders as list.
 ### D7 — Enforcement [FIXED: WEB-Q-007; config PROPOSED]
 
 - **Lighthouse CI** on every PR against: `/`, `/dein-ort`, `/mitmachen`,
-  `/eigener-kalender`, `/warum-wir` (mobile emulation, throttled);
+  `/dein-kalender`, `/ueber-uns` (mobile emulation, throttled);
   asserts D1 scores. Performance < 98 fails the build.
 - **Bundle guard** in CI asserts D1/D4 size budgets per route.
 - **RUM**: Vercel Speed Insights (cookieless) watches D1 in production;
@@ -94,15 +95,15 @@ module renders as list.
 
 ## Acceptance criteria
 
-| # | Check |
-| --- | --- |
-| A1 | Lighthouse CI green on the five D7 routes, mobile + desktop. |
-| A2 | Bundle guard: every route within D1/D4 budgets. |
-| A3 | Fonts: single variable woff2, preloaded, ≤ 50KB, swap. |
-| A4 | With app APIs blocked (simulated outage): every page renders tier-2/3 content, freshness labels shown, counters hidden after stale window. |
-| A5 | eTracker and envoy absent from the critical request chain of the LCP element (verified in trace). |
-| A6 | `Save-Data: on` responses are measurably lighter (≥ 30 % image bytes saved) [PROPOSED threshold]. |
-| A7 | CLS < 0.1 with live modules streaming in (reserved space, no shift). |
+| ID | Level | Check |
+| --- | --- | --- |
+| TS-003-A1 | tool | Lighthouse CI green on the five D7 routes, mobile + desktop. |
+| TS-003-A2 | tool | Bundle guard: every route within D1/D4 budgets. |
+| TS-003-A3 | static | Fonts: single variable woff2, preloaded, ≤ 50KB, swap. |
+| TS-003-A4 | e2e | With app APIs blocked (simulated outage): every page renders tier-2/3 content, freshness labels shown, counters hidden after stale window. |
+| TS-003-A5 | tool | eTracker and envoy absent from the critical request chain of the LCP element (verified in trace). |
+| TS-003-A6 | e2e | `Save-Data: on` responses are measurably lighter (≥ 30 % image bytes saved) [PROPOSED threshold]. |
+| TS-003-A7 | tool | CLS < 0.1 with live modules streaming in (reserved space, no shift). |
 
 ## Coverage
 
