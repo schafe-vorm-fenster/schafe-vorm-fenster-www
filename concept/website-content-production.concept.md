@@ -60,15 +60,30 @@ content from:
 
 | Source entity | Package | Carries | Feeds website content types |
 | --- | --- | --- | --- |
-| Proof | `@schafe-vorm-fenster/proof` | claim, evidence, source, date, `usage_rights`, audiences, geo | proof card, quote, value story, offer tier reassurance |
+| Proof | `@schafe-vorm-fenster/proof` | claim, evidence, source, date, `usage_rights`, audiences | proof card, quote, value story, **anecdote**, offer tier reassurance |
 | Media echo | `@schafe-vorm-fenster/media-echo` | type(s), title, source, date, url, geo, participants, media | proof card, archive entry, award mention |
 | Offerings | `@schafe-vorm-fenster/offerings` | scope, price, `promotion`, audience | offer tier, comparison, feature/benefit |
-| Strategy | `@schafe-vorm-fenster/strategy` | positioning, value propositions, conversion goals, content pillars, business goals | hero, scene, value story, CTA semantics |
-| Audiences | `@schafe-vorm-fenster/audiences` | audience model, communication goals, register | tone profile input, audience ordering |
+| Goals | `@schafe-vorm-fenster/goals` | business goals, conversion goals, channel matrix | CTA semantics, conversion binding |
+| Messaging | `@schafe-vorm-fenster/messaging` | positioning, value propositions, content pillars | hero, scene, value story |
+| Audiences | `@schafe-vorm-fenster/audiences` | audience model, relations, communication goals | tone profile input, audience ordering, job relation guidance |
 | Partners | `@schafe-vorm-fenster/partners` | partner, relationship, logo | partner mention |
-| People | `@schafe-vorm-fenster/people` | name, role, portrait, bio | person profile, origin story |
-| Brand | `@schafe-vorm-fenster/brand` | tokens, logos, imagery rules, kit | component styling, image rules, length budgets |
-| Posts | `@schafe-vorm-fenster/posts` | published posts | anecdote (secondary; not a website surface) |
+| People | `@schafe-vorm-fenster/people` | name, role, portrait, bio | person profile |
+| Brand identity | `@schafe-vorm-fenster/brand-identity` | voice, values, imagery rules, **origin story** | origin story, tone profile input |
+| Brand design | `@schafe-vorm-fenster/brand-design` | tokens, logos, kit | component styling, image rules, length budgets |
+| Posts | `@schafe-vorm-fenster/posts` | published posts | secondary reference; not a website surface |
+
+All eleven are installed as devDependencies of this repository and read
+through their `index.json` (A.2). Two notes on the state of that wiring:
+
+- The hub restructured its packages while this document was being
+  written: `strategy` became `goals` + `messaging`, `brand` became
+  `brand-identity` + `brand-design`. Exactly the case A.2 rule 1 exists
+  for — the names changed, the records did not.
+- `@schafe-vorm-fenster/posts@0.4.0` declares `exports["./index.json"]`
+  but its `files` array ships only `surfaces/*/published/**`, so no
+  `index.json` reaches the tarball and the export resolves to nothing.
+  A one-line packaging fix in the hub; until then the package is
+  installed but not readable through the contract. The other ten resolve.
 
 Two content families are **not** sourced from the hub and keep their own
 pipelines: legal texts (Google Workspace import, DEC-012/027/039) and live
@@ -196,8 +211,8 @@ fragments, and declares which source entities it may derive from.
 | 10 | `proof-card` | one proof element as the website renders it | context line, claim, attribution, `GeoBadge`, `ImageRef?`, link | proof, media echo | every page |
 | 11 | `empty-proof-slot` | the visible gap where no cleared proof exists | copy, target proof id | — | `/ueber-uns`, any stream |
 | 12 | `archive-entry` | one chronological row | title, type, date, source, link | media echo | `/ueber-uns/archiv` |
-| 13 | `origin-story` | founder and origin narrative | headline, body, `ImageRef` | people, strategy | `/ueber-uns` |
-| 14 | `anecdote` | short reusable narrative snippet | title, body, `proof_ref?` | anecdote records in the hub (consolidation pending) | inline anywhere |
+| 13 | `origin-story` | founder and origin narrative | headline, body, `ImageRef` | brand-identity (`## Origin story`), people | `/ueber-uns` |
+| 14 | `anecdote` | short reusable narrative snippet | title, body, `proof_ref?` | proof (`reference-case`, `metric`) | inline anywhere |
 | 15 | `person-profile` | team member | name, role line, portrait, bio? | people | `/ueber-uns` |
 | 16 | `partner-mention` | a named relationship | partner, relationship line, logo, link | partners | `/deine-region`, `/ueber-uns` |
 | 17 | `trust-block` | data protection, operations, AI | headline, body, link | strategy, legal | `/dein-kalender` |
@@ -221,6 +236,12 @@ Rules:
   once per locale and never per place.
 - Type 26 stays outside the generation pipeline; it is imported and only
   validated here.
+- Anecdotes are proof, not a separate entity. The hub consolidated them
+  into citable assets — the bakery van (`google-baecker-schlatkow`), the
+  home-office readers (`homeoffice-mobile-anbieter`), the vaccination
+  dates (`impftermine-landkreis`) — all `reference-case`, all `cleared`.
+  Type 14 therefore derives from `proof` like type 10 does, and differs
+  from it in framing rather than in origin.
 - Types 3, 10, 12, 14 and 16 are **selectable**: the relevance engine may
   choose and order them, so they carry `RelevanceFacets` (B.5). A
   selectable type without complete facets is invalid — the engine has no
@@ -285,6 +306,13 @@ content file when generation ends. Four facets, on every selectable type.
 | `geo.county` | `geo.county` |
 | `geo.state` | `geo.state` |
 | `geo.country` | `geo.country` |
+
+The hub's data already speaks these five levels: every `geo` block in
+`@schafe-vorm-fenster/media-echo` is
+`{place, municipality, county, state, country}`, with `state` populated
+and the finer levels `null` where unknown. `@schafe-vorm-fenster/proof`
+carries no `geo` at all yet — the one demand in this section that still
+blocks (see Open Points).
 
 **This corrects DEC-041 §1 and TS-005 D1**, which fix four levels and
 drop *state* on the stated grounds that four is what the geo-api offers.
@@ -816,8 +844,8 @@ written after the specification phase.
       Both handled by A.2 rule 5 — marked missing, claim weakened,
       demand registered, pipeline running. Open is only where the demand
       register lives, so the gaps stay countable.
-- [ ] **Anecdote records.** Anecdotes come from the hub like everything
-      else, but the records are not consolidated yet: the bakery van and
-      the Flechtorf evening currently sit spread across intake and post
-      material. Cleanup happens in the hub. Until it does, type 14
-      generates from whichever record exists and marks the rest missing.
+- [ ] **Posts packaging.** `@schafe-vorm-fenster/posts` ships no
+      `index.json` despite exporting one (A.1). One line in the hub's
+      package `files` array. Until it lands, the adapter has no contract
+      for that entity — which costs little, since posts are a secondary
+      source.

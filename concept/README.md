@@ -46,13 +46,20 @@ The documents reference `strategy/conversion-goals/`, `audiences/`,
 exist only in `go-to-market-os`, which is why the documents cannot live
 here.
 
-## The one concept document that lives here
+## The two concept documents that live here
 
 `website-content-production.concept.md` specifies the content pipeline —
 source layer, schema hierarchy, mapping skeleton, components, processes.
 It lives in this repository because it is about how *this* repository
 turns hub packages into rendered pages; the hub owns what is said, this
 document owns how it gets here. TS-007 implements it.
+
+`website-design-system.md` specifies how the brand is applied to this
+website: colour roles, type scale, components, page rhythm, aspect ratios
+and reserved space, icons, motion, accessibility. It consumes the tokens
+of `@schafe-vorm-fenster/brand-design` and adds the layer above them —
+the components and composition that the tokens alone do not carry. The
+visual boards are in [`v2.0/`](v2.0/).
 
 ## What stays in this repository
 

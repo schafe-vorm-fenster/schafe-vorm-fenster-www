@@ -3,7 +3,7 @@ artefact: tactical-spec
 id: TS-003
 profile: rule
 status: DRAFT
-implements: [WEB-Q-001, WEB-Q-002, WEB-Q-003, WEB-Q-004, WEB-Q-005, WEB-Q-006, WEB-Q-007, WEB-Q-008, WEB-F-105]
+implements: [WEB-Q-001, WEB-Q-002, WEB-Q-003, WEB-Q-004, WEB-Q-005, WEB-Q-006, WEB-Q-007, WEB-Q-008, WEB-Q-009, WEB-F-105]
 sources: [SRC-006, SRC-007]
 decisions: [DEC-007, DEC-019]
 ---
@@ -106,6 +106,20 @@ module renders as list.
 | TS-003-A6 | e2e | `Save-Data: on` responses are measurably lighter (≥ 30 % image bytes saved) [PROPOSED threshold]. |
 | TS-003-A7 | tool | CLS < 0.1 with live modules streaming in (reserved space, no shift). |
 
+### D8 — Reserved space is how CLS is met [FIXED: DEC-056, SRC-014]
+
+Every box holding asynchronous content declares its shape before the
+content arrives: `aspect-ratio` on media (never a pixel height, so the
+ratio survives every viewport), fixed heights for controls whose content
+length varies, and `min-height: calc(<lines> · <line-height> · 1em)` for
+text that arrives with data. Event titles clamp to two lines and meta to
+one, so a long title cannot change a row's height; live counts sit in a
+fixed-height badge, so one digit becoming two does not reflow.
+
+The ratio set and the height table are in SRC-014; this spec consumes
+them and restates none of the values. CLS < 0.1 (D1) is the outcome this
+determination produces rather than hopes for.
+
 ## Coverage
 
 | Requirement | Discharged by |
@@ -117,6 +131,7 @@ module renders as list.
 | WEB-Q-005 (self-hosted fonts) | D3 · A3 |
 | WEB-Q-006 (image loading) | D2, D6 |
 | WEB-Q-007 (CI + RUM) | D7 · A1, A2 |
+| WEB-Q-009 (reserved space) | D8 · A7 |
 | WEB-Q-008 (reduced data) | D6 · A6 |
 | WEB-F-105 (cache lifetimes) | D5 · A4 |
 

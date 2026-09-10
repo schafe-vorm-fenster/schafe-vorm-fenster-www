@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700;800&family=Atkinson+Hyperlegible+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#EEF2E9}
+body{font-family:'Atkinson Hyperlegible Next',Helvetica,Arial,sans-serif;color:#171D0D;-webkit-font-smoothing:antialiased;text-wrap:pretty}
+a{color:#486202}a:hover{color:#531BDE}
+.vp::-webkit-scrollbar{width:0}
+</style></helmet>
+
+<div style="padding:48px 52px 90px;max-width:1680px">
+
+  <div style="display:flex;gap:20px;align-items:flex-start;margin-bottom:40px">
+    <div role="img" aria-label="Schafe vorm Fenster" style="width:72px;height:72px;flex:none;border-radius:999px;background:#A4D822 url(assets/brand/svf-mark-flat.svg) center/contain no-repeat"></div>
+    <div style="max-width:780px">
+      <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#606657">Style Guide · Version 1.0 · 10. September 2026</div>
+      <h1 style="margin:8px 0 12px;font-size:44px;font-weight:800;line-height:1;letter-spacing:-.035em">Editorial mit Fotoflächen</h1>
+      <p style="margin:0;font-size:19px;line-height:1.5;color:#39412C">Flächen und Fotos laufen randlos über die volle Breite und wechseln sich ab. Typografie und Ortsnamen tragen die Emotion. Die einzige weiche Form im System ist das, was man anfassen kann.</p>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:52px">
+    <div style="flex:1;min-width:300px;background:#171D0D;color:#F9FBF7;padding:24px">
+      <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:34px;font-weight:700;color:#A4D822;line-height:1;margin-bottom:12px">01</div>
+      <div style="font-size:24px;font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:8px">Flächen sind kantig</div>
+      <p style="margin:0;font-size:17px;line-height:1.5;color:#C6E593">Sektionen ohne Rand, ohne Schatten, ohne Radius. Sie stoßen direkt aneinander — dadurch entstehen nie doppelte Abstände.</p>
+    </div>
+    <div style="flex:1;min-width:300px;background:#A4D822;padding:24px">
+      <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:34px;font-weight:700;color:#2D3F01;line-height:1;margin-bottom:12px">02</div>
+      <div style="font-size:24px;font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:8px">Bedienelemente sind rund</div>
+      <p style="margin:0;font-size:17px;line-height:1.5;color:#2D3F01">Buttons, Badges, Chips, Suchfeld, Kategorien und das Logo: Radius 999. Dazwischen gibt es nichts.</p>
+    </div>
+    <div style="flex:1;min-width:300px;background:#531BDE;color:#F9FBF7;padding:24px">
+      <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:34px;font-weight:700;color:#CFD1FC;line-height:1;margin-bottom:12px">03</div>
+      <div style="font-size:24px;font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:8px">Foto und Farbe wechseln</div>
+      <p style="margin:0;font-size:17px;line-height:1.5;color:#CFD1FC">Auf jede Fotofläche folgt eine Farbfläche. Zwei Fotos berühren sich nie — das ist der Unterschied zwischen Magazin und Unordnung.</p>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:44px;align-items:flex-start;flex-wrap:wrap">
+
+    <div style="flex:1;min-width:min(620px,100%);display:flex;flex-direction:column;gap:44px">
+
+      <div>
+        <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#606657;margin-bottom:6px">01 · Farbe</div>
+        <h2 style="margin:0 0 6px;font-size:30px;font-weight:800;letter-spacing:-.025em;line-height:1.1">Vier Rollen, kein Hex daneben</h2>
+        <p style="margin:0 0 20px;font-size:17px;line-height:1.5;color:#39412C">Lime ist die Fläche, Violett die Stimme, Himbeere der Puls — höchstens ein Himbeere-Element pro Screen. Alles andere ist Neutral.</p>
+        <sc-for list="{{ scales }}" as="sc" hint-placeholder-count="4">
+          <div style="margin-bottom:18px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+              <span style="font-size:18px;font-weight:800">{{ sc.name }}</span>
+              <span style="font-size:15px;color:#606657">{{ sc.role }}</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:2px">
+              <sc-for list="{{ sc.items }}" as="c" hint-placeholder-count="6">
+                <div style="min-width:0">
+                  <div style="{{ c.style }}"></div>
+                  <div style="background:#F9FBF7;padding:7px 8px 8px">
+                    <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:11px;font-weight:700;letter-spacing:.02em;line-height:1.3;word-break:break-word">{{ c.name }}</div>
+                    <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:11px;color:#606657;line-height:1.3;margin-top:1px">{{ c.hex }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div>
+        <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#606657;margin-bottom:6px">02 · Typografie</div>
+        <h2 style="margin:0 0 6px;font-size:30px;font-weight:800;letter-spacing:-.025em;line-height:1.1">Atkinson Hyperlegible, zwei Schnitte</h2>
+        <p style="margin:0 0 20px;font-size:17px;line-height:1.5;color:#39412C">Next für alles Lesbare, Mono für Labels, Daten, Zahlen und Preise. 400 und 700, dazu 800 für Displaygrößen. Nichts unter 15 px.</p>
+        <div style="background:#F9FBF7;padding:24px">
+          <sc-for list="{{ typeRows }}" as="t" hint-placeholder-count="6">
+            <div style="padding:16px 0;border-top:1px solid #D1D6CB;display:flex;gap:20px;align-items:baseline">
+              <div style="width:150px;flex:none">
+                <div style="font-size:15px;font-weight:700">{{ t.role }}</div>
+                <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;color:#606657;margin-top:2px">{{ t.spec }}</div>
+              </div>
+              <div style="{{ t.style }}">{{ t.sample }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#606657;margin-bottom:6px">03 · Form &amp; Raum</div>
+        <h2 style="margin:0 0 6px;font-size:30px;font-weight:800;letter-spacing:-.025em;line-height:1.1">Zwei Radien, ein Padding</h2>
+        <p style="margin:0 0 20px;font-size:17px;line-height:1.5;color:#39412C">16 px seitlich in jeder Sektion, 26–30 px vertikal. Keine gepolsterte Karte in einer gepolsterten Sektion.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:16px">
+          <div style="flex:1;min-width:200px;background:#F9FBF7;padding:20px">
+            <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#606657;margin-bottom:12px">Radius 0 · Flächen</div>
+            <div style="height:64px;background:#E2E7DB;margin-bottom:10px"></div>
+            <div style="font-size:15px;line-height:1.45;color:#39412C">Sektionen, Fotoflächen, Listenzeilen</div>
+          </div>
+          <div style="flex:1;min-width:200px;background:#F9FBF7;padding:20px">
+            <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#606657;margin-bottom:12px">Radius 999 · Bedienbar</div>
+            <div style="height:64px;background:#A4D822;border-radius:999px;margin-bottom:10px"></div>
+            <div style="font-size:15px;line-height:1.45;color:#39412C">Buttons, Badges, Chips, Suchfeld, Logo</div>
+          </div>
+          <div style="flex:1;min-width:200px;background:#FBF1DC;padding:20px">
+            <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#9A6300;margin-bottom:12px">Verboten</div>
+            <div style="height:64px;background:#E2E7DB;border-radius:12px;border:2px solid #6F7467;box-shadow:4px 4px 0 #171D0D;margin-bottom:10px"></div>
+            <div style="font-size:15px;line-height:1.45;color:#39412C">Mittlere Radien, Rahmen, Schatten, schwebende Karten</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#606657;margin-bottom:6px">04 · Bausteine</div>
+        <h2 style="margin:0 0 20px;font-size:30px;font-weight:800;letter-spacing:-.025em;line-height:1.1">Bausteine</h2>
+
+        <div style="background:#F9FBF7;padding:24px;margin-bottom:16px">
+          <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#606657;margin-bottom:16px">Buttons · 56 px, Radius 999</div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:14px">
+            <sc-for list="{{ buttons }}" as="b" hint-placeholder-count="5">
+              <div style="{{ b.style }}">{{ b.label }}<span style="{{ b.arrow }}"></span></div>
+            </sc-for>
+          </div>
+          <div style="font-size:15px;line-height:1.5;color:#606657">Primär auf Hell ist Ink, primär auf Dunkel ist Lime. Himbeere nur für die bezahlte Conversion.</div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:16px">
+          <div style="flex:1;min-width:300px;background:#F9FBF7;padding:24px">
+            <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#606657;margin-bottom:16px">Suchfeld</div>
+            <div style="background:#EEF2E9;border-radius:999px;display:flex;align-items:center;gap:10px;min-height:56px;padding:0 6px 0 18px">
+              <span style="{{ icPin }}"></span>
+              <span style="font-size:17px;color:#606657;font-weight:600;flex:1">Ort oder Postleitzahl</span>
+              <span style="min-height:44px;display:flex;align-items:center;padding:0 20px;background:#171D0D;color:#F9FBF7;border-radius:999px;font-weight:700;font-size:16px">Suchen</span>
+            </div>
+          </div>
+          <div style="flex:1;min-width:300px;background:#F9FBF7;padding:24px">
+            <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#606657;margin-bottom:16px">Badges &amp; Kategorien</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-for list="{{ badges }}" as="b" hint-placeholder-count="6">
+                <span style="{{ b.style }}">{{ b.label }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#171D0D;padding:24px;margin-bottom:16px">
+          <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#C6E593;margin-bottom:16px">Terminzeile · flach, Haarlinie, nie Karte</div>
+          <sc-for list="{{ events }}" as="e" hint-placeholder-count="3">
+            <div style="display:flex;gap:14px;padding:15px 0;border-top:1px solid #39412C;align-items:baseline;color:#F9FBF7">
+              <div style="width:52px;flex:none">
+                <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:28px;font-weight:700;line-height:1">{{ e.dayNum }}</div>
+                <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;color:#C6E593;text-transform:uppercase">{{ e.monShort }}</div>
+              </div>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:21px;font-weight:700;line-height:1.15;letter-spacing:-.012em">{{ e.title }}</div>
+                <div style="font-size:15px;color:#C6E593;margin-top:3px;line-height:1.35">{{ e.meta }}</div>
+              </div>
+              <span style="{{ e.pill }}">{{ e.tag }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:16px">
+          <div style="flex:1;min-width:300px">
+            <div style="{{ demoPhoto }}">
+              <div style="position:relative;z-index:2;padding:120px 18px 20px">
+                <span style="display:inline-flex;align-items:center;background:#A4D822;color:#171D0D;border-radius:999px;padding:7px 15px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Fotofläche</span>
+                <div style="font-size:26px;font-weight:800;line-height:1.05;letter-spacing:-.025em;color:#F9FBF7">Verlauf über dem Bild, Text im dunklen Teil</div>
+              </div>
+            </div>
+            <div style="background:#E2E7DB;padding:14px 18px;font-size:15px;line-height:1.5;color:#39412C">Foto als erste Ebene, <span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px">linear-gradient</span> darüber: 0 bei 12–26 %, 0,86 bei 62 %, 0,96 unten.</div>
+          </div>
+          <div style="flex:1;min-width:300px">
+            <div style="{{ demoHatch }}">
+              <div style="position:relative;z-index:2;padding:110px 18px 20px">
+                <span style="display:inline-flex;align-items:center;background:#BC1C5A;color:#F9FBF7;border-radius:999px;padding:7px 15px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Foto gesucht</span>
+                <div style="font-size:26px;font-weight:800;line-height:1.05;letter-spacing:-.025em">Fehlendes Motiv wird zur Einladung</div>
+              </div>
+            </div>
+            <div style="background:#E2E7DB;padding:14px 18px;font-size:15px;line-height:1.5;color:#39412C">Kein Symbolbild. Schraffur aus <span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px">surface-2</span> und <span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px">line</span>, Badge, Aufforderung.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#606657;margin-bottom:6px">05 · Seitenverhältnisse</div>
+        <h2 style="margin:0 0 6px;font-size:30px;font-weight:800;letter-spacing:-.025em;line-height:1.1">Jede Fläche kennt ihre Form vor dem Inhalt</h2>
+        <p style="margin:0 0 20px;font-size:17px;line-height:1.5;color:#39412C">Live-Termine, Fotos und der eingebettete Kalender laden nachträglich. Damit nichts nachrutscht, steht das Verhältnis als <span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:15px">aspect-ratio</span> fest — nie als Pixelhöhe.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:24px">
+          <sc-for list="{{ ratios }}" as="r" hint-placeholder-count="6">
+            <div>
+              <div style="{{ r.box }}">
+                <span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:22px;font-weight:700;color:#39412C">{{ r.ratio }}</span>
+              </div>
+              <div style="font-size:15px;font-weight:700;margin-top:8px;line-height:1.25">{{ r.token }}</div>
+              <div style="font-size:14px;color:#606657;line-height:1.4;margin-top:2px">{{ r.use }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:16px">
+          <div style="flex:1;min-width:300px;background:#F9FBF7;padding:24px">
+            <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#606657;margin-bottom:16px">Feste Höhen</div>
+            <sc-for list="{{ heights }}" as="h" hint-placeholder-count="6">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:10px 0;border-top:1px solid #D1D6CB">
+                <span style="font-size:16px;line-height:1.35">{{ h.el }}</span>
+                <span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:16px;font-weight:700;flex:none">{{ h.px }}</span>
+              </div>
+            </sc-for>
+            <div style="font-size:15px;line-height:1.5;color:#606657;margin-top:14px">Termintitel auf zwei Zeilen begrenzt, Meta auf eine — ein langer Titel ändert die Zeilenhöhe nie.</div>
+          </div>
+          <div style="flex:1;min-width:300px;background:#F9FBF7;padding:24px">
+            <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#606657;margin-bottom:16px">Skeleton · gleiche Form, kein Inhalt</div>
+            <div style="{{ skelPhoto }}"></div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin:14px 0 16px">
+              <div style="height:16px;background:#D1D6CB;width:100%"></div>
+              <div style="height:16px;background:#D1D6CB;width:100%"></div>
+              <div style="height:16px;background:#D1D6CB;width:60%"></div>
+            </div>
+            <div style="display:flex;gap:10px">
+              <div style="height:56px;width:170px;border-radius:999px;background:#E2E7DB"></div>
+              <div style="height:40px;width:90px;border-radius:999px;background:#E2E7DB;align-self:center"></div>
+            </div>
+            <div style="font-size:15px;line-height:1.5;color:#606657;margin-top:16px">Ohne Animation — die Seite hat genau eine Bewegung. Nach zwei Sekunden übernimmt der ehrliche Leerzustand: Publisher-Einladung oder „Foto gesucht".</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#606657;margin-bottom:6px">06 · Icons</div>
+        <h2 style="margin:0 0 6px;font-size:30px;font-weight:800;letter-spacing:-.025em;line-height:1.1">Lucide, 24er Raster, 2 px Strich</h2>
+        <p style="margin:0 0 20px;font-size:17px;line-height:1.5;color:#39412C">Ein Set, einfarbig, nie gefüllt. Drei Größen: 24 px Standard, 18 px im Badge, 32 px als Sektionsauftakt. Nichts wird von Hand gezeichnet.</p>
+        <div style="background:#F9FBF7;padding:24px;margin-bottom:16px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:2px">
+            <sc-for list="{{ iconGrid }}" as="i" hint-placeholder-count="18">
+              <div style="background:#EEF2E9;padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:9px;min-width:0">
+                <span style="{{ i.style }}"></span>
+                <span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:11px;color:#606657;text-align:center;line-height:1.3;word-break:break-word">{{ i.name }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:16px">
+          <div style="flex:1;min-width:280px;background:#F9FBF7;padding:20px;display:flex;align-items:center;gap:16px">
+            <span style="{{ ic32 }}"></span>
+            <div><div style="font-size:16px;font-weight:700">32 px</div><div style="font-size:14px;color:#606657">Sektionsauftakt</div></div>
+          </div>
+          <div style="flex:1;min-width:280px;background:#F9FBF7;padding:20px;display:flex;align-items:center;gap:16px">
+            <span style="{{ ic24 }}"></span>
+            <div><div style="font-size:16px;font-weight:700">24 px</div><div style="font-size:14px;color:#606657">Buttons, Zeilen, Listen</div></div>
+          </div>
+          <div style="flex:1;min-width:280px;background:#F9FBF7;padding:20px;display:flex;align-items:center;gap:16px">
+            <span style="display:inline-flex;align-items:center;gap:8px;background:#486202;border-radius:999px;padding:7px 15px"><span style="{{ ic18 }}"></span><span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#F9FBF7">18 px</span></span>
+            <div style="font-size:14px;color:#606657;line-height:1.4">Im Badge und Kicker</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#606657;margin-bottom:6px">07 · Rhythmus</div>
+        <h2 style="margin:0 0 6px;font-size:30px;font-weight:800;letter-spacing:-.025em;line-height:1.1">Die Reihenfolge ist Teil des Designs</h2>
+        <p style="margin:0 0 20px;font-size:17px;line-height:1.5;color:#39412C">Neun Sektionen, kein Foto berührt ein Foto, höchstens zwei Sektionen derselben Farbfamilie hintereinander.</p>
+        <div style="display:flex;gap:2px;align-items:stretch;height:72px;margin-bottom:14px">
+          <sc-for list="{{ rhythm }}" as="r" hint-placeholder-count="9">
+            <div style="{{ r.style }}">{{ r.n }}</div>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0">
+          <sc-for list="{{ rhythm }}" as="r" hint-placeholder-count="9">
+            <div style="display:flex;gap:14px;padding:11px 0;border-top:1px solid #D1D6CB;align-items:baseline">
+              <span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px;color:#606657;width:26px;flex:none">{{ r.n }}</span>
+              <span style="{{ r.kind }}">{{ r.kindLabel }}</span>
+              <span style="flex:1;min-width:0;font-size:16px;line-height:1.4">{{ r.desc }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#606657;margin-bottom:6px">08 · Grenzen</div>
+        <h2 style="margin:0 0 20px;font-size:30px;font-weight:800;letter-spacing:-.025em;line-height:1.1">Was nicht passiert</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px">
+          <sc-for list="{{ donts }}" as="d" hint-placeholder-count="6">
+            <div style="background:#FBF1DC;padding:18px;min-width:0">
+              <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:20px;font-weight:700;color:#9A6300;line-height:1;margin-bottom:8px">✕</div>
+              <div style="font-size:17px;line-height:1.45;color:#39412C">{{ d }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="width:414px;flex:none;position:sticky;top:24px">
+      <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#606657;margin-bottom:6px">Finale Variante</div>
+      <h2 style="margin:0 0 14px;font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.15">Startseite, alle Regeln angewandt</h2>
+      <div style="width:414px;height:844px;box-sizing:border-box;background:#171D0D;border-radius:46px;padding:12px">
+        <div class="vp" style="width:390px;height:820px;background:#F9FBF7;border-radius:34px;overflow-y:auto;overflow-x:hidden;font-size:18px;line-height:1.55">
+
+          <div style="{{ heroBleed }}">
+            <div style="position:absolute;top:0;left:0;right:0;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;z-index:2">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div role="img" aria-label="Schafe vorm Fenster" style="width:40px;height:40px;flex:none;border-radius:999px;background:#A4D822 url(assets/brand/svf-mark-flat.svg) center/contain no-repeat"></div>
+                <span style="font-size:15px;font-weight:800;line-height:1.1;color:#F9FBF7;letter-spacing:-.01em">Schafe vorm<br>Fenster</span>
+              </div>
+              <div style="min-height:44px;display:flex;align-items:center;padding:0 18px;background:#A4D822;border-radius:999px;font-weight:700;font-size:15px;color:#171D0D">Kalender</div>
+            </div>
+            <div style="position:absolute;left:0;right:0;bottom:0;padding:0 16px 22px;z-index:2">
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+                <span style="display:inline-flex;align-items:center;gap:8px;background:#A4D822;color:#171D0D;border-radius:999px;padding:7px 15px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px;font-weight:700;letter-spacing:.04em"><span style="width:8px;height:8px;border-radius:50%;background:#2D3F01;display:inline-block"></span>5 TERMINE DIESE WOCHE</span>
+                <span style="display:inline-flex;align-items:center;background:rgba(23,29,13,.55);color:#F9FBF7;border-radius:999px;padding:7px 14px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.04em">OPEN AIR · SCHLATKOW</span>
+              </div>
+              <h3 style="margin:0 0 20px;font-size:54px;line-height:.9;letter-spacing:-.045em;font-weight:800;color:#F9FBF7">Für Schlatkow läuft es.</h3>
+              <div style="background:#F9FBF7;border-radius:999px;display:flex;align-items:center;gap:10px;min-height:56px;padding:0 6px 0 18px">
+                <span style="{{ icPin }}"></span>
+                <span style="font-size:18px;color:#606657;font-weight:600;flex:1">Ort oder Postleitzahl</span>
+                <span style="min-height:44px;display:flex;align-items:center;padding:0 20px;background:#171D0D;color:#F9FBF7;border-radius:999px;font-weight:700;font-size:16px">Suchen</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#A4D822;padding:22px 16px 24px">
+            <p style="margin:0 0 14px;font-size:20px;line-height:1.35;font-weight:600;color:#2D3F01">Feuerwehrfest, Bäckerwagen, Gemeindevertretersitzung — alles, was den Tag im Dorf bestimmt, an einem Ort.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-for list="{{ chips }}" as="c" hint-placeholder-count="3">
+                <div style="min-height:40px;display:inline-flex;align-items:center;padding:0 15px;background:#2D3F01;color:#F9FBF7;border-radius:999px;font-size:15px;font-weight:600">{{ c }}</div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="background:#171D0D;color:#F9FBF7;padding:26px 16px">
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:18px">
+              <div style="font-size:50px;line-height:.9;letter-spacing:-.045em;font-weight:800">SCHLAT<br>KOW</div>
+              <div style="display:inline-flex;align-items:baseline;gap:7px;background:#A4D822;color:#171D0D;border-radius:999px;padding:8px 16px;flex:none">
+                <span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:26px;font-weight:700;line-height:1">5</span>
+                <span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase">Termine</span>
+              </div>
+            </div>
+            <sc-for list="{{ events }}" as="e" hint-placeholder-count="3">
+              <div style="display:flex;gap:14px;padding:15px 0;border-top:1px solid #39412C;align-items:baseline">
+                <div style="width:52px;flex:none">
+                  <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:28px;font-weight:700;line-height:1">{{ e.dayNum }}</div>
+                  <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;color:#C6E593;text-transform:uppercase">{{ e.monShort }}</div>
+                </div>
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:21px;font-weight:700;line-height:1.15;letter-spacing:-.012em">{{ e.title }}</div>
+                  <div style="font-size:15px;color:#C6E593;margin-top:3px;line-height:1.35">{{ e.meta }}</div>
+                </div>
+                <span style="{{ e.pill }}">{{ e.tag }}</span>
+              </div>
+            </sc-for>
+            <div style="min-height:52px;display:inline-flex;align-items:center;padding:0 22px;background:#A4D822;color:#171D0D;border-radius:999px;font-weight:800;font-size:17px;gap:9px;margin-top:20px">Alle Termine<span style="{{ icArrowInk }}"></span></div>
+          </div>
+
+          <div style="{{ weekBleed }}">
+            <div style="position:absolute;top:12px;right:12px;z-index:2"><span style="{{ noteStyle }}">Nicht motivgenau</span></div>
+            <div style="position:absolute;left:0;right:0;bottom:0;padding:0 16px 20px;z-index:2">
+              <span style="display:inline-flex;align-items:center;background:#531BDE;color:#F9FBF7;border-radius:999px;padding:7px 15px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Termin der Woche</span>
+              <div style="font-size:32px;font-weight:800;line-height:1.02;letter-spacing:-.03em;color:#F9FBF7">Tanzabend im Schloss Bröllin</div>
+              <div style="font-size:16px;color:#C6E593;margin-top:6px">So 14.9. · 20:00 · Kulturlandbüro</div>
+            </div>
+          </div>
+
+          <div style="background:#E5F2D1;padding:28px 16px">
+            <span style="display:inline-flex;align-items:center;gap:8px;background:#486202;border-radius:999px;padding:7px 15px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#F9FBF7;margin-bottom:16px"><span style="{{ icPhonePaper }}"></span>Für Vereine</span>
+            <div style="font-size:38px;font-weight:800;line-height:1;letter-spacing:-.035em;margin-bottom:12px">Flyer knipsen, abschicken — steht drin.</div>
+            <p style="margin:0 0 20px;font-size:19px;line-height:1.45;color:#39412C">Oder ihr verbindet euren Google-Kalender, dann kommt alles von selbst. Kostenlos für Verein, Feuerwehr, Kirche, Bäckerwagen.</p>
+            <div style="min-height:56px;display:inline-flex;align-items:center;padding:0 24px;background:#171D0D;color:#F9FBF7;border-radius:999px;font-weight:800;font-size:18px;gap:9px">Wie das geht<span style="{{ icArrowPaper }}"></span></div>
+          </div>
+
+          <div style="{{ inviteBleed }}">
+            <div style="position:relative;z-index:2;padding:110px 16px 26px">
+              <span style="display:inline-flex;align-items:center;background:#BC1C5A;color:#F9FBF7;border-radius:999px;padding:7px 15px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px">Foto gesucht</span>
+              <div style="font-size:32px;font-weight:800;line-height:1.02;letter-spacing:-.03em;margin-bottom:10px">Kein Bild vom Feuerwehrfest in Schlatkow?</div>
+              <p style="margin:0 0 20px;font-size:18px;line-height:1.45;color:#39412C">Schick uns eins — dann steht hier euer Ort und nicht ein Symbolbild. Wir zeigen es mit Namen.</p>
+              <div style="min-height:56px;display:inline-flex;align-items:center;padding:0 24px;background:#171D0D;color:#F9FBF7;border-radius:999px;font-weight:800;font-size:18px;gap:9px">Foto beisteuern<span style="{{ icArrowPaper }}"></span></div>
+            </div>
+          </div>
+
+          <div style="background:#EEF2E9;padding:28px 16px">
+            <span style="display:inline-flex;align-items:center;gap:8px;background:#F9FBF7;border-radius:999px;padding:7px 15px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#486202;margin-bottom:16px"><span style="{{ icGlobeLime }}"></span>Für Gemeinden &amp; Ämter</span>
+            <div style="font-size:38px;font-weight:800;line-height:1;letter-spacing:-.035em;margin-bottom:12px">Ihr Kalender. Ihre Website. Ihr Name.</div>
+            <p style="margin:0 0 20px;font-size:19px;line-height:1.45;color:#39412C">Im Amt tippt niemand mehr Termine ab. Die Gemeinde Lehre macht das für 17 Orte.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+              <div style="min-height:56px;display:inline-flex;align-items:center;padding:0 24px;background:#171D0D;color:#F9FBF7;border-radius:999px;font-weight:800;font-size:18px;gap:9px">Wie das aussieht<span style="{{ icArrowPaper }}"></span></div>
+              <span style="min-height:56px;display:inline-flex;align-items:center;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:17px;font-weight:700;color:#486202">480 € / Jahr</span>
+            </div>
+          </div>
+
+          <div style="background:#531BDE;color:#F9FBF7;padding:28px 16px">
+            <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#CFD1FC;margin-bottom:16px">Woher wir kommen</div>
+            <div style="display:flex;flex-wrap:wrap;gap:9px;margin-bottom:22px">
+              <sc-for list="{{ awards }}" as="b" hint-placeholder-count="5">
+                <span style="{{ b.style }}">{{ b.label }}</span>
+              </sc-for>
+            </div>
+            <div style="font-size:30px;font-weight:800;line-height:1.08;letter-spacing:-.028em">Ein Dorfprojekt, das es bis in die ARD-Themenwoche geschafft hat.</div>
+          </div>
+
+          <div style="background:#F9FBF7;padding:28px 16px 36px">
+            <div style="font-size:32px;font-weight:800;line-height:1.03;letter-spacing:-.03em;margin-bottom:8px">Leserin, Vereinsvorstand und im Amt — gleichzeitig?</div>
+            <p style="margin:0 0 20px;font-size:17px;line-height:1.5;color:#606657">Kennen wir. Deshalb führt von hier alles überall hin.</p>
+            <sc-for list="{{ band }}" as="c" hint-placeholder-count="3">
+              <div style="padding:16px 0;border-top:1px solid #D1D6CB;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:56px">
+                <div><div style="font-size:19px;font-weight:700;line-height:1.25">{{ c.title }}</div><div style="font-size:15px;color:#606657;margin-top:2px;line-height:1.4">{{ c.sub }}</div></div>
+                <span style="width:44px;height:44px;flex:none;border-radius:999px;background:#EEF2E9;display:inline-flex;align-items:center;justify-content:center"><span style="{{ icArrowLime800 }}"></span></span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+      <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;color:#606657;margin-top:12px;line-height:1.6">390 × 820 px · Foto · Lime · Ink · Foto · Lime-100 · Schraffur · Surface · Violett · Paper</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1680,&quot;height&quot;:1100}}">
+const SCALES = [
+  {name:'Neutral', role:'Grund, Text, Linien', items:[
+    ['ink','#171D0D'],['text-2','#39412C'],['muted','#606657'],
+    ['border','#6F7467'],['line','#D1D6CB'],['surface-2','#E2E7DB'],
+    ['surface','#EEF2E9'],['paper','#F9FBF7']
+  ]},
+  {name:'Lime', role:'die Fläche', items:[
+    ['lime-100','#E5F2D1'],['lime-200','#D5ECB4'],['lime-300','#C6E593'],
+    ['lime-400','#B6DE6D'],['lime-500','#A4D822'],['lime-600','#83AF09'],
+    ['lime-800','#486202'],['lime-900','#2D3F01']
+  ]},
+  {name:'Violett', role:'die Stimme', items:[
+    ['violet-50','#F5F6FE'],['violet-100','#CFD1FC'],
+    ['violet-500','#531BDE'],['violet-600','#4617BF']
+  ]},
+  {name:'Himbeere & Status', role:'der Puls — einmal pro Screen', items:[
+    ['himbeere-100','#FDD1D9'],['himbeere-500','#E0286E'],['himbeere-600','#BC1C5A'],
+    ['error','#B02A1C'],['warn','#9A6300'],['warn-bg','#FBF1DC']
+  ]}
+];
+
+const TYPE = [
+  {role:'Display', spec:'54 / .90 / −.045em / 800', sample:'Für Schlatkow läuft es.', size:'40px', lh:'.92', ls:'-.04em', w:800},
+  {role:'Ortsname', spec:'50 / .90 / −.045em / 800', sample:'SCHLATKOW', size:'36px', lh:'.92', ls:'-.04em', w:800},
+  {role:'Sektionskopf', spec:'38 / 1.00 / −.035em / 800', sample:'Flyer knipsen, abschicken.', size:'30px', lh:'1.02', ls:'-.032em', w:800},
+  {role:'Kartentitel', spec:'21 / 1.15 / 700', sample:'Gemeindevertretersitzung', size:'21px', lh:'1.15', ls:'-.012em', w:700},
+  {role:'Lead', spec:'20 / 1.35 / 600', sample:'Alles, was den Tag im Dorf bestimmt.', size:'20px', lh:'1.35', ls:'0', w:600},
+  {role:'Fließtext', spec:'18 / 1.50 / 400', sample:'Die Vereine tragen selbst ein, Sie zeigen es unter Ihrem Namen.', size:'18px', lh:'1.5', ls:'0', w:400},
+  {role:'Meta', spec:'15 / 1.35 / 400', sample:'Schlatkow · 18:00 · Freiwillige Feuerwehr', size:'15px', lh:'1.35', ls:'0', w:400},
+  {role:'Label (Mono)', spec:'12 / uppercase / .08em / 700', sample:'FÜR GEMEINDEN & ÄMTER', size:'12px', lh:'1.4', ls:'.08em', w:700, mono:true}
+];
+
+const EVENTS = [
+  {dayNum:'12', monShort:'Sep', title:'Feuerwehrfest', meta:'Schlatkow · 18:00 · Freiwillige Feuerwehr', cat:'#BC1C5A', fg:'#F9FBF7', tag:'Fest'},
+  {dayNum:'13', monShort:'Sep', title:'Bäckerwagen Kurzweg', meta:'Schlatkow · 8:30 · Dorfplatz', cat:'#83AF09', fg:'#171D0D', tag:'Händler'},
+  {dayNum:'14', monShort:'Sep', title:'Tanzabend im Schloss', meta:'Bröllin · 20:00 · Kulturlandbüro', cat:'#531BDE', fg:'#F9FBF7', tag:'Kultur'},
+  {dayNum:'17', monShort:'Sep', title:'Gemeindevertretersitzung', meta:'Schmatzin · TOP Spielplatz', cat:'#486202', fg:'#F9FBF7', tag:'Amtlich'}
+];
+
+const RHYTHM = [
+  {n:'1', type:'photo', desc:'Hero — Headline und Suche auf dem Bild'},
+  {n:'2', type:'lime', desc:'lime-500 — das Versprechen, Orts-Chips'},
+  {n:'3', type:'ink', desc:'ink — Ortsname und Termine der Woche'},
+  {n:'4', type:'photo', desc:'Termin der Woche, bildgeführt'},
+  {n:'5', type:'lime100', desc:'lime-100 — das Argument für Akteure'},
+  {n:'6', type:'hatch', desc:'Schraffur — „Foto gesucht", Einladung'},
+  {n:'7', type:'surface', desc:'surface — das Argument für Kommunen, nüchtern'},
+  {n:'8', type:'violet', desc:'violet-500 — Herkunft als Badges'},
+  {n:'9', type:'paper', desc:'paper — Kontextband in die anderen Jobs'}
+];
+
+const RH_STYLE = {
+  photo:   {bg:'#171D0D', fg:'#F9FBF7', label:'Foto'},
+  hatch:   {bg:'repeating-linear-gradient(45deg,#E2E7DB,#E2E7DB 8px,#D1D6CB 8px,#D1D6CB 16px)', fg:'#171D0D', label:'Schraffur'},
+  lime:    {bg:'#A4D822', fg:'#171D0D', label:'Farbe'},
+  lime100: {bg:'#E5F2D1', fg:'#171D0D', label:'Farbe'},
+  ink:     {bg:'#39412C', fg:'#F9FBF7', label:'Farbe'},
+  violet:  {bg:'#531BDE', fg:'#F9FBF7', label:'Farbe'},
+  surface: {bg:'#EEF2E9', fg:'#171D0D', label:'Farbe'},
+  paper:   {bg:'#F9FBF7', fg:'#171D0D', label:'Farbe'}
+};
+
+class Component extends DCLogic {
+  mask(icon, color, size) {
+    const px = (size || 24) + 'px';
+    const u = 'url(assets/icons/' + icon + '.svg) center/contain no-repeat';
+    return 'display:inline-block;flex:none;width:' + px + ';height:' + px + ';background:' + color +
+      ';-webkit-mask:' + u + ';mask:' + u;
+  }
+
+  renderVals() {
+    const mono = "font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;";
+    const pill = (bg, fg) => mono + 'font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 12px;border-radius:999px;white-space:nowrap;flex:none;background:' + bg + ';color:' + fg;
+    const btn = (bg, fg) => 'min-height:56px;display:inline-flex;align-items:center;gap:9px;padding:0 24px;border-radius:999px;font-weight:800;font-size:18px;background:' + bg + ';color:' + fg;
+
+    return {
+      scales: SCALES.map(s => ({
+        name:s.name, role:s.role,
+        items: s.items.map(([name, hex]) => ({
+          name, hex,
+          style: 'height:70px;background:' + hex + (hex === '#F9FBF7' ? ';box-shadow:inset 0 0 0 1px #D1D6CB' : '')
+        }))
+      })),
+
+      typeRows: TYPE.map(t => ({
+        role:t.role, spec:t.spec, sample:t.sample,
+        style: 'flex:1;min-width:0;' + (t.mono ? mono : '') + 'font-size:' + t.size + ';line-height:' + t.lh +
+          ';letter-spacing:' + t.ls + ';font-weight:' + t.w + (t.mono ? ';text-transform:uppercase;color:#606657' : '')
+      })),
+
+      buttons: [
+        {label:'Kalender öffnen', style: btn('#171D0D', '#F9FBF7'), arrow: this.mask('arrow-right', '#F9FBF7')},
+        {label:'Alle Termine', style: btn('#A4D822', '#171D0D'), arrow: this.mask('arrow-right', '#171D0D')},
+        {label:'Kalender zusammenstellen', style: btn('#BC1C5A', '#F9FBF7'), arrow: this.mask('arrow-right', '#F9FBF7')},
+        {label:'Wie das aussieht', style: btn('#F9FBF7', '#171D0D'), arrow: this.mask('arrow-right', '#171D0D')},
+        {label:'Die Geschichte', style: 'min-height:56px;display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:18px;color:#486202', arrow: this.mask('arrow-right', '#486202')}
+      ],
+
+      badges: [
+        {label:'Fest', style: pill('#BC1C5A', '#F9FBF7')},
+        {label:'Händler', style: pill('#83AF09', '#171D0D')},
+        {label:'Kultur', style: pill('#531BDE', '#F9FBF7')},
+        {label:'Amtlich', style: pill('#486202', '#F9FBF7')},
+        {label:'Nachbarort', style: pill('#9A6300', '#F9FBF7')},
+        {label:'Foto gesucht', style: pill('#FBF1DC', '#9A6300')},
+        {label:'5 Termine', style: pill('#A4D822', '#171D0D')},
+        {label:'Bröllin', style: 'min-height:40px;display:inline-flex;align-items:center;padding:0 15px;background:#EEF2E9;border-radius:999px;font-size:15px;font-weight:600'}
+      ],
+
+      awards: ['NØRD Award 2026', 'KfW Award 2021', 'LEADER gefördert', 'im NDR gelaufen', 'bleibt kostenlos'].map((label, i) => ({
+        label,
+        style: mono + 'font-size:14px;font-weight:700;letter-spacing:.03em;padding:8px 15px;border-radius:999px;' +
+          (i === 0 ? 'background:#A4D822;color:#171D0D' : i === 4 ? 'background:#F9FBF7;color:#531BDE' : 'background:#4617BF;color:#F9FBF7')
+      })),
+
+      events: EVENTS.map(e => Object.assign({}, e, {pill: pill(e.cat, e.fg)})),
+
+      rhythm: RHYTHM.map(r => {
+        const st = RH_STYLE[r.type];
+        return {
+          n:r.n, desc:r.desc, kindLabel:st.label,
+          style: 'flex:1;background:' + st.bg + ';color:' + st.fg + ';display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;' + mono + 'font-size:13px;font-weight:700',
+          kind: pill(r.type === 'photo' ? '#171D0D' : r.type === 'hatch' ? '#FBF1DC' : '#E2E7DB', r.type === 'photo' ? '#F9FBF7' : r.type === 'hatch' ? '#9A6300' : '#39412C')
+        };
+      }),
+
+      donts: [
+        'Keine Rahmen, keine Schlagschatten, keine schwebenden Karten auf einer Fläche.',
+        'Kein Radius zwischen 0 und 999 — auch nicht 4 oder 8.',
+        'Keine dritte Schrift, kein Schnitt unter 400 oder zwischen 400 und 700.',
+        'Keine Fotofläche direkt neben einer Fotofläche.',
+        'Keine Stockfotos. Eine ehrliche Schraffur ist besser und konvertiert.',
+        'Keine Farbe außerhalb der Skalen. Höchstens ein Himbeere-Element pro Screen.'
+      ],
+
+      ratios: [
+        {token:'ratio-hero', ratio:'8:9', use:'Hero-Fotofläche (ab 900 px 21:9)', ar:'8 / 9'},
+        {token:'ratio-feature', ratio:'7:5', use:'Termin der Woche, Pfad-Sektionen', ar:'7 / 5'},
+        {token:'ratio-proof', ratio:'5:2', use:'Presse- und Proof-Bilder', ar:'5 / 2'},
+        {token:'ratio-map', ratio:'16:9', use:'Karte für Ort und Landkreis', ar:'16 / 9'},
+        {token:'ratio-portrait', ratio:'4:5', use:'Menschen, Team', ar:'4 / 5'},
+        {token:'ratio-square', ratio:'1:1', use:'Logo, Avatar, Partnerlogo', ar:'1 / 1'}
+      ].map(r => Object.assign({}, r, {
+        box: 'aspect-ratio:' + r.ar + ';background:repeating-linear-gradient(45deg,#E2E7DB,#E2E7DB 12px,#D1D6CB 12px,#D1D6CB 24px);display:flex;align-items:center;justify-content:center'
+      })),
+
+      heights: [
+        {el:'Primärer Button', px:'56 px'},
+        {el:'Sekundäres Element, Icon-Well', px:'44 px'},
+        {el:'Chip (tappbar)', px:'40 px'},
+        {el:'Badge (nur Label)', px:'26 px'},
+        {el:'Badge mit Icon', px:'30 px'},
+        {el:'Terminzeile', px:'76 px'},
+        {el:'Suchfeld', px:'56 px'}
+      ],
+
+      skelPhoto: 'aspect-ratio:7 / 5;background:repeating-linear-gradient(45deg,#E2E7DB,#E2E7DB 16px,#D1D6CB 16px,#D1D6CB 32px)',
+
+      iconGrid: ['arrow-right','map-pin','calendar-days','circle-check','circle-x','triangle-alert','info','smartphone','globe','landmark','theater','truck','store','tractor','sprout','church','users','party-popper','heart-pulse','trophy','megaphone','qr-code','download','mail','phone','clock','monitor','menu','search','share-2','external-link','house','plus','utensils','music','shopping-basket']
+        .map(name => ({name, style: this.mask(name, '#171D0D', 24)})),
+
+      ic32: this.mask('trophy', '#486202', 32),
+      ic24: this.mask('calendar-days', '#171D0D', 24),
+      ic18: this.mask('smartphone', '#F9FBF7', 18),
+
+      chips: ['Bröllin', 'Krenzow', 'Quilow'],
+      band: [
+        {title:'Wir organisieren selbst was', sub:'Termine veröffentlichen — kostenlos'},
+        {title:'Auf unsere eigene Website', sub:'Eigener Kalender, 480 €/Jahr'},
+        {title:'Wer steckt dahinter?', sub:'Herkunft, Referenzen, Presse'}
+      ],
+
+      icPin: this.mask('map-pin', '#606657'),
+      icArrowInk: this.mask('arrow-right', '#171D0D'),
+      icArrowPaper: this.mask('arrow-right', '#F9FBF7'),
+      icArrowLime800: this.mask('arrow-right', '#486202'),
+      icPhonePaper: this.mask('smartphone', '#F9FBF7', 18),
+      icGlobeLime: this.mask('globe', '#486202', 18),
+
+      noteStyle: mono + 'font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A6300;background:#FBF1DC;border-radius:999px;padding:5px 12px;white-space:nowrap',
+
+      heroBleed: 'position:relative;width:100%;height:440px;background-image:linear-gradient(180deg,rgba(23,29,13,.55) 0%,rgba(23,29,13,.20) 26%,rgba(23,29,13,.86) 62%,rgba(23,29,13,.96) 100%),url(../v1.0/assets/open-air-stage.jpeg);background-size:cover,cover;background-position:center,center;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
+      weekBleed: 'position:relative;width:100%;height:280px;background-image:linear-gradient(180deg,rgba(23,29,13,0) 18%,rgba(23,29,13,.80) 55%,rgba(23,29,13,.96) 100%),url(../v1.0/assets/office-interior.jpg);background-size:cover,cover;background-position:center,center;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
+      inviteBleed: 'position:relative;width:100%;background:repeating-linear-gradient(45deg,#E2E7DB,#E2E7DB 16px,#D1D6CB 16px,#D1D6CB 32px)',
+
+      demoPhoto: 'position:relative;width:100%;background-image:linear-gradient(180deg,rgba(23,29,13,0) 14%,rgba(23,29,13,.84) 52%,rgba(23,29,13,.96) 100%),url(../v1.0/assets/garden-workplace.jpeg);background-size:cover,cover;background-position:center,center top;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
+      demoHatch: 'position:relative;width:100%;background:repeating-linear-gradient(45deg,#E2E7DB,#E2E7DB 16px,#D1D6CB 16px,#D1D6CB 32px)'
+    };
+  }
+}
+</script>
+</body>
+</html>

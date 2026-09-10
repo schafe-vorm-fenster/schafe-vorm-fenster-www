@@ -30,7 +30,7 @@ date: 2026-09-09
 | Q-020 | ~~Newsletter system?~~ **Resolved by DEC-051** — envoy carries signup and double opt-in, as a row of the Q-022 contract. | WEB-F-096 | — | DEC-051 |
 | Q-021 | BFSG applicability of the website (self-service sale to institutions vs consumers): legal confirmation. | WEB-Q-026 | legal | DEC-012 |
 | Q-022 | **Demand to envoy:** widget contract — CSS variable set, emitted events, spam protection (honeypot + rate limit per DEC-014), accessibility conformance, delivery date. | WEB-F-090–092, WEB-Q-035 | envoy team | DEC-009 |
-| Q-023 | **Design system** — kept open **by decision** (DEC-054): tokens, UI kit and logos are not treated as sufficient; component library and breakpoints are awaited as a formal specification. This is the gate on visual generation; everything else proceeds. | visual generation | jan-henrik | DEC-054 |
+| Q-023 | ~~Design system missing?~~ **Resolved by DEC-056** — delivered as `concept/website-design-system.md` with the boards in `concept/v2.0/`; the visual gate is lifted. | visual generation | — | DEC-056 |
 | Q-024 | ~~Region interim~~ **Resolved by DEC-034** — active examples + counters + search; residual: events-per-place activity signal (folded into Q-015/Q-025 demands). | WEB-F-028 | — | DEC-034 |
 | Q-025 | **Demand to geo-api:** place/municipality name-search endpoint over the existing Typesense index (ZIP search exists; `findbyaddress` forbidden for this use — external Google lookup). | WEB-F-046 | geo-api | DEC-024 |
 | Q-026 | **Demand to Portalize:** embed cookie-freedom verified (no consent duty introduced), and a place-filter parameter for the loader so the demo shows the searched place. | WEB-F-043 | portalize | DEC-030 |
@@ -45,6 +45,8 @@ date: 2026-09-09
 | Q-039 | ~~Where do /hilfe URLs and the support articles go?~~ **Resolved by DEC-047** — articles migrate to the app, `/hilfe/*` redirects there; interim target is the app root. | WEB-F-070, WEB-C-010 | — | DEC-047 |
 | Q-040 | Does the app emit conversion completion under the same hub goal ids, and does one eTracker secure code really mean one property for website and app? DEC-028 states the intent; the account was never inspected. | WEB-Q-028 | app team | TS-012 |
 | Q-041 | **Demand to the app team:** a public help URL contract, so `/hilfe/{slug}` can redirect per article instead of to the app root (DEC-047), and a destination for the 37 migrating support articles. | WEB-F-070 | app team | DEC-047 |
+| Q-042 | The design system uses weight **800** for display sizes, while `@schafe-vorm-fenster/brand-design` declares only `regular 400` and `bold 700`. Add 800 to the tokens, or restate the display weight? | WEB-Q-016, SRC-014 | brand/design | DEC-056 |
+| Q-043 | The v2.0 boards mask icons from `assets/icons/*.svg`, which were not delivered. Twelve Lucide glyphs are referenced. Drop them in, or accept icon-less boards? | WEB-C-007 | design | DEC-056 |
 | Q-030 | ~~Measure segmentation cache cost before launch?~~ **Resolved by DEC-055** — observed in production instead; the fallback to municipality level is a parameter change. | WEB-F-052, WEB-Q-002 | — | DEC-055 |
 | Q-031 | ~~Assessment drift trigger?~~ **Resolved by DEC-049** — twelve months or a major version, reported not blocking. | WEB-F-089 | — | DEC-049 |
 | Q-029 | ~~Is the DPA public?~~ **Resolved by DEC-052 §5** — yes, as a section at `#auftragsverarbeitung`; municipalities check it before buying. | WEB-F-029 | — | DEC-052 |

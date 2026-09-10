@@ -19,6 +19,8 @@ date: 2026-09-09
 | SRC-009 | `go-to-market-os/handbook/decisions/001–004` | ADRs | high | repository-level decisions binding this spec (content SSOT, layer model, audience model) | read |
 | SRC-010 | `schafe-vorm-fenster-www/legacy-content/` | archive | low | pre-relaunch site; consulted only for lookups (legacy URL inventory, eTracker config) | lookup only |
 | SRC-011 | `specs/contracts/api-contracts.md` — OpenAPI specs of the ecosystem services (`<host>/api/openapi`) | machine contract | high | services publish OpenAPI 3.0+; product consumes them via documented convention (DEC-021) | registered |
+| SRC-014 | `concept/website-design-system.md` + boards in `concept/v2.0/` | design specification, governed | high | workshop result 2026-09-10; closes the design-system contract (SRC-013), binding per DEC-056 | read |
+| SRC-013 | `specs/contracts/design-system-contract.md` — the expectation against `@schafe-vorm-fenster/brand-design` | contract | high | states what the component layer must deliver; tokens already read from the installed package v2.6.0 | registered |
 | SRC-012 | `classification-api/.github/workflows/` — reference CI/CD setup (typecheck · lint · coverage · knip · jscpd · preview · auto-merge · deploy) | external reference setup | high | running production pipeline of a sibling service; adopted as the model by DEC-031 | read |
 
 ## Notes

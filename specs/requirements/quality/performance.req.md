@@ -21,6 +21,7 @@ the transcript (SRC-006).
 | WEB-Q-005 | Fonts shall be self-hosted (brand kit woff2), `font-display: swap`, preloaded. | SRC-007, brand kit | S2 |
 | WEB-Q-006 | Images below the fold lazy-load; hero images eager-load. | SRC-007 | S2 |
 | WEB-Q-007 | Performance shall be enforced in CI (Lighthouse CI) and observed in production via cookieless RUM. | SRC-007 | S2 |
+| WEB-Q-009 | Every box that will hold asynchronous content shall declare its ratio or height **before** the content arrives — `aspect-ratio` on the media element, never a fixed pixel height; text that arrives with data reserves its height in line units. Nothing may push the page down after paint. | SRC-014#aspect-ratios-and-reserved-space, DEC-056 | S3 |
 | WEB-Q-008 | Reduced-data signals (`Save-Data`, `prefers-reduced-data`) shall be honoured with lighter payloads. | SRC-006 | S2 |
 
 Cache strategy: the product's edge-cache table was **not** adopted

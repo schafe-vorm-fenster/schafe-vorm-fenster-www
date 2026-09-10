@@ -1,25 +1,34 @@
 ---
 id: DEC-054
-title: Visual generation waits for the complete design system
+title: Visual generation waits for the component layer, not for tokens
 status: accepted
 date: 2026-09-10
-decided_by: jan-henrik.hempel
 ---
+
+# DEC-054 — Visual generation waits for the component layer
 
 ## Decision
 
-The tokens, the UI kit and the logos in
-`@schafe-vorm-fenster/brand-design` are not treated as sufficient input
-for generating the visual layer. Component library and breakpoints are
-awaited as a formal specification before that layer is generated.
+Generation of the visual layer waits for the design system. Everything
+that does not depend on it — routing, content pipeline, relevance engine,
+BFF, analytics, security, delivery — proceeds.
 
-Everything that does not depend on the visual system — routing, content
-pipeline, relevance engine, BFF, analytics, security, delivery — is
-unblocked and proceeds.
+**Corrected 2026-09-10.** An earlier version of this record described the
+design system as "announced but not delivered". Read from the installed
+package, that is wrong: `@schafe-vorm-fenster/brand-design` v2.6.0 already
+ships a substantial system — six breakpoints, the space scale, radius,
+border (with contrast ratios in the values), shadow, touch targets,
+measure, logo and button tokens, category display, print tokens, a dark
+palette, and responsive type via `clamp()`.
+
+What is missing is one layer up: **components and composition**. The
+outstanding contract is stated in
+`specs/contracts/design-system-contract.md`.
 
 ## Consequences
 
-Q-023 stays open by decision rather than by omission, and it is the
-gate on visual generation. TS-017 D2's breakpoint proposals and TS-002
-D3's weight floor remain provisional until the system lands and are
-superseded by it, not merged with it.
+- The gate is narrower than it was: not "wait for a design system" but
+  "wait for the component manifest and the composition rules".
+- TS-017 D2's breakpoint proposals are superseded by the token values —
+  the specs consume `breakpoint.*` and propose nothing.
+- Q-023 stays open against the narrowed contract.

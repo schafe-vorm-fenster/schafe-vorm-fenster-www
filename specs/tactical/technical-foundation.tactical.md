@@ -3,7 +3,7 @@ artefact: tactical-spec
 id: TS-017
 profile: rule
 status: DRAFT
-implements: [WEB-C-001, WEB-C-002, WEB-C-003, WEB-C-004, WEB-C-005, WEB-C-006]
+implements: [WEB-C-001, WEB-C-002, WEB-C-003, WEB-C-004, WEB-C-005, WEB-C-006, WEB-C-007]
 sources: [SRC-006, SRC-008, SRC-011, SRC-012]
 decisions: [DEC-002, DEC-020, DEC-023, DEC-029, DEC-031, DEC-035]
 ---
@@ -235,7 +235,20 @@ for the spec side, and needs the content frontmatter schema
 | TS-017-A13 | tool | `pnpm check` (frontmatter + `check:specs`) exits 0 — pre-commit hook and CI; zero E-class errors. |
 | TS-017-A14 | static | Every file under `content/` names the tactical spec it realises, and that spec exists; a content file naming no spec, or an unknown one, fails. |
 | TS-017-A15 | manual | Imagery review: every image shipped is checked against the imagery rules in the brand identity profile — per release, by the brand owner. |
+| TS-017-A17 | static | Exactly one icon dependency; every icon name used resolves to a Lucide export. |
 | TS-017-A16 | manual | Dependency review: any dependency adopted from a sibling repository is confirmed as framework-neutral intent, not a ported implementation — per PR that changes `package.json`. |
+
+### D7 — One icon set [FIXED: DEC-056, SRC-014#icons]
+
+Lucide, 24 × 24 grid, 2 px stroke, round caps and joins. Monochrome,
+inheriting one token colour — never filled, never two-tone, never in a
+coloured circle unless that circle is a 44 px control well. Three sizes
+only: 24 (buttons, rows, list items), 18 (inside a badge or kicker), 32
+(section-leading). A new requirement takes the matching Lucide glyph; no
+glyph is drawn by hand and no second family enters the set.
+
+Checkable: exactly one icon dependency in `package.json`, and every icon
+name used resolves to a Lucide export.
 
 ## Coverage
 
@@ -246,6 +259,7 @@ for the spec side, and needs the content frontmatter schema
 | WEB-C-003 (brand kit binding) | D3 (with TS-002 D3, TS-003 D3) · A5, A6, A7, A15 |
 | WEB-C-004 (app owns the calendars) | D4 · A10, A11, A12 |
 | WEB-C-005 (TypeScript, pnpm conventions) | D5 · A2, A3, A13 |
+| WEB-C-007 (one icon set) | D7 · A17 |
 | WEB-C-006 (STRICT; specs precede content) | D6 · A13, A14 |
 
 ## Open points

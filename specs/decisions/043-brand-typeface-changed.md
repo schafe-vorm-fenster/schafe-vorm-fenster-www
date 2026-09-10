@@ -1,38 +1,53 @@
 ---
 id: DEC-043
-title: The brand typeface is Inter; Catamaran is retired
+title: The brand typeface is Atkinson Hyperlegible Next; Catamaran is retired
 status: accepted
 date: 2026-09-10
-decided_by: jan-henrik.hempel
 ---
+
+# DEC-043 — The brand typeface is Atkinson Hyperlegible Next
 
 ## Context
 
 TS-002 D3 and TS-003 D3 were written against Catamaran, taken from the
-brand profile as it stood on 2026-09-09. The hub's design system has since
-moved: `@schafe-vorm-fenster/brand-design` sets Inter throughout and its
-own kit records the change in as many words — "Catamaran's old rules" and
-"Catamaran sunset. Roughly a dozen surfaces still load it."
+brand profile as it stood on 2026-09-09. The design system has since
+moved — its own kit records the change in as many words: "Catamaran's old
+rules" and "Catamaran sunset."
+
+**Correction of 2026-09-10:** an earlier version of this record named
+*Inter* as the successor. That was wrong — it came from counting
+occurrences of the string "inter", which matches `letterSpacing`,
+"interface" and similar. Read from the tokens themselves, the family is:
+
+```
+sans: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible',
+      'Helvetica Neue', Helvetica, Arial, sans-serif
+mono: 'Atkinson Hyperlegible Mono', 'Atkinson Hyperlegible Next',
+      ui-monospace, monospace
+```
 
 ## Decision
 
-Inter is the website's typeface. Catamaran is not used, not loaded, and
-not carried as a fallback.
+**Atkinson Hyperlegible Next** is the website's typeface, with the Mono
+variant for markers rather than sentences (wordmark, eyebrows, labels,
+table headers, meta lines, timestamps). Catamaran is not used, not
+loaded, not carried as a fallback.
 
-**The rules survive the name.** Everything the two specs determined about
-type remains in force and now applies to Inter: a weight floor for body
-copy, a single self-hosted variable `woff2`, `font-display: swap`,
-preloaded, within the 50 KB font budget, and contrast checked against the
-brand palette. Only the family changes.
+Source of truth: `@schafe-vorm-fenster/brand-design`, `font.family` in
+`tokens.json`. The specs name no font value of their own.
 
 ## Consequences
 
-- TS-002 D3's weight floor is restated for Inter; the concrete value is
-  [PROPOSED] until read from `@schafe-vorm-fenster/brand-design`.
-- TS-003 D3's font row names Inter.
-- Q-013 (Catamaran's readability) is superseded by Q-034, which asks the
-  same of Inter and of the new colour system.
-- Three brand packages are in play — the repo installs
-  `@schafe-vorm-fenster/design-tokens` from the retired path while the hub
-  publishes `brand-design` and `brand-identity`. Which one binds is
-  Q-033.
+- **The weight-floor question dissolves.** The family ships exactly two
+  weights, `regular 400` and `bold 700` — there is no Light to guard
+  against. TS-002 D3's floor becomes "body ≥ 400", which is the only
+  option.
+- Type sizes are already responsive at token level (`clamp()`), body at
+  `1.125rem` — the specs consume them rather than restating them.
+- The choice is itself an accessibility argument: Atkinson Hyperlegible
+  was designed by the Braille Institute for low-vision readers, which is
+  a strong fit for WCAG AA plus the AAA basics (TS-002 D1/D2) and for an
+  audience of all ages.
+- Q-034 narrows accordingly: verify the *colour world* (Lime, Violett,
+  Himbeere — decided 2026-09-09) for contrast; the typeface needs no
+  separate readability case.

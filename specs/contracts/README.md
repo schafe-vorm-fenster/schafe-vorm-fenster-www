@@ -11,6 +11,7 @@ it.
 ## Contents
 
 - `api-contracts.md` — the service contract register (SRC-011)
+- `design-system-contract.md` — what the website needs from the styleguide (SRC-013)
 - Content-format Zod schemas live in code (`src/domain/`), required by
   WEB-F-089; this folder documents *which* contracts exist and where.
 
