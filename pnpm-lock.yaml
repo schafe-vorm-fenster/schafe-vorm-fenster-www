@@ -25,8 +25,8 @@ importers:
         specifier: ^0.3.3
         version: 0.3.3(zod@4.4.3)
       '@schafe-vorm-fenster/brand-design':
-        specifier: ^0.1.1
-        version: 0.1.1
+        specifier: ^0.1.3
+        version: 0.1.3
       '@schafe-vorm-fenster/brand-identity':
         specifier: ^0.1.4
         version: 0.1.4(zod@4.4.3)
@@ -722,9 +722,12 @@ packages:
     resolution: {integrity: sha512-OCWBBjDBMyK0rGVgSDaO/+LPWjMDU35JW5cFbzYqz2bZFaax4gMNmiVfXwlX3l2aMX77TgkTfkBHpcnz2foiYg==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/audiences/0.3.3/9ac8524ac6d0044442c11000e42abddc05856b58}
     peerDependencies:
       zod: ^4.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
 
-  '@schafe-vorm-fenster/brand-design@0.1.1':
-    resolution: {integrity: sha512-iLWWSN33m5MXDMIcPKDKZHnTuzdEkDxMXcczkkRNlC9N3vzqHajG7N1klqXExARivEBF+z/6nmDjMbT9SpeOrQ==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/brand-design/0.1.1/c4ebd8e1bfc0f7364ed6787331f0abde40ab7059}
+  '@schafe-vorm-fenster/brand-design@0.1.3':
+    resolution: {integrity: sha512-B/RHQTtOakeLHM0JdzpN90TKw5+Egc+bw9Pmvru6av0Y+FvYYkP8V5gw11Upy9uhc7Mnex/GYyoBrkUarwZ/Wg==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/brand-design/0.1.3/2c3cd940f5925083e1a89659a7338b41aa4032aa}
 
   '@schafe-vorm-fenster/brand-identity@0.1.4':
     resolution: {integrity: sha512-EwAwerqHr8B413mzp7ph507Yzhh1sg4bXaSqonIwuC4O3NkUvbnoxlaf31Rimj9Ucw9pEo4ZK9pYSenr+K1FZw==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/brand-identity/0.1.4/e0056dedfe80121203efe71982b490b7c8af948b}
@@ -742,6 +745,9 @@ packages:
     resolution: {integrity: sha512-hdSNu5i50hfnsSTgw/bZljBNLEFFDtjvJqjPO6GJJPYCWk75dcGwaMNifpC9o/ComEkM+evbtX4TFWDE1f0jbA==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/goals/0.3.0/9f8655b4bc6bbf56833e98e421a02f01d950064d}
     peerDependencies:
       zod: ^4.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
 
   '@schafe-vorm-fenster/media-echo@0.3.3':
     resolution: {integrity: sha512-3mFs1BB+bV3w2mIewCReHp6sgWr+b/iBhaDoRW+f+BmQqECV4TpybJ8fg7PkkG3R/7EiOPEjWV5BXJO/kH+uUQ==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/media-echo/0.3.3/17c8ebda42fb7acb1edf466fb2d389c9a762a293}
@@ -750,21 +756,33 @@ packages:
     resolution: {integrity: sha512-Q0EFj2rFLs3jqKxmnsC9b3IGEcLUcaY1G7HURpSIbQv952E4cTpe1sIS3mWuIO4Tk44i8L00A/Pr57cwodCFUw==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/messaging/0.1.0/d67bb3a72bfd0b9a33d81652df86e497fd87ffe0}
     peerDependencies:
       zod: ^4.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
 
   '@schafe-vorm-fenster/offerings@0.3.3':
     resolution: {integrity: sha512-1WYywHGU8QvthTNUDuvw8yWtSVHHnUuNpq5iYWERyhNd0jPEDn2lJem8tvkofRS7UxtiJCsFP7cUOkc70EZXOg==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/offerings/0.3.3/fb4418dbe02413c86c8d3d798e46f7d4d9240dbd}
     peerDependencies:
       zod: ^4.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
 
   '@schafe-vorm-fenster/partners@0.2.4':
     resolution: {integrity: sha512-tDlyBAxA/Pm2j8kUzO7ZgDwzSOoZApDI5XXwXCXN2ExLH6FVJdKdN7T1YJZbAw83zks56hqzdaGxqIRwmnmMQw==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/partners/0.2.4/d3f272dbfeee1817fea7c3fde3e666527cd940e8}
     peerDependencies:
       zod: ^4.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
 
   '@schafe-vorm-fenster/people@0.3.6':
     resolution: {integrity: sha512-NPq4lSr/P0qTI+QSkr4tB44MV1M3Lm9ggko35hgXUtl1XjwHDz84W965kOOuC+UChnbuR0JrZBd0waPyP+KKpg==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/people/0.3.6/4222bf8b80f5360281c86675e7143a8bc0f0bb05}
     peerDependencies:
       zod: ^4.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
 
   '@schafe-vorm-fenster/playbook-dependency-update@0.2.0':
     resolution: {integrity: sha512-2y/7hOUzwiyZ6d0smhDt/DkF425kRwjwrNJcWnAgpchG+tOZVsSjvc05+dFJ7DA8sHEtmZSiSeB6jjAy5qmiZQ==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/playbook-dependency-update/0.2.0/7358d030e01fa248b45d2d62e25b12d27b9e7618}
@@ -779,11 +797,17 @@ packages:
     resolution: {integrity: sha512-ZyAWq/YFLJSFDyihzin17Z4dcUwgxOKNj6aGUmt+rufxGcSZU1osGvyrqHXeiQ8W5wjw9jZ2zVRNbIUOUc8AFA==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/posts/0.4.0/878daf425983009fa0fe7e7d01caba2140462d13}
     peerDependencies:
       zod: ^4.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
 
   '@schafe-vorm-fenster/proof@0.3.5':
     resolution: {integrity: sha512-cQvQayPr+4p68sKVnKmwbSfFq3yaY2XMAgTfGjUluWXQ+Ehzz8mBQimf8j+8+hVAxXttSCiGvROSiSaDfjBS/A==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/proof/0.3.5/31eb531464e29e20b8fe9f7424d65b1d1de2c0e9}
     peerDependencies:
       zod: ^4.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
 
   '@schafe-vorm-fenster/skill-github-issues@0.2.0':
     resolution: {integrity: sha512-fyx5LnczSnL5S096tWCb8vAjCdIFwgRRLuSiuap/Gak+TnX7So/YIFDysuY5HVTMIs0VtSt+oqPTGFU+7cGNiw==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/skill-github-issues/0.2.0/defe7ad36c7222895fcf348d21f54038afaa5ceb}
@@ -2381,10 +2405,10 @@ snapshots:
   '@schafe-vorm-fenster/agent-tester@0.2.0': {}
 
   '@schafe-vorm-fenster/audiences@0.3.3(zod@4.4.3)':
-    dependencies:
+    optionalDependencies:
       zod: 4.4.3
 
-  '@schafe-vorm-fenster/brand-design@0.1.1':
+  '@schafe-vorm-fenster/brand-design@0.1.3':
     dependencies:
       '@fontsource/atkinson-hyperlegible-mono': 5.3.0
       '@fontsource/atkinson-hyperlegible-next': 5.3.0
@@ -2416,25 +2440,25 @@ snapshots:
       '@schafe-vorm-fenster/skill-github-issues': 0.2.0
 
   '@schafe-vorm-fenster/goals@0.3.0(zod@4.4.3)':
-    dependencies:
+    optionalDependencies:
       zod: 4.4.3
 
   '@schafe-vorm-fenster/media-echo@0.3.3': {}
 
   '@schafe-vorm-fenster/messaging@0.1.0(zod@4.4.3)':
-    dependencies:
+    optionalDependencies:
       zod: 4.4.3
 
   '@schafe-vorm-fenster/offerings@0.3.3(zod@4.4.3)':
-    dependencies:
+    optionalDependencies:
       zod: 4.4.3
 
   '@schafe-vorm-fenster/partners@0.2.4(zod@4.4.3)':
-    dependencies:
+    optionalDependencies:
       zod: 4.4.3
 
   '@schafe-vorm-fenster/people@0.3.6(zod@4.4.3)':
-    dependencies:
+    optionalDependencies:
       zod: 4.4.3
 
   '@schafe-vorm-fenster/playbook-dependency-update@0.2.0':
@@ -2446,11 +2470,11 @@ snapshots:
   '@schafe-vorm-fenster/playbook-rebase-on-main@0.2.0': {}
 
   '@schafe-vorm-fenster/posts@0.4.0(zod@4.4.3)':
-    dependencies:
+    optionalDependencies:
       zod: 4.4.3
 
   '@schafe-vorm-fenster/proof@0.3.5(zod@4.4.3)':
-    dependencies:
+    optionalDependencies:
       zod: 4.4.3
 
   '@schafe-vorm-fenster/skill-github-issues@0.2.0': {}
