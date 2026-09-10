@@ -100,6 +100,8 @@ specs/
 ├── decisions/          DEC-### decision records (S3 evidence anchor)
 ├── questions/          Q-### open-question register (UNKNOWN + resolving question)
 ├── tactical/           TS-### tactical specs — the generation prompts (FIXED/PROPOSED/FREE)
+│                       with TS-###-A# acceptance criteria carrying a verification level
+├── verification/       test strategy + Gherkin journeys (DEC-040)
 └── traceability/       RTM: requirement → source → decision → question
 ```
 
@@ -115,5 +117,9 @@ specs/
   (`scripts/check-specs.ts`, part of `pnpm check` and the pre-commit
   hook) validates frontmatter, ID uniqueness, row shape, the S3-needs-a-
   decision rule, reference integrity across all ID families,
-  implements↔Coverage symmetry, and the decisions index — and reports
-  which requirements no tactical spec covers yet.
+  implements↔Coverage symmetry, the decisions index, acceptance-criterion
+  IDs and levels, and that tests reference only ids that exist. It closes
+  the requirement → acceptance criterion → test matrix and reports every
+  gap: requirements without a tactical spec (W1), covered requirements
+  discharged by no acceptance criterion (W2), acceptance criteria no test
+  references (W3). It also prints the verification pyramid.

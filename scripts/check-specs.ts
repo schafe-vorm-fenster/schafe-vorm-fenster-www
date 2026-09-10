@@ -14,7 +14,12 @@
  *  E5  Every referenced ID (WEB-*, DEC-*, Q-*, SRC-*, TS-*, GL-*) exists
  *  E6  Tactical `implements:` ↔ Coverage table match bidirectionally
  *  E7  decisions/README.md index ↔ decision files match both ways
+ *  E8  Acceptance criteria: unique ID, valid verification level
+ *  E9  Coverage tables reference only existing acceptance criteria
+ *  E10 Tests/features reference only IDs that exist
  *  W1  (warning) requirements not covered by any tactical spec
+ *  W2  (warning) covered requirements discharged by no acceptance criterion
+ *  W3  (warning) acceptance criteria no test references
  *
  * Exit code: number of errors (0 = green). Warnings never fail the run.
  *
@@ -215,9 +220,85 @@ if (uncovered.length) {
   warnings.push(`   ${uncovered.join(", ")}`);
 }
 
+// ── E8/E9: acceptance criteria and their levels ──────────────────────────
+
+const LEVELS = new Set(["static", "unit", "integration", "e2e", "tool", "manual"]);
+const acDefs = new Map<string, { file: string; level: string }>();
+const acByReq = new Map<string, Set<string>>();   // requirement → AC ids
+
+for (const d of docs.filter((d) => /\.tactical\.md$/.test(d.file))) {
+  const tsId = (d.frontmatter?.id as string) ?? "";
+  const acSection = d.body.split(/^## Acceptance criteria$/m)[1]?.split(/^## /m)[0] ?? "";
+  for (const m of acSection.matchAll(/^\|\s*(TS-\d{3}-A\d+)\s*\|\s*([a-z0-9]+)\s*\|/gm)) {
+    const [, id, level] = m;
+    if (acDefs.has(id)) err(d.file, `E8 duplicate acceptance criterion ${id}`);
+    if (!LEVELS.has(level)) err(d.file, `E8 ${id}: unknown level "${level}" (expected ${[...LEVELS].join(" | ")})`);
+    if (!id.startsWith(tsId + "-")) err(d.file, `E8 ${id} does not carry this spec's id (${tsId})`);
+    acDefs.set(id, { file: d.file, level });
+  }
+
+  // Coverage: bare A# resolve within the spec
+  const covSection = d.body.split(/^## Coverage$/m)[1]?.split(/^## /m)[0] ?? "";
+  for (const line of covSection.split("\n")) {
+    const reqM = line.match(/^\|\s*(WEB-[FQC]-\d{3})/);
+    if (!reqM) continue;
+    const ids = new Set<string>();
+    for (const a of line.matchAll(/\bA(\d+)\b/g)) {
+      const full = `${tsId}-A${a[1]}`;
+      if (!acDefs.has(full)) err(d.file, `E9 coverage of ${reqM[1]} references ${full}, which is not defined`);
+      else ids.add(full);
+    }
+    if (ids.size) acByReq.set(reqM[1], new Set([...(acByReq.get(reqM[1]) ?? []), ...ids]));
+  }
+}
+
+// ── E10/W3: what the tests reference ─────────────────────────────────────
+
+const testGlobs = [
+  ["src", /\.(test|integration\.test)\.tsx?$/],
+  ["e2e", /\.spec\.tsx?$/],
+  ["specs/verification/journeys", /\.feature$/],
+] as const;
+
+const referencedIds = new Set<string>();
+for (const [dir, pattern] of testGlobs) {
+  const full = join(SPECS_DIR, "..", dir);
+  let entries: string[] = [];
+  try { entries = walk(full).filter((f) => pattern.test(f)); } catch { /* dir absent yet */ }
+  for (const f of entries) {
+    const raw = readFileSync(f, "utf8");
+    for (const m of raw.matchAll(/\b(TS-\d{3}-A\d+|WEB-[FQC]-\d{3})\b/g)) {
+      const id = m[1];
+      const known = id.startsWith("TS-") ? acDefs.has(id) : reqDefs.has(id);
+      if (!known) err(f, `E10 references unknown id ${id}`);
+      else referencedIds.add(id);
+    }
+  }
+}
+
+// ── W2/W3: the closure gaps ──────────────────────────────────────────────
+
+const coveredNoAc = [...covered].filter((id) => !acByReq.has(id)).sort();
+if (coveredNoAc.length) {
+  warnings.push(`W2 ${coveredNoAc.length} requirement(s) covered by a tactical spec but discharged by no acceptance criterion:`);
+  warnings.push(`   ${coveredNoAc.join(", ")}`);
+}
+
+const acsByLevel = new Map<string, number>();
+for (const { level } of acDefs.values()) acsByLevel.set(level, (acsByLevel.get(level) ?? 0) + 1);
+const untested = [...acDefs.keys()].filter((id) => !referencedIds.has(id)).sort();
+if (untested.length) {
+  warnings.push(`W3 ${untested.length}/${acDefs.size} acceptance criteria have no test referencing them:`);
+  warnings.push(`   ${untested.join(", ")}`);
+}
+
 // ── Report ───────────────────────────────────────────────────────────────
 
-console.log(`specs check: ${files.length} files · ${reqDefs.size} requirements · ${decDefs.size} decisions · ${qDefs.size} questions · ${srcDefs.size} sources · ${tsDefs.size} tactical specs · ${glDefs.size} glossary terms`);
+console.log(`specs check: ${files.length} files · ${reqDefs.size} requirements · ${decDefs.size} decisions · ${qDefs.size} questions · ${srcDefs.size} sources · ${tsDefs.size} tactical specs · ${glDefs.size} glossary terms · ${acDefs.size} acceptance criteria`);
+if (acDefs.size) {
+  const pyramid = [...LEVELS].map((l) => `${l} ${acsByLevel.get(l) ?? 0}`).join(" · ");
+  console.log(`  verification pyramid: ${pyramid}`);
+}
 if (errors.length) {
   console.error(`\n${errors.length} error(s):`);
   for (const e of errors) console.error(`  ✗ ${e}`);
