@@ -24,14 +24,18 @@ Kommunikationsprinzipien, Relevanzmodell) mit dem Routenstand vor der
 `dein`-Familie. Sie wurden nicht importiert — verbindlich ist der Stand im
 Hub, siehe [`../README.md`](../README.md).
 
-## Bekannte Lücke
+## Icons
 
-Die Boards maskieren Icons aus `assets/icons/<name>.svg`; diese Dateien
-lagen dem Intake nicht bei. Das Set ist benannt (Lucide, 24 × 24, 2 px
-Stroke) — für die Generierung genügt der Name, für die Darstellung der
-Boards müssten die zwölf verwendeten SVGs hier abgelegt werden:
-`arrow-right`, `calendar-days`, `check`, `globe`, `landmark`, `map-pin`,
-`menu`, `share-2`, `smartphone`, `theater`, `trophy`, `truck`.
+Die Boards maskieren Icons aus `assets/icons/<name>.svg`. Diese Dateien
+liegen hier bewusst nicht: Das Set ist **Lucide**, und die Website holt es
+sich als Abhängigkeit in den eigenen Stack (WEB-C-007) — es wird nicht als
+Asset geliefert und nicht ins Repo eingecheckt. Die Boards stellen die
+Icons lokal deshalb nicht dar; das ist kosmetisch und ohne Bedeutung für
+die Spezifikation.
+
+Verwendet werden zwölf Glyphen: `arrow-right`, `calendar-days`, `check`,
+`globe`, `landmark`, `map-pin`, `menu`, `share-2`, `smartphone`,
+`theater`, `trophy`, `truck`.
 
 ## Assets
 

@@ -247,8 +247,14 @@ only: 24 (buttons, rows, list items), 18 (inside a badge or kicker), 32
 (section-leading). A new requirement takes the matching Lucide glyph; no
 glyph is drawn by hand and no second family enters the set.
 
+The set is a dependency of this repository — the design specification
+names it, the website installs it (`lucide-react` for the React tree, or
+the raw SVGs where a mask is needed). No icon file is committed here and
+none is requested from the design side; a glyph that does not exist in
+Lucide is a signal to pick a different glyph, not to draw one.
+
 Checkable: exactly one icon dependency in `package.json`, and every icon
-name used resolves to a Lucide export.
+name used resolves to an export of it.
 
 ## Coverage
 

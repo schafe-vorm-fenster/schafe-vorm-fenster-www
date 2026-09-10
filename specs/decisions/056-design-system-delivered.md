@@ -49,7 +49,8 @@ Two layers, and neither restates the other:
 - Superseded proposals: TS-017 D2's breakpoint numbers (tokens win),
   TS-002 D3's weight floor (the family ships 400/700 plus 800 for
   display), TS-003's font row (Atkinson, per DEC-043).
-- Two small gaps recorded rather than closed: the design system uses
-  weight 800 for display sizes while the tokens declare only 400 and 700
-  (Q-042), and the boards reference Lucide SVGs that were not delivered
-  (Q-043).
+- One gap recorded rather than closed: the design system uses weight 800
+  for display sizes while the tokens declare only 400 and 700 (Q-042).
+- Icons are not a delivery: the specification names the set, and the
+  website installs it into its own stack (WEB-C-007). The v2.0 boards
+  render without them locally, which is cosmetic.
