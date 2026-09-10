@@ -42,9 +42,10 @@ without being the declared LCP element.
 
 ### D3 — Fonts [FIXED: WEB-Q-005; subset PROPOSED]
 
-Catamaran as **variable font**, `woff2`, latin subset, self-hosted,
-preloaded, `font-display: swap`; total ≤ 50KB. The nine static brand-kit
-weights are not shipped to the browser.
+**Inter** as variable font, `woff2`, latin subset, self-hosted, preloaded,
+`font-display: swap`; total ≤ 50KB. Static weights are not shipped to the
+browser. Corrected 2026-09-10 (DEC-043) — the rule was written for
+Catamaran, which the brand has retired; only the family changed.
 
 ### D4 — JavaScript [FIXED: WEB-Q-003/004; split PROPOSED]
 
@@ -64,7 +65,7 @@ Vercel SWR semantics per DEC-019 (serve cached, revalidate behind):
 | active places / map | 1 h | 7 d |
 | live counters (`/api/stats`) | 15 min | 24 h — beyond: hide (WEB-F-104) |
 | proof stream input (`media-echo`, build data) | build-time | until next deploy |
-| proof stream per segment (`{municipality, trait, job, isoWeek}`) | 1 week | until the ISO week turns (tagged, TS-005 D7) |
+| proof stream per segment (`{community, trait, job, isoWeek}`) | 1 week | until the ISO week turns (tagged, TS-005 D7) |
 | pages (HTML, ISR) | 1 h | until next deploy |
 | landing-only domains | static | until next deploy |
 

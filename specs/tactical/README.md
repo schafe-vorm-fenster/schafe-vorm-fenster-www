@@ -43,3 +43,16 @@ of the spec.
 | TS-003 | `performance.tactical.md` | rule | WEB-Q-001–008, WEB-F-105 |
 | TS-004 | `url-and-routing.tactical.md` | system | routes, navigation, BFF, error pages |
 | TS-005 | `relevance-engine.tactical.md` | system | proof/live scoring, ordering, segmentation |
+| TS-006 | `page-composition.tactical.md` | rule | what holds on every page: focus job, context band, closing CTA |
+| TS-007 | `content-pipeline.tactical.md` | system | packages in, per-locale markdown out, schema and provenance |
+| TS-008 | `live-data.tactical.md` | system | live modules, widening chain, place search, app handover |
+| TS-009 | `rendering-and-resilience.tactical.md` | system | static shell, cached islands, three-tier fallback |
+| TS-010 | `personalization.tactical.md` | system | stages 0–3, geolocation, entry context |
+| TS-011 | `seo.tactical.md` | rule | redirects, semantics, structured data, landing pages |
+| TS-012 | `analytics.tactical.md` | system | cookieless measurement, event registry, attribution |
+| TS-013 | `privacy.tactical.md` | rule | the closed client-request set and the rule for additions |
+| TS-014 | `security.tactical.md` | rule | CSP, headers, dependency scanning, form abuse |
+| TS-015 | `delivery-pipeline.tactical.md` | procedure | preview domains, merge gates, rolling promotion |
+| TS-016 | `forms-and-leads.tactical.md` | interaction | envoy widget, briefing, order flow, newsletter |
+| TS-017 | `technical-foundation.tactical.md` | rule | stack, mobile-first, brand kit, app boundary |
+| TS-018 | `scope-boundaries.tactical.md` | rule | what the website is not — gate, guard, review |

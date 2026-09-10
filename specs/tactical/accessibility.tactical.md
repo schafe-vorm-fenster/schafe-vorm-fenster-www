@@ -43,9 +43,11 @@ theme covers it, D4), sign language, extended audio description.
   components 3:1. Brand green `#B4CF39` fails on white for text → it is
   never a text colour on light ground; usage limited to surfaces,
   accents, and large graphical elements that meet 3:1 [PROPOSED].
-- Catamaran weight floor: `Light (300)` only ≥ 18px; body text ≥ 400
-  [PROPOSED — resolves Q-013's practical half; brand doc prefers Light
-  "where readability remains good", this defines "good"].
+- **Inter** weight floor: body text ≥ 400; lighter weights only ≥ 18px
+  [PROPOSED — the concrete value is read from
+  `@schafe-vorm-fenster/brand-design` once Q-033 names the binding
+  package]. Corrected 2026-09-10 (DEC-043): this rule was written for
+  Catamaran, which the brand has retired. The rule survives the name.
 
 ### D4 — Themes via browser hints only [FIXED: WEB-Q-014/015]
 
@@ -111,7 +113,7 @@ claim:
 | WEB-Q-013 (keyboard, screen reader) | D5 · A4, A5 |
 | WEB-Q-014 (browser preference hints) | D4 · A9 |
 | WEB-Q-015 (no manual theme switcher) | D4 · A1 (three themes) |
-| WEB-Q-016 (Catamaran readability) | D3 weight floor · Q-013 rest |
+| WEB-Q-016 (brand typeface readability) | D3 weight floor · Q-034 rest |
 | WEB-Q-017 (text alternatives) | D5 images rule |
 | WEB-Q-018 (touch targets, mobile) | D5 target sizes · A7 |
 | WEB-Q-019 (automated + manual testing) | A1–A5 (the acceptance regime) |

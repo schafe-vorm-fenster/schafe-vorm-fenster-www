@@ -18,25 +18,50 @@ set; everything impure — fetching, caching, segmenting — sits around it.
 
 ## Determinations
 
-### D1 — Geo hierarchy [FIXED: DEC-041]
+### D1 — Geo hierarchy [FIXED: DEC-041, corrected 2026-09-10]
 
-Four levels, matching the geo-api: `country > county > municipality >
-community`. Every element and every visitor position is expressed in
-these terms; unknown levels are `null`.
+**Five levels**: `country > state > county > municipality > community`.
+Verified against `geo-api/src/types/GeoLocation/geo-location.types.ts`,
+where `GeoAdministrativeHierarchy` is `place? > community > municipality
+> county > state > country` and **`state` is required**. An earlier
+four-level version of this determination dropped `state` on the mistaken
+premise that the geo-api offers four; it does not. Unknown levels are
+`null`; `place` is finer than the website needs and is not carried.
 
-Proximity tiers, computed by comparing element position to visitor
-position from the most specific level downwards:
+**The level rule is coverage, not venue.** An element is recorded at the
+most specific level that covers what it is *about* — usually where it
+happened, sometimes not: the NØRD Award is an MV award held in Rostock
+and scores as `state`; the KfW Award is nationwide and scores as
+`country` regardless of the ceremony's city. The venue survives in the
+copy, never in the level.
+
+Proximity tiers, computed from the most specific level downwards:
 
 | Tier | Match | Weight |
 | --- | --- | --- |
 | 0 | same community | 1.0 |
 | 1 | same municipality | 0.8 |
 | 2 | same county | 0.6 |
-| 3 | same country | 0.3 |
-| 4 | no match / element has no geo | 0.1 |
+| 3 | same state | 0.45 |
+| 4 | same country | 0.3 |
+| 5 | different country | 0.15 |
+| 6 | no match / element has no geo | 0.1 |
 
-Neighbourhood tiers are deliberately absent (DEC-041, geo-api#165). An
-element without geo scores tier 4 rather than being excluded.
+Tier 5 carries the other country domains and appearances abroad. It is
+nearly empty in today's stock — which is the point: it is what makes
+*very far* reachable at all once the stock fills.
+
+**No distance tier in phase 1.** Administrative containment is the only
+measure. This is a known mismatch with the site's own argument —
+`/deine-region` sells "thirty kilometres, across municipal boundaries"
+while the scale cannot express it, and a visitor 8 km away across a
+Kreisgrenze scores as *same state*. Accepted for phase 1: a distance
+tier needs coordinates on every element and on the visitor. Revisit with
+the map view. Neighbourhood tiers likewise absent (geo-api#165).
+
+**What stage 1 delivers.** IP geolocation resolves to county level,
+rarely finer, so tiers 0 and 1 fire only after a place search. Proof
+starts at county scale and becomes local the moment someone searches.
 
 ### D2 — Context proximity [PROPOSED]
 
@@ -54,12 +79,39 @@ explicit rather than leaving it undefined:
 The full type × context matrix is generated from the context matrix in
 SRC-002 and lives with the engine as data, not code.
 
-### D3 — Job fit [FIXED: DEC-041]
+### D3 — Job relation [FIXED: DEC-041, corrected 2026-09-10]
 
-`job_fit` is the element's declared relation to the focus job, carried by
-the website's content schema (which maps GTM audiences onto jobs at
-generation time). Scale: supports the focus job `1.0` · neutral `0.5` ·
-alien `0.2`.
+Every selectable element carries a **profile over all four jobs**, set as
+an assessment at generation time with a stated reason — not derived from
+a table:
+
+```yaml
+job_relation:
+  know-what-is-on: neutral
+  publish-our-dates: supports
+  run-our-own-calendar: supports
+  understand-who-is-behind-it: neutral
+job_relation_reason: >
+  Testimonial of a publishing Verein; carries the publishing argument
+  directly and the licence argument by example. Not a reader's voice.
+```
+
+Scale per job: `supports` 1.0 · `neutral` 0.5 · **`peripheral`** 0.2
+(renamed from `alien`, which read as a verdict rather than an absence).
+**A job left unassessed takes the lowest step and is marked unassessed**,
+so the gap stays countable — in doubt an element holds back rather than
+appearing everywhere.
+
+**Relations carry the jobs, not audiences.** ADR-003 splits the hub's
+model into audience (durable identity) and relation (posture towards us).
+The relations map onto the jobs almost one to one — `reader` → know what
+is on, `publisher` → publish our dates, `customer` → run our own
+calendar, `multiplier`/`funder` → understand who is behind it,
+`advertiser` → no job (offering withheld). This corrects the earlier
+audience-based derivation: `actors` alone holds reader, publisher,
+customer and multiplier, so an audience-derived mapping marks it as
+supporting everything — 25 % of the score spent on a constant. The
+correspondence is guidance for the assessment, never a lookup.
 
 ### D4 — Time and editorial weight [FIXED: DEC-041; steps PROPOSED]
 
@@ -86,17 +138,39 @@ score(e) = w_geo · geo(e) + w_ctx · ctx(e) + w_job · job(e)
          + w_time · (freshness(e) · editorial_weight(e))
 ```
 
-Weights: `w_geo 0.35 · w_ctx 0.25 · w_job 0.25 · w_time 0.15`. At stage 0
-(no geo known) `w_geo` is 0 and its share moves to `w_time` and `w_job`
-(exact split: Q-002).
+**Weights are a profile per focus job**, not one set for the whole site.
+This settles the relevance model's open point ("whether `w_job` may
+outrank geo proximity"): it may, and where is a property of the page.
+
+| Focus job | w_geo | w_ctx | w_job | w_time |
+| --- | --- | --- | --- | --- |
+| know what is on (`/dein-ort`) | 0.45 | 0.20 | 0.15 | 0.20 |
+| publish our dates | 0.35 | 0.25 | 0.25 | 0.15 |
+| run our own calendar | 0.20 | 0.25 | 0.40 | 0.15 |
+| understand who is behind it | 0.25 | 0.25 | 0.35 | 0.15 |
+
+Rationale: on `/dein-ort` everything starts at the visitor's own place;
+on the sell pages a mayor from Baden-Württemberg is better served by
+Rubkow than by an arbitrary local clipping. The profiles are
+[PROPOSED] — the shape is fixed, the numbers are revised from
+measurement. At stage 0 (no geo known) `w_geo` is 0 and its share moves
+to `w_time` and `w_job` (exact split: Q-002).
 
 **Clearance is a hard filter applied before scoring** — elements without
 cleared usage rights never enter the pool, they are not down-weighted
 (WEB-F-033).
 
-**Place-bound elements come only from covered places** (WEB-F-024): an
-element referencing a place without data in events-api is filtered out
-with clearance.
+**Place-bound elements come only from covered places** (WEB-F-024):
+selectable types carry `place_bound` and the place reference, so the
+engine can ask events-api before showing "in <place>" to a visitor whose
+place is empty. Such elements are filtered out together with clearance.
+
+**Clearance can go stale.** `usage_rights` is denormalised onto the
+content file at generation time, so a revocation in the hub leaves the
+local file claiming `cleared`. The build re-validates every clearance
+facet against the installed package version and **fails** on mismatch;
+a revocation removes content immediately rather than waiting for a
+review round.
 
 ### D6 — Ordering [PROPOSED — pragmatic first pass]
 
@@ -140,12 +214,12 @@ The engine never renders per visitor. Two segmentation axes:
 
 | Axis | Resolution |
 | --- | --- |
-| geo | **municipality** — county is too coarse for the visitor, community too many variants |
+| geo | **community** — corrected 2026-09-10: municipality made tier 0 unreachable, since the engine would never learn the visitor's community and could not distinguish tier 0 from tier 1. Community makes the place effect real, at roughly 10–20× the cache entries. That trade is accepted. |
 | entry trait | the entry contexts of SRC-002, from which the focus job derives |
 
 Realisation (Next.js Cache Components): the route shell stays
 prerendered. The proof stream and live modules are cached components that
-take `{ municipality, trait, job }` **as props** — resolved outside the
+take `{ community, trait, job }` **as props** — resolved outside the
 cached boundary, because `cookies()` / `headers()` may not be read inside
 `use cache`. Props become the cache key automatically, giving one entry
 per segment rather than per visitor. Each carries `cacheLife` per TS-003
@@ -172,7 +246,7 @@ directly. The scoring functions are pure and free of I/O.
 
 | ID | Level | Check |
 | --- | --- | --- |
-| TS-005-A1 | unit | Geo tiers per D1 for every combination, including elements without geo. |
+| TS-005-A1 | unit | Geo tiers 0–6 per D1 for every level combination, including `state`, foreign-country elements, and elements without geo. |
 | TS-005-A2 | unit | Clearance filter removes uncleared elements before scoring; a high-scoring uncleared element never appears. |
 | TS-005-A3 | unit | Scoring reproduces SRC-002's worked example — visitor from Lehre, stage 1: positions 1–7 in the documented order. |
 | TS-005-A4 | unit | Determinism: identical input yields identical output across 1000 runs; ties resolve by id. |
