@@ -10,7 +10,7 @@ decisions: [DEC-002]
 
 | ID | Requirement | Source | Suff. |
 | --- | --- | --- | --- |
-| WEB-C-001 | The website is built with Next.js (current major) and hosted on Vercel. | SRC-006, DEC-002 | S3 |
+| WEB-C-001 | The website is built with Next.js (current major) and hosted on Vercel. No second framework is introduced — the stack is deliberately not diversified. | SRC-006, DEC-002 | S3 |
 | WEB-C-002 | Mobile first: the primary audience arrives on the phone; mobile UX/UI is fully optimised. Tablet/desktop must work well but stays close to the mobile layout — width is not maximised. | SRC-006 | S2 |
 | WEB-C-003 | The brand kit is binding: typography (Catamaran), colours, logos, imagery rules from `go-to-market-os/brands/profiles/schafe-vorm-fenster/schafe-vorm-fenster.brand.md`. | SRC-006, SRC-008 | S2 |
 | WEB-C-004 | The village calendars run on `app.schafe-vorm-fenster.de`; the website links to them ("Dorfkalender öffnen" persistent in the header) and embeds their data, but does not reimplement them. | SRC-001#purpose, SRC-003 | S2 |

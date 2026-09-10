@@ -17,3 +17,5 @@ decisions: [DEC-014, DEC-015, DEC-017]
 | WEB-Q-034 | All traffic is HTTPS; HTTP redirects permanently. | platform default | S2 |
 | WEB-Q-035 | Form abuse protection is honeypot fields, submission-timing checks, and server-side rate limiting — no captcha. Binds the envoy widget (Q-022). | DEC-014 | S3 |
 | WEB-Q-036 | Production errors and availability shall be observed through Vercel-native means (logs, runtime errors, existing uptime monitoring); no additional tracking service. | DEC-017 | S3 |
+| WEB-Q-037 | External API tokens never reach the client. The website exposes use-case-tailored endpoints for client interactions and calls ecosystem APIs exclusively server-side (BFF). | DEC-025 | S3 |
+| WEB-Q-038 | The website's client-facing endpoints are protected by rate limiting and origin checks; no client-side auth tokens for public read data. | DEC-025 | S3 |

@@ -14,4 +14,4 @@ principles where they bind quality (no tracking as a trust argument).
 | `performance.req.md` | Lighthouse, Core Web Vitals, budgets | WEB-Q-001–008 |
 | `accessibility.req.md` | WCAG, browser preference hints, themes, BFSG | WEB-Q-010–019, 026–027 |
 | `privacy.req.md` | tracking, consent, data handling, measurement | WEB-Q-020–025, 028 |
-| `security.req.md` | CSP, headers, dependency scanning, form abuse | WEB-Q-030–036 |
+| `security.req.md` | CSP, headers, dependency scanning, form abuse, BFF | WEB-Q-030–038 |

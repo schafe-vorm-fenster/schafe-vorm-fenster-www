@@ -19,6 +19,7 @@ date: 2026-09-09
 | SRC-009 | `go-to-market-os/handbook/decisions/001–004` | ADRs | high | repository-level decisions binding this spec (content SSOT, layer model, audience model) | read |
 | SRC-010 | `schafe-vorm-fenster-www/legacy-content/` | archive | low | pre-relaunch site; consulted only for lookups (legacy URL inventory, eTracker config) | lookup only |
 | SRC-011 | `specs/contracts/api-contracts.md` — OpenAPI specs of the ecosystem services (`<host>/api/openapi`) | machine contract | high | services publish OpenAPI 3.0+; product consumes them via documented convention (DEC-021) | registered |
+| SRC-012 | `classification-api/.github/workflows/` — reference CI/CD setup (typecheck · lint · coverage · knip · jscpd · preview · auto-merge · deploy) | external reference setup | high | running production pipeline of a sibling service; adopted as the model by DEC-031 | read |
 
 ## Notes
 

@@ -20,4 +20,4 @@ sources: [SRC-006]
 | WEB-Q-018 | Touch targets and mobile UX shall meet accessibility sizing on the primary (mobile) experience. | SRC-006 | S2 |
 | WEB-Q-019 | Accessibility shall be tested automatically in CI (axe or equivalent) plus manual screen-reader spot checks per release. | derived; convention | S1 |
 | WEB-Q-026 | The website shall target BFSG conformity (Barrierefreiheitsstärkungsgesetz); applicability is legally confirmed via Q-021. | DEC-012 | S3 |
-| WEB-Q-027 | A published accessibility statement (Barrierefreiheitserklärung) shall exist as a footer-reachable page. | DEC-012 | S3 |
+| WEB-Q-027 | A published accessibility statement (Barrierefreiheitserklärung) shall exist as a footer-reachable section with a stable anchor on `/rechtliches` (WEB-F-029). | DEC-012, DEC-039 | S3 |
