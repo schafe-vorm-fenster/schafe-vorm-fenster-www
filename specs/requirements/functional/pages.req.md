@@ -29,7 +29,7 @@ Additional page-level requirements:
 
 | ID | Requirement | Source | Suff. |
 | --- | --- | --- | --- |
-| WEB-F-019 | The conversion map in SRC-003 shall be complete on the website: every conversion goal listed there is carried by the pages named there; `order-promotion-material` has no page yet (Q-005). | SRC-003#conversion-map | S2 |
+| WEB-F-019 | The conversion map in SRC-003 shall be complete on the website: every conversion goal listed there is carried by the pages named there; `order-promotion-material` is deliberately unwired — the goal stays in the hub, the website carries no page (DEC-052). | SRC-003#conversion-map | S2 |
 | WEB-F-020 | Pricing display: `480 €/year` is public (offering `portalize-calendar`, `promotion: promoted`); the region/enterprise price is not published; offerings with `promotion: withheld` are not offered on the website. | SRC-003#run-our-own-calendar, `@schafe-vorm-fenster/offerings` | S2 |
 | WEB-F-021 | Footer shall carry contact, newsletter, and the legal links — "Impressum", "Datenschutz", "Barrierefreiheit" — each pointing at its anchor on `/rechtliches` (WEB-F-029); the header carries the persistent "Kalender" button to `/dein-ort`. Help lives in the app, not on the website. | SRC-003#navigation, DEC-012, DEC-039 | S3 |
 | WEB-F-022 | The region page shall state a two-working-day response promise on the quote request. The promise is an operational commitment: the lead-handling process behind the envoy widget (WEB-F-090) must be able to keep it — flagged to envoy/ops as part of Q-022. | SRC-003#for-a-whole-region | S2 |

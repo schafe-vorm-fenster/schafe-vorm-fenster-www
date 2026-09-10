@@ -154,7 +154,7 @@ on the sell pages a mayor from Baden-Württemberg is better served by
 Rubkow than by an arbitrary local clipping. The profiles are
 [PROPOSED] — the shape is fixed, the numbers are revised from
 measurement. At stage 0 (no geo known) `w_geo` is 0 and its share moves
-to `w_time` and `w_job` (exact split: Q-002).
+to `w_time` and `w_job` — **0.20 and 0.15** (DEC-048), giving `w_time 0.35 · w_ctx 0.25 · w_job 0.40`.
 
 **Clearance is a hard filter applied before scoring** — elements without
 cleared usage rights never enter the pool, they are not down-weighted
@@ -186,7 +186,7 @@ The shape wanted is *near · near · far · near · very far · middle · far*
      average.
    If the wanted side has no candidate, take the highest scorer of the
    other side — alternation is a preference, never a deadlock.
-4. Stop at the element count for the surface (Q-003).
+4. Stop at the element count for the surface (DEC-048): 3 inline beside a claim · 5 on the home page · 7 in the `/ueber-uns` stream.
 
 ### D7 — Determinism and rotation [FIXED: DEC-041]
 
@@ -214,7 +214,7 @@ The engine never renders per visitor. Two segmentation axes:
 
 | Axis | Resolution |
 | --- | --- |
-| geo | **community** — corrected 2026-09-10: municipality made tier 0 unreachable, since the engine would never learn the visitor's community and could not distinguish tier 0 from tier 1. Community makes the place effect real, at roughly 10–20× the cache entries. That trade is accepted. |
+| geo | **community** — falls back to municipality if production cache figures demand it (DEC-055, a parameter change) — corrected 2026-09-10: municipality made tier 0 unreachable, since the engine would never learn the visitor's community and could not distinguish tier 0 from tier 1. Community makes the place effect real, at roughly 10–20× the cache entries. That trade is accepted. |
 | entry trait | the entry contexts of SRC-002, from which the focus job derives |
 
 Realisation (Next.js Cache Components): the route shell stays
