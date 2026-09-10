@@ -15,7 +15,7 @@ sources: [SRC-006]
 | WEB-Q-013 | The site shall be fully keyboard-operable and screen-reader optimised. | SRC-006 | S2 |
 | WEB-Q-014 | The site shall honour browser preference hints and render accordingly: `prefers-color-scheme` (dark and light theme), `prefers-contrast` (high-contrast theme), `prefers-reduced-motion`, reduced-data, and user font-size scaling. | SRC-006 | S2 |
 | WEB-Q-015 | Theme selection follows the user's browser exclusively; the website provides no manual theme switcher. | SRC-006 | S2 |
-| WEB-Q-016 | Brand typography (Catamaran) shall be verified for readability/accessibility as part of the brand kit application (Q-013). | SRC-006 | S1 |
+| WEB-Q-016 | Brand typography (Inter, DEC-043) shall be verified for readability/accessibility as part of the brand kit application (Q-013). | SRC-006 | S1 |
 | WEB-Q-017 | Text alternatives exist for all informative images; decorative images are marked as such. | SRC-006 (implied by AA) | S2 |
 | WEB-Q-018 | Touch targets and mobile UX shall meet accessibility sizing on the primary (mobile) experience. | SRC-006 | S2 |
 | WEB-Q-019 | Accessibility shall be tested automatically in CI (axe or equivalent) plus manual screen-reader spot checks per release. | derived; convention | S1 |

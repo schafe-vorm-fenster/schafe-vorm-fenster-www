@@ -8,16 +8,22 @@ decided_by: jan-henrik.hempel
 
 ## Decision
 
-1. **Geo hierarchy follows the geo-api**: `country > county > municipality
-   > community`. The website's own content schema uses these four levels
-   so content can be selected at every one of them. GTM's model packages
-   will follow later — the website does not wait for them and does not
-   change them.
-2. **Jobs, not audiences, are the relevance dimension.** The
-   job-based framework of the information architecture governs. GTM
-   defines audiences; the website's content schema maps them onto jobs
-   when content is generated. The mapping is content work, not engine
-   work.
+1. **Geo hierarchy follows the geo-api**: `country > state > county >
+   municipality > community` — **five** levels. Corrected 2026-09-10:
+   an earlier version fixed four and dropped `state` on the premise that
+   the geo-api offers four. It does not — `GeoAdministrativeHierarchy` is
+   `place? > community > municipality > county > state > country` with
+   `state` required. Seven proximity tiers including *different country*
+   (TS-005 D1). GTM's model packages follow later; the website does not
+   wait for them.
+2. **Jobs are the relevance dimension, and relations carry them —
+   not audiences.** Corrected 2026-09-10: an audience-derived mapping
+   collapses, because `actors` alone holds reader, publisher, customer
+   and multiplier. ADR-003's relation axis maps onto the four jobs almost
+   one to one. Each element carries an **assessed profile over all four
+   jobs** with a stated reason, set once at generation time and sticky
+   across regeneration — never a mechanical lookup. Unassessed takes the
+   lowest step and stays countable.
 3. **The website has its own content schema**; GTM sources are mapped onto
    it at generation time (parallel session). The engine reads the
    website's schema only.
@@ -38,8 +44,10 @@ decided_by: jan-henrik.hempel
    clock read inside the engine, and it is part of the cache tag. Never
    randomness at request time, never an LLM.
 7. **Segmented, not personalised.** Dynamic elements are segmented by
-   (a) geo, simplified to municipality level, and (b) entry trait, from
-   which the focus job is derived. No per-visitor rendering.
+   (a) geo at **community** level — corrected 2026-09-10 from
+   municipality, which made tier 0 unreachable — and (b) entry trait,
+   from which the focus job is derived. No per-visitor rendering. The
+   cache cost of that resolution is measured before launch (Q-030).
 8. **The static shell is never sacrificed.** Dynamic elements load a
    static default server-side and stream their segmented variant; the
    route's shell stays prerendered. Turning every route into a function
@@ -51,5 +59,13 @@ decided_by: jan-henrik.hempel
 
 ## Consequences
 
-→ TS-005. Supersedes the assumption in Q-002/Q-004 that weighting is
-purely formulaic: editorial weight is now an input.
+→ TS-005. Editorial weight is an input, not a formula term. Weights are a
+profile per focus job, which settles Q-004 (job fit may outrank geo, and
+where is a property of the page). Two risks are now tracked: cache cost
+of community segmentation (Q-030) and assessment drift of the sticky
+facets (Q-031).
+
+The corrections of 2026-09-10 come from the website content production
+concept in `go-to-market-os`, which specifies the schema this engine
+reads. Where that document and this one disagreed, it was right on the
+facts — the geo-api hierarchy was verified in source.

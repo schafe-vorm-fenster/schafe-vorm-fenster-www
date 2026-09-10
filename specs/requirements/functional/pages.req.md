@@ -11,7 +11,7 @@ Primary source: SRC-003 (`go-to-market-os/concept/website-information-architectu
 Page briefs (structure, audiences in priority order, live modules) are
 defined there per page and referenced — this file fixes existence, route,
 focus job, and primary conversion. Conversion goal IDs resolve in
-`go-to-market-os/strategy/conversion-goals/`.
+`@schafe-vorm-fenster/goals`.
 
 | ID | Route | Focus job | Primary conversion | Source | Suff. |
 | --- | --- | --- | --- | --- | --- |
@@ -30,7 +30,7 @@ Additional page-level requirements:
 | ID | Requirement | Source | Suff. |
 | --- | --- | --- | --- |
 | WEB-F-019 | The conversion map in SRC-003 shall be complete on the website: every conversion goal listed there is carried by the pages named there; `order-promotion-material` has no page yet (Q-005). | SRC-003#conversion-map | S2 |
-| WEB-F-020 | Pricing display: `480 €/year` is public (offering `portalize-calendar`, `promotion: promoted`); the region/enterprise price is not published; offerings with `promotion: withheld` are not offered on the website. | SRC-003#run-our-own-calendar, `go-to-market-os/offerings/` | S2 |
+| WEB-F-020 | Pricing display: `480 €/year` is public (offering `portalize-calendar`, `promotion: promoted`); the region/enterprise price is not published; offerings with `promotion: withheld` are not offered on the website. | SRC-003#run-our-own-calendar, `@schafe-vorm-fenster/offerings` | S2 |
 | WEB-F-021 | Footer shall carry contact, newsletter, and the legal links — "Impressum", "Datenschutz", "Barrierefreiheit" — each pointing at its anchor on `/rechtliches` (WEB-F-029); the header carries the persistent "Kalender" button to `/dein-ort`. Help lives in the app, not on the website. | SRC-003#navigation, DEC-012, DEC-039 | S3 |
 | WEB-F-022 | The region page shall state a two-working-day response promise on the quote request. The promise is an operational commitment: the lead-handling process behind the envoy widget (WEB-F-090) must be able to keep it — flagged to envoy/ops as part of Q-022. | SRC-003#for-a-whole-region | S2 |
 | WEB-F-026 | The 404 page returns real status 404 with `noindex` and mini content: one sentence, the place search as the dominant element, the four jobs as context band. No place-slug guessing. | DEC-032 | S3 |

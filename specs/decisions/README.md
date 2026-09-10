@@ -53,3 +53,5 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-039 — Legal content is one long page with anchor navigation](039-legal-as-one-page.md)
 - [DEC-040 — Verification architecture — levels on acceptance criteria, IDs everywhere, Gherkin for journeys](040-verification-architecture.md)
 - [DEC-041 — Relevance engine — website-owned service, geo hierarchy of the geo-api, segmented not personalised](041-relevance-engine-design.md)
+- [DEC-042 — Hub content is referenced by package name, never by repository path](042-reference-packages-by-name.md)
+- [DEC-043 — The brand typeface is Inter; Catamaran is retired](043-brand-typeface-changed.md)

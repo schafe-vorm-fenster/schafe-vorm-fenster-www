@@ -29,9 +29,9 @@ Referenced, not restated (SRC-008):
 
 | Goal | Reference |
 | --- | --- |
-| Recurring licence revenue (100 subscriptions · 50k € ARR) | `go-to-market-os/strategy/business-goals/recurring-licence-revenue/` |
-| Proven outside the home regions | `go-to-market-os/strategy/business-goals/proven-outside-home-regions/` |
-| Positioning | `go-to-market-os/strategy/positioning/schafe-vorm-fenster.positioning.md` |
+| Recurring licence revenue (100 subscriptions · 50k € ARR) | `@schafe-vorm-fenster/goals`recurring-licence-revenue/` |
+| Proven outside the home regions | `@schafe-vorm-fenster/goals`proven-outside-home-regions/` |
+| Positioning | `@schafe-vorm-fenster/messaging` |
 
 `ai-coaching` and `gmbh-conversion` business goals exist but are not
 carried by this website.
@@ -39,12 +39,12 @@ carried by this website.
 ## Stakeholders
 
 The audience model (two axes: audience × relation) is defined in
-`go-to-market-os/audiences/` (ADR-003, SRC-009). The website serves, in
+`@schafe-vorm-fenster/audiences` (ADR-003, SRC-009). The website serves, in
 the priority order given per page by SRC-003:
 
 `rural-residents` · `actors` · `municipalities` · `institutions` ·
 `counties` · `companies` — each defined in
-`go-to-market-os/audiences/<id>.audience.md` with `communication_goals`
+`@schafe-vorm-fenster/audiences`<id>.audience.md` with `communication_goals`
 and `information_needs` (these are the STRICT needs layer for this spec).
 `tech-leaders` belongs to the coaching track and is out of scope.
 
@@ -52,12 +52,12 @@ and `information_needs` (these are the STRICT needs layer for this spec).
 
 The websites' conversions are the conversion goals referenced per page in
 `requirements/functional/pages.req.md`, defined in
-`go-to-market-os/strategy/conversion-goals/`.
+`@schafe-vorm-fenster/goals`.
 
 ## Constraints Summary
 
 See `requirements/constraints/`. Binding: Next.js + Vercel (DEC-002),
-brand kit (`go-to-market-os/brands/profiles/schafe-vorm-fenster/`),
+brand kit (`@schafe-vorm-fenster/brand-design`),
 mobile-first, cookieless analytics (DEC-004).
 
 ## Open Issues

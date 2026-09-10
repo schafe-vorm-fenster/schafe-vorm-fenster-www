@@ -39,10 +39,23 @@ files themselves.
 | TS-003 performance | WEB-Q-001–008, WEB-F-105 |
 | TS-004 url-and-routing | WEB-F-002, 010–018, 021, 026–027, 047–048, 067, 073, 079 · WEB-Q-037–038 |
 | TS-005 relevance-engine | WEB-F-024, 030–036, 038, 042, 052, 055 |
+| TS-006 page-composition | WEB-F-001, 003–009, 019, 020, 022 |
+| TS-007 content-pipeline | WEB-F-025, 039, 080–089 |
+| TS-008 live-data | WEB-F-040, 041, 043–046, 049 |
+| TS-009 rendering-and-resilience | WEB-F-100–104, 106 |
+| TS-010 personalization | WEB-F-050, 051, 053, 054, 056, 069 |
+| TS-011 seo | WEB-F-070–072, 074–078 |
+| TS-012 analytics | WEB-Q-020–022, 028 |
+| TS-013 privacy | WEB-Q-023–025 |
+| TS-014 security | WEB-Q-030–036 |
+| TS-015 delivery-pipeline | WEB-C-020–023 |
+| TS-016 forms-and-leads | WEB-F-090–096 |
+| TS-017 technical-foundation | WEB-C-001–006 |
+| TS-018 scope-boundaries | WEB-C-010–016 |
 
 ## Chain upward
 
-Goals: `go-to-market-os/strategy/business-goals/` · Needs: audience
-`communication_goals` / `information_needs` in `go-to-market-os/audiences/`
-· Conversions: `go-to-market-os/strategy/conversion-goals/`. See
+Goals: `@schafe-vorm-fenster/goals` · Needs: audience
+`communication_goals` / `information_needs` in `@schafe-vorm-fenster/audiences`
+· Conversions: `@schafe-vorm-fenster/goals`. See
 `ssd/website-relaunch.ssd.md`.

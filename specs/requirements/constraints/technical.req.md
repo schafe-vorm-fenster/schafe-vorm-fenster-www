@@ -12,7 +12,7 @@ decisions: [DEC-002]
 | --- | --- | --- | --- |
 | WEB-C-001 | The website is built with Next.js (current major) and hosted on Vercel. No second framework is introduced — the stack is deliberately not diversified. | SRC-006, DEC-002 | S3 |
 | WEB-C-002 | Mobile first: the primary audience arrives on the phone; mobile UX/UI is fully optimised. Tablet/desktop must work well but stays close to the mobile layout — width is not maximised. | SRC-006 | S2 |
-| WEB-C-003 | The brand kit is binding: typography (Catamaran), colours, logos, imagery rules from `go-to-market-os/brands/profiles/schafe-vorm-fenster/schafe-vorm-fenster.brand.md`. | SRC-006, SRC-008 | S2 |
+| WEB-C-003 | The brand kit is binding: typography (Inter, DEC-043), colours, logos and imagery rules from `@schafe-vorm-fenster/brand-identity`. | SRC-006, SRC-008 | S2 |
 | WEB-C-004 | The village calendars run on `app.schafe-vorm-fenster.de`; the website links to them ("Dorfkalender öffnen" persistent in the header) and embeds their data, but does not reimplement them. | SRC-001#purpose, SRC-003 | S2 |
 | WEB-C-005 | TypeScript throughout; repository conventions (`pnpm`) follow the existing setup. | existing repo, convention | S1 |
 | WEB-C-006 | The specification method for this repository is STRICT (`/Users/jan-henrik.hempel/LeafcutterOS/leafcutter-strict`); specs precede content. | DEC-023 | S3 |
