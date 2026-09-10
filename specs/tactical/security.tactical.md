@@ -82,7 +82,17 @@ default:
 | `style-src 'unsafe-inline'` | the one bounded concession. Next.js inlines critical CSS and both web components style their shadow roots inline. Script injection stays fully locked; CSS-based exfiltration is the residual risk, accepted and flagged. Tightening path: a style nonce, once D3 resolves nonce delivery. |
 | `frame-src 'none'` | pins Portalize to web-component mode. DEC-030 chose it; this makes the iframe fallback fail loudly instead of quietly loading a second document. |
 
-### D3 — Nonce versus static rendering: the one real conflict [PROPOSED — needs a decision]
+### D3 — Per-build hashes, not a nonce [FIXED: DEC-045]
+
+**Decided 2026-09-10:** variant A. `script-src` carries `'self'` plus
+per-build `'sha256-…'` hashes; no per-request nonce, so the prerendered
+shell of TS-004 D6 is preserved. The build extracts and hashes every
+inline script — a new inline block that skips that step breaks the policy
+loudly instead of silently weakening it. `'strict-dynamic'` still applies.
+The nonce variant below is recorded as the rejected alternative and its
+cost is why.
+
+#### The conflict, for the record [superseded by DEC-045]
 
 Next.js emits inline bootstrap scripts (flight payload). Under D2 they
 need a nonce or a hash. A per-request nonce cannot live in a body served

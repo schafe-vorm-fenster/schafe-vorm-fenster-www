@@ -103,7 +103,7 @@ resilient(key, fetcher, { snapshot, timeoutMs })
 
 | Tier | Trigger | Source | On success | Visible marker |
 | --- | --- | --- | --- | --- |
-| 1 live | upstream answers within the timeout, response validates | upstream (via `src/clients/*`) | writes `last-good:{key}` with `fetchedAt` | none, unless older than its fresh TTL |
+| 1 live | upstream answers within the timeout, response validates | upstream (via `src/clients/*`) | writes `last-good:{key}` in the Vercel Runtime Cache (DEC-046) with `fetchedAt` | none, unless older than its fresh TTL |
 | 2 stale | upstream errors, times out, or fails schema validation | `last-good:{key}` inside its serve-stale window (TS-003 D5) | — | freshness label, D5 |
 | 3 snapshot | no `last-good` entry, or it is past its serve-stale window | build-time snapshot artefact, D8 | — | freshness label, D5 |
 

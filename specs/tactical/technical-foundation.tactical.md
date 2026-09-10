@@ -83,7 +83,7 @@ operative as a single-tree rule:
 This is what makes A8 possible: if the visible text order at 360 and at
 1280 is identical, the layouts are the same layout at two widths.
 
-### D3 — The brand kit is binding: one source, no restated values [FIXED: WEB-C-003, SRC-008; package identity PROPOSED]
+### D3 — The brand kit is binding: two packages, three levels (DEC-044) [FIXED: WEB-C-003, SRC-008; package identity PROPOSED]
 
 The brand lives in the hub and is **consumed**, never copied. Binding
 paths in `go-to-market-os`:
