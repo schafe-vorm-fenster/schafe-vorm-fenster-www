@@ -784,6 +784,14 @@ dismissed in the protocol, not here.
   is wiring an existing branch into `resolveLiveAnchor` plus honouring
   `?ort=` on `/`, not new logic. The stale `test.skip`s that hide it
   (TS-019-A3/A4/A5, TS-021-A6, TS-021-A14) come with the fix.
+- Resolved: 4f5ea30 — `resolvePlaceOutcome` (`src/lib/pages/live-anchor.ts`) keeps
+  TS-008 D7's three outcomes apart all the way into the page; `/dein-ort`
+  forwards an uncovered value to `/dein-ort/starten`, and `/` honours `?ort=`
+  in D2's four states behind one `<Suspense>` whose fallback *is* S1, so the
+  route keeps its static shell (the build now reports `/de` and `/en` as ◐,
+  partially prerendered — row 131's eight prerendering routes are unchanged).
+  TS-019-A3/A4/A5 and TS-021-A6/A7/A14 are real walks instead of `test.fixme`
+  placeholders; `src/lib/pages/live-anchor.test.ts` covers the classifier.
 
 ## F-2-31 — The 404 page ships a developer note as its body copy and carries neither place search nor jobs band
 
@@ -826,6 +834,12 @@ dismissed in the protocol, not here.
   status, `robots` and the heading) is package C's, under F-2-55's
   assert-too-little strand — A must not edit `e2e/routes.spec.ts` or
   `src/lib/routes/routing.integration.test.ts` this round.
+- Resolved: 0258669 — both 404 surfaces carry the place search (the same component
+  everywhere, a plain GET form to `/dein-ort`, no JavaScript needed) and the
+  jobs band with all four jobs, since a 404 has no focus job to subtract. The
+  developer note and the dashed placeholder box are gone, and so is the 500
+  surface's own. `e2e/content-compliance.spec.ts` asserts the two clauses the
+  criterion is actually about.
 
 ## F-2-32 — `request-product-briefing` is a dead link, and two pages paste a second placeholder URL against TS-016 D7
 
@@ -869,6 +883,11 @@ dismissed in the protocol, not here.
   the two per-page pastes. The third occurrence is in the dev-only
   `src/components/gallery.tsx` and is not visitor-facing; it is not part of
   this fix and not a reason to touch package B's files.
+- Resolved: 9e0d7ff — `BRIEFING_URL` carries the real booking URL the finding
+  located in `@schafe-vorm-fenster/people`, transcribed with its citation the
+  way `src/lib/pricing/offerings.ts` transcribes the offering prices, and the
+  two per-page pastes are gone. An e2e walks every S3 placement and asserts
+  they all resolve to the one value (TS-016 D7).
 
 ## F-2-33 — The English conversion flows still render German UI strings, including the primary buttons
 
@@ -911,6 +930,17 @@ dismissed in the protocol, not here.
   A for this round — F-2-33, F-2-35 and F-2-64 all sit in that one block and
   are fixed together. The logo's German accessible name on `/en` (UAT) is
   folded in here rather than filed separately.
+- Resolved: 0258669, with c0592a2 and 9e0d7ff for the flow surfaces — the footer
+  contact and newsletter block, the register flow's step-1 submit and step
+  control, the quote form's whole field set, the `/deine-region` labels and
+  the logo's accessible name all read from the dictionary or the page's own
+  artifact in the page's language.
+- Open tail for package B (one line, `src/components/choice-group/choice-group.tsx`):
+  the `<DemoDataBadge className={styles.badge} />` in the legend takes no
+  `locale`, so registration step 2 still badges "Demo-Daten" on
+  `/en/take-part/register`. The fix is `<DemoDataBadge className={styles.badge}
+  locale={locale} />` — the prop is already on the component. The same file's
+  `"Keine Auswahl verfügbar."` empty-state literal has the same shape.
 
 ## F-2-34 — `{county-or-organization}` renders as a literal in the English quote page's `h1`
 
@@ -933,6 +963,9 @@ dismissed in the protocol, not here.
   sentence, so the fix is its English counterpart in
   `content/pages/deine-region/en.md:159` plus the page filling the slot when
   a county is known — one content line and one page file.
+- Resolved: 9e0d7ff — both artifacts' slot names are filled, both locales have
+  their placeless variant, and `/en/your-region/quote` renders "Request a
+  quote for your organisation".
 
 ## F-2-35 — Internal identifiers are rendered as visitor-facing copy on every route, in both locales
 
@@ -966,6 +999,13 @@ dismissed in the protocol, not here.
   `newsletter-block.tsx:71` — cheap and the most visible thing on the
   prototype. The lint that would have caught it is F-2-43 (package C); this
   round fixes the text, not only the instrument.
+- Resolved: 0258669 — the footer's `Q-020`, `/ueber-uns`'s `TS-007 D12`,
+  `/rechtliches`'s `TS-029 Open Point #1`, `DEC-027` and `state/open.md` #21
+  are out of the rendered artefacts; the accessibility statement says what is
+  still open in words a visitor can read. `e2e/content-compliance.spec.ts` is
+  the instrument: it walks all 24 routes plus both 404 surfaces and greps the
+  rendered text for `TS-0…`, `DEC-0…`, `Q-0…`, `WEB-…`, `SRC-0…`,
+  `[Platzhalter` and the two repository paths.
 
 ## F-2-36 — `proxy.ts` sends the Vercel automation bypass secret to a Host-header-controlled origin and caches the answer process-wide
 
@@ -1089,6 +1129,9 @@ dismissed in the protocol, not here.
   on `search-field` and `envoy-form-mount`. Only the length/allowlist half
   is in scope; the XSS hypothesis is dismissed in the finding with its
   evidence and is not reopened.
+- Resolved: c0592a2 — both flow routes read `?ort=` through `readPlaceParameter`,
+  and `search-field` and `envoy-form-mount` carry the same bounds the server
+  applies (`MAX_PLACE_LENGTH`, 120 for a field, 2000 for a message body).
 
 ## F-2-39 — No island renders a skeleton: the streamed-shell contract of TS-009 is not built
 
@@ -1441,6 +1484,11 @@ dismissed in the protocol, not here.
   not excuse it. Cheap: one mount in the page, one hidden field and a timing
   stamp in `envoy-form-mount`, which A is already opening for F-2-51,
   F-2-65 and F-2-66.
+- Resolved: 9e0d7ff (mount) and c0592a2 (anti-spam) — `/deine-region` renders the
+  S2 quote mount in place with the D2 attributes, and every lead form carries
+  the honeypot and the timing gate of TS-016-A10: in the DOM, hidden from
+  assistive technology, not focusable, unnamed like every other field, and a
+  submission faster than a human could make one refused in words.
 
 ## F-2-49 — `/dein-ort/starten` never re-resolves, and echoes the raw parameter as the place name
 
@@ -1464,6 +1512,10 @@ dismissed in the protocol, not here.
   re-resolution gap as F-2-30 and lands in the same two modules
   (`src/lib/pages/live-anchor.ts`, `src/lib/live/places.ts`), so fixing it
   apart from F-2-30 would cost more than fixing it with it.
+- Resolved: 4f5ea30 — `/dein-ort/starten` re-resolves and answers one 307 to
+  `/dein-ort?ort=<slug>` with `etcc_*` and the language prefix preserved
+  (TS-021-A7, DEC-070). Only an **uncovered** value is echoed now, so a
+  covered place is never told in its own name that it is not covered.
 
 ## F-2-50 — `/deine-region`'s manifest declares one live module where D1 names four
 
@@ -1489,6 +1541,11 @@ dismissed in the protocol, not here.
   the missing test. The embed-demo row stays undeclared with F-2-15, which
   is blocked on the third-party no-cookie confirmation: do not invent a
   fourth entry to make the count match D1.
+- Resolved: 97c1a0b — the manifest declares the three modules the page runs, each
+  with its own empty state, and `app/[lang]/deine-region/page.meta.test.ts`
+  asserts TS-026-A15 field by field. The embed demo at position 1′ stays
+  undeclared on purpose while F-2-15 is open, and the test asserts that
+  absence rather than leaving it to a reader to notice.
 
 ## F-2-51 — Order step 3 offers two calls to action, one of them inert
 
@@ -1514,6 +1571,9 @@ dismissed in the protocol, not here.
   ("Absenden") does nothing at all. Same `envoy-form-mount` work as F-2-65
   and F-2-66, one step's controls. Note the finding's own correction:
   "Weiter" does navigate; the inert "Absenden" beside it is the defect.
+- Resolved: c0592a2 — the invoice form stands inside a flow, so the step owns the
+  advance and the form renders no submit of its own (`ownSubmit={false}`).
+  Exactly one control on step 3, and it is the one that advances.
 
 ## F-2-52 — TS-010-A5 and TS-027-A7 contradict each other on the stage-0 empty proof slot
 
@@ -1690,6 +1750,11 @@ dismissed in the protocol, not here.
   confirmations, which is the opposite of blocked. Both claims sit on
   conversion pages that the reviews and the user tests run against.
   TS-024-A19's half is a `derived_from` frontmatter line on two artefacts.
+- Resolved: 9e0d7ff — TS-026-A17: the map view is removed from the claim set,
+  headline included, so the January-2027 date goes with it. TS-016-A13: the
+  two-working-day promise is absent, its demo placeholder included — an
+  example sentence about our own response time sets the same expectation as a
+  promise. TS-024-A19: `dein-kalender-6-trust` names its update path.
 
 ## F-2-58 — The axe sweep covers one of the three declared themes, so five criteria are only partly discharged
 
@@ -1800,6 +1865,12 @@ dismissed in the protocol, not here.
   `FireConversionOnMount` (`bestellen/page.tsx:270`) plus
   `src/components/conversion-tracker/**`, with a per-flow dedupe key rather
   than a mount.
+- Resolved: c0592a2, refined in 71b2f1b — `FireConversionOnMount` keys its guard on
+  the **completed step** at module scope, so it survives every soft navigation
+  inside the document; Back-then-Forward through step 4 reports once. It
+  deliberately does not survive a reload — TS-025 D8 and DEC-009 forbid the
+  store that would. 71b2f1b keys it on the resolved scope rather than the raw
+  `?orte=` value.
 
 ## F-2-61 — `/dein-ort`'s empty state changes neither the primary CTA nor position 2, and leaks raw markdown
 
@@ -1832,6 +1903,19 @@ dismissed in the protocol, not here.
   markdown (backticks and an arrow) ships as visitor copy, which the
   dummy-content rule forbids outright. Same page and same live layer as
   F-2-30 and F-2-49, so all three land together.
+- Resolved: 4f5ea30 — state B's publish offer occupies the module slot with the
+  page's one `data-cta="primary"` and the resolved slug, the search is
+  demoted, the closing block repeats the offer, and the `→ `/mitmachen``
+  routing note no longer ships as visitor copy. Position 2 has rows: the demo
+  ring gained `Beispielhof Musterheide` 5.6 km from the empty demo place, with
+  `ZIP_DEMO_PLACES` keeping the postcode modulo at six so no covered walk
+  moves.
+- Note for the retest: the offer targets `/mitmachen/registrieren?ort=<slug>`,
+  not `/mitmachen`. TS-020 D2's block table and TS-020-A3 say `/mitmachen`;
+  TS-023 D5 names "the `/dein-ort` empty state" as one of the four surfaces
+  `?ort=` reaches `/mitmachen/registrieren` from, and this finding calls
+  `/mitmachen` the wrong target in as many words. The finding won. The
+  spec-against-spec contradiction belongs on `state/open.md`.
 
 ## F-2-62 — Entering registration from `/dein-ort/starten` skips step 1, and the place is neither shown nor changeable
 
@@ -1857,6 +1941,9 @@ dismissed in the protocol, not here.
   on the previous page cannot see or correct it. It is the hand-over that
   F-2-30 restores traffic to, so the two must land in the same round or the
   founding path opens onto a broken step.
+- Resolved: c0592a2 — an answered step 1 stays on screen through step 3 and the
+  handover: the place named, with a change control that carries the answer
+  back (TS-023 D5's "answered, visible and changeable, never skipped").
 
 ## F-2-63 — `/deine-region` asserts a county at stage 0, and names it with a raw internal id
 
@@ -1883,6 +1970,9 @@ dismissed in the protocol, not here.
   a raw `geoname.900001` rendered as visitor copy, the same leak class as
   F-2-35. UAT named it unprompted, which is the signal that it reads as
   broken rather than as unfinished.
+- Resolved: 9e0d7ff — block 3's heading carries no county slot at stage 0, so
+  neither the county nor `geoname.900001` is asserted (TS-026-A10, D4). The
+  county-scoped wording returns with the anchor it needs.
 
 ## F-2-64 — The newsletter consent line links a legal anchor that does not exist in English
 
@@ -1910,6 +2000,9 @@ dismissed in the protocol, not here.
   fix while that block is open.
 
 ---
+- Resolved: 0258669 — the consent line resolves through `legalAnchor`, like the
+  three named footer links already did; an e2e follows it to the anchor it
+  claims, in both languages.
 
 # Findings — Round 2, chaos Run 2 (Hasty Clicker, Playwright)
 
@@ -1959,6 +2052,9 @@ Dispositions for the Run-2 observations that are **not** new findings:
   one-per-flow guard in the one component A already opens for F-2-48,
   F-2-51 and F-2-66. It is also the mechanical half of F-2-66: a button that
   cannot be pressed twice is what makes the missing confirmation survivable.
+- Resolved: c0592a2 — the submit disables itself, and the authoritative guard is a
+  ref set synchronously: `disabled` and `state` both need a re-render, which
+  two `click()` calls in one task never give React. That was the mechanism.
 
 ## F-2-66 — The quote form gives no success feedback at all after a submission
 
@@ -1984,6 +2080,9 @@ Dispositions for the Run-2 observations that are **not** new findings:
   widget is a declared mock (`state/open.md` row 7), which is precisely why
   the mock owes a labelled success state rather than nothing; building it
   is the mount's job, not the third party's, so it is not blocked.
+- Resolved: c0592a2 — the mount owns a labelled success state that says in its own
+  words that this is the demo and that nothing was sent, replaces the form in
+  the same slot, and takes focus (TS-016-A9).
 
 ## F-2-67 — Reloading immediately after "Weiter" on order step 3 silently swallows the advance
 
@@ -2007,6 +2106,8 @@ Dispositions for the Run-2 observations that are **not** new findings:
   state on the step's primary control is enough for the visitor to see that
   the click was lost. No dedupe or session store is needed, and none may be
   added — TS-025 D8 is explicit that nothing is stored between page views.
+- Resolved: c0592a2 — `useLinkStatus` puts the pending state on the control the
+  visitor pressed. No store and no dedupe key, which TS-025 D8 forbids anyway.
 
 ## F-2-68 — Controls in the footer region move up to 174 px between first paint and settle
 
