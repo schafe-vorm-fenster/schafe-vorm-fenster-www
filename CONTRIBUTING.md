@@ -117,6 +117,19 @@ cannot see whether the small range does anything.
   the token sheet and the font faces; everything else consumes CSS custom
   properties. No logo and no font file is committed here — they are package
   subpaths.
+- **The browser talks to this origin only.** Every ecosystem service is
+  reached server-side through a route handler in `app/api/`, which is
+  GET-only (`pnpm check:api-routes`), and the handler calls an interface
+  module in `src/lib/live/`. A component never imports a service client, a
+  host or read token is read only inside `src/clients/`, and the app's
+  hostname exists in exactly one file — the handover module. All four are
+  asserted by tests, not by review.
+- **A live module never shows a spinner or an error.** It shows its data,
+  its skeleton, its own empty state, or the last good answer with a
+  "Stand: …" label. Mocked data is complete, obviously fictitious, carries
+  `demo: true` out of the BFF, and has a `Mock aktiv` row in
+  `state/open.md`. `src/lib/live/README.md` says which state each shell
+  gets in which tier; `LIVE_DATA=mock` runs the whole layer offline.
 - **A new dependency needs an ADR.** Look sideways at the sibling repos
   first (`../classification-api`, `../events-api`, `../geo-api`,
   `../community-calendar`, `../envoy-api`), decide, write the decision into

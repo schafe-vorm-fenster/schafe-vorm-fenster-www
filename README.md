@@ -85,6 +85,10 @@ Protection with `VERCEL_AUTOMATION_BYPASS_SECRET` — the suite sends it as
 | `proxy.ts` | the CSP, the HSTS variance and the `X-Robots-Tag`, on every response |
 | `src/lib/security/` | the policy as one typed structure, in one module |
 | `src/lib/seo/` | the indexability predicate and the robots surface |
+| `app/api/` | **the BFF** (TS-004 D5): five GET-only route handlers, the browser's only data surface. No ecosystem host, token or visitor IP ever appears in a client request |
+| `src/lib/live/` | **the live-data layer** (TS-008/TS-009): one interface module per live module, the real/mock switch, the three-tier fallback, and the one module that knows the app's hostname. `src/lib/live/README.md` has the module map and the page-wiring example |
+| `src/clients/` | the pinned OpenAPI specs and the two service clients built on them — one closed header set, one place a host or read token is read |
+| `src/generated/snapshots/` | tier 3: the committed build-time payloads a live module renders when the upstream is down and the cache is cold (TS-009 D8) |
 | `src/lib/content/` | **the content pipeline** (TS-007): `loadPage(routeId, locale)` gives a page its typed slots — provenance, `Demo-Daten` marking and all — out of `content/pages/<route>/<locale>.md`. Request time reads the local tree only; the hub-package adapter beside it is build-time. `src/lib/content/README.md` has the call example |
 | `content/pages/` | the page artifacts the pipeline reads: one file per page per locale, one section per slot, provenance per slot. Written by the content playbook, validated by `pnpm check:content` |
 | `e2e/` | Playwright specs |
