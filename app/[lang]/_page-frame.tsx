@@ -60,6 +60,22 @@ import type { ReactNode } from "react";
  */
 const CONTACT_EMAIL = "jan@schafe-vorm-fenster.de";
 
+/**
+ * The band's offer, per locale.
+ *
+ * Only `content/pages/home/{de,en}.md` carries a `context-band` slot
+ * (`home-10-context-band`); the other ten pages have none, and the band is
+ * rendered on every page by construction (TS-006 D5). Rather than let ten
+ * pages fall back to the component's German default, the frame carries the
+ * home artifact's two sentences — the same offer, verbatim, in both
+ * languages. A per-page phrasing is a content-phase question, on
+ * `state/open.md`.
+ */
+const BAND_HEADING: Record<Locale, string> = {
+  de: "Heute mit einem anderen Anliegen hier?",
+  en: "Here for something else today?",
+};
+
 export interface SiteChromeProps {
   readonly route: RouteId;
   readonly locale: Locale;
@@ -144,7 +160,12 @@ export type ClosingBlock =
    * `data-cta="primary"` marker, which block 1 keeps. state/open.md carries
    * the row.
    */
-  | { readonly variant: "module"; readonly node: ReactNode };
+  | {
+      readonly variant: "module";
+      readonly node: ReactNode;
+      /** Only where a cleared backing exists — otherwise omitted, not softened. */
+      readonly reassurance?: string;
+    };
 
 export interface PageFrameProps extends Omit<SiteChromeProps, "children" | "route"> {
   /** The page's `page.meta.ts` — the route, and the only source of the band's and the closing block's job. */
@@ -174,6 +195,7 @@ export function PageFrame({
   children,
 }: PageFrameProps) {
   const currentJob = jobLabelKey(meta.focusJob);
+  const bandHeading = contextBandHeading ?? BAND_HEADING[locale];
   const merged = closing.variant === "merged";
 
   return (
@@ -189,12 +211,8 @@ export function PageFrame({
           merged three-job offer, which is the same list (TS-006 D6). */}
       {merged ? null : (
         <MotionReveal>
-          <SectionShell id="context-band" label={contextBandHeading} surface="surface">
-            <ContextBand
-              currentJob={currentJob}
-              heading={contextBandHeading}
-              locale={locale}
-            />
+          <SectionShell id="context-band" label={bandHeading} surface="surface">
+            <ContextBand currentJob={currentJob} heading={bandHeading} locale={locale} />
           </SectionShell>
         </MotionReveal>
       )}
@@ -206,7 +224,10 @@ export function PageFrame({
           {closing.variant === "merged" ? (
             <ClosingCta currentJob={currentJob} locale={locale} variant="merged" />
           ) : closing.variant === "module" ? (
-            closing.node
+            <>
+              {closing.node}
+              {closing.reassurance ? <p>{closing.reassurance}</p> : null}
+            </>
           ) : (
             <ClosingCta
               label={closing.label}

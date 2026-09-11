@@ -79,3 +79,18 @@ export function fillTemplate(
 ): string {
   return text.replace(/\{([a-z_]+)\}/gi, (match, name: string) => values[name] ?? match);
 }
+
+/**
+ * Splits an authored instruction into its steps.
+ *
+ * `howto-block` takes an ordered list, and the content artifact writes the
+ * platform instruction as running prose ("Öffne … . Tipp auf … . Fertig.").
+ * Sentence boundaries are the steps — the split happens here rather than in
+ * the page so both locales, and both platforms, are read the same way.
+ */
+export function splitSteps(text: string): string[] {
+  return text
+    .split(/(?<=[.!?])\s+/)
+    .map((step) => step.trim())
+    .filter((step) => step.length > 0);
+}

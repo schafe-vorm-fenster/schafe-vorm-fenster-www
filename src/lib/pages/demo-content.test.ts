@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { fillTemplate, parseDemoProofElement } from "@/src/lib/pages/demo-content";
+import { fillTemplate, parseDemoProofElement, splitSteps } from "@/src/lib/pages/demo-content";
 
 /**
  * TS-019-A8 / plan/guardrails.md (dummy-content rule): the five demo proof
@@ -77,5 +77,24 @@ describe("TS-007 D7: runtime values are substituted, the sentence is not rewritt
   it("leaves an unknown slot visible rather than blanking the sentence", () => {
     expect(fillTemplate("Kalender von {place} öffnen", {})).toBe("Kalender von {place} öffnen");
     expect(fillTemplate("{dates_count} Termine", { place: "x" })).toBe("{dates_count} Termine");
+  });
+});
+
+describe("TS-020 D4: the homescreen instruction becomes an ordered list", () => {
+  it("splits running prose at its sentence boundaries", () => {
+    expect(
+      splitSteps(
+        `Öffne den Kalender von Musterdorf in Safari. Tipp auf „Teilen", dann auf „Zum Home-Bildschirm". Fertig — er startet ab jetzt wie eine App.`,
+      ),
+    ).toEqual([
+      "Öffne den Kalender von Musterdorf in Safari.",
+      `Tipp auf „Teilen", dann auf „Zum Home-Bildschirm".`,
+      "Fertig — er startet ab jetzt wie eine App.",
+    ]);
+  });
+
+  it("returns one step for a single sentence and none for an empty string", () => {
+    expect(splitSteps("Fertig.")).toEqual(["Fertig."]);
+    expect(splitSteps("   ")).toEqual([]);
   });
 });
