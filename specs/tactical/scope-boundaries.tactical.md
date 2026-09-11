@@ -44,7 +44,7 @@ be caught".
 | WEB-C-012 | municipalities and institutions are not separated | D7 | gate (narrow) + review |
 | WEB-C-013 | the AI-coaching track does not appear | D4 | gate + guard |
 | WEB-C-014 | the product name is never a navigation label | D5 | gate |
-| WEB-C-015 | local advertising: at most one sentence while withheld | D8 | gate |
+| WEB-C-015 | local advertising: no occurrence at all while withheld (DEC-052 §3) | D8 | gate |
 | WEB-C-016 | no claim without cleared proof or live data | D9, D10 | gate (the reference) + review (what counts as a claim) |
 
 Only WEB-C-014 is fully machine-decidable. WEB-C-010 and WEB-C-016 are
@@ -155,7 +155,8 @@ name for a destination, not about hostnames.
 
 **Where the name may appear:** the body of `/dein-kalender`, at most
 once, at the 480 € tier — the proposal in Q-012, unresolved. Until
-Q-012 resolves, the gate enforces the ceiling (≤ 1 occurrence, that one
+DEC-052 §1 fixes it at **exactly one** occurrence on `/dein-kalender` at
+the 480 € tier — a floor as well as a ceiling. The gate enforces both (the one
 route only); it does not enforce a floor, so a page without the name also
 passes.
 
@@ -315,7 +316,7 @@ The four boundary questions:
 | TS-018-A7 | integration | Header, footer, and context band of every TS-004 D1 route render without a product name in `de` and `en`; `/dein-kalender` is the only route whose body may contain one, at most once. |
 | TS-018-A8 | static | Content build input excludes `content/support/**` and `legacy-content/app/funktionen/**`; no content file's `derived_from` points into them; the content schema declares no help/FAQ/how-to type; the route inventory contains no help path. |
 | TS-018-A9 | static | No path segment, nav label, or content id equals an audience id; every page brief declares exactly one of the four focus jobs; no two briefs with the same focus job split `municipalities` and `institutions`. |
-| TS-018-A10 | static | At most one content file references `local-advertising`, bound to `/dein-kalender`, with a `withheld_mention` of one sentence ≤ 160 characters containing no link, price token, or CTA; `request-ad-placement` appears in no CTA registry or form target. |
+| TS-018-A10 | static | **No** content file references `local-advertising` while the offering is withheld (DEC-052 §3). Formerly a budget of one sentence; the budget is now zero. Legacy row retained for the `withheld_mention` of one sentence ≤ 160 characters containing no link, price token, or CTA; `request-ad-placement` appears in no CTA registry or form target. |
 | TS-018-A11 | static | Every `claims[]` entry names a resolvable `proof:` with `usage_rights: cleared` or a `live:` module id from the TS-004 D5 inventory; anything else fails the build. |
 | TS-018-A12 | integration | With the stats upstream stubbed empty, counter modules are absent from the rendered page and no figure stands in their place (WEB-F-041, WEB-F-104). |
 | TS-018-A13 | e2e | Every internal link resolves inside the TS-004 D1 inventory; every help or instruction affordance targets the app host, not a website route. |

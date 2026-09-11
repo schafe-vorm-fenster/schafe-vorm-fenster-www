@@ -68,3 +68,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-054 — Visual generation waits for the complete design system](054-design-system-blocks-visual-generation.md)
 - [DEC-055 — Segmentation cache cost is observed in production, not gated before launch](055-cache-cost-observed-after-launch.md)
 - [DEC-056 — The design system is delivered and binding](056-design-system-delivered.md)
+- [DEC-057 — Place-parameter pages are indexable with a parameter-free canonical](057-place-parameter-pages-are-indexable.md)

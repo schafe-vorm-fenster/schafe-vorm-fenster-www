@@ -56,3 +56,23 @@ of the spec.
 | TS-016 | `forms-and-leads.tactical.md` | interaction | envoy widget, briefing, order flow, newsletter |
 | TS-017 | `technical-foundation.tactical.md` | rule | stack, mobile-first, brand kit, app boundary |
 | TS-018 | `scope-boundaries.tactical.md` | rule | what the website is not — gate, guard, review |
+
+## Page specs
+
+One per page, thin: which modules in which order, what data each needs,
+and acceptance criteria a QA walker can follow. They bind the system specs
+above rather than restating them.
+
+| ID | File | Route |
+| --- | --- | --- |
+| TS-019 | `pages/home.tactical.md` | `/` |
+| TS-020 | `pages/dein-ort.tactical.md` | `/dein-ort` |
+| TS-021 | `pages/dein-ort-starten.tactical.md` | `/dein-ort/starten` |
+| TS-022 | `pages/mitmachen.tactical.md` | `/mitmachen` |
+| TS-023 | `pages/registrieren.tactical.md` | `/mitmachen/registrieren` |
+| TS-024 | `pages/dein-kalender.tactical.md` | `/dein-kalender` |
+| TS-025 | `pages/bestellen.tactical.md` | `/dein-kalender/bestellen` |
+| TS-026 | `pages/deine-region.tactical.md` | `/deine-region` |
+| TS-027 | `pages/ueber-uns.tactical.md` | `/ueber-uns` |
+| TS-028 | `pages/archiv.tactical.md` | `/ueber-uns/archiv` |
+| TS-029 | `pages/rechtliches.tactical.md` | `/rechtliches` |

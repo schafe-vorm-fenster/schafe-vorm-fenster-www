@@ -76,7 +76,8 @@ type, no px font sizes) [FIXED: SRC-006].
 
 ### D6 — Accessibility statement [FIXED: WEB-Q-027; route PROPOSED]
 
-Route `/barrierefreiheit`, linked from the footer on every page, content
+A section at the permanent anchor `#barrierefreiheit` on `/rechtliches`
+(DEC-039; the anchor registry is TS-004 D8), footer-linked on every page, content
 per BFSG requirements; maintained like a legal page (WEB-F-088 pipeline).
 
 ## Free for the generator
@@ -96,7 +97,7 @@ per BFSG requirements; maintained like a legal page (WEB-F-088 pipeline).
 | TS-002-A5 | manual | Screen-reader spot check (VoiceOver iOS + NVDA) on home, `/dein-ort`, one sell page — manual, per release. |
 | TS-002-A6 | tool | envoy widget passes A1/A4 inside the page context. |
 | TS-002-A7 | e2e | 320px viewport: no horizontal scroll on any page. |
-| TS-002-A8 | integration | `/barrierefreiheit` exists, footer-linked, content current. |
+| TS-002-A8 | integration | `/rechtliches#barrierefreiheit` resolves to the accessibility statement, is footer-linked under its conventional label, and its content is current. |
 | TS-002-A9 | e2e | With `prefers-reduced-motion`: no animation beyond opacity. |
 
 ## Coverage

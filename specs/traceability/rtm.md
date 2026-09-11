@@ -52,6 +52,17 @@ files themselves.
 | TS-016 forms-and-leads | WEB-F-090–096 |
 | TS-017 technical-foundation | WEB-C-001–006 |
 | TS-018 scope-boundaries | WEB-C-010–016 |
+| TS-019 home | WEB-F-010 |
+| TS-020 dein-ort | WEB-F-011 |
+| TS-021 dein-ort/starten | WEB-F-047 |
+| TS-022 mitmachen | WEB-F-012 |
+| TS-023 registrieren | WEB-F-013 |
+| TS-024 dein-kalender | WEB-F-014, 020 |
+| TS-025 bestellen | WEB-F-015 |
+| TS-026 deine-region | WEB-F-016, 022, 028 |
+| TS-027 ueber-uns | WEB-F-017 |
+| TS-028 archiv | WEB-F-018, 037 |
+| TS-029 rechtliches | WEB-F-029 |
 
 ## Chain upward
 

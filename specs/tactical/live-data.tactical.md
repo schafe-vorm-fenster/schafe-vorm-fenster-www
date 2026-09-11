@@ -210,7 +210,10 @@ Mechanics:
   `slug`; for an uncovered place it carries the raw query, escaped.
 - Submitting is a plain navigation; the search works without JavaScript
   (progressive enhancement), typeahead is an enhancement on top.
-- Query-parameterised place pages are `noindex,follow` — SEO landing
+- Query-parameterised place pages are **indexable with a parameter-free
+  canonical** (DEC-057, TS-011 D9); an earlier `noindex,follow` proposal
+  here is withdrawn because the canonical already prevents a place URL
+  from ranking. SEO landing
   pages are a separate surface (WEB-F-074, TS-004 D7). [PROPOSED]
 - Input is never echoed unescaped (see D4).
 
@@ -340,6 +343,7 @@ skeletons) TS-003 D5 · WEB-Q-037/038 (BFF) TS-004 D5.
 - **`APP_HOST` switch (D9).** The handover host changes when the
   calendars move to `app.*` (DEC-035). Open: who flips the environment
   value, and whether both hosts must work during the transition.
-- **Timeout budget (D5) and the `noindex` rule for `?ort=` pages (D7)
+- **Timeout budget (D5)** is set, not measured. The `?ort=` indexing rule
+  is settled by DEC-057. (D7
   are [PROPOSED]** — they need TS-003 and the SEO area to confirm rather
   than this spec to assert.
