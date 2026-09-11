@@ -1,79 +1,104 @@
-import { dictionary } from "@/src/lib/i18n/dictionary";
+import { Button } from "@/src/components/button/button";
+import { EventList } from "@/src/components/event-list/event-list";
+import { HeroBlock } from "@/src/components/hero-block/hero-block";
+import { LiveModuleFrame } from "@/src/components/live-module-frame/live-module-frame";
+import { ObjectionList } from "@/src/components/objection-list/objection-list";
+import { ProofCard } from "@/src/components/proof-card/proof-card";
+import { ProofStream } from "@/src/components/proof-stream/proof-stream";
+import { PublishingPath } from "@/src/components/publishing-path/publishing-path";
+import { RouteLink } from "@/src/components/route-link/route-link";
+import { SectionShell } from "@/src/components/section-shell/section-shell";
+import { fieldAt } from "@/src/lib/content/blocks";
+import { loadPage, slot } from "@/src/lib/content/loader";
+import { slotState } from "@/src/lib/content/provenance";
+import { resolveLocale } from "@/src/lib/i18n/locales";
 import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
 
-import { resolveLocale } from "@/src/lib/i18n/locales";
-
 import { localeFrom } from "../_locale";
-import { PlaceholderPage } from "../_shell";
+import { PageFrame } from "../_page-frame";
 
-import type { PlaceholderModule } from "../_shell";
+import { selectExamplePlace } from "./example-place";
+import { pageMeta } from "./page.meta";
+
+import type { Step } from "@/src/components/content-fragments";
+import type { ContentBlock } from "@/src/lib/content/types";
+import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
 /**
- * TS-022 — `/mitmachen` — the publishing entry
+ * TS-022 — `/mitmachen`, the publishing entry.
  *
- * Routing skeleton (M2). The ordered module list below is the page's
- * composition sheet (`plan/component-inventory.md` §4) turned into labelled
- * placeholder sections with reserved heights. The page implementer replaces a
- * section **in place**: the id and the order are the seam.
+ * Own blocks, in D2 order: hero (scene) → objections → three publishing
+ * paths → live example (ink, the page's single dark section, D10) → proof.
+ * The context band and the closing CTA are block 3/4 of TS-006 D2 and are
+ * rendered by `PageFrame` from `page.meta.ts` — this page never renders them
+ * itself.
  */
 
 const ROUTE = "takePart" as const;
-
-const MODULES: readonly PlaceholderModule[] = [
-  {
-    id: "hero",
-    components:
-      "hero-block carrying the WhatsApp scene (data-block=\"scene\") + button primary",
-    height: 20,
-  },
-  {
-    id: "objections",
-    components:
-      "objection-list + one proof slot (proof-card / empty-proof-slot)",
-    height: 16,
-  },
-  {
-    id: "three-paths",
-    components:
-      "publishing-path ×3 (whatsapp, calendar-connection, website-import + status-badge), ending with one aside + route-link → /dein-kalender",
-    height: 20,
-  },
-  {
-    id: "live-example",
-    components:
-      "live-module-frame + event-list (the page's single ink section)",
-    height: 16,
-  },
-  {
-    id: "proof",
-    components:
-      "proof-stream (3) of proof-card",
-    height: 16,
-  },
-  {
-    id: "context-band",
-    components:
-      "context-band — rendered by the layout from page.meta.ts (TS-006 D2)",
-    height: 12,
-  },
-  {
-    id: "closing-cta",
-    components:
-      "closing-cta (reassurance = permanence promise, removed if unbacked) — rendered by the layout from page.meta.ts (TS-006 D2)",
-    height: 10,
-  },
-];
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
-  // `generateMetadata` must not throw `notFound()`: the metadata boundary
-  // sits above `[lang]`, so a throw here escapes the shell and Next.js falls
-  // back to its built-in 404. The *page* answers 404; this resolves.
   return pageMetadata(ROUTE, resolveLocale((await params).lang));
+}
+
+function listItems(blocks: readonly ContentBlock[]): string[] {
+  return blocks.flatMap((block) => (block.kind === "list" ? block.items : []));
+}
+
+/** Ordered-list step items → the `Step` fragment `publishing-path` takes. */
+function stepsOf(items: readonly string[]): Step[] {
+  return items.map((body, index) => ({ index: index + 1, title: body, body: "" }));
+}
+
+/**
+ * `<channel> — <the one concrete way it fails>` when the copy carries the
+ * em-dash split (3 of 5 items); otherwise the whole sentence stands as the
+ * failure and the channel names itself from context. Content is TS-022 D3's;
+ * this two-part rendering split is [PROPOSED], a UI decision only.
+ */
+function splitObjection(text: string): { channel: string; failure: string } {
+  const dash = text.split(" — ");
+  if (dash.length >= 2) return { channel: dash[0], failure: dash.slice(1).join(" — ") };
+  return { channel: text, failure: "" };
+}
+
+/**
+ * The demo proof items of `mitmachen-7-proof-demo`: an ordered list of
+ * `„<claim>" — <attribution>` lines (state/open.md Dummy-Content #49).
+ */
+function parseDemoQuote(line: string): { claim: string; attribution: string } {
+  const match = /^„(.+)"\s*—\s*(.+)$/.exec(line);
+  if (!match) return { claim: line, attribution: "" };
+  return { claim: match[1], attribution: match[2] };
+}
+
+const PATHS_LABEL: Record<Locale, string> = {
+  de: "Drei Wege, die Termine zu uns zu bringen",
+  en: "Three ways to get your dates to us",
+};
+
+const PROOF_LABEL: Record<Locale, string> = {
+  de: "Was andere sagen",
+  en: "What others say",
+};
+
+const PROOF_CONTEXT_LINE: Record<Locale, string> = {
+  de: "Beispielhafte Rückmeldung",
+  en: "Example feedback",
+};
+
+const GEO_SNAPSHOT_LABEL: Record<Locale, string> = { de: "Beispiel", en: "Example" };
+
+/** Demo rows are dated relative to render, never `Date.now()` inline in JSX (react-hooks/purity). */
+function inDays(days: number): Date {
+  const date = new Date();
+  date.setHours(12, 0, 0, 0);
+  date.setDate(date.getDate() + days);
+  return date;
 }
 
 export default async function Page({
@@ -82,13 +107,145 @@ export default async function Page({
   params: Promise<{ lang: string }>;
 }) {
   const locale = await localeFrom(params);
-  const d = dictionary(locale);
+  const page = await loadPage(ROUTE, locale);
+  const home = await loadPage("home", locale);
+
+  const hero = slot(page, "mitmachen-1-hero");
+  const objections = slot(page, "mitmachen-2-objections");
+  const pathWhatsapp = slot(page, "mitmachen-3-path-whatsapp");
+  const pathCalendar = slot(page, "mitmachen-4-path-calendar");
+  const pathWebsite = slot(page, "mitmachen-5-path-website");
+  const example = slot(page, "mitmachen-6-beispiel");
+  const proofDemo = slot(page, "mitmachen-7-proof-demo");
+  const contextBand = slot(home, "home-10-context-band");
+
+  const place = selectExamplePlace(undefined);
+  const exampleTitle = (fieldAt(example.blocks, 0) ?? "").replace(/\{[^}]+\}/, place.name);
+
+  const demoQuotes = listItems(proofDemo.blocks).map(parseDemoQuote);
+  const heroCtaLabel = fieldAt(hero.blocks, 2) ?? "";
+
   return (
-    <PlaceholderPage
-      labels={d.placeholder}
-      modules={MODULES}
-      note={d.placeholder.note}
-      title={pageTitle(ROUTE, locale)}
-    />
+    <PageFrame
+      closing={{
+        to: "register",
+        label: heroCtaLabel,
+        // TS-022-A11: with the backing element unavailable at build time
+        // (Open points — the 2022 commitment has no `proof/` element), the
+        // permanence promise is absent rather than reworded, even though
+        // the content artifact carries a generated placeholder sentence
+        // under the prototype completeness override (state/open.md #45).
+        // Recorded as a content/spec tension in `state/open.md`, not
+        // silently resolved by rendering it.
+      }}
+      contextBandHeading={fieldAt(contextBand.blocks, 0)}
+      locale={locale}
+      meta={pageMeta}
+    >
+      <div data-block="scene" data-mechanism="whatsapp">
+        <HeroBlock
+          cta={
+            <Button dataCta="primary" locale={locale} onward to="register">
+              {heroCtaLabel}
+            </Button>
+          }
+          headline={fieldAt(hero.blocks, 0) ?? ""}
+          id="hero"
+          lead={fieldAt(hero.blocks, 1)}
+          state={slotState(hero)}
+        />
+      </div>
+
+      <SectionShell dataBlock="objections" label={fieldAt(objections.blocks, 0)} surface="paper">
+        <ObjectionList
+          headline={fieldAt(objections.blocks, 0) ?? ""}
+          items={listItems(objections.blocks).map(splitObjection)}
+        />
+      </SectionShell>
+
+      <SectionShell dataBlock="wege" labelledBy="wege-heading" surface="surface-2">
+        <h2 id="wege-heading">{PATHS_LABEL[locale]}</h2>
+        <PublishingPath
+          headline={fieldAt(pathWhatsapp.blocks, 0) ?? ""}
+          mechanism="whatsapp"
+          steps={stepsOf(listItems(pathWhatsapp.blocks))}
+        />
+        <PublishingPath
+          headline={fieldAt(pathCalendar.blocks, 0) ?? ""}
+          mechanism="calendar-connection"
+          steps={stepsOf(listItems(pathCalendar.blocks))}
+        />
+        <PublishingPath
+          availability="alpha"
+          availabilityLabel={fieldAt(pathWebsite.blocks, 1)}
+          headline={fieldAt(pathWebsite.blocks, 0) ?? ""}
+          mechanism="website-import"
+          steps={stepsOf(listItems(pathWebsite.blocks))}
+        />
+        <aside>
+          <p>
+            {(fieldAt(pathWebsite.blocks, 3) ?? "").split("→")[0].trim()}{" "}
+            <RouteLink locale={locale} to="calendar">
+              {pageTitle("calendar", locale)}
+            </RouteLink>
+          </p>
+        </aside>
+      </SectionShell>
+
+      <SectionShell dataBlock="beispiel" label={exampleTitle} surface="ink">
+        <LiveModuleFrame announced state={slotState(example, "mocked")} title={exampleTitle}>
+          <EventList
+            items={[
+              {
+                date: inDays(3),
+                title: locale === "de" ? "Dorffest Musterhagen" : "Village fest (example)",
+                meta: place.name,
+                category: "fest",
+                categoryLabel: locale === "de" ? "Fest" : "Festival",
+              },
+              {
+                date: inDays(9),
+                title: locale === "de" ? "Flohmarkt am Anger" : "Flea market (example)",
+                meta: place.name,
+                category: "merchants",
+                categoryLabel: locale === "de" ? "Markt" : "Market",
+              },
+              {
+                date: inDays(16),
+                title:
+                  locale === "de" ? "Chorprobe der Kirchengemeinde" : "Choir practice (example)",
+                meta: place.name,
+                category: "culture",
+                categoryLabel: locale === "de" ? "Kultur" : "Culture",
+              },
+            ]}
+            locale={locale}
+            rowCount={3}
+            state="mocked"
+          />
+        </LiveModuleFrame>
+      </SectionShell>
+
+      {/* `lime-100`, not `paper`: `PageFrame` appends `surface` (band) then
+          `paper` (closing) after this section — three consecutive `neutral`-
+          family sections would break the rhythm rule this page's own test
+          checks (TS-022-A16, D10). */}
+      <SectionShell dataBlock="beleg" labelledBy="beleg-heading" surface="lime-100">
+        <h2 id="beleg-heading">{PROOF_LABEL[locale]}</h2>
+        <ProofStream label={PROOF_LABEL[locale]}>
+          {demoQuotes.map((quote) => (
+            <ProofCard
+              attribution={quote.attribution}
+              claim={quote.claim}
+              contextLine={PROOF_CONTEXT_LINE[locale]}
+              geo={{ level: "snapshot", label: GEO_SNAPSHOT_LABEL[locale] }}
+              key={quote.claim}
+              locale={locale}
+              state="mocked"
+            />
+          ))}
+        </ProofStream>
+      </SectionShell>
+    </PageFrame>
   );
 }
