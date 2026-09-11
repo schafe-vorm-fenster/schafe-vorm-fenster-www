@@ -233,7 +233,11 @@ test.describe("/deine-region/angebot", () => {
     // The mock says so itself, so nobody is told a message was sent.
     await expect(success).toContainText(/Demo/);
     await expect(page.locator("form[data-envoy-form-kind='quote']")).toHaveCount(0);
-    expect(await success.evaluate((node) => node === document.activeElement)).toBe(true);
+    // F-2-71: the node takes focus in an effect, so a one-shot
+    // `document.activeElement` read could run before that effect landed — the
+    // flake seen under the parallel preview run. `toBeFocused` is the
+    // auto-retrying form of the same assertion: same criterion, no clock.
+    await expect(success).toBeFocused();
   });
 
   /**

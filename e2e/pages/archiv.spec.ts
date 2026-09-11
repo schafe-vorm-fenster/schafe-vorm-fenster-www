@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import type { Page } from "@playwright/test";
+
 /**
  * TS-028 — `/ueber-uns/archiv` — acceptance pass.
  *
@@ -7,6 +9,23 @@ import { expect, test } from "@playwright/test";
  * this page is the content artifact's own dummy-content addition, rendered
  * with `demo` (`data-demo="true"`) and one page-level `Demo-Daten` badge.
  */
+
+/**
+ * F-2-71 — wait for the filter's own ready state, never for a clock.
+ *
+ * The chip group is client-only by determination (TS-028 D8), so it replaces
+ * the reserved row only after hydration — measured at 279–370 ms after
+ * `page.goto` resolves, in all three `waitUntil` modes. `chips.count()` is a
+ * non-retrying read and therefore saw 0 every single run (5/5). The component
+ * publishes the signal itself (`data-hydrated`, set in the same render that
+ * swaps the reserved row for the real chips,
+ * `src/components/archive-filter/archive-filter.tsx`), so every case that
+ * reads the chips waits for that attribute through an auto-retrying
+ * assertion. A `waitForTimeout` would only move the race, not close it.
+ */
+async function waitForFilterHydration(page: Page) {
+  await expect(page.locator("[data-archive-filter]")).toHaveAttribute("data-hydrated", "true");
+}
 
 test.describe("/ueber-uns/archiv", () => {
   test("TS-028-A1: rows are date-descending, year h2s descend", async ({ page }) => {
@@ -31,6 +50,16 @@ test.describe("/ueber-uns/archiv", () => {
     const rows = page.locator("[data-archive-type]");
     expect(await rows.count()).toBeGreaterThan(0);
     await expect(page.locator('[role="group"]')).toHaveCount(0);
+    // F-2-69 reserved the chip row's height in the server render so hydration
+    // costs no shift. The criterion it must not buy that with: the row stays
+    // *not visible* and nothing in it is a control, so a visitor without
+    // JavaScript is offered nothing dead (TS-028 D8).
+    await expect(page.locator("[data-archive-filter]")).toHaveAttribute(
+      "data-hydrated",
+      "false",
+    );
+    await expect(page.locator("[data-archive-filter] button")).toHaveCount(0);
+    await expect(page.locator("[data-archive-filter] [aria-hidden='true']").first()).toBeHidden();
     await context.close();
   });
 
@@ -38,6 +67,7 @@ test.describe("/ueber-uns/archiv", () => {
     page,
   }) => {
     await page.goto("/ueber-uns/archiv");
+    await waitForFilterHydration(page);
     const chips = page.getByRole("group").getByRole("button");
     const total = await chips.count();
     expect(total).toBeGreaterThan(1); // "Alle" + at least one type chip
@@ -57,6 +87,7 @@ test.describe("/ueber-uns/archiv", () => {
     page,
   }) => {
     await page.goto("/ueber-uns/archiv");
+    await waitForFilterHydration(page);
     const chips = page.getByRole("group").getByRole("button");
     const firstType = chips.nth(1);
     const typeLabel = (await firstType.textContent())?.trim();
@@ -89,6 +120,7 @@ test.describe("/ueber-uns/archiv", () => {
 
   test("TS-028-A5: filtering never changes the URL", async ({ page }) => {
     await page.goto("/ueber-uns/archiv");
+    await waitForFilterHydration(page);
     const before = page.url();
     const chip = page.getByRole("group").getByRole("button").nth(1);
     await chip.click();
@@ -138,6 +170,7 @@ test.describe("/ueber-uns/archiv", () => {
     page,
   }) => {
     await page.goto("/ueber-uns/archiv");
+    await waitForFilterHydration(page);
     await expect(page.locator("h1")).toHaveCount(1);
     const chip = page.getByRole("group").getByRole("button").first();
     await chip.focus();

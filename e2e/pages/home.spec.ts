@@ -265,6 +265,10 @@ test.describe("TS-019 — home", () => {
   }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/");
+    // Block 1 reveals one of its two variants after hydration; until it has,
+    // two `data-cta="primary"` submits stand in the document and the hero
+    // lookup below is ambiguous (F-2-71, same race as F-2-30's).
+    await blockOneSettled(page);
 
     const band = page.locator("#context-band nav");
     await expect(band).toHaveCount(1);
@@ -379,12 +383,20 @@ test.describe("TS-019 — home", () => {
     await page.goto("/");
     const handover = page.locator('#place-dates a[rel~="external"], #place-dates a[target="_blank"], #place-dates a[href^="https://app."]').first();
     await expect(handover).toBeVisible();
+    // The listener lives in a client component, so the click has to land
+    // after hydration or nothing is logged. Wait for the tracker's own
+    // signal rather than for a timeout (F-2-71).
+    await expect(
+      page.locator('[data-conversion-tracker="save-calendar-to-homescreen"]').first(),
+    ).toHaveAttribute("data-hydrated", "true");
 
     // The click navigates off-site; the event must fire without the link
     // being delayed (TS-012 D9), so the listener is enough — no
     // `preventDefault`, and the assertion is on what was logged.
     await handover.click({ modifiers: ["Shift"] }).catch(() => undefined);
-    await page.waitForTimeout(250);
+    await expect
+      .poll(() => events.filter((line) => line.includes("save-calendar-to-homescreen")).length)
+      .toBe(1);
 
     const saves = events.filter((line) => line.includes("save-calendar-to-homescreen"));
     expect(saves).toHaveLength(1);

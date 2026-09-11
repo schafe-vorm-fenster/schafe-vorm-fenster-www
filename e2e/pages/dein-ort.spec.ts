@@ -167,6 +167,12 @@ test.describe("TS-020 — your place", () => {
       const context = await browser.newContext({ userAgent });
       const page = await context.newPage();
       await page.goto("/dein-ort");
+      // Both snapshots have to be taken in the same lifecycle phase, or the
+      // comparison reports the hydration signal instead of a user-agent
+      // difference (F-2-71).
+      await expect(
+        page.locator("#homescreen [data-conversion-tracker]"),
+      ).toHaveAttribute("data-hydrated", "true");
       markup.push((await page.locator("#homescreen").innerHTML()) ?? "");
       await context.close();
     }
@@ -394,6 +400,29 @@ test.describe("TS-020 — your place", () => {
     expect(sections).toContain("ink");
     expect(sections.filter((entry) => entry === "ink")).toHaveLength(1);
     expect(checkRhythm(sections, 0)).toEqual([]);
+  });
+
+
+  test("TS-020 D2 row 5 (F-2-49): an uncovered value leaves the page with a real 307", async ({
+    request,
+    browser,
+  }) => {
+    // The hop is `proxy.ts`'s now: a page-level `redirect()` answers 200 with
+    // an empty document on a production build, because Cache Components
+    // resumes every route from a postponed prerender and the status line is
+    // already written by the time the page runs.
+    const response = await request.get("/dein-ort?ort=99999", { maxRedirects: 0 });
+    expect(response.status()).toBe(307);
+    const hop = new URL(response.headers()["location"]!, "http://localhost");
+    expect(`${hop.pathname}${hop.search}`).toBe("/dein-ort/starten?ort=99999");
+
+    // And it happens without JavaScript, which is the half the retest reopened.
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto("/dein-ort?ort=99999");
+    await expect(page).toHaveURL(/\/dein-ort\/starten\?ort=99999$/);
+    expect((await page.locator("body").innerText()).length).toBeGreaterThan(100);
+    await context.close();
   });
 
   test("TS-001: the English variant renders the English artifact", async ({ page }) => {

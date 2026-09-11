@@ -31,7 +31,7 @@
  * exactly the store those two forbid. A fresh document is a fresh visit.
  */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 
 import { getAnalyticsTracker } from "@/src/lib/analytics";
 
@@ -57,14 +57,32 @@ export interface ConversionTrackerProps extends ConversionBinding {
   readonly children: ReactNode;
 }
 
+/**
+ * The hydration signal (F-2-71). Until this wrapper has hydrated its click
+ * listener does not exist, so a test that clicks the CTA before then gets a
+ * navigation and no event — the race the register and order flows kept
+ * losing against a production build, where `waitForLoadState("networkidle")`
+ * never settles on a streamed route. `data-hydrated` flips in the same render
+ * that attaches the listener, so an auto-retrying assertion can wait for the
+ * fact instead of for a proxy of it. It costs no layout: the wrapper is
+ * `display: contents`.
+ */
+const subscribeNever = () => () => {};
+const hydratedSnapshot = () => true;
+const serverSnapshot = () => false;
+
 export function ConversionTracker({
   goalId,
   stage,
   attributes,
   children,
 }: ConversionTrackerProps) {
+  const hydrated = useSyncExternalStore(subscribeNever, hydratedSnapshot, serverSnapshot);
+
   return (
     <span
+      data-conversion-tracker={goalId}
+      data-hydrated={hydrated ? "true" : "false"}
       onClick={() => getAnalyticsTracker().trackConversion(goalId, stage, attributes)}
       style={{ display: "contents" }}
     >

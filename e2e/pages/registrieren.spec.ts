@@ -141,7 +141,6 @@ test.describe("TS-023: the register flow", () => {
     page.on("console", (message) => consoleMessages.push(message.text()));
 
     await page.goto(ROUTE);
-    await page.waitForLoadState("networkidle");
     await page.fill('input[name="ort"]', "beispielgemeinde-musterdorf");
     await page.click('button[type="submit"]');
     await expect(page).toHaveURL(/ort=beispielgemeinde-musterdorf/);
@@ -156,9 +155,12 @@ test.describe("TS-023: the register flow", () => {
 
     // Hydration, not just the URL, has to be done before this click: it is
     // a client component's `onClick` (`ConversionTracker`) that fires the
-    // event, and under heavy parallel load Next dev's on-demand compile can
-    // leave a freshly-navigated page server-rendered but not yet hydrated.
-    await page.waitForLoadState("networkidle");
+    // event. Wait for the tracker's own signal, not for the network
+    // (F-2-71): `networkidle` never settles on a streamed production route,
+    // and a timeout would only move the race.
+    await expect(
+      page.locator('[data-conversion-tracker="register-as-publisher"]'),
+    ).toHaveAttribute("data-hydrated", "true");
     const handoverLink = page.locator('[data-cta="primary"]');
     await expect(handoverLink).toHaveCount(1);
     await expect(handoverLink).toHaveAttribute("href", /^https:\/\/app\./);
@@ -197,7 +199,10 @@ test.describe("TS-023: the register flow", () => {
     await page.goto(ROUTE);
     await page.fill('input[name="ort"]', "beispielgemeinde-musterdorf");
     await page.click('button[type="submit"]');
-    await page.waitForLoadState("networkidle");
+    // The step advanced — that is the whole settle this assertion needs
+    // (F-2-71: `networkidle` never settles on a streamed production route).
+    await expect(page).toHaveURL(/ort=beispielgemeinde-musterdorf/);
+    await expect(page.locator("main")).toBeVisible();
     expect(requests).toEqual([]);
     // Scoped to `main`: the footer's own contact widget (`kind="contact"`)
     // is site-wide chrome present on every page, not this route's content.
