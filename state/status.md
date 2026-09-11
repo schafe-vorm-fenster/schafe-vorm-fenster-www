@@ -6,6 +6,8 @@ Current test round: — (n of 3)
 
 ## Done
 
+- Fix (high, rows 21/31): CSP hydration — strict-dynamic removed, per-build hash generation built (works self-hosted), preview hydrates via preview-only unsafe-inline after three delivery mechanisms failed on Vercel with evidence; production unaffected; e2e 38/38 against preview https://schafe-vorm-fenster-8bkxy2mov-schafe-vorm-fenster.vercel.app — 2026-09-11
+- M2 argument-block components: 19 (B; 21 test files; dev-layout bug fixed) → all 63 inventory components exist, 172 tests green — 2026-09-11
 - M3 Phase 3: gaps filled with labelled demo content (12 slots, rows 45–53) + English for all eleven pages, glossary 22 terms, frontmatter green 64 files (Content) — 2026-09-11
 - M2 live-module shells + conversion/form components: 17 (C; mocks envoy/newsletter with no-`name` fields; 172 tests green) — 2026-09-11
 - M3 Phase 2: German copy for eleven pages in content/pages/<route>/de.md, compliance table complete (Content) — 2026-09-11
