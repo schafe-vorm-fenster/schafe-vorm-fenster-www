@@ -44,9 +44,11 @@ vi.mock("next/root-params", () => ({ lang: async () => rootParams.lang }));
  * no way to enter. The host is what the machine surfaces actually vary on, so
  * it is the only thing the stub has to carry.
  */
-const requestHeaders = { host: "www.schafe-vorm-fenster.de" };
+const requestHeaders: Record<string, string> = {
+  host: "www.schafe-vorm-fenster.de",
+};
 vi.mock("next/headers", () => ({
-  headers: async () => new Headers({ host: requestHeaders.host }),
+  headers: async () => new Headers(requestHeaders),
 }));
 
 /** The concatenated text of a rendered element tree. */
@@ -264,12 +266,40 @@ describe("TS-004-A4: an unknown path answers 404, noindex, inside the language",
       metadata: Metadata;
     };
     expect(notFound.metadata.robots).toBe("noindex, follow");
-    const global = (await import("@/app/global-not-found")) as {
-      metadata: Metadata;
-      default: () => unknown;
+    const global = (await import("@/app/global-not-found")) as unknown as {
+      generateMetadata: () => Promise<Metadata>;
+      default: () => Promise<unknown>;
     };
-    expect(global.metadata.robots).toBe("noindex, follow");
-    expect(textOf(global.default())).toContain("Seite nicht gefunden");
+    expect((await global.generateMetadata()).robots).toBe("noindex, follow");
+    expect(textOf(await global.default())).toContain("Seite nicht gefunden");
+  });
+
+  /**
+   * F-2-70: the global 404 sits above `[lang]` and has no language parameter,
+   * so `proxy.ts` resolves the language from the URL and hands it down on a
+   * request header. Both halves — the body and the `<title>` — read it.
+   */
+  it("renders the global 404 in the language the proxy resolved", async () => {
+    const global = (await import("@/app/global-not-found")) as unknown as {
+      generateMetadata: () => Promise<Metadata>;
+      default: () => Promise<unknown>;
+    };
+    const { NOT_FOUND_LOCALE_HEADER } = await import("./not-found-routing");
+
+    requestHeaders[NOT_FOUND_LOCALE_HEADER] = "en";
+    expect(textOf(await global.default())).toContain("Page not found");
+    expect(String((await global.generateMetadata()).title)).toContain(
+      "Page not found",
+    );
+
+    requestHeaders[NOT_FOUND_LOCALE_HEADER] = "de";
+    expect(textOf(await global.default())).toContain("Seite nicht gefunden");
+
+    // A header that is not a language this site serves falls back to the TLD
+    // default (TS-001 D4), it never renders half a page.
+    requestHeaders[NOT_FOUND_LOCALE_HEADER] = "uk";
+    expect(textOf(await global.default())).toContain("Seite nicht gefunden");
+    delete requestHeaders[NOT_FOUND_LOCALE_HEADER];
   });
 
   it("renders the 404 in the language of the request", async () => {

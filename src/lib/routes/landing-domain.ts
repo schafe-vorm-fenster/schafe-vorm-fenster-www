@@ -70,14 +70,14 @@ export function landingDomainBlocks(
   return !servedOnLandingDomain(pathname);
 }
 
-/**
- * Where a blocked request is sent so Next answers with a **real** 404.
+/*
+ * Where a blocked request is sent is `NOT_FOUND_PATH`
+ * (`not-found-routing.ts`), which every unknown URL now shares.
  *
- * Not `/_not-found`: that is a route, and a rewrite onto it is served with
- * status 200 on Vercel — the same trap `next.config.ts`'s `afterFiles`
- * comment records from M4. This path matches nothing in the tree
- * (`[lang]` runs with `dynamicParams = false` and there is no catch-all), so
- * Next falls through to its own 404 handling and `global-not-found` renders
- * with status 404.
+ * This module used to name its own target, `/__landing-only`. That was one
+ * segment, so it matched `app/[lang]` — the very shape that produces a 404
+ * with an empty body (F-2-70, measured: 11 584 bytes of `__next_error__`
+ * shell, zero rendered characters). The replacement has two segments and
+ * matches nothing, so Next falls through to its own 404 handling and
+ * `global-not-found` renders in full.
  */
-export const LANDING_NOT_FOUND_PATH = "/__landing-only";

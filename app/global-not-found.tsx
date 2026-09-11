@@ -1,13 +1,17 @@
+import { headers } from "next/headers";
+
 import { ContextBand } from "@/src/components/context-band/context-band";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { dictionary } from "@/src/lib/i18n/dictionary";
-import { DEFAULT_LOCALE, HTML_LANG } from "@/src/lib/i18n/locales";
+import { DEFAULT_LOCALE, HTML_LANG, isLocale } from "@/src/lib/i18n/locales";
+import { NOT_FOUND_LOCALE_HEADER } from "@/src/lib/routes/not-found-routing";
 import { href } from "@/src/lib/routes/routes";
 
 import "./styles/brand.css";
 import "./styles/base.css";
 import "./styles/components.css";
 
+import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
@@ -32,27 +36,54 @@ import type { ReactNode } from "react";
  * response carries the right status and the right metadata, but the HTML
  * document is an empty `__next_error__` shell, and the browser leaves it
  * empty too (measured, both `next dev` and `next start`, with and without a
- * dynamic root segment). `global-not-found` is the framework's own answer for
- * this case and renders a complete document. Every unknown URL reaches it,
- * because `[lang]` runs with `dynamicParams = false` and the inventory holds
- * no catch-all.
+ * dynamic root segment). With Cache Components the reason is exact: every
+ * route resumes from a postponed prerender, and an error thrown during the
+ * resume can no longer replace a document that is already being written — so
+ * React serialises it into the flight payload and only a browser executing
+ * JavaScript ever sees the 404. `global-not-found` is the framework's own
+ * answer for this case and renders a complete document.
  *
- * **The cost, recorded in `state/open.md`.** This file sits above `[lang]`,
- * so it has no language parameter and no request path: an unknown `/en/…` URL
- * gets the 404 of the TLD default (TS-001 D1), not an English one. A
- * client-side swap would make the language depend on something other than the
- * server's view of the path, which DEC-038 rules out. The localized page in
- * `app/[lang]/not-found.tsx` stays for the `notFound()` calls the page work
- * packages will make.
+ * **Every unknown URL now reaches it** — that is the F-2-70 fix. `[lang]`
+ * matches *any* first segment, so `/dies-gibt-es-nicht` and `/uk/mitmachen`
+ * used to land inside the tree and get the empty shell, while `/en/anything`
+ * (which matches no route at all) got this file. `proxy.ts` rewrites the
+ * first kind onto `NOT_FOUND_PATH` before the render starts, so both kinds
+ * arrive here — see `src/lib/routes/not-found-routing.ts`.
+ *
+ * **The language comes from the proxy** (row 37). This file sits above
+ * `[lang]`, so it has no language parameter and no request path of its own;
+ * the proxy still has the URL and puts the resolved language on a request
+ * header. It is the server's view of the path, not a client-side swap, so
+ * DEC-038 holds. The `<title>` stays on the TLD default: `generateMetadata`
+ * may not read runtime data under Cache Components (`_locale.ts` records the
+ * same boundary), and a 404 title is not a surface a visitor reads.
  */
 
-export const metadata: Metadata = {
-  title: `${dictionary(DEFAULT_LOCALE).notFound.title} — ${dictionary(DEFAULT_LOCALE).siteName}`,
-  robots: "noindex, follow",
-};
+/**
+ * The 404 blocks on purpose (F-2-70). Reading the language off the request
+ * header is runtime data, so this route cannot be prerendered, and Next's own
+ * guidance for a route that must run at request time is exactly this export
+ * (`blocking-prerender-dynamic`). The alternative it offers — a `<Suspense>`
+ * boundary — is the one thing this surface may not have: the fallback is what
+ * a visitor without JavaScript would be left with, and TS-004 D6 wants a
+ * complete document. Nothing is lost by blocking: the whole body is static
+ * markup once the language is known, and a 404 is not a cached surface.
+ */
+export const instant = false;
 
-export default function GlobalNotFound(): ReactNode {
-  const locale = DEFAULT_LOCALE;
+export async function generateMetadata(): Promise<Metadata> {
+  const d = dictionary(await requestedLocale());
+  return { title: `${d.notFound.title} — ${d.siteName}`, robots: "noindex, follow" };
+}
+
+/** The language `proxy.ts` resolved from the URL this 404 answers. */
+async function requestedLocale(): Promise<Locale> {
+  const requested = (await headers()).get(NOT_FOUND_LOCALE_HEADER);
+  return isLocale(requested) ? requested : DEFAULT_LOCALE;
+}
+
+export default async function GlobalNotFound(): Promise<ReactNode> {
+  const locale = await requestedLocale();
   const d = dictionary(locale);
 
   return (
