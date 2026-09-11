@@ -1,0 +1,18 @@
+.module {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.hint {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+  margin: 0;
+}
+
+.suggestions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--control-gap);
+}

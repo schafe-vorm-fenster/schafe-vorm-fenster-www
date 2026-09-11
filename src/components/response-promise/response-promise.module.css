@@ -1,0 +1,8 @@
+.promise {
+  align-items: center;
+  color: var(--color-neutral-muted);
+  display: inline-flex;
+  font-size: var(--type-meta-size);
+  gap: var(--space-2);
+  margin: 0;
+}

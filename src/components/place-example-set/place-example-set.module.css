@@ -1,0 +1,6 @@
+.set {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--control-gap);
+}

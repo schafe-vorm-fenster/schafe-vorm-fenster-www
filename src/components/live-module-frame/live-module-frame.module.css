@@ -1,0 +1,46 @@
+.frame {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.header {
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+.heading {
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--type-subhead-size);
+  font-weight: 800;
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: var(--leading-tight);
+  margin: 0;
+}
+
+.subline {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+  margin: var(--space-1) 0 0;
+}
+
+.marks {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.body {
+  min-width: 0;
+}
+
+.cta {
+  align-self: flex-start;
+}

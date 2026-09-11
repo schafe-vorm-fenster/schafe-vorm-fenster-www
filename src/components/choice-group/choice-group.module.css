@@ -1,0 +1,66 @@
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.legend {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: var(--type-card-size);
+  font-weight: 700;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+  padding: 0;
+}
+
+.none {
+  color: var(--color-neutral-muted);
+  margin: 0;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--control-gap);
+}
+
+.option {
+  align-items: center;
+  background: var(--color-neutral-surface);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-label);
+  font-weight: 700;
+  gap: var(--space-2);
+  letter-spacing: var(--tracking-mono);
+  min-height: var(--target-min);
+  padding: 0 var(--space-4);
+  position: relative;
+}
+
+.option:has(.input:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.selected {
+  background: var(--color-lime-500);
+  color: var(--color-neutral-ink);
+}
+
+.input {
+  height: 1px;
+  opacity: 0;
+  position: absolute;
+  width: 1px;
+}

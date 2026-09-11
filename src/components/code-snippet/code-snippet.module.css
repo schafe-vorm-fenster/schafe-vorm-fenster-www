@@ -1,0 +1,53 @@
+.snippet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 9rem;
+}
+
+.pre {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+  font-family: var(--font-mono);
+  font-size: var(--type-meta-size);
+  margin: 0;
+  overflow-x: auto;
+  padding: var(--space-4);
+}
+
+.actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.copy {
+  align-items: center;
+  background: var(--color-neutral-surface);
+  border: 0;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body-sm);
+  font-weight: 700;
+  gap: var(--space-2);
+  min-height: var(--height-control);
+  padding: 0 var(--space-4);
+}
+
+.copy:hover {
+  background: var(--color-neutral-surface2);
+}
+
+.note {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+  margin: 0;
+}
+
+.pending {
+  color: var(--color-neutral-muted);
+  margin: 0;
+}
