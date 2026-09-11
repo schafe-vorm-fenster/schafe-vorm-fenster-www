@@ -192,6 +192,25 @@ describe("TS-004-A3 (F-2-45): the landing-only domain rule", () => {
     }
   });
 
+  it("still carries the full header set on a blocked request", async () => {
+    vi.stubEnv("VERCEL_ENV", "production");
+    const response = await proxy(
+      request("https://www.schafvormfenster.at/mitmachen"),
+    );
+    expect(response.headers.get("Content-Security-Policy")).toContain(
+      "default-src 'self'",
+    );
+    expect(response.headers.get("Strict-Transport-Security")).toBe(
+      "max-age=63072000; includeSubDomains",
+    );
+    // Not a canonical production host in `CANONICAL_PUBLIC_HOSTS`? It is —
+    // so the 404 is indexable-by-host but 404 by status; the point of the
+    // assertion is that the header logic ran at all.
+    expect(response.headers.get("x-middleware-rewrite")).toContain(
+      "/__landing-only",
+    );
+  });
+
   it("lets the landing page's own assets through", async () => {
     for (const path of ["/_next/static/chunks/main.js", "/favicon.ico", "/logo.svg"]) {
       const response = await proxy(request(`https://www.schafvormfenster.at${path}`));

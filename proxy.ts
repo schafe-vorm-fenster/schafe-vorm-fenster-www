@@ -72,11 +72,14 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   // matrix with no consumer and all three domains answered 200 on every path
   // (F-2-45). The predicate, its asset exemptions and the reason this
   // rewrites rather than returns a bodyless 404 are in `landing-domain.ts`.
-  if (landingDomainBlocks(domain, request.nextUrl.pathname)) {
-    return NextResponse.rewrite(new URL(LANDING_NOT_FOUND_PATH, request.url));
-  }
+  const blocked = landingDomainBlocks(domain, request.nextUrl.pathname);
 
-  const response = NextResponse.next();
+  // The blocked request still gets the full header set: TS-014 D4 makes the
+  // CSP one source for *every* route and TS-015 D3 runs the robots rule on
+  // "all routes incl. assets", so a 404 is not an exception to either.
+  const response = blocked
+    ? NextResponse.rewrite(new URL(LANDING_NOT_FOUND_PATH, request.url))
+    : NextResponse.next();
   const vercelEnv = process.env.VERCEL_ENV;
   const environment = environmentFrom(vercelEnv);
 
@@ -121,11 +124,13 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   // changes what renders (D3's cacheability rule holds: no `Vary`, no
   // cookie) and the deferred client-side banner (Q-011) is not built here;
   // the proxy only exposes what it already knows.
-  const suggestion = suggestedLanguage(
-    request.headers.get("accept-language"),
-    domain,
-    request.nextUrl.pathname,
-  );
+  const suggestion = blocked
+    ? undefined
+    : suggestedLanguage(
+        request.headers.get("accept-language"),
+        domain,
+        request.nextUrl.pathname,
+      );
   if (suggestion) {
     response.headers.set("Server-Timing", suggestionServerTiming(suggestion));
   }
