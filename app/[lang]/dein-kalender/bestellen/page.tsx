@@ -20,6 +20,7 @@ import { resolvePlace } from "@/src/lib/live/places";
 import { jobLabelKey } from "@/src/lib/pages/page-meta";
 import { pageMetadata } from "@/src/lib/routes/metadata";
 
+import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
 import { localeFrom } from "../../_locale";
 import { SiteChrome } from "../../_page-frame";
@@ -186,6 +187,9 @@ export default async function Page({
     '<script defer src="https://portalize.schafe-vorm-fenster.de/api/demo-organizer-bestellen/load.js"></script>\n<div data-portalize-organizer-id="demo-organizer-bestellen"></div>';
 
   return (
+    <>
+      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      <PageJsonLd locale={locale} route={ROUTE} />
     <SiteChrome locale={locale} route={ROUTE}>
       <SectionShell surface="paper">
         <StepIndicator step={step} total={STEP_TOTAL} />
@@ -282,5 +286,6 @@ export default async function Page({
         </SectionShell>
       ) : null}
     </SiteChrome>
+    </>
   );
 }

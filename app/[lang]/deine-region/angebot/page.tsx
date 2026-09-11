@@ -9,8 +9,8 @@ import { slotState } from "@/src/lib/content/provenance";
 import { interpolate } from "@/src/lib/content/text";
 import { resolveLocale } from "@/src/lib/i18n/locales";
 import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
-import { SITE_ORIGIN, href } from "@/src/lib/routes/routes";
 
+import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
 import { localeFrom } from "../../_locale";
 import { PageFrame } from "../../_page-frame";
@@ -65,6 +65,9 @@ export default async function Page({
     pageTitle(ROUTE, locale);
 
   return (
+    <>
+      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{ to: "regionQuote", label: "Angebot anfragen" }}
       locale={locale}
@@ -103,31 +106,7 @@ export default async function Page({
         </MotionReveal>
       </SectionShell>
 
-      {/* JSON-LD: BreadcrumbList, in addition to the parent's Service node
-          (D8, TS-026-A15). */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                name: pageTitle("region", locale),
-                item: `${SITE_ORIGIN}${href("region", locale)}`,
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                name: pageTitle(ROUTE, locale),
-                item: `${SITE_ORIGIN}${href(ROUTE, locale)}`,
-              },
-            ],
-          }),
-        }}
-        type="application/ld+json"
-      />
     </PageFrame>
+    </>
   );
 }

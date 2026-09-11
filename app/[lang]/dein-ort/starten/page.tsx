@@ -16,6 +16,7 @@ import { pageMetadata } from "@/src/lib/routes/metadata";
 import heroPlaceholder from "@/src/generated/placeholders/dein-ort-starten/hero.svg";
 
 import { PlaceDatesIsland } from "../../_islands";
+import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
 import { localeFrom } from "../../_locale";
 import { PageFrame } from "../../_page-frame";
@@ -176,6 +177,9 @@ export default async function PlaceStartPage({
   );
 
   return (
+    <>
+      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{ to: "register", label: ctaLabel, query: { ort: searched } }}
       locale={locale}
@@ -258,5 +262,6 @@ export default async function PlaceStartPage({
         </SectionShell>
       </MotionReveal>
     </PageFrame>
+    </>
   );
 }

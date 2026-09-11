@@ -10,6 +10,7 @@ import { resolveLocale } from "@/src/lib/i18n/locales";
 import { legalAnchor, LEGAL_SECTION_IDS } from "@/src/lib/routes/legal-anchors";
 import { pageMetadata } from "@/src/lib/routes/metadata";
 
+import { PageJsonLd } from "../_structured-data";
 import { legalDocument, pageContent } from "../_content";
 import { localeFrom } from "../_locale";
 import { PageFrame } from "../_page-frame";
@@ -105,6 +106,9 @@ export default async function Page({
   }));
 
   return (
+    <>
+      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame backToTop closing={{ variant: "merged" }} locale={locale} meta={pageMeta}>
       {/* One section, not two: `PageFrame`'s merged closing block is
           `paper` (`app/[lang]/_page-frame.tsx`), and the page-rhythm rule
@@ -135,5 +139,6 @@ export default async function Page({
         </MotionReveal>
       </SectionShell>
     </PageFrame>
+    </>
   );
 }

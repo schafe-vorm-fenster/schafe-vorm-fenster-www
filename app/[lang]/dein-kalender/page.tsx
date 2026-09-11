@@ -17,6 +17,7 @@ import { BRIEFING_URL } from "@/src/lib/live/briefing";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
 import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
 
+import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { selectProof } from "../_proof";
 import { localeFrom } from "../_locale";
@@ -153,6 +154,9 @@ export default async function Page({
   const briefingLabel = withoutArrow(fieldAt(focus.blocks, 2)) || BRIEFING_LABEL[locale];
 
   return (
+    <>
+      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{ to: "order", label: orderLabel }}
       contextBandHeading={fieldAt(contextBand.blocks, 0)}
@@ -331,5 +335,6 @@ export default async function Page({
         />
       </SectionShell>
     </PageFrame>
+    </>
   );
 }

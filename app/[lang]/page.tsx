@@ -23,6 +23,7 @@ import styles from "./_pages.module.css";
 
 import { CountersIsland, NearbyIsland, PlaceDatesIsland } from "./_islands";
 import { selectProof } from "./_proof";
+import { PageJsonLd } from "./_structured-data";
 import { pageContent } from "./_content";
 import { localeFrom } from "./_locale";
 import { PageFrame } from "./_page-frame";
@@ -206,6 +207,9 @@ export default async function HomePage({
   );
 
   return (
+    <>
+      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{ variant: "module", node: search(false) }}
       contextBandHeading={fieldAt(band.blocks, 0)}
@@ -371,5 +375,6 @@ export default async function HomePage({
       </MotionReveal>
 
     </PageFrame>
+    </>
   );
 }

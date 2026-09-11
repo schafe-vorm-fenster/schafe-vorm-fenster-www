@@ -17,10 +17,10 @@ import { ctaLabelOnly } from "@/src/lib/content/text";
 import { resolveLocale } from "@/src/lib/i18n/locales";
 import { pageMetadata } from "@/src/lib/routes/metadata";
 import { assetSrc } from "@/src/lib/content/asset-src";
-import { SITE_ORIGIN } from "@/src/lib/routes/routes";
 
 import { CountersIsland } from "../_islands";
 import { selectProof } from "../_proof";
+import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { localeFrom } from "../_locale";
 import { PageFrame } from "../_page-frame";
@@ -178,6 +178,9 @@ export default async function Page({
   const archiveLabel = ctaLabelOnly(fieldAt(archiveLink.blocks, 0)) ?? "Zum Archiv";
 
   return (
+    <>
+      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame closing={{ variant: "merged" }} locale={locale} meta={pageMeta}>
       {/* Block 1 — origin (photo, ratio-hero, ink gradient): h1, the causal
           chain, the honorary-mayor proof (D3). Both images are DEC-068
@@ -299,20 +302,7 @@ export default async function Page({
         </MotionReveal>
       </SectionShell>
 
-      {/* JSON-LD: one `Organization` reference, zero `Person` nodes, zero
-          `ItemList` (TS-011 D4, TS-027-A12). */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "@id": `${SITE_ORIGIN}/#organization`,
-            name: "Schafe vorm Fenster",
-            url: SITE_ORIGIN,
-          }),
-        }}
-        type="application/ld+json"
-      />
     </PageFrame>
+    </>
   );
 }

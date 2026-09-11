@@ -25,13 +25,13 @@ import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
 import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
 import { assetSrc } from "@/src/lib/content/asset-src";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
-import { SITE_ORIGIN } from "@/src/lib/routes/routes";
 
 import {
   CountersIsland,
   RegionExamplesIsland,
   StatedRegionExamples,
 } from "../_islands";
+import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { selectProof } from "../_proof";
 import { localeFrom } from "../_locale";
@@ -143,6 +143,9 @@ export default async function Page({
   const ctaLabel = ctaLabelOnly(fieldAt(focus.blocks, 2)) ?? "Angebot anfragen";
 
   return (
+    <>
+      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{ to: "regionQuote", label: ctaLabel, reassurance: undefined }}
       contextBandHeading={undefined}
@@ -317,21 +320,7 @@ export default async function Page({
         </MotionReveal>
       </SectionShell>
 
-      {/* JSON-LD: Service, no Offer, no price (TS-026-A15, TS-006 D10). */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Service",
-            "@id": `${SITE_ORIGIN}/deine-region#service`,
-            name: "Portalize Enterprise",
-            provider: { "@id": `${SITE_ORIGIN}/#organization` },
-            areaServed: "DE",
-            serviceType: "embedded calendar and map for a whole territory",
-          }),
-        }}
-        type="application/ld+json"
-      />
     </PageFrame>
+    </>
   );
 }

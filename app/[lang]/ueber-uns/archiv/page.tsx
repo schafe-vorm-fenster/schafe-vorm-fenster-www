@@ -9,6 +9,7 @@ import { resolveLocale } from "@/src/lib/i18n/locales";
 import { pageMetadata } from "@/src/lib/routes/metadata";
 import { SITE_ORIGIN } from "@/src/lib/routes/routes";
 
+import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
 import { localeFrom } from "../../_locale";
 import { PageFrame } from "../../_page-frame";
@@ -106,7 +107,31 @@ export default async function Page({
   const typesPresent = [...new Set(rows.map((row) => row.type))];
   const filterTypes = typesPresent.map((label) => ({ id: label, label }));
 
+  /**
+   * One `ItemList`, byte-identical before and after filtering — the filter is
+   * client-side over already-rendered rows and never touches it (D9,
+   * TS-028-A10). It now travels inside the page's **one** JSON-LD graph
+   * rather than a second `<script>`, which is TS-011 D4's own rule.
+   */
+  const itemList = {
+    "@type": "ItemList",
+    itemListElement: rows.map((row, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "CreativeWork",
+        name: row.title,
+        datePublished: row.date,
+        publisher: { "@type": "Organization", name: row.source },
+        url: SITE_ORIGIN,
+      },
+    })),
+  };
+
   return (
+    <>
+      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      <PageJsonLd locale={locale} nodes={[itemList]} route={ROUTE} />
     <PageFrame closing={{ variant: "merged" }} locale={locale} meta={pageMeta}>
       <SectionShell labelledBy="archiv-h1" surface="paper">
         <MotionReveal>
@@ -134,29 +159,7 @@ export default async function Page({
         </MotionReveal>
       </SectionShell>
 
-      {/* JSON-LD: one `ItemList`, byte-identical before and after filtering —
-          the filter is client-side over already-rendered rows and never
-          touches this static script (D9, TS-028-A10). */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "ItemList",
-            itemListElement: rows.map((row, index) => ({
-              "@type": "ListItem",
-              position: index + 1,
-              item: {
-                "@type": "CreativeWork",
-                name: row.title,
-                datePublished: row.date,
-                publisher: { "@type": "Organization", name: row.source },
-                url: SITE_ORIGIN,
-              },
-            })),
-          }),
-        }}
-        type="application/ld+json"
-      />
     </PageFrame>
+    </>
   );
 }

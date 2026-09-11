@@ -31,6 +31,7 @@ import {
   StatedPlaceDates,
   exampleRows,
 } from "../_islands";
+import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { localeFrom } from "../_locale";
 import { PageFrame } from "../_page-frame";
@@ -266,6 +267,9 @@ export default async function PlacePage({
   );
 
   return (
+    <>
+      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{
         variant: "module",
@@ -392,5 +396,6 @@ export default async function PlacePage({
         </SectionShell>
       </MotionReveal>
     </PageFrame>
+    </>
   );
 }

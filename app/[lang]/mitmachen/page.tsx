@@ -16,6 +16,7 @@ import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
 
 import { PlaceDatesIsland } from "../_islands";
 import { selectProof } from "../_proof";
+import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { localeFrom } from "../_locale";
 import { PageFrame } from "../_page-frame";
@@ -166,6 +167,9 @@ export default async function Page({
   const heroCtaLabel = fieldAt(hero.blocks, 2) ?? "";
 
   return (
+    <>
+      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{
         to: "register",
@@ -272,5 +276,6 @@ export default async function Page({
         </ProofStream>
       </SectionShell>
     </PageFrame>
+    </>
   );
 }

@@ -13,6 +13,7 @@ import { APP_ORIGIN } from "@/src/lib/live/app-handover";
 import { jobLabelKey } from "@/src/lib/pages/page-meta";
 import { pageMetadata } from "@/src/lib/routes/metadata";
 
+import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
 import { localeFrom } from "../../_locale";
 import { SiteChrome } from "../../_page-frame";
@@ -118,6 +119,9 @@ export default async function Page({
   const carried = campaign as Record<string, string | undefined>;
 
   return (
+    <>
+      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      <PageJsonLd locale={locale} route={ROUTE} />
     <SiteChrome locale={locale} route={ROUTE}>
       <SectionShell surface="paper">
         {step !== "handover" ? (
@@ -202,6 +206,7 @@ export default async function Page({
         </SectionShell>
       ) : null}
     </SiteChrome>
+    </>
   );
 }
 
