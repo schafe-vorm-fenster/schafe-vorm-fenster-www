@@ -163,3 +163,56 @@ describe("TS-001 D2: the canonical-host redirect", () => {
     expect(response.status).toBe(200);
   });
 });
+
+describe("TS-004-A3 (F-2-45): the landing-only domain rule", () => {
+  it("404s every path outside the landing set on a landing-only domain", async () => {
+    for (const host of [
+      "www.schafvormfenster.at",
+      "www.owcezaoknem.pl",
+      "www.sheepoutside.com",
+    ]) {
+      for (const path of ["/mitmachen", "/en/take-part", "/dein-ort", "/start"]) {
+        const response = await proxy(request(`https://${host}${path}`));
+        // The proxy rewrites onto a path that matches nothing, so Next's own
+        // 404 handling renders `global-not-found` with a real 404 — see
+        // `landing-domain.ts` for why this is not `/_not-found`.
+        expect(
+          response.headers.get("x-middleware-rewrite"),
+          `${host}${path}`,
+        ).toContain("/__landing-only");
+      }
+    }
+  });
+
+  it("serves `/`, the legal route and the machine surfaces there", async () => {
+    for (const path of ["/", "/en", "/rechtliches", "/en/legal", "/robots.txt", "/llms.txt", "/sitemap.xml"]) {
+      const response = await proxy(request(`https://www.schafvormfenster.at${path}`));
+      expect(response.headers.get("x-middleware-rewrite"), path).toBeNull();
+      expect(response.headers.get("Content-Security-Policy"), path).toBeTruthy();
+    }
+  });
+
+  it("lets the landing page's own assets through", async () => {
+    for (const path of ["/_next/static/chunks/main.js", "/favicon.ico", "/logo.svg"]) {
+      const response = await proxy(request(`https://www.schafvormfenster.at${path}`));
+      expect(response.headers.get("x-middleware-rewrite"), path).toBeNull();
+    }
+  });
+
+  it("changes nothing on the full-site domain", async () => {
+    for (const path of ["/mitmachen", "/dein-ort", "/start"]) {
+      const response = await proxy(
+        request(`https://www.schafe-vorm-fenster.de${path}`),
+      );
+      expect(response.headers.get("x-middleware-rewrite"), path).toBeNull();
+    }
+  });
+
+  it("redirects the bare landing apex to www before it judges the path", async () => {
+    const response = await proxy(request("https://schafvormfenster.at/mitmachen"));
+    expect(response.status).toBe(301);
+    expect(response.headers.get("location")).toBe(
+      "https://www.schafvormfenster.at/mitmachen",
+    );
+  });
+});

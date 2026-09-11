@@ -31,6 +31,10 @@
 import { NextResponse } from "next/server";
 
 import { canonicalHostFor, domainConfigFor, normaliseHost } from "@/src/lib/routes/host-matrix";
+import {
+  landingDomainBlocks,
+  LANDING_NOT_FOUND_PATH,
+} from "@/src/lib/routes/landing-domain";
 import { suggestedLanguage, suggestionServerTiming } from "@/src/lib/routes/locale-suggestion";
 import { CSP_HASHES_ASSET_PATH, scriptHashes } from "@/src/lib/security/csp-hashes";
 import {
@@ -58,6 +62,18 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     const hsts = strictTransportSecurity(environmentFrom(process.env.VERCEL_ENV));
     if (hsts) redirect.headers.set("Strict-Transport-Security", hsts);
     return redirect;
+  }
+
+  const domain = domainConfigFor(host);
+
+  // TS-004 D1/A3 — the landing-only domain rule. `.pl`, `.at` and
+  // `sheepoutside.com` serve `/`, the legal route and the machine surfaces;
+  // every other path 404s. Before M4 the `kind: "landing"` flag sat on the
+  // matrix with no consumer and all three domains answered 200 on every path
+  // (F-2-45). The predicate, its asset exemptions and the reason this
+  // rewrites rather than returns a bodyless 404 are in `landing-domain.ts`.
+  if (landingDomainBlocks(domain, request.nextUrl.pathname)) {
+    return NextResponse.rewrite(new URL(LANDING_NOT_FOUND_PATH, request.url));
   }
 
   const response = NextResponse.next();
@@ -105,7 +121,6 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   // changes what renders (D3's cacheability rule holds: no `Vary`, no
   // cookie) and the deferred client-side banner (Q-011) is not built here;
   // the proxy only exposes what it already knows.
-  const domain = domainConfigFor(host);
   const suggestion = suggestedLanguage(
     request.headers.get("accept-language"),
     domain,
