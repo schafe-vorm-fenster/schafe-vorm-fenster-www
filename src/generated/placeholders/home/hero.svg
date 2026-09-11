@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 686" width="1600" height="686" role="img" aria-label="Platzhalter: Ortsansicht">
+  <title>Platzhalter: Ortsansicht</title>
+  <desc>Generiertes Platzhalterbild fuer den Slot home/hero (DEC-068). Kein Foto, keine Aussage.</desc>
+  <defs>
+    <pattern id="h" width="31" height="31" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="31" stroke="#C6E593" stroke-width="5.166666666666667"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="686" fill="#E5F2D1"/>
+  <rect width="1600" height="686" fill="url(#h)"/>
+  <rect x="31" y="31" width="1538" height="624"
+        fill="none" stroke="#2D3F01" stroke-width="3.875" stroke-dasharray="31 15.5" opacity="0.55"/>
+  <g fill="#2D3F01" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" text-anchor="middle">
+    <text x="800" y="332.15" font-size="46.5" font-weight="700">Ortsansicht</text>
+    <text x="800" y="377.1" font-size="24.8" opacity="0.75" letter-spacing="3.7199999999999998">PLATZHALTER · 21:9</text>
+  </g>
+</svg>

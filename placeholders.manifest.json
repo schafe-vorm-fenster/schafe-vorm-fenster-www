@@ -6,6 +6,9 @@
     { "id": "dein-kalender/portalize",   "aspect": "16:10", "tone": "himbeere",  "label": "Produktansicht",     "note": "Kalender unter eigenem Namen" },
     { "id": "ueber-uns/dorf",            "aspect": "3:2",   "tone": "lime",      "label": "Ort",                "note": "Das Dorf, aus dem heraus betrieben wird" },
     { "id": "deine-region/karte",        "aspect": "3:2",   "tone": "violet",    "label": "Kartenausschnitt",   "note": "Aktive Orte im Landkreis" },
+    { "id": "home/hero",                 "aspect": "21:9",  "tone": "lime",      "label": "Ortsansicht",        "note": "Hero von / — Headline und Ortssuche stehen auf dieser Fläche (TS-019 D3)" },
+    { "id": "dein-ort/hero",             "aspect": "21:9",  "tone": "lime",      "label": "Ortsansicht",        "note": "Hero von /dein-ort — Ortsname und nächste Termine (TS-020 D1)" },
+    { "id": "dein-ort-starten/hero",     "aspect": "21:9",  "tone": "violet",    "label": "Ortsansicht",        "note": "Hero von /dein-ort/starten — Bestätigung mit Ortsname (TS-021 D2)" },
     { "id": "og/default",                "aspect": "1.91:1","tone": "lime",      "label": "Vorschaubild",       "note": "Open-Graph-Fallback" }
   ]
 }

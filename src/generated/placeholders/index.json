@@ -52,6 +52,36 @@
       "src": "/src/generated/placeholders/deine-region/karte.svg"
     },
     {
+      "id": "home/hero",
+      "aspect": "21:9",
+      "tone": "lime",
+      "label": "Ortsansicht",
+      "note": "Hero von / — Headline und Ortssuche stehen auf dieser Fläche (TS-019 D3)",
+      "w": 1600,
+      "h": 686,
+      "src": "/src/generated/placeholders/home/hero.svg"
+    },
+    {
+      "id": "dein-ort/hero",
+      "aspect": "21:9",
+      "tone": "lime",
+      "label": "Ortsansicht",
+      "note": "Hero von /dein-ort — Ortsname und nächste Termine (TS-020 D1)",
+      "w": 1600,
+      "h": 686,
+      "src": "/src/generated/placeholders/dein-ort/hero.svg"
+    },
+    {
+      "id": "dein-ort-starten/hero",
+      "aspect": "21:9",
+      "tone": "violet",
+      "label": "Ortsansicht",
+      "note": "Hero von /dein-ort/starten — Bestätigung mit Ortsname (TS-021 D2)",
+      "w": 1600,
+      "h": 686,
+      "src": "/src/generated/placeholders/dein-ort-starten/hero.svg"
+    },
+    {
       "id": "og/default",
       "aspect": "1.91:1",
       "tone": "lime",
