@@ -1,0 +1,126 @@
+/*
+ * The component layer — the derived values every component of the M2 set
+ * shares (plan/component-inventory.md §1, SRC-014).
+ *
+ * Why this file exists: `brand.css` is the only file a *brand* value may
+ * enter through (TS-017 D3), and it holds the token sheet verbatim. The
+ * design system, however, names roles the token sheet does not carry as
+ * single values — the nine type roles, the six category fill/text pairs, the
+ * six aspect ratios, the seven fixed heights, the one motion. Each of them is
+ * composed here **out of the tokens** so that no component re-derives them and
+ * `pnpm check:brand` stays green: there is no colour literal below, only
+ * `var(--color-*)`.
+ *
+ * Imported by `base.css`, so it reaches every route through the one layout
+ * stylesheet chain. Mobile-first (TS-017 D2): the only media queries are
+ * `min-width` on breakpoint token values.
+ */
+
+:root {
+  /* ── Type roles — SRC-014 §Typography ─────────────────────────────────
+   * Nine roles, two weights plus 800. Sizes are the design system's desktop
+   * values; below the switch point the phone value is the smaller end of the
+   * clamp, so one component tree serves every width (D2(d)).
+   * Lead is specified as weight 600, which the same document forbids ("no
+   * weight between 400 and 700") and the font package does not ship. The
+   * conservative reading is 400 at the Lead size — recorded in state/open.md.
+   */
+  --type-display-size: var(--font-size-display);
+  --type-display-leading: 0.9;
+  --type-display-tracking: -0.045em;
+  --type-place-size: clamp(2.125rem, 7.5vw, 3.125rem);
+  --type-section-size: clamp(1.75rem, 5vw, 2.375rem);
+  --type-section-tracking: -0.035em;
+  --type-subhead-size: clamp(1.5rem, 4vw, 2rem);
+  --type-subhead-tracking: -0.03em;
+  --type-card-size: 1.3125rem;
+  --type-card-leading: 1.15;
+  --type-card-tracking: -0.012em;
+  --type-lead-size: 1.25rem;
+  --type-body-size: var(--font-size-body);
+  --type-meta-size: var(--font-size-meta);
+  --type-label-size: 0.75rem;
+  --type-label-tracking: 0.08em;
+  /* The one size below the 15px floor the design system itself names: the
+     placeholder badge (SRC-014 §Photo surface, 11px mono). */
+  --type-microlabel-size: 0.6875rem;
+
+  /* ── Fixed heights — SRC-014 §Fixed heights ─────────────────────────── */
+  --height-button: var(--target-comfortable); /* 56 */
+  --height-control: var(--target-min); /* 44 — secondary, nested submit, well */
+  --height-chip: var(--target-min); /* ≥ 40 specified; 44 also clears 2.5.5 */
+  --height-badge: 26px;
+  --height-badge-icon: 30px;
+  --height-event-row: 76px;
+  --height-search: var(--target-comfortable); /* 56 */
+
+  /* ── Aspect ratios — SRC-014 §Media ratios ──────────────────────────── */
+  --ratio-hero: 8 / 9; /* 21 / 9 from the lg switch point, below */
+  --ratio-feature: 7 / 5;
+  --ratio-proof: 5 / 2;
+  --ratio-map: 16 / 9;
+  --ratio-portrait: 4 / 5;
+  --ratio-square: 1 / 1;
+
+  /* ── Section rhythm — SRC-014 §Shape and Space ──────────────────────── */
+  --section-padding-block: 28px; /* 26–30 standard */
+  --section-padding-block-tight: 22px; /* 20–24 tight */
+  --control-gap: 10px; /* 8–10 between controls */
+
+  /* ── The one motion — SRC-014 §Motion ───────────────────────────────── */
+  --motion-reveal-distance: 22px;
+  --motion-reveal-duration: 550ms;
+  --motion-reveal-easing: cubic-bezier(0.2, 0.7, 0.3, 1);
+
+  /* ── Reading measure — plan/component-inventory.md D-7 ──────────────── */
+  --measure-reading: 66ch;
+  --measure-reading-max: 80ch;
+
+  /* ── Focus ring — SRC-014 §Accessibility ────────────────────────────── */
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+
+  /* ── The placeholder register — one pair for "this is not real" ──────
+   * Placeholder photography, unresolved clearance and demo data share it
+   * (plan/component-inventory.md D-8). 6.0:1 at badge size.
+   */
+  --placeholder-ground: var(--color-placeholder-ground);
+  --placeholder-text: var(--color-status-warning);
+  --placeholder-hatch: repeating-linear-gradient(
+    45deg,
+    var(--color-neutral-surface2) 0 16px,
+    var(--color-neutral-line) 16px 32px
+  );
+
+  /* ── Category colours — SRC-014 §Category colours ─────────────────────
+   * The website's six categories, each with the text colour that clears
+   * 4.5:1 at badge size. The token sheet's `--color-category-*` set is a
+   * different, PROVISIONAL five-category taxonomy (state/open.md row 10);
+   * the design system wins, so the pairs are composed from the scales.
+   */
+  --category-fest-fill: var(--color-himbeere-600);
+  --category-fest-text: var(--color-neutral-paper);
+  --category-merchants-fill: var(--color-lime-600);
+  --category-merchants-text: var(--color-neutral-ink);
+  --category-culture-fill: var(--color-violet-500);
+  --category-culture-text: var(--color-neutral-paper);
+  --category-official-fill: var(--color-lime-800);
+  --category-official-text: var(--color-neutral-paper);
+  --category-social-fill: var(--color-status-error);
+  --category-social-text: var(--color-neutral-paper);
+  --category-neighbouring-fill: var(--color-status-warning);
+  --category-neighbouring-text: var(--color-neutral-paper);
+
+  /* ── The header height, published for `scroll-margin-top` (TS-029 D3) ── */
+  --site-header-height: 64px;
+}
+
+/* lg — 48rem / 768px: the hero ratio turns landscape (SRC-014 §Media ratios
+   says "from 900px"; 768 is the nearest breakpoint token below it, and the
+   next one up, 64rem, would leave the tablet on the 8:9 phone crop). */
+@media (min-width: 48rem) {
+  :root {
+    --ratio-hero: 21 / 9;
+    --site-header-height: 72px;
+  }
+}

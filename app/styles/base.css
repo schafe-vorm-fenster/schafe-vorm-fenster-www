@@ -20,6 +20,10 @@
  * value is a token from app/styles/brand.css.
  */
 
+/* The component layer: type roles, category pairs, ratios, fixed heights and
+   the one motion, each composed from the tokens above (M2 component set). */
+@import "./components.css";
+
 *,
 *::before,
 *::after {
