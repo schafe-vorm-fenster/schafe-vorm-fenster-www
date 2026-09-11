@@ -240,3 +240,36 @@ test("TS-014-A2: the security headers of TS-014 D4 are on the response", async (
     );
   }
 });
+
+/**
+ * F-2-36, on the served response rather than in a unit test: every
+ * `script-src` token that is not `'self'`, a D1 host or a documented
+ * environment concession must be a well-formed `'sha256-<44 base64>'`
+ * source. The hash set reaches the header from a build artifact the proxy
+ * fetches, so this is the one assertion that covers the whole path —
+ * generator, fetch, validation, serialisation — against a real deployment.
+ */
+test("TS-014-A2 / F-2-36: script-src carries no token that is not a real hash", async ({
+  page,
+}) => {
+  const response = await page.goto("/");
+  const csp = response?.headers()["content-security-policy"] ?? "";
+  const scriptSrc = /script-src ([^;]+)/.exec(csp)?.[1] ?? "";
+  expect(scriptSrc.length).toBeGreaterThan(0);
+
+  const allowed = new Set([
+    "'self'",
+    "'unsafe-eval'", // TS-014 D5, local development only
+    "'unsafe-inline'", // state/open.md rows 21/31, dev + preview only
+    "https://code.etracker.com",
+    "https://portalize.schafe-vorm-fenster.de",
+    "https://envoy-api.api.schafe-vorm-fenster.de",
+  ]);
+
+  for (const token of scriptSrc.trim().split(/\s+/)) {
+    if (allowed.has(token)) continue;
+    expect(token, `unexpected script-src token: ${token}`).toMatch(
+      /^'sha256-[A-Za-z0-9+/]{43}='$/,
+    );
+  }
+});
