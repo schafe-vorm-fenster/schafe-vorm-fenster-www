@@ -2,6 +2,10 @@ import { NextRequest } from "next/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { proxy } from "@/proxy";
+import {
+  NOT_FOUND_LOCALE_HEADER,
+  NOT_FOUND_PATH,
+} from "@/src/lib/routes/not-found-routing";
 import { CSP_HASHES_ASSET_PATH, resetScriptHashCache } from "@/src/lib/security/csp-hashes";
 
 /**
@@ -179,7 +183,7 @@ describe("TS-004-A3 (F-2-45): the landing-only domain rule", () => {
         expect(
           response.headers.get("x-middleware-rewrite"),
           `${host}${path}`,
-        ).toContain("/__landing-only");
+        ).toContain(NOT_FOUND_PATH);
       }
     }
   });
@@ -206,9 +210,7 @@ describe("TS-004-A3 (F-2-45): the landing-only domain rule", () => {
     // Not a canonical production host in `CANONICAL_PUBLIC_HOSTS`? It is —
     // so the 404 is indexable-by-host but 404 by status; the point of the
     // assertion is that the header logic ran at all.
-    expect(response.headers.get("x-middleware-rewrite")).toContain(
-      "/__landing-only",
-    );
+    expect(response.headers.get("x-middleware-rewrite")).toContain(NOT_FOUND_PATH);
   });
 
   it("lets the landing page's own assets through", async () => {
@@ -233,5 +235,103 @@ describe("TS-004-A3 (F-2-45): the landing-only domain rule", () => {
     expect(response.headers.get("location")).toBe(
       "https://www.schafvormfenster.at/mitmachen",
     );
+  });
+});
+
+describe("TS-004-A4 (F-2-70): an unknown URL reaches a 404 that renders", () => {
+  it.each(["/dies-gibt-es-nicht", "/uk/mitmachen", "/irgendwas/irgendwo"])(
+    "rewrites %s onto the 404 surface before the route renders",
+    async (path) => {
+      const response = await proxy(
+        request(`https://www.schafe-vorm-fenster.de${path}`),
+      );
+      // Without this the request lands in `app/[lang]` with a `lang` that is
+      // not a language, the page calls `notFound()` one render too late, and
+      // the visitor gets a 404 with zero rendered characters.
+      expect(response.headers.get("x-middleware-rewrite")).toContain(
+        NOT_FOUND_PATH,
+      );
+    },
+  );
+
+  it.each(["/", "/dein-ort", "/en/your-place", "/robots.txt", "/start", "/dev/components", "/api/stats"])(
+    "leaves %s alone",
+    async (path) => {
+      const response = await proxy(
+        request(`https://www.schafe-vorm-fenster.de${path}`),
+      );
+      expect(response.headers.get("x-middleware-rewrite"), path).toBeNull();
+    },
+  );
+
+  it("hands the 404 its language, because the surface above `[lang]` has none", async () => {
+    const german = await proxy(
+      request("https://www.schafe-vorm-fenster.de/dies-gibt-es-nicht"),
+    );
+    expect(
+      german.headers.get("x-middleware-override-headers"),
+    ).toContain(NOT_FOUND_LOCALE_HEADER);
+    expect(
+      german.headers.get(`x-middleware-request-${NOT_FOUND_LOCALE_HEADER}`),
+    ).toBe("de");
+
+    const english = await proxy(
+      request("https://www.schafe-vorm-fenster.de/en/anything"),
+    );
+    expect(
+      english.headers.get(`x-middleware-request-${NOT_FOUND_LOCALE_HEADER}`),
+    ).toBe("en");
+  });
+
+  it("still carries the full header set on an unknown URL", async () => {
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/dies-gibt-es-nicht"),
+    );
+    expect(response.headers.get("Content-Security-Policy")).toContain(
+      "default-src 'self'",
+    );
+  });
+});
+
+describe("TS-021-A7 (F-2-49): the re-resolution hop is an HTTP redirect", () => {
+  it("307s a now-covered value off `/dein-ort/starten`", async () => {
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/dein-ort/starten?ort=beispielwalde"),
+    );
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe(
+      "https://www.schafe-vorm-fenster.de/dein-ort?ort=beispielwalde",
+    );
+  });
+
+  it("307s an uncovered value off `/dein-ort`", async () => {
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/dein-ort?ort=99999"),
+    );
+    expect(response.status).toBe(307);
+    expect(response.headers.get("location")).toBe(
+      "https://www.schafe-vorm-fenster.de/dein-ort/starten?ort=99999",
+    );
+  });
+
+  it("keeps the language prefix", async () => {
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/en/your-place/start?ort=beispielwalde"),
+    );
+    expect(response.headers.get("location")).toBe(
+      "https://www.schafe-vorm-fenster.de/en/your-place?ort=beispielwalde",
+    );
+  });
+
+  it("does not hop a value that belongs where it is", async () => {
+    for (const url of [
+      "https://www.schafe-vorm-fenster.de/dein-ort?ort=beispielwalde",
+      "https://www.schafe-vorm-fenster.de/dein-ort/starten?ort=99999",
+      "https://www.schafe-vorm-fenster.de/dein-ort",
+      "https://www.schafe-vorm-fenster.de/mitmachen?ort=beispielwalde",
+    ]) {
+      const response = await proxy(request(url));
+      expect(response.status, url).not.toBe(307);
+    }
   });
 });
