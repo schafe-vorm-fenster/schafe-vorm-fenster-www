@@ -94,6 +94,8 @@ The gate's QA sweep re-checks their ACs at retest.
   inside the M4 security sweep this gate runs.
 - Resolved: 574f606
 
+- Retest (gate 2, run 2): **resolved** — `scripts/check-csp.ts` runs inside `pnpm check` and is green (4 environment/hash cases built and checked). TS-014-A1 passes. (Gate 2 run 2, `reports/qa/gate-2-run-2.md`.)
+
 ## F-2-1 — `pnpm build` fails typecheck on `next-2026`
 
 - Round decision: **fix-now**
@@ -124,6 +126,8 @@ The gate's QA sweep re-checks their ACs at retest.
   added (`check:contrast`, `check:seo-budget`, `check:terms`) were green /
   green / three module-level violations in package B's `gallery.tsx` and
   `live-modules-and-conversions.test.tsx` — see `state/open.md` 143.
+
+- Retest (gate 2, run 2): **resolved, with one caveat** — the sweep C could not run finally ran on `next-2026` @ `a17505a`: `pnpm check` **exit 0** (9 static guards, 55 static tests, 796 unit+integration tests with 1 skipped, typecheck, lint) and `pnpm build` **exit 0** (245 CSP hashes from 374 inline scripts across 39 pages). `pnpm e2e` is **not** green: one deterministic local failure (`archiv.spec.ts` TS-028-A3), filed as F-2-71.
 
 ## F-2-2 — Hero headline can fall on the light part of the photo surface at 360 px
 
@@ -810,6 +814,8 @@ dismissed in the protocol, not here.
   TS-019-A3/A4/A5 and TS-021-A6/A7/A14 are real walks instead of `test.fixme`
   placeholders; `src/lib/pages/live-anchor.test.ts` covers the classifier.
 
+- Retest (gate 2, run 2): **resolved** — browser walk at 360 px against the dev server: `/` + `07743` → "Das ist los in Beispielwalde" with three rows and `https://app.schafe-vorm-fenster.de/beispielwalde`; `38165` → "In Beispielhausen steht noch nichts im Kalender" with the publish CTA; typing `99999` into the home search lands on `/dein-ort/starten?ort=99999`. `/dein-ort?ort=99999` and `?ort=abcde` both 307 to `/dein-ort/starten`. TS-019-A3/A4/A5, TS-021-A6/A14 and TS-008-A7 pass. **Residual, recorded not re-filed:** on a production build (`pnpm start` and the preview) the server-rendered answer for `/?ort=…` is still S1 and the resolution arrives with the client patch — same mechanism as F-2-49's reopen below.
+
 ## F-2-31 — The 404 page ships a developer note as its body copy and carries neither place search nor jobs band
 
 - Severity: high
@@ -858,6 +864,8 @@ dismissed in the protocol, not here.
   surface's own. `e2e/content-compliance.spec.ts` asserts the two clauses the
   criterion is actually about.
 
+- Retest (gate 2, run 2): **resolved** — both 404 surfaces carry the place search (`<form role="search" action="/dein-ort" method="get">`, walked: typing `07743` lands on `/dein-ort?ort=07743`) and all four jobs; status 404 and `noindex`; the developer note and the dashed placeholder box are gone from the 404 and the 500 surface. **New, separate defect:** the German 404 renders an empty document without JavaScript — F-2-70.
+
 ## F-2-32 — `request-product-briefing` is a dead link, and two pages paste a second placeholder URL against TS-016 D7
 
 - Severity: high
@@ -905,6 +913,8 @@ dismissed in the protocol, not here.
   way `src/lib/pricing/offerings.ts` transcribes the offering prices, and the
   two per-page pastes are gone. An e2e walks every S3 placement and asserts
   they all resolve to the one value (TS-016 D7).
+
+- Retest (gate 2, run 2): **resolved** — every S3 placement (`/dein-kalender`, `/deine-region`, `/dein-kalender/bestellen`, `/en/your-calendar`, `/en/your-region`) renders exactly `https://calendar.app.google/VG9bZoYVnFcX1W6F8`; `grep -rn 'calendar.google.com'` finds no per-page paste outside the dev-only gallery. TS-016-A5 passes.
 
 ## F-2-33 — The English conversion flows still render German UI strings, including the primary buttons
 
@@ -959,6 +969,8 @@ dismissed in the protocol, not here.
   locale={locale} />` — the prop is already on the component. The same file's
   `"Keine Auswahl verfügbar."` empty-state literal has the same shape.
 
+- Retest (gate 2, run 2): **reopened** — the half the finding leads with is fixed: registration steps 1–3, the quote form's whole field set, `Suchen`/`Weiter`/`Absenden` and the footer contact + newsletter block all read English on `/en`. Still German on `/en` routes, measured over all twelve English routes: **`Demo-Daten`** on `/en/take-part/register?ort=beispielwalde` (the package-B tail this finding itself records — `choice-group.tsx`'s `<DemoDataBadge>` still takes no `locale`), `/en/your-calendar` and `/en/about/archive`; **`Foto gesucht`** on `/en/take-part`, `/en/your-calendar`, `/en/your-region/quote` and `/en/about`; **`Nicht motivgenau · Platzhalter`** on `/en/your-place`, `/en/your-place/start`, `/en/your-region` and `/en/about`. No primary action is affected, so the conversion-path half of the finding is discharged; the badge half is not.
+
 ## F-2-34 — `{county-or-organization}` renders as a literal in the English quote page's `h1`
 
 - Severity: high
@@ -983,6 +995,8 @@ dismissed in the protocol, not here.
 - Resolved: 9e0d7ff — both artifacts' slot names are filled, both locales have
   their placeless variant, and `/en/your-region/quote` renders "Request a
   quote for your organisation".
+
+- Retest (gate 2, run 2): **resolved** — `/en/your-region/quote`'s `h1` reads "Request a quote for your organisation"; no `{…}` slot survives in either locale.
 
 ## F-2-35 — Internal identifiers are rendered as visitor-facing copy on every route, in both locales
 
@@ -1023,6 +1037,8 @@ dismissed in the protocol, not here.
   the instrument: it walks all 24 routes plus both 404 surfaces and greps the
   rendered text for `TS-0…`, `DEC-0…`, `Q-0…`, `WEB-…`, `SRC-0…`,
   `[Platzhalter` and the two repository paths.
+
+- Retest (gate 2, run 2): **resolved** — all 24 routes requested, tags stripped, visible text greped for `TS-0…`, `DEC-0…`, `Q-0…`, `SRC-0…` and `[Platzhalter`: **zero hits**. `e2e/content-compliance.spec.ts` 41/41 green locally and on the preview.
 
 ## F-2-36 — `proxy.ts` sends the Vercel automation bypass secret to a Host-header-controlled origin and caches the answer process-wide
 
@@ -1082,6 +1098,8 @@ dismissed in the protocol, not here.
   between them (`csp-hashes.test.ts`, `proxy.test.ts`), including the
   Host-spoof case: four spoofed hosts, and the secret leaves for none of
   them. DEC-045 and the preview `'unsafe-inline'` fallback are untouched.
+
+- Retest (gate 2, run 2): **resolved** — `csp-hashes.ts` takes its fetch origin from `VERCEL_URL`/`VERCEL_PROJECT_PRODUCTION_URL` (off Vercel: only a D1 host or loopback, and never with the secret), keys the cache on `VERCEL_DEPLOYMENT_ID`, and validates every entry against `sha256-<44 base64>`. 33 unit tests across `csp-hashes.test.ts` and `proxy.test.ts` where the module had none; `check-csp.ts` gained the hostile-hash guard; `e2e/smoke.spec.ts:252` asserts it and is green on the preview.
 
 ## F-2-37 — `report-uri` / `Reporting-Endpoints` point at `/api/csp-report`, which cannot exist
 
@@ -1150,6 +1168,8 @@ dismissed in the protocol, not here.
   and `search-field` and `envoy-form-mount` carry the same bounds the server
   applies (`MAX_PLACE_LENGTH`, 120 for a field, 2000 for a message body).
 
+- Retest (gate 2, run 2): **resolved** — `search-field.tsx:94` carries `maxLength={MAX_PLACE_LENGTH}` (rendered as `maxlength="80"`), `envoy-form.tsx` 120/2000; `readPlaceParameter` is now imported by `registrieren/page.tsx`, `bestellen/page.tsx` and `dein-ort/starten/page.tsx`.
+
 ## F-2-39 — No island renders a skeleton: the streamed-shell contract of TS-009 is not built
 
 - Severity: high
@@ -1205,6 +1225,8 @@ dismissed in the protocol, not here.
   stays written and uncalled; `_islands.tsx` is unchanged from before this
   round.
 
+- Retest (gate 2, run 2): **reopened** — confirmed unresolved, exactly as the fix round recorded. `moduleSkeleton` still has no call site (`app/[lang]/_islands.tsx:127` is its only occurrence outside comments) and `grep -c skeleton` over the rendered HTML is **0** on every route measured. `<Suspense>` boundaries do now exist in `page.tsx`, `dein-ort/page.tsx`, `deine-region/page.tsx` and `ueber-uns/page.tsx` — introduced by F-2-30's work — but none of them renders a fallback *box*. TS-005-A9, TS-009-A3 and TS-009-A9 stay fail. Goes to `state/open.md` with row 145's reasoning: this is a spec decision, not a fix-round item.
+
 ## F-2-40 — Every content artefact is `status: draft` and every one of them renders
 
 - Severity: high
@@ -1250,6 +1272,8 @@ dismissed in the protocol, not here.
   is what `state/open.md` 140 now carries; 141 carries the legal-schema
   half of F-2-46 that stays open.
 
+- Retest (gate 2, run 2): **resolved** — `VERCEL_ENV=production pnpm check:content` exits non-zero on the first `draft` artefact (`content/pages/rechtliches/en.md`) with D11's message; `lifecycle.ts` renders `draft` in preview and locally only. TS-007-A14 passes. Which artefacts become `approved` stays open row 140, by decision.
+
 ## F-2-41 — The context band is a `section` inside `main`, not an `aside`, and is missing from four pages
 
 - Severity: medium
@@ -1280,6 +1304,8 @@ dismissed in the protocol, not here.
 - Resolved: 1f1dd6f — `SectionShell` already took an `as` element override;
   `PageFrame` now passes `as="aside"` for the band. The four-page absence
   is unchanged (package A's `closing` variant, not touched).
+
+- Retest (gate 2, run 2): **reopened** — the element half is fixed: the band renders as `<aside aria-label="Heute mit einem anderen Anliegen hier?" id="context-band">` on `/`, `/dein-ort`, `/dein-ort/starten`, `/mitmachen`, `/dein-kalender`, `/deine-region` and `/deine-region/angebot` (and their `/en` twins). TS-011-A4 says the band is an `aside` **on every page**, and it is still absent on five: `/ueber-uns`, `/ueber-uns/archiv`, `/rechtliches`, `/mitmachen/registrieren` and `/dein-kalender/bestellen` — the last two are F-2-10. On those pages the job links render as a bare `<ul>` inside the closing block. The fix commit records the absence as untouched, so this is the half the round scoped out, not a regression.
 
 ## F-2-42 — No page emits an OG image, and `twitter:card` is `summary`
 
@@ -1370,6 +1396,8 @@ dismissed in the protocol, not here.
   in the `check` chain; `state/open.md` 143 carries the one line that wires
   it in. TS-005-A15, TS-006-A8 and TS-007-A4 stay blocked as recorded.
 
+- Retest (gate 2, run 2): **resolved as scoped** — the three guards whose inputs exist were built and run inside `pnpm check`: `check:contrast` (TS-002-A3, 68 token pairs across 4 themes, green) and `check:seo-budget` (TS-011-A7, 24 (path, language) pairs, green) discharge their criteria. `check:terms` (TS-026-A7/A8) exists but is **red** on three module lines (`gallery.tsx:1112`, `live-modules-and-conversions.test.tsx:246,247`) and is not in the `check` chain — TS-026-A8 stays fail, open row 143. TS-005-A15, TS-006-A8 and TS-007-A4 stay fail, as the round decided.
+
 ## F-2-44 — The type scale is declared outside the token import and goes below 15 px
 
 - Severity: medium
@@ -1410,6 +1438,8 @@ dismissed in the protocol, not here.
   `pnpm check:brand` stays green. `state/open.md` row 144 carries the
   upstream reconciliation and the still-open scale/weight work.
 
+- Retest (gate 2, run 2): **resolved** — `app/styles/components.css` declares `--type-label-size: 0.9375rem` and `--type-microlabel-size: 0.9375rem` (15 px each) and `--type-figure-size: 1.75rem` for the former bare `28px`; `pnpm check:brand` green over 66 stylesheets and 441 source files. TS-002-A10 passes.
+
 ## F-2-45 — The landing-only domain rule is not implemented: every path answers 200 on `.at`/`.pl`/`.com`
 
 - Severity: medium
@@ -1443,6 +1473,8 @@ dismissed in the protocol, not here.
   dev server, all three landing domains: `/` 200, `/rechtliches` 200,
   `/robots.txt` and `/llms.txt` 200, `/mitmachen` **404**, `/start` 404;
   `.de` and `localhost` unchanged at 200.
+
+- Retest (gate 2, run 2): **resolved** — with a `Host` header for each of the three landing domains, `/` and `/rechtliches` answer **200** and `/mitmachen` and `/dein-kalender` answer **404**; `www.schafe-vorm-fenster.de` answers 200 on all four. TS-004-A3 passes.
 
 ## F-2-46 — `/en/legal` renders German bodies, and generation-only frontmatter passes validation
 
@@ -1541,6 +1573,8 @@ dismissed in the protocol, not here.
   assistive technology, not focusable, unnamed like every other field, and a
   submission faster than a human could make one refused in words.
 
+- Retest (gate 2, run 2): **resolved** — `/deine-region` renders exactly one `form[data-envoy-form-kind="quote"]`; `envoy-form.tsx` carries the honeypot (`useId`-named, `tabIndex={-1}`) and the ~2 s timing gate. Measured: filling the honeypot still shows the success state but fires **no** conversion event, which is the silent-accept the criterion wants. TS-016-A2 and TS-016-A10 pass.
+
 ## F-2-49 — `/dein-ort/starten` never re-resolves, and echoes the raw parameter as the place name
 
 - Severity: medium
@@ -1567,6 +1601,8 @@ dismissed in the protocol, not here.
   `/dein-ort?ort=<slug>` with `etcc_*` and the language prefix preserved
   (TS-021-A7, DEC-070). Only an **uncovered** value is echoed now, so a
   covered place is never told in its own name that it is not covered.
+
+- Retest (gate 2, run 2): **reopened** — against the dev server the fix holds: `/dein-ort/starten?ort=beispielwalde` answers one **307** to `/dein-ort?ort=beispielwalde`, and `?ort=07743` resolves to the same slug. Against a **production build** it does not: on the round-3 preview *and* on a local `pnpm next start` of the same tree, `/dein-ort/starten?ort=beispielwalde` and `/dein-ort?ort=99999` answer **200 with an empty document** (`x-nextjs-prerender: 1`, `x-vercel-cache: HIT` on the preview) and the forward runs only in the client. With JavaScript the visitor still arrives (browser walk confirms both forwards); without it the page is blank. `pnpm e2e` with `E2E_BASE_URL` against the preview fails on exactly this — `dein-ort-starten.spec.ts:237`, expected 307, received 200. TS-021-A7 stays fail.
 
 ## F-2-50 — `/deine-region`'s manifest declares one live module where D1 names four
 
@@ -1598,6 +1634,8 @@ dismissed in the protocol, not here.
   undeclared on purpose while F-2-15 is open, and the test asserts that
   absence rather than leaving it to a reader to notice.
 
+- Retest (gate 2, run 2): **resolved** — `app/[lang]/deine-region/page.meta.ts` declares three live modules, each with its own `emptyState`, and `app/[lang]/deine-region/page.meta.test.ts` exists. TS-026-A15 passes.
+
 ## F-2-51 — Order step 3 offers two calls to action, one of them inert
 
 - Severity: medium
@@ -1625,6 +1663,8 @@ dismissed in the protocol, not here.
 - Resolved: c0592a2 — the invoice form stands inside a flow, so the step owns the
   advance and the form renders no submit of its own (`ownSubmit={false}`).
   Exactly one control on step 3, and it is the one that advances.
+
+- Retest (gate 2, run 2): **resolved** — `/dein-kalender/bestellen?orte=beispielwalde&schritt=3` renders exactly one advance control ("Weiter"); the inert "Absenden" beside it is gone.
 
 ## F-2-52 — TS-010-A5 and TS-027-A7 contradict each other on the stage-0 empty proof slot
 
@@ -1740,6 +1780,8 @@ dismissed in the protocol, not here.
   302 → the form with `x-robots-tag: noindex, nofollow`, `/llms.txt` 200
   with both language sections.
 
+- Retest (gate 2, run 2): **resolved** — `/start` answers 302 to the lead form and is absent from the sitemap; `/llms.txt` answers 200 and lists this domain's D1 pages in both languages. `e2e/routes.spec.ts` now walks `d1Inventory()` row by row instead of the route registry. TS-004-A1 and TS-004-A5 pass.
+
 ## F-2-56 — No route is partially prerendered; four content routes are fully dynamic
 
 - Severity: medium
@@ -1770,6 +1812,8 @@ dismissed in the protocol, not here.
 
 - **Not resolved — closes with F-2-39, which is not resolved either.**
   Same root cause, same file, same blocker: `state/open.md` row 145.
+
+- Retest (gate 2, run 2): **reopened** — measurable progress, criterion still unmet. The build manifest now reports ten `◐` entries (`/[lang]`, `/de`, `/en`, plus the `[lang]` forms of `dein-kalender`, `deine-region`, `deine-region/angebot`, `mitmachen`, `rechtliches`, `ueber-uns`, `ueber-uns/archiv`, whose concrete `/de`/`/en` variants are `○`) where run 1 found zero, so eight of the twelve D1 routes emit a prerendered shell. TS-009-A2 asks for "zero routes fully dynamic" and four are still `ƒ` — which `state/open.md` row 131 settles as intended. The criterion cannot pass as written while row 131 stands; goes to the open list with row 131 and row 145.
 
 ## F-2-57 — Three claims ship without the confirmation their criteria make a precondition
 
@@ -1809,6 +1853,8 @@ dismissed in the protocol, not here.
   two-working-day promise is absent, its demo placeholder included — an
   example sentence about our own response time sets the same expectation as a
   promise. TS-024-A19: `dein-kalender-6-trust` names its update path.
+
+- Retest (gate 2, run 2): **resolved** — the map claim is out of `/deine-region`'s claim set, the two-working-day wording appears on none of `/deine-region`, `/deine-region/angebot`, `/dein-kalender`, and `dein-kalender-6-trust` carries `derived_from: [ia]`. TS-026-A17, TS-016-A13 and TS-024-A19 pass.
 
 ## F-2-58 — The axe sweep covers one of the three declared themes, so five criteria are only partly discharged
 
@@ -1892,6 +1938,8 @@ dismissed in the protocol, not here.
   `[hidden]`-attribute-selector assertion passed even with the bug, the
   same trap the finding's own "Measurement note" describes.
 
+- Retest (gate 2, run 2): **resolved** — browser at 360 px: selecting the "Presse" chip leaves **1 of 6 rows visible and 5 hidden by computed style** (not only by the `hidden` attribute) and the count line reads "1 VON 6 EINTRÄGEN"; the survivors keep their unfiltered relative order, which also discharges TS-028-A6. TS-028-A4 passes.
+
 ## F-2-60 — `buy-calendar-licence` fires a second time on client-side back/forward
 
 - Severity: high
@@ -1935,6 +1983,8 @@ dismissed in the protocol, not here.
   deliberately does not survive a reload — TS-025 D8 and DEC-009 forbid the
   store that would. 71b2f1b keys it on the resolved scope rather than the raw
   `?orte=` value.
+
+- Retest (gate 2, run 2): **resolved** — a real soft walk (step 3 → click "Weiter" → step 4 → Back → Forward) fires `buy-calendar-licence` **exactly once**, payload `stage: completed`. TS-012-A5 and TS-016-A12 pass.
 
 ## F-2-61 — `/dein-ort`'s empty state changes neither the primary CTA nor position 2, and leaks raw markdown
 
@@ -1981,6 +2031,8 @@ dismissed in the protocol, not here.
   `/mitmachen` the wrong target in as many words. The finding won. The
   spec-against-spec contradiction belongs on `state/open.md`.
 
+- Retest (gate 2, run 2): **resolved** — `/dein-ort?ort=38165` (the empty demo place): the primary CTA is "Ersten Termin veröffentlichen" → `/mitmachen/registrieren?ort=beispielhausen`, position 2 carries the nearby module, and `main` contains no backticks or raw `**`. TS-008-A6 passes.
+
 ## F-2-62 — Entering registration from `/dein-ort/starten` skips step 1, and the place is neither shown nor changeable
 
 - Severity: high
@@ -2008,6 +2060,8 @@ dismissed in the protocol, not here.
 - Resolved: c0592a2 — an answered step 1 stays on screen through step 3 and the
   handover: the place named, with a change control that carries the answer
   back (TS-023 D5's "answered, visible and changeable, never skipped").
+
+- Retest (gate 2, run 2): **resolved** — `/mitmachen/registrieren?ort=beispielwalde` shows "Dein Ort: Beispielwalde" with an "Ort ändern" control on step 2 of 3; the answered step 1 stays on screen and is changeable. TS-023-A7 passes.
 
 ## F-2-63 — `/deine-region` asserts a county at stage 0, and names it with a raw internal id
 
@@ -2037,6 +2091,8 @@ dismissed in the protocol, not here.
 - Resolved: 9e0d7ff — block 3's heading carries no county slot at stage 0, so
   neither the county nor `geoname.900001` is asserted (TS-026-A10, D4). The
   county-scoped wording returns with the anchor it needs.
+
+- Retest (gate 2, run 2): **resolved** — `/deine-region` at stage 0 reads "Beispiele aus dem Landkreis deiner Region"; no county is asserted and no `geoname.*` appears anywhere in the rendered text of any route. TS-026-A10 passes.
 
 ## F-2-64 — The newsletter consent line links a legal anchor that does not exist in English
 
@@ -2090,6 +2146,8 @@ Dispositions for the Run-2 observations that are **not** new findings:
 | C-H-15 (navigate away mid-search, then Back) | **clean pass** — no stale or duplicated state |
 | C-H-16 (roam, double-clicking the first nav link on eight routes) | **not a defect** — all eight console errors are the identical known `vercel.live` preview CSP block, F-2-27 |
 
+- Retest (gate 2, run 2): **resolved** — the consent line resolves through `legalAnchor`: `/rechtliches#datenschutz` on German routes, `/en/legal#privacy` on English ones, and `#privacy`, `#imprint`, `#data-processing` and `#accessibility` all exist as ids on `/en/legal`. TS-004-A8 passes.
+
 ## F-2-65 — `request-licence-quote` fires twice from one rapid double-click on "Absenden"
 
 - Severity: high
@@ -2120,6 +2178,8 @@ Dispositions for the Run-2 observations that are **not** new findings:
   ref set synchronously: `disabled` and `state` both need a re-render, which
   two `click()` calls in one task never give React. That was the mechanism.
 
+- Retest (gate 2, run 2): **resolved** — the submit disables itself on the first press: a second `click()` times out against the disabled control, and the suite's own one-task double-click case (`deine-region.spec.ts:197`) is green locally and on the preview. Exactly one `request-licence-quote` fires, with no field value in the payload.
+
 ## F-2-66 — The quote form gives no success feedback at all after a submission
 
 - Severity: high
@@ -2148,6 +2208,8 @@ Dispositions for the Run-2 observations that are **not** new findings:
   words that this is the demo and that nothing was sent, replaces the form in
   the same slot, and takes focus (TS-016-A9).
 
+- Retest (gate 2, run 2): **resolved** — after a submission the form is replaced by `[data-envoy-state="sent"] [role="status"]` reading "Danke — deine Anfrage ist angekommen" with the `Demo-Daten` label and the sentence that says nothing was sent; the node carries `tabIndex={-1}` and takes focus. The dedicated test is green 3/3 in isolation locally **and** against the preview; its one failure inside the parallel preview run is a flake and is filed as F-2-71.
+
 ## F-2-67 — Reloading immediately after "Weiter" on order step 3 silently swallows the advance
 
 - Severity: medium
@@ -2172,6 +2234,8 @@ Dispositions for the Run-2 observations that are **not** new findings:
   added — TS-025 D8 is explicit that nothing is stored between page views.
 - Resolved: c0592a2 — `useLinkStatus` puts the pending state on the control the
   visitor pressed. No store and no dedupe key, which TS-025 D8 forbids anyway.
+
+- Retest (gate 2, run 2): **resolved** — clicking "Weiter" on step 3 and reloading 120 ms later lands on `?schritt=4` with the embed snippet rendered; the advance is not swallowed.
 
 ## F-2-68 — Controls in the footer region move up to 174 px between first paint and settle
 
@@ -2219,3 +2283,152 @@ Dispositions for the Run-2 observations that are **not** new findings:
   exception, `/mitmachen` at 1280px (a discrete line-wrap tip in a long,
   vertically-centred headline — a different, harder class of residual than
   the width drift this fix eliminates), is `state/open.md` row 146.
+
+- Retest (gate 2, run 2): **resolved** — `e2e/layout-stability.spec.ts` is **24/24** green locally and against the preview (all twelve routes at both DEC-067 viewports; the `/mitmachen` @1280 residual of open row 146 no longer trips the budget). Independent measurements: Lighthouse mobile on the preview gives CLS **0** on `/` and **0.017** on `/dein-kalender`, and a PerformanceObserver sweep at 360 px measures ≤ 0.0002 on `/`, `/dein-ort`, `/mitmachen`, `/deine-region`, `/ueber-uns` and `/rechtliches`. `/ueber-uns/archiv` is the one page over budget, for a different cause — F-2-69.
+
+## F-2-69 — `/ueber-uns/archiv` shifts 262 px when the filter chips appear: CLS 0.2197
+
+- Severity: high
+- Source: qa (gate 2, run 2 — regression sweep)
+- Where: `/ueber-uns/archiv` and `/en/about/archive` at 360×800 ·
+  TS-028-A13, TS-009-A8 · `src/components/archive-filter/**` (the chip
+  group is client-only by design — TS-028-A9 requires the rows to render
+  without it)
+- Steps:
+  1. Install a `PerformanceObserver` for `layout-shift` with
+     `buffered: true` in an init script.
+  2. `page.goto("http://localhost:3100/ueber-uns/archiv")`, wait for
+     `networkidle` plus 1.2 s, read the accumulated value.
+  3. Repeat against the round-3 preview with the bypass header.
+- Expected:
+  - TS-028-A13: "No layout shift from media: both row variants occupy
+    their final height before images load; CLS measured over load plus
+    three filter interactions stays < 0.1."
+  - TS-009-A8: "CLS < 0.1 on every content page … with all islands
+    streaming."
+- Observed: **CLS 0.2197** on the dev server and **0.2205** on the
+  preview, from a single shift during load. The shifting node is the row
+  list: `previousRect` `y: 211.39, height: 588.61` →
+  `currentRect` `y: 473.39, height: 326.61` — the list is pushed **262 px**
+  down when the filter chip row is inserted after hydration. Measured
+  separately, the chips first appear 279–370 ms after `load` (three
+  `waitUntil` modes, same result). The three filter interactions the
+  criterion also names contribute 0.0008 in total, so the load shift is
+  the whole defect.
+  A comparison sweep at the same viewport measures `/` 0.0002,
+  `/dein-ort` 0.0002 and `/mitmachen`, `/deine-region`, `/ueber-uns`,
+  `/rechtliches` at 0.0000 — `/ueber-uns/archiv` is the only page over
+  budget.
+- Why the green suite does not see it: `e2e/layout-stability.spec.ts`
+  (new this round, F-2-68) measures per-element position deltas against an
+  8 px budget and is 24/24 green; it does not compute CLS, and a single
+  large shift of one container passes its shape of check. Lighthouse was
+  run on `/` and `/dein-kalender`, not on the archive.
+- Impact: on the 360 px reference viewport a visitor who taps an archive
+  row inside the settling window hits a different row — the same
+  mis-click failure mode F-2-68 was filed for on `/`, at 1.5× the
+  distance.
+- Severity reasoning: high, by the same reading that made F-2-68 high — an
+  in-scope AC (TS-009-A8, and TS-028-A13 by name) fails at a reference
+  viewport and the failure mode is a mis-click, not a cosmetic wobble. It
+  is not critical: `/ueber-uns/archiv` carries no conversion goal.
+- Not a duplicate of F-2-68: that finding's cause was the font swap and is
+  fixed (`/` now measures 0.0002). This one is a client-inserted control
+  row with no reserved space, which is the *other* half of TS-003 D8 and
+  the only place it still bites.
+
+## F-2-70 — The German 404 surface renders an empty document without JavaScript
+
+- Severity: high
+- Source: qa (gate 2, run 2 — regression sweep, while retesting F-2-31)
+- Where: every unknown German-locale URL — `/dies-gibt-es-nicht`,
+  `/uk/mitmachen` — on the dev server, on a local `pnpm next start` and on
+  the round-3 preview · TS-004-A4, TS-004 D6 ·
+  `app/global-not-found.tsx`, `app/[lang]/**`
+- Steps:
+  1. `browser.newContext({ javaScriptEnabled: false })`.
+  2. `page.goto("/dies-gibt-es-nicht")`; read `body.innerText()`.
+  3. Repeat with `/uk/mitmachen`, then with `/en/anything` and
+     `/en/does-not-exist` as the control.
+  4. `curl -s https://<preview>/dies-gibt-es-nicht` shows the same shape
+     without a browser: `<html id="__next_error__">`,
+     `x-matched-path: /[lang]`, and the 404 body in no server-rendered
+     form.
+- Expected: TS-004-A4 — "404 renders place search + jobs band with status
+  404 and `noindex`"; TS-004 D6 — "404: **static shell** + streamed place
+  search". A static shell is server-rendered by definition, and F-2-31's
+  fix is recorded as "the same component everywhere, a plain GET form to
+  `/dein-ort`, **no JavaScript needed**".
+- Observed, with JavaScript disabled:
+
+  | URL | Status | `body.innerText().length` |
+  | --- | --- | --- |
+  | `/dies-gibt-es-nicht` | 404 | **0** |
+  | `/uk/mitmachen` | 404 | **0** |
+  | `/en/anything` | 404 | 327 |
+  | `/en/does-not-exist` | 404 | 327 |
+
+  With JavaScript the German surface renders correctly on both
+  environments (one search input, six links, the full copy), so this is a
+  server-rendering gap, not a missing page. The English surface is
+  server-rendered in full, which is what makes this one surface rather
+  than a policy.
+- Impact: the 404 place search is part of the `save-calendar-to-homescreen`
+  walk (`plan/gate-2-scope.md` §2). A German visitor who lands on a stale
+  or mistyped URL without JavaScript gets a blank page with no way
+  forward, and search engines that do not execute scripts see an empty
+  404 body.
+- Severity reasoning: high — an in-scope AC fails on a conversion-path
+  surface, and the page is unusable (empty) in that state. Not critical:
+  the same URL works for every visitor who has JavaScript, which is most
+  of them.
+- Note: `e2e/routes.spec.ts`'s three TS-004-A4 cases are green because
+  they run with JavaScript enabled. The no-JS completeness tests this
+  codebase carries elsewhere (`e2e/pages/{home,archiv,registrieren,
+  rechtliches,dein-ort,dein-ort-starten}.spec.ts`) have no 404 case.
+
+## F-2-71 — Two e2e assertions race hydration: the local suite is red and the preview suite flakes
+
+- Severity: medium
+- Source: qa (gate 2, run 2 — regression sweep)
+- Where: `e2e/pages/archiv.spec.ts:43` (TS-028-A3) and
+  `e2e/pages/deine-region.spec.ts:236` (F-2-66 / TS-016-A9)
+- Steps:
+  1. `pnpm e2e` against the dev server → **1 failed, 356 passed, 8
+     skipped**. The failure is `archiv.spec.ts:43`,
+     `expect(total).toBeGreaterThan(1)`, received `0`.
+  2. `pnpm exec playwright test e2e/pages/archiv.spec.ts -g "TS-028-A3"`
+     five times → **5/5 failed**. Deterministic, not a flake.
+  3. `E2E_BASE_URL=<preview> pnpm e2e` → **2 failed, 348 passed, 15
+     skipped**. One is F-2-49 (a real defect); the other is
+     `deine-region.spec.ts:236`,
+     `expect(success === document.activeElement).toBe(true)`.
+  4. Run that one test in isolation three times against the preview and
+     three times locally → **6/6 passed**.
+- Expected: `plan/guardrails.md` — "nothing enters the pipeline that is
+  not green locally". `pnpm e2e` is a job in both
+  `.github/workflows/check.yml` and `.github/workflows/preview-e2e.yml`.
+- Observed, and why both ACs themselves are fine:
+  - **TS-028-A3.** The chip group is client-only by design (TS-028-A9
+    asserts it is absent from the DOM with JavaScript off), so it appears
+    only after hydration — measured at 279–370 ms after `page.goto`
+    resolves, in all three `waitUntil` modes. `chips.count()` is a
+    non-retrying immediate read, so it sees 0. The neighbouring TS-028-A4
+    case does the same query and passes, because its first operation is an
+    auto-waiting `click()`. Measured by hand in a browser, the criterion
+    holds: 7 chips, one chip leaves 1 of 6 rows visible, "Alle" restores
+    all six.
+  - **F-2-66 / TS-016-A9.** The success node takes focus in an effect;
+    under the parallel preview run the assertion can read
+    `document.activeElement` before that effect lands. In isolation it is
+    green 6/6 on both environments, and the focus behaviour is real
+    (`role="status"`, `tabIndex={-1}`, `successRef`).
+- Impact: the gate's own regression criterion cannot be met — `pnpm e2e`
+  is red on `next-2026` HEAD — and the CI job that runs it is red for a
+  reason that has nothing to do with the product. It also costs the next
+  round a real signal: a reader who sees "1 failed" twice stops reading
+  the failure.
+- Severity reasoning: medium. No acceptance criterion is violated by the
+  product and no visitor is affected; what is broken is the instrument and
+  the guardrail that depends on it. It is deliberately **not** filed
+  higher than F-2-49, which the same suite found.
