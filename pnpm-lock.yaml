@@ -42,12 +42,6 @@ importers:
       '@schafe-vorm-fenster/brand-identity':
         specifier: ^0.1.4
         version: 0.1.4(zod@4.4.3)
-      '@schafe-vorm-fenster/cli':
-        specifier: ^0.2.0
-        version: 0.2.0
-      '@schafe-vorm-fenster/config-engineering':
-        specifier: ^0.2.0
-        version: 0.2.0
       '@schafe-vorm-fenster/goals':
         specifier: ^0.3.0
         version: 0.3.0(zod@4.4.3)
@@ -106,8 +100,8 @@ importers:
         specifier: 9.1.7
         version: 9.1.7
       js-yaml:
-        specifier: 4.1.1
-        version: 4.1.1
+        specifier: 4.3.2
+        version: 4.3.2
       tsx:
         specifier: 4.21.0
         version: 4.21.0
@@ -1189,39 +1183,6 @@ packages:
   '@rtsao/scc@1.1.0':
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
 
-  '@schafe-vorm-fenster/adapter-github-cli@0.2.0':
-    resolution: {integrity: sha512-W9M0+rG7mcLDA4Wk2WCVabn+g51c/Cb7mBbUKP9NXO9fd/DRqiZoVziiQMPfMwsveapAWqRjSOwO6YD2atu7/Q==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/adapter-github-cli/0.2.0/9468c7ee8b7a6c3c3e911060dc43674a8ec5f081}
-
-  '@schafe-vorm-fenster/adapter-trivy-cli@0.2.0':
-    resolution: {integrity: sha512-6KjPF+dleXsjMzukRUXMb2F4S+bAAkFC4t9zZj9hCNcdvyns1oc5iCRSasgXxFI/qdZKBNo4m6c0MkS1ivyv0A==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/adapter-trivy-cli/0.2.0/d0433ffb4d71332b8d3cdb0b21a06504276dd68b}
-
-  '@schafe-vorm-fenster/adapter-vercel-cli@0.2.0':
-    resolution: {integrity: sha512-PC9JTaJFpCeUTIK8OToWJut5r8iUI1CNKg8IEJEV8grsRkrfHTo54b2GNNFz/I+DMq1Od6C107DFFmU3/rqSYQ==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/adapter-vercel-cli/0.2.0/fe37b08c10207b5a3d6dba8ae67fc8e0a7b69aa2}
-
-  '@schafe-vorm-fenster/agent-architect@0.2.0':
-    resolution: {integrity: sha512-OuYd3MNITadH8KtbyL3MeTwCQrRq0uAhDOT2KRdvXIIjwZ2ZvdCAeEpsGq51uenK65T63Cub6UOzspt8UgPqQQ==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/agent-architect/0.2.0/4550a99bfdb576c0e0dda2df1160c41d2f1bfa08}
-
-  '@schafe-vorm-fenster/agent-auditor@0.2.0':
-    resolution: {integrity: sha512-tC1OeMTCUkgS5FChFqjhy+pfnxhD3AC8kSmb91Qg4oIkF/Fni7kop0Q1gJWVvc1nTe0Ifk4UBMQltwmUOf/bNg==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/agent-auditor/0.2.0/2ff06df502d17694f7baaa9a144676248c2441ea}
-
-  '@schafe-vorm-fenster/agent-dependency-update@0.2.0':
-    resolution: {integrity: sha512-nZ8pI14WxQoIvTXjP1/pYxVV5ppYuTBRG45O4tbYeBCuCUUuTq7dY/wCyfpRPF4ZF14cNw73tTGf4jM+xs0MAA==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/agent-dependency-update/0.2.0/bf95b4fd9a86a6fd833101ba4c152ca4d88f34e7}
-
-  '@schafe-vorm-fenster/agent-guardian@0.2.0':
-    resolution: {integrity: sha512-WG+FK+QfowBXAKqDImrAV4QFPfEBj9dmmn1ZRzKV6Mp2O64sz824SYmdA3uOO/8YfHx81eWt3PKXgx30p7+ODw==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/agent-guardian/0.2.0/652d150820e1556474f3c76c1022a78578d32af0}
-
-  '@schafe-vorm-fenster/agent-orchestrator@0.2.0':
-    resolution: {integrity: sha512-Adu8FBmYJUlf5ZDdy2q8qUSYC9W2BUyp3G7YMvChjeO1dT+BbEjLzP4LrDS0o60iwzk5fdVHCbU+3VdhhJJckg==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/agent-orchestrator/0.2.0/afe6852d696013fda08b5d515ccefb7932928962}
-
-  '@schafe-vorm-fenster/agent-planner@0.2.0':
-    resolution: {integrity: sha512-Z1Tum/+euPVIy82QBL9hzD2rqsdx+Wp2f+jySnyRmgVOqsv0ZBzZyR5NeC7ZWPQKZ0wYgV4ncV7mWaPDs/xKtA==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/agent-planner/0.2.0/0970a62e020af36d33355ecfdc96291472ce69f4}
-
-  '@schafe-vorm-fenster/agent-supervisor@0.2.0':
-    resolution: {integrity: sha512-5t18XEiCt6OYEF7GPnZyyjfojNK7/ivZZaJ/pJO88tMYA9gDYT4MI2+X375fkAcTi4LWi53ILYMSBi0tG7RNAA==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/agent-supervisor/0.2.0/11340eb32f985daf949e3a66d10f379251c6086d}
-
-  '@schafe-vorm-fenster/agent-tester@0.2.0':
-    resolution: {integrity: sha512-C7hFJnrMVoAoXcSwI6aEi417CnZR9KIUpxNcg92rurgCU6rBT4QJvwz1pqqKr42Yazuzi7cuIwzJZogPO0/B9Q==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/agent-tester/0.2.0/313b2268e49fb97c8777a0d2367621849159ab03}
-
   '@schafe-vorm-fenster/audiences@0.3.3':
     resolution: {integrity: sha512-OCWBBjDBMyK0rGVgSDaO/+LPWjMDU35JW5cFbzYqz2bZFaax4gMNmiVfXwlX3l2aMX77TgkTfkBHpcnz2foiYg==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/audiences/0.3.3/9ac8524ac6d0044442c11000e42abddc05856b58}
     peerDependencies:
@@ -1240,13 +1201,6 @@ packages:
     peerDependenciesMeta:
       zod:
         optional: true
-
-  '@schafe-vorm-fenster/cli@0.2.0':
-    resolution: {integrity: sha512-qjFRxrm3AINiQ5XHuKCRJBtLTjUY6FM7d86fk19QHvHeBBOq6VSCBv+hyQZJHR6y2H0eq7Cw58OC6HWMXKKL0Q==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/cli/0.2.0/ee7955792ce705b5412892459b82b2803964d106}
-    hasBin: true
-
-  '@schafe-vorm-fenster/config-engineering@0.2.0':
-    resolution: {integrity: sha512-ldALsjh1fwu/HJ2KcKbnP6wSdpRj3D/ZGtY8iCe0ChTmGxGWpPW4TQKZZ1D/9aV8z9jJzRkE7hUBqNObQ4po1w==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/config-engineering/0.2.0/0730c14f461fae2ef0db61b5296222a07f5d394a}
 
   '@schafe-vorm-fenster/goals@0.3.0':
     resolution: {integrity: sha512-hdSNu5i50hfnsSTgw/bZljBNLEFFDtjvJqjPO6GJJPYCWk75dcGwaMNifpC9o/ComEkM+evbtX4TFWDE1f0jbA==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/goals/0.3.0/9f8655b4bc6bbf56833e98e421a02f01d950064d}
@@ -1291,15 +1245,6 @@ packages:
       zod:
         optional: true
 
-  '@schafe-vorm-fenster/playbook-dependency-update@0.2.0':
-    resolution: {integrity: sha512-2y/7hOUzwiyZ6d0smhDt/DkF425kRwjwrNJcWnAgpchG+tOZVsSjvc05+dFJ7DA8sHEtmZSiSeB6jjAy5qmiZQ==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/playbook-dependency-update/0.2.0/7358d030e01fa248b45d2d62e25b12d27b9e7618}
-
-  '@schafe-vorm-fenster/playbook-engineering-v-model-delivery@0.2.0':
-    resolution: {integrity: sha512-2Gn8VXzB9lpD2AOUYAjbBHV8A6Ae9hz99OSaDrQZ64AjLlA8i68frkr3/BStuOHp6CFPlUCb8uUdyPwzKL+MfQ==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/playbook-engineering-v-model-delivery/0.2.0/ea17dcb7d5c3dde00b9d716b5854a851cd1d4b66}
-
-  '@schafe-vorm-fenster/playbook-rebase-on-main@0.2.0':
-    resolution: {integrity: sha512-WuIYkmZypslBJu0KBw+ketP5HuLezjSMpapxcIDsZ8IFn8sw/GILljPAOY8sn+u0GXUwMao7ZEGYeLPmix/mTw==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/playbook-rebase-on-main/0.2.0/18a656137ea12d262f43db89e1033942d9045689}
-
   '@schafe-vorm-fenster/posts@0.4.0':
     resolution: {integrity: sha512-ZyAWq/YFLJSFDyihzin17Z4dcUwgxOKNj6aGUmt+rufxGcSZU1osGvyrqHXeiQ8W5wjw9jZ2zVRNbIUOUc8AFA==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/posts/0.4.0/878daf425983009fa0fe7e7d01caba2140462d13}
     peerDependencies:
@@ -1315,9 +1260,6 @@ packages:
     peerDependenciesMeta:
       zod:
         optional: true
-
-  '@schafe-vorm-fenster/skill-github-issues@0.2.0':
-    resolution: {integrity: sha512-fyx5LnczSnL5S096tWCb8vAjCdIFwgRRLuSiuap/Gak+TnX7So/YIFDysuY5HVTMIs0VtSt+oqPTGFU+7cGNiw==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/skill-github-issues/0.2.0/defe7ad36c7222895fcf348d21f54038afaa5ceb}
 
   '@sinclair/typebox@0.25.24':
     resolution: {integrity: sha512-XJfwUVUKDHF5ugKwIcxEgc9k8b7HbznCp6eUfWgu710hMPNIO4aw4/zB5RogDQz8nd6gyCDpU9O/m6qYEWY6yQ==}
@@ -1858,12 +1800,12 @@ packages:
   bindings@1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
 
-  brace-expansion@1.1.14:
-    resolution: {integrity: sha512-MWPGfDxnyzKU7rNOW9SP/c50vi3xrmrua/+6hfPbCS2ABNWfx24vPidzvC7krjU/RTo235sV776ymlsMtGKj8g==}
+  brace-expansion@1.1.18:
+    resolution: {integrity: sha512-Edep/X9fGqVNmzKBVsDYIOtD+z1tuezV70LBjdCst9Tqu76lsnvRiZ6oTic1n+/BIwX6QDGAO94PN4N2SADvtw==}
 
-  brace-expansion@5.0.6:
-    resolution: {integrity: sha512-kLpxurY4Z4r9sgMsyG0Z9uzsBlgiU/EFKhj/h91/8yHu0edo7XuixOIH3VcJ8kkxs6/jPzoI6U9Vj3WqbMQ94g==}
-    engines: {node: 18 || 20 || >=22}
+  brace-expansion@5.0.9:
+    resolution: {integrity: sha512-ScQ4IuvIEF1TMlP7Zt+vjJ//9zlPb2SDcxWxM3bk8s6t6GGdJ7KO1dCcTidOPJKePW30LE/2cT7wCyPho9/Wxg==}
+    engines: {node: 20 || >=22}
 
   braces@3.0.3:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
@@ -4689,33 +4631,6 @@ snapshots:
 
   '@rtsao/scc@1.1.0': {}
 
-  '@schafe-vorm-fenster/adapter-github-cli@0.2.0': {}
-
-  '@schafe-vorm-fenster/adapter-trivy-cli@0.2.0': {}
-
-  '@schafe-vorm-fenster/adapter-vercel-cli@0.2.0': {}
-
-  '@schafe-vorm-fenster/agent-architect@0.2.0': {}
-
-  '@schafe-vorm-fenster/agent-auditor@0.2.0': {}
-
-  '@schafe-vorm-fenster/agent-dependency-update@0.2.0':
-    dependencies:
-      '@schafe-vorm-fenster/playbook-dependency-update': 0.2.0
-      '@schafe-vorm-fenster/playbook-rebase-on-main': 0.2.0
-
-  '@schafe-vorm-fenster/agent-guardian@0.2.0': {}
-
-  '@schafe-vorm-fenster/agent-orchestrator@0.2.0':
-    dependencies:
-      '@schafe-vorm-fenster/playbook-engineering-v-model-delivery': 0.2.0
-
-  '@schafe-vorm-fenster/agent-planner@0.2.0': {}
-
-  '@schafe-vorm-fenster/agent-supervisor@0.2.0': {}
-
-  '@schafe-vorm-fenster/agent-tester@0.2.0': {}
-
   '@schafe-vorm-fenster/audiences@0.3.3(zod@4.4.3)':
     optionalDependencies:
       zod: 4.4.3
@@ -4728,28 +4643,6 @@ snapshots:
   '@schafe-vorm-fenster/brand-identity@0.1.4(zod@4.4.3)':
     optionalDependencies:
       zod: 4.4.3
-
-  '@schafe-vorm-fenster/cli@0.2.0':
-    dependencies:
-      js-yaml: 4.1.1
-
-  '@schafe-vorm-fenster/config-engineering@0.2.0':
-    dependencies:
-      '@schafe-vorm-fenster/adapter-github-cli': 0.2.0
-      '@schafe-vorm-fenster/adapter-trivy-cli': 0.2.0
-      '@schafe-vorm-fenster/adapter-vercel-cli': 0.2.0
-      '@schafe-vorm-fenster/agent-architect': 0.2.0
-      '@schafe-vorm-fenster/agent-auditor': 0.2.0
-      '@schafe-vorm-fenster/agent-dependency-update': 0.2.0
-      '@schafe-vorm-fenster/agent-guardian': 0.2.0
-      '@schafe-vorm-fenster/agent-orchestrator': 0.2.0
-      '@schafe-vorm-fenster/agent-planner': 0.2.0
-      '@schafe-vorm-fenster/agent-supervisor': 0.2.0
-      '@schafe-vorm-fenster/agent-tester': 0.2.0
-      '@schafe-vorm-fenster/cli': 0.2.0
-      '@schafe-vorm-fenster/playbook-dependency-update': 0.2.0
-      '@schafe-vorm-fenster/playbook-rebase-on-main': 0.2.0
-      '@schafe-vorm-fenster/skill-github-issues': 0.2.0
 
   '@schafe-vorm-fenster/goals@0.3.0(zod@4.4.3)':
     optionalDependencies:
@@ -4773,14 +4666,6 @@ snapshots:
     optionalDependencies:
       zod: 4.4.3
 
-  '@schafe-vorm-fenster/playbook-dependency-update@0.2.0':
-    dependencies:
-      '@schafe-vorm-fenster/adapter-trivy-cli': 0.2.0
-
-  '@schafe-vorm-fenster/playbook-engineering-v-model-delivery@0.2.0': {}
-
-  '@schafe-vorm-fenster/playbook-rebase-on-main@0.2.0': {}
-
   '@schafe-vorm-fenster/posts@0.4.0(zod@4.4.3)':
     optionalDependencies:
       zod: 4.4.3
@@ -4788,8 +4673,6 @@ snapshots:
   '@schafe-vorm-fenster/proof@0.3.5(zod@4.4.3)':
     optionalDependencies:
       zod: 4.4.3
-
-  '@schafe-vorm-fenster/skill-github-issues@0.2.0': {}
 
   '@sinclair/typebox@0.25.24': {}
 
@@ -5536,12 +5419,12 @@ snapshots:
     dependencies:
       file-uri-to-path: 1.0.0
 
-  brace-expansion@1.1.14:
+  brace-expansion@1.1.18:
     dependencies:
       balanced-match: 1.0.2
       concat-map: 0.0.1
 
-  brace-expansion@5.0.6:
+  brace-expansion@5.0.9:
     dependencies:
       balanced-match: 4.0.4
 
@@ -6844,11 +6727,11 @@ snapshots:
 
   minimatch@10.2.5:
     dependencies:
-      brace-expansion: 5.0.6
+      brace-expansion: 5.0.9
 
   minimatch@3.1.5:
     dependencies:
-      brace-expansion: 1.1.14
+      brace-expansion: 1.1.18
 
   minimist@1.2.8: {}
 
