@@ -1,18 +1,18 @@
 version: 1
 kind: command-dispatch
-command: cmd:abnahme
-description: Customer acceptance of a milestone gate, protocol written by the Kunde agent alone.
+command: cmd:acceptance
+description: Customer acceptance of a milestone gate, protocol written by the Customer agent alone.
 match:
   labels:
     all:
       - local-run
-      - cmd:abnahme
+      - cmd:acceptance
 playbook:
-  path: .agents/playbooks/playbook-kundenabnahme/SKILL.md
+  path: .agents/playbooks/playbook-customer-acceptance/SKILL.md
   interfaces:
     acceptance-scope:
       from: workflow-context
-      selector: "milestone TS ids from plan/projektplan.md"
+      selector: "milestone TS ids from plan/project-plan.md"
       required: true
     qa-protocol:
       from: workflow-context
@@ -25,7 +25,7 @@ playbook:
       required: true
     abnahme-protocol:
       from: workflow-context
-      selector: "reports/abnahme/M<milestone>.md (abschluss.md after M5)"
+      selector: "reports/acceptance/M<milestone>.md (final.md after M5)"
       required: true
     open-points:
       from: repository-file

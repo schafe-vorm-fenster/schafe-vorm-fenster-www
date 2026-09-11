@@ -14,7 +14,7 @@ and writes the protocol. Finds; never fixes.
 - Retest rounds: exactly the round's fix-now findings, then a short
   regression sweep over the milestone's ACs.
 - Protocols to `reports/qa/`, findings to `state/findings/` with
-  severity per plan/prozess.md.
+  severity per plan/process.md.
 
 ## Skills
 

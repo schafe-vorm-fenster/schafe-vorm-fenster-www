@@ -1,4 +1,4 @@
-# Chaos-Persona: Der Grenzgänger
+# Chaos persona: The Boundary Tester (Der Grenzgänger)
 
 Feeds the site what nobody intended. Politely, thoroughly, at the
 edges.

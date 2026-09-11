@@ -1,5 +1,5 @@
 ---
-name: kundenabnahme
+name: customer-acceptance
 description: Accept or reject a milestone against its acceptance criteria from the customer's chair, in a written protocol, without escalating to a human.
 layer: project
 tags:
@@ -24,7 +24,7 @@ interfaces:
     required: false
 ---
 
-# Kundenabnahme
+# Customer Acceptance
 
 Judge a milestone the way a paying customer would: read what was
 ordered, look at what stands, accept or reject each criterion in
@@ -34,7 +34,7 @@ writing — alone, and with reasons a developer can act on.
 
 - `acceptance-scope` is what was ordered; the criteria bind
   verbatim.
-- `qa-protocol` is read first — the Kunde spot-checks and judges,
+- `qa-protocol` is read first — the Customer spot-checks and judges,
   QA already proved execution.
 - `target-environment` is opened and used, not just reasoned about.
 - `abnahme-protocol` is writable; `open-points` explains deferred
@@ -45,7 +45,7 @@ writing — alone, and with reasons a developer can act on.
 - Accept only what satisfies the criterion as written; reject with
   the criterion id and a concrete, actionable reason.
 - A criterion touching a mocked system is judged against the mock
-  (mock rule, plan/leitplanken.md): the full flow visible and usable
+  (mock rule, plan/guardrails.md): the full flow visible and usable
   with labeled dummy data can be accepted **as prototype**, with the
   `Mock aktiv` open point cited in the protocol. The final protocol
   lists every mock-based acceptance — that list feeds the hardening

@@ -48,7 +48,7 @@ criterion individually satisfiable.
 
 ## Guidelines
 
-- Mandatory skills (Skill-Matrix, plan/prozess.md): load
+- Mandatory skills (skill matrix, plan/process.md): load
   `vercel-react-best-practices` and `web-design-guidelines` before
   Phase 2, use `next-dev-loop` from Phase 2 on, `tdd` for logic in
   Phase 3/4 — the phases are not done without them.
@@ -59,7 +59,7 @@ criterion individually satisfiable.
   defect.
 - Empty and error states are designed states from the spec, not
   afterthoughts. A **missing** external system is mocked per the mock
-  rule (plan/leitplanken.md): dummy data behind the real interface
+  rule (plan/guardrails.md): dummy data behind the real interface
   module, labeled `Demo-Daten` in the UI, `Mock aktiv` row in
   `state-files` — the function is visible, never a hole.
 - One component tree for all viewports; breakpoints change spacing,

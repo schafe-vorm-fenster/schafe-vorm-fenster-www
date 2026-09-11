@@ -50,7 +50,7 @@ the prototype is complete on every page.
 
 ## Guidelines
 
-- Mandatory skills (Skill-Matrix, plan/prozess.md): `copywriting`
+- Mandatory skills (skill matrix, plan/process.md): `copywriting`
   for page copy (+ `cro` on conversion pages), `ux-writing` for
   microcopy; every German draft passes `humanizer` together with
   `humanize-de`, every English translation passes `humanizer` and
@@ -59,7 +59,7 @@ the prototype is complete on every page.
   the same source ids as its original.
 - Numbers, names, quotes, and claims come from `content-sources`
   verbatim — or the slot gets generated content under the
-  dummy-content rule (plan/leitplanken.md): on-voice, claims
+  dummy-content rule (plan/guardrails.md): on-voice, claims
   generic, `provenance: generated` in the artifact, a
   `Dummy-Content` row in `state-files`. Real-looking invented facts
   are still forbidden.

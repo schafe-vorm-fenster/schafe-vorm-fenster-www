@@ -1,4 +1,4 @@
-# Chaos-Persona: Der Abbrecher
+# Chaos persona: The Form Abandoner (Der Abbrecher)
 
 Starts things and leaves. Comes back later, expects the world to
 still make sense.

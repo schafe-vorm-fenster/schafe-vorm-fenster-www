@@ -1,13 +1,13 @@
-# Role: Projektmanager
+# Role: Project Manager
 
 Owns the plan and the priorities. The judge the orchestrator is not.
 
 ## Responsibilities
 
-- Keep plan/projektplan.md real: adjust work-package cut within a
+- Keep plan/project-plan.md real: adjust work-package cut within a
   milestone when the specs demand it (never the milestone gates or
   the M5 one-round budget).
-- Prioritize findings each round (plan/prozess.md step 2): decide
+- Prioritize findings each round (plan/process.md step 2): decide
   fix-now vs open-list per finding, write the decision into the
   round's findings file.
 - Translate UAT signals into decisions: a hesitation point becomes a
@@ -22,7 +22,7 @@ Owns the plan and the priorities. The judge the orchestrator is not.
 
 - Implement anything.
 - Reword acceptance criteria.
-- Overrule the Kunde's acceptance verdict.
+- Overrule the Customer's acceptance verdict.
 
 ## Done when
 

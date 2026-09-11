@@ -8,7 +8,7 @@ anyone outside the team.
    → findings into state/findings/round-<n>.md,
      each with severity: critical / high / medium / low
 
-2. Projektmanager prioritizes
+2. Project Manager prioritizes
    → decides what enters this round
    → everything left over goes to state/open.md with its severity
 
@@ -79,7 +79,7 @@ that skipped its skills has not finished its step.
 | 3 — Fix round (PR) | Developer | `diagnosing-bugs`; `differential-review` on the PR diff |
 | 5 — Retest | QA | `webapp-testing` on the round's findings |
 | M4 + M5 gate: security sweep | QA | `semgrep` (scan), `differential-review` over the milestone diff — findings feed the normal loop (TS-014 scope) |
-| Gate — customer acceptance | Kunde | none — the criteria and the preview are the instrument |
+| Gate — customer acceptance | Customer | none — the criteria and the preview are the instrument |
 | Gate — UAT | UAT persona | none — naive eyes are the instrument |
 
 ## Round bookkeeping

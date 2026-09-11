@@ -94,7 +94,7 @@ const envToken = (name) => {
 
 // ── Structure ─────────────────────────────────────────────────────────
 {
-  const struct = ['plan/projektplan.md', 'plan/prozess.md', 'plan/leitplanken.md', 'state/status.md', 'state/open.md', 'state/findings', 'reports/qa', 'reports/uat', 'reports/abnahme', '.agents/roles/orchestrator.md', '.agents/playbooks/playbook-website-foundation/SKILL.md', '.agents/dispatch/website-foundation.dispatch.yaml', '.claude/agents/developer.md'];
+  const struct = ['plan/project-plan.md', 'plan/process.md', 'plan/guardrails.md', 'state/status.md', 'state/open.md', 'state/findings', 'reports/qa', 'reports/uat', 'reports/acceptance', '.agents/roles/orchestrator.md', '.agents/playbooks/playbook-website-foundation/SKILL.md', '.agents/dispatch/website-foundation.dispatch.yaml', '.claude/agents/developer.md'];
   const missing = struct.filter((p) => !existsSync(join(root, p)));
   check('run structure', missing.length === 0 ? 'GREEN' : 'RED', missing.length === 0 ? 'complete' : `missing: ${missing.join(', ')}`);
 }

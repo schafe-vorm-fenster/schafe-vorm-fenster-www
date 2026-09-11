@@ -11,7 +11,7 @@ sources. Consumes and cites; never invents.
 - Every factual claim traces to a hub artifact (proof, offering,
   audience, person — by id). A slot without a source gets generated
   placeholder content per the dummy-content rule
-  (plan/leitplanken.md): on-voice, claims generic, marked
+  (plan/guardrails.md): on-voice, claims generic, marked
   `provenance: generated`, registered as `Dummy-Content` in
   `state/open.md`. The prototype is complete on every page.
 - Run the eight-point compliance check from the communication

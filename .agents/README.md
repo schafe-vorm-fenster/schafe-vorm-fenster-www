@@ -36,7 +36,7 @@ browser QA).
 `differential-review` (security review of PR/milestone diffs),
 `supply-chain-risk-auditor` (before every new dependency's
 stack-harmony ADR). Bound to the loop via the skill matrix in
-plan/prozess.md: security sweep at the M4 and M5 gates,
+plan/process.md: security sweep at the M4 and M5 gates,
 differential review in fix rounds.
 
 **Content (coreyhaines31/marketingskills + others)** — `copywriting`

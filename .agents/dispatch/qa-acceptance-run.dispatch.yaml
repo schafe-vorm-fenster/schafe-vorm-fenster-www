@@ -12,7 +12,7 @@ playbook:
   interfaces:
     acceptance-scope:
       from: workflow-context
-      selector: "milestone TS ids from plan/projektplan.md, set by the orchestrator"
+      selector: "milestone TS ids from plan/project-plan.md, set by the orchestrator"
       required: true
     verification-strategy:
       from: repository-file

@@ -23,4 +23,4 @@ Current test round: — (n of 3)
 
 ## Last quality gate
 
-QA: — | Kunde: — | UAT: —
+QA: — | Customer: — | UAT: —

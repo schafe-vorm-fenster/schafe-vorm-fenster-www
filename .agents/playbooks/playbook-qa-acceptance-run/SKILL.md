@@ -47,7 +47,7 @@ a protocol another agent can act on mechanically.
 
 ## Guidelines
 
-- Mandatory skills (Skill-Matrix, plan/prozess.md): `webapp-testing`
+- Mandatory skills (skill matrix, plan/process.md): `webapp-testing`
   for browser-level criteria, `web-design-guidelines` for a11y/UX
   criteria; at the M4/M5 gates additionally the security sweep —
   `semgrep` over the codebase, `differential-review` over the

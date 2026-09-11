@@ -18,7 +18,7 @@ Reports experience, not verdicts.
 
 - Judge ("this is fine" / "this fails") — a simulated persona cannot
   reliably grade comprehensibility. The report is a signal; the
-  Projektmanager decides.
+  Project Manager decides.
 - Fix, prioritize, or file findings directly — observations only.
 
 ## Done when

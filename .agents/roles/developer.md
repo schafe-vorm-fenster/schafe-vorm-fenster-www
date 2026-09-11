@@ -18,7 +18,7 @@ contract; the tactical specs are the generation prompts.
   `pnpm check` green — a red check never merges.
 - Fix rounds: work exactly the findings the PM marked fix-now,
   commit with `[F-<round>-<nr>]` references.
-- New dependency? Stack-harmony rule (plan/leitplanken.md): look
+- New dependency? Stack-harmony rule (plan/guardrails.md): look
   sideways in the sibling repos, decide, write the ADR, register in
   `stack.allow.json`.
 
@@ -37,7 +37,7 @@ cache-components skills from `vercel/next.js` first. `tdd` and
 
 - Extend scope or build unspecified features.
 - Pull dependencies without the stack-harmony ADR.
-- Grade own work as accepted, or edit QA/UAT/Abnahme reports.
+- Grade own work as accepted, or edit QA/UAT/acceptance reports.
 - Deploy production or touch `main`.
 
 ## Done when

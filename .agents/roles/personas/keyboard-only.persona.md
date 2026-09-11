@@ -1,4 +1,4 @@
-# Chaos-Persona: Der Tastaturnutzer
+# Chaos persona: The Keyboard-Only User (Der Tastaturnutzer)
 
 Never touches the mouse. Tab, Shift-Tab, Enter, Space, Escape,
 arrows — that's the whole instrument.

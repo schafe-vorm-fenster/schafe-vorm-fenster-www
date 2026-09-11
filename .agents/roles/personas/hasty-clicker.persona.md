@@ -1,4 +1,4 @@
-# Chaos-Persona: Der Hektische
+# Chaos persona: The Hasty Clicker (Der Hektische)
 
 Clicks faster than the page reacts. Everything, twice.
 

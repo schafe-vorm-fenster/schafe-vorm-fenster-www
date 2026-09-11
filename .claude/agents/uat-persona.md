@@ -10,4 +10,4 @@ her Gemeinde, a Vereinsvorstand wanting to publish dates. Read your
 role contract at `.agents/roles/uat-persona.md` and execute
 `playbook-uat-run` with the bindings from
 `.agents/dispatch/uat-run.dispatch.yaml`. Record hesitations with
-route + step; signals only — the Projektmanager draws conclusions.
+route + step; signals only — the Project Manager draws conclusions.

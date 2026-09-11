@@ -83,7 +83,7 @@ Interactions, live data, forms, conversion paths work.
 | Live modules + place search, widening chain, BFF, app handover | TS-008 |
 | Personalization stages 0–3, geolocation | TS-010 |
 | Forms and leads: envoy widget as mock behind its interface module (Q-022), briefing, order flow with mocked organizerId minting (Q-046), newsletter | TS-016 |
-| Mock layer for every missing external system, dummy data labeled, per the mock rule (plan/leitplanken.md) | mock rule |
+| Mock layer for every missing external system, dummy data labeled, per the mock rule (plan/guardrails.md) | mock rule |
 | Analytics cookieless, event registry, attribution | TS-012 |
 | SEO: redirect map, structured data, sitemaps, landing pages | TS-011 |
 | Rendering and resilience: static shell, cached islands, three-tier fallback | TS-009, DEC-045/046 |
@@ -101,7 +101,7 @@ prioritization, fix round, deploy, retest, customer acceptance. The
 loop's abort criterion applies (no critical/high open, or three
 rounds). Findings beyond the third round go to `state/open.md`. M5
 closes with the final customer acceptance
-(`reports/abnahme/abschluss.md`) and the run report — that
+(`reports/acceptance/final.md`) and the run report — that
 acceptance **is** the prototype milestone.
 
 ## The result is a prototype — complete
@@ -136,15 +136,15 @@ A milestone closes when all three strands are through:
 
 1. **QA** — the milestone's acceptance criteria checked one by one
    (playbook-qa-acceptance-run); no critical, no high finding open.
-2. **Kunde** — acceptance protocol written
-   (playbook-kundenabnahme): accepted, or rejected with reasons that
-   then feed a fix round. The Kunde decides alone; Jan is not asked.
+2. **Customer** — acceptance protocol written
+   (playbook-customer-acceptance): accepted, or rejected with reasons that
+   then feed a fix round. The Customer decides alone; Jan is not asked.
 3. **UAT** — conversion paths walked, hesitation points recorded
    (playbook-uat-run). The UAT report is a **signal, not a verdict**;
-   the Projektmanager decides what follows from it.
+   the Project Manager decides what follows from it.
 
 Between strands 1 and 2 the fix-deploy-retest loop from
-[prozess.md](prozess.md) runs with its abort criterion.
+[process.md](process.md) runs with its abort criterion.
 
 ## Milestones and the verification pyramid
 

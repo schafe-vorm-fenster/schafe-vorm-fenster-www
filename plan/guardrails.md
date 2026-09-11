@@ -96,5 +96,5 @@ slot without a source gets **generated content**, never a hole:
 
 - Nothing enters the pipeline that is not green locally
   (`pnpm check`, typecheck, unit/integration, local e2e).
-- QA, Chaos, UAT and Kunde never fix code. Developer never grades
+- QA, Chaos, UAT and Customer never fix code. Developer never grades
   their own work as accepted.

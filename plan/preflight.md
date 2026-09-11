@@ -7,7 +7,7 @@ and the run may proceed with the documented degradation.
 
 Verified actively, never assumed — the point is to fail in minute
 one, not after two hours. After preflight, M0 (tracer bullet,
-plan/projektplan.md) proves the toolchain dynamically.
+plan/project-plan.md) proves the toolchain dynamically.
 
 ## Access
 
@@ -53,7 +53,7 @@ plan/projektplan.md) proves the toolchain dynamically.
 ## Structure
 
 - [ ] `plan/`, `state/status.md`, `state/open.md`,
-      `state/findings/`, `reports/{qa,uat,abnahme}/` exist.
+      `state/findings/`, `reports/{qa,uat,acceptance}/` exist.
 - [ ] All role files in `.agents/roles/`, playbooks in
       `.agents/playbooks/`, subagent mirrors in `.claude/agents/`.
 

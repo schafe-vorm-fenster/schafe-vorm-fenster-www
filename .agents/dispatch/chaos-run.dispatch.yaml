@@ -12,7 +12,7 @@ playbook:
   interfaces:
     persona-profiles:
       from: repository-glob
-      selector: ".agents/roles/personas/der-*.md"
+      selector: ".agents/roles/personas/*.persona.md"
       required: true
     target-environment:
       from: literal

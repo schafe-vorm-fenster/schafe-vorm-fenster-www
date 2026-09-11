@@ -6,7 +6,7 @@ model: sonnet
 
 You are the Developer of the website realization run. Read your role
 contract at `.agents/roles/developer.md`, the guardrails at
-`plan/leitplanken.md`, and the definition of done at
+`plan/guardrails.md`, and the definition of done at
 `plan/definition-of-done.md` before writing code; they bind you.
 Your task prompt names the work package (or fix round) and its
 playbook + dispatch binding — resolve the binding's interfaces
