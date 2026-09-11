@@ -91,6 +91,7 @@ The gate's QA sweep re-checks their ACs at retest.
   a human reading the file keeps it that way. One
   `scripts/check-csp.ts` wired into `pnpm check` is cheap, and TS-014 is
   inside the M4 security sweep this gate runs.
+- Resolved: 574f606
 
 ## F-2-1 — `pnpm build` fails typecheck on `next-2026`
 
@@ -186,6 +187,7 @@ The gate's QA sweep re-checks their ACs at retest.
 - Reasoning: an AC on a conversion path that the gate sweep cannot
   discharge. The fix is one fixture in the shared live-data mock — the
   mock rule already puts demo data there, so this adds no new mechanism.
+- Resolved: 2b50928
 
 ## F-2-6 — No a11y instrument: axe is not installed, so TS-002-A1 and TS-029-A12 cannot be discharged
 
@@ -207,6 +209,9 @@ The gate's QA sweep re-checks their ACs at retest.
   cannot report on it otherwise. Needs a stack-harmony ADR for the
   dependency (`plan/guardrails.md`) plus one e2e sweep over the route
   table — bounded, and it pays for itself immediately at this gate.
+- Resolved: 549973f — the sweep found two real violations, filed as
+  F-2-28 and F-2-29 below rather than fixed (both in `src/components/**`,
+  the wiring work package's ownership this round).
 
 ## F-2-7 — An unknown `/en/…` URL gets the German 404 body
 
@@ -584,6 +589,78 @@ The gate's QA sweep re-checks their ACs at retest.
   and D7 holds there unconditionally. What this round does buy is the
   fence: F-1-2's static check keeps the branch preview-only, which is
   why F-1-2 is fix-now.
+
+## F-2-28 — `outbound-link`'s `secondary` pill loses the CSP's own contrast when nested in a `section-shell` ink/violet ground
+
+- Severity: high
+- Source: qa-tool (`e2e/a11y.spec.ts`, the F-2-6 axe instrument)
+- Where: `src/components/outbound-link/outbound-link.module.css` (`.secondary`),
+  `src/components/section-shell/section-shell.module.css` (`.ink a`,
+  `.violet500 a`); TS-002-A1
+- Routes: `/`, `/en`, `/dein-ort`, `/en/your-place` (all four: 360 px and
+  1280 px) — 8 of the sweep's 48 (route × viewport) cases
+- Steps: `axe-core` reports `color-contrast` (`serious`) on the
+  `outbound-link`'s `secondary`-variant text on all four routes. Traced by
+  hand (`getComputedStyle` on the failing node): `.secondary` sets
+  `color: var(--color-neutral-ink)` on the anchor itself, meant to read
+  against its own `--color-neutral-paper` (near-white) pill background.
+  But `section-shell.module.css`'s `.ink a, .violet500 a { color:
+  var(--color-lime-400) }` — the rule that makes *plain* links legible
+  directly on the shell's own dark ground — has higher specificity (class +
+  type selector vs. `.secondary`'s single class) and wins whenever the
+  pill sits inside an `.ink`/`.violet500` section. The pill then renders
+  `--color-lime-400` (`#b6de6d`) text on its own `--color-neutral-paper`
+  background: measured contrast 1.47:1 against the 4.5:1 floor.
+- Expected: TS-002-A1 — zero `axe-core` violations on every page (a11y
+  gate); TS-002 D3's own rule that the brand green is never a text colour
+  on a light ground.
+- Observed: A light-on-near-white pill button on the home and `/dein-ort`
+  hero/live-module CTA, in both languages, at both reference viewports.
+- Round decision: (Project Manager to set)
+- Note: not fixed here — `outbound-link` and `section-shell` are under
+  `src/components/**`, the wiring work package's ownership for this round.
+  The general shape of the fix: `.secondary` (and any other component that
+  paints its own surface) needs to re-assert its own text colour with
+  higher specificity than `section-shell`'s blanket `.ink a`/`.violet500 a`
+  rule, e.g. `.ink .secondary, .violet500 .secondary { color:
+  var(--color-neutral-ink); }` beside the existing rule in
+  `section-shell.module.css`, or a `:where()`-wrapped blanket rule in
+  `section-shell.module.css` so its specificity stops overriding a
+  component's own variant colour.
+
+## F-2-29 — `proof-card`'s claim text inherits the ink ground's colour onto the card's own lighter surface
+
+- Severity: high
+- Source: qa-tool (`e2e/a11y.spec.ts`, the F-2-6 axe instrument)
+- Where: `src/components/proof-card/proof-card.module.css` (`.card`,
+  `.claim`), `src/components/section-shell/section-shell.module.css`
+  (`.ink`); TS-002-A1
+- Routes: `/ueber-uns`, `/en/about` (both: 360 px and 1280 px) — 4 of the
+  sweep's 48 cases
+- Steps: `axe-core` reports `color-contrast` (`serious`) on the
+  `proof-card`'s `.claim` text. `proof-card.module.css`'s `.card` paints
+  its own `background: var(--color-neutral-surface)`, and `.claim` sets no
+  `color` of its own — it inherits whatever ancestor supplies one. Inside
+  the origin story's `.ink` section-shell, that ancestor is
+  `section-shell.module.css`'s `.ink { color: var(--color-neutral-paper)
+  }` — correct for text sitting directly on the ink background, wrong for
+  a `proof-card` that paints its own lighter surface on top of it.
+  Measured: `#f9fbf7` text on `#eef2e9` background, contrast 1.08:1
+  against the 3:1 floor for this bold, large text.
+- Expected: TS-002-A1 — zero `axe-core` violations on every page.
+- Observed: Near-white text on a near-white card, on the one page
+  (`/ueber-uns`, `/en/about`) that places a `proof-card` inside an `.ink`
+  section.
+- Round decision: (Project Manager to set)
+- Note: not fixed here — both components are under `src/components/**`,
+  the wiring work package's ownership for this round. Same root-cause
+  family as F-2-28 (a component that paints its own surface does not
+  re-declare its own text colour, so it inherits a dark-ground default
+  meant for bare text): the fix is `proof-card.module.css` giving `.claim`
+  (and `.context`/`.attribution`, which have the same exposure) an explicit
+  `color: var(--color-neutral-ink)`, which is correct on every one of
+  `section-shell`'s own background variants because `.card`'s background is
+  never the section's background.
 
 ## Not converted (rows that stay rows)
 
