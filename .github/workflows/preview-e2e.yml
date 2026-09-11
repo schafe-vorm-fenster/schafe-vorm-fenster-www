@@ -14,6 +14,12 @@ name: Preview E2E Smoke
 # preview e2e, the merge-gating job graph (D4), and the canary/rollback
 # production pipeline (D7/D8) are stage-2 follow-up, not part of this run —
 # see `.github/workflows/check.yml`'s header and README.md's CI section.
+#
+# `github.event.deployment.ref` is NOT the branch name — verified live
+# (run 34623798394): Vercel's GitHub App sets it to the deployed commit
+# SHA, same as `.sha`. Restricting to `next-2026` is therefore done with a
+# `git merge-base --is-ancestor` check in the `gate` job below, not a
+# string comparison against `ref`.
 
 on:
   deployment_status:
@@ -30,12 +36,35 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  smoke:
-    name: E2E smoke against preview
+  gate:
+    name: Resolve target branch
     if: >
       github.event.deployment_status.state == 'success' &&
-      github.event.deployment.ref == 'next-2026' &&
+      github.event.deployment.environment == 'Preview' &&
       github.event.deployment_status.environment_url != ''
+    runs-on: ubuntu-latest
+    outputs:
+      on_next_2026: ${{ steps.check.outputs.on_next_2026 }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Is the deployed commit on next-2026?
+        id: check
+        run: |
+          git fetch --quiet origin next-2026
+          if git merge-base --is-ancestor "${{ github.event.deployment.sha }}" origin/next-2026; then
+            echo "on_next_2026=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "on_next_2026=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  smoke:
+    name: E2E smoke against preview
+    needs: gate
+    if: needs.gate.outputs.on_next_2026 == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
