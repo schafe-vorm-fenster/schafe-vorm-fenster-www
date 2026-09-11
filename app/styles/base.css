@@ -1,0 +1,208 @@
+/*
+ * The mobile-first layout shell — TS-017 D2.
+ *
+ * D2(a) Direction: everything below the first `@media` line is the phone.
+ *   Every query is `min-width`; a `max-width` query is a defect, because it
+ *   makes the desktop the base case (checked by scripts/check-brand.ts, A4).
+ * D2(b) Breakpoints: the six `breakpoint.*` token values of brand-design
+ *   (DEC-067) — xs 22.5rem · sm 26.75rem · md 40rem · lg 48rem · xl 64rem ·
+ *   2xl 80rem. No call site invents one. CSS media queries cannot read custom
+ *   properties, so the literals appear here and are checked against the token
+ *   set rather than being free.
+ * D2(c) Width is not maximised: the container is `--measure-page` (75rem),
+ *   the text measure `--measure-text` (68ch). Above 2xl only the outer margin
+ *   grows.
+ * D2(d) One component tree. A breakpoint may change spacing, type step, image
+ *   aspect and the column count of a block that declares `data-columns-*`.
+ *   It may never change block order, block presence or wording.
+ *
+ * No colour and no font-family literal appears here — TS-017 D3.1. Every
+ * value is a token from app/styles/brand.css.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: light;
+  /* The outer gutter. The design system fixes 16px inside the viewport on
+     every section; the per-breakpoint gutter table is still owed (DEC-067
+     consequences, state/open.md). */
+  --gutter: var(--space-4);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  font-weight: 400;
+  line-height: var(--leading-relaxed);
+  /* D2/A9: nothing may scroll sideways at 320px. */
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 800;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  margin: 0 0 var(--space-4);
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); font-weight: 700; }
+h4 { font-size: var(--font-size-h4); font-weight: 700; }
+
+p {
+  margin: 0 0 var(--space-4);
+  /* D2(c): the text measure is capped separately from the container. */
+  max-width: var(--measure-text);
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--link);
+  text-underline-offset: 0.15em;
+}
+
+a:hover {
+  color: var(--link-hover);
+}
+
+img,
+svg,
+video {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+
+/* Focus is visible on every interactive element, and only on keyboard entry. */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Touch targets: 44px floor, 56px for primary actions (design system). */
+a,
+button,
+input,
+select,
+summary,
+textarea {
+  touch-action: manipulation;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── The shell ─────────────────────────────────────────────────────────── */
+
+.skip-link {
+  background: var(--bg);
+  border-radius: var(--radius-pill);
+  color: var(--text);
+  left: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  position: absolute;
+  top: calc(var(--space-2) * -10);
+  z-index: 10;
+}
+
+.skip-link:focus-visible {
+  top: var(--space-2);
+}
+
+.container {
+  margin-inline: auto;
+  /* D2(c): the content stops growing at measure.page; only the margin grows. */
+  max-width: var(--measure-page);
+  padding-inline: var(--gutter);
+  width: 100%;
+}
+
+.site-header,
+.site-footer {
+  background: var(--bg-subtle);
+}
+
+.site-header__inner,
+.site-footer__inner {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  min-height: var(--target-comfortable);
+  padding-block: var(--space-3);
+}
+
+.wordmark {
+  align-items: center;
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-label);
+  font-weight: 700;
+  gap: var(--space-2);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.site-main {
+  padding-block: var(--space-8);
+}
+
+.site-footer__inner {
+  color: var(--text-muted);
+  font-size: var(--font-size-meta);
+}
+
+/* ── Switch points ─────────────────────────────────────────────────────────
+ * Only spacing and type steps change. The tree, the order and the wording
+ * are identical at every width (D2(d)); TS-017-A8 tests exactly that.
+ * ─────────────────────────────────────────────────────────────────────── */
+
+/* sm — 26.75rem / 428px: large phones, where the extra width is spent. */
+@media (min-width: 26.75rem) {
+  :root {
+    --gutter: var(--space-6);
+  }
+}
+
+/* lg — 48rem / 768px: tablet portrait. */
+@media (min-width: 48rem) {
+  .site-main {
+    padding-block: var(--space-12);
+  }
+}
+
+/* xl — 64rem / 1024px: small desktop. */
+@media (min-width: 64rem) {
+  :root {
+    --gutter: var(--space-8);
+  }
+
+  .site-main {
+    padding-block: var(--space-16);
+  }
+}

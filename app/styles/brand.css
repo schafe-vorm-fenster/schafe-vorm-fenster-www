@@ -1,0 +1,22 @@
+/*
+ * The single token-import file — TS-017 D3.
+ *
+ * This is the ONLY file in the repository that brand values enter through.
+ * It contains no value of its own: it imports the brand token sheet and the
+ * font faces, and everything else in `app/` and `src/` consumes the resulting
+ * CSS custom properties. `scripts/check-brand.ts` (TS-017-A5) fails any colour
+ * literal or `font-family` literal outside this file.
+ *
+ * Fonts — TS-003 D3 / DEC-043: Atkinson Hyperlegible Next plus the Mono
+ * variant, latin subset, weights 400 · 700 · 800, `font-display: swap`
+ * (fontsource sets it). Self-hosted: the woff2 files are bundled from the
+ * package, never fetched from a CDN (TS-014 D1 has no font host).
+ */
+
+@import "@fontsource/atkinson-hyperlegible-next/latin-400.css";
+@import "@fontsource/atkinson-hyperlegible-next/latin-700.css";
+@import "@fontsource/atkinson-hyperlegible-next/latin-800.css";
+@import "@fontsource/atkinson-hyperlegible-mono/latin-400.css";
+@import "@fontsource/atkinson-hyperlegible-mono/latin-700.css";
+@import "@fontsource/atkinson-hyperlegible-mono/latin-800.css";
+@import "@schafe-vorm-fenster/brand-design/tokens.css";

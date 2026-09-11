@@ -9,6 +9,8 @@ import {
   SupportFrontmatterSchema,
 } from "../src/domain/content-frontmatter.schema.js";
 
+import type { ZodType } from "zod";
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const CONTENT_DIR = join(__dirname, "..", "content");
 
@@ -16,7 +18,7 @@ const CONTENT_DIR = join(__dirname, "..", "content");
 // Folders not listed here fall through to the NormalizedFrontmatterSchema.
 const FOLDER_SCHEMA_MAP: Record<
   string,
-  { schema: Zod.ZodType; label: string }
+  { schema: ZodType; label: string }
 > = {
   press: { schema: PressFrontmatterSchema, label: "PressFrontmatter" },
   support: { schema: SupportFrontmatterSchema, label: "SupportFrontmatter" },
