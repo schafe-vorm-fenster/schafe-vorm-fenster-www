@@ -7,6 +7,27 @@ gate references them by TS id, it never copies them.
 
 ## Milestones
 
+### M0 — Durchstich (Setup-Test, wegwerfbar)
+
+Before any real work: prove the whole toolchain end to end with a
+throwaway tracer bullet, so environment friction surfaces in the
+first half hour, not inside M1.
+
+| Proof | How |
+| --- | --- |
+| Scaffold works | `create-next-app` (current major) into a scratch directory |
+| Dev server + MCP | `next dev` runs; the `next-devtools` MCP (`.mcp.json`) answers `get_routes` |
+| Playwright | browsers install; one trivial spec passes against the scratch app |
+| Agent-driven Chrome | the agent opens the scratch app in a local Chrome session and reads the page (chaos-run mechanics) |
+| Preview deploy | `vercel deploy` of the scratch app succeeds; URL reachable (protection bypass if set) |
+| Teardown | scratch directory deleted; nothing of M0 lands in the repo |
+
+Gate: all six proofs green, recorded in `state/status.md`. A failed
+proof is an environment fix (or a `state/open.md` entry with its
+degradation — e.g. Chrome fails → chaos falls back to Playwright),
+never a reason to start M1 blind. Budget: one hour; M0 produces no
+reusable code by design.
+
 ### M1 — Gerüst
 
 The repository becomes a deployable Next.js project; the delivery

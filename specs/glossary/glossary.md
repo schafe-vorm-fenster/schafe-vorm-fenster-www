@@ -6,6 +6,19 @@ date: 2026-09-09
 
 # Glossary
 
+> **The canonical vocabulary is not here.** Geographic terms, product
+> terms and roles are defined in the bilingual glossary (SRC-016), which
+> becomes `@schafe-vorm-fenster/glossary` (DEC-062). This register points
+> at it and adds only what is specific to the website: which word to use
+> in copy per locale, and which words not to use.
+>
+> From the canonical source, binding here: **Community** = Dorf/Ort ·
+> **Municipality** = Gemeinde · **County** = Landkreis · **State** =
+> Bundesland — the five levels of TS-005 D1. **Community Calendar** =
+> Dorfkalender. And the role in two registers (DEC-062): **Actor/Akteur**
+> outward, in all copy and in the audience model; **Organizer** internal,
+> in the data model and the APIs. Nothing user-facing says Organizer.
+
 | ID | Term | Meaning / canonical source |
 | --- | --- | --- |
 | GL-001 | job | A visitor's concern in the moment, not a role. Four jobs carry the site. Canonical: SRC-001 §1. |

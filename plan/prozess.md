@@ -3,7 +3,7 @@
 The loop that closes every milestone gate. It runs without asking
 anyone outside the team.
 
-```
+```text
 1. QA + Chaos personas run against the milestone scope
    → findings into state/findings/round-<n>.md,
      each with severity: critical / high / medium / low
@@ -62,6 +62,25 @@ locally. Otherwise two environments are debugged at once.
   verifies Chrome access before any run starts; if it fails, chaos
   runs fall back to Playwright with persona scripts and the gap is
   recorded on the open list.
+
+## Skill-Matrix — welcher Roundtrip lädt was
+
+Binding, not advisory: the orchestrator names these skills in every
+spawn prompt, and each playbook's Guidelines repeat them. An agent
+that skipped its skills has not finished its step.
+
+| Loop step | Role | Skills (mandatory) |
+| --- | --- | --- |
+| Work package: page/feature | Developer | `vercel-react-best-practices`, `web-design-guidelines`, `next-dev-loop` (+ `tdd` for logic) |
+| Work package: content | Content | `copywriting` (+ `cro` on conversion pages), `ux-writing` for microcopy, then `humanizer` + `humanize-de` (DE) / `humanizer` + `copy-editing` (EN) |
+| New dependency | Developer | `supply-chain-risk-auditor` before the stack-harmony ADR |
+| 1 — QA run | QA | `webapp-testing`; `web-design-guidelines` for a11y/UX criteria |
+| 1 — Chaos run | Chaos personas | persona file is the method (no further skills) |
+| 3 — Fix round (PR) | Developer | `diagnosing-bugs`; `differential-review` on the PR diff |
+| 5 — Retest | QA | `webapp-testing` on the round's findings |
+| M4 + M5 gate: security sweep | QA | `semgrep` (scan), `differential-review` over the milestone diff — findings feed the normal loop (TS-014 scope) |
+| Gate — Kundenabnahme | Kunde | none — the criteria and the preview are the instrument |
+| Gate — UAT | UAT persona | none — naive eyes are the instrument |
 
 ## Round bookkeeping
 

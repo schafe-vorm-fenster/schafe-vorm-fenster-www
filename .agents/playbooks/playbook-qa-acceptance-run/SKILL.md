@@ -47,6 +47,11 @@ a protocol another agent can act on mechanically.
 
 ## Guidelines
 
+- Mandatory skills (Skill-Matrix, plan/prozess.md): `webapp-testing`
+  for browser-level criteria, `web-design-guidelines` for a11y/UX
+  criteria; at the M4/M5 gates additionally the security sweep —
+  `semgrep` over the codebase, `differential-review` over the
+  milestone diff.
 - Verdicts are per criterion id. "The suite is green" is not a
   verdict.
 - A failing criterion produces a finding with reproduction steps and

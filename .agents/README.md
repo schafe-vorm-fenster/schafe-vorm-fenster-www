@@ -32,6 +32,13 @@ auto-generates `AGENTS.md`; the cache-components skills from
 **QA (anthropics/skills)** — `webapp-testing` (Playwright-driven
 browser QA).
 
+**Security (trailofbits/skills)** — `semgrep` (codebase scan),
+`differential-review` (security review of PR/milestone diffs),
+`supply-chain-risk-auditor` (before every new dependency's
+stack-harmony ADR). Bound to the loop via the Skill-Matrix in
+plan/prozess.md: security sweep at the M4 and M5 gates,
+differential review in fix rounds.
+
 **Content (coreyhaines31/marketingskills + others)** — `copywriting`
 (landing/homepage/pricing copy), `copy-editing` (editorial review),
 `cro` (conversion review), `ux-writing` (microcopy: buttons, errors,
@@ -47,10 +54,11 @@ problem): obra/superpowers (TDD/debugging/review — overlaps the
 mattpocock set), hardikpandya/stop-slop (overlaps humanizer; its
 em-dash ban is wrong for German), anthropics pr-review-toolkit
 (six reviewer agents — our two-axis `code-review` covers the run),
-trailofbits/skills (deep security research — beyond TS-014's
-baseline; revisit for the hardening round),
-senshinji/claude-translation-skill (multi-agent translation —
-Content role + tone-of-voice cover DE/EN). Register:
-https://skills.sh — install via `npx skills add <owner>/<repo> -s
+the broader trailofbits research skills (fuzzing, CodeQL, audit
+prep — beyond TS-014's baseline; the review-relevant subset IS
+installed, see Security above; revisit the rest for the hardening
+round), senshinji/claude-translation-skill (multi-agent translation
+— Content role + tone-of-voice cover DE/EN). Register:
+<https://skills.sh> — install via `npx skills add <owner>/<repo> -s
 <skill> -a claude-code -y`, then normalize: canonical folder in
 `.agents/skills/`, symlink in `.claude/skills/`.

@@ -7,7 +7,13 @@ judge.
 ## Verantwortung
 
 - Run `pnpm preflight` first; abort on RED, log YELLOW to
-  `state/open.md`.
+  `state/open.md`. Then execute **M0 Durchstich**
+  (plan/projektplan.md) before any real work — the toolchain proof
+  is the run's first gate.
+- Every spawn prompt names the mandatory skills for that step from
+  the Skill-Matrix (plan/prozess.md) — an agent that skipped its
+  skills has not finished its step, and the orchestrator sends the
+  work back.
 - Decompose the current milestone (plan/projektplan.md) into work
   packages and delegate each to the right role as a subagent
   (`.claude/agents/`), with the matching playbook and its dispatch

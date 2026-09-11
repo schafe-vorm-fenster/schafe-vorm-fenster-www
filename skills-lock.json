@@ -43,6 +43,12 @@
       "skillPath": "skills/engineering/diagnosing-bugs/SKILL.md",
       "computedHash": "37b5e9c624513551da790b52864dc8c84bff996a6d03a380cc6facdcc0a88354"
     },
+    "differential-review": {
+      "source": "trailofbits/skills",
+      "sourceType": "github",
+      "skillPath": "plugins/differential-review/skills/differential-review/SKILL.md",
+      "computedHash": "deb285f46103f8f088b3d5e383bba497c28ef8839f1b18f9ce3196e93f8eed2b"
+    },
     "domain-modeling": {
       "source": "mattpocock/skills",
       "sourceType": "github",
@@ -115,11 +121,23 @@
       "skillPath": "skills/engineering/resolving-merge-conflicts/SKILL.md",
       "computedHash": "63b2dcadbe9124caeb3448f1378286fe18dcefb2494f60e136831b8b4986ca27"
     },
+    "semgrep": {
+      "source": "trailofbits/skills",
+      "sourceType": "github",
+      "skillPath": "plugins/static-analysis/skills/semgrep/SKILL.md",
+      "computedHash": "afd37cee7037ab05e9d3a5000d95e803902345606886ca4103c1ad24684fbe92"
+    },
     "setup-matt-pocock-skills": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
       "computedHash": "552b0f48b9fe054aa93c5d432fefbd7bd9645e3f2d20b4e22432453a81800b21"
+    },
+    "supply-chain-risk-auditor": {
+      "source": "trailofbits/skills",
+      "sourceType": "github",
+      "skillPath": "plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor/SKILL.md",
+      "computedHash": "99a6580a03a85794ef409632859a5cb158f22fd11c5ab35ddf822f73a2ed859c"
     },
     "tdd": {
       "source": "mattpocock/skills",

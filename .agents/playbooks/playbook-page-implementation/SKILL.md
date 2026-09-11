@@ -48,6 +48,10 @@ criterion individually satisfiable.
 
 ## Guidelines
 
+- Mandatory skills (Skill-Matrix, plan/prozess.md): load
+  `vercel-react-best-practices` and `web-design-guidelines` before
+  Phase 2, use `next-dev-loop` from Phase 2 on, `tdd` for logic in
+  Phase 3/4 — the phases are not done without them.
 - A missing component is derived from `design-system` and marked
   [PROPOSED] — never invented freestyle, never blocking.
 - Every box that receives async content declares its ratio or height

@@ -307,12 +307,21 @@ content file when generation ends. Four facets, on every selectable type.
 | `geo.state` | `geo.state` |
 | `geo.country` | `geo.country` |
 
-The hub's data already speaks these five levels: every `geo` block in
-`@schafe-vorm-fenster/media-echo` is
-`{place, municipality, county, state, country}`, with `state` populated
-and the finer levels `null` where unknown. `@schafe-vorm-fenster/proof`
-carries no `geo` at all yet — the one demand in this section that still
-blocks (see Open Points).
+**Geo is a website-owned facet.** The binding value lives in the content
+file, not in the hub record. Where a record carries `geo`, it is taken as
+the **suggestion** and pre-fills the facet — every `geo` block in
+`@schafe-vorm-fenster/media-echo` is already
+`{place, municipality, county, state, country}` with `state` populated,
+and none of that work is thrown away. Where a record carries none —
+`@schafe-vorm-fenster/proof` carries no `geo` at all — the facet is
+determined at generation time from what the record does say, and the
+reason is recorded like any other assessment.
+
+This is deliberately not A.2 rule 5 territory. Geo is not a missing hub
+field to be marked and waited for; it is a property of how *this site*
+places an element on *its* scale, and the hub's five-level model is an
+input to that rather than its source of truth. One rule, no per-entity
+exceptions, no blocked proof stream.
 
 **This corrects DEC-041 §1 and TS-005 D1**, which fix four levels and
 drop *state* on the stated grounds that four is what the geo-api offers.
@@ -532,6 +541,38 @@ named interpolation slots of `PlaceholderText`, never baked into a
 generated string. A content file that varies per visitor breaks the cache
 key and, with it, the performance budget.
 
+### B.6 One tonality for the whole site
+
+There is **one** tone profile, not one per job, per audience or per route,
+and its register is **`du` everywhere**. The hub's `tone-of-voice`
+foundation already says so ("use informal `Du` by default"); this fixes it
+as binding for the website rather than as a default that each page may
+reconsider.
+
+What may vary is emphasis, not register: slightly more matter-of-fact
+where the reader is deciding about a budget, warmer where someone is
+looking for what is on next weekend. Those are tendencies inside one
+voice.
+
+What may never vary is the register. A site that says `du` on `/dein-ort`
+and `Sie` on `/dein-kalender` breaks at exactly the point principle 2 is
+built on — the same person wearing a different hat, one click apart.
+Whoever crosses that seam is addressed by two different senders, and no
+amount of good copy repairs that. If the choice is between switching and
+staying informal, the site stays informal.
+
+**This contradicts the wireframes.** Screens 05, 06 and 08 address the
+Verwaltung with `Sie` throughout — "Ihr Veranstaltungskalender. Ihre
+Website. Ihr Name." Under this decision that copy is rewritten to `du`,
+not kept as an exception. It is a brand decision with real weight, since
+addressing a Landrat informally is a stance rather than an oversight, and
+it belongs in a decision record and in the hub's communication principles
+rather than only here (see Open Points).
+
+Consequence for generation: `tone-profile` is one interface value for
+every run, and a register switch is a validation failure rather than a
+stylistic finding.
+
 ## C — Mapping Layer: The Container Skeleton
 
 Between IA and components sits one artefact per route: the **page
@@ -651,7 +692,7 @@ Interfaces:
 | `target-schema` | yes | the Zod schema — the binding output contract |
 | `glossary` | yes | the bound terms, the word to use per locale, the words banned (A.3) |
 | `page-context` | yes | focus job, audience order, primary conversion, position on the page |
-| `tone-profile` | yes | register, voice, forbidden phrasings |
+| `tone-profile` | yes | the site-wide profile of B.6 — one register, one voice, forbidden phrasings |
 | `locales` | yes | the locale set, e.g. `["de", "en"]` |
 | `length-budget` | yes | per field, from the component |
 | `relation-job-guidance` | for selectable types | the relation → job correspondence and the assessment rules (B.5 §2) |
@@ -776,34 +817,70 @@ A new media echo entry lands: `2026-09-noerd-award.media-echo.md`, type
 
 ## Order of Work
 
-1. **Schema catalogue** — walk the eight wireframe screens field by field
-   and turn B.3 into real Zod schemas with real budgets. This is the
-   longest step and everything else waits on it.
-2. **One composition** — `/dein-kalender`, the commercially heaviest page,
-   as the proof that Layer C carries.
-3. **Component inventory** — name every component against a schema; mark
-   which ones the design kit already covers.
-4. **The core playbook** — E.2, with one interface set, run manually.
-5. **Pilot** — one media echo record end to end, `de` + `en`, as in E.4.
-   Measure how much editorial rework the draft needs; that number decides
-   how much prompt work the playbook still owes.
-6. **Scale** — remaining compositions, then `check:content` in CI, then P7.
+Layer C comes first. It is the only layer with no specification at all,
+and it is what tells the schema work which types actually carry a page.
 
-Nothing before step 1 produces copy: the project rule stands, page copy is
-written after the specification phase.
+1. **Composition spec** — a tactical spec of its own for Layer C: slot
+   grammar, binding kinds, cardinality, empty behaviour. It closes the
+   open point TS-007 names and gives `check:content` 7 and 9 something to
+   validate against.
+2. **One composition** — `/dein-kalender` in TypeScript, referencing the
+   Zod schemas by type. The commercially heaviest page: three offer tiers,
+   comparison, pricing rules, embed demo. If Layer C carries that, it
+   carries everything.
+3. **Schema catalogue** — all 26 types of B.3 as real Zod schemas in a new
+   `src/domain/content/` tree. `max()` budgets measured off the wireframes
+   at 390 px and marked provisional in `describe()`; the existing
+   `content-frontmatter.schema.ts` stays where it is as the archive
+   validator and is not carried forward.
+4. **Source adapter** — `resolve(sourceRef) → record`, reading
+   `index.json` only, the single module that knows package layout.
+5. **The core playbook** — E.2 with one interface set, run locally.
+6. **Pilot: one type, every page.** `proof-card` from media echo records,
+   `de` and `en`, as in E.4. Output goes to a pilot location as fixtures,
+   `status: draft`, never `approved` — so WEB-F-087 holds while the
+   pipeline is being proven. Measure the editorial rework; that number
+   decides how much prompt work the playbook still owes.
+7. **Components with fixtures** — render the composition against fixed
+   example data so the page can be judged whole before events-api and the
+   Portalize loader exist. The fixtures are temporary by design.
+8. **Scale** — remaining compositions, `check:content` in CI, then P7.
+
+Page copy for a live page still waits for the end of the specification
+phase. The pilot is not that: it produces evidence about the pipeline, in
+fixtures, outside `content/`.
+
+## How Generation Runs
+
+Two modes, and the second is not a scaled-up version of the first.
+
+**First run — local.** The playbook runs in an agent in this repository
+and commits its output directly. No issue, no pull request, no dispatch.
+The point is to find out what the pipeline does, and every layer of
+process in between costs a cycle and hides a finding.
+
+**Production — issue-driven.** A content need becomes an issue; a
+dispatch rule triggers the playbook through the hub's GTM pipeline, the
+same mechanism that already carries publishing (`cmd:` labels, dispatch
+YAML in `governance/dispatch/`); the result arrives as a pull request;
+`check:content` and the auto-merge rules decide whether it lands on its
+own or waits for manual release. That is also where P7 attaches once the
+Q-018 trigger is settled.
 
 ## Open Points
 
-- [ ] **Register per job.** The tone-of-voice foundation says informal `Du`
-      by default, but `/dein-kalender` and `/deine-region` address
-      Verwaltungen with `Sie` in the wireframes. The tone profile must be
-      resolvable per audience and job. Where is that mapping decided —
-      here, in `audiences/`, or in the foundation?
-- [ ] **Glossary columns.** The `GL-###` register carries meanings, not
-      copy words. Before generation can rely on it, every entry needs a
-      use-this-word and an avoid-this-word column per locale (A.3). Who
-      fills them, and does the register stay in `specs/` once it becomes a
-      production input rather than a specification aid?
+- [ ] **`du` for the Verwaltung needs a decision record.** B.6 fixes one
+      register for the whole site and rewrites the `Sie` copy of wireframe
+      screens 05, 06 and 08. That is a brand stance, not a formatting
+      rule: it decides how a Landrat, an Amtsleiterin and a Stiftung are
+      addressed. It belongs in a `DEC-###` here and in the hub's
+      communication principles, and the wireframes should be corrected so
+      they stop teaching the opposite.
+- [ ] **Glossary columns — to be filled.** Decided: the `GL-###` register
+      stays in `specs/`, gains a use-this-word and an avoid-this-word
+      column per locale, and an agent pre-fills both from the IA, the
+      wireframes and the principles for review (A.3). Open is only the
+      doing of it; `check:content` 11 has nothing to check until then.
 - [ ] **Demands against TS-005 and DEC-041** — decided here, still to be
       carried into the engine spec by the session that owns it:
       DEC-041 §1 and TS-005 D1 (six tiers incl. state and different
@@ -821,9 +898,11 @@ written after the specification phase.
       re-reads them. Needs a review trigger — an age, a package major
       version, or a periodic sweep — or the site quietly orders itself by
       judgements nobody still holds.
-- [ ] **Length budgets.** They come from the components, which do not exist
-      yet. Interim: take them from the wireframes at 390 px and mark them
-      provisional in `describe()`.
+- [ ] **Length budgets are provisional by decision.** Measured off the
+      wireframes at 390 px and marked provisional in `describe()`, because
+      the schemas are built before the components. Open: what re-flags
+      existing content when a component later changes its budget — a
+      `budget_version` on the schema, or a sweep?
 - [ ] **Update trigger mechanics** — unresolved as Q-018 in the website
       specs. Options: release webhook, scheduled dependency check, manual.
 - [ ] **`en` proof context.** Generating from the record rather than
@@ -831,19 +910,24 @@ written after the specification phase.
       Verify on the pilot — and measure how much the harmonisation step
       actually has to repair. If it repairs a lot, parallel generation is
       the wrong trade and translation-plus-adaptation wins.
-- [ ] **Composition format.** TypeScript (typed, refactorable) or YAML
-      (editable without a build). Recommendation: TypeScript, because the
-      slots reference Zod schemas.
+- [ ] **Composition spec needs an id.** Decided: compositions are
+      TypeScript, and Layer C gets a tactical spec of its own rather than
+      being folded into TS-006. Open: its `TS-###` number, and who writes
+      it — it is the first artefact on the critical path.
 - [ ] **Variant handling.** Whether generation proposes alternatives per
       slot by default, and who chooses.
-- [ ] **Missing source fields.** `geo` on proof is the one that still
-      binds: without it a proof element cannot be placed on the scale at
-      all and falls to tier 6. `audiences` on media echo has become the
-      lesser demand — job relation is assessed rather than derived
-      (B.5 §2), so a missing audience tag no longer blocks the facet.
-      Both handled by A.2 rule 5 — marked missing, claim weakened,
-      demand registered, pipeline running. Open is only where the demand
-      register lives, so the gaps stay countable.
+- [ ] **Missing source fields — both demands have shrunk.** `geo` on
+      proof no longer blocks: geo is a website-owned facet with the hub
+      value as a suggestion (B.5 §1). `audiences` on media echo no longer
+      blocks either, since job relation is assessed rather than derived
+      (B.5 §2). Neither is a prerequisite any more; both stay as hub
+      demands worth doing. Open is only where the demand register lives,
+      so the gaps stay countable.
+- [ ] **Fixture lifecycle.** Step 7 renders components against fixed
+      example data so a page can be judged before events-api and the
+      Portalize loader exist. Temporary data has a way of becoming
+      permanent: what removes the fixtures, and what fails if they are
+      still there at launch?
 - [ ] **Posts packaging.** `@schafe-vorm-fenster/posts` ships no
       `index.json` despite exporting one (A.1). One line in the hub's
       package `files` array. Until it lands, the adapter has no contract

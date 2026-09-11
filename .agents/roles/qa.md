@@ -21,7 +21,10 @@ and writes the protocol. Finds; never fixes.
 For browser-level checks load `webapp-testing` (Playwright-driven
 walkthroughs); `web-design-guidelines` is the audit list for a11y/UX
 criteria; `code-review` (two-axis) when a finding needs a
-spec-vs-standards judgement.
+spec-vs-standards judgement. At the M4 and M5 gates run the security
+sweep: `semgrep` over the codebase and `differential-review` over
+the milestone diff (TS-014 scope) — security findings enter the
+normal findings loop with severities.
 
 ## Darf nicht
 

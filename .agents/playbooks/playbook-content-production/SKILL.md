@@ -49,6 +49,11 @@ secondary locale, and keep each claim traceable to a governed source
 
 ## Guidelines
 
+- Mandatory skills (Skill-Matrix, plan/prozess.md): `copywriting`
+  for page copy (+ `cro` on conversion pages), `ux-writing` for
+  microcopy; every German draft passes `humanizer` together with
+  `humanize-de`, every English translation passes `humanizer` and
+  `copy-editing` — Phase 2/3 are not done without these passes.
 - Primary locale first, translation second; a translation carries
   the same source ids as its original.
 - Numbers, names, quotes, and claims come from `content-sources`
