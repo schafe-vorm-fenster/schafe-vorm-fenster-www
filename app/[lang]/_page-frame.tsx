@@ -130,10 +130,24 @@ export type ClosingBlock =
       /** Only where a cleared backing exists — otherwise omitted, not softened. */
       readonly reassurance?: string;
     }
-  | { readonly variant: "merged" };
+  | { readonly variant: "merged" }
+  /**
+   * The block-1 primary repeated as the **module** it is [PROPOSED].
+   *
+   * TS-006 D6 names two shapes, a goal CTA and the merged three-job offer.
+   * Neither fits a state whose primary conversion is a module rather than a
+   * link: where the focus job is "know what is on" and no place is known,
+   * block 1 carries the place search and TS-019 D2 gives that state no goal
+   * at all ("a search is not a conversion"). The closing block then repeats
+   * the same module with the same submit label and the same target — which
+   * is what "no new text, same target" asks for — and without the
+   * `data-cta="primary"` marker, which block 1 keeps. state/open.md carries
+   * the row.
+   */
+  | { readonly variant: "module"; readonly node: ReactNode };
 
-export interface PageFrameProps extends Omit<SiteChromeProps, "children"> {
-  /** The page's `page.meta.ts` — the only source of the band's and the closing block's job. */
+export interface PageFrameProps extends Omit<SiteChromeProps, "children" | "route"> {
+  /** The page's `page.meta.ts` — the route, and the only source of the band's and the closing block's job. */
   readonly meta: PageMeta;
   /** The band's own phrasing, from the page's `context-band` content slot. */
   readonly contextBandHeading?: string;
@@ -174,23 +188,25 @@ export function PageFrame({
       {/* Block 3 — the three non-focus jobs. Suppressed where block 4 is the
           merged three-job offer, which is the same list (TS-006 D6). */}
       {merged ? null : (
-        <SectionShell id="kontextband" label={contextBandHeading} surface="surface">
-          <MotionReveal>
+        <MotionReveal>
+          <SectionShell id="context-band" label={contextBandHeading} surface="surface">
             <ContextBand
               currentJob={currentJob}
               heading={contextBandHeading}
               locale={locale}
             />
-          </MotionReveal>
-        </SectionShell>
+          </SectionShell>
+        </MotionReveal>
       )}
 
       {/* Block 4 — the focus job's conversion, repeated. Nothing but the
           global footer renders after it (TS-006 D2). */}
-      <SectionShell id="abschluss" label={dictionary(locale).nav.home} surface="paper">
-        <MotionReveal>
-          {merged ? (
+      <MotionReveal>
+        <SectionShell id="closing-cta" label={dictionary(locale).nav.home} surface="paper">
+          {closing.variant === "merged" ? (
             <ClosingCta currentJob={currentJob} locale={locale} variant="merged" />
+          ) : closing.variant === "module" ? (
+            closing.node
           ) : (
             <ClosingCta
               label={closing.label}
@@ -200,8 +216,8 @@ export function PageFrame({
               to={closing.to}
             />
           )}
-        </MotionReveal>
-      </SectionShell>
+        </SectionShell>
+      </MotionReveal>
     </SiteChrome>
   );
 }

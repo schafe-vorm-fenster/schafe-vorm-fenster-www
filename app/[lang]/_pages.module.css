@@ -1,0 +1,23 @@
+/*
+ * The few page-level layout values the three pages of this work package
+ * need on top of the components' own styles. Tokens only — no colour, no
+ * font-family, no `max-width` media query (TS-017 D2/D3, `pnpm check:brand`).
+ */
+
+/*
+ * A scene's instance is an illustration, not a section background: without a
+ * cap it fills the full section width and a `ratio-portrait` box becomes a
+ * 1400 px tall wall on a desktop viewport. The reading measure is the same
+ * cap the hero's lead uses.
+ */
+.sceneMedia {
+  max-width: var(--measure-reading);
+}
+
+/* The counters stand inline in the provenance band (TS-019 D3, block 2d). */
+.counters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-block: var(--space-4);
+}
