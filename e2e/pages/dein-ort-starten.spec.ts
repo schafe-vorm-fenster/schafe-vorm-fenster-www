@@ -258,35 +258,31 @@ test.describe("TS-021 — start the calendar in your place", () => {
   });
 
   test("TS-021-A12: no tracker request carries a conversion-goal name", async ({ page }) => {
-    const offOrigin: string[] = [];
-    page.on("request", (request) => {
-      const url = new URL(request.url());
-      if (url.hostname !== "localhost" && url.hostname !== "127.0.0.1") {
-        offOrigin.push(request.url());
-      }
-    });
+    // Every request the page makes, whatever its host. The criterion is
+    // about the *payload* — a goal name must not travel — so the assertion is
+    // on the URLs, not on the host list. (The host list is TS-013-A1's, in
+    // `e2e/privacy.spec.ts`; on a Vercel preview it also sees the platform's
+    // own `vercel.live` toolbar, which is the deployment's, not the page's.)
+    const requests: string[] = [];
+    page.on("request", (request) => requests.push(request.url()));
 
     await page.goto("/dein-ort/starten?ort=17390");
     await page.locator('[data-cta="primary"]').first().hover();
-    await page.waitForTimeout(250);
-
-    // TS-012 D1/D2 and the mock rule: the tracker in every environment today
-    // is `mock-tracker.ts` — it logs and records nothing, makes no network
-    // call at all, and this page arms no conversion in the first place (the
-    // founding offer's goal fires on `/mitmachen/registrieren`).
-    expect(offOrigin).toEqual([]);
-
-    // Belt and braces on the criterion's own wording: no request of any
-    // origin carries a goal name in its URL.
-    const anyRequest: string[] = [];
-    page.on("request", (request) => anyRequest.push(request.url()));
-    await page.reload();
     await page.waitForLoadState("networkidle");
-    for (const url of anyRequest) {
+
+    expect(requests.length).toBeGreaterThan(0);
+    for (const url of requests) {
       expect(url).not.toContain("register-as-publisher");
       expect(url).not.toContain("save-calendar-to-homescreen");
       expect(url).not.toContain("publish-first-event");
+      expect(url).not.toContain("buy-calendar-licence");
+      expect(url).not.toContain("request-licence-quote");
     }
+
+    // TS-012 D1/D2 and the mock rule: the tracker in every environment today
+    // is `mock-tracker.ts` — it logs and records nothing, and makes no
+    // network call at all. No etracker host is contacted.
+    expect(requests.filter((url) => url.includes("etracker"))).toEqual([]);
   });
 
   test("TS-021-A13: the place name reserves its box before paint, and nothing shifts", async ({

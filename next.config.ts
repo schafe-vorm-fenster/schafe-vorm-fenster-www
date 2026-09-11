@@ -1,8 +1,4 @@
-import {
-  localeRewrites,
-  redirectTable,
-  unknownLanguageRewrites,
-} from "./src/lib/routes/next-routing";
+import { localeRewrites, redirectTable } from "./src/lib/routes/next-routing";
 import { STATIC_SECURITY_HEADERS } from "./src/lib/security/csp";
 
 import type { NextConfig } from "next";
@@ -45,26 +41,14 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return {
       beforeFiles: [...localeRewrites()],
-      // TS-004 D3.4 / DEC-032 — an unknown first segment is a 404 with a
-      // *rendered* body.
-      //
-      // `app/[lang]/layout.tsx` used to pair `generateStaticParams` with
-      // `dynamicParams = false`, which made a non-language first segment match
-      // no route at all, so Next answered with the prerendered
-      // `global-not-found` document. Cache Components forbids `dynamicParams`,
-      // and without it `/gibt-es-nicht` matches `app/[lang]` with
-      // `lang = "gibt-es-nicht"`, whose `notFound()` renders the in-route 404 —
-      // an `__next_error__` shell whose request-time inline bootstrap has no
-      // entry in the per-build CSP hash set (`scripts/generate-csp-hashes.mjs`
-      // only sees prerendered HTML), so the browser blocks it and leaves the
-      // document empty. Measured: React error #412, zero `h1`, zero body text.
-      //
-      // `afterFiles` is the right stage: it runs **after** the filesystem
-      // routes (so `/robots.txt`, `/sitemap.xml`, `/dev/components` and
-      // `/api/*` are already served) and **before** the dynamic ones (so
-      // `app/[lang]` never sees the path). `/_not-found` is Next's own
-      // prerendered 404 route — status 404, full body, hashes in the set.
-      afterFiles: [...unknownLanguageRewrites()],
+      // TS-004 D3.4: nothing here. An unknown first segment matches
+      // `app/[lang]`, whose page calls `notFound()` — status 404, and the
+      // body renders wherever the page can hydrate. A rewrite onto Next's own
+      // `/_not-found` was tried and reverted: it renders the right document
+      // but Vercel serves the rewritten route with **200**, and a 404 that
+      // says 200 is worse than a 404 that renders thin. The empty body is
+      // `state/open.md` row 132's CSP gap, not a routing one.
+      afterFiles: [],
       fallback: [],
     };
   },

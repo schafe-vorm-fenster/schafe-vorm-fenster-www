@@ -8,14 +8,12 @@ import { StepIndicator } from "@/src/components/step-indicator/step-indicator";
 import { appendCampaignParams, extractCampaignParams } from "@/src/lib/analytics";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
-import { resolveLocale } from "@/src/lib/i18n/locales";
 import { APP_ORIGIN } from "@/src/lib/live/app-handover";
 import { jobLabelKey } from "@/src/lib/pages/page-meta";
-import { pageMetadata } from "@/src/lib/routes/metadata";
 
 import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
-import { localeFrom } from "../../_locale";
+import { localeFrom, pageMetadataFor } from "../../_locale";
 import { SiteChrome } from "../../_page-frame";
 
 import { pageMeta } from "./page.meta";
@@ -45,7 +43,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
-  return pageMetadata(ROUTE, resolveLocale((await params).lang));
+  return pageMetadataFor(ROUTE, params);
 }
 
 function listItems(blocks: readonly ContentBlock[]): string[] {

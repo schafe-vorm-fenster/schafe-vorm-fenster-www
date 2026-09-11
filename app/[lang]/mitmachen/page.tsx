@@ -10,15 +10,14 @@ import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
 import { slotState } from "@/src/lib/content/provenance";
-import { resolveLocale } from "@/src/lib/i18n/locales";
 import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
-import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
+import { pageTitle } from "@/src/lib/routes/metadata";
 
 import { PlaceDatesIsland } from "../_islands";
 import { selectProof } from "../_proof";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
-import { localeFrom } from "../_locale";
+import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
 import { REFERENCE_PLACE, selectExamplePlace } from "./example-place";
@@ -46,7 +45,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
-  return pageMetadata(ROUTE, resolveLocale((await params).lang));
+  return pageMetadataFor(ROUTE, params);
 }
 
 function listItems(blocks: readonly ContentBlock[]): string[] {

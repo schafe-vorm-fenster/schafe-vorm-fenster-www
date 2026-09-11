@@ -6,13 +6,11 @@ import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { shiftHeadings } from "@/src/lib/content/legal-markdown";
 import { slot } from "@/src/lib/content/loader";
-import { resolveLocale } from "@/src/lib/i18n/locales";
 import { legalAnchor, LEGAL_SECTION_IDS } from "@/src/lib/routes/legal-anchors";
-import { pageMetadata } from "@/src/lib/routes/metadata";
 
 import { PageJsonLd } from "../_structured-data";
 import { legalDocument, pageContent } from "../_content";
-import { localeFrom } from "../_locale";
+import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
 import styles from "./page.module.css";
@@ -64,7 +62,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
-  return pageMetadata(ROUTE, resolveLocale((await params).lang));
+  return pageMetadataFor(ROUTE, params);
 }
 
 export default async function Page({

@@ -11,10 +11,8 @@ import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
-import { resolveLocale } from "@/src/lib/i18n/locales";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
-import { pageMetadata } from "@/src/lib/routes/metadata";
 
 import heroPlaceholder from "@/src/generated/placeholders/home/hero.svg";
 import portraitPlaceholder from "@/src/generated/placeholders/ueber-uns/gruender.svg";
@@ -25,7 +23,7 @@ import { CountersIsland, NearbyIsland, PlaceDatesIsland } from "./_islands";
 import { selectProof } from "./_proof";
 import { PageJsonLd } from "./_structured-data";
 import { pageContent } from "./_content";
-import { localeFrom } from "./_locale";
+import { localeFrom, pageMetadataFor } from "./_locale";
 import { PageFrame } from "./_page-frame";
 import { HOME_META } from "./page.meta";
 
@@ -87,7 +85,7 @@ export async function generateMetadata({
   // `generateMetadata` must not throw `notFound()`: the metadata boundary
   // sits above `[lang]`, so a throw here escapes the shell and Next.js falls
   // back to its built-in 404. The *page* answers 404; this resolves.
-  return pageMetadata(ROUTE, resolveLocale((await params).lang));
+  return pageMetadataFor(ROUTE, params);
 }
 
 /** The generated labels this page needs and no artifact carries (Dummy-Content, state/open.md). */

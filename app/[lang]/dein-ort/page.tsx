@@ -7,7 +7,6 @@ import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { ValueStory } from "@/src/components/value-story/value-story";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
-import { resolveLocale } from "@/src/lib/i18n/locales";
 import { ctaLabelOnly } from "@/src/lib/content/text";
 import { fillTemplate, splitSteps } from "@/src/lib/pages/demo-content";
 import { STAGE_ZERO_ANCHOR, resolveAnchorPlace } from "@/src/lib/pages/live-anchor";
@@ -17,7 +16,6 @@ import { cacheLife, cacheTag } from "next/cache";
 import { calendarUrl } from "@/src/lib/live/app-handover";
 import { cacheLifeProfile, cacheTags } from "@/src/lib/live/cache-profiles";
 import { resolvePlace } from "@/src/lib/live/places";
-import { pageMetadata } from "@/src/lib/routes/metadata";
 import { href } from "@/src/lib/routes/routes";
 
 import heroPlaceholder from "@/src/generated/placeholders/dein-ort/hero.svg";
@@ -25,7 +23,7 @@ import heroPlaceholder from "@/src/generated/placeholders/dein-ort/hero.svg";
 import { NearbyIsland, PlaceDatesIsland, exampleRows } from "../_islands";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
-import { localeFrom } from "../_locale";
+import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 import { PLACE_META } from "./page.meta";
 
@@ -108,7 +106,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
-  return pageMetadata(ROUTE, resolveLocale((await params).lang));
+  return pageMetadataFor(ROUTE, params);
 }
 
 /**

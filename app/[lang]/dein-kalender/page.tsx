@@ -12,15 +12,14 @@ import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { TrustBlock } from "@/src/components/trust-block/trust-block";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
-import { resolveLocale } from "@/src/lib/i18n/locales";
 import { BRIEFING_URL } from "@/src/lib/live/briefing";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
-import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
+import { pageTitle } from "@/src/lib/routes/metadata";
 
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { selectProof } from "../_proof";
-import { localeFrom } from "../_locale";
+import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
 import { pageMeta } from "./page.meta";
@@ -45,7 +44,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
-  return pageMetadata(ROUTE, resolveLocale((await params).lang));
+  return pageMetadataFor(ROUTE, params);
 }
 
 function listItems(blocks: readonly ContentBlock[]): string[] {

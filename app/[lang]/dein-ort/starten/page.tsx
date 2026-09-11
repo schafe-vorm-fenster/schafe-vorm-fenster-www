@@ -6,19 +6,17 @@ import { SceneBlock } from "@/src/components/scene-block/scene-block";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
-import { resolveLocale } from "@/src/lib/i18n/locales";
 import { fillTemplate, splitSteps } from "@/src/lib/pages/demo-content";
 import { DEMO_PLACE } from "@/src/lib/pages/demo-data";
 import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
 import { readPlaceParameter } from "@/src/lib/pages/place-parameter";
-import { pageMetadata } from "@/src/lib/routes/metadata";
 
 import heroPlaceholder from "@/src/generated/placeholders/dein-ort-starten/hero.svg";
 
 import { PlaceDatesIsland } from "../../_islands";
 import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
-import { localeFrom } from "../../_locale";
+import { localeFrom, pageMetadataFor } from "../../_locale";
 import { PageFrame } from "../../_page-frame";
 import { PLACE_START_META } from "./page.meta";
 
@@ -73,7 +71,7 @@ export async function generateMetadata({
   // Parameter-free by construction (TS-011 D5): no runtime value reaches the
   // indexed surface, which is what makes D6's leak impossible rather than
   // merely unlikely.
-  return pageMetadata(ROUTE, resolveLocale((await params).lang));
+  return pageMetadataFor(ROUTE, params);
 }
 
 /**
