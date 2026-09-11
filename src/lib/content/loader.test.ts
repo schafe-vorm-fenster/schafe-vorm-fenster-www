@@ -3,10 +3,17 @@ import { describe, expect, it } from "vitest";
 import { loadPage, parsePage, slot, slotsOfType } from "@/src/lib/content/loader";
 import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
 
+// The `seo` block is required frontmatter (TS-011 D5, F-2-72) — the page's
+// own title and meta description, keyed by the German route path.
 const artifact = `---
 id: home-de
 page_id: TS-019
 route: "/"
+seo:
+  "/":
+    title: "Fixture-Titel"
+    description: "Fixture-Beschreibung"
+    provenance: generated
 content_type: section
 status: draft
 locale: de

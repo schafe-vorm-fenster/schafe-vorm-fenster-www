@@ -2,6 +2,11 @@
 id: rechtliches-de
 page_id: TS-029
 route: "/legal"
+seo:
+  "/rechtliches":
+    title: "Legal information"
+    description: "Imprint, privacy policy, terms of use, community guidelines, data processing agreement and accessibility statement — all on one page."
+    provenance: generated
 content_type: section
 status: draft
 locale: en

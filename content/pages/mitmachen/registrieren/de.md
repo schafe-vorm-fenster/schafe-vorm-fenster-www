@@ -2,6 +2,11 @@
 id: mitmachen-registrieren-de
 page_id: TS-023
 route: "/mitmachen/registrieren"
+seo:
+  "/mitmachen/registrieren":
+    title: "Kostenlos zum Veröffentlichen anmelden"
+    description: "In drei Schritten zum Zugang: Ort wählen, sagen wer veröffentlicht, loslegen. Ohne Klarnamen, ohne E-Mail-Adresse, ohne Anmeldegebühr."
+    provenance: generated
 content_type: section
 status: draft
 locale: de

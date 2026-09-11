@@ -2,6 +2,11 @@
 id: mitmachen-de
 page_id: TS-022
 route: "/mitmachen"
+seo:
+  "/mitmachen":
+    title: "Publish your dates"
+    description: "Photograph the flyer, send it by WhatsApp, done: your date shows up in your own village calendar and in the ones next door. Sign up for free."
+    provenance: generated
 content_type: section
 status: draft
 locale: en

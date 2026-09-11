@@ -2,6 +2,11 @@
 id: ueber-uns-de
 page_id: TS-027
 route: "/ueber-uns"
+seo:
+  "/ueber-uns":
+    title: "Gebaut in einem Dorf"
+    description: "Wer den Kalender betreibt und warum er für die Orte kostenlos bleibt: ein Dorf, das sich keinen Dienst mit eigenem Vertrieb leisten kann."
+    provenance: generated
 content_type: section
 status: draft
 locale: de

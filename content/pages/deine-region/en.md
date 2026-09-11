@@ -2,6 +2,15 @@
 id: deine-region-de
 page_id: TS-026
 route: "/deine-region"
+seo:
+  "/deine-region":
+    title: "A calendar for your whole area"
+    description: "Your whole district in one calendar, under your name and in your design — without a portal project of your own. Ask us for a quote."
+    provenance: generated
+  "/deine-region/angebot":
+    title: "Request a quote for your region"
+    description: "Tell us which territory the calendar should cover and who is responsible on your side — we come back to you with a fitting quote."
+    provenance: generated
 content_type: section
 status: draft
 locale: en

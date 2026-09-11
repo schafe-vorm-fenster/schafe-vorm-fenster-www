@@ -2,6 +2,11 @@
 id: dein-ort-starten-de
 page_id: TS-021
 route: "/dein-ort/starten"
+seo:
+  "/dein-ort/starten":
+    title: "Kalender für deinen Ort starten"
+    description: "Dein Ort steht noch nicht im Dorfkalender? Eine Person, ein Flyer, ein Foto per WhatsApp — mehr braucht es nicht, damit er dazukommt."
+    provenance: generated
 content_type: section
 status: draft
 locale: de

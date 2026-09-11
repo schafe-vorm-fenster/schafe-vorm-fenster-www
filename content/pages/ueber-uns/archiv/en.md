@@ -2,6 +2,11 @@
 id: ueber-uns-archiv-de
 page_id: TS-028
 route: "/ueber-uns/archiv"
+seo:
+  "/ueber-uns/archiv":
+    title: "Archive: coverage and evidence"
+    description: "What has been written about the calendar, in chronological order and open to scrutiny — every row links to the original at the outlet."
+    provenance: generated
 content_type: section
 status: draft
 locale: en

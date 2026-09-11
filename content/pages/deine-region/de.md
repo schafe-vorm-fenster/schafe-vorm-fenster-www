@@ -2,6 +2,15 @@
 id: deine-region-de
 page_id: TS-026
 route: "/deine-region"
+seo:
+  "/deine-region":
+    title: "Kalender für euer ganzes Gebiet"
+    description: "Das ganze Kreisgebiet in einem Kalender, unter eurem Namen und in eurem Design — ohne eigenes Portalprojekt. Angebot anfragen."
+    provenance: generated
+  "/deine-region/angebot":
+    title: "Angebot für eure Region anfragen"
+    description: "Sagt uns, für welches Gebiet der Kalender gelten soll und wer bei euch zuständig ist — wir melden uns mit einem passenden Angebot."
+    provenance: generated
 content_type: section
 status: draft
 locale: de

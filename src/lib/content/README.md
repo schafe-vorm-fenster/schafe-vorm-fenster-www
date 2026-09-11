@@ -138,6 +138,7 @@ page's artifact. `CONTENT_PAGE_DIRS` in `loader.ts` is the map.
 | `slot-meta.ts` | the one place that knows the metadata-comment syntax |
 | `blocks.ts` | a slot body → typed blocks; `fieldAt`, `fieldsOf`, `ctaOf` |
 | `provenance.ts` | `slotState`, `isDemoSlot` — the badge decision, once |
+| `page-seo.ts` | `pageSeo(route, locale)` — the `seo` block of TS-011 D5, read synchronously |
 | `source-refs.ts` | the source adapter of TS-007 D2: `resolve(ref) → record \| fail`, over the packages' `index.json` |
 | `validate.ts` | the D12 rules, shared by `scripts/check-content.ts` and the tests |
 | `types.ts` | `PageContent`, `ContentSlot`, `ContentBlock` |
@@ -149,6 +150,34 @@ imports it nowhere.
 
 The schemas live in `src/domain/content-frontmatter.schema.ts` — the TS-007
 layer at the bottom of the file.
+
+## The `seo` block (TS-011 D5)
+
+A page artifact's frontmatter carries the `<title>` and the meta description
+of every route it serves, keyed by the German route path:
+
+```yaml
+seo:
+  "/deine-region":
+    title: "Kalender für euer ganzes Gebiet"
+    description: "Das ganze Kreisgebiet in einem Kalender, …"
+    provenance: generated
+```
+
+Keyed, not a single pair, because one artifact can serve more than one route
+(`/deine-region/angebot` shares `/deine-region`'s file — `CONTENT_PAGE_DIRS`),
+and two routes are two documents to a search engine. The key is the German
+path in the `de` and the `en` file alike, the same locale-free convention slot
+ids follow.
+
+`page-seo.ts` reads it **synchronously**, unlike everything else here:
+`pageTitle()` is called from inside a render, and an async metadata source
+would make those call sites async. A missing or malformed block is `null` plus
+one warning, never a throw; `pnpm check:seo-budget` (TS-011-A7) is the gate
+that refuses the build. Before F-2-72, a template in
+`src/lib/i18n/dictionary.ts` answered for these two strings, and every route
+in both languages served a work-package name and a spec-clause id as its meta
+description.
 
 ## The gate
 

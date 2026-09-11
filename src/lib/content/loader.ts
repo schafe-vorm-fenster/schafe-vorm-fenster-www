@@ -105,8 +105,14 @@ function emptyPage(
   };
 }
 
-/** Splits off the YAML frontmatter block. */
-function splitFrontmatter(raw: string): { frontmatter: unknown; body: string } {
+/**
+ * Splits off the YAML frontmatter block.
+ *
+ * Exported for `page-seo.ts`, which reads the same block synchronously — one
+ * parser for one file format, so the two readers cannot disagree about where
+ * the frontmatter ends.
+ */
+export function splitFrontmatter(raw: string): { frontmatter: unknown; body: string } {
   const match = /^---\n([\s\S]*?)\n---\n?/.exec(raw);
   if (!match) return { frontmatter: null, body: raw };
   let frontmatter: unknown = null;

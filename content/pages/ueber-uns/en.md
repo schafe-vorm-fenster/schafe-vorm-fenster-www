@@ -2,6 +2,11 @@
 id: ueber-uns-de
 page_id: TS-027
 route: "/ueber-uns"
+seo:
+  "/ueber-uns":
+    title: "Built in a village"
+    description: "Who runs the calendar, and why it stays free for the villages: a place of a few hundred people cannot afford a service with a sales team."
+    provenance: generated
 content_type: section
 status: draft
 locale: en

@@ -2,6 +2,11 @@
 id: dein-ort-de
 page_id: TS-020
 route: "/dein-ort"
+seo:
+  "/dein-ort":
+    title: "What's on in your place"
+    description: "Every date from your own village in one place — clubs, council, fire brigade, church. Find your place and put the calendar on your home screen."
+    provenance: generated
 content_type: section
 status: draft
 locale: en

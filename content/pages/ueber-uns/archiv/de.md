@@ -2,6 +2,11 @@
 id: ueber-uns-archiv-de
 page_id: TS-028
 route: "/ueber-uns/archiv"
+seo:
+  "/ueber-uns/archiv":
+    title: "Archiv: Berichte und Belege"
+    description: "Was über den Kalender berichtet wurde, chronologisch und zum Nachprüfen — jede Zeile verlinkt auf die Originalquelle beim Medium selbst."
+    provenance: generated
 content_type: section
 status: draft
 locale: de

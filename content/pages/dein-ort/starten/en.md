@@ -2,6 +2,11 @@
 id: dein-ort-starten-de
 page_id: TS-021
 route: "/dein-ort/starten"
+seo:
+  "/dein-ort/starten":
+    title: "Start the calendar for your place"
+    description: "Your place is not in the village calendar yet? One person, one flyer, one photo by WhatsApp — that is all it takes to get it added."
+    provenance: generated
 content_type: section
 status: draft
 locale: en

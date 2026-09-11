@@ -2,6 +2,11 @@
 id: rechtliches-de
 page_id: TS-029
 route: "/rechtliches"
+seo:
+  "/rechtliches":
+    title: "Rechtliches"
+    description: "Impressum, Datenschutz, Nutzungsbedingungen, Community-Richtlinien, Auftragsverarbeitung und Barrierefreiheit — alles auf einer Seite."
+    provenance: generated
 content_type: section
 status: draft
 locale: de

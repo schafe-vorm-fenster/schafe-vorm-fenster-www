@@ -2,6 +2,11 @@
 id: mitmachen-de
 page_id: TS-022
 route: "/mitmachen"
+seo:
+  "/mitmachen":
+    title: "Eure Termine veröffentlichen"
+    description: "Flyer fotografieren, per WhatsApp schicken, fertig: Euer Termin steht im Kalender eures Orts und in den Nachbarorten. Kostenlos anmelden."
+    provenance: generated
 content_type: section
 status: draft
 locale: de

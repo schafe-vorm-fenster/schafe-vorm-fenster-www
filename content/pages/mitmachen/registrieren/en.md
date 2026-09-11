@@ -2,6 +2,11 @@
 id: mitmachen-registrieren-de
 page_id: TS-023
 route: "/mitmachen/registrieren"
+seo:
+  "/mitmachen/registrieren":
+    title: "Sign up to publish dates"
+    description: "Three steps to your access: choose the place, say who is publishing, start. No real name, no email address, and no sign-up fee at all."
+    provenance: generated
 content_type: section
 status: draft
 locale: en

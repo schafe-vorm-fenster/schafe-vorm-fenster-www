@@ -8,12 +8,20 @@ import type { PageContent } from "@/src/lib/content/types";
 
 const resolver = createHubResolver();
 
+// Every fixture below carries an `seo` block because `PageFrontmatterSchema`
+// requires one (TS-011 D5, F-2-72): a page artifact without a title and a
+// description is a page that cannot be indexed, so it does not validate.
 function page(body: string, frontmatterPatch = ""): PageContent {
   return parsePage(
     `---
 id: home-de
 page_id: TS-019
 route: "/"
+seo:
+  "/":
+    title: "Fixture-Titel"
+    description: "Fixture-Beschreibung"
+    provenance: generated
 content_type: section
 status: draft
 locale: de
@@ -152,6 +160,11 @@ describe("TS-007-A1: the checker validates the page artifact itself", () => {
 id: home-de
 page_id: TS-999
 route: "/"
+seo:
+  "/":
+    title: "Fixture-Titel"
+    description: "Fixture-Beschreibung"
+    provenance: generated
 content_type: section
 status: draft
 locale: de
@@ -208,6 +221,11 @@ describe("TS-007-A5: locale completeness and harmonisation", () => {
 id: home-de
 page_id: TS-019
 route: "/"
+seo:
+  "/":
+    title: "Fixture-Titel"
+    description: "Fixture-Beschreibung"
+    provenance: generated
 content_type: section
 status: draft
 locale: en
@@ -253,6 +271,11 @@ provenance: "sourced"
 id: home-de
 page_id: TS-019
 route: "/"
+seo:
+  "/":
+    title: "Fixture-Titel"
+    description: "Fixture-Beschreibung"
+    provenance: generated
 content_type: section
 status: draft
 locale: en
@@ -277,6 +300,11 @@ provenance: "sourced"
 id: home-de
 page_id: TS-019
 route: "/"
+seo:
+  "/":
+    title: "Fixture-Titel"
+    description: "Fixture-Beschreibung"
+    provenance: generated
 content_type: section
 status: draft
 locale: en
@@ -328,6 +356,11 @@ describe("TS-007-A14 (F-2-40): `check:content` asks the production question", ()
 id: home-de
 page_id: TS-019
 route: "/"
+seo:
+  "/":
+    title: "Fixture-Titel"
+    description: "Fixture-Beschreibung"
+    provenance: generated
 content_type: section
 status: approved
 locale: de

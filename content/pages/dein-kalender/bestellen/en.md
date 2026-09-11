@@ -2,6 +2,11 @@
 id: dein-kalender-bestellen-de
 page_id: TS-025
 route: "/dein-kalender/bestellen"
+seo:
+  "/dein-kalender/bestellen":
+    title: "Order your calendar"
+    description: "Choose the scope — single places, one postcode, or a whole county —, give us the invoice address, and send the order off. That is it."
+    provenance: generated
 content_type: section
 status: draft
 locale: en

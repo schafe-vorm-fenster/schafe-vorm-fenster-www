@@ -3,17 +3,21 @@
  *
  * A7: "Every (path, language) has a unique non-empty title ≤ 60 chars and a
  * description of 120–158 chars; violations fail the build." Nothing measured
- * either. The values happen to comply today because one placeholder template
- * produces them (`src/lib/routes/metadata.ts`), which is exactly the
- * condition a guard exists to notice changing.
+ * either.
  *
- * What this does **not** do is move the source. TS-011 D5 wants title and
- * description to come from the page's content frontmatter, and
- * `state/open.md` rows 103 and 138 record that closing D5 needs a schema
- * field plus twelve content files in two languages — the content pipeline's
- * work, not a fix round's. This guard measures whatever
- * `pageTitle`/`pageDescription` return, so it keeps holding when the source
- * moves under it.
+ * The source has since moved where TS-011 D5 wants it (F-2-72, closing
+ * `state/open.md` rows 103 and 138): the values are the `seo` block of each
+ * page artifact, read by `src/lib/content/page-seo.ts`. This guard did not
+ * have to change for that — it measures whatever `pageTitle`/`pageDescription`
+ * return — and it is now the thing that refuses a build where an artifact
+ * forgot its block, because a missing entry is an empty string here.
+ *
+ * The numbers below are A7's, deliberately not D5's stricter reading of the
+ * title ("≤ 60 characters **including** the suffix"). The shipped titles do
+ * satisfy the stricter one — every non-home title leaves room for the
+ * layout's ` — Schafe vorm Fenster` — and `src/lib/routes/metadata.test.ts`
+ * is where that headroom is asserted, so this file keeps saying exactly what
+ * the acceptance criterion says.
  *
  * Exit code of `main()`: number of errors (0 = green).
  */

@@ -2,6 +2,11 @@
 id: dein-ort-de
 page_id: TS-020
 route: "/dein-ort"
+seo:
+  "/dein-ort":
+    title: "Was in deinem Ort los ist"
+    description: "Alle Termine aus deinem Ort an einer Stelle — Vereine, Gemeinde, Feuerwehr, Kirche. Ort suchen und den Kalender auf den Homescreen legen."
+    provenance: generated
 content_type: section
 status: draft
 locale: de

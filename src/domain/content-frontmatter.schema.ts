@@ -375,6 +375,48 @@ export const SlotMetaSchema = z.strictObject({
 export type SlotMeta = z.infer<typeof SlotMetaSchema>;
 
 /**
+ * The `<title>` and meta description of **one route** in one language
+ * (TS-011 D5, TS-021-A11).
+ *
+ * D5 is explicit that both are content, not code: they live in the page's own
+ * frontmatter and are "never derived at runtime from body copy or from the
+ * `h1`". `provenance` marks where the two strings came from in the same
+ * vocabulary a slot uses — `generated` for copy this repository wrote from
+ * the page's own focus slot rather than lifting from a hub record, which is
+ * what the dummy-content rule (plan/guardrails.md) asks to be registered.
+ *
+ * The lengths are *not* checked here. TS-011-A7 owns those numbers and
+ * `scripts/check-seo-budget.ts` is the one place they are written down; a
+ * second copy in the schema would be a second thing to keep in step.
+ */
+export const PageSeoSchema = z.strictObject({
+  title: z.string().min(1),
+  description: z.string().min(1),
+  provenance: SlotProvenanceSchema,
+});
+
+export type PageSeo = z.infer<typeof PageSeoSchema>;
+
+/**
+ * A page artifact's `seo` block, keyed by the **German route path** — the
+ * same locale-free key the `route` field carries, so the `de` and the `en`
+ * file of a page name their routes identically (TS-007 D4's rule for slot
+ * ids, applied to routes).
+ *
+ * It is a map rather than a single pair because one artifact can serve more
+ * than one route: `/deine-region/angebot` is specified by TS-026 together
+ * with `/deine-region` and its slots live in that page's file
+ * (`CONTENT_PAGE_DIRS` in `src/lib/content/loader.ts`). Two routes are two
+ * documents to a search engine, so they get two titles.
+ */
+export const PageSeoMapSchema = z.record(
+  z.string().startsWith("/", "must be a German route path from src/lib/routes/routes.ts"),
+  PageSeoSchema,
+);
+
+export type PageSeoMap = z.infer<typeof PageSeoMapSchema>;
+
+/**
  * The frontmatter of a page artifact under `content/pages/<route>/<locale>.md`.
  *
  * Extends the pre-relaunch base rather than replacing it, so
@@ -398,6 +440,13 @@ export const PageFrontmatterSchema = BaseFrontmatterSchema.extend({
   generated_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   /** Page-level summary; the binding per-slot value is in the slot comment. */
   provenance: z.string().min(1),
+  /**
+   * TS-011 D5 — the indexed surface of every route this artifact serves.
+   * Required: a page without it has no title and no description, and
+   * `pnpm check:seo-budget` (TS-011-A7) fails the build rather than letting
+   * a template in code answer for the content (F-2-72).
+   */
+  seo: PageSeoMapSchema,
   tone_profile: z.string().optional(),
   compliance_check: z.string().optional(),
   schema_note: z.string().optional(),

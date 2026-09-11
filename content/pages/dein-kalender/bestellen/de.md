@@ -2,6 +2,11 @@
 id: dein-kalender-bestellen-de
 page_id: TS-025
 route: "/dein-kalender/bestellen"
+seo:
+  "/dein-kalender/bestellen":
+    title: "Kalender bestellen"
+    description: "Umfang wählen — einzelne Orte, eine Postleitzahl oder einen ganzen Landkreis —, Rechnungsanschrift angeben, Bestellung abschicken. Fertig."
+    provenance: generated
 content_type: section
 status: draft
 locale: de

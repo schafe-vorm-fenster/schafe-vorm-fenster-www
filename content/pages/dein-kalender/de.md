@@ -2,6 +2,11 @@
 id: dein-kalender-de
 page_id: TS-024
 route: "/dein-kalender"
+seo:
+  "/dein-kalender":
+    title: "Kalender für eure Website"
+    description: "Euer Kalender, eure Website, euer Name — und niemand im Amt tippt mehr Termine ein. Ansicht konfigurieren oder erst einen Termin buchen."
+    provenance: generated
 content_type: section
 status: draft
 locale: de

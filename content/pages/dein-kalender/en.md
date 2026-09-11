@@ -2,6 +2,11 @@
 id: dein-kalender-de
 page_id: TS-024
 route: "/dein-kalender"
+seo:
+  "/dein-kalender":
+    title: "A calendar for your website"
+    description: "Your calendar, your website, your name — and nobody in the office types in dates anymore. Configure the view, or book a briefing first."
+    provenance: generated
 content_type: section
 status: draft
 locale: en
