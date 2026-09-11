@@ -254,11 +254,12 @@ else in the tree types them:
   stale-while-revalidate=…` (`cacheControlFor()`), the Vercel SWR semantics
   DEC-019 fixes.
 - The **`last-good` store** uses the stale window as its TTL.
-- The **islands** will use `cacheLifeProfile()` with `cacheLife()` and the
+- The **islands** use `cacheLifeProfile()` with `cacheLife()` and the
   `cacheTags` of `cacheTags.*`. Cache Components (`cacheComponents: true`) is
-  **not** switched on in this repository yet — see DEC-075 §4 and
-  `state/open.md`. Until it is, the islands are plain async server components
-  inside `<Suspense>`, which is the same tree with a different cache.
+  on since M4 (`state/open.md` row 76), and the islands live in
+  `app/[lang]/_islands.tsx` — one `use cache` component per TS-008 position,
+  each calling exactly one interface module of this folder. A page renders
+  them; it does not fetch.
 
 ## Testing
 

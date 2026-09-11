@@ -13,9 +13,9 @@
  *  2. the BFF route handlers — the `Cache-Control` they send, in the Vercel
  *     SWR semantics DEC-019 fixes (`s-maxage` + `stale-while-revalidate`);
  *  3. the page-level `use cache` islands — `cacheLife()` takes the same two
- *     numbers (see `README.md` → "Wiring a page"). Cache Components are not
- *     switched on in this repository yet; `cacheLifeProfile()` is written so
- *     the flip is a config change and not a second table.
+ *     numbers, and `app/[lang]/_islands.tsx` passes `cacheLifeProfile(kind)`
+ *     straight into it, so an island and its BFF route cannot disagree about
+ *     what "5 minutes" means.
  */
 
 /** The data kinds TS-003 D5 distinguishes. Modules map onto these, not the reverse. */

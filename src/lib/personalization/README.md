@@ -183,8 +183,8 @@ No `index.ts`, for the reason `src/lib/content/README.md` gives.
 | TS-010-A1 resolver over every input path | ✅ unit | `viewer-context.test.ts`, `geolocation.test.ts` |
 | TS-010-A2 granularity ceiling, stated place overwrites | ✅ unit | `geolocation.test.ts`, `viewer-context.test.ts` |
 | TS-010-A3 trait mapping, one shared constant | ✅ unit | `entry-context.test.ts` |
-| TS-010-A4 structure invariance across stages | 🔜 integration | pages — the library half is `emphasis.ts` and the focus job as an input |
-| TS-010-A5 stage-0 completeness, no geo lookup | 🔜 integration | pages + `disabledLocationResolver` |
+| TS-010-A4 structure invariance across stages | ⚠️ integration | `/dein-ort` walks stage 0 and stage 3 (`e2e/pages/dein-ort.spec.ts` A2/A3) with the same blocks in the same order; the trait half (stage 2) cannot fire while the proxy hands no `Referer` down |
+| TS-010-A5 stage-0 completeness, no geo lookup | ✅ integration | `e2e/pages/dein-ort.spec.ts` TS-020-A10 and `home.spec.ts` TS-019-A11 — both with JavaScript disabled |
 | TS-010-A6 cacheability, no `Vary`, no `Set-Cookie` | 🔜 integration | pages and `proxy.ts` |
 | TS-010-A7 no classification control | 🔜 e2e | pages |
 | TS-010-A8 browser geolocation only after an interaction | 🔜 e2e | the place-search control (D5) — client-side, another package |

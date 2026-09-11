@@ -225,12 +225,12 @@ One direction, so the entry-trait ids are literally one constant.
 | TS-005-A5 stage 0 | ✅ unit | `weights.test.ts`, `score.test.ts` |
 | TS-005-A6 editorial weight | ⚠️ unit | `freshness.test.ts` — the mechanism holds, **the criterion as written does not**: D4's five-year step is 0.45, so a fresh element is overtaken at a weight above ≈ 2.23, not at 2.0. → `state/open.md` |
 | TS-005-A7 no deadlock | ✅ unit | `order.test.ts` |
-| TS-005-A8 cached per segment | 🔜 integration | keys are `segments.ts`; the cached component is the page work packages' |
-| TS-005-A9 prerendered shell first | 🔜 integration | pages + `use cache` (TS-009) |
+| TS-005-A8 cached per segment | ✅ integration | `app/[lang]/_proof.ts` — a `use cache` function keyed on the candidates, the viewer and the ISO week, `cacheTag("proof:<iso-week>")` |
+| TS-005-A9 prerendered shell first | ✅ integration | `cacheComponents: true` since M4; the selection sits inside the shell on every page that takes no place parameter |
 | TS-005-A10 place-bound proof | 🔜 e2e | the gate is here; the covered-place list comes from events-api (mocked) |
 | TS-005-A11 rotation | ✅ unit | `rotation.test.ts`, `select.test.ts` |
 | TS-005-A12 ordering, ties by id | ✅ unit | `order.test.ts` |
-| TS-005-A13 spot check on two pages | 🔜 e2e | page work packages |
+| TS-005-A13 spot check on two pages | ✅ e2e | `e2e/pages/home.spec.ts` — DEC-048's counts on `/` and `/ueber-uns`, reproduced across reloads |
 | TS-005-A14 context matrix | ✅ unit | `context-matrix.test.ts` |
 | TS-005-A15 every claim resolves to a cleared proof | 🔜 static | a content check; the facets are not on the artifacts yet |
 | TS-005-A16 the widening chain | ✅ unit | `live-chain.test.ts` |
