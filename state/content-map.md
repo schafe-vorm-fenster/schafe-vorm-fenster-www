@@ -8,6 +8,65 @@ it `Dummy-Content` with a one-line note on what generated placeholder it
 needs. Phase 2 (primary copy), Phase 3 (translation) and Phase 4
 (validation/handoff) follow in M3; this file is their starting point.
 
+## Pipeline contract (M3 developer → Content & Translation)
+
+The loader reads the shipped shape **as is** — no rewrite of the eleven
+pages is needed (ADR-074 §1, closes `state/open.md` #43). What follows is
+what `pnpm check:content` now enforces, so the next content pass writes
+against a checked contract rather than a convention.
+
+**The slot comment.** Keys: `id`, `content_type`, `provenance`,
+`derived_from`, `status`, `demo`. An unknown key fails. `derived_from`
+takes `[ia]`, `[]`, or a comma-separated list of quoted refs.
+
+**`content_type`** is concept B.3's 26 types plus `section` (the generic
+prose block B.3 lacks). Four spellings are normalised on read and may stay
+as written: `form → form-step`, `tier → offer-tier`,
+`profile → person-profile`, `configuration → site-config`.
+
+**`provenance`** is one of five: `sourced`, `generated`,
+`sourced-empty-by-design`, `withheld`, `mixed`. `demo: true` is separate
+and is what puts the `Demo-Daten` badge on the module — a slot that is
+`generated` without `demo` renders **without** a badge, which is right for
+an editorial choice (the stage-0 reference place, the accessibility
+statement) and wrong for invented demo data. Four slots currently sit in
+that state and warn: `mitmachen-6a-reference-place`, `mitmachen-8-closing`,
+`registrieren-2-wer`, `rechtliches-4-accessibility-note`.
+
+**`derived_from`** accepts `<package>@<version>#<record-id>`, `ia`, and
+`<package>@<version>` (a whole-package pool, as `home-8-proof-stream` uses).
+The exact installed version is checked against `node_modules`, and the
+record id against the package's `index.json` — for `media-echo`, whose
+entries carry no `id`, the file stem is the id. **An empty list is correct
+for `generated` + `demo: true`** (invented content derives from nothing;
+`[ia]` there would claim the IA as its source). An empty list on a
+`sourced` slot is an error.
+
+**Two things the pipeline needs from the next content pass:**
+
+1. **Field labels are translated** (`**Sucheingabe (Placeholder):**` vs
+   `**Search input (placeholder):**`), so a page cannot address a field by
+   its label across locales. Pages therefore read fields **by position**,
+   and `check:content` fails a locale whose block sequence differs from
+   `de`. Keeping the DE and EN block order identical is now a hard
+   requirement; adopting locale-stable label keys would be better
+   (`state/open.md` #61).
+2. **A bold sentence is prose, a field needs the colon.** `**Label:** value`
+   is a field; `**Ein ganzer Satz.** Weiterer Text` is a paragraph. Both
+   render, but only the first is addressable.
+
+**What is checked per file:** frontmatter against `PageFrontmatterSchema`
+(the `page_id` must be the `TS-###` the route table gives the route —
+TS-017-A14), unique slot ids, every `derived_from` resolvable, a `de` and an
+`en` sibling per page, and locale siblings agreeing on slot set, records,
+provenance and block sequence. Wording, length and sentence count may differ
+— that is what generating per locale is for.
+
+**Not checked yet** (each blocked on an artefact that does not exist):
+length budgets, clearance re-validation, hub-id resolution, composition slot
+binding, segment independence, glossary conformance, legal anchors. See
+`src/lib/content/README.md`.
+
 ## How to read this map
 
 - **Copy shells** (headlines, CTA labels, scene openers, empty-state
