@@ -124,6 +124,11 @@ The gate's QA sweep re-checks their ACs at retest.
   every conversion path, at the smallest reference viewport. The fix is
   a floor on the scrim behind the content box in one component's CSS —
   cheap, and it belongs to the component work package, not to a page.
+- Resolved: 4aeb472 — a second, content-anchored scrim in
+  `photo-surface.module.css` that grows with the text stack itself
+  rather than with a percentage of the box. Measured on `/`, `/dein-ort`,
+  `/dein-ort/starten` at 360 and 1280 px: 1.76–3.53:1 (failing) at 360 px
+  before, 11.88–15.67:1 after.
 
 ## F-2-3 — Two `<nav>` landmarks share the accessible name "Startseite" on every second-level page
 
@@ -146,6 +151,9 @@ The gate's QA sweep re-checks their ACs at retest.
   are conversion pages (register, order, quote). The fix is one prop in
   `_page-frame.tsx`. The keyboard-only chaos persona runs these pages at
   this gate.
+- Resolved: 2eeab26 (dictionary key in 4aeb472) — `_page-frame.tsx` now
+  passes the breadcrumb `d.nav.breadcrumb` ("Seitenpfad"/"Page path")
+  instead of the header nav's own `d.nav.home`.
 
 ## F-2-4 — Demo and freshness labels render German on `/en`
 
@@ -167,6 +175,15 @@ The gate's QA sweep re-checks their ACs at retest.
   language switch is one of the flows the chaos personas target at this
   gate. Bounded fix: forward the label (or read the dictionary) in six
   components.
+- Resolved: 7b4b844 — `live-counters`'s figures no longer format with a
+  hard-coded `"de-DE"` locale; `place-search`, `photo-surface`,
+  `placeholder-surface`, `placeholder-badge` and `outbound-link` no
+  longer carry a hard-coded German default with no `locale` awareness.
+  Verified by walking all twelve `/en/*` routes and grepping the
+  rendered text for the known German markers. Residue outside
+  `src/components/**` ownership (page files that hard-code a value or
+  never pass `locale`; `content/legal/**` has no English translation at
+  all) is noted in the commit and left for its owning work package.
 
 ## F-2-5 — TS-023-A6 has no fixture, so the ambiguous-place branch is not walkable
 
@@ -616,7 +633,7 @@ The gate's QA sweep re-checks their ACs at retest.
   on a light ground.
 - Observed: A light-on-near-white pill button on the home and `/dein-ort`
   hero/live-module CTA, in both languages, at both reference viewports.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 2b)
 - Note: not fixed here — `outbound-link` and `section-shell` are under
   `src/components/**`, the wiring work package's ownership for this round.
   The general shape of the fix: `.secondary` (and any other component that
@@ -627,6 +644,12 @@ The gate's QA sweep re-checks their ACs at retest.
   `section-shell.module.css`, or a `:where()`-wrapped blanket rule in
   `section-shell.module.css` so its specificity stops overriding a
   component's own variant colour.
+- Resolved: 7da518f — `.secondary` became `.link.secondary` (both
+  classes already sit on the same anchor, `outbound-link.tsx`), raising
+  its specificity to 0,2,0 against `section-shell`'s 0,1,1 ambient rule
+  regardless of CSS import order. `section-shell.module.css` untouched,
+  so `.inline`/`.quiet` (which rely on the ambient recolour) are
+  unaffected. `e2e/a11y.spec.ts`: 49/49 passing after the fix.
 
 ## F-2-29 — `proof-card`'s claim text inherits the ink ground's colour onto the card's own lighter surface
 
@@ -651,7 +674,7 @@ The gate's QA sweep re-checks their ACs at retest.
 - Observed: Near-white text on a near-white card, on the one page
   (`/ueber-uns`, `/en/about`) that places a `proof-card` inside an `.ink`
   section.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 2b)
 - Note: not fixed here — both components are under `src/components/**`,
   the wiring work package's ownership for this round. Same root-cause
   family as F-2-28 (a component that paints its own surface does not
@@ -661,6 +684,11 @@ The gate's QA sweep re-checks their ACs at retest.
   `color: var(--color-neutral-ink)`, which is correct on every one of
   `section-shell`'s own background variants because `.card`'s background is
   never the section's background.
+- Resolved: 7da518f — `.claim` got its explicit `color:
+  var(--color-neutral-ink)`. `.context`/`.attribution` already carried
+  their own explicit colour by the time this round started (not the
+  inheritance exposure this note anticipated) — checked, not touched.
+  `e2e/a11y.spec.ts`: 49/49 passing after the fix.
 
 ## Not converted (rows that stay rows)
 
