@@ -26,7 +26,8 @@
   finding) purely from this one file; unrelated to the CI work package's
   own changes (`.github/workflows/**`, `README.md`, `CONTRIBUTING.md`,
   `playwright.config.ts`).
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** — decided in the triage entry for F-2-1 below
+  (regression sweep on `next-2026` HEAD, not a file-by-file chase).
 - Note: found while dry-running M4's `check.yml` build step locally, not
   by the persona this file's format was originally written for (QA) —
   filed as instructed for a CI-discovered issue outside the CI work
@@ -103,6 +104,9 @@ The gate's QA sweep re-checks their ACs at retest.
   once this run's parallel work packages have landed (row 65), not a
   file-by-file chase: both named files may already be fixed by the time
   the fix round starts, and new ones may have appeared.
+- Round 3: carried into round 3 as **package C** — C runs the sweep on
+  `next-2026` HEAD once the round's three packages have landed
+  (`plan/round-3.md`).
 
 ## F-2-2 — Hero headline can fall on the light part of the photo surface at 360 px
 
@@ -773,7 +777,13 @@ dismissed in the protocol, not here.
 - Note: the e2e tests for TS-019-A3/A4/A5, TS-021-A6 and TS-021-A14 are
   `test.skip`ped with the annotation "[M4 — TS-008 D2 BFF routes]". M4 is
   in scope at this gate, so those skips are stale and hide a live defect.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: critical, and on the founding conversion path — every critical
+  is fix-now (`plan/process.md`). `outcome.kind === "uncovered"` already
+  exists at `src/lib/live/places.ts:72` and is consumed by nothing, so this
+  is wiring an existing branch into `resolveLiveAnchor` plus honouring
+  `?ort=` on `/`, not new logic. The stale `test.skip`s that hide it
+  (TS-019-A3/A4/A5, TS-021-A6, TS-021-A14) come with the fix.
 
 ## F-2-31 — The 404 page ships a developer note as its body copy and carries neither place search nor jobs band
 
@@ -807,7 +817,15 @@ dismissed in the protocol, not here.
 - Conversion-path argument for escalation: `plan/gate-2-scope.md` §2 lists
   "plus the 404 place search" as part of the `save-calendar-to-homescreen`
   walk. If the PM reads the 404 as part of that path, this is critical.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: `plan/gate-2-scope.md` §2 counts the 404 place search as part
+  of the `save-calendar-to-homescreen` walk, so the PM reads this as a
+  conversion-path AC failure — critical by the severity table, fix-now
+  either way. A decision id rendered as body copy also breaks the
+  dummy-content rule. The evidence half (the TS-004-A4 tests assert only
+  status, `robots` and the heading) is package C's, under F-2-55's
+  assert-too-little strand — A must not edit `e2e/routes.spec.ts` or
+  `src/lib/routes/routing.integration.test.ts` this round.
 
 ## F-2-32 — `request-product-briefing` is a dead link, and two pages paste a second placeholder URL against TS-016 D7
 
@@ -843,7 +861,14 @@ dismissed in the protocol, not here.
 - Impact: `request-product-briefing` is a wired conversion goal
   (`plan/gate-2-scope.md` §2) and it is a dead end on every one of its
   placements.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: a wired conversion goal that dead-ends on every one of its
+  placements, and it is **not** externally blocked — the real booking URL
+  ships in the installed `@schafe-vorm-fenster/people` package, which the
+  finding located. D7's "one configured value" is the same fix that removes
+  the two per-page pastes. The third occurrence is in the dev-only
+  `src/components/gallery.tsx` and is not visitor-facing; it is not part of
+  this fix and not a reason to touch package B's files.
 
 ## F-2-33 — The English conversion flows still render German UI strings, including the primary buttons
 
@@ -876,7 +901,16 @@ dismissed in the protocol, not here.
 - Impact: two of the five wired conversion goals
   (`register-as-publisher`, `request-licence-quote`) present their primary
   action to an English visitor in German.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: two of the five wired conversion goals present their primary
+  action to an English visitor in German. Package A owns the whole tail this
+  round: the flow surface (register steps 1–3, the quote form, `Suchen`, the
+  aside line, the `Demo-Daten` badge on flows) **and** the footer
+  contact/newsletter block, because `src/components/newsletter-block/**`,
+  `site-footer`-adjacent copy and `src/components/logo/**` are carved out to
+  A for this round — F-2-33, F-2-35 and F-2-64 all sit in that one block and
+  are fixed together. The logo's German accessible name on `/en` (UAT) is
+  folded in here rather than filed separately.
 
 ## F-2-34 — `{county-or-organization}` renders as a literal in the English quote page's `h1`
 
@@ -893,7 +927,12 @@ dismissed in the protocol, not here.
   {county-or-organization}". The German equivalent
   (`/deine-region/angebot`) renders a complete sentence ("Angebot für eure
   Organisation anfragen"), so only the English variant leaks the slot.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: an unfilled interpolation slot rendered as the `h1` of a
+  conversion page. The German twin already carries a complete placeless
+  sentence, so the fix is its English counterpart in
+  `content/pages/deine-region/en.md:159` plus the page filling the slot when
+  a county is known — one content line and one page file.
 
 ## F-2-35 — Internal identifiers are rendered as visitor-facing copy on every route, in both locales
 
@@ -919,7 +958,14 @@ dismissed in the protocol, not here.
   - The 404/500 placeholder note is filed separately as F-2-31.
 - Note: the `Demo-Daten` badge itself is the guardrail working as intended
   and is not the defect — the ticket id next to it is.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: internal ticket, decision and spec ids rendered as visitor copy
+  on 24/24 routes fails the content-compliance check of
+  `plan/gate-2-scope.md` §1.3 and the dummy-content rule's "claims stay
+  generic" bar. Five known sites, all body copy plus one line in
+  `newsletter-block.tsx:71` — cheap and the most visible thing on the
+  prototype. The lint that would have caught it is F-2-43 (package C); this
+  round fixes the text, not only the instrument.
 
 ## F-2-36 — `proxy.ts` sends the Vercel automation bypass secret to a Host-header-controlled origin and caches the answer process-wide
 
@@ -956,7 +1002,14 @@ dismissed in the protocol, not here.
   the shared run server. `src/lib/security/csp-hashes.ts` is a new module
   that handles a secret and performs a request-derived fetch and has
   **zero tests**; `proxy.ts` has no unit test.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package C)
+- Reasoning: high, and not externally blocked. Three independent defences
+  are absent and each is cheap: a host allowlist before the fetch, a
+  per-origin cache key instead of `cached ??=`, and a shape check on the
+  returned tokens before they are interpolated into `script-src`. The module
+  is new, handles the preview-protection secret and has zero tests — the
+  tests are part of the fix. Reachability being unproven lowers the urgency,
+  not the fix: the fix costs less than another attempt to reproduce it.
 
 ## F-2-37 — `report-uri` / `Reporting-Endpoints` point at `/api/csp-report`, which cannot exist
 
@@ -974,7 +1027,14 @@ dismissed in the protocol, not here.
   half is inert by construction, and two smoke assertions currently certify
   the dead pointer as correct. This is a spec collision to resolve, not a
   coding slip.
-- Round decision: (Project Manager to set)
+- Round decision: **open-list**
+- Reasoning: TS-014 D2 against TS-017 D4 is spec-against-spec, which this
+  run records rather than resolves in a fix round (as with F-2-10 and
+  F-2-23) — deciding whether a POST sink may exist under `app/**` is a spec
+  session, and the PM does not reword either criterion
+  (`plan/guardrails.md`). No visitor impact: nothing ever collected the
+  reports, so the pointer is inert rather than wrong-in-effect. Blocker
+  named: the TS-014 / TS-017 owner.
 
 ## F-2-38 — Two pages read `?ort=` raw, bypassing the validator; no input anywhere has a length bound
 
@@ -1007,7 +1067,13 @@ dismissed in the protocol, not here.
   (`src/lib/seo/canonical-params.ts:14-22`), URLs are built with
   `URLSearchParams`, and the envoy form has no `action` and no named
   fields, so nothing is submitted at all.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: medium on a conversion path — both bypassing routes are flow
+  steps (`registrieren`, `bestellen`) — and cheap: route the two
+  `searchParams.ort` reads through `readPlaceParameter` and put `maxLength`
+  on `search-field` and `envoy-form-mount`. Only the length/allowlist half
+  is in scope; the XSS hypothesis is dismissed in the finding with its
+  evidence and is not reopened.
 
 ## F-2-39 — No island renders a skeleton: the streamed-shell contract of TS-009 is not built
 
@@ -1034,7 +1100,18 @@ dismissed in the protocol, not here.
   does wait for the engine and no static-default → segment-variant swap
   exists. TTFB is fine (37–133 ms) and header/footer/copy are present; the
   streaming half of the contract is simply absent.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package B)
+- Reasoning: high — three criteria (TS-005-A9, TS-009-A3, TS-009-A9) fail on
+  one missing mechanism, and `moduleSkeleton` is already written and never
+  called, so the work is mounting boundaries in `app/[lang]/_islands.tsx`,
+  one file B owns this round.
+- **Settled by the wiring wave — do not re-litigate:** `state/open.md`
+  row 131 records that `/dein-ort`, `/dein-ort/starten`,
+  `/mitmachen/registrieren` and `/dein-kalender/bestellen` stay blocking and
+  dynamic by decision, and TS-020-A10 forbids a skeleton on `/dein-ort` by
+  name. The boundaries go on the other eight routes' islands. Row 132 (a
+  dynamic route cannot hydrate under DEC-045's hash-only CSP) is a DEC-045
+  amendment owned outside this run and is not this package's to solve.
 
 ## F-2-40 — Every content artefact is `status: draft` and every one of them renders
 
@@ -1053,7 +1130,16 @@ dismissed in the protocol, not here.
   statement is among the drafts, and its own first paragraph says it "darf
   ohne Freigabe … nicht produktiv veröffentlicht werden" — the site would
   publish that sentence.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package C)
+- Reasoning: high — TS-007-A14 fails site-wide, and the site would publish
+  the accessibility statement's own sentence saying it must not be
+  published. The gate is code the run owns: `src/lib/content/loader.ts`
+  filtering on `status` for a production build. Which artefacts become
+  `approved` is a clearance decision for Jan and stays on the open list; the
+  gate ships with everything still `draft`, which is exactly the preview
+  behaviour A14 describes. F-2-46's one owned clause rides here: the
+  frontmatter Zod objects must reject unknown keys, or the gate is
+  bypassable silently.
 
 ## F-2-41 — The context band is a `section` inside `main`, not an `aside`, and is missing from four pages
 
@@ -1072,7 +1158,15 @@ dismissed in the protocol, not here.
   `/dein-kalender/bestellen`. Across all twelve pages there is exactly one
   `<aside>` in total (on `/mitmachen`); the live counters render as
   `<div id="live-counters">` inside `main`.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package B)
+- Reasoning: TS-011-A4 is a landmark criterion and twelve routes render
+  exactly one `<aside>` between them — an a11y defect the keyboard-only
+  persona meets on every page. The fix sits in the two chrome files B owns
+  this round (`app/[lang]/_page-frame.tsx` and `section-shell`). The
+  registration steps 2–3 suppression stays as F-2-10 decided (spec against
+  spec, recorded, not fixed). If the four pages missing the band turn out to
+  opt out in their own `page.tsx`, that clause goes back to package A at
+  retest rather than B editing A's files.
 
 ## F-2-42 — No page emits an OG image, and `twitter:card` is `summary`
 
@@ -1091,7 +1185,12 @@ dismissed in the protocol, not here.
   TS-011-A9 has no subject at all. The equality clauses of A8 do hold:
   `og:url` equals the canonical, `og:locale` matches `<html lang>`, and
   `og:locale:alternate` matches the hreflang set.
-- Round decision: (Project Manager to set)
+- Round decision: **open-list**
+- Reasoning: no conversion path and no visitor-visible failure. An OG image
+  route plus a per-locale 1200×630 template for twelve routes in two
+  languages is its own work package, not a fix-round slot, and the prototype
+  does not go live (`plan/guardrails.md`). Goes to the M5 / go-live
+  workstream with the other SEO surface items.
 
 ## F-2-43 — Six declared build guards do not exist, so six criteria cannot fail anything
 
@@ -1132,7 +1231,16 @@ dismissed in the protocol, not here.
   of an interpolation slot that ships unfilled. `src/lib/content/validate.ts:14,16`
   marks its own facet-completeness and harmonisation rows "partial", which
   is why A6 and A9 cannot be discharged either.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package C)
+- Reasoning: three of the six guards can be written against inputs that
+  exist today — TS-002-A3 (token contrast over the brand set), TS-011-A7
+  (title/description budget) and TS-026-A8 (single-source wording lint) —
+  and each flips a criterion from fail to pass at gate close; package C has
+  the room for them. The other three stay blocked on spec decisions and stay
+  recorded here, exactly as F-2-18 records its own six: TS-005-A15 needs a
+  `claims` key that no artefact has, TS-006-A8 needs a term list
+  `page-composition.tactical.md:317` says does not exist, TS-007-A4 needs
+  the clearance model.
 
 ## F-2-44 — The type scale is declared outside the token import and goes below 15 px
 
@@ -1153,7 +1261,13 @@ dismissed in the protocol, not here.
   roughly thirty module stylesheets. `check-brand.ts` guards only colour
   literals and `font-family`, so the size and weight halves of the
   criterion are unguarded as well as unmet.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package B)
+- Reasoning: 11 px and 12 px body type is an a11y defect, not token hygiene,
+  and raising the two custom properties above the 15 px floor plus the one
+  bare `28px` in `event-row.module.css` is cheap. The rest of TS-002-A10 —
+  moving the whole scale into the token import and the ~30 `font-weight`
+  literals, plus teaching `check-brand.ts` the size and weight halves — is
+  not cheap and goes to the open list.
 
 ## F-2-45 — The landing-only domain rule is not implemented: every path answers 200 on `.at`/`.pl`/`.com`
 
@@ -1172,7 +1286,11 @@ dismissed in the protocol, not here.
 - Note: distinct from TS-001-A9, which `plan/gate-2-scope.md` §4 puts out
   of scope for being about real domains over HTTPS. This one is the
   in-tree routing rule and is checkable locally.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package C)
+- Reasoning: cheap — `kind: "landing"` already sits on the host matrix with
+  no consumer, so one branch in the routing layer discharges TS-004-A3, and
+  C owns `src/lib/routes/**` this round anyway for F-2-55. Distinct from
+  TS-001-A9, which is out of scope for needing real domains.
 
 ## F-2-46 — `/en/legal` renders German bodies, and generation-only frontmatter passes validation
 
@@ -1196,7 +1314,15 @@ dismissed in the protocol, not here.
 - Side observation, same area: the English newsletter consent link points
   at `/en/legal#datenschutz`, an anchor that does not exist on the English
   page (it uses `#privacy`).
-- Round decision: (Project Manager to set)
+- Round decision: **open-list**
+- Reasoning: the criterion's main clause is English legal bodies, and the
+  run must not write or translate legal text (repository working rule) —
+  same blocker as F-2-19: the legal source owner, plus DEC-027, which fixes
+  that DE and EN legal texts both exist. A `content/legal/<locale>/`
+  restructure buys nothing while only German text exists. The one clause the
+  run does own — non-strict Zod objects letting generation-only frontmatter
+  pass `check:frontmatter` — is folded into F-2-40's gate in package C and
+  is not lost.
 
 ## F-2-47 — Archive rows carry neither a preview image nor an outbound link
 
@@ -1216,7 +1342,13 @@ dismissed in the protocol, not here.
   legitimate variants, so no row has either. The no-embed half of A7 does
   hold and is enforced (`object-src`/`frame-src 'none'`,
   `src/lib/security/csp.ts:129-130`).
-- Round decision: (Project Manager to set)
+- Round decision: **open-list**
+- Reasoning: not a conversion path, and neither half is the run's to
+  produce: the outbound URLs per entry are media-echo data in
+  `go-to-market-os`, and the previews are a `Dummy-Content` register item
+  for the content follow-up workstream. `ArchiveRow` already accepts both
+  props, so the row closes the moment the data exists — no code is in the
+  way.
 
 ## F-2-48 — S2's quote mount is missing on `/deine-region`, and no lead form has a honeypot or a timing gate
 
@@ -1244,7 +1376,13 @@ dismissed in the protocol, not here.
 - Note: the widget itself is a declared mock (`state/open.md` row 7); this
   finding is about the mount and the anti-spam contract the website owns,
   not about the widget's behaviour.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: on the `request-licence-quote` path — D1 names `/deine-region`
+  as an S2 lead surface and the mount is simply absent — and the honeypot is
+  the website's half of A10, not the mocked widget's, so the mock rule does
+  not excuse it. Cheap: one mount in the page, one hidden field and a timing
+  stamp in `envoy-form-mount`, which A is already opening for F-2-51,
+  F-2-65 and F-2-66.
 
 ## F-2-49 — `/dein-ort/starten` never re-resolves, and echoes the raw parameter as the place name
 
@@ -1262,7 +1400,12 @@ dismissed in the protocol, not here.
   told it is not covered. The raw parameter is also echoed verbatim as the
   place name ("beispielwalde eintragen", lowercase) instead of the resolved
   name "Beispielwalde".
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: the founding conversion path tells a covered place it is not
+  covered and echoes the raw query value as its name. It is the same
+  re-resolution gap as F-2-30 and lands in the same two modules
+  (`src/lib/pages/live-anchor.ts`, `src/lib/live/places.ts`), so fixing it
+  apart from F-2-30 would cost more than fixing it with it.
 
 ## F-2-50 — `/deine-region`'s manifest declares one live module where D1 names four
 
@@ -1281,7 +1424,13 @@ dismissed in the protocol, not here.
   nothing catches the drift. The JSON-LD half of the criterion passes:
   `regionServiceNode` (`src/lib/seo/structured-data/service.ts:75-81`)
   emits `Service` with no `offers` and no price property.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: `/deine-region` is the entry of a wired conversion goal, and
+  its manifest is the only one of seven with no `page.meta.test.ts`, which
+  is why the drift went unseen — declare the three modules that exist plus
+  the missing test. The embed-demo row stays undeclared with F-2-15, which
+  is blocked on the third-party no-cookie confirmation: do not invent a
+  fourth entry to make the count match D1.
 
 ## F-2-51 — Order step 3 offers two calls to action, one of them inert
 
@@ -1301,7 +1450,12 @@ dismissed in the protocol, not here.
   here and had to work out which control was real.
 - Correction to the UAT note: "Weiter" does navigate; the earlier
   observation that it did nothing did not reproduce.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: UAT stopped here on a paid conversion path — two visible calls
+  to action on one step, and the one that reads like the commitment
+  ("Absenden") does nothing at all. Same `envoy-form-mount` work as F-2-65
+  and F-2-66, one step's controls. Note the finding's own correction:
+  "Weiter" does navigate; the inert "Absenden" beside it is the defect.
 
 ## F-2-52 — TS-010-A5 and TS-027-A7 contradict each other on the stage-0 empty proof slot
 
@@ -1324,7 +1478,13 @@ dismissed in the protocol, not here.
   `SURFACE_COUNTS.stream = 7` and pads with generic empties. Today's 6+1 is
   an artefact of a six-element pool, not an enforced reservation, so
   TS-027-A7's second clause is unguarded even where it is satisfied.
-- Round decision: (Project Manager to set)
+- Round decision: **open-list**
+- Reasoning: TS-010-A5 against TS-027-A7 — both cannot hold, and the PM does
+  not amend an acceptance criterion to make it satisfiable
+  (`plan/guardrails.md`). Recorded for the spec session together with the
+  finding's load-bearing note that `src/lib/relevance/select.ts` has no type
+  reservation, so A7's no-backfill clause is unguarded even where it is
+  satisfied today.
 
 ## F-2-53 — "1 Orte ausgewählt": the German plural form is used for a count of one
 
@@ -1337,7 +1497,9 @@ dismissed in the protocol, not here.
 - Observed: "1 Orte ausgewählt". `SELECTED_COUNT` is
   `(n) => \`${n} Orte ausgewählt\`` with no singular branch; the English
   variant has the same shape ("1 places selected").
-- Round decision: (Project Manager to set)
+- Round decision: **open-list**
+- Reasoning: low is open-list by `plan/process.md`. A singular branch on the
+  scope-chip counter is an M5-budget item, not a round-3 slot.
 
 ## F-2-54 — Step 4 promises an email that nothing sends
 
@@ -1353,7 +1515,11 @@ dismissed in the protocol, not here.
   `action` and no named fields, and no address is ever collected. The
   `Demo-Daten` badge does render next to the snippet, so the mock-labelling
   guardrail itself is satisfied — the false promise is the defect.
-- Round decision: (Project Manager to set)
+- Round decision: **open-list**
+- Reasoning: low is open-list by `plan/process.md`. Worth naming for the
+  content follow-up: it is one sentence, it promises something no mock can
+  keep, and it is the first row the M5 budget should buy if the budget
+  stretches.
 
 ## F-2-55 — Two rows of the D1 URL inventory do not exist, and the criteria that guard it are self-referential
 
@@ -1383,7 +1549,13 @@ dismissed in the protocol, not here.
 - Consequence for TS-016 D6: with `/start` missing, the lead fallback has
   no indirection target, which is one of the two reasons F-2-32's briefing
   URLs are pasted per page.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package C)
+- Reasoning: two D1 rows do not exist, and the two criteria that guard them
+  assert against the route registry instead of against D1 — a green suite
+  certifying its own gap. That is exactly the "tests that assert too little"
+  strand this package owns (TS-004-A1, A4, A5). `/start` is also the
+  indirection target whose absence is one of the two reasons F-2-32's
+  briefing URL is pasted per page, so it pays twice.
 
 ## F-2-56 — No route is partially prerendered; four content routes are fully dynamic
 
@@ -1402,7 +1574,16 @@ dismissed in the protocol, not here.
 - Note: `cacheComponents: true` is set (`next.config.ts:8`) and the build
   is green, so TS-009-A1 passes; the flip has simply not produced a PPR
   boundary anywhere, which is the same root cause as F-2-39.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package B)
+- Reasoning: same root cause and same file as F-2-39, so it closes with it
+  on the eight routes that prerender — a shell plus streamed islands rather
+  than fully static pages.
+- **Settled, do not re-litigate:** `state/open.md` row 131 is the wiring
+  wave's recorded reading that the four flow/`?ort=` routes are dynamic by
+  design (the request value *is* the page). TS-009-A2's "zero routes are
+  fully dynamic" clause therefore stays failed against row 131 and is
+  recorded, not chased; row 132 (hash-only CSP vs request-time scripts) is a
+  DEC-045 amendment owned outside this run.
 
 ## F-2-57 — Three claims ship without the confirmation their criteria make a precondition
 
@@ -1430,7 +1611,13 @@ dismissed in the protocol, not here.
     carries the map claim ("Der ganze Landkreis auf einer Karte …"); no
     confirmation record exists, and F-2-21 shows the map-shaped placeholder
     is still in the manifest. **fail**
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: two of the three criteria prescribe the action themselves —
+  "absent otherwise" (TS-016-A13) and "the claim is removed, not qualified"
+  (TS-026-A17) — so the run discharges them without the external
+  confirmations, which is the opposite of blocked. Both claims sit on
+  conversion pages that the reviews and the user tests run against.
+  TS-024-A19's half is a `derived_from` frontmatter line on two artefacts.
 
 ## F-2-58 — The axe sweep covers one of the three declared themes, so five criteria are only partly discharged
 
@@ -1456,7 +1643,14 @@ dismissed in the protocol, not here.
   reference viewports, on all 24 routes, and Lighthouse accessibility
   measures 100 on mobile and desktop for `/` on the preview. This finding
   is about the uncovered remainder, not about a regression.
-- Round decision: (Project Manager to set)
+- Round decision: **open-list**
+- Reasoning: an instrument gap, not a regression — what the sweep covers is
+  green on 24 routes at both viewports, and Lighthouse a11y measures 100.
+  Round 3 is the last round before the abort criterion and the budget goes
+  to defects, not to widening instruments. The more valuable uncovered half
+  (a per-step sweep of the register and order flows, and focus landing on
+  the new step's heading) goes on the list with it, as the first thing the
+  M5 tool-checks gate buys.
 
 ## F-2-59 — The archive filter updates its count but hides no rows
 
@@ -1488,7 +1682,14 @@ dismissed in the protocol, not here.
 - Consequence for the chaos protocol: C-K-3 verified the chips are
   keyboard-reachable and that Enter activates them; it did not verify what
   activation does. That gap is what this finding closes.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package B)
+- Reasoning: high — the filter announces "1 von 6" to a screen-reader user
+  while all six rows stay visible, so the accessible result and the visual
+  result disagree; that is an a11y failure on top of TS-028-A4, and
+  TS-028-A6 is vacuous until it is fixed. Contained in
+  `src/components/archive-filter/**`, whose `selection.ts` is already
+  unit-tested — the gap is the render, not the selection, which is why the
+  green unit tests did not catch it.
 
 ## F-2-60 — `buy-calendar-licence` fires a second time on client-side back/forward
 
@@ -1517,7 +1718,16 @@ dismissed in the protocol, not here.
 - Note: the event currently goes to `createMockTracker()` by decision, so
   no real number is wrong yet — but the trigger contract is, and the real
   adapter flag is the only thing between this and a wrong number.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: high, and independently reproduced by the chaos run on the
+  fresh preview with direct console counts (C-H-6, `round-2-chaos-hasty-clicker.md`
+  Run 2) — so the trigger contract is wrong in the deployed surface, not
+  only in the local reading. It is the one goal wired at `stage: completed`,
+  and the mock tracker is the only reason no real number is wrong yet
+  (`state/open.md` row 130 flips the real adapter on). Fix at
+  `FireConversionOnMount` (`bestellen/page.tsx:270`) plus
+  `src/components/conversion-tracker/**`, with a per-flow dedupe key rather
+  than a mount.
 
 ## F-2-61 — `/dein-ort`'s empty state changes neither the primary CTA nor position 2, and leaks raw markdown
 
@@ -1544,7 +1754,12 @@ dismissed in the protocol, not here.
   - Passing clauses: URL and canonical unchanged
     (`canonical = …/dein-ort`), and the place name is escaped
     (`?ort=<img src=x onerror=…>` injects no element).
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: high — TS-008-A6's whole point is that the empty branch switches
+  the conversion, and none of the three clauses happens; on top of it, raw
+  markdown (backticks and an arrow) ships as visitor copy, which the
+  dummy-content rule forbids outright. Same page and same live layer as
+  F-2-30 and F-2-49, so all three land together.
 
 ## F-2-62 — Entering registration from `/dein-ort/starten` skips step 1, and the place is neither shown nor changeable
 
@@ -1564,7 +1779,12 @@ dismissed in the protocol, not here.
 - Relation to F-2-30: the same CTA is what the founding path should hand
   over; with F-2-30 open, almost nobody reaches this page in the first
   place, which is why the defect has not been noticed.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: high — TS-023-A7 is explicit that step 1 is not skipped and the
+  place is visible and changeable, and a visitor who mistyped her postcode
+  on the previous page cannot see or correct it. It is the hand-over that
+  F-2-30 restores traffic to, so the two must land in the same round or the
+  founding path opens onto a broken step.
 
 ## F-2-63 — `/deine-region` asserts a county at stage 0, and names it with a raw internal id
 
@@ -1585,7 +1805,12 @@ dismissed in the protocol, not here.
   same class of leak as F-2-35. The place search *is* present in the block
   and the block sequence matches the located render, so the rest of A10
   holds.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: on the `request-licence-quote` entry page, and two defects in
+  one heading — a county asserted with no anchor (TS-026-A10, TS-026 D4) and
+  a raw `geoname.900001` rendered as visitor copy, the same leak class as
+  F-2-35. UAT named it unprompted, which is the signal that it reads as
+  broken rather than as unfinished.
 
 ## F-2-64 — The newsletter consent line links a legal anchor that does not exist in English
 
@@ -1606,4 +1831,135 @@ dismissed in the protocol, not here.
 - Note: the same consent sentence is the German-on-English string of
   F-2-33 and carries the `Q-020` id of F-2-35; all three defects sit in one
   block.
-- Round decision: (Project Manager to set)
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: one `href` in the footer consent line, wrong on all 24 routes,
+  and a broken internal link under TS-004-A8. It sits in the same block as
+  F-2-33 and F-2-35, which package A is opening anyway — it costs nothing to
+  fix while that block is open.
+
+---
+
+# Findings — Round 2, chaos Run 2 (Hasty Clicker, Playwright)
+
+Triaged by the Project Manager from
+`state/findings/round-2-chaos-hasty-clicker.md` **Run 2 (Playwright)**
+(C-H-6…C-H-16), which landed after the QA acceptance sweep had closed. The
+run used the documented fallback (persona-scripted Playwright against the
+fresh preview, after round 1's agent-browser session could not type into
+fields) and counted every conversion fire directly from the mock tracker's
+console lines, so the numbers below are measured, not inferred.
+
+Dispositions for the Run-2 observations that are **not** new findings:
+
+| Chaos id | Disposition |
+| --- | --- |
+| C-H-6 (`buy-calendar-licence` twice after Back/Forward) | **already filed as F-2-60.** Not re-filed; the chaos evidence is added to F-2-60's reasoning, because it reproduces the defect on the deployed preview with console counts where QA had it locally |
+| C-H-8 (double-click on step 3 → 4 fires once) | **clean pass**, recorded by the persona as a contrast case — no finding |
+| C-H-11 (two tabs, interleaved quote submissions) | **clean pass** — one event per tab, no cross-tab value bleed |
+| C-H-13 (`registrieren` commits via `?ort=` where `bestellen` uses `?orte=` + chip) | **not a defect.** Two different flows with two different specs: TS-023 registers one place, TS-025's scope picker selects several, so an explicit add step exists there and not here. The asymmetry is specified |
+| C-H-14 (language switch double-click) | **not a defect** — confirms round 1's C-H-4 was a selector/tooling failure. The duplicate `<nav aria-label="Sprache">` it noticed is F-2-3, resolved in `2eeab26` |
+| C-H-15 (navigate away mid-search, then Back) | **clean pass** — no stale or duplicated state |
+| C-H-16 (roam, double-clicking the first nav link on eight routes) | **not a defect** — all eight console errors are the identical known `vercel.live` preview CSP block, F-2-27 |
+
+## F-2-65 — `request-licence-quote` fires twice from one rapid double-click on "Absenden"
+
+- Severity: high
+- Source: chaos:hasty-clicker (C-H-7, Playwright Run 2, fresh preview)
+- Where: `/deine-region/angebot` submit button ·
+  `src/components/envoy-form-mount/envoy-form-mount.tsx` · TS-012-A5,
+  TS-016-A12
+- Steps: fill Organisation / Name / E-Mail / Telefon / Nachricht, then issue
+  two `click()` calls at "Absenden" back to back with no wait between them.
+- Expected: TS-012-A5 — each wired trigger emits exactly one event;
+  TS-016-A12 — once per completed flow.
+- Observed: `[analytics:mock] conversion {goalId: request-licence-quote,
+  stage: completed}` twice for the one user action. Nothing disables or
+  debounces the button, so the second click starts its own tracked
+  submission.
+- Relation: the same family as F-2-60, and the opposite mechanism — F-2-60
+  is a history revisit, this is a click race. C-H-8 shows the bestellen
+  completion link does **not** double-fire, so the defect is this button,
+  not every control.
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: high, on a wired conversion path, and the second of the two
+  `stage: completed` goals to over-count — with F-2-60 open, both of the
+  run's completed-stage goals are wrong. The fix is disable-on-submit plus a
+  one-per-flow guard in the one component A already opens for F-2-48,
+  F-2-51 and F-2-66. It is also the mechanical half of F-2-66: a button that
+  cannot be pressed twice is what makes the missing confirmation survivable.
+
+## F-2-66 — The quote form gives no success feedback at all after a submission
+
+- Severity: high
+- Source: chaos:hasty-clicker (C-H-10) + uat (`/deine-region/angebot` walk)
+- Where: `/deine-region/angebot` ·
+  `src/components/envoy-form-mount/envoy-form-mount.tsx` · TS-016-A9,
+  `plan/guardrails.md` (mock rule)
+- Steps: fill and submit the quote form once, cleanly, and watch the page.
+- Expected: TS-016-A9 requires focus to move "to the success message", which
+  presupposes one; the mock rule requires every mocked component to deliver
+  dummy data "never as a hole, never as a bare empty state".
+- Observed: after the console-confirmed single fire, the fields are simply
+  empty again — same layout, same "Absenden" button, no message, no disabled
+  or loading state at any captured point. Nothing distinguishes "submitted"
+  from "page just loaded". UAT reached the same dead end independently and
+  wrote that she would not know whether to wait for a reply or try again.
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: high — the completion of a wired conversion goal is invisible
+  to the visitor, on the one flow whose whole purpose is a hand-off to a
+  human. It is also the direct risk multiplier for F-2-65: a visitor who
+  sees no confirmation has every reason to press "Absenden" again. The
+  widget is a declared mock (`state/open.md` row 7), which is precisely why
+  the mock owes a labelled success state rather than nothing; building it
+  is the mount's job, not the third party's, so it is not blocked.
+
+## F-2-67 — Reloading immediately after "Weiter" on order step 3 silently swallows the advance
+
+- Severity: medium
+- Source: chaos:hasty-clicker (C-H-9, Playwright Run 2)
+- Where: `/dein-kalender/bestellen`, the step 3 → step 4 transition ·
+  `app/[lang]/dein-kalender/bestellen/page.tsx`
+- Steps: from step 3, click "Weiter" and trigger a page reload immediately,
+  with no wait — a hasty reload during the in-flight client-side transition.
+- Expected: the reload either lands on step 4 (the transition had
+  committed) or stays on step 3 with the click ready to retry and visibly
+  so.
+- Observed: the reload lands back on `schritt=3` with **zero** conversion
+  events logged; the in-flight history push is discarded before the URL
+  updates. No error, no pending state, no indication that the click did not
+  count.
+- Round decision: **fix-now** (round 3, package A)
+- Reasoning: medium on a paid conversion path, which `plan/process.md` makes
+  a fix-now case regardless of cost — and the cost here is small, because
+  the flow's state is already entirely in the URL (TS-025 D8): a pending
+  state on the step's primary control is enough for the visitor to see that
+  the click was lost. No dedupe or session store is needed, and none may be
+  added — TS-025 D8 is explicit that nothing is stored between page views.
+
+## F-2-68 — Controls in the footer region move up to 174 px between first paint and settle
+
+- Severity: high
+- Source: chaos:hasty-clicker (C-H-12, Playwright Run 2, both viewports)
+- Where: `/` at 1280×800 and 360×640 · TS-009-A8 (reference: F-2-39,
+  F-2-56; TS-003-A7 / TS-003 D8 are the same rule but out of scope at this
+  gate)
+- Steps: load `/` with `waitUntil: domcontentloaded`, read
+  `getBoundingClientRect()` for the `h1` and the first controls ~50 ms
+  later, then read the same elements after `networkidle` plus a 1 s settle.
+- Expected: TS-009-A8 — CLS < 0.1 on every content page with all islands
+  streaming; TS-003 D8 — reserved space is how that is met.
+- Observed (desktop): second "Suchen" button y `4204 → 4366` (+162 px),
+  "Absenden" y `4764 → 4938` (+174 px), "Anmelden" y `4974 → 5148`
+  (+174 px), `h1` width `450 → 474` (a font-swap reflow). Mobile shows the
+  same shape at +12 px. A visitor who clicks a below-the-fold control inside
+  the settling window — the hasty clicker's defining habit — hits empty
+  space or the wrong control.
+- Round decision: **fix-now** (round 3, package B)
+- Reasoning: high — an in-scope AC (TS-009-A8) fails on the home page at
+  both reference viewports, and the failure mode is a mis-click on the
+  contact and newsletter controls rather than a cosmetic shift. Same root
+  cause and same package as F-2-39 and F-2-56: nothing reserves an island's
+  box because no island has a fallback box, so the fix is the reserved-space
+  half of the boundaries B is mounting anyway, plus the font-swap reflow in
+  `app/styles/**`. Measured numbers exist, so the retest has a target even
+  without a CLS harness.
