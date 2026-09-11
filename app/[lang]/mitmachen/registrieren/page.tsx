@@ -7,12 +7,13 @@ import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { StepIndicator } from "@/src/components/step-indicator/step-indicator";
 import { appendCampaignParams, extractCampaignParams } from "@/src/lib/analytics";
 import { fieldAt } from "@/src/lib/content/blocks";
-import { loadPage, slot } from "@/src/lib/content/loader";
+import { slot } from "@/src/lib/content/loader";
 import { resolveLocale } from "@/src/lib/i18n/locales";
 import { APP_ORIGIN } from "@/src/lib/live/app-handover";
 import { jobLabelKey } from "@/src/lib/pages/page-meta";
 import { pageMetadata } from "@/src/lib/routes/metadata";
 
+import { pageContent } from "../../_content";
 import { localeFrom } from "../../_locale";
 import { SiteChrome } from "../../_page-frame";
 
@@ -58,6 +59,18 @@ const WEG_IDS = ["whatsapp", "calendar-connection", "website-import"] as const;
 
 const HANDOVER_HEADING = { de: "Fast geschafft", en: "Almost there" } as const;
 
+/**
+ * **Cache Components: this route blocks on purpose** (TS-009 D1, the dynamic
+ * layer). The step this flow renders *is* the query — heading, form, step
+ * indicator and closing block all change with it — so there is no static
+ * shell to split off: a `<Suspense>` around the body would prerender a
+ * skeleton and nothing else.
+ *
+ * `instant = false` is the framework's own marker for "allowed to block".
+ * Recorded in `state/open.md` with the other two flow routes.
+ */
+export const instant = false;
+
 export default async function Page({
   params,
   searchParams,
@@ -67,7 +80,7 @@ export default async function Page({
 }) {
   const locale = await localeFrom(params);
   const rawQuery = await searchParams;
-  const page = await loadPage(ROUTE, locale);
+  const page = await pageContent(ROUTE, locale);
 
   const ortSlot = slot(page, "registrieren-1-ort");
   const werSlot = slot(page, "registrieren-2-wer");

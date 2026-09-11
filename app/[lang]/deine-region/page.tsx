@@ -16,7 +16,7 @@ import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { ResponsePromise } from "@/src/components/response-promise/response-promise";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
-import { loadPage, slot } from "@/src/lib/content/loader";
+import { slot } from "@/src/lib/content/loader";
 import { slotState } from "@/src/lib/content/provenance";
 import { ctaLabelOnly, interpolate, splitQuoteAttribution } from "@/src/lib/content/text";
 import { resolveLocale } from "@/src/lib/i18n/locales";
@@ -25,6 +25,8 @@ import { assetSrc } from "@/src/lib/content/asset-src";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
 import { SITE_ORIGIN } from "@/src/lib/routes/routes";
 
+import { pageContent } from "../_content";
+import { localeFrom } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
 import { pageMeta } from "./page.meta";
@@ -71,8 +73,8 @@ export default async function Page({
 }: {
   params: Promise<{ lang: string }>;
 }) {
-  const locale = resolveLocale((await params).lang);
-  const page = await loadPage(ROUTE, locale);
+  const locale = await localeFrom(params);
+  const page = await pageContent(ROUTE, locale);
 
   const focus = slot(page, "deine-region-1-focus");
   const territory = slot(page, "deine-region-2-territory");

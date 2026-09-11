@@ -13,13 +13,15 @@ import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { RouteLink } from "@/src/components/route-link/route-link";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
-import { loadPage, slot } from "@/src/lib/content/loader";
+import { slot } from "@/src/lib/content/loader";
 import { ctaLabelOnly } from "@/src/lib/content/text";
 import { resolveLocale } from "@/src/lib/i18n/locales";
 import { pageMetadata } from "@/src/lib/routes/metadata";
 import { assetSrc } from "@/src/lib/content/asset-src";
 import { SITE_ORIGIN } from "@/src/lib/routes/routes";
 
+import { pageContent } from "../_content";
+import { localeFrom } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
 import { pageMeta } from "./page.meta";
@@ -128,8 +130,8 @@ export default async function Page({
 }: {
   params: Promise<{ lang: string }>;
 }) {
-  const locale = resolveLocale((await params).lang);
-  const page = await loadPage(ROUTE, locale);
+  const locale = await localeFrom(params);
+  const page = await pageContent(ROUTE, locale);
 
   const origin = slot(page, "ueber-uns-1-origin");
   const archiveLink = slot(page, "ueber-uns-4-archive");

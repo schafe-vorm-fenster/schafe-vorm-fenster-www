@@ -1,21 +1,24 @@
+import { Suspense } from "react";
+
 import { Button } from "@/src/components/button/button";
-import { EventList } from "@/src/components/event-list/event-list";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
-import { LiveModuleFrame } from "@/src/components/live-module-frame/live-module-frame";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { SceneBlock } from "@/src/components/scene-block/scene-block";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
-import { loadPage, slot } from "@/src/lib/content/loader";
+import { slot } from "@/src/lib/content/loader";
 import { resolveLocale } from "@/src/lib/i18n/locales";
 import { fillTemplate, splitSteps } from "@/src/lib/pages/demo-content";
-import { DEMO_PLACE, demoPlaceEvents } from "@/src/lib/pages/demo-data";
+import { DEMO_PLACE } from "@/src/lib/pages/demo-data";
+import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
 import { readPlaceParameter } from "@/src/lib/pages/place-parameter";
 import { pageMetadata } from "@/src/lib/routes/metadata";
 
 import heroPlaceholder from "@/src/generated/placeholders/dein-ort-starten/hero.svg";
 
+import { PlaceDatesIsland, moduleSkeleton } from "../../_islands";
+import { pageContent } from "../../_content";
 import { localeFrom } from "../../_locale";
 import { PageFrame } from "../../_page-frame";
 import { PLACE_START_META } from "./page.meta";
@@ -99,6 +102,22 @@ function labelOf(field: string | undefined): string {
   return (field ?? "").split("→")[0]?.trim() ?? "";
 }
 
+/**
+ * **Cache Components: this route blocks on purpose** (TS-009 D1, the dynamic
+ * layer). `?ort=` is not one module's input here — it is the page's headline,
+ * its primary CTA's query and its closing block, all three (D4/D8). Splitting
+ * that into a `<Suspense>` island would put the *hero* behind a skeleton and
+ * ship a shell whose first screen is empty, which is the opposite of what a
+ * static shell is for.
+ *
+ * `instant = false` is the framework's own marker for "allowed to block".
+ * The route still renders from the same tree, with the same content; what it
+ * gives up is the prerendered shell. Recorded in `state/open.md` together
+ * with the two other flow routes (`/mitmachen/registrieren`,
+ * `/dein-kalender/bestellen`), which block for the same reason.
+ */
+export const instant = false;
+
 export default async function PlaceStartPage({
   params,
   searchParams,
@@ -107,7 +126,7 @@ export default async function PlaceStartPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const locale = await localeFrom(params);
-  const page = await loadPage(ROUTE, locale);
+  const page = await pageContent(ROUTE, locale);
   const copy = PAGE_COPY[locale];
 
   // D4: exactly one value, validated; anything else renders the placeless
@@ -201,19 +220,15 @@ export default async function PlaceStartPage({
       <MotionReveal>
         <SectionShell id="live-example" surface="ink">
           <p>{splitSteps(fillTemplate(fieldAt(example.blocks, 1) ?? "", ctaValues))[0]}</p>
-          <LiveModuleFrame
-            headingLevel="h2"
-            state="mocked"
-            title={fillTemplate(fieldAt(example.blocks, 0) ?? "", values)}
-          >
-            <EventList
-              items={demoPlaceEvents(locale)}
+          <Suspense fallback={moduleSkeleton(3)}>
+            <PlaceDatesIsland
               locale={locale}
               rowCount={3}
-              state="mocked"
+              slug={STAGE_ZERO_ANCHOR.slug}
+              titleTemplate={fillTemplate(fieldAt(example.blocks, 0) ?? "", values)}
               tone="dark"
             />
-          </LiveModuleFrame>
+          </Suspense>
         </SectionShell>
       </MotionReveal>
 

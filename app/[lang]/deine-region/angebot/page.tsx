@@ -4,13 +4,15 @@ import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { ResponsePromise } from "@/src/components/response-promise/response-promise";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
-import { loadPage, slot } from "@/src/lib/content/loader";
+import { slot } from "@/src/lib/content/loader";
 import { slotState } from "@/src/lib/content/provenance";
 import { interpolate } from "@/src/lib/content/text";
 import { resolveLocale } from "@/src/lib/i18n/locales";
 import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
 import { SITE_ORIGIN, href } from "@/src/lib/routes/routes";
 
+import { pageContent } from "../../_content";
+import { localeFrom } from "../../_locale";
 import { PageFrame } from "../../_page-frame";
 
 import { pageMeta } from "./page.meta";
@@ -52,10 +54,10 @@ export default async function Page({
 }: {
   params: Promise<{ lang: string }>;
 }) {
-  const locale = resolveLocale((await params).lang);
+  const locale = await localeFrom(params);
   // TS-007 README: `/deine-region/angebot` has no artifact of its own —
   // its slots live in the `region` artifact (`deine-region-angebot-*`).
-  const page = await loadPage("region", locale);
+  const page = await pageContent("region", locale);
   const form = slot(page, "deine-region-angebot-1-form");
 
   const heading =

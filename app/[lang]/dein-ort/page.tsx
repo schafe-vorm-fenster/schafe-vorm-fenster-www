@@ -1,27 +1,37 @@
-import { EventList } from "@/src/components/event-list/event-list";
+import { Suspense } from "react";
+
 import { EventRow } from "@/src/components/event-row/event-row";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { HowtoBlock } from "@/src/components/howto-block/howto-block";
-import { LiveModuleFrame } from "@/src/components/live-module-frame/live-module-frame";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
-import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { ValueStory } from "@/src/components/value-story/value-story";
 import { fieldAt } from "@/src/lib/content/blocks";
-import { loadPage, slot } from "@/src/lib/content/loader";
+import { slot } from "@/src/lib/content/loader";
 import { resolveLocale } from "@/src/lib/i18n/locales";
+import { ctaLabelOnly } from "@/src/lib/content/text";
 import { fillTemplate, splitSteps } from "@/src/lib/pages/demo-content";
-import {
-  DEMO_PLACE,
-  demoAppHref,
-  demoNearbyEvents,
-  demoPlaceEvents,
-} from "@/src/lib/pages/demo-data";
+import { STAGE_ZERO_ANCHOR, resolveAnchorPlace } from "@/src/lib/pages/live-anchor";
+import { readPlaceParameter } from "@/src/lib/pages/place-parameter";
+import { cacheLife, cacheTag } from "next/cache";
+
+import { calendarUrl } from "@/src/lib/live/app-handover";
+import { cacheLifeProfile, cacheTags } from "@/src/lib/live/cache-profiles";
+import { resolvePlace } from "@/src/lib/live/places";
 import { pageMetadata } from "@/src/lib/routes/metadata";
+import { href } from "@/src/lib/routes/routes";
 
 import heroPlaceholder from "@/src/generated/placeholders/dein-ort/hero.svg";
 
+import {
+  NearbyIsland,
+  PlaceDatesIsland,
+  StatedNearby,
+  StatedPlaceDates,
+  exampleRows,
+} from "../_islands";
+import { pageContent } from "../_content";
 import { localeFrom } from "../_locale";
 import { PageFrame } from "../_page-frame";
 import { PLACE_META } from "./page.meta";
@@ -42,8 +52,15 @@ import type { Metadata } from "next";
  * a known community the page is **S0** — "the prerendered shell, complete on
  * its own: place search dominant, stories on snapshot examples, counters may
  * render; **no empty-state markup**, no unresolved skeleton, no 'we could not
- * find you'" (D2, TS-020-A10). States A and B need the resolved place of
- * `/api/places/{slug}/events`, which M4 wires; nothing here fetches.
+ * find you'" (D2, TS-020-A10).
+ *
+ * S0 is literally the **prerendered shell**: the two live modules are cached
+ * islands anchored on the stage-0 reference community, and they sit in the
+ * `<Suspense>` *fallback* position. `?ort=` is read only inside the boundary
+ * (`StatedPlaceDates`/`StatedNearby`, `_islands.tsx`), so state A and state B
+ * stream over a page that was already complete without them — which is what
+ * keeps this route prerenderable while still answering a stated place
+ * (TS-009 D1/D2, TS-010 D8).
  *
  * Consequences of S0 that this file makes explicit:
  *
@@ -109,17 +126,67 @@ const PAGE_COPY: Record<
   },
 };
 
+
+/**
+ * TS-020 D4 — the homescreen block, which names a place and links the app.
+ *
+ * Cached per slug: everything it renders is a function of the resolved place
+ * and the artifact's own instructions, so it belongs on the cache side of
+ * TS-009 D1 rather than in the request-bound half.
+ */
+interface HomescreenCopy {
+  readonly locale: Locale;
+  readonly headline: string;
+  readonly ios: string;
+  readonly android: string;
+  readonly ctaTemplate: string;
+  readonly genericPlace: string;
+}
+
+async function Homescreen({ slug, locale, headline, ios, android, ctaTemplate, genericPlace }: HomescreenCopy & { readonly slug: string }) {
+  "use cache";
+  cacheLife(cacheLifeProfile("activePlaces"));
+  cacheTag(cacheTags.places());
+
+  const place = await resolvePlace(slug);
+  const name = place?.name ?? genericPlace;
+
+  return (
+    <HowtoBlock
+      android={{ steps: splitSteps(fillTemplate(android, { place: name })) }}
+      // No resolved place, no app link: an unresolved place has no handover
+      // (TS-008 D9) and the founding route carries it instead.
+      appHref={place ? calendarUrl(place) : href("placeStart", locale)}
+      appLinkLabel={fillTemplate(ctaTemplate, { place: name })}
+      headline={headline}
+      ios={{ steps: splitSteps(fillTemplate(ios, { place: name })) }}
+    />
+  );
+}
+
+/** The `?ort=` half: read the request value, resolve it, hand down a slug. */
+async function StatedHomescreen({
+  searchParams,
+  ...copy
+}: HomescreenCopy & { readonly searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const query = await searchParams;
+  const stated = await resolveAnchorPlace(readPlaceParameter(query["ort"]));
+  return <Homescreen slug={stated?.slug ?? STAGE_ZERO_ANCHOR.slug} {...copy} />;
+}
+
 export default async function PlacePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ lang: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const locale = await localeFrom(params);
-  const page = await loadPage(ROUTE, locale);
+  const page = await pageContent(ROUTE, locale);
   const copy = PAGE_COPY[locale];
-  const place = DEMO_PLACE.name[locale];
 
   const stateA = slot(page, "dein-ort-1-state-a");
+  const stateB = slot(page, "dein-ort-2-state-b");
   const stories = [
     slot(page, "dein-ort-3-story-baeckerwagen"),
     slot(page, "dein-ort-4-story-ratssitzung"),
@@ -129,18 +196,45 @@ export default async function PlacePage({
   const homescreen = slot(page, "dein-ort-7-homescreen");
   const permanence = slot(page, "dein-ort-8-permanence");
 
-  const placeEvents = demoPlaceEvents(locale);
-  const nearbyEvents = demoNearbyEvents(locale);
-
-  /** One demo row per story — the snapshot rung of the example ladder (TS-020 D3). */
-  const storyExamples: readonly EventListItem[] = [
-    placeEvents[1], // the bakery van
-    placeEvents[2], // the council meeting
-    nearbyEvents[2], // the exhibition — culture, and from the surroundings
-    nearbyEvents[0], // the fifteen-minute radius, a row naming its own place
+  // The story examples are real rows off the live layer, cached rather than
+  // suspended: they stand inside prose, where a skeleton would read as a
+  // broken paragraph rather than as arriving data (TS-020 D3's example
+  // ladder, snapshot rung).
+  const rows = await exampleRows(
+    STAGE_ZERO_ANCHOR.slug,
+    STAGE_ZERO_ANCHOR.lat,
+    STAGE_ZERO_ANCHOR.lng,
+    locale,
+  );
+  const storyExamples: readonly (EventListItem | undefined)[] = [
+    rows.place[1],
+    rows.place[2],
+    rows.nearby[2],
+    rows.nearby[0],
   ];
 
-  const handoverLabel = fillTemplate(stateA.cta ?? "", { place });
+  /**
+   * TS-008 D4's conversion moment, as the module's own empty state: a
+   * **covered** place with no dates yet gets the publish invitation in the
+   * module slot, and the focus job shifts (`page.meta.ts`'s `emptyState`).
+   */
+  const invitation = {
+    // `{place}` stays a template: the island fills it with the place the
+    // envelope resolved, which is the only place name this page may claim.
+    headline: stateB.fields["Headline"] ?? "",
+    lead: fieldAt(stateB.blocks, 1),
+    ctaLabel: ctaLabelOnly(stateB.cta ?? "") ?? "",
+    ctaTo: "takePart",
+  } as const;
+
+  const homescreenCopy = {
+    locale,
+    headline: fieldAt(homescreen.blocks, 0) ?? "",
+    ios: fieldAt(homescreen.blocks, 1) ?? "",
+    android: fieldAt(homescreen.blocks, 2) ?? "",
+    ctaTemplate: stateA.cta ?? "",
+    genericPlace: copy.genericPlace,
+  } as const;
 
   const search = (primary: boolean) => (
     <PlaceSearch
@@ -186,25 +280,31 @@ export default async function PlacePage({
           not the rows, that carries it. */}
       <MotionReveal>
         <SectionShell id="place-dates" surface="ink">
-          <LiveModuleFrame
-            announced
-            cta={
-              <OutboundLink href={demoAppHref()} variant="secondary">
-                {handoverLabel}
-              </OutboundLink>
+          <Suspense
+            fallback={
+              <PlaceDatesIsland
+                announced
+                ctaTemplate={stateA.cta ?? ""}
+                invitation={invitation}
+                locale={locale}
+                rowCount={3}
+                slug={STAGE_ZERO_ANCHOR.slug}
+                titleTemplate={stateA.fields["Headline"] ?? ""}
+                tone="dark"
+              />
             }
-            headingLevel="h2"
-            state="mocked"
-            title={fillTemplate(stateA.fields["Headline"] ?? "", { place })}
           >
-            <EventList
-              items={placeEvents}
+            <StatedPlaceDates
+              announced
+              ctaTemplate={stateA.cta ?? ""}
+              invitation={invitation}
               locale={locale}
               rowCount={3}
-              state="mocked"
+              searchParams={searchParams}
+              titleTemplate={stateA.fields["Headline"] ?? ""}
               tone="dark"
             />
-          </LiveModuleFrame>
+          </Suspense>
         </SectionShell>
       </MotionReveal>
 
@@ -218,11 +318,13 @@ export default async function PlacePage({
             <ValueStory
               aspect={fieldAt(story.blocks, 0) ?? ""}
               example={
-                <EventRow
-                  {...storyExamples[index]}
-                  locale={locale}
-                  state="mocked"
-                />
+                storyExamples[index] === undefined ? undefined : (
+                  <EventRow
+                    {...storyExamples[index]}
+                    locale={locale}
+                    state={rows.demo ? "mocked" : "ready"}
+                  />
+                )
               }
               exampleLabel={copy.example}
               exampleLevel="snapshot"
@@ -239,9 +341,24 @@ export default async function PlacePage({
           naming its own place. */}
       <MotionReveal>
         <SectionShell id="nearby" surface="lime-100">
-          <LiveModuleFrame headingLevel="h2" state="mocked" title={copy.nearby}>
-            <EventList items={nearbyEvents} locale={locale} rowCount={5} state="mocked" />
-          </LiveModuleFrame>
+          <Suspense
+            fallback={
+              <NearbyIsland
+                lat={STAGE_ZERO_ANCHOR.lat}
+                lng={STAGE_ZERO_ANCHOR.lng}
+                locale={locale}
+                rowCount={5}
+                titleTemplate={copy.nearby}
+              />
+            }
+          >
+            <StatedNearby
+              locale={locale}
+              rowCount={5}
+              searchParams={searchParams}
+              titleTemplate={copy.nearby}
+            />
+          </Suspense>
         </SectionShell>
       </MotionReveal>
 
@@ -251,13 +368,9 @@ export default async function PlacePage({
           secondary treatment. */}
       <MotionReveal>
         <SectionShell id="homescreen" surface="lime-500">
-          <HowtoBlock
-            android={{ steps: splitSteps(fillTemplate(fieldAt(homescreen.blocks, 2) ?? "", { place })) }}
-            appHref={demoAppHref()}
-            appLinkLabel={handoverLabel}
-            headline={fieldAt(homescreen.blocks, 0) ?? ""}
-            ios={{ steps: splitSteps(fillTemplate(fieldAt(homescreen.blocks, 1) ?? "", { place })) }}
-          />
+          <Suspense fallback={<Homescreen slug={STAGE_ZERO_ANCHOR.slug} {...homescreenCopy} />}>
+            <StatedHomescreen searchParams={searchParams} {...homescreenCopy} />
+          </Suspense>
         </SectionShell>
       </MotionReveal>
     </PageFrame>

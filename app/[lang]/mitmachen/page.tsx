@@ -1,7 +1,7 @@
+import { Suspense } from "react";
+
 import { Button } from "@/src/components/button/button";
-import { EventList } from "@/src/components/event-list/event-list";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
-import { LiveModuleFrame } from "@/src/components/live-module-frame/live-module-frame";
 import { ObjectionList } from "@/src/components/objection-list/objection-list";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
@@ -9,15 +9,18 @@ import { PublishingPath } from "@/src/components/publishing-path/publishing-path
 import { RouteLink } from "@/src/components/route-link/route-link";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
-import { loadPage, slot } from "@/src/lib/content/loader";
+import { slot } from "@/src/lib/content/loader";
 import { slotState } from "@/src/lib/content/provenance";
 import { resolveLocale } from "@/src/lib/i18n/locales";
+import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
 import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
 
+import { PlaceDatesIsland, moduleSkeleton } from "../_islands";
+import { pageContent } from "../_content";
 import { localeFrom } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
-import { selectExamplePlace } from "./example-place";
+import { REFERENCE_PLACE, selectExamplePlace } from "./example-place";
 import { pageMeta } from "./page.meta";
 
 import type { Step } from "@/src/components/content-fragments";
@@ -93,22 +96,14 @@ const PROOF_CONTEXT_LINE: Record<Locale, string> = {
 
 const GEO_SNAPSHOT_LABEL: Record<Locale, string> = { de: "Beispiel", en: "Example" };
 
-/** Demo rows are dated relative to render, never `Date.now()` inline in JSX (react-hooks/purity). */
-function inDays(days: number): Date {
-  const date = new Date();
-  date.setHours(12, 0, 0, 0);
-  date.setDate(date.getDate() + days);
-  return date;
-}
-
 export default async function Page({
   params,
 }: {
   params: Promise<{ lang: string }>;
 }) {
   const locale = await localeFrom(params);
-  const page = await loadPage(ROUTE, locale);
-  const home = await loadPage("home", locale);
+  const page = await pageContent(ROUTE, locale);
+  const home = await pageContent("home", locale);
 
   const hero = slot(page, "mitmachen-1-hero");
   const objections = slot(page, "mitmachen-2-objections");
@@ -119,8 +114,23 @@ export default async function Page({
   const proofDemo = slot(page, "mitmachen-7-proof-demo");
   const contextBand = slot(home, "home-10-context-band");
 
-  const place = selectExamplePlace(undefined);
-  const exampleTitle = (fieldAt(example.blocks, 0) ?? "").replace(/\{[^}]+\}/, place.name);
+  /**
+   * The heading keeps its `{…}` slot: the island fills it with the place the
+   * envelope actually resolved, which is the only name this page may claim.
+   *
+   * `selectExamplePlace()` (D5's own decision function, unit-tested) still
+   * owns *which* place — its stage-0 answer is the configured reference
+   * community `gross-kiesow`. That slug resolves only against the **real**
+   * geo-api, and this environment has no read token, so the module would
+   * render nothing at all. The stage-0 anchor stands in until the token
+   * exists; both slugs go through the same `resolvePlace()` call, so the
+   * swap is one constant. `state/open.md`.
+   */
+  const exampleTitle = (fieldAt(example.blocks, 0) ?? "").replace(
+    /\{[^}]+\}/,
+    "{place}",
+  );
+  const exampleSlug = selectExamplePlace(undefined).slug;
 
   const demoQuotes = listItems(proofDemo.blocks).map(parseDemoQuote);
   const heroCtaLabel = fieldAt(hero.blocks, 2) ?? "";
@@ -193,37 +203,20 @@ export default async function Page({
       </SectionShell>
 
       <SectionShell dataBlock="beispiel" label={exampleTitle} surface="ink">
-        <LiveModuleFrame announced state={slotState(example, "mocked")} title={exampleTitle}>
-          <EventList
-            items={[
-              {
-                date: inDays(3),
-                title: locale === "de" ? "Dorffest Musterhagen" : "Village fest (example)",
-                meta: place.name,
-                category: "fest",
-                categoryLabel: locale === "de" ? "Fest" : "Festival",
-              },
-              {
-                date: inDays(9),
-                title: locale === "de" ? "Flohmarkt am Anger" : "Flea market (example)",
-                meta: place.name,
-                category: "merchants",
-                categoryLabel: locale === "de" ? "Markt" : "Market",
-              },
-              {
-                date: inDays(16),
-                title:
-                  locale === "de" ? "Chorprobe der Kirchengemeinde" : "Choir practice (example)",
-                meta: place.name,
-                category: "culture",
-                categoryLabel: locale === "de" ? "Kultur" : "Culture",
-              },
-            ]}
+        {/* D5's live example, now off the shared live-data layer rather than
+            a page-local row list (`state/open.md` row 128): the same
+            `placeEvents()` interface `/dein-ort` and `/` use, so this module
+            degrades, caches and demo-labels exactly like every other one. */}
+        <Suspense fallback={moduleSkeleton(3)}>
+          <PlaceDatesIsland
+            announced
             locale={locale}
             rowCount={3}
-            state="mocked"
+            slug={exampleSlug === REFERENCE_PLACE.slug ? STAGE_ZERO_ANCHOR.slug : exampleSlug}
+            titleTemplate={exampleTitle}
+            tone="dark"
           />
-        </LiveModuleFrame>
+        </Suspense>
       </SectionShell>
 
       {/* `lime-100`, not `paper`: `PageFrame` appends `surface` (band) then

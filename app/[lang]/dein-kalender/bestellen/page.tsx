@@ -13,13 +13,14 @@ import { ScopePicker } from "@/src/components/scope-picker/scope-picker";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { StepIndicator } from "@/src/components/step-indicator/step-indicator";
 import { fieldAt } from "@/src/lib/content/blocks";
-import { loadPage, slot } from "@/src/lib/content/loader";
+import { slot } from "@/src/lib/content/loader";
 import { resolveLocale } from "@/src/lib/i18n/locales";
 import { BRIEFING_URL } from "@/src/lib/live/briefing";
 import { resolvePlace } from "@/src/lib/live/places";
 import { jobLabelKey } from "@/src/lib/pages/page-meta";
 import { pageMetadata } from "@/src/lib/routes/metadata";
 
+import { pageContent } from "../../_content";
 import { localeFrom } from "../../_locale";
 import { SiteChrome } from "../../_page-frame";
 import { resolveRegisterPlace } from "../../mitmachen/registrieren/resolve-place";
@@ -98,6 +99,18 @@ const SELECTED_COUNT: Record<Locale, (n: number) => string> = {
 const CONTINUE_LABEL: Record<Locale, string> = { de: "Weiter", en: "Continue" };
 const STEP_TOTAL = 4;
 
+/**
+ * **Cache Components: this route blocks on purpose** (TS-009 D1, the dynamic
+ * layer). The step this flow renders *is* the query — heading, form, step
+ * indicator and closing block all change with it — so there is no static
+ * shell to split off: a `<Suspense>` around the body would prerender a
+ * skeleton and nothing else.
+ *
+ * `instant = false` is the framework's own marker for "allowed to block".
+ * Recorded in `state/open.md` with the other two flow routes.
+ */
+export const instant = false;
+
 export default async function Page({
   params,
   searchParams,
@@ -107,8 +120,8 @@ export default async function Page({
 }) {
   const locale = await localeFrom(params);
   const query = await searchParams;
-  const page = await loadPage(ROUTE, locale);
-  const home = await loadPage("home", locale);
+  const page = await pageContent(ROUTE, locale);
+  const home = await pageContent("home", locale);
   const contextBandHeading = fieldAt(slot(home, "home-10-context-band").blocks, 0);
 
   const scopeSlot = slot(page, "bestellen-1-scope");

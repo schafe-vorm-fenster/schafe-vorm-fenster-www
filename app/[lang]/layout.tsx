@@ -36,13 +36,15 @@ export const viewport: Viewport = {
 /**
  * TS-001 D4 / TS-004 D2 — the language set that ships, and nothing else.
  *
- * `dynamicParams = false` is D2's own pairing: a first segment that is not a
- * language served on this domain matches no route at all and answers 404
- * through `app/global-not-found.tsx` — the one 404 surface Next.js 16.3
- * actually server-renders (see the note there).
+ * D2 paired this with `dynamicParams = false`, which Cache Components refuses
+ * ("Route segment config \"dynamicParams\" is not compatible with
+ * `nextConfig.cacheComponents`"). The 404 it bought is unchanged, because it
+ * was never the only guard: every page resolves its language through
+ * `localeFrom()` (`_locale.ts`), which calls `notFound()` on a segment that is
+ * not a language served here. A non-language first segment therefore still
+ * answers 404 — now from the page rather than from the router, which is also
+ * the surface DEC-032 wants rendering the body.
  */
-export const dynamicParams = false;
-
 export function generateStaticParams(): { lang: string }[] {
   return LOCALES.map((lang) => ({ lang }));
 }

@@ -4,13 +4,14 @@ import { renderLegalBlocks } from "@/src/components/legal-section/render-legal-b
 import { SectionNav } from "@/src/components/section-nav/section-nav";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
-import { loadLegalDocument } from "@/src/lib/content/legal-loader";
 import { shiftHeadings } from "@/src/lib/content/legal-markdown";
-import { loadPage, slot } from "@/src/lib/content/loader";
+import { slot } from "@/src/lib/content/loader";
 import { resolveLocale } from "@/src/lib/i18n/locales";
 import { legalAnchor, LEGAL_SECTION_IDS } from "@/src/lib/routes/legal-anchors";
 import { pageMetadata } from "@/src/lib/routes/metadata";
 
+import { legalDocument, pageContent } from "../_content";
+import { localeFrom } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
 import styles from "./page.module.css";
@@ -70,11 +71,11 @@ export default async function Page({
 }: {
   params: Promise<{ lang: string }>;
 }) {
-  const locale = resolveLocale((await params).lang);
+  const locale = await localeFrom(params);
 
   const [page, ...documents] = await Promise.all([
-    loadPage(ROUTE, locale),
-    ...LEGAL_SECTION_IDS.map((section) => loadLegalDocument(section)),
+    pageContent(ROUTE, locale),
+    ...LEGAL_SECTION_IDS.map((section) => legalDocument(section)),
   ]);
 
   const header = slot(page, "rechtliches-1-header");

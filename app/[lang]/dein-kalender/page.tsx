@@ -10,12 +10,13 @@ import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { TrustBlock } from "@/src/components/trust-block/trust-block";
 import { fieldAt } from "@/src/lib/content/blocks";
-import { loadPage, slot } from "@/src/lib/content/loader";
+import { slot } from "@/src/lib/content/loader";
 import { resolveLocale } from "@/src/lib/i18n/locales";
 import { BRIEFING_URL } from "@/src/lib/live/briefing";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
 import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
 
+import { pageContent } from "../_content";
 import { localeFrom } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
@@ -89,8 +90,8 @@ export default async function Page({
   params: Promise<{ lang: string }>;
 }) {
   const locale = await localeFrom(params);
-  const page = await loadPage(ROUTE, locale);
-  const home = await loadPage("home", locale);
+  const page = await pageContent(ROUTE, locale);
+  const home = await pageContent("home", locale);
 
   const focus = slot(page, "dein-kalender-1-focus");
   const contrast = slot(page, "dein-kalender-2-contrast");

@@ -5,6 +5,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  cacheComponents: true,
   // DEC-032 needs a 404 that actually renders. Next.js 16.3 does not
   // server-render the body of a `notFound()` inside the route tree — the
   // status is right and the RSC payload carries the page, but the HTML

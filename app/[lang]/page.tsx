@@ -1,28 +1,20 @@
+import { Suspense } from "react";
+
 import { Button } from "@/src/components/button/button";
-import { EventList } from "@/src/components/event-list/event-list";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
-import { LiveCounters } from "@/src/components/live-counters/live-counters";
-import { LiveModuleFrame } from "@/src/components/live-module-frame/live-module-frame";
 import { MediaFrame } from "@/src/components/media-frame/media-frame";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
-import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SceneBlock } from "@/src/components/scene-block/scene-block";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
-import { loadPage, slot } from "@/src/lib/content/loader";
+import { slot } from "@/src/lib/content/loader";
 import { slotState } from "@/src/lib/content/provenance";
 import { resolveLocale } from "@/src/lib/i18n/locales";
-import { fillTemplate, parseDemoProofElement } from "@/src/lib/pages/demo-content";
-import {
-  DEMO_DATE_COUNT,
-  DEMO_PLACE,
-  demoAppHref,
-  demoNearbyEvents,
-  demoPlaceEvents,
-} from "@/src/lib/pages/demo-data";
+import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
+import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
 import { pageMetadata } from "@/src/lib/routes/metadata";
 
 import heroPlaceholder from "@/src/generated/placeholders/home/hero.svg";
@@ -30,6 +22,13 @@ import portraitPlaceholder from "@/src/generated/placeholders/ueber-uns/gruender
 
 import styles from "./_pages.module.css";
 
+import {
+  CountersIsland,
+  NearbyIsland,
+  PlaceDatesIsland,
+  moduleSkeleton,
+} from "./_islands";
+import { pageContent } from "./_content";
 import { localeFrom } from "./_locale";
 import { PageFrame } from "./_page-frame";
 import { HOME_META } from "./page.meta";
@@ -113,9 +112,8 @@ export default async function HomePage({
   params: Promise<{ lang: string }>;
 }) {
   const locale = await localeFrom(params);
-  const page = await loadPage(ROUTE, locale);
+  const page = await pageContent(ROUTE, locale);
   const demo = DEMO_LABELS[locale];
-  const place = DEMO_PLACE.name[locale];
 
   const hero = slot(page, "home-1-search-hero");
   const dates = slot(page, "home-2-place-dates");
@@ -181,24 +179,16 @@ export default async function HomePage({
           M4 wires `/api/places/{slug}/events` (TS-008 D2). */}
       <MotionReveal>
         <SectionShell id="place-dates" surface="ink">
-          <LiveModuleFrame
-            cta={
-              <OutboundLink href={demoAppHref()} variant="secondary">
-                {fillTemplate(dates.cta ?? "", { place })}
-              </OutboundLink>
-            }
-            headingLevel="h2"
-            state="mocked"
-            title={fillTemplate(dates.fields["Headline"] ?? "", { place })}
-          >
-            <EventList
-              items={demoPlaceEvents(locale)}
+          <Suspense fallback={moduleSkeleton(3)}>
+            <PlaceDatesIsland
+              ctaTemplate={dates.cta ?? ""}
               locale={locale}
               rowCount={3}
-              state="mocked"
+              slug={STAGE_ZERO_ANCHOR.slug}
+              titleTemplate={dates.fields["Headline"] ?? ""}
               tone="dark"
             />
-          </LiveModuleFrame>
+          </Suspense>
         </SectionShell>
       </MotionReveal>
 
@@ -208,18 +198,15 @@ export default async function HomePage({
           name (TS-008 D1). */}
       <MotionReveal>
         <SectionShell id="nearby" surface="surface-2">
-          <LiveModuleFrame
-            headingLevel="h2"
-            state="mocked"
-            title={fieldAt(nearby.blocks, 0) ?? ""}
-          >
-            <EventList
-              items={demoNearbyEvents(locale)}
+          <Suspense fallback={moduleSkeleton(5)}>
+            <NearbyIsland
+              lat={STAGE_ZERO_ANCHOR.lat}
+              lng={STAGE_ZERO_ANCHOR.lng}
               locale={locale}
               rowCount={5}
-              state="mocked"
+              titleTemplate={fieldAt(nearby.blocks, 0) ?? ""}
             />
-          </LiveModuleFrame>
+          </Suspense>
         </SectionShell>
       </MotionReveal>
       {/* Block 2a — three scenes, one mechanism each (TS-006 D7), in the
@@ -230,14 +217,15 @@ export default async function HomePage({
           <SceneBlock
             body={fieldAt(sceneWhatsapp.blocks, 1)}
             instance={
-              <LiveModuleFrame state="mocked" title={demo.flyerExample}>
-                <EventList
-                  items={demoPlaceEvents(locale).slice(0, 1)}
+              <Suspense fallback={moduleSkeleton(1)}>
+                <PlaceDatesIsland
+                  headingLevel="h3"
                   locale={locale}
                   rowCount={1}
-                  state="mocked"
+                  slug={STAGE_ZERO_ANCHOR.slug}
+                  titleTemplate={demo.flyerExample}
                 />
-              </LiveModuleFrame>
+              </Suspense>
             }
             locale={locale}
             mechanism="whatsapp"
@@ -297,11 +285,12 @@ export default async function HomePage({
               unit and the artifact's full label stands beside it as text. */}
           <div className={styles.counters} id="live-counters">
             <p>{fieldAt(counters.blocks, 0)}</p>
-            <LiveCounters
-              datesLabel={demo.datesUnit}
-              dates={DEMO_DATE_COUNT}
-              state="mocked"
-            />
+            <Suspense fallback={null}>
+              {/* TS-019-A14 / Q-037: only the counted figure. `places` and
+                  `updatesToday` have no `/api/stats` field, so the band shows
+                  one slot rather than an estimate. */}
+              <CountersIsland locale={locale} show={["dates"]} />
+            </Suspense>
           </div>
           <Button locale={locale} onward to="about" variant="secondary">
             {(fieldAt(stamps.blocks, 1) ?? "").split("→")[0]?.trim()}

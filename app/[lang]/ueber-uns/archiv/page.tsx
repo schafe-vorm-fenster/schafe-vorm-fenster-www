@@ -4,11 +4,13 @@ import { DemoDataBadge } from "@/src/components/demo-data-badge/demo-data-badge"
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
-import { loadPage, slot } from "@/src/lib/content/loader";
+import { slot } from "@/src/lib/content/loader";
 import { resolveLocale } from "@/src/lib/i18n/locales";
 import { pageMetadata } from "@/src/lib/routes/metadata";
 import { SITE_ORIGIN } from "@/src/lib/routes/routes";
 
+import { pageContent } from "../../_content";
+import { localeFrom } from "../../_locale";
 import { PageFrame } from "../../_page-frame";
 
 import { pageMeta } from "./page.meta";
@@ -72,8 +74,8 @@ export default async function Page({
 }: {
   params: Promise<{ lang: string }>;
 }) {
-  const locale = resolveLocale((await params).lang);
-  const page = await loadPage(ROUTE, locale);
+  const locale = await localeFrom(params);
+  const page = await pageContent(ROUTE, locale);
 
   const heading = slot(page, "archiv-1-heading");
   const rowsDemo = slot(page, "archiv-2-rows-demo");
