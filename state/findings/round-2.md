@@ -107,6 +107,23 @@ The gate's QA sweep re-checks their ACs at retest.
 - Round 3: carried into round 3 as **package C** — C runs the sweep on
   `next-2026` HEAD once the round's three packages have landed
   (`plan/round-3.md`).
+- **Open — sweep pending A/B.** Package C's own six findings are resolved
+  and pushed; package A reported complete (F-2-30 … F-2-67, last commit
+  `71b2f1b`); package B had not committed when C's session ended —
+  `app/styles/{brand,components}.css`, `app/[lang]/_page-frame.tsx`,
+  four component stylesheets, `live-counters.tsx` and an untracked
+  `e2e/layout-stability.spec.ts` were still uncommitted. The sweep is
+  therefore **not run**: `pnpm check && pnpm build` on a tree that still
+  carries one package's working copy measures nothing anybody can act on.
+  C is to be re-invoked for the sweep once B has reported.
+- Partial signal from the last measurement, for whoever runs it:
+  `pnpm check` was last red on `src/components/envoy-form-mount/envoy-form-mount.tsx`
+  (three TS errors, package A's file, mid-change at the time and since
+  committed — re-measure rather than trust this line). Every check
+  package C owns was green at C's last commit, and the three guards it
+  added (`check:contrast`, `check:seo-budget`, `check:terms`) were green /
+  green / three module-level violations in package B's `gallery.tsx` and
+  `live-modules-and-conversions.test.tsx` — see `state/open.md` 143.
 
 ## F-2-2 — Hero headline can fall on the light part of the photo surface at 360 px
 
