@@ -1,11 +1,12 @@
 # Status
 
 Run started: 2026-09-11 (orchestrator session, model claude-fable-5-1)
-Current milestone: Gate 2 (structure + pages + content + M4 systems) — round 2 (M1 closed 2026-09-11)
-Current test round: 3 of 3 (gate-2 loop: round 2 = QA sweep + triage, round 3 = fix packages A/B/C → retest)
+Current milestone: M5 Final acceptance (gate 2 closed after 3 rounds with named remainder) (M1 closed 2026-09-11)
+Current test round: M5 round 1 (gate-2 loop used its 3 rounds)
 
 ## Done
 
+- Gate 2 QA run 2 (retest): 26 resolved / 2 scoped / 5 reopened; 264 pass / 26 fail / 43 n-t; Lighthouse 95–96, CLS 0; a11y 0 serious; new F-2-69 (archive CLS), F-2-70 (German 404 blank JS-off), F-2-71 (flaky specs); loop ended by the three-round branch (reports/qa/gate-2-run-2.md) — 2026-09-12
 - Round 3 fix packages: A 20/20 (F-2-30 critical closed; events once per action; 404 real; briefing links real), B 4/6 (archive filter, type floor 15 px, metric-matched font fallbacks → shift 174→≤2.4 px; F-2-39/56 Suspense reverted: contradicts JS-off ACs, row 145), C 5/6 (bypass fetch hardened, D11 lifecycle gate, /start + /llms.txt, landing rule, build guards); orchestrator sweep: pnpm check green 796 tests, build ○/◐/ƒ as decided, preview deployed — 2026-09-12
 - Gate 2 QA run 1: 333 ACs — 234 pass / 52 fail / 47 not-testable; 35 findings (1 critical F-2-30 uncovered branch, 12 high); Lighthouse a11y 100; semgrep 0 true positives; differential review → F-2-36 (reports/qa/gate-2-run-1.md) — 2026-09-11
 - Chaos hasty-clicker run 2 (Playwright): double-fired events C-H-6/7, 174 px shift C-H-12 — 2026-09-11
@@ -41,8 +42,9 @@ Current test round: 3 of 3 (gate-2 loop: round 2 = QA sweep + triage, round 3 = 
 
 ## In progress
 
-- Gate 2 QA retest (round 3) on preview https://schafe-vorm-fenster-hhnus16wk-schafe-vorm-fenster.vercel.app — QA (opus)
-- Next: Customer acceptance gate 2 → M5 final roundtrips
+- Customer acceptance gate 2 on preview hhnus16wk — Customer
+- M5 fix round on the open highs (F-2-49, F-2-70, F-2-69, F-2-33/41 residue, F-2-71) — every proof on a production build — Developer (opus)
+- Next: M5 full roundtrip (QA sweep + 4 chaos + UAT on the production-build preview) → PM → last fixes → retest → final Customer protocol + run report
 
 ## Pending
 
@@ -53,4 +55,5 @@ Current test round: 3 of 3 (gate-2 loop: round 2 = QA sweep + triage, round 3 = 
 
 ## Last quality gate
 
-M1 — QA: clear | Customer: accepted | UAT: n/a (no conversion path yet)
+M1 — QA: clear | Customer: accepted | UAT: n/a
+Gate 2 — QA: closed with named remainder (4 highs) | Customer: pending | UAT: report filed
