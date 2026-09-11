@@ -1,5 +1,4 @@
-import { CalendarDays } from "lucide-react";
-
+import { SkipLink } from "@/src/components/skip-link/skip-link";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import {
   HTML_LANG,
@@ -7,14 +6,8 @@ import {
   OG_LOCALE,
   resolveLocale,
 } from "@/src/lib/i18n/locales";
-import {
-  FOOTER_LEGAL_LINKS,
-  HEADER_CALENDAR_ENTRY,
-  HEADER_JOBS,
-} from "@/src/lib/routes/navigation";
-import { legalAnchor } from "@/src/lib/routes/legal-anchors";
-import { href, SITE_ORIGIN } from "@/src/lib/routes/routes";
-import { environmentFrom, NOINDEX } from "@/src/lib/seo/indexable";
+import { SITE_ORIGIN } from "@/src/lib/routes/routes";
+import { NOINDEX } from "@/src/lib/seo/indexable";
 
 import "../styles/brand.css";
 import "../styles/base.css";
@@ -93,77 +86,25 @@ export default async function RootLayout({
   // it can answer 404 *inside* this shell (TS-004 D3.4). It resolves rather
   // than throws; the 404 body is then the TLD default's.
   const locale = resolveLocale((await params).lang);
-  const d = dictionary(locale);
-  const other = LOCALES.filter((candidate) => candidate !== locale);
 
   return (
     <html lang={HTML_LANG[locale]}>
       <body>
-        <a className="skip-link" href="#main">
-          {d.skipToContent}
-        </a>
-        {/* Chrome placeholder. The header and footer components land with the
-            component work package; what has to be right *here* is that every
-            target comes from the route registry (TS-004 D4, TS-001 D5). */}
-        <header className="site-header">
-          <div className="container site-header__inner">
-            <a className="wordmark" href={href("home", locale)}>
-              <CalendarDays aria-hidden="true" size={24} />
-              {d.siteName}
-            </a>
-            <nav aria-label={d.nav.home}>
-              <ul>
-                {HEADER_JOBS.map((entry) => (
-                  <li key={entry.route}>
-                    <a href={href(entry.route, locale)}>{d.nav[entry.label]}</a>
-                  </li>
-                ))}
-                <li>
-                  <a
-                    data-header-calendar="true"
-                    href={href(HEADER_CALENDAR_ENTRY.route, locale)}
-                  >
-                    {d.nav[HEADER_CALENDAR_ENTRY.label]}
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </header>
-        <main className="site-main" id="main">
-          <div className="container">{children}</div>
-        </main>
-        <footer className="site-footer">
-          <div className="container site-footer__inner">
-            <nav aria-label={d.footer.imprint}>
-              <ul>
-                {FOOTER_LEGAL_LINKS.map((entry) => (
-                  <li key={entry.section}>
-                    <a
-                      href={`${href(entry.route, locale)}#${legalAnchor(entry.section, locale)}`}
-                    >
-                      {d.footer[entry.label]}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-            {/* TS-001 D5: switching language is plain link navigation and
-                keeps the visitor on the equivalent page — no JS required. */}
-            <nav aria-label={d.footer.language} data-language-switcher="true">
-              <ul>
-                {other.map((candidate) => (
-                  <li key={candidate}>
-                    <a hrefLang={candidate} href={href("home", candidate)}>
-                      {HTML_LANG[candidate].toUpperCase()}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-            <span>Prototyp · {environmentFrom(process.env.VERCEL_ENV)}</span>
-          </div>
-        </footer>
+        {/* The first focusable element of the document; it jumps to `#main`,
+            which `site-chrome` renders (TS-002 D5). */}
+        <SkipLink locale={locale} />
+        {/* The rest of the chrome — header, breadcrumb trail, the `main`
+            landmark, footer — plus blocks 3 and 4 of TS-006 D2 lives in
+            `_page-frame.tsx`, one component for all eleven pages. A layout
+            receives only `children` and its own `params`, so it cannot know
+            which route renders below it, and every one of those pieces needs
+            the route id: the language switch links the equivalent page
+            (TS-001-A7), the header marks the current job, and the context
+            band and closing CTA are built from the page's `page.meta.ts`
+            (TS-006 D5/D6). Reading the route from a request header instead
+            would make the prerendered shell a per-request function — what
+            DEC-045 and TS-010 D8 forbid. See `_page-frame.tsx`. */}
+        {children}
       </body>
     </html>
   );
