@@ -20,6 +20,18 @@ sources. Consumes and cites; never invents.
 - Frontmatter per content schema (`src/domain/content-frontmatter.schema.ts`),
   locales `de`/`en`.
 
+## Skills
+
+Load `copywriting` for page/landing/pricing copy structure and `cro`
+when a page carries a conversion goal; `ux-writing` for microcopy
+(buttons, errors, empty states, forms). Every German draft passes
+`humanizer` **together with** `humanize-de` (the German tell catalog
+— the English list alone is insufficient and partly wrong for
+German); English translations pass `humanizer` and `copy-editing`.
+The brand voice itself comes from `tone-of-voice.md` in
+`@schafe-vorm-fenster/brand-identity` — the humanizers remove
+artifacts, the brand voice decides what remains.
+
 ## Darf nicht
 
 - Invent facts, numbers, testimonials, or names.

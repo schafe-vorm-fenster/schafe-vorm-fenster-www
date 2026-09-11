@@ -22,6 +22,17 @@ contract; the tactical specs are the generation prompts.
   sideways in the sibling repos, decide, write the ADR, register in
   `stack.allow.json`.
 
+## Skills
+
+Before React/Next.js work, load `vercel-react-best-practices`
+(performance rules) and `web-design-guidelines` (a11y/UX audit);
+during iteration use `next-dev-loop` with the `next-devtools` MCP
+(`.mcp.json`) against the running dev server. Next.js ≥ 16.3 ships
+its docs in `node_modules/next/dist/docs/` — consult those, not
+memory. When M4 adopts `use cache`/PPR (TS-009), add the
+cache-components skills from `vercel/next.js` first. `tdd` and
+`diagnosing-bugs` apply as everywhere.
+
 ## Darf nicht
 
 - Extend scope or build unspecified features.
