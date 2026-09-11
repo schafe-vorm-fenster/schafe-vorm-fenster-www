@@ -25,6 +25,14 @@ export interface ArchiveRowProps {
   /** ≤ 100 KB, `ratio-proof`, lazy — absent for the plain variant. */
   readonly previewSrc?: string;
   readonly previewAlt?: string;
+  /**
+   * Additive (plan/component-inventory.md §4 TS-028, mock rule): marks the
+   * row as generated dummy content (`data-demo="true"`) while `Q-045`
+   * leaves every real entry uncleared (`state/open.md` #1). The group badge
+   * is the caller's (`src/components/README.md` — "the module owns the
+   * marking, not the row"); this only carries the check-visible attribute.
+   */
+  readonly demo?: boolean;
   readonly className?: string;
 }
 
@@ -60,6 +68,7 @@ export function ArchiveRow({
   href,
   previewSrc,
   previewAlt = "",
+  demo = false,
   className,
 }: ArchiveRowProps) {
   const { iso, label } = formatArchiveDate(date, precision);
@@ -70,6 +79,7 @@ export function ArchiveRow({
         .filter(Boolean)
         .join(" ")}
       data-archive-type={types.join(" ")}
+      data-demo={demo ? "true" : undefined}
     >
       {previewSrc ? (
         <MediaFrame alt={previewAlt} className={styles.preview} ratio="proof" sizes="120px" src={previewSrc} />
