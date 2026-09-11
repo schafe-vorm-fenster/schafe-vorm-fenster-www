@@ -111,7 +111,7 @@ export function SiteChrome({
               to: ancestor,
               label: d.pages[ancestor],
             }))}
-            label={d.nav.home}
+            label={d.nav.breadcrumb}
             locale={locale}
           />
         </div>

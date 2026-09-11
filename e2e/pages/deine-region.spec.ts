@@ -133,7 +133,10 @@ test.describe("/deine-region/angebot", () => {
     page,
   }) => {
     await page.goto("/deine-region/angebot");
-    const trail = page.getByRole("navigation", { name: "Startseite" }).filter({ hasText: "Angebot anfordern" });
+    // "Seitenpfad", not "Startseite" (F-2-3): the breadcrumb nav and the
+    // header nav are two landmarks of the same role and now carry distinct
+    // accessible names, so a name-based lookup finds the breadcrumb only.
+    const trail = page.getByRole("navigation", { name: "Seitenpfad" }).filter({ hasText: "Angebot anfordern" });
     await expect(trail).toBeVisible();
     await expect(trail.locator("[data-cta]")).toHaveCount(0);
     const current = trail.locator('[aria-current="page"]');
