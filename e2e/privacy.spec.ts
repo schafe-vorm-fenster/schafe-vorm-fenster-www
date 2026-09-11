@@ -19,6 +19,20 @@ const ALLOWED_HOSTS = new Set<string>(
   Object.values(ALLOWLIST).map((url) => new URL(url).host),
 );
 
+/**
+ * `vercel.live` is Vercel's own preview-deployment toolbar (feedback,
+ * comments, the deployment badge) — injected by the platform into every
+ * `*.vercel.app` response, not a host this application ever requests
+ * itself. It is not, and must not become, part of `csp.ts`'s D2 allowlist
+ * (that list is the *application's* closed request set, and the toolbar is
+ * gone in production, where the domain is never a `*.vercel.app` one) —
+ * this is a smoke-test environment accommodation, scoped to exactly the
+ * hosts where the platform can inject it, so a real unlisted-host
+ * regression on a real domain still fails the suite.
+ */
+const VERCEL_PREVIEW_HOST = /\.vercel\.app$/;
+const VERCEL_TOOLBAR_HOST = "vercel.live";
+
 const ROUTES = everyRoute().map(({ route, locale }) => ({
   path: href(route, locale),
   route,
@@ -32,6 +46,7 @@ test.describe("TS-013-A1: the client-request inventory is closed (D2)", () => {
       baseURL,
     }) => {
       const ownHost = baseURL ? new URL(baseURL).host : "";
+      const isVercelPreview = VERCEL_PREVIEW_HOST.test(ownHost);
       const offenders = new Set<string>();
 
       page.on("request", (request) => {
@@ -44,6 +59,7 @@ test.describe("TS-013-A1: the client-request inventory is closed (D2)", () => {
         if (url.protocol !== "http:" && url.protocol !== "https:") return;
         if (url.host === ownHost) return; // own origin — D2's first row, and the
         // `/_vercel/speed-insights/*` path lives on it.
+        if (isVercelPreview && url.host === VERCEL_TOOLBAR_HOST) return;
         if (!ALLOWED_HOSTS.has(url.host)) offenders.add(`${url.host} (${request.url()})`);
       });
 

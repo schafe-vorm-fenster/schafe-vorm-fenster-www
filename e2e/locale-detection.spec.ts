@@ -15,11 +15,48 @@ import { expect, test } from "@playwright/test";
  * the 301 itself rather than following it.
  */
 
+/**
+ * The host-matrix redirect (D1's four domains) only means something against
+ * `localhost` — where `proxy.ts`'s own Host-header read is exactly what this
+ * file's header spoofs against, per the file's own doc comment above — or
+ * against the real canonical domains themselves, which this run never
+ * serves (preview only, `plan/guardrails.md`). A Vercel preview URL
+ * (`*.vercel.app`) is neither: the platform's edge network owns the TLS
+ * connection (SNI) for that specific deployment hostname, and there is no
+ * guarantee it forwards an unrelated spoofed `Host` header (one of the D1
+ * production domains) through to this app's `proxy.ts` the way a plain
+ * `next dev`/`next start` process does — the request may be rejected or
+ * rerouted by the platform before it ever reaches the code under test. So
+ * these cases are skipped, with a reason, whenever `E2E_BASE_URL` is
+ * neither localhost nor one of the real domains — never loosened, only
+ * skipped where the assertion would not be testing this app at all.
+ */
+const REAL_DOMAINS = new Set([
+  "schafe-vorm-fenster.de",
+  "www.schafe-vorm-fenster.de",
+  "owcezaoknem.pl",
+  "www.owcezaoknem.pl",
+  "schafvormfenster.at",
+  "www.schafvormfenster.at",
+  "sheepoutside.com",
+  "www.sheepoutside.com",
+]);
+
+function isHostMatrixTestable(baseURL: string | undefined): boolean {
+  if (!baseURL) return true;
+  const host = new URL(baseURL).hostname;
+  return host === "localhost" || host === "127.0.0.1" || REAL_DOMAINS.has(host);
+}
+
+const SKIP_REASON =
+  "host-matrix redirect: E2E_BASE_URL is neither localhost nor a real D1 domain (looks like a Vercel preview URL) — Host-header spoofing against the platform's own edge routing is not a meaningful test of this app's proxy.ts";
+
 test.describe("TS-001-A4/D2: the canonical-host redirect", () => {
   test("a bare known domain 301s to its https www form, path and query intact", async ({
     request,
     baseURL,
   }) => {
+    test.skip(!isHostMatrixTestable(baseURL), SKIP_REASON);
     const target = new URL("/mitmachen?etcc_cmp=x", baseURL);
     const response = await request.get(target.toString(), {
       headers: { host: "schafe-vorm-fenster.de" },
@@ -33,6 +70,7 @@ test.describe("TS-001-A4/D2: the canonical-host redirect", () => {
   });
 
   test("the other D1 domains redirect to their own www form", async ({ request, baseURL }) => {
+    test.skip(!isHostMatrixTestable(baseURL), SKIP_REASON);
     for (const [bareHost, canonicalHost] of [
       ["owcezaoknem.pl", "www.owcezaoknem.pl"],
       ["schafvormfenster.at", "www.schafvormfenster.at"],
@@ -49,6 +87,7 @@ test.describe("TS-001-A4/D2: the canonical-host redirect", () => {
   });
 
   test("an already-canonical host is not redirected", async ({ request, baseURL }) => {
+    test.skip(!isHostMatrixTestable(baseURL), SKIP_REASON);
     const target = new URL("/mitmachen", baseURL);
     const response = await request.get(target.toString(), {
       headers: { host: "www.schafe-vorm-fenster.de" },
