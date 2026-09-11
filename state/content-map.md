@@ -450,3 +450,39 @@ Notes:
   documents use `du` or `Sie`. DEC-066 binds the whole website; this
   playbook cannot rewrite legal text to fix it (role boundary), so it is
   registered here rather than silently passed.
+
+---
+
+## Glossary (Phase 3, DE → EN)
+
+One glossary entry per recurring term, kept here so every English page
+uses the same word for the same thing (voice-over-variety rule,
+`.agents/playbooks/playbook-content-production/SKILL.md`). Context
+notes mark the terms that translate differently depending on sense.
+
+| German | English | Notes |
+| --- | --- | --- |
+| Dorfkalender | village calendar | The product's descriptive name; translated (lowercase, common-noun register) per this task's own instruction. "Portalize" and "Pulse" stay untranslated brand names. |
+| Gemeinde | municipality | |
+| Verein | association / club | "Cultural association", "club" when the register is more casual (e.g. a village fair organizer); "association" as the default. |
+| Kirchengemeinde | parish / church congregation | |
+| Feuerwehr | fire brigade | "Volunteer fire brigade" when "Freiwillige Feuerwehr" is explicit. |
+| Termin | date / event | "Date" for a calendar entry (the dominant sense on this site — "Termine im Kalender" → "dates in the calendar"); "event" only where German itself shifts to describe the happening rather than the calendar entry. |
+| Ort | place | Never "location" or "town" — "place" is the site's consistent term, matching the product's own place-based model. |
+| Landkreis | county | |
+| Akteure | local groups | The audience concept behind the hub's `actors` id; "local groups" (or "local groups and organizers" where the sentence needs it) reads more naturally in English than a literal "actors". |
+| Beleg / Belegstrom | proof / proof stream | |
+| Zusicherung(stext) | reassurance (text) | |
+| Einbindung | embedding | As in "calendar embedding", the technical integration feature. |
+| Publizierweg | publishing path | |
+| Homescreen | home screen | Two words in English. |
+| Rechtliches | Legal | Page title / nav label. |
+| Barrierefreiheit | Accessibility | |
+| Auftragsverarbeitung (AVV) | Data processing agreement (DPA) | |
+| Nutzungsbedingungen | Terms of use | |
+| Datenschutz(erklärung) | Privacy (policy) | |
+| Impressum | Imprint | |
+| Community-Richtlinien | Community guidelines | |
+| Du-Anrede | "you" (informal register, no "Sie" equivalent in English) | English has no T–V distinction; the informal, direct register carries over as plain "you" plus the same warm, direct sentence construction (short sentences, active voice, no corporate "we"-distancing). |
+
+Glossary size: 22 entries (2026-09-11, Phase 3).
