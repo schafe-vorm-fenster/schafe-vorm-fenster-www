@@ -1011,6 +1011,21 @@ dismissed in the protocol, not here.
   tests are part of the fix. Reachability being unproven lowers the urgency,
   not the fix: the fix costs less than another attempt to reproduce it.
 
+- Resolved: ad57495 — three guards in `src/lib/security/csp-hashes.ts`, plus
+  the shape check at the interpolation point in `csp.ts`. (1) The fetch
+  origin comes from the deployment's own environment (`VERCEL_URL`, else
+  `VERCEL_PROJECT_PRODUCTION_URL`) and the bypass secret travels only there;
+  off Vercel the request origin is used only for a host in TS-001 D1's
+  matrix or loopback, only on this process's own port, and never with the
+  secret. (2) The module-scope `cached ??=` is a bounded map keyed by
+  `VERCEL_DEPLOYMENT_ID`. (3) Every entry must match
+  `sha256-<44 base64>`, de-duplicated and capped at 128. `check-csp.ts`
+  gains a guard that builds a policy from hostile hash strings and fails if
+  one reaches `script-src`. The zero-test modules now have 25 unit tests
+  between them (`csp-hashes.test.ts`, `proxy.test.ts`), including the
+  Host-spoof case: four spoofed hosts, and the secret leaves for none of
+  them. DEC-045 and the preview `'unsafe-inline'` fallback are untouched.
+
 ## F-2-37 — `report-uri` / `Reporting-Endpoints` point at `/api/csp-report`, which cannot exist
 
 - Severity: medium
@@ -1141,6 +1156,23 @@ dismissed in the protocol, not here.
   frontmatter Zod objects must reject unknown keys, or the gate is
   bypassable silently.
 
+- Resolved: 53cd27c — `src/lib/content/lifecycle.ts` is D11's table as one
+  predicate (production renders `approved`/`imported`; preview and every
+  local build also render `draft`/`in-review`), keyed on `VERCEL_ENV` like
+  TS-014 D5 and TS-015 D3 rather than on `NODE_ENV`, so QA's local
+  production build still renders the prototype. `loader.ts` applies it per
+  page and per slot (`gatedSlots` + the `slot-not-approved` reason);
+  `check:content` gains a `lifecycle` row that asks the *production*
+  question from any environment — error when producing a production build,
+  warning otherwise. Measured: `VERCEL_ENV=production pnpm check:content`
+  exits 1 naming all 22 artefacts; without it, exit 0 with 22 warnings.
+  F-2-46's owned clause rides along: `PageFrontmatterSchema` and
+  `SlotMetaSchema` are strict, so a misspelt `status`/`reviewed_by` can no
+  longer walk past the gate. The `status:` keys were **not** flipped: D11
+  reserves `approved` for a person at the editorial decision point, which
+  is what `state/open.md` 140 now carries; 141 carries the legal-schema
+  half of F-2-46 that stays open.
+
 ## F-2-41 — The context band is a `section` inside `main`, not an `aside`, and is missing from four pages
 
 - Severity: medium
@@ -1242,6 +1274,21 @@ dismissed in the protocol, not here.
   `page-composition.tactical.md:317` says does not exist, TS-007-A4 needs
   the clearance model.
 
+- Resolved: f51c37b (partially, as decided) — three of the six guards
+  built. `check:contrast` (TS-002-A3) measures 68 token pairs across the
+  four themes the brand sheet declares, green; two pairs are scoped to the
+  light themes because the palette-level `--color-status-error`/`-success`
+  have no dark variant upstream and measure 2.8:1/2.7:1 there, on a theme
+  the site never enters (`color-scheme: light`) — `state/open.md` 142.
+  `check:seo-budget` (TS-011-A7) measures all 24 (path, language) pairs for
+  a unique non-empty title ≤ 60 and a 120–158 char description, green.
+  Both are in `pnpm check`. `check:terms` (TS-026-A8) implements both
+  clauses and reports five real violations today — `gallery.tsx`, one test
+  (package B) and `content/pages/deine-region/{de,en}.md:138` (package A,
+  F-2-57) — so it ships as `pnpm check:terms` and is deliberately not yet
+  in the `check` chain; `state/open.md` 143 carries the one line that wires
+  it in. TS-005-A15, TS-006-A8 and TS-007-A4 stay blocked as recorded.
+
 ## F-2-44 — The type scale is declared outside the token import and goes below 15 px
 
 - Severity: medium
@@ -1291,6 +1338,17 @@ dismissed in the protocol, not here.
   no consumer, so one branch in the routing layer discharges TS-004-A3, and
   C owns `src/lib/routes/**` this round anyway for F-2-55. Distinct from
   TS-001-A9, which is out of scope for needing real domains.
+
+- Resolved: 5719dd3 — `src/lib/routes/landing-domain.ts` reads the landing
+  set out of the new D1 inventory and `proxy.ts` applies it right after the
+  canonical-host redirect. Two narrow exemptions, because the proxy has no
+  matcher: `/_next/…` and a closed list of static-asset extensions. A
+  blocked request is rewritten onto a path that matches nothing, so Next
+  renders `global-not-found` with a real 404 — not onto `/_not-found`,
+  which Vercel serves with 200. Measured with a spoofed `Host` against the
+  dev server, all three landing domains: `/` 200, `/rechtliches` 200,
+  `/robots.txt` and `/llms.txt` 200, `/mitmachen` **404**, `/start` 404;
+  `.de` and `localhost` unchanged at 200.
 
 ## F-2-46 — `/en/legal` renders German bodies, and generation-only frontmatter passes validation
 
@@ -1556,6 +1614,20 @@ dismissed in the protocol, not here.
   strand this package owns (TS-004-A1, A4, A5). `/start` is also the
   indirection target whose absence is one of the two reasons F-2-32's
   briefing URL is pasted per page, so it pays twice.
+
+- Resolved: 74cc787 — `app/start/route.ts` (302 to the lead form,
+  `noindex`, absent from the sitemap, target overridable through
+  `LEAD_FALLBACK_URL`) and `app/llms.txt/route.ts` (per domain, narrowed on
+  a landing-only domain, titles from the same dictionary `<title>` uses)
+  both exist and answer. `src/lib/routes/url-inventory.ts` is D1's table as
+  data — the page rows derived from the registry so they cannot drift, plus
+  the three machine surfaces and the redirect row. TS-004-A1, A4 and A5 now
+  assert against it: the integration suite walks `d1Inventory()` and
+  invokes the real handlers, A4 gains the "500 renders without any data
+  dependency" half it never asserted, and `e2e/routes.spec.ts` requests
+  every non-page row over HTTP. Verified against the dev server: `/start`
+  302 → the form with `x-robots-tag: noindex, nofollow`, `/llms.txt` 200
+  with both language sections.
 
 ## F-2-56 — No route is partially prerendered; four content routes are fully dynamic
 
