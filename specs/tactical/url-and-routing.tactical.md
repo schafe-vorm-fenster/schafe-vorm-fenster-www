@@ -200,7 +200,7 @@ against content frontmatter offering references (WEB-F-085):
 | `portalize-calendar` | promoted | `/dein-kalender` + order flow |
 | `portalize-enterprise` | promoted | `/deine-region` |
 | `portalize-website-widget` | withheld | none built; `/deine-termine` reserved for launch |
-| `local-advertising` | withheld | at most one sentence on `/dein-kalender` (WEB-C-015) |
+| `local-advertising` | withheld | **none** — DEC-052 §3 narrowed WEB-C-015's "at most one sentence" to no occurrence while the offering is withheld; the guard checks for absence |
 | `custom-data-integration` | on-request | mention on the enterprise page |
 
 SEO landing pages (WEB-F-074) attach to this map later instead of
