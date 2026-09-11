@@ -53,6 +53,40 @@ test.describe("/ueber-uns/archiv", () => {
     expect(await allRows.count()).toBeGreaterThan(0);
   });
 
+  test("TS-028-A4: selecting one chip actually hides the rows of every other type", async ({
+    page,
+  }) => {
+    await page.goto("/ueber-uns/archiv");
+    const chips = page.getByRole("group").getByRole("button");
+    const firstType = chips.nth(1);
+    const typeLabel = (await firstType.textContent())?.trim();
+    expect(typeLabel).toBeTruthy();
+
+    await firstType.click();
+
+    const rows = page.locator("[data-archive-type]");
+    const rowCount = await rows.count();
+    expect(rowCount).toBeGreaterThan(0);
+
+    let visibleCount = 0;
+    for (let index = 0; index < rowCount; index += 1) {
+      const row = rows.nth(index);
+      const rowTypes = (await row.getAttribute("data-archive-type"))?.split(" ") ?? [];
+      if (rowTypes.includes(typeLabel!)) {
+        // The accessible result (`hidden` attribute) and the visual result
+        // must agree — this is the half a `[hidden]`-attribute-only
+        // selector cannot see (F-2-59).
+        await expect(row).toBeVisible();
+        visibleCount += 1;
+      } else {
+        await expect(row).toBeHidden();
+      }
+    }
+
+    const count = await page.locator('[aria-live="polite"]').textContent();
+    expect(count?.trim()).toBe(`${visibleCount} von ${rowCount} Einträgen`);
+  });
+
   test("TS-028-A5: filtering never changes the URL", async ({ page }) => {
     await page.goto("/ueber-uns/archiv");
     const before = page.url();

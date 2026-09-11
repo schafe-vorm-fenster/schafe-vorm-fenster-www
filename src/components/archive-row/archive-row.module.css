@@ -5,6 +5,19 @@
   padding-block: var(--space-4);
 }
 
+/*
+ * `archive-filter` sets the `hidden` attribute on this element directly
+ * (F-2-59). The browser's own `[hidden] { display: none }` rule lives in the
+ * user-agent stylesheet, which any author rule of equal or higher
+ * specificity overrides regardless of origin ordering — `.row`'s
+ * `display: flex` above was silently winning, so a "hidden" row kept its
+ * box: the filter updated its count while every row stayed on screen. This
+ * rule is the author-stylesheet override that makes `hidden` win here too.
+ */
+.row[hidden] {
+  display: none;
+}
+
 .withPreview .preview {
   flex: none;
   width: 120px;
