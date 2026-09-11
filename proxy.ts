@@ -15,6 +15,7 @@
 
 import { NextResponse } from "next/server";
 
+import { scriptHashes } from "@/src/lib/security/csp-hashes";
 import {
   contentSecurityPolicy,
   strictTransportSecurity,
@@ -29,12 +30,16 @@ export function proxy(request: NextRequest): NextResponse {
   const environment = environmentFrom(vercelEnv);
 
   // DEC-045: per-build hashes, no per-request nonce — the shell stays static.
-  // The hash set is empty until the build-time extraction step lands
-  // (state/open.md); `'strict-dynamic'` plus the CSP2 host fallback carry the
-  // policy until then.
+  // `scriptHashes()` reads a build artifact once per server instance (module
+  // scope caches it) rather than computing anything per request, so this
+  // stays a pure function of hostname + path (TS-004 D3). `next dev` never
+  // produces that artifact, so the set is `[]` there and `csp.ts` falls back
+  // to `'unsafe-inline'` (dev only) instead of leaving the inline scripts
+  // with nothing to trust — see `csp.ts` for why `'strict-dynamic'` is not
+  // part of the policy at all (state/open.md rows 21, 31).
   response.headers.set(
     "Content-Security-Policy",
-    contentSecurityPolicy({ environment, scriptHashes: [] }),
+    contentSecurityPolicy({ environment, scriptHashes: scriptHashes() }),
   );
 
   const hsts = strictTransportSecurity(environment);

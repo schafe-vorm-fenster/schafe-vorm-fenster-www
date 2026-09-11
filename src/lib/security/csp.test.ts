@@ -40,11 +40,16 @@ describe("TS-014 D2: the Content-Security-Policy, written out", () => {
     expect(defaultSrc).toEqual(["'self'"]);
   });
 
-  it("carries 'strict-dynamic' and the host allowlist together", () => {
+  it("carries hashes and the host allowlist together, with no 'strict-dynamic'", () => {
     const { "script-src": scriptSrc } = policyDirectives({
       environment: "production",
+      scriptHashes: ["sha256-abc"],
     });
-    expect(scriptSrc).toContain("'strict-dynamic'");
+    // See state/open.md rows 21/31: 'strict-dynamic' measurably breaks the
+    // same-origin chunks it was meant to help — dropped for good, not just
+    // while the hash set is empty.
+    expect(scriptSrc).not.toContain("'strict-dynamic'");
+    expect(scriptSrc).toContain("'sha256-abc'");
     expect(scriptSrc).toContain(ALLOWLIST.etracker);
     expect(scriptSrc).toContain(ALLOWLIST.portalize);
     expect(scriptSrc).toContain(ALLOWLIST.envoy);
@@ -73,6 +78,44 @@ describe("TS-014 D3 (DEC-045): per-build hashes, not a nonce", () => {
     expect(header).toContain("'sha256-abc'");
     expect(header).toContain("'sha256-def'");
     expect(header).not.toContain("nonce-");
+  });
+});
+
+describe("state/open.md rows 21 & 31: the CSP that actually hydrates", () => {
+  it("never emits 'strict-dynamic', hashes or not — it only ever ignores 'self' here, never adds trust", () => {
+    for (const scriptHashes of [[], ["sha256-abc"]]) {
+      for (const environment of ["production", "preview", "development"] as const) {
+        const { "script-src": scriptSrc } = policyDirectives({ environment, scriptHashes });
+        expect(scriptSrc).not.toContain("'strict-dynamic'");
+      }
+    }
+  });
+
+  it("in production with an empty hash set, still ships no 'unsafe-inline' — the host allowlist carries it instead", () => {
+    const { "script-src": scriptSrc } = policyDirectives({
+      environment: "production",
+      scriptHashes: [],
+    });
+    expect(scriptSrc).not.toContain("'unsafe-inline'");
+    expect(scriptSrc).toContain("'self'");
+    expect(scriptSrc).toContain(ALLOWLIST.etracker);
+  });
+
+  it("lets 'next dev' hydrate: 'unsafe-inline' stands in for the hash set that only a build produces", () => {
+    const { "script-src": scriptSrc } = policyDirectives({
+      environment: "development",
+      scriptHashes: [],
+    });
+    expect(scriptSrc).toContain("'unsafe-inline'");
+  });
+
+  it("prefers hashes over 'unsafe-inline' in development too, once they exist", () => {
+    const { "script-src": scriptSrc } = policyDirectives({
+      environment: "development",
+      scriptHashes: ["sha256-abc"],
+    });
+    expect(scriptSrc).not.toContain("'unsafe-inline'");
+    expect(scriptSrc).toContain("'sha256-abc'");
   });
 });
 
