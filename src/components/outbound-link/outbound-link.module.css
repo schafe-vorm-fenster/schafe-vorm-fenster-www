@@ -27,7 +27,21 @@
   text-decoration-thickness: 2px;
 }
 
-.secondary {
+/*
+ * `.link.secondary` (both classes already sit on the same anchor — see
+ * outbound-link.tsx) rather than `.secondary` alone: the pill paints its own
+ * `paper` background and needs `ink` text on it regardless of the section it
+ * stands in. `section-shell`'s `.ink a, .violet500 a` rule (one class + one
+ * type selector, specificity 0,1,1) recolours *any* plain anchor to
+ * `lime-400` for legibility on a dark ground — correct for `.inline`/
+ * `.quiet`, which paint no surface of their own and rely on that ambient
+ * rule, but wrong here: it beat this rule's own single-class specificity and
+ * put lime-400 text on this pill's near-white background (1.47:1, F-2-28).
+ * Two classes (0,2,0) outrank the ambient rule regardless of CSS import
+ * order, without touching `section-shell` and the components that still
+ * depend on it.
+ */
+.link.secondary {
   background: var(--color-neutral-paper);
   border-radius: var(--radius-pill);
   color: var(--color-neutral-ink);
@@ -37,7 +51,7 @@
   text-decoration: none;
 }
 
-.secondary:hover {
+.link.secondary:hover {
   background: var(--color-neutral-surface);
 }
 

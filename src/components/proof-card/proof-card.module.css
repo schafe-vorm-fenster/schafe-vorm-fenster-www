@@ -31,6 +31,15 @@
 }
 
 .claim {
+  /*
+   * `.card` paints its own `--color-neutral-surface` background — never the
+   * section's own background — so `.claim` needs its own text colour rather
+   * than inheriting one. Without it, a `.card` nested in an `.ink` section
+   * inherited `section-shell`'s `.ink { color: paper }` (meant for text
+   * sitting directly on the ink ground) onto this near-white card: 1.08:1,
+   * F-2-29.
+   */
+  color: var(--color-neutral-ink);
   flex: 1;
   font-size: var(--type-card-size);
   font-weight: 700;
