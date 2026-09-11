@@ -70,6 +70,9 @@ const HANDOVER_HEADING = { de: "Fast geschafft", en: "Almost there" } as const;
  * `state/open.md`: the artifact writes the three questions and the handover,
  * not the summary line the flow needs to keep an answer on screen.
  */
+/** The step's advance label — `choice-group`'s own default is German. */
+const CONTINUE_LABEL: Record<Locale, string> = { de: "Weiter", en: "Continue" };
+
 const ANSWERED_PLACE: Record<Locale, { label: string; change: string }> = {
   de: { label: "Dein Ort", change: "Ort ändern" },
   en: { label: "Your place", change: "Change place" },
@@ -97,6 +100,10 @@ export default async function Page({
   const locale = await localeFrom(params);
   const rawQuery = await searchParams;
   const page = await pageContent(ROUTE, locale);
+  // The band's kicker is the home artifact's, in the page's language — the
+  // component's own default is a German literal (F-2-33).
+  const home = await pageContent("home", locale);
+  const contextBandHeading = fieldAt(slot(home, "home-10-context-band").blocks, 0);
 
   const ortSlot = slot(page, "registrieren-1-ort");
   const werSlot = slot(page, "registrieren-2-wer");
@@ -202,6 +209,7 @@ export default async function Page({
               options={werOptions}
               query={{ ...carried, ort: resolvedOrt }}
               state="mocked"
+              submitLabel={CONTINUE_LABEL[locale]}
               to="register"
             />
           </>
@@ -216,6 +224,7 @@ export default async function Page({
               name="weg"
               options={wegOptions}
               query={{ ...carried, ort: resolvedOrt, wer: resolvedWer }}
+              submitLabel={CONTINUE_LABEL[locale]}
               to="register"
             />
           </>
@@ -239,7 +248,11 @@ export default async function Page({
           the page exists for. */}
       {step === 1 ? (
         <SectionShell id="context-band" surface="surface">
-          <ContextBand currentJob={jobLabelKey(pageMeta.focusJob)} locale={locale} />
+          <ContextBand
+            currentJob={jobLabelKey(pageMeta.focusJob)}
+            heading={contextBandHeading}
+            locale={locale}
+          />
         </SectionShell>
       ) : null}
     </SiteChrome>

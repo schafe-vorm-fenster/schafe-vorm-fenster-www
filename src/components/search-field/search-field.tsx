@@ -1,6 +1,7 @@
 import { Icon } from "../icon/icon";
 import { linkHref, type LinkOptions } from "../route-link/href";
 
+import { dictionary } from "@/src/lib/i18n/dictionary";
 import { MAX_PLACE_LENGTH } from "@/src/lib/pages/place-parameter";
 
 import type { RouteId } from "@/src/lib/routes/routes";
@@ -46,17 +47,24 @@ export interface SearchFieldProps extends Omit<LinkOptions, "hash"> {
  */
 export function SearchField({
   to,
-  locale,
+  locale = "de",
   query,
   label,
-  placeholder = "Ort oder Postleitzahl",
-  submitLabel = "Suchen",
+  placeholder,
+  submitLabel,
   name = "ort",
   defaultValue,
   id = "ort-suche",
   submitDataCta,
   className,
 }: SearchFieldProps) {
+  // F-2-33: the two defaults were German literals, so the submit control of
+  // the register flow's step 1 read "Suchen" on `/en/take-part/register` —
+  // the first control of an English flow, in German.
+  const words = dictionary(locale).search;
+  const resolvedPlaceholder = placeholder ?? words.placeholder;
+  const resolvedSubmitLabel = submitLabel ?? words.submit;
+
   return (
     <form
       action={linkHref(to, { locale })}
@@ -85,12 +93,12 @@ export function SearchField({
           // an answer, not a silent rejection (F-2-38).
           maxLength={MAX_PLACE_LENGTH}
           name={name}
-          placeholder={placeholder}
+          placeholder={resolvedPlaceholder}
           spellCheck={false}
           type="search"
         />
         <button className={styles.submit} data-cta={submitDataCta} type="submit">
-          {submitLabel}
+          {resolvedSubmitLabel}
         </button>
       </div>
     </form>

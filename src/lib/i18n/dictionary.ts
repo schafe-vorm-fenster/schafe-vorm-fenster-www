@@ -42,6 +42,12 @@ export interface Dictionary {
      * distinguishable by name on every second-level page (F-2-3).
      */
     breadcrumb: string;
+    /**
+     * The logo link's accessible name. Hard-coded German before F-2-33, so
+     * an English visitor met "Schafe vorm Fenster — zur Startseite" in the
+     * accessibility tree on every `/en` page.
+     */
+    logoHome: string;
   };
   footer: {
     contact: string;
@@ -50,6 +56,26 @@ export interface Dictionary {
     privacy: string;
     accessibility: string;
     language: string;
+  };
+  /**
+   * The newsletter block's own words — heading, field, submit, consent and
+   * the mock's note (TS-016 S5, D10).
+   *
+   * German-only before F-2-33, in the footer of **every** `/en` route, and
+   * the note named the open question behind the mock ("solange Q-020 offen
+   * ist") in visitor copy, which F-2-35 counted on 24/24 routes. The badge
+   * itself is the guardrail working; the ticket id beside it was the defect.
+   */
+  newsletter: {
+    heading: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    submit: string;
+    /** `%s` is the privacy-policy link text. */
+    consent: string;
+    consentLinkLabel: string;
+    /** What the mock says about itself — no ticket id, no promise. */
+    demoNote: string;
   };
   /** The M2 scaffolding strings — every one of them disappears with the page. */
   placeholder: {
@@ -62,6 +88,8 @@ export interface Dictionary {
     title: string;
     body: string;
     backHome: string;
+    /** The heading over the four jobs on the 404 (TS-004-A4's jobs band). */
+    jobsHeading: string;
   };
   error: {
     title: string;
@@ -113,6 +141,8 @@ export interface Dictionary {
     label: string;
     placeholder: string;
     hint: string;
+    /** The submit control's label — "Suchen" on `/en` before F-2-33. */
+    submit: string;
   };
   /**
    * `outbound-link`'s own announcements — hard-coded German regardless of
@@ -141,6 +171,7 @@ const de: Dictionary = {
     whyUs: "Warum wir",
     calendarButton: "Kalender",
     breadcrumb: "Seitenpfad",
+    logoHome: "Schafe vorm Fenster — zur Startseite",
   },
   footer: {
     contact: "Kontakt",
@@ -150,6 +181,15 @@ const de: Dictionary = {
     accessibility: "Barrierefreiheit",
     language: "Sprache",
   },
+  newsletter: {
+    heading: "Neuigkeiten aus dem Projekt",
+    emailLabel: "E-Mail-Adresse",
+    emailPlaceholder: "du@beispiel.de",
+    submit: "Anmelden",
+    consent: "Double-Opt-in, keine Cookies. Mit der Anmeldung stimmst du unserer %s zu.",
+    consentLinkLabel: "Datenschutzerklärung",
+    demoNote: "Es wird nichts verschickt — der Versand ist noch nicht angeschlossen.",
+  },
   placeholder: {
     section: "Platzhalter",
     reserved: "Reservierte Höhe — dieser Abschnitt wird in M2 an Ort und Stelle ersetzt.",
@@ -158,12 +198,13 @@ const de: Dictionary = {
   },
   notFound: {
     title: "Seite nicht gefunden",
-    body: "Diese Adresse gibt es nicht. [Platzhalter M2 — Ortssuche und Job-Band folgen mit den Komponenten, DEC-032.]",
+    body: "Diese Adresse gibt es nicht. Gib deine Postleitzahl ein, dann zeigen wir dir, was in deinem Ort los ist.",
     backHome: "Zur Startseite",
+    jobsHeading: "Oder du bist mit einem anderen Anliegen hier:",
   },
   error: {
     title: "Da ist etwas schiefgelaufen",
-    body: "Bitte versuche es noch einmal. [Platzhalter M2 — DEC-032: statisch, minimal, ohne Datenabhängigkeit.]",
+    body: "Bitte versuche es noch einmal. Wenn es dann immer noch nicht klappt, warte ein paar Minuten und lade die Seite neu.",
     retry: "Erneut versuchen",
     backHome: "Zur Startseite",
   },
@@ -184,6 +225,7 @@ const de: Dictionary = {
     label: "Ort oder Postleitzahl",
     placeholder: "Postleitzahl",
     hint: "Bislang nur per Postleitzahl — die Ortssuche folgt.",
+    submit: "Suchen",
   },
   outboundLink: {
     newTab: "öffnet neuen Tab",
@@ -218,6 +260,7 @@ const en: Dictionary = {
     whyUs: "Why us",
     calendarButton: "Calendar",
     breadcrumb: "Page path",
+    logoHome: "Schafe vorm Fenster — to the home page",
   },
   footer: {
     contact: "Contact",
@@ -227,6 +270,15 @@ const en: Dictionary = {
     accessibility: "Accessibility",
     language: "Language",
   },
+  newsletter: {
+    heading: "News from the project",
+    emailLabel: "Email address",
+    emailPlaceholder: "you@example.com",
+    submit: "Sign up",
+    consent: "Double opt-in, no cookies. By signing up you agree to our %s.",
+    consentLinkLabel: "privacy policy",
+    demoNote: "Nothing is sent — the mailing system is not connected yet.",
+  },
   placeholder: {
     section: "Placeholder",
     reserved: "Reserved height — this section is replaced in place during M2.",
@@ -235,12 +287,13 @@ const en: Dictionary = {
   },
   notFound: {
     title: "Page not found",
-    body: "This address does not exist. [Placeholder M2 — place search and job band follow with the components, DEC-032.]",
+    body: "This address does not exist. Type your postcode and we will show you what is on where you live.",
     backHome: "To the home page",
+    jobsHeading: "Or you are here for something else:",
   },
   error: {
     title: "Something went wrong",
-    body: "Please try again. [Placeholder M2 — DEC-032: static, minimal, no data dependency.]",
+    body: "Please try again. If it still does not work, give it a few minutes and reload the page.",
     retry: "Try again",
     backHome: "To the home page",
   },
@@ -261,6 +314,7 @@ const en: Dictionary = {
     label: "Place or postcode",
     placeholder: "Postcode",
     hint: "Postcode search only for now — search by name is coming.",
+    submit: "Search",
   },
   outboundLink: {
     newTab: "opens new tab",

@@ -2,6 +2,9 @@ import { Button } from "../button/button";
 import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { RouteLink } from "../route-link/route-link";
 
+import { dictionary } from "@/src/lib/i18n/dictionary";
+import { legalAnchor } from "@/src/lib/routes/legal-anchors";
+
 import type { Locale } from "@/src/lib/i18n/locales";
 
 import styles from "./newsletter-block.module.css";
@@ -33,42 +36,49 @@ export interface NewsletterBlockProps {
  * shifts the footer.
  * A11y: label bound by `htmlFor`; the consent text is real content, not a
  * tooltip.
+ *
+ * Every string here comes from the dictionary (F-2-33): the block stands in
+ * the footer of **every** route, so a German default was German on all
+ * twelve `/en` pages. The consent link resolves through `legalAnchor`
+ * (F-2-64) — it used to point at `#datenschutz` in both languages, and the
+ * English legal page has no such id, so the link landed at the top of the
+ * page instead of at the privacy section. And the mock says what it is
+ * without naming the question behind it (F-2-35).
  */
-export function NewsletterBlock({
-  heading = "Neuigkeiten aus dem Projekt",
-  locale = "de",
-  className,
-}: NewsletterBlockProps) {
+export function NewsletterBlock({ heading, locale = "de", className }: NewsletterBlockProps) {
+  const words = dictionary(locale).newsletter;
+  const [beforeLink, afterLink] = words.consent.split("%s");
+
   return (
     <div className={[styles.block, className].filter(Boolean).join(" ")}>
-      <p className={styles.heading}>{heading}</p>
+      <p className={styles.heading}>{heading ?? words.heading}</p>
       <form className={styles.form}>
         <label className={styles.label} htmlFor="newsletter-email">
-          E-Mail-Adresse
+          {words.emailLabel}
         </label>
         <div className={styles.field}>
           <input
             autoComplete="off"
             className={styles.input}
             id="newsletter-email"
-            placeholder="du@beispiel.de"
+            placeholder={words.emailPlaceholder}
             required
             type="email"
           />
           <Button size="compact" type="submit" variant="secondary">
-            Anmelden
+            {words.submit}
           </Button>
         </div>
         <p className={styles.note}>
-          Double-Opt-in, keine Cookies. Mit der Anmeldung stimmst du unserer{" "}
-          <RouteLink hash="datenschutz" locale={locale} to="legal">
-            Datenschutzerklärung
-          </RouteLink>{" "}
-          zu.
+          {beforeLink}
+          <RouteLink hash={legalAnchor("privacy", locale)} locale={locale} to="legal">
+            {words.consentLinkLabel}
+          </RouteLink>
+          {afterLink}
         </p>
       </form>
       <p className={styles.note}>
-        <DemoDataBadge /> — es wird nichts verschickt, solange Q-020 offen ist.
+        <DemoDataBadge locale={locale} /> — {words.demoNote}
       </p>
     </div>
   );

@@ -93,12 +93,6 @@ Genau ein Link, keine Vorschau, keine Liste, kein Zähler (TS-027 D6).
 
 **Christian Sauer** — langjähriger Wegbegleiter und ehemaliger Projektkoordinator, mit Hintergrund in Kunst, Kuration, Projektmanagement, Kundensupport und Online-Redaktion.
 
-Rollen, Kurzbiografien und Bilder kommen direkt aus
-`@schafe-vorm-fenster/people` — nichts über die Personen wird neu
-formuliert. Christian Sauers Porträt ist `license: unverified` und
-deshalb bei jedem Build erneut auf Freigabe zu prüfen (kein Textproblem,
-TS-007 D12).
-
 ## Slot 6 — Newsletter
 
 <!-- id: ueber-uns-6-newsletter; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
@@ -111,8 +105,6 @@ TS-007 D12).
 
 **Button-Label:** Eintragen
 
-**Demo-Hinweis (solange kein Versandsystem entschieden ist, Q-020):** Demo-Daten — diese Anmeldung verlässt deinen Browser noch nicht.
+**Demo-Hinweis:** Demo-Daten — diese Anmeldung verlässt deinen Browser noch nicht.
 
-Läuft als sichtbar markierter Mock, bis Q-020 entschieden ist (`Mock
-aktiv`, `state/open.md` #22); keine Adresse verlässt den Browser, kein
-Abonnement wird tatsächlich behauptet.
+

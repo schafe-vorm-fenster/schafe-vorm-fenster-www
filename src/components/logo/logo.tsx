@@ -4,6 +4,8 @@ import sheepMark from "@schafe-vorm-fenster/brand-design/logo.svg";
 
 import { RouteLink } from "../route-link/route-link";
 
+import { dictionary } from "@/src/lib/i18n/dictionary";
+
 import type { Locale } from "@/src/lib/i18n/locales";
 
 import styles from "./logo.module.css";
@@ -33,10 +35,11 @@ const EDITORIAL_URL = "schafe-vorm-fenster.de";
  * wins — state/open.md row 9.
  * Space: fixed; the mark is a 1:1 box at a fixed pixel size, so the header
  * height is known before paint.
- * A11y: the link form carries the site name as its accessible name; the mark
- * itself is decorative, because the wordmark beside it is real text.
+ * A11y: the link form carries the site name as its accessible name, from the
+ * dictionary and in the page's language (F-2-33); the mark itself is
+ * decorative, because the wordmark beside it is real text.
  */
-export function Logo({ variant = "wordmark", link = true, locale, className }: LogoProps) {
+export function Logo({ variant = "wordmark", link = true, locale = "de", className }: LogoProps) {
   const content = (
     <>
       <Image
@@ -68,7 +71,9 @@ export function Logo({ variant = "wordmark", link = true, locale, className }: L
 
   return (
     <RouteLink
-      aria-label="Schafe vorm Fenster — zur Startseite"
+      // F-2-33: hard-coded German, so the one landmark link every `/en` page
+      // opens with announced itself in the wrong language.
+      aria-label={dictionary(locale).nav.logoHome}
       className={classes}
       locale={locale}
       styled={false}

@@ -14,11 +14,10 @@ anchor: barrierefreiheit
 
 # Barrierefreiheitserklärung
 
-Diese Erklärung ist ein **Entwurf**. Sie wurde ohne rechtliche Prüfung
-erstellt, weil für diesen Abschnitt noch kein geprüftes Ausgangsdokument
-vorliegt (siehe `state/open.md` #21). Sie ersetzt keine rechtliche
-Beratung und darf ohne Freigabe durch die zuständige Rechtsberatung
-nicht produktiv veröffentlicht werden.
+Diese Erklärung ist ein **Entwurf**. Für diesen Abschnitt liegt noch kein
+geprüftes Ausgangsdokument vor, und die Erklärung wurde noch nicht
+rechtlich geprüft. Sie ersetzt keine rechtliche Beratung und wird erst
+nach Freigabe durch die zuständige Rechtsberatung veröffentlicht.
 
 ## Geltungsbereich
 
@@ -50,10 +49,9 @@ ist.
 
 ## Offene Punkte
 
-- Rechtliche Prüfung durch Rechtsberatung (jan-henrik, zusammen mit
-  Rechtsberatung — TS-029 Open Point #1).
+- Rechtliche Prüfung und Freigabe dieser Erklärung durch eine
+  Rechtsberatung.
 - Tatsächliche Prüfung der Website gegen die einschlägigen technischen
   Anforderungen; erst danach kann diese Erklärung ein Prüfdatum und eine
   Konformitätsstufe nennen.
-- Englische Fassung, sobald die deutsche Fassung freigegeben ist
-  (DEC-027: Rechtstexte in DE und EN).
+- Englische Fassung, sobald die deutsche Fassung freigegeben ist.

@@ -92,12 +92,6 @@ Exactly one link, no preview, no list, no counter (TS-027 D6).
 
 **Christian Sauer** — long-time collaborator and former project coordinator, with a background in art, curation, project management, customer support, and online editing.
 
-Roles, short bios, and photos come directly from
-`@schafe-vorm-fenster/people` — nothing about these people is newly
-phrased. Christian Sauer's portrait is `license: unverified` and must
-therefore be re-checked for clearance on every build (not a text
-problem, TS-007 D12).
-
 ## Slot 6 — Newsletter
 
 <!-- id: ueber-uns-6-newsletter; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
@@ -110,8 +104,6 @@ problem, TS-007 D12).
 
 **Button label:** Subscribe
 
-**Demo note (as long as no sending system is decided, Q-020):** Demo data — this sign-up doesn't leave your browser yet.
+**Demo note:** Demo data — this sign-up doesn't leave your browser yet.
 
-Runs as a visibly marked mock until Q-020 is decided (`Mock active`,
-`state/open.md` #22); no address leaves the browser, no subscription
-is actually claimed.
+
