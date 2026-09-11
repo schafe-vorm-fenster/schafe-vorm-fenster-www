@@ -293,7 +293,11 @@ export default async function Page({
                 through step 4 reports the same completion once. */}
             <FireConversionOnMount
               attributes={{ route: ROUTE }}
-              dedupeKey={`${orteRaw ?? ""}|${hasCounty ? KREIS_ID : ""}`}
+              // The **resolved** scope, not the raw parameter: two spellings
+              // of the same order are one completion, and the key stays
+              // bounded by what geo-api confirmed rather than by what a
+              // visitor typed.
+              dedupeKey={`${resolvedPlaces.map((place) => place.slug).join(",")}|${hasCounty ? KREIS_ID : ""}`}
               goalId="buy-calendar-licence"
               stage="completed"
             />
