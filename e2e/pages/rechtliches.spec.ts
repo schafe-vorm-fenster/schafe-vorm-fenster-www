@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { dictionary } from "../../src/lib/i18n/dictionary";
+
 /**
  * TS-029 — `/rechtliches` (EN `/legal`) — acceptance pass.
  */
@@ -177,6 +179,17 @@ test.describe("/rechtliches", () => {
     "TS-029-A12: axe-core, zero violations across all three themes — not-yet: no axe-core dependency is installed in this repository (would need the stack-harmony ADR, plan/guardrails.md, outside this work package's mandate)",
     () => {},
   );
+
+  test("F-2-74: the German page carries no such notice — its sections are German", async ({
+    page,
+  }) => {
+    await page.goto("/rechtliches");
+    const notice = dictionary("en").legal.germanOnlyNotice ?? "";
+    await expect(page.getByText(notice, { exact: false })).toHaveCount(0);
+    // And no German translation of it slipped in either: the dictionary
+    // holds no German string for this notice at all.
+    expect(dictionary("de").legal.germanOnlyNotice).toBeNull();
+  });
 });
 
 test.describe("/legal (EN)", () => {
@@ -189,5 +202,40 @@ test.describe("/legal (EN)", () => {
   test("TS-029-A3: /legal#imprint lands the heading correctly", async ({ page }) => {
     await page.goto("/en/legal#imprint");
     await expect(page.locator("#imprint h2")).toBeVisible();
+  });
+
+  /**
+   * F-2-74 (gate-2 protocol item 7) / `state/open.md` row 53 — the six legal
+   * documents are imported German-only (TS-029 open point #2), and row 53's
+   * mitigation is that the EN page frame "states explicitly, in English,
+   * that the six legal sections themselves are provided in German only".
+   * Until gate 2 it had not shipped: an English reader met English section
+   * labels over unannounced German prose.
+   */
+  test("F-2-74 / row 53: the English frame says the sections are German, before the first German body", async ({
+    page,
+  }) => {
+    await page.goto("/en/legal");
+    const notice = dictionary("en").legal.germanOnlyNotice ?? "";
+    expect(notice).not.toBe("");
+
+    const sentence = page.getByText(notice, { exact: false });
+    await expect(sentence).toHaveCount(1);
+    await expect(sentence).toBeVisible();
+
+    // Before the first German body in DOM order — the reader meets the
+    // explanation, then the German text, never the other way round.
+    const beforeFirstSection = await page.evaluate((text: string) => {
+      const paragraph = [...document.querySelectorAll("p")].find((element) =>
+        (element.textContent ?? "").includes(text),
+      );
+      const firstSection = document.querySelector("#imprint");
+      if (!paragraph || !firstSection) return false;
+      return Boolean(
+        paragraph.compareDocumentPosition(firstSection) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+    }, notice);
+    expect(beforeFirstSection).toBe(true);
   });
 });

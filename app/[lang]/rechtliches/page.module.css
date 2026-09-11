@@ -24,3 +24,19 @@
   flex-direction: column;
   gap: var(--space-8);
 }
+
+/*
+ * F-2-74 / `state/open.md` row 53 — the English-only notice that the six
+ * legal sections themselves are German. It stands between the `h1` and the
+ * section navigation, so an English reader meets it before the first German
+ * body. A note, not a warning: no new colour, only tokens the design system
+ * already carries (TS-017 D3), and D5's reading measure so it wraps like the
+ * text it introduces.
+ */
+.germanOnly {
+  border-left: 2px solid var(--color-neutral-line);
+  font-size: var(--type-meta-size);
+  margin: var(--space-4) 0 0;
+  max-width: 66ch;
+  padding-left: var(--space-4);
+}

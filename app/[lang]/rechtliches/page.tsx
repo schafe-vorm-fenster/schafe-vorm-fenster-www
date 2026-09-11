@@ -5,6 +5,7 @@ import { SectionNav } from "@/src/components/section-nav/section-nav";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { shiftHeadings } from "@/src/lib/content/legal-markdown";
+import { dictionary } from "@/src/lib/i18n/dictionary";
 import { slot } from "@/src/lib/content/loader";
 import { legalAnchor, LEGAL_SECTION_IDS } from "@/src/lib/routes/legal-anchors";
 
@@ -83,6 +84,7 @@ export default async function Page({
 
   const h1 = fieldAt(header.blocks, 0) ?? "Rechtliches";
   const navLabel = fieldAt(header.blocks, 1) ?? "Abschnitte";
+  const { germanOnlyNotice } = dictionary(locale).legal;
 
   const docsBySection = new Map(
     LEGAL_SECTION_IDS.map((section, index) => [section, documents[index]]),
@@ -117,6 +119,15 @@ export default async function Page({
       <SectionShell labelledBy="rechtliches-h1" surface="paper">
         <MotionReveal>
           <h1 id="rechtliches-h1">{h1}</h1>
+          {/* F-2-74 / `state/open.md` row 53 — the six sections are imported
+              German-only (TS-029 open point #2), so the EN page frame says
+              so, in English, *before* the first German body: between the `h1`
+              and the section navigation, server-rendered, no JavaScript. The
+              German page has no such string in the dictionary and renders
+              nothing here. */}
+          {germanOnlyNotice ? (
+            <p className={styles.germanOnly}>{germanOnlyNotice}</p>
+          ) : null}
           <div className={styles.layout}>
             <SectionNav items={navItems} label={navLabel} />
             <article className={styles.sections}>
