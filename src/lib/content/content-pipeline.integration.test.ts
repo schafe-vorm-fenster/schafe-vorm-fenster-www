@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
 
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { checkContentTree } from "@/src/lib/content/validate";
 import { CONTENT_PAGE_DIRS, loadPage, slot } from "@/src/lib/content/loader";
 import { createHubResolver } from "@/src/lib/content/source-refs";
@@ -95,6 +98,26 @@ describe("TS-007-A8: no content reference is a repository path", () => {
         }
       }
     }
+  });
+});
+
+describe("TS-007-A12: no request-time module reads a hub package", () => {
+  it("keeps the source adapter out of everything a page imports", () => {
+    const requestTime = ["loader.ts", "blocks.ts", "slot-meta.ts", "provenance.ts", "types.ts"];
+    for (const file of requestTime) {
+      const source = readFileSync(join(process.cwd(), "src/lib/content", file), "utf-8");
+      const imports = source
+        .split("\n")
+        .filter((line) => /^\s*import /.test(line))
+        .join("\n");
+      expect(imports, `${file} imports the source adapter`).not.toContain("source-refs");
+      expect(imports, `${file} imports a hub package`).not.toContain("@schafe-vorm-fenster/");
+      expect(imports, `${file} imports the validator`).not.toContain("content/validate");
+    }
+  });
+
+  it("has no barrel that would pull the adapter into a page bundle", () => {
+    expect(() => readFileSync(join(process.cwd(), "src/lib/content/index.ts"), "utf-8")).toThrow();
   });
 });
 
