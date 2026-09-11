@@ -29,7 +29,7 @@ const envToken = (name) => {
   }
 };
 
-// ── Zugänge ──────────────────────────────────────────────────────────
+// ── Access ──────────────────────────────────────────────────────────
 {
   const branch = sh('git rev-parse --abbrev-ref HEAD').out;
   if (branch === 'main') check('git branch', 'RED', 'on main — the run works on next-2026 only');
@@ -54,7 +54,7 @@ const envToken = (name) => {
   }
 }
 
-// ── Werkzeuge ────────────────────────────────────────────────────────
+// ── Tools ────────────────────────────────────────────────────────
 {
   const node = process.versions.node;
   check('node >= 20', Number(node.split('.')[0]) >= 20 ? 'GREEN' : 'RED', `node ${node}`);
@@ -92,7 +92,7 @@ const envToken = (name) => {
   check('brand-design package', existsSync(join(root, 'node_modules/@schafe-vorm-fenster/brand-design/tokens/svf-tokens.json')) ? 'GREEN' : 'RED', 'tokens importable');
 }
 
-// ── Struktur ─────────────────────────────────────────────────────────
+// ── Structure ─────────────────────────────────────────────────────────
 {
   const struct = ['plan/projektplan.md', 'plan/prozess.md', 'plan/leitplanken.md', 'state/status.md', 'state/open.md', 'state/findings', 'reports/qa', 'reports/uat', 'reports/abnahme', '.agents/roles/orchestrator.md', '.agents/playbooks/playbook-website-foundation/SKILL.md', '.agents/dispatch/website-foundation.dispatch.yaml', '.claude/agents/developer.md'];
   const missing = struct.filter((p) => !existsSync(join(root, p)));
@@ -102,7 +102,7 @@ const envToken = (name) => {
 // ── Report ───────────────────────────────────────────────────────────
 const pad = (s, n) => s.padEnd(n);
 const colors = { GREEN: '\x1b[32m', YELLOW: '\x1b[33m', RED: '\x1b[31m' };
-console.log('\nPreflight — Website-Realisierungslauf\n');
+console.log('\nPreflight — website realization run\n');
 for (const r of results) console.log(`  ${colors[r.level]}${pad(r.level, 6)}\x1b[0m ${pad(r.name, 36)} ${r.detail}`);
 const count = (l) => results.filter((r) => r.level === l).length;
 console.log(`\n  ${count('GREEN')} green · ${count('YELLOW')} yellow · ${count('RED')} red`);

@@ -1,4 +1,4 @@
-# Chaos-Personas
+# Chaos personas
 
 Unstructured browser testing by behaviour profile — a local Chrome
 session against the dev server, driven directly by the agent

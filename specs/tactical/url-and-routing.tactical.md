@@ -249,6 +249,9 @@ labels (D4).
 | TS-004-A6 | e2e | No external API host appears in any client-initiated request except envoy and Portalize (verified via CSP report / network trace). |
 | TS-004-A7 | integration | BFF routes return 429 beyond the rate limit and reject foreign origins. |
 | TS-004-A8 | e2e | Navigation labels match D4 exactly on every page; every internal link resolves within the D1 inventory. |
+| TS-004-A9 | integration | Footer on every page carries contact, newsletter and the three legal links under their conventional labels ("Impressum", "Datenschutz", "Barrierefreiheit"), each resolving to its anchor on `/rechtliches`. |
+| TS-004-A10 | static | No route segment in the app tree is a place slug or a place-shaped parameter: the route inventory equals D1 exactly, and no dynamic segment resolves against the place set. A place reaches a page only as a query parameter. |
+| TS-004-A11 | integration | Once the calendars have moved to `app.*`: a request to `/{community}` carrying `etcc_cmp`/`etcc_med` redirects to that place's calendar on `app.*` with both parameters intact. Before the move the rule is inactive and the path is served by the apex — the criterion is skipped with a recorded reason, not silently passed. |
 
 ## Coverage
 
@@ -276,6 +279,9 @@ labels (D4).
 | WEB-F-079 (robots + llms.txt) | D1 · A5 |
 | WEB-Q-037 (BFF, no client tokens) | D5 · A6 |
 | WEB-Q-038 (rate limits + origin checks) | D5 · A7 |
+| WEB-F-021 (footer inventory) | D4 · A9 |
+| WEB-F-023 (no place slugs in paths) | D1, D1a · A10 |
+| WEB-F-048 (community-slug forwarding) | D3 rule 6 · A11 |
 
 ## Open points
 

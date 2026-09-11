@@ -257,6 +257,11 @@ directly. The scoring functions are pure and free of I/O.
 | TS-005-A9 | integration | The route shell renders prerendered without waiting for the engine; the static default appears before the segment variant. |
 | TS-005-A10 | e2e | Place-bound proof shown to a visitor always references a covered place. |
 | TS-005-A11 | unit | Rotation: two different ISO-week seeds reorder only equally-scored candidates; the ranking by score is identical. The engine reads no clock — the seed is an input. |
+| TS-005-A12 | unit | Ordering: given more than three elements the engine produces the D6 sequence and never a chronological one; ties break by id. **Limitation:** this proves the engine orders correctly, not that every list on the site uses it — a spot check on two rendered pages (A13) is the only coverage of that. |
+| TS-005-A13 | e2e | Spot check on `/` and `/ueber-uns`: the rendered proof stream is not in date order. The archive is the documented exception (TS-028 D2) and is excluded. |
+| TS-005-A14 | unit | For each entry context of the SRC-002 matrix the engine selects the documented starting type and time window; a type named in no row scores the widest step. |
+| TS-005-A15 | static | Every claim declared in content frontmatter resolves to a proof id that exists and is cleared, or is explicitly marked as having no proof — in which case the rendered claim carries its weakened form. A declared claim with a dangling proof id fails the build. |
+| TS-005-A16 | unit | The widening chain resolves in the documented order (place → surroundings → county → all regions) and each step sends the id list of its level; no step is skipped when the previous one returns results. |
 
 ## Coverage
 
@@ -274,6 +279,10 @@ directly. The scoring functions are pure and free of I/O.
 | WEB-F-042 (live modules widen) | D1, D8 |
 | WEB-F-052 (stages change selection only) | D8 · A9 |
 | WEB-F-055 (entry context preselects) | D2, D8 · A8 |
+| WEB-F-030 (lists ordered by the model) | D6 · A12, A13 |
+| WEB-F-035 (entry context selects starting type) | D2 · A14 |
+| WEB-F-036 (proof slot beside every claim) | D5 · A15 |
+| WEB-F-042 (live modules widen) | D1, D8 · A16 |
 
 ## Open points
 

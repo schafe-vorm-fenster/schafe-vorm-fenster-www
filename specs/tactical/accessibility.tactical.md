@@ -100,6 +100,9 @@ per BFSG requirements; maintained like a legal page (WEB-F-088 pipeline).
 | TS-002-A7 | e2e | 320px viewport: no horizontal scroll on any page. |
 | TS-002-A8 | integration | `/rechtliches#barrierefreiheit` resolves to the accessibility statement, is footer-linked under its conventional label, and its content is current. |
 | TS-002-A9 | e2e | With `prefers-reduced-motion`: no animation beyond opacity. |
+| TS-002-A10 | static | No font family, size or weight is declared outside the token import; the rendered type scale equals `font.*` from the brand package, and no size below 15 px appears. |
+| TS-002-A11 | tool | axe-core reports no image without a text alternative; every image is either given a meaningful `alt` from content frontmatter or marked decorative with `alt=""`. |
+| TS-002-A12 | manual | The published accessibility statement names its method — self-assessment backed by the acceptance regime of this spec (A1–A5) — and claims no audit that did not happen. **Limitation:** automated checks cover only part of the BITV test steps; the statement must not imply more coverage than was performed. |
 
 ## Coverage
 
@@ -121,6 +124,9 @@ claim:
 | WEB-Q-019 (automated + manual testing) | A1–A5 (the acceptance regime) |
 | WEB-Q-026 (BFSG conformity) | D1 · Q-021 |
 | WEB-Q-027 (accessibility statement) | D6 · A8 |
+| WEB-Q-016 (brand typeface) | D3 · A10 · Q-034 for the colour world |
+| WEB-Q-017 (text alternatives) | D5 images rule · A11 |
+| WEB-Q-026 (BFSG conformity) | D1 · A12 · Q-021 for applicability |
 
 ## Open points
 

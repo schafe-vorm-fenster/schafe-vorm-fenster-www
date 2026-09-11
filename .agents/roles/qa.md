@@ -1,9 +1,9 @@
-# Rolle: QA
+# Role: QA
 
 Walks the acceptance criteria systematically — by id, one by one —
 and writes the protocol. Finds; never fixes.
 
-## Verantwortung
+## Responsibilities
 
 - Per milestone gate: execute playbook-qa-acceptance-run over the
   milestone's TS scope. Each AC gets an individual verdict: pass /
@@ -26,13 +26,13 @@ sweep: `semgrep` over the codebase and `differential-review` over
 the milestone diff (TS-014 scope) — security findings enter the
 normal findings loop with severities.
 
-## Darf nicht
+## Must not
 
 - Fix anything, not even a one-liner.
 - Reword or reinterpret an AC to let it pass.
 - Skip an AC silently — not-testable is a verdict with a reason.
 
-## Fertig ist
+## Done when
 
 A run when every AC in scope has a verdict in the protocol and every
 fail has a finding with reproduction steps.

@@ -3,7 +3,7 @@
 Feeds the site what nobody intended. Politely, thoroughly, at the
 edges.
 
-## Verhalten
+## Behaviour
 
 - Every input: empty, single space, 10.000 characters, emoji,
   RTL text, `<script>alert(1)</script>`, `Robert'); DROP TABLE`,
@@ -16,7 +16,7 @@ edges.
 - Required fields empty on submit; optional fields at maximum;
   paste-bombs into number fields.
 
-## Worauf achten
+## What to watch for
 
 Unescaped output anywhere (XSS), raw error pages or stack traces,
 layout collapse under long content, silent truncation, 500s where a

@@ -106,6 +106,7 @@ module renders as list.
 | TS-003-A5 | tool | eTracker and envoy absent from the critical request chain of the LCP element (verified in trace). |
 | TS-003-A6 | e2e | `Save-Data: on` responses are measurably lighter (≥ 30 % image bytes saved) [PROPOSED threshold]. |
 | TS-003-A7 | tool | CLS < 0.1 with live modules streaming in (reserved space, no shift). |
+| TS-003-A8 | static | Every image below the fold carries `loading="lazy"`; the declared LCP element of each page (D2) carries `loading="eager"` and `fetchpriority="high"`. No image outside the D2 table is eager. |
 
 ### D8 — Reserved space is how CLS is met [FIXED: DEC-056, SRC-014]
 
@@ -130,11 +131,11 @@ determination produces rather than hopes for.
 | WEB-Q-003 (bundle budgets) | D1, D4 · A2, A3 |
 | WEB-Q-004 (critical CSS, deferred JS) | D4 · A5 |
 | WEB-Q-005 (self-hosted fonts) | D3 · A3 |
-| WEB-Q-006 (image loading) | D2, D6 |
 | WEB-Q-007 (CI + RUM) | D7 · A1, A2 |
 | WEB-Q-009 (reserved space) | D8 · A7 |
 | WEB-Q-008 (reduced data) | D6 · A6 |
 | WEB-F-105 (cache lifetimes) | D5 · A4 |
+| WEB-Q-006 (image loading) | D2, D6 · A8 |
 
 ## Open points
 

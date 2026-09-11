@@ -1,4 +1,4 @@
-# Prozess — die Fix-Deploy-Retest-Schleife
+# Process — the fix-deploy-retest loop
 
 The loop that closes every milestone gate. It runs without asking
 anyone outside the team.
@@ -8,7 +8,7 @@ anyone outside the team.
    → findings into state/findings/round-<n>.md,
      each with severity: critical / high / medium / low
 
-2. Projektmanager priorisiert
+2. Projektmanager prioritizes
    → decides what enters this round
    → everything left over goes to state/open.md with its severity
 
@@ -43,11 +43,11 @@ spins forever. Whatever is open at abort goes to `state/open.md`.
 
 ## Two test tracks
 
-| | Lokal | Pipeline/Preview |
+| | Local | Pipeline/Preview |
 | --- | --- | --- |
-| Gegenstand | behaviour, logic, content, acceptance criteria | only what cannot occur locally |
-| Umfang | complete — all roundtrips, unit + integration + e2e against dev server | thin smoke on the preview URL |
-| Prüft | function, rendering, conversion paths | build errors, env vars, preview deploy, domains, redirects |
+| Subject | behaviour, logic, content, acceptance criteria | only what cannot occur locally |
+| Extent | complete — all roundtrips, unit + integration + e2e against dev server | thin smoke on the preview URL |
+| Verifies | function, rendering, conversion paths | build errors, env vars, preview deploy, domains, redirects |
 
 **Hard rule:** nothing goes onto the preview that is not green
 locally. Otherwise two environments are debugged at once.
@@ -63,7 +63,7 @@ locally. Otherwise two environments are debugged at once.
   runs fall back to Playwright with persona scripts and the gap is
   recorded on the open list.
 
-## Skill-Matrix — welcher Roundtrip lädt was
+## Skill matrix — which roundtrip loads what
 
 Binding, not advisory: the orchestrator names these skills in every
 spawn prompt, and each playbook's Guidelines repeat them. An agent
@@ -79,7 +79,7 @@ that skipped its skills has not finished its step.
 | 3 — Fix round (PR) | Developer | `diagnosing-bugs`; `differential-review` on the PR diff |
 | 5 — Retest | QA | `webapp-testing` on the round's findings |
 | M4 + M5 gate: security sweep | QA | `semgrep` (scan), `differential-review` over the milestone diff — findings feed the normal loop (TS-014 scope) |
-| Gate — Kundenabnahme | Kunde | none — the criteria and the preview are the instrument |
+| Gate — customer acceptance | Kunde | none — the criteria and the preview are the instrument |
 | Gate — UAT | UAT persona | none — naive eyes are the instrument |
 
 ## Round bookkeeping

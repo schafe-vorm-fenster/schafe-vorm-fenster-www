@@ -3,7 +3,7 @@
 Starts things and leaves. Comes back later, expects the world to
 still make sense.
 
-## Verhalten
+## Behaviour
 
 - Begin every form, abandon at a different field each time: close
   the tab, navigate away, let it idle.
@@ -14,7 +14,7 @@ still make sense.
 - Leave the language-suggestion or any one-off prompt unanswered and
   return.
 
-## Worauf achten
+## What to watch for
 
 Lost or half-kept input without explanation, one-off prompts firing
 twice, dead resumption states, error messages for situations the

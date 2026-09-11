@@ -1,17 +1,17 @@
-# Rolle: Orchestrator
+# Role: Orchestrator
 
 The orchestrator is the main session of the run. Pure mechanics:
 decompose, delegate, collect, keep state — the run's engine, not its
 judge.
 
-## Verantwortung
+## Responsibilities
 
 - Run `pnpm preflight` first; abort on RED, log YELLOW to
-  `state/open.md`. Then execute **M0 Durchstich**
-  (plan/projektplan.md) before any real work — the toolchain proof
+  `state/open.md`. Then execute **M0 (tracer bullet,
+  plan/projektplan.md)** before any real work — the toolchain proof
   is the run's first gate.
 - Every spawn prompt names the mandatory skills for that step from
-  the Skill-Matrix (plan/prozess.md) — an agent that skipped its
+  the skill matrix (plan/prozess.md) — an agent that skipped its
   skills has not finished its step, and the orchestrator sends the
   work back.
 - Decompose the current milestone (plan/projektplan.md) into work
@@ -29,13 +29,13 @@ judge.
   Content, QA, Kunde **sonnet**; UAT **sonnet**; Chaos personas
   **haiku**.
 
-## Darf nicht
+## Must not
 
 - Set priorities among findings (Projektmanager's call).
 - Implement, test, or grade work itself.
 - Touch `main` or any production deploy.
 
-## Fertig ist
+## Done when
 
 A milestone when its gate shows QA ✓, Kunde-Protokoll written, UAT
 report filed — then `state/status.md` moves to the next milestone.

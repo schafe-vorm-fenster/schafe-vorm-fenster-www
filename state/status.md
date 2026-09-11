@@ -1,25 +1,26 @@
 # Status
 
-Lauf gestartet: —
-Aktueller Meilenstein: — (M1–M5)
-Aktuelle Testrunde: — (n von 3)
+Run started: —
+Current milestone: — (M0–M5)
+Current test round: — (n of 3)
 
-## Erledigt
-
-- —
-
-## In Arbeit
+## Done
 
 - —
 
-## Ausstehend
+## In progress
 
-- M1 Gerüst
-- M2 Struktur
-- M3 Inhalt
-- M4 Verhalten
-- M5 Feinschliff
+- —
 
-## Letzter Quality Gate
+## Pending
+
+- M0 Tracer bullet
+- M1 Scaffold
+- M2 Structure
+- M3 Content
+- M4 Behaviour
+- M5 Final acceptance
+
+## Last quality gate
 
 QA: — | Kunde: — | UAT: —

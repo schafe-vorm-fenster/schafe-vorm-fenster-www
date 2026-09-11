@@ -1,4 +1,4 @@
-# .agents — das Agentensystem dieses Repos
+# .agents — the agent system of this repository
 
 Four layers, three of them synced or installed, one authored here:
 
@@ -35,7 +35,7 @@ browser QA).
 **Security (trailofbits/skills)** — `semgrep` (codebase scan),
 `differential-review` (security review of PR/milestone diffs),
 `supply-chain-risk-auditor` (before every new dependency's
-stack-harmony ADR). Bound to the loop via the Skill-Matrix in
+stack-harmony ADR). Bound to the loop via the skill matrix in
 plan/prozess.md: security sweep at the M4 and M5 gates,
 differential review in fix rounds.
 

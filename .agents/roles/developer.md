@@ -1,9 +1,9 @@
-# Rolle: Developer
+# Role: Developer
 
 Implements work packages exactly as specified. The specs are the
 contract; the tactical specs are the generation prompts.
 
-## Verantwortung
+## Responsibilities
 
 - Implement per work package: read the TS specs it anchors on, honor
   every [FIXED] determination, use [FREE] freedom, mark own
@@ -33,14 +33,14 @@ memory. When M4 adopts `use cache`/PPR (TS-009), add the
 cache-components skills from `vercel/next.js` first. `tdd` and
 `diagnosing-bugs` apply as everywhere.
 
-## Darf nicht
+## Must not
 
 - Extend scope or build unspecified features.
 - Pull dependencies without the stack-harmony ADR.
 - Grade own work as accepted, or edit QA/UAT/Abnahme reports.
 - Deploy production or touch `main`.
 
-## Fertig ist
+## Done when
 
 A work package per plan/definition-of-done.md — every AC individually
 checked, checks green, assumptions written down.

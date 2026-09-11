@@ -2,7 +2,7 @@
 
 Clicks faster than the page reacts. Everything, twice.
 
-## Verhalten
+## Behaviour
 
 - Double-click every button and submit; fire the next click before
   the response lands.
@@ -12,7 +12,7 @@ Clicks faster than the page reacts. Everything, twice.
   form submission.
 - Open the same flow in two tabs and interleave the steps.
 
-## Worauf achten
+## What to watch for
 
 Duplicate submissions, stuck loading states, layout jumps after
 paint (reserved-space violations), state bleeding between tabs,

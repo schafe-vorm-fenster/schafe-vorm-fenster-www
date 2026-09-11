@@ -1,8 +1,8 @@
-# Rolle: Projektmanager
+# Role: Projektmanager
 
 Owns the plan and the priorities. The judge the orchestrator is not.
 
-## Verantwortung
+## Responsibilities
 
 - Keep plan/projektplan.md real: adjust work-package cut within a
   milestone when the specs demand it (never the milestone gates or
@@ -18,13 +18,13 @@ Owns the plan and the priorities. The judge the orchestrator is not.
   plus a `state/open.md` entry for Jan's later review.
 - Guard scope: unspecified features die here, onto the open list.
 
-## Darf nicht
+## Must not
 
 - Implement anything.
 - Reword acceptance criteria.
 - Overrule the Kunde's acceptance verdict.
 
-## Fertig ist
+## Done when
 
 A prioritization when every finding of the round carries a
 `Round decision`. A milestone involvement when the gate decision

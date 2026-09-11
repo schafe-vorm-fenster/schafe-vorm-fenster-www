@@ -1,4 +1,4 @@
-# Preflight — vor dem ersten Agentenstart
+# Preflight — before the first agent starts
 
 `pnpm preflight` (→ [scripts/preflight.mjs](../scripts/preflight.mjs))
 automates this list and prints GREEN / YELLOW / RED per item.
@@ -6,9 +6,10 @@ automates this list and prints GREEN / YELLOW / RED per item.
 and the run may proceed with the documented degradation.
 
 Verified actively, never assumed — the point is to fail in minute
-one, not after two hours.
+one, not after two hours. After preflight, M0 (tracer bullet,
+plan/projektplan.md) proves the toolchain dynamically.
 
-## Zugänge
+## Access
 
 - [ ] Git: repository on branch `next-2026`, push to origin works
       (SSH). `main` is not the current branch.
@@ -24,7 +25,7 @@ one, not after two hours.
 - [ ] External services reachable: `events.api`, `geo.api-v2`,
       `assets.api` respond (the live modules build against them).
 
-## Werkzeuge
+## Tools
 
 - [ ] Node ≥ 20 and pnpm (repo pins `pnpm@10.26.0`).
 - [ ] `pnpm install` clean; the 13 `@schafe-vorm-fenster/*` hub
@@ -49,7 +50,7 @@ one, not after two hours.
 - [ ] Brand package pinned and importable
       (`@schafe-vorm-fenster/brand-design`, tokens + kit).
 
-## Struktur
+## Structure
 
 - [ ] `plan/`, `state/status.md`, `state/open.md`,
       `state/findings/`, `reports/{qa,uat,abnahme}/` exist.

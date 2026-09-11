@@ -1,4 +1,4 @@
-# Abnahmeprotokolle
+# Acceptance protocols
 
 One protocol per milestone gate: `M<milestone>.md`, plus the final
 `abschluss.md` after M5. Written by the Kunde agent, alone — Jan is

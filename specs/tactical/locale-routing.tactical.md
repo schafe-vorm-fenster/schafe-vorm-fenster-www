@@ -109,6 +109,9 @@ language must not require code changes [PROPOSED].
 | TS-001-A6 | integration | `GET <preview>.vercel.app/…` behaves exactly like `.de`. |
 | TS-001-A7 | e2e | Switching language on any page keeps the visitor on the equivalent page (D5), never the home page. |
 | TS-001-A8 | integration | No `Set-Cookie`, no locale storage anywhere in the response chain. |
+| TS-001-A9 | integration | Each domain of D1 resolves over HTTPS and renders in its TLD default language; the international domain is reachable once its DNS is wired (Q-001 residual). |
+| TS-001-A10 | integration | `.de` serves German bare and English under `/en/`; no third language is reachable on any domain. |
+| TS-001-A11 | static | The language table is the single place a language is declared: the set that ships equals phase 1 exactly (de + en on `.de`, the national language elsewhere). **Limitation:** the target picture beyond phase 1 (WEB-F-068) is deliberately not verified — it becomes checkable when a second country gains content. |
 
 ## Coverage
 
@@ -123,6 +126,9 @@ language must not require code changes [PROPOSED].
 | WEB-F-066 (phase 1: de + en on .de) | D1, D7 |
 | WEB-F-067 (other domains navigable) | D1 landing rows |
 | WEB-F-068 (per-country sets later) | D1 extensible · Q-010 |
+| WEB-F-060 (one domain per country) | D1 · A9 |
+| WEB-F-066 (phase 1: de + en) | D1, D7 · A10 |
+| WEB-F-068 (per-country sets, target picture) | D1 · A11, limited by design |
 
 WEB-F-069 (suggestion banner) is deliberately **not** implemented here —
 open per Q-011; it would extend D3 as an additive client feature.

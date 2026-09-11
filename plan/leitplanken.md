@@ -1,4 +1,4 @@
-# Leitplanken
+# Guardrails
 
 Hard rules for every agent in the run. A violation is a critical
 finding, regardless of who commits it.
@@ -29,7 +29,23 @@ finding, regardless of who commits it.
   the dummy-content rule applies (below) — the prototype is complete,
   never empty.
 
-## Die Mock-Regel (Prototyp-Entscheidung)
+## Dependencies — the stack-harmony rule
+
+The team decides new packages itself, without asking Jan. The
+procedure for every new tool or package:
+
+1. **Look sideways first**: check the sibling repos under
+   `~/Projects/` (classification-api, events-api, geo-api,
+   community-calendar, envoy-api — Next.js/Vercel/Actions stacks)
+   for what they already use for this problem. Already-in-use in the
+   family is a plus point; matching the family keeps the stack
+   harmonious.
+2. Decide, then **record the decision as an ADR** in
+   `specs/decisions/` (next free number, normal index update) naming
+   the alternatives and the sideways evidence.
+3. Register the runtime dependency in `stack.allow.json` (TS-017 D1).
+
+## The mock rule (prototype decision)
 
 The run's target is a **finished prototype** for reviews and user
 tests — every function integrated and visible. Therefore:
@@ -50,7 +66,7 @@ tests — every function integrated and visible. Therefore:
   (real APIs in, mocks out, clearances resolved) follows after the
   run, before any production promotion.
 
-## Die Dummy-Content-Regel
+## The dummy-content rule
 
 The completeness bar applies to content exactly as to systems: every
 route, every element, full design, **full copy, full images** — a
@@ -66,23 +82,7 @@ slot without a source gets **generated content**, never a hole:
 - Every generated slot is registered: artifact metadata marks it
   (`provenance: generated`), and `state/open.md` carries a
   `Dummy-Content` row per page area — that list drives the
-  content-nachziehen workstream after the run.
-
-## Dependencies — the stack-harmony rule
-
-The team decides new packages itself, without asking Jan. The
-procedure for every new tool or package:
-
-1. **Look sideways first**: check the sibling repos under
-   `~/Projects/` (classification-api, events-api, geo-api,
-   community-calendar, envoy-api — Next.js/Vercel/Actions stacks)
-   for what they already use for this problem. Already-in-use in the
-   family is a plus point; matching the family keeps the stack
-   harmonious.
-2. Decide, then **record the decision as an ADR** in
-   `specs/decisions/` (next free number, normal index update) naming
-   the alternatives and the sideways evidence.
-3. Register the runtime dependency in `stack.allow.json` (TS-017 D1).
+  content follow-up workstream after the run.
 
 ## Credentials and questions
 

@@ -1,13 +1,14 @@
-# Projektplan — Website-Komplettrealisierung
+# Project Plan — Full Website Realization
 
-Five milestones, each closed by a three-strand quality gate. The
-tactical specs (`specs/tactical/`) are the generation prompts; this
-plan sequences them. Acceptance criteria stay where they are — the
-gate references them by TS id, it never copies them.
+Five milestones plus a setup probe, each closed by a three-strand
+quality gate. The tactical specs (`specs/tactical/`) are the
+generation prompts; this plan sequences them. Acceptance criteria
+stay where they are — the gate references them by TS id, it never
+copies them.
 
 ## Milestones
 
-### M0 — Durchstich (Setup-Test, wegwerfbar)
+### M0 — Tracer bullet (setup test, disposable)
 
 Before any real work: prove the whole toolchain end to end with a
 throwaway tracer bullet, so environment friction surfaces in the
@@ -28,7 +29,7 @@ degradation — e.g. Chrome fails → chaos falls back to Playwright),
 never a reason to start M1 blind. Budget: one hour; M0 produces no
 reusable code by design.
 
-### M1 — Gerüst
+### M1 — Scaffold
 
 The repository becomes a deployable Next.js project; the delivery
 chain is proven once end to end.
@@ -43,7 +44,7 @@ chain is proven once end to end.
 
 Gate scope: TS-017, TS-015 ACs plus one deployed, reachable preview.
 
-### M2 — Struktur
+### M2 — Structure
 
 Every page and component exists with placeholder content.
 
@@ -58,21 +59,21 @@ Every page and component exists with placeholder content.
 Gate scope: TS-004, TS-006, TS-002 structural ACs, page-spec
 composition ACs (placeholder level).
 
-### M3 — Inhalt
+### M3 — Content
 
 Texts, images, translations complete; the content pipeline runs.
 
 | Work package | Spec anchor |
 | --- | --- |
 | Content pipeline: hub packages in, per-locale markdown out, schema + provenance, `TS-###` frontmatter field | TS-007 |
-| Page copy DE + EN from go-to-market-os sources per communication principles and tone of voice | content playbook |
+| Page copy DE + EN from go-to-market-os sources per communication principles and tone of voice; missing slots per the dummy-content rule | content playbook |
 | Legal content via existing Google-Docs import, one page with anchor navigation | DEC-039, DEC-027 |
-| Imagery per design system (photo surfaces, honest placeholders, "Foto gesucht") | design system |
+| Imagery per design system (photo surfaces, honest placeholders, generated images marked) | design system, dummy-content rule |
 
-Gate scope: TS-007 ACs, per-page content ACs; Content compliance
+Gate scope: TS-007 ACs, per-page content ACs; content compliance
 check (eight-point check from the communication principles).
 
-### M4 — Verhalten
+### M4 — Behaviour
 
 Interactions, live data, forms, conversion paths work.
 
@@ -91,18 +92,19 @@ Interactions, live data, forms, conversion paths work.
 
 Gate scope: the ACs of every TS in this table.
 
-### M5 — Gesamtabnahme
+### M5 — Final acceptance
 
 **Two to three full roundtrips over the complete prototype** — not
 per milestone this time, but end to end: QA acceptance sweep + all
 four chaos personas + UAT walks over every conversion path, PM
-prioritization, fix round, deploy, retest, Kundenabnahme. The loop's
-abort criterion applies (no critical/high open, or three rounds).
-Findings beyond the third round go to `state/open.md`. M5 closes
-with the final Kundenabnahme (`reports/abnahme/abschluss.md`) and
-the run report — that acceptance **is** the prototype milestone.
+prioritization, fix round, deploy, retest, customer acceptance. The
+loop's abort criterion applies (no critical/high open, or three
+rounds). Findings beyond the third round go to `state/open.md`. M5
+closes with the final customer acceptance
+(`reports/abnahme/abschluss.md`) and the run report — that
+acceptance **is** the prototype milestone.
 
-## Das Ergebnis ist ein Prototyp — vollständig
+## The result is a prototype — complete
 
 The run delivers the website as a **complete prototype**: every
 route, every element, full web design, full copy, full images.
@@ -113,21 +115,20 @@ prototype runs as preview deployment on Vercel and is fully tested
 locally through the roundtrips. It is ready for reviews and user
 tests on the protected preview; it does not go live.
 
-## Nach dem Prototyp (nicht Teil dieses Laufs)
+## After the prototype (not part of this run)
 
 After the prototype milestone comes a **deliberate manual break**;
 the next phases are planned together with Jan, not by this run. The
 known workstreams, fed by the run's registers:
 
-1. **Inhalte nachziehen** — replace every `Dummy-Content` row with
+1. **Content follow-up** — replace every `Dummy-Content` row with
    real, sourced content.
-2. **Content-Review und Tonalität schärfen** — editorial pass over
-   all copy against tone of voice and communication principles.
-3. **Usability- und Feature-Feedback** — human reviews and user
+2. **Content review and tone sharpening** — editorial pass over all
+   copy against tone of voice and communication principles.
+3. **Usability and feature feedback** — human reviews and user
    tests on the prototype, fed back as change requests.
-4. **Mocks fertig implementieren** — every `Mock aktiv` row against
-   the real systems (hardening round), plus clearances; only then
-   production.
+4. **Finish the mocks** — every `Mock aktiv` row against the real
+   systems (hardening round), plus clearances; only then production.
 
 ## Quality gate — every milestone
 
@@ -145,7 +146,7 @@ A milestone closes when all three strands are through:
 Between strands 1 and 2 the fix-deploy-retest loop from
 [prozess.md](prozess.md) runs with its abort criterion.
 
-## Milestone ↔ verification pyramid
+## Milestones and the verification pyramid
 
 The verification level distribution (static 71 · unit 27 ·
 integration 67 · e2e 155 · tool 38 · manual 29) is built up over the

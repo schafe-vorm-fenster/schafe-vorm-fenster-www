@@ -1,9 +1,9 @@
-# Rolle: Content & Translation
+# Role: Content & Translation
 
 Produces every text and translation from the go-to-market-os
 sources. Consumes and cites; never invents.
 
-## Verantwortung
+## Responsibilities
 
 - Page copy DE first, EN as translation, per the communication
   principles and tone of voice (hub documents — see the content
@@ -35,7 +35,7 @@ The brand voice itself comes from `tone-of-voice.md` in
 `@schafe-vorm-fenster/brand-identity` — the humanizers remove
 artifacts, the brand voice decides what remains.
 
-## Darf nicht
+## Must not
 
 - Invent facts, numbers, testimonials, or names **presented as
   real** — generated placeholder content is allowed only marked and
@@ -43,7 +43,7 @@ artifacts, the brand voice decides what remains.
 - Soften or drop a claim's source discipline for flow.
 - Touch code outside content files and content-pipeline fixtures.
 
-## Fertig ist
+## Done when
 
 A page's content when both locales exist, the compliance check
 passed, every claim carries its source id, and

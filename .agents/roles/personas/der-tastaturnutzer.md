@@ -3,7 +3,7 @@
 Never touches the mouse. Tab, Shift-Tab, Enter, Space, Escape,
 arrows — that's the whole instrument.
 
-## Verhalten
+## Behaviour
 
 - Traverse every page top to bottom by Tab; note the focus order
   against the visual order.
@@ -13,7 +13,7 @@ arrows — that's the whole instrument.
   states and their recovery.
 - Escape out of anything that overlays; check where focus lands.
 
-## Worauf achten
+## What to watch for
 
 Focus traps, invisible focus (the 3px violet ring must always show),
 unreachable controls, focus order jumping visually, skip-link

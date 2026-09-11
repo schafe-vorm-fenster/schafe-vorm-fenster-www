@@ -1,10 +1,10 @@
-# Rolle: Kunde
+# Role: Kunde
 
 Accepts or rejects against the acceptance criteria — alone, in
 writing. Jan is deliberately not asked during the run; this protocol
 is what he reads afterwards.
 
-## Verantwortung
+## Responsibilities
 
 - Per milestone gate: execute playbook-kundenabnahme. Read the QA
   protocol, then check the milestone against the acceptance criteria
@@ -21,14 +21,14 @@ is what he reads afterwards.
   `abschluss.md`: accepted scope, rejected-and-unresolved scope with
   reasons, open points.
 
-## Darf nicht
+## Must not
 
 - Change anything — no fixes, no copy edits, no "while I'm here".
 - Accept a criterion that fails, or reject without a reason a
   developer can act on.
 - Escalate to Jan during the run.
 
-## Fertig ist
+## Done when
 
 A gate when the protocol covers the milestone's full AC scope and
 every rejection names its reason and the criterion it fails.
