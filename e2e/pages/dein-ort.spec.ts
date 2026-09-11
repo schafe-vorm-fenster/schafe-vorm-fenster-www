@@ -173,10 +173,65 @@ test.describe("TS-020 — your place", () => {
     expect(markup[0]).toBe(markup[1]);
   });
 
-  test.fixme(
-    "TS-020-A8: the three call sites emit save-calendar-to-homescreen exactly once [M4 — TS-012 analytics is not built]",
-    () => {},
-  );
+  /**
+   * The analytics collector is `mock-tracker.ts` by decision (`state/open.md`
+   * row 130) and it logs every conversion to the console, so the trigger
+   * contract is walkable — the skip that said "TS-012 analytics is not built"
+   * was reading the *adapter*, not the wiring.
+   */
+  test("TS-020-A8: every app handover emits save-calendar-to-homescreen exactly once", async ({
+    page,
+  }) => {
+    const fires: string[] = [];
+    page.on("console", (message) => {
+      if (message.text().includes("conversion")) fires.push(message.text());
+    });
+    // The handover leaves this origin; the assertion is about the event, not
+    // about what `app.*` answers.
+    await page.route("https://app.schafe-vorm-fenster.de/**", (route) => route.abort());
+
+    await page.setViewportSize(DESKTOP);
+    await page.goto(`/dein-ort?ort=${PLACE_WITH_DATES}`);
+    const count = await page.locator('a[href^="https://app."]').count();
+    expect(count).toBeGreaterThan(0);
+
+    // One fresh page view per call site: an aborted handover leaves the
+    // document in a state no visitor would ever click a second control from.
+    for (let index = 0; index < count; index += 1) {
+      await page.goto(`/dein-ort?ort=${PLACE_WITH_DATES}`);
+      fires.length = 0;
+      await page.locator('a[href^="https://app."]').nth(index).click({ noWaitAfter: true });
+      await page.waitForTimeout(250);
+      expect(fires, `call site ${index}`).toHaveLength(1);
+      expect(fires[0]).toContain("save-calendar-to-homescreen");
+      expect(fires[0]).toContain("handover");
+    }
+  });
+
+  test("TS-020-A8 (second half): in state B the publish CTA emits no conversion event", async ({
+    page,
+  }) => {
+    const fires: string[] = [];
+    page.on("console", (message) => {
+      if (message.text().includes("conversion")) fires.push(message.text());
+    });
+
+    await page.setViewportSize(DESKTOP);
+    await page.goto(`/dein-ort?ort=${PLACE_WITHOUT_DATES}`);
+    // Block 1 carries no calendar handover in state B: "an 'open the
+    // calendar' link beside 'nothing is in it yet' is the one offer that
+    // state must not carry" (TS-008 D4). The homescreen block keeps its own —
+    // TS-020 D2 demotes it below position 2, it does not remove it.
+    await expect(page.locator('#place-dates a[href^="https://app."]')).toHaveCount(0);
+    await expect(page.locator('#homescreen a[href^="https://app."]')).toHaveCount(1);
+
+    await page.locator('[data-cta="primary"]').click();
+    await expect(page).toHaveURL(
+      new RegExp(`/mitmachen/registrieren\\?ort=${PLACE_WITHOUT_DATES}$`),
+    );
+    // `register-as-publisher` is fired on the registration handover, not here.
+    expect(fires).toHaveLength(0);
+  });
 
   test("TS-020-A9: no parameter, an empty one and a garbage one all answer 200 in the search state", async ({
     page,
