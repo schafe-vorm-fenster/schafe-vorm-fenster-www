@@ -152,7 +152,7 @@ exemplarisch; sie ersetzen kein freigegebenes Proof-Element.
 
 ## Slot 6 — Vertrauensblock: Datenschutz, Betrieb, KI
 
-<!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: []; status: draft -->
+<!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: [ia]; status: draft -->
 
 **Überschrift:** Wie eure Daten hier behandelt werden
 

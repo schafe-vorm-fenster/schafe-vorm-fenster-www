@@ -160,8 +160,170 @@ test.describe("/deine-region/angebot", () => {
     expect(bodyText).not.toMatch(/Werktage|48 Stunden|schnellstmöglich/);
   });
 
-  test.skip(
-    "TS-026-A13: submitting the form fires exactly one request-licence-quote event — not-yet-M4, no analytics wiring or real widget submission target exists in this run (state/open.md)",
-    () => {},
-  );
+  /**
+   * A filled quote form, ready to submit. The timing gate of TS-016-A10
+   * refuses anything faster than a human could manage, so the walk waits it
+   * out the way a visitor does.
+   */
+  const fillQuoteForm = async (page: import("@playwright/test").Page) => {
+    await page.fill("#envoy-quote-organisation", "Beispielverwaltung Musterkreis");
+    await page.fill("#envoy-quote-name", "Beispielperson");
+    await page.fill("#envoy-quote-email", "anfrage@beispiel.de");
+    await page.fill("#envoy-quote-message", "Wir hätten gern ein Angebot für unser Gebiet.");
+    await page.waitForTimeout(2600);
+  };
+
+  test("TS-026-A13 / TS-016-A12: submitting fires exactly one request-licence-quote event", async ({
+    page,
+  }) => {
+    const fires: string[] = [];
+    page.on("console", (message) => {
+      if (message.text().includes("request-licence-quote")) fires.push(message.text());
+    });
+
+    await page.goto("/deine-region/angebot");
+    await fillQuoteForm(page);
+    await page.locator('[data-cta="primary"]').click();
+
+    await expect(page.locator('[data-envoy-state="sent"]')).toBeVisible();
+    expect(fires).toHaveLength(1);
+  });
+
+  /**
+   * F-2-65 (chaos C-H-7) — two `click()` calls back to back with no wait used
+   * to start two tracked submissions, because nothing disabled or debounced
+   * the button.
+   */
+  test("F-2-65 / TS-012-A5: a rapid double-click submits once", async ({ page }) => {
+    const fires: string[] = [];
+    page.on("console", (message) => {
+      if (message.text().includes("request-licence-quote")) fires.push(message.text());
+    });
+
+    await page.goto("/deine-region/angebot");
+    await fillQuoteForm(page);
+
+    // Two presses in one task, the way the hasty clicker issued them — no
+    // wait, no re-query, the same node both times.
+    await page.evaluate(() => {
+      const button = document.querySelector<HTMLButtonElement>('[data-cta="primary"]');
+      button?.click();
+      button?.click();
+    });
+    await page.waitForTimeout(400);
+
+    expect(fires, "the second click started its own submission").toHaveLength(1);
+  });
+
+  /**
+   * F-2-66 (chaos C-H-10 + UAT) — after a clean submission the fields were
+   * simply empty again: same layout, same button, nothing distinguishing
+   * "submitted" from "page just loaded".
+   */
+  test("F-2-66 / TS-016-A9: a submission leaves a labelled success state that takes focus", async ({
+    page,
+  }) => {
+    await page.goto("/deine-region/angebot");
+    await fillQuoteForm(page);
+    await page.locator('[data-cta="primary"]').click();
+
+    const success = page.locator('[data-envoy-state="sent"] [role="status"]');
+    await expect(success).toBeVisible();
+    await expect(success).toContainText(/Danke/);
+    // The mock says so itself, so nobody is told a message was sent.
+    await expect(success).toContainText(/Demo/);
+    await expect(page.locator("form[data-envoy-form-kind='quote']")).toHaveCount(0);
+    expect(await success.evaluate((node) => node === document.activeElement)).toBe(true);
+  });
+
+  /**
+   * F-2-48 / TS-016-A10 — the website's half of the spam contract: a honeypot
+   * in the DOM, hidden from assistive technology and not focusable, and a
+   * submission faster than a human could make one refused.
+   */
+  test("F-2-48 / TS-016-A10: a honeypot is present and unreachable, and a too-fast submission is refused", async ({
+    page,
+  }) => {
+    await page.goto("/deine-region/angebot");
+
+    const honeypot = page.locator("form[data-envoy-form-kind='quote'] [aria-hidden='true'] input");
+    await expect(honeypot).toHaveCount(1);
+    await expect(honeypot).toHaveAttribute("tabindex", "-1");
+    // Not in the accessibility tree: no accessible textbox beyond the visible
+    // field set.
+    const visibleFields = await page
+      .locator("form[data-envoy-form-kind='quote']")
+      .getByRole("textbox")
+      .count();
+    expect(visibleFields).toBe(5);
+
+    // Submitted immediately, it is refused rather than accepted.
+    await page.fill("#envoy-quote-organisation", "Beispielverwaltung Musterkreis");
+    await page.fill("#envoy-quote-name", "Beispielperson");
+    await page.fill("#envoy-quote-email", "anfrage@beispiel.de");
+    await page.locator('[data-cta="primary"]').click();
+    await expect(
+      page.locator("form[data-envoy-form-kind='quote'] [role='alert']"),
+    ).toBeVisible();
+    await expect(page.locator('[data-envoy-state="sent"]')).toHaveCount(0);
+  });
+
+  /**
+   * F-2-48 / TS-016-A2 — D1 row S2 names both `/deine-region` and
+   * `/deine-region/angebot`; the mount was absent from the first.
+   */
+  test("F-2-48 / TS-016-A2: both S2 surfaces render the quote mount with the D2 attributes", async ({
+    page,
+  }) => {
+    for (const path of ["/deine-region", "/deine-region/angebot"]) {
+      await page.goto(path);
+      const mount = page.locator("form[data-envoy-form-kind='quote']");
+      await expect(mount, path).toHaveCount(1);
+      await expect(mount).toHaveAttribute("data-envoy-locale", "de");
+      await expect(mount).toHaveAttribute("data-envoy-context-goal", "request-licence-quote");
+    }
+  });
+
+  /**
+   * F-2-32 / TS-016 D7 — one configured value, referenced by every S3
+   * placement, never pasted per page.
+   */
+  test("F-2-32 / TS-016 D7: every briefing link is the one configured booking URL", async ({
+    page,
+  }) => {
+    for (const path of [
+      "/deine-region",
+      "/dein-kalender",
+      "/dein-kalender/bestellen",
+      "/dein-kalender/bestellen?orte=beispielgemeinde-musterdorf&schritt=3",
+    ]) {
+      await page.goto(path);
+      const hrefs = await page
+        .locator("main a[href*='calendar']")
+        .evaluateAll((nodes) => nodes.map((node) => node.getAttribute("href") ?? ""));
+      expect(hrefs.length, path).toBeGreaterThan(0);
+      for (const href of hrefs) {
+        expect(href, path).toBe("https://calendar.app.google/VG9bZoYVnFcX1W6F8");
+      }
+    }
+  });
+
+  test("TS-001 / F-2-33: the English quote flow is English", async ({ page }) => {
+    await page.goto("/en/your-region/quote");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Request a quote for your organisation",
+    );
+    const form = page.locator("form[data-envoy-form-kind='quote']");
+    const text = await form.innerText();
+    for (const german of [
+      "E-Mail-Adresse",
+      "Telefon",
+      "Worum geht es?",
+      "Absenden",
+      "Demo-Daten",
+    ]) {
+      expect(text, german).not.toContain(german);
+    }
+    await expect(form.locator("button[type='submit']")).toHaveText("Send");
+  });
 });

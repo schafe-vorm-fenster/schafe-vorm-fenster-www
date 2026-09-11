@@ -31,8 +31,10 @@ open_points:
 
 Für Landkreise, Landesbehörden, Netzwerke und große Städte, die einen
 Kalender für ein **ganzes Gebiet** wollen (TS-026 D1). Kein Kartenmodul
-auf dieser Seite — die Karte kommt Januar 2027 (DEC-061); bis dahin trägt
-ein Interims-Modul die Seite (DEC-034). Keine Entfernungsangabe als
+und keine Kartenzusage auf dieser Seite: TS-026-A17 verlangt, dass ein
+unbestätigtes Merkmal entfernt wird statt eingeschränkt, und für die Karte
+(DEC-061) liegt keine Bestätigung des Offering-Owners vor. Ein
+Interims-Modul trägt die Seite (DEC-034). Keine Entfernungsangabe als
 Modul-, Filter- oder Ergebnisbeschriftung — nur als Frage der Besucherin
 (TS-026 D3).
 
@@ -40,14 +42,18 @@ Modul-, Filter- oder Ergebnisbeschriftung — nur als Frage der Besucherin
 
 <!-- id: deine-region-1-focus; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: draft -->
 
-**Aha-Frage:** Der ganze Landkreis auf einer Karte, ohne eigenes Portalprojekt?
+**Aha-Frage:** Das ganze Kreisgebiet in einem Kalender, ohne eigenes Portalprojekt?
 
-**Text:** Genau das ist der Punkt. Ein eingebundenes System zeigt euer ganzes Gebiet als Liste, ab Januar 2027 zusätzlich als Karte, unter eurem Namen und in eurem Design.
+**Text:** Genau das ist der Punkt. Ein eingebundenes System zeigt euer ganzes Gebiet, unter eurem Namen und in eurem Design.
 
 **CTA-Label (primär):** Angebot anfragen → `/deine-region/angebot`
 
 Quelle: `headline` von `counties--portalize-enterprise` — „The whole
-district on one map, without a portal project."
+district on one map, without a portal project." Die Kartenhälfte der
+Schlagzeile steht hier nicht: TS-026-A17 macht die Bestätigung des
+Offering-Owners zur Bedingung und schreibt vor, das Merkmal sonst zu
+entfernen, nicht zu qualifizieren (F-2-57). Die Schlagzeile wird wieder
+vollständig übernommen, sobald die Bestätigung vorliegt.
 
 ## Slot 2 — Die Gebietsfrage
 
@@ -90,12 +96,14 @@ Dieselbe Komponente wie auf `/dein-kalender` Slot 3 (TS-008 Position 1′).
 
 **Überschrift:** Was der Landkreis-Tarif zusätzlich bringt
 
-**Text:** Zusätzlich zu allem, was der 480-€-Tarif bietet: eine Kartenansicht derselben Termine unter denselben Filtereinstellungen, ab Januar 2027, und eine eigene, whitelabel-fähige Registrierung, die ihr auf eurer Website einbindet.
+**Text:** Zusätzlich zu allem, was der 480-€-Tarif bietet: eine eigene, whitelabel-fähige Registrierung, die ihr auf eurer Website einbindet.
 
 **Erwähnung (ohne CTA):** Wer eigene Termindatenbanken hat — ein Kursprogramm, einen kirchlichen Dienst, die Abfallkalender-Daten der Kreisverwaltung — kann sie über die Datenanbindung einmalig anschließen lassen.
 
-Die Karte wird als **datiertes, kommendes** Merkmal genannt, nie als
-bereits existierend (DEC-061, TS-026 D3a). `custom-data-integration` wird
+Die Kartenansicht steht nicht in dieser Aufzählung. TS-026-A17: solange
+der Offering-Owner nicht bestätigt hat, dass sie an einen Käufer
+auslieferbar ist, wird das Merkmal entfernt und nicht datiert
+eingeschränkt (F-2-57, `state/open.md`). `custom-data-integration` wird
 erwähnt, nie bepreist, ohne eigenen CTA (`promotion: on-request-only`).
 
 ## Slot 6 — Beleg (3 Elemente)
@@ -112,7 +120,7 @@ Gebiet existiert; keiner wird simuliert.
 Referenzfall freigegeben ist, zeigt der Prototyp drei beispielhafte
 Karten statt einer leeren Fläche:
 
-1. „Vierzig Orte redaktionell abzudecken war für uns nicht zu schaffen — jetzt liegt alles auf einer Karte." — Landrätin, Beispiel-Landkreis Musterkreis
+1. „Vierzig Orte redaktionell abzudecken war für uns nicht zu schaffen — jetzt steht alles in einem Kalender." — Landrätin, Beispiel-Landkreis Musterkreis
 2. „Unsere Verwaltungsgrenze war nie die Grenze, an der sich das Leben der Menschen orientiert — der Kalender zeigt jetzt beides." — Amt für Regionalentwicklung, Beispiellandkreis Mustermark
 3. „Die Einbindung unter eigenem Namen und im eigenen Design war für uns kein Portalprojekt, sondern eine Konfiguration." — Netzwerkpartner, Beispielregion Musterland
 
@@ -130,15 +138,11 @@ derselbe Satz an drei Stellen unverändert: bei der CTA auf dieser Seite,
 im Formular auf `/deine-region/angebot` und in der Bestätigung danach —
 nie an einer Stelle abweichend von den anderen.
 
-<!-- id: deine-region-7-response-promise-demo; content_type: closing-cta; provenance: generated; derived_from: []; status: draft; demo: true -->
-
-**Demo-Platzhalter (Prototyp, `Demo-Daten`-Badge):** Für den
-vollständigen Prototyp-Eindruck zeigt diese Ansicht einen illustrativen
-Beispielsatz anstelle der leeren Fläche: „Beispielhaft: Du hörst in der
-Regel innerhalb von zwei Werktagen von uns." Der Satz ist als
-Beispieltext markiert, ohne bestätigten Bearbeitungsprozess dahinter,
-und wird durch die echte Formulierung ersetzt, sobald C11 beantwortet
-ist.
+Kein Demo-Platzhalter an dieser Stelle. TS-016-A13 macht den benannten,
+freigegebenen Bearbeitungsprozess zur Bedingung für jede Zeitzusage und
+schreibt vor, dass der Satz sonst **fehlt** — auch als Beispieltext, weil
+ein Beispielsatz über die eigene Antwortzeit dieselbe Erwartung setzt wie
+eine Zusage (F-2-57). Die Fläche bleibt leer, bis C11 beantwortet ist.
 
 ## Slot 8 — Preisanzeige
 

@@ -8,6 +8,7 @@ import { slot } from "@/src/lib/content/loader";
 import { slotState } from "@/src/lib/content/provenance";
 import { interpolate } from "@/src/lib/content/text";
 import { pageTitle } from "@/src/lib/routes/metadata";
+import { BRIEFING_URL } from "@/src/lib/live/briefing";
 
 import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
@@ -16,6 +17,7 @@ import { PageFrame } from "../../_page-frame";
 
 import { pageMeta } from "./page.meta";
 
+import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
 /**
@@ -26,19 +28,37 @@ import type { Metadata } from "next";
  * `envoy-form-mount` (kind `quote`, TS-016 S2) with its own `lead-fallback`
  * → `response-promise` → band + closing.
  *
- * The confirmation state ("Deine Anfrage ist bei uns.") is not built here:
- * `envoy-form-mount` is a labelled mock with no real submission target
- * (Q-022) and does not offer a success callback to switch views into.
- * Building one would mean the page pretends the widget submitted somewhere
- * — the real confirmation UX arrives with the actual widget (M4). Recorded
- * in `state/open.md`, and TS-026-A13 (the `request-licence-quote` event on
- * submit) is listed not-yet-M4 for the same reason.
+ * **The confirmation state is built** (F-2-66). Round 2 left it out on the
+ * argument that a labelled mock with no submission target has nothing to
+ * confirm — but the mock rule says the opposite: a mocked component owes the
+ * full experience, "never as a hole, never as a bare empty state", and a
+ * visitor who submits and sees the same screen again cannot tell whether to
+ * wait for a reply or try once more. `envoy-form-mount` owns the state, says
+ * in its own words that this is the demo and that nothing was sent, and moves
+ * focus to it (TS-016-A9). The real widget replaces the whole mount.
  */
 
 const ROUTE = "regionQuote" as const;
 const CONTACT_EMAIL = "jan@schafe-vorm-fenster.de";
-const BRIEFING_HREF = "https://calendar.google.com/calendar/appointments/example";
-const BRIEFING_LABEL = "Termin für ein Kennenlerngespräch buchen";
+
+/**
+ * The placeless variant of the heading's interpolation slot, and the
+ * `lead-fallback` labels. The German artifact names the slot
+ * `{landkreis-oder-organisation}`, the English one `{county-or-organization}`
+ * — only the German name was ever filled, so `/en/your-region/quote` rendered
+ * "Request a quote for {county-or-organization}" as its `h1` (F-2-34).
+ * Generated copy, `Dummy-Content` in `state/open.md`.
+ */
+const PAGE_COPY: Record<Locale, { genericScope: string; briefingLabel: string }> = {
+  de: {
+    genericScope: "eure Organisation",
+    briefingLabel: "Termin für ein Kennenlerngespräch buchen",
+  },
+  en: {
+    genericScope: "your organisation",
+    briefingLabel: "Book a slot to get to know each other",
+  },
+};
 
 export async function generateMetadata({
   params,
@@ -59,16 +79,22 @@ export default async function Page({
   const page = await pageContent("region", locale);
   const form = slot(page, "deine-region-angebot-1-form");
 
+  const copy = PAGE_COPY[locale];
+
+  // Both artifacts' slot names, both filled: an unfilled slot rendered as the
+  // `h1` of a conversion page is what F-2-34 measured.
   const heading =
-    interpolate(fieldAt(form.blocks, 0), { "landkreis-oder-organisation": "eure Organisation" }) ??
-    pageTitle(ROUTE, locale);
+    interpolate(fieldAt(form.blocks, 0), {
+      "landkreis-oder-organisation": copy.genericScope,
+      "county-or-organization": copy.genericScope,
+    }) ?? pageTitle(ROUTE, locale);
 
   return (
     <>
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
-      closing={{ to: "regionQuote", label: "Angebot anfragen" }}
+      closing={{ to: "regionQuote", label: heading }}
       locale={locale}
       meta={pageMeta}
     >
@@ -87,8 +113,8 @@ export default async function Page({
       <SectionShell label={heading} surface="lime-100">
         <MotionReveal>
           <EnvoyFormMount
-            briefingHref={BRIEFING_HREF}
-            briefingLabel={BRIEFING_LABEL}
+            briefingHref={BRIEFING_URL}
+            briefingLabel={copy.briefingLabel}
             context={{ goal: "request-licence-quote" }}
             // TS-012 D4 / TS-026-A13: the page's own goal, at the stage the
             // registry fixes. The widget is the mock (Q-022) and its submit
@@ -100,6 +126,7 @@ export default async function Page({
             kind="quote"
             locale={locale}
             sourceRoute={ROUTE}
+            submitDataCta="primary"
           />
           <ResponsePromise />
         </MotionReveal>

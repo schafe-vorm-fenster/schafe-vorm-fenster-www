@@ -3,6 +3,7 @@ import heroImage from "@/src/generated/placeholders/deine-region/hero.svg";
 
 import { Button } from "@/src/components/button/button";
 import { EmbedFrame } from "@/src/components/embed-frame/embed-frame";
+import { EnvoyFormMount } from "@/src/components/envoy-form-mount/envoy-form-mount";
 import { FeatureBenefit } from "@/src/components/feature-benefit/feature-benefit";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
@@ -22,6 +23,9 @@ import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
 import { pageTitle } from "@/src/lib/routes/metadata";
 import { assetSrc } from "@/src/lib/content/asset-src";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
+import { BRIEFING_RECIPIENT, BRIEFING_URL } from "@/src/lib/live/briefing";
+import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
+import { dictionary } from "@/src/lib/i18n/dictionary";
 
 import { CountersIsland, RegionExamplesIsland } from "../_islands";
 import { PageJsonLd } from "../_structured-data";
@@ -32,6 +36,7 @@ import { PageFrame } from "../_page-frame";
 
 import { pageMeta } from "./page.meta";
 
+import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
 /**
@@ -61,6 +66,57 @@ import type { Metadata } from "next";
 
 const ROUTE = "region" as const;
 
+const CONTACT_EMAIL = "jan@schafe-vorm-fenster.de";
+
+/**
+ * The labels this page needs and no artifact carries. German-only before
+ * round 3, which is how `/en/your-region` ended up half-translated (F-2-33);
+ * generated copy in the tone of voice, `Dummy-Content` in `state/open.md`.
+ */
+const PAGE_COPY: Record<
+  Locale,
+  {
+    briefingLabel: string;
+    proofHeading: string;
+    proofLabel: string;
+    proofContext: string;
+    proofGeo: string;
+    missingProof: string;
+    closingHeading: string;
+    quoteFallback: string;
+    territorySketchAlt: string;
+    interimFallback: string;
+    embedFallback: string;
+  }
+> = {
+  de: {
+    briefingLabel: "Termin für ein Kennenlerngespräch buchen",
+    proofHeading: "Was Landkreise und Institutionen sagen",
+    proofLabel: "Beleg",
+    proofContext: "Beispielhafte Rückmeldung",
+    proofGeo: "Beispielregion",
+    missingProof: "Für diese Aussage ist noch kein freigegebener Beleg hinterlegt.",
+    closingHeading: "Bereit für euer Gebiet?",
+    quoteFallback: "Angebot anfragen",
+    territorySketchAlt: "Platzhalter: Gebietsschnitt",
+    interimFallback: "So sieht das heute schon aus: Beispiele",
+    embedFallback: "So sieht die Einbindung aus: ein Beispiel",
+  },
+  en: {
+    briefingLabel: "Book a slot to get to know each other",
+    proofHeading: "What counties and institutions say",
+    proofLabel: "Proof",
+    proofContext: "Example feedback",
+    proofGeo: "Example region",
+    missingProof: "No cleared proof is on file for this claim yet.",
+    closingHeading: "Ready for your territory?",
+    quoteFallback: "Request a quote",
+    territorySketchAlt: "Placeholder: territory outline",
+    interimFallback: "This is what it looks like today: examples",
+    embedFallback: "This is what the embed looks like: an example",
+  },
+};
+
 export async function generateMetadata({
   params,
 }: {
@@ -76,6 +132,8 @@ export default async function Page({
 }) {
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
+  const copy = PAGE_COPY[locale];
+  const words = dictionary(locale);
 
   const focus = slot(page, "deine-region-1-focus");
   const territory = slot(page, "deine-region-2-territory");
@@ -92,16 +150,18 @@ export default async function Page({
   // package can ship without a geo/BFF integration: examples and search
   // stand, the county-scoped heading and counter stay generic/absent
   // (TS-026-A10). The interim ranking (D4, Q-037) is mocked accordingly.
-  // The heading keeps a `{county}` slot for the island to fill with the
-  // county the envelope resolved; `{landkreis}` is the DE artifact's own
-  // name for the same slot and gets the stage-0 wording when no county is
-  // known (TS-026-A10 — generic, never a claimed district).
-  const interimHeading =
-    interpolate(fieldAt(interim.blocks, 0), { landkreis: "{county}" }) ??
-    "So sieht das heute schon aus: Beispiele in {county}";
+  // F-2-63: at stage 0 the heading carries **no county slot at all**. It used
+  // to keep `{county}` for the island to fill, and the island filled it with
+  // whatever `county` it was handed — the stage-0 anchor's raw geo-api id —
+  // so block 3 read "Beispiele aus dem Landkreis geoname.900001": a county
+  // asserted with no anchor (TS-026-A10, TS-026 D4) *and* an internal
+  // identifier rendered as visitor copy. The county-scoped heading returns
+  // with the anchor it needs, not before.
   const interimFallbackHeading =
-    interpolate(fieldAt(interim.blocks, 0), { landkreis: "deiner Region" }) ??
-    "So sieht das heute schon aus: Beispiele";
+    interpolate(fieldAt(interim.blocks, 0), {
+      landkreis: locale === "de" ? "deiner Region" : "your region",
+      "county-or-organization": locale === "de" ? "deiner Region" : "your region",
+    }) ?? copy.interimFallback;
 
   const quoteItems = proofDemo.blocks.filter((block) => block.kind === "list");
   const quotes =
@@ -122,16 +182,16 @@ export default async function Page({
     surface: "inline",
     candidates: quotes.map((quote, index) => ({
       id: `deine-region-6-proof-demo-${index + 1}`,
-      contextLine: "Beispielhafte Rückmeldung",
+      contextLine: copy.proofContext,
       claim: quote.claim,
       attribution: quote.attribution,
-      geo: { level: "region" as const, label: "Beispielregion" },
+      geo: { level: "region" as const, label: copy.proofGeo },
       geoCounty: quote.attribution.split(", ").slice(1).join(", ").trim() || null,
       demo: isDemoSlot(proofDemo),
     })),
   });
 
-  const ctaLabel = ctaLabelOnly(fieldAt(focus.blocks, 2)) ?? "Angebot anfragen";
+  const ctaLabel = ctaLabelOnly(fieldAt(focus.blocks, 2)) ?? copy.quoteFallback;
 
   return (
     <>
@@ -157,14 +217,23 @@ export default async function Page({
               <Button dataCta="primary" locale={locale} to="regionQuote" variant="primary-light">
                 {ctaLabel}
               </Button>
-              <OutboundLink
-                href="https://calendar.google.com/calendar/appointments/example"
-                newTab
-                recipient="Google Kalender"
-                variant="secondary"
+              {/* F-2-32: the one configured value of TS-016 D7, never a
+                  second URL pasted per page. */}
+              <ConversionTracker
+                attributes={{ route: ROUTE }}
+                goalId="request-product-briefing"
+                stage="handover"
               >
-                Termin für ein Kennenlerngespräch buchen
-              </OutboundLink>
+                <OutboundLink
+                  href={BRIEFING_URL}
+                  locale={locale}
+                  newTab
+                  recipient={BRIEFING_RECIPIENT}
+                  variant="secondary"
+                >
+                  {copy.briefingLabel}
+                </OutboundLink>
+              </ConversionTracker>
             </>
           }
           state={slotState(focus)}
@@ -194,13 +263,13 @@ export default async function Page({
             county={STAGE_ZERO_ANCHOR.county}
             locale={locale}
             max={6}
-            titleTemplate={interimHeading}
+            titleTemplate={interimFallbackHeading}
           />
           {/* The search stands *beside* the module, so the block never
               collapses when the ranking has nothing (TS-008 D1, DEC-034). */}
           <PlaceSearch
-            hint="Bislang nur per Postleitzahl — die Ortssuche folgt."
-            label={fieldAt(interim.blocks, 2) ?? "Dein Ort"}
+            hint={words.search.hint}
+            label={fieldAt(interim.blocks, 2) ?? words.search.label}
             locale={locale}
             to="place"
           />
@@ -215,12 +284,12 @@ export default async function Page({
           not `labelledBy`: `embed-frame` renders its own heading with no id
           to point to. */}
       <SectionShell
-        label={fieldAt(embedDemo.blocks, 0) ?? "So sieht die Einbindung aus: ein Beispiel"}
+        label={fieldAt(embedDemo.blocks, 0) ?? copy.embedFallback}
         surface="surface-2"
       >
         <MotionReveal>
           <EmbedFrame
-            heading={fieldAt(embedDemo.blocks, 0) ?? "So sieht die Einbindung aus: ein Beispiel"}
+            heading={fieldAt(embedDemo.blocks, 0) ?? copy.embedFallback}
             organizerId="demo-landkreis"
             ratio="feature"
             state={slotState(embedDemo, "degraded")}
@@ -250,7 +319,7 @@ export default async function Page({
           <FeatureBenefit
             benefit={fieldAt(whatItAdds.blocks, 1) ?? ""}
             feature={fieldAt(whatItAdds.blocks, 0) ?? ""}
-            mediaAlt="Platzhalter: Gebietsschnitt"
+            mediaAlt={copy.territorySketchAlt}
             mediaSrc={assetSrc(gebietsschnitt)}
           />
           <p>{fieldAt(whatItAdds.blocks, 2)}</p>
@@ -262,8 +331,8 @@ export default async function Page({
           no cleared reference case for a delivered territory exists. */}
       <SectionShell labelledBy="beleg" surface="lime-100">
         <MotionReveal>
-          <h2 id="beleg">Was Landkreise und Institutionen sagen</h2>
-          <ProofStream label="Beleg">
+          <h2 id="beleg">{copy.proofHeading}</h2>
+          <ProofStream label={copy.proofLabel}>
             {proofSelection.entries.map((entry, position) =>
               entry.kind === "item" ? (
                 <ProofCard
@@ -276,10 +345,7 @@ export default async function Page({
                   state={entry.state}
                 />
               ) : (
-                <EmptyProofSlot
-                  key={`empty-${position}`}
-                  sentence="Für diese Aussage ist noch kein freigegebener Beleg hinterlegt."
-                />
+                <EmptyProofSlot key={`empty-${position}`} sentence={copy.missingProof} />
               ),
             )}
           </ProofStream>
@@ -290,8 +356,21 @@ export default async function Page({
           C11 is unanswered — no response-time wording anywhere, A7). */}
       <SectionShell labelledBy="angebot-cta" surface="lime-100">
         <MotionReveal>
-          <h2 id="angebot-cta">Bereit für euer Gebiet?</h2>
-          <Button locale={locale} to="regionQuote" variant="primary-light">
+          <h2 id="angebot-cta">{copy.closingHeading}</h2>
+          {/* F-2-48 / TS-016-A2: D1 row S2 names **both** `/deine-region` and
+              `/deine-region/angebot` as quote surfaces, and the mount was
+              absent here — the `request-licence-quote` path began with a link
+              to a form rather than with the form. The dedicated page stays;
+              this is the in-place instance D1 asks for. */}
+          <EnvoyFormMount
+            context={{ goal: "request-licence-quote" }}
+            conversion={{ goalId: "request-licence-quote", stage: "completed" }}
+            fallbackEmail={CONTACT_EMAIL}
+            kind="quote"
+            locale={locale}
+            sourceRoute={ROUTE}
+          />
+          <Button locale={locale} to="regionQuote" variant="secondary">
             {ctaLabel}
           </Button>
           <ResponsePromise />

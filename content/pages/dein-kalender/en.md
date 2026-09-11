@@ -152,7 +152,7 @@ exemplary; they replace no cleared proof element.
 
 ## Slot 6 — Trust block: data protection, operations, AI
 
-<!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: []; status: draft -->
+<!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: [ia]; status: draft -->
 
 **Heading:** How your data is handled here
 

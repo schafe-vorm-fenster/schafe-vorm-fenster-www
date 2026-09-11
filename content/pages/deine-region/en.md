@@ -30,8 +30,10 @@ open_points:
 # Your region (`/deine-region`)
 
 For counties, state authorities, networks, and large cities that want
-a calendar for a **whole territory** (TS-026 D1). No map module on
-this page — the map arrives January 2027 (DEC-061); until then, an
+a calendar for a **whole territory** (TS-026 D1). No map module and no
+map promise on this page: TS-026-A17 requires an unconfirmed feature to
+be removed rather than qualified, and no owner confirmation exists for
+the map (DEC-061). Until then, an
 interim module carries the page (DEC-034). No distance stated as a
 module, filter, or result label — only ever as the visitor's own
 question (TS-026 D3).
@@ -40,14 +42,18 @@ question (TS-026 D3).
 
 <!-- id: deine-region-1-focus; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: draft -->
 
-**Aha question:** The whole county on one map, with no portal project of your own?
+**Aha question:** Your whole county in one calendar, with no portal project of your own?
 
-**Text:** That's exactly the point. An embedded system shows your whole territory as a list, and from January 2027 also as a map, under your own name and in your own design.
+**Text:** That's exactly the point. An embedded system shows your whole territory, under your own name and in your own design.
 
 **CTA label (primary):** Request a quote → `/deine-region/angebot`
 
 Source: `headline` from `counties--portalize-enterprise` — "The whole
-district on one map, without a portal project."
+district on one map, without a portal project." The map half of that
+headline is not used here: TS-026-A17 makes the offering owner's
+confirmation a precondition and prescribes removing the feature rather
+than qualifying it (F-2-57). The headline is used in full again once the
+confirmation exists.
 
 ## Slot 2 — The territory question
 
@@ -90,12 +96,14 @@ The same component as on `/dein-kalender` slot 3 (TS-008 position 1′).
 
 **Heading:** What the county tier adds on top
 
-**Text:** On top of everything the €480 tier offers: a map view of the same dates under the same filter settings, from January 2027, plus your own white-label-capable registration, embedded on your website.
+**Text:** On top of everything the €480 tier offers: your own white-label-capable registration, embedded on your website.
 
 **Mention (no CTA):** Anyone with their own date databases — a course programme, a church service schedule, the county administration's waste-collection calendar data — can have them connected once via the data integration.
 
-The map is named as a **dated, upcoming** feature, never as already
-existing (DEC-061, TS-026 D3a). `custom-data-integration` is mentioned,
+The map view is not in this list. TS-026-A17: until the offering owner
+confirms it is shippable to a buyer, the feature is removed rather than
+qualified with a date (F-2-57, `state/open.md`).
+`custom-data-integration` is mentioned,
 never priced, with no CTA of its own (`promotion: on-request-only`).
 
 ## Slot 6 — Proof (3 elements)
@@ -112,7 +120,7 @@ territory exists; none is simulated.
 reference case is cleared, the prototype shows three example cards
 instead of an empty area:
 
-1. "Covering forty places editorially was never going to work for us — now it's all on one map." — County commissioner, Example county Musterkreis
+1. "Covering forty places editorially was never going to work for us — now it's all in one calendar." — County commissioner, Example county Musterkreis
 2. "Our administrative boundary was never the boundary people's lives run to — the calendar now shows both." — Regional development office, Example county Mustermark
 3. "Embedding it under our own name and in our own design wasn't a portal project for us, it was a configuration." — Network partner, Example region Musterland
 
@@ -130,14 +138,11 @@ unchanged in three places: at the CTA on this page, in the form on
 `/deine-region/angebot`, and in the confirmation afterwards — never
 differing from one place to the next.
 
-<!-- id: deine-region-7-response-promise-demo; content_type: closing-cta; provenance: generated; derived_from: []; status: draft; demo: true -->
-
-**Demo placeholder (prototype, `Demo Data` badge):** For the full
-prototype impression, this view shows an illustrative example sentence
-instead of the empty area: "As an example: you'll typically hear back
-from us within two working days." The sentence is marked as example
-text, with no confirmed process behind it, and is replaced by the real
-wording once C11 is answered.
+No demo placeholder here. TS-016-A13 makes the named, signed-off
+handling process a precondition for any time promise and prescribes that
+the sentence is **absent** otherwise — example text included, because an
+example sentence about our own response time sets the same expectation as
+a promise (F-2-57). The area stays empty until C11 is answered.
 
 ## Slot 8 — Price display
 
