@@ -34,7 +34,8 @@ interfaces:
 
 Write every page's copy in the primary locale, translate it into the
 secondary locale, and keep each claim traceable to a governed source
-— gaps become designed empty states, not prose.
+— gaps become generated, clearly-registered placeholder content, so
+the prototype is complete on every page.
 
 ## Prerequisites
 
@@ -57,7 +58,11 @@ secondary locale, and keep each claim traceable to a governed source
 - Primary locale first, translation second; a translation carries
   the same source ids as its original.
 - Numbers, names, quotes, and claims come from `content-sources`
-  verbatim or not at all.
+  verbatim — or the slot gets generated content under the
+  dummy-content rule (plan/leitplanken.md): on-voice, claims
+  generic, `provenance: generated` in the artifact, a
+  `Dummy-Content` row in `state-files`. Real-looking invented facts
+  are still forbidden.
 - Voice over variety: the same term for the same thing on every
   page, per `tone-of-voice`.
 - Legal texts flow through their own import path; this playbook
@@ -69,9 +74,10 @@ secondary locale, and keep each claim traceable to a governed source
 
 - Per page, map every content slot from `page-specs` to its source
   artifact in `content-sources`; unresolvable slots are recorded in
-  `state-files` and marked for empty states.
+  `state-files` as `Dummy-Content` rows and marked for generation.
 
-Quality gate: every slot has a source id or an open-point entry.
+Quality gate: every slot has a source id or a `Dummy-Content` entry
+— no slot is undecided.
 
 ### Phase 2 — Primary copy
 

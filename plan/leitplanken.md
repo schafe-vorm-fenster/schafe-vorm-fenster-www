@@ -24,10 +24,10 @@ finding, regardless of who commits it.
 - If a spec contradicts a concept document, the concept document wins
   (repo rule). Record the contradiction in `state/open.md`.
 - Page copy comes from the go-to-market-os sources via the content
-  playbook. Content is consumed and cited, never invented — a missing
-  brand fact renders as a designed empty state, and the gap goes on
-  the open list. (Missing *systems* are a different case — see the
-  mock rule.)
+  playbook. Where a source exists, it binds: consumed and cited,
+  never paraphrased into new claims. Where content is **missing**,
+  the dummy-content rule applies (below) — the prototype is complete,
+  never empty.
 
 ## Die Mock-Regel (Prototyp-Entscheidung)
 
@@ -49,6 +49,24 @@ tests — every function integrated and visible. Therefore:
 - **The prototype does not go live.** A separate hardening round
   (real APIs in, mocks out, clearances resolved) follows after the
   run, before any production promotion.
+
+## Die Dummy-Content-Regel
+
+The completeness bar applies to content exactly as to systems: every
+route, every element, full design, **full copy, full images** — a
+slot without a source gets **generated content**, never a hole:
+
+- Generated copy follows the tone of voice and the communication
+  principles, but claims stay generic — no invented numbers, names,
+  testimonials, awards, or press quotes presented as real. Facts are
+  real (cited) or recognizably exemplary.
+- Generated or placeholder images follow the design system's imagery
+  rules; where an image would claim to depict something real that it
+  does not, it carries the design system's placeholder marking.
+- Every generated slot is registered: artifact metadata marks it
+  (`provenance: generated`), and `state/open.md` carries a
+  `Dummy-Content` row per page area — that list drives the
+  content-nachziehen workstream after the run.
 
 ## Dependencies — the stack-harmony rule
 

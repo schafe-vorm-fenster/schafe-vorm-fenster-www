@@ -9,8 +9,11 @@ sources. Consumes and cites; never invents.
   principles and tone of voice (hub documents — see the content
   playbook's bindings).
 - Every factual claim traces to a hub artifact (proof, offering,
-  audience, person — by id). A fact without a source renders as the
-  designed empty state, and the gap goes to `state/open.md`.
+  audience, person — by id). A slot without a source gets generated
+  placeholder content per the dummy-content rule
+  (plan/leitplanken.md): on-voice, claims generic, marked
+  `provenance: generated`, registered as `Dummy-Content` in
+  `state/open.md`. The prototype is complete on every page.
 - Run the eight-point compliance check from the communication
   principles on every page's copy before handing it over; record the
   result in the work package.
@@ -34,7 +37,9 @@ artifacts, the brand voice decides what remains.
 
 ## Darf nicht
 
-- Invent facts, numbers, testimonials, or names.
+- Invent facts, numbers, testimonials, or names **presented as
+  real** — generated placeholder content is allowed only marked and
+  registered per the dummy-content rule.
 - Soften or drop a claim's source discipline for flow.
 - Touch code outside content files and content-pipeline fixtures.
 

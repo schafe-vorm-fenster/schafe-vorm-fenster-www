@@ -91,21 +91,43 @@ Interactions, live data, forms, conversion paths work.
 
 Gate scope: the ACs of every TS in this table.
 
-### M5 — Feinschliff
+### M5 — Gesamtabnahme
 
-Exactly **one** round with a fixed budget. Everything discovered after
-that round goes to `state/open.md` instead of being built. M5 ends
-with the final Kundenabnahme across all milestones and the closing
-run report.
+**Two to three full roundtrips over the complete prototype** — not
+per milestone this time, but end to end: QA acceptance sweep + all
+four chaos personas + UAT walks over every conversion path, PM
+prioritization, fix round, deploy, retest, Kundenabnahme. The loop's
+abort criterion applies (no critical/high open, or three rounds).
+Findings beyond the third round go to `state/open.md`. M5 closes
+with the final Kundenabnahme (`reports/abnahme/abschluss.md`) and
+the run report — that acceptance **is** the prototype milestone.
 
-## Das Ergebnis ist ein Prototyp
+## Das Ergebnis ist ein Prototyp — vollständig
 
-The run delivers the website as a **finished prototype**: every
-function integrated and visible, missing external systems mocked with
-labeled dummy data (mock rule, plan/leitplanken.md). It is ready for
-reviews and user tests on the protected preview. Going live requires
-the subsequent hardening round — real APIs swapped in, mocks removed,
-clearances resolved — which is outside this run's scope.
+The run delivers the website as a **complete prototype**: every
+route, every element, full web design, full copy, full images.
+Missing external systems are mocked (mock rule), missing content is
+generated and marked (dummy-content rule) — completeness beats
+emptiness everywhere; both registers live in `state/open.md`. The
+prototype runs as preview deployment on Vercel and is fully tested
+locally through the roundtrips. It is ready for reviews and user
+tests on the protected preview; it does not go live.
+
+## Nach dem Prototyp (nicht Teil dieses Laufs)
+
+After the prototype milestone comes a **deliberate manual break**;
+the next phases are planned together with Jan, not by this run. The
+known workstreams, fed by the run's registers:
+
+1. **Inhalte nachziehen** — replace every `Dummy-Content` row with
+   real, sourced content.
+2. **Content-Review und Tonalität schärfen** — editorial pass over
+   all copy against tone of voice and communication principles.
+3. **Usability- und Feature-Feedback** — human reviews and user
+   tests on the prototype, fed back as change requests.
+4. **Mocks fertig implementieren** — every `Mock aktiv` row against
+   the real systems (hardening round), plus clearances; only then
+   production.
 
 ## Quality gate — every milestone
 
