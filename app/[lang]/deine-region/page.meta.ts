@@ -28,6 +28,16 @@ export const pageMeta: PageMeta = {
       emptyState:
         "no county anchor (stage 0) or upstream empty/failing (D4/A9): the module is absent from the DOM, no error styling, no retry — the place search and block 3's static copy still render",
     },
+    {
+      id: "position-4-live-counters",
+      emptyState:
+        "both fallback tiers exhausted (TS-009 D6): the counter band is removed, never zeroed and never estimated — WEB-F-041's 'counted live or not shown'",
+    },
+    {
+      id: "place-search",
+      emptyState:
+        "never empty: the field is static and stands beside the ranking, so block 3 keeps an action even when the module above it has nothing (TS-008 D1, DEC-034)",
+    },
   ],
   proofSlots: ["deine-region-6-proof"],
 };
