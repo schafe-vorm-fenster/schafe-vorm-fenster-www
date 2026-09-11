@@ -1,0 +1,4856 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "@schafevormfenster/calendar-api",
+    "description": "The calendar API delivers data related to organizers and calendars from the CRM, facilitating access to calendar events sourced from Google calendars.",
+    "version": "1.4.8",
+    "contact": {
+      "name": "Schafe vorm Fenster UG",
+      "email": "jan@schafe-vorm-fenster.de"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://calendar.api.schafe-vorm-fenster.de",
+      "description": "Production"
+    }
+  ],
+  "paths": {
+    "/api/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "enum": [
+                        200
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "services": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "enum": [
+                                  200
+                                ]
+                              },
+                              "message": {
+                                "type": "string",
+                                "enum": [
+                                  "healthy"
+                                ]
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "message",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "enum": [
+                                  202
+                                ]
+                              },
+                              "message": {
+                                "type": "string",
+                                "enum": [
+                                  "degraded"
+                                ]
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "message",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "minimum": 400,
+                                "maximum": 599
+                              },
+                              "error": {
+                                "type": "string"
+                              },
+                              "trace": {
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "error",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "name",
+                    "version",
+                    "services"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "503",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "services": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "enum": [
+                                  200
+                                ]
+                              },
+                              "message": {
+                                "type": "string",
+                                "enum": [
+                                  "healthy"
+                                ]
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "message",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "enum": [
+                                  202
+                                ]
+                              },
+                              "message": {
+                                "type": "string",
+                                "enum": [
+                                  "degraded"
+                                ]
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "message",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "minimum": 400,
+                                "maximum": 599
+                              },
+                              "error": {
+                                "type": "string"
+                              },
+                              "trace": {
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "error",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error",
+                    "name",
+                    "version",
+                    "services"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/organizers": {
+      "get": {
+        "description": "Get a list of all organizers from the crm system.",
+        "summary": "Get a list of all organizers",
+        "tags": [
+          "organizers"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Access token for authentication"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "number"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Unique identifier of the contact"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Display name of the organizer"
+                          },
+                          "organization": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Formal name of the organization"
+                          },
+                          "google_calendars": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Google Kalender IDs"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$",
+                            "description": "Date and time when the organizer was created"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$",
+                            "description": "Date and time when the organizer was last updated"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "google_calendars",
+                          "created_at",
+                          "updated_at"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "results",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "503",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/organizers/{id}": {
+      "get": {
+        "description": "Get detailed information about a specific organizer by their unique identifier, including timestamps and additional metadata.",
+        "summary": "Get detailed information about a specific organizer",
+        "tags": [
+          "organizers"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Access token for authentication"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Unique identifier of the organizer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Unique identifier of the contact"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Display name of the organizer"
+                        },
+                        "organization": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Formal name of the organization"
+                        },
+                        "google_calendars": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Google Kalender IDs"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$",
+                          "description": "Date and time when the organizer was created"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$",
+                          "description": "Date and time when the organizer was last updated"
+                        },
+                        "wikidata_id": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Wikidata ID of the organization"
+                        },
+                        "google_place_id": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Google Place ID"
+                        },
+                        "postal_code": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Postal code"
+                        },
+                        "location": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Full address including postal code and city"
+                        },
+                        "website": {
+                          "description": "Website of the organization",
+                          "nullable": true
+                        },
+                        "wikidata": {
+                          "type": "object",
+                          "properties": {
+                            "logo_url": {
+                              "type": "string",
+                              "format": "uri",
+                              "nullable": true,
+                              "description": "Resolved Wikimedia Commons logo URL"
+                            },
+                            "official_website": {
+                              "type": "string",
+                              "format": "uri",
+                              "nullable": true,
+                              "description": "Official website from Wikidata P856"
+                            },
+                            "description": {
+                              "type": "string",
+                              "nullable": true,
+                              "description": "Localized description from Wikidata"
+                            },
+                            "inception": {
+                              "type": "string",
+                              "nullable": true,
+                              "description": "Foundation/establishment date from P571 in ISO8601 format"
+                            },
+                            "web_feed_url": {
+                              "type": "string",
+                              "format": "uri",
+                              "nullable": true,
+                              "description": "RSS/Atom feed URL from P1019"
+                            }
+                          },
+                          "nullable": true,
+                          "description": "Optional Wikidata enrichment fields"
+                        },
+                        "portalize": {
+                          "type": "object",
+                          "properties": {
+                            "active": {
+                              "type": "boolean",
+                              "description": "Whether portalize is active for this organizer"
+                            },
+                            "referers": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "description": "Allow-list of referer hosts permitted for portal embedding"
+                            },
+                            "style": {
+                              "type": "object",
+                              "properties": {
+                                "font": {
+                                  "type": "object",
+                                  "properties": {
+                                    "size": {
+                                      "type": "object",
+                                      "properties": {
+                                        "base": {
+                                          "type": "string",
+                                          "nullable": true,
+                                          "description": "Base font size as CSS value (e.g. '1.8rem' or 'clamp(1.8rem, ...)')"
+                                        },
+                                        "large": {
+                                          "type": "string",
+                                          "nullable": true,
+                                          "description": "Large font size as CSS value (e.g. '3rem')"
+                                        },
+                                        "small": {
+                                          "type": "string",
+                                          "nullable": true,
+                                          "description": "Small font size as CSS value (e.g. '0.8rem')"
+                                        }
+                                      },
+                                      "description": "Font size configuration for portalize"
+                                    },
+                                    "family": {
+                                      "type": "object",
+                                      "properties": {
+                                        "base": {
+                                          "type": "string",
+                                          "nullable": true,
+                                          "description": "Base font family for portalize text"
+                                        },
+                                        "large": {
+                                          "type": "string",
+                                          "nullable": true,
+                                          "description": "Large font family for portalize text"
+                                        },
+                                        "small": {
+                                          "type": "string",
+                                          "nullable": true,
+                                          "description": "Small font family for portalize text"
+                                        }
+                                      },
+                                      "description": "Font family configuration for portalize"
+                                    }
+                                  },
+                                  "required": [
+                                    "size",
+                                    "family"
+                                  ],
+                                  "description": "Typography settings for portalize"
+                                },
+                                "brand": {
+                                  "type": "object",
+                                  "properties": {
+                                    "logourl": {
+                                      "type": "string",
+                                      "nullable": true,
+                                      "description": "Optional brand logo URL"
+                                    },
+                                    "claim": {
+                                      "type": "string",
+                                      "nullable": true,
+                                      "description": "Optional brand claim/tagline"
+                                    },
+                                    "linkurl": {
+                                      "type": "string",
+                                      "nullable": true,
+                                      "description": "Optional brand link URL"
+                                    }
+                                  },
+                                  "description": "Optional brand information for portalize"
+                                }
+                              },
+                              "required": [
+                                "font",
+                                "brand"
+                              ],
+                              "description": "Visual style configuration for portalize"
+                            },
+                            "initialize": {
+                              "type": "object",
+                              "properties": {
+                                "category": {
+                                  "type": "string",
+                                  "nullable": true,
+                                  "description": "Initial category filter value"
+                                }
+                              },
+                              "description": "Initial values for portalize filters"
+                            },
+                            "filters": {
+                              "type": "object",
+                              "properties": {
+                                "country": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "description": "ISO2 country code for narrowing scope (defaults to organizer country or DE)"
+                                },
+                                "zipcodes": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "List of postal codes used for filtering"
+                                },
+                                "communities": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "List of communities used for filtering"
+                                },
+                                "organizers": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "List of organizer identifiers used for filtering"
+                                },
+                                "categories": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "List of categories used for filtering"
+                                },
+                                "counties": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "List of counties used for filtering"
+                                },
+                                "municipalities": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "List of municipalities used for filtering"
+                                }
+                              },
+                              "required": [
+                                "country",
+                                "zipcodes",
+                                "communities",
+                                "organizers",
+                                "categories",
+                                "counties",
+                                "municipalities"
+                              ],
+                              "description": "Filter rules applied for portalize visibility"
+                            }
+                          },
+                          "required": [
+                            "active",
+                            "referers",
+                            "style",
+                            "initialize",
+                            "filters"
+                          ],
+                          "nullable": true,
+                          "description": "Optional portalize configuration"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "google_calendars",
+                        "created_at",
+                        "updated_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "503",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/organizers/new": {
+      "get": {
+        "description": "Get a list of organizers that were created after a specific timestamp. Supports both ISO8601 timestamps (e.g., '2024-07-26T15:20:00Z') and relative time expressions (e.g., '1d' for 1 day ago, '3h' for 3 hours ago, '30m' for 30 minutes ago).",
+        "summary": "Get a list of newly created organizers",
+        "tags": [
+          "organizers"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Access token for authentication"
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "description": "Timestamp in ISO8601 format or relative time expression (e.g., '1d', '3h', '30m'). Defaults to '1d' (last 24 hours).",
+            "schema": {
+              "default": "1d",
+              "oneOf": [
+                {
+                  "type": "string",
+                  "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$",
+                  "description": "Datetime in ISO8601 format"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^(\\d+)([mhdwM])$",
+                  "description": "Relative time expression"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "number"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "Unique identifier of the contact"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Display name of the organizer"
+                          },
+                          "organization": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Formal name of the organization"
+                          },
+                          "google_calendars": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Google Kalender IDs"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$",
+                            "description": "Date and time when the organizer was created"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$",
+                            "description": "Date and time when the organizer was last updated"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "google_calendars",
+                          "created_at",
+                          "updated_at"
+                        ]
+                      }
+                    },
+                    "since": {
+                      "type": "string",
+                      "description": "The timestamp used to filter new organizers (normalized to ISO8601)"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "results",
+                    "data",
+                    "since"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/organizers/search": {
+      "get": {
+        "description": "Find an organizer by searching for a specific Google Calendar ID. Returns the organizer that has the specified calendar ID in any of their calendar fields.",
+        "summary": "Search for organizer by calendar ID",
+        "tags": [
+          "organizers"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Access token for authentication"
+          },
+          {
+            "name": "calendarId",
+            "in": "query",
+            "description": "Google Calendar ID to search for",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Unique identifier of the contact"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Display name of the organizer"
+                        },
+                        "organization": {
+                          "type": "string",
+                          "nullable": true,
+                          "description": "Formal name of the organization"
+                        },
+                        "google_calendars": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Google Kalender IDs"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$",
+                          "description": "Date and time when the organizer was created"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$",
+                          "description": "Date and time when the organizer was last updated"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "google_calendars",
+                        "created_at",
+                        "updated_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "503",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/organizers/{id}/portalize": {
+      "get": {
+        "description": "Retrieve the portalize configuration for a specific organizer. Returns portalize data if active, or an error message with HTTP 200 if not active.",
+        "summary": "Get portalize configuration for a specific organizer",
+        "tags": [
+          "organizers"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Access token for authentication"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Unique identifier of the organizer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "number",
+                          "minimum": 200,
+                          "maximum": 299
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "timestamp": {
+                          "type": "string"
+                        },
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "active": {
+                              "type": "boolean",
+                              "description": "Whether portalize is active for this organizer"
+                            },
+                            "referers": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "description": "Allow-list of referer hosts permitted for portal embedding"
+                            },
+                            "style": {
+                              "type": "object",
+                              "properties": {
+                                "font": {
+                                  "type": "object",
+                                  "properties": {
+                                    "size": {
+                                      "type": "object",
+                                      "properties": {
+                                        "base": {
+                                          "type": "string",
+                                          "nullable": true,
+                                          "description": "Base font size as CSS value (e.g. '1.8rem' or 'clamp(1.8rem, ...)')"
+                                        },
+                                        "large": {
+                                          "type": "string",
+                                          "nullable": true,
+                                          "description": "Large font size as CSS value (e.g. '3rem')"
+                                        },
+                                        "small": {
+                                          "type": "string",
+                                          "nullable": true,
+                                          "description": "Small font size as CSS value (e.g. '0.8rem')"
+                                        }
+                                      },
+                                      "description": "Font size configuration for portalize"
+                                    },
+                                    "family": {
+                                      "type": "object",
+                                      "properties": {
+                                        "base": {
+                                          "type": "string",
+                                          "nullable": true,
+                                          "description": "Base font family for portalize text"
+                                        },
+                                        "large": {
+                                          "type": "string",
+                                          "nullable": true,
+                                          "description": "Large font family for portalize text"
+                                        },
+                                        "small": {
+                                          "type": "string",
+                                          "nullable": true,
+                                          "description": "Small font family for portalize text"
+                                        }
+                                      },
+                                      "description": "Font family configuration for portalize"
+                                    }
+                                  },
+                                  "required": [
+                                    "size",
+                                    "family"
+                                  ],
+                                  "description": "Typography settings for portalize"
+                                },
+                                "brand": {
+                                  "type": "object",
+                                  "properties": {
+                                    "logourl": {
+                                      "type": "string",
+                                      "nullable": true,
+                                      "description": "Optional brand logo URL"
+                                    },
+                                    "claim": {
+                                      "type": "string",
+                                      "nullable": true,
+                                      "description": "Optional brand claim/tagline"
+                                    },
+                                    "linkurl": {
+                                      "type": "string",
+                                      "nullable": true,
+                                      "description": "Optional brand link URL"
+                                    }
+                                  },
+                                  "description": "Optional brand information for portalize"
+                                }
+                              },
+                              "required": [
+                                "font",
+                                "brand"
+                              ],
+                              "description": "Visual style configuration for portalize"
+                            },
+                            "initialize": {
+                              "type": "object",
+                              "properties": {
+                                "category": {
+                                  "type": "string",
+                                  "nullable": true,
+                                  "description": "Initial category filter value"
+                                }
+                              },
+                              "description": "Initial values for portalize filters"
+                            },
+                            "filters": {
+                              "type": "object",
+                              "properties": {
+                                "country": {
+                                  "type": "string",
+                                  "minLength": 2,
+                                  "maxLength": 2,
+                                  "nullable": true,
+                                  "description": "Optional ISO2 country code for narrowing scope"
+                                },
+                                "communities": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "List of communities used for filtering"
+                                },
+                                "organizers": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "List of organizer identifiers used for filtering"
+                                },
+                                "categories": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "List of categories used for filtering"
+                                },
+                                "counties": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "List of counties used for filtering"
+                                },
+                                "municipalities": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "List of municipalities used for filtering"
+                                }
+                              },
+                              "required": [
+                                "communities",
+                                "organizers",
+                                "categories",
+                                "counties",
+                                "municipalities"
+                              ],
+                              "description": "Filter rules applied for portalize visibility"
+                            }
+                          },
+                          "required": [
+                            "active",
+                            "referers",
+                            "style",
+                            "initialize",
+                            "filters"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "status",
+                        "timestamp",
+                        "data"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "number",
+                          "enum": [
+                            200
+                          ]
+                        },
+                        "error": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "timestamp": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "status",
+                        "error"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "503",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/calendars": {
+      "get": {
+        "description": "Get a list of all google calendars from organizers in the crm.",
+        "summary": "Get a list of all google calendars.",
+        "tags": [
+          "calendars"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Access token for authentication"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "number"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "google-calendar",
+                              "internal"
+                            ]
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "organizer": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "Unique identifier of the contact"
+                              },
+                              "name": {
+                                "type": "string",
+                                "description": "Display name of the organizer"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "organizer"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "results",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "503",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/calendars/{id}": {
+      "get": {
+        "description": "Get a google calendar (detail) by id with basic organizer info.",
+        "summary": "Get a calendar.",
+        "tags": [
+          "calendars"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Access token for authentication"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 250
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "google-calendar",
+                            "internal"
+                          ]
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "organizer": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "Unique identifier of the contact"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "Display name of the organizer"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "organizer"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "503",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/calendars/{id}/events": {
+      "get": {
+        "description": "Get events from a google calendar.",
+        "summary": "Get calendar events.",
+        "tags": [
+          "calendars"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Access token for authentication"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Calendar ID"
+          },
+          {
+            "name": "timeMin",
+            "in": "query",
+            "description": "Default value is today 0am.",
+            "schema": {
+              "default": "2026-09-11T00:00:00.000Z",
+              "type": "string",
+              "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$"
+            }
+          },
+          {
+            "name": "timeMax",
+            "in": "query",
+            "description": "Default value is 90 days in the future.",
+            "schema": {
+              "default": "2026-12-10T00:00:00.000Z",
+              "type": "string",
+              "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$"
+            }
+          },
+          {
+            "name": "updatedMin",
+            "in": "query",
+            "description": "Datetime in ISO8601 format",
+            "schema": {
+              "type": "string",
+              "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "number"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "discriminator": {
+                          "propertyName": "status"
+                        },
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "created": {
+                                "type": "string"
+                              },
+                              "updated": {
+                                "type": "string"
+                              },
+                              "summary": {
+                                "type": "string"
+                              },
+                              "location": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "source_system": {
+                                "type": "string",
+                                "enum": [
+                                  "whatsapp",
+                                  "crawler",
+                                  "ics",
+                                  "caldav",
+                                  "manual",
+                                  "google"
+                                ]
+                              },
+                              "start": {
+                                "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "string"
+                                  },
+                                  "dateTime": {
+                                    "type": "string"
+                                  },
+                                  "timeZone": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "end": {
+                                "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "string"
+                                  },
+                                  "dateTime": {
+                                    "type": "string"
+                                  },
+                                  "timeZone": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "calendar": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "Google Calendar ID where this event originates"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "Calendar display name"
+                                  }
+                                },
+                                "required": [
+                                  "id"
+                                ]
+                              },
+                              "organizer": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "Organizer ID from calendar API (CRM system)"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "Public display name of the organizer"
+                                  }
+                                },
+                                "required": [
+                                  "id"
+                                ]
+                              },
+                              "recurrence": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "recurringEventId": {
+                                "type": "string"
+                              },
+                              "sequence": {
+                                "type": "number"
+                              },
+                              "attachments": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "attachmentId": {
+                                      "type": "string"
+                                    },
+                                    "fileUrl": {
+                                      "type": "string"
+                                    },
+                                    "fileUrlTemplate": {
+                                      "type": "string",
+                                      "description": "Token-templated attachment URL. Uses host placeholder {calendar-api-host} and token placeholder {read-access-token} with concrete calendar/event/attachment IDs, e.g. https://{calendar-api-host}/api/{read-access-token}/calendars/<calendarId>/events/<eventId>/attachments/<attachmentId>"
+                                    },
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "mimeType": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "confirmed",
+                                  "tentative"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "created",
+                              "updated",
+                              "summary",
+                              "location",
+                              "start",
+                              "status"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "created": {
+                                "type": "string"
+                              },
+                              "updated": {
+                                "type": "string"
+                              },
+                              "summary": {
+                                "type": "string"
+                              },
+                              "location": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "source_system": {
+                                "type": "string",
+                                "enum": [
+                                  "whatsapp",
+                                  "crawler",
+                                  "ics",
+                                  "caldav",
+                                  "manual",
+                                  "google"
+                                ]
+                              },
+                              "start": {
+                                "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "string"
+                                  },
+                                  "dateTime": {
+                                    "type": "string"
+                                  },
+                                  "timeZone": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "end": {
+                                "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "string"
+                                  },
+                                  "dateTime": {
+                                    "type": "string"
+                                  },
+                                  "timeZone": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "calendar": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "Google Calendar ID where this event originates"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "Calendar display name"
+                                  }
+                                },
+                                "required": [
+                                  "id"
+                                ]
+                              },
+                              "organizer": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "Organizer ID from calendar API (CRM system)"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "Public display name of the organizer"
+                                  }
+                                },
+                                "required": [
+                                  "id"
+                                ]
+                              },
+                              "recurrence": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "recurringEventId": {
+                                "type": "string"
+                              },
+                              "sequence": {
+                                "type": "number"
+                              },
+                              "attachments": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "attachmentId": {
+                                      "type": "string"
+                                    },
+                                    "fileUrl": {
+                                      "type": "string"
+                                    },
+                                    "fileUrlTemplate": {
+                                      "type": "string",
+                                      "description": "Token-templated attachment URL. Uses host placeholder {calendar-api-host} and token placeholder {read-access-token} with concrete calendar/event/attachment IDs, e.g. https://{calendar-api-host}/api/{read-access-token}/calendars/<calendarId>/events/<eventId>/attachments/<attachmentId>"
+                                    },
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "mimeType": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "cancelled"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "status"
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "results",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "422",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "503",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/calendars/{id}/events/{eventId}": {
+      "get": {
+        "description": "Retrieve a single event from a calendar. Validates that the event belongs to the specified calendar.",
+        "summary": "Get a single event by ID.",
+        "tags": [
+          "calendars"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Access token for authentication"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "whatsapp",
+                    "crawler",
+                    "ics",
+                    "caldav",
+                    "manual",
+                    "email",
+                    "website"
+                  ]
+                },
+                {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 250
+                }
+              ]
+            },
+            "description": "Calendar/channel identifier"
+          },
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Event ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "discriminator": {
+                        "propertyName": "status"
+                      },
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "created": {
+                              "type": "string"
+                            },
+                            "updated": {
+                              "type": "string"
+                            },
+                            "summary": {
+                              "type": "string"
+                            },
+                            "location": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "source_system": {
+                              "type": "string",
+                              "enum": [
+                                "whatsapp",
+                                "crawler",
+                                "ics",
+                                "caldav",
+                                "manual",
+                                "google"
+                              ]
+                            },
+                            "start": {
+                              "type": "object",
+                              "properties": {
+                                "date": {
+                                  "type": "string"
+                                },
+                                "dateTime": {
+                                  "type": "string"
+                                },
+                                "timeZone": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "end": {
+                              "type": "object",
+                              "properties": {
+                                "date": {
+                                  "type": "string"
+                                },
+                                "dateTime": {
+                                  "type": "string"
+                                },
+                                "timeZone": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "calendar": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "description": "Google Calendar ID where this event originates"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "description": "Calendar display name"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            "organizer": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "description": "Organizer ID from calendar API (CRM system)"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "description": "Public display name of the organizer"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            "recurrence": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "recurringEventId": {
+                              "type": "string"
+                            },
+                            "sequence": {
+                              "type": "number"
+                            },
+                            "attachments": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "attachmentId": {
+                                    "type": "string"
+                                  },
+                                  "fileUrl": {
+                                    "type": "string"
+                                  },
+                                  "fileUrlTemplate": {
+                                    "type": "string",
+                                    "description": "Token-templated attachment URL. Uses host placeholder {calendar-api-host} and token placeholder {read-access-token} with concrete calendar/event/attachment IDs, e.g. https://{calendar-api-host}/api/{read-access-token}/calendars/<calendarId>/events/<eventId>/attachments/<attachmentId>"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "mimeType": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "status": {
+                              "type": "string",
+                              "enum": [
+                                "confirmed",
+                                "tentative"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "created",
+                            "updated",
+                            "summary",
+                            "location",
+                            "start",
+                            "status"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "created": {
+                              "type": "string"
+                            },
+                            "updated": {
+                              "type": "string"
+                            },
+                            "summary": {
+                              "type": "string"
+                            },
+                            "location": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "source_system": {
+                              "type": "string",
+                              "enum": [
+                                "whatsapp",
+                                "crawler",
+                                "ics",
+                                "caldav",
+                                "manual",
+                                "google"
+                              ]
+                            },
+                            "start": {
+                              "type": "object",
+                              "properties": {
+                                "date": {
+                                  "type": "string"
+                                },
+                                "dateTime": {
+                                  "type": "string"
+                                },
+                                "timeZone": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "end": {
+                              "type": "object",
+                              "properties": {
+                                "date": {
+                                  "type": "string"
+                                },
+                                "dateTime": {
+                                  "type": "string"
+                                },
+                                "timeZone": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "calendar": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "description": "Google Calendar ID where this event originates"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "description": "Calendar display name"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            "organizer": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "description": "Organizer ID from calendar API (CRM system)"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "description": "Public display name of the organizer"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ]
+                            },
+                            "recurrence": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "recurringEventId": {
+                              "type": "string"
+                            },
+                            "sequence": {
+                              "type": "number"
+                            },
+                            "attachments": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "attachmentId": {
+                                    "type": "string"
+                                  },
+                                  "fileUrl": {
+                                    "type": "string"
+                                  },
+                                  "fileUrlTemplate": {
+                                    "type": "string",
+                                    "description": "Token-templated attachment URL. Uses host placeholder {calendar-api-host} and token placeholder {read-access-token} with concrete calendar/event/attachment IDs, e.g. https://{calendar-api-host}/api/{read-access-token}/calendars/<calendarId>/events/<eventId>/attachments/<attachmentId>"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "mimeType": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "status": {
+                              "type": "string",
+                              "enum": [
+                                "cancelled"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "status"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/calendars/new": {
+      "get": {
+        "description": "Get a list of calendars that were associated with organizers after a specific timestamp. Supports both ISO8601 timestamps (e.g., '2024-07-26T15:20:00Z') and relative time expressions (e.g., '1d' for 1 day ago, '3h' for 3 hours ago, '30m' for 30 minutes ago).",
+        "summary": "Get a list of newly created calendars",
+        "tags": [
+          "calendars"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Access token for authentication"
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "description": "Timestamp in ISO8601 format or relative time expression (e.g., '1d', '3h', '30m'). Defaults to '1d' (last 24 hours).",
+            "schema": {
+              "default": "1d",
+              "oneOf": [
+                {
+                  "type": "string",
+                  "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$",
+                  "description": "Datetime in ISO8601 format"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^(\\d+)([mhdwM])$",
+                  "description": "Relative time expression"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "number"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "google-calendar",
+                              "internal"
+                            ]
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "organizer": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "Unique identifier of the contact"
+                              },
+                              "name": {
+                                "type": "string",
+                                "description": "Display name of the organizer"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "organizer"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "results",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/attachments/{attachmentId}": {
+      "get": {
+        "description": "Serves internal attachments as binary or redirects to external (Google Drive) URLs.",
+        "summary": "Get an event attachment.",
+        "tags": [
+          "calendars"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Access token for authentication"
+          },
+          {
+            "name": "attachmentId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Attachment ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Binary attachment data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Binary attachment data",
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "302": {
+            "description": "Redirect to external attachment URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Redirect to external attachment URL",
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organizers/{id}/events": {
+      "post": {
+        "description": "Create an event with optional Base64-encoded attachments. Organizer and calendar are resolved from the path. Returns 200 if duplicate detected.",
+        "summary": "Create an event for an organizer.",
+        "tags": [
+          "createOrganizerEvent"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Organizer ID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Bearer <write_token>"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "source_system": {
+                    "type": "string",
+                    "enum": [
+                      "whatsapp",
+                      "crawler",
+                      "ics",
+                      "caldav",
+                      "manual"
+                    ]
+                  },
+                  "summary": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "location": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "start": {
+                    "type": "object",
+                    "properties": {
+                      "date": {
+                        "type": "string",
+                        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                      },
+                      "dateTime": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "timeZone": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "end": {
+                    "type": "object",
+                    "properties": {
+                      "date": {
+                        "type": "string",
+                        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                      },
+                      "dateTime": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "timeZone": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "status": {
+                    "default": "confirmed",
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "tentative"
+                    ]
+                  },
+                  "recurrence": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "attachments": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "filename": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "mimeType": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "filename",
+                        "mimeType"
+                      ]
+                    },
+                    "maxItems": 5
+                  }
+                },
+                "required": [
+                  "source_system",
+                  "summary",
+                  "location",
+                  "start"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    },
+                    "event": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "source_system": {
+                          "type": "string",
+                          "enum": [
+                            "whatsapp",
+                            "crawler",
+                            "ics",
+                            "caldav",
+                            "manual",
+                            "google"
+                          ]
+                        },
+                        "summary": {
+                          "type": "string"
+                        },
+                        "location": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "start": {
+                          "type": "object",
+                          "properties": {
+                            "date": {
+                              "type": "string"
+                            },
+                            "dateTime": {
+                              "type": "string"
+                            },
+                            "timeZone": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "end": {
+                          "type": "object",
+                          "properties": {
+                            "date": {
+                              "type": "string"
+                            },
+                            "dateTime": {
+                              "type": "string"
+                            },
+                            "timeZone": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "confirmed",
+                            "tentative"
+                          ]
+                        },
+                        "calendar": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id"
+                          ]
+                        },
+                        "organizer": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id"
+                          ]
+                        },
+                        "recurrence": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "attachments": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "attachmentId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "mimeType": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "attachmentId"
+                            ]
+                          }
+                        },
+                        "created": {
+                          "type": "string"
+                        },
+                        "updated": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "source_system",
+                        "summary",
+                        "location",
+                        "start",
+                        "status",
+                        "created",
+                        "updated"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "event"
+                  ]
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    },
+                    "event": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "source_system": {
+                          "type": "string",
+                          "enum": [
+                            "whatsapp",
+                            "crawler",
+                            "ics",
+                            "caldav",
+                            "manual",
+                            "google"
+                          ]
+                        },
+                        "summary": {
+                          "type": "string"
+                        },
+                        "location": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "start": {
+                          "type": "object",
+                          "properties": {
+                            "date": {
+                              "type": "string"
+                            },
+                            "dateTime": {
+                              "type": "string"
+                            },
+                            "timeZone": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "end": {
+                          "type": "object",
+                          "properties": {
+                            "date": {
+                              "type": "string"
+                            },
+                            "dateTime": {
+                              "type": "string"
+                            },
+                            "timeZone": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "confirmed",
+                            "tentative"
+                          ]
+                        },
+                        "calendar": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id"
+                          ]
+                        },
+                        "organizer": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id"
+                          ]
+                        },
+                        "recurrence": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "attachments": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "attachmentId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "mimeType": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "attachmentId"
+                            ]
+                          }
+                        },
+                        "created": {
+                          "type": "string"
+                        },
+                        "updated": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "source_system",
+                        "summary",
+                        "location",
+                        "start",
+                        "status",
+                        "created",
+                        "updated"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "event"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "413",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/organizers/{id}/events/{eventId}": {
+      "delete": {
+        "description": "Delete a single event owned by an organizer with cascade attachment cleanup. Validates that the event belongs to the specified organizer.",
+        "summary": "Delete a single event by ID.",
+        "tags": [
+          "deleteOrganizerEvent"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Organizer ID"
+          },
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "Event ID"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Bearer <write_token>"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "nullable": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "deleted": {
+                      "type": "number",
+                      "enum": [
+                        1
+                      ]
+                    },
+                    "eventId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "deleted",
+                    "eventId"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/events/bulk-delete": {
+      "delete": {
+        "description": "Delete events by organizer, calendar, or date threshold. At least one filter is required. Use dryRun=true to preview.",
+        "summary": "Bulk delete events with filters.",
+        "tags": [
+          "bulkDeleteEvents"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Bearer <write_token>"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "description": "Filter events ending before this date (ISO8601 or relative time, e.g. '1d', '2w')",
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$",
+                  "description": "Datetime in ISO8601 format"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^(\\d+)([mhdwM])$",
+                  "description": "Relative time expression"
+                }
+              ]
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "description": "Filter events starting after this date (ISO8601 or relative time)",
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "pattern": "^((?:(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?))(Z|[\\+-]\\d{2}:\\d{2})?)$",
+                  "description": "Datetime in ISO8601 format"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^(\\d+)([mhdwM])$",
+                  "description": "Relative time expression"
+                }
+              ]
+            }
+          },
+          {
+            "name": "organizer",
+            "in": "query",
+            "description": "Filter by organizer ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "calendarId",
+            "in": "query",
+            "description": "Filter by calendar/channel ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dryRun",
+            "in": "query",
+            "description": "Preview deletion without executing (default: false)",
+            "schema": {
+              "default": "false",
+              "oneOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "true",
+                    "false"
+                  ]
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "number"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "calendar.id": {
+                            "type": "string"
+                          },
+                          "organizer.id": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id"
+                        ]
+                      }
+                    },
+                    "dryRun": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "results",
+                    "data",
+                    "dryRun"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cron/cleanup-events": {
+      "get": {
+        "description": "Production-only GET endpoint triggered by Vercel Cron Jobs. Deletes events with end date older than 7 days. Protected by Vercel CRON_SECRET authentication.",
+        "summary": "Cron job: cleanup past events",
+        "tags": [
+          "cleanupEvents"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string",
+              "description": "Bearer <CRON_SECRET>"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "deleted": {
+                      "type": "number",
+                      "description": "Number of events deleted"
+                    },
+                    "before": {
+                      "type": "string",
+                      "description": "ISO8601 threshold date used for deletion cutoff"
+                    },
+                    "durationMs": {
+                      "type": "number",
+                      "description": "Duration of the cleanup operation in ms"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "deleted",
+                    "before",
+                    "durationMs"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/openapi": {
+      "get": {
+        "description": "Returns the complete OpenAPI/Swagger specification for this API in JSON format. This endpoint can be used by code generators to create client SDKs.",
+        "summary": "Get OpenAPI Specification",
+        "tags": [
+          "openapi"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "openapi": {
+                      "type": "string",
+                      "description": "OpenAPI version"
+                    },
+                    "info": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string",
+                          "description": "API title"
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "API description"
+                        },
+                        "version": {
+                          "type": "string",
+                          "description": "API version"
+                        },
+                        "contact": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string",
+                              "format": "email"
+                            }
+                          }
+                        },
+                        "license": {
+                          "type": "object",
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "name"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "title",
+                        "version"
+                      ]
+                    },
+                    "servers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "description": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "url"
+                        ]
+                      }
+                    },
+                    "paths": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "nullable": true
+                      },
+                      "description": "API paths and operations"
+                    },
+                    "components": {
+                      "type": "object",
+                      "properties": {
+                        "securitySchemes": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "nullable": true
+                          }
+                        },
+                        "schemas": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "nullable": true
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "openapi",
+                    "info",
+                    "servers",
+                    "paths"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {}
+}

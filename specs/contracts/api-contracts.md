@@ -18,7 +18,16 @@ values the product (`community-calendar`) already consumes.
 | calendar-api | `https://calendar.api.schafe-vorm-fenster.de` | organizer/calendar metadata (embed demo, reference embed) | per OpenAPI spec |
 | classification-api | `https://classify.api.schafe-vorm-fenster.de` | category/scope definitions (build-time) | per OpenAPI spec |
 | assets-api | `https://assets.api.schafe-vorm-fenster.de` | images/media delivery | per OpenAPI spec |
-| envoy-api | UNKNOWN — widget not finished | lead forms (embedded widget) | Q-022 (demand) |
+| envoy-api | `https://envoy.api.schafe-vorm-fenster.de` | registration, order handover | `POST /api/registration` (organizer into the CRM), `POST /api/conversation` (AI chat, unused). Auth: `SheepToken`, global. |
+
+## Pinned locally
+
+Since 2026-09-11 every specification above is pinned at
+`src/clients/<service>/openapi.json` and refreshed with
+`pnpm fetch:openapi` (DEC-058). Each folder's README records what the
+website uses the service for and what it measurably cannot do. The
+operation lists in this register are read from those pinned files, not
+assumed.
 
 ## Notes
 

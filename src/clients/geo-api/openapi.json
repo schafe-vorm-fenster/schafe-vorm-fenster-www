@@ -1,0 +1,4871 @@
+{
+  "openapi": "3.0.2",
+  "paths": {
+    "/api/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "enum": [
+                        200
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "services": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "enum": [
+                                  200
+                                ]
+                              },
+                              "message": {
+                                "type": "string",
+                                "enum": [
+                                  "healthy"
+                                ]
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "message",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "enum": [
+                                  202
+                                ]
+                              },
+                              "message": {
+                                "type": "string",
+                                "enum": [
+                                  "degraded"
+                                ]
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "message",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "minimum": 400,
+                                "maximum": 599
+                              },
+                              "error": {
+                                "type": "string"
+                              },
+                              "trace": {
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "error",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "name",
+                    "version",
+                    "services"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "202",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "enum": [
+                        202
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "services": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "enum": [
+                                  200
+                                ]
+                              },
+                              "message": {
+                                "type": "string",
+                                "enum": [
+                                  "healthy"
+                                ]
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "message",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "enum": [
+                                  202
+                                ]
+                              },
+                              "message": {
+                                "type": "string",
+                                "enum": [
+                                  "degraded"
+                                ]
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "message",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "minimum": 400,
+                                "maximum": 599
+                              },
+                              "error": {
+                                "type": "string"
+                              },
+                              "trace": {
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "error",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "name",
+                    "version",
+                    "services"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "503",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "services": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "enum": [
+                                  200
+                                ]
+                              },
+                              "message": {
+                                "type": "string",
+                                "enum": [
+                                  "healthy"
+                                ]
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "message",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "enum": [
+                                  202
+                                ]
+                              },
+                              "message": {
+                                "type": "string",
+                                "enum": [
+                                  "degraded"
+                                ]
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "message",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "status": {
+                                "type": "number",
+                                "minimum": 400,
+                                "maximum": 599
+                              },
+                              "error": {
+                                "type": "string"
+                              },
+                              "trace": {
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "status",
+                              "error",
+                              "name"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error",
+                    "name",
+                    "version",
+                    "services"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/community/{id}": {
+      "get": {
+        "description": "Retrieve community details by geonames ID. The ID must be a numeric value.",
+        "summary": "Get community details by geonames ID",
+        "tags": [
+          "Community"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "description": "API access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The geonames ID of the community to retrieve",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "geonameId": {
+                              "type": "number"
+                            },
+                            "googlePlaceId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "wikidataId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "googleMyBusinessId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "localName": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "asciiName": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "slug": {
+                              "type": "string",
+                              "description": "URL-safe slug derived from community name. Generated from asciiName or name. Not guaranteed to be unique across all communities."
+                            },
+                            "type": {
+                              "default": "community",
+                              "type": "string",
+                              "enum": [
+                                "place",
+                                "community",
+                                "municipality",
+                                "county",
+                                "state",
+                                "country"
+                              ]
+                            },
+                            "geo": {
+                              "type": "object",
+                              "properties": {
+                                "point": {
+                                  "type": "object",
+                                  "properties": {
+                                    "lat": {
+                                      "type": "number"
+                                    },
+                                    "lng": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "lat",
+                                    "lng"
+                                  ]
+                                },
+                                "box": {
+                                  "type": "object",
+                                  "properties": {
+                                    "north": {
+                                      "type": "number"
+                                    },
+                                    "east": {
+                                      "type": "number"
+                                    },
+                                    "south": {
+                                      "type": "number"
+                                    },
+                                    "west": {
+                                      "type": "number"
+                                    },
+                                    "accuracyLevel": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "north",
+                                    "east",
+                                    "south",
+                                    "west"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "point"
+                              ]
+                            },
+                            "hierarchy": {
+                              "type": "object",
+                              "properties": {
+                                "place": {
+                                  "type": "object",
+                                  "properties": {
+                                    "geonameId": {
+                                      "type": "number",
+                                      "nullable": true
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "code": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "class": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "geo": {
+                                      "type": "object",
+                                      "properties": {
+                                        "point": {
+                                          "type": "object",
+                                          "properties": {
+                                            "lat": {
+                                              "type": "number"
+                                            },
+                                            "lng": {
+                                              "type": "number"
+                                            }
+                                          },
+                                          "required": [
+                                            "lat",
+                                            "lng"
+                                          ]
+                                        },
+                                        "box": {
+                                          "type": "object",
+                                          "properties": {
+                                            "north": {
+                                              "type": "number"
+                                            },
+                                            "east": {
+                                              "type": "number"
+                                            },
+                                            "south": {
+                                              "type": "number"
+                                            },
+                                            "west": {
+                                              "type": "number"
+                                            },
+                                            "accuracyLevel": {
+                                              "type": "number"
+                                            }
+                                          },
+                                          "required": [
+                                            "north",
+                                            "east",
+                                            "south",
+                                            "west"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "point"
+                                      ]
+                                    },
+                                    "wikidataId": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "required": [
+                                    "geonameId",
+                                    "name",
+                                    "code",
+                                    "class",
+                                    "wikidataId"
+                                  ]
+                                },
+                                "community": {
+                                  "type": "object",
+                                  "properties": {
+                                    "geonameId": {
+                                      "type": "number",
+                                      "nullable": true
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "wikidataId": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "required": [
+                                    "geonameId",
+                                    "name",
+                                    "wikidataId"
+                                  ]
+                                },
+                                "municipality": {
+                                  "type": "object",
+                                  "properties": {
+                                    "geonameId": {
+                                      "type": "number",
+                                      "nullable": true
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "zip": {
+                                      "type": "string",
+                                      "nullable": true
+                                    },
+                                    "wikidataId": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "required": [
+                                    "geonameId",
+                                    "name",
+                                    "zip",
+                                    "wikidataId"
+                                  ]
+                                },
+                                "county": {
+                                  "type": "object",
+                                  "properties": {
+                                    "geonameId": {
+                                      "type": "number",
+                                      "nullable": true
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "abbr": {
+                                      "type": "string",
+                                      "nullable": true
+                                    }
+                                  },
+                                  "required": [
+                                    "geonameId",
+                                    "name",
+                                    "abbr"
+                                  ]
+                                },
+                                "state": {
+                                  "type": "object",
+                                  "properties": {
+                                    "geonameId": {
+                                      "type": "number",
+                                      "nullable": true
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "ISO3166": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "geonameId",
+                                    "name",
+                                    "ISO3166"
+                                  ]
+                                },
+                                "country": {
+                                  "type": "object",
+                                  "properties": {
+                                    "geonameId": {
+                                      "type": "number",
+                                      "nullable": true
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "ISO3166": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "geonameId",
+                                    "name",
+                                    "ISO3166"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "community",
+                                "municipality",
+                                "county",
+                                "state",
+                                "country"
+                              ]
+                            },
+                            "location": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "address": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "demography": {
+                              "type": "object",
+                              "properties": {
+                                "population": {
+                                  "type": "number",
+                                  "nullable": true
+                                }
+                              },
+                              "required": [
+                                "population"
+                              ],
+                              "nullable": true
+                            },
+                            "timezone": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "image": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "website": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "geonameId",
+                            "googlePlaceId",
+                            "wikidataId",
+                            "googleMyBusinessId",
+                            "name",
+                            "localName",
+                            "asciiName",
+                            "slug",
+                            "geo",
+                            "hierarchy",
+                            "location",
+                            "address",
+                            "demography",
+                            "timezone",
+                            "image",
+                            "website"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "geonameId": {
+                              "type": "number"
+                            },
+                            "googlePlaceId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "wikidataId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "googleMyBusinessId": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "localName": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "asciiName": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "slug": {
+                              "type": "string",
+                              "description": "URL-safe slug derived from community name. Generated from asciiName or name. Not guaranteed to be unique across all communities."
+                            },
+                            "type": {
+                              "default": "community",
+                              "type": "string",
+                              "enum": [
+                                "place",
+                                "community",
+                                "municipality",
+                                "county",
+                                "state",
+                                "country"
+                              ]
+                            },
+                            "geo": {
+                              "type": "object",
+                              "properties": {
+                                "point": {
+                                  "type": "object",
+                                  "properties": {
+                                    "lat": {
+                                      "type": "number"
+                                    },
+                                    "lng": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "lat",
+                                    "lng"
+                                  ]
+                                },
+                                "box": {
+                                  "type": "object",
+                                  "properties": {
+                                    "north": {
+                                      "type": "number"
+                                    },
+                                    "east": {
+                                      "type": "number"
+                                    },
+                                    "south": {
+                                      "type": "number"
+                                    },
+                                    "west": {
+                                      "type": "number"
+                                    },
+                                    "accuracyLevel": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "north",
+                                    "east",
+                                    "south",
+                                    "west"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "point"
+                              ]
+                            },
+                            "hierarchy": {
+                              "type": "string",
+                              "format": "null",
+                              "nullable": true
+                            },
+                            "location": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "address": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "demography": {
+                              "type": "object",
+                              "properties": {
+                                "population": {
+                                  "type": "number",
+                                  "nullable": true
+                                }
+                              },
+                              "required": [
+                                "population"
+                              ],
+                              "nullable": true
+                            },
+                            "timezone": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "image": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "website": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "geonameId",
+                            "googlePlaceId",
+                            "wikidataId",
+                            "googleMyBusinessId",
+                            "name",
+                            "localName",
+                            "asciiName",
+                            "slug",
+                            "geo",
+                            "hierarchy",
+                            "location",
+                            "address",
+                            "demography",
+                            "timezone",
+                            "image",
+                            "website"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "data"
+                  ],
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/community/search": {
+      "post": {
+        "description": "Search for communities using postal codes, municipalities, counties, or states via POST request. Supports international ZIP codes (DE, AT, PL) and geoname IDs. Returns 200 with partial results if some lookups fail.\n\n**Supported Search Parameters:**\n- `zips`: Array of postal codes\n- `municipalities`: Array of municipality geoname IDs\n- `counties`: Array of county geoname IDs\n- `states`: Array of state geoname IDs\n\n**Combination Examples:**\n- Search by ZIP only: `{ countryCode: 'DE', zips: ['17309', '10115'] }`\n- Search by municipality: `{ countryCode: 'DE', municipalities: ['2838887', '2843553'] }`\n- Combined search: `{ countryCode: 'DE', zips: ['17309'], municipalities: ['2838887'] }`\n\n**Method Selection Guidance:**\n- **Prefer GET** for small, countable payloads (better HTTP caching, CDN support)\n- **Use POST** for large payloads (many parameters)\n\n**Performance Tips:**\n- Results are deduplicated by geonameId\n- Send parameters as **cleaned, trimmed, and sorted** lists to maximize cache hits",
+        "summary": "Search communities by geographic parameters (POST)",
+        "tags": [
+          "Community"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "countryCode": {
+                    "type": "string",
+                    "enum": [
+                      "DE",
+                      "AT",
+                      "PL"
+                    ],
+                    "description": "ISO 3166-1 alpha-2 country code (DE, AT, PL). Required for all searches except geo point searches."
+                  },
+                  "geoPoint": {
+                    "type": "object",
+                    "properties": {
+                      "lat": {
+                        "type": "number"
+                      },
+                      "lng": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "lat",
+                      "lng"
+                    ],
+                    "description": "Geographic coordinates for proximity-based search. Mutually exclusive with other search parameters."
+                  },
+                  "zips": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 50,
+                    "description": "Array of postal codes in the specified country's format. For best cache performance, provide cleaned (trimmed) and sorted lists."
+                  },
+                  "municipalities": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^\\d+$"
+                    },
+                    "maxItems": 50,
+                    "description": "Array of municipality geoname IDs"
+                  },
+                  "counties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^\\d+$"
+                    },
+                    "maxItems": 50,
+                    "description": "Array of county geoname IDs"
+                  },
+                  "states": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^\\d+$"
+                    },
+                    "maxItems": 50,
+                    "description": "Array of state geoname IDs"
+                  },
+                  "maxResults": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 1000,
+                    "description": "Maximum communities to return (default: 10 for geo searches, 1000 for other searches)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "number"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "geonameId": {
+                                "type": "number"
+                              },
+                              "googlePlaceId": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "wikidataId": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "googleMyBusinessId": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "localName": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "asciiName": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "slug": {
+                                "type": "string",
+                                "description": "URL-safe slug derived from community name. Generated from asciiName or name. Not guaranteed to be unique across all communities."
+                              },
+                              "type": {
+                                "default": "community",
+                                "type": "string",
+                                "enum": [
+                                  "place",
+                                  "community",
+                                  "municipality",
+                                  "county",
+                                  "state",
+                                  "country"
+                                ]
+                              },
+                              "geo": {
+                                "type": "object",
+                                "properties": {
+                                  "point": {
+                                    "type": "object",
+                                    "properties": {
+                                      "lat": {
+                                        "type": "number"
+                                      },
+                                      "lng": {
+                                        "type": "number"
+                                      }
+                                    },
+                                    "required": [
+                                      "lat",
+                                      "lng"
+                                    ]
+                                  },
+                                  "box": {
+                                    "type": "object",
+                                    "properties": {
+                                      "north": {
+                                        "type": "number"
+                                      },
+                                      "east": {
+                                        "type": "number"
+                                      },
+                                      "south": {
+                                        "type": "number"
+                                      },
+                                      "west": {
+                                        "type": "number"
+                                      },
+                                      "accuracyLevel": {
+                                        "type": "number"
+                                      }
+                                    },
+                                    "required": [
+                                      "north",
+                                      "east",
+                                      "south",
+                                      "west"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "point"
+                                ]
+                              },
+                              "hierarchy": {
+                                "type": "object",
+                                "properties": {
+                                  "place": {
+                                    "type": "object",
+                                    "properties": {
+                                      "geonameId": {
+                                        "type": "number",
+                                        "nullable": true
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "code": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "class": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "geo": {
+                                        "type": "object",
+                                        "properties": {
+                                          "point": {
+                                            "type": "object",
+                                            "properties": {
+                                              "lat": {
+                                                "type": "number"
+                                              },
+                                              "lng": {
+                                                "type": "number"
+                                              }
+                                            },
+                                            "required": [
+                                              "lat",
+                                              "lng"
+                                            ]
+                                          },
+                                          "box": {
+                                            "type": "object",
+                                            "properties": {
+                                              "north": {
+                                                "type": "number"
+                                              },
+                                              "east": {
+                                                "type": "number"
+                                              },
+                                              "south": {
+                                                "type": "number"
+                                              },
+                                              "west": {
+                                                "type": "number"
+                                              },
+                                              "accuracyLevel": {
+                                                "type": "number"
+                                              }
+                                            },
+                                            "required": [
+                                              "north",
+                                              "east",
+                                              "south",
+                                              "west"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "point"
+                                        ]
+                                      },
+                                      "wikidataId": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    },
+                                    "required": [
+                                      "geonameId",
+                                      "name",
+                                      "code",
+                                      "class",
+                                      "wikidataId"
+                                    ]
+                                  },
+                                  "community": {
+                                    "type": "object",
+                                    "properties": {
+                                      "geonameId": {
+                                        "type": "number",
+                                        "nullable": true
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "wikidataId": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    },
+                                    "required": [
+                                      "geonameId",
+                                      "name",
+                                      "wikidataId"
+                                    ]
+                                  },
+                                  "municipality": {
+                                    "type": "object",
+                                    "properties": {
+                                      "geonameId": {
+                                        "type": "number",
+                                        "nullable": true
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "zip": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "wikidataId": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    },
+                                    "required": [
+                                      "geonameId",
+                                      "name",
+                                      "zip",
+                                      "wikidataId"
+                                    ]
+                                  },
+                                  "county": {
+                                    "type": "object",
+                                    "properties": {
+                                      "geonameId": {
+                                        "type": "number",
+                                        "nullable": true
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "abbr": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    },
+                                    "required": [
+                                      "geonameId",
+                                      "name",
+                                      "abbr"
+                                    ]
+                                  },
+                                  "state": {
+                                    "type": "object",
+                                    "properties": {
+                                      "geonameId": {
+                                        "type": "number",
+                                        "nullable": true
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "ISO3166": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "geonameId",
+                                      "name",
+                                      "ISO3166"
+                                    ]
+                                  },
+                                  "country": {
+                                    "type": "object",
+                                    "properties": {
+                                      "geonameId": {
+                                        "type": "number",
+                                        "nullable": true
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "ISO3166": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "geonameId",
+                                      "name",
+                                      "ISO3166"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "community",
+                                  "municipality",
+                                  "county",
+                                  "state",
+                                  "country"
+                                ]
+                              },
+                              "location": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "address": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "demography": {
+                                "type": "object",
+                                "properties": {
+                                  "population": {
+                                    "type": "number",
+                                    "nullable": true
+                                  }
+                                },
+                                "required": [
+                                  "population"
+                                ],
+                                "nullable": true
+                              },
+                              "timezone": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "image": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "website": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "geonameId",
+                              "googlePlaceId",
+                              "wikidataId",
+                              "googleMyBusinessId",
+                              "name",
+                              "localName",
+                              "asciiName",
+                              "slug",
+                              "geo",
+                              "hierarchy",
+                              "location",
+                              "address",
+                              "demography",
+                              "timezone",
+                              "image",
+                              "website"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "geonameId": {
+                                "type": "number"
+                              },
+                              "googlePlaceId": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "wikidataId": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "googleMyBusinessId": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "localName": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "asciiName": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "slug": {
+                                "type": "string",
+                                "description": "URL-safe slug derived from community name. Generated from asciiName or name. Not guaranteed to be unique across all communities."
+                              },
+                              "type": {
+                                "default": "community",
+                                "type": "string",
+                                "enum": [
+                                  "place",
+                                  "community",
+                                  "municipality",
+                                  "county",
+                                  "state",
+                                  "country"
+                                ]
+                              },
+                              "geo": {
+                                "type": "object",
+                                "properties": {
+                                  "point": {
+                                    "type": "object",
+                                    "properties": {
+                                      "lat": {
+                                        "type": "number"
+                                      },
+                                      "lng": {
+                                        "type": "number"
+                                      }
+                                    },
+                                    "required": [
+                                      "lat",
+                                      "lng"
+                                    ]
+                                  },
+                                  "box": {
+                                    "type": "object",
+                                    "properties": {
+                                      "north": {
+                                        "type": "number"
+                                      },
+                                      "east": {
+                                        "type": "number"
+                                      },
+                                      "south": {
+                                        "type": "number"
+                                      },
+                                      "west": {
+                                        "type": "number"
+                                      },
+                                      "accuracyLevel": {
+                                        "type": "number"
+                                      }
+                                    },
+                                    "required": [
+                                      "north",
+                                      "east",
+                                      "south",
+                                      "west"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "point"
+                                ]
+                              },
+                              "hierarchy": {
+                                "type": "string",
+                                "format": "null",
+                                "nullable": true
+                              },
+                              "location": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "address": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "demography": {
+                                "type": "object",
+                                "properties": {
+                                  "population": {
+                                    "type": "number",
+                                    "nullable": true
+                                  }
+                                },
+                                "required": [
+                                  "population"
+                                ],
+                                "nullable": true
+                              },
+                              "timezone": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "image": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "website": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "geonameId",
+                              "googlePlaceId",
+                              "wikidataId",
+                              "googleMyBusinessId",
+                              "name",
+                              "localName",
+                              "asciiName",
+                              "slug",
+                              "geo",
+                              "hierarchy",
+                              "location",
+                              "address",
+                              "demography",
+                              "timezone",
+                              "image",
+                              "website"
+                            ]
+                          }
+                        ]
+                      },
+                      "description": "Array of communities found (deduplicated by geonameId). Communities are fully qualified; items with missing data due to processing issues are reported in 'errors'."
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "searchType": {
+                            "type": "string",
+                            "enum": [
+                              "zip",
+                              "municipality",
+                              "county",
+                              "state"
+                            ],
+                            "description": "Type of search parameter that failed"
+                          },
+                          "identifier": {
+                            "type": "string",
+                            "description": "The identifier that failed (ZIP code or geoname ID)"
+                          },
+                          "error": {
+                            "type": "string",
+                            "description": "Error message"
+                          },
+                          "reason": {
+                            "type": "string",
+                            "enum": [
+                              "invalid_format",
+                              "not_found",
+                              "api_error",
+                              "timeout",
+                              "processing_error"
+                            ],
+                            "description": "Error category"
+                          }
+                        },
+                        "required": [
+                          "searchType",
+                          "identifier",
+                          "error",
+                          "reason"
+                        ]
+                      },
+                      "description": "Failed search parameters or items with processing issues (if any). Malformed items are listed here by ID."
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "results",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Search for communities using postal codes, municipalities, counties, or states via GET request. Supports international ZIP codes (DE, AT, PL) and geoname IDs. Returns 200 with partial results if some lookups fail.\n\n**Supported Query Parameters:**\n- `zips`: Comma-separated postal codes (e.g., '10115,17309,80331')\n- `municipalities`: Comma-separated municipality geoname IDs (e.g., '2838887,2843553')\n- `counties`: Comma-separated county geoname IDs (e.g., '8648413')\n- `states`: Comma-separated state geoname IDs (e.g., '2872567')\n\n**Example URLs:**\n- ZIP only: `/api/TOKEN/community/search?countryCode=DE&zips=17309`\n- Municipality: `/api/TOKEN/community/search?countryCode=DE&municipalities=2838887,2843553`\n- Combined: `/api/TOKEN/community/search?countryCode=DE&zips=17309&municipalities=2838887`\n\n**Method Selection Guidance:**\n- **Prefer GET** for small, countable payloads (better HTTP caching, CDN support)\n- **Use POST** for large payloads (many parameters)\n\n**Performance Tips:**\n- Results are deduplicated by geonameId\n- Send parameters as **cleaned, trimmed, and sorted** lists to maximize cache hits",
+        "summary": "Search communities by geographic parameters (GET)",
+        "tags": [
+          "Community"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "countryCode",
+            "in": "query",
+            "description": "ISO 3166-1 alpha-2 country code (DE, AT, PL). Required for all searches except geo point searches.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "DE",
+                "AT",
+                "PL"
+              ]
+            }
+          },
+          {
+            "name": "lat",
+            "in": "query",
+            "description": "Latitude for proximity search (-90 to 90)",
+            "schema": {}
+          },
+          {
+            "name": "lng",
+            "in": "query",
+            "description": "Longitude for proximity search (-180 to 180)",
+            "schema": {}
+          },
+          {
+            "name": "zips",
+            "in": "query",
+            "description": "Comma-separated postal codes. For best cache performance, provide cleaned (trimmed) and sorted lists.",
+            "schema": {}
+          },
+          {
+            "name": "municipalities",
+            "in": "query",
+            "description": "Comma-separated municipality geoname IDs",
+            "schema": {}
+          },
+          {
+            "name": "counties",
+            "in": "query",
+            "description": "Comma-separated county geoname IDs",
+            "schema": {}
+          },
+          {
+            "name": "states",
+            "in": "query",
+            "description": "Comma-separated state geoname IDs",
+            "schema": {}
+          },
+          {
+            "name": "maxResults",
+            "in": "query",
+            "description": "Maximum communities to return (default: 10 for geo searches, 1000 for other searches)",
+            "schema": {}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "number"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "geonameId": {
+                                "type": "number"
+                              },
+                              "googlePlaceId": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "wikidataId": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "googleMyBusinessId": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "localName": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "asciiName": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "slug": {
+                                "type": "string",
+                                "description": "URL-safe slug derived from community name. Generated from asciiName or name. Not guaranteed to be unique across all communities."
+                              },
+                              "type": {
+                                "default": "community",
+                                "type": "string",
+                                "enum": [
+                                  "place",
+                                  "community",
+                                  "municipality",
+                                  "county",
+                                  "state",
+                                  "country"
+                                ]
+                              },
+                              "geo": {
+                                "type": "object",
+                                "properties": {
+                                  "point": {
+                                    "type": "object",
+                                    "properties": {
+                                      "lat": {
+                                        "type": "number"
+                                      },
+                                      "lng": {
+                                        "type": "number"
+                                      }
+                                    },
+                                    "required": [
+                                      "lat",
+                                      "lng"
+                                    ]
+                                  },
+                                  "box": {
+                                    "type": "object",
+                                    "properties": {
+                                      "north": {
+                                        "type": "number"
+                                      },
+                                      "east": {
+                                        "type": "number"
+                                      },
+                                      "south": {
+                                        "type": "number"
+                                      },
+                                      "west": {
+                                        "type": "number"
+                                      },
+                                      "accuracyLevel": {
+                                        "type": "number"
+                                      }
+                                    },
+                                    "required": [
+                                      "north",
+                                      "east",
+                                      "south",
+                                      "west"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "point"
+                                ]
+                              },
+                              "hierarchy": {
+                                "type": "object",
+                                "properties": {
+                                  "place": {
+                                    "type": "object",
+                                    "properties": {
+                                      "geonameId": {
+                                        "type": "number",
+                                        "nullable": true
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "code": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "class": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "geo": {
+                                        "type": "object",
+                                        "properties": {
+                                          "point": {
+                                            "type": "object",
+                                            "properties": {
+                                              "lat": {
+                                                "type": "number"
+                                              },
+                                              "lng": {
+                                                "type": "number"
+                                              }
+                                            },
+                                            "required": [
+                                              "lat",
+                                              "lng"
+                                            ]
+                                          },
+                                          "box": {
+                                            "type": "object",
+                                            "properties": {
+                                              "north": {
+                                                "type": "number"
+                                              },
+                                              "east": {
+                                                "type": "number"
+                                              },
+                                              "south": {
+                                                "type": "number"
+                                              },
+                                              "west": {
+                                                "type": "number"
+                                              },
+                                              "accuracyLevel": {
+                                                "type": "number"
+                                              }
+                                            },
+                                            "required": [
+                                              "north",
+                                              "east",
+                                              "south",
+                                              "west"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "point"
+                                        ]
+                                      },
+                                      "wikidataId": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    },
+                                    "required": [
+                                      "geonameId",
+                                      "name",
+                                      "code",
+                                      "class",
+                                      "wikidataId"
+                                    ]
+                                  },
+                                  "community": {
+                                    "type": "object",
+                                    "properties": {
+                                      "geonameId": {
+                                        "type": "number",
+                                        "nullable": true
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "wikidataId": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    },
+                                    "required": [
+                                      "geonameId",
+                                      "name",
+                                      "wikidataId"
+                                    ]
+                                  },
+                                  "municipality": {
+                                    "type": "object",
+                                    "properties": {
+                                      "geonameId": {
+                                        "type": "number",
+                                        "nullable": true
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "zip": {
+                                        "type": "string",
+                                        "nullable": true
+                                      },
+                                      "wikidataId": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    },
+                                    "required": [
+                                      "geonameId",
+                                      "name",
+                                      "zip",
+                                      "wikidataId"
+                                    ]
+                                  },
+                                  "county": {
+                                    "type": "object",
+                                    "properties": {
+                                      "geonameId": {
+                                        "type": "number",
+                                        "nullable": true
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "abbr": {
+                                        "type": "string",
+                                        "nullable": true
+                                      }
+                                    },
+                                    "required": [
+                                      "geonameId",
+                                      "name",
+                                      "abbr"
+                                    ]
+                                  },
+                                  "state": {
+                                    "type": "object",
+                                    "properties": {
+                                      "geonameId": {
+                                        "type": "number",
+                                        "nullable": true
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "ISO3166": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "geonameId",
+                                      "name",
+                                      "ISO3166"
+                                    ]
+                                  },
+                                  "country": {
+                                    "type": "object",
+                                    "properties": {
+                                      "geonameId": {
+                                        "type": "number",
+                                        "nullable": true
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "ISO3166": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "geonameId",
+                                      "name",
+                                      "ISO3166"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "community",
+                                  "municipality",
+                                  "county",
+                                  "state",
+                                  "country"
+                                ]
+                              },
+                              "location": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "address": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "demography": {
+                                "type": "object",
+                                "properties": {
+                                  "population": {
+                                    "type": "number",
+                                    "nullable": true
+                                  }
+                                },
+                                "required": [
+                                  "population"
+                                ],
+                                "nullable": true
+                              },
+                              "timezone": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "image": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "website": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "geonameId",
+                              "googlePlaceId",
+                              "wikidataId",
+                              "googleMyBusinessId",
+                              "name",
+                              "localName",
+                              "asciiName",
+                              "slug",
+                              "geo",
+                              "hierarchy",
+                              "location",
+                              "address",
+                              "demography",
+                              "timezone",
+                              "image",
+                              "website"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "geonameId": {
+                                "type": "number"
+                              },
+                              "googlePlaceId": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "wikidataId": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "googleMyBusinessId": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "localName": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "asciiName": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "slug": {
+                                "type": "string",
+                                "description": "URL-safe slug derived from community name. Generated from asciiName or name. Not guaranteed to be unique across all communities."
+                              },
+                              "type": {
+                                "default": "community",
+                                "type": "string",
+                                "enum": [
+                                  "place",
+                                  "community",
+                                  "municipality",
+                                  "county",
+                                  "state",
+                                  "country"
+                                ]
+                              },
+                              "geo": {
+                                "type": "object",
+                                "properties": {
+                                  "point": {
+                                    "type": "object",
+                                    "properties": {
+                                      "lat": {
+                                        "type": "number"
+                                      },
+                                      "lng": {
+                                        "type": "number"
+                                      }
+                                    },
+                                    "required": [
+                                      "lat",
+                                      "lng"
+                                    ]
+                                  },
+                                  "box": {
+                                    "type": "object",
+                                    "properties": {
+                                      "north": {
+                                        "type": "number"
+                                      },
+                                      "east": {
+                                        "type": "number"
+                                      },
+                                      "south": {
+                                        "type": "number"
+                                      },
+                                      "west": {
+                                        "type": "number"
+                                      },
+                                      "accuracyLevel": {
+                                        "type": "number"
+                                      }
+                                    },
+                                    "required": [
+                                      "north",
+                                      "east",
+                                      "south",
+                                      "west"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "point"
+                                ]
+                              },
+                              "hierarchy": {
+                                "type": "string",
+                                "format": "null",
+                                "nullable": true
+                              },
+                              "location": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "address": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "demography": {
+                                "type": "object",
+                                "properties": {
+                                  "population": {
+                                    "type": "number",
+                                    "nullable": true
+                                  }
+                                },
+                                "required": [
+                                  "population"
+                                ],
+                                "nullable": true
+                              },
+                              "timezone": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "image": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "website": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "geonameId",
+                              "googlePlaceId",
+                              "wikidataId",
+                              "googleMyBusinessId",
+                              "name",
+                              "localName",
+                              "asciiName",
+                              "slug",
+                              "geo",
+                              "hierarchy",
+                              "location",
+                              "address",
+                              "demography",
+                              "timezone",
+                              "image",
+                              "website"
+                            ]
+                          }
+                        ]
+                      },
+                      "description": "Array of communities found (deduplicated by geonameId). Communities are fully qualified; items with missing data due to processing issues are reported in 'errors'."
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "searchType": {
+                            "type": "string",
+                            "enum": [
+                              "zip",
+                              "municipality",
+                              "county",
+                              "state"
+                            ],
+                            "description": "Type of search parameter that failed"
+                          },
+                          "identifier": {
+                            "type": "string",
+                            "description": "The identifier that failed (ZIP code or geoname ID)"
+                          },
+                          "error": {
+                            "type": "string",
+                            "description": "Error message"
+                          },
+                          "reason": {
+                            "type": "string",
+                            "enum": [
+                              "invalid_format",
+                              "not_found",
+                              "api_error",
+                              "timeout",
+                              "processing_error"
+                            ],
+                            "description": "Error category"
+                          }
+                        },
+                        "required": [
+                          "searchType",
+                          "identifier",
+                          "error",
+                          "reason"
+                        ]
+                      },
+                      "description": "Failed search parameters or items with processing issues (if any). Malformed items are listed here by ID."
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "results",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/community/slug/{slug}": {
+      "get": {
+        "description": "Translate a community slug to its numeric geonames ID using the static community mapping. Returns the slug, numeric ID, and community name.",
+        "summary": "Get community ID by slug",
+        "tags": [
+          "Community"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "description": "API access token",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "slug",
+            "in": "path",
+            "description": "The slug of the community to get the ID for",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 150
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "slug": {
+                          "type": "string"
+                        },
+                        "geonameId": {
+                          "type": "number",
+                          "description": "Numeric geonames ID"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Community name"
+                        }
+                      },
+                      "required": [
+                        "slug",
+                        "geonameId",
+                        "name"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/findbyaddress": {
+      "get": {
+        "description": "Find geolocation by address using geocoding with Google Maps and hierarchy mapping for Geonames.",
+        "summary": "Find geolocation by address",
+        "tags": [
+          "Geocoding"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 3
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "geonameId": {
+                          "type": "number",
+                          "nullable": true
+                        },
+                        "googlePlaceId": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "wikidataId": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "googleMyBusinessId": {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "localName": {
+                          "type": "string"
+                        },
+                        "asciiName": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "place",
+                            "community",
+                            "municipality",
+                            "county",
+                            "state",
+                            "country"
+                          ]
+                        },
+                        "geo": {
+                          "type": "object",
+                          "properties": {
+                            "point": {
+                              "type": "object",
+                              "properties": {
+                                "lat": {
+                                  "type": "number"
+                                },
+                                "lng": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "lat",
+                                "lng"
+                              ]
+                            },
+                            "box": {
+                              "type": "object",
+                              "properties": {
+                                "north": {
+                                  "type": "number"
+                                },
+                                "east": {
+                                  "type": "number"
+                                },
+                                "south": {
+                                  "type": "number"
+                                },
+                                "west": {
+                                  "type": "number"
+                                },
+                                "accuracyLevel": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "north",
+                                "east",
+                                "south",
+                                "west"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "point"
+                          ]
+                        },
+                        "location": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "hierarchy": {
+                          "type": "object",
+                          "properties": {
+                            "place": {
+                              "type": "object",
+                              "properties": {
+                                "geonameId": {
+                                  "type": "number",
+                                  "nullable": true
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "code": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "class": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "geo": {
+                                  "type": "object",
+                                  "properties": {
+                                    "point": {
+                                      "type": "object",
+                                      "properties": {
+                                        "lat": {
+                                          "type": "number"
+                                        },
+                                        "lng": {
+                                          "type": "number"
+                                        }
+                                      },
+                                      "required": [
+                                        "lat",
+                                        "lng"
+                                      ]
+                                    },
+                                    "box": {
+                                      "type": "object",
+                                      "properties": {
+                                        "north": {
+                                          "type": "number"
+                                        },
+                                        "east": {
+                                          "type": "number"
+                                        },
+                                        "south": {
+                                          "type": "number"
+                                        },
+                                        "west": {
+                                          "type": "number"
+                                        },
+                                        "accuracyLevel": {
+                                          "type": "number"
+                                        }
+                                      },
+                                      "required": [
+                                        "north",
+                                        "east",
+                                        "south",
+                                        "west"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "point"
+                                  ]
+                                },
+                                "wikidataId": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "required": [
+                                "geonameId",
+                                "name",
+                                "code",
+                                "class",
+                                "wikidataId"
+                              ]
+                            },
+                            "community": {
+                              "type": "object",
+                              "properties": {
+                                "geonameId": {
+                                  "type": "number",
+                                  "nullable": true
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "wikidataId": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "required": [
+                                "geonameId",
+                                "name",
+                                "wikidataId"
+                              ]
+                            },
+                            "municipality": {
+                              "type": "object",
+                              "properties": {
+                                "geonameId": {
+                                  "type": "number",
+                                  "nullable": true
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "zip": {
+                                  "type": "string",
+                                  "nullable": true
+                                },
+                                "wikidataId": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "required": [
+                                "geonameId",
+                                "name",
+                                "zip",
+                                "wikidataId"
+                              ]
+                            },
+                            "county": {
+                              "type": "object",
+                              "properties": {
+                                "geonameId": {
+                                  "type": "number",
+                                  "nullable": true
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "abbr": {
+                                  "type": "string",
+                                  "nullable": true
+                                }
+                              },
+                              "required": [
+                                "geonameId",
+                                "name",
+                                "abbr"
+                              ]
+                            },
+                            "state": {
+                              "type": "object",
+                              "properties": {
+                                "geonameId": {
+                                  "type": "number",
+                                  "nullable": true
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "ISO3166": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "geonameId",
+                                "name",
+                                "ISO3166"
+                              ]
+                            },
+                            "country": {
+                              "type": "object",
+                              "properties": {
+                                "geonameId": {
+                                  "type": "number",
+                                  "nullable": true
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "ISO3166": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "geonameId",
+                                "name",
+                                "ISO3166"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "community",
+                            "municipality",
+                            "county",
+                            "state",
+                            "country"
+                          ]
+                        },
+                        "demography": {
+                          "type": "object",
+                          "properties": {
+                            "population": {
+                              "type": "number",
+                              "nullable": true
+                            }
+                          },
+                          "required": [
+                            "population"
+                          ]
+                        },
+                        "timezone": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "geonameId",
+                        "googlePlaceId",
+                        "wikidataId",
+                        "googleMyBusinessId",
+                        "name"
+                      ],
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/schema": {
+      "post": {
+        "tags": [
+          "Schema"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "201",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "403",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "409",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Schema"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "description": "HTTP status code"
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Success message"
+                    },
+                    "updated": {
+                      "type": "boolean",
+                      "description": "Whether schema was actually updated"
+                    },
+                    "fieldsAdded": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Names of fields that were added"
+                    },
+                    "fieldsModified": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "Names of fields that were modified"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message",
+                    "updated"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "403",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Schema"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "exists": {
+                      "type": "boolean",
+                      "description": "Whether the schema exists"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Schema name if it exists"
+                    },
+                    "numDocuments": {
+                      "type": "number",
+                      "description": "Number of documents if it exists"
+                    },
+                    "numFields": {
+                      "type": "number",
+                      "description": "Number of fields in the schema"
+                    },
+                    "fields": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "Field name"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "Field type"
+                          },
+                          "facet": {
+                            "type": "boolean",
+                            "description": "Whether field is facetable"
+                          },
+                          "index": {
+                            "type": "boolean",
+                            "description": "Whether field is indexed"
+                          },
+                          "optional": {
+                            "type": "boolean",
+                            "description": "Whether field is optional"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "type"
+                        ]
+                      },
+                      "description": "Field definitions if schema exists"
+                    }
+                  },
+                  "required": [
+                    "exists"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "403",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Schema"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "403",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{token}/import": {
+      "post": {
+        "tags": [
+          "Import"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "countryCode": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 2,
+                    "pattern": "^[A-Z]{2}$",
+                    "description": "ISO 3166-1 alpha-2 country code (e.g., DE, AT, CH)"
+                  },
+                  "featureClasses": {
+                    "default": [
+                      "P",
+                      "A"
+                    ],
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1
+                    },
+                    "description": "Feature classes to import: P (cities), A (admin areas), L (parks), H (water), T (terrain), R (roads), S (buildings), U (undersea), V (vegetation)"
+                  },
+                  "batchSize": {
+                    "default": 2500,
+                    "type": "integer",
+                    "minimum": 100,
+                    "maximum": 5000,
+                    "description": "Batch size for Typesense imports (100-5000)"
+                  },
+                  "maxProcessingTimeMs": {
+                    "default": 1500000,
+                    "type": "integer",
+                    "minimum": 60000,
+                    "maximum": 1800000,
+                    "description": "Maximum processing time in milliseconds (60000-1800000, default 25 minutes)"
+                  },
+                  "locale": {
+                    "default": "de",
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 2,
+                    "pattern": "^[a-z]{2}$",
+                    "description": "ISO 639-1 language code for selecting the default name (e.g., de, en). Uses alternate name in this language as default if available."
+                  }
+                },
+                "required": [
+                  "countryCode"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "integer",
+                      "description": "Total number of documents successfully imported"
+                    },
+                    "failedCount": {
+                      "type": "integer",
+                      "description": "Number of documents that failed to import"
+                    },
+                    "durationMs": {
+                      "type": "integer",
+                      "description": "Total import duration in milliseconds"
+                    },
+                    "stoppedAt": {
+                      "type": "string",
+                      "enum": [
+                        "downloading",
+                        "extracting",
+                        "parsing",
+                        "merging",
+                        "transforming",
+                        "importing"
+                      ],
+                      "description": "Stage where import stopped if incomplete"
+                    },
+                    "statistics": {
+                      "type": "object",
+                      "properties": {
+                        "download": {
+                          "type": "object",
+                          "properties": {
+                            "baseFileSizeBytes": {
+                              "type": "integer"
+                            },
+                            "alternateNamesFileSizeBytes": {
+                              "type": "integer"
+                            },
+                            "durationMs": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "baseFileSizeBytes",
+                            "alternateNamesFileSizeBytes",
+                            "durationMs"
+                          ]
+                        },
+                        "extraction": {
+                          "type": "object",
+                          "properties": {
+                            "durationMs": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "durationMs"
+                          ]
+                        },
+                        "parsing": {
+                          "type": "object",
+                          "properties": {
+                            "baseRecordsCount": {
+                              "type": "integer"
+                            },
+                            "alternateNamesCount": {
+                              "type": "integer"
+                            },
+                            "durationMs": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "baseRecordsCount",
+                            "alternateNamesCount",
+                            "durationMs"
+                          ]
+                        },
+                        "merge": {
+                          "type": "object",
+                          "properties": {
+                            "mergedCount": {
+                              "type": "integer"
+                            },
+                            "durationMs": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "mergedCount",
+                            "durationMs"
+                          ]
+                        },
+                        "transform": {
+                          "type": "object",
+                          "properties": {
+                            "successCount": {
+                              "type": "integer"
+                            },
+                            "failureCount": {
+                              "type": "integer"
+                            },
+                            "durationMs": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "successCount",
+                            "failureCount",
+                            "durationMs"
+                          ]
+                        },
+                        "import": {
+                          "type": "object",
+                          "properties": {
+                            "successCount": {
+                              "type": "integer"
+                            },
+                            "failureCount": {
+                              "type": "integer"
+                            },
+                            "durationMs": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "successCount",
+                            "failureCount",
+                            "durationMs"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "download",
+                        "parsing",
+                        "merge",
+                        "transform",
+                        "import"
+                      ],
+                      "description": "Detailed statistics for each import stage"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "results",
+                    "failedCount",
+                    "durationMs",
+                    "statistics"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "403",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Import"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "countryCode": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 2,
+                    "pattern": "^[A-Z]{2}$",
+                    "description": "ISO 3166-1 alpha-2 country code (e.g., DE, AT, CH)"
+                  },
+                  "featureClasses": {
+                    "default": [
+                      "P",
+                      "A"
+                    ],
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1
+                    },
+                    "description": "Feature classes to import: P (cities), A (admin areas), L (parks), H (water), T (terrain), R (roads), S (buildings), U (undersea), V (vegetation)"
+                  },
+                  "batchSize": {
+                    "default": 2000,
+                    "type": "integer",
+                    "minimum": 100,
+                    "maximum": 5000,
+                    "description": "Batch size for Typesense imports (100-5000)"
+                  },
+                  "locale": {
+                    "default": "de",
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 2,
+                    "pattern": "^[a-z]{2}$",
+                    "description": "ISO 639-1 language code for selecting the default name (e.g., de, en). Uses alternate name in this language as default if available."
+                  }
+                },
+                "required": [
+                  "countryCode"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "modified": {
+                      "type": "integer",
+                      "description": "Number of documents modified/upserted"
+                    },
+                    "deleted": {
+                      "type": "integer",
+                      "description": "Number of documents deleted"
+                    },
+                    "skipped": {
+                      "type": "integer",
+                      "description": "Number of records skipped due to conflicts (deletion takes precedence)"
+                    },
+                    "durationMs": {
+                      "type": "integer",
+                      "description": "Total operation duration in milliseconds"
+                    },
+                    "statistics": {
+                      "type": "object",
+                      "properties": {
+                        "download": {
+                          "type": "object",
+                          "properties": {
+                            "modificationsFileSizeBytes": {
+                              "type": "integer"
+                            },
+                            "deletionsFileSizeBytes": {
+                              "type": "integer"
+                            },
+                            "durationMs": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "modificationsFileSizeBytes",
+                            "deletionsFileSizeBytes",
+                            "durationMs"
+                          ]
+                        },
+                        "parsing": {
+                          "type": "object",
+                          "properties": {
+                            "modificationsCount": {
+                              "type": "integer"
+                            },
+                            "deletionsCount": {
+                              "type": "integer"
+                            },
+                            "conflictsDetected": {
+                              "type": "integer"
+                            },
+                            "durationMs": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "modificationsCount",
+                            "deletionsCount",
+                            "conflictsDetected",
+                            "durationMs"
+                          ]
+                        },
+                        "transform": {
+                          "type": "object",
+                          "properties": {
+                            "successCount": {
+                              "type": "integer"
+                            },
+                            "failureCount": {
+                              "type": "integer"
+                            },
+                            "durationMs": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "successCount",
+                            "failureCount",
+                            "durationMs"
+                          ]
+                        },
+                        "upsert": {
+                          "type": "object",
+                          "properties": {
+                            "successCount": {
+                              "type": "integer"
+                            },
+                            "failureCount": {
+                              "type": "integer"
+                            },
+                            "durationMs": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "successCount",
+                            "failureCount",
+                            "durationMs"
+                          ]
+                        },
+                        "delete": {
+                          "type": "object",
+                          "properties": {
+                            "deletedCount": {
+                              "type": "integer"
+                            },
+                            "durationMs": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "deletedCount",
+                            "durationMs"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "download",
+                        "parsing",
+                        "transform",
+                        "upsert",
+                        "delete"
+                      ],
+                      "description": "Detailed statistics for each stage"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "modified",
+                    "deleted",
+                    "skipped",
+                    "durationMs"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "400",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "403",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Import"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 200,
+                      "maximum": 299
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "deletedCount": {
+                      "type": "integer",
+                      "description": "Number of documents deleted from the collection"
+                    },
+                    "durationMs": {
+                      "type": "integer",
+                      "description": "Duration of delete operation in milliseconds"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "deletedCount",
+                    "durationMs"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "403",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "404",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "minimum": 400,
+                      "maximum": 599
+                    },
+                    "error": {
+                      "type": "string"
+                    },
+                    "trace": {
+                      "nullable": true
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/openapi": {
+      "get": {
+        "tags": [
+          "Documentation"
+        ],
+        "summary": "Get OpenAPI Specification",
+        "description": "Returns the complete OpenAPI/Swagger specification for this API in JSON format. This endpoint can be used by code generators to create client SDKs.",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "OpenAPI specification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "openapi": {
+                      "type": "string",
+                      "description": "OpenAPI version"
+                    },
+                    "info": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "version": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "paths": {
+                      "type": "object",
+                      "description": "API paths and operations"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error generating specification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "info": {
+    "title": "@schafevormfenster/geo-api",
+    "description": "Geo API to geocode and structure addresses.",
+    "version": "3.1.3",
+    "contact": {
+      "name": "Jan-Henrik Hempel",
+      "email": "jan@schafe-vorm-fenster.de"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://geo-h1egvsh5r-schafe-vorm-fenster.vercel.app",
+      "description": "Production"
+    }
+  ]
+}
