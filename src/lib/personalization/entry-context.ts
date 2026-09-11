@@ -15,6 +15,8 @@
  * referrer host (the browser told us where she came from).
  */
 
+import { APP_ORIGIN } from "../live/app-handover";
+
 import type { EntryTrait, FocusJob } from "../relevance/types";
 import type { RouteId } from "../routes/routes";
 
@@ -29,7 +31,12 @@ const MEDIUM_TRAITS: Record<string, EntryTrait> = {
 
 const SOCIAL_HOSTS = ["instagram.com", "facebook.com", "whatsapp.com", "fb.me", "fb.com", "threads.net"];
 const PROFESSIONAL_HOSTS = ["linkedin.com", "lnkd.in"];
-const ACTIVATED_HOSTS = ["app.schafe-vorm-fenster.de"];
+/**
+ * Derived from the one module that knows where the app is (TS-017 D4): the
+ * hostname may not be typed a second time, and this way the classification
+ * follows the DEC-035 move off the apex automatically.
+ */
+const ACTIVATED_HOSTS = [new URL(APP_ORIGIN).hostname];
 const SEARCH_HOSTS = [
   "google.com",
   "google.de",
