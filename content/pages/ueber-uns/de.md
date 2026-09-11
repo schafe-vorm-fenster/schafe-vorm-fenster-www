@@ -26,7 +26,7 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — 0 generated slots; 1 sourced-empty-by-design (testimonial slot, see slot 6)"
+provenance: "sourced — 1 generated demo addition under the prototype completeness override (slot 3, reserved testimonial-type placeholder — state/open.md Dummy-Content)"
 compliance_check: "state/content-map.md#compliance-checks — TS-027"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 ---
@@ -72,6 +72,10 @@ Platz ist für den Typ `testimonial` reserviert — heute leer, weil alle
 fünf Testimonial-Datensätze `unverified` sind (Q-014). Der leere Platz
 wird nicht durch ein Element eines anderen Typs aufgefüllt; er zeigt die
 Schraffur-Fläche mit einem Satz, der die Lücke benennt (TS-027 D5).
+
+<!-- id: ueber-uns-3-testimonial-slot-demo; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Demo-Testimonial für den reservierten Platz (Prototyp, `Demo-Daten`-Badge):** „Der Dorfkalender kennt unsere Verwaltung von innen — das merkt man." — Ehrenamtliche Bürgermeisterin, Beispielgemeinde Musterdorf. Name, Ort und Zitat sind frei erfunden und erkennbar exemplarisch; die Demo-Karte zeigt nur, wie der reservierte Platz mit Beleg aussähe, und ersetzt kein freigegebenes Testimonial.
 
 ## Slot 4 — Archiv-Verweis
 

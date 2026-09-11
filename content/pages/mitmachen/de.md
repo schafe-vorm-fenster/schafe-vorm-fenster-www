@@ -18,7 +18,7 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — 6 sourced, 1 sourced-empty-by-design, 2 generated (see slots 6a, 8)"
+provenance: "mixed — 6 sourced, 3 generated (slots 6a, 8 from Phase 2; slot 7 demo proof cards added under the prototype completeness override — state/open.md Dummy-Content)"
 compliance_check: "state/content-map.md#compliance-checks — TS-022"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 open_points:
@@ -146,6 +146,19 @@ zusätzlichen Referenzort benennt.
 Auswahl und Reihenfolge sind Aufgabe der Relevanz-Engine mit dem
 Gewichtsprofil „publish-our-dates" (TS-005 D5, DEC-048). Ein leerer Slot
 schwächt den Anspruch, wird aber nie durch erfundenen Text ersetzt.
+
+<!-- id: mitmachen-7-proof-demo; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Demo-Elemente (Prototyp, `Demo-Daten`-Badge):** Solange keine Auswahl
+freigegeben ist, zeigt der Prototyp drei beispielhafte Karten statt
+einer leeren Fläche:
+
+1. „Ein Foto vom Flyer per WhatsApp, fertig — mehr Aufwand war es wirklich nicht." — Vorsitzende, Kulturverein Beispielgemeinde Musterdorf
+2. „Unsere Termine erreichen jetzt auch die Nachbarorte, ohne dass wir dafür etwas Neues gelernt haben." — Freiwillige Feuerwehr, Beispielort Musterhagen
+3. „Wir tragen unsere Gottesdiensttermine seit Kurzem selbst ein, direkt aus dem bestehenden Kalender." — Kirchengemeinde, Beispielgemeinde Musterdorf
+
+Vereine, Orte und Zitate sind frei erfunden und erkennbar exemplarisch;
+sie ersetzen kein freigegebenes Proof-Element.
 
 ## Slot 8 — Abschluss-CTA mit Permanenz-Zusicherung
 
