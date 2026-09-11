@@ -42,10 +42,11 @@ without being the declared LCP element.
 
 ### D3 — Fonts [FIXED: WEB-Q-005; subset PROPOSED]
 
-**Inter** as variable font, `woff2`, latin subset, self-hosted, preloaded,
-`font-display: swap`; total ≤ 50KB. Static weights are not shipped to the
-browser. Corrected 2026-09-10 (DEC-043) — the rule was written for
-Catamaran, which the brand has retired; only the family changed.
+**Atkinson Hyperlegible Next** (plus the Mono variant for labels, dates
+and numbers), `woff2`, latin subset, self-hosted, preloaded,
+`font-display: swap`; total ≤ 50KB across both families and the three
+weights in use (400 · 700 · 800). Corrected 2026-09-11 per DEC-043 — an
+earlier version named Inter, which was wrong.
 
 ### D4 — JavaScript [FIXED: WEB-Q-003/004; split PROPOSED]
 

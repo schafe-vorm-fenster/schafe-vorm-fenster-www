@@ -287,7 +287,7 @@ name used resolves to an export of it.
   `packages/identity/brand-design/`, and on 2026-09-09 adopted a new
   colour system and a new typeface — the family WEB-C-003 names
   (Catamaran) is no longer the brand's — resolved by DEC-043, which moves
-  the rules to Inter. TS-002 D3 (weight floor, brand
+  the rules to Atkinson Hyperlegible Next. TS-002 D3 (weight floor, brand
   colour vs. text) and TS-003 D3 (one variable `woff2`) rest on the same
   superseded fact. **Demand** to the brand owner and the spec owner:
   *is the new brand-design package binding for the relaunch, and do

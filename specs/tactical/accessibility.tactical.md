@@ -43,11 +43,12 @@ theme covers it, D4), sign language, extended audio description.
   components 3:1. Brand green `#B4CF39` fails on white for text → it is
   never a text colour on light ground; usage limited to surfaces,
   accents, and large graphical elements that meet 3:1 [PROPOSED].
-- **Inter** weight floor: body text ≥ 400; lighter weights only ≥ 18px
-  [PROPOSED — the concrete value is read from
-  `@schafe-vorm-fenster/brand-design` once Q-033 names the binding
-  package]. Corrected 2026-09-10 (DEC-043): this rule was written for
-  Catamaran, which the brand has retired. The rule survives the name.
+- **Atkinson Hyperlegible Next** (DEC-043). The weight-floor rule that
+  stood here is **moot**: the family ships `400`, `700` and `800` only —
+  there is no light weight to guard against. Body copy is `400` because
+  that is the regular. Sizes come from `font.size` in
+  `@schafe-vorm-fenster/brand-design`, which is already responsive
+  (`clamp()`) and floors at 15 px; the specs restate none of them.
 
 ### D4 — Themes via browser hints only [FIXED: WEB-Q-014/015]
 

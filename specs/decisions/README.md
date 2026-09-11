@@ -54,7 +54,7 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-040 — Verification architecture — levels on acceptance criteria, IDs everywhere, Gherkin for journeys](040-verification-architecture.md)
 - [DEC-041 — Relevance engine — website-owned service, geo hierarchy of the geo-api, segmented not personalised](041-relevance-engine-design.md)
 - [DEC-042 — Hub content is referenced by package name, never by repository path](042-reference-packages-by-name.md)
-- [DEC-043 — The brand typeface is Inter; Catamaran is retired](043-brand-typeface-changed.md)
+- [DEC-043 — The brand typeface is Atkinson Hyperlegible Next; Catamaran is retired](043-brand-typeface-changed.md)
 - [DEC-044 — Two brand packages, three levels of use](044-brand-packages-three-levels.md)
 - [DEC-045 — The CSP uses per-build hashes; the shell stays static](045-csp-per-build-hashes.md)
 - [DEC-046 — The last-good store is the Vercel Runtime Cache](046-last-good-in-runtime-cache.md)
