@@ -33,3 +33,18 @@
   package's own ownership scope. Not fixed here (`src/lib/live/**` is
   outside `.github/workflows/**` / `README.md` / `CONTRIBUTING.md` /
   `playwright.config.ts`, this work package's owned paths).
+- Update (same round, ~10 min later): `next-2026`'s build is a moving
+  target under the concurrent agents in this run. A push minutes later
+  (`b4163fa`) triggered a real Vercel deployment build
+  (`https://schafe-vorm-fenster-eepc12lta-schafe-vorm-fenster.vercel.app`,
+  inspected via `vercel inspect --logs`) that failed typecheck on a
+  **different** file: `src/components/code-snippet/copy-button.tsx(36,13)`
+  — `TS2322`, a `"copy"`/`"check"` icon-name literal not assignable to the
+  `lucide-react` icon-name union (consistent with `src/components/icon/`
+  being under concurrent edit — `git status` showed it modified). This is
+  not the same bug as the `last-good.ts` one above; it demonstrates the
+  class of problem (typecheck breaks repo-wide, transiently, as other
+  work packages land) rather than pinning blame on one file. Both
+  `check.yml`'s `pnpm build` step and Vercel's own build are red for this
+  reason whenever it recurs — worth a regression sweep once the parallel
+  work packages in this run settle, not a fix chased file-by-file here.
