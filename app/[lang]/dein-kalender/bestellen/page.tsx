@@ -1,94 +1,273 @@
-import { dictionary } from "@/src/lib/i18n/dictionary";
-import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
-
+import { Button } from "@/src/components/button/button";
+import { Chip } from "@/src/components/chip/chip";
+import { CodeSnippet } from "@/src/components/code-snippet/code-snippet";
+import { ContextBand } from "@/src/components/context-band/context-band";
+import {
+  ConversionTracker,
+  FireConversionOnMount,
+} from "@/src/components/conversion-tracker/conversion-tracker";
+import { EnvoyFormMount } from "@/src/components/envoy-form-mount/envoy-form-mount";
+import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
+import { PlaceSearch } from "@/src/components/place-search/place-search";
+import { ScopePicker } from "@/src/components/scope-picker/scope-picker";
+import { SectionShell } from "@/src/components/section-shell/section-shell";
+import { StepIndicator } from "@/src/components/step-indicator/step-indicator";
+import { fieldAt } from "@/src/lib/content/blocks";
+import { loadPage, slot } from "@/src/lib/content/loader";
 import { resolveLocale } from "@/src/lib/i18n/locales";
+import { BRIEFING_URL } from "@/src/lib/live/briefing";
+import { resolvePlace } from "@/src/lib/live/places";
+import { jobLabelKey } from "@/src/lib/pages/page-meta";
+import { pageMetadata } from "@/src/lib/routes/metadata";
 
 import { localeFrom } from "../../_locale";
-import { PlaceholderPage } from "../../_shell";
+import { SiteChrome } from "../../_page-frame";
+import { resolveRegisterPlace } from "../../mitmachen/registrieren/resolve-place";
 
-import type { PlaceholderModule } from "../../_shell";
+import { pageMeta } from "./page.meta";
+import { addPlace, parseOrte, removePlace, resolveOrderStep } from "./steps";
+
+import type { ScopeChip } from "@/src/components/scope-picker/scope-picker";
+import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
 /**
- * TS-025 — `/dein-kalender/bestellen` — order flow
+ * TS-025 — `/dein-kalender/bestellen`, the order flow.
  *
- * Routing skeleton (M2). The ordered module list below is the page's
- * composition sheet (`plan/component-inventory.md` §4) turned into labelled
- * placeholder sections with reserved heights. The page implementer replaces a
- * section **in place**: the id and the order are the seam.
+ * One route, `schritt=1..4` (D2). Steps 1/2 share a screen (scope), 3 is the
+ * invoice mock (`envoy-form-mount`), 4 is the embed code. Context band and
+ * closing CTA render **once**, after step 4 (component-inventory §TS-025) —
+ * hand-rendered here via `SiteChrome`, not `PageFrame`, for the same reason
+ * as `/mitmachen/registrieren`: a per-step suppression `PageFrame` has no
+ * hook for.
+ *
+ * `noindex, follow` (D9) — this amends TS-011 D9, which called this route
+ * indexable; the contradiction is recorded in `state/open.md`. The meta tag
+ * is this page's own concern; the `X-Robots-Tag` **header** is `proxy.ts`'s
+ * (README: "the CSP, the HSTS variance and the X-Robots-Tag, on every
+ * response") — flagged there as an open point, not built here.
+ *
+ * Step 4 shows the **mocked, successful** code experience (dummy
+ * `organizerId`, full `demo-data-badge`'d snippet) rather than the D7
+ * "cannot be issued synchronously" fallback — the mock rule's "full
+ * instant-embed experience, labelled `Demo-Daten`" (plan/guardrails.md row
+ * 2), matching what the work package's dispatch names explicitly.
  */
 
 const ROUTE = "order" as const;
-
-const MODULES: readonly PlaceholderModule[] = [
-  {
-    id: "breadcrumb-trail",
-    components:
-      "breadcrumb-trail",
-    height: 4,
-  },
-  {
-    id: "step-indicator",
-    components:
-      "step-indicator (\"… von 4\", schritt=1..4 in the URL)",
-    height: 6,
-  },
-  {
-    id: "scope",
-    components:
-      "place-search + scope-picker (chips, county = one chip, collapse above 12); no live preview in V1 (DEC-069)",
-    height: 18,
-  },
-  {
-    id: "invoice",
-    components:
-      "envoy-form-mount (authority field set) with lead-fallback",
-    height: 20,
-  },
-  {
-    id: "code",
-    components:
-      "code-snippet + confirmation, plus the lost-state note",
-    height: 16,
-  },
-  {
-    id: "context-band",
-    components:
-      "context-band, rendered once after step 4 — rendered by the layout from page.meta.ts (TS-006 D2)",
-    height: 12,
-  },
-  {
-    id: "closing-cta",
-    components:
-      "closing-cta, rendered once after step 4 — rendered by the layout from page.meta.ts (TS-006 D2)",
-    height: 10,
-  },
-];
+const KREIS_ID = "musterkreis";
+const CONTACT_EMAIL = "jan@schafe-vorm-fenster.de";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
-  // `generateMetadata` must not throw `notFound()`: the metadata boundary
-  // sits above `[lang]`, so a throw here escapes the shell and Next.js falls
-  // back to its built-in 404. The *page* answers 404; this resolves.
-  return pageMetadata(ROUTE, resolveLocale((await params).lang));
+  const base = await pageMetadata(ROUTE, resolveLocale((await params).lang));
+  return { ...base, robots: { index: false, follow: true } };
 }
+
+function firstParam(value: string | string[] | undefined): string | undefined {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+const SCOPE_QUESTION_FALLBACK: Record<Locale, string> = {
+  de: "Für welchen Bereich soll der Kalender gelten?",
+  en: "Which area should the calendar cover?",
+};
+
+// Short enough to fit a pill chip's single line at 360 px (TS-017 A9) —
+// `scope-picker` appends its own " (ganzer Landkreis)" suffix once selected
+// (`src/components/scope-picker/scope-picker.tsx`), so this "add" affordance
+// does not repeat it.
+const COUNTY_LABEL: Record<Locale, string> = {
+  de: "Landkreis Musterkreis",
+  en: "Musterkreis district",
+};
+
+const COUNTY_CHIP_LABEL: Record<Locale, string> = {
+  de: "Musterkreis",
+  en: "Musterkreis",
+};
+
+const SELECTED_COUNT: Record<Locale, (n: number) => string> = {
+  de: (n) => `${n} Orte ausgewählt`,
+  en: (n) => `${n} places selected`,
+};
+
+const CONTINUE_LABEL: Record<Locale, string> = { de: "Weiter", en: "Continue" };
+const STEP_TOTAL = 4;
 
 export default async function Page({
   params,
+  searchParams,
 }: {
   params: Promise<{ lang: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const locale = await localeFrom(params);
-  const d = dictionary(locale);
+  const query = await searchParams;
+  const page = await loadPage(ROUTE, locale);
+  const home = await loadPage("home", locale);
+  const contextBandHeading = fieldAt(slot(home, "home-10-context-band").blocks, 0);
+
+  const scopeSlot = slot(page, "bestellen-1-scope");
+  const briefingSlot = slot(page, "bestellen-2-briefing-exit");
+  const invoiceSlot = slot(page, "bestellen-3-invoice");
+  const codeSlot = slot(page, "bestellen-4-embed-code");
+
+  const orteRaw = firstParam(query.orte);
+  const orte = parseOrte(orteRaw);
+  const hasCounty = firstParam(query.kreis) === KREIS_ID;
+  const hasScope = orte.length > 0 || hasCounty;
+  const step = resolveOrderStep(hasScope, firstParam(query.schritt));
+
+  const resolvedPlaces = (await Promise.all(orte.map((slug) => resolvePlace(slug)))).filter(
+    (place): place is NonNullable<typeof place> => place !== undefined,
+  );
+
+  const chips: ScopeChip[] = [
+    ...resolvedPlaces.map((place) => ({
+      id: place.slug,
+      label: place.name,
+      kind: "place" as const,
+      removeQuery: {
+        orte: removePlace(orteRaw, place.slug) || undefined,
+        kreis: hasCounty ? KREIS_ID : undefined,
+      },
+    })),
+    ...(hasCounty
+      ? [
+          {
+            id: KREIS_ID,
+            label: COUNTY_CHIP_LABEL[locale],
+            kind: "county" as const,
+            removeQuery: { orte: orteRaw, kreis: undefined },
+          },
+        ]
+      : []),
+  ];
+
+  // The scope search reuses `place-search`'s own field name ("ort") and the
+  // same shared resolver step 1 of the register flow uses (not a page-local
+  // mock) — an unresolved value is simply not offered as an "add" chip.
+  const rawSearch = firstParam(query.ort);
+  const lookup = rawSearch ? await resolveRegisterPlace(rawSearch) : undefined;
+  const addable =
+    lookup?.kind === "resolved" && !orte.includes(lookup.place.slug) ? lookup.place : undefined;
+
+  const briefingLabel = fieldAt(briefingSlot.blocks, 0) ?? "";
+  const briefingExit = (
+    <ConversionTracker
+      attributes={{ route: ROUTE }}
+      goalId="request-product-briefing"
+      stage="handover"
+    >
+      <OutboundLink href={BRIEFING_URL} newTab recipient="Google" variant="secondary">
+        {briefingLabel}
+      </OutboundLink>
+    </ConversionTracker>
+  );
+
+  const demoCode =
+    '<script defer src="https://portalize.schafe-vorm-fenster.de/api/demo-organizer-bestellen/load.js"></script>\n<div data-portalize-organizer-id="demo-organizer-bestellen"></div>';
+
   return (
-    <PlaceholderPage
-      labels={d.placeholder}
-      modules={MODULES}
-      note={d.placeholder.note}
-      title={pageTitle(ROUTE, locale)}
-    />
+    <SiteChrome locale={locale} route={ROUTE}>
+      <SectionShell surface="paper">
+        <StepIndicator step={step} total={STEP_TOTAL} />
+
+        {step <= 2 ? (
+          <>
+            <h1>{fieldAt(scopeSlot.blocks, 0) ?? SCOPE_QUESTION_FALLBACK[locale]}</h1>
+            <PlaceSearch
+              defaultValue={rawSearch}
+              label={fieldAt(scopeSlot.blocks, 0) ?? ""}
+              locale={locale}
+              query={{ orte: orteRaw, kreis: hasCounty ? KREIS_ID : undefined }}
+              to="order"
+            />
+            {addable ? (
+              <Chip
+                locale={locale}
+                query={{
+                  orte: addPlace(orteRaw, addable.slug),
+                  kreis: hasCounty ? KREIS_ID : undefined,
+                }}
+                to="order"
+              >
+                + {addable.name}
+              </Chip>
+            ) : null}
+            <Chip
+              locale={locale}
+              query={{ orte: orteRaw, kreis: hasCounty ? undefined : KREIS_ID }}
+              selected={hasCounty}
+              to="order"
+            >
+              {COUNTY_LABEL[locale]}
+            </Chip>
+            <ScopePicker items={chips} locale={locale} to="order" />
+            <p aria-live="polite">{SELECTED_COUNT[locale](chips.length)}</p>
+            {hasScope ? (
+              <Button
+                dataCta="primary"
+                locale={locale}
+                onward
+                query={{ orte: orteRaw, kreis: hasCounty ? KREIS_ID : undefined, schritt: 3 }}
+                to="order"
+              >
+                {CONTINUE_LABEL[locale]}
+              </Button>
+            ) : null}
+            {briefingExit}
+          </>
+        ) : null}
+
+        {step === 3 ? (
+          <>
+            <h1>{fieldAt(invoiceSlot.blocks, 0)}</h1>
+            <EnvoyFormMount
+              context={{ scope: orte.join(",") || KREIS_ID }}
+              fallbackEmail={CONTACT_EMAIL}
+              kind="order-invoice"
+              locale={locale}
+              sourceRoute={ROUTE}
+              state="mocked"
+            />
+            <p>{fieldAt(invoiceSlot.blocks, 2)}</p>
+            <Button
+              dataCta="primary"
+              locale={locale}
+              onward
+              query={{ orte: orteRaw, kreis: hasCounty ? KREIS_ID : undefined, schritt: 4 }}
+              to="order"
+            >
+              {CONTINUE_LABEL[locale]}
+            </Button>
+            {briefingExit}
+          </>
+        ) : null}
+
+        {step === 4 ? (
+          <>
+            <h1>{fieldAt(codeSlot.blocks, 0)}</h1>
+            <CodeSnippet code={demoCode} note={fieldAt(codeSlot.blocks, 1)} state="mocked" />
+            <FireConversionOnMount
+              attributes={{ route: ROUTE }}
+              goalId="buy-calendar-licence"
+              stage="completed"
+            />
+            {briefingExit}
+          </>
+        ) : null}
+      </SectionShell>
+
+      {step === 4 ? (
+        <SectionShell id="context-band" surface="surface">
+          <ContextBand currentJob={jobLabelKey(pageMeta.focusJob)} heading={contextBandHeading} locale={locale} />
+        </SectionShell>
+      ) : null}
+    </SiteChrome>
   );
 }
