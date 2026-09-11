@@ -207,42 +207,76 @@ export function PageFrame({
     >
       {children}
 
-      {/* Block 3 — the three non-focus jobs. Suppressed where block 4 is the
-          merged three-job offer, which is the same list (TS-006 D6).
-          `as="aside"` — TS-011-A4: "the context band is an `aside` on every
-          page." It rendered as a plain `section` before (F-2-41); the four
-          pages where it is absent opt out through their own `closing`
-          variant (package A's file), which is unchanged here. */}
-      {merged ? null : (
+      {merged ? (
+        /* Blocks 3 and 4 in one, where block 4 *is* the band's list: TS-006
+           D6 merges them on the `primaryConversion: null` pages, "so they
+           render once, as the last block, rather than twice in sequence".
+           The merged block is the band, not a replacement for it — the
+           composition sheets compose it as "`context-band` in `merged` mode
+           = the three-job block, rendered **once**, as the last block"
+           (`plan/component-inventory.md` §4, TS-027 block 7 / TS-028 block
+           4; §47 lists `merged` as the band's second mode). So it renders as
+           the band's own `aside#context-band` — TS-011-A4: "the context band
+           is an `aside` on **every** page", TS-006-A6: "every page renders
+           exactly one context band" — and carries block 4's `#closing-cta`
+           anchor inside it, which keeps exactly one of each per page and the
+           three job links exactly once (TS-027-A10: "rendered once, not
+           twice").
+
+           F-2-41, reopened at gate 2: the merge was built as a suppression,
+           which left `/ueber-uns`, `/ueber-uns/archiv` and `/rechtliches`
+           with no `aside` at all. No page spec exempts them — the only band
+           exemption the specs carry is F-2-10's mid-flow suppression on
+           `/mitmachen/registrieren` and `/dein-kalender/bestellen` (TS-023
+           D7 / TS-025, `state/open.md` row 24), and those two pages compose
+           their chrome through `SiteChrome`, never through this branch. */
         <MotionReveal>
-          <SectionShell as="aside" id="context-band" label={bandHeading} surface="surface">
-            <ContextBand currentJob={currentJob} heading={bandHeading} locale={locale} />
+          <SectionShell as="aside" id="context-band" label={bandHeading} surface="paper">
+            {/* The band's own heading, not the component's German default —
+                the block is the band, and on `/en` the default rendered
+                German (the F-2-33 failure mode). */}
+            <ClosingCta
+              currentJob={currentJob}
+              heading={bandHeading}
+              id="closing-cta"
+              locale={locale}
+              variant="merged"
+            />
           </SectionShell>
         </MotionReveal>
-      )}
+      ) : (
+        <>
+          {/* Block 3 — the three non-focus jobs. `as="aside"` — TS-011-A4:
+              "the context band is an `aside` on every page." It rendered as
+              a plain `section` before (F-2-41). */}
+          <MotionReveal>
+            <SectionShell as="aside" id="context-band" label={bandHeading} surface="surface">
+              <ContextBand currentJob={currentJob} heading={bandHeading} locale={locale} />
+            </SectionShell>
+          </MotionReveal>
 
-      {/* Block 4 — the focus job's conversion, repeated. Nothing but the
-          global footer renders after it (TS-006 D2). */}
-      <MotionReveal>
-        <SectionShell id="closing-cta" label={dictionary(locale).nav.home} surface="paper">
-          {closing.variant === "merged" ? (
-            <ClosingCta currentJob={currentJob} locale={locale} variant="merged" />
-          ) : closing.variant === "module" ? (
-            <>
-              {closing.node}
-              {closing.reassurance ? <p>{closing.reassurance}</p> : null}
-            </>
-          ) : (
-            <ClosingCta
-              label={closing.label}
-              locale={locale}
-              query={closing.query}
-              reassurance={closing.reassurance}
-              to={closing.to}
-            />
-          )}
-        </SectionShell>
-      </MotionReveal>
+          {/* Block 4 — the focus job's conversion, repeated. Nothing but the
+              global footer renders after it (TS-006 D2). */}
+          <MotionReveal>
+            <SectionShell id="closing-cta" label={dictionary(locale).nav.home} surface="paper">
+              {closing.variant === "module" ? (
+                <>
+                  {closing.node}
+                  {closing.reassurance ? <p>{closing.reassurance}</p> : null}
+                </>
+              ) : (
+                <ClosingCta
+                  label={closing.label}
+                  locale={locale}
+                  query={closing.query}
+                  reassurance={closing.reassurance}
+                  to={closing.to}
+                />
+              )}
+            </SectionShell>
+          </MotionReveal>
+        </>
+      )}
     </SiteChrome>
   );
 }

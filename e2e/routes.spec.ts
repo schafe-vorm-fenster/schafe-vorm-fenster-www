@@ -101,24 +101,114 @@ for (const { path, locale, route } of ROUTES) {
 }
 
 /**
- * TS-004-A4 / TS-001-A3. The 404 body speaks the TLD default on every URL:
- * `app/global-not-found.tsx` is the only 404 surface Next.js 16.3 renders,
- * and it sits above the language segment. The limitation is recorded in
- * `state/open.md`; the status and the `noindex` are right on every path.
+ * TS-011-A4 — "the context band is an `aside` on **every** page" — and
+ * TS-006-A6 — "every page renders exactly one context band" — over the whole
+ * route table, in both languages.
+ *
+ * The two documented exceptions are `/mitmachen/registrieren` and
+ * `/dein-kalender/bestellen`: TS-023 D7 suppresses the band mid-flow because
+ * "a mid-flow exit offer costs the conversion the page exists for", TS-025
+ * does the same for the order flow, and the deviation from TS-006 D5/A6 is
+ * the decided one — `plan/component-inventory.md` D-5, `state/open.md` row
+ * 24, finding F-2-10. Both land on their first step by default, where the
+ * band is suppressed; no other page may opt out (F-2-41).
  */
-for (const path of ["/gibt-es-nicht", "/en/does-not-exist", "/uk/mitmachen"]) {
-  test(`TS-004-A4: ${path} answers a rendered 404`, async ({ page }) => {
+const FLOW_ROUTES_WITHOUT_BAND: readonly string[] = ["register", "order"];
+
+for (const { path, route } of ROUTES) {
+  const midFlow = FLOW_ROUTES_WITHOUT_BAND.includes(route);
+
+  test(`TS-011-A4/TS-006-A6: ${path} — ${
+    midFlow ? "the F-2-10 flow exception" : "one aside#context-band, one #closing-cta"
+  }`, async ({ page }) => {
+    await page.goto(path);
+    const band = page.locator("#context-band");
+
+    if (midFlow) {
+      // The two flow routes compose their chrome themselves, step by step,
+      // and never through `PageFrame`. Where each renders a band it is an
+      // `aside` like everywhere else (TS-011-A4, F-2-41) — TS-023 D7 puts
+      // the register flow's on step 1, TS-025 puts the order flow's after
+      // step 4, and the suppression in between is F-2-10's decided
+      // deviation, walked step by step in the two page specs. Asserted here
+      // as the named exception so a third page cannot join it unnoticed.
+      const bandOnLanding = route === "register";
+      await expect(band, `#context-band on ${path}`).toHaveCount(bandOnLanding ? 1 : 0);
+      if (bandOnLanding) {
+        expect(await band.evaluate((element) => element.tagName)).toBe("ASIDE");
+        await expect(band).toHaveAttribute("aria-label", /\S/);
+      }
+      return;
+    }
+
+    await expect(band, `#context-band on ${path}`).toHaveCount(1);
+    // The closing block stands on every `PageFrame` page (TS-006 D2/A7); on
+    // the merged pages it is the anchor **inside** the band, so it is
+    // counted on its own rather than as one element with it.
+    await expect(page.locator("#closing-cta"), `#closing-cta on ${path}`).toHaveCount(1);
+    // TS-011 D3: "every `nav` and every `aside` carries an accessible name."
+    expect(await band.evaluate((element) => element.tagName)).toBe("ASIDE");
+    await expect(band).toHaveAttribute("aria-label", /\S/);
+    // TS-006 D5: exactly the three non-focus jobs, once — the merged pages
+    // must not render the same list twice (TS-027-A10).
+    await expect(band.getByRole("link")).toHaveCount(3);
+  });
+}
+
+/**
+ * TS-004-A4 / TS-004 D6 — the 404 that renders, in the language of the URL
+ * that was asked for (F-2-70).
+ *
+ * `app/global-not-found.tsx` is still the only 404 surface Next.js 16.3
+ * server-renders, but every unknown URL now reaches it: `proxy.ts` keeps a
+ * non-language first segment out of `app/[lang]`, where the page's own
+ * `notFound()` arrived one render too late and produced a 404 with an empty
+ * body. The language comes down the same way, on a request header.
+ */
+const NOT_FOUND_CASES = [
+  { path: "/gibt-es-nicht", heading: "Seite nicht gefunden", lang: "de" },
+  { path: "/uk/mitmachen", heading: "Seite nicht gefunden", lang: "de" },
+  { path: "/irgendwas/irgendwo", heading: "Seite nicht gefunden", lang: "de" },
+  { path: "/en/does-not-exist", heading: "Page not found", lang: "en" },
+  { path: "/en/anything", heading: "Page not found", lang: "en" },
+] as const;
+
+for (const { path, heading, lang } of NOT_FOUND_CASES) {
+  test(`TS-004-A4: ${path} answers a rendered 404 in ${lang}`, async ({ page }) => {
     const response = await page.goto(path);
     expect(response?.status()).toBe(404);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      "Seite nicht gefunden",
-    );
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(heading);
+    await expect(page.locator("html")).toHaveAttribute("lang", lang);
     // Next.js emits its own `noindex` for a 404 response; the page adds the
     // `follow` half of DEC-032. Assert the page's tag is present rather than
     // that it is the only one.
     await expect(
       page.locator('meta[name="robots"][content="noindex, follow"]'),
     ).toHaveCount(1);
+  });
+
+  test(`TS-004-A4/D6: ${path} is a complete document without JavaScript`, async ({
+    browser,
+  }) => {
+    // The half F-2-70 was filed for. D6 calls the 404 a "static shell +
+    // streamed place search", and a static shell is server-rendered by
+    // definition — before this fix the German surface measured **zero**
+    // rendered characters here while the English one measured 327.
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    const response = await page.goto(path);
+
+    expect(response?.status()).toBe(404);
+    const text = await page.locator("body").innerText();
+    expect(text.length).toBeGreaterThan(100);
+    expect(text).toContain(heading);
+
+    // A4 names both modules by name: the place search is the dominant
+    // element, the jobs band carries the four jobs.
+    await expect(page.locator("#place-search input")).toHaveCount(1);
+    await expect(page.locator("#context-band a")).not.toHaveCount(0);
+
+    await context.close();
   });
 }
 

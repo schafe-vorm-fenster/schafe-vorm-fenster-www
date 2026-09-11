@@ -26,6 +26,13 @@ export interface ClosingCtaMergedProps {
   readonly currentJob: NavEntry["label"];
   readonly heading?: string;
   readonly locale?: Locale;
+  /**
+   * Block 4's anchor, where the merged block is rendered inside the band's
+   * own `aside#context-band` — the merged shape is one block carrying both
+   * ids, so a page keeps exactly one `#context-band` and one `#closing-cta`
+   * (TS-006 D6 + TS-011-A4, F-2-41).
+   */
+  readonly id?: string;
   readonly className?: string;
 }
 
@@ -48,9 +55,15 @@ export type ClosingCtaProps = ClosingCtaRepeatProps | ClosingCtaMergedProps;
  */
 export function ClosingCta(props: ClosingCtaProps) {
   if (props.variant === "merged") {
-    const { currentJob, heading = "Was suchst du sonst noch?", locale = "de", className } = props;
+    const {
+      currentJob,
+      heading = "Was suchst du sonst noch?",
+      locale = "de",
+      id,
+      className,
+    } = props;
     return (
-      <div className={[styles.merged, className].filter(Boolean).join(" ")}>
+      <div className={[styles.merged, className].filter(Boolean).join(" ")} id={id}>
         <p className={styles.heading}>{heading}</p>
         <JobLinks jobs={otherJobs(currentJob)} locale={locale} />
       </div>

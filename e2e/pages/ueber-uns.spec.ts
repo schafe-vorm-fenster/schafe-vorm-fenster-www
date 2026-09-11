@@ -77,9 +77,18 @@ test.describe("/ueber-uns", () => {
   }) => {
     await page.goto("/ueber-uns");
     await expect(page.locator('[data-cta="primary"]')).toHaveCount(0);
-    await expect(page.locator("#context-band")).toHaveCount(0);
+    // "Rendered once, not twice": the merged block **is** the context band
+    // (TS-006 D6, `plan/component-inventory.md` TS-027 block 7 — "`context-
+    // band` in `merged` mode … rendered once, as the last block"), so it is
+    // the one `aside#context-band` TS-011-A4 requires on every page and it
+    // carries block 4's `#closing-cta` anchor inside. This used to assert
+    // the band's *absence*, which is what left the page without an `aside`
+    // at all (F-2-41, reopened at gate 2).
+    const band = page.locator("aside#context-band");
+    await expect(band).toHaveCount(1);
     const closing = page.locator("#closing-cta");
     await expect(closing).toHaveCount(1);
+    await expect(band.locator("#closing-cta")).toHaveCount(1);
     const jobs = closing.getByRole("link");
     expect(await jobs.count()).toBe(3);
   });

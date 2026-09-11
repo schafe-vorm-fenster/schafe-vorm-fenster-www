@@ -247,7 +247,10 @@ export default async function Page({
           2/3 and the handover — a mid-flow exit offer costs the conversion
           the page exists for. */}
       {step === 1 ? (
-        <SectionShell id="context-band" surface="surface">
+        // TS-011-A4 (F-2-41): the band is an `aside` on every page it
+        // renders on — this file hand-rolls its own because D7 makes it
+        // conditional, so `PageFrame`'s `as="aside"` does not reach it.
+        <SectionShell as="aside" id="context-band" label={contextBandHeading} surface="surface">
           <ContextBand
             currentJob={jobLabelKey(pageMeta.focusJob)}
             heading={contextBandHeading}

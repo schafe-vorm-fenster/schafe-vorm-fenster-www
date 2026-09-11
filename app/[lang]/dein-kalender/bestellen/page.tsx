@@ -288,7 +288,14 @@ export default async function Page({
         {step === 4 ? (
           <>
             <h1>{fieldAt(codeSlot.blocks, 0)}</h1>
-            <CodeSnippet code={demoCode} note={fieldAt(codeSlot.blocks, 1)} state="mocked" />
+            {/* F-2-33: the snippet's `Demo-Daten` badge reads the page's
+                language like every other self-badging module. */}
+            <CodeSnippet
+              code={demoCode}
+              locale={locale}
+              note={fieldAt(codeSlot.blocks, 1)}
+              state="mocked"
+            />
             {/* F-2-60: keyed on the completed order, so Back-then-Forward
                 through step 4 reports the same completion once. */}
             <FireConversionOnMount
@@ -307,7 +314,9 @@ export default async function Page({
       </SectionShell>
 
       {step === 4 ? (
-        <SectionShell id="context-band" surface="surface">
+        // TS-011-A4 (F-2-41): an `aside`, like every other band — this page
+        // renders its own because TS-025 places it after step 4 only.
+        <SectionShell as="aside" id="context-band" label={contextBandHeading} surface="surface">
           <ContextBand currentJob={jobLabelKey(pageMeta.focusJob)} heading={contextBandHeading} locale={locale} />
         </SectionShell>
       ) : null}
