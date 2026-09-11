@@ -1,0 +1,45 @@
+{
+  "$comment": "TS-017 D1 — the register of every runtime dependency, one line of reason each. An entry in package.json dependencies that is absent here fails scripts/check-stack.ts (TS-017-A1); an entry here that is not a dependency fails too. The deny-set is changed by a decision, not by a commit.",
+  "spec": "TS-017 D1",
+  "dependencies": {
+    "next": {
+      "reason": "The one rendering and routing framework: Next.js App Router, server-first, on Vercel.",
+      "decision": "DEC-002"
+    },
+    "react": {
+      "reason": "The rendering runtime Next.js is built on; not a second framework, a peer of the first.",
+      "decision": "DEC-002"
+    },
+    "react-dom": {
+      "reason": "The DOM renderer half of React, required by Next.js.",
+      "decision": "DEC-002"
+    },
+    "@schafe-vorm-fenster/brand-design": {
+      "reason": "The binding design system: colour and type tokens, logos, font packages. Consumed, never copied; pinned exact so a brand change arrives as a reviewable version bump.",
+      "decision": "DEC-044"
+    },
+    "@fontsource/atkinson-hyperlegible-next": {
+      "reason": "Self-hosted woff2 faces of the brand typeface; a direct dependency because pnpm does not hoist the brand package's own dependencies to our import paths.",
+      "decision": "DEC-043"
+    },
+    "@fontsource/atkinson-hyperlegible-mono": {
+      "reason": "Self-hosted woff2 faces of the brand mono typeface, used for labels, dates and numbers.",
+      "decision": "DEC-043"
+    },
+    "lucide-react": {
+      "reason": "The one icon set (24px grid, 2px stroke). Exactly one icon dependency is allowed; no glyph is drawn by hand.",
+      "decision": "DEC-056"
+    },
+    "zod": {
+      "reason": "Schema validation for content frontmatter and, from M3, for every external payload crossing the BFF boundary.",
+      "decision": "DEC-020"
+    }
+  },
+  "denySet": {
+    "$comment": "TS-017 D1 [PROPOSED]: no source enumerates forbidden frameworks. These are the alternatives a second framework would arrive as.",
+    "metaFrameworks": ["remix", "@remix-run/react", "gatsby", "nuxt", "astro", "@sveltejs/kit", "solid-start"],
+    "routers": ["react-router", "react-router-dom", "@tanstack/react-router", "wouter"],
+    "componentFrameworks": ["vue", "svelte", "solid-js", "preact", "@angular/core"],
+    "applicationServers": ["express", "fastify", "koa", "hapi", "@nestjs/core"]
+  }
+}
