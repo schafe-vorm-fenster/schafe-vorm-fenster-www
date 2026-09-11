@@ -2,10 +2,13 @@
 
 Run started: 2026-09-11 (orchestrator session, model claude-fable-5-1)
 Current milestone: Gate 2 (structure + pages + content + M4 systems) — round 2 (M1 closed 2026-09-11)
-Current test round: 2 (round 1 = M1 gate)
+Current test round: 3 of 3 (gate-2 loop: round 2 = QA sweep + triage, round 3 = fix packages A/B/C → retest)
 
 ## Done
 
+- Gate 2 QA run 1: 333 ACs — 234 pass / 52 fail / 47 not-testable; 35 findings (1 critical F-2-30 uncovered branch, 12 high); Lighthouse a11y 100; semgrep 0 true positives; differential review → F-2-36 (reports/qa/gate-2-run-1.md) — 2026-09-11
+- Chaos hasty-clicker run 2 (Playwright): double-fired events C-H-6/7, 174 px shift C-H-12 — 2026-09-11
+- PM round-3 decisions: 32 fix-now (1c/15h/16m) in packages A/B/C, 29 open-list (plan/round-3.md) — 2026-09-11
 - Fix round 2b: F-2-2 scrim (11.9–15.7:1), F-2-28/29 contrast (axe 0 serious on 48 cases), F-2-3 breadcrumb name, F-2-4 locale props + dictionary sections, e2e env fit; preview https://schafe-vorm-fenster-cmijfafo8-schafe-vorm-fenster.vercel.app 256 passed / 0 failed — 2026-09-11
 - Gate 2 strands: UAT report reports/uat/gate-2.md (5 goals walked; strongest: 404 placeholder copy, dead briefing links, Weiter/Absenden, demo organizer id, mixed-language EN registration); chaos keyboard-only (8 obs, TS-001-A7 switch bug), boundary-tester (18 obs), form-abandoner (6 obs, {county-or-organization} literal, EN labels German) — 2026-09-11
 - M4 wiring wave: Cache Components on (6 static ○ / 2 ◐ / 4 ƒ), live islands + relevance selection + 9 goal events + one JSON-LD graph per page, TS-006 A1/A11 cross-page validation; pnpm check 704 tests; e2e 251 local, 221 on preview https://schafe-vorm-fenster-83x6zbys4-schafe-vorm-fenster.vercel.app (failures = known contrast + env-fit) — 2026-09-11
@@ -37,9 +40,8 @@ Current test round: 2 (round 1 = M1 gate)
 
 ## In progress
 
-- Gate 2 QA acceptance sweep run 1 (full scope, security sweep, triage of chaos/UAT) on preview cmijfafo8 — QA (opus)
-- Chaos hasty-clicker run 2 via Playwright — persona
-- Next: PM round decisions → fix round 3 → retest → Customer acceptance
+- Round 3 fix packages (plan/round-3.md): A conversion paths (20 findings, opus), B components/rendering (6), C platform (6, opus) — three developers in parallel
+- Next: fresh preview → QA retest (round 3) → Customer acceptance gate 2 → M5 final roundtrips
 
 ## Pending
 
