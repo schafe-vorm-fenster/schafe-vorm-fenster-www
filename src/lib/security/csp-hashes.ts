@@ -3,61 +3,75 @@
  * `scripts/generate-csp-hashes.mjs` writes after `next build` — TS-014 D3 /
  * DEC-045, state/open.md rows 21 and 31.
  *
- * Works today for a self-hosted deployment (`next build && next start`):
- * verified locally against a real production build — 28 hashes, correct
- * `script-src`, zero CSP violations, real hydration. Proxy defaults to the
- * Node.js runtime as of Next 16 (see
- * `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/proxy.md`
- * — "Runtime"), so a synchronous `fs` read is available there.
+ * First attempt (superseded): a synchronous `fs` read of a hand-written file
+ * under `.next/security/`. Verified working for a self-hosted
+ * `next build && next start`, but measured to fail on an actual Vercel
+ * preview — the deployed Proxy function's traced filesystem never included
+ * that file (or `.next/server/app` itself), and Proxy's file-convention
+ * `config` export has no option to force-include extra files.
  *
- * **Does not yet reach the deployed Vercel Proxy function.** Measured
- * against an actual preview deploy: Vercel's Next.js builder packages the
- * Proxy/Middleware function from a traced subset of `.next` that includes
- * the manifests and `server/chunks`, but neither `.next/server/app` (the
- * rendered page HTML) nor a hand-written file under a new `.next/security/`
- * directory — `existsSync` here returns `false` at runtime on Vercel even
- * though the build log confirms the extraction step ran and wrote the file.
- * There is no Proxy-level config to force-include extra files (the file
- * convention's `config` export only supports `matcher`). Result: this
- * function safely returns `[]` there today, and `csp.ts`'s no-hashes
- * fallback applies — same-origin chunks still load, but the two inline
- * bootstrap/flight scripts stay unhashed and blocked, so hydration is not
- * yet restored on an actual Vercel deployment. See state/open.md row 31 for
- * the follow-up options (a real per-request nonce, which DEC-045 rules out
- * for the static shell; or a runtime-reachable store such as Vercel Edge
- * Config populated at build time) — both are bigger than this fix.
+ * Current mechanism: the extraction script writes the hash set into
+ * `.next/static/security/csp-script-hashes.json`, which Vercel uploads and
+ * serves like any other `_next/static` asset — no function file-tracing
+ * involved. This module fetches it from the incoming request's own origin,
+ * once per server instance (the in-flight promise is cached in module
+ * scope, so concurrent first requests share one fetch and every later
+ * request is free). `proxy.ts` stays a pure function of hostname + path
+ * (TS-004 D3): the fetch reads a build artifact, not per-request state, and
+ * its result never varies with *this* request's path.
+ *
+ * Preview deployments sit behind Vercel Deployment Protection, so the
+ * self-fetch carries `x-vercel-protection-bypass` — the same
+ * `VERCEL_AUTOMATION_BYPASS_SECRET` Vercel injects into a protected
+ * deployment's own functions (state/open.md row 14), not a secret this
+ * module invents or reads from a file.
+ *
+ * `next dev` never runs the extraction step, so the asset 404s there by
+ * design; `csp.ts` treats an empty result as "no hashes yet" and falls back
+ * to a dev-only `'unsafe-inline'` rather than pairing `'strict-dynamic'`
+ * with nothing to trust.
  */
 
-import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+const ASSET_PATH = "/_next/static/security/csp-script-hashes.json";
 
 interface GeneratedHashes {
-  readonly hashes?: readonly string[];
+  readonly hashes?: readonly unknown[];
 }
 
-let cached: readonly string[] | undefined;
+let cached: Promise<readonly string[]> | undefined;
 
-function readGeneratedHashes(): readonly string[] {
-  const path = join(process.cwd(), ".next", "security", "csp-script-hashes.json");
-  if (!existsSync(path)) return [];
-
+async function fetchGeneratedHashes(origin: string): Promise<readonly string[]> {
   try {
-    const raw = readFileSync(path, "utf8");
-    const parsed = JSON.parse(raw) as GeneratedHashes;
-    const hashes = parsed.hashes;
-    return Array.isArray(hashes) ? hashes.filter((h) => typeof h === "string") : [];
+    const url = new URL(ASSET_PATH, origin);
+    const bypass = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+
+    const response = await fetch(url, {
+      headers: bypass ? { "x-vercel-protection-bypass": bypass } : {},
+      signal: AbortSignal.timeout(3000),
+      cache: "no-store",
+    });
+    if (!response.ok) return [];
+
+    const parsed = (await response.json()) as GeneratedHashes;
+    return Array.isArray(parsed.hashes)
+      ? parsed.hashes.filter((h): h is string => typeof h === "string")
+      : [];
   } catch (error) {
-    // Loud in the server log, not fatal for the request — a build that made
-    // it to serving traffic already ran the extraction step successfully
-    // once; a read failure here is an operational anomaly, not the expected
-    // "no hashes in dev" case `existsSync` already handled above.
-    console.error("[csp-hashes] failed to read/parse the generated hash file:", error);
+    // Loud in the server log, not fatal for the request. `csp.ts` treats an
+    // empty result the same as "next dev, no build has run" — the policy
+    // degrades to the host allowlist rather than shipping 'strict-dynamic'
+    // with nothing to trust.
+    console.error("[csp-hashes] failed to fetch the generated hash asset:", error);
     return [];
   }
 }
 
+/** The path this module fetches — also the one path `proxy.ts` must not
+ * recurse into when computing a hash-dependent CSP for it. */
+export const CSP_HASHES_ASSET_PATH = ASSET_PATH;
+
 /** The distinct `sha256-…` sources for this build, or `[]` if none exist yet. */
-export function scriptHashes(): readonly string[] {
-  cached ??= readGeneratedHashes();
+export function scriptHashes(origin: string): Promise<readonly string[]> {
+  cached ??= fetchGeneratedHashes(origin);
   return cached;
 }

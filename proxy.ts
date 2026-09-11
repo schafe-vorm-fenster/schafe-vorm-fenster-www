@@ -15,7 +15,7 @@
 
 import { NextResponse } from "next/server";
 
-import { scriptHashes } from "@/src/lib/security/csp-hashes";
+import { CSP_HASHES_ASSET_PATH, scriptHashes } from "@/src/lib/security/csp-hashes";
 import {
   contentSecurityPolicy,
   strictTransportSecurity,
@@ -24,22 +24,32 @@ import { environmentFrom, isIndexable, NOINDEX } from "@/src/lib/seo/indexable";
 
 import type { NextRequest } from "next/server";
 
-export function proxy(request: NextRequest): NextResponse {
+export async function proxy(request: NextRequest): Promise<NextResponse> {
   const response = NextResponse.next();
   const vercelEnv = process.env.VERCEL_ENV;
   const environment = environmentFrom(vercelEnv);
 
   // DEC-045: per-build hashes, no per-request nonce — the shell stays static.
-  // `scriptHashes()` reads a build artifact once per server instance (module
-  // scope caches it) rather than computing anything per request, so this
-  // stays a pure function of hostname + path (TS-004 D3). `next dev` never
-  // produces that artifact, so the set is `[]` there and `csp.ts` falls back
-  // to `'unsafe-inline'` (dev only) instead of leaving the inline scripts
-  // with nothing to trust — see `csp.ts` for why `'strict-dynamic'` is not
-  // part of the policy at all (state/open.md rows 21, 31).
+  // `scriptHashes()` fetches a build artifact from this deployment's own
+  // static assets once per server instance (module scope caches the
+  // in-flight promise), not per request, so this stays a pure function of
+  // hostname + path (TS-004 D3). The one exception: the hash asset's own
+  // request must not try to compute a hash-dependent policy for itself —
+  // that would recurse into the same fetch this proxy has no matcher to
+  // skip (TS-015 D3 runs it on "all routes incl. assets" on purpose).
+  // `next dev` never produces the asset, so the set is `[]` there and
+  // `csp.ts` falls back to `'unsafe-inline'` (dev only) instead of leaving
+  // the inline scripts with nothing to trust — see `csp.ts` for why
+  // `'strict-dynamic'` is not part of the policy at all (state/open.md rows
+  // 21, 31).
+  const hashes =
+    request.nextUrl.pathname === CSP_HASHES_ASSET_PATH
+      ? []
+      : await scriptHashes(request.nextUrl.origin);
+
   response.headers.set(
     "Content-Security-Policy",
-    contentSecurityPolicy({ environment, scriptHashes: scriptHashes() }),
+    contentSecurityPolicy({ environment, scriptHashes: hashes }),
   );
 
   const hsts = strictTransportSecurity(environment);

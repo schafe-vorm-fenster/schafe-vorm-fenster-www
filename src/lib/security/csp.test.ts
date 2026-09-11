@@ -117,6 +117,31 @@ describe("state/open.md rows 21 & 31: the CSP that actually hydrates", () => {
     expect(scriptSrc).not.toContain("'unsafe-inline'");
     expect(scriptSrc).toContain("'sha256-abc'");
   });
+
+  it("lets the deployed preview hydrate too, for the same reason as dev: the hash asset doesn't reach it yet", () => {
+    const { "script-src": scriptSrc } = policyDirectives({
+      environment: "preview",
+      scriptHashes: [],
+    });
+    expect(scriptSrc).toContain("'unsafe-inline'");
+    expect(scriptSrc).not.toContain("'strict-dynamic'");
+  });
+
+  it("prefers hashes over 'unsafe-inline' in preview too, once the asset reaches it", () => {
+    const { "script-src": scriptSrc } = policyDirectives({
+      environment: "preview",
+      scriptHashes: ["sha256-abc"],
+    });
+    expect(scriptSrc).not.toContain("'unsafe-inline'");
+    expect(scriptSrc).toContain("'sha256-abc'");
+  });
+
+  it("never grants production the preview/dev 'unsafe-inline' concession, hash set or not — D7 holds unconditionally there", () => {
+    for (const scriptHashes of [[], ["sha256-abc"]]) {
+      const { "script-src": scriptSrc } = policyDirectives({ environment: "production", scriptHashes });
+      expect(scriptSrc).not.toContain("'unsafe-inline'");
+    }
+  });
 });
 
 describe("TS-014 D7: no wildcard, ever", () => {

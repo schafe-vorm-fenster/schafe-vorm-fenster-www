@@ -7,15 +7,17 @@
  * `<script>` tags that have no `src` — Next's own hydration bootstrap and
  * flight-payload scripts — and hashes each distinct one it finds.
  *
- * The result is written to `.next/security/csp-script-hashes.json`, which
- * `src/lib/security/csp-hashes.ts` reads at runtime. This keeps `proxy.ts` a
- * pure function of hostname + path (TS-004 D3): the file is a build
- * artifact, not per-request state. Verified against a self-hosted
- * `next build && next start` — see `csp-hashes.ts` for the caveat measured
- * against an actual Vercel preview deploy (state/open.md row 31): the
- * deployed Proxy function's traced filesystem does not include this file
- * (or `.next/server/app` itself), so this step currently only benefits a
- * self-hosted deployment, not the Vercel one this project ships to.
+ * The result is written to `.next/static/security/csp-script-hashes.json` —
+ * inside `.next/static`, not the earlier `.next/security`, because Vercel
+ * uploads everything under `.next/static/**` as public static assets after
+ * the build command finishes (served at `/_next/static/...`), while a
+ * hand-written file outside that tree does not reach the deployed Proxy
+ * function at all (measured: its traced filesystem excludes both
+ * `.next/server/app` and a custom `.next/security/` directory — see
+ * state/open.md rows 21/31 for that earlier, failed attempt). `proxy.ts`
+ * fetches this asset from the request's own origin at runtime
+ * (`src/lib/security/csp-hashes.ts`) rather than reading it off disk, so it
+ * needs to be something Vercel actually serves.
  *
  * Failure is loud on purpose (DEC-045: "a new inline block that does not
  * pass through that step breaks the policy loudly rather than silently
@@ -30,7 +32,7 @@ import { fileURLToPath } from "node:url";
 
 const projectRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const APP_DIR = join(projectRoot, ".next", "server", "app");
-const OUT_FILE = join(projectRoot, ".next", "security", "csp-script-hashes.json");
+const OUT_FILE = join(projectRoot, ".next", "static", "security", "csp-script-hashes.json");
 
 /** Matches a `<script …>…</script>` tag whose opening tag has no `src=`. */
 const SCRIPT_TAG_RE = /<script(\s[^>]*)?>([\s\S]*?)<\/script>/g;
