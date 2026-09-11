@@ -1,0 +1,60 @@
+.section {
+  /* Surfaces are square: no border, no shadow, no radius (SRC-014). */
+  border-radius: 0;
+  display: block;
+  width: 100%;
+}
+
+.standard {
+  padding-block: var(--section-padding-block);
+}
+
+.tight {
+  padding-block: var(--section-padding-block-tight);
+}
+
+.paper {
+  background: var(--color-neutral-paper);
+  color: var(--color-neutral-ink);
+}
+
+.surface {
+  background: var(--color-neutral-surface);
+  color: var(--color-neutral-ink);
+}
+
+.surface2 {
+  background: var(--color-neutral-surface2);
+  color: var(--color-neutral-ink);
+}
+
+.lime100 {
+  background: var(--color-lime-100);
+  color: var(--color-neutral-ink);
+}
+
+.lime500 {
+  background: var(--color-lime-500);
+  color: var(--color-lime-900);
+}
+
+/* The dark anchor: once per page, and it carries the live data. */
+.ink {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+}
+
+.violet500 {
+  background: var(--color-violet-500);
+  color: var(--color-neutral-paper);
+}
+
+/* On the dark grounds the link colour has to change with the ground. */
+.ink a,
+.violet500 a {
+  color: var(--color-lime-400);
+}
+
+.lime500 a {
+  color: var(--color-lime-900);
+}

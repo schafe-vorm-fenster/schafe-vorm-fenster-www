@@ -1,0 +1,35 @@
+.frame {
+  margin: 0;
+  width: 100%;
+}
+
+.box {
+  /* The ratio is on the box, so the space exists before the asset does. */
+  aspect-ratio: var(--media-ratio, var(--ratio-feature));
+  background: var(--color-neutral-surface2);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.image {
+  object-fit: cover;
+  object-position: center;
+}
+
+.marks {
+  bottom: var(--space-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  left: var(--space-2);
+  position: absolute;
+  right: var(--space-2);
+}
+
+.caption {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+  line-height: var(--leading-normal);
+  padding-top: var(--space-2);
+}

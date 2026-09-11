@@ -1,0 +1,58 @@
+.nav {
+  display: block;
+}
+
+.title {
+  color: var(--color-neutral-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  margin: 0 0 var(--space-2);
+  text-transform: uppercase;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link,
+.current {
+  align-items: center;
+  border-top: 1px solid var(--color-neutral-line);
+  display: flex;
+  font-size: var(--type-meta-size);
+  gap: var(--space-2);
+  min-height: var(--target-min);
+  text-decoration: none;
+}
+
+.link {
+  color: var(--color-lime-800);
+}
+
+.link:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.15em;
+}
+
+/* Weight plus a marker glyph — the current item is never colour-only. */
+.current {
+  color: var(--color-neutral-ink);
+  font-weight: 700;
+}
+
+.marker {
+  flex: none;
+}
+
+/* xl — 64rem / 1024px: the list becomes the sticky column beside the text. */
+@media (min-width: 64rem) {
+  .nav {
+    position: sticky;
+    top: calc(var(--site-header-height) + var(--space-4));
+  }
+}

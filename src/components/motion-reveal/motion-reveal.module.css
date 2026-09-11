@@ -1,0 +1,24 @@
+.reveal {
+  /* Without JavaScript, and before the observer speaks, this is a plain box. */
+  display: block;
+}
+
+.reveal[data-armed="true"] {
+  opacity: 0;
+  transform: translateY(var(--motion-reveal-distance));
+}
+
+.reveal[data-armed="true"][data-revealed="true"] {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity var(--motion-reveal-duration) var(--motion-reveal-easing),
+    transform var(--motion-reveal-duration) var(--motion-reveal-easing);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal[data-armed="true"] {
+    opacity: 1;
+    transform: none;
+  }
+}
