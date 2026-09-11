@@ -76,9 +76,9 @@ JS disabled.
 
 | Viewport | Behaviour |
 | --- | --- |
-| ≥ 1024 px | sticky column beside the text, full list visible, `position: sticky` below the header |
-| < 1024 px | not sticky: the list sits once below the `h1`, above the first section |
-| < 1024 px, past section one | one "Nach oben" control, fixed bottom-right, ≥ 44 px, returning to the nav — no floating menu, no overlay |
+| ≥ `xl` (1024 px) | sticky column beside the text, full list visible, `position: sticky` below the header |
+| < `xl` | not sticky: the list sits once below the `h1`, above the first section |
+| < `xl`, past section one | one "Nach oben" control, fixed bottom-right, ≥ 44 px, returning to the nav — no floating menu, no overlay |
 
 Current-section indication is progressive enhancement: an
 `IntersectionObserver` marks the topmost visible section's entry with
@@ -148,7 +148,7 @@ the anchors are not URLs of their own.
 | TS-029-A5 | e2e | The section `nav` lists the registry sections in order; clicking each entry lands per A3; `aria-current="true"` follows the topmost section while scrolling. |
 | TS-029-A6 | e2e | At 390 px: the nav is not sticky, sits above the first section, no horizontal scroll; after scrolling past section one a ≥ 44 px "Nach oben" control appears and returns to the nav. |
 | TS-029-A7 | e2e | With JavaScript disabled the page renders all sections and every nav link jumps correctly; no `aria-current` is required. |
-| TS-029-A8 | e2e | Body text column measure ≤ 80 ch at 390 px, 768 px and 1440 px (measured against a 0-width `ch` probe). |
+| TS-029-A8 | e2e | Body text column measure ≤ 80 ch at 360 px, 428 px, 768 px and 1440 px (measured against a 0-width `ch` probe). |
 | TS-029-A9 | e2e | Footer links "Impressum", "Datenschutz", "Barrierefreiheit" (and their EN labels) resolve to the matching anchors on this page, on both languages. |
 | TS-029-A10 | integration | `#auftragsverarbeitung` renders its content anonymously — no redirect, no auth, no form gate. |
 | TS-029-A11 | integration | Production build fails when the accessibility-statement section is absent; preview build succeeds and omits it (D8). |

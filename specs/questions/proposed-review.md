@@ -17,45 +17,52 @@ only what those decisions do not answer. Answers become DEC entries, and the
 determinations they settle flip to `[FIXED]`.
 
 The register rows are Q-058 … Q-070 in [open-questions.md](open-questions.md).
+Q-058 is answered; the twelve below are open.
 
 ---
 
-## A. A collision that blocks generation
+## A. Resolved while this catalogue was being written
 
-### Q-058 — Breakpoints: the spec and the tokens disagree, and they disagree *by name*
+### Q-058 — Breakpoints: six, and dense at the phone end **[resolved — DEC-067]**
 
-`brand-design` ships six breakpoint tokens:
+`brand-design` ships six breakpoint tokens. TS-017 D1(b) had fixed **two**
+and, worse, reused the names `md` and `lg` for 768 and 1024 — widths the
+token set calls `lg` and `xl`. Writing `md:` against the tokens would have
+yielded 640 px where the spec meant 768, silently, with no error anywhere.
 
-| Token | Value | px |
+The reduction was the spec's mistake, not the token set's excess. The
+density below the tablet is the decision:
+
+| Token | px | What it is for |
 | --- | --- | --- |
-| `xs` | 22.5rem | 360 |
-| `sm` | 26.75rem | 428 |
-| `md` | 40rem | 640 |
-| `lg` | 48rem | 768 |
-| `xl` | 64rem | 1024 |
-| `2xl` | 80rem | 1280 |
+| base | 0 | below `xs`: 320 px phones, the floor TS-002 A7 guards |
+| `xs` | 360 | the small-phone reference viewport |
+| `sm` | 428 | large phones — where the extra width is actually spent |
+| `md` | 640 | phone landscape and the smallest tablets |
+| `lg` | 768 | tablet portrait |
+| `xl` | 1024 | small desktop |
+| `2xl` | 1280 | the desktop reference viewport |
 
-TS-017 D1(b) fixes **two** breakpoints and reuses two of those names for
-different widths: `md` = 768 px, `lg` = 1024 px. In the tokens those widths are
-`lg` and `xl`. An implementation agent that writes `md:` against the token set
-gets **640 px, not 768** — silently, with no error anywhere. This is not a
-disagreement about how many breakpoints we want; it is the same name meaning
-two things in one build.
+Three of the six sit under 640 px because the primary audience arrives on
+a phone, so the phone is the case to *optimise* rather than the case to
+survive — and "phone" is not one width. A 360 px handset and a 428 px
+handset differ by nearly a fifth of the usable line: enough for a date row
+to earn its preview thumbnail, for a counter trio to stop wrapping, for a
+label to sit beside its control instead of under it. Collapsing both into
+one "mobile" spends that difference on nothing.
 
-The reduction itself has a reason worth keeping: TS-017 D2 permits a breakpoint
-to change only spacing, type step, image aspect and column count, and forbids
-breakpoint-twinned markup. Two switch points make that rule enforceable; six
-make it a matter of discipline.
+What survives unchanged is the single-tree rule: six switch points do not
+license six layouts. Density buys tuning, never a second component tree.
 
-| Option | What it means |
-| --- | --- |
-| **A — spec adopts the token names** (recommended) | TS-017 renames its two switch points to `lg` (768) and `xl` (1024). The token set stays as delivered; the spec uses two of its six and says so. Nothing changes in the brand package. |
-| B — tokens shrink to two | `brand-design` drops `xs`, `sm`, `md`, `2xl`. Cleanest to read, but the package serves more than this website, and print/app surfaces may use them. |
-| C — spec keeps its names, mapped once | A single CSS layer aliases the spec's names onto token values. Adds an indirection that exists only to preserve a naming preference. |
+Carried through to TS-017 D2, TS-006 D3 (428 × 926 as a third reference
+viewport, deliberately not a fold viewport), WEB-C-002, the design-system
+contract, and the acceptance regime — A8 and A9 now sample the small range,
+because a check that looks only at 360 and 1280 cannot see whether the
+dense end does anything at all.
 
-Under A, an open sub-question: `measure.page` is 75rem = **1200 px**. TS-017
-D1(c) says content stops growing above the upper breakpoint. Is 1200 px the
-container maximum, with the page background continuing past it?
+One thing is still owed, and it moved rather than closed: the design system
+gives no container width or outer gutter **per breakpoint**. Six are needed,
+and the three below 640 px are the ones nothing delivered so far answers.
 
 ---
 

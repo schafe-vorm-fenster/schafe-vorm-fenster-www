@@ -73,9 +73,19 @@ explicitly).
   marked `data-cta="primary"` so the rule is testable, not a matter of
   taste.
 - **Above the fold** = fully visible without scrolling at the two
-  reference viewports 360 × 640 and 1280 × 800 [PROPOSED — no source
-  defines the fold; TS-002 fixes 320 px only as the no-horizontal-scroll
-  floor].
+  *extreme* reference viewports, 360 × 640 and 1280 × 800 [PROPOSED — no
+  source defines the fold; TS-002 fixes 320 px only as the
+  no-horizontal-scroll floor].
+
+  There is a third reference viewport, **428 × 926** — the large phone
+  that `breakpoint.sm` exists for (TS-017 D2b). It is deliberately *not*
+  a fold viewport: it is strictly more generous than 360 × 640 in both
+  axes, so a CTA that clears the fold on the small phone clears it here
+  too, and testing it would add a check that cannot fail on its own. It
+  is a reference viewport for what the small range *does* change —
+  layout identity and horizontal scroll (TS-017 A8, A9) — because that
+  is where the token scale is dense and where an unnoticed second layout
+  would otherwise hide.
 - **Visually unrivalled** = no other element on the page uses the primary
   treatment; secondary actions use the secondary treatment and sit below
   or beside, never above, the primary one.
@@ -273,11 +283,13 @@ the promise is removed rather than softened.
 
 ## Open points
 
-- **Fold definition is UNKNOWN in the sources.** D3 sets 360 × 640 and
-  1280 × 800 as reference viewports; no source states at which viewport
-  "above the fold" is measured. Question: are those the right two, and
-  does the promise have to hold for a 320 px viewport (TS-002 A7) as
-  well, where it may be unreachable for the longer CTAs?
+- **Fold definition is UNKNOWN in the sources.** D3 measures the fold at
+  360 × 640 and 1280 × 800; no source states at which viewport "above the
+  fold" is measured. Question: are those the right two extremes, and does
+  the promise have to hold for a 320 px viewport (TS-002 A7) as well,
+  where it may be unreachable for the longer CTAs? The third reference
+  viewport (428 × 926) is settled and not part of this question — it
+  carries the small-range checks, not the fold promise.
 - **Equal weight versus "visually unrivalled".** SRC-003 gives
   `/dein-kalender` two equal conversions while SRC-001 §2 allows one
   unrivalled primary. D3 reconciles them by rendering the second as an

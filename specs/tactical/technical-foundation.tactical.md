@@ -43,29 +43,52 @@ The deny-set is [PROPOSED]: no source enumerates forbidden frameworks.
 Its content is a list in `stack.allow.json`, changed by a decision, not
 by a commit.
 
-### D2 — Mobile-first as a layout law [FIXED: WEB-C-002; numbers PROPOSED]
+### D2 — Mobile-first as a layout law [FIXED: WEB-C-002, DEC-054, DEC-056]
 
-"Mobile first" is turned into three rules a reviewer can apply and a
-build can test. All three are [PROPOSED] in their numbers and yield to
-the design system when it lands (Q-023); the *rules* are what binds.
+"Mobile first" is turned into four rules a reviewer can apply and a
+build can test. The numbers are no longer this spec's: the design system
+has landed and `brand-design` fixes every value below (DEC-056).
 
 **(a) Direction.** Base styles are the phone styles — the styles that
 apply with no media query at all. Every media query is `min-width`.
 A `max-width` query is a defect, because it makes the desktop the base
 case. Checkable by inspecting the generated CSS (A4).
 
-**(b) Breakpoints.** Exactly two, and no others:
+**(b) Breakpoints — six, and three of them below the tablet.** The values
+come from `brand-design` (`breakpoint.xs…2xl`); this spec proposes none
+of its own and none may be invented at a call site.
 
-| Name | From | Designed against |
-| --- | --- | --- |
-| base | 0 | 360 × 640 (TS-006 D3 reference viewport); must survive 320 px (TS-002 A7) |
-| `md` | 768 px | tablet portrait |
-| `lg` | 1024 px | 1280 × 800 (TS-006 D3 reference viewport) |
+| Token | Width | px | What it is for |
+| --- | --- | --- | --- |
+| base | — | 0 | below `xs`: 320 px phones, the floor TS-002 A7 guards |
+| `xs` | 22.5rem | 360 | the small-phone reference viewport (TS-006 D3) |
+| `sm` | 26.75rem | 428 | large phones — where the extra width is actually spent |
+| `md` | 40rem | 640 | phone landscape and the smallest tablets |
+| `lg` | 48rem | 768 | tablet portrait |
+| `xl` | 64rem | 1024 | small desktop |
+| `2xl` | 80rem | 1280 | the desktop reference viewport (TS-006 D3) |
 
-**(c) Width is not maximised.** Above `lg` the *content* stops growing;
-only the outer margin does. One container measure (proposed: 960 px) and
-one text measure (proposed: 68 ch) exist as tokens, and no page defines
-its own.
+**Why the small range is dense, and deliberately so.** Three of the six
+switch points sit below 640 px. That is the decision, not an accident of
+a default scale: the primary audience arrives on a phone (WEB-C-002), so
+the phone is not one case to be survived but *the* case to be optimised —
+and "phone" is not one width. A 360 px handset and a 428 px handset differ
+by nearly a fifth of the available line; that difference is enough for a
+date row to earn its preview thumbnail, for a counter trio to stop
+wrapping, for a label to sit beside its control instead of under it.
+Collapsing both into one undifferentiated "mobile" spends that width on
+nothing and tunes the layout for neither. The upper three switch points
+exist for the opposite reason: they keep the layout from falling apart as
+the window grows, where width is deliberately not maximised (c).
+
+The consequence for verification: a criterion that samples only 360 and
+1280 cannot see whether the small range does anything at all. A8 and A9
+therefore sample **three** widths — 360, 428 and 1280.
+
+**(c) Width is not maximised.** Above `2xl` the *content* stops growing;
+only the outer margin does. The container measure is `measure.page`
+(75rem = 1200 px) and the text measure is `measure.text` (68 ch) — both
+token values, neither a proposal of this spec. No page defines its own.
 
 **(d) Tablet and desktop stay close to the mobile layout.** Made
 operative as a single-tree rule:
@@ -75,13 +98,21 @@ operative as a single-tree rule:
   desktop showing the same content is forbidden.
 - A breakpoint may change **only** spacing, type-scale step, image
   aspect, and the column count of a block that declares itself
-  multi-column via `data-columns-lg`.
+  multi-column via `data-columns-<token>`, the token naming the
+  breakpoint at which the further column appears.
 - A breakpoint may **never** change the order of blocks, the presence of
   a block, or its wording. TS-006 D2 fixes the block sequence once, for
   all viewports.
 
-This is what makes A8 possible: if the visible text order at 360 and at
-1280 is identical, the layouts are the same layout at two widths.
+**Six switch points do not license six layouts.** The density of (b) buys
+*tuning* — a step of space, a type size, a thumbnail that appears — and
+never a second component tree. The three rules above are what hold those
+two apart: without them, a dense scale becomes an invitation to build the
+phone layout twice.
+
+This is what makes A8 possible: if the visible text order at 360, at 428
+and at 1280 is identical, the layouts are the same layout at three
+widths.
 
 ### D3 — The brand kit is binding: two packages, three levels (DEC-044) [FIXED: WEB-C-003, SRC-008; package identity PROPOSED]
 
@@ -213,8 +244,9 @@ for the spec side, and needs the content frontmatter schema
   checks named here.
 - [FREE] The internal shape of the app-handover module (D4), as long as
   it is the only place the app hostname occurs.
-- [FREE] Naming of the breakpoint tokens, provided the two values of
-  D2(b) are the only ones in the generated CSS.
+- [FREE] Which of the six breakpoints a given block uses — one, three or
+  none — provided every switch point it uses is a `breakpoint.*` token
+  value and the single-tree rule of D2(d) holds.
 
 ## Acceptance criteria
 
@@ -223,12 +255,12 @@ for the spec side, and needs the content frontmatter schema
 | TS-017-A1 | static | `package.json`: `next` present; no dependency from the D1 deny-set; every `dependencies` entry has a reason line in `stack.allow.json`, and every register entry exists as a dependency. |
 | TS-017-A2 | static | `pnpm-lock.yaml` is the only lockfile; `packageManager` pins pnpm; `.npmrc` maps the `@schafe-vorm-fenster` scope to the private registry. |
 | TS-017-A3 | static | Root `tsconfig.json` exists with `strict: true`; `pnpm typecheck` is a script, is part of `pnpm check`, and exits 0. |
-| TS-017-A4 | static | Generated CSS contains no `@media (max-width: …)`; the only breakpoint values present are D2(b)'s two. |
+| TS-017-A4 | static | Generated CSS contains no `@media (max-width: …)`, and every `min-width` value in it is one of the six `breakpoint.*` token values — a literal px breakpoint at a call site fails. |
 | TS-017-A5 | static | No colour literal and no `font-family` literal outside the single brand-token import file (`app/`, `src/`, stylesheets). |
 | TS-017-A6 | static | No logo, mark, or font file is committed in this repository; every logo reference is a brand-package subpath import. |
 | TS-017-A7 | static | The brand package is pinned to an exact version; the lockfile version matches the version recorded in D3. |
-| TS-017-A8 | e2e | Visible text order in the rendered DOM is identical at 360 × 640 and 1280 × 800 on every page; no element is visible at one width and absent at the other. |
-| TS-017-A9 | e2e | At 1920 px the content container does not exceed the D2(c) measure (only margins grow); at 320 px no page scrolls horizontally (TS-002 A7 is the floor). |
+| TS-017-A8 | e2e | Visible text order in the rendered DOM is identical at 360 × 640, 428 × 926 and 1280 × 800 on every page; no element is visible at one width and absent at another. This is the single-tree rule of D2(d) under test, and it samples the small range because that is where the switch points are dense. |
+| TS-017-A9 | e2e | At 1920 px the content container does not exceed `measure.page` (only margins grow); at 320 px no page scrolls horizontally (TS-002 A7 is the floor); at 360 px and at 428 px no page scrolls horizontally either. |
 | TS-017-A10 | static | Every website `/api/*` route handler exports `GET` only — no write handler anywhere in the route tree. |
 | TS-017-A11 | static | The app hostname occurs in exactly one module (the DEC-029 handover builder); no other file contains it, and no app link is assembled elsewhere. |
 | TS-017-A12 | integration | The persistent calendar entry is present in the header on every page and resolves to the target TS-004 D4 fixes. |
@@ -270,15 +302,16 @@ name used resolves to an export of it.
 
 ## Open points
 
-- **The design system is announced, not delivered (Q-023).** D2's
-  breakpoints, container measure and text measure are this spec's own
-  proposals, made only so that "mobile first" is checkable today. They
-  are superseded the moment the design system lands. Questions for
-  jan-henrik: *which breakpoints does the design system fix, which
-  container and text measure, and does it ship components or tokens
-  only?* Until answered, the visual layer of the one-shot generation
-  stays blocked — D2's rules (min-width only, one tree, order never
-  changes) hold regardless of the numbers.
+- **The design system has landed (DEC-056), and D2 no longer proposes
+  numbers.** Breakpoints, container measure and text measure are token
+  values; this spec's earlier proposals — two breakpoints at 768 and
+  1024, a 960 px container — are withdrawn, including their names, which
+  collided with the token names for other widths. What remains this
+  spec's own is the *rules*: min-width only, one component tree, block
+  order never changes. Those hold regardless of how many switch points
+  the token set carries. Still missing from the design system, and
+  tracked in the design-system contract rather than here: a container
+  width and outer gutter **per breakpoint** — six now, not two.
 
 - **WEB-C-003 points at a path that no longer exists, and names a
   superseded typeface.** The requirement and SRC-008 both cite

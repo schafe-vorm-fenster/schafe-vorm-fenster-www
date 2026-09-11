@@ -54,9 +54,12 @@ value of their own. That rule is what lets the linter check it.
 
 ### 2. Composition rules
 
-- Container width per breakpoint, and the outer gutter.
-- Section rhythm: which `space` token separates blocks, and whether it
-  changes by breakpoint.
+- Container width and outer gutter **per breakpoint — all six**, not
+  only at the desktop end. The three switch points below 640 px are the
+  reason the scale exists (TS-017 D2b), and they are the ones no
+  delivered artefact currently gives a container width for.
+- Section rhythm: which `space` token separates blocks, and at which of
+  the six breakpoints it steps.
 - The mobile-first rule stated normatively: `min-width` queries only, one
   component tree, no separate desktop layout.
 - How the block order every page carries — focus · argument · context
