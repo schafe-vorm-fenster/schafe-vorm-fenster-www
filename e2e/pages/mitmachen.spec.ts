@@ -104,9 +104,18 @@ test.describe("TS-022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
     page,
   }) => {
     await page.goto("/mitmachen");
-    const asideLinks = page.locator('aside a[href*="/dein-kalender"]');
-    await expect(asideLinks).toHaveCount(1);
-    await expect(asideLinks).not.toHaveAttribute("data-cta", "primary");
+    // Excludes `#context-band`: TS-011-A4 makes it an `aside` too (F-2-41),
+    // and its "other jobs" list links `/dein-kalender` on every page — not
+    // this page's own D9 rule, which is about its own blocks 1–2.
+    const ownAsideLinks = await page
+      .locator('aside a[href*="/dein-kalender"]')
+      .evaluateAll((elements) =>
+        elements
+          .filter((element) => !element.closest("#context-band"))
+          .map((element) => element.getAttribute("data-cta")),
+      );
+    expect(ownAsideLinks).toHaveLength(1);
+    expect(ownAsideLinks[0]).not.toBe("primary");
     // Scoped to `main`, excluding the context band: the header's persistent
     // job nav (chrome, TS-004 D4) and TS-006 D5's context band both link to
     // /dein-kalender as "the other jobs" on every page — neither is this

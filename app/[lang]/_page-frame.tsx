@@ -208,10 +208,14 @@ export function PageFrame({
       {children}
 
       {/* Block 3 — the three non-focus jobs. Suppressed where block 4 is the
-          merged three-job offer, which is the same list (TS-006 D6). */}
+          merged three-job offer, which is the same list (TS-006 D6).
+          `as="aside"` — TS-011-A4: "the context band is an `aside` on every
+          page." It rendered as a plain `section` before (F-2-41); the four
+          pages where it is absent opt out through their own `closing`
+          variant (package A's file), which is unchanged here. */}
       {merged ? null : (
         <MotionReveal>
-          <SectionShell id="context-band" label={bandHeading} surface="surface">
+          <SectionShell as="aside" id="context-band" label={bandHeading} surface="surface">
             <ContextBand currentJob={currentJob} heading={bandHeading} locale={locale} />
           </SectionShell>
         </MotionReveal>
