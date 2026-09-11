@@ -51,3 +51,45 @@
 .submit:hover {
   background: var(--color-lime-900);
 }
+
+.submit:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+/* TS-016-A10: present in the DOM, hidden from assistive technology and not
+   focusable — `display: none` would take it out of the DOM's layout entirely,
+   which some bots detect; an off-screen box does not. */
+.honeypot {
+  block-size: 1px;
+  inline-size: 1px;
+  inset-inline-start: -9999px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.success {
+  border: 1px solid var(--color-neutral-line);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+}
+
+.success:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.successHeadline {
+  font-size: var(--type-lead-size);
+  font-weight: 800;
+}
+
+.successBody {
+  font-size: var(--type-body-size);
+}
+
+.refusal {
+  font-size: var(--type-meta-size);
+}

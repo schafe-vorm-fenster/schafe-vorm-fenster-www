@@ -59,6 +59,45 @@ test.describe("TS-023: the register flow", () => {
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
   });
 
+  test("TS-023-A7: step 1 arrives answered — the place is named and changeable, never skipped", async ({
+    page,
+  }) => {
+    // The hand-over the founding path makes: `/dein-ort/starten?ort=X` → this.
+    await page.goto("/dein-ort/starten?ort=99999");
+    await page.locator('[data-cta="primary"]').first().click();
+    await expect(page).toHaveURL(/\/mitmachen\/registrieren\?ort=99999$/);
+
+    // `99999` is uncovered, so step 1 is genuinely unanswered and asked.
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
+
+    // And with a value that resolves: the step advances, and the answered
+    // step 1 stays on screen — the place named, with a control to change it
+    // (D5: "answered, visible and changeable, never skipped").
+    await page.goto(`${ROUTE}?ort=beispielgemeinde-musterdorf`);
+    const answered = page.locator('[data-step-answered="ort"]');
+    await expect(answered).toHaveCount(1);
+    await expect(answered).toContainText("Beispielgemeinde Musterdorf");
+
+    const change = answered.locator("a");
+    await expect(change).toHaveCount(1);
+    await change.click();
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
+    // The answer travels back with it, so the visitor can correct rather than
+    // retype (D4: `schritt` may move backwards to an answered step).
+    await expect(page.locator('input[name="ort"]')).toHaveValue("beispielgemeinde-musterdorf");
+
+    // It stays visible through step 3 and the handover.
+    for (const query of [
+      "?ort=beispielgemeinde-musterdorf&wer=opt-1",
+      "?ort=beispielgemeinde-musterdorf&wer=opt-1&weg=whatsapp",
+    ]) {
+      await page.goto(`${ROUTE}${query}`);
+      await expect(page.locator('[data-step-answered="ort"]')).toContainText(
+        "Beispielgemeinde Musterdorf",
+      );
+    }
+  });
+
   test("TS-023-A4: an invalid `schritt` and an invalid enum are dropped, re-asking the step", async ({
     page,
   }) => {

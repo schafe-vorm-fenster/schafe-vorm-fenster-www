@@ -17,6 +17,7 @@ import { slot } from "@/src/lib/content/loader";
 import { BRIEFING_URL } from "@/src/lib/live/briefing";
 import { resolvePlace } from "@/src/lib/live/places";
 import { jobLabelKey } from "@/src/lib/pages/page-meta";
+import { readPlaceParameter } from "@/src/lib/pages/place-parameter";
 
 import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
@@ -24,6 +25,7 @@ import { localeFrom, pageMetadataFor } from "../../_locale";
 import { SiteChrome } from "../../_page-frame";
 import { resolveRegisterPlace } from "../../mitmachen/registrieren/resolve-place";
 
+import { AdvancePending } from "./advance-pending";
 import { pageMeta } from "./page.meta";
 import { addPlace, parseOrte, removePlace, resolveOrderStep } from "./steps";
 
@@ -96,6 +98,9 @@ const SELECTED_COUNT: Record<Locale, (n: number) => string> = {
 };
 
 const CONTINUE_LABEL: Record<Locale, string> = { de: "Weiter", en: "Continue" };
+
+/** What the advance control says while the step is loading (F-2-67). */
+const PENDING_LABEL: Record<Locale, string> = { de: "Moment …", en: "One moment …" };
 const STEP_TOTAL = 4;
 
 /**
@@ -163,7 +168,10 @@ export default async function Page({
   // The scope search reuses `place-search`'s own field name ("ort") and the
   // same shared resolver step 1 of the register flow uses (not a page-local
   // mock) — an unresolved value is simply not offered as an "add" chip.
-  const rawSearch = firstParam(query.ort);
+  // F-2-38: through the D4 validator first — the 80-character cap and the
+  // character allowlist of `place-parameter.ts` apply on every flow step, not
+  // only on the pages that echo the value.
+  const rawSearch = readPlaceParameter(query.ort);
   const lookup = rawSearch ? await resolveRegisterPlace(rawSearch) : undefined;
   const addable =
     lookup?.kind === "resolved" && !orte.includes(lookup.place.slug) ? lookup.place : undefined;
@@ -242,11 +250,18 @@ export default async function Page({
         {step === 3 ? (
           <>
             <h1>{fieldAt(invoiceSlot.blocks, 0)}</h1>
+            {/* One call to action on this step (F-2-51). The invoice form
+                stands inside a flow, so the step owns the advance and the
+                form does not render a submit of its own: until round 3 the
+                mount's inert "Absenden" stood beside "Weiter", and the button
+                a visitor filling in invoice details reaches for was the one
+                that did nothing at all. */}
             <EnvoyFormMount
               context={{ scope: orte.join(",") || KREIS_ID }}
               fallbackEmail={CONTACT_EMAIL}
               kind="order-invoice"
               locale={locale}
+              ownSubmit={false}
               sourceRoute={ROUTE}
               state="mocked"
             />
@@ -259,6 +274,12 @@ export default async function Page({
               to="order"
             >
               {CONTINUE_LABEL[locale]}
+              {/* F-2-67: a hasty reload during the transition used to swallow
+                  the advance with no sign that the click had not counted.
+                  `useLinkStatus` puts the pending state on the control the
+                  visitor pressed — no store, no dedupe, which TS-025 D8
+                  forbids anyway. */}
+              <AdvancePending label={PENDING_LABEL[locale]} />
             </Button>
             {briefingExit}
           </>
@@ -268,8 +289,11 @@ export default async function Page({
           <>
             <h1>{fieldAt(codeSlot.blocks, 0)}</h1>
             <CodeSnippet code={demoCode} note={fieldAt(codeSlot.blocks, 1)} state="mocked" />
+            {/* F-2-60: keyed on the completed order, so Back-then-Forward
+                through step 4 reports the same completion once. */}
             <FireConversionOnMount
               attributes={{ route: ROUTE }}
+              dedupeKey={`${orteRaw ?? ""}|${hasCounty ? KREIS_ID : ""}`}
               goalId="buy-calendar-licence"
               stage="completed"
             />

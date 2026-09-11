@@ -1,6 +1,8 @@
 import { Icon } from "../icon/icon";
 import { linkHref, type LinkOptions } from "../route-link/href";
 
+import { MAX_PLACE_LENGTH } from "@/src/lib/pages/place-parameter";
+
 import type { RouteId } from "@/src/lib/routes/routes";
 
 import styles from "./search-field.module.css";
@@ -39,6 +41,8 @@ export interface SearchFieldProps extends Omit<LinkOptions, "hash"> {
  * Space: 56 px reserved everywhere it stands, including the 404 page.
  * A11y: a real `<label>` bound by `htmlFor`; the icon is decorative;
  * `:focus-within` lifts the whole pill so the compound control shows focus.
+ * Bounds: the input carries the server's own `MAX_PLACE_LENGTH`, so the
+ * client and `place-parameter.ts` agree on what a place value may be.
  */
 export function SearchField({
   to,
@@ -76,6 +80,10 @@ export function SearchField({
           defaultValue={defaultValue}
           enterKeyHint="search"
           id={id}
+          // The same bound the server applies (`place-parameter.ts` D4), so a
+          // value the page would drop cannot be typed in the first place —
+          // an answer, not a silent rejection (F-2-38).
+          maxLength={MAX_PLACE_LENGTH}
           name={name}
           placeholder={placeholder}
           spellCheck={false}

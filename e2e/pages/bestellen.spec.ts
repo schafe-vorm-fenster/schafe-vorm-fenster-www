@@ -131,6 +131,36 @@ test.describe("TS-025: the order flow", () => {
     expect(fires).toHaveLength(1);
   });
 
+  /**
+   * F-2-60 / TS-012-A5 — "client-side navigation back and forth does not
+   * replay it". The step-4 completion used to fire again on the forward
+   * navigation, because `FireConversionOnMount` re-mounted and its `useRef`
+   * guard went with the unmount.
+   */
+  test("F-2-60 / TS-012-A5: Back and Forward through step 4 does not replay the completion", async ({
+    page,
+  }) => {
+    const fires: string[] = [];
+    page.on("console", (message) => {
+      if (message.text().includes("buy-calendar-licence") && message.text().includes("completed")) {
+        fires.push(message.text());
+      }
+    });
+
+    await page.goto(`${ROUTE}?orte=beispielgemeinde-musterdorf&schritt=3`);
+    await page.locator('[data-cta="primary"]').click();
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Einbindungscode");
+    await page.waitForTimeout(400);
+    expect(fires).toHaveLength(1);
+
+    await page.goBack();
+    await page.waitForTimeout(300);
+    await page.goForward();
+    await page.waitForTimeout(600);
+    await expect(page.locator("pre code")).not.toBeEmpty();
+    expect(fires, "the forward navigation replayed the completion").toHaveLength(1);
+  });
+
   test("TS-025-A14: with the envoy script blocked, step 3 renders the static fallback, never a spinner", async ({
     page,
   }) => {
@@ -160,5 +190,49 @@ test.describe("TS-025: the order flow", () => {
     await page.locator('[data-cta="primary"]').click();
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Einbindungscode");
     await expect(page.locator("pre code")).not.toBeEmpty();
+  });
+
+  /**
+   * F-2-51 — until round 3 this step rendered the mount's inert "Absenden"
+   * beside a `data-cta="primary"` "Weiter" link, and the button a visitor
+   * filling in invoice details reaches for was the one that did nothing.
+   */
+  test("F-2-51 / TS-006 D3: step 3 offers exactly one call to action, and it advances", async ({
+    page,
+  }) => {
+    await page.goto(`${ROUTE}?orte=beispielgemeinde-musterdorf&schritt=3`);
+
+    // Exactly one control that reads as an action: the step's own advance.
+    const primary = page.locator('[data-cta="primary"]');
+    await expect(primary).toHaveCount(1);
+    // The invoice form no longer renders a submit of its own beside it.
+    await expect(page.locator('[data-envoy-form-kind="order-invoice"] button')).toHaveCount(0);
+
+    await primary.click();
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Einbindungscode");
+  });
+
+  /**
+   * F-2-67 — a hasty reload straight after the advance used to land back on
+   * step 3 with the click silently swallowed: the in-flight client-side
+   * history push was discarded before the URL updated. The step's advance is
+   * a real form navigation now, so there is no in-flight transition to lose.
+   */
+  test("F-2-67: a swallowed advance is visible, not silent", async ({ page }) => {
+    // The route is dynamic and un-prefetched, so the transition has a real
+    // pending window — the one the hasty clicker reloads inside. The control
+    // the visitor pressed says so while it lasts.
+    await page.route(/schritt=4/, async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+      await route.continue();
+    });
+    await page.goto(`${ROUTE}?orte=beispielgemeinde-musterdorf&schritt=3`);
+
+    const primary = page.locator('[data-cta="primary"]');
+    await primary.click();
+    await expect(primary.locator('[role="status"]')).toBeVisible();
+
+    // And the advance itself still completes when nothing interrupts it.
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Einbindungscode");
   });
 });

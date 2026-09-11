@@ -1,10 +1,12 @@
-import { ConversionTracker, type ConversionBinding } from "../conversion-tracker/conversion-tracker";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { LeadFallback } from "../lead-fallback/lead-fallback";
 import { Skeleton } from "../skeleton/skeleton";
 
+import { EnvoyForm } from "./envoy-form";
 import { ENVOY_FORM_FIELDS, type EnvoyFormKind } from "./fields";
+
+import type { ConversionBinding } from "../conversion-tracker/conversion-tracker";
 
 import type { RouteId } from "@/src/lib/routes/routes";
 import type { Locale } from "@/src/lib/i18n/locales";
@@ -32,6 +34,14 @@ export interface EnvoyFormMountProps extends DataStateProps {
    * records for its own mocked completion (`state/open.md`).
    */
   readonly conversion?: ConversionBinding;
+  /**
+   * `false` where the form stands inside a flow whose step already owns the
+   * advance (order step 3) — see F-2-51.
+   */
+  readonly ownSubmit?: boolean;
+  /** The conversion marker on the submit control, where this form is the
+   *  page's or the step's one action (TS-006 D3). */
+  readonly submitDataCta?: string;
   readonly className?: string;
 }
 
@@ -54,10 +64,14 @@ export interface EnvoyFormMountProps extends DataStateProps {
  *   degraded → `lead-fallback` as well — the widget's own submission errors
  *              are the widget's to own once it exists; this mock has no
  *              submission to fail, so degraded and empty share the fallback;
- *   mocked   → the mocked field set, marked `demo-data-badge`.
+ *   mocked   → the mocked field set, marked `demo-data-badge`, plus the
+ *              submitted state `envoy-form.tsx` owns (TS-016-A9).
  * Inherits: the page renders and is fully usable without any script; no
  * field value ever reaches this origin, a log or analytics (D5).
- * A11y: every field has a bound label; the submit control is a real button.
+ * Space: the success message replaces the form in the same slot.
+ * A11y: every field has a bound label; the submit control is a real button;
+ * the honeypot of TS-016-A10 is hidden from assistive technology and not
+ * focusable; focus moves to the success message.
  */
 export function EnvoyFormMount({
   kind,
@@ -68,6 +82,8 @@ export function EnvoyFormMount({
   briefingHref,
   briefingLabel,
   conversion,
+  ownSubmit,
+  submitDataCta,
   state = "mocked",
   className,
 }: EnvoyFormMountProps) {
@@ -89,57 +105,23 @@ export function EnvoyFormMount({
     );
   }
 
-  const fields = ENVOY_FORM_FIELDS[kind];
-
   return (
-    <form
-      className={classes}
-      data-envoy-form-kind={kind}
-      data-envoy-locale={locale}
-      data-envoy-source={sourceRoute}
-      {...contextAttributes(context)}
-    >
-      {isMocked(state) ? <DemoDataBadge /> : null}
-      {fields.map((field) => (
-        <div className={styles.field} key={field.id}>
-          <label className={styles.label} htmlFor={`envoy-${kind}-${field.id}`}>
-            {field.label}
-          </label>
-          {field.multiline ? (
-            <textarea
-              className={styles.textarea}
-              id={`envoy-${kind}-${field.id}`}
-              placeholder={field.placeholder}
-              required={field.required}
-              rows={4}
-            />
-          ) : (
-            <input
-              className={styles.input}
-              id={`envoy-${kind}-${field.id}`}
-              placeholder={field.placeholder}
-              required={field.required}
-              type={field.type}
-            />
-          )}
-        </div>
-      ))}
-      {conversion === undefined ? (
-        <button className={styles.submit} type="submit">
-          Absenden
-        </button>
-      ) : (
-        <ConversionTracker
-          attributes={conversion.attributes}
-          goalId={conversion.goalId}
-          stage={conversion.stage}
-        >
-          <button className={styles.submit} type="submit">
-            Absenden
-          </button>
-        </ConversionTracker>
-      )}
-    </form>
+    <EnvoyForm
+      ownSubmit={ownSubmit}
+      badge={isMocked(state) ? <DemoDataBadge locale={locale} /> : undefined}
+      className={className}
+      conversion={conversion}
+      elementAttributes={{
+        "data-envoy-form-kind": kind,
+        "data-envoy-locale": locale,
+        "data-envoy-source": sourceRoute,
+        ...contextAttributes(context),
+      }}
+      fields={ENVOY_FORM_FIELDS[kind]}
+      kind={kind}
+      locale={locale}
+      submitDataCta={submitDataCta}
+    />
   );
 }
 
