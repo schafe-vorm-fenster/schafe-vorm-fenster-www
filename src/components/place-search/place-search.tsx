@@ -105,7 +105,7 @@ export function PlaceSearch({
               {suggestion.label}
             </Chip>
           ))}
-          {state === "mocked" ? <DemoDataBadge /> : null}
+          {state === "mocked" ? <DemoDataBadge locale={locale} /> : null}
         </div>
       ) : null}
     </div>

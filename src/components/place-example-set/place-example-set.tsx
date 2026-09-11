@@ -64,7 +64,7 @@ export function PlaceExampleSet({
           {example.label}
         </Chip>
       ))}
-      {isMocked(state) ? <DemoDataBadge /> : null}
+      {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
     </div>
   );
 }

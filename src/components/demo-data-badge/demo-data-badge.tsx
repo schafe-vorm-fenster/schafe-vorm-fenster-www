@@ -1,10 +1,20 @@
 import { Badge } from "../badge/badge";
 
+import { dictionary } from "@/src/lib/i18n/dictionary";
+
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./demo-data-badge.module.css";
 
 export interface DemoDataBadgeProps {
-  /** Overridable for `en`; the German label is the default everywhere. */
+  /** An explicit word, for a caller that has one. Otherwise `locale` decides. */
   readonly label?: string;
+  /**
+   * The page's language. Without it the badge said `Demo-Daten` on `/en` too
+   * (`state/open.md` row 101) — the label is a UI string and belongs in the
+   * dictionary, not in a component default.
+   */
+  readonly locale?: Locale;
   readonly className?: string;
 }
 
@@ -21,10 +31,10 @@ export interface DemoDataBadgeProps {
  * Space: badge height, reserved, so removing the mock does not reflow.
  * A11y: text in the accessibility tree, never colour-only.
  */
-export function DemoDataBadge({ label = "Demo-Daten", className }: DemoDataBadgeProps) {
+export function DemoDataBadge({ label, locale = "de", className }: DemoDataBadgeProps) {
   return (
     <Badge className={[styles.badge, className].filter(Boolean).join(" ")} tone="placeholder">
-      {label}
+      {label ?? dictionary(locale).live.demoData}
     </Badge>
   );
 }

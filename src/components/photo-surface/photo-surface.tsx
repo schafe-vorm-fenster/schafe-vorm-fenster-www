@@ -10,6 +10,8 @@ import { photoUrl } from "./url";
 import type { ReactNode } from "react";
 import type { CSSProperties } from "react";
 
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./photo-surface.module.css";
 
 export interface PhotoSurfaceProps extends DataStateProps {
@@ -26,6 +28,8 @@ export interface PhotoSurfaceProps extends DataStateProps {
   readonly id?: string;
   /** The manifest slot id when this surface shows a generated image (DEC-068). */
   readonly placeholderId?: string;
+  /** The page's language — the `Demo-Daten` badge and the freshness label read it. */
+  readonly locale?: Locale;
   readonly className?: string;
   readonly children?: ReactNode;
 }
@@ -66,6 +70,7 @@ export function PhotoSurface({
   placeholderId,
   className,
   children,
+  locale = "de",
 }: PhotoSurfaceProps) {
   const classes = [
     styles.surface,
@@ -118,7 +123,7 @@ export function PhotoSurface({
           <div className={styles.marks}>
             {missingPhoto ? <Badge tone="placeholder">Foto gesucht</Badge> : null}
             {!missingPhoto && notDepicting ? <PlaceholderBadge /> : null}
-            {isMocked(state) ? <DemoDataBadge /> : null}
+            {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
           </div>
         )}
         {children}

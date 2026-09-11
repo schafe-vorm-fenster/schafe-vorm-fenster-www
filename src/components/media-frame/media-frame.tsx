@@ -9,6 +9,8 @@ import { Skeleton } from "../skeleton/skeleton";
 import type { StaticImageData } from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./media-frame.module.css";
 
 export const MEDIA_RATIOS = [
@@ -39,6 +41,8 @@ export interface MediaFrameProps extends DataStateProps {
   readonly caption?: ReactNode;
   /** The manifest slot id when this frame shows a generated image (DEC-068). */
   readonly placeholderId?: string;
+  /** The page's language — the `Demo-Daten` badge and the freshness label read it. */
+  readonly locale?: Locale;
   readonly className?: string;
 }
 
@@ -77,6 +81,7 @@ export function MediaFrame({
   placeholderId,
   state = "ready",
   className,
+  locale = "de",
 }: MediaFrameProps) {
   if (isPending(state)) {
     return <Skeleton className={className} ratio={ratio} variant="box" />;
@@ -114,7 +119,7 @@ export function MediaFrame({
         {(notDepicting || isMocked(state)) && (
           <div className={styles.marks}>
             {notDepicting ? <PlaceholderBadge /> : null}
-            {isMocked(state) ? <DemoDataBadge /> : null}
+            {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
           </div>
         )}
       </div>

@@ -5,6 +5,8 @@ import { Skeleton } from "../skeleton/skeleton";
 
 import { CopyButton } from "./copy-button";
 
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./code-snippet.module.css";
 
 export interface CodeSnippetProps extends DataStateProps {
@@ -12,6 +14,8 @@ export interface CodeSnippetProps extends DataStateProps {
   /** The permanent reminder — copy now, this is not stored anywhere. */
   readonly note?: string;
   readonly pendingNote?: string;
+  /** The page's language — the `Demo-Daten` badge and the freshness label read it. */
+  readonly locale?: Locale;
   readonly className?: string;
 }
 
@@ -42,6 +46,7 @@ export function CodeSnippet({
   pendingNote = "Der Code kommt in Kürze per E-Mail.",
   state = "ready",
   className,
+  locale = "de",
 }: CodeSnippetProps) {
   const classes = [styles.snippet, className].filter(Boolean).join(" ");
 
@@ -55,13 +60,13 @@ export function CodeSnippet({
 
   return (
     <div className={classes} data-demo={isMocked(state) ? "true" : undefined}>
-      {state === "degraded" ? <FreshnessLabel tier="snapshot" /> : null}
+      {state === "degraded" ? <FreshnessLabel locale={locale} tier="snapshot" /> : null}
       <pre className={styles.pre}>
         <code>{code}</code>
       </pre>
       <div className={styles.actions}>
         <CopyButton code={code} />
-        {isMocked(state) ? <DemoDataBadge /> : null}
+        {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
       </div>
       <p className={styles.note}>{note}</p>
     </div>

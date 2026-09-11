@@ -88,7 +88,7 @@ export function ProofCard({
         <div className={styles.meta}>
           <p className={styles.context}>{contextLine}</p>
           <Badge tone="neutral">{geo.label}</Badge>
-          {isMocked(state) ? <DemoDataBadge /> : null}
+          {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
         </div>
         <p className={styles.claim}>{claim}</p>
         <p className={styles.attribution}>{attribution}</p>

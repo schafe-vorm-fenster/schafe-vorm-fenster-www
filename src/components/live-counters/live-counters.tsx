@@ -3,6 +3,10 @@ import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { Skeleton } from "../skeleton/skeleton";
 
+import { dictionary } from "@/src/lib/i18n/dictionary";
+
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./live-counters.module.css";
 
 export interface LiveCountersProps extends DataStateProps {
@@ -14,6 +18,8 @@ export interface LiveCountersProps extends DataStateProps {
   readonly placesLabel?: string;
   readonly datesLabel?: string;
   readonly updatesLabel?: string;
+  /** The page's language — the `Demo-Daten` badge reads it. */
+  readonly locale?: Locale;
   readonly className?: string;
 }
 
@@ -41,13 +47,20 @@ export function LiveCounters({
   places,
   dates,
   updatesToday,
-  placesLabel = "Orte",
-  datesLabel = "Termine",
-  updatesLabel = "Aktualisierungen heute",
+  placesLabel,
+  datesLabel,
+  updatesLabel,
+  locale = "de",
   state = "ready",
   className,
 }: LiveCountersProps) {
   const classes = [styles.band, className].filter(Boolean).join(" ");
+  // The three units are UI strings, so they come from the dictionary unless
+  // the caller names one (`state/open.md` row 101).
+  const words = dictionary(locale).live;
+  const placesWord = placesLabel ?? words.places;
+  const datesWord = datesLabel ?? words.dates;
+  const updatesWord = updatesLabel ?? words.updatesToday;
 
   if (isPending(state)) {
     return (
@@ -60,9 +73,9 @@ export function LiveCounters({
   }
 
   const figures: readonly { readonly value: number; readonly label: string }[] = [
-    places !== undefined ? { value: places, label: placesLabel } : undefined,
-    dates !== undefined ? { value: dates, label: datesLabel } : undefined,
-    updatesToday !== undefined ? { value: updatesToday, label: updatesLabel } : undefined,
+    places !== undefined ? { value: places, label: placesWord } : undefined,
+    dates !== undefined ? { value: dates, label: datesWord } : undefined,
+    updatesToday !== undefined ? { value: updatesToday, label: updatesWord } : undefined,
   ].filter((figure) => figure !== undefined);
 
   // Cold cache / nothing counted: hide the module entirely, never tier 3.
@@ -75,7 +88,7 @@ export function LiveCounters({
           {figure.value.toLocaleString("de-DE")} {figure.label}
         </Badge>
       ))}
-      {isMocked(state) ? <DemoDataBadge /> : null}
+      {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
     </div>
   );
 }

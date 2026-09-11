@@ -1,5 +1,6 @@
 import { Icon } from "../icon/icon";
 
+import { dictionary } from "@/src/lib/i18n/dictionary";
 import { OG_LOCALE } from "@/src/lib/i18n/locales";
 
 import type { Locale } from "@/src/lib/i18n/locales";
@@ -45,11 +46,18 @@ export function FreshnessLabel({
   tier,
   updatedAt,
   locale = "de",
-  staleLabel = "Stand",
-  snapshotLabel = "Beispiel",
+  staleLabel,
+  snapshotLabel,
   className,
 }: FreshnessLabelProps) {
   if (tier === "fresh") return null;
+
+  // The two words come from the dictionary unless the caller names one, so
+  // `/en` reads "As of" / "Example" rather than the German default that
+  // `state/open.md` row 101 recorded.
+  const words = dictionary(locale).live;
+  const stale = staleLabel ?? words.stale;
+  const snapshot = snapshotLabel ?? words.snapshot;
 
   const classes = [styles.label, className].filter(Boolean).join(" ");
 
@@ -57,7 +65,7 @@ export function FreshnessLabel({
     return (
       <p className={classes}>
         <Icon name="clock" size={18} />
-        {snapshotLabel}
+        {snapshot}
       </p>
     );
   }
@@ -74,7 +82,7 @@ export function FreshnessLabel({
   return (
     <p className={classes}>
       <Icon name="clock" size={18} />
-      {staleLabel}: <time dateTime={value.toISOString()}>{shown}</time>
+      {stale}: <time dateTime={value.toISOString()}>{shown}</time>
     </p>
   );
 }

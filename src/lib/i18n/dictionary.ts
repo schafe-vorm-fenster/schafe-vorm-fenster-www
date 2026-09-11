@@ -63,6 +63,25 @@ export interface Dictionary {
     retry: string;
     backHome: string;
   };
+  /**
+   * The words the live-data shells put on themselves. They live here rather
+   * than in each component's default, because a component that hard-codes a
+   * German default renders that German on `/en` — which is exactly what
+   * happened (`state/open.md` row 101). Every self-badging module takes a
+   * `locale` and reads these.
+   */
+  live: {
+    /** The mock rule's marking (plan/guardrails.md). */
+    demoData: string;
+    /** Tier 2's prefix — "Stand: <time>". */
+    stale: string;
+    /** Tier 3's word — the build-time snapshot, labelled as an example. */
+    snapshot: string;
+    /** The counter band's three units (TS-008 D8). */
+    dates: string;
+    places: string;
+    updatesToday: string;
+  };
   /** Page titles, keyed by route id. Placeholders until M3 (TS-011 D5). */
   pages: Record<RouteId, string>;
   /** Template for the placeholder meta description, `%s` = the page title. */
@@ -104,6 +123,14 @@ const de: Dictionary = {
     body: "Bitte versuche es noch einmal. [Platzhalter M2 — DEC-032: statisch, minimal, ohne Datenabhängigkeit.]",
     retry: "Erneut versuchen",
     backHome: "Zur Startseite",
+  },
+  live: {
+    demoData: "Demo-Daten",
+    stale: "Stand",
+    snapshot: "Beispiel",
+    dates: "Termine",
+    places: "Orte",
+    updatesToday: "Aktualisierungen heute",
   },
   pages: {
     home: "Schafe vorm Fenster",
@@ -158,6 +185,14 @@ const en: Dictionary = {
     body: "Please try again. [Placeholder M2 — DEC-032: static, minimal, no data dependency.]",
     retry: "Try again",
     backHome: "To the home page",
+  },
+  live: {
+    demoData: "Demo data",
+    stale: "As of",
+    snapshot: "Example",
+    dates: "dates",
+    places: "places",
+    updatesToday: "updates today",
   },
   pages: {
     home: "Schafe vorm Fenster",

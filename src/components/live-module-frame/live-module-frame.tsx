@@ -3,6 +3,7 @@ import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { FreshnessLabel, type FreshnessTier } from "../freshness-label/freshness-label";
 import { Skeleton } from "../skeleton/skeleton";
 
+import type { Locale } from "@/src/lib/i18n/locales";
 import type { ReactNode } from "react";
 
 import styles from "./live-module-frame.module.css";
@@ -27,6 +28,8 @@ export interface LiveModuleFrameProps extends DataStateProps {
    * hierarchical heading order (TS-002, Web Interface Guidelines).
    */
   readonly headingLevel?: "h2" | "h3";
+  /** The page's language — the `Demo-Daten` badge and the freshness label read it. */
+  readonly locale?: Locale;
   readonly className?: string;
   readonly children: ReactNode;
 }
@@ -65,6 +68,7 @@ export function LiveModuleFrame({
   tier = "stale",
   skeleton,
   headingLevel: Heading = "h3",
+  locale = "de",
   state = "ready",
   className,
   children,
@@ -81,8 +85,8 @@ export function LiveModuleFrame({
           {subline ? <p className={styles.subline}>{subline}</p> : null}
         </div>
         <div className={styles.marks}>
-          {isMocked(state) ? <DemoDataBadge /> : null}
-          {state === "degraded" ? <FreshnessLabel tier={tier} updatedAt={updatedAt} /> : null}
+          {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
+          {state === "degraded" ? <FreshnessLabel locale={locale} tier={tier} updatedAt={updatedAt} /> : null}
         </div>
       </header>
       <div className={styles.body}>
