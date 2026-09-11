@@ -1,7 +1,7 @@
 # Status
 
-Run started: —
-Current milestone: — (M0–M5)
+Run started: 2026-09-11 (orchestrator session, model claude-fable-5-1)
+Current milestone: M0 Tracer bullet
 Current test round: — (n of 3)
 
 ## Done
@@ -10,11 +10,10 @@ Current test round: — (n of 3)
 
 ## In progress
 
-- —
+- M0 Tracer bullet — Developer
 
 ## Pending
 
-- M0 Tracer bullet
 - M1 Scaffold
 - M2 Structure
 - M3 Content
