@@ -16,10 +16,9 @@ catalogue holds them against the sixty-five decisions taken so far and asks
 only what those decisions do not answer. Answers become DEC entries, and the
 determinations they settle flip to `[FIXED]`.
 
-**Twelve of thirteen are answered.** This document stays as the reasoning
+**All thirteen are answered.** This document stays as the reasoning
 behind them; the decisions themselves are DEC-067 … DEC-070, and the
 register rows are Q-058 … Q-070 in [open-questions.md](open-questions.md).
-**Q-065 is still open.**
 
 | # | Question | Outcome |
 | --- | --- | --- |
@@ -30,7 +29,7 @@ register rows are Q-058 … Q-070 in [open-questions.md](open-questions.md).
 | Q-062 | AAA criteria | Eight, not four; 2.5.5 raises every target to 44 × 44 · DEC-069 |
 | Q-063 | Order preview | Deferred to the backlog, spec kept intact · DEC-069 |
 | Q-064 | Committed snapshots | Yes — the keep-the-last-good rule needs a file to keep · DEC-069 |
-| Q-065 | `/deine-termine` | **open** — reserve the route for the withheld widget, or leave it out? |
+| Q-065 | `/deine-termine` | Reserved but not built; 404 until the widget is sellable · DEC-071 |
 | Q-066 | Lead fallback | The Google Form at `/start`, linked never embedded · DEC-069 |
 | Q-067 | Cache lifetimes | Stale to three days; fresh TTLs untouched · DEC-069 |
 | Q-068 | Context proximity | Not a question — the tag was wrong. SRC-002 fixes 1.0 and 0.3 · DEC-069 |

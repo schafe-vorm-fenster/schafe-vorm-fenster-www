@@ -65,7 +65,7 @@ does.
 | `/dein-ort` + `/dein-ort/starten` | community-calendar: reading · founding |
 | `/dein-kalender` + `/bestellen` | portalize-calendar (480 €) |
 | `/deine-region` + `/angebot` | portalize-enterprise |
-| `/deine-termine` | **reserved** for portalize-website-widget |
+| `/deine-termine` | **reserved, not built** for portalize-website-widget — the name is held so no other plan claims it; it answers 404 until the offering is sellable (DEC-071) |
 | `/mitmachen` + `/registrieren` | publishing entry (stays a verb by rule) |
 
 A bare verb is not a base: the founding page is `/dein-ort/starten`
@@ -194,7 +194,7 @@ they are not proxied (their hosts are CSP-allowlisted, TS-003 D4/WEB-Q-030).
 | BFF routes | dynamic, cached per TS-003 D5 |
 | 404 | static shell + streamed place search; 500 fully static |
 
-### D7 — Offering → surface map [PROPOSED]
+### D7 — Offering → surface map [FIXED: DEC-052, DEC-071]
 
 Offerings never define routes (WEB-F-002); every promoted offering has
 exactly one primary surface. This map is the contract — later verifiable
@@ -205,7 +205,7 @@ against content frontmatter offering references (WEB-F-085):
 | `community-calendar` | promoted | `/dein-ort` (read) · `/mitmachen` (publish) · tier 1 on `/dein-kalender` |
 | `portalize-calendar` | promoted | `/dein-kalender` + order flow |
 | `portalize-enterprise` | promoted | `/deine-region` |
-| `portalize-website-widget` | withheld | none built; `/deine-termine` reserved for launch |
+| `portalize-website-widget` | withheld | none built; `/deine-termine` is reserved but not built and answers 404 (DEC-071). Nothing on the site links to it, and it is absent from the sitemap |
 | `local-advertising` | withheld | **none** — DEC-052 §3 narrowed WEB-C-015's "at most one sentence" to no occurrence while the offering is withheld; the guard checks for absence |
 | `custom-data-integration` | on-request | mention on the enterprise page |
 

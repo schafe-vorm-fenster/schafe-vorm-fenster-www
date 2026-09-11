@@ -62,6 +62,16 @@ all of them the visitor is asked for a place, never for a role (TS-006 D8):
 | `?ort=` present but unresolvable | **S0**, status 200, no redirect; the raw value is escaped and never rendered as data |
 | place not covered by geo-api | not this page → `/dein-ort/starten?ort=…` (TS-021, TS-008 D7) |
 
+**State B addresses the reader directly, and it is the only place that
+does** [FIXED: DEC-071]. SRC-002's wording — *"nothing has been entered in
+<place> yet — you could be the first"* — is right here and nowhere else:
+the calendar for this place exists and is waiting, so publishing is a
+small step, and SRC-002 calls this the strongest publisher-acquisition
+moment the site has. On `/dein-ort/starten`, where the place is not
+covered at all, the same sentence would hand a stranger our distribution
+problem; TS-021 D9 forbids it there. The two are a deliberate pair, not a
+contradiction.
+
 **The B trigger is "no future dates at all", not "nothing this week."** Position
 1 asks `after=now` without an upper bound (TS-008 D3), so a place whose next
 date is six weeks out is state A with one row; a bounded window would tell a

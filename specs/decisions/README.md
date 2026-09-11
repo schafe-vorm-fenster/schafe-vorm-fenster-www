@@ -81,3 +81,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-068 — Every gap is filled with a marked placeholder, never left empty](068-placeholders-over-empty-slots.md)
 - [DEC-069 — Answers from the PROPOSED review — price, accessibility, cache, budget, fallback, preview](069-eleven-answers-from-the-proposed-review.md)
 - [DEC-070 — Eleven determinations confirmed — the price predicate, its accepted risk, and the low-stakes block](070-the-confirmation-block.md)
+- [DEC-071 — The last four — reserved route, breadcrumbs everywhere, no geo in analytics, and one tone split in two](071-the-last-four.md)

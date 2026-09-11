@@ -128,13 +128,35 @@ anchorless module never claims proximity (TS-008 D1).
 | Analytics | **no event fires here**: `register-as-publisher` is emitted as `handover` on `/mitmachen/registrieren` (TS-012 D4), and this page adds none of its own (TS-012 D7) |
 | Out of scope | what `/mitmachen/registrieren` does with the value — TS-023 |
 
-### D9 — Tone for the third audience [PROPOSED]
+### D9 — Tone for the third audience [FIXED: DEC-071]
 
 The resident who searched and found nothing is on a publishing page she
 did not ask for. The page never tells *her* to publish — it names who
 usually starts it (block 2.3) and lets her recognise someone. No blame,
 no scarcity: the missing place is our gap. The forwarding affordance is
 the URL itself — no share buttons, no share SDK (DEC-013, TS-013).
+
+**Why this reads as the opposite of `/dein-ort` state B, and is not**
+[FIXED: DEC-071]. SRC-002 gives the empty place a direct address:
+*"nothing has been entered in <place> yet — you could be the first."*
+That belongs on `/dein-ort` state B and stays there. The two pages answer
+two different situations, and the difference is not tone for its own
+sake:
+
+| | `/dein-ort` state B | `/dein-ort/starten` (this page) |
+| --- | --- | --- |
+| Situation | the place **is** covered; nothing is entered this moment | the place is **not** covered at all |
+| What is missing | dates | the place itself, in our system |
+| Whose gap | the calendar exists and is empty — filling it is a small, obvious step | ours: we have not reached this place |
+| Address | direct — *"du könntest die erste sein"* | never direct; name who usually starts it and let her recognise someone |
+
+Telling a resident who searched for the weekend that she could be the
+first to publish makes sense where a calendar is waiting for her. Where
+there is no calendar at all, the same sentence hands a stranger our
+distribution problem. State B is the strongest publisher-acquisition
+moment the site has (SRC-002); this page is not that moment, and treating
+it as one spends the goodwill of someone who only wanted to know what is
+on.
 
 ### D10 — Rendering and indexing [FIXED: TS-009 D1/D8, TS-010 D8, TS-011 D4/D9]
 

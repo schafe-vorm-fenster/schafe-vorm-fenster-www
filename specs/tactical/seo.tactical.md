@@ -100,7 +100,7 @@ No element is demoted by CSS alone and no `aside` is used for layout: if
 it is in an `aside`, it is secondary; if it is secondary, it is in an
 `aside`.
 
-### D4 — Structured data: type per page type [PROPOSED]
+### D4 — Structured data: type per page type [FIXED: DEC-069, DEC-071]
 
 No source fixes the vocabulary; this selection does. **JSON-LD** carries
 entities, server-rendered in the page HTML, one `<script
@@ -127,7 +127,7 @@ Emitted types:
 | --- | --- | --- |
 | every page | `WebPage` (`inLanguage`, `isPartOf` → `WebSite`, `primaryImageOfPage`, `description`) | — |
 | `/` | `WebSite` + `Organization` (the full node, `@id` = site root) | — |
-| second-level pages (`/dein-ort/starten`, `/mitmachen/registrieren`, `/dein-kalender/bestellen`, `/deine-region/angebot`, `/ueber-uns/archiv`) | `BreadcrumbList` | on the visible trail, if the IA adopts one — see Open points |
+| second-level pages (`/dein-ort/starten`, `/mitmachen/registrieren`, `/dein-kalender/bestellen`, `/deine-region/angebot`, `/ueber-uns/archiv`) | `BreadcrumbList` — **all five** (DEC-071) | — (one entity, one representation: the trail is described in JSON-LD, so it is not also marked up in microdata) |
 | `/dein-kalender` | `Service` + `Offer` with a `priceSpecification` (`price` 480, `priceCurrency` EUR, `valueAddedTaxIncluded: false`, `unitCode` ANN, `referenceQuantity` 1 with `unitText` naming the **organisation**, `provider` → `Organization` `@id`) — see D4a | — |
 | `/deine-region` | `Service` **without** any price or `Offer` (WEB-F-020: the region price is not published) | — |
 | `/ueber-uns` | `Organization` (reference by `@id`, not a second full node) | — |
@@ -297,6 +297,7 @@ Rule of thumb behind the table: a query parameter changes what a page
 | TS-011-A11 | static | No route, content file, sitemap entry, metadata field, or `llms.txt` line names a competitor while Q-009 is open. |
 | TS-011-A12 | manual | Each interest landing page passes the SRC-001 page-brief compliance check and is reviewed against D7.4 (not a keyword permutation of an existing page) before publication. |
 | TS-011-A13 | manual | Post-cutover watch: Search Console shows no rise in 404s on formerly indexed URLs, and the previously best-ranking legacy URLs keep their impressions within the agreed corridor eight weeks after launch. |
+| TS-011-A14 | integration | Each of the five second-level pages emits exactly one `BreadcrumbList` whose `itemListElement` positions match the visible trail of TS-006 D2 item for item, and whose last item is the current page. No other page emits one, and no page emits the trail twice (JSON-LD and microdata both). |
 
 ## Coverage
 
@@ -304,7 +305,7 @@ Rule of thumb behind the table: a query parameter changes what a page
 | --- | --- |
 | WEB-F-070 (stable URLs or 301) | D1, D2, D9 · A1, A2, A13 |
 | WEB-F-071 (strictly semantic markup) | D3 · A3, A4 |
-| WEB-F-072 (JSON-LD plus microdata) | D4 · A5, A6 |
+| WEB-F-072 (JSON-LD plus microdata) | D4 · A5, A6, A14 |
 | WEB-F-074 (interest landing pages) | D7 · A12 |
 | WEB-F-075 (competitor keywords deferred) | D8 · A11 |
 | WEB-F-076 (purposeful titles + descriptions) | D5 · A7 |

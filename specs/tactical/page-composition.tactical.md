@@ -61,6 +61,20 @@ hand-placed per page — that is what makes "every page" enforceable rather
 than aspirational. Nothing renders after block 4 except the global footer
 (TS-004 D4).
 
+**The breadcrumb trail is not a block** [FIXED: DEC-071]. The five
+second-level pages carry a visible trail; it belongs to the page header,
+renders *above* block 1, and does not enter the sequence above. Three
+rules keep it from competing with the focus block:
+
+- It uses link treatment, never CTA treatment. `data-cta` never appears
+  inside it, so the "one primary conversion, visually unrivalled" rule
+  (D3, WEB-F-003) is untouched by construction rather than by judgement.
+- It is one `<nav>` with an accessible name, server-rendered as plain
+  links, and its last item — the current page — is not a link.
+- It is the only navigation permitted above block 1. A trail is a
+  position indicator; anything that offers a *destination* above the
+  focus block is a second exit, and those live in the context band.
+
 This holds for the sender surfaces too: `/ueber-uns`, `/ueber-uns/archiv`
 and the one legal page `/rechtliches` (DEC-039) each end in blocks 3 and
 4. Because legal content is one page, the sequence exists once there
@@ -264,13 +278,14 @@ the promise is removed rather than softened.
 | TS-006-A12 | static | The only numeric price rendered anywhere is `portalize-calendar`'s 480 €/year, read from the offering package; every other offering renders "auf Anfrage" or no price at all. |
 | TS-006-A13 | e2e | `/deine-region` shows the two-working-day promise at the quote form and in the confirmation, both from the same constant. |
 | TS-006-A14 | manual | The eight-point compliance check of SRC-001 passes for each page brief before its content ships — points 4, 7 and 8 reviewed by hand, the rest evidenced by A1–A13. |
+| TS-006-A15 | e2e | The five second-level pages (`/dein-ort/starten`, `/mitmachen/registrieren`, `/dein-kalender/bestellen`, `/deine-region/angebot`, `/ueber-uns/archiv`) each render exactly one breadcrumb `<nav>` with an accessible name, positioned before the `h1` in DOM order, whose last item is not a link. No `data-cta` attribute occurs inside it, and no other page renders one. |
 
 ## Coverage
 
 | Requirement | Discharged by |
 | --- | --- |
 | WEB-F-001 (one focus job per page, declared) | D1 · A1, A14 |
-| WEB-F-003 (one primary conversion, above the fold) | D3 · A2, A3 |
+| WEB-F-003 (one primary conversion, above the fold) | D3 · A2, A3, A15 |
 | WEB-F-004 (four jobs, one click from anywhere) | D5 (with TS-004 D4) · A5 |
 | WEB-F-005 (context band, position and contents) | D2, D5 · A6 |
 | WEB-F-006 (page ends in its focus job's CTA) | D2, D6 · A7 |

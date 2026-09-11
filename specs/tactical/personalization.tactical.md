@@ -256,14 +256,32 @@ crosses an origin and therefore also crosses the `sessionStorage`
 boundary — the "once" guarantee would need re-stating before it is
 built.
 
-### D11 — What is measured [PROPOSED]
+### D11 — What is measured [FIXED: DEC-071]
 
 Launch ships conversion measurement only (WEB-Q-028), so no stage
-dimension is sent at launch. When one is added later it is bound by:
-the stage label (`0`–`3`) and the `trait` id may be event properties;
-`county` is the finest geo value that may ever be attached; `community`,
-coordinates and IP may not. This keeps the hypotheses of SRC-002
-(H1–H6) testable without turning a cookieless site into a profiling one.
+dimension is sent at launch. When one is added later it is bound by a
+rule that does not soften:
+
+| May be an event property | Never |
+| --- | --- |
+| the stage label (`0`–`3`) | **any geographic value at all** — not community, not municipality, not county, not state, not country, not coordinates, not IP, and no value derived from one |
+| the `trait` id (entry context) | anything that narrows a visitor to a place |
+
+**No geo dimension, at any resolution** [FIXED: DEC-071]. The earlier
+proposal allowed `county` as the finest value; that is withdrawn. The
+reason is not that a county identifies anyone — it is that a
+resolution ceiling has to be defended every time someone asks for one
+step finer, and "none" is the only line that holds without a new argument
+each time. A relevance engine that knows where you are while an analytics
+event does not is a coherent position; a site that records where its
+visitors were is a different product.
+
+**What this costs, stated plainly.** SRC-002's hypothesis H2 — does a
+distant proof element at position 3 raise the CTA click rate among
+municipalities? — is not answerable from analytics under this rule, and
+neither is "does geo proximity in the relevance model change behaviour at
+all". Those questions move to deliberate experiments with their own
+consent, or they stay unanswered. That is the accepted price.
 
 ## Free for the generator
 
