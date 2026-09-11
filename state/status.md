@@ -6,6 +6,8 @@ Current test round: — (n of 3)
 
 ## Done
 
+- M2 live-module shells + conversion/form components: 17 (C; mocks envoy/newsletter with no-`name` fields; 172 tests green) — 2026-09-11
+- M3 Phase 2: German copy for eleven pages in content/pages/<route>/de.md, compliance table complete (Content) — 2026-09-11
 - M2 foundation components: 27 components in src/components (A; 44 tests; gallery at /dev/components; refactored onto the route/i18n facades) — 2026-09-11
 - M2 routing + locale skeleton: 24 URLs (12 pages × de/en), src/lib/routes + src/lib/i18n, metadata/hreflang, 404/error pages, 301 redirects, ADR-073; pnpm check green (106 tests), e2e 38 green, prod build 28 static pages (D) — 2026-09-11
 - M1 gate closed: QA run 1 (24 pass / 0 fail / 4 not-testable, findings F-1-1..3 low/medium → PM round decision at M2), Customer ACCEPTED (reports/acceptance/M1.md), UAT n/a — 2026-09-11
