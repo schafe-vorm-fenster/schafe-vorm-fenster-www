@@ -1,0 +1,83 @@
+.badge {
+  align-items: center;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  gap: var(--space-2);
+  letter-spacing: var(--type-label-tracking);
+  line-height: 1;
+  min-height: var(--height-badge);
+  padding: 7px 15px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* A kicker: the same badge with an 18 px glyph, 30 px tall. */
+.withIcon {
+  min-height: var(--height-badge-icon);
+}
+
+/* ── The six category pairs — SRC-014 §Category colours ─────────────────── */
+
+.fest {
+  background: var(--category-fest-fill);
+  color: var(--category-fest-text);
+}
+
+.merchants {
+  background: var(--category-merchants-fill);
+  color: var(--category-merchants-text);
+}
+
+.culture {
+  background: var(--category-culture-fill);
+  color: var(--category-culture-text);
+}
+
+.official {
+  background: var(--category-official-fill);
+  color: var(--category-official-text);
+}
+
+.social {
+  background: var(--category-social-fill);
+  color: var(--category-social-text);
+}
+
+.neighbouring {
+  background: var(--category-neighbouring-fill);
+  color: var(--category-neighbouring-text);
+}
+
+/* ── The non-category pairs ─────────────────────────────────────────────── */
+
+/* The headline accent. `lime-500` always with `ink` — paper on it is 2.5:1. */
+.accent {
+  background: var(--color-lime-500);
+  color: var(--color-neutral-ink);
+}
+
+/* Badges inside a violet section. */
+.voice {
+  background: var(--color-violet-600);
+  color: var(--color-neutral-paper);
+}
+
+.neutral {
+  background: var(--color-neutral-surface2);
+  color: var(--color-neutral-text2);
+}
+
+/* On a photo or an ink section, where the ground is dark. */
+.paper {
+  background: var(--color-neutral-paper);
+  color: var(--color-neutral-ink);
+}
+
+/* The one "this is not real" pair — 6.0:1 (D-8). */
+.placeholder {
+  background: var(--placeholder-ground);
+  color: var(--placeholder-text);
+}

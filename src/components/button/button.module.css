@@ -1,0 +1,88 @@
+.button {
+  align-items: center;
+  border: 0;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  font-weight: 800;
+  gap: var(--control-gap);
+  justify-content: center;
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.1;
+  padding: 0 var(--space-6);
+  text-align: center;
+  text-decoration: none;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.label {
+  /* A long label wraps inside the pill instead of pushing the row sideways. */
+  min-width: 0;
+}
+
+.primary {
+  min-height: var(--height-button);
+}
+
+.compact {
+  min-height: var(--height-control);
+  padding: 0 var(--space-4);
+}
+
+/* ── The five variants — SRC-014 §Button ────────────────────────────────── */
+
+.primaryLight {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+}
+
+.primaryLight:hover {
+  background: var(--color-lime-900);
+}
+
+.primaryDark {
+  background: var(--color-lime-500);
+  color: var(--color-neutral-ink);
+}
+
+.primaryDark:hover {
+  background: var(--color-lime-400);
+}
+
+/* Paid conversion only, and never twice on one screen. */
+.pulse {
+  background: var(--color-himbeere-600);
+  color: var(--color-neutral-paper);
+}
+
+.pulse:hover {
+  background: var(--color-himbeere-700);
+}
+
+.secondary {
+  background: var(--color-neutral-paper);
+  color: var(--color-neutral-ink);
+}
+
+.secondary:hover {
+  background: var(--color-neutral-surface);
+}
+
+.quiet {
+  background: transparent;
+  color: var(--color-lime-800);
+  padding: 0 var(--space-2);
+}
+
+.quiet:hover {
+  color: var(--color-lime-900);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.15em;
+}

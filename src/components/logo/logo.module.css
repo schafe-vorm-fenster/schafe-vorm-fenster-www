@@ -1,0 +1,35 @@
+.logo {
+  align-items: center;
+  color: var(--color-neutral-ink);
+  display: inline-flex;
+  gap: var(--space-3);
+  text-decoration: none;
+}
+
+/* Radius 999 — the same radius as every control (SRC-014 §Logo). */
+.mark {
+  border-radius: var(--radius-pill);
+  flex: none;
+  height: 40px;
+  width: 40px;
+}
+
+.wordmark {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--type-meta-size);
+  font-weight: 800;
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.05;
+}
+
+.line {
+  display: block;
+}
+
+.url {
+  font-family: var(--font-mono);
+  font-size: var(--type-meta-size);
+  font-weight: 700;
+  letter-spacing: var(--tracking-mono);
+}

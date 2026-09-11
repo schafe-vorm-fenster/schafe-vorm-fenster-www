@@ -1,0 +1,58 @@
+/*
+ * The photograph and the gradient are one declaration, so the scrim scales
+ * with the image (SRC-014 §Photo surface). The stops follow the specified
+ * band: transparent at 12–26 %, 0.82–0.86 at 38–62 %, 0.96 at the bottom.
+ * `color-mix` keeps the alpha values inside the token system — no colour
+ * literal exists anywhere in this repository outside brand.css.
+ */
+.surface {
+  align-items: flex-end;
+  aspect-ratio: var(--photo-ratio, var(--ratio-hero));
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 0;
+  display: flex;
+  width: 100%;
+}
+
+.ink {
+  background-image:
+    linear-gradient(
+      to bottom,
+      transparent 18%,
+      color-mix(in srgb, var(--color-neutral-ink) 84%, transparent) 55%,
+      color-mix(in srgb, var(--color-neutral-ink) 96%, transparent) 100%
+    ),
+    var(--photo-image);
+  color: var(--color-neutral-paper);
+}
+
+/* The municipal path (SRC-014 §Photo surface). */
+.violet {
+  background-image:
+    linear-gradient(
+      to bottom,
+      transparent 18%,
+      color-mix(in srgb, var(--color-violet-500) 84%, transparent) 55%,
+      color-mix(in srgb, var(--color-violet-500) 96%, transparent) 100%
+    ),
+    var(--photo-image);
+  color: var(--color-neutral-paper);
+}
+
+.content {
+  /* A badge is inline-flex; as a stretched flex child it would fill the row. */
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--section-padding-block) var(--space-4);
+  width: 100%;
+}
+
+.marks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}

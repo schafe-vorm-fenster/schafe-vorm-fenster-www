@@ -1,0 +1,94 @@
+.row {
+  align-items: baseline;
+  /* The hairline divides rows inside a surface — no gap, no card. */
+  border-top: 1px solid var(--color-neutral-line);
+  display: flex;
+  gap: var(--space-4);
+  min-height: var(--height-event-row);
+  padding-block: var(--space-3);
+}
+
+.light {
+  color: var(--color-neutral-ink);
+}
+
+.dark {
+  border-top-color: var(--color-neutral-text2);
+  color: var(--color-neutral-paper);
+}
+
+.date {
+  flex: none;
+  font-family: var(--font-mono);
+  text-align: left;
+  width: 52px;
+}
+
+.day {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.month {
+  color: var(--color-neutral-muted);
+  display: block;
+  font-size: var(--type-label-size);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+}
+
+.dark .month {
+  color: var(--color-lime-300);
+}
+
+.body {
+  flex: 1;
+  /* Flex children need this to let the clamps actually clamp. */
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--type-card-size);
+  font-weight: 700;
+  letter-spacing: var(--type-card-tracking);
+  line-height: var(--type-card-leading);
+  margin: 0;
+  /* Two lines, always — a long title never changes the row height. */
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.title a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.15em;
+}
+
+.meta {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+  line-height: var(--leading-normal);
+  margin: var(--space-1) 0 0;
+  max-width: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dark .meta {
+  color: var(--color-lime-300);
+}
+
+.category {
+  flex: none;
+}

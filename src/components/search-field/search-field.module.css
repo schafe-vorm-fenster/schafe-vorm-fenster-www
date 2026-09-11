@@ -1,0 +1,76 @@
+.form {
+  width: 100%;
+}
+
+/* The label is read, not seen — the pill carries the placeholder. */
+.label {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.field {
+  align-items: center;
+  background: var(--color-neutral-paper);
+  border-radius: var(--radius-pill);
+  display: flex;
+  gap: var(--control-gap);
+  /* 6 px inset: the 44 px submit pill inside the 56 px field. */
+  min-height: var(--height-search);
+  padding: 0 6px 0 18px;
+}
+
+/* The compound control shows focus as a whole (Web Interface Guidelines). */
+.field:focus-within {
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.pin {
+  color: var(--color-neutral-muted);
+  flex: none;
+}
+
+.input {
+  background: transparent;
+  border: 0;
+  color: var(--color-neutral-ink);
+  flex: 1;
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  min-width: 0;
+  padding: 0;
+}
+
+.input::placeholder {
+  color: var(--color-neutral-muted);
+  opacity: 1;
+}
+
+/* The field owns the focus ring; the input inside it must not draw a second. */
+.input:focus-visible {
+  outline: none;
+}
+
+.submit {
+  align-items: center;
+  background: var(--color-neutral-ink);
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-paper);
+  cursor: pointer;
+  display: inline-flex;
+  flex: none;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body-sm);
+  font-weight: 700;
+  min-height: var(--height-control);
+  padding: 0 var(--space-6);
+}
+
+.submit:hover {
+  background: var(--color-lime-900);
+}

@@ -1,0 +1,47 @@
+.chip {
+  align-items: center;
+  border: 0;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-label);
+  font-weight: 700;
+  gap: var(--space-2);
+  letter-spacing: var(--tracking-mono);
+  line-height: 1;
+  /* ≥ 40 px specified, 44 px shipped — the 2.5.5 AAA floor. */
+  min-height: var(--height-chip);
+  padding: 0 var(--space-4);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.light {
+  background: var(--color-neutral-surface);
+  color: var(--color-neutral-ink);
+}
+
+.light:hover {
+  background: var(--color-neutral-surface2);
+}
+
+/* On an ink, lime-500 or photo ground. */
+.dark {
+  background: var(--color-lime-900);
+  color: var(--color-neutral-paper);
+}
+
+.dark:hover {
+  background: var(--color-neutral-ink);
+}
+
+/* Selected: fill *and* the check glyph the component renders — two signals. */
+.selected {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+}
+
+.selected:hover {
+  background: var(--color-lime-900);
+}
