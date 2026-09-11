@@ -62,7 +62,7 @@ whole run uses 3100 — the `dev` and `start` scripts, the Playwright
 | --- | --- |
 | `pnpm dev` | development server on port 3100 |
 | `pnpm build` | production build |
-| `pnpm check` | **the single gate** — frontmatter · specs · stack · brand · typecheck · lint · unit and integration tests. The pre-commit hook runs it on every commit, so it stays under five seconds. A new check is added *to* it, never run beside it. |
+| `pnpm check` | **the single gate** — frontmatter · content · specs · stack · brand · typecheck · lint · unit and integration tests. The pre-commit hook runs it on every commit, so it stays in the seconds (7.7 s measured at M3, `check:content` 0.3 s of it). A new check is added *to* it, never run beside it. |
 | `pnpm test` | unit and integration tests (Vitest) |
 | `pnpm test:watch` | the same, watching |
 | `pnpm e2e` | end-to-end tests (Playwright); starts the dev server itself |
@@ -85,6 +85,8 @@ Protection with `VERCEL_AUTOMATION_BYPASS_SECRET` — the suite sends it as
 | `proxy.ts` | the CSP, the HSTS variance and the `X-Robots-Tag`, on every response |
 | `src/lib/security/` | the policy as one typed structure, in one module |
 | `src/lib/seo/` | the indexability predicate and the robots surface |
+| `src/lib/content/` | **the content pipeline** (TS-007): `loadPage(routeId, locale)` gives a page its typed slots — provenance, `Demo-Daten` marking and all — out of `content/pages/<route>/<locale>.md`. Request time reads the local tree only; the hub-package adapter beside it is build-time. `src/lib/content/README.md` has the call example |
+| `content/pages/` | the page artifacts the pipeline reads: one file per page per locale, one section per slot, provenance per slot. Written by the content playbook, validated by `pnpm check:content` |
 | `e2e/` | Playwright specs |
 | `stack.allow.json` | the register of every runtime dependency with its reason |
 | `vercel.json` | install and build command only — **never a `headers` block**, which would silently outrank `next.config.ts` and `proxy.ts` |

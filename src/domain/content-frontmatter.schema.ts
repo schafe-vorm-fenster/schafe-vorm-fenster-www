@@ -25,6 +25,8 @@
 
 import { z } from "zod";
 
+import { LOCALES } from "../lib/i18n/locales";
+
 // ── Shared primitives ────────────────────────────────────────────────────────
 
 export const ContentTypeSchema = z.enum([
@@ -45,7 +47,12 @@ export const ContentStatusSchema = z.enum([
   "ready",
 ]);
 
-export const ContentLocaleSchema = z.enum(["de", "en"]);
+/**
+ * TS-007 D8.1 / DEC-006: the pipeline takes a locale **set**, never a
+ * hard-coded pair. The set is `src/lib/i18n/locales.ts`, which TS-001-A11
+ * makes the single place a language is declared — adding one is a row there.
+ */
+export const ContentLocaleSchema = z.enum(LOCALES);
 
 export type ContentType = z.infer<typeof ContentTypeSchema>;
 export type ContentStatus = z.infer<typeof ContentStatusSchema>;
@@ -196,3 +203,203 @@ export const AnyFrontmatterSchema = z.union([
 ]);
 
 export type AnyFrontmatter = z.infer<typeof AnyFrontmatterSchema>;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TS-007 — the content pipeline layer
+//
+// Added, not forked: everything above is the pre-relaunch taxonomy that
+// `content/features/`, `content/support/` and `content/legal/` still validate
+// against (TS-007 D4 calls them archive). Everything below is the schema the
+// M3 pipeline reads — the page artifacts under `content/pages/**` and the
+// per-slot metadata comments inside them.
+//
+// The full 26-type reshape of D5 is *not* done here. D5 rewrites the whole
+// file against Layer C compositions that do not exist yet (TS-007's own open
+// point "Layer C has no tactical spec"). What lands here is the part M3
+// actually needs and can check today: the provenance key (D6), the lifecycle
+// (D11), the slot vocabulary of concept B.3, and the `TS-###` spec binding
+// that TS-017-A14 demands. See ADR-074.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * The lifecycle of TS-007 D11: an agent emits `draft`, a person sets
+ * `approved` at the editorial decision point. `imported` survives for the
+ * legal family only (D10), which never enters generation.
+ *
+ * Kept beside `ContentStatusSchema` rather than replacing it: the archive
+ * folders still carry `needs-review` and `ready`, and this run does not
+ * rewrite archive content.
+ */
+export const LifecycleStatusSchema = z.enum([
+  "draft",
+  "in-review",
+  "approved",
+  "imported",
+]);
+
+export type LifecycleStatus = z.infer<typeof LifecycleStatusSchema>;
+
+/**
+ * The slot content types of concept B.3 — the 26 website content formats —
+ * plus the four spellings the Phase-2 artifacts actually use and one
+ * addition.
+ *
+ * `section` is the addition [PROPOSED]: B.3 has no generic prose block, and
+ * 42 of the 172 shipped slots are exactly that (a heading plus body copy
+ * that no other type describes). Naming it is better than forcing it into
+ * `hero` or `trust-block`.
+ */
+export const SLOT_CONTENT_TYPES = [
+  "hero",
+  "scene",
+  "value-story",
+  "objection-list",
+  "publishing-path",
+  "comparison",
+  "offer-tier",
+  "feature-benefit",
+  "form-step",
+  "proof-card",
+  "empty-proof-slot",
+  "archive-entry",
+  "origin-story",
+  "anecdote",
+  "person-profile",
+  "partner-mention",
+  "trust-block",
+  "howto-block",
+  "live-module-frame",
+  "empty-state",
+  "context-band",
+  "closing-cta",
+  "page-meta",
+  "site-config",
+  "error-page",
+  "legal-section",
+  "section",
+] as const;
+
+export const SlotContentTypeSchema = z.enum(SLOT_CONTENT_TYPES);
+
+export type SlotContentType = z.infer<typeof SlotContentTypeSchema>;
+
+/**
+ * Spellings the content artifacts use for a B.3 type, normalised on read.
+ * One vocabulary for content, schema and component (`src/components/README.md`
+ * rule "the folder name is the inventory name"), without asking the writer to
+ * re-edit eleven pages.
+ */
+export const SLOT_CONTENT_TYPE_ALIASES: Readonly<Record<string, SlotContentType>> = {
+  form: "form-step",
+  tier: "offer-tier",
+  profile: "person-profile",
+  configuration: "site-config",
+  quote: "anecdote",
+  teaser: "context-band",
+};
+
+/**
+ * Where a slot's copy comes from. `sourced` and `generated` are TS-007 D6 and
+ * the dummy-content rule; the other three are determinations the content map
+ * made and the pipeline has to carry rather than flatten:
+ *
+ *   sourced-empty-by-design  a clearance-gated proof slot that stays empty
+ *                            (SRC-001 rule 4, TS-007 D2) — never substituted
+ *   withheld                 a slot a page spec forbids filling without a
+ *                            named source (TS-024 D10, TS-026 D5)
+ *   mixed                    a slot whose parts differ in provenance
+ *
+ * `demo` is orthogonal: it marks the slot the prototype shows in place of an
+ * empty one, and it is what puts the `Demo-Daten` badge on the page.
+ */
+export const SlotProvenanceSchema = z.enum([
+  "sourced",
+  "generated",
+  "sourced-empty-by-design",
+  "withheld",
+  "mixed",
+]);
+
+export type SlotProvenance = z.infer<typeof SlotProvenanceSchema>;
+
+/**
+ * A provenance reference of TS-007 D6 — `<package>@<version>#<record-id>`,
+ * the exact installed version, never a range and never a repository path
+ * (DEC-042). Two forms beyond the canonical one are accepted:
+ *
+ *   `ia`                     the copy shell with no source record, declared
+ *                            against the information architecture (D6)
+ *   `<package>@<version>`    a whole-package *pool* reference: the slot draws
+ *                            from every record of that package and the
+ *                            relevance engine (TS-005) picks. It still
+ *                            resolves, and a version bump still selects the
+ *                            file for P7 — which is all D6 asks of the key.
+ *                            [PROPOSED — D6 writes only the `#record` form]
+ */
+export const SOURCE_REF_PATTERN =
+  /^(?:ia|@[a-z0-9][a-z0-9._-]*\/[a-z0-9][a-z0-9._-]*@\d+\.\d+\.\d+(?:-[0-9a-z.-]+)?(?:#[A-Za-z0-9._-]+)?)$/;
+
+export const SourceRefSchema = z
+  .string()
+  .regex(
+    SOURCE_REF_PATTERN,
+    "must be `<package>@<version>#<record-id>`, `<package>@<version>`, or `ia` (TS-007 D6)",
+  );
+
+/**
+ * The per-slot metadata comment inside a page artifact
+ * (`<!-- id: …; content_type: …; provenance: …; derived_from: […]; status: … -->`).
+ *
+ * It carries what TS-007 D4/D6 would put in a per-slot file's own
+ * frontmatter. `state/content-map.md` explains why the artifacts are one file
+ * per page instead; ADR-074 records the determination that the loader reads
+ * that shape as is.
+ */
+export const SlotMetaSchema = z.object({
+  id: z
+    .string()
+    .min(1)
+    .describe("Locale-free slot id, kebab-case: `<route-segment>-<n>-<slot>`."),
+  content_type: SlotContentTypeSchema,
+  provenance: SlotProvenanceSchema,
+  derived_from: z.array(SourceRefSchema),
+  status: LifecycleStatusSchema,
+  demo: z.boolean().optional().describe("True for a dummy-content slot; puts the `Demo-Daten` badge on the module."),
+});
+
+export type SlotMeta = z.infer<typeof SlotMetaSchema>;
+
+/**
+ * The frontmatter of a page artifact under `content/pages/<route>/<locale>.md`.
+ *
+ * Extends the pre-relaunch base rather than replacing it, so
+ * `pnpm check:frontmatter` keeps validating these files through the same
+ * union — with the TS-007 fields now actually required instead of silently
+ * dropped as unknown keys (which is what `state/open.md` #43 reported).
+ */
+export const PageFrontmatterSchema = BaseFrontmatterSchema.extend({
+  status: LifecycleStatusSchema,
+  /** The tactical spec the page realises — TS-017-A14. */
+  page_id: z
+    .string()
+    .regex(/^TS-\d{3}$/, "must name the tactical spec as `TS-###` (TS-017-A14)"),
+  /** The German route path the page answers on, per `src/lib/routes/routes.ts`. */
+  route: z.string().startsWith("/"),
+  /** TS-007 D6: one entry per record actually used; never empty. */
+  derived_from: z.array(SourceRefSchema).min(1),
+  /** TS-007 D6: `<playbook>@<version>`, so a prompt change is traceable. */
+  generated_by: z.string().min(1),
+  /** TS-007 D6: ISO date of the draft. */
+  generated_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  /** Page-level summary; the binding per-slot value is in the slot comment. */
+  provenance: z.string().min(1),
+  tone_profile: z.string().optional(),
+  compliance_check: z.string().optional(),
+  schema_note: z.string().optional(),
+  open_points: z.array(z.string()).optional(),
+  /** TS-007 D11: set by a person at the editorial decision point, never by an agent. */
+  reviewed_by: z.string().optional(),
+  reviewed_at: z.string().optional(),
+});
+
+export type PageFrontmatter = z.infer<typeof PageFrontmatterSchema>;

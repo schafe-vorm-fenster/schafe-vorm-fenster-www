@@ -18,6 +18,10 @@
       "reason": "The binding design system: colour and type tokens, logos, font packages. Consumed, never copied; pinned exact so a brand change arrives as a reviewable version bump.",
       "decision": "DEC-044"
     },
+    "js-yaml": {
+      "reason": "The YAML reader for content frontmatter and the specs checks. Already in the tree since M1 (same version, same lockfile entry); promoted from devDependencies because src/lib/content/loader.ts reads page artifacts on a server path, and a module a rendered page imports is a runtime dependency, whatever the folder it is read from.",
+      "decision": "DEC-074"
+    },
     "@fontsource/atkinson-hyperlegible-next": {
       "reason": "Self-hosted woff2 faces of the brand typeface; a direct dependency because pnpm does not hoist the brand package's own dependencies to our import paths.",
       "decision": "DEC-043"

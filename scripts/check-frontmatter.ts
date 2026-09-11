@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import * as yaml from "js-yaml";
 import {
   NormalizedFrontmatterSchema,
+  PageFrontmatterSchema,
   PressFrontmatterSchema,
   ProductFrontmatterSchema,
   SupportFrontmatterSchema,
@@ -22,6 +23,11 @@ const FOLDER_SCHEMA_MAP: Record<
 > = {
   press: { schema: PressFrontmatterSchema, label: "PressFrontmatter" },
   support: { schema: SupportFrontmatterSchema, label: "SupportFrontmatter" },
+  // The M3 pipeline tree (TS-007 D4): page artifacts carry the provenance,
+  // lifecycle and `TS-###` spec binding of TS-007 D6/D11 and TS-017-A14.
+  // Until this row existed, those fields parsed as unknown keys and were
+  // silently dropped — state/open.md #43.
+  pages: { schema: PageFrontmatterSchema, label: "PageFrontmatter" },
 };
 
 // Product files live inside products/ and use an extended schema.
