@@ -1,0 +1,88 @@
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.entry {
+  display: block;
+}
+
+.heading {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: var(--type-card-size);
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+}
+
+.number {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-label-size);
+}
+
+.demo {
+  display: block;
+}
+
+.row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--control-gap);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.states {
+  display: grid;
+  gap: var(--space-4);
+  /* `minmax(0, …)`: a grid track's default min is min-content, which would
+     let a nowrap badge push the page sideways (TS-017 D2/A9). */
+  grid-template-columns: minmax(0, 1fr);
+  margin-top: var(--space-6);
+}
+
+.state {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  border-top: 1px solid var(--color-neutral-line);
+  padding-top: var(--space-3);
+}
+
+.stateLabel {
+  color: var(--color-neutral-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  letter-spacing: var(--type-label-tracking);
+  margin: 0 0 var(--space-2);
+  text-transform: uppercase;
+}
+
+.photoHeadline {
+  font-size: var(--type-subhead-size);
+  font-weight: 800;
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: var(--leading-tight);
+  margin: 0;
+}
+
+/* lg — 48rem / 768px: the four states stand beside each other. */
+@media (min-width: 48rem) {
+  .states {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* The search field is `paper` on every ground, so the gallery shows it on a
+   `surface` block — otherwise its pill is invisible against the page. */
+.onSurface {
+  background: var(--color-neutral-surface);
+  padding: var(--space-6);
+}
