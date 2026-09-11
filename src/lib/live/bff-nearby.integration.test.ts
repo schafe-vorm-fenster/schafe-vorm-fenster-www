@@ -59,6 +59,17 @@ describe("TS-013-A5 / TS-013 D6: the nearby key is a segment, never a visitor", 
     const response = await call(`?lat=${anchor.lat}&lng=${anchor.lng}`);
     const body = await response.json();
     expect(body.demo).toBe(true);
-    expect(JSON.stringify(body.data)).not.toContain(String(anchor.lat));
+
+    // Not `toContain(String(anchor.lat))`: the anchor's latitude is `54`, and
+    // `fetchedAt` is an ISO timestamp — so the assertion failed whenever the
+    // minute or the second happened to be 54, which is a little over 3 % of
+    // renders. What it means to assert is that **no coordinate** travels back,
+    // so it asserts that: no coordinate-shaped field, and no coordinate-shaped
+    // value.
+    const payload = JSON.stringify(body.data);
+    expect(payload).not.toContain('"lat"');
+    expect(payload).not.toContain('"lng"');
+    expect(payload).not.toContain(anchor.lat.toFixed(2));
+    expect(payload).not.toContain(anchor.lng.toFixed(2));
   });
 });

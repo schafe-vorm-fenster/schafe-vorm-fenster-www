@@ -37,7 +37,6 @@
 import { cacheLife } from "next/cache";
 
 import { pageDescription, pageTitle } from "@/src/lib/routes/metadata";
-import { canonicalUrl } from "@/src/lib/routes/routes";
 import {
   breadcrumbListNode,
   calendarServiceNode,
@@ -100,15 +99,13 @@ export async function pageGraph({
     // The two service pages; `/deine-region` carries no price (WEB-F-020).
     ...(route === "calendar" ? [calendarServiceNode(locale, title)] : []),
     ...(route === "region" ? [regionServiceNode(locale, title)] : []),
-    // `/ueber-uns` — by reference, never a second full node.
+    // `/ueber-uns` — D4: "`Organization` (reference by `@id`, not a second
+    // full node)". A typed node carrying nothing but its `@id` is JSON-LD's
+    // own way to *refer* to an entity defined elsewhere: it adds no second
+    // description (the full node lives on `/`), and it is still an
+    // `Organization` node, which is what TS-027-A12 counts.
     ...(route === "about"
-      ? [
-          {
-            "@type": "AboutPage",
-            "@id": `${canonicalUrl("about", locale)}#aboutpage`,
-            about: organizationReference(),
-          },
-        ]
+      ? [{ "@type": "Organization", ...organizationReference() }]
       : []),
     // Any page with a visible Q&A block.
     faqPageNode(faq ?? []),

@@ -35,7 +35,7 @@ const EXPECTED_TYPES: Readonly<Record<RouteId, readonly string[]>> = {
   order: ["WebPage", "BreadcrumbList"],
   region: ["WebPage", "Service"],
   regionQuote: ["WebPage", "BreadcrumbList"],
-  about: ["WebPage", "AboutPage"],
+  about: ["WebPage", "Organization"],
   archive: ["WebPage", "BreadcrumbList"],
   legal: ["WebPage"],
 };
@@ -77,11 +77,12 @@ describe("TS-011-A4: every page emits exactly the nodes D4's table names", () =>
       expect(home["@graph"][1]).toEqual(websiteNode(locale));
       expect(home["@graph"][2]).toEqual(await organizationNode());
     }
+    const full = await organizationNode();
     for (const route of ROUTE_IDS) {
       if (route === "home") continue;
       const graph = await pageGraph({ route, locale: "de" });
-      expect(typesOf(graph), `${route} emits a second Organization`).not.toContain(
-        "Organization",
+      expect(graph["@graph"], `${route} emits a second full Organization`).not.toContainEqual(
+        full,
       );
       expect(typesOf(graph), `${route} emits a second WebSite`).not.toContain("WebSite");
     }
@@ -89,8 +90,12 @@ describe("TS-011-A4: every page emits exactly the nodes D4's table names", () =>
 
   it("references the Organization on `/ueber-uns` instead of repeating it", async () => {
     const graph = await pageGraph({ route: "about", locale: "de" });
-    const about = graph["@graph"][1] as { about: { "@id": string } };
-    expect(about.about["@id"]).toBe("https://www.schafe-vorm-fenster.de/#organization");
+    // D4: a reference by `@id`, not a second full node — so the node carries
+    // its type and its id, and nothing else (no name, no address, no contact).
+    expect(graph["@graph"][1]).toEqual({
+      "@type": "Organization",
+      "@id": "https://www.schafe-vorm-fenster.de/#organization",
+    });
   });
 
   it("carries the BreadcrumbList on all five second-level pages and nowhere else", async () => {

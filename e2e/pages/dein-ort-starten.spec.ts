@@ -257,10 +257,37 @@ test.describe("TS-021 — start the calendar in your place", () => {
     await expect(page.locator('#closing-cta [data-cta="primary"]')).toHaveCount(0);
   });
 
-  test.fixme(
-    "TS-021-A12: no tracker request carries a conversion-goal name [M4 — TS-012 analytics is not built]",
-    () => {},
-  );
+  test("TS-021-A12: no tracker request carries a conversion-goal name", async ({ page }) => {
+    const offOrigin: string[] = [];
+    page.on("request", (request) => {
+      const url = new URL(request.url());
+      if (url.hostname !== "localhost" && url.hostname !== "127.0.0.1") {
+        offOrigin.push(request.url());
+      }
+    });
+
+    await page.goto("/dein-ort/starten?ort=17390");
+    await page.locator('[data-cta="primary"]').first().hover();
+    await page.waitForTimeout(250);
+
+    // TS-012 D1/D2 and the mock rule: the tracker in every environment today
+    // is `mock-tracker.ts` — it logs and records nothing, makes no network
+    // call at all, and this page arms no conversion in the first place (the
+    // founding offer's goal fires on `/mitmachen/registrieren`).
+    expect(offOrigin).toEqual([]);
+
+    // Belt and braces on the criterion's own wording: no request of any
+    // origin carries a goal name in its URL.
+    const anyRequest: string[] = [];
+    page.on("request", (request) => anyRequest.push(request.url()));
+    await page.reload();
+    await page.waitForLoadState("networkidle");
+    for (const url of anyRequest) {
+      expect(url).not.toContain("register-as-publisher");
+      expect(url).not.toContain("save-calendar-to-homescreen");
+      expect(url).not.toContain("publish-first-event");
+    }
+  });
 
   test("TS-021-A13: the place name reserves its box before paint, and nothing shifts", async ({
     page,

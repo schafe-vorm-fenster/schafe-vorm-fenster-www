@@ -29,7 +29,13 @@ export function EmptyProofSlot({
   className,
 }: EmptyProofSlotProps) {
   return (
-    <div className={[styles.slot, className].filter(Boolean).join(" ")}>
+    // `data-empty-proof` makes the honest gap countable from outside — the
+    // selection's positions are cards *and* gaps, and SRC-001 §4 is about the
+    // count (DEC-048), not about how many cards happen to be cleared.
+    <div
+      className={[styles.slot, className].filter(Boolean).join(" ")}
+      data-empty-proof="true"
+    >
       <div className={styles.content}>
         <Badge tone="placeholder">{badgeLabel}</Badge>
         <p className={styles.sentence}>{sentence}</p>

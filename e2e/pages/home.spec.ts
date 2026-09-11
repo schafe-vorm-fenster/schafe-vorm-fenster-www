@@ -237,15 +237,90 @@ test.describe("TS-019 — home", () => {
     await context.close();
   });
 
-  test.fixme(
-    "TS-019-A12: the JSON-LD graph is one WebSite and one Organization, no Event [M4 — TS-011 D4 structured data is not built]",
-    () => {},
-  );
+  test("TS-005-A13: the selection is the engine's, and the same on two pages across reloads", async ({
+    page,
+  }) => {
+    // DEC-048's counts, per surface: 5 on home, 7 in the `/ueber-uns` stream,
+    // 3 inline. A count that holds while the pool is smaller than the surface
+    // is what "an unfilled position weakens the claim, it does not shorten
+    // the stream" means in the DOM (SRC-001 §4).
+    const positionsOf = async (path: string, selector: string) => {
+      await page.goto(path);
+      return page.locator(selector).evaluateAll((nodes) =>
+        nodes.map((node) => node.textContent?.trim().slice(0, 60) ?? ""),
+      );
+    };
 
-  test.fixme(
-    "TS-019-A13: the calendar handover emits save-calendar-to-homescreen once [M4 — TS-012 analytics is not built]",
-    () => {},
-  );
+    const home = await positionsOf("/", "#proof-stream article, #proof-stream [data-empty-proof]");
+    expect(home).toHaveLength(5);
+
+    const about = await positionsOf(
+      "/ueber-uns",
+      '[aria-labelledby="belegstrom"] article, [aria-labelledby="belegstrom"] [data-empty-proof]',
+    );
+    expect(about).toHaveLength(7);
+
+    // TS-005-A4: same trait, same place, same result. Both pages are stage 0
+    // here, and the ISO-week seed is the only variety input, so a reload
+    // inside the same week reproduces the order exactly.
+    expect(
+      await positionsOf("/", "#proof-stream article, #proof-stream [data-empty-proof]"),
+    ).toEqual(home);
+    expect(
+      await positionsOf("/ueber-uns", '[aria-labelledby="belegstrom"] article, [aria-labelledby="belegstrom"] [data-empty-proof]'),
+    ).toEqual(about);
+  });
+
+  test("TS-019-A12: the JSON-LD graph is one WebSite and one Organization, no Event", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    const scripts = page.locator('script[type="application/ld+json"]');
+    // TS-011 D4: one graph per page, not one script per node.
+    await expect(scripts).toHaveCount(1);
+
+    const graph = JSON.parse((await scripts.textContent()) ?? "{}");
+    expect(graph["@context"]).toBe("https://schema.org");
+
+    const types = (graph["@graph"] as { "@type": string }[]).map((node) => node["@type"]);
+    expect(types).toEqual(["WebPage", "WebSite", "Organization"]);
+    expect(types.filter((type) => type === "WebSite")).toHaveLength(1);
+    expect(types.filter((type) => type === "Organization")).toHaveLength(1);
+    // D4's "deliberately not emitted" table: event markup belongs to the app.
+    expect(JSON.stringify(graph)).not.toContain('"Event"');
+  });
+
+  test("TS-019-A13: the calendar handover emits save-calendar-to-homescreen once", async ({
+    page,
+  }) => {
+    // The tracker is the mock (TS-012, plan/guardrails.md): it logs and
+    // records nothing, so the console line *is* the event, and its absence
+    // from the network is half of what A13 asserts.
+    const events: string[] = [];
+    page.on("console", (message) => {
+      if (message.text().includes("[analytics:mock] conversion")) events.push(message.text());
+    });
+    const requests: string[] = [];
+    page.on("request", (request) => {
+      if (new URL(request.url()).origin !== new URL(page.url() || "http://x").origin) {
+        requests.push(request.url());
+      }
+    });
+
+    await page.goto("/");
+    const handover = page.locator('#place-dates a[rel~="external"], #place-dates a[target="_blank"], #place-dates a[href^="https://app."]').first();
+    await expect(handover).toBeVisible();
+
+    // The click navigates off-site; the event must fire without the link
+    // being delayed (TS-012 D9), so the listener is enough — no
+    // `preventDefault`, and the assertion is on what was logged.
+    await handover.click({ modifiers: ["Shift"] }).catch(() => undefined);
+    await page.waitForTimeout(250);
+
+    const saves = events.filter((line) => line.includes("save-calendar-to-homescreen"));
+    expect(saves).toHaveLength(1);
+  });
 
   test("TS-019-A14: the counter block renders the dates figure and nothing else", async ({
     page,

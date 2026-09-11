@@ -49,8 +49,6 @@ import { liveCounters } from "@/src/lib/live/counters";
 import { nearbyEvents } from "@/src/lib/live/nearby";
 import { placeEvents } from "@/src/lib/live/places";
 import { regionExamples } from "@/src/lib/live/region";
-import { resolveLiveAnchor } from "@/src/lib/pages/live-anchor";
-import { readPlaceParameter } from "@/src/lib/pages/place-parameter";
 
 import type { EventListItem } from "@/src/components/event-list/event-list";
 import type { DataState } from "@/src/components/data-state";
@@ -196,7 +194,11 @@ export async function PlaceDatesIsland({
     <LiveModuleFrame
       announced={announced || data.publishInvitation}
       cta={
-        ctaTemplate === undefined ? undefined : conversion === undefined ? (
+        // State B suppresses the calendar handover: a covered place with no
+        // dates shifts the focus job to publishing (TS-008 D4, TS-020 D2),
+        // and an "open the calendar" link beside "nothing is in it yet" is
+        // the one offer that state must not carry.
+        ctaTemplate === undefined || (empty && invitation !== undefined) ? undefined : conversion === undefined ? (
           <OutboundLink href={calendarUrl(data.place)} variant="secondary">
             {fillTemplate(ctaTemplate, { place: data.place.name })}
           </OutboundLink>
@@ -223,6 +225,10 @@ export async function PlaceDatesIsland({
         emptyState={
           invitation === undefined ? undefined : (
             <EmptyStateBlock
+              // The frame already carries `role="status"` (`announced`), and
+              // the shift is announced **once** — `empty-state-block`'s own
+              // contract for exactly this case.
+              announced={false}
               cta={
                 <Button locale={locale} onward to={invitation.ctaTo} variant="primary-light">
                   {invitation.ctaLabel}
@@ -384,55 +390,6 @@ export async function CountersIsland({
       updatesToday={wanted.has("updatesToday") ? data.updatesToday : undefined}
     />
   );
-}
-
-/* ------------------------------------------------------------------ */
-/* The request-bound wrappers — TS-009 D2, the one place `?ort=` is read */
-/* ------------------------------------------------------------------ */
-
-/**
- * `?ort=` → an anchor → a cached island, with the **stage-0 island as the
- * `<Suspense>` fallback**.
- *
- * That pairing is TS-010 D8 and TS-009 D1 in one shape: the prerendered
- * shell carries the complete stage-0 page (search present, modules filled,
- * no skeleton left standing), and the stated place streams in over it at
- * request time. A crawler, a JS-less visitor and a visitor whose lookup
- * timed out all keep the shell — which is a finished page, not a fallback.
- *
- * The wrappers below are the only components on the site that await
- * `searchParams`. They read it, resolve it, and hand a **string** to the
- * cached island — the request value never crosses the cache boundary.
- */
-export type SearchParamsPromise = Promise<Record<string, string | string[] | undefined>>;
-
-async function anchorFrom(searchParams: SearchParamsPromise) {
-  const query = await searchParams;
-  return resolveLiveAnchor(readPlaceParameter(query["ort"]));
-}
-
-export async function StatedPlaceDates({
-  searchParams,
-  ...island
-}: { readonly searchParams: SearchParamsPromise } & Omit<PlaceDatesIslandProps, "slug">) {
-  const anchor = await anchorFrom(searchParams);
-  return <PlaceDatesIsland slug={anchor.slug} {...island} />;
-}
-
-export async function StatedNearby({
-  searchParams,
-  ...island
-}: { readonly searchParams: SearchParamsPromise } & Omit<NearbyIslandProps, "lat" | "lng">) {
-  const anchor = await anchorFrom(searchParams);
-  return <NearbyIsland lat={anchor.lat} lng={anchor.lng} {...island} />;
-}
-
-export async function StatedRegionExamples({
-  searchParams,
-  ...island
-}: { readonly searchParams: SearchParamsPromise } & Omit<RegionExamplesIslandProps, "county">) {
-  const anchor = await anchorFrom(searchParams);
-  return <RegionExamplesIsland county={anchor.county} {...island} />;
 }
 
 /**

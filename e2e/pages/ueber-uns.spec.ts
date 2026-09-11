@@ -86,12 +86,20 @@ test.describe("/ueber-uns", () => {
 
   test("TS-027-A12: exactly one Organization JSON-LD node, no Person nodes", async ({ page }) => {
     await page.goto("/ueber-uns");
-    const jsonLd = await page.locator('script[type="application/ld+json"]').allTextContents();
-    const nodes = jsonLd.map((text) => JSON.parse(text));
+    // One `<script>` per page (TS-011 D4), so the nodes are read out of the
+    // page's one `@graph`. The criterion is unchanged.
+    const scripts = page.locator('script[type="application/ld+json"]');
+    await expect(scripts).toHaveCount(1);
+
+    const graph = JSON.parse((await scripts.textContent()) ?? "{}");
+    const nodes = graph["@graph"] as Record<string, unknown>[];
     const organizations = nodes.filter((node) => node["@type"] === "Organization");
     const persons = nodes.filter((node) => node["@type"] === "Person");
     expect(organizations).toHaveLength(1);
     expect(persons).toHaveLength(0);
+    // D4: a reference by `@id`, never a second full node — the page describes
+    // the organisation nowhere, it points at the description on `/`.
+    expect(Object.keys(organizations[0]!).sort()).toEqual(["@id", "@type"]);
   });
 
   test("TS-004-A1: no horizontal scroll at 360px", async ({ page }) => {

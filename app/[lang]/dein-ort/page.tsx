@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import { EventRow } from "@/src/components/event-row/event-row";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { HowtoBlock } from "@/src/components/howto-block/howto-block";
@@ -24,13 +22,7 @@ import { href } from "@/src/lib/routes/routes";
 
 import heroPlaceholder from "@/src/generated/placeholders/dein-ort/hero.svg";
 
-import {
-  NearbyIsland,
-  PlaceDatesIsland,
-  StatedNearby,
-  StatedPlaceDates,
-  exampleRows,
-} from "../_islands";
+import { NearbyIsland, PlaceDatesIsland, exampleRows } from "../_islands";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { localeFrom } from "../_locale";
@@ -87,6 +79,18 @@ import type { Metadata } from "next";
  */
 
 const ROUTE = "place" as const;
+
+/**
+ * **Cache Components: this route blocks on purpose** (TS-009 D1, the dynamic
+ * layer). TS-020 D2 keys five page states on `?ort=`, and TS-020-A10 requires
+ * stage 0 to render with JavaScript disabled and with **no unresolved
+ * skeleton** — so the request value is read in the page rather than behind a
+ * `<Suspense>` boundary whose fallback a JS-less visitor would never get
+ * past. `instant = false` is the framework's own marker for "allowed to
+ * block". Content and every live module below stay cached, so the
+ * per-request work is a cache read and a slug lookup. `state/open.md`.
+ */
+export const instant = false;
 
 /**
  * TS-012 D4 — `save-calendar-to-homescreen`, `stage: handover`: every click
@@ -181,16 +185,6 @@ async function Homescreen({ slug, locale, headline, ios, android, ctaTemplate, g
   );
 }
 
-/** The `?ort=` half: read the request value, resolve it, hand down a slug. */
-async function StatedHomescreen({
-  searchParams,
-  ...copy
-}: HomescreenCopy & { readonly searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-  const query = await searchParams;
-  const stated = await resolveAnchorPlace(readPlaceParameter(query["ort"]));
-  return <Homescreen slug={stated?.slug ?? STAGE_ZERO_ANCHOR.slug} {...copy} />;
-}
-
 export default async function PlacePage({
   params,
   searchParams,
@@ -201,6 +195,24 @@ export default async function PlacePage({
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
   const copy = PAGE_COPY[locale];
+
+  /**
+   * The one request value this page has, resolved once, outside every cache
+   * boundary (TS-009 D2) — and read in the **page**, not behind a
+   * `<Suspense>`.
+   *
+   * That makes `/dein-ort` a dynamic route rather than a prerendered shell,
+   * and it is the honest shape for this page: TS-020 D2 keys *five* states on
+   * the place parameter, and TS-020-A10 requires stage 0 to render with
+   * JavaScript disabled and with **no unresolved skeleton**. A `<Suspense>`
+   * boundary buys the shell back only by paying with a skeleton a JS-less
+   * visitor never gets past — which is precisely what A10 forbids. The
+   * shell/island split still holds underneath: content and every live module
+   * are cached (`_content.ts`, `_islands.tsx`), so the per-request work is a
+   * cache read and a slug lookup, not an upstream call.
+   */
+  const stated = await resolveAnchorPlace(readPlaceParameter((await searchParams)["ort"]));
+  const anchor = stated ?? STAGE_ZERO_ANCHOR;
 
   const stateA = slot(page, "dein-ort-1-state-a");
   const stateB = slot(page, "dein-ort-2-state-b");
@@ -300,33 +312,17 @@ export default async function PlacePage({
           not the rows, that carries it. */}
       <MotionReveal>
         <SectionShell id="place-dates" surface="ink">
-          <Suspense
-            fallback={
-              <PlaceDatesIsland
-                announced
-                conversion={SAVE_CALENDAR}
-                ctaTemplate={stateA.cta ?? ""}
-                invitation={invitation}
-                locale={locale}
-                rowCount={3}
-                slug={STAGE_ZERO_ANCHOR.slug}
-                titleTemplate={stateA.fields["Headline"] ?? ""}
-                tone="dark"
-              />
-            }
-          >
-            <StatedPlaceDates
-              announced
-              conversion={SAVE_CALENDAR}
-              ctaTemplate={stateA.cta ?? ""}
-              invitation={invitation}
-              locale={locale}
-              rowCount={3}
-              searchParams={searchParams}
-              titleTemplate={stateA.fields["Headline"] ?? ""}
-              tone="dark"
-            />
-          </Suspense>
+          <PlaceDatesIsland
+            announced
+            conversion={SAVE_CALENDAR}
+            ctaTemplate={stateA.cta ?? ""}
+            invitation={invitation}
+            locale={locale}
+            rowCount={3}
+            slug={anchor.slug}
+            titleTemplate={stateA.fields["Headline"] ?? ""}
+            tone="dark"
+          />
         </SectionShell>
       </MotionReveal>
 
@@ -363,24 +359,13 @@ export default async function PlacePage({
           naming its own place. */}
       <MotionReveal>
         <SectionShell id="nearby" surface="lime-100">
-          <Suspense
-            fallback={
-              <NearbyIsland
-                lat={STAGE_ZERO_ANCHOR.lat}
-                lng={STAGE_ZERO_ANCHOR.lng}
-                locale={locale}
-                rowCount={5}
-                titleTemplate={copy.nearby}
-              />
-            }
-          >
-            <StatedNearby
-              locale={locale}
-              rowCount={5}
-              searchParams={searchParams}
-              titleTemplate={copy.nearby}
-            />
-          </Suspense>
+          <NearbyIsland
+            lat={anchor.lat}
+            lng={anchor.lng}
+            locale={locale}
+            rowCount={5}
+            titleTemplate={copy.nearby}
+          />
         </SectionShell>
       </MotionReveal>
 
@@ -390,9 +375,7 @@ export default async function PlacePage({
           secondary treatment. */}
       <MotionReveal>
         <SectionShell id="homescreen" surface="lime-500">
-          <Suspense fallback={<Homescreen slug={STAGE_ZERO_ANCHOR.slug} {...homescreenCopy} />}>
-            <StatedHomescreen searchParams={searchParams} {...homescreenCopy} />
-          </Suspense>
+          <Homescreen slug={anchor.slug} {...homescreenCopy} />
         </SectionShell>
       </MotionReveal>
     </PageFrame>

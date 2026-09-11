@@ -70,11 +70,20 @@ test.describe("/ueber-uns/archiv", () => {
     page,
   }) => {
     await page.goto("/ueber-uns/archiv");
-    const jsonLd = await page.locator('script[type="application/ld+json"]').first().textContent();
-    const parsed = JSON.parse(jsonLd ?? "{}");
-    expect(parsed["@type"]).toBe("ItemList");
+    // One `<script>` per page is TS-011 D4's rule, so the `ItemList` travels
+    // inside the page's one `@graph` rather than in a second tag. The
+    // criterion is unchanged: it parses as **one** `ItemList`, and its count
+    // is the visible row count.
+    const scripts = page.locator('script[type="application/ld+json"]');
+    await expect(scripts).toHaveCount(1);
+
+    const graph = JSON.parse((await scripts.textContent()) ?? "{}");
+    const lists = (graph["@graph"] as { "@type": string; itemListElement?: unknown[] }[]).filter(
+      (node) => node["@type"] === "ItemList",
+    );
+    expect(lists).toHaveLength(1);
     const rows = await page.locator("[data-archive-type]").count();
-    expect(parsed.itemListElement).toHaveLength(rows);
+    expect(lists[0]!.itemListElement).toHaveLength(rows);
   });
 
   test("TS-028-A11: no conversion — no form, no primary CTA; last block is the three-job offer", async ({

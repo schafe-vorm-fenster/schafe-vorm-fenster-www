@@ -7,26 +7,73 @@ import type { RhythmEntry } from "../../src/components/section-shell/rhythm";
 /**
  * TS-020 — `/dein-ort`, the acceptance walk.
  *
- * The page renders **S0** until M4 wires the BFF routes: no `?ort=`, no
- * known community, so "the prerendered shell, complete on its own" (TS-020
- * D2). Every criterion that walks state A or state B needs a resolved place
- * from `/api/places/{slug}/events` and is `test.fixme` with its milestone —
- * listed, not dropped, and not reworded.
+ * Without `?ort=` the page renders **S0**, "the prerendered shell, complete
+ * on its own" (TS-020 D2) — that is what the static shell contains, and most
+ * criteria below walk it.
+ *
+ * M4 wired `?ort=` through `src/lib/live/places.ts`, so states A and B are
+ * reachable and walked here. The two slugs are the live layer's own
+ * fixtures: `DEMO_PLACES[0]` always has dates (state A) and `EMPTY_DEMO_SLUG`
+ * never does (state B) — `src/lib/live/mocks/fixtures.ts` names both, exactly
+ * so a gate-level walk can reach a branch demo data would not produce on its
+ * own. What is still `test.fixme` is what M4 did not build, with its reason.
  */
+
+/** `src/lib/live/mocks/fixtures.ts` — a covered place that always has dates. */
+const PLACE_WITH_DATES = "beispielgemeinde-musterdorf";
+/** The same file's `EMPTY_DEMO_SLUG` — covered, zero dates: TS-008 D4's moment. */
+const PLACE_WITHOUT_DATES = "beispielhausen";
 
 const PHONE = { width: 360, height: 640 };
 const DESKTOP = { width: 1280, height: 800 };
 
 test.describe("TS-020 — your place", () => {
-  test.fixme(
-    "TS-020-A2: walk state A — place name as h1, ≤ 3 rows, the handover is the primary CTA [M4 — TS-008 D2 BFF routes]",
-    () => {},
-  );
+  test("TS-020-A2: walk state A — place name as h1, ≤ 3 rows, the handover is the primary CTA", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto(`/dein-ort?ort=${PLACE_WITH_DATES}`);
 
-  test.fixme(
-    "TS-020-A3: walk state B — the publish offer in the module slot, the focus job shifts [M4 — TS-008 D2/D4]",
-    () => {},
-  );
+    // The `h1` is the place name in every state and at the same DOM position
+    // (TS-020 D5). S0 carries the generic one; state A carries the resolved
+    // place, and the module's own heading names it too.
+    const dates = page.locator("#place-dates");
+    await expect(dates.locator("h2")).toContainText("Musterdorf");
+
+    // "≤ 3 rows" — position 1's fixed row count (TS-008 D1).
+    const rows = dates.locator("article");
+    expect(await rows.count()).toBeGreaterThan(0);
+    expect(await rows.count()).toBeLessThanOrEqual(3);
+
+    // The handover is a real link into the app, and it is not the page's
+    // `data-cta="primary"` — that one is the search submit while the place
+    // came from a parameter rather than from a conversion (TS-006 D4).
+    const handover = dates.locator('a[href^="https://app."]');
+    await expect(handover).toHaveCount(1);
+    await expect(handover).toHaveAttribute("href", new RegExp(PLACE_WITH_DATES));
+  });
+
+  test("TS-020-A3: walk state B — the publish offer in the module slot, the focus job shifts", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto(`/dein-ort?ort=${PLACE_WITHOUT_DATES}`);
+
+    const dates = page.locator("#place-dates");
+    // TS-008 D4: a covered place with zero dates is the conversion moment,
+    // not an error — the publish offer *occupies* the module slot.
+    await expect(dates.locator("text=/noch nichts eingetragen/i")).toHaveCount(1);
+    // No empty list, no error styling, no retry control.
+    await expect(dates.locator("button")).toHaveCount(0);
+
+    // The focus job shifts: the offer leads to `register-as-publisher`'s page
+    // (`page.meta.ts`'s `emptyState`), not to the calendar handover.
+    await expect(dates.locator('a[href="/mitmachen"]')).toHaveCount(1);
+    await expect(dates.locator('a[href^="https://app."]')).toHaveCount(0);
+
+    // `role="status"`: the shift is announced once (TS-009 D7).
+    await expect(dates.locator('[role="status"]')).toHaveCount(1);
+  });
 
   test("TS-020-A4: exactly four value stories, each with a title, a story and an example box", async ({
     page,
@@ -162,10 +209,20 @@ test.describe("TS-020 — your place", () => {
     expect(jsonLd.join("")).not.toContain('"Event"');
   });
 
-  test.fixme(
-    "TS-020-A11 (second half): the JSON-LD graph contains WebPage [M4 — TS-011 D4 structured data is not built]",
-    () => {},
-  );
+  test("TS-020-A11 (second half): the JSON-LD graph contains WebPage", async ({ page }) => {
+    await page.goto("/dein-ort");
+
+    const scripts = page.locator('script[type="application/ld+json"]');
+    await expect(scripts).toHaveCount(1); // TS-011 D4: one graph per page
+
+    const graph = JSON.parse((await scripts.textContent()) ?? "{}");
+    const nodes = graph["@graph"] as { "@type": string; url?: string }[];
+    const webPage = nodes.find((node) => node["@type"] === "WebPage");
+    expect(webPage).toBeDefined();
+    expect(webPage?.url).toBe("https://www.schafe-vorm-fenster.de/dein-ort");
+    // D4's "deliberately not emitted" table — and A11's own first half.
+    expect(JSON.stringify(graph)).not.toContain('"Event"');
+  });
 
   test.fixme(
     "TS-020-A12: with the BFF delayed beyond 2 s the box keeps its geometry and CLS stays < 0.1 [M4 — TS-008 D2 BFF routes]",

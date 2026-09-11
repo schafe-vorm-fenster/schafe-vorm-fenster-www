@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import gebietsschnitt from "@/src/generated/placeholders/deine-region/gebietsschnitt.svg";
 import heroImage from "@/src/generated/placeholders/deine-region/hero.svg";
 
@@ -26,11 +24,7 @@ import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
 import { assetSrc } from "@/src/lib/content/asset-src";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
 
-import {
-  CountersIsland,
-  RegionExamplesIsland,
-  StatedRegionExamples,
-} from "../_islands";
+import { CountersIsland, RegionExamplesIsland } from "../_islands";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { selectProof } from "../_proof";
@@ -78,10 +72,8 @@ export async function generateMetadata({
 
 export default async function Page({
   params,
-  searchParams,
 }: {
   params: Promise<{ lang: string }>;
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
@@ -120,9 +112,9 @@ export default async function Page({
 
   /**
    * TS-005 through, not around: DEC-048's **3** inline positions, selected by
-   * the engine. `?ort=` is handed in as a slug, so a visitor who stated a
-   * place gets the selection ordered around her own county (stage 3) while
-   * the prerendered shell keeps the stage-0 one.
+   * the engine. This route takes no place parameter — the visitor's own place
+   * is `/dein-ort`'s subject, not this page's — so the selection is stage 0
+   * and stays inside the prerendered shell.
    */
   const proofSelection = await selectProof({
     routeId: ROUTE,
@@ -199,23 +191,12 @@ export default async function Page({
               county scope, DEC-034's designed set rather than a place list.
               The stage-0 anchor is the `<Suspense>` fallback, `?ort=` streams
               the visitor's own county over it. */}
-          <Suspense
-            fallback={
-              <RegionExamplesIsland
-                county={STAGE_ZERO_ANCHOR.county}
-                locale={locale}
-                max={6}
-                titleTemplate={interimHeading}
-              />
-            }
-          >
-            <StatedRegionExamples
-              locale={locale}
-              max={6}
-              searchParams={searchParams}
-              titleTemplate={interimHeading}
-            />
-          </Suspense>
+          <RegionExamplesIsland
+            county={STAGE_ZERO_ANCHOR.county}
+            locale={locale}
+            max={6}
+            titleTemplate={interimHeading}
+          />
           {/* The search stands *beside* the module, so the block never
               collapses when the ranking has nothing (TS-008 D1, DEC-034). */}
           <PlaceSearch
@@ -227,9 +208,7 @@ export default async function Page({
           {/* D4's county-scoped figure: counted or absent, never estimated
               (WEB-F-041). `places` has no `/api/stats` field (Q-037), so the
               band renders the one figure that is counted. */}
-          <Suspense fallback={null}>
-            <CountersIsland locale={locale} show={["dates"]} />
-          </Suspense>
+          <CountersIsland locale={locale} show={["dates"]} />
         </MotionReveal>
       </SectionShell>
 
