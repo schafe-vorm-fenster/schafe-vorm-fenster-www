@@ -49,6 +49,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.63.0",
     "@schafe-vorm-fenster/audiences": "^0.3.3",
     "@schafe-vorm-fenster/brand-identity": "^0.1.4",

@@ -87,3 +87,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-073 — The locale and URL layer: one typed table, no i18n library, and the 404 that actually renders](073-locale-and-url-layer.md)
 - [DEC-074 — The content pipeline reads the shipped page artifacts — one file per page, typed blocks, no markdown library](074-content-pipeline-reads-the-shipped-artifacts.md)
 - [DEC-075 — The last-good store is the Vercel Runtime Cache, behind one interface](075-last-good-store-is-the-vercel-runtime-cache.md)
+- [DEC-076 — @axe-core/playwright is the a11y sweep instrument for TS-002-A1 and TS-029-A12](076-axe-core-playwright-for-a11y-e2e.md)
