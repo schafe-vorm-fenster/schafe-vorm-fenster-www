@@ -80,6 +80,10 @@ Protection with `VERCEL_AUTOMATION_BYPASS_SECRET` — the suite sends it as
 | Path | What |
 | --- | --- |
 | `app/` | routes, layouts and the app-router tree |
+| `app/[lang]/_islands.tsx` | **the cached islands** (TS-009 D1): one `use cache` component per TS-008 live-module position, `cacheLife`/`cacheTag` from `src/lib/live/cache-profiles.ts`. A page renders them; it never fetches |
+| `app/[lang]/_content.ts` | the content pipeline on the cache side — `loadPage`/`loadLegalDocument` at `cacheLife("max")`, which is what keeps a page's copy inside the prerendered shell |
+| `app/[lang]/_proof.ts` | the relevance engine's one seam into the pages: candidates in, DEC-048's positions out, cached per viewer segment and ISO week |
+| `app/[lang]/_structured-data.tsx` | TS-011 D4's table as one function — which JSON-LD node sits on which page, in the one graph per page |
 | `app/styles/brand.css` | **the single token-import file** — the only place a brand value enters. No colour literal and no `font-family` literal exists anywhere else, and `pnpm check:brand` fails one that does. |
 | `app/styles/base.css` | the mobile-first shell: phone base, `min-width` queries only, the six `breakpoint.*` token values |
 | `proxy.ts` | the CSP, the HSTS variance and the `X-Robots-Tag`, on every response |
@@ -100,6 +104,30 @@ Unit tests sit beside the code as `*.test.ts`, integration tests as
 `*.integration.test.ts`. A test names the spec id it verifies in its
 `describe` title — `describe("TS-015-A1: …")` — which is how
 `pnpm check:specs` reads coverage off the suite.
+
+### Rendering
+
+**Cache Components is on** (`cacheComponents: true`, Next.js 16). Every page is
+a prerendered shell plus cached islands (TS-009 D1): page copy and every live
+module carry `use cache` with the TS-003 D5 lifetimes, and a request value —
+`?ort=`, a header — is read outside every cache boundary and handed down as a
+prop.
+
+Eight of the twelve routes prerender. Four read a request value that *is* the
+page (`/dein-ort`'s five place states, and the three flow routes' step) and
+carry `export const instant = false`, the framework's marker for "allowed to
+block"; they still compose from cached pieces, so their per-request work is a
+cache read rather than an upstream call. `state/open.md` row 131.
+
+Two consequences worth knowing before editing a page:
+
+- `dynamic`, `dynamicParams`, `revalidate` and `fetchCache` are **build
+  errors**. Use `use cache` + `cacheLife`, or `<Suspense>`, or `instant`.
+- `new Date()`, `Math.random()` and `crypto.randomUUID()` fail the prerender
+  unless they sit inside a `use cache` scope or behind `await connection()`.
+
+`next build --debug-prerender` is the stricter gate: it reports the blocking
+reads a normal build tolerates, and it is clean today.
 
 ### Deploying
 

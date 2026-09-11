@@ -130,6 +130,23 @@ cannot see whether the small range does anything.
   `demo: true` out of the BFF, and has a `Mock aktiv` row in
   `state/open.md`. `src/lib/live/README.md` says which state each shell
   gets in which tier; `LIVE_DATA=mock` runs the whole layer offline.
+- **A request value is read outside every cache boundary.** Cache Components
+  is on (`cacheComponents: true`), so a page is a prerendered shell plus
+  cached islands: `use cache` with a `cacheLife` from
+  `src/lib/live/cache-profiles.ts` and a `cacheTag`, and `?ort=`, `cookies()`
+  or `headers()` read in the page — never inside a cached scope — and handed
+  down as a plain string prop, which is also what makes the prop the cache
+  key. `dynamic`, `dynamicParams`, `revalidate` and `fetchCache` are build
+  errors; so is a bare `new Date()` or `Math.random()` in a prerendered path.
+  A route that cannot be split says so with `export const instant = false`
+  and a reason, and gets a `state/open.md` row. `next build
+  --debug-prerender` is the check that catches what a normal build tolerates.
+- **A `<Suspense>` fallback may not suspend.** It is the static shell's
+  content, so it has to be synchronous — a skeleton, or nothing. An async
+  component in a fallback leaves *both* trees in the DOM (measured), and a
+  skeleton a JS-less visitor never gets past is what TS-020-A10 forbids by
+  name. Where a page must be complete without JavaScript, read the request
+  value in the page and let the route block.
 - **A new dependency needs an ADR.** Look sideways at the sibling repos
   first (`../classification-api`, `../events-api`, `../geo-api`,
   `../community-calendar`, `../envoy-api`), decide, write the decision into
