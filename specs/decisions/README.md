@@ -76,3 +76,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-062 — The glossary becomes a hub package; Actor is outward, Organizer is internal](062-glossary-is-a-hub-package.md)
 - [DEC-063 — Media echo uses the same clearance field as proof](063-media-echo-clearance.md)
 - [DEC-064 — The permanence promise gets a proof element; the channels get enumerated](064-evidence-for-the-publishing-page.md)
+- [DEC-065 — How the four hardest rules are verified — and where the coverage stops](065-verification-of-the-hard-rules.md)
