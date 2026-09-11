@@ -125,15 +125,114 @@ test("TS-015-A1: a non-production deployment is noindex on all three surfaces", 
   expect(await robots.text()).toContain("Disallow: /");
 });
 
+/**
+ * TS-014-A2: "Every production response carries the D2 CSP and all D4
+ * headers with exactly the specified values."
+ *
+ * F-1-1 (round 1): the previous version of this test asserted four of the
+ * D4 headers and two CSP substrings — real, but a fraction of the AC. This
+ * asserts the full D4 header table and the full D2 directive set.
+ *
+ * Two things are deliberately environment-aware rather than a single fixed
+ * expectation, both per TS-014 D5 (three environments, not one):
+ *
+ *  - `Strict-Transport-Security` is absent in local development and
+ *    present with a different `max-age` in preview vs. production — its
+ *    *absence* here is correct when this suite runs against `next dev`
+ *    (the README default), so the assertion checks the header's value only
+ *    when the header is present at all, against either allowed value.
+ *  - `script-src` and `connect-src` carry extra, environment-specific
+ *    tokens (`'unsafe-eval'`, dev's `ws:`/`localhost` entries, the D3
+ *    hash set or its `'unsafe-inline'` fallback) that D5 and DEC-045
+ *    deliberately vary and that `src/lib/security/csp.ts` is under active
+ *    revision on this round (state/open.md rows 21/31) — this asserts the
+ *    D1 allowlist hosts and `'self'` are present in each, per the spec's
+ *    required directive members, rather than pinning the exact directive
+ *    string another developer's file is still changing.
+ *
+ * Every other D2 directive is fixed by the spec regardless of environment
+ * and is asserted on its exact value.
+ */
 test("TS-014-A2: the security headers of TS-014 D4 are on the response", async ({
   page,
 }) => {
   const response = await page.goto("/");
   const headers = response?.headers() ?? {};
+
+  // D4 — the static header set, every route, every environment.
   expect(headers["x-content-type-options"]).toBe("nosniff");
   expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
+  expect(headers["permissions-policy"]).toBe(
+    [
+      "accelerometer=()",
+      "autoplay=()",
+      "browsing-topics=()",
+      "camera=()",
+      "display-capture=()",
+      "encrypted-media=()",
+      "fullscreen=(self)",
+      "geolocation=(self)",
+      "gyroscope=()",
+      "idle-detection=()",
+      "magnetometer=()",
+      "microphone=()",
+      "midi=()",
+      "payment=()",
+      "picture-in-picture=()",
+      "publickey-credentials-get=()",
+      "screen-wake-lock=()",
+      "serial=()",
+      "usb=()",
+      "xr-spatial-tracking=()",
+    ].join(", "),
+  );
   expect(headers["x-frame-options"]).toBe("DENY");
   expect(headers["cross-origin-opener-policy"]).toBe("same-origin");
-  expect(headers["content-security-policy"]).toContain("default-src 'self'");
-  expect(headers["content-security-policy"]).toContain("frame-ancestors 'none'");
+  expect(headers["cross-origin-resource-policy"]).toBe("same-origin");
+  expect(headers["reporting-endpoints"]).toBe('csp="/api/csp-report"');
+
+  // D5 — HSTS varies by environment; only its value (when present) is fixed.
+  const hsts = headers["strict-transport-security"];
+  if (hsts !== undefined) {
+    expect([
+      "max-age=63072000; includeSubDomains", // production
+      "max-age=86400; includeSubDomains", // preview
+    ]).toContain(hsts);
+  }
+
+  // D2 — the CSP, directive by directive. Every directive not named below
+  // as environment-varying is fixed by the spec regardless of environment.
+  const csp = headers["content-security-policy"] ?? "";
+  expect(csp).toContain("default-src 'self'");
+  expect(csp).toContain("base-uri 'self'");
+  expect(csp).toContain("style-src 'self' 'unsafe-inline'");
+  expect(csp).toContain("img-src 'self' data: https://code.etracker.com");
+  expect(csp).toContain("font-src 'self'");
+  expect(csp).toContain("media-src 'self'");
+  expect(csp).toContain("manifest-src 'self'");
+  expect(csp).toContain("worker-src 'self'");
+  expect(csp).toContain("object-src 'none'");
+  expect(csp).toContain("frame-src 'none'");
+  expect(csp).toContain("child-src 'none'");
+  expect(csp).toContain("form-action 'self'");
+  expect(csp).toContain("frame-ancestors 'none'");
+  expect(csp).toContain("report-to csp");
+  expect(csp).toContain("report-uri /api/csp-report");
+
+  // D1's three active external hosts (a fourth, `app.…`, is reserved —
+  // "none today", TS-014 D1) must be reachable in both directives that
+  // govern them, in every environment — the environment-specific extras
+  // (D5, DEC-045) are additions, never a substitute for the allowlist.
+  const scriptSrcMatch = /script-src ([^;]+);/.exec(csp);
+  const connectSrcMatch = /connect-src ([^;]+);/.exec(csp);
+  const scriptSrc = scriptSrcMatch?.[1] ?? "";
+  const connectSrc = connectSrcMatch?.[1] ?? "";
+  for (const directive of [scriptSrc, connectSrc]) {
+    expect(directive).toContain("'self'");
+    expect(directive).toContain("https://code.etracker.com");
+    expect(directive).toContain("https://portalize.schafe-vorm-fenster.de");
+    expect(directive).toContain(
+      "https://envoy-api.api.schafe-vorm-fenster.de",
+    );
+  }
 });
