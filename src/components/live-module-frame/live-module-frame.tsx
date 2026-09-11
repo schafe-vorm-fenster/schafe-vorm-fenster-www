@@ -20,6 +20,13 @@ export interface LiveModuleFrameProps extends DataStateProps {
   readonly tier?: Extract<FreshnessTier, "stale" | "snapshot">;
   /** Overrides the default loading placeholder, built from this same frame's geometry. */
   readonly skeleton?: ReactNode;
+  /**
+   * The heading level of the module's title. `h3` by default, because a
+   * module usually stands inside a section that has its own `h2`; a page
+   * whose section *is* the module passes `h2`, so the document keeps a
+   * hierarchical heading order (TS-002, Web Interface Guidelines).
+   */
+  readonly headingLevel?: "h2" | "h3";
   readonly className?: string;
   readonly children: ReactNode;
 }
@@ -57,6 +64,7 @@ export function LiveModuleFrame({
   updatedAt,
   tier = "stale",
   skeleton,
+  headingLevel: Heading = "h3",
   state = "ready",
   className,
   children,
@@ -69,7 +77,7 @@ export function LiveModuleFrame({
     >
       <header className={styles.header}>
         <div className={styles.heading}>
-          <h3 className={styles.title}>{title}</h3>
+          <Heading className={styles.title}>{title}</Heading>
           {subline ? <p className={styles.subline}>{subline}</p> : null}
         </div>
         <div className={styles.marks}>

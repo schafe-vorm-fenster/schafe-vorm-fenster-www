@@ -202,6 +202,7 @@ export default async function PlaceStartPage({
         <SectionShell id="live-example" surface="ink">
           <p>{splitSteps(fillTemplate(fieldAt(example.blocks, 1) ?? "", ctaValues))[0]}</p>
           <LiveModuleFrame
+            headingLevel="h2"
             state="mocked"
             title={fillTemplate(fieldAt(example.blocks, 0) ?? "", values)}
           >

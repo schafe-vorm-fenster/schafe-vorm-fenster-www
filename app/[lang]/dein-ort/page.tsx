@@ -193,6 +193,7 @@ export default async function PlacePage({
                 {handoverLabel}
               </OutboundLink>
             }
+            headingLevel="h2"
             state="mocked"
             title={fillTemplate(stateA.fields["Headline"] ?? "", { place })}
           >
@@ -238,7 +239,7 @@ export default async function PlacePage({
           naming its own place. */}
       <MotionReveal>
         <SectionShell id="nearby" surface="lime-100">
-          <LiveModuleFrame state="mocked" title={copy.nearby}>
+          <LiveModuleFrame headingLevel="h2" state="mocked" title={copy.nearby}>
             <EventList items={nearbyEvents} locale={locale} rowCount={5} state="mocked" />
           </LiveModuleFrame>
         </SectionShell>

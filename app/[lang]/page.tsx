@@ -187,6 +187,7 @@ export default async function HomePage({
                 {fillTemplate(dates.cta ?? "", { place })}
               </OutboundLink>
             }
+            headingLevel="h2"
             state="mocked"
             title={fillTemplate(dates.fields["Headline"] ?? "", { place })}
           >
@@ -208,6 +209,7 @@ export default async function HomePage({
       <MotionReveal>
         <SectionShell id="nearby" surface="surface-2">
           <LiveModuleFrame
+            headingLevel="h2"
             state="mocked"
             title={fieldAt(nearby.blocks, 0) ?? ""}
           >
