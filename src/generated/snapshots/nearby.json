@@ -1,0 +1,42 @@
+{
+  "$note": "Tier 3 for position 2 (this week nearby). Widest scope, labelled as an example by the module.",
+  "$generated": "mock backend, committed per TS-009 D8",
+  "builtAt": "2026-09-11T00:00:00.000Z",
+  "events": [
+    {
+      "id": "snapshot-0",
+      "title": "Dorffest am Gemeindehaus (Beispiel)",
+      "startsAt": "2026-09-12T02:00:00.000Z",
+      "placeName": "Beispielort Musterhagen",
+      "categoryId": "fest"
+    },
+    {
+      "id": "snapshot-1",
+      "title": "Hofladen: Freitagsmarkt (Beispiel)",
+      "startsAt": "2026-09-13T04:00:00.000Z",
+      "placeName": "Musterbach",
+      "categoryId": "merchants"
+    },
+    {
+      "id": "snapshot-2",
+      "title": "Chorprobe im Pfarrsaal (Beispiel)",
+      "startsAt": "2026-09-14T06:00:00.000Z",
+      "placeName": "Beispielwalde",
+      "categoryId": "culture"
+    },
+    {
+      "id": "snapshot-3",
+      "title": "Gemeindevertretung, öffentliche Sitzung (Beispiel)",
+      "startsAt": "2026-09-15T08:00:00.000Z",
+      "placeName": "Musterfelde",
+      "categoryId": "official"
+    },
+    {
+      "id": "snapshot-4",
+      "title": "Seniorenkaffee im Vereinsheim (Beispiel)",
+      "startsAt": "2026-09-16T10:00:00.000Z",
+      "placeName": "Beispielhausen",
+      "categoryId": "social"
+    }
+  ]
+}

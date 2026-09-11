@@ -40,11 +40,15 @@ export const SITE_ORIGIN = "https://www.schafe-vorm-fenster.de";
 
 /**
  * Where the village calendars live after the move off the apex (DEC-035).
- * Used by the interim `/hilfe/*` redirect (DEC-047) and, later, by the app
- * handovers. One constant, so the swap is one line — `state/open.md` row 8.
+ * Used by the interim `/hilfe/*` redirect (DEC-047) and by the app handovers.
+ *
+ * The constant itself now lives in the **one handover module** TS-017 D4
+ * demands (`src/lib/live/app-handover.ts`), which is the only file in the
+ * tree where the app hostname occurs — `pnpm check:api-routes` (TS-017-A11)
+ * fails a second occurrence. Re-exported here so this module's existing
+ * consumers keep their import.
  */
-export const APP_ORIGIN =
-  process.env.NEXT_PUBLIC_APP_ORIGIN ?? "https://app.schafe-vorm-fenster.de";
+export { APP_ORIGIN } from "../live/app-handover";
 
 /** Every page of the TS-004 D1 inventory, in inventory order. */
 export const ROUTE_IDS = [

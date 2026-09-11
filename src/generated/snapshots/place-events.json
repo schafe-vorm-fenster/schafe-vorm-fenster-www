@@ -1,0 +1,28 @@
+{
+  "$note": "Tier 3 for position 1. Country-wide, never place-specific: the place name is re-anchored by snapshots.ts on the place actually asked for.",
+  "$generated": "mock backend, committed per TS-009 D8",
+  "builtAt": "2026-09-11T00:00:00.000Z",
+  "events": [
+    {
+      "id": "snapshot-0",
+      "title": "Dorffest am Gemeindehaus (Beispiel)",
+      "startsAt": "2026-09-12T02:00:00.000Z",
+      "placeName": "Beispielgemeinde Musterdorf",
+      "categoryId": "fest"
+    },
+    {
+      "id": "snapshot-1",
+      "title": "Hofladen: Freitagsmarkt (Beispiel)",
+      "startsAt": "2026-09-13T04:00:00.000Z",
+      "placeName": "Beispielgemeinde Musterdorf",
+      "categoryId": "merchants"
+    },
+    {
+      "id": "snapshot-2",
+      "title": "Chorprobe im Pfarrsaal (Beispiel)",
+      "startsAt": "2026-09-14T06:00:00.000Z",
+      "placeName": "Beispielgemeinde Musterdorf",
+      "categoryId": "culture"
+    }
+  ]
+}

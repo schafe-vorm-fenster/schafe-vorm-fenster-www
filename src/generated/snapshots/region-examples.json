@@ -1,0 +1,22 @@
+{
+  "$note": "Tier 3 for position 3 (active example places). A designed set, never a place list (DEC-034).",
+  "$generated": "mock backend, committed per TS-009 D8",
+  "builtAt": "2026-09-11T00:00:00.000Z",
+  "examples": [
+    {
+      "name": "Beispielgemeinde Musterdorf",
+      "slug": "beispielgemeinde-musterdorf",
+      "eventCount": 3
+    },
+    {
+      "name": "Beispielort Musterhagen",
+      "slug": "beispielort-musterhagen",
+      "eventCount": 3
+    },
+    {
+      "name": "Musterbach",
+      "slug": "musterbach",
+      "eventCount": 3
+    }
+  ]
+}
