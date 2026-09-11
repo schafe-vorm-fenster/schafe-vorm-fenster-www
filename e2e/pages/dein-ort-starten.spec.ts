@@ -9,16 +9,27 @@ import type { RhythmEntry } from "../../src/components/section-shell/rhythm";
  *
  * This page is a pure function of URL and language (D4), so most of its
  * criteria are testable today: the parameter contract, the no-fake-coverage
- * rule, the handover, the tone boundary against `/dein-ort` state B. What
- * needs M4 is the classification that *leads* here (TS-008 D7), the
- * re-resolution redirect of D5, and the analytics negative of A12 — each is
- * `test.fixme` with its milestone. Nothing is reworded.
+ * rule, the handover, the tone boundary against `/dein-ort` state B.
+ *
+ * Round 3 (F-2-30, F-2-49): the classification that *leads* here (TS-008 D7)
+ * and the re-resolution redirect of DEC-070 are built, so A6, A7 and A14 are
+ * real walks instead of `test.fixme` placeholders. A8 (upstream down) still
+ * needs a fault-injection seam and keeps its marker. Nothing is reworded.
  */
 
 const PHONE = { width: 360, height: 640 };
 const DESKTOP = { width: 1280, height: 800 };
 
 const PLACE = "Testdorf";
+
+/**
+ * The fixture's own uncovered postcode (`src/lib/live/mocks/fixtures.ts`
+ * `UNCOVERED_DEMO_ZIP`) and a covered slug, so the classification of
+ * TS-008 D7 has both of its live rows to walk.
+ */
+const UNCOVERED_ZIP = "99999";
+const COVERED_ZIP = "17390";
+const COVERED_SLUG = "musterbach";
 
 test.describe("TS-021 — start the calendar in your place", () => {
   for (const viewport of [PHONE, DESKTOP]) {
@@ -192,15 +203,58 @@ test.describe("TS-021 — start the calendar in your place", () => {
     expect(text).not.toContain("du könntest die Erste sein");
   });
 
-  test.fixme(
-    "TS-021-A6 (first half): searching an uncovered place from `/` or `/dein-ort` lands here [M4 — TS-008 D7 classification]",
-    () => {},
-  );
+  test("TS-021-A6 (first half): searching an uncovered place from `/` or `/dein-ort` lands here", async ({
+    page,
+  }) => {
+    for (const entry of ["/", "/dein-ort"]) {
+      await page.goto(entry);
+      const field = page.getByRole("searchbox").first();
+      await field.fill(UNCOVERED_ZIP);
+      await field.press("Enter");
+      await expect(page).toHaveURL(new RegExp(`/dein-ort/starten\\?ort=${UNCOVERED_ZIP}$`));
+      await expect(page.getByRole("heading", { level: 1 })).toContainText(UNCOVERED_ZIP);
+    }
+  });
 
-  test.fixme(
-    "TS-021-A7: a value that now resolves produces exactly one 302 to /dein-ort?ort=<slug> [M4 — TS-008 D7 / DEC-070 re-resolution]",
-    () => {},
-  );
+  test("TS-021-A6 (second half): a covered place with no dates lands on /dein-ort in the empty state", async ({
+    page,
+  }) => {
+    // `38165` is the fixture's covered-but-empty place (`EMPTY_DEMO_SLUG`).
+    await page.goto("/dein-ort");
+    const field = page.getByRole("searchbox").first();
+    await field.fill("38165");
+    await field.press("Enter");
+    await expect(page).toHaveURL(/\/dein-ort\?ort=38165$/);
+    await expect(page.locator("#place-dates")).toContainText("Beispielhausen");
+  });
+
+  test("TS-021-A7: a value that now resolves produces exactly one 302 to /dein-ort?ort=<slug>", async ({
+    request,
+  }) => {
+    const response = await request.get(`/dein-ort/starten?ort=${COVERED_ZIP}`, {
+      maxRedirects: 0,
+    });
+    expect(response.status()).toBe(307);
+    expect(response.headers()["location"]).toBe(`/dein-ort?ort=${COVERED_SLUG}`);
+
+    // Following it terminates in one hop, and the campaign parameters and the
+    // language prefix survive.
+    const followed = await request.get(
+      `/en/your-place/start?ort=${COVERED_ZIP}&etcc_cmp=herbst&etcc_med=mail`,
+      { maxRedirects: 0 },
+    );
+    expect(followed.status()).toBe(307);
+    const target = new URL(followed.headers()["location"], "http://localhost");
+    expect(target.pathname).toBe("/en/your-place");
+    expect(target.searchParams.get("ort")).toBe(COVERED_SLUG);
+    expect(target.searchParams.get("etcc_cmp")).toBe("herbst");
+    expect(target.searchParams.get("etcc_med")).toBe("mail");
+
+    const second = await request.get(target.toString().replace("http://localhost", ""), {
+      maxRedirects: 0,
+    });
+    expect(second.status()).toBe(200);
+  });
 
   test.fixme(
     "TS-021-A8: with the place-search upstream down the page renders as uncovered [M4 — TS-008 D5]",
@@ -266,7 +320,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     const requests: string[] = [];
     page.on("request", (request) => requests.push(request.url()));
 
-    await page.goto("/dein-ort/starten?ort=17390");
+    await page.goto(`/dein-ort/starten?ort=${PLACE}`);
     await page.locator('[data-cta="primary"]').first().hover();
     await page.waitForLoadState("networkidle");
 
@@ -334,10 +388,31 @@ test.describe("TS-021 — start the calendar in your place", () => {
     }
   });
 
-  test.fixme(
-    "TS-021-A14: walk `/` → search an uncovered place → this page → CTA → registration [M4 — TS-008 D7 classification]",
-    () => {},
-  );
+  test("TS-021-A14: walk `/` → search an uncovered place → this page → CTA → registration", async ({
+    page,
+  }) => {
+    const visited: string[] = [];
+    page.on("framenavigated", (frame) => {
+      if (frame === page.mainFrame()) visited.push(new URL(frame.url()).pathname);
+    });
+
+    await page.goto("/");
+    const field = page.getByRole("searchbox").first();
+    await field.fill(UNCOVERED_ZIP);
+    await field.press("Enter");
+    await expect(page).toHaveURL(new RegExp(`/dein-ort/starten\\?ort=${UNCOVERED_ZIP}$`));
+
+    await page.locator('[data-cta="primary"]').first().click();
+    await expect(page).toHaveURL(new RegExp(`/mitmachen/registrieren\\?ort=${UNCOVERED_ZIP}$`));
+
+    // Every URL visited is in the D1 inventory, and no path segment ever
+    // carries a place name or slug (DEC-037).
+    const inventory = new Set(["/", "/dein-ort", "/dein-ort/starten", "/mitmachen/registrieren"]);
+    for (const path of visited) {
+      expect(inventory.has(path), `outside the inventory: ${path}`).toBe(true);
+      expect(path).not.toContain(UNCOVERED_ZIP);
+    }
+  });
 
   test("TS-006-A15: the breadcrumb trail stands before the h1, and its last item is not a link", async ({
     page,

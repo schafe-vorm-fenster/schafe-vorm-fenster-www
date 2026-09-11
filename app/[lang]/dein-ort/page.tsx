@@ -1,3 +1,5 @@
+import { Button } from "@/src/components/button/button";
+import { EmptyStateBlock } from "@/src/components/empty-state-block/empty-state-block";
 import { EventRow } from "@/src/components/event-row/event-row";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { HowtoBlock } from "@/src/components/howto-block/howto-block";
@@ -9,13 +11,14 @@ import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
 import { ctaLabelOnly } from "@/src/lib/content/text";
 import { fillTemplate, splitSteps } from "@/src/lib/pages/demo-content";
-import { STAGE_ZERO_ANCHOR, resolveAnchorPlace } from "@/src/lib/pages/live-anchor";
-import { readPlaceParameter } from "@/src/lib/pages/place-parameter";
+import { STAGE_ZERO_ANCHOR, resolvePlaceOutcome } from "@/src/lib/pages/live-anchor";
 import { cacheLife, cacheTag } from "next/cache";
+import { redirect } from "next/navigation";
 
+import { linkHref } from "@/src/components/route-link/href";
 import { calendarUrl } from "@/src/lib/live/app-handover";
 import { cacheLifeProfile, cacheTags } from "@/src/lib/live/cache-profiles";
-import { resolvePlace } from "@/src/lib/live/places";
+import { placeEvents, resolvePlace } from "@/src/lib/live/places";
 import { href } from "@/src/lib/routes/routes";
 
 import heroPlaceholder from "@/src/generated/placeholders/dein-ort/hero.svg";
@@ -209,8 +212,36 @@ export default async function PlacePage({
    * are cached (`_content.ts`, `_islands.tsx`), so the per-request work is a
    * cache read and a slug lookup, not an upstream call.
    */
-  const stated = await resolveAnchorPlace(readPlaceParameter((await searchParams)["ort"]));
+  const outcome = await resolvePlaceOutcome((await searchParams)["ort"]);
+
+  /**
+   * TS-020 D2 row 5 and TS-008 D7 row 3: a place geo-api has no community for
+   * is **not this page**. Before F-2-30 the `uncovered` outcome was produced
+   * by `src/lib/live/places.ts` and consumed by nothing, so a resident typing
+   * her own uncovered postcode was shown a village she had never heard of and
+   * told what was on there. One hop, the query carried verbatim (TS-021 D4
+   * re-validates it on arrival), and the founding path finally has its entry.
+   *
+   * A value the validator *dropped* takes the other row — S0 at 200, no
+   * redirect (TS-020-A9) — because nothing has been established about it.
+   */
+  if (outcome.kind === "uncovered") {
+    redirect(linkHref("placeStart", { locale, query: { ort: outcome.query } }));
+  }
+
+  const stated = outcome.kind === "covered" ? outcome.place : undefined;
   const anchor = stated ?? STAGE_ZERO_ANCHOR;
+
+  /**
+   * Which of TS-020 D2's three states renders. The empty state is TS-008 D4's
+   * trigger — a **covered** place whose window is empty — so the page has to
+   * know the answer before block 1 is composed: state B moves the primary
+   * conversion to publishing (D4), which is a decision about the page, not
+   * about one module (F-2-61). The lookup is the same cached call the island
+   * makes, so the second read costs a cache hit.
+   */
+  const statedDates = stated === undefined ? undefined : await placeEvents({ slug: stated.slug, rowCount: 3 });
+  const emptyState = statedDates?.data.publishInvitation === true;
 
   const stateA = slot(page, "dein-ort-1-state-a");
   const stateB = slot(page, "dein-ort-2-state-b");
@@ -241,18 +272,32 @@ export default async function PlacePage({
   ];
 
   /**
-   * TS-008 D4's conversion moment, as the module's own empty state: a
-   * **covered** place with no dates yet gets the publish invitation in the
-   * module slot, and the focus job shifts (`page.meta.ts`'s `emptyState`).
+   * TS-008 D4's conversion moment, as block 1's own module slot (F-2-61).
+   *
+   * Three things the round-2 render got wrong and this composition fixes:
+   *
+   *  - the offer is the page's **primary** conversion in state B, so the
+   *    marker sits here and the search below is demoted (TS-008 D4,
+   *    TS-008-A6);
+   *  - its target is `register-as-publisher`'s own route, carrying the
+   *    resolved slug — TS-023 D5 names "the `/dein-ort` empty state" as one
+   *    of the four surfaces `?ort=` arrives at `/mitmachen/registrieren`
+   *    from, and only a resolved community slug ever travels (TS-008 D4);
+   *  - the lead is the artifact's own sentence, not the `→ \`/mitmachen\``
+   *    routing note that stood next to the CTA label and shipped its
+   *    backticks and its arrow as visitor copy.
+   *
+   * The place name comes from the resolved geo-api community, never from the
+   * raw parameter (TS-008 D4).
    */
-  const invitation = {
-    // `{place}` stays a template: the island fills it with the place the
-    // envelope resolved, which is the only place name this page may claim.
-    headline: stateB.fields["Headline"] ?? "",
-    lead: fieldAt(stateB.blocks, 1),
-    ctaLabel: ctaLabelOnly(stateB.cta ?? "") ?? "",
-    ctaTo: "takePart",
-  } as const;
+  const publishOffer =
+    emptyState && stated !== undefined
+      ? {
+          headline: fillTemplate(stateB.fields["Headline"] ?? "", { place: stated.name }),
+          ctaLabel: ctaLabelOnly(stateB.cta ?? "") ?? "",
+          slug: stated.slug,
+        }
+      : undefined;
 
   const homescreenCopy = {
     locale,
@@ -281,46 +326,89 @@ export default async function PlacePage({
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
-      closing={{
-        variant: "module",
-        node: search(false),
-        // The permanence promise is cleared content (`community-calendar`
-        // `price.note`, publicly committed since 2022), so it may stand.
-        reassurance: fieldAt(permanence.blocks, 0),
-      }}
+      closing={
+        // TS-020 D2, block 4: the closing CTA repeats block 1's primary of
+        // the *current* state — the publishing offer in B, the search
+        // everywhere else (TS-006 D6).
+        publishOffer === undefined
+          ? {
+              variant: "module",
+              node: search(false),
+              // The permanence promise is cleared content (`community-calendar`
+              // `price.note`, publicly committed since 2022), so it may stand.
+              reassurance: fieldAt(permanence.blocks, 0),
+            }
+          : {
+              to: "register",
+              label: publishOffer.ctaLabel,
+              query: { ort: publishOffer.slug },
+              reassurance: fieldAt(permanence.blocks, 0),
+            }
+      }
       locale={locale}
       meta={PLACE_META}
     >
       {/* Block 1 — the focus block. The `h1` is the place name in every
           state and at the same DOM position (TS-020 D5); S0 has no resolved
           place, so the artifact's own sentence carries a generic one instead
-          of claiming a village. */}
+          of claiming a village. In state B the search is demoted: the one
+          `data-cta="primary"` moves to the publishing offer below (TS-008
+          D4). */}
       <HeroBlock
-        cta={search(true)}
-        headline={fillTemplate(stateA.fields["Headline"] ?? "", { place: copy.genericPlace })}
+        cta={search(publishOffer === undefined)}
+        headline={
+          publishOffer?.headline ??
+          fillTemplate(stateA.fields["Headline"] ?? "", {
+            place: stated?.name ?? copy.genericPlace,
+          })
+        }
         id="focus-block"
         notDepicting
         placeholderId="dein-ort/hero"
         src={heroPlaceholder.src}
-        variant="place-name"
+        // `place-name` clamps to two display lines, which is right for
+        // "Das ist los in X" and wrong for state B's full sentence.
+        variant={publishOffer === undefined ? "place-name" : undefined}
       />
 
       {/* Block 1, the module slot: TS-008 position 1. `role="status"` is the
           region TS-009 D7 announces the focus-job shift in — it is the frame,
-          not the rows, that carries it. */}
+          not the rows, that carries it. In state B the slot carries the
+          publish offer instead of an empty date box ("Position 1 is not left
+          blank", TS-008 D4) — rendered here rather than inside the cached
+          island, because its target carries the resolved slug and its marker
+          is the page's primary conversion. */}
       <MotionReveal>
         <SectionShell id="place-dates" surface="ink">
-          <PlaceDatesIsland
-            announced
-            conversion={SAVE_CALENDAR}
-            ctaTemplate={stateA.cta ?? ""}
-            invitation={invitation}
-            locale={locale}
-            rowCount={3}
-            slug={anchor.slug}
-            titleTemplate={stateA.fields["Headline"] ?? ""}
-            tone="dark"
-          />
+          {publishOffer === undefined ? (
+            <PlaceDatesIsland
+              announced
+              conversion={SAVE_CALENDAR}
+              ctaTemplate={stateA.cta ?? ""}
+              locale={locale}
+              rowCount={3}
+              slug={anchor.slug}
+              titleTemplate={stateA.fields["Headline"] ?? ""}
+              tone="dark"
+            />
+          ) : (
+            <EmptyStateBlock
+              announced
+              cta={
+                <Button
+                  dataCta="primary"
+                  locale={locale}
+                  onward
+                  query={{ ort: publishOffer.slug }}
+                  to="register"
+                  variant="primary-light"
+                >
+                  {publishOffer.ctaLabel}
+                </Button>
+              }
+              headline={publishOffer.headline}
+            />
+          )}
         </SectionShell>
       </MotionReveal>
 

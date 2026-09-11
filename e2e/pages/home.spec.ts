@@ -94,20 +94,73 @@ test.describe("TS-019 — home", () => {
     });
   }
 
-  test.fixme(
-    "TS-019-A3: `?ort=<covered place with dates>` shows the place and 3 rows [M4 — TS-008 D2 BFF routes]",
-    () => {},
-  );
+  test("TS-019-A3: `?ort=<covered place with dates>` shows the place and 3 rows", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP);
+    // `07743` resolves to `beispielwalde`, a covered demo place with dates.
+    await page.goto("/?ort=07743");
 
-  test.fixme(
-    "TS-019-A4: `?ort=<covered place without dates>` shows the nearby module and the publish CTA [M4 — TS-008 D2/D4]",
-    () => {},
-  );
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Das ist los in Beispielwalde",
+    );
+    const dates = page.locator("#place-dates");
+    await expect(dates).toContainText("Beispielwalde");
+    await expect(dates.locator("article")).toHaveCount(3);
 
-  test.fixme(
-    "TS-019-A5: an uncovered place typed into the search navigates to /dein-ort/starten?ort= [M4 — TS-008 D7 classification]",
-    () => {},
-  );
+    const primary = page.locator('[data-cta="primary"]');
+    await expect(primary).toHaveCount(1);
+    await expect(primary).toHaveAttribute(
+      "href",
+      "https://app.schafe-vorm-fenster.de/beispielwalde",
+    );
+  });
+
+  test("TS-019-A4: `?ort=<covered place without dates>` shows the nearby module and the publish CTA", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP);
+    // `38165` resolves to `beispielhausen`, the covered demo place with no dates.
+    await page.goto("/?ort=38165");
+
+    // Position 2 renders under a heading that names its radius, not the place.
+    const nearby = page.locator("#nearby");
+    await expect(nearby.locator("article").first()).toBeVisible();
+    const nearbyHeading = (await nearby.locator("h2").first().innerText()).trim();
+    expect(nearbyHeading).not.toContain("Beispielhausen");
+
+    // A publish-the-first-date CTA targeting the registration route.
+    const primary = page.locator('[data-cta="primary"]');
+    await expect(primary).toHaveCount(1);
+    await expect(primary).toHaveAttribute(
+      "href",
+      "/mitmachen/registrieren?ort=beispielhausen",
+    );
+
+    // No text claims dates in that place.
+    const dates = (await page.locator("#place-dates").innerText()).trim();
+    expect(dates).not.toMatch(/Das ist los in Beispielhausen/);
+    expect(dates).toContain("Beispielhausen");
+  });
+
+  test("TS-019-A5: an uncovered place typed into the search navigates to /dein-ort/starten?ort=", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto("/");
+
+    const field = page.getByRole("searchbox").first();
+    await field.fill("99999"); // the fixture's own uncovered postcode
+    await field.press("Enter");
+
+    await expect(page).toHaveURL(/\/dein-ort\/starten\?ort=99999$/);
+
+    // `/` itself renders no uncovered place as data.
+    await page.goto("/?ort=99999");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Was ist bei dir los?");
+    const main = await page.locator("main").innerText();
+    expect(main).not.toContain("99999");
+  });
 
   test("TS-019-A6: exactly three scenes, one mechanism each, every opener a question", async ({
     page,

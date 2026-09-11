@@ -1,4 +1,7 @@
+import { Suspense } from "react";
+
 import { Button } from "@/src/components/button/button";
+import { EmptyStateBlock } from "@/src/components/empty-state-block/empty-state-block";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { MediaFrame } from "@/src/components/media-frame/media-frame";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
@@ -10,9 +13,14 @@ import { SceneBlock } from "@/src/components/scene-block/scene-block";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
-import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
-import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
-import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
+import { isDemoSlot } from "@/src/lib/content/provenance";
+import { ctaLabelOnly } from "@/src/lib/content/text";
+import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
+import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
+import { fillTemplate, parseDemoProofElement } from "@/src/lib/pages/demo-content";
+import { calendarUrl } from "@/src/lib/live/app-handover";
+import { placeEvents } from "@/src/lib/live/places";
+import { STAGE_ZERO_ANCHOR, resolvePlaceOutcome } from "@/src/lib/pages/live-anchor";
 
 import heroPlaceholder from "@/src/generated/placeholders/home/hero.svg";
 import portraitPlaceholder from "@/src/generated/placeholders/ueber-uns/gruender.svg";
@@ -28,9 +36,11 @@ import { PageFrame } from "./_page-frame";
 import { HOME_META } from "./page.meta";
 
 import type { ProofCandidate } from "./_proof";
+import type { Place } from "@/src/lib/live/types";
 import type { ContentSlot } from "@/src/lib/content/types";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
 /**
  * TS-019 — `/` — home.
@@ -76,6 +86,9 @@ const SAVE_CALENDAR = {
   goalId: "save-calendar-to-homescreen",
   stage: "handover",
 } as const;
+
+/** The attributes S2's own handover adds beside the resolved place slug. */
+const SAVE_CALENDAR_ATTRIBUTES = { route: ROUTE } as const;
 
 export async function generateMetadata({
   params,
@@ -142,10 +155,197 @@ function proofCandidates(proof: ContentSlot, locale: Locale): ProofCandidate[] {
   });
 }
 
+/**
+ * Block 1 in TS-019 D2's four states (F-2-30).
+ *
+ * D2 keys block 1 on **what is known about the place**, and until round 3 `/`
+ * ignored `?ort=` altogether: `07743`, `38165` and `99999` all rendered the
+ * same stage-0 anchor, so S2, S3 and S4 were written, specified and
+ * unreachable. The three sections below are the same three in every state —
+ * PHOTO hero, ink module slot, surface-2 nearby — so the page rhythm and the
+ * DOM order of TS-019-A9 do not move when the state does.
+ *
+ * S1 stays the **prerendered shell** (D2, TS-010 D8): this component with
+ * `place === undefined` is the `<Suspense>` fallback, and the stated states
+ * stream over it. That is what keeps `/` a prerendered route while still
+ * answering a stated place — `state/open.md` row 131 counts `/` among the
+ * eight that prerender, and nothing here reads a request value outside the
+ * boundary.
+ */
+interface FocusCopy {
+  readonly locale: Locale;
+  /** S1's hero headline and the search module in both treatments. */
+  readonly s1Headline: string;
+  readonly search: (primary: boolean) => ReactNode;
+  /** S2 — `home-2-place-dates`: `{place}` headline and app-handover label. */
+  readonly datesHeadline: string;
+  readonly datesCta: string;
+  /** S3 — `home-3-place-empty`: radius heading, invitation, publish label. */
+  readonly nearbyHeading: string;
+  readonly invitation: string;
+  readonly publishCta: string;
+}
+
+/** The artifact writes the invitation as two sentences; the first is the headline. */
+function splitInvitation(text: string): { headline: string; lead?: string } {
+  const cut = text.indexOf(". ");
+  if (cut === -1) return { headline: text };
+  return { headline: text.slice(0, cut + 1).trim(), lead: text.slice(cut + 1).trim() };
+}
+
+function FocusBlocks({
+  copy,
+  place,
+  hasDates,
+}: {
+  readonly copy: FocusCopy;
+  /** The resolved community, or `undefined` for S1 — never the raw parameter. */
+  readonly place?: Place;
+  readonly hasDates?: boolean;
+}) {
+  const { locale } = copy;
+  const stated = place !== undefined;
+  const empty = stated && hasDates === false;
+  const values = { place: place?.name ?? "" };
+
+  return (
+    <>
+      {/* Block 1 — the focus block. `hero-block` brings its own
+          `photo-surface` section at `ratio-hero`; the photograph is the
+          generated placeholder of DEC-068 until a real one exists. */}
+      <HeroBlock
+        cta={
+          !stated ? (
+            copy.search(true)
+          ) : empty ? (
+            // S3: the primary conversion is publishing, and it is a link —
+            // "on `/` the shift stays a link" (TS-019 D2, open point 2).
+            <Button
+              dataCta="primary"
+              locale={locale}
+              onward
+              query={{ ort: place.slug }}
+              to="register"
+              variant="primary-light"
+            >
+              {copy.publishCta}
+            </Button>
+          ) : (
+            // S2: the app handover, carrying the place slug as its one
+            // attribute (TS-012 D4 rule 3).
+            <ConversionTracker
+              attributes={{ ...SAVE_CALENDAR_ATTRIBUTES, place: place.slug }}
+              goalId={SAVE_CALENDAR.goalId}
+              stage={SAVE_CALENDAR.stage}
+            >
+              <OutboundLink
+                dataCta="primary"
+                href={calendarUrl(place)}
+                locale={locale}
+                variant="secondary"
+              >
+                {fillTemplate(copy.datesCta, values)}
+              </OutboundLink>
+            </ConversionTracker>
+          )
+        }
+        headline={
+          !stated
+            ? copy.s1Headline
+            : empty
+              ? splitInvitation(fillTemplate(copy.invitation, values)).headline
+              : fillTemplate(copy.datesHeadline, values)
+        }
+        id="focus-block"
+        lead={empty ? splitInvitation(fillTemplate(copy.invitation, values)).lead : undefined}
+        notDepicting
+        placeholderId="home/hero"
+        src={heroPlaceholder.src}
+      />
+
+      {/* Block 1′ — the live dates of a known place. The one `ink` section of
+          the page rhythm, and the anchor the live data sits on. In S3 the
+          slot carries the publish invitation instead of an empty date box
+          ("Position 1 is not left blank", TS-008 D4). */}
+      <MotionReveal>
+        <SectionShell id="place-dates" surface="ink">
+          {empty ? (
+            <EmptyStateBlock
+              announced
+              cta={copy.search(false)}
+              headline={splitInvitation(fillTemplate(copy.invitation, values)).headline}
+              lead={splitInvitation(fillTemplate(copy.invitation, values)).lead}
+              pulse={false}
+            />
+          ) : (
+            <PlaceDatesIsland
+              conversion={SAVE_CALENDAR}
+              ctaTemplate={stated ? undefined : copy.datesCta}
+              locale={locale}
+              rowCount={3}
+              slug={place?.slug ?? STAGE_ZERO_ANCHOR.slug}
+              titleTemplate={copy.datesHeadline}
+              tone="dark"
+            />
+          )}
+        </SectionShell>
+      </MotionReveal>
+
+      {/* TS-019 D5, position 2: "this week nearby" is block 1's S3 module.
+          Its shell renders here under its own radius label — never the place
+          name (TS-008 D1). */}
+      <MotionReveal>
+        <SectionShell id="nearby" surface="surface-2">
+          <NearbyIsland
+            lat={place?.lat ?? STAGE_ZERO_ANCHOR.lat}
+            lng={place?.lng ?? STAGE_ZERO_ANCHOR.lng}
+            locale={locale}
+            rowCount={5}
+            titleTemplate={copy.nearbyHeading}
+          />
+        </SectionShell>
+      </MotionReveal>
+    </>
+  );
+}
+
+/**
+ * The stated half of block 1 — the only place on `/` that reads `?ort=`, and
+ * it reads it **inside** the `<Suspense>` boundary (Next.js "maximizing the
+ * static shell"), so the shell above stays prerendered.
+ *
+ * S4 — "a search resolved to an uncovered place" — carries *nothing* on `/`
+ * per D2: the search navigates away instead (`/dein-ort` classifies and
+ * forwards, TS-008 D7). So an uncovered value renders S1 here, and TS-019-A5's
+ * "`/` itself renders no uncovered place as data" holds by construction.
+ */
+async function StatedFocusBlocks({
+  copy,
+  searchParams,
+}: {
+  readonly copy: FocusCopy;
+  readonly searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const outcome = await resolvePlaceOutcome((await searchParams)["ort"]);
+  if (outcome.kind !== "covered") return <FocusBlocks copy={copy} />;
+
+  const envelope = await placeEvents({ slug: outcome.place.slug, rowCount: 3 });
+  return (
+    <FocusBlocks
+      copy={copy}
+      hasDates={(envelope?.data.events.length ?? 0) > 0}
+      place={outcome.place}
+    />
+  );
+}
+
 export default async function HomePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ lang: string }>;
+  /** Read only inside the `<Suspense>` boundary below — never awaited here. */
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
@@ -204,6 +404,17 @@ export default async function HomePage({
     />
   );
 
+  const focusCopy: FocusCopy = {
+    locale,
+    s1Headline: hero.fields["Headline"] ?? "",
+    search,
+    datesHeadline: dates.fields["Headline"] ?? "",
+    datesCta: dates.cta ?? "",
+    nearbyHeading: fieldAt(nearby.blocks, 0) ?? "",
+    invitation: fieldAt(nearby.blocks, 1) ?? "",
+    publishCta: ctaLabelOnly(nearby.cta ?? fieldAt(nearby.blocks, 2) ?? "") ?? "",
+  };
+
   return (
     <>
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
@@ -214,51 +425,12 @@ export default async function HomePage({
       locale={locale}
       meta={HOME_META}
     >
-      {/* Block 1 — the focus block, state S1. `hero-block` brings its own
-          `photo-surface` section at `ratio-hero`; the photograph is the
-          generated placeholder of DEC-068 until a real one exists. */}
-      <HeroBlock
-        cta={search(true)}
-        headline={hero.fields["Headline"] ?? ""}
-        id="focus-block"
-        notDepicting
-        placeholderId="home/hero"
-        src={heroPlaceholder.src}
-        state={slotState(hero)}
-      />
-
-      {/* Block 1′ — the live dates of a known place. The one `ink` section of
-          the page rhythm, and the anchor the live data sits on. Mocked until
-          M4 wires `/api/places/{slug}/events` (TS-008 D2). */}
-      <MotionReveal>
-        <SectionShell id="place-dates" surface="ink">
-          <PlaceDatesIsland
-            conversion={SAVE_CALENDAR}
-            ctaTemplate={dates.cta ?? ""}
-            locale={locale}
-            rowCount={3}
-            slug={STAGE_ZERO_ANCHOR.slug}
-            titleTemplate={dates.fields["Headline"] ?? ""}
-            tone="dark"
-          />
-        </SectionShell>
-      </MotionReveal>
-
-      {/* TS-019 D5, position 2: "this week nearby" is block 1's S3 module.
-          Its shell renders here in the mocked state so the function is
-          visible before M4, under its own radius label — never the place
-          name (TS-008 D1). */}
-      <MotionReveal>
-        <SectionShell id="nearby" surface="surface-2">
-          <NearbyIsland
-            lat={STAGE_ZERO_ANCHOR.lat}
-            lng={STAGE_ZERO_ANCHOR.lng}
-            locale={locale}
-            rowCount={5}
-            titleTemplate={fieldAt(nearby.blocks, 0) ?? ""}
-          />
-        </SectionShell>
-      </MotionReveal>
+      {/* Block 1 and its module slot, in whichever of TS-019 D2's states the
+          place parameter resolves to. The fallback **is** S1 — the
+          prerendered shell — and S2/S3 stream over it. */}
+      <Suspense fallback={<FocusBlocks copy={focusCopy} />}>
+        <StatedFocusBlocks copy={focusCopy} searchParams={searchParams} />
+      </Suspense>
       {/* Block 2a — three scenes, one mechanism each (TS-006 D7), in the
           `direct`/stage-0 order of TS-019 D3a. The trait-dependent order is
           a runtime property of TS-010 and lands with the stages at M4. */}

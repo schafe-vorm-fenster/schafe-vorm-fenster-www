@@ -22,9 +22,19 @@ import type { LiveEvent, Place } from "../types";
 export const DEMO_COUNTY = { id: "geoname.900001", name: "Beispiellandkreis Musterkreis" } as const;
 
 /**
- * Six demo communities in a ring around the first one, at increasing
+ * Seven demo communities in a ring around the first one, at increasing
  * distance, so the ~15 km cut of the widening chain has something real to cut
  * (three inside, three outside).
+ *
+ * The seventh, `Beispielhof Musterheide`, is the **neighbour of the empty
+ * place** (F-2-61). `EMPTY_DEMO_SLUG` below is what makes TS-008 D4's empty
+ * state reachable, and TS-020 D2 has that state's position 2 carry the
+ * *first* evidence ("the chain starts here", TS-008-A6). Without a community
+ * inside the 15 km cut around `Beispielhausen` the widening chain had nothing
+ * to widen to, so the designed state rendered its strongest module empty.
+ * It is deliberately **not** ZIP-addressable (`ZIP_DEMO_PLACES` below): the
+ * ring's existing members are keyed to their ZIP positions by several
+ * already-covered behaviours, and a seventh divisor would move all of them.
  */
 export const DEMO_PLACES: readonly Place[] = [
   { communityId: "geoname.900101", name: "Beispielgemeinde Musterdorf", slug: "beispielgemeinde-musterdorf", lat: 54.0, lng: 13.4, county: DEMO_COUNTY },
@@ -33,7 +43,16 @@ export const DEMO_PLACES: readonly Place[] = [
   { communityId: "geoname.900104", name: "Beispielwalde", slug: "beispielwalde", lat: 54.09, lng: 13.52, county: DEMO_COUNTY },
   { communityId: "geoname.900105", name: "Musterfelde", slug: "musterfelde", lat: 54.2, lng: 13.7, county: DEMO_COUNTY },
   { communityId: "geoname.900106", name: "Beispielhausen", slug: "beispielhausen", lat: 54.35, lng: 13.95, county: DEMO_COUNTY },
+  { communityId: "geoname.900107", name: "Beispielhof Musterheide", slug: "beispielhof-musterheide", lat: 54.38, lng: 14.02, county: DEMO_COUNTY },
 ];
+
+/**
+ * The demo places a postcode resolves to. The first six of the ring, in
+ * order: `demoPlaceForZip` is a modulo over this list, so its divisor — and
+ * therefore which ZIP means which place — must not move when the ring gains
+ * a member for a proximity reason.
+ */
+export const ZIP_DEMO_PLACES: readonly Place[] = DEMO_PLACES.slice(0, 6);
 
 /**
  * The ZIP that demonstrates the **uncovered** branch of TS-008 D7 — the
@@ -64,7 +83,7 @@ const NEIGHBOURING_DEMO_COUNTY = {
  * than one place of the same name is exactly why "which one?" is a real
  * step, not a hypothetical one). Both entries live in
  * `AMBIGUOUS_DEMO_PLACES`, deliberately kept **out of** `DEMO_PLACES`: that
- * six-place ring is keyed elsewhere (the ~15 km widening cut's three-in/
+ * ring is keyed elsewhere (the ~15 km widening cut's three-in/
  * three-out split, `mocks/events.ts`'s region-example selection) to its
  * current members and order, and a same-named collision would change what
  * those already-covered behaviours see rather than only add a lookup
@@ -103,7 +122,7 @@ export function demoPlaceForZip(zip: string): Place | undefined {
   if (zip === UNCOVERED_DEMO_ZIP) return undefined;
   const digits = Number.parseInt(zip, 10);
   if (!Number.isFinite(digits)) return undefined;
-  return DEMO_PLACES[digits % DEMO_PLACES.length];
+  return ZIP_DEMO_PLACES[digits % ZIP_DEMO_PLACES.length];
 }
 
 export function demoPlaceBySlug(slug: string): Place | undefined {

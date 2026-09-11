@@ -67,9 +67,31 @@ test.describe("TS-020 — your place", () => {
     await expect(dates.locator("button")).toHaveCount(0);
 
     // The focus job shifts: the offer leads to `register-as-publisher`'s page
-    // (`page.meta.ts`'s `emptyState`), not to the calendar handover.
-    await expect(dates.locator('a[href="/mitmachen"]')).toHaveCount(1);
+    // (`page.meta.ts`'s `emptyState`), not to the calendar handover — and it
+    // carries the page's one `data-cta="primary"` (F-2-61). The target is
+    // inside `/mitmachen`, at the route the goal is actually fired on, with
+    // the resolved slug: TS-023 D5 names "the `/dein-ort` empty state" as one
+    // of the four surfaces `?ort=` reaches `/mitmachen/registrieren` from.
+    const offer = dates.locator('a[href^="/mitmachen"]');
+    await expect(offer).toHaveCount(1);
+    await expect(offer).toHaveAttribute("data-cta", "primary");
+    await expect(offer).toHaveAttribute(
+      "href",
+      `/mitmachen/registrieren?ort=${PLACE_WITHOUT_DATES}`,
+    );
     await expect(dates.locator('a[href^="https://app."]')).toHaveCount(0);
+
+    // TS-008-A6: position 2 renders, labelled as surroundings — in state B it
+    // is the *first* evidence, so an empty module is the defect, not a state.
+    const nearby = page.locator("#nearby");
+    await expect(nearby.locator("article").first()).toBeVisible();
+    expect(await nearby.locator("h2").first().innerText()).not.toContain("Beispielhausen");
+
+    // No raw markdown reaches the visitor: the `→ `/mitmachen`` routing note
+    // beside the CTA label is not copy.
+    const body = await dates.innerText();
+    expect(body).not.toContain("`");
+    expect(body).not.toContain("→");
 
     // `role="status"`: the shift is announced once (TS-009 D7).
     await expect(dates.locator('[role="status"]')).toHaveCount(1);
@@ -194,7 +216,14 @@ test.describe("TS-020 — your place", () => {
   test("TS-020-A11: the canonical is the parameter-free path for every `?ort=`", async ({
     page,
   }) => {
-    for (const path of ["/dein-ort", "/dein-ort?ort=17390", "/dein-ort?ort=garbage"]) {
+    // The criterion names "`/dein-ort`, `?ort=<A slug>` and `?ort=<B slug>`" —
+    // a state-A and a state-B place, not a value that classifies as uncovered
+    // and is forwarded to the founding route (TS-020 D2 row 5, F-2-30).
+    for (const path of [
+      "/dein-ort",
+      "/dein-ort?ort=17390",
+      `/dein-ort?ort=${PLACE_WITHOUT_DATES}`,
+    ]) {
       await page.goto(path);
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
         "href",

@@ -8,8 +8,10 @@ import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
 import { fillTemplate, splitSteps } from "@/src/lib/pages/demo-content";
 import { DEMO_PLACE } from "@/src/lib/pages/demo-data";
-import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
-import { readPlaceParameter } from "@/src/lib/pages/place-parameter";
+import { STAGE_ZERO_ANCHOR, resolvePlaceOutcome } from "@/src/lib/pages/live-anchor";
+import { linkHref } from "@/src/components/route-link/href";
+import { extractCampaignParams } from "@/src/lib/analytics";
+import { redirect } from "next/navigation";
 
 import heroPlaceholder from "@/src/generated/placeholders/dein-ort-starten/hero.svg";
 
@@ -126,9 +128,31 @@ export default async function PlaceStartPage({
   const page = await pageContent(ROUTE, locale);
   const copy = PAGE_COPY[locale];
 
+  const query = await searchParams;
+
+  /**
+   * DEC-070's re-resolution, as TS-021-A7 states it (F-2-49): this page is
+   * the answer to "geo-api has no community for that". The moment it *does*
+   * — the place was added, or the visitor arrived on a stale link — the page
+   * is the wrong one, and the visitor belongs on `/dein-ort?ort=<slug>`.
+   * Before this, a covered place like `beispielwalde` was told in its own
+   * name that it "steht noch nicht im Dorfkalender".
+   *
+   * Exactly one hop, and the campaign parameters survive it (TS-023 D4's
+   * `etcc_*` rule, which the whole founding path shares); the language
+   * prefix comes from `linkHref` and is never typed.
+   */
+  const outcome = await resolvePlaceOutcome(query.ort);
+  if (outcome.kind === "covered") {
+    const campaign = extractCampaignParams(new URLSearchParams(asStringRecord(query)));
+    redirect(linkHref("place", { locale, query: { ort: outcome.place.slug, ...campaign } }));
+  }
+
   // D4: exactly one value, validated; anything else renders the placeless
   // variant. The DE artifact names the slot `{ort}`, the EN one `{place}`.
-  const searched = readPlaceParameter((await searchParams).ort);
+  // Only an **uncovered** value is echoed: a value the validator dropped and
+  // a value geo-api could not be asked about both render placeless.
+  const searched = outcome.kind === "uncovered" ? outcome.query : undefined;
   const values = {
     ort: searched,
     place: searched,
@@ -262,4 +286,16 @@ export default async function PlaceStartPage({
     </PageFrame>
     </>
   );
+}
+
+/** `URLSearchParams` wants string values; a repeated parameter's first stands in. */
+function asStringRecord(
+  query: Record<string, string | string[] | undefined>,
+): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [key, value] of Object.entries(query)) {
+    const first = Array.isArray(value) ? value[0] : value;
+    if (first !== undefined) out[key] = first;
+  }
+  return out;
 }

@@ -20,6 +20,7 @@
  */
 
 import { resolvePlace, searchPlaces } from "@/src/lib/live/places";
+import { readPlaceParameter } from "@/src/lib/pages/place-parameter";
 
 import type { Place } from "@/src/lib/live/types";
 
@@ -72,10 +73,55 @@ export async function resolveLiveAnchor(raw: string | undefined): Promise<LiveAn
 export async function resolveAnchorPlace(
   raw: string | undefined,
 ): Promise<Place | undefined> {
-  if (!raw) return undefined;
-  const bySlug = await resolvePlace(raw);
-  if (bySlug) return bySlug;
+  const outcome = await resolvePlaceOutcome(raw);
+  return outcome.kind === "covered" ? outcome.place : undefined;
+}
 
-  const search = await searchPlaces({ query: raw });
-  return search.data.outcome.kind === "covered" ? search.data.outcome.place : undefined;
+/**
+ * What `?ort=` turned out to be — TS-008 D7's **three** outcomes, kept apart
+ * all the way into the page (F-2-30).
+ *
+ * `searchPlaces` has classified covered / uncovered / unsupported since M4,
+ * but every caller collapsed the three into "did we get a place?", so the
+ * destination D7 gives the third row — `/dein-ort/starten?ort=<slug-or-query>`
+ * — was produced by the live layer and consumed by nothing. This type is the
+ * seam that keeps it: a page switches on `kind`, never on `undefined`.
+ *
+ * | `kind` | Means | Destination (TS-008 D7, TS-020 D2) |
+ * | --- | --- | --- |
+ * | `none` | no parameter, or one the validator dropped | the placeless variant, status 200, no redirect |
+ * | `covered` | geo-api resolved a community | `/dein-ort?ort=<slug>`; dates or the empty state decide which |
+ * | `uncovered` | geo-api answered, and has no community for it | `/dein-ort/starten?ort=<query>` |
+ *
+ * The interim `unsupported` outcome (a typed name while geo-api's name
+ * search is Q-025) is **`none`, not `uncovered`**: the value never reached
+ * geo-api, so nothing has been established about the place. TS-020 D2 makes
+ * the same distinction in words — "present but unresolvable" stays on the
+ * page at 200, "not covered by geo-api" leaves it.
+ */
+export type PlaceOutcome =
+  | { readonly kind: "none" }
+  | { readonly kind: "covered"; readonly place: Place }
+  | { readonly kind: "uncovered"; readonly query: string };
+
+/**
+ * `?ort=` → one of TS-008 D7's three outcomes.
+ *
+ * Takes the raw `searchParams` entry (string, repeated, or absent) and runs
+ * it through `readPlaceParameter` first, so every page that switches on the
+ * result has the D4 grammar and the 80-character cap behind it (F-2-38).
+ */
+export async function resolvePlaceOutcome(
+  raw: string | readonly string[] | undefined,
+): Promise<PlaceOutcome> {
+  const value = readPlaceParameter(raw);
+  if (value === undefined) return { kind: "none" };
+
+  const bySlug = await resolvePlace(value);
+  if (bySlug) return { kind: "covered", place: bySlug };
+
+  const { outcome } = (await searchPlaces({ query: value })).data;
+  if (outcome.kind === "covered") return { kind: "covered", place: outcome.place };
+  if (outcome.kind === "uncovered") return { kind: "uncovered", query: value };
+  return { kind: "none" };
 }
