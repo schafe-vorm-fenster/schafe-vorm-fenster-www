@@ -75,6 +75,21 @@ the shell and the badge appears. Demo data is obviously fictitious
 person and no real-looking figure, and every mocked capability has a
 `Mock aktiv` row in `state/open.md`.
 
+### Fixture markers — the magic inputs a branch needs to be walkable
+
+`mocks/fixtures.ts` names a handful of ZIPs/slugs that exist only so a
+gate-level walk (QA, e2e, chaos) can reach a branch that ordinary demo data
+never produces on its own:
+
+| Constant | What it walks |
+| --- | --- |
+| `UNCOVERED_DEMO_ZIP` (`"99999"`) | TS-008 D7's **uncovered** outcome — no place resolves. |
+| `EMPTY_DEMO_SLUG` (`"beispielhausen"`) | TS-008 D4's conversion moment — a covered place with zero dates. |
+| `AMBIGUOUS_DEMO_ZIP` (`"18299"`) | TS-023-A6 — a municipality search that resolves to **several** communities, so `mockSearchByZip` answers `AMBIGUOUS_DEMO_PLACES` (two places, same name, two counties) instead of the usual one. Before this fixture (F-2-5, round 2), that branch had no fixture at all and only ran against a stubbed `searchPlaces()` result in `resolve-place.test.ts`. Deliberately **not** part of `DEMO_PLACES`: that six-place ring is keyed elsewhere (the ~15 km widening cut, `mocks/events.ts`'s region-example selection) to its current members, and a same-named collision inside it would change those rather than only add a lookup branch. |
+
+Every one of these is a postcode or slug nobody would type by accident —
+finding them is the point of naming them here, not an obstacle.
+
 ## The envelope
 
 Every interface module returns the same thing, and the shells read their

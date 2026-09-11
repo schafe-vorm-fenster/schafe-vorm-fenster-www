@@ -16,12 +16,27 @@
  * used only because the environment has no read token — see `config.ts`.
  */
 
-import { DEMO_PLACES, demoPlaceBySlug, demoPlaceForZip, UNCOVERED_DEMO_ZIP } from "./fixtures";
+import {
+  AMBIGUOUS_DEMO_PLACES,
+  AMBIGUOUS_DEMO_ZIP,
+  DEMO_PLACES,
+  demoPlaceBySlug,
+  demoPlaceForZip,
+  UNCOVERED_DEMO_ZIP,
+} from "./fixtures";
 import { haversineKm } from "../widening";
 
 import type { Place } from "../types";
 
+/**
+ * TS-023-A6 (F-2-5, round 2): `AMBIGUOUS_DEMO_ZIP` is the one postcode that
+ * answers more than one place, so `searchPlaces`' `suggestions.length > 1`
+ * branch — "a municipality hit with several communities does not advance"
+ * — has a real fixture to walk, not only the stubbed unit test in
+ * `resolve-place.test.ts`.
+ */
 export function mockSearchByZip(zip: string): Place[] {
+  if (zip === AMBIGUOUS_DEMO_ZIP) return [...AMBIGUOUS_DEMO_PLACES];
   const place = demoPlaceForZip(zip);
   return place ? [place] : [];
 }
@@ -56,4 +71,4 @@ export function mockCountyForPoint(point: { readonly lat: number; readonly lng: 
   return mockSearchByPoint(point, 1)[0]?.county;
 }
 
-export { UNCOVERED_DEMO_ZIP };
+export { AMBIGUOUS_DEMO_ZIP, UNCOVERED_DEMO_ZIP };

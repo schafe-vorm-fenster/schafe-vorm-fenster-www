@@ -43,6 +43,54 @@ export const DEMO_PLACES: readonly Place[] = [
  */
 export const UNCOVERED_DEMO_ZIP = "99999";
 
+/** The second county of the ambiguous-municipality fixture below. */
+const NEIGHBOURING_DEMO_COUNTY = {
+  id: "geoname.900002",
+  name: "Beispiellandkreis Nachbarkreis",
+} as const;
+
+/**
+ * TS-023-A6 fixture (F-2-5, round 2): the ZIP that demonstrates the
+ * **ambiguous** branch — a municipality search that resolves to several
+ * communities, which must not auto-advance
+ * (`app/[lang]/mitmachen/registrieren/resolve-place.ts`'s `PlaceLookup`
+ * "ambiguous" case). Before this fixture, `mockSearchByZip` answered at
+ * most one place for every ZIP, so that branch had no gate-level walk —
+ * only a stubbed unit test of the page's own handling
+ * (`resolve-place.test.ts`) exercised it.
+ *
+ * Two communities that share a **name** across two **counties** — the real
+ * shape a German postcode occasionally serves (one ZIP area covering more
+ * than one place of the same name is exactly why "which one?" is a real
+ * step, not a hypothetical one). Both entries live in
+ * `AMBIGUOUS_DEMO_PLACES`, deliberately kept **out of** `DEMO_PLACES`: that
+ * six-place ring is keyed elsewhere (the ~15 km widening cut's three-in/
+ * three-out split, `mocks/events.ts`'s region-example selection) to its
+ * current members and order, and a same-named collision would change what
+ * those already-covered behaviours see rather than only add a lookup
+ * branch.
+ */
+export const AMBIGUOUS_DEMO_ZIP = "18299";
+
+export const AMBIGUOUS_DEMO_PLACES: readonly Place[] = [
+  {
+    communityId: "geoname.900201",
+    name: "Musterhausen",
+    slug: "musterhausen-musterkreis",
+    lat: 54.5,
+    lng: 12.1,
+    county: DEMO_COUNTY,
+  },
+  {
+    communityId: "geoname.900202",
+    name: "Musterhausen",
+    slug: "musterhausen-nachbarkreis",
+    lat: 51.3,
+    lng: 9.5,
+    county: NEIGHBOURING_DEMO_COUNTY,
+  },
+];
+
 /**
  * The demo place whose dates are empty — the conversion moment of TS-008 D4
  * ("nothing entered in <place> yet") has to be reachable in the prototype,
