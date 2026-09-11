@@ -1,0 +1,41 @@
+.kicker {
+  margin-bottom: var(--space-4);
+}
+
+.headline {
+  color: var(--color-neutral-paper);
+  font-size: var(--type-display-size);
+  font-weight: 800;
+  letter-spacing: var(--type-display-tracking);
+  line-height: var(--type-display-leading);
+  margin: 0;
+  min-height: calc(var(--hero-headline-lines) * var(--type-display-leading) * 1em);
+}
+
+.placeName {
+  color: var(--color-neutral-paper);
+  font-size: var(--type-place-size);
+  font-weight: 800;
+  letter-spacing: var(--type-display-tracking);
+  line-height: var(--type-display-leading);
+  margin: 0;
+  min-height: calc(var(--hero-headline-lines) * var(--type-display-leading) * 1em);
+  /* Clamped to two lines — a long place name never grows the reserved box. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.lead {
+  color: var(--color-neutral-paper);
+  font-size: var(--type-lead-size);
+  line-height: var(--leading-relaxed);
+  margin: var(--space-4) 0 0;
+  max-width: var(--measure-reading);
+}
+
+.cta {
+  margin-top: var(--space-6);
+}

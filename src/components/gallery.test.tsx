@@ -6,8 +6,8 @@ import { ComponentGallery, DECLARED_STATE_ORDER, GALLERY } from "./gallery";
 const html = renderToStaticMarkup(<ComponentGallery />);
 
 /**
- * The M2 foundation set, by inventory name and number
- * (plan/component-inventory.md §2.1, §2.2, §2.6).
+ * The M2 component set, by inventory name and number
+ * (plan/component-inventory.md §2.1, §2.2, §2.3, §2.4, §2.5, §2.6).
  */
 const INVENTORY = [
   "button",
@@ -30,6 +30,46 @@ const INVENTORY = [
   "back-to-top",
   "media-frame",
   "icon",
+  // ── §2.3 argument blocks (content types B.3) ──
+  "hero-block",
+  "scene-block",
+  "value-story",
+  "objection-list",
+  "publishing-path",
+  "comparison-table",
+  "offer-tier",
+  "feature-benefit",
+  "price-tag",
+  "proof-card",
+  "proof-stream",
+  "empty-proof-slot",
+  "archive-row",
+  "archive-filter",
+  "origin-story",
+  "person-profile",
+  "trust-block",
+  "howto-block",
+  "legal-section",
+  // ── §2.4 live-module shells ──
+  "live-module-frame",
+  "place-search",
+  "event-list",
+  "place-example-set",
+  "live-counters",
+  "embed-frame",
+  "empty-state-block",
+  // ── §2.5 conversion blocks, forms, flows ──
+  "context-band",
+  "closing-cta",
+  "newsletter-block",
+  "envoy-form-mount",
+  "lead-fallback",
+  "response-promise",
+  "step-indicator",
+  "choice-group",
+  "scope-picker",
+  "code-snippet",
+  // ── §2.6 placeholders, states, errors ──
   "skeleton",
   "placeholder-surface",
   "placeholder-badge",
@@ -40,10 +80,26 @@ const INVENTORY = [
 ] as const;
 
 /** The components that depend on late or external data (D-9). */
-const DATA_DEPENDENT = ["event-row", "photo-surface", "media-frame"] as const;
+const DATA_DEPENDENT = [
+  "event-row",
+  "photo-surface",
+  "media-frame",
+  "hero-block",
+  "proof-card",
+  "live-module-frame",
+  "place-search",
+  "event-list",
+  "place-example-set",
+  "live-counters",
+  "embed-frame",
+  "envoy-form-mount",
+  "choice-group",
+  "scope-picker",
+  "code-snippet",
+] as const;
 
-describe("Q-044: the M2 foundation set is complete and named as the inventory names it", () => {
-  it("carries all 27 components of sections 2.1, 2.2 and 2.6", () => {
+describe("Q-044: the M2 component set is complete and named as the inventory names it", () => {
+  it("carries all 63 components of sections 2.1–2.6, in inventory order", () => {
     expect(GALLERY.map((entry) => entry.name)).toEqual([...INVENTORY]);
   });
 
@@ -150,7 +206,12 @@ describe("TS-017 D3: no brand value enters through a component", () => {
   it("keeps every inline style a token reference", () => {
     const inlineStyles = html.match(/style="[^"]*"/g) ?? [];
     for (const style of inlineStyles) {
-      const custom = style.includes("--photo-image") || style.includes("var(--ratio-");
+      const custom =
+        style.includes("--photo-image") ||
+        style.includes("var(--ratio-") ||
+        // `hero-block`'s reserved-line-count var — a line count, not a brand
+        // value, and read back only through `calc()` in its own stylesheet.
+        style.includes("--hero-headline-lines");
       const layout = /object-fit|position:|inset:|color:transparent/.test(style);
       expect(custom || layout, style).toBe(true);
     }
@@ -167,23 +228,37 @@ describe("TS-001 D5: no component holds a literal internal href", () => {
       (href) => href.startsWith("/") && !href.startsWith("//"),
     );
     expect(internal.length).toBeGreaterThan(0);
+    const routes = [
+      "/",
+      "/dein-ort",
+      "/dein-ort/starten",
+      "/mitmachen",
+      "/mitmachen/registrieren",
+      "/dein-kalender",
+      "/dein-kalender/bestellen",
+      "/deine-region",
+      "/deine-region/angebot",
+      "/ueber-uns",
+      "/ueber-uns/archiv",
+      "/rechtliches",
+      "/en",
+      // `/start` (TS-016 D6, DEC-069): the redirect-only path `lead-fallback`
+      // links to. It is not a route-facade path — it joins the TS-004 D1
+      // route inventory once the app work package builds the redirect
+      // (state/open.md) — so it is named here rather than through `href()`.
+      "/start",
+    ];
     for (const href of internal) {
       expect(
-        [
-          "/",
-          "/dein-ort",
-          "/dein-ort/starten",
-          "/mitmachen",
-          "/mitmachen/registrieren",
-          "/dein-kalender",
-          "/dein-kalender/bestellen",
-          "/deine-region",
-          "/deine-region/angebot",
-          "/ueber-uns",
-          "/ueber-uns/archiv",
-          "/rechtliches",
-          "/en",
-        ].some((route) => href === route || href.startsWith(`${route}#`) || href.startsWith("/en/")),
+        routes.some(
+          (route) =>
+            href === route ||
+            // `route-link`'s `query`/`hash` options append `?…` or `#…` —
+            // both are still the same route, never a second path.
+            href.startsWith(`${route}#`) ||
+            href.startsWith(`${route}?`) ||
+            href.startsWith("/en/"),
+        ),
         href,
       ).toBe(true);
     }

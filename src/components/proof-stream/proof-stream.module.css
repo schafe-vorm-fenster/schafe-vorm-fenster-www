@@ -1,0 +1,29 @@
+.stream {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* lg — 48rem / 768px: proof cards stand in a real grid. */
+@media (min-width: 48rem) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.scroller {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+}
+
+.scroller > * {
+  flex: 0 0 80%;
+}
+
+/* lg — 48rem / 768px: the scroller shows more of the next card. */
+@media (min-width: 48rem) {
+  .scroller > * {
+    flex-basis: 32%;
+  }
+}

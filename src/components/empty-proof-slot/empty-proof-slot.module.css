@@ -1,0 +1,22 @@
+.slot {
+  aspect-ratio: var(--ratio-proof);
+  background: var(--placeholder-hatch);
+  display: flex;
+}
+
+.content {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  justify-content: flex-end;
+  padding: var(--space-4);
+}
+
+.sentence {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-meta-size);
+  line-height: var(--leading-normal);
+  margin: 0;
+  max-width: var(--measure-reading);
+}

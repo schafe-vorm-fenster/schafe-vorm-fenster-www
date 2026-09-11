@@ -1,0 +1,68 @@
+.tier {
+  background: var(--color-neutral-surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: 100%;
+  padding: var(--space-6);
+}
+
+.name {
+  font-size: var(--type-card-size);
+  font-weight: 700;
+  letter-spacing: var(--type-card-tracking);
+  margin: 0;
+}
+
+.audience {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-meta-size);
+  margin: 0;
+}
+
+.price {
+  margin: 0;
+}
+
+.checks {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.check,
+.checkEmphasis {
+  align-items: flex-start;
+  color: var(--color-neutral-text2);
+  display: flex;
+  font-size: var(--type-body-size);
+  gap: var(--space-2);
+  line-height: var(--leading-normal);
+}
+
+.checkEmphasis {
+  color: var(--color-neutral-ink);
+  font-weight: 700;
+}
+
+.check :global(svg),
+.checkEmphasis :global(svg) {
+  color: var(--color-lime-800);
+  flex: none;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--control-gap);
+}
+
+.footnote {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+  margin: 0;
+}

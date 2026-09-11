@@ -1,0 +1,32 @@
+.reserved {
+  scroll-margin-top: calc(var(--site-header-height) + var(--section-padding-block));
+}
+
+.section {
+  border-top: 1px solid var(--color-neutral-line);
+  padding-top: var(--section-padding-block);
+  scroll-margin-top: calc(var(--site-header-height) + var(--section-padding-block));
+}
+
+.heading {
+  font-size: var(--type-subhead-size);
+  font-weight: 800;
+  letter-spacing: var(--type-subhead-tracking);
+  margin: 0 0 var(--space-4);
+}
+
+.body {
+  font-size: var(--type-body-size);
+  line-height: var(--leading-relaxed);
+  max-width: var(--measure-reading);
+}
+
+.body :global(*) {
+  max-width: var(--measure-reading-max);
+}
+
+.pointer {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-body-size);
+  margin: 0;
+}

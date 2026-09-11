@@ -1,0 +1,10 @@
+.tag {
+  font-family: var(--font-mono);
+  font-size: var(--type-card-size);
+  font-weight: 700;
+  letter-spacing: var(--type-card-tracking);
+  /* One line reserved: a currency or digit-count change never reflows the
+     tier around it (SRC-014 §Reserved text space). */
+  min-height: calc(var(--type-card-size) * var(--leading-normal));
+  margin: 0;
+}

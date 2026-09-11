@@ -1,0 +1,60 @@
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.headline {
+  align-items: center;
+  display: flex;
+  font-size: var(--type-section-size);
+  font-weight: 800;
+  gap: var(--space-2);
+  letter-spacing: var(--type-section-tracking);
+  margin: 0;
+}
+
+.icon {
+  flex: none;
+}
+
+.platforms {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.platform {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.platformLabel {
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  letter-spacing: var(--type-label-tracking);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--type-body-size);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+  padding-left: var(--space-6);
+}
+
+.cta {
+  align-self: flex-start;
+}
+
+/* lg — 48rem / 768px: iOS and Android stand side by side. */
+@media (min-width: 48rem) {
+  .platforms {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

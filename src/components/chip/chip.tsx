@@ -17,6 +17,13 @@ export interface ChipProps extends LinkOptions {
   readonly selected?: boolean;
   readonly tone?: "light" | "dark";
   readonly icon?: IconName;
+  /**
+   * Client-side toggling only (`archive-filter`, TS-028 D4/D5) — a chip that
+   * neither navigates nor submits still needs a way to react to a press.
+   * Additive: every other caller leaves it out and gets the original two
+   * forms (link or plain GET submit).
+   */
+  readonly onClick?: () => void;
   readonly className?: string;
   readonly children: ReactNode;
 }
@@ -43,6 +50,7 @@ export function Chip({
   selected = false,
   tone = "light",
   icon,
+  onClick,
   className,
   children,
 }: ChipProps) {
@@ -83,7 +91,8 @@ export function Chip({
       aria-pressed={selected}
       className={classes}
       name={name}
-      type="submit"
+      onClick={onClick}
+      type={onClick ? "button" : "submit"}
       value={value}
     >
       {content}

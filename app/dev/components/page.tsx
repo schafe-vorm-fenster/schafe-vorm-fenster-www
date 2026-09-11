@@ -2,12 +2,6 @@ import { notFound } from "next/navigation";
 
 import { ComponentGallery } from "@/src/components/gallery";
 
-// The app tree's root layout lives under `app/[lang]/` (TS-004 D2), so this
-// route outside it brings the two stylesheets itself. They are the same two
-// files the layout imports — the token file and the shell — never a copy.
-import "../../styles/brand.css";
-import "../../styles/base.css";
-
 import type { Metadata } from "next";
 
 /**
@@ -33,9 +27,9 @@ export default function ComponentGalleryPage() {
     <div className="container">
       <h1>Komponenten — M2</h1>
       <p>
-        Jede Komponente der Inventar-Abschnitte 2.1, 2.2 und 2.6 mit allen
-        Zuständen, die sie deklariert. Entwicklungsseite, nicht Teil der
-        Website.
+        Jede Komponente der Inventar-Abschnitte 2.1, 2.2, 2.3, 2.4, 2.5 und 2.6
+        mit allen Zuständen, die sie deklariert. Entwicklungsseite, nicht Teil
+        der Website.
       </p>
       <ComponentGallery />
     </div>
