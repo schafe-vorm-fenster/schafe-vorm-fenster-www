@@ -54,8 +54,10 @@ criterion individually satisfiable.
   before the content arrives; a layout shift after paint is a
   defect.
 - Empty and error states are designed states from the spec, not
-  afterthoughts — a degraded external dependency renders its
-  documented fallback.
+  afterthoughts. A **missing** external system is mocked per the mock
+  rule (plan/leitplanken.md): dummy data behind the real interface
+  module, labeled `Demo-Daten` in the UI, `Mock aktiv` row in
+  `state-files` — the function is visible, never a hole.
 - One component tree for all viewports; breakpoints change spacing,
   type step, aspect, and column count only.
 
@@ -86,7 +88,8 @@ viewports; keyboard traversal reaches every control.
   loading, empty, error, and degraded states as designed.
 
 Quality gate: page renders correctly with full data, no data, and
-failing upstreams (simulated), without raw errors.
+failing upstreams (simulated), without raw errors; every mocked
+dependency shows its complete, labeled dummy experience.
 
 ### Phase 4 — Acceptance pass
 

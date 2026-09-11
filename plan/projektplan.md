@@ -60,7 +60,8 @@ Interactions, live data, forms, conversion paths work.
 | Relevance engine: scoring, ordering, segmentation | TS-005 |
 | Live modules + place search, widening chain, BFF, app handover | TS-008 |
 | Personalization stages 0–3, geolocation | TS-010 |
-| Forms and leads: envoy widget (degraded until Q-022 lands), briefing, order flow (degraded per Q-046), newsletter | TS-016 |
+| Forms and leads: envoy widget as mock behind its interface module (Q-022), briefing, order flow with mocked organizerId minting (Q-046), newsletter | TS-016 |
+| Mock layer for every missing external system, dummy data labeled, per the mock rule (plan/leitplanken.md) | mock rule |
 | Analytics cookieless, event registry, attribution | TS-012 |
 | SEO: redirect map, structured data, sitemaps, landing pages | TS-011 |
 | Rendering and resilience: static shell, cached islands, three-tier fallback | TS-009, DEC-045/046 |
@@ -75,6 +76,15 @@ Exactly **one** round with a fixed budget. Everything discovered after
 that round goes to `state/open.md` instead of being built. M5 ends
 with the final Kundenabnahme across all milestones and the closing
 run report.
+
+## Das Ergebnis ist ein Prototyp
+
+The run delivers the website as a **finished prototype**: every
+function integrated and visible, missing external systems mocked with
+labeled dummy data (mock rule, plan/leitplanken.md). It is ready for
+reviews and user tests on the protected preview. Going live requires
+the subsequent hardening round — real APIs swapped in, mocks removed,
+clearances resolved — which is outside this run's scope.
 
 ## Quality gate — every milestone
 

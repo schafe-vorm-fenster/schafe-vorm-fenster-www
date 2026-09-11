@@ -25,8 +25,30 @@ finding, regardless of who commits it.
   (repo rule). Record the contradiction in `state/open.md`.
 - Page copy comes from the go-to-market-os sources via the content
   playbook. Content is consumed and cited, never invented — a missing
-  fact renders as a designed empty state, and the gap goes on the
-  open list.
+  brand fact renders as a designed empty state, and the gap goes on
+  the open list. (Missing *systems* are a different case — see the
+  mock rule.)
+
+## Die Mock-Regel (Prototyp-Entscheidung)
+
+The run's target is a **finished prototype** for reviews and user
+tests — every function integrated and visible. Therefore:
+
+- Every missing external endpoint or component (envoy widget,
+  organizerId minting, geo-api gaps, events-api stats fields, app
+  help-URL contract, …) is **built as a mock delivering dummy data**
+  — never as a hole, never as a bare empty state.
+- Mocks live behind the same interface module the real system will
+  use, switchable per environment — swapping in the real system
+  later touches one module, not the pages.
+- Dummy data is obviously fictitious and labeled as such in the UI
+  (e.g. a `Demo-Daten` badge); it never contains real persons,
+  customers, or real-looking testimonials.
+- Every active mock has a row in `state/open.md` marked `Mock aktiv`
+  — that list is the checklist for the later hardening round.
+- **The prototype does not go live.** A separate hardening round
+  (real APIs in, mocks out, clearances resolved) follows after the
+  run, before any production promotion.
 
 ## Dependencies — the stack-harmony rule
 

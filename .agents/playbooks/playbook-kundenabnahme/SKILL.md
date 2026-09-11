@@ -44,9 +44,12 @@ writing — alone, and with reasons a developer can act on.
 
 - Accept only what satisfies the criterion as written; reject with
   the criterion id and a concrete, actionable reason.
-- A criterion degraded by a documented open point is judged against
-  the documented degradation — met degradation can be accepted,
-  with the open point cited.
+- A criterion touching a mocked system is judged against the mock
+  (mock rule, plan/leitplanken.md): the full flow visible and usable
+  with labeled dummy data can be accepted **as prototype**, with the
+  `Mock aktiv` open point cited in the protocol. The final protocol
+  lists every mock-based acceptance — that list feeds the hardening
+  round.
 - No fixes, no rewording, no escalation to a human: the protocol is
   the communication.
 - The final protocol after the last milestone states the
