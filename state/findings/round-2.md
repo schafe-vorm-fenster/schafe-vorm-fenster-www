@@ -713,3 +713,897 @@ The gate's QA sweep re-checks their ACs at retest.
   half), 115's A11 half (production build), 117, 122, 130.
 - **Post-prototype by definition**: rows 13, 84, 87 (hub identity
   record), and the whole "After the prototype" block.
+
+---
+
+# Findings — Round 2, QA gate-2 acceptance run 1
+
+Appended by the QA acceptance run over `plan/gate-2-scope.md` (333 ACs).
+Protocol: `reports/qa/gate-2-run-1.md`. Findings below carry the chaos and
+UAT ids they were triaged from; observations that were **not** defects are
+dismissed in the protocol, not here.
+
+## F-2-30 — The uncovered-place branch never fires: any unresolved search answers with a confident demo place
+
+- Severity: critical
+- Source: uat (divergence pass) + chaos:boundary-tester (C-B-5) + qa
+- Where: `/` and `/dein-ort` place search · TS-019-A3, TS-019-A4,
+  TS-019-A5, TS-021-A6, TS-021-A14, TS-008-A7 · `src/lib/pages/live-anchor.ts:59`,
+  `src/lib/live/places.ts:72`
+- Steps:
+  1. `curl "http://localhost:3100/dein-ort?ort=99999"` — `99999` is the
+     fixture's own declared uncovered ZIP
+     (`src/lib/live/mocks/fixtures.ts:44`, `demoPlaceForZip` returns
+     `undefined` for it).
+  2. Repeat with `?ort=abcde` (not a postcode at all).
+  3. `curl "http://localhost:3100/?ort=07743"`, `?ort=38165`, `?ort=99999`.
+- Expected:
+  - TS-019-A5: "Type an uncovered place into the search on `/` and submit.
+    The browser navigates to `/dein-ort/starten?ort=…`."
+  - TS-019-A3: "Open `/?ort=<covered place with dates>`. Block 1 shows the
+    place name and exactly 3 event rows."
+  - TS-019-A4: "Open `/?ort=<covered place with no dates>`. Block 1 shows
+    the nearby module … plus a publish-the-first-date CTA."
+  - TS-021-A6 / TS-008-A7: "Searching an uncovered place lands on
+    `/dein-ort/starten?ort=…`."
+- Observed:
+  - `/dein-ort?ort=99999` and `?ort=abcde` both answer **200** with a
+    fully populated covered place ("Das ist los in Beispielgemeinde
+    Musterdorf", three demo event rows, a homescreen CTA for that place).
+    No redirect, no uncovered branch, no "we don't know this place yet".
+  - `grep -rn "uncovered" app src` shows `outcome.kind === "uncovered"` is
+    produced by `src/lib/live/places.ts:72` and **consumed by nothing** —
+    no page and no route handler reacts to it.
+  - `resolveLiveAnchor` (`src/lib/pages/live-anchor.ts:59`) turns every
+    unresolvable value into `STAGE_ZERO_ANCHOR` with `stated: false`, and
+    the placeless variant then renders as a confident *covered* answer
+    rather than as "no place".
+  - On `/`, `?ort=` is ignored entirely: `07743`, `38165` and `99999` all
+    render the same stage-0 anchor. The home search form posts to
+    `action="/dein-ort"`, so `/` never honours the parameter the three
+    criteria are written against.
+  - `/dein-ort/starten?ort=99999` renders correctly when reached directly —
+    the founding page works, nothing routes to it.
+- Impact: the three-outcome model of TS-008 D7 (dates / no dates / no
+  place) collapses to one outcome for the visitor. A resident typing her
+  own real postcode is shown a village she has never heard of and told
+  what is on there. The founding conversion path
+  (`save-calendar-to-homescreen` → `/dein-ort/starten` →
+  `register-as-publisher`) has no entry.
+- Note: the e2e tests for TS-019-A3/A4/A5, TS-021-A6 and TS-021-A14 are
+  `test.skip`ped with the annotation "[M4 — TS-008 D2 BFF routes]". M4 is
+  in scope at this gate, so those skips are stale and hide a live defect.
+- Round decision: (Project Manager to set)
+
+## F-2-31 — The 404 page ships a developer note as its body copy and carries neither place search nor jobs band
+
+- Severity: high
+- Source: uat (404 walk) + qa
+- Where: every unknown URL, both locales · TS-004-A4 ·
+  `src/lib/i18n/dictionary.ts:161` (de), `:238` (en),
+  `app/global-not-found.tsx:52-70`
+- Steps: open `http://localhost:3100/dies-gibt-es-nicht` (and
+  `/en/anything`).
+- Expected: TS-004-A4 — "404 renders place search + jobs band with status
+  404 and `noindex`"; TS-004 D6 — "404: static shell + streamed place
+  search".
+- Observed:
+  - The page's own body paragraph reads "Diese Adresse gibt es nicht.
+    [Platzhalter M2 — Ortssuche und Job-Band folgen mit den Komponenten,
+    DEC-032.]" — a developer note with a decision id, rendered as visitor
+    copy. The English variant carries the same note translated.
+  - Below it a dashed box labelled "Platzhalter: place-search +
+    context-band" stands in for both required modules. There is no place
+    search and no jobs band on the page.
+  - The 500 surface has the same shape: "Bitte versuche es noch einmal.
+    [Platzhalter M2 — DEC-032: statisch, minimal, ohne Datenabhängigkeit.]"
+    (`dictionary.ts:166`, `:243`).
+  - Status 404 and `noindex, follow` are correct.
+- Note on the evidence gap: `src/lib/routes/routing.integration.test.ts:163`
+  and `e2e/routes.spec.ts:53` both name TS-004-A4 and both pass, but they
+  assert only the status, the `robots` value and the heading — neither
+  clause the criterion is actually about (place search, jobs band) is
+  asserted anywhere. A green suite is not evidence for this AC.
+- Conversion-path argument for escalation: `plan/gate-2-scope.md` §2 lists
+  "plus the 404 place search" as part of the `save-calendar-to-homescreen`
+  walk. If the PM reads the 404 as part of that path, this is critical.
+- Round decision: (Project Manager to set)
+
+## F-2-32 — `request-product-briefing` is a dead link, and two pages paste a second placeholder URL against TS-016 D7
+
+- Severity: high
+- Source: uat (briefing walk) + qa
+- Where: `/dein-kalender`, `/deine-region`, `/deine-region/angebot`, every
+  step of `/dein-kalender/bestellen` · TS-016-A5, TS-016 D7 ·
+  `src/lib/live/briefing.ts:12`, `app/[lang]/deine-region/page.tsx:161`,
+  `app/[lang]/deine-region/angebot/page.tsx:40`,
+  `src/components/gallery.tsx:1097`
+- Steps: open `/dein-kalender`, follow "Beratungstermin buchen"; repeat on
+  `/deine-region` and on `/deine-region/angebot`.
+- Expected: TS-016 D7 (S3) — "One configured value (environment/config),
+  referenced by every S3 placement — **never pasted per page**"; the CTA
+  navigates to a booking URL that resolves.
+- Observed:
+  1. `BRIEFING_URL` defaults to
+     `https://calendar.google.com/calendar/appointments/schedules/placeholder-briefing`.
+     Google answers "Termin nicht gefunden". `NEXT_PUBLIC_BRIEFING_URL` is
+     not set in `.env.local`, so this is what ships.
+  2. `src/lib/live/briefing.ts:7` states "The real Google Calendar
+     appointment-schedule URL is not configured anywhere yet (no source
+     names it)". That premise is false: the installed hub package carries
+     it — `node_modules/@schafe-vorm-fenster/people/jan-henrik-hempel/jan-henrik-hempel.person.md:24`
+     and `index.json:370`, `url: https://calendar.app.google/VG9bZoYVnFcX1W6F8`,
+     labelled "Booking a video call … Public, brand-neutral, usable for
+     Schafe vorm Fenster".
+  3. `/deine-region` and `/deine-region/angebot` do **not** read the
+     constant at all — both hard-code a *different* placeholder,
+     `https://calendar.google.com/calendar/appointments/example`, pasted
+     per page. That is the exact thing D7 forbids, and it means the swap
+     to the real URL would still leave two dead links behind.
+- Impact: `request-product-briefing` is a wired conversion goal
+  (`plan/gate-2-scope.md` §2) and it is a dead end on every one of its
+  placements.
+- Round decision: (Project Manager to set)
+
+## F-2-33 — The English conversion flows still render German UI strings, including the primary buttons
+
+- Severity: high
+- Source: uat (EN walks) + chaos:form-abandoner (C-A-02, C-A-03) + qa
+- Where: `/en/take-part/register`, `/en/your-region/quote`,
+  `/en/your-place`, and the footer of every `/en/…` route · reference: F-2-4
+  (resolved for six strings; this is the remaining tail)
+- Steps:
+  1. `curl "http://localhost:3100/en/take-part/register"` — step 1.
+  2. `curl "http://localhost:3100/en/take-part/register?ort=beispielwalde"`
+     — step 2.
+  3. `curl "http://localhost:3100/en/your-region/quote"`.
+- Expected: an English page renders English UI strings; TS-007 D-level
+  harmonisation and the locale discipline of TS-001.
+- Observed (all reproduce on the fresh preview as well):
+  - Registration step 1: the search submit button reads **"Suchen"**, and
+    the aside line reads "Heute mit einem anderen Anliegen hier?".
+  - Registration step 2: the demo badge reads **"Demo-Daten"** and the
+    primary continue button reads **"Weiter"**. Step 3 likewise.
+  - `/en/your-region/quote`: the whole quote form is German —
+    "Organisation", "E-Mail-Adresse", "Telefon (optional)", "Worum geht es?",
+    submit **"Absenden"** — plus the badges "Foto gesucht" and
+    "Demo-Daten", and the aside link "Angebot anfragen".
+  - The footer contact + newsletter block is German on **every** `/en/…`
+    route: "Demo-Daten", "Name", "E-Mail-Adresse", "Nachricht",
+    "Absenden", "Neuigkeiten aus dem Projekt", "Anmelden",
+    "Double-Opt-in, keine Cookies. Mit der Anmeldung stimmst du unserer
+    Datenschutzerklärung zu."
+- Impact: two of the five wired conversion goals
+  (`register-as-publisher`, `request-licence-quote`) present their primary
+  action to an English visitor in German.
+- Round decision: (Project Manager to set)
+
+## F-2-34 — `{county-or-organization}` renders as a literal in the English quote page's `h1`
+
+- Severity: high
+- Source: chaos:form-abandoner (C-A-01) + uat
+- Where: `/en/your-region/quote`, the page `h1` · TS-026 (quote-flow half)
+- Steps: `curl "http://localhost:3100/en/your-region/quote"`; also
+  reproduced against the fresh preview.
+- Expected: the heading names the county or the organisation, or falls back
+  to a written-out placeless variant. TS-007-A16 forbids a resolved place
+  name in a generated string and requires named interpolation slots — a
+  slot that is never filled is not an acceptable rendering of one.
+- Observed: the heading reads literally "Request a quote for
+  {county-or-organization}". The German equivalent
+  (`/deine-region/angebot`) renders a complete sentence ("Angebot für eure
+  Organisation anfragen"), so only the English variant leaks the slot.
+- Round decision: (Project Manager to set)
+
+## F-2-35 — Internal identifiers are rendered as visitor-facing copy on every route, in both locales
+
+- Severity: high
+- Source: uat (registration + quote walks) + qa
+- Where: the footer newsletter block on all 24 routes; `/ueber-uns` and
+  `/en/about`; `/rechtliches` and `/en/legal` · content compliance
+  (`plan/gate-2-scope.md` §1.3), TS-007 D12
+- Steps: request each of the twelve routes in both locales and strip tags;
+  grep the visible text for `Q-0..`, `DEC-0..`, `TS-0..`.
+- Expected: no internal ticket, decision or spec identifier appears in
+  rendered page copy.
+- Observed, verbatim:
+  - Footer, **24/24 routes**, German even under `/en`: "Demo-Daten — es
+    wird nichts verschickt, solange **Q-020** offen ist."
+  - `/ueber-uns` and `/en/about`: "… ist \`license: unverified\` und deshalb
+    bei jedem Build erneut auf Freigabe zu prüfen (kein Textproblem,
+    **TS-007 D12**)." — the backticks render literally too.
+  - `/rechtliches` and `/en/legal`: "Rechtliche Prüfung durch
+    Rechtsberatung (jan-henrik, zusammen mit Rechtsberatung — **TS-029
+    Open Point #1**)" and "Englische Fassung, sobald die deutsche Fassung
+    freigegeben ist (**DEC-027**: Rechtstexte in DE und EN)."
+  - The 404/500 placeholder note is filed separately as F-2-31.
+- Note: the `Demo-Daten` badge itself is the guardrail working as intended
+  and is not the defect — the ticket id next to it is.
+- Round decision: (Project Manager to set)
+
+## F-2-36 — `proxy.ts` sends the Vercel automation bypass secret to a Host-header-controlled origin and caches the answer process-wide
+
+- Severity: high
+- Source: qa (security sweep — `differential-review` over `7b3624d..HEAD`)
+- Where: `proxy.ts:83`, `src/lib/security/csp-hashes.ts:41-77`,
+  `src/lib/routes/host-matrix.ts:99-103` · TS-014 scope
+- Steps (code path, reachability unproven — see the note):
+  1. `canonicalHostFor(host)` returns `undefined` for any host absent from
+     `DOMAIN_MATRIX`, so an unrecognised `Host` does **not** take the 301
+     at `proxy.ts:52`.
+  2. Execution reaches `await scriptHashes(request.nextUrl.origin)`
+     (`proxy.ts:83`) with an origin derived from that header.
+  3. `csp-hashes.ts:46-52` fetches that origin with the header
+     `x-vercel-protection-bypass: $VERCEL_AUTOMATION_BYPASS_SECRET`.
+  4. `cached ??=` (`csp-hashes.ts:41`, `:75`) is module-scope and keyed by
+     nothing, so the first request on a cold instance fixes the hash set
+     for every later request that instance serves.
+  5. `:56-57` filters the parsed entries only by `typeof h === "string"`,
+     and `src/lib/security/csp.ts:66` interpolates each as `` `'${hash}'` ``
+     with no shape check — so a returned string containing `'` or `;`
+     writes arbitrary tokens into `script-src`.
+- Expected: the secret that bypasses Deployment Protection on every preview
+  is never sent to a host the request chose; the CSP `script-src` is a
+  function of the build, not of a request header.
+- Observed: three independent defences are absent — no host allowlist
+  before the fetch, no per-origin cache key, no validation of the returned
+  tokens.
+- Reachability note, recorded honestly: Vercel's edge normally refuses an
+  unrecognised `Host`, and commit `e256fa8` skips the Host-spoof e2e case
+  on preview for that reason, so this was **not** reproduced end to end.
+  A local reproduction needs a cold server instance and `next dev` refuses
+  a second instance in the same directory, so it was not attempted against
+  the shared run server. `src/lib/security/csp-hashes.ts` is a new module
+  that handles a secret and performs a request-derived fetch and has
+  **zero tests**; `proxy.ts` has no unit test.
+- Round decision: (Project Manager to set)
+
+## F-2-37 — `report-uri` / `Reporting-Endpoints` point at `/api/csp-report`, which cannot exist
+
+- Severity: medium
+- Source: qa (security sweep)
+- Where: `src/lib/security/csp.ts:136`, `:188`; asserted green by
+  `e2e/smoke.spec.ts:196` and `:227` · TS-014 D2 vs TS-017 D4
+- Steps: `curl -sI http://localhost:3100/ | grep -i "report"` shows
+  `report-uri /api/csp-report` and `Reporting-Endpoints: csp="/api/csp-report"`;
+  `curl -s -o /dev/null -w "%{http_code}" http://localhost:3100/api/csp-report`.
+- Expected: the reporting endpoint the policy names receives reports.
+- Observed: the route does not exist, and it cannot be built: a report
+  endpoint needs POST, and `scripts/check-api-routes.ts:110-128` (TS-017-A10)
+  fails the build on any non-GET handler under `app/**`. TS-014's reporting
+  half is inert by construction, and two smoke assertions currently certify
+  the dead pointer as correct. This is a spec collision to resolve, not a
+  coding slip.
+- Round decision: (Project Manager to set)
+
+## F-2-38 — Two pages read `?ort=` raw, bypassing the validator; no input anywhere has a length bound
+
+- Severity: medium
+- Source: chaos:boundary-tester (C-B-1, C-B-2) + qa (security sweep)
+- Where: `app/[lang]/mitmachen/registrieren/page.tsx:90`,
+  `app/[lang]/dein-kalender/bestellen/page.tsx:166`;
+  `src/components/search-field/search-field.tsx:73-83`,
+  `src/components/envoy-form-mount/envoy-form-mount.tsx:109-123`
+- Steps:
+  1. In a browser on `/dein-kalender/bestellen`, read the place-search
+     input's `maxlength` attribute — it is `null`.
+  2. Paste 10 000 characters into it, or into any envoy field; the value is
+     accepted whole.
+  3. Read the two page files above: both take `searchParams.ort` directly
+     instead of through `readPlaceParameter`.
+- Expected: `src/lib/pages/place-parameter.ts:1-19` states "everything the
+  page is allowed to do with it depends on it having passed through here
+  first", and `:25` caps the value at 80 characters.
+- Observed: those two routes skip the validator, so neither the 80-char cap
+  nor the character allowlist applies on them — and no input in the tree
+  carries `maxLength` on the client either. Server-side bounds exist only
+  on the BFF routes (`app/api/places/search/route.ts:20` ≤120,
+  `app/api/region/[county]/examples/route.ts:20` ≤80).
+- Explicitly **not** a finding: the chaos personas' XSS hypothesis
+  (C-B-3, C-B-4). The differential review traced both fields to every sink
+  and found no reflection — the repo's single `dangerouslySetInnerHTML`
+  (`src/lib/seo/structured-data/render.ts:33`) escapes `<` and is
+  unreachable from request data, canonical/OG strip every query parameter
+  (`src/lib/seo/canonical-params.ts:14-22`), URLs are built with
+  `URLSearchParams`, and the envoy form has no `action` and no named
+  fields, so nothing is submitted at all.
+- Round decision: (Project Manager to set)
+
+## F-2-39 — No island renders a skeleton: the streamed-shell contract of TS-009 is not built
+
+- Severity: high
+- Source: qa
+- Where: `app/[lang]/_islands.tsx:127` (`moduleSkeleton`, never called),
+  `app/[lang]/_proof.ts:104` · TS-005-A9, TS-009-A3, TS-009-A9
+- Steps: `grep -rn "<Suspense" app src --include='*.tsx'` → matches in
+  comments only, no JSX. `grep -rn "moduleSkeleton\|fallback=" app src` →
+  no call site. Request any of the twelve routes and `grep -c skeleton`
+  the HTML → 0 on every one.
+- Expected:
+  - TS-005-A9: "The route shell renders prerendered without waiting for the
+    engine; the static default appears before the segment variant."
+  - TS-009-A3: the shell "contains header, footer, copy and **all module
+    skeletons**".
+  - TS-009-A9: "For every D3 island, the skeleton's rendered box equals the
+    resolved module's box."
+- Observed: there is no `<Suspense>` boundary anywhere in the tree, so no
+  island has a fallback position to render into. `selectProof()` is
+  awaited inline in every page body (`page.tsx:178`,
+  `mitmachen/page.tsx:147`, `ueber-uns/page.tsx:139`,
+  `dein-kalender/page.tsx:126`, `deine-region/page.tsx:118`), so the shell
+  does wait for the engine and no static-default → segment-variant swap
+  exists. TTFB is fine (37–133 ms) and header/footer/copy are present; the
+  streaming half of the contract is simply absent.
+- Round decision: (Project Manager to set)
+
+## F-2-40 — Every content artefact is `status: draft` and every one of them renders
+
+- Severity: high
+- Source: qa
+- Where: all 22 files under `content/pages/`, plus
+  `content/legal/accessibility.md` · TS-007-A14
+- Steps: `grep -rn "^status:" content/pages content/legal | sort | uniq -c`;
+  then request any route and read the copy.
+- Expected: TS-007-A14 — "A production build contains only
+  `status: approved` content; a `draft` file renders in preview and reaches
+  no production page."
+- Observed: no gate exists at any stage. `grep -rn approved src app scripts`
+  finds only the schema enum and comments; `src/lib/content/loader.ts:197,215`
+  reads the status field and never filters on it. The accessibility
+  statement is among the drafts, and its own first paragraph says it "darf
+  ohne Freigabe … nicht produktiv veröffentlicht werden" — the site would
+  publish that sentence.
+- Round decision: (Project Manager to set)
+
+## F-2-41 — The context band is a `section` inside `main`, not an `aside`, and is missing from four pages
+
+- Severity: medium
+- Source: qa
+- Where: all twelve routes · TS-011-A4 (reference: F-2-10 covers only
+  registration steps 2–3)
+- Steps: `curl -s http://localhost:3100/dein-kalender | grep -o '<[a-z]* [^>]*context-band[^>]*>'`.
+- Expected: TS-011-A4 — "every listed secondary element renders inside an
+  `aside`, every primary element inside `main > article`; the context band
+  is an `aside` on every page."
+- Observed: the band renders as `<section aria-label="…" id="context-band">`
+  **inside `<main>`** on `/`, `/dein-ort`, `/mitmachen`, `/dein-kalender`,
+  `/deine-region`, `/dein-ort/starten` and `/mitmachen/registrieren`, and is
+  absent entirely on `/ueber-uns`, `/ueber-uns/archiv`, `/rechtliches` and
+  `/dein-kalender/bestellen`. Across all twelve pages there is exactly one
+  `<aside>` in total (on `/mitmachen`); the live counters render as
+  `<div id="live-counters">` inside `main`.
+- Round decision: (Project Manager to set)
+
+## F-2-42 — No page emits an OG image, and `twitter:card` is `summary`
+
+- Severity: medium
+- Source: qa
+- Where: every route, both locales · TS-011-A8, TS-011-A9 ·
+  `src/lib/routes/metadata.ts:53-65`
+- Steps: `curl -s http://localhost:3100/dein-kalender | grep -oE '<meta property="og:[^>]*>|<meta name="twitter:[^>]*>'`.
+- Expected: TS-011-A8 — the complete D6 tag set; TS-011-A9 — "The OG image
+  of every (path, language) responds 200, is 1200×630, within the size
+  budget, and shows text in that language."
+- Observed: `og:image`, `og:image:width`, `og:image:height`,
+  `og:image:alt` and `twitter:image` are absent on every page in both
+  locales, and `twitter:card` is `summary` where D6 fixes
+  `summary_large_image`. No `next/og` route or build step exists, so
+  TS-011-A9 has no subject at all. The equality clauses of A8 do hold:
+  `og:url` equals the canonical, `og:locale` matches `<html lang>`, and
+  `og:locale:alternate` matches the hreflang set.
+- Round decision: (Project Manager to set)
+
+## F-2-43 — Six declared build guards do not exist, so six criteria cannot fail anything
+
+- Severity: medium
+- Source: qa
+- Where: `scripts/check-*.ts`, `src/lib/content/validate.ts` · TS-002-A3,
+  TS-005-A15, TS-006-A8, TS-007-A4, TS-011-A7, TS-026-A8
+- Steps: run `pnpm check` (green), then look for each guard.
+- Expected / Observed, one line each:
+  - **TS-002-A3** "Automated contrast check of the token set passes for all
+    themes" — no script reads the brand token set and computes ratios;
+    the only contrast assertion is axe inside `e2e/a11y.spec.ts`, which
+    runs on rendered pages and is not part of `pnpm check`.
+  - **TS-005-A15** "A declared claim with a dangling proof id fails the
+    build" — there is no `claims` key in the frontmatter schema or in any
+    of the 22 artefacts, and `src/lib/content/validate.ts` contains zero
+    `proof` references. (Same root cause as the skipped TS-020-A5.)
+  - **TS-006-A8** "Content lint: zero hits of the generic-claims term list"
+    — the list does not exist; `specs/tactical/page-composition.tactical.md:317`
+    says so itself.
+  - **TS-007-A4** "The same revocation fails the build" — the build command
+    is `next build && node scripts/generate-csp-hashes.mjs`
+    (`package.json:12`); `check:content` is not a build step, and
+    `validate.ts` implements no clearance check at all.
+  - **TS-011-A7** "unique non-empty title ≤ 60 chars and a description of
+    120–158 chars; violations fail the build" — nothing measures either.
+    Values happen to comply today because one placeholder template
+    produces them (`src/lib/routes/metadata.ts:9-11`).
+  - **TS-026-A8** "The response-time wording exists in exactly one module;
+    a content lint fails on that wording in any content file" — the
+    wording ships in `content/pages/deine-region/de.md:138` and `en.md:138`
+    and in a second module (`src/components/gallery.tsx:1112`), and no
+    term lint exists.
+- Not re-filed here, per `plan/gate-2-scope.md` §1.3: TS-007-A3, A6, A13 and
+  A16 are the same class of gap and are **recorded against F-2-18**. Two
+  of them were re-confirmed this run: no glossary lint exists (A13), and
+  no segment-independence lint exists (A16) — F-2-34 is the counter-example
+  of an interpolation slot that ships unfilled. `src/lib/content/validate.ts:14,16`
+  marks its own facet-completeness and harmonisation rows "partial", which
+  is why A6 and A9 cannot be discharged either.
+- Round decision: (Project Manager to set)
+
+## F-2-44 — The type scale is declared outside the token import and goes below 15 px
+
+- Severity: medium
+- Source: qa (`web-design-guidelines`)
+- Where: `app/styles/components.css:28-46`,
+  `src/components/event-row/event-row.module.css:29`,
+  `scripts/check-brand.ts:79-84` · TS-002-A10
+- Steps: `pnpm check:brand` (reports "no errors"), then read the files.
+- Expected: TS-002-A10 — "No font family, size or weight is declared
+  outside the token import; the rendered type scale equals `font.*` from
+  the brand package, and no size below 15 px appears."
+- Observed: `components.css` defines its own scale with literals that have
+  no `font.*` counterpart; `--type-label-size: 0.75rem` is 12 px and
+  `--type-microlabel-size: 0.6875rem` is 11 px — the file's own comment
+  concedes it is "below the 15px floor". `event-row.module.css:29` is a
+  bare `font-size: 28px`, and `font-weight: 700/800` literals appear in
+  roughly thirty module stylesheets. `check-brand.ts` guards only colour
+  literals and `font-family`, so the size and weight halves of the
+  criterion are unguarded as well as unmet.
+- Round decision: (Project Manager to set)
+
+## F-2-45 — The landing-only domain rule is not implemented: every path answers 200 on `.at`/`.pl`/`.com`
+
+- Severity: medium
+- Source: qa
+- Where: `src/lib/routes/host-matrix.ts:29` (`kind: "landing"`, no
+  consumer), `src/lib/routes/next-routing.ts:15` · TS-004-A3, TS-004 D1
+- Steps: `curl -s -o /dev/null -w "%{http_code}" -H "Host: www.schafvormfenster.at" http://localhost:3100/mitmachen`.
+- Expected: TS-004-A3 — "Landing-only domain: `/` and legal routes 200,
+  `/mitmachen` 404"; TS-004 D1 — on the landing-only domains "every other
+  path 404s".
+- Observed: `/` 200, `/rechtliches` 200 and `/mitmachen` **200**.
+  `host-matrix.ts` carries the `kind: "landing"` flag but nothing reads it,
+  and `next-routing.ts:15` records that the host-dependent half of D3 is
+  not built.
+- Note: distinct from TS-001-A9, which `plan/gate-2-scope.md` §4 puts out
+  of scope for being about real domains over HTTPS. This one is the
+  in-tree routing rule and is checkable locally.
+- Round decision: (Project Manager to set)
+
+## F-2-46 — `/en/legal` renders German bodies, and generation-only frontmatter passes validation
+
+- Severity: medium
+- Source: qa
+- Where: `content/legal/` (flat, no locale level),
+  `src/lib/content/legal-loader.ts:5-9`, `content/legal/accessibility.md:5-11`
+  · TS-007-A11
+- Steps: `ls content/legal`; `curl -s http://localhost:3100/en/legal`.
+- Expected: TS-007-A11 — "`content/legal/<locale>/` renders as the anchored
+  sections of the one legal page in registry order; anchors match TS-004 D8;
+  a legal file carrying generation-only fields fails validation."
+- Observed: `content/legal/` is six flat `.md` files with no `<locale>/`
+  level. `/en/legal` renders the correct English anchors in registry order
+  but **German section bodies**. Separately,
+  `content/legal/accessibility.md` carries `derived_from`, `generated_by`,
+  `generated_at` and `provenance: generated` — all forbidden for a
+  `legal-section` by D10 — and `pnpm check:frontmatter` still reports "All
+  frontmatter is valid", because the Zod objects are non-strict and drop
+  unknown keys.
+- Side observation, same area: the English newsletter consent link points
+  at `/en/legal#datenschutz`, an anchor that does not exist on the English
+  page (it uses `#privacy`).
+- Round decision: (Project Manager to set)
+
+## F-2-47 — Archive rows carry neither a preview image nor an outbound link
+
+- Severity: medium
+- Source: qa
+- Where: `/ueber-uns/archiv`, `/en/about/archive` ·
+  `app/[lang]/ueber-uns/archiv/page.tsx:144-152`,
+  `src/components/archive-row/archive-row.tsx:25-29` · TS-016-A7, TS-028-A14
+- Steps: open `/ueber-uns/archiv` and inspect any row.
+- Expected: TS-016-A7 — "every archive entry renders an own preview image
+  served from our own origin plus one outbound link with descriptive text";
+  TS-028-A14 — "the outbound link opens the original at the outlet, its
+  link text names source and subject, and it carries `rel="noopener"`".
+- Observed: `ArchiveRow` is invoked with `contextLine`, `date`, `demo`,
+  `outlet`, `title`, `types` — no `previewSrc` and no `href`. The component
+  declares both optional and treats a missing preview and a missing link as
+  legitimate variants, so no row has either. The no-embed half of A7 does
+  hold and is enforced (`object-src`/`frame-src 'none'`,
+  `src/lib/security/csp.ts:129-130`).
+- Round decision: (Project Manager to set)
+
+## F-2-48 — S2's quote mount is missing on `/deine-region`, and no lead form has a honeypot or a timing gate
+
+- Severity: medium
+- Source: qa
+- Where: `app/[lang]/deine-region/page.tsx`,
+  `src/components/envoy-form-mount/envoy-form-mount.tsx` · TS-016-A2,
+  TS-016-A10
+- Steps:
+  1. `curl -s http://localhost:3100/deine-region | grep -o '<form[^>]*data-envoy[^>]*>'`.
+  2. `grep -rni "honeypot" src app e2e`.
+- Expected: TS-016-A2 — "Every D1 lead surface (S1, S2) renders the envoy
+  mount point with the D2 attributes"; D1 row S2
+  (`specs/tactical/forms-and-leads.tactical.md:45`) names **both**
+  `/deine-region` and `/deine-region/angebot`. TS-016-A10 — honeypot
+  present, hidden from assistive technology, not focusable; a submission
+  faster than the timing threshold rejected.
+- Observed: `/deine-region` renders only the site-wide footer contact mount
+  — `EnvoyFormMount` does not appear in the page at all, so the quote mount
+  exists only on `/deine-region/angebot`. And `honeypot` has zero hits
+  anywhere; the rendered forms contain only their visible fields, and there
+  is no submit handler of any kind (no `onSubmit`, no `"use client"`, no
+  `"use server"`), so nothing could reject anything. The captcha clause of
+  A10 passes cleanly.
+- Note: the widget itself is a declared mock (`state/open.md` row 7); this
+  finding is about the mount and the anti-spam contract the website owns,
+  not about the widget's behaviour.
+- Round decision: (Project Manager to set)
+
+## F-2-49 — `/dein-ort/starten` never re-resolves, and echoes the raw parameter as the place name
+
+- Severity: medium
+- Source: qa
+- Where: `/dein-ort/starten` · TS-021-A7
+- Steps:
+  - `curl -s -o /dev/null -w "%{http_code} %{redirect_url}" "http://localhost:3100/dein-ort/starten?ort=beispielwalde"`
+  - then read the rendered copy.
+- Expected: TS-021-A7 — "a value that now resolves produces exactly one 302
+  to `/dein-ort?ort=<slug>`" (DEC-070 re-resolution).
+- Observed: the request answers **200**, not 302. Worse, `beispielwalde` is
+  a covered demo place *with* dates, and the page tells the visitor
+  "beispielwalde steht noch nicht im Dorfkalender" — a covered place is
+  told it is not covered. The raw parameter is also echoed verbatim as the
+  place name ("beispielwalde eintragen", lowercase) instead of the resolved
+  name "Beispielwalde".
+- Round decision: (Project Manager to set)
+
+## F-2-50 — `/deine-region`'s manifest declares one live module where D1 names four
+
+- Severity: medium
+- Source: qa
+- Where: `app/[lang]/deine-region/page.meta.ts:25-31` · TS-026-A15
+- Steps: compare the file against the D1 table in
+  `specs/tactical/pages/deine-region.tactical.md`.
+- Expected: TS-026-A15 — "`page.meta.ts` for `/deine-region` matches D1
+  field by field".
+- Observed: `liveModules` declares one entry
+  (`position-3-active-places-in-the-county`) where D1 names four (county
+  examples · counters · place search · embed demo position 1′), and D1's
+  `offerings` row has no field in `PageMeta` and is not declared. Unlike
+  the six other manifests this route has **no** `page.meta.test.ts`, so
+  nothing catches the drift. The JSON-LD half of the criterion passes:
+  `regionServiceNode` (`src/lib/seo/structured-data/service.ts:75-81`)
+  emits `Service` with no `offers` and no price property.
+- Round decision: (Project Manager to set)
+
+## F-2-51 — Order step 3 offers two calls to action, one of them inert
+
+- Severity: medium
+- Source: uat (order walk) + qa
+- Where: `/dein-kalender/bestellen?orte=…&schritt=3` ·
+  `app/[lang]/dein-kalender/bestellen/page.tsx:242-264`
+- Steps: open `/dein-kalender/bestellen?orte=beispielwalde&schritt=3` and
+  list the controls inside `main`.
+- Expected: one primary action per step (TS-006 D-level, one primary
+  conversion per screen).
+- Observed: the step renders the envoy form's own **"Absenden"** submit
+  button *and* a `data-cta="primary"` **"Weiter"** link. "Weiter" is the
+  one that advances (to `?…&schritt=4`, verified). "Absenden" does nothing
+  at all — the mocked mount has no `action` and no named fields — but it is
+  the button a visitor filling in invoice details reaches for. UAT stopped
+  here and had to work out which control was real.
+- Correction to the UAT note: "Weiter" does navigate; the earlier
+  observation that it did nothing did not reproduce.
+- Round decision: (Project Manager to set)
+
+## F-2-52 — TS-010-A5 and TS-027-A7 contradict each other on the stage-0 empty proof slot
+
+- Severity: medium
+- Source: qa
+- Where: `/mitmachen`, `/ueber-uns` at stage 0 · TS-010-A5 vs TS-027-A7 and
+  SRC-001 §4
+- Steps: `curl -s http://localhost:3100/mitmachen | grep -o 'data-empty-proof="true"'`.
+- Expected: TS-010-A5 — at stage 0 "every page renders fully — place search
+  present, **no empty slot**, no unresolved skeleton". TS-027-A7 — with no
+  cleared testimonial, "6 filled + 1 empty, and the 7th position is not
+  backfilled".
+- Observed: one `EmptyProofSlot` ("Kein Nachweis") renders on each page at
+  stage 0. Judged against TS-010-A5's own words this is a fail; judged
+  against TS-027-A7 it is required. Both cannot hold — one criterion needs
+  amending. Everything else in A5 passes (place search on all twelve pages,
+  no skeletons, no geo lookup).
+- Load-bearing note for whoever resolves it: `src/lib/relevance/select.ts:80-105`
+  has no type reservation and no no-backfill rule — it slices to
+  `SURFACE_COUNTS.stream = 7` and pads with generic empties. Today's 6+1 is
+  an artefact of a six-element pool, not an enforced reservation, so
+  TS-027-A7's second clause is unguarded even where it is satisfied.
+- Round decision: (Project Manager to set)
+
+## F-2-53 — "1 Orte ausgewählt": the German plural form is used for a count of one
+
+- Severity: low
+- Source: uat (order walk) + qa
+- Where: `/dein-kalender/bestellen`, scope chip counter ·
+  `app/[lang]/dein-kalender/bestellen/page.tsx:94`
+- Steps: open `/dein-kalender/bestellen?orte=beispielwalde`.
+- Expected: "1 Ort ausgewählt".
+- Observed: "1 Orte ausgewählt". `SELECTED_COUNT` is
+  `(n) => \`${n} Orte ausgewählt\`` with no singular branch; the English
+  variant has the same shape ("1 places selected").
+- Round decision: (Project Manager to set)
+
+## F-2-54 — Step 4 promises an email that nothing sends
+
+- Severity: low
+- Source: uat (order walk)
+- Where: `/dein-kalender/bestellen`, step 4 ·
+  `content/pages/dein-kalender/bestellen/*.md`
+- Steps: open `/dein-kalender/bestellen?orte=beispielwalde&schritt=4`.
+- Expected: the completed-conversion screen makes no promise the system
+  cannot keep.
+- Observed: "Kopiere den Code jetzt — er wird zusätzlich an die angegebene
+  E-Mail-Adresse geschickt." Nothing is sent: the envoy mount has no
+  `action` and no named fields, and no address is ever collected. The
+  `Demo-Daten` badge does render next to the snippet, so the mock-labelling
+  guardrail itself is satisfied — the false promise is the defect.
+- Round decision: (Project Manager to set)
+
+## F-2-55 — Two rows of the D1 URL inventory do not exist, and the criteria that guard it are self-referential
+
+- Severity: medium
+- Source: qa
+- Where: `src/lib/routes/routes.ts` (route registry), `/start`, `/llms.txt`
+  · TS-004-A1, TS-004-A5, TS-004 D1
+- Steps:
+  - `curl -s -o /dev/null -w "%{http_code}" http://localhost:3100/start` → **404**
+  - `curl -s -o /dev/null -w "%{http_code}" http://localhost:3100/llms.txt` → **404**
+  - `/robots.txt` and `/sitemap.xml` both 200.
+  - `pnpm build` route manifest lists neither path.
+- Expected:
+  - TS-004 D1 names `/sitemap.xml · /robots.txt · /llms.txt` as machine
+    surfaces "per domain", and `/start` as a redirect-only row that exists
+    "so that no lead surface hard-codes a third-party URL: every fallback
+    links to `/start`".
+  - TS-004-A1: "Every D1 path responds 200 on `.de`, bare and `/en/…`".
+  - TS-004-A5: "`sitemap.xml`, `robots.txt`, `llms.txt` respond per domain".
+- Observed: both rows are absent from the route registry, so neither is
+  built. The failure is hidden because the tests naming both criteria
+  assert against the registry rather than against D1:
+  `src/lib/routes/routing.integration.test.ts:84` iterates `ROUTE_IDS`
+  (the twelve content routes only), and the `TS-004-A5` block at `:202`
+  checks the sitemap alone and never requests `llms.txt`. Both suites are
+  green.
+- Consequence for TS-016 D6: with `/start` missing, the lead fallback has
+  no indirection target, which is one of the two reasons F-2-32's briefing
+  URLs are pasted per page.
+- Round decision: (Project Manager to set)
+
+## F-2-56 — No route is partially prerendered; four content routes are fully dynamic
+
+- Severity: medium
+- Source: qa
+- Where: `pnpm build` route manifest · TS-009-A2 (reference: F-2-39)
+- Steps: `pnpm build` (exit 0), then read the Route (app) table.
+- Expected: TS-009-A2 — "Build manifest: every TS-004 D1 route emits a
+  prerendered shell; zero routes are fully dynamic."
+- Observed: **zero** routes are marked `◐ (Partial Prerender)`, so no route
+  emits a prerendered shell with streamed content at all. Four content
+  routes are marked `ƒ (Dynamic)` — `/dein-ort`, `/dein-ort/starten`,
+  `/dein-kalender/bestellen`, `/mitmachen/registrieren` — in both locales.
+  The remaining eight are fully static `○`, which is the opposite failure
+  mode: static, not a shell plus islands.
+- Note: `cacheComponents: true` is set (`next.config.ts:8`) and the build
+  is green, so TS-009-A1 passes; the flip has simply not produced a PPR
+  boundary anywhere, which is the same root cause as F-2-39.
+- Round decision: (Project Manager to set)
+
+## F-2-57 — Three claims ship without the confirmation their criteria make a precondition
+
+- Severity: medium
+- Source: qa
+- Where: `/deine-region`, `/dein-kalender` · TS-016-A13, TS-024-A19,
+  TS-026-A17
+- Steps / Expected / Observed, one per criterion:
+  - **TS-016-A13** — "The two-working-day promise copy on `/deine-region`
+    is present only when the lead-handling process behind it is named and
+    signed off (C11); absent otherwise." The promise ships
+    (`content/pages/deine-region/de.md:138`, `en.md:138`); C11 in
+    `specs/tactical/forms-and-leads.tactical.md` is UNKNOWN and no sign-off
+    record exists. The criterion's own fallback ("absent otherwise") is not
+    taken. **fail**
+  - **TS-024-A19** — "Every sentence in `data-block=\"trust\"` about
+    operations and AI names a hub record in its `derived_from`. A sentence
+    without one blocks the block from shipping." `pnpm check:content`
+    reports `content/pages/dein-kalender/de.md › dein-kalender-6-trust`
+    and its EN twin as "[provenance] empty `derived_from`" — a warning, not
+    a block, and the block ships. **fail**
+  - **TS-026-A17** — "Before the page claims the map view as part of the
+    package, the offering owner confirms it is shippable to a buyer.
+    Unconfirmed → the claim is removed, not qualified." `/deine-region`
+    carries the map claim ("Der ganze Landkreis auf einer Karte …"); no
+    confirmation record exists, and F-2-21 shows the map-shaped placeholder
+    is still in the manifest. **fail**
+- Round decision: (Project Manager to set)
+
+## F-2-58 — The axe sweep covers one of the three declared themes, so five criteria are only partly discharged
+
+- Severity: medium
+- Source: qa (`web-design-guidelines`)
+- Where: `e2e/a11y.spec.ts:26-30` · TS-002-A1, TS-029-A12, TS-016-A8,
+  TS-023-A16, TS-025-A12 (reference: F-2-6, which delivered the instrument)
+- Steps: read the spec header; run `pnpm e2e` and count the generated cases
+  (24 routes × 2 viewports = 48, all green).
+- Expected: all five criteria say "in all three themes" (TS-002-A1 and
+  TS-029-A12 literally "in all three [D4] themes"; TS-016-A8 and
+  TS-025-A12 "in light, dark and high contrast"; TS-023-A16 "in all three
+  themes").
+- Observed: the sweep "runs the default (light, no-preference) theme only —
+  the three-theme matrix is out of this bounded round and stays a gap", in
+  the spec file's own words. Dark and high-contrast are never swept on any
+  route. Three further clauses have no instrument at all: the widget's
+  shadow root (TS-016-A8, TS-025-A12), the per-step sweep of the register
+  and order flows (TS-023-A16, TS-025-A12 — only the flows' first step is
+  in the route list), and "after each advance focus sits on the new step's
+  heading" (TS-023-A16).
+- Note: what the instrument does cover is genuinely green, at both
+  reference viewports, on all 24 routes, and Lighthouse accessibility
+  measures 100 on mobile and desktop for `/` on the preview. This finding
+  is about the uncovered remainder, not about a regression.
+- Round decision: (Project Manager to set)
+
+## F-2-59 — The archive filter updates its count but hides no rows
+
+- Severity: high
+- Source: qa (cross-checked twice after a disagreeing first measurement)
+- Where: `/ueber-uns/archiv`, `/en/about/archive` · TS-028-A4 (and TS-028-A6,
+  which becomes vacuous)
+- Steps:
+  1. Open `/ueber-uns/archiv` and read the count line: "6 VON 6 EINTRÄGEN",
+     six rows rendered, one per type.
+  2. Click the chip "Presse".
+  3. Read the count line and the rows again.
+- Expected: TS-028-A4 — "Selecting two chips shows the union; an entry
+  carrying both types appears exactly once." Selecting one chip must show
+  only the rows of that type.
+- Observed: the count line changes to "**1 VON 6 EINTRÄGEN**" and the chip's
+  `aria-pressed` flips to `true`, but **all six rows stay rendered and
+  visible**. The "Auszeichnung" row (04. November 2025) is still in
+  `main`'s text and still returns client rects after "Presse" is selected.
+  Adding a second chip changes nothing either. The filter therefore
+  announces a filtered result set to a screen-reader user while the visual
+  list is unfiltered — the two disagree.
+- Measurement note, because it nearly went the other way: a first pass
+  using `offsetParent !== null || display !== "none"` as the visibility
+  test was wrong, and a parallel check that read only the count line
+  concluded the filter worked. The verdict above rests on
+  `getClientRects().length > 0` per row **and** on the rendered `main`
+  text before and after the click, which agree with each other.
+- Consequence for the chaos protocol: C-K-3 verified the chips are
+  keyboard-reachable and that Enter activates them; it did not verify what
+  activation does. That gap is what this finding closes.
+- Round decision: (Project Manager to set)
+
+## F-2-60 — `buy-calendar-licence` fires a second time on client-side back/forward
+
+- Severity: high
+- Source: qa
+- Where: `/dein-kalender/bestellen` step 4 · TS-012-A5, TS-016-A12,
+  TS-025-A11
+- Steps:
+  1. Open `/dein-kalender/bestellen?orte=beispielwalde&schritt=3`.
+  2. Click "Weiter" — a Next `<Link>`, zero document requests recorded, so
+     this is a soft navigation. One `buy-calendar-licence` event with
+     `stage: completed` fires.
+  3. Press Back, then Forward. Both are soft navigations (still zero
+     document requests).
+- Expected: TS-012-A5 — "Each wired D4 trigger emits exactly one event …
+  client-side navigation back and forth does not replay it"; TS-016-A12 —
+  "once per completed flow"; TS-025-A11 — "Exactly one
+  `buy-calendar-licence` event with stage `completed` fires".
+- Observed: a **second** identical `buy-calendar-licence` /
+  `stage: completed` event fires on the forward navigation. The trigger is
+  `FireConversionOnMount` at
+  `app/[lang]/dein-kalender/bestellen/page.tsx:270`, which re-mounts.
+- Impact: the one goal that is wired at `stage: completed` over-counts. The
+  briefing handover does **not** replay on reload, so the defect is
+  specific to the step-4 completion mount.
+- Note: the event currently goes to `createMockTracker()` by decision, so
+  no real number is wrong yet — but the trigger contract is, and the real
+  adapter flag is the only thing between this and a wrong number.
+- Round decision: (Project Manager to set)
+
+## F-2-61 — `/dein-ort`'s empty state changes neither the primary CTA nor position 2, and leaks raw markdown
+
+- Severity: high
+- Source: qa
+- Where: `/dein-ort?ort=<covered place with no dates>` · TS-008-A6
+- Steps: open `http://localhost:3100/dein-ort?ort=38165` at 1280×800
+  (`38165` resolves to the demo place "Beispielhausen", which has no dates).
+- Expected: TS-008-A6 — "focus job and primary CTA switch to publishing,
+  the place name appears escaped in the copy, URL and canonical are
+  unchanged, position 2 renders labelled as surroundings."
+- Observed:
+  - `[data-cta="primary"]` is still the place search's
+    `<button type="submit">Suchen</button>`. The only publishing action,
+    "Ersten Termin veröffentlichen", carries no `data-cta` and targets
+    `/mitmachen`, not the `register-as-publisher` target
+    `/mitmachen/registrieren`. The primary conversion does not switch.
+  - Position 2 renders **empty**: the section that shows "Diese Woche in
+    der Nähe" for `?ort=07743` has no surroundings heading and no dates
+    here.
+  - The lead paragraph renders the raw placeholder
+    ``Ersten Termin veröffentlichen → `/mitmachen` `` — literal backticks
+    and an arrow, as visitor copy.
+  - Passing clauses: URL and canonical unchanged
+    (`canonical = …/dein-ort`), and the place name is escaped
+    (`?ort=<img src=x onerror=…>` injects no element).
+- Round decision: (Project Manager to set)
+
+## F-2-62 — Entering registration from `/dein-ort/starten` skips step 1, and the place is neither shown nor changeable
+
+- Severity: high
+- Source: qa
+- Where: `/dein-ort/starten` → `/mitmachen/registrieren` · TS-023-A7
+- Steps: open `/dein-ort/starten?ort=07743` and click the primary CTA
+  ("07743 eintragen" → `/mitmachen/registrieren?ort=07743`).
+- Expected: TS-023-A7 — "Following the CTA on `/dein-ort/starten?ort=X`
+  lands on this page with step 1 answered as X, **the place visible and
+  changeable, and step 1 not skipped**."
+- Observed: the page renders "SCHRITT 2 VON 3 — Wer veröffentlicht die
+  Termine?". Step 1 is not displayed at all, the resolved place name
+  appears nowhere on the screen, and no control offers to change it. A
+  visitor who mistyped her postcode on the previous page cannot see or
+  correct which place she is registering for.
+- Relation to F-2-30: the same CTA is what the founding path should hand
+  over; with F-2-30 open, almost nobody reaches this page in the first
+  place, which is why the defect has not been noticed.
+- Round decision: (Project Manager to set)
+
+## F-2-63 — `/deine-region` asserts a county at stage 0, and names it with a raw internal id
+
+- Severity: medium
+- Source: uat (`/deine-region` walk) + qa
+- Where: `/deine-region`, `/en/your-region`, block 3 · TS-026-A10,
+  TS-026 D4
+- Steps: open `/deine-region` in a clean context — no geolocation, no
+  `?ort=`, no referrer.
+- Expected: TS-026-A10 — "Stage 0 …: block 3 renders the place search,
+  **asserts no county name** and shows no county-dependent counter";
+  TS-026 D4 — "Without an anchor no county name is asserted and the
+  county-dependent parts do not render."
+- Observed: block 3's heading reads "So sieht das heute schon aus:
+  Beispiele aus dem **Landkreis geoname.900001**", followed by five county
+  example places. A county is asserted with no anchor, and the asserted
+  name is an unresolved geo-api identifier rendered as visitor copy — the
+  same class of leak as F-2-35. The place search *is* present in the block
+  and the block sequence matches the located render, so the rest of A10
+  holds.
+- Round decision: (Project Manager to set)
+
+## F-2-64 — The newsletter consent line links a legal anchor that does not exist in English
+
+- Severity: medium
+- Source: qa
+- Where: the footer newsletter block on all 24 routes · TS-004-A8,
+  TS-004-A9
+- Steps: open any `/en/…` route, read the consent line's
+  `Datenschutzerklärung` link target, then open it.
+- Expected: TS-004-A8 — "every internal link resolves within the D1
+  inventory"; TS-004-A9 — each legal link resolves "to its anchor on
+  `/rechtliches`".
+- Observed: the link targets `/en/legal#datenschutz`. The English legal
+  page uses `#privacy`; there is no `#datenschutz` id on it, so the link
+  lands at the top of the page instead of at the privacy section. The three
+  named footer legal links (Imprint / Privacy / Accessibility) are correct
+  — this is the fourth, inline one in the consent sentence.
+- Note: the same consent sentence is the German-on-English string of
+  F-2-33 and carries the `Q-020` id of F-2-35; all three defects sit in one
+  block.
+- Round decision: (Project Manager to set)
