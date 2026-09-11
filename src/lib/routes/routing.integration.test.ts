@@ -245,19 +245,24 @@ describe("TS-011-A1: the redirect map has one source per URL and no chains", () 
 });
 
 describe("TS-011-A2: the /hilfe family redirects in one hop to the app", () => {
+  // The legacy map is append-only (TS-011 D1) and grew at M4 with the rest
+  // of SRC-010's inventory (`redirect-map.ts`) — this checks the /hilfe
+  // family specifically, not the whole table's exact shape.
   it("carries the path and its subtree, both 301", () => {
-    expect(legacyRedirects()).toEqual([
-      {
-        source: "/hilfe",
-        destination: "https://app.schafe-vorm-fenster.de",
-        statusCode: 301,
-      },
-      {
-        source: "/hilfe/:path*",
-        destination: "https://app.schafe-vorm-fenster.de",
-        statusCode: 301,
-      },
-    ]);
+    expect(legacyRedirects()).toEqual(
+      expect.arrayContaining([
+        {
+          source: "/hilfe",
+          destination: "https://app.schafe-vorm-fenster.de",
+          statusCode: 301,
+        },
+        {
+          source: "/hilfe/:path*",
+          destination: "https://app.schafe-vorm-fenster.de",
+          statusCode: 301,
+        },
+      ]),
+    );
   });
 
   it("evaluates the legacy map before any locale rule", () => {

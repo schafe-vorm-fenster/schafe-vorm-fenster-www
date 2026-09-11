@@ -6,24 +6,47 @@
  * exactly this file. The table is **append-only**: rows are never deleted,
  * because the links pointing at them are not ours to fix.
  *
- * ### State at M2
+ * ### State at M4
  *
- * This is the mechanism plus the one row DEC-047 fixes. The legacy inventory
- * itself is blocked on Q-016 (no export of indexed URLs exists) and lands in
- * M4 — the table below is deliberately almost empty, not forgotten.
+ * The table now carries the confirmed floor of TS-011 D2 — extracted from
+ * SRC-010's route files (`legacy-content/app/`), which is what exists: a
+ * route inventory, not an indexed-URL export. Q-016 (that export) is still
+ * open, so D2 stays [PROPOSED] until it lands and this table is the
+ * confirmed floor, not the finished inventory (`redirectMapViolations` is
+ * what a wider inventory has to keep passing).
  *
  * ### Deviation from TS-011 D1, recorded
  *
  * D1 names `proxy.ts` as the single consumer and rules out config-level
- * `redirects()`. M2 consumes the table in `next.config.ts` instead: the
- * substance of D1 — *one legacy URL is known in one place only* — is kept
- * (this file is that place), and `next.config.ts` evaluates redirects before
- * every rewrite, so D1's "step 0, before any locale rule" ordering holds.
- * Moving the consumer into `proxy.ts` when M4 adds the host-dependent rules
- * changes the consumer, not this table. See `state/open.md`.
+ * `redirects()`. This table is still consumed via `next.config.ts`
+ * (`next-routing.ts`'s `legacyRedirects()`), not `proxy.ts`: the substance of
+ * D1 — *one legacy URL is known in one place only* — is kept (this file is
+ * that place), and `next.config.ts` evaluates redirects before every
+ * rewrite, so D1's "step 0, before any locale rule" ordering holds. Moving
+ * the *consumer* into `proxy.ts` is a mechanical change to `next-routing.ts`/
+ * `next.config.ts`, neither of which this work package owns; recorded as
+ * open (state/open.md).
+ *
+ * ### `/start` — row 40's contradiction, resolved
+ *
+ * TS-011 D2 proposed `/start` → `/mitmachen`. TS-016 D6 (forms-and-leads)
+ * separately makes `/start` a **live route** that joins the TS-004 D1
+ * inventory itself, redirecting on to the Google Form lead fallback — the
+ * same functional job the legacy "Anmelden" page at that exact URL did.
+ * One path cannot carry both a redirect-map row and a page route: whichever
+ * exists, the other never runs (`next.config.ts` evaluates redirects before
+ * any route matches).
+ *
+ * **Decision:** no redirect-map row for `/start`. The URL stays live,
+ * unchanged, as TS-016's route — which satisfies WEB-F-070 ("stable URLs or
+ * 301") more directly than moving it: nothing about the URL changes, and
+ * its audience (visitors wanting to register) lands exactly where the
+ * legacy page put them, one hop closer to signup than a stop at
+ * `/mitmachen` would be. Recorded in `state/open.md` row 40.
  */
 
-import { APP_ORIGIN } from "./routes";
+import { legalAnchor } from "./legal-anchors";
+import { APP_ORIGIN, href } from "./routes";
 
 export interface RedirectRow {
   /**
@@ -55,6 +78,32 @@ export const LEGACY_REDIRECTS: readonly RedirectRow[] = [
       "DEC-047 — support articles moved to the app. Interim target is the app root " +
       "until the app publishes a per-article URL contract (Q-041, state/open.md row 8).",
   },
+  {
+    from: "/funktionen",
+    to: href("calendar", "de"),
+    reason:
+      "TS-011 D2 — the legacy feature list (10 markdown features under " +
+      "legacy-content/app/funktionen/). /dein-kalender is the only page that " +
+      "still argues features.",
+  },
+  {
+    from: "/presse",
+    to: href("archive", "de"),
+    reason:
+      "TS-011 D2 — the legacy press page. The proof archive is its successor " +
+      "(WEB-F-018).",
+  },
+  {
+    from: "/impressum",
+    to: `${href("legal", "de")}#${legalAnchor("imprint", "de")}`,
+    reason:
+      "TS-011 D2 — the legacy page carried imprint and privacy together " +
+      "(one page, footer linked both here); the anchor is TS-004 D8's.",
+  },
+  // `/hilfe/{slug}` is covered by the `/hilfe` wildcard row above (DEC-047).
+  // `/start` is deliberately **not** a row here — see the module doc above
+  // ("`/start` — row 40's contradiction, resolved"): it stays a live route
+  // under TS-016, not a legacy redirect.
 ];
 
 /**
