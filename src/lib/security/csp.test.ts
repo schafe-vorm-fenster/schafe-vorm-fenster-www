@@ -3,7 +3,9 @@ import { describe, expect, it } from "vitest";
 import {
   ALLOWLIST,
   contentSecurityPolicy,
+  isScriptHash,
   policyDirectives,
+  SCRIPT_HASH_PATTERN,
   STATIC_SECURITY_HEADERS,
   strictTransportSecurity,
 } from "@/src/lib/security/csp";
@@ -205,5 +207,43 @@ describe("TS-014 D4/D5: security headers, header by header", () => {
     );
     expect(strictTransportSecurity("development")).toBeNull();
     expect(strictTransportSecurity("production")).not.toContain("preload");
+  });
+});
+
+describe("F-2-36: script-src accepts nothing but a real sha256 source", () => {
+  const valid = `sha256-${"A".repeat(43)}=`;
+
+  it("drops every malformed entry before it can be interpolated", () => {
+    const { "script-src": scriptSrc } = policyDirectives({
+      environment: "production",
+      scriptHashes: [
+        valid,
+        "sha256-abc",
+        "' 'unsafe-inline",
+        "x'; script-src *; '",
+        `sha384-${"A".repeat(43)}=`,
+        `sha256-${"A".repeat(42)}==`,
+      ],
+    });
+    expect(scriptSrc).toContain(`'${valid}'`);
+    for (const token of scriptSrc) expect(token).not.toContain(";");
+    expect(scriptSrc.filter((token) => token.startsWith("'sha256-"))).toHaveLength(1);
+  });
+
+  it("treats a hash set that is entirely malformed as no hash set at all", () => {
+    // …so preview still gets its documented 'unsafe-inline' fallback rather
+    // than a policy that trusts nothing and blocks everything.
+    const { "script-src": scriptSrc } = policyDirectives({
+      environment: "preview",
+      scriptHashes: ["sha256-abc", "nonsense"],
+    });
+    expect(scriptSrc).toContain("'unsafe-inline'");
+    expect(scriptSrc.some((token) => token.includes("nonsense"))).toBe(false);
+  });
+
+  it("states the shape rather than implying it", () => {
+    expect(isScriptHash(valid)).toBe(true);
+    expect(isScriptHash("sha256-abc")).toBe(false);
+    expect(SCRIPT_HASH_PATTERN.source).toContain("sha256-");
   });
 });
