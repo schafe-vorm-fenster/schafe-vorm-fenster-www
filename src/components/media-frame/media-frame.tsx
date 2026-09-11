@@ -93,6 +93,7 @@ export function MediaFrame({
         className={className}
         cta={placeholderCta}
         headline={placeholderHeadline}
+        locale={locale}
         ratio={ratio}
       />
     );
@@ -118,7 +119,7 @@ export function MediaFrame({
         />
         {(notDepicting || isMocked(state)) && (
           <div className={styles.marks}>
-            {notDepicting ? <PlaceholderBadge /> : null}
+            {notDepicting ? <PlaceholderBadge locale={locale} /> : null}
             {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
           </div>
         )}

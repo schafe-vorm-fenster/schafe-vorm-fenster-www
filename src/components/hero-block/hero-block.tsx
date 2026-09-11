@@ -6,6 +6,8 @@ import { Skeleton } from "../skeleton/skeleton";
 import type { IconName } from "../icon/icon";
 import type { CSSProperties, ReactNode } from "react";
 
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./hero-block.module.css";
 
 export interface HeroBlockProps extends DataStateProps {
@@ -23,6 +25,8 @@ export interface HeroBlockProps extends DataStateProps {
   readonly gradient?: "ink" | "violet";
   readonly notDepicting?: boolean;
   readonly placeholderId?: string;
+  /** The page's language — forwarded to `photo-surface`'s own badges (F-2-4). */
+  readonly locale?: Locale;
   readonly id?: string;
   readonly className?: string;
 }
@@ -59,6 +63,7 @@ export function HeroBlock({
   gradient = "ink",
   notDepicting = false,
   placeholderId,
+  locale = "de",
   state = "ready",
   id,
   className,
@@ -72,6 +77,7 @@ export function HeroBlock({
       className={className}
       gradient={gradient}
       id={id}
+      locale={locale}
       notDepicting={notDepicting}
       placeholderId={placeholderId}
       ratio="hero"

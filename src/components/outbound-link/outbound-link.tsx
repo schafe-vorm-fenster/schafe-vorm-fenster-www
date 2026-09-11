@@ -1,5 +1,8 @@
 import { Icon } from "../icon/icon";
 
+import { dictionary } from "@/src/lib/i18n/dictionary";
+
+import type { Locale } from "@/src/lib/i18n/locales";
 import type { ReactNode } from "react";
 
 import styles from "./outbound-link.module.css";
@@ -14,6 +17,11 @@ export interface OutboundLinkProps {
   readonly variant?: "inline" | "secondary" | "quiet";
   /** The conversion marker the analytics registry reads (TS-006 D3) — e.g. `"equal-weight"`. */
   readonly dataCta?: string;
+  /**
+   * The page's language — the new-tab announcement was hard-coded German
+   * regardless of it (F-2-4, same root cause as `state/open.md` row 101).
+   */
+  readonly locale?: Locale;
   readonly className?: string;
   readonly children: ReactNode;
 }
@@ -40,10 +48,12 @@ export function OutboundLink({
   recipient,
   variant = "inline",
   dataCta,
+  locale = "de",
   className,
   children,
 }: OutboundLinkProps) {
   const classes = [styles.link, styles[variant], className].filter(Boolean).join(" ");
+  const words = dictionary(locale).outboundLink;
 
   return (
     <a
@@ -55,9 +65,12 @@ export function OutboundLink({
     >
       <span className={styles.text}>
         {children}
-        {newTab ? <span className={styles.hint}> (öffnet neuen Tab)</span> : null}
+        {newTab ? <span className={styles.hint}> ({words.newTab})</span> : null}
         {recipient ? (
-          <span className={styles.hint}> · Daten gehen an {recipient}</span>
+          <span className={styles.hint}>
+            {" "}
+            · {words.dataGoesTo} {recipient}
+          </span>
         ) : null}
       </span>
       <Icon className={styles.glyph} name="external-link" size={18} />

@@ -7,6 +7,8 @@ import { Skeleton } from "../skeleton/skeleton";
 
 import { photoUrl } from "./url";
 
+import { dictionary } from "@/src/lib/i18n/dictionary";
+
 import type { ReactNode } from "react";
 import type { CSSProperties } from "react";
 
@@ -101,6 +103,7 @@ export function PhotoSurface({
         className={className}
         cta={placeholderCta}
         headline={placeholderHeadline}
+        locale={locale}
         ratio={ratio}
       />
     );
@@ -121,8 +124,10 @@ export function PhotoSurface({
       <div className={styles.content}>
         {(missingPhoto || notDepicting || isMocked(state)) && (
           <div className={styles.marks}>
-            {missingPhoto ? <Badge tone="placeholder">Foto gesucht</Badge> : null}
-            {!missingPhoto && notDepicting ? <PlaceholderBadge /> : null}
+            {missingPhoto ? (
+              <Badge tone="placeholder">{dictionary(locale).media.photoWanted}</Badge>
+            ) : null}
+            {!missingPhoto && notDepicting ? <PlaceholderBadge locale={locale} /> : null}
             {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
           </div>
         )}

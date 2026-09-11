@@ -4,6 +4,8 @@ import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { SearchField } from "../search-field/search-field";
 import { Skeleton } from "../skeleton/skeleton";
 
+import { dictionary } from "@/src/lib/i18n/dictionary";
+
 import type { LinkOptions } from "../route-link/href";
 import type { RouteId } from "@/src/lib/routes/routes";
 
@@ -58,13 +60,13 @@ export interface PlaceSearchProps extends DataStateProps, Omit<LinkOptions, "has
  */
 export function PlaceSearch({
   to,
-  locale,
+  locale = "de",
   query,
-  label = "Ort oder Postleitzahl",
-  hint = "Bislang nur per Postleitzahl — die Ortssuche folgt.",
+  label,
+  hint,
   suggestions,
   defaultValue,
-  placeholder = "Postleitzahl",
+  placeholder,
   submitLabel,
   submitDataCta,
   tone = "light",
@@ -72,6 +74,15 @@ export function PlaceSearch({
   state = "ready",
   className,
 }: PlaceSearchProps) {
+  // The three words come from the dictionary unless the page's own content
+  // names one, so a page that forgets to pass its own copy falls back to the
+  // visitor's language rather than to German (F-2-4, same root cause as
+  // `state/open.md` row 101).
+  const words = dictionary(locale).search;
+  const resolvedLabel = label ?? words.label;
+  const resolvedHint = hint ?? words.hint;
+  const resolvedPlaceholder = placeholder ?? words.placeholder;
+
   const classes = [styles.module, tone === "dark" ? styles.dark : undefined, className]
     .filter(Boolean)
     .join(" ");
@@ -89,15 +100,15 @@ export function PlaceSearch({
       <SearchField
         defaultValue={defaultValue}
         id={id}
-        label={label}
+        label={resolvedLabel}
         locale={locale}
-        placeholder={placeholder}
+        placeholder={resolvedPlaceholder}
         query={query}
         submitDataCta={submitDataCta}
         submitLabel={submitLabel}
         to={to}
       />
-      <p className={styles.hint}>{hint}</p>
+      <p className={styles.hint}>{resolvedHint}</p>
       {suggestions && suggestions.length > 0 ? (
         <div className={styles.suggestions}>
           {suggestions.map((suggestion) => (

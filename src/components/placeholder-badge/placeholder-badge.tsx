@@ -1,9 +1,21 @@
 import { Badge } from "../badge/badge";
 
+import { dictionary } from "@/src/lib/i18n/dictionary";
+
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./placeholder-badge.module.css";
 
 export interface PlaceholderBadgeProps {
+  /** An explicit word, for a caller that has one. Otherwise `locale` decides. */
   readonly label?: string;
+  /**
+   * The page's language. Without it the badge said "Nicht motivgenau ·
+   * Platzhalter" on `/en` too (F-2-4, same root cause as `demo-data-badge`
+   * before it) — the label is a UI string and belongs in the dictionary, not
+   * in a component default.
+   */
+  readonly locale?: Locale;
   readonly className?: string;
 }
 
@@ -20,7 +32,8 @@ export interface PlaceholderBadgeProps {
  * A11y: readable text, checked at 4.5:1 for badge size.
  */
 export function PlaceholderBadge({
-  label = "Nicht motivgenau · Platzhalter",
+  label,
+  locale = "de",
   className,
 }: PlaceholderBadgeProps) {
   return (
@@ -29,7 +42,7 @@ export function PlaceholderBadge({
       icon="triangle-alert"
       tone="placeholder"
     >
-      {label}
+      {label ?? dictionary(locale).media.notDepicting}
     </Badge>
   );
 }

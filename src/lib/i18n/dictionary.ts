@@ -88,6 +88,42 @@ export interface Dictionary {
     places: string;
     updatesToday: string;
   };
+  /**
+   * The photo surface's own placeholder register (SRC-014 §Photo surface) —
+   * `photo-surface`, `placeholder-surface` and `placeholder-badge` take a
+   * `locale` and read these, for the same reason `live` above exists: a
+   * hard-coded German default renders on `/en` too (F-2-4).
+   */
+  media: {
+    /** The missing-photo hatch's badge — "Foto gesucht". */
+    photoWanted: string;
+    /** The missing-photo hatch's invitation headline. */
+    photoWantedHeadline: string;
+    /** The placeholder-photography badge — "Nicht motivgenau · Platzhalter". */
+    notDepicting: string;
+  };
+  /**
+   * `place-search`'s own ZIP-only-until-Q-025 words (TS-008 D7). A page
+   * usually supplies its own copy from content, but the component's default
+   * — used wherever a page does not — hard-coded German and rendered it on
+   * `/en` too (F-2-4), the same failure `live` and `media` above exist to
+   * prevent.
+   */
+  search: {
+    label: string;
+    placeholder: string;
+    hint: string;
+  };
+  /**
+   * `outbound-link`'s own announcements — hard-coded German regardless of
+   * `locale` before F-2-4, on every page that links off-site.
+   */
+  outboundLink: {
+    /** "(öffnet neuen Tab)" — announced in the link text itself (A11y). */
+    newTab: string;
+    /** "Daten gehen an <recipient>" — the recipient follows this phrase. */
+    dataGoesTo: string;
+  };
   /** Page titles, keyed by route id. Placeholders until M3 (TS-011 D5). */
   pages: Record<RouteId, string>;
   /** Template for the placeholder meta description, `%s` = the page title. */
@@ -138,6 +174,20 @@ const de: Dictionary = {
     dates: "Termine",
     places: "Orte",
     updatesToday: "Aktualisierungen heute",
+  },
+  media: {
+    photoWanted: "Foto gesucht",
+    photoWantedHeadline: "Uns fehlt hier ein Bild aus deinem Ort.",
+    notDepicting: "Nicht motivgenau · Platzhalter",
+  },
+  search: {
+    label: "Ort oder Postleitzahl",
+    placeholder: "Postleitzahl",
+    hint: "Bislang nur per Postleitzahl — die Ortssuche folgt.",
+  },
+  outboundLink: {
+    newTab: "öffnet neuen Tab",
+    dataGoesTo: "Daten gehen an",
   },
   pages: {
     home: "Schafe vorm Fenster",
@@ -201,6 +251,20 @@ const en: Dictionary = {
     dates: "dates",
     places: "places",
     updatesToday: "updates today",
+  },
+  media: {
+    photoWanted: "Photo wanted",
+    photoWantedHeadline: "We're missing a picture from your place here.",
+    notDepicting: "Not an exact match · placeholder",
+  },
+  search: {
+    label: "Place or postcode",
+    placeholder: "Postcode",
+    hint: "Postcode search only for now — search by name is coming.",
+  },
+  outboundLink: {
+    newTab: "opens new tab",
+    dataGoesTo: "Data goes to",
   },
   pages: {
     home: "Schafe vorm Fenster",

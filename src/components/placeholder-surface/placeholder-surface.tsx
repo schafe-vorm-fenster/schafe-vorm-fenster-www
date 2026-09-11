@@ -1,5 +1,8 @@
 import { Badge } from "../badge/badge";
 
+import { dictionary } from "@/src/lib/i18n/dictionary";
+
+import type { Locale } from "@/src/lib/i18n/locales";
 import type { ReactNode } from "react";
 import type { CSSProperties } from "react";
 
@@ -16,6 +19,12 @@ export interface PlaceholderSurfaceProps {
   readonly cta?: ReactNode;
   /** `row` is the text-only form for the archive, which has no conversion. */
   readonly variant?: "surface" | "row";
+  /**
+   * The page's language — the badge and headline fallbacks read it, so an
+   * English page without its own invitation copy does not fall back to
+   * German (F-2-4).
+   */
+  readonly locale?: Locale;
   readonly className?: string;
 }
 
@@ -39,18 +48,23 @@ export interface PlaceholderSurfaceProps {
  */
 export function PlaceholderSurface({
   ratio = "feature",
-  badgeLabel = "Foto gesucht",
-  headline = "Uns fehlt hier ein Bild aus deinem Ort.",
+  badgeLabel,
+  headline,
   body,
   cta,
   variant = "surface",
+  locale = "de",
   className,
 }: PlaceholderSurfaceProps) {
+  const words = dictionary(locale).media;
+  const badge = badgeLabel ?? words.photoWanted;
+  const invitation = headline ?? words.photoWantedHeadline;
+
   if (variant === "row") {
     return (
       <p className={[styles.row, className].filter(Boolean).join(" ")}>
-        <Badge tone="placeholder">{badgeLabel}</Badge>
-        <span>{headline}</span>
+        <Badge tone="placeholder">{badge}</Badge>
+        <span>{invitation}</span>
       </p>
     );
   }
@@ -61,8 +75,8 @@ export function PlaceholderSurface({
       style={{ "--placeholder-ratio": `var(--ratio-${ratio})` } as CSSProperties}
     >
       <div className={styles.content}>
-        <Badge tone="placeholder">{badgeLabel}</Badge>
-        <p className={styles.headline}>{headline}</p>
+        <Badge tone="placeholder">{badge}</Badge>
+        <p className={styles.headline}>{invitation}</p>
         {body ? <p className={styles.body}>{body}</p> : null}
         {cta ? <div className={styles.cta}>{cta}</div> : null}
       </div>

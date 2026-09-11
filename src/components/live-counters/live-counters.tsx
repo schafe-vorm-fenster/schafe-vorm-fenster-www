@@ -4,6 +4,7 @@ import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { Skeleton } from "../skeleton/skeleton";
 
 import { dictionary } from "@/src/lib/i18n/dictionary";
+import { OG_LOCALE } from "@/src/lib/i18n/locales";
 
 import type { Locale } from "@/src/lib/i18n/locales";
 
@@ -85,7 +86,7 @@ export function LiveCounters({
     <div className={classes} data-demo={isMocked(state) ? "true" : undefined}>
       {figures.map((figure) => (
         <Badge icon="calendar-days" key={figure.label} tone="neutral">
-          {figure.value.toLocaleString("de-DE")} {figure.label}
+          {figure.value.toLocaleString(OG_LOCALE[locale].replace("_", "-"))} {figure.label}
         </Badge>
       ))}
       {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
