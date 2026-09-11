@@ -1,4 +1,8 @@
-import { localeRewrites, redirectTable } from "./src/lib/routes/next-routing";
+import {
+  localeRewrites,
+  redirectTable,
+  unknownLanguageRewrites,
+} from "./src/lib/routes/next-routing";
 import { STATIC_SECURITY_HEADERS } from "./src/lib/security/csp";
 
 import type { NextConfig } from "next";
@@ -39,7 +43,30 @@ const nextConfig: NextConfig = {
   // `beforeFiles`, because a bare path like `/dein-ort` would otherwise match
   // `app/[lang]` with `lang = "dein-ort"`.
   async rewrites() {
-    return { beforeFiles: [...localeRewrites()], afterFiles: [], fallback: [] };
+    return {
+      beforeFiles: [...localeRewrites()],
+      // TS-004 D3.4 / DEC-032 — an unknown first segment is a 404 with a
+      // *rendered* body.
+      //
+      // `app/[lang]/layout.tsx` used to pair `generateStaticParams` with
+      // `dynamicParams = false`, which made a non-language first segment match
+      // no route at all, so Next answered with the prerendered
+      // `global-not-found` document. Cache Components forbids `dynamicParams`,
+      // and without it `/gibt-es-nicht` matches `app/[lang]` with
+      // `lang = "gibt-es-nicht"`, whose `notFound()` renders the in-route 404 —
+      // an `__next_error__` shell whose request-time inline bootstrap has no
+      // entry in the per-build CSP hash set (`scripts/generate-csp-hashes.mjs`
+      // only sees prerendered HTML), so the browser blocks it and leaves the
+      // document empty. Measured: React error #412, zero `h1`, zero body text.
+      //
+      // `afterFiles` is the right stage: it runs **after** the filesystem
+      // routes (so `/robots.txt`, `/sitemap.xml`, `/dev/components` and
+      // `/api/*` are already served) and **before** the dynamic ones (so
+      // `app/[lang]` never sees the path). `/_not-found` is Next's own
+      // prerendered 404 route — status 404, full body, hashes in the set.
+      afterFiles: [...unknownLanguageRewrites()],
+      fallback: [],
+    };
   },
 };
 

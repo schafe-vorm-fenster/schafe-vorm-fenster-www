@@ -1,8 +1,7 @@
-import { Suspense } from "react";
-
 import { Button } from "@/src/components/button/button";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { ObjectionList } from "@/src/components/objection-list/objection-list";
+import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { PublishingPath } from "@/src/components/publishing-path/publishing-path";
@@ -15,7 +14,8 @@ import { resolveLocale } from "@/src/lib/i18n/locales";
 import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
 import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
 
-import { PlaceDatesIsland, moduleSkeleton } from "../_islands";
+import { PlaceDatesIsland } from "../_islands";
+import { selectProof } from "../_proof";
 import { pageContent } from "../_content";
 import { localeFrom } from "../_locale";
 import { PageFrame } from "../_page-frame";
@@ -96,6 +96,12 @@ const PROOF_CONTEXT_LINE: Record<Locale, string> = {
 
 const GEO_SNAPSHOT_LABEL: Record<Locale, string> = { de: "Beispiel", en: "Example" };
 
+/** SRC-001 §4: an unfilled position weakens the claim, it never shortens the stream. */
+const MISSING_PROOF: Record<Locale, string> = {
+  de: "Für diese Aussage ist noch kein freigegebener Beleg hinterlegt.",
+  en: "No cleared proof is on file for this claim yet.",
+};
+
 export default async function Page({
   params,
 }: {
@@ -132,7 +138,31 @@ export default async function Page({
   );
   const exampleSlug = selectExamplePlace(undefined).slug;
 
-  const demoQuotes = listItems(proofDemo.blocks).map(parseDemoQuote);
+  /**
+   * TS-005 through, not around: the inline surface is **3** positions
+   * (DEC-048), gated, scored, rotated and ordered by the engine. The demo
+   * quotes pass the clearance gate carrying their flag and come back as the
+   * `mocked` state, which is what badges each card.
+   */
+  const proofSelection = await selectProof({
+    routeId: ROUTE,
+    locale,
+    focusJob: "publish-our-dates",
+    surface: "inline",
+    candidates: listItems(proofDemo.blocks).map((line, index) => {
+      const quote = parseDemoQuote(line);
+      const place = quote.attribution.split(", ").slice(1).join(", ").trim();
+      return {
+        id: `mitmachen-7-proof-demo-${index + 1}`,
+        contextLine: PROOF_CONTEXT_LINE[locale],
+        claim: quote.claim,
+        attribution: quote.attribution,
+        geo: { level: "snapshot" as const, label: GEO_SNAPSHOT_LABEL[locale] },
+        geoCommunity: place === "" ? null : place,
+        demo: true,
+      };
+    }),
+  });
   const heroCtaLabel = fieldAt(hero.blocks, 2) ?? "";
 
   return (
@@ -207,16 +237,14 @@ export default async function Page({
             a page-local row list (`state/open.md` row 128): the same
             `placeEvents()` interface `/dein-ort` and `/` use, so this module
             degrades, caches and demo-labels exactly like every other one. */}
-        <Suspense fallback={moduleSkeleton(3)}>
-          <PlaceDatesIsland
-            announced
-            locale={locale}
-            rowCount={3}
-            slug={exampleSlug === REFERENCE_PLACE.slug ? STAGE_ZERO_ANCHOR.slug : exampleSlug}
-            titleTemplate={exampleTitle}
-            tone="dark"
-          />
-        </Suspense>
+        <PlaceDatesIsland
+          announced
+          locale={locale}
+          rowCount={3}
+          slug={exampleSlug === REFERENCE_PLACE.slug ? STAGE_ZERO_ANCHOR.slug : exampleSlug}
+          titleTemplate={exampleTitle}
+          tone="dark"
+        />
       </SectionShell>
 
       {/* `lime-100`, not `paper`: `PageFrame` appends `surface` (band) then
@@ -226,17 +254,21 @@ export default async function Page({
       <SectionShell dataBlock="beleg" labelledBy="beleg-heading" surface="lime-100">
         <h2 id="beleg-heading">{PROOF_LABEL[locale]}</h2>
         <ProofStream label={PROOF_LABEL[locale]}>
-          {demoQuotes.map((quote) => (
-            <ProofCard
-              attribution={quote.attribution}
-              claim={quote.claim}
-              contextLine={PROOF_CONTEXT_LINE[locale]}
-              geo={{ level: "snapshot", label: GEO_SNAPSHOT_LABEL[locale] }}
-              key={quote.claim}
-              locale={locale}
-              state="mocked"
-            />
-          ))}
+          {proofSelection.entries.map((entry, position) =>
+            entry.kind === "item" ? (
+              <ProofCard
+                attribution={entry.candidate.attribution}
+                claim={entry.candidate.claim}
+                contextLine={entry.candidate.contextLine}
+                geo={entry.candidate.geo}
+                key={entry.candidate.id}
+                locale={locale}
+                state={entry.state}
+              />
+            ) : (
+              <EmptyProofSlot key={`empty-${position}`} sentence={MISSING_PROOF[locale]} />
+            ),
+          )}
         </ProofStream>
       </SectionShell>
     </PageFrame>

@@ -1,17 +1,16 @@
-import { Suspense } from "react";
-
 import { Button } from "@/src/components/button/button";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { MediaFrame } from "@/src/components/media-frame/media-frame";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
+import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SceneBlock } from "@/src/components/scene-block/scene-block";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
-import { slotState } from "@/src/lib/content/provenance";
+import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
 import { resolveLocale } from "@/src/lib/i18n/locales";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
@@ -22,17 +21,14 @@ import portraitPlaceholder from "@/src/generated/placeholders/ueber-uns/gruender
 
 import styles from "./_pages.module.css";
 
-import {
-  CountersIsland,
-  NearbyIsland,
-  PlaceDatesIsland,
-  moduleSkeleton,
-} from "./_islands";
+import { CountersIsland, NearbyIsland, PlaceDatesIsland } from "./_islands";
+import { selectProof } from "./_proof";
 import { pageContent } from "./_content";
 import { localeFrom } from "./_locale";
 import { PageFrame } from "./_page-frame";
 import { HOME_META } from "./page.meta";
 
+import type { ProofCandidate } from "./_proof";
 import type { ContentSlot } from "@/src/lib/content/types";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
@@ -84,26 +80,55 @@ export async function generateMetadata({
 /** The generated labels this page needs and no artifact carries (Dummy-Content, state/open.md). */
 const DEMO_LABELS: Record<
   Locale,
-  { flyerExample: string; geo: string; photoWanted: string; datesUnit: string }
+  {
+    flyerExample: string;
+    geo: string;
+    photoWanted: string;
+    datesUnit: string;
+    missingProof: string;
+  }
 > = {
   de: {
     flyerExample: "Aus dem Flyer geworden — Beispieltermin",
     geo: "Beispiel",
     photoWanted: "Uns fehlt hier ein Bild aus deinem Ort.",
     datesUnit: "Termine",
+    missingProof: "Für diese Aussage ist noch kein freigegebener Beleg hinterlegt.",
   },
   en: {
     flyerExample: "Made from the flyer — example date",
     geo: "Example",
     photoWanted: "We are missing a picture from your place here.",
     datesUnit: "dates",
+    missingProof: "No cleared proof is on file for this claim yet.",
   },
 };
 
-function demoProofCards(proof: ContentSlot, locale: Locale) {
+/**
+ * The artifact's demo proof lines as relevance candidates (TS-005).
+ *
+ * The attribution names the example place ("… — Ehrenamtliche
+ * Bürgermeisterin, Beispielgemeinde Musterdorf"), and that name is what the
+ * element *covers* — `geoCommunity`, the facet the engine scores. Without it
+ * every candidate would tie at country level and the spread rule would have
+ * nothing to spread.
+ */
+function proofCandidates(proof: ContentSlot, locale: Locale): ProofCandidate[] {
   const list = proof.blocks.find((block) => block.kind === "list");
   const items = list?.kind === "list" ? list.items : [];
-  return items.map((item) => parseDemoProofElement(item, DEMO_LABELS[locale].geo));
+  return items.map((item, index) => {
+    const card = parseDemoProofElement(item, DEMO_LABELS[locale].geo);
+    const place = card.attribution.split(", ").slice(1).join(", ").trim();
+    return {
+      id: `home-8-proof-stream-${index + 1}`,
+      contextLine: card.contextLine,
+      claim: card.claim,
+      attribution: card.attribution,
+      geo: { level: "snapshot" as const, label: DEMO_LABELS[locale].geo },
+      geoCommunity: place === "" ? null : place,
+      demo: isDemoSlot(proof),
+    };
+  });
 }
 
 export default async function HomePage({
@@ -132,6 +157,20 @@ export default async function HomePage({
   const searchPlaceholder = fieldAt(hero.blocks, 1);
   const searchHint = fieldAt(hero.blocks, 3);
   const proofKicker = fieldAt(proof.blocks, 0);
+
+  /**
+   * TS-005 through, not around: gate · score · rotate · order · count, at
+   * DEC-048's home count of **5**. Home is stage 0 — its search hands a place
+   * to `/dein-ort`, it never takes one itself — so no `placeSlug` goes in and
+   * the whole selection stays inside the prerendered shell.
+   */
+  const proofSelection = await selectProof({
+    routeId: ROUTE,
+    locale,
+    focusJob: "know-what-is-on",
+    surface: "home",
+    candidates: proofCandidates(proof, locale),
+  });
 
   /**
    * The one primary conversion of the page (TS-006 D3, TS-019 D2 S1): the
@@ -179,16 +218,14 @@ export default async function HomePage({
           M4 wires `/api/places/{slug}/events` (TS-008 D2). */}
       <MotionReveal>
         <SectionShell id="place-dates" surface="ink">
-          <Suspense fallback={moduleSkeleton(3)}>
-            <PlaceDatesIsland
-              ctaTemplate={dates.cta ?? ""}
-              locale={locale}
-              rowCount={3}
-              slug={STAGE_ZERO_ANCHOR.slug}
-              titleTemplate={dates.fields["Headline"] ?? ""}
-              tone="dark"
-            />
-          </Suspense>
+          <PlaceDatesIsland
+            ctaTemplate={dates.cta ?? ""}
+            locale={locale}
+            rowCount={3}
+            slug={STAGE_ZERO_ANCHOR.slug}
+            titleTemplate={dates.fields["Headline"] ?? ""}
+            tone="dark"
+          />
         </SectionShell>
       </MotionReveal>
 
@@ -198,15 +235,13 @@ export default async function HomePage({
           name (TS-008 D1). */}
       <MotionReveal>
         <SectionShell id="nearby" surface="surface-2">
-          <Suspense fallback={moduleSkeleton(5)}>
-            <NearbyIsland
-              lat={STAGE_ZERO_ANCHOR.lat}
-              lng={STAGE_ZERO_ANCHOR.lng}
-              locale={locale}
-              rowCount={5}
-              titleTemplate={fieldAt(nearby.blocks, 0) ?? ""}
-            />
-          </Suspense>
+          <NearbyIsland
+            lat={STAGE_ZERO_ANCHOR.lat}
+            lng={STAGE_ZERO_ANCHOR.lng}
+            locale={locale}
+            rowCount={5}
+            titleTemplate={fieldAt(nearby.blocks, 0) ?? ""}
+          />
         </SectionShell>
       </MotionReveal>
       {/* Block 2a — three scenes, one mechanism each (TS-006 D7), in the
@@ -217,15 +252,13 @@ export default async function HomePage({
           <SceneBlock
             body={fieldAt(sceneWhatsapp.blocks, 1)}
             instance={
-              <Suspense fallback={moduleSkeleton(1)}>
-                <PlaceDatesIsland
-                  headingLevel="h3"
-                  locale={locale}
-                  rowCount={1}
-                  slug={STAGE_ZERO_ANCHOR.slug}
-                  titleTemplate={demo.flyerExample}
-                />
-              </Suspense>
+              <PlaceDatesIsland
+                headingLevel="h3"
+                locale={locale}
+                rowCount={1}
+                slug={STAGE_ZERO_ANCHOR.slug}
+                titleTemplate={demo.flyerExample}
+              />
             }
             locale={locale}
             mechanism="whatsapp"
@@ -285,12 +318,10 @@ export default async function HomePage({
               unit and the artifact's full label stands beside it as text. */}
           <div className={styles.counters} id="live-counters">
             <p>{fieldAt(counters.blocks, 0)}</p>
-            <Suspense fallback={null}>
-              {/* TS-019-A14 / Q-037: only the counted figure. `places` and
-                  `updatesToday` have no `/api/stats` field, so the band shows
-                  one slot rather than an estimate. */}
-              <CountersIsland locale={locale} show={["dates"]} />
-            </Suspense>
+            {/* TS-019-A14 / Q-037: only the counted figure. `places` and
+                `updatesToday` have no `/api/stats` field, so the band shows
+                one slot rather than an estimate. */}
+            <CountersIsland locale={locale} show={["dates"]} />
           </div>
           <Button locale={locale} onward to="about" variant="secondary">
             {(fieldAt(stamps.blocks, 1) ?? "").split("→")[0]?.trim()}
@@ -305,17 +336,23 @@ export default async function HomePage({
         <SectionShell id="proof-stream" labelledBy="proof-stream-heading" surface="lime-100">
           <h2 id="proof-stream-heading">{proofKicker}</h2>
           <ProofStream label={proofKicker}>
-            {demoProofCards(proof, locale).map((card) => (
-              <ProofCard
-                attribution={card.attribution}
-                claim={card.claim}
-                contextLine={card.contextLine}
-                geo={{ level: "snapshot", label: demo.geo }}
-                key={card.claim}
-                locale={locale}
-                state={slotState(proof)}
-              />
-            ))}
+            {proofSelection.entries.map((entry, position) =>
+              entry.kind === "item" ? (
+                <ProofCard
+                  attribution={entry.candidate.attribution}
+                  claim={entry.candidate.claim}
+                  contextLine={entry.candidate.contextLine}
+                  geo={entry.candidate.geo}
+                  key={entry.candidate.id}
+                  locale={locale}
+                  state={entry.state}
+                />
+              ) : (
+                // An unfilled position weakens the claim; it never shortens
+                // the stream (SRC-001 §4, DEC-048).
+                <EmptyProofSlot key={`empty-${position}`} sentence={demo.missingProof} />
+              ),
+            )}
           </ProofStream>
         </SectionShell>
       </MotionReveal>

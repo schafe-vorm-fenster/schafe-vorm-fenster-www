@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import gebietsschnitt from "@/src/generated/placeholders/deine-region/gebietsschnitt.svg";
 import heroImage from "@/src/generated/placeholders/deine-region/hero.svg";
 
@@ -5,27 +7,33 @@ import { Button } from "@/src/components/button/button";
 import { EmbedFrame } from "@/src/components/embed-frame/embed-frame";
 import { FeatureBenefit } from "@/src/components/feature-benefit/feature-benefit";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
-import { LiveModuleFrame } from "@/src/components/live-module-frame/live-module-frame";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
-import { PlaceExampleSet } from "@/src/components/place-example-set/place-example-set";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { PriceTag } from "@/src/components/price-tag/price-tag";
+import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { ResponsePromise } from "@/src/components/response-promise/response-promise";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
-import { slotState } from "@/src/lib/content/provenance";
+import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
 import { ctaLabelOnly, interpolate, splitQuoteAttribution } from "@/src/lib/content/text";
 import { resolveLocale } from "@/src/lib/i18n/locales";
+import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
 import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
 import { assetSrc } from "@/src/lib/content/asset-src";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
 import { SITE_ORIGIN } from "@/src/lib/routes/routes";
 
+import {
+  CountersIsland,
+  RegionExamplesIsland,
+  StatedRegionExamples,
+} from "../_islands";
 import { pageContent } from "../_content";
+import { selectProof } from "../_proof";
 import { localeFrom } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
@@ -70,8 +78,10 @@ export async function generateMetadata({
 
 export default async function Page({
   params,
+  searchParams,
 }: {
   params: Promise<{ lang: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
@@ -91,23 +101,44 @@ export default async function Page({
   // package can ship without a geo/BFF integration: examples and search
   // stand, the county-scoped heading and counter stay generic/absent
   // (TS-026-A10). The interim ranking (D4, Q-037) is mocked accordingly.
+  // The heading keeps a `{county}` slot for the island to fill with the
+  // county the envelope resolved; `{landkreis}` is the DE artifact's own
+  // name for the same slot and gets the stage-0 wording when no county is
+  // known (TS-026-A10 — generic, never a claimed district).
   const interimHeading =
+    interpolate(fieldAt(interim.blocks, 0), { landkreis: "{county}" }) ??
+    "So sieht das heute schon aus: Beispiele in {county}";
+  const interimFallbackHeading =
     interpolate(fieldAt(interim.blocks, 0), { landkreis: "deiner Region" }) ??
     "So sieht das heute schon aus: Beispiele";
-  const EXAMPLE_PLACES = [
-    "Beispieldorf Nord",
-    "Beispielgemeinde Ost",
-    "Beispielort Süd",
-    "Beispielstadt West",
-    "Beispielflecken Mitte",
-    "Beispielhagen",
-  ] as const;
 
   const quoteItems = proofDemo.blocks.filter((block) => block.kind === "list");
   const quotes =
     quoteItems[0]?.kind === "list"
       ? quoteItems[0].items.map((item) => splitQuoteAttribution(item))
       : [];
+
+  /**
+   * TS-005 through, not around: DEC-048's **3** inline positions, selected by
+   * the engine. `?ort=` is handed in as a slug, so a visitor who stated a
+   * place gets the selection ordered around her own county (stage 3) while
+   * the prerendered shell keeps the stage-0 one.
+   */
+  const proofSelection = await selectProof({
+    routeId: ROUTE,
+    locale,
+    focusJob: "run-our-own-calendar",
+    surface: "inline",
+    candidates: quotes.map((quote, index) => ({
+      id: `deine-region-6-proof-demo-${index + 1}`,
+      contextLine: "Beispielhafte Rückmeldung",
+      claim: quote.claim,
+      attribution: quote.attribution,
+      geo: { level: "region" as const, label: "Beispielregion" },
+      geoCounty: quote.attribution.split(", ").slice(1).join(", ").trim() || null,
+      demo: isDemoSlot(proofDemo),
+    })),
+  });
 
   const ctaLabel = ctaLabelOnly(fieldAt(focus.blocks, 2)) ?? "Angebot anfragen";
 
@@ -159,26 +190,43 @@ export default async function Page({
           no distance language anywhere (A2). */}
       {/* `label`, not `labelledBy`: `live-module-frame` renders its own
           heading with no id to point to. */}
-      <SectionShell label={interimHeading} surface="ink">
+      <SectionShell label={interimFallbackHeading} surface="ink">
         <MotionReveal>
-          <LiveModuleFrame state="mocked" title={interimHeading}>
-            <PlaceExampleSet
-              examples={EXAMPLE_PLACES.map((label) => ({
-                label,
-                to: "place",
-                query: { ort: label },
-              }))}
+          {/* The examples come off `regionExamples()` — TS-008 position 3 at
+              county scope, DEC-034's designed set rather than a place list.
+              The stage-0 anchor is the `<Suspense>` fallback, `?ort=` streams
+              the visitor's own county over it. */}
+          <Suspense
+            fallback={
+              <RegionExamplesIsland
+                county={STAGE_ZERO_ANCHOR.county}
+                locale={locale}
+                max={6}
+                titleTemplate={interimHeading}
+              />
+            }
+          >
+            <StatedRegionExamples
               locale={locale}
               max={6}
-              state="mocked"
+              searchParams={searchParams}
+              titleTemplate={interimHeading}
             />
-            <PlaceSearch
-              hint="Bislang nur per Postleitzahl — die Ortssuche folgt."
-              label={fieldAt(interim.blocks, 2) ?? "Dein Ort"}
-              locale={locale}
-              to="place"
-            />
-          </LiveModuleFrame>
+          </Suspense>
+          {/* The search stands *beside* the module, so the block never
+              collapses when the ranking has nothing (TS-008 D1, DEC-034). */}
+          <PlaceSearch
+            hint="Bislang nur per Postleitzahl — die Ortssuche folgt."
+            label={fieldAt(interim.blocks, 2) ?? "Dein Ort"}
+            locale={locale}
+            to="place"
+          />
+          {/* D4's county-scoped figure: counted or absent, never estimated
+              (WEB-F-041). `places` has no `/api/stats` field (Q-037), so the
+              band renders the one figure that is counted. */}
+          <Suspense fallback={null}>
+            <CountersIsland locale={locale} show={["dates"]} />
+          </Suspense>
         </MotionReveal>
       </SectionShell>
 
@@ -235,19 +283,24 @@ export default async function Page({
         <MotionReveal>
           <h2 id="beleg">Was Landkreise und Institutionen sagen</h2>
           <ProofStream label="Beleg">
-            {quotes.length > 0
-              ? quotes.map((quote, index) => (
-                  <ProofCard
-                    attribution={quote.attribution}
-                    claim={quote.claim}
-                    contextLine="Beispielhafte Rückmeldung"
-                    geo={{ level: "region", label: "Beispielregion" }}
-                    key={`${ROUTE}-proof-${index}`}
-                    locale={locale}
-                    state={slotState(proofDemo, "mocked")}
-                  />
-                ))
-              : null}
+            {proofSelection.entries.map((entry, position) =>
+              entry.kind === "item" ? (
+                <ProofCard
+                  attribution={entry.candidate.attribution}
+                  claim={entry.candidate.claim}
+                  contextLine={entry.candidate.contextLine}
+                  geo={entry.candidate.geo}
+                  key={entry.candidate.id}
+                  locale={locale}
+                  state={entry.state}
+                />
+              ) : (
+                <EmptyProofSlot
+                  key={`empty-${position}`}
+                  sentence="Für diese Aussage ist noch kein freigegebener Beleg hinterlegt."
+                />
+              ),
+            )}
           </ProofStream>
         </MotionReveal>
       </SectionShell>

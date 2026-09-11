@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import { Button } from "@/src/components/button/button";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
@@ -17,7 +15,7 @@ import { pageMetadata } from "@/src/lib/routes/metadata";
 
 import heroPlaceholder from "@/src/generated/placeholders/dein-ort-starten/hero.svg";
 
-import { PlaceDatesIsland, moduleSkeleton } from "../../_islands";
+import { PlaceDatesIsland } from "../../_islands";
 import { pageContent } from "../../_content";
 import { localeFrom } from "../../_locale";
 import { PageFrame } from "../../_page-frame";
@@ -220,15 +218,13 @@ export default async function PlaceStartPage({
       <MotionReveal>
         <SectionShell id="live-example" surface="ink">
           <p>{splitSteps(fillTemplate(fieldAt(example.blocks, 1) ?? "", ctaValues))[0]}</p>
-          <Suspense fallback={moduleSkeleton(3)}>
-            <PlaceDatesIsland
-              locale={locale}
-              rowCount={3}
-              slug={STAGE_ZERO_ANCHOR.slug}
-              titleTemplate={fillTemplate(fieldAt(example.blocks, 0) ?? "", values)}
-              tone="dark"
-            />
-          </Suspense>
+          <PlaceDatesIsland
+            locale={locale}
+            rowCount={3}
+            slug={STAGE_ZERO_ANCHOR.slug}
+            titleTemplate={fillTemplate(fieldAt(example.blocks, 0) ?? "", values)}
+            tone="dark"
+          />
         </SectionShell>
       </MotionReveal>
 

@@ -2,7 +2,6 @@ import dorf from "@/src/generated/placeholders/ueber-uns/dorf.svg";
 import gruender from "@/src/generated/placeholders/ueber-uns/gruender.svg";
 
 import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
-import { LiveCounters } from "@/src/components/live-counters/live-counters";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { NewsletterBlock } from "@/src/components/newsletter-block/newsletter-block";
 import { OriginStory } from "@/src/components/origin-story/origin-story";
@@ -20,6 +19,8 @@ import { pageMetadata } from "@/src/lib/routes/metadata";
 import { assetSrc } from "@/src/lib/content/asset-src";
 import { SITE_ORIGIN } from "@/src/lib/routes/routes";
 
+import { CountersIsland } from "../_islands";
+import { selectProof } from "../_proof";
 import { pageContent } from "../_content";
 import { localeFrom } from "../_locale";
 import { PageFrame } from "../_page-frame";
@@ -131,6 +132,32 @@ export default async function Page({
   params: Promise<{ lang: string }>;
 }) {
   const locale = await localeFrom(params);
+  /**
+   * TS-005 through, not around: DEC-048's `/ueber-uns` **stream** count is 7,
+   * and the page has six generated elements — so the engine itself leaves the
+   * seventh position empty rather than the page hard-coding the gap (D5,
+   * A6/A7).
+   */
+  const proofSelection = await selectProof({
+    routeId: ROUTE,
+    locale,
+    focusJob: "understand-who-is-behind-it",
+    surface: "stream",
+    candidates: DEMO_PROOF.map((proof, index) => ({
+      id: `ueber-uns-3-proof-stream-${index + 1}`,
+      contextLine: proof.contextLine,
+      claim: proof.claim,
+      attribution: proof.attribution,
+      geo: { level: "snapshot" as const, label: "Beispiel" },
+      geoCommunity: proof.attribution.split(", ").slice(1).join(", ").trim() || null,
+      type: proof.contextLine.includes("Presse")
+        ? ("press" as const)
+        : proof.contextLine.includes("Auszeichnung")
+          ? ("award" as const)
+          : ("testimonial" as const),
+      demo: true,
+    })),
+  });
   const page = await pageContent(ROUTE, locale);
 
   const origin = slot(page, "ueber-uns-1-origin");
@@ -187,14 +214,17 @@ export default async function Page({
         </MotionReveal>
       </PhotoSurface>
 
-      {/* Block 2 — operating counters: the cleared "since 2018" fact always
-          renders; the live active-places count is absent today (no `/api/
-          stats` integration in this work package) — `live-counters` then
-          renders nothing rather than a substitute (D4). */}
+      {/* Block 2 — operating counters (D4). The cleared "since 2018" fact
+          always renders; the figures come off `/api/stats` through
+          `liveCounters()`, and a field the upstream does not count is simply
+          absent from the band — never a zero, never a substitute
+          (WEB-F-041). Both fallback tiers exhausted removes the band
+          entirely (TS-009 D6), which is why it sits under its own
+          `<Suspense>` with a `null` fallback rather than a skeleton. */}
       <SectionShell labelledBy="betrieb" surface="paper">
         <MotionReveal>
           <h2 id="betrieb">Seit 2018 in Betrieb</h2>
-          <LiveCounters placesLabel="aktive Orte" />
+          <CountersIsland locale={locale} show={["places", "dates"]} />
         </MotionReveal>
       </SectionShell>
 
@@ -207,21 +237,28 @@ export default async function Page({
         <MotionReveal>
           <h2 id="belegstrom">Was andere sagen</h2>
           <ProofStream label="Belege">
-            {DEMO_PROOF.map((proof, index) => (
-              <ProofCard
-                attribution={proof.attribution}
-                claim={proof.claim}
-                contextLine={proof.contextLine}
-                geo={{ level: "snapshot", label: "Beispiel" }}
-                key={`ueber-uns-proof-${index}`}
-                locale={locale}
-                state="mocked"
-              />
-            ))}
-            <EmptyProofSlot
-              badgeLabel="Kein Nachweis"
-              sentence="Für Erfahrungsberichte von Veranstalter:innen liegt noch kein freigegebenes Zitat vor."
-            />
+            {proofSelection.entries.map((entry, position) =>
+              entry.kind === "item" ? (
+                <ProofCard
+                  attribution={entry.candidate.attribution}
+                  claim={entry.candidate.claim}
+                  contextLine={entry.candidate.contextLine}
+                  geo={entry.candidate.geo}
+                  key={entry.candidate.id}
+                  locale={locale}
+                  state={entry.state}
+                />
+              ) : (
+                // D5/A6/A7: the seventh position is reserved and never
+                // backfilled — the engine leaves it empty because there is no
+                // seventh cleared element, not because the page hard-codes it.
+                <EmptyProofSlot
+                  badgeLabel="Kein Nachweis"
+                  key={`empty-${position}`}
+                  sentence="Für Erfahrungsberichte von Veranstalter:innen liegt noch kein freigegebenes Zitat vor."
+                />
+              ),
+            )}
           </ProofStream>
         </MotionReveal>
       </SectionShell>
