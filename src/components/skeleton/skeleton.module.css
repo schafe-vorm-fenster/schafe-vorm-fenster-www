@@ -1,0 +1,45 @@
+.skeleton {
+  display: block;
+}
+
+/* The hatch: `repeating-linear-gradient(45deg, surface-2 0 16px, line 16px 32px)`
+   — SRC-014 §Skeletons, composed once in app/styles/components.css. */
+.box {
+  aspect-ratio: var(--skeleton-ratio, var(--ratio-feature));
+  background-image: var(--placeholder-hatch);
+  max-width: 100%;
+  width: 100%;
+}
+
+.bar,
+.lastBar {
+  background: var(--color-neutral-line);
+  display: block;
+  /* The text's own line height: body 18 px × 1.5. */
+  height: calc(var(--type-body-size) * 1.5);
+  margin-bottom: var(--space-2);
+}
+
+.bar {
+  width: 100%;
+}
+
+.lastBar {
+  width: 60%;
+}
+
+/* A control keeps its pill shape while it waits. */
+.control {
+  background: var(--color-neutral-surface2);
+  border-radius: var(--radius-pill);
+  display: block;
+  height: var(--height-button);
+  width: 170px;
+}
+
+/* A list of event rows keeps the 76 px rhythm and the hairline above each. */
+.row {
+  border-top: 1px solid var(--color-neutral-line);
+  display: block;
+  height: var(--height-event-row);
+}

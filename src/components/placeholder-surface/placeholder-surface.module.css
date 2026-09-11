@@ -1,0 +1,52 @@
+.surface {
+  align-items: flex-end;
+  aspect-ratio: var(--placeholder-ratio, var(--ratio-feature));
+  background-image: var(--placeholder-hatch);
+  display: flex;
+  width: 100%;
+}
+
+.content {
+  /* A badge is inline-flex; as a stretched flex child it would fill the row. */
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  width: 100%;
+}
+
+.headline {
+  color: var(--color-neutral-ink);
+  font-size: var(--type-subhead-size);
+  font-weight: 800;
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: var(--leading-tight);
+  margin: 0;
+  max-width: var(--measure-reading);
+  text-wrap: balance;
+}
+
+.body {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-meta-size);
+  margin: 0;
+  max-width: var(--measure-reading);
+}
+
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--control-gap);
+}
+
+/* The text-only form: the archive has no conversion to carry (TS-028 D6). */
+.row {
+  align-items: center;
+  color: var(--color-neutral-text2);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: var(--type-meta-size);
+  gap: var(--space-3);
+  margin: 0;
+}

@@ -1,0 +1,29 @@
+.code {
+  color: var(--color-neutral-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  margin: 0 0 var(--space-2);
+}
+
+.headline {
+  font-size: var(--type-section-size);
+  font-weight: 800;
+  letter-spacing: var(--type-section-tracking);
+  line-height: var(--leading-tight);
+  margin: 0 0 var(--space-4);
+  max-width: var(--measure-reading);
+  text-wrap: balance;
+}
+
+.body {
+  font-size: var(--type-body-size);
+  margin: 0 0 var(--space-6);
+  max-width: var(--measure-reading);
+}
+
+/* The search reserves 56 px here as everywhere (SRC-014 §Fixed heights). */
+.search {
+  min-height: var(--height-search);
+}

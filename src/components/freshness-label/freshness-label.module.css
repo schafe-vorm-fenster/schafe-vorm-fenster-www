@@ -1,0 +1,11 @@
+.label {
+  align-items: center;
+  color: var(--color-neutral-muted);
+  display: inline-flex;
+  font-size: var(--type-meta-size);
+  gap: var(--space-2);
+  line-height: var(--leading-normal);
+  margin: 0;
+  /* The row is reserved by the frame, so this never pushes anything. */
+  min-height: var(--height-badge-icon);
+}
