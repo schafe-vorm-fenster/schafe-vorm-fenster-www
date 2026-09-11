@@ -24,6 +24,8 @@ export interface EventListProps extends DataStateProps {
   readonly rowCount: number;
   /** The conversion state for zero results — never an empty list (TS-008 D4). */
   readonly emptyState?: ReactNode;
+  /** `dark` inside the ink section that carries the live data — forwarded to every row. */
+  readonly tone?: "light" | "dark";
   readonly locale?: Locale;
   readonly className?: string;
 }
@@ -53,6 +55,7 @@ export function EventList({
   items,
   rowCount,
   emptyState,
+  tone,
   locale,
   state = "ready",
   className,
@@ -75,6 +78,7 @@ export function EventList({
           key={item.id ?? `${item.title}-${index}`}
           locale={locale}
           state={state}
+          tone={tone}
         />
       ))}
     </div>

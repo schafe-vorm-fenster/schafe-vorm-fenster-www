@@ -10,6 +10,13 @@
   margin: 0;
 }
 
+/* On a photo surface or an ink section the muted grey of the light ground
+   does not clear 4.5:1 — the hint is the same text in the paper colour the
+   hero's own headline and lead use (TS-002 contrast). */
+.dark .hint {
+  color: var(--color-neutral-paper);
+}
+
 .suggestions {
   align-items: center;
   display: flex;

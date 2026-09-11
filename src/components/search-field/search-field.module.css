@@ -43,6 +43,12 @@
   font-size: var(--type-body-size);
   min-width: 0;
   padding: 0;
+  /* An `<input>` carries an intrinsic width from its default `size`, and that
+     width is what a shrink-to-fit ancestor (the hero's CTA slot) measures —
+     which pushed the whole pill ~32 px past the 360 px viewport. `flex: 1`
+     still grows it; `width: 0` only removes it from the intrinsic
+     calculation (TS-017-A9, no horizontal scroll at 360 and at 320). */
+  width: 0;
 }
 
 .input::placeholder {

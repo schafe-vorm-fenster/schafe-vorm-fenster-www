@@ -29,6 +29,10 @@ export interface PlaceSearchProps extends DataStateProps, Omit<LinkOptions, "has
   readonly submitLabel?: string;
   /** Passed to the submit control: the primary conversion of a "know what is on" page (TS-006 D4). */
   readonly submitDataCta?: string;
+  /** `dark` where the module stands on a photo surface or the ink section. */
+  readonly tone?: "light" | "dark";
+  /** The input's DOM id — required where a page renders the module twice. */
+  readonly id?: string;
   readonly className?: string;
 }
 
@@ -63,10 +67,14 @@ export function PlaceSearch({
   placeholder = "Postleitzahl",
   submitLabel,
   submitDataCta,
+  tone = "light",
+  id,
   state = "ready",
   className,
 }: PlaceSearchProps) {
-  const classes = [styles.module, className].filter(Boolean).join(" ");
+  const classes = [styles.module, tone === "dark" ? styles.dark : undefined, className]
+    .filter(Boolean)
+    .join(" ");
 
   if (isPending(state)) {
     return (
@@ -80,6 +88,7 @@ export function PlaceSearch({
     <div className={classes}>
       <SearchField
         defaultValue={defaultValue}
+        id={id}
         label={label}
         locale={locale}
         placeholder={placeholder}
