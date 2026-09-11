@@ -88,6 +88,12 @@ export default async function Page({
             briefingHref={BRIEFING_HREF}
             briefingLabel={BRIEFING_LABEL}
             context={{ goal: "request-licence-quote" }}
+            // TS-012 D4 / TS-026-A13: the page's own goal, at the stage the
+            // registry fixes. The widget is the mock (Q-022) and its submit
+            // is therefore its success signal — the same reading
+            // `/dein-kalender/bestellen` step 4 records for its own mocked
+            // completion. `state/open.md`.
+            conversion={{ goalId: "request-licence-quote", stage: "completed" }}
             fallbackEmail={CONTACT_EMAIL}
             kind="quote"
             locale={locale}

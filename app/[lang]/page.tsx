@@ -66,6 +66,18 @@ import type { Metadata } from "next";
 
 const ROUTE = "home" as const;
 
+/**
+ * TS-012 D4 — `save-calendar-to-homescreen`, `stage: handover`: the click
+ * that opens a place calendar on `app.*`. The page's own primary conversion
+ * (`page.meta.ts`), and the only outbound handover this page has. The place
+ * search submit is **not** a conversion (TS-019 D2: "a search is not a
+ * conversion"), so it stays unarmed.
+ */
+const SAVE_CALENDAR = {
+  goalId: "save-calendar-to-homescreen",
+  stage: "handover",
+} as const;
+
 export async function generateMetadata({
   params,
 }: {
@@ -219,6 +231,7 @@ export default async function HomePage({
       <MotionReveal>
         <SectionShell id="place-dates" surface="ink">
           <PlaceDatesIsland
+            conversion={SAVE_CALENDAR}
             ctaTemplate={dates.cta ?? ""}
             locale={locale}
             rowCount={3}

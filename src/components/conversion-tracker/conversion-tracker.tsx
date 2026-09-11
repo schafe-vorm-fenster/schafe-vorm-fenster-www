@@ -27,10 +27,22 @@ import { getAnalyticsTracker } from "@/src/lib/analytics";
 import type { ConversionAttributes, EventStage } from "@/src/lib/analytics/types";
 import type { ReactNode } from "react";
 
-export interface ConversionTrackerProps {
+/**
+ * One goal binding, as a **serializable** object.
+ *
+ * A component that owns its own CTA (`howto-block`'s app link,
+ * `envoy-form-mount`'s submit) cannot be wrapped from the outside without
+ * arming every click inside it, so it takes the binding as a prop and wraps
+ * its own control. Strings only — the binding crosses `use cache`
+ * boundaries as an island prop.
+ */
+export interface ConversionBinding {
   readonly goalId: string;
   readonly stage: EventStage;
   readonly attributes?: ConversionAttributes;
+}
+
+export interface ConversionTrackerProps extends ConversionBinding {
   readonly children: ReactNode;
 }
 

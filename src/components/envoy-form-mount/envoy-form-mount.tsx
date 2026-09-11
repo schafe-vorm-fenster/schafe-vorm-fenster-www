@@ -1,3 +1,4 @@
+import { ConversionTracker, type ConversionBinding } from "../conversion-tracker/conversion-tracker";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { LeadFallback } from "../lead-fallback/lead-fallback";
@@ -21,6 +22,16 @@ export interface EnvoyFormMountProps extends DataStateProps {
   readonly fallbackEmail: string;
   readonly briefingHref?: string;
   readonly briefingLabel?: string;
+  /**
+   * The goal a successful submission completes (TS-012 D4). The mount wraps
+   * its **own** submit button — arming the whole form from outside would fire
+   * on every click in a field.
+   *
+   * While the widget is the mock (Q-022), the mocked submit *is* the success
+   * signal, the same reading `/dein-kalender/bestellen` step 4 already
+   * records for its own mocked completion (`state/open.md`).
+   */
+  readonly conversion?: ConversionBinding;
   readonly className?: string;
 }
 
@@ -56,6 +67,7 @@ export function EnvoyFormMount({
   fallbackEmail,
   briefingHref,
   briefingLabel,
+  conversion,
   state = "mocked",
   className,
 }: EnvoyFormMountProps) {
@@ -112,9 +124,21 @@ export function EnvoyFormMount({
           )}
         </div>
       ))}
-      <button className={styles.submit} type="submit">
-        Absenden
-      </button>
+      {conversion === undefined ? (
+        <button className={styles.submit} type="submit">
+          Absenden
+        </button>
+      ) : (
+        <ConversionTracker
+          attributes={conversion.attributes}
+          goalId={conversion.goalId}
+          stage={conversion.stage}
+        >
+          <button className={styles.submit} type="submit">
+            Absenden
+          </button>
+        </ConversionTracker>
+      )}
     </form>
   );
 }

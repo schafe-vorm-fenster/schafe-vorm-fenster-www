@@ -1,5 +1,6 @@
 import { Icon } from "../icon/icon";
 import { MediaFrame } from "../media-frame/media-frame";
+import { ConversionTracker, type ConversionBinding } from "../conversion-tracker/conversion-tracker";
 import { OutboundLink } from "../outbound-link/outbound-link";
 
 import styles from "./howto-block.module.css";
@@ -18,6 +19,12 @@ export interface HowtoBlockProps {
   /** `{APP_HOST}/{slug}` — the app handover, always an outbound link. */
   readonly appHref: string;
   readonly appLinkLabel?: string;
+  /**
+   * The goal this block's app handover completes (TS-012 D4). The block wraps
+   * its **own** link, because arming the whole block from outside would fire
+   * on any click in the instructions.
+   */
+  readonly conversion?: ConversionBinding;
   readonly className?: string;
 }
 
@@ -38,7 +45,7 @@ export interface HowtoBlockProps {
  * A11y: both instructions are readable in linear order — iOS then Android,
  * every time, for every visitor.
  */
-export function HowtoBlock({ headline, ios, android, appHref, appLinkLabel = "Kalender öffnen", className }: HowtoBlockProps) {
+export function HowtoBlock({ headline, ios, android, appHref, appLinkLabel = "Kalender öffnen", conversion, className }: HowtoBlockProps) {
   const platforms: Array<{ id: string; label: string; platform: HowtoPlatform }> = [
     { id: "ios", label: "iPhone", platform: ios },
     { id: "android", label: "Android", platform: android },
@@ -70,9 +77,21 @@ export function HowtoBlock({ headline, ios, android, appHref, appLinkLabel = "Ka
           </div>
         ))}
       </div>
-      <OutboundLink className={styles.cta} href={appHref} variant="secondary">
-        {appLinkLabel}
-      </OutboundLink>
+      {conversion === undefined ? (
+        <OutboundLink className={styles.cta} href={appHref} variant="secondary">
+          {appLinkLabel}
+        </OutboundLink>
+      ) : (
+        <ConversionTracker
+          attributes={conversion.attributes}
+          goalId={conversion.goalId}
+          stage={conversion.stage}
+        >
+          <OutboundLink className={styles.cta} href={appHref} variant="secondary">
+            {appLinkLabel}
+          </OutboundLink>
+        </ConversionTracker>
+      )}
     </div>
   );
 }

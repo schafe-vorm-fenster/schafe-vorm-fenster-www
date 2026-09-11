@@ -30,6 +30,10 @@
 import { cacheLife, cacheTag } from "next/cache";
 
 import { Button } from "@/src/components/button/button";
+import {
+  ConversionTracker,
+  type ConversionBinding,
+} from "@/src/components/conversion-tracker/conversion-tracker";
 import { EmptyStateBlock } from "@/src/components/empty-state-block/empty-state-block";
 import { EventList } from "@/src/components/event-list/event-list";
 import { LiveCounters } from "@/src/components/live-counters/live-counters";
@@ -144,6 +148,12 @@ export interface PlaceDatesIslandProps {
   /** `true` where arriving content changes the page's meaning (`/dein-ort`). */
   readonly announced?: boolean;
   /**
+   * The goal this module's app handover completes (TS-012 D4). The island
+   * arms the link itself and adds the resolved place slug as the one
+   * attribute — a slug is fine, a form value is not (D4 rule 3).
+   */
+  readonly conversion?: ConversionBinding;
+  /**
    * The publish invitation of TS-008 D4, as the page's own copy — **strings
    * only**. A cached component's props are its cache key, so a `ReactNode`
    * here would be a non-serializable argument ("Unexpected cache miss after
@@ -166,6 +176,7 @@ export async function PlaceDatesIsland({
   headingLevel = "h2",
   ctaTemplate,
   announced = false,
+  conversion,
   invitation,
 }: PlaceDatesIslandProps) {
   "use cache";
@@ -185,10 +196,20 @@ export async function PlaceDatesIsland({
     <LiveModuleFrame
       announced={announced || data.publishInvitation}
       cta={
-        ctaTemplate === undefined ? undefined : (
+        ctaTemplate === undefined ? undefined : conversion === undefined ? (
           <OutboundLink href={calendarUrl(data.place)} variant="secondary">
             {fillTemplate(ctaTemplate, { place: data.place.name })}
           </OutboundLink>
+        ) : (
+          <ConversionTracker
+            attributes={{ ...conversion.attributes, place: data.place.slug }}
+            goalId={conversion.goalId}
+            stage={conversion.stage}
+          >
+            <OutboundLink href={calendarUrl(data.place)} variant="secondary">
+              {fillTemplate(ctaTemplate, { place: data.place.name })}
+            </OutboundLink>
+          </ConversionTracker>
         )
       }
       headingLevel={headingLevel}

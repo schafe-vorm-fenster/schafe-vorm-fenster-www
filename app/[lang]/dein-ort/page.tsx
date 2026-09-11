@@ -87,6 +87,17 @@ import type { Metadata } from "next";
 
 const ROUTE = "place" as const;
 
+/**
+ * TS-012 D4 — `save-calendar-to-homescreen`, `stage: handover`: every click
+ * that opens this place's calendar on `app.*`. Two of them on this page (the
+ * module's onward link and the homescreen block's action), both the same
+ * goal at the same stage, each fired by its own click — never on render.
+ */
+const SAVE_CALENDAR = {
+  goalId: "save-calendar-to-homescreen",
+  stage: "handover",
+} as const;
+
 export async function generateMetadata({
   params,
 }: {
@@ -157,6 +168,11 @@ async function Homescreen({ slug, locale, headline, ios, android, ctaTemplate, g
       // No resolved place, no app link: an unresolved place has no handover
       // (TS-008 D9) and the founding route carries it instead.
       appHref={place ? calendarUrl(place) : href("placeStart", locale)}
+      // Only a resolved place is a calendar handover; the founding route is
+      // a different goal and is not armed here.
+      conversion={
+        place ? { ...SAVE_CALENDAR, attributes: { place: place.slug } } : undefined
+      }
       appLinkLabel={fillTemplate(ctaTemplate, { place: name })}
       headline={headline}
       ios={{ steps: splitSteps(fillTemplate(ios, { place: name })) }}
@@ -284,6 +300,7 @@ export default async function PlacePage({
             fallback={
               <PlaceDatesIsland
                 announced
+                conversion={SAVE_CALENDAR}
                 ctaTemplate={stateA.cta ?? ""}
                 invitation={invitation}
                 locale={locale}
@@ -296,6 +313,7 @@ export default async function PlacePage({
           >
             <StatedPlaceDates
               announced
+              conversion={SAVE_CALENDAR}
               ctaTemplate={stateA.cta ?? ""}
               invitation={invitation}
               locale={locale}
