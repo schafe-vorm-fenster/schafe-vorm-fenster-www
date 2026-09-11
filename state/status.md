@@ -6,6 +6,7 @@ Current test round: — (n of 3)
 
 ## Done
 
+- M3 Phase 3: gaps filled with labelled demo content (12 slots, rows 45–53) + English for all eleven pages, glossary 22 terms, frontmatter green 64 files (Content) — 2026-09-11
 - M2 live-module shells + conversion/form components: 17 (C; mocks envoy/newsletter with no-`name` fields; 172 tests green) — 2026-09-11
 - M3 Phase 2: German copy for eleven pages in content/pages/<route>/de.md, compliance table complete (Content) — 2026-09-11
 - M2 foundation components: 27 components in src/components (A; 44 tests; gallery at /dev/components; refactored onto the route/i18n facades) — 2026-09-11
