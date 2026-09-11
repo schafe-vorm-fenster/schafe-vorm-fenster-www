@@ -39,7 +39,7 @@ chain is proven once end to end.
 | Technical foundation: Next.js (current major, App Router), root `tsconfig.json` `strict: true`, `pnpm typecheck` wired into `pnpm check`, `stack.allow.json` | TS-017 D1, D5 |
 | Test harness: Vitest (unit + integration), Playwright (e2e), real `pnpm test` | verification-strategy, TS-017 |
 | Brand binding: single token-import file, brand package pinned exact, no colour/font literal elsewhere | TS-017 D3 |
-| Layout shell: mobile-first base, breakpoints `md:768`/`lg:1024`, security headers + CSP scaffold | TS-017 D2, TS-014 |
+| Layout shell: mobile-first base, breakpoints and container per TS-017 D2 as currently specified (the spec, not this row, binds), security headers + CSP scaffold | TS-017 D2, TS-014 |
 | Preview chain: `vercel deploy` (preview) from `next-2026`, deployment protection respected, e2e smoke against the preview URL | TS-015, DEC-031 Stage 1 |
 
 Gate scope: TS-017, TS-015 ACs plus one deployed, reachable preview.

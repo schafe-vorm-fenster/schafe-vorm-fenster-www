@@ -6,6 +6,9 @@ Current test round: — (n of 3)
 
 ## Done
 
+- M1 Scaffold — six commits (088cc97…7b3624d): Next 16.3.4 pinned, stack.allow.json + DEC-072, pnpm check = 7-step gate, 17 unit / 4 integration / 9 e2e green, preview https://schafe-vorm-fenster-4veymgqid-schafe-vorm-fenster.vercel.app smoked 9/9 through protection bypass. UAT and chaos deliberately skipped at M1: no conversion path exists yet (first chaos/UAT at the M2 gate) — 2026-09-11
+- M3 prep: content source map state/content-map.md (78 slots: 59 sourced, 11 clearance-gated → labelled Demo entries in M3, 7 Dummy-Content) — 2026-09-11
+- M2 prep: plan/component-inventory.md (63 components, 7 fixed / 56 proposed, per-page composition sheets; Q-052 = DEC-059) — 2026-09-11
 - M1 Scaffold — Next.js 16.3.4 App Router in the repository root, strict
   typing, `pnpm check` as the single gate (7 checks, ~3 s), Vitest +
   Playwright with one real passing test per level, brand tokens bound
