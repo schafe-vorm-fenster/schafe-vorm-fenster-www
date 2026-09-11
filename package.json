@@ -13,7 +13,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "check:specs": "tsx scripts/check-specs.ts",
     "fetch:openapi": "tsx scripts/fetch-openapi.mjs",
-    "preflight": "node scripts/preflight.mjs"
+    "preflight": "node scripts/preflight.mjs",
+    "placeholders": "node scripts/make-placeholders.mjs"
   },
   "keywords": [],
   "author": "",

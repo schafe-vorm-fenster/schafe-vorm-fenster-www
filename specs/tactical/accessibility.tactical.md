@@ -22,7 +22,7 @@ set every page and component is built and tested against.
 WCAG 2.2 Level AA, all criteria, no exceptions. BFSG conformity is the
 legal frame (Q-021 confirms applicability).
 
-### D2 — The AAA basics [PROPOSED]
+### D2 — The AAA basics [FIXED: DEC-069]
 
 Adopted beyond AA — chosen for this audience (rural, all ages, many
 first-time users):
@@ -33,9 +33,26 @@ first-time users):
 | 1.4.8 Visual Presentation | line length ≤ 80ch, line height ≥ 1.5, text resizable |
 | 3.1.5 Reading Level | plain language; matches the scene principle (SRC-001 §1a) |
 | 2.3.3 Animation from Interactions | full — with `prefers-reduced-motion` |
+| 2.4.10 Section Headings | full — the heading outline is already the page structure (TS-006 D2); this makes it binding |
+| 2.5.5 Target Size | full — **≥ 44 × 44 CSS px for every target**, not only primary CTAs (supersedes the AA floor in D6) |
+| 2.2.6 Timeouts | full — trivially met: no page has a session, a timeout or expiring state |
+| 3.3.6 Error Prevention (All) | full — every submission is reversible, checked, or confirmed before it commits |
 
-Not adopted: 1.4.6 enhanced contrast as blanket rule (the high-contrast
-theme covers it, D4), sign language, extended audio description.
+Why these eight and not more. Four were chosen for the audience — rural,
+all ages, many first-time users — and four more were added because they
+cost little against what the specs already require: the heading outline
+and the absence of timeouts are properties this site has anyway, and
+error prevention is already the shape of the order flow. The one that
+costs something is **2.5.5**: raising every target to 44 × 44 (not just
+the primary CTAs) puts real pressure on dense rows — the archive filter
+chips, the scope tick-list. It is adopted because a 24 px target is a
+thumb-miss for exactly the visitors this site is for.
+
+Not adopted, and why: **1.4.6** enhanced contrast as a blanket rule (the
+high-contrast theme covers it, D4); **1.3.6** Identify Purpose (needs a
+personalisation vocabulary on controls that no source asks for);
+**1.4.9** Images of Text (no images of text exist to constrain); sign
+language and extended audio description (no video).
 
 ### D3 — Contrast and brand [FIXED: WEB-Q-011; weights PROPOSED]
 
@@ -66,7 +83,7 @@ type, no px font sizes) [FIXED: SRC-006].
   their roles (ties WEB-F-071); heading levels never skip.
 - Skip link as first focusable element [PROPOSED].
 - Full keyboard operability; visible focus (2.4.7 + 2.4.11); no traps.
-- Touch targets ≥ 24×24 CSS px (2.5.8), primary CTAs ≥ 44×44 [PROPOSED].
+- Touch targets ≥ 44×44 CSS px everywhere — D2 adopts 2.5.5 (AAA), which supersedes the 2.5.8 AA floor of 24×24 [FIXED: DEC-069].
 - Zoom: usable at 200 %; reflow at 320px width without 2D scrolling.
 - Images: informative → meaningful `alt` from content frontmatter
   (WEB-F-089 schema carries the field); decorative → `alt=""`
@@ -132,4 +149,4 @@ claim:
 
 - Q-021 (BFSG applicability — legal), Q-013 (formal brand-font signoff;
   D3 settles the operative rule), Q-022 (widget conformance).
-- D2/D3/D6 route are [PROPOSED].
+- D3 and D6's remaining rows are [PROPOSED]; D2 and D6's target size are fixed by DEC-069.

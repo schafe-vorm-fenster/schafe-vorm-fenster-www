@@ -1,0 +1,11 @@
+{
+  "$comment": "Placeholder slots per DEC-068. A slot listed here renders a generated image until the real asset lands. Rule 3 of DEC-068: a placeholder may occupy a slot, never assert anything — no synthetic person, place, outlet or record.",
+  "slots": [
+    { "id": "ueber-uns/gruender",        "aspect": "4:3",   "tone": "lime",      "label": "Porträt",            "note": "Gründerfoto — LCP-Element von /ueber-uns (TS-003 D2)" },
+    { "id": "mitmachen/whatsapp-szene",  "aspect": "16:9",  "tone": "violet",    "label": "Szene",              "note": "Termin per WhatsApp einreichen — LCP-Element von /mitmachen (TS-003 D2)" },
+    { "id": "dein-kalender/portalize",   "aspect": "16:10", "tone": "himbeere",  "label": "Produktansicht",     "note": "Kalender unter eigenem Namen" },
+    { "id": "ueber-uns/dorf",            "aspect": "3:2",   "tone": "lime",      "label": "Ort",                "note": "Das Dorf, aus dem heraus betrieben wird" },
+    { "id": "deine-region/karte",        "aspect": "3:2",   "tone": "violet",    "label": "Kartenausschnitt",   "note": "Aktive Orte im Landkreis" },
+    { "id": "og/default",                "aspect": "1.91:1","tone": "lime",      "label": "Vorschaubild",       "note": "Open-Graph-Fallback" }
+  ]
+}

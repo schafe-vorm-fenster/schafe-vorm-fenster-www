@@ -1,0 +1,65 @@
+{
+  "generatedFrom": "placeholders.manifest.json",
+  "slots": [
+    {
+      "id": "ueber-uns/gruender",
+      "aspect": "4:3",
+      "tone": "lime",
+      "label": "Porträt",
+      "note": "Gründerfoto — LCP-Element von /ueber-uns (TS-003 D2)",
+      "w": 1600,
+      "h": 1200,
+      "src": "/src/generated/placeholders/ueber-uns/gruender.svg"
+    },
+    {
+      "id": "mitmachen/whatsapp-szene",
+      "aspect": "16:9",
+      "tone": "violet",
+      "label": "Szene",
+      "note": "Termin per WhatsApp einreichen — LCP-Element von /mitmachen (TS-003 D2)",
+      "w": 1600,
+      "h": 900,
+      "src": "/src/generated/placeholders/mitmachen/whatsapp-szene.svg"
+    },
+    {
+      "id": "dein-kalender/portalize",
+      "aspect": "16:10",
+      "tone": "himbeere",
+      "label": "Produktansicht",
+      "note": "Kalender unter eigenem Namen",
+      "w": 1600,
+      "h": 1000,
+      "src": "/src/generated/placeholders/dein-kalender/portalize.svg"
+    },
+    {
+      "id": "ueber-uns/dorf",
+      "aspect": "3:2",
+      "tone": "lime",
+      "label": "Ort",
+      "note": "Das Dorf, aus dem heraus betrieben wird",
+      "w": 1600,
+      "h": 1067,
+      "src": "/src/generated/placeholders/ueber-uns/dorf.svg"
+    },
+    {
+      "id": "deine-region/karte",
+      "aspect": "3:2",
+      "tone": "violet",
+      "label": "Kartenausschnitt",
+      "note": "Aktive Orte im Landkreis",
+      "w": 1600,
+      "h": 1067,
+      "src": "/src/generated/placeholders/deine-region/karte.svg"
+    },
+    {
+      "id": "og/default",
+      "aspect": "1.91:1",
+      "tone": "lime",
+      "label": "Vorschaubild",
+      "note": "Open-Graph-Fallback",
+      "w": 1600,
+      "h": 838,
+      "src": "/src/generated/placeholders/og/default.svg"
+    }
+  ]
+}

@@ -78,3 +78,5 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-064 — The permanence promise gets a proof element; the channels get enumerated](064-evidence-for-the-publishing-page.md)
 - [DEC-065 — How the four hardest rules are verified — and where the coverage stops](065-verification-of-the-hard-rules.md)
 - [DEC-067 — Six breakpoints, dense below the tablet — and why the spec's two were wrong](067-six-breakpoints-dense-at-the-phone-end.md)
+- [DEC-068 — Every gap is filled with a marked placeholder, never left empty](068-placeholders-over-empty-slots.md)
+- [DEC-069 — Answers from the PROPOSED review — price, accessibility, cache, budget, fallback, preview](069-eleven-answers-from-the-proposed-review.md)

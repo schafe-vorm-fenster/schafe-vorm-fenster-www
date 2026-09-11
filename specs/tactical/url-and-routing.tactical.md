@@ -39,9 +39,15 @@ every row on `.de` (phase 1). One row per page; conversions per
 | `/ueber-uns/archiv` | proof archive | WEB-F-018 |
 | `/rechtliches` | all legal content, one page, anchors `#impressum` · `#datenschutz` · `#barrierefreiheit` | WEB-F-029, WEB-Q-027 |
 | `/sitemap.xml` · `/robots.txt` · `/llms.txt` | machine surfaces, per domain | WEB-F-073, WEB-F-079 |
+| `/start` | **redirect only, renders nothing** — the lead fallback's target while the envoy widget is undelivered (TS-016 D6). Points at the existing Google Form today; the swap to envoy changes this one redirect and no lead surface | WEB-F-093 |
 
 Reserved, not built: `/mitmachen/vor-ort-werben` (Q-005),
 `/nutzungsbedingungen` (if the legal import delivers terms).
+
+`/start` is the only row that is not a page. It exists so that no lead
+surface hard-codes a third-party URL: every fallback links to `/start`,
+and what `/start` resolves to is one decision in one place. It carries
+`noindex` and is absent from the sitemap.
 
 **Landing-only domains** (`.pl`, `.at`, `sheepoutside.com`, phase 1):
 serve `/`, the three legal routes, and the machine surfaces; every other

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1067" width="1600" height="1067" role="img" aria-label="Platzhalter: Kartenausschnitt">
+  <title>Platzhalter: Kartenausschnitt</title>
+  <desc>Generiertes Platzhalterbild fuer den Slot deine-region/karte (DEC-068). Kein Foto, keine Aussage.</desc>
+  <defs>
+    <pattern id="h" width="49" height="49" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="49" stroke="#ABACF2" stroke-width="8.166666666666666"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="1067" fill="#CFD1FC"/>
+  <rect width="1600" height="1067" fill="url(#h)"/>
+  <rect x="49" y="49" width="1502" height="969"
+        fill="none" stroke="#230B67" stroke-width="6.125" stroke-dasharray="49 24.5" opacity="0.55"/>
+  <g fill="#230B67" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" text-anchor="middle">
+    <text x="800" y="516.35" font-size="73.5" font-weight="700">Kartenausschnitt</text>
+    <text x="800" y="587.4" font-size="39.2" opacity="0.75" letter-spacing="5.88">PLATZHALTER · 3:2</text>
+  </g>
+</svg>

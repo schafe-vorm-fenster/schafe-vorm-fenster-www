@@ -24,7 +24,7 @@ Compressed: HTML ≤ 50KB · JS ≤ 100KB · CSS ≤ 30KB · fonts ≤ 50KB ·
 images ≤ 100KB each. Lighthouse: 100 target / 98 floor (Performance),
 100 the rest — mobile and desktop.
 
-### D2 — LCP elements per page [PROPOSED]
+### D2 — LCP elements per page [FIXED: DEC-068, DEC-069]
 
 The LCP element is declared per page and eager-loaded; everything else
 must not compete:
@@ -40,6 +40,14 @@ must not compete:
 Text-first LCP wherever the brief allows — images never above the fold
 without being the declared LCP element.
 
+The two image LCPs are safe to declare because the asset always exists:
+under DEC-068 a missing photograph is filled by a generated placeholder
+at the declared aspect ratio, never by an empty slot. The LCP element
+therefore has its geometry from day one, and swapping the placeholder for
+the real photograph later changes the bytes, not the layout and not the
+budget. What the swap must not change is the aspect — the placeholder
+declares it, and the real image is cropped to it.
+
 ### D3 — Fonts [FIXED: WEB-Q-005; subset PROPOSED]
 
 **Atkinson Hyperlegible Next** (plus the Mono variant for labels, dates
@@ -54,17 +62,25 @@ Server-first rendering (DEC-019); client JS only for: live-module
 hydration, place search, envoy widget, eTracker. Third-party rule:
 eTracker deferred (never render-blocking, excluded from LCP path); envoy
 widget loads lazily when its container approaches the viewport.
-Per-route first-load JS ≤ 100KB hard, ≤ 70KB target [PROPOSED].
+Per-route first-load JS ≤ 100KB, ≤ 70KB target — **reported, not
+gating** [FIXED: DEC-069]. The byte budget is a measure we watch; the
+build-failing gate is Lighthouse (D1, 100 target / 98 floor, fixed by
+DEC-007). A route that exceeds the budget while Lighthouse stays green
+produces a warning in the run summary and a line in the release review,
+not a red build — what the visitor experiences is the thing being
+promised, and bytes are only a proxy for it. The budgets are not
+abandoned: a route that exceeds them *and* drops Lighthouse below the
+floor fails on the Lighthouse check, which is the one that matters.
 
-### D5 — Cache lifetimes (fills WEB-F-105) [PROPOSED]
+### D5 — Cache lifetimes (fills WEB-F-105) [FIXED: DEC-019, DEC-069]
 
 Vercel SWR semantics per DEC-019 (serve cached, revalidate behind):
 
 | Data | Fresh TTL | Serve-stale window |
 | --- | --- | --- |
-| dates per place ("today", "this week") | 5 min | 24 h |
-| active places / map | 1 h | 7 d |
-| live counters (`/api/stats`) | 15 min | 24 h — beyond: hide (WEB-F-104) |
+| dates per place ("today", "this week") | 5 min | **3 d** |
+| active places / map | 1 h | **7 d** |
+| live counters (`/api/stats`) | 15 min | **3 d** — beyond: hide (WEB-F-104) |
 | proof stream input (`media-echo`, build data) | build-time | until next deploy |
 | proof stream per segment (`{community, trait, job, isoWeek}`) | 1 week | until the ISO week turns (tagged, TS-005 D7) |
 | pages (HTML, ISR) | 1 h | until next deploy |
@@ -72,6 +88,16 @@ Vercel SWR semantics per DEC-019 (serve cached, revalidate behind):
 
 Freshness label ("Stand: …") appears when served data is older than its
 fresh TTL [FIXED: DEC-019].
+
+**Why the stale windows are long.** Fresh TTL and stale window answer
+different questions. The fresh TTL decides how fast a correction reaches
+the page — five minutes for dates, and that is what matters in normal
+operation. The stale window decides only what happens when the upstream
+is *unreachable*, and there the choice is between a three-day-old date
+list carrying a visible "Stand: …" and no date list at all. An old answer
+that says how old it is beats an empty page, so the window is generous on
+purpose. It never delays a correction: as soon as upstream answers, the
+revalidation behind the served response replaces the stale copy.
 
 ### D6 — Reduced data [FIXED: WEB-Q-008; measures PROPOSED]
 
@@ -100,7 +126,7 @@ module renders as list.
 | ID | Level | Check |
 | --- | --- | --- |
 | TS-003-A1 | tool | Lighthouse CI green on the five D7 routes, mobile + desktop. |
-| TS-003-A2 | tool | Bundle guard: every route within D1/D4 budgets. |
+| TS-003-A2 | tool | Bundle guard runs on every route and writes the measured first-load bytes to the run summary; a route over the D1/D4 budget is reported as a warning. The job fails only when A1's Lighthouse floor fails — the byte budget never fails a build on its own (D4). |
 | TS-003-A3 | static | Fonts: single variable woff2, preloaded, ≤ 50KB, swap. |
 | TS-003-A4 | e2e | With app APIs blocked (simulated outage): every page renders tier-2/3 content, freshness labels shown, counters hidden after stale window. |
 | TS-003-A5 | tool | eTracker and envoy absent from the critical request chain of the LCP element (verified in trace). |
@@ -139,5 +165,5 @@ determination produces rather than hopes for.
 
 ## Open points
 
-- D2/D4-split/D5-values/D6-measures/A6-threshold are [PROPOSED].
+- D4's split and D6's measures are [PROPOSED]; A6's threshold is [PROPOSED]. D2, D5's values and D4's enforcement stance are fixed by DEC-069.
 - Q-015 sliver (stats fields) touches D5's counter row.

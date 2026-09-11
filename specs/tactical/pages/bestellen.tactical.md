@@ -13,7 +13,7 @@ decisions: [DEC-010, DEC-011, DEC-013, DEC-024, DEC-025, DEC-030, DEC-034, DEC-0
 ## Purpose
 
 The page brief of `/dein-kalender/bestellen` (SRC-003 §Order the calendar) in
-buildable form: how the scope drives a live preview, what the invoice step demands
+buildable form: how the scope is configured, what the invoice step demands
 of the Verwaltung, what leaves the page in step 4. Page-specific matter only —
 composition TS-006 · components SRC-014 · routes and BFF TS-004 · live modules
 TS-008 · fallback tiers TS-009 · forms, briefing exit and the four-step model
@@ -31,7 +31,7 @@ the embed code to Portalize (DEC-030, D7).
 | `primaryConversion` | `buy-calendar-licence` |
 | `equalWeightConversion` | `null` — the briefing is an exit on every step (D5), not a second goal; equal weight lives on `/dein-kalender` (WEB-F-014) |
 | `audiences` | municipalities, institutions (in that order) |
-| `liveModules` · `proofSlots` | the scope preview (D4), and no proof slot — the decision was made on `/dein-kalender`; the flow does not re-argue it |
+| `liveModules` · `proofSlots` | **none** in V1 — the scope preview is deferred (D4) and there is no proof slot; the decision was made on `/dein-kalender` and the flow does not re-argue it |
 
 One route, not four (TS-004 D1/D2); TS-006 D2's blocks 3 and 4 render once, after step 4.
 
@@ -40,7 +40,7 @@ One route, not four (TS-004 D1/D2); TS-006 D2's blocks 3 and 4 render once, afte
 Steps and their binding properties are TS-016 D8. This page adds: the step travels
 as `schritt=1..4`, so back and forward work and no step is reachable past an
 unsatisfied one — `schritt=3` without a scope lands on step 1. Steps 1 and 2 share
-one screen (tick → preview beside it).
+one screen (tick → the chosen scope beside it; the live preview of its contents is deferred, D4).
 
 ### D3 — Scope selection [FIXED: DEC-024, TS-008 D7; amended by DEC-060, see D3a; realisation PROPOSED]
 
@@ -54,7 +54,28 @@ The selection lives in the URL (D8), never in a path segment (WEB-F-023, DEC-037
 above 12 chips the row collapses to "n Orte ausgewählt" plus a disclosure. No cap
 on the scope — what a scope costs is open (Open points).
 
-### D4 — The live preview: what it shows and what it costs [PROPOSED]
+### D4 — The live preview: **not in V1** [FIXED: DEC-069]
+
+**The live preview does not ship in V1.** The scope step itself stays —
+choosing places, ZIP codes or a county is the configuration the order is
+made of, and nothing about it changes. What is deferred is the *live
+answer* to "what would be in my calendar": the counters, the next dates,
+the example places, and the BFF route that would serve them.
+
+Deferred rather than dropped, because the reasoning behind it still
+holds — a buyer who sees eleven upcoming dates in their own villages is
+persuaded by something a sentence cannot do. It is simply not what V1
+turns on: the order works without it, and the route it needs
+(`GET /api/scope/preview`) is the only BFF endpoint in the whole flow, so
+deferring it removes an entire upstream dependency from launch.
+
+**Backlog entry.** The determination below is the specification, kept
+intact so the feature does not have to be re-derived. It is not built for
+V1, no acceptance criterion tests it, and `GET /api/scope/preview` does
+**not** join the TS-004 D5 route inventory until it is scheduled.
+
+<details>
+<summary>Deferred specification — the live preview as designed</summary>
 
 The preview answers "what would be in my calendar", not "what will my calendar look
 like": rendering the product needs the loader's place filter (Q-026), and an
@@ -67,6 +88,10 @@ unfiltered reference calendar would misrepresent the purchase.
 | Layout | the preview box declares its height before the data arrives (WEB-Q-009, SRC-014 §Reserved space): fixed-height counter badges, five reserved event rows at 76 px, skeleton per TS-009 D7. Ticking a box never moves anything below the preview |
 | Scope extremes | empty scope: no request, designed empty state, step 3 unreachable. Zero dates *in* a scope: the honest publishing invitation, never a fabricated figure (WEB-F-041). County: never a place list (DEC-034) — counters plus examples, same fixed box, same one request |
 | Failure / 429 | tiers per TS-009 D4; a `429` renders as a component state (TS-014 D10), never an error page. A failed preview never blocks the order — step 3 stays reachable |
+
+</details>
+
+**What V1 does instead.** The scope step shows what the visitor has chosen — the chips they ticked and their count — and nothing about what is in it. A count of *selected places* is not a claim about content and needs no upstream call. Step 3 stays gated on a non-empty scope exactly as before; only the reason changes from "the preview is empty" to "nothing is selected".
 
 ### D5 — The briefing exit, on every step [FIXED: DEC-010, DEC-013, TS-016 D7]
 
@@ -131,7 +156,7 @@ disagree in writing rather than silently.
 | Rule | Here |
 | --- | --- |
 | Billing data never traverses the website | no POST route, no server action, no edge function — envoy receives directly (DEC-025); no field value appears in Vercel runtime logs, error reports or D11's payloads |
-| Rate limit, origin check, spam layers | the preview route joins TS-014 D10 at 30/min per IP, `429` + `Retry-After: 60`, limits high for carrier-NAT villages; TS-014 D11 unchanged and no CORS headers on it; honeypot and timing belong to envoy (TS-014 D9) — the website adds no competing layer and no captcha, here least of all |
+| Rate limit, origin check, spam layers | V1 has no BFF route here to rate-limit (D4), so TS-014 D10 gains nothing from this page and TS-014 D11 is unchanged; honeypot and timing belong to envoy (TS-014 D9) — the website adds no competing layer and no captcha, here least of all. When the preview is scheduled, its route joins TS-014 D10 at 30/min per IP with `429` + `Retry-After: 60`, limits high for carrier-NAT villages |
 | CSP | envoy and Portalize hosts are allowlist entries (TS-014 D1) — both UNKNOWN. No payment-provider host exists in the policy, now or later (DEC-011) |
 
 ### D11 — Measurement [FIXED: TS-012 D4]
@@ -153,9 +178,9 @@ and step, never a field value. Both wait on envoy's event contract (Q-022 C3).
 | --- | --- | --- |
 | TS-025-A1 | static | `page.meta.ts` for the route matches D1 field for field; `primaryConversion` resolves in the hub goal set; `equalWeightConversion` is `null`. |
 | TS-025-A2 | e2e | All four steps are walked; on each one the briefing link is visible and navigates to the configured Google Calendar URL; no step loads a Google script, iframe or font, and no Google host appears in any request. |
-| TS-025-A3 | e2e | With a layout-shift observer running, ticking three places one after another updates the preview each time and produces zero layout shift in and below the preview box. |
-| TS-025-A4 | e2e | With no place selected: no preview request is fired, the empty state is visible, and step 3 cannot be reached — neither by the CTA nor by editing `schritt=3` into the URL. Selecting a county then renders counters plus at most five example places, no place list, and fires exactly one preview request. |
-| TS-025-A5 | integration | Every preview request goes to the same-origin BFF route; no ecosystem host and no token appears in the browser; the 31st request within a minute returns `429` with `Retry-After`, and the page shows a component state, not an error page. |
+| TS-025-A3 | e2e | With a layout-shift observer running, ticking three places one after another updates the visible chip list and its count each time and produces zero layout shift in and below the scope block. |
+| TS-025-A4 | e2e | With no place selected: the empty state is visible and step 3 cannot be reached — neither by the CTA nor by editing `schritt=3` into the URL. Selecting a county renders the county as one chip, never a place list (DEC-034). |
+| TS-025-A5 | integration | The order flow issues **no** request to any ecosystem host and carries no token in the browser: the only network calls from `/dein-kalender/bestellen` are to the same origin, and `/api/scope/preview` does not exist in V1 (D4). |
 | TS-025-A6 | e2e | No step contains a card, IBAN or payment field; no payment-provider host appears in any request or in the CSP; step 4 is reached without any payment interaction. |
 | TS-025-A7 | e2e | Step 4 shows the embed code as selectable text with a copy control, and no "pending payment" or "code follows after payment" state exists anywhere in the flow. |
 | TS-025-A8 | e2e | Reload on step 2 restores the scope from the URL. Reload on step 3 restores the scope, leaves the invoice fields empty and shows the note. After a full run no cookie is set and `localStorage` / `sessionStorage` / IndexedDB are empty. |
@@ -163,7 +188,7 @@ and step, never a field value. Both wait on envoy's event contract (Q-022 C3).
 | TS-025-A10 | integration | Every step URL returns `noindex, follow` in both the `X-Robots-Tag` header and the meta tag; the route does not appear in `sitemap.xml`. |
 | TS-025-A11 | e2e | Exactly one `buy-calendar-licence` event with stage `completed` fires, and only when a code is shown; a run ending without a code fires none; each briefing click fires one `request-product-briefing` handover event. |
 | TS-025-A12 | tool | axe-core: zero violations on all four steps in light, dark and high contrast, including inside the order form's shadow root. |
-| TS-025-A13 | manual | Keyboard-only run through all four steps: every chip is removable, focus moves to the preview update announcement, invalid invoice fields identify the error in text, and the code in step 4 is reachable and copyable. |
+| TS-025-A13 | manual | Keyboard-only run through all four steps: every chip is removable, focus moves to the scope-change announcement, invalid invoice fields identify the error in text, and the code in step 4 is reachable and copyable. |
 | TS-025-A14 | e2e | With the envoy script blocked, step 3 renders the static fallback (contact link plus briefing link) — never an empty slot and never a spinner that does not resolve. |
 
 ## Coverage
@@ -209,4 +234,4 @@ rendering concern, not a commercial one.
   is published for "your places" with no rule for how many, none for a county; the
   flow can assemble a scope it cannot price.
 - **TS-016 owner** — D8's "two candidates for step 3" is stale; DEC-051 chose envoy.
-- [PROPOSED]: D2, D3 realisation, D4, D6 field set, D8 carrier, D9, D10's limit row.
+- [PROPOSED]: D2, D3 realisation, D6 field set, D8 carrier, D9, D10's limit row. D4 is fixed by DEC-069 as deferred to the backlog.

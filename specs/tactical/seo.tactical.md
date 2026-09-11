@@ -111,6 +111,16 @@ repeating DOM structures. The rule that keeps them from contradicting
 each other: **one entity, one representation** — an entity described in
 JSON-LD is not also described in microdata on the same page.
 
+**D4a — the price is emitted, and it carries its own scope [FIXED: DEC-069].**
+480 € is **per organisation and per year, net** — however many places that
+organisation covers. A bare `price: 480` with `unitCode: ANN` states the
+year and nothing else, so a search engine or assistant could quote the
+figure as if it were per place or gross. The `priceSpecification` carries
+both missing halves: `valueAddedTaxIncluded: false` for the net, and a
+`referenceQuantity` whose `unitText` names the organisation for the
+scope. The same two qualifiers appear in the visible copy — structured
+data never says more precisely what the page says vaguely.
+
 Emitted types:
 
 | Page | JSON-LD | Microdata |
@@ -118,7 +128,7 @@ Emitted types:
 | every page | `WebPage` (`inLanguage`, `isPartOf` → `WebSite`, `primaryImageOfPage`, `description`) | — |
 | `/` | `WebSite` + `Organization` (the full node, `@id` = site root) | — |
 | second-level pages (`/dein-ort/starten`, `/mitmachen/registrieren`, `/dein-kalender/bestellen`, `/deine-region/angebot`, `/ueber-uns/archiv`) | `BreadcrumbList` | on the visible trail, if the IA adopts one — see Open points |
-| `/dein-kalender` | `Service` + `Offer` (`price` 480, `priceCurrency` EUR, `unitCode` ANN, `provider` → `Organization` `@id`) | — |
+| `/dein-kalender` | `Service` + `Offer` with a `priceSpecification` (`price` 480, `priceCurrency` EUR, `valueAddedTaxIncluded: false`, `unitCode` ANN, `referenceQuantity` 1 with `unitText` naming the **organisation**, `provider` → `Organization` `@id`) — see D4a | — |
 | `/deine-region` | `Service` **without** any price or `Offer` (WEB-F-020: the region price is not published) | — |
 | `/ueber-uns` | `Organization` (reference by `@id`, not a second full node) | — |
 | `/ueber-uns/archiv` | — | `ItemList` of `NewsArticle`/`CreativeWork`, each with the **outlet** as `publisher` and `url` to the original — a citation list, never authored content |

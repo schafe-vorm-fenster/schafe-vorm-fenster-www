@@ -87,8 +87,22 @@ therefore sample **three** widths — 360, 428 and 1280.
 
 **(c) Width is not maximised.** Above `2xl` the *content* stops growing;
 only the outer margin does. The container measure is `measure.page`
-(75rem = 1200 px) and the text measure is `measure.text` (68 ch) — both
-token values, neither a proposal of this spec. No page defines its own.
+(75rem = **1200 px**) and the text measure is `measure.text` (68 ch) —
+both token values, neither a proposal of this spec. No page defines its
+own.
+
+Why 1200 and not wider or narrower (DEC-069): the container does not
+carry text width — `measure.text` caps that separately at 68 ch, roughly
+600 px, so a paragraph never spans the container. What the container
+carries is the multi-column blocks: date rows with a preview thumbnail,
+the counter trio, the map. A **1350 px** container would sit above the
+1280 px desktop reference viewport (TS-006 D3), so its maximum would
+never be reached at the width everything is tested at — a limit that only
+applies beyond your own reference is a limit nobody verifies. **980 px**
+would leave a three-column row about 300 px per column where 1200 leaves
+about 380. Anything materially wider than 1200 stops being the same
+layout at a greater width and becomes a different layout, which D2(d)
+forbids.
 
 **(d) Tablet and desktop stay close to the mobile layout.** Made
 operative as a single-tree rule:

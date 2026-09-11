@@ -208,7 +208,7 @@ Reserved geometry per module [PROPOSED]:
 | proof stream | element count per surface (Q-003), fixed card height |
 | live counters | one band, three figure slots |
 
-### D8 — Build-time snapshot artefact [PROPOSED]
+### D8 — Build-time snapshot artefact [FIXED: DEC-069]
 
 Tier 3 needs a payload that exists before the first request. It is
 produced by a build step, not by a runtime fetch.
@@ -224,9 +224,22 @@ produced by a build step, not by a runtime fetch.
 | Build fetch fails | the previously committed snapshot is kept, the build **warns**; the build fails only if a required snapshot is missing entirely |
 | Counters | **no snapshot file** (D6) |
 
+| Committed | **yes** — the generated files are tracked in git |
+
 The snapshot is a resilience artefact, not content: it is small, it is
 never the source for anything a page claims about a specific place, and
 it is allowed to be visibly old — that is what the label of D5 is for.
+
+**Why they are committed, despite being generated.** The "keep the
+previous file when the build fetch fails" rule only works if a previous
+file exists in the source tree; a snapshot regenerated from nothing on a
+clean checkout is not a fallback but a second live dependency, and a
+build running during an upstream outage would ship with no tier 3 at all —
+exactly the situation the tier exists for. The cost is real and accepted:
+generated JSON changes in most builds and makes noisy diffs. They are
+confined to `src/generated/`, which is excluded from review attention by
+convention, and their content is bounded by D8's "one representative
+payload per module, at the widest scope".
 
 ### D9 — Failure containment [PROPOSED, within DEC-032]
 

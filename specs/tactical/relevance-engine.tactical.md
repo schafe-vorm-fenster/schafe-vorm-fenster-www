@@ -63,18 +63,32 @@ the map view. Neighbourhood tiers likewise absent (geo-api#165).
 rarely finer, so tiers 0 and 1 fire only after a place search. Proof
 starts at county scale and becomes local the moment someone searches.
 
-### D2 — Context proximity [PROPOSED]
+### D2 — Context proximity [FIXED: SRC-002 scoring block; the middle value and the floor rule PROPOSED]
 
 Every element type has a defined proximity to every entry context — no
 type is without a relation. The entry context (SRC-002 context matrix)
 names a starting type and a widening set; this spec makes the remainder
 explicit rather than leaving it undefined:
 
-| Relation to the entry context | Weight |
-| --- | --- |
-| starting type | 1.0 |
-| named widening type | 0.6 |
-| any other type | 0.3 |
+| Relation to the entry context | Weight | Where it comes from |
+| --- | --- | --- |
+| starting type | 1.0 | SRC-002: *"1.0 starting type"* |
+| named widening type | 0.6 | this spec — see below |
+| any other type | 0.3 | SRC-002: *"… 0.3 widest widening"*, extended to types the matrix does not name |
+
+The endpoints are the source's, not this spec's: SRC-002's scoring block
+states `context_proximity(e, p)  # 1.0 starting type … 0.3 widest
+widening`. Two things the source leaves open, and this spec closes:
+
+- **The middle.** SRC-002 describes a span, not a gradient. Every named
+  widening type is collapsed to one value, 0.6, rather than ranked
+  between 1.0 and 0.3. A gradient would need an ordering the context
+  matrix does not carry.
+- **The floor applies to everything.** A type the matrix names for
+  neither role scores 0.3 — the same as the widest widening — instead of
+  being excluded. This is what keeps a stream from running dry: when
+  nothing better is cleared, something distant still surfaces rather than
+  nothing at all.
 
 The full type × context matrix is generated from the context matrix in
 SRC-002 and lives with the engine as data, not code.
@@ -286,7 +300,7 @@ directly. The scoring functions are pure and free of I/O.
 
 ## Open points
 
-- D2 weights, D4 steps, D6 ordering are [PROPOSED] — deliberately simple,
+- D2's middle value and floor rule, D4 steps, D6 ordering are [PROPOSED] — deliberately simple,
   to be revised from measurement (H1–H6), not opinion.
 - Q-002 (stage-0 split), Q-003 (element count per surface), Q-004 (may
   job fit outrank geo).

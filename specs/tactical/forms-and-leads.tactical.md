@@ -128,7 +128,7 @@ C8–C10 are genuinely open.
 | Data protection texts follow the fact | The processing description for lead data belongs to envoy-api and is referenced from `/rechtliches#datenschutz` (TS-004 D8), not authored as if the website were the processor |
 | Prefill is one-way | A prefilled place or offering context is passed *into* the widget as configuration (D2); nothing comes back out that the website stores |
 
-### D6 — Degradation, failure and the not-yet-delivered case [PROPOSED]
+### D6 — Degradation, failure and the not-yet-delivered case [FIXED: DEC-069]
 
 The widget is unfinished and its delivery date is UNKNOWN (C10). The
 website must be buildable and shippable regardless.
@@ -142,6 +142,21 @@ website must be buildable and shippable regardless.
 
 The fallback is one component reused by every surface, so removing it
 later is one deletion.
+
+**What the "contact route of last resort" is** [FIXED: DEC-069]: the
+form that already runs today at `https://www.schafe-vorm-fenster.de/start`
+— a Google Form. Three rules govern how it is used, and they follow from
+decisions already taken:
+
+| Rule | Why |
+| --- | --- |
+| **Linked, never embedded.** The fallback renders an outbound link, not an iframe. Today's `/start` embeds the form; the relaunch must not | DEC-013 / TS-013: no third-party embed on any page. An embedded Google Form would load Google into the page for every visitor who merely *sees* the surface |
+| **The link points at our own path `/start`**, which redirects to the form — never at the `docs.google.com` URL | The target changes when envoy lands. One redirect we control means the swap touches one route, not every lead surface. `/start` joins the TS-004 D1 route inventory as a redirect-only path |
+| **The visitor is told where the link goes** before following it: it names Google as the recipient and carries the outbound marking of TS-016 D9 | The form submits to a third country. A visitor must be able to decline it — which is only possible if the fallback also still shows the email address beside it |
+
+The Google Form is the fallback's *target*, not its shape: the fallback
+component stays one component, and the swap to envoy is a change of the
+redirect behind `/start`.
 
 ### D7 — Briefing booking is an outbound link [FIXED: DEC-010, DEC-013]
 

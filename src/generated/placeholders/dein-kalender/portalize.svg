@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="Platzhalter: Produktansicht">
+  <title>Platzhalter: Produktansicht</title>
+  <desc>Generiertes Platzhalterbild fuer den Slot dein-kalender/portalize (DEC-068). Kein Foto, keine Aussage.</desc>
+  <defs>
+    <pattern id="h" width="45" height="45" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="45" stroke="#F6AFBE" stroke-width="7.5"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="1000" fill="#FDD1D9"/>
+  <rect width="1600" height="1000" fill="url(#h)"/>
+  <rect x="45" y="45" width="1510" height="910"
+        fill="none" stroke="#580025" stroke-width="5.625" stroke-dasharray="45 22.5" opacity="0.55"/>
+  <g fill="#580025" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" text-anchor="middle">
+    <text x="800" y="484.25" font-size="67.5" font-weight="700">Produktansicht</text>
+    <text x="800" y="549.5" font-size="36" opacity="0.75" letter-spacing="5.3999999999999995">PLATZHALTER · 16:10</text>
+  </g>
+</svg>

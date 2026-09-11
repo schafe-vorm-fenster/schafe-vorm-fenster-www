@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" width="1600" height="1200" role="img" aria-label="Platzhalter: Porträt">
+  <title>Platzhalter: Porträt</title>
+  <desc>Generiertes Platzhalterbild fuer den Slot ueber-uns/gruender (DEC-068). Kein Foto, keine Aussage.</desc>
+  <defs>
+    <pattern id="h" width="55" height="55" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="55" stroke="#C6E593" stroke-width="9.166666666666666"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="1200" fill="#E5F2D1"/>
+  <rect width="1600" height="1200" fill="url(#h)"/>
+  <rect x="55" y="55" width="1490" height="1090"
+        fill="none" stroke="#2D3F01" stroke-width="6.875" stroke-dasharray="55 27.5" opacity="0.55"/>
+  <g fill="#2D3F01" font-family="'Atkinson Hyperlegible Next', system-ui, sans-serif" text-anchor="middle">
+    <text x="800" y="580.75" font-size="82.5" font-weight="700">Porträt</text>
+    <text x="800" y="660.5" font-size="44" opacity="0.75" letter-spacing="6.6">PLATZHALTER · 4:3</text>
+  </g>
+</svg>
