@@ -130,6 +130,21 @@ Production — `--prod`, promotion, production environment variables,
 production domains — is out of scope for everyone working in this
 repository right now.
 
+### Continuous Integration
+
+`.github/workflows/check.yml` runs `pnpm check` · `pnpm build` · `pnpm e2e`
+(against the production build) on every push to `next-2026` and every pull
+request targeting it. `.github/workflows/preview-e2e.yml` runs the same
+e2e suite again against the Vercel preview that Vercel's Git integration
+deploys for that push, once GitHub's `deployment_status` event reports it
+ready, past Vercel Deployment Protection via the
+`VERCEL_AUTOMATION_BYPASS_SECRET` repository secret. Both are the M4
+prototype subset of TS-015 (`specs/tactical/delivery-pipeline.tactical.md`)
+— see `README.md`'s Continuous Integration section for what is and is not
+in this slice, and each workflow file's header comment for the detail.
+
+Watch a run in the **Actions** tab, or `gh run list` / `gh run watch <id>`.
+
 ## Content Tooling
 
 The legal-content import from Google Workspace is unchanged:

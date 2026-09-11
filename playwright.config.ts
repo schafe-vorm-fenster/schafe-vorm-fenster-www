@@ -31,11 +31,15 @@ export default defineConfig({
   projects: [
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },
   ],
-  // Only start a dev server when the suite runs against localhost.
+  // Only start a local server when the suite runs against localhost. CI runs
+  // against the production build (`pnpm build` already ran as its own gate),
+  // so it starts that build instead of paying for a dev-server boot.
   ...(baseURL === localBaseUrl
     ? {
         webServer: {
-          command: `PORT=${PORT} pnpm next dev`,
+          command: process.env.CI
+            ? `PORT=${PORT} pnpm start`
+            : `PORT=${PORT} pnpm next dev`,
           url: localBaseUrl,
           reuseExistingServer: !process.env.CI,
           timeout: 120_000,

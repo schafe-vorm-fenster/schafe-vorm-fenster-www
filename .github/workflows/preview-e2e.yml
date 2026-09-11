@@ -1,0 +1,111 @@
+name: Preview E2E Smoke
+
+# TS-015 preview smoke (M4 — minimal CI, DEC-031 stage 2 prototype subset).
+#
+# `vercel project inspect schafe-vorm-fenster-www` shows the project linked
+# to this GitHub repo (`link.type: github`), and `vercel ls`/the
+# `/v6/deployments` API confirm pushes to `next-2026` already produce
+# `source: git` deployments matching the branch's HEAD commit — Vercel's Git
+# integration deploys this branch automatically. That is what this workflow
+# rides on: GitHub's `deployment_status` event, which the Vercel GitHub App
+# fires once a deployment it created finishes, carrying `environment_url`.
+#
+# Scope: the migration-preview smoke only (`next-2026`). Feature-branch
+# preview e2e, the merge-gating job graph (D4), and the canary/rollback
+# production pipeline (D7/D8) are stage-2 follow-up, not part of this run —
+# see `.github/workflows/check.yml`'s header and README.md's CI section.
+
+on:
+  deployment_status:
+
+concurrency:
+  group: preview-e2e-${{ github.event.deployment.sha }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: read
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  smoke:
+    name: E2E smoke against preview
+    if: >
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment.ref == 'next-2026' &&
+      github.event.deployment_status.environment_url != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.deployment.sha }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: ".nvmrc"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate bypass secret
+        run: |
+          if [ -z "${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}" ]; then
+            echo "::error::VERCEL_AUTOMATION_BYPASS_SECRET is not set. Add it as a repository secret in GitHub -> Settings -> Secrets and variables -> Actions."
+            exit 1
+          fi
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright Chromium (with OS deps)
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Install Playwright OS deps only (browser cache hit)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
+
+      - name: Wait for preview to answer through the bypass
+        env:
+          DEPLOYMENT_URL: ${{ github.event.deployment_status.environment_url }}
+          BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: |
+          echo "Testing URL: ${DEPLOYMENT_URL}"
+          for i in $(seq 1 30); do
+            if curl -sf -H "x-vercel-protection-bypass: ${BYPASS}" "${DEPLOYMENT_URL}/" > /dev/null; then
+              echo "Preview deployment is ready."
+              exit 0
+            fi
+            echo "Attempt $i/30: preview not ready yet, waiting 10 seconds..."
+            sleep 10
+          done
+          echo "::error::Preview deployment did not become ready within 5 minutes."
+          exit 1
+
+      - name: E2E smoke against the preview deployment
+        env:
+          E2E_BASE_URL: ${{ github.event.deployment_status.environment_url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          CI: true
+        run: pnpm e2e
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-e2e-report
+          path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore

@@ -104,6 +104,39 @@ working tree to a protected, `noindex` preview. **Production is nobody's
 job in this run** — no `--prod`, no promotion, no production environment
 variables.
 
+### Continuous Integration
+
+`.github/workflows/` carries the M4 minimal-CI slice of
+`specs/tactical/delivery-pipeline.tactical.md` (TS-015) — a prototype
+subset of DEC-031's stage 2, not the full merge-gating job graph:
+
+- **`check.yml`** — every push to `next-2026` and every pull request
+  targeting it: install (the `@schafe-vorm-fenster` scope resolves from
+  `npm.pkg.github.com` using `secrets.GITHUB_TOKEN` with `packages: read`)
+  · `pnpm check` · `pnpm build` · `pnpm e2e` against the production build
+  (`next start`, not `next dev` — see `playwright.config.ts`), with
+  Playwright's Chromium browser cached between runs.
+- **`preview-e2e.yml`** — the TS-015 preview smoke. Vercel's Git
+  integration deploys every push to `next-2026` automatically (confirmed via
+  `vercel ls` / the deployments API: `source: git`, matching commit SHAs);
+  this workflow reacts to the resulting `deployment_status` event and runs
+  the same Playwright suite against `environment_url`, authenticating past
+  Vercel Deployment Protection with the `VERCEL_AUTOMATION_BYPASS_SECRET`
+  repository secret (`x-vercel-protection-bypass`, TS-015 D3/D10).
+
+See a run: the repository's **Actions** tab, or `gh run list` /
+`gh run watch <id>` (`gh auth switch --user schafevormfenster` first — a
+different GitHub account is used for this repository, per
+`~/.claude/memory/gh-account-per-directory.md`).
+
+Not shipped in M4, on purpose: the `Quality` job (knip/jscpd/security),
+`Preview-Deployment` as its own gate, `Budgets` (Lighthouse/bundle/axe),
+`auto-merge*.yml`, branch protection, and the production canary/rollback
+pipeline (`deploy.yml`). These are DEC-031 stage-2 work for after the
+prototype — TS-015-A3–A5/A9/A10/A12's current status (pass / not-yet, with
+the reason) is recorded in this work package's completion report and in
+`state/open.md`.
+
 ### The MCP Endpoint
 
 The running dev server exposes Next.js devtools over MCP (`.mcp.json`).
