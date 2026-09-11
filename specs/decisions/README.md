@@ -83,3 +83,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-070 — Eleven determinations confirmed — the price predicate, its accepted risk, and the low-stakes block](070-the-confirmation-block.md)
 - [DEC-071 — The last four — reserved route, breadcrumbs everywhere, no geo in analytics, and one tone split in two](071-the-last-four.md)
 - [DEC-072 — The foundation stack follows the sibling repositories, with three deliberate deviations](072-the-foundation-stack.md)
+- [DEC-073 — The locale and URL layer: one typed table, no i18n library, and the 404 that actually renders](073-locale-and-url-layer.md)
