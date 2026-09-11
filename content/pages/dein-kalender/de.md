@@ -20,7 +20,7 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — 6 sourced, 1 sourced-empty-by-design, 2 withheld (trust block, see slot 8)"
+provenance: "mixed — 6 sourced, 2 generated demo additions under the prototype completeness override (slot 5 demo proof cards, slot 6 demo operations/AI placeholder sentences — the withheld status per TS-024 D10 stands for the real, non-demo copy; state/open.md Dummy-Content)"
 compliance_check: "state/content-map.md#compliance-checks — TS-024"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 open_points:
@@ -137,6 +137,19 @@ Pool: die vier Proof-IDs, auf die `portalize-calendar` verweist
 (Q-014). Ein Bild ohne geklärtes Nutzungsrecht zeigt die
 „Foto gesucht"-Platzhalterfläche, nie ein geliehenes Foto.
 
+<!-- id: dein-kalender-5-proof-demo; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Demo-Elemente (Prototyp, `Demo-Daten`-Badge):** Solange keines der vier
+Proof-Elemente freigegeben ist, zeigt der Prototyp drei beispielhafte
+Karten statt einer leeren Fläche:
+
+1. „Unser Kalender läuft jetzt unter eigenem Namen auf unserer Website — im eigenen Design, ohne eigenes System dahinter." — Amt für Digitales, Beispielverwaltung Musterkreis (Bild: „Foto gesucht" · Platzhalter)
+2. „Die Akteure vor Ort tragen ihre Termine selbst ein, unser Kalender ist einfach aktuell." — Beispielgemeinde Musterdorf (Bild: „Foto gesucht" · Platzhalter)
+3. „Ein zweites Login hätte bei uns niemand benutzt — die Einbindung schon." — Kulturverein, Beispielort Musterhagen (Bild: „Foto gesucht" · Platzhalter)
+
+Institutionen, Orte und Zitate sind frei erfunden und erkennbar
+exemplarisch; sie ersetzen kein freigegebenes Proof-Element.
+
 ## Slot 6 — Vertrauensblock: Datenschutz, Betrieb, KI
 
 <!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: []; status: draft -->
@@ -155,6 +168,22 @@ Nur der Datenschutz-Absatz hat einen Beleg (TS-013 D1/D2) und geht in
 Produktion. Betrieb und KI bleiben unveröffentlicht, bis ein Hub-Eintrag
 existiert — kein generischer Ersatzsatz, weil TS-024 D10 das
 ausdrücklich ausschließt.
+
+<!-- id: dein-kalender-6-trust-demo; content_type: section; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Demo-Platzhalter für Betrieb und KI-Nutzung (Prototyp, `Demo-Daten`-Badge):**
+Für den vollständigen Prototyp-Eindruck zeigt diese Ansicht zwei
+illustrative Beispielsätze anstelle der leeren Fläche — beide erkennbar
+als Platzhalter markiert, keine bestätigte Aussage:
+
+**Betrieb (Beispieltext):** Beispielhaft: Der Dorfkalender wird von einem kleinen Team betrieben, mit Sitz in einem Dorf — der genaue Betriebsstandort und die Rechtsform folgen, sobald ein Hub-Eintrag vorliegt.
+
+**KI-Nutzung (Beispieltext):** Beispielhaft: Veröffentlicher-Daten würden nur für die Kalenderfunktion selbst verarbeitet, nicht zum Training von KI-Modellen — die endgültige Formulierung folgt, sobald ein Hub-Eintrag vorliegt.
+
+Beide Sätze sind bewusst als Beispieltext gekennzeichnet und tragen
+keine bestätigte betriebliche oder technische Aussage; sie verschwinden,
+sobald ein echter Hub-Datensatz die Lücke schließt (`state/open.md`,
+Zeile 19).
 
 ## Verifikation — lokale Werbung
 

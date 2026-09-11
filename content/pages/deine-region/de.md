@@ -20,7 +20,7 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — 5 sourced, 1 sourced-empty-by-design, 1 withheld (response promise, see slot 7)"
+provenance: "mixed — 5 sourced, 2 generated demo additions under the prototype completeness override (slot 6 demo proof cards, slot 7 demo response-promise placeholder — the withheld status per TS-026 D5 stands for the real, non-demo copy; state/open.md Dummy-Content)"
 compliance_check: "state/content-map.md#compliance-checks — TS-026"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 open_points:
@@ -106,6 +106,19 @@ Pool: `eichler-wasserschloss-quilow`, `partner-network` — beide heute
 `unverified` (Q-014). Kein Referenzfall für ein bereits ausgeliefertes
 Gebiet existiert; keiner wird simuliert.
 
+<!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Demo-Elemente (Prototyp, `Demo-Daten`-Badge):** Solange kein
+Referenzfall freigegeben ist, zeigt der Prototyp drei beispielhafte
+Karten statt einer leeren Fläche:
+
+1. „Vierzig Orte redaktionell abzudecken war für uns nicht zu schaffen — jetzt liegt alles auf einer Karte." — Landrätin, Beispiel-Landkreis Musterkreis
+2. „Unsere Verwaltungsgrenze war nie die Grenze, an der sich das Leben der Menschen orientiert — der Kalender zeigt jetzt beides." — Amt für Regionalentwicklung, Beispiellandkreis Mustermark
+3. „Die Einbindung unter eigenem Namen und im eigenen Design war für uns kein Portalprojekt, sondern eine Konfiguration." — Netzwerkpartner, Beispielregion Musterland
+
+Landkreise, Institutionen und Zitate sind frei erfunden und erkennbar
+exemplarisch; sie ersetzen kein freigegebenes Proof-Element.
+
 ## Slot 7 — Antwortversprechen
 
 <!-- id: deine-region-7-response-promise; content_type: closing-cta; provenance: withheld; derived_from: []; status: draft -->
@@ -116,6 +129,16 @@ TS-026 D5, `state/open.md` #20).* Sobald C11 beantwortet ist, erscheint
 derselbe Satz an drei Stellen unverändert: bei der CTA auf dieser Seite,
 im Formular auf `/deine-region/angebot` und in der Bestätigung danach —
 nie an einer Stelle abweichend von den anderen.
+
+<!-- id: deine-region-7-response-promise-demo; content_type: closing-cta; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Demo-Platzhalter (Prototyp, `Demo-Daten`-Badge):** Für den
+vollständigen Prototyp-Eindruck zeigt diese Ansicht einen illustrativen
+Beispielsatz anstelle der leeren Fläche: „Beispielhaft: Du hörst in der
+Regel innerhalb von zwei Werktagen von uns." Der Satz ist als
+Beispieltext markiert, ohne bestätigten Bearbeitungsprozess dahinter,
+und wird durch die echte Formulierung ersetzt, sobald C11 beantwortet
+ist.
 
 ## Slot 8 — Preisanzeige
 

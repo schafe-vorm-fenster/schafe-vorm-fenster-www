@@ -345,6 +345,66 @@ generated text will fill it.
 - **Sourced — empty by design (clearance-gated proof/testimonial slots that must render empty rather than be filled): 11** — these are not gaps in this playbook's work; they are correct behaviour per SRC-001 rule 4 / TS-005 D5 / TS-007 D2, driven by hub clearance state (chiefly Q-045: 0/32 media-echo entries carry `usage_rights`, and 5/5 `testimonial`-type proof records still `unverified`, Q-014). No slot in this category should be "fixed" with generated copy.
 - **Dummy-Content: 7** — registered individually above and rolled up by page area in `state/open.md` below. Two of the seven (TS-024 trust-block operations/AI sentences, TS-026 response-time promise) are **withheld entirely** rather than filled with generated placeholder text, because their governing determinations (TS-024 D10, TS-026 D5) explicitly forbid shipping any sentence without a named source. The other five get on-voice, generic, clearly-marked generated content once Phase 2 starts.
 
+## Completeness correction (Task 1, 2026-09-11)
+
+**Orchestrator decision, overriding the `Sourced — empty by design`
+determination above for the prototype only.** `plan/guardrails.md`'s
+dummy-content rule requires the prototype to be complete on every page —
+"a slot without a source gets generated content, never a hole." Applied
+strictly, that rule already covered the 7 `Dummy-Content` slots above,
+but left the 11 `Sourced — empty by design` slots and the 2 fully
+`withheld` slots (TS-024 8a/8b, TS-026 row 7) genuinely empty, because
+SRC-001 rule 4 / TS-005 D5 / TS-007 D2 forbid filling a clearance-gated
+proof/testimonial slot with invented content. For the **prototype**, the
+orchestrator decided the completeness bar wins: every one of those 13
+slots now additionally carries generated, clearly-labelled, `demo: true`
+placeholder content layered *on top of* the untouched original
+determination — the map rows above, the `sourced-empty-by-design`/
+`withheld` provenance tags, and their reasoning are unchanged; the demo
+content is additive, not a replacement. Full detail and per-slot content
+is in `content/pages/**/de.md` (search `demo: true`) and registered as
+`state/open.md` #45–52.
+
+Updated tallies for the whole run (Phase 1 + this correction):
+
+| Category | Phase 2 count | + Task 1 additions | Total |
+| --- | --- | --- | --- |
+| Dummy-Content (Phase 2, real gaps generated or withheld) | 7 | 0 | 7 |
+| Sourced — empty by design (clearance-gated, real gap unchanged) | 11 | 0 | 11 |
+| **Generated demo additions (`provenance: generated`, `demo: true`, prototype-only, layered on sourced-empty/withheld slots)** | 0 | **12** | 12 |
+
+The 12 new demo additions, by page (slot → what was added):
+
+- **TS-019 Home** — slot 8: 5 demo proof/media cards. (Note: the map's
+  page-total line above reads "2 Sourced-empty-by-design" for this page,
+  but the shipped file (`content/pages/home/de.md`) only ever tagged one
+  slot, 8, with that provenance. This is a Phase 2 map/file
+  inconsistency, corrected here rather than re-litigated: the page has
+  exactly 1 sourced-empty-by-design slot, now also carrying 1 demo
+  addition.)
+- **TS-020 `/dein-ort`** — slots 3, 4, 5, 6: one generated demo
+  testimonial per value story (4 additions), plus a generated demo
+  example anchor for story 5 (Kultur)'s otherwise fully unbacked
+  anecdote — counted as 4 slot-level additions (one per story).
+- **TS-022 `/mitmachen`** — slot 7: 3 demo proof cards.
+- **TS-024 `/dein-kalender`** — slot 5: 3 demo proof cards; slot 6: 2
+  demo illustrative sentences (operations, AI use) layered on the
+  withheld real sentences.
+- **TS-026 `/deine-region`** — slot 6: 3 demo proof cards; slot 7: 1
+  demo illustrative response-promise sentence layered on the withheld
+  real constant.
+- **TS-027 `/ueber-uns`** — slot 3: 1 demo testimonial for the reserved
+  `testimonial`-type place.
+- **TS-028 Archiv** — slot 2: 6 demo archive rows spanning the type
+  vocabulary, layered on the untouched real (empty-at-scale) list logic.
+
+All additions use only recognizably exemplary names (`Beispielgemeinde
+Musterdorf`, `Beispiellandkreis Musterkreis`, `Beispielzeitung`, generic
+role attributions) — never a real-looking person, number, award, or
+quote presented as real — per the dummy-content rule and the role's
+"Must not" list. Every German addition passed `humanizer` +
+`humanize-de` before commit.
+
 ## Pages with the most Dummy-Content
 
 1. **TS-022 `/mitmachen`** and **TS-024 `/dein-kalender`** — tied, 2 each (the stage-0 reference place / permanence-promise proof gap on `/mitmachen`; the operations and AI trust-block sentences on `/dein-kalender`, both explicitly source-less per their own specs' open points).

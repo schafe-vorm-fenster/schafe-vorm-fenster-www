@@ -20,7 +20,7 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — sourced per section, see slot comments; 0 generated slots on this page"
+provenance: "mixed — sourced per section, see slot comments; 1 generated slot (slot 8, demo proof stream, prototype completeness override — state/open.md Dummy-Content)"
 compliance_check: "state/content-map.md#compliance-checks — TS-019"
 schema_note: >-
   src/domain/content-frontmatter.schema.ts predates TS-007 (8 content types,
@@ -125,7 +125,7 @@ zitierfähig ist „seit 2018 in Betrieb", nicht „acht Jahre Vollbetrieb".
 
 ## Block 2c — Belegstrom (5 Elemente)
 
-<!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft -->
+<!-- id: home-8-proof-stream; content_type: proof-card; provenance: generated; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft; demo: true -->
 
 **Kicker über dem Strom:** Was Presse, Ämter und Akteure über den Dorfkalender sagen
 
@@ -135,6 +135,20 @@ Pool: `@schafe-vorm-fenster/proof@0.3.5` (8 `cleared` Einträge) plus
 `@schafe-vorm-fenster/media-echo@0.3.3` (32 Einträge, 0 mit `usage_rights`
 heute — Q-045, `state/open.md` #1). Ein leerer Slot schwächt den Anspruch,
 er wird nie durch erfundenen Text ersetzt.
+
+**Demo-Elemente (Prototyp, `Demo-Daten`-Badge):** Solange keine Auswahl
+freigegeben ist, zeigt der Prototyp fünf beispielhafte Karten anstelle
+einer leeren Fläche:
+
+1. „Endlich sehen wir auf einen Blick, was bei uns im Ort los ist." — Ehrenamtliche Bürgermeisterin, Beispielgemeinde Musterdorf
+2. „Wir haben unseren Kalender einfach in unsere Website eingebunden, ohne eigenes System dahinter." — Amt für Digitales, Beispielverwaltung Musterkreis
+3. „Digitale Dorfkalender verändern, wie kleine Gemeinden ihre Termine teilen." — Beispielzeitung, Ausgabe März 2026
+4. „Wir tragen unsere Vereinstermine jetzt selbst ein, keine Excel-Liste mehr nötig." — Vorsitzender, Freiwillige Feuerwehr Musterdorf
+5. „Beispiel-Auszeichnung für digitale Teilhabe im ländlichen Raum." — Beispiel-Fachpreis Ländliche Digitalisierung
+
+Orte, Institutionen und Zitate sind frei erfunden und erkennbar
+exemplarisch — sie ersetzen keinen echten Beleg und verschwinden, sobald
+reale, freigegebene Einträge aus dem Pool vorliegen.
 
 ## Block 2d — Live-Zähler
 

@@ -25,7 +25,7 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — sourced per section; 0 generated slots; 3 sourced-empty-by-design (testimonial parts)"
+provenance: "mixed — sourced per section; 4 generated demo-testimonial/demo-example slots added under the prototype completeness override (slots 3, 4, 5, 6 — state/open.md Dummy-Content); underlying value-story text stays sourced, only the demo testimonial/example additions are generated"
 compliance_check: "state/content-map.md#compliance-checks — TS-020"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 ---
@@ -77,6 +77,10 @@ Solange `kurzweg-baeckerei` `usage_rights: unverified` bleibt, rendert die
 Story dreiteilig (Aspekt → Warum → Beispiel), ohne Zitat. Kein Ersatztext,
 keine Paraphrase, kein „Nutzer sagen" (SRC-001 §4).
 
+<!-- id: dein-ort-3-story-baeckerwagen-demo-testimonial; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Demo-Testimonial (Prototyp, `Demo-Daten`-Badge):** „Seit der Bäckerwagen im Kalender steht, verpassen wir ihn nicht mehr." — Bäckerei, Beispielgemeinde Musterdorf. Erkennbar exemplarisch, ersetzt kein freigegebenes Zitat.
+
 ## Slot 4 — Value Story 2: die Ratssitzung
 
 <!-- id: dein-ort-4-story-ratssitzung; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"]; status: draft -->
@@ -96,6 +100,10 @@ tagesaktuell und ortsgenau über die Dorfkalender (`impftermine-landkreis`,
 
 <!-- provenance: sourced-empty-by-design; testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; usage_rights: unverified (Q-014) -->
 
+<!-- id: dein-ort-4-story-ratssitzung-demo-testimonial; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Demo-Testimonial (Prototyp, `Demo-Daten`-Badge):** „Ich habe von der Ratssitzung im Kalender erfahren, nicht erst im Protokoll danach." — Einwohnerin, Beispielgemeinde Musterdorf. Erkennbar exemplarisch, ersetzt kein freigegebenes Zitat.
+
 ## Slot 5 — Value Story 3: Kultur, die niemand gesucht hätte
 
 <!-- id: dein-ort-5-story-kultur; content_type: value-story; provenance: sourced-empty-by-design; derived_from: [ia]; status: draft -->
@@ -109,6 +117,10 @@ tagesaktuell und ortsgenau über die Dorfkalender (`impftermine-landkreis`,
 **Testimonial:** *leer nach Vorgabe — kein freigegebenes Zitat*
 
 <!-- provenance: sourced-empty-by-design; testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin", "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"]; usage_rights: unverified (Q-014); note: "keine gedeckte Backing-Anekdote vorhanden — an Orten ohne Kulturtermin trägt diese Story heute keinen Beleg (TS-020 Open Points)" -->
+
+<!-- id: dein-ort-5-story-kultur-demo; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Demo-Beispiel und Demo-Testimonial (Prototyp, `Demo-Daten`-Badge):** Beispieltermin „Ausstellung im Schlosspark, Beispielgemeinde Musterdorf" — „Von der Ausstellung hätte ich sonst nie erfahren, sie stand einfach im Kalender." — Besucherin, Beispielgemeinde Musterdorf. Termin, Ort und Zitat sind frei erfunden und erkennbar exemplarisch; sie zeigen nur, wie die Story mit Beleg aussähe, und ersetzen weder eine echte Anekdote noch ein freigegebenes Zitat.
 
 ## Slot 6 — Value Story 4: der Fünfzehn-Minuten-Radius
 
@@ -129,6 +141,10 @@ keine Reichweitenzahl).
 **Testimonial:** *leer nach Vorgabe — kein freigegebenes Zitat*
 
 <!-- provenance: sourced-empty-by-design; testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; usage_rights: unverified (Q-014) -->
+
+<!-- id: dein-ort-6-story-radius-demo-testimonial; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Demo-Testimonial (Prototyp, `Demo-Daten`-Badge):** „Was zwei Dörfer weiter läuft, sehe ich jetzt genauso wie das, was direkt bei uns passiert." — Einwohner, Beispielgemeinde Musterdorf. Erkennbar exemplarisch, ersetzt kein freigegebenes Zitat.
 
 ## Slot 7 — Homescreen-Block
 
