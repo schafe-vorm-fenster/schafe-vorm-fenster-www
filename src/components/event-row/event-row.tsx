@@ -6,7 +6,6 @@ import { Skeleton } from "../skeleton/skeleton";
 import { formatEventDay } from "./format";
 
 import type { LinkOptions } from "../route-link/href";
-import type { Locale } from "@/src/lib/i18n/locales";
 import type { RouteId } from "@/src/lib/routes/routes";
 
 import styles from "./event-row.module.css";
