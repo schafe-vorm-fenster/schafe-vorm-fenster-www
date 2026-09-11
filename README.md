@@ -62,7 +62,7 @@ whole run uses 3100 — the `dev` and `start` scripts, the Playwright
 | --- | --- |
 | `pnpm dev` | development server on port 3100 |
 | `pnpm build` | production build |
-| `pnpm check` | **the single gate** — frontmatter · content · specs · stack · brand · typecheck · lint · unit and integration tests. The pre-commit hook runs it on every commit, so it stays in the seconds (7.7 s measured at M3, `check:content` 0.3 s of it). A new check is added *to* it, never run beside it. |
+| `pnpm check` | **the single gate** — frontmatter · content · specs · stack · brand · csp · typecheck · lint · unit and integration tests. The pre-commit hook runs it on every commit, so it stays in the seconds (7.7 s measured at M3, `check:content` 0.3 s of it). A new check is added *to* it, never run beside it. |
 | `pnpm test` | unit and integration tests (Vitest) |
 | `pnpm test:watch` | the same, watching |
 | `pnpm e2e` | end-to-end tests (Playwright); starts the dev server itself |
