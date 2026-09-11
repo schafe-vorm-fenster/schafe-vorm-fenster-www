@@ -89,7 +89,7 @@ TS-008 D6 governs loader, host, lazy loading, cookies, failure. Page-local:
 | Reserved space | the container declares its height before the loader runs; the page never reflows |
 | Failure | static copy and the block's CTA remain; no empty frame, no error sentence |
 
-### D6 — Three tiers under one question [FIXED: SRC-003; module shape PROPOSED]
+### D6 — Three tiers under one question [FIXED: SRC-003; amended by DEC-060, see D6a; module shape PROPOSED]
 
 One module, one question heading ("who is the calendar for?"), three tiers in
 this order. Facts come from `@schafe-vorm-fenster/offerings`; this spec

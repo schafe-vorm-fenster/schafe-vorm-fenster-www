@@ -42,7 +42,7 @@ as `schritt=1..4`, so back and forward work and no step is reachable past an
 unsatisfied one — `schritt=3` without a scope lands on step 1. Steps 1 and 2 share
 one screen (tick → preview beside it).
 
-### D3 — Scope selection [FIXED: DEC-024, TS-008 D7; realisation PROPOSED]
+### D3 — Scope selection [FIXED: DEC-024, TS-008 D7; amended by DEC-060, see D3a; realisation PROPOSED]
 
 | Mode | Input | Resolution | State today |
 | --- | --- | --- | --- |
