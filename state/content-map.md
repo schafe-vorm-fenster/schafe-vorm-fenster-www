@@ -43,8 +43,49 @@ needs. Phase 2 (primary copy), Phase 3 (translation) and Phase 4
 
 ## Artifact shape (TS-007, for Phase 2)
 
-Per-locale content artifacts (once the reshaped schema of TS-007 D5
-lands) live at:
+**Update, Phase 2, 2026-09-11 — this section is now authoritative for
+what was actually shipped, not only for the target state.** TS-007 D4
+fixes one generated file per **slot** per locale
+(`content/<locale>/<route>/<slot>.<type>.md`), but the reshaped 26-type
+schema and the `derived_from[]`/`RelevanceFacets` fields it depends on
+have not landed in `src/domain/content-frontmatter.schema.ts` yet (still
+the pre-relaunch 8-type schema, see TS-007 D5's own migration table).
+Writing 78 tiny per-slot files against a schema that cannot yet validate
+their shape would not be checkable and would not match what M1/M3 code
+builds against today. Content & Translation therefore used the
+explicitly offered fallback: **one file per page per locale**,
+
+```
+content/pages/<route-slug>/de.md               ← generated, then edited (nested to match the route tree)
+content/legal/<locale-flat>/<doc>.md           ← imported, not generated (content/legal/ is flat today, TS-029 open point 8)
+```
+
+with one Markdown section per content slot from this map, in page-spec
+composition order, and a per-slot inline HTML comment carrying the
+slot-level metadata that TS-007 D4/D6 would otherwise put in the file's
+own frontmatter (`<!-- id: …; content_type: …; provenance: …;
+derived_from: […]; status: … -->`) — page-level YAML frontmatter cannot
+carry one `provenance`/`derived_from` per slot when slots differ (a page
+is typically "mixed": some slots sourced, some sourced-empty-by-design,
+a few generated). Page frontmatter carries a best-effort superset: the
+pre-relaunch schema's required fields (`id`, `content_type` — `section`
+for all eleven pages, `legal` for the one new legal file; `status:
+draft`; `locale: de`) plus TS-007-shaped extras (`page_id` TS-###,
+`route`, `derived_from[]`, `generated_by`, `generated_at`, `provenance`,
+`tone_profile: du-everywhere`, `compliance_check`, `open_points`).
+`pnpm check:frontmatter` is green on all twelve new files — but only
+because Zod's default (non-strict) object parsing silently drops
+unknown top-level keys, which is not the same as TS-007 D12 actually
+resolving `derived_from` or checking facet completeness. `content_type:
+section` is a stopgap: no content-type vocabulary (old 8 or planned 26)
+defines a whole-page composite type. All of this is registered as
+`state/open.md` #43 for the M3 pipeline developer, who should confirm
+whether to keep one-file-per-page or migrate to TS-007 D4's
+one-file-per-slot shape once the schema is reshaped.
+
+The paragraphs below describe the **target** shape (TS-007 D4/D5/D6/D7)
+that the pipeline should converge on; they are kept for that purpose,
+not because Phase 2 built against them directly.
 
 ```
 content/<locale>/<route>/<slot>.<type>.md      ← generated, then edited
@@ -308,3 +349,44 @@ generated text will fill it.
 
 1. **TS-022 `/mitmachen`** and **TS-024 `/dein-kalender`** — tied, 2 each (the stage-0 reference place / permanence-promise proof gap on `/mitmachen`; the operations and AI trust-block sentences on `/dein-kalender`, both explicitly source-less per their own specs' open points).
 2. **TS-023 `/mitmachen/registrieren`**, **TS-026 `/deine-region`**, **TS-029 `/rechtliches`** — 1 each (the "who publishes" enum vocabulary; the conditional response-time promise; the accessibility statement).
+
+---
+
+## Compliance check (Phase 2, 2026-09-11)
+
+The eight-point check of `website-communication-principles.concept.md`
+§"Compliance Check for a Page Brief", plus point 9 (DEC-066, `du`
+throughout) — nine rows per page below. Assessed against the copy in
+`content/pages/**/de.md` together with each page's own tactical spec
+(manifest values are the spec's, not authored here; this check reads
+whether the copy is consistent with them, not whether the manifest
+itself is right). "Pass" means the copy satisfies the point or does not
+contradict it; "N/A (by design)" marks a point the page's own spec
+exempts it from; "Partial" names what is missing and why.
+
+| Page (TS-###) | 1. One focus job | 2. One primary conversion (ID) | 3. Audiences ordered, primary named | 4. Every claim has a proof slot or is weakened | 5. ≥ 1 live module, empty state defined | 6. Context band names other 3 jobs | 7. Closing CTA = primary | 8. Works at stage 0 | 9. `du` throughout, no formal address |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| TS-019 Home | Pass — `know-what-is-on`, invariant across S1–S4 | Pass — `save-calendar-to-homescreen` | Pass — order is a runtime property of the proof stream, not authored here; not contradicted | Pass — proof stream (slot 8) is explicitly empty-by-design where uncleared, never invented | Pass — place search (S1), position 1/2 (S2/S3), counters (slot 9), each with a defined empty/fallback state | Pass — slot 10 names all three other jobs | Pass — slot 11 mirrors the current-state primary by rule | Pass — S1 (search) is the prerendered default and is complete on its own | Pass |
+| TS-020 Your place | Pass — `know-what-is-on`, shifts to `publish-our-dates` only in state B (registered exception) | Pass — `save-calendar-to-homescreen` (state A) / `register-as-publisher` (state B) | Pass — `rural-residents` then `actors`, per spec | Partial — 4 value stories, 3 testimonial parts empty-by-design (Q-14, unverified); backing examples cleared where the spec names one | Pass — position 1/2 + search; state B is itself the registered live-module-driven empty state | Pass (rendered by layout, not re-authored here) | Pass — state A opens the calendar, state B is `register-as-publisher`, both closing-CTA-mirrored | Pass — S0 renders search + 4 stories on snapshot examples | Pass — includes the one direct-address sentence DEC-071 reserves for this page |
+| TS-021 Start the calendar | Pass — `publish-our-dates`, static | Pass — `register-as-publisher` | Pass — `actors`, `municipalities`, `rural-residents` in order | Pass — no proof slot on this page by spec; the live example is the credibility carrier, sourced to a real active place | Pass — live example (slot 3) + search (slot 5), both degrade to the placeless variant | Pass (layout) | Pass — slot 6 CTA is the closing CTA | Pass — placeless variant is itself the prerendered page | Pass — slot 4 explicitly avoids naming the visitor as the one who must act |
+| TS-022 Mitmachen | Pass — `publish-our-dates`, invariant | Pass — `register-as-publisher` | Pass — `actors` primary, `municipalities` as publisher | Partial — objection block and proof block (slot 7) are sourced but pool-thin; permanence promise (slot 8) is generated, not proof-backed (state/open.md #17) | Pass — live example (slot 6), with a named stage-0 reference place (slot 6a) as its empty/fallback anchor | Pass (layout) | Pass — slot 8 mirrors slot 1 exactly | Pass — stage-0 uses the configured reference place, never the visitor's own | Pass |
+| TS-023 Registrieren | Pass — `publish-our-dates` | Pass — `publish-first-event` (completed in-app; `register-as-publisher` fired here at handover) | Pass — single audience `actors`, per spec | N/A (by design) — no proof slot on this page; the argument was made on `/mitmachen` | Pass — place search, step 1 only, per spec | Partial — band renders on step 1 only, suppressed steps 2–3 (TS-023 D7, `state/open.md` #24, a registered deviation from TS-006's every-page rule) | Pass — handover *is* the closing CTA | Pass — step 1 is reachable with no assumption | Pass |
+| TS-024 Dein Kalender | Pass — `run-our-own-calendar` | Pass — `buy-calendar-licence` primary, `request-product-briefing` equal-weight | Pass — municipalities, institutions, actors, counties in order | Partial — proof block (slot 5) pool-thin/unverified by design; trust block (slot 6) ships data-protection only, operations/AI sentences withheld, not generated (D10, `state/open.md` #19) | Pass — embed demo (slot 3), labelled example while Q-026 is open | Pass (layout) | Pass — closing CTA mirrors the primary, not Pulse-styled | Pass — tiers, contrast and trust block need no visitor context | Pass |
+| TS-025 Bestellen | Pass — `run-our-own-calendar` | Pass — `buy-calendar-licence` | Pass — municipalities, institutions | N/A (by design) — no proof slot in V1 (decision already made on `/dein-kalender`) | Partial — scope selection (slot 1) has no live preview in V1 (DEC-069, deferred by decision, not a copy gap) | N/A (by design) — TS-025 D7-style flow, no argument blocks | Pass — step 4 code display is the terminal state, no separate closing CTA needed (flow, not an argument page) | Pass — steps 1–2 need no visitor context; step 3 explicitly handles the no-live-preview case in copy | Pass |
+| TS-026 Deine Region | Pass — `run-our-own-calendar` | Pass — `request-licence-quote` primary, `request-product-briefing` equal-weight | Pass — counties, institutions, municipalities in order | Partial — proof block (slot 6) pool-thin/unverified by design; response promise (slot 7) fully withheld, not generated (`state/open.md` #20) | Pass — interim module (slot 3) with a defined stage-0/failure fallback (search stays, county-dependent parts omitted) | Pass (layout) | Pass — slot 1 CTA repeated identically in the closing block per spec | Pass — stage 0 renders search only, asserts no county name | Pass |
+| TS-027 Über uns | N/A (by design) — page carries no conversion of its own (TS-027 D1) | N/A (by design) — `primaryConversion: null` by spec | Pass — 5 audiences listed, priority order per spec | Partial — proof stream (slot 3) has one permanently visible empty slot by design (5/5 testimonials unverified, Q-014); origin claim (slot 1) is fully cleared | Pass — operating counters (slot 2), empty state defined (renders without the figure, never a placeholder zero) | Pass — merged into the closing block per TS-006 D6, offering all three jobs (this page's substitute for points 6+7 given no conversion of its own) | N/A (by design), see above | Pass — stage 0/1 renders identical block order | Pass |
+| TS-028 Archiv | N/A (by design) — no focus-job argument, a reference list (TS-028 D1) | N/A (by design) — `primaryConversion: null` | N/A — not an audience-targeted argument page | Pass — clearance is the only filter; 0/32 rows render today rather than any invented row (Q-045, `state/open.md` #1) | N/A — fully static by design, no live module (TS-028 D8) | N/A (by design) — TS-028 D1 forbids an own CTA; the closing block still offers the three jobs, per layout | Pass — closing block, per layout | Pass — chronological order needs no visitor context | Pass |
+| TS-029 Rechtliches | N/A (by design) — sender surface, no focus job in the four-job sense (TS-029 open point #5) | N/A (by design) — no conversion | N/A — not audience-targeted | N/A — legal text, not a marketing claim | N/A — fully static (TS-029 D7) | N/A (by design) — TS-004 D8 registry page, not an argument page | N/A | Pass — static, no visitor context needed | Partial — the composition/nav copy in this file is `du`-consistent, but the five **imported** legal documents (`content/legal/*.md`) predate this run, are out of this playbook's scope to rewrite, and were not audited for register; a `du`/`Sie` mismatch there is a known, unaddressed risk, not a finding this run can close |
+
+Notes:
+
+- "Partial" rows are not failures of this playbook's work; nearly all of
+  them restate a `Sourced — empty by design` or `Dummy-Content` row
+  already tracked above and in `state/open.md` — clearance gaps,
+  withheld promises, and one unaudited legal register are system/hub
+  gaps, not missing copy.
+- The one open finding worth flagging on its own: **`/rechtliches`
+  point 9** — nobody has checked whether the five imported legal
+  documents use `du` or `Sie`. DEC-066 binds the whole website; this
+  playbook cannot rewrite legal text to fix it (role boundary), so it is
+  registered here rather than silently passed.
