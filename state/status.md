@@ -6,6 +6,8 @@ Current test round: 2 (round 1 = M1 gate)
 
 ## Done
 
+- Fix round 2b: F-2-2 scrim (11.9–15.7:1), F-2-28/29 contrast (axe 0 serious on 48 cases), F-2-3 breadcrumb name, F-2-4 locale props + dictionary sections, e2e env fit; preview https://schafe-vorm-fenster-cmijfafo8-schafe-vorm-fenster.vercel.app 256 passed / 0 failed — 2026-09-11
+- Gate 2 strands: UAT report reports/uat/gate-2.md (5 goals walked; strongest: 404 placeholder copy, dead briefing links, Weiter/Absenden, demo organizer id, mixed-language EN registration); chaos keyboard-only (8 obs, TS-001-A7 switch bug), boundary-tester (18 obs), form-abandoner (6 obs, {county-or-organization} literal, EN labels German) — 2026-09-11
 - M4 wiring wave: Cache Components on (6 static ○ / 2 ◐ / 4 ƒ), live islands + relevance selection + 9 goal events + one JSON-LD graph per page, TS-006 A1/A11 cross-page validation; pnpm check 704 tests; e2e 251 local, 221 on preview https://schafe-vorm-fenster-83x6zbys4-schafe-vorm-fenster.vercel.app (failures = known contrast + env-fit) — 2026-09-11
 - Round-2 triage: 27 findings (0 critical, 1 high), 7 fix-now; plan/gate-2-scope.md (PM) — 2026-09-11
 - Fix round 2a: F-1-2 CSP guard, F-2-5 geo fixture, F-2-6 axe (DEC-076, 24-route sweep → F-2-28/29 found) — 2026-09-11
@@ -35,10 +37,9 @@ Current test round: 2 (round 1 = M1 gate)
 
 ## In progress
 
-- Fix round 2b: F-2-2 hero scrim, F-2-28/29 contrast, F-2-3 nav names, F-2-4 /en labels, e2e env fit — Developer
-- Gate 2 UAT walks on preview 83x6zbys4 — UAT persona
-- Gate 2 chaos runs on preview: hasty-clicker, form-abandoner, keyboard-only, boundary-tester — 4 personas
-- Next: QA acceptance sweep (plan/gate-2-scope.md) on the 2b build, PM prioritization, retest, Customer
+- Gate 2 QA acceptance sweep run 1 (full scope, security sweep, triage of chaos/UAT) on preview cmijfafo8 — QA (opus)
+- Chaos hasty-clicker run 2 via Playwright — persona
+- Next: PM round decisions → fix round 3 → retest → Customer acceptance
 
 ## Pending
 
