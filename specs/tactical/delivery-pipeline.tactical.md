@@ -192,7 +192,7 @@ Merges are serialised: `concurrency: { group: production-release,
 cancel-in-progress: false }`, so two rolling releases are never open at
 once. [PROPOSED]
 
-### D8 — What the canary gate evaluates [PROPOSED]
+### D8 — What the canary gate evaluates [FIXED: DEC-070]
 
 Four signals, evaluated against the canary stage only (requests carry
 the canary-forcing query parameter so they are not served by the
@@ -209,7 +209,7 @@ Lighthouse, axe and the bundle guard stay at PR level (D4 job 4); they
 are not repeated against the canary — a regression they would catch has
 already blocked the merge.
 
-### D9 — The spec checker in CI; warnings are a burn-down [PROPOSED]
+### D9 — The spec checker in CI; warnings are a burn-down [FIXED: DEC-070]
 
 `pnpm check` (= `check:frontmatter` + `check:specs`) runs today only as
 a Husky pre-commit hook. A hook is skippable (`--no-verify`) and does
@@ -250,7 +250,7 @@ Tokens never reach the browser and never appear in a deployed bundle
 finds a required secret empty fails with an explicit message naming the
 setting to add, rather than proceeding and timing out.
 
-### D11 — Runner and toolchain [PROPOSED]
+### D11 — Runner and toolchain [FIXED: DEC-070]
 
 `runs-on: ubuntu-latest`, no custom container. SRC-012 runs its jobs in
 a prebuilt `ci-runner` image; the website starts without one and adopts

@@ -55,7 +55,7 @@ dressed as personalization. The place search (WEB-F-046) is not such a
 control: it answers the visitor's own question and only incidentally
 raises the stage.
 
-### D2 — Resolution pipeline and precedence [PROPOSED]
+### D2 — Resolution pipeline and precedence [FIXED: DEC-070]
 
 One pass per request, cheapest first, stated intent always winning over
 inferred intent:
@@ -334,7 +334,6 @@ TS-001 D3.
 - **Q-002 (stage-0 weight split)** decides what stage 0 actually looks
   like in the proof stream; D8 asserts completeness, TS-005 D5 decides
   composition.
-- [PROPOSED] and unconfirmed: D2 (pipeline and precedence), D3
-  vocabulary, D4 source and the 150 ms budget, D6's GPC row, D9
-  mechanism, D11. Each is a proposal awaiting its decision point, not a
-  gap.
+- [PROPOSED] and unconfirmed: D3 vocabulary, D4 source and the 150 ms
+  budget, D6's GPC row, D9 mechanism, D11. Each is a proposal awaiting
+  its decision point, not a gap. D2 is fixed by DEC-070.

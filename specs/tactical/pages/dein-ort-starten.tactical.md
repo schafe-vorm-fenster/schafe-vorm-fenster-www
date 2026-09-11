@@ -82,7 +82,7 @@ founding page; entry without a parameter is legitimate (D4), not an error.
 | Shareability | the page is a pure function of URL + language — no dependence on referrer, session, cookie, storage or a prior search, so a WhatsApp recipient who never searched sees the identical page (A2) |
 | Absent or invalid | the placeless variant: the same blocks, the same CTA, the acknowledgment phrased without a place name, registration without prefill (A3) |
 
-### D5 — Re-resolution, for the link that arrives late [PROPOSED]
+### D5 — Re-resolution, for the link that arrives late [FIXED: DEC-070]
 
 The link is shared and may be opened weeks later, when the place may be
 covered. The route resolves `?ort=` once per request (TS-008 D7): still

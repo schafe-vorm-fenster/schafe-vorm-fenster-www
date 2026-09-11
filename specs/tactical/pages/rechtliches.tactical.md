@@ -55,7 +55,7 @@ hold in code:
 | one id per anchor, duplicates fail the build; localized in pairs | `/rechtliches#impressum` and `/legal#imprint` are the same section (D8) |
 | markdown headings inside a document get **no** auto ids | no heading collision can shadow a registry anchor |
 
-### D3 — Landing at an anchor lands correctly [PROPOSED]
+### D3 — Landing at an anchor lands correctly [FIXED: DEC-070]
 
 The header is sticky, so a raw anchor jump hides the heading under it:
 
@@ -68,7 +68,7 @@ The header is sticky, so a raw anchor jump hides the heading under it:
 - smooth scrolling only under `prefers-reduced-motion: no-preference`;
   an unknown fragment renders the page at the top, not an error.
 
-### D4 — On-page navigation [PROPOSED]
+### D4 — On-page navigation [FIXED: DEC-070]
 
 One `<nav>` with an accessible name ("Abschnitte" / "Sections") listing the
 registry sections in order, server-rendered as plain links — it works with

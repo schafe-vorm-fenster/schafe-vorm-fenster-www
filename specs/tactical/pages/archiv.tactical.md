@@ -55,7 +55,7 @@ counted, not in the JSON-LD. Applied at generation, re-validated at build
 D13). An **absent** `usage_rights` is no clearance (TS-007 D2) — blocking
 today (Open points).
 
-### D4 — The type filter [PROPOSED]
+### D4 — The type filter [FIXED: DEC-070]
 
 | Aspect | Determination |
 | --- | --- |
@@ -97,7 +97,7 @@ At most one preview in the initial viewport, every other lazy and
 async-decoded. No image here is the LCP element — that is the page heading
 (text); TS-003 D2 has no row for this route yet (Open points).
 
-### D7 — What a row carries, and the year spine [PROPOSED]
+### D7 — What a row carries, and the year spine [FIXED: DEC-070]
 
 A row is the SRC-014 **event row**, not a card: date at stated precision ·
 original title in its source language (DEC-026) · outlet · type badge(s) · one

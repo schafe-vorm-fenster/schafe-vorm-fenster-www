@@ -69,7 +69,7 @@ The offering→surface map is TS-004 D7 and is not repeated here; this
 determination is the predicate that map has to satisfy. Offerings never
 define routes (WEB-F-002, DEC-036).
 
-### D3 — Publishable price predicate [PROPOSED]
+### D3 — Publishable price predicate [FIXED: DEC-070]
 
 ```
 publishablePrice(o) = o.promotion === 'promoted' && o.price_status === 'fixed'
@@ -95,6 +95,13 @@ Two consequences:
    is a defect even when the figure is right.
 2. **The figures 4000 and 5 ship inside the build.** They are frontmatter
    of packages the site installs, so a template mistake can print them.
+   **No guard checks for this, by decision** (DEC-070): the rendered
+   output is not scanned for withheld amounts. The risk is accepted
+   rather than overlooked — the component that refuses unpublishable ids
+   is the control, and a second check on the output would be a guard
+   against a bug that has not happened. The trigger to revisit is
+   explicit: the first time a withheld amount reaches a rendered page,
+   the guard gets built.
    The guard is over the built output: every currency token
    (`\d[\d.,]*\s*(€|EUR)`) in rendered HTML must resolve to a
    `publishablePrice` amount or to an allow-listed non-price figure.
@@ -372,5 +379,7 @@ The four boundary questions:
   machine-decidable and rest on moments 1 and 2. If those moments are not
   actually held, both boundaries are unenforced regardless of what the
   build reports.
-- D3, D4 deny-list, D6 mechanism, D8 size, D9 guard, and D10 moments are
-  [PROPOSED].
+- D4 deny-list, D6 mechanism, D8 size, D9 guard, and D10 moments are
+  [PROPOSED]. D3 is fixed by DEC-070, including its accepted risk: the
+  withheld amounts ship inside the build and no guard checks the rendered
+  output for them.

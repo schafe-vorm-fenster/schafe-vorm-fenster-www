@@ -146,7 +146,7 @@ per-environment variance). **A `vercel.json` `headers` block would
 silently take precedence over both and is therefore forbidden** — one
 source per header, no exceptions.
 
-### D5 — Three environments [PROPOSED]
+### D5 — Three environments [FIXED: DEC-070]
 
 | | Production | Preview (`next.*`, branch previews) | Local dev |
 | --- | --- | --- | --- |

@@ -80,3 +80,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-067 — Six breakpoints, dense below the tablet — and why the spec's two were wrong](067-six-breakpoints-dense-at-the-phone-end.md)
 - [DEC-068 — Every gap is filled with a marked placeholder, never left empty](068-placeholders-over-empty-slots.md)
 - [DEC-069 — Answers from the PROPOSED review — price, accessibility, cache, budget, fallback, preview](069-eleven-answers-from-the-proposed-review.md)
+- [DEC-070 — Eleven determinations confirmed — the price predicate, its accepted risk, and the low-stakes block](070-the-confirmation-block.md)
