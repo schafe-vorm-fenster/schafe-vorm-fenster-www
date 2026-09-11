@@ -23,7 +23,8 @@
   minor level deviation: `verification-strategy.md` puts headers at
   `integration` ("routes are integration, not e2e"); this AC is
   implemented as a Playwright e2e test instead.
-- Round decision:
+- Round decision: fix-now
+- Resolved: 26176ff
 
 ## F-1-2 — No automated guard for TS-014-A1 (CSP allowlist / no-wildcard rule)
 
@@ -64,4 +65,5 @@
   round, not by a script. Once M4 adds `app/api/*` routes and the
   DEC-029 handover module, a violation could land without `pnpm check`
   catching it.
-- Round decision:
+- Round decision: fix-now
+- Resolved: 26176ff
