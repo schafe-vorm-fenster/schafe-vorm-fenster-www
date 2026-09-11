@@ -22,6 +22,74 @@
 @import "@schafe-vorm-fenster/brand-design/tokens.css";
 
 /*
+ * F-2-68 — the font-swap half of the 174px shift on `/`.
+ *
+ * `font-display: swap` (fontsource's default, kept per DEC-043) paints the
+ * fallback immediately and swaps to Atkinson Hyperlegible Next once it
+ * loads. The fallback in the token package's stack — `'Atkinson
+ * Hyperlegible'` (a distinct, rarely-installed accessibility font, not this
+ * one) then system sans — has a materially different average glyph width,
+ * so the swap reflows every line, cascading into the ~174px the chaos run
+ * measured at the footer (C-H-12).
+ *
+ * This declares one metric-matched fallback face per weight actually used
+ * (400/700/800 — the type roles this project has), aliased to a local Arial
+ * install (or an Arial-metric-compatible substitute), and inserts it right
+ * after the real font in `--font-sans`.
+ *
+ * `ascent-override`/`descent-override`/`size-adjust` are **measured, not
+ * derived from the `OS/2.xAvgCharWidth` field**: that field is a
+ * frequency-weighted single number, not a real average of rendered text, and
+ * computing `size-adjust` from it against Arial's own `xAvgCharWidth` put it
+ * at ~121–132% — verified wrong in the browser, where it rendered a live
+ * "Suchen" button 35% too wide instead of matching. The values below came
+ * from a Playwright/Canvas `measureText()` comparison instead: the site's
+ * own short UI words ("Suchen Absenden Anmelden Weiter …", the exact class
+ * of text C-H-12 measured moving) rendered in both fonts at a large size
+ * (1000px, for rounding precision) at each weight —
+ * `size-adjust = realWidth / fallbackWidthAtNoAdjustment`, and
+ * `ascent/descent-override = (realFont's own hhea ascent|descent / 1000) /
+ * size-adjust`. Recompute with the same method (`document.fonts.load` +
+ * `canvas.measureText`) if either font file changes.
+ *
+ * `line-gap-override: 0%` at every weight — the font's own `hhea` line gap
+ * is 0 regardless of weight.
+ *
+ * Scoped to the sans family only: `--font-mono` carries a much smaller share
+ * of visible text (the wordmark, date labels) and is not what C-H-12
+ * measured; left as the open point it already was.
+ */
+@font-face {
+  font-family: "Atkinson Hyperlegible Next Fallback";
+  font-weight: 400;
+  src: local("Arial"), local("Liberation Sans"), local("Arial Nova"), local("Helvetica Neue"), local("Helvetica");
+  ascent-override: 99.37%;
+  descent-override: 31.91%;
+  line-gap-override: 0%;
+  size-adjust: 99.02%;
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible Next Fallback";
+  font-weight: 700;
+  src: local("Arial Bold"), local("Liberation Sans Bold"), local("Arial Nova Bold"), local("Helvetica Neue Bold"), local("Helvetica-Bold");
+  ascent-override: 99.83%;
+  descent-override: 32.06%;
+  line-gap-override: 0%;
+  size-adjust: 98.57%;
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible Next Fallback";
+  font-weight: 800;
+  src: local("Arial Bold"), local("Liberation Sans Bold"), local("Arial Nova Bold"), local("Helvetica Neue Bold"), local("Helvetica-Bold");
+  ascent-override: 96.47%;
+  descent-override: 30.98%;
+  line-gap-override: 0%;
+  size-adjust: 102.0%;
+}
+
+/*
  * One value the token package does not carry yet.
  *
  * The design system (SRC-014 §Status, §Photo surface) fixes the placeholder
@@ -34,4 +102,25 @@
  */
 :root {
   --color-placeholder-ground: #FBF1DC;
+
+  /*
+   * F-2-44 (TS-002-A10's 15px floor): `@schafe-vorm-fenster/brand-design@0.1.3`
+   * ships `--font-size-label: 0.875rem` (14px) — used verbatim by `chip`,
+   * `choice-group`, `scope-picker` and the site chrome's wordmark. Same
+   * situation as `--color-placeholder-ground` above: this is the one file a
+   * brand value may enter through (TS-017 D3), so the correction lands here
+   * rather than at each call site, and reconciling it back into the token
+   * package is the same open point.
+   */
+  --font-size-label: 0.9375rem;
+
+  /*
+   * F-2-68 — the metric-matched face above, inserted between the real font
+   * and the token package's own fallback chain. `'Atkinson Hyperlegible'`
+   * (no "Next") is a distinct, real accessibility font; where it happens to
+   * be installed it still wins over the synthetic fallback below, exactly
+   * as before — this only closes the gap for the far more common case where
+   * it is not.
+   */
+  --font-sans: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible Next Fallback", "Atkinson Hyperlegible", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }

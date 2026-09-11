@@ -1,3 +1,16 @@
 .badge {
   font-size: var(--type-microlabel-size);
+  /*
+   * F-2-44 raised this role from 11px to the 15px floor. `badge` itself is
+   * [FIXED] as a single-line, `white-space: nowrap` pill (SRC-014 §Badge and
+   * chip) — correct for a short category word, but this badge's own phrase
+   * ("Nicht motivgenau · Platzhalter") no longer fits one line at 15px
+   * inside the photo box it sits in. Wrapping to two lines keeps "no layout
+   * effect outside the box" (this component's own contract) instead of
+   * pushing past its edge; `badge`'s fixed single-line contract is
+   * unaffected everywhere else, since this override is scoped to this
+   * module's own class, not `badge`'s.
+   */
+  max-width: 100%;
+  white-space: normal;
 }

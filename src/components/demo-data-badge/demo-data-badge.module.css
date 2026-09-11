@@ -1,3 +1,7 @@
 .badge {
   font-size: var(--type-microlabel-size);
+  /* F-2-44 — same reasoning as `placeholder-badge`: the 15px floor no longer
+     guarantees a caller-supplied `label` fits one `nowrap` line. */
+  max-width: 100%;
+  white-space: normal;
 }

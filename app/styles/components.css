@@ -39,11 +39,25 @@
   --type-lead-size: 1.25rem;
   --type-body-size: var(--font-size-body);
   --type-meta-size: var(--font-size-meta);
-  --type-label-size: 0.75rem;
+  /* F-2-44: was 0.75rem (12px), below TS-002-A10's 15px floor. Raised to the
+     floor itself rather than to a newly invented value between it and
+     `--type-meta-size` — the two roles collapsing to one size until the
+     scale is redesigned is the recorded, cheaper half of the fix
+     (state/open.md carries the rest: moving the whole scale into the token
+     import and teaching `scripts/check-brand.ts` the size/weight halves). */
+  --type-label-size: 0.9375rem;
   --type-label-tracking: 0.08em;
-  /* The one size below the 15px floor the design system itself names: the
-     placeholder badge (SRC-014 §Photo surface, 11px mono). */
-  --type-microlabel-size: 0.6875rem;
+  /* F-2-44: was 0.6875rem (11px) — the design system's own SRC-014 §Photo
+     surface value for the placeholder badge, below the a11y floor TS-002-A10
+     fixes regardless. The floor is the fixed rule this round buys; SRC-014's
+     11px is recorded in state/open.md for the design-system owner. */
+  --type-microlabel-size: 0.9375rem;
+  /* F-2-44: `event-row`'s day-of-month figure was a bare `28px` literal
+     (TS-002-A10's "no size... declared outside the token import" half) —
+     one fixed size, not part of the fluid section/subhead/place roles above
+     it, so it gets its own named role rather than borrowing a mismatched
+     one. */
+  --type-figure-size: 1.75rem;
 
   /* ── Fixed heights — SRC-014 §Fixed heights ─────────────────────────── */
   --height-button: var(--target-comfortable); /* 56 */
