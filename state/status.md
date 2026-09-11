@@ -1,11 +1,14 @@
 # Status
 
 Run started: 2026-09-11 (orchestrator session, model claude-fable-5-1)
-Current milestone: M2 Structure (pages in build) — M3 content done, M4 libraries started in parallel (M1 closed 2026-09-11)
+Current milestone: M4 Behaviour (wiring wave) — M2 structure + M3 content built; gate 2 (structure/pages/content/M4) next (M1 closed 2026-09-11)
 Current test round: — (n of 3)
 
 ## Done
 
+- M2/M3 pages: all twelve routes built in de+en with real content and chrome (P1 home/dein-ort/starten + PageFrame; P2 mitmachen/registrieren/dein-kalender/bestellen flows; P3 region/angebot/ueber-uns/archiv/rechtliches); pnpm check green (651 tests), e2e 207 green — 2026-09-11
+- M4 libraries: relevance + personalization (138 tests), live-data BFF + mocks + DEC-075, analytics registry + mock tracker, SEO builders + redirect map, locale detection + privacy e2e (25/25) — 2026-09-11
+- Fix round M1: F-1-1, F-1-3, row 42 resolved (26176ff); CI check.yml + preview-e2e.yml built, blocked on GitHub Packages access (row 64) — 2026-09-11
 - M3 content pipeline: src/lib/content loader (typed blocks), check:content gate (0 errors), schema extended (page_id/derived_from/provenance), ADR-074; 237 tests green — 2026-09-11
 - Fix (high, rows 21/31): CSP hydration — strict-dynamic removed, per-build hash generation built (works self-hosted), preview hydrates via preview-only unsafe-inline after three delivery mechanisms failed on Vercel with evidence; production unaffected; e2e 38/38 against preview https://schafe-vorm-fenster-8bkxy2mov-schafe-vorm-fenster.vercel.app — 2026-09-11
 - M2 argument-block components: 19 (B; 21 test files; dev-layout bug fixed) → all 63 inventory components exist, 172 tests green — 2026-09-11
@@ -29,12 +32,8 @@ Current test round: — (n of 3)
 
 ## In progress
 
-- M2/M3 pages: P1 home + dein-ort + starten + chrome wiring (opus); P2 mitmachen/registrieren/kalender/bestellen; P3 region/about/archive/legal — three developers
-- M4-A relevance engine + personalization model (opus)
-- M4-B live-data BFF + interface modules + mocks (opus)
-- M4-C analytics + SEO/redirect map + locale detection + privacy e2e
-- CI: minimal GitHub Actions (check/build/e2e, preview smoke if Git integration deploys)
-- M3 prep: content source mapping (Phase 1 of content playbook) — Content
+- M4 wiring wave across all twelve pages: Cache Components, live islands, relevance selection, analytics, JSON-LD, page-meta consolidation — Developer (opus)
+- Round-2 triage + gate-2 scope — Project Manager (opus)
 
 ## Pending
 
