@@ -1,11 +1,14 @@
 # Status
 
 Run started: 2026-09-11 (orchestrator session, model claude-fable-5-1)
-Current milestone: M4 Behaviour (wiring wave) — M2 structure + M3 content built; gate 2 (structure/pages/content/M4) next (M1 closed 2026-09-11)
-Current test round: — (n of 3)
+Current milestone: Gate 2 (structure + pages + content + M4 systems) — round 2 (M1 closed 2026-09-11)
+Current test round: 2 (round 1 = M1 gate)
 
 ## Done
 
+- M4 wiring wave: Cache Components on (6 static ○ / 2 ◐ / 4 ƒ), live islands + relevance selection + 9 goal events + one JSON-LD graph per page, TS-006 A1/A11 cross-page validation; pnpm check 704 tests; e2e 251 local, 221 on preview https://schafe-vorm-fenster-83x6zbys4-schafe-vorm-fenster.vercel.app (failures = known contrast + env-fit) — 2026-09-11
+- Round-2 triage: 27 findings (0 critical, 1 high), 7 fix-now; plan/gate-2-scope.md (PM) — 2026-09-11
+- Fix round 2a: F-1-2 CSP guard, F-2-5 geo fixture, F-2-6 axe (DEC-076, 24-route sweep → F-2-28/29 found) — 2026-09-11
 - M2/M3 pages: all twelve routes built in de+en with real content and chrome (P1 home/dein-ort/starten + PageFrame; P2 mitmachen/registrieren/dein-kalender/bestellen flows; P3 region/angebot/ueber-uns/archiv/rechtliches); pnpm check green (651 tests), e2e 207 green — 2026-09-11
 - M4 libraries: relevance + personalization (138 tests), live-data BFF + mocks + DEC-075, analytics registry + mock tracker, SEO builders + redirect map, locale detection + privacy e2e (25/25) — 2026-09-11
 - Fix round M1: F-1-1, F-1-3, row 42 resolved (26176ff); CI check.yml + preview-e2e.yml built, blocked on GitHub Packages access (row 64) — 2026-09-11
@@ -32,8 +35,10 @@ Current test round: — (n of 3)
 
 ## In progress
 
-- M4 wiring wave across all twelve pages: Cache Components, live islands, relevance selection, analytics, JSON-LD, page-meta consolidation — Developer (opus)
-- Round-2 triage + gate-2 scope — Project Manager (opus)
+- Fix round 2b: F-2-2 hero scrim, F-2-28/29 contrast, F-2-3 nav names, F-2-4 /en labels, e2e env fit — Developer
+- Gate 2 UAT walks on preview 83x6zbys4 — UAT persona
+- Gate 2 chaos runs on preview: hasty-clicker, form-abandoner, keyboard-only, boundary-tester — 4 personas
+- Next: QA acceptance sweep (plan/gate-2-scope.md) on the 2b build, PM prioritization, retest, Customer
 
 ## Pending
 
