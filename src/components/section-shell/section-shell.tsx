@@ -20,6 +20,8 @@ export interface SectionShellProps {
   /** 26–30 px standard, 20–24 px tight. One value per section. */
   readonly density?: "standard" | "tight";
   readonly id?: string;
+  /** The stable `data-block` id a page's own composition sheet names (e.g. TS-024 D2). */
+  readonly dataBlock?: string;
   /** The id of the heading that names this section, for `aria-labelledby`. */
   readonly labelledBy?: string;
   /** An accessible name where the section carries no heading of its own. */
@@ -66,6 +68,7 @@ export function SectionShell({
   surface = "paper",
   density = "standard",
   id,
+  dataBlock,
   labelledBy,
   label,
   contained = true,
@@ -87,6 +90,7 @@ export function SectionShell({
       aria-label={label}
       aria-labelledby={labelledBy}
       className={classes}
+      data-block={dataBlock}
       data-surface={surface}
       id={id}
     >

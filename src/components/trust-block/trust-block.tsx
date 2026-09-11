@@ -22,6 +22,9 @@ export interface TrustBlockProps {
   readonly headline: string;
   readonly subjects: readonly TrustSubject[];
   readonly locale?: Locale;
+  /** Overrides the two legal-link labels — German by default, `en` pages pass their own. */
+  readonly privacyLabel?: string;
+  readonly dataProcessingLabel?: string;
   readonly className?: string;
 }
 
@@ -40,7 +43,14 @@ export interface TrustBlockProps {
  * Space: static content.
  * A11y: the two legal links name their targets in the link text itself.
  */
-export function TrustBlock({ headline, subjects, locale, className }: TrustBlockProps) {
+export function TrustBlock({
+  headline,
+  subjects,
+  locale,
+  privacyLabel = "Datenschutzerklärung",
+  dataProcessingLabel = "Auftragsverarbeitung",
+  className,
+}: TrustBlockProps) {
   const shipped = subjects.filter((subject) => subject.body);
 
   return (
@@ -62,11 +72,11 @@ export function TrustBlock({ headline, subjects, locale, className }: TrustBlock
       </ul>
       <p className={styles.links}>
         <RouteLink hash={legalAnchor("privacy", locale ?? "de")} locale={locale} to="legal">
-          Datenschutzerklärung
+          {privacyLabel}
         </RouteLink>
         {" · "}
         <RouteLink hash={legalAnchor("dataProcessing", locale ?? "de")} locale={locale} to="legal">
-          Auftragsverarbeitung
+          {dataProcessingLabel}
         </RouteLink>
       </p>
     </div>

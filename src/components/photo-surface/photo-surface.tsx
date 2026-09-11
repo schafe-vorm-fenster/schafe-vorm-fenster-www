@@ -1,3 +1,4 @@
+import { Badge } from "../badge/badge";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { PlaceholderBadge } from "../placeholder-badge/placeholder-badge";
@@ -78,7 +79,18 @@ export function PhotoSurface({
     return <Skeleton className={className} ratio={ratio} variant="box" />;
   }
 
-  if (!src || state === "empty") {
+  const missingPhoto = !src || state === "empty";
+
+  // A surface with no content of its own (a standalone photo slot — the
+  // `/ueber-uns` origin photo, an archive row) *is* the invitation: the
+  // hatch, the badge, its own headline and CTA. A surface wrapping content
+  // (`hero-block`, `scene-block`) must still render that content — the
+  // design system's own rule is "never a text-only card without the badge",
+  // which presumes the text renders; dropping the caller's `children`
+  // entirely (the previous behaviour here) silently deleted the page's one
+  // `h1` whenever no photograph existed, which is every hero on this site
+  // today (no photography asset exists anywhere in the tree yet).
+  if (missingPhoto && !children) {
     return (
       <PlaceholderSurface
         className={className}
@@ -92,19 +104,20 @@ export function PhotoSurface({
   return (
     <section
       className={classes}
-      data-placeholder={placeholderId}
+      data-placeholder={missingPhoto ? "true" : placeholderId}
       id={id}
       style={
         {
-          "--photo-image": photoUrl(src),
+          "--photo-image": missingPhoto ? "none" : photoUrl(src!),
           "--photo-ratio": `var(--ratio-${ratio})`,
         } as CSSProperties
       }
     >
       <div className={styles.content}>
-        {(notDepicting || isMocked(state)) && (
+        {(missingPhoto || notDepicting || isMocked(state)) && (
           <div className={styles.marks}>
-            {notDepicting ? <PlaceholderBadge /> : null}
+            {missingPhoto ? <Badge tone="placeholder">Foto gesucht</Badge> : null}
+            {!missingPhoto && notDepicting ? <PlaceholderBadge /> : null}
             {isMocked(state) ? <DemoDataBadge /> : null}
           </div>
         )}

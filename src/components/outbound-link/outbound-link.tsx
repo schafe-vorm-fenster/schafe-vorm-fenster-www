@@ -12,6 +12,8 @@ export interface OutboundLinkProps {
   /** Named where a third party receives data by following this link. */
   readonly recipient?: string;
   readonly variant?: "inline" | "secondary" | "quiet";
+  /** The conversion marker the analytics registry reads (TS-006 D3) — e.g. `"equal-weight"`. */
+  readonly dataCta?: string;
   readonly className?: string;
   readonly children: ReactNode;
 }
@@ -37,6 +39,7 @@ export function OutboundLink({
   newTab = false,
   recipient,
   variant = "inline",
+  dataCta,
   className,
   children,
 }: OutboundLinkProps) {
@@ -45,6 +48,7 @@ export function OutboundLink({
   return (
     <a
       className={classes}
+      data-cta={dataCta}
       href={href}
       rel={newTab ? "noopener" : undefined}
       target={newTab ? "_blank" : undefined}

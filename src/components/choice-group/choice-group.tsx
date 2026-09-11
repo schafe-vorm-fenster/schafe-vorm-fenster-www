@@ -71,7 +71,16 @@ export function ChoiceGroup({
   }
 
   return (
-    <form action={linkHref(to, { locale, query })} className={classes} method="get">
+    <form action={linkHref(to, { locale })} className={classes} method="get">
+      {/* A GET form's submission replaces the action URL's own query string
+          entirely (the browser never merges the two) — so anything the
+          step must carry forward (`ort`, an earlier `wer`) has to travel as
+          a hidden field, the same pattern `search-field` already uses. */}
+      {Object.entries(query ?? {}).map(([key, value]) =>
+        value === undefined ? null : (
+          <input key={key} name={key} type="hidden" value={String(value)} />
+        ),
+      )}
       <fieldset className={styles.fieldset} data-demo={isMocked(state) ? "true" : undefined}>
         <legend className={styles.legend}>
           {legend}

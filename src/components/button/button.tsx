@@ -38,6 +38,15 @@ export interface ButtonProps extends LinkOptions {
   readonly icon?: IconName;
   /** Renders a link to a route id. Without it the component is a `<button>`. */
   readonly to?: RouteId;
+  /**
+   * Renders a link to an external URL — the app handover
+   * (`/mitmachen/registrieren`, TS-023 D6), an outbound target that still
+   * needs the primary treatment. Ignored when `to` is set; mutually
+   * exclusive with the plain-`<button>` form.
+   */
+  readonly href?: string;
+  /** `rel="noopener"` and a new tab, for the `href` form only. */
+  readonly newTab?: boolean;
   readonly type?: "button" | "submit" | "reset";
   readonly name?: string;
   readonly value?: string;
@@ -71,6 +80,8 @@ export function Button({
   onward = false,
   icon,
   to,
+  href,
+  newTab = false,
   locale,
   query,
   hash,
@@ -109,6 +120,21 @@ export function Button({
       >
         {content}
       </RouteLink>
+    );
+  }
+
+  if (href) {
+    return (
+      <a
+        className={classes}
+        data-cta={dataCta}
+        href={href}
+        id={id}
+        rel={newTab ? "noopener" : undefined}
+        target={newTab ? "_blank" : undefined}
+      >
+        {content}
+      </a>
     );
   }
 

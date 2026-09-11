@@ -14,6 +14,8 @@ export interface PublishingPathProps {
   readonly steps: readonly Step[];
   /** Present only where the hub record is not `generally-available`. */
   readonly availability?: Availability;
+  /** Overrides the badge's default (German) wording — content-authored, per locale. */
+  readonly availabilityLabel?: string;
   readonly mediaSrc?: string;
   readonly mediaAlt?: string;
   readonly mediaState?: DataState;
@@ -43,6 +45,7 @@ export function PublishingPath({
   headline,
   steps,
   availability,
+  availabilityLabel,
   mediaSrc,
   mediaAlt = "",
   mediaState,
@@ -53,7 +56,9 @@ export function PublishingPath({
     <div className={[styles.path, className].filter(Boolean).join(" ")} data-mechanism={mechanism}>
       <div className={styles.header}>
         <h3 className={styles.headline}>{headline}</h3>
-        {availability ? <StatusBadge availability={availability} /> : null}
+        {availability ? (
+          <StatusBadge availability={availability} label={availabilityLabel} />
+        ) : null}
       </div>
       {mediaSrc !== undefined || mediaState ? (
         <MediaFrame alt={mediaAlt} className={styles.media} ratio="feature" src={mediaSrc} state={mediaState} />
