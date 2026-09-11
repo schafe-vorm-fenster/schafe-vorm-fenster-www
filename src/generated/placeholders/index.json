@@ -46,10 +46,30 @@
       "aspect": "3:2",
       "tone": "violet",
       "label": "Kartenausschnitt",
-      "note": "Aktive Orte im Landkreis",
+      "note": "Aktive Orte im Landkreis — NOT USED: TS-026 D3 forbids a map-labelled placeholder anywhere on /deine-region ('no hatched ratio-map box, no placeholder shaped like a map'); kept for the record rather than deleted (not this work package's file to remove), see state/open.md",
       "w": 1600,
       "h": 1067,
       "src": "/src/generated/placeholders/deine-region/karte.svg"
+    },
+    {
+      "id": "deine-region/hero",
+      "aspect": "21:9",
+      "tone": "violet",
+      "label": "Gebietsübersicht",
+      "note": "Hero von /deine-region — Landkreise, Institutionen, große Städte (TS-026 D2); deliberately not map-labelled (D3)",
+      "w": 1600,
+      "h": 686,
+      "src": "/src/generated/placeholders/deine-region/hero.svg"
+    },
+    {
+      "id": "deine-region/gebietsschnitt",
+      "aspect": "16:10",
+      "tone": "violet",
+      "label": "Gebietsschnitt",
+      "note": "Feature-Benefit-Bild von /deine-region Block 5 ('was dazukommt'); deliberately not map-labelled (D3)",
+      "w": 1600,
+      "h": 1000,
+      "src": "/src/generated/placeholders/deine-region/gebietsschnitt.svg"
     },
     {
       "id": "home/hero",
