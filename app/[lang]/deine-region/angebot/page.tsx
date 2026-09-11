@@ -99,7 +99,9 @@ export default async function Page({
       meta={pageMeta}
     >
       <MotionReveal>
-        <HeroBlock headline={heading} id="angebot-titel" state={slotState(form)} />
+        {/* F-2-33: the hero's `photo-surface` badges itself out of the
+            dictionary and needs the page's language. */}
+        <HeroBlock headline={heading} id="angebot-titel" locale={locale} state={slotState(form)} />
       </MotionReveal>
 
       {/* `lime-100`, not `paper`: `PageFrame` always appends `surface` (band)

@@ -78,12 +78,6 @@ export interface Dictionary {
     demoNote: string;
   };
   /** The M2 scaffolding strings — every one of them disappears with the page. */
-  placeholder: {
-    section: string;
-    reserved: string;
-    components: string;
-    note: string;
-  };
   notFound: {
     title: string;
     body: string;
@@ -111,6 +105,13 @@ export interface Dictionary {
     stale: string;
     /** Tier 3's word — the build-time snapshot, labelled as an example. */
     snapshot: string;
+    /**
+     * What a heading calls the county when the live layer has only geo-api's
+     * identifier for it — "deiner Region" / "your region". Never the
+     * identifier itself (F-2-73), and never an asserted county name, which
+     * TS-026 D4 forbids without an anchor.
+     */
+    genericCounty: string;
     /** The counter band's three units (TS-008 D8). */
     dates: string;
     places: string;
@@ -129,6 +130,26 @@ export interface Dictionary {
     photoWantedHeadline: string;
     /** The placeholder-photography badge — "Nicht motivgenau · Platzhalter". */
     notDepicting: string;
+  };
+  /**
+   * The form controls' own words — the strings a component renders when the
+   * page supplied none. `choice-group`'s empty state was a German literal in
+   * the component body and rendered on `/en` too (F-2-33).
+   */
+  forms: {
+    /** The step cannot be answered because the vocabulary is empty. */
+    noOptions: string;
+  };
+  /**
+   * `archive-filter`'s own chrome (TS-028 D4). Same failure class as
+   * `forms.noOptions`: the component's defaults were hard-coded German and
+   * rendered on `/en/about/archive` too (F-2-33 residue).
+   */
+  archiveFilter: {
+    all: string;
+    label: string;
+    /** `{visible}` of `{total}` entries — both slots are filled by the component. */
+    count: string;
   };
   /**
    * `place-search`'s own ZIP-only-until-Q-025 words (TS-008 D7). A page
@@ -154,10 +175,33 @@ export interface Dictionary {
     /** "Daten gehen an <recipient>" — the recipient follows this phrase. */
     dataGoesTo: string;
   };
-  /** Page titles, keyed by route id. Placeholders until M3 (TS-011 D5). */
+  /**
+   * `/rechtliches` (EN `/legal`) — the one string of this dictionary that
+   * exists in English only.
+   *
+   * TS-029 open point #2 and `state/open.md` row 53: `import.yaml` carries
+   * no locale dimension, so the five imported documents plus the generated
+   * accessibility statement exist in German, and DEC-027's English versions
+   * arrive later through the same import. Row 53's mitigation is that the EN
+   * page frame "states explicitly, in English, that the six legal sections
+   * themselves are provided in German only — no machine translation, no
+   * invented English legal text". It never shipped; the Customer met six
+   * unannounced German bodies under English section labels at gate 2
+   * (F-2-74, TS-007-A11 / TS-029).
+   *
+   * A German reader needs no such notice — the page is in her language — so
+   * `de` is `null` and the German page renders nothing at all. `null`, not
+   * an empty string, so the dictionary's own "no string is empty" check
+   * keeps meaning what it says.
+   */
+  legal: {
+    germanOnlyNotice: string | null;
+  };
+  /**
+   * Page titles, keyed by route id — the fallback for a route whose artifact
+   * carries no `seo.title` (TS-011 D5; the artifact is the source, F-2-72).
+   */
   pages: Record<RouteId, string>;
-  /** Template for the placeholder meta description, `%s` = the page title. */
-  descriptionTemplate: string;
 }
 
 const de: Dictionary = {
@@ -190,12 +234,6 @@ const de: Dictionary = {
     consentLinkLabel: "Datenschutzerklärung",
     demoNote: "Es wird nichts verschickt — der Versand ist noch nicht angeschlossen.",
   },
-  placeholder: {
-    section: "Platzhalter",
-    reserved: "Reservierte Höhe — dieser Abschnitt wird in M2 an Ort und Stelle ersetzt.",
-    components: "Komponenten",
-    note: "Platzhalterseite aus dem Routing-Gerüst (M2). Inhalt und Module folgen aus dem Seiten-Spec.",
-  },
   notFound: {
     title: "Seite nicht gefunden",
     body: "Diese Adresse gibt es nicht. Gib deine Postleitzahl ein, dann zeigen wir dir, was in deinem Ort los ist.",
@@ -212,6 +250,7 @@ const de: Dictionary = {
     demoData: "Demo-Daten",
     stale: "Stand",
     snapshot: "Beispiel",
+    genericCounty: "deiner Region",
     dates: "Termine",
     places: "Orte",
     updatesToday: "Aktualisierungen heute",
@@ -220,6 +259,14 @@ const de: Dictionary = {
     photoWanted: "Foto gesucht",
     photoWantedHeadline: "Uns fehlt hier ein Bild aus deinem Ort.",
     notDepicting: "Nicht motivgenau · Platzhalter",
+  },
+  forms: {
+    noOptions: "Keine Auswahl verfügbar.",
+  },
+  archiveFilter: {
+    all: "Alle",
+    label: "Nach Typ filtern",
+    count: "{visible} von {total} Einträgen",
   },
   search: {
     label: "Ort oder Postleitzahl",
@@ -230,6 +277,10 @@ const de: Dictionary = {
   outboundLink: {
     newTab: "öffnet neuen Tab",
     dataGoesTo: "Daten gehen an",
+  },
+  legal: {
+    // The German page carries no notice: its six sections are German (F-2-74).
+    germanOnlyNotice: null,
   },
   pages: {
     home: "Schafe vorm Fenster",
@@ -245,8 +296,6 @@ const de: Dictionary = {
     archive: "Archiv",
     legal: "Rechtliches",
   },
-  descriptionTemplate:
-    "%s — Platzhalter aus dem Routing-Gerüst (M2). Titel und Beschreibung kommen in M3 aus dem Content-Frontmatter (TS-011 D5).",
 };
 
 const en: Dictionary = {
@@ -279,12 +328,6 @@ const en: Dictionary = {
     consentLinkLabel: "privacy policy",
     demoNote: "Nothing is sent — the mailing system is not connected yet.",
   },
-  placeholder: {
-    section: "Placeholder",
-    reserved: "Reserved height — this section is replaced in place during M2.",
-    components: "Components",
-    note: "Placeholder page from the routing skeleton (M2). Content and modules follow from the page spec.",
-  },
   notFound: {
     title: "Page not found",
     body: "This address does not exist. Type your postcode and we will show you what is on where you live.",
@@ -301,6 +344,7 @@ const en: Dictionary = {
     demoData: "Demo data",
     stale: "As of",
     snapshot: "Example",
+    genericCounty: "your region",
     dates: "dates",
     places: "places",
     updatesToday: "updates today",
@@ -309,6 +353,14 @@ const en: Dictionary = {
     photoWanted: "Photo wanted",
     photoWantedHeadline: "We're missing a picture from your place here.",
     notDepicting: "Not an exact match · placeholder",
+  },
+  forms: {
+    noOptions: "Nothing to choose from yet.",
+  },
+  archiveFilter: {
+    all: "All",
+    label: "Filter by type",
+    count: "{visible} of {total} entries",
   },
   search: {
     label: "Place or postcode",
@@ -319,6 +371,10 @@ const en: Dictionary = {
   outboundLink: {
     newTab: "opens new tab",
     dataGoesTo: "Data goes to",
+  },
+  legal: {
+    germanOnlyNotice:
+      "The six legal sections below are available in German only. We do not machine-translate legal text and do not write an English substitute for it. The English documents follow once they exist.",
   },
   pages: {
     home: "Schafe vorm Fenster",
@@ -334,8 +390,6 @@ const en: Dictionary = {
     archive: "Archive",
     legal: "Legal",
   },
-  descriptionTemplate:
-    "%s — placeholder from the routing skeleton (M2). Title and description come from the content frontmatter in M3 (TS-011 D5).",
 };
 
 const DICTIONARIES: Readonly<Record<Locale, Dictionary>> = { de, en };
@@ -350,11 +404,6 @@ export type DictionaryKeyOf<Group extends keyof Dictionary> =
   Dictionary[Group] extends Record<string, string>
     ? keyof Dictionary[Group] & string
     : never;
-
-/** The placeholder meta description of a page (TS-011 D5 until M3). */
-export function placeholderDescription(locale: Locale, title: string): string {
-  return dictionary(locale).descriptionTemplate.replace("%s", title);
-}
 
 /** Every language that has a dictionary — used by the key-parity test. */
 export const DICTIONARY_LOCALES = LOCALES;

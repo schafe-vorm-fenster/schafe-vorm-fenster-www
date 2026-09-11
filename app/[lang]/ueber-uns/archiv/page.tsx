@@ -134,9 +134,11 @@ export default async function Page({
       <SectionShell labelledBy="archiv-h1" surface="paper">
         <MotionReveal>
           <h1 id="archiv-h1">{fieldAt(heading.blocks, 0) ?? "Archiv"}</h1>
-          {rows.length > 0 ? <DemoDataBadge /> : null}
+          {/* F-2-33: the badge takes the page's language, or it reads
+              "Demo-Daten" on `/en/about/archive`. */}
+          {rows.length > 0 ? <DemoDataBadge locale={locale} /> : null}
 
-          <ArchiveFilter types={filterTypes}>
+          <ArchiveFilter locale={locale} types={filterTypes}>
             {[...byYear.entries()].map(([year, yearRows]) => (
               <div key={year}>
                 <h2>{year}</h2>

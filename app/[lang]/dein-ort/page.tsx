@@ -182,6 +182,8 @@ async function Homescreen({ slug, locale, headline, ios, android, ctaTemplate, g
       appLinkLabel={fillTemplate(ctaTemplate, { place: name })}
       headline={headline}
       ios={{ steps: splitSteps(fillTemplate(ios, { place: name })) }}
+      // F-2-33: the screenshot frames badge themselves out of the dictionary.
+      locale={locale}
     />
   );
 }
@@ -363,6 +365,10 @@ export default async function PlacePage({
           })
         }
         id="focus-block"
+        // F-2-33: the hero's `photo-surface` badges itself out of the
+        // dictionary — without the page's language it marks an English page
+        // in German.
+        locale={locale}
         notDepicting
         placeholderId="dein-ort/hero"
         src={heroPlaceholder.src}

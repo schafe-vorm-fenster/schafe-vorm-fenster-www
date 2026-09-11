@@ -3,6 +3,8 @@ import { MediaFrame } from "../media-frame/media-frame";
 import { ConversionTracker, type ConversionBinding } from "../conversion-tracker/conversion-tracker";
 import { OutboundLink } from "../outbound-link/outbound-link";
 
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./howto-block.module.css";
 
 export interface HowtoPlatform {
@@ -25,6 +27,12 @@ export interface HowtoBlockProps {
    * on any click in the instructions.
    */
   readonly conversion?: ConversionBinding;
+  /**
+   * The page's language — the screenshot frames badge themselves and read
+   * it. Without it `/en/your-place` carried the German placeholder marking
+   * (F-2-33).
+   */
+  readonly locale?: Locale;
   readonly className?: string;
 }
 
@@ -45,7 +53,7 @@ export interface HowtoBlockProps {
  * A11y: both instructions are readable in linear order — iOS then Android,
  * every time, for every visitor.
  */
-export function HowtoBlock({ headline, ios, android, appHref, appLinkLabel = "Kalender öffnen", conversion, className }: HowtoBlockProps) {
+export function HowtoBlock({ headline, ios, android, appHref, appLinkLabel = "Kalender öffnen", conversion, locale, className }: HowtoBlockProps) {
   const platforms: Array<{ id: string; label: string; platform: HowtoPlatform }> = [
     { id: "ios", label: "iPhone", platform: ios },
     { id: "android", label: "Android", platform: android },
@@ -64,6 +72,7 @@ export function HowtoBlock({ headline, ios, android, appHref, appLinkLabel = "Ka
             {platform.screenshotSrc !== undefined || platform.screenshotAlt !== undefined ? (
               <MediaFrame
                 alt={platform.screenshotAlt ?? ""}
+                locale={locale}
                 notDepicting={platform.screenshotNotDepicting}
                 ratio="portrait"
                 src={platform.screenshotSrc}

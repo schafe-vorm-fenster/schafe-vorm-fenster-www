@@ -78,6 +78,10 @@ export function ProofCard({
         <MediaFrame
           alt={image.alt}
           className={styles.image}
+          // F-2-33: the card's own badge read `locale`, the frame's did not,
+          // so an English proof slot without a cleared asset hatched
+          // "Foto gesucht".
+          locale={locale}
           notDepicting={image.notDepicting}
           placeholderId={image.placeholderId}
           ratio="proof"

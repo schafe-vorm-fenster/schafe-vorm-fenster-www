@@ -48,6 +48,7 @@ import { cacheLifeProfile, cacheTags } from "@/src/lib/live/cache-profiles";
 import { liveCounters } from "@/src/lib/live/counters";
 import { nearbyEvents } from "@/src/lib/live/nearby";
 import { placeEvents } from "@/src/lib/live/places";
+import { countyLabel } from "@/src/lib/live/county-label";
 import { regionExamples } from "@/src/lib/live/region";
 
 import type { EventListItem } from "@/src/components/event-list/event-list";
@@ -307,7 +308,7 @@ export async function NearbyIsland({
 export interface RegionExamplesIslandProps {
   readonly county: string;
   readonly locale: Locale;
-  /** `{county}` is filled in. */
+  /** `{county}` is filled in — with a written-out label, never an id (F-2-73). */
   readonly titleTemplate: string;
   readonly max?: number;
   readonly headingLevel?: "h2" | "h3";
@@ -335,7 +336,11 @@ export async function RegionExamplesIsland({
       locale={locale}
       state={stateOf(envelope)}
       tier={tierOf(envelope)}
-      title={fillTemplate(titleTemplate, { county: data.county })}
+      // F-2-73: `data.county` is geo-api's identifier, not a name. Filling
+      // the slot with it put "examples from geoname.900001" in block 3's
+      // heading on `/en/your-region`. `countyLabel` answers a label or the
+      // language's generic phrase — an id can no longer reach a heading.
+      title={fillTemplate(titleTemplate, { county: countyLabel(data.county, locale) })}
       updatedAt={fetchedAt}
     >
       <PlaceExampleSet

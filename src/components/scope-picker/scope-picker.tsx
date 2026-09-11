@@ -104,7 +104,8 @@ export function ScopePicker({
       ) : (
         <div className={styles.chips}>{chips}</div>
       )}
-      {isMocked(state) ? <DemoDataBadge /> : null}
+      {/* F-2-33: the badge reads the page's language like every other one. */}
+      {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
     </div>
   );
 }

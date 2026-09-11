@@ -189,6 +189,10 @@ export default async function Page({
       <PhotoSurface
         gradient="ink"
         id="herkunft"
+        // F-2-33: the surface badges itself out of the dictionary — without
+        // the page's language `/en/about` read "Nicht motivgenau ·
+        // Platzhalter".
+        locale={locale}
         notDepicting
         placeholderId="ueber-uns/dorf"
         ratio="hero"
@@ -197,6 +201,7 @@ export default async function Page({
         <MotionReveal>
           <OriginStory
             body={fieldAt(origin.blocks, 1) ?? ""}
+            locale={locale}
             portraitAlt="Jan-Henrik Hempel, Gründer"
             portraitNotDepicting
             portraitSrc={assetSrc(gruender)}
@@ -282,6 +287,9 @@ export default async function Page({
             <PersonProfile
               bio={person.bio}
               key={person.name}
+              // F-2-33: a person with no portrait gets the hatch, and the
+              // hatch badges itself out of the dictionary.
+              locale={locale}
               name={person.name}
               portraitAlt={person.name}
               role={person.role}

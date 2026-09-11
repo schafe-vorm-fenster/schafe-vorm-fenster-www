@@ -29,6 +29,10 @@ const INTERNAL_IDS = [
   /\[Platzhalter/i,
   /\[Placeholder/i,
   /\bF-\d-\d{1,2}\b/,
+  // F-2-73: geo-api's own identifiers are internal ids too. `/en/your-region`
+  // rendered "examples from geoname.900001" as a heading — the German twin
+  // had been fixed (F-2-63) and the English one had not.
+  /\bgeoname\./,
   /state\/open\.md/,
   /plan\/guardrails\.md/,
 ];
@@ -188,3 +192,80 @@ test("F-2-33: the English register flow's own controls are English", async ({ pa
   await page.goto("/en/take-part/register?ort=beispielwalde");
   await expect(page.getByRole("main").locator('button[type="submit"]')).toHaveText("Continue");
 });
+
+
+/**
+ * F-2-33, gate-2 retest — the badge half of the finding. Measured over all
+ * twelve `/en` routes: `Demo-Daten` on the register step, `/en/your-calendar`
+ * and `/en/about/archive`; `Foto gesucht` on `/en/take-part`,
+ * `/en/your-calendar`, `/en/your-region/quote` and `/en/about`; `Nicht
+ * motivgenau · Platzhalter` on `/en/your-place`, `/en/your-place/start`,
+ * `/en/your-region` and `/en/about`.
+ *
+ * The badges themselves were never the defect — they read the dictionary and
+ * default to German, which is right. The defect was every component and page
+ * around them that rendered a badge without handing it the page's language.
+ * `src/components/badge-locale.test.tsx` holds the component half; this walk
+ * is the page half, and it is the one that catches a *new* caller forgetting
+ * the prop.
+ *
+ * One caller is still open: the page-level badge on `/en/about/archive`
+ * (`app/[lang]/ueber-uns/archiv/page.tsx`, `rows.length > 0 ? <DemoDataBadge
+ * /> : null`). The fix is `locale={locale}` on that line, exactly like every
+ * other one — the file belongs to another work package this round, so the
+ * walk records the leak rather than hiding it.
+ */
+const GERMAN_BADGES = ["Demo-Daten", "Foto gesucht", "Nicht motivgenau"];
+
+/** Every `/en` route, plus the one step that only appears with a parameter. */
+const ENGLISH_BADGE_PATHS = [
+  ...ENGLISH_ROUTES,
+  "/en/take-part/register?ort=beispielwalde",
+];
+
+for (const path of ENGLISH_BADGE_PATHS) {
+  test(`F-2-33: ${path} badges nothing in German`, async ({ page }) => {
+    await page.goto(path);
+    const text = (await page.evaluate(visibleText)) as string;
+
+    for (const german of GERMAN_BADGES) {
+      const at = text.indexOf(german);
+      expect(
+        at,
+        at === -1
+          ? ""
+          : `${path} renders "${german}": …${text.slice(Math.max(0, at - 90), at + 90)}…`,
+      ).toBe(-1);
+    }
+  });
+}
+
+/**
+ * F-2-73 / TS-026-A10, TS-026 D4 — block 3 of `/deine-region` names a region
+ * a visitor can read, in **both** languages. F-2-63 fixed the German heading
+ * ("Beispiele aus dem Landkreis deiner Region") and left the English one
+ * filling its own `{county}` slot with the stage-0 anchor's geo-api id, so
+ * `/en/your-region` read "examples from geoname.900001". The identifier
+ * check above now covers every route; this names the heading the criterion
+ * is actually about.
+ */
+for (const [path, phrase] of [
+  ["/deine-region", "Landkreis deiner Region"],
+  ["/en/your-region", "examples from your region"],
+] as const) {
+  test(`F-2-73 / TS-026-A10: ${path} asserts no county and no identifier in block 3`, async ({
+    page,
+  }) => {
+    await page.goto(path);
+    const text = (await page.evaluate(visibleText)) as string;
+
+    // The written-out region, and it is a heading rather than body prose.
+    expect(text, `${path} block 3 heading`).toContain(phrase);
+    expect(
+      await page.getByRole("heading", { name: new RegExp(phrase, "i") }).count(),
+      `${path} names the region in a heading`,
+    ).toBeGreaterThan(0);
+
+    expect(text, `${path} renders a geo-api identifier`).not.toMatch(/geoname\./);
+  });
+}

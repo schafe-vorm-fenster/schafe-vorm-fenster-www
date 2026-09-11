@@ -6,6 +6,8 @@ import { Skeleton } from "../skeleton/skeleton";
 import type { MediaRatio } from "../media-frame/media-frame";
 import type { CSSProperties, ReactNode } from "react";
 
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./embed-frame.module.css";
 
 export interface EmbedFrameProps extends DataStateProps {
@@ -16,6 +18,12 @@ export interface EmbedFrameProps extends DataStateProps {
   /** The organizer the loader would target — set once Q-046 mints one (mocked here). */
   readonly organizerId?: string;
   readonly ratio?: MediaRatio;
+  /**
+   * The page's language — the mount's `demo-data-badge` and the degraded
+   * freshness label read it. Without it the embed demo on `/en/your-calendar`
+   * badged "Demo-Daten" (F-2-33).
+   */
+  readonly locale?: Locale;
   readonly className?: string;
 }
 
@@ -47,6 +55,7 @@ export function EmbedFrame({
   organizerId,
   ratio = "map",
   state = "ready",
+  locale,
   className,
 }: EmbedFrameProps) {
   const classes = [styles.frame, className].filter(Boolean).join(" ");
@@ -57,7 +66,7 @@ export function EmbedFrame({
       <div className={styles.copyBlock}>
         <h3 className={styles.heading}>{heading}</h3>
         {copy ? <p className={styles.copy}>{copy}</p> : null}
-        {state === "degraded" ? <FreshnessLabel tier="snapshot" /> : null}
+        {state === "degraded" ? <FreshnessLabel locale={locale} tier="snapshot" /> : null}
         {cta ? <div className={styles.cta}>{cta}</div> : null}
       </div>
       {isPending(state) ? (
@@ -68,7 +77,7 @@ export function EmbedFrame({
           data-portalize-organizer-id={organizerId}
           style={{ "--embed-ratio": `var(--ratio-${ratio})` } as CSSProperties}
         >
-          {isMocked(state) ? <DemoDataBadge className={styles.badge} /> : null}
+          {isMocked(state) ? <DemoDataBadge className={styles.badge} locale={locale} /> : null}
         </div>
       ) : null}
     </div>

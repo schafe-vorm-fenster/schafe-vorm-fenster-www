@@ -24,6 +24,7 @@ import { pageTitle } from "@/src/lib/routes/metadata";
 import { assetSrc } from "@/src/lib/content/asset-src";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
 import { BRIEFING_RECIPIENT, BRIEFING_URL } from "@/src/lib/live/briefing";
+import { genericCountyLabel } from "@/src/lib/live/county-label";
 import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 
@@ -157,10 +158,17 @@ export default async function Page({
   // asserted with no anchor (TS-026-A10, TS-026 D4) *and* an internal
   // identifier rendered as visitor copy. The county-scoped heading returns
   // with the anchor it needs, not before.
+  // F-2-73: the German template's slot is `{landkreis}`, the English one's
+  // is `{county}` — F-2-63 filled the first and left the second, so the
+  // English heading still took whatever the island handed it (the stage-0
+  // anchor's raw geo-api id). All three slot names are filled here, from the
+  // one place that decides what an unresolved county is called.
+  const genericCounty = genericCountyLabel(locale);
   const interimFallbackHeading =
     interpolate(fieldAt(interim.blocks, 0), {
-      landkreis: locale === "de" ? "deiner Region" : "your region",
-      "county-or-organization": locale === "de" ? "deiner Region" : "your region",
+      landkreis: genericCounty,
+      county: genericCounty,
+      "county-or-organization": genericCounty,
     }) ?? copy.interimFallback;
 
   const quoteItems = proofDemo.blocks.filter((block) => block.kind === "list");
@@ -209,6 +217,10 @@ export default async function Page({
           headline={fieldAt(focus.blocks, 0) ?? pageTitle(ROUTE, locale)}
           id="fokus"
           lead={fieldAt(focus.blocks, 1)}
+          // F-2-33: the hero's `photo-surface` badges itself out of the
+          // dictionary — without the page's language it marks an English
+          // page in German.
+          locale={locale}
           notDepicting
           placeholderId="deine-region/hero"
           src={assetSrc(heroImage)}
@@ -290,6 +302,7 @@ export default async function Page({
         <MotionReveal>
           <EmbedFrame
             heading={fieldAt(embedDemo.blocks, 0) ?? copy.embedFallback}
+            locale={locale}
             organizerId="demo-landkreis"
             ratio="feature"
             state={slotState(embedDemo, "degraded")}
@@ -319,6 +332,7 @@ export default async function Page({
           <FeatureBenefit
             benefit={fieldAt(whatItAdds.blocks, 1) ?? ""}
             feature={fieldAt(whatItAdds.blocks, 0) ?? ""}
+            locale={locale}
             mediaAlt={copy.territorySketchAlt}
             mediaSrc={assetSrc(gebietsschnitt)}
           />

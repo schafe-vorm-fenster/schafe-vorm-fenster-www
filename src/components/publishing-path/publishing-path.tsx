@@ -5,6 +5,8 @@ import type { MechanismId, Step } from "../content-fragments";
 import type { DataState } from "../data-state";
 import type { ReactNode } from "react";
 
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./publishing-path.module.css";
 
 export interface PublishingPathProps {
@@ -19,6 +21,11 @@ export interface PublishingPathProps {
   readonly mediaSrc?: string;
   readonly mediaAlt?: string;
   readonly mediaState?: DataState;
+  /**
+   * The page's language — `media-frame` badges itself and reads it. Without
+   * it the three paths on `/en/take-part` hatched "Foto gesucht" (F-2-33).
+   */
+  readonly locale?: Locale;
   readonly cta?: ReactNode;
   readonly className?: string;
 }
@@ -49,6 +56,7 @@ export function PublishingPath({
   mediaSrc,
   mediaAlt = "",
   mediaState,
+  locale,
   cta,
   className,
 }: PublishingPathProps) {
@@ -61,7 +69,14 @@ export function PublishingPath({
         ) : null}
       </div>
       {mediaSrc !== undefined || mediaState ? (
-        <MediaFrame alt={mediaAlt} className={styles.media} ratio="feature" src={mediaSrc} state={mediaState} />
+        <MediaFrame
+          alt={mediaAlt}
+          className={styles.media}
+          locale={locale}
+          ratio="feature"
+          src={mediaSrc}
+          state={mediaState}
+        />
       ) : null}
       <ol className={styles.steps}>
         {steps.map((step) => (

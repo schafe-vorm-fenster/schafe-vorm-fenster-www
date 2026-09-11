@@ -3,6 +3,8 @@ import { MediaFrame } from "../media-frame/media-frame";
 import type { DataState } from "../data-state";
 import type { ReactNode } from "react";
 
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./feature-benefit.module.css";
 
 export interface FeatureBenefitProps {
@@ -13,6 +15,11 @@ export interface FeatureBenefitProps {
   readonly mediaSrc?: string;
   readonly mediaAlt?: string;
   readonly mediaState?: DataState;
+  /**
+   * The page's language — `media-frame` badges itself and reads it. Without
+   * it block 5 of `/en/your-region` hatched "Foto gesucht" (F-2-33).
+   */
+  readonly locale?: Locale;
   readonly className?: string;
 }
 
@@ -40,12 +47,20 @@ export function FeatureBenefit({
   mediaSrc,
   mediaAlt = "",
   mediaState,
+  locale,
   className,
 }: FeatureBenefitProps) {
   return (
     <div className={[styles.pair, className].filter(Boolean).join(" ")}>
       {mediaSrc !== undefined || mediaState ? (
-        <MediaFrame alt={mediaAlt} className={styles.media} ratio="feature" src={mediaSrc} state={mediaState} />
+        <MediaFrame
+          alt={mediaAlt}
+          className={styles.media}
+          locale={locale}
+          ratio="feature"
+          src={mediaSrc}
+          state={mediaState}
+        />
       ) : null}
       <h3 className={styles.feature}>{feature}</h3>
       <p className={styles.benefit}>{benefit}</p>

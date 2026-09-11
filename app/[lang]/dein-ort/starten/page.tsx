@@ -220,6 +220,10 @@ export default async function PlaceStartPage({
         headlineLines={2}
         id="focus-block"
         lead={fieldAt(ack.blocks, 2)}
+        // F-2-33: the hero's `photo-surface` badges itself out of the
+        // dictionary — without the page's language it marks an English page
+        // in German.
+        locale={locale}
         notDepicting
         placeholderId="dein-ort-starten/hero"
         src={heroPlaceholder.src}

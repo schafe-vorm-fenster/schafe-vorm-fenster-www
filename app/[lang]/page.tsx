@@ -258,6 +258,9 @@ function FocusBlocks({
         }
         id="focus-block"
         lead={empty ? splitInvitation(fillTemplate(copy.invitation, values)).lead : undefined}
+        // F-2-33: the surface badges itself out of the dictionary, so it
+        // needs the page's language or it badges an English page in German.
+        locale={locale}
         notDepicting
         placeholderId="home/hero"
         src={heroPlaceholder.src}
@@ -462,6 +465,7 @@ export default async function HomePage({
               <MediaFrame
                 alt=""
                 className={styles.sceneMedia}
+                locale={locale}
                 placeholderHeadline={demo.photoWanted}
                 ratio="feature"
                 state="empty"
@@ -482,6 +486,7 @@ export default async function HomePage({
               <MediaFrame
                 alt={fieldAt(sceneProvenance.blocks, 0) ?? ""}
                 className={styles.sceneMedia}
+                locale={locale}
                 notDepicting
                 placeholderId="ueber-uns/gruender"
                 ratio="feature"

@@ -4,6 +4,8 @@ import { PriceTag, type PriceDisplay, type PriceFigure } from "../price-tag/pric
 import type { DataState } from "../data-state";
 import type { ReactNode } from "react";
 
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./origin-story.module.css";
 
 export interface OriginStoryProps {
@@ -17,6 +19,12 @@ export interface OriginStoryProps {
   readonly portraitAlt: string;
   readonly portraitState?: DataState;
   readonly portraitNotDepicting?: boolean;
+  /**
+   * The page's language — the portrait's own badges read it. Without it the
+   * founder's portrait on `/en/about` carried "Nicht motivgenau ·
+   * Platzhalter" (F-2-33).
+   */
+  readonly locale?: Locale;
   /** The inline `proof-card` for the honorary-mayor claim. */
   readonly proof?: ReactNode;
   readonly className?: string;
@@ -49,6 +57,7 @@ export function OriginStory({
   portraitAlt,
   portraitState,
   portraitNotDepicting,
+  locale,
   proof,
   className,
 }: OriginStoryProps) {
@@ -63,6 +72,7 @@ export function OriginStory({
         <MediaFrame
           alt={portraitAlt}
           className={styles.portrait}
+          locale={locale}
           notDepicting={portraitNotDepicting}
           ratio="portrait"
           src={portraitSrc}

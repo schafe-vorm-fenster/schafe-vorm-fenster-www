@@ -188,6 +188,10 @@ export default async function Page({
           }
           headline={focusHeadline}
           id="hero"
+          // F-2-33: the hero's `photo-surface` badges itself out of the
+          // dictionary — without the page's language it marks an English
+          // page in German.
+          locale={locale}
         />
       </div>
 
@@ -203,6 +207,8 @@ export default async function Page({
       <SectionShell dataBlock="embed-demo" surface="violet-500">
         <EmbedFrame
           heading={fieldAt(embedDemo.blocks, 0) ?? ""}
+          // F-2-33: the mocked mount's `Demo-Daten` badge reads the language.
+          locale={locale}
           organizerId="demo-organizer"
           ratio="map"
           state="mocked"

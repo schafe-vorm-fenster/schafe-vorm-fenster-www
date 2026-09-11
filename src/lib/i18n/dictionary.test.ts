@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { dictionary, placeholderDescription } from "@/src/lib/i18n/dictionary";
+import { dictionary } from "@/src/lib/i18n/dictionary";
 import {
   DEFAULT_LOCALE,
   HREFLANG,
@@ -43,9 +43,23 @@ describe("TS-001 D7: the dictionary is keyed and complete in every language", ()
       );
   });
 
-  it("builds a placeholder description that names the page", () => {
-    expect(placeholderDescription("de", "Mitmachen")).toContain("Mitmachen");
-    expect(placeholderDescription("en", "Take part")).toContain("Take part");
+  /**
+   * F-2-72: the dictionary used to carry a `descriptionTemplate` that named
+   * the run's own work packages and a spec clause, and every page served it
+   * as its `<meta name="description">`. The description is content now
+   * (`content/pages/**` `seo:`), and both the template and the unused
+   * routing-skeleton `placeholder` group are gone — this asserts neither can
+   * come back through the dictionary. "Platzhalter" itself stays allowed: it
+   * is DEC-068's own visitor-facing marking on an image that depicts nothing
+   * real.
+   */
+  it("carries no internal identifier in any string", () => {
+    for (const locale of LOCALES) {
+      const text = JSON.stringify(dictionary(locale));
+      for (const marker of ["TS-0", "DEC-", "Q-0", "(M2)", "(M3)"]) {
+        expect(text, `${locale} / ${marker}`).not.toContain(marker);
+      }
+    }
   });
 });
 

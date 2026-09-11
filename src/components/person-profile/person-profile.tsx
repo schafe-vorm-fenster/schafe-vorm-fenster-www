@@ -2,6 +2,8 @@ import { MediaFrame } from "../media-frame/media-frame";
 
 import type { DataState } from "../data-state";
 
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./person-profile.module.css";
 
 export interface PersonProfileProps {
@@ -13,6 +15,11 @@ export interface PersonProfileProps {
   readonly portraitAlt: string;
   readonly portraitState?: DataState;
   readonly portraitNotDepicting?: boolean;
+  /**
+   * The page's language — the portrait hatch badges itself and reads it.
+   * Without it the team block on `/en/about` said "Foto gesucht" (F-2-33).
+   */
+  readonly locale?: Locale;
   readonly className?: string;
 }
 
@@ -39,6 +46,7 @@ export function PersonProfile({
   portraitAlt,
   portraitState,
   portraitNotDepicting,
+  locale,
   className,
 }: PersonProfileProps) {
   return (
@@ -46,6 +54,7 @@ export function PersonProfile({
       <MediaFrame
         alt={portraitAlt}
         className={styles.portrait}
+        locale={locale}
         notDepicting={portraitNotDepicting}
         ratio="portrait"
         src={portraitSrc}

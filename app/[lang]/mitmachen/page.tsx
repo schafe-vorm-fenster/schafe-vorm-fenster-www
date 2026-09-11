@@ -195,6 +195,10 @@ export default async function Page({
           headline={fieldAt(hero.blocks, 0) ?? ""}
           id="hero"
           lead={fieldAt(hero.blocks, 1)}
+          // F-2-33: the hero's `photo-surface` badges itself out of the
+          // dictionary — without the page's language it marks an English
+          // page in German.
+          locale={locale}
           state={slotState(hero)}
         />
       </div>
@@ -210,11 +214,13 @@ export default async function Page({
         <h2 id="wege-heading">{PATHS_LABEL[locale]}</h2>
         <PublishingPath
           headline={fieldAt(pathWhatsapp.blocks, 0) ?? ""}
+          locale={locale}
           mechanism="whatsapp"
           steps={stepsOf(listItems(pathWhatsapp.blocks))}
         />
         <PublishingPath
           headline={fieldAt(pathCalendar.blocks, 0) ?? ""}
+          locale={locale}
           mechanism="calendar-connection"
           steps={stepsOf(listItems(pathCalendar.blocks))}
         />
@@ -222,6 +228,7 @@ export default async function Page({
           availability="alpha"
           availabilityLabel={fieldAt(pathWebsite.blocks, 1)}
           headline={fieldAt(pathWebsite.blocks, 0) ?? ""}
+          locale={locale}
           mechanism="website-import"
           steps={stepsOf(listItems(pathWebsite.blocks))}
         />
