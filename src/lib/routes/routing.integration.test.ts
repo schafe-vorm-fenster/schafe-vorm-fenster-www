@@ -13,6 +13,12 @@ import {
 } from "@/src/lib/routes/next-routing";
 import { redirectMapViolations } from "@/src/lib/routes/redirect-map";
 import {
+  d1Inventory,
+  D1_NON_PAGE_ROWS,
+  everyD1Path,
+  servedOnLandingDomain,
+} from "@/src/lib/routes/url-inventory";
+import {
   canonicalUrl,
   everyRoute,
   href,
@@ -32,6 +38,16 @@ import type { Metadata } from "next";
  */
 const rootParams = { lang: "de" };
 vi.mock("next/root-params", () => ({ lang: async () => rootParams.lang }));
+
+/**
+ * `headers()` needs a request scope, which an in-process integration test has
+ * no way to enter. The host is what the machine surfaces actually vary on, so
+ * it is the only thing the stub has to carry.
+ */
+const requestHeaders = { host: "www.schafe-vorm-fenster.de" };
+vi.mock("next/headers", () => ({
+  headers: async () => new Headers({ host: requestHeaders.host }),
+}));
 
 /** The concatenated text of a rendered element tree. */
 function textOf(node: unknown): string {
@@ -82,15 +98,63 @@ async function layoutFor(lang: string) {
 }
 
 describe("TS-004-A1: every path of the D1 inventory exists in both languages", () => {
-  it("has a page module behind every route", () => {
-    for (const route of ROUTE_IDS)
-      expect(existsSync(pageFile(route)), pageFile(route)).toBe(true);
+  /**
+   * F-2-55: this block used to iterate `ROUTE_IDS` — the registry — which is
+   * the one list that cannot be missing a row it defines. Two D1 rows
+   * (`/start`, `/llms.txt`) were absent from the site and every assertion
+   * here was green. It now walks `d1Inventory()`, and a separate check
+   * holds the inventory against the spec text, so a row can only disappear
+   * from both at once and deliberately.
+   */
+  it("has a handler behind every row of D1, not only behind every registry row", () => {
+    for (const row of d1Inventory()) {
+      if (row.kind === "page") {
+        expect(existsSync(pageFile(row.routeId!)), row.path).toBe(true);
+        continue;
+      }
+      const file =
+        row.path === "/sitemap.xml"
+          ? join(ROOT, "app", "sitemap.ts")
+          : row.path === "/robots.txt"
+            ? join(ROOT, "app", "robots.ts")
+            : join(ROOT, "app", row.path.slice(1), "route.ts");
+      expect(existsSync(file), `${row.path} → ${file}`).toBe(true);
+    }
   });
 
-  it("maps all 24 public URLs onto a page of the tree", () => {
+  it("walks the whole inventory, not just the pages", () => {
+    const paths = everyD1Path();
+    // 12 routes × 2 languages + `/sitemap.xml` + `/robots.txt` + `/llms.txt`
+    // + `/start`.
+    expect(paths).toHaveLength(ROUTE_IDS.length * LOCALES.length + 4);
+    expect(paths).toContain("/llms.txt");
+    expect(paths).toContain("/start");
+    expect(new Set(paths).size).toBe(paths.length);
+  });
+
+  it("maps all 24 public page URLs onto a page of the tree", () => {
     const urls = everyRoute().map(({ route, locale }) => href(route, locale));
     expect(urls).toHaveLength(ROUTE_IDS.length * LOCALES.length);
     expect(new Set(urls).size).toBe(urls.length);
+  });
+
+  it("answers every non-page row through its real handler", async () => {
+    const start = (await import("@/app/start/route")) as {
+      GET: () => Response;
+    };
+    const response = start.GET();
+    expect(response.status).toBe(302);
+    expect(response.headers.get("location")).toMatch(/^https:\/\//);
+    expect(response.headers.get("x-robots-tag")).toBe("noindex, nofollow");
+
+    const llms = (await import("@/app/llms.txt/route")) as {
+      GET: () => Promise<Response>;
+    };
+    const llmsResponse = await llms.GET();
+    expect(llmsResponse.headers.get("content-type")).toContain("text/plain");
+    const body = await llmsResponse.text();
+    expect(body.startsWith("# ")).toBe(true);
+    expect(body).toContain("https://www.schafe-vorm-fenster.de/");
   });
 
   it("titles and describes every page in every language", async () => {
@@ -160,6 +224,15 @@ describe("TS-004-A2: the redundant default prefix redirects, an unknown code 404
   });
 });
 
+describe("TS-004-A3: the landing-only domain rule", () => {
+  it("serves `/`, the legal route and the machine surfaces there, and nothing else", () => {
+    for (const path of ["/", "/en", "/rechtliches", "/en/legal", "/llms.txt", "/robots.txt", "/sitemap.xml"])
+      expect(servedOnLandingDomain(path), path).toBe(true);
+    for (const path of ["/mitmachen", "/en/take-part", "/dein-ort", "/dein-kalender/bestellen", "/start"])
+      expect(servedOnLandingDomain(path), path).toBe(false);
+  });
+});
+
 describe("TS-004-A4: an unknown path answers 404, noindex, inside the language", () => {
   it("carries all four error surfaces of TS-004 D2", () => {
     expect(existsSync(join(ROOT, "app", "global-not-found.tsx"))).toBe(true);
@@ -170,6 +243,20 @@ describe("TS-004-A4: an unknown path answers 404, noindex, inside the language",
 
   it("declares no catch-all, so an unknown path is genuinely unmatched", () => {
     expect(existsSync(join(APP_TREE, "[...rest]"))).toBe(false);
+  });
+
+  /**
+   * F-2-55: A4's second half — "500 renders without any data dependency" —
+   * was never asserted. `global-error` is rendered here with no arguments
+   * beyond the error itself: if it ever grew a content or live-data read,
+   * this throws instead of returning a tree.
+   */
+  it("renders the 500 surface with no data dependency at all", async () => {
+    const globalError = (await import("@/app/global-error")) as {
+      default: (props: { error: Error & { digest?: string } }) => unknown;
+    };
+    const tree = globalError.default({ error: new Error("boom") });
+    expect(textOf(tree).length).toBeGreaterThan(0);
   });
 
   it("marks both 404 surfaces noindex, follow", async () => {
@@ -199,7 +286,50 @@ describe("TS-004-A4: an unknown path answers 404, noindex, inside the language",
   });
 });
 
-describe("TS-004-A5: the sitemap lists the inventory in its languages", () => {
+describe("TS-004-A5: the three machine surfaces answer, per domain", () => {
+  /**
+   * F-2-55: this block checked the sitemap alone and never requested
+   * `llms.txt`, which is why the criterion stayed green while the route did
+   * not exist. All three surfaces are exercised through their real handlers
+   * now, and the per-domain half of A5 is asserted rather than assumed.
+   */
+  async function llmsFor(host: string): Promise<string> {
+    const { llmsTxtFor } = await import("@/src/lib/routes/llms-txt");
+    return llmsTxtFor(host);
+  }
+
+  it("serves llms.txt, naming the requesting domain and no other", async () => {
+    const body = await llmsFor("www.schafe-vorm-fenster.de");
+    expect(body).toContain("https://www.schafe-vorm-fenster.de/mitmachen");
+    expect(body).toContain("https://www.schafe-vorm-fenster.de/en/take-part");
+    expect(body).not.toContain("schafvormfenster.at");
+    expect(body).not.toContain("owcezaoknem.pl");
+  });
+
+  it("narrows llms.txt on a landing-only domain to what that domain serves", async () => {
+    const body = await llmsFor("www.schafvormfenster.at");
+    expect(body).toContain("https://www.schafvormfenster.at/");
+    expect(body).toContain("https://www.schafvormfenster.at/rechtliches");
+    expect(body).not.toContain("/mitmachen");
+    expect(body).not.toContain("/dein-kalender");
+  });
+
+  it("names every machine surface of D1 in llms.txt", async () => {
+    const body = await llmsFor("www.schafe-vorm-fenster.de");
+    for (const row of D1_NON_PAGE_ROWS)
+      if (row.kind === "machine") expect(body).toContain(row.path);
+  });
+
+  it("serves robots.txt per domain", async () => {
+    const { robotsFor } = await import("@/src/lib/seo/robots");
+    const production = robotsFor("production", "www.schafe-vorm-fenster.de");
+    expect(production.sitemap).toBe(
+      "https://www.schafe-vorm-fenster.de/sitemap.xml",
+    );
+    const preview = robotsFor("preview", "sheep-abc123.vercel.app");
+    expect(preview.sitemap).toBeUndefined();
+  });
+
   it("lists every public URL once, with its alternates", async () => {
     const { default: sitemap } = (await import("@/app/sitemap")) as {
       default: () => { url: string; alternates?: { languages?: object } }[];
