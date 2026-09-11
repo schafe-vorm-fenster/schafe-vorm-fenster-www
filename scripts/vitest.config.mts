@@ -13,6 +13,11 @@ import { defineConfig } from "vitest/config";
  * scope.
  */
 export default defineConfig({
+  // The guards import from `src/` through the `@/` alias, same as the
+  // application does; Vite resolves it natively (ADR-072).
+  resolve: {
+    tsconfigPaths: true,
+  },
   test: {
     environment: "node",
     include: ["scripts/**/*.test.ts"],
