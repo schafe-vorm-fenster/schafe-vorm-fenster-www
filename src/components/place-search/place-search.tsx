@@ -24,6 +24,11 @@ export interface PlaceSearchProps extends DataStateProps, Omit<LinkOptions, "has
   /** Typeahead enhancement — chips, never a fetch in this component. */
   readonly suggestions?: readonly PlaceSuggestion[];
   readonly defaultValue?: string;
+  /** The field's own placeholder — the second locale needs its own word. */
+  readonly placeholder?: string;
+  readonly submitLabel?: string;
+  /** Passed to the submit control: the primary conversion of a "know what is on" page (TS-006 D4). */
+  readonly submitDataCta?: string;
   readonly className?: string;
 }
 
@@ -55,6 +60,9 @@ export function PlaceSearch({
   hint = "Bislang nur per Postleitzahl — die Ortssuche folgt.",
   suggestions,
   defaultValue,
+  placeholder = "Postleitzahl",
+  submitLabel,
+  submitDataCta,
   state = "ready",
   className,
 }: PlaceSearchProps) {
@@ -74,8 +82,10 @@ export function PlaceSearch({
         defaultValue={defaultValue}
         label={label}
         locale={locale}
-        placeholder="Postleitzahl"
+        placeholder={placeholder}
         query={query}
+        submitDataCta={submitDataCta}
+        submitLabel={submitLabel}
         to={to}
       />
       <p className={styles.hint}>{hint}</p>

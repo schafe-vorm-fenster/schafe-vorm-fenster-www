@@ -15,6 +15,14 @@ export interface SearchFieldProps extends Omit<LinkOptions, "hash"> {
   readonly name?: string;
   readonly defaultValue?: string;
   readonly id?: string;
+  /**
+   * The conversion marker on the submit control. Where the focus job is
+   * "know what is on", the primary conversion **is** this submit and not a
+   * link to another page (TS-006 D4, TS-019-A2) — so the marker has to be
+   * reachable from the page that owns it. Absent by default: only one
+   * element per page carries it (TS-006 D3).
+   */
+  readonly submitDataCta?: string;
   readonly className?: string;
 }
 
@@ -42,6 +50,7 @@ export function SearchField({
   name = "ort",
   defaultValue,
   id = "ort-suche",
+  submitDataCta,
   className,
 }: SearchFieldProps) {
   return (
@@ -72,7 +81,7 @@ export function SearchField({
           spellCheck={false}
           type="search"
         />
-        <button className={styles.submit} type="submit">
+        <button className={styles.submit} data-cta={submitDataCta} type="submit">
           {submitLabel}
         </button>
       </div>
