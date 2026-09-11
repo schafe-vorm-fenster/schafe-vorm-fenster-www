@@ -1,0 +1,38 @@
+version: 1
+kind: command-dispatch
+command: cmd:qa
+description: QA acceptance run over a milestone's AC scope; also used for round retests.
+match:
+  labels:
+    all:
+      - local-run
+      - cmd:qa
+playbook:
+  path: .agents/playbooks/playbook-qa-acceptance-run/SKILL.md
+  interfaces:
+    acceptance-scope:
+      from: workflow-context
+      selector: "milestone TS ids from plan/projektplan.md, set by the orchestrator"
+      required: true
+    verification-strategy:
+      from: repository-file
+      selector: specs/verification/verification-strategy.md
+      required: true
+    target-environment:
+      from: literal
+      value:
+        dev: http://localhost:3000
+        preview: latest preview URL from state/status.md
+      required: true
+    findings-log:
+      from: workflow-context
+      selector: "state/findings/round-<n>.md, round set by the orchestrator"
+      required: true
+    qa-protocol:
+      from: workflow-context
+      selector: "reports/qa/M<milestone>-run-<n>.md"
+      required: true
+    retest-list:
+      from: workflow-context
+      selector: "fix-now findings of the current round (retests only)"
+      required: false

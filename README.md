@@ -23,6 +23,12 @@ the specs exist, not before. `go-to-market-os` is the single source of
 truth for content
 ([ADR-001](https://github.com/schafe-vorm-fenster/go-to-market-os/blob/main/handbook/decisions/001-content-source-of-truth.adr.md)).
 
+**4 — Realisierung.** The implementation runs as a one-shot multi-agent
+run against the specs. The operating manual lives in
+[`plan/README.md`](plan/README.md) (milestones, quality gates, process,
+guardrails); roles and playbooks in [`.agents/`](.agents/); run state in
+`state/`, protocols in `reports/`. Start with `pnpm preflight`.
+
 The order is deliberate. Writing content before the specification produces
 copy with nowhere to live, and a specification bent around copy that
 already exists.

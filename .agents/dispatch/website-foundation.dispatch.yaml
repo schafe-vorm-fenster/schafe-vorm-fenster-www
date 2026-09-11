@@ -1,0 +1,51 @@
+version: 1
+kind: command-dispatch
+command: cmd:foundation
+description: Stand up the technical foundation (M1) per TS-017/TS-015 with a proven preview chain.
+match:
+  labels:
+    all:
+      - local-run
+      - cmd:foundation
+playbook:
+  path: .agents/playbooks/playbook-website-foundation/SKILL.md
+  interfaces:
+    foundation-spec:
+      from: repository-glob
+      selector: "specs/tactical/{technical-foundation,security,performance}.tactical.md"
+      required: true
+    delivery-spec:
+      from: repository-glob
+      selector: "specs/{tactical/delivery-pipeline.tactical.md,decisions/031-*.md,decisions/035-*.md}"
+      required: true
+    brand-package:
+      from: literal
+      value:
+        package: "@schafe-vorm-fenster/brand-design"
+        pin: exact
+      required: true
+    verification-strategy:
+      from: repository-file
+      selector: specs/verification/verification-strategy.md
+      required: true
+    sibling-repos:
+      from: literal
+      value:
+        - ../classification-api
+        - ../events-api
+        - ../geo-api
+        - ../community-calendar
+        - ../envoy-api
+      required: true
+    stack-registry:
+      from: literal
+      value:
+        path: stack.allow.json
+        note: created in Phase 2 if absent
+      required: true
+    state-files:
+      from: repository-glob
+      selector: "state/*.md"
+      required: true
+outputs:
+  artifact_path_template: "app/ + stack.allow.json + tsconfig.json"

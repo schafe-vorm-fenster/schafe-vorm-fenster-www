@@ -1,0 +1,41 @@
+version: 1
+kind: command-dispatch
+command: cmd:page
+description: Implement one page (M2/M4) from its page spec. The orchestrator instantiates this contract once per page, narrowing page-spec to the single file.
+match:
+  labels:
+    all:
+      - local-run
+      - cmd:page
+playbook:
+  path: .agents/playbooks/playbook-page-implementation/SKILL.md
+  interfaces:
+    page-spec:
+      from: repository-glob
+      selector: "specs/tactical/pages/*.tactical.md"
+      required: true
+    composition-rules:
+      from: repository-file
+      selector: specs/tactical/page-composition.tactical.md
+      required: true
+    design-system:
+      from: repository-glob
+      selector: "concept/{website-design-system.md,v2.0/*.dc.html}"
+      required: true
+    route-map:
+      from: repository-glob
+      selector: "specs/tactical/{url-and-routing,locale-routing}.tactical.md"
+      required: true
+    brand-tokens:
+      from: literal
+      value:
+        note: the single token-import file created in M1 (see stack ADR for its path)
+      required: true
+    content-model:
+      from: repository-glob
+      selector: "specs/tactical/content-pipeline.tactical.md"
+      required: true
+    state-files:
+      from: repository-glob
+      selector: "state/*.md"
+      required: true

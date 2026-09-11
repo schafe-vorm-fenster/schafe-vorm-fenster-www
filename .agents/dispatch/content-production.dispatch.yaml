@@ -1,0 +1,54 @@
+version: 1
+kind: command-dispatch
+command: cmd:content
+description: Produce page copy DE/EN (M3) from the go-to-market-os sources, compliance-checked and schema-valid.
+match:
+  labels:
+    all:
+      - local-run
+      - cmd:content
+playbook:
+  path: .agents/playbooks/playbook-content-production/SKILL.md
+  interfaces:
+    content-sources:
+      from: literal
+      value:
+        hub-packages:
+          - "@schafe-vorm-fenster/audiences"
+          - "@schafe-vorm-fenster/goals"
+          - "@schafe-vorm-fenster/offerings"
+          - "@schafe-vorm-fenster/messaging"
+          - "@schafe-vorm-fenster/proof"
+          - "@schafe-vorm-fenster/media-echo"
+          - "@schafe-vorm-fenster/people"
+          - "@schafe-vorm-fenster/partners"
+          - "@schafe-vorm-fenster/brand-identity"
+        note: consume from node_modules by id; never copy into the repo (AGENTS.md rule)
+      required: true
+    communication-principles:
+      from: literal
+      value:
+        path: ../go-to-market-os/concept/website-communication-principles.concept.md
+      required: true
+    tone-of-voice:
+      from: literal
+      value:
+        package: "@schafe-vorm-fenster/brand-identity"
+        file: tone-of-voice.md
+      required: true
+    page-specs:
+      from: repository-glob
+      selector: "specs/tactical/pages/*.tactical.md"
+      required: true
+    content-schema:
+      from: repository-file
+      selector: src/domain/content-frontmatter.schema.ts
+      required: true
+    pipeline-spec:
+      from: repository-file
+      selector: specs/tactical/content-pipeline.tactical.md
+      required: true
+    state-files:
+      from: repository-glob
+      selector: "state/*.md"
+      required: true

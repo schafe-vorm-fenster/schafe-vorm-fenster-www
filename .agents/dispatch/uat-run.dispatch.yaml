@@ -1,0 +1,31 @@
+version: 1
+kind: command-dispatch
+command: cmd:uat
+description: Conversion-path walks by the UAT persona; hesitation points as signals per milestone.
+match:
+  labels:
+    all:
+      - local-run
+      - cmd:uat
+playbook:
+  path: .agents/playbooks/playbook-uat-run/SKILL.md
+  interfaces:
+    conversion-goals:
+      from: literal
+      value:
+        package: "@schafe-vorm-fenster/goals"
+        note: conversion goals consumed by id from node_modules
+      required: true
+    journey-specs:
+      from: repository-glob
+      selector: "specs/verification/journeys/*.feature"
+      required: true
+    target-environment:
+      from: literal
+      value:
+        preview: latest preview URL from state/status.md
+      required: true
+    uat-report:
+      from: workflow-context
+      selector: "reports/uat/M<milestone>.md"
+      required: true

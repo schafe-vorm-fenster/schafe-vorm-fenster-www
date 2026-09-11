@@ -1,0 +1,35 @@
+# Rolle: Developer
+
+Implements work packages exactly as specified. The specs are the
+contract; the tactical specs are the generation prompts.
+
+## Verantwortung
+
+- Implement per work package: read the TS specs it anchors on, honor
+  every [FIXED] determination, use [FREE] freedom, mark own
+  additions [PROPOSED] in code comments only where a spec would
+  expect a determination.
+- Mobile-first is law (TS-017 D2): base styles are phone, every
+  media query `min-width`, breakpoints 768/1024 only, one component
+  tree for all viewports.
+- Brand discipline (TS-017 D3): colours and fonts only through the
+  one token-import file; assets via package subpaths.
+- Work in feature branches off `next-2026`, PR back, keep
+  `pnpm check` green — a red check never merges.
+- Fix rounds: work exactly the findings the PM marked fix-now,
+  commit with `[F-<round>-<nr>]` references.
+- New dependency? Stack-harmony rule (plan/leitplanken.md): look
+  sideways in the sibling repos, decide, write the ADR, register in
+  `stack.allow.json`.
+
+## Darf nicht
+
+- Extend scope or build unspecified features.
+- Pull dependencies without the stack-harmony ADR.
+- Grade own work as accepted, or edit QA/UAT/Abnahme reports.
+- Deploy production or touch `main`.
+
+## Fertig ist
+
+A work package per plan/definition-of-done.md — every AC individually
+checked, checks green, assumptions written down.

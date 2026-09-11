@@ -1,0 +1,30 @@
+version: 1
+kind: command-dispatch
+command: cmd:chaos
+description: Persona-driven unstructured browser testing against the local dev server.
+match:
+  labels:
+    all:
+      - local-run
+      - cmd:chaos
+playbook:
+  path: .agents/playbooks/playbook-chaos-run/SKILL.md
+  interfaces:
+    persona-profiles:
+      from: repository-glob
+      selector: ".agents/roles/personas/der-*.md"
+      required: true
+    target-environment:
+      from: literal
+      value:
+        dev: http://localhost:3000
+        mechanics: local Chrome session driven directly by the agent; Playwright persona scripts as fallback
+      required: true
+    run-scope:
+      from: workflow-context
+      selector: "milestone routes, set by the orchestrator"
+      required: true
+    findings-log:
+      from: workflow-context
+      selector: "state/findings/round-<n>.md"
+      required: true
