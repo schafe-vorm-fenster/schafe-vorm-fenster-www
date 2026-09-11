@@ -235,7 +235,15 @@ test.describe("TS-021 — start the calendar in your place", () => {
       maxRedirects: 0,
     });
     expect(response.status()).toBe(307);
-    expect(response.headers()["location"]).toBe(`/dein-ort?ort=${COVERED_SLUG}`);
+    // The hop is issued by `proxy.ts` now (F-2-49), so `Location` is absolute:
+    // a page `redirect()` answers 200 with an empty document on a production
+    // build, because Cache Components resumes every route from a postponed
+    // prerender. Compare the part the criterion is about.
+    const hop = new URL(response.headers()["location"]!, "http://localhost");
+    expect(`${hop.pathname}${hop.search}`).toBe(`/dein-ort?ort=${COVERED_SLUG}`);
+    // The body is irrelevant, the status line is not: this must be a real
+    // HTTP redirect with no document behind it, not a client-side forward.
+    expect((await response.body()).length).toBeLessThan(1024);
 
     // Following it terminates in one hop, and the campaign parameters and the
     // language prefix survive.
@@ -244,16 +252,33 @@ test.describe("TS-021 — start the calendar in your place", () => {
       { maxRedirects: 0 },
     );
     expect(followed.status()).toBe(307);
-    const target = new URL(followed.headers()["location"], "http://localhost");
+    const target = new URL(followed.headers()["location"]!, "http://localhost");
     expect(target.pathname).toBe("/en/your-place");
     expect(target.searchParams.get("ort")).toBe(COVERED_SLUG);
     expect(target.searchParams.get("etcc_cmp")).toBe("herbst");
     expect(target.searchParams.get("etcc_med")).toBe("mail");
 
-    const second = await request.get(target.toString().replace("http://localhost", ""), {
+    const second = await request.get(`${target.pathname}${target.search}`, {
       maxRedirects: 0,
     });
     expect(second.status()).toBe(200);
+  });
+
+  test("TS-021-A7: the hop happens with JavaScript disabled (F-2-49)", async ({
+    browser,
+  }) => {
+    // The half the retest reopened: with a page-level `redirect()` the forward
+    // ran only in the client, so a visitor without JavaScript was left on a
+    // blank 200. It is an HTTP redirect now, so the browser follows it before
+    // it ever needs a script.
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+
+    await page.goto(`/dein-ort/starten?ort=${COVERED_ZIP}`);
+    await expect(page).toHaveURL(new RegExp(`/dein-ort\\?ort=${COVERED_SLUG}$`));
+    expect((await page.locator("body").innerText()).length).toBeGreaterThan(100);
+
+    await context.close();
   });
 
   test.fixme(
