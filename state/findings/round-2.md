@@ -1101,6 +1101,32 @@ dismissed in the protocol, not here.
 
 - Retest (gate 2, run 2): **resolved** — `csp-hashes.ts` takes its fetch origin from `VERCEL_URL`/`VERCEL_PROJECT_PRODUCTION_URL` (off Vercel: only a D1 host or loopback, and never with the secret), keys the cache on `VERCEL_DEPLOYMENT_ID`, and validates every entry against `sha256-<44 base64>`. 33 unit tests across `csp-hashes.test.ts` and `proxy.test.ts` where the module had none; `check-csp.ts` gained the hostile-hash guard; `e2e/smoke.spec.ts:252` asserts it and is green on the preview.
 
+
+- **QA correction to this finding's premise (post-close, does not reopen it).**
+  The finding was filed at `high` on a static read of the call chain, with
+  reachability explicitly marked unproven. It has since been executed, and
+  the stated mechanism **does not reproduce**. Method: `pnpm build`, then a
+  **cold** `next start -p 3101` (a second instance; the port-3100 run server
+  was never touched), with a local listener on `:3102` answering the hash
+  asset with a poisoned token. Since `cached ??=` is fixed by the first
+  request, the attack request was the first request to each cold server.
+  Two vectors, two cold starts:
+  `Host: 127.0.0.1:3102` → listener never contacted, response CSP carried
+  the 128 genuine build hashes; `X-Forwarded-Host: 127.0.0.1:3102`
+  (+ `X-Forwarded-Proto`) → identical result. So `request.nextUrl.origin`
+  resolved to the server's own origin and followed neither header. On the
+  evidence, the correct severity was **low** — unvalidated values flowing
+  into a security header in an untested module — not `high`, and there was
+  no external-attacker path.
+  This changes nothing about the fix in `ad57495`, which is sound and is
+  the right shape independently: taking the origin from the deployment's
+  environment asserts what the framework merely happened to do, and the 33
+  new unit tests pin it. Recorded so that no one later reads F-2-36 as
+  evidence that Next's `nextUrl` follows `Host` — it does not.
+  Method note for future rounds: a code-path argument about a security
+  boundary is a hypothesis, not a finding, until it has been run. This one
+  read convincingly and survived a second static re-read; it did not
+  survive the first execution.
 ## F-2-37 — `report-uri` / `Reporting-Endpoints` point at `/api/csp-report`, which cannot exist
 
 - Severity: medium
