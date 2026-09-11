@@ -12,7 +12,7 @@ Current test round: — (n of 3)
   through one file, security headers and CSP live, preview deployed and
   the e2e smoke green against it through the protection bypass —
   2026-09-11. Preview:
-  <https://schafe-vorm-fenster-81urqy2fw-schafe-vorm-fenster.vercel.app>
+  <https://schafe-vorm-fenster-4veymgqid-schafe-vorm-fenster.vercel.app>
 - M0 Tracer bullet — all six proofs GREEN (Next.js 16.3.4; MCP endpoint needs `Accept: application/json, text/event-stream`; Playwright chromium; chaos tooling = `agent-browser`; Vercel auth + project visible; teardown clean) — 2026-09-11
 
 ## In progress
