@@ -77,6 +77,7 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-063 — Media echo uses the same clearance field as proof](063-media-echo-clearance.md)
 - [DEC-064 — The permanence promise gets a proof element; the channels get enumerated](064-evidence-for-the-publishing-page.md)
 - [DEC-065 — How the four hardest rules are verified — and where the coverage stops](065-verification-of-the-hard-rules.md)
+- [DEC-066 — One register for the whole site — informal du, including the Verwaltung](066-one-register-du-everywhere.md)
 - [DEC-067 — Six breakpoints, dense below the tablet — and why the spec's two were wrong](067-six-breakpoints-dense-at-the-phone-end.md)
 - [DEC-068 — Every gap is filled with a marked placeholder, never left empty](068-placeholders-over-empty-slots.md)
 - [DEC-069 — Answers from the PROPOSED review — price, accessibility, cache, budget, fallback, preview](069-eleven-answers-from-the-proposed-review.md)
@@ -85,3 +86,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-072 — The foundation stack follows the sibling repositories, with three deliberate deviations](072-the-foundation-stack.md)
 - [DEC-073 — The locale and URL layer: one typed table, no i18n library, and the 404 that actually renders](073-locale-and-url-layer.md)
 - [DEC-074 — The content pipeline reads the shipped page artifacts — one file per page, typed blocks, no markdown library](074-content-pipeline-reads-the-shipped-artifacts.md)
+- [DEC-075 — The last-good store is the Vercel Runtime Cache, behind one interface](075-last-good-store-is-the-vercel-runtime-cache.md)

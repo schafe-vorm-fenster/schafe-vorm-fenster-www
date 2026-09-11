@@ -18,6 +18,10 @@
       "reason": "The binding design system: colour and type tokens, logos, font packages. Consumed, never copied; pinned exact so a brand change arrives as a reviewable version bump.",
       "decision": "DEC-044"
     },
+    "@vercel/functions": {
+      "reason": "The Vercel Runtime Cache client — the `last-good` store tier 2 of TS-009 D4 reads when the render cache has nothing and the upstream is down. Used by exactly one module (src/lib/live/last-good.ts) behind a two-implementation interface; getCache() falls back to an in-process cache off-platform, so dev and tests run the same path.",
+      "decision": "DEC-075"
+    },
     "js-yaml": {
       "reason": "The YAML reader for content frontmatter and the specs checks. Already in the tree since M1 (same version, same lockfile entry); promoted from devDependencies because src/lib/content/loader.ts reads page artifacts on a server path, and a module a rendered page imports is a runtime dependency, whatever the folder it is read from.",
       "decision": "DEC-074"
