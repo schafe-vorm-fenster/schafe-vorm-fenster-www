@@ -36,6 +36,12 @@ export interface Dictionary {
     yourCalendar: string;
     whyUs: string;
     calendarButton: string;
+    /**
+     * The breadcrumb `nav`'s own accessible name — distinct from the header
+     * `nav`'s (`home`), so the two landmarks of the same role are
+     * distinguishable by name on every second-level page (F-2-3).
+     */
+    breadcrumb: string;
   };
   footer: {
     contact: string;
@@ -98,6 +104,7 @@ const de: Dictionary = {
     yourCalendar: "Dein Kalender",
     whyUs: "Warum wir",
     calendarButton: "Kalender",
+    breadcrumb: "Seitenpfad",
   },
   footer: {
     contact: "Kontakt",
@@ -160,6 +167,7 @@ const en: Dictionary = {
     yourCalendar: "Your calendar",
     whyUs: "Why us",
     calendarButton: "Calendar",
+    breadcrumb: "Page path",
   },
   footer: {
     contact: "Contact",

@@ -17,6 +17,7 @@
 }
 
 .ink {
+  --photo-scrim: var(--color-neutral-ink);
   background-image:
     linear-gradient(
       to bottom,
@@ -30,6 +31,7 @@
 
 /* The municipal path (SRC-014 §Photo surface). */
 .violet {
+  --photo-scrim: var(--color-violet-500);
   background-image:
     linear-gradient(
       to bottom,
@@ -48,7 +50,40 @@
   flex-direction: column;
   gap: var(--space-3);
   padding: var(--section-padding-block) var(--space-4);
+  position: relative;
   width: 100%;
+  z-index: 0;
+}
+
+/*
+ * F-2-2: the gradient above is a percentage of the *box* (fixed by
+ * `ratio-hero`/`ratio-feature`), while the text stack's height is not — a
+ * longer headline, a search field, or an English translation all change how
+ * much of the box the content actually fills. At 360 px the box-relative
+ * gradient alone could put the first line of text above its own dark band,
+ * because the content grew taller than the percentages assumed.
+ *
+ * This second scrim is anchored to `.content`'s own box instead of the
+ * section's, so it grows and shrinks with the text stack itself: by the
+ * stack's own top edge (0 in the gradient below, `--section-padding-block`
+ * below the pseudo-element's top) it has already reached the 0.82 floor the
+ * design system sets (SRC-014 §Photo surface, §Accessibility), regardless of
+ * how tall the stack is. `z-index: 0` on `.content` gives it its own
+ * stacking context so the pseudo-element's `z-index: -1` stays behind the
+ * real content and above `.surface`'s own image, rather than escaping to a
+ * lower level of the document.
+ */
+.content::before {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--photo-scrim, var(--color-neutral-ink)) 82%, transparent) 32px,
+    color-mix(in srgb, var(--photo-scrim, var(--color-neutral-ink)) 96%, transparent) 100%
+  );
+  content: "";
+  inset: -32px 0 0;
+  position: absolute;
+  z-index: -1;
 }
 
 .marks {
