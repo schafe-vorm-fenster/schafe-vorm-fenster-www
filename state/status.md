@@ -6,6 +6,7 @@ Current test round: 3 of 3 (gate-2 loop: round 2 = QA sweep + triage, round 3 = 
 
 ## Done
 
+- Round 3 fix packages: A 20/20 (F-2-30 critical closed; events once per action; 404 real; briefing links real), B 4/6 (archive filter, type floor 15 px, metric-matched font fallbacks → shift 174→≤2.4 px; F-2-39/56 Suspense reverted: contradicts JS-off ACs, row 145), C 5/6 (bypass fetch hardened, D11 lifecycle gate, /start + /llms.txt, landing rule, build guards); orchestrator sweep: pnpm check green 796 tests, build ○/◐/ƒ as decided, preview deployed — 2026-09-12
 - Gate 2 QA run 1: 333 ACs — 234 pass / 52 fail / 47 not-testable; 35 findings (1 critical F-2-30 uncovered branch, 12 high); Lighthouse a11y 100; semgrep 0 true positives; differential review → F-2-36 (reports/qa/gate-2-run-1.md) — 2026-09-11
 - Chaos hasty-clicker run 2 (Playwright): double-fired events C-H-6/7, 174 px shift C-H-12 — 2026-09-11
 - PM round-3 decisions: 32 fix-now (1c/15h/16m) in packages A/B/C, 29 open-list (plan/round-3.md) — 2026-09-11
@@ -40,8 +41,8 @@ Current test round: 3 of 3 (gate-2 loop: round 2 = QA sweep + triage, round 3 = 
 
 ## In progress
 
-- Round 3 fix packages (plan/round-3.md): A conversion paths (20 findings, opus), B components/rendering (6), C platform (6, opus) — three developers in parallel
-- Next: fresh preview → QA retest (round 3) → Customer acceptance gate 2 → M5 final roundtrips
+- Gate 2 QA retest (round 3) on preview https://schafe-vorm-fenster-hhnus16wk-schafe-vorm-fenster.vercel.app — QA (opus)
+- Next: Customer acceptance gate 2 → M5 final roundtrips
 
 ## Pending
 
