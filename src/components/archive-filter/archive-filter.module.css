@@ -18,3 +18,15 @@
   margin: 0;
   text-transform: uppercase;
 }
+
+/**
+ * F-2-69 — the pre-hydration copies of the chip row and the count line hold
+ * their own space and nothing else. `visibility: hidden` is the load-bearing
+ * choice: it keeps the box (which `display: none` would collapse, which is
+ * the 262 px shift this finding is about) while keeping the copy out of the
+ * accessibility tree and the tab order, so TS-028-A9's "the chip row is not
+ * visible" and D8's "never dead" both hold with JavaScript disabled.
+ */
+.reserved {
+  visibility: hidden;
+}

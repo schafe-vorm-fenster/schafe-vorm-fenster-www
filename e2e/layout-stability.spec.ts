@@ -105,3 +105,101 @@ for (const routeId of ROUTE_IDS) {
     }
   });
 }
+
+/**
+ * F-2-69 — the real thing: Cumulative Layout Shift, not a proxy for it.
+ *
+ * The per-anchor budget above is 24/24 green and still missed CLS 0.2197 on
+ * `/ueber-uns/archiv`: it matches anchors by tag + text and the archive's
+ * anchors (the `h1`, the footer controls) did not move — what moved was the
+ * row list, 262 px, when the client-only filter chip row was inserted after
+ * hydration. A shape of check that watches a fixed anchor set cannot see a
+ * shift of everything *between* those anchors, so this block measures the
+ * metric the criteria actually name:
+ *
+ *   TS-009-A8  — "CLS < 0.1 on every content page … with all islands streaming"
+ *   TS-028-A13 — "CLS measured over load plus three filter interactions stays < 0.1"
+ *
+ * Method, the same one the finding used so the numbers are comparable: a
+ * `layout-shift` `PerformanceObserver` installed with `buffered: true` in an
+ * init script (so shifts before the observer attaches still count), then
+ * `goto` → `networkidle` → a settle pause → read the accumulated value.
+ *
+ * Deliberately stricter than the browser's own CLS: shifts carrying
+ * `hadRecentInput` are counted too, rather than discounted, because
+ * TS-028-A13 asks explicitly for the three filter interactions to be inside
+ * the measured window. (In the finding's measurement they contributed 0.0008
+ * of the 0.2197, so this costs the budget nothing and closes a hiding place.)
+ *
+ * The primary viewport is 360×800 — the finding's own, and the mobile-first
+ * base case (TS-017 D2). The archive is measured at all three reference
+ * widths on top, because its fix is a *reserved* block whose height has to
+ * match the chip row after wrapping at each of them, not only at 360.
+ */
+
+const CLS_BUDGET = 0.1;
+const CLS_VIEWPORT = { width: 360, height: 800 } as const;
+/** DEC-067's reference widths — the chip row wraps to a different line count at each. */
+const ARCHIVE_WIDTHS = [360, 768, 1024] as const;
+
+interface ClsWindow {
+  __cls: number;
+}
+
+/** Must run before the first navigation, or the load shifts are already lost. */
+async function installClsObserver(page: import("@playwright/test").Page): Promise<void> {
+  await page.addInitScript(() => {
+    const store = window as unknown as ClsWindow;
+    store.__cls = 0;
+    if (!PerformanceObserver.supportedEntryTypes?.includes("layout-shift")) return;
+    new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        store.__cls += (entry as PerformanceEntry & { value: number }).value;
+      }
+    }).observe({ type: "layout-shift", buffered: true });
+  });
+}
+
+async function settleAndReadCls(page: import("@playwright/test").Page): Promise<number> {
+  await page.waitForLoadState("networkidle");
+  // Not a wait for a state — a measurement window. The finding's own settle
+  // pause: the archive's shift landed 279–370 ms after load, and late fonts,
+  // late images and a late island all fall inside 1.2 s.
+  await page.waitForTimeout(1200);
+  return page.evaluate(() => (window as unknown as ClsWindow).__cls);
+}
+
+for (const routeId of ROUTE_IDS) {
+  const path = href(routeId, "de");
+
+  test(`TS-009-A8: CLS < ${CLS_BUDGET} — ${path} at 360×800`, async ({ page }) => {
+    await page.setViewportSize({ ...CLS_VIEWPORT });
+    await installClsObserver(page);
+    await page.goto(path);
+    const cls = await settleAndReadCls(page);
+    expect(cls, `${path} accumulated CLS ${cls.toFixed(4)}`).toBeLessThan(CLS_BUDGET);
+  });
+}
+
+for (const width of ARCHIVE_WIDTHS) {
+  test(`TS-028-A13: CLS < ${CLS_BUDGET} over load plus three filter interactions at ${width}px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 800 });
+    await installClsObserver(page);
+    await page.goto(href("archive", "de"));
+
+    // The chip row is client-only (TS-028 D8) and replaces a reserved block of
+    // its own size at hydration (F-2-69) — waiting for the component's own
+    // ready state is what makes the three interactions below deterministic.
+    await expect(page.locator("[data-archive-filter]")).toHaveAttribute("data-hydrated", "true");
+
+    const chips = page.getByRole("group").getByRole("button");
+    await chips.nth(1).click(); // one type
+    await chips.nth(2).click(); // a second type, OR-combined
+    await chips.nth(0).click(); // "Alle" — back to the full list
+
+    const cls = await settleAndReadCls(page);
+    expect(cls, `archive at ${width}px accumulated CLS ${cls.toFixed(4)}`).toBeLessThan(CLS_BUDGET);
+  });
+}
