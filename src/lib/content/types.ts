@@ -31,7 +31,10 @@ export type ContentGap =
   | "page-file-missing"
   | "page-frontmatter-invalid"
   | "slot-unknown"
-  | "slot-meta-invalid";
+  | "slot-meta-invalid"
+  /** TS-007 D11: the status this build does not render (A14). */
+  | "page-not-approved"
+  | "slot-not-approved";
 
 /**
  * One authored block below a slot's metadata comment.
@@ -98,6 +101,12 @@ export interface PageContent {
    * `pnpm check:content` so the commit that wrote one does not.
    */
   readonly invalidSlots: readonly { readonly problems: readonly string[] }[];
+  /**
+   * Slot ids the editorial gate of TS-007 D11 removed for *this* build. They
+   * are absent from `slots`, so a page renders its empty states, and
+   * `check:content` reports them against a production build.
+   */
+  readonly gatedSlots: readonly string[];
   readonly status: LifecycleStatus;
   /** False when the file is missing or its frontmatter does not validate. */
   readonly ok: boolean;

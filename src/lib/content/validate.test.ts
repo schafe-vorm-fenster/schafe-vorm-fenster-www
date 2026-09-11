@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { parsePage } from "@/src/lib/content/loader";
 import { createHubResolver } from "@/src/lib/content/source-refs";
-import { checkLocaleSet, checkPage } from "@/src/lib/content/validate";
+import { checkLifecycle, checkLocaleSet, checkPage } from "@/src/lib/content/validate";
 
 import type { PageContent } from "@/src/lib/content/types";
 
@@ -296,5 +296,59 @@ provenance: "sourced"
     expect(checks(checkLocaleSet("home", { de, en: diverged }))).toContain(
       "harmonisation",
     );
+  });
+});
+
+describe("TS-007-A14 (F-2-40): `check:content` asks the production question", () => {
+  const draftPage = page(
+    `<!-- id: home-1-search-hero; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
+
+**Headline:** Was ist bei dir los?
+`,
+  );
+
+  it("fails a production build on an unapproved artefact", () => {
+    const findings = checkLifecycle(draftPage, "production");
+    expect(findings).toHaveLength(1);
+    expect(findings[0]!.level).toBe("error");
+    expect(findings[0]!.check).toBe("lifecycle");
+    expect(findings[0]!.message).toContain("draft");
+  });
+
+  it("reports the same artefact as a warning anywhere else — clearance is not a developer's fix", () => {
+    for (const environment of ["preview", "development"] as const) {
+      const findings = checkLifecycle(draftPage, environment);
+      expect(findings.map((f) => f.level), environment).toEqual(["warning"]);
+    }
+  });
+
+  it("says nothing about an approved artefact", () => {
+    const approved = parsePage(
+      `---
+id: home-de
+page_id: TS-019
+route: "/"
+content_type: section
+status: approved
+locale: de
+derived_from:
+  - "ia"
+generated_by: "playbook-content-production@1.0.0"
+generated_at: "2026-09-11"
+provenance: "sourced"
+reviewed_by: "a-person"
+reviewed_at: "2026-09-11"
+---
+
+# Startseite
+
+<!-- id: home-1-search-hero; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
+
+**Headline:** Was ist bei dir los?
+`,
+      { routeId: "home", locale: "de", file: "content/pages/home/de.md", environment: "production" },
+    );
+    expect(approved.ok).toBe(true);
+    expect(checkLifecycle(approved, "production")).toEqual([]);
   });
 });

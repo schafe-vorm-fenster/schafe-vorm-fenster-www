@@ -350,12 +350,17 @@ export const SourceRefSchema = z
  * The per-slot metadata comment inside a page artifact
  * (`<!-- id: …; content_type: …; provenance: …; derived_from: […]; status: … -->`).
  *
+ * **Strict** (F-2-40, F-2-46's owned clause): an unknown key is an error, not
+ * a silently dropped one. A non-strict object would let a misspelt `status`
+ * or `reviewed_by` pass validation and then be invisible to the editorial
+ * gate — a gate that can be bypassed by a typo is not a gate.
+ *
  * It carries what TS-007 D4/D6 would put in a per-slot file's own
  * frontmatter. `state/content-map.md` explains why the artifacts are one file
  * per page instead; ADR-074 records the determination that the loader reads
  * that shape as is.
  */
-export const SlotMetaSchema = z.object({
+export const SlotMetaSchema = z.strictObject({
   id: z
     .string()
     .min(1)
@@ -397,9 +402,16 @@ export const PageFrontmatterSchema = BaseFrontmatterSchema.extend({
   compliance_check: z.string().optional(),
   schema_note: z.string().optional(),
   open_points: z.array(z.string()).optional(),
+  /** Where a price shown on the page comes from — TS-024/TS-025. */
+  price_source_note: z.string().optional(),
   /** TS-007 D11: set by a person at the editorial decision point, never by an agent. */
   reviewed_by: z.string().optional(),
   reviewed_at: z.string().optional(),
-});
+  // F-2-40 / F-2-46's owned clause: **strict**. A non-strict object drops an
+  // unknown key silently, so a misspelt `status`, `reviewed_by` or
+  // `reviewed_at` would pass `check:frontmatter` and be invisible to the
+  // editorial gate of D11. Adding a field here is deliberate; acquiring one
+  // by typo is not.
+}).strict();
 
 export type PageFrontmatter = z.infer<typeof PageFrontmatterSchema>;

@@ -12,6 +12,7 @@
  * | 1 schema parse | `schema` | runs |
  * | 3 provenance | `provenance`, `dummy-content` | runs |
  * | 5 facet completeness | `slot-meta` (provenance + status on every slot) | partial |
+ * | — TS-007 D11/A14 | `lifecycle` (the editorial gate) | runs |
  * | 7 locale completeness | `locale-completeness` | runs |
  * | 8 harmonisation | `harmonisation` (records, slot set, provenance) | partial |
  * | 9 slot binding | `slot-binding` (unique ids inside a page) | partial |
@@ -21,10 +22,12 @@
  */
 
 import { loadPage } from "@/src/lib/content/loader";
+import { contentEnvironment, PRODUCTION_STATUSES, rendersIn } from "@/src/lib/content/lifecycle";
 import { createHubResolver } from "@/src/lib/content/source-refs";
 import { LOCALES } from "@/src/lib/i18n/locales";
 import { ROUTE_IDS, ROUTES } from "@/src/lib/routes/routes";
 
+import type { Environment } from "@/src/lib/security/csp";
 import type { PageContent } from "@/src/lib/content/types";
 import type { HubResolver } from "@/src/lib/content/source-refs";
 import type { Locale } from "@/src/lib/i18n/locales";
@@ -43,7 +46,8 @@ export interface Finding {
     | "provenance"
     | "dummy-content"
     | "locale-completeness"
-    | "harmonisation";
+    | "harmonisation"
+    | "lifecycle";
   readonly message: string;
 }
 
@@ -160,6 +164,57 @@ export function checkPage(page: PageContent, resolver: HubResolver): Finding[] {
   return findings;
 }
 
+/**
+ * TS-007 D11 / A14, the editorial gate as a build check (F-2-40).
+ *
+ * `loader.ts` drops what the *running* build may not render; this asks the
+ * production question from wherever `check:content` happens to run, so the
+ * answer does not depend on the developer's shell. Severity follows the
+ * target: producing a production build, an unapproved artefact is an error
+ * ("a production build contains only `status: approved` content"); anywhere
+ * else it is the standing list of what is not cleared yet — which is the
+ * clearance decision recorded on `state/open.md`, not a defect a developer
+ * can fix.
+ *
+ * The page is reported once; a slot is reported only when it is *more*
+ * restricted than its page, so a wholly-draft artefact costs one line and
+ * not thirty.
+ */
+export function checkLifecycle(
+  page: PageContent,
+  targetEnvironment: Environment,
+): Finding[] {
+  if (!page.ok) return [];
+
+  const level: Finding["level"] =
+    targetEnvironment === "production" ? "error" : "warning";
+  const allowed = PRODUCTION_STATUSES.join(" / ");
+  const findings: Finding[] = [];
+
+  if (!rendersIn(page.status, "production"))
+    findings.push({
+      level,
+      file: page.file,
+      check: "lifecycle",
+      message: `\`status: ${page.status}\` — a production build contains only ${allowed} content (TS-007 D11, A14); this page renders in preview and reaches no production page`,
+    });
+
+  for (const slot of [...page.slots, ...page.gatedSlots.map((id) => ({ id, status: null }))]) {
+    const status = "status" in slot && slot.status ? slot.status : null;
+    if (!status || rendersIn(status, "production")) continue;
+    if (status === page.status) continue;
+    findings.push({
+      level,
+      file: page.file,
+      slot: slot.id,
+      check: "lifecycle",
+      message: `\`status: ${status}\` — a production build contains only ${allowed} content (TS-007 D11, A14)`,
+    });
+  }
+
+  return findings;
+}
+
 export interface LocaleSetOptions {
   /**
    * How a missing locale sibling is reported. `error` is TS-007 D8/D12 row 7;
@@ -256,6 +311,13 @@ export function checkLocaleSet(
 export interface CheckTreeOptions extends LocaleSetOptions {
   readonly contentRoot?: string;
   readonly resolver?: HubResolver;
+  /**
+   * Which build the tree is being validated for (TS-007 D11). Defaults to
+   * this process's own `VERCEL_ENV`. The *loading* always uses `preview`, so
+   * the gate can report what production would drop instead of silently not
+   * seeing it.
+   */
+  readonly targetEnvironment?: Environment;
 }
 
 /**
@@ -266,6 +328,7 @@ export async function checkContentTree(
   options: CheckTreeOptions = {},
 ): Promise<Finding[]> {
   const resolver = options.resolver ?? createHubResolver();
+  const targetEnvironment = options.targetEnvironment ?? contentEnvironment();
   const findings: Finding[] = [];
 
   for (const routeId of ROUTE_IDS) {
@@ -273,9 +336,12 @@ export async function checkContentTree(
     for (const locale of LOCALES) {
       const page = await loadPage(routeId, locale, {
         ...(options.contentRoot ? { contentRoot: options.contentRoot } : {}),
+        // Load everything, then judge it — see `checkLifecycle`.
+        environment: "preview",
       });
       pages[locale] = page;
       findings.push(...checkPage(page, resolver));
+      findings.push(...checkLifecycle(page, targetEnvironment));
     }
     findings.push(...checkLocaleSet(routeId, pages, options));
   }

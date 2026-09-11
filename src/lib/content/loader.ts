@@ -23,9 +23,11 @@ import * as yaml from "js-yaml";
 
 import { PageFrontmatterSchema } from "@/src/domain/content-frontmatter.schema";
 import { ctaOf, fieldsOf, parseBlocks } from "@/src/lib/content/blocks";
+import { contentEnvironment, rendersIn } from "@/src/lib/content/lifecycle";
 import { parseSlotMeta, SLOT_META_COMMENT } from "@/src/lib/content/slot-meta";
 import { ROUTE_IDS, ROUTES } from "@/src/lib/routes/routes";
 
+import type { Environment } from "@/src/lib/security/csp";
 import type { SlotContentType } from "@/src/domain/content-frontmatter.schema";
 import type { ContentGap, ContentSlot, PageContent } from "@/src/lib/content/types";
 import type { Locale } from "@/src/lib/i18n/locales";
@@ -96,6 +98,7 @@ function emptyPage(
     frontmatter: null,
     slots: [],
     invalidSlots: [],
+    gatedSlots: [],
     status: "draft",
     ok: false,
     reason,
@@ -138,6 +141,12 @@ export interface ParsePageOptions {
   readonly locale: Locale;
   /** Repository-relative path, for messages. */
   readonly file: string;
+  /**
+   * Which build is being produced — TS-007 D11's editorial gate. Defaults to
+   * this process's own (`VERCEL_ENV`); `check:content` passes it explicitly
+   * so it can ask the *production* question from any environment.
+   */
+  readonly environment?: Environment;
 }
 
 /**
@@ -146,6 +155,7 @@ export interface ParsePageOptions {
  */
 export function parsePage(raw: string, options: ParsePageOptions): PageContent {
   const { routeId, locale, file } = options;
+  const environment = options.environment ?? contentEnvironment();
   const { frontmatter, body } = splitFrontmatter(raw);
 
   const parsed = PageFrontmatterSchema.safeParse(frontmatter);
@@ -157,10 +167,26 @@ export function parsePage(raw: string, options: ParsePageOptions): PageContent {
     return emptyPage(routeId, locale, file, "page-frontmatter-invalid");
   }
 
+  // TS-007 D11 / A14 — the editorial gate. A page the build may not contain
+  // renders nothing at all rather than a half page: the empty states are the
+  // honest answer, and `check:content` is what refuses the build.
+  if (!rendersIn(parsed.data.status, environment)) {
+    warnOnce(
+      `lifecycle:${file}:${environment}`,
+      `${file}: \`status: ${parsed.data.status}\` does not render in a ${environment} build (TS-007 D11) — the page renders empty`,
+    );
+    return {
+      ...emptyPage(routeId, locale, file, "page-not-approved"),
+      frontmatter: parsed.data,
+      status: parsed.data.status,
+    };
+  }
+
   SLOT_META_COMMENT.lastIndex = 0;
   const comments = [...body.matchAll(SLOT_META_COMMENT)];
   const slots: ContentSlot[] = [];
   const invalidSlots: { problems: readonly string[] }[] = [];
+  const gatedSlots: string[] = [];
 
   let pendingTitle: string | undefined;
 
@@ -182,6 +208,18 @@ export function parsePage(raw: string, options: ParsePageOptions): PageContent {
         `${file}: a slot metadata comment does not validate — ${meta.problems.join("; ")}`,
       );
       invalidSlots.push({ problems: meta.problems });
+      continue;
+    }
+
+    // The same gate, per slot: one unapproved slot does not take the page
+    // down, it takes itself out (D11 — the *build* is what fails, in
+    // `check:content`, not the render).
+    if (!rendersIn(meta.meta.status, environment)) {
+      warnOnce(
+        `lifecycle:${file}:${meta.meta.id}:${environment}`,
+        `${file} › ${meta.meta.id}: \`status: ${meta.meta.status}\` does not render in a ${environment} build (TS-007 D11)`,
+      );
+      gatedSlots.push(meta.meta.id);
       continue;
     }
 
@@ -212,6 +250,7 @@ export function parsePage(raw: string, options: ParsePageOptions): PageContent {
     frontmatter: parsed.data,
     slots,
     invalidSlots,
+    gatedSlots,
     status: parsed.data.status,
     ok: true,
   };
@@ -223,6 +262,8 @@ export interface LoadPageOptions {
    * never does.
    */
   readonly contentRoot?: string;
+  /** TS-007 D11's build axis — see `ParsePageOptions.environment`. */
+  readonly environment?: Environment;
 }
 
 const pages = new Map<string, PageContent>();
@@ -251,7 +292,8 @@ export async function loadPage(
 ): Promise<PageContent> {
   const root = options.contentRoot ?? join(process.cwd(), CONTENT_ROOT);
   const file = pageFile(routeId, locale);
-  const cacheKey = `${root}:${routeId}:${locale}`;
+  const environment = options.environment ?? contentEnvironment();
+  const cacheKey = `${root}:${routeId}:${locale}:${environment}`;
 
   const cached = pages.get(cacheKey);
   if (cached && process.env.NODE_ENV === "production") return cached;
@@ -270,7 +312,7 @@ export async function loadPage(
     return emptyPage(routeId, locale, file, "page-file-missing");
   }
 
-  const page = parsePage(raw, { routeId, locale, file });
+  const page = parsePage(raw, { routeId, locale, file, environment });
   pages.set(cacheKey, page);
   return page;
 }
@@ -282,6 +324,7 @@ export async function loadPage(
 export function slot(page: PageContent, id: string): ContentSlot {
   const hit = page.slots.find((candidate) => candidate.id === id);
   if (hit) return hit;
+  if (page.gatedSlots.includes(id)) return emptySlot(id, "slot-not-approved");
   warnOnce(
     `slot:${page.file}:${id}`,
     `${page.file}: no slot \`${id}\` — the block renders empty`,
