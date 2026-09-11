@@ -109,10 +109,10 @@ export function checkPreviewUnsafeInlineFence(
 
   const previewNoHashes = buildDirectives({ environment: "preview", scriptHashes: [] })["script-src"] ?? [];
   const previewWithHashes =
-    buildDirectives({ environment: "preview", scriptHashes: ["sha256-Zm9vYmFy=="] })["script-src"] ?? [];
+    buildDirectives({ environment: "preview", scriptHashes: ["sha256-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC="] })["script-src"] ?? [];
   const productionNoHashes = buildDirectives({ environment: "production", scriptHashes: [] })["script-src"] ?? [];
   const productionWithHashes =
-    buildDirectives({ environment: "production", scriptHashes: ["sha256-Zm9vYmFy=="] })["script-src"] ?? [];
+    buildDirectives({ environment: "production", scriptHashes: ["sha256-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC="] })["script-src"] ?? [];
 
   if (!previewNoHashes.includes(UNSAFE_INLINE))
     errors.push(
@@ -128,6 +128,38 @@ export function checkPreviewUnsafeInlineFence(
     errors.push(
       "F-2-27 production/script-src (with hashes): 'unsafe-inline' must never appear in production",
     );
+
+  return errors;
+}
+
+/**
+ * F-2-36: the hash-source shape guard. `policyDirectives()` interpolates
+ * every hash entry as `'<hash>'`, so a string carrying `'` or `;` would
+ * write a whole extra directive into the header. The module filters on
+ * `isScriptHash` — this asserts that it still does, by building a policy
+ * from deliberately hostile "hashes" and demanding that none of them
+ * appears anywhere in the serialised header.
+ */
+export function checkHashSourceValidation(): string[] {
+  const errors: string[] = [];
+  const hostile = [
+    "' 'unsafe-inline",
+    "x'; script-src *; '",
+    "sha256-short",
+    "sha384-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+    "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+  ];
+
+  for (const environment of ["production", "preview"] as const) {
+    const scriptSrc =
+      policyDirectives({ environment, scriptHashes: hostile })["script-src"] ?? [];
+    for (const value of hostile) {
+      if (scriptSrc.some((token) => token.includes(value)))
+        errors.push(
+          `A1 ${environment}/script-src: an unvalidated hash source reached the policy — "${value}"`,
+        );
+    }
+  }
 
   return errors;
 }
@@ -149,12 +181,13 @@ export function checkCsp(): CspCheckResult {
   const errors: string[] = [];
 
   for (const { environment, hasHashes } of CASES) {
-    const scriptHashes = hasHashes ? ["sha256-Zm9vYmFy=="] : [];
+    const scriptHashes = hasHashes ? ["sha256-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC="] : [];
     const directives = policyDirectives({ environment, scriptHashes });
     errors.push(...checkPolicyDirectives(environment, directives));
   }
 
   errors.push(...checkPreviewUnsafeInlineFence());
+  errors.push(...checkHashSourceValidation());
 
   return { errors, casesChecked: CASES.length };
 }

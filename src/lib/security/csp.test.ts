@@ -43,13 +43,13 @@ describe("TS-014 D2: the Content-Security-Policy, written out", () => {
   it("carries hashes and the host allowlist together, with no 'strict-dynamic'", () => {
     const { "script-src": scriptSrc } = policyDirectives({
       environment: "production",
-      scriptHashes: ["sha256-abc"],
+      scriptHashes: ["sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="],
     });
     // See state/open.md rows 21/31: 'strict-dynamic' measurably breaks the
     // same-origin chunks it was meant to help — dropped for good, not just
     // while the hash set is empty.
     expect(scriptSrc).not.toContain("'strict-dynamic'");
-    expect(scriptSrc).toContain("'sha256-abc'");
+    expect(scriptSrc).toContain("'sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='");
     expect(scriptSrc).toContain(ALLOWLIST.etracker);
     expect(scriptSrc).toContain(ALLOWLIST.portalize);
     expect(scriptSrc).toContain(ALLOWLIST.envoy);
@@ -73,17 +73,17 @@ describe("TS-014 D3 (DEC-045): per-build hashes, not a nonce", () => {
   it("places every supplied hash in script-src and emits no nonce", () => {
     const header = contentSecurityPolicy({
       environment: "production",
-      scriptHashes: ["sha256-abc", "sha256-def"],
+      scriptHashes: ["sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=", "sha256-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB="],
     });
-    expect(header).toContain("'sha256-abc'");
-    expect(header).toContain("'sha256-def'");
+    expect(header).toContain("'sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='");
+    expect(header).toContain("'sha256-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB='");
     expect(header).not.toContain("nonce-");
   });
 });
 
 describe("state/open.md rows 21 & 31: the CSP that actually hydrates", () => {
   it("never emits 'strict-dynamic', hashes or not — it only ever ignores 'self' here, never adds trust", () => {
-    for (const scriptHashes of [[], ["sha256-abc"]]) {
+    for (const scriptHashes of [[], ["sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="]]) {
       for (const environment of ["production", "preview", "development"] as const) {
         const { "script-src": scriptSrc } = policyDirectives({ environment, scriptHashes });
         expect(scriptSrc).not.toContain("'strict-dynamic'");
@@ -112,10 +112,10 @@ describe("state/open.md rows 21 & 31: the CSP that actually hydrates", () => {
   it("prefers hashes over 'unsafe-inline' in development too, once they exist", () => {
     const { "script-src": scriptSrc } = policyDirectives({
       environment: "development",
-      scriptHashes: ["sha256-abc"],
+      scriptHashes: ["sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="],
     });
     expect(scriptSrc).not.toContain("'unsafe-inline'");
-    expect(scriptSrc).toContain("'sha256-abc'");
+    expect(scriptSrc).toContain("'sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='");
   });
 
   it("lets the deployed preview hydrate too, for the same reason as dev: the hash asset doesn't reach it yet", () => {
@@ -130,14 +130,14 @@ describe("state/open.md rows 21 & 31: the CSP that actually hydrates", () => {
   it("prefers hashes over 'unsafe-inline' in preview too, once the asset reaches it", () => {
     const { "script-src": scriptSrc } = policyDirectives({
       environment: "preview",
-      scriptHashes: ["sha256-abc"],
+      scriptHashes: ["sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="],
     });
     expect(scriptSrc).not.toContain("'unsafe-inline'");
-    expect(scriptSrc).toContain("'sha256-abc'");
+    expect(scriptSrc).toContain("'sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='");
   });
 
   it("never grants production the preview/dev 'unsafe-inline' concession, hash set or not — D7 holds unconditionally there", () => {
-    for (const scriptHashes of [[], ["sha256-abc"]]) {
+    for (const scriptHashes of [[], ["sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="]]) {
       const { "script-src": scriptSrc } = policyDirectives({ environment: "production", scriptHashes });
       expect(scriptSrc).not.toContain("'unsafe-inline'");
     }

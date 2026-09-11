@@ -36,6 +36,24 @@ export const ALLOWLIST = {
   app: "https://app.schafe-vorm-fenster.de",
 } as const;
 
+/**
+ * A `script-src` hash source, exactly as `scripts/generate-csp-hashes.mjs`
+ * writes it: `sha256-` plus the 44 base64 characters of a SHA-256 digest.
+ *
+ * The policy interpolates each entry as `'<hash>'` (below), so a string
+ * carrying `'` or `;` would write arbitrary tokens — a whole extra
+ * directive — into the header. F-2-36: the shape is checked here, at the
+ * interpolation point, so the guard holds for every caller and not only for
+ * the one module that fetches the build artifact
+ * (`csp-hashes.ts` applies the same predicate at its own boundary).
+ */
+export const SCRIPT_HASH_PATTERN = /^sha256-[A-Za-z0-9+/]{43}=$/;
+
+/** True for a string that may be interpolated into `script-src` as `'<hash>'`. */
+export function isScriptHash(value: string): boolean {
+  return SCRIPT_HASH_PATTERN.test(value);
+}
+
 export type Environment = "production" | "preview" | "development";
 
 export interface PolicyInput {
@@ -59,11 +77,16 @@ export function policyDirectives({
   const isDev = environment === "development";
   const isPreview = environment === "preview";
   const { etracker, portalize, envoy } = ALLOWLIST;
-  const hasHashes = scriptHashes.length > 0;
+  // F-2-36: only a well-formed hash source is interpolated. A rejected entry
+  // is dropped rather than escaped — there is no legitimate `script-src`
+  // hash this predicate refuses, so anything it refuses is a defect or an
+  // attack, and neither belongs in the header.
+  const validHashes = scriptHashes.filter(isScriptHash);
+  const hasHashes = validHashes.length > 0;
 
   const scriptSrc = [
     "'self'",
-    ...scriptHashes.map((hash) => `'${hash}'`),
+    ...validHashes.map((hash) => `'${hash}'`),
     // No 'strict-dynamic', by measurement rather than by the original design
     // (DEC-045 assumed it would "still apply" once hashes exist — see
     // state/open.md rows 21/31 for the correction). Every script tag Next

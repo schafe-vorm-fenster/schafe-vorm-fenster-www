@@ -66,9 +66,16 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
 
   // DEC-045: per-build hashes, no per-request nonce — the shell stays static.
   // `scriptHashes()` fetches a build artifact from this deployment's own
-  // static assets once per server instance (module scope caches the
-  // in-flight promise), not per request, so this stays a pure function of
-  // hostname + path (TS-004 D3). The one exception: the hash asset's own
+  // static assets once per deployment (`csp-hashes.ts` caches the in-flight
+  // promise per deployment id), not per request, so this stays a pure
+  // function of hostname + path (TS-004 D3).
+  //
+  // F-2-36: the origin below is a *hint*, not the target. `csp-hashes.ts`
+  // resolves the fetch origin from the deployment's own environment
+  // (`VERCEL_URL`), and only falls back to this request-derived origin off
+  // Vercel and only for a host this site actually answers on — without the
+  // Deployment Protection bypass secret. A spoofed `Host` therefore neither
+  // receives the secret nor selects the asset. The one exception: the hash asset's own
   // request must not try to compute a hash-dependent policy for itself —
   // that would recurse into the same fetch this proxy has no matcher to
   // skip (TS-015 D3 runs it on "all routes incl. assets" on purpose).

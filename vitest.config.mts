@@ -16,7 +16,13 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    include: ["src/**/*.test.ts", "src/**/*.test.tsx", "app/**/*.test.ts"],
+    include: [
+      "src/**/*.test.ts",
+      "src/**/*.test.tsx",
+      "app/**/*.test.ts",
+      // `proxy.ts` is a root-level file convention, so its test is one too.
+      "proxy.test.ts",
+    ],
     exclude: ["node_modules/**", ".next/**", "e2e/**", "legacy-content/**"],
     coverage: {
       provider: "v8",
