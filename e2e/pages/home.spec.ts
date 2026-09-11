@@ -19,6 +19,19 @@ import type { Page } from "@playwright/test";
 const PHONE = { width: 360, height: 640 };
 const DESKTOP = { width: 1280, height: 800 };
 
+/**
+ * Block 1 arrives behind a `<Suspense>` boundary whose fallback **is** S1
+ * (TS-019 D2: "S2 and S3 arrive by island"), so a cold cache serves the
+ * fallback first and the resolved block a beat later. Between the two the
+ * document briefly holds both — React reveals a boundary by inserting the
+ * streamed content and removing the fallback, in that order. Every assertion
+ * about block 1's controls waits for that to be over.
+ */
+async function blockOneSettled(page: Page): Promise<void> {
+  await expect(page.locator('[data-cta="primary"]')).toHaveCount(1);
+  await expect(page.locator('input[type="search"]')).toHaveCount(2);
+}
+
 /** The rhythm entry of every section of the page, in DOM order. */
 async function sectionRhythm(page: Page): Promise<RhythmEntry[]> {
   return page.evaluate(() =>
@@ -44,6 +57,7 @@ test.describe("TS-019 — home", () => {
     await page.setViewportSize(PHONE);
     await page.goto("/");
 
+    await blockOneSettled(page);
     await expect(page.getByRole("searchbox").first()).toBeVisible();
     // Every input has its own id — the module renders twice on this page.
     const ids = await page.evaluate(() =>
@@ -76,6 +90,7 @@ test.describe("TS-019 — home", () => {
     }) => {
       await page.setViewportSize(viewport);
       await page.goto("/");
+      await blockOneSettled(page);
       const box = await page.locator('[data-cta="primary"]').boundingBox();
       expect(box).not.toBeNull();
       expect(box!.y).toBeGreaterThanOrEqual(0);
