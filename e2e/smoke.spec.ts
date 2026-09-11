@@ -103,8 +103,12 @@ test("TS-017-A9: at 1920px the container stops at measure.page", async ({
 }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
   await page.goto("/");
+  // Every section brings its own `.container` now that the pages are
+  // composed (`section-shell` is full-bleed and contains only its content),
+  // so the assertion reads the first one rather than the page's only one.
   const width = await page
     .locator("main .container")
+    .first()
     .evaluate((element) => element.getBoundingClientRect().width);
   // measure.page is 75rem = 1200px; only the outer margin grows beyond it.
   expect(width).toBeLessThanOrEqual(1200);
