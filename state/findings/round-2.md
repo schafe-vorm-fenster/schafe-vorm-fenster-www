@@ -1188,6 +1188,23 @@ dismissed in the protocol, not here.
   dynamic route cannot hydrate under DEC-045's hash-only CSP) is a DEC-045
   amendment owned outside this run and is not this package's to solve.
 
+- **Not resolved.** Built, measured, and reverted: wrapping the D3 islands
+  in `<Suspense>` with `moduleSkeleton` fallbacks is exactly what Next's own
+  Cache Components docs prescribe for this pattern, and it discharges
+  TS-005-A9/TS-009-A3/A9 — but per Next's own glossary a `<Suspense>`
+  boundary is, by definition, the point where the static shell ends and
+  streaming (i.e. a client-side RSC patch) begins, in production as much as
+  in dev. Verified against a live page: with JavaScript disabled, a
+  Suspense-wrapped island's fallback never resolves, failing `TS-019-A11`
+  ("with JavaScript disabled the page is complete") on `/` — a criterion
+  this codebase enforces on most routes, not a corner case. `state/open.md`
+  row 145 has the full reasoning, including the second, independent
+  blocker (`PlaceDatesIsland`/`NearbyIsland` are shared between the eight
+  allowed routes and the two blocking ones that also call them, with no
+  safe per-call discriminator reachable from this file alone). `moduleSkeleton`
+  stays written and uncalled; `_islands.tsx` is unchanged from before this
+  round.
+
 ## F-2-40 — Every content artefact is `status: draft` and every one of them renders
 
 - Severity: high
@@ -1259,6 +1276,10 @@ dismissed in the protocol, not here.
   spec, recorded, not fixed). If the four pages missing the band turn out to
   opt out in their own `page.tsx`, that clause goes back to package A at
   retest rather than B editing A's files.
+
+- Resolved: 1f1dd6f — `SectionShell` already took an `as` element override;
+  `PageFrame` now passes `as="aside"` for the band. The four-page absence
+  is unchanged (package A's `closing` variant, not touched).
 
 ## F-2-42 — No page emits an OG image, and `twitter:card` is `summary`
 
@@ -1375,6 +1396,19 @@ dismissed in the protocol, not here.
   moving the whole scale into the token import and the ~30 `font-weight`
   literals, plus teaching `check-brand.ts` the size and weight halves — is
   not cheap and goes to the open list.
+
+- Resolved: 52078c9 — `--type-label-size` and `--type-microlabel-size`
+  raised to `0.9375rem` (15px, collapsing the two roles pending the fuller
+  scale redesign, still open-list); `event-row`'s bare `28px` replaced with
+  a new `--type-figure-size` role. A fourth sub-15px value surfaced during
+  the fix — `@schafe-vorm-fenster/brand-design`'s own `--font-size-label`
+  (14px, used by `chip`/`choice-group`/`scope-picker`/the wordmark) —
+  corrected in `brand.css`, the one file TS-017 D3 lets a brand value enter
+  through. Raising the two badge-facing roles to 15px overflowed
+  `placeholder-badge`/`demo-data-badge` at 360px; both now wrap their own
+  text rather than forcing `badge`'s `[FIXED]` single-line contract.
+  `pnpm check:brand` stays green. `state/open.md` row 144 carries the
+  upstream reconciliation and the still-open scale/weight work.
 
 ## F-2-45 — The landing-only domain rule is not implemented: every path answers 200 on `.at`/`.pl`/`.com`
 
@@ -1734,6 +1768,9 @@ dismissed in the protocol, not here.
   recorded, not chased; row 132 (hash-only CSP vs request-time scripts) is a
   DEC-045 amendment owned outside this run.
 
+- **Not resolved — closes with F-2-39, which is not resolved either.**
+  Same root cause, same file, same blocker: `state/open.md` row 145.
+
 ## F-2-57 — Three claims ship without the confirmation their criteria make a precondition
 
 - Severity: medium
@@ -1844,6 +1881,16 @@ dismissed in the protocol, not here.
   `src/components/archive-filter/**`, whose `selection.ts` is already
   unit-tested — the gap is the render, not the selection, which is why the
   green unit tests did not catch it.
+
+- Resolved: defa448 — root cause was in `archive-row`, not `archive-filter`:
+  `.row { display: flex }` is an author-origin rule and always beats the
+  browser's `[hidden] { display: none }` default regardless of specificity,
+  since the default lives in the lower-priority user-agent origin. Added
+  `.row[hidden] { display: none }`. Strengthened the e2e coverage
+  (`archiv.spec.ts`, TS-028-A4) with `toBeVisible()`/`toBeHidden()`
+  assertions per row, which read computed rendering — the existing
+  `[hidden]`-attribute-selector assertion passed even with the bug, the
+  same trap the finding's own "Measurement note" describes.
 
 ## F-2-60 — `buy-calendar-licence` fires a second time on client-side back/forward
 
@@ -2153,3 +2200,22 @@ Dispositions for the Run-2 observations that are **not** new findings:
   half of the boundaries B is mounting anyway, plus the font-swap reflow in
   `app/styles/**`. Measured numbers exist, so the retest has a target even
   without a CLS harness.
+
+- Resolved (mostly): 52078c9 — the reserved-space/Suspense half did not ship
+  (see F-2-39 — a progressive-enhancement conflict, `state/open.md` row 145),
+  but re-measuring showed the font-swap half was the dominant cause on `/`:
+  content there is already fully resolved at first paint (static/cached, no
+  request-time data), so the observed shift was the fallback-to-real-font
+  reflow, not late-arriving data. Fixed with a metric-matched
+  `@font-face` fallback per weight in `app/styles/brand.css`, calibrated by
+  measuring real vs. fallback text in a browser (`canvas.measureText`) —
+  the `OS/2.xAvgCharWidth`-derived formula tried first was ~30% wrong,
+  caught by checking a live "Suchen" button before trusting it. Deterministic
+  worst-case measurement (font requests delayed via Playwright's
+  `page.route`, forcing the fallback-then-swap sequence every time): `/`'s
+  shift went from 94–174px to 0.6–2.4px. New instrument:
+  `e2e/layout-stability.spec.ts` (TS-009-A8), all twelve routes at both
+  DEC-067 viewports, ≤ 8px cumulative-shift budget — 23/24 green. The one
+  exception, `/mitmachen` at 1280px (a discrete line-wrap tip in a long,
+  vertically-centred headline — a different, harder class of residual than
+  the width drift this fix eliminates), is `state/open.md` row 146.
