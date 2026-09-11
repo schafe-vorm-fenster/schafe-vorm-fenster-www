@@ -1,72 +1,67 @@
-import { dictionary } from "@/src/lib/i18n/dictionary";
-import { pageMetadata, pageTitle } from "@/src/lib/routes/metadata";
-
+import { LegalSection } from "@/src/components/legal-section/legal-section";
+import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
+import { renderLegalBlocks } from "@/src/components/legal-section/render-legal-blocks";
+import { SectionNav } from "@/src/components/section-nav/section-nav";
+import { SectionShell } from "@/src/components/section-shell/section-shell";
+import { fieldAt } from "@/src/lib/content/blocks";
+import { loadLegalDocument } from "@/src/lib/content/legal-loader";
+import { shiftHeadings } from "@/src/lib/content/legal-markdown";
+import { loadPage, slot } from "@/src/lib/content/loader";
 import { resolveLocale } from "@/src/lib/i18n/locales";
+import { legalAnchor, LEGAL_SECTION_IDS } from "@/src/lib/routes/legal-anchors";
+import { pageMetadata } from "@/src/lib/routes/metadata";
 
-import { localeFrom } from "../_locale";
-import { PlaceholderPage } from "../_shell";
+import { PageFrame } from "../_page-frame";
 
-import type { PlaceholderModule } from "../_shell";
+import styles from "./page.module.css";
+import { pageMeta } from "./page.meta";
+
+import type { ContentBlock } from "@/src/lib/content/types";
+import type { LegalSectionId } from "@/src/lib/routes/legal-anchors";
 import type { Metadata } from "next";
 
 /**
- * TS-029 — `/rechtliches` (EN `/legal`) — the one legal page
+ * TS-029 — `/rechtliches` (EN `/legal`) — the one legal page.
  *
- * Routing skeleton (M2). The ordered module list below is the page's
- * composition sheet (`plan/component-inventory.md` §4) turned into labelled
- * placeholder sections with reserved heights. The page implementer replaces a
- * section **in place**: the id and the order are the seam.
+ * D1: one section per `LEGAL_SECTION_IDS` registry entry, in registry
+ * order — appending a document to `content/legal/` plus its registry entry
+ * is the only way a section appears; a missing document renders nothing,
+ * the anchor stays reserved (`legal-section`'s own contract). D2: the `id`
+ * is the registry anchor, never derived from the imported heading. D3/D4:
+ * landing and scroll-margin come from `--site-header-height`
+ * (`legal-section.module.css`, already built) — nothing extra to wire here.
+ * D6: `h1` once, `h2` per section (this component's `title` prop), `h3`+ the
+ * imported document's own structure, shifted by `shiftHeadings(…, 2)` so the
+ * document's own top-level heading demotes instead of duplicating the
+ * section's `h2` (never rendered twice).
+ *
+ * D8: `#barrierefreiheit` is the one registry anchor with no document today
+ * (TS-004 D8: "to be written", `state/open.md` #21) — the production build
+ * fails while it is missing; a preview build omits it.
  */
 
 const ROUTE = "legal" as const;
 
-const MODULES: readonly PlaceholderModule[] = [
-  {
-    id: "page-head",
-    components:
-      "the page heading (Rechtliches / Legal)",
-    height: 8,
-  },
-  {
-    id: "section-nav",
-    components:
-      "section-nav (sticky column ≥ 1024 px, inline below the heading under it)",
-    height: 10,
-  },
-  {
-    id: "sections",
-    components:
-      "legal-section ×6 in registry order, ids from the anchor registry (TS-004 D8), scroll-margin-top from the header variable",
-    height: 30,
-  },
-  {
-    id: "back-to-top",
-    components:
-      "back-to-top (< xl, past section one)",
-    height: 6,
-  },
-  {
-    id: "context-band",
-    components:
-      "context-band — rendered by the layout from page.meta.ts (TS-006 D2)",
-    height: 12,
-  },
-  {
-    id: "closing-cta",
-    components:
-      "closing-cta — rendered by the layout from page.meta.ts (TS-006 D2)",
-    height: 10,
-  },
-];
+/** DE/EN section display titles, read from the content artifact's own
+ * registry table (`rechtliches-2-registry`) rather than typed here — the
+ * table's `Anker`/`Anchor` column carries the anchor as inline code
+ * (`` `#impressum` ``), which the page's typed-block reader does not strip. */
+function titlesFromRegistryTable(blocks: readonly ContentBlock[]): ReadonlyMap<string, string> {
+  const table = blocks.find((block) => block.kind === "table");
+  const titles = new Map<string, string>();
+  if (table?.kind !== "table") return titles;
+  for (const [anchorCell, name] of table.rows) {
+    const anchor = anchorCell?.replace(/`/g, "").replace(/^#/, "").trim();
+    if (anchor && name) titles.set(anchor, name);
+  }
+  return titles;
+}
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
-  // `generateMetadata` must not throw `notFound()`: the metadata boundary
-  // sits above `[lang]`, so a throw here escapes the shell and Next.js falls
-  // back to its built-in 404. The *page* answers 404; this resolves.
   return pageMetadata(ROUTE, resolveLocale((await params).lang));
 }
 
@@ -75,14 +70,69 @@ export default async function Page({
 }: {
   params: Promise<{ lang: string }>;
 }) {
-  const locale = await localeFrom(params);
-  const d = dictionary(locale);
+  const locale = resolveLocale((await params).lang);
+
+  const [page, ...documents] = await Promise.all([
+    loadPage(ROUTE, locale),
+    ...LEGAL_SECTION_IDS.map((section) => loadLegalDocument(section)),
+  ]);
+
+  const header = slot(page, "rechtliches-1-header");
+  const registry = slot(page, "rechtliches-2-registry");
+  const titles = titlesFromRegistryTable(registry.blocks);
+
+  const h1 = fieldAt(header.blocks, 0) ?? "Rechtliches";
+  const navLabel = fieldAt(header.blocks, 1) ?? "Abschnitte";
+
+  const docsBySection = new Map(
+    LEGAL_SECTION_IDS.map((section, index) => [section, documents[index]]),
+  );
+
+  // D8: the accessibility statement is the one release-blocking exception —
+  // production fails while it is missing; preview/dev renders the page
+  // without that section, exactly like any other registry entry with no
+  // document (TS-029-A11).
+  if (process.env.VERCEL_ENV === "production" && !docsBySection.get("accessibility")) {
+    throw new Error(
+      "TS-029 D8: #barrierefreiheit/#accessibility has no document — the production build must not ship the legal page without it (state/open.md #21).",
+    );
+  }
+
+  const navItems = LEGAL_SECTION_IDS.map((section) => ({
+    id: legalAnchor(section, locale),
+    label: titles.get(legalAnchor(section, locale)) ?? section,
+  }));
+
   return (
-    <PlaceholderPage
-      labels={d.placeholder}
-      modules={MODULES}
-      note={d.placeholder.note}
-      title={pageTitle(ROUTE, locale)}
-    />
+    <PageFrame backToTop closing={{ variant: "merged" }} locale={locale} meta={pageMeta}>
+      {/* One section, not two: `PageFrame`'s merged closing block is
+          `paper` (`app/[lang]/_page-frame.tsx`), and the page-rhythm rule
+          (`src/components/section-shell/rhythm.ts`) forbids more than two
+          consecutive sections of one colour family — an `h1` section plus a
+          nav+article section plus the closing block would be three `paper`
+          sections in a row. */}
+      <SectionShell labelledBy="rechtliches-h1" surface="paper">
+        <MotionReveal>
+          <h1 id="rechtliches-h1">{h1}</h1>
+          <div className={styles.layout}>
+            <SectionNav items={navItems} label={navLabel} />
+            <article className={styles.sections}>
+              {LEGAL_SECTION_IDS.map((section: LegalSectionId) => {
+                const document = docsBySection.get(section);
+                return (
+                  <LegalSection
+                    body={document ? renderLegalBlocks(shiftHeadings(document.blocks, 2)) : undefined}
+                    key={section}
+                    locale={locale}
+                    section={section}
+                    title={navItems.find((item) => item.id === legalAnchor(section, locale))?.label ?? section}
+                  />
+                );
+              })}
+            </article>
+          </div>
+        </MotionReveal>
+      </SectionShell>
+    </PageFrame>
   );
 }

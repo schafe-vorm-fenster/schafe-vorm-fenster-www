@@ -1,0 +1,26 @@
+/*
+ * TS-029 D4 — the on-page navigation layout. Below `xl` the nav sits once
+ * under the `h1`, not sticky (`section-nav`'s own CSS governs that); at
+ * `xl` (1024px, same switch point `section-nav.module.css` already uses)
+ * it becomes a sticky column beside the text. Mobile-first: base is the
+ * single phone column, the `min-width` query is the only widening.
+ */
+
+.layout {
+  display: block;
+}
+
+@media (min-width: 64rem) {
+  .layout {
+    align-items: start;
+    display: grid;
+    gap: var(--space-8);
+    grid-template-columns: 16rem 1fr;
+  }
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
