@@ -33,6 +33,84 @@ The order is deliberate. Writing content before the specification produces
 copy with nowhere to live, and a specification bent around copy that
 already exists.
 
+## The Application
+
+The website is a Next.js 16 application in the App Router, server-first,
+deployed to Vercel. TypeScript throughout, pnpm as the package manager,
+plain CSS and CSS Modules over the `@schafe-vorm-fenster/brand-design`
+tokens. `specs/decisions/072-the-foundation-stack.md` records why each of
+those is what it is.
+
+### Getting Started
+
+```bash
+pnpm install            # the @schafe-vorm-fenster scope needs GITHUB_TOKEN
+pnpm dev                # http://localhost:3100
+```
+
+**Port 3100, not 3000.** Port 3000 is occupied on the build machine, so the
+whole run uses 3100 — the `dev` and `start` scripts, the Playwright
+`webServer`, and every URL in the documentation.
+
+`pnpm install` resolves `@schafe-vorm-fenster/*` from GitHub Packages via
+`.npmrc`, which reads `${GITHUB_TOKEN}`. If your shell does not export one,
+`export GITHUB_TOKEN=$(gh auth token)` before installing.
+
+### Commands
+
+| Command | What it does |
+| --- | --- |
+| `pnpm dev` | development server on port 3100 |
+| `pnpm build` | production build |
+| `pnpm check` | **the single gate** — frontmatter · specs · stack · brand · typecheck · lint · unit and integration tests. The pre-commit hook runs it on every commit, so it stays under five seconds. A new check is added *to* it, never run beside it. |
+| `pnpm test` | unit and integration tests (Vitest) |
+| `pnpm test:watch` | the same, watching |
+| `pnpm e2e` | end-to-end tests (Playwright); starts the dev server itself |
+| `pnpm typecheck` | `tsc --noEmit` against the strict root config |
+| `pnpm lint` | ESLint |
+| `pnpm stop` | kill whatever holds port 3100 |
+
+`pnpm e2e` runs against `http://localhost:3100` by default. Point it at a
+deployment instead with `E2E_BASE_URL`, and past Vercel Deployment
+Protection with `VERCEL_AUTOMATION_BYPASS_SECRET` — the suite sends it as
+`x-vercel-protection-bypass`. Protection is never disabled to run a test.
+
+### Where Things Live
+
+| Path | What |
+| --- | --- |
+| `app/` | routes, layouts and the app-router tree |
+| `app/styles/brand.css` | **the single token-import file** — the only place a brand value enters. No colour literal and no `font-family` literal exists anywhere else, and `pnpm check:brand` fails one that does. |
+| `app/styles/base.css` | the mobile-first shell: phone base, `min-width` queries only, the six `breakpoint.*` token values |
+| `proxy.ts` | the CSP, the HSTS variance and the `X-Robots-Tag`, on every response |
+| `src/lib/security/` | the policy as one typed structure, in one module |
+| `src/lib/seo/` | the indexability predicate and the robots surface |
+| `e2e/` | Playwright specs |
+| `stack.allow.json` | the register of every runtime dependency with its reason |
+| `vercel.json` | install and build command only — **never a `headers` block**, which would silently outrank `next.config.ts` and `proxy.ts` |
+| `scripts/check-*.ts` | the static checks `pnpm check` runs |
+
+Unit tests sit beside the code as `*.test.ts`, integration tests as
+`*.integration.test.ts`. A test names the spec id it verifies in its
+`describe` title — `describe("TS-015-A1: …")` — which is how
+`pnpm check:specs` reads coverage off the suite.
+
+### Deploying
+
+Preview only. `vercel deploy` from the repository root deploys the current
+working tree to a protected, `noindex` preview. **Production is nobody's
+job in this run** — no `--prod`, no promotion, no production environment
+variables.
+
+### The MCP Endpoint
+
+The running dev server exposes Next.js devtools over MCP (`.mcp.json`).
+Requests to it need both content types in the header, or it answers 406:
+
+```
+Accept: application/json, text/event-stream
+```
+
 ## What Is Archive
 
 `legacy-content/` and `content/` are pre-relaunch material. They

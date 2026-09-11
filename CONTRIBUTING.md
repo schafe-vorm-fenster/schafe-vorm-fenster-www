@@ -2,7 +2,7 @@
 
 This repository is being prepared for a full rebuild of the official Schafe vorm Fenster website.
 
-At the moment there is no active frontend stack in the repository root. The previous website was archived in `legacy-content/` so content and assets remain available during the rebuild.
+The frontend stack lives in the repository root: Next.js 16 in the App Router, TypeScript, pnpm. The previous website stays archived in `legacy-content/` so content and assets remain available during the rebuild; it is not built and not linted.
 
 ## Before You Start
 
@@ -17,7 +17,7 @@ Useful contributions right now include:
 - documenting requirements for the new website
 - reviewing, organizing, or extracting legacy content
 - proposing information architecture, navigation, or content structure
-- introducing the new technical foundation for the rebuild
+- building pages and components against the tactical specs
 - improving repository documentation and contributor workflow
 
 ## Development Basics
@@ -43,19 +43,100 @@ Useful contributions right now include:
 
 ## Local Development
 
-There is currently no standard frontend development command because the new website stack has not been set up yet.
+```bash
+export GITHUB_TOKEN=$(gh auth token)   # .npmrc reads it for the private scope
+pnpm install
+pnpm dev                               # http://localhost:3100
+```
 
-The repository does include one supported content-tooling workflow:
+**Port 3100 everywhere.** Port 3000 is taken on the build machine, so the
+`dev` and `start` scripts, the Playwright `webServer` and every documented
+URL use 3100. `pnpm stop` frees it.
 
-- Install dependencies with `pnpm install`.
-- Use `pnpm env:pull` to sync `.env.local` from the linked Vercel project.
-- Put `GOOGLEAPI_CLIENT_EMAIL` and `GOOGLEAPI_PRIVATE_KEY` into `.env.local` at the repository root.
-- Use `pnpm import:legal-content:dry-run` before a real import to validate `content/legal/import.yaml` and the current targets.
-- Use `pnpm import:legal-content` to refresh the normalized legal files in `content/legal/` directly from Google Workspace.
+| Command | What it does |
+| --- | --- |
+| `pnpm check` | the single gate: frontmatter · specs · stack · brand · typecheck · lint · tests |
+| `pnpm test` | unit and integration tests (Vitest) |
+| `pnpm e2e` | end-to-end tests (Playwright), starting the dev server itself |
+| `pnpm build` | production build |
+| `vercel deploy` | a protected, `noindex` preview deployment |
 
-When that changes, this file should be updated with at least:
+### `pnpm check` Is the Only Gate
 
-- install steps
-- local run commands
-- test and lint commands
-- build or preview instructions
+Everything a change has to survive runs inside `pnpm check`, and the Husky
+pre-commit hook runs it on every commit. A new check is added *to* it,
+never run beside it — a check nobody runs is not a check. Keep it fast: it
+is paid on every commit, and today it costs about three seconds.
+
+It currently runs, in order:
+
+1. `check:frontmatter` — content frontmatter against its schema
+2. `check:specs` — the STRICT spec guard (E1–E10 fail, W1–W3 report)
+3. `check:stack` — TS-017-A1/A2/A7/A17: every runtime dependency registered
+   in `stack.allow.json`, one lockfile, the brand package pinned exact, one
+   icon set
+4. `check:brand` — TS-017-A4/A5/A6: no `max-width` media query, every
+   `min-width` a breakpoint token, no colour or `font-family` literal
+   outside `app/styles/brand.css`, no brand asset committed here
+5. `typecheck` · `lint` · `test`
+
+### Writing Tests
+
+The level is chosen by what the thing actually is, per
+`specs/verification/verification-strategy.md`:
+
+- **unit** — pure functions. `*.test.ts`, beside the code under `src/`.
+- **integration** — routes, handlers, rendering. `*.integration.test.ts`.
+  Next.js runs a route handler in-process, so a redirect, a status code, a
+  header or a sitemap is a Vitest test, not a browser test.
+- **e2e** — what genuinely crosses the browser boundary. `e2e/*.spec.ts`.
+
+A test names the id it verifies in its title:
+
+```ts
+describe("TS-015-A1: noindex on everything that is not production", () => { … });
+```
+
+That single convention is what lets `pnpm check:specs` report which
+acceptance criteria still have no test (W3).
+
+E2E viewports sample **360, 428 and 1280** (DEC-067). Three of the six
+breakpoints sit below 640px, so a suite that samples only 360 and 1280
+cannot see whether the small range does anything.
+
+### Rules That Are Checked, Not Trusted
+
+- **Mobile first is a direction, not a feeling.** Base styles are the
+  phone. Every media query is `min-width`; a `max-width` query fails the
+  build. Every switch point is one of the six `breakpoint.*` token values
+  of `brand-design` — never a literal at a call site.
+- **One component tree.** A breakpoint may change spacing, type step, image
+  aspect and column count. It may never change the order of blocks, the
+  presence of a block, or its wording.
+- **Brand values enter through one file.** `app/styles/brand.css` imports
+  the token sheet and the font faces; everything else consumes CSS custom
+  properties. No logo and no font file is committed here — they are package
+  subpaths.
+- **A new dependency needs an ADR.** Look sideways at the sibling repos
+  first (`../classification-api`, `../events-api`, `../geo-api`,
+  `../community-calendar`, `../envoy-api`), decide, write the decision into
+  `specs/decisions/`, register the runtime dependency in `stack.allow.json`
+  with its reason. Pin the version exactly.
+
+### Deployments
+
+Preview only. `vercel deploy` produces a protected, `noindex` preview.
+Production — `--prod`, promotion, production environment variables,
+production domains — is out of scope for everyone working in this
+repository right now.
+
+## Content Tooling
+
+The legal-content import from Google Workspace is unchanged:
+
+- `pnpm env:pull` syncs `.env.local` from the linked Vercel project.
+- Put `GOOGLEAPI_CLIENT_EMAIL` and `GOOGLEAPI_PRIVATE_KEY` into `.env.local`.
+- `pnpm import:legal-content:dry-run` validates `content/legal/import.yaml`
+  and the current targets before a real import.
+- `pnpm import:legal-content` refreshes the normalized legal files in
+  `content/legal/`.
