@@ -52,7 +52,7 @@ TS-011 · boundaries and price TS-018.
 | 6–7 | proof at this level (D7), then the quote CTA + response promise (D5) | colour |
 | 8–9 | context band, closing CTA (TS-006 D5/D6) | paper |
 
-### D3 — The map story, told without a map [FIXED: DEC-034; copy contract PROPOSED]
+### D3 — The map story, told without a map [until January 2027, DEC-061] [FIXED: DEC-034; copy contract PROPOSED]
 
 The argument: in a county nobody asks "what is on in Gemeinde X" but
 "what is near me", thirty kilometres out, across municipal boundaries —
@@ -167,6 +167,22 @@ so `publishablePrice` is false: promoted buys the page and the CTA, not a figure
 
 Consumed, discharged elsewhere: WEB-F-020 TS-006 D10 / TS-018 D3 ·
 WEB-F-040–046 TS-008 · WEB-F-036 TS-005 · WEB-F-090–093 TS-016 · WEB-C-012/016 TS-018.
+
+### D3a — The map has a date; the tier has features [FIXED: DEC-060, DEC-061]
+
+Corrected 2026-09-11 on two counts.
+
+**The map ships January 2027** — Landkreis Rottweil bought it and goes
+live then. Until it runs the page names it as a dated, forthcoming
+feature and never as an existing one; DEC-034's interim module carries
+the page. When it ships the module is swapped, not rewritten.
+
+**The tier is differentiated by features, not by territory.** What the
+enterprise licence adds is the map view and a white-label registration
+the customer embeds on their own site — not a larger area. The route
+keeps its name because it describes who it addresses (DEC-036 §4's
+reasoning is corrected accordingly), but the argument on the page is
+features.
 
 ## Open points
 

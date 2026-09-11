@@ -207,6 +207,24 @@ TS-018 D8's budget constant is 0 for this route.
 | WEB-F-014 (`/dein-kalender`, focus job *run our own calendar*, primary `buy-calendar-licence`, equal `request-product-briefing`) | D1, D2, D3, D4, D5, D6, D9, D10 · A1–A9, A12–A17, A19 |
 | WEB-F-020 (pricing display: 480 € public, enterprise unpriced, withheld offerings not offered) | D6, D8, D11 · A8, A10, A11, A18 |
 
+### D6a — What the tiers actually differ by [FIXED: DEC-060]
+
+Corrected 2026-09-11. The tiers are **not** graded by territory (village ·
+places · region) but by **where the calendar runs**, which is the real
+product difference:
+
+| Tier | Where it runs | Extra | Offering |
+| --- | --- | --- | --- |
+| free | in the Dorfkalender | — | `community-calendar` |
+| 480 €/yr | on your own website, configured | — | `portalize-calendar` |
+| on request | on your own website | map view (from January 2027, DEC-061), white-label registration | `portalize-enterprise` |
+
+The 480 € licence is **per organisation**, with no place limit — several
+organisations in one place or region each holding their own calendar is
+the intended case. The single question stays "wo soll der Kalender
+stehen?", which satisfies the IA's one-question requirement without
+asking the visitor to classify herself (WEB-F-009).
+
 ## Open points
 
 | # | Point | Addressee |

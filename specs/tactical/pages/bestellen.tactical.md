@@ -175,6 +175,18 @@ and step, never a field value. Both wait on envoy's event contract (Q-022 C3).
 Served, not claimed: WEB-F-093/094 · WEB-Q-009 · WEB-Q-038 · WEB-Q-028 ·
 WEB-F-020 · WEB-F-041.
 
+### D3a — Scope does not drive price [FIXED: DEC-060]
+
+Corrected 2026-09-11. An earlier reading treated the scope step as a
+pricing input and recorded that the flow could assemble a scope it could
+not price. It cannot: **480 € is per organisation**, whatever the scope
+contains. The step configures what the calendar *shows*; the price is
+fixed before it starts and does not move.
+
+What remains true is the practical warning of DEC-034: a county can hold
+hundreds of places, so the preview must stay bounded — but that is a
+rendering concern, not a commercial one.
+
 ## Open points
 
 - **Portalize (Q-026 extension) — synchronous organizer provisioning.** Nothing
