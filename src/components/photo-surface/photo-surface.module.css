@@ -4,6 +4,27 @@
  * band: transparent at 12–26 %, 0.82–0.86 at 38–62 %, 0.96 at the bottom.
  * `color-mix` keeps the alpha values inside the token system — no colour
  * literal exists anywhere in this repository outside brand.css.
+ *
+ * **Round 3, Jan's point 1 — the rebalance.** The scrim had grown until the
+ * photograph was a strip at the top of its own section: the section gradient
+ * reached its dark plateau at 55 % *and* the content-anchored scrim of F-2-2
+ * started 32 px above a text stack that began with a badge, so on the 8:9
+ * phone rendition the two together covered roughly four fifths of the box.
+ * Three changes, none of which gives back the contrast F-2-2 bought:
+ *
+ *   1. the section gradient takes the **far end** of the design system's own
+ *      band — transparent through 26 %, the plateau at 62 % — instead of the
+ *      near end. The picture is untouched through the top quarter and only
+ *      lightly veiled to about 40 %;
+ *   2. the placeholder and demo marks left the text stack for the
+ *      photograph's top corner (`photo-surface.tsx`), so the stack is the
+ *      copy alone and starts that much lower;
+ *   3. the content-anchored scrim's run-up is halved, 32 px → 16 px, so it
+ *      still reaches F-2-2's 0.82 floor by the stack's own top edge but
+ *      darkens half as much of the picture above it.
+ *
+ * The numbers are measured, not asserted: `state/open.md` row 203 carries the
+ * before/after contrast table at 360 and 1280 for all four sampled pages.
  */
 .surface {
   align-items: flex-end;
@@ -21,6 +42,8 @@
   background-size: cover;
   border-radius: 0;
   display: flex;
+  /* The containing block for the marks in the photograph's own top corner. */
+  position: relative;
   width: 100%;
 }
 
@@ -28,8 +51,8 @@
   --photo-scrim: var(--color-neutral-ink);
   --photo-gradient: linear-gradient(
     to bottom,
-    transparent 18%,
-    color-mix(in srgb, var(--color-neutral-ink) 84%, transparent) 55%,
+    transparent 26%,
+    color-mix(in srgb, var(--color-neutral-ink) 84%, transparent) 62%,
     color-mix(in srgb, var(--color-neutral-ink) 96%, transparent) 100%
   );
   color: var(--color-neutral-paper);
@@ -40,8 +63,8 @@
   --photo-scrim: var(--color-violet-500);
   --photo-gradient: linear-gradient(
     to bottom,
-    transparent 18%,
-    color-mix(in srgb, var(--color-violet-500) 84%, transparent) 55%,
+    transparent 26%,
+    color-mix(in srgb, var(--color-violet-500) 84%, transparent) 62%,
     color-mix(in srgb, var(--color-violet-500) 96%, transparent) 100%
   );
   color: var(--color-neutral-paper);
@@ -84,29 +107,91 @@
  *
  * This second scrim is anchored to `.content`'s own box instead of the
  * section's, so it grows and shrinks with the text stack itself: by the
- * stack's own top edge (0 in the gradient below, `--section-padding-block`
- * below the pseudo-element's top) it has already reached the 0.82 floor the
- * design system sets (SRC-014 §Photo surface, §Accessibility), regardless of
- * how tall the stack is. `z-index: 0` on `.content` gives it its own
- * stacking context so the pseudo-element's `z-index: -1` stays behind the
- * real content and above `.surface`'s own image, rather than escaping to a
- * lower level of the document.
+ * stack's own top edge (16 px in the gradient below, the pseudo-element's own
+ * top inset) it has already reached the 0.82 floor the design system sets
+ * (SRC-014 §Photo surface, §Accessibility), regardless of how tall the stack
+ * is. `z-index: 0` on `.content` gives it its own stacking context so the
+ * pseudo-element's `z-index: -1` stays behind the real content and above
+ * `.surface`'s own image, rather than escaping to a lower level of the
+ * document.
+ *
+ * Round 3: the run-up is 16 px rather than 32 px, and the stack it is
+ * anchored to no longer begins with the placeholder badge — the floor at the
+ * text's own edge is unchanged, the darkened band above it is halved.
  */
 .content::before {
   background: linear-gradient(
     to bottom,
     transparent,
-    color-mix(in srgb, var(--photo-scrim, var(--color-neutral-ink)) 82%, transparent) 32px,
+    color-mix(in srgb, var(--photo-scrim, var(--color-neutral-ink)) 82%, transparent) 16px,
     color-mix(in srgb, var(--photo-scrim, var(--color-neutral-ink)) 96%, transparent) 100%
   );
   content: "";
-  inset: -32px 0 0;
+  inset: -16px 0 0;
   position: absolute;
   z-index: -1;
 }
 
+/*
+ * **The reserved photograph band** — Jan's round-3 point 1, the part the
+ * gradient alone cannot buy.
+ *
+ * A hero whose copy is long (`/mitmachen`: four headline lines and a
+ * five-line lead at 360 px) fills its own 8:9 box completely, and then no
+ * stop in any gradient can show a photograph that has no uncovered pixels
+ * left. So the hero reserves a band at the top of its surface that the text
+ * stack cannot enter, as a flex spacer with its own aspect ratio: 40 % of the
+ * width on the phone, which is ~35 % of the 8:9 box, and 15 % of the width
+ * from `lg`, which is ~35 % of the 21:9 box. Where the copy is short the box
+ * keeps the design system's ratio exactly and the band simply sits inside it;
+ * where the copy is long the box grows, as it already did, and the band is
+ * what the visitor sees of the picture.
+ *
+ * It also keeps the text clear of the header lying transparent above it —
+ * the band is deeper than the header at every width.
+ *
+ * Hero only. A `feature`-ratio photo surface elsewhere on the page keeps
+ * today's behaviour; whether the same reservation belongs on those is a
+ * design-system question and carries its own row in `state/open.md`.
+ */
+.surface[data-hero="true"] {
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.surface[data-hero="true"]::before {
+  aspect-ratio: var(--photo-headroom, 5 / 2);
+  content: "";
+  flex: none;
+  width: 100%;
+}
+
+@media (min-width: 48rem) {
+  .surface[data-hero="true"] {
+    --photo-headroom: 20 / 3;
+  }
+}
+
+/*
+ * The marks on the photograph — "Foto gesucht", "Nicht motivgenau ·
+ * Platzhalter", `Demo-Daten`. Each carries its own fill and its own checked
+ * pair, so it needs no scrim of its own; it sits in the picture's top corner
+ * the way the design boards draw it, clear of the header that may be lying
+ * transparent above it on a hero.
+ */
 .marks {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
+  left: var(--space-4);
+  position: absolute;
+  right: var(--space-4);
+  top: var(--space-4);
+  z-index: 1;
+}
+
+/* On the page's hero the header may lie over the picture — clear its height. */
+.surface[data-hero="true"] .marks {
+  top: calc(var(--site-header-height) + var(--space-3));
 }

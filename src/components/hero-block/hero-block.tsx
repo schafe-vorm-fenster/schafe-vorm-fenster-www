@@ -92,6 +92,7 @@ export function HeroBlock({
     <PhotoSurface
       className={className}
       gradient={gradient}
+      hero
       id={id}
       locale={locale}
       notDepicting={notDepicting}

@@ -32,10 +32,27 @@
   color: var(--color-neutral-paper);
   font-size: var(--type-lead-size);
   line-height: var(--leading-relaxed);
-  margin: var(--space-4) 0 0;
+  margin: var(--space-3) 0 0;
   max-width: var(--measure-reading);
 }
 
 .cta {
-  margin-top: var(--space-6);
+  margin-top: var(--space-4);
+}
+
+/*
+ * Round 3, Jan's point 1: on the 8:9 phone rendition the stack's own internal
+ * spacing is what decides how far up the picture the headline starts. It is
+ * a step tighter below `md` and the design system's own values return above
+ * it — spacing per breakpoint, which is exactly what TS-017 D2(d) allows a
+ * switch point to change.
+ */
+@media (min-width: 40rem) {
+  .lead {
+    margin-top: var(--space-4);
+  }
+
+  .cta {
+    margin-top: var(--space-6);
+  }
 }

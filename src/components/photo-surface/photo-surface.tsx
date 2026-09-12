@@ -34,6 +34,15 @@ export interface PhotoSurfaceProps extends DataStateProps {
    * a background image has. At most one surface per page may set it.
    */
   readonly priority?: boolean;
+  /**
+   * This surface is the page's hero — the photograph the header lies on
+   * until it has scrolled past (Jan's round-3 point 2). `hero-block` sets it
+   * for every hero it renders; a page composing its hero out of a bare
+   * `photo-surface` (`/ueber-uns`) sets it itself. It reaches the markup only
+   * when a photograph actually exists: the missing-photo hatch is a light
+   * ground that paper-coloured header items could not sit on.
+   */
+  readonly hero?: boolean;
   /** `ink` by default, `violet` for the municipal path. */
   readonly gradient?: "ink" | "violet";
   readonly ratio?: "hero" | "feature";
@@ -56,10 +65,13 @@ export interface PhotoSurfaceProps extends DataStateProps {
  *
  * Structure: a full-width section with no radius and no border. The
  * photograph is the section's first background layer with the gradient above
- * it *in the same declaration* — transparent at 12–26 %, 0.82–0.86 at
- * 38–62 %, 0.96 at the bottom — so the scrim scales with the image and the
- * text always sits in the dark part. Ink gradient by default, violet for the
- * municipal path.
+ * it *in the same declaration* — transparent through 26 %, 0.84 at 62 %,
+ * 0.96 at the bottom, the far end of the design system's own band — so the
+ * scrim scales with the image and the text always sits in the dark part. Ink
+ * gradient by default, violet for the municipal path. The placeholder and
+ * demo marks sit in the picture's top corner, not in the text stack: they
+ * mark the photograph, and inside the stack they pushed the copy — and the
+ * content-anchored scrim with it — a badge's height further up the picture.
  * States (D-9, all four):
  *   loading  → the `skeleton` hatch at the same ratio;
  *   empty    → `placeholder-surface`: hatch, "Foto gesucht", invitation. This
@@ -70,7 +82,11 @@ export interface PhotoSurfaceProps extends DataStateProps {
  * Inherits: radius 0, no border, no shadow. Never adjacent to another photo
  * section — a rhythm rule `section-shell` enforces at composition time.
  * Space: the ratio is declared before the image arrives (8:9 on the phone,
- * 21:9 from the lg switch point for the hero).
+ * 21:9 from the lg switch point for the hero). A surface marked `hero`
+ * additionally reserves a band at its top that the text stack cannot enter —
+ * ~35 % of the box at every width — so a hero with long copy still shows the
+ * photograph rather than growing its box and covering all of it
+ * (`state/open.md` row 203).
  * A11y: the photograph is a background and carries no alt — an image that
  * carries meaning belongs in `media-frame`. Body text clears 4.5:1 against
  * the composite of photo plus gradient, which is why the scrim is this dark.
@@ -79,6 +95,7 @@ export function PhotoSurface({
   src,
   wideSrc,
   priority = false,
+  hero = false,
   gradient = "ink",
   ratio = "hero",
   notDepicting = false,
@@ -157,6 +174,9 @@ export function PhotoSurface({
       ) : null}
     <section
       className={classes}
+      /* The page's hero surface — what the header observes to know when it
+         has scrolled off the photograph (Jan's round-3 point 2). */
+      data-hero={hero && !missingPhoto ? "true" : undefined}
       data-placeholder={missingPhoto ? "true" : placeholderId}
       id={id}
       style={
@@ -167,18 +187,23 @@ export function PhotoSurface({
         } as CSSProperties
       }
     >
-      <div className={styles.content}>
-        {(missingPhoto || notDepicting || isMocked(state)) && (
-          <div className={styles.marks}>
-            {missingPhoto ? (
-              <Badge tone="placeholder">{dictionary(locale).media.photoWanted}</Badge>
-            ) : null}
-            {!missingPhoto && notDepicting ? <PlaceholderBadge locale={locale} /> : null}
-            {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
-          </div>
-        )}
-        {children}
-      </div>
+      {/* F-3-R1: the marks left the text stack. They are a mark *on the
+          photograph*, not a line of the hero's copy, and standing at the top
+          of the stack they pushed the headline — and with it the whole
+          content-anchored scrim — a badge's height further up the picture on
+          every page. They now sit in the photograph's own top corner, which
+          is where the design boards put them, and the stack below is the
+          copy alone. */}
+      {(missingPhoto || notDepicting || isMocked(state)) && (
+        <div className={styles.marks}>
+          {missingPhoto ? (
+            <Badge tone="placeholder">{dictionary(locale).media.photoWanted}</Badge>
+          ) : null}
+          {!missingPhoto && notDepicting ? <PlaceholderBadge locale={locale} /> : null}
+          {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
+        </div>
+      )}
+      <div className={styles.content}>{children}</div>
     </section>
     </>
   );
