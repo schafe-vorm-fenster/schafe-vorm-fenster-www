@@ -29,7 +29,6 @@ describe("isUnservablePath: every path the site really serves stays served", () 
     "/api/places/search",
     "/dev/components",
     "/_next/static/chunks/main.js",
-    "/favicon.ico",
     "/.well-known/security.txt",
     "/en/anything",
     "/en/does-not-exist",
@@ -48,6 +47,15 @@ describe("isUnservablePath: the URLs that produced the empty 404 document", () =
     "/pl/mitmachen",
     "/__landing-only",
     "/irgendwas/irgendwo",
+    // F-3-13: asset-shaped, and no file behind any of them. They used to be
+    // exempted by extension alone, which sent them to `app/[lang]` with a
+    // non-language `lang` — the empty `__next_error__` document F-2-70
+    // removed, reopened by every browser's automatic favicon request.
+    "/favicon.ico",
+    "/does-not-exist.js",
+    "/nope.css",
+    "/nope.png",
+    "/robots.txt.map",
   ])("%s is routed to the 404 surface", (path) => {
     expect(isUnservablePath(path)).toBe(true);
   });

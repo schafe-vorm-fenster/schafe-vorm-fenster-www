@@ -214,9 +214,21 @@ describe("TS-004-A3 (F-2-45): the landing-only domain rule", () => {
   });
 
   it("lets the landing page's own assets through", async () => {
-    for (const path of ["/_next/static/chunks/main.js", "/favicon.ico", "/logo.svg"]) {
+    // `/_next/**` is the framework's own output and is what the landing page
+    // actually loads. `public/` does not exist in this repository, so there
+    // is no second kind of asset to let through.
+    for (const path of ["/_next/static/chunks/main.js", "/_next/static/media/logo.svg"]) {
       const response = await proxy(request(`https://www.schafvormfenster.at${path}`));
       expect(response.headers.get("x-middleware-rewrite"), path).toBeNull();
+    }
+  });
+
+  it("sends an asset-shaped path with no file behind it to the 404 surface (F-3-13)", async () => {
+    // Before F-3-13 the extension alone exempted these, on every domain, and
+    // they rendered the empty `__next_error__` shell instead of the 404 page.
+    for (const path of ["/favicon.ico", "/logo.svg", "/nope.css"]) {
+      const response = await proxy(request(`https://www.schafvormfenster.at${path}`));
+      expect(response.headers.get("x-middleware-rewrite"), path).toContain(NOT_FOUND_PATH);
     }
   });
 

@@ -35,7 +35,7 @@
  * to its own 404 handling and `global-not-found` renders in full.
  */
 
-import { isAssetPath } from "./landing-domain";
+import { isServableAssetPath } from "./landing-domain";
 import { normalisePath } from "./routes";
 import { everyD1Path } from "./url-inventory";
 import { DEFAULT_LOCALE, isLocale } from "../i18n/locales";
@@ -104,8 +104,9 @@ export function notFoundLocale(pathname: string, tldDefault?: string): Locale {
  *  - a **served language prefix** (`/en/anything`) already falls through to
  *    Next's own 404 handling, because `app/[lang]/anything` matches no route
  *    — that surface is complete today and is left alone here;
- *  - every **D1 path**, every asset and the three reserved prefixes are
- *    served and answer for themselves; `/dev/**` answers for itself too,
+ *  - every **D1 path**, every asset that is really on disk and the reserved
+ *    prefixes are served and answer for themselves; `/dev/**` answers for
+ *    itself too,
  *    except in a production build, where it is the one URL that would
  *    otherwise reproduce the very defect this module removes;
  *  - `/de/…` carries a language prefix too, so the redundant-prefix redirect
@@ -114,8 +115,8 @@ export function notFoundLocale(pathname: string, tldDefault?: string): Locale {
 export function isUnservablePath(pathname: string): boolean {
   const path = normalisePath(pathname);
   if (path === normalisePath(NOT_FOUND_PATH)) return false;
-  if (isAssetPath(path)) return false;
   if (RESERVED_PREFIXES.some((prefix) => path.startsWith(prefix))) return false;
+  if (isServableAssetPath(path)) return false;
   if (path.startsWith(DEV_PREFIX)) return process.env.VERCEL_ENV === "production";
 
   const first = path.split("/")[1] ?? "";

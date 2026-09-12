@@ -171,6 +171,15 @@ const NOT_FOUND_CASES = [
   { path: "/irgendwas/irgendwo", heading: "Seite nicht gefunden", lang: "de" },
   { path: "/en/does-not-exist", heading: "Page not found", lang: "en" },
   { path: "/en/anything", heading: "Page not found", lang: "en" },
+  // F-3-13 — the door F-2-70's fix was left open on. `isUnservablePath()`
+  // exempted **anything** ending in an asset extension, whether or not a file
+  // existed, so these never reached the `NOT_FOUND_PATH` rewrite and rendered
+  // the empty `<html id="__next_error__">` shell instead. `/favicon.ico` is
+  // the one every browser asks for by itself, on every page load.
+  { path: "/favicon.ico", heading: "Seite nicht gefunden", lang: "de" },
+  { path: "/does-not-exist.js", heading: "Seite nicht gefunden", lang: "de" },
+  { path: "/nope.css", heading: "Seite nicht gefunden", lang: "de" },
+  { path: "/robots.txt.map", heading: "Seite nicht gefunden", lang: "de" },
 ] as const;
 
 for (const { path, heading, lang } of NOT_FOUND_CASES) {
@@ -218,4 +227,24 @@ test("TS-001-A3: the redundant /de prefix redirects to the bare path", async ({
   const response = await page.goto("/de/mitmachen");
   expect(response?.status()).toBe(200);
   expect(new URL(page.url()).pathname).toBe("/mitmachen");
+});
+
+/**
+ * F-3-13 — every page carries the brand icon, so no browser has to guess.
+ *
+ * The tree shipped no `public/favicon.ico` and no `app/icon.*` at all. The
+ * icon is the brand package's own logo, reached through the subpath import
+ * TS-017-A6 requires (no logo file is committed here), and Next emits it
+ * under `/_next/static/`.
+ */
+test("F-3-13: every page links the brand icon, and it resolves", async ({ page, request }) => {
+  for (const path of ["/", "/en", "/dein-ort", "/ueber-uns"]) {
+    await page.goto(path);
+    const icon = page.locator('link[rel="icon"]');
+    await expect(icon, `icon link on ${path}`).toHaveCount(1);
+    const href = await icon.getAttribute("href");
+    expect(href, `icon href on ${path}`).toMatch(/^\/_next\/static\/media\/.+\.svg$/);
+    const asset = await request.get(href ?? "");
+    expect(asset.status(), `the icon asset linked from ${path}`).toBe(200);
+  }
 });

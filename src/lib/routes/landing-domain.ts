@@ -50,11 +50,50 @@ const ASSET_EXTENSIONS = [
   ".woff2",
 ] as const;
 
-/** True for a path the landing-only rule must let through regardless. */
+/**
+ * Files this repository actually serves out of `public/`, as paths.
+ *
+ * `public/` does not exist today — every asset the site uses is a package
+ * subpath import that Next emits under `/_next/static/`, and TS-017-A6
+ * forbids committing a logo, mark or font file here at all. So the list is
+ * empty, and `static-assets.static.test.ts` walks `public/` and fails if it
+ * ever stops being (`state/open.md` row 153): a file added to `public/`
+ * without a row here would be classified unservable and 404'd by the proxy,
+ * with the file sitting on disk.
+ */
+const PUBLIC_FILES: readonly string[] = [];
+
+/**
+ * True for a path that is **shaped** like a file — the landing-only rule's
+ * own question, which is "could this be an asset the landing page needs",
+ * not "does this file exist".
+ */
 export function isAssetPath(pathname: string): boolean {
   if (pathname.startsWith("/_next/")) return true;
   const lowered = pathname.toLowerCase();
   return ASSET_EXTENSIONS.some((extension) => lowered.endsWith(extension));
+}
+
+/**
+ * True for a path that is an asset this site really serves — the 404
+ * predicate's question, which is a different one (F-3-13).
+ *
+ * `isAssetPath` answers "servable, leave it alone" for **anything** ending in
+ * an asset extension, whether or not a file exists. `isUnservablePath()` used
+ * it, so `/favicon.ico`, `/nope.css`, `/does-not-exist.js` and
+ * `/robots.txt.map` never reached the `NOT_FOUND_PATH` rewrite: they fell
+ * through to `app/[lang]` with a non-language `lang`, which is exactly the
+ * empty `<html id="__next_error__">` 404 F-2-70 removed — reopened through a
+ * door nobody checked, and opened by **every page view**, because every
+ * browser asks for `/favicon.ico` by itself.
+ *
+ * `/_next/**` is the framework's own output and always passes; everything
+ * else has to be a file this repository ships.
+ */
+export function isServableAssetPath(pathname: string): boolean {
+  if (pathname.startsWith("/_next/")) return true;
+  if (!isAssetPath(pathname)) return false;
+  return PUBLIC_FILES.includes(pathname.toLowerCase());
 }
 
 /**

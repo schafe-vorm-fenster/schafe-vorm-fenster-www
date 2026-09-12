@@ -1,3 +1,5 @@
+import sheepMark from "@schafe-vorm-fenster/brand-design/logo.svg";
+
 import { SkipLink } from "@/src/components/skip-link/skip-link";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import {
@@ -76,6 +78,44 @@ export async function generateMetadata({
       template: `%s — ${d.siteName}`,
     },
     openGraph: { siteName: d.siteName, locale: OG_LOCALE[locale] },
+    /**
+     * F-3-13 — the site's icon, and the real brand mark rather than nothing.
+     *
+     * The tree shipped no `public/favicon.ico` and no `app/icon.*` at all, so
+     * every browser's automatic `GET /favicon.ico` on every page load went
+     * down the 404 path. It now finds a `<link rel="icon">` in the head
+     * instead and never asks.
+     *
+     * Not `app/icon.svg`: TS-017-A6 forbids committing a logo, mark or font
+     * file in this repository, and `pnpm check:brand` enforces it — every
+     * logo reference is a brand-package subpath import, which is exactly what
+     * `sheepMark` is (the same import `src/components/logo/logo.tsx` uses).
+     * Not `app/icon.tsx` either: the generated-icon convention is a Route
+     * Handler that has to hand over bytes, and reading them back out of the
+     * package defeats both bundlers — Turbopack rewrites a `require.resolve`
+     * of an `.svg` into an asset reference and the read fails at runtime
+     * (measured). The static import is the bundler-native form: Next emits
+     * the file under `/_next/static/` and stamps its hash into the URL.
+     *
+     * It is the brand owner's own logo — neither mocked nor generated — so
+     * neither the mock rule nor the dummy-content rule applies and it carries
+     * no badge.
+     */
+    icons: {
+      icon: [
+        {
+          // Next 16 resolves an `.svg` import to the emitted **URL string**,
+          // not to a `StaticImageData` (measured: the value is
+          // "/_next/static/media/Schafe-vorm-Fenster_Logo_V2.1.<hash>.svg").
+          // The ambient module declaration still types it as the object, and
+          // reading `.src` off it yields `undefined`, which throws inside
+          // Next's own metadata resolution and silently drops the entire
+          // `<head>` block.
+          url: sheepMark as unknown as string,
+          type: "image/svg+xml",
+        },
+      ],
+    },
     ...(INDEXABLE_BUILD ? {} : { robots: NOINDEX }),
   };
 }
