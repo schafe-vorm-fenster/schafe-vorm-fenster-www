@@ -14,14 +14,6 @@
  * the placeholder.
  */
 
-import { dictionary } from "@/src/lib/i18n/dictionary";
-import { DEFAULT_LOCALE, LOCALES } from "@/src/lib/i18n/locales";
-import { ROUTE_IDS } from "@/src/lib/routes/routes";
-
-import { SiteChrome } from "./_page-frame";
-
-import type { Locale } from "@/src/lib/i18n/locales";
-import type { RouteId } from "@/src/lib/routes/routes";
 import type { ReactNode } from "react";
 
 export interface PlaceholderModule {
@@ -69,53 +61,28 @@ export function PlaceholderSection({
   );
 }
 
-/**
- * Which route and which language a placeholder page stands for, read back
- * off its own title.
- *
- * Transitional, and it disappears with the last placeholder: every page in
- * the routing skeleton passes `title={pageTitle(ROUTE, locale)}`, and the
- * eleven titles are distinct inside each language, so both values are
- * recoverable without editing eleven files that three developers are
- * replacing in parallel. A page that knows its own route and language passes
- * them and skips the lookup.
- */
-function identify(title: string): { route: RouteId; locale: Locale } {
-  for (const locale of LOCALES) {
-    const pages = dictionary(locale).pages;
-    const route = ROUTE_IDS.find((candidate) => pages[candidate] === title);
-    if (route) return { route, locale };
-  }
-  return { route: "home", locale: DEFAULT_LOCALE };
-}
-
 export function PlaceholderPage({
   title,
   note,
   modules,
   labels,
-  locale,
-  route,
 }: {
   title: string;
   note: string;
   modules: readonly PlaceholderModule[];
   labels: { section: string; components: string; reserved: string };
-  /** The page's language — the chrome needs it for every link it renders. */
-  locale?: Locale;
-  /** The page's route id; derived from the title where a page has not been built yet. */
-  route?: RouteId;
 }): ReactNode {
-  const identified = identify(title);
+  // The chrome — header, trail, `main`, footer — belongs to
+  // `app/[lang]/layout.tsx` since state/open.md row 204, so a placeholder page
+  // renders its own blocks and nothing else, exactly as a finished page does.
+  // That is also why it no longer needs to know its route or its language.
   return (
-    <SiteChrome locale={locale ?? identified.locale} route={route ?? identified.route}>
-      <article className="container" data-placeholder="page">
-        <h1>{title}</h1>
-        <p>{note}</p>
-        {modules.map((module) => (
-          <PlaceholderSection key={module.id} labels={labels} module={module} />
-        ))}
-      </article>
-    </SiteChrome>
+    <article className="container" data-placeholder="page">
+      <h1>{title}</h1>
+      <p>{note}</p>
+      {modules.map((module) => (
+        <PlaceholderSection key={module.id} labels={labels} module={module} />
+      ))}
+    </article>
   );
 }

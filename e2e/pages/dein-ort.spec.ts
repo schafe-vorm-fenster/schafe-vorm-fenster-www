@@ -246,10 +246,22 @@ test.describe("TS-020 — your place", () => {
       const response = await page.goto(path);
       expect(response?.status(), path).toBe(200);
       await expect(page.getByRole("searchbox").first()).toBeVisible();
-      // The raw value appears nowhere as data.
-      const body = (await page.locator("main").textContent()) ?? "";
+      // The raw value appears nowhere as data — not as markup, not as text,
+      // and not as an element that could run.
+      //
+      // `innerText`, not `textContent`: since state/open.md row 204 the chrome
+      // is the layout's, so the page's own tree — the JSON-LD graph of
+      // TS-011 D4 included — sits inside the `main` landmark. `textContent`
+      // reads that graph's source, where the key `"description"` contains the
+      // substring this line looks for. `innerText` reads what is rendered,
+      // which is what "appears as data" means, and the count below is the
+      // stricter half the substring was standing in for.
+      const body = await page.locator("main").innerText();
       expect(body).not.toContain("<script>");
       expect(body).not.toContain("script");
+      await expect(
+        page.locator("main script:not([type='application/ld+json'])"),
+      ).toHaveCount(0);
     }
   });
 

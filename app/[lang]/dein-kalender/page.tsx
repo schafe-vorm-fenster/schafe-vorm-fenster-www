@@ -12,6 +12,7 @@ import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { TrustBlock } from "@/src/components/trust-block/trust-block";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
+import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
 import { BRIEFING_URL } from "@/src/lib/live/briefing";
@@ -119,7 +120,7 @@ export default async function Page({
 }) {
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
-  const heroImage = pageImage(page, "dein-kalender-hero");
+  const heroImage = pageImage(page, HERO_IMAGE_ID.calendar);
   const home = await pageContent("home", locale);
 
   const focus = slot(page, "dein-kalender-1-focus");
@@ -192,7 +193,6 @@ export default async function Page({
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
-      heroPhoto={heroImage?.src !== undefined}
       closing={{ to: "order", label: orderLabel }}
       contextBandHeading={fieldAt(contextBand.blocks, 0)}
       locale={locale}

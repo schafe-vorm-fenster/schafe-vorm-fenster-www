@@ -13,6 +13,7 @@ import { SceneBlock } from "@/src/components/scene-block/scene-block";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
+import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
 import { ctaLabelOnly } from "@/src/lib/content/text";
@@ -450,7 +451,7 @@ export default async function HomePage({
 
   const focusCopy: FocusCopy = {
     locale,
-    hero: pageImage(page, "home-hero"),
+    hero: pageImage(page, HERO_IMAGE_ID.home),
     s1Headline: hero.fields["Headline"] ?? "",
     search,
     datesHeadline: dates.fields["Headline"] ?? "",
@@ -466,7 +467,6 @@ export default async function HomePage({
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{ variant: "module", node: search(false) }}
-      heroPhoto={focusCopy.hero?.src !== undefined}
       contextBandHeading={fieldAt(band.blocks, 0)}
       locale={locale}
       meta={HOME_META}

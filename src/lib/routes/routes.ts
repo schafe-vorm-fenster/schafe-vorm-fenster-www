@@ -164,6 +164,37 @@ export function trail(route: RouteId): RouteId[] {
   return parent ? [...trail(parent), route] : [route];
 }
 
+/**
+ * The route id of the App Router segments below `app/[lang]/layout.tsx` —
+ * `[]` is the home page, `["ueber-uns", "archiv"]` is the archive.
+ *
+ * This is the **layout's** way of learning which page renders below it, and
+ * the only one that costs nothing: `useSelectedLayoutSegments()` reads the
+ * router tree, which is the *internal* path (`app/[lang]/…`, German segments
+ * by TS-004 D2), so it is immune to the locale rewrite — `/en/about/archive`
+ * and `/ueber-uns/archiv` both arrive here as `["ueber-uns", "archiv"]`.
+ * `usePathname()` would not be: the prerender sees the rewritten path and the
+ * browser sees the public one, which is the hydration mismatch the Next.js
+ * `usePathname` reference warns about for apps with rewrites.
+ *
+ * `undefined` for anything that is not one of the twelve routes — a first
+ * segment that is not a language still matches `app/[lang]`, and that page
+ * answers 404 (`_locale.ts`).
+ */
+export function routeFromSegments(
+  segments: readonly string[],
+): RouteId | undefined {
+  return ROUTE_BY_INTERNAL_PATH.get(segments.join("/"));
+}
+
+/** `"" | "dein-ort" | "ueber-uns/archiv" | …` → route id. Built from the table. */
+const ROUTE_BY_INTERNAL_PATH: ReadonlyMap<string, RouteId> = new Map(
+  ROUTE_IDS.map((id) => [
+    ROUTES[id].path[DEFAULT_LOCALE].replace(/^\//, ""),
+    id,
+  ]),
+);
+
 /** Resolves a public path (no language prefix) back to its route id. */
 export function routeIdForPath(
   path: string,

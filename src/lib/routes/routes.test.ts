@@ -8,6 +8,7 @@ import {
   href,
   internalPath,
   normalisePath,
+  routeFromSegments,
   routeIdForPath,
   ROUTE_IDS,
   ROUTES,
@@ -155,5 +156,32 @@ describe("TS-011 D1: path normalisation before the map is consulted", () => {
     expect(routeIdForPath("/Dein-Ort/", "de")).toBe("place");
     expect(routeIdForPath("/your-place", "en")).toBe("place");
     expect(routeIdForPath("/your-place", "de")).toBeUndefined();
+  });
+});
+
+describe("row 204: the layout resolves its route from the App Router segments", () => {
+  it("maps every route's internal segments back onto its id", () => {
+    for (const route of ROUTE_IDS) {
+      const segments = internalPath(route, DEFAULT_LOCALE)
+        .split("/")
+        .slice(2)
+        .filter(Boolean);
+      expect(routeFromSegments(segments)).toBe(route);
+    }
+  });
+
+  it("reads the home page off the empty segment list", () => {
+    expect(routeFromSegments([])).toBe("home");
+  });
+
+  it("is immune to the locale rewrite — the segments are always German", () => {
+    // `/en/about/archive` is rewritten onto `app/[lang]/ueber-uns/archiv`,
+    // so the layout sees the German segments on both language variants.
+    expect(routeFromSegments(["ueber-uns", "archiv"])).toBe("archive");
+    expect(routeFromSegments(["about", "archive"])).toBeUndefined();
+  });
+
+  it("does not resolve a segment list that is not a route", () => {
+    expect(routeFromSegments(["gibt-es-nicht"])).toBeUndefined();
   });
 });

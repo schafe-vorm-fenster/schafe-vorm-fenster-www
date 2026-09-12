@@ -9,6 +9,7 @@ import { RouteLink } from "@/src/components/route-link/route-link";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
+import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
@@ -179,7 +180,7 @@ export default async function Page({
   // image, which is the hero itself (`data-block="scene"` below). The entry
   // carries `lcp: true`, and `photo-surface` turns that into the preload a
   // CSS background image can actually carry.
-  const heroImage = pageImage(page, "mitmachen-hero");
+  const heroImage = pageImage(page, HERO_IMAGE_ID.takePart);
   const whatsappImage = pageImage(page, "mitmachen-path-whatsapp");
   const calendarImage = pageImage(page, "mitmachen-path-calendar");
   const websiteImage = pageImage(page, "mitmachen-path-website");
@@ -189,7 +190,6 @@ export default async function Page({
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
-      heroPhoto={heroImage?.src !== undefined}
       closing={{
         to: "register",
         label: heroCtaLabel,

@@ -121,20 +121,37 @@ header publishes its height as `--site-header-height`; `legal-section` uses
 that for `scroll-margin-top`. The layout keeps the `main` landmark and the
 `#main` id, because `skip-link` jumps to it.
 
+**The whole chrome is the layout's, and it is one per document**
+(`app/[lang]/layout.tsx` → `app/[lang]/_chrome.tsx`, `state/open.md` rows 97
+and 204). Never render a `header`, a `main` or a `footer` from a page: with
+Cache Components on, the App Router keeps the last three route segments
+mounted in hidden `<Activity>` boundaries, so anything a page renders is
+still in the document after the visitor has clicked away from it — and
+chrome rendered by a page therefore duplicated on every client navigation.
+`_chrome.tsx` is a Client Component for the same reason: on a client
+navigation the server never re-renders the layout, so the route id comes from
+`useSelectedLayoutSegments()` (the internal, German segments — immune to the
+locale rewrite, and resolved at prerender, so the JavaScript-less document is
+correct too). `e2e/landmarks.spec.ts` walks navigations rather than loads and
+holds the rule.
+
 #### The header has two grounds and two disclosures
 
 Both are Jan's round-3 decision (`state/open.md` rows 200 and 201), and both
 are one component tree — every destination exists in the markup at every
 width.
 
-- **Ground.** A page whose first block is a `photo-surface` carrying a
-  photograph passes `heroPhoto` to `PageFrame`. The header then lies
-  transparent on the hero (`position: fixed`, items in paper over its own top
-  scrim) and turns solid once the hero's bottom edge passes it. A page without
-  one, or one with a breadcrumb trail between the header and the hero, stays
-  solid. Compute `heroPhoto` from the page's own image inventory — a hero
-  whose photograph is still missing renders the light hatch, which paper items
-  could not sit on — and pass `hero` to the surface that *is* the hero, so
+- **Ground.** Over a first block that is a `photo-surface` carrying a
+  photograph the header lies transparent (`position: fixed`, items in paper
+  over its own top scrim) and turns solid once the hero's bottom edge passes
+  it. A route without one, or one with a breadcrumb trail between the header
+  and the hero, stays solid. The fact stays content-derived rather than
+  declared — a hero whose photograph is still missing renders the light hatch,
+  which paper items could not sit on — but it is resolved for **every** route
+  at once by `app/[lang]/_chrome-data.ts`, because the layout that renders the
+  header cannot ask a page anything. A page therefore passes no `heroPhoto`:
+  it names its hero entry in `src/lib/pages/hero-images.ts` (the one table
+  both readers use) and passes `hero` to the surface that *is* the hero, so
   `photo-surface` marks it `data-hero` for the header to measure against.
 - **Disclosure.** Below `md` the logo shows the mark alone (`compact`), the
   four job labels move into a full-screen `<dialog>` behind a burger, and the

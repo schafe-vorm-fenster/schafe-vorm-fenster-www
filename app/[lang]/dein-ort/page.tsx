@@ -9,6 +9,7 @@ import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { ValueStory } from "@/src/components/value-story/value-story";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
+import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { ctaLabelOnly } from "@/src/lib/content/text";
 import { fillTemplate, splitSteps } from "@/src/lib/pages/demo-content";
@@ -203,7 +204,7 @@ export default async function PlacePage({
   const page = await pageContent(ROUTE, locale);
   // The hero photograph from the page's image inventory; `undefined` while
   // none exists, and the surface renders its "Foto gesucht" hatch instead.
-  const heroImage = pageImage(page, "dein-ort-hero");
+  const heroImage = pageImage(page, HERO_IMAGE_ID.place);
   const fallbackCopy = PAGE_COPY[locale];
   const stateS0 = slot(page, "dein-ort-0-state-s0");
   const s0Headline = fieldAt(stateS0.blocks, 0);
@@ -343,7 +344,6 @@ export default async function PlacePage({
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
-      heroPhoto={heroImage?.src !== undefined}
       closing={
         // TS-020 D2, block 4: the closing CTA repeats block 1's primary of
         // the *current* state — the publishing offer in B, the search

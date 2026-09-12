@@ -113,7 +113,7 @@ export default async function Page({
     <>
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
-    <PageFrame backToTop closing={{ variant: "merged" }} locale={locale} meta={pageMeta}>
+    <PageFrame closing={{ variant: "merged" }} locale={locale} meta={pageMeta}>
       {/* One section, not two: `PageFrame`'s merged closing block is
           `paper` (`app/[lang]/_page-frame.tsx`), and the page-rhythm rule
           (`src/components/section-shell/rhythm.ts`) forbids more than two

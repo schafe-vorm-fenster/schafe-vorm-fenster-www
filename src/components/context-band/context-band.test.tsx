@@ -30,10 +30,9 @@ import type { PageMeta } from "@/src/lib/pages/page-meta";
  *
  * The two pages that legitimately carry no band — `/mitmachen/registrieren`
  * and `/dein-kalender/bestellen` on their flow steps (F-2-10, TS-023 D7 /
- * TS-025, `state/open.md` row 24) — render their chrome through
- * `SiteChrome`, never through `PageFrame`, and are therefore outside this
- * file by construction; `e2e/routes.spec.ts` names them as the two
- * exceptions of the route walk.
+ * TS-025, `state/open.md` row 24) — compose their blocks by hand, never
+ * through `PageFrame`, and are therefore outside this file by construction;
+ * `e2e/routes.spec.ts` names them as the two exceptions of the route walk.
  */
 
 const CLOSINGS: ReadonlyArray<{ name: string; meta: PageMeta; closing: ClosingBlock }> = [
@@ -57,9 +56,13 @@ function count(haystack: string, needle: string): number {
   return haystack.split(needle).length - 1;
 }
 
-/** The page's own body, without the header and footer chrome around it. */
+/**
+ * The page's own body. `PageFrame` renders exactly that and nothing else
+ * since row 204 — the `main` landmark it used to wrap around this belongs to
+ * `app/[lang]/layout.tsx` now, so there is no chrome left to strip.
+ */
 function mainOf(html: string): string {
-  return html.slice(html.indexOf("<main"), html.indexOf("</main>"));
+  return html;
 }
 
 function render(meta: PageMeta, closing: ClosingBlock): string {

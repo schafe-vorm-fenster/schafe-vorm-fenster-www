@@ -51,6 +51,20 @@ vi.mock("next/headers", () => ({
   headers: async () => new Headers(requestHeaders),
 }));
 
+/**
+ * `"use cache"` is a compiler directive; `cacheLife()` and `cacheTag()` are
+ * its runtime half and refuse to run outside a Next.js build with Cache
+ * Components on. Since row 204 the layout reads the chrome's
+ * hero-photograph table through one of them (`app/[lang]/_chrome-data.ts`),
+ * so both markers are stubbed here exactly like `headers()` above: what they
+ * annotate is a cache lifetime, and an in-process render has no cache to
+ * apply it to.
+ */
+vi.mock("next/cache", () => ({
+  cacheLife: () => undefined,
+  cacheTag: () => undefined,
+}));
+
 /** The concatenated text of a rendered element tree. */
 function textOf(node: unknown): string {
   if (node === null || node === undefined || typeof node === "boolean")

@@ -19,7 +19,6 @@ import { RouteLink } from "@/src/components/route-link/route-link";
 import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
 import { localeFrom, pageMetadataFor } from "../../_locale";
-import { SiteChrome } from "../../_page-frame";
 
 import { pageMeta } from "./page.meta";
 import { resolveRegisterPlace } from "./resolve-place";
@@ -195,7 +194,6 @@ export default async function Page({
     <>
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
-    <SiteChrome locale={locale} route={ROUTE}>
       <SectionShell surface="paper">
         {step !== "handover" ? (
           <StepIndicator
@@ -326,7 +324,6 @@ export default async function Page({
           />
         </SectionShell>
       ) : null}
-    </SiteChrome>
     </>
   );
 }

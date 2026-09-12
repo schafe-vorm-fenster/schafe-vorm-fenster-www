@@ -22,7 +22,6 @@ import { readPlaceParameter } from "@/src/lib/pages/place-parameter";
 import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
 import { localeFrom, pageMetadataFor } from "../../_locale";
-import { SiteChrome } from "../../_page-frame";
 import { resolveRegisterPlace } from "../../mitmachen/registrieren/resolve-place";
 
 import { AdvancePending } from "./advance-pending";
@@ -196,7 +195,6 @@ export default async function Page({
     <>
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
-    <SiteChrome locale={locale} route={ROUTE}>
       <SectionShell surface="paper">
         <StepIndicator step={step} total={STEP_TOTAL} />
 
@@ -320,7 +318,6 @@ export default async function Page({
           <ContextBand currentJob={jobLabelKey(pageMeta.focusJob)} heading={contextBandHeading} locale={locale} />
         </SectionShell>
       ) : null}
-    </SiteChrome>
     </>
   );
 }

@@ -15,6 +15,7 @@ import { isDemoSlot } from "@/src/lib/content/provenance";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { ctaLabelOnly } from "@/src/lib/content/text";
 import { pageImage } from "@/src/lib/content/images";
+import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 
 import { CountersIsland } from "../_islands";
@@ -192,7 +193,7 @@ export default async function Page({
   // founder's portrait is the real, cleared photograph from
   // `@schafe-vorm-fenster/people` and carries the rights holder's credit
   // line verbatim — a face is never generated (DEC-068 rule 3).
-  const heroImage = pageImage(page, "ueber-uns-hero");
+  const heroImage = pageImage(page, HERO_IMAGE_ID.about);
   const founderImage = pageImage(page, "ueber-uns-founder-portrait");
   const archiveLabel = ctaLabelOnly(fieldAt(archiveLink.blocks, 0)) ?? "Zum Archiv";
 
@@ -202,7 +203,6 @@ export default async function Page({
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{ variant: "merged" }}
-      heroPhoto={heroImage?.src !== undefined}
       locale={locale}
       meta={pageMeta}
     >

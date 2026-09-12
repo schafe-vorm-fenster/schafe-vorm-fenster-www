@@ -1,64 +1,48 @@
 /**
- * The shared page frame — the chrome of TS-004 D4 and blocks 3 and 4 of
- * TS-006 D2, in one place, for every page.
+ * Blocks 3 and 4 of TS-006 D2 — the context band and the closing CTA — built
+ * from the page's `page.meta.ts`, for every page, in one place.
  *
  * ```
- * skip-link → site-header → (breadcrumb-trail) → main → context-band
- *           → closing-cta → site-footer
+ * (chrome: header · trail · main) → page blocks → context-band → closing-cta → (footer)
  * ```
  * (`plan/component-inventory.md` §4, "Every page is wrapped by the shared
  * layout".)
  *
- * ### Why this is a component and not `layout.tsx` [PROPOSED — state/open.md]
+ * ### Where the chrome went (state/open.md rows 97 and 204)
  *
- * TS-006 D2 wants blocks 3 and 4 "rendered by the shared layout from
- * `page.meta.ts`, not hand-placed per page". A Next.js layout receives only
- * `children` and its own segment `params` (`node_modules/next/dist/docs/
- * 01-app/03-api-reference/03-file-conventions/layout.md`): `app/[lang]/
- * layout.tsx` therefore knows the language and nothing else — not which of
- * the eleven routes is rendering below it. Three of the chrome's own
- * contracts need exactly that:
+ * Header, breadcrumb trail, the `main` landmark and the footer used to be
+ * rendered here too, by a `SiteChrome` every page wrapped itself in, because
+ * a Next.js layout cannot know which route renders below it and all three
+ * need the route id. With Cache Components on that turned into a defect: the
+ * App Router keeps the last three route segments mounted inside hidden
+ * `<Activity>` boundaries (`preserving-ui-state.md`), so chrome rendered by a
+ * page stayed in the document after the visitor clicked away — two, then
+ * three `<main id="main">` elements, two headers, two footers. The chrome now
+ * hangs off `app/[lang]/layout.tsx`, above those boundaries, and reads its
+ * route from the router tree (`_chrome.tsx`).
  *
- *  - `site-footer` → `language-switch` links the **equivalent** page in the
- *    other language (TS-001-A7) — it needs the route id;
- *  - `site-header` marks the current job with `aria-current` (TS-004 D4);
- *  - `context-band` and `closing-cta` are "all four jobs minus *this page's*
- *    focus job" and "this page's primary conversion" (TS-006 D5/D6).
+ * What stays here is what was never chrome: two **content** blocks that live
+ * inside `main`, that TS-006 D2 wants "rendered by the shared layout from
+ * `page.meta.ts`, not hand-placed per page", and that are built from the
+ * page's own manifest:
  *
- * The only way a layout could learn the route is `headers()` (or a proxy
- * header), which turns the prerendered shell into a per-request function —
- * the failure mode DEC-045 and TS-010 D8 exist to prevent. So the seam moves
- * one level down: the *frame* is shared, single, and reads `page.meta.ts`;
- * the page passes its manifest and its blocks and writes no band and no
- * closing CTA of its own. `layout.tsx` keeps `<html>`, `<body>` and the
- * skip link, which need no route.
+ *  - `context-band` — "all four jobs minus *this page's* focus job" (D5);
+ *  - `closing-cta` — "this page's primary conversion" (D6).
+ *
+ * A page hands over its manifest and its blocks and writes neither of them.
  */
 
-import { BackToTop } from "@/src/components/back-to-top/back-to-top";
-import { BreadcrumbTrail } from "@/src/components/breadcrumb-trail/breadcrumb-trail";
 import { ClosingCta } from "@/src/components/closing-cta/closing-cta";
 import { ContextBand } from "@/src/components/context-band/context-band";
-import { EnvoyFormMount } from "@/src/components/envoy-form-mount/envoy-form-mount";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
-import { NewsletterBlock } from "@/src/components/newsletter-block/newsletter-block";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
-import { SiteFooter } from "@/src/components/site-footer/site-footer";
-import { SiteHeader } from "@/src/components/site-header/site-header";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { jobLabelKey } from "@/src/lib/pages/page-meta";
-import { ROUTES, trail } from "@/src/lib/routes/routes";
 
 import type { PageMeta } from "@/src/lib/pages/page-meta";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { RouteId } from "@/src/lib/routes/routes";
 import type { ReactNode } from "react";
-
-/**
- * The imprint's own contact address (`content/legal/imprint.md`) — the
- * `lead-fallback` behind the mocked envoy widget must reach a real inbox, so
- * this is read from the legal text rather than invented (TS-016 D6).
- */
-const CONTACT_EMAIL = "jan@schafe-vorm-fenster.de";
 
 /**
  * The band's offer, per locale — the fallback only.
@@ -76,78 +60,6 @@ const BAND_HEADING: Record<Locale, string> = {
   de: "Heute mit einem anderen Anliegen hier?",
   en: "Here for something else today?",
 };
-
-export interface SiteChromeProps {
-  readonly route: RouteId;
-  readonly locale: Locale;
-  /** The five second-level pages carry a visible trail (TS-006 D2, DEC-071). */
-  readonly showTrail?: boolean;
-  /** `/rechtliches` only (inventory §2.2 #18) — a fixed control, never elsewhere. */
-  readonly backToTop?: boolean;
-  /**
-   * This page's first block is a `photo-surface` carrying a photograph, so
-   * the header lies transparent on it and turns solid once it has scrolled
-   * past (Jan's round-3 point 2). The page computes it from its own image
-   * inventory — a hero whose photograph is still missing renders the light
-   * hatch, which paper-coloured header items could not sit on.
-   *
-   * Suppressed where a breadcrumb trail stands between the header and the
-   * hero: there the header is not over the photograph at all.
-   */
-  readonly heroPhoto?: boolean;
-  readonly children: ReactNode;
-}
-
-/**
- * Header · trail · `main` · footer. Everything that is the same on all
- * eleven pages and needs nothing but the route and the language.
- */
-export function SiteChrome({
-  route,
-  locale,
-  showTrail = ROUTES[route].parent !== undefined,
-  backToTop = false,
-  heroPhoto = false,
-  children,
-}: SiteChromeProps) {
-  const d = dictionary(locale);
-  const ancestors = trail(route).slice(0, -1);
-  const trailShown = showTrail && ancestors.length > 0;
-
-  return (
-    <>
-      <SiteHeader current={route} locale={locale} overHero={heroPhoto && !trailShown} />
-      {trailShown ? (
-        <div className="container">
-          <BreadcrumbTrail
-            current={d.pages[route]}
-            items={ancestors.map((ancestor) => ({
-              to: ancestor,
-              label: d.pages[ancestor],
-            }))}
-            label={d.nav.breadcrumb}
-            locale={locale}
-          />
-        </div>
-      ) : null}
-      <main id="main">{children}</main>
-      <SiteFooter
-        contact={
-          <EnvoyFormMount
-            fallbackEmail={CONTACT_EMAIL}
-            kind="contact"
-            locale={locale}
-            sourceRoute={route}
-          />
-        }
-        locale={locale}
-        newsletter={<NewsletterBlock locale={locale} />}
-        route={route}
-      />
-      {backToTop ? <BackToTop /> : null}
-    </>
-  );
-}
 
 /** The closing block of TS-006 D6, as the page hands it over. */
 export type ClosingBlock =
@@ -181,7 +93,8 @@ export type ClosingBlock =
       readonly reassurance?: string;
     };
 
-export interface PageFrameProps extends Omit<SiteChromeProps, "children" | "route"> {
+export interface PageFrameProps {
+  readonly locale: Locale;
   /** The page's `page.meta.ts` — the route, and the only source of the band's and the closing block's job. */
   readonly meta: PageMeta;
   /** The band's own phrasing, from the page's `context-band` content slot. */
@@ -191,8 +104,7 @@ export interface PageFrameProps extends Omit<SiteChromeProps, "children" | "rout
 }
 
 /**
- * The whole page: the chrome, the page's own blocks 1 and 2, and then
- * blocks 3 and 4 built from the manifest.
+ * The page's own blocks 1 and 2, and then blocks 3 and 4 from the manifest.
  *
  * A page never writes a `context-band` or a `closing-cta` itself — it hands
  * over its manifest and, for the repeat case, the label and target its
@@ -202,9 +114,6 @@ export interface PageFrameProps extends Omit<SiteChromeProps, "children" | "rout
 export function PageFrame({
   meta,
   locale,
-  showTrail,
-  backToTop,
-  heroPhoto,
   contextBandHeading,
   closing,
   children,
@@ -214,13 +123,7 @@ export function PageFrame({
   const merged = closing.variant === "merged";
 
   return (
-    <SiteChrome
-      backToTop={backToTop}
-      heroPhoto={heroPhoto}
-      locale={locale}
-      route={meta.route}
-      showTrail={showTrail}
-    >
+    <>
       {children}
 
       {merged ? (
@@ -245,7 +148,7 @@ export function PageFrame({
            exemption the specs carry is F-2-10's mid-flow suppression on
            `/mitmachen/registrieren` and `/dein-kalender/bestellen` (TS-023
            D7 / TS-025, `state/open.md` row 24), and those two pages compose
-           their chrome through `SiteChrome`, never through this branch. */
+           their blocks by hand, never through this component. */
         <MotionReveal>
           <SectionShell as="aside" id="context-band" label={bandHeading} surface="paper">
             {/* The band's own heading, not the component's German default —
@@ -293,6 +196,6 @@ export function PageFrame({
           </MotionReveal>
         </>
       )}
-    </SiteChrome>
+    </>
   );
 }

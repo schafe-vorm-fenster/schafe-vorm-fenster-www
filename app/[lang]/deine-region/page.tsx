@@ -15,6 +15,7 @@ import { ResponsePromise } from "@/src/components/response-promise/response-prom
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
+import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
 import { ctaLabelOnly, interpolate } from "@/src/lib/content/text";
@@ -143,7 +144,7 @@ export default async function Page({
 }) {
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
-  const heroImage = pageImage(page, "deine-region-hero");
+  const heroImage = pageImage(page, HERO_IMAGE_ID.region);
   const territoryImage = pageImage(page, "deine-region-gebietsschnitt");
   const copy = PAGE_COPY[locale];
   const words = dictionary(locale);
@@ -220,7 +221,6 @@ export default async function Page({
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
-      heroPhoto={heroImage?.src !== undefined}
       closing={{ to: "regionQuote", label: ctaLabel, reassurance: undefined }}
       contextBandHeading={undefined}
       locale={locale}

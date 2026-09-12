@@ -1,5 +1,6 @@
 import sheepMark from "@schafe-vorm-fenster/brand-design/logo.svg";
 
+import { NewsletterBlock } from "@/src/components/newsletter-block/newsletter-block";
 import { SkipLink } from "@/src/components/skip-link/skip-link";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import {
@@ -10,6 +11,9 @@ import {
 } from "@/src/lib/i18n/locales";
 import { SITE_ORIGIN } from "@/src/lib/routes/routes";
 import { NOINDEX } from "@/src/lib/seo/indexable";
+
+import { heroPhotoByRoute } from "./_chrome-data";
+import { SiteChrome } from "./_chrome";
 
 import "../styles/brand.css";
 import "../styles/base.css";
@@ -128,25 +132,39 @@ export default async function RootLayout({
   // it can answer 404 *inside* this shell (TS-004 D3.4). It resolves rather
   // than throws; the 404 body is then the TLD default's.
   const locale = resolveLocale((await params).lang);
+  const heroPhoto = await heroPhotoByRoute(locale);
 
   return (
     <html lang={HTML_LANG[locale]}>
       <body>
         {/* The first focusable element of the document; it jumps to `#main`,
-            which `site-chrome` renders (TS-002 D5). */}
+            which `_chrome.tsx` renders (TS-002 D5). */}
         <SkipLink locale={locale} />
         {/* The rest of the chrome — header, breadcrumb trail, the `main`
-            landmark, footer — plus blocks 3 and 4 of TS-006 D2 lives in
-            `_page-frame.tsx`, one component for all eleven pages. A layout
-            receives only `children` and its own `params`, so it cannot know
-            which route renders below it, and every one of those pieces needs
-            the route id: the language switch links the equivalent page
-            (TS-001-A7), the header marks the current job, and the context
-            band and closing CTA are built from the page's `page.meta.ts`
-            (TS-006 D5/D6). Reading the route from a request header instead
-            would make the prerendered shell a per-request function — what
-            DEC-045 and TS-010 D8 forbid. See `_page-frame.tsx`. */}
-        {children}
+            landmark, footer — is **one per document**, and that is why it
+            hangs here rather than off each page (state/open.md rows 97 and
+            204). With Cache Components on, the router keeps the last three
+            route segments mounted in hidden `<Activity>` boundaries, so
+            chrome rendered by a page is still in the document after the
+            visitor has clicked away from it: two `main` landmarks, two
+            `id="main"`. The layout is the one level above those boundaries.
+            It still cannot be told which route renders below it — a layout
+            gets `children` and its own `params`, and reading the route from a
+            request header would make the prerendered shell a per-request
+            function (DEC-045, TS-010 D8) — so `_chrome.tsx` reads it off the
+            router tree instead, which costs nothing at prerender and is what
+            the client updates on a navigation.
+
+            Blocks 3 and 4 of TS-006 D2 stay with the page: they are content
+            inside `main`, built from the page's own `page.meta.ts`
+            (`_page-frame.tsx`). */}
+        <SiteChrome
+          heroPhoto={heroPhoto}
+          locale={locale}
+          newsletter={<NewsletterBlock locale={locale} />}
+        >
+          {children}
+        </SiteChrome>
       </body>
     </html>
   );
