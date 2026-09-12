@@ -8,6 +8,15 @@ import {
 } from "@/src/lib/routes/not-found-routing";
 import { CSP_HASHES_ASSET_PATH, resetScriptHashCache } from "@/src/lib/security/csp-hashes";
 
+// F-3-9 needs `placeHop` to throw, which nothing in the tree could make it do
+// — `resolvePlace` swallows its own errors and `searchPlaces` has a tier-3
+// snapshot. The module is mocked and its real implementation restored per
+// call, so every other test in this file still exercises the real hop.
+vi.mock("@/src/lib/routes/place-hop", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/src/lib/routes/place-hop")>();
+  return { ...actual, placeHop: vi.fn(actual.placeHop) };
+});
+
 /**
  * `proxy.ts` had no test of its own (F-2-36). These are the guarantees it
  * makes for *every* request on the site — the canonical-host redirect
@@ -345,5 +354,48 @@ describe("TS-021-A7 (F-2-49): the re-resolution hop is an HTTP redirect", () => 
       const response = await proxy(request(url));
       expect(response.status, url).not.toBe(307);
     }
+  });
+});
+
+/**
+ * F-3-9 — the place hop's failure arm leaves a trace.
+ *
+ * `proxy.ts` catches a `placeHop` throw and falls through to the render, on
+ * purpose: an upstream that cannot answer must never cost a visitor her page.
+ * The arm was empty, and its failure mode is the defect it exists to fix —
+ * the render's own `redirect()` produces a 200 with an empty document on a
+ * production build (F-2-49). No test made `placeHop` throw, so neither the
+ * fall-through nor the silence had ever been exercised.
+ */
+describe("F-3-9: a failing place hop is logged, and still costs no page", () => {
+  it("logs the pathname and the error, and serves the request anyway", async () => {
+    const placeHop = vi.mocked(await import("@/src/lib/routes/place-hop")).placeHop;
+    const logged: unknown[][] = [];
+    const error = vi.spyOn(console, "error").mockImplementation((...args: unknown[]) => {
+      logged.push(args);
+    });
+
+    placeHop.mockRejectedValueOnce(new Error("geo-api unreachable"));
+
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/dein-ort?ort=07743"),
+    );
+
+    // The visitor still gets her page: no redirect, no 404 rewrite.
+    expect(response.status).toBe(200);
+    expect(response.headers.get("x-middleware-rewrite") ?? "").not.toContain(
+      NOT_FOUND_PATH,
+    );
+
+    expect(logged, "the arm is no longer silent").toHaveLength(1);
+    expect(String(logged[0]?.[0])).toContain("placeHop failed");
+    expect(logged[0]?.[1]).toMatchObject({
+      pathname: "/dein-ort",
+      error: "geo-api unreachable",
+    });
+    // `?ort=` is attacker-controlled text and is not echoed into the log.
+    expect(JSON.stringify(logged[0])).not.toContain("07743");
+
+    error.mockRestore();
   });
 });

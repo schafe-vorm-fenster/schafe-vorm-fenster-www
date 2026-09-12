@@ -93,8 +93,22 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   if (!blocked) {
     try {
       hop = await placeHop(request.nextUrl.pathname, request.nextUrl.searchParams);
-    } catch {
+    } catch (error) {
       hop = undefined;
+      // F-3-9: the fall-through is correct and stays — what was missing is
+      // that nothing anywhere said it happened. This arm is hard to reach
+      // (`resolvePlace` swallows its own errors, `searchPlaces` has a tier-3
+      // snapshot), and its failure mode is the defect it exists to fix: the
+      // request falls through to the render, whose own `redirect()` then
+      // produces a 200 with an empty document on a production build — exactly
+      // the state F-2-49 described. If that is ever the answer a visitor
+      // gets, the log is the only place it will be visible.
+      console.error("[proxy] placeHop failed; falling through to the render", {
+        // The pathname only. `?ort=` is attacker-controlled text, and a log
+        // line is not a place to echo it.
+        pathname: request.nextUrl.pathname,
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   }
 
