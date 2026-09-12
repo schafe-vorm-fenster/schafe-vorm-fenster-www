@@ -35,6 +35,8 @@ export interface PlaceSearchProps extends DataStateProps, Omit<LinkOptions, "has
   readonly tone?: "light" | "dark";
   /** The input's DOM id — required where a page renders the module twice. */
   readonly id?: string;
+  /** Native validation, where an empty submit is not a page state (F-3-14). */
+  readonly required?: boolean;
   readonly className?: string;
 }
 
@@ -71,6 +73,7 @@ export function PlaceSearch({
   submitDataCta,
   tone = "light",
   id,
+  required = false,
   state = "ready",
   className,
 }: PlaceSearchProps) {
@@ -104,6 +107,7 @@ export function PlaceSearch({
         locale={locale}
         placeholder={resolvedPlaceholder}
         query={query}
+        required={required}
         submitDataCta={submitDataCta}
         submitLabel={submitLabel}
         to={to}

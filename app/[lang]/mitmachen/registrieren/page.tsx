@@ -1,5 +1,6 @@
 import { Button } from "@/src/components/button/button";
 import { ChoiceGroup } from "@/src/components/choice-group/choice-group";
+import { EmptyStateBlock } from "@/src/components/empty-state-block/empty-state-block";
 import { ContextBand } from "@/src/components/context-band/context-band";
 import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
@@ -8,6 +9,8 @@ import { StepIndicator } from "@/src/components/step-indicator/step-indicator";
 import { appendCampaignParams, extractCampaignParams } from "@/src/lib/analytics";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
+import { ctaLabelOnly } from "@/src/lib/content/text";
+import { fillTemplate } from "@/src/lib/pages/demo-content";
 import { APP_ORIGIN } from "@/src/lib/live/app-handover";
 import { jobLabelKey } from "@/src/lib/pages/page-meta";
 import { readPlaceParameter } from "@/src/lib/pages/place-parameter";
@@ -73,6 +76,12 @@ const HANDOVER_HEADING = { de: "Fast geschafft", en: "Almost there" } as const;
 /** The step's advance label — `choice-group`'s own default is German. */
 const CONTINUE_LABEL: Record<Locale, string> = { de: "Weiter", en: "Continue" };
 
+/** The founding CTA's `{ort}` slot, where this page may not name a place. */
+const GENERIC_PLACE: Record<Locale, { ort: string; place: string }> = {
+  de: { ort: "deinen Ort", place: "deinen Ort" },
+  en: { ort: "your place", place: "your place" },
+};
+
 const ANSWERED_PLACE: Record<Locale, { label: string; change: string }> = {
   de: { label: "Dein Ort", change: "Ort ändern" },
   en: { label: "Your place", change: "Change place" },
@@ -116,6 +125,45 @@ export default async function Page({
   // are `place-parameter.ts`'s, and every flow step gets them.
   const rawOrt = readPlaceParameter(rawQuery.ort);
   const lookup = await resolveRegisterPlace(rawOrt);
+
+  /**
+   * F-3-14 — step 1 answers a search that found nothing.
+   *
+   * The boundary-tester persona clicked "Suchen" with the field empty, and
+   * with 80 characters of junk: both times the page silently re-rendered
+   * itself with `?ort=` appended and nothing else changed — no validation
+   * message, no "not found" state, no visible difference at all, on step 1 of
+   * a conversion path (C3-B-2).
+   *
+   * The answer is not designed here, it is **reused**: the founding page is
+   * what this site says to an uncovered place, and its acknowledgment slot
+   * already writes the words. The **placeless** half of that slot is the one
+   * this page may use — TS-023-A5 is explicit that an unresolvable value is
+   * "echoed only in the search field", and the founding page's
+   * "{ort} steht noch nicht…" variant would put it in body text. So the
+   * heading names no place and the value travels in the call to action's URL,
+   * to the one page TS-021 D6 does let it name.
+   *
+   * The empty-field half needs no copy at all: the field asks the browser to
+   * insist (`required` below), so an empty submit never leaves the page.
+   */
+  const searchSubmitted = firstParam(rawQuery.ort) !== undefined;
+  const placeNotFound = searchSubmitted && lookup.kind === "unresolved";
+
+  // The founding page's own acknowledgment slot, verbatim — the same words a
+  // visitor gets for the same value one click away, in her language, with the
+  // placeless fallback the artifact already writes for a dropped value.
+  const founding = placeNotFound ? await pageContent("placeStart", locale) : undefined;
+  const foundingAck = founding === undefined ? undefined : slot(founding, "dein-ort-starten-1-ack");
+  const foundingCta = founding === undefined ? undefined : slot(founding, "dein-ort-starten-6-cta");
+  // Index 1 is the artifact's "Headline (ohne Ort, Fallback)" — authored
+  // copy, not a blank, and it names no place (TS-023-A5).
+  const notFoundHeadline = foundingAck === undefined ? "" : (fieldAt(foundingAck.blocks, 1) ?? "");
+  const notFoundLead = foundingAck === undefined ? undefined : fieldAt(foundingAck.blocks, 2);
+  const notFoundCtaLabel =
+    foundingCta === undefined
+      ? ""
+      : fillTemplate(ctaLabelOnly(foundingCta.cta ?? "") ?? "", GENERIC_PLACE[locale]);
   const resolvedOrt = lookup.kind === "resolved" ? lookup.place.slug : undefined;
   const answeredPlace = lookup.kind === "resolved" ? lookup.place.name : undefined;
 
@@ -166,6 +214,7 @@ export default async function Page({
               label={fieldAt(ortSlot.blocks, 0) ?? ""}
               locale={locale}
               query={carried}
+              required
               state={lookup.kind === "ambiguous" ? "mocked" : "ready"}
               suggestions={
                 lookup.kind === "ambiguous"
@@ -178,6 +227,26 @@ export default async function Page({
               }
               to="register"
             />
+            {placeNotFound ? (
+              <div data-place-not-found="">
+                <EmptyStateBlock
+                  announced
+                  cta={
+                    <Button
+                      locale={locale}
+                      onward
+                      query={{ ...carried, ort: rawOrt }}
+                      to="placeStart"
+                      variant="primary-light"
+                    >
+                      {notFoundCtaLabel}
+                    </Button>
+                  }
+                  headline={notFoundHeadline}
+                  lead={notFoundLead}
+                />
+              </div>
+            ) : null}
           </>
         ) : null}
 

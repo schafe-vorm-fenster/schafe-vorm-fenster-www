@@ -28,6 +28,15 @@ export interface SearchFieldProps extends Omit<LinkOptions, "hash"> {
    * element per page carries it (TS-006 D3).
    */
   readonly submitDataCta?: string;
+  /**
+   * Native validation, where an empty submit is not a page state (F-3-14).
+   *
+   * Off by default, and deliberately: on `/` and `/dein-ort` an empty search
+   * is TS-020-A9's own row — the value is dropped and stage 0 renders at 200,
+   * which is a designed answer. Step 1 of the registration flow has no such
+   * state, so there the field asks the browser to insist.
+   */
+  readonly required?: boolean;
   readonly className?: string;
 }
 
@@ -58,6 +67,7 @@ export function SearchField({
   defaultValue,
   id = "ort-suche",
   submitDataCta,
+  required = false,
   className,
 }: SearchFieldProps) {
   // F-2-33: the two defaults were German literals, so the submit control of
@@ -98,6 +108,7 @@ export function SearchField({
           maxLength={MAX_PLACE_LENGTH}
           name={name}
           placeholder={resolvedPlaceholder}
+          required={required}
           spellCheck={false}
           type="search"
         />
