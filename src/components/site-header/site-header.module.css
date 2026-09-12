@@ -312,6 +312,10 @@
   background: var(--color-neutral-ink);
 }
 
+.dialogClose {
+  flex: none;
+}
+
 .dialogBar {
   align-items: center;
   display: flex;

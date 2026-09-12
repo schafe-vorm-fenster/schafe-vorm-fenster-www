@@ -198,7 +198,10 @@ export function HeaderShell({
         <div className={`container ${styles.dialogBar}`}>
           {overlayBrand}
           <MenuToggle
-            className={styles.burger}
+            // Not `.burger`: that class is `display: none` from the switch
+            // point up, and the overlay's own close control must never
+            // inherit that — a modal whose close button is hidden is a trap.
+            className={styles.dialogClose}
             label={labels.close}
             onClick={toggle}
             variant="close"
