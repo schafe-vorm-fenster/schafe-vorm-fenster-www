@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   isUnservablePath,
@@ -82,5 +82,26 @@ describe("notFoundLocale: TS-001 D1/D4", () => {
 
   it("prefers the path prefix over the domain default", () => {
     expect(notFoundLocale("/en/anything", "de")).toBe("en");
+  });
+});
+
+describe("the component gallery is a tool, not a page", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("answers for itself wherever it exists", () => {
+    for (const env of ["preview", "development", ""]) {
+      vi.stubEnv("VERCEL_ENV", env);
+      expect(isUnservablePath("/dev/components"), env).toBe(false);
+    }
+  });
+
+  it("is routed to the 404 in a production build, where it calls `notFound()` itself", () => {
+    // The one URL that would otherwise still reproduce the defect this module
+    // removes: an in-route `notFound()` under Cache Components renders an
+    // empty document (F-2-70).
+    vi.stubEnv("VERCEL_ENV", "production");
+    expect(isUnservablePath("/dev/components")).toBe(true);
   });
 });
