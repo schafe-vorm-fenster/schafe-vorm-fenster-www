@@ -14,20 +14,30 @@ sources:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
+  - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
+  - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
+  - "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"
+  - "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
+  - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
+  - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
+  - "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"
+  - "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"
   - "ia"
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — 6 sourced, 3 generated (slots 6a, 8 from Phase 2; slot 7 demo proof cards added under the prototype completeness override — state/open.md Dummy-Content)"
+provenance: "sourced — every slot. Slot 6a names Groß Kiesow against the real record anchored there, slot 7 carries three real publish-weighted reference cases instead of demo quotes, and slot 8 cites the offering record together with the 2022 Nordkurier entry behind the permanence commitment; all of those are clearance: pending (Q-014, Q-045)"
 compliance_check: "state/content-map.md#compliance-checks — TS-022"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 open_points:
-  - "state/open.md #17 — permanence-promise reassurance (slot 8) and the stage-0 reference place (slot 6a) are generated/editorial-assumption content pending a hub record"
+  - "state/open.md #17 — the permanence promise is now cited from `community-calendar` plus the 2022 Nordkurier media-echo entry; whether a proof element of its own gets minted stays open, and the press record has no `usage_rights` yet (Q-045)"
 ---
 
 # Mitmachen (`/mitmachen`)
@@ -131,18 +141,19 @@ abgedeckter Ort als Daten (WEB-F-024).
 
 ### Slot 6a — Referenzort für Stufe 0 (kein Kontext bekannt)
 
-<!-- id: mitmachen-6a-reference-place; content_type: configuration; provenance: generated; derived_from: []; status: draft -->
+<!-- clearance: pending — `zschiesche-gross-kiesow` steht auf `usage_rights: unverified` (Q-014). Der Ort selbst ist eine Konfiguration, kein Zitat; zitiert wird hier nichts. -->
+<!-- source_note: Ehrlichkeitsregel „das Live-Beispiel ist immer ein real abgedeckter Ort" aus gtm:concept/website-information-architecture.concept.md, Seitenbrief `/dein-ort/starten` („Empty-state rule"). -->
+<!-- id: mitmachen-6a-reference-place; content_type: configuration; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; status: draft -->
 
-**Redaktionelle Annahme (kein erfundener Datensatz):** Solange keine
-Quelle einen Referenzort für Stufe 0 benennt (TS-022 Open Points), setzt
-diese Seite **Groß Kiesow** als konfigurierten Beispielort — ein
-tatsächlich abgedeckter Ort mit dokumentierter Aktivität
-(`zschiesche-gross-kiesow`, Bürgermeisterin-Zitat, wenn auch heute
-`unverified`, ist an diesem Ort verankert). Kein erfundener Ort, keine
-erfundenen Termine — die Auswahl ist eine editorische Entscheidung, keine
-generierte Behauptung, und ist als solche in `state/open.md` #17
-registriert. Zu ersetzen, sobald Content/Editorial einen anderen oder
-zusätzlichen Referenzort benennt.
+**Referenzort (Stufe 0):** Groß Kiesow
+
+Solange kein Kontext bekannt ist, zeigt das Live-Beispiel Groß Kiesow —
+einen real abgedeckten Ort, für den ein eigener Beleg im Hub liegt
+(`zschiesche-gross-kiesow`, Zitat der Bürgermeisterin Dr. A. Zschiesche
+von 2022, Freigabe steht aus). Kein erfundener Ort, keine erfundenen
+Termine: Das Modul zeigt die echten Daten dieses Orts. Zu ersetzen,
+sobald Content/Editorial einen anderen oder zusätzlichen Referenzort
+benennt (`state/open.md` #44).
 
 ## Slot 7 — Belegblock (3 Elemente, publish-gewichtet)
 
@@ -152,38 +163,56 @@ Auswahl und Reihenfolge sind Aufgabe der Relevanz-Engine mit dem
 Gewichtsprofil „publish-our-dates" (TS-005 D5, DEC-048). Ein leerer Slot
 schwächt den Anspruch, wird aber nie durch erfundenen Text ersetzt.
 
-<!-- id: mitmachen-7-proof-demo; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+### Belegkarten, publish-gewichtet
 
-**Demo-Elemente (Prototyp, `Demo-Daten`-Badge):** Solange keine Auswahl
-freigegeben ist, zeigt der Prototyp drei beispielhafte Karten statt
-einer leeren Fläche:
+<!-- clearance: pending — alle drei Belege stehen auf `usage_rights: unverified` (Q-014): `lehre-lelender` (schriftliche Freigabe der Stiftung steht aus), `volkshochschule-uecker-randow` (Freigabe der VHS steht aus), `zukunftswege-ost-newsletter` (Freigabe steht aus). Die geschützte Vorschau zeigt sie, der Härtungslauf vor dem Go-live klärt sie. -->
+<!-- source_note: Gewichtung „publish our dates" aus gtm:concept/website-relevance-model.concept.md (job_fit) und der Job-Tabelle in gtm:concept/website-communication-principles.concept.md Prinzip 1. -->
+<!-- id: mitmachen-7-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"]; status: draft -->
 
-1. „Ein Foto vom Flyer per WhatsApp, fertig — mehr Aufwand war es wirklich nicht." — Vorsitzende, Kulturverein Beispielgemeinde Musterdorf
-2. „Unsere Termine erreichen jetzt auch die Nachbarorte, ohne dass wir dafür etwas Neues gelernt haben." — Freiwillige Feuerwehr, Beispielort Musterhagen
-3. „Wir tragen unsere Gottesdiensttermine seit Kurzem selbst ein, direkt aus dem bestehenden Kalender." — Kirchengemeinde, Beispielgemeinde Musterdorf
+**Kandidaten (drei, alle veröffentlichen selbst):**
 
-Vereine, Orte und Zitate sind frei erfunden und erkennbar exemplarisch;
-sie ersetzen kein freigegebenes Proof-Element.
+1. „Die Gemeinde Lehre betreibt den Kalender für ihre 17 Orte unter eigenem Namen: LeLender." — Stiftung Lebendiges Lehre, Lehre (Niedersachsen)
+2. „Die Volkshochschule veröffentlicht ihr komplettes Kursprogramm über den Dorfkalender." — Volkshochschule Uecker-Randow, Pasewalk
+3. „Der Newsletter des Netzwerks sammelt seine Termine über den Dorfkalender." — Zukunftswege Ost-Vorpommern, Ost-Vorpommern
+
+Drei reale Einrichtungen, die selbst veröffentlichen — das ist genau der
+Job dieser Seite. Namen, Orte und Zahlen stehen so in den Belegen: die 17
+Orte und der Name „LeLender" aus `lehre-lelender`, das Kursprogramm am
+Standort Pasewalk aus `volkshochschule-uecker-randow` (dokumentiert vom
+Kulturlandbüro Uecker-Randow, Maria Elsner, September 2024), die
+Newsletter-Termine aus `zukunftswege-ost-newsletter` (dokumentiert im
+Porträt von Zukunftswege Ost-Vorpommern, Januar 2026).
 
 ## Slot 8 — Abschluss-CTA mit Permanenz-Zusicherung
 
-<!-- id: mitmachen-8-closing; content_type: closing-cta; provenance: generated; derived_from: []; status: draft -->
+<!-- clearance: pending für den Presse-Beleg — der Nordkurier-Eintrag von 2022 trägt kein `usage_rights` (Q-045, `state/open.md` #1). Der Angebots-Datensatz selbst ist frei verwendbar. -->
+<!-- id: mitmachen-8-closing; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
 
 **CTA-Label (identisch zu Slot 1, primär):** Kostenlos anmelden
 
-**Zusicherungstext (generiert, allgemein, ohne Zahl oder Datum):** Kostenlos anmelden, kostenlos bleiben. Dafür steht der Dorfkalender, seit es ihn gibt.
+**Zusicherungstext:** Kostenlos anmelden, kostenlos bleiben — das steht seit 2022 öffentlich so da.
 
-Kein Hub-Beleg deckt diese Zusicherung direkt (das öffentliche
-Versprechen von 2022 liegt nur in `media-echo`, nicht in `proof/` — TS-022
-Open Points, `state/open.md` #17). Der Satz bleibt bewusst allgemein,
-nennt keine Jahreszahl und keine Größenordnung, und ist als
-`provenance: generated` markiert. Sobald ein zitierfähiges Proof-Element
-existiert, ersetzt es diesen Satz.
+Der Beleg liegt jetzt vor, wenn auch nicht in `proof/`: Der
+Offering-Datensatz `community-calendar` nennt den freien Zugang
+ausdrücklich „a public commitment, not a pricing decision that can be
+quietly reversed", und der Nordkurier-Artikel von 2022 hält dieselbe
+Zusage fest: „Das Basisangebot, das unter anderem beliebig viele Termine
+pro Dorf oder Gemeinde erlaubt, werde es auch danach bleiben." Der Satz
+nennt das Jahr, weil das Jahr belegt ist, und keine Größenordnung, weil
+es dafür keinen Beleg gibt. Offen bleibt, ob dafür ein eigenes Proof-Element
+entsteht (`state/open.md` #17).
 
 ## Kontextband und Abschluss
 
+<!-- source_note: Angebotsformulierung statt Menü aus gtm:concept/website-communication-principles.concept.md Prinzip 2; die drei Jobs und ihre Formulierung aus der Job-Tabelle in Prinzip 1. Beantwortet state/open.md Zeile 95 für diese Seite: eigener Bandtext statt des geteilten Home-Satzes. -->
 <!-- id: mitmachen-9-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
 
-Von Layout/TS-006 gerendert — kein eigener Text dieser Seite über die
-drei Nicht-Fokus-Jobs hinaus (siehe `home-10-context-band` für die
-kanonischen Job-Formulierungen).
+**Kicker:** Heute mit einem anderen Anliegen hier?
+
+- **Sehen, was los ist:** Du willst wissen, was in deinem Ort als Nächstes ansteht? → `/dein-ort`
+- **Eigenen Kalender betreiben:** Du willst einen Kalender unter eigenem Namen, auf eurer eigenen Website? → `/dein-kalender`
+- **Wer dahintersteckt:** Du willst wissen, wer den Dorfkalender macht? → `/ueber-uns`
+
+Fokusjob dieser Seite ist „publish our dates". Das Band steht unter dem
+Hauptargument und über der Abschluss-CTA (Prinzip 2) und ist als Frage
+formuliert, nicht als Menü.
