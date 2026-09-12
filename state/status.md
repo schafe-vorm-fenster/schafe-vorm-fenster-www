@@ -6,6 +6,7 @@ Current test round: closed (gate-2 loop 3 rounds; M5 roundtrip + final fix round
 
 ## Done
 
+- Workstream 1 content follow-up (2026-09-12): all generated proof/testimonial/archive slots rewritten from real sources — 31 real media-echo entries in the archive, real proof cases and quoted testimonials on /, /dein-ort, /mitmachen, /dein-kalender, /deine-region, /ueber-uns (origin story + cleared founder quote); 12+ records ship with clearance pending (row 160/179 = go-live checklist); pages now derive demo labelling from the artifact; five new slots wired; still generated for lack of any source: AI-use sentence (row 19), response-time promise (row 20, withheld), accessibility statement (row 21), step-2 enum (row 18). pnpm check 1085 tests, e2e 509/0; preview https://schafe-vorm-fenster-aqbxcsrgs-schafe-vorm-fenster.vercel.app
 - Final fix round (12/12, plan/round-4.md; F-3-10 = IntersectionObserver bug fixed), preview https://schafe-vorm-fenster-ihuc6flgy-schafe-vorm-fenster.vercel.app e2e 509/0 prod build; QA M5 run 2: 12/12 resolved, 0 critical / 0 high, 285/28/45; Customer FINAL: prototype milestone ACCEPTED, R-1…R-11 unresolved with reasons; run report reports/run-report.md — 2026-09-12
 - M5 roundtrip on preview 5jupiff6w: QA run 1 285 pass / 28 fail / 45 n-t, 0 critical / 0 high, e2e 471/0 + 464/0 (reports/qa/M5-run-1.md); UAT: all nine walks reach their goal, 9/19 gate-2 hesitations gone (reports/uat/M5.md); chaos ×4 on Playwright: no double-fired events, all gate-2 defects confirmed fixed, new observations triaged to F-3-10…23; PM final decisions: 12 fix-now / 11 open-list + handover section (plan/round-4.md) — 2026-09-12
 - M5 fix round: F-2-49 (proxy-level 307 hop — Cache Components serialises page redirect() into the flight payload), F-2-70 (404 via two-segment rewrite, JS-off full body both locales, closes row 37), F-2-69 (archive CLS 0.22→0), F-2-33/41 residue, F-2-71 (six hydration races), F-2-72/73/74 (real titles/descriptions from content `seo:` blocks, no geoname ids, EN legal notice); pnpm check 1073 tests; e2e 471/0 prod build, 464/0 preview; Lighthouse CLS 0; verification traps rows 147/148 — 2026-09-12
@@ -46,7 +47,7 @@ Current test round: closed (gate-2 loop 3 rounds; M5 roundtrip + final fix round
 
 ## In progress
 
-- Workstream 1 (content follow-up, started on Jan's instruction 2026-09-12): replace Dummy-Content/demo slots with texts from real hub + gtm sources; two Content agents (group 1: home/dein-ort/starten/mitmachen/registrieren; group 2: kalender/bestellen/region/ueber-uns/archiv/rechtliches)
+- — (workstream 1 closed; next: Jan's review, then workstreams 2–4 in plan/round-4.md)
 
 ## Pending
 
