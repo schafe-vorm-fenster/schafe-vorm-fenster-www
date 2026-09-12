@@ -15,7 +15,12 @@ Environments both findings and evidence were taken in:
   `https://schafe-vorm-fenster-5jupiff6w-schafe-vorm-fenster.vercel.app`,
   reached through the automation bypass.
 
-Nine findings: **0 critical · 0 high · 5 medium · 4 low.**
+Nine findings from the QA sweep: **0 critical · 0 high · 5 medium ·
+4 low.** The PM triage of the four round-3 chaos runs and the M5 UAT
+walk adds **F-3-10 … F-3-23** at the end of this file, so the round
+carries **23 findings: 0 critical · 0 high · 13 medium · 10 low**.
+Every finding here carries a `Round decision`; the round's work split
+and the dismissals are `plan/round-4.md`.
 
 ---
 
@@ -60,6 +65,14 @@ Nine findings: **0 critical · 0 high · 5 medium · 4 low.**
   that string does match the accessible name. The violation is caused
   by markup that omits whitespace between two visual lines, not by a
   wrong label. That is why this is medium, not high.
+- Round decision: **fix-now**
+- Reasoning: A serious WCAG 2.1 Level A violation on 48 nodes of every route, and
+  the cheapest fix in the file — whitespace between the two wordmark line
+  spans, or the whole visible string inside the `aria-label`. It turns two
+  `fail` verdicts into `pass`. Enable `label-content-name-mismatch` in
+  `e2e/a11y.spec.ts` in the **same** change and make the sweep fail on
+  *presence* rather than on impact, or TS-002-A1 stays unenforced and the
+  next round re-discovers this one.
 
 ---
 
@@ -106,6 +119,15 @@ Nine findings: **0 critical · 0 high · 5 medium · 4 low.**
   LCP is an image score lowest — `/` 96 (LCP 2.8 s) and `/ueber-uns` 97
   (LCP 2.6 s) — while the text-LCP routes score 100 (`/dein-ort` LCP
   1.0 s, `/mitmachen/registrieren` LCP 1.2 s). Same preview, same run.
+- Round decision: **fix-now (the `/ueber-uns` half only)**
+- Reasoning: Split, because the finding is two things. The `/ueber-uns` half is one
+  prop — `priority` on the declared LCP image — and it closes the only lazy
+  `<img>` on the page. The `photo-surface` half on `/` and `/dein-ort` is a
+  TS-003 D2 conversation, not a page fix: a CSS `background-image` can carry
+  neither `loading` nor `fetchpriority`, so A8's second and third clauses are
+  unreachable for those two pages as long as the hero is painted that way.
+  That half goes **open-list**, to the rendering/performance owner. Name both
+  halves in the commit message so the retest can tell which one moved.
 
 ---
 
@@ -134,6 +156,12 @@ Nine findings: **0 critical · 0 high · 5 medium · 4 low.**
 - Not part of this finding: there is no Lighthouse CI job. That is
   TS-015-A9, which `plan/gate-2-scope.md` §4 keeps out of scope; A1's
   *numbers* are what this finding is about.
+- Round decision: **open-list**
+- Reasoning: A two-point gap on two of five routes, and the LCP it is made of is 2.8 s
+  spent on a placeholder SVG hero that the content follow-up replaces anyway
+  — optimising it now measures the placeholder. Performance owner, after the
+  prototype. Named at the acceptance rather than quietly fixed, per QA's own
+  recommendation.
 
 ---
 
@@ -156,6 +184,11 @@ Nine findings: **0 critical · 0 high · 5 medium · 4 low.**
   `Save-Data`, no `prefers-reduced-data` occurs in `app/` or `src/`.
   The criterion's threshold is `[PROPOSED]`, but the measurement is
   zero, so no threshold makes it pass.
+- Round decision: **open-list**
+- Reasoning: A6 needs a reduced-data image pipeline that exists nowhere in the tree:
+  low-res variants, a request-header read, a list-mode map module. That is a
+  work package, not an hour, and the criterion's threshold is still
+  `[PROPOSED]`. Named at the acceptance alongside F-3-3.
 
 ---
 
@@ -178,6 +211,12 @@ Nine findings: **0 critical · 0 high · 5 medium · 4 low.**
   label reads `Dieses Feld bitte frei lassen` on `/en/your-region/quote`
   too. The wrapper is `aria-hidden="true"` and positioned at
   `x = -9999`, so it reaches neither eye nor screen reader.
+- Round decision: **fix-now**
+- Reasoning: One `alt` string in one content file, on the English surface a naive
+  visitor meets. Low, and `plan/process.md` puts low polish inside M5's
+  budget. The honeypot's German label recorded under the same finding stays
+  as it is — `aria-hidden`, off-screen, reaching neither eye nor screen
+  reader.
 
 ---
 
@@ -219,6 +258,12 @@ Nine findings: **0 critical · 0 high · 5 medium · 4 low.**
   ran it in isolation; it did not run the server. Same lesson as
   F-2-36's correction: a code-path argument is a hypothesis until it
   has been executed.
+- Round decision: **open-list**
+- Reasoning: Measured rather than inferred: the case variant serves the full page and
+  its `<link rel="canonical">` points at the canonical URL, so a crawler
+  consolidates correctly and no visitor sees anything odd. One row in
+  `localeRedirects()` whenever a review wants the duplicate gone — the same
+  call F-2-8 got, for the same reason.
 
 ---
 
@@ -261,6 +306,15 @@ Nine findings: **0 critical · 0 high · 5 medium · 4 low.**
   characters of attacker-chosen text, so the tier-2 `last-good`
   entries — the site's own degradation safety net — can be evicted by
   churn.
+- Round decision: **open-list**
+- Reasoning: Latent by measurement, not by hope: `hasRealBackend("communityBySlug")`
+  is false in every environment (`state/open.md` row 77), so every one of
+  these calls answers from the in-process mock today. It becomes real on the
+  day the token is provisioned — the same day the hardening round touches
+  row 77 — and tuning the caching of a mock now would be tuning the wrong
+  thing. Carried as `state/open.md` row 150; the shared-cache-key half goes
+  with it, and it is the one finding this round hands the hardening round
+  with a name.
 
 ---
 
@@ -281,6 +335,11 @@ Nine findings: **0 critical · 0 high · 5 medium · 4 low.**
   "RUM: Vercel Speed Insights (cookieless)" as the production
   mechanism, and switching it on from the dashboard would silently
   break the beacon with nothing in the repository to explain why.
+- Round decision: **fix-now**
+- Reasoning: Three strings in `RESERVED_PREFIXES`. TS-003 D7 names Vercel Speed
+  Insights as the production RUM mechanism, and switching it on from the
+  dashboard would silently break the beacon with nothing in the repository to
+  explain why. The cheapest insurance in the list.
 
 ---
 
@@ -302,6 +361,11 @@ Nine findings: **0 critical · 0 high · 5 medium · 4 low.**
   swallows its own errors and `searchPlaces` has a tier-3 snapshot —
   but if it is ever reached, nothing anywhere says so. No test makes
   `placeHop` throw.
+- Round decision: **fix-now**
+- Reasoning: One log line in an empty catch arm on a conversion-path hop, plus the
+  test that makes `placeHop` throw. The fall-through itself is correct and
+  stays — an upstream that cannot answer must not cost a visitor her page —
+  what is missing is that nothing anywhere says it happened.
 
 ---
 
@@ -339,3 +403,368 @@ Nine findings: **0 critical · 0 high · 5 medium · 4 low.**
 | F-2-47 | **unchanged** | zero outbound `href="http…"` on `/ueber-uns/archiv` other than the two hreflang self-links. |
 | F-2-53 | **unchanged** | `/dein-kalender/bestellen?kreis=musterkreis` reads "**1 Orte ausgewählt**"; `/en/your-calendar/order?kreis=musterkreis` reads "**1 places selected**". Low, open list, `plan/process.md` puts it in M5's budget. |
 | F-2-27 | **unchanged, preview-only** | one console error per route on the preview (48/48 route-viewport pairs), all the `vercel.live/_next-live/feedback/feedback.js` CSP block. Local: zero console errors on all 48. |
+
+---
+
+# PM triage — chaos runs and UAT (F-3-10 … F-3-23)
+
+Per `.agents/roles/project-manager.md`, every chaos observation and every
+UAT signal becomes a finding, a work package, or a one-line dismissal.
+The dismissals are in `plan/round-4.md`; what survives as a defect is
+below, with the severity the PM assigns (`plan/process.md`) and the chaos
+or UAT id it came from. These are **not** QA measurements — they are
+naive-eye and persona observations promoted to findings, and the round's
+retest verifies them the same way it verifies F-3-1 … F-3-9.
+
+Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
+
+---
+
+## F-3-10 — A screen-height blank band sits between the first screen and the footer on every place-result page
+
+- Severity: medium
+- Source: uat (M5 walk, phone 360×640 and desktop 1280×800, DE and EN)
+- Where: `/dein-ort`, `/en/your-place`, `/dein-ort/starten` — every
+  variant walked (dates, no dates, founding page) · `app/[lang]/_islands.tsx`,
+  `app/[lang]/_page-frame.tsx` · TS-020, TS-021, TS-008
+- Steps:
+  1. Open `/dein-ort?ort=07743` on the preview at 360 px.
+  2. Scroll past the postcode search, the headline and the date list.
+- Observed: roughly a full screen's height or more of blank white before
+  the footer starts, with no loading indicator and nothing to suggest the
+  page is unfinished rather than broken. UAT reports the content that
+  should fill it — the narrative "why this matters" cards and the "Diese
+  Woche in der Nähe" section — as **present in the page's text but never
+  visible on screen** in any of the walks. Same gap on the founding page,
+  between the green "Was es braucht…" band and the footer, where an example
+  events section is likewise in the text and not on screen.
+- Expected: either the module renders, or it is removed — TS-009 D6's own
+  rule ("a module that has nothing is removed, never zeroed").
+- Not measured by QA: the M5 sweep did not report this. Whether it is a
+  reserved-space height left standing after an empty island, a module
+  rendering with `display` or `visibility` lost, or the Suspense/PPR
+  tension of `state/open.md` row 145 seen from the visitor's side, is
+  exactly what has not been established.
+- Round decision: **fix-now — verify first, and QA verifies it either way**
+- Reasoning: this is the one thing in the whole triage that a reviewer or
+  a first-time user trips over *first*, and it sits on the primary
+  conversion path in both languages and on both viewports. It is also the
+  one thing nobody has reproduced outside the UAT walk, so it enters the
+  round as a **verification** before it enters as a fix: the developer
+  reproduces it on the local production build (timebox ~15 minutes). If
+  the cause is a reserved-space or empty-module height, he closes it in
+  this round. If it turns out to be row 145's Suspense/PPR tension, he
+  stops there, writes the evidence into this finding, and it moves to the
+  open list with the rendering-and-resilience owner — the round does not
+  buy an architecture. Either way **QA verifies this finding at the
+  retest**: a blank screen on a conversion path that nobody has measured
+  is not something the final acceptance should meet for the first time.
+
+---
+
+## F-3-11 — The newsletter mock's native submit wipes every other form on the page, resets the flow routes to step 1, and confirms nothing
+
+- Severity: medium
+- Source: chaos:form-abandoner (C3-A-01, C3-A-02, C3-A-03 — one defect,
+  three manifestations)
+- Where: `src/components/newsletter-block/newsletter-block.tsx`, in the
+  footer of all 24 routes · `state/open.md` row 22 (`Mock aktiv`) ·
+  TS-016 D10, the mock rule (`plan/guardrails.md`)
+- Steps:
+  1. On `/deine-region/angebot`, fill the quote form but do not submit it.
+  2. Scroll to the footer, type a valid address into `#newsletter-email`,
+     click "Anmelden".
+- Observed: a real full-page GET navigation — this is the only `<form>` on
+  the site with neither `action` nor `onSubmit`, so nothing intercepts it.
+  Afterwards the quote form is empty; so is the footer contact form.
+  On `/dein-kalender/bestellen` the navigation drops `?orte=…` and the
+  selection is silently back to zero places; on `/mitmachen/registrieren`
+  it drops `?ort=` and `?wer=` and the flow is back at step 1. And the
+  "submission" itself produces no banner, no inline message, no sign that
+  anything happened. Reproduced at 1280 and 360, DE and EN.
+- Expected: the mock rule asks for a labelled **working** mock. A mock that
+  resets the page it stands on is not working, and the URL-is-the-state
+  design that C-A-04/C-A-05 accepted as correct is exactly what this
+  destroys.
+- Round decision: **fix-now**
+- Reasoning: one mis-click on an ever-present footer widget throws away an
+  unsent quote and, on two conversion paths, the flow's own progress. The
+  pattern to copy already exists one directory away — `envoy-form-mount`
+  calls `preventDefault()` and swaps in a `role="status"` confirmation —
+  and copying it closes the missing-feedback half in the same change. The
+  input keeps its missing `name`, so no address leaves the browser either
+  way; Q-020 (row 22) stays open and untouched.
+
+---
+
+## F-3-12 — Double-clicking "Suchen" drops the typed postcode on three of the four place-search placements
+
+- Severity: medium
+- Source: chaos:hasty-clicker (C3-H-2)
+- Where: `src/components/search-field/search-field.tsx` as used on `/`
+  (`#ort-suche-fokus`, `#ort-suche-abschluss`), `/dein-ort`, and the true
+  404's recovery widget (`#ort-suche-404`). **Not** reproducible on
+  `/dein-kalender/bestellen`'s instance (`#ort-suche`) · TS-019-A2, TS-020
+- Steps: fill the field with `10115` (confirmed held by `inputValue()`
+  immediately before), fire two clicks at the submit button back to back.
+- Observed: navigates to `/dein-ort?ort=` — the parameter is there and
+  **empty**, the typed value is gone. 100 % reproduction on the 404
+  widget across repeat attempts; reproduced once each on `/` and
+  `/dein-ort`. A single clean click on the same widget preserves the
+  value, so this is a double-submit race, not a general defect.
+- Expected: one navigation to `/dein-ort?ort=10115`.
+- Round decision: **fix-now**
+- Reasoning: data loss on the site's primary entry control, caused by the
+  most ordinary impatient gesture there is, on three placements including
+  the 404 recovery widget that F-2-31 was written to give visitors in the
+  first place. `bestellen`'s instance being unaffected localises it to the
+  shared submit path — one component, one file.
+
+---
+
+## F-3-13 — Asset-shaped paths that match no file render the empty `__next_error__` shell, and the tree ships no favicon at all
+
+- Severity: medium
+- Source: chaos:boundary-tester (C3-B-1)
+- Where: `src/lib/routes/not-found-routing.ts` (`isUnservablePath` →
+  `isAssetPath`), `src/lib/routes/landing-domain.ts`
+  (`ASSET_EXTENSIONS`, `landingDomainBlocks`) · no `public/`, no
+  `app/icon.*` anywhere in the tree · `state/open.md` row 153 · F-2-70
+- Steps: `curl .../favicon.ico` (also `/does-not-exist.js`, `/nope.css`,
+  `/nope.png`, `/robots.txt.map`).
+- Observed: 404 with `content-type: text/html` and a ~11.9 KB
+  `<html id="__next_error__">` body — preload links, scripts and a Flight
+  payload, no literal `<h1>` in the rendered HTML. The visible "Seite
+  nicht gefunden" text exists only serialized inside a
+  `self.__next_f.push([…])` string. By contrast `/dies-gibt-es-nicht`,
+  `/.well-known/does-not-exist` and `/en/nonexistent-page` all render the
+  full styled page — F-2-70's fix works for those. `isAssetPath()` returns
+  "servable, leave it alone" for anything ending in an asset extension
+  regardless of whether a file exists, so those paths never reach the
+  `NOT_FOUND_PATH` rewrite.
+- Why it is not hypothetical: the repository ships no `public/favicon.ico`
+  and no `app/icon.*`, so **every browser's automatic `GET /favicon.ico`
+  on every page load hits this today**.
+- Round decision: **fix-now**
+- Reasoning: F-2-70 is the round-2 fix this reopens through a door nobody
+  checked, and the door is opened by every single page view. Two halves,
+  one item: stop exempting asset-shaped paths that match no file from the
+  404 rewrite, and **ship the real favicon** from the brand package —
+  `@schafe-vorm-fenster/brand-design` exports `./logo.svg` and
+  `./logo.png` (`logos/Schafe-vorm-Fenster_Logo_V2.1.*`) — as `app/icon.*`.
+  That asset is the brand owner's own file, not generated and not stand-in
+  data, so neither the mock rule nor the dummy-content rule applies to it
+  and it needs no badge. `state/open.md` row 153 (the closed
+  `ASSET_EXTENSIONS` list) rides along as the test that walks `public/`.
+
+---
+
+## F-3-14 — The registration flow's own postcode search answers empty and junk input with nothing at all
+
+- Severity: medium
+- Source: chaos:boundary-tester (C3-B-2)
+- Where: `/mitmachen/registrieren`, `/en/take-part/register`, step 1 of 3
+  · TS-023
+- Steps: click "Suchen"/"Search" with the field empty; separately, fill it
+  with 80 characters of junk and click.
+- Observed: in both cases the page silently re-renders itself with `?ort=`
+  (empty, or the junk string) appended. No validation message, no
+  "not found" state, no visible change. The field carries no `required`,
+  so `element.validationMessage` is empty and native validation never
+  engages either.
+- Expected: the same value one click away on `/dein-ort?ort=99999` gets a
+  designed empty state ("99999 steht noch nicht im Dorfkalender." plus a
+  call to action). The registration widget has no equivalent for either
+  case.
+- Round decision: **fix-now**
+- Reasoning: step 1 of a conversion path is the worst place on the site
+  for a control that does nothing visible. The empty state to reuse
+  already exists and is already translated; this is wiring an answer, not
+  designing one.
+
+---
+
+## F-3-15 — "KEIN NACHWEIS" and its sentence are German on the English pages
+
+- Severity: low
+- Source: uat (M5, `/en/take-part`)
+- Where: `src/components/empty-proof-slot/empty-proof-slot.tsx:28`
+  (`badgeLabel = "Kein Nachweis"`),
+  `src/components/objection-list/objection-list.tsx:44`
+  (`proofEmptySentence = "Für diesen Kanal liegt uns noch kein Nachweis
+  vor."`), `app/[lang]/ueber-uns/page.tsx:262` (German literal) ·
+  F-2-33 residue, same class as F-3-5
+- Observed: an English visitor reading an otherwise fully translated page
+  meets "KEIN NACHWEIS / Für diesen Kanal liegt uns noch kein Nachweis
+  vor." partway down. The badge beside it ("FOTO GESUCHT" → "PHOTO
+  WANTED") was translated in round 3; this one was not.
+- Round decision: **fix-now**
+- Reasoning: the same class and the same cost as F-3-5 — two hard-coded
+  German defaults and one literal, moved into the dictionary the rest of
+  the site already uses. Low, and `plan/process.md` puts low polish inside
+  M5's budget.
+
+---
+
+## F-3-16 — The true 404 has no skip link and no header or nav landmarks
+
+- Severity: low
+- Source: chaos:keyboard-only (C3-K-2)
+- Where: `app/global-not-found.tsx` — the surface any genuinely unknown
+  URL reaches; it renders its own `<html><body>` and bypasses
+  `SiteChrome` entirely · TS-002, C-K-8
+- Steps: open `/dies-gibt-es-nicht-xyz`, press Tab once.
+- Observed: focus lands directly on the postcode input. The full sequence
+  is input → "Suchen" → 4 job-band links → "Zur Startseite" → cycle: seven
+  stops, against 26–32 on a routed page. No "Zum Inhalt springen", no
+  header navigation, no breadcrumb. Every routed page, including the
+  in-tree localized 404, has the skip link first.
+- Round decision: **fix-now, last in the round, and only if it stays cheap**
+- Reasoning: the site is otherwise consistent about the skip link, and
+  consistency on an a11y affordance is worth an hour — but only if
+  `global-not-found.tsx` can take the anchor and a target id without
+  pulling `SiteChrome` into a file that bypasses it deliberately. If it
+  costs more than that, it stops and moves to the open list: seven tab
+  stops with no navigation to skip past is very little harm, and breaking
+  a deliberate chrome bypass to satisfy a consistency argument is a worse
+  trade than leaving it.
+
+---
+
+## F-3-17 — The quote form's spam guard says nothing at all on the retry click inside its own window
+
+- Severity: medium
+- Source: chaos:hasty-clicker (C3-H-1), corroborated by uat
+- Where: `src/components/envoy-form-mount/*` (`envoy-form.tsx`'s timing
+  guard) on `/deine-region/angebot`, `/en/your-region/quote` ·
+  `state/open.md` row 7 (`Mock aktiv`, Q-022)
+- Steps: fill the form and submit within ~2 s of load; the guard shows
+  "Das ging sehr schnell. Sieh die Angaben noch einmal durch und schick
+  sie dann ab." Click "Absenden" again 500 ms later.
+- Observed: no new feedback of any kind. The same static warning stays on
+  screen, no event fires, nothing says the second click also did not
+  count or how much longer to wait. The window measures elapsed time since
+  load, not since the warning, so the retry lands in a dead zone. Probed:
+  clicks at 2 s, 4 s and 6 s all succeed normally. UAT met the same
+  message on a first honest submit and read it as the form suspecting her
+  of being a robot.
+- Round decision: **open-list**
+- Reasoning: the guard itself is right and this round should not weaken
+  it. What is missing is a second message, and it sits inside the timing
+  contract of the envoy **mock** — Q-022 (row 7) has not delivered the
+  real widget's spam-protection behaviour, and whatever cool-down
+  messaging is written now is re-decided the day it lands. Goes to the
+  hardening workstream with row 7, and the wording goes to the content
+  workstream with it.
+
+---
+
+## F-3-18 — Reloading immediately after "Weiter" on order step 3 silently swallows the step
+
+- Severity: medium
+- Source: chaos:hasty-clicker (C-H-9, re-reproduced unchanged in round 3)
+- Where: `/dein-kalender/bestellen`, step 3 → 4 · TS-025
+- Steps: click "Weiter" on step 3, reload before the navigation settles.
+- Observed: lands back on step 3, **0** conversion events, all fields
+  empty, and no toast or message telling the visitor the click did not
+  count.
+- Round decision: **open-list**
+- Reasoning: a reload fired inside the click-to-navigation window of a
+  plain GET flow genuinely loses the navigation — the browser re-requests
+  the URL it still holds. Making the click survive it means moving the
+  step transition off a GET, which is TS-025's own design and not a fix
+  round's call. Recorded with a name so the usability workstream and the
+  TS-025 owner inherit it instead of re-finding it.
+
+---
+
+## F-3-19 — Order step 3 accepts entirely empty invoice fields and proceeds to step 4
+
+- Severity: medium
+- Source: uat (M5, desktop)
+- Where: `/dein-kalender/bestellen` step 3 ("Wohin geht die Rechnung?"),
+  `src/components/envoy-form-mount/*` · `state/open.md` row 7, TS-025
+- Observed: clicking "Weiter" with organisation, contact, email and
+  address all blank moves the flow to step 4. Nothing marks a field
+  required and nothing stops the visitor.
+- Round decision: **open-list**
+- Reasoning: those fields live in the envoy mount, and field-level
+  validation is precisely the part of the widget contract Q-022 has not
+  delivered (row 7). Writing `required` into a mock now writes a rule the
+  real widget re-decides, on a flow that is labelled a mock end to end and
+  stores and sends nothing. Goes to the hardening workstream with row 7,
+  next to F-3-17 and F-3-18 — all three sit on the same step, and whoever
+  takes that step should take all three.
+
+---
+
+## F-3-20 — The footer's two-column grid sends tab order 153 px back up the page at ≥768 px
+
+- Severity: low
+- Source: chaos:keyboard-only (C3-K-1)
+- Where: `src/components/site-footer/site-footer.module.css` — `.inner`
+  becomes `grid-template-columns: repeat(2, 1fr)` at ≥768 px with no
+  explicit order, so placement is DOM order
+- Observed: on `/` at 1280, tab stop 24 is the newsletter block's consent
+  link (document Y ≈ 5318) and stop 25 is "Impressum" in the legal nav
+  (Y ≈ 5165). At 360 px the footer is a single flex column and the jump is
+  absent.
+- Round decision: **open-list**
+- Reasoning: column-major tabbing through a multi-column grid is the
+  standard, correct behaviour — nothing is skipped and nothing traps, and
+  the chaos run declined to assert a severity for exactly that reason.
+  Changing it means giving the footer an explicit grid order, which is a
+  layout decision for the design-system owner, not an hour in the last
+  round.
+
+---
+
+## F-3-21 — Back-button recovery of unsubmitted input works on one form and not on the other
+
+- Severity: low
+- Source: chaos:form-abandoner (C3-A-04)
+- Where: `/mitmachen/registrieren` step-1 postcode field versus
+  `/deine-region/angebot`'s quote fields
+- Observed: type into the registration postcode field, navigate to `/`,
+  press Back — the value is gone. Do the same on the quote form — the
+  values are still there. Same gesture, same session, seconds apart, two
+  outcomes. Distinct from C-A-04/C-A-05, which are about a genuinely new
+  session and are settled as by design.
+- Round decision: **open-list**
+- Reasoning: this is browser form-restoration behaviour meeting two
+  different implementations, not a defect in either — the fields that
+  survive are React state, the one that does not is an uncontrolled input
+  with no `defaultValue`. Making it symmetric means carrying the search
+  value in the URL or in state at every placement, a consistency decision
+  for the usability workstream.
+
+---
+
+## F-3-22 — 22 px of residual desktop layout shift between first paint and settle on `/`
+
+- Severity: low
+- Source: chaos:hasty-clicker (C3-H-3, the residue of C-H-12)
+- Observed: footer-region controls still move up to 22 px at 1280×800
+  between a bounding-box snapshot ~50 ms after DOMContentLoaded and one
+  after networkidle. Was 174 px at gate 2. Mobile is 0 px, fully resolved.
+- Round decision: **open-list**
+- Reasoning: an 87 % reduction already landed, and the criterion that
+  measures this — CLS — reads 0.0006 worst-case across the whole 48-pair
+  sweep. Below the bar for the last round's one hour.
+
+---
+
+## F-3-23 — "Weiter · Moment …" is the only progress signal for several seconds on order step 3
+
+- Severity: low
+- Source: uat (M5, desktop)
+- Where: `/dein-kalender/bestellen` step 3 → 4
+- Observed: the button relabels itself and nothing else on the page
+  changes for a few seconds. UAT could not tell whether the click had
+  registered.
+- Round decision: **open-list**
+- Reasoning: a button that says "Moment …" *is* a progress signal; what
+  UAT wanted is a second one. Polish, and it sits on the same step as
+  F-3-18 and F-3-19 — the usability workstream should take the three
+  together rather than have a fix round touch the step once for the
+  cheapest of them.
