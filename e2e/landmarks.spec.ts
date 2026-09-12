@@ -101,9 +101,17 @@ for (const { route, locale } of everyRoute()) {
       // Back is the other half: the router *restores* a preserved segment
       // here rather than creating one, and that path duplicated too.
       await page.goBack();
-      await page.waitForURL((url) => url.pathname === startPath);
       await settle(page);
-      expect(await landmarks(page), `${target} → back to ${from}`).toEqual(ONE);
+      expect(await landmarks(page), `${target} → back`).toEqual(ONE);
+
+      // A route that answers a redirect for the parameter it was entered with
+      // (TS-020 D2 row 5 / F-2-49) bounces the back step forward again. The
+      // landmark count has to hold wherever it lands — it was asserted above —
+      // but the next link has to be clicked from this page, so reset.
+      if (new URL(page.url()).pathname !== startPath) {
+        await page.goto(from);
+        await settle(page);
+      }
     }
   });
 }
