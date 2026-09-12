@@ -248,3 +248,32 @@ test("F-3-13: every page links the brand icon, and it resolves", async ({ page, 
     expect(asset.status(), `the icon asset linked from ${path}`).toBe(200);
   }
 });
+
+/**
+ * F-3-16 — the true 404 opens with the skip link, like every routed page.
+ *
+ * `app/global-not-found.tsx` renders its own `<html><body>` and bypasses
+ * `SiteChrome` on purpose, so it inherited none of the layout's chrome:
+ * pressing Tab landed straight on the postcode input (C3-K-2). The link is
+ * the only piece taken — the surface still has no header and no navigation,
+ * which is what keeps it a complete document.
+ */
+test("F-3-16: the true 404's first tab stop is the skip link", async ({ page }) => {
+  for (const [path, label] of [
+    ["/dies-gibt-es-nicht-xyz", "Zum Inhalt springen"],
+    ["/en/does-not-exist", "Skip to content"],
+  ] as const) {
+    await page.goto(path);
+    await page.keyboard.press("Tab");
+
+    const focused = await page.evaluate(() => ({
+      tag: document.activeElement?.tagName ?? "",
+      text: document.activeElement?.textContent?.trim() ?? "",
+      href: document.activeElement?.getAttribute("href") ?? "",
+    }));
+
+    expect(focused.tag, `first tab stop on ${path}`).toBe("A");
+    expect(focused.text).toBe(label);
+    expect(focused.href).toBe("#main");
+  }
+});

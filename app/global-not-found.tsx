@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 
 import { ContextBand } from "@/src/components/context-band/context-band";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
+import { SkipLink } from "@/src/components/skip-link/skip-link";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { DEFAULT_LOCALE, HTML_LANG, isLocale } from "@/src/lib/i18n/locales";
 import { NOT_FOUND_LOCALE_HEADER } from "@/src/lib/routes/not-found-routing";
@@ -100,6 +101,18 @@ export default async function GlobalNotFound(): Promise<ReactNode> {
   return (
     <html lang={HTML_LANG[locale]}>
       <body>
+        {/* F-3-16 — the one chrome element this surface does take.
+            `app/[lang]/layout.tsx` puts the skip link first on every routed
+            page, and this file bypasses that layout on purpose (see the note
+            above), so pressing Tab here landed straight on the postcode
+            input: seven tab stops against 26–32, and the one a11y affordance
+            the site is otherwise consistent about was missing.
+
+            The link, not the chrome. `SiteChrome` is deliberately not pulled
+            in — this surface has no header and no navigation by design, and
+            the bypass is the reason the 404 renders as a complete document at
+            all. `#main` already exists below, so the target needed nothing. */}
+        <SkipLink locale={locale} />
         <main className="site-main" id="main">
           <div className="container">
             <article data-page="not-found">
