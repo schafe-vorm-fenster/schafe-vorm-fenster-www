@@ -19,6 +19,14 @@ sources:
   - "@schafe-vorm-fenster/media-echo@0.3.3"
   - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
   - "@schafe-vorm-fenster/people@0.3.6#christian-sauer"
+  - "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster"
+  - "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"
+  - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
+  - "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben"
+  - "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"
+  - "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"
+  - "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"
+  - "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
@@ -27,12 +35,23 @@ derived_from:
   - "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"
   - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
   - "@schafe-vorm-fenster/people@0.3.6#christian-sauer"
+  - "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster"
+  - "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"
+  - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
+  - "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben"
+  - "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"
+  - "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"
+  - "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"
+  - "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"
   - "ia"
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — 1 generated demo addition under the prototype completeness override (slot 3, reserved testimonial-type placeholder — state/open.md Dummy-Content)"
+provenance: "sourced — 0 generated slots left. Slot 1 gained the real origin story and a real founder quote; slot 3 names six cleared proof elements and fills the reserved testimonial place with a real, clearance-pending testimonial"
 compliance_check: "state/content-map.md#compliance-checks — TS-027"
+open_points:
+  - "Clearance pending — the testimonial in slot 3 (`kulturlandbuero-broellin`) carries `usage_rights: unverified` (Q-014) and its own record says 'nicht für neue öffentliche Flächen verwenden'. Protected preview only; go-live needs written clearance or the place goes back to empty"
+  - "Code follow-up — `app/[lang]/ueber-uns/page.tsx` still builds block 3 from a hard-coded `DEMO_PROOF` array with `demo: true`. Slot 3 now carries six real, cleared elements; the page should read them instead (state/open.md #109)"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 ---
 
@@ -44,7 +63,7 @@ keiner anderen Seite.
 
 ## Slot 1 — Herkunft (h1, fest)
 
-<!-- id: ueber-uns-1-origin; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: ueber-uns-1-origin; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/offerings@0.3.3#community-calendar", "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"]; status: draft -->
 
 **h1 (fest, DEC-036 §3 — nicht umformulierbar):** Gebaut in einem Dorf, betrieben aus einem Dorf.
 
@@ -52,9 +71,20 @@ keiner anderen Seite.
 
 **Satz mit Beleg:** Der Gründer war selbst ehrenamtlicher Bürgermeister — das Amt, dem der Dienst hilft, kennt er von innen.
 
-Preisangaben aus `community-calendar` (kostenlos, „forever") und
-`portalize-calendar` (480/EUR/Jahr) — gelesen, nicht getippt. Beleg:
-`founder-former-volunteer-mayor` (`cleared`).
+**Herkunft (Anfang und Name):** Angefangen hat es mit der Suche nach frischen Brötchen. Nach dem Umzug von Berlin nach Schlatkow fragte die Familie zwei Wochen lang nach einem Bäckerwagen, legte sich schließlich morgens auf die Lauer und fuhr dem Wagen ins Nachbardorf hinterher, um einen Halt in Schlatkow zu vereinbaren. Der Name stammt aus der Amtszeit als Bürgermeister von Schmatzin: Die Gemeinde unterhielt eine Schafweide, die vom Küchenfenster aus zu sehen war.
+
+**Zitat (Gründer):** „Wenn man alles sammelt, ist plötzlich in jedem Dorf jeden Tag irgendwas los. Wir müssen das nur sichtbar machen." — Jan-Henrik Hempel
+
+Die Zahl „rund 400 Einwohner" und die Kausalkette stehen wörtlich so im
+Markenprofil (`brand-identity@0.1.4#schafe-vorm-fenster`: „A place of
+four hundred inhabitants cannot carry a service that needs a salesperson
+to sell it"). Preisangaben aus `community-calendar` (kostenlos,
+„forever") und `portalize-calendar` (480/EUR/Jahr) — gelesen, nicht
+getippt. Beleg zum Bürgermeister-Satz: `founder-former-volunteer-mayor`
+(`cleared`). Herkunftsabsatz: Abschnitt „Origin story" desselben
+Markenprofils, dazu das Porträt von Zukunftswege Ost-Vorpommern
+(Januar 2026). Das Zitat steht wörtlich im Personenprofil
+(`press_clearance: cleared`) und im Porträt.
 
 ## Slot 2 — Betriebs-Zähler (Live-Modul)
 
@@ -70,17 +100,38 @@ Zahl.
 
 ## Slot 3 — Belegstrom (7 Elemente, 1 typreserviert)
 
-<!-- id: ueber-uns-3-proof-stream; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft -->
+<!-- id: ueber-uns-3-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/media-echo@0.3.3", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"]; status: draft -->
 
-Pool: der volle `proof`-Bestand plus `media-echo` (32 Einträge). Ein
-Platz ist für den Typ `testimonial` reserviert — heute leer, weil alle
-fünf Testimonial-Datensätze `unverified` sind (Q-014). Der leere Platz
-wird nicht durch ein Element eines anderen Typs aufgefüllt; er zeigt die
-Schraffur-Fläche mit einem Satz, der die Lücke benennt (TS-027 D5).
+**Überschrift:** Was andere sagen
 
-<!-- id: ueber-uns-3-testimonial-slot-demo; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+Pool: der volle `proof`-Bestand plus `media-echo` (31 Einträge). Sechs
+der sieben Plätze sind heute mit freigegebenen Belegen besetzbar — alle
+sechs tragen `usage_rights: cleared`:
 
-**Demo-Testimonial für den reservierten Platz (Prototyp, `Demo-Daten`-Badge):** „Der Dorfkalender kennt unsere Verwaltung von innen — das merkt man." — Ehrenamtliche Bürgermeisterin, Beispielgemeinde Musterdorf. Name, Ort und Zitat sind frei erfunden und erkennbar exemplarisch; die Demo-Karte zeigt nur, wie der reservierte Platz mit Beleg aussähe, und ersetzt kein freigegebenes Testimonial.
+1. NØRD AWARD 2026, Kategorie Smart Community, unter Bitkom-Schirmherrschaft, verliehen am 28. Mai 2026 auf der NØRD digital convention in Rostock. — NØRD digital convention / digitales MV
+2. Der Dorfkalender ist seit 2018 in Betrieb — kein Pilot, kein Prototyp. — media-echo-Bestand, frühester Fremdbeleg Nordkurier, Juni 2018
+3. Der Gründer hat als ehrenamtlicher Bürgermeister das Amt gehalten, dem der Dienst dient. — Nordkurier 2019 und 2022; Zukunftswege Ost-Vorpommern 2026
+4. In der Pandemie wurden sämtliche Impfangebote und Testzentren-Öffnungszeiten des Landkreises tagesaktuell und ortsgenau über die Dorfkalender veröffentlicht. — Landkreis Vorpommern-Greifswald, 2022
+5. Der Dorfkalender hat 2022 die Integration ukrainischer Geflüchteter ins Dorfleben unterstützt: Anschluss an Vereinstreffen, Veranstaltungen und mobile Händler. — eu:react-Abschlussbericht, Juli 2022
+6. Wer bei Google nach „Bäcker Schlatkow" sucht, findet das mobile Bäckerauto und seinen Tag — nicht Filialen in Anklam. — eu:react-Abschlussbericht, Juli 2022
+
+Die Reihenfolge hier ist die Quellenliste, nicht die Anzeigereihenfolge:
+Welches Element auf welchem Platz steht, entscheidet die
+Relevanz-Maschine (TS-005) aus demselben Pool. Der siebte Platz ist für
+den Typ `testimonial` reserviert und wird nie mit einem Element eines
+anderen Typs aufgefüllt (TS-027 D5).
+
+<!-- id: ueber-uns-3-testimonial-slot-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; status: draft -->
+
+**Reservierter Platz (Typ `testimonial`, Freigabe steht aus):** „Das Projekt kann einen wertvollen Beitrag zum wirtschaftlichen Wiederaufbau und zur Sichtbarkeit im ländlichen Raum leisten." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
+
+Echtes Zitat aus `kulturlandbuero-broellin`, wörtlich, in normaler
+deutscher Rechtschreibung statt der ASCII-Umschrift der Quelldatei. Der
+Datensatz trägt `usage_rights: unverified` und den ausdrücklichen
+Vermerk „nicht für neue öffentliche Flächen verwenden" (Q-014): Die
+Karte steht deshalb nur im geschützten Preview. Liegt bis zum Go-live
+keine schriftliche Freigabe vor, bleibt der Platz leer und zeigt wieder
+die Schraffur-Fläche mit dem Satz, der die Lücke benennt (TS-027 D5).
 
 ## Slot 4 — Archiv-Verweis
 
@@ -92,7 +143,7 @@ Genau ein Link, keine Vorschau, keine Liste, kein Zähler (TS-027 D6).
 
 ## Slot 5 — Team
 
-<!-- id: ueber-uns-5-team; content_type: profile; provenance: sourced; derived_from: ["@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/people@0.3.6#christian-sauer"]; status: draft -->
+<!-- id: ueber-uns-5-team; content_type: profile; provenance: sourced; derived_from: ["@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/people@0.3.6#christian-sauer", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"]; status: draft -->
 
 **Jan-Henrik Hempel** — Gründer, technische Leitung und Softwarearchitektur. Zog 2008 von Berlin nach Schlatkow in Vorpommern, gründete 2014 den Kulturverein der Gemeinde Schmatzin mit und war ab 2019 deren ehrenamtlicher Bürgermeister.
 
