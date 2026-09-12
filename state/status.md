@@ -2,10 +2,11 @@
 
 Run started: 2026-09-11 (orchestrator session, model claude-fable-5-1)
 Current milestone: M5 Final acceptance (gate 2 closed after 3 rounds with named remainder) (M1 closed 2026-09-11)
-Current test round: M5 round 1 (gate-2 loop used its 3 rounds)
+Current test round: M5 final fix round (plan/round-4.md) → retest → final acceptance
 
 ## Done
 
+- M5 roundtrip on preview 5jupiff6w: QA run 1 285 pass / 28 fail / 45 n-t, 0 critical / 0 high, e2e 471/0 + 464/0 (reports/qa/M5-run-1.md); UAT: all nine walks reach their goal, 9/19 gate-2 hesitations gone (reports/uat/M5.md); chaos ×4 on Playwright: no double-fired events, all gate-2 defects confirmed fixed, new observations triaged to F-3-10…23; PM final decisions: 12 fix-now / 11 open-list + handover section (plan/round-4.md) — 2026-09-12
 - M5 fix round: F-2-49 (proxy-level 307 hop — Cache Components serialises page redirect() into the flight payload), F-2-70 (404 via two-segment rewrite, JS-off full body both locales, closes row 37), F-2-69 (archive CLS 0.22→0), F-2-33/41 residue, F-2-71 (six hydration races), F-2-72/73/74 (real titles/descriptions from content `seo:` blocks, no geoname ids, EN legal notice); pnpm check 1073 tests; e2e 471/0 prod build, 464/0 preview; Lighthouse CLS 0; verification traps rows 147/148 — 2026-09-12
 - Customer acceptance gate 2: closed with named remainder — 264 accepted / 14 as prototype / 15 rejected / 27 not in gate; 7 must-fix items for M5 incl. three new findings (reports/acceptance/gate-2.md) — 2026-09-12
 - Gate 2 QA run 2 (retest): 26 resolved / 2 scoped / 5 reopened; 264 pass / 26 fail / 43 n-t; Lighthouse 95–96, CLS 0; a11y 0 serious; new F-2-69 (archive CLS), F-2-70 (German 404 blank JS-off), F-2-71 (flaky specs); loop ended by the three-round branch (reports/qa/gate-2-run-2.md) — 2026-09-12
@@ -44,8 +45,8 @@ Current test round: M5 round 1 (gate-2 loop used its 3 rounds)
 
 ## In progress
 
-- M5 full roundtrip on preview https://schafe-vorm-fenster-5jupiff6w-schafe-vorm-fenster.vercel.app (production build, VERCEL_ENV=preview): QA sweep run 1 (opus), UAT walks incl. EN + uncovered path + 404, four chaos personas on Playwright — six agents
-- Next: PM decisions → last fix round → retest → final Customer protocol reports/acceptance/final.md + run report
+- Final fix round, 12 items (plan/round-4.md), one developer, whole tree, production-build proofs — Developer (opus)
+- Next: QA retest M5 run 2 on the fresh preview → final Customer protocol reports/acceptance/final.md → run report
 
 ## Pending
 
