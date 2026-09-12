@@ -19,18 +19,26 @@ sources:
   - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
   - "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"
   - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
+  - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
   - "@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"
   - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
   - "ia"
 derived_from:
+  - "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"
+  - "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"
   - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
   - "@schafe-vorm-fenster/proof@0.3.5#regional-footprint"
+  - "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"
+  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
+  - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
+  - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
+  - "@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"
   - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
   - "ia"
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — sourced per section; 4 generated demo-testimonial/demo-example slots added under the prototype completeness override (slots 3, 4, 5, 6 — state/open.md Dummy-Content); underlying value-story text stays sourced, only the demo testimonial/example additions are generated"
+provenance: "sourced — every slot. The four value-story proof cards now carry the real testimonials of the hub (kurzweg-baeckerei, zschiesche-gross-kiesow, eichler-wasserschloss-quilow, wendt-rubkow) and the Volkshochschule reference case instead of generated demo quotes; all five are clearance: pending (Q-014)"
 compliance_check: "state/content-map.md#compliance-checks — TS-020"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 ---
@@ -41,6 +49,24 @@ Zwei Zustände auf einer Route (TS-020 D2): **A** — Termine vorhanden,
 **B** — Ort ist erfasst, aber leer (Fokusjob wechselt zu „publish our
 dates"). Block- und DOM-Reihenfolge bleiben in beiden Zuständen gleich;
 nur der Angebotstext in Block 1 wechselt.
+
+## Slot 0 — Fokusblock, Zustand S0 (kein Ort bekannt)
+
+<!-- source_note: Stufe-0-Regel aus gtm:concept/website-communication-principles.concept.md Prinzip 6 („Stufe 0 muss für sich allein vollständig und überzeugend sein") und Prinzip 1 („know what is on wird an Ort und Stelle erfüllt, nicht verlinkt"); Register „du" aus Prinzip 1b. Ersetzt den generischen Fülltext `deinem Ort` in app/[lang]/dein-ort/page.tsx `PAGE_COPY` (state/open.md Zeile 93) — die Code-Bindung steht noch aus. -->
+<!-- id: dein-ort-0-state-s0; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
+
+**Headline:** Such deinen Ort, dann steht hier, was dort los ist.
+
+**Modul-Überschrift (eigener Radius, kein Ortsname):** Diese Woche in der Nähe
+
+**Beispiel-Badge am Modul:** Beispielort
+
+**Hinweistext unter dem Suchfeld:** Suche nach Ortsnamen kommt noch dazu — bis dahin reicht die Postleitzahl.
+
+Stufe 0 nennt keinen Ort, weil keiner bekannt ist. Die Seite behauptet
+deshalb nichts über einen Ort, sondern zeigt die Suche und ein
+Beispielmodul, das als Beispiel gekennzeichnet ist. Die Zustände A und B
+(Slots 1 und 2) setzen erst ein, wenn ein Ort feststeht.
 
 ## Slot 1 — Fokusblock, Zustand A (Termine vorhanden)
 
@@ -74,17 +100,26 @@ Kalender für diesen Ort existiert bereits und wartet.
 
 **Beispiel:** wiederkehrender Liefertermin in {place} oder in der Umgebung, live aus dem Kalender.
 
-**Testimonial:** *leer nach Vorgabe — kein freigegebenes Zitat*
+**Testimonial:** Elisabeth Kurzweg, Bäckerei Kurzweg — Wortlaut in der Belegkarte unten.
 
-<!-- provenance: sourced-empty-by-design; testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; usage_rights: unverified (Q-014) -->
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; clearance: pending (usage_rights unverified, Q-014) -->
 
-Solange `kurzweg-baeckerei` `usage_rights: unverified` bleibt, rendert die
-Story dreiteilig (Aspekt → Warum → Beispiel), ohne Zitat. Kein Ersatztext,
-keine Paraphrase, kein „Nutzer sagen" (SRC-001 §4).
+Die Story stützt sich auf zwei freigegebene Belege: die Google-Suche nach
+dem Bäcker in Schlatkow, die das Bäckerauto samt Wochentag statt der
+Stadtfiliale findet (`google-baecker-schlatkow`, `cleared`, dokumentiert im
+eu:react-Abschlussbericht vom Juli 2022), und die Erfahrungsberichte, nach
+denen Home-Office-Nutzer in der Corona-Zeit über die Dorfkalender erstmals
+auf mobile Anbieter aufmerksam wurden (`homeoffice-mobile-anbieter`,
+`cleared`). Der Bericht hält ausdrücklich fest, dass sich das nicht in
+Umsatzzahlen messen lässt — die Anekdote steht, die Zahl nicht.
 
-<!-- id: dein-ort-3-story-baeckerwagen-demo-testimonial; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+### Belegkarte zur Story 1
 
-**Demo-Testimonial (Prototyp, `Demo-Daten`-Badge):** „Seit der Bäckerwagen im Kalender steht, verpassen wir ihn nicht mehr." — Bäckerei, Beispielgemeinde Musterdorf. Erkennbar exemplarisch, ersetzt kein freigegebenes Zitat.
+<!-- clearance: pending — `kurzweg-baeckerei` steht auf `usage_rights: unverified` (Q-014). Das Zitat stammt aus der Testimonial-Sektion der alten Website; eine schriftliche Freigabe liegt im Hub nicht vor. Die geschützte Vorschau zeigt es, der Härtungslauf vor dem Go-live klärt es. -->
+<!-- source_note: Das Zitat liegt im Paket in ASCII-Umschrift („Digitale Terminliste fuer die Doerfer"); hier mit Umlauten gesetzt, Wortlaut unverändert. -->
+<!-- id: dein-ort-3-story-baeckerwagen-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; status: draft -->
+
+**Testimonial:** „Mit der Digitalen Terminliste für die Dörfer in Vorpommern-Greifswald werden die Fahrtrouten anderer Unternehmen transparenter." — Elisabeth Kurzweg, Bäckerei Kurzweg (2022)
 
 ## Slot 4 — Value Story 2: die Ratssitzung
 
@@ -101,17 +136,21 @@ sämtliche Impfangebote und Testzentren-Öffnungszeiten des Landkreises
 tagesaktuell und ortsgenau über die Dorfkalender (`impftermine-landkreis`,
 `cleared`).
 
-**Testimonial:** *leer nach Vorgabe — kein freigegebenes Zitat*
+**Testimonial:** Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow — Wortlaut in der Belegkarte unten.
 
-<!-- provenance: sourced-empty-by-design; testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; usage_rights: unverified (Q-014) -->
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; clearance: pending (usage_rights unverified, Q-014) -->
 
-<!-- id: dein-ort-4-story-ratssitzung-demo-testimonial; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+### Belegkarte zur Story 2
 
-**Demo-Testimonial (Prototyp, `Demo-Daten`-Badge):** „Ich habe von der Ratssitzung im Kalender erfahren, nicht erst im Protokoll danach." — Einwohnerin, Beispielgemeinde Musterdorf. Erkennbar exemplarisch, ersetzt kein freigegebenes Zitat.
+<!-- clearance: pending — `zschiesche-gross-kiesow` steht auf `usage_rights: unverified` (Q-014), gleiche Herkunft wie die übrigen vier Testimonials der alten Website. -->
+<!-- source_note: Das Zitat liegt im Paket in ASCII-Umschrift („Fuer dieses Projekt", „Landbevoelkerung", „Haendler"); hier mit Umlauten gesetzt, Wortlaut unverändert. -->
+<!-- id: dein-ort-4-story-ratssitzung-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; status: draft -->
+
+**Testimonial:** „Für dieses Projekt sehe ich unsere Landbevölkerung, aber auch mobile Händler als Gewinner." — Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow (2022)
 
 ## Slot 5 — Value Story 3: Kultur, die niemand gesucht hätte
 
-<!-- id: dein-ort-5-story-kultur; content_type: value-story; provenance: sourced-empty-by-design; derived_from: [ia]; status: draft -->
+<!-- id: dein-ort-5-story-kultur; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"]; status: draft -->
 
 **Titel:** Kultur, die du nicht gesucht hättest
 
@@ -119,13 +158,26 @@ tagesaktuell und ortsgenau über die Dorfkalender (`impftermine-landkreis`,
 
 **Beispiel:** ein Kulturtermin aus der Umgebung von {place}, live aus dem Kalender.
 
-**Testimonial:** *leer nach Vorgabe — kein freigegebenes Zitat*
+**Testimonial:** Uwe Eichler, Wasserschloss Quilow — Wortlaut in der Belegkarte unten.
 
-<!-- provenance: sourced-empty-by-design; testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin", "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"]; usage_rights: unverified (Q-014); note: "keine gedeckte Backing-Anekdote vorhanden — an Orten ohne Kulturtermin trägt diese Story heute keinen Beleg (TS-020 Open Points)" -->
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; clearance: pending (usage_rights unverified, Q-014) -->
 
-<!-- id: dein-ort-5-story-kultur-demo; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+Die Story hat jetzt einen echten Anker: Die Volkshochschule Uecker-Randow
+veröffentlicht ihr komplettes Kursprogramm über den Dorfkalender, am
+Standort Pasewalk und in weiteren Ortskalendern — beschrieben vom
+Kulturlandbüro Uecker-Randow (Maria Elsner, September 2024). Bildung und
+Kultur, die niemand im Ort gesucht hätte, stehen damit belegbar im
+Kalender.
 
-**Demo-Beispiel und Demo-Testimonial (Prototyp, `Demo-Daten`-Badge):** Beispieltermin „Ausstellung im Schlosspark, Beispielgemeinde Musterdorf" — „Von der Ausstellung hätte ich sonst nie erfahren, sie stand einfach im Kalender." — Besucherin, Beispielgemeinde Musterdorf. Termin, Ort und Zitat sind frei erfunden und erkennbar exemplarisch; sie zeigen nur, wie die Story mit Beleg aussähe, und ersetzen weder eine echte Anekdote noch ein freigegebenes Zitat.
+### Belegkarte zur Story 3
+
+<!-- clearance: pending — `eichler-wasserschloss-quilow` und `volkshochschule-uecker-randow` stehen beide auf `usage_rights: unverified` (Q-014). -->
+<!-- source_note: Das Zitat liegt im Paket in ASCII-Umschrift („Flaechenland"); hier mit Umlauten gesetzt, Wortlaut unverändert. -->
+<!-- id: dein-ort-5-story-kultur-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"]; status: draft -->
+
+**Beispiel:** Die Volkshochschule Uecker-Randow veröffentlicht ihr Kursprogramm über den Dorfkalender, Standort Pasewalk. — Kulturlandbüro Uecker-Randow, September 2024
+
+**Testimonial:** „Der Dienst hilft dabei, Angebote in einem Flächenland besser sichtbar und auffindbar zu machen." — Uwe Eichler, Wasserschloss Quilow (2022)
 
 ## Slot 6 — Value Story 4: der Fünfzehn-Minuten-Radius
 
@@ -143,13 +195,17 @@ Vorpommern-Greifswald bis zur Landkreis-Schnittstelle in
 Baden-Württemberg (`regional-footprint`, `cleared`, qualitative Aussage,
 keine Reichweitenzahl).
 
-**Testimonial:** *leer nach Vorgabe — kein freigegebenes Zitat*
+**Testimonial:** Holger Wendt, Bürgermeister in Rubkow — Wortlaut in der Belegkarte unten.
 
-<!-- provenance: sourced-empty-by-design; testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; usage_rights: unverified (Q-014) -->
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; clearance: pending (usage_rights unverified, Q-014) -->
 
-<!-- id: dein-ort-6-story-radius-demo-testimonial; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+### Belegkarte zur Story 4
 
-**Demo-Testimonial (Prototyp, `Demo-Daten`-Badge):** „Was zwei Dörfer weiter läuft, sehe ich jetzt genauso wie das, was direkt bei uns passiert." — Einwohner, Beispielgemeinde Musterdorf. Erkennbar exemplarisch, ersetzt kein freigegebenes Zitat.
+<!-- clearance: pending — `wendt-rubkow` steht auf `usage_rights: unverified` (Q-014). -->
+<!-- source_note: Wortlaut unverändert aus dem Evidence-Block des Belegs. -->
+<!-- id: dein-ort-6-story-radius-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; status: draft -->
+
+**Testimonial:** „Die selbstverwaltete und automatisierte Bereitstellung der Termindaten reduziert den Arbeitsaufwand unserer Gemeinde." — Holger Wendt, Bürgermeister in Rubkow (2022)
 
 ## Slot 7 — Homescreen-Block
 
@@ -175,3 +231,17 @@ Quelle: `price.note` von `community-calendar` — „Free for readers without
 any account … No limit on the number of dates per place. Permanent, not
 an introductory tier." Der freie Zugang ist ein öffentliches Versprechen
 seit 2022, kein Preismodell, das sich leise ändern lässt.
+
+## Kontextband (3 Nicht-Fokus-Jobs)
+
+<!-- source_note: Angebotsformulierung statt Menü aus gtm:concept/website-communication-principles.concept.md Prinzip 2 („ordnen, nicht ausschließen"); die drei Jobs und ihre Formulierung aus der Job-Tabelle in Prinzip 1. Beantwortet state/open.md Zeile 95 für diese Seite: eigener Bandtext statt des geteilten Home-Satzes. -->
+<!-- id: dein-ort-9-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
+
+**Kicker:** Heute mit einem anderen Anliegen hier?
+
+- **Termine veröffentlichen:** Du willst Termine für deinen Verein, deine Feuerwehr oder deine Gemeinde eintragen? → `/mitmachen`
+- **Eigenen Kalender betreiben:** Du willst einen Kalender unter eigenem Namen, auf eurer eigenen Website? → `/dein-kalender`
+- **Wer dahintersteckt:** Du willst wissen, wer den Dorfkalender macht? → `/ueber-uns`
+
+Fokusjob dieser Seite ist „know what is on". Das Band steht darunter und
+nennt die drei anderen Anliegen, jedes in der Sprache der Leserin.
