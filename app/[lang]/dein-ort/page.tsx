@@ -113,9 +113,13 @@ export async function generateMetadata({
 }
 
 /**
- * The copy S0 needs and the artifact does not carry — it writes state A and
- * state B, both of which name a place. Generated, in the tone of voice, with
- * a `Dummy-Content` row in `state/open.md`.
+ * Fallback only. `dein-ort-0-state-s0` now carries S0's own headline, the
+ * nearby module's place-agnostic heading, its example badge and the search
+ * hint (state/open.md row 93, row 161); `searchLabel` and `genericPlace`
+ * have no field in that slot and stay generated (Dummy-Content,
+ * `state/open.md`) — `genericPlace` fills state A/B's own `{place}`
+ * template when no place is resolved yet, which is a different sentence
+ * from S0's dedicated headline below.
  */
 const PAGE_COPY: Record<
   Locale,
@@ -197,7 +201,15 @@ export default async function PlacePage({
 }) {
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
-  const copy = PAGE_COPY[locale];
+  const fallbackCopy = PAGE_COPY[locale];
+  const stateS0 = slot(page, "dein-ort-0-state-s0");
+  const s0Headline = fieldAt(stateS0.blocks, 0);
+  const copy = {
+    ...fallbackCopy,
+    nearby: fieldAt(stateS0.blocks, 1) ?? fallbackCopy.nearby,
+    example: fieldAt(stateS0.blocks, 2) ?? fallbackCopy.example,
+    searchHint: fieldAt(stateS0.blocks, 3) ?? fallbackCopy.searchHint,
+  };
 
   /**
    * The one request value this page has, resolved once, outside every cache
@@ -347,6 +359,7 @@ export default async function PlacePage({
               reassurance: fieldAt(permanence.blocks, 0),
             }
       }
+      contextBandHeading={fieldAt(slot(page, "dein-ort-9-context-band").blocks, 0)}
       locale={locale}
       meta={PLACE_META}
     >
@@ -360,9 +373,12 @@ export default async function PlacePage({
         cta={search(publishOffer === undefined)}
         headline={
           publishOffer?.headline ??
-          fillTemplate(stateA.fields["Headline"] ?? "", {
-            place: stated?.name ?? copy.genericPlace,
-          })
+          (stated === undefined
+            ? // TS-020 D2 / state/open.md row 93: S0 names no place at all, so
+              // it gets its own authored sentence rather than state A's
+              // "Das ist los in …" template filled with a generic word.
+              (s0Headline ?? fillTemplate(stateA.fields["Headline"] ?? "", { place: copy.genericPlace }))
+            : fillTemplate(stateA.fields["Headline"] ?? "", { place: stated.name }))
         }
         id="focus-block"
         // F-2-33: the hero's `photo-surface` badges itself out of the

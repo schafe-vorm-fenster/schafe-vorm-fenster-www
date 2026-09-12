@@ -101,7 +101,14 @@ export async function generateMetadata({
   return pageMetadataFor(ROUTE, params);
 }
 
-/** The generated labels this page needs and no artifact carries (Dummy-Content, state/open.md). */
+/**
+ * Fallback only — `home-12-ui-strings` now carries these four short strings
+ * (state/open.md row 92, row 161), read below through `uiStringsFrom`. This
+ * record stands in only where a locale's slot is unreadable (`slot()`'s own
+ * typed-empty-with-`reason` contract, `src/lib/content/README.md`), never as
+ * the primary source. `missingProof` has no field in the slot and stays
+ * generated (Dummy-Content, `state/open.md`).
+ */
 const DEMO_LABELS: Record<
   Locale,
   {
@@ -128,6 +135,26 @@ const DEMO_LABELS: Record<
   },
 };
 
+/** Strips the artifact's own leading "Foto gesucht — "/"Photo wanted — " —
+ * documentation of the design-system badge the surface renders on its own
+ * (`placeholder-surface`), not part of the invitation sentence itself. */
+function withoutPhotoWantedBadge(text: string): string {
+  return text.replace(/^(?:Foto gesucht|Photo wanted)\s*—\s*/, "");
+}
+
+/** The four short UI strings, read off `home-12-ui-strings` where the slot
+ * has them, falling back to the generated stand-ins otherwise. */
+function uiStringsFrom(uiStrings: ContentSlot, locale: Locale) {
+  const fallback = DEMO_LABELS[locale];
+  return {
+    flyerExample: fieldAt(uiStrings.blocks, 0) ?? fallback.flyerExample,
+    geo: fieldAt(uiStrings.blocks, 1) ?? fallback.geo,
+    photoWanted: withoutPhotoWantedBadge(fieldAt(uiStrings.blocks, 2) ?? fallback.photoWanted),
+    datesUnit: fieldAt(uiStrings.blocks, 3) ?? fallback.datesUnit,
+    missingProof: fallback.missingProof,
+  };
+}
+
 /**
  * The artifact's demo proof lines as relevance candidates (TS-005).
  *
@@ -137,18 +164,18 @@ const DEMO_LABELS: Record<
  * every candidate would tie at country level and the spread rule would have
  * nothing to spread.
  */
-function proofCandidates(proof: ContentSlot, locale: Locale): ProofCandidate[] {
+function proofCandidates(proof: ContentSlot, geoLabel: string): ProofCandidate[] {
   const list = proof.blocks.find((block) => block.kind === "list");
   const items = list?.kind === "list" ? list.items : [];
   return items.map((item, index) => {
-    const card = parseDemoProofElement(item, DEMO_LABELS[locale].geo);
+    const card = parseDemoProofElement(item, geoLabel);
     const place = card.attribution.split(", ").slice(1).join(", ").trim();
     return {
       id: `home-8-proof-stream-${index + 1}`,
       contextLine: card.contextLine,
       claim: card.claim,
       attribution: card.attribution,
-      geo: { level: "snapshot" as const, label: DEMO_LABELS[locale].geo },
+      geo: { level: "snapshot" as const, label: geoLabel },
       geoCommunity: place === "" ? null : place,
       demo: isDemoSlot(proof),
     };
@@ -352,7 +379,6 @@ export default async function HomePage({
 }) {
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
-  const demo = DEMO_LABELS[locale];
 
   const hero = slot(page, "home-1-search-hero");
   const dates = slot(page, "home-2-place-dates");
@@ -364,6 +390,8 @@ export default async function HomePage({
   const proof = slot(page, "home-8-proof-stream");
   const counters = slot(page, "home-9-counters");
   const band = slot(page, "home-10-context-band");
+  const uiStrings = slot(page, "home-12-ui-strings");
+  const demo = uiStringsFrom(uiStrings, locale);
 
   // Field labels are translated, so the n-th block is the contract, not the
   // label (TS-007, `src/lib/content/README.md`). `Headline` is one of the few
@@ -383,7 +411,7 @@ export default async function HomePage({
     locale,
     focusJob: "know-what-is-on",
     surface: "home",
-    candidates: proofCandidates(proof, locale),
+    candidates: proofCandidates(proof, demo.geo),
   });
 
   /**

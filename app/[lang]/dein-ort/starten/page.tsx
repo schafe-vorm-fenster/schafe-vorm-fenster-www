@@ -77,10 +77,12 @@ export async function generateMetadata({
 }
 
 /**
- * The two words the artifact does not carry: a generic stand-in for the
- * place in the CTA label of the placeless variant (the artifact writes a
- * fallback *headline*, but no fallback CTA), and the example module's own
- * demo labels. Generated, with a `Dummy-Content` row in `state/open.md`.
+ * Fallback only. `dein-ort-starten-5-search` now carries the search hint
+ * (state/open.md row 94, row 161) and `dein-ort-starten-6-cta` carries its
+ * own placeless CTA label, both read below; `genericPlace` remains
+ * generated for the *other* templates that still interpolate a generic
+ * place word (the "what it takes" opener, the live-example note) — the
+ * artifact authors no dedicated placeless sentence for those two.
  */
 const PAGE_COPY: Record<Locale, { genericPlace: string; searchLabel: string; searchHint: string }> =
   {
@@ -177,7 +179,14 @@ export default async function PlaceStartPage({
     ? fillTemplate(fieldAt(ack.blocks, 0) ?? "", values)
     : (fieldAt(ack.blocks, 1) ?? "");
 
-  const ctaLabel = fillTemplate(labelOf(closing.cta ?? fieldAt(closing.blocks, 0)), ctaValues);
+  // "CTA-Label (primär)" / "CTA-Label (ohne Ort, Fallback)" — like the
+  // headline above, the placeless variant now has its own authored label
+  // (state/open.md row 94) instead of the primary template filled with a
+  // generic word.
+  const ctaLabel = searched
+    ? fillTemplate(labelOf(closing.cta ?? fieldAt(closing.blocks, 0)), ctaValues)
+    : labelOf(fieldAt(closing.blocks, 1)) ||
+      fillTemplate(labelOf(closing.cta ?? fieldAt(closing.blocks, 0)), ctaValues);
 
   /**
    * D8: a plain `<a href="/mitmachen/registrieren?ort=…">` carrying
@@ -204,6 +213,7 @@ export default async function PlaceStartPage({
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{ to: "register", label: ctaLabel, query: { ort: searched } }}
+      contextBandHeading={fieldAt(slot(page, "dein-ort-starten-7-context-band").blocks, 0)}
       locale={locale}
       meta={PLACE_START_META}
     >
@@ -278,7 +288,7 @@ export default async function PlaceStartPage({
         <SectionShell id="search-again" labelledBy="search-again-heading" surface="lime-100">
           <h2 id="search-again-heading">{fieldAt(searchAgain.blocks, 0)}</h2>
           <PlaceSearch
-            hint={copy.searchHint}
+            hint={fieldAt(searchAgain.blocks, 2) ?? copy.searchHint}
             id="ort-suche-nochmal"
             label={fieldAt(searchAgain.blocks, 1) ?? copy.searchLabel}
             locale={locale}

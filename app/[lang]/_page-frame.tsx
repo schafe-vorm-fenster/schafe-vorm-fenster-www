@@ -61,15 +61,16 @@ import type { ReactNode } from "react";
 const CONTACT_EMAIL = "jan@schafe-vorm-fenster.de";
 
 /**
- * The band's offer, per locale.
+ * The band's offer, per locale — the fallback only.
  *
- * Only `content/pages/home/{de,en}.md` carries a `context-band` slot
- * (`home-10-context-band`); the other ten pages have none, and the band is
- * rendered on every page by construction (TS-006 D5). Rather than let ten
- * pages fall back to the component's German default, the frame carries the
- * home artifact's two sentences — the same offer, verbatim, in both
- * languages. A per-page phrasing is a content-phase question, on
- * `state/open.md`.
+ * `home-10-context-band`, `dein-ort-9-context-band`,
+ * `dein-ort-starten-7-context-band`, `mitmachen-9-context-band` and
+ * `registrieren-6-context-band` each carry the page's own kicker sentence
+ * now (state/open.md row 95, row 161; identical wording today, so a page
+ * without its own slot yet loses nothing by falling back here). The band
+ * itself still renders on every page by construction (TS-006 D5); the
+ * remaining pages without a dedicated slot fall back to this constant
+ * rather than the component's German default.
  */
 const BAND_HEADING: Record<Locale, string> = {
   de: "Heute mit einem anderen Anliegen hier?",

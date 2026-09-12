@@ -9,7 +9,8 @@ import { RouteLink } from "@/src/components/route-link/route-link";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
-import { slotState } from "@/src/lib/content/provenance";
+import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
+import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
 import { pageTitle } from "@/src/lib/routes/metadata";
 
@@ -69,16 +70,6 @@ function splitObjection(text: string): { channel: string; failure: string } {
   return { channel: text, failure: "" };
 }
 
-/**
- * The demo proof items of `mitmachen-7-proof-demo`: an ordered list of
- * `„<claim>" — <attribution>` lines (state/open.md Dummy-Content #49).
- */
-function parseDemoQuote(line: string): { claim: string; attribution: string } {
-  const match = /^„(.+)"\s*—\s*(.+)$/.exec(line);
-  if (!match) return { claim: line, attribution: "" };
-  return { claim: match[1], attribution: match[2] };
-}
-
 const PATHS_LABEL: Record<Locale, string> = {
   de: "Drei Wege, die Termine zu uns zu bringen",
   en: "Three ways to get your dates to us",
@@ -89,12 +80,23 @@ const PROOF_LABEL: Record<Locale, string> = {
   en: "What others say",
 };
 
-const PROOF_CONTEXT_LINE: Record<Locale, string> = {
-  de: "Beispielhafte Rückmeldung",
-  en: "Example feedback",
+/**
+ * `mitmachen-7-proof-demo` is `provenance: sourced` (state/open.md row 49,
+ * row 162), not `generated` — three real institutions that publish
+ * themselves. `demo` and every displayed label are read off the slot
+ * (`isDemoSlot`), never hard-coded; `PROOF_CONTEXT_FALLBACK` is used only
+ * where a quote's own attribution has no organisation name to show instead
+ * (`parseDemoProofElement`).
+ */
+const PROOF_CONTEXT_FALLBACK: Record<"demo" | "sourced", Record<Locale, string>> = {
+  demo: { de: "Beispielhafte Rückmeldung", en: "Example feedback" },
+  sourced: { de: "Rückmeldung", en: "Feedback" },
 };
 
-const GEO_SNAPSHOT_LABEL: Record<Locale, string> = { de: "Beispiel", en: "Example" };
+const GEO_SNAPSHOT_LABEL: Record<"demo" | "sourced", Record<Locale, string>> = {
+  demo: { de: "Beispiel", en: "Example" },
+  sourced: { de: "Beleg", en: "Reference" },
+};
 
 /** SRC-001 §4: an unfilled position weakens the claim, it never shortens the stream. */
 const MISSING_PROOF: Record<Locale, string> = {
@@ -109,7 +111,6 @@ export default async function Page({
 }) {
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
-  const home = await pageContent("home", locale);
 
   const hero = slot(page, "mitmachen-1-hero");
   const objections = slot(page, "mitmachen-2-objections");
@@ -118,7 +119,8 @@ export default async function Page({
   const pathWebsite = slot(page, "mitmachen-5-path-website");
   const example = slot(page, "mitmachen-6-beispiel");
   const proofDemo = slot(page, "mitmachen-7-proof-demo");
-  const contextBand = slot(home, "home-10-context-band");
+  // The band's own kicker (state/open.md row 95, row 161), not home's.
+  const contextBand = slot(page, "mitmachen-9-context-band");
 
   /**
    * The heading keeps its `{…}` slot: the island fills it with the place the
@@ -140,26 +142,33 @@ export default async function Page({
 
   /**
    * TS-005 through, not around: the inline surface is **3** positions
-   * (DEC-048), gated, scored, rotated and ordered by the engine. The demo
-   * quotes pass the clearance gate carrying their flag and come back as the
-   * `mocked` state, which is what badges each card.
+   * (DEC-048), gated, scored, rotated and ordered by the engine. The three
+   * quotes are real (sourced, clearance pending), so `demo` and every
+   * displayed label come off `isDemoSlot(proofDemo)`, not a hard-coded flag.
    */
+  const proofIsDemo = isDemoSlot(proofDemo);
   const proofSelection = await selectProof({
     routeId: ROUTE,
     locale,
     focusJob: "publish-our-dates",
     surface: "inline",
     candidates: listItems(proofDemo.blocks).map((line, index) => {
-      const quote = parseDemoQuote(line);
+      const quote = parseDemoProofElement(
+        line,
+        PROOF_CONTEXT_FALLBACK[proofIsDemo ? "demo" : "sourced"][locale],
+      );
       const place = quote.attribution.split(", ").slice(1).join(", ").trim();
       return {
         id: `mitmachen-7-proof-demo-${index + 1}`,
-        contextLine: PROOF_CONTEXT_LINE[locale],
+        contextLine: quote.contextLine,
         claim: quote.claim,
         attribution: quote.attribution,
-        geo: { level: "snapshot" as const, label: GEO_SNAPSHOT_LABEL[locale] },
+        geo: {
+          level: "snapshot" as const,
+          label: GEO_SNAPSHOT_LABEL[proofIsDemo ? "demo" : "sourced"][locale],
+        },
         geoCommunity: place === "" ? null : place,
-        demo: true,
+        demo: proofIsDemo,
       };
     }),
   });
@@ -177,7 +186,7 @@ export default async function Page({
         // (Open points — the 2022 commitment has no `proof/` element), the
         // permanence promise is absent rather than reworded, even though
         // the content artifact carries a generated placeholder sentence
-        // under the prototype completeness override (state/open.md #45).
+        // under the prototype completeness override (state/open.md row 45).
         // Recorded as a content/spec tension in `state/open.md`, not
         // silently resolved by rendering it.
       }}

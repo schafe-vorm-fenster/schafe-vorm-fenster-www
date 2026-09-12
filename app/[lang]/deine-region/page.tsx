@@ -18,7 +18,8 @@ import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
-import { ctaLabelOnly, interpolate, splitQuoteAttribution } from "@/src/lib/content/text";
+import { ctaLabelOnly, interpolate } from "@/src/lib/content/text";
+import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
 import { pageTitle } from "@/src/lib/routes/metadata";
 import { assetSrc } from "@/src/lib/content/asset-src";
@@ -80,8 +81,6 @@ const PAGE_COPY: Record<
     briefingLabel: string;
     proofHeading: string;
     proofLabel: string;
-    proofContext: string;
-    proofGeo: string;
     missingProof: string;
     closingHeading: string;
     quoteFallback: string;
@@ -94,8 +93,6 @@ const PAGE_COPY: Record<
     briefingLabel: "Termin für ein Kennenlerngespräch buchen",
     proofHeading: "Was Landkreise und Institutionen sagen",
     proofLabel: "Beleg",
-    proofContext: "Beispielhafte Rückmeldung",
-    proofGeo: "Beispielregion",
     missingProof: "Für diese Aussage ist noch kein freigegebener Beleg hinterlegt.",
     closingHeading: "Bereit für euer Gebiet?",
     quoteFallback: "Angebot anfragen",
@@ -107,8 +104,6 @@ const PAGE_COPY: Record<
     briefingLabel: "Book a slot to get to know each other",
     proofHeading: "What counties and institutions say",
     proofLabel: "Proof",
-    proofContext: "Example feedback",
-    proofGeo: "Example region",
     missingProof: "No cleared proof is on file for this claim yet.",
     closingHeading: "Ready for your territory?",
     quoteFallback: "Request a quote",
@@ -116,6 +111,23 @@ const PAGE_COPY: Record<
     interimFallback: "This is what it looks like today: examples",
     embedFallback: "This is what the embed looks like: an example",
   },
+};
+
+/**
+ * The proof stream's context line and geo badge, per `isDemoSlot` — never a
+ * fixed "Beispielhafte Rückmeldung"/"Beispielregion" for the real, sourced
+ * quotes `deine-region-6-proof-demo` carries today (state/open.md row 50,
+ * row 162). `PROOF_CONTEXT_FALLBACK` is used only where a quote's own
+ * attribution has no organisation name to show (`parseDemoProofElement`).
+ */
+const PROOF_CONTEXT_FALLBACK: Record<"demo" | "sourced", Record<Locale, string>> = {
+  demo: { de: "Beispielhafte Rückmeldung", en: "Example feedback" },
+  sourced: { de: "Rückmeldung", en: "Feedback" },
+};
+
+const PROOF_GEO_LABEL: Record<"demo" | "sourced", Record<Locale, string>> = {
+  demo: { de: "Beispielregion", en: "Example region" },
+  sourced: { de: "Beleg", en: "Reference" },
 };
 
 export async function generateMetadata({
@@ -172,9 +184,11 @@ export default async function Page({
     }) ?? copy.interimFallback;
 
   const quoteItems = proofDemo.blocks.filter((block) => block.kind === "list");
+  const proofIsDemo = isDemoSlot(proofDemo);
+  const proofFallbackContext = PROOF_CONTEXT_FALLBACK[proofIsDemo ? "demo" : "sourced"][locale];
   const quotes =
     quoteItems[0]?.kind === "list"
-      ? quoteItems[0].items.map((item) => splitQuoteAttribution(item))
+      ? quoteItems[0].items.map((item) => parseDemoProofElement(item, proofFallbackContext))
       : [];
 
   /**
@@ -190,12 +204,12 @@ export default async function Page({
     surface: "inline",
     candidates: quotes.map((quote, index) => ({
       id: `deine-region-6-proof-demo-${index + 1}`,
-      contextLine: copy.proofContext,
+      contextLine: quote.contextLine,
       claim: quote.claim,
       attribution: quote.attribution,
-      geo: { level: "region" as const, label: copy.proofGeo },
+      geo: { level: "region" as const, label: PROOF_GEO_LABEL[proofIsDemo ? "demo" : "sourced"][locale] },
       geoCounty: quote.attribution.split(", ").slice(1).join(", ").trim() || null,
-      demo: isDemoSlot(proofDemo),
+      demo: proofIsDemo,
     })),
   });
 

@@ -12,7 +12,9 @@ import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { TrustBlock } from "@/src/components/trust-block/trust-block";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
+import { isDemoSlot } from "@/src/lib/content/provenance";
 import { BRIEFING_URL } from "@/src/lib/live/briefing";
+import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
 import { pageTitle } from "@/src/lib/routes/metadata";
 
@@ -79,12 +81,35 @@ const TRUST_PRIVACY_LABEL: Record<Locale, { privacy: string; dataProcessing: str
   en: { privacy: "Privacy policy", dataProcessing: "Data processing agreement" },
 };
 
+const TRUST_SUBJECT_LABEL: Record<Locale, { dataProtection: string; operations: string }> = {
+  de: { dataProtection: "Datenschutz", operations: "Betrieb" },
+  en: { dataProtection: "Data protection", operations: "Operations" },
+};
+
 const BRIEFING_LABEL: Record<Locale, string> = {
   de: "Beratungstermin buchen",
   en: "Book a briefing",
 };
 
 const PROOF_LABEL: Record<Locale, string> = { de: "Belege", en: "Proof" };
+
+/** Fallback context line — used only where a quote's own attribution carries
+ * no organisation name to show instead (`parseDemoProofElement`). */
+const PROOF_FALLBACK_CONTEXT: Record<"demo" | "sourced", Record<Locale, string>> = {
+  demo: { de: "Beispielhafte Rückmeldung", en: "Example feedback" },
+  sourced: { de: "Rückmeldung", en: "Feedback" },
+};
+
+const PROOF_GEO_LABEL: Record<"demo" | "sourced", Record<Locale, string>> = {
+  demo: { de: "Beispiel", en: "Example" },
+  sourced: { de: "Beleg", en: "Reference" },
+};
+
+/** Strips the artifact's own "(Bild: …)" / "(image: …)" documentation note
+ * — never copy to display — before the shared quote parser runs. */
+function withoutImageNote(line: string): string {
+  return line.replace(/\s*\((?:Bild|image):[^)]*\)\s*$/i, "");
+}
 
 export default async function Page({
   params,
@@ -120,30 +145,38 @@ export default async function Page({
 
   /**
    * TS-005 through, not around: DEC-048's **3** inline positions beside the
-   * claim, selected by the engine rather than by file order. The demo quotes
-   * pass the clearance gate carrying their flag and come back `mocked`.
+   * claim, selected by the engine rather than by file order.
+   *
+   * `dein-kalender-5-proof-demo` is `provenance: sourced` (state/open.md
+   * row 48, row 162), not `generated` — three real, named quotes, clearance
+   * pending (Q-014). `demo` and every displayed label are therefore read off
+   * the slot (`isDemoSlot`), never hard-coded: a real quote no longer comes
+   * back `mocked`, and only a genuinely generated quote would still badge
+   * itself and use the "Beispielhafte Rückmeldung" wording.
    */
+  const proofIsDemo = isDemoSlot(proofDemo);
   const proofSelection = await selectProof({
     routeId: ROUTE,
     locale,
     focusJob: "run-our-own-calendar",
     surface: "inline",
     candidates: listItems(proofDemo.blocks).map((line, index) => {
-      const match = /^„(.+)"\s*—\s*(.+?)(?:\s*\(Bild:.*\)|\s*\(image:.*\))?$/.exec(line);
-      const claim = match ? match[1] : line;
-      const attribution = match ? match[2] : "";
-      const place = attribution.split(", ").slice(1).join(", ").trim();
+      const card = parseDemoProofElement(
+        withoutImageNote(line),
+        PROOF_FALLBACK_CONTEXT[proofIsDemo ? "demo" : "sourced"][locale],
+      );
+      const place = card.attribution.split(", ").slice(1).join(", ").trim();
       return {
         id: `dein-kalender-5-proof-demo-${index + 1}`,
-        contextLine: locale === "de" ? "Beispielhafte Rückmeldung" : "Example feedback",
-        claim,
-        attribution,
+        contextLine: card.contextLine,
+        claim: card.claim,
+        attribution: card.attribution,
         geo: {
           level: "snapshot" as const,
-          label: locale === "de" ? "Beispiel" : "Example",
+          label: PROOF_GEO_LABEL[proofIsDemo ? "demo" : "sourced"][locale],
         },
         geoCommunity: place === "" ? null : place,
-        demo: true,
+        demo: proofIsDemo,
       };
     }),
   });
@@ -328,14 +361,21 @@ export default async function Page({
           subjects={[
             {
               id: "data-protection",
-              label: locale === "de" ? "Datenschutz" : "Data protection",
-              // TS-024-A19: operations/AI stay unpublished — no hub record
-              // names either (D10), and A19 blocks any sentence without
-              // one. The content artifact's `derived_from: []` demo
-              // sentences are intentionally not rendered here (documented
-              // tension with the prototype completeness override — see
-              // `state/open.md`).
+              label: TRUST_SUBJECT_LABEL[locale].dataProtection,
               body: withoutArrow(fieldAt(trust.blocks, 1)),
+            },
+            {
+              // TS-024-A19 / state/open.md row 163, row 19: the slot now carries a
+              // sourced operations sentence naming a hub record
+              // (`people@0.3.6#jan-henrik-hempel`,
+              // `proof@0.3.5#in-operation-since-2018`), so it ships. AI use
+              // stays unpublished — no hub record names it yet (D10), and
+              // A19 blocks any sentence without one; the content artifact's
+              // `derived_from: []` demo sentence for it is deliberately not
+              // read here.
+              id: "operations",
+              label: TRUST_SUBJECT_LABEL[locale].operations,
+              body: withoutArrow(fieldAt(trust.blocks, 2)),
             },
           ]}
         />

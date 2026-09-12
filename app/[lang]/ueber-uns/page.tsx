@@ -13,9 +13,11 @@ import { RouteLink } from "@/src/components/route-link/route-link";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
+import { isDemoSlot } from "@/src/lib/content/provenance";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { ctaLabelOnly } from "@/src/lib/content/text";
 import { assetSrc } from "@/src/lib/content/asset-src";
+import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 
 import { CountersIsland } from "../_islands";
 import { selectProof } from "../_proof";
@@ -26,6 +28,8 @@ import { PageFrame } from "../_page-frame";
 
 import { pageMeta } from "./page.meta";
 
+import type { ProofCandidate } from "../_proof";
+import type { ContentSlot } from "@/src/lib/content/types";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
@@ -38,23 +42,23 @@ import type { Metadata } from "next";
  * three-job offer (`primaryConversion: null`, TS-006 D6). Zero
  * `data-cta="primary"` elements on this page (TS-027-A10).
  *
- * [ASSUMPTION, per plan/guardrails.md] The proof stream's six filled cards
- * have no authored source: `content/pages/ueber-uns/de.md` names the pool
- * ("the full proof stock plus media-echo, 32 entries") but not an actual
- * cleared selection — that selection is TS-005's relevance engine, which is
- * not built. Per the dummy-content rule, six generated, clearly exemplary
- * cards stand in (`state="mocked"`, `Demo-Daten`), never a real name, place
- * or number presented as real. Recorded in `state/open.md`.
+ * The content follow-up's second pass (2026-09-12, state/open.md row 51/row 109)
+ * replaced the generated `DEMO_PROOF` stand-ins with the six **cleared**
+ * proof elements `ueber-uns-3-proof-stream` now names verbatim — read off
+ * the slot, not hard-coded, so `demo` (`isDemoSlot`) is `false` and no card
+ * badges itself as `Demo-Daten`.
  *
- * [ASSUMPTION] The content file additionally authors a demo testimonial for
- * the reserved 7th slot ("Demo-Testimonial für den reservierten Platz").
- * TS-027 D5 and its acceptance criteria (A6/A7) are [FIXED] and explicit —
- * "Backfill: never", "exactly one empty slot is visible" — precisely
- * because the empty slot *is* the honest, designed state the dummy-content
- * rule's "never a hole" already covers (`empty-proof-slot` is a fully
- * designed, labelled state, not a blank box). The reserved slot renders as
- * `empty-proof-slot`, not the content file's optional demo alternative, so
- * A6/A7 stay satisfiable. Recorded in `state/open.md`.
+ * [ASSUMPTION] The reserved 7th slot still renders as `empty-proof-slot`,
+ * not the content file's real, clearance-pending testimonial
+ * (`ueber-uns-3-testimonial-slot-demo`, `kulturlandbuero-broellin`). TS-027
+ * D5 and its acceptance criteria (A6/A7) are [FIXED] and explicit —
+ * "Backfill: never", "exactly one empty slot is visible" — and an
+ * acceptance criterion is never reworded to fit new content
+ * (plan/guardrails.md). Only six candidates reach `selectProof`, so the
+ * engine leaves the seventh position empty exactly as before; whether that
+ * position may show the clearance-pending testimonial in the protected
+ * preview is the open question `state/open.md` row 109 files for jan-henrik,
+ * not a call this page makes on its own.
  */
 
 const ROUTE = "about" as const;
@@ -93,45 +97,33 @@ function parsePerson(paragraph: string): Person {
   };
 }
 
-interface DemoProof {
-  readonly contextLine: string;
-  readonly claim: string;
-  readonly attribution: string;
-}
+/** Fallback context line — used only where a real element's own attribution
+ * carries no organisation name to show instead (`parseDemoProofElement`). */
+const PROOF_FALLBACK_CONTEXT: Record<Locale, string> = { de: "Beleg", en: "Reference" };
 
-/** Six generated, clearly exemplary proof cards (Q-014: no cleared selection today). */
-const DEMO_PROOF: readonly DemoProof[] = [
-  {
-    contextLine: "Beispielhafte Rückmeldung",
-    claim: "„Der Dorfkalender läuft bei uns seit Jahren einfach mit — ohne dass wir ihn pflegen müssten.“",
-    attribution: "Bürgermeisterin, Beispielgemeinde Musterdorf",
-  },
-  {
-    contextLine: "Beispielhafte Presseerwähnung",
-    claim: "„Ein kleines Projekt aus einem Dorf, das zeigt, wie digitale Teilhabe auf dem Land aussehen kann.“",
-    attribution: "Beispielzeitung, Regionalressort",
-  },
-  {
-    contextLine: "Beispielhafte Rückmeldung",
-    claim: "„Wir haben nie einen Vertrieb gesehen — nur den Kalender, der einfach funktioniert.“",
-    attribution: "Vereinsvorsitzender, Beispielort Musterhagen",
-  },
-  {
-    contextLine: "Beispielhafte Auszeichnung",
-    claim: "„Ausgezeichnet für digitale Teilhabe im ländlichen Raum.“",
-    attribution: "Beispiel-Fachpreis Ländliche Digitalisierung",
-  },
-  {
-    contextLine: "Beispielhafte Rückmeldung",
-    claim: "„Als Netzwerk aus mehreren Gemeinden war die gemeinsame Übersicht das, was uns gefehlt hat.“",
-    attribution: "Netzwerkpartner, Beispielregion Musterland",
-  },
-  {
-    contextLine: "Beispielhafte Rückmeldung",
-    claim: "„Kostenlos und trotzdem verlässlich — das war für unseren Kirchenkreis der Unterschied.“",
-    attribution: "Ehrenamtliche Koordinatorin, Beispielgemeinde Musterkirchen",
-  },
-];
+/**
+ * The six cleared proof elements `ueber-uns-3-proof-stream` names, as
+ * relevance candidates (TS-005). Read off the slot, never re-typed: `demo`
+ * is `isDemoSlot(proofStream)`, `false` today (state/open.md row 51, row 109).
+ */
+function proofCandidates(proofStream: ContentSlot, locale: Locale): ProofCandidate[] {
+  const list = proofStream.blocks.find((block) => block.kind === "list");
+  const items = list?.kind === "list" ? list.items : [];
+  const demo = isDemoSlot(proofStream);
+  return items.map((item, index) => {
+    const card = parseDemoProofElement(item, PROOF_FALLBACK_CONTEXT[locale]);
+    const place = card.attribution.split(", ").slice(1).join(", ").trim();
+    return {
+      id: `ueber-uns-3-proof-stream-${index + 1}`,
+      contextLine: card.contextLine,
+      claim: card.claim,
+      attribution: card.attribution,
+      geo: { level: "snapshot" as const, label: PROOF_FALLBACK_CONTEXT[locale] },
+      geoCommunity: place === "" ? null : place,
+      demo,
+    };
+  });
+}
 
 export async function generateMetadata({
   params,
@@ -147,33 +139,22 @@ export default async function Page({
   params: Promise<{ lang: string }>;
 }) {
   const locale = await localeFrom(params);
+  const page = await pageContent(ROUTE, locale);
+  const proofStream = slot(page, "ueber-uns-3-proof-stream");
+
   /**
    * TS-005 through, not around: DEC-048's `/ueber-uns` **stream** count is 7,
-   * and the page has six generated elements — so the engine itself leaves the
-   * seventh position empty rather than the page hard-coding the gap (D5,
-   * A6/A7).
+   * and the slot names six cleared elements — so the engine itself leaves
+   * the seventh position empty rather than the page hard-coding the gap
+   * (D5, A6/A7).
    */
   const proofSelection = await selectProof({
     routeId: ROUTE,
     locale,
     focusJob: "understand-who-is-behind-it",
     surface: "stream",
-    candidates: DEMO_PROOF.map((proof, index) => ({
-      id: `ueber-uns-3-proof-stream-${index + 1}`,
-      contextLine: proof.contextLine,
-      claim: proof.claim,
-      attribution: proof.attribution,
-      geo: { level: "snapshot" as const, label: "Beispiel" },
-      geoCommunity: proof.attribution.split(", ").slice(1).join(", ").trim() || null,
-      type: proof.contextLine.includes("Presse")
-        ? ("press" as const)
-        : proof.contextLine.includes("Auszeichnung")
-          ? ("award" as const)
-          : ("testimonial" as const),
-      demo: true,
-    })),
+    candidates: proofCandidates(proofStream, locale),
   });
-  const page = await pageContent(ROUTE, locale);
 
   const origin = slot(page, "ueber-uns-1-origin");
   const archiveLink = slot(page, "ueber-uns-4-archive");

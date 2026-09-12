@@ -109,10 +109,9 @@ export default async function Page({
   const locale = await localeFrom(params);
   const rawQuery = await searchParams;
   const page = await pageContent(ROUTE, locale);
-  // The band's kicker is the home artifact's, in the page's language — the
-  // component's own default is a German literal (F-2-33).
-  const home = await pageContent("home", locale);
-  const contextBandHeading = fieldAt(slot(home, "home-10-context-band").blocks, 0);
+  // The band's own kicker (state/open.md row 95, row 161) — the component's
+  // own default is a German literal (F-2-33).
+  const contextBandHeading = fieldAt(slot(page, "registrieren-6-context-band").blocks, 0);
 
   const ortSlot = slot(page, "registrieren-1-ort");
   const werSlot = slot(page, "registrieren-2-wer");
