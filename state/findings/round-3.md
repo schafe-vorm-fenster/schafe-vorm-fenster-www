@@ -22,6 +22,18 @@ carries **23 findings: 0 critical · 0 high · 13 medium · 10 low**.
 Every finding here carries a `Round decision`; the round's work split
 and the dismissals are `plan/round-4.md`.
 
+**Round 4 (the fix round) — where to retest.** All twelve fix-now findings
+carry a `Resolved: <commit>` line in their own section below. Verified on a
+local production build (`VERCEL_ENV=preview pnpm build && VERCEL_ENV=preview
+pnpm start` on 3100, hash asset removed — rows 147 and 148): `pnpm e2e`
+**509 passed / 0 failed / 8 skipped**, including `e2e/a11y.spec.ts` with
+`label-content-name-mismatch` enabled and failing on presence. Preview:
+`https://schafe-vorm-fenster-ihuc6flgy-schafe-vorm-fenster.vercel.app`,
+**502 passed / 0 failed / 15 skipped** through the automation bypass. Two
+findings want a human eye at the retest: F-3-10 (QA verifies it either way,
+by the round's own instruction) and F-3-12 (not reproducible locally in four
+gestures — `state/open.md` row 159).
+
 ---
 
 ## F-3-1 — The logo link's visible text is not part of its accessible name, on every page
