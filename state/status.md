@@ -1,11 +1,12 @@
 # Status
 
 Run started: 2026-09-11 (orchestrator session, model claude-fable-5-1)
-Current milestone: M5 Final acceptance (gate 2 closed after 3 rounds with named remainder) (M1 closed 2026-09-11)
-Current test round: M5 final fix round (plan/round-4.md) → retest → final acceptance
+Current milestone: DONE — prototype milestone accepted (reports/acceptance/final.md); run closed (M1 closed 2026-09-11)
+Current test round: closed (gate-2 loop 3 rounds; M5 roundtrip + final fix round + retest)
 
 ## Done
 
+- Final fix round (12/12, plan/round-4.md; F-3-10 = IntersectionObserver bug fixed), preview https://schafe-vorm-fenster-ihuc6flgy-schafe-vorm-fenster.vercel.app e2e 509/0 prod build; QA M5 run 2: 12/12 resolved, 0 critical / 0 high, 285/28/45; Customer FINAL: prototype milestone ACCEPTED, R-1…R-11 unresolved with reasons; run report reports/run-report.md — 2026-09-12
 - M5 roundtrip on preview 5jupiff6w: QA run 1 285 pass / 28 fail / 45 n-t, 0 critical / 0 high, e2e 471/0 + 464/0 (reports/qa/M5-run-1.md); UAT: all nine walks reach their goal, 9/19 gate-2 hesitations gone (reports/uat/M5.md); chaos ×4 on Playwright: no double-fired events, all gate-2 defects confirmed fixed, new observations triaged to F-3-10…23; PM final decisions: 12 fix-now / 11 open-list + handover section (plan/round-4.md) — 2026-09-12
 - M5 fix round: F-2-49 (proxy-level 307 hop — Cache Components serialises page redirect() into the flight payload), F-2-70 (404 via two-segment rewrite, JS-off full body both locales, closes row 37), F-2-69 (archive CLS 0.22→0), F-2-33/41 residue, F-2-71 (six hydration races), F-2-72/73/74 (real titles/descriptions from content `seo:` blocks, no geoname ids, EN legal notice); pnpm check 1073 tests; e2e 471/0 prod build, 464/0 preview; Lighthouse CLS 0; verification traps rows 147/148 — 2026-09-12
 - Customer acceptance gate 2: closed with named remainder — 264 accepted / 14 as prototype / 15 rejected / 27 not in gate; 7 must-fix items for M5 incl. three new findings (reports/acceptance/gate-2.md) — 2026-09-12
@@ -45,8 +46,7 @@ Current test round: M5 final fix round (plan/round-4.md) → retest → final ac
 
 ## In progress
 
-- Final fix round, 12 items (plan/round-4.md), one developer, whole tree, production-build proofs — Developer (opus)
-- Next: QA retest M5 run 2 on the fresh preview → final Customer protocol reports/acceptance/final.md → run report
+- — (run closed; next: manual break, then the four workstreams in plan/round-4.md)
 
 ## Pending
 
@@ -58,4 +58,5 @@ Current test round: M5 final fix round (plan/round-4.md) → retest → final ac
 ## Last quality gate
 
 M1 — QA: clear | Customer: accepted | UAT: n/a
-Gate 2 — QA: closed with named remainder (4 highs) | Customer: closed with named remainder (7 must-fix → M5) | UAT: report filed
+Gate 2 — QA: closed with named remainder | Customer: closed with named remainder | UAT: filed
+M5 — QA: 0 critical / 0 high, proceed | Customer: ACCEPTED (prototype) | UAT: all nine walks reach their goal
