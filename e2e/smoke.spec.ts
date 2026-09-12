@@ -16,12 +16,37 @@ const VIEWPORTS = [
   { name: "1280x800 (2xl, reference)", width: 1280, height: 800 },
 ];
 
-/** The visible text of the rendered DOM, in document order. */
+/**
+ * The visible text of the rendered DOM, in document order — **the page**, not
+ * the header.
+ *
+ * TS-017 D2(d)'s single-tree rule is what this checks, and it still holds for
+ * everything a page composes: no block appears, disappears or reorders between
+ * 360, 428 and 1280. The site header is the one named exception, on Jan's
+ * round-3 decision (point 3, `state/open.md` rows 35 and 201): below `md` the
+ * logo shows the mark alone and the four job labels move behind a burger into
+ * a full-screen overlay, because the previous single-tree form — four labels
+ * in a sideways-scrolling row — showed one and a half of them on a phone and
+ * hid the rest behind a gesture nobody discovers.
+ *
+ * The exception is scoped to the header element and named here rather than
+ * loosened in the criterion: every destination, label and control still exists
+ * in the markup at every width, and `e2e/site-header.spec.ts` asserts that the
+ * whole D4 inventory is reachable at 360 and at 1280. Aligning D2(d) and D4
+ * with this is a spec-session row, not a test-side edit.
+ */
 async function visibleTextOrder(page: import("@playwright/test").Page) {
   return page.evaluate(() => {
+    const banner = document.querySelector("body > header");
     const walker = document.createTreeWalker(
       document.body,
       NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: (node) =>
+          banner?.contains(node)
+            ? NodeFilter.FILTER_REJECT
+            : NodeFilter.FILTER_ACCEPT,
+      },
     );
     const out: string[] = [];
     let node = walker.nextNode();
@@ -54,7 +79,7 @@ test("the shell renders and declares its language", async ({ page }) => {
   await expect(page.getByRole("contentinfo")).toBeVisible();
 });
 
-test("TS-017-A8: the visible text order is identical at 360, 428 and 1280", async ({
+test("TS-017-A8: the page's visible text order is identical at 360, 428 and 1280", async ({
   page,
 }) => {
   const orders: string[][] = [];

@@ -16,6 +16,15 @@ export interface LogoProps {
   readonly variant?: "wordmark" | "url" | "mark";
   /** Renders the logo as the link home. Off inside an existing link. */
   readonly link?: boolean;
+  /**
+   * Below `md` the wordmark is not painted and the mark stands alone — the
+   * design system allows the mark at 38–40 px on its own (SRC-014 §Logo), and
+   * the phone header needs the width for the calendar pill and the burger
+   * (Jan's round-3 point 3). The wordmark stays in the markup and returns at
+   * `md`; the link's accessible name is the dictionary's either way, so
+   * nothing is lost to the accessibility tree at any width.
+   */
+  readonly compact?: boolean;
   readonly locale?: Locale;
   readonly className?: string;
 }
@@ -40,7 +49,13 @@ const EDITORIAL_URL = "schafe-vorm-fenster.de";
  * dictionary and in the page's language (F-2-33); the mark itself is
  * decorative, because the wordmark beside it is real text.
  */
-export function Logo({ variant = "wordmark", link = true, locale = "de", className }: LogoProps) {
+export function Logo({
+  variant = "wordmark",
+  link = true,
+  compact = false,
+  locale = "de",
+  className,
+}: LogoProps) {
   const content = (
     <>
       <Image
@@ -77,7 +92,11 @@ export function Logo({ variant = "wordmark", link = true, locale = "de", classNa
   const classes = [styles.logo, className].filter(Boolean).join(" ");
 
   if (!link) {
-    return <span className={classes}>{content}</span>;
+    return (
+      <span className={classes} data-compact={compact ? "phone" : undefined}>
+        {content}
+      </span>
+    );
   }
 
   return (
@@ -86,6 +105,7 @@ export function Logo({ variant = "wordmark", link = true, locale = "de", classNa
       // opens with announced itself in the wrong language.
       aria-label={dictionary(locale).nav.logoHome}
       className={classes}
+      data-compact={compact ? "phone" : undefined}
       locale={locale}
       styled={false}
       to="home"

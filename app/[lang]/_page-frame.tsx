@@ -84,6 +84,17 @@ export interface SiteChromeProps {
   readonly showTrail?: boolean;
   /** `/rechtliches` only (inventory §2.2 #18) — a fixed control, never elsewhere. */
   readonly backToTop?: boolean;
+  /**
+   * This page's first block is a `photo-surface` carrying a photograph, so
+   * the header lies transparent on it and turns solid once it has scrolled
+   * past (Jan's round-3 point 2). The page computes it from its own image
+   * inventory — a hero whose photograph is still missing renders the light
+   * hatch, which paper-coloured header items could not sit on.
+   *
+   * Suppressed where a breadcrumb trail stands between the header and the
+   * hero: there the header is not over the photograph at all.
+   */
+  readonly heroPhoto?: boolean;
   readonly children: ReactNode;
 }
 
@@ -96,15 +107,17 @@ export function SiteChrome({
   locale,
   showTrail = ROUTES[route].parent !== undefined,
   backToTop = false,
+  heroPhoto = false,
   children,
 }: SiteChromeProps) {
   const d = dictionary(locale);
   const ancestors = trail(route).slice(0, -1);
+  const trailShown = showTrail && ancestors.length > 0;
 
   return (
     <>
-      <SiteHeader current={route} locale={locale} />
-      {showTrail && ancestors.length > 0 ? (
+      <SiteHeader current={route} locale={locale} overHero={heroPhoto && !trailShown} />
+      {trailShown ? (
         <div className="container">
           <BreadcrumbTrail
             current={d.pages[route]}
@@ -191,6 +204,7 @@ export function PageFrame({
   locale,
   showTrail,
   backToTop,
+  heroPhoto,
   contextBandHeading,
   closing,
   children,
@@ -202,6 +216,7 @@ export function PageFrame({
   return (
     <SiteChrome
       backToTop={backToTop}
+      heroPhoto={heroPhoto}
       locale={locale}
       route={meta.route}
       showTrail={showTrail}

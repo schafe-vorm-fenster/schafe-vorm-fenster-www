@@ -39,3 +39,21 @@
   background: var(--color-neutral-ink);
   color: var(--color-neutral-paper);
 }
+
+/*
+ * On an ink ground (the phone menu overlay) the pair inverts: the available
+ * language reads in `lime-300`, the current one takes the paper fill it
+ * needs to be a fill at all. Still marked by the fill, not by colour alone.
+ */
+.dark .link {
+  color: var(--color-lime-300);
+}
+
+.dark .link:hover {
+  background: color-mix(in srgb, var(--color-neutral-paper) 16%, transparent);
+}
+
+.dark .current {
+  background: var(--color-neutral-paper);
+  color: var(--color-neutral-ink);
+}

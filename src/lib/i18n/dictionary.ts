@@ -48,6 +48,14 @@ export interface Dictionary {
      * accessibility tree on every `/en` page.
      */
     logoHome: string;
+    /**
+     * The phone header's disclosure (Jan's round-3 decision, state/open.md
+     * rows 35 and 201): the burger's accessible name in both states, the
+     * overlay's own name, and the close control.
+     */
+    menuOpen: string;
+    menuClose: string;
+    menuLabel: string;
   };
   footer: {
     contact: string;
@@ -242,6 +250,9 @@ const de: Dictionary = {
     calendarButton: "Kalender",
     breadcrumb: "Seitenpfad",
     logoHome: "Schafe vorm Fenster — zur Startseite",
+    menuOpen: "Menü öffnen",
+    menuClose: "Menü schließen",
+    menuLabel: "Menü",
   },
   footer: {
     contact: "Kontakt",
@@ -346,6 +357,9 @@ const en: Dictionary = {
     calendarButton: "Calendar",
     breadcrumb: "Page path",
     logoHome: "Schafe vorm Fenster — to the home page",
+    menuOpen: "Open menu",
+    menuClose: "Close menu",
+    menuLabel: "Menu",
   },
   footer: {
     contact: "Contact",

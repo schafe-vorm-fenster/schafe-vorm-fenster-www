@@ -33,3 +33,21 @@
   font-weight: 700;
   letter-spacing: var(--tracking-mono);
 }
+
+/*
+ * The mark alone below `md` — Jan's round-3 point 3.
+ *
+ * Mobile-first (TS-017 D2(a)): the base rule is the phone's, and the `md`
+ * query below brings the wordmark back. The wordmark is never removed from
+ * the markup, and the link's accessible name comes from `aria-label` in both
+ * cases, so the accessibility tree reads the same at every width.
+ */
+.logo[data-compact="phone"] .wordmark {
+  display: none;
+}
+
+@media (min-width: 40rem) {
+  .logo[data-compact="phone"] .wordmark {
+    display: flex;
+  }
+}

@@ -121,6 +121,28 @@ header publishes its height as `--site-header-height`; `legal-section` uses
 that for `scroll-margin-top`. The layout keeps the `main` landmark and the
 `#main` id, because `skip-link` jumps to it.
 
+#### The header has two grounds and two disclosures
+
+Both are Jan's round-3 decision (`state/open.md` rows 200 and 201), and both
+are one component tree — every destination exists in the markup at every
+width.
+
+- **Ground.** A page whose first block is a `photo-surface` carrying a
+  photograph passes `heroPhoto` to `PageFrame`. The header then lies
+  transparent on the hero (`position: fixed`, items in paper over its own top
+  scrim) and turns solid once the hero's bottom edge passes it. A page without
+  one, or one with a breadcrumb trail between the header and the hero, stays
+  solid. Compute `heroPhoto` from the page's own image inventory — a hero
+  whose photograph is still missing renders the light hatch, which paper items
+  could not sit on — and pass `hero` to the surface that *is* the hero, so
+  `photo-surface` marks it `data-hero` for the header to measure against.
+- **Disclosure.** Below `md` the logo shows the mark alone (`compact`), the
+  four job labels move into a full-screen `<dialog>` behind a burger, and the
+  calendar entry stays in the bar. From `md` the labels are inline and the
+  burger is gone. `HeaderShell` is the one client component of the chrome and
+  owns both runtime facts; `menu-state.ts` holds the disclosure logic and is
+  where it is tested.
+
 ## How states are passed
 
 Four states, one vocabulary — `data-state.ts`, inventory rule 6 and decision

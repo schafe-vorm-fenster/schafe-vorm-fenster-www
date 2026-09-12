@@ -1,10 +1,122 @@
+/*
+ * The header — TS-004 D4, and Jan's round-3 points 2 and 3.
+ *
+ * Mobile-first (TS-017 D2(a)): everything above the first `@media` line is
+ * the phone. The two `min-width` queries are `md` (40rem) and `lg` (48rem),
+ * both `breakpoint.*` token values (D2(b)).
+ *
+ * Two grounds, one element:
+ *   solid       — paper, hairline, in the flow. Every page without a hero
+ *                 photograph, and every page once the hero has scrolled past.
+ *   over a hero — transparent, out of the flow, items in paper over the
+ *                 header's own top scrim. Swapping between them changes
+ *                 colours only, never geometry, so CLS stays 0.
+ */
+
 .header {
   background: var(--color-neutral-paper);
   border-bottom: 1px solid var(--color-neutral-line);
+  color: var(--color-neutral-ink);
   position: sticky;
   top: 0;
   width: 100%;
   z-index: 10;
+}
+
+/*
+ * Over a hero photograph the header takes no space in the flow — the
+ * photograph starts at the top of the document, which is what the design
+ * boards draw (`concept/v2.0/UI Varianten.dc.html`, turn 6 "Editorial mit
+ * Fotoflächen": the bar lies on the hero, mark and wordmark in paper, the
+ * calendar pill in lime). `fixed`, not `sticky`, at every scroll position, so
+ * swapping between the two grounds moves nothing.
+ */
+.header[data-over-hero="true"] {
+  /*
+   * The scrim is the header's **own** background image, not a pseudo-element,
+   * for a reason that is not cosmetic: axe-core resolves a text node's ground
+   * by walking the element and its ancestors, and a pseudo-element is not on
+   * that walk. With a transparent header it therefore resolved paper text
+   * against `body`'s paper and reported seven `color-contrast` violations —
+   * non-deterministically, because the same nodes sometimes resolved against
+   * the hero's own image and came back `incomplete` instead. As the header's
+   * own image the ground is visible to the walk, the rule reports
+   * `incomplete` (a machine cannot read contrast off a photograph), and the
+   * real number is measured per pixel instead — `state/open.md` row 200
+   * carries the table.
+   *
+   * The two grounds swap without a transition. A fade would have to animate
+   * `background-image`, which is not an animatable property, so the honest
+   * form is an instant swap at the threshold rather than a 160 ms window in
+   * which the header is neither.
+   */
+  background-color: transparent;
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-neutral-ink) 78%, transparent) 0,
+    color-mix(in srgb, var(--color-neutral-ink) 58%, transparent) 100%
+  );
+  border-bottom-color: transparent;
+  color: var(--color-neutral-paper);
+  left: 0;
+  position: fixed;
+  right: 0;
+}
+
+/*
+ * The light top scrim the design system's 12–26 % transparency allows — the
+ * design boards open their hero with a little over half ink at the very top
+ * edge and fade it out by the time the photograph is meant to be visible.
+ * This pseudo-element is only the tail of it, below the header's own box, so
+ * the band does not end on a hard edge. It is the header's, not the hero's,
+ * so a page whose first section is not a photograph never paints it.
+ */
+.header[data-over-hero="true"]::after {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-neutral-ink) 58%, transparent) 0,
+    transparent 100%
+  );
+  content: "";
+  height: var(--space-4);
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: -1;
+}
+
+.header[data-over-hero="true"][data-solid="true"] {
+  background-color: var(--color-neutral-paper);
+  /* No image on the solid ground, so axe checks the real contrast here. */
+  background-image: none;
+  border-bottom-color: var(--color-neutral-line);
+  color: var(--color-neutral-ink);
+}
+
+.header[data-over-hero="true"][data-solid="true"]::after {
+  display: none;
+}
+
+/*
+ * Without JavaScript nothing can observe the hero leaving, so the transparent
+ * ground would stay over whatever scrolled under it. The `scripting` media
+ * feature is the one place that case can be answered in CSS: the header falls
+ * back to the solid, in-flow form it has everywhere else.
+ */
+@media (scripting: none) {
+  .header[data-over-hero="true"] {
+    background-color: var(--color-neutral-paper);
+    background-image: none;
+    border-bottom-color: var(--color-neutral-line);
+    color: var(--color-neutral-ink);
+    position: sticky;
+  }
+
+  .header[data-over-hero="true"]::after {
+    display: none;
+  }
 }
 
 .inner {
@@ -16,17 +128,20 @@
   padding-block: var(--space-2);
 }
 
-.logo {
+.header .logo {
+  color: inherit;
   flex: none;
+  margin-inline-end: auto;
 }
 
+/*
+ * The four job labels. Below `md` they live in the overlay instead — the same
+ * links, the same order, disclosed rather than scrolled sideways (Jan's
+ * round-3 point 3; state/open.md rows 35 and 201).
+ */
 .nav {
-  flex: 1;
+  display: none;
   min-width: 0;
-  /* One tree at every width: the row scrolls instead of collapsing. */
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
 }
 
 .list {
@@ -65,4 +180,225 @@
 
 .cta {
   flex: none;
+}
+
+/*
+ * On the photograph the calendar entry takes the design system's
+ * "primary on dark" pair (`lime-500` on `ink`, SRC-014 §Button) rather than
+ * the ink fill it wears on paper — the same swap the boards draw.
+ */
+.header[data-over-hero="true"][data-solid="false"] .job {
+  color: var(--color-neutral-paper);
+}
+
+.header[data-over-hero="true"][data-solid="false"] .job:hover,
+.header[data-over-hero="true"][data-solid="false"] .job[data-current="true"] {
+  background: color-mix(in srgb, var(--color-neutral-ink) 55%, transparent);
+  color: var(--color-neutral-paper);
+}
+
+.header[data-over-hero="true"][data-solid="false"] .cta {
+  background: var(--color-lime-500);
+  color: var(--color-neutral-ink);
+}
+
+/* ── The disclosure control ─────────────────────────────────────────────── */
+
+.burger {
+  flex: none;
+}
+
+.toggle {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  height: var(--target-min);
+  justify-content: center;
+  padding: 0;
+  width: var(--target-min);
+}
+
+.toggle:hover {
+  background: color-mix(in srgb, currentcolor 12%, transparent);
+}
+
+.stripes {
+  display: block;
+  height: 16px;
+  position: relative;
+  width: 22px;
+}
+
+.stripe {
+  background: currentcolor;
+  border-radius: var(--radius-pill);
+  display: block;
+  height: 2px;
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.stripe:nth-child(1) {
+  top: 0;
+}
+
+.stripe:nth-child(2) {
+  top: 7px;
+}
+
+.stripe:nth-child(3) {
+  top: 14px;
+}
+
+/*
+ * Burger → X. A second movement beside SRC-014 §Motion's one, on Jan's
+ * instruction (state/open.md row 202). It plays when the overlay's own
+ * instance mounts, and `prefers-reduced-motion` removes it in `base.css`.
+ */
+.toggle[data-shape="close"] .stripe:nth-child(1) {
+  animation: toggle-top var(--motion-control-duration) var(--motion-reveal-easing) forwards;
+}
+
+.toggle[data-shape="close"] .stripe:nth-child(2) {
+  animation: toggle-middle var(--motion-control-duration) var(--motion-reveal-easing) forwards;
+}
+
+.toggle[data-shape="close"] .stripe:nth-child(3) {
+  animation: toggle-bottom var(--motion-control-duration) var(--motion-reveal-easing) forwards;
+}
+
+@keyframes toggle-top {
+  to {
+    top: 7px;
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes toggle-middle {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes toggle-bottom {
+  to {
+    top: 7px;
+    transform: rotate(-45deg);
+  }
+}
+
+/* ── The overlay ───────────────────────────────────────────────────────── */
+
+.dialog {
+  background: var(--color-neutral-ink);
+  border: 0;
+  border-radius: 0;
+  color: var(--color-neutral-paper);
+  height: 100%;
+  margin: 0;
+  max-height: 100%;
+  max-width: 100%;
+  overflow-y: auto;
+  padding: 0;
+  width: 100%;
+}
+
+.dialog::backdrop {
+  background: var(--color-neutral-ink);
+}
+
+.dialogBar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  min-height: var(--site-header-height);
+  padding-block: var(--space-2);
+}
+
+.dialogBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-inline: auto;
+  max-width: var(--measure-page);
+  padding: var(--space-6) var(--gutter) var(--space-12);
+  width: 100%;
+}
+
+.menuNav {
+  width: 100%;
+}
+
+.menuList {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menuLink {
+  align-items: center;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-neutral-paper) 22%, transparent);
+  color: var(--color-neutral-paper);
+  display: flex;
+  font-size: var(--type-subhead-size);
+  font-weight: 800;
+  letter-spacing: var(--type-subhead-tracking);
+  min-height: var(--target-comfortable);
+  padding-block: var(--space-3);
+  text-decoration: none;
+}
+
+.menuLink[data-current="true"] {
+  color: var(--color-lime-300);
+}
+
+.menuCta {
+  align-self: flex-start;
+}
+
+.menuLanguage {
+  margin-top: var(--space-2);
+}
+
+/* ── md — 40rem / 428–640 px up: the wordmark comes back beside the mark. ─ */
+
+@media (min-width: 40rem) {
+  .logo {
+    margin-inline-end: var(--space-2);
+  }
+}
+
+/* ── xl — 64rem / 1024px: the four labels are inline and the burger goes. ──
+ *
+ * Jan's round-3 point 3 names `md` as the switch point for the inline labels.
+ * Measured, they do not fit there: at 640 px the four German labels are 277 px
+ * of a 576 px content box **after** the logo and the calendar pill, and the
+ * header's own container scrolls sideways by 262 px — the exact anti-pattern
+ * the decision exists to remove. At 768 px it still scrolls by 126 px and the
+ * document itself overflows by 6 px. The first breakpoint token at which the
+ * row fits without scrolling is `xl`; `lg` does not. So the **disclosure**
+ * switch is `xl` and the wordmark's is `md`, and the deviation from Jan's
+ * wording is recorded rather than silently rounded (state/open.md row 201).
+ */
+
+@media (min-width: 64rem) {
+  .nav {
+    display: block;
+    flex: 1;
+  }
+
+  .burger {
+    display: none;
+  }
+
+  .logo {
+    margin-inline-end: 0;
+  }
 }

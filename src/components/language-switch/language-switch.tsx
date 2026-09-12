@@ -11,6 +11,14 @@ export interface LanguageSwitchProps {
   /** The page the visitor is on — switching keeps them on it (TS-001-A7). */
   readonly route: RouteId;
   readonly current: Locale;
+  /**
+   * The ground it stands on. `light` is the footer's paper; `dark` is the
+   * phone menu's ink overlay, where the light-ground pair (lime-800 text, an
+   * ink fill for the current language) would be invisible. Same failure class
+   * as state/open.md row 133 — a component that does not re-assert its own
+   * colour against an ambient dark ground.
+   */
+  readonly tone?: "light" | "dark";
   readonly label?: string;
   readonly className?: string;
 }
@@ -29,11 +37,22 @@ export interface LanguageSwitchProps {
  * A11y: `hreflang` and `lang` on each link, `aria-current="true"` on the
  * current language plus a filled chip, targets ≥ 44 px.
  */
-export function LanguageSwitch({ route, current, label, className }: LanguageSwitchProps) {
+export function LanguageSwitch({
+  route,
+  current,
+  tone = "light",
+  label,
+  className,
+}: LanguageSwitchProps) {
   const name = label ?? dictionary(current).footer.language;
 
   return (
-    <nav aria-label={name} className={[styles.nav, className].filter(Boolean).join(" ")}>
+    <nav
+      aria-label={name}
+      className={[styles.nav, tone === "dark" ? styles.dark : "", className]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <ul className={styles.list}>
         {LOCALES.map((locale) => (
           <li key={locale}>

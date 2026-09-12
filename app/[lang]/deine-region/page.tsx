@@ -220,6 +220,7 @@ export default async function Page({
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
+      heroPhoto={heroImage?.src !== undefined}
       closing={{ to: "regionQuote", label: ctaLabel, reassurance: undefined }}
       contextBandHeading={undefined}
       locale={locale}
@@ -299,6 +300,11 @@ export default async function Page({
             label={fieldAt(interim.blocks, 2) ?? words.search.label}
             locale={locale}
             to="place"
+            // F-3-R2: the block is an `ink` section, and the light tone's
+            // muted hint is `neutral-muted` on ink — 2.9:1. The dark tone
+            // renders the hint in paper, which is what `place-search` already
+            // provides for exactly this ground.
+            tone="dark"
           />
           {/* D4's county-scoped figure: counted or absent, never estimated
               (WEB-F-041). `places` has no `/api/stats` field (Q-037), so the

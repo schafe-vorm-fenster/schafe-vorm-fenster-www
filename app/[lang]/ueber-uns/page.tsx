@@ -200,7 +200,12 @@ export default async function Page({
     <>
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
-    <PageFrame closing={{ variant: "merged" }} locale={locale} meta={pageMeta}>
+    <PageFrame
+      closing={{ variant: "merged" }}
+      heroPhoto={heroImage?.src !== undefined}
+      locale={locale}
+      meta={pageMeta}
+    >
       {/* Block 1 — origin (photo, ratio-hero, ink gradient): h1, the causal
           chain, the honorary-mayor proof (D3). Both images are DEC-068
           generated placeholders (`placeholders.manifest.json`), already
@@ -209,6 +214,9 @@ export default async function Page({
           real founder. */}
       <PhotoSurface
         gradient="ink"
+        // The page's hero, composed out of a bare surface rather than
+        // `hero-block` — the header lies on it (Jan's round-3 point 2).
+        hero
         id="herkunft"
         // F-2-33: the surface badges itself out of the dictionary — without
         // the page's language `/en/about` read "Nicht motivgenau ·

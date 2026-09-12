@@ -192,6 +192,7 @@ export default async function Page({
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
+      heroPhoto={heroImage?.src !== undefined}
       closing={{ to: "order", label: orderLabel }}
       contextBandHeading={fieldAt(contextBand.blocks, 0)}
       locale={locale}

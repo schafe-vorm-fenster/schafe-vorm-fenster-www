@@ -85,6 +85,15 @@
   --motion-reveal-distance: 22px;
   --motion-reveal-duration: 550ms;
   --motion-reveal-easing: cubic-bezier(0.2, 0.7, 0.3, 1);
+  /*
+   * The chrome's own, much shorter movement — the header's two grounds fading
+   * into each other and the burger crossing into an X (Jan's round-3 points 2
+   * and 3). SRC-014 §Motion names one movement, the section reveal; these are
+   * a second, on Jan's instruction, and the duration is deliberately a
+   * quarter of it so a control never feels like a section.
+   * `prefers-reduced-motion` removes both in `base.css`.
+   */
+  --motion-control-duration: 160ms;
 
   /* ── Reading measure — plan/component-inventory.md D-7 ──────────────── */
   --measure-reading: 66ch;

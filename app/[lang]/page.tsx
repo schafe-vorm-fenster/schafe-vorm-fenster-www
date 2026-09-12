@@ -466,6 +466,7 @@ export default async function HomePage({
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{ variant: "module", node: search(false) }}
+      heroPhoto={focusCopy.hero?.src !== undefined}
       contextBandHeading={fieldAt(band.blocks, 0)}
       locale={locale}
       meta={HOME_META}

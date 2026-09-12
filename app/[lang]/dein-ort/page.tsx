@@ -343,6 +343,7 @@ export default async function PlacePage({
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
+      heroPhoto={heroImage?.src !== undefined}
       closing={
         // TS-020 D2, block 4: the closing CTA repeats block 1's primary of
         // the *current* state — the publishing offer in B, the search
