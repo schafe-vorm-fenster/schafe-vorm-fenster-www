@@ -47,7 +47,7 @@ Current test round: closed (gate-2 loop 3 rounds; M5 roundtrip + final fix round
 
 ## In progress
 
-- — (workstream 1 closed; next: Jan's review, then workstreams 2–4 in plan/round-4.md)
+- Imagery follow-up (Jan, 2026-09-12): image inventory persisted in page frontmatter (Content) + AI-generated placeholder images via Vercel AI Gateway `bfl/flux-pro-1.1`, wired with next/image, real portrait from the people package (Developer)
 
 ## Pending
 
