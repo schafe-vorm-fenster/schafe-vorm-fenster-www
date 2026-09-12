@@ -40,6 +40,15 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  /*
+   * The header is sticky on every page and `fixed` over a hero photograph
+   * (round 3, Jan's point 2), so anything scrolled to — a fragment link, a
+   * focused element the browser brings into view — would otherwise land under
+   * it. One declaration here covers every anchor on the site;
+   * `legal-section`'s own `scroll-margin-top` stays, because that one also
+   * wants a little air above the heading.
+   */
+  scroll-padding-top: var(--site-header-height);
 }
 
 body {

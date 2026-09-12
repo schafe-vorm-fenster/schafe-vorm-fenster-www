@@ -272,10 +272,11 @@
   animation: toggle-bottom var(--motion-control-duration) var(--motion-reveal-easing) forwards;
 }
 
+/* `transform` and `opacity` only — both compositor-friendly; animating `top`
+   would lay the header out again on every frame. */
 @keyframes toggle-top {
   to {
-    top: 7px;
-    transform: rotate(45deg);
+    transform: translateY(7px) rotate(45deg);
   }
 }
 
@@ -287,8 +288,7 @@
 
 @keyframes toggle-bottom {
   to {
-    top: 7px;
-    transform: rotate(-45deg);
+    transform: translateY(-7px) rotate(-45deg);
   }
 }
 
@@ -296,6 +296,9 @@
 
 .dialog {
   background: var(--color-neutral-ink);
+  /* The overlay scrolls on its own; a scroll that reaches its end must not
+     continue in the page behind it. */
+  overscroll-behavior: contain;
   border: 0;
   border-radius: 0;
   color: var(--color-neutral-paper);
@@ -357,6 +360,10 @@
   min-height: var(--target-comfortable);
   padding-block: var(--space-3);
   text-decoration: none;
+}
+
+.menuLink:hover {
+  color: var(--color-lime-300);
 }
 
 .menuLink[data-current="true"] {
