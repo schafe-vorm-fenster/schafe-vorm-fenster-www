@@ -269,3 +269,28 @@ for (const [path, phrase] of [
     expect(text, `${path} renders a geo-api identifier`).not.toMatch(/geoname\./);
   });
 }
+
+/**
+ * F-3-5 — the German residue F-2-33 could not reach.
+ *
+ * Everything visible on the `/en` pages was translated in round 3. The
+ * founder portrait's `alt` was not: `alt="Jan-Henrik Hempel, Gründer"` stood
+ * on `/en/about` and `/en/about/archive`, the one German job noun on two
+ * otherwise fully English pages. An `alt` is not visible text, so no sweep of
+ * the rendered body could ever have found it — which is why this assertion
+ * reads the attribute rather than the page.
+ */
+test("F-3-5: text alternatives follow the page language", async ({ page }) => {
+  await page.goto("/en/about");
+  const englishAlts = await page.evaluate(() =>
+    [...document.querySelectorAll("img")].map((img) => img.getAttribute("alt") ?? ""),
+  );
+  expect(englishAlts.join(" | ")).not.toContain("Gründer");
+  expect(englishAlts).toContain("Jan-Henrik Hempel, founder");
+
+  await page.goto("/ueber-uns");
+  const germanAlts = await page.evaluate(() =>
+    [...document.querySelectorAll("img")].map((img) => img.getAttribute("alt") ?? ""),
+  );
+  expect(germanAlts).toContain("Jan-Henrik Hempel, Gründer");
+});

@@ -25,6 +25,7 @@ import { PageFrame } from "../_page-frame";
 
 import { pageMeta } from "./page.meta";
 
+import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
 /**
@@ -56,6 +57,21 @@ import type { Metadata } from "next";
  */
 
 const ROUTE = "about" as const;
+
+/**
+ * The founder portrait's text alternative, per locale (F-3-5).
+ *
+ * It was a German literal, so `/en/about` and `/en/about/archive` rendered
+ * `alt="Jan-Henrik Hempel, Gründer"` — the one German job noun left on two
+ * otherwise fully English pages, and the residue F-2-33 did not reach because
+ * an `alt` is not visible text and no sweep reads it.
+ *
+ * A name is a name in both languages; only the role is translated.
+ */
+const FOUNDER_ALT: Record<Locale, string> = {
+  de: "Jan-Henrik Hempel, Gründer",
+  en: "Jan-Henrik Hempel, founder",
+};
 
 interface Person {
   readonly name: string;
@@ -202,7 +218,7 @@ export default async function Page({
           <OriginStory
             body={fieldAt(origin.blocks, 1) ?? ""}
             locale={locale}
-            portraitAlt="Jan-Henrik Hempel, Gründer"
+            portraitAlt={FOUNDER_ALT[locale]}
             portraitNotDepicting
             portraitSrc={assetSrc(gruender)}
             priceDisplay={originPrice.display}
