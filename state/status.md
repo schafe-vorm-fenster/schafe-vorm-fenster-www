@@ -46,7 +46,7 @@ Current test round: closed (gate-2 loop 3 rounds; M5 roundtrip + final fix round
 
 ## In progress
 
-- — (run closed; next: manual break, then the four workstreams in plan/round-4.md)
+- Workstream 1 (content follow-up, started on Jan's instruction 2026-09-12): replace Dummy-Content/demo slots with texts from real hub + gtm sources; two Content agents (group 1: home/dein-ort/starten/mitmachen/registrieren; group 2: kalender/bestellen/region/ueber-uns/archiv/rechtliches)
 
 ## Pending
 
