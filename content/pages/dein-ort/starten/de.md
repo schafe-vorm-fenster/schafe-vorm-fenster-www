@@ -28,6 +28,21 @@ tone_profile: "du-everywhere"
 provenance: "sourced — 0 generated slots. Slot 2 now cites the 2022 Nordkurier record behind the permanence commitment and slot 4 the Lehre reference case; both are clearance: pending (Q-045, Q-014)"
 compliance_check: "state/content-map.md#compliance-checks — TS-021"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+images:
+  - id: dein-ort-starten-hero
+    slot: dein-ort-starten-1-ack
+    ratio: hero
+    provenance: generated
+    brief: >-
+      Gemeindehaus und Feuerwehrgerätehaus an einem Dorfanger im Mai, später
+      Nachmittag: frisch gemähtes Gras, ein Fahnenmast ohne Fahne, Klappstühle
+      an der Hauswand. Weiches Licht, leicht bedeckt, gedeckte Grüntöne. Im
+      Hintergrund tragen zwei Menschen einen Tisch, von hinten und klein im
+      Bild. Nicht zeigen: Schrift, Logos, lesbare Schilder, Gesichter, eine in
+      die Kamera gestellte Vereinsgruppe.
+    style: "documentary photo, natural light, 35mm, muted colours, no text"
+    alt: "Gemeindehaus am Dorfanger im Frühling, davor Klappstühle an der Wand."
+    status: needed
 ---
 
 # Dein Ort gründen (`/dein-ort/starten`)

@@ -38,6 +38,59 @@ compliance_check: "state/content-map.md#compliance-checks — TS-022"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 open_points:
   - "state/open.md #17 — the permanence promise is now cited from `community-calendar` plus the 2022 Nordkurier media-echo entry; whether a proof element of its own gets minted stays open, and the press record has no `usage_rights` yet (Q-045)"
+images:
+  - id: mitmachen-hero
+    slot: mitmachen-1-hero
+    ratio: hero
+    provenance: generated
+    brief: >-
+      Zwei Hände halten ein Smartphone über einen ausgedruckten Aushang, der
+      auf einem Küchentisch liegt, und fotografieren ihn. Morgenlicht von der
+      Seite, Wachstuchdecke, eine Kaffeetasse am Bildrand. Zu sehen sind nur
+      Hände und Unterarme. Nicht zeigen: Gesichter, Schrift, Logos, einen
+      lesbaren Aushang, eine erkennbare App-Oberfläche, eine Gerätemarke.
+    style: "documentary photo, natural light, 35mm, muted colours, no text"
+    alt: "Hands photographing a printed flyer on a kitchen table with a smartphone."
+    lcp: true
+    status: needed
+  - id: mitmachen-path-whatsapp
+    slot: mitmachen-3-path-whatsapp
+    ratio: feature
+    provenance: generated
+    brief: >-
+      Ein gefalteter Aushang klemmt unter einem Kühlschrankmagneten, daneben
+      liegt ein Smartphone mit dunklem Display auf der Arbeitsplatte.
+      Abendlicht aus dem Fenster, warme, gedeckte Töne, eine gebrauchte Küche.
+      Kein Mensch im Bild. Nicht zeigen: Schrift, Logos, einen lesbaren
+      Zettel, eine App-Oberfläche auf dem Display.
+    style: "documentary photo, natural light, 35mm, muted colours, no text"
+    alt: "A folded flyer under a fridge magnet, a smartphone lying beside it on the counter."
+    status: needed
+  - id: mitmachen-path-calendar
+    slot: mitmachen-4-path-calendar
+    ratio: feature
+    provenance: generated
+    brief: >-
+      Papier-Wandkalender in einem Vereinsraum, an einer Schnur hängt ein
+      Kugelschreiber daneben. In einigen Kästchen stehen handschriftliche
+      Einträge, zu klein und zu unscharf, um sie zu lesen. Bedeckter
+      Nachmittag, Neonlicht mischt sich mit Tageslicht. Nicht zeigen: Schrift,
+      Logos, lesbare Einträge, eine Jahreszahl, Menschen.
+    style: "documentary photo, natural light, 35mm, muted colours, no text"
+    alt: "A paper wall calendar in a club room, a pen hanging beside it on a string."
+    status: needed
+  - id: mitmachen-path-website
+    slot: mitmachen-5-path-website
+    ratio: feature
+    provenance: generated
+    brief: >-
+      Ein zugeklappter Laptop steht auf einem Holztisch im Vereinsheim,
+      daneben ein Stapel Papiere und eine Lesebrille. Nachmittagslicht durch
+      ein Fenster mit Gardine, staubige, warme Farben. Kein Mensch im Bild.
+      Nicht zeigen: Schrift, Logos, eine Gerätemarke, Bildschirminhalt.
+    style: "documentary photo, natural light, 35mm, muted colours, no text"
+    alt: "A closed laptop, a stack of papers, and reading glasses on a wooden table in a club room."
+    status: needed
 ---
 
 # Join in (`/mitmachen`)

@@ -53,6 +53,56 @@ open_points:
   - "Clearance pending — the testimonial in slot 3 (`kulturlandbuero-broellin`) carries `usage_rights: unverified` (Q-014) and its own record says 'nicht für neue öffentliche Flächen verwenden'. Protected preview only; go-live needs written clearance or the place goes back to empty"
   - "Code follow-up — `app/[lang]/ueber-uns/page.tsx` still builds block 3 from a hard-coded `DEMO_PROOF` array with `demo: true`. Slot 3 now carries six real, cleared elements; the page should read them instead (state/open.md #109)"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+images:
+  - id: ueber-uns-hero
+    slot: ueber-uns-1-origin
+    ratio: hero
+    provenance: generated
+    brief: >-
+      Ein Dorf mit wenigen hundert Einwohnern, von einem Feldweg aus gesehen,
+      Februar am späten Nachmittag: kahle Bäume, Backsteinhäuser, ein
+      Storchennest auf einem Mast, Pfützen im Weg. Tief stehendes graues
+      Licht, fast keine Farbe. Kein Mensch im Bild. Nicht zeigen: Schrift,
+      Logos, lesbare Ortsschilder, Schnee, Idylle.
+    style: "documentary photo, natural light, 35mm, muted colours, no text"
+    alt: "A small village seen from a field track in February, bare trees and brick houses."
+    status: needed
+  - id: ueber-uns-founder-portrait
+    slot: ueber-uns-1-origin
+    ratio: portrait
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2026-05-noerdaward2026-DSC09263-portrait.jpeg
+      — `license: free use, credit required`, `press_clearance: cleared`,
+      1826×1826. Binärdatei liegt im go-to-market-os-Repository, das npm-Paket
+      liefert nur den .asset.md-Deskriptor.
+    alt: "Jan-Henrik Hempel looking into the camera, the darkened hall behind him."
+    credit: "@rightvisionstudios & NØRD2026"
+    lcp: true
+    status: real
+  - id: ueber-uns-team-jan-henrik-hempel
+    slot: ueber-uns-5-team
+    ratio: portrait
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2021-workshop-quilow-portrait.jpeg
+      — Eigenaufnahme (in-house), unbeschränkte Nutzung, kein Credit nötig.
+      Nicht dasselbe Bild wie im Herkunftsblock, damit die Seite ein Porträt
+      nicht zweimal zeigt.
+    alt: "Jan-Henrik Hempel explaining something with both hands raised, timber beams behind him."
+    status: real
+  - id: ueber-uns-team-christian-sauer
+    slot: ueber-uns-5-team
+    ratio: portrait
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/people@0.3.6#christian-sauer/assets/2019-christian.jpg
+      — `license: unverified`, Fotograf unbekannt, `press_clearance:
+      unverified`. Nicht freigegeben, und ein Porträt einer realen Person wird
+      nie generiert (DEC-068 Regel 3); bis zur Klärung zeigt die Karte die
+      Fläche „Foto gesucht“ (TS-027-A9).
+    alt: "Christian Sauer outdoors, looking into the camera."
+    status: needed
 ---
 
 # About us (`/ueber-uns`)

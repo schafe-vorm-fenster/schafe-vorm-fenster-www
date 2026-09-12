@@ -36,6 +36,48 @@ schema_note: >-
   no derived_from/RelevanceFacets). The fields above follow TS-007 D6/D7
   and are carried through even though the current schema neither requires
   nor validates them — see state/open.md #37.
+images:
+  - id: home-hero
+    slot: home-1-search-hero
+    ratio: hero
+    provenance: generated
+    brief: >-
+      Blick über ein kleines Dorf in Vorpommern am späten Nachmittag im
+      September: Feldsteinkirche, Backsteinscheune, ein Stück
+      Kopfsteinpflaster, dahinter abgeerntete Felder bis zum Horizont. Tiefes,
+      warmes Seitenlicht, bewölkter Himmel, die Sonne selbst bleibt außerhalb
+      des Bildes. Ganz hinten auf der Dorfstraße zwei Menschen, nur als
+      Silhouetten und zu weit weg, um jemanden zu erkennen. Nicht zeigen:
+      Schrift, Logos, lesbare Orts- oder Nummernschilder, Gesichter,
+      Postkartenidylle mit knallblauem Himmel.
+    style: "documentary photo, natural light, 35mm, muted colours, no text"
+    alt: "Kleines Dorf in Vorpommern am Nachmittag, Feldsteinkirche und Scheune an einer Dorfstraße, dahinter abgeerntete Felder."
+    status: needed
+  - id: home-scene-embed
+    slot: home-5-scene-embed
+    ratio: feature
+    provenance: generated
+    brief: >-
+      Schaukasten aus Holz und Glas an einer Backsteinwand, wie ihn Gemeinden
+      und Vereine für Aushänge benutzen: ein paar Zettel hängen schief, eine
+      Ecke ist leer. Bedeckter Vormittag im Frühjahr, weiches Licht,
+      Regenspuren auf der Scheibe. Die Zettel sind unscharf und aus dieser
+      Entfernung nicht zu entziffern. Nicht zeigen: Schrift, Logos, lesbare
+      Aushänge oder Schilder, Menschen, Bildschirme oder Geräte.
+    style: "documentary photo, natural light, 35mm, muted colours, no text"
+    alt: "Hölzerner Schaukasten an einer Backsteinwand, mit ein paar Aushängen und einer freien Ecke."
+    status: needed
+  - id: home-scene-provenance
+    slot: home-6-scene-provenance
+    ratio: feature
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2021-workshop-ranzin.jpeg
+      — Eigenaufnahme (in-house), unbeschränkte Nutzung, kein Credit nötig.
+      Binärdatei liegt im go-to-market-os-Repository, das npm-Paket liefert
+      nur den .asset.md-Deskriptor.
+    alt: "Jan-Henrik Hempel steht in der offenen Tür eines Backsteinhauses, daneben der Roll-up von Schafe vorm Fenster."
+    status: real
 ---
 
 # Startseite (`/`)

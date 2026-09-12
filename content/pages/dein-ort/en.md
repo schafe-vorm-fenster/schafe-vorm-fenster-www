@@ -41,6 +41,43 @@ tone_profile: "du-everywhere"
 provenance: "sourced — every slot. The four value-story proof cards now carry the real testimonials of the hub (kurzweg-baeckerei, zschiesche-gross-kiesow, eichler-wasserschloss-quilow, wendt-rubkow) and the Volkshochschule reference case instead of generated demo quotes; all five are clearance: pending (Q-014); EN translation of content/pages/dein-ort/de.md, same source ids per slot"
 compliance_check: "state/content-map.md#compliance-checks — TS-020"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+images:
+  - id: dein-ort-hero
+    slot: dein-ort-1-state-a
+    ratio: hero
+    provenance: generated
+    brief: >-
+      Dorfstraße in Vorpommern an einem klaren Morgen im Oktober, leicht
+      erhöhter Blickwinkel: Alleebäume, Vorgärten, ein Bushäuschen, in der
+      Ferne ein Kirchturm. Flaches Seitenlicht, der Asphalt ist noch feucht
+      von der Nacht. Weit hinten schiebt jemand ein Fahrrad, von hinten
+      aufgenommen. Nicht zeigen: Schrift, Logos, lesbare Orts- oder
+      Nummernschilder, erkennbare Gesichter, Drohnenperspektive.
+    style: "documentary photo, natural light, 35mm, muted colours, no text"
+    alt: "A village street lined with trees and a bus shelter on a clear autumn morning, a church tower in the distance."
+    status: needed
+  - id: dein-ort-homescreen-ios
+    slot: dein-ort-7-homescreen
+    ratio: portrait
+    provenance: real
+    source: >-
+      Screenshot der eigenen Kalender-Ansicht unter {APP_HOST}/{ort},
+      iOS/Safari — muss aufgenommen werden. Keine Rendition: eine erfundene
+      Oberfläche wäre eine Produktbehauptung (DEC-068 Regel 3). Bis dahin
+      bleibt die schraffierte Fläche (TS-020-A7).
+    alt: "An iPhone screen showing Safari's share menu with the entry for adding a page to the home screen."
+    status: needed
+  - id: dein-ort-homescreen-android
+    slot: dein-ort-7-homescreen
+    ratio: portrait
+    provenance: real
+    source: >-
+      Screenshot der eigenen Kalender-Ansicht unter {APP_HOST}/{ort},
+      Android/Chrome — muss aufgenommen werden. Keine Rendition, gleicher
+      Grund wie bei der iOS-Aufnahme. Bis dahin bleibt die schraffierte Fläche
+      (TS-020-A7).
+    alt: "An Android screen showing the Chrome menu with the entry for adding a page to the home screen."
+    status: needed
 ---
 
 # Your place (`/dein-ort`)

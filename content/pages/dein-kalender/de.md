@@ -46,6 +46,54 @@ price_source_note: >-
   auf Anfrage) must render from the offerings package at build time,
   never as a typed literal (TS-024 D8) — this file records the source
   value for the page developer, it is not the rendering mechanism.
+images:
+  - id: dein-kalender-hero
+    slot: dein-kalender-1-focus
+    ratio: hero
+    provenance: generated
+    brief: >-
+      Amtsstube einer kleinen Gemeindeverwaltung an einem grauen Vormittag:
+      Aktenschrank, Topfpflanze auf der Fensterbank, ein Stuhl am leeren
+      Schreibtisch. Durch das Fenster Dorfstraße und Kirchturm. Nüchternes,
+      kaltes Tageslicht, Linoleum und helles Holz. Nicht zeigen: Schrift,
+      Logos, lesbare Papiere oder Bildschirme, Menschen.
+    style: "documentary photo, natural light, 35mm, muted colours, no text"
+    alt: "Amtsstube mit Aktenschrank und leerem Schreibtisch, durch das Fenster die Dorfstraße."
+    status: needed
+  - id: dein-kalender-proof-rubkow
+    slot: dein-kalender-5-proof-demo
+    ratio: proof
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/proof@0.3.5#wendt-rubkow — Testimonial von Holger
+      Wendt, Bürgermeister in Rubkow. `usage_rights: unverified`, kein
+      Bildasset vorhanden. Ein Beleg wird nie mit einer Rendition bebildert
+      (DEC-068 Regel 3, `src/generated/placeholders/README.md`); bis zur
+      Freigabe zeigt die Karte die Fläche „Foto gesucht“ (TS-024-A13).
+    alt: "Holger Wendt vor dem Gemeindeamt in Rubkow."
+    status: needed
+  - id: dein-kalender-proof-gross-kiesow
+    slot: dein-kalender-5-proof-demo
+    ratio: proof
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow — Testimonial
+      von Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow. `usage_rights:
+      unverified`, kein Bildasset vorhanden. Gleiche Regel wie bei
+      `dein-kalender-proof-rubkow`.
+    alt: "Dr. A. Zschiesche vor dem Gemeindeamt in Groß Kiesow."
+    status: needed
+  - id: dein-kalender-proof-quilow
+    slot: dein-kalender-5-proof-demo
+    ratio: proof
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow —
+      Testimonial von Uwe Eichler, Wasserschloss Quilow. `usage_rights:
+      unverified`, kein Bildasset vorhanden. Gleiche Regel wie bei
+      `dein-kalender-proof-rubkow`.
+    alt: "Uwe Eichler vor dem Wasserschloss Quilow."
+    status: needed
 ---
 
 # Dein Kalender (`/dein-kalender`)
