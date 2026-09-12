@@ -17,31 +17,42 @@
   white-space: nowrap;
 }
 
-.light {
+/*
+ * F-3-R2 (row 193's class, `state/open.md` row 133's pattern): `section-shell`
+ * recolours every `a` on its dark grounds — `.ink a { color: lime-400 }` —
+ * and a chip is an `a` that brings its own fill/text pair with it. At
+ * specificity (0,1,1) the ambient rule beat the pair at (0,1,0), so a light
+ * chip inside an ink section rendered `lime-400` text on its own
+ * `neutral-surface` ground: **1.35:1**, on every one of `/deine-region`'s
+ * place chips. Each pair now re-asserts itself at (0,2,0), which is above the
+ * ambient rule without needing `!important` or a tone prop the caller would
+ * have to remember.
+ */
+.chip.light {
   background: var(--color-neutral-surface);
   color: var(--color-neutral-ink);
 }
 
-.light:hover {
+.chip.light:hover {
   background: var(--color-neutral-surface2);
 }
 
 /* On an ink, lime-500 or photo ground. */
-.dark {
+.chip.dark {
   background: var(--color-lime-900);
   color: var(--color-neutral-paper);
 }
 
-.dark:hover {
+.chip.dark:hover {
   background: var(--color-neutral-ink);
 }
 
 /* Selected: fill *and* the check glyph the component renders — two signals. */
-.selected {
+.chip.selected {
   background: var(--color-neutral-ink);
   color: var(--color-neutral-paper);
 }
 
-.selected:hover {
+.chip.selected:hover {
   background: var(--color-lime-900);
 }
