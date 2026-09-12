@@ -21,7 +21,7 @@ provenance: "sourced — page-level composition/navigation copy only; the six se
 compliance_check: "state/content-map.md#compliance-checks — TS-029"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 open_points:
-  - "state/open.md #21 — accessibility statement is generated, provenance: generated, flagged for legal-counsel review before production"
+  - "state/open.md #21 — accessibility statement is generated, provenance: generated, flagged for legal-counsel review before production. Re-checked 2026-09-12 against the hub packages and go-to-market-os (including the brand-identity org-profile intake, which holds only .gdoc pointers): no source exists anywhere, so this slot stays generated"
   - "TS-029 open point #2 / state/open.md #53 — English siblings of the five imported documents do not exist yet; this playbook never machine-translates legal text, and the EN page frame below says so explicitly instead of silently showing German text under an English URL"
 ---
 
@@ -71,14 +71,18 @@ translation.
 <!-- id: rechtliches-4-accessibility-note; content_type: section; provenance: generated; derived_from: []; status: draft -->
 
 No Google Doc and no source exists for `#accessibility` yet (TS-029
-D8, TS-004 D8: "to be written"). This page cannot go to production
-without this section (release blocker). The text lives separately
-under `content/legal/accessibility.md`, generated per the
-dummy-content rule: conservatively worded, with no invented
-inspection date, no claimed conformance level — and explicitly marked
-for legal-counsel review before it goes live (`state/open.md` #21).
-The document itself is German only today, like the other five; it is
-not translated here.
+D8, TS-004 D8: "to be written"). Searched again on 2026-09-12: neither
+the hub packages nor `go-to-market-os` carry an accessibility record,
+and the intake documents under
+`packages/identity/brand-identity/intake/org-profile-gdocs/` are bare
+`.gdoc` pointers with no local text, so they are not a source either.
+The section therefore stays `provenance: generated`. This page cannot go
+to production without it (release blocker). The text lives separately
+under `content/legal/accessibility.md`, generated per the dummy-content
+rule: conservatively worded, with no invented inspection date, no
+claimed conformance level — and explicitly marked for legal-counsel
+review before it goes live (`state/open.md` #21). The document itself is
+German only today, like the other five; it is not translated here.
 
 ## English siblings of the legal documents
 

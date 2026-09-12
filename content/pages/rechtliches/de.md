@@ -21,7 +21,7 @@ provenance: "sourced — page-level composition/navigation copy only; the six se
 compliance_check: "state/content-map.md#compliance-checks — TS-029"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 open_points:
-  - "state/open.md #21 — accessibility statement is generated, provenance: generated, flagged for legal-counsel review before production"
+  - "state/open.md #21 — accessibility statement is generated, provenance: generated, flagged for legal-counsel review before production. Re-checked 2026-09-12 against the hub packages and go-to-market-os (including the brand-identity org-profile intake, which holds only .gdoc pointers): no source exists anywhere, so this slot stays generated"
   - "TS-029 open point #2 / state/open.md — English siblings of the five imported documents do not exist yet; this playbook never machine-translates legal text"
 ---
 
@@ -68,9 +68,14 @@ Rolle Content & Translation, „Must not: touch code outside content files
 <!-- id: rechtliches-4-accessibility-note; content_type: section; provenance: generated; derived_from: []; status: draft -->
 
 Für `#barrierefreiheit` existiert bislang kein Google-Doc und keine
-Quelle (TS-029 D8, TS-004 D8: „to be written"). Diese Seite kann ohne
-diesen Abschnitt nicht in Produktion gehen (Release-Blocker). Der Text
-liegt separat unter `content/legal/accessibility.md`, generiert nach der
+Quelle (TS-029 D8, TS-004 D8: „to be written"). Am 2026-09-12 erneut
+gesucht: weder die Hub-Pakete noch `go-to-market-os` tragen einen
+Datensatz zur Barrierefreiheit; die Intake-Dokumente unter
+`packages/identity/brand-identity/intake/org-profile-gdocs/` sind reine
+`.gdoc`-Verweise ohne lokalen Text, also auch keine Quelle. Der
+Abschnitt bleibt deshalb `provenance: generated`. Diese Seite kann ohne
+ihn nicht in Produktion gehen (Release-Blocker). Der Text liegt separat
+unter `content/legal/accessibility.md`, generiert nach der
 Dummy-Content-Regel: zurückhaltend formuliert, ohne erfundenes
 Prüfdatum, ohne behauptete Konformitätsstufe — und ausdrücklich zur
 Prüfung durch Rechtsberatung markiert, bevor er produktiv geht
