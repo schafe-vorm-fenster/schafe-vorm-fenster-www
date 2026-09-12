@@ -12,18 +12,22 @@ status: draft
 locale: en
 sources:
   - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/audiences@0.3.3#actors"
+  - "@schafe-vorm-fenster/audiences@0.3.3#municipalities"
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/audiences@0.3.3#actors"
+  - "@schafe-vorm-fenster/audiences@0.3.3#municipalities"
   - "ia"
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — 4 sourced, 1 generated (step 2 vocabulary, see slot 2); EN translation of content/pages/mitmachen/registrieren/de.md, same source ids per slot"
+provenance: "sourced — every slot. Step 2's option list is now drawn from the `actors` and `municipalities` audience records' own enumerations; the binding enum still belongs to the app's account model (state/open.md #18)"
 compliance_check: "state/content-map.md#compliance-checks — TS-023"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 open_points:
-  - "state/open.md #18 — step-2 vocabulary (who publishes) is a generated placeholder enum pending the app team's account model"
+  - "state/open.md #18 — the step-2 labels are now sourced from the audience records, but the binding value set is still the app account model's to publish"
 ---
 
 # Register (`/mitmachen/registrieren`)
@@ -47,24 +51,32 @@ Pre-filled, visible, and editable when `?ort=` arrives from
 
 ## Step 2 — Who's publishing
 
-<!-- id: registrieren-2-wer; content_type: form; provenance: generated; derived_from: []; status: draft -->
+<!-- source_note: the option list is taken from the audience records' own enumerations (`actors` field "Context": Vereine, Feuerwehr, Kirchengemeinde, Initiativen, Kulturbetriebe, mobile Dienste such as a Bäckerwagen or Arztbus, local businesses with an occasional event; `municipalities` field "Context": Gemeinden, Städte, Ämter, Samtgemeinden, Verbandsgemeinden). The order follows this page's audience priority from gtm:concept/website-information-architecture.concept.md, page brief `/mitmachen/registrieren` (1 actors). -->
+<!-- id: registrieren-2-wer; content_type: form; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/audiences@0.3.3#municipalities"]; status: draft -->
 
 **Question:** Who's publishing the dates?
 
-**Options (generic placeholder, see note):**
+**Options:**
 
 - Club or initiative
-- Municipality or administration
-- Parish, fire brigade, or similar organization
-- Individual
-- Other
+- Fire brigade or parish
+- Cultural venue or organization
+- Municipality, town, or Amt
+- Mobile service or business with occasional dates
 
-No hub record defines this list — the app's account model owns it, and
-the app hasn't published it yet (TS-023 D2, "step-2 vocabulary
-UNKNOWN"). The options above are a deliberately generic, replaceable
-placeholder (`provenance: generated`), registered in `state/open.md`
-#18. This answer doesn't classify the visitor for the website — it's
-account information for the app (TS-023 D8).
+The words are the audience records' own: the `actors` record
+lists Vereine, Feuerwehr, Kirchengemeinde,
+Initiativen, Kulturbetriebe, mobile services such as a Bäckerwagen or
+Arztbus, and local businesses with an occasional event in its "Context"
+field; `municipalities` names Gemeinden, Städte, Ämter, Samtgemeinden, and
+Verbandsgemeinden. The same record notes that behind all of these there is
+very often one person doing it voluntarily — so the list asks about the
+organization and not about the person.
+
+What stays open is the binding: which values the app's account finally
+stores is the app's account model to decide, and it has not published it
+(TS-023 D2, `state/open.md` #18). This answer doesn't classify the visitor
+for the website — it's account information for the app (TS-023 D8).
 
 ## Step 3 — Which publishing path
 
@@ -100,3 +112,18 @@ website and the app (DEC-029, TS-023 D6) — the page does not claim
 that place, role, or path are already pre-filled in the app. After the
 click, no confirmation, no instructions, and no further form follow on
 this website — the app takes over completely.
+
+## Context band (step 1 only)
+
+<!-- source_note: the offer phrasing instead of a menu comes from gtm:concept/website-communication-principles.concept.md principle 2; the three jobs and their wording from the job table in principle 1. The band renders on step 1 only (TS-023 D7, state/open.md #24). Answers state/open.md row 95 for this page. -->
+<!-- id: registrieren-6-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
+
+**Kicker:** Here for something else today?
+
+- **See what's on:** Want to know what's coming up where you live? → `/dein-ort`
+- **Run your own calendar:** Want a calendar under your own name, on your own website? → `/dein-kalender`
+- **Who is behind it:** Want to know who makes the village calendar? → `/ueber-uns`
+
+From step 2 the band disappears: someone inside the flow should be able to
+finish it without the page offering three other routes out of it
+(TS-023 D7, a registered deviation from TS-006).
