@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Fragment } from "react";
 
 import sheepMark from "@schafe-vorm-fenster/brand-design/logo.svg";
 
@@ -52,10 +53,20 @@ export function Logo({ variant = "wordmark", link = true, locale = "de", classNa
       />
       {variant === "wordmark" ? (
         <span className={styles.wordmark}>
-          {WORDMARK_LINES.map((line) => (
-            <span className={styles.line} key={line}>
-              {line}
-            </span>
+          {WORDMARK_LINES.map((line, index) => (
+            <Fragment key={line}>
+              {/* F-3-1: the separator that makes the accessible name right.
+                  The two lines are adjacent elements, so the accessible-name
+                  algorithm's flattened text was "Schafe vormFenster" — not a
+                  substring of the `aria-label`, which is WCAG 2.1 SC 2.5.3
+                  (Label in Name) failing on two nodes of all 24 routes.
+                  `.wordmark` is a column flex container and CSS Flexbox
+                  §4 does not render a white-space-only anonymous flex item,
+                  so this space is a space to the accessibility tree and
+                  nothing at all to the layout. */}
+              {index > 0 ? " " : null}
+              <span className={styles.line}>{line}</span>
+            </Fragment>
           ))}
         </span>
       ) : null}
