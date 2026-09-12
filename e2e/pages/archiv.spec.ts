@@ -114,8 +114,12 @@ test.describe("/ueber-uns/archiv", () => {
       }
     }
 
-    const count = await page.locator('[aria-live="polite"]').textContent();
-    expect(count?.trim()).toBe(`${visibleCount} von ${rowCount} Einträgen`);
+    // The count is recomputed one effect after the rows change, so a single
+    // `textContent()` read can still see the previous figure (F-2-71 — the
+    // preview caught it at "6 von 6" while one row stood). Auto-retrying.
+    await expect(page.locator('[aria-live="polite"]')).toHaveText(
+      `${visibleCount} von ${rowCount} Einträgen`,
+    );
   });
 
   test("TS-028-A5: filtering never changes the URL", async ({ page }) => {

@@ -143,7 +143,10 @@ const CLS_VIEWPORT = { width: 360, height: 800 } as const;
 const ARCHIVE_WIDTHS = [360, 768, 1024] as const;
 
 interface ClsWindow {
+  /** The metric: unexpected shifts only, as CLS is defined. */
   __cls: number;
+  /** Shifts within 500 ms of an input — kept apart, asserted separately. */
+  __clsAfterInput: number;
 }
 
 /** Must run before the first navigation, or the load shifts are already lost. */
@@ -151,10 +154,27 @@ async function installClsObserver(page: import("@playwright/test").Page): Promis
   await page.addInitScript(() => {
     const store = window as unknown as ClsWindow;
     store.__cls = 0;
+    store.__clsAfterInput = 0;
     if (!PerformanceObserver.supportedEntryTypes?.includes("layout-shift")) return;
     new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        store.__cls += (entry as PerformanceEntry & { value: number }).value;
+        const shift = entry as PerformanceEntry & {
+          value: number;
+          hadRecentInput: boolean;
+        };
+        // CLS is defined as the sum of *unexpected* shifts: a shift within
+        // 500 ms of a user input is excluded by the metric itself, and
+        // TS-028-A13 asks for "CLS measured over load plus three filter
+        // interactions", not for a stricter number of our own. Removing rows
+        // moves what stands below them — that is the one shift the component
+        // accepts, on a deliberate action, and counting it made the archive
+        // fail its own criterion at 0.1119 on the preview while Lighthouse
+        // measured 0.
+        if (shift.hadRecentInput) {
+          store.__clsAfterInput += shift.value;
+          continue;
+        }
+        store.__cls += shift.value;
       }
     }).observe({ type: "layout-shift", buffered: true });
   });
@@ -201,5 +221,17 @@ for (const width of ARCHIVE_WIDTHS) {
 
     const cls = await settleAndReadCls(page);
     expect(cls, `archive at ${width}px accumulated CLS ${cls.toFixed(4)}`).toBeLessThan(CLS_BUDGET);
+
+    // The other half of D8's promise, kept honest rather than dropped: the
+    // shifts the three clicks *do* cause are the rows they removed collapsing,
+    // and nothing more. A chip row that re-wrapped, or a list that reflowed
+    // the rows it kept, would blow well past this.
+    const afterInput = await page.evaluate(
+      () => (window as unknown as ClsWindow).__clsAfterInput,
+    );
+    expect(
+      afterInput,
+      `archive at ${width}px shifted ${afterInput.toFixed(4)} on the three clicks`,
+    ).toBeLessThan(0.5);
   });
 }
