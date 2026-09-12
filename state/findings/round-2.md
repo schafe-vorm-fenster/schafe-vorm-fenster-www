@@ -971,6 +971,19 @@ dismissed in the protocol, not here.
 
 - Retest (gate 2, run 2): **reopened** — the half the finding leads with is fixed: registration steps 1–3, the quote form's whole field set, `Suchen`/`Weiter`/`Absenden` and the footer contact + newsletter block all read English on `/en`. Still German on `/en` routes, measured over all twelve English routes: **`Demo-Daten`** on `/en/take-part/register?ort=beispielwalde` (the package-B tail this finding itself records — `choice-group.tsx`'s `<DemoDataBadge>` still takes no `locale`), `/en/your-calendar` and `/en/about/archive`; **`Foto gesucht`** on `/en/take-part`, `/en/your-calendar`, `/en/your-region/quote` and `/en/about`; **`Nicht motivgenau · Platzhalter`** on `/en/your-place`, `/en/your-place/start`, `/en/your-region` and `/en/about`. No primary action is affected, so the conversion-path half of the finding is discharged; the badge half is not.
 
+- Resolved (M5 fix round, 53e15ca + 9874d07): the three strings are gone from
+  all twelve `/en/*` routes, measured on the local production build **and** on
+  the preview `schafe-vorm-fenster-9e9lg20m3`. The badges themselves were never
+  the defect — every component *around* them rendered one without the page's
+  language, and `HeroBlock`, which owns the `photo-surface` that badges every
+  hero, was given `locale` by no page at all. Nine components forward it now,
+  ten pages pass it, `choice-group`'s empty-state literal and
+  `archive-filter`'s `Alle` / `Nach Typ filtern` / `… von … Einträgen` read the
+  dictionary, and the merged closing block stopped falling back to its German
+  default heading on `/en`. Guarded by `src/components/badge-locale.test.tsx`
+  (14 cases, each component in the state that makes its badge appear) and by a
+  walk over all twelve English routes in `e2e/content-compliance.spec.ts`.
+
 ## F-2-34 — `{county-or-organization}` renders as a literal in the English quote page's `h1`
 
 - Severity: high
@@ -1333,6 +1346,20 @@ dismissed in the protocol, not here.
 
 - Retest (gate 2, run 2): **reopened** — the element half is fixed: the band renders as `<aside aria-label="Heute mit einem anderen Anliegen hier?" id="context-band">` on `/`, `/dein-ort`, `/dein-ort/starten`, `/mitmachen`, `/dein-kalender`, `/deine-region` and `/deine-region/angebot` (and their `/en` twins). TS-011-A4 says the band is an `aside` **on every page**, and it is still absent on five: `/ueber-uns`, `/ueber-uns/archiv`, `/rechtliches`, `/mitmachen/registrieren` and `/dein-kalender/bestellen` — the last two are F-2-10. On those pages the job links render as a bare `<ul>` inside the closing block. The fix commit records the absence as untouched, so this is the half the round scoped out, not a regression.
 
+- Resolved (M5 fix round, 9874d07): TS-011-A4 holds on every page that renders
+  a band. `PageFrame` implemented TS-006 D6's *merge* as a *suppression*, so
+  the three `primaryConversion: null` pages (`/ueber-uns`, `/ueber-uns/archiv`,
+  `/rechtliches`) rendered a closing block and no `aside` at all. No spec
+  exempts them — `plan/component-inventory.md` names the band as the component
+  that renders the merged block (TS-027 sheet block 7, TS-028 block 4, §47),
+  and TS-006 D6 says the two "render once, as the last block". The merged block
+  **is** the band now: `<aside id="context-band">` with block 4's
+  `#closing-cta` anchor inside it and the three job links exactly once. The two
+  flow routes hand-roll their band because TS-023 D7 / TS-025 make it
+  conditional, so `PageFrame`'s `as="aside"` never reached them — they pass it
+  themselves now. Their mid-flow suppression stays exactly as F-2-10 decided.
+  `e2e/routes.spec.ts` asserts both halves over all 24 rows.
+
 ## F-2-42 — No page emits an OG image, and `twitter:card` is `summary`
 
 - Severity: medium
@@ -1629,6 +1656,26 @@ dismissed in the protocol, not here.
   covered place is never told in its own name that it is not covered.
 
 - Retest (gate 2, run 2): **reopened** — against the dev server the fix holds: `/dein-ort/starten?ort=beispielwalde` answers one **307** to `/dein-ort?ort=beispielwalde`, and `?ort=07743` resolves to the same slug. Against a **production build** it does not: on the round-3 preview *and* on a local `pnpm next start` of the same tree, `/dein-ort/starten?ort=beispielwalde` and `/dein-ort?ort=99999` answer **200 with an empty document** (`x-nextjs-prerender: 1`, `x-vercel-cache: HIT` on the preview) and the forward runs only in the client. With JavaScript the visitor still arrives (browser walk confirms both forwards); without it the page is blank. `pnpm e2e` with `E2E_BASE_URL` against the preview fails on exactly this — `dein-ort-starten.spec.ts:237`, expected 307, received 200. TS-021-A7 stays fail.
+
+- Resolved (M5 fix round, 0961071 + f2089e3): **root cause** — under Cache
+  Components every route resumes from a postponed prerender (`x-nextjs-postponed: 1`
+  on the response), so a `redirect()` raised in the page body arrives after the
+  status line has been written; Next serialises it into the flight payload
+  (`NEXT_REDIRECT;replace;/dein-ort?ort=…;307`) and only a hydrated browser
+  follows it. Not fixable inside the page: `instant = false` governs
+  instant-navigation validation, not the shell, and `generateMetadata` may not
+  read `searchParams` under Cache Components. Next's own `redirect` reference
+  names the remedy — "if you'd like to redirect before the render process, use
+  `next.config.js` or Proxy"; `next.config.ts` cannot, because the decision
+  needs a geo lookup. `src/lib/routes/place-hop.ts` carries the rule and
+  `proxy.ts` asks it before the route renders. Measured: on the local
+  production build and on the preview,
+  `/dein-ort/starten?ort=beispielwalde` → **307** `Location: …/dein-ort?ort=beispielwalde`
+  with a 15-byte body, `/dein-ort?ort=99999` → **307** `…/dein-ort/starten?ort=99999`,
+  `/en/your-place/start?ort=17390&etcc_cmp=x` → **307**
+  `…/en/your-place?ort=musterbach&etcc_cmp=x` (language prefix and `etcc_*`
+  preserved). Walked with JavaScript disabled in both suites. Row 131 is
+  untouched: the four routes stay dynamic.
 
 ## F-2-50 — `/deine-region`'s manifest declares one live module where D1 names four
 
@@ -2363,6 +2410,20 @@ Dispositions for the Run-2 observations that are **not** new findings:
   row with no reserved space, which is the *other* half of TS-003 D8 and
   the only place it still bites.
 
+- Resolved (M5 fix round, 1a945a8 + ba55cbd): **root cause** — the chip group
+  is client-only by design (TS-028-A9), so the server HTML carried nothing
+  where it and the count line would later sit and hydration inserted 262 px of
+  flow content above the list. TS-028 D8 forbids the other fix ("the chip row
+  **not displayed**, never dead"), so the space is reserved server-side: a
+  `visibility: hidden` copy of the chip row built from the same labels and the
+  same `chip.module.css` classes, so it wraps identically at 360, 768 and 1024
+  by construction rather than by a measured height. It holds the box, stays out
+  of the accessibility tree and the tab order, and contains no button and no
+  `role="group"`. Measured after: **Lighthouse CLS 0** on `/ueber-uns/archiv`
+  (0.2197 before), and `e2e/layout-stability.spec.ts` now computes real CLS per
+  route plus the archive at all three reference widths with A13's three filter
+  interactions inside the window — 39 cases, green locally and on the preview.
+
 ## F-2-70 — The German 404 surface renders an empty document without JavaScript
 
 - Severity: high
@@ -2413,6 +2474,33 @@ Dispositions for the Run-2 observations that are **not** new findings:
   codebase carries elsewhere (`e2e/pages/{home,archiv,registrieren,
   rechtliches,dein-ort,dein-ort-starten}.spec.ts`) have no 404 case.
 
+- Resolved (M5 fix round, c0e018c + f2089e3): **root cause** — `app/[lang]/**`
+  matches any first segment, so a non-language one landed *inside* the route
+  tree and `_locale.ts`'s `notFound()` fired one render too late: the same
+  postponed-resume mechanism as F-2-49, which is why the response was a correct
+  404 over an `__next_error__` body of zero rendered characters, while
+  `/en/anything` — matching no route at all — was already complete. The
+  decision moves in front of the route: `proxy.ts` rewrites an unservable path
+  onto a **two-segment** target that matches nothing, so Next's own 404
+  handling renders `global-not-found` in full. One segment was not enough —
+  `/__landing-only`, which TS-004-A3's landing rule used, matched `app[lang]`
+  and answered the same blank 404 (a latent second instance, fixed here). The
+  language comes down on a request header from the one place that still has the
+  URL, which also closes row 37. Measured with JavaScript disabled, local
+  production build and preview:
+
+  | URL | Status | `<html lang>` | `body.innerText().length` |
+  | --- | --- | --- | --- |
+  | `/dies-gibt-es-nicht` | 404 | `de` | **370** (was 0) |
+  | `/uk/mitmachen` | 404 | `de` | **370** (was 0) |
+  | `/irgendwas/irgendwo` | 404 | `de` | **370** |
+  | `/en/anything` | 404 | `en` | **328** (was 327, German) |
+  | `/en/does-not-exist` | 404 | `en` | **328** |
+
+  Place search and jobs band present on all five; `<title>` per language;
+  `noindex, follow` unchanged. `isUnservablePath()` is asserted against the
+  whole TS-004 D1 inventory so no served path can be swept into it.
+
 ## F-2-71 — Two e2e assertions race hydration: the local suite is red and the preview suite flakes
 
 - Severity: medium
@@ -2458,3 +2546,108 @@ Dispositions for the Run-2 observations that are **not** new findings:
   product and no visitor is affected; what is broken is the instrument and
   the guardrail that depends on it. It is deliberately **not** filed
   higher than F-2-49, which the same suite found.
+
+- Resolved (M5 fix round, 580e746 + ba55cbd): six assertions raced hydration,
+  not two — the other four only show against a production build, which is the
+  environment this round verifies in. `archiv.spec.ts` TS-028-A3/A4/A5/A12 read
+  `chips.count()` before the group exists and wait for `archive-filter`'s
+  `data-hydrated` now; `deine-region.spec.ts` F-2-66 is an auto-retrying
+  `toBeFocused()`; `registrieren.spec.ts` A9/A10 and A12 waited on
+  `waitForLoadState("networkidle")`, which never settles on a streamed
+  production route (30 s timeouts every run); `home.spec.ts` TS-019-A10 read the
+  hero submit while block 1 still had both variants in the document and
+  TS-019-A13 clicked the handover before its listener existed; `archiv.spec.ts`
+  TS-028-A4 read the `aria-live` count once and the preview caught it stale.
+  `ConversionTracker` grows the signal the click tests need — `data-hydrated`
+  flips in the same render that attaches the listener, on a wrapper that is
+  already `display: contents`, so it costs no layout. No fixed timeout was
+  added anywhere. **`pnpm e2e`: 471 passed / 0 failed / 8 skipped** against the
+  local production build, **464 passed / 0 failed / 15 skipped** against the
+  preview.
+
+---
+
+## F-2-72 — every page's meta description exposes an internal note
+
+- Severity: high
+- Source: customer (gate-2 acceptance protocol, "What I found that nobody had
+  written down", item 2)
+- Where: every route, both locales · TS-011 D5, TS-021-A11 ·
+  `src/lib/routes/metadata.ts`, `state/open.md` rows 103/138
+- Steps: `curl -s <any route> | grep '<meta name="description"'`.
+- Expected: TS-011 D5 — `<title>` and description come from the page's content
+  frontmatter, and neither is ever derived at runtime.
+- Observed: every route, in both languages, served *"Schafe vorm Fenster —
+  Platzhalter aus dem Routing-Gerüst (M2). Titel und Beschreibung kommen in M3
+  aus dem Content-Frontmatter (TS-011 D5)."* — a work-package name and a
+  spec-clause id, in the text search engines index and link previews display.
+  No check could see it: `check:seo-budget` measured its length and
+  `e2e/content-compliance.spec.ts` greps `innerText`, which cannot reach the
+  document head.
+- Round decision: **fix-now** (M5)
+- Resolved (M5 fix round, 18c94ac): `content/pages/**` carries an `seo` block
+  per route, `src/lib/content/page-seo.ts` reads it through the same
+  frontmatter parser the loader uses, and `metadata.ts` stops standing anything
+  in — an absent description is omitted rather than replaced. Every value is
+  real page copy in the page's own language, derived from that page's own focus
+  slot and marked `provenance: generated` per the dummy-content rule: no
+  invented numbers, names, testimonials or awards. `check:seo-budget` is green
+  on all 24 (path, language) pairs (unique title ≤ 60, description 120–158),
+  `src/lib/routes/metadata.test.ts` asserts the provenance and the ≤ 60 title
+  including its suffix, and `e2e/metadata-compliance.spec.ts` fails on `TS-0`,
+  `DEC-`, `M2`, `M3` or `Platzhalter` in any title or description on any route.
+  Measured on the preview: `/` → "Was in deinem Ort und in den Nachbarorten als
+  Nächstes ansteht: …", `/en` → "What is coming up where you live and in the
+  villages next door: …". The dictionary's `descriptionTemplate` and its dead
+  routing-skeleton `placeholder` group are deleted (53e15ca), and
+  `dictionary.test.ts` now fails on any internal identifier in any string.
+
+---
+
+## F-2-73 — `/en/your-region` renders `geoname.900001` in a live heading
+
+- Severity: high
+- Source: customer (gate-2 acceptance protocol, "What I found that nobody had
+  written down", item 1)
+- Where: `/en/your-region`, block 3 · TS-026-A10 · reference: F-2-63
+- Steps: `curl -s <preview>/en/your-region | grep geoname`.
+- Expected: the heading names a written-out region, never an identifier.
+- Observed: *"Here's what that already looks like today: examples from
+  geoname.900001"* — verbatim. The German twin reads "Beispiele aus dem
+  Landkreis deiner Region"; F-2-63 filled the German slot at page level and
+  left the English one, and its retest evidence quoted only the German string.
+- Round decision: **fix-now** (M5)
+- Resolved (M5 fix round, 53e15ca): fixed at the source rather than at the slot
+  — `src/lib/live/county-label.ts` resolves `RegionExamples.county` to the
+  language's written-out phrase whenever it is a geo-api identifier or empty
+  (TS-026 D4: no county asserted without an anchor), and `_islands.tsx` fills
+  the heading from it, so an identifier can no longer reach a heading by any
+  route. `/deine-region`'s two inline locale ternaries were replaced by the
+  same resolver. Guarded by `county-label.test.ts` (6 cases) and by
+  `/\bgeoname\./` in `e2e/content-compliance.spec.ts`'s identifier sweep, which
+  walks all 24 routes. Measured on the preview: all twelve `/en/*` routes carry
+  no `geoname.`.
+
+---
+
+## F-2-74 — `/en/legal` has no English notice that its texts are German
+
+- Severity: medium
+- Source: customer (gate-2 acceptance protocol, item 7; folded-in item 3)
+- Where: `/en/legal` · TS-007-A11, `state/open.md` row 53
+- Steps: open `/en/legal` and read from the `h1` down.
+- Expected: row 53's mitigation — "the EN page frame states explicitly, in
+  English, that the six legal sections themselves are provided in German only".
+- Observed: the section labels in the navigation are English, the body under
+  each is unannounced German prose, and the promised sentence is nowhere on the
+  page. The Customer went looking for it and could not find it.
+- Round decision: **fix-now** (M5)
+- Resolved (M5 fix round, 5c66ab3): one dictionary key, English only (`de` is
+  `null`, so the German page renders nothing and the dictionary's key-parity
+  and no-empty-string tests keep holding), rendered between the `h1` and the
+  section nav — before the first German body, server-rendered, no JavaScript
+  needed. It states what is true today: the texts are German, we do not
+  machine-translate legal text and do not write an English substitute for it.
+  Asserted present on `/en/legal` and absent on `/rechtliches`
+  (`app/[lang]/rechtliches/german-only-notice.test.ts`,
+  `e2e/pages/rechtliches.spec.ts`); measured on the preview.
