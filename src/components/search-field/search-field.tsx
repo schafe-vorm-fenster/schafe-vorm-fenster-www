@@ -1,6 +1,8 @@
 import { Icon } from "../icon/icon";
 import { linkHref, type LinkOptions } from "../route-link/href";
 
+import { SearchForm } from "./search-form";
+
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { MAX_PLACE_LENGTH } from "@/src/lib/pages/place-parameter";
 
@@ -66,11 +68,13 @@ export function SearchField({
   const resolvedSubmitLabel = submitLabel ?? words.submit;
 
   return (
-    <form
+    // F-3-12: the `<form>` is a client component now — the markup and the
+    // GET are unchanged, and it refuses a *second* submit of the same
+    // document, which is how an impatient double click arrived at
+    // `/dein-ort?ort=` with the typed value gone.
+    <SearchForm
       action={linkHref(to, { locale })}
       className={[styles.form, className].filter(Boolean).join(" ")}
-      method="get"
-      role="search"
     >
       <label className={styles.label} htmlFor={id}>
         {label}
@@ -101,6 +105,6 @@ export function SearchField({
           {resolvedSubmitLabel}
         </button>
       </div>
-    </form>
+    </SearchForm>
   );
 }
