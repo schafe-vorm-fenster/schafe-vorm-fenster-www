@@ -31,7 +31,11 @@ export interface MediaFrameProps extends DataStateProps {
   readonly ratio?: MediaRatio;
   /** The asset does not depict what the copy claims. */
   readonly notDepicting?: boolean;
-  /** LCP candidates only — everything else loads lazily. */
+  /**
+   * The page's **declared** LCP element (TS-003 D2) — everything else loads
+   * lazily. Exactly one frame per page may set it (TS-003-A8: "No image
+   * outside the D2 table is eager").
+   */
   readonly priority?: boolean;
   readonly sizes?: string;
   /** Skips the image optimizer, for SVG and for hosts without a remote pattern. */
@@ -111,8 +115,19 @@ export function MediaFrame({
         <Image
           alt={alt}
           className={styles.image}
+          // TS-003-A8 asks for the two attributes by name, and F-3-2 measured
+          // zero of either anywhere in the tree. `priority` was the wrong
+          // instrument twice over: it was `false` here, and Next 16
+          // deprecated it in favour of `preload` — which inserts a `<link>`
+          // and is explicitly *not* what the docs recommend when the element
+          // is a known LCP image (`node_modules/next/dist/docs/01-app/
+          // 03-api-reference/02-components/image.md`, "In most cases, you
+          // should use `loading=\"eager\"` or `fetchPriority=\"high\"`
+          // instead of preload"). So the attributes are set directly, which
+          // is also what makes A8 checkable in the rendered HTML.
+          fetchPriority={priority ? "high" : undefined}
           fill
-          priority={priority}
+          loading={priority ? "eager" : "lazy"}
           sizes={sizes}
           src={src}
           unoptimized={unoptimized}

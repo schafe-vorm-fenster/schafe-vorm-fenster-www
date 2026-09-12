@@ -74,6 +74,12 @@ export function OriginStory({
           className={styles.portrait}
           locale={locale}
           notDepicting={portraitNotDepicting}
+          // TS-003 D2 declares this portrait as `/ueber-uns`'s LCP element,
+          // and the browser agrees: QA measured it as the LCP on the same
+          // load, carrying `loading="lazy"` (F-3-2). `origin-story` is the
+          // page's first block and stands on no other route, so the
+          // declaration belongs here rather than as one more caller prop.
+          priority
           ratio="portrait"
           src={portraitSrc}
           state={portraitState}
