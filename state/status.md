@@ -6,6 +6,7 @@ Current test round: closed (gate-2 loop 3 rounds; M5 roundtrip + final fix round
 
 ## Done
 
+- Fix row 204 / R-6 (2026-09-12): chrome duplicated on client navigation — root cause: Cache Components keeps the last 3 route segments mounted in hidden <Activity> boundaries and the chrome lived inside the page (row 97 seam); chrome moved to app/[lang]/layout via _chrome.tsx + useSelectedLayoutSegments; e2e/landmarks.spec.ts walks every internal link (27/27, was 26/27 red); e2e 550/0 prod build, 543/0 preview; row 207 (TS-019-A14 counter demo flag follows the cached upstream envelope — live-data tier fit, pre-existing) — 2026-09-12
 - CR-1 (Jan, 2026-09-12) header/hero/mobile menu: hero gradient per boards (top transparent, text in the lower band, 35 % photo band reserved), header transparent over the hero → solid after scroll (contrast 4.68–10.53:1, was 1.87–2.84), phone: mark-only logo + burger → native dialog overlay (focus trap, Escape, restore) + calendar pill; e2e 523/0 local, 516/0 preview https://schafe-vorm-fenster-3onu5zwiu-schafe-vorm-fenster.vercel.app; rows 200–206 (spec alignment D4/D2(d), label switch at xl not md); found row 204 — 2026-09-12
 - Imagery follow-up (2026-09-12): images[] inventory in all 22 page artifacts (22 entries: 13 generated, 9 real); `pnpm images:generate` (AI Gateway bfl/flux-pro-1.1, DEC-077) → 21 renditions ≈ $0.84 + 3 cleared photographs from the people package; wired on 8 heroes, scenes, publishing paths, founder portrait with credit; every generated image badged "Nicht motivgenau · Platzhalter"; 6 slots stay "Foto gesucht" (uncleared portraits/screenshots); pnpm check 1106 tests, e2e 503/0 on preview, Lighthouse a11y 100, CLS 0; preview https://schafe-vorm-fenster-5nwbr21rd-schafe-vorm-fenster.vercel.app; rows 187, 192 (TS-003 D2 LCP table vs hero photos — spec decision), 193/194
 - Imagery workstream (2026-09-12): `images:` inventory in the page frontmatter (strict `ImageEntrySchema`, exposed as `page.images`), `pnpm images:generate` → **21 renditions** from 13 entries via the AI Gateway (`bfl/flux-pro-1.1`, ≈ **$0.84**, every file ≤ 100 KB) plus **3 cleared photographs** from `@schafe-vorm-fenster/people` in `public/images/real/`; wired into all eight photo-carrying pages — heroes as two renditions on `photo-surface` (8:9 phone / 21:9 from 48rem, preloaded), everything else through `next/image` in `media-frame`, every generated image badged "Nicht motivgenau · Platzhalter" and `data-placeholder="generated:<model>"`; six slots stay "Foto gesucht" on purpose (uncleared portraits, unshot screenshots, proof slots). DEC-077 (tooling + guardrails, `ai`/`sharp` as devDependencies, supply-chain audit), rows 186–194. pnpm check green (1106 tests), e2e **503/0/15 skipped** on preview <https://schafe-vorm-fenster-5nwbr21rd-schafe-vorm-fenster.vercel.app>, Lighthouse mobile 94/93/97/94 with a11y 100 and CLS 0 — the photographs cost 3–7 points and make the hero the LCP element (row 192)
@@ -50,7 +51,7 @@ Current test round: closed (gate-2 loop 3 rounds; M5 roundtrip + final fix round
 
 ## In progress
 
-- Fix (high, row 204 / R-6): whole chrome duplicated after client-side navigation (two main/header/footer) on production builds — Developer (opus)
+- — (nothing running; latest preview https://schafe-vorm-fenster-e8mxabxmt-schafe-vorm-fenster.vercel.app; next: Jan's review)
 
 ## Pending
 
