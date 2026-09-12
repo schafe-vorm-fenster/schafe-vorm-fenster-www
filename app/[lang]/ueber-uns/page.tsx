@@ -1,5 +1,3 @@
-import dorf from "@/src/generated/placeholders/ueber-uns/dorf.svg";
-import gruender from "@/src/generated/placeholders/ueber-uns/gruender.svg";
 
 import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
@@ -16,7 +14,7 @@ import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { ctaLabelOnly } from "@/src/lib/content/text";
-import { assetSrc } from "@/src/lib/content/asset-src";
+import { pageImage } from "@/src/lib/content/images";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 
 import { CountersIsland } from "../_islands";
@@ -82,6 +80,24 @@ interface Person {
   readonly name: string;
   readonly role: string;
   readonly bio?: string;
+}
+
+/**
+ * A team member's portrait id in the page's image inventory. The people come
+ * out of the artifact as prose (`parsePerson`), and the inventory keys its
+ * portraits by the same person slug the hub package uses, so the name is the
+ * join between the two.
+ */
+function portraitId(name: string): string {
+  const slug = name
+    .toLowerCase()
+    .replaceAll("ä", "ae")
+    .replaceAll("ö", "oe")
+    .replaceAll("ü", "ue")
+    .replaceAll("ß", "ss")
+    .replaceAll(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+  return `ueber-uns-team-${slug}`;
 }
 
 /** Splits the content artifact's "Name — role sentence. Bio." paragraph. */
@@ -171,6 +187,13 @@ export default async function Page({
   // second time in the same block — content is never reworded to remove
   // the number, so this is the one place left to avoid the duplicate.
   const originPrice = { display: "withheld" as const, figure: undefined };
+
+  // The page's images. The village is a generated stand-in and says so; the
+  // founder's portrait is the real, cleared photograph from
+  // `@schafe-vorm-fenster/people` and carries the rights holder's credit
+  // line verbatim — a face is never generated (DEC-068 rule 3).
+  const heroImage = pageImage(page, "ueber-uns-hero");
+  const founderImage = pageImage(page, "ueber-uns-founder-portrait");
   const archiveLabel = ctaLabelOnly(fieldAt(archiveLink.blocks, 0)) ?? "Zum Archiv";
 
   return (
@@ -191,18 +214,20 @@ export default async function Page({
         // the page's language `/en/about` read "Nicht motivgenau ·
         // Platzhalter".
         locale={locale}
-        notDepicting
-        placeholderId="ueber-uns/dorf"
+        notDepicting={heroImage?.notDepicting}
+        placeholderId={heroImage?.placeholderId}
         ratio="hero"
-        src={assetSrc(dorf)}
+        src={heroImage?.src}
+        wideSrc={heroImage?.wideSrc}
       >
         <MotionReveal>
           <OriginStory
             body={fieldAt(origin.blocks, 1) ?? ""}
             locale={locale}
-            portraitAlt={FOUNDER_ALT[locale]}
-            portraitNotDepicting
-            portraitSrc={assetSrc(gruender)}
+            portraitAlt={founderImage?.alt ?? FOUNDER_ALT[locale]}
+            portraitCredit={founderImage?.credit}
+            portraitNotDepicting={founderImage?.notDepicting}
+            portraitSrc={founderImage?.src}
             priceDisplay={originPrice.display}
             priceFigure={originPrice.figure}
             proof={
@@ -286,10 +311,14 @@ export default async function Page({
               bio={person.bio}
               key={person.name}
               // F-2-33: a person with no portrait gets the hatch, and the
-              // hatch badges itself out of the dictionary.
+              // hatch badges itself out of the dictionary. A portrait whose
+              // rights are not cleared keeps that hatch — the inventory entry
+              // stays `status: needed` and resolves to `undefined` here.
               locale={locale}
               name={person.name}
-              portraitAlt={person.name}
+              portraitAlt={pageImage(page, portraitId(person.name))?.alt ?? person.name}
+              portraitCredit={pageImage(page, portraitId(person.name))?.credit}
+              portraitSrc={pageImage(page, portraitId(person.name))?.src}
               role={person.role}
             />
           ))}

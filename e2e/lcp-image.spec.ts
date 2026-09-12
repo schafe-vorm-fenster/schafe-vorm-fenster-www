@@ -3,6 +3,11 @@ import { expect, test } from "@playwright/test";
 /**
  * TS-003-A8, the `/ueber-uns` half of F-3-2.
  *
+ * Since the imagery workstream the portrait is the **real** photograph from
+ * `@schafe-vorm-fenster/people` rather than the DEC-068 hatch, so the file it
+ * is served from is `/images/real/ueber-uns-founder-portrait.webp` (through
+ * the image optimiser, hence the substring match).
+ *
  * A8: "Every image below the fold carries `loading="lazy"`; the declared LCP
  * element of each page (D2) carries `loading="eager"` and
  * `fetchpriority="high"`. No image outside the D2 table is eager."
@@ -27,7 +32,7 @@ for (const path of PAGES) {
   }) => {
     await page.goto(path);
 
-    const portrait = page.locator('img[src*="gruender"]').first();
+    const portrait = page.locator('img[src*="founder-portrait"]').first();
     await expect(portrait).toHaveAttribute("loading", "eager");
     await expect(portrait).toHaveAttribute("fetchpriority", "high");
   });
@@ -41,6 +46,6 @@ for (const path of PAGES) {
         .map((img) => img.getAttribute("src") ?? ""),
     );
 
-    expect(eager.filter((src) => !src.includes("gruender"))).toEqual([]);
+    expect(eager.filter((src) => !src.includes("founder-portrait"))).toEqual([]);
   });
 }

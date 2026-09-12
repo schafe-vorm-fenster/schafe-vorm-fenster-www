@@ -7,6 +7,14 @@
  */
 .surface {
   align-items: flex-end;
+  /*
+   * The scrim and the photograph are one declaration (SRC-014 §Photo
+   * surface), so the gradient scales with the image. The gradient itself is a
+   * variable set by the tone class below, which lets the hero swap in its
+   * landscape rendition at the width where `--ratio-hero` turns landscape
+   * without restating the stops a second time.
+   */
+  background-image: var(--photo-gradient), var(--photo-image);
   aspect-ratio: var(--photo-ratio, var(--ratio-hero));
   background-position: center;
   background-repeat: no-repeat;
@@ -18,29 +26,40 @@
 
 .ink {
   --photo-scrim: var(--color-neutral-ink);
-  background-image:
-    linear-gradient(
-      to bottom,
-      transparent 18%,
-      color-mix(in srgb, var(--color-neutral-ink) 84%, transparent) 55%,
-      color-mix(in srgb, var(--color-neutral-ink) 96%, transparent) 100%
-    ),
-    var(--photo-image);
+  --photo-gradient: linear-gradient(
+    to bottom,
+    transparent 18%,
+    color-mix(in srgb, var(--color-neutral-ink) 84%, transparent) 55%,
+    color-mix(in srgb, var(--color-neutral-ink) 96%, transparent) 100%
+  );
   color: var(--color-neutral-paper);
 }
 
 /* The municipal path (SRC-014 §Photo surface). */
 .violet {
   --photo-scrim: var(--color-violet-500);
-  background-image:
-    linear-gradient(
-      to bottom,
-      transparent 18%,
-      color-mix(in srgb, var(--color-violet-500) 84%, transparent) 55%,
-      color-mix(in srgb, var(--color-violet-500) 96%, transparent) 100%
-    ),
-    var(--photo-image);
+  --photo-gradient: linear-gradient(
+    to bottom,
+    transparent 18%,
+    color-mix(in srgb, var(--color-violet-500) 84%, transparent) 55%,
+    color-mix(in srgb, var(--color-violet-500) 96%, transparent) 100%
+  );
   color: var(--color-neutral-paper);
+}
+
+/*
+ * Art direction, not a second image for its own sake: `--ratio-hero` is 8:9
+ * on the phone and 21:9 from 48rem (`app/styles/components.css`), and a
+ * landscape frame centre-cropped into the phone's upright box loses most of
+ * its motif. The generator renders both (`scripts/generate-images.mjs`);
+ * mobile-first, so the upright one is the base and this swaps the wide one in
+ * at the same width the ratio changes. A surface with no wide rendition keeps
+ * the base image, so nothing here depends on both existing.
+ */
+@media (min-width: 48rem) {
+  .surface {
+    background-image: var(--photo-gradient), var(--photo-image-wide, var(--photo-image));
+  }
 }
 
 .content {

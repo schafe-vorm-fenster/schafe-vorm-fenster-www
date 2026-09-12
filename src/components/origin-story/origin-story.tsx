@@ -19,6 +19,8 @@ export interface OriginStoryProps {
   readonly portraitAlt: string;
   readonly portraitState?: DataState;
   readonly portraitNotDepicting?: boolean;
+  /** The rights holder's attribution string, verbatim, where one is required. */
+  readonly portraitCredit?: string;
   /**
    * The page's language — the portrait's own badges read it. Without it the
    * founder's portrait on `/en/about` carried "Nicht motivgenau ·
@@ -57,6 +59,7 @@ export function OriginStory({
   portraitAlt,
   portraitState,
   portraitNotDepicting,
+  portraitCredit,
   locale,
   proof,
   className,
@@ -71,6 +74,7 @@ export function OriginStory({
         </div>
         <MediaFrame
           alt={portraitAlt}
+          caption={portraitCredit}
           className={styles.portrait}
           locale={locale}
           notDepicting={portraitNotDepicting}

@@ -22,6 +22,10 @@ export interface HeroBlockProps extends DataStateProps {
   /** The page's single conversion, marked `data-cta="primary"` by the caller. */
   readonly cta?: ReactNode;
   readonly src?: string;
+  /** The hero's landscape rendition, swapped in from 48rem. */
+  readonly wideSrc?: string;
+  /** This hero is the page's declared LCP element (TS-003 D2). */
+  readonly priority?: boolean;
   readonly gradient?: "ink" | "violet";
   readonly notDepicting?: boolean;
   readonly placeholderId?: string;
@@ -60,6 +64,8 @@ export function HeroBlock({
   lead,
   cta,
   src,
+  wideSrc,
+  priority = false,
   gradient = "ink",
   notDepicting = false,
   placeholderId,
@@ -80,9 +86,11 @@ export function HeroBlock({
       locale={locale}
       notDepicting={notDepicting}
       placeholderId={placeholderId}
+      priority={priority}
       ratio="hero"
       src={src}
       state={state}
+      wideSrc={wideSrc}
     >
       {kicker ? (
         <Badge className={styles.kicker} icon={kickerIcon} tone="accent">

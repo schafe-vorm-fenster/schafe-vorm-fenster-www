@@ -19,6 +19,21 @@ import styles from "./photo-surface.module.css";
 export interface PhotoSurfaceProps extends DataStateProps {
   /** The photograph. Absent → the honest hatch, never a stock picture. */
   readonly src?: string;
+  /**
+   * The landscape rendition of the same motif, swapped in from 48rem — the
+   * width at which `--ratio-hero` turns landscape. Without it the base image
+   * is used at every width.
+   */
+  readonly wideSrc?: string;
+  /**
+   * This surface carries the page's **declared** LCP element (TS-003 D2).
+   * The photograph is a CSS background — the design system requires it to be
+   * one (§Photo surface: photo and gradient in the same declaration), and a
+   * background carries neither `loading` nor `fetchpriority`. So the priority
+   * signal is a `preload` link per rendition instead, which is the instrument
+   * a background image has. At most one surface per page may set it.
+   */
+  readonly priority?: boolean;
   /** `ink` by default, `violet` for the municipal path. */
   readonly gradient?: "ink" | "violet";
   readonly ratio?: "hero" | "feature";
@@ -62,6 +77,8 @@ export interface PhotoSurfaceProps extends DataStateProps {
  */
 export function PhotoSurface({
   src,
+  wideSrc,
+  priority = false,
   gradient = "ink",
   ratio = "hero",
   notDepicting = false,
@@ -110,6 +127,34 @@ export function PhotoSurface({
   }
 
   return (
+    <>
+      {/*
+        The LCP background, announced before the stylesheet that references it
+        is even parsed. Two links, each behind the media query that decides
+        which rendition the browser will actually paint, so the phone never
+        fetches the landscape frame and the desktop never fetches the upright
+        one. React hoists them into `<head>`.
+      */}
+      {priority && !missingPhoto ? (
+        <>
+          <link
+            as="image"
+            fetchPriority="high"
+            href={src}
+            media={wideSrc ? "(max-width: 47.999rem)" : undefined}
+            rel="preload"
+          />
+          {wideSrc ? (
+            <link
+              as="image"
+              fetchPriority="high"
+              href={wideSrc}
+              media="(min-width: 48rem)"
+              rel="preload"
+            />
+          ) : null}
+        </>
+      ) : null}
     <section
       className={classes}
       data-placeholder={missingPhoto ? "true" : placeholderId}
@@ -117,6 +162,7 @@ export function PhotoSurface({
       style={
         {
           "--photo-image": missingPhoto ? "none" : photoUrl(src!),
+          ...(wideSrc && !missingPhoto ? { "--photo-image-wide": photoUrl(wideSrc) } : {}),
           "--photo-ratio": `var(--ratio-${ratio})`,
         } as CSSProperties
       }
@@ -134,5 +180,6 @@ export function PhotoSurface({
         {children}
       </div>
     </section>
+    </>
   );
 }

@@ -1,5 +1,3 @@
-import gebietsschnitt from "@/src/generated/placeholders/deine-region/gebietsschnitt.svg";
-import heroImage from "@/src/generated/placeholders/deine-region/hero.svg";
 
 import { Button } from "@/src/components/button/button";
 import { EmbedFrame } from "@/src/components/embed-frame/embed-frame";
@@ -16,13 +14,13 @@ import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { ResponsePromise } from "@/src/components/response-promise/response-promise";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
+import { pageImage } from "@/src/lib/content/images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
 import { ctaLabelOnly, interpolate } from "@/src/lib/content/text";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
 import { pageTitle } from "@/src/lib/routes/metadata";
-import { assetSrc } from "@/src/lib/content/asset-src";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
 import { BRIEFING_RECIPIENT, BRIEFING_URL } from "@/src/lib/live/briefing";
 import { genericCountyLabel } from "@/src/lib/live/county-label";
@@ -145,6 +143,8 @@ export default async function Page({
 }) {
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
+  const heroImage = pageImage(page, "deine-region-hero");
+  const territoryImage = pageImage(page, "deine-region-gebietsschnitt");
   const copy = PAGE_COPY[locale];
   const words = dictionary(locale);
 
@@ -235,9 +235,10 @@ export default async function Page({
           // dictionary — without the page's language it marks an English
           // page in German.
           locale={locale}
-          notDepicting
-          placeholderId="deine-region/hero"
-          src={assetSrc(heroImage)}
+          notDepicting={heroImage?.notDepicting}
+          placeholderId={heroImage?.placeholderId}
+          src={heroImage?.src}
+          wideSrc={heroImage?.wideSrc}
           cta={
             <>
               <Button dataCta="primary" locale={locale} to="regionQuote" variant="primary-light">
@@ -347,8 +348,8 @@ export default async function Page({
             benefit={fieldAt(whatItAdds.blocks, 1) ?? ""}
             feature={fieldAt(whatItAdds.blocks, 0) ?? ""}
             locale={locale}
-            mediaAlt={copy.territorySketchAlt}
-            mediaSrc={assetSrc(gebietsschnitt)}
+            mediaAlt={territoryImage?.alt ?? copy.territorySketchAlt}
+            mediaSrc={territoryImage?.src}
           />
           <p>{fieldAt(whatItAdds.blocks, 2)}</p>
           <PriceTag display={enterprise.display} figure={enterprise.figure} locale={locale} />

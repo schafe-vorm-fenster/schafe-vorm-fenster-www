@@ -21,6 +21,10 @@ export interface PublishingPathProps {
   readonly mediaSrc?: string;
   readonly mediaAlt?: string;
   readonly mediaState?: DataState;
+  /** The image does not depict what the copy claims — the placeholder badge. */
+  readonly mediaNotDepicting?: boolean;
+  /** `data-placeholder` on the frame, so a build can enumerate what is still a stand-in. */
+  readonly mediaPlaceholderId?: string;
   /**
    * The page's language — `media-frame` badges itself and reads it. Without
    * it the three paths on `/en/take-part` hatched "Foto gesucht" (F-2-33).
@@ -56,6 +60,8 @@ export function PublishingPath({
   mediaSrc,
   mediaAlt = "",
   mediaState,
+  mediaNotDepicting,
+  mediaPlaceholderId,
   locale,
   cta,
   className,
@@ -73,6 +79,8 @@ export function PublishingPath({
           alt={mediaAlt}
           className={styles.media}
           locale={locale}
+          notDepicting={mediaNotDepicting}
+          placeholderId={mediaPlaceholderId}
           ratio="feature"
           src={mediaSrc}
           state={mediaState}

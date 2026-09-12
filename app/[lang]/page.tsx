@@ -12,6 +12,7 @@ import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SceneBlock } from "@/src/components/scene-block/scene-block";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
+import { pageImage } from "@/src/lib/content/images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
 import { ctaLabelOnly } from "@/src/lib/content/text";
@@ -21,9 +22,6 @@ import { fillTemplate, parseDemoProofElement } from "@/src/lib/pages/demo-conten
 import { calendarUrl } from "@/src/lib/live/app-handover";
 import { placeEvents } from "@/src/lib/live/places";
 import { STAGE_ZERO_ANCHOR, resolvePlaceOutcome } from "@/src/lib/pages/live-anchor";
-
-import heroPlaceholder from "@/src/generated/placeholders/home/hero.svg";
-import portraitPlaceholder from "@/src/generated/placeholders/ueber-uns/gruender.svg";
 
 import styles from "./_pages.module.css";
 
@@ -37,6 +35,7 @@ import { HOME_META } from "./page.meta";
 
 import type { ProofCandidate } from "./_proof";
 import type { Place } from "@/src/lib/live/types";
+import type { RenderableImage } from "@/src/lib/content/images";
 import type { ContentSlot } from "@/src/lib/content/types";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
@@ -201,6 +200,12 @@ function proofCandidates(proof: ContentSlot, geoLabel: string): ProofCandidate[]
  */
 interface FocusCopy {
   readonly locale: Locale;
+  /**
+   * The hero photograph from the page's image inventory, or `undefined` while
+   * none exists — in which case `photo-surface` renders the "Foto gesucht"
+   * hatch, which is a conversion rather than a gap (DEC-068, SRC-014).
+   */
+  readonly hero?: RenderableImage;
   /** S1's hero headline and the search module in both treatments. */
   readonly s1Headline: string;
   readonly search: (primary: boolean) => ReactNode;
@@ -288,9 +293,10 @@ function FocusBlocks({
         // F-2-33: the surface badges itself out of the dictionary, so it
         // needs the page's language or it badges an English page in German.
         locale={locale}
-        notDepicting
-        placeholderId="home/hero"
-        src={heroPlaceholder.src}
+        notDepicting={copy.hero?.notDepicting}
+        placeholderId={copy.hero?.placeholderId}
+        src={copy.hero?.src}
+        wideSrc={copy.hero?.wideSrc}
       />
 
       {/* Block 1′ — the live dates of a known place. The one `ink` section of
@@ -396,6 +402,13 @@ export default async function HomePage({
   // Field labels are translated, so the n-th block is the contract, not the
   // label (TS-007, `src/lib/content/README.md`). `Headline` is one of the few
   // labels both locales share.
+  // The page's image inventory (`images:` in the artifact's frontmatter):
+  // one entry per image, carrying its own alt text and provenance. An entry
+  // with no file yet resolves to `undefined`, and the module renders its
+  // honest "Foto gesucht" state (DEC-068).
+  const sceneEmbedImage = pageImage(page, "home-scene-embed");
+  const sceneProvenanceImage = pageImage(page, "home-scene-provenance");
+
   const searchPlaceholder = fieldAt(hero.blocks, 1);
   const searchHint = fieldAt(hero.blocks, 3);
   const proofKicker = fieldAt(proof.blocks, 0);
@@ -437,6 +450,7 @@ export default async function HomePage({
 
   const focusCopy: FocusCopy = {
     locale,
+    hero: pageImage(page, "home-hero"),
     s1Headline: hero.fields["Headline"] ?? "",
     search,
     datesHeadline: dates.fields["Headline"] ?? "",
@@ -491,12 +505,15 @@ export default async function HomePage({
             body={fieldAt(sceneEmbed.blocks, 1)}
             instance={
               <MediaFrame
-                alt=""
+                alt={sceneEmbedImage?.alt ?? ""}
                 className={styles.sceneMedia}
                 locale={locale}
+                notDepicting={sceneEmbedImage?.notDepicting}
                 placeholderHeadline={demo.photoWanted}
+                placeholderId={sceneEmbedImage?.placeholderId}
                 ratio="feature"
-                state="empty"
+                src={sceneEmbedImage?.src}
+                state={sceneEmbedImage ? undefined : "empty"}
               />
             }
             locale={locale}
@@ -512,13 +529,14 @@ export default async function HomePage({
             body={fieldAt(sceneProvenance.blocks, 1)}
             instance={
               <MediaFrame
-                alt={fieldAt(sceneProvenance.blocks, 0) ?? ""}
+                alt={sceneProvenanceImage?.alt ?? fieldAt(sceneProvenance.blocks, 0) ?? ""}
                 className={styles.sceneMedia}
                 locale={locale}
-                notDepicting
-                placeholderId="ueber-uns/gruender"
+                notDepicting={sceneProvenanceImage?.notDepicting}
+                placeholderHeadline={demo.photoWanted}
+                placeholderId={sceneProvenanceImage?.placeholderId}
                 ratio="feature"
-                src={portraitPlaceholder.src}
+                src={sceneProvenanceImage?.src}
               />
             }
             locale={locale}

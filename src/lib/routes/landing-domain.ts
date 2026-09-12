@@ -53,15 +53,47 @@ const ASSET_EXTENSIONS = [
 /**
  * Files this repository actually serves out of `public/`, as paths.
  *
- * `public/` does not exist today — every asset the site uses is a package
- * subpath import that Next emits under `/_next/static/`, and TS-017-A6
- * forbids committing a logo, mark or font file here at all. So the list is
- * empty, and `static-assets.static.test.ts` walks `public/` and fails if it
- * ever stops being (`state/open.md` row 153): a file added to `public/`
- * without a row here would be classified unservable and 404'd by the proxy,
- * with the file sitting on disk.
+ * The proxy has no filesystem to consult, so the list is kept by hand — and
+ * `landing-domain.public-files.test.ts` walks `public/` and fails if a file
+ * there is missing from it (`state/open.md` row 153): a file added to
+ * `public/` without a row here would be classified unservable and 404'd by
+ * the proxy, with the file sitting on disk.
+ *
+ * Until the imagery workstream the list was empty and `public/` did not
+ * exist: every asset was a package subpath import that Next emits under
+ * `/_next/static/`. TS-017-A6 still forbids committing a logo, a mark or a
+ * font file here — what `public/images/` holds is photography: the
+ * model-generated placeholders of DEC-077, written by
+ * `pnpm images:generate`, and the cleared photographs of
+ * `@schafe-vorm-fenster/people`, whose npm package ships the `.asset.md`
+ * descriptor but not the binary.
  */
-const PUBLIC_FILES: readonly string[] = [];
+const PUBLIC_FILES: readonly string[] = [
+  "/images/generated/dein-kalender-hero-wide.webp",
+  "/images/generated/dein-kalender-hero.webp",
+  "/images/generated/dein-ort-hero-wide.webp",
+  "/images/generated/dein-ort-hero.webp",
+  "/images/generated/dein-ort-starten-hero-wide.webp",
+  "/images/generated/dein-ort-starten-hero.webp",
+  "/images/generated/deine-region-angebot-hero-wide.webp",
+  "/images/generated/deine-region-angebot-hero.webp",
+  "/images/generated/deine-region-gebietsschnitt.webp",
+  "/images/generated/deine-region-hero-wide.webp",
+  "/images/generated/deine-region-hero.webp",
+  "/images/generated/home-hero-wide.webp",
+  "/images/generated/home-hero.webp",
+  "/images/generated/home-scene-embed.webp",
+  "/images/generated/mitmachen-hero-wide.webp",
+  "/images/generated/mitmachen-hero.webp",
+  "/images/generated/mitmachen-path-calendar.webp",
+  "/images/generated/mitmachen-path-website.webp",
+  "/images/generated/mitmachen-path-whatsapp.webp",
+  "/images/generated/ueber-uns-hero-wide.webp",
+  "/images/generated/ueber-uns-hero.webp",
+  "/images/real/home-scene-provenance.webp",
+  "/images/real/ueber-uns-founder-portrait.webp",
+  "/images/real/ueber-uns-team-jan-henrik-hempel.webp",
+];
 
 /**
  * True for a path that is **shaped** like a file — the landing-only rule's

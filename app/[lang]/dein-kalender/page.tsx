@@ -11,6 +11,7 @@ import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { TrustBlock } from "@/src/components/trust-block/trust-block";
 import { fieldAt } from "@/src/lib/content/blocks";
+import { pageImage } from "@/src/lib/content/images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
 import { BRIEFING_URL } from "@/src/lib/live/briefing";
@@ -118,6 +119,7 @@ export default async function Page({
 }) {
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
+  const heroImage = pageImage(page, "dein-kalender-hero");
   const home = await pageContent("home", locale);
 
   const focus = slot(page, "dein-kalender-1-focus");
@@ -225,6 +227,10 @@ export default async function Page({
           // dictionary — without the page's language it marks an English
           // page in German.
           locale={locale}
+          notDepicting={heroImage?.notDepicting}
+          placeholderId={heroImage?.placeholderId}
+          src={heroImage?.src}
+          wideSrc={heroImage?.wideSrc}
         />
       </div>
 

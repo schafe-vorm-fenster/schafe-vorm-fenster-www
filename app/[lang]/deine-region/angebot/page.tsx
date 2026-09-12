@@ -4,6 +4,7 @@ import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { ResponsePromise } from "@/src/components/response-promise/response-promise";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
+import { pageImage } from "@/src/lib/content/images";
 import { slot } from "@/src/lib/content/loader";
 import { slotState } from "@/src/lib/content/provenance";
 import { interpolate } from "@/src/lib/content/text";
@@ -77,6 +78,9 @@ export default async function Page({
   // TS-007 README: `/deine-region/angebot` has no artifact of its own —
   // its slots live in the `region` artifact (`deine-region-angebot-*`).
   const page = await pageContent("region", locale);
+  // `/deine-region/angebot` is specified together with `/deine-region`, so its
+  // slots and its images live in that page's artifact (`CONTENT_PAGE_DIRS`).
+  const heroImage = pageImage(page, "deine-region-angebot-hero");
   const form = slot(page, "deine-region-angebot-1-form");
 
   const copy = PAGE_COPY[locale];
@@ -101,7 +105,17 @@ export default async function Page({
       <MotionReveal>
         {/* F-2-33: the hero's `photo-surface` badges itself out of the
             dictionary and needs the page's language. */}
-        <HeroBlock headline={heading} id="angebot-titel" locale={locale} state={slotState(form)} />
+        <HeroBlock
+          gradient="violet"
+          headline={heading}
+          id="angebot-titel"
+          locale={locale}
+          notDepicting={heroImage?.notDepicting}
+          placeholderId={heroImage?.placeholderId}
+          src={heroImage?.src}
+          state={slotState(form)}
+          wideSrc={heroImage?.wideSrc}
+        />
       </MotionReveal>
 
       {/* `lime-100`, not `paper`: `PageFrame` always appends `surface` (band)

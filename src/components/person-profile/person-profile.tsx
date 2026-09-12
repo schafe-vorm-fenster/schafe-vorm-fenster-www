@@ -16,6 +16,12 @@ export interface PersonProfileProps {
   readonly portraitState?: DataState;
   readonly portraitNotDepicting?: boolean;
   /**
+   * The rights holder's attribution string, verbatim, where the asset's
+   * licence requires one to be printed. Rendered as the portrait's caption —
+   * real text under the picture, never a `title` attribute.
+   */
+  readonly portraitCredit?: string;
+  /**
    * The page's language — the portrait hatch badges itself and reads it.
    * Without it the team block on `/en/about` said "Foto gesucht" (F-2-33).
    */
@@ -46,6 +52,7 @@ export function PersonProfile({
   portraitAlt,
   portraitState,
   portraitNotDepicting,
+  portraitCredit,
   locale,
   className,
 }: PersonProfileProps) {
@@ -53,6 +60,7 @@ export function PersonProfile({
     <article className={[styles.profile, className].filter(Boolean).join(" ")}>
       <MediaFrame
         alt={portraitAlt}
+        caption={portraitCredit}
         className={styles.portrait}
         locale={locale}
         notDepicting={portraitNotDepicting}

@@ -5,6 +5,7 @@ import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { SceneBlock } from "@/src/components/scene-block/scene-block";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
+import { pageImage } from "@/src/lib/content/images";
 import { slot } from "@/src/lib/content/loader";
 import { fillTemplate, splitSteps } from "@/src/lib/pages/demo-content";
 import { DEMO_PLACE } from "@/src/lib/pages/demo-data";
@@ -13,7 +14,6 @@ import { linkHref } from "@/src/components/route-link/href";
 import { extractCampaignParams } from "@/src/lib/analytics";
 import { redirect } from "next/navigation";
 
-import heroPlaceholder from "@/src/generated/placeholders/dein-ort-starten/hero.svg";
 
 import { PlaceDatesIsland } from "../../_islands";
 import { PageJsonLd } from "../../_structured-data";
@@ -128,6 +128,7 @@ export default async function PlaceStartPage({
 }) {
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
+  const heroImage = pageImage(page, "dein-ort-starten-hero");
   const copy = PAGE_COPY[locale];
 
   const query = await searchParams;
@@ -234,9 +235,10 @@ export default async function PlaceStartPage({
         // dictionary — without the page's language it marks an English page
         // in German.
         locale={locale}
-        notDepicting
-        placeholderId="dein-ort-starten/hero"
-        src={heroPlaceholder.src}
+        notDepicting={heroImage?.notDepicting}
+        placeholderId={heroImage?.placeholderId}
+        src={heroImage?.src}
+        wideSrc={heroImage?.wideSrc}
       />
 
       {/* Block 2.1 — what it takes. One mechanism: WhatsApp (D2). */}

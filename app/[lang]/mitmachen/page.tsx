@@ -8,6 +8,7 @@ import { PublishingPath } from "@/src/components/publishing-path/publishing-path
 import { RouteLink } from "@/src/components/route-link/route-link";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
+import { pageImage } from "@/src/lib/content/images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
@@ -174,6 +175,15 @@ export default async function Page({
   });
   const heroCtaLabel = fieldAt(hero.blocks, 2) ?? "";
 
+  // TS-003 D2 declares this page's LCP element to be the WhatsApp scene
+  // image, which is the hero itself (`data-block="scene"` below). The entry
+  // carries `lcp: true`, and `photo-surface` turns that into the preload a
+  // CSS background image can actually carry.
+  const heroImage = pageImage(page, "mitmachen-hero");
+  const whatsappImage = pageImage(page, "mitmachen-path-whatsapp");
+  const calendarImage = pageImage(page, "mitmachen-path-calendar");
+  const websiteImage = pageImage(page, "mitmachen-path-website");
+
   return (
     <>
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
@@ -208,7 +218,12 @@ export default async function Page({
           // dictionary — without the page's language it marks an English
           // page in German.
           locale={locale}
+          notDepicting={heroImage?.notDepicting}
+          placeholderId={heroImage?.placeholderId}
+          priority={heroImage?.priority}
+          src={heroImage?.src}
           state={slotState(hero)}
+          wideSrc={heroImage?.wideSrc}
         />
       </div>
 
@@ -228,12 +243,20 @@ export default async function Page({
           headline={fieldAt(pathWhatsapp.blocks, 0) ?? ""}
           locale={locale}
           mechanism="whatsapp"
+          mediaAlt={whatsappImage?.alt}
+          mediaNotDepicting={whatsappImage?.notDepicting}
+          mediaPlaceholderId={whatsappImage?.placeholderId}
+          mediaSrc={whatsappImage?.src}
           steps={stepsOf(listItems(pathWhatsapp.blocks))}
         />
         <PublishingPath
           headline={fieldAt(pathCalendar.blocks, 0) ?? ""}
           locale={locale}
           mechanism="calendar-connection"
+          mediaAlt={calendarImage?.alt}
+          mediaNotDepicting={calendarImage?.notDepicting}
+          mediaPlaceholderId={calendarImage?.placeholderId}
+          mediaSrc={calendarImage?.src}
           steps={stepsOf(listItems(pathCalendar.blocks))}
         />
         <PublishingPath
@@ -242,6 +265,10 @@ export default async function Page({
           headline={fieldAt(pathWebsite.blocks, 0) ?? ""}
           locale={locale}
           mechanism="website-import"
+          mediaAlt={websiteImage?.alt}
+          mediaNotDepicting={websiteImage?.notDepicting}
+          mediaPlaceholderId={websiteImage?.placeholderId}
+          mediaSrc={websiteImage?.src}
           steps={stepsOf(listItems(pathWebsite.blocks))}
         />
         <aside>

@@ -8,6 +8,7 @@ import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { ValueStory } from "@/src/components/value-story/value-story";
 import { fieldAt } from "@/src/lib/content/blocks";
+import { pageImage } from "@/src/lib/content/images";
 import { slot } from "@/src/lib/content/loader";
 import { ctaLabelOnly } from "@/src/lib/content/text";
 import { fillTemplate, splitSteps } from "@/src/lib/pages/demo-content";
@@ -21,7 +22,6 @@ import { cacheLifeProfile, cacheTags } from "@/src/lib/live/cache-profiles";
 import { placeEvents, resolvePlace } from "@/src/lib/live/places";
 import { href } from "@/src/lib/routes/routes";
 
-import heroPlaceholder from "@/src/generated/placeholders/dein-ort/hero.svg";
 
 import { NearbyIsland, PlaceDatesIsland, exampleRows } from "../_islands";
 import { PageJsonLd } from "../_structured-data";
@@ -201,6 +201,9 @@ export default async function PlacePage({
 }) {
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
+  // The hero photograph from the page's image inventory; `undefined` while
+  // none exists, and the surface renders its "Foto gesucht" hatch instead.
+  const heroImage = pageImage(page, "dein-ort-hero");
   const fallbackCopy = PAGE_COPY[locale];
   const stateS0 = slot(page, "dein-ort-0-state-s0");
   const s0Headline = fieldAt(stateS0.blocks, 0);
@@ -385,9 +388,10 @@ export default async function PlacePage({
         // dictionary — without the page's language it marks an English page
         // in German.
         locale={locale}
-        notDepicting
-        placeholderId="dein-ort/hero"
-        src={heroPlaceholder.src}
+        notDepicting={heroImage?.notDepicting}
+        placeholderId={heroImage?.placeholderId}
+        src={heroImage?.src}
+        wideSrc={heroImage?.wideSrc}
         // `place-name` clamps to two display lines, which is right for
         // "Das ist los in X" and wrong for state B's full sentence.
         variant={publishOffer === undefined ? "place-name" : undefined}

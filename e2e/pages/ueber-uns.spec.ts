@@ -4,16 +4,27 @@ import { expect, test } from "@playwright/test";
  * TS-027 — `/ueber-uns` — acceptance pass.
  *
  * TS-027-A9 (every person in `@schafe-vorm-fenster/people` appears with a
- * real portrait) is not fully built: no hub-package portrait asset is read
- * into the render path in this work package (`src/lib/pricing/offerings.ts`'s
- * docblock records the same boundary for prices) — both team members render
- * with the honest "Foto gesucht" placeholder. `state/open.md` tracks it.
+ * real portrait) is half built. The imagery workstream placed the two
+ * cleared photographs of Jan-Henrik Hempel — the origin block's portrait and
+ * the team card — from the hub package's asset set. Christian Sauer's only
+ * photograph carries `license: unverified`, so his card keeps the honest
+ * "Foto gesucht" hatch: an uncleared portrait is not published, and a face is
+ * never generated (DEC-068 rule 3, DEC-077). `state/open.md` tracks it.
  */
 
 test.describe("/ueber-uns", () => {
   test("TS-027-A1: manifest matches D1 — no primary CTA on this page", async ({ page }) => {
     await page.goto("/ueber-uns");
     await expect(page.locator('[data-cta="primary"]')).toHaveCount(0);
+  });
+
+  test("TS-027-A9: the cleared founder portrait renders, with its credit line", async ({
+    page,
+  }) => {
+    await page.goto("/ueber-uns");
+    await expect(page.locator('img[src*="founder-portrait"]').first()).toBeVisible();
+    // The rights holder prescribes the attribution string verbatim.
+    await expect(page.getByText("@rightvisionstudios & NØRD2026").first()).toBeVisible();
   });
 
   test("TS-027-A2: exactly one photo section, at the top", async ({ page }) => {
