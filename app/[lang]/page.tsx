@@ -542,7 +542,7 @@ export default async function HomePage({
               ) : (
                 // An unfilled position weakens the claim; it never shortens
                 // the stream (SRC-001 §4, DEC-048).
-                <EmptyProofSlot key={`empty-${position}`} sentence={demo.missingProof} />
+                <EmptyProofSlot key={`empty-${position}`} locale={locale} sentence={demo.missingProof} />
               ),
             )}
           </ProofStream>

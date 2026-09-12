@@ -307,6 +307,7 @@ export default async function Page({
             ) : (
               <EmptyProofSlot
                 key={`empty-${position}`}
+                locale={locale}
                 sentence={
                   locale === "de"
                     ? "Für diese Aussage ist noch kein freigegebener Beleg hinterlegt."

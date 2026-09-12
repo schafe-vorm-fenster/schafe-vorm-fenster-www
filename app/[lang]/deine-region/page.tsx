@@ -359,7 +359,7 @@ export default async function Page({
                   state={entry.state}
                 />
               ) : (
-                <EmptyProofSlot key={`empty-${position}`} sentence={copy.missingProof} />
+                <EmptyProofSlot key={`empty-${position}`} locale={locale} sentence={copy.missingProof} />
               ),
             )}
           </ProofStream>

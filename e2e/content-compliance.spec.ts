@@ -215,7 +215,20 @@ test("F-2-33: the English register flow's own controls are English", async ({ pa
  * other one — the file belongs to another work package this round, so the
  * walk records the leak rather than hiding it.
  */
-const GERMAN_BADGES = ["Demo-Daten", "Foto gesucht", "Nicht motivgenau"];
+// F-3-15 adds the proof register: `empty-proof-slot` and
+// `objection-list` carried German defaults in their component bodies, so
+// "KEIN NACHWEIS" and its sentence stood partway down otherwise fully
+// English pages.
+const GERMAN_BADGES = [
+  "Demo-Daten",
+  "Foto gesucht",
+  "Nicht motivgenau",
+  // F-3-15's two, as the exact strings the components rendered. The bare word
+  // "Nachweis" is not usable here: `/en/legal` carries the German legal
+  // bodies by design (`state/open.md` row 151) and one of them contains it.
+  "Kein Nachweis",
+  "liegt uns noch kein",
+];
 
 /** Every `/en` route, plus the one step that only appears with a parameter. */
 const ENGLISH_BADGE_PATHS = [

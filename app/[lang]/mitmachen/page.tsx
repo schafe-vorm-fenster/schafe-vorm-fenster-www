@@ -207,6 +207,9 @@ export default async function Page({
         <ObjectionList
           headline={fieldAt(objections.blocks, 0) ?? ""}
           items={listItems(objections.blocks).map(splitObjection)}
+          // F-3-15: without it the block's own empty proof slot rendered
+          // "KEIN NACHWEIS" and a German sentence on `/en/take-part`.
+          locale={locale}
         />
       </SectionShell>
 
@@ -276,7 +279,11 @@ export default async function Page({
                 state={entry.state}
               />
             ) : (
-              <EmptyProofSlot key={`empty-${position}`} sentence={MISSING_PROOF[locale]} />
+              <EmptyProofSlot
+                key={`empty-${position}`}
+                locale={locale}
+                sentence={MISSING_PROOF[locale]}
+              />
             ),
           )}
         </ProofStream>

@@ -140,6 +140,22 @@ export interface Dictionary {
     notDepicting: string;
   };
   /**
+   * The honest-gap register — the words a proof slot renders when nothing
+   * clears (F-3-15). Same reason as `media` above: `empty-proof-slot` and
+   * `objection-list` carried German defaults in their component bodies, so an
+   * English visitor reading an otherwise fully translated page met
+   * "KEIN NACHWEIS / Für diesen Kanal liegt uns noch kein Nachweis vor."
+   * partway down.
+   */
+  proof: {
+    /** The empty proof slot's badge — "Kein Nachweis". */
+    none: string;
+    /** What is missing, where the caller names no channel of its own. */
+    noneForChannel: string;
+    /** What is missing in a testimonial position (`/ueber-uns` block 3). */
+    noneForTestimonial: string;
+  };
+  /**
    * The form controls' own words — the strings a component renders when the
    * page supplied none. `choice-group`'s empty state was a German literal in
    * the component body and rendered on `/en` too (F-2-33).
@@ -273,6 +289,12 @@ const de: Dictionary = {
     photoWantedHeadline: "Uns fehlt hier ein Bild aus deinem Ort.",
     notDepicting: "Nicht motivgenau · Platzhalter",
   },
+  proof: {
+    none: "Kein Nachweis",
+    noneForChannel: "Für diesen Kanal liegt uns noch kein Nachweis vor.",
+    noneForTestimonial:
+      "Für Erfahrungsberichte von Veranstalter:innen liegt noch kein freigegebenes Zitat vor.",
+  },
   forms: {
     noOptions: "Keine Auswahl verfügbar.",
   },
@@ -370,6 +392,11 @@ const en: Dictionary = {
     photoWanted: "Photo wanted",
     photoWantedHeadline: "We're missing a picture from your place here.",
     notDepicting: "Not an exact match · placeholder",
+  },
+  proof: {
+    none: "No evidence",
+    noneForChannel: "We have no evidence for this channel yet.",
+    noneForTestimonial: "No cleared quote from an organiser is available yet.",
   },
   forms: {
     noOptions: "Nothing to choose from yet.",

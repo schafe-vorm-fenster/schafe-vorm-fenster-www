@@ -3,6 +3,8 @@ import { Icon } from "../icon/icon";
 
 import type { ReactNode } from "react";
 
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./objection-list.module.css";
 
 export interface ObjectionItem {
@@ -18,6 +20,11 @@ export interface ObjectionListProps {
   /** A cleared `proof-card`. Omitted → `empty-proof-slot`, never backfilled. */
   readonly proof?: ReactNode;
   readonly proofEmptySentence?: string;
+  /**
+   * The page's language, handed on to the empty proof slot. Without it the
+   * slot's sentence and badge rendered in German on `/en/take-part` (F-3-15).
+   */
+  readonly locale?: Locale;
   readonly className?: string;
 }
 
@@ -41,7 +48,8 @@ export function ObjectionList({
   headline,
   items,
   proof,
-  proofEmptySentence = "Für diesen Kanal liegt uns noch kein Nachweis vor.",
+  proofEmptySentence,
+  locale = "de",
   className,
 }: ObjectionListProps) {
   return (
@@ -60,7 +68,7 @@ export function ObjectionList({
           ))}
         </ul>
         <div className={styles.proof}>
-          {proof ?? <EmptyProofSlot sentence={proofEmptySentence} />}
+          {proof ?? <EmptyProofSlot locale={locale} sentence={proofEmptySentence} />}
         </div>
       </div>
     </div>

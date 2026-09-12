@@ -13,6 +13,7 @@ import { RouteLink } from "@/src/components/route-link/route-link";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
+import { dictionary } from "@/src/lib/i18n/dictionary";
 import { ctaLabelOnly } from "@/src/lib/content/text";
 import { assetSrc } from "@/src/lib/content/asset-src";
 
@@ -275,9 +276,9 @@ export default async function Page({
                 // backfilled — the engine leaves it empty because there is no
                 // seventh cleared element, not because the page hard-codes it.
                 <EmptyProofSlot
-                  badgeLabel="Kein Nachweis"
                   key={`empty-${position}`}
-                  sentence="Für Erfahrungsberichte von Veranstalter:innen liegt noch kein freigegebenes Zitat vor."
+                  locale={locale}
+                  sentence={dictionary(locale).proof.noneForTestimonial}
                 />
               ),
             )}

@@ -1,11 +1,21 @@
 import { Badge } from "../badge/badge";
 
+import { dictionary } from "@/src/lib/i18n/dictionary";
+
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./empty-proof-slot.module.css";
 
 export interface EmptyProofSlotProps {
   /** What is missing, in one sentence — never backfilled with a substitute. */
-  readonly sentence: string;
+  readonly sentence?: string;
   readonly badgeLabel?: string;
+  /**
+   * The page's language. Without it the badge read "KEIN NACHWEIS" on `/en`
+   * too (F-3-15) — the label is a UI string and belongs in the dictionary,
+   * not in a component default, exactly as `demo-data-badge` learned.
+   */
+  readonly locale?: Locale;
   readonly className?: string;
 }
 
@@ -25,9 +35,11 @@ export interface EmptyProofSlotProps {
  */
 export function EmptyProofSlot({
   sentence,
-  badgeLabel = "Kein Nachweis",
+  badgeLabel,
+  locale = "de",
   className,
 }: EmptyProofSlotProps) {
+  const words = dictionary(locale).proof;
   return (
     // `data-empty-proof` makes the honest gap countable from outside — the
     // selection's positions are cards *and* gaps, and SRC-001 §4 is about the
@@ -37,8 +49,8 @@ export function EmptyProofSlot({
       data-empty-proof="true"
     >
       <div className={styles.content}>
-        <Badge tone="placeholder">{badgeLabel}</Badge>
-        <p className={styles.sentence}>{sentence}</p>
+        <Badge tone="placeholder">{badgeLabel ?? words.none}</Badge>
+        <p className={styles.sentence}>{sentence ?? words.noneForChannel}</p>
       </div>
     </div>
   );
