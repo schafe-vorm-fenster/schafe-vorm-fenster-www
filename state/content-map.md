@@ -740,3 +740,98 @@ four "Partial" rows became "Pass". Every German passage written in this
 pass went through `humanizer` + `humanize-de`, every English passage
 through `humanizer` + `copy-editing`. `pnpm check:content` and
 `pnpm check` are green.
+
+## Image inventory (2026-09-12)
+
+Every image the eleven pages need, as an `images:` entry in the page
+artifact's frontmatter — `de` and `en` carry identical ids in identical
+order, with alt text localized. The schema is `ImageEntrySchema` in
+`src/domain/content-frontmatter.schema.ts` (commit ae63093); the entry
+*is* the provenance record, there is no sidecar.
+
+22 entries across 7 artifacts. `pnpm check:frontmatter` and
+`pnpm check:content` are green.
+
+| Page | Entries | `real` | `generated` | Still needed |
+| --- | --- | --- | --- | --- |
+| TS-019 `/` | 3 | 1 | 2 | 2 |
+| TS-020 `/dein-ort` | 3 | 2 | 1 | 3 |
+| TS-021 `/dein-ort/starten` | 1 | 0 | 1 | 1 |
+| TS-026 `/deine-region` (incl. `/angebot`) | 3 | 0 | 3 | 3 |
+| TS-024 `/dein-kalender` | 4 | 3 | 1 | 4 |
+| TS-025 `/dein-kalender/bestellen` | 0 | — | — | — |
+| TS-022 `/mitmachen` | 4 | 0 | 4 | 4 |
+| TS-023 `/mitmachen/registrieren` | 0 | — | — | — |
+| TS-027 `/ueber-uns` | 4 | 3 | 1 | 2 |
+| TS-028 `/ueber-uns/archiv` | 0 | — | — | — |
+| TS-029 `/rechtliches` | 0 | — | — | — |
+| **Total** | **22** | **9** | **13** | **19** |
+
+`real` counts `provenance: real` — the pixels must be a photograph
+somebody owns. Only three of those nine are `status: real` today; the
+other six name a real asset that is not cleared or not yet taken, and
+the page shows the design system's "Foto gesucht" surface until it is.
+
+### The three real assets in use
+
+| Entry | Asset | Rights |
+| --- | --- | --- |
+| `ueber-uns-founder-portrait` (LCP of `/ueber-uns`, TS-003 D2) | `people@0.3.6#jan-henrik-hempel/assets/2026-05-noerdaward2026-DSC09263-portrait.jpeg`, 1826×1826 | `free use, credit required`; `press_clearance: cleared`. Credit line verbatim: `@rightvisionstudios & NØRD2026` |
+| `ueber-uns-team-jan-henrik-hempel` | `…/assets/2021-workshop-quilow-portrait.jpeg` | Eigenaufnahme, unbeschränkt, kein Credit |
+| `home-scene-provenance` | `…/assets/2021-workshop-ranzin.jpeg`, 3729×3729 | Eigenaufnahme, unbeschränkt, kein Credit |
+
+A second portrait is used for the team card on purpose, so `/ueber-uns`
+does not show the same face twice.
+
+**The binaries are not in the installed package.** `people@0.3.6`'s
+`files` list ships `*/assets/*.asset.md` and no image, so a copy step
+from `go-to-market-os/packages/identity/people/jan-henrik-hempel/assets/`
+into `public/images/` is part of wiring these three up. Same for the
+brand-identity office motifs, which the package README marks "never
+shipped".
+
+### Where a real asset exists but is not usable
+
+- **The three `/dein-kalender` proof cards** (`wendt-rubkow`,
+  `zschiesche-gross-kiesow`, `eichler-wasserschloss-quilow`): all
+  `usage_rights: unverified`, and none has an image asset at all.
+- **`christian-sauer`**: `press_clearance: unverified`, portrait
+  `license: unverified`, photographer unknown (TS-027-A9 → "Foto
+  gesucht").
+- **The two `/dein-ort` homescreen screenshots**: nobody has taken them.
+
+None of these five gets a rendition. A proof element is outside the
+placeholder regime entirely — `src/generated/placeholders/README.md`:
+"an uncleared element is excluded, never placeheld" — and a portrait of
+a real person or a screenshot of a real product would be a fabrication
+under DEC-068 rule 3. They are `provenance: real`, `status: needed`.
+
+### The three pages with no entry, and why
+
+- **`/ueber-uns/archiv`**: 0 of the 31 media-echo entries carries a
+  `usage_rights` field, so no preview may be derived. TS-028 already
+  answers this: an entry without an image is the text-only row variant,
+  and the spec forbids a "Foto gesucht" hatch here ("that surface is a
+  conversion invitation and this page has no conversion").
+- **`/dein-kalender/bestellen`, `/mitmachen/registrieren`,
+  `/rechtliches`**: no hero, no photo surface, no media box in the
+  rendered page or in the spec.
+- **The 404 pages** (`app/[lang]/not-found.tsx`,
+  `app/global-not-found.tsx`): heading, place search and context band,
+  no image slot. They have no content artifact either, so there is
+  nowhere to register one. Left as is rather than inventing a slot.
+
+### Observations for the developer
+
+- `mitmachen-path-whatsapp/-calendar/-website` and the two `/dein-ort`
+  screenshots describe boxes the components support (`PublishingPath`
+  has `mediaSrc`, `HowtoBlock` has `screenshotSrc`) but the pages pass
+  nothing today. Wiring them is a code step, not a content step.
+- `placeholders.manifest.json` holds two slots nothing consumes:
+  `dein-kalender/portalize` (block 3 is the live embed widget, not an
+  image) and `deine-region/karte` (TS-026 D3 forbids it). Neither has
+  an inventory entry.
+- Exactly two entries carry `lcp: true` — `mitmachen-hero` and
+  `ueber-uns-founder-portrait` — the two image LCPs of TS-003 D2.
+- The style line is identical on all 13 generated entries:
+  `documentary photo, natural light, 35mm, muted colours, no text`.
