@@ -198,7 +198,7 @@ content/legal/<locale>/<doc>.md                ← imported, not generated
 | 5 | Scene 2 — embed mechanism ("own calendar, own name") | `value-story`/scene copy | `@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar` field `gains`/`relievers` ("our own design and our own selection, without our own system") | |
 | 6 | Scene 3 — provenance ("who built this") | `value-story`/scene copy | `@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor` (claim, cleared) + `@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel` | Cleared — usable without a Dummy-Content fallback. |
 | 7 | Block 2b — "who built this" provenance stamps | copy shell + proof | same as row 6 | |
-| 8 | Block 2c — proof stream, 5 elements (DEC-048) | `proof-card` pool | Pool: `@schafe-vorm-fenster/proof@0.3.5` full set (20 ids) + `@schafe-vorm-fenster/media-echo@0.3.3` (32 verified entries, 0 with `usage_rights` today) | Sourced — empty-slot risk: media-echo entries all lack `usage_rights` (Q-045, already on `state/open.md` #1); proof-package entries include 8 `cleared` ids. Selection is TS-005's job, not this map's. |
+| 8 | Block 2c — proof stream, 5 elements (DEC-048) | `proof-card` pool | Pool: `@schafe-vorm-fenster/proof@0.3.5` + `@schafe-vorm-fenster/media-echo@0.3.3`; the artifact now names five concrete candidates: `lehre-lelender`, `noerd-award-2026-smart-community`, `volkshochschule-uecker-randow`, `in-operation-since-2018`, `media-echo#2026-04-nord-award-nordkurier` | **Sourced** (follow-up group 1, 2026-09-12). Two candidates are `cleared`, three run with `clearance: pending` (Q-014, Q-045, `state/open.md` #160). Selection and order stay TS-005's job. |
 | 9 | Block 2d — live counters label | copy shell | IA (TS-019 D5) | Today only the *dates* figure renders (Q-037); "places"/"updates today" fields absent from `/api/stats`. |
 | 10 | Context band (3 non-focus jobs) | copy shell | IA (SRC-003, TS-006 D5) | Standard job labels, shared across pages — see TS-006 (out of this run's scope) for the canonical job names. |
 | 11 | Closing CTA | copy shell | mirrors block-1 primary, no new copy | |
@@ -214,9 +214,9 @@ content/legal/<locale>/<doc>.md                ← imported, not generated
 | 1 | Block 1 state A headline ("place name + next dates") | copy shell | IA | live data, not authored |
 | 2 | Block 1 state B headline ("nothing entered in `<place>` yet — you could be the first") | copy shell | SRC-002 (`website-relevance-model.concept.md`, quoted verbatim in TS-020 D2/DEC-071) | Direct address is deliberate and specific to this page (TS-021 forbids the same sentence). Quote, do not paraphrase. |
 | 3 | Value story 1 — bakery van (aspect + why it matters) | `value-story` | IA (SRC-003) for narrative frame; example-place data live; testimonial pool below | |
-| 3a | — testimonial candidate | proof | Pool: `@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei` (`unverified`) | **Sourced — empty by design.** Not cleared; per SRC-001 rule 4 the slot renders 3-part (no quote), never a substitute. Hub demand: Q-014. |
+| 3a | — testimonial candidate | proof | `@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei` (Elisabeth Kurzweg, Bäckerei Kurzweg, 2022) | **Sourced, `clearance: pending`** (follow-up group 1, 2026-09-12). The quote is written into the artifact verbatim, umlauts restored from the package's ASCII transliteration, not translated on `/en`. TS-020-A6 still keeps it off the rendered page — `state/open.md` #162. Hub demand: Q-014. |
 | 4 | Value story 2 — council meeting | `value-story` | IA; cleared backing `@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis` (`cleared`) | Backing example cleared; testimonial candidate `zschiesche-gross-kiesow` is `unverified` → testimonial part empty by design. |
-| 5 | Value story 3 — culture nobody would have searched for | `value-story` | IA; no cleared backing anecdote at all (`kulturlandbuero-broellin`, `eichler-wasserschloss-quilow` both `unverified`) | **Sourced — empty by design**, and per TS-020 open points this story "carries no evidence at all" without a culture date in the place. Hub demand: Q-014. |
+| 5 | Value story 3 — culture nobody would have searched for | `value-story` | `@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow` (backing anecdote) + `#eichler-wasserschloss-quilow` (testimonial) | **Sourced, `clearance: pending`** (follow-up group 1, 2026-09-12). The "no evidence at all" gap is closed: the Volkshochschule publishes its whole course programme through the village calendar (Kulturlandbüro Uecker-Randow, Maria Elsner, September 2024). Both records are `unverified` — Q-014. |
 | 6 | Value story 4 — fifteen-minute radius | `value-story` | IA; cleared backing `@schafe-vorm-fenster/proof@0.3.5#regional-footprint` (`cleared`); testimonial `wendt-rubkow` `unverified` | Testimonial part empty by design. |
 | 7 | Homescreen block (iOS/Android instructions) | `howto-block` | IA (SRC-003) | Generic instructional copy, no claim. |
 | 8 | CTA reassurance ("permanence promise") | copy + proof | `@schafe-vorm-fenster/offerings@0.3.3#community-calendar` price note ("Permanent, not an introductory tier") | Backing exists in the offering package directly (not media-echo) — usable. |
@@ -250,9 +250,9 @@ content/legal/<locale>/<doc>.md                ← imported, not generated
 | 4 | Publishing path 2 — calendar connection | `publishing-path` | `@schafe-vorm-fenster/offerings@0.3.3#community-calendar` (`generally-available`) | |
 | 5 | Publishing path 3 — website import | `publishing-path` | `@schafe-vorm-fenster/offerings@0.3.3#community-calendar` (hub-recorded as **alpha** — status badge required, not `generally-available`) | Content must render the status badge per D4; not itself a Dummy-Content case, it's an honesty constraint on sourced copy. |
 | 6 | Live example module label ("in `<place>`") | copy shell + live data | IA | |
-| 6a | Stage-0 reference place (unnamed) | configuration, not copy | **Dummy-Content** | No source names which covered place with dates + cleared place-bound proof serves as the stage-0 default (TS-022 open points: "the stage-0 reference place is unnamed"). Generate: pick one real, currently-covered, dated place as a configuration value (not invented data — an actual place already in the app), and register the choice as an editorial assumption, not fictitious content. Flagged in `state/open.md`. |
+| 6a | Stage-0 reference place | configuration, not copy | **Sourced** — `@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow` | No source names which covered place with dates + cleared place-bound proof serves as the stage-0 default (TS-022 open points: "the stage-0 reference place is unnamed"). Generate: pick one real, currently-covered, dated place as a configuration value (not invented data — an actual place already in the app), and register the choice as an editorial assumption, not fictitious content. Flagged in `state/open.md`. |
 | 7 | Proof block (3 elements, publish-weighted) | `proof-card` pool | Pool: `@schafe-vorm-fenster/proof@0.3.5` (job-fit `publish-our-dates` weighting, TS-005 D5) | Sourced — empty-slot risk same as elsewhere depending on clearance draw. |
-| 8 | CTA label + permanence-promise reassurance | copy + proof | **Dummy-Content** | TS-022 D7/open points: "the permanence promise has no element in `@schafe-vorm-fenster/proof`" — the 2022 commitment lives only in `media-echo` (itself `usage_rights`-less, Q-045), referenced loosely from the offering. Until a proof element exists or TS-005 accepts a media-echo element here, the reassurance text has no citable backing. Generate an on-voice, generic reassurance sentence with no invented number/date, `provenance: generated`. |
+| 8 | CTA label + permanence-promise reassurance | copy + proof | **Sourced** — `@schafe-vorm-fenster/offerings@0.3.3#community-calendar` ("a public commitment, not a pricing decision that can be quietly reversed") + `@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer` (the 2022 sentence itself) | TS-022 D7/open points: "the permanence promise has no element in `@schafe-vorm-fenster/proof`" — the 2022 commitment lives only in `media-echo` (itself `usage_rights`-less, Q-045), referenced loosely from the offering. Until a proof element exists or TS-005 accepts a media-echo element here, the reassurance text has no citable backing. Generate an on-voice, generic reassurance sentence with no invented number/date, `provenance: generated`. |
 | 9 | Cross-link to `/dein-kalender` (one sentence) | copy shell | IA (TS-022 D9) | |
 
 **Page total: 9 slots — 6 Sourced, 1 Sourced-empty-by-design, 2 Dummy-Content.**
@@ -264,7 +264,7 @@ content/legal/<locale>/<doc>.md                ← imported, not generated
 | # | Slot | Content type | Source | Note |
 | --- | --- | --- | --- | --- |
 | 1 | Step 1 — "which place" question + search microcopy | copy shell | IA | |
-| 2 | Step 2 — "who publishes" question + options | copy shell / enum labels | **Dummy-Content** | TS-023 D2: vocabulary is **UNKNOWN** — "no source defines the list; the app's account model owns it." Cannot even be IA-sourced since the option set itself is undefined. Generate a minimal, clearly generic placeholder option set (e.g. "Verein/Initiative", "Gemeinde/Verwaltung", "Einzelperson", "Sonstiges") marked `provenance: generated`, to be replaced once the app team publishes the real enum (open point, app team). |
+| 2 | Step 2 — "who publishes" question + options | copy shell / enum labels | **Sourced** (labels) — `@schafe-vorm-fenster/audiences@0.3.3#actors` and `#municipalities`, field Context | TS-023 D2: vocabulary is **UNKNOWN** — "no source defines the list; the app's account model owns it." Cannot even be IA-sourced since the option set itself is undefined. Generate a minimal, clearly generic placeholder option set (e.g. "Verein/Initiative", "Gemeinde/Verwaltung", "Einzelperson", "Sonstiges") marked `provenance: generated`, to be replaced once the app team publishes the real enum (open point, app team). |
 | 3 | Step 3 — "which publishing path" question + 3 options | copy shell | `@schafe-vorm-fenster/offerings@0.3.3#community-calendar` (same three mechanisms as TS-022 rows 3–5) | |
 | 4 | Step indicator microcopy ("Schritt 2 von 3") | copy shell | IA | |
 | 5 | Handover button label + what-happens-next note | copy shell | IA (WEB-F-087: content phase may only say what the app will ask next in generic terms, since no prefill contract exists) | |
@@ -490,11 +490,11 @@ exempts it from; "Partial" names what is missing and why.
 | TS-021 Start the calendar | Pass — `publish-our-dates`, static | Pass — `register-as-publisher` | Pass — `actors`, `municipalities`, `rural-residents` in order | Pass — no proof slot on this page by spec; the live example is the credibility carrier, sourced to a real active place | Pass — live example (slot 3) + search (slot 5), both degrade to the placeless variant | Pass (layout) | Pass — slot 6 CTA is the closing CTA | Pass — placeless variant is itself the prerendered page | Pass — slot 4 explicitly avoids naming the visitor as the one who must act |
 | TS-022 Mitmachen | Pass — `publish-our-dates`, invariant | Pass — `register-as-publisher` | Pass — `actors` primary, `municipalities` as publisher | Partial — objection block and proof block (slot 7) are sourced but pool-thin; permanence promise (slot 8) is generated, not proof-backed (state/open.md #17) | Pass — live example (slot 6), with a named stage-0 reference place (slot 6a) as its empty/fallback anchor | Pass (layout) | Pass — slot 8 mirrors slot 1 exactly | Pass — stage-0 uses the configured reference place, never the visitor's own | Pass |
 | TS-023 Registrieren | Pass — `publish-our-dates` | Pass — `publish-first-event` (completed in-app; `register-as-publisher` fired here at handover) | Pass — single audience `actors`, per spec | N/A (by design) — no proof slot on this page; the argument was made on `/mitmachen` | Pass — place search, step 1 only, per spec | Partial — band renders on step 1 only, suppressed steps 2–3 (TS-023 D7, `state/open.md` #24, a registered deviation from TS-006's every-page rule) | Pass — handover *is* the closing CTA | Pass — step 1 is reachable with no assumption | Pass |
-| TS-024 Dein Kalender | Pass — `run-our-own-calendar` | Pass — `buy-calendar-licence` primary, `request-product-briefing` equal-weight | Pass — municipalities, institutions, actors, counties in order | Partial — proof block (slot 5) pool-thin/unverified by design; trust block (slot 6) ships data-protection only, operations/AI sentences withheld, not generated (D10, `state/open.md` #19) | Pass — embed demo (slot 3), labelled example while Q-026 is open | Pass (layout) | Pass — closing CTA mirrors the primary, not Pulse-styled | Pass — tiers, contrast and trust block need no visitor context | Pass |
+| TS-024 Dein Kalender | Pass — `run-our-own-calendar` | Pass — `buy-calendar-licence` primary, `request-product-briefing` equal-weight | Pass — municipalities, institutions, actors, counties in order | Pass (2026-09-12) — proof block (slot 5) now carries three real, verbatim quotes from the `portalize-calendar` pool, cited and clearance-pending (`state/open.md` #160); trust block (slot 6) ships data protection **and** a sourced operations sentence naming a hub record, per A19. Only the AI-use sentence is still withheld, and no claim stands on it (`state/open.md` #19) | Pass — embed demo (slot 3), labelled example while Q-026 is open | Pass (layout) | Pass — closing CTA mirrors the primary, not Pulse-styled | Pass — tiers, contrast and trust block need no visitor context | Pass |
 | TS-025 Bestellen | Pass — `run-our-own-calendar` | Pass — `buy-calendar-licence` | Pass — municipalities, institutions | N/A (by design) — no proof slot in V1 (decision already made on `/dein-kalender`) | Partial — scope selection (slot 1) has no live preview in V1 (DEC-069, deferred by decision, not a copy gap) | N/A (by design) — TS-025 D7-style flow, no argument blocks | Pass — step 4 code display is the terminal state, no separate closing CTA needed (flow, not an argument page) | Pass — steps 1–2 need no visitor context; step 3 explicitly handles the no-live-preview case in copy | Pass |
-| TS-026 Deine Region | Pass — `run-our-own-calendar` | Pass — `request-licence-quote` primary, `request-product-briefing` equal-weight | Pass — counties, institutions, municipalities in order | Partial — proof block (slot 6) pool-thin/unverified by design; response promise (slot 7) fully withheld, not generated (`state/open.md` #20) | Pass — interim module (slot 3) with a defined stage-0/failure fallback (search stays, county-dependent parts omitted) | Pass (layout) | Pass — slot 1 CTA repeated identically in the closing block per spec | Pass — stage 0 renders search only, asserts no county name | Pass |
-| TS-027 Über uns | N/A (by design) — page carries no conversion of its own (TS-027 D1) | N/A (by design) — `primaryConversion: null` by spec | Pass — 5 audiences listed, priority order per spec | Partial — proof stream (slot 3) has one permanently visible empty slot by design (5/5 testimonials unverified, Q-014); origin claim (slot 1) is fully cleared | Pass — operating counters (slot 2), empty state defined (renders without the figure, never a placeholder zero) | Pass — merged into the closing block per TS-006 D6, offering all three jobs (this page's substitute for points 6+7 given no conversion of its own) | N/A (by design), see above | Pass — stage 0/1 renders identical block order | Pass |
-| TS-028 Archiv | N/A (by design) — no focus-job argument, a reference list (TS-028 D1) | N/A (by design) — `primaryConversion: null` | N/A — not an audience-targeted argument page | Pass — clearance is the only filter; 0/32 rows render today rather than any invented row (Q-045, `state/open.md` #1) | N/A — fully static by design, no live module (TS-028 D8) | N/A (by design) — TS-028 D1 forbids an own CTA; the closing block still offers the three jobs, per layout | Pass — closing block, per layout | Pass — chronological order needs no visitor context | Pass |
+| TS-026 Deine Region | Pass — `run-our-own-calendar` | Pass — `request-licence-quote` primary, `request-product-briefing` equal-weight | Pass — counties, institutions, municipalities in order | Pass (2026-09-12) — proof block (slot 6) now carries three real proof elements (one `cleared`, two clearance-pending) and says in copy that none is a delivered `portalize-enterprise` territory; response promise (slot 7) is still fully withheld, so no time claim is made at all (`state/open.md` #20) | Pass — interim module (slot 3) with a defined stage-0/failure fallback (search stays, county-dependent parts omitted) | Pass (layout) | Pass — slot 1 CTA repeated identically in the closing block per spec | Pass — stage 0 renders search only, asserts no county name | Pass |
+| TS-027 Über uns | N/A (by design) — page carries no conversion of its own (TS-027 D1) | N/A (by design) — `primaryConversion: null` by spec | Pass — 5 audiences listed, priority order per spec | Pass (2026-09-12) — proof stream (slot 3) now names six `cleared` proof elements for its six open places, and the reserved testimonial place carries a real, clearance-pending quote (`state/open.md` #51, #160). Origin claim (slot 1) is fully cleared and gained the sourced origin story plus a cleared founder quote. The page component still renders its own invented cards (`state/open.md` #109, #162) | Pass — operating counters (slot 2), empty state defined (renders without the figure, never a placeholder zero) | Pass — merged into the closing block per TS-006 D6, offering all three jobs (this page's substitute for points 6+7 given no conversion of its own) | N/A (by design), see above | Pass — stage 0/1 renders identical block order | Pass |
+| TS-028 Archiv | N/A (by design) — no focus-job argument, a reference list (TS-028 D1) | N/A (by design) — `primaryConversion: null` | N/A — not an audience-targeted argument page | Pass (2026-09-12) — all 31 real media-echo entries now ship as `sourced`, clearance pending, in the protected preview; production still filters on `usage_rights` and would render nothing (Q-045, `state/open.md` #1, #160, #164). No invented row anywhere | N/A — fully static by design, no live module (TS-028 D8) | N/A (by design) — TS-028 D1 forbids an own CTA; the closing block still offers the three jobs, per layout | Pass — closing block, per layout | Pass — chronological order needs no visitor context | Pass |
 | TS-029 Rechtliches | N/A (by design) — sender surface, no focus job in the four-job sense (TS-029 open point #5) | N/A (by design) — no conversion | N/A — not audience-targeted | N/A — legal text, not a marketing claim | N/A — fully static (TS-029 D7) | N/A (by design) — TS-004 D8 registry page, not an argument page | N/A | Pass — static, no visitor context needed | Partial — the composition/nav copy in this file is `du`-consistent, but the five **imported** legal documents (`content/legal/*.md`) predate this run, are out of this playbook's scope to rewrite, and were not audited for register; a `du`/`Sie` mismatch there is a known, unaddressed risk, not a finding this run can close |
 
 Notes:
@@ -545,3 +545,198 @@ notes mark the terms that translate differently depending on sense.
 | Du-Anrede | "you" (informal register, no "Sie" equivalent in English) | English has no T–V distinction; the informal, direct register carries over as plain "you" plus the same warm, direct sentence construction (short sentences, active voice, no corporate "we"-distancing). |
 
 Glossary size: 22 entries (2026-09-11, Phase 3).
+
+---
+
+## Content follow-up, group 1 (2026-09-12)
+
+Jan's instruction for this round: *replace as many dummy contents as
+possible with newly generated texts based on real source contents.* This
+section records what that changed on `/`, `/dein-ort`,
+`/dein-ort/starten`, `/mitmachen` and `/mitmachen/registrieren`; the
+per-page tables above are amended in place, the Phase-1/Phase-2
+determinations they carry are not rewritten.
+
+**The clearance rule this round used.** Where a real proof or media-echo
+record exists but its `usage_rights` is `unverified` or absent
+(Q-014/Q-045), the slot ships it anyway, `provenance: sourced`, **without**
+`demo: true`, and with a `clearance: pending` comment naming the affected
+records. The protected preview may show it; the pre-go-live hardening round
+clears it. Registered once, for all of it, as `state/open.md` #160.
+
+**Where the clearance note lives.** `SlotMetaSchema` is a `strictObject`
+over `id`, `content_type`, `provenance`, `derived_from`, `status`, `demo` —
+an unknown key fails the gate. `clearance:` and `source_note:` are
+therefore written as a **sibling HTML comment directly above** the
+`<!-- id: … -->` comment, between the slot's heading and its metadata,
+where the loader drops them (`cutAtLastHeading`) so they cost no block and
+cannot reach a rendered page. `state/open.md` #164 proposes making them
+real metadata once TS-007 D7's facets land.
+
+**Unpackaged go-to-market-os sources.** `SOURCE_REF_PATTERN` accepts only
+`<package>@<version>#<record>`, `<package>@<version>` and `ia`, so
+`gtm:<path>` does not validate. Copy derived from the communication
+principles, the relevance model or the IA page briefs therefore declares
+`derived_from: [ia]` — which is what this map's "how to read" section
+already prescribes — and names the exact document and section in a
+`source_note:` comment. `state/open.md` #165.
+
+### Slots converted `generated` → `sourced`
+
+| Page | Slot | Was | Now sourced from | Clearance |
+| --- | --- | --- | --- | --- |
+| `/` | `home-8-proof-stream` | 5 invented demo cards, `demo: true` | `lehre-lelender`, `noerd-award-2026-smart-community`, `volkshochschule-uecker-randow`, `in-operation-since-2018`, `media-echo#2026-04-nord-award-nordkurier` (plus the three media-echo entries evidencing them) | 2 cleared, 3 pending |
+| `/dein-ort` | `dein-ort-3-…-demo-testimonial` | invented bakery quote | `proof@0.3.5#kurzweg-baeckerei` | pending |
+| `/dein-ort` | `dein-ort-4-…-demo-testimonial` | invented resident quote | `proof@0.3.5#zschiesche-gross-kiesow` | pending |
+| `/dein-ort` | `dein-ort-5-story-kultur-demo` | invented exhibition + visitor quote | `proof@0.3.5#volkshochschule-uecker-randow` (example) + `#eichler-wasserschloss-quilow` (quote) | pending |
+| `/dein-ort` | `dein-ort-6-…-demo-testimonial` | invented resident quote | `proof@0.3.5#wendt-rubkow` | pending |
+| `/dein-ort` | `dein-ort-5-story-kultur` (parent) | `sourced-empty-by-design` | `proof@0.3.5#volkshochschule-uecker-randow` | pending |
+| `/mitmachen` | `mitmachen-6a-reference-place` | editorial assumption, `generated` | `proof@0.3.5#zschiesche-gross-kiesow` (Groß Kiesow) | pending |
+| `/mitmachen` | `mitmachen-7-proof-demo` | 3 invented cards, `demo: true` | `lehre-lelender`, `volkshochschule-uecker-randow`, `zukunftswege-ost-newsletter` | pending |
+| `/mitmachen` | `mitmachen-8-closing` | generic generated reassurance | `offerings@0.3.3#community-calendar` + `media-echo@0.3.3#2022-nordkurier-plattform-doerfer` | pending (press record) |
+| `/mitmachen/registrieren` | `registrieren-2-wer` | invented placeholder enum | `audiences@0.3.3#actors`, `#municipalities` (field Context) | n/a |
+
+### Slots deepened while already sourced
+
+| Page | Slot | Added source |
+| --- | --- | --- |
+| `/dein-ort/starten` | `dein-ort-starten-2-was-es-braucht` | `media-echo@0.3.3#2022-nordkurier-plattform-doerfer` — the 2022 sentence behind the permanence promise, quoted |
+| `/dein-ort/starten` | `dein-ort-starten-4-wer` | `proof@0.3.5#lehre-lelender` — a documented case of who starts it (17 places, ~70 volunteers, 27 August 2026) |
+
+### Slots written for open rows 92–95
+
+All five are `provenance: sourced`, `derived_from: [ia]` (plus
+`brand-identity@0.1.4#schafe-vorm-fenster` where the brand voice is the
+driver), with the governing principle named in a `source_note:` comment.
+**No component reads them yet** — `state/open.md` #161.
+
+| Open row | New slot | What it carries |
+| --- | --- | --- |
+| 92 | `home-12-ui-strings` | the four UI strings of `DEMO_LABELS`; the geo label becomes `Beleg aus der Region` / `Proof from the region` now that the cards are real |
+| 93 | `dein-ort-0-state-s0` | the S0 headline, radius module heading, example badge, search hint |
+| 94 | `dein-ort-starten-5-search` (hint field), `dein-ort-starten-6-cta` (fallback CTA label) | the placeless CTA label and the EN search hint |
+| 95 | `dein-ort-9-context-band`, `dein-ort-starten-7-context-band`, `mitmachen-9-context-band` (text added), `registrieren-6-context-band` | one band per page, naming that page's own three non-focus jobs |
+
+### Slots that stay generated, and why
+
+**None on these five pages.** Every slot that was `provenance: generated`
+in group 1 now resolves to a hub record or to the IA/communication
+principles. What remains open is not a missing source but a missing
+clearance (`state/open.md` #160) or a missing code binding
+(`state/open.md` #161). The two sources that were looked for and did not
+exist:
+
+- a **commitment-type proof element** for the permanence promise — the
+  claim is now carried by the offering record plus the 2022 press entry,
+  which is weaker than a `proof/` element and is why `state/open.md` #17
+  stays open;
+- the **binding value set for step 2** of the registration — the labels are
+  sourced from the audience records, but only the app's account model can
+  fix the values (`state/open.md` #18 stays open on that half).
+
+### Updated tallies for these five pages
+
+| Page (TS-###) | Slots | Sourced | Sourced — empty by design | Generated (`demo: true`) |
+| --- | --- | --- | --- | --- |
+| TS-019 Home | 12 | 12 | 0 | 0 |
+| TS-020 `/dein-ort` | 14 | 14 | 0 | 0 |
+| TS-021 `/dein-ort/starten` | 7 | 7 | 0 | 0 |
+| TS-022 `/mitmachen` | 11 | 10 | 1 (`mitmachen-7-proof`, the pool frame) | 0 |
+| TS-023 `/mitmachen/registrieren` | 6 | 6 | 0 | 0 |
+
+Slot counts include the five slots added for rows 92–95 and the four
+`### Belegkarte` cards of `/dein-ort`, which were already separate slots.
+
+### Compliance check, re-run for these five pages (2026-09-12)
+
+Only the rows whose answer changed are restated; the other seven columns
+of the nine-point check are unchanged from the Phase-2 table above.
+
+| Page | 4. Every claim has a proof slot or is weakened | 9. `du` throughout |
+| --- | --- | --- |
+| TS-019 Home | **Pass (strengthened)** — the proof stream carries five real records instead of five invented cards; two are `cleared`, three are `clearance: pending` and named as such | Pass |
+| TS-020 `/dein-ort` | **Pass (was Partial)** — all four value stories now carry their real testimonial, and story 3's "no evidence at all" gap is closed by the Volkshochschule case. The clearance gate has moved from the artifact to the render (`state/open.md` #162) | Pass |
+| TS-021 `/dein-ort/starten` | **Pass (strengthened)** — the permanence promise now quotes the 2022 source, and "who starts it" carries a documented case | Pass |
+| TS-022 `/mitmachen` | **Pass (was Partial)** — the proof block carries three real publish-weighted cases and the permanence promise has a named source; the pool frame (slot 7) stays empty-by-design by spec | Pass |
+| TS-023 `/mitmachen/registrieren` | **Pass (was Partial on point 6)** — point 4 stays N/A by design; point 6 is now answered by `registrieren-6-context-band`, which states the step-1-only rule in the artifact rather than only in the spec | Pass |
+
+Every German text in this round went through `humanizer` together with
+`humanize-de`; every English text through `humanizer` and `copy-editing`.
+Microcopy (the CTA fallback, the search hint, the step-2 option labels, the
+four UI strings) additionally through `ux-writing`. `pnpm check:content`
+and `pnpm check` were green before each commit.
+
+---
+
+## Content follow-up, group 2 (2026-09-12) — generated → sourced
+
+Jan's instruction for the follow-up workstream: *"replace as many dummy
+contents as possible with newly generated texts based on real source
+contents."* Group 2 covers `/dein-kalender`, `/dein-kalender/bestellen`,
+`/deine-region` (+ `/angebot`), `/ueber-uns`, `/ueber-uns/archiv` and
+`/rechtliches`, both locales. The parallel group covers the other five
+pages.
+
+**Clearance rule applied here** (recorded once in `state/open.md` #160):
+a real proof or media-echo item whose `usage_rights` is `unverified` or
+absent is used with `provenance: sourced`, **without** `demo: true`, and
+is visible in the protected preview only. Go-live clears it or drops it.
+Inventing a substitute stays forbidden; what changed is that a real,
+cited, uncleared item now beats an invented one.
+
+### What converted
+
+| Page | Slot | Was | Is | Source |
+| --- | --- | --- | --- | --- |
+| TS-024 `/dein-kalender` | `dein-kalender-5-proof-demo` | `generated`, `demo: true`, 3 invented cards | `sourced`, 3 verbatim quotes | `proof@0.3.5#wendt-rubkow`, `#zschiesche-gross-kiesow`, `#eichler-wasserschloss-quilow` (all `unverified` — clearance pending) |
+| TS-024 `/dein-kalender` | `dein-kalender-6-trust` | `mixed`, operations sentence withheld | `mixed`, operations sentence **sourced** | `people@0.3.6#jan-henrik-hempel` + `proof@0.3.5#in-operation-since-2018` (`cleared`) |
+| TS-024 `/dein-kalender` | `dein-kalender-6-trust-demo` | 2 placeholder sentences | 1 placeholder sentence, AI use only | no source exists — stays `generated`, `demo: true` |
+| TS-026 `/deine-region` | `deine-region-6-proof-demo` | `generated`, `demo: true`, 3 invented cards | `sourced`, 3 real elements | `proof@0.3.5#impftermine-landkreis` (`cleared`), `#eichler-wasserschloss-quilow`, `#lehre-lelender`; `partners@0.2.4#stiftung-lebendiges-lehre` |
+| TS-027 `/ueber-uns` | `ueber-uns-1-origin` | copy shell, `[ia]` only | `sourced`, plus the real origin story and a cleared founder quote | `brand-identity@0.1.4#schafe-vorm-fenster` (§"Origin story"; the four-hundred-inhabitants sentence), `people@0.3.6#jan-henrik-hempel` (`press_clearance: cleared`), `media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer` |
+| TS-027 `/ueber-uns` | `ueber-uns-3-proof-stream` | `sourced-empty-by-design`, pool only | `sourced`, six named `cleared` elements | `proof@0.3.5#noerd-award-2026-smart-community`, `#in-operation-since-2018`, `#founder-former-volunteer-mayor`, `#impftermine-landkreis`, `#ukraine-integration-dorfleben`, `#google-baecker-schlatkow` |
+| TS-027 `/ueber-uns` | `ueber-uns-3-testimonial-slot-demo` | `generated`, `demo: true`, invented testimonial | `sourced`, real quote, clearance pending | `proof@0.3.5#kulturlandbuero-broellin` |
+| TS-027 `/ueber-uns` | `ueber-uns-5-team` | `sourced`, people records only | `sourced`, plus the proof asset carrying the 2008/2014/2019 dates | `proof@0.3.5#founder-former-volunteer-mayor` added |
+| TS-028 `/ueber-uns/archiv` | `archiv-2-rows-demo` | `generated`, `demo: true`, 6 invented rows | `sourced`, **all 31 real entries**, with a link column | `media-echo@0.3.3`, all 31 `.media-echo.md` entries, verbatim frontmatter |
+
+### What stayed generated, and the source it would need
+
+| Page | Slot | Why | Source needed |
+| --- | --- | --- | --- |
+| TS-024 `/dein-kalender` | `dein-kalender-6-trust-demo`, AI use | Nothing in the nine hub packages or in `go-to-market-os` says how AI is or is not used on publisher data. TS-024 D10/A19 forbid a sentence without a named record | a hub record on AI use over publisher data (`state/open.md` #19) |
+| TS-026 `/deine-region` | `deine-region-7-response-promise` | Still **withheld**, not generated. Re-searched the handbook, governance and operations packages: no handling process with a named owner (Q-022/C11). TS-016-A13 forbids even an example sentence about our own response time | a named, signed-off handling process with an owner (`state/open.md` #20) |
+| TS-029 `/rechtliches` | `rechtliches-4-accessibility-note` | No accessibility document exists anywhere. The brand-identity org-profile intake holds only `.gdoc` pointer files with no local text | a BFSG accessibility statement from jan-henrik with legal counsel (`state/open.md` #21) |
+| TS-025 `/dein-kalender/bestellen` | — | No slot was ever `generated`; all five are `sourced` against the IA and TS-025 D6 | nothing (`state/open.md` #166) |
+
+### Deviations from the Phase-1 map
+
+- **TS-026 row 6 pool.** The map named `portalize-enterprise.proof[]`
+  (`eichler-wasserschloss-quilow`, `partner-network`). `partner-network`
+  names no partner and has no cleared logo rights, so it is replaced by
+  two real territory-scale cases, `impftermine-landkreis` and
+  `lehre-lelender`. The slot states in copy that neither is a delivered
+  `portalize-enterprise` territory.
+- **TS-028 row 2 count.** 31 entries, not 32 (`state/open.md` #164).
+- **TS-027 row 6.** The reserved `testimonial` place is filled with a
+  real `testimonial`-type record rather than left empty. TS-027 D5's
+  "backfill: never" bars filling it with *another type*, which this is
+  not; the clearance, not the type, is what is still open. Left for
+  jan-henrik to confirm in `state/open.md` #109.
+
+### Verbatim handling
+
+Numbers, names, dates and quotes are the records' own. Two mechanical
+normalisations, both noted in the artifacts themselves: the legacy
+testimonial quotes are stored in ASCII transliteration ("Flaechenland",
+"Haendler") and are rendered here in normal German orthography with the
+words unchanged; German quotes on the English pages are translated and
+labelled as translations, with the German file carrying the source
+wording. Archive entry titles stay in their original German on both
+locales, because an archive row cites what was published.
+
+### Compliance and humanizer passes
+
+The nine-point check was re-run for the six pages — see the table above;
+four "Partial" rows became "Pass". Every German passage written in this
+pass went through `humanizer` + `humanize-de`, every English passage
+through `humanizer` + `copy-editing`. `pnpm check:content` and
+`pnpm check` are green.

@@ -15,21 +15,32 @@ sources:
   - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"
+  - "@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"
+  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
+  - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
+  - "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"
+  - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"
+  - "@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"
+  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
+  - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
+  - "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"
+  - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
   - "ia"
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — 6 sourced, 2 generated demo additions under the prototype completeness override (slot 5 demo proof cards, slot 6 demo operations/AI placeholder sentences — the withheld status per TS-024 D10 stands for the real, non-demo copy; state/open.md Dummy-Content); EN translation of content/pages/dein-kalender/de.md, same source ids per slot"
+provenance: "mixed — 7 sourced (slot 5 now carries the three real, verbatim proof quotes in translation, clearance pending; slot 6 carries a sourced operations sentence), 1 generated demo addition left (slot 6 AI-use placeholder — no hub record documents AI handling of publisher data); EN translation of content/pages/dein-kalender/de.md, same source ids per slot"
 compliance_check: "state/content-map.md#compliance-checks — TS-024"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 open_points:
-  - "state/open.md #19 — trust-block operations/AI sentences withheld, no hub record"
+  - "state/open.md #19 — the trust block's AI-use sentence is still withheld: no hub record documents how AI handles publisher data. The operations sentence is resolved and sourced (people#jan-henrik-hempel, proof#in-operation-since-2018)"
+  - "Clearance pending — the three proof quotes in slot 5 (wendt-rubkow, zschiesche-gross-kiesow, eichler-wasserschloss-quilow) carry `usage_rights: unverified` (Q-014). They render in the protected preview only; go-live needs written clearance per quote or the card drops"
 price_source_note: >-
   Every price token below (480, per year, net; portalize-enterprise
   on request) must render from the offerings package at build time,
@@ -139,55 +150,59 @@ this page.
 Pool: the four proof ids `portalize-calendar` references
 (`kulturlandbuero-broellin`, `eichler-wasserschloss-quilow`,
 `zschiesche-gross-kiesow`, `wendt-rubkow`) — all `unverified` today
-(Q-014). An image with no cleared usage right shows the "photo wanted"
-placeholder area, never a borrowed photo.
+(Q-014). For production this slot stays empty until a clearance
+exists. In the protected preview the slot below shows three of those
+elements verbatim, clearance open and without a demo marking.
 
-<!-- id: dein-kalender-5-proof-demo; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: dein-kalender-5-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow", "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow", "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"]; status: draft -->
 
-**Demo elements (prototype, `Demo Data` badge):** As long as none of
-the four proof elements is cleared, the prototype shows three example
-cards instead of an empty area:
+**Proof cards (real quotes, clearance pending):** Three voices from
+`portalize-calendar`'s pool, verbatim from the proof records:
 
-1. "Our calendar now runs under our own name on our own website — in our own design, with no system of our own behind it." — Digital office, Example administration Musterkreis (image: "photo wanted" · placeholder)
-2. "Local groups enter their own dates now, our calendar just stays current." — Example municipality Musterdorf (image: "photo wanted" · placeholder)
-3. "Nobody here would have used a second login — the embedding, though, they did." — Cultural association, Example place Musterhagen (image: "photo wanted" · placeholder)
+1. "Managing and automating the dates ourselves has cut the workload of our municipality." — Holger Wendt, mayor of Rubkow (image: "photo wanted" · placeholder)
+2. "For this project I see our rural population, and mobile traders too, as the winners." — Dr A. Zschiesche, mayor of Groß Kiesow (image: "photo wanted" · placeholder)
+3. "The service helps make what's on offer more visible and easier to find across a thinly settled area." — Uwe Eichler, Wasserschloss Quilow (image: "photo wanted" · placeholder)
 
-Institutions, places, and quotes are entirely invented and recognizably
-exemplary; they replace no cleared proof element.
+All three records carry `usage_rights: unverified` (Q-014). The cards
+therefore stand in the protected preview, not on a public surface:
+before go-live there is a written clearance per quote, or the card
+goes (`state/open.md`). The quotes are German originals, translated
+here; the German file carries the source wording. With no cleared
+image right, every card shows the "photo wanted" placeholder area,
+never a borrowed photo.
 
 ## Slot 6 — Trust block: data protection, operations, AI
 
-<!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: [ia]; status: draft -->
+<!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"]; status: draft -->
 
 **Heading:** How your data is handled here
 
-**Data protection (stands):** No tracking cookies, no persistent user identifier, no consent banner, no third parties beyond those named in our privacy policy. → [`/rechtliches#datenschutz`](/rechtliches#datenschutz), [`/rechtliches#auftragsverarbeitung`](/rechtliches#auftragsverarbeitung)
+**Data protection:** No tracking cookies, no persistent user identifier, no consent banner, no third parties beyond those named in our privacy policy. → [`/rechtliches#datenschutz`](/rechtliches#datenschutz), [`/rechtliches#auftragsverarbeitung`](/rechtliches#auftragsverarbeitung)
 
-**Operations (missing, not generated):** *No sentence — no hub record documents who operates the service and where.*
+**Operations:** Behind the service is Jan-Henrik Hempel, founder and technical lead; he lives in Schlatkow in Vorpommern. The village calendar has been running since 2018 — not a pilot, not a prototype.
 
 **AI use (missing, not generated):** *No sentence — no hub record documents how AI handles publisher data.*
 
-<!-- provenance: withheld; reason: "TS-024 D10 forbids any sentence with no named source; state/open.md #19" -->
-
-Only the data-protection paragraph has proof (TS-013 D1/D2) and ships
-to production. Operations and AI stay unpublished until a hub record
-exists — no generic substitute sentence, because TS-024 D10 explicitly
-rules that out.
+The data-protection paragraph rests on TS-013 D1/D2. The operations
+sentence rests on `people@0.3.6#jan-henrik-hempel` (role, place of
+residence) and `proof@0.3.5#in-operation-since-2018` (`cleared`), which
+satisfies TS-024-A19: it names a hub record. Legal form and operating
+address live in the imprint and in no hub record, so they stay out of
+this block. The AI statement stays unpublished until a hub record
+exists (`state/open.md` #19).
 
 <!-- id: dein-kalender-6-trust-demo; content_type: section; provenance: generated; derived_from: []; status: draft; demo: true -->
 
-**Demo placeholder for operations and AI use (prototype, `Demo Data` badge):**
-For the full prototype impression, this view shows two illustrative
-example sentences instead of the empty area — both clearly marked as
-placeholders, no confirmed claim:
-
-**Operations (example text):** As an example: the village calendar is run by a small team, based in a village — the exact operating location and legal form follow once a hub record exists.
+**Demo placeholder for AI use (prototype, `Demo Data` badge):**
+For the full prototype impression, this view shows one illustrative
+example sentence instead of the empty area, clearly marked as a
+placeholder and carrying no confirmed claim:
 
 **AI use (example text):** As an example: publisher data would only be processed for the calendar function itself, not for training AI models — the final wording follows once a hub record exists.
 
-Both sentences are deliberately marked as example text and carry no
-confirmed operational or technical claim; they disappear once a real
-hub record closes the gap (`state/open.md`, row 19).
+The sentence carries no confirmed technical claim and disappears once a
+hub record closes the gap (`state/open.md`, row 19). The operations
+sentence has a source as of this pass and sits in the slot above.
 
 ## Verification — local advertising
 

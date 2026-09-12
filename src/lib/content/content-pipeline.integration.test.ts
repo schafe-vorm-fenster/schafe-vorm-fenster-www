@@ -142,7 +142,12 @@ describe("TS-007-A1: a page renders its slots as typed content, not as markdown"
   });
 
   it("marks the prototype's dummy-content slots so the badge can render", async () => {
-    const page = await loadPage("archive", "de");
+    // `/dein-kalender`, not `/ueber-uns/archiv`: the archive's rows are the
+    // real 31 media-echo entries now (sourced, clearance pending), so it
+    // carries no `demo` slot at all. The one dummy-content slot left on this
+    // page group is the trust block's AI-use placeholder, which has no hub
+    // record behind it (TS-024 D10, state/open.md #19).
+    const page = await loadPage("calendar", "de");
     const demo = page.slots.filter((s) => s.demo);
     expect(demo.length).toBeGreaterThan(0);
     for (const contentSlot of demo) {

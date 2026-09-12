@@ -15,21 +15,32 @@ sources:
   - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"
+  - "@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"
+  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
+  - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
+  - "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"
+  - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"
+  - "@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"
+  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
+  - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
+  - "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"
+  - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
   - "ia"
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — 6 sourced, 2 generated demo additions under the prototype completeness override (slot 5 demo proof cards, slot 6 demo operations/AI placeholder sentences — the withheld status per TS-024 D10 stands for the real, non-demo copy; state/open.md Dummy-Content)"
+provenance: "mixed — 7 sourced (slot 5 now carries the three real, verbatim proof quotes, clearance pending; slot 6 carries a sourced operations sentence), 1 generated demo addition left (slot 6 AI-use placeholder — no hub record documents AI handling of publisher data)"
 compliance_check: "state/content-map.md#compliance-checks — TS-024"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 open_points:
-  - "state/open.md #19 — trust-block operations/AI sentences withheld, no hub record"
+  - "state/open.md #19 — the trust block's AI-use sentence is still withheld: no hub record documents how AI handles publisher data. The operations sentence is resolved and sourced (people#jan-henrik-hempel, proof#in-operation-since-2018)"
+  - "Clearance pending — the three proof quotes in slot 5 (wendt-rubkow, zschiesche-gross-kiesow, eichler-wasserschloss-quilow) carry `usage_rights: unverified` (Q-014). They render in the protected preview only; go-live needs written clearance per quote or the card drops"
 price_source_note: >-
   Every price token below (480, jährlich, netto; portalize-enterprise
   auf Anfrage) must render from the offerings package at build time,
@@ -139,56 +150,61 @@ erscheinen.
 Pool: die vier Proof-IDs, auf die `portalize-calendar` verweist
 (`kulturlandbuero-broellin`, `eichler-wasserschloss-quilow`,
 `zschiesche-gross-kiesow`, `wendt-rubkow`) — alle heute `unverified`
-(Q-014). Ein Bild ohne geklärtes Nutzungsrecht zeigt die
+(Q-014). Für Produktion bleibt dieser Slot leer, bis eine Freigabe
+vorliegt. Im geschützten Preview zeigt der Slot darunter drei dieser
+Elemente im Wortlaut, mit offener Freigabe und ohne Demo-Kennzeichnung.
+
+<!-- id: dein-kalender-5-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow", "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow", "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"]; status: draft -->
+
+**Belegkarten (echte Zitate, Freigabe steht aus):** Drei Stimmen aus dem
+Pool von `portalize-calendar`, wörtlich aus den Proof-Datensätzen:
+
+1. „Die selbstverwaltete und automatisierte Bereitstellung der Termindaten reduziert den Arbeitsaufwand unserer Gemeinde." — Holger Wendt, Bürgermeister in Rubkow (Bild: „Foto gesucht" · Platzhalter)
+2. „Für dieses Projekt sehe ich unsere Landbevölkerung, aber auch mobile Händler als Gewinner." — Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow (Bild: „Foto gesucht" · Platzhalter)
+3. „Der Dienst hilft dabei, Angebote in einem Flächenland besser sichtbar und auffindbar zu machen." — Uwe Eichler, Wasserschloss Quilow (Bild: „Foto gesucht" · Platzhalter)
+
+Alle drei Datensätze tragen `usage_rights: unverified` (Q-014). Die
+Karten stehen deshalb im geschützten Preview, nicht auf einer
+öffentlichen Fläche: Vor dem Go-live liegt je Zitat eine schriftliche
+Freigabe vor, oder die Karte fällt weg (`state/open.md`). In den
+Quelldateien stehen die Zitate in ASCII-Umschrift („Flaechenland",
+„Haendler"); hier stehen dieselben Wörter in normaler deutscher
+Rechtschreibung. Ohne geklärtes Bildrecht zeigt jede Karte die
 „Foto gesucht"-Platzhalterfläche, nie ein geliehenes Foto.
-
-<!-- id: dein-kalender-5-proof-demo; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
-
-**Demo-Elemente (Prototyp, `Demo-Daten`-Badge):** Solange keines der vier
-Proof-Elemente freigegeben ist, zeigt der Prototyp drei beispielhafte
-Karten statt einer leeren Fläche:
-
-1. „Unser Kalender läuft jetzt unter eigenem Namen auf unserer Website — im eigenen Design, ohne eigenes System dahinter." — Amt für Digitales, Beispielverwaltung Musterkreis (Bild: „Foto gesucht" · Platzhalter)
-2. „Die Akteure vor Ort tragen ihre Termine selbst ein, unser Kalender ist einfach aktuell." — Beispielgemeinde Musterdorf (Bild: „Foto gesucht" · Platzhalter)
-3. „Ein zweites Login hätte bei uns niemand benutzt — die Einbindung schon." — Kulturverein, Beispielort Musterhagen (Bild: „Foto gesucht" · Platzhalter)
-
-Institutionen, Orte und Zitate sind frei erfunden und erkennbar
-exemplarisch; sie ersetzen kein freigegebenes Proof-Element.
 
 ## Slot 6 — Vertrauensblock: Datenschutz, Betrieb, KI
 
-<!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: [ia]; status: draft -->
+<!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"]; status: draft -->
 
 **Überschrift:** Wie eure Daten hier behandelt werden
 
-**Datenschutz (steht):** Keine Tracking-Cookies, keine dauerhafte Nutzer-Kennung, kein Consent-Banner, keine Drittanbieter außer den in unserer Datenschutzerklärung genannten. → [`/rechtliches#datenschutz`](/rechtliches#datenschutz), [`/rechtliches#auftragsverarbeitung`](/rechtliches#auftragsverarbeitung)
+**Datenschutz:** Keine Tracking-Cookies, keine dauerhafte Nutzer-Kennung, kein Consent-Banner, keine Drittanbieter außer den in unserer Datenschutzerklärung genannten. → [`/rechtliches#datenschutz`](/rechtliches#datenschutz), [`/rechtliches#auftragsverarbeitung`](/rechtliches#auftragsverarbeitung)
 
-**Betrieb (fehlt, nicht generiert):** *Kein Satz — kein Hub-Datensatz belegt, wer den Dienst betreibt und wo.*
+**Betrieb:** Hinter dem Dienst steht Jan-Henrik Hempel, Gründer und technische Leitung; er lebt in Schlatkow in Vorpommern. Der Dorfkalender ist seit 2018 in Betrieb — kein Pilot, kein Prototyp.
 
 **KI-Nutzung (fehlt, nicht generiert):** *Kein Satz — kein Hub-Datensatz belegt, wie KI mit Veröffentlicher-Daten umgeht.*
 
-<!-- provenance: withheld; reason: "TS-024 D10 verbietet jeden Satz ohne benannte Quelle; state/open.md #19" -->
-
-Nur der Datenschutz-Absatz hat einen Beleg (TS-013 D1/D2) und geht in
-Produktion. Betrieb und KI bleiben unveröffentlicht, bis ein Hub-Eintrag
-existiert — kein generischer Ersatzsatz, weil TS-024 D10 das
-ausdrücklich ausschließt.
+Der Datenschutz-Absatz steht auf TS-013 D1/D2. Der Betriebssatz steht auf
+`people@0.3.6#jan-henrik-hempel` (Rolle, Wohnort) und
+`proof@0.3.5#in-operation-since-2018` (`cleared`) und erfüllt damit
+TS-024-A19, weil er einen Hub-Datensatz benennt. Rechtsform und
+Betriebsanschrift stehen im Impressum und in keinem Hub-Datensatz — sie
+bleiben hier weg. Die KI-Aussage bleibt unveröffentlicht, bis ein
+Hub-Eintrag existiert (`state/open.md` #19).
 
 <!-- id: dein-kalender-6-trust-demo; content_type: section; provenance: generated; derived_from: []; status: draft; demo: true -->
 
-**Demo-Platzhalter für Betrieb und KI-Nutzung (Prototyp, `Demo-Daten`-Badge):**
-Für den vollständigen Prototyp-Eindruck zeigt diese Ansicht zwei
-illustrative Beispielsätze anstelle der leeren Fläche — beide erkennbar
-als Platzhalter markiert, keine bestätigte Aussage:
-
-**Betrieb (Beispieltext):** Beispielhaft: Der Dorfkalender wird von einem kleinen Team betrieben, mit Sitz in einem Dorf — der genaue Betriebsstandort und die Rechtsform folgen, sobald ein Hub-Eintrag vorliegt.
+**Demo-Platzhalter für die KI-Nutzung (Prototyp, `Demo-Daten`-Badge):**
+Für den vollständigen Prototyp-Eindruck steht hier ein illustrativer
+Beispielsatz statt einer leeren Fläche, erkennbar als Platzhalter und
+ohne bestätigte Aussage:
 
 **KI-Nutzung (Beispieltext):** Beispielhaft: Veröffentlicher-Daten würden nur für die Kalenderfunktion selbst verarbeitet, nicht zum Training von KI-Modellen — die endgültige Formulierung folgt, sobald ein Hub-Eintrag vorliegt.
 
-Beide Sätze sind bewusst als Beispieltext gekennzeichnet und tragen
-keine bestätigte betriebliche oder technische Aussage; sie verschwinden,
-sobald ein echter Hub-Datensatz die Lücke schließt (`state/open.md`,
-Zeile 19).
+Der Satz trägt keine bestätigte technische Aussage und verschwindet,
+sobald ein Hub-Datensatz die Lücke schließt (`state/open.md`, Zeile 19).
+Der Betriebssatz ist seit diesem Durchgang belegt und steht im Slot
+darüber.
 
 ## Verifikation — lokale Werbung
 
