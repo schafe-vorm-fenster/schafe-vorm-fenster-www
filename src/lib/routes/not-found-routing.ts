@@ -63,9 +63,19 @@ export const NOT_FOUND_LOCALE_HEADER = "x-svf-not-found-locale";
 
 /**
  * App paths that are not D1 rows and must never be mistaken for unknown
- * URLs: the BFF, the framework's own output and the well-known surface.
+ * URLs: the BFF, the framework's own output, the well-known surface, and the
+ * platform's own.
+ *
+ * `/_vercel/` is F-3-8, and it costs three strings rather than a defect
+ * later: `/_vercel/insights/view`, `/_vercel/speed-insights/vitals` and
+ * `/_vercel/image` were classified unservable and rewritten to the 404
+ * surface. Nothing breaks today — neither `@vercel/analytics` nor
+ * `@vercel/speed-insights` is a dependency — but TS-003 D7 names "RUM: Vercel
+ * Speed Insights (cookieless)" as the production mechanism, and switching it
+ * on from the dashboard would silently break the beacon with nothing in this
+ * repository to explain why.
  */
-const RESERVED_PREFIXES = ["/api/", "/_next/", "/.well-known/"] as const;
+const RESERVED_PREFIXES = ["/api/", "/_next/", "/.well-known/", "/_vercel/"] as const;
 
 /**
  * The component gallery is a development tool, not a page of this site. It

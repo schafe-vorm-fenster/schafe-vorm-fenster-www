@@ -30,6 +30,11 @@ describe("isUnservablePath: every path the site really serves stays served", () 
     "/dev/components",
     "/_next/static/chunks/main.js",
     "/.well-known/security.txt",
+    // F-3-8 — platform-owned paths. TS-003 D7 names Vercel Speed Insights as
+    // the production RUM mechanism, and its beacon posts to one of these.
+    "/_vercel/insights/view",
+    "/_vercel/speed-insights/vitals",
+    "/_vercel/image",
     "/en/anything",
     "/en/does-not-exist",
     "/de/mitmachen",
