@@ -44,3 +44,18 @@
   font-size: var(--type-meta-size);
   margin: 0;
 }
+
+/* F-3-11 — the confirmation the form is swapped for. It stands where the
+   form stood, so it inherits the block's own column rhythm rather than
+   inventing one; `role="status"` is on the element, not on a banner. */
+.success {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.successHeadline {
+  font-size: var(--type-body-size);
+  font-weight: 700;
+  margin: 0;
+}

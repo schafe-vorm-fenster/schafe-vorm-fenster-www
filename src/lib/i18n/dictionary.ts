@@ -76,6 +76,14 @@ export interface Dictionary {
     consentLinkLabel: string;
     /** What the mock says about itself — no ticket id, no promise. */
     demoNote: string;
+    /**
+     * The confirmation the block swaps itself for (F-3-11). It replaces a
+     * native GET submit that threw the whole page's state away, so it has to
+     * say what did and did not happen — the mock sends nothing, and the
+     * visitor must not be left believing she is subscribed.
+     */
+    successHeadline: string;
+    successBody: string;
   };
   /** The M2 scaffolding strings — every one of them disappears with the page. */
   notFound: {
@@ -235,6 +243,9 @@ const de: Dictionary = {
     consent: "Double-Opt-in, keine Cookies. Mit der Anmeldung stimmst du unserer %s zu.",
     consentLinkLabel: "Datenschutzerklärung",
     demoNote: "Es wird nichts verschickt — der Versand ist noch nicht angeschlossen.",
+    successHeadline: "Notiert — hier in der Demo.",
+    successBody:
+      "Das ist die Demo-Fassung des Newsletters: Deine Adresse hat den Browser nicht verlassen, und angemeldet bist du damit nicht. Sobald der Versand steht, kannst du dich richtig eintragen.",
   },
   notFound: {
     title: "Seite nicht gefunden",
@@ -330,6 +341,9 @@ const en: Dictionary = {
     consent: "Double opt-in, no cookies. By signing up you agree to our %s.",
     consentLinkLabel: "privacy policy",
     demoNote: "Nothing is sent — the mailing system is not connected yet.",
+    successHeadline: "Thank you — noted, in the demo.",
+    successBody:
+      "This is the demo version of the newsletter: your address never left the browser, and it does not sign you up. Once the mailing system is connected you will be able to subscribe for real.",
   },
   notFound: {
     title: "Page not found",

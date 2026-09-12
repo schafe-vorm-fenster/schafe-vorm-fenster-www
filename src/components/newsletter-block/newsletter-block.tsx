@@ -1,6 +1,7 @@
-import { Button } from "../button/button";
 import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { RouteLink } from "../route-link/route-link";
+
+import { NewsletterForm } from "./newsletter-form";
 
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { legalAnchor } from "@/src/lib/routes/legal-anchors";
@@ -29,7 +30,14 @@ export interface NewsletterBlockProps {
  * can offer the full control surface (label, type="email", required) while
  * genuinely submitting nothing: an unnamed control is not a successful
  * control (HTML forms), so no address ever leaves the browser even if the
- * form is submitted before Q-020 wires a real destination.
+ * form is submitted before Q-020 wires a real destination. That is unchanged
+ * by F-3-11; what changed is that the form no longer *navigates*. It was the
+ * only `<form>` on the site with neither `action` nor `onSubmit`, so one
+ * mis-click on an ever-present footer widget reloaded the page with the query
+ * string replaced — throwing away an unsent quote, `?orte=` on the order
+ * flow, and `?ort=`/`?wer=` on the registration flow. `newsletter-form.tsx`
+ * is the client half that cancels it and swaps in a `role="status"`
+ * confirmation, the way `envoy-form-mount` already does.
  * Inherits: secondary treatment; the page still contains zero
  * `data-cta="primary"` elements on `/ueber-uns`.
  * Space: fixed height including the note line, so validation text never
@@ -50,33 +58,33 @@ export function NewsletterBlock({ heading, locale = "de", className }: Newslette
   const [beforeLink, afterLink] = words.consent.split("%s");
 
   return (
-    <div className={[styles.block, className].filter(Boolean).join(" ")}>
+    <div
+      className={[styles.block, className].filter(Boolean).join(" ")}
+      // F-3-11's own handle: the block is in the footer of all 24 routes and
+      // the tests need to address *this* form rather than the page's.
+      data-newsletter=""
+    >
       <p className={styles.heading}>{heading ?? words.heading}</p>
-      <form className={styles.form}>
-        <label className={styles.label} htmlFor="newsletter-email">
-          {words.emailLabel}
-        </label>
-        <div className={styles.field}>
-          <input
-            autoComplete="off"
-            className={styles.input}
-            id="newsletter-email"
-            placeholder={words.emailPlaceholder}
-            required
-            type="email"
-          />
-          <Button size="compact" type="submit" variant="secondary">
-            {words.submit}
-          </Button>
-        </div>
-        <p className={styles.note}>
-          {beforeLink}
-          <RouteLink hash={legalAnchor("privacy", locale)} locale={locale} to="legal">
-            {words.consentLinkLabel}
-          </RouteLink>
-          {afterLink}
-        </p>
-      </form>
+      {/* The `<form>` itself is a client component (F-3-11): it has to cancel
+          its own submit, and a server component cannot. The consent sentence
+          is built here, because the link resolves through `legalAnchor` and
+          `RouteLink`, both of which belong to the server tree. */}
+      <NewsletterForm
+        consent={
+          <>
+            {beforeLink}
+            <RouteLink hash={legalAnchor("privacy", locale)} locale={locale} to="legal">
+              {words.consentLinkLabel}
+            </RouteLink>
+            {afterLink}
+          </>
+        }
+        emailLabel={words.emailLabel}
+        emailPlaceholder={words.emailPlaceholder}
+        submitLabel={words.submit}
+        successBody={words.successBody}
+        successHeadline={words.successHeadline}
+      />
       <p className={styles.note}>
         <DemoDataBadge locale={locale} /> — {words.demoNote}
       </p>
