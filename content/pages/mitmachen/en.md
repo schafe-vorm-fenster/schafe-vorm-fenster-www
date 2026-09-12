@@ -44,53 +44,76 @@ images:
     ratio: hero
     provenance: generated
     brief: >-
-      Zwei Hände halten ein Smartphone über einen ausgedruckten Aushang, der
-      auf einem Küchentisch liegt, und fotografieren ihn. Morgenlicht von der
-      Seite, Wachstuchdecke, eine Kaffeetasse am Bildrand. Zu sehen sind nur
-      Hände und Unterarme. Nicht zeigen: Gesichter, Schrift, Logos, einen
-      lesbaren Aushang, eine erkennbare App-Oberfläche, eine Gerätemarke.
-    style: "documentary photo, natural light, 35mm, muted colours, no text"
-    alt: "Hands photographing a printed flyer on a kitchen table with a smartphone."
+      Zwei Hände halten ein Smartphone über einen ausgedruckten Aushang, der auf einem Küchentisch
+      liegt, und fotografieren ihn. Morgenlicht von der Seite, Wachstuchdecke, eine Kaffeetasse am
+      Bildrand. Zu sehen sind nur Hände und Unterarme. Nicht zeigen: Gesichter, Schrift, Logos,
+      einen lesbaren Aushang, eine erkennbare App-Oberfläche, eine Gerätemarke.
+    style: documentary photo, natural light, 35mm, muted colours, no text
+    alt: Hands photographing a printed flyer on a kitchen table with a smartphone.
     lcp: true
-    status: needed
+    status: generated
+    model: bfl/flux-pro-1.1
+    generated_at: "2026-09-12"
+    prompt_hash: 3159feabef6ae676
+    file: /images/generated/mitmachen-hero.webp
+    width: 800
+    height: 900
+    wide_file: /images/generated/mitmachen-hero-wide.webp
+    wide_width: 1400
+    wide_height: 600
   - id: mitmachen-path-whatsapp
     slot: mitmachen-3-path-whatsapp
     ratio: feature
     provenance: generated
     brief: >-
-      Ein gefalteter Aushang klemmt unter einem Kühlschrankmagneten, daneben
-      liegt ein Smartphone mit dunklem Display auf der Arbeitsplatte.
-      Abendlicht aus dem Fenster, warme, gedeckte Töne, eine gebrauchte Küche.
-      Kein Mensch im Bild. Nicht zeigen: Schrift, Logos, einen lesbaren
+      Ein gefalteter Aushang klemmt unter einem Kühlschrankmagneten, daneben liegt ein Smartphone
+      mit dunklem Display auf der Arbeitsplatte. Abendlicht aus dem Fenster, warme, gedeckte Töne,
+      eine gebrauchte Küche. Kein Mensch im Bild. Nicht zeigen: Schrift, Logos, einen lesbaren
       Zettel, eine App-Oberfläche auf dem Display.
-    style: "documentary photo, natural light, 35mm, muted colours, no text"
-    alt: "A folded flyer under a fridge magnet, a smartphone lying beside it on the counter."
-    status: needed
+    style: documentary photo, natural light, 35mm, muted colours, no text
+    alt: A folded flyer under a fridge magnet, a smartphone lying beside it on the counter.
+    status: generated
+    model: bfl/flux-pro-1.1
+    generated_at: "2026-09-12"
+    prompt_hash: e4a9a7e26804d17c
+    file: /images/generated/mitmachen-path-whatsapp.webp
+    width: 1400
+    height: 1000
   - id: mitmachen-path-calendar
     slot: mitmachen-4-path-calendar
     ratio: feature
     provenance: generated
     brief: >-
-      Papier-Wandkalender in einem Vereinsraum, an einer Schnur hängt ein
-      Kugelschreiber daneben. In einigen Kästchen stehen handschriftliche
-      Einträge, zu klein und zu unscharf, um sie zu lesen. Bedeckter
-      Nachmittag, Neonlicht mischt sich mit Tageslicht. Nicht zeigen: Schrift,
-      Logos, lesbare Einträge, eine Jahreszahl, Menschen.
-    style: "documentary photo, natural light, 35mm, muted colours, no text"
-    alt: "A paper wall calendar in a club room, a pen hanging beside it on a string."
-    status: needed
+      Papier-Wandkalender in einem Vereinsraum, an einer Schnur hängt ein Kugelschreiber daneben. In
+      einigen Kästchen stehen handschriftliche Einträge, zu klein und zu unscharf, um sie zu lesen.
+      Bedeckter Nachmittag, Neonlicht mischt sich mit Tageslicht. Nicht zeigen: Schrift, Logos,
+      lesbare Einträge, eine Jahreszahl, Menschen.
+    style: documentary photo, natural light, 35mm, muted colours, no text
+    alt: A paper wall calendar in a club room, a pen hanging beside it on a string.
+    status: generated
+    model: bfl/flux-pro-1.1
+    generated_at: "2026-09-12"
+    prompt_hash: fe443745feadacdf
+    file: /images/generated/mitmachen-path-calendar.webp
+    width: 1400
+    height: 1000
   - id: mitmachen-path-website
     slot: mitmachen-5-path-website
     ratio: feature
     provenance: generated
     brief: >-
-      Ein zugeklappter Laptop steht auf einem Holztisch im Vereinsheim,
-      daneben ein Stapel Papiere und eine Lesebrille. Nachmittagslicht durch
-      ein Fenster mit Gardine, staubige, warme Farben. Kein Mensch im Bild.
-      Nicht zeigen: Schrift, Logos, eine Gerätemarke, Bildschirminhalt.
-    style: "documentary photo, natural light, 35mm, muted colours, no text"
-    alt: "A closed laptop, a stack of papers, and reading glasses on a wooden table in a club room."
-    status: needed
+      Ein zugeklappter Laptop steht auf einem Holztisch im Vereinsheim, daneben ein Stapel Papiere
+      und eine Lesebrille. Nachmittagslicht durch ein Fenster mit Gardine, staubige, warme Farben.
+      Kein Mensch im Bild. Nicht zeigen: Schrift, Logos, eine Gerätemarke, Bildschirminhalt.
+    style: documentary photo, natural light, 35mm, muted colours, no text
+    alt: A closed laptop, a stack of papers, and reading glasses on a wooden table in a club room.
+    status: generated
+    model: bfl/flux-pro-1.1
+    generated_at: "2026-09-12"
+    prompt_hash: 094b0f74d2346284
+    file: /images/generated/mitmachen-path-website.webp
+    width: 1400
+    height: 1000
 ---
 
 # Join in (`/mitmachen`)

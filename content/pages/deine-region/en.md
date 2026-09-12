@@ -50,44 +50,67 @@ images:
     ratio: hero
     provenance: generated
     brief: >-
-      Weiter Blick vom Rand einer vorpommerschen Kreisstadt über das Umland,
-      früher Abend im August: Wohnblocks und ein Kirchturm im Mittelgrund,
-      dahinter Felder, Windräder und mehrere Dörfer am Horizont. Tiefes
-      Abendlicht, gestreifte Wolken, gedeckte Farben. Menschen nur winzig auf
-      einem Feldweg. Nicht zeigen: Schrift, Logos, lesbare Schilder, Gesichter
-      — und nichts Kartenartiges: keine Draufsicht, keine Umrisse, keine
-      eingezeichneten Grenzen oder Marker (TS-026 D3).
-    style: "documentary photo, natural light, 35mm, muted colours, no text"
-    alt: "A view from the edge of a district town across fields and wind turbines to several villages on the horizon."
-    status: needed
+      Weiter Blick vom Rand einer vorpommerschen Kreisstadt über das Umland, früher Abend im August:
+      Wohnblocks und ein Kirchturm im Mittelgrund, dahinter Felder, Windräder und mehrere Dörfer am
+      Horizont. Tiefes Abendlicht, gestreifte Wolken, gedeckte Farben. Menschen nur winzig auf einem
+      Feldweg. Nicht zeigen: Schrift, Logos, lesbare Schilder, Gesichter — und nichts Kartenartiges:
+      keine Draufsicht, keine Umrisse, keine eingezeichneten Grenzen oder Marker (TS-026 D3).
+    style: documentary photo, natural light, 35mm, muted colours, no text
+    alt: >-
+      A view from the edge of a district town across fields and wind turbines to several villages on
+      the horizon.
+    status: generated
+    model: bfl/flux-pro-1.1
+    generated_at: "2026-09-12"
+    prompt_hash: ed800a796b43916c
+    file: /images/generated/deine-region-hero.webp
+    width: 800
+    height: 900
+    wide_file: /images/generated/deine-region-hero-wide.webp
+    wide_width: 1400
+    wide_height: 600
   - id: deine-region-gebietsschnitt
     slot: deine-region-5-was-dazukommt
     ratio: feature
     provenance: generated
     brief: >-
-      Ortsausgang an einer Kreisstraße im Novembernebel, kurz nach
-      Sonnenaufgang: eine Baumreihe, ein Feldweg zweigt ab, das nächste Dorf
-      verschwindet im Dunst. Kühle, gedeckte Farben, kein harter Kontrast.
-      Kein Mensch im Bild. Nicht zeigen: Schrift, Logos, lesbare Ortsschilder
-      — und nichts Kartenartiges: keine Draufsicht, keine Grenzen, keine
-      Marker (TS-026 D3).
-    style: "documentary photo, natural light, 35mm, muted colours, no text"
-    alt: "The edge of a village on a country road in November fog, the next village fading into the haze."
-    status: needed
+      Ortsausgang an einer Kreisstraße im Novembernebel, kurz nach Sonnenaufgang: eine Baumreihe,
+      ein Feldweg zweigt ab, das nächste Dorf verschwindet im Dunst. Kühle, gedeckte Farben, kein
+      harter Kontrast. Kein Mensch im Bild. Nicht zeigen: Schrift, Logos, lesbare Ortsschilder — und
+      nichts Kartenartiges: keine Draufsicht, keine Grenzen, keine Marker (TS-026 D3).
+    style: documentary photo, natural light, 35mm, muted colours, no text
+    alt: >-
+      The edge of a village on a country road in November fog, the next village fading into the
+      haze.
+    status: generated
+    model: bfl/flux-pro-1.1
+    generated_at: "2026-09-12"
+    prompt_hash: f0c65bdaa69bddf1
+    file: /images/generated/deine-region-gebietsschnitt.webp
+    width: 1190
+    height: 850
   - id: deine-region-angebot-hero
     slot: deine-region-angebot-1-form
     ratio: hero
     provenance: generated
     brief: >-
-      Schreibtisch in einem Amtszimmer am Vormittag, leicht schräge Aufsicht:
-      ein aufgeschlagener Ringordner, ein Kaffeebecher, ein Kugelschreiber,
-      Tageslicht von der Seite durch ein Sprossenfenster. Papier und Holz in
-      gedeckten Tönen, ein bisschen Unordnung. Die Seiten im Ordner sind
-      unscharf. Nicht zeigen: Schrift, Logos, Gesichter, Bildschirminhalte,
-      einen aufgeräumten Werbeschreibtisch.
-    style: "documentary photo, natural light, 35mm, muted colours, no text"
-    alt: "An open ring binder, a coffee mug, and a pen on a desk beside a window."
-    status: needed
+      Schreibtisch in einem Amtszimmer am Vormittag, leicht schräge Aufsicht: ein aufgeschlagener
+      Ringordner, ein Kaffeebecher, ein Kugelschreiber, Tageslicht von der Seite durch ein
+      Sprossenfenster. Papier und Holz in gedeckten Tönen, ein bisschen Unordnung. Die Seiten im
+      Ordner sind unscharf. Nicht zeigen: Schrift, Logos, Gesichter, Bildschirminhalte, einen
+      aufgeräumten Werbeschreibtisch.
+    style: documentary photo, natural light, 35mm, muted colours, no text
+    alt: An open ring binder, a coffee mug, and a pen on a desk beside a window.
+    status: generated
+    model: bfl/flux-pro-1.1
+    generated_at: "2026-09-12"
+    prompt_hash: f6291bf2030c74df
+    file: /images/generated/deine-region-angebot-hero.webp
+    width: 800
+    height: 900
+    wide_file: /images/generated/deine-region-angebot-hero-wide.webp
+    wide_width: 1400
+    wide_height: 600
 ---
 
 # Your region (`/deine-region`)

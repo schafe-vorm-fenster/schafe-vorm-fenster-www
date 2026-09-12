@@ -34,15 +34,23 @@ images:
     ratio: hero
     provenance: generated
     brief: >-
-      Gemeindehaus und Feuerwehrgerätehaus an einem Dorfanger im Mai, später
-      Nachmittag: frisch gemähtes Gras, ein Fahnenmast ohne Fahne, Klappstühle
-      an der Hauswand. Weiches Licht, leicht bedeckt, gedeckte Grüntöne. Im
-      Hintergrund tragen zwei Menschen einen Tisch, von hinten und klein im
-      Bild. Nicht zeigen: Schrift, Logos, lesbare Schilder, Gesichter, eine in
-      die Kamera gestellte Vereinsgruppe.
-    style: "documentary photo, natural light, 35mm, muted colours, no text"
-    alt: "A village hall on the green in spring, folding chairs leaning against the wall."
-    status: needed
+      Gemeindehaus und Feuerwehrgerätehaus an einem Dorfanger im Mai, später Nachmittag: frisch
+      gemähtes Gras, ein Fahnenmast ohne Fahne, Klappstühle an der Hauswand. Weiches Licht, leicht
+      bedeckt, gedeckte Grüntöne. Im Hintergrund tragen zwei Menschen einen Tisch, von hinten und
+      klein im Bild. Nicht zeigen: Schrift, Logos, lesbare Schilder, Gesichter, eine in die Kamera
+      gestellte Vereinsgruppe.
+    style: documentary photo, natural light, 35mm, muted colours, no text
+    alt: A village hall on the green in spring, folding chairs leaning against the wall.
+    status: generated
+    model: bfl/flux-pro-1.1
+    generated_at: "2026-09-12"
+    prompt_hash: 2a2d1632066f7151
+    file: /images/generated/dein-ort-starten-hero.webp
+    width: 800
+    height: 900
+    wide_file: /images/generated/dein-ort-starten-hero-wide.webp
+    wide_width: 1400
+    wide_height: 600
 ---
 
 # Start your place (`/dein-ort/starten`)

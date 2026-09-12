@@ -42,42 +42,60 @@ images:
     ratio: hero
     provenance: generated
     brief: >-
-      Blick über ein kleines Dorf in Vorpommern am späten Nachmittag im
-      September: Feldsteinkirche, Backsteinscheune, ein Stück
-      Kopfsteinpflaster, dahinter abgeerntete Felder bis zum Horizont. Tiefes,
-      warmes Seitenlicht, bewölkter Himmel, die Sonne selbst bleibt außerhalb
-      des Bildes. Ganz hinten auf der Dorfstraße zwei Menschen, nur als
-      Silhouetten und zu weit weg, um jemanden zu erkennen. Nicht zeigen:
-      Schrift, Logos, lesbare Orts- oder Nummernschilder, Gesichter,
+      Blick über ein kleines Dorf in Vorpommern am späten Nachmittag im September: Feldsteinkirche,
+      Backsteinscheune, ein Stück Kopfsteinpflaster, dahinter abgeerntete Felder bis zum Horizont.
+      Tiefes, warmes Seitenlicht, bewölkter Himmel, die Sonne selbst bleibt außerhalb des Bildes.
+      Ganz hinten auf der Dorfstraße zwei Menschen, nur als Silhouetten und zu weit weg, um jemanden
+      zu erkennen. Nicht zeigen: Schrift, Logos, lesbare Orts- oder Nummernschilder, Gesichter,
       Postkartenidylle mit knallblauem Himmel.
-    style: "documentary photo, natural light, 35mm, muted colours, no text"
-    alt: "Kleines Dorf in Vorpommern am Nachmittag, Feldsteinkirche und Scheune an einer Dorfstraße, dahinter abgeerntete Felder."
-    status: needed
+    style: documentary photo, natural light, 35mm, muted colours, no text
+    alt: >-
+      Kleines Dorf in Vorpommern am Nachmittag, Feldsteinkirche und Scheune an einer Dorfstraße,
+      dahinter abgeerntete Felder.
+    status: generated
+    model: bfl/flux-pro-1.1
+    generated_at: "2026-09-12"
+    prompt_hash: c39a629351615869
+    file: /images/generated/home-hero.webp
+    width: 800
+    height: 900
+    wide_file: /images/generated/home-hero-wide.webp
+    wide_width: 1400
+    wide_height: 600
   - id: home-scene-embed
     slot: home-5-scene-embed
     ratio: feature
     provenance: generated
     brief: >-
-      Schaukasten aus Holz und Glas an einer Backsteinwand, wie ihn Gemeinden
-      und Vereine für Aushänge benutzen: ein paar Zettel hängen schief, eine
-      Ecke ist leer. Bedeckter Vormittag im Frühjahr, weiches Licht,
-      Regenspuren auf der Scheibe. Die Zettel sind unscharf und aus dieser
-      Entfernung nicht zu entziffern. Nicht zeigen: Schrift, Logos, lesbare
-      Aushänge oder Schilder, Menschen, Bildschirme oder Geräte.
-    style: "documentary photo, natural light, 35mm, muted colours, no text"
-    alt: "Hölzerner Schaukasten an einer Backsteinwand, mit ein paar Aushängen und einer freien Ecke."
-    status: needed
+      Schaukasten aus Holz und Glas an einer Backsteinwand, wie ihn Gemeinden und Vereine für
+      Aushänge benutzen: ein paar Zettel hängen schief, eine Ecke ist leer. Bedeckter Vormittag im
+      Frühjahr, weiches Licht, Regenspuren auf der Scheibe. Die Zettel sind unscharf und aus dieser
+      Entfernung nicht zu entziffern. Nicht zeigen: Schrift, Logos, lesbare Aushänge oder Schilder,
+      Menschen, Bildschirme oder Geräte.
+    style: documentary photo, natural light, 35mm, muted colours, no text
+    alt: Hölzerner Schaukasten an einer Backsteinwand, mit ein paar Aushängen und einer freien Ecke.
+    status: generated
+    model: bfl/flux-pro-1.1
+    generated_at: "2026-09-12"
+    prompt_hash: 00d6458bd5f2d454
+    file: /images/generated/home-scene-embed.webp
+    width: 1400
+    height: 1000
   - id: home-scene-provenance
     slot: home-6-scene-provenance
     ratio: feature
     provenance: real
     source: >-
-      @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2021-workshop-ranzin.jpeg
-      — Eigenaufnahme (in-house), unbeschränkte Nutzung, kein Credit nötig.
-      Binärdatei liegt im go-to-market-os-Repository, das npm-Paket liefert
-      nur den .asset.md-Deskriptor.
-    alt: "Jan-Henrik Hempel steht in der offenen Tür eines Backsteinhauses, daneben der Roll-up von Schafe vorm Fenster."
+      @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2021-workshop-ranzin.jpeg —
+      Eigenaufnahme (in-house), unbeschränkte Nutzung, kein Credit nötig. Binärdatei liegt im
+      go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
+    alt: >-
+      Jan-Henrik Hempel steht in der offenen Tür eines Backsteinhauses, daneben der Roll-up von
+      Schafe vorm Fenster.
     status: real
+    file: /images/real/home-scene-provenance.webp
+    width: 1400
+    height: 1000
 ---
 
 # Startseite (`/`)

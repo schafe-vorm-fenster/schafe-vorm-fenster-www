@@ -59,49 +59,60 @@ images:
     ratio: hero
     provenance: generated
     brief: >-
-      Ein Dorf mit wenigen hundert Einwohnern, von einem Feldweg aus gesehen,
-      Februar am späten Nachmittag: kahle Bäume, Backsteinhäuser, ein
-      Storchennest auf einem Mast, Pfützen im Weg. Tief stehendes graues
-      Licht, fast keine Farbe. Kein Mensch im Bild. Nicht zeigen: Schrift,
+      Ein Dorf mit wenigen hundert Einwohnern, von einem Feldweg aus gesehen, Februar am späten
+      Nachmittag: kahle Bäume, Backsteinhäuser, ein Storchennest auf einem Mast, Pfützen im Weg.
+      Tief stehendes graues Licht, fast keine Farbe. Kein Mensch im Bild. Nicht zeigen: Schrift,
       Logos, lesbare Ortsschilder, Schnee, Idylle.
-    style: "documentary photo, natural light, 35mm, muted colours, no text"
-    alt: "A small village seen from a field track in February, bare trees and brick houses."
-    status: needed
+    style: documentary photo, natural light, 35mm, muted colours, no text
+    alt: A small village seen from a field track in February, bare trees and brick houses.
+    status: generated
+    model: bfl/flux-pro-1.1
+    generated_at: "2026-09-12"
+    prompt_hash: df3c8bdb1c615bec
+    file: /images/generated/ueber-uns-hero.webp
+    width: 800
+    height: 900
+    wide_file: /images/generated/ueber-uns-hero-wide.webp
+    wide_width: 1190
+    wide_height: 510
   - id: ueber-uns-founder-portrait
     slot: ueber-uns-1-origin
     ratio: portrait
     provenance: real
     source: >-
       @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2026-05-noerdaward2026-DSC09263-portrait.jpeg
-      — `license: free use, credit required`, `press_clearance: cleared`,
-      1826×1826. Binärdatei liegt im go-to-market-os-Repository, das npm-Paket
-      liefert nur den .asset.md-Deskriptor.
-    alt: "Jan-Henrik Hempel looking into the camera, the darkened hall behind him."
+      — `license: free use, credit required`, `press_clearance: cleared`, 1826×1826. Binärdatei
+      liegt im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
+    alt: Jan-Henrik Hempel looking into the camera, the darkened hall behind him.
     credit: "@rightvisionstudios & NØRD2026"
     lcp: true
     status: real
+    file: /images/real/ueber-uns-founder-portrait.webp
+    width: 1152
+    height: 1440
   - id: ueber-uns-team-jan-henrik-hempel
     slot: ueber-uns-5-team
     ratio: portrait
     provenance: real
     source: >-
       @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2021-workshop-quilow-portrait.jpeg
-      — Eigenaufnahme (in-house), unbeschränkte Nutzung, kein Credit nötig.
-      Nicht dasselbe Bild wie im Herkunftsblock, damit die Seite ein Porträt
-      nicht zweimal zeigt.
-    alt: "Jan-Henrik Hempel explaining something with both hands raised, timber beams behind him."
+      — Eigenaufnahme (in-house), unbeschränkte Nutzung, kein Credit nötig. Nicht dasselbe Bild wie
+      im Herkunftsblock, damit die Seite ein Porträt nicht zweimal zeigt.
+    alt: Jan-Henrik Hempel explaining something with both hands raised, timber beams behind him.
     status: real
+    file: /images/real/ueber-uns-team-jan-henrik-hempel.webp
+    width: 1152
+    height: 1440
   - id: ueber-uns-team-christian-sauer
     slot: ueber-uns-5-team
     ratio: portrait
     provenance: real
     source: >-
-      @schafe-vorm-fenster/people@0.3.6#christian-sauer/assets/2019-christian.jpg
-      — `license: unverified`, Fotograf unbekannt, `press_clearance:
-      unverified`. Nicht freigegeben, und ein Porträt einer realen Person wird
-      nie generiert (DEC-068 Regel 3); bis zur Klärung zeigt die Karte die
-      Fläche „Foto gesucht“ (TS-027-A9).
-    alt: "Christian Sauer outdoors, looking into the camera."
+      @schafe-vorm-fenster/people@0.3.6#christian-sauer/assets/2019-christian.jpg — `license:
+      unverified`, Fotograf unbekannt, `press_clearance: unverified`. Nicht freigegeben, und ein
+      Porträt einer realen Person wird nie generiert (DEC-068 Regel 3); bis zur Klärung zeigt die
+      Karte die Fläche „Foto gesucht“ (TS-027-A9).
+    alt: Christian Sauer outdoors, looking into the camera.
     status: needed
 ---
 
