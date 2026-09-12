@@ -417,6 +417,143 @@ export const PageSeoMapSchema = z.record(
 export type PageSeoMap = z.infer<typeof PageSeoMapSchema>;
 
 /**
+ * The aspect-ratio vocabulary of the design system's media-ratio table
+ * (`concept/website-design-system.md` › Aspect Ratios and Reserved Space).
+ * An image declares which box it is made for, and the generator asks the
+ * model for exactly that aspect — the ratio is reserved space, so a
+ * rendition that does not fit it would reflow the page after paint.
+ */
+export const ImageRatioSchema = z.enum([
+  "hero",
+  "feature",
+  "proof",
+  "map",
+  "portrait",
+  "square",
+]);
+
+export type ImageRatio = z.infer<typeof ImageRatioSchema>;
+
+/**
+ * Where the pixels come from. `real` is a photograph or an asset somebody
+ * actually owns — it must name its `source`, because an image carries no
+ * frontmatter a reviewer could check (DEC-068 guardrail 3). `generated` is a
+ * model rendition standing in for a photograph nobody has taken yet; it is a
+ * *placeholder* and the page marks it as one.
+ */
+export const ImageProvenanceSchema = z.enum(["generated", "real"]);
+
+export type ImageProvenance = z.infer<typeof ImageProvenanceSchema>;
+
+/**
+ * The lifecycle of one inventory entry: `needed` is a brief waiting for the
+ * generator, `generated` is a rendition on disk (the generator writes `file`,
+ * `width`, `height`, `model`, `generated_at` and `prompt_hash` back into the
+ * same entry), `real` is the finished asset that replaces it later.
+ */
+export const ImageStatusSchema = z.enum(["needed", "generated", "real"]);
+
+export type ImageStatus = z.infer<typeof ImageStatusSchema>;
+
+/**
+ * One image of a page's image inventory — the `images:` block in a page
+ * artifact's frontmatter.
+ *
+ * The entry **is** the provenance record. There is no sidecar file: an image
+ * that is not in this list is not on the page, and an image in this list
+ * carries its brief, its prompt hash and the model that rendered it in the
+ * same place the copy's provenance lives (TS-007 D6, applied to pixels).
+ *
+ * **Strict**, for the reason `SlotMetaSchema` is strict: a misspelt `status`
+ * that validates is a gate that a typo can walk past.
+ *
+ * Cross-field rules, checked below:
+ *   - `provenance: real` must name a `source` — no unattributed real asset.
+ *   - `provenance: generated` must carry a `brief` — the prompt's input.
+ *   - `status: generated` must carry `file`, `width` and `height` — an entry
+ *     that claims a rendition exists has to say which file it is, and the
+ *     ratio box needs the intrinsic size to reserve its space.
+ */
+export const ImageEntrySchema = z
+  .strictObject({
+    /** Kebab-case, file-name-safe: it is the basename under `public/images/generated/`. */
+    id: z
+      .string()
+      .regex(
+        /^[a-z0-9][a-z0-9-]*$/,
+        "must be kebab-case — it becomes the file name under public/images/",
+      ),
+    /** The slot id the image belongs to, as the slot metadata comment spells it. */
+    slot: z.string().min(1),
+    ratio: ImageRatioSchema,
+    provenance: ImageProvenanceSchema,
+    /** Required for `provenance: real` — where the asset comes from and under whose rights. */
+    source: z.string().min(1).optional(),
+    /** The motif, in German, as a person would brief a photographer. */
+    brief: z.string().min(1).optional(),
+    /** Look and treatment; appended to the brief when the prompt is built. */
+    style: z.string().min(1).optional(),
+    /** Alt text. Empty string is not allowed — a decorative image has no inventory entry. */
+    alt: z.string().min(1),
+    caption: z.string().min(1).optional(),
+    status: ImageStatusSchema,
+    /** Credit line, where the asset's rights require one to be rendered. */
+    credit: z.string().min(1).optional(),
+    /**
+     * Set on the one image per route that TS-003 D2 declares the LCP element.
+     * It is the only image that may be `priority`.
+     */
+    lcp: z.boolean().optional(),
+
+    // ── Written back by `pnpm images:generate`, never by hand ──────────────
+    /** Site-absolute path of the rendition, e.g. `/images/generated/home-hero.webp`. */
+    file: z
+      .string()
+      .startsWith("/images/", "must be a site-absolute path under /images/")
+      .optional(),
+    width: z.number().int().positive().optional(),
+    height: z.number().int().positive().optional(),
+    /** The gateway model id that rendered it, e.g. `bfl/flux-pro-1.1`. */
+    model: z.string().min(1).optional(),
+    generated_at: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "ISO date")
+      .optional(),
+    /** SHA-256 of the exact prompt, truncated — a brief change is visible as a hash change. */
+    prompt_hash: z
+      .string()
+      .regex(/^[0-9a-f]{12,64}$/, "hex digest of the prompt")
+      .optional(),
+  })
+  .superRefine((entry, ctx) => {
+    if (entry.provenance === "real" && !entry.source) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["source"],
+        message: "`provenance: real` must name a source (DEC-068 guardrail 3)",
+      });
+    }
+    if (entry.provenance === "generated" && !entry.brief) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["brief"],
+        message: "`provenance: generated` must carry a brief — it is the prompt's input",
+      });
+    }
+    for (const key of ["file", "width", "height"] as const) {
+      if (entry.status === "generated" && entry[key] === undefined) {
+        ctx.addIssue({
+          code: "custom",
+          path: [key],
+          message: `\`status: generated\` must carry \`${key}\` — the reserved box needs the intrinsic size`,
+        });
+      }
+    }
+  });
+
+export type ImageEntry = z.infer<typeof ImageEntrySchema>;
+
+/**
  * The frontmatter of a page artifact under `content/pages/<route>/<locale>.md`.
  *
  * Extends the pre-relaunch base rather than replacing it, so
@@ -453,6 +590,16 @@ export const PageFrontmatterSchema = BaseFrontmatterSchema.extend({
   open_points: z.array(z.string()).optional(),
   /** Where a price shown on the page comes from — TS-024/TS-025. */
   price_source_note: z.string().optional(),
+  /**
+   * The page's image inventory — one entry per image the page shows, in the
+   * order the page shows them. Optional: a page with no imagery has no block,
+   * and the eleven artifacts acquired theirs one at a time.
+   *
+   * The list is the register the dummy-content rule (plan/guardrails.md) asks
+   * for: `provenance: generated` marks a rendition standing in for a
+   * photograph nobody has taken, and `pnpm images:generate` fills it in.
+   */
+  images: z.array(ImageEntrySchema).optional(),
   /** TS-007 D11: set by a person at the editorial decision point, never by an agent. */
   reviewed_by: z.string().optional(),
   reviewed_at: z.string().optional(),

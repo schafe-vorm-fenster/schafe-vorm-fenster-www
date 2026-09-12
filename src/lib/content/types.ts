@@ -10,6 +10,7 @@
  */
 
 import type {
+  ImageEntry,
   LifecycleStatus,
   SlotContentType,
   SlotProvenance,
@@ -95,6 +96,12 @@ export interface PageContent {
   readonly file: string;
   readonly frontmatter: PageFrontmatter | null;
   readonly slots: readonly ContentSlot[];
+  /**
+   * The page's image inventory, in frontmatter order (`images:`). Empty when
+   * the page has no imagery or could not be read — never undefined, so a page
+   * can map over it without a guard.
+   */
+  readonly images: readonly ImageEntry[];
   /**
    * Slot metadata comments the file carries but that do not validate. They
    * are dropped from `slots` so a page renders, and they fail

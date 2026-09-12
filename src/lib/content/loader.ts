@@ -97,6 +97,7 @@ function emptyPage(
     file,
     frontmatter: null,
     slots: [],
+    images: [],
     invalidSlots: [],
     gatedSlots: [],
     status: "draft",
@@ -184,6 +185,7 @@ export function parsePage(raw: string, options: ParsePageOptions): PageContent {
     return {
       ...emptyPage(routeId, locale, file, "page-not-approved"),
       frontmatter: parsed.data,
+      images: parsed.data.images ?? [],
       status: parsed.data.status,
     };
   }
@@ -255,6 +257,7 @@ export function parsePage(raw: string, options: ParsePageOptions): PageContent {
     file,
     frontmatter: parsed.data,
     slots,
+    images: parsed.data.images ?? [],
     invalidSlots,
     gatedSlots,
     status: parsed.data.status,
