@@ -15,17 +15,21 @@ sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
   - "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"
   - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
+  - "@schafe-vorm-fenster/proof@0.3.5"
+  - "@schafe-vorm-fenster/media-echo@0.3.3"
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
   - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
   - "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"
   - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
+  - "@schafe-vorm-fenster/proof@0.3.5"
+  - "@schafe-vorm-fenster/media-echo@0.3.3"
   - "ia"
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — sourced per section, see slot comments; 1 generated slot (slot 8, demo proof stream, prototype completeness override — state/open.md Dummy-Content); EN translation of content/pages/home/de.md, same source ids per slot"
+provenance: "sourced — every slot; slot 8 (proof stream) now carries real proof and media-echo records instead of demo cards, three of them with clearance pending (Q-014, Q-045); EN translation of content/pages/home/de.md, same source ids per slot"
 compliance_check: "state/content-map.md#compliance-checks — TS-019"
 schema_note: >-
   src/domain/content-frontmatter.schema.ts predates TS-007 (8 content types,
@@ -131,30 +135,35 @@ citable is "running since 2018", not "eight years at full operation".
 
 ## Block 2c — Proof stream (5 elements)
 
-<!-- id: home-8-proof-stream; content_type: proof-card; provenance: generated; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft; demo: true -->
+<!-- clearance: pending — `lehre-lelender` and `volkshochschule-uecker-randow` are `usage_rights: unverified` (Q-014), the three media-echo entries carry no `usage_rights` at all (Q-045, state/open.md #1). The protected preview shows them; the pre-go-live hardening round clears them. `noerd-award-2026-smart-community` and `in-operation-since-2018` are `cleared`. -->
+<!-- source_note: the stage-0 rule "widest spread, most recent first" comes from gtm:concept/website-relevance-model.concept.md (context matrix, row "Direct visit, unknown"); the proof rule from gtm:concept/website-communication-principles.concept.md §4. -->
+<!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2026-04-nord-award-nordkurier", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
 
-**Kicker above the stream:** What press, authorities, and local groups say about the village calendar
+**Kicker above the stream:** Awards, press, and places already using the village calendar
 
-Selection and order of the five elements is the relevance engine's job
-(TS-005 D5, DEC-048) at runtime — this slot only supplies the frame
-sentence. Pool: `@schafe-vorm-fenster/proof@0.3.5` (8 `cleared`
-entries) plus `@schafe-vorm-fenster/media-echo@0.3.3` (32 entries, 0
-with `usage_rights` today — Q-045, `state/open.md` #1). An empty slot
-weakens the claim; it is never replaced by invented text.
+Selection and order of the five elements stay the relevance engine's job
+at runtime (TS-005 D5, DEC-048). This slot supplies the frame sentence and
+the candidate set it draws from — pool:
+`@schafe-vorm-fenster/proof@0.3.5` and
+`@schafe-vorm-fenster/media-echo@0.3.3`.
 
-**Demo elements (prototype, `Demo Data` badge):** As long as no
-selection is cleared, the prototype shows five example cards instead
-of an empty area:
+**Candidates (stage 0: widest spread, most recent first):**
 
-1. "At last we can see at a glance what's on in our village." — Volunteer mayor, Example municipality Musterdorf
-2. "We simply embedded our calendar in our website, with no system of our own behind it." — Digital office, Example administration Musterkreis
-3. "Digital village calendars are changing how small communities share their dates." — Example newspaper, March 2026 issue
-4. "We enter our club's dates ourselves now, no more spreadsheet." — Chair, Volunteer fire brigade Musterdorf
-5. "Example award for digital participation in rural areas." — Example award for rural digitalisation
+1. The municipality of Lehre runs the calendar for its 17 places under its own name: LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony)
+2. NØRD Award 2026 in the Smart Community category, decided by public vote out of 80 entries. — NØRD digital convention, Rostock
+3. Village calendar nominated for a digital award, April 2026. — Nordkurier, Vorpommern-Greifswald
+4. The adult education centre publishes its entire course programme through the village calendar. — Volkshochschule Uecker-Randow, Pasewalk
+5. Running since 2018, no pilot and no prototype. — Press and appearance record 2018 to 2026, Vorpommern-Greifswald
 
-Places, institutions, and quotes are entirely invented and
-recognizably exemplary — they replace no real proof and disappear once
-real, cleared entries from the pool exist.
+Names, figures, titles, and years are taken from the records as they
+stand: the 17 places and the name "LeLender" from `lehre-lelender`, the 80
+entries and the category from `noerd-award-2026-smart-community`, the
+headline from the Nordkurier entry of April 2026, the course programme
+from `volkshochschule-uecker-randow`, the operating year from
+`in-operation-since-2018`. Two of the five are cleared; three are waiting
+for clearance and therefore run with `clearance: pending`. Citable is
+"running since 2018", not "eight years at full operation" (the record's own
+wording limit).
 
 ## Block 2d — Live counters
 
@@ -185,3 +194,22 @@ replaces it (SRC-001 §5, `reach-and-usage` is `expired`).
 Mirrors block 1's primary CTA in whichever state is current (S1 search,
 S2 open calendar, S3 publish first date) — no new text, same target id
 (TS-006 D6).
+
+## Slot 12 — UI strings no other slot carries
+
+<!-- source_note: register and honesty rule from the gtm sources: principle 1a "scenes, not labels" and principle 5 "live data carries the argument" in gtm:concept/website-communication-principles.concept.md, the informal register from principle 1b; the image-placeholder rule from the role definition (design system: "Foto gesucht"). Replaces the four generated strings in app/[lang]/page.tsx `DEMO_LABELS` (state/open.md row 92) — the code binding is still open. -->
+<!-- id: home-12-ui-strings; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster"]; status: draft -->
+
+**Caption on the example module of the WhatsApp scene:** Made from the flyer — example date
+
+**Geo label on the proof cards:** Proof from the region
+
+**Image invitation on the media frame of the embed scene:** Photo wanted — we are missing a picture from your place here.
+
+**Unit in the counter badge:** dates
+
+Four short strings the page currently keeps in code. "Example date" and
+"Proof from the region" say plainly what the surface is showing instead of
+leaving it open; "Photo wanted" is the design system's placeholder wording
+and claims no picture that does not exist. The unit word stays short in the
+badge because the full label (slot 9) sits beside it as text.

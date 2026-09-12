@@ -15,17 +15,21 @@ sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
   - "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"
   - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
+  - "@schafe-vorm-fenster/proof@0.3.5"
+  - "@schafe-vorm-fenster/media-echo@0.3.3"
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
   - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
   - "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"
   - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
+  - "@schafe-vorm-fenster/proof@0.3.5"
+  - "@schafe-vorm-fenster/media-echo@0.3.3"
   - "ia"
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — sourced per section, see slot comments; 1 generated slot (slot 8, demo proof stream, prototype completeness override — state/open.md Dummy-Content)"
+provenance: "sourced — every slot; slot 8 (proof stream) now carries real proof and media-echo records instead of demo cards, three of them with clearance pending (Q-014, Q-045)"
 compliance_check: "state/content-map.md#compliance-checks — TS-019"
 schema_note: >-
   src/domain/content-frontmatter.schema.ts predates TS-007 (8 content types,
@@ -130,30 +134,35 @@ zitierfähig ist „seit 2018 in Betrieb", nicht „acht Jahre Vollbetrieb".
 
 ## Block 2c — Belegstrom (5 Elemente)
 
-<!-- id: home-8-proof-stream; content_type: proof-card; provenance: generated; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft; demo: true -->
+<!-- clearance: pending — `lehre-lelender` und `volkshochschule-uecker-randow` stehen auf `usage_rights: unverified` (Q-014), die drei media-echo-Einträge tragen gar kein `usage_rights` (Q-045, state/open.md #1). Die geschützte Vorschau zeigt sie, der Härtungslauf vor dem Go-live klärt sie. `noerd-award-2026-smart-community` und `in-operation-since-2018` sind `cleared`. -->
+<!-- source_note: Stufe-0-Regel „weiteste Streuung, jüngste zuerst" aus gtm:concept/website-relevance-model.concept.md (Kontextmatrix, Zeile „Direkter Besuch, unbekannt"); Belegregel aus gtm:concept/website-communication-principles.concept.md §4. -->
+<!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2026-04-nord-award-nordkurier", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
 
-**Kicker über dem Strom:** Was Presse, Ämter und Akteure über den Dorfkalender sagen
+**Kicker über dem Strom:** Auszeichnungen, Presse und Orte, die den Dorfkalender schon nutzen
 
-Auswahl und Reihenfolge der fünf Elemente ist Aufgabe der Relevanz-Engine
-(TS-005 D5, DEC-048) zur Laufzeit — dieser Slot liefert nur den Rahmen-Satz.
-Pool: `@schafe-vorm-fenster/proof@0.3.5` (8 `cleared` Einträge) plus
-`@schafe-vorm-fenster/media-echo@0.3.3` (32 Einträge, 0 mit `usage_rights`
-heute — Q-045, `state/open.md` #1). Ein leerer Slot schwächt den Anspruch,
-er wird nie durch erfundenen Text ersetzt.
+Auswahl und Reihenfolge der fünf Elemente bleiben Aufgabe der
+Relevanz-Engine zur Laufzeit (TS-005 D5, DEC-048). Dieser Slot liefert den
+Rahmensatz und den Kandidatensatz, aus dem gezogen wird — Pool:
+`@schafe-vorm-fenster/proof@0.3.5` und
+`@schafe-vorm-fenster/media-echo@0.3.3`.
 
-**Demo-Elemente (Prototyp, `Demo-Daten`-Badge):** Solange keine Auswahl
-freigegeben ist, zeigt der Prototyp fünf beispielhafte Karten anstelle
-einer leeren Fläche:
+**Kandidaten (Stufe 0: weiteste Streuung, jüngste zuerst):**
 
-1. „Endlich sehen wir auf einen Blick, was bei uns im Ort los ist." — Ehrenamtliche Bürgermeisterin, Beispielgemeinde Musterdorf
-2. „Wir haben unseren Kalender einfach in unsere Website eingebunden, ohne eigenes System dahinter." — Amt für Digitales, Beispielverwaltung Musterkreis
-3. „Digitale Dorfkalender verändern, wie kleine Gemeinden ihre Termine teilen." — Beispielzeitung, Ausgabe März 2026
-4. „Wir tragen unsere Vereinstermine jetzt selbst ein, keine Excel-Liste mehr nötig." — Vorsitzender, Freiwillige Feuerwehr Musterdorf
-5. „Beispiel-Auszeichnung für digitale Teilhabe im ländlichen Raum." — Beispiel-Fachpreis Ländliche Digitalisierung
+1. Die Gemeinde Lehre betreibt den Kalender für ihre 17 Orte unter eigenem Namen: LeLender. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen)
+2. NØRD Award 2026 in der Kategorie Smart Community, vergeben per öffentlicher Abstimmung aus 80 Bewerbungen. — NØRD digital convention, Rostock
+3. Dorfkalender für Digitalpreis nominiert, April 2026. — Nordkurier, Vorpommern-Greifswald
+4. Die Volkshochschule veröffentlicht ihr komplettes Kursprogramm über den Dorfkalender. — Volkshochschule Uecker-Randow, Pasewalk
+5. Seit 2018 in Betrieb, kein Pilot und kein Prototyp. — Presse- und Auftrittshistorie 2018 bis 2026, Vorpommern-Greifswald
 
-Orte, Institutionen und Zitate sind frei erfunden und erkennbar
-exemplarisch — sie ersetzen keinen echten Beleg und verschwinden, sobald
-reale, freigegebene Einträge aus dem Pool vorliegen.
+Namen, Zahlen, Titel und Jahre stehen so in den Belegen: 17 Orte und der
+Name „LeLender" aus `lehre-lelender`, die 80 Bewerbungen und die
+Kategorie aus `noerd-award-2026-smart-community`, die Schlagzeile aus dem
+Nordkurier-Eintrag vom April 2026, das Kursprogramm aus
+`volkshochschule-uecker-randow`, das Betriebsjahr aus
+`in-operation-since-2018`. Zwei der fünf sind freigegeben, drei warten auf
+ihre Freigabe und laufen deshalb mit `clearance: pending`. Zitierfähig ist
+„seit 2018 in Betrieb", nicht „acht Jahre Vollbetrieb"
+(Formulierungsgrenze des Belegs).
 
 ## Block 2d — Live-Zähler
 
@@ -184,3 +193,23 @@ Reichweitenzahl ersetzt sie (SRC-001 §5, `reach-and-usage` ist `expired`).
 Spiegelt die primäre CTA von Block 1 im jeweils aktuellen Zustand (S1
 Suche, S2 Kalender öffnen, S3 ersten Termin veröffentlichen) — kein neuer
 Text, gleiche Ziel-ID (TS-006 D6).
+
+## Slot 12 — UI-Strings, die kein anderer Slot trägt
+
+<!-- source_note: Tonfall und Ehrlichkeitsregel aus gtm-Quellen: Prinzip 1a „Szenen statt Etiketten" und Prinzip 5 „Live-Daten tragen das Argument" in gtm:concept/website-communication-principles.concept.md, Register „du" aus Prinzip 1b; Bild-Platzhalter-Regel aus der Rolle (Design-System: „Foto gesucht"). Ersetzt die vier generierten Strings in app/[lang]/page.tsx `DEMO_LABELS` (state/open.md Zeile 92) — die Code-Bindung steht noch aus. -->
+<!-- id: home-12-ui-strings; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster"]; status: draft -->
+
+**Bildunterschrift am Beispielmodul der WhatsApp-Szene:** Aus dem Flyer geworden — Beispieltermin
+
+**Geo-Label auf den Belegkarten:** Beleg aus der Region
+
+**Bild-Einladung auf dem Medienrahmen der Einbindungs-Szene:** Foto gesucht — uns fehlt hier ein Bild aus deinem Ort.
+
+**Einheit im Zähler-Badge:** Termine
+
+Vier kurze Strings, die die Seite heute im Code führt. „Beispieltermin"
+und „Beleg aus der Region" sagen offen, was die Fläche zeigt, statt es
+offen zu lassen; „Foto gesucht" ist die Platzhalter-Formulierung des
+Design-Systems und behauptet kein Motiv, das es nicht gibt. Das
+Einheitenwort steht kurz im Badge, weil die vollständige Beschriftung
+(Slot 9) als Text daneben steht.
