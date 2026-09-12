@@ -49,7 +49,7 @@ Current test round: closed (gate-2 loop 3 rounds; M5 roundtrip + final fix round
 
 ## In progress
 
-- — (imagery follow-up closed; next: Jan's review)
+- Workstream 3 (usability/feature feedback), CR-1 from Jan 2026-09-12: hero photo over-covered by scrim → rebalance to the design-system gradient with text in the lower band; header transparent over the hero (solid after scroll); mobile top menu → mark-only logo + burger with full-screen overlay + compact calendar pill (replaces the scrollable job row, row 35) — Developer (opus)
 
 ## Pending
 
