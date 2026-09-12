@@ -216,6 +216,11 @@ export default async function Page({
         locale={locale}
         notDepicting={heroImage?.notDepicting}
         placeholderId={heroImage?.placeholderId}
+        // The page's first section, and the first thing painted at full
+        // width — preloaded for the same reason `hero-block` preloads its
+        // own (the portrait inside it is the declared LCP of TS-003 D2 and
+        // carries `fetchpriority="high"` through `media-frame`).
+        priority
         ratio="hero"
         src={heroImage?.src}
         wideSrc={heroImage?.wideSrc}

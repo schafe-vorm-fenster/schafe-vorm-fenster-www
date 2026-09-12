@@ -292,18 +292,38 @@ for (const [path, phrase] of [
  * otherwise fully English pages. An `alt` is not visible text, so no sweep of
  * the rendered body could ever have found it — which is why this assertion
  * reads the attribute rather than the page.
+ *
+ * Since the imagery workstream the `alt` is content, not a constant in the
+ * page: it comes from the locale file's own `images:` entry, so the two
+ * locales carry two different sentences and the component's `FOUNDER_ALT`
+ * pair is only the fallback for a portrait the inventory does not describe.
+ * The assertion therefore checks what F-3-5 is actually about — that the
+ * text alternative is in the page's language and is not the other locale's —
+ * rather than one exact string that content may legitimately rewrite.
  */
 test("F-3-5: text alternatives follow the page language", async ({ page }) => {
+  const altOfPortrait = () =>
+    page.evaluate(
+      () =>
+        document.querySelector<HTMLImageElement>('img[src*="founder-portrait"]')?.alt ?? "",
+    );
+
   await page.goto("/en/about");
   const englishAlts = await page.evaluate(() =>
     [...document.querySelectorAll("img")].map((img) => img.getAttribute("alt") ?? ""),
   );
   expect(englishAlts.join(" | ")).not.toContain("Gründer");
-  expect(englishAlts).toContain("Jan-Henrik Hempel, founder");
+  // German markers that would betray an untranslated alt on an English page.
+  expect(englishAlts.join(" | ")).not.toMatch(/\b(der|die|das|und|mit|vor|dahinter)\b/i);
+  const englishPortrait = await altOfPortrait();
+  expect(englishPortrait).not.toBe("");
 
   await page.goto("/ueber-uns");
   const germanAlts = await page.evaluate(() =>
     [...document.querySelectorAll("img")].map((img) => img.getAttribute("alt") ?? ""),
   );
-  expect(germanAlts).toContain("Jan-Henrik Hempel, Gründer");
+  const germanPortrait = await altOfPortrait();
+  expect(germanPortrait).not.toBe("");
+  expect(germanPortrait).not.toBe(englishPortrait);
+  expect(germanAlts.join(" | ")).toMatch(/Jan-Henrik Hempel/);
 });

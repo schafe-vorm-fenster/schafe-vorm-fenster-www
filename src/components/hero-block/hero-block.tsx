@@ -24,7 +24,17 @@ export interface HeroBlockProps extends DataStateProps {
   readonly src?: string;
   /** The hero's landscape rendition, swapped in from 48rem. */
   readonly wideSrc?: string;
-  /** This hero is the page's declared LCP element (TS-003 D2). */
+  /**
+   * Preload the hero photograph. Defaults to **true** whenever the hero has
+   * one, because a full-bleed photograph in the page's first section is what
+   * the browser paints largest and last: measured on the production build,
+   * the home hero became the LCP element the moment a real photograph stood
+   * in it, at 4.3 s, because a CSS background is discovered only after the
+   * stylesheet is parsed. TS-003 D2's table names an image LCP for two pages
+   * only — that table was written when no photograph existed anywhere, and
+   * the design system's page rhythm puts one in every hero (see
+   * `state/open.md`). Pass `false` for a hero that must not compete.
+   */
   readonly priority?: boolean;
   readonly gradient?: "ink" | "violet";
   readonly notDepicting?: boolean;
@@ -65,7 +75,7 @@ export function HeroBlock({
   cta,
   src,
   wideSrc,
-  priority = false,
+  priority = true,
   gradient = "ink",
   notDepicting = false,
   placeholderId,
