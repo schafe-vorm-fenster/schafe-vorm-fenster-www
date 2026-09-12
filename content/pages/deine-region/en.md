@@ -19,21 +19,31 @@ sources:
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#custom-data-integration"
+  - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
+  - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
+  - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
+  - "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#custom-data-integration"
+  - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
+  - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
+  - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
+  - "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"
   - "ia"
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — 5 sourced, 2 generated demo additions under the prototype completeness override (slot 6 demo proof cards, slot 7 demo response-promise placeholder — the withheld status per TS-026 D5 stands for the real, non-demo copy; state/open.md Dummy-Content); EN translation of content/pages/deine-region/de.md, same source ids per slot"
+provenance: "mixed — 6 sourced (slot 6 now carries three real proof elements, two of them clearance-pending), 1 withheld (slot 7 response-time promise, no named handling process, TS-026 D5), 0 generated demo additions; EN translation of content/pages/deine-region/de.md, same source ids per slot"
 compliance_check: "state/content-map.md#compliance-checks — TS-026"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 open_points:
-  - "state/open.md #20 — the two-working-day response promise is withheld entirely (constant null), no named process/owner yet"
+  - "state/open.md #20 — the two-working-day response promise is withheld entirely (constant null), no named process/owner yet (Q-022/C11). Re-checked 2026-09-12 against go-to-market-os: no handling process with a named owner exists anywhere in the hub, so the slot stays withheld"
+  - "Clearance pending — slot 6 uses `eichler-wasserschloss-quilow` and `lehre-lelender`, both `usage_rights: unverified` (Q-014). Protected preview only; go-live needs written clearance per element. `impftermine-landkreis` is `cleared`"
+  - "Pool extension — TS-026 row 6 in state/content-map.md named only `portalize-enterprise.proof[]` (eichler-wasserschloss-quilow, partner-network). `partner-network` has no named partner list and no cleared logos, so it is replaced here by two real territory-scale cases (impftermine-landkreis, lehre-lelender). Neither is a delivered `portalize-enterprise` territory and the slot says so"
 ---
 
 # Your region (`/deine-region`)
@@ -121,20 +131,30 @@ never priced, with no CTA of its own (`promotion: on-request-only`).
 
 Pool: `eichler-wasserschloss-quilow`, `partner-network` — both
 `unverified` today (Q-014). No reference case for an already delivered
-territory exists; none is simulated.
+`portalize-enterprise` territory exists; none is simulated. The slot
+below instead shows three real, named proof elements from the full set,
+and says what they do and do not prove.
 
-<!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"]; status: draft -->
 
-**Demo elements (prototype, `Demo Data` badge):** As long as no
-reference case is cleared, the prototype shows three example cards
-instead of an empty area:
+**Proof cards (real, two of them clearance-pending):** Three elements
+from the proof set, in the wording of the records:
 
-1. "Covering forty places editorially was never going to work for us — now it's all in one calendar." — County commissioner, Example county Musterkreis
-2. "Our administrative boundary was never the boundary people's lives run to — the calendar now shows both." — Regional development office, Example county Mustermark
-3. "Embedding it under our own name and in our own design wasn't a portal project for us, it was a configuration." — Network partner, Example region Musterland
+1. During the pandemic, every vaccination slot and every testing-centre opening time in the county was published through the village calendars, day-current and place-precise. — Landkreis Vorpommern-Greifswald, 2022
+2. "The service helps make what's on offer more visible and easier to find across a thinly settled area." — Uwe Eichler, Wasserschloss Quilow
+3. One municipality runs the village calendar as a brand of its own for 17 places, and volunteers are being brought on board. — Stiftung Lebendiges Lehre, municipality of Lehre, 2026
 
-Counties, institutions, and quotes are entirely invented and
-recognizably exemplary; they replace no cleared proof element.
+None of the three is a delivered `portalize-enterprise` territory, and
+this page does not say otherwise. Card 1 is a county that published its
+own dates through the existing set (`impftermine-landkreis`, `cleared`;
+evidence: our own eu:react final report, July 2022). Card 3 is a
+municipality with 17 place calendars under its own brand
+(`lehre-lelender`, `unverified`). Card 2 comes from the pool
+`portalize-enterprise` names (`eichler-wasserschloss-quilow`,
+`unverified`). The two `unverified` elements stand in the protected
+preview; before go-live there is a written clearance per element, or the
+card goes. `partner-network` is not among them: that record names no
+partner and has no cleared logo rights.
 
 ## Slot 7 — Response promise
 

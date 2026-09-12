@@ -19,21 +19,31 @@ sources:
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#custom-data-integration"
+  - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
+  - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
+  - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
+  - "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"
   - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.3#custom-data-integration"
+  - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
+  - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
+  - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
+  - "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"
   - "ia"
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — 5 sourced, 2 generated demo additions under the prototype completeness override (slot 6 demo proof cards, slot 7 demo response-promise placeholder — the withheld status per TS-026 D5 stands for the real, non-demo copy; state/open.md Dummy-Content)"
+provenance: "mixed — 6 sourced (slot 6 now carries three real proof elements, two of them clearance-pending), 1 withheld (slot 7 response-time promise, no named handling process, TS-026 D5), 0 generated demo additions"
 compliance_check: "state/content-map.md#compliance-checks — TS-026"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 open_points:
-  - "state/open.md #20 — the two-working-day response promise is withheld entirely (constant null), no named process/owner yet"
+  - "state/open.md #20 — the two-working-day response promise is withheld entirely (constant null), no named process/owner yet (Q-022/C11). Re-checked 2026-09-12 against go-to-market-os: no handling process with a named owner exists anywhere in the hub, so the slot stays withheld"
+  - "Clearance pending — slot 6 uses `eichler-wasserschloss-quilow` and `lehre-lelender`, both `usage_rights: unverified` (Q-014). Protected preview only; go-live needs written clearance per element. `impftermine-landkreis` is `cleared`"
+  - "Pool extension — TS-026 row 6 in state/content-map.md named only `portalize-enterprise.proof[]` (eichler-wasserschloss-quilow, partner-network). `partner-network` has no named partner list and no cleared logos, so it is replaced here by two real territory-scale cases (impftermine-landkreis, lehre-lelender). Neither is a delivered `portalize-enterprise` territory and the slot says so"
 ---
 
 # Deine Region (`/deine-region`)
@@ -121,20 +131,31 @@ erwähnt, nie bepreist, ohne eigenen CTA (`promotion: on-request-only`).
 
 Pool: `eichler-wasserschloss-quilow`, `partner-network` — beide heute
 `unverified` (Q-014). Kein Referenzfall für ein bereits ausgeliefertes
-Gebiet existiert; keiner wird simuliert.
+`portalize-enterprise`-Gebiet existiert; keiner wird simuliert. Der Slot
+darunter zeigt stattdessen drei echte, benannte Belege aus dem
+Gesamtbestand und sagt dazu, was sie belegen und was nicht.
 
-<!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"]; status: draft -->
 
-**Demo-Elemente (Prototyp, `Demo-Daten`-Badge):** Solange kein
-Referenzfall freigegeben ist, zeigt der Prototyp drei beispielhafte
-Karten statt einer leeren Fläche:
+**Belegkarten (echt, teils mit offener Freigabe):** Drei Elemente aus
+dem Proof-Bestand, im Wortlaut der Datensätze:
 
-1. „Vierzig Orte redaktionell abzudecken war für uns nicht zu schaffen — jetzt steht alles in einem Kalender." — Landrätin, Beispiel-Landkreis Musterkreis
-2. „Unsere Verwaltungsgrenze war nie die Grenze, an der sich das Leben der Menschen orientiert — der Kalender zeigt jetzt beides." — Amt für Regionalentwicklung, Beispiellandkreis Mustermark
-3. „Die Einbindung unter eigenem Namen und im eigenen Design war für uns kein Portalprojekt, sondern eine Konfiguration." — Netzwerkpartner, Beispielregion Musterland
+1. In der Pandemie wurden sämtliche Impfangebote und Testzentren-Öffnungszeiten des Landkreises tagesaktuell und ortsgenau über die Dorfkalender veröffentlicht. — Landkreis Vorpommern-Greifswald, 2022
+2. „Der Dienst hilft dabei, Angebote in einem Flächenland besser sichtbar und auffindbar zu machen." — Uwe Eichler, Wasserschloss Quilow
+3. Eine Gemeinde betreibt den Dorfkalender als eigene Marke für 17 Orte, und Ehrenamtliche werden erfolgreich an Bord geholt. — Stiftung Lebendiges Lehre, Gemeinde Lehre, 2026
 
-Landkreise, Institutionen und Zitate sind frei erfunden und erkennbar
-exemplarisch; sie ersetzen kein freigegebenes Proof-Element.
+Keines der drei Elemente ist ein ausgeliefertes
+`portalize-enterprise`-Gebiet — das sagt diese Seite auch nicht. Karte 1
+ist ein Landkreis, der seine eigenen Termine über den Bestand
+veröffentlicht hat (`impftermine-landkreis`, `cleared`; Beleg: eigener
+eu:react-Abschlussbericht, Juli 2022). Karte 3 ist eine Gemeinde mit 17
+Ortskalendern unter eigener Marke (`lehre-lelender`, `unverified`).
+Karte 2 kommt aus dem Pool, den `portalize-enterprise` nennt
+(`eichler-wasserschloss-quilow`, `unverified`). Die beiden
+`unverified`-Elemente stehen im geschützten Preview; vor dem Go-live
+liegt je Element eine schriftliche Freigabe vor, oder die Karte fällt
+weg. `partner-network` steht nicht dabei: Der Datensatz führt keine
+Partner namentlich und hat keine geklärten Logorechte.
 
 ## Slot 7 — Antwortversprechen
 
