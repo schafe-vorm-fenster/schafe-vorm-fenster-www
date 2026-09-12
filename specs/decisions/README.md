@@ -88,3 +88,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-074 — The content pipeline reads the shipped page artifacts — one file per page, typed blocks, no markdown library](074-content-pipeline-reads-the-shipped-artifacts.md)
 - [DEC-075 — The last-good store is the Vercel Runtime Cache, behind one interface](075-last-good-store-is-the-vercel-runtime-cache.md)
 - [DEC-076 — @axe-core/playwright is the a11y sweep instrument for TS-002-A1 and TS-029-A12](076-axe-core-playwright-for-a11y-e2e.md)
+- [DEC-077 — Example imagery is model-generated, marked, and produced by a script — with `ai` and `sharp` as build-time tooling](077-generated-imagery-pipeline.md)

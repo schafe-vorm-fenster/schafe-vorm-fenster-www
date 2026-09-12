@@ -37,6 +37,7 @@
     "fetch:openapi": "tsx scripts/fetch-openapi.mjs",
     "preflight": "node scripts/preflight.mjs",
     "placeholders": "node scripts/make-placeholders.mjs",
+    "images:generate": "node scripts/generate-images.mjs",
     "prepare": "husky"
   },
   "dependencies": {
@@ -69,12 +70,14 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitest/coverage-v8": "4.1.11",
+    "ai": "7.0.99",
     "babel-plugin-react-compiler": "1.0.0",
     "dotenv": "17.4.2",
     "eslint": "9.39.5",
     "eslint-config-next": "16.3.4",
     "googleapis": "171.4.0",
     "husky": "9.1.7",
+    "sharp": "0.35.4",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
     "vercel": "53.4.0",

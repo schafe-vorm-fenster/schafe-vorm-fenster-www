@@ -519,6 +519,18 @@ export const ImageEntrySchema = z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/, "ISO date")
       .optional(),
+    /**
+     * The landscape rendition of a `ratio: hero` image. The design system
+     * makes the hero 8:9 on the phone and 21:9 from 48rem, and one frame
+     * cannot be both — `file` is the phone rendition (mobile-first, TS-017
+     * D2), this is the one the media query swaps in above that width.
+     */
+    wide_file: z
+      .string()
+      .startsWith("/images/", "must be a site-absolute path under /images/")
+      .optional(),
+    wide_width: z.number().int().positive().optional(),
+    wide_height: z.number().int().positive().optional(),
     /** SHA-256 of the exact prompt, truncated — a brief change is visible as a hash change. */
     prompt_hash: z
       .string()
