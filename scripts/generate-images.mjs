@@ -31,7 +31,7 @@
  * into a scratch file with `vercel env pull` when it is missing or expired.
  */
 import { createHash } from "node:crypto";
-import { mkdirSync, readFileSync, readdirSync, writeFileSync, statSync } from "node:fs";
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, relative } from "node:path";
 import { execFileSync } from "node:child_process";
@@ -231,11 +231,15 @@ function ensureToken() {
     stdio: "inherit",
   });
   const pulled = loadEnv({ path: scratch, override: true, quiet: true });
+  // The file is a credential the moment it exists, and it exists outside the
+  // repository on purpose. It is read once and deleted immediately — the
+  // token lives on in this process's environment, and nowhere on disk.
+  rmSync(scratch, { force: true });
   if (!pulled.parsed?.VERCEL_OIDC_TOKEN) {
     throw new Error("no VERCEL_OIDC_TOKEN after `vercel env pull`");
   }
   process.env.VERCEL_OIDC_TOKEN = pulled.parsed.VERCEL_OIDC_TOKEN;
-  return scratch;
+  return "vercel env pull (scratch file, deleted)";
 }
 
 // ── Rendering ────────────────────────────────────────────────────────────────
@@ -424,6 +428,10 @@ function resolveRealSource(source) {
   const match = source?.match(SOURCE_REF);
   if (!match) return null;
   const [, pkg, path] = match;
+  // The path comes out of a content file. It names a file inside one hub
+  // package and nothing else: a `..` segment would let an inventory entry
+  // reach anywhere on the machine and publish what it finds into `public/`.
+  if (path.split("/").some((segment) => segment === "..")) return null;
   for (const family of ["identity", "evidence", "market", "operations"]) {
     const candidate = join(HUB_REPO, family, pkg, path.trim());
     if (existsFile(candidate)) return candidate;
