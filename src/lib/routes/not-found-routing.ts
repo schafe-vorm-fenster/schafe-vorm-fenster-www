@@ -63,10 +63,17 @@ export const NOT_FOUND_LOCALE_HEADER = "x-svf-not-found-locale";
 
 /**
  * App paths that are not D1 rows and must never be mistaken for unknown
- * URLs: the BFF, the component gallery, the framework's own output and the
- * well-known surface.
+ * URLs: the BFF, the framework's own output and the well-known surface.
  */
-const RESERVED_PREFIXES = ["/api/", "/dev/", "/_next/", "/.well-known/"] as const;
+const RESERVED_PREFIXES = ["/api/", "/_next/", "/.well-known/"] as const;
+
+/**
+ * The component gallery is a development tool, not a page of this site. It
+ * answers for itself everywhere it exists and `notFound()`s itself in a
+ * production build — which is the one shape this module exists to prevent, so
+ * there the proxy sends it the same way as every other unservable URL.
+ */
+const DEV_PREFIX = "/dev/";
 
 let servedPaths: Set<string> | undefined;
 
@@ -97,8 +104,10 @@ export function notFoundLocale(pathname: string, tldDefault?: string): Locale {
  *  - a **served language prefix** (`/en/anything`) already falls through to
  *    Next's own 404 handling, because `app/[lang]/anything` matches no route
  *    — that surface is complete today and is left alone here;
- *  - every **D1 path**, every asset, and the four reserved prefixes are
- *    served and answer for themselves;
+ *  - every **D1 path**, every asset and the three reserved prefixes are
+ *    served and answer for themselves; `/dev/**` answers for itself too,
+ *    except in a production build, where it is the one URL that would
+ *    otherwise reproduce the very defect this module removes;
  *  - `/de/…` carries a language prefix too, so the redundant-prefix redirect
  *    of `next.config.ts` (which runs *before* the proxy) keeps its turn.
  */
@@ -107,6 +116,7 @@ export function isUnservablePath(pathname: string): boolean {
   if (path === normalisePath(NOT_FOUND_PATH)) return false;
   if (isAssetPath(path)) return false;
   if (RESERVED_PREFIXES.some((prefix) => path.startsWith(prefix))) return false;
+  if (path.startsWith(DEV_PREFIX)) return process.env.VERCEL_ENV === "production";
 
   const first = path.split("/")[1] ?? "";
   if (isLocale(first)) return false;

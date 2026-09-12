@@ -54,20 +54,31 @@ import type { ReactNode } from "react";
  * `[lang]`, so it has no language parameter and no request path of its own;
  * the proxy still has the URL and puts the resolved language on a request
  * header. It is the server's view of the path, not a client-side swap, so
- * DEC-038 holds. The `<title>` stays on the TLD default: `generateMetadata`
- * may not read runtime data under Cache Components (`_locale.ts` records the
- * same boundary), and a 404 title is not a surface a visitor reads.
+ * DEC-038 holds, and `generateMetadata` reads the same header, so the
+ * `<title>` follows the body's language rather than the TLD default. (That is
+ * possible *here* and not in `app/[lang]/**`: those routes are prerendered, and
+ * `_locale.ts` records why a metadata function there may not read request
+ * data. This one already blocks.)
  */
 
 /**
- * The 404 blocks on purpose (F-2-70). Reading the language off the request
- * header is runtime data, so this route cannot be prerendered, and Next's own
- * guidance for a route that must run at request time is exactly this export
- * (`blocking-prerender-dynamic`). The alternative it offers — a `<Suspense>`
- * boundary — is the one thing this surface may not have: the fallback is what
- * a visitor without JavaScript would be left with, and TS-004 D6 wants a
- * complete document. Nothing is lost by blocking: the whole body is static
- * markup once the language is known, and a 404 is not a cached surface.
+ * The 404 blocks on purpose (F-2-70).
+ *
+ * What makes it request-time is the `await headers()` below with no
+ * `<Suspense>` above it — the language of this surface is a function of the
+ * URL, and only the proxy still has that. `instant = false` does not cause
+ * that; it silences the *static-shell validation* that would otherwise fail
+ * the build for a route whose prelude is empty (`instant.md`, "Disabling
+ * static shell validation"). It may well be redundant — the same document
+ * says framework-synthesized `/_not-found` is already excluded from implicit
+ * validation — but the default is explicitly allowed to change, and the build
+ * refused this route without it.
+ *
+ * The other way out, a `<Suspense>` boundary, is the one thing this surface
+ * may not have: the fallback is what a visitor without JavaScript would be
+ * left with, and TS-004 D6 asks for a complete document. Nothing is lost by
+ * blocking — the body is static markup once the language is known, and a 404
+ * is not a cached surface.
  */
 export const instant = false;
 

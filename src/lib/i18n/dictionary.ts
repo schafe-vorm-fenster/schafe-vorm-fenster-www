@@ -195,6 +195,8 @@ export interface Dictionary {
    * keeps meaning what it says.
    */
   legal: {
+    /** The section-nav heading on `/rechtliches`, where the artifact has none. */
+    sectionsLabel: string;
     germanOnlyNotice: string | null;
   };
   /**
@@ -279,6 +281,7 @@ const de: Dictionary = {
     dataGoesTo: "Daten gehen an",
   },
   legal: {
+    sectionsLabel: "Abschnitte",
     // The German page carries no notice: its six sections are German (F-2-74).
     germanOnlyNotice: null,
   },
@@ -373,6 +376,7 @@ const en: Dictionary = {
     dataGoesTo: "Data goes to",
   },
   legal: {
+    sectionsLabel: "Sections",
     germanOnlyNotice:
       "The six legal sections below are available in German only. We do not machine-translate legal text and do not write an English substitute for it. The English documents follow once they exist.",
   },

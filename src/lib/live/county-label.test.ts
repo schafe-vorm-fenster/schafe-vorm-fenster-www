@@ -42,3 +42,26 @@ describe("F-2-73: countyLabel answers a written-out label in both languages", ()
     }
   });
 });
+
+/**
+ * Widened after the differential review of the F-2-73 change: the criterion is
+ * "no internal id reaches a heading", and geo-api's neighbours do not all
+ * spell theirs `geoname.900001`.
+ */
+describe("the identifier shape is wider than the one case F-2-63 met", () => {
+  it.each(["geoname.900001", "geoname.900001a", "osm.relation-62422", "geo.de.900001"])(
+    "%s is an identifier",
+    (value) => {
+      expect(isGeoIdentifier(value)).toBe(true);
+    },
+  );
+
+  it.each([
+    "Landkreis St. Wendel",
+    "Vorpommern-Greifswald",
+    "Mecklenburgische Seenplatte",
+    "Kreis Plön",
+  ])("%s is a name a person would recognise", (value) => {
+    expect(isGeoIdentifier(value)).toBe(false);
+  });
+});

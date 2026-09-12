@@ -41,7 +41,8 @@ describe("F-2-74 / row 53: the German-only notice exists in English only", () =>
 
   it("is read from the dictionary by the page, not typed into it (TS-001 D7)", () => {
     const source = readFileSync(new URL("./page.tsx", import.meta.url), "utf8");
-    expect(source).toContain("dictionary(locale).legal");
+    expect(source).toContain("dictionary(locale)");
+    expect(source).toContain("d.legal");
     expect(source).toContain("germanOnlyNotice");
     expect(source).not.toContain("German only");
   });

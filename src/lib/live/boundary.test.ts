@@ -23,7 +23,15 @@ function walk(dir: string): string[] {
   });
 }
 
-const sourceFiles = [...walk(join(ROOT, "app")), ...walk(join(ROOT, "src"))]
+// `proxy.ts` sits at the repository root and is a client caller since F-2-49
+// (`place-hop.ts` → `live-anchor.ts` → `places.ts`), so it belongs inside the
+// boundary these criteria draw — it was outside every one of them until the
+// differential review of that change said so.
+const sourceFiles = [
+  ...walk(join(ROOT, "app")),
+  ...walk(join(ROOT, "src")),
+  join(ROOT, "proxy.ts"),
+]
   .filter((file) => /\.(ts|tsx)$/.test(file))
   .filter((file) => !/\.test\.tsx?$/.test(file))
   .map((file) => ({ path: relative(ROOT, file), source: readFileSync(file, "utf8") }));

@@ -82,9 +82,13 @@ export default async function Page({
   const registry = slot(page, "rechtliches-2-registry");
   const titles = titlesFromRegistryTable(registry.blocks);
 
-  const h1 = fieldAt(header.blocks, 0) ?? "Rechtliches";
-  const navLabel = fieldAt(header.blocks, 1) ?? "Abschnitte";
-  const { germanOnlyNotice } = dictionary(locale).legal;
+  const d = dictionary(locale);
+  // F-2-4's class, in the one file this round already edits: a German literal
+  // as the fallback renders German on `/en/legal` the moment the artifact is
+  // missing its header slot. The dictionary has both languages.
+  const h1 = fieldAt(header.blocks, 0) ?? d.pages.legal;
+  const navLabel = fieldAt(header.blocks, 1) ?? d.legal.sectionsLabel;
+  const { germanOnlyNotice } = d.legal;
 
   const docsBySection = new Map(
     LEGAL_SECTION_IDS.map((section, index) => [section, documents[index]]),

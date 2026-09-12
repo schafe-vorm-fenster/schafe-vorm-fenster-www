@@ -142,3 +142,40 @@ describe("TS-011 D5: a content gap is a value, never a throw", () => {
     expect(pageSeo("home", "de", { contentRoot: root })).toBeNull();
   });
 });
+
+/**
+ * TS-007 D11 applies to the head as much as to the body (differential review
+ * of the F-2-72 change): without the gate a production build would serve an
+ * unreviewed title and description — and the `WebPage` JSON-LD built from
+ * them — on a page whose body the same gate had just emptied.
+ */
+describe("TS-007 D11: the editorial gate reaches the head too", () => {
+  const artifactWith = (status: string) =>
+    contentRootWith({
+      "deine-region/de.md": frontmatter(`seo:
+  "/deine-region":
+    title: "Kalender für euer ganzes Gebiet"
+    description: "Das ganze Kreisgebiet in einem Kalender."
+    provenance: generated`).replace("status: draft", `status: ${status}`),
+    });
+
+  it("answers null for a draft artifact in a production build", () => {
+    const root = artifactWith("draft");
+    expect(
+      pageSeo("region", "de", { contentRoot: root, environment: "production" }),
+    ).toBeNull();
+    expect(
+      pageSeo("region", "de", { contentRoot: root, environment: "preview" }),
+    ).not.toBeNull();
+  });
+
+  it("answers for an approved artifact in every build", () => {
+    const root = artifactWith("approved");
+    for (const environment of ["production", "preview", "development"] as const) {
+      expect(
+        pageSeo("region", "de", { contentRoot: root, environment }),
+        environment,
+      ).not.toBeNull();
+    }
+  });
+});
