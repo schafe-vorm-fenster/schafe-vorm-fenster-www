@@ -35,11 +35,18 @@ const CASES = [
 for (const { path, id, expected } of CASES) {
   test(`F-3-12: a double click on ${path} keeps the typed postcode`, async ({ page }) => {
     await page.goto(path);
-    await page.locator(`#${id}`).fill("10115");
+    // `.first()`, and settled: on the production build `/` transiently
+    // renders a **third** search input while the flight payload hydrates, and
+    // it carries the same `id` as block 1's. Recorded rather than worked
+    // around silently — it is a duplicate DOM id in a hydration window, and a
+    // plausible second mechanism behind this very finding (a second click
+    // landing on an element that is about to be replaced). Filed with F-3-12
+    // in `state/open.md`.
+    await page.waitForLoadState("networkidle");
+    const field = page.locator(`#${id}`).first();
+    await field.fill("10115");
 
-    const submit = page.locator(`#${id}`).locator("xpath=ancestor::form").locator(
-      'button[type="submit"]',
-    );
+    const submit = field.locator("xpath=ancestor::form").locator('button[type="submit"]');
     await Promise.all([
       submit.click({ noWaitAfter: true }).catch(() => {}),
       submit.click({ noWaitAfter: true }).catch(() => {}),
