@@ -6,6 +6,7 @@ Current test round: closed (gate-2 loop 3 rounds; M5 roundtrip + final fix round
 
 ## Done
 
+- CR-2 (Jan, 2026-09-13): header fully transparent over the hero (no scrim, no border in either state); contrast via 44 px ink control wells with paper glyphs (burger, one well behind the desktop label row, aria-current as paper chip), mark-only logo over the hero, lime calendar pill kept; glyph-vs-well 16.56:1; residual well-edge vs bright skies recorded (row 208, mid-tone well as the one guaranteed alternative); two defects fixed on the way (JS-off labels paper-on-paper; CSS-module ordering differed dev/prod); e2e 314/0 prod-build subset, preview https://schafe-vorm-fenster-da2unsz7s-schafe-vorm-fenster.vercel.app — 2026-09-13
 - Fix row 204 / R-6 (2026-09-12): chrome duplicated on client navigation — root cause: Cache Components keeps the last 3 route segments mounted in hidden <Activity> boundaries and the chrome lived inside the page (row 97 seam); chrome moved to app/[lang]/layout via _chrome.tsx + useSelectedLayoutSegments; e2e/landmarks.spec.ts walks every internal link (27/27, was 26/27 red); e2e 550/0 prod build, 543/0 preview; row 207 (TS-019-A14 counter demo flag follows the cached upstream envelope — live-data tier fit, pre-existing) — 2026-09-12
 - CR-1 (Jan, 2026-09-12) header/hero/mobile menu: hero gradient per boards (top transparent, text in the lower band, 35 % photo band reserved), header transparent over the hero → solid after scroll (contrast 4.68–10.53:1, was 1.87–2.84), phone: mark-only logo + burger → native dialog overlay (focus trap, Escape, restore) + calendar pill; e2e 523/0 local, 516/0 preview https://schafe-vorm-fenster-3onu5zwiu-schafe-vorm-fenster.vercel.app; rows 200–206 (spec alignment D4/D2(d), label switch at xl not md); found row 204 — 2026-09-12
 - Imagery follow-up (2026-09-12): images[] inventory in all 22 page artifacts (22 entries: 13 generated, 9 real); `pnpm images:generate` (AI Gateway bfl/flux-pro-1.1, DEC-077) → 21 renditions ≈ $0.84 + 3 cleared photographs from the people package; wired on 8 heroes, scenes, publishing paths, founder portrait with credit; every generated image badged "Nicht motivgenau · Platzhalter"; 6 slots stay "Foto gesucht" (uncleared portraits/screenshots); pnpm check 1106 tests, e2e 503/0 on preview, Lighthouse a11y 100, CLS 0; preview https://schafe-vorm-fenster-5nwbr21rd-schafe-vorm-fenster.vercel.app; rows 187, 192 (TS-003 D2 LCP table vs hero photos — spec decision), 193/194
@@ -51,7 +52,7 @@ Current test round: closed (gate-2 loop 3 rounds; M5 roundtrip + final fix round
 
 ## In progress
 
-- — (nothing running; latest preview https://schafe-vorm-fenster-e8mxabxmt-schafe-vorm-fenster.vercel.app; next: Jan's review)
+- — (nothing running; latest preview https://schafe-vorm-fenster-da2unsz7s-schafe-vorm-fenster.vercel.app; next: Jan's review)
 
 ## Pending
 
