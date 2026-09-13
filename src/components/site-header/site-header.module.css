@@ -1,26 +1,71 @@
 /*
- * The header — TS-004 D4, and Jan's round-3 points 2 and 3.
+ * The header — TS-004 D4, and Jan's round-3 points 2 and 3, re-cut by his
+ * round-4 change request (state/open.md row 200).
  *
  * Mobile-first (TS-017 D2(a)): everything above the first `@media` line is
  * the phone. The two `min-width` queries are `md` (40rem) and `lg` (48rem),
  * both `breakpoint.*` token values (D2(b)).
  *
  * Two grounds, one element:
- *   solid       — paper, hairline, in the flow. Every page without a hero
- *                 photograph, and every page once the hero has scrolled past.
- *   over a hero — transparent, out of the flow, items in paper over the
- *                 header's own top scrim. Swapping between them changes
- *                 colours only, never geometry, so CLS stays 0.
+ *   solid       — paper, in the flow. Every page without a hero photograph,
+ *                 and every page once the hero has scrolled past.
+ *   over a hero — **completely transparent**: no scrim, no hairline, no
+ *                 ground of any kind. Logo, burger, labels and calendar pill
+ *                 lie on the photograph itself. Swapping between the two
+ *                 changes colours only, never geometry, so CLS stays 0.
+ *
+ * ### Where the contrast comes from now (Jan's round-4 change request)
+ *
+ * Round 3 gave the header its own ink top scrim and read paper text off it.
+ * Jan's finding on that preview: the scrim is a grey bar over the
+ * photograph, and the photograph is what the page is for. So the scrim is
+ * gone and every item that is not already a filled control carries its own
+ * **44 px control well** instead — the one ground SRC-014 §Icons sanctions
+ * ("never in a coloured circle unless that circle is a 44 px control well"),
+ * at radius 999, with no border and no shadow (§Shape and Space: "Borders
+ * and shadows: none").
+ *
+ * The well is one custom property, `--header-well`, so the three places that
+ * paint it (the burger, the desktop label row, and nothing else) stay in
+ * step and the JavaScript-less branch at the bottom can retire all of them
+ * with one declaration.
+ *
+ * **Why ink and not paper** — measured, both viewports, all six hero pages,
+ * pixel-sampled against the generated renditions actually in use with the
+ * header's own foreground hidden (`state/open.md` row 200 carries the
+ * table): paper on an ink well and ink on a paper well are the same
+ * 16.56:1, so the identifying contrast is a tie; the tie-break is the well's
+ * own edge against the photograph, and there ink clears 3:1 at the local
+ * mean on 23 of 30 measured positions against paper's 11 of 30 (median 8.2:1
+ * against 2.2:1). Hero photographs open on sky far more often than on
+ * anything dark, and sky is exactly where a paper well disappears.
  */
 
 .header {
   background: var(--color-neutral-paper);
-  border-bottom: 1px solid var(--color-neutral-line);
   color: var(--color-neutral-ink);
   position: sticky;
   top: 0;
   width: 100%;
   z-index: 10;
+
+  /*
+   * The solid ground's values. Every item rule below reads these, and the
+   * transparent ground re-declares them — one switch, no rule that only one
+   * of the two states knows about. The calendar pill's pair repeats
+   * `button.primaryLight`/`primaryDark` (SRC-014 §Button) rather than
+   * overriding it in one direction only, because a one-way override cannot
+   * be taken back in the `scripting: none` branch.
+   */
+  --header-well: transparent;
+  --header-label: var(--color-neutral-text2);
+  --header-label-hover: var(--color-neutral-surface);
+  --header-current-fill: var(--color-neutral-surface2);
+  --header-current-ink: var(--color-neutral-ink);
+  --header-cta-fill: var(--color-neutral-ink);
+  --header-cta-ink: var(--color-neutral-paper);
+  --header-cta-hover: var(--color-lime-900);
+  --header-wordmark: visible;
 }
 
 /*
@@ -33,30 +78,26 @@
  */
 .header[data-over-hero="true"] {
   /*
-   * The scrim is the header's **own** background image, not a pseudo-element,
-   * for a reason that is not cosmetic: axe-core resolves a text node's ground
-   * by walking the element and its ancestors, and a pseudo-element is not on
-   * that walk. With a transparent header it therefore resolved paper text
-   * against `body`'s paper and reported seven `color-contrast` violations —
-   * non-deterministically, because the same nodes sometimes resolved against
-   * the hero's own image and came back `incomplete` instead. As the header's
-   * own image the ground is visible to the walk, the rule reports
-   * `incomplete` (a machine cannot read contrast off a photograph), and the
-   * real number is measured per pixel instead — `state/open.md` row 200
-   * carries the table.
+   * Nothing. No colour, no image, no hairline — the photograph is the
+   * header's ground, which is the whole of Jan's round-4 request.
    *
-   * The two grounds swap without a transition. A fade would have to animate
-   * `background-image`, which is not an animatable property, so the honest
-   * form is an instant swap at the threshold rather than a 160 ms window in
-   * which the header is neither.
+   * The scrim this replaces was not only decoration: axe-core resolves a
+   * text node's ground by walking the element and its ancestors, so over a
+   * transparent header it used to resolve paper text against `body`'s paper
+   * and report seven `color-contrast` violations. That is answered better by
+   * the wells than it was by the scrim: every text node in the transparent
+   * bar now sits inside an element with an **opaque** background of its own
+   * (the label row's well, the calendar pill's lime), so the walk finds a
+   * real colour, the ratio it computes is the ratio a visitor sees, and the
+   * hidden wordmark is out of the tree entirely. Nothing is left resolving
+   * against a photograph.
+   *
+   * The two grounds swap without a transition: the solid one arrives as a
+   * background-colour change, and a fade would leave a window in which the
+   * header is neither.
    */
   background-color: transparent;
-  background-image: linear-gradient(
-    to bottom,
-    color-mix(in srgb, var(--color-neutral-ink) 78%, transparent) 0,
-    color-mix(in srgb, var(--color-neutral-ink) 58%, transparent) 100%
-  );
-  border-bottom-color: transparent;
+  background-image: none;
   color: var(--color-neutral-paper);
   left: 0;
   position: fixed;
@@ -64,39 +105,35 @@
 }
 
 /*
- * The light top scrim the design system's 12–26 % transparency allows — the
- * design boards open their hero with a little over half ink at the very top
- * edge and fade it out by the time the photograph is meant to be visible.
- * This pseudo-element is only the tail of it, below the header's own box, so
- * the band does not end on a hard edge. It is the header's, not the hero's,
- * so a page whose first section is not a photograph never paints it.
+ * The transparent ground's values — the 44 px control well and the pairs
+ * that sit on it. `[data-solid="false"]` is the state the server renders and
+ * the scroll measure confirms; `[data-solid="true"]` never reaches here, so
+ * turning solid restores the block above without a second override.
  */
-.header[data-over-hero="true"]::after {
-  background: linear-gradient(
-    to bottom,
-    color-mix(in srgb, var(--color-neutral-ink) 58%, transparent) 0,
-    transparent 100%
-  );
-  content: "";
-  height: var(--space-4);
-  left: 0;
-  pointer-events: none;
-  position: absolute;
-  right: 0;
-  top: 100%;
-  z-index: -1;
+.header[data-over-hero="true"][data-solid="false"] {
+  --header-well: var(--color-neutral-ink);
+  --header-label: var(--color-neutral-paper);
+  --header-label-hover: color-mix(in srgb, var(--color-neutral-paper) 16%, transparent);
+  --header-current-fill: var(--color-neutral-paper);
+  --header-current-ink: var(--color-neutral-ink);
+  --header-cta-fill: var(--color-lime-500);
+  --header-cta-ink: var(--color-neutral-ink);
+  --header-cta-hover: var(--color-lime-400);
+  /*
+   * The wordmark is paper *text*, and paper text on a bare hero photograph
+   * measures 1.09–5.01:1 against a 4.5:1 floor — it fails on five of the six
+   * heroes at 1280. Its own well would put a third dark shape next to the
+   * mark's white ground and the pill's lime. So over the photograph the logo
+   * is the mark alone, which is what Jan chose for the phone already; the
+   * wordmark keeps its box (`visibility`, not `display`), so the header does
+   * not move when it comes back on the solid ground.
+   */
+  --header-wordmark: hidden;
 }
 
 .header[data-over-hero="true"][data-solid="true"] {
   background-color: var(--color-neutral-paper);
-  /* No image on the solid ground, so axe checks the real contrast here. */
-  background-image: none;
-  border-bottom-color: var(--color-neutral-line);
   color: var(--color-neutral-ink);
-}
-
-.header[data-over-hero="true"][data-solid="true"]::after {
-  display: none;
 }
 
 /*
@@ -108,14 +145,28 @@
 @media (scripting: none) {
   .header[data-over-hero="true"] {
     background-color: var(--color-neutral-paper);
-    background-image: none;
-    border-bottom-color: var(--color-neutral-line);
     color: var(--color-neutral-ink);
     position: sticky;
   }
 
-  .header[data-over-hero="true"]::after {
-    display: none;
+  /*
+   * And the items with it. Round 3 reset the *ground* here and left the item
+   * pairs alone, so a visitor without JavaScript got a solid paper bar whose
+   * four job labels were still paper — paper on paper, measured 1:1, four
+   * invisible links on every hero page. One reset of the same custom
+   * properties the state above declares puts the whole bar back on the solid
+   * pair, labels included.
+   */
+  .header[data-over-hero="true"][data-solid="false"] {
+    --header-well: transparent;
+    --header-label: var(--color-neutral-text2);
+    --header-label-hover: var(--color-neutral-surface);
+    --header-current-fill: var(--color-neutral-surface2);
+    --header-current-ink: var(--color-neutral-ink);
+    --header-cta-fill: var(--color-neutral-ink);
+    --header-cta-ink: var(--color-neutral-paper);
+    --header-cta-hover: var(--color-lime-900);
+    --header-wordmark: visible;
   }
 }
 
@@ -135,6 +186,16 @@
 }
 
 /*
+ * The mark alone while the header is on the photograph — see the
+ * `--header-wordmark` note above. `visibility` keeps the box, so the
+ * wordmark returning on the solid ground moves nothing. Scoped to the bar:
+ * the overlay's own brand stands on the ink dialog and keeps its wordmark.
+ */
+.inner [data-wordmark] {
+  visibility: var(--header-wordmark);
+}
+
+/*
  * The four job labels. Below `md` they live in the overlay instead — the same
  * links, the same order, disclosed rather than scrolled sideways (Jan's
  * round-3 point 3; state/open.md rows 35 and 201).
@@ -144,18 +205,44 @@
   min-width: 0;
 }
 
-.list {
+/*
+ * The label row is **one** well, not four.
+ *
+ * (Every rule in this block is written `.header .x` rather than `.x`. The
+ * items are `route-link`s and `button`s, whose own modules carry
+ * single-class rules — `.bare { color: inherit }` among them — and two
+ * single-class rules from different CSS modules are decided by sheet order,
+ * which differs between `next dev` and the production build. Measured: with
+ * `.job` alone the four labels came out ink instead of `--header-label` in
+ * the production build only. The descendant selector settles it by
+ * specificity instead of by luck.)
+ *
+ * Over the photograph the four labels need a ground of their own — paper
+ * text on a bare hero measures 1.03–2.53:1 at 1280 against a 4.5:1 floor, so
+ * it fails on every one of the six heroes. A well per label would put four
+ * dark pills in a row beside the mark's white ground and the lime pill;
+ * one well behind the row is a single 44 px-high control well at radius 999
+ * (the label's own `min-height` is the well's height, and its own
+ * `padding-inline` is the well's inset, so the well adds no geometry and
+ * the row does not move when the header turns solid).
+ */
+.header .list {
+  background: var(--header-well);
+  border-radius: var(--radius-pill);
   display: flex;
   gap: var(--space-2);
   list-style: none;
   margin: 0;
   padding: 0;
+  /* The `ul` is a block inside `nav { flex: 1 }`, so without this the well
+     would be painted across the whole free width instead of behind the row. */
+  width: fit-content;
 }
 
-.job {
+.header .job {
   align-items: center;
   border-radius: var(--radius-pill);
-  color: var(--color-neutral-text2);
+  color: var(--header-label);
   display: inline-flex;
   font-family: var(--font-mono);
   font-size: var(--type-label-size);
@@ -168,38 +255,37 @@
   white-space: nowrap;
 }
 
-.job:hover {
-  background: var(--color-neutral-surface);
-}
-
-/* Current page: fill and ink weight, not colour alone. */
-.job[data-current="true"] {
-  background: var(--color-neutral-surface2);
-  color: var(--color-neutral-ink);
-}
-
-.cta {
-  flex: none;
+.header .job:hover {
+  background: var(--header-label-hover);
 }
 
 /*
- * On the photograph the calendar entry takes the design system's
- * "primary on dark" pair (`lime-500` on `ink`, SRC-014 §Button) rather than
- * the ink fill it wears on paper — the same swap the boards draw.
+ * Current page: fill and ink weight, not colour alone — on the solid ground
+ * `surface-2` behind ink, inside the well a paper chip behind ink. The chip
+ * is the only mark a visitor needs to read at a glance, and paper on the ink
+ * well is 16.56:1 either way round, so `aria-current` survives the state
+ * change as a *fill*, not as a colour.
  */
-.header[data-over-hero="true"][data-solid="false"] .job {
-  color: var(--color-neutral-paper);
+.header .job[data-current="true"] {
+  background: var(--header-current-fill);
+  color: var(--header-current-ink);
 }
 
-.header[data-over-hero="true"][data-solid="false"] .job:hover,
-.header[data-over-hero="true"][data-solid="false"] .job[data-current="true"] {
-  background: color-mix(in srgb, var(--color-neutral-ink) 55%, transparent);
-  color: var(--color-neutral-paper);
+/*
+ * The calendar entry is already a filled control, so it needs no well: on
+ * the photograph it takes the design system's "primary on dark" pair
+ * (`lime-500` behind `ink`, SRC-014 §Button) — the swap the boards draw —
+ * and on paper the "primary on light" pair the Button itself would use.
+ * Both are declared, so the `scripting: none` branch can put it back.
+ */
+.header .cta {
+  background: var(--header-cta-fill);
+  color: var(--header-cta-ink);
+  flex: none;
 }
 
-.header[data-over-hero="true"][data-solid="false"] .cta {
-  background: var(--color-lime-500);
-  color: var(--color-neutral-ink);
+.header .cta:hover {
+  background: var(--header-cta-hover);
 }
 
 /* ── The disclosure control ─────────────────────────────────────────────── */
@@ -208,9 +294,20 @@
   flex: none;
 }
 
-.toggle {
+/*
+ * The burger's 44 px control well — SRC-014 §Icons is explicit that this is
+ * the one ground an icon may have ("never in a coloured circle unless that
+ * circle is a 44 px control well"), and the button was already exactly that
+ * square at radius 999, so the well costs no geometry: on the solid ground
+ * `--header-well` is `transparent` and the control is what it always was.
+ *
+ * Measured, stripes on the ink well are 16.56:1 against a 3:1 floor on every
+ * hero page at 360 — the number does not depend on the photograph at all,
+ * which is the point of a well.
+ */
+.header .toggle {
   align-items: center;
-  background: transparent;
+  background: var(--header-well);
   border: 0;
   border-radius: var(--radius-pill);
   color: inherit;
@@ -222,8 +319,10 @@
   width: var(--target-min);
 }
 
-.toggle:hover {
-  background: color-mix(in srgb, currentcolor 12%, transparent);
+/* Lightens the well rather than replacing it — `transparent` on the solid
+   ground leaves the original 12 % currentcolor wash untouched. */
+.header .toggle:hover {
+  background: color-mix(in srgb, currentcolor 12%, var(--header-well));
 }
 
 .stripes {
@@ -295,6 +394,10 @@
 /* ── The overlay ───────────────────────────────────────────────────────── */
 
 .dialog {
+  /* The overlay is its own ink surface, so the close control needs no well
+     of its own — and the brand inside it keeps its wordmark. */
+  --header-well: transparent;
+  --header-wordmark: visible;
   background: var(--color-neutral-ink);
   /* The overlay scrolls on its own; a scroll that reaches its end must not
      continue in the page behind it. */
@@ -405,7 +508,9 @@
     flex: 1;
   }
 
-  .burger {
+  /* `.header .toggle` above carries the display, so the switch-off has to
+     match its specificity — a bare `.burger` loses to it. */
+  .header .burger {
     display: none;
   }
 

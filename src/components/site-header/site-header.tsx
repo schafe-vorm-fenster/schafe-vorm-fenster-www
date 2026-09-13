@@ -18,11 +18,13 @@ export interface SiteHeaderProps {
   readonly current?: RouteId;
   readonly locale?: Locale;
   /**
-   * This page opens on a hero photograph (Jan's round-3 point 2). The header
-   * then lies transparent on it — paper-coloured items over the hero's own
-   * top scrim — and turns solid once the hero has scrolled past. A page
-   * without a hero photograph passes `false` and the header is solid
-   * throughout.
+   * This page opens on a hero photograph (Jan's round-3 point 2, re-cut by
+   * his round-4 change request). The header then lies **completely
+   * transparent** on it — no scrim, no hairline, the items straight on the
+   * photograph, each carrying its own 44 px control well where it is not
+   * already a filled control — and turns solid once the hero has scrolled
+   * past. A page without a hero photograph passes `false` and the header is
+   * solid throughout.
    */
   readonly overHero?: boolean;
   readonly className?: string;
@@ -42,8 +44,21 @@ export interface SiteHeaderProps {
  * overlay open or closed). No loading, empty or error state, and identical at
  * every personalization stage (TS-006 D8). No role switcher, no audience tab,
  * no segmented entry: forbidden on every page (TS-006-A9).
- * Inherits: a flat surface, no shadow, no border but a hairline on the solid
- * ground; controls at radius 999; labels in Label-mono.
+ * Inherits: a flat surface, no shadow and no border in either state (SRC-014
+ * §Shape and Space: "Borders and shadows: none" — surface contrast does the
+ * dividing); controls at radius 999; labels in Label-mono.
+ *
+ * **The transparent ground [Jan's change request, round 4 — state/open.md
+ * row 200].** Round 3 painted the header its own ink top scrim and read
+ * paper items off it. Jan's finding on that preview: over the hero the bar
+ * must be *completely* transparent, the photograph uninterrupted. So the
+ * scrim and the hairline are gone and the contrast is per element instead:
+ * the burger sits in a 44 px control well, the four desktop labels share one
+ * well, the calendar pill is already a filled control, the logo carries its
+ * own white ground, and the wordmark — paper text, which no well can save
+ * without a third dark shape in the bar — stands down over the photograph in
+ * favour of the mark alone. Every number is measured per pixel against the
+ * generated hero renditions in use, at 360 and 1280, on all six hero pages.
  * Space: the height is fixed and declared before paint. Over a hero the
  * header is `position: fixed`, so it reserves no space and turning solid
  * moves nothing.

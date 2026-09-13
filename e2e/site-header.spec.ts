@@ -41,6 +41,39 @@ const burger = (page: import("@playwright/test").Page) =>
 const dialog = (page: import("@playwright/test").Page) =>
   page.locator("dialog#site-menu").first();
 
+/**
+ * A colour expression as the browser computes it — a design token, or
+ * `transparent`. The assertions below compare against these rather than
+ * against literals, because TS-017 D3 lets brand values enter the repository
+ * through `app/styles/brand.css` and nowhere else (`pnpm check:brand` fails a
+ * literal even in a comment), and because a token that changes should move
+ * the test with it rather than break it.
+ */
+const computed = (page: import("@playwright/test").Page, value: string) =>
+  page.evaluate((expression) => {
+    const probe = document.createElement("div");
+    probe.style.color = expression;
+    document.body.append(probe);
+    const resolved = getComputedStyle(probe).color;
+    probe.remove();
+    return resolved;
+  }, value);
+
+const INK = "var(--color-neutral-ink)";
+const PAPER = "var(--color-neutral-paper)";
+const LABEL_INK = "var(--color-neutral-text2)";
+const NOTHING = "transparent";
+
+/** `toHaveCSS` with a token on the expected side. */
+async function expectColor(
+  page: import("@playwright/test").Page,
+  locator: import("@playwright/test").Locator,
+  property: "color" | "background-color",
+  token: string,
+) {
+  await expect(locator).toHaveCSS(property, await computed(page, token));
+}
+
 test.describe("TS-004-A8: the header inventory at both widths", () => {
   test("above `xl` the four job labels and the calendar entry are inline", async ({
     page,
@@ -210,5 +243,142 @@ test.describe("TS-009-A8: the header's two grounds, without a layout shift", () 
     await page.setViewportSize(DESKTOP);
     await page.goto("/rechtliches");
     await expect(header(page)).toHaveAttribute("data-solid", "true");
+  });
+});
+
+/**
+ * Jan's round-4 change request (`state/open.md` row 200): over the hero the
+ * header paints **nothing** — no scrim, no hairline — and the contrast comes
+ * from a 44 px control well per item instead. These are the assertions that
+ * would go red if a ground ever crept back in, and the ones that keep the
+ * wells opaque, which is the whole of what makes the measured ratios hold.
+ */
+test.describe("TS-004-A8: completely transparent over the hero, wells instead of a scrim", () => {
+  test("paints no ground and no border while it lies on the photograph", async ({
+    page,
+  }) => {
+    for (const width of [360, 1280]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/");
+      const bar = header(page);
+      await expect(bar).toHaveAttribute("data-solid", "false");
+      await expect(bar).toHaveCSS("background-image", "none");
+      await expectColor(page, bar, "background-color", NOTHING);
+      await expect(bar).toHaveCSS("border-bottom-width", "0px");
+      // The round-3 tail scrim below the bar is gone with it.
+      const tail = await bar.evaluate(
+        (node) => getComputedStyle(node, "::after").content,
+      );
+      expect(tail).toBe("none");
+    }
+  });
+
+  test("the solid ground carries no border either — surface contrast divides", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto("/rechtliches");
+    await expect(header(page)).toHaveCSS("border-bottom-width", "0px");
+  });
+
+  test("the burger sits in an opaque 44 px well over the hero, and in none on paper", async ({
+    page,
+  }) => {
+    await page.setViewportSize(PHONE);
+
+    await page.goto("/");
+    const well = await burger(page).evaluate((node) => {
+      const style = getComputedStyle(node);
+      const box = node.getBoundingClientRect();
+      return {
+        fill: style.backgroundColor,
+        radius: style.borderTopLeftRadius,
+        size: Math.min(box.width, box.height),
+      };
+    });
+    // `ink`, opaque: the stripes' 16.56:1 is a token pair, not a photograph.
+    expect(well.fill).toBe(await computed(page, INK));
+    expect(Number.parseFloat(well.radius)).toBeGreaterThanOrEqual(22);
+    expect(well.size).toBeGreaterThanOrEqual(44);
+
+    await page.goto("/rechtliches");
+    await expectColor(page, burger(page), "background-color", NOTHING);
+  });
+
+  test("the four desktop labels share one opaque well, and `aria-current` stays a fill", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto("/dein-ort");
+
+    const list = header(page).getByRole("navigation", { name: "Startseite" }).locator("ul");
+    await expectColor(page, list, "background-color", INK);
+
+    const current = header(page)
+      .getByRole("navigation", { name: "Startseite" })
+      .locator('a[data-current="true"]');
+    await expect(current).toHaveCount(1);
+    await expect(current).toHaveAttribute("aria-current", "page");
+    // A fill, not colour alone — paper chip, ink label, inside the ink well.
+    await expectColor(page, current, "background-color", PAPER);
+    await expectColor(page, current, "color", INK);
+  });
+
+  test("over the hero the logo stands as the mark alone, without moving anything", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto("/");
+
+    // `.first()` is the bar's own logo: the overlay carries a second one,
+    // and it keeps its wordmark on the ink dialog by design.
+    const wordmark = header(page).locator("[data-wordmark]").first();
+    // Hidden, not removed: the box stays, so turning solid shifts nothing.
+    await expect(wordmark).toHaveCSS("visibility", "hidden");
+    const box = await wordmark.boundingBox();
+    expect(box?.width ?? 0).toBeGreaterThan(0);
+
+    await page.evaluate(() => window.scrollTo(0, 1200));
+    await expect(header(page)).toHaveAttribute("data-solid", "true");
+    await expect(wordmark).toBeVisible();
+    const after = await wordmark.boundingBox();
+    expect(after?.x).toBe(box?.x);
+    expect(after?.width).toBe(box?.width);
+  });
+});
+
+/**
+ * Without JavaScript nothing can observe the hero leaving, so the header
+ * stays solid and in the flow — and, since round 4, so does everything in
+ * it. Round 3 reset only the bar's own ground here and left the four job
+ * labels paper-on-paper (measured 1:1, four invisible links on every hero
+ * page); this is the test that keeps them readable.
+ */
+test.describe("TS-004-A8: without JavaScript the header is solid, items included", () => {
+  test.use({ javaScriptEnabled: false });
+
+  test("solid ground, solid items", async ({ page }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto("/");
+    const bar = header(page);
+
+    await expectColor(page, bar, "background-color", PAPER);
+    await expect(bar).toHaveCSS("position", "sticky");
+    await expect(bar).toHaveCSS("background-image", "none");
+
+    const job = bar.getByRole("navigation", { name: "Startseite" }).getByRole("link").first();
+    await expectColor(page, job, "color", LABEL_INK);
+    await expectColor(
+      page,
+      bar.getByRole("navigation", { name: "Startseite" }).locator("ul"),
+      "background-color",
+      NOTHING,
+    );
+    await expect(bar.locator("[data-wordmark]").first()).toBeVisible();
+
+    // The calendar entry goes back to the "primary on light" pair as well.
+    const cta = bar.getByRole("link", { exact: true, name: CALENDAR });
+    await expectColor(page, cta, "background-color", INK);
+    await expectColor(page, cta, "color", PAPER);
   });
 });

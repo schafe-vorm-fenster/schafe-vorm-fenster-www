@@ -67,7 +67,12 @@ export function Logo({
         width={40}
       />
       {variant === "wordmark" ? (
-        <span className={styles.wordmark}>
+        // `data-wordmark` is the hook the header uses to stand the mark alone
+        // while it lies on a hero photograph (`site-header.module.css`). It
+        // is an attribute rather than a prop because the state that decides
+        // it — has the hero scrolled past? — belongs to the header at
+        // runtime, and this logo is server-rendered inside it.
+        <span className={styles.wordmark} data-wordmark="true">
           {WORDMARK_LINES.map((line, index) => (
             <Fragment key={line}>
               {/* F-3-1: the separator that makes the accessible name right.

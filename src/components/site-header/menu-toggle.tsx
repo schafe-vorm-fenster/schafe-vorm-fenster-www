@@ -15,8 +15,12 @@ export interface MenuToggleProps {
  * The phone header's disclosure control — Jan's round-3 point 3.
  *
  * Structure: three stripes in a radius-999 touch target of at least 44 px
- * (SRC-014 §Shape and Space). The `close` variant draws the same three, the
- * middle one gone and the outer two crossed.
+ * (SRC-014 §Shape and Space) — which is exactly the **control well** §Icons
+ * sanctions, so over a hero photograph the same square is filled with ink
+ * and the stripes turn paper (16.56:1, whatever the photograph does), while
+ * on the solid ground the fill is `transparent` and nothing about the
+ * control changes. The `close` variant draws the same three, the middle one
+ * gone and the outer two crossed.
  * States: none of its own; the header's state machine owns open/closed.
  * Inherits: radius 999, no border, no shadow, the shell's focus ring.
  * Space: a fixed square, so the bar's height is known before paint.
