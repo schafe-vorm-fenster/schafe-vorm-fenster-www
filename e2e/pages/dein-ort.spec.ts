@@ -108,10 +108,22 @@ test.describe("TS-020 — your place", () => {
     await page.setViewportSize(DESKTOP);
     await page.goto(`/dein-ort?ort=${slug}`);
 
+    // SRC-002's sentence belongs to this page and stands once, as the `h1`.
+    // It used to stand twice — as the headline and again, verbatim, as the
+    // first line of the block right under it (brief, page 2: the second
+    // identical heading goes away).
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      /noch nichts eingetragen/i,
+    );
+    expect(
+      ((await page.locator("#main").innerText()).match(/noch nichts eingetragen/gi) ?? []).length,
+    ).toBe(1);
+
     const dates = page.locator("#place-dates");
     // TS-008 D4: a covered place with zero dates is the conversion moment,
-    // not an error — the publish offer *occupies* the module slot.
-    await expect(dates.locator("text=/noch nichts eingetragen/i")).toHaveCount(1);
+    // not an error — the publish offer *occupies* the module slot, with its
+    // own line over the button rather than the headline's sentence again.
+    await expect(dates.locator("p").first()).not.toBeEmpty();
     // No empty list, no error styling, no retry control.
     await expect(dates.locator("button")).toHaveCount(0);
 
