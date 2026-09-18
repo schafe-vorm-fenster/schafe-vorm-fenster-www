@@ -27,11 +27,25 @@
  * hydrates.
  */
 
-/** The four external origins of TS-014 D1. No fifth. */
+/**
+ * The external origins of TS-014 D1. Every one of them is Jan's own
+ * infrastructure except eTracker, which is the one named third party.
+ *
+ * `assets` joined the table on 2026-09-18, when the real Portalize calendar
+ * was embedded on `/dein-kalender` (state/open.md row 82). The widget renders
+ * event images straight from the events data, and the embedded calendar's
+ * images all come from the ecosystem's own asset host — so this is one host,
+ * ours, in one directive (`img-src`), added because a real embed genuinely
+ * needs it. It is also **why that particular calendar was chosen**: a
+ * region-wide one carries images from municipal websites, and allow-listing
+ * those would put a visitor's IP on hosts we do not run.
+ */
 export const ALLOWLIST = {
   etracker: "https://code.etracker.com",
   portalize: "https://portalize.schafe-vorm-fenster.de",
   envoy: "https://envoy-api.api.schafe-vorm-fenster.de",
+  /** The ecosystem's image proxy — the embedded calendar's event images. */
+  assets: "https://assets.api.schafe-vorm-fenster.de",
   /** TS-014 D1: named by WEB-Q-030, but active in no directive today. */
   app: "https://app.schafe-vorm-fenster.de",
 } as const;
@@ -76,7 +90,7 @@ export function policyDirectives({
 }: PolicyInput): Record<string, readonly string[]> {
   const isDev = environment === "development";
   const isPreview = environment === "preview";
-  const { etracker, portalize, envoy } = ALLOWLIST;
+  const { etracker, portalize, envoy, assets } = ALLOWLIST;
   // F-2-36: only a well-formed hash source is interpolated. A rejected entry
   // is dropped rather than escaped — there is no legitimate `script-src`
   // hash this predicate refuses, so anything it refuses is a defect or an
@@ -143,7 +157,10 @@ export function policyDirectives({
     // TS-014 D2: the one bounded concession — Next inlines critical CSS and
     // both web components style their shadow roots inline.
     "style-src": ["'self'", "'unsafe-inline'"],
-    "img-src": ["'self'", "data:", etracker],
+    // `assets` carries the embedded Portalize calendar's event images; the
+    // widget sets them from the events data, so they are real requests from
+    // the visitor's browser and need a real source (TS-014 D1).
+    "img-src": ["'self'", "data:", etracker, assets],
     "font-src": ["'self'"],
     "connect-src": connectSrc,
     "media-src": ["'self'"],

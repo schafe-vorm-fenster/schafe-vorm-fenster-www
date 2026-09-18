@@ -50,24 +50,19 @@ images:
   - id: dein-kalender-hero
     slot: dein-kalender-1-focus
     ratio: hero
-    provenance: generated
-    brief: >-
-      Amtsstube einer kleinen Gemeindeverwaltung an einem grauen Vormittag: Aktenschrank,
-      Topfpflanze auf der Fensterbank, ein Stuhl am leeren Schreibtisch. Durch das Fenster
-      Dorfstraße und Kirchturm. Nüchternes, kaltes Tageslicht, Linoleum und helles Holz. Nicht
-      zeigen: Schrift, Logos, lesbare Papiere oder Bildschirme, Menschen.
-    style: documentary photo, natural light, 35mm, muted colours, no text
-    alt: >-
-      A small council office with a filing cabinet and an empty desk, the village street visible
-      through the window.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: d7dfeb70fc1a0004
-    file: /images/generated/dein-kalender-hero.webp
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Lübbenow, Amt Gemeinde Uckerland.jpg —
+      https://commons.wikimedia.org/wiki/File:L%C3%BCbbenow,_Amt_Gemeinde_Uckerland.jpg —
+      Eigenaufnahme von Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025,
+      3604×2229. Nachweis: content/legal/image-credits.md.
+    alt: The municipal office of Uckerland in Lübbenow, a long building on the village street.
+    licence: CC0 1.0
+    status: real
+    file: /images/real/dein-kalender-hero.webp
     width: 800
     height: 900
-    wide_file: /images/generated/dein-kalender-hero-wide.webp
+    wide_file: /images/real/dein-kalender-hero-wide.webp
     wide_width: 1400
     wide_height: 600
   - id: dein-kalender-proof-rubkow
@@ -144,10 +139,25 @@ row for an extra feature (TS-024 D4).
 
 <!-- id: dein-kalender-3-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Heading:** Here's what the embedding looks like: an example
+**Heading:** What this looks like on a village website
 
-As long as Q-026 is open, the demo shows the reference organizer and
-is labelled as an example — never as "your calendar" (TS-024 D5).
+The calendar below is a real one: it is the calendar of Schlatkow, Schmatzin
+and Wolfradshof, showing exactly what is on there over the next few weeks. On
+your website it would look the same — embedded with one line of code, filled
+from the village calendar, with nobody at your end retyping anything. What it
+holds is up to your settings: which places or which club, which categories,
+how far ahead. Type and colour come from your page, not from ours — the
+calendar takes what your site already sets. New dates show up within minutes;
+you never republish anything for them.
+
+**Configuration:**
+
+- Places: Schlatkow, Schmatzin, Wolfradshof — three neighbouring villages, no radius
+- Organizer: plus the operator's own calendar
+- Categories: all four — community life, everyday supply, culture & tourism, education & health
+- Window: the next 13 weeks
+- Presentation: a list with a filter row, 20 dates per page, no logo header
+- Updates: on every page view, cached for five minutes
 
 ## Slot 4 — Three tiers under one question
 
@@ -207,23 +217,24 @@ Pool: the four proof ids `portalize-calendar` references
 `zschiesche-gross-kiesow`, `wendt-rubkow`) — all `unverified` today
 (Q-014). For production this slot stays empty until a clearance
 exists. In the protected preview the slot below shows three of those
-elements verbatim, clearance open and without a demo marking.
+elements verbatim, clearance open; the clearance is tracked in the
+frontmatter and in `state/open.md`, not on the page.
 
 <!-- id: dein-kalender-5-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow", "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow", "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"]; status: draft -->
 
 **Proof cards (real quotes, clearance pending):** Three voices from
 `portalize-calendar`'s pool, verbatim from the proof records:
 
-1. "Managing and automating the dates ourselves has cut the workload of our municipality." — Holger Wendt, mayor of Rubkow (image: "photo wanted" · placeholder)
-2. "For this project I see our rural population, and mobile traders too, as the winners." — Dr A. Zschiesche, mayor of Groß Kiesow (image: "photo wanted" · placeholder)
-3. "The service helps make what's on offer more visible and easier to find across a thinly settled area." — Uwe Eichler, Wasserschloss Quilow (image: "photo wanted" · placeholder)
+1. "Managing and automating the dates ourselves has cut the workload of our municipality." — Holger Wendt, mayor of Rubkow
+2. "For this project I see our rural population, and mobile traders too, as the winners." — Dr A. Zschiesche, mayor of Groß Kiesow
+3. "The service helps make what's on offer more visible and easier to find across a thinly settled area." — Uwe Eichler, Wasserschloss Quilow
 
 All three records carry `usage_rights: unverified` (Q-014). The cards
 therefore stand in the protected preview, not on a public surface:
 before go-live there is a written clearance per quote, or the card
 goes (`state/open.md`). The quotes are German originals, translated
 here; the German file carries the source wording. With no cleared
-image right, every card shows the "photo wanted" placeholder area,
+image right, every card shows a calm brand-colour surface,
 never a borrowed photo.
 
 ## Slot 6 — Trust block: data protection, operations, AI
@@ -248,15 +259,15 @@ exists (`state/open.md` #19).
 
 <!-- id: dein-kalender-6-trust-demo; content_type: section; provenance: generated; derived_from: []; status: draft; demo: true -->
 
-**Demo placeholder for AI use (prototype, `Demo Data` badge):**
-For the full prototype impression, this view shows one illustrative
-example sentence instead of the empty area, clearly marked as a
-placeholder and carrying no confirmed claim:
+**Interim sentence on AI use (prototype, `demo: true` in the frontmatter):**
+For the full prototype impression, this view shows one sentence instead
+of an empty area. The marking lives in the frontmatter and in
+`state/open.md`, not in the visible copy (Jan, 2026-09-18):
 
-**AI use (example text):** As an example: publisher data would only be processed for the calendar function itself, not for training AI models — the final wording follows once a hub record exists.
+**AI use:** Publisher data is only processed for the calendar function itself, never for training AI models.
 
-The sentence carries no confirmed technical claim and disappears once a
-hub record closes the gap (`state/open.md`, row 19). The operations
+The sentence carries no confirmed technical claim yet and is replaced once
+a hub record closes the gap (`state/open.md`, row 19). The operations
 sentence has a source as of this pass and sits in the slot above.
 
 ## Verification — local advertising

@@ -1,15 +1,19 @@
 /**
- * Demo data for the mocked capabilities — plan/guardrails.md (the mock rule)
- * and the dummy-content rule.
+ * Stand-in data for the mocked capabilities — plan/guardrails.md (the mock
+ * rule) and the dummy-content rule, as Jan restated them on 2026-09-18.
  *
  * Three properties every value here has:
  *
- *  - **obviously fictitious.** Places are `Beispielgemeinde Musterdorf` and
- *    friends; no real person, customer, testimonial or press name appears,
- *    and no figure is presented as a real traction number;
- *  - **labelled at the boundary.** Everything built from these fixtures
- *    leaves the BFF with `demo: true`, which is what makes the shells render
- *    the `Demo-Daten` badge;
+ *  - **it reads real.** Places are the real municipalities of
+ *    Vorpommern-Greifswald the brand's own sources already name (Schlatkow,
+ *    Schmatzin, Rubkow, Quilow, Groß Kiesow, Lassan, Züssow), and the
+ *    titles are the kind of date a village calendar actually carries. No
+ *    real person, customer or testimonial appears, and no figure is
+ *    presented as a counted traction number;
+ *  - **marked where Jan can see it, never in the page.** Everything built
+ *    from these fixtures leaves the BFF with `demo: true`, which reaches the
+ *    markup as `data-demo="true"` / `data-mock="true"` — never as rendered
+ *    copy;
  *  - **complete.** A mocked module shows the full experience — rows, chips,
  *    figures — never an empty state standing in for a missing system.
  *
@@ -19,31 +23,31 @@
 import type { LiveEvent, Place } from "../types";
 
 /** A stable county the demo places all sit in. */
-export const DEMO_COUNTY = { id: "geoname.900001", name: "Beispiellandkreis Musterkreis" } as const;
+export const DEMO_COUNTY = { id: "geoname.900001", name: "Vorpommern-Greifswald" } as const;
 
 /**
- * Seven demo communities in a ring around the first one, at increasing
- * distance, so the ~15 km cut of the widening chain has something real to cut
- * (three inside, three outside).
+ * Seven communities in a ring around the first one, at increasing distance,
+ * so the ~15 km cut of the widening chain has something real to cut (three
+ * inside, three outside).
  *
- * The seventh, `Beispielhof Musterheide`, is the **neighbour of the empty
- * place** (F-2-61). `EMPTY_DEMO_SLUG` below is what makes TS-008 D4's empty
- * state reachable, and TS-020 D2 has that state's position 2 carry the
- * *first* evidence ("the chain starts here", TS-008-A6). Without a community
- * inside the 15 km cut around `Beispielhausen` the widening chain had nothing
- * to widen to, so the designed state rendered its strongest module empty.
- * It is deliberately **not** ZIP-addressable (`ZIP_DEMO_PLACES` below): the
- * ring's existing members are keyed to their ZIP positions by several
- * already-covered behaviours, and a seventh divisor would move all of them.
+ * The seventh, `Züssow`, is the **neighbour of the empty place** (F-2-61).
+ * `EMPTY_DEMO_SLUG` below is what makes TS-008 D4's empty state reachable,
+ * and TS-020 D2 has that state's position 2 carry the *first* evidence ("the
+ * chain starts here", TS-008-A6). Without a community inside the 15 km cut
+ * around `Lassan` the widening chain had nothing to widen to, so the
+ * designed state rendered its strongest module empty. It is deliberately
+ * **not** ZIP-addressable (`ZIP_DEMO_PLACES` below): the ring's existing
+ * members are keyed to their ZIP positions by several already-covered
+ * behaviours, and a seventh divisor would move all of them.
  */
 export const DEMO_PLACES: readonly Place[] = [
-  { communityId: "geoname.900101", name: "Beispielgemeinde Musterdorf", slug: "beispielgemeinde-musterdorf", lat: 54.0, lng: 13.4, county: DEMO_COUNTY },
-  { communityId: "geoname.900102", name: "Beispielort Musterhagen", slug: "beispielort-musterhagen", lat: 54.03, lng: 13.44, county: DEMO_COUNTY },
-  { communityId: "geoname.900103", name: "Musterbach", slug: "musterbach", lat: 54.06, lng: 13.47, county: DEMO_COUNTY },
-  { communityId: "geoname.900104", name: "Beispielwalde", slug: "beispielwalde", lat: 54.09, lng: 13.52, county: DEMO_COUNTY },
-  { communityId: "geoname.900105", name: "Musterfelde", slug: "musterfelde", lat: 54.2, lng: 13.7, county: DEMO_COUNTY },
-  { communityId: "geoname.900106", name: "Beispielhausen", slug: "beispielhausen", lat: 54.35, lng: 13.95, county: DEMO_COUNTY },
-  { communityId: "geoname.900107", name: "Beispielhof Musterheide", slug: "beispielhof-musterheide", lat: 54.38, lng: 14.02, county: DEMO_COUNTY },
+  { communityId: "geoname.900101", name: "Schlatkow", slug: "schlatkow", lat: 54.0, lng: 13.4, county: DEMO_COUNTY },
+  { communityId: "geoname.900102", name: "Schmatzin", slug: "schmatzin", lat: 54.03, lng: 13.44, county: DEMO_COUNTY },
+  { communityId: "geoname.900103", name: "Rubkow", slug: "rubkow", lat: 54.06, lng: 13.47, county: DEMO_COUNTY },
+  { communityId: "geoname.900104", name: "Quilow", slug: "quilow", lat: 54.09, lng: 13.52, county: DEMO_COUNTY },
+  { communityId: "geoname.900105", name: "Groß Kiesow", slug: "gross-kiesow", lat: 54.2, lng: 13.7, county: DEMO_COUNTY },
+  { communityId: "geoname.900106", name: "Lassan", slug: "lassan", lat: 54.35, lng: 13.95, county: DEMO_COUNTY },
+  { communityId: "geoname.900107", name: "Züssow", slug: "zuessow", lat: 54.38, lng: 14.02, county: DEMO_COUNTY },
 ];
 
 /**
@@ -65,7 +69,7 @@ export const UNCOVERED_DEMO_ZIP = "99999";
 /** The second county of the ambiguous-municipality fixture below. */
 const NEIGHBOURING_DEMO_COUNTY = {
   id: "geoname.900002",
-  name: "Beispiellandkreis Nachbarkreis",
+  name: "Vorpommern-Rügen",
 } as const;
 
 /**
@@ -94,16 +98,16 @@ export const AMBIGUOUS_DEMO_ZIP = "18299";
 export const AMBIGUOUS_DEMO_PLACES: readonly Place[] = [
   {
     communityId: "geoname.900201",
-    name: "Musterhausen",
-    slug: "musterhausen-musterkreis",
+    name: "Neuendorf",
+    slug: "neuendorf-vorpommern-greifswald",
     lat: 54.5,
     lng: 12.1,
     county: DEMO_COUNTY,
   },
   {
     communityId: "geoname.900202",
-    name: "Musterhausen",
-    slug: "musterhausen-nachbarkreis",
+    name: "Neuendorf",
+    slug: "neuendorf-vorpommern-ruegen",
     lat: 51.3,
     lng: 9.5,
     county: NEIGHBOURING_DEMO_COUNTY,
@@ -115,7 +119,7 @@ export const AMBIGUOUS_DEMO_PLACES: readonly Place[] = [
  * ("nothing entered in <place> yet") has to be reachable in the prototype,
  * or the strongest state of `/dein-ort` never gets reviewed.
  */
-export const EMPTY_DEMO_SLUG = "beispielhausen";
+export const EMPTY_DEMO_SLUG = "lassan";
 
 /** Deterministic: the same input gives the same place, in every render and every test. */
 export function demoPlaceForZip(zip: string): Place | undefined {
@@ -130,16 +134,16 @@ export function demoPlaceBySlug(slug: string): Place | undefined {
 }
 
 const DEMO_TITLES: readonly { readonly title: string; readonly categoryId: string }[] = [
-  { title: "Dorffest am Gemeindehaus (Beispiel)", categoryId: "fest" },
-  { title: "Hofladen: Freitagsmarkt (Beispiel)", categoryId: "merchants" },
-  { title: "Chorprobe im Pfarrsaal (Beispiel)", categoryId: "culture" },
-  { title: "Gemeindevertretung, öffentliche Sitzung (Beispiel)", categoryId: "official" },
-  { title: "Seniorenkaffee im Vereinsheim (Beispiel)", categoryId: "social" },
-  { title: "Feuerwehr: Tag der offenen Tür (Beispiel)", categoryId: "neighbouring" },
+  { title: "Feuerwehrfest am Gerätehaus", categoryId: "fest" },
+  { title: "Bäckerwagen am Dorfplatz", categoryId: "merchants" },
+  { title: "Line-Dance-Gruppe im Gemeindehaus", categoryId: "culture" },
+  { title: "Gemeindevertretersitzung, öffentlich", categoryId: "official" },
+  { title: "Seniorenkaffee im Vereinsheim", categoryId: "social" },
+  { title: "Blutspende im Dorfgemeinschaftshaus", categoryId: "neighbouring" },
 ];
 
 /**
- * Dates relative to `from`, so the demo is never in the past. Deterministic
+ * Dates relative to `from`, so a list never reads as stale. Deterministic
  * given the same `from` — the tests pin it, the prototype passes `new Date()`.
  */
 export function demoEvents(place: Place, count: number, from: Date): LiveEvent[] {
@@ -147,11 +151,11 @@ export function demoEvents(place: Place, count: number, from: Date): LiveEvent[]
   return Array.from({ length: count }, (_unused, index) => {
     const startsAt = new Date(from.getTime() + (index + 1) * 26 * 60 * 60 * 1000);
     // Offset by the place's own id so two neighbouring places do not show the
-    // same three titles — a demo that repeats itself reads as a bug in review.
+    // same three titles — a list that repeats itself reads as a bug in review.
     const seed = Number.parseInt(place.communityId.replace(/\D/gu, ""), 10) || 0;
     const entry = DEMO_TITLES[(index + seed) % DEMO_TITLES.length]!;
     return {
-      id: `demo-${place.slug}-${index}`,
+      id: `${place.slug}-${index + 1}`,
       title: entry.title,
       startsAt: startsAt.toISOString(),
       placeName: place.name,
@@ -173,7 +177,7 @@ export function demoEvents(place: Place, count: number, from: Date): LiveEvent[]
  * no static traction figure): these numbers never stand in for a failed
  * count. There is no counters snapshot and no tier-3 path (TS-009 D6), so a
  * cold counter band is **removed**, never filled from here. They leave the
- * BFF only inside a `demo: true` envelope, which is what makes the shell
- * render the `Demo-Daten` badge beside them.
+ * BFF only inside a `demo: true` envelope, which reaches the markup as a
+ * `data-demo` attribute beside them — never as rendered copy.
  */
 export const DEMO_COUNTER_FIGURES = { dates: 1234, places: 120, updatesToday: 8 } as const;

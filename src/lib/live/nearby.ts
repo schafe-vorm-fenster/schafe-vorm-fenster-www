@@ -45,10 +45,10 @@ export async function nearbyEvents({
 }: NearbyInput): Promise<LiveEnvelope<NearbyEvents>> {
   const realGeo = hasRealBackend("placesNearPoint");
   const realEvents = hasRealBackend("eventsSearch");
-  // Both halves through the public village-calendar site: its own proximity
-  // proxy for the ring, its community page for the dates. One source, so the
+  // The public path: the committed index cuts the radius, the village
+  // calendar's community page carries the dates. Both halves real, so the
   // module is either entirely real or entirely demo — never half of each.
-  const viaPublic = hasRealBackend("placesNearPointPublic") && hasRealBackend("eventsByCommunityPublic");
+  const viaPublic = hasRealBackend("placesNearPointIndex") && hasRealBackend("eventsByCommunityPublic");
   const clock = now ?? (() => new Date());
   const anchor = { lat, lng };
 

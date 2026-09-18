@@ -71,8 +71,8 @@ export const CAPABILITIES = {
   placeSearchByName: { service: "index", credential: "none", upstream: true, openRow: "5" },
   /** geo-api proximity search — exists, but with a fixed radius (open row 5). */
   placesNearPoint: { service: "geo", credential: "token", upstream: true, openRow: "5" },
-  /** The same proximity search through the village calendar's own public proxy. */
-  placesNearPointPublic: { service: "communitySite", credential: "none", upstream: true, openRow: undefined },
+  /** The ~15 km cut, made locally against the committed index — no cap, no credential. */
+  placesNearPointIndex: { service: "index", credential: "none", upstream: true, openRow: "5" },
   /** geo-api slug lookup — exists, token-scoped. */
   communityBySlug: { service: "geo", credential: "token", upstream: true, openRow: undefined },
   /** The same lookup out of the committed index — no network, no credential. */

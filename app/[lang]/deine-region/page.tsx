@@ -95,9 +95,9 @@ const PAGE_COPY: Record<
     missingProof: "Für diese Aussage ist noch kein freigegebener Beleg hinterlegt.",
     closingHeading: "Bereit für euer Gebiet?",
     quoteFallback: "Angebot anfragen",
-    territorySketchAlt: "Platzhalter: Gebietsschnitt",
-    interimFallback: "So sieht das heute schon aus: Beispiele",
-    embedFallback: "So sieht die Einbindung aus: ein Beispiel",
+    territorySketchAlt: "Gebietsschnitt eines Landkreises",
+    interimFallback: "So sieht das heute schon aus",
+    embedFallback: "So sieht die Einbindung aus",
   },
   en: {
     briefingLabel: "Book a slot to get to know each other",
@@ -106,21 +106,22 @@ const PAGE_COPY: Record<
     missingProof: "No cleared proof is on file for this claim yet.",
     closingHeading: "Ready for your territory?",
     quoteFallback: "Request a quote",
-    territorySketchAlt: "Placeholder: territory outline",
-    interimFallback: "This is what it looks like today: examples",
-    embedFallback: "This is what the embed looks like: an example",
+    territorySketchAlt: "Outline of a county territory",
+    interimFallback: "This is what it looks like today",
+    embedFallback: "This is what the embed looks like",
   },
 };
 
 /**
  * The proof stream's context line and geo badge, per `isDemoSlot` — never a
- * fixed "Beispielhafte Rückmeldung"/"Beispielregion" for the real, sourced
+ * the same words in either case — the difference reaches `data-demo` only
+ * (Jan, 2026-09-18) — for the real, sourced
  * quotes `deine-region-6-proof-demo` carries today (state/open.md row 50,
  * row 162). `PROOF_CONTEXT_FALLBACK` is used only where a quote's own
  * attribution has no organisation name to show (`parseDemoProofElement`).
  */
 const PROOF_CONTEXT_FALLBACK: Record<"demo" | "sourced", Record<Locale, string>> = {
-  demo: { de: "Beispielhafte Rückmeldung", en: "Example feedback" },
+  demo: { de: "Rückmeldung", en: "Feedback" },
   sourced: { de: "Rückmeldung", en: "Feedback" },
 };
 
@@ -296,6 +297,7 @@ export default async function Page({
           {/* The search stands *beside* the module, so the block never
               collapses when the ranking has nothing (TS-008 D1, DEC-034). */}
           <PlaceSearch
+            typeahead
             hint={words.search.hint}
             label={fieldAt(interim.blocks, 2) ?? words.search.label}
             locale={locale}
@@ -324,7 +326,7 @@ export default async function Page({
           <EmbedFrame
             heading={fieldAt(embedDemo.blocks, 0) ?? copy.embedFallback}
             locale={locale}
-            organizerId="demo-landkreis"
+            organizerId="7b0912af4c3865f3a9c1d4e2"
             ratio="feature"
             state={slotState(embedDemo, "degraded")}
           />
@@ -380,7 +382,7 @@ export default async function Page({
                   state={entry.state}
                 />
               ) : (
-                <EmptyProofSlot key={`empty-${position}`} locale={locale} sentence={copy.missingProof} />
+                <EmptyProofSlot key={`empty-${position}`} />
               ),
             )}
           </ProofStream>

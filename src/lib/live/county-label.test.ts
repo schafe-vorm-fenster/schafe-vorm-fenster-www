@@ -9,7 +9,7 @@ describe("F-2-73: a geo-api identifier is never a label", () => {
   });
 
   it("does not mistake a written-out county for an identifier", () => {
-    expect(isGeoIdentifier("Beispiellandkreis Musterkreis")).toBe(false);
+    expect(isGeoIdentifier("Vorpommern-Greifswald")).toBe(false);
     expect(isGeoIdentifier("Landkreis Vorpommern-Greifswald")).toBe(false);
     // A name with a full stop in it — "St. Wendel" is a real county.
     expect(isGeoIdentifier("Landkreis St. Wendel")).toBe(false);
@@ -18,11 +18,11 @@ describe("F-2-73: a geo-api identifier is never a label", () => {
 
 describe("F-2-73: countyLabel answers a written-out label in both languages", () => {
   it("hands back a real county name unchanged", () => {
-    expect(countyLabel("Beispiellandkreis Musterkreis", "de")).toBe(
-      "Beispiellandkreis Musterkreis",
+    expect(countyLabel("Vorpommern-Greifswald", "de")).toBe(
+      "Vorpommern-Greifswald",
     );
-    expect(countyLabel("Beispiellandkreis Musterkreis", "en")).toBe(
-      "Beispiellandkreis Musterkreis",
+    expect(countyLabel("Vorpommern-Greifswald", "en")).toBe(
+      "Vorpommern-Greifswald",
     );
   });
 

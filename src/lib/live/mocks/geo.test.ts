@@ -87,9 +87,9 @@ describe("F-2-61: the empty demo place has a neighbour inside the ~15 km cut", (
     // The ring gained a member for a proximity reason; the ZIP modulo runs
     // over the unchanged first six, so no already-covered walk moves.
     expect(ZIP_DEMO_PLACES).toHaveLength(6);
-    expect(demoPlaceForZip("07743")?.slug).toBe("beispielwalde");
+    expect(demoPlaceForZip("07743")?.slug).toBe("quilow");
     expect(demoPlaceForZip("38165")?.slug).toBe(EMPTY_DEMO_SLUG);
-    expect(demoPlaceForZip("17390")?.slug).toBe("musterbach");
+    expect(demoPlaceForZip("17390")?.slug).toBe("rubkow");
     for (const place of ZIP_DEMO_PLACES) expect(DEMO_PLACES).toContain(place);
   });
 });

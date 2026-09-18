@@ -27,6 +27,7 @@
  */
 
 import index from "@/src/generated/snapshots/communities.json";
+import { haversineKm } from "./widening";
 
 import type { Place } from "./types";
 
@@ -123,4 +124,35 @@ export function placeByCommunityId(communityId: string): Place | undefined {
  */
 export function communityRouteSlugFor(place: Place): string {
   return `${place.slug}.${place.communityId.replace(/^geoname\./u, "")}`;
+}
+
+/**
+ * The covered communities within `radiusKm` of a point, nearest first.
+ *
+ * geo-api's proximity search exists but is token-scoped and runs against its
+ * own fixed radius constant (TS-008 D2.2, Q-038); the village calendar's
+ * public proxy in front of it answers five. The index has every community's
+ * own coordinate, so the ~15 km cut of TS-008 D3 step 2 can be made **here**,
+ * exactly, for free, and without a cap that would truncate it.
+ */
+export function placesWithin(
+  point: { readonly lat: number; readonly lng: number },
+  radiusKm: number,
+): Place[] {
+  return ENTRIES.flatMap((entry) => {
+    const distance = haversineKm(point, entry);
+    return distance <= radiusKm ? [{ place: toPlace(entry), distance }] : [];
+  })
+    .sort((a, b) => a.distance - b.distance)
+    .map(({ place }) => place);
+}
+
+/** The covered community a coordinate sits in or next to. */
+export function nearestPlace(point: { readonly lat: number; readonly lng: number }): Place | undefined {
+  let best: { place: Place; distance: number } | undefined;
+  for (const entry of ENTRIES) {
+    const distance = haversineKm(point, entry);
+    if (best === undefined || distance < best.distance) best = { place: toPlace(entry), distance };
+  }
+  return best?.place;
 }

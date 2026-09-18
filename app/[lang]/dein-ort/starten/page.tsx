@@ -138,7 +138,7 @@ export default async function PlaceStartPage({
    * the answer to "geo-api has no community for that". The moment it *does*
    * — the place was added, or the visitor arrived on a stale link — the page
    * is the wrong one, and the visitor belongs on `/dein-ort?ort=<slug>`.
-   * Before this, a covered place like `beispielwalde` was told in its own
+   * Before this, a covered place like `quilow` was told in its own
    * name that it "steht noch nicht im Dorfkalender".
    *
    * Exactly one hop, and the campaign parameters survive it (TS-023 D4's
@@ -290,6 +290,7 @@ export default async function PlaceStartPage({
         <SectionShell id="search-again" labelledBy="search-again-heading" surface="lime-100">
           <h2 id="search-again-heading">{fieldAt(searchAgain.blocks, 0)}</h2>
           <PlaceSearch
+            typeahead
             hint={fieldAt(searchAgain.blocks, 2) ?? copy.searchHint}
             id="ort-suche-nochmal"
             label={fieldAt(searchAgain.blocks, 1) ?? copy.searchLabel}

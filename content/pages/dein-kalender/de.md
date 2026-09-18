@@ -50,22 +50,21 @@ images:
   - id: dein-kalender-hero
     slot: dein-kalender-1-focus
     ratio: hero
-    provenance: generated
-    brief: >-
-      Amtsstube einer kleinen Gemeindeverwaltung an einem grauen Vormittag: Aktenschrank,
-      Topfpflanze auf der Fensterbank, ein Stuhl am leeren Schreibtisch. Durch das Fenster
-      Dorfstraße und Kirchturm. Nüchternes, kaltes Tageslicht, Linoleum und helles Holz. Nicht
-      zeigen: Schrift, Logos, lesbare Papiere oder Bildschirme, Menschen.
-    style: documentary photo, natural light, 35mm, muted colours, no text
-    alt: Amtsstube mit Aktenschrank und leerem Schreibtisch, durch das Fenster die Dorfstraße.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: d7dfeb70fc1a0004
-    file: /images/generated/dein-kalender-hero.webp
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Lübbenow, Amt Gemeinde Uckerland.jpg —
+      https://commons.wikimedia.org/wiki/File:L%C3%BCbbenow,_Amt_Gemeinde_Uckerland.jpg —
+      Eigenaufnahme von Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025,
+      3604×2229. Nachweis: content/legal/image-credits.md.
+    alt: >-
+      Das Amtsgebäude der Gemeinde Uckerland in Lübbenow, ein langgestrecktes Haus an der
+      Dorfstraße.
+    licence: CC0 1.0
+    status: real
+    file: /images/real/dein-kalender-hero.webp
     width: 800
     height: 900
-    wide_file: /images/generated/dein-kalender-hero-wide.webp
+    wide_file: /images/real/dein-kalender-hero-wide.webp
     wide_width: 1400
     wide_height: 600
   - id: dein-kalender-proof-rubkow
@@ -142,10 +141,26 @@ fünfte Zeile für ein zusätzliches Feature (TS-024 D4).
 
 <!-- id: dein-kalender-3-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Überschrift:** So sieht die Einbindung aus: ein Beispiel
+**Überschrift:** So sieht das auf einer Gemeindeseite aus
 
-Solange Q-026 offen ist, zeigt die Demo den Referenz-Organizer und ist
-als Beispiel beschriftet — nie als „euer Kalender" (TS-024 D5).
+Der Kalender hier drunter ist echt: Es ist der Kalender von Schlatkow,
+Schmatzin und Wolfradshof, und er zeigt genau das, was dort in den nächsten
+Wochen ansteht. Auf eurer Website sähe er genauso aus — eingebunden mit einer
+Zeile Code, gefüllt aus dem Dorfkalender, ohne dass jemand bei euch etwas
+abtippt. Was drinsteht, bestimmt ihr über die Einstellungen: welche Orte oder
+welcher Verein, welche Kategorien, wie weit nach vorn. Schrift und Farben
+kommen aus eurer Seite, nicht aus unserer — der Kalender übernimmt, was bei
+euch schon eingestellt ist. Neue Termine sind nach wenigen Minuten drin; ihr
+müsst dafür nichts neu veröffentlichen.
+
+**Konfiguration:**
+
+- Orte: Schlatkow, Schmatzin, Wolfradshof — drei Nachbardörfer, kein Radius
+- Veranstalter: zusätzlich der eigene Kalender des Betreibers
+- Kategorien: alle vier — Gemeindeleben, Versorgung, Kultur & Tourismus, Bildung & Gesundheit
+- Zeitraum: die nächsten 13 Wochen
+- Darstellung: Liste mit Filterzeile, 20 Termine je Seite, kein Logo-Kopf
+- Aktualisierung: bei jedem Seitenaufruf, fünf Minuten zwischengespeichert
 
 ## Slot 4 — Drei Tarife unter einer Frage
 
@@ -205,16 +220,17 @@ Pool: die vier Proof-IDs, auf die `portalize-calendar` verweist
 `zschiesche-gross-kiesow`, `wendt-rubkow`) — alle heute `unverified`
 (Q-014). Für Produktion bleibt dieser Slot leer, bis eine Freigabe
 vorliegt. Im geschützten Preview zeigt der Slot darunter drei dieser
-Elemente im Wortlaut, mit offener Freigabe und ohne Demo-Kennzeichnung.
+Elemente im Wortlaut, mit offener Freigabe; die Freigabe wird im
+Frontmatter und in `state/open.md` geführt, nicht auf der Seite.
 
 <!-- id: dein-kalender-5-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow", "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow", "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"]; status: draft -->
 
 **Belegkarten (echte Zitate, Freigabe steht aus):** Drei Stimmen aus dem
 Pool von `portalize-calendar`, wörtlich aus den Proof-Datensätzen:
 
-1. „Die selbstverwaltete und automatisierte Bereitstellung der Termindaten reduziert den Arbeitsaufwand unserer Gemeinde." — Holger Wendt, Bürgermeister in Rubkow (Bild: „Foto gesucht" · Platzhalter)
-2. „Für dieses Projekt sehe ich unsere Landbevölkerung, aber auch mobile Händler als Gewinner." — Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow (Bild: „Foto gesucht" · Platzhalter)
-3. „Der Dienst hilft dabei, Angebote in einem Flächenland besser sichtbar und auffindbar zu machen." — Uwe Eichler, Wasserschloss Quilow (Bild: „Foto gesucht" · Platzhalter)
+1. „Die selbstverwaltete und automatisierte Bereitstellung der Termindaten reduziert den Arbeitsaufwand unserer Gemeinde." — Holger Wendt, Bürgermeister in Rubkow
+2. „Für dieses Projekt sehe ich unsere Landbevölkerung, aber auch mobile Händler als Gewinner." — Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow
+3. „Der Dienst hilft dabei, Angebote in einem Flächenland besser sichtbar und auffindbar zu machen." — Uwe Eichler, Wasserschloss Quilow
 
 Alle drei Datensätze tragen `usage_rights: unverified` (Q-014). Die
 Karten stehen deshalb im geschützten Preview, nicht auf einer
@@ -222,8 +238,8 @@ Karten stehen deshalb im geschützten Preview, nicht auf einer
 Freigabe vor, oder die Karte fällt weg (`state/open.md`). In den
 Quelldateien stehen die Zitate in ASCII-Umschrift („Flaechenland",
 „Haendler"); hier stehen dieselben Wörter in normaler deutscher
-Rechtschreibung. Ohne geklärtes Bildrecht zeigt jede Karte die
-„Foto gesucht"-Platzhalterfläche, nie ein geliehenes Foto.
+Rechtschreibung. Ohne geklärtes Bildrecht zeigt jede Karte eine ruhige
+Markenfläche, nie ein geliehenes Foto (Jan, 2026-09-18).
 
 ## Slot 6 — Vertrauensblock: Datenschutz, Betrieb, KI
 
@@ -247,14 +263,14 @@ Hub-Eintrag existiert (`state/open.md` #19).
 
 <!-- id: dein-kalender-6-trust-demo; content_type: section; provenance: generated; derived_from: []; status: draft; demo: true -->
 
-**Demo-Platzhalter für die KI-Nutzung (Prototyp, `Demo-Daten`-Badge):**
-Für den vollständigen Prototyp-Eindruck steht hier ein illustrativer
-Beispielsatz statt einer leeren Fläche, erkennbar als Platzhalter und
-ohne bestätigte Aussage:
+**Vorläufiger Satz zur KI-Nutzung (Prototyp, `demo: true` im Frontmatter):**
+Für den vollständigen Prototyp-Eindruck steht hier ein Satz statt einer
+leeren Fläche. Die Kennzeichnung steht im Frontmatter und in
+`state/open.md`, nicht im sichtbaren Text (Jan, 2026-09-18):
 
-**KI-Nutzung (Beispieltext):** Beispielhaft: Veröffentlicher-Daten würden nur für die Kalenderfunktion selbst verarbeitet, nicht zum Training von KI-Modellen — die endgültige Formulierung folgt, sobald ein Hub-Eintrag vorliegt.
+**KI-Nutzung:** Veröffentlicher-Daten werden nur für die Kalenderfunktion selbst verarbeitet, nicht zum Training von KI-Modellen.
 
-Der Satz trägt keine bestätigte technische Aussage und verschwindet,
+Der Satz trägt noch keine bestätigte technische Aussage und wird ersetzt,
 sobald ein Hub-Datensatz die Lücke schließt (`state/open.md`, Zeile 19).
 Der Betriebssatz ist seit diesem Durchgang belegt und steht im Slot
 darüber.

@@ -1,0 +1,43 @@
+/**
+ * The typeahead popup. It is absolutely positioned inside `place-search`'s
+ * own stacking context, so the suggestion list never takes layout space and
+ * the module's reserved 56 px stays 56 px whether it is open or not.
+ */
+.popup {
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 20;
+}
+
+.list {
+  background: var(--color-neutral-paper);
+  border-radius: var(--radius-control, 12px);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 18%);
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  max-height: 22rem;
+  overflow-y: auto;
+  padding: var(--space-1) 0;
+}
+
+.option {
+  color: var(--color-neutral-ink);
+  display: block;
+  /* The 44 px touch target the design system asks of every control. */
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  text-decoration: none;
+}
+
+.option:hover,
+.option:focus-visible,
+.active {
+  background: var(--color-lime-100);
+}
+
+.none {
+  color: var(--color-neutral-muted);
+  padding: var(--space-2) var(--space-3);
+}

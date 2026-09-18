@@ -18,7 +18,13 @@ and a page that shows demo ones.
 | --- | --- | --- |
 | `/` | GET (HTML) | the **community index** — every covered community: name, geo-api slug, geonameId, point, municipality |
 | `/{slug}.{geonameId}` | GET (HTML) | one community's **community object** and its **events** (its own, its municipality's, and the widened `nearby` / `region` ones), already localized to German and already ISO-timed |
-| `/api/search-nearby-communities` | POST (JSON) | the covered communities **near a point** — the site's own public proxy in front of geo-api's proximity search |
+
+The site publishes a third public surface, `POST
+/api/search-nearby-communities` — its own credential-hiding proxy in front of
+geo-api's proximity search. It is deliberately not used: it answers five
+communities, and a cap truncates a radius silently. `src/lib/live/place-index.ts`
+holds every covered community's coordinate and makes the ~15 km cut of
+TS-008 D3 exactly and locally instead.
 
 The two HTML surfaces are read through the `<script id="__NEXT_DATA__">`
 block Next.js writes into every page of a Pages-Router application: the JSON

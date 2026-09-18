@@ -1,7 +1,9 @@
 import { isMocked, isPending, type DataStateProps } from "../data-state";
-import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
-import { FreshnessLabel } from "../freshness-label/freshness-label";
 import { Skeleton } from "../skeleton/skeleton";
+
+import { PortalizeMount } from "./portalize-mount";
+
+import { DEFAULT_WEEKS_AHEAD } from "@/src/lib/embed/portalize";
 
 import type { MediaRatio } from "../media-frame/media-frame";
 import type { CSSProperties, ReactNode } from "react";
@@ -15,13 +17,25 @@ export interface EmbedFrameProps extends DataStateProps {
   readonly heading: string;
   readonly copy?: string;
   readonly cta?: ReactNode;
-  /** The organizer the loader would target — set once Q-046 mints one (mocked here). */
+  /**
+   * The public organizer id of the calendar to embed. With one, the real
+   * Portalize loader mounts a real calendar here; without one, the frame
+   * reserves the box and stays empty, which is what a page with no calendar
+   * to show renders.
+   */
   readonly organizerId?: string;
+  /** The mount's DOM id — the Portalize loader refuses an element without one. */
+  readonly mountId?: string;
+  /** The widget's own category filter. On by default, as upstream has it. */
+  readonly showFilter?: boolean;
+  /** The organizer's logo/claim header. Off: this page carries its own brand. */
+  readonly showBranding?: boolean;
+  /** How far ahead the widget looks; the loader's own default is 13 weeks. */
+  readonly weeksAhead?: number;
   readonly ratio?: MediaRatio;
   /**
-   * The page's language — the mount's `demo-data-badge` and the degraded
-   * freshness label read it. Without it the embed demo on `/en/your-calendar`
-   * badged "Demo-Daten" (F-2-33).
+   * Kept in the interface so every page composes the frame the same way;
+   * the mount itself renders no words of its own any more (Jan, 2026-09-18).
    */
   readonly locale?: Locale;
   readonly className?: string;
@@ -30,9 +44,9 @@ export interface EmbedFrameProps extends DataStateProps {
 /**
  * 45 `embed-frame` [PROPOSED] — TS-008 D6, DEC-030.
  *
- * Structure: the real Portalize widget's mount, loaded deferred and never
- * render-blocking (wired in M4, behind this same interface). The heading
- * states the radius/filter it is actually showing.
+ * Structure: the real Portalize widget's mount, injected lazily and never
+ * render-blocking (`portalize-mount.tsx`). The heading states the filter it
+ * is actually showing.
  * States (D-9, all four):
  *   loading  → the reserved box as a `skeleton` at `ratio`;
  *   empty    → loader blocked or failing (D6): the heading, `copy` and `cta`
@@ -42,8 +56,9 @@ export interface EmbedFrameProps extends DataStateProps {
  *              the place-filter parameter (Q-026) is open;
  *   mocked   → the reserved box plus `demo-data-badge`, dummy `organizerId`.
  * Inherits: violet embed frame, radius 0.
- * Space: the container declares its height before the loader runs, so the
- * page never reflows.
+ * Space: the box declares a fixed height before the loader runs and the
+ * widget scrolls inside it, so neither the config fetch nor the events fetch
+ * moves anything below — the page never reflows.
  * A11y: the copy and CTA stay reachable regardless of the widget's state; the
  * widget itself may use a shadow root the page does not reach into (checked
  * where it is actually mounted, M4).
@@ -53,9 +68,12 @@ export function EmbedFrame({
   copy,
   cta,
   organizerId,
+  mountId = "schafe-vorm-fenster-portalize-widget",
+  showFilter = true,
+  showBranding = false,
+  weeksAhead = DEFAULT_WEEKS_AHEAD,
   ratio = "map",
   state = "ready",
-  locale,
   className,
 }: EmbedFrameProps) {
   const classes = [styles.frame, className].filter(Boolean).join(" ");
@@ -66,18 +84,26 @@ export function EmbedFrame({
       <div className={styles.copyBlock}>
         <h3 className={styles.heading}>{heading}</h3>
         {copy ? <p className={styles.copy}>{copy}</p> : null}
-        {state === "degraded" ? <FreshnessLabel locale={locale} tier="snapshot" /> : null}
         {cta ? <div className={styles.cta}>{cta}</div> : null}
       </div>
       {isPending(state) ? (
         <Skeleton ratio={ratio} variant="box" />
       ) : showBox ? (
         <div
-          className={styles.mount}
-          data-portalize-organizer-id={organizerId}
+          className={styles.box}
+          data-demo={isMocked(state) ? "true" : undefined}
           style={{ "--embed-ratio": `var(--ratio-${ratio})` } as CSSProperties}
         >
-          {isMocked(state) ? <DemoDataBadge className={styles.badge} locale={locale} /> : null}
+          {organizerId === undefined ? null : (
+            <PortalizeMount
+              className={styles.mount}
+              id={mountId}
+              organizerId={organizerId}
+              showBranding={showBranding}
+              showFilter={showFilter}
+              weeksAhead={weeksAhead}
+            />
+          )}
         </div>
       ) : null}
     </div>

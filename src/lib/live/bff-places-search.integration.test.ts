@@ -41,7 +41,7 @@ describe("TS-008-A14: place search classifies, and never answers a bare nothing"
   });
 
   it("answers a typed name from the mocked name search while Q-025 is open", async () => {
-    const response = await call("http://localhost:3100/api/places/search?q=Muster");
+    const response = await call("http://localhost:3100/api/places/search?q=Schlat");
     const body = await response.json();
 
     expect(body.data.outcome.kind).toBe("covered");

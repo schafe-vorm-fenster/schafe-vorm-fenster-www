@@ -36,10 +36,10 @@ describe("TS-008-A4: an empty upstream result is 200 and a conversion, not an er
   });
 
   it("answers the place's dates and no invitation when the window has dates", async () => {
-    const body = await (await call("beispielgemeinde-musterdorf")).json();
+    const body = await (await call("schlatkow")).json();
     expect(body.data.publishInvitation).toBe(false);
     expect(body.data.events.length).toBeGreaterThan(0);
-    expect(body.data.place.name).toBe("Beispielgemeinde Musterdorf");
+    expect(body.data.place.name).toBe("Schlatkow");
   });
 
   it("keeps the uncovered place a 404 — a different fact from an empty list (TS-008 D7)", async () => {
@@ -47,18 +47,18 @@ describe("TS-008-A4: an empty upstream result is 200 and a conversion, not an er
   });
 
   it("rejects an unknown window rather than silently widening it", async () => {
-    expect((await call("beispielgemeinde-musterdorf", "?window=letztes-jahr")).status).toBe(400);
+    expect((await call("schlatkow", "?window=letztes-jahr")).status).toBe(400);
   });
 
   it("serves the today window as its own cut of the calendar day", async () => {
-    const response = await call("beispielgemeinde-musterdorf", "?window=today");
+    const response = await call("schlatkow", "?window=today");
     expect(response.status).toBe(200);
   });
 });
 
 describe("TS-009-A5: the dates route carries the dates cache lifetime of TS-003 D5", () => {
   it("sends s-maxage=300 with a three-day serve-stale window", async () => {
-    const response = await call("beispielgemeinde-musterdorf");
+    const response = await call("schlatkow");
     expect(response.headers.get("cache-control")).toBe(
       "public, s-maxage=300, stale-while-revalidate=259200",
     );

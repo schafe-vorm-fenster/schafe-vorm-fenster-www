@@ -66,7 +66,7 @@ import type { Metadata } from "next";
  *    forbids empty-state markup in S0. The one `himbeere` element of the
  *    design system belongs to that block, so S0 spends none;
  *  - the live modules render their `mocked` state over
- *    `Beispielgemeinde Musterdorf`, badged `Demo-Daten` (the mock rule),
+ *    `Schlatkow`, badged `Demo-Daten` (the mock rule),
  *    so both are visible as the functions they are.
  *
  * **The four value stories render three-part.** Every testimonial candidate
@@ -135,14 +135,14 @@ const PAGE_COPY: Record<
   de: {
     genericPlace: "deinem Ort",
     nearby: "Diese Woche in der Nähe",
-    example: "Beispiel",
+    example: "Aus der Region",
     searchLabel: "Deine Postleitzahl",
     searchHint: "Suche nach Ortsnamen kommt noch dazu — bis dahin reicht die Postleitzahl.",
   },
   en: {
     genericPlace: "your place",
     nearby: "This week nearby",
-    example: "Example",
+    example: "From the region",
     searchLabel: "Your postcode",
     searchHint: "Search by place name is coming — until then, the postcode works fine.",
   },
@@ -328,6 +328,7 @@ export default async function PlacePage({
 
   const search = (primary: boolean) => (
     <PlaceSearch
+      typeahead
       hint={copy.searchHint}
       id={primary ? "ort-suche-fokus" : "ort-suche-abschluss"}
       label={copy.searchLabel}

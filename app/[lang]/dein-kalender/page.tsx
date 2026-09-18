@@ -15,6 +15,7 @@ import { pageImage } from "@/src/lib/content/images";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
+import { DEFAULT_WEEKS_AHEAD, SHOWCASE_CALENDAR } from "@/src/lib/embed/portalize";
 import { BRIEFING_URL } from "@/src/lib/live/briefing";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
@@ -98,12 +99,12 @@ const PROOF_LABEL: Record<Locale, string> = { de: "Belege", en: "Proof" };
 /** Fallback context line — used only where a quote's own attribution carries
  * no organisation name to show instead (`parseDemoProofElement`). */
 const PROOF_FALLBACK_CONTEXT: Record<"demo" | "sourced", Record<Locale, string>> = {
-  demo: { de: "Beispielhafte Rückmeldung", en: "Example feedback" },
+  demo: { de: "Rückmeldung", en: "Feedback" },
   sourced: { de: "Rückmeldung", en: "Feedback" },
 };
 
 const PROOF_GEO_LABEL: Record<"demo" | "sourced", Record<Locale, string>> = {
-  demo: { de: "Beispiel", en: "Example" },
+  demo: { de: "Beleg", en: "Reference" },
   sourced: { de: "Beleg", en: "Reference" },
 };
 
@@ -126,6 +127,24 @@ export default async function Page({
   const focus = slot(page, "dein-kalender-1-focus");
   const contrast = slot(page, "dein-kalender-2-contrast");
   const embedDemo = slot(page, "dein-kalender-3-embed-demo");
+  // Slot 3 carries three things beside its heading: the paragraph that
+  // explains the embedded calendar, the label of its settings list, and the
+  // settings themselves as `key: value` lines (`src/lib/content/README.md`'s
+  // block grammar — a field with an empty value is a heading for what
+  // follows).
+  const embedCopy = embedDemo.blocks.find((block) => block.kind === "paragraph")?.text;
+  const embedConfigLabel =
+    embedDemo.blocks.flatMap((block) =>
+      block.kind === "field" && block.value === "" ? [block.label] : [],
+    )[0] ?? "";
+  const embedConfig = embedDemo.blocks
+    .flatMap((block) => (block.kind === "list" ? block.items : []))
+    .flatMap((item) => {
+      const separator = item.indexOf(":");
+      return separator === -1
+        ? []
+        : [{ key: item.slice(0, separator).trim(), value: item.slice(separator + 1).trim() }];
+    });
   const tiers = slot(page, "dein-kalender-4-tiers");
   const proofDemo = slot(page, "dein-kalender-5-proof-demo");
   const trust = slot(page, "dein-kalender-6-trust");
@@ -155,7 +174,8 @@ export default async function Page({
    * pending (Q-014). `demo` and every displayed label are therefore read off
    * the slot (`isDemoSlot`), never hard-coded: a real quote no longer comes
    * back `mocked`, and only a genuinely generated quote would still badge
-   * itself and use the "Beispielhafte Rückmeldung" wording.
+   * itself in `data-demo`; the words a visitor reads are the same either
+   * way (Jan, 2026-09-18).
    */
   const proofIsDemo = isDemoSlot(proofDemo);
   const proofSelection = await selectProof({
@@ -246,13 +266,34 @@ export default async function Page({
 
       <SectionShell dataBlock="embed-demo" surface="violet-500">
         <EmbedFrame
+          copy={embedCopy}
           heading={fieldAt(embedDemo.blocks, 0) ?? ""}
-          // F-2-33: the mocked mount's `Demo-Daten` badge reads the language.
           locale={locale}
-          organizerId="demo-organizer"
+          // The real calendar of Schlatkow, Schmatzin and Wolfradshof —
+          // `src/lib/embed/portalize.ts` records which one and why.
+          organizerId={SHOWCASE_CALENDAR.organizerId}
           ratio="map"
-          state="mocked"
+          showBranding={SHOWCASE_CALENDAR.branding}
+          state="ready"
+          weeksAhead={DEFAULT_WEEKS_AHEAD}
         />
+        {embedConfig.length === 0 ? null : (
+          <>
+            <h4>{embedConfigLabel}</h4>
+            {/* The embed's own settings, as key and value: what a visitor is
+                looking at, and what they would set for themselves. The list
+                is authored beside the copy (`content/pages/dein-kalender/`),
+                so it stays in the content pipeline rather than in a page. */}
+            <dl>
+              {embedConfig.map(({ key, value }) => (
+                <div key={key}>
+                  <dt>{key}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </>
+        )}
       </SectionShell>
 
       <SectionShell dataBlock="tiers" surface="lime-100">
@@ -345,15 +386,7 @@ export default async function Page({
                 state={entry.state}
               />
             ) : (
-              <EmptyProofSlot
-                key={`empty-${position}`}
-                locale={locale}
-                sentence={
-                  locale === "de"
-                    ? "Für diese Aussage ist noch kein freigegebener Beleg hinterlegt."
-                    : "No cleared proof is on file for this claim yet."
-                }
-              />
+              <EmptyProofSlot key={`empty-${position}`} />
             ),
           )}
         </ProofStream>

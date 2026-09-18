@@ -4,6 +4,13 @@
   gap: var(--space-3);
 }
 
+/* The positioning context the typeahead popup hangs from, so the popup can
+   overlay the page instead of pushing the hint and the suggestion chips
+   down — the module's reserved 56 px stays 56 px whether it is open or not. */
+.fieldWrap {
+  position: relative;
+}
+
 .hint {
   color: var(--color-neutral-muted);
   font-size: var(--type-meta-size);

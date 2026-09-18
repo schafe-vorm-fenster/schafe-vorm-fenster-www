@@ -22,6 +22,14 @@ export interface EventListProps extends DataStateProps {
   readonly items: readonly EventListItem[];
   /** The fixed row count the module promises (3 at position 1, 5 at position 2). */
   readonly rowCount: number;
+  /**
+   * `true` caps the list at three rows on a phone and lets all `rowCount`
+   * rows show from the tablet breakpoint up — the illustrative cap a live
+   * list on a marketing page carries, with the rest behind the module's own
+   * calendar link. CSS-only, so it holds in a prerendered page and costs no
+   * layout shift.
+   */
+  readonly capOnPhone?: boolean;
   /** The conversion state for zero results — never an empty list (TS-008 D4). */
   readonly emptyState?: ReactNode;
   /** `dark` inside the ink section that carries the live data — forwarded to every row. */
@@ -54,13 +62,17 @@ export interface EventListProps extends DataStateProps {
 export function EventList({
   items,
   rowCount,
+  capOnPhone = false,
   emptyState,
   tone,
   locale,
   state = "ready",
   className,
 }: EventListProps) {
-  const classes = [styles.list, className].filter(Boolean).join(" ");
+  const capped = capOnPhone && rowCount > 3;
+  const classes = [styles.list, capped ? styles.capPhone : undefined, className]
+    .filter(Boolean)
+    .join(" ");
 
   if (isPending(state)) {
     return <Skeleton className={classes} rows={rowCount} variant="row" />;

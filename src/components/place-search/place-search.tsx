@@ -1,8 +1,10 @@
 import { Chip } from "../chip/chip";
 import { isPending, type DataStateProps } from "../data-state";
-import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
+import { linkHref } from "../route-link/href";
 import { SearchField } from "../search-field/search-field";
 import { Skeleton } from "../skeleton/skeleton";
+
+import { PlaceTypeahead } from "./typeahead";
 
 import { dictionary } from "@/src/lib/i18n/dictionary";
 
@@ -37,6 +39,13 @@ export interface PlaceSearchProps extends DataStateProps, Omit<LinkOptions, "has
   readonly id?: string;
   /** Native validation, where an empty submit is not a page state (F-3-14). */
   readonly required?: boolean;
+  /**
+   * The typeahead, off by default. It is a **pure enhancement**: the module
+   * stays a plain GET form, the suggestion popup takes no layout space, and
+   * a page that does not want the extra client chunk simply does not ask for
+   * it (the 404 page, the order flow's scope step).
+   */
+  readonly typeahead?: boolean;
   readonly className?: string;
 }
 
@@ -74,6 +83,7 @@ export function PlaceSearch({
   tone = "light",
   id,
   required = false,
+  typeahead = false,
   state = "ready",
   className,
 }: PlaceSearchProps) {
@@ -98,11 +108,16 @@ export function PlaceSearch({
     );
   }
 
+  // `search-field`'s own default, restated so the enhancement and the input
+  // cannot disagree about which element it attaches to.
+  const inputId = id ?? "ort-suche";
+
   return (
     <div className={classes}>
+      <div className={styles.fieldWrap}>
       <SearchField
         defaultValue={defaultValue}
-        id={id}
+        id={inputId}
         label={resolvedLabel}
         locale={locale}
         placeholder={resolvedPlaceholder}
@@ -112,15 +127,22 @@ export function PlaceSearch({
         submitLabel={submitLabel}
         to={to}
       />
+      {typeahead ? (
+        <PlaceTypeahead
+          action={linkHref(to, { locale })}
+          inputId={inputId}
+          locale={locale}
+        />
+      ) : null}
+      </div>
       <p className={styles.hint}>{resolvedHint}</p>
       {suggestions && suggestions.length > 0 ? (
-        <div className={styles.suggestions}>
+        <div className={styles.suggestions} data-demo={state === "mocked" ? "true" : undefined}>
           {suggestions.map((suggestion) => (
             <Chip key={suggestion.label} locale={locale} query={suggestion.query} to={suggestion.to}>
               {suggestion.label}
             </Chip>
           ))}
-          {state === "mocked" ? <DemoDataBadge locale={locale} /> : null}
         </div>
       ) : null}
     </div>

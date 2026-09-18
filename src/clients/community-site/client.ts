@@ -13,7 +13,13 @@
  *  | --- | --- |
  *  | `GET /` | the **community index** — every covered community with its name, geo-api slug, geonameId and point |
  *  | `GET /{slug}.{geonameId}` | one community's **events**, already localized, already in and around that place |
- *  | `POST /api/search-nearby-communities` | the covered communities **near a point** — the site's own credential-hiding proxy in front of geo-api's proximity search |
+ *
+ * The site publishes a third surface, `POST /api/search-nearby-communities`
+ * (its own credential-hiding proxy in front of geo-api's proximity search).
+ * It is deliberately **not** used: it answers five communities, and a cap
+ * truncates a radius silently. The committed index carries every covered
+ * community's coordinate, so `src/lib/live/place-index.ts` makes the ~15 km
+ * cut exactly and locally instead.
  *
  * Two properties this client keeps, so the fragility of reading a page's
  * embedded data stays contained:
@@ -28,7 +34,7 @@
 
 import { z } from "zod";
 
-import { callUpstream, callUpstreamText, UpstreamError } from "../http";
+import { callUpstreamText, UpstreamError } from "../http";
 
 /** The embedded-data script Next.js writes into every page of a Pages-Router app. */
 const NEXT_DATA = /<script id="__NEXT_DATA__" type="application\/json">([\s\S]*?)<\/script>/u;
@@ -99,11 +105,6 @@ const CommunityIndexSchema = z.object({
   }),
 });
 
-const NearbySchema = z.object({
-  success: z.boolean(),
-  communities: z.array(CommunitySiteCommunitySchema).default([]),
-});
-
 export interface CommunitySiteConfig {
   readonly host: string;
   readonly timeoutMs: number;
@@ -165,26 +166,4 @@ export async function fetchCommunityPage(
   });
   const { community, events } = parse(CommunityPageSchema, embeddedData(html)).props.pageProps;
   return { community, events };
-}
-
-/**
- * The covered communities near a point. This is the site's own public proxy
- * in front of geo-api's proximity search — the same operation
- * `geo-api/client.ts` `searchByPoint` reaches with a token, minus the
- * hierarchy fields.
- */
-export async function searchNearbyCommunities(
-  config: CommunitySiteConfig,
-  point: { readonly lat: number; readonly lng: number },
-): Promise<CommunitySiteCommunity[]> {
-  const payload = await callUpstream({
-    service: "community-site",
-    url: `${config.host}/api/search-nearby-communities`,
-    method: "POST",
-    body: { lat: point.lat, lng: point.lng, countryCode: "DE" },
-    timeoutMs: config.timeoutMs,
-  });
-  const answer = parse(NearbySchema, payload);
-  if (!answer.success) throw new UpstreamError("community-site", "proximity search reported failure");
-  return answer.communities;
 }

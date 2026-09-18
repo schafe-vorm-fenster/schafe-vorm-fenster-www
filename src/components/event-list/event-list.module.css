@@ -2,3 +2,25 @@
   display: flex;
   flex-direction: column;
 }
+
+/**
+ * The illustrative cap — TS-008: a live list on a marketing page is an
+ * example, not the calendar. Three rows on a phone, five from the tablet
+ * breakpoint up, and the rest of the dates behind the module's own
+ * "Alle Termine im Kalender" link.
+ *
+ * Done in CSS rather than by rendering fewer items, for two reasons: the
+ * page is prerendered and has no viewport at render time, and a JavaScript
+ * cap would change the row count after paint, which is the layout shift the
+ * whole module is built to avoid. Both the rows and their skeleton carry the
+ * same rule, so the reserved height matches what finally renders.
+ */
+.capPhone > *:nth-child(n + 4) {
+  display: none;
+}
+
+@media (min-width: 48rem) {
+  .capPhone > *:nth-child(n + 4) {
+    display: revert;
+  }
+}

@@ -30,15 +30,17 @@
  *    the county it already knows.
  */
 
-import {
-  fetchCommunityPage,
-  searchNearbyCommunities,
-} from "@/src/clients/community-site/client";
+import { fetchCommunityPage } from "@/src/clients/community-site/client";
 
-import { toLiveEventsFromSite, toPlaceFromSite } from "./adapters";
+import { toLiveEventsFromSite } from "./adapters";
 import { communitySiteConfig } from "./config";
-import { communityRouteSlugFor, placeByCommunityId } from "./place-index";
-import { byStart, haversineKm, withinWindow, type EventWindow } from "./widening";
+import {
+  communityRouteSlugFor,
+  nearestPlace,
+  placeByCommunityId,
+  placesWithin,
+} from "./place-index";
+import { byStart, withinWindow, type EventWindow } from "./widening";
 
 import type { LiveEvent, Place } from "./types";
 
@@ -73,33 +75,45 @@ export async function publicPlaceEvents(
 export interface PublicNearby {
   readonly events: readonly LiveEvent[];
   readonly places: readonly Place[];
-  /** The proximity search's own cap ended the candidate list, not the radius. */
+  /** The source page's own row cap ended the list, not the radius. */
   readonly truncated: boolean;
 }
 
 /**
+ * The village calendar caps one community page at 100 rows; a page that long
+ * may have had more behind it, and the module then claims no completeness
+ * (TS-008 D3 rule 2).
+ */
+export const PUBLIC_PAGE_ROW_CAP = 100;
+
+/**
  * Position 2 — this week within the ~15 km cut, from the public surfaces.
  *
- * Two calls: the site's own proximity proxy answers which communities are
- * near the point, and the nearest one's page carries the dates in and around
- * it. The rows are then cut to the communities inside the radius, so the
- * module shows what its title claims and nothing wider.
+ * One page fetch. The **cut is exact and local**: the committed index holds
+ * every covered community's own coordinate, so which places are inside the
+ * radius is arithmetic rather than a proximity query — which matters, because
+ * every proximity source available here caps its result count (geo-api's own
+ * constant, the calendar's public proxy at five) and a cap truncates a radius
+ * silently.
+ *
+ * The anchor's own community is excluded: position 1 already showed those
+ * dates, and a widened module repeating the narrow one beside it is not a
+ * widening (TS-008 D1).
  */
 export async function publicNearbyEvents(
   anchor: { readonly lat: number; readonly lng: number },
   { radiusKm, rowCount, now }: { radiusKm: number; rowCount: number; now: Date },
 ): Promise<PublicNearby> {
-  const config = communitySiteConfig();
-  const candidates = (await searchNearbyCommunities(config, anchor))
-    .map(toPlaceFromSite)
-    .filter((place): place is Place => place !== undefined);
+  const seed = nearestPlace(anchor);
+  if (seed === undefined) return { events: [], places: [], truncated: false };
 
-  const within = candidates.filter((place) => haversineKm(anchor, place) <= radiusKm);
-  const nearest = within[0] ?? candidates[0];
-  if (nearest === undefined) return { events: [], places: [], truncated: false };
+  const ring = placesWithin(anchor, radiusKm).filter(
+    (place) => place.communityId !== seed.communityId,
+  );
+  if (ring.length === 0) return { events: [], places: [], truncated: false };
 
-  const { events } = await fetchCommunityPage(config, communityRouteSlugFor(nearest));
-  const ids = new Set(within.map((place) => place.communityId));
+  const { events } = await fetchCommunityPage(communitySiteConfig(), communityRouteSlugFor(seed));
+  const ids = new Set(ring.map((place) => place.communityId));
 
   const rows = toLiveEventsFromSite(
     events.filter((event) => {
@@ -110,16 +124,10 @@ export async function publicNearbyEvents(
 
   return {
     events: byStart(withinWindow(rows, "week", now)).slice(0, rowCount),
-    places: within,
-    // The site's proximity proxy asks geo-api for five and has no radius
-    // parameter of its own, so a full candidate list that was never cut means
-    // the cap ended it — the module then claims no completeness (TS-008 D3).
-    truncated: within.length === candidates.length && candidates.length >= PUBLIC_NEARBY_CAP,
+    places: ring,
+    truncated: events.length >= PUBLIC_PAGE_ROW_CAP,
   };
 }
-
-/** What the village calendar's own proximity search asks geo-api for. */
-export const PUBLIC_NEARBY_CAP = 5;
 
 export interface RankedPlace {
   readonly name: string;

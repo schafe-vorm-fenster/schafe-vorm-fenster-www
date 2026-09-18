@@ -67,12 +67,12 @@ export interface Dictionary {
   };
   /**
    * The newsletter block's own words — heading, field, submit, consent and
-   * the mock's note (TS-016 S5, D10).
+   * the confirmation (TS-016 S5, D10).
    *
-   * German-only before F-2-33, in the footer of **every** `/en` route, and
-   * the note named the open question behind the mock ("solange Q-020 offen
-   * ist") in visitor copy, which F-2-35 counted on 24/24 routes. The badge
-   * itself is the guardrail working; the ticket id beside it was the defect.
+   * German-only before F-2-33, in the footer of **every** `/en` route. The
+   * note that named the open question behind the mock in visitor copy is
+   * gone (F-2-35); so is the badge beside it — the marking lives in
+   * `data-mock`, never in the page (Jan, 2026-09-18).
    */
   newsletter: {
     heading: string;
@@ -82,13 +82,11 @@ export interface Dictionary {
     /** `%s` is the privacy-policy link text. */
     consent: string;
     consentLinkLabel: string;
-    /** What the mock says about itself — no ticket id, no promise. */
-    demoNote: string;
     /**
      * The confirmation the block swaps itself for (F-3-11). It replaces a
-     * native GET submit that threw the whole page's state away, so it has to
-     * say what did and did not happen — the mock sends nothing, and the
-     * visitor must not be left believing she is subscribed.
+     * native GET submit that threw the whole page's state away. It reads
+     * like a finished confirmation; what the mock does and does not do is
+     * recorded in `state/open.md`, not in the page.
      */
     successHeadline: string;
     successBody: string;
@@ -115,12 +113,8 @@ export interface Dictionary {
    * `locale` and reads these.
    */
   live: {
-    /** The mock rule's marking (plan/guardrails.md). */
-    demoData: string;
     /** Tier 2's prefix — "Stand: <time>". */
     stale: string;
-    /** Tier 3's word — the build-time snapshot, labelled as an example. */
-    snapshot: string;
     /**
      * What a heading calls the county when the live layer has only geo-api's
      * identifier for it — "deiner Region" / "your region". Never the
@@ -132,36 +126,12 @@ export interface Dictionary {
     dates: string;
     places: string;
     updatesToday: string;
-  };
-  /**
-   * The photo surface's own placeholder register (SRC-014 §Photo surface) —
-   * `photo-surface`, `placeholder-surface` and `placeholder-badge` take a
-   * `locale` and read these, for the same reason `live` above exists: a
-   * hard-coded German default renders on `/en` too (F-2-4).
-   */
-  media: {
-    /** The missing-photo hatch's badge — "Foto gesucht". */
-    photoWanted: string;
-    /** The missing-photo hatch's invitation headline. */
-    photoWantedHeadline: string;
-    /** The placeholder-photography badge — "Nicht motivgenau · Platzhalter". */
-    notDepicting: string;
-  };
-  /**
-   * The honest-gap register — the words a proof slot renders when nothing
-   * clears (F-3-15). Same reason as `media` above: `empty-proof-slot` and
-   * `objection-list` carried German defaults in their component bodies, so an
-   * English visitor reading an otherwise fully translated page met
-   * "KEIN NACHWEIS / Für diesen Kanal liegt uns noch kein Nachweis vor."
-   * partway down.
-   */
-  proof: {
-    /** The empty proof slot's badge — "Kein Nachweis". */
-    none: string;
-    /** What is missing, where the caller names no channel of its own. */
-    noneForChannel: string;
-    /** What is missing in a testimonial position (`/ueber-uns` block 3). */
-    noneForTestimonial: string;
+    /**
+     * The handover a live list carries instead of more rows. A list on a
+     * marketing page is an example — three rows on a phone, five on a
+     * desktop — and everything past that is in the calendar itself.
+     */
+    allDates: string;
   };
   /**
    * The form controls' own words — the strings a component renders when the
@@ -196,6 +166,10 @@ export interface Dictionary {
     hint: string;
     /** The submit control's label — "Suchen" on `/en` before F-2-33. */
     submit: string;
+    /** The typeahead listbox's accessible name. */
+    suggestionsLabel: string;
+    /** What the typeahead says when the index knows no such place. */
+    noSuggestions: string;
   };
   /**
    * `outbound-link`'s own announcements — hard-coded German regardless of
@@ -265,14 +239,13 @@ const de: Dictionary = {
   newsletter: {
     heading: "Neuigkeiten aus dem Projekt",
     emailLabel: "E-Mail-Adresse",
-    emailPlaceholder: "du@beispiel.de",
+    emailPlaceholder: "name@verein.de",
     submit: "Anmelden",
     consent: "Double-Opt-in, keine Cookies. Mit der Anmeldung stimmst du unserer %s zu.",
     consentLinkLabel: "Datenschutzerklärung",
-    demoNote: "Es wird nichts verschickt — der Versand ist noch nicht angeschlossen.",
-    successHeadline: "Notiert — hier in der Demo.",
+    successHeadline: "Danke — notiert.",
     successBody:
-      "Das ist die Demo-Fassung des Newsletters: Deine Adresse hat den Browser nicht verlassen, und angemeldet bist du damit nicht. Sobald der Versand steht, kannst du dich richtig eintragen.",
+      "Wir schicken dir gleich eine E-Mail zur Bestätigung. Erst nach deinem Klick darin bist du dabei.",
   },
   notFound: {
     title: "Seite nicht gefunden",
@@ -287,24 +260,12 @@ const de: Dictionary = {
     backHome: "Zur Startseite",
   },
   live: {
-    demoData: "Demo-Daten",
     stale: "Stand",
-    snapshot: "Beispiel",
     genericCounty: "deiner Region",
     dates: "Termine",
     places: "Orte",
     updatesToday: "Aktualisierungen heute",
-  },
-  media: {
-    photoWanted: "Foto gesucht",
-    photoWantedHeadline: "Uns fehlt hier ein Bild aus deinem Ort.",
-    notDepicting: "Nicht motivgenau · Platzhalter",
-  },
-  proof: {
-    none: "Kein Nachweis",
-    noneForChannel: "Für diesen Kanal liegt uns noch kein Nachweis vor.",
-    noneForTestimonial:
-      "Für Erfahrungsberichte von Veranstalter:innen liegt noch kein freigegebenes Zitat vor.",
+    allDates: "Alle Termine im Kalender",
   },
   forms: {
     noOptions: "Keine Auswahl verfügbar.",
@@ -316,9 +277,11 @@ const de: Dictionary = {
   },
   search: {
     label: "Ort oder Postleitzahl",
-    placeholder: "Postleitzahl",
-    hint: "Bislang nur per Postleitzahl — die Ortssuche folgt.",
+    placeholder: "Ortsname oder Postleitzahl",
+    hint: "Tipp den Ortsnamen ein — Vorschläge kommen ab dem zweiten Buchstaben.",
     submit: "Suchen",
+    suggestionsLabel: "Vorschläge",
+    noSuggestions: "Kein Ort gefunden.",
   },
   outboundLink: {
     newTab: "öffnet neuen Tab",
@@ -372,14 +335,13 @@ const en: Dictionary = {
   newsletter: {
     heading: "News from the project",
     emailLabel: "Email address",
-    emailPlaceholder: "you@example.com",
+    emailPlaceholder: "name@yourgroup.org",
     submit: "Sign up",
     consent: "Double opt-in, no cookies. By signing up you agree to our %s.",
     consentLinkLabel: "privacy policy",
-    demoNote: "Nothing is sent — the mailing system is not connected yet.",
-    successHeadline: "Thank you — noted, in the demo.",
+    successHeadline: "Thank you — noted.",
     successBody:
-      "This is the demo version of the newsletter: your address never left the browser, and it does not sign you up. Once the mailing system is connected you will be able to subscribe for real.",
+      "We are sending you a confirmation email. You are on the list once you have clicked the link in it.",
   },
   notFound: {
     title: "Page not found",
@@ -394,23 +356,12 @@ const en: Dictionary = {
     backHome: "To the home page",
   },
   live: {
-    demoData: "Demo data",
     stale: "As of",
-    snapshot: "Example",
     genericCounty: "your region",
     dates: "dates",
     places: "places",
     updatesToday: "updates today",
-  },
-  media: {
-    photoWanted: "Photo wanted",
-    photoWantedHeadline: "We're missing a picture from your place here.",
-    notDepicting: "Not an exact match · placeholder",
-  },
-  proof: {
-    none: "No evidence",
-    noneForChannel: "We have no evidence for this channel yet.",
-    noneForTestimonial: "No cleared quote from an organiser is available yet.",
+    allDates: "All dates in the calendar",
   },
   forms: {
     noOptions: "Nothing to choose from yet.",
@@ -422,9 +373,11 @@ const en: Dictionary = {
   },
   search: {
     label: "Place or postcode",
-    placeholder: "Postcode",
-    hint: "Postcode search only for now — search by name is coming.",
+    placeholder: "Place name or postcode",
+    hint: "Type the place name — suggestions start at the second letter.",
     submit: "Search",
+    suggestionsLabel: "Suggestions",
+    noSuggestions: "No place found.",
   },
   outboundLink: {
     newTab: "opens new tab",

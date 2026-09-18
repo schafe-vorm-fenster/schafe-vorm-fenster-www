@@ -64,7 +64,7 @@ import type { ReactNode } from "react";
  * show — position 1 (dates in the place), position 2 (this week nearby) and
  * position 4 (counters) — render here in the `mocked` state with the
  * `Demo-Daten` badge their frames put on themselves, over the invented
- * `Beispielgemeinde Musterdorf`. Block *structure* is therefore identical to
+ * `Schlatkow`. Block *structure* is therefore identical to
  * the M4 render (TS-006-A10); only the data source changes. Each has a
  * `Mock aktiv` row in `state/open.md`.
  *
@@ -102,67 +102,54 @@ export async function generateMetadata({
 }
 
 /**
- * Fallback only — `home-12-ui-strings` now carries these four short strings
+ * Fallback only — `home-12-ui-strings` carries these three short strings
  * (state/open.md row 92, row 161), read below through `uiStringsFrom`. This
  * record stands in only where a locale's slot is unreadable (`slot()`'s own
  * typed-empty-with-`reason` contract, `src/lib/content/README.md`), never as
- * the primary source. `missingProof` has no field in the slot and stays
- * generated (Dummy-Content, `state/open.md`).
+ * the primary source.
+ *
+ * None of them says anything about the surface being a stand-in: Jan's
+ * decision of 2026-09-18 keeps that in the frontmatter, in `data-*` and in
+ * `state/open.md`.
  */
-const DEMO_LABELS: Record<
+const UI_STRING_FALLBACKS: Record<
   Locale,
   {
     flyerExample: string;
     geo: string;
-    photoWanted: string;
     datesUnit: string;
-    missingProof: string;
   }
 > = {
   de: {
-    flyerExample: "Aus dem Flyer geworden — Beispieltermin",
-    geo: "Beispiel",
-    photoWanted: "Uns fehlt hier ein Bild aus deinem Ort.",
+    flyerExample: "Aus dem Flyer geworden",
+    geo: "Beleg aus der Region",
     datesUnit: "Termine",
-    missingProof: "Für diese Aussage ist noch kein freigegebener Beleg hinterlegt.",
   },
   en: {
-    flyerExample: "Made from the flyer — example date",
-    geo: "Example",
-    photoWanted: "We are missing a picture from your place here.",
+    flyerExample: "Made from the flyer",
+    geo: "Proof from the region",
     datesUnit: "dates",
-    missingProof: "No cleared proof is on file for this claim yet.",
   },
 };
 
-/** Strips the artifact's own leading "Foto gesucht — "/"Photo wanted — " —
- * documentation of the design-system badge the surface renders on its own
- * (`placeholder-surface`), not part of the invitation sentence itself. */
-function withoutPhotoWantedBadge(text: string): string {
-  return text.replace(/^(?:Foto gesucht|Photo wanted)\s*—\s*/, "");
-}
-
-/** The four short UI strings, read off `home-12-ui-strings` where the slot
- * has them, falling back to the generated stand-ins otherwise. */
+/** The three short UI strings, read off `home-12-ui-strings` where the slot
+ * has them, falling back to the stand-ins otherwise. */
 function uiStringsFrom(uiStrings: ContentSlot, locale: Locale) {
-  const fallback = DEMO_LABELS[locale];
+  const fallback = UI_STRING_FALLBACKS[locale];
   return {
     flyerExample: fieldAt(uiStrings.blocks, 0) ?? fallback.flyerExample,
     geo: fieldAt(uiStrings.blocks, 1) ?? fallback.geo,
-    photoWanted: withoutPhotoWantedBadge(fieldAt(uiStrings.blocks, 2) ?? fallback.photoWanted),
-    datesUnit: fieldAt(uiStrings.blocks, 3) ?? fallback.datesUnit,
-    missingProof: fallback.missingProof,
+    datesUnit: fieldAt(uiStrings.blocks, 2) ?? fallback.datesUnit,
   };
 }
 
 /**
- * The artifact's demo proof lines as relevance candidates (TS-005).
+ * The artifact's proof lines as relevance candidates (TS-005).
  *
- * The attribution names the example place ("… — Ehrenamtliche
- * Bürgermeisterin, Beispielgemeinde Musterdorf"), and that name is what the
- * element *covers* — `geoCommunity`, the facet the engine scores. Without it
- * every candidate would tie at country level and the spread rule would have
- * nothing to spread.
+ * The attribution names the place ("… — Bürgermeister in Rubkow"), and that
+ * name is what the element *covers* — `geoCommunity`, the facet the engine
+ * scores. Without it every candidate would tie at country level and the
+ * spread rule would have nothing to spread.
  */
 function proofCandidates(proof: ContentSlot, geoLabel: string): ProofCandidate[] {
   const list = proof.blocks.find((block) => block.kind === "list");
@@ -437,6 +424,7 @@ export default async function HomePage({
    */
   const search = (primary: boolean) => (
     <PlaceSearch
+      typeahead
       hint={searchHint}
       id={primary ? "ort-suche-fokus" : "ort-suche-abschluss"}
       label={searchPlaceholder ?? ""}
@@ -510,7 +498,6 @@ export default async function HomePage({
                 className={styles.sceneMedia}
                 locale={locale}
                 notDepicting={sceneEmbedImage?.notDepicting}
-                placeholderHeadline={demo.photoWanted}
                 placeholderId={sceneEmbedImage?.placeholderId}
                 ratio="feature"
                 src={sceneEmbedImage?.src}
@@ -534,7 +521,6 @@ export default async function HomePage({
                 className={styles.sceneMedia}
                 locale={locale}
                 notDepicting={sceneProvenanceImage?.notDepicting}
-                placeholderHeadline={demo.photoWanted}
                 placeholderId={sceneProvenanceImage?.placeholderId}
                 ratio="feature"
                 src={sceneProvenanceImage?.src}
@@ -589,7 +575,7 @@ export default async function HomePage({
               ) : (
                 // An unfilled position weakens the claim; it never shortens
                 // the stream (SRC-001 §4, DEC-048).
-                <EmptyProofSlot key={`empty-${position}`} locale={locale} sentence={demo.missingProof} />
+                <EmptyProofSlot key={`empty-${position}`} />
               ),
             )}
           </ProofStream>

@@ -46,6 +46,8 @@ import { fillTemplate } from "@/src/lib/pages/demo-content";
 import { calendarUrl } from "@/src/lib/live/app-handover";
 import { cacheLifeProfile, cacheTags } from "@/src/lib/live/cache-profiles";
 import { categoryLabel, categoryTone } from "@/src/lib/live/categories";
+import { nearestPlace } from "@/src/lib/live/place-index";
+import { dictionary } from "@/src/lib/i18n/dictionary";
 import { liveCounters } from "@/src/lib/live/counters";
 import { nearbyEvents } from "@/src/lib/live/nearby";
 import { placeEvents } from "@/src/lib/live/places";
@@ -263,8 +265,21 @@ export async function NearbyIsland({
   // empty list — the page's other blocks carry the screen.
   if (data.events.length === 0) return null;
 
+  // The list is an example, not the calendar: three rows on a phone, five on
+  // a desktop, and the rest behind one handover. The link is built from the
+  // covered community the coordinate sits in — a `Place` out of the community
+  // index, never a slug assembled from a request value (TS-008 D9).
+  const anchor = nearestPlace({ lat, lng });
+
   return (
     <LiveModuleFrame
+      cta={
+        anchor === undefined ? undefined : (
+          <OutboundLink href={calendarUrl(anchor)} variant="secondary">
+            {dictionary(locale).live.allDates}
+          </OutboundLink>
+        )
+      }
       headingLevel={headingLevel}
       locale={locale}
       state={stateOf(envelope)}
@@ -273,6 +288,7 @@ export async function NearbyIsland({
       updatedAt={fetchedAt}
     >
       <EventList
+        capOnPhone
         items={toListItems(data.events, locale)}
         locale={locale}
         rowCount={rowCount}

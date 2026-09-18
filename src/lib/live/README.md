@@ -71,7 +71,7 @@ events halves switch to the real clients with no code change.
 **Every mocked payload carries `demo: true`** out through the BFF. That flag
 is the `Demo-Daten` badge's only input — a page passes `state="mocked"` to
 the shell and the badge appears. Demo data is obviously fictitious
-(`Beispielgemeinde Musterdorf`, titles suffixed "(Beispiel)"), contains no
+(`Schlatkow`, titles suffixed "(Beispiel)"), contains no
 person and no real-looking figure, and every mocked capability has a
 `Mock aktiv` row in `state/open.md`.
 
@@ -84,7 +84,7 @@ never produces on its own:
 | Constant | What it walks |
 | --- | --- |
 | `UNCOVERED_DEMO_ZIP` (`"99999"`) | TS-008 D7's **uncovered** outcome — no place resolves. |
-| `EMPTY_DEMO_SLUG` (`"beispielhausen"`) | TS-008 D4's conversion moment — a covered place with zero dates. |
+| `EMPTY_DEMO_SLUG` (`"lassan"`) | TS-008 D4's conversion moment — a covered place with zero dates. |
 | `AMBIGUOUS_DEMO_ZIP` (`"18299"`) | TS-023-A6 — a municipality search that resolves to **several** communities, so `mockSearchByZip` answers `AMBIGUOUS_DEMO_PLACES` (two places, same name, two counties) instead of the usual one. Before this fixture (F-2-5, round 2), that branch had no fixture at all and only ran against a stubbed `searchPlaces()` result in `resolve-place.test.ts`. Deliberately **not** part of `DEMO_PLACES`: that six-place ring is keyed elsewhere (the ~15 km widening cut, `mocks/events.ts`'s region-example selection) to its current members, and a same-named collision inside it would change those rather than only add a lookup branch. |
 
 Every one of these is a postcode or slug nobody would type by accident —

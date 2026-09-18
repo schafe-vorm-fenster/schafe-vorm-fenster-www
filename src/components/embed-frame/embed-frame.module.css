@@ -27,11 +27,32 @@
   margin-top: var(--space-2);
 }
 
-.mount {
-  aspect-ratio: var(--embed-ratio, var(--ratio-map));
+/**
+ * The reserved box. Its height is declared here, before the loader runs, and
+ * the widget scrolls **inside** it — so the two round trips the embed makes
+ * (organizer config, then events) move nothing on the page below it.
+ *
+ * A fixed box rather than an aspect ratio, because the widget is a normal
+ * flow element that grows with its content: an aspect ratio would either clip
+ * a long list or leave a gap under a short one.
+ */
+.box {
   background: var(--color-violet-100);
+  height: clamp(26rem, 60vh, 34rem);
+  overflow-y: auto;
   position: relative;
   width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mount {
+  padding: var(--space-3);
+}
+
+/* TS-008 D6: a blocked or failing loader shows no error and no empty frame —
+   the heading, the copy and the CTA around it stay exactly as they are. */
+.box:has(> [data-portalize-failed="true"]) {
+  display: none;
 }
 
 .badge {

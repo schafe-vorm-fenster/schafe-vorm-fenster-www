@@ -13,8 +13,8 @@ import type { Place } from "./types";
 
 const resolved: Place = {
   communityId: "geoname.900101",
-  name: "Beispielgemeinde Musterdorf",
-  slug: "beispielgemeinde-musterdorf",
+  name: "Schlatkow",
+  slug: "schlatkow",
   lat: 54,
   lng: 13.4,
 };
@@ -25,11 +25,11 @@ afterEach(() => {
 
 describe("TS-008-A11: the handover URL is {APP_ORIGIN}/{slug}, built from a geo-api slug", () => {
   it("builds the calendar URL from a resolved place", () => {
-    expect(calendarUrl(resolved)).toBe(`${APP_ORIGIN}/beispielgemeinde-musterdorf`);
+    expect(calendarUrl(resolved)).toBe(`${APP_ORIGIN}/schlatkow`);
   });
 
   it("refuses a slug that geo-api has not confirmed", () => {
-    expect(calendarUrlForSlug("beispielgemeinde-musterdorf", { resolved: false })).toBeUndefined();
+    expect(calendarUrlForSlug("schlatkow", { resolved: false })).toBeUndefined();
   });
 
   it("refuses a slug that is not slug-shaped, even when the caller says it resolved", () => {
@@ -49,7 +49,7 @@ describe("TS-008-A11: the handover URL is {APP_ORIGIN}/{slug}, built from a geo-
 
   it("appends nothing to the app URL for registration — no prefill contract exists (DEC-029)", () => {
     expect(calendarUrl(resolved)).not.toContain("ort=");
-    expect(registrationQuery(resolved)).toEqual({ ort: "beispielgemeinde-musterdorf" });
+    expect(registrationQuery(resolved)).toEqual({ ort: "schlatkow" });
     expect(registrationQuery(undefined)).toEqual({});
   });
 
@@ -57,7 +57,7 @@ describe("TS-008-A11: the handover URL is {APP_ORIGIN}/{slug}, built from a geo-
     vi.stubEnv("NEXT_PUBLIC_APP_ORIGIN", "https://schafe-vorm-fenster.de");
     vi.resetModules();
     const fresh = await import("./app-handover");
-    expect(fresh.calendarUrl(resolved)).toBe("https://schafe-vorm-fenster.de/beispielgemeinde-musterdorf");
+    expect(fresh.calendarUrl(resolved)).toBe("https://schafe-vorm-fenster.de/schlatkow");
     vi.resetModules();
   });
 });
