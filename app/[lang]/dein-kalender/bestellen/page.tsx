@@ -275,7 +275,12 @@ export default async function Page({
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
       <SectionShell surface="paper">
-        <StepIndicator complete={step === STEP_TOTAL} step={step} total={STEP_TOTAL} />
+        <StepIndicator
+          complete={step === STEP_TOTAL}
+          locale={locale}
+          step={step}
+          total={STEP_TOTAL}
+        />
 
         {/* What this costs, on every step, with the count beside it — the
             flow carried no price at all, so someone arriving from the 480 €

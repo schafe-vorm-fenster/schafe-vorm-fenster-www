@@ -41,7 +41,7 @@
 import Link from "next/link";
 
 import { Icon } from "../icon/icon";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 
 import { getAnalyticsTracker } from "@/src/lib/analytics";
 
@@ -60,6 +60,10 @@ import styles from "./envoy-form-mount.module.css";
  * visitor is never refused twice — the refusal is a sentence, not a lockout.
  */
 export const MIN_SUBMIT_MS = 2500;
+
+const subscribeNever = () => () => {};
+const hydratedSnapshot = () => true;
+const serverSnapshot = () => false;
 
 export interface EnvoyFormProps {
   readonly kind: EnvoyFormKind;
@@ -125,6 +129,16 @@ export function EnvoyForm({
   className,
 }: EnvoyFormProps) {
   const words = ENVOY_FORM_WORDS[locale];
+  /**
+   * The hydration signal, the same one `conversion-tracker` publishes and for
+   * the same reason (F-2-71). Until this component has hydrated, its
+   * `onSubmit` does not exist: a press before then is the browser's own form
+   * submission — correct, and indistinguishable from the enhanced path to
+   * anything watching for the validation messages or the pending word. An
+   * auto-retrying assertion can wait for the fact instead of for a proxy of
+   * it, and a visitor is never worse off either way.
+   */
+  const hydrated = useSyncExternalStore(subscribeNever, hydratedSnapshot, serverSnapshot);
   const honeypotId = useId();
   const successRef = useRef<HTMLDivElement>(null);
   /**
@@ -247,6 +261,7 @@ export function EnvoyForm({
     <form
       action={advanceAction}
       className={[styles.mount, className].filter(Boolean).join(" ")}
+      data-envoy-hydrated={hydrated ? "true" : "false"}
       data-envoy-state={state}
       method={advanceAction === undefined ? undefined : "get"}
       ref={formRef}

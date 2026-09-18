@@ -219,6 +219,7 @@ export default async function Page({
             is left" is answered right through to "nothing". */}
         <StepIndicator
           complete={step === "handover"}
+          locale={locale}
           label={(fieldAt(stepIndicatorSlot.blocks, 0) ?? "").replace(
             "{n}",
             String(step === "handover" ? 3 : step),

@@ -1,10 +1,20 @@
+import { dictionary } from "@/src/lib/i18n/dictionary";
+
+import type { Locale } from "@/src/lib/i18n/locales";
+
 import styles from "./step-indicator.module.css";
 
 export interface StepIndicatorProps {
   readonly step: number;
   readonly total: number;
-  /** The full sentence — "Schritt 2 von 3" / "Step 2 of 3". The caller's, per locale. */
+  /**
+   * The full sentence — "Schritt 2 von 3" / "Step 2 of 3". A flow whose
+   * content artifact writes it (the register flow does) passes it; the rest
+   * get the dictionary's, in `locale`.
+   */
   readonly label?: string;
+  /** The page's language, for the sentence this component writes itself. */
+  readonly locale?: Locale;
   /**
    * The flow is over: every dot is filled and none is marked current, so the
    * handover screen reads finished rather than as a fourth question.
@@ -36,10 +46,11 @@ export function StepIndicator({
   step,
   total,
   label,
+  locale = "de",
   complete = false,
   className,
 }: StepIndicatorProps) {
-  const sentence = label ?? `Schritt ${step} von ${total}`;
+  const sentence = label ?? dictionary(locale).steps.of(step, total);
   const dots = Array.from({ length: total }, (_, index) => index + 1);
 
   return (

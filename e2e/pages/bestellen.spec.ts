@@ -183,6 +183,7 @@ test.describe("TS-025: the order flow", () => {
     });
 
     await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);
+    await invoiceReady(page);
     await fillInvoice(page);
     await page.locator('[data-cta="primary"]').click();
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Einbindungscode");
@@ -211,6 +212,20 @@ test.describe("TS-025: the order flow", () => {
     await expect(page.locator(".skeleton, [aria-busy='true']")).toHaveCount(0);
   });
 
+  /**
+   * The invoice step's own messages and its pending word belong to the
+   * hydrated form; a press before hydration is the browser's own submission,
+   * which is correct but says its own things. Every assertion about the
+   * enhanced behaviour waits for the fact rather than for a proxy of it
+   * (F-2-71).
+   */
+  async function invoiceReady(page: import("@playwright/test").Page) {
+    await expect(page.locator('[data-envoy-form-kind="order-invoice"]')).toHaveAttribute(
+      "data-envoy-hydrated",
+      "true",
+    );
+  }
+
   /** The four required invoice fields of TS-025 D6, as a real order fills them. */
   async function fillInvoice(page: import("@playwright/test").Page) {
     await page.fill('input[id$="authority"]', "Gemeinde Schlatkow");
@@ -230,6 +245,7 @@ test.describe("TS-025: the order flow", () => {
 
     await page.locator('[data-cta="primary"]').click();
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Rechnung");
+    await invoiceReady(page);
 
     // CHANGED (the brief's own "validation that helps"): the step used to
     // advance on an empty invoice, because its "Weiter" was a link standing
@@ -249,6 +265,7 @@ test.describe("TS-025: the order flow", () => {
    */
   test("an empty invoice does not advance, and each open field says so", async ({ page }) => {
     await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);
+    await invoiceReady(page);
     await page.locator('[data-cta="primary"]').click();
 
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Rechnung");
@@ -277,6 +294,7 @@ test.describe("TS-025: the order flow", () => {
     page,
   }) => {
     await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);
+    await invoiceReady(page);
 
     // Exactly one control that reads as an action: the step's own advance.
     const primary = page.locator('[data-cta="primary"]');
@@ -339,6 +357,7 @@ test.describe("TS-025: the order flow", () => {
     });
     await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);
 
+    await invoiceReady(page);
     await fillInvoice(page);
     const primary = page.locator('[data-cta="primary"]');
     await primary.click();

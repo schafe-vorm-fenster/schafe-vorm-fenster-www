@@ -199,6 +199,18 @@ export interface Dictionary {
     onRequest: string;
   };
   /**
+   * The flow progress row's sentence — the accessible name of the dot row
+   * and the line beside it.
+   *
+   * It lived as a German literal default in `step-indicator`, and the order
+   * flow passes no label of its own, so `/en/your-calendar/order` counted
+   * "SCHRITT 3 VON 4" at an English visitor in the middle of a paid
+   * conversion path (the F-2-33 failure mode).
+   */
+  steps: {
+    of: (step: number, total: number) => string;
+  };
+  /**
    * `archive-filter`'s own chrome (TS-028 D4). Same failure class as
    * `forms.noOptions`: the component's defaults were hard-coded German and
    * rendered on `/en/about/archive` too (F-2-33 residue).
@@ -353,6 +365,9 @@ const de: Dictionary = {
     permanent: "Dauerhaft kostenfrei",
     onRequest: "Auf Anfrage",
   },
+  steps: {
+    of: (step, total) => `Schritt ${step} von ${total}`,
+  },
   archiveFilter: {
     all: "Alle",
     label: "Nach Typ filtern",
@@ -469,6 +484,9 @@ const en: Dictionary = {
   price: {
     permanent: "Free, permanently",
     onRequest: "On request",
+  },
+  steps: {
+    of: (step, total) => `Step ${step} of ${total}`,
   },
   archiveFilter: {
     all: "All",
