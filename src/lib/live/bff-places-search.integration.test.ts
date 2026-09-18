@@ -104,3 +104,49 @@ describe("TS-003 D5 / TS-009-A5: the route carries its data kind's cache lifetim
     );
   });
 });
+
+/**
+ * The same route in `auto` — the mode a real deployment runs in. Since
+ * 2026-09-18 the name half of it answers from the committed community index,
+ * so a typed name is a **real** answer even with no read token anywhere, and
+ * that is what the typeahead fetches.
+ */
+describe("auto mode: the typeahead's upstream, without a credential", () => {
+  beforeEach(() => {
+    vi.stubEnv("LIVE_DATA", "auto");
+    vi.stubEnv("GEOAPI_READ_TOKEN", "");
+    vi.stubEnv("EVENTSAPI_READ_TOKEN", "");
+  });
+
+  it("answers a typed name with real, covered communities and no demo flag", async () => {
+    const response = await call("http://localhost:3100/api/places/search?q=Schlat");
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.demo, "a committed index of real places is not demo data").toBe(false);
+    expect(body.data.outcome.kind).toBe("covered");
+    expect(body.data.outcome.place.name).toBe("Schlatkow");
+    expect(body.data.suggestions.map((place: { name: string }) => place.name)).toContain("Schlatkow");
+  });
+
+  it("caps the suggestion list at what a chip row can carry", async () => {
+    const body = await (await call("http://localhost:3100/api/places/search?q=er")).json();
+    expect(body.data.suggestions.length).toBeLessThanOrEqual(6);
+  });
+
+  it("classifies a name nothing covers as uncovered, not as an error", async () => {
+    const body = await (await call("http://localhost:3100/api/places/search?q=Oberammergau")).json();
+    expect(body.data.outcome).toMatchObject({ kind: "uncovered" });
+    expect(body.data.suggestions).toEqual([]);
+  });
+
+  it("still sends the cache lifetime of its data kind (TS-003 D5)", async () => {
+    const response = await call("http://localhost:3100/api/places/search?q=Schlat");
+    expect(response.headers.get("cache-control")).toMatch(/s-maxage=3600/u);
+  });
+
+  it("carries no ecosystem host and no token in the answer", async () => {
+    const text = await (await call("http://localhost:3100/api/places/search?q=Schlat")).text();
+    expect(text).not.toMatch(/geo\.api|events\.api|READ_TOKEN/u);
+  });
+});
