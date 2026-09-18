@@ -31,6 +31,13 @@
   min-width: 0;
 }
 
+.meta {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
 .date {
   color: var(--color-neutral-muted);
   font-family: var(--font-mono);
@@ -52,12 +59,6 @@
   overflow: hidden;
 }
 
-.outlet {
-  color: var(--color-neutral-text2);
-  font-size: var(--type-meta-size);
-  margin: 0;
-}
-
 .badges {
   display: flex;
   flex-wrap: wrap;
@@ -65,12 +66,20 @@
 }
 
 .context {
+  /*
+   * Two lines, not one truncated one. At 390 px a single nowrap line cut
+   * two thirds of the entries mid-word ("Flechtorf (Landkreis Hel…"), and
+   * the part it cut is the part that says where the entry is from — which
+   * is what this line is for.
+   */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   color: var(--color-neutral-text2);
   font-size: var(--type-meta-size);
+  line-clamp: 2;
   margin: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .link {

@@ -5,9 +5,17 @@ import type { Page } from "@playwright/test";
 /**
  * TS-028 — `/ueber-uns/archiv` — acceptance pass.
  *
- * The real list is empty today (Q-045, `state/open.md` #1) — every row on
- * this page is the content artifact's own dummy-content addition, rendered
- * with `demo` (`data-demo="true"`) and one page-level `Demo-Daten` badge.
+ * The real list is empty today (Q-045, `state/open.md` #1) — the 31 rows are
+ * the content artifact's own real, cited media-echo entries with clearance
+ * pending, so nothing on the page badges itself.
+ *
+ * **Changed for the polish brief (page 11).** The *all* chip is gone: it was
+ * pressed by default, did nothing when pressed again, and cost a whole pill
+ * in a row of eight in front of a list nobody browses. The reset it replaced
+ * it with (`[data-archive-reset]`) exists only while a selection is active,
+ * so the type chips are now the whole group and the cases below index from
+ * chip 0 instead of chip 1. The count line moved above the chips, so the
+ * page's first line says how big the archive is.
  */
 
 /**
@@ -30,7 +38,11 @@ async function waitForFilterHydration(page: Page) {
 test.describe("/ueber-uns/archiv", () => {
   test("TS-028-A1: rows are date-descending, year h2s descend", async ({ page }) => {
     await page.goto("/ueber-uns/archiv");
-    const years = (await page.locator("article h2").allTextContents()).map(Number);
+    // The year headings, not the rows' own `h3`s: `article h2` matched
+    // nothing at all (an `archive-row` is the `article`, and its heading is
+    // an `h3`), so this case used to compare an empty list with itself.
+    const years = (await page.locator("[data-archive-filter] h2").allTextContents()).map(Number);
+    expect(years.length).toBeGreaterThan(1);
     const sorted = [...years].sort((a, b) => b - a);
     expect(years).toEqual(sorted);
   });
@@ -63,21 +75,23 @@ test.describe("/ueber-uns/archiv", () => {
     await context.close();
   });
 
-  test("TS-028-A3: every chip yields at least one visible row; 'Alle' restores the full count", async ({
+  test("TS-028-A3: every chip yields at least one visible row; the reset restores the full count", async ({
     page,
   }) => {
     await page.goto("/ueber-uns/archiv");
     await waitForFilterHydration(page);
-    const chips = page.getByRole("group").getByRole("button");
+    const chips = page.getByRole("group").locator("button:not([data-archive-reset])");
     const total = await chips.count();
-    expect(total).toBeGreaterThan(1); // "Alle" + at least one type chip
+    expect(total).toBeGreaterThan(1);
 
-    const firstType = chips.nth(1);
-    await firstType.click();
+    // No selection, no reset — there is nothing to reset yet.
+    await expect(page.locator("[data-archive-reset]")).toHaveCount(0);
+
+    await chips.nth(0).click();
     const visibleRows = page.locator("[data-archive-type]:not([hidden])");
     expect(await visibleRows.count()).toBeGreaterThan(0);
 
-    await chips.nth(0).click(); // "Alle"
+    await page.locator("[data-archive-reset]").click();
     const allRows = page.locator("[data-archive-type]");
     await expect(page.locator("[data-archive-type][hidden]")).toHaveCount(0);
     expect(await allRows.count()).toBeGreaterThan(0);
@@ -88,8 +102,8 @@ test.describe("/ueber-uns/archiv", () => {
   }) => {
     await page.goto("/ueber-uns/archiv");
     await waitForFilterHydration(page);
-    const chips = page.getByRole("group").getByRole("button");
-    const firstType = chips.nth(1);
+    const chips = page.getByRole("group").locator("button:not([data-archive-reset])");
+    const firstType = chips.nth(0);
     const typeLabel = (await firstType.textContent())?.trim();
     expect(typeLabel).toBeTruthy();
 
@@ -126,7 +140,7 @@ test.describe("/ueber-uns/archiv", () => {
     await page.goto("/ueber-uns/archiv");
     await waitForFilterHydration(page);
     const before = page.url();
-    const chip = page.getByRole("group").getByRole("button").nth(1);
+    const chip = page.getByRole("group").locator("button:not([data-archive-reset])").nth(0);
     await chip.click();
     expect(page.url()).toBe(before);
   });
@@ -176,7 +190,7 @@ test.describe("/ueber-uns/archiv", () => {
     await page.goto("/ueber-uns/archiv");
     await waitForFilterHydration(page);
     await expect(page.locator("h1")).toHaveCount(1);
-    const chip = page.getByRole("group").getByRole("button").first();
+    const chip = page.getByRole("group").locator("button:not([data-archive-reset])").first();
     await chip.focus();
     await expect(chip).toBeFocused();
   });
@@ -189,6 +203,62 @@ test.describe("/ueber-uns/archiv", () => {
       () => document.documentElement.scrollWidth > window.innerWidth + 1,
     );
     expect(overflows).toBe(false);
+  });
+
+  /**
+   * Polish brief page 11 — the two things this page needed.
+   */
+  test("brief page 11: the count stands above the chips, and the list is one line per fact", async ({
+    page,
+  }) => {
+    await page.goto("/ueber-uns/archiv");
+    await waitForFilterHydration(page);
+
+    const order = await page.evaluate(() => {
+      const count = document.querySelector('[aria-live="polite"]');
+      const group = document.querySelector('[role="group"]');
+      if (!count || !group) return null;
+      return Boolean(
+        count.compareDocumentPosition(group) & Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+    });
+    expect(order, "the entry count precedes the chip row").toBe(true);
+
+    // A month-precision entry states a month, not a first-of-the-month that
+    // no outlet ever published on: `2026-08` used to render "01. AUGUST 2026".
+    const dates = await page.locator("[data-archive-type] time").evaluateAll((nodes) =>
+      nodes.map((node) => ({
+        iso: node.getAttribute("datetime") ?? "",
+        label: (node.textContent ?? "").trim(),
+      })),
+    );
+    expect(dates.length).toBeGreaterThan(10);
+    for (const { iso, label } of dates) {
+      if (/^\d{4}-\d{2}$/.test(iso)) {
+        expect(label, `${iso} renders a day it does not state`).not.toMatch(/^\d{2}\./);
+      }
+    }
+
+    // One provenance line per row, not two. The outlet used to stand on a
+    // line of its own *and* at the head of the context line below it
+    // ("Nordkurier" / "Nordkurier · Mecklenburg-Vorpommern"), so every row
+    // cost six lines where four say the same thing.
+    const firstRow = page.locator("[data-archive-type]").first();
+    await expect(firstRow.locator("p")).toHaveCount(1);
+    await expect(firstRow.locator("p")).toContainText(" · ");
+  });
+
+  test("F-2-33: the English archive is English — the row's own link label included", async ({
+    page,
+  }) => {
+    await page.goto("/en/about/archive");
+    const rows = page.locator("[data-archive-type]");
+    expect(await rows.count()).toBeGreaterThan(10);
+    const text = await page.locator("[data-archive-filter]").innerText();
+    for (const german of ["Original ansehen", "öffnet neuen Tab", "Einträgen", "Alle"]) {
+      expect(text, german).not.toContain(german);
+    }
+    expect(text).toContain("View the original");
   });
 
   test.skip(

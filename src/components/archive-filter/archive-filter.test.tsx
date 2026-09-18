@@ -40,8 +40,14 @@ describe("F-2-69: the chip row occupies its final height before hydration", () =
     const html = serverHtml();
     // Every label the hydrated row renders, so the reserved row wraps to the
     // same number of lines at every width rather than to a guessed height.
-    expect(html).toContain("Alle");
+    //
+    // Polish brief page 11: the *all* chip is no longer one of them. It was
+    // pressed by default and did nothing when pressed again; it is a text
+    // **reset** now, and a reset only exists while there is a selection to
+    // clear — so the row the visitor first sees is the type chips alone, and
+    // the reserved copy is that same row.
     for (const type of TYPES) expect(html).toContain(type.label);
+    expect(html, "the reset has nothing to reset yet").not.toContain("Alle");
   });
 
   it("hides the reserved row and the reserved count line without collapsing them", () => {

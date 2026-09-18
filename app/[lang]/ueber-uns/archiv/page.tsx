@@ -5,7 +5,10 @@ import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
+import { dictionary } from "@/src/lib/i18n/dictionary";
 import { SITE_ORIGIN } from "@/src/lib/routes/routes";
+
+import { archivePrecision } from "./precision";
 
 import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
@@ -146,7 +149,7 @@ export default async function Page({
     <PageFrame closing={{ variant: "merged" }} locale={locale} meta={pageMeta}>
       <SectionShell labelledBy="archiv-h1" surface="paper">
         <MotionReveal>
-          <h1 id="archiv-h1">{fieldAt(heading.blocks, 0) ?? "Archiv"}</h1>
+          <h1 id="archiv-h1">{fieldAt(heading.blocks, 0) ?? dictionary(locale).pages.archive}</h1>
 
           <ArchiveFilter locale={locale} types={filterTypes}>
             {[...byYear.entries()].map(([year, yearRows]) => (
@@ -154,7 +157,11 @@ export default async function Page({
                 <h2>{year}</h2>
                 {yearRows.map((row) => (
                   <ArchiveRow
-                    contextLine={`${row.source} · ${row.place}`}
+                    // The place only. The outlet is the row's own `outlet`
+                    // prop, and passing it here too printed the name twice
+                    // in two adjacent lines ("Nordkurier" / "Nordkurier ·
+                    // Mecklenburg-Vorpommern") on all 31 rows.
+                    contextLine={row.place === "—" ? "" : row.place}
                     date={row.date}
                     demo={demo}
                     // TS-028-A14/R-2: the outlet's own `url`, verbatim — a
@@ -162,7 +169,13 @@ export default async function Page({
                     // than pointing at nothing.
                     href={row.url && row.url !== "—" ? row.url : undefined}
                     key={`${row.title}-${row.date}`}
+                    locale={locale}
                     outlet={row.source}
+                    // The entries carry `YYYY`, `YYYY-MM` and `YYYY-MM-DD`
+                    // alike. Rendered at the component's `day` default, a
+                    // month-precision entry dated itself "01. August 2026" —
+                    // a day no source states, on two thirds of the list.
+                    precision={archivePrecision(row.date)}
                     title={row.title}
                     types={[row.type]}
                   />

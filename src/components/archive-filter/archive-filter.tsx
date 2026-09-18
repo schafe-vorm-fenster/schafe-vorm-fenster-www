@@ -64,25 +64,16 @@ export interface ArchiveFilterType {
  * `visibility: hidden` subtree is outside both the accessibility tree and the
  * tab order, so a visitor without JavaScript is offered nothing dead.
  */
-function ReservedChipRow({
-  allLabel,
-  types,
-}: {
-  readonly allLabel: string;
-  readonly types: readonly ArchiveFilterType[];
-}) {
+function ReservedChipRow({ types }: { readonly types: readonly ArchiveFilterType[] }) {
   const chipClass = [chipStyles.chip, chipStyles.light].join(" ");
 
   return (
     <div aria-hidden="true" className={[styles.chips, styles.reserved].join(" ")}>
-      {/* Zero selected means *all*, so the mounted row opens with the `all`
-          chip pressed — which is the one chip that carries the check glyph.
-          The reserved copy carries it too, or the row would wrap one chip
-          earlier than the real one at a narrow width. */}
-      <span className={[chipClass, chipStyles.selected].join(" ")}>
-        <Icon name="check" size={18} />
-        {allLabel}
-      </span>
+      {/* The mounted row opens with nothing selected and therefore with the
+          type chips alone — the *all* control is a reset and appears only
+          once there is something to reset (polish brief page 11, item 1).
+          The reserved copy is chip for chip the same row, so it wraps to the
+          same number of lines at every width. */}
       {types.map((type) => (
         <span className={chipClass} key={type.id}>
           {type.label}
@@ -180,24 +171,9 @@ export function ArchiveFilter({
       data-archive-filter
       data-hydrated={mounted ? "true" : "false"}
     >
-      {mounted ? (
-        <div aria-label={labelText} className={styles.chips} role="group">
-          <Chip onClick={() => setSelected(new Set())} selected={selected.size === 0}>
-            {allText}
-          </Chip>
-          {types.map((type) => (
-            <Chip
-              key={type.id}
-              onClick={() => setSelected((prev) => toggleSelection(prev, type.id))}
-              selected={selected.has(type.id)}
-            >
-              {type.label}
-            </Chip>
-          ))}
-        </div>
-      ) : (
-        <ReservedChipRow allLabel={allText} types={types} />
-      )}
+      {/* The count stands **above** the chips (polish brief page 11, item 2):
+          the page's first line then says how big the archive is, before it
+          offers eight controls for narrowing it down. */}
       {mounted && visible !== null ? (
         <p aria-live="polite" className={styles.count}>
           {d.count.replace("{visible}", String(visible)).replace("{total}", String(total))}
@@ -212,6 +188,36 @@ export function ArchiveFilter({
         <p aria-hidden="true" className={[styles.count, styles.reserved].join(" ")}>
           &nbsp;
         </p>
+      )}
+      {mounted ? (
+        <div aria-label={labelText} className={styles.chips} role="group">
+          {types.map((type) => (
+            <Chip
+              key={type.id}
+              onClick={() => setSelected((prev) => toggleSelection(prev, type.id))}
+              selected={selected.has(type.id)}
+            >
+              {type.label}
+            </Chip>
+          ))}
+          {/* Eight pills at 40 px each is a lot of furniture in front of a
+              list nobody browses, and one of them — *all* — was pressed by
+              default and did nothing when pressed again. It is a reset now,
+              and a reset only exists while there is a selection to clear. */}
+          {selected.size > 0 ? (
+            <button
+              className={styles.reset}
+              data-archive-reset
+              onClick={() => setSelected(new Set())}
+              type="button"
+            >
+              <Icon name="circle-x" size={18} />
+              {allText}
+            </button>
+          ) : null}
+        </div>
+      ) : (
+        <ReservedChipRow types={types} />
       )}
       <div ref={listRef}>{children}</div>
     </div>

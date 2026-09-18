@@ -1,13 +1,33 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 
 .chips {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--control-gap);
+  gap: var(--space-2);
+}
+
+/*
+ * The *all* control is a text reset, not an eighth pill — no fill, no
+ * border, the site's own quiet link colour, and the same 44 px target every
+ * other control keeps.
+ */
+.reset {
+  align-items: center;
+  background: none;
+  border: 0;
+  color: var(--color-lime-800);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  gap: var(--space-1);
+  min-height: var(--target-min);
+  padding: 0 var(--space-2);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
 }
 
 .count {
