@@ -69,18 +69,18 @@ const ROUTE = "legal" as const;
  */
 function dropRepeatedTitle(
   blocks: readonly LegalBlock[],
-  title: string,
+  names: readonly string[],
 ): { blocks: readonly LegalBlock[]; dropped: boolean } {
   const first = blocks[0];
   if (!first || first.kind !== "heading") return { blocks, dropped: false };
   const normalise = (value: string) => value.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
   const heading = normalise(first.text);
-  const section = normalise(title);
-  if (heading === "" || section === "") return { blocks, dropped: false };
-  if (!heading.startsWith(section) && !section.startsWith(heading)) {
-    return { blocks, dropped: false };
-  }
-  return { blocks: blocks.slice(1), dropped: true };
+  if (heading === "") return { blocks, dropped: false };
+  const repeats = names
+    .map(normalise)
+    .filter((name) => name !== "")
+    .some((name) => heading.startsWith(name) || name.startsWith(heading));
+  return repeats ? { blocks: blocks.slice(1), dropped: true } : { blocks, dropped: false };
 }
 
 /** DE/EN section display titles, read from the content artifact's own
@@ -179,7 +179,18 @@ export default async function Page({
                 const document = docsBySection.get(section);
                 const title =
                   navItems.find((item) => item.id === legalAnchor(section, locale))?.label ?? section;
-                const body = document ? dropRepeatedTitle(document.blocks, title) : null;
+                // The section's own title **and** its German anchor: the
+                // documents are German (TS-029 open point #2), so on
+                // `/en/legal` the English title "Imprint" never matches the
+                // German "Impressum" the document opens with, and the page
+                // said the same thing twice in two languages. The anchor
+                // registry is the join — `impressum`, `datenschutz`,
+                // `nutzungsbedingungen` — and "Fotos auf dieser Website"
+                // still matches neither `bildnachweise` nor "Image credits",
+                // so it keeps its own heading.
+                const body = document
+                  ? dropRepeatedTitle(document.blocks, [title, legalAnchor(section, "de")])
+                  : null;
                 return (
                   <LegalSection
                     body={

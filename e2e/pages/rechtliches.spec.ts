@@ -287,6 +287,29 @@ test.describe("/legal (EN)", () => {
   });
 
   /**
+   * The same duplication as the German page, in two languages: the section
+   * heading said "Imprint" and the German document under it opened with
+   * "Impressum". The registry anchor is the join (`impressum`,
+   * `datenschutz`, `nutzungsbedingungen`), so the English page drops the
+   * repeated title too — and keeps a heading that says something new.
+   */
+  test("brief page 12: the English page does not head each section twice", async ({ page }) => {
+    await page.goto("/en/legal");
+    for (const [anchor, german] of [
+      ["imprint", "Impressum"],
+      ["privacy", "Datenschutzerklärung"],
+      ["terms", "Nutzungsbedingungen"],
+    ] as const) {
+      const section = page.locator(`#${anchor}`);
+      await expect(section.locator("h3").first(), anchor).not.toHaveText(german);
+    }
+    // "Fotos auf dieser Website" is not "Image credits" — it stays.
+    await expect(page.locator("#image-credits h3").first()).toHaveText(
+      "Fotos auf dieser Website",
+    );
+  });
+
+  /**
    * F-2-74 (gate-2 protocol item 7) / `state/open.md` row 53 — the six legal
    * documents are imported German-only (TS-029 open point #2), and row 53's
    * mitigation is that the EN page frame "states explicitly, in English,
