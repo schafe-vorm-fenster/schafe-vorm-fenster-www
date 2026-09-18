@@ -115,7 +115,19 @@ export function PhotoSurface({
     return <Skeleton className={className} ratio={ratio} variant="box" />;
   }
 
-  const missingPhoto = !src || state === "empty";
+  /*
+   * `empty` is a statement about *this surface's own asset*, and it removes
+   * the photograph only where the surface **is** the asset — a standalone
+   * photo slot with nothing in it. A surface that wraps content is a hero,
+   * and its `state` is the state of the copy the caller renders inside it:
+   * `/mitmachen` and `/deine-region` both pass `slotState(hero)`, their
+   * headline slot's own state, and in the production build that slot is
+   * `empty` (its content is still `status: draft`). The surface then dropped
+   * the photograph, `data-hero` with it, and the two pages shipped a hero
+   * with no picture and a solid header — in the build, while `next dev`
+   * showed the photograph. An absent copy slot is not an absent photograph.
+   */
+  const missingPhoto = !src || (state === "empty" && !children);
 
   // A surface with no content of its own (a standalone photo slot — the
   // `/ueber-uns` origin photo, an archive row) *is* the invitation: the
