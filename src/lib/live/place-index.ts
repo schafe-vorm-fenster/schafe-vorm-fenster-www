@@ -63,17 +63,32 @@ function toPlace(entry: IndexEntry): Place {
 }
 
 /**
- * Fold the diacritics a German place name carries so `gross`, `groß` and
- * `Groß` all find `Groß Kiesow`, and a keyboard without umlauts still works.
+ * Fold what a German place name spells differently from what a visitor types:
+ * the combining marks left by NFD (`\u0300`–`\u036f`, so `ü` matches `u`)
+ * and `ß`, which people type as `ss` as often as not. Written as escapes
+ * rather than as literal marks, so the range survives every editor and every
+ * diff.
  */
 function fold(value: string): string {
   return value
     .normalize("NFD")
-    .replace(/[̀-ͯ]/gu, "")
-    .replace(/ß/gu, "ss")
+    .replace(/[\u0300-\u036f]/gu, "")
+    .replace(/\u00df/gu, "ss")
     .toLowerCase()
     .trim();
 }
+
+/**
+ * The folded forms, computed once at module load rather than per keystroke:
+ * the typeahead calls `searchByName` on every debounced input, and folding
+ * 1760 names each time is work the answer does not change with.
+ */
+const FOLDED: readonly { readonly entry: IndexEntry; readonly name: string; readonly municipality: string }[] =
+  ENTRIES.map((entry) => ({
+    entry,
+    name: fold(entry.name),
+    municipality: fold(entry.municipality ?? ""),
+  }));
 
 const BY_ID = new Map<string, IndexEntry>(ENTRIES.map((entry) => [entry.communityId, entry]));
 const BY_SLUG = new Map<string, IndexEntry>(ENTRIES.map((entry) => [entry.slug, entry]));
@@ -92,10 +107,17 @@ export function searchByName(query: string, limit = 6): Place[] {
   if (needle.length < 2) return [];
 
   const ranked: { entry: IndexEntry; rank: number }[] = [];
-  for (const entry of ENTRIES) {
-    const name = fold(entry.name);
+  for (const { entry, name, municipality } of FOLDED) {
     const rank =
-      name === needle ? 0 : name.startsWith(needle) ? 1 : name.includes(needle) ? 2 : fold(entry.municipality ?? "").startsWith(needle) ? 3 : -1;
+      name === needle
+        ? 0
+        : name.startsWith(needle)
+          ? 1
+          : name.includes(needle)
+            ? 2
+            : municipality.startsWith(needle)
+              ? 3
+              : -1;
     if (rank >= 0) ranked.push({ entry, rank });
   }
 
