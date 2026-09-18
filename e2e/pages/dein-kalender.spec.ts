@@ -25,7 +25,22 @@ test.describe("TS-024: /dein-kalender", () => {
     const blocks = await page.locator("[data-block]").evaluateAll((elements) =>
       elements.map((element) => element.getAttribute("data-block")),
     );
-    expect(blocks).toEqual(["focus", "contrast", "embed-demo", "tiers", "proof", "trust"]);
+    // CHANGED (polish brief G-4 and page 6, item 2): `embed-config` is new.
+    // The embed section measured 1772 px at 390 px — a screen and a half over
+    // the budget — because the real calendar, a nine-line paragraph and a
+    // six-row settings list shared one violet ground, and the settings read
+    // as fine print under the picture rather than as the answer to "can we
+    // decide what is in it?". The calendar keeps the violet section to
+    // itself; the settings stand one section lower, on their own ground.
+    expect(blocks).toEqual([
+      "focus",
+      "contrast",
+      "embed-demo",
+      "embed-config",
+      "tiers",
+      "proof",
+      "trust",
+    ]);
   });
 
   test("TS-024-A3: exactly one Pulse primary CTA to /dein-kalender/bestellen, one equal-weight CTA inside focus", async ({
@@ -62,6 +77,11 @@ test.describe("TS-024: /dein-kalender", () => {
     page,
   }) => {
     await page.goto(ROUTE);
+    // The heading read "Heute gegen mit dem Produkt" — not a sentence in any
+    // language, in 38 px, on the page that asks for 480 € (brief, finding 5).
+    await expect(
+      page.getByRole("heading", { name: "Heute — und mit dem Produkt" }),
+    ).toBeVisible();
     const rows = page.locator('[data-block="contrast"] li');
     await expect(rows).toHaveCount(4);
     // `innerText` reflects the rendered (CSS-uppercased) text, so compare
@@ -111,7 +131,7 @@ test.describe("TS-024: /dein-kalender", () => {
     expect(bodyText).not.toMatch(/\bab\s+\d/);
   });
 
-  test("TS-024-A13: the proof block renders three cards, and an uncleared image is a flat surface, not a marked gap", async ({
+  test("TS-024-A13: the proof block renders three cards, one featured and two compact, and no image slot at all", async ({
     page,
   }) => {
     await page.goto(ROUTE);
@@ -124,6 +144,81 @@ test.describe("TS-024: /dein-kalender", () => {
     for (const marking of ["Foto gesucht", "Photo wanted", "Platzhalter", "Nicht motivgenau"]) {
       await expect(block.getByText(marking), marking).toHaveCount(0);
     }
+
+    // CHANGED (polish brief G-9 + G-7). The flat surface was three identical
+    // 143 px bands in a row — which also broke the design system's own "no
+    // two photo surfaces adjacent" rule — and the copy behind it invited a
+    // photo from the reader's village for what are portrait slots of named
+    // mayors. The slot is gone. What is left is one feature card over two
+    // hairline rows, each naming its own source, with no `Beleg` badge
+    // repeating the word the source line already carries.
+    await expect(block.locator("img, [data-placeholder]")).toHaveCount(0);
+    await expect(block.locator('article[data-emphasis="feature"]')).toHaveCount(1);
+    await expect(block.locator('article[data-emphasis="compact"]')).toHaveCount(2);
+    await expect(block.getByText("Beleg", { exact: true })).toHaveCount(0);
+  });
+
+  /**
+   * G-3 / brief page 6, item 7 — the page was four arguments standing next to
+   * each other with nothing between them. Each of the three joints now
+   * carries the sentence that names it, and every section after the hero
+   * opens with its role.
+   */
+  test("G-3: the three transitions and the section kickers are on the page", async ({ page }) => {
+    await page.goto(ROUTE);
+    for (const line of [
+      "So sieht das aus, wenn es bei euch steht:",
+      "Was das kostet, hängt nur davon ab, wo der Kalender stehen soll.",
+      "Bleibt die Frage, wem ihr da eigentlich eure Daten gebt.",
+    ]) {
+      await expect(page.getByText(line)).toBeVisible();
+    }
+    for (const kicker of [
+      "Warum es heute hakt",
+      "So funktioniert es",
+      "Was es kostet",
+      "Wer das schon macht",
+      "Wie wir arbeiten",
+    ]) {
+      await expect(page.getByText(kicker, { exact: true })).toBeVisible();
+    }
+  });
+
+  /**
+   * G-5 — the outbound disclosure leaves the control's label. "(öffnet neuen
+   * Tab) · Daten gehen an Google" inside the pill made the hero's secondary a
+   * three-line white block that outweighed the page's own primary, and made
+   * tier 2's briefing a two-line link. The new-tab half is one written
+   * sentence under the control; the data half belongs to the privacy
+   * statement the trust block links.
+   */
+  test("G-5: no briefing control carries its disclosure inside its own label", async ({ page }) => {
+    await page.goto(ROUTE);
+    const labels = await page
+      .locator('a[href*="calendar.app.google"]')
+      .evaluateAll((elements) => elements.map((element) => element.textContent ?? ""));
+    expect(labels.length).toBeGreaterThan(0);
+    for (const label of labels) {
+      expect(label).not.toContain("Daten gehen an");
+    }
+    await expect(page.getByText("Öffnet Google Kalender in einem neuen Tab.").first()).toBeVisible();
+  });
+
+  /**
+   * G-6 / brief page 6, item 8 — the page ended on a button with no sentence
+   * above it, and the equal-weight briefing was nowhere near it.
+   */
+  test("the closing block carries its heading and the briefing as a quiet second way", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    const closing = page.locator("#closing-cta");
+    await expect(closing).toContainText("Euer Kalender läuft, sobald der Code auf eurer Seite steht.");
+    await expect(closing.locator('a[href*="/dein-kalender/bestellen"]')).toHaveCount(1);
+    await expect(closing.getByText("Lieber erst sprechen?")).toBeVisible();
+    // Still exactly one primary treatment on this screenful: the repeat is
+    // `data-cta="repeat"`, and the briefing is a link.
+    await expect(closing.locator('[data-cta="primary"]')).toHaveCount(0);
   });
 
   test("TS-024-A14: the trust block occurs exactly once, states the data-protection claim, links both legal anchors", async ({

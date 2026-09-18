@@ -27,6 +27,72 @@ test.describe("TS-023: the register flow", () => {
     await expect(page.getByText("Belege", { exact: true })).toHaveCount(0);
   });
 
+  /**
+   * Polish brief, page 5 — the brief's reviewer called step 1 a dead end.
+   * The screen was a breadcrumb, a badge, a question, a field and a helper
+   * line, and the only control on it said "Suchen", which reads as something
+   * a page does rather than as the way through a flow.
+   *
+   * CHANGED: the step-1 submit label. It was "Suchen" / "Search" and is
+   * "Weiter" / "Continue" now, with the arrow every other step's advance
+   * carries. Searching *is* the advance on this step — a resolved place moves
+   * the flow to step 2 by itself — so one label for one action beats two
+   * words for the same press.
+   */
+  test("step 1 has an unmistakable way forward, a progress row and its reassurance", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    const submit = page.locator('main button[type="submit"]');
+    await expect(submit).toHaveCount(1);
+    await expect(submit).toContainText("Weiter");
+
+    await expect(page.getByRole("group", { name: "Schritt 1 von 3" })).toBeVisible();
+    await expect(
+      page.getByText("Drei Fragen, dann bist du drin. Keine E-Mail-Adresse nötig, solange du hier bist."),
+    ).toBeVisible();
+
+    // The band moved below the step and went tight: on step 1 it was the
+    // largest thing on the screen after the question, offering three ways
+    // out at the moment the visitor was about to start.
+    const stepBottom = await page.locator("main section").first().evaluate((element) =>
+      element.getBoundingClientRect().bottom,
+    );
+    const bandTop = await page.locator("#context-band").evaluate((element) =>
+      element.getBoundingClientRect().top,
+    );
+    expect(bandTop).toBeGreaterThanOrEqual(stepBottom - 1);
+  });
+
+  /**
+   * One action per step, and a step cannot be answered by pressing past it:
+   * the radio group insists, in the browser, with no JavaScript.
+   */
+  test("steps 2 and 3 refuse an unanswered advance", async ({ page }) => {
+    for (const [query, name] of [
+      ["?ort=schlatkow", "wer"],
+      ["?ort=schlatkow&wer=opt-1", "weg"],
+    ] as const) {
+      await page.goto(`${ROUTE}${query}`);
+      const options = page.locator(`input[name="${name}"]`);
+      expect(await options.count()).toBeGreaterThan(0);
+      await expect(options.first()).toHaveAttribute("required", "");
+      await expect(page.getByRole("button", { name: /Weiter/ })).toHaveCount(1);
+    }
+  });
+
+  /**
+   * The last screen reads finished — the website's part is over — without
+   * claiming a registration it cannot confirm (D6, and TS-023-A11 below).
+   */
+  test("the handover reads as the end of the flow, with every step marked done", async ({
+    page,
+  }) => {
+    await page.goto(`${ROUTE}?ort=schlatkow&wer=opt-1&weg=whatsapp`);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Geschafft");
+    await expect(page.getByRole("group", { name: "Schritt 3 von 3" })).toBeVisible();
+  });
+
   test("TS-023-A2/A3/A7: walking the flow keeps state in the URL, survives reload and a fresh window, never in storage", async ({
     page,
     context,

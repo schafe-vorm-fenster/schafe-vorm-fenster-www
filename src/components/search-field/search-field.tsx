@@ -17,6 +17,12 @@ export interface SearchFieldProps extends Omit<LinkOptions, "hash"> {
   readonly label: string;
   readonly placeholder?: string;
   readonly submitLabel?: string;
+  /**
+   * Adds the `arrow-right` to the submit, where this control *is* a flow's
+   * step forward rather than a search on a page (polish brief, page 5: "an
+   * unmistakable Weiter per step"). Off everywhere the field searches.
+   */
+  readonly submitOnward?: boolean;
   readonly name?: string;
   readonly defaultValue?: string;
   readonly id?: string;
@@ -63,6 +69,7 @@ export function SearchField({
   label,
   placeholder,
   submitLabel,
+  submitOnward = false,
   name = "ort",
   defaultValue,
   id = "ort-suche",
@@ -114,6 +121,7 @@ export function SearchField({
         />
         <button className={styles.submit} data-cta={submitDataCta} type="submit">
           {resolvedSubmitLabel}
+          {submitOnward ? <Icon name="arrow-right" size={18} /> : null}
         </button>
       </div>
     </SearchForm>

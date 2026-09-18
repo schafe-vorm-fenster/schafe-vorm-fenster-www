@@ -32,7 +32,7 @@
  * A page hands over its manifest and its blocks and writes neither of them.
  */
 
-import { ClosingCta } from "@/src/components/closing-cta/closing-cta";
+import { ClosingCta, ClosingCtaModule } from "@/src/components/closing-cta/closing-cta";
 import { ContextBand } from "@/src/components/context-band/context-band";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
@@ -73,6 +73,8 @@ export type ClosingBlock =
       readonly heading?: string;
       /** Only where a cleared backing exists — otherwise omitted, not softened. */
       readonly reassurance?: string;
+      /** A quiet second way forward under the button — never a second pill (G-5). */
+      readonly footer?: ReactNode;
     }
   | { readonly variant: "merged" }
   /**
@@ -91,8 +93,12 @@ export type ClosingBlock =
   | {
       readonly variant: "module";
       readonly node: ReactNode;
+      /** The promise the page ends on, above the control (polish brief G-6). */
+      readonly heading?: string;
       /** Only where a cleared backing exists — otherwise omitted, not softened. */
       readonly reassurance?: string;
+      /** A quiet line under the block — "Anderer Ort?", "Falsch getippt?". */
+      readonly footer?: ReactNode;
     };
 
 export interface PageFrameProps {
@@ -181,12 +187,20 @@ export function PageFrame({
           <MotionReveal>
             <SectionShell id="closing-cta" label={dictionary(locale).nav.home} surface="paper">
               {closing.variant === "module" ? (
-                <>
+                /* The block-1 primary repeated as the module it is, with the
+                   same heading and reassurance a `repeat` block carries — a
+                   page that ends on a control and nothing else ends on no
+                   promise at all (polish brief G-6). */
+                <ClosingCtaModule
+                  footer={closing.footer}
+                  heading={closing.heading}
+                  reassurance={closing.reassurance}
+                >
                   {closing.node}
-                  {closing.reassurance ? <p>{closing.reassurance}</p> : null}
-                </>
+                </ClosingCtaModule>
               ) : (
                 <ClosingCta
+                  footer={closing.footer}
                   heading={closing.heading}
                   label={closing.label}
                   locale={locale}

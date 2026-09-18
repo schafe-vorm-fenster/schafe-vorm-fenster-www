@@ -1,5 +1,7 @@
 import { formatPriceFigure, type PriceDisplay, type PriceFigure } from "./format";
 
+import { dictionary } from "@/src/lib/i18n/dictionary";
+
 import type { Locale } from "@/src/lib/i18n/locales";
 
 import styles from "./price-tag.module.css";
@@ -39,24 +41,31 @@ export interface PriceTagProps {
 export function PriceTag({
   display,
   figure,
-  permanentLabel = "Dauerhaft kostenfrei",
-  onRequestLabel = "Auf Anfrage",
+  permanentLabel,
+  onRequestLabel,
   locale = "de",
   className,
 }: PriceTagProps) {
   const classes = [styles.tag, className].filter(Boolean).join(" ");
+  // F-2-33: both labels were German literals in this component body, so the
+  // free tier on `/en/your-calendar` read "Dauerhaft kostenfrei" and the
+  // enterprise tier "Auf Anfrage". A page may still override them; the
+  // fallback follows the page's language rather than the author's.
+  const words = dictionary(locale).price;
+  const permanent = permanentLabel ?? words.permanent;
+  const onRequest = onRequestLabel ?? words.onRequest;
 
   if (display === "withheld") return <span className={classes} />;
 
   if (display === "permanent") {
-    return <p className={classes}>{permanentLabel}</p>;
+    return <p className={classes}>{permanent}</p>;
   }
 
   if (display === "on-request") {
-    return <p className={classes}>{onRequestLabel}</p>;
+    return <p className={classes}>{onRequest}</p>;
   }
 
-  if (!figure) return <p className={classes}>{onRequestLabel}</p>;
+  if (!figure) return <p className={classes}>{onRequest}</p>;
 
   return <p className={classes}>{formatPriceFigure(figure, locale)}</p>;
 }

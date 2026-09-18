@@ -11,13 +11,47 @@
 }
 
 .label {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
   font-size: var(--type-meta-size);
+  font-weight: 700;
+  gap: var(--space-2);
+}
+
+/*
+ * "Pflichtfeld", spelled out rather than an asterisk. An invoice form for a
+ * public authority is nine fields, four of them required, and a visitor
+ * should not have to find the legend that explains a symbol.
+ */
+.required {
+  color: var(--color-neutral-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  text-transform: uppercase;
+}
+
+.hint {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+  margin: 0;
+}
+
+/* The message sits under the field it is about, in the failure colour the
+   objection list already uses for "this is what does not work". */
+.fieldError {
+  color: var(--color-status-error);
+  font-size: var(--type-meta-size);
+  margin: 0;
 }
 
 .input,
 .textarea {
   background: var(--color-neutral-paper);
   border: 1px solid var(--color-neutral-line);
+  border-radius: 0;
   color: var(--color-neutral-ink);
   font-family: var(--font-sans);
   font-size: var(--type-body-size);
@@ -32,8 +66,16 @@
   resize: vertical;
 }
 
+/* Never colour alone: the border thickens as well as changes hue. */
+.input[aria-invalid="true"],
+.textarea[aria-invalid="true"] {
+  border-color: var(--color-status-error);
+  border-width: 2px;
+}
+
 .submit {
   align-items: center;
+  gap: var(--control-gap);
   align-self: flex-start;
   background: var(--color-neutral-ink);
   border: 0;
@@ -73,7 +115,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  padding: var(--space-5);
+  padding: var(--space-4);
 }
 
 .success:focus-visible {
@@ -91,5 +133,20 @@
 }
 
 .refusal {
+  color: var(--color-status-error);
   font-size: var(--type-meta-size);
+  font-weight: 700;
+}
+
+/* F-2-67: the pending word belongs on the control the visitor pressed. The
+   label above it is already replaced, so this only has to exist for the
+   `role="status"` announcement and for the assertion that watches it. */
+/* The advance link the submit clicks: in the DOM, out of every reading and
+   tabbing order (see `envoy-form.tsx`). */
+.hiddenAdvance,
+.pending {
+  block-size: 1px;
+  inline-size: 1px;
+  overflow: hidden;
+  position: absolute;
 }

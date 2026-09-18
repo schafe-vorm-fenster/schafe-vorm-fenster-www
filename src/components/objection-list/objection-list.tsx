@@ -16,8 +16,23 @@ export interface ObjectionItem {
 export interface ObjectionListProps {
   readonly headline: string;
   readonly items: readonly ObjectionItem[];
+  /**
+   * The line the block closes on — the objections that are about the
+   * organiser rather than about a channel, folded into one sentence instead
+   * of two more bulleted rows (polish brief, page 4, item 2). Beat 2 should
+   * sting, not grind.
+   */
+  readonly closing?: string;
   /** A cleared `proof-card`. Omitted → `empty-proof-slot`, never backfilled. */
   readonly proof?: ReactNode;
+  /**
+   * Whether the block reserves a proof position at all.
+   *
+   * `false` on `/mitmachen`: the brief struck it (G-9). The objections are
+   * the audience's own words — they need no third-party evidence, and the
+   * reserved panel was a blank rectangle under a list of bad news.
+   */
+  readonly proofSlot?: boolean;
   readonly className?: string;
 }
 
@@ -26,8 +41,9 @@ export interface ObjectionListProps {
  * TS-022 D3.
  *
  * Structure: one headline plus *n* items, each the channel in the visitor's
- * own words and the one concrete way it fails. One proof slot beside the
- * block. No numeral asserts how many channels exist.
+ * own words and the one concrete way it fails, and — where the copy has one
+ * — a closing sentence. A proof slot beside the block where the caller asks
+ * for one. No numeral asserts how many channels exist.
  * States: the proof slot holds its position as a flat brand-colour panel
  * when nothing clears (`empty-proof-slot`), never backfilled with a
  * substitute claim and — since Jan's decision of 2026-09-18 — never labelled
@@ -42,7 +58,9 @@ export interface ObjectionListProps {
 export function ObjectionList({
   headline,
   items,
+  closing,
   proof,
+  proofSlot = true,
   className,
 }: ObjectionListProps) {
   return (
@@ -60,10 +78,11 @@ export function ObjectionList({
             </li>
           ))}
         </ul>
-        <div className={styles.proof}>
-          {proof ?? <EmptyProofSlot />}
-        </div>
+        {proofSlot ? (
+          <div className={styles.proof}>{proof ?? <EmptyProofSlot />}</div>
+        ) : null}
       </div>
+      {closing ? <p className={styles.closing}>{closing}</p> : null}
     </div>
   );
 }

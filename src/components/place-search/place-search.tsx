@@ -31,6 +31,8 @@ export interface PlaceSearchProps extends DataStateProps, Omit<LinkOptions, "has
   /** The field's own placeholder — the second locale needs its own word. */
   readonly placeholder?: string;
   readonly submitLabel?: string;
+  /** The submit carries `arrow-right` — a flow step, not a search (brief, page 5). */
+  readonly submitOnward?: boolean;
   /** Passed to the submit control: the primary conversion of a "know what is on" page (TS-006 D4). */
   readonly submitDataCta?: string;
   /** `dark` where the module stands on a photo surface or the ink section. */
@@ -79,6 +81,7 @@ export function PlaceSearch({
   defaultValue,
   placeholder,
   submitLabel,
+  submitOnward,
   submitDataCta,
   tone = "light",
   id,
@@ -125,6 +128,7 @@ export function PlaceSearch({
         required={required}
         submitDataCta={submitDataCta}
         submitLabel={submitLabel}
+        submitOnward={submitOnward}
         to={to}
       />
       {typeahead ? (

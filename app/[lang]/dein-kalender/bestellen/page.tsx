@@ -18,15 +18,19 @@ import { BRIEFING_URL } from "@/src/lib/live/briefing";
 import { resolvePlace } from "@/src/lib/live/places";
 import { jobLabelKey } from "@/src/lib/pages/page-meta";
 import { readPlaceParameter } from "@/src/lib/pages/place-parameter";
+import { formatPriceFigure } from "@/src/components/price-tag/format";
+import { linkHref } from "@/src/components/route-link/href";
+import { offeringPrice } from "@/src/lib/pricing/offerings";
 
 import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
 import { localeFrom, pageMetadataFor } from "../../_locale";
 import { resolveRegisterPlace } from "../../mitmachen/registrieren/resolve-place";
 
-import { AdvancePending } from "./advance-pending";
 import { pageMeta } from "./page.meta";
 import { addPlace, parseOrte, removePlace, resolveOrderStep } from "./steps";
+
+import styles from "./page.module.css";
 
 import type { ScopeChip } from "@/src/components/scope-picker/scope-picker";
 import type { Locale } from "@/src/lib/i18n/locales";
@@ -91,12 +95,62 @@ const COUNTY_CHIP_LABEL: Record<Locale, string> = {
   en: "Vorpommern-Greifswald",
 };
 
+/** One place is not "1 Orte" — the strip reads a count, so it has to count. */
 const SELECTED_COUNT: Record<Locale, (n: number) => string> = {
-  de: (n) => `${n} Orte ausgewählt`,
-  en: (n) => `${n} places selected`,
+  de: (n) => (n === 1 ? "1 Ort ausgewählt" : `${n} Orte ausgewählt`),
+  en: (n) => (n === 1 ? "1 place selected" : `${n} places selected`),
 };
 
 const CONTINUE_LABEL: Record<Locale, string> = { de: "Weiter", en: "Continue" };
+
+/**
+ * Why the advance is disabled on step 1/2, said out loud.
+ *
+ * A control that is simply absent until some invisible condition is met is
+ * the dead end the brief found: the screen offered a chip, two contradicting
+ * empty statements and an exit, and nothing that looked like a way on. The
+ * button is always there now; when it cannot be pressed, this line says what
+ * would make it pressable.
+ */
+const SCOPE_REQUIRED: Record<Locale, string> = {
+  de: "Wähl mindestens einen Ort oder den ganzen Landkreis, dann geht es weiter.",
+  en: "Pick at least one place, or the whole district, and you can carry on.",
+};
+
+/** The county, offered the way a found place is offered — as something to add. */
+const ADD_COUNTY: Record<Locale, (county: string) => string> = {
+  de: (county) => `+ ${county}`,
+  en: (county) => `+ ${county}`,
+};
+
+/**
+ * The strip above every step: what this costs, and what is selected.
+ *
+ * Someone who arrives from the 480 € tier card loses the one number that
+ * made her click the moment the flow starts — and the price is fixed per
+ * organisation regardless of scope (DEC-060), which is reassuring and has to
+ * be said rather than left to be discovered.
+ */
+const PRICE_NOTE: Record<Locale, string> = {
+  de: "Der Preis ändert sich mit der Auswahl nicht.",
+  en: "The price does not change with your selection.",
+};
+
+/**
+ * G-5 — the outbound disclosure leaves the control's label. The data half
+ * belongs to the privacy statement `/dein-kalender` links, not to an exit in
+ * a flow.
+ */
+const BRIEFING_DISCLOSURE: Record<Locale, string> = {
+  de: "Öffnet Google Kalender in einem neuen Tab.",
+  en: "Opens Google Calendar in a new tab.",
+};
+
+/** The step-4 line that makes the flow read finished. */
+const DONE_NOTE: Record<Locale, string> = {
+  de: "Die Bestellung ist aufgenommen.",
+  en: "Your order is in.",
+};
 
 /** What the advance control says while the step is loading (F-2-67). */
 const PENDING_LABEL: Record<Locale, string> = { de: "Moment …", en: "One moment …" };
@@ -175,6 +229,19 @@ export default async function Page({
   const addable =
     lookup?.kind === "resolved" && !orte.includes(lookup.place.slug) ? lookup.place : undefined;
 
+  /**
+   * 480 € per year, net — read from the offering package like every other
+   * price on the site (TS-006 D10), never typed into the flow.
+   */
+  const priceFigure = offeringPrice("portalize-calendar", locale).figure;
+  const priceLine = priceFigure ? formatPriceFigure(priceFigure, locale) : "";
+
+  /** Where a valid invoice submission goes: step 4, scope carried. */
+  const advanceHref = linkHref("order", {
+    locale,
+    query: { orte: orteRaw, kreis: hasCounty ? KREIS_ID : undefined, schritt: 4 },
+  });
+
   const briefingLabel = fieldAt(briefingSlot.blocks, 0) ?? "";
   const briefingExit = (
     <ConversionTracker
@@ -182,7 +249,16 @@ export default async function Page({
       goalId="request-product-briefing"
       stage="handover"
     >
-      <OutboundLink href={BRIEFING_URL} newTab recipient="Google" variant="secondary">
+      {/* G-5 / TS-025 D5: an exit, never a button. It was the only
+          control on the screen that looked like an action, so the way out
+          outranked the way on. */}
+      <OutboundLink
+        disclosure={BRIEFING_DISCLOSURE[locale]}
+        href={BRIEFING_URL}
+        locale={locale}
+        newTab
+        variant="quiet"
+      >
         {briefingLabel}
       </OutboundLink>
     </ConversionTracker>
@@ -199,7 +275,26 @@ export default async function Page({
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
       <SectionShell surface="paper">
-        <StepIndicator step={step} total={STEP_TOTAL} />
+        <StepIndicator complete={step === STEP_TOTAL} step={step} total={STEP_TOTAL} />
+
+        {/* What this costs, on every step, with the count beside it — the
+            flow carried no price at all, so someone arriving from the 480 €
+            tier card lost the number that made her click. The count lives
+            here rather than as a line of its own under the chips, which is
+            how step 1 came to state "Noch keine Auswahl." and "0 Orte
+            ausgewählt" within 120 px of each other. */}
+        <p className={styles.summary}>
+          <span className={styles.price}>{priceLine}</span>
+          {/* Silent at zero: the picker's own empty state is the one
+              statement about an empty scope. The step used to carry three —
+              a chip that looked selected, "Noch keine Auswahl." and "0 Orte
+              ausgewählt" — inside 120 px. The node stays mounted so an
+              addition is announced rather than appearing unremarked. */}
+          <span aria-live="polite" className={styles.count}>
+            {chips.length === 0 ? "" : SELECTED_COUNT[locale](chips.length)}
+          </span>
+        </p>
+        <p className={styles.priceNote}>{PRICE_NOTE[locale]}</p>
 
         {step <= 2 ? (
           <>
@@ -210,29 +305,37 @@ export default async function Page({
               locale={locale}
               query={{ orte: orteRaw, kreis: hasCounty ? KREIS_ID : undefined }}
               to="order"
+              typeahead
             />
-            {addable ? (
+            <div className={styles.offers}>
+              {addable ? (
+                <Chip
+                  locale={locale}
+                  query={{
+                    orte: addPlace(orteRaw, addable.slug),
+                    kreis: hasCounty ? KREIS_ID : undefined,
+                  }}
+                  to="order"
+                >
+                  + {addable.name}
+                </Chip>
+              ) : null}
+              {/* Not a selected-looking chip on an empty step: unselected, it
+                  is an offer and says "+", exactly like a found place. The
+                  brief read the old one as a third statement contradicting
+                  the two empty ones under it. */}
               <Chip
                 locale={locale}
-                query={{
-                  orte: addPlace(orteRaw, addable.slug),
-                  kreis: hasCounty ? KREIS_ID : undefined,
-                }}
+                query={{ orte: orteRaw, kreis: hasCounty ? undefined : KREIS_ID }}
+                selected={hasCounty}
                 to="order"
               >
-                + {addable.name}
+                {hasCounty ? COUNTY_LABEL[locale] : ADD_COUNTY[locale](COUNTY_LABEL[locale])}
               </Chip>
-            ) : null}
-            <Chip
-              locale={locale}
-              query={{ orte: orteRaw, kreis: hasCounty ? undefined : KREIS_ID }}
-              selected={hasCounty}
-              to="order"
-            >
-              {COUNTY_LABEL[locale]}
-            </Chip>
+            </div>
             <ScopePicker items={chips} locale={locale} to="order" />
-            <p aria-live="polite">{SELECTED_COUNT[locale](chips.length)}</p>
+            {/* Always here, so the way on is never something a visitor has to
+                discover. Disabled, it says what would make it pressable. */}
             {hasScope ? (
               <Button
                 dataCta="primary"
@@ -243,52 +346,63 @@ export default async function Page({
               >
                 {CONTINUE_LABEL[locale]}
               </Button>
-            ) : null}
-            {briefingExit}
+            ) : (
+              <>
+                <Button describedBy="scope-required" disabled onward>
+                  {CONTINUE_LABEL[locale]}
+                </Button>
+                <p className={styles.requirement} id="scope-required">
+                  {SCOPE_REQUIRED[locale]}
+                </p>
+              </>
+            )}
+            <div className={styles.exit}>{briefingExit}</div>
           </>
         ) : null}
 
         {step === 3 ? (
           <>
             <h1>{fieldAt(invoiceSlot.blocks, 0)}</h1>
+            {/* Above the form, not under the advance: it is context for the
+                step ("your scope survived, the invoice details did not"),
+                and under the button it read as a note about pressing it. */}
+            <p className={styles.reloadNote}>{fieldAt(invoiceSlot.blocks, 2)}</p>
             {/* One call to action on this step (F-2-51). The invoice form
                 stands inside a flow, so the step owns the advance and the
                 form does not render a submit of its own: until round 3 the
                 mount's inert "Absenden" stood beside "Weiter", and the button
                 a visitor filling in invoice details reaches for was the one
                 that did nothing at all. */}
+            {/* One call to action on this step (F-2-51) — and since the
+                polish pass it is the **form's own** submit rather than a link
+                standing beside it. The link advanced whether the invoice was
+                filled in or not: a public authority could place an order with
+                nothing in it. Now the step's one control validates the four
+                required fields first, in the page's language, and navigates
+                only when they are answered. The pending word stays on the
+                control the visitor pressed (F-2-67). */}
             <EnvoyFormMount
+              advanceHref={advanceHref}
               context={{ scope: orte.join(",") || KREIS_ID }}
               fallbackEmail={CONTACT_EMAIL}
               kind="order-invoice"
               locale={locale}
-              ownSubmit={false}
+              pendingLabel={PENDING_LABEL[locale]}
               sourceRoute={ROUTE}
               state="mocked"
+              submitDataCta="primary"
+              submitLabel={CONTINUE_LABEL[locale]}
             />
-            <p>{fieldAt(invoiceSlot.blocks, 2)}</p>
-            <Button
-              dataCta="primary"
-              locale={locale}
-              onward
-              query={{ orte: orteRaw, kreis: hasCounty ? KREIS_ID : undefined, schritt: 4 }}
-              to="order"
-            >
-              {CONTINUE_LABEL[locale]}
-              {/* F-2-67: a hasty reload during the transition used to swallow
-                  the advance with no sign that the click had not counted.
-                  `useLinkStatus` puts the pending state on the control the
-                  visitor pressed — no store, no dedupe, which TS-025 D8
-                  forbids anyway. */}
-              <AdvancePending label={PENDING_LABEL[locale]} />
-            </Button>
-            {briefingExit}
+            <div className={styles.exit}>{briefingExit}</div>
           </>
         ) : null}
 
         {step === 4 ? (
           <>
             <h1>{fieldAt(codeSlot.blocks, 0)}</h1>
+            {/* The flow has to end on something that reads finished, not on a
+                fourth screen that looks like a fifth is coming. */}
+            <p className={styles.done}>{DONE_NOTE[locale]}</p>
             <CodeSnippet code={demoCode} note={fieldAt(codeSlot.blocks, 1)} state="mocked" />
             {/* F-2-60: keyed on the completed order, so Back-then-Forward
                 through step 4 reports the same completion once. */}
@@ -302,7 +416,7 @@ export default async function Page({
               goalId="buy-calendar-licence"
               stage="completed"
             />
-            {briefingExit}
+            <div className={styles.exit}>{briefingExit}</div>
           </>
         ) : null}
       </SectionShell>

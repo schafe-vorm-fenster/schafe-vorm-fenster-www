@@ -23,3 +23,13 @@
   letter-spacing: var(--type-subhead-tracking);
   margin: 0;
 }
+
+/*
+ * The second, quiet way forward under the repeated conversion (brief, page 6).
+ * `/dein-kalender` ends on "Kalender bestellen" with "Lieber erst sprechen?"
+ * beneath it — one primary treatment per screenful, so the alternative is a
+ * link, never a second pill.
+ */
+.footer {
+  margin-top: var(--space-2);
+}

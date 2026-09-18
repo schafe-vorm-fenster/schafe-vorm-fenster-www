@@ -1,4 +1,3 @@
-import { Icon } from "../icon/icon";
 import { RouteLink } from "../route-link/route-link";
 
 import { legalAnchor } from "@/src/lib/routes/legal-anchors";
@@ -38,8 +37,11 @@ export interface TrustBlockProps {
  * caller omits its `body`, and this component skips it rather than
  * rendering a heading over nothing. Today only `data-protection` renders.
  * Inherits: a sober `surface` section (composed by the caller's
- * `section-shell`); `info` / `circle-check` icons; no badge implying
- * certification.
+ * `section-shell`); **no icons** — the polish brief (page 6, item 5) struck
+ * the green `circle-check` beside each subject: a check mark affirms a
+ * feature, and "who runs this and where he lives" is a biography, not a
+ * feature. Each subject is a mono label over its paragraph instead. No badge
+ * implying certification.
  * Space: static content.
  * A11y: the two legal links name their targets in the link text itself.
  */
@@ -55,18 +57,12 @@ export function TrustBlock({
 
   return (
     <div className={[styles.block, className].filter(Boolean).join(" ")}>
-      <h2 className={styles.headline}>
-        <Icon className={styles.icon} name="info" />
-        {headline}
-      </h2>
+      <h2 className={styles.headline}>{headline}</h2>
       <ul className={styles.list}>
         {shipped.map((subject) => (
           <li className={styles.item} key={subject.id}>
-            <Icon className={styles.check} name="circle-check" />
-            <div>
-              <p className={styles.subjectLabel}>{subject.label}</p>
-              <p className={styles.body}>{subject.body}</p>
-            </div>
+            <p className={styles.subjectLabel}>{subject.label}</p>
+            <p className={styles.body}>{subject.body}</p>
           </li>
         ))}
       </ul>

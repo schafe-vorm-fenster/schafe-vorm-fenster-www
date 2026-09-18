@@ -14,6 +14,17 @@ export interface OutboundLinkProps {
   readonly newTab?: boolean;
   /** Named where a third party receives data by following this link. */
   readonly recipient?: string;
+  /**
+   * The control variants' meta line, written out instead of assembled.
+   *
+   * G-5: "(öffnet neuen Tab) · Daten gehen an Google" under a button is two
+   * disclosures stacked into one line of machine-assembled prose, and the
+   * data note belongs in the privacy section the page already links to. A
+   * page that has such a section passes one finished sentence here — e.g.
+   * „Öffnet Google Kalender in einem neuen Tab." — and the assembled line
+   * stands down.
+   */
+  readonly disclosure?: string;
   readonly variant?: "inline" | "secondary" | "quiet";
   /** The conversion marker the analytics registry reads (TS-006 D3) — e.g. `"equal-weight"`. */
   readonly dataCta?: string;
@@ -52,6 +63,7 @@ export function OutboundLink({
   href,
   newTab = false,
   recipient,
+  disclosure: writtenDisclosure,
   variant = "inline",
   dataCta,
   locale = "de",
@@ -61,7 +73,7 @@ export function OutboundLink({
   const classes = [styles.link, styles[variant], className].filter(Boolean).join(" ");
   const words = dictionary(locale).outboundLink;
   const control = variant !== "inline";
-  const disclosure = (
+  const assembled = (
     <>
       {newTab ? <>{" "}({words.newTab})</> : null}
       {recipient ? (
@@ -72,7 +84,9 @@ export function OutboundLink({
       ) : null}
     </>
   );
-  const hasDisclosure = newTab || Boolean(recipient);
+  const disclosure =
+    writtenDisclosure === undefined ? assembled : <>{" "}{writtenDisclosure}</>;
+  const hasDisclosure = writtenDisclosure !== undefined || newTab || Boolean(recipient);
 
   const anchor = (
     <a

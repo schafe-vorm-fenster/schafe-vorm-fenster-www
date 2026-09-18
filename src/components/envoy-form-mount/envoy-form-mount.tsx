@@ -38,6 +38,17 @@ export interface EnvoyFormMountProps extends DataStateProps {
    * advance (order step 3) — see F-2-51.
    */
   readonly ownSubmit?: boolean;
+  /**
+   * Where a valid submission goes next, where this form **is** a flow step's
+   * one control (order step 3). With it the mount owns the advance again —
+   * and validates before taking it, which is what an order with an empty
+   * invoice needed.
+   */
+  readonly advanceHref?: string;
+  /** The submit's label, where it advances a step rather than sending. */
+  readonly submitLabel?: string;
+  /** What the submit says while the next step loads (F-2-67). */
+  readonly pendingLabel?: string;
   /** The conversion marker on the submit control, where this form is the
    *  page's or the step's one action (TS-006 D3). */
   readonly submitDataCta?: string;
@@ -83,6 +94,9 @@ export function EnvoyFormMount({
   briefingLabel,
   conversion,
   ownSubmit,
+  advanceHref,
+  submitLabel,
+  pendingLabel,
   submitDataCta,
   state = "mocked",
   className,
@@ -107,9 +121,12 @@ export function EnvoyFormMount({
 
   return (
     <EnvoyForm
+      advanceHref={advanceHref}
       ownSubmit={ownSubmit}
       className={className}
       conversion={conversion}
+      pendingLabel={pendingLabel}
+      submitLabel={submitLabel}
       elementAttributes={{
         "data-envoy-form-kind": kind,
         "data-envoy-locale": locale,

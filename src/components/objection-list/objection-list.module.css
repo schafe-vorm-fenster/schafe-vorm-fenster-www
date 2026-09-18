@@ -63,3 +63,15 @@
     grid-template-columns: 2fr 1fr;
   }
 }
+
+/*
+ * The organiser's own two objections, folded into the sentence the block ends
+ * on (brief, page 4, item 2). It is not a sixth row: it is the reason the
+ * five rows above are not going to be solved by trying harder.
+ */
+.closing {
+  color: var(--color-neutral-ink);
+  font-size: var(--type-body-size);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+}

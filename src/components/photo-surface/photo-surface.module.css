@@ -198,6 +198,26 @@
   width: 100%;
 }
 
+/*
+ * On a short phone the band gives way before the page's call to action does.
+ *
+ * 55 svh is 352 px on a 640 px-tall viewport — an older device, or a browser
+ * showing two toolbars — and the hero's own stack (five display lines plus
+ * two controls on `/dein-kalender`) then ends below the fold, which puts the
+ * page's primary conversion where nobody scrolling the first screen sees it.
+ * G-1's rule is "at least 200 px of photograph, unobstructed, below the
+ * header", not "55 % whatever the screen": 42 svh of 640 px is 269 px, of
+ * which 205 px is clear of the 64 px header, so the rule still holds and the
+ * buttons come back onto the screen. Above 44 rem tall — the 844 px the brief
+ * measured — nothing changes.
+ */
+@media (max-height: 44rem) {
+  .surface[data-hero="true"]::before {
+    min-height: 42vh;
+    min-height: 42svh;
+  }
+}
+
 @media (min-width: 48rem) {
   .surface[data-hero="true"] {
     --photo-headroom: 20 / 3;

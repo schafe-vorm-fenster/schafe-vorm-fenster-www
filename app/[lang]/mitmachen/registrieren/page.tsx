@@ -61,7 +61,27 @@ function firstParam(value: string | string[] | undefined): string | undefined {
 
 const WEG_IDS = ["whatsapp", "calendar-connection", "website-import"] as const;
 
-const HANDOVER_HEADING = { de: "Fast geschafft", en: "Almost there" } as const;
+/**
+ * The last screen has to read **finished** — the three questions are
+ * answered and the website's part is over — without claiming a registration
+ * it cannot confirm: the account is the app's, and TS-023 D6 forbids a
+ * confirmation, an instruction or an event field on this route.
+ */
+const HANDOVER_HEADING = {
+  de: "Geschafft — deine drei Antworten stehen.",
+  en: "Done — all three answers are in.",
+} as const;
+
+/**
+ * Under the first question, and nowhere else: what a visitor at the first
+ * field of an unfamiliar flow wants to know is how long it is and what it
+ * is going to cost her. Both halves are the route's own design — three
+ * steps (D2) and no identity field anywhere on it (D6).
+ */
+const STEP_ONE_REASSURANCE: Record<Locale, string> = {
+  de: "Drei Fragen, dann bist du drin. Keine E-Mail-Adresse nötig, solange du hier bist.",
+  en: "Three questions and you're in. No email address needed while you're here.",
+};
 
 /**
  * The answered-step line of D5 — "a prefilled step renders **answered,
@@ -195,17 +215,36 @@ export default async function Page({
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
       <SectionShell surface="paper">
-        {step !== "handover" ? (
-          <StepIndicator
-            label={(fieldAt(stepIndicatorSlot.blocks, 0) ?? "").replace("{n}", String(step))}
-            step={step}
-            total={3}
-          />
-        ) : null}
+        {/* The progress row stands on the handover too, complete — "how much
+            is left" is answered right through to "nothing". */}
+        <StepIndicator
+          complete={step === "handover"}
+          label={(fieldAt(stepIndicatorSlot.blocks, 0) ?? "").replace(
+            "{n}",
+            String(step === "handover" ? 3 : step),
+          )}
+          step={step === "handover" ? 3 : step}
+          total={3}
+        />
 
         {step === 1 ? (
           <>
             <h1>{fieldAt(ortSlot.blocks, 0)}</h1>
+            <p data-step-reassurance="">{STEP_ONE_REASSURANCE[locale]}</p>
+            {/*
+                The step's one way forward, labelled like every other step's.
+                It read "Suchen" until the polish pass, which made the first
+                screen of a three-step flow look like a page with a search
+                box on it — the brief's reviewer did not recognise it as the
+                way on at all and called step 1 a dead end. Searching *is*
+                the advance here: a resolved place moves the flow to step 2
+                by itself, an unresolved one is answered below, and an empty
+                one never leaves the page (`required`).
+
+                The typeahead comes with it: the field's own helper text
+                promises suggestions from the second letter, and until now
+                nothing produced any.
+            */}
             <PlaceSearch
               defaultValue={rawOrt}
               label={fieldAt(ortSlot.blocks, 0) ?? ""}
@@ -213,6 +252,9 @@ export default async function Page({
               query={carried}
               required
               state={lookup.kind === "ambiguous" ? "mocked" : "ready"}
+              submitLabel={CONTINUE_LABEL[locale]}
+              submitOnward
+              typeahead
               suggestions={
                 lookup.kind === "ambiguous"
                   ? lookup.candidates.map((candidate) => ({
@@ -316,7 +358,16 @@ export default async function Page({
         // TS-011-A4 (F-2-41): the band is an `aside` on every page it
         // renders on — this file hand-rolls its own because D7 makes it
         // conditional, so `PageFrame`'s `as="aside"` does not reach it.
-        <SectionShell as="aside" id="context-band" label={contextBandHeading} surface="surface">
+        // `tight`: the band sat between the question and the footer as the
+        // largest thing on the screen after the question, inviting the
+        // visitor to leave at the moment she was about to start.
+        <SectionShell
+          as="aside"
+          density="tight"
+          id="context-band"
+          label={contextBandHeading}
+          surface="surface"
+        >
           <ContextBand
             currentJob={jobLabelKey(pageMeta.focusJob)}
             heading={contextBandHeading}

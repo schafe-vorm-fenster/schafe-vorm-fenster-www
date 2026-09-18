@@ -12,7 +12,10 @@ describe("TS-024: /dein-kalender section rhythm", () => {
     const sections = [
       "photo", // focus (hero)
       "paper", // contrast
-      "violet-500", // embed-demo
+      "violet-500", // embed-demo — the real embedded calendar, alone
+      // The settings that produce it, on their own light ground (G-4): the
+      // two together measured 1772 px, a screen and a half over budget.
+      "surface-2", // embed-config
       "lime-100", // tiers
       "paper", // proof
       "lime-100", // trust

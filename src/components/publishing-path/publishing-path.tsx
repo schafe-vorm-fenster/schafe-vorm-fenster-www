@@ -112,7 +112,10 @@ export function PublishingPath({
       <ol className={styles.steps}>
         {steps.map((step) => (
           <li className={styles.step} key={step.index}>
-            <span className={styles.index}>{String(step.index).padStart(2, "0")}</span>
+            {/* A bare digit, not "01": the path's own ordinal above is the
+                zero-padded mono one, and two identical "01"s a line apart
+                read as the same counter restarting. */}
+            <span className={styles.index}>{step.index}</span>
             <div>
               <p className={styles.stepTitle}>{step.title}</p>
               <p className={styles.stepBody}>{step.body}</p>

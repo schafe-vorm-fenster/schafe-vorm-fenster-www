@@ -73,14 +73,36 @@ function splitObjection(text: string): { channel: string; failure: string } {
   return { channel: text, failure: "" };
 }
 
+/**
+ * The section's name. It used to be "Drei Wege, die Termine zu uns zu
+ * bringen", which now stutters against the transition line above it — that
+ * sentence is the one that says "three", and it says it better.
+ */
 const PATHS_LABEL: Record<Locale, string> = {
-  de: "Drei Wege, die Termine zu uns zu bringen",
-  en: "Three ways to get your dates to us",
+  de: "So kommen eure Termine rein",
+  en: "How your dates get in",
+};
+
+/**
+ * The hinge of the page, and the one line the brief found missing: the
+ * objections end on "and you have no time for a new tool", and the three
+ * paths only answer that if something says they are not a new tool. It adds
+ * no claim — the three mechanisms below are the claim.
+ */
+const PATHS_TRANSITION: Record<Locale, string> = {
+  de: "Deshalb gibt es drei Wege rein, und alle drei sind Wege, die ihr schon geht.",
+  en: "So there are three ways in, and all three are ways you already take.",
 };
 
 const PROOF_LABEL: Record<Locale, string> = {
   de: "Was andere sagen",
   en: "What others say",
+};
+
+/** The accessible name of the cross-reference aside, which carries no heading. */
+const CROSS_REFERENCE_LABEL: Record<Locale, string> = {
+  de: "Anderes Angebot",
+  en: "A different offering",
 };
 
 /**
@@ -116,6 +138,7 @@ export default async function Page({
   const pathWebsite = slot(page, "mitmachen-5-path-website");
   const example = slot(page, "mitmachen-6-beispiel");
   const proofDemo = slot(page, "mitmachen-7-proof-demo");
+  const closing = slot(page, "mitmachen-8-closing");
   // The band's own kicker (state/open.md row 95, row 161), not home's.
   const contextBand = slot(page, "mitmachen-9-context-band");
 
@@ -177,8 +200,10 @@ export default async function Page({
   // CSS background image can actually carry.
   const heroImage = pageImage(page, HERO_IMAGE_ID.takePart);
   const whatsappImage = pageImage(page, "mitmachen-path-whatsapp");
-  const calendarImage = pageImage(page, "mitmachen-path-calendar");
-  const websiteImage = pageImage(page, "mitmachen-path-website");
+  // `mitmachen-path-calendar` and `mitmachen-path-website` stay declared in
+  // the artifact's `images:` block — they are real, credited photographs and
+  // the credits page cites them — but the page no longer renders them: one
+  // photograph across the three paths, not three (brief, page 4, item 4).
 
   return (
     <>
@@ -188,13 +213,20 @@ export default async function Page({
       closing={{
         to: "register",
         label: heroCtaLabel,
-        // TS-022-A11: with the backing element unavailable at build time
-        // (Open points — the 2022 commitment has no `proof/` element), the
-        // permanence promise is absent rather than reworded, even though
-        // the content artifact carries a generated placeholder sentence
-        // under the prototype completeness override (state/open.md row 45).
-        // Recorded as a content/spec tension in `state/open.md`, not
-        // silently resolved by rendering it.
+        heading: fieldAt(closing.blocks, 0),
+        /*
+         * TS-022-A11 asks for a cleared backing before the permanence
+         * promise ships, and the artifact now names one: the offering
+         * record `community-calendar` calls free access "a public
+         * commitment, not a pricing decision that can be quietly
+         * reversed", and the 2022 Nordkurier entry records the same
+         * sentence in public. The slot is `provenance: sourced` with both
+         * in its `derived_from`, so the sentence is rendered word for word
+         * rather than withheld. What stays open is only whether a `proof/`
+         * element of its own gets minted (`state/open.md` #17) — a
+         * bookkeeping question, not a clearance one.
+         */
+        reassurance: fieldAt(closing.blocks, 2),
       }}
       contextBandHeading={fieldAt(contextBand.blocks, 0)}
       locale={locale}
@@ -209,7 +241,19 @@ export default async function Page({
           }
           headline={fieldAt(hero.blocks, 0) ?? ""}
           id="hero"
-          lead={fieldAt(hero.blocks, 1)}
+          /*
+           * The hero is the question and the button, and nothing else
+           * (brief, page 4, item 1). With the lead inside it the primary
+           * conversion sat 777 px down a 640 px screen on the narrowest
+           * phone the suite measures — the page's one call to action, below
+           * the fold, on the page whose whole job is that call.
+           *
+           * The sentence is not cut: it stands one section lower as the
+           * hand-off into the objections (`transition` below), where G-3
+           * wants "one line tying this section to the one before it". It
+           * answers the hero's question there, and the objection heading
+           * under it then says why that is not enough today.
+           */
           // F-2-33: the hero's `photo-surface` badges itself out of the
           // dictionary — without the page's language it marks an English
           // page in German.
@@ -223,10 +267,25 @@ export default async function Page({
         />
       </div>
 
-      <SectionShell dataBlock="objections" label={fieldAt(objections.blocks, 0)} surface="paper">
+      <SectionShell
+        dataBlock="objections"
+        kicker={dictionary(locale).kickers.objection}
+        label={fieldAt(objections.blocks, 0)}
+        surface="paper"
+        transition={fieldAt(hero.blocks, 1)}
+      >
+        {/* Three channels and the sentence the block ends on — the two
+            objections about the organiser herself are one line now, not two
+            more 21 px rows with a `circle-x` beside them (brief, page 4,
+            item 2). `proofSlot={false}`: G-9 struck the reserved proof
+            position, which after the badge removal was a blank rectangle
+            under a list of bad news. The objections are the audience's own
+            words; they need no third-party evidence. */}
         <ObjectionList
+          closing={fieldAt(objections.blocks, 1)}
           headline={fieldAt(objections.blocks, 0) ?? ""}
           items={listItems(objections.blocks).map(splitObjection)}
+          proofSlot={false}
         />
       </SectionShell>
 
@@ -249,6 +308,7 @@ export default async function Page({
         kicker={dictionary(locale).kickers.howItWorks}
         labelledBy="wege-heading"
         surface="surface-2"
+        transition={PATHS_TRANSITION[locale]}
       >
         <h2 id="wege-heading">{PATHS_LABEL[locale]}</h2>
         <PublishingPath
@@ -269,14 +329,15 @@ export default async function Page({
         label={fieldAt(pathCalendar.blocks, 0)}
         surface="lime-100"
       >
+        {/* One photograph across all three paths, not three (brief, page 4,
+            item 4): a wall calendar and a desk say nothing the three steps
+            under them do not, and the two extra `ratio-feature` frames were
+            half a phone screen each. The WhatsApp path keeps its picture
+            because the flyer on the shelter wall *is* the mechanism. */}
         <PublishingPath
           headline={fieldAt(pathCalendar.blocks, 0) ?? ""}
           locale={locale}
           mechanism="calendar-connection"
-          mediaAlt={calendarImage?.alt}
-          mediaNotDepicting={calendarImage?.notDepicting}
-          mediaPlaceholderId={calendarImage?.placeholderId}
-          mediaSrc={calendarImage?.src}
           ordinal={2}
           steps={stepsOf(listItems(pathCalendar.blocks))}
         />
@@ -293,24 +354,17 @@ export default async function Page({
           headline={fieldAt(pathWebsite.blocks, 0) ?? ""}
           locale={locale}
           mechanism="website-import"
-          mediaAlt={websiteImage?.alt}
-          mediaNotDepicting={websiteImage?.notDepicting}
-          mediaPlaceholderId={websiteImage?.placeholderId}
-          mediaSrc={websiteImage?.src}
           ordinal={3}
           steps={stepsOf(listItems(pathWebsite.blocks))}
         />
-        <aside>
-          <p>
-            {(fieldAt(pathWebsite.blocks, 3) ?? "").split("→")[0].trim()}{" "}
-            <RouteLink locale={locale} to="calendar">
-              {pageTitle("calendar", locale)}
-            </RouteLink>
-          </p>
-        </aside>
       </SectionShell>
 
-      <SectionShell dataBlock="beispiel" label={exampleTitle} surface="ink">
+      <SectionShell
+        dataBlock="beispiel"
+        kicker={dictionary(locale).kickers.liveAnswer}
+        label={exampleTitle}
+        surface="ink"
+      >
         {/* D5's live example, now off the shared live-data layer rather than
             a page-local row list (`state/open.md` row 128): the same
             `placeEvents()` interface `/dein-ort` and `/` use, so this module
@@ -325,20 +379,31 @@ export default async function Page({
         />
       </SectionShell>
 
-      {/* `lime-100`, not `paper`: `PageFrame` appends `surface` (band) then
-          `paper` (closing) after this section — three consecutive `neutral`-
-          family sections would break the rhythm rule this page's own test
-          checks (TS-022-A16, D10). */}
-      <SectionShell dataBlock="beleg" labelledBy="beleg-heading" surface="lime-100">
+      {/* The lime ground moved one section down, to the cross-reference: the
+          rhythm rule this page's own test checks (TS-022-A16, D10) forbids
+          three consecutive `neutral`-family sections, and `PageFrame` appends
+          `surface` (band) and `paper` (closing) after the aside. */}
+      <SectionShell
+        dataBlock="beleg"
+        kicker={dictionary(locale).kickers.evidence}
+        labelledBy="beleg-heading"
+        surface="surface-2"
+      >
         <h2 id="beleg-heading">{PROOF_LABEL[locale]}</h2>
-        <ProofStream label={PROOF_LABEL[locale]}>
+        {/* G-7: one emphasis per stream. The first card opens it at sub-head
+            size, the rest are hairline rows — three identical filled cards
+            read as one block rather than as three institutions. No `geo`
+            badge either: every card here already names its source in its
+            own context line, and `BELEG` beside `Stiftung Lebendiges Lehre`
+            is the same word twice. */}
+        <ProofStream label={PROOF_LABEL[locale]} layout="rows">
           {proofSelection.entries.map((entry, position) =>
             entry.kind === "item" ? (
               <ProofCard
                 attribution={entry.candidate.attribution}
                 claim={entry.candidate.claim}
                 contextLine={entry.candidate.contextLine}
-                geo={entry.candidate.geo}
+                emphasis={position === 0 ? "feature" : "compact"}
                 key={entry.candidate.id}
                 locale={locale}
                 state={entry.state}
@@ -348,6 +413,27 @@ export default async function Page({
             ),
           )}
         </ProofStream>
+      </SectionShell>
+
+      {/* The one cross-reference this page may carry (TS-022 D9), out of
+          path 3 and into a block of its own — inside the path it read as a
+          fourth step of "your website as the source" (brief, page 4, item
+          5). One sentence, a quiet link, unchanged wording, and it stands
+          where a reader who has seen the whole publishing argument may
+          legitimately discover that hers is a different job. */}
+      <SectionShell
+        as="aside"
+        dataBlock="verweis"
+        density="tight"
+        label={CROSS_REFERENCE_LABEL[locale]}
+        surface="lime-100"
+      >
+        <p>
+          {(fieldAt(pathWebsite.blocks, 3) ?? "").split("→")[0].trim()}{" "}
+          <RouteLink locale={locale} to="calendar">
+            {pageTitle("calendar", locale)}
+          </RouteLink>
+        </p>
       </SectionShell>
     </PageFrame>
     </>

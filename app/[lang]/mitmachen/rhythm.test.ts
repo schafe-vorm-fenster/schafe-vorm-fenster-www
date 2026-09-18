@@ -22,7 +22,12 @@ describe("TS-022-A16: /mitmachen section rhythm", () => {
       "lime-100", // path 2 — calendar connection
       "surface-2", // path 3 — website import
       "ink", // live example — the page's single dark section
-      "lime-100", // proof
+      "surface-2", // proof
+      // The `/dein-kalender` cross-reference, out of path 3 and into its own
+      // quiet aside (brief, page 4, item 5). It carries the lime ground the
+      // proof section used to: three `neutral` sections in a row — proof,
+      // the frame's band and the frame's closing — would break the rule.
+      "lime-100", // verweis
       "surface", // PageFrame: context band
       "paper", // PageFrame: closing CTA
     ] as const;

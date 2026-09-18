@@ -19,6 +19,7 @@ import { DEFAULT_WEEKS_AHEAD, SHOWCASE_CALENDAR } from "@/src/lib/embed/portaliz
 import { BRIEFING_URL } from "@/src/lib/live/briefing";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
+import { dictionary } from "@/src/lib/i18n/dictionary";
 import { pageTitle } from "@/src/lib/routes/metadata";
 
 import { PageJsonLd } from "../_structured-data";
@@ -28,6 +29,8 @@ import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
 import { pageMeta } from "./page.meta";
+
+import pageStyles from "../_pages.module.css";
 
 import type { FourComparisonRows } from "@/src/components/content-fragments";
 import type { ContentBlock } from "@/src/lib/content/types";
@@ -64,9 +67,49 @@ function withoutArrow(text: string | undefined): string {
   return (text ?? "").split(/→|`/)[0].trim();
 }
 
+/**
+ * The German heading read "Heute gegen mit dem Produkt" — not a sentence in
+ * any language, in 38 px, on the page that asks for 480 €. The dash joins
+ * the two columns the four rows below compare; "gegen" was a literal
+ * translation of "versus" that German does not take in front of a
+ * preposition.
+ */
 const CONTRAST_LABELS: Record<Locale, { today: string; withProduct: string; heading: string }> = {
-  de: { today: "Heute", withProduct: "Mit dem Produkt", heading: "Heute gegen mit dem Produkt" },
-  en: { today: "Today", withProduct: "With the product", heading: "Today versus with the product" },
+  de: { today: "Heute", withProduct: "Mit dem Produkt", heading: "Heute — und mit dem Produkt" },
+  en: { today: "Today", withProduct: "With the product", heading: "Today — and with the product" },
+};
+
+/**
+ * The three joints of this page, as the brief writes them. Each ties the
+ * section it opens to the one before it and adds no claim of its own: the
+ * page was four arguments standing next to each other with nothing between
+ * them.
+ */
+const TRANSITIONS: Record<Locale, { embed: string; tiers: string; trust: string }> = {
+  de: {
+    embed: "So sieht das aus, wenn es bei euch steht:",
+    tiers: "Was das kostet, hängt nur davon ab, wo der Kalender stehen soll.",
+    trust: "Bleibt die Frage, wem ihr da eigentlich eure Daten gebt.",
+  },
+  en: {
+    embed: "This is what it looks like once it sits on your site:",
+    tiers: "What it costs depends only on where the calendar is going to sit.",
+    trust: "Which leaves the question of who you are actually giving your data to.",
+  },
+};
+
+/**
+ * G-5 — the outbound disclosure leaves the button's label.
+ *
+ * "(öffnet neuen Tab) · Daten gehen an Google" rendered inside the pill and
+ * made the secondary a three-line block that outweighed the page's own
+ * primary. The new-tab half stays, written out, under the control; the data
+ * half belongs to the trust block further down, which links the privacy
+ * statement that actually says it.
+ */
+const BRIEFING_DISCLOSURE: Record<Locale, string> = {
+  de: "Öffnet Google Kalender in einem neuen Tab.",
+  en: "Opens Google Calendar in a new tab.",
 };
 
 const TIERS_QUESTION_FALLBACK: Record<Locale, string> = {
@@ -132,7 +175,14 @@ export default async function Page({
   // settings themselves as `key: value` lines (`src/lib/content/README.md`'s
   // block grammar — a field with an empty value is a heading for what
   // follows).
-  const embedCopy = embedDemo.blocks.find((block) => block.kind === "paragraph")?.text;
+  // Two paragraphs now, not one: the first says the calendar below is real,
+  // the second says what the settings decide. They stand in two sections —
+  // the embed section measured 1772 px, a screen and a half over G-4's
+  // budget, with a nine-line paragraph above the box and a six-row settings
+  // list below it.
+  const embedParagraphs = embedDemo.blocks.flatMap((block) =>
+    block.kind === "paragraph" ? [block.text] : [],
+  );
   const embedConfigLabel =
     embedDemo.blocks.flatMap((block) =>
       block.kind === "field" && block.value === "" ? [block.label] : [],
@@ -148,6 +198,7 @@ export default async function Page({
   const tiers = slot(page, "dein-kalender-4-tiers");
   const proofDemo = slot(page, "dein-kalender-5-proof-demo");
   const trust = slot(page, "dein-kalender-6-trust");
+  const closing = slot(page, "dein-kalender-7-closing");
   const contextBand = slot(home, "home-10-context-band");
 
   const table = contrast.blocks.find((block) => block.kind === "table");
@@ -161,9 +212,16 @@ export default async function Page({
           { today: "", withProduct: "" },
         ];
 
-  const portalizePrice = offeringPrice("portalize-calendar");
+  const portalizePrice = offeringPrice("portalize-calendar", locale);
   const tier1Ctas = fieldAt(tiers.blocks, 4)?.split("·").map((s) => s.trim()) ?? [];
-  const tier3Cta = `${withoutArrow(fieldAt(tiers.blocks, 13))} ${pageTitle("region", locale)}`.trim();
+  /**
+   * The link names where it goes, and nothing else. "Weiter zu Kalender für
+   * euer ganzes Gebiet" wrapped to two centred lines in a column of
+   * otherwise left-aligned controls (brief, page 6, item 3); the tier's own
+   * title above it already says "für eine ganze Region", so repeating that
+   * as the label would put the same four words twice in one card.
+   */
+  const tier3Cta = pageTitle("region", locale);
 
   /**
    * TS-005 through, not around: DEC-048's **3** inline positions beside the
@@ -213,7 +271,31 @@ export default async function Page({
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
-      closing={{ to: "order", label: orderLabel }}
+      closing={{
+        to: "order",
+        label: orderLabel,
+        heading: fieldAt(closing.blocks, 0),
+        /* The equal-weight second way, as a quiet link rather than a second
+           pill: G-5 allows one primary treatment per screenful, and this one
+           belongs to the order. */
+        footer: (
+          <ConversionTracker
+            attributes={{ route: ROUTE }}
+            goalId="request-product-briefing"
+            stage="handover"
+          >
+            <OutboundLink
+              disclosure={BRIEFING_DISCLOSURE[locale]}
+              href={BRIEFING_URL}
+              locale={locale}
+              newTab
+              variant="quiet"
+            >
+              {fieldAt(closing.blocks, 2)}
+            </OutboundLink>
+          </ConversionTracker>
+        ),
+      }}
       contextBandHeading={fieldAt(contextBand.blocks, 0)}
       locale={locale}
       meta={pageMeta}
@@ -232,9 +314,10 @@ export default async function Page({
               >
                 <OutboundLink
                   dataCta="equal-weight"
+                  disclosure={BRIEFING_DISCLOSURE[locale]}
                   href={BRIEFING_URL}
+                  locale={locale}
                   newTab
-                  recipient="Google"
                   variant="secondary"
                 >
                   {briefingLabel}
@@ -255,7 +338,11 @@ export default async function Page({
         />
       </div>
 
-      <SectionShell dataBlock="contrast" surface="paper">
+      <SectionShell
+        dataBlock="contrast"
+        kicker={dictionary(locale).kickers.objection}
+        surface="paper"
+      >
         <ComparisonTable
           headline={CONTRAST_LABELS[locale].heading}
           rows={comparisonRows}
@@ -264,11 +351,25 @@ export default async function Page({
         />
       </SectionShell>
 
-      <SectionShell dataBlock="embed-demo" surface="violet-500">
+      {/*
+          The most persuasive module on the page, and for a long time the most
+          expensive defect on the site: an empty lilac rectangle where the
+          embedded calendar was meant to be. It is the real Portalize widget
+          now, showing the real calendar of three neighbouring villages — so
+          it gets the room it deserves and nothing else in its section.
+
+          The settings that produce it stand one section lower (G-4): the two
+          together measured 1772 px, a screen and a half over budget, and the
+          config list read as fine print under the picture rather than as the
+          answer to "but can we decide what is in it?". */}
+      <SectionShell
+        dataBlock="embed-demo"
+        kicker={dictionary(locale).kickers.howItWorks}
+        surface="violet-500"
+        transition={TRANSITIONS[locale].embed}
+      >
         <EmbedFrame
-          config={embedConfig}
-          configLabel={embedConfigLabel}
-          copy={embedCopy}
+          copy={embedParagraphs[0]}
           heading={fieldAt(embedDemo.blocks, 0) ?? ""}
           locale={locale}
           // The real calendar of Schlatkow, Schmatzin and Wolfradshof —
@@ -281,9 +382,38 @@ export default async function Page({
         />
       </SectionShell>
 
-      <SectionShell dataBlock="tiers" surface="lime-100">
-        <h2>{fieldAt(tiers.blocks, 0) ?? TIERS_QUESTION_FALLBACK[locale]}</h2>
-        <div style={{ display: "grid", gap: "1.5rem" }}>
+      {/* `WARUM DAS ZÄHLT`, not a second `SO FUNKTIONIERT ES`: the calendar
+          above shows the mechanism, and this section answers the question a
+          municipality actually has about it — whether it decides what stands
+          in it. G-3's vocabulary is closed, and this is the entry that
+          names that role. */}
+      <SectionShell
+        dataBlock="embed-config"
+        kicker={dictionary(locale).kickers.whyItMatters}
+        labelledBy="embed-config-heading"
+        surface="surface-2"
+      >
+        <h2 id="embed-config-heading">{fieldAt(embedDemo.blocks, 1)}</h2>
+        <p>{embedParagraphs[1]}</p>
+        <dl aria-label={embedConfigLabel} className={pageStyles.configList}>
+          {embedConfig.map(({ key, value }) => (
+            <div className={pageStyles.configRow} key={key}>
+              <dt className={pageStyles.configKey}>{key}</dt>
+              <dd className={pageStyles.configValue}>{value}</dd>
+            </div>
+          ))}
+        </dl>
+      </SectionShell>
+
+      <SectionShell
+        dataBlock="tiers"
+        kicker={dictionary(locale).kickers.price}
+        labelledBy="tiers-heading"
+        surface="lime-100"
+        transition={TRANSITIONS[locale].tiers}
+      >
+        <h2 id="tiers-heading">{fieldAt(tiers.blocks, 0) ?? TIERS_QUESTION_FALLBACK[locale]}</h2>
+        <div className={pageStyles.tierGroup}>
           <OfferTier
             audienceLine={fieldAt(tiers.blocks, 3) ?? ""}
             checks={[]}
@@ -332,7 +462,13 @@ export default async function Page({
                 goalId="request-product-briefing"
                 stage="handover"
               >
-                <OutboundLink href={BRIEFING_URL} newTab recipient="Google">
+                <OutboundLink
+                  disclosure={BRIEFING_DISCLOSURE[locale]}
+                  href={BRIEFING_URL}
+                  locale={locale}
+                  newTab
+                  variant="quiet"
+                >
                   {fieldAt(tiers.blocks, 9)}
                 </OutboundLink>
               </ConversionTracker>
@@ -346,7 +482,13 @@ export default async function Page({
             name={fieldAt(tiers.blocks, 10) ?? ""}
             offeringId="portalize-enterprise"
             primaryCta={
-              <Button locale={locale} to="region" variant={OFFER_TIER_CTA_VARIANT["portalize-enterprise"]}>
+              <Button
+                locale={locale}
+                onward
+                size="compact"
+                to="region"
+                variant={OFFER_TIER_CTA_VARIANT["portalize-enterprise"]}
+              >
                 {tier3Cta}
               </Button>
             }
@@ -355,17 +497,29 @@ export default async function Page({
         </div>
       </SectionShell>
 
-      <SectionShell dataBlock="proof" labelledBy="proof-heading" surface="paper">
+      {/* G-9 and G-7 together. The three cards carried an image slot with no
+          cleared image behind it: three identical 143 px bands in a row,
+          which also broke the design system's own "no two photo surfaces
+          adjacent" rule. The slot is gone — a mayor's portrait is not a
+          photo-contribution occasion — and the stream is one feature card
+          over two hairline rows, without the `Beleg` badge each card already
+          repeats in its own source line. 1176 px becomes about a third of
+          that. */}
+      <SectionShell
+        dataBlock="proof"
+        kicker={dictionary(locale).kickers.evidence}
+        labelledBy="proof-heading"
+        surface="paper"
+      >
         <h2 id="proof-heading">{PROOF_LABEL[locale]}</h2>
-        <ProofStream label={PROOF_LABEL[locale]}>
+        <ProofStream label={PROOF_LABEL[locale]} layout="rows">
           {proofSelection.entries.map((entry, position) =>
             entry.kind === "item" ? (
               <ProofCard
                 attribution={entry.candidate.attribution}
                 claim={entry.candidate.claim}
                 contextLine={entry.candidate.contextLine}
-                geo={entry.candidate.geo}
-                image={{ alt: "" }}
+                emphasis={position === 0 ? "feature" : "compact"}
                 key={entry.candidate.id}
                 locale={locale}
                 state={entry.state}
@@ -377,7 +531,12 @@ export default async function Page({
         </ProofStream>
       </SectionShell>
 
-      <SectionShell dataBlock="trust" surface="lime-100">
+      <SectionShell
+        dataBlock="trust"
+        kicker={dictionary(locale).kickers.trust}
+        surface="lime-100"
+        transition={TRANSITIONS[locale].trust}
+      >
         <TrustBlock
           dataProcessingLabel={TRUST_PRIVACY_LABEL[locale].dataProcessing}
           headline={fieldAt(trust.blocks, 0) ?? TRUST_HEADLINE[locale]}

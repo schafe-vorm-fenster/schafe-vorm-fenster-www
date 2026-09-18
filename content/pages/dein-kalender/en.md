@@ -139,16 +139,19 @@ row for an extra feature (TS-024 D4).
 
 <!-- id: dein-kalender-3-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Heading:** What this looks like on a village website
+**Heading:** A real calendar from three neighbouring villages
 
-The calendar below is a real one: it is the calendar of Schlatkow, Schmatzin
-and Wolfradshof, showing exactly what is on there over the next few weeks. On
-your website it would look the same — embedded with one line of code, filled
-from the village calendar, with nobody at your end retyping anything. What it
-holds is up to your settings: which places or which club, which categories,
-how far ahead. Type and colour come from your page, not from ours — the
-calendar takes what your site already sets. New dates show up within minutes;
-you never republish anything for them.
+It is the calendar of Schlatkow, Schmatzin and Wolfradshof, showing exactly
+what is on there over the next few weeks. On your website it would look the
+same — filled from the village calendar, with nobody at your end retyping
+anything.
+
+**Settings heading:** What it holds is up to you
+
+Your settings decide which places or which club, which categories, and how
+far ahead. Type and colour come from your page, not from ours — the calendar
+takes what your site already sets. New dates show up within minutes; you
+never republish anything for them. This is how the calendar above is set:
 
 **Configuration:**
 
@@ -201,7 +204,7 @@ on this entire page exclusively in this paragraph.
 
 **Text:** Counties, state authorities, and large cities additionally get a map view of the same dates and their own white-label-capable registration.
 
-**CTA (quiet):** Continue to `/deine-region`
+**CTA (quiet):** For a whole region → `/deine-region`
 
 Offering id: `portalize-enterprise`, `price_status: on-request` — never
 a number, never "from", never an order of magnitude (TS-024 D8). The
@@ -269,6 +272,22 @@ of an empty area. The marking lives in the frontmatter and in
 The sentence carries no confirmed technical claim yet and is replaced once
 a hub record closes the gap (`state/open.md`, row 19). The operations
 sentence has a source as of this pass and sits in the slot above.
+
+## Slot 7 — Closing CTA
+
+<!-- source_note: The heading repeats what slot 3 already shows (the calendar runs as soon as the code sits on the page) and claims no lead time: nothing cleared backs "next week". The secondary link is the same briefing as the focus block, worded as the order flow words it (`bestellen-2-briefing-exit`). -->
+<!-- id: dein-kalender-7-closing; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
+
+**Closing heading:** Your calendar is running as soon as the code sits on your page.
+
+**CTA label (identical to the focus block, primary):** Order the calendar
+
+**Secondary link:** Rather talk first? Book a briefing
+
+The page used to end on a button with no sentence above it. Block 4
+repeats the same conversion as the focus block — same goal, same label —
+without Pulse, and the equal-weight second way stands under it as a quiet
+link rather than beside it as a second button.
 
 ## Verification — local advertising
 

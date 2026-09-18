@@ -23,6 +23,7 @@
  */
 
 import type { PriceDisplay, PriceFigure } from "@/src/components/price-tag/price-tag";
+import type { Locale } from "@/src/lib/i18n/locales";
 
 export type OfferingId =
   | "community-calendar"
@@ -52,9 +53,22 @@ const OFFERING_PRICES: Readonly<Record<OfferingId, OfferingPrice>> = {
   "custom-data-integration": { display: "on-request" },
 };
 
+/**
+ * The net qualifier a figure is never shown without, per locale. The table
+ * above transcribes the package's own German `vat: excluded` note, and an
+ * English page read "€480 / year, zzgl. USt." until this pass — the same
+ * F-2-33 failure mode as every other German literal that outlived its page.
+ */
+const VAT_NOTE: Readonly<Record<Locale, string>> = {
+  de: "zzgl. USt.",
+  en: "excl. VAT",
+};
+
 /** The one place a page reads an offering's price display (TS-006 D10). */
-export function offeringPrice(offering: OfferingId): OfferingPrice {
-  return OFFERING_PRICES[offering];
+export function offeringPrice(offering: OfferingId, locale: Locale = "de"): OfferingPrice {
+  const price = OFFERING_PRICES[offering];
+  if (price.figure === undefined) return price;
+  return { ...price, figure: { ...price.figure, vatNote: VAT_NOTE[locale] } };
 }
 
 /** TS-026 D6 / TS-018 D2/D3 — true only for a `price_status: fixed` offering. */

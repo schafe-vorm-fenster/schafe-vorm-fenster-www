@@ -36,6 +36,14 @@ export interface EnvoyFormField {
   readonly type: "text" | "email" | "tel";
   readonly required?: boolean;
   readonly multiline?: boolean;
+  /**
+   * What the field is for, under its label — the one line that stops a
+   * visitor guessing what "Leitweg-ID" wants from her. Optional: most fields
+   * are their own explanation.
+   */
+  readonly hint?: Readonly<Record<Locale, string>>;
+  /** `autocomplete`, so a browser can fill what the visitor has typed before. */
+  readonly autoComplete?: string;
 }
 
 const CONTACT_FIELDS: readonly EnvoyFormField[] = [
@@ -78,31 +86,79 @@ const QUOTE_FIELDS: readonly EnvoyFormField[] = [
   },
 ];
 
+/**
+ * The invoice step's field set is **specified**, not invented here: TS-025 D6
+ * fixes it, and `content/pages/dein-kalender/bestellen/*.md` writes the nine
+ * labels out, four of them required. Until the polish pass this mount carried
+ * four generic fields and the step advanced whether they were filled or not —
+ * a public authority could "order" with an empty invoice.
+ */
 const ORDER_INVOICE_FIELDS: readonly EnvoyFormField[] = [
   {
+    autoComplete: "organization",
     id: "authority",
-    label: { de: "Verwaltung / Organisation", en: "Administration / organisation" },
+    label: { de: "Körperschaft oder Behörde", en: "Public body or authority" },
+    required: true,
     type: "text",
-    required: true,
   },
   {
-    id: "contact",
-    label: { de: "Ansprechperson", en: "Contact person" },
+    id: "department",
+    label: { de: "Amt oder Abteilung (optional)", en: "Department (optional)" },
     type: "text",
-    required: true,
   },
   {
-    id: "email",
-    label: { de: "E-Mail-Adresse", en: "Email address" },
-    type: "email",
-    required: true,
-  },
-  {
+    autoComplete: "street-address",
+    hint: {
+      de: "Straße, Postleitzahl und Ort.",
+      en: "Street, postcode and town.",
+    },
     id: "address",
-    label: { de: "Rechnungsadresse", en: "Billing address" },
-    type: "text",
+    label: { de: "Rechnungsanschrift", en: "Billing address" },
     multiline: true,
     required: true,
+    type: "text",
+  },
+  {
+    id: "billing-office",
+    label: { de: "Abweichende Rechnungsstelle (optional)", en: "Different billing office (optional)" },
+    type: "text",
+  },
+  {
+    autoComplete: "name",
+    id: "contact",
+    label: { de: "Ansprechperson", en: "Contact person" },
+    required: true,
+    type: "text",
+  },
+  {
+    autoComplete: "email",
+    id: "email",
+    hint: {
+      de: "Hierhin geht der Einbindungscode.",
+      en: "This is where the embed code goes.",
+    },
+    label: { de: "Dienstliche E-Mail-Adresse", en: "Work email address" },
+    required: true,
+    type: "email",
+  },
+  {
+    id: "order-reference",
+    label: { de: "Bestellzeichen (optional)", en: "Order reference (optional)" },
+    type: "text",
+  },
+  {
+    hint: {
+      de: "Nur nötig, wenn ihr E-Rechnungen über den Bund oder ein Land empfangt.",
+      en: "Only needed if you receive electronic invoices through a federal or state route.",
+    },
+    id: "routing-id",
+    label: { de: "Leitweg-ID (optional)", en: "Routing ID (optional)" },
+    type: "text",
+  },
+  {
+    id: "vat-id",
+    label: { de: "USt-IdNr. (optional)", en: "VAT ID (optional)" },
+    type: "text",
   },
 ];
 
@@ -125,6 +181,21 @@ export interface EnvoyFormWords {
   readonly successBody: string;
   readonly tooFast: string;
   readonly honeypotLabel: string;
+  /**
+   * What a refused field says, and what the summary above the form says.
+   *
+   * Written rather than left to the browser: a native validation bubble
+   * speaks the *browser's* language, not the page's, so an English visitor on
+   * a German-locale machine met German, and a German visitor on an English
+   * one met "Please fill in this field". Each message sits under the field it
+   * is about, so it says what to do rather than repeating the field's name.
+   */
+  readonly missingField: string;
+  readonly invalidEmail: string;
+  /** The `role="alert"` line above the form, naming how many fields are open. */
+  readonly checkFields: (count: number) => string;
+  /** The mono marker beside a field that must be filled. */
+  readonly requiredMark: string;
 }
 
 export const ENVOY_FORM_WORDS: Readonly<Record<Locale, EnvoyFormWords>> = {
@@ -136,6 +207,13 @@ export const ENVOY_FORM_WORDS: Readonly<Record<Locale, EnvoyFormWords>> = {
       "Das ist die Demo-Fassung des Formulars: Es wurde nichts verschickt und nichts gespeichert. Im fertigen Dorfkalender meldet sich ein Mensch bei dir.",
     tooFast: "Das ging sehr schnell. Sieh die Angaben noch einmal durch und schick sie dann ab.",
     honeypotLabel: "Dieses Feld bitte frei lassen",
+    missingField: "Dieses Feld brauchen wir noch.",
+    invalidEmail: "Diese Adresse sieht unvollständig aus — sie braucht ein @ und eine Domain.",
+    checkFields: (count) =>
+      count === 1
+        ? "Ein Feld fehlt noch. Es ist unten markiert."
+        : `${count} Felder fehlen noch. Sie sind unten markiert.`,
+    requiredMark: "Pflichtfeld",
   },
   en: {
     submit: "Send",
@@ -145,5 +223,12 @@ export const ENVOY_FORM_WORDS: Readonly<Record<Locale, EnvoyFormWords>> = {
       "This is the demo version of the form: nothing was sent and nothing was stored. In the finished product a person gets back to you.",
     tooFast: "That was very quick. Have another look at your details, then send them.",
     honeypotLabel: "Please leave this field empty",
+    missingField: "We still need this one.",
+    invalidEmail: "That address looks incomplete — it needs an @ and a domain.",
+    checkFields: (count) =>
+      count === 1
+        ? "One field is still open. It is marked below."
+        : `${count} fields are still open. They are marked below.`,
+    requiredMark: "Required",
   },
 };

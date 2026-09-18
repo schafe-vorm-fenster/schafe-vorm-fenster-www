@@ -51,6 +51,12 @@ export interface ButtonProps extends LinkOptions {
   readonly name?: string;
   readonly value?: string;
   readonly disabled?: boolean;
+  /**
+   * The element that says *why* — a disabled control has to name its own
+   * condition somewhere a screen reader reaches. The order flow's advance
+   * points at "pick at least one place" with it.
+   */
+  readonly describedBy?: string;
   readonly id?: string;
   /** The conversion marker the analytics registry reads (TS-006). */
   readonly dataCta?: string;
@@ -89,6 +95,7 @@ export function Button({
   name,
   value,
   disabled,
+  describedBy,
   id,
   dataCta,
   className,
@@ -140,6 +147,7 @@ export function Button({
 
   return (
     <button
+      aria-describedby={describedBy}
       className={classes}
       data-cta={dataCta}
       disabled={disabled}

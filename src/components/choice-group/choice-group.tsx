@@ -52,7 +52,9 @@ export interface ChoiceGroupProps extends DataStateProps {
  * Inherits: not self-classification — it asks who *publishes*, account data,
  * and never changes what any page shows (TS-006 D8).
  * A11y: real `radiogroup` semantics via `<fieldset>`/`<legend>`; the checked
- * state is marked by fill and the `check` glyph together.
+ * state is marked by fill and the `check` glyph together; every option is
+ * `required`, so a step submitted with nothing chosen is refused by the
+ * browser rather than advancing unanswered.
  */
 export function ChoiceGroup({
   name,
@@ -104,6 +106,11 @@ export function ChoiceGroup({
                   className={styles.input}
                   defaultChecked={option.value === selected}
                   name={name}
+                  /* The step cannot be advanced unanswered: the browser
+                     insists, in the visitor's own language, with no
+                     JavaScript and no disabled control she cannot explain
+                     (polish brief, the flow pages). */
+                  required
                   type="radio"
                   value={option.value}
                 />
@@ -114,7 +121,10 @@ export function ChoiceGroup({
           </div>
         )}
       </fieldset>
-      <Button size="compact" type="submit" variant="primary-light">
+      {/* The step's one way forward, at primary size and carrying the arrow
+          — the brief found the flows' advance indistinguishable from the
+          controls around it. */}
+      <Button onward type="submit" variant="primary-light">
         {submitLabel}
       </Button>
     </form>

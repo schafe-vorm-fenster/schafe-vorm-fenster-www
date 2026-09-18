@@ -14,11 +14,6 @@
   margin: 0;
 }
 
-.icon {
-  color: var(--color-neutral-text2);
-  flex: none;
-}
-
 .list {
   display: flex;
   flex-direction: column;
@@ -30,18 +25,21 @@
 
 .item {
   display: flex;
-  gap: var(--space-3);
+  flex-direction: column;
 }
 
-.check {
-  color: var(--color-lime-800);
-  flex: none;
-}
-
+/*
+ * A mono label, not a bold sentence with a check mark in front of it — the
+ * two subjects are headings over paragraphs (brief, page 6, item 5).
+ */
 .subjectLabel {
-  font-size: var(--type-body-size);
+  color: var(--color-neutral-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
   font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
   margin: 0;
+  text-transform: uppercase;
 }
 
 .body {

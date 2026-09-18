@@ -5,6 +5,7 @@ import type { LinkOptions } from "../route-link/href";
 import type { RouteId } from "@/src/lib/routes/routes";
 import type { NavEntry } from "@/src/lib/routes/navigation";
 import type { Locale } from "@/src/lib/i18n/locales";
+import type { ReactNode } from "react";
 
 import styles from "./closing-cta.module.css";
 
@@ -23,6 +24,13 @@ export interface ClosingCtaRepeatProps extends LinkOptions {
    */
   readonly heading?: string;
   readonly reassurance?: string;
+  /**
+   * One quiet line under the button, where the page's focus job carries a
+   * second, equal-weight way forward — `/dein-kalender` ends on "order" with
+   * "rather talk first?" beneath it (brief, page 6, item 8). Never a second
+   * button: G-5 allows one primary treatment per screenful.
+   */
+  readonly footer?: ReactNode;
   readonly className?: string;
 }
 
@@ -43,6 +51,45 @@ export interface ClosingCtaMergedProps {
 }
 
 export type ClosingCtaProps = ClosingCtaRepeatProps | ClosingCtaMergedProps;
+
+export interface ClosingCtaModuleProps {
+  /** The promise the page ends on, above the control (polish brief G-6). */
+  readonly heading?: string;
+  readonly reassurance?: string;
+  /** A quiet line under the block — "Anderer Ort?", "Falsch getippt?". */
+  readonly footer?: ReactNode;
+  /** The block-1 primary, repeated as the module it is (the place search, the app handover). */
+  readonly children: ReactNode;
+  readonly className?: string;
+}
+
+/**
+ * The third shape of block 4: the primary conversion repeated as a **module**
+ * rather than as a link — the place search on a "know what is on" page, the
+ * calendar handover once a place is known.
+ *
+ * It exists so that shape gets the same frame as the other two: a heading
+ * above the control and the reassurance under it, at the same rhythm. Before
+ * the polish pass the module variant was the bare control, and `/dein-ort`
+ * ended on an input with the permanence promise wedged under the field's own
+ * helper text with no gap between them.
+ */
+export function ClosingCtaModule({
+  heading,
+  reassurance,
+  footer,
+  children,
+  className,
+}: ClosingCtaModuleProps) {
+  return (
+    <div className={[styles.repeat, className].filter(Boolean).join(" ")}>
+      {heading ? <p className={styles.heading}>{heading}</p> : null}
+      {children}
+      {reassurance ? <p className={styles.reassurance}>{reassurance}</p> : null}
+      {footer}
+    </div>
+  );
+}
 
 /**
  * 48 `closing-cta` [PROPOSED] — content type 22, TS-006 D6.
@@ -82,6 +129,7 @@ export function ClosingCta(props: ClosingCtaProps) {
     buttonVariant = "primary-light",
     heading,
     reassurance,
+    footer,
     locale,
     query,
     hash,
@@ -107,6 +155,7 @@ export function ClosingCta(props: ClosingCtaProps) {
         {label}
       </Button>
       {reassurance ? <p className={styles.reassurance}>{reassurance}</p> : null}
+      {footer ? <div className={styles.footer}>{footer}</div> : null}
     </div>
   );
 }

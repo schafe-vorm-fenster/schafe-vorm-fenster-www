@@ -141,17 +141,20 @@ fünfte Zeile für ein zusätzliches Feature (TS-024 D4).
 
 <!-- id: dein-kalender-3-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Überschrift:** So sieht das auf einer Gemeindeseite aus
+**Überschrift:** Ein echter Kalender aus drei Nachbardörfern
 
-Der Kalender hier drunter ist echt: Es ist der Kalender von Schlatkow,
-Schmatzin und Wolfradshof, und er zeigt genau das, was dort in den nächsten
-Wochen ansteht. Auf eurer Website sähe er genauso aus — eingebunden mit einer
-Zeile Code, gefüllt aus dem Dorfkalender, ohne dass jemand bei euch etwas
-abtippt. Was drinsteht, bestimmt ihr über die Einstellungen: welche Orte oder
-welcher Verein, welche Kategorien, wie weit nach vorn. Schrift und Farben
-kommen aus eurer Seite, nicht aus unserer — der Kalender übernimmt, was bei
-euch schon eingestellt ist. Neue Termine sind nach wenigen Minuten drin; ihr
-müsst dafür nichts neu veröffentlichen.
+Es ist der Kalender von Schlatkow, Schmatzin und Wolfradshof, und er zeigt
+genau das, was dort in den nächsten Wochen ansteht. Auf eurer Website sähe er
+genauso aus — gefüllt aus dem Dorfkalender, ohne dass jemand bei euch etwas
+abtippt.
+
+**Einstellungs-Überschrift:** Was drinsteht, bestimmt ihr
+
+Über die Einstellungen legt ihr fest, welche Orte oder welcher Verein, welche
+Kategorien und wie weit nach vorn. Schrift und Farben kommen aus eurer Seite,
+nicht aus unserer — der Kalender übernimmt, was bei euch schon eingestellt
+ist. Neue Termine sind nach wenigen Minuten drin; ihr müsst dafür nichts neu
+veröffentlichen. So ist der Kalender oben eingestellt:
 
 **Konfiguration:**
 
@@ -204,7 +207,7 @@ in der gesamten Seite ausschließlich in diesem Absatz.
 
 **Text:** Landkreise, Landesbehörden und große Städte bekommen zusätzlich eine Kartenansicht derselben Termine und eine eigene, whitelabel-fähige Registrierung.
 
-**CTA (Quiet):** Weiter zu `/deine-region`
+**CTA (Quiet):** Für eine ganze Region → `/deine-region`
 
 Offering-ID: `portalize-enterprise`, `price_status: on-request` — nie
 eine Zahl, nie „ab", nie eine Größenordnung (TS-024 D8). Die interne
@@ -274,6 +277,22 @@ Der Satz trägt noch keine bestätigte technische Aussage und wird ersetzt,
 sobald ein Hub-Datensatz die Lücke schließt (`state/open.md`, Zeile 19).
 Der Betriebssatz ist seit diesem Durchgang belegt und steht im Slot
 darüber.
+
+## Slot 7 — Abschluss-CTA
+
+<!-- source_note: Die Überschrift wiederholt, was Slot 3 schon zeigt (der Kalender läuft, sobald der Code auf der Seite steht) und behauptet keine Vorlaufzeit: Für „nächste Woche" liegt kein freigegebener Beleg vor. Der sekundäre Link ist derselbe Beratungstermin wie im Fokusblock, in derselben Formulierung wie im Bestellablauf (`bestellen-2-briefing-exit`). -->
+<!-- id: dein-kalender-7-closing; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
+
+**Abschluss-Überschrift:** Euer Kalender läuft, sobald der Code auf eurer Seite steht.
+
+**CTA-Label (identisch zum Fokusblock, primär):** Kalender bestellen
+
+**Sekundärer Link:** Lieber erst sprechen? Beratungstermin buchen
+
+Die Seite endete auf einem Knopf ohne Satz darüber. Block 4 wiederholt
+dieselbe Conversion wie der Fokusblock — gleiches Ziel, gleiches Label —,
+nur ohne Pulse, und der gleichwertige zweite Weg steht als ruhiger Link
+darunter statt als zweiter Knopf daneben.
 
 ## Verifikation — lokale Werbung
 

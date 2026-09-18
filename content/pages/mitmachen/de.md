@@ -138,14 +138,21 @@ und das Mechanismus-Attribut `whatsapp` (TS-022 D4).
 - Flyer in Briefkästen enden an der Ortsgrenze — und werden oft gar nicht verteilt, weil niemand die Zeit dafür hat.
 - Zeitung und Amtsblatt haben Redaktionsschluss — ein verschobener oder abgesagter Termin kommt zu spät oder gar nicht an.
 - Die eigene Vereinswebsite und die eigenen Social-Media-Kanäle erreichen vor allem die, die euch schon folgen.
-- Wer ehrenamtlich organisiert, hat neben der Organisation selbst keine Zeit mehr fürs Bewerben.
-- Ein neues Werkzeug zu lernen ist eine zusätzliche Hürde — Kommunikation ist für die wenigsten Akteure die Hauptaufgabe.
+
+**Abschlusssatz:** Und wer das ehrenamtlich organisiert, hat neben der Organisation keine Zeit mehr fürs Bewerben — und schon gar nicht für ein neues Werkzeug.
 
 Quelle: `@schafe-vorm-fenster/audiences#actors` Feld „Problem" (Termine
 werden „by hand" in mehrere Kanäle getippt) und `pains[]` aus
 `actors--community-calendar` (5 Einträge). Keine Kanalzahl wird genannt —
 „sechs" ist im Audience-Record eine Redewendung, keine Aufzählung
 (TS-022 D3).
+
+Drei Kanäle als Zeilen, die beiden Einträge über die Organisatorin selbst
+als der Satz, auf dem der Block endet: Der Einwandblock maß 1116 px auf
+dem Telefon, fast anderthalb Bildschirme aus lauter schlechten
+Nachrichten. Beide Hälften des Abschlusssatzes sind dieselben `pains[]` —
+es wird nichts Neues behauptet, es steht nur nicht mehr als zwei weitere
+Aufzählungspunkte da.
 
 ## Slot 3 — Publizierweg 1: WhatsApp
 
@@ -255,6 +262,8 @@ Porträt von Zukunftswege Ost-Vorpommern, Januar 2026).
 
 <!-- clearance: pending für den Presse-Beleg — der Nordkurier-Eintrag von 2022 trägt kein `usage_rights` (Q-045, `state/open.md` #1). Der Angebots-Datensatz selbst ist frei verwendbar. -->
 <!-- id: mitmachen-8-closing; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
+
+**Abschluss-Überschrift:** Der nächste Flyer kann der erste Termin sein.
 
 **CTA-Label (identisch zu Slot 1, primär):** Kostenlos anmelden
 

@@ -140,14 +140,20 @@ attribute `whatsapp` (TS-022 D4).
 - Flyers in letterboxes stop at the village boundary — and often don't get delivered at all, because nobody has time for it.
 - The newspaper and the local gazette have deadlines — a rescheduled or cancelled date arrives too late, or not at all.
 - Your own club website and your own social media channels mainly reach people who already follow you.
-- Anyone organizing as a volunteer has no time left for promotion on top of the organizing itself.
-- Learning a new tool is one more hurdle — for most local groups, communication isn't the main job.
+
+**Closing line:** And whoever organises this as a volunteer has no time left for promoting it — let alone for learning a new tool.
 
 Source: `@schafe-vorm-fenster/audiences#actors` field "Problem" (dates
 are typed "by hand" into several channels) and `pains[]` from
 `actors--community-calendar` (5 entries). No channel count is stated —
 "six" in the audience record is a figure of speech, not an enumeration
 (TS-022 D3).
+
+Three channels as rows, and the two entries about the organiser herself
+as the sentence the block ends on: the objection block measured 1116 px
+on the phone, nearly a screen and a half of nothing but bad news. Both
+halves of the closing line are the same `pains[]` — nothing new is
+claimed, it simply no longer stands there as two more bullet points.
 
 ## Slot 3 — Publishing path 1: WhatsApp
 
@@ -258,6 +264,8 @@ Ost-Vorpommern portrait, January 2026).
 
 <!-- clearance: pending for the press record — the 2022 Nordkurier entry carries no `usage_rights` (Q-045, `state/open.md` #1). The offering record itself is free to use. -->
 <!-- id: mitmachen-8-closing; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
+
+**Closing heading:** The next flyer can be the first date.
 
 **CTA label (identical to slot 1, primary):** Sign up for free
 
