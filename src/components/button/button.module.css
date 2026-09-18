@@ -55,13 +55,21 @@
  * ground it paints (`app/styles/components.css`).
  */
 
+/*
+ * "Primary on light" and "primary on dark" are one role in SRC-014's own
+ * table — same action, same weight, the pair swapped for the ground. This
+ * variant takes the ground's pair, so a page that composes its hero CTA the
+ * way every other page does gets a legible pill on a photograph instead of
+ * ink on ink (G-5). `primary-dark` below stays, for the caller who wants to
+ * name the dark pair on a light ground.
+ */
 .button.primaryLight {
-  background: var(--color-neutral-ink);
-  color: var(--color-neutral-paper);
+  background: var(--ground-primary-fill);
+  color: var(--ground-primary-text);
 }
 
 .button.primaryLight:hover {
-  background: var(--color-lime-900);
+  background: var(--ground-primary-fill-hover);
 }
 
 .button.primaryDark {

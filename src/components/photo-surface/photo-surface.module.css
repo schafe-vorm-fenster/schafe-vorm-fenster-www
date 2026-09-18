@@ -49,11 +49,15 @@
 
 .ink {
   --photo-scrim: var(--color-neutral-ink);
-  /* The ground's link colour, the same role `section-shell` publishes. */
+  /* The ground's link colour and primary pair, the same roles
+     `section-shell` publishes — a photo section is a dark section. */
   --ground-link: var(--color-lime-400);
   --ground-link-hover: var(--color-lime-300);
   --link: var(--color-lime-400);
   --link-hover: var(--color-lime-300);
+  --ground-primary-fill: var(--color-lime-500);
+  --ground-primary-text: var(--color-neutral-ink);
+  --ground-primary-fill-hover: var(--color-lime-400);
   --photo-gradient: linear-gradient(
     to bottom,
     transparent 26%,
@@ -70,6 +74,9 @@
   --ground-link-hover: var(--color-lime-300);
   --link: var(--color-lime-400);
   --link-hover: var(--color-lime-300);
+  --ground-primary-fill: var(--color-lime-500);
+  --ground-primary-text: var(--color-neutral-ink);
+  --ground-primary-fill-hover: var(--color-lime-400);
   --photo-gradient: linear-gradient(
     to bottom,
     transparent 26%,

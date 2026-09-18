@@ -56,9 +56,10 @@ export interface HeroBlockProps extends DataStateProps {
  * swaps content by place knowledge (S1/S2/S3) at the page level, not here —
  * this component's own contract is that the reserved space is identical
  * whichever branch the page renders into it.
- * Inherits: Display 54/0.90/−0.045em/800 or Place-name 50 px; a place name is
- * clamped to two lines and may break by hand; text sits in the gradient's
- * dark part (`photo-surface`'s own contract).
+ * Inherits: Display 54/0.90/−0.045em/800 or Place-name 50 px; the headline
+ * may break by hand and is never clamped (G-8 — the two-line clamp cut
+ * `/dein-ort`'s S0 sentence mid-word); text sits in the gradient's dark part
+ * (`photo-surface`'s own contract).
  * Space: `ratio-hero`; the headline reserves `headlineLines` line boxes via
  * `min-height: calc(lines × lh × 1em)` so a content swap never shifts layout.
  * A11y: exactly one `h1` per page — the caller must render at most one

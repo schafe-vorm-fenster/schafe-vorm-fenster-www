@@ -394,8 +394,9 @@ export default async function PlacePage({
         placeholderId={heroImage?.placeholderId}
         src={heroImage?.src}
         wideSrc={heroImage?.wideSrc}
-        // `place-name` clamps to two display lines, which is right for
-        // "Das ist los in X" and wrong for state B's full sentence.
+        // `place-name` is the 50 px display role of SRC-014 §Typography,
+        // right for "Das ist los in X"; state B's full sentence takes the
+        // Display role instead. Neither is clamped any more (G-8).
         variant={publishOffer === undefined ? "place-name" : undefined}
       />
 

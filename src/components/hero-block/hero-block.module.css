@@ -12,6 +12,26 @@
   min-height: calc(var(--hero-headline-lines) * var(--type-display-leading) * 1em);
 }
 
+/*
+ * G-8: the `h1` is never clamped.
+ *
+ * SRC-014 §Fixed heights allows a **place name** two display lines, so a
+ * long village never grows the reserved box. This variant is also what a
+ * page renders when it has no resolved place — `/dein-ort`'s S0 headline is
+ * a whole sentence — and the clamp then cut it mid-word: "Such deinen Ort,
+ * dann steht hier, was dort lo…", 98 px of text in a 61 px box (polish brief
+ * finding 5).
+ *
+ * The clamp is gone; the two-line `min-height` reserve stays, which is the
+ * half that actually buys the no-shift promise — the box is already two
+ * display lines tall before the place is known, and only a name longer than
+ * that grows it. A cut sentence is the worse failure of the two, and the one
+ * a visitor sees on the first screen of the site's highest-traffic page.
+ *
+ * Hand breaks in a display headline (`SCHLAT / KOW`, SRC-014 §Typography)
+ * are unaffected: nothing here collapses white space, so a break the author
+ * writes still renders.
+ */
 .placeName {
   color: var(--color-neutral-paper);
   font-size: var(--type-place-size);
@@ -20,12 +40,6 @@
   line-height: var(--type-display-leading);
   margin: 0;
   min-height: calc(var(--hero-headline-lines) * var(--type-display-leading) * 1em);
-  /* Clamped to two lines — a long place name never grows the reserved box. */
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  overflow: hidden;
 }
 
 .lead {

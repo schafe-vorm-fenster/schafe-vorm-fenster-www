@@ -68,3 +68,44 @@
   text-decoration: underline;
   text-decoration-thickness: 2px;
 }
+
+/*
+ * The control variants' disclosure, G-5: out of the pill, under it.
+ *
+ * The same words stay in the link's accessible name (`.hidden` below, the
+ * `clip-path` pattern `search-field` and `scope-picker` already use), so
+ * TS-016 D9's "the recipient is named in the link's own line" and the
+ * new-tab announcement both hold — what changes is that they no longer set
+ * the pill's width and height. On `/deine-region` they made the secondary
+ * three lines tall and full width, directly above the page's own primary.
+ */
+.control {
+  align-items: flex-start;
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.meta {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+  line-height: var(--leading-normal);
+}
+
+/* On a dark or photo ground `muted` is unreadable; the ground's own
+   secondary text colour is what the design system pairs there. */
+.ink .meta,
+[data-surface="ink"] .meta,
+[data-surface="violet-500"] .meta,
+[data-hero="true"] .meta {
+  color: var(--color-lime-300);
+}
+
+.hidden {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

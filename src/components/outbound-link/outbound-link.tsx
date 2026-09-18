@@ -39,8 +39,14 @@ export interface OutboundLinkProps {
  * Inherits: inline link treatment, or the secondary/quiet button treatment.
  * Space: inline; the glyph never shifts the line box, because it sits in an
  * inline-flex box with the text.
- * A11y: the new-tab behaviour is announced in the link text itself, so a
- * screen-reader user is not surprised by a changed context.
+ * A11y: the new-tab behaviour and the recipient stay inside the link's own
+ * accessible name, so a screen-reader user is not surprised by a changed
+ * context. In the two **control** variants they are read out of the visible
+ * pill and printed under it as a meta line instead (G-5): inside the label
+ * they made `/deine-region`'s secondary a three-line white block that
+ * outweighed the page's own primary conversion. In the `inline` variant —
+ * a link inside a sentence — they stay in the line, which is where a reader
+ * of that sentence needs them.
  */
 export function OutboundLink({
   href,
@@ -54,8 +60,21 @@ export function OutboundLink({
 }: OutboundLinkProps) {
   const classes = [styles.link, styles[variant], className].filter(Boolean).join(" ");
   const words = dictionary(locale).outboundLink;
+  const control = variant !== "inline";
+  const disclosure = (
+    <>
+      {newTab ? <>{" "}({words.newTab})</> : null}
+      {recipient ? (
+        <>
+          {" "}
+          · {words.dataGoesTo} {recipient}
+        </>
+      ) : null}
+    </>
+  );
+  const hasDisclosure = newTab || Boolean(recipient);
 
-  return (
+  const anchor = (
     <a
       className={classes}
       data-cta={dataCta}
@@ -65,15 +84,25 @@ export function OutboundLink({
     >
       <span className={styles.text}>
         {children}
-        {newTab ? <span className={styles.hint}> ({words.newTab})</span> : null}
-        {recipient ? (
-          <span className={styles.hint}>
-            {" "}
-            · {words.dataGoesTo} {recipient}
-          </span>
+        {hasDisclosure ? (
+          <span className={control ? styles.hidden : styles.hint}>{disclosure}</span>
         ) : null}
       </span>
       <Icon className={styles.glyph} name="external-link" size={18} />
     </a>
+  );
+
+  if (!control || !hasDisclosure) return anchor;
+
+  return (
+    <span className={styles.control}>
+      {anchor}
+      {/* `aria-hidden`: the same words are already in the link's accessible
+          name above, and a screen reader reading them twice is worse than
+          not seeing them at all. */}
+      <span aria-hidden className={styles.meta}>
+        {disclosure}
+      </span>
+    </span>
   );
 }

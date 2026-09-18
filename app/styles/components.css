@@ -112,6 +112,21 @@
   --ground-link: var(--color-lime-800);
   --ground-link-hover: var(--color-lime-900);
 
+  /* ── The ground's own primary control — SRC-014 §Button ───────────────
+   * The design system lists "primary on light" (`ink`/`paper`) and "primary
+   * on dark" (`lime-500`/`ink`) as one role with two grounds — "**Same**,
+   * inside an ink or photo section". A page that names the light one inside
+   * a photo hero therefore paints an ink pill on the scrim's own 0.96 ink,
+   * and the page's single conversion reads as bare text: `/mitmachen`,
+   * `/deine-region` and `/dein-ort/starten` all lost their hero CTA that way
+   * (polish brief G-5). Which of the two applies is a fact about the ground,
+   * so the ground states it and the variant reads it — the same mechanism as
+   * `--ground-link` above.
+   */
+  --ground-primary-fill: var(--color-neutral-ink);
+  --ground-primary-text: var(--color-neutral-paper);
+  --ground-primary-fill-hover: var(--color-lime-900);
+
   /* ── Focus ring — SRC-014 §Accessibility ────────────────────────────── */
   --focus-ring-width: 3px;
   --focus-ring-offset: 2px;
