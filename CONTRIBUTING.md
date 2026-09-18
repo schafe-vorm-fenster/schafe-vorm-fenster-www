@@ -130,6 +130,14 @@ cannot see whether the small range does anything.
   `demo: true` out of the BFF, and has a `Mock aktiv` row in
   `state/open.md`. `src/lib/live/README.md` says which state each shell
   gets in which tier; `LIVE_DATA=mock` runs the whole layer offline.
+- **Three sources, in order, and two of them need no credential.** Every
+  data operation of geo-api and events-api is token-scoped, so a module
+  takes the first source that can answer it: the token-scoped API, then the
+  **public village calendar** (`src/clients/community-site/`, read
+  server-side) plus the committed community index, then the mock. That is
+  what makes an untokened preview show real dates.
+  `GEOAPI_READ_TOKEN` and `EVENTSAPI_READ_TOKEN` move each module up to the
+  authoritative source with no code change.
 - **A request value is read outside every cache boundary.** Cache Components
   is on (`cacheComponents: true`), so a page is a prerendered shell plus
   cached islands: `use cache` with a `cacheLife` from
@@ -185,3 +193,9 @@ The legal-content import from Google Workspace is unchanged:
   and the current targets before a real import.
 - `pnpm import:legal-content` refreshes the normalized legal files in
   `content/legal/`.
+
+`pnpm build:place-index` rebuilds `src/generated/snapshots/communities.json`
+— the covered-community index the place search's name lookup and the ~15 km
+proximity cut read. It needs no credential (the public village calendar
+publishes the list) and the result is committed, the same way the tier-3
+snapshots are.
