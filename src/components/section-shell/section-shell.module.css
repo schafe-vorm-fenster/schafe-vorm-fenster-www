@@ -5,6 +5,43 @@
   width: 100%;
 }
 
+/*
+ * One vertical rhythm for every section — G-3/G-4.
+ *
+ * `base.css` gives `p` a `margin-bottom`, so a section ending on a paragraph
+ * carried the shell's own padding plus that margin and read a step taller
+ * than its neighbour. The shell owns the space at its own edges.
+ */
+.section > .container > :last-child,
+.section > :last-child {
+  margin-bottom: 0;
+}
+
+/*
+ * The kicker — G-3. Mono, uppercase, no fill, and 8 px above the heading it
+ * introduces. `--ground-kicker` is the ground's own label colour, published
+ * beside `--ground-link`, so the same class reads on paper and on ink.
+ */
+.kicker {
+  color: var(--ground-kicker);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  line-height: 1.2;
+  margin: 0 0 var(--space-2);
+  text-transform: uppercase;
+}
+
+/* The hand-off line: one sentence, at Lead size, tying this section to the
+   one before it. */
+.transition {
+  font-size: var(--type-lead-size);
+  line-height: var(--leading-relaxed);
+  margin: 0 0 var(--space-4);
+  max-width: var(--measure-reading);
+}
+
 .standard {
   padding-block: var(--section-padding-block);
 }
@@ -72,6 +109,7 @@
  */
 .ink,
 .violet500 {
+  --ground-kicker: var(--color-lime-300);
   --ground-link: var(--color-lime-400);
   --ground-link-hover: var(--color-lime-300);
   --link: var(--color-lime-400);
@@ -83,6 +121,7 @@
 }
 
 .lime500 {
+  --ground-kicker: var(--color-lime-900);
   --ground-link: var(--color-lime-900);
   --ground-link-hover: var(--color-neutral-ink);
   --link: var(--color-lime-900);

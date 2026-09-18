@@ -7,6 +7,7 @@ import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { ValueStory } from "@/src/components/value-story/value-story";
+import { dictionary } from "@/src/lib/i18n/dictionary";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
@@ -445,8 +446,17 @@ export default async function PlacePage({
           testimonial slot is absent, not empty, while no quote is cleared. */}
       <MotionReveal>
         {/* No heading of its own: each story is its own `h2`, so the section
-            introduces nothing the stories do not already say. */}
-        <SectionShell id="value-stories" surface="paper">
+            introduces nothing the stories do not already say. The kicker
+            names the section's role instead (polish brief G-3) — the one
+            thing four stacked stories on one ground could not say for
+            themselves. Splitting them across four alternating grounds, with
+            the four cleared testimonials the artifact already carries, is
+            the per-page pass. */}
+        <SectionShell
+          id="value-stories"
+          kicker={dictionary(locale).kickers.whyItMatters}
+          surface="paper"
+        >
           {stories.map((story, index) => (
             <ValueStory
               aspect={fieldAt(story.blocks, 0) ?? ""}

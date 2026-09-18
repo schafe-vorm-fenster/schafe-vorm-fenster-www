@@ -12,6 +12,14 @@ import styles from "./publishing-path.module.css";
 export interface PublishingPathProps {
   /** One mechanism per block — `whatsapp` · `calendar-connection` · `website-import`. */
   readonly mechanism: MechanismId;
+  /**
+   * Which of the paths this is — 1, 2, 3. It renders as the mono ordinal
+   * above the headline and turns on the rule that separates one path from
+   * the one before it. Three paths stacked in a single 1995 px section with
+   * no number and no separation read as one long step list, which is what
+   * the polish brief measured on `/mitmachen` (G-4).
+   */
+  readonly ordinal?: number;
   readonly headline: string;
   readonly steps: readonly Step[];
   /** Present only where the hub record is not `generally-available`. */
@@ -44,8 +52,9 @@ export interface PublishingPathProps {
  * States: a path whose hub record is not `generally-available` renders
  * `status-badge` and may not be presented as dependable — the badge is
  * driven by `availability`, never by a copy decision.
- * Inherits: `ratio-feature` for its media; step numbers in Label-mono;
- * radius 0 for the block, 999 for anything tappable inside a step's hint.
+ * Inherits: `ratio-feature` for its media; the headline at Sub head so it
+ * outranks its own 18/700 step titles; step numbers in Label-mono; radius 0
+ * for the block, 999 for anything tappable inside a step's hint.
  * Space: the media ratio is declared before the asset arrives; the step list
  * is static content.
  * A11y: an ordered list for the steps; the badge text is read, not implied
@@ -53,6 +62,7 @@ export interface PublishingPathProps {
  */
 export function PublishingPath({
   mechanism,
+  ordinal,
   headline,
   steps,
   availability,
@@ -67,8 +77,21 @@ export function PublishingPath({
   className,
 }: PublishingPathProps) {
   return (
-    <div className={[styles.path, className].filter(Boolean).join(" ")} data-mechanism={mechanism}>
+    <div
+      className={[styles.path, ordinal ? styles.separated : undefined, className]
+        .filter(Boolean)
+        .join(" ")}
+      data-mechanism={mechanism}
+      data-ordinal={ordinal}
+    >
       <div className={styles.header}>
+        {ordinal ? (
+          /* A number, not a word — nothing here needs translating, and the
+             reader counts three paths instead of scrolling one list. */
+          <p aria-hidden className={styles.ordinal}>
+            {String(ordinal).padStart(2, "0")}
+          </p>
+        ) : null}
         <h3 className={styles.headline}>{headline}</h3>
         {availability ? (
           <StatusBadge availability={availability} label={availabilityLabel} />

@@ -14,7 +14,13 @@ describe("TS-022-A16: /mitmachen section rhythm", () => {
     const sections = [
       "photo", // hero (scene)
       "paper", // objections
-      "surface-2", // three publishing paths
+      // One path per section (polish brief G-4) — the single 2035 px block
+      // the three of them used to share was 2.4 phone screens. The lime
+      // ground between them is not decoration: three neutral sections in a
+      // row would break the very rule this test checks.
+      "surface-2", // path 1 — WhatsApp
+      "lime-100", // path 2 — calendar connection
+      "surface-2", // path 3 — website import
       "ink", // live example — the page's single dark section
       "lime-100", // proof
       "surface", // PageFrame: context band

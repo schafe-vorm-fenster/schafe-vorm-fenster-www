@@ -7,6 +7,7 @@ import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { PublishingPath } from "@/src/components/publishing-path/publishing-path";
 import { RouteLink } from "@/src/components/route-link/route-link";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
+import { dictionary } from "@/src/lib/i18n/dictionary";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
@@ -229,7 +230,26 @@ export default async function Page({
         />
       </SectionShell>
 
-      <SectionShell dataBlock="wege" labelledBy="wege-heading" surface="surface-2">
+      {/*
+          One path per section, on its own ground — polish brief G-4.
+
+          The three of them stood in a single `surface-2` section that
+          measured 2035 px at 390 px, 2.4 phone screens, in which each path
+          opened with a sub-head flush against the step list of the path
+          above it. Nothing told the reader she had reached the next way in.
+          Three grounds, three ordinals and one kicker on the first do, and
+          no section is over the 1270 px budget any more.
+
+          `surface-2 → lime-100 → surface-2` rather than three neutrals: the
+          page's own rhythm test (TS-022-A16) forbids three consecutive
+          sections of one colour family, and `objections` above is already
+          `paper`. */}
+      <SectionShell
+        dataBlock="wege"
+        kicker={dictionary(locale).kickers.howItWorks}
+        labelledBy="wege-heading"
+        surface="surface-2"
+      >
         <h2 id="wege-heading">{PATHS_LABEL[locale]}</h2>
         <PublishingPath
           headline={fieldAt(pathWhatsapp.blocks, 0) ?? ""}
@@ -239,8 +259,16 @@ export default async function Page({
           mediaNotDepicting={whatsappImage?.notDepicting}
           mediaPlaceholderId={whatsappImage?.placeholderId}
           mediaSrc={whatsappImage?.src}
+          ordinal={1}
           steps={stepsOf(listItems(pathWhatsapp.blocks))}
         />
+      </SectionShell>
+
+      <SectionShell
+        dataBlock="wege"
+        label={fieldAt(pathCalendar.blocks, 0)}
+        surface="lime-100"
+      >
         <PublishingPath
           headline={fieldAt(pathCalendar.blocks, 0) ?? ""}
           locale={locale}
@@ -249,8 +277,16 @@ export default async function Page({
           mediaNotDepicting={calendarImage?.notDepicting}
           mediaPlaceholderId={calendarImage?.placeholderId}
           mediaSrc={calendarImage?.src}
+          ordinal={2}
           steps={stepsOf(listItems(pathCalendar.blocks))}
         />
+      </SectionShell>
+
+      <SectionShell
+        dataBlock="wege"
+        label={fieldAt(pathWebsite.blocks, 0)}
+        surface="surface-2"
+      >
         <PublishingPath
           availability="alpha"
           availabilityLabel={fieldAt(pathWebsite.blocks, 1)}
@@ -261,6 +297,7 @@ export default async function Page({
           mediaNotDepicting={websiteImage?.notDepicting}
           mediaPlaceholderId={websiteImage?.placeholderId}
           mediaSrc={websiteImage?.src}
+          ordinal={3}
           steps={stepsOf(listItems(pathWebsite.blocks))}
         />
         <aside>

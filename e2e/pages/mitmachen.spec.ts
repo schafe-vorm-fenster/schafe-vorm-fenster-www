@@ -43,8 +43,18 @@ test.describe("TS-022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
     const blocks = await page
       .locator("main [data-block]")
       .evaluateAll((elements) => elements.map((element) => element.getAttribute("data-block")));
-    // hero (scene) -> objections -> wege (three paths) -> beispiel (live example) -> beleg (proof)
-    expect(blocks).toEqual(["scene", "objections", "wege", "beispiel", "beleg"]);
+    // hero (scene) -> objections -> wege (three paths, one section each
+    // since polish brief G-4 — same block, same order, three grounds) ->
+    // beispiel (live example) -> beleg (proof)
+    expect(blocks).toEqual([
+      "scene",
+      "objections",
+      "wege",
+      "wege",
+      "wege",
+      "beispiel",
+      "beleg",
+    ]);
   });
 
   test("TS-022-A4: exactly one data-block=\"scene\", mechanism whatsapp, opener ends in a question mark", async ({

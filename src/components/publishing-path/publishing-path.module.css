@@ -4,17 +4,43 @@
   gap: var(--space-4);
 }
 
-.header {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
+/*
+ * The separation between one path and the next — G-4.
+ *
+ * Three paths in one `surface-2` section measured 1995 px on a phone, 2.4
+ * screens, and each of them opened with a 21 px sub-head that sat flush
+ * against the step list of the path above it. A rule and a full section step
+ * of air above each numbered path give the eye the joint; the ordinal says
+ * how many are left.
+ */
+.separated {
+  border-top: 1px solid var(--color-neutral-line);
+  padding-top: var(--section-padding-block);
 }
 
-.headline {
-  font-size: var(--type-card-size);
+.header {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.ordinal {
+  color: var(--color-neutral-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
   font-weight: 700;
-  letter-spacing: var(--type-card-tracking);
+  letter-spacing: var(--type-label-tracking);
+  margin: 0;
+}
+
+/* Sub head, not Card title: a path outranks the 18/700 titles of its own
+   steps, which it did not before. */
+.headline {
+  font-size: var(--type-subhead-size);
+  font-weight: 800;
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: var(--leading-tight);
   margin: 0;
 }
 

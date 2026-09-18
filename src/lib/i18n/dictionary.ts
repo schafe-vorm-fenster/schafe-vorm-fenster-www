@@ -134,6 +134,38 @@ export interface Dictionary {
     allDates: string;
   };
   /**
+   * The section kickers — polish brief G-3's fixed vocabulary.
+   *
+   * "No section may begin with only a heading on a new colour." Each section
+   * after the hero opens with a kicker naming its **role**, and the roles are
+   * a closed set for the whole site: a page picks one, it does not write one.
+   * That is why they live here and not in `content/pages/**` — they are not
+   * the page's argument, they are the site's own signposting, and a page that
+   * invented its own would put two names on the same joint.
+   */
+  kickers: {
+    /** The live answer — this week's dates. */
+    liveAnswer: string;
+    /** The widened radius — one place over. */
+    widerRadius: string;
+    /** Why the thing matters. */
+    whyItMatters: string;
+    /** How the mechanism works. */
+    howItWorks: string;
+    /** The objection: why it snags today. */
+    objection: string;
+    /** The evidence: who already does this. */
+    evidence: string;
+    /** Price and scope. */
+    price: string;
+    /** Trust: how we work. */
+    trust: string;
+    /** Origin: where this comes from. */
+    origin: string;
+    /** The context band's other concerns. */
+    otherConcerns: string;
+  };
+  /**
    * The form controls' own words — the strings a component renders when the
    * page supplied none. `choice-group`'s empty state was a German literal in
    * the component body and rendered on `/en` too (F-2-33).
@@ -267,6 +299,18 @@ const de: Dictionary = {
     updatesToday: "Aktualisierungen heute",
     allDates: "Alle Termine im Kalender",
   },
+  kickers: {
+    liveAnswer: "Was gerade ansteht",
+    widerRadius: "Einen Ort weiter",
+    whyItMatters: "Warum das zählt",
+    howItWorks: "So funktioniert es",
+    objection: "Warum es heute hakt",
+    evidence: "Wer das schon macht",
+    price: "Was es kostet",
+    trust: "Wie wir arbeiten",
+    origin: "Wo das herkommt",
+    otherConcerns: "Anderes Anliegen?",
+  },
   forms: {
     noOptions: "Keine Auswahl verfügbar.",
   },
@@ -362,6 +406,18 @@ const en: Dictionary = {
     places: "places",
     updatesToday: "updates today",
     allDates: "All dates in the calendar",
+  },
+  kickers: {
+    liveAnswer: "What's on now",
+    widerRadius: "One place over",
+    whyItMatters: "Why it matters",
+    howItWorks: "How it works",
+    objection: "Why it snags today",
+    evidence: "Who already does this",
+    price: "What it costs",
+    trust: "How we work",
+    origin: "Where this comes from",
+    otherConcerns: "Something else today?",
   },
   forms: {
     noOptions: "Nothing to choose from yet.",

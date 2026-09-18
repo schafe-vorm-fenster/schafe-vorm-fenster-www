@@ -111,6 +111,8 @@
    */
   --ground-link: var(--color-lime-800);
   --ground-link-hover: var(--color-lime-900);
+  /* The section kicker's label colour on a light ground (G-3). */
+  --ground-kicker: var(--color-neutral-muted);
 
   /* ── The ground's own primary control — SRC-014 §Button ───────────────
    * The design system lists "primary on light" (`ink`/`paper`) and "primary
