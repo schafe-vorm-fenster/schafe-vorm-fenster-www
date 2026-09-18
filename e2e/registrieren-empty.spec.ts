@@ -68,6 +68,6 @@ test("F-3-14: the empty state is English on the English flow", async ({ page }) 
 });
 
 test("F-3-14: a resolved place still advances, untouched", async ({ page }) => {
-  await page.goto("/mitmachen/registrieren?ort=beispielwalde");
+  await page.goto("/mitmachen/registrieren?ort=quilow");
   await expect(page.locator("[data-place-not-found]")).toHaveCount(0);
 });

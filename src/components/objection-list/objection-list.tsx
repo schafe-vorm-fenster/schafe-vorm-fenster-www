@@ -3,7 +3,6 @@ import { Icon } from "../icon/icon";
 
 import type { ReactNode } from "react";
 
-import type { Locale } from "@/src/lib/i18n/locales";
 
 import styles from "./objection-list.module.css";
 
@@ -19,12 +18,6 @@ export interface ObjectionListProps {
   readonly items: readonly ObjectionItem[];
   /** A cleared `proof-card`. Omitted → `empty-proof-slot`, never backfilled. */
   readonly proof?: ReactNode;
-  readonly proofEmptySentence?: string;
-  /**
-   * The page's language, handed on to the empty proof slot. Without it the
-   * slot's sentence and badge rendered in German on `/en/take-part` (F-3-15).
-   */
-  readonly locale?: Locale;
   readonly className?: string;
 }
 
@@ -35,8 +28,10 @@ export interface ObjectionListProps {
  * Structure: one headline plus *n* items, each the channel in the visitor's
  * own words and the one concrete way it fails. One proof slot beside the
  * block. No numeral asserts how many channels exist.
- * States: the proof slot is visibly empty when nothing clears
- * (`empty-proof-slot`), never backfilled with a substitute claim.
+ * States: the proof slot holds its position as a flat brand-colour panel
+ * when nothing clears (`empty-proof-slot`), never backfilled with a
+ * substitute claim and — since Jan's decision of 2026-09-18 — never labelled
+ * in the page either.
  * Inherits: not a Q&A block and not `FAQPage` markup; `circle-x` marks the
  * failure role; the failure colour is the status-error token, used here only
  * as the failure narrative, never as an error state of the page itself.
@@ -48,8 +43,6 @@ export function ObjectionList({
   headline,
   items,
   proof,
-  proofEmptySentence,
-  locale = "de",
   className,
 }: ObjectionListProps) {
   return (
@@ -68,7 +61,7 @@ export function ObjectionList({
           ))}
         </ul>
         <div className={styles.proof}>
-          {proof ?? <EmptyProofSlot locale={locale} sentence={proofEmptySentence} />}
+          {proof ?? <EmptyProofSlot />}
         </div>
       </div>
     </div>

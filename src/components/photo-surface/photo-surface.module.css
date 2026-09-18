@@ -150,25 +150,38 @@
 
 /*
  * **The reserved photograph band** — Jan's round-3 point 1, the part the
- * gradient alone cannot buy.
+ * gradient alone cannot buy, re-measured against the polish brief's G-1.
  *
  * A hero whose copy is long (`/mitmachen`: four headline lines and a
- * five-line lead at 360 px) fills its own 8:9 box completely, and then no
+ * five-line lead at 390 px) fills its own 8:9 box completely, and then no
  * stop in any gradient can show a photograph that has no uncovered pixels
  * left. So the hero reserves a band at the top of its surface that the text
- * stack cannot enter, as a flex spacer with its own aspect ratio: 40 % of the
- * width on the phone, which is ~35 % of the 8:9 box, and 15 % of the width
- * from `lg`, which is ~35 % of the 21:9 box. Where the copy is short the box
- * keeps the design system's ratio exactly and the band simply sits inside it;
- * where the copy is long the box grows, as it already did, and the band is
- * what the visitor sees of the picture.
+ * stack cannot enter, as a flex spacer.
  *
- * It also keeps the text clear of the header lying transparent above it —
- * the band is deeper than the header at every width.
+ * Round 3 made that band a **ratio of the width** — 5/2, which is 156 px at
+ * 390 px. The site header lies transparent over its top 64 px, so what a
+ * visitor actually saw of the photograph was ~92 px: 11 % of the first
+ * screen, on every phone page. Worse, the band being width-derived meant it
+ * could not grow with the copy below it — `/ueber-uns` rendered 156 px of
+ * picture inside a 1256 px hero box (12 %), `/deine-region` 156 of 693,
+ * `/mitmachen` 156 of 610 (polish brief finding 2).
  *
- * Hero only. A `feature`-ratio photo surface elsewhere on the page keeps
- * today's behaviour; whether the same reservation belongs on those is a
- * design-system question and carries its own row in `state/open.md`.
+ * The band is now a share of the **viewport**, which is the thing the rule
+ * is about: 55 svh, of which the header covers its own height and the rest —
+ * about 400 px at 844 px tall, 47 % of the first screen — is uncovered
+ * photograph. `svh` rather than `vh` so a mobile browser's collapsing URL bar
+ * cannot change it after paint; the band is pure CSS and resolves before the
+ * first paint, so it shifts nothing.
+ *
+ * The text stack still sits inside the same box, on the gradient's dark end:
+ * the photograph is `cover`, so a hero whose copy grows past the band simply
+ * shows more of the picture through the scrim rather than running out of
+ * image. `.content::before` keeps its 0.82 floor at the stack's own top edge
+ * regardless of how far down the box that edge falls, which is what holds
+ * the contrast (verified by pixel sampling, not by the gradient's maths).
+ *
+ * From `lg` the hero ratio turns 21:9 and the desktop heroes were already
+ * right; there the band stays the width ratio it was.
  */
 .surface[data-hero="true"] {
   align-items: stretch;
@@ -177,15 +190,22 @@
 }
 
 .surface[data-hero="true"]::before {
-  aspect-ratio: var(--photo-headroom, 5 / 2);
   content: "";
   flex: none;
+  /* `vh` first for a browser that does not know `svh`; the real value wins. */
+  min-height: 55vh;
+  min-height: var(--photo-band, 55svh);
   width: 100%;
 }
 
 @media (min-width: 48rem) {
   .surface[data-hero="true"] {
     --photo-headroom: 20 / 3;
+  }
+
+  .surface[data-hero="true"]::before {
+    aspect-ratio: var(--photo-headroom, 5 / 2);
+    min-height: 0;
   }
 }
 

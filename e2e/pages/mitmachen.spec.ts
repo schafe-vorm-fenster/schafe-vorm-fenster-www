@@ -76,7 +76,10 @@ test.describe("TS-022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
   }) => {
     await page.goto("/mitmachen");
     await expect(page.getByText("Warum das, was ihr heute macht, nicht überall ankommt")).toBeVisible();
-    await expect(page.getByText("Kein Nachweis", { exact: true })).toBeVisible();
+    // The unfilled proof position still holds its place and is still
+    // countable — it simply no longer labels itself (Jan, 2026-09-18).
+    await expect(page.locator("[data-empty-proof]")).toHaveCount(1);
+    await expect(page.getByText("Kein Nachweis")).toHaveCount(0);
     const bodyText = (await page.locator("body").innerText()).toLowerCase();
     for (const banned of ["einfach", "digital", "für alle", "modern", "innovativ"]) {
       expect(bodyText).not.toContain(banned);

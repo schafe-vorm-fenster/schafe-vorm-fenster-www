@@ -29,7 +29,7 @@ const PLACE = "Testdorf";
  */
 const UNCOVERED_ZIP = "99999";
 const COVERED_ZIP = "17390";
-const COVERED_SLUG = "musterbach";
+const COVERED_SLUG = "rubkow";
 
 test.describe("TS-021 — start the calendar in your place", () => {
   for (const viewport of [PHONE, DESKTOP]) {
@@ -225,7 +225,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     await field.fill("38165");
     await field.press("Enter");
     await expect(page).toHaveURL(/\/dein-ort\?ort=38165$/);
-    await expect(page.locator("#place-dates")).toContainText("Beispielhausen");
+    await expect(page.locator("#place-dates")).toContainText("Lassan");
   });
 
   test("TS-021-A7: a value that now resolves produces exactly one 302 to /dein-ort?ort=<slug>", async ({

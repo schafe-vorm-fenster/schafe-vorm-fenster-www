@@ -1,13 +1,8 @@
-import { Badge } from "../badge/badge";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
-import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
-import { PlaceholderBadge } from "../placeholder-badge/placeholder-badge";
 import { PlaceholderSurface } from "../placeholder-surface/placeholder-surface";
 import { Skeleton } from "../skeleton/skeleton";
 
 import { photoUrl } from "./url";
-
-import { dictionary } from "@/src/lib/i18n/dictionary";
 
 import type { ReactNode } from "react";
 import type { CSSProperties } from "react";
@@ -46,15 +41,18 @@ export interface PhotoSurfaceProps extends DataStateProps {
   /** `ink` by default, `violet` for the municipal path. */
   readonly gradient?: "ink" | "violet";
   readonly ratio?: "hero" | "feature";
-  /** The photo does not depict what the copy claims → the placeholder badge. */
+  /**
+   * The photo does not depict what the copy claims. It reaches the markup as
+   * `data-provenance="generated"` and nothing else — Jan, 2026-09-18.
+   */
   readonly notDepicting?: boolean;
-  /** Invitation copy for the missing-photo case. */
-  readonly placeholderHeadline?: string;
-  readonly placeholderCta?: ReactNode;
   readonly id?: string;
   /** The manifest slot id when this surface shows a generated image (DEC-068). */
   readonly placeholderId?: string;
-  /** The page's language — the `Demo-Daten` badge and the freshness label read it. */
+  /**
+   * Kept in the interface so every page composes the surface the same way;
+   * the surface itself renders no words of its own any more.
+   */
   readonly locale?: Locale;
   readonly className?: string;
   readonly children?: ReactNode;
@@ -74,11 +72,11 @@ export interface PhotoSurfaceProps extends DataStateProps {
  * content-anchored scrim with it — a badge's height further up the picture.
  * States (D-9, all four):
  *   loading  → the `skeleton` hatch at the same ratio;
- *   empty    → `placeholder-surface`: hatch, "Foto gesucht", invitation. This
- *              is a conversion, which is why it is designed, not hidden;
+ *   empty    → `placeholder-surface`: a flat brand-colour ground at the same
+ *              ratio, with nothing written on it (Jan, 2026-09-18);
  *   degraded → the section renders with whatever image it has; a missing one
  *              is the empty case, so there is no third visual;
- *   mocked   → the full surface plus `demo-data-badge`.
+ *   mocked   → the full surface, marked `data-mock="true"`.
  * Inherits: radius 0, no border, no shadow. Never adjacent to another photo
  * section — a rhythm rule `section-shell` enforces at composition time.
  * Space: the ratio is declared before the image arrives (8:9 on the phone,
@@ -99,14 +97,11 @@ export function PhotoSurface({
   gradient = "ink",
   ratio = "hero",
   notDepicting = false,
-  placeholderHeadline,
-  placeholderCta,
   state = "ready",
   id,
   placeholderId,
   className,
   children,
-  locale = "de",
 }: PhotoSurfaceProps) {
   const classes = [
     styles.surface,
@@ -133,13 +128,7 @@ export function PhotoSurface({
   // today (no photography asset exists anywhere in the tree yet).
   if (missingPhoto && !children) {
     return (
-      <PlaceholderSurface
-        className={className}
-        cta={placeholderCta}
-        headline={placeholderHeadline}
-        locale={locale}
-        ratio={ratio}
-      />
+      <PlaceholderSurface className={className} ratio={ratio} />
     );
   }
 
@@ -177,7 +166,9 @@ export function PhotoSurface({
       /* The page's hero surface — what the header observes to know when it
          has scrolled off the photograph (Jan's round-3 point 2). */
       data-hero={hero && !missingPhoto ? "true" : undefined}
+      data-mock={isMocked(state) ? "true" : undefined}
       data-placeholder={missingPhoto ? "true" : placeholderId}
+      data-provenance={notDepicting && !missingPhoto ? "generated" : undefined}
       id={id}
       style={
         {
@@ -187,22 +178,11 @@ export function PhotoSurface({
         } as CSSProperties
       }
     >
-      {/* F-3-R1: the marks left the text stack. They are a mark *on the
-          photograph*, not a line of the hero's copy, and standing at the top
-          of the stack they pushed the headline — and with it the whole
-          content-anchored scrim — a badge's height further up the picture on
-          every page. They now sit in the photograph's own top corner, which
-          is where the design boards put them, and the stack below is the
-          copy alone. */}
-      {(missingPhoto || notDepicting || isMocked(state)) && (
-        <div className={styles.marks}>
-          {missingPhoto ? (
-            <Badge tone="placeholder">{dictionary(locale).media.photoWanted}</Badge>
-          ) : null}
-          {!missingPhoto && notDepicting ? <PlaceholderBadge locale={locale} /> : null}
-          {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
-        </div>
-      )}
+      {/* F-3-R1: the marks left the text stack — and, since Jan's decision
+          of 2026-09-18, the page entirely. What this surface is standing in
+          for is readable from `data-placeholder`, `data-provenance` and
+          `data-mock` above, and from `state/open.md`; a visitor sees a
+          finished picture or a finished flat ground, never a label. */}
       <div className={styles.content}>{children}</div>
     </section>
     </>

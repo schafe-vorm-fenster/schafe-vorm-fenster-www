@@ -111,13 +111,19 @@ test.describe("TS-024: /dein-kalender", () => {
     expect(bodyText).not.toMatch(/\bab\s+\d/);
   });
 
-  test("TS-024-A13: the proof block renders three cards, each with a cleared image or the placeholder badge", async ({
+  test("TS-024-A13: the proof block renders three cards, and an uncleared image is a flat surface, not a marked gap", async ({
     page,
   }) => {
     await page.goto(ROUTE);
-    const cards = page.locator('[data-block="proof"] article');
-    await expect(cards).toHaveCount(3);
-    await expect(page.locator('[data-block="proof"]').getByText("Foto gesucht")).toHaveCount(3);
+    const block = page.locator('[data-block="proof"]');
+    await expect(block.locator("article")).toHaveCount(3);
+
+    // Jan, 2026-09-18: a card whose image right is not cleared shows a flat
+    // brand-colour surface and says nothing about itself. The old assertion
+    // counted three "Foto gesucht" badges; the contract is now the opposite.
+    for (const marking of ["Foto gesucht", "Photo wanted", "Platzhalter", "Nicht motivgenau"]) {
+      await expect(block.getByText(marking), marking).toHaveCount(0);
+    }
   });
 
   test("TS-024-A14: the trust block occurs exactly once, states the data-protection claim, links both legal anchors", async ({

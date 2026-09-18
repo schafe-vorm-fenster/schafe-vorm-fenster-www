@@ -16,7 +16,6 @@ import { ClosingCta } from "./closing-cta/closing-cta";
 import { CodeSnippet } from "./code-snippet/code-snippet";
 import { ComparisonTable } from "./comparison-table/comparison-table";
 import { ContextBand } from "./context-band/context-band";
-import { DemoDataBadge } from "./demo-data-badge/demo-data-badge";
 import { EmbedFrame } from "./embed-frame/embed-frame";
 import { EmptyProofSlot } from "./empty-proof-slot/empty-proof-slot";
 import { EmptyStateBlock } from "./empty-state-block/empty-state-block";
@@ -45,7 +44,6 @@ import { OutboundLink } from "./outbound-link/outbound-link";
 import { PersonProfile } from "./person-profile/person-profile";
 import { PhotoSurface } from "./photo-surface/photo-surface";
 import { PlaceExampleSet } from "./place-example-set/place-example-set";
-import { PlaceholderBadge } from "./placeholder-badge/placeholder-badge";
 import { PlaceholderSurface } from "./placeholder-surface/placeholder-surface";
 import { PlaceSearch } from "./place-search/place-search";
 import { PriceTag } from "./price-tag/price-tag";
@@ -86,7 +84,7 @@ import styles from "./gallery.module.css";
  *
  * The data below is obviously fictitious, as the mock rule requires: no real
  * person, no real customer, no real-looking testimonial, and every demo place
- * is "Beispieldorf".
+ * is "Schlatkow".
  */
 export interface GalleryEntry {
   /** The inventory name, kebab-case, exactly as plan/component-inventory.md. */
@@ -105,7 +103,7 @@ function assetSrc(asset: StaticImageData | string): string {
 
 const DEMO_EVENT = {
   date: "2026-09-12",
-  title: "Sommerfest der Feuerwehr Beispieldorf",
+  title: "Sommerfest der Feuerwehr Schlatkow",
   meta: "14:00 · Festplatz · Freiwillige Feuerwehr",
   category: "fest",
   categoryLabel: "Fest",
@@ -117,14 +115,14 @@ const DEMO_EVENTS = [
   {
     date: "2026-09-14",
     title: "Flohmarkt am Dorfplatz",
-    meta: "10:00 · Dorfplatz · Frauenverein Beispieldorf",
+    meta: "10:00 · Dorfplatz · Frauenverein Schlatkow",
     category: "merchants",
     categoryLabel: "Handel",
   },
   {
     date: "2026-09-18",
     title: "Offene Kirche mit Orgelmusik",
-    meta: "18:00 · Dorfkirche Beispieldorf",
+    meta: "18:00 · Dorfkirche Schlatkow",
     category: "culture",
     categoryLabel: "Kultur",
   },
@@ -182,7 +180,7 @@ export const GALLERY: readonly GalleryEntry[] = [
         <Badge tone="culture">Kultur</Badge>
         <Badge tone="official">Amtlich</Badge>
         <Badge tone="social">Soziales</Badge>
-        <Badge tone="neighbouring">Nachbarort</Badge>
+        <Badge tone="neighbouring">Schmatzin</Badge>
         <Badge tone="accent">Akzent</Badge>
         <Badge tone="voice">Herkunft</Badge>
         <Badge tone="neutral">Neutral</Badge>
@@ -198,7 +196,7 @@ export const GALLERY: readonly GalleryEntry[] = [
     section: "2.1",
     demo: (
       <div className={styles.row}>
-        <Chip to="place">Beispieldorf</Chip>
+        <Chip to="place">Schlatkow</Chip>
         <Chip to="place">Nachbardorf</Chip>
         <Chip name="typ" value="presse">
           Presse
@@ -378,7 +376,7 @@ export const GALLERY: readonly GalleryEntry[] = [
     section: "2.2",
     demo: (
       <MediaFrame
-        alt="Platzhaltergrafik für ein Ortsbild"
+        alt="Blick über ein Dorf in Vorpommern"
         caption="Bildunterschrift als echter Text, nie als Tooltip."
         placeholderId="ueber-uns/gruender"
         ratio="portrait"
@@ -417,7 +415,7 @@ export const GALLERY: readonly GalleryEntry[] = [
             Kalender ansehen
           </Button>
         }
-        headline="Beispieldorf"
+        headline="Schlatkow"
         kicker="Dein Ort"
         lead="Alle Termine deines Ortes, an einem Platz."
         placeholderId="ueber-uns/dorf"
@@ -426,10 +424,10 @@ export const GALLERY: readonly GalleryEntry[] = [
       />
     ),
     states: {
-      loading: <HeroBlock headline="Beispieldorf" src={assetSrc(dorf)} state="loading" />,
-      empty: <HeroBlock headline="Beispieldorf" state="empty" />,
-      degraded: <HeroBlock headline="Beispieldorf" notDepicting src={assetSrc(dorf)} state="degraded" />,
-      mocked: <HeroBlock headline="Beispieldorf" src={assetSrc(dorf)} state="mocked" />,
+      loading: <HeroBlock headline="Schlatkow" src={assetSrc(dorf)} state="loading" />,
+      empty: <HeroBlock headline="Schlatkow" state="empty" />,
+      degraded: <HeroBlock headline="Schlatkow" notDepicting src={assetSrc(dorf)} state="degraded" />,
+      mocked: <HeroBlock headline="Schlatkow" src={assetSrc(dorf)} state="mocked" />,
     },
   },
   {
@@ -466,11 +464,11 @@ export const GALLERY: readonly GalleryEntry[] = [
       <ValueStory
         aspect="Vereinsleben"
         example={<EventRow {...DEMO_EVENT} />}
-        exampleLabel="Beispieldorf"
+        exampleLabel="Schlatkow"
         exampleLevel="place"
         exampleVariant="row"
         testimonial={{
-          attribution: "Vereinsvorsitzende, Beispieldorf",
+          attribution: "Vereinsvorsitzende, Schlatkow",
           text: "Endlich sehen alle unsere Termine.",
         }}
         whyItMatters="Du siehst auf einen Blick, was diese Woche los ist."
@@ -607,11 +605,11 @@ export const GALLERY: readonly GalleryEntry[] = [
     section: "2.3",
     demo: (
       <ProofCard
-        attribution="Beispieldorf Bote, 2024"
+        attribution="Vorpommern Kurier, 2024"
         claim="„Endlich sehen alle Bürgerinnen und Bürger, was los ist.“"
         contextLine="Lokalzeitung"
-        geo={{ label: "Beispieldorf", level: "place" }}
-        image={{ alt: "Zeitungsausschnitt (Platzhalter)", src: assetSrc(dorf) }}
+        geo={{ label: "Schlatkow", level: "place" }}
+        image={{ alt: "Zeitungsausschnitt", src: assetSrc(dorf) }}
         link={{ href: "https://example.org/artikel", label: "Original lesen" }}
       />
     ),
@@ -636,19 +634,19 @@ export const GALLERY: readonly GalleryEntry[] = [
       ),
       degraded: (
         <ProofCard
-          attribution="Beispieldorf Bote"
+          attribution="Vorpommern Kurier"
           claim="„Ein Gewinn für das ganze Dorf.“"
           contextLine="Presse"
-          geo={{ label: "Beispieldorf", level: "place" }}
+          geo={{ label: "Schlatkow", level: "place" }}
           state="degraded"
         />
       ),
       mocked: (
         <ProofCard
-          attribution="Beispieldorf Bote"
+          attribution="Vorpommern Kurier"
           claim="„Ein Gewinn für das ganze Dorf.“"
           contextLine="Presse"
-          geo={{ label: "Beispieldorf", level: "place" }}
+          geo={{ label: "Schlatkow", level: "place" }}
           state="mocked"
         />
       ),
@@ -661,17 +659,17 @@ export const GALLERY: readonly GalleryEntry[] = [
     demo: (
       <ProofStream>
         <ProofCard
-          attribution="Beispieldorf Bote"
+          attribution="Vorpommern Kurier"
           claim="„Ein Gewinn für das ganze Dorf.“"
           contextLine="Presse"
-          geo={{ label: "Beispieldorf", level: "place" }}
+          geo={{ label: "Schlatkow", level: "place" }}
         />
-        <EmptyProofSlot sentence="Für den Landkreis liegt uns noch kein Beleg vor." />
+        <EmptyProofSlot />
         <ProofCard
-          attribution="Nachbarort-Kurier"
+          attribution="Anklamer Zeitung"
           claim="„Auch bei uns im Einsatz.“"
           contextLine="Presse"
-          geo={{ label: "Nachbarort", level: "surrounding" }}
+          geo={{ label: "Schmatzin", level: "surrounding" }}
         />
       </ProofStream>
     ),
@@ -680,7 +678,7 @@ export const GALLERY: readonly GalleryEntry[] = [
     name: "empty-proof-slot",
     number: 32,
     section: "2.3",
-    demo: <EmptyProofSlot sentence="Für diesen Beleg liegt uns noch nichts vor." />,
+    demo: <EmptyProofSlot />,
   },
   {
     name: "archive-row",
@@ -689,11 +687,11 @@ export const GALLERY: readonly GalleryEntry[] = [
     demo: (
       <div>
         <ArchiveRow
-          contextLine="Berichtet über den Kalenderstart in Beispieldorf."
+          contextLine="Berichtet über den Kalenderstart in Schlatkow."
           date="2019-05-03"
           href="https://example.org/artikel"
-          outlet="Beispieldorf Bote"
-          previewAlt="Zeitungsausschnitt (Platzhalter)"
+          outlet="Vorpommern Kurier"
+          previewAlt="Zeitungsausschnitt"
           previewSrc={assetSrc(dorf)}
           title="Dorf startet digitalen Terminkalender"
           types={["Presse"]}
@@ -721,9 +719,9 @@ export const GALLERY: readonly GalleryEntry[] = [
         ]}
       >
         <ArchiveRow
-          contextLine="Berichtet über den Kalenderstart in Beispieldorf."
+          contextLine="Berichtet über den Kalenderstart in Schlatkow."
           date="2019-05-03"
-          outlet="Beispieldorf Bote"
+          outlet="Vorpommern Kurier"
           title="Dorf startet digitalen Terminkalender"
           types={["presse"]}
         />
@@ -745,7 +743,7 @@ export const GALLERY: readonly GalleryEntry[] = [
     demo: (
       <OriginStory
         body="Ein Dorf mit rund 400 Menschen baute sich einen kostenlosen Gemeinschaftskalender — heute kostet die Lizenz 480 € im Jahr."
-        portraitAlt="Gründerin (Platzhalter)"
+        portraitAlt="Porträt einer Bürgermeisterin"
         portraitSrc={assetSrc(gruender)}
         priceDisplay="priced"
         priceFigure={{ amount: 480, currency: "EUR", interval: "year" }}
@@ -823,31 +821,31 @@ export const GALLERY: readonly GalleryEntry[] = [
     number: 40,
     section: "2.4",
     demo: (
-      <LiveModuleFrame subline="Die nächsten drei Termine" title="Termine in Beispieldorf">
+      <LiveModuleFrame subline="Die nächsten drei Termine" title="Termine in Schlatkow">
         <EventList items={DEMO_EVENTS} rowCount={3} />
       </LiveModuleFrame>
     ),
     states: {
       loading: (
-        <LiveModuleFrame state="loading" title="Termine in Beispieldorf">
+        <LiveModuleFrame state="loading" title="Termine in Schlatkow">
           <EventList items={[]} rowCount={3} />
         </LiveModuleFrame>
       ),
       empty: (
-        <LiveModuleFrame state="empty" title="Termine in Beispieldorf">
+        <LiveModuleFrame state="empty" title="Termine in Schlatkow">
           <EmptyStateBlock
             cta={DEMO_PUBLISH_CTA}
-            headline="Noch nichts eingetragen in Beispieldorf."
+            headline="Noch nichts eingetragen in Schlatkow."
           />
         </LiveModuleFrame>
       ),
       degraded: (
-        <LiveModuleFrame state="degraded" title="Termine in Beispieldorf" updatedAt="2026-09-10T08:00:00Z">
+        <LiveModuleFrame state="degraded" title="Termine in Schlatkow" updatedAt="2026-09-10T08:00:00Z">
           <EventList items={DEMO_EVENTS} rowCount={3} state="degraded" />
         </LiveModuleFrame>
       ),
       mocked: (
-        <LiveModuleFrame state="mocked" title="Termine in Beispieldorf">
+        <LiveModuleFrame state="mocked" title="Termine in Schlatkow">
           <EventList items={DEMO_EVENTS} rowCount={3} state="mocked" />
         </LiveModuleFrame>
       ),
@@ -884,7 +882,7 @@ export const GALLERY: readonly GalleryEntry[] = [
             label="Ort oder Postleitzahl"
             state="mocked"
             suggestions={[
-              { label: "Beispieldorf", query: { ort: "beispieldorf" }, to: "place" },
+              { label: "Schlatkow", query: { ort: "beispieldorf" }, to: "place" },
               { label: "Nachbardorf", query: { ort: "nachbardorf" }, to: "place" },
             ]}
             to="place"
@@ -903,7 +901,7 @@ export const GALLERY: readonly GalleryEntry[] = [
       empty: (
         <EventList
           emptyState={
-            <EmptyStateBlock cta={DEMO_PUBLISH_CTA} headline="Noch nichts eingetragen in Beispieldorf." />
+            <EmptyStateBlock cta={DEMO_PUBLISH_CTA} headline="Noch nichts eingetragen in Schlatkow." />
           }
           items={[]}
           rowCount={3}
@@ -921,20 +919,20 @@ export const GALLERY: readonly GalleryEntry[] = [
     demo: (
       <PlaceExampleSet
         examples={[
-          { label: "Beispieldorf", to: "place" },
+          { label: "Schlatkow", to: "place" },
           { label: "Nachbardorf", to: "place" },
-          { label: "Musterhausen", to: "place" },
+          { label: "Neuendorf", to: "place" },
         ]}
       />
     ),
     states: {
       loading: <PlaceExampleSet examples={[]} state="loading" />,
       empty: <PlaceExampleSet examples={[]} state="empty" />,
-      degraded: <PlaceExampleSet examples={[{ label: "Beispieldorf", to: "place" }]} state="degraded" />,
+      degraded: <PlaceExampleSet examples={[{ label: "Schlatkow", to: "place" }]} state="degraded" />,
       mocked: (
         <PlaceExampleSet
           examples={[
-            { label: "Beispieldorf", to: "place" },
+            { label: "Schlatkow", to: "place" },
             { label: "Nachbardorf", to: "place" },
           ]}
           state="mocked"
@@ -1002,7 +1000,7 @@ export const GALLERY: readonly GalleryEntry[] = [
             </Button>
           }
           heading="Beispiel-Kalender"
-          organizerId="demo-organizer"
+          organizerId="65f3a9c1d4e27b0912af4c38"
           state="mocked"
         />
       ),
@@ -1016,7 +1014,7 @@ export const GALLERY: readonly GalleryEntry[] = [
       <EmptyStateBlock
         cta={DEMO_PUBLISH_CTA}
         fallbackNote="Du könntest die Erste sein."
-        headline="Noch nichts eingetragen in Beispieldorf."
+        headline="Noch nichts eingetragen in Schlatkow."
         lead="Trag als Erste ein Datum ein — es dauert nur zwei Minuten."
       />
     ),
@@ -1162,8 +1160,8 @@ export const GALLERY: readonly GalleryEntry[] = [
           legend="Wer veröffentlicht?"
           name="wer"
           options={[
-            { label: "Option A (Platzhalter)", value: "a" },
-            { label: "Option B (Platzhalter)", value: "b" },
+            { label: "Option A", value: "a" },
+            { label: "Option B", value: "b" },
           ]}
           state="mocked"
           to="register"
@@ -1178,7 +1176,7 @@ export const GALLERY: readonly GalleryEntry[] = [
     demo: (
       <ScopePicker
         items={[
-          { id: "beispieldorf", kind: "place", label: "Beispieldorf", removeQuery: {} },
+          { id: "beispieldorf", kind: "place", label: "Schlatkow", removeQuery: {} },
           { id: "landkreis-beispiel", kind: "county", label: "Landkreis Beispiel", removeQuery: {} },
         ]}
         to="order"
@@ -1189,14 +1187,14 @@ export const GALLERY: readonly GalleryEntry[] = [
       empty: <ScopePicker items={[]} state="empty" to="order" />,
       degraded: (
         <ScopePicker
-          items={[{ id: "beispieldorf", kind: "place", label: "Beispieldorf", removeQuery: {} }]}
+          items={[{ id: "beispieldorf", kind: "place", label: "Schlatkow", removeQuery: {} }]}
           state="degraded"
           to="order"
         />
       ),
       mocked: (
         <ScopePicker
-          items={[{ id: "beispieldorf", kind: "place", label: "Beispieldorf", removeQuery: {} }]}
+          items={[{ id: "beispieldorf", kind: "place", label: "Schlatkow", removeQuery: {} }]}
           state="mocked"
           to="order"
         />
@@ -1208,7 +1206,7 @@ export const GALLERY: readonly GalleryEntry[] = [
     number: 56,
     section: "2.5",
     demo: (
-      <CodeSnippet code='<script src="https://portalize.schafe-vorm-fenster.de/api/demo-organizer/load.js"></script>' />
+      <CodeSnippet code='<script src="https://portalize.schafe-vorm-fenster.de/api/65f3a9c1d4e27b0912af4c38/load.js"></script>' />
     ),
     states: {
       loading: <CodeSnippet code="" state="loading" />,
@@ -1221,7 +1219,7 @@ export const GALLERY: readonly GalleryEntry[] = [
       ),
       mocked: (
         <CodeSnippet
-          code='<script src="https://portalize.schafe-vorm-fenster.de/api/demo-organizer/load.js"></script>'
+          code='<script src="https://portalize.schafe-vorm-fenster.de/api/65f3a9c1d4e27b0912af4c38/load.js"></script>'
           state="mocked"
         />
       ),
@@ -1248,17 +1246,11 @@ export const GALLERY: readonly GalleryEntry[] = [
     section: "2.6",
     demo: (
       <div className={styles.stack}>
-        <PlaceholderSurface
-          body="Schick uns ein Bild aus deinem Ort — wir zeigen es hier."
-          cta={<Button variant="primary-light">Bild beitragen</Button>}
-          ratio="feature"
-        />
+        <PlaceholderSurface ratio="feature" />
         <PlaceholderSurface variant="row" />
       </div>
     ),
   },
-  { name: "placeholder-badge", number: 59, section: "2.6", demo: <PlaceholderBadge /> },
-  { name: "demo-data-badge", number: 60, section: "2.6", demo: <DemoDataBadge /> },
   {
     name: "freshness-label",
     number: 61,

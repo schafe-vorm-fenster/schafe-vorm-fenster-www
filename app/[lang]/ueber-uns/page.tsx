@@ -12,7 +12,6 @@ import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
-import { dictionary } from "@/src/lib/i18n/dictionary";
 import { ctaLabelOnly } from "@/src/lib/content/text";
 import { pageImage } from "@/src/lib/content/images";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
@@ -294,11 +293,7 @@ export default async function Page({
                 // D5/A6/A7: the seventh position is reserved and never
                 // backfilled — the engine leaves it empty because there is no
                 // seventh cleared element, not because the page hard-codes it.
-                <EmptyProofSlot
-                  key={`empty-${position}`}
-                  locale={locale}
-                  sentence={dictionary(locale).proof.noneForTestimonial}
-                />
+                <EmptyProofSlot key={`empty-${position}`} />
               ),
             )}
           </ProofStream>

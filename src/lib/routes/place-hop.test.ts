@@ -7,7 +7,7 @@ import { placeHop, placeHopRoute } from "./place-hop";
  * as the proxy computes it (F-2-49).
  *
  * The fixtures are the shared demo backend's own
- * (`src/lib/live/mocks/fixtures.ts`): `beispielwalde` is a covered community,
+ * (`src/lib/live/mocks/fixtures.ts`): `quilow` is a covered community,
  * `99999` is the postcode geo-api answers "no community" for.
  */
 
@@ -33,8 +33,8 @@ describe("placeHopRoute: only the two `?ort=` routes, in every language", () => 
 
 describe("TS-021-A7: a value that now resolves leaves `/dein-ort/starten`", () => {
   it("hops to `/dein-ort` with the resolved slug", async () => {
-    await expect(hop("/dein-ort/starten", "ort=beispielwalde")).resolves.toBe(
-      "/dein-ort?ort=beispielwalde",
+    await expect(hop("/dein-ort/starten", "ort=quilow")).resolves.toBe(
+      "/dein-ort?ort=quilow",
     );
   });
 
@@ -45,15 +45,15 @@ describe("TS-021-A7: a value that now resolves leaves `/dein-ort/starten`", () =
   });
 
   it("keeps the language prefix", async () => {
-    await expect(hop("/en/your-place/start", "ort=beispielwalde")).resolves.toBe(
-      "/en/your-place?ort=beispielwalde",
+    await expect(hop("/en/your-place/start", "ort=quilow")).resolves.toBe(
+      "/en/your-place?ort=quilow",
     );
   });
 
   it("carries the campaign parameters across the hop (TS-023 D4)", async () => {
     await expect(
-      hop("/dein-ort/starten", "ort=beispielwalde&etcc_med=display&etcc_cmp=herbst&foo=bar"),
-    ).resolves.toBe("/dein-ort?ort=beispielwalde&etcc_cmp=herbst&etcc_med=display");
+      hop("/dein-ort/starten", "ort=quilow&etcc_med=display&etcc_cmp=herbst&foo=bar"),
+    ).resolves.toBe("/dein-ort?ort=quilow&etcc_cmp=herbst&etcc_med=display");
   });
 
   it("stays put for an uncovered value", async () => {
@@ -85,7 +85,7 @@ describe("TS-020 D2 row 5: an uncovered value leaves `/dein-ort`", () => {
   });
 
   it("stays put for a covered value", async () => {
-    await expect(hop("/dein-ort", "ort=beispielwalde")).resolves.toBeUndefined();
+    await expect(hop("/dein-ort", "ort=quilow")).resolves.toBeUndefined();
   });
 
   it("stays put for a value the grammar drops (TS-020-A9)", async () => {
@@ -95,7 +95,7 @@ describe("TS-020 D2 row 5: an uncovered value leaves `/dein-ort`", () => {
 
 describe("no hop can loop", () => {
   it("the target of each hop does not hop back", async () => {
-    const forward = await hop("/dein-ort/starten", "ort=beispielwalde");
+    const forward = await hop("/dein-ort/starten", "ort=quilow");
     expect(forward).toBeDefined();
     const [path, search = ""] = forward!.split("?");
     await expect(hop(path!, search)).resolves.toBeUndefined();

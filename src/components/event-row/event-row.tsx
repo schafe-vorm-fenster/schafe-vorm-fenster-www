@@ -59,9 +59,9 @@ const CATEGORY_TONE: Record<EventCategory, BadgeTone> = {
  *              the publisher invitation, which is a conversion, not a gap;
  *   degraded → the row renders its snapshot unchanged; the module's
  *              `freshness-label` says "Stand: …". No error sentence here;
- *   mocked   → the row renders dummy data and carries the `Demo-Daten`
- *              marking of its module (`live-module-frame`), so the badge is
- *              not repeated per row — `data-demo` marks the row for the check.
+ *   mocked   → the row renders stand-in data and carries its module's
+ *              `data-demo` marking (`live-module-frame`); nothing is written
+ *              on the row itself (Jan, 2026-09-18).
  * Inherits: category fill/text pairs from the table only; radius 999 on the
  * badge, 0 everywhere else; no border but the hairline.
  * Space: fixed 76 px, both clamps enforced in CSS.

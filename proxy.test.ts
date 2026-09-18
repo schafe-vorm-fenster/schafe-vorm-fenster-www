@@ -317,11 +317,11 @@ describe("TS-004-A4 (F-2-70): an unknown URL reaches a 404 that renders", () => 
 describe("TS-021-A7 (F-2-49): the re-resolution hop is an HTTP redirect", () => {
   it("307s a now-covered value off `/dein-ort/starten`", async () => {
     const response = await proxy(
-      request("https://www.schafe-vorm-fenster.de/dein-ort/starten?ort=beispielwalde"),
+      request("https://www.schafe-vorm-fenster.de/dein-ort/starten?ort=quilow"),
     );
     expect(response.status).toBe(307);
     expect(response.headers.get("location")).toBe(
-      "https://www.schafe-vorm-fenster.de/dein-ort?ort=beispielwalde",
+      "https://www.schafe-vorm-fenster.de/dein-ort?ort=quilow",
     );
   });
 
@@ -337,19 +337,19 @@ describe("TS-021-A7 (F-2-49): the re-resolution hop is an HTTP redirect", () => 
 
   it("keeps the language prefix", async () => {
     const response = await proxy(
-      request("https://www.schafe-vorm-fenster.de/en/your-place/start?ort=beispielwalde"),
+      request("https://www.schafe-vorm-fenster.de/en/your-place/start?ort=quilow"),
     );
     expect(response.headers.get("location")).toBe(
-      "https://www.schafe-vorm-fenster.de/en/your-place?ort=beispielwalde",
+      "https://www.schafe-vorm-fenster.de/en/your-place?ort=quilow",
     );
   });
 
   it("does not hop a value that belongs where it is", async () => {
     for (const url of [
-      "https://www.schafe-vorm-fenster.de/dein-ort?ort=beispielwalde",
+      "https://www.schafe-vorm-fenster.de/dein-ort?ort=quilow",
       "https://www.schafe-vorm-fenster.de/dein-ort/starten?ort=99999",
       "https://www.schafe-vorm-fenster.de/dein-ort",
-      "https://www.schafe-vorm-fenster.de/mitmachen?ort=beispielwalde",
+      "https://www.schafe-vorm-fenster.de/mitmachen?ort=quilow",
     ]) {
       const response = await proxy(request(url));
       expect(response.status, url).not.toBe(307);

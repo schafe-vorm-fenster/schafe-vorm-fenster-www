@@ -189,69 +189,136 @@ test("F-2-33: the English register flow's own controls are English", async ({ pa
   const main = page.getByRole("main");
   await expect(main.locator('button[type="submit"]')).toHaveText("Search");
 
-  await page.goto("/en/take-part/register?ort=beispielwalde");
+  await page.goto("/en/take-part/register?ort=quilow");
   await expect(page.getByRole("main").locator('button[type="submit"]')).toHaveText("Continue");
 });
 
 
 /**
- * F-2-33, gate-2 retest — the badge half of the finding. Measured over all
- * twelve `/en` routes: `Demo-Daten` on the register step, `/en/your-calendar`
- * and `/en/about/archive`; `Foto gesucht` on `/en/take-part`,
- * `/en/your-calendar`, `/en/your-region/quote` and `/en/about`; `Nicht
- * motivgenau · Platzhalter` on `/en/your-place`, `/en/your-place/start`,
- * `/en/your-region` and `/en/about`.
+ * Jan's decision of 2026-09-18 — **the site must read as finished.**
  *
- * The badges themselves were never the defect — they read the dictionary and
- * default to German, which is right. The defect was every component and page
- * around them that rendered a badge without handing it the page's language.
- * `src/components/badge-locale.test.tsx` holds the component half; this walk
- * is the page half, and it is the one that catches a *new* caller forgetting
- * the prop.
+ * This replaces the "badges nothing in German" walk that stood here. The
+ * earlier finding (F-2-33) was that the demo and placeholder badges rendered
+ * their German defaults on `/en`; the badges themselves were considered
+ * right. They are not any more. No page, in either language, may carry a
+ * visible or screen-reader-audible hint that something on it is a stand-in:
+ * no "Beispiel", "Demo", "Dummy", "Platzhalter", "nicht motivgenau", "Foto
+ * gesucht", "KI-generiert", "nicht freigegeben", "Kein Nachweis".
  *
- * One caller is still open: the page-level badge on `/en/about/archive`
- * (`app/[lang]/ueber-uns/archiv/page.tsx`, `rows.length > 0 ? <DemoDataBadge
- * /> : null`). The fix is `locale={locale}` on that line, exactly like every
- * other one — the file belongs to another work package this round, so the
- * walk records the leak rather than hiding it.
+ * Provenance did not disappear — it moved to the content frontmatter, to
+ * `data-*` attributes and to `state/open.md`. The second test below asserts
+ * that it is still there, so this sweep cannot be satisfied by deleting the
+ * marking outright.
+ *
+ * Two surfaces are swept, because a badge is not the only way a page can say
+ * "this is fake":
+ *
+ *  - the **rendered text** a visitor reads;
+ *  - the **accessible tree** a screen reader speaks — every `alt`,
+ *    `aria-label`, `aria-description`, `title` and input `placeholder` on
+ *    the page, which no sweep of `innerText` can see (the lesson of F-3-5).
  */
-// F-3-15 adds the proof register: `empty-proof-slot` and
-// `objection-list` carried German defaults in their component bodies, so
-// "KEIN NACHWEIS" and its sentence stood partway down otherwise fully
-// English pages.
-const GERMAN_BADGES = [
-  "Demo-Daten",
-  "Foto gesucht",
-  "Nicht motivgenau",
-  // F-3-15's two, as the exact strings the components rendered. The bare word
-  // "Nachweis" is not usable here: `/en/legal` carries the German legal
-  // bodies by design (`state/open.md` row 151) and one of them contains it.
-  "Kein Nachweis",
-  "liegt uns noch kein",
+const FORBIDDEN_MARKINGS = [
+  // German
+  /\bbeispiel/i,
+  /\bdemo-daten\b/i,
+  /\bdemodaten\b/i,
+  /\bdummy/i,
+  /\bplatzhalter/i,
+  /\bmotivgenau\b/i,
+  /\bfoto gesucht\b/i,
+  /\bkein nachweis\b/i,
+  /\bliegt uns noch kein\b/i,
+  /\bki-generiert\b/i,
+  /\bnicht freigegeben\b/i,
+  // English
+  /\bdemo data\b/i,
+  /\bdemo version\b/i,
+  /\bphoto wanted\b/i,
+  /\bno evidence\b/i,
+  /\bnot an exact match\b/i,
+  /\bplaceholder/i,
+  /\bsample (data|content|text)\b/i,
+  /\bexample (date|place|municipality|village|town|district|feedback|text|data|sentence)\b/i,
+  /\bfor example —/i,
 ];
 
-/** Every `/en` route, plus the one step that only appears with a parameter. */
-const ENGLISH_BADGE_PATHS = [
-  ...ENGLISH_ROUTES,
-  "/en/take-part/register?ort=beispielwalde",
+/**
+ * The exception, and the only one: `/rechtliches` and `/en/legal` carry the
+ * community guidelines verbatim (`state/open.md` row 151), and their own
+ * prose uses "Beispiele sind Sonderangebote …" to introduce a list of event
+ * types. That is genuine legal copy explaining a rule — it labels nothing on
+ * the site as fake — so the legal bodies are swept for everything except the
+ * bare word "Beispiel".
+ */
+const LEGAL_PATHS = new Set(["/rechtliches", "/en/legal"]);
+
+/** Every `alt`, `aria-label`, `title` and `placeholder` on the page. */
+const accessibleStrings = `(() => {
+  const out = [];
+  for (const el of document.querySelectorAll("[alt],[aria-label],[aria-description],[title],[placeholder]")) {
+    for (const attr of ["alt", "aria-label", "aria-description", "title", "placeholder"]) {
+      const value = el.getAttribute(attr);
+      if (value) out.push(value);
+    }
+  }
+  return out;
+})()`;
+
+/** Every route in both languages, plus the one step that needs a parameter. */
+const VOCABULARY_PATHS = [
+  ...ROUTES.map((entry) => entry.path),
+  "/en/take-part/register?ort=quilow",
+  "/mitmachen/registrieren?ort=quilow",
+  "/dein-kalender/bestellen?schritt=4",
+  "/en/your-calendar/order?schritt=4",
 ];
 
-for (const path of ENGLISH_BADGE_PATHS) {
-  test(`F-2-33: ${path} badges nothing in German`, async ({ page }) => {
+for (const path of VOCABULARY_PATHS) {
+  test(`no visible marking of stand-in content: ${path}`, async ({ page }) => {
     await page.goto(path);
     const text = (await page.evaluate(visibleText)) as string;
+    const spoken = ((await page.evaluate(accessibleStrings)) as string[]).join("\n");
+    const isLegal = LEGAL_PATHS.has(path);
 
-    for (const german of GERMAN_BADGES) {
-      const at = text.indexOf(german);
+    for (const pattern of FORBIDDEN_MARKINGS) {
+      if (isLegal && pattern.source === "\\bbeispiel") continue;
+
+      const inText = pattern.exec(text);
       expect(
-        at,
-        at === -1
+        inText,
+        inText === null
           ? ""
-          : `${path} renders "${german}": …${text.slice(Math.max(0, at - 90), at + 90)}…`,
-      ).toBe(-1);
+          : `${path} renders "${inText[0]}": …${text.slice(Math.max(0, inText.index - 90), inText.index + 90)}…`,
+      ).toBeNull();
+
+      const inTree = pattern.exec(spoken);
+      expect(
+        inTree,
+        inTree === null ? "" : `${path} speaks "${inTree[0]}" in the accessible tree: ${inTree.input.slice(Math.max(0, inTree.index - 60), inTree.index + 60)}`,
+      ).toBeNull();
     }
   });
 }
+
+/**
+ * The other half of the same decision: the marking moved, it was not
+ * deleted. A page whose live modules are mocked still says so — to Jan, in
+ * the markup — and a photo slot still waiting for its photograph still
+ * declares itself.
+ */
+test("provenance survives in `data-*`, on the pages that carry a mock", async ({ page }) => {
+  for (const path of ["/", "/en", "/dein-ort", "/en/your-place"]) {
+    await page.goto(path);
+    const marked = await page.locator('[data-demo="true"], [data-mock="true"]').count();
+    expect(marked, `${path} marks its mocked modules in data-*`).toBeGreaterThan(0);
+  }
+});
+
+test("the footer's mocked newsletter block declares itself in `data-mock`", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator('[data-newsletter][data-mock="true"]')).toHaveCount(1);
+});
 
 /**
  * F-2-73 / TS-026-A10, TS-026 D4 — block 3 of `/deine-region` names a region
@@ -264,7 +331,7 @@ for (const path of ENGLISH_BADGE_PATHS) {
  */
 for (const [path, phrase] of [
   ["/deine-region", "Landkreis deiner Region"],
-  ["/en/your-region", "examples from your region"],
+  ["/en/your-region", "places in your region"],
 ] as const) {
   test(`F-2-73 / TS-026-A10: ${path} asserts no county and no identifier in block 3`, async ({
     page,

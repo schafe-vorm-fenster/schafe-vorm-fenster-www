@@ -20,9 +20,9 @@ import type { RhythmEntry } from "../../src/components/section-shell/rhythm";
  */
 
 /** `src/lib/live/mocks/fixtures.ts` — a covered place that always has dates. */
-const PLACE_WITH_DATES = "beispielgemeinde-musterdorf";
+const PLACE_WITH_DATES = "schlatkow";
 /** The same file's `EMPTY_DEMO_SLUG` — covered, zero dates: TS-008 D4's moment. */
-const PLACE_WITHOUT_DATES = "beispielhausen";
+const PLACE_WITHOUT_DATES = "lassan";
 
 const PHONE = { width: 360, height: 640 };
 const DESKTOP = { width: 1280, height: 800 };
@@ -38,7 +38,7 @@ test.describe("TS-020 — your place", () => {
     // (TS-020 D5). S0 carries the generic one; state A carries the resolved
     // place, and the module's own heading names it too.
     const dates = page.locator("#place-dates");
-    await expect(dates.locator("h2")).toContainText("Musterdorf");
+    await expect(dates.locator("h2")).toContainText("Schlatkow");
 
     // "≤ 3 rows" — position 1's fixed row count (TS-008 D1).
     const rows = dates.locator("article");
@@ -85,7 +85,7 @@ test.describe("TS-020 — your place", () => {
     // is the *first* evidence, so an empty module is the defect, not a state.
     const nearby = page.locator("#nearby");
     await expect(nearby.locator("article").first()).toBeVisible();
-    expect(await nearby.locator("h2").first().innerText()).not.toContain("Beispielhausen");
+    expect(await nearby.locator("h2").first().innerText()).not.toContain("Lassan");
 
     // No raw markdown reaches the visitor: the `→ `/mitmachen`` routing note
     // beside the CTA label is not copy.
@@ -113,11 +113,14 @@ test.describe("TS-020 — your place", () => {
       await expect(story.locator("[data-example-level]")).toHaveCount(1);
     }
 
-    // No example names a place absent from geo-api: while the modules are
-    // mocked every example place is a `Beispiel…` construction, which is
-    // exactly what the mock rule requires of dummy data.
+    // Every example names a real covered place, and nothing in the box says
+    // the box is a stand-in — Jan, 2026-09-18. The provenance is the module's
+    // own `data-demo`/`data-mock`, asserted in `e2e/content-compliance.spec.ts`.
     const exampleText = (await page.locator("#value-stories").textContent()) ?? "";
-    expect(exampleText).toContain("Beispiel");
+    expect(exampleText).toMatch(/Schlatkow|Schmatzin|Rubkow|Quilow|Groß Kiesow|Züssow|Lassan/);
+    for (const marking of ["Beispiel", "Demo", "Platzhalter"]) {
+      expect(exampleText, marking).not.toContain(marking);
+    }
   });
 
   test.fixme(

@@ -1,6 +1,5 @@
 import { Badge } from "../badge/badge";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
-import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { Skeleton } from "../skeleton/skeleton";
 
 import { dictionary } from "@/src/lib/i18n/dictionary";
@@ -19,7 +18,7 @@ export interface LiveCountersProps extends DataStateProps {
   readonly placesLabel?: string;
   readonly datesLabel?: string;
   readonly updatesLabel?: string;
-  /** The page's language — the `Demo-Daten` badge reads it. */
+  /** The page's language — the unit labels read it. */
   readonly locale?: Locale;
   readonly className?: string;
 }
@@ -89,7 +88,6 @@ export function LiveCounters({
           {figure.value.toLocaleString(OG_LOCALE[locale].replace("_", "-"))} {figure.label}
         </Badge>
       ))}
-      {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
     </div>
   );
 }

@@ -1,85 +1,50 @@
-import { Badge } from "../badge/badge";
-
-import { dictionary } from "@/src/lib/i18n/dictionary";
-
-import type { Locale } from "@/src/lib/i18n/locales";
 import type { ReactNode } from "react";
 import type { CSSProperties } from "react";
 
 import styles from "./placeholder-surface.module.css";
 
 export interface PlaceholderSurfaceProps {
-  /** The ratio of the box the missing photograph would have filled. */
+  /** The ratio of the box the photograph will fill. */
   readonly ratio?: "hero" | "feature" | "proof" | "map" | "portrait" | "square";
-  readonly badgeLabel?: string;
-  /** The invitation. Copy arrives with the page (M3); this is the fallback. */
-  readonly headline?: string;
-  readonly body?: string;
-  /** The conversion this surface carries. Omitted on `/ueber-uns/archiv`. */
-  readonly cta?: ReactNode;
-  /** `row` is the text-only form for the archive, which has no conversion. */
+  /** `row` is the flat inline form for the archive, which has no conversion. */
   readonly variant?: "surface" | "row";
-  /**
-   * The page's language — the badge and headline fallbacks read it, so an
-   * English page without its own invitation copy does not fall back to
-   * German (F-2-4).
-   */
-  readonly locale?: Locale;
+  /** Kept so callers need not change while photography is being sourced. */
+  readonly cta?: ReactNode;
   readonly className?: string;
 }
 
 /**
  * 58 `placeholder-surface` [PROPOSED] — SRC-014 §Photo surface.
  *
- * Structure: a missing photograph becomes the diagonal hatch of `surface-2`
- * and `line`, with the badge "Foto gesucht" and an invitation to contribute
- * one. No stock photography, ever — the honest hatch is better and doubles as
- * a conversion.
+ * Structure: a flat brand-colour surface at the ratio the photograph will
+ * fill. No hatch, no badge, no caption — Jan's decision of 2026-09-18: the
+ * site must read as finished, so a slot still waiting for its photograph
+ * shows a calm surface from the design system's colour sections and says
+ * nothing about itself. The marking lives in the content frontmatter
+ * (`images[].provenance`), in `data-placeholder` on the surrounding
+ * `photo-surface`/`media-frame`, and in `state/open.md`.
  * States: terminal, not transitional. It is where a skeleton that outlives
- * two seconds ends up, and it is a conversion, so it carries its CTA —
- * except on `/ueber-uns/archiv`, which has no conversion and therefore takes
- * `variant="row"`, a text-only line (TS-028 D6).
- * Inherits: the hatch tokens; the badge in the placeholder pair (6.0:1),
- * radius 999 — the inventory's reading of the design system's one
- * placeholder pair, rather than the board's himbeere fill, so that the
- * "this is not real" register stays one colour.
- * Space: the declared ratio of the box it replaces, so nothing moves.
- * A11y: real content in the accessibility tree — never `aria-hidden`.
+ * two seconds ends up.
+ * Inherits: `--color-neutral-surface2`, the design system's quietest ground.
+ * Space: the declared ratio of the box, so nothing moves when the photograph
+ * arrives.
+ * A11y: no text and no role — an empty decorative ground, hidden from
+ * assistive technology rather than announced as an empty region.
  */
 export function PlaceholderSurface({
   ratio = "feature",
-  badgeLabel,
-  headline,
-  body,
-  cta,
   variant = "surface",
-  locale = "de",
   className,
 }: PlaceholderSurfaceProps) {
-  const words = dictionary(locale).media;
-  const badge = badgeLabel ?? words.photoWanted;
-  const invitation = headline ?? words.photoWantedHeadline;
-
   if (variant === "row") {
-    return (
-      <p className={[styles.row, className].filter(Boolean).join(" ")}>
-        <Badge tone="placeholder">{badge}</Badge>
-        <span>{invitation}</span>
-      </p>
-    );
+    return <span aria-hidden="true" className={[styles.row, className].filter(Boolean).join(" ")} />;
   }
 
   return (
-    <section
+    <div
+      aria-hidden="true"
       className={[styles.surface, className].filter(Boolean).join(" ")}
       style={{ "--placeholder-ratio": `var(--ratio-${ratio})` } as CSSProperties}
-    >
-      <div className={styles.content}>
-        <Badge tone="placeholder">{badge}</Badge>
-        <p className={styles.headline}>{invitation}</p>
-        {body ? <p className={styles.body}>{body}</p> : null}
-        {cta ? <div className={styles.cta}>{cta}</div> : null}
-      </div>
-    </section>
+    />
   );
 }

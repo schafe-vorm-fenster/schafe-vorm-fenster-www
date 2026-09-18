@@ -15,9 +15,9 @@ import { resolveRegisterPlace } from "./resolve-place";
  */
 describe("TS-023-A5: place resolution (real interface, mocked backend)", () => {
   it("resolves an already-known community slug", async () => {
-    const result = await resolveRegisterPlace("beispielgemeinde-musterdorf");
+    const result = await resolveRegisterPlace("schlatkow");
     expect(result.kind).toBe("resolved");
-    if (result.kind === "resolved") expect(result.place.slug).toBe("beispielgemeinde-musterdorf");
+    if (result.kind === "resolved") expect(result.place.slug).toBe("schlatkow");
   });
 
   it("resolves a postcode to its one covered place", async () => {

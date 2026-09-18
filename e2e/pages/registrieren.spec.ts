@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 /**
  * TS-023 — `/mitmachen/registrieren`, walked step by step to its handover.
  *
- * "beispielgemeinde-musterdorf" is `src/lib/live/mocks/fixtures.ts`'s
+ * "schlatkow" is `src/lib/live/mocks/fixtures.ts`'s
  * `DEMO_PLACES[0]` — the shared live-data mock every place lookup on the
  * site resolves against, not a page-local fixture.
  *
@@ -37,9 +37,9 @@ test.describe("TS-023: the register flow", () => {
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
 
     // Arrives pre-answered, as if from /dein-ort/starten or /mitmachen (D5, A7).
-    await page.goto(`${ROUTE}?ort=beispielgemeinde-musterdorf`);
+    await page.goto(`${ROUTE}?ort=schlatkow`);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
-    expect(page.url()).toContain("ort=beispielgemeinde-musterdorf");
+    expect(page.url()).toContain("ort=schlatkow");
 
     await page.reload();
     await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
@@ -73,10 +73,10 @@ test.describe("TS-023: the register flow", () => {
     // And with a value that resolves: the step advances, and the answered
     // step 1 stays on screen — the place named, with a control to change it
     // (D5: "answered, visible and changeable, never skipped").
-    await page.goto(`${ROUTE}?ort=beispielgemeinde-musterdorf`);
+    await page.goto(`${ROUTE}?ort=schlatkow`);
     const answered = page.locator('[data-step-answered="ort"]');
     await expect(answered).toHaveCount(1);
-    await expect(answered).toContainText("Beispielgemeinde Musterdorf");
+    await expect(answered).toContainText("Schlatkow");
 
     const change = answered.locator("a");
     await expect(change).toHaveCount(1);
@@ -84,16 +84,16 @@ test.describe("TS-023: the register flow", () => {
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
     // The answer travels back with it, so the visitor can correct rather than
     // retype (D4: `schritt` may move backwards to an answered step).
-    await expect(page.locator('input[name="ort"]')).toHaveValue("beispielgemeinde-musterdorf");
+    await expect(page.locator('input[name="ort"]')).toHaveValue("schlatkow");
 
     // It stays visible through step 3 and the handover.
     for (const query of [
-      "?ort=beispielgemeinde-musterdorf&wer=opt-1",
-      "?ort=beispielgemeinde-musterdorf&wer=opt-1&weg=whatsapp",
+      "?ort=schlatkow&wer=opt-1",
+      "?ort=schlatkow&wer=opt-1&weg=whatsapp",
     ]) {
       await page.goto(`${ROUTE}${query}`);
       await expect(page.locator('[data-step-answered="ort"]')).toContainText(
-        "Beispielgemeinde Musterdorf",
+        "Schlatkow",
       );
     }
   });
@@ -101,11 +101,11 @@ test.describe("TS-023: the register flow", () => {
   test("TS-023-A4: an invalid `schritt` and an invalid enum are dropped, re-asking the step", async ({
     page,
   }) => {
-    await page.goto(`${ROUTE}?ort=beispielgemeinde-musterdorf&schritt=3`);
+    await page.goto(`${ROUTE}?ort=schlatkow&schritt=3`);
     // step 2 (who publishes) is unanswered, so schritt=3 must not be honoured.
     await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
 
-    await page.goto(`${ROUTE}?ort=beispielgemeinde-musterdorf&wer=not-a-real-option`);
+    await page.goto(`${ROUTE}?ort=schlatkow&wer=not-a-real-option`);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
   });
 
@@ -123,7 +123,7 @@ test.describe("TS-023: the register flow", () => {
   });
 
   test("TS-023-A8: step 3 offers exactly three publishing paths", async ({ page }) => {
-    await page.goto(`${ROUTE}?ort=beispielgemeinde-musterdorf&wer=opt-1`);
+    await page.goto(`${ROUTE}?ort=schlatkow&wer=opt-1`);
     const options = page.locator('input[name="weg"]');
     await expect(options).toHaveCount(3);
   });
@@ -141,9 +141,9 @@ test.describe("TS-023: the register flow", () => {
     page.on("console", (message) => consoleMessages.push(message.text()));
 
     await page.goto(ROUTE);
-    await page.fill('input[name="ort"]', "beispielgemeinde-musterdorf");
+    await page.fill('input[name="ort"]', "schlatkow");
     await page.click('button[type="submit"]');
-    await expect(page).toHaveURL(/ort=beispielgemeinde-musterdorf/);
+    await expect(page).toHaveURL(/ort=schlatkow/);
 
     await page.click('input[name="wer"][value="opt-1"]');
     await page.click('button:has-text("Weiter")');
@@ -183,7 +183,7 @@ test.describe("TS-023: the register flow", () => {
   test("TS-023-A11: no step or the handover state shows a confirmation, instructions or an event field", async ({
     page,
   }) => {
-    await page.goto(`${ROUTE}?ort=beispielgemeinde-musterdorf&wer=opt-1&weg=whatsapp`);
+    await page.goto(`${ROUTE}?ort=schlatkow&wer=opt-1&weg=whatsapp`);
     const bodyText = (await page.locator("body").innerText()).toLowerCase();
     expect(bodyText).not.toMatch(/bestätigung|erfolgreich registriert/);
     await expect(page.locator('input[type="date"], input[name="event"]')).toHaveCount(0);
@@ -197,11 +197,11 @@ test.describe("TS-023: the register flow", () => {
       if (request.method() !== "GET") requests.push(`${request.method()} ${request.url()}`);
     });
     await page.goto(ROUTE);
-    await page.fill('input[name="ort"]', "beispielgemeinde-musterdorf");
+    await page.fill('input[name="ort"]', "schlatkow");
     await page.click('button[type="submit"]');
     // The step advanced — that is the whole settle this assertion needs
     // (F-2-71: `networkidle` never settles on a streamed production route).
-    await expect(page).toHaveURL(/ort=beispielgemeinde-musterdorf/);
+    await expect(page).toHaveURL(/ort=schlatkow/);
     await expect(page.locator("main")).toBeVisible();
     expect(requests).toEqual([]);
     // Scoped to `main`: the footer's own contact widget (`kind="contact"`)
@@ -213,9 +213,9 @@ test.describe("TS-023: the register flow", () => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
     await page.goto(ROUTE);
-    await page.fill('input[name="ort"]', "beispielgemeinde-musterdorf");
+    await page.fill('input[name="ort"]', "schlatkow");
     await page.click('button[type="submit"]');
-    await expect(page).toHaveURL(/ort=beispielgemeinde-musterdorf/);
+    await expect(page).toHaveURL(/ort=schlatkow/);
     await page.click('input[name="wer"][value="opt-1"]');
     await page.click('button:has-text("Weiter")');
     await expect(page).toHaveURL(/wer=opt-1/);
@@ -230,7 +230,7 @@ test.describe("TS-023: the register flow", () => {
     // regime (TS-015 D3 puts every non-production build behind `noindex`,
     // which this suite always runs under) — only the canonical claim is
     // testable outside production.
-    await page.goto(`${ROUTE}?ort=beispielgemeinde-musterdorf`);
+    await page.goto(`${ROUTE}?ort=schlatkow`);
     const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
     expect(canonical).toMatch(new RegExp(`${ROUTE}$`));
   });
@@ -241,13 +241,13 @@ test.describe("TS-023: the register flow", () => {
     await page.goto(ROUTE);
     await expect(page.locator("#context-band")).toHaveCount(1);
 
-    await page.goto(`${ROUTE}?ort=beispielgemeinde-musterdorf`);
+    await page.goto(`${ROUTE}?ort=schlatkow`);
     await expect(page.locator("#context-band")).toHaveCount(0);
 
-    await page.goto(`${ROUTE}?ort=beispielgemeinde-musterdorf&wer=opt-1`);
+    await page.goto(`${ROUTE}?ort=schlatkow&wer=opt-1`);
     await expect(page.locator("#context-band")).toHaveCount(0);
 
-    await page.goto(`${ROUTE}?ort=beispielgemeinde-musterdorf&wer=opt-1&weg=whatsapp`);
+    await page.goto(`${ROUTE}?ort=schlatkow&wer=opt-1&weg=whatsapp`);
     await expect(page.locator("#context-band")).toHaveCount(0);
   });
 });

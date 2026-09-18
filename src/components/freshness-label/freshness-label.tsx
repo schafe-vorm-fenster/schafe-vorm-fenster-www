@@ -11,7 +11,10 @@ import styles from "./freshness-label.module.css";
  * The three fallback tiers of TS-008 D5 / TS-009 D4:
  *   fresh     the data is current — no label at all;
  *   stale     a cached answer — "Stand: <time>";
- *   snapshot  a build-time snapshot — labelled as an example.
+ *   snapshot  a build-time snapshot — no label at all: Jan's decision of
+ *             2026-09-18 removed the word "Beispiel"/"Example" from every
+ *             rendered page. The tier still reaches the markup, as
+ *             `data-demo`/`data-mock` on the module that carries it.
  */
 export const FRESHNESS_TIERS = ["fresh", "stale", "snapshot"] as const;
 export type FreshnessTier = (typeof FRESHNESS_TIERS)[number];
@@ -21,9 +24,8 @@ export interface FreshnessLabelProps {
   /** Required for `stale`: what the shown data is the state of. */
   readonly updatedAt?: string | Date;
   readonly locale?: Locale;
-  /** Word overrides for `en`. */
+  /** Word override for `en`. */
   readonly staleLabel?: string;
-  readonly snapshotLabel?: string;
   readonly className?: string;
 }
 
@@ -32,9 +34,9 @@ export interface FreshnessLabelProps {
 /**
  * 61 `freshness-label` [PROPOSED] — TS-008 D5, TS-009 D4.
  *
- * Structure: tier 2 renders "Stand: <time>" beside the module's heading;
- * tier 3 renders the snapshot labelled as an example.
- * States: absent at tier 1. Never an error sentence, never a warning icon,
+ * Structure: tier 2 renders "Stand: <time>" beside the module's heading.
+ * States: absent at tier 1 and at tier 3 — a build-time snapshot is a
+ * finished answer to the visitor and is marked only in `data-*`. Never an error sentence, never a warning icon,
  * never a retry control — failures are logged server-side and the visitor
  * sees a dated answer instead of an apology.
  * Inherits: Meta 15 px in `muted`, `clock` at 18 px.
@@ -47,28 +49,17 @@ export function FreshnessLabel({
   updatedAt,
   locale = "de",
   staleLabel,
-  snapshotLabel,
   className,
 }: FreshnessLabelProps) {
-  if (tier === "fresh") return null;
+  if (tier === "fresh" || tier === "snapshot") return null;
 
-  // The two words come from the dictionary unless the caller names one, so
-  // `/en` reads "As of" / "Example" rather than the German default that
-  // `state/open.md` row 101 recorded.
+  // The word comes from the dictionary unless the caller names one, so `/en`
+  // reads "As of" rather than the German default that `state/open.md` row
+  // 101 recorded.
   const words = dictionary(locale).live;
   const stale = staleLabel ?? words.stale;
-  const snapshot = snapshotLabel ?? words.snapshot;
 
   const classes = [styles.label, className].filter(Boolean).join(" ");
-
-  if (tier === "snapshot") {
-    return (
-      <p className={classes}>
-        <Icon name="clock" size={18} />
-        {snapshot}
-      </p>
-    );
-  }
 
   const value = typeof updatedAt === "string" ? new Date(updatedAt) : updatedAt;
   if (!value || Number.isNaN(value.getTime())) return null;

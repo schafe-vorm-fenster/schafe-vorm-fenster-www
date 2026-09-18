@@ -1,8 +1,6 @@
 import Image from "next/image";
 
 import { isMocked, isPending, type DataStateProps } from "../data-state";
-import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
-import { PlaceholderBadge } from "../placeholder-badge/placeholder-badge";
 import { PlaceholderSurface } from "../placeholder-surface/placeholder-surface";
 import { Skeleton } from "../skeleton/skeleton";
 
@@ -40,12 +38,13 @@ export interface MediaFrameProps extends DataStateProps {
   readonly sizes?: string;
   /** Skips the image optimizer, for SVG and for hosts without a remote pattern. */
   readonly unoptimized?: boolean;
-  readonly placeholderHeadline?: string;
-  readonly placeholderCta?: ReactNode;
   readonly caption?: ReactNode;
   /** The manifest slot id when this frame shows a generated image (DEC-068). */
   readonly placeholderId?: string;
-  /** The page's language — the `Demo-Daten` badge and the freshness label read it. */
+  /**
+   * Kept in the interface so every page composes the frame the same way;
+   * the frame itself renders no words of its own any more.
+   */
   readonly locale?: Locale;
   readonly className?: string;
 }
@@ -79,13 +78,10 @@ export function MediaFrame({
   priority = false,
   sizes = "(min-width: 64rem) 33vw, 100vw",
   unoptimized,
-  placeholderHeadline,
-  placeholderCta,
   caption,
   placeholderId,
   state = "ready",
   className,
-  locale = "de",
 }: MediaFrameProps) {
   if (isPending(state)) {
     return <Skeleton className={className} ratio={ratio} variant="box" />;
@@ -93,20 +89,16 @@ export function MediaFrame({
 
   if (!src || state === "empty") {
     return (
-      <PlaceholderSurface
-        className={className}
-        cta={placeholderCta}
-        headline={placeholderHeadline}
-        locale={locale}
-        ratio={ratio}
-      />
+      <PlaceholderSurface className={className} ratio={ratio} />
     );
   }
 
   return (
     <figure
       className={[styles.frame, className].filter(Boolean).join(" ")}
+      data-mock={isMocked(state) ? "true" : undefined}
       data-placeholder={placeholderId}
+      data-provenance={notDepicting ? "generated" : undefined}
     >
       <div
         className={styles.box}
@@ -132,12 +124,6 @@ export function MediaFrame({
           src={src}
           unoptimized={unoptimized}
         />
-        {(notDepicting || isMocked(state)) && (
-          <div className={styles.marks}>
-            {notDepicting ? <PlaceholderBadge locale={locale} /> : null}
-            {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
-          </div>
-        )}
       </div>
       {caption ? <figcaption className={styles.caption}>{caption}</figcaption> : null}
     </figure>

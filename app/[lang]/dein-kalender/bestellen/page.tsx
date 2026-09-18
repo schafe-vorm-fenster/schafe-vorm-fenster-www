@@ -48,15 +48,15 @@ import type { Metadata } from "next";
  * (README: "the CSP, the HSTS variance and the X-Robots-Tag, on every
  * response") — flagged there as an open point, not built here.
  *
- * Step 4 shows the **mocked, successful** code experience (dummy
- * `organizerId`, full `demo-data-badge`'d snippet) rather than the D7
+ * Step 4 shows the **mocked, successful** code experience (a stand-in
+ * `organizerId` in the real id shape, the full snippet) rather than the D7
  * "cannot be issued synchronously" fallback — the mock rule's "full
- * instant-embed experience, labelled `Demo-Daten`" (plan/guardrails.md row
- * 2), matching what the work package's dispatch names explicitly.
+ * instant-embed experience" (plan/guardrails.md), with the marking in
+ * `data-demo` rather than in the page (Jan, 2026-09-18).
  */
 
 const ROUTE = "order" as const;
-const KREIS_ID = "musterkreis";
+const KREIS_ID = "vorpommern-greifswald";
 const CONTACT_EMAIL = "jan@schafe-vorm-fenster.de";
 
 export async function generateMetadata({
@@ -82,13 +82,13 @@ const SCOPE_QUESTION_FALLBACK: Record<Locale, string> = {
 // (`src/components/scope-picker/scope-picker.tsx`), so this "add" affordance
 // does not repeat it.
 const COUNTY_LABEL: Record<Locale, string> = {
-  de: "Landkreis Musterkreis",
-  en: "Musterkreis district",
+  de: "Landkreis Vorpommern-Greifswald",
+  en: "Vorpommern-Greifswald district",
 };
 
 const COUNTY_CHIP_LABEL: Record<Locale, string> = {
-  de: "Musterkreis",
-  en: "Musterkreis",
+  de: "Vorpommern-Greifswald",
+  en: "Vorpommern-Greifswald",
 };
 
 const SELECTED_COUNT: Record<Locale, (n: number) => string> = {
@@ -188,8 +188,11 @@ export default async function Page({
     </ConversionTracker>
   );
 
+  // The id shape the CRM really issues, so the snippet a visitor copies in
+  // the prototype looks exactly like the one she will be sent (Q-046,
+  // `state/open.md` row 2). The block itself carries `data-demo="true"`.
   const demoCode =
-    '<script defer src="https://portalize.schafe-vorm-fenster.de/api/demo-organizer-bestellen/load.js"></script>\n<div data-portalize-organizer-id="demo-organizer-bestellen"></div>';
+    '<script defer src="https://portalize.schafe-vorm-fenster.de/api/65f3a9c1d4e27b0912af4c38/load.js"></script>\n<div data-portalize-organizer-id="65f3a9c1d4e27b0912af4c38"></div>';
 
   return (
     <>
@@ -286,14 +289,7 @@ export default async function Page({
         {step === 4 ? (
           <>
             <h1>{fieldAt(codeSlot.blocks, 0)}</h1>
-            {/* F-2-33: the snippet's `Demo-Daten` badge reads the page's
-                language like every other self-badging module. */}
-            <CodeSnippet
-              code={demoCode}
-              locale={locale}
-              note={fieldAt(codeSlot.blocks, 1)}
-              state="mocked"
-            />
+            <CodeSnippet code={demoCode} note={fieldAt(codeSlot.blocks, 1)} state="mocked" />
             {/* F-2-60: keyed on the completed order, so Back-then-Forward
                 through step 4 reports the same completion once. */}
             <FireConversionOnMount

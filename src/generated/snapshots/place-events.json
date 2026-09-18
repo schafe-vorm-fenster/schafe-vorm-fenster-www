@@ -5,23 +5,23 @@
   "events": [
     {
       "id": "snapshot-0",
-      "title": "Dorffest am Gemeindehaus (Beispiel)",
+      "title": "Feuerwehrfest am Gerätehaus",
       "startsAt": "2026-09-12T02:00:00.000Z",
-      "placeName": "Beispielgemeinde Musterdorf",
+      "placeName": "Schlatkow",
       "categoryId": "fest"
     },
     {
       "id": "snapshot-1",
-      "title": "Hofladen: Freitagsmarkt (Beispiel)",
+      "title": "Bäckerwagen am Dorfplatz",
       "startsAt": "2026-09-13T04:00:00.000Z",
-      "placeName": "Beispielgemeinde Musterdorf",
+      "placeName": "Schlatkow",
       "categoryId": "merchants"
     },
     {
       "id": "snapshot-2",
-      "title": "Chorprobe im Pfarrsaal (Beispiel)",
+      "title": "Line-Dance-Gruppe im Gemeindehaus",
       "startsAt": "2026-09-14T06:00:00.000Z",
-      "placeName": "Beispielgemeinde Musterdorf",
+      "placeName": "Schlatkow",
       "categoryId": "culture"
     }
   ]

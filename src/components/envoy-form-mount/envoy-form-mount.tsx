@@ -1,5 +1,4 @@
 import { isMocked, isPending, type DataStateProps } from "../data-state";
-import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { LeadFallback } from "../lead-fallback/lead-fallback";
 import { Skeleton } from "../skeleton/skeleton";
 
@@ -52,8 +51,8 @@ export interface EnvoyFormMountProps extends DataStateProps {
  * with attributes (form kind, page language, source route, offering/goal
  * context). The envoy widget itself is undelivered (Q-022, `state/open.md`
  * row 7), so per the mock rule this component **is** the mock behind that
- * same interface: it renders the full form UX for `kind`, `demo-data-badge`,
- * and submits nothing — every field carries no `name` attribute, so even a
+ * same interface: it renders the full form UX for `kind` and submits
+ * nothing — every field carries no `name` attribute, so even a
  * submission (there is no real destination to submit to) carries zero data
  * out of the browser.
  * States (D-9, all four):
@@ -64,8 +63,9 @@ export interface EnvoyFormMountProps extends DataStateProps {
  *   degraded → `lead-fallback` as well — the widget's own submission errors
  *              are the widget's to own once it exists; this mock has no
  *              submission to fail, so degraded and empty share the fallback;
- *   mocked   → the mocked field set, marked `demo-data-badge`, plus the
- *              submitted state `envoy-form.tsx` owns (TS-016-A9).
+ *   mocked   → the mocked field set, marked `data-mock="true"` on the mount
+ *              element, plus the submitted state `envoy-form.tsx` owns
+ *              (TS-016-A9).
  * Inherits: the page renders and is fully usable without any script; no
  * field value ever reaches this origin, a log or analytics (D5).
  * Space: the success message replaces the form in the same slot.
@@ -108,13 +108,15 @@ export function EnvoyFormMount({
   return (
     <EnvoyForm
       ownSubmit={ownSubmit}
-      badge={isMocked(state) ? <DemoDataBadge locale={locale} /> : undefined}
       className={className}
       conversion={conversion}
       elementAttributes={{
         "data-envoy-form-kind": kind,
         "data-envoy-locale": locale,
         "data-envoy-source": sourceRoute,
+        // The mock's own marking, where Jan can read it and a visitor cannot
+        // (2026-09-18). The form itself reads as the finished one.
+        ...(isMocked(state) ? { "data-mock": "true" } : {}),
         ...contextAttributes(context),
       }}
       fields={ENVOY_FORM_FIELDS[kind]}

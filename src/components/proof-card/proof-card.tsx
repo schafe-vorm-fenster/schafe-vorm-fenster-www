@@ -1,6 +1,5 @@
 import { Badge } from "../badge/badge";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
-import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { MediaFrame } from "../media-frame/media-frame";
 import { OutboundLink } from "../outbound-link/outbound-link";
 import { RouteLink } from "../route-link/route-link";
@@ -92,7 +91,6 @@ export function ProofCard({
         <div className={styles.meta}>
           <p className={styles.context}>{contextLine}</p>
           <Badge tone="neutral">{geo.label}</Badge>
-          {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
         </div>
         <p className={styles.claim}>{claim}</p>
         <p className={styles.attribution}>{attribution}</p>

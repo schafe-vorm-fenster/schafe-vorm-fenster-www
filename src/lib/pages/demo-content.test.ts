@@ -12,13 +12,13 @@ describe("TS-019-A8: demo proof lines are read, never re-typed", () => {
   it("splits a quoted claim from its role and its place", () => {
     expect(
       parseDemoProofElement(
-        `„Endlich sehen wir auf einen Blick, was bei uns im Ort los ist." — Ehrenamtliche Bürgermeisterin, Beispielgemeinde Musterdorf`,
+        `„Endlich sehen wir auf einen Blick, was bei uns im Ort los ist." — Ehrenamtliche Bürgermeisterin, Schlatkow`,
         "Beispiel",
       ),
     ).toEqual({
       contextLine: "Ehrenamtliche Bürgermeisterin",
       claim: "Endlich sehen wir auf einen Blick, was bei uns im Ort los ist.",
-      attribution: "Beispielgemeinde Musterdorf",
+      attribution: "Schlatkow",
     });
   });
 

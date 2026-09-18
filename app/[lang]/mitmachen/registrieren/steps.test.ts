@@ -8,22 +8,22 @@ describe("TS-023-A4: step derivation", () => {
   });
 
   it("shows step 2 once the place is answered", () => {
-    expect(derivedStep({ ort: "beispielgemeinde-musterdorf" })).toBe(2);
+    expect(derivedStep({ ort: "schlatkow" })).toBe(2);
   });
 
   it("shows step 3 once place and who-publishes are answered", () => {
-    expect(derivedStep({ ort: "beispielgemeinde-musterdorf", wer: "opt-1" })).toBe(3);
+    expect(derivedStep({ ort: "schlatkow", wer: "opt-1" })).toBe(3);
   });
 
   it("shows the handover once all three are answered", () => {
     expect(
-      derivedStep({ ort: "beispielgemeinde-musterdorf", wer: "opt-1", weg: "whatsapp" }),
+      derivedStep({ ort: "schlatkow", wer: "opt-1", weg: "whatsapp" }),
     ).toBe("handover");
   });
 
   it("honours an explicit `schritt` pointing back to an answered step", () => {
     const answers = {
-      ort: "beispielgemeinde-musterdorf",
+      ort: "schlatkow",
       wer: "opt-1",
       weg: "whatsapp",
     } as const;
@@ -33,7 +33,7 @@ describe("TS-023-A4: step derivation", () => {
 
   it("ignores a `schritt` pointing forward past an unanswered step", () => {
     expect(resolveDisplayedStep({}, "3")).toBe(1);
-    expect(resolveDisplayedStep({ ort: "beispielgemeinde-musterdorf" }, "3")).toBe(2);
+    expect(resolveDisplayedStep({ ort: "schlatkow" }, "3")).toBe(2);
   });
 
   it("ignores an invalid `schritt` value", () => {

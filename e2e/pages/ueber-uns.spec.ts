@@ -8,7 +8,7 @@ import { expect, test } from "@playwright/test";
  * cleared photographs of Jan-Henrik Hempel — the origin block's portrait and
  * the team card — from the hub package's asset set. Christian Sauer's only
  * photograph carries `license: unverified`, so his card keeps the honest
- * "Foto gesucht" hatch: an uncleared portrait is not published, and a face is
+ * flat brand-colour surface: an uncleared portrait is not published, and a face is
  * never generated (DEC-068 rule 3, DEC-077). `state/open.md` tracks it.
  */
 
@@ -62,10 +62,13 @@ test.describe("/ueber-uns", () => {
     // `[class*="proof-card"]` also matches the card's own inner `body`/
     // `meta` elements — only `article` is unique to one card each.
     const cards = stream.locator("article");
-    const emptySlot = page.getByText("Kein Nachweis");
+    // The reserved seventh position is a flat brand-colour panel carrying
+    // `data-empty-proof` and no words at all (Jan, 2026-09-18) — it is still
+    // reserved, still countable, and never backfilled.
+    const emptySlot = stream.locator("[data-empty-proof]");
     expect(await cards.count()).toBeLessThanOrEqual(6);
     await expect(emptySlot).toHaveCount(1);
-    await expect(emptySlot).toBeVisible();
+    await expect(page.getByText("Kein Nachweis")).toHaveCount(0);
   });
 
   test("TS-027-A8: the archive block has exactly one outgoing link to /ueber-uns/archiv", async ({

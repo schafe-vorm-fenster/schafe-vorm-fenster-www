@@ -4,18 +4,18 @@
   "builtAt": "2026-09-11T00:00:00.000Z",
   "examples": [
     {
-      "name": "Beispielgemeinde Musterdorf",
-      "slug": "beispielgemeinde-musterdorf",
+      "name": "Schlatkow",
+      "slug": "schlatkow",
       "eventCount": 3
     },
     {
-      "name": "Beispielort Musterhagen",
-      "slug": "beispielort-musterhagen",
+      "name": "Schmatzin",
+      "slug": "schmatzin",
       "eventCount": 3
     },
     {
-      "name": "Musterbach",
-      "slug": "musterbach",
+      "name": "Rubkow",
+      "slug": "rubkow",
       "eventCount": 3
     }
   ]

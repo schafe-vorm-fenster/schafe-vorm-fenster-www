@@ -1,6 +1,5 @@
 import { Chip } from "../chip/chip";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
-import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { Skeleton } from "../skeleton/skeleton";
 
 import type { RouteId } from "@/src/lib/routes/routes";
@@ -35,7 +34,7 @@ export interface PlaceExampleSetProps extends DataStateProps {
  *              because `place-search` is static and stands beside it);
  *   degraded → the same designed set, still labelled as examples by the
  *              surrounding `live-module-frame`;
- *   mocked   → the set plus `demo-data-badge`, for the interim ranking.
+ *   mocked   → the set, marked `data-demo="true"`, for the interim ranking.
  * Inherits: `chip` presentation, radius 999.
  * Space: a fixed chip count reserved before paint.
  * A11y: each example names its place in text.
@@ -58,13 +57,12 @@ export function PlaceExampleSet({
   const shown = examples.slice(0, max);
 
   return (
-    <div className={classes}>
+    <div className={classes} data-demo={isMocked(state) ? "true" : undefined}>
       {shown.map((example) => (
         <Chip key={example.label} locale={locale} query={example.query} to={example.to}>
           {example.label}
         </Chip>
       ))}
-      {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
     </div>
   );
 }

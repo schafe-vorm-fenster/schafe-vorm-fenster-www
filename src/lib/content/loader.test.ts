@@ -38,7 +38,7 @@ provenance: "mixed"
 
 <!-- id: home-8-proof-stream; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
 
-**Karte 1:** Beispielgemeinde Musterdorf
+**Karte 1:** Schlatkow
 `;
 
 describe("TS-007-A1: a page artifact parses into a typed page", () => {

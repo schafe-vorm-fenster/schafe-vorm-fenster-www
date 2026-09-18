@@ -166,8 +166,8 @@ test.describe("/deine-region/angebot", () => {
    * out the way a visitor does.
    */
   const fillQuoteForm = async (page: import("@playwright/test").Page) => {
-    await page.fill("#envoy-quote-organisation", "Beispielverwaltung Musterkreis");
-    await page.fill("#envoy-quote-name", "Beispielperson");
+    await page.fill("#envoy-quote-organisation", "Amt Züssow");
+    await page.fill("#envoy-quote-name", "A. Test");
     await page.fill("#envoy-quote-email", "anfrage@beispiel.de");
     await page.fill("#envoy-quote-message", "Wir hätten gern ein Angebot für unser Gebiet.");
     await page.waitForTimeout(2600);
@@ -262,8 +262,8 @@ test.describe("/deine-region/angebot", () => {
     expect(visibleFields).toBe(5);
 
     // Submitted immediately, it is refused rather than accepted.
-    await page.fill("#envoy-quote-organisation", "Beispielverwaltung Musterkreis");
-    await page.fill("#envoy-quote-name", "Beispielperson");
+    await page.fill("#envoy-quote-organisation", "Amt Züssow");
+    await page.fill("#envoy-quote-name", "A. Test");
     await page.fill("#envoy-quote-email", "anfrage@beispiel.de");
     await page.locator('[data-cta="primary"]').click();
     await expect(
@@ -299,7 +299,7 @@ test.describe("/deine-region/angebot", () => {
       "/deine-region",
       "/dein-kalender",
       "/dein-kalender/bestellen",
-      "/dein-kalender/bestellen?orte=beispielgemeinde-musterdorf&schritt=3",
+      "/dein-kalender/bestellen?orte=schlatkow&schritt=3",
     ]) {
       await page.goto(path);
       const hrefs = await page
@@ -324,7 +324,6 @@ test.describe("/deine-region/angebot", () => {
       "Telefon",
       "Worum geht es?",
       "Absenden",
-      "Demo-Daten",
     ]) {
       expect(text, german).not.toContain(german);
     }

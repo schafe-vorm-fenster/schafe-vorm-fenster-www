@@ -1,21 +1,17 @@
 /**
- * The labelled dummy data the prototype's live modules render — the mock
- * rule of `plan/guardrails.md`.
- *
- * "Every missing external endpoint or component is built as a mock
- * delivering dummy data — never as a hole, never as a bare empty state …
- * Dummy data is obviously fictitious and labeled as such in the UI (a
- * `Demo-Daten` badge); it never contains real persons, customers, or
- * real-looking testimonials."
+ * The stand-in data the prototype's live modules render — the mock rule of
+ * `plan/guardrails.md` as Jan restated it on 2026-09-18: the marking lives
+ * in frontmatter, `data-*` attributes and `state/open.md`, never in rendered
+ * copy.
  *
  * M4 wires `/api/places/{slug}/events`, `/api/nearby`, `/api/places/search`
  * and `/api/stats` (TS-008 D2) behind the same module interfaces the pages
  * already render. Until then every one of those modules is handed the rows
- * below in the `mocked` state, which is what puts the `Demo-Daten` badge on
- * the module frame (`src/components/data-state.ts`). Nothing here is fetched,
- * and no row claims a real place: every name is a `Beispiel…`/`Example …`
- * construction, and every place name that is *not* one of these comes from
- * geo-api at M4 (WEB-F-024).
+ * below in the `mocked` state, which is what puts `data-demo="true"` on the
+ * module frame (`src/components/data-state.ts`). Nothing here is fetched.
+ * Place names are real municipalities of Vorpommern-Greifswald that the
+ * brand's own sources already name; the real ones come from geo-api at M4
+ * (WEB-F-024).
  *
  * Rows in `state/open.md`: `Mock aktiv` per module.
  */
@@ -25,31 +21,30 @@ import { APP_ORIGIN } from "@/src/lib/routes/routes";
 import type { EventListItem } from "@/src/components/event-list/event-list";
 import type { Locale } from "@/src/lib/i18n/locales";
 
-/** The one invented place every demo module speaks about. */
+/** The one place every stand-in module speaks about. */
 export const DEMO_PLACE = {
-  slug: "musterdorf",
-  name: { de: "Beispielgemeinde Musterdorf", en: "Example municipality Musterdorf" },
-  county: { de: "Beispielkreis Musterkreis", en: "Example district Musterkreis" },
+  slug: "schlatkow",
+  name: { de: "Schlatkow", en: "Schlatkow" },
+  county: { de: "Vorpommern-Greifswald", en: "Vorpommern-Greifswald" },
 } as const;
 
-/** Where a demo calendar handover points — the app host, never a real slug. */
+/** Where a stand-in calendar handover points — the app host. */
 export function demoAppHref(slug: string = DEMO_PLACE.slug): string {
   return `${APP_ORIGIN}/${slug}`;
 }
 
 /**
  * The counter figure of TS-008 position 4. A figure is a claim, so this one
- * is only ever rendered inside a module marked `Demo-Daten`; `/api/stats`
- * replaces it at M4, and Q-037 keeps the other two figures absent rather
- * than estimated (TS-019-A14).
+ * is only ever rendered inside a module carrying `data-demo="true"`;
+ * `/api/stats` replaces it at M4, and Q-037 keeps the other two figures
+ * absent rather than estimated (TS-019-A14).
  */
 export const DEMO_DATE_COUNT = 1234;
 
 /**
- * Demo rows are dated relative to the render so they never read as "last
+ * Rows are dated relative to the render so a list never reads as "last
  * year". The pages are prerendered, so the dates freeze at build time — an
- * accepted property of a labelled demo, and one more reason the badge is
- * not optional.
+ * accepted property, recorded as a `Mock aktiv` row rather than shown.
  */
 function inDays(days: number): Date {
   const date = new Date();
@@ -69,22 +64,22 @@ interface DemoRow {
 const PLACE_ROWS: readonly DemoRow[] = [
   {
     offset: 2,
-    title: { de: "Dorffest am Anger", en: "Village fête on the green" },
-    meta: { de: "14:00 · Beispielgemeinde Musterdorf", en: "2 pm · Example municipality Musterdorf" },
+    title: { de: "Feuerwehrfest am Gerätehaus", en: "Fire brigade fête at the engine house" },
+    meta: { de: "14:00 · Schlatkow", en: "2 pm · Schlatkow" },
     category: "fest",
     categoryLabel: { de: "Fest", en: "Fête" },
   },
   {
     offset: 4,
     title: { de: "Bäckerwagen am Dorfplatz", en: "Bakery van on the village square" },
-    meta: { de: "08:30 · Beispielgemeinde Musterdorf", en: "8:30 am · Example municipality Musterdorf" },
+    meta: { de: "08:30 · Schlatkow", en: "8:30 am · Schlatkow" },
     category: "merchants",
     categoryLabel: { de: "Versorgung", en: "Supplies" },
   },
   {
     offset: 9,
-    title: { de: "Sitzung der Gemeindevertretung", en: "Municipal council meeting" },
-    meta: { de: "19:00 · Beispielgemeinde Musterdorf", en: "7 pm · Example municipality Musterdorf" },
+    title: { de: "Gemeindevertretersitzung, öffentlich", en: "Municipal council meeting, open to the public" },
+    meta: { de: "19:00 · Schlatkow", en: "7 pm · Schlatkow" },
     category: "official",
     categoryLabel: { de: "Amtlich", en: "Official" },
   },
@@ -93,36 +88,36 @@ const PLACE_ROWS: readonly DemoRow[] = [
 const NEARBY_ROWS: readonly DemoRow[] = [
   {
     offset: 1,
-    title: { de: "Chorprobe im Gemeindehaus", en: "Choir rehearsal at the parish hall" },
-    meta: { de: "18:00 · Beispieldorf Musterhagen", en: "6 pm · Example village Musterhagen" },
+    title: { de: "Line-Dance-Gruppe im Gemeindehaus", en: "Line dancing at the parish hall" },
+    meta: { de: "18:00 · Schmatzin", en: "6 pm · Schmatzin" },
     category: "culture",
     categoryLabel: { de: "Kultur", en: "Culture" },
   },
   {
     offset: 2,
     title: { de: "Sprechstunde der Gemeinde", en: "Municipal open hours" },
-    meta: { de: "10:00 · Beispielort Musterberg", en: "10 am · Example place Musterberg" },
+    meta: { de: "10:00 · Rubkow", en: "10 am · Rubkow" },
     category: "official",
     categoryLabel: { de: "Amtlich", en: "Official" },
   },
   {
     offset: 3,
-    title: { de: "Ausstellung im Schlosspark", en: "Exhibition in the castle park" },
-    meta: { de: "11:00 · Beispielgemeinde Musterstein", en: "11 am · Example municipality Musterstein" },
+    title: { de: "Führung im Wasserschloss", en: "Guided tour of the moated castle" },
+    meta: { de: "11:00 · Quilow", en: "11 am · Quilow" },
     category: "culture",
     categoryLabel: { de: "Kultur", en: "Culture" },
   },
   {
     offset: 5,
-    title: { de: "Übungsabend der Feuerwehr", en: "Fire brigade practice evening" },
-    meta: { de: "19:30 · Beispieldorf Musterhagen", en: "7:30 pm · Example village Musterhagen" },
+    title: { de: "Seniorenkaffee im Vereinsheim", en: "Seniors' coffee at the clubhouse" },
+    meta: { de: "15:00 · Schmatzin", en: "3 pm · Schmatzin" },
     category: "social",
     categoryLabel: { de: "Gemeinschaft", en: "Community" },
   },
   {
     offset: 6,
-    title: { de: "Wochenmarkt", en: "Weekly market" },
-    meta: { de: "09:00 · Beispielstadt Musterwalde", en: "9 am · Example town Musterwalde" },
+    title: { de: "Blutspende im Dorfgemeinschaftshaus", en: "Blood donation at the village hall" },
+    meta: { de: "16:00 · Groß Kiesow", en: "4 pm · Groß Kiesow" },
     category: "merchants",
     categoryLabel: { de: "Versorgung", en: "Supplies" },
   },
@@ -139,7 +134,7 @@ function rows(source: readonly DemoRow[], locale: Locale): EventListItem[] {
   }));
 }
 
-/** TS-008 position 1 — the next 3 dates of the known place, as demo rows. */
+/** TS-008 position 1 — the next 3 dates of the known place. */
 export function demoPlaceEvents(locale: Locale): EventListItem[] {
   return rows(PLACE_ROWS, locale);
 }
@@ -152,6 +147,6 @@ export function demoNearbyEvents(locale: Locale): EventListItem[] {
 /** TS-008 position 3 — the small set of active example places (DEC-034). */
 export function demoExamplePlaces(locale: Locale): readonly string[] {
   return locale === "de"
-    ? ["Beispieldorf Musterhagen", "Beispielort Musterberg", "Beispielstadt Musterwalde"]
-    : ["Example village Musterhagen", "Example place Musterberg", "Example town Musterwalde"];
+    ? ["Schmatzin", "Rubkow", "Quilow"]
+    : ["Schmatzin", "Rubkow", "Quilow"];
 }

@@ -21,6 +21,23 @@ import { ResponsePromise } from "./response-promise/response-promise";
 import { ScopePicker } from "./scope-picker/scope-picker";
 
 /**
+ * The words that may never reach a rendered page again — Jan's decision of
+ * 2026-09-18. Provenance travels in `data-*`, in the content frontmatter and
+ * in `state/open.md`; a visitor sees a finished site in both languages.
+ */
+const FORBIDDEN_MARKINGS = [
+  "Demo-Daten",
+  "Demo data",
+  "Foto gesucht",
+  "Photo wanted",
+  "Kein Nachweis",
+  "No evidence",
+  "Nicht motivgenau",
+  "Not an exact match",
+  "Platzhalter",
+];
+
+/**
  * Cross-cutting contracts for the M2 work package "live-module shells and
  * conversion/form components" (`plan/component-inventory.md` §2.4 + §2.5):
  * the seven live-module shells (40–46) and the ten conversion/form/flow
@@ -105,14 +122,16 @@ describe("D-9: the ten data-dependent §2.4/§2.5 components declare all four st
   });
 });
 
-describe("plan/guardrails.md mock rule: mocked modules carry Demo-Daten and no field value leaves the browser", () => {
-  it("marks EnvoyFormMount's mocked field set with demo-data-badge", () => {
+describe("plan/guardrails.md mock rule: mocked modules are marked in `data-*`, never in the page, and no field value leaves the browser", () => {
+  it("marks EnvoyFormMount's mocked field set with `data-mock`, not with a badge", () => {
     const html = renderToStaticMarkup(
       <EnvoyFormMount fallbackEmail="kontakt@example.org" kind="contact" sourceRoute="home" state="mocked" />,
     );
-    expect(html).toContain("Demo-Daten");
+    expect(html).toContain('data-mock="true"');
+    for (const word of FORBIDDEN_MARKINGS) expect(html, word).not.toContain(word);
     // No form control carries a `name` — even a submission of this mock form
-    // sends zero fields anywhere (TS-016 D5).
+    // sends zero fields anywhere (TS-016 D5). Unchanged by Jan's 2026-09-18
+    // decision: the safety property is not what came off the page.
     expect(html).not.toMatch(/<(input|textarea)\b[^>]*\sname="/);
   });
 
@@ -126,7 +145,8 @@ describe("plan/guardrails.md mock rule: mocked modules carry Demo-Daten and no f
 
   it("renders NewsletterBlock's email field with no name attribute either", () => {
     const html = renderToStaticMarkup(<NewsletterBlock />);
-    expect(html).toContain("Demo-Daten");
+    expect(html).toContain('data-mock="true"');
+    for (const word of FORBIDDEN_MARKINGS) expect(html, word).not.toContain(word);
     expect(html).not.toMatch(/<input\b[^>]*\sname="/);
     expect(html).toContain('type="email"');
   });
@@ -316,7 +336,8 @@ describe("TS-025 D7: code-snippet reserves the pending case and never invents a 
     expect(html).toContain("<pre");
     expect(html).toContain("<code>");
     expect(html).toMatch(/<button[^>]*type="button"/);
-    expect(html).toContain("Demo-Daten");
+    expect(html).toContain('data-demo="true"');
+    for (const word of FORBIDDEN_MARKINGS) expect(html, word).not.toContain(word);
   });
 });
 

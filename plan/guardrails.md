@@ -57,9 +57,18 @@ tests — every function integrated and visible. Therefore:
 - Mocks live behind the same interface module the real system will
   use, switchable per environment — swapping in the real system
   later touches one module, not the pages.
-- Dummy data is obviously fictitious and labeled as such in the UI
-  (e.g. a `Demo-Daten` badge); it never contains real persons,
-  customers, or real-looking testimonials.
+- **Marking lives in frontmatter, data attributes and
+  `state/open.md`; never in rendered copy (Jan, 2026-09-18.)** The
+  site must look and read as if everything is finished: no visible
+  or screen-reader-audible "Beispiel", "Demo", "Dummy", "Platzhalter",
+  "nicht motivgenau", "Foto gesucht", "KI-generiert", "nicht
+  freigegeben" or "Kein Nachweis" on any page, in either language.
+  Stand-in data therefore *reads real* — real regional place names,
+  plausible village dates, dates relative to today — while carrying
+  `data-demo="true"` / `data-mock="true"` in the markup and a
+  `Mock aktiv` row in `state/open.md`. It still never contains real
+  persons, customers, or real-looking testimonials; real quotes come
+  from the hub packages, and mocked form confirmations stay generic.
 - Every active mock has a row in `state/open.md` marked `Mock aktiv`
   — that list is the checklist for the later hardening round.
 - **The prototype does not go live.** A separate hardening round
@@ -75,14 +84,20 @@ slot without a source gets **generated content**, never a hole:
 - Generated copy follows the tone of voice and the communication
   principles, but claims stay generic — no invented numbers, names,
   testimonials, awards, or press quotes presented as real. Facts are
-  real (cited) or recognizably exemplary.
-- Generated or placeholder images follow the design system's imagery
-  rules; where an image would claim to depict something real that it
-  does not, it carries the design system's placeholder marking.
-- Every generated slot is registered: artifact metadata marks it
-  (`provenance: generated`), and `state/open.md` carries a
-  `Dummy-Content` row per page area — that list drives the
-  content follow-up workstream after the run.
+  real (cited) or plausible and unremarkable; never labelled in the
+  page as an example.
+- **Marking lives in frontmatter, data attributes and
+  `state/open.md`; never in rendered copy (Jan, 2026-09-18.)** A slot
+  whose photograph has not landed renders a flat brand-colour surface
+  from the design system's colour sections — no hatch, no badge, no
+  caption — and records the gap in `images[].provenance` and
+  `data-placeholder`. A slot whose proof has not cleared holds its
+  position the same way, marked `data-empty-proof`.
+- Every generated slot is still registered: artifact metadata marks it
+  (`provenance: generated`, `demo: true`), and `state/open.md` carries
+  a `Dummy-Content` row per page area. The clearance and mocks
+  registers in `state/open.md` remain the go-live checklist — they
+  are the only place the marking now lives.
 
 ## Credentials and questions
 

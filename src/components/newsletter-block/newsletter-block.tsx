@@ -1,4 +1,3 @@
-import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { RouteLink } from "../route-link/route-link";
 
 import { NewsletterForm } from "./newsletter-form";
@@ -23,9 +22,11 @@ export interface NewsletterBlockProps {
  * identifier; consent wording links `/rechtliches#datenschutz`. Footer on
  * every page; inline once on `/ueber-uns` (permitted only there).
  * States: Q-020 (the sending system) is unanswered, so per the mock rule
- * this ships as a labelled mock — full UX, `demo-data-badge`, and a
- * `Mock aktiv` row (`state/open.md` row 22). No `state` prop: the mock is
- * not late data arriving, it is the permanent M2 shape until Q-020 answers.
+ * this ships as a mock — the full UX, `data-mock="true"` on the block, and a
+ * `Mock aktiv` row (`state/open.md` row 22). Nothing on the surface says so:
+ * Jan's decision of 2026-09-18 keeps the marking out of the rendered copy.
+ * No `state` prop: the mock is not late data arriving, it is the permanent
+ * M2 shape until Q-020 answers.
  * The email input carries no `name` — the one way a plain, no-JS `<form>`
  * can offer the full control surface (label, type="email", required) while
  * genuinely submitting nothing: an unnamed control is not a successful
@@ -60,6 +61,9 @@ export function NewsletterBlock({ heading, locale = "de", className }: Newslette
   return (
     <div
       className={[styles.block, className].filter(Boolean).join(" ")}
+      // The mock's marking, where Jan can read it and a visitor cannot
+      // (2026-09-18). Q-020, `state/open.md` row 22.
+      data-mock="true"
       // F-3-11's own handle: the block is in the footer of all 24 routes and
       // the tests need to address *this* form rather than the page's.
       data-newsletter=""
@@ -85,9 +89,6 @@ export function NewsletterBlock({ heading, locale = "de", className }: Newslette
         successBody={words.successBody}
         successHeadline={words.successHeadline}
       />
-      <p className={styles.note}>
-        <DemoDataBadge locale={locale} /> — {words.demoNote}
-      </p>
     </div>
   );
 }

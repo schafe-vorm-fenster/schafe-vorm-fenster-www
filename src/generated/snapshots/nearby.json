@@ -1,41 +1,41 @@
 {
-  "$note": "Tier 3 for position 2 (this week nearby). Widest scope, labelled as an example by the module.",
+  "$note": "Tier 3 for position 2 (this week nearby). Widest scope; the module marks it with data-demo, never with rendered copy.",
   "$generated": "mock backend, committed per TS-009 D8",
   "builtAt": "2026-09-11T00:00:00.000Z",
   "events": [
     {
       "id": "snapshot-0",
-      "title": "Dorffest am Gemeindehaus (Beispiel)",
+      "title": "Feuerwehrfest am Gerätehaus",
       "startsAt": "2026-09-12T02:00:00.000Z",
-      "placeName": "Beispielort Musterhagen",
+      "placeName": "Schmatzin",
       "categoryId": "fest"
     },
     {
       "id": "snapshot-1",
-      "title": "Hofladen: Freitagsmarkt (Beispiel)",
+      "title": "Bäckerwagen am Dorfplatz",
       "startsAt": "2026-09-13T04:00:00.000Z",
-      "placeName": "Musterbach",
+      "placeName": "Rubkow",
       "categoryId": "merchants"
     },
     {
       "id": "snapshot-2",
-      "title": "Chorprobe im Pfarrsaal (Beispiel)",
+      "title": "Line-Dance-Gruppe im Gemeindehaus",
       "startsAt": "2026-09-14T06:00:00.000Z",
-      "placeName": "Beispielwalde",
+      "placeName": "Quilow",
       "categoryId": "culture"
     },
     {
       "id": "snapshot-3",
-      "title": "Gemeindevertretung, öffentliche Sitzung (Beispiel)",
+      "title": "Gemeindevertretersitzung, öffentlich",
       "startsAt": "2026-09-15T08:00:00.000Z",
-      "placeName": "Musterfelde",
+      "placeName": "Groß Kiesow",
       "categoryId": "official"
     },
     {
       "id": "snapshot-4",
-      "title": "Seniorenkaffee im Vereinsheim (Beispiel)",
+      "title": "Seniorenkaffee im Vereinsheim",
       "startsAt": "2026-09-16T10:00:00.000Z",
-      "placeName": "Beispielhausen",
+      "placeName": "Züssow",
       "categoryId": "social"
     }
   ]

@@ -19,9 +19,9 @@ test.describe("TS-025: the order flow", () => {
   }) => {
     for (const query of [
       "",
-      "?orte=beispielgemeinde-musterdorf",
-      "?orte=beispielgemeinde-musterdorf&schritt=3",
-      "?orte=beispielgemeinde-musterdorf&schritt=4",
+      "?orte=schlatkow",
+      "?orte=schlatkow&schritt=3",
+      "?orte=schlatkow&schritt=4",
     ]) {
       await page.goto(`${ROUTE}${query}`);
       await expect(page.getByText("Beratungstermin buchen")).toBeVisible();
@@ -50,9 +50,9 @@ test.describe("TS-025: the order flow", () => {
     await page.goto(`${ROUTE}?schritt=3`);
     await expect(page.getByText("Noch keine Auswahl.")).toBeVisible();
 
-    await page.goto(`${ROUTE}?kreis=musterkreis`);
+    await page.goto(`${ROUTE}?kreis=vorpommern-greifswald`);
     await expect(
-      page.getByText("Musterkreis (ganzer Landkreis)").first(),
+      page.getByText("Vorpommern-Greifswald (ganzer Landkreis)").first(),
     ).toBeVisible();
     await expect(page.getByText("Noch keine Auswahl.")).toHaveCount(0);
   });
@@ -61,9 +61,9 @@ test.describe("TS-025: the order flow", () => {
     page,
   }) => {
     for (const query of [
-      "?orte=beispielgemeinde-musterdorf",
-      "?orte=beispielgemeinde-musterdorf&schritt=3",
-      "?orte=beispielgemeinde-musterdorf&schritt=4",
+      "?orte=schlatkow",
+      "?orte=schlatkow&schritt=3",
+      "?orte=schlatkow&schritt=4",
     ]) {
       await page.goto(`${ROUTE}${query}`);
       await expect(page.locator('input[type="text"][name*="card" i], input[name*="iban" i]')).toHaveCount(0);
@@ -74,7 +74,7 @@ test.describe("TS-025: the order flow", () => {
   test("TS-025-A7: step 4 shows the embed code as selectable text with a copy control, no pending-payment state", async ({
     page,
   }) => {
-    await page.goto(`${ROUTE}?orte=beispielgemeinde-musterdorf&schritt=4`);
+    await page.goto(`${ROUTE}?orte=schlatkow&schritt=4`);
     await expect(page.locator("pre code")).toContainText("portalize.schafe-vorm-fenster.de");
     await expect(page.getByRole("button", { name: /kopieren/i })).toBeVisible();
     const bodyText = (await page.locator("body").innerText()).toLowerCase();
@@ -84,11 +84,11 @@ test.describe("TS-025: the order flow", () => {
   test("TS-025-A8: reload on step 2 restores scope from the URL; reload on step 3 keeps scope, empties invoice fields, no storage used", async ({
     page,
   }) => {
-    await page.goto(`${ROUTE}?orte=beispielgemeinde-musterdorf`);
+    await page.goto(`${ROUTE}?orte=schlatkow`);
     await page.reload();
     await expect(page.getByText("1 Orte ausgewählt")).toBeVisible();
 
-    await page.goto(`${ROUTE}?orte=beispielgemeinde-musterdorf&schritt=3`);
+    await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);
     await page.fill('input[id*="authority"]', "Testverwaltung");
     await page.reload();
     await expect(page.locator('input[id*="authority"]')).toHaveValue("");
@@ -103,7 +103,7 @@ test.describe("TS-025: the order flow", () => {
   });
 
   test("TS-025-A10: every step URL is noindex, follow", async ({ page }) => {
-    for (const query of ["", "?orte=beispielgemeinde-musterdorf&schritt=3", "?orte=beispielgemeinde-musterdorf&schritt=4"]) {
+    for (const query of ["", "?orte=schlatkow&schritt=3", "?orte=schlatkow&schritt=4"]) {
       const response = await page.goto(`${ROUTE}${query}`);
       await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
       // The X-Robots-Tag response header is proxy.ts's job (see page.tsx
@@ -119,11 +119,11 @@ test.describe("TS-025: the order flow", () => {
     const consoleMessages: string[] = [];
     page.on("console", (message) => consoleMessages.push(message.text()));
 
-    await page.goto(`${ROUTE}?orte=beispielgemeinde-musterdorf&schritt=3`);
+    await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);
     await page.waitForTimeout(500);
     expect(consoleMessages.some((text) => text.includes("buy-calendar-licence"))).toBe(false);
 
-    await page.goto(`${ROUTE}?orte=beispielgemeinde-musterdorf&schritt=4`);
+    await page.goto(`${ROUTE}?orte=schlatkow&schritt=4`);
     await page.waitForTimeout(500);
     const fires = consoleMessages.filter(
       (text) => text.includes("buy-calendar-licence") && text.includes("completed"),
@@ -147,7 +147,7 @@ test.describe("TS-025: the order flow", () => {
       }
     });
 
-    await page.goto(`${ROUTE}?orte=beispielgemeinde-musterdorf&schritt=3`);
+    await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);
     await page.locator('[data-cta="primary"]').click();
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Einbindungscode");
     await page.waitForTimeout(400);
@@ -170,7 +170,7 @@ test.describe("TS-025: the order flow", () => {
     // currently-shipped `mocked` branch renders the full form with no
     // spinner and no empty slot, which is what the mock rule requires while
     // the widget is undelivered.
-    await page.goto(`${ROUTE}?orte=beispielgemeinde-musterdorf&schritt=3`);
+    await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);
     await expect(page.locator('[data-envoy-form-kind="order-invoice"]')).toBeVisible();
     await expect(page.locator(".skeleton, [aria-busy='true']")).toHaveCount(0);
   });
@@ -200,7 +200,7 @@ test.describe("TS-025: the order flow", () => {
   test("F-2-51 / TS-006 D3: step 3 offers exactly one call to action, and it advances", async ({
     page,
   }) => {
-    await page.goto(`${ROUTE}?orte=beispielgemeinde-musterdorf&schritt=3`);
+    await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);
 
     // Exactly one control that reads as an action: the step's own advance.
     const primary = page.locator('[data-cta="primary"]');
@@ -226,7 +226,7 @@ test.describe("TS-025: the order flow", () => {
       await new Promise((resolve) => setTimeout(resolve, 1200));
       await route.continue();
     });
-    await page.goto(`${ROUTE}?orte=beispielgemeinde-musterdorf&schritt=3`);
+    await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);
 
     const primary = page.locator('[data-cta="primary"]');
     await primary.click();

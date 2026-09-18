@@ -1,6 +1,5 @@
 import { Button } from "../button/button";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
-import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { Icon } from "../icon/icon";
 import { linkHref } from "../route-link/href";
 import { Skeleton } from "../skeleton/skeleton";
@@ -87,9 +86,6 @@ export function ChoiceGroup({
       <fieldset className={styles.fieldset} data-demo={isMocked(state) ? "true" : undefined}>
         <legend className={styles.legend}>
           {legend}
-          {/* F-2-33: the badge took no `locale`, so step 2 of
-              `/en/take-part/register` read "Demo-Daten". */}
-          {isMocked(state) ? <DemoDataBadge className={styles.badge} locale={locale} /> : null}
         </legend>
         {options.length === 0 ? (
           // F-2-33: a hard-coded German literal renders on `/en` too — the

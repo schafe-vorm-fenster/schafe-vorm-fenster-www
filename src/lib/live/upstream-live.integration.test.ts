@@ -1,11 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { fetchStats } from "@/src/clients/events-api/client";
-import { eventsApiHost, geoApiHost, geoApiToken } from "@/src/clients/hosts";
+import { communitySiteHost, eventsApiHost, geoApiHost, geoApiToken } from "@/src/clients/hosts";
 
 import { memoryStore } from "./last-good";
 import { liveCounters } from "./counters";
-import { searchPlaces } from "./places";
+import { nearbyEvents } from "./nearby";
+import { placeEvents, searchPlaces } from "./places";
+import { regionExamples } from "./region";
+import { SHOWCASE_COMMUNITY } from "./showcase";
 
 /**
  * The one suite that talks to the **real** ecosystem services — TS-008-A13's
@@ -39,6 +42,7 @@ async function reachable(url: string): Promise<boolean> {
 
 const eventsUp = await reachable(`${eventsApiHost()}/api/stats`);
 const geoUp = (await reachable(`${geoApiHost()}/api/health`)) && geoApiToken() !== undefined;
+const calendarUp = await reachable(`${communitySiteHost()}/`);
 
 beforeEach(() => {
   vi.stubEnv("LIVE_DATA", "auto");
@@ -77,5 +81,70 @@ describe.skipIf(!geoUp)("TS-008-A14 (live): geo-api resolves a ZIP to a communit
       expect(envelope.data.outcome.place.slug).toMatch(/^[a-z0-9-]+$/);
       expect(envelope.data.outcome.place.communityId).toMatch(/^geoname\.\d+$/);
     }
+  });
+});
+
+/**
+ * The tokenless source, live. This block is the evidence behind the claim
+ * the whole live layer now rests on: **a deployment with no read token
+ * still shows real dates**. It needs no credential, so unlike the geo-api
+ * block it actually runs in this environment.
+ */
+describe.skipIf(!calendarUp)("the public village calendar answers without a credential", () => {
+  beforeEach(() => {
+    // Not `real`: the point is what `auto` does in an environment that has
+    // no token, which is the environment every preview is today.
+    vi.stubEnv("LIVE_DATA", "auto");
+    vi.stubEnv("GEOAPI_READ_TOKEN", "");
+    vi.stubEnv("EVENTSAPI_READ_TOKEN", "");
+    vi.stubEnv("LIVE_HTML_TIMEOUT_MS", "8000");
+  });
+
+  it("serves the showcase community's own dates as tier 1, not as demo data", async () => {
+    const envelope = await placeEvents({
+      slug: SHOWCASE_COMMUNITY.slug,
+      rowCount: 3,
+      store: memoryStore(),
+    });
+
+    expect(envelope?.demo).toBe(false);
+    expect(envelope?.tier).toBe("live");
+    expect(envelope?.data.place.name).toBe(SHOWCASE_COMMUNITY.name);
+    for (const event of envelope?.data.events ?? []) {
+      expect(event.placeName).toBe(SHOWCASE_COMMUNITY.name);
+      expect(new Date(event.startsAt).getTime()).toBeGreaterThan(Date.now() - 86_400_000);
+    }
+  });
+
+  it("serves the nearby module from the same source, without the anchor's own place", async () => {
+    const envelope = await nearbyEvents({
+      lat: SHOWCASE_COMMUNITY.lat,
+      lng: SHOWCASE_COMMUNITY.lng,
+      rowCount: 5,
+      store: memoryStore(),
+    });
+
+    expect(envelope.demo).toBe(false);
+    for (const event of envelope.data.events) {
+      expect(event.placeName).not.toBe(SHOWCASE_COMMUNITY.name);
+    }
+  });
+
+  it("ranks the county's active places with slugs a link can use", async () => {
+    const envelope = await regionExamples({
+      county: SHOWCASE_COMMUNITY.county.id,
+      store: memoryStore(),
+    });
+
+    expect(envelope.demo).toBe(false);
+    for (const example of envelope.data.examples) {
+      expect(example.slug).toMatch(/^[a-z0-9-]+$/u);
+    }
+  });
+
+  it("answers a typed name from the committed index, with no network at all", async () => {
+    const envelope = await searchPlaces({ query: "Schlat", store: memoryStore() });
+    expect(envelope.demo).toBe(false);
+    expect(envelope.data.suggestions.map((place) => place.name)).toContain("Schlatkow");
   });
 });

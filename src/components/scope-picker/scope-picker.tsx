@@ -1,5 +1,4 @@
 import { isMocked, isPending, type DataStateProps } from "../data-state";
-import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { Icon } from "../icon/icon";
 import { RouteLink } from "../route-link/route-link";
 import { Skeleton } from "../skeleton/skeleton";
@@ -105,7 +104,6 @@ export function ScopePicker({
         <div className={styles.chips}>{chips}</div>
       )}
       {/* F-2-33: the badge reads the page's language like every other one. */}
-      {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
     </div>
   );
 }

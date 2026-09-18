@@ -1,4 +1,3 @@
-import { DemoDataBadge } from "../demo-data-badge/demo-data-badge";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { FreshnessLabel, type FreshnessTier } from "../freshness-label/freshness-label";
 import { Skeleton } from "../skeleton/skeleton";
@@ -28,7 +27,7 @@ export interface LiveModuleFrameProps extends DataStateProps {
    * hierarchical heading order (TS-002, Web Interface Guidelines).
    */
   readonly headingLevel?: "h2" | "h3";
-  /** The page's language — the `Demo-Daten` badge and the freshness label read it. */
+  /** The page's language — the freshness label reads it. */
   readonly locale?: Locale;
   readonly className?: string;
   readonly children: ReactNode;
@@ -46,11 +45,11 @@ export interface LiveModuleFrameProps extends DataStateProps {
  *              never drift apart;
  *   empty    → the children render the module's own declared conversion —
  *              the frame adds no box, no styling of its own;
- *   degraded → the last cached answer plus `freshness-label` ("Stand: …") or
- *              the build-time snapshot ("Beispiel") — never a spinner, never
- *              an error sentence, never a retry control;
- *   mocked   → the children's dummy data plus `demo-data-badge` in the header,
- *              so the badge is not repeated inside the body.
+ *   degraded → the last cached answer plus `freshness-label` ("Stand: …"),
+ *              or the build-time snapshot with no label at all — never a
+ *              spinner, never an error sentence, never a retry control;
+ *   mocked   → the children's stand-in rows, marked `data-demo="true"` on
+ *              the frame and nowhere in the page.
  * Inherits: radius 0; stands in the `ink` section that carries the live data,
  * once per page.
  * Space: declares the module's final geometry before the data arrives; a
@@ -85,7 +84,6 @@ export function LiveModuleFrame({
           {subline ? <p className={styles.subline}>{subline}</p> : null}
         </div>
         <div className={styles.marks}>
-          {isMocked(state) ? <DemoDataBadge locale={locale} /> : null}
           {state === "degraded" ? <FreshnessLabel locale={locale} tier={tier} updatedAt={updatedAt} /> : null}
         </div>
       </header>

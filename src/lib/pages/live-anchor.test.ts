@@ -24,9 +24,9 @@ describe("resolvePlaceOutcome", () => {
   });
 
   it("answers `covered` for a slug", async () => {
-    const outcome = await resolvePlaceOutcome("beispielwalde");
+    const outcome = await resolvePlaceOutcome("quilow");
     expect(outcome.kind).toBe("covered");
-    expect(outcome.kind === "covered" && outcome.place.name).toBe("Beispielwalde");
+    expect(outcome.kind === "covered" && outcome.place.name).toBe("Quilow");
   });
 
   it("answers `covered` for a postcode that resolves", async () => {
@@ -46,8 +46,8 @@ describe("resolvePlaceOutcome", () => {
   });
 
   it("takes the first value of a repeated parameter", async () => {
-    const outcome = await resolvePlaceOutcome(["beispielwalde", "musterbach"]);
-    expect(outcome.kind === "covered" && outcome.place.slug).toBe("beispielwalde");
+    const outcome = await resolvePlaceOutcome(["quilow", "rubkow"]);
+    expect(outcome.kind === "covered" && outcome.place.slug).toBe("quilow");
   });
 });
 
@@ -57,8 +57,8 @@ describe("resolveLiveAnchor", () => {
   });
 
   it("anchors on a stated place", async () => {
-    const anchor = await resolveLiveAnchor("beispielwalde");
-    expect(anchor.slug).toBe("beispielwalde");
+    const anchor = await resolveLiveAnchor("quilow");
+    expect(anchor.slug).toBe("quilow");
     expect(anchor.stated).toBe(true);
   });
 

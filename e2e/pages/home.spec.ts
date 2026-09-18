@@ -113,21 +113,21 @@ test.describe("TS-019 — home", () => {
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
-    // `07743` resolves to `beispielwalde`, a covered demo place with dates.
+    // `07743` resolves to `quilow`, a covered demo place with dates.
     await page.goto("/?ort=07743");
 
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      "Das ist los in Beispielwalde",
+      "Das ist los in Quilow",
     );
     const dates = page.locator("#place-dates");
-    await expect(dates).toContainText("Beispielwalde");
+    await expect(dates).toContainText("Quilow");
     await expect(dates.locator("article")).toHaveCount(3);
 
     const primary = page.locator('[data-cta="primary"]');
     await expect(primary).toHaveCount(1);
     await expect(primary).toHaveAttribute(
       "href",
-      "https://app.schafe-vorm-fenster.de/beispielwalde",
+      "https://app.schafe-vorm-fenster.de/quilow",
     );
   });
 
@@ -135,27 +135,27 @@ test.describe("TS-019 — home", () => {
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
-    // `38165` resolves to `beispielhausen`, the covered demo place with no dates.
+    // `38165` resolves to `lassan`, the covered demo place with no dates.
     await page.goto("/?ort=38165");
 
     // Position 2 renders under a heading that names its radius, not the place.
     const nearby = page.locator("#nearby");
     await expect(nearby.locator("article").first()).toBeVisible();
     const nearbyHeading = (await nearby.locator("h2").first().innerText()).trim();
-    expect(nearbyHeading).not.toContain("Beispielhausen");
+    expect(nearbyHeading).not.toContain("Lassan");
 
     // A publish-the-first-date CTA targeting the registration route.
     const primary = page.locator('[data-cta="primary"]');
     await expect(primary).toHaveCount(1);
     await expect(primary).toHaveAttribute(
       "href",
-      "/mitmachen/registrieren?ort=beispielhausen",
+      "/mitmachen/registrieren?ort=lassan",
     );
 
     // No text claims dates in that place.
     const dates = (await page.locator("#place-dates").innerText()).trim();
-    expect(dates).not.toMatch(/Das ist los in Beispielhausen/);
-    expect(dates).toContain("Beispielhausen");
+    expect(dates).not.toMatch(/Das ist los in Lassan/);
+    expect(dates).toContain("Lassan");
   });
 
   test("TS-019-A5: an uncovered place typed into the search navigates to /dein-ort/starten?ort=", async ({
@@ -414,7 +414,10 @@ test.describe("TS-019 — home", () => {
     expect(text).not.toMatch(/\bOrte\b|\bplaces\b/i);
     expect(text).not.toMatch(/Aktualisierungen|updates today/i);
     // Exactly one figure badge inside the counter module.
-    await expect(counters.locator("span[data-tone]")).toHaveCount(2); // the figure + its Demo-Daten badge
+    // One badge: the figure. Its `Demo-Daten` twin went with Jan's decision
+    // of 2026-09-18 — the module declares itself in `data-demo` instead, and
+    // `e2e/content-compliance.spec.ts` asserts that half.
+    await expect(counters.locator("span[data-tone]")).toHaveCount(1);
   });
 
   test("SRC-014 §Page Rhythm: photo/colour alternation holds on /", async ({ page }) => {

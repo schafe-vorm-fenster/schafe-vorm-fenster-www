@@ -91,19 +91,13 @@ const PROOF_LABEL: Record<Locale, string> = {
  * (`parseDemoProofElement`).
  */
 const PROOF_CONTEXT_FALLBACK: Record<"demo" | "sourced", Record<Locale, string>> = {
-  demo: { de: "Beispielhafte Rückmeldung", en: "Example feedback" },
+  demo: { de: "Rückmeldung", en: "Feedback" },
   sourced: { de: "Rückmeldung", en: "Feedback" },
 };
 
 const GEO_SNAPSHOT_LABEL: Record<"demo" | "sourced", Record<Locale, string>> = {
-  demo: { de: "Beispiel", en: "Example" },
+  demo: { de: "Beleg", en: "Reference" },
   sourced: { de: "Beleg", en: "Reference" },
-};
-
-/** SRC-001 §4: an unfilled position weakens the claim, it never shortens the stream. */
-const MISSING_PROOF: Record<Locale, string> = {
-  de: "Für diese Aussage ist noch kein freigegebener Beleg hinterlegt.",
-  en: "No cleared proof is on file for this claim yet.",
 };
 
 export default async function Page({
@@ -232,9 +226,6 @@ export default async function Page({
         <ObjectionList
           headline={fieldAt(objections.blocks, 0) ?? ""}
           items={listItems(objections.blocks).map(splitObjection)}
-          // F-3-15: without it the block's own empty proof slot rendered
-          // "KEIN NACHWEIS" and a German sentence on `/en/take-part`.
-          locale={locale}
         />
       </SectionShell>
 
@@ -316,11 +307,7 @@ export default async function Page({
                 state={entry.state}
               />
             ) : (
-              <EmptyProofSlot
-                key={`empty-${position}`}
-                locale={locale}
-                sentence={MISSING_PROOF[locale]}
-              />
+              <EmptyProofSlot key={`empty-${position}`} />
             ),
           )}
         </ProofStream>

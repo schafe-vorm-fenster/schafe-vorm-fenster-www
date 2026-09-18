@@ -72,8 +72,6 @@ const INVENTORY = [
   // ── §2.6 placeholders, states, errors ──
   "skeleton",
   "placeholder-surface",
-  "placeholder-badge",
-  "demo-data-badge",
   "freshness-label",
   "status-badge",
   "error-page",
@@ -99,7 +97,7 @@ const DATA_DEPENDENT = [
 ] as const;
 
 describe("Q-044: the M2 component set is complete and named as the inventory names it", () => {
-  it("carries all 63 components of sections 2.1–2.6, in inventory order", () => {
+  it("carries all 61 components of sections 2.1–2.6, in inventory order", () => {
     expect(GALLERY.map((entry) => entry.name)).toEqual([...INVENTORY]);
   });
 
@@ -130,8 +128,13 @@ describe("D-9: every data-dependent component declares all four states", () => {
     }
   });
 
-  it("marks mocked data with the `Demo-Daten` badge (mock rule)", () => {
-    expect(html).toContain("Demo-Daten");
+  // Jan, 2026-09-18: the marking left the page. A mocked module carries
+  // `data-demo`/`data-mock` and nothing a visitor can read or hear.
+  it("marks mocked data in `data-*`, never in the rendered text (mock rule)", () => {
+    expect(html).toMatch(/data-(demo|mock)="true"/);
+    for (const word of ["Demo-Daten", "Demo data", "Foto gesucht", "Photo wanted", "Kein Nachweis", "No evidence", "Nicht motivgenau", "Platzhalter"]) {
+      expect(html, word).not.toContain(word);
+    }
   });
 
   it("shows no spinner, no error sentence and no retry control", () => {

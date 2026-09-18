@@ -1,6 +1,5 @@
 import { ArchiveFilter } from "@/src/components/archive-filter/archive-filter";
 import { ArchiveRow } from "@/src/components/archive-row/archive-row";
-import { DemoDataBadge } from "@/src/components/demo-data-badge/demo-data-badge";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
@@ -148,11 +147,6 @@ export default async function Page({
       <SectionShell labelledBy="archiv-h1" surface="paper">
         <MotionReveal>
           <h1 id="archiv-h1">{fieldAt(heading.blocks, 0) ?? "Archiv"}</h1>
-          {/* F-2-33: the badge takes the page's language, or it reads
-              "Demo-Daten" on `/en/about/archive`. Rendered only when the slot
-              itself is demo (state/open.md row 109/row 162) — today it is not: all
-              31 rows are real, sourced media-echo entries. */}
-          {demo ? <DemoDataBadge locale={locale} /> : null}
 
           <ArchiveFilter locale={locale} types={filterTypes}>
             {[...byYear.entries()].map(([year, yearRows]) => (

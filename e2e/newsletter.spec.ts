@@ -27,7 +27,7 @@ test.describe("F-3-11: the newsletter mock confirms, and keeps the page", () => 
     const urlBefore = page.url();
 
     const firstQuoteField = page.locator('form[data-envoy-state] input[type="text"]').first();
-    await firstQuoteField.fill("Beispielgemeinde Musterdorf");
+    await firstQuoteField.fill("Schlatkow");
 
     await page.locator("#newsletter-email").fill("jemand@beispiel.de");
     await page.locator(NEWSLETTER_SUBMIT).click();
@@ -36,11 +36,11 @@ test.describe("F-3-11: the newsletter mock confirms, and keeps the page", () => 
     // the address bar is untouched.
     await expect(page.locator('[data-newsletter] [role="status"]')).toBeVisible();
     expect(page.url()).toBe(urlBefore);
-    await expect(firstQuoteField).toHaveValue("Beispielgemeinde Musterdorf");
+    await expect(firstQuoteField).toHaveValue("Schlatkow");
   });
 
   test("does not reset a flow route's step", async ({ page }) => {
-    await page.goto("/mitmachen/registrieren?ort=beispielwalde&wer=gemeinde");
+    await page.goto("/mitmachen/registrieren?ort=quilow&wer=gemeinde");
     const urlBefore = page.url();
 
     await page.locator("#newsletter-email").fill("jemand@beispiel.de");

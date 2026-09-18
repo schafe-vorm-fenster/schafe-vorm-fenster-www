@@ -6,7 +6,7 @@
  * content playbook wrote the prototype's stand-ins **into the artifact**, as
  * a `demo: true` slot with a numbered list — one line per card:
  *
- *     „Endlich sehen wir …" — Ehrenamtliche Bürgermeisterin, Beispielgemeinde Musterdorf
+ *     „Endlich sehen wir …" — Ehrenamtliche Bürgermeisterin, Schlatkow
  *
  * A page must not re-type those sentences, and it must not invent the split
  * between the claim and who says it. This is that split, in one tested
@@ -35,7 +35,7 @@ const QUOTES = /^[„“"«»]+|[”“"«»]+$/g;
  * - the **last** ` — ` separates the claim from its attribution, so an em
  *   dash inside the sentence stays inside the sentence;
  * - the attribution's first `, ` separates who from where — "Ehrenamtliche
- *   Bürgermeisterin, Beispielgemeinde Musterdorf";
+ *   Bürgermeisterin, Schlatkow";
  * - a line with no attribution at all (an award, say) keeps `fallbackContext`
  *   as its context line rather than repeating itself.
  */
