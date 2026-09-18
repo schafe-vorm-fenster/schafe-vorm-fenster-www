@@ -25,7 +25,41 @@ const CALENDAR = href("calendar", "de");
 const ALLOWED_HOSTS = new Set(Object.values(ALLOWLIST).map((url) => new URL(url).host));
 const VERCEL_PREVIEW_HOST = /\.vercel\.app$/;
 
+/**
+ * Vercel's preview toolbar (`vercel.live`) is injected by the platform into
+ * every `*.vercel.app` response and is refused by the application's own CSP,
+ * which logs a console error the application did not cause. `privacy.spec.ts`
+ * makes the same exception for the same host and the same reason.
+ */
+const PLATFORM_NOISE = /vercel\.live/;
+
+const BYPASS = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+
 test.describe("the embed frame", () => {
+  /**
+   * **No bypass header on this context**, and the reason is the embed itself.
+   *
+   * Vercel's Deployment Protection is normally passed with
+   * `x-vercel-protection-bypass`, which Playwright then sends on *every*
+   * request — including the cross-origin module the Portalize loader fetches.
+   * That turns a simple request into a preflighted one, the widget host does
+   * not list the header in `Access-Control-Allow-Headers`, and the module is
+   * refused. A real visitor sends no such header, so the failure would be the
+   * harness's and not the product's.
+   *
+   * The cookie form of the same bypass has no such effect: it is set once, on
+   * this site's own origin, and travels with same-origin requests only.
+   */
+  test.use({ extraHTTPHeaders: {} });
+
+  test.beforeEach(async ({ page, baseURL }) => {
+    if (BYPASS === undefined || baseURL === undefined) return;
+    if (!VERCEL_PREVIEW_HOST.test(new URL(baseURL).host)) return;
+    await page.goto(
+      `/?x-vercel-protection-bypass=${encodeURIComponent(BYPASS)}&x-vercel-set-bypass-cookie=true`,
+    );
+  });
+
   test("the mount carries what the loader needs, and reserves its height", async ({ page }) => {
     await page.goto(CALENDAR);
 
@@ -74,13 +108,17 @@ test.describe("the embed frame", () => {
       }
       if (url.protocol !== "http:" && url.protocol !== "https:") return;
       if (url.host === ownHost) return;
-      if (isPreview && url.host === "vercel.live") return;
+      if (isPreview && PLATFORM_NOISE.test(url.host)) return;
       if (!ALLOWED_HOSTS.has(url.host)) offenders.add(`${url.host} (${request.url()})`);
     });
     page.on("console", (message) => {
-      if (message.type() === "error") errors.push(message.text());
+      if (message.type() === "error" && !PLATFORM_NOISE.test(message.text())) {
+        errors.push(message.text());
+      }
     });
-    page.on("pageerror", (error) => errors.push(error.message));
+    page.on("pageerror", (error) => {
+      if (!PLATFORM_NOISE.test(error.message)) errors.push(error.message);
+    });
 
     await page.goto(CALENDAR);
     await page.locator("[data-portalize-widget]").scrollIntoViewIfNeeded();
