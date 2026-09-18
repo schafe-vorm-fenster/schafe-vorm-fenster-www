@@ -48,63 +48,55 @@ images:
   - id: deine-region-hero
     slot: deine-region-1-focus
     ratio: hero
-    provenance: generated
-    brief: >-
-      Weiter Blick vom Rand einer vorpommerschen Kreisstadt über das Umland, früher Abend im August:
-      Wohnblocks und ein Kirchturm im Mittelgrund, dahinter Felder, Windräder und mehrere Dörfer am
-      Horizont. Tiefes Abendlicht, gestreifte Wolken, gedeckte Farben. Menschen nur winzig auf einem
-      Feldweg. Nicht zeigen: Schrift, Logos, lesbare Schilder, Gesichter — und nichts Kartenartiges:
-      keine Draufsicht, keine Umrisse, keine eingezeichneten Grenzen oder Marker (TS-026 D3).
-    style: documentary photo, natural light, 35mm, muted colours, no text
-    alt: Blick vom Rand einer Kreisstadt über Felder und Windräder auf mehrere Dörfer am Horizont.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: ed800a796b43916c
-    file: /images/generated/deine-region-hero.webp
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Güterberg, Ausblick.jpg —
+      https://commons.wikimedia.org/wiki/File:G%C3%BCterberg,_Ausblick.jpg — Eigenaufnahme von
+      Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3563×2231.
+      Nachweis: content/legal/image-credits.md.
+    alt: Blick über Felder bei Güterberg bis zum Horizont, dort Baumreihen, Dächer und Windräder.
+    licence: CC0 1.0
+    status: real
+    file: /images/real/deine-region-hero.webp
     width: 800
     height: 900
-    wide_file: /images/generated/deine-region-hero-wide.webp
+    wide_file: /images/real/deine-region-hero-wide.webp
     wide_width: 1400
     wide_height: 600
   - id: deine-region-gebietsschnitt
     slot: deine-region-5-was-dazukommt
     ratio: feature
-    provenance: generated
-    brief: >-
-      Ortsausgang an einer Kreisstraße im Novembernebel, kurz nach Sonnenaufgang: eine Baumreihe,
-      ein Feldweg zweigt ab, das nächste Dorf verschwindet im Dunst. Kühle, gedeckte Farben, kein
-      harter Kontrast. Kein Mensch im Bild. Nicht zeigen: Schrift, Logos, lesbare Ortsschilder — und
-      nichts Kartenartiges: keine Draufsicht, keine Grenzen, keine Marker (TS-026 D3).
-    style: documentary photo, natural light, 35mm, muted colours, no text
-    alt: Ortsausgang an einer Kreisstraße im Novembernebel, dahinter ein weiteres Dorf im Dunst.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: f0c65bdaa69bddf1
-    file: /images/generated/deine-region-gebietsschnitt.webp
-    width: 1190
-    height: 850
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Carolinenthal, Ortseingang.jpg —
+      https://commons.wikimedia.org/wiki/File:Carolinenthal,_Ortseingang.jpg — Eigenaufnahme von
+      Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 4032×3024.
+      Nachweis: content/legal/image-credits.md.
+    alt: >-
+      Kopfsteinpflasterstraße am Ortseingang von Carolinenthal, daneben das gelbe Ortsschild unter
+      einer Baumreihe.
+    licence: CC0 1.0
+    status: real
+    file: /images/real/deine-region-gebietsschnitt.webp
+    width: 1400
+    height: 1000
   - id: deine-region-angebot-hero
     slot: deine-region-angebot-1-form
     ratio: hero
-    provenance: generated
-    brief: >-
-      Schreibtisch in einem Amtszimmer am Vormittag, leicht schräge Aufsicht: ein aufgeschlagener
-      Ringordner, ein Kaffeebecher, ein Kugelschreiber, Tageslicht von der Seite durch ein
-      Sprossenfenster. Papier und Holz in gedeckten Tönen, ein bisschen Unordnung. Die Seiten im
-      Ordner sind unscharf. Nicht zeigen: Schrift, Logos, Gesichter, Bildschirminhalte, einen
-      aufgeräumten Werbeschreibtisch.
-    style: documentary photo, natural light, 35mm, muted colours, no text
-    alt: Aufgeschlagener Ordner, Kaffeebecher und Kugelschreiber auf einem Schreibtisch am Fenster.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: f6291bf2030c74df
-    file: /images/generated/deine-region-angebot-hero.webp
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/brand-identity@0.1.4#imagery/office/2020-07-loft-office-02.jpeg —
+      Eigenaufnahme (Jan-Henrik Hempel), unbeschränkte Nutzung, kein Credit nötig. Binärdatei liegt
+      im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
+    alt: >-
+      Zwei Schreibtische in einem Dachbüro mit historischen Holzbalken, heller Dielenboden, Fenster
+      zur Seite.
+    licence: Eigenaufnahme, unbeschränkte Nutzung
+    status: real
+    file: /images/real/deine-region-angebot-hero.webp
     width: 800
     height: 900
-    wide_file: /images/generated/deine-region-angebot-hero-wide.webp
+    wide_file: /images/real/deine-region-angebot-hero-wide.webp
     wide_width: 1400
     wide_height: 600
 ---
@@ -153,13 +145,13 @@ Moduls (TS-026 D3).
 
 <!-- id: deine-region-3-interim; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Überschrift:** So sieht das heute schon aus: Beispiele aus dem Landkreis {landkreis}
+**Überschrift:** So sieht das heute schon aus: Orte im Landkreis {landkreis}
 
 **Zähler-Label (nur wenn belegt):** {n} Orte im Landkreis sind dabei
 
 **Sucheingabe (Placeholder):** Dein Ort
 
-Höchstens 6 Beispielorte, immer als „Beispiele" beschriftet — nie als
+Höchstens 6 Orte, als gestaltete Auswahl — nie als
 „die aktivsten Orte" und nie als vollständige Liste (TS-026 D4). Der
 Zähler rendert nur, wenn `/api/stats` den Wert tatsächlich liefert
 (Q-037) — sonst bleibt er weg, keine Schätzung.
@@ -168,7 +160,7 @@ Zähler rendert nur, wenn `/api/stats` den Wert tatsächlich liefert
 
 <!-- id: deine-region-4-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Überschrift:** So sieht die Einbindung aus: ein Beispiel
+**Überschrift:** So sieht die Einbindung aus
 
 Dieselbe Komponente wie auf `/dein-kalender` Slot 3 (TS-008 Position 1′).
 

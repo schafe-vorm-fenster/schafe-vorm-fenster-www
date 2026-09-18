@@ -78,6 +78,7 @@ const REAL = `images:
     source: "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
     alt: "Jan-Henrik Hempel"
     credit: "@rightvisionstudios & NØRD2026"
+    licence: "free use, credit required"
     lcp: true
     status: real
     file: /images/real/founder.webp

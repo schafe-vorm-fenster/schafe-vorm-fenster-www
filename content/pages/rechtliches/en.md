@@ -17,7 +17,7 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — page-level composition/navigation copy only; the six sections themselves are content/legal/*.md, imported (5, DE only today) or generated-pending-counsel (1, accessibility, DE only today); EN translation of content/pages/rechtliches/de.md frame copy — the five imported legal documents themselves are NOT translated here, see slot 5"
+provenance: "sourced — page-level composition/navigation copy only; the seven sections themselves are content/legal/*.md, imported (5, DE only today), generated-pending-counsel (1, accessibility, DE only today) or maintained here (1, image credits, DE only today); EN translation of content/pages/rechtliches/de.md frame copy — the five imported legal documents themselves are NOT translated here, see slot 5"
 compliance_check: "state/content-map.md#compliance-checks — TS-029"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 open_points:
@@ -28,7 +28,7 @@ open_points:
 # Legal (`/legal`)
 
 This file supplies **only** the page-frame copy (h1, navigation label,
-footer link text). The six sections themselves come from
+footer link text). The seven sections themselves come from
 `content/legal/*.md` via import (TS-007 D10) — this playbook does not
 rewrite legal text, it references it (repository working rule / the
 Content & Translation role's "Must not: touch code outside content
@@ -57,6 +57,7 @@ translation.
 | `#community-guidelines` | Community guidelines | `content/legal/community-guidelines.md` (imported, German text) |
 | `#data-processing` | Data processing agreement (DPA) | `content/legal/dpa.md` (imported, public, no access gate, German text) |
 | `#accessibility` | Accessibility | `content/legal/accessibility.md` (generated, see below, German text) |
+| `#image-credits` | Image credits | `content/legal/image-credits.md` (maintained in this repository, mirrors the `images:` blocks, German text) |
 
 ## Footer link text
 

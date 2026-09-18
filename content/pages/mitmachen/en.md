@@ -42,76 +42,70 @@ images:
   - id: mitmachen-hero
     slot: mitmachen-1-hero
     ratio: hero
-    provenance: generated
-    brief: >-
-      Zwei Hände halten ein Smartphone über einen ausgedruckten Aushang, der auf einem Küchentisch
-      liegt, und fotografieren ihn. Morgenlicht von der Seite, Wachstuchdecke, eine Kaffeetasse am
-      Bildrand. Zu sehen sind nur Hände und Unterarme. Nicht zeigen: Gesichter, Schrift, Logos,
-      einen lesbaren Aushang, eine erkennbare App-Oberfläche, eine Gerätemarke.
-    style: documentary photo, natural light, 35mm, muted colours, no text
-    alt: Hands photographing a printed flyer on a kitchen table with a smartphone.
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Osterfeuer 2023 in Schmatzin.jpg —
+      https://commons.wikimedia.org/wiki/File:Osterfeuer_2023_in_Schmatzin.jpg — Eigenaufnahme
+      (Jan-Henrik Hempel), April 2023, 5526×2378. Öffentliche Dorfveranstaltung, Menschen nur klein
+      und aus der Entfernung. Nachweis: content/legal/image-credits.md.
+    alt: >-
+      The Easter bonfire in Schmatzin: people at trestle tables on the meadow, bare trees and the
+      village behind them.
     lcp: true
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: 3159feabef6ae676
-    file: /images/generated/mitmachen-hero.webp
+    licence: CC BY-SA 4.0
+    status: real
+    file: /images/real/mitmachen-hero.webp
     width: 800
     height: 900
-    wide_file: /images/generated/mitmachen-hero-wide.webp
+    wide_file: /images/real/mitmachen-hero-wide.webp
     wide_width: 1400
     wide_height: 600
   - id: mitmachen-path-whatsapp
     slot: mitmachen-3-path-whatsapp
     ratio: feature
-    provenance: generated
-    brief: >-
-      Ein gefalteter Aushang klemmt unter einem Kühlschrankmagneten, daneben liegt ein Smartphone
-      mit dunklem Display auf der Arbeitsplatte. Abendlicht aus dem Fenster, warme, gedeckte Töne,
-      eine gebrauchte Küche. Kein Mensch im Bild. Nicht zeigen: Schrift, Logos, einen lesbaren
-      Zettel, eine App-Oberfläche auf dem Display.
-    style: documentary photo, natural light, 35mm, muted colours, no text
-    alt: A folded flyer under a fridge magnet, a smartphone lying beside it on the counter.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: e4a9a7e26804d17c
-    file: /images/generated/mitmachen-path-whatsapp.webp
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Werbelow, Bushaltestelle.jpg —
+      https://commons.wikimedia.org/wiki/File:Werbelow,_Bushaltestelle.jpg — Eigenaufnahme von
+      Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3561×2409.
+      Nachweis: content/legal/image-credits.md.
+    alt: >-
+      A bus stop against a fieldstone wall in Werbelow, two notices taped to the wall, a bench and
+      flower pots in front.
+    licence: CC0 1.0
+    status: real
+    file: /images/real/mitmachen-path-whatsapp.webp
     width: 1400
     height: 1000
   - id: mitmachen-path-calendar
     slot: mitmachen-4-path-calendar
     ratio: feature
-    provenance: generated
-    brief: >-
-      Papier-Wandkalender in einem Vereinsraum, an einer Schnur hängt ein Kugelschreiber daneben. In
-      einigen Kästchen stehen handschriftliche Einträge, zu klein und zu unscharf, um sie zu lesen.
-      Bedeckter Nachmittag, Neonlicht mischt sich mit Tageslicht. Nicht zeigen: Schrift, Logos,
-      lesbare Einträge, eine Jahreszahl, Menschen.
-    style: documentary photo, natural light, 35mm, muted colours, no text
-    alt: A paper wall calendar in a club room, a pen hanging beside it on a string.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: fe443745feadacdf
-    file: /images/generated/mitmachen-path-calendar.webp
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Dorftreffpunkt, Schmatzin, Deutschland.jpeg —
+      https://commons.wikimedia.org/wiki/File:Dorftreffpunkt,_Schmatzin,_Deutschland.jpeg —
+      Eigenaufnahme (Jan-Henrik Hempel, Commons-Konto „J2hcom", own work), Mai 2020, 4032×3024.
+      Nachweis: content/legal/image-credits.md.
+    alt: >-
+      The village meeting place in Schmatzin in the evening: a meadow with an old tree, a fire pit
+      and a place to sit.
+    licence: CC BY-SA 4.0
+    status: real
+    file: /images/real/mitmachen-path-calendar.webp
     width: 1400
     height: 1000
   - id: mitmachen-path-website
     slot: mitmachen-5-path-website
     ratio: feature
-    provenance: generated
-    brief: >-
-      Ein zugeklappter Laptop steht auf einem Holztisch im Vereinsheim, daneben ein Stapel Papiere
-      und eine Lesebrille. Nachmittagslicht durch ein Fenster mit Gardine, staubige, warme Farben.
-      Kein Mensch im Bild. Nicht zeigen: Schrift, Logos, eine Gerätemarke, Bildschirminhalt.
-    style: documentary photo, natural light, 35mm, muted colours, no text
-    alt: A closed laptop, a stack of papers, and reading glasses on a wooden table in a club room.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: 094b0f74d2346284
-    file: /images/generated/mitmachen-path-website.webp
+    provenance: real
+    source: >-
+      @schafe-vorm-fenster/brand-identity@0.1.4#imagery/office/2020-07-loft-office-01.jpeg —
+      Eigenaufnahme (Jan-Henrik Hempel), unbeschränkte Nutzung, kein Credit nötig. Binärdatei liegt
+      im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
+    alt: A desk with a monitor, a laptop and papers in an attic office with historic timber beams.
+    licence: Eigenaufnahme, unbeschränkte Nutzung
+    status: real
+    file: /images/real/mitmachen-path-website.webp
     width: 1400
     height: 1000
 ---

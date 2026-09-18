@@ -32,23 +32,21 @@ images:
   - id: dein-ort-starten-hero
     slot: dein-ort-starten-1-ack
     ratio: hero
-    provenance: generated
-    brief: >-
-      Gemeindehaus und Feuerwehrgerätehaus an einem Dorfanger im Mai, später Nachmittag: frisch
-      gemähtes Gras, ein Fahnenmast ohne Fahne, Klappstühle an der Hauswand. Weiches Licht, leicht
-      bedeckt, gedeckte Grüntöne. Im Hintergrund tragen zwei Menschen einen Tisch, von hinten und
-      klein im Bild. Nicht zeigen: Schrift, Logos, lesbare Schilder, Gesichter, eine in die Kamera
-      gestellte Vereinsgruppe.
-    style: documentary photo, natural light, 35mm, muted colours, no text
-    alt: Gemeindehaus am Dorfanger im Frühling, davor Klappstühle an der Wand.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: 2a2d1632066f7151
-    file: /images/generated/dein-ort-starten-hero.webp
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Groß Luckow, Feuerwehr und Gemeindezentrum.jpg —
+      https://commons.wikimedia.org/wiki/File:Gro%C3%9F_Luckow,_Feuerwehr_und_Gemeindezentrum.jpg —
+      Eigenaufnahme von Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025,
+      3914×2281. Nachweis: content/legal/image-credits.md.
+    alt: >-
+      Gerätehaus der Freiwilligen Feuerwehr und das Gemeindezentrum von Groß Luckow, dahinter der
+      Kirchturm.
+    licence: CC0 1.0
+    status: real
+    file: /images/real/dein-ort-starten-hero.webp
     width: 800
     height: 900
-    wide_file: /images/generated/dein-ort-starten-hero-wide.webp
+    wide_file: /images/real/dein-ort-starten-hero-wide.webp
     wide_width: 1400
     wide_height: 600
 ---
@@ -92,15 +90,15 @@ danach bleiben." Der Offering-Datensatz nennt das ausdrücklich eine
 öffentliche Zusage und keine Preisentscheidung, die sich still
 zurücknehmen lässt (dieselbe Zusicherung wie `/dein-ort` Slot 8).
 
-## Slot 3 — Live-Beispiel, nächster aktiver Ort
+## Slot 3 — Live-Modul, nächster aktiver Ort
 
 <!-- id: dein-ort-starten-3-beispiel; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Modul-Überschrift:** So sieht das zum Beispiel aus — in {beispielort}
+**Modul-Überschrift:** So läuft das anderswo — in {beispielort}
 
-**Hinweis:** Beispiel, nicht {ort}. {ort} selbst taucht in diesem Modul nirgends als Daten auf.
+**Hinweis:** {ort} steht noch nicht im Kalender. {ort} selbst taucht in diesem Modul nirgends als Daten auf.
 
-Der Ortsname im Beispiel kommt aus einem tatsächlich abgedeckten, aktiven
+Der gezeigte Ortsname kommt aus einem tatsächlich abgedeckten, aktiven
 Ort (TS-021 D7) — nie aus dem gesuchten, nicht gefundenen Ort.
 
 ## Slot 4 — Wer das meistens anstößt

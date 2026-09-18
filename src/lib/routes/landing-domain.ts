@@ -62,36 +62,35 @@ const ASSET_EXTENSIONS = [
  * Until the imagery workstream the list was empty and `public/` did not
  * exist: every asset was a package subpath import that Next emits under
  * `/_next/static/`. TS-017-A6 still forbids committing a logo, a mark or a
- * font file here — what `public/images/` holds is photography: the
- * model-generated placeholders of DEC-077, written by
- * `pnpm images:generate`, and the cleared photographs of
- * `@schafe-vorm-fenster/people`, whose npm package ships the `.asset.md`
- * descriptor but not the binary.
+ * font file here — what `public/images/` holds is photography, and since the
+ * photo round it holds **only** photography: `public/images/generated/` is
+ * gone with the 21 model renditions of DEC-077, and every path below is a
+ * real photograph with a named rights holder (`content/legal/image-credits.md`).
  */
 const PUBLIC_FILES: readonly string[] = [
-  "/images/generated/dein-kalender-hero-wide.webp",
-  "/images/generated/dein-kalender-hero.webp",
-  "/images/generated/dein-ort-hero-wide.webp",
-  "/images/generated/dein-ort-hero.webp",
-  "/images/generated/dein-ort-starten-hero-wide.webp",
-  "/images/generated/dein-ort-starten-hero.webp",
-  "/images/generated/deine-region-angebot-hero-wide.webp",
-  "/images/generated/deine-region-angebot-hero.webp",
-  "/images/generated/deine-region-gebietsschnitt.webp",
-  "/images/generated/deine-region-hero-wide.webp",
-  "/images/generated/deine-region-hero.webp",
-  "/images/generated/home-hero-wide.webp",
-  "/images/generated/home-hero.webp",
-  "/images/generated/home-scene-embed.webp",
-  "/images/generated/mitmachen-hero-wide.webp",
-  "/images/generated/mitmachen-hero.webp",
-  "/images/generated/mitmachen-path-calendar.webp",
-  "/images/generated/mitmachen-path-website.webp",
-  "/images/generated/mitmachen-path-whatsapp.webp",
-  "/images/generated/ueber-uns-hero-wide.webp",
-  "/images/generated/ueber-uns-hero.webp",
+  "/images/real/dein-kalender-hero-wide.webp",
+  "/images/real/dein-kalender-hero.webp",
+  "/images/real/dein-ort-hero-wide.webp",
+  "/images/real/dein-ort-hero.webp",
+  "/images/real/dein-ort-starten-hero-wide.webp",
+  "/images/real/dein-ort-starten-hero.webp",
+  "/images/real/deine-region-angebot-hero-wide.webp",
+  "/images/real/deine-region-angebot-hero.webp",
+  "/images/real/deine-region-gebietsschnitt.webp",
+  "/images/real/deine-region-hero-wide.webp",
+  "/images/real/deine-region-hero.webp",
+  "/images/real/home-hero-wide.webp",
+  "/images/real/home-hero.webp",
+  "/images/real/home-scene-embed.webp",
   "/images/real/home-scene-provenance.webp",
+  "/images/real/mitmachen-hero-wide.webp",
+  "/images/real/mitmachen-hero.webp",
+  "/images/real/mitmachen-path-calendar.webp",
+  "/images/real/mitmachen-path-website.webp",
+  "/images/real/mitmachen-path-whatsapp.webp",
   "/images/real/ueber-uns-founder-portrait.webp",
+  "/images/real/ueber-uns-hero-wide.webp",
+  "/images/real/ueber-uns-hero.webp",
   "/images/real/ueber-uns-team-jan-henrik-hempel.webp",
 ];
 

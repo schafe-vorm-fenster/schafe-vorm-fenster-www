@@ -500,6 +500,19 @@ export const ImageEntrySchema = z
     /** Credit line, where the asset's rights require one to be rendered. */
     credit: z.string().min(1).optional(),
     /**
+     * The licence the asset is used under, as its rights holder spells it —
+     * `CC0`, `CC BY-SA 4.0`, `Eigenaufnahme` for own material.
+     *
+     * Required for every `provenance: real` entry, because a real photograph
+     * is somebody's work and the terms are what make it usable: CC BY and
+     * CC BY-SA oblige the site to attribute, and the obligation has to be
+     * readable off the inventory rather than looked up per file. The
+     * attribution itself is rendered once, on `/rechtliches`
+     * (`content/legal/image-credits.md`), never as a caption on the
+     * photograph — except where `credit` says the rights holder demands one.
+     */
+    licence: z.string().min(1).optional(),
+    /**
      * Set on the one image per route that TS-003 D2 declares the LCP element.
      * It is the only image that may be `priority`.
      */
@@ -543,6 +556,17 @@ export const ImageEntrySchema = z
         code: "custom",
         path: ["source"],
         message: "`provenance: real` must name a source (DEC-068 guardrail 3)",
+      });
+    }
+    // Only once the asset is actually placed: an entry that is still
+    // `status: needed` is a slot waiting for a photograph whose rights are,
+    // by definition, not settled yet. A placed one has no such excuse.
+    if (entry.provenance === "real" && entry.status === "real" && !entry.licence) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["licence"],
+        message:
+          "a placed real photograph must name its `licence` — CC BY/BY-SA oblige the site to attribute (content/legal/image-credits.md)",
       });
     }
     if (entry.provenance === "generated" && !entry.brief) {

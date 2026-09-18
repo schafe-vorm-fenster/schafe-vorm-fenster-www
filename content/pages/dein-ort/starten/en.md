@@ -32,23 +32,21 @@ images:
   - id: dein-ort-starten-hero
     slot: dein-ort-starten-1-ack
     ratio: hero
-    provenance: generated
-    brief: >-
-      Gemeindehaus und Feuerwehrgerätehaus an einem Dorfanger im Mai, später Nachmittag: frisch
-      gemähtes Gras, ein Fahnenmast ohne Fahne, Klappstühle an der Hauswand. Weiches Licht, leicht
-      bedeckt, gedeckte Grüntöne. Im Hintergrund tragen zwei Menschen einen Tisch, von hinten und
-      klein im Bild. Nicht zeigen: Schrift, Logos, lesbare Schilder, Gesichter, eine in die Kamera
-      gestellte Vereinsgruppe.
-    style: documentary photo, natural light, 35mm, muted colours, no text
-    alt: A village hall on the green in spring, folding chairs leaning against the wall.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: 2a2d1632066f7151
-    file: /images/generated/dein-ort-starten-hero.webp
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Groß Luckow, Feuerwehr und Gemeindezentrum.jpg —
+      https://commons.wikimedia.org/wiki/File:Gro%C3%9F_Luckow,_Feuerwehr_und_Gemeindezentrum.jpg —
+      Eigenaufnahme von Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025,
+      3914×2281. Nachweis: content/legal/image-credits.md.
+    alt: >-
+      The volunteer fire station and the community centre of Groß Luckow, the church tower behind
+      them.
+    licence: CC0 1.0
+    status: real
+    file: /images/real/dein-ort-starten-hero.webp
     width: 800
     height: 900
-    wide_file: /images/generated/dein-ort-starten-hero-wide.webp
+    wide_file: /images/real/dein-ort-starten-hero-wide.webp
     wide_width: 1400
     wide_height: 600
 ---
@@ -93,15 +91,15 @@ es auch danach bleiben." The offering record calls that a public
 commitment rather than a pricing decision that can be quietly reversed
 (the same commitment as `/dein-ort` slot 8).
 
-## Slot 3 — Live example, nearest active place
+## Slot 3 — Live module, nearest active place
 
 <!-- id: dein-ort-starten-3-beispiel; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Module heading:** Here's what that looks like, for example — in {example_place}
+**Module heading:** Here's how it runs elsewhere — in {example_place}
 
-**Note:** Example, not {place}. {place} itself never appears as data in this module.
+**Note:** {place} isn't in the calendar yet. {place} itself never appears as data in this module.
 
-The place name in the example comes from an actually covered, active
+The place name shown comes from an actually covered, active
 place (TS-021 D7) — never from the searched-for, not-found place.
 
 ## Slot 4 — Who usually starts it

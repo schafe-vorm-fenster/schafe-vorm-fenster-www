@@ -45,25 +45,21 @@ images:
   - id: dein-ort-hero
     slot: dein-ort-1-state-a
     ratio: hero
-    provenance: generated
-    brief: >-
-      Dorfstraße in Vorpommern an einem klaren Morgen im Oktober, leicht erhöhter Blickwinkel:
-      Alleebäume, Vorgärten, ein Bushäuschen, in der Ferne ein Kirchturm. Flaches Seitenlicht, der
-      Asphalt ist noch feucht von der Nacht. Weit hinten schiebt jemand ein Fahrrad, von hinten
-      aufgenommen. Nicht zeigen: Schrift, Logos, lesbare Orts- oder Nummernschilder, erkennbare
-      Gesichter, Drohnenperspektive.
-    style: documentary photo, natural light, 35mm, muted colours, no text
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Dargitz, Bushaltestelle.jpg —
+      https://commons.wikimedia.org/wiki/File:Dargitz,_Bushaltestelle.jpg — Eigenaufnahme von Schafe
+      vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3272×2286. Nachweis:
+      content/legal/image-credits.md.
     alt: >-
-      A village street lined with trees and a bus shelter on a clear autumn morning, a church tower
-      in the distance.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: 4c48080b6b86b3ed
-    file: /images/generated/dein-ort-hero.webp
+      A bus stop with a planted shelter on the village street in Dargitz, the church tower behind
+      it.
+    licence: CC0 1.0
+    status: real
+    file: /images/real/dein-ort-hero.webp
     width: 800
     height: 900
-    wide_file: /images/generated/dein-ort-hero-wide.webp
+    wide_file: /images/real/dein-ort-hero-wide.webp
     wide_width: 1400
     wide_height: 600
   - id: dein-ort-homescreen-ios
@@ -106,14 +102,14 @@ block 1's offer text changes.
 
 **Module heading (own radius, no place name):** This week nearby
 
-**Example badge on the module:** Example place
+**Geo badge on the module:** From the region
 
 **Hint below the search field:** Searching by place name is still to come — until then a postcode does it.
 
 Stage 0 names no place because none is known. The page therefore claims
-nothing about a place; it shows the search and an example module that is
-marked as an example. States A and B (slots 1 and 2) only start once a
-place is settled.
+nothing about a place; it shows the search and a module from the region
+whose radius is named in the badge. States A and B (slots 1 and 2) only
+start once a place is settled.
 
 ## Slot 1 — Focus block, state A (dates exist)
 

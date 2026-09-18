@@ -46,8 +46,26 @@ describe("ImageEntrySchema", () => {
       provenance: "real",
       status: "real",
       source: "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel",
+      licence: "Eigenaufnahme, unbeschränkte Nutzung",
     });
     expect(withSource.success).toBe(true);
+  });
+
+  it("requires a licence once a real asset is placed — CC BY/BY-SA oblige the site to attribute", () => {
+    const placed = {
+      ...needed,
+      provenance: "real" as const,
+      status: "real" as const,
+      source: "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel",
+    };
+    expect(ImageEntrySchema.safeParse(placed).success).toBe(false);
+    expect(
+      ImageEntrySchema.safeParse({ ...placed, licence: "CC BY-SA 4.0" }).success,
+    ).toBe(true);
+    // A slot still waiting for its photograph has no rights to state yet.
+    expect(
+      ImageEntrySchema.safeParse({ ...placed, status: "needed" }).success,
+    ).toBe(true);
   });
 
   it("requires a brief for a generated image", () => {

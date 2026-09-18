@@ -40,45 +40,38 @@ images:
   - id: home-hero
     slot: home-1-search-hero
     ratio: hero
-    provenance: generated
-    brief: >-
-      Blick über ein kleines Dorf in Vorpommern am späten Nachmittag im September: Feldsteinkirche,
-      Backsteinscheune, ein Stück Kopfsteinpflaster, dahinter abgeerntete Felder bis zum Horizont.
-      Tiefes, warmes Seitenlicht, bewölkter Himmel, die Sonne selbst bleibt außerhalb des Bildes.
-      Ganz hinten auf der Dorfstraße zwei Menschen, nur als Silhouetten und zu weit weg, um jemanden
-      zu erkennen. Nicht zeigen: Schrift, Logos, lesbare Orts- oder Nummernschilder, Gesichter,
-      Postkartenidylle mit knallblauem Himmel.
-    style: documentary photo, natural light, 35mm, muted colours, no text
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Rathebur, Dorfstraße.jpg —
+      https://commons.wikimedia.org/wiki/File:Rathebur,_Dorfstra%C3%9Fe.jpg — Eigenaufnahme von
+      Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Juni 2025, 4032×2585.
+      Nachweis: content/legal/image-credits.md.
     alt: >-
-      Kleines Dorf in Vorpommern am Nachmittag, Feldsteinkirche und Scheune an einer Dorfstraße,
-      dahinter abgeerntete Felder.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: c39a629351615869
-    file: /images/generated/home-hero.webp
+      Kopfsteinpflasterstraße durch das Dorf Rathebur, links Wohnhäuser, rechts eine Feldsteinmauer
+      und alte Bäume.
+    licence: CC0 1.0
+    status: real
+    file: /images/real/home-hero.webp
     width: 800
     height: 900
-    wide_file: /images/generated/home-hero-wide.webp
+    wide_file: /images/real/home-hero-wide.webp
     wide_width: 1400
     wide_height: 600
   - id: home-scene-embed
     slot: home-5-scene-embed
     ratio: feature
-    provenance: generated
-    brief: >-
-      Schaukasten aus Holz und Glas an einer Backsteinwand, wie ihn Gemeinden und Vereine für
-      Aushänge benutzen: ein paar Zettel hängen schief, eine Ecke ist leer. Bedeckter Vormittag im
-      Frühjahr, weiches Licht, Regenspuren auf der Scheibe. Die Zettel sind unscharf und aus dieser
-      Entfernung nicht zu entziffern. Nicht zeigen: Schrift, Logos, lesbare Aushänge oder Schilder,
-      Menschen, Bildschirme oder Geräte.
-    style: documentary photo, natural light, 35mm, muted colours, no text
-    alt: Hölzerner Schaukasten an einer Backsteinwand, mit ein paar Aushängen und einer freien Ecke.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: 00d6458bd5f2d454
-    file: /images/generated/home-scene-embed.webp
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Guetzkow Ostvorpommern Rathaus.jpg —
+      https://commons.wikimedia.org/wiki/File:Guetzkow_Ostvorpommern_Rathaus.jpg — Foto: Erell, Mai
+      2007, 3008×2000. Fremdaufnahme: CC BY-SA verlangt Namensnennung, sie steht in
+      content/legal/image-credits.md.
+    alt: >-
+      Das Rathaus von Gützkow in Vorpommern, ein weiß verputzter Altbau mit Freitreppe an der
+      Straße.
+    licence: CC BY-SA 2.5
+    status: real
+    file: /images/real/home-scene-embed.webp
     width: 1400
     height: 1000
   - id: home-scene-provenance
@@ -92,6 +85,7 @@ images:
     alt: >-
       Jan-Henrik Hempel steht in der offenen Tür eines Backsteinhauses, daneben der Roll-up von
       Schafe vorm Fenster.
+    licence: Eigenaufnahme, unbeschränkte Nutzung
     status: real
     file: /images/real/home-scene-provenance.webp
     width: 1400
@@ -256,20 +250,16 @@ Text, gleiche Ziel-ID (TS-006 D6).
 
 ## Slot 12 — UI-Strings, die kein anderer Slot trägt
 
-<!-- source_note: Tonfall und Ehrlichkeitsregel aus gtm-Quellen: Prinzip 1a „Szenen statt Etiketten" und Prinzip 5 „Live-Daten tragen das Argument" in gtm:concept/website-communication-principles.concept.md, Register „du" aus Prinzip 1b; Bild-Platzhalter-Regel aus der Rolle (Design-System: „Foto gesucht"). Ersetzt die vier generierten Strings in app/[lang]/page.tsx `DEMO_LABELS` (state/open.md Zeile 92) — die Code-Bindung steht noch aus. -->
+<!-- source_note: Tonfall aus gtm-Quellen: Prinzip 1a „Szenen statt Etiketten" und Prinzip 5 „Live-Daten tragen das Argument" in gtm:concept/website-communication-principles.concept.md, Register „du" aus Prinzip 1b. Ersetzt die generierten Strings in app/[lang]/page.tsx `DEMO_LABELS` (state/open.md Zeile 92). Entscheidung Jan, 2026-09-18: keine Kennzeichnung im sichtbaren Text — Provenienz steht im Frontmatter, in `data-*` und in state/open.md. -->
 <!-- id: home-12-ui-strings; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster"]; status: draft -->
 
-**Bildunterschrift am Beispielmodul der WhatsApp-Szene:** Aus dem Flyer geworden — Beispieltermin
+**Bildunterschrift am Modul der WhatsApp-Szene:** Aus dem Flyer geworden
 
 **Geo-Label auf den Belegkarten:** Beleg aus der Region
 
-**Bild-Einladung auf dem Medienrahmen der Einbindungs-Szene:** Foto gesucht — uns fehlt hier ein Bild aus deinem Ort.
-
 **Einheit im Zähler-Badge:** Termine
 
-Vier kurze Strings, die die Seite heute im Code führt. „Beispieltermin"
-und „Beleg aus der Region" sagen offen, was die Fläche zeigt, statt es
-offen zu lassen; „Foto gesucht" ist die Platzhalter-Formulierung des
-Design-Systems und behauptet kein Motiv, das es nicht gibt. Das
+Drei kurze Strings, die die Seite heute im Code führt. Sie benennen, was
+die Fläche zeigt, ohne die Fläche als unfertig zu beschriften. Das
 Einheitenwort steht kurz im Badge, weil die vollständige Beschriftung
 (Slot 9) als Text daneben steht.

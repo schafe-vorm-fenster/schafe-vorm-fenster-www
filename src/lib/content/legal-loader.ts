@@ -40,6 +40,7 @@ export const LEGAL_SECTION_FILES: Readonly<Record<LegalSectionId, string>> = {
   terms: "terms-of-use.md",
   communityGuidelines: "community-guidelines.md",
   dataProcessing: "dpa.md",
+  imageCredits: "image-credits.md",
 };
 
 export interface LegalDocument {

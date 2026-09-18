@@ -20,6 +20,12 @@ export const LEGAL_SECTION_IDS = [
   "terms",
   "communityGuidelines",
   "dataProcessing",
+  // Appended, never inserted: the anchors above are already linked from
+  // outside. The site shows real photographs, and CC BY / CC BY-SA oblige it
+  // to attribute them somewhere a reader can find — this is that place
+  // (`content/legal/image-credits.md`), rather than a credit line burned into
+  // every photo surface.
+  "imageCredits",
 ] as const;
 
 export type LegalSectionId = (typeof LEGAL_SECTION_IDS)[number];
@@ -34,6 +40,7 @@ export const LEGAL_ANCHORS: Readonly<
   terms: { de: "nutzungsbedingungen", en: "terms" },
   communityGuidelines: { de: "community-richtlinien", en: "community-guidelines" },
   dataProcessing: { de: "auftragsverarbeitung", en: "data-processing" },
+  imageCredits: { de: "bildnachweise", en: "image-credits" },
 };
 
 export function legalAnchor(section: LegalSectionId, locale: Locale): string {

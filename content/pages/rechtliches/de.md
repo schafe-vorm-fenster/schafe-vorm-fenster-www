@@ -17,7 +17,7 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — page-level composition/navigation copy only; the six sections themselves are content/legal/*.md, imported (5) or generated-pending-counsel (1, accessibility)"
+provenance: "sourced — page-level composition/navigation copy only; the seven sections themselves are content/legal/*.md, imported (5), generated-pending-counsel (1, accessibility) or maintained here (1, image credits)"
 compliance_check: "state/content-map.md#compliance-checks — TS-029"
 schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
 open_points:
@@ -28,8 +28,9 @@ open_points:
 # Rechtliches (`/rechtliches`)
 
 Diese Datei liefert **nur** die Seitenrahmen-Texte (h1, Navigationslabel,
-Fußzeilen-Linktexte). Die sechs Abschnitte selbst kommen aus
-`content/legal/*.md` per Import (TS-007 D10) — dieses Playbook schreibt
+Fußzeilen-Linktexte). Die sieben Abschnitte selbst kommen aus
+`content/legal/*.md` — sechs per Import (TS-007 D10), die Bildnachweise
+werden hier gepflegt, weil sie das Bildverzeichnis der Seiten spiegeln — dieses Playbook schreibt
 Rechtstexte nicht neu, es referenziert sie (Repository-Arbeitsregel /
 Rolle Content & Translation, „Must not: touch code outside content files
 … never rewrite legal text").
@@ -54,6 +55,7 @@ Rolle Content & Translation, „Must not: touch code outside content files
 | `#community-richtlinien` | Community-Richtlinien | `content/legal/community-guidelines.md` (importiert) |
 | `#auftragsverarbeitung` | Auftragsverarbeitung (AVV) | `content/legal/dpa.md` (importiert, öffentlich, ohne Zugangssperre) |
 | `#barrierefreiheit` | Barrierefreiheit | `content/legal/accessibility.md` (generiert, siehe unten) |
+| `#bildnachweise` | Bildnachweise | `content/legal/image-credits.md` (in diesem Repository gepflegt, Spiegel der `images:`-Blöcke) |
 
 ## Fußzeilen-Linktexte
 

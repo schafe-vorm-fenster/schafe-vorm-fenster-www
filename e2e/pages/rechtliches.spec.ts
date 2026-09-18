@@ -13,6 +13,7 @@ const SECTIONS_DE = [
   "nutzungsbedingungen",
   "community-richtlinien",
   "auftragsverarbeitung",
+  "bildnachweise",
 ];
 
 test.describe("/rechtliches", () => {

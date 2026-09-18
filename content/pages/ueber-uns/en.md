@@ -57,24 +57,24 @@ images:
   - id: ueber-uns-hero
     slot: ueber-uns-1-origin
     ratio: hero
-    provenance: generated
-    brief: >-
-      Ein Dorf mit wenigen hundert Einwohnern, von einem Feldweg aus gesehen, Februar am späten
-      Nachmittag: kahle Bäume, Backsteinhäuser, ein Storchennest auf einem Mast, Pfützen im Weg.
-      Tief stehendes graues Licht, fast keine Farbe. Kein Mensch im Bild. Nicht zeigen: Schrift,
-      Logos, lesbare Ortsschilder, Schnee, Idylle.
-    style: documentary photo, natural light, 35mm, muted colours, no text
-    alt: A small village seen from a field track in February, bare trees and brick houses.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: df3c8bdb1c615bec
-    file: /images/generated/ueber-uns-hero.webp
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Bauhof und Schafstall in Schlatkow.jpeg —
+      https://commons.wikimedia.org/wiki/File:Bauhof_und_Schafstall_in_Schlatkow.jpeg —
+      Eigenaufnahme von Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Juni
+      2021, 4032×2268. Der Ort, auf den der Firmenname zeigt. Nachweis:
+      content/legal/image-credits.md.
+    alt: >-
+      The sheep barn and the municipal yard in Schlatkow, a whitewashed shed at the edge of a
+      meadow.
+    licence: CC BY-SA 4.0
+    status: real
+    file: /images/real/ueber-uns-hero.webp
     width: 800
     height: 900
-    wide_file: /images/generated/ueber-uns-hero-wide.webp
-    wide_width: 1190
-    wide_height: 510
+    wide_file: /images/real/ueber-uns-hero-wide.webp
+    wide_width: 1400
+    wide_height: 600
   - id: ueber-uns-founder-portrait
     slot: ueber-uns-1-origin
     ratio: portrait
@@ -85,6 +85,7 @@ images:
       liegt im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
     alt: Jan-Henrik Hempel looking into the camera, the darkened hall behind him.
     credit: "@rightvisionstudios & NØRD2026"
+    licence: "Freie Nutzung mit Namensnennung (Rechteinhaber: @rightvisionstudios & NØRD2026)"
     lcp: true
     status: real
     file: /images/real/ueber-uns-founder-portrait.webp
@@ -99,6 +100,7 @@ images:
       — Eigenaufnahme (in-house), unbeschränkte Nutzung, kein Credit nötig. Nicht dasselbe Bild wie
       im Herkunftsblock, damit die Seite ein Porträt nicht zweimal zeigt.
     alt: Jan-Henrik Hempel explaining something with both hands raised, timber beams behind him.
+    licence: Eigenaufnahme, unbeschränkte Nutzung
     status: real
     file: /images/real/ueber-uns-team-jan-henrik-hempel.webp
     width: 1152
@@ -216,10 +218,10 @@ Exactly one link, no preview, no list, no counter (TS-027 D6).
 
 **Text:** Once or twice a month: what's changing about the village calendar, and what new places are doing with it.
 
-**Input field (placeholder):** `name@example.com`
+**Input field (hint text):** `name@yourgroup.org`
 
 **Button label:** Subscribe
 
-**Demo note:** Demo data — this sign-up doesn't leave your browser yet.
+**Confirmation:** Thank you — noted. We are sending you a confirmation email.
 
 

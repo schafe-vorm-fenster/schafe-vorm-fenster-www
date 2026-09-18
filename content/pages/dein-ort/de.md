@@ -45,23 +45,21 @@ images:
   - id: dein-ort-hero
     slot: dein-ort-1-state-a
     ratio: hero
-    provenance: generated
-    brief: >-
-      Dorfstraße in Vorpommern an einem klaren Morgen im Oktober, leicht erhöhter Blickwinkel:
-      Alleebäume, Vorgärten, ein Bushäuschen, in der Ferne ein Kirchturm. Flaches Seitenlicht, der
-      Asphalt ist noch feucht von der Nacht. Weit hinten schiebt jemand ein Fahrrad, von hinten
-      aufgenommen. Nicht zeigen: Schrift, Logos, lesbare Orts- oder Nummernschilder, erkennbare
-      Gesichter, Drohnenperspektive.
-    style: documentary photo, natural light, 35mm, muted colours, no text
-    alt: Dorfstraße mit Alleebäumen und Bushäuschen an einem klaren Herbstmorgen, hinten ein Kirchturm.
-    status: generated
-    model: bfl/flux-pro-1.1
-    generated_at: "2026-09-12"
-    prompt_hash: 4c48080b6b86b3ed
-    file: /images/generated/dein-ort-hero.webp
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Dargitz, Bushaltestelle.jpg —
+      https://commons.wikimedia.org/wiki/File:Dargitz,_Bushaltestelle.jpg — Eigenaufnahme von Schafe
+      vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3272×2286. Nachweis:
+      content/legal/image-credits.md.
+    alt: >-
+      Bushaltestelle mit bepflanztem Wartehäuschen an der Dorfstraße in Dargitz, dahinter der
+      Kirchturm.
+    licence: CC0 1.0
+    status: real
+    file: /images/real/dein-ort-hero.webp
     width: 800
     height: 900
-    wide_file: /images/generated/dein-ort-hero-wide.webp
+    wide_file: /images/real/dein-ort-hero-wide.webp
     wide_width: 1400
     wide_height: 600
   - id: dein-ort-homescreen-ios
@@ -104,14 +102,14 @@ nur der Angebotstext in Block 1 wechselt.
 
 **Modul-Überschrift (eigener Radius, kein Ortsname):** Diese Woche in der Nähe
 
-**Beispiel-Badge am Modul:** Beispielort
+**Geo-Badge am Modul:** Aus der Region
 
 **Hinweistext unter dem Suchfeld:** Suche nach Ortsnamen kommt noch dazu — bis dahin reicht die Postleitzahl.
 
 Stufe 0 nennt keinen Ort, weil keiner bekannt ist. Die Seite behauptet
-deshalb nichts über einen Ort, sondern zeigt die Suche und ein
-Beispielmodul, das als Beispiel gekennzeichnet ist. Die Zustände A und B
-(Slots 1 und 2) setzen erst ein, wenn ein Ort feststeht.
+deshalb nichts über einen Ort, sondern zeigt die Suche und ein Modul aus
+der Region, dessen Radius im Badge steht. Die Zustände A und B (Slots 1
+und 2) setzen erst ein, wenn ein Ort feststeht.
 
 ## Slot 1 — Fokusblock, Zustand A (Termine vorhanden)
 
