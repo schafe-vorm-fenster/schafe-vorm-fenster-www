@@ -35,6 +35,27 @@ const PLATFORM_NOISE = /vercel\.live/;
 
 const BYPASS = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
 
+/**
+ * Whether the widget host answers at all.
+ *
+ * Three of the four checks below are about this page and hold offline. The
+ * fourth mounts the **real** calendar, so it depends on a third-party
+ * service being up, and a gate that goes red because someone else's
+ * deployment is restarting reports nothing useful. That one is skipped when
+ * the host does not answer — the same guard, for the same reason, as
+ * `src/lib/live/upstream-live.integration.test.ts`.
+ */
+async function widgetHostReachable(): Promise<boolean> {
+  try {
+    const response = await fetch(`${ALLOWLIST.portalize}/api/health`, {
+      signal: AbortSignal.timeout(8000),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
 test.describe("the embed frame", () => {
   /**
    * **No bypass header on this context**, and the reason is the embed itself.
@@ -94,6 +115,7 @@ test.describe("the embed frame", () => {
     page,
     baseURL,
   }) => {
+    test.skip(!(await widgetHostReachable()), "the Portalize host does not answer");
     const ownHost = baseURL ? new URL(baseURL).host : "";
     const isPreview = VERCEL_PREVIEW_HOST.test(ownHost);
     const offenders = new Set<string>();
