@@ -3,13 +3,19 @@ import { expect, test } from "@playwright/test";
 /**
  * TS-027 — `/ueber-uns` — acceptance pass.
  *
- * TS-027-A9 (every person in `@schafe-vorm-fenster/people` appears with a
- * real portrait) is half built. The imagery workstream placed the two
- * cleared photographs of Jan-Henrik Hempel — the origin block's portrait and
- * the team card — from the hub package's asset set. Christian Sauer's only
- * photograph carries `license: unverified`, so his card keeps the honest
- * flat brand-colour surface: an uncleared portrait is not published, and a face is
- * never generated (DEC-068 rule 3, DEC-077). `state/open.md` tracks it.
+ * **TS-027-A9 changed with the polish brief (page 10, item 6).** The
+ * criterion asks for every person in `@schafe-vorm-fenster/people` to appear
+ * with a real portrait. Two do not have one that may ship: the team card's
+ * photograph of Jan-Henrik Hempel is a candid with a hand in front of his
+ * face, and Christian Sauer's only photograph carries `license: unverified`.
+ * The hatch that used to name that gap is gone (Jan, 2026-09-18), so what
+ * the team block rendered was one unusable crop beside one blank 4:5 box.
+ * G-9's decision for exactly this slot is "render the two team entries as
+ * text-only rows until a portrait exists" — so the case below now asserts
+ * the **people**, their roles and their bios, and that neither entry ships a
+ * portrait box at all. The founder's cleared portrait still stands on the
+ * page, in the causal chain, which is what TS-027-A9's own intent is about.
+ * `state/open.md` keeps the row: the portraits return when they are cleared.
  */
 
 test.describe("/ueber-uns", () => {
@@ -56,7 +62,7 @@ test.describe("/ueber-uns", () => {
     page,
   }) => {
     await page.goto("/ueber-uns");
-    const stream = page.locator('[aria-label="Belege"]');
+    const stream = page.locator("[data-block='belegstrom']");
     // Scoped to the stream container: CSS Modules name every class in a
     // component's file with the same file-basename prefix, so an unscoped
     // `[class*="proof-card"]` also matches the card's own inner `body`/
@@ -79,11 +85,85 @@ test.describe("/ueber-uns", () => {
     await expect(archiveLinks).toHaveCount(1);
   });
 
-  test("TS-027-A9: every team member renders once, with a name and a role", async ({ page }) => {
+  test("TS-027-A9: every team member renders once, with a name and a role, and no empty portrait box", async ({
+    page,
+  }) => {
     await page.goto("/ueber-uns");
-    const bodyText = await page.locator("body").innerText();
-    expect(bodyText).toContain("Jan-Henrik Hempel");
-    expect(bodyText).toContain("Christian Sauer");
+    const team = page.locator("section", { has: page.locator("#team-h2") });
+    const teamText = await team.innerText();
+    expect(teamText).toContain("Jan-Henrik Hempel");
+    expect(teamText).toContain("Christian Sauer");
+    expect(teamText).toContain("Gründer");
+    // G-9: no portrait slot at all until every person has a cleared one —
+    // never a 4:5 grey rectangle under a name.
+    await expect(team.locator("img")).toHaveCount(0);
+    await expect(team.locator("[data-placeholder]")).toHaveCount(0);
+  });
+
+  /**
+   * Polish brief page 10, item 2 — beat 2 was missing from the page.
+   *
+   * The artifact has carried the origin paragraph (Berlin → Schlatkow, the
+   * baker's van, the municipal sheep pasture the company is named after) and
+   * the cleared founder quote since the content follow-up; the page rendered
+   * neither, and that is the beat that makes a reader trust this.
+   */
+  test("brief page 10, item 2: the origin story and the cleared founder quote render", async ({
+    page,
+  }) => {
+    await page.goto("/ueber-uns");
+    const section = page.locator("[data-block='herkunftsgeschichte']");
+    await expect(section).toHaveCount(1);
+    const text = await section.innerText();
+    expect(text).toContain("Angefangen hat es mit Brötchen.");
+    expect(text).toContain("Bäckerwagen");
+    expect(text).toContain("Schafweide");
+    await expect(section.locator("blockquote")).toContainText(
+      "Wenn man alles sammelt, ist plötzlich in jedem Dorf jeden Tag irgendwas los.",
+    );
+    await expect(section.locator("blockquote cite")).toHaveText("Jan-Henrik Hempel");
+  });
+
+  /**
+   * Polish brief G-7 — the proof stream used to render "Beleg: founder-
+   * former-volunteer-mayor (cleared)" as the honorary-mayor card's context
+   * line, and a `BELEG` badge next to a label already reading `Beleg`.
+   */
+  test("G-7: no raw proof id, no badge repeating the source label", async ({ page }) => {
+    await page.goto("/ueber-uns");
+    const main = await page.locator("#main").innerText();
+    expect(main).not.toMatch(/founder-former-volunteer-mayor/);
+    expect(main).not.toMatch(/\(cleared\)/);
+    expect(main).not.toMatch(/^\s*Beleg\s*$/m);
+
+    // One emphasis per stream: the first card is the feature, the rest are
+    // compact hairline rows (never seven identical cards).
+    const stream = page.locator("[data-block='belegstrom']");
+    const emphases = await stream
+      .locator("article")
+      .evaluateAll((nodes) => nodes.map((node) => node.className));
+    expect(emphases.length).toBeGreaterThan(1);
+    expect(emphases.filter((name) => /feature/.test(name))).toHaveLength(1);
+    expect(emphases.filter((name) => /compact/.test(name))).toHaveLength(emphases.length - 1);
+  });
+
+  test("brief page 10, item 1: the hero is the h1 and the photograph, nothing else", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/ueber-uns");
+    const hero = page.locator("#herkunft");
+    const text = (await hero.innerText()).trim();
+    expect(text).toBe("Gebaut in einem Dorf, betrieben aus einem Dorf.");
+    // The causal chain moved into the section below it, where it now opens
+    // the page's first argument.
+    await expect(page.locator("[data-block='kausalkette']")).toContainText("rund 400 Einwohnern");
+  });
+
+  test("F-2-33: the English page heads its counter section in English", async ({ page }) => {
+    await page.goto("/en/about");
+    const section = page.locator("[data-block='betrieb']");
+    await expect(section.locator("h2")).toHaveText("Running since 2018");
   });
 
   test("TS-027-A10: the newsletter stands after the team block, zero data-cta=\"primary\", last block is the merged three-job offer", async ({

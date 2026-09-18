@@ -13,12 +13,13 @@ import { checkRhythm, type RhythmEntry } from "@/src/components/section-shell/rh
 describe("TS-027: /ueber-uns page rhythm", () => {
   it("has no rhythm violation, exactly one photo section, one merged closing block", () => {
     const sections: RhythmEntry[] = [
-      "photo", // 1 origin
-      "paper", // 2 operating counters
-      "lime-100", // 3 proof stream
-      "paper", // 4 archive link
-      "lime-100", // 5 team
-      "paper", // 6 newsletter
+      "photo", // 1 hero — the h1 on the photograph
+      "paper", // 2 the causal chain, portrait and honorary-mayor proof
+      "lime-100", // 3 where this comes from (the origin story, brief item 2)
+      "paper", // 4 operating counters
+      "surface", // 5 proof stream + the archive link (brief item 5)
+      "lime-100", // 6 team
+      "paper", // 7 newsletter
       "paper", // PageFrame merged closing block
     ];
     expect(checkRhythm(sections)).toEqual([]);

@@ -162,6 +162,16 @@ export interface Dictionary {
     trust: string;
     /** Origin: where this comes from. */
     origin: string;
+    /** The people behind it — `/ueber-uns`'s team block. */
+    team: string;
+    /**
+     * The newsletter block, where a page carries one inline (TS-027 D8) —
+     * the same label the footer's own block already uses, so the site names
+     * the thing once. The block's own heading is the page's authored one
+     * ("Auf dem Laufenden bleiben"), which is why the kicker does not repeat
+     * that sentence.
+     */
+    newsletter: string;
     /** The context band's other concerns. */
     otherConcerns: string;
   };
@@ -175,6 +185,20 @@ export interface Dictionary {
     noOptions: string;
   };
   /**
+   * The two price states that are words rather than figures (TS-006 D10).
+   *
+   * They lived as German literal defaults inside `price-tag`, so
+   * `/en/your-calendar` priced its free tier "Dauerhaft kostenfrei" and its
+   * enterprise tier "Auf Anfrage" — the F-2-33 failure mode, on the page
+   * that asks for money.
+   */
+  price: {
+    /** The free tier's permanence statement — not a price. */
+    permanent: string;
+    /** No figure, no range, no "from". */
+    onRequest: string;
+  };
+  /**
    * `archive-filter`'s own chrome (TS-028 D4). Same failure class as
    * `forms.noOptions`: the component's defaults were hard-coded German and
    * rendered on `/en/about/archive` too (F-2-33 residue).
@@ -184,6 +208,15 @@ export interface Dictionary {
     label: string;
     /** `{visible}` of `{total}` entries — both slots are filled by the component. */
     count: string;
+  };
+  /**
+   * `archive-row`'s own link label. It was a German literal in the component
+   * body, so all 31 rows of `/en/about/archive` offered "Original ansehen"
+   * — the same failure class as `archiveFilter` above (F-2-33).
+   */
+  archiveRow: {
+    /** The outbound link to the outlet's own page. */
+    original: string;
   };
   /**
    * `place-search`'s own ZIP-only-until-Q-025 words (TS-008 D7). A page
@@ -309,15 +342,24 @@ const de: Dictionary = {
     price: "Was es kostet",
     trust: "Wie wir arbeiten",
     origin: "Wo das herkommt",
+    team: "Wer dahintersteckt",
+    newsletter: "Newsletter",
     otherConcerns: "Anderes Anliegen?",
   },
   forms: {
     noOptions: "Keine Auswahl verfügbar.",
   },
+  price: {
+    permanent: "Dauerhaft kostenfrei",
+    onRequest: "Auf Anfrage",
+  },
   archiveFilter: {
     all: "Alle",
     label: "Nach Typ filtern",
     count: "{visible} von {total} Einträgen",
+  },
+  archiveRow: {
+    original: "Original ansehen",
   },
   search: {
     label: "Ort oder Postleitzahl",
@@ -417,15 +459,24 @@ const en: Dictionary = {
     price: "What it costs",
     trust: "How we work",
     origin: "Where this comes from",
+    team: "Who is behind it",
+    newsletter: "Newsletter",
     otherConcerns: "Something else today?",
   },
   forms: {
     noOptions: "Nothing to choose from yet.",
   },
+  price: {
+    permanent: "Free, permanently",
+    onRequest: "On request",
+  },
   archiveFilter: {
     all: "All",
     label: "Filter by type",
     count: "{visible} of {total} entries",
+  },
+  archiveRow: {
+    original: "View the original",
   },
   search: {
     label: "Place or postcode",

@@ -1,0 +1,80 @@
+/*
+ * `/ueber-uns`'s own two layout values. Tokens only (TS-017 D2/D3,
+ * `pnpm check:brand`): no colour literal, no font family, no raw length that
+ * the design system does not already name.
+ */
+
+/*
+ * The hero is the headline plus the photograph, and nothing else (polish
+ * brief page 10, item 1). The headline therefore carries `origin-story`'s
+ * own display treatment here instead of inside that block.
+ */
+.heroHeadline {
+  font-size: var(--type-display-size);
+  font-weight: 800;
+  letter-spacing: var(--type-display-tracking);
+  line-height: var(--type-display-leading);
+  margin: 0;
+}
+
+/*
+ * The founder quote, set as a pull quote at sub-head size. It is
+ * `press_clearance: cleared`, so it may carry weight visually (brief page
+ * 10, item 2) — a rule on the reading edge, not a card, so it stays part of
+ * the paragraph it closes.
+ */
+.pullQuote {
+  border-inline-start: 2px solid var(--color-lime-500);
+  margin: var(--space-6) 0 0;
+  max-width: var(--measure-reading);
+  padding-inline-start: var(--space-4);
+}
+
+.pullQuoteText {
+  font-size: var(--type-subhead-size);
+  font-weight: 700;
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: var(--leading-tight);
+  margin: 0;
+}
+
+.pullQuoteSource {
+  color: var(--color-neutral-text2);
+  display: block;
+  font-size: var(--type-meta-size);
+  font-weight: 400;
+  margin-top: var(--space-2);
+}
+
+/*
+ * The reserved seventh position of the proof stream (TS-027 D5): still in
+ * the DOM, still countable through `data-empty-proof`, and in the `rows`
+ * layout it closes the list the way every compact row opens it, with the
+ * stream's own hairline, rather than standing there as a 5:2 grey
+ * rectangle. It says nothing about itself (Jan, 2026-09-18).
+ */
+.reservedRow {
+  aspect-ratio: auto;
+  background: none;
+  border-top: 1px solid var(--color-neutral-line);
+  min-height: 0;
+}
+
+/* The archive link closes the proof section rather than owning one (item 5). */
+.archiveLink {
+  display: block;
+  margin-top: var(--space-6);
+}
+
+/* Two people, one column on a phone, side by side from `lg`. */
+.team {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 48rem) {
+  .team {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

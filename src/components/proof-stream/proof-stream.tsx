@@ -6,7 +6,13 @@ export interface ProofStreamProps {
   /** Already-composed `proof-card` / `empty-proof-slot` elements, in the
    * relevance engine's order (TS-005 D5–D8) — this container never reorders. */
   readonly children: ReactNode;
-  readonly layout?: "grid" | "scroller";
+  /**
+   * `grid` — the default card grid. `scroller` — a horizontal set.
+   * `rows` — polish brief G-7: one column, the first child a feature card
+   * and the rest hairline-separated compact rows, so a stream reads as a
+   * track record rather than as one grey block of identical cards.
+   */
+  readonly layout?: "grid" | "scroller" | "rows";
   readonly label?: string;
   readonly className?: string;
 }
@@ -29,10 +35,12 @@ export interface ProofStreamProps {
  * this container never reorders its children, including an empty slot.
  */
 export function ProofStream({ children, layout = "grid", label = "Belege", className }: ProofStreamProps) {
+  const layoutClass =
+    layout === "scroller" ? styles.scroller : layout === "rows" ? styles.rows : styles.grid;
   return (
     <div
       aria-label={label}
-      className={[styles.stream, layout === "scroller" ? styles.scroller : styles.grid, className]
+      className={[styles.stream, layoutClass, className]
         .filter(Boolean)
         .join(" ")}
     >

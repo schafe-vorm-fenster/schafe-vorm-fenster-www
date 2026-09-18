@@ -10,6 +10,7 @@ import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { RouteLink } from "@/src/components/route-link/route-link";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
+import { dictionary } from "@/src/lib/i18n/dictionary";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
 import { ctaLabelOnly } from "@/src/lib/content/text";
@@ -24,6 +25,7 @@ import { pageContent } from "../_content";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
+import styles from "./page.module.css";
 import { pageMeta } from "./page.meta";
 
 import type { ProofCandidate } from "../_proof";
@@ -34,17 +36,29 @@ import type { Metadata } from "next";
 /**
  * TS-027 — `/ueber-uns` — the trust surface.
  *
- * Composition (TS-027 D2, a scanning order, not a narrative one): origin
- * (photo, ratio-hero, ink gradient) → operating counters → proof stream (7)
- * → archive link → team → newsletter → band + closing, merged into the
- * three-job offer (`primaryConversion: null`, TS-006 D6). Zero
- * `data-cta="primary"` elements on this page (TS-027-A10).
+ * Composition (TS-027 D2 plus polish brief page 10, which turns the scanning
+ * order into a story): hero — the `h1` on the photograph, nothing else →
+ * the causal chain with the founder portrait and the honorary-mayor proof →
+ * **the origin story** (the baker's van, the sheep pasture behind the name,
+ * the founder quote) → the operating counters → the proof stream, one
+ * feature card and five compact rows, with the archive link under it → team
+ * → newsletter → band + closing, merged into the three-job offer
+ * (`primaryConversion: null`, TS-006 D6). Zero `data-cta="primary"` elements
+ * on this page (TS-027-A10).
  *
- * The content follow-up's second pass (2026-09-12, state/open.md row 51/row 109)
- * replaced the generated `DEMO_PROOF` stand-ins with the six **cleared**
- * proof elements `ueber-uns-3-proof-stream` now names verbatim — read off
- * the slot, not hard-coded, so `demo` (`isDemoSlot`) is `false` and no card
- * badges itself as `Demo-Daten`.
+ * Three things the brief changed here, each of which was a visible defect:
+ *
+ *  - **beat 2 was missing.** The artifact has carried the origin paragraph
+ *    and the cleared founder quote since the content follow-up; the page
+ *    rendered neither, so the one beat that makes a reader trust this was
+ *    absent. It is now its own `lime-100` section under the causal chain.
+ *  - **a raw proof id rendered as visitor copy** — "Beleg:
+ *    founder-former-volunteer-mayor (cleared)" stood on the public page as
+ *    the honorary-mayor card's context line. The card names its human source
+ *    instead, read off the artifact like every other string here.
+ *  - **six identical grey cards, 1643 px.** G-7: one feature card carries
+ *    the emphasis, the other five are hairline rows, and the archive link
+ *    closes the same section rather than occupying one of its own.
  *
  * [ASSUMPTION] The reserved 7th slot still renders as `empty-proof-slot`,
  * not the content file's real, clearance-pending testimonial
@@ -56,7 +70,9 @@ import type { Metadata } from "next";
  * engine leaves the seventh position empty exactly as before; whether that
  * position may show the clearance-pending testimonial in the protected
  * preview is the open question `state/open.md` row 109 files for jan-henrik,
- * not a call this page makes on its own.
+ * not a call this page makes on its own. In the `rows` layout that position
+ * is the stream's closing hairline rather than a grey rectangle — countable,
+ * wordless, and no longer reading as an unfinished card.
  */
 
 const ROUTE = "about" as const;
@@ -75,6 +91,9 @@ const FOUNDER_ALT: Record<Locale, string> = {
   de: "Jan-Henrik Hempel, Gründer",
   en: "Jan-Henrik Hempel, founder",
 };
+
+/** The team block's own heading — the same word in both languages. */
+const TEAM_HEADING = "Team";
 
 interface Person {
   readonly name: string;
@@ -113,32 +132,69 @@ function parsePerson(paragraph: string): Person {
   };
 }
 
-/** Fallback context line — used only where a real element's own attribution
- * carries no organisation name to show instead (`parseDemoProofElement`). */
-const PROOF_FALLBACK_CONTEXT: Record<Locale, string> = { de: "Beleg", en: "Reference" };
+/**
+ * The counters section's heading — the first sentence of the artifact's own
+ * counter line ("Seit 2018 in Betrieb. Heute aktiv in {n} Orten."), so the
+ * cleared year stands as the heading and the live figure stands in the band
+ * below it. It used to be a German literal in this file, which is how
+ * `/en/about` came to head an English section "Seit 2018 in Betrieb".
+ */
+function firstSentence(text: string | undefined, fallback: string): string {
+  if (!text) return fallback;
+  const end = text.indexOf(". ");
+  return (end === -1 ? text : text.slice(0, end)).trim();
+}
+
+/**
+ * The quote and its attribution, split on the artifact's own separator —
+ * the same ` — ` convention `parseDemoProofElement` reads, and the same
+ * reason: the page must not re-type an authored sentence to divide it.
+ */
+function splitQuote(line: string | undefined): { text: string; source?: string } | null {
+  if (!line) return null;
+  const separator = line.lastIndexOf(" — ");
+  const text = (separator === -1 ? line : line.slice(0, separator))
+    .trim()
+    .replace(/^[„“"«»]+|[”“"«»]+$/g, "")
+    .trim();
+  if (text === "") return null;
+  const source = separator === -1 ? undefined : line.slice(separator + 3).trim();
+  return { text, source };
+}
 
 /**
  * The six cleared proof elements `ueber-uns-3-proof-stream` names, as
  * relevance candidates (TS-005). Read off the slot, never re-typed: `demo`
  * is `isDemoSlot(proofStream)`, `false` today (state/open.md row 51, row 109).
+ *
+ * Each authored line is `claim — source, date`, so the source becomes the
+ * card's context line and the date its attribution. No geo badge: G-7 drops
+ * the badge where the card already names its source, which is what put
+ * "Beleg  BELEG" on the page — a label and a badge saying the same word.
+ * The date is also the engine's freshness facet, which is what makes the
+ * stream read newest-first, like a track record.
  */
-function proofCandidates(proofStream: ContentSlot, locale: Locale): ProofCandidate[] {
+function proofCandidates(proofStream: ContentSlot, fallbackContext: string): ProofCandidate[] {
   const list = proofStream.blocks.find((block) => block.kind === "list");
   const items = list?.kind === "list" ? list.items : [];
   const demo = isDemoSlot(proofStream);
   return items.map((item, index) => {
-    const card = parseDemoProofElement(item, PROOF_FALLBACK_CONTEXT[locale]);
-    const place = card.attribution.split(", ").slice(1).join(", ").trim();
+    const card = parseDemoProofElement(item, fallbackContext);
     return {
       id: `ueber-uns-3-proof-stream-${index + 1}`,
       contextLine: card.contextLine,
       claim: card.claim,
       attribution: card.attribution,
-      geo: { level: "snapshot" as const, label: PROOF_FALLBACK_CONTEXT[locale] },
-      geoCommunity: place === "" ? null : place,
+      date: proofYear(card.attribution),
       demo,
     };
   });
+}
+
+/** The four-digit year an authored attribution ends on, for TS-005 freshness. */
+function proofYear(attribution: string): string | null {
+  const match = /\b(19|20)\d{2}\b/.exec(attribution);
+  return match === null ? null : match[0];
 }
 
 export async function generateMetadata({
@@ -155,6 +211,7 @@ export default async function Page({
   params: Promise<{ lang: string }>;
 }) {
   const locale = await localeFrom(params);
+  const words = dictionary(locale);
   const page = await pageContent(ROUTE, locale);
   const proofStream = slot(page, "ueber-uns-3-proof-stream");
 
@@ -169,12 +226,14 @@ export default async function Page({
     locale,
     focusJob: "understand-who-is-behind-it",
     surface: "stream",
-    candidates: proofCandidates(proofStream, locale),
+    candidates: proofCandidates(proofStream, words.kickers.evidence),
   });
 
   const origin = slot(page, "ueber-uns-1-origin");
+  const counters = slot(page, "ueber-uns-2-counters");
   const archiveLink = slot(page, "ueber-uns-4-archive");
   const team = slot(page, "ueber-uns-5-team");
+  const newsletter = slot(page, "ueber-uns-6-newsletter");
 
   const people = team.blocks
     .filter((block) => block.kind === "paragraph")
@@ -188,13 +247,17 @@ export default async function Page({
   // the number, so this is the one place left to avoid the duplicate.
   const originPrice = { display: "withheld" as const, figure: undefined };
 
-  // The page's images. The village is a generated stand-in and says so; the
-  // founder's portrait is the real, cleared photograph from
-  // `@schafe-vorm-fenster/people` and carries the rights holder's credit
-  // line verbatim — a face is never generated (DEC-068 rule 3).
+  // The page's images: the village behind the company name and the founder's
+  // cleared portrait, which carries the rights holder's credit line verbatim.
   const heroImage = pageImage(page, HERO_IMAGE_ID.about);
   const founderImage = pageImage(page, "ueber-uns-founder-portrait");
-  const archiveLabel = ctaLabelOnly(fieldAt(archiveLink.blocks, 0)) ?? "Zum Archiv";
+  const archiveLabel = ctaLabelOnly(fieldAt(archiveLink.blocks, 0)) ?? words.pages.archive;
+
+  const headline = fieldAt(origin.blocks, 0) ?? words.pages.about;
+  const originHeading = fieldAt(origin.blocks, 4);
+  const founderQuote = splitQuote(fieldAt(origin.blocks, 6));
+  const counterHeading = firstSentence(fieldAt(counters.blocks, 0), words.pages.about);
+  const proofHeading = fieldAt(proofStream.blocks, 0) ?? words.kickers.evidence;
 
   return (
     <>
@@ -205,12 +268,10 @@ export default async function Page({
       locale={locale}
       meta={pageMeta}
     >
-      {/* Block 1 — origin (photo, ratio-hero, ink gradient): h1, the causal
-          chain, the honorary-mayor proof (D3). Both images are DEC-068
-          generated placeholders (`placeholders.manifest.json`), already
-          minted for this exact page by the component work package —
-          `notDepicting` on both, since neither is the real village or the
-          real founder. */}
+      {/* Block 1 — the hero: the photograph of the village the company is
+          named after, and the one `h1`. The causal chain used to stand here
+          too, which is what made this the worst instance of G-1 on the site:
+          1256 px of box with 156 px of picture. */}
       <PhotoSurface
         gradient="ink"
         // The page's hero, composed out of a bare surface rather than
@@ -223,14 +284,26 @@ export default async function Page({
         locale={locale}
         notDepicting={heroImage?.notDepicting}
         placeholderId={heroImage?.placeholderId}
-        // The page's first section, and the first thing painted at full
-        // width — preloaded for the same reason `hero-block` preloads its
-        // own (the portrait inside it is the declared LCP of TS-003 D2 and
-        // carries `fetchpriority="high"` through `media-frame`).
         priority
         ratio="hero"
         src={heroImage?.src}
         wideSrc={heroImage?.wideSrc}
+      >
+        <MotionReveal>
+          <h1 className={styles.heroHeadline}>{headline}</h1>
+        </MotionReveal>
+      </PhotoSurface>
+
+      {/* Block 2 — the causal chain: a village of 400 → the free community
+          calendar → the 480 € licence, with the founder's portrait and the
+          honorary-mayor proof beside it (D3). The proof card names its human
+          source; the internal id it used to print is in the artifact's own
+          prose and in `state/open.md`, where an id belongs. */}
+      <SectionShell
+        dataBlock="kausalkette"
+        kicker={words.kickers.whyItMatters}
+        label={headline}
+        surface="paper"
       >
         <MotionReveal>
           <OriginStory
@@ -244,47 +317,88 @@ export default async function Page({
             priceFigure={originPrice.figure}
             proof={
               <ProofCard
-                attribution="Jan-Henrik Hempel, Gründer"
+                attribution={FOUNDER_ALT[locale]}
                 claim={fieldAt(origin.blocks, 2) ?? ""}
-                contextLine="Beleg: founder-former-volunteer-mayor (cleared)"
-                geo={{ level: "place", label: "Schlatkow" }}
+                contextLine={fieldAt(origin.blocks, 3) ?? words.pages.about}
                 locale={locale}
               />
             }
+            showHeadline={false}
           />
         </MotionReveal>
-      </PhotoSurface>
+      </SectionShell>
 
-      {/* Block 2 — operating counters (D4). The cleared "since 2018" fact
+      {/* Block 3 — beat 2, restored (brief page 10, item 2): where this
+          comes from. The baker's van, the move from Berlin to Schlatkow, and
+          the municipal sheep pasture the company is named after — the
+          artifact's own paragraph, closed by the cleared founder quote as a
+          pull quote. */}
+      {originHeading ? (
+        <SectionShell
+          dataBlock="herkunftsgeschichte"
+          kicker={words.kickers.origin}
+          labelledBy="herkunftsgeschichte-h2"
+          surface="lime-100"
+        >
+          <MotionReveal>
+            <h2 id="herkunftsgeschichte-h2">{originHeading}</h2>
+            <p>{fieldAt(origin.blocks, 5)}</p>
+            {founderQuote ? (
+              <blockquote className={styles.pullQuote}>
+                <p className={styles.pullQuoteText}>
+                  {`„${founderQuote.text}“`}
+                  {founderQuote.source ? (
+                    <cite className={styles.pullQuoteSource}>{founderQuote.source}</cite>
+                  ) : null}
+                </p>
+              </blockquote>
+            ) : null}
+          </MotionReveal>
+        </SectionShell>
+      ) : null}
+
+      {/* Block 4 — operating counters (D4). The cleared "since 2018" fact
           always renders; the figures come off `/api/stats` through
           `liveCounters()`, and a field the upstream does not count is simply
           absent from the band — never a zero, never a substitute
           (WEB-F-041). Both fallback tiers exhausted removes the band
           entirely (TS-009 D6), which is why it sits under its own
           `<Suspense>` with a `null` fallback rather than a skeleton. */}
-      <SectionShell labelledBy="betrieb" surface="paper">
+      <SectionShell
+        dataBlock="betrieb"
+        density="tight"
+        kicker={words.kickers.trust}
+        labelledBy="betrieb-h2"
+        surface="paper"
+      >
         <MotionReveal>
-          <h2 id="betrieb">Seit 2018 in Betrieb</h2>
+          <h2 id="betrieb-h2">{counterHeading}</h2>
           <CountersIsland locale={locale} show={["places", "dates"]} />
         </MotionReveal>
       </SectionShell>
 
-      {/* Block 3 — proof stream (7): 6 demo cards + the reserved,
-          never-backfilled empty slot (D5, A6/A7). `lime-100`, not a neutral
-          surface: blocks 2/4/6 are already `paper` and the page-rhythm rule
-          (`src/components/section-shell/rhythm.ts`) forbids more than two
-          consecutive sections of one colour family. */}
-      <SectionShell labelledBy="belegstrom" surface="lime-100">
+      {/* Block 5 — the proof stream (7 positions, DEC-048): one feature card
+          carrying the emphasis, five compact hairline rows, and the reserved,
+          never-backfilled seventh position (D5, A6/A7). The archive link
+          (D6 — exactly one link, no teasers, no count) closes this section
+          rather than standing in a 114 px section of its own. */}
+      <SectionShell
+        dataBlock="belegstrom"
+        density="tight"
+        kicker={words.kickers.evidence}
+        labelledBy="belegstrom-h2"
+        surface="surface"
+      >
         <MotionReveal>
-          <h2 id="belegstrom">Was andere sagen</h2>
-          <ProofStream label="Belege">
+          <h2 id="belegstrom-h2">{proofHeading}</h2>
+          <ProofStream label={proofHeading} layout="rows">
             {proofSelection.entries.map((entry, position) =>
               entry.kind === "item" ? (
                 <ProofCard
                   attribution={entry.candidate.attribution}
                   claim={entry.candidate.claim}
                   contextLine={entry.candidate.contextLine}
-                  geo={entry.candidate.geo}
+                  emphasis={position === 0 ? "feature" : "compact"}
                   key={entry.candidate.id}
                   locale={locale}
                   state={entry.state}
@@ -293,53 +407,67 @@ export default async function Page({
                 // D5/A6/A7: the seventh position is reserved and never
                 // backfilled — the engine leaves it empty because there is no
                 // seventh cleared element, not because the page hard-codes it.
-                <EmptyProofSlot key={`empty-${position}`} />
+                <EmptyProofSlot className={styles.reservedRow} key={`empty-${position}`} />
               ),
             )}
           </ProofStream>
-        </MotionReveal>
-      </SectionShell>
-
-      {/* Block 4 — archive: exactly one link, zero teasers/counts (D6). */}
-      {/* `label`, not `labelledBy`: this block carries a link, not a heading. */}
-      <SectionShell label="Archiv" surface="paper">
-        <MotionReveal>
-          <RouteLink locale={locale} to="archive">
+          <RouteLink className={styles.archiveLink} locale={locale} to="archive">
             {archiveLabel}
           </RouteLink>
         </MotionReveal>
       </SectionShell>
 
-      {/* Block 5 — team (D7). `lime-100`, same rhythm reason as block 3. */}
-      <SectionShell labelledBy="team" surface="lime-100">
+      {/* Block 6 — team (D7). Two people, side by side from `lg`, so the
+          block is one screen rather than 1380 px of stacked portraits. */}
+      <SectionShell
+        dataBlock="team"
+        kicker={words.kickers.team}
+        labelledBy="team-h2"
+        surface="lime-100"
+      >
         <MotionReveal>
-          <h2 id="team">Team</h2>
-          {people.map((person) => (
-            <PersonProfile
-              bio={person.bio}
-              key={person.name}
-              // F-2-33: a person with no portrait gets the hatch, and the
-              // hatch badges itself out of the dictionary. A portrait whose
-              // rights are not cleared keeps that hatch — the inventory entry
-              // stays `status: needed` and resolves to `undefined` here.
-              locale={locale}
-              name={person.name}
-              portraitAlt={pageImage(page, portraitId(person.name))?.alt ?? person.name}
-              portraitCredit={pageImage(page, portraitId(person.name))?.credit}
-              portraitSrc={pageImage(page, portraitId(person.name))?.src}
-              role={person.role}
-            />
-          ))}
+          <h2 id="team-h2">{TEAM_HEADING}</h2>
+          <div className={styles.team}>
+            {people.map((person) => (
+              <PersonProfile
+                bio={person.bio}
+                key={person.name}
+                locale={locale}
+                name={person.name}
+                portraitAlt={pageImage(page, portraitId(person.name))?.alt ?? person.name}
+                role={person.role}
+                /* G-9: text rows until every person has a cleared, plain
+                   portrait. One of the two photographs is a candid with a
+                   hand in front of the face and the other carries
+                   `license: unverified`, so the block would have been one
+                   unusable crop beside one blank 4:5 box. The founder's
+                   cleared portrait stands where it belongs, in the causal
+                   chain above, and is not shown twice. */
+                textOnly
+              />
+            ))}
+          </div>
         </MotionReveal>
       </SectionShell>
 
-      {/* Block 6 — newsletter (inline, permitted only here, D8) — a labelled
-          mock (Q-020, `state/open.md`); still zero `data-cta="primary"`. */}
-      {/* `label`, not `labelledBy`: `newsletter-block` renders its own
-          heading with no id to point to. */}
-      <SectionShell label="Newsletter" surface="paper">
+      {/* Block 7 — newsletter (inline, permitted only here, D8) — a labelled
+          mock (Q-020, `state/open.md`); still zero `data-cta="primary"`.
+          It carries the page's **own** heading and lead now
+          (`ueber-uns-6-newsletter`): the footer renders the same widget on
+          every route, and with the component's default heading this page
+          showed the identical block twice in one scroll. */}
+      <SectionShell
+        dataBlock="newsletter"
+        kicker={words.kickers.newsletter}
+        label={fieldAt(newsletter.blocks, 0) ?? words.kickers.newsletter}
+        surface="paper"
+      >
         <MotionReveal>
-          <NewsletterBlock locale={locale} />
+          <NewsletterBlock
+            heading={fieldAt(newsletter.blocks, 0)}
+            lead={fieldAt(newsletter.blocks, 1)}
+            locale={locale}
+          />
         </MotionReveal>
       </SectionShell>
 

@@ -11,6 +11,13 @@ import styles from "./newsletter-block.module.css";
 
 export interface NewsletterBlockProps {
   readonly heading?: string;
+  /**
+   * One line saying what the letter actually carries, where the page has
+   * authored one (`ueber-uns-6-newsletter`). The footer's own instance has
+   * none: it is the same widget on all 24 routes and the page's inline one
+   * is the one that argues for itself (polish brief page 10, item 7).
+   */
+  readonly lead?: string;
   readonly locale?: Locale;
   readonly className?: string;
 }
@@ -54,7 +61,7 @@ export interface NewsletterBlockProps {
  * page instead of at the privacy section. And the mock says what it is
  * without naming the question behind it (F-2-35).
  */
-export function NewsletterBlock({ heading, locale = "de", className }: NewsletterBlockProps) {
+export function NewsletterBlock({ heading, lead, locale = "de", className }: NewsletterBlockProps) {
   const words = dictionary(locale).newsletter;
   const [beforeLink, afterLink] = words.consent.split("%s");
 
@@ -69,6 +76,7 @@ export function NewsletterBlock({ heading, locale = "de", className }: Newslette
       data-newsletter=""
     >
       <p className={styles.heading}>{heading ?? words.heading}</p>
+      {lead ? <p className={styles.lead}>{lead}</p> : null}
       {/* The `<form>` itself is a client component (F-3-11): it has to cancel
           its own submit, and a server component cannot. The consent sentence
           is built here, because the link resolves through `legalAnchor` and

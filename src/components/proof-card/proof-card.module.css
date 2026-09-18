@@ -57,3 +57,34 @@
 .link {
   margin-top: var(--space-1);
 }
+
+/*
+ * The two emphases of polish brief G-7.
+ *
+ * Six to eight identical cards read as one grey block, not as breadth. A
+ * stream therefore opens with one `feature` card — its claim at sub-head
+ * size — and continues in `compact` rows: no fill, a hairline instead, and
+ * no badge (the card names its source in the context line already).
+ */
+.feature .claim {
+  font-size: var(--type-subhead-size);
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: var(--leading-tight);
+}
+
+.compact {
+  background: none;
+  border-top: 1px solid var(--color-neutral-line);
+}
+
+.compact .body {
+  gap: var(--space-1);
+  padding: var(--space-3) 0;
+}
+
+.compact .claim {
+  font-size: var(--type-body-size);
+  font-weight: 700;
+  letter-spacing: normal;
+  line-height: var(--leading-normal);
+}

@@ -132,6 +132,10 @@ keiner anderen Seite.
 
 **Satz mit Beleg:** Der Gründer war selbst ehrenamtlicher Bürgermeister — das Amt, dem der Dienst hilft, kennt er von innen.
 
+**Quelle zum Beleg:** Nordkurier, 2019 und 2022
+
+**Überschrift (Herkunft):** Angefangen hat es mit Brötchen.
+
 **Herkunft (Anfang und Name):** Angefangen hat es mit der Suche nach frischen Brötchen. Nach dem Umzug von Berlin nach Schlatkow fragte die Familie zwei Wochen lang nach einem Bäckerwagen, legte sich schließlich morgens auf die Lauer und fuhr dem Wagen ins Nachbardorf hinterher, um einen Halt in Schlatkow zu vereinbaren. Der Name stammt aus der Amtszeit als Bürgermeister von Schmatzin: Die Gemeinde unterhielt eine Schafweide, die vom Küchenfenster aus zu sehen war.
 
 **Zitat (Gründer):** „Wenn man alles sammelt, ist plötzlich in jedem Dorf jeden Tag irgendwas los. Wir müssen das nur sichtbar machen." — Jan-Henrik Hempel
@@ -169,14 +173,15 @@ Pool: der volle `proof`-Bestand plus `media-echo` (31 Einträge). Sechs
 der sieben Plätze sind heute mit freigegebenen Belegen besetzbar — alle
 sechs tragen `usage_rights: cleared`:
 
-1. NØRD AWARD 2026, Kategorie Smart Community, unter Bitkom-Schirmherrschaft, verliehen am 28. Mai 2026 auf der NØRD digital convention in Rostock. — NØRD digital convention / digitales MV
-2. Der Dorfkalender ist seit 2018 in Betrieb — kein Pilot, kein Prototyp. — media-echo-Bestand, frühester Fremdbeleg Nordkurier, Juni 2018
-3. Der Gründer hat als ehrenamtlicher Bürgermeister das Amt gehalten, dem der Dienst dient. — Nordkurier 2019 und 2022; Zukunftswege Ost-Vorpommern 2026
-4. In der Pandemie wurden sämtliche Impfangebote und Testzentren-Öffnungszeiten des Landkreises tagesaktuell und ortsgenau über die Dorfkalender veröffentlicht. — Landkreis Vorpommern-Greifswald, 2022
-5. Der Dorfkalender hat 2022 die Integration ukrainischer Geflüchteter ins Dorfleben unterstützt: Anschluss an Vereinstreffen, Veranstaltungen und mobile Händler. — eu:react-Abschlussbericht, Juli 2022
-6. Wer bei Google nach „Bäcker Schlatkow" sucht, findet das mobile Bäckerauto und seinen Tag — nicht Filialen in Anklam. — eu:react-Abschlussbericht, Juli 2022
+1. NØRD AWARD 2026, Kategorie Smart Community, unter Bitkom-Schirmherrschaft, verliehen am 28. Mai 2026 auf der NØRD digital convention in Rostock. — NØRD digital convention / digitales MV, Mai 2026
+2. Der Gründer hat als ehrenamtlicher Bürgermeister das Amt gehalten, dem der Dienst dient. — Zukunftswege Ost-Vorpommern, Januar 2026
+3. In der Pandemie wurden sämtliche Impfangebote und Testzentren-Öffnungszeiten des Landkreises tagesaktuell und ortsgenau über die Dorfkalender veröffentlicht. — Landkreis Vorpommern-Greifswald, 2022
+4. Der Dorfkalender hat 2022 die Integration ukrainischer Geflüchteter ins Dorfleben unterstützt: Anschluss an Vereinstreffen, Veranstaltungen und mobile Händler. — eu:react-Abschlussbericht, Juli 2022
+5. Wer bei Google nach „Bäcker Schlatkow" sucht, findet das mobile Bäckerauto und seinen Tag — nicht Filialen in Anklam. — eu:react-Abschlussbericht, Juli 2022
+6. Der Dorfkalender ist seit 2018 in Betrieb — kein Pilot, kein Prototyp. — Nordkurier, Juni 2018
 
-Die Reihenfolge hier ist die Quellenliste, nicht die Anzeigereihenfolge:
+Die Reihenfolge hier ist chronologisch, neueste zuerst — nicht die
+Anzeigereihenfolge:
 Welches Element auf welchem Platz steht, entscheidet die
 Relevanz-Maschine (TS-005) aus demselben Pool. Der siebte Platz ist für
 den Typ `testimonial` reserviert und wird nie mit einem Element eines
@@ -208,7 +213,7 @@ Genau ein Link, keine Vorschau, keine Liste, kein Zähler (TS-027 D6).
 
 **Jan-Henrik Hempel** — Gründer, technische Leitung und Softwarearchitektur. Zog 2008 von Berlin nach Schlatkow in Vorpommern, gründete 2014 den Kulturverein der Gemeinde Schmatzin mit und war ab 2019 deren ehrenamtlicher Bürgermeister.
 
-**Christian Sauer** — langjähriger Wegbegleiter und ehemaliger Projektkoordinator, mit Hintergrund in Kunst, Kuration, Projektmanagement, Kundensupport und Online-Redaktion.
+**Christian Sauer** — Langjähriger Wegbegleiter und ehemaliger Projektkoordinator, mit Hintergrund in Kunst, Kuration, Projektmanagement, Kundensupport und Online-Redaktion.
 
 ## Slot 6 — Newsletter
 

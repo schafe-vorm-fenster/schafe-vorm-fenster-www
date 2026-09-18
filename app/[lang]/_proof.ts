@@ -55,7 +55,12 @@ export interface ProofCandidate {
   readonly contextLine: string;
   readonly claim: string;
   readonly attribution: string;
-  readonly geo: GeoBadgeFragment;
+  /**
+   * The badge the card shows. Optional since polish brief G-7: a card that
+   * already names its source in the context line drops the badge rather than
+   * printing the same word twice ("Beleg  BELEG", `/ueber-uns`).
+   */
+  readonly geo?: GeoBadgeFragment;
   /** Labelled dummy content — passes the clearance gate carrying its flag. */
   readonly demo: boolean;
   readonly type?: ItemType;

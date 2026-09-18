@@ -134,6 +134,10 @@ no other page.
 
 **Sentence with proof:** The founder was a volunteer mayor himself — he knows the office this service helps from the inside.
 
+**Source for the proof:** Nordkurier, 2019 and 2022
+
+**Heading (origin):** It started with bread rolls.
+
 **Origin (how it started, and the name):** It began with the search for fresh bread rolls. After the family moved from Berlin to Schlatkow, they asked about a baker's van for two weeks, finally lay in wait one morning, and chased the van to the next village to arrange a stop in Schlatkow. The name comes from the years as mayor of Schmatzin: the municipal sheep pasture was visible from the kitchen window.
 
 **Quote (founder):** "Collect all of it, and suddenly every village has something on every day. All we have to do is make it visible." — Jan-Henrik Hempel
@@ -171,14 +175,15 @@ Pool: the full `proof` set plus `media-echo` (31 entries). Six of the
 seven places can be filled today with cleared proof — all six carry
 `usage_rights: cleared`:
 
-1. NØRD AWARD 2026, Smart Community category, under Bitkom patronage, awarded on 28 May 2026 at the NØRD digital convention in Rostock. — NØRD digital convention / digitales MV
-2. The village calendar has been running since 2018 — not a pilot, not a prototype. — media-echo set, earliest third-party record Nordkurier, June 2018
-3. The founder held, as a volunteer mayor, the office this service serves. — Nordkurier 2019 and 2022; Zukunftswege Ost-Vorpommern 2026
-4. During the pandemic, every vaccination slot and every testing-centre opening time in the county was published through the village calendars, day-current and place-precise. — Landkreis Vorpommern-Greifswald, 2022
-5. In 2022 the village calendar helped Ukrainian refugees join village life: club meetings, events, and mobile traders. — eu:react final report, July 2022
-6. Search Google for "Bäcker Schlatkow" and you find the mobile bakery van and its day — not branches in Anklam. — eu:react final report, July 2022
+1. NØRD AWARD 2026, Smart Community category, under Bitkom patronage, awarded on 28 May 2026 at the NØRD digital convention in Rostock. — NØRD digital convention / digitales MV, May 2026
+2. The founder held, as a volunteer mayor, the office this service serves. — Zukunftswege Ost-Vorpommern, January 2026
+3. During the pandemic, every vaccination slot and every testing-centre opening time in the county was published through the village calendars, day-current and place-precise. — Landkreis Vorpommern-Greifswald, 2022
+4. In 2022 the village calendar helped Ukrainian refugees join village life: club meetings, events, and mobile traders. — eu:react final report, July 2022
+5. Search Google for "Bäcker Schlatkow" and you find the mobile bakery van and its day — not branches in Anklam. — eu:react final report, July 2022
+6. The village calendar has been running since 2018 — not a pilot, not a prototype. — Nordkurier, June 2018
 
-The order here is the source list, not the display order: which element
+The order here is chronological, newest first — not the display
+order: which element
 sits in which place is decided by the relevance engine (TS-005) out of
 the same pool. The seventh place is reserved for the `testimonial` type
 and is never backfilled with an element of another type (TS-027 D5).
@@ -208,7 +213,7 @@ Exactly one link, no preview, no list, no counter (TS-027 D6).
 
 **Jan-Henrik Hempel** — Founder, technical lead, and software architecture. Moved from Berlin to Schlatkow in Vorpommern in 2008, co-founded the Schmatzin municipality's cultural association in 2014, and was its volunteer mayor from 2019.
 
-**Christian Sauer** — long-time collaborator and former project coordinator, with a background in art, curation, project management, customer support, and online editing.
+**Christian Sauer** — Long-time collaborator and former project coordinator, with a background in art, curation, project management, customer support, and online editing.
 
 ## Slot 6 — Newsletter
 

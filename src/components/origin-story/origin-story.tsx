@@ -11,6 +11,14 @@ import styles from "./origin-story.module.css";
 export interface OriginStoryProps {
   /** Fixed by TS-027 D3, from brand-identity's own "## Origin story" section. */
   readonly headline?: string;
+  /**
+   * `false` where the page's own hero already carries the `h1` (polish brief
+   * page 10, item 1: the hero is the headline plus the photograph, and the
+   * causal chain moves into the section below it). The block then renders
+   * the chain, the portrait and the proof card without a second heading —
+   * the page still has exactly one `h1`.
+   */
+  readonly showHeadline?: boolean;
   /** The causal chain: village → free community calendar → the licence. */
   readonly body: string;
   readonly priceDisplay: PriceDisplay;
@@ -52,6 +60,7 @@ export interface OriginStoryProps {
  */
 export function OriginStory({
   headline = "Gebaut in einem Dorf, betrieben aus einem Dorf.",
+  showHeadline = true,
   body,
   priceDisplay,
   priceFigure,
@@ -66,7 +75,7 @@ export function OriginStory({
 }: OriginStoryProps) {
   return (
     <div className={[styles.story, className].filter(Boolean).join(" ")}>
-      <h1 className={styles.headline}>{headline}</h1>
+      {showHeadline ? <h1 className={styles.headline}>{headline}</h1> : null}
       <div className={styles.layout}>
         <div className={styles.text}>
           <p className={styles.body}>{body}</p>

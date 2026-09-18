@@ -28,7 +28,20 @@ export interface ProofCardProps extends DataStateProps {
   readonly contextLine: string;
   readonly claim: string;
   readonly attribution: string;
-  readonly geo: GeoBadgeFragment;
+  /**
+   * The `Beleg` / `Reference` badge. **Omitted where the card already names
+   * its source** — polish brief G-7: a badge reading `BELEG` beside a context
+   * line reading `Beleg: …` is the same word twice, and six cards carrying it
+   * read as one grey block rather than as breadth.
+   */
+  readonly geo?: GeoBadgeFragment;
+  /**
+   * How much of the stream's emphasis this card carries (G-7). `feature` is
+   * the one card that opens a stream — its claim is set at sub-head size and
+   * it keeps its surface; `compact` is a hairline-separated row with no fill
+   * and no badge. One emphasis per stream, not seven.
+   */
+  readonly emphasis?: "feature" | "compact";
   /** Present only where the content type expects an image at all. */
   readonly image?: ProofCardImage;
   readonly link?: ProofCardLink;
@@ -49,6 +62,9 @@ export interface ProofCardProps extends DataStateProps {
  * `image` slot, where present at all, carries its own D-9 states through
  * `media-frame` — an image without cleared usage right becomes the "Foto
  * gesucht" placeholder there, never a text-only card missing the badge.
+ * Emphasis: a stream opens with one `feature` card and continues in
+ * `compact` rows (G-7) — the default `card` shape is what a stream of one
+ * uses.
  * Inherits: `ratio-proof` 5:2; radius 0; the card sits *inside* a colour
  * section, so it never counts as a photo section for the rhythm rule.
  * Space: a fixed card height per stream (the caller's `proof-stream` sets
@@ -60,6 +76,7 @@ export function ProofCard({
   claim,
   attribution,
   geo,
+  emphasis,
   image,
   link,
   state = "ready",
@@ -72,7 +89,18 @@ export function ProofCard({
   if (state === "empty") return null;
 
   return (
-    <article className={[styles.card, className].filter(Boolean).join(" ")} data-demo={isMocked(state) ? "true" : undefined}>
+    <article
+      className={[
+        styles.card,
+        emphasis === "feature" ? styles.feature : undefined,
+        emphasis === "compact" ? styles.compact : undefined,
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      data-demo={isMocked(state) ? "true" : undefined}
+      data-emphasis={emphasis}
+    >
       {image ? (
         <MediaFrame
           alt={image.alt}
@@ -88,12 +116,25 @@ export function ProofCard({
         />
       ) : null}
       <div className={styles.body}>
-        <div className={styles.meta}>
-          <p className={styles.context}>{contextLine}</p>
-          <Badge tone="neutral">{geo.label}</Badge>
-        </div>
+        {/*
+          A compact row carries its provenance on **one** line — "Nordkurier ·
+          Juni 2018" — rather than a source line above the claim and a date
+          line under it. Six rows of three lines each is 1401 px of section
+          at 390 px, past G-4's own budget; six rows of two is not, and the
+          source and its date were always one fact anyway.
+        */}
+        {emphasis === "compact" ? (
+          <p className={styles.context}>
+            {[contextLine, attribution].filter(Boolean).join(" · ")}
+          </p>
+        ) : (
+          <div className={styles.meta}>
+            <p className={styles.context}>{contextLine}</p>
+            {geo ? <Badge tone="neutral">{geo.label}</Badge> : null}
+          </div>
+        )}
         <p className={styles.claim}>{claim}</p>
-        <p className={styles.attribution}>{attribution}</p>
+        {emphasis === "compact" ? null : <p className={styles.attribution}>{attribution}</p>}
         {link ? (
           <div className={styles.link}>
             {link.to ? (

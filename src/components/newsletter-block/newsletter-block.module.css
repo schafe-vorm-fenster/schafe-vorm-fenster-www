@@ -10,6 +10,15 @@
   margin: 0;
 }
 
+/* The page's own inline instance says what the letter carries (G-3). */
+.lead {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-meta-size);
+  margin: 0;
+  max-width: var(--measure-reading);
+}
+
+
 .form {
   display: flex;
   flex-direction: column;

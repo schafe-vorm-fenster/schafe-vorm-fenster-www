@@ -27,3 +27,17 @@
     flex-basis: 32%;
   }
 }
+
+/*
+ * G-7 — one emphasis per stream. A single column at every width: the first
+ * child is the feature card, the rest are `compact` rows whose own hairline
+ * separates them, so the gap between children is zero.
+ */
+.rows {
+  gap: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.rows > :first-child {
+  margin-bottom: var(--space-4);
+}

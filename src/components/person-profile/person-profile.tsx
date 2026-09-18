@@ -26,6 +26,20 @@ export interface PersonProfileProps {
    * Without it the team block on `/en/about` said "Foto gesucht" (F-2-33).
    */
   readonly locale?: Locale;
+  /**
+   * `true` renders the entry as a text row with no portrait slot at all
+   * (polish brief G-9).
+   *
+   * The state table below used to end at the "Foto gesucht" hatch: a person
+   * without a usable portrait got a marked, explained gap. Jan's decision of
+   * 2026-09-18 removed every visible mark, and what the hatch left behind
+   * was the one thing this component's own contract forbids — a blank box,
+   * 4:5 and full column width, under a name. A portrait slot is also not a
+   * photo-contribution occasion, so there is nothing to invite. Where no
+   * cleared portrait exists the honest shape is the name, the role and the
+   * bio, and nothing else.
+   */
+  readonly textOnly?: boolean;
   readonly className?: string;
 }
 
@@ -36,8 +50,10 @@ export interface PersonProfileProps {
  * Structure: portrait · name · role line · optional bio. Nothing about a
  * person is written into website copy beyond what `@schafe-vorm-fenster/
  * people` (via the content pipeline, M3) supplies as props.
- * States: a person without a usable portrait gets the "Foto gesucht" hatch
- * through `media-frame` — never omitted, never a blank box.
+ * States: a person with a cleared portrait shows it through `media-frame`;
+ * a person without one is a `textOnly` row — never a blank box, and never
+ * an invitation, because a portrait slot is not a photo-contribution
+ * occasion (polish brief G-9).
  * Inherits: `ratio-portrait` 4:5, radius 0, no shadow.
  * Space: the ratio is declared before the portrait loads; equal card heights
  * in a grid come from the page's own layout, not from this component.
@@ -54,10 +70,12 @@ export function PersonProfile({
   portraitNotDepicting,
   portraitCredit,
   locale,
+  textOnly = false,
   className,
 }: PersonProfileProps) {
   return (
     <article className={[styles.profile, className].filter(Boolean).join(" ")}>
+      {textOnly ? null : (
       <MediaFrame
         alt={portraitAlt}
         caption={portraitCredit}
@@ -68,6 +86,7 @@ export function PersonProfile({
         src={portraitSrc}
         state={portraitState}
       />
+      )}
       <p className={styles.name}>{name}</p>
       <p className={styles.role}>{role}</p>
       {bio ? <p className={styles.bio}>{bio}</p> : null}

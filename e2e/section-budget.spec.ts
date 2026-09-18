@@ -17,8 +17,9 @@ import { everyRoute, href } from "../src/lib/routes/routes";
  * ### Why a ratchet and not a flat assertion
  *
  * The remaining violators are page composition, which the per-page pass owns
- * (brief Part B). Until then this file holds them at their **measured**
- * height: a section named below may shrink, and may not grow; a section not
+ * (brief Part B) — `/ueber-uns` and `/en/about` have had theirs and their
+ * two lines are gone. Until then this file holds the rest at their
+ * **measured** height: a section named below may shrink, and may not grow; a section not
  * named below may not exceed the budget at all. So the rule binds every new
  * section immediately, the known debt cannot quietly get worse, and each
  * page that is fixed deletes a line here rather than loosening a threshold.
@@ -39,10 +40,10 @@ const PHONE = { width: 390, height: 844 };
  * by a step.
  */
 const KNOWN_OVER: Record<string, Record<string, number>> = {
-  // G-9: the embed demo section. The brief's decision is a static screenshot
-  // of a real embedded calendar at `ratio-map`, or no section at all.
-  "/dein-kalender": { "embed-demo": 1772 },
-  "/en/your-calendar": { "embed-demo": 1772 },
+  // `/dein-kalender`'s embed demo is off this list: the real embedded
+  // calendar keeps the violet section to itself and its six-row settings
+  // list stands one section lower, on its own ground. 1772 px became 946 +
+  // 902, both inside the budget (brief, page 6, item 2).
   // Brief Part B page 2: the four value stories are one undifferentiated
   // block. The prescription is four sections on alternating grounds, each
   // with its own transition and the cleared testimonial that belongs to it —
@@ -50,11 +51,6 @@ const KNOWN_OVER: Record<string, Record<string, number>> = {
   // nowhere. That is copy work, so it lands with the per-page pass; the
   // German page is 1199 px and only the longer English translation is over.
   "/en/your-place": { "value-stories": 1273 },
-  // Brief Part B page 5: the proof stream is seven near-identical cards
-  // (G-7 turns it into one feature plus compact rows) and the team block
-  // carries two portrait slots with no portrait (G-9).
-  "/ueber-uns": { herkunft: 1564, "(unnamed)": 1643 },
-  "/en/about": { herkunft: 1564, "(unnamed)": 1643 },
 };
 
 /**
