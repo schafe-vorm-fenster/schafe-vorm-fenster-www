@@ -62,6 +62,40 @@ images:
     wide_file: /images/real/dein-ort-hero-wide.webp
     wide_width: 1400
     wide_height: 600
+  - id: dein-ort-story-baeckerwagen
+    slot: dein-ort-3-story-baeckerwagen
+    ratio: feature
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Brietzig, Kirche und Café.jpg —
+      https://commons.wikimedia.org/wiki/File:Brietzig,_Kirche_und_Caf%C3%A9.jpg — own photograph by
+      Schafe vorm Fenster (Commons account "Schafevormfenster", own work), May 2025, 2889×1929.
+      Credit: content/legal/image-credits.md.
+    alt: >-
+      The centre of Brietzig: the brick church, a house and the terrace of the village café with
+      people sitting at it.
+    licence: CC0 1.0
+    status: real
+    file: /images/real/dein-ort-story-baeckerwagen.webp
+    width: 1400
+    height: 1000
+  - id: dein-ort-story-kultur
+    slot: dein-ort-5-story-kultur
+    ratio: feature
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Schönwalde, Schloss.jpg —
+      https://commons.wikimedia.org/wiki/File:Sch%C3%B6nwalde,_Schloss.jpg — own photograph by
+      Schafe vorm Fenster (Commons account "Schafevormfenster", own work), May 2025, 3908×2421.
+      Credit: content/legal/image-credits.md.
+    alt: >-
+      The manor house in Schönwalde with its open staircase and red tiled roof, a meadow with young
+      trees in front of it.
+    licence: CC0 1.0
+    status: real
+    file: /images/real/dein-ort-story-kultur.webp
+    width: 1400
+    height: 1000
   - id: dein-ort-homescreen-ios
     slot: dein-ort-7-homescreen
     ratio: portrait
@@ -106,6 +140,8 @@ block 1's offer text changes.
 
 **Hint below the search field:** Searching by place name is still to come — until then a postcode does it.
 
+**Transition into the module:** This is what it looks like once a place is in:
+
 Stage 0 names no place because none is known. The page therefore claims
 nothing about a place; it shows the search and a module from the region
 whose radius is named in the badge. States A and B (slots 1 and 2) only
@@ -129,6 +165,8 @@ Place name and dates are live data from `/api/places/{slug}/events`.
 
 **CTA label (primary):** Publish the first date → `/mitmachen`
 
+**Closing heading:** One date is enough to put something in {place}.
+
 Literal quote from SRC-002 (TS-020 D2, DEC-071): this sentence belongs
 only here. It implies no fault and no apology — the calendar for this
 place already exists and is waiting.
@@ -140,6 +178,8 @@ place already exists and is waiting.
 **Title:** The bakery van, with its route
 
 **Why it matters:** When the bakery van comes and where it stops isn't a side issue — it decides whether you get fresh bread or not. That belongs in the same calendar as the village fair.
+
+**Transition:** Starting with the bread.
 
 **Example:** a recurring delivery date in {place} or nearby, live from the calendar.
 
@@ -172,6 +212,8 @@ revenue — the account stands, the figure does not.
 
 **Why it matters:** If you want a say, you need to hear about the meeting before it passes, not afterwards in the minutes. Official dates belong in the same calendar as everything else in the place.
 
+**Transition:** And it doesn't stop at bread.
+
 **Example:** an official date from {place} or the county, live from the calendar.
 
 Proof of resilience in a crisis: during the pandemic, all of the
@@ -198,6 +240,8 @@ day-current and place-accurate through the village calendars
 **Title:** Culture you wouldn't have gone looking for
 
 **Why it matters:** The concert in the next village, the exhibition at the manor — if you don't happen to hear about it, you miss it. In the calendar, it finds you instead of the other way round.
+
+**Transition:** You wouldn't go looking for all of it.
 
 **Example:** a culture date from around {place}, live from the calendar.
 
@@ -228,7 +272,9 @@ calendar, on the record.
 
 **Title:** What's happening fifteen minutes away
 
-**Why it matters:** Your place doesn't stop at the municipal boundary. What's going on two villages over belongs in your calendar just as much as what's happening right outside your door.
+**Why it matters:** What's going on two villages over belongs in your calendar just as much as what's happening right outside your door.
+
+**Transition:** And it doesn't stop at the municipal boundary.
 
 **Example:** dates from around {place}, live from the calendar (position 2, "this week nearby").
 
@@ -269,6 +315,10 @@ moves behind the neighbourhood module.
 <!-- id: dein-ort-8-permanence; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar"]; status: draft -->
 
 **Reassurance text:** Free, no sign-up, permanent: no introductory tier that quietly disappears later.
+
+**Closing heading:** One tap, and it sits where your apps sit.
+
+**Different place:** Different place?
 
 Source: `price.note` from `community-calendar` — "Free for readers
 without any account … No limit on the number of dates per place.

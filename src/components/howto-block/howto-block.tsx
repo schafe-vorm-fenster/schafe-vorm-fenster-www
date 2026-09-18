@@ -28,6 +28,15 @@ export interface HowtoBlockProps {
    */
   readonly conversion?: ConversionBinding;
   /**
+   * Which platforms open behind their own `summary` instead of standing
+   * open. Both instructions stay in the DOM for every visitor, in the same
+   * order, under every user agent (TS-020 D4) — a collapsed one is disclosed,
+   * not branched away. `/dein-ort` collapses Android, which halves the
+   * block's height on a phone without taking the instruction off the page
+   * (polish brief, page 2, fix 6).
+   */
+  readonly collapsed?: readonly ("ios" | "android")[];
+  /**
    * The page's language — the screenshot frames badge themselves and read
    * it. Without it `/en/your-place` carried the German placeholder marking
    * (F-2-33).
@@ -53,7 +62,7 @@ export interface HowtoBlockProps {
  * A11y: both instructions are readable in linear order — iOS then Android,
  * every time, for every visitor.
  */
-export function HowtoBlock({ headline, ios, android, appHref, appLinkLabel = "Kalender öffnen", conversion, locale, className }: HowtoBlockProps) {
+export function HowtoBlock({ headline, ios, android, appHref, appLinkLabel = "Kalender öffnen", collapsed = [], conversion, locale, className }: HowtoBlockProps) {
   const platforms: Array<{ id: string; label: string; platform: HowtoPlatform }> = [
     { id: "ios", label: "iPhone", platform: ios },
     { id: "android", label: "Android", platform: android },
@@ -66,25 +75,42 @@ export function HowtoBlock({ headline, ios, android, appHref, appLinkLabel = "Ka
         {headline}
       </h2>
       <div className={styles.platforms}>
-        {platforms.map(({ id, label, platform }) => (
-          <div className={styles.platform} data-platform={id} key={id}>
-            <p className={styles.platformLabel}>{label}</p>
-            {platform.screenshotSrc !== undefined || platform.screenshotAlt !== undefined ? (
-              <MediaFrame
-                alt={platform.screenshotAlt ?? ""}
-                locale={locale}
-                notDepicting={platform.screenshotNotDepicting}
-                ratio="portrait"
-                src={platform.screenshotSrc}
-              />
-            ) : null}
-            <ol className={styles.steps}>
-              {platform.steps.map((step) => (
-                <li key={step}>{step}</li>
-              ))}
-            </ol>
-          </div>
-        ))}
+        {platforms.map(({ id, label, platform }) => {
+          const body = (
+            <>
+              {platform.screenshotSrc !== undefined || platform.screenshotAlt !== undefined ? (
+                <MediaFrame
+                  alt={platform.screenshotAlt ?? ""}
+                  locale={locale}
+                  notDepicting={platform.screenshotNotDepicting}
+                  ratio="portrait"
+                  src={platform.screenshotSrc}
+                />
+              ) : null}
+              <ol className={styles.steps}>
+                {platform.steps.map((step) => (
+                  <li key={step}>{step}</li>
+                ))}
+              </ol>
+            </>
+          );
+
+          return (
+            <div className={styles.platform} data-platform={id} key={id}>
+              {collapsed.includes(id as "ios" | "android") ? (
+                <details className={styles.disclosure}>
+                  <summary className={styles.platformSummary}>{label}</summary>
+                  {body}
+                </details>
+              ) : (
+                <>
+                  <p className={styles.platformLabel}>{label}</p>
+                  {body}
+                </>
+              )}
+            </div>
+          );
+        })}
       </div>
       {conversion === undefined ? (
         <OutboundLink className={styles.cta} href={appHref} variant="secondary">

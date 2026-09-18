@@ -10,6 +10,14 @@ import styles from "./live-module-frame.module.css";
 export interface LiveModuleFrameProps extends DataStateProps {
   /** The full heading, already naming its own radius — "in <place>", "in der Umgebung", "im Kreis <county>". */
   readonly title: string;
+  /**
+   * Read, not seen. The heading still names the module's own radius (TS-008
+   * D1) — it is only taken out of sight where the block directly above
+   * already says the same sentence, which on `/dein-ort` state A is the
+   * page's `h1` (polish brief, page 2, fix 2: "the second identical heading
+   * goes away entirely").
+   */
+  readonly titleHidden?: boolean;
   readonly subline?: string;
   /** An onward action beside the module — never the primary CTA of the page. */
   readonly cta?: ReactNode;
@@ -60,6 +68,7 @@ export interface LiveModuleFrameProps extends DataStateProps {
  */
 export function LiveModuleFrame({
   title,
+  titleHidden = false,
   subline,
   cta,
   announced = false,
@@ -80,7 +89,7 @@ export function LiveModuleFrame({
     >
       <header className={styles.header}>
         <div className={styles.heading}>
-          <Heading className={styles.title}>{title}</Heading>
+          <Heading className={titleHidden ? styles.titleHidden : styles.title}>{title}</Heading>
           {subline ? <p className={styles.subline}>{subline}</p> : null}
         </div>
         <div className={styles.marks}>

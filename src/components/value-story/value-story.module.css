@@ -18,6 +18,10 @@
   margin: 0;
 }
 
+.media {
+  margin: 0;
+}
+
 .exampleBadge {
   margin-bottom: var(--space-2);
 }

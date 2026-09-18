@@ -44,3 +44,17 @@
 .cta {
   align-self: flex-start;
 }
+
+/*
+ * The heading a page has already said in its `h1` — read, not seen. Same
+ * pattern as `search-field`'s label: out of sight, still in the accessible
+ * tree, taking no layout space.
+ */
+.titleHidden {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

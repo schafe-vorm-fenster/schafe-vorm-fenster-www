@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import type { APIRequestContext } from "@playwright/test";
+
 import { checkRhythm } from "../../src/components/section-shell/rhythm";
 
 import type { RhythmEntry } from "../../src/components/section-shell/rhythm";
@@ -21,8 +23,34 @@ import type { RhythmEntry } from "../../src/components/section-shell/rhythm";
 
 /** `src/lib/live/mocks/fixtures.ts` — a covered place that always has dates. */
 const PLACE_WITH_DATES = "schlatkow";
-/** The same file's `EMPTY_DEMO_SLUG` — covered, zero dates: TS-008 D4's moment. */
-const PLACE_WITHOUT_DATES = "lassan";
+
+/**
+ * A covered community whose window is **empty** — TS-008 D4's conversion
+ * moment, and the state this page changes its primary conversion for.
+ *
+ * It used to be `EMPTY_DEMO_SLUG` (`lassan`), the mock backend's own marker.
+ * That stopped reaching the branch when the dates capability moved to the
+ * public village calendar, which needs no credential and therefore answers
+ * in every environment (`src/lib/live/README.md`, "the three sources"):
+ * Lassan has real dates now, so the fixture asked for an empty place and got
+ * a full one. Making the mock override a real answer for one slug would ship
+ * a village that claims to be empty when it is not, so the walk uses a
+ * community that genuinely has nothing in its window, and confirms that from
+ * the BFF before it walks — a village entering its first date is content
+ * news, not a regression, and the list is long enough to survive it.
+ */
+const EMPTY_PLACE_CANDIDATES = ["achimswalde", "altenhof", "kattenberg", "zwiedorf"];
+
+/** The first candidate the live layer still answers empty for. */
+async function emptyPlace(request: APIRequestContext): Promise<string | undefined> {
+  for (const slug of EMPTY_PLACE_CANDIDATES) {
+    const response = await request.get(`/api/places/${slug}/events?window=upcoming`);
+    if (!response.ok()) continue;
+    const body = (await response.json()) as { data?: { events?: unknown[] } };
+    if ((body.data?.events ?? []).length === 0) return slug;
+  }
+  return undefined;
+}
 
 const PHONE = { width: 360, height: 640 };
 const DESKTOP = { width: 1280, height: 800 };
@@ -45,19 +73,40 @@ test.describe("TS-020 — your place", () => {
     expect(await rows.count()).toBeGreaterThan(0);
     expect(await rows.count()).toBeLessThanOrEqual(3);
 
-    // The handover is a real link into the app, and it is not the page's
-    // `data-cta="primary"` — that one is the search submit while the place
-    // came from a parameter rather than from a conversion (TS-006 D4).
+    // The handover is a real link into the app, and once a place is known it
+    // **is** the page's conversion (polish brief G-5, page 2: "the hero
+    // headline is followed immediately by the three live rows and the
+    // homescreen CTA"). Before the polish pass the marker stayed on the
+    // search field even in state A, so the page's stated primary conversion
+    // — `save-calendar-to-homescreen`, `page.meta.ts` — was carried by no
+    // control at all and the search was offered to a visitor who had just
+    // searched. The hero therefore has no CTA of its own in this state;
+    // repeating the offer above the rows it is about would be the third of
+    // three (TS-006 D4 keeps the search as the primary only while no place
+    // is known, which is state S0 and state B's publish offer).
     const handover = dates.locator('a[href^="https://app."]');
     await expect(handover).toHaveCount(1);
     await expect(handover).toHaveAttribute("href", new RegExp(PLACE_WITH_DATES));
+    await expect(handover).toHaveAttribute("data-cta", "primary");
+    await expect(page.locator('[data-cta="primary"]')).toHaveCount(1);
+
+    // The module's heading is in the accessible tree and out of sight: the
+    // `h1` two lines above already says this sentence, and the page said it
+    // twice in a row before the polish pass (brief, page 2, fix 2).
+    await expect(dates.locator("h2")).toHaveCount(1);
+    expect(
+      await dates.locator("h2").evaluate((node) => node.getBoundingClientRect().height),
+    ).toBeLessThan(4);
   });
 
   test("TS-020-A3: walk state B — the publish offer in the module slot, the focus job shifts", async ({
     page,
+    request,
   }) => {
+    const slug = await emptyPlace(request);
+    test.skip(slug === undefined, "no covered community is empty right now");
     await page.setViewportSize(DESKTOP);
-    await page.goto(`/dein-ort?ort=${PLACE_WITHOUT_DATES}`);
+    await page.goto(`/dein-ort?ort=${slug}`);
 
     const dates = page.locator("#place-dates");
     // TS-008 D4: a covered place with zero dates is the conversion moment,
@@ -75,10 +124,7 @@ test.describe("TS-020 — your place", () => {
     const offer = dates.locator('a[href^="/mitmachen"]');
     await expect(offer).toHaveCount(1);
     await expect(offer).toHaveAttribute("data-cta", "primary");
-    await expect(offer).toHaveAttribute(
-      "href",
-      `/mitmachen/registrieren?ort=${PLACE_WITHOUT_DATES}`,
-    );
+    await expect(offer).toHaveAttribute("href", `/mitmachen/registrieren?ort=${slug}`);
     await expect(dates.locator('a[href^="https://app."]')).toHaveCount(0);
 
     // TS-008-A6: position 2 renders, labelled as surroundings — in state B it
@@ -86,6 +132,10 @@ test.describe("TS-020 — your place", () => {
     const nearby = page.locator("#nearby");
     await expect(nearby.locator("article").first()).toBeVisible();
     expect(await nearby.locator("h2").first().innerText()).not.toContain("Lassan");
+    // The closing block repeats the *current* state's offer, with the
+    // page's own promise over it (G-6): in state B that is the publishing
+    // route, not the calendar handover.
+    await expect(page.locator(`#closing-cta a[href^="/mitmachen/registrieren"]`)).toHaveCount(1);
 
     // No raw markdown reaches the visitor: the `→ `/mitmachen`` routing note
     // beside the CTA label is not copy.
@@ -97,26 +147,46 @@ test.describe("TS-020 — your place", () => {
     await expect(dates.locator('[role="status"]')).toHaveCount(1);
   });
 
-  test("TS-020-A4: exactly four value stories, each with a title, a story and an example box", async ({
+  /**
+   * **Changed by the polish pass** (brief, page 2, fix 3). The four stories
+   * were one 1320 px `paper` block — `#value-stories` — with four `article`s
+   * inside it, no kicker, no image and no ground change between them. They
+   * are four **sections** now, on alternating grounds, each carrying its own
+   * hand-off line; so the count is over `[data-block="value-story"]` rather
+   * than over the children of one container, and the example box is asserted
+   * where a story has one: two of the four are picture-led instead (a
+   * picture, a live row *and* a quote is three pieces of evidence for one
+   * argument, and four stories built that way were a 3 000 px wall).
+   */
+  test("TS-020-A4: exactly four value stories, each with a title, a story and its own evidence", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/dein-ort");
 
-    const stories = page.locator("#value-stories > div > article");
+    const stories = page.locator('[data-block="value-story"]');
     await expect(stories).toHaveCount(4);
 
     for (let index = 0; index < 4; index += 1) {
       const story = stories.nth(index);
-      await expect(story.locator("h2")).toHaveCount(1);
-      await expect(story.locator("p").first()).not.toBeEmpty();
-      await expect(story.locator("[data-example-level]")).toHaveCount(1);
+      await expect(story.locator("article h2")).toHaveCount(1);
+      await expect(story.locator("article p").first()).not.toBeEmpty();
+      // Evidence: a live row, a live module, or a photograph — never none.
+      const evidence = await story.locator("[data-example-level], img").count();
+      expect(evidence, `story ${index + 1} carries no evidence`).toBeGreaterThan(0);
     }
+
+    // The grounds alternate, which is what stops four arguments in a row
+    // from reading as one long block.
+    const surfaces = await stories.evaluateAll((nodes) =>
+      nodes.map((node) => node.getAttribute("data-surface")),
+    );
+    expect(new Set(surfaces).size).toBeGreaterThan(2);
 
     // Every example names a real covered place, and nothing in the box says
     // the box is a stand-in — Jan, 2026-09-18. The provenance is the module's
     // own `data-demo`/`data-mock`, asserted in `e2e/content-compliance.spec.ts`.
-    const exampleText = (await page.locator("#value-stories").textContent()) ?? "";
+    const exampleText = (await stories.allTextContents()).join(" ");
     expect(exampleText).toMatch(/Schlatkow|Schmatzin|Rubkow|Quilow|Groß Kiesow|Züssow|Lassan/);
     for (const marking of ["Beispiel", "Demo", "Platzhalter"]) {
       expect(exampleText, marking).not.toContain(marking);
@@ -128,19 +198,42 @@ test.describe("TS-020 — your place", () => {
     () => {},
   );
 
-  test("TS-020-A6: with every testimonial uncleared the stories render three-part", async ({
-    page,
-  }) => {
+  /**
+   * **Changed by the polish pass** (brief, page 2, "the testimonials are not
+   * rendered at all, although four real quotes sit in
+   * `content/pages/dein-ort/de.md`"; fix 3: "render them").
+   *
+   * The criterion this replaces asserted the *absence* of every quote, on the
+   * reading of TS-020-A6 that no testimonial may stand while its
+   * `usage_rights` are unverified (Q-014). What the artifact carries is not
+   * an unverified paraphrase: four named people, quoted verbatim from the
+   * hub's own proof records, each with its attribution and its year, each
+   * with a `clearance: pending` note naming the record and the reason. The
+   * brief decides that the pre-go-live hardening round clears them and that
+   * the page ships with them; this test holds the half that did not change —
+   * that no quote is anonymous, invented, or a stock sentence about "users".
+   */
+  test("TS-020-A6: every story closes on a named, attributed quote", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/dein-ort");
 
-    const stories = page.locator("#value-stories");
-    await expect(stories.locator("blockquote")).toHaveCount(0);
-    await expect(stories.locator("figure")).toHaveCount(0);
-    await expect(stories.locator("img")).toHaveCount(0);
+    const quotes = page.locator('[data-block="value-story"] blockquote');
+    await expect(quotes).toHaveCount(4);
 
-    const text = (await stories.textContent()) ?? "";
+    for (let index = 0; index < 4; index += 1) {
+      const quote = quotes.nth(index);
+      // The sentence, and the person who said it — never one without the other.
+      await expect(quote.locator("p")).not.toBeEmpty();
+      const attribution = (await quote.locator("footer").innerText()).trim();
+      expect(attribution.length, `quote ${index + 1} has no attribution`).toBeGreaterThan(6);
+    }
+
+    const text = (await page.locator("#main").textContent()) ?? "";
     expect(text).not.toMatch(/Nutzer sagen|users say|unsere Kundinnen|our customers/i);
+    // The four people the artifact names, and nobody else.
+    for (const name of ["Kurzweg", "Zschiesche", "Eichler", "Wendt"]) {
+      expect(text, name).toContain(name);
+    }
   });
 
   test("TS-020-A7: the homescreen block renders iOS and Android, always, with the app handover", async ({
@@ -191,6 +284,10 @@ test.describe("TS-020 — your place", () => {
   test("TS-020-A8: every app handover emits save-calendar-to-homescreen exactly once", async ({
     page,
   }) => {
+    // Three call sites, each walked from its own fresh page view, each
+    // waiting for hydration: the walk is long by construction.
+    test.slow();
+
     const fires: string[] = [];
     page.on("console", (message) => {
       if (message.text().includes("conversion")) fires.push(message.text());
@@ -208,6 +305,16 @@ test.describe("TS-020 — your place", () => {
     // document in a state no visitor would ever click a second control from.
     for (let index = 0; index < count; index += 1) {
       await page.goto(`/dein-ort?ort=${PLACE_WITH_DATES}`);
+      // The listener lives in a client component, so a click before
+      // hydration is a navigation and nothing else. Wait for the tracker's
+      // own signal rather than for a timeout (F-2-71) — the page carries
+      // three call sites for this goal now (the module's handover, the
+      // homescreen block and the closing block), and the ones further down
+      // the document hydrate last.
+      const trackers = page.locator('[data-conversion-tracker="save-calendar-to-homescreen"]');
+      for (let tracker = 0; tracker < (await trackers.count()); tracker += 1) {
+        await expect(trackers.nth(tracker)).toHaveAttribute("data-hydrated", "true");
+      }
       fires.length = 0;
       await page.locator('a[href^="https://app."]').nth(index).click({ noWaitAfter: true });
       await page.waitForTimeout(250);
@@ -219,14 +326,17 @@ test.describe("TS-020 — your place", () => {
 
   test("TS-020-A8 (second half): in state B the publish CTA emits no conversion event", async ({
     page,
+    request,
   }) => {
+    const slug = await emptyPlace(request);
+    test.skip(slug === undefined, "no covered community is empty right now");
     const fires: string[] = [];
     page.on("console", (message) => {
       if (message.text().includes("conversion")) fires.push(message.text());
     });
 
     await page.setViewportSize(DESKTOP);
-    await page.goto(`/dein-ort?ort=${PLACE_WITHOUT_DATES}`);
+    await page.goto(`/dein-ort?ort=${slug}`);
     // Block 1 carries no calendar handover in state B: "an 'open the
     // calendar' link beside 'nothing is in it yet' is the one offer that
     // state must not carry" (TS-008 D4). The homescreen block keeps its own —
@@ -235,9 +345,7 @@ test.describe("TS-020 — your place", () => {
     await expect(page.locator('#homescreen a[href^="https://app."]')).toHaveCount(1);
 
     await page.locator('[data-cta="primary"]').click();
-    await expect(page).toHaveURL(
-      new RegExp(`/mitmachen/registrieren\\?ort=${PLACE_WITHOUT_DATES}$`),
-    );
+    await expect(page).toHaveURL(new RegExp(`/mitmachen/registrieren\\?ort=${slug}$`));
     // `register-as-publisher` is fired on the registration handover, not here.
     expect(fires).toHaveLength(0);
   });
@@ -248,7 +356,11 @@ test.describe("TS-020 — your place", () => {
     for (const path of ["/dein-ort", "/dein-ort?ort=", "/dein-ort?ort=%3Cscript%3E"]) {
       const response = await page.goto(path);
       expect(response?.status(), path).toBe(200);
-      await expect(page.getByRole("searchbox").first()).toBeVisible();
+      // `input[type="search"]`, not `getByRole("searchbox")`: the typeahead
+      // sets `role="combobox"` on the same input once it mounts (the ARIA
+      // pattern for a field with a suggestion list), so the role a test sees
+      // depends on whether hydration has happened yet.
+      await expect(page.locator('input[type="search"]').first()).toBeVisible();
       // The raw value appears nowhere as data — not as markup, not as text,
       // and not as an element that could run.
       //
@@ -276,9 +388,12 @@ test.describe("TS-020 — your place", () => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/dein-ort");
 
-    await expect(page.getByRole("searchbox").first()).toBeVisible();
-    await expect(page.locator("#value-stories > div > article")).toHaveCount(4);
-    await expect(page.locator("[data-example-level]")).toHaveCount(4);
+    await expect(page.locator('input[type="search"]').first()).toBeVisible();
+    await expect(page.locator('[data-block="value-story"]')).toHaveCount(4);
+    // Two of the four stories are picture-led and carry no example box; the
+    // other two carry the live row and the live module (brief, page 2).
+    await expect(page.locator("[data-example-level]")).toHaveCount(2);
+    await expect(page.locator('[data-block="value-story"] img')).toHaveCount(2);
     await expect(page.locator("#context-band nav")).toHaveCount(1);
     await expect(page.locator("#closing-cta")).toHaveCount(1);
 
@@ -298,7 +413,7 @@ test.describe("TS-020 — your place", () => {
     for (const path of [
       "/dein-ort",
       "/dein-ort?ort=17390",
-      `/dein-ort?ort=${PLACE_WITHOUT_DATES}`,
+      `/dein-ort?ort=${EMPTY_PLACE_CANDIDATES[0]}`,
     ]) {
       await page.goto(path);
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
@@ -378,7 +493,9 @@ test.describe("TS-020 — your place", () => {
         [
           "focus-block",
           "place-dates",
-          "value-stories",
+          "story-baeckerwagen",
+          "story-ratssitzung",
+          "story-kultur",
           "nearby",
           "homescreen",
           "context-band",
@@ -386,10 +503,15 @@ test.describe("TS-020 — your place", () => {
         ].includes(id),
       );
     });
+    // The four stories are four sections now, and the fourth **is** position
+    // 2: the radius argument carries the nearby rows as its own evidence
+    // instead of being followed by a fifth list (brief, page 2, fix 5).
     expect(order).toEqual([
       "focus-block",
       "place-dates",
-      "value-stories",
+      "story-baeckerwagen",
+      "story-ratssitzung",
+      "story-kultur",
       "nearby",
       "homescreen",
       "context-band",
@@ -444,7 +566,7 @@ test.describe("TS-020 — your place", () => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/en/your-place");
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
-    await expect(page.locator("#value-stories > div > article")).toHaveCount(4);
+    await expect(page.locator('[data-block="value-story"]')).toHaveCount(4);
     await expect(page.locator("#homescreen")).toHaveCount(1);
     const hint = (await page.locator("main").textContent()) ?? "";
     expect(hint).toContain("postcode");

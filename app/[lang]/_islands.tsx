@@ -43,6 +43,7 @@ import { PlaceExampleSet } from "@/src/components/place-example-set/place-exampl
 import { Skeleton } from "@/src/components/skeleton/skeleton";
 import { OG_LOCALE } from "@/src/lib/i18n/locales";
 import { fillTemplate } from "@/src/lib/pages/demo-content";
+import { pickStoryExamples } from "@/src/lib/pages/story-examples";
 import { calendarUrl } from "@/src/lib/live/app-handover";
 import { cacheLifeProfile, cacheTags } from "@/src/lib/live/cache-profiles";
 import { categoryLabel, categoryTone } from "@/src/lib/live/categories";
@@ -54,7 +55,8 @@ import { placeEvents } from "@/src/lib/live/places";
 import { countyLabel } from "@/src/lib/live/county-label";
 import { regionExamples } from "@/src/lib/live/region";
 
-import type { EventListItem } from "@/src/components/event-list/event-list";
+import type { EventCategory } from "@/src/components/event-row/event-row";
+import type { EventListItem, EventListRole } from "@/src/components/event-list/event-list";
 import type { DataState } from "@/src/components/data-state";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { LiveEnvelope, LiveEvent } from "@/src/lib/live/types";
@@ -99,8 +101,11 @@ export function toListItems(
       date: event.startsAt,
       title: event.title,
       // Every row names its own place — the rule that lets a widened module
-      // stand beside a narrow one without lying (TS-008 D1).
-      meta: [clock, event.placeName].filter(Boolean).join(" · "),
+      // stand beside a narrow one without lying (TS-008 D1). The place comes
+      // **first**: the meta line is one line of 76 px and ellipsises at its
+      // end, and with the clock in front a row from the next village over
+      // read "13:…" on a phone — the one word the rule is about, cut.
+      meta: [event.placeName, clock].filter(Boolean).join(" · "),
       category,
       categoryLabel: categoryLabel(event.categoryId, locale),
     };
@@ -123,10 +128,36 @@ export interface PlaceDatesIslandProps {
   /** The module's own heading, already naming its radius. `{place}` is filled in. */
   readonly titleTemplate: string;
   readonly rowCount?: number;
+  /**
+   * The list's role, which caps its rows (polish brief G-2): `illustrative`
+   * three, `answering` five, `story` one. The module may ask its source for
+   * more dates than it is allowed to print; the rest stay behind the
+   * calendar link.
+   */
+  readonly role?: EventListRole;
   readonly tone?: "light" | "dark";
   readonly headingLevel?: "h2" | "h3";
+  /** Read, not seen — where the block above already carries this sentence as the page's `h1`. */
+  readonly titleHidden?: boolean;
+  /**
+   * Which categories a **story-capped** module would rather show, best
+   * first. A list of one row is an illustration, and the next date in the
+   * window is not always one: "a place like yours has something in it"
+   * illustrated by a bin collection is an argument against itself. Ignored
+   * unless the list is capped to one row, where order is not the module's
+   * promise; position 1 stays chronological, always.
+   */
+  readonly prefer?: readonly EventCategory[];
   /** The app handover's label. `{place}` is filled in; omitted means no CTA. */
   readonly ctaTemplate?: string;
+  /**
+   * The conversion marker for the module's own handover, where the page's
+   * primary conversion *is* this link — on `/dein-ort` in state A the hero
+   * above carries the place name and the offer sits under the three rows, so
+   * the marker travels with it (G-5). A string, never a node: an island's
+   * props are its cache key.
+   */
+  readonly ctaDataCta?: string;
   /** `true` where arriving content changes the page's meaning (`/dein-ort`). */
   readonly announced?: boolean;
   /**
@@ -154,9 +185,13 @@ export async function PlaceDatesIsland({
   locale,
   titleTemplate,
   rowCount = 3,
+  role,
   tone,
   headingLevel = "h2",
+  titleHidden = false,
+  prefer,
   ctaTemplate,
+  ctaDataCta,
   announced = false,
   conversion,
   invitation,
@@ -165,7 +200,14 @@ export async function PlaceDatesIsland({
   cacheLife(cacheLifeProfile("dates"));
   cacheTag(cacheTags.dates(slug));
 
-  const envelope = await placeEvents({ slug, window: "upcoming", rowCount });
+  // A module that gets to choose its row has to be given more than one to
+  // choose from: `prefer` picks out of the window, so it asks for the window
+  // rather than for the single row it prints.
+  const envelope = await placeEvents({
+    slug,
+    window: "upcoming",
+    rowCount: prefer === undefined ? rowCount : Math.max(rowCount, 12),
+  });
   // An unresolved place is a different page state entirely, never an empty
   // module (`src/lib/live/README.md`). The page's own shell already stands.
   if (envelope === undefined) return null;
@@ -173,6 +215,12 @@ export async function PlaceDatesIsland({
   const { data, fetchedAt } = envelope;
   const empty = data.events.length === 0;
   const title = fillTemplate(titleTemplate, { place: data.place.name });
+  const items =
+    role === "story" && prefer !== undefined
+      ? pickStoryExamples(toListItems(data.events, locale), [prefer]).filter(
+          (item): item is EventListItem => item !== undefined,
+        )
+      : toListItems(data.events, locale);
 
   return (
     <LiveModuleFrame
@@ -183,7 +231,7 @@ export async function PlaceDatesIsland({
         // and an "open the calendar" link beside "nothing is in it yet" is
         // the one offer that state must not carry.
         ctaTemplate === undefined || (empty && invitation !== undefined) ? undefined : conversion === undefined ? (
-          <OutboundLink href={calendarUrl(data.place)} variant="secondary">
+          <OutboundLink dataCta={ctaDataCta} href={calendarUrl(data.place)} variant="secondary">
             {fillTemplate(ctaTemplate, { place: data.place.name })}
           </OutboundLink>
         ) : (
@@ -192,7 +240,7 @@ export async function PlaceDatesIsland({
             goalId={conversion.goalId}
             stage={conversion.stage}
           >
-            <OutboundLink href={calendarUrl(data.place)} variant="secondary">
+            <OutboundLink dataCta={ctaDataCta} href={calendarUrl(data.place)} variant="secondary">
               {fillTemplate(ctaTemplate, { place: data.place.name })}
             </OutboundLink>
           </ConversionTracker>
@@ -203,6 +251,7 @@ export async function PlaceDatesIsland({
       state={stateOf(envelope)}
       tier={tierOf(envelope)}
       title={title}
+      titleHidden={titleHidden}
       updatedAt={fetchedAt}
     >
       <EventList
@@ -223,8 +272,9 @@ export async function PlaceDatesIsland({
             />
           )
         }
-        items={toListItems(data.events, locale)}
+        items={items}
         locale={locale}
+        role={role}
         rowCount={rowCount}
         state={empty ? "empty" : stateOf(envelope)}
         tone={tone}
@@ -244,7 +294,16 @@ export interface NearbyIslandProps {
   /** Names its own radius — never the place name (TS-008 D1). `{radius}` is the km figure. */
   readonly titleTemplate: string;
   readonly rowCount?: number;
+  /** The list's role, which caps its rows (G-2) — position 2 is the `answering` five. */
+  readonly role?: EventListRole;
   readonly headingLevel?: "h2" | "h3";
+  /**
+   * The goal this module's calendar link completes (TS-012 D4: *every* click
+   * that opens a place calendar on `app.*`). Position 2's own link went
+   * unarmed, so one of the four handovers on `/dein-ort` fired nothing —
+   * measured, not reviewed.
+   */
+  readonly conversion?: ConversionBinding;
 }
 
 export async function NearbyIsland({
@@ -253,7 +312,9 @@ export async function NearbyIsland({
   locale,
   titleTemplate,
   rowCount = 5,
+  role,
   headingLevel = "h2",
+  conversion,
 }: NearbyIslandProps) {
   "use cache";
   cacheLife(cacheLifeProfile("dates"));
@@ -274,10 +335,20 @@ export async function NearbyIsland({
   return (
     <LiveModuleFrame
       cta={
-        anchor === undefined ? undefined : (
+        anchor === undefined ? undefined : conversion === undefined ? (
           <OutboundLink href={calendarUrl(anchor)} variant="secondary">
             {dictionary(locale).live.allDates}
           </OutboundLink>
+        ) : (
+          <ConversionTracker
+            attributes={{ ...conversion.attributes, place: anchor.slug }}
+            goalId={conversion.goalId}
+            stage={conversion.stage}
+          >
+            <OutboundLink href={calendarUrl(anchor)} variant="secondary">
+              {dictionary(locale).live.allDates}
+            </OutboundLink>
+          </ConversionTracker>
         )
       }
       headingLevel={headingLevel}
@@ -291,6 +362,7 @@ export async function NearbyIsland({
         capOnPhone
         items={toListItems(data.events, locale)}
         locale={locale}
+        role={role}
         rowCount={rowCount}
         state={stateOf(envelope)}
       />
@@ -416,9 +488,14 @@ export async function exampleRows(
   cacheLife(cacheLifeProfile("dates"));
   cacheTag(cacheTags.dates(slug));
 
+  // More rows than any one module prints: `/dein-ort` shows three of the
+  // place's dates at position 1 and five nearby in story 4, and the value
+  // stories pick their own example out of what is left — a story that
+  // repeats a row the reader has just scrolled past is not an example, it
+  // is the same list again (polish brief, page 2).
   const [dates, near] = await Promise.all([
-    placeEvents({ slug, window: "upcoming", rowCount: 3 }),
-    nearbyEvents({ lat, lng, rowCount: 5 }),
+    placeEvents({ slug, window: "upcoming", rowCount: 12 }),
+    nearbyEvents({ lat, lng, rowCount: 12 }),
   ]);
 
   return {

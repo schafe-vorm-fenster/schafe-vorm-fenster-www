@@ -17,10 +17,27 @@ export interface ValueStoryProps {
   readonly exampleLevel: ExampleLevel;
   /** The place or county name the example is labelled with, where applicable. */
   readonly exampleLabel?: string;
-  /** The example itself — an `event-row`, a snapshot line, or the publish invitation. */
-  readonly example: ReactNode;
-  /** `row` reserves 76 px (`event-row`); `feature` reserves `ratio-feature`. */
-  readonly exampleVariant?: "row" | "feature";
+  /**
+   * The example itself — an `event-row`, a snapshot line, or the publish
+   * invitation. Absent where the story is led by its photograph instead: a
+   * picture, a live date *and* a quote is three pieces of evidence for one
+   * argument, and the box is not reserved for an example that is not coming.
+   */
+  readonly example?: ReactNode;
+  /**
+   * A photograph for the story, at `ratio-feature`, where one exists
+   * (polish brief, page 2, fix 3: two of the four stories are picture-led so
+   * the four do not read as one list). Absent, not empty: a story without a
+   * cleared photograph renders text-led and reserves nothing.
+   */
+  readonly media?: ReactNode;
+  /**
+   * `row` reserves 76 px (`event-row`); `feature` reserves `ratio-feature`;
+   * `module` reserves nothing, for the one story whose example *is* a live
+   * module with its own frame and its own geometry (`/dein-ort` story 4,
+   * which carries position 2 — polish brief, page 2, fix 5).
+   */
+  readonly exampleVariant?: "row" | "feature" | "module";
   /**
    * Absent, not empty: an uncleared testimonial is not in the DOM at all —
    * clearance is known at build time, so there is no async box to reserve.
@@ -48,12 +65,20 @@ export interface ValueStoryProps {
  * A11y: one heading per story (`headingLevel`, default `h3` inside the
  * page's own `h2` section), no heading-level skip.
  */
+/** What the example box reserves before its content arrives. */
+const EXAMPLE_CLASS: Record<"row" | "feature" | "module", string | undefined> = {
+  row: styles.exampleRow,
+  feature: styles.exampleFeature,
+  module: undefined,
+};
+
 export function ValueStory({
   aspect,
   whyItMatters,
   exampleLevel,
   exampleLabel,
   example,
+  media,
   exampleVariant = "feature",
   testimonial,
   headingLevel = "h3",
@@ -65,17 +90,17 @@ export function ValueStory({
     <article className={[styles.story, className].filter(Boolean).join(" ")}>
       <Heading className={styles.aspect}>{aspect}</Heading>
       <p className={styles.why}>{whyItMatters}</p>
-      <div
-        className={exampleVariant === "row" ? styles.exampleRow : styles.exampleFeature}
-        data-example-level={exampleLevel}
-      >
-        {exampleLabel ? (
-          <Badge className={styles.exampleBadge} tone="neutral">
-            {exampleLabel}
-          </Badge>
-        ) : null}
-        {example}
-      </div>
+      {media ? <div className={styles.media}>{media}</div> : null}
+      {example === undefined || example === null ? null : (
+        <div className={EXAMPLE_CLASS[exampleVariant]} data-example-level={exampleLevel}>
+          {exampleLabel ? (
+            <Badge className={styles.exampleBadge} tone="neutral">
+              {exampleLabel}
+            </Badge>
+          ) : null}
+          {example}
+        </div>
+      )}
       {testimonial ? (
         <blockquote className={styles.quote}>
           <p className={styles.quoteText}>{testimonial.text}</p>

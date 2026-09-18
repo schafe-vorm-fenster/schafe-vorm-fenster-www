@@ -74,6 +74,8 @@ const PUBLIC_FILES: readonly string[] = [
   "/images/real/dein-ort-hero.webp",
   "/images/real/dein-ort-starten-hero-wide.webp",
   "/images/real/dein-ort-starten-hero.webp",
+  "/images/real/dein-ort-story-baeckerwagen.webp",
+  "/images/real/dein-ort-story-kultur.webp",
   "/images/real/deine-region-angebot-hero-wide.webp",
   "/images/real/deine-region-angebot-hero.webp",
   "/images/real/deine-region-gebietsschnitt.webp",

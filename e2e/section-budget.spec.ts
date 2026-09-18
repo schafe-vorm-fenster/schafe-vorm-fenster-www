@@ -44,13 +44,9 @@ const KNOWN_OVER: Record<string, Record<string, number>> = {
   // calendar keeps the violet section to itself and its six-row settings
   // list stands one section lower, on its own ground. 1772 px became 946 +
   // 902, both inside the budget (brief, page 6, item 2).
-  // Brief Part B page 2: the four value stories are one undifferentiated
-  // block. The prescription is four sections on alternating grounds, each
-  // with its own transition and the cleared testimonial that belongs to it —
-  // four quotes that sit in `content/pages/dein-ort/*.md` and render
-  // nowhere. That is copy work, so it lands with the per-page pass; the
-  // German page is 1199 px and only the longer English translation is over.
-  "/en/your-place": { "value-stories": 1273 },
+  // `/dein-ort`'s four value stories are off this list: they were one
+  // undifferentiated block and are four sections now, each on its own
+  // ground, each under the budget in both languages (brief, page 2, fix 3).
 };
 
 /**

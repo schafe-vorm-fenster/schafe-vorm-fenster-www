@@ -62,6 +62,40 @@ images:
     wide_file: /images/real/dein-ort-hero-wide.webp
     wide_width: 1400
     wide_height: 600
+  - id: dein-ort-story-baeckerwagen
+    slot: dein-ort-3-story-baeckerwagen
+    ratio: feature
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Brietzig, Kirche und Café.jpg —
+      https://commons.wikimedia.org/wiki/File:Brietzig,_Kirche_und_Caf%C3%A9.jpg — Eigenaufnahme von
+      Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 2889×1929.
+      Nachweis: content/legal/image-credits.md.
+    alt: >-
+      Dorfmitte von Brietzig: die Backsteinkirche, ein Wohnhaus und die Terrasse des Dorfcafés, an
+      der Gäste sitzen.
+    licence: CC0 1.0
+    status: real
+    file: /images/real/dein-ort-story-baeckerwagen.webp
+    width: 1400
+    height: 1000
+  - id: dein-ort-story-kultur
+    slot: dein-ort-5-story-kultur
+    ratio: feature
+    provenance: real
+    source: >-
+      Wikimedia Commons, File:Schönwalde, Schloss.jpg —
+      https://commons.wikimedia.org/wiki/File:Sch%C3%B6nwalde,_Schloss.jpg — Eigenaufnahme von
+      Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3908×2421.
+      Nachweis: content/legal/image-credits.md.
+    alt: >-
+      Gutshaus in Schönwalde mit Freitreppe und rotem Ziegeldach, davor eine Wiese mit jungen
+      Bäumen.
+    licence: CC0 1.0
+    status: real
+    file: /images/real/dein-ort-story-kultur.webp
+    width: 1400
+    height: 1000
   - id: dein-ort-homescreen-ios
     slot: dein-ort-7-homescreen
     ratio: portrait
@@ -106,6 +140,8 @@ nur der Angebotstext in Block 1 wechselt.
 
 **Hinweistext unter dem Suchfeld:** Suche nach Ortsnamen kommt noch dazu — bis dahin reicht die Postleitzahl.
 
+**Überleitung zum Modul:** So sieht das aus, wenn ein Ort schon dabei ist:
+
 Stufe 0 nennt keinen Ort, weil keiner bekannt ist. Die Seite behauptet
 deshalb nichts über einen Ort, sondern zeigt die Suche und ein Modul aus
 der Region, dessen Radius im Badge steht. Die Zustände A und B (Slots 1
@@ -129,6 +165,8 @@ Ortsname und Termine sind Live-Daten aus `/api/places/{slug}/events`.
 
 **CTA-Label (primär):** Ersten Termin veröffentlichen → `/mitmachen`
 
+**Abschluss-Überschrift:** Ein Termin reicht, damit in {place} etwas steht.
+
 Wörtliches Zitat aus SRC-002 (TS-020 D2, DEC-071): Dieser Satz gehört nur
 hierher. Er unterstellt keinen Fehler und keine Entschuldigung — der
 Kalender für diesen Ort existiert bereits und wartet.
@@ -140,6 +178,8 @@ Kalender für diesen Ort existiert bereits und wartet.
 **Titel:** Der Bäckerwagen, mit Route
 
 **Warum es zählt:** Wann der Bäckerwagen kommt und wo er hält, ist keine Nebensache — es entscheidet, ob du frisches Brot bekommst oder nicht. Das gehört in denselben Kalender wie das Dorffest.
+
+**Überleitung:** Angefangen beim Brot.
 
 **Beispiel:** wiederkehrender Liefertermin in {place} oder in der Umgebung, live aus dem Kalender.
 
@@ -172,6 +212,8 @@ Umsatzzahlen messen lässt — die Anekdote steht, die Zahl nicht.
 
 **Warum es zählt:** Wer mitreden will, muss vom Termin erfahren, bevor er vorbei ist — nicht danach im Protokoll. Amtliche Termine gehören in denselben Kalender wie alles andere im Ort.
 
+**Überleitung:** Und es bleibt nicht beim Brot.
+
 **Beispiel:** ein amtlicher Termin aus {place} oder dem Landkreis, live aus dem Kalender.
 
 Beleg für die Tragfähigkeit in der Krise: Während der Pandemie liefen
@@ -198,6 +240,8 @@ tagesaktuell und ortsgenau über die Dorfkalender (`impftermine-landkreis`,
 **Titel:** Kultur, die du nicht gesucht hättest
 
 **Warum es zählt:** Das Konzert im Nachbardorf, die Ausstellung im Schloss — wer nicht zufällig davon hört, verpasst es. Im Kalender findet es dich, statt umgekehrt.
+
+**Überleitung:** Nicht alles davon würdest du suchen.
 
 **Beispiel:** ein Kulturtermin aus der Umgebung von {place}, live aus dem Kalender.
 
@@ -228,7 +272,9 @@ Kalender.
 
 **Titel:** Was in fünfzehn Minuten Entfernung passiert
 
-**Warum es zählt:** Dein Ort hört an der Gemeindegrenze nicht auf. Was zwei Dörfer weiter läuft, gehört genauso in deinen Kalender wie das, was direkt vor deiner Tür passiert.
+**Warum es zählt:** Was zwei Dörfer weiter läuft, gehört genauso in deinen Kalender wie das, was direkt vor deiner Tür passiert.
+
+**Überleitung:** Und es hört an der Gemeindegrenze nicht auf.
 
 **Beispiel:** Termine aus der Umgebung von {place}, live aus dem Kalender (Position 2, „diese Woche in der Nähe").
 
@@ -269,6 +315,10 @@ dieser Block hinter das Nachbarschafts-Modul.
 <!-- id: dein-ort-8-permanence; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar"]; status: draft -->
 
 **Zusicherungstext:** Kostenlos, ohne Anmeldung, dauerhaft: keine Einführungsstufe, die später wieder verschwindet.
+
+**Abschluss-Überschrift:** Einmal antippen, und er ist da, wo deine Apps sind.
+
+**Anderer Ort:** Anderer Ort?
 
 Quelle: `price.note` von `community-calendar` — „Free for readers without
 any account … No limit on the number of dates per place. Permanent, not
