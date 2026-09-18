@@ -310,7 +310,8 @@ export const SLOT_CONTENT_TYPE_ALIASES: Readonly<Record<string, SlotContentType>
  *   mixed                    a slot whose parts differ in provenance
  *
  * `demo` is orthogonal: it marks the slot the prototype shows in place of an
- * empty one, and it is what puts the `Demo-Daten` badge on the page.
+ * empty one, and it is what puts `data-demo="true"` on the module — never a
+ * word on the page (Jan, 2026-09-18).
  */
 export const SlotProvenanceSchema = z.enum([
   "sourced",
@@ -369,7 +370,7 @@ export const SlotMetaSchema = z.strictObject({
   provenance: SlotProvenanceSchema,
   derived_from: z.array(SourceRefSchema),
   status: LifecycleStatusSchema,
-  demo: z.boolean().optional().describe("True for a dummy-content slot; puts the `Demo-Daten` badge on the module."),
+  demo: z.boolean().optional().describe('True for a stand-in slot; puts data-demo="true" on the module, never a word on the page.'),
 });
 
 export type SlotMeta = z.infer<typeof SlotMetaSchema>;

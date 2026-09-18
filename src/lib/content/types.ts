@@ -67,7 +67,7 @@ export interface ContentSlot {
   readonly provenance: RenderedProvenance;
   /**
    * Dummy content (plan/guardrails.md): the module renders it with the
-   * `Demo-Daten` badge. Use `slotState()` rather than reading this directly.
+   * `data-demo` marking. Use `slotState()` rather than reading this directly.
    */
   readonly demo: boolean;
   /** TS-007 D6 — the update key. `ia` for a copy shell with no source record. */

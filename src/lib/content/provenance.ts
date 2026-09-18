@@ -1,5 +1,6 @@
 /**
- * Provenance on the page — the one place the `Demo-Daten` badge is decided
+ * Provenance on the page — the one place a module's `data-demo` marking is
+ * decided
  * (plan/guardrails.md mock and dummy-content rules, TS-007 D6).
  *
  * The components already know how to show it: every module that depends on

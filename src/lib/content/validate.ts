@@ -111,7 +111,8 @@ export function checkPage(page: PageContent, resolver: HubResolver): Finding[] {
 
     if (slot.provenance === "generated" && !slot.demo) {
       // A warning, not an error: `generated` says "no hub record behind it",
-      // `demo` says "show the Demo-Daten badge". Most generated slots are
+      // `demo` says "mark this module `data-demo` in the markup" — never a
+      // word on the page (Jan, 2026-09-18). Most generated slots are
       // demo data and must carry both, but a few are editorial choices that
       // are not demo data — the stage-0 reference place, the accessibility
       // statement awaiting counsel. Both are registered in state/open.md,
@@ -121,7 +122,7 @@ export function checkPage(page: PageContent, resolver: HubResolver): Finding[] {
           check: "dummy-content",
           slot: slot.id,
           message:
-            "generated but not marked `demo: true` — confirm it needs no `Demo-Daten` badge and carries a state/open.md row (plan/guardrails.md)",
+            "generated but not marked `demo: true` — confirm it needs no `data-demo` marking and carries a state/open.md row (plan/guardrails.md)",
         },
         "warning",
       );
