@@ -559,6 +559,11 @@ export default async function PlacePage({
               ctaDataCta={stated === undefined ? undefined : "primary"}
               ctaTemplate={stated === undefined ? undefined : (stateA.cta ?? "")}
               locale={locale}
+              // S0's single row is an illustration of "what's on", so it
+              // shows the village's own life where the window has some:
+              // "so sieht das aus, wenn ein Ort dabei ist" answered by the
+              // next bin collection illustrates the wrong thing.
+              prefer={stated === undefined ? ["social", "culture", "fest", "official"] : undefined}
               role={stated === undefined ? "story" : "illustrative"}
               rowCount={stated === undefined ? 1 : 3}
               slug={anchor.slug}
