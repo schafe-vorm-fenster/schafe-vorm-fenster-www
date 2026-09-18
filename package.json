@@ -35,6 +35,7 @@
     "import:legal-content": "tsx legacy-content/scripts/import-content.ts",
     "import:legal-content:dry-run": "tsx legacy-content/scripts/import-content.ts --dry-run",
     "fetch:openapi": "tsx scripts/fetch-openapi.mjs",
+    "build:place-index": "tsx scripts/build-place-index.ts",
     "preflight": "node scripts/preflight.mjs",
     "placeholders": "node scripts/make-placeholders.mjs",
     "images:generate": "node scripts/generate-images.mjs",

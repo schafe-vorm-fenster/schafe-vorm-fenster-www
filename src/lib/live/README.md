@@ -27,19 +27,53 @@ A page sees one thing: an **envelope**.
 
 | BFF route | Interface module | Backend today | Serves |
 | --- | --- | --- | --- |
-| `GET /api/places/search?q=` | `places.ts` → `searchPlaces()` | **mock** (no `GEOAPI_READ_TOKEN`; name search has no upstream at all) | the place search, position 0 |
-| `GET /api/places/{slug}/events?window=` | `places.ts` → `placeEvents()` | **mock** (no read token) | position 1, dates in the place, and the empty-state verdict |
-| `GET /api/nearby?lat=&lng=&radius=` | `nearby.ts` → `nearbyEvents()` | **mock** (no read token) | position 2, this week within ~15 km |
-| `GET /api/region/{county}/examples` | `region.ts` → `regionExamples()` | **mock by necessity** — the activity ranking has no upstream operation | position 3, active example places (DEC-034) |
+| `GET /api/places/search?q=` | `places.ts` → `searchPlaces()` | **real** for a name (the committed index), **mock** for a ZIP (no `GEOAPI_READ_TOKEN`) | the place search and its typeahead, position 0 |
+| `GET /api/places/{slug}/events?window=` | `places.ts` → `placeEvents()` | **real** — the public village calendar | position 1, dates in the place, and the empty-state verdict |
+| `GET /api/nearby?lat=&lng=&radius=` | `nearby.ts` → `nearbyEvents()` | **real** — the index cuts the radius, the public calendar carries the dates | position 2, this week within ~15 km |
+| `GET /api/region/{county}/examples` | `region.ts` → `regionExamples()` | **real, approximated** — no activity ranking exists upstream (DEC-034) | position 3, active example places |
 | `GET /api/stats` | `counters.ts` → `liveCounters()` | **real** for `dates`, **mock** for `places` / `updates today` | position 4, the live counters |
 | — (built server-side, never fetched) | `app-handover.ts` | — | every link into the app (DEC-029) |
 
 Supporting modules: `types.ts` (the envelope and the domain shapes),
-`widening.ts` (the chain and the ~15 km cut), `resilient.ts` (the three
-tiers), `last-good.ts` (the tier-2 store), `cache-profiles.ts` (TS-003 D5's
-numbers), `snapshots.ts` (tier 3), `bff.ts` (origin check, rate limit, the
-response shape), `adapters.ts` (upstream shape → ours), `mocks/` (the demo
+`widening.ts` (the chain, the ~15 km cut and the `Europe/Berlin` windows),
+`resilient.ts` (the three tiers), `last-good.ts` (the tier-2 store),
+`cache-profiles.ts` (TS-003 D5's numbers), `snapshots.ts` (tier 3),
+`bff.ts` (origin check, rate limit, the response shape), `adapters.ts`
+(upstream shape → ours), `categories.ts` (events-api's five category ids →
+the design system's six tones), `place-index.ts` (the committed
+covered-community index: name search, id → slug, the radius cut),
+`public-source.ts` (the tokenless source in this layer's vocabulary),
+`showcase.ts` (the configured showcase community), `mocks/` (the stand-in
 backends).
+
+## The three sources, in order
+
+Every data operation of geo-api and events-api is path-scoped
+(`/api/{token}/…`) and this environment has no read token
+(`state/open.md` row 77). That used to mean every list on every page was
+demo data. It no longer does, because two of the three sources below need no
+credential at all.
+
+| # | Source | Needs | Answers |
+| --- | --- | --- | --- |
+| 1 | **geo-api / events-api** (`src/clients/{geo,events}-api/`) | a read token | everything, authoritatively — postcodes, the hierarchy, county-wide event queries |
+| 2 | **the public village calendar** (`src/clients/community-site/`) + **the committed community index** (`place-index.ts`) | nothing | a community's dates, the communities near a point, a name → a place, an id → a slug |
+| 3 | **the mocks** (`mocks/`) | nothing | a complete demo of every module, for `LIVE_DATA=mock` and for offline work |
+
+A module takes the first source that can answer it. Provision
+`GEOAPI_READ_TOKEN` and `EVENTSAPI_READ_TOKEN` and each module moves up to
+row 1 with no code change; take the network away and it falls to row 3.
+
+What row 2 **cannot** do, and does not pretend to:
+
+- **no postcode lookup.** No public surface carries a ZIP, so ZIP search
+  stays geo-api's and stays token-gated. A typed name is answered; a typed
+  postcode falls to the mock.
+- **no county query.** The public calendar answers for a community and its
+  surroundings, so `region.ts` approximates the county from its showcase
+  community's region feed and says so.
+- **no hierarchy.** A place built from row 2 carries no county; the caller
+  supplies the county it already knows (`showcase.ts`).
 
 ## The mock / real switch
 
@@ -53,39 +87,36 @@ LIVE_DATA=real   # force the real clients; capabilities upstream lacks stay mock
 
 `auto` decides **per capability**, in this order:
 
-1. does the operation exist upstream at all? Four do not, and they are
-   measured, not guessed — name search (Q-025), the county activity ranking
-   (Q-015 residue), and the `/api/stats` *places* and *updates today* fields
-   (Q-037). Those are mocked whatever the flag says, because there is nothing
-   to call. `state/open.md` rows 5 and 6.
-2. is the service reachable with a credential? geo-api and the events search
-   are token-scoped (`/api/{token}/…`) and this environment has no read
-   token, so `auto` picks the mock and says so in the payload.
-3. `/api/stats` is the one tokenless operation, so the **dates** counter is
-   real data even here. The band is part real, part demo — which is exactly
-   what Q-037 leaves us with.
+1. does the operation exist at all? Three do not, and they are measured, not
+   guessed — the county activity ranking (Q-015 residue) and the
+   `/api/stats` *places* and *updates today* fields (Q-037). Those are mocked
+   whatever the flag says. `state/open.md` rows 6 and 78.
+2. does the capability's service need a **credential**? `credential: "none"`
+   in `CAPABILITIES` means the public calendar or the committed index
+   answers it, so it is open in every environment — including a preview with
+   no secrets at all.
+3. otherwise: is a read token present? Without one, `auto` picks the mock and
+   says so in the payload.
 
-Provision `GEOAPI_READ_TOKEN` and `EVENTSAPI_READ_TOKEN` and the geo and
-events halves switch to the real clients with no code change.
+Name search is the row that moved: geo-api still has none (Q-025 stays open,
+row 5), but the committed index answers it, so typing `Schlat` suggests
+Schlatkow with no token anywhere.
 
-**Every mocked payload carries `demo: true`** out through the BFF. That flag
-is the `Demo-Daten` badge's only input — a page passes `state="mocked"` to
-the shell and the badge appears. Demo data is obviously fictitious
-(`Schlatkow`, titles suffixed "(Beispiel)"), contains no
-person and no real-looking figure, and every mocked capability has a
-`Mock aktiv` row in `state/open.md`.
+**Every mocked payload carries `demo: true`** out through the BFF. It reaches
+the markup as `data-demo="true"`, never as rendered copy, and every mocked
+capability has a `Mock aktiv` row in `state/open.md`.
 
 ### Fixture markers — the magic inputs a branch needs to be walkable
 
 `mocks/fixtures.ts` names a handful of ZIPs/slugs that exist only so a
-gate-level walk (QA, e2e, chaos) can reach a branch that ordinary demo data
-never produces on its own:
+gate-level walk (QA, e2e, chaos) can reach a branch that ordinary stand-in
+data never produces on its own:
 
 | Constant | What it walks |
 | --- | --- |
 | `UNCOVERED_DEMO_ZIP` (`"99999"`) | TS-008 D7's **uncovered** outcome — no place resolves. |
-| `EMPTY_DEMO_SLUG` (`"lassan"`) | TS-008 D4's conversion moment — a covered place with zero dates. |
-| `AMBIGUOUS_DEMO_ZIP` (`"18299"`) | TS-023-A6 — a municipality search that resolves to **several** communities, so `mockSearchByZip` answers `AMBIGUOUS_DEMO_PLACES` (two places, same name, two counties) instead of the usual one. Before this fixture (F-2-5, round 2), that branch had no fixture at all and only ran against a stubbed `searchPlaces()` result in `resolve-place.test.ts`. Deliberately **not** part of `DEMO_PLACES`: that six-place ring is keyed elsewhere (the ~15 km widening cut, `mocks/events.ts`'s region-example selection) to its current members, and a same-named collision inside it would change those rather than only add a lookup branch. |
+| `EMPTY_DEMO_SLUG` | TS-008 D4's conversion moment — a covered place with zero dates. |
+| `AMBIGUOUS_DEMO_ZIP` (`"18299"`) | TS-023-A6 — a municipality search that resolves to **several** communities. |
 
 Every one of these is a postcode or slug nobody would type by accident —
 finding them is the point of naming them here, not an obstacle.
@@ -272,3 +303,16 @@ RUN_LIVE_API_TESTS=0 pnpm test   # skip the one suite that talks to the real ser
 `src/lib/live/upstream-live.integration.test.ts` is the only suite that
 reaches the network. It probes each host first and skips itself when a
 service does not answer or a credential is missing, so it is green offline.
+
+Everything else runs against **recorded, token-free fixtures**:
+`src/clients/community-site/fixtures/community-page.json` is a real community
+page of the public calendar, trimmed; the two API clients are asserted
+against payloads shaped after the services' own schemas; and
+`place-index.test.ts` runs against the committed index itself, so a build
+that produced a truncated one fails there rather than on a page.
+
+The index is rebuilt with:
+
+```bash
+pnpm build:place-index   # → src/generated/snapshots/communities.json
+```

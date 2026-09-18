@@ -11,15 +11,22 @@
   z-index: 20;
 }
 
+/* Hairline rather than a shadow: the design system has neither shadows nor
+   cards, and `event-row`'s own divider is the same 1 px line on the same
+   token. The popup is paper on paper, separated the way every other list in
+   the system is separated. */
 .list {
   background: var(--color-neutral-paper);
-  border-radius: var(--radius-control, 12px);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 18%);
+  border: 1px solid var(--color-neutral-line);
   list-style: none;
   margin: var(--space-2) 0 0;
   max-height: 22rem;
   overflow-y: auto;
-  padding: var(--space-1) 0;
+  padding: 0;
+}
+
+.list > li + li .option {
+  border-top: 1px solid var(--color-neutral-line);
 }
 
 .option {
