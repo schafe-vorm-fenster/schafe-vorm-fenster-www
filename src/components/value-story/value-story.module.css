@@ -18,8 +18,16 @@
   margin: 0;
 }
 
+/*
+ * The story's photograph, capped at the reading measure like every other
+ * illustration inside prose: without the cap a `ratio-feature` frame is as
+ * wide as the section on a desktop, which makes it 857 px tall and turns one
+ * story into a full screen of picture.
+ */
 .media {
   margin: 0;
+  max-width: var(--measure-reading);
+  width: 100%;
 }
 
 .exampleBadge {
