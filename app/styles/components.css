@@ -99,6 +99,19 @@
   --measure-reading: 66ch;
   --measure-reading-max: 80ch;
 
+  /* ── The ground's own link colour — SRC-014 §Colour ───────────────────
+   * A link's colour is a property of the **ground it stands on**, not of a
+   * selector that happens to load last. Every surface that is not the light
+   * page ground republishes this one custom property (`section-shell`,
+   * `photo-surface`), and every component that paints link-coloured text
+   * reads it instead of naming `lime-800` itself. Inheritance settles the
+   * value, so no rule has to out-specify another and no CSS-module import
+   * order can change the answer — which is what put ink on ink at the foot
+   * of four pages (polish brief G-6).
+   */
+  --ground-link: var(--color-lime-800);
+  --ground-link-hover: var(--color-lime-900);
+
   /* ── Focus ring — SRC-014 §Accessibility ────────────────────────────── */
   --focus-ring-width: 3px;
   --focus-ring-offset: 2px;

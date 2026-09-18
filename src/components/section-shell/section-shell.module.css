@@ -49,12 +49,38 @@
   color: var(--color-neutral-paper);
 }
 
-/* On the dark grounds the link colour has to change with the ground. */
-.ink a,
-.violet500 a {
-  color: var(--color-lime-400);
+/*
+ * The ground publishes its own link colour, rather than recolouring every
+ * descendant `a` by selector.
+ *
+ * The old rules here were `.ink a, .violet500 a { color: lime-400 }` — one
+ * class plus one type selector. That out-specified every single-class rule
+ * beneath it: `chip`'s own fill/text pair (F-3-R2), `outbound-link`'s
+ * secondary pill (F-2-28), `event-row`'s `.title a { color: inherit }`, and
+ * `button`'s five variants. Each of those had to be patched back up to two
+ * classes one at a time, and the one that was not — `button` — is what put
+ * `route-link`'s `.bare { color: inherit }` in charge of the closing CTA's
+ * label and rendered ink on ink at the foot of four pages (polish brief
+ * finding 1).
+ *
+ * A custom property inherits instead of competing: the ground names its link
+ * colour once, every component that paints link-coloured text reads
+ * `--ground-link` (`app/styles/components.css`), and a control that brings
+ * its own fill simply does not read it. `--link`/`--link-hover` are set
+ * alongside for the plain `a` of `base.css` — imported prose, a legal text —
+ * which has no component of its own.
+ */
+.ink,
+.violet500 {
+  --ground-link: var(--color-lime-400);
+  --ground-link-hover: var(--color-lime-300);
+  --link: var(--color-lime-400);
+  --link-hover: var(--color-lime-300);
 }
 
-.lime500 a {
-  color: var(--color-lime-900);
+.lime500 {
+  --ground-link: var(--color-lime-900);
+  --ground-link-hover: var(--color-neutral-ink);
+  --link: var(--color-lime-900);
+  --link-hover: var(--color-neutral-ink);
 }

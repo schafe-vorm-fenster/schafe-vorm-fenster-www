@@ -49,6 +49,11 @@
 
 .ink {
   --photo-scrim: var(--color-neutral-ink);
+  /* The ground's link colour, the same role `section-shell` publishes. */
+  --ground-link: var(--color-lime-400);
+  --ground-link-hover: var(--color-lime-300);
+  --link: var(--color-lime-400);
+  --link-hover: var(--color-lime-300);
   --photo-gradient: linear-gradient(
     to bottom,
     transparent 26%,
@@ -61,6 +66,10 @@
 /* The municipal path (SRC-014 §Photo surface). */
 .violet {
   --photo-scrim: var(--color-violet-500);
+  --ground-link: var(--color-lime-400);
+  --ground-link-hover: var(--color-lime-300);
+  --link: var(--color-lime-400);
+  --link-hover: var(--color-lime-300);
   --photo-gradient: linear-gradient(
     to bottom,
     transparent 26%,
@@ -174,11 +183,9 @@
 }
 
 /*
- * The marks on the photograph — "Foto gesucht", "Nicht motivgenau ·
- * Platzhalter", `Demo-Daten`. Each carries its own fill and its own checked
- * pair, so it needs no scrim of its own; it sits in the picture's top corner
- * the way the design boards draw it, clear of the header that may be lying
- * transparent above it on a hero.
+ * Retained for a future mark on the photograph. Jan's decision of
+ * 2026-09-18 removed every visible one; provenance now travels in
+ * `data-placeholder`, `data-provenance` and `data-mock` on the section.
  */
 .marks {
   display: flex;

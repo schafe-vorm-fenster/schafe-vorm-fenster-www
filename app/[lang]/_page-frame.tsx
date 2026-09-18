@@ -69,6 +69,8 @@ export type ClosingBlock =
       readonly to: RouteId;
       readonly label: string;
       readonly query?: Readonly<Record<string, string | number | undefined>>;
+      /** The promise the page ends on, above the button (polish brief G-6). */
+      readonly heading?: string;
       /** Only where a cleared backing exists — otherwise omitted, not softened. */
       readonly reassurance?: string;
     }
@@ -185,6 +187,7 @@ export function PageFrame({
                 </>
               ) : (
                 <ClosingCta
+                  heading={closing.heading}
                   label={closing.label}
                   locale={locale}
                   query={closing.query}

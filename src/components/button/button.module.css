@@ -35,53 +35,71 @@
   padding: 0 var(--space-4);
 }
 
-/* ── The five variants — SRC-014 §Button ────────────────────────────────── */
+/* ── The five variants — SRC-014 §Button ──────────────────────────────────
+ *
+ * Every variant re-asserts its own fill/text pair at **two classes**
+ * (`.button.primaryLight`), which is the pattern `chip` and `outbound-link`
+ * already carry for the same reason. A button that renders as a link is a
+ * `route-link` in its `bare` form, and `bare` sets `color: inherit` at one
+ * class; `section-shell` used to recolour every `a` on a dark ground at one
+ * class plus one type. Both tie or beat a single-class variant rule, so which
+ * of them won was decided by CSS-module import order — and the production
+ * bundle orders the modules differently from `next dev`, which is why the
+ * closing CTA computed ink on ink on four pages in the preview and looked
+ * correct locally (polish brief finding 1 / G-6). Two classes settle it in
+ * both builds, without `!important` and without a tone prop the caller would
+ * have to remember.
+ *
+ * `quiet` is the one variant with no fill of its own, so it cannot name a
+ * colour: it reads `--ground-link`, which every surface publishes for the
+ * ground it paints (`app/styles/components.css`).
+ */
 
-.primaryLight {
+.button.primaryLight {
   background: var(--color-neutral-ink);
   color: var(--color-neutral-paper);
 }
 
-.primaryLight:hover {
+.button.primaryLight:hover {
   background: var(--color-lime-900);
 }
 
-.primaryDark {
+.button.primaryDark {
   background: var(--color-lime-500);
   color: var(--color-neutral-ink);
 }
 
-.primaryDark:hover {
+.button.primaryDark:hover {
   background: var(--color-lime-400);
 }
 
 /* Paid conversion only, and never twice on one screen. */
-.pulse {
+.button.pulse {
   background: var(--color-himbeere-600);
   color: var(--color-neutral-paper);
 }
 
-.pulse:hover {
+.button.pulse:hover {
   background: var(--color-himbeere-700);
 }
 
-.secondary {
+.button.secondary {
   background: var(--color-neutral-paper);
   color: var(--color-neutral-ink);
 }
 
-.secondary:hover {
+.button.secondary:hover {
   background: var(--color-neutral-surface);
 }
 
-.quiet {
+.button.quiet {
   background: transparent;
-  color: var(--color-lime-800);
+  color: var(--ground-link);
   padding: 0 var(--space-2);
 }
 
-.quiet:hover {
-  color: var(--color-lime-900);
+.button.quiet:hover {
+  color: var(--ground-link-hover);
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 0.15em;

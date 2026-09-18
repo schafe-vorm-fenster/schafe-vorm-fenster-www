@@ -1,12 +1,17 @@
-/* Link treatment: `lime-800` on light (SRC-014 §Colour), never CTA styling. */
+/*
+ * Link treatment: `lime-800` on light (SRC-014 §Colour), never CTA styling.
+ * The colour comes from the ground (`--ground-link`), so the same class reads
+ * correctly on ink, violet and lime-500 without a second selector.
+ */
 .link {
-  color: var(--color-lime-800);
+  color: var(--ground-link);
   font-weight: 700;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.15em;
 }
 
 .link:hover {
+  color: var(--ground-link-hover);
   text-decoration-thickness: 2px;
 }
 
@@ -16,6 +21,13 @@
   text-decoration-thickness: 3px;
 }
 
+/*
+ * A link wrapped in a control (`button`, `chip`, `logo`, `event-row`'s
+ * title): the control owns the colour. `color: inherit` is the fallback for
+ * the cases where the wrapper genuinely inherits — the header's job labels,
+ * a breadcrumb crumb — and it must never win over a control that names its
+ * own pair, which is why every such control asserts at two classes.
+ */
 .bare {
   color: inherit;
   text-decoration: none;

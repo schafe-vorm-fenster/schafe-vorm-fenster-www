@@ -16,6 +16,12 @@ export interface ClosingCtaRepeatProps extends LinkOptions {
   readonly to: RouteId;
   readonly label: string;
   readonly buttonVariant?: ClosingCtaButtonVariant;
+  /**
+   * The promise the page ends on, above the button. Without it the last
+   * thing a visitor sees is a control with no sentence around it (polish
+   * brief G-6); the sentence itself is the page's, written in Part B.
+   */
+  readonly heading?: string;
   readonly reassurance?: string;
   readonly className?: string;
 }
@@ -70,12 +76,34 @@ export function ClosingCta(props: ClosingCtaProps) {
     );
   }
 
-  const { to, label, buttonVariant = "primary-light", reassurance, locale, query, hash, className } =
-    props;
+  const {
+    to,
+    label,
+    buttonVariant = "primary-light",
+    heading,
+    reassurance,
+    locale,
+    query,
+    hash,
+    className,
+  } = props;
 
   return (
     <div className={[styles.repeat, className].filter(Boolean).join(" ")}>
-      <Button hash={hash} locale={locale} query={query} to={to} variant={buttonVariant}>
+      {heading ? <p className={styles.heading}>{heading}</p> : null}
+      {/* `data-cta="repeat"`, never `"primary"` — the marker block 1 keeps
+          (TS-006 D6). It is here so the label is inside the contrast sweep
+          that walks `[data-cta]` on every route (`e2e/cta-contrast.spec.ts`);
+          this button computed ink on ink in the production build and nothing
+          measured it. */}
+      <Button
+        dataCta="repeat"
+        hash={hash}
+        locale={locale}
+        query={query}
+        to={to}
+        variant={buttonVariant}
+      >
         {label}
       </Button>
       {reassurance ? <p className={styles.reassurance}>{reassurance}</p> : null}

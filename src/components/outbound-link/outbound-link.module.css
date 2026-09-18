@@ -18,7 +18,7 @@
 }
 
 .inline {
-  color: var(--color-lime-800);
+  color: var(--ground-link);
   font-weight: 700;
   text-underline-offset: 0.15em;
 }
@@ -56,7 +56,7 @@
 }
 
 .quiet {
-  color: var(--color-lime-800);
+  color: var(--ground-link);
   font-weight: 700;
   min-height: var(--height-control);
   padding: 0 var(--space-2);
@@ -64,6 +64,7 @@
 }
 
 .quiet:hover {
+  color: var(--ground-link-hover);
   text-decoration: underline;
   text-decoration-thickness: 2px;
 }
