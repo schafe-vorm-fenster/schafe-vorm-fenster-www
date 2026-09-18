@@ -114,13 +114,27 @@ Modul-, Filter- oder Ergebnisbeschriftung — nur als Frage der Besucherin
 
 ## Slot 1 — Fokusblock (Mechanismus: embed)
 
-<!-- id: deine-region-1-focus; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: draft -->
+<!-- id: deine-region-1-focus; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: draft -->
 
 **Aha-Frage:** Das ganze Kreisgebiet in einem Kalender, ohne eigenes Portalprojekt?
 
 **Text:** Genau das ist der Punkt. Ein eingebundenes System zeigt euer ganzes Gebiet, unter eurem Namen und in eurem Design.
 
 **CTA-Label (primär):** Angebot anfragen → `/deine-region/angebot`
+
+**Zweit-CTA (leise):** Lieber erst sprechen? Kennenlerngespräch buchen
+
+**Hinweis zum Zweit-CTA:** Öffnet Google Kalender in einem neuen Tab.
+
+**Abschluss-Überschrift:** Sollen wir euch ein Angebot rechnen?
+
+Der Zweit-CTA steht leise unter dem primären, nie daneben und nie als
+zweite Schaltfläche: eine Seite trägt pro Bildschirm genau eine primäre
+Handlung. Der Hinweis nennt, was das Antippen auslöst; wohin die Daten
+gehen, steht im Datenschutz-Abschnitt, auf den die Seite ohnehin
+verlinkt. Die Abschluss-Überschrift wiederholt dieselbe Conversion wie
+oben — gleiches Ziel, gleiches Label (TS-006 D6). Kein
+Zeitversprechen, solange C11 offen ist.
 
 Quelle: `headline` von `counties--portalize-enterprise` — „The whole
 district on one map, without a portal project." Die Kartenhälfte der
@@ -151,7 +165,13 @@ Moduls (TS-026 D3).
 
 **Sucheingabe (Placeholder):** Dein Ort
 
-Höchstens 6 Orte, als gestaltete Auswahl — nie als
+**Überschrift (ohne Landkreis):** So sieht das heute schon aus: Orte, die schon dabei sind
+
+**Überleitung:** Und das ist keine Absichtserklärung — es läuft schon:
+
+Solange kein Landkreis bekannt ist, nennt die Überschrift keinen: der
+Fallback benannte bis hierher „den Landkreis deiner Region", was kein
+Landkreis ist (TS-026-A10). Höchstens 6 Orte, als gestaltete Auswahl — nie als
 „die aktivsten Orte" und nie als vollständige Liste (TS-026 D4). Der
 Zähler rendert nur, wenn `/api/stats` den Wert tatsächlich liefert
 (Q-037) — sonst bleibt er weg, keine Schätzung.
@@ -247,6 +267,8 @@ Preis-Baustein gelesen, nie getippt.
 <!-- id: deine-region-angebot-1-form; content_type: form; provenance: sourced; derived_from: [ia]; status: draft -->
 
 **Überschrift:** Angebot für {landkreis-oder-organisation} anfragen
+
+**Einleitung:** Sag uns, um welches Gebiet es geht — den Rest klären wir im Gespräch.
 
 Eine envoy-Instanz (TS-016 S2) — Feldset und Erfolgsverhalten sind noch
 nicht spezifiziert (Q-022). Diese Seite trägt keinen eigenen

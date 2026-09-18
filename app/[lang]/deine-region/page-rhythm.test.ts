@@ -20,7 +20,11 @@ describe("TS-026: /deine-region page rhythm", () => {
       "surface-2", // 4 the product (embed demo)
       "paper", // 5 what it adds (feature-benefit's own contained media, not a photo section)
       "lime-100", // 6 proof
-      "lime-100", // 7 quote CTA
+      // Block 7 — the inline quote form — is gone (polish brief page 8,
+      // item 2): `/deine-region/angebot` is the form, this page is the
+      // argument, and the two of them showed "Absenden" and "Angebot
+      // anfragen" one under the other for a single action. Removing it also
+      // removes the two adjacent `lime-100` sections the brief measured.
       "surface", // PageFrame block 3 — context band
       "paper", // PageFrame block 4 — closing CTA
     ];
@@ -32,7 +36,10 @@ describe("TS-026: /deine-region page rhythm", () => {
 describe("TS-026: /deine-region/angebot page rhythm", () => {
   it("has no rhythm violation across hero, form, band and closing", () => {
     const sections: RhythmEntry[] = [
-      "photo", // hero-block
+      // No hero photograph: `/deine-region/angebot` is a form page, and the
+      // violet wash over an office interior read as a rendering error
+      // rather than as art direction (brief page 9, item 1).
+      "violet-500", // the headline
       "lime-100", // the quote form
       "surface", // PageFrame block 3 — context band
       "paper", // PageFrame block 4 — closing CTA

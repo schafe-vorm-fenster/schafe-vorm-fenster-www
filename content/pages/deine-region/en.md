@@ -116,13 +116,26 @@ question (TS-026 D3).
 
 ## Slot 1 — Focus block (mechanism: embed)
 
-<!-- id: deine-region-1-focus; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: draft -->
+<!-- id: deine-region-1-focus; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: draft -->
 
 **Aha question:** Your whole county in one calendar, with no portal project of your own?
 
 **Text:** That's exactly the point. An embedded system shows your whole territory, under your own name and in your own design.
 
 **CTA label (primary):** Request a quote → `/deine-region/angebot`
+
+**Secondary CTA (quiet):** Rather talk first? Book an intro call
+
+**Note on the secondary CTA:** Opens Google Calendar in a new tab.
+
+**Closing heading:** Shall we put a quote together for you?
+
+The secondary CTA stands quietly under the primary one, never beside it
+and never as a second button: a page carries exactly one primary action
+per screenful. The note says what tapping it does; where the data goes
+is in the privacy section the page already links to. The closing
+heading repeats the same conversion as the hero — same goal, same label
+(TS-006 D6). No time promise while C11 is open.
 
 Source: `headline` from `counties--portalize-enterprise` — "The whole
 district on one map, without a portal project." The map half of that
@@ -153,7 +166,13 @@ label (TS-026 D3).
 
 **Search input (placeholder):** Your place
 
-At most 6 places, as a designed set — never "the most
+**Heading (no county known):** This is what it already looks like: places that are already on board
+
+**Transition:** And this isn't a statement of intent — it's already running:
+
+While no county is known, the heading names none: the fallback read
+"the county of your region" until here, which is not a county
+(TS-026-A10). At most 6 places, as a designed set — never "the most
 active places" and never a complete list (TS-026 D4). The counter only
 renders when `/api/stats` actually supplies the value (Q-037) —
 otherwise it stays off, no estimate.
@@ -248,6 +267,8 @@ price component, never typed.
 <!-- id: deine-region-angebot-1-form; content_type: form; provenance: sourced; derived_from: [ia]; status: draft -->
 
 **Heading:** Request a quote for {county-or-organization}
+
+**Intro:** Tell us which territory this is about — we'll sort the rest out in conversation.
 
 An envoy instance (TS-016 S2) — field set and success behaviour are
 not yet specified (Q-022). This page carries no argument text of its

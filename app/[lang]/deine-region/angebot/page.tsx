@@ -1,12 +1,10 @@
 import { EnvoyFormMount } from "@/src/components/envoy-form-mount/envoy-form-mount";
-import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { ResponsePromise } from "@/src/components/response-promise/response-promise";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
-import { pageImage } from "@/src/lib/content/images";
+import { dictionary } from "@/src/lib/i18n/dictionary";
 import { slot } from "@/src/lib/content/loader";
-import { slotState } from "@/src/lib/content/provenance";
 import { interpolate } from "@/src/lib/content/text";
 import { pageTitle } from "@/src/lib/routes/metadata";
 import { BRIEFING_URL } from "@/src/lib/live/briefing";
@@ -25,9 +23,16 @@ import type { Metadata } from "next";
  * TS-026 — `/deine-region/angebot` — the quote form.
  *
  * Composition (D1/D2): `breadcrumb-trail` (rendered by `PageFrame`, this
- * route's `ROUTES.regionQuote.parent` is `region`) → `hero-block` →
- * `envoy-form-mount` (kind `quote`, TS-016 S2) with its own `lead-fallback`
- * → `response-promise` → band + closing.
+ * route's `ROUTES.regionQuote.parent` is `region`) → the headline on the
+ * violet ground → `envoy-form-mount` (kind `quote`, TS-016 S2) with its own
+ * `lead-fallback` → `response-promise` → band + closing.
+ *
+ * **No hero photograph** (polish brief page 9, item 1). The hero was an
+ * attic-office interior under a full violet wash, with the headline below it
+ * on flat violet: the photograph carried nothing, and the wash read as a
+ * rendering error rather than as art direction. This is a form page — the
+ * headline, one line of framing, and the fields. It saves ~430 px and the
+ * page starts at the question it is there to ask.
  *
  * **The confirmation state is built** (F-2-66). Round 2 left it out on the
  * argument that a labelled mock with no submission target has nothing to
@@ -50,14 +55,19 @@ const CONTACT_EMAIL = "jan@schafe-vorm-fenster.de";
  * "Request a quote for {county-or-organization}" as its `h1` (F-2-34).
  * Generated copy, `Dummy-Content` in `state/open.md`.
  */
-const PAGE_COPY: Record<Locale, { genericScope: string; briefingLabel: string }> = {
+const PAGE_COPY: Record<
+  Locale,
+  { genericScope: string; briefingLabel: string; quoteLabel: string }
+> = {
   de: {
     genericScope: "eure Organisation",
-    briefingLabel: "Termin für ein Kennenlerngespräch buchen",
+    briefingLabel: "Lieber erst sprechen? Kennenlerngespräch buchen",
+    quoteLabel: "Angebot anfragen",
   },
   en: {
     genericScope: "your organisation",
-    briefingLabel: "Book a slot to get to know each other",
+    briefingLabel: "Rather talk first? Book an intro call",
+    quoteLabel: "Request a quote",
   },
 };
 
@@ -79,11 +89,11 @@ export default async function Page({
   // its slots live in the `region` artifact (`deine-region-angebot-*`).
   const page = await pageContent("region", locale);
   // `/deine-region/angebot` is specified together with `/deine-region`, so its
-  // slots and its images live in that page's artifact (`CONTENT_PAGE_DIRS`).
-  const heroImage = pageImage(page, "deine-region-angebot-hero");
+  // slots live in that page's artifact (`CONTENT_PAGE_DIRS`).
   const form = slot(page, "deine-region-angebot-1-form");
 
   const copy = PAGE_COPY[locale];
+  const words = dictionary(locale);
 
   // Both artifacts' slot names, both filled: an unfilled slot rendered as the
   // `h1` of a conversion page is what F-2-34 measured.
@@ -92,42 +102,45 @@ export default async function Page({
       "landkreis-oder-organisation": copy.genericScope,
       "county-or-organization": copy.genericScope,
     }) ?? pageTitle(ROUTE, locale);
+  // One line between the headline and the first field: an organisation asked
+  // to request a quote met five inputs and no sentence about what happens
+  // next (brief page 9, item 2). No time promise — C11 is open.
+  const intro = fieldAt(form.blocks, 1);
 
   return (
     <>
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
-      closing={{ to: "regionQuote", label: heading }}
+      // TS-006 D6 — the same goal and the same label as the page's own
+      // conversion. The label used to be the interpolated `h1`, so the
+      // closing button read "Angebot für eure Organisation anfragen" on the
+      // page that *is* that form.
+      closing={{ to: "regionQuote", label: copy.quoteLabel }}
       locale={locale}
       meta={pageMeta}
     >
-      <MotionReveal>
-        {/* F-2-33: the hero's `photo-surface` badges itself out of the
-            dictionary and needs the page's language. */}
-        <HeroBlock
-          gradient="violet"
-          headline={heading}
-          id="angebot-titel"
-          locale={locale}
-          notDepicting={heroImage?.notDepicting}
-          placeholderId={heroImage?.placeholderId}
-          src={heroImage?.src}
-          state={slotState(form)}
-          wideSrc={heroImage?.wideSrc}
-        />
-      </MotionReveal>
+      <SectionShell
+        density="tight"
+        labelledBy="angebot-titel"
+        kicker={words.kickers.price}
+        surface="violet-500"
+      >
+        <MotionReveal>
+          <h1 id="angebot-titel">{heading}</h1>
+        </MotionReveal>
+      </SectionShell>
 
       {/* `lime-100`, not `paper`: `PageFrame` always appends `surface` (band)
           then `paper` (closing) after this page's own blocks — two more
           neutral-family sections in a row, so this one must not also be
           neutral or the run of three would break the page-rhythm rule
           (`src/components/section-shell/rhythm.ts`). */}
-      {/* `label`, not `labelledBy="angebot-titel"`: that id sits on
-          `hero-block`'s own `photo-surface` section (a sibling), not on a
-          heading this section could point to. */}
+      {/* `label`, not `labelledBy="angebot-titel"`: that id sits on the
+          headline section above (a sibling), not on a heading of this one. */}
       <SectionShell label={heading} surface="lime-100">
         <MotionReveal>
+          {intro ? <p>{intro}</p> : null}
           <EnvoyFormMount
             briefingHref={BRIEFING_URL}
             briefingLabel={copy.briefingLabel}

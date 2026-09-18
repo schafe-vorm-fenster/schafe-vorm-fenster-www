@@ -185,12 +185,18 @@ test("F-2-64 / TS-004-A9: the consent line's legal link resolves to its own anch
 });
 
 test("F-2-33: the English register flow's own controls are English", async ({ page }) => {
+  // CHANGED (polish brief, page 5): step 1's submit read "Search" / "Suchen".
+  // It is the flow's advance — a resolved place moves the flow on by itself —
+  // and the brief's reviewer did not recognise it as the way through, so it
+  // carries the same label as every other step. The assertion this file is
+  // about is unchanged: whatever the control says, it says it in the page's
+  // language.
   await page.goto("/en/take-part/register");
   const main = page.getByRole("main");
-  await expect(main.locator('button[type="submit"]')).toHaveText("Search");
+  await expect(main.locator('button[type="submit"]')).toContainText("Continue");
 
   await page.goto("/en/take-part/register?ort=quilow");
-  await expect(page.getByRole("main").locator('button[type="submit"]')).toHaveText("Continue");
+  await expect(page.getByRole("main").locator('button[type="submit"]')).toContainText("Continue");
 });
 
 
@@ -321,17 +327,23 @@ test("the footer's mocked newsletter block declares itself in `data-mock`", asyn
 });
 
 /**
- * F-2-73 / TS-026-A10, TS-026 D4 — block 3 of `/deine-region` names a region
- * a visitor can read, in **both** languages. F-2-63 fixed the German heading
- * ("Beispiele aus dem Landkreis deiner Region") and left the English one
+ * F-2-73 / TS-026-A10, TS-026 D4 — block 3 of `/deine-region`, in **both**
+ * languages. F-2-63 fixed the German heading and left the English one
  * filling its own `{county}` slot with the stage-0 anchor's geo-api id, so
- * `/en/your-region` read "examples from geoname.900001". The identifier
- * check above now covers every route; this names the heading the criterion
- * is actually about.
+ * `/en/your-region` read "examples from geoname.900001".
+ *
+ * **Changed for the polish brief (page 8, item 3).** This case used to
+ * require the heading to contain "Landkreis deiner Region" — the generic
+ * stand-in F-2-63 put in the `{landkreis}` slot. The brief's finding is that
+ * this *is* the defect: "'Beispiele aus dem Landkreis deiner Region' is the
+ * fallback string showing through. When no district is known the heading
+ * must not name one." So the criterion TS-026-A10 is actually about — no
+ * county asserted without an anchor, and no identifier rendered as copy — is
+ * asserted directly, and the stand-in phrase is asserted **absent**.
  */
-for (const [path, phrase] of [
-  ["/deine-region", "Landkreis deiner Region"],
-  ["/en/your-region", "places in your region"],
+for (const [path, standIn] of [
+  ["/deine-region", /Landkreis deiner Region/i],
+  ["/en/your-region", /county of your region|in your region/i],
 ] as const) {
   test(`F-2-73 / TS-026-A10: ${path} asserts no county and no identifier in block 3`, async ({
     page,
@@ -339,13 +351,15 @@ for (const [path, phrase] of [
     await page.goto(path);
     const text = (await page.evaluate(visibleText)) as string;
 
-    // The written-out region, and it is a heading rather than body prose.
-    expect(text, `${path} block 3 heading`).toContain(phrase);
+    // Block 3 has a heading of its own, and it names no county at all.
+    const heading = page.locator("[data-block='bestand']").getByRole("heading").first();
+    expect(await heading.count(), `${path} block 3 has a heading`).toBeGreaterThan(0);
     expect(
-      await page.getByRole("heading", { name: new RegExp(phrase, "i") }).count(),
-      `${path} names the region in a heading`,
+      (await heading.innerText()).trim().length,
+      `${path} block 3 heading is not empty`,
     ).toBeGreaterThan(0);
 
+    expect(text, `${path} renders the county stand-in as copy`).not.toMatch(standIn);
     expect(text, `${path} renders a geo-api identifier`).not.toMatch(/geoname\./);
   });
 }

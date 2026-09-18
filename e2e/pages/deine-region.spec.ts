@@ -8,6 +8,21 @@ import { expect, test } from "@playwright/test";
  * on submit) are not built here: no `/api/*` stub exists in this run and
  * `envoy-form-mount` has no real submission target (Q-022) — `state/open.md`
  * lists them not-yet-M4.
+ *
+ * **Changed for the polish brief (page 8, item 2): `/deine-region` no longer
+ * renders the quote form inline.** F-2-48's reading of TS-016 D1 row S2 was
+ * that both quote surfaces must carry the `envoy` mount, and the case below
+ * asserted it on both. What that produced is what the brief measured: the
+ * argument page ended in a five-field form whose submit button ("Absenden")
+ * was immediately followed by a second button reading "Angebot anfragen" —
+ * two controls for one action — with ~800 px of form between the proof and
+ * the page's own closing CTA, and two `lime-100` sections back to back
+ * against the design system's own colour rule. D1 row S2 names the two
+ * surfaces of the `request-licence-quote` goal; it does not require the same
+ * form to be built twice. `/deine-region` argues and offers the goal,
+ * `/deine-region/angebot` is the form, and the case now asserts exactly
+ * that: the mount on the form route, and on the argument route the CTA that
+ * opens it and no competing second control.
  */
 
 const FOLD_VIEWPORTS = [
@@ -67,8 +82,12 @@ test.describe("/deine-region", () => {
     const quoteLinks = page.locator('a[href="/deine-region/angebot"]');
     expect(await quoteLinks.count()).toBeGreaterThanOrEqual(2);
 
+    // Two of them since the polish brief: the quiet second way forward is
+    // the same line in the hero and in the closing block (G-5), so a reader
+    // who scrolls past the first meets it again where she decides.
     const briefing = page.getByRole("link", { name: /Kennenlerngespräch/ });
-    await expect(briefing).toBeVisible();
+    await expect(briefing).toHaveCount(2);
+    await expect(briefing.first()).toBeVisible();
   });
 
   test("TS-026-A7 / A8: no response-time wording while the promise constant is unset", async ({
@@ -114,6 +133,81 @@ test.describe("/deine-region", () => {
       await expect(primary).toBeInViewport();
     });
   }
+
+  /**
+   * Polish brief page 8, items 1 and 3 — the hero's CTA hierarchy was
+   * inverted (the primary was bare text under a three-line white pill whose
+   * label carried its own disclosures), and the stage-0 example heading read
+   * "Orte im Landkreis deiner Region", which is the fallback string showing
+   * through and not a county.
+   */
+  test("brief page 8, items 1 and 3: one primary pill in the hero, a quiet briefing under it, no invented county", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/deine-region");
+
+    const hero = page.locator("#fokus");
+    const primary = hero.locator('[data-cta="primary"]');
+    await expect(primary).toHaveCount(1);
+    const briefing = hero.getByRole("link", { name: /Kennenlerngespräch/ });
+    await expect(briefing).toBeVisible();
+
+    // The primary outweighs the secondary: a filled pill against a text
+    // link, and the briefing stands under it, never beside it (G-5).
+    const [primaryBox, briefingBox] = await Promise.all([
+      primary.boundingBox(),
+      briefing.boundingBox(),
+    ]);
+    expect(primaryBox).not.toBeNull();
+    expect(briefingBox).not.toBeNull();
+    expect(briefingBox!.y).toBeGreaterThan(primaryBox!.y);
+    expect(primaryBox!.height).toBeLessThan(briefingBox!.height + primaryBox!.height);
+
+    // The disclosure left the button label (G-5) and is one written line.
+    await expect(briefing).not.toContainText("Daten gehen an");
+    await expect(hero).toContainText("Öffnet Google Kalender in einem neuen Tab.");
+
+    // No county is named while none is known.
+    const examples = await page.locator("[data-block='bestand']").innerText();
+    expect(examples).toContain("Orte, die schon dabei sind");
+    expect(examples).not.toMatch(/Landkreis deiner Region/);
+  });
+
+  test("G-9: the embed demo mounts the real showcase calendar, never a dead organizer", async ({
+    page,
+  }) => {
+    const loaders: string[] = [];
+    page.on("request", (request) => {
+      if (request.url().includes("/load.js")) loaders.push(request.url());
+    });
+
+    await page.goto("/deine-region");
+    const embed = page.locator("[data-block='einbindung']");
+    await expect(embed).toHaveCount(1);
+
+    // The mount is lazy (`portalize-mount.tsx`), so the loader is requested
+    // when the block is approached, exactly as on `/dein-kalender`.
+    await page.locator("[data-portalize-widget]").scrollIntoViewIfNeeded();
+    await expect.poll(() => loaders.length, { timeout: 15_000 }).toBeGreaterThan(0);
+    // The id this page used to carry ("7b0912af…") resolves to nothing
+    // upstream, so the single most persuasive module on the page rendered a
+    // lilac rectangle with the widget's own red German error paragraph — on
+    // the English page too. It is the showcase organizer now, the one
+    // `/dein-kalender` embeds and the one the service smoke-tests.
+    for (const url of loaders) expect(url).toContain("5f3745f3-845d-4bbc-84e3-4d9a00883bf8");
+  });
+
+  test("G-6: the closing CTA carries its heading and the same quiet second way forward", async ({
+    page,
+  }) => {
+    await page.goto("/deine-region");
+    const closing = page.locator("#closing-cta");
+    await expect(closing).toContainText("Sollen wir euch ein Angebot rechnen?");
+    await expect(closing.getByRole("link", { name: /Kennenlerngespräch/ })).toBeVisible();
+    // No response-time promise is invented to fill the reassurance line.
+    await expect(closing).not.toContainText(/Werktage/);
+  });
 
   test("TS-004-A1: the page carries no horizontal scroll at 360px and has a heading", async ({
     page,
@@ -276,16 +370,27 @@ test.describe("/deine-region/angebot", () => {
    * F-2-48 / TS-016-A2 — D1 row S2 names both `/deine-region` and
    * `/deine-region/angebot`; the mount was absent from the first.
    */
-  test("F-2-48 / TS-016-A2: both S2 surfaces render the quote mount with the D2 attributes", async ({
+  test("F-2-48 / TS-016-A2: the quote mount stands once, on the form route, with the D2 attributes", async ({
     page,
   }) => {
-    for (const path of ["/deine-region", "/deine-region/angebot"]) {
-      await page.goto(path);
-      const mount = page.locator("form[data-envoy-form-kind='quote']");
-      await expect(mount, path).toHaveCount(1);
-      await expect(mount).toHaveAttribute("data-envoy-locale", "de");
-      await expect(mount).toHaveAttribute("data-envoy-context-goal", "request-licence-quote");
-    }
+    await page.goto("/deine-region/angebot");
+    const mount = page.locator("form[data-envoy-form-kind='quote']");
+    await expect(mount).toHaveCount(1);
+    await expect(mount).toHaveAttribute("data-envoy-locale", "de");
+    await expect(mount).toHaveAttribute("data-envoy-context-goal", "request-licence-quote");
+  });
+
+  test("brief page 8, item 2: the argument route offers the goal and does not repeat the form", async ({
+    page,
+  }) => {
+    await page.goto("/deine-region");
+    // The argument page carries no quote form of its own — and no submit
+    // button beside the CTA that opens the one that exists.
+    await expect(page.locator("form[data-envoy-form-kind='quote']")).toHaveCount(0);
+    await expect(page.locator("#main").getByRole("button", { name: "Absenden" })).toHaveCount(0);
+    // The goal is still offered here, twice: hero and closing block.
+    const quoteLinks = page.locator('a[href="/deine-region/angebot"]');
+    expect(await quoteLinks.count()).toBe(2);
   });
 
   /**

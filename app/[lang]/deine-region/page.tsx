@@ -1,7 +1,6 @@
 
 import { Button } from "@/src/components/button/button";
 import { EmbedFrame } from "@/src/components/embed-frame/embed-frame";
-import { EnvoyFormMount } from "@/src/components/envoy-form-mount/envoy-form-mount";
 import { FeatureBenefit } from "@/src/components/feature-benefit/feature-benefit";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
@@ -11,7 +10,6 @@ import { PriceTag } from "@/src/components/price-tag/price-tag";
 import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
-import { ResponsePromise } from "@/src/components/response-promise/response-promise";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
@@ -23,7 +21,8 @@ import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
 import { pageTitle } from "@/src/lib/routes/metadata";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
-import { BRIEFING_RECIPIENT, BRIEFING_URL } from "@/src/lib/live/briefing";
+import { SHOWCASE_CALENDAR } from "@/src/lib/embed/portalize";
+import { BRIEFING_URL } from "@/src/lib/live/briefing";
 import { genericCountyLabel } from "@/src/lib/live/county-label";
 import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
 import { dictionary } from "@/src/lib/i18n/dictionary";
@@ -43,11 +42,20 @@ import type { Metadata } from "next";
 /**
  * TS-026 — `/deine-region` — the region page.
  *
- * Composition (`plan/component-inventory.md` §4, TS-026 D2): focus (hero +
- * primary CTA + briefing) → territory question → interim module (examples +
- * search, no county count today, Q-037) → embed demo → what it adds → proof
- * (3, demo — Q-014) → quote CTA + response promise (withheld, D5) → band +
- * closing (rendered by `PageFrame` from `page.meta.ts`, TS-006 D2).
+ * Composition (`plan/component-inventory.md` §4, TS-026 D2, as the polish
+ * brief's page 8 orders it): focus (hero — headline and the one primary CTA,
+ * the briefing quiet beneath it) → the territory question, which is where
+ * the hero's own lead sentence now stands → what is already live here →
+ * embed demo → what the district tier adds → proof (3) → band + closing
+ * (rendered by `PageFrame` from `page.meta.ts`, TS-006 D2).
+ *
+ * **The inline quote form is gone** (brief page 8, item 2). It stood on this
+ * page *and* on `/deine-region/angebot`, so the argument page ended in a
+ * five-field form whose "Absenden" was followed by a second button reading
+ * "Angebot anfragen" — two controls, one action, and ~800 px of form between
+ * the proof and the page's own closing CTA. This page is the argument; the
+ * form is the form. `/deine-region` is still the quote surface TS-016 D1 row
+ * S2 names, through the CTA that opens it.
  *
  * [ASSUMPTION] The composition sheet's block-1 component list also names a
  * `scene-block mechanism="embed"`. The content artifact gives one embed
@@ -67,8 +75,6 @@ import type { Metadata } from "next";
 
 const ROUTE = "region" as const;
 
-const CONTACT_EMAIL = "jan@schafe-vorm-fenster.de";
-
 /**
  * The labels this page needs and no artifact carries. German-only before
  * round 3, which is how `/en/your-region` ended up half-translated (F-2-33);
@@ -80,7 +86,6 @@ const PAGE_COPY: Record<
     briefingLabel: string;
     proofHeading: string;
     proofLabel: string;
-    missingProof: string;
     closingHeading: string;
     quoteFallback: string;
     territorySketchAlt: string;
@@ -89,25 +94,26 @@ const PAGE_COPY: Record<
   }
 > = {
   de: {
-    briefingLabel: "Termin für ein Kennenlerngespräch buchen",
+    // Fallbacks only — `deine-region-1-focus` carries the real wording now,
+    // so the quiet briefing link and the closing heading are authored copy
+    // rather than strings typed into a page file.
+    briefingLabel: "Lieber erst sprechen? Kennenlerngespräch buchen",
     proofHeading: "Was Landkreise und Institutionen sagen",
     proofLabel: "Beleg",
-    missingProof: "Für diese Aussage ist noch kein freigegebener Beleg hinterlegt.",
-    closingHeading: "Bereit für euer Gebiet?",
+    closingHeading: "Sollen wir euch ein Angebot rechnen?",
     quoteFallback: "Angebot anfragen",
     territorySketchAlt: "Gebietsschnitt eines Landkreises",
-    interimFallback: "So sieht das heute schon aus",
+    interimFallback: "So sieht das heute schon aus: Orte, die schon dabei sind",
     embedFallback: "So sieht die Einbindung aus",
   },
   en: {
-    briefingLabel: "Book a slot to get to know each other",
+    briefingLabel: "Rather talk first? Book an intro call",
     proofHeading: "What counties and institutions say",
     proofLabel: "Proof",
-    missingProof: "No cleared proof is on file for this claim yet.",
-    closingHeading: "Ready for your territory?",
+    closingHeading: "Shall we put a quote together for you?",
     quoteFallback: "Request a quote",
     territorySketchAlt: "Outline of a county territory",
-    interimFallback: "This is what it looks like today",
+    interimFallback: "This is what it already looks like: places that are already on board",
     embedFallback: "This is what the embed looks like",
   },
 };
@@ -125,10 +131,6 @@ const PROOF_CONTEXT_FALLBACK: Record<"demo" | "sourced", Record<Locale, string>>
   sourced: { de: "Rückmeldung", en: "Feedback" },
 };
 
-const PROOF_GEO_LABEL: Record<"demo" | "sourced", Record<Locale, string>> = {
-  demo: { de: "Beispielregion", en: "Example region" },
-  sourced: { de: "Beleg", en: "Reference" },
-};
 
 export async function generateMetadata({
   params,
@@ -177,13 +179,21 @@ export default async function Page({
   // English heading still took whatever the island handed it (the stage-0
   // anchor's raw geo-api id). All three slot names are filled here, from the
   // one place that decides what an unresolved county is called.
+  // Polish brief page 8, item 3: at stage 0 the heading must not name a
+  // county at all. Filling `{landkreis}` with a generic label produced
+  // "Orte im Landkreis deiner Region" — the fallback string showing through,
+  // and not a county. The artifact now carries a second, county-free
+  // heading for exactly this state; the templated one returns with the
+  // anchor it needs, not before.
   const genericCounty = genericCountyLabel(locale);
   const interimFallbackHeading =
+    fieldAt(interim.blocks, 3) ??
     interpolate(fieldAt(interim.blocks, 0), {
       landkreis: genericCounty,
       county: genericCounty,
       "county-or-organization": genericCounty,
-    }) ?? copy.interimFallback;
+    }) ??
+    copy.interimFallback;
 
   const quoteItems = proofDemo.blocks.filter((block) => block.kind === "list");
   const proofIsDemo = isDemoSlot(proofDemo);
@@ -209,30 +219,68 @@ export default async function Page({
       contextLine: quote.contextLine,
       claim: quote.claim,
       attribution: quote.attribution,
-      geo: { level: "region" as const, label: PROOF_GEO_LABEL[proofIsDemo ? "demo" : "sourced"][locale] },
+      // G-7: no badge. Every one of these cards names its source in the
+      // context line, and the badge beside it read "BELEG" — the same word
+      // the line under it already carried.
       geoCounty: quote.attribution.split(", ").slice(1).join(", ").trim() || null,
       demo: proofIsDemo,
     })),
   });
 
   const ctaLabel = ctaLabelOnly(fieldAt(focus.blocks, 2)) ?? copy.quoteFallback;
+  const briefingLabel = fieldAt(focus.blocks, 3) ?? copy.briefingLabel;
+  const briefingDisclosure = fieldAt(focus.blocks, 4);
+  const closingHeading = fieldAt(focus.blocks, 5) ?? copy.closingHeading;
+  // G-5: the same quiet line in the hero and in the closing block, so the
+  // second way forward is recognisably the same one both times.
+  const briefingLink = (
+    <ConversionTracker
+      attributes={{ route: ROUTE }}
+      goalId="request-product-briefing"
+      stage="handover"
+    >
+      <OutboundLink
+        disclosure={briefingDisclosure}
+        href={BRIEFING_URL}
+        locale={locale}
+        newTab
+        variant="quiet"
+      >
+        {briefingLabel}
+      </OutboundLink>
+    </ConversionTracker>
+  );
 
   return (
     <>
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
-      closing={{ to: "regionQuote", label: ctaLabel, reassurance: undefined }}
+      closing={{
+        to: "regionQuote",
+        label: ctaLabel,
+        heading: closingHeading,
+        // D5/A7: no response-time wording anywhere while C11 is open — the
+        // constant is deliberately `null` and a reassurance is not invented
+        // to fill the line.
+        reassurance: undefined,
+        footer: briefingLink,
+      }}
       contextBandHeading={undefined}
       locale={locale}
       meta={pageMeta}
     >
-      {/* Block 1 — focus: hero, primary CTA, briefing link (photo, ratio-hero). */}
+      {/* Block 1 — focus: the Aha question and the one primary CTA, with the
+          briefing quiet underneath (G-5). The hero used to carry its lead
+          sentence as well, and the briefing as a full-width white pill three
+          lines tall whose label held its own disclosures — so the secondary
+          outweighed the primary and the photograph had 156 px of a 693 px
+          box. The lead now opens block 2, where it is the answer to the
+          question the heading asks. */}
       <MotionReveal>
         <HeroBlock
           headline={fieldAt(focus.blocks, 0) ?? pageTitle(ROUTE, locale)}
           id="fokus"
-          lead={fieldAt(focus.blocks, 1)}
           // F-2-33: the hero's `photo-surface` badges itself out of the
           // dictionary — without the page's language it marks an English
           // page in German.
@@ -243,36 +291,35 @@ export default async function Page({
           wideSrc={heroImage?.wideSrc}
           cta={
             <>
-              <Button dataCta="primary" locale={locale} to="regionQuote" variant="primary-light">
+              <Button
+                dataCta="primary"
+                icon="arrow-right"
+                locale={locale}
+                to="regionQuote"
+                variant="primary-dark"
+              >
                 {ctaLabel}
               </Button>
               {/* F-2-32: the one configured value of TS-016 D7, never a
                   second URL pasted per page. */}
-              <ConversionTracker
-                attributes={{ route: ROUTE }}
-                goalId="request-product-briefing"
-                stage="handover"
-              >
-                <OutboundLink
-                  href={BRIEFING_URL}
-                  locale={locale}
-                  newTab
-                  recipient={BRIEFING_RECIPIENT}
-                  variant="secondary"
-                >
-                  {copy.briefingLabel}
-                </OutboundLink>
-              </ConversionTracker>
+              {briefingLink}
             </>
           }
           state={slotState(focus)}
         />
       </MotionReveal>
 
-      {/* Block 2 — the territory question (colour, sober). */}
-      <SectionShell labelledBy="gebietsfrage" surface="paper">
+      {/* Block 2 — the territory question (colour, sober), opening with the
+          sentence that used to sit in the hero. */}
+      <SectionShell
+        dataBlock="gebietsfrage"
+        kicker={words.kickers.objection}
+        labelledBy="gebietsfrage"
+        surface="paper"
+      >
         <MotionReveal>
           <h2 id="gebietsfrage">{fieldAt(territory.blocks, 0)}</h2>
+          <p>{fieldAt(focus.blocks, 1)}</p>
           <p>{fieldAt(territory.blocks, 1)}</p>
         </MotionReveal>
       </SectionShell>
@@ -282,7 +329,13 @@ export default async function Page({
           no distance language anywhere (A2). */}
       {/* `label`, not `labelledBy`: `live-module-frame` renders its own
           heading with no id to point to. */}
-      <SectionShell label={interimFallbackHeading} surface="ink">
+      <SectionShell
+        dataBlock="bestand"
+        kicker={words.kickers.liveAnswer}
+        label={interimFallbackHeading}
+        surface="ink"
+        transition={fieldAt(interim.blocks, 4)}
+      >
         <MotionReveal>
           {/* The examples come off `regionExamples()` — TS-008 position 3 at
               county scope, DEC-034's designed set rather than a place list.
@@ -319,6 +372,8 @@ export default async function Page({
           not `labelledBy`: `embed-frame` renders its own heading with no id
           to point to. */}
       <SectionShell
+        dataBlock="einbindung"
+        kicker={words.kickers.howItWorks}
         label={fieldAt(embedDemo.blocks, 0) ?? copy.embedFallback}
         surface="surface-2"
       >
@@ -326,7 +381,14 @@ export default async function Page({
           <EmbedFrame
             heading={fieldAt(embedDemo.blocks, 0) ?? copy.embedFallback}
             locale={locale}
-            organizerId="7b0912af4c3865f3a9c1d4e2"
+            // The **real** showcase calendar, the same organizer
+            // `/dein-kalender` embeds (`src/lib/embed/portalize.ts`). This
+            // page used to pass an id that resolves to nothing upstream, so
+            // the single most persuasive module on it was a lilac rectangle
+            // carrying the widget's own red German error paragraph — on the
+            // English page too. G-9: this section does not ship empty.
+            mountId="deine-region-portalize-widget"
+            organizerId={SHOWCASE_CALENDAR.organizerId}
             ratio="feature"
             state={slotState(embedDemo, "degraded")}
           />
@@ -350,7 +412,12 @@ export default async function Page({
           "Kartenausschnitt") is not used here; see `state/open.md`. */}
       {/* `label`, not `labelledBy`: `feature-benefit` renders its own
           heading with no id to point to. */}
-      <SectionShell label={fieldAt(whatItAdds.blocks, 0) ?? ""} surface="paper">
+      <SectionShell
+        dataBlock="was-dazukommt"
+        kicker={words.kickers.price}
+        label={fieldAt(whatItAdds.blocks, 0) ?? ""}
+        surface="paper"
+      >
         <MotionReveal>
           <FeatureBenefit
             benefit={fieldAt(whatItAdds.blocks, 1) ?? ""}
@@ -366,7 +433,12 @@ export default async function Page({
 
       {/* Block 6 — proof at this level (D7): three demo cards, Q-014 —
           no cleared reference case for a delivered territory exists. */}
-      <SectionShell labelledBy="beleg" surface="lime-100">
+      <SectionShell
+        dataBlock="beleg"
+        kicker={words.kickers.evidence}
+        labelledBy="beleg"
+        surface="lime-100"
+      >
         <MotionReveal>
           <h2 id="beleg">{copy.proofHeading}</h2>
           <ProofStream label={copy.proofLabel}>
@@ -386,31 +458,6 @@ export default async function Page({
               ),
             )}
           </ProofStream>
-        </MotionReveal>
-      </SectionShell>
-
-      {/* Block 7 — quote CTA + response promise (D5: constant is null while
-          C11 is unanswered — no response-time wording anywhere, A7). */}
-      <SectionShell labelledBy="angebot-cta" surface="lime-100">
-        <MotionReveal>
-          <h2 id="angebot-cta">{copy.closingHeading}</h2>
-          {/* F-2-48 / TS-016-A2: D1 row S2 names **both** `/deine-region` and
-              `/deine-region/angebot` as quote surfaces, and the mount was
-              absent here — the `request-licence-quote` path began with a link
-              to a form rather than with the form. The dedicated page stays;
-              this is the in-place instance D1 asks for. */}
-          <EnvoyFormMount
-            context={{ goal: "request-licence-quote" }}
-            conversion={{ goalId: "request-licence-quote", stage: "completed" }}
-            fallbackEmail={CONTACT_EMAIL}
-            kind="quote"
-            locale={locale}
-            sourceRoute={ROUTE}
-          />
-          <Button locale={locale} to="regionQuote" variant="secondary">
-            {ctaLabel}
-          </Button>
-          <ResponsePromise />
         </MotionReveal>
       </SectionShell>
 
