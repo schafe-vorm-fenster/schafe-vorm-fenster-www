@@ -50,9 +50,17 @@ const CATEGORY_TONE: Record<EventCategory, BadgeTone> = {
  * 5 `event-row` [FIXED] — SRC-014 §Event row.
  *
  * Structure: a flat row with a hairline above, 76 px tall — mono day number
- * at 28 px with the month beneath, the title at 21/700 clamped to two lines,
- * the meta at 15 px clamped to one, and the category badge right-aligned.
- * Never a card.
+ * at 28 px with the month beneath, the title at 21/700, the meta at 15 px
+ * clamped to one line, and the category badge right-aligned. Never a card.
+ *
+ * The four parts are a **grid**, not a three-column flex row, and the badge
+ * sits on the meta's line rather than the title's. As a flex sibling of the
+ * title it took 126 px of a 358 px row on a phone, leaving the title 148 px —
+ * so "Feuerwehrfest am Gerätehaus" needed two lines, "Line-Dance-Gruppe im
+ * Gemeindehaus" three, and the row measured 102 px against the design
+ * system's 76 (polish brief G-2). The title now spans the full column, which
+ * is the width the desktop always had and where the same titles have always
+ * rendered in one line.
  * States (D-9, all four):
  *   loading  → the row's own geometry as a `skeleton`, no animation;
  *   empty    → nothing. A single row cannot be empty; the list around it owns
@@ -82,12 +90,21 @@ export function EventRow({
   hash,
   className,
 }: EventRowProps) {
-  const classes = [styles.row, tone === "dark" ? styles.dark : styles.light, className]
-    .filter(Boolean)
-    .join(" ");
+  const toneClass = tone === "dark" ? styles.dark : styles.light;
+  const classes = [styles.row, toneClass, className].filter(Boolean).join(" ");
 
   if (isPending(state)) {
-    return <Skeleton className={classes} rows={1} variant="row" />;
+    // The skeleton brings the row's 76 px geometry itself and must not
+    // inherit the row's grid — its bars carry no grid areas, so they would
+    // land in implicit rows and reserve nearly twice the height the real row
+    // finally takes, which is the layout shift the skeleton exists to avoid.
+    return (
+      <Skeleton
+        className={[toneClass, className].filter(Boolean).join(" ")}
+        rows={1}
+        variant="row"
+      />
+    );
   }
   if (state === "empty") return null;
 
@@ -107,10 +124,8 @@ export function EventRow({
         <span className={styles.day}>{day}</span>
         <span className={styles.month}>{month}</span>
       </time>
-      <div className={styles.body}>
-        <h3 className={styles.title}>{title_}</h3>
-        {meta ? <p className={styles.meta}>{meta}</p> : null}
-      </div>
+      <h3 className={styles.title}>{title_}</h3>
+      {meta ? <p className={styles.meta}>{meta}</p> : null}
       <Badge className={styles.category} tone={CATEGORY_TONE[category]}>
         {categoryLabel}
       </Badge>

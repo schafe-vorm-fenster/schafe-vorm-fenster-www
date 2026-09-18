@@ -37,9 +37,11 @@
   width: 170px;
 }
 
-/* A list of event rows keeps the 76 px rhythm and the hairline above each. */
+/* A list of event rows keeps the 76 px rhythm and the hairline above each.
+   `--event-row-display` is `event-list`'s phone cap, so a skeleton row is
+   hidden and restored by the same switch as the real row it stands in for. */
 .row {
   border-top: 1px solid var(--color-neutral-line);
-  display: block;
+  display: var(--event-row-display, block);
   height: var(--height-event-row);
 }

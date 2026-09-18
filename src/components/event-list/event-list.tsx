@@ -18,10 +18,43 @@ export interface EventListItem {
   readonly to?: RouteId;
 }
 
+/**
+ * How many rows a list of this **role** shows — polish brief G-2, and the
+ * only three numbers this website uses.
+ *
+ * A list that illustrates is three rows; a list that *is* the answer to the
+ * visitor's question may be five; a list standing inside a story is one,
+ * because one real date makes the point and three make a list. Nothing shows
+ * more than five, ever. Eleven rows across three modules before the home
+ * page's first argument was what this replaces.
+ */
+export const EVENT_LIST_CAPS = {
+  illustrative: 3,
+  answering: 5,
+  story: 1,
+} as const;
+
+export type EventListRole = keyof typeof EVENT_LIST_CAPS;
+
 export interface EventListProps extends DataStateProps {
   readonly items: readonly EventListItem[];
   /** The fixed row count the module promises (3 at position 1, 5 at position 2). */
   readonly rowCount: number;
+  /**
+   * The list's role, which fixes its row count (G-2). Where it is set it wins
+   * over a larger `rowCount`: the module may have asked its source for more
+   * dates than it is allowed to print, and the rest live behind `more`. The
+   * skeleton reserves the capped count too, so nothing moves when the data
+   * lands.
+   */
+  readonly role?: EventListRole;
+  /**
+   * The quiet affordance under a capped list — "Mehr Termine im Kalender von
+   * {ort}" (G-2). Never a second CTA, and never rendered where the cap hides
+   * nothing: a list that already shows everything it has has nothing to link
+   * on to.
+   */
+  readonly more?: ReactNode;
   /**
    * `true` caps the list at three rows on a phone and lets all `rowCount`
    * rows show from the tablet breakpoint up — the illustrative cap a live
@@ -62,6 +95,8 @@ export interface EventListProps extends DataStateProps {
 export function EventList({
   items,
   rowCount,
+  role,
+  more,
   capOnPhone = false,
   emptyState,
   tone,
@@ -69,22 +104,24 @@ export function EventList({
   state = "ready",
   className,
 }: EventListProps) {
-  const capped = capOnPhone && rowCount > 3;
+  const limit = role ? Math.min(rowCount, EVENT_LIST_CAPS[role]) : rowCount;
+  const capped = capOnPhone && limit > 3;
   const classes = [styles.list, capped ? styles.capPhone : undefined, className]
     .filter(Boolean)
     .join(" ");
 
   if (isPending(state)) {
-    return <Skeleton className={classes} rows={rowCount} variant="row" />;
+    return <Skeleton className={classes} rows={limit} variant="row" />;
   }
 
   if (state === "empty" || items.length === 0) {
     return <>{emptyState ?? null}</>;
   }
 
-  return (
+  const shown = items.slice(0, limit);
+  const rows = (
     <div className={classes}>
-      {items.map((item, index) => (
+      {shown.map((item, index) => (
         <EventRow
           {...item}
           key={item.id ?? `${item.title}-${index}`}
@@ -93,6 +130,15 @@ export function EventList({
           tone={tone}
         />
       ))}
+    </div>
+  );
+
+  if (!more || items.length <= shown.length) return rows;
+
+  return (
+    <div className={styles.withMore}>
+      {rows}
+      {more}
     </div>
   );
 }

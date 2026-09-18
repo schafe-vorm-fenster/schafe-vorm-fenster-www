@@ -1,11 +1,38 @@
+/*
+ * Four parts, two lines, 76 px — SRC-014 §Event row and §Fixed heights.
+ *
+ * A grid rather than a flex row, because the badge belongs on the meta's
+ * line and not in the title's line box. As a flex sibling it was 126 px wide
+ * on a 358 px phone row and the title got 148 px, which turned one-line
+ * titles into two- and three-line ones and the row into 102 px (G-2). The
+ * title now spans both content columns; the badge is right-aligned under it,
+ * beside the time. One tree at every width — the desktop row is the same
+ * grid with more room in it.
+ */
 .row {
-  align-items: baseline;
+  /* The date block spans both rows and starts at the top; the badge and the
+     meta share the second one. Baseline alignment across the grid would let
+     the 28 px day figure set the title row's height and push the row past
+     76 px, which is the height the whole component is specified by. */
+  align-content: center;
+  align-items: start;
   /* The hairline divides rows inside a surface — no gap, no card. */
   border-top: 1px solid var(--color-neutral-line);
-  display: flex;
-  gap: var(--space-4);
+  column-gap: var(--space-4);
+  /* `event-list`'s phone cap hides a row through this property rather than
+     through `display: none` on the child, which would have to be undone with
+     `display: revert` at the switch point and would take the grid with it. */
+  display: var(--event-row-display, grid);
+  grid-template-areas:
+    "date title title"
+    "date meta  badge";
+  grid-template-columns: 52px minmax(0, 1fr) auto;
   min-height: var(--height-event-row);
-  padding-block: var(--space-3);
+  /* 8 px, not 12: the specified height is 76 px and the row's own content is
+     24 px of title plus a 29 px badge line. `align-content: center` puts the
+     slack above and below, so the row reads as the design system's 76 px
+     rather than overshooting it by a padding step. */
+  padding-block: var(--space-2);
 }
 
 .light {
@@ -18,10 +45,9 @@
 }
 
 .date {
-  flex: none;
   font-family: var(--font-mono);
+  grid-area: date;
   text-align: left;
-  width: 52px;
 }
 
 .day {
@@ -43,13 +69,10 @@
   color: var(--color-lime-300);
 }
 
-.body {
-  flex: 1;
-  /* Flex children need this to let the clamps actually clamp. */
-  min-width: 0;
-}
-
 .title {
+  grid-area: title;
+  /* The clamp needs a bounded box to clamp inside. */
+  min-width: 0;
   font-size: var(--type-card-size);
   font-weight: 700;
   letter-spacing: var(--type-card-tracking);
@@ -75,10 +98,14 @@
 }
 
 .meta {
+  align-self: center;
+  grid-area: meta;
+  min-width: 0;
   color: var(--color-neutral-muted);
   font-size: var(--type-meta-size);
   line-height: var(--leading-normal);
-  margin: var(--space-1) 0 0;
+  /* The grid owns the spacing; a margin here would add to the 76 px. */
+  margin: 0;
   max-width: none;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -89,6 +116,10 @@
   color: var(--color-lime-300);
 }
 
+/* Right-aligned (SRC-014 §Event row), on the meta's line, and never in the
+   title's column: a long category name must not narrow the title. */
 .category {
-  flex: none;
+  align-self: center;
+  grid-area: badge;
+  justify-self: end;
 }
