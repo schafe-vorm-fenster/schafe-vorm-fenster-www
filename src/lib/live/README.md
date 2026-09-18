@@ -132,7 +132,7 @@ interface LiveEnvelope<T> {
   tier: "live" | "stale" | "snapshot";  // TS-009 D4 tiers 1 / 2 / 3
   fetchedAt: string;                     // ISO; tier 3 carries the build time
   stale: boolean;                        // the freshness label's condition
-  demo: boolean;                         // the Demo-Daten badge's condition
+  demo: boolean;                         // reaches the markup as data-demo, never as copy
   source: "real" | "mock";
 }
 ```
@@ -204,8 +204,10 @@ async function DatesInThePlace({ slug }: { slug: string }) {
           date: event.startsAt,
           title: event.title,
           meta: event.placeName,
-          category: "fest",                          // TS-005 owns the mapping
-          categoryLabel: "Fest",
+          // `categories.ts` owns the mapping: an events-api id in, a tone
+          // and the upstream vocabulary's own label out. Never a literal.
+          category: categoryTone(event.categoryId),
+          categoryLabel: categoryLabel(event.categoryId, locale),
         }))}
         rowCount={3}
         state={data.events.length === 0 ? "empty" : "ready"}
