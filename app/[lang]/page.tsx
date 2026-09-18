@@ -11,6 +11,7 @@ import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SceneBlock } from "@/src/components/scene-block/scene-block";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
+import { dictionary } from "@/src/lib/i18n/dictionary";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
@@ -19,14 +20,16 @@ import { isDemoSlot } from "@/src/lib/content/provenance";
 import { ctaLabelOnly } from "@/src/lib/content/text";
 import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
 import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
+import { EventRow } from "@/src/components/event-row/event-row";
 import { fillTemplate, parseDemoProofElement } from "@/src/lib/pages/demo-content";
+import { pickStoryExamples } from "@/src/lib/pages/story-examples";
 import { calendarUrl } from "@/src/lib/live/app-handover";
 import { placeEvents } from "@/src/lib/live/places";
 import { STAGE_ZERO_ANCHOR, resolvePlaceOutcome } from "@/src/lib/pages/live-anchor";
 
 import styles from "./_pages.module.css";
 
-import { CountersIsland, NearbyIsland, PlaceDatesIsland } from "./_islands";
+import { CountersIsland, NearbyIsland, PlaceDatesIsland, exampleRows } from "./_islands";
 import { selectProof } from "./_proof";
 import { PageJsonLd } from "./_structured-data";
 import { pageContent } from "./_content";
@@ -204,6 +207,8 @@ interface FocusCopy {
   readonly nearbyHeading: string;
   readonly invitation: string;
   readonly publishCta: string;
+  /** `home-9-counters`: what the one figure under the rows is a figure of. */
+  readonly countersLabel: string;
 }
 
 /** The artifact writes the invitation as two sentences; the first is the headline. */
@@ -224,6 +229,7 @@ function FocusBlocks({
   readonly hasDates?: boolean;
 }) {
   const { locale } = copy;
+  const words = dictionary(locale);
   const stated = place !== undefined;
   const empty = stated && hasDates === false;
   const values = { place: place?.name ?? "" };
@@ -292,7 +298,11 @@ function FocusBlocks({
           slot carries the publish invitation instead of an empty date box
           ("Position 1 is not left blank", TS-008 D4). */}
       <MotionReveal>
-        <SectionShell id="place-dates" surface="ink">
+        <SectionShell
+          id="place-dates"
+          kicker={empty ? undefined : words.kickers.liveAnswer}
+          surface="ink"
+        >
           {empty ? (
             <EmptyStateBlock
               announced
@@ -306,29 +316,53 @@ function FocusBlocks({
               conversion={SAVE_CALENDAR}
               ctaTemplate={stated ? undefined : copy.datesCta}
               locale={locale}
+              role="illustrative"
               rowCount={3}
               slug={place?.slug ?? STAGE_ZERO_ANCHOR.slug}
               titleTemplate={copy.datesHeadline}
               tone="dark"
             />
           )}
+          {/* Block 2d — the counter, where it means something: directly under
+              the live rows it is the size of the thing those three dates came
+              out of. It stood on a violet band of its own between the scenes
+              and the proof, next to an origin sentence and a link, and the
+              one number on the page was the smallest thing in it (polish
+              brief, page 1, fix 5). TS-019 D3 asks for it "inline in 2b or
+              2c, no section of its own" — this is that, one block earlier. */}
+          <div className={styles.counters} id="live-counters">
+            <p>{copy.countersLabel}</p>
+            {/* TS-019-A14 / Q-037: only the counted figure. `places` and
+                `updatesToday` have no `/api/stats` field, so the band shows
+                one slot rather than an estimate. */}
+            <CountersIsland locale={locale} show={["dates"]} />
+          </div>
         </SectionShell>
       </MotionReveal>
 
-      {/* TS-019 D5, position 2: "this week nearby" is block 1's S3 module.
-          Its shell renders here under its own radius label — never the place
-          name (TS-008 D1). */}
-      <MotionReveal>
-        <SectionShell id="nearby" surface="surface-2">
-          <NearbyIsland
-            lat={place?.lat ?? STAGE_ZERO_ANCHOR.lat}
-            lng={place?.lng ?? STAGE_ZERO_ANCHOR.lng}
-            locale={locale}
-            rowCount={5}
-            titleTemplate={copy.nearbyHeading}
-          />
-        </SectionShell>
-      </MotionReveal>
+      {/* TS-019 D5, position 2: "this week nearby" is block 1's **S3**
+          module, and only S3's. Round 3 rendered it in every state, so the
+          page opened on two five-row lists with the same titles in both —
+          1.6 phone screens of near-identical rows before a single argument
+          was made (polish brief, page 1, fix 2). Where dates exist, widening
+          the radius answers nothing the list above has not; where they do
+          not, it is the whole answer, and `/dein-ort` carries the radius
+          argument for everyone else. Its shell names its own radius — never
+          the place name (TS-008 D1). */}
+      {empty ? (
+        <MotionReveal>
+          <SectionShell id="nearby" kicker={words.kickers.widerRadius} surface="surface-2">
+            <NearbyIsland
+              lat={place.lat}
+              lng={place.lng}
+              locale={locale}
+              role="answering"
+              rowCount={5}
+              titleTemplate={copy.nearbyHeading}
+            />
+          </SectionShell>
+        </MotionReveal>
+      ) : null}
     </>
   );
 }
@@ -372,6 +406,7 @@ export default async function HomePage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const locale = await localeFrom(params);
+  const words = dictionary(locale);
   const page = await pageContent(ROUTE, locale);
 
   const hero = slot(page, "home-1-search-hero");
@@ -384,6 +419,7 @@ export default async function HomePage({
   const proof = slot(page, "home-8-proof-stream");
   const counters = slot(page, "home-9-counters");
   const band = slot(page, "home-10-context-band");
+  const closingCta = slot(page, "home-11-closing-cta");
   const uiStrings = slot(page, "home-12-ui-strings");
   const demo = uiStringsFrom(uiStrings, locale);
 
@@ -400,6 +436,24 @@ export default async function HomePage({
   const searchPlaceholder = fieldAt(hero.blocks, 1);
   const searchHint = fieldAt(hero.blocks, 3);
   const proofKicker = fieldAt(proof.blocks, 0);
+
+  /**
+   * The one live row the WhatsApp scene shows as its outcome — cached rather
+   * than suspended, because it stands inside prose (TS-020 D3's snapshot
+   * rung, the same shape `/dein-ort`'s stories use).
+   */
+  const rows = await exampleRows(
+    STAGE_ZERO_ANCHOR.slug,
+    STAGE_ZERO_ANCHOR.lat,
+    STAGE_ZERO_ANCHOR.lng,
+    locale,
+  );
+  const [flyerRow] = pickStoryExamples(
+    // Position 1 prints the first three; the scene takes one the reader has
+    // not just scrolled past.
+    [...rows.place.slice(3), ...rows.nearby],
+    [["social", "culture", "fest"]],
+  );
 
   /**
    * TS-005 through, not around: gate · score · rotate · order · count, at
@@ -447,6 +501,7 @@ export default async function HomePage({
     nearbyHeading: fieldAt(nearby.blocks, 0) ?? "",
     invitation: fieldAt(nearby.blocks, 1) ?? "",
     publishCta: ctaLabelOnly(nearby.cta ?? fieldAt(nearby.blocks, 2) ?? "") ?? "",
+    countersLabel: fieldAt(counters.blocks, 0) ?? "",
   };
 
   return (
@@ -454,7 +509,12 @@ export default async function HomePage({
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
-      closing={{ variant: "module", node: search(false) }}
+      closing={{
+        variant: "module",
+        node: search(false),
+        heading: fieldAt(closingCta.blocks, 0),
+        reassurance: fieldAt(closingCta.blocks, 1),
+      }}
       contextBandHeading={fieldAt(band.blocks, 0)}
       locale={locale}
       meta={HOME_META}
@@ -469,17 +529,28 @@ export default async function HomePage({
           `direct`/stage-0 order of TS-019 D3a. The trait-dependent order is
           a runtime property of TS-010 and lands with the stages at M4. */}
       <MotionReveal>
-        <SectionShell id="scene-1" surface="lime-500">
+        <SectionShell
+          id="scene-1"
+          kicker={fieldAt(sceneWhatsapp.blocks, 2)}
+          surface="lime-500"
+          transition={fieldAt(sceneWhatsapp.blocks, 3)}
+        >
           <SceneBlock
             body={fieldAt(sceneWhatsapp.blocks, 1)}
             instance={
-              <PlaceDatesIsland
-                headingLevel="h3"
-                locale={locale}
-                rowCount={1}
-                slug={STAGE_ZERO_ANCHOR.slug}
-                titleTemplate={demo.flyerExample}
-              />
+              flyerRow === undefined ? null : (
+                <>
+                  {/* The outcome, not a list (polish brief, page 1, fix 3):
+                      one real date, under the line that says what it is. It
+                      is picked out of what position 1 has **not** already
+                      shown, and out of the categories a printed flyer is
+                      actually about — the module took the place's next date
+                      whatever it was, which put "Gelber Sack" under "made
+                      from the flyer", twice on one screen. */}
+                  <h3 className={styles.instanceHeading}>{demo.flyerExample}</h3>
+                  <EventRow {...flyerRow} locale={locale} state={rows.demo ? "mocked" : "ready"} />
+                </>
+              )
             }
             locale={locale}
             mechanism="whatsapp"
@@ -489,7 +560,12 @@ export default async function HomePage({
       </MotionReveal>
 
       <MotionReveal>
-        <SectionShell id="scene-2" surface="paper">
+        <SectionShell
+          id="scene-2"
+          kicker={fieldAt(sceneEmbed.blocks, 2)}
+          surface="surface-2"
+          transition={fieldAt(sceneEmbed.blocks, 3)}
+        >
           <SceneBlock
             body={fieldAt(sceneEmbed.blocks, 1)}
             instance={
@@ -512,7 +588,12 @@ export default async function HomePage({
       </MotionReveal>
 
       <MotionReveal>
-        <SectionShell id="scene-3" surface="lime-100">
+        <SectionShell
+          id="scene-3"
+          kicker={fieldAt(sceneProvenance.blocks, 2)}
+          surface="paper"
+          transition={fieldAt(sceneProvenance.blocks, 3)}
+        >
           <SceneBlock
             body={fieldAt(sceneProvenance.blocks, 1)}
             instance={
@@ -526,29 +607,22 @@ export default async function HomePage({
                 src={sceneProvenanceImage?.src}
               />
             }
+            /* Block 2b — the origin stamp, where it belongs: in the scene
+               that is about where this comes from. It stood on a violet band
+               of its own between the scenes and the proof, mixing the origin
+               sentence, the live counter and a link to `/ueber-uns` into one
+               block with three unrelated jobs (polish brief, page 1, fix 5).
+               The counter moved up to the live rows it is a figure of; the
+               sentence and the link are this scene's, and the page is one
+               section shorter for it. */
             locale={locale}
             mechanism="provenance"
             opener={fieldAt(sceneProvenance.blocks, 0) ?? ""}
           />
-        </SectionShell>
-      </MotionReveal>
-
-      {/* Block 2b — the provenance stamps, with block 2d (the counters)
-          standing inside them: "inline in 2b or 2c, no section of its own"
-          (TS-019 D3). Only the dates figure exists (TS-008 D8, Q-037). */}
-      <MotionReveal>
-        <SectionShell id="provenance-stamps" surface="violet-500">
-          <p>{fieldAt(stamps.blocks, 0)}</p>
-          {/* The badge is a pill of fixed height, so the figure carries the
-              unit and the artifact's full label stands beside it as text. */}
-          <div className={styles.counters} id="live-counters">
-            <p>{fieldAt(counters.blocks, 0)}</p>
-            {/* TS-019-A14 / Q-037: only the counted figure. `places` and
-                `updatesToday` have no `/api/stats` field, so the band shows
-                one slot rather than an estimate. */}
-            <CountersIsland locale={locale} show={["dates"]} />
-          </div>
-          <Button locale={locale} onward to="about" variant="secondary">
+          <p className={styles.stamp} id="provenance-stamps">
+            {fieldAt(stamps.blocks, 0)}
+          </p>
+          <Button locale={locale} onward to="about" variant="quiet">
             {(fieldAt(stamps.blocks, 1) ?? "").split("→")[0]?.trim()}
           </Button>
         </SectionShell>
@@ -558,7 +632,12 @@ export default async function HomePage({
           no selection is cleared (Q-014/Q-045) the five demo cards the
           content artifact itself carries stand in, each badged. */}
       <MotionReveal>
-        <SectionShell id="proof-stream" labelledBy="proof-stream-heading" surface="lime-100">
+        <SectionShell
+          id="proof-stream"
+          kicker={words.kickers.evidence}
+          labelledBy="proof-stream-heading"
+          surface="lime-100"
+        >
           <h2 id="proof-stream-heading">{proofKicker}</h2>
           <ProofStream label={proofKicker}>
             {proofSelection.entries.map((entry, position) =>
@@ -567,7 +646,13 @@ export default async function HomePage({
                   attribution={entry.candidate.attribution}
                   claim={entry.candidate.claim}
                   contextLine={entry.candidate.contextLine}
-                  geo={entry.candidate.geo}
+                  /* G-7: one emphasis per stream. The first element opens it
+                     at sub-head size; the rest are hairline rows with no
+                     fill — five identical cards read as one grey block, not
+                     as breadth. And the geo badge goes: every card here
+                     already names its own source in the line above it, so
+                     the badge was the same word five times. */
+                  emphasis={position === 0 ? "feature" : "compact"}
                   key={entry.candidate.id}
                   locale={locale}
                   state={entry.state}

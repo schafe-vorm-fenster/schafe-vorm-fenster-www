@@ -148,6 +148,10 @@ Lücke im eigenen Ort an, nicht die Lücke im System.
 
 **Text:** Genau so. Du druckst den Flyer sowieso aus. Fotografierst ihn, schickst das Bild per WhatsApp an unsere Nummer, fertig: Der Termin erscheint in deinem Ort und in den Nachbarorten, ohne dass du ihn ein zweites Mal tippst.
 
+**Kicker:** So kommen die Termine rein
+
+**Überleitung:** Die Termine oben tippt niemand bei uns ein. Sie kommen von den Leuten im Ort — meistens so:
+
 Quelle: `relievers[0]` der Value Proposition „actors--community-calendar" —
 „send a photo of the printed flyer by WhatsApp and the date is created
 from it".
@@ -160,6 +164,10 @@ from it".
 
 **Text:** Deine Gemeinde bekommt ihre eigene Auswahl an Terminen, im eigenen Design, unter eigenem Namen, ohne dass bei euch jemand ein System pflegt. Die Akteure vor Ort tragen ihre Termine für sich selbst ein; euer Kalender ist nebenbei aktuell.
 
+**Kicker:** Und wenn ihr sie selbst zeigen wollt
+
+**Überleitung:** Dieselben Termine, nur auf eurer eigenen Seite:
+
 Quelle: Value Proposition „municipalities--portalize-calendar", Felder
 `gains`/`relievers` — „our own design and our own selection, without our
 own system".
@@ -171,6 +179,10 @@ own system".
 **Aha-Frage:** Wer steckt eigentlich dahinter?
 
 **Text:** Jan-Henrik Hempel war selbst ehrenamtlicher Bürgermeister. Der Name der Firma kommt von der Schafweide der Gemeinde vor dem eigenen Küchenfenster. Er kennt die Verwaltung, der der Dienst hilft, von innen.
+
+**Kicker:** Wo das herkommt
+
+**Überleitung:** Beides gibt es, weil jemand das Problem selbst hatte.
 
 Quelle: `founder-former-volunteer-mayor` (`usage_rights: cleared`) — belegt
 über Nordkurier 2019/2022 und das Zukunftswege-Ost-Porträt 2026.
@@ -243,6 +255,16 @@ Reichweitenzahl ersetzt sie (SRC-001 §5, `reach-and-usage` ist `expired`).
 ## Abschluss-CTA
 
 <!-- id: home-11-closing-cta; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
+
+**Überschrift:** Dann schau nach, was bei dir los ist.
+
+**Zusicherungstext:** Kostenlos, ohne Anmeldung, dauerhaft.
+
+Der Zusicherungssatz ist die Kurzform der Zusage aus `price.note` von
+`community-calendar` („Free for readers without any account … Permanent,
+not an introductory tier"), dieselbe Quelle wie `/dein-ort` Slot 8 — die
+Startseite sagt sie in einer Zeile, weil sie hier unter einem Suchfeld
+steht und nicht unter einem Kalender-Knopf.
 
 Spiegelt die primäre CTA von Block 1 im jeweils aktuellen Zustand (S1
 Suche, S2 Kalender öffnen, S3 ersten Termin veröffentlichen) — kein neuer

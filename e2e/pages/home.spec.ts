@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 import { checkRhythm } from "../../src/components/section-shell/rhythm";
 
 import type { RhythmEntry } from "../../src/components/section-shell/rhythm";
-import type { Page } from "@playwright/test";
+import type { APIRequestContext, Page } from "@playwright/test";
 
 /**
  * TS-019 — `/`, the acceptance walk.
@@ -32,6 +32,38 @@ async function blockOneSettled(page: Page): Promise<void> {
   await expect(page.locator('input[type="search"]')).toHaveCount(2);
 }
 
+/**
+ * A covered community whose window is empty — TS-019 D2's S3, and the only
+ * state in which the widening module still renders (polish brief, page 1,
+ * fix 2). `EMPTY_DEMO_SLUG` no longer reaches it: the dates capability needs
+ * no credential, so the public village calendar answers for Lassan in every
+ * environment and Lassan has dates. The walk therefore asks the BFF which of
+ * a handful of covered communities is empty right now.
+ */
+const EMPTY_PLACE_CANDIDATES = ["achimswalde", "altenhof", "kattenberg", "zwiedorf"];
+
+async function emptyPlace(request: APIRequestContext): Promise<string | undefined> {
+  for (const slug of EMPTY_PLACE_CANDIDATES) {
+    const response = await request.get(`/api/places/${slug}/events?window=upcoming`);
+    if (!response.ok()) continue;
+    const body = (await response.json()) as {
+      data?: { events?: unknown[]; place?: { lat: number; lng: number } };
+    };
+    if ((body.data?.events ?? []).length > 0) continue;
+
+    // S3's answer *is* the widened radius, so the walk needs a community
+    // that has something within it — an empty place in an empty region
+    // renders no module at all (TS-008 D1: absent, never empty).
+    const place = body.data?.place;
+    if (place === undefined) continue;
+    const near = await request.get(`/api/nearby?lat=${place.lat}&lng=${place.lng}&radius=15`);
+    if (!near.ok()) continue;
+    const nearBody = (await near.json()) as { data?: { events?: unknown[] } };
+    if ((nearBody.data?.events ?? []).length > 0) return slug;
+  }
+  return undefined;
+}
+
 /** The rhythm entry of every section of the page, in DOM order. */
 async function sectionRhythm(page: Page): Promise<RhythmEntry[]> {
   return page.evaluate(() =>
@@ -58,7 +90,10 @@ test.describe("TS-019 — home", () => {
     await page.goto("/");
 
     await blockOneSettled(page);
-    await expect(page.getByRole("searchbox").first()).toBeVisible();
+    // The typeahead sets `role="combobox"` on the same input once it mounts
+    // (the ARIA pattern for a field with a suggestion list), so the element
+    // is located by what it *is* rather than by the role it reports.
+    await expect(page.locator('input[type="search"]').first()).toBeVisible();
     // Every input has its own id — the module renders twice on this page.
     const ids = await page.evaluate(() =>
       [...document.querySelectorAll('input[type="search"]')].map((input) => input.id),
@@ -133,29 +168,27 @@ test.describe("TS-019 — home", () => {
 
   test("TS-019-A4: `?ort=<covered place without dates>` shows the nearby module and the publish CTA", async ({
     page,
+    request,
   }) => {
+    const slug = await emptyPlace(request);
+    test.skip(slug === undefined, "no covered community is empty right now");
     await page.setViewportSize(DESKTOP);
-    // `38165` resolves to `lassan`, the covered demo place with no dates.
-    await page.goto("/?ort=38165");
+    await page.goto(`/?ort=${slug}`);
 
     // Position 2 renders under a heading that names its radius, not the place.
     const nearby = page.locator("#nearby");
     await expect(nearby.locator("article").first()).toBeVisible();
     const nearbyHeading = (await nearby.locator("h2").first().innerText()).trim();
-    expect(nearbyHeading).not.toContain("Lassan");
+    expect(nearbyHeading.toLowerCase()).not.toContain(slug!);
 
     // A publish-the-first-date CTA targeting the registration route.
     const primary = page.locator('[data-cta="primary"]');
     await expect(primary).toHaveCount(1);
-    await expect(primary).toHaveAttribute(
-      "href",
-      "/mitmachen/registrieren?ort=lassan",
-    );
+    await expect(primary).toHaveAttribute("href", `/mitmachen/registrieren?ort=${slug}`);
 
     // No text claims dates in that place.
     const dates = (await page.locator("#place-dates").innerText()).trim();
-    expect(dates).not.toMatch(/Das ist los in Lassan/);
-    expect(dates).toContain("Lassan");
+    expect(dates).not.toMatch(/^Das ist los in/m);
   });
 
   test("TS-019-A5: an uncovered place typed into the search navigates to /dein-ort/starten?ort=", async ({
@@ -164,7 +197,7 @@ test.describe("TS-019 — home", () => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/");
 
-    const field = page.getByRole("searchbox").first();
+    const field = page.locator('input[type="search"]').first();
     await field.fill("99999"); // the fixture's own uncovered postcode
     await field.press("Enter");
 
@@ -232,15 +265,26 @@ test.describe("TS-019 — home", () => {
         ),
     );
 
+    /**
+     * **Changed by the polish pass** (brief, page 1, fixes 2 and 5).
+     *
+     * `nearby` is gone from this list because it is gone from every state
+     * but S3: the page opened on two five-row lists with the same three
+     * titles in both, which is 1.6 phone screens of rows before the first
+     * argument. `live-counters` moved *into* `place-dates`, directly under
+     * the rows it counts, and the violet band that used to carry it
+     * disappeared with the block; `provenance-stamps` is the origin
+     * sentence, now inside the scene that is about where this comes from —
+     * so both still appear here, in the order the reader meets them.
+     */
     expect(ids).toEqual([
       "focus-block",
       "place-dates",
-      "nearby",
+      "live-counters",
       "scene-1",
       "scene-2",
       "scene-3",
       "provenance-stamps",
-      "live-counters",
       "proof-stream",
       "context-band",
       "closing-cta",
@@ -298,7 +342,17 @@ test.describe("TS-019 — home", () => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/");
 
-    await expect(page.getByRole("searchbox")).toHaveCount(2); // block 1 and the closing block
+    // The **visible** controls. Without JavaScript the `<Suspense>` fallback
+    // that block 1 streams over stays in the document — hidden, but present
+    // — so counting nodes counts the shell twice; what A11 is about is what
+    // the visitor can use, which is block 1's field and the closing one.
+    const visibleSearchFields = await page.evaluate(
+      () =>
+        [...document.querySelectorAll('input[type="search"]')].filter(
+          (input) => input.getBoundingClientRect().height > 0,
+        ).length,
+    );
+    expect(visibleSearchFields).toBe(2); // block 1 and the closing block
     await expect(page.locator("[data-mechanism]")).toHaveCount(3);
     await expect(page.locator("#proof-stream article")).toHaveCount(5);
     await expect(page.locator("#context-band nav")).toHaveCount(1);
@@ -309,13 +363,18 @@ test.describe("TS-019 — home", () => {
     await context.close();
   });
 
-  test("TS-005-A13: the selection is the engine's, and the same on two pages across reloads", async ({
+  test("TS-005-A13: the selection is the engine's, and reproducible across reloads", async ({
     page,
   }) => {
-    // DEC-048's counts, per surface: 5 on home, 7 in the `/ueber-uns` stream,
-    // 3 inline. A count that holds while the pool is smaller than the surface
-    // is what "an unfilled position weakens the claim, it does not shorten
-    // the stream" means in the DOM (SRC-001 §4).
+    // DEC-048's count for this surface is 5, and it holds while the pool is
+    // smaller than the surface: "an unfilled position weakens the claim, it
+    // does not shorten the stream" (SRC-001 §4).
+    //
+    // The `/ueber-uns` half of this walk moved to that page's own spec. A
+    // home-page acceptance test asserting another page's card count was a
+    // coupling defect: `/ueber-uns` composes its stream differently since the
+    // polish pass (one feature card plus compact rows, G-7) and its count is
+    // that page's decision, not this one's.
     const positionsOf = async (path: string, selector: string) => {
       await page.goto(path);
       return page.locator(selector).evaluateAll((nodes) =>
@@ -323,24 +382,14 @@ test.describe("TS-019 — home", () => {
       );
     };
 
-    const home = await positionsOf("/", "#proof-stream article, #proof-stream [data-empty-proof]");
+    const selector = "#proof-stream article, #proof-stream [data-empty-proof]";
+    const home = await positionsOf("/", selector);
     expect(home).toHaveLength(5);
 
-    const about = await positionsOf(
-      "/ueber-uns",
-      '[aria-labelledby="belegstrom"] article, [aria-labelledby="belegstrom"] [data-empty-proof]',
-    );
-    expect(about).toHaveLength(7);
-
-    // TS-005-A4: same trait, same place, same result. Both pages are stage 0
-    // here, and the ISO-week seed is the only variety input, so a reload
+    // TS-005-A4: same trait, same place, same result. The page is stage 0
+    // here and the ISO-week seed is the only variety input, so a reload
     // inside the same week reproduces the order exactly.
-    expect(
-      await positionsOf("/", "#proof-stream article, #proof-stream [data-empty-proof]"),
-    ).toEqual(home);
-    expect(
-      await positionsOf("/ueber-uns", '[aria-labelledby="belegstrom"] article, [aria-labelledby="belegstrom"] [data-empty-proof]'),
-    ).toEqual(about);
+    expect(await positionsOf("/", selector)).toEqual(home);
   });
 
   test("TS-019-A12: the JSON-LD graph is one WebSite and one Organization, no Event", async ({

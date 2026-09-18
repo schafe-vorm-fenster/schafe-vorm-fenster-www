@@ -148,6 +148,10 @@ gap in the visitor's own place, not a gap in the system.
 
 **Text:** Exactly that. You're printing the flyer anyway. Photograph it, send the picture to our WhatsApp number, done: the date appears in your place and in the neighbouring places, without you typing it in a second time.
 
+**Kicker:** How the dates get in
+
+**Transition:** Nobody here types those dates in. They come from the people in the place — usually like this:
+
 Source: `relievers[0]` of the "actors--community-calendar" value
 proposition — "send a photo of the printed flyer by WhatsApp and the
 date is created from it".
@@ -160,6 +164,10 @@ date is created from it".
 
 **Text:** Your municipality gets its own selection of dates, in its own design, under its own name, with nobody there maintaining a system. Local groups enter their own dates for their own purposes; your calendar stays current as a side effect.
 
+**Kicker:** And if you want to show them yourself
+
+**Transition:** The same dates, on your own site:
+
 Source: "municipalities--portalize-calendar" value proposition,
 `gains`/`relievers` fields — "our own design and our own selection,
 without our own system".
@@ -171,6 +179,10 @@ without our own system".
 **Aha question:** Who's actually behind this?
 
 **Text:** Jan-Henrik Hempel was a volunteer mayor himself. The company's name comes from the municipality's sheep pasture in front of his own kitchen window. He knows the administration this service helps from the inside.
+
+**Kicker:** Where this comes from
+
+**Transition:** Both exist because somebody had the problem himself.
 
 Source: `founder-former-volunteer-mayor` (`usage_rights: cleared`) —
 documented via Nordkurier 2019/2022 and the Zukunftswege-Ost portrait
@@ -244,6 +256,16 @@ replaces it (SRC-001 §5, `reach-and-usage` is `expired`).
 ## Closing CTA
 
 <!-- id: home-11-closing-cta; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
+
+**Heading:** Then go find out what's on where you live.
+
+**Reassurance text:** Free, no account, permanently.
+
+The reassurance is the short form of the commitment in `price.note` of
+`community-calendar` ("Free for readers without any account … Permanent,
+not an introductory tier"), the same source as `/dein-ort` slot 8 — the
+home page says it in one line because here it stands under a search
+field rather than under a calendar button.
 
 Mirrors block 1's primary CTA in whichever state is current (S1 search,
 S2 open calendar, S3 publish first date) — no new text, same target id
