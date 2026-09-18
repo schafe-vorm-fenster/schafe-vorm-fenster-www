@@ -1,15 +1,61 @@
+/*
+ * Polish brief page 12, item 1 — sticky on the phone.
+ *
+ * `/rechtliches` is fifty phone screens. A table of contents that scrolls
+ * away after the first one is a table of contents for the first one, so the
+ * list sticks under the header and becomes a single scrollable row: seven
+ * short labels, 44 px targets, one line. Full-bleed, because the bar has to
+ * cover the text passing under it edge to edge — the shell's own 16 px
+ * padding is given back to the list inside.
+ */
 .nav {
+  background: var(--color-neutral-paper);
+  border-bottom: 1px solid var(--color-neutral-line);
   display: block;
+  margin-inline: calc(var(--space-4) * -1);
+  padding-inline: var(--space-4);
+  position: sticky;
+  top: var(--site-header-height);
+  z-index: 1;
 }
 
+.list {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  /* The bar is the orientation, not a scrollbar to look at. */
+  scrollbar-width: none;
+}
+
+.list > li {
+  flex: none;
+}
+
+.list .link,
+.list .current {
+  border-top: 0;
+  white-space: nowrap;
+}
+
+/*
+ * The `nav` is named for a screen reader by its own `aria-label`, so on the
+ * phone bar the visible label only costs a line — it is hidden there and
+ * returns as the column's heading from `xl`.
+ */
 .title {
+  clip-path: inset(50%);
   color: var(--color-neutral-muted);
   font-family: var(--font-mono);
   font-size: var(--type-label-size);
   font-weight: 700;
+  height: 1px;
   letter-spacing: var(--type-label-tracking);
   margin: 0 0 var(--space-2);
+  overflow: hidden;
+  position: absolute;
   text-transform: uppercase;
+  white-space: nowrap;
+  width: 1px;
 }
 
 .list {
@@ -49,10 +95,32 @@
   flex: none;
 }
 
-/* xl — 64rem / 1024px: the list becomes the sticky column beside the text. */
+/* xl — 64rem / 1024px: the bar becomes the sticky column beside the text. */
 @media (min-width: 64rem) {
   .nav {
-    position: sticky;
+    border-bottom: 0;
+    margin-inline: 0;
+    padding-inline: 0;
     top: calc(var(--site-header-height) + var(--space-4));
+  }
+
+  .list {
+    display: block;
+    overflow-x: visible;
+  }
+
+  .list .link,
+  .list .current {
+    border-top: 1px solid var(--color-neutral-line);
+    white-space: normal;
+  }
+
+  .title {
+    clip-path: none;
+    height: auto;
+    overflow: visible;
+    position: static;
+    white-space: normal;
+    width: auto;
   }
 }

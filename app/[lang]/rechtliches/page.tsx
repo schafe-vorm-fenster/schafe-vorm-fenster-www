@@ -17,6 +17,7 @@ import { PageFrame } from "../_page-frame";
 import styles from "./page.module.css";
 import { pageMeta } from "./page.meta";
 
+import type { LegalBlock } from "@/src/lib/content/legal-markdown";
 import type { ContentBlock } from "@/src/lib/content/types";
 import type { LegalSectionId } from "@/src/lib/routes/legal-anchors";
 import type { Metadata } from "next";
@@ -39,9 +40,48 @@ import type { Metadata } from "next";
  * D8: `#barrierefreiheit` is the one registry anchor with no document today
  * (TS-004 D8: "to be written", `state/open.md` #21) — the production build
  * fails while it is missing; a preview build omits it.
+ *
+ * ### The heading the page said twice (polish brief page 12)
+ *
+ * Five of the seven documents open with their own title, and that title is
+ * the section's title: the page read "Impressum / Impressum",
+ * "Datenschutz / Datenschutzerklärung", "Nutzungsbedingungen /
+ * Nutzungsbedingungen". `dropRepeatedTitle` removes the document's own
+ * opening heading where the section heading above it already says the same
+ * thing — and only then, so a document whose first heading says something
+ * new ("Fotos auf dieser Website" under "Bildnachweise") keeps it.
+ *
+ * The shift follows from that: a document that gave up its title shifts by
+ * **one** (its `##` becomes the `h3` under the section's `h2`), one that
+ * kept it shifts by two, as D6 prescribes. Before this the deepest sections
+ * of the privacy policy ran to `h6` and three levels rendered at nearly the
+ * same size, so a 50-screen document had no visible hierarchy at all.
  */
 
 const ROUTE = "legal" as const;
+
+/**
+ * The document's own opening title, where the section heading above it
+ * already carries it. Compared on a normalised form, and only as a
+ * prefix relation in either direction: "Datenschutzerklärung" under
+ * "Datenschutz" is the same heading twice; "Fotos auf dieser Website" under
+ * "Bildnachweise" is not.
+ */
+function dropRepeatedTitle(
+  blocks: readonly LegalBlock[],
+  title: string,
+): { blocks: readonly LegalBlock[]; dropped: boolean } {
+  const first = blocks[0];
+  if (!first || first.kind !== "heading") return { blocks, dropped: false };
+  const normalise = (value: string) => value.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+  const heading = normalise(first.text);
+  const section = normalise(title);
+  if (heading === "" || section === "") return { blocks, dropped: false };
+  if (!heading.startsWith(section) && !section.startsWith(heading)) {
+    return { blocks, dropped: false };
+  }
+  return { blocks: blocks.slice(1), dropped: true };
+}
 
 /** DE/EN section display titles, read from the content artifact's own
  * registry table (`rechtliches-2-registry`) rather than typed here — the
@@ -137,13 +177,20 @@ export default async function Page({
             <article className={styles.sections}>
               {LEGAL_SECTION_IDS.map((section: LegalSectionId) => {
                 const document = docsBySection.get(section);
+                const title =
+                  navItems.find((item) => item.id === legalAnchor(section, locale))?.label ?? section;
+                const body = document ? dropRepeatedTitle(document.blocks, title) : null;
                 return (
                   <LegalSection
-                    body={document ? renderLegalBlocks(shiftHeadings(document.blocks, 2)) : undefined}
+                    body={
+                      body
+                        ? renderLegalBlocks(shiftHeadings(body.blocks, body.dropped ? 1 : 2))
+                        : undefined
+                    }
                     key={section}
                     locale={locale}
                     section={section}
-                    title={navItems.find((item) => item.id === legalAnchor(section, locale))?.label ?? section}
+                    title={title}
                   />
                 );
               })}

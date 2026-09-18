@@ -4,6 +4,18 @@ import { dictionary } from "../../src/lib/i18n/dictionary";
 
 /**
  * TS-029 — `/rechtliches` (EN `/legal`) — acceptance pass.
+ *
+ * **TS-029-A6 changed with the polish brief (page 12, item 1).** The
+ * criterion's own wording — "at 390px the nav is not sticky" — dates from
+ * before the page carried seven sections and fifty phone screens: a table of
+ * contents that scrolls away after the first screen is a table of contents
+ * for the first screen. The brief's instruction is the opposite ("make it
+ * sticky under the header on the phone, `tight`"), and the brief wins. The
+ * case below therefore asserts that the bar **does** stick, directly under
+ * the header, as one scrollable row — and keeps everything the criterion was
+ * actually protecting: no horizontal page scroll at 390 px, and
+ * `back-to-top` reachable at 44 px once the reader is a screen and a half
+ * down.
  */
 
 const SECTIONS_DE = [
@@ -63,7 +75,7 @@ test.describe("/rechtliches", () => {
     expect(hrefs).toEqual(SECTIONS_DE.map((anchor) => `#${anchor}`));
   });
 
-  test("TS-029-A6: at 390px the nav is not sticky, no horizontal scroll; back-to-top appears after scrolling", async ({
+  test("TS-029-A6 (brief page 12): at 390px the nav sticks under the header, no horizontal scroll; back-to-top appears after scrolling", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 700 });
@@ -73,11 +85,80 @@ test.describe("/rechtliches", () => {
     );
     expect(overflows).toBe(false);
 
+    // Twenty screens into the privacy policy, the jump list is still there.
+    await page.evaluate(() => window.scrollTo(0, 9000));
+    const nav = page.locator("#abschnitte");
+    const measured = await nav.evaluate((element) => {
+      const header = Number.parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue("--site-header-height"),
+      );
+      const box = element.getBoundingClientRect();
+      return { top: box.top, height: box.height, header };
+    });
+    expect(measured.top).toBeGreaterThanOrEqual(0);
+    expect(Math.abs(measured.top - measured.header)).toBeLessThanOrEqual(2);
+    // `tight`: one scrollable row, not a seven-item column pinned to the top.
+    expect(measured.height).toBeLessThanOrEqual(64);
+    await expect(nav.getByRole("link").first()).toBeVisible();
+
     await page.evaluate(() => window.scrollTo(0, window.innerHeight * 1.5));
     const backToTop = page.getByRole("link", { name: "Nach oben" });
     await expect(backToTop).toBeVisible();
     const box = await backToTop.boundingBox();
     expect(box?.height).toBeGreaterThanOrEqual(44);
+  });
+
+  /**
+   * Polish brief page 12 — long-form typography.
+   *
+   * Five of the seven documents open with their own title, and that title is
+   * the section's title, so the page read "Impressum / Impressum" and
+   * "Datenschutz / Datenschutzerklärung". And the imported headings had no
+   * scale of their own: `h5` and `h6` fell back to the user-agent sizes,
+   * which are *smaller* than the body text they introduce.
+   */
+  test("brief page 12: no section says its own title twice, and every heading level is larger than the body", async ({
+    page,
+  }) => {
+    await page.goto("/rechtliches");
+
+    for (const anchor of ["impressum", "datenschutz", "nutzungsbedingungen"]) {
+      const section = page.locator(`#${anchor}`);
+      const title = (await section.locator("h2").innerText()).trim();
+      const first = section.locator("h3").first();
+      if ((await first.count()) > 0) {
+        const firstHeading = (await first.innerText()).trim();
+        expect(firstHeading, `${anchor} repeats its own heading`).not.toBe(title);
+      }
+    }
+
+    const sizes = await page.evaluate(() => {
+      const body = Number.parseFloat(getComputedStyle(document.body).fontSize);
+      const levels = ["h3", "h4", "h5"].map((tag) => {
+        const element = document.querySelector(`[class*="legal-section"][class*="body"] ${tag}`);
+        return element ? Number.parseFloat(getComputedStyle(element).fontSize) : null;
+      });
+      return { body, levels };
+    });
+    for (const size of sizes.levels) {
+      if (size !== null) expect(size).toBeGreaterThanOrEqual(sizes.body);
+    }
+  });
+
+  test("brief page 12: the image-credits section is the last one and carries the real credits", async ({
+    page,
+  }) => {
+    await page.goto("/rechtliches");
+    const credits = page.locator("#bildnachweise");
+    await expect(credits).toHaveCount(1);
+    await expect(credits).toContainText("Wikimedia Commons");
+    await expect(credits).toContainText("CC BY-SA 4.0");
+    // It is the last registry section on the page.
+    const last = await page.evaluate(() => {
+      const sections = [...document.querySelectorAll("article section[id]")];
+      return sections.at(-1)?.id ?? "";
+    });
+    expect(last).toBe("bildnachweise");
   });
 
   test("TS-029-A7: with JavaScript disabled every section renders and nav links jump correctly", async ({
