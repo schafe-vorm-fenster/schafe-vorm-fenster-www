@@ -266,6 +266,8 @@ export default async function Page({
 
       <SectionShell dataBlock="embed-demo" surface="violet-500">
         <EmbedFrame
+          config={embedConfig}
+          configLabel={embedConfigLabel}
           copy={embedCopy}
           heading={fieldAt(embedDemo.blocks, 0) ?? ""}
           locale={locale}
@@ -277,23 +279,6 @@ export default async function Page({
           state="ready"
           weeksAhead={DEFAULT_WEEKS_AHEAD}
         />
-        {embedConfig.length === 0 ? null : (
-          <>
-            <h4>{embedConfigLabel}</h4>
-            {/* The embed's own settings, as key and value: what a visitor is
-                looking at, and what they would set for themselves. The list
-                is authored beside the copy (`content/pages/dein-kalender/`),
-                so it stays in the content pipeline rather than in a page. */}
-            <dl>
-              {embedConfig.map(({ key, value }) => (
-                <div key={key}>
-                  <dt>{key}</dt>
-                  <dd>{value}</dd>
-                </div>
-              ))}
-            </dl>
-          </>
-        )}
       </SectionShell>
 
       <SectionShell dataBlock="tiers" surface="lime-100">

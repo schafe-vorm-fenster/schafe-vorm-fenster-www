@@ -32,6 +32,14 @@ export interface EmbedFrameProps extends DataStateProps {
   readonly showBranding?: boolean;
   /** How far ahead the widget looks; the loader's own default is 13 weeks. */
   readonly weeksAhead?: number;
+  /**
+   * What the embed is actually set to, as key and value — authored beside
+   * the copy, so a visitor reads the settings rather than guessing at them
+   * (TS-024 D5: the frame says what it is showing).
+   */
+  readonly config?: readonly { readonly key: string; readonly value: string }[];
+  /** The settings list's own heading, from the same slot. */
+  readonly configLabel?: string;
   readonly ratio?: MediaRatio;
   /**
    * Kept in the interface so every page composes the frame the same way;
@@ -72,6 +80,8 @@ export function EmbedFrame({
   showFilter = true,
   showBranding = false,
   weeksAhead = DEFAULT_WEEKS_AHEAD,
+  config,
+  configLabel,
   ratio = "map",
   state = "ready",
   className,
@@ -106,6 +116,19 @@ export function EmbedFrame({
           )}
         </div>
       ) : null}
+      {config === undefined || config.length === 0 ? null : (
+        <div>
+          {configLabel ? <h4 className={styles.configHeading}>{configLabel}</h4> : null}
+          <dl className={styles.config}>
+            {config.map(({ key, value }) => (
+              <div className={styles.configRow} key={key}>
+                <dt className={styles.configKey}>{key}</dt>
+                <dd className={styles.configValue}>{value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )}
     </div>
   );
 }

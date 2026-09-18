@@ -49,6 +49,99 @@
   padding: var(--space-3);
 }
 
+/**
+ * The widget's own theming contract — `[data-portalize-widget]` custom
+ * properties, which it reads through its open shadow root
+ * (`apps/widget-host/docs/widget-embedding-guide.md`).
+ *
+ * Every value is one of this site's tokens, which is what makes the page's
+ * claim true rather than aspirational: the calendar takes the host page's
+ * type and colour, it does not bring its own. Without this the widget falls
+ * back to its own greys, and on the violet surface the category filter was
+ * grey-on-grey.
+ */
+.mount[data-portalize-widget] {
+  --portalize-title-color: var(--color-neutral-ink);
+  --portalize-title-font-family: var(--font-sans);
+  --portalize-title-font-weight: 800;
+  --portalize-title-font-size: 1.05em;
+  --portalize-description-color: var(--color-neutral-ink);
+  --portalize-description-font-family: var(--font-sans);
+  --portalize-metadata-color: var(--color-neutral-text2);
+  --portalize-metadata-font-family: var(--font-mono);
+  --portalize-metadata-font-size: 0.85em;
+  --portalize-highlight-color: var(--color-neutral-ink);
+  --portalize-highlight-font-family: var(--font-sans);
+  --portalize-button-bg-color: var(--color-neutral-paper);
+  --portalize-button-bg-color-selected: var(--color-lime-500);
+  --portalize-button-text-color: var(--color-neutral-ink);
+  --portalize-button-text-color-selected: var(--color-neutral-ink);
+  --portalize-button-border-color: var(--color-neutral-ink);
+  --portalize-button-border-width: 1px;
+  --portalize-button-border-radius: 999px;
+  --portalize-divider-color: var(--color-neutral-line);
+  --portalize-image-bg-color: var(--color-neutral-surface);
+  --portalize-image-border-radius: 0;
+  --portalize-image-shadow: none;
+  --portalize-badge-bg-color: var(--color-neutral-surface);
+  --portalize-badge-border-radius: 999px;
+  /* Mobile first: on a phone the four category buttons wrap to four lines
+     and eat most of the reserved box, so they become one scrolling row and
+     the box stays for dates. The widget's own filter properties do it. */
+  --portalize-filter-flex-wrap: nowrap;
+  --portalize-filter-justify-content: flex-start;
+  --portalize-filter-overflow-x: auto;
+}
+
+@media (min-width: 48rem) {
+  .mount[data-portalize-widget] {
+    --portalize-filter-flex-wrap: wrap;
+    --portalize-filter-justify-content: center;
+    --portalize-filter-overflow-x: visible;
+  }
+}
+
+/**
+ * What the embed is set to, as key and value. It sits under the frame rather
+ * than beside it because the reader has to see the calendar before the list
+ * of what produced it means anything.
+ */
+.configHeading {
+  font-size: var(--type-meta-size);
+  letter-spacing: 0.08em;
+  margin: var(--space-4) 0 var(--space-2);
+  text-transform: uppercase;
+}
+
+.config {
+  border-top: 1px solid currentcolor;
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.configRow {
+  border-bottom: 1px solid currentcolor;
+  display: grid;
+  gap: var(--space-1) var(--space-4);
+  padding: var(--space-2) 0;
+}
+
+@media (min-width: 40rem) {
+  .configRow {
+    grid-template-columns: minmax(8rem, 12rem) 1fr;
+  }
+}
+
+.configKey {
+  font-weight: 700;
+  margin: 0;
+}
+
+.configValue {
+  margin: 0;
+}
+
 /* TS-008 D6: a blocked or failing loader shows no error and no empty frame —
    the heading, the copy and the CTA around it stay exactly as they are. */
 .box:has(> [data-portalize-failed="true"]) {
