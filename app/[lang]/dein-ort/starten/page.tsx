@@ -7,7 +7,7 @@ import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
 import { slot } from "@/src/lib/content/loader";
-import { fillTemplate, splitSteps } from "@/src/lib/pages/demo-content";
+import { fillTemplate } from "@/src/lib/pages/demo-content";
 import { DEMO_PLACE } from "@/src/lib/pages/demo-data";
 import { STAGE_ZERO_ANCHOR, resolvePlaceOutcome } from "@/src/lib/pages/live-anchor";
 import { linkHref } from "@/src/components/route-link/href";
@@ -171,7 +171,7 @@ export default async function PlaceStartPage({
   const whatItTakes = slot(page, "dein-ort-starten-2-was-es-braucht");
   const example = slot(page, "dein-ort-starten-3-beispiel");
   const whoStarts = slot(page, "dein-ort-starten-4-wer");
-  const searchAgain = slot(page, "dein-ort-starten-5-search");
+  const searchAgainSlot = slot(page, "dein-ort-starten-5-search");
   const closing = slot(page, "dein-ort-starten-6-cta");
 
   // "Headline (mit Ort)" / "Headline (ohne Ort, Fallback)" — the artifact
@@ -208,12 +208,46 @@ export default async function PlaceStartPage({
     </Button>
   );
 
+  /**
+   * The mistyped-search field. It used to be a section of its own between
+   * "who usually starts it" and the closing block, so the page trailed off
+   * into "Falsch getippt?" *before* its own offer — a retreat where the
+   * conversion belongs (polish brief, page 3, fix 3). It is now a quiet line
+   * under the closing CTA: still there for the visitor who needs it, no
+   * longer the last argument the page makes.
+   */
+  const searchAgain = (
+    <div id="search-again">
+      <p>{fieldAt(searchAgainSlot.blocks, 0)}</p>
+      <PlaceSearch
+        typeahead
+        hint={fieldAt(searchAgainSlot.blocks, 2) ?? copy.searchHint}
+        id="ort-suche-nochmal"
+        label={fieldAt(searchAgainSlot.blocks, 1) ?? copy.searchLabel}
+        locale={locale}
+        placeholder={fieldAt(searchAgainSlot.blocks, 1) ?? copy.searchLabel}
+        to="place"
+      />
+    </div>
+  );
+
   return (
     <>
       {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
-      closing={{ to: "register", label: ctaLabel, query: { ort: searched } }}
+      closing={{
+        to: "register",
+        label: ctaLabel,
+        query: { ort: searched },
+        // The page's own promise over its offer (G-6). `{ort}` falls back to
+        // the placeless word, like every other template on this page.
+        heading: fillTemplate(labelOf(fieldAt(closing.blocks, 2)), ctaValues),
+        // Sourced: `price.note` of `community-calendar`, the same public
+        // commitment slot 2 cites.
+        reassurance: fieldAt(closing.blocks, 3),
+        footer: searchAgain,
+      }}
       contextBandHeading={fieldAt(slot(page, "dein-ort-starten-7-context-band").blocks, 0)}
       locale={locale}
       meta={PLACE_START_META}
@@ -230,7 +264,11 @@ export default async function PlaceStartPage({
         headline={headline}
         headlineLines={2}
         id="focus-block"
-        lead={fieldAt(ack.blocks, 2)}
+        /* No lead: G-1 moves the hero's second sentence out of the box on
+           every page whose copy is long enough to push the conversion off
+           the first screen — at 360 × 640 this one's button sat 34 px below
+           the fold. The sentence is not lost, it is the hand-off into the
+           section that answers it (`what-it-takes`, below). */
         // F-2-33: the hero's `photo-surface` badges itself out of the
         // dictionary — without the page's language it marks an English page
         // in German.
@@ -243,7 +281,12 @@ export default async function PlaceStartPage({
 
       {/* Block 2.1 — what it takes. One mechanism: WhatsApp (D2). */}
       <MotionReveal>
-        <SectionShell id="what-it-takes" surface="lime-500">
+        <SectionShell
+          id="what-it-takes"
+          kicker={fieldAt(whatItTakes.blocks, 2)}
+          surface="lime-500"
+          transition={fieldAt(ack.blocks, 2)}
+        >
           <SceneBlock
             body={fieldAt(whatItTakes.blocks, 1)}
             instance={null}
@@ -258,11 +301,19 @@ export default async function PlaceStartPage({
           "your place". The searched place appears in the note *beside* the
           module, never inside its heading or its rows (D6, A4). */}
       <MotionReveal>
-        <SectionShell id="live-example" surface="ink">
-          <p>{splitSteps(fillTemplate(fieldAt(example.blocks, 1) ?? "", ctaValues))[0]}</p>
+        <SectionShell id="live-example" kicker={fieldAt(example.blocks, 1)} surface="ink">
           <PlaceDatesIsland
             locale={locale}
-            rowCount={3}
+            // One row, not three (G-2): the point here is "a place like
+            // yours has something in it", not "here is a list". The note
+            // that stood above the module said what the `h1` had already
+            // said two screens up and is gone with it.
+            // The village's own life first: a club evening or a concert
+            // shows what a covered place has in it, where the next bin
+            // collection shows the opposite.
+            prefer={["social", "culture", "fest", "official"]}
+            role="story"
+            rowCount={1}
             slug={STAGE_ZERO_ANCHOR.slug}
             titleTemplate={fillTemplate(fieldAt(example.blocks, 0) ?? "", values)}
             tone="dark"
@@ -278,28 +329,17 @@ export default async function PlaceStartPage({
           (TS-006 D8): it names who it usually is and lets the reader
           recognise someone (D9). */}
       <MotionReveal>
-        <SectionShell id="who-starts-it" labelledBy="who-starts-it-heading" surface="paper">
+        <SectionShell
+          id="who-starts-it"
+          kicker={fieldAt(whoStarts.blocks, 2)}
+          labelledBy="who-starts-it-heading"
+          surface="lime-100"
+        >
           <h2 id="who-starts-it-heading">{fieldAt(whoStarts.blocks, 0)}</h2>
           <p>{fieldAt(whoStarts.blocks, 1)}</p>
         </SectionShell>
       </MotionReveal>
 
-      {/* Block 2.4 — the same search component as everywhere, for the
-          visitor who mistyped (D2, TS-008 D7). */}
-      <MotionReveal>
-        <SectionShell id="search-again" labelledBy="search-again-heading" surface="lime-100">
-          <h2 id="search-again-heading">{fieldAt(searchAgain.blocks, 0)}</h2>
-          <PlaceSearch
-            typeahead
-            hint={fieldAt(searchAgain.blocks, 2) ?? copy.searchHint}
-            id="ort-suche-nochmal"
-            label={fieldAt(searchAgain.blocks, 1) ?? copy.searchLabel}
-            locale={locale}
-            placeholder={fieldAt(searchAgain.blocks, 1) ?? copy.searchLabel}
-            to="place"
-          />
-        </SectionShell>
-      </MotionReveal>
     </PageFrame>
     </>
   );

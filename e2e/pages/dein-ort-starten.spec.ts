@@ -208,7 +208,10 @@ test.describe("TS-021 — start the calendar in your place", () => {
   }) => {
     for (const entry of ["/", "/dein-ort"]) {
       await page.goto(entry);
-      const field = page.getByRole("searchbox").first();
+      // `input[type="search"]`, not `getByRole("searchbox")`: the typeahead
+      // sets `role="combobox"` on the same input once it mounts, so the role
+      // a test sees depends on whether hydration has happened yet.
+      const field = page.locator('input[type="search"]').first();
       await field.fill(UNCOVERED_ZIP);
       await field.press("Enter");
       await expect(page).toHaveURL(new RegExp(`/dein-ort/starten\\?ort=${UNCOVERED_ZIP}$`));
@@ -221,7 +224,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
   }) => {
     // `38165` is the fixture's covered-but-empty place (`EMPTY_DEMO_SLUG`).
     await page.goto("/dein-ort");
-    const field = page.getByRole("searchbox").first();
+    const field = page.locator('input[type="search"]').first();
     await field.fill("38165");
     await field.press("Enter");
     await expect(page).toHaveURL(/\/dein-ort\?ort=38165$/);
@@ -307,10 +310,16 @@ test.describe("TS-021 — start the calendar in your place", () => {
   test("TS-021-A9: a value that needs encoding travels encoded and unchanged", async ({
     page,
   }) => {
-    await page.goto("/dein-ort/starten?ort=Gro%C3%9F%20Kiesow");
+    // A name that needs encoding **and stays uncovered**. It used to be
+    // "Groß Kiesow", which is a real community: name search was geo-api's
+    // and geo-api had none (Q-025), so the value classified as uncovered and
+    // this page rendered it. The committed community index answers name
+    // searches now, so Groß Kiesow resolves, and the visitor is forwarded to
+    // `/dein-ort` — which is DEC-070 working, not this criterion failing.
+    await page.goto("/dein-ort/starten?ort=Gro%C3%9F%20Testdorf");
     const href = await page.locator('[data-cta="primary"]').getAttribute("href");
-    expect(href).toBe("/mitmachen/registrieren?ort=Gro%C3%9F+Kiesow");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Groß Kiesow");
+    expect(href).toBe("/mitmachen/registrieren?ort=Gro%C3%9F+Testdorf");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Groß Testdorf");
   });
 
   test("TS-021-A10: exactly one primary CTA, a context band of three jobs, a closing block that repeats block 1", async ({
@@ -422,7 +431,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     });
 
     await page.goto("/");
-    const field = page.getByRole("searchbox").first();
+    const field = page.locator('input[type="search"]').first();
     await field.fill(UNCOVERED_ZIP);
     await field.press("Enter");
     await expect(page).toHaveURL(new RegExp(`/dein-ort/starten\\?ort=${UNCOVERED_ZIP}$`));

@@ -78,9 +78,11 @@ calendar row, or a number (TS-021 D6).
 <!-- clearance: pending for the press record — the 2022 Nordkurier entry carries no `usage_rights` (Q-045, state/open.md #1). The offering record itself is free to use. -->
 <!-- id: dein-ort-starten-2-was-es-braucht; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
 
-**Heading:** What it takes to get {place} into the calendar
+**Heading:** One person is enough to get {place} into the calendar
 
 **Text:** One person. A flyer that already exists anyway. One photo by WhatsApp. That's it: free, no sign-up fee, permanent.
+
+**Kicker:** What it takes
 
 Source: `price.note` from `community-calendar` — "Free for readers without
 any account … Permanent, not an introductory tier." The offer was free
@@ -95,9 +97,9 @@ commitment rather than a pricing decision that can be quietly reversed
 
 <!-- id: dein-ort-starten-3-beispiel; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Module heading:** Here's how it runs elsewhere — in {example_place}
+**Module heading:** Here's how it runs in {example_place}
 
-**Note:** {place} isn't in the calendar yet. {place} itself never appears as data in this module.
+**Kicker:** This is what it looks like
 
 The place name shown comes from an actually covered, active
 place (TS-021 D7) — never from the searched-for, not-found place.
@@ -107,9 +109,11 @@ place (TS-021 D7) — never from the searched-for, not-found place.
 <!-- clearance: pending for `lehre-lelender` (`usage_rights: unverified`, the foundation's written clearance is outstanding). The audience record is free to use. -->
 <!-- id: dein-ort-starten-4-wer; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"]; status: draft -->
 
-**Heading:** Who usually gets this started
+**Heading:** Usually a club or the fire brigade
 
-**Text:** In most places, it's a club, the fire brigade, the parish, an initiative, a cultural venue, or a mobile service like a bakery or doctor's van. Often a single person doing it alongside everything else.
+**Text:** Sometimes the parish, an initiative, a cultural venue, or a mobile service like a bakery or doctor's van. Often a single person doing it alongside everything else.
+
+**Kicker:** Who usually gets this started
 
 Source: `@schafe-vorm-fenster/audiences#actors`, "Context" field — the
 audience record's own enumeration, no new invention.
@@ -146,6 +150,10 @@ default.
 **CTA label (primary):** Add {place} → `/mitmachen/registrieren?ort={place}`
 
 **CTA label (without place, fallback):** Add your place → `/mitmachen/registrieren`
+
+**Closing heading:** One flyer is enough to put {place} on the map.
+
+**Reassurance text:** Free, no signup fee, permanent.
 
 The value carries over unchanged and URL-encoded (TS-021 D8) — no app
 link, no pre-filled account, no claim that {place} is already

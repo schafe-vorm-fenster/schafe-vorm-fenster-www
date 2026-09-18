@@ -77,9 +77,11 @@ Kalender-Zeile oder einer Zahl (TS-021 D6).
 <!-- clearance: pending für den Presse-Beleg — der Nordkurier-Eintrag von 2022 trägt kein `usage_rights` (Q-045, state/open.md #1). Der Angebots-Datensatz selbst ist frei verwendbar. -->
 <!-- id: dein-ort-starten-2-was-es-braucht; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
 
-**Überschrift:** Was es braucht, damit {ort} im Kalender steht
+**Überschrift:** Damit {ort} im Kalender steht, reicht eine Person
 
 **Text:** Eine Person. Ein Flyer, den es sowieso schon gibt. Ein Foto per WhatsApp. Mehr nicht: kostenlos, ohne Anmeldegebühr, dauerhaft.
+
+**Kicker:** Was es braucht
 
 Quelle: `price.note` von `community-calendar` — „Free for readers without
 any account … Permanent, not an introductory tier." Das Angebot war
@@ -94,9 +96,9 @@ zurücknehmen lässt (dieselbe Zusicherung wie `/dein-ort` Slot 8).
 
 <!-- id: dein-ort-starten-3-beispiel; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Modul-Überschrift:** So läuft das anderswo — in {beispielort}
+**Modul-Überschrift:** So läuft das in {beispielort}
 
-**Hinweis:** {ort} steht noch nicht im Kalender. {ort} selbst taucht in diesem Modul nirgends als Daten auf.
+**Kicker:** So sieht das aus
 
 Der gezeigte Ortsname kommt aus einem tatsächlich abgedeckten, aktiven
 Ort (TS-021 D7) — nie aus dem gesuchten, nicht gefundenen Ort.
@@ -106,9 +108,11 @@ Ort (TS-021 D7) — nie aus dem gesuchten, nicht gefundenen Ort.
 <!-- clearance: pending für `lehre-lelender` (`usage_rights: unverified`, schriftliche Freigabe der Stiftung steht aus). Der Audience-Datensatz ist frei verwendbar. -->
 <!-- id: dein-ort-starten-4-wer; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"]; status: draft -->
 
-**Überschrift:** Wer sowas meistens anstößt
+**Überschrift:** Meistens ein Verein oder die Feuerwehr
 
-**Text:** In den meisten Orten ist es ein Verein, die Feuerwehr, die Kirchengemeinde, eine Initiative, ein Kulturbetrieb oder ein mobiler Dienst wie ein Bäcker- oder Arztwagen. Oft eine einzelne Person, die das nebenbei macht.
+**Text:** Manchmal die Kirchengemeinde, eine Initiative, ein Kulturbetrieb oder ein mobiler Dienst wie ein Bäcker- oder Arztwagen. Oft eine einzelne Person, die das nebenbei macht.
+
+**Kicker:** Wer das meistens anstößt
 
 Quelle: `@schafe-vorm-fenster/audiences#actors`, Feld „Context" — die
 eigene Aufzählung des Audience-Records, keine neue Erfindung.
@@ -146,6 +150,10 @@ Vorgabe der Komponente erbt.
 **CTA-Label (primär):** {ort} eintragen → `/mitmachen/registrieren?ort={ort}`
 
 **CTA-Label (ohne Ort, Fallback):** Deinen Ort eintragen → `/mitmachen/registrieren`
+
+**Abschluss-Überschrift:** Ein Flyer reicht, um {ort} auf die Karte zu bringen.
+
+**Zusicherungstext:** Kostenlos, ohne Anmeldegebühr, dauerhaft.
 
 Der Wert wandert unverändert und URL-codiert weiter (TS-021 D8) — kein
 App-Link, kein vorausgefülltes Konto, keine Behauptung, {ort} sei bereits
