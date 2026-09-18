@@ -10,32 +10,32 @@
  *
  *   1. render no live module at all, which the mock rule forbids — "never as
  *      a hole, never as a bare empty state" (plan/guardrails.md);
- *   2. anchor the modules on one configured reference community, whose
- *      payloads every backend marks `demo: true` so the `Demo-Daten` badge
- *      renders itself.
+ *   2. anchor the modules on one configured **showcase community**.
  *
- * This module is (2), in one place. It is **configuration, not data**: when
- * the proxy hands the request geo down, `resolveLiveAnchor()` gains a second
- * source and no page changes. `Mock aktiv`, `state/open.md`.
+ * This module is (2), in one place. The community itself is configured in
+ * `src/lib/live/showcase.ts`; this file only decides when it is used. It is
+ * **configuration, not data**: when the proxy hands the request geo down,
+ * `resolveLiveAnchor()` gains a second source and no page changes.
  */
 
 import { resolvePlace, searchPlaces } from "@/src/lib/live/places";
+import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
 import { readPlaceParameter } from "@/src/lib/pages/place-parameter";
 
 import type { Place } from "@/src/lib/live/types";
 
 /**
- * The demo backend's own first community (`src/lib/live/mocks/fixtures.ts`
- * `DEMO_PLACES[0]`). Restated here rather than imported: a page may not
- * reach into `src/lib/live/mocks/` — that is the boundary `boundary.test.ts`
- * enforces — and the values are configuration either way.
+ * The configured showcase community — `src/lib/live/showcase.ts`, imported
+ * rather than restated, because it is not the demo backend's first row any
+ * more: it is a real village in Vorpommern-Greifswald with real upcoming
+ * dates, and the one place both the fixtures and the live modules mean.
  */
 export const STAGE_ZERO_ANCHOR = {
-  slug: "beispielgemeinde-musterdorf",
-  lat: 54.0,
-  lng: 13.4,
-  /** geo-api id of the demo county; `region.ts` takes the id, not the label. */
-  county: "geoname.900001",
+  slug: SHOWCASE_COMMUNITY.slug,
+  lat: SHOWCASE_COMMUNITY.lat,
+  lng: SHOWCASE_COMMUNITY.lng,
+  /** geo-api id of the county; `region.ts` takes the id, not the label. */
+  county: SHOWCASE_COMMUNITY.county.id,
 } as const;
 
 export interface LiveAnchor {

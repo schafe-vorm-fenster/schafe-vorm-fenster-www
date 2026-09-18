@@ -16,9 +16,10 @@ import { cacheTags } from "./cache-profiles";
 import { eventsConfig, geoConfig, hasRealBackend } from "./config";
 import { mockEventsForPlaces } from "./mocks/events";
 import { mockSearchByPoint } from "./mocks/geo";
+import { publicNearbyEvents } from "./public-source";
 import { resilient, type ResilientOptions } from "./resilient";
 import { nearbyFallback } from "./snapshots";
-import { EVENT_WINDOWS, NEARBY_RADIUS_KM, selectNearby } from "./widening";
+import { byStart, EVENT_WINDOWS, NEARBY_RADIUS_KM, selectNearby } from "./widening";
 
 import type { LiveEnvelope, NearbyEvents, Place } from "./types";
 
@@ -44,14 +45,33 @@ export async function nearbyEvents({
 }: NearbyInput): Promise<LiveEnvelope<NearbyEvents>> {
   const realGeo = hasRealBackend("placesNearPoint");
   const realEvents = hasRealBackend("eventsSearch");
+  // Both halves through the public village-calendar site: its own proximity
+  // proxy for the ring, its community page for the dates. One source, so the
+  // module is either entirely real or entirely demo — never half of each.
+  const viaPublic = hasRealBackend("placesNearPointPublic") && hasRealBackend("eventsByCommunityPublic");
   const clock = now ?? (() => new Date());
   const anchor = { lat, lng };
 
   const fetcher = async (): Promise<NearbyEvents> => {
-    const candidates: Place[] = realGeo
-      ? (await searchByPoint(geoConfig(), anchor, GEO_MAX_RESULTS)).map(toPlace)
-      : mockSearchByPoint(anchor, GEO_MAX_RESULTS);
+    if (!realGeo || !realEvents) {
+      if (viaPublic) {
+        const { events, truncated } = await publicNearbyEvents(anchor, {
+          radiusKm,
+          rowCount,
+          now: clock(),
+        });
+        return { events, radiusKm, truncated };
+      }
+      const places = mockSearchByPoint(anchor, GEO_MAX_RESULTS);
+      const selection = selectNearby(anchor, places, { radiusKm, maxResults: GEO_MAX_RESULTS });
+      return {
+        events: selection.places.length === 0 ? [] : mockEventsForPlaces(selection.places, rowCount, clock()),
+        radiusKm,
+        truncated: selection.truncated,
+      };
+    }
 
+    const candidates: Place[] = (await searchByPoint(geoConfig(), anchor, GEO_MAX_RESULTS)).map(toPlace);
     const { places, truncated } = selectNearby(anchor, candidates, {
       radiusKm,
       maxResults: GEO_MAX_RESULTS,
@@ -59,17 +79,14 @@ export async function nearbyEvents({
 
     if (places.length === 0) return { events: [], radiusKm, truncated };
 
-    const events = realEvents
-      ? toLiveEvents(
-          await searchEvents(eventsConfig(), {
-            communities: places.map((place) => place.communityId),
-            after: EVENT_WINDOWS.week.after,
-            before: EVENT_WINDOWS.week.before,
-          }),
-        ).slice(0, rowCount)
-      : mockEventsForPlaces(places, rowCount, clock());
+    const { events } = await searchEvents(eventsConfig(), {
+      communities: places.map((place) => place.communityId),
+      after: EVENT_WINDOWS.week.after,
+      before: EVENT_WINDOWS.week.before,
+      limit: rowCount,
+    });
 
-    return { events, radiusKm, truncated };
+    return { events: byStart(toLiveEvents(events)).slice(0, rowCount), radiusKm, truncated };
   };
 
   return resilient(fetcher, {
@@ -81,6 +98,6 @@ export async function nearbyEvents({
     snapshot: () => nearbyFallback(radiusKm),
     store,
     now,
-    demo: !realGeo || !realEvents,
+    demo: (!realGeo || !realEvents) && !viaPublic,
   });
 }

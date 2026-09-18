@@ -25,7 +25,13 @@
  * are not (WEB-F-041: counted live or not shown).
  */
 
-import { eventsApiHost, eventsApiToken, geoApiHost, geoApiToken } from "@/src/clients/hosts";
+import {
+  communitySiteHost,
+  eventsApiHost,
+  eventsApiToken,
+  geoApiHost,
+  geoApiToken,
+} from "@/src/clients/hosts";
 
 import { UPSTREAM_TIMEOUT_MS } from "./resilient";
 
@@ -38,26 +44,49 @@ export function liveDataMode(): LiveDataMode {
 }
 
 /**
- * One row per thing a module needs. `upstream: false` is a measured gap with
- * an open row — not a guess, and not a temporary lack of effort.
+ * One row per thing a module needs, and **which backend can answer it**.
+ *
+ * Three fields, each answering a different question:
+ *
+ *  - `service` — who would answer. Four of them now: the two token-scoped
+ *    APIs, the **public village-calendar site** (`communitySite`, no
+ *    credential at all) and the **committed community index** (`index`,
+ *    no network at all);
+ *  - `credential` — `"token"` means the service is path-scoped
+ *    (`/api/{token}/…`) and unreachable without a read token; `"none"` means
+ *    it answers anybody;
+ *  - `upstream: false` — a measured gap with an open row. Not a guess, and
+ *    not a temporary lack of effort.
+ *
+ * `placeSearchByName` moved from `upstream: false` to a real backend on
+ * 2026-09-18: geo-api still has no name search (Q-025 stays open, row 5), but
+ * the covered-community index the village calendar publishes does, and this
+ * website now ships it (`place-index.ts`). The gap is upstream's; the answer
+ * is no longer a mock.
  */
 export const CAPABILITIES = {
-  /** geo-api ZIP search — exists, token-scoped. */
-  placeSearchByZip: { service: "geo", upstream: true, openRow: undefined },
-  /** geo-api name search — Q-025, does not exist (open row 5). */
-  placeSearchByName: { service: "geo", upstream: false, openRow: "5" },
+  /** geo-api ZIP search — exists, token-scoped. No public equivalent: the index carries no postcodes. */
+  placeSearchByZip: { service: "geo", credential: "token", upstream: true, openRow: undefined },
+  /** Name search — geo-api has none (Q-025, open row 5); the committed index answers it. */
+  placeSearchByName: { service: "index", credential: "none", upstream: true, openRow: "5" },
   /** geo-api proximity search — exists, but with a fixed radius (open row 5). */
-  placesNearPoint: { service: "geo", upstream: true, openRow: "5" },
+  placesNearPoint: { service: "geo", credential: "token", upstream: true, openRow: "5" },
+  /** The same proximity search through the village calendar's own public proxy. */
+  placesNearPointPublic: { service: "communitySite", credential: "none", upstream: true, openRow: undefined },
   /** geo-api slug lookup — exists, token-scoped. */
-  communityBySlug: { service: "geo", upstream: true, openRow: undefined },
+  communityBySlug: { service: "geo", credential: "token", upstream: true, openRow: undefined },
+  /** The same lookup out of the committed index — no network, no credential. */
+  communityBySlugIndex: { service: "index", credential: "none", upstream: true, openRow: undefined },
   /** events-api search — exists, token-scoped. */
-  eventsSearch: { service: "events", upstream: true, openRow: undefined },
+  eventsSearch: { service: "events", credential: "token", upstream: true, openRow: undefined },
+  /** One community's dates off its public page on the village calendar. */
+  eventsByCommunityPublic: { service: "communitySite", credential: "none", upstream: true, openRow: undefined },
   /** events-api activity ranking behind `/api/region/{county}/examples` — no operation (open row 6). */
-  countyActivityRanking: { service: "events", upstream: false, openRow: "6" },
+  countyActivityRanking: { service: "events", credential: "token", upstream: false, openRow: "6" },
   /** `/api/stats` — exists, tokenless, but carries `totalEvents` only (open row 6). */
-  statsTotalEvents: { service: "events", upstream: true, openRow: undefined },
-  statsPlacesCount: { service: "events", upstream: false, openRow: "6" },
-  statsUpdatesToday: { service: "events", upstream: false, openRow: "6" },
+  statsTotalEvents: { service: "events", credential: "none", upstream: true, openRow: undefined },
+  statsPlacesCount: { service: "events", credential: "token", upstream: false, openRow: "6" },
+  statsUpdatesToday: { service: "events", credential: "token", upstream: false, openRow: "6" },
 } as const;
 
 export type Capability = keyof typeof CAPABILITIES;
@@ -80,25 +109,30 @@ function credentialsFor(service: "geo" | "events"): ServiceCredentials {
 }
 
 /**
- * The decision, per capability. `true` means the real client answers.
+ * The decision, per capability. `true` means a **real** backend answers —
+ * which since 2026-09-18 may be the token-scoped API, the public site, or the
+ * committed index, in that order of preference where a module has more than
+ * one (the modules themselves express the order; this function only says
+ * which doors are open).
  *
- * `statsTotalEvents` is the one capability that needs no token, so it is the
- * one that answers for real in an environment with no credentials at all.
+ * A capability whose service needs no credential is open in every
+ * environment. That is what makes an untokened preview show real dates
+ * instead of demo ones.
  */
 export function hasRealBackend(capability: Capability): boolean {
   const mode = liveDataMode();
   if (mode === "mock") return false;
 
-  const { service, upstream } = CAPABILITIES[capability];
+  const { service, credential, upstream } = CAPABILITIES[capability];
   if (!upstream) return false; // nothing to call — the mock rule applies
 
+  if (credential === "none") return true; // no token gate: reachable everywhere
   if (mode === "real") return true;
 
-  if (capability === "statsTotalEvents") return true; // tokenless
-  return credentialsFor(service).token !== undefined;
+  return credentialsFor(service as "geo" | "events").token !== undefined;
 }
 
-/** The timeout every client gets — one budget, named in one place (TS-009 D4). */
+/** The timeout every JSON client gets — one budget, named in one place (TS-009 D4). */
 export function timeoutMs(): number {
   const raw = Number(process.env.LIVE_TIMEOUT_MS);
   return Number.isFinite(raw) && raw > 0 ? raw : UPSTREAM_TIMEOUT_MS;
@@ -112,4 +146,23 @@ export function geoConfig(): { host: string; token: string; timeoutMs: number } 
 export function eventsConfig(): { host: string; token: string; timeoutMs: number } {
   const { host, token } = eventsApi();
   return { host, token: token ?? "", timeoutMs: timeoutMs() };
+}
+
+/**
+ * The budget for the **public village-calendar page**, which is a document
+ * rather than an API call: ~80 KB gzipped, measured at 100–200 ms TTFB on
+ * 2026-09-18. It gets its own number because 800 ms is the budget for a JSON
+ * API and a page is not one — and because this is the source that keeps a
+ * tokenless environment on real data, so cutting it at an API's budget would
+ * trade the whole point of it for a tenth of a second.
+ */
+export const HTML_TIMEOUT_MS = 2500;
+
+export function htmlTimeoutMs(): number {
+  const raw = Number(process.env.LIVE_HTML_TIMEOUT_MS);
+  return Number.isFinite(raw) && raw > 0 ? raw : HTML_TIMEOUT_MS;
+}
+
+export function communitySiteConfig(): { host: string; timeoutMs: number } {
+  return { host: communitySiteHost(), timeoutMs: htmlTimeoutMs() };
 }

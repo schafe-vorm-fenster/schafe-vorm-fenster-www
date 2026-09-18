@@ -21,6 +21,11 @@ const outage = () => {
   vi.stubEnv("LIVE_DATA", "real");
   vi.stubEnv("EVENTSAPI_HOST", "http://127.0.0.1:1");
   vi.stubEnv("GEOAPI_HOST", "http://127.0.0.1:1");
+  // The public village-calendar site is a real source too since 2026-09-18,
+  // so an "everything is down" fixture has to take it down as well — and a
+  // test must never reach the network to find that out.
+  vi.stubEnv("COMMUNITYSITE_HOST", "http://127.0.0.1:1");
+  vi.stubEnv("LIVE_HTML_TIMEOUT_MS", "200");
   vi.stubEnv("GEOAPI_READ_TOKEN", "not-a-real-token");
   vi.stubEnv("EVENTSAPI_READ_TOKEN", "not-a-real-token");
   vi.stubEnv("LIVE_TIMEOUT_MS", "200");
@@ -42,10 +47,10 @@ describe("TS-008-A5 / TS-009-A6: upstream down, cache warm — tier 2 with a fre
     const store = memoryStore(
       new Map<string, LastGoodEntry<unknown>>([
         [
-          "dates:geoname.900101:upcoming",
+          "dates:geoname.2838887:upcoming",
           {
             data: {
-              place: { communityId: "geoname.900101", name: "Beispielgemeinde Musterdorf", slug: "beispielgemeinde-musterdorf", lat: 54, lng: 13.4 },
+              place: { communityId: "geoname.2838887", name: "Schlatkow", slug: "schlatkow", lat: 53.92153, lng: 13.58116 },
               events: [{ id: "cached-1", title: "Zwischengespeicherter Termin (Beispiel)", startsAt: "2026-09-12T16:00:00.000Z" }],
               publishInvitation: false,
             },
@@ -56,7 +61,7 @@ describe("TS-008-A5 / TS-009-A6: upstream down, cache warm — tier 2 with a fre
     );
     outage();
 
-    const envelope = await placeEvents({ slug: "beispielgemeinde-musterdorf", store, ...silent });
+    const envelope = await placeEvents({ slug: "schlatkow", store, ...silent });
 
     expect(envelope?.tier).toBe("stale");
     expect(envelope?.stale).toBe(true);
@@ -68,13 +73,13 @@ describe("TS-008-A5 / TS-009-A6: upstream down, cache warm — tier 2 with a fre
 describe("TS-008-A5 / TS-009-A7: upstream down, cache cold — the tier-3 snapshot, labelled", () => {
   it("serves the committed snapshot for the place module", async () => {
     outage();
-    const envelope = await placeEvents({ slug: "beispielgemeinde-musterdorf", store: memoryStore(), ...silent });
+    const envelope = await placeEvents({ slug: "schlatkow", store: memoryStore(), ...silent });
 
     expect(envelope?.tier).toBe("snapshot");
     expect(envelope?.stale).toBe(true);
     expect(envelope?.data.events.length).toBeGreaterThan(0);
     // Tier 3 has no segment: the snapshot is re-anchored on the place asked for.
-    expect(envelope?.data.place.slug).toBe("beispielgemeinde-musterdorf");
+    expect(envelope?.data.place.slug).toBe("schlatkow");
   });
 
   it("serves the committed snapshot for the nearby module", async () => {
@@ -85,12 +90,23 @@ describe("TS-008-A5 / TS-009-A7: upstream down, cache cold — the tier-3 snapsh
     expect(nearby.data.events.length).toBeGreaterThan(0);
   });
 
-  it("keeps a fully mocked module at tier 1 through an outage — it has no upstream to lose", async () => {
-    // The county activity ranking has no upstream operation at all (Q-015
-    // residue), so the region examples are mock-backed whatever the flag says
-    // and an outage cannot degrade them. They are labelled `demo`, not stale.
+  it("serves the committed snapshot for the region module", async () => {
+    // The county activity ranking still has no upstream operation (Q-015
+    // residue), but the ranking is now derived from a real, tokenless source,
+    // so this module *can* lose an upstream and degrades like the others.
     outage();
-    const region = await regionExamples({ county: "geoname.900001", store: memoryStore(), ...silent });
+    const region = await regionExamples({ county: "geoname.8648415", store: memoryStore(), ...silent });
+
+    expect(region.tier).toBe("snapshot");
+    expect(region.data.examples.length).toBeGreaterThan(0);
+  });
+
+  it("keeps a fully mocked module at tier 1 through an outage — it has no upstream to lose", async () => {
+    // With every backend forced to the mock there is nothing to lose, so the
+    // module stays tier 1 and is labelled `demo` rather than stale.
+    outage();
+    vi.stubEnv("LIVE_DATA", "mock");
+    const region = await regionExamples({ county: "geoname.8648415", store: memoryStore(), ...silent });
 
     expect(region.tier).toBe("live");
     expect(region.demo).toBe(true);
@@ -108,10 +124,10 @@ describe("TS-009-A11: a failing module degrades one module, not the page", () =>
     const store = memoryStore(
       new Map<string, LastGoodEntry<unknown>>([
         [
-          "dates:geoname.900101:upcoming",
+          "dates:geoname.2838887:upcoming",
           {
             data: {
-              place: { communityId: "geoname.900101", name: "Beispielgemeinde Musterdorf", slug: "beispielgemeinde-musterdorf", lat: 54, lng: 13.4 },
+              place: { communityId: "geoname.2838887", name: "Schlatkow", slug: "schlatkow", lat: 53.92153, lng: 13.58116 },
               events: [{ id: "cached-1", title: "Zwischengespeicherter Termin (Beispiel)", startsAt: "2026-09-12T16:00:00.000Z" }],
               publishInvitation: false,
             },
@@ -122,13 +138,11 @@ describe("TS-009-A11: a failing module degrades one module, not the page", () =>
     );
     outage();
 
-    const dates = await placeEvents({ slug: "beispielgemeinde-musterdorf", store, ...silent });
+    const dates = await placeEvents({ slug: "schlatkow", store, ...silent });
     const nearby = await nearbyEvents({ lat: 54, lng: 13.4, store, ...silent });
-    const region = await regionExamples({ county: "geoname.900001", store, ...silent });
 
     expect(dates?.tier).toBe("stale");
     expect(nearby.tier).toBe("snapshot");
-    expect(region.tier).toBe("live");
   });
 
   it("never throws into the caller for a module that has a fallback", async () => {

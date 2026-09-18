@@ -140,8 +140,15 @@ export function selectNearby(
 /**
  * The windows of TS-008 D3, in `Europe/Berlin`: position 1 asks `after=now`,
  * position 2 `after=now&before=7d`. "Today" is the local calendar day, not a
- * rolling 24 h — expressed with the upstream's own relative words where they
- * exist, so the two systems cut the day the same way. [PROPOSED]
+ * rolling 24 h — expressed with the upstream's own relative words, so the two
+ * systems cut the day the same way.
+ *
+ * All four tokens are the **events-api contract's own** vocabulary, verified
+ * against `FlexibleTimeSchema` (`~/Projects/events-api`,
+ * `src/rest/helpers/time/time-schemas.ts`): `now`, `today`, `tomorrow`,
+ * `yesterday`, `<n><s|m|h|d|w>` and `week-start`/`week-end`. The service
+ * resolves them in its own timezone, which is why the website never sends a
+ * hand-built midnight.
  */
 export const EVENT_WINDOWS = {
   today: { after: "now", before: "tomorrow" },
@@ -155,4 +162,65 @@ export const EVENT_WINDOW_IDS = ["today", "week", "upcoming"] as const;
 
 export function isEventWindow(value: string): value is EventWindow {
   return (EVENT_WINDOW_IDS as readonly string[]).includes(value);
+}
+
+const BERLIN = "Europe/Berlin";
+
+/**
+ * The same window as two real instants, for the source that cannot take a
+ * relative word: the public village-calendar page serves whatever the
+ * calendar holds and the cut happens here. Both halves are computed **in
+ * `Europe/Berlin`**, so "today" ends at local midnight and not at the
+ * server's.
+ */
+export function windowBounds(
+  window: EventWindow,
+  now: Date = new Date(),
+): { readonly from: Date; readonly to?: Date } {
+  switch (window) {
+    case "today":
+      return { from: now, to: berlinStartOfDay(addDays(now, 1)) };
+    case "week":
+      return { from: now, to: addDays(now, 7) };
+    case "upcoming":
+      return { from: now };
+  }
+}
+
+function addDays(date: Date, days: number): Date {
+  return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
+}
+
+/**
+ * Midnight of `date`'s **Berlin** calendar day, as a real instant. Built from
+ * `Intl` rather than from a fixed offset, because Germany changes offset
+ * twice a year and a hard-coded `+01:00` is wrong for half of it.
+ */
+export function berlinStartOfDay(date: Date): Date {
+  const day = new Intl.DateTimeFormat("en-CA", { timeZone: BERLIN }).format(date);
+  const offset =
+    new Intl.DateTimeFormat("en-US", { timeZone: BERLIN, timeZoneName: "longOffset" })
+      .formatToParts(date)
+      .find((part) => part.type === "timeZoneName")?.value ?? "GMT+01:00";
+  return new Date(`${day}T00:00:00${offset.replace("GMT", "") || "+01:00"}`);
+}
+
+/** The window applied to a list the source did not filter itself. */
+export function withinWindow<T extends { readonly startsAt: string }>(
+  events: readonly T[],
+  window: EventWindow,
+  now: Date = new Date(),
+): T[] {
+  const { from, to } = windowBounds(window, now);
+  return events.filter((event) => {
+    const starts = new Date(event.startsAt).getTime();
+    if (Number.isNaN(starts)) return false;
+    if (starts < from.getTime()) return false;
+    return to === undefined || starts < to.getTime();
+  });
+}
+
+/** Chronological, so a list the source returned in its own order still reads. */
+export function byStart<T extends { readonly startsAt: string }>(events: readonly T[]): T[] {
+  return [...events].sort((a, b) => a.startsAt.localeCompare(b.startsAt));
 }

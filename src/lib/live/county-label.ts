@@ -21,7 +21,18 @@
 
 import { dictionary } from "@/src/lib/i18n/dictionary";
 
+import { COVERED_COUNTIES } from "./showcase";
+
 import type { Locale } from "@/src/lib/i18n/locales";
+
+/**
+ * The counties the village calendar covers, by id. An id the live layer
+ * hands down is not automatically unreadable — these three have names, and a
+ * heading may say them. Anything else still falls to the generic phrase.
+ */
+const COUNTY_NAMES = new Map<string, string>(
+  COVERED_COUNTIES.map((county) => [county.id, county.name]),
+);
 
 /**
  * geo-api's identifier shape — a source prefix and a numeric id, e.g.
@@ -57,6 +68,8 @@ export function genericCountyLabel(locale: Locale): string {
  */
 export function countyLabel(county: string | undefined, locale: Locale): string {
   const trimmed = county?.trim() ?? "";
+  const known = COUNTY_NAMES.get(trimmed);
+  if (known !== undefined) return known;
   if (trimmed === "" || isGeoIdentifier(trimmed)) return genericCountyLabel(locale);
   return trimmed;
 }

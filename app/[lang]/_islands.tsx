@@ -45,6 +45,7 @@ import { OG_LOCALE } from "@/src/lib/i18n/locales";
 import { fillTemplate } from "@/src/lib/pages/demo-content";
 import { calendarUrl } from "@/src/lib/live/app-handover";
 import { cacheLifeProfile, cacheTags } from "@/src/lib/live/cache-profiles";
+import { categoryLabel, categoryTone } from "@/src/lib/live/categories";
 import { liveCounters } from "@/src/lib/live/counters";
 import { nearbyEvents } from "@/src/lib/live/nearby";
 import { placeEvents } from "@/src/lib/live/places";
@@ -55,7 +56,6 @@ import type { EventListItem } from "@/src/components/event-list/event-list";
 import type { DataState } from "@/src/components/data-state";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { LiveEnvelope, LiveEvent } from "@/src/lib/live/types";
-import type { EventCategory } from "@/src/components/event-row/event-row";
 import type { RouteId } from "@/src/lib/routes/routes";
 import type { ReactNode } from "react";
 
@@ -78,25 +78,6 @@ function tierOf(envelope: LiveEnvelope<unknown>): "stale" | "snapshot" {
   return envelope.tier === "snapshot" ? "snapshot" : "stale";
 }
 
-/**
- * The six categories of the design system are the events-api category ids
- * (`src/lib/live/mocks/fixtures.ts` uses them verbatim). An unknown id falls
- * to `neighbouring`, which is the table's own "everything else" tone — never
- * an invented seventh category.
- */
-const CATEGORY_LABELS: Readonly<Record<EventCategory, Record<Locale, string>>> = {
-  fest: { de: "Fest", en: "Fête" },
-  merchants: { de: "Versorgung", en: "Supplies" },
-  culture: { de: "Kultur", en: "Culture" },
-  official: { de: "Amtlich", en: "Official" },
-  social: { de: "Gemeinschaft", en: "Community" },
-  neighbouring: { de: "Nachbarschaft", en: "Neighbourhood" },
-};
-
-function categoryOf(id: string | undefined): EventCategory {
-  return id !== undefined && id in CATEGORY_LABELS ? (id as EventCategory) : "neighbouring";
-}
-
 /** `LiveEvent` → the row shape `event-list` takes. The one mapping (TS-005 owns the vocabulary). */
 export function toListItems(
   events: readonly LiveEvent[],
@@ -108,7 +89,7 @@ export function toListItems(
     timeZone: "Europe/Berlin",
   });
   return events.map((event) => {
-    const category = categoryOf(event.categoryId);
+    const category = categoryTone(event.categoryId);
     const starts = new Date(event.startsAt);
     const clock = Number.isNaN(starts.getTime()) ? undefined : time.format(starts);
     return {
@@ -119,7 +100,7 @@ export function toListItems(
       // stand beside a narrow one without lying (TS-008 D1).
       meta: [clock, event.placeName].filter(Boolean).join(" · "),
       category,
-      categoryLabel: CATEGORY_LABELS[category][locale],
+      categoryLabel: categoryLabel(event.categoryId, locale),
     };
   });
 }

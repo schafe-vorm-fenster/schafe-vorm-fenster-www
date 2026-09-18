@@ -38,3 +38,42 @@ export function eventsApiToken(): string | undefined {
 export function geoApiToken(): string | undefined {
   return token(process.env.GEOAPI_READ_TOKEN);
 }
+
+/**
+ * The **public village-calendar site** — the one ecosystem surface that
+ * answers without a credential.
+ *
+ * `events-api` and `geo-api` are token-scoped (`/api/{token}/…`), so an
+ * environment without read tokens can reach neither. The village-calendar
+ * app in front of them is a public website: its community pages, its
+ * community index and its proximity search are served to anyone, and they
+ * carry the same events and the same geo-api slugs the token-scoped services
+ * would answer. `src/clients/community-site/README.md` records what is read,
+ * why it is allowed, and what it costs.
+ *
+ * It is a **source, not a fallback**: `src/lib/live/config.ts` places it
+ * between the token-scoped clients and the mock backend, so a page shows real
+ * dates in an environment that has no token at all.
+ */
+export const COMMUNITY_SITE_HOST_FALLBACK = "https://schafe-vorm-fenster.de";
+
+export function communitySiteHost(): string {
+  return process.env.COMMUNITYSITE_HOST ?? COMMUNITY_SITE_HOST_FALLBACK;
+}
+
+/**
+ * The embeddable-calendar host (Portalize). It carries no token either: a
+ * calendar is addressed by its **organizer id**, which is a public
+ * identifier — the widget's own `<script src>` puts it in the page source of
+ * every site that embeds one.
+ *
+ * `src/lib/security/csp.ts` names the same origin in the TS-014 D1 allowlist,
+ * because the browser loads the widget from it. This constant is the
+ * server-side half: the value `src/lib/embed/portalize.ts` builds the loader
+ * URL from.
+ */
+export const PORTALIZE_HOST_FALLBACK = "https://portalize.schafe-vorm-fenster.de";
+
+export function portalizeHost(): string {
+  return process.env.PORTALIZE_HOST ?? PORTALIZE_HOST_FALLBACK;
+}

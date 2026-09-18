@@ -91,3 +91,63 @@ export async function callUpstream({
     throw new UpstreamError(service, "response body is not JSON", response.status);
   }
 }
+
+/**
+ * One upstream attempt whose answer is **text, not JSON** — the public
+ * village-calendar site's pages (`src/clients/community-site/`).
+ *
+ * Same three properties as `callUpstream`: the closed header set, one
+ * bounded attempt, and `UpstreamError` for every non-answer. Two differences
+ * the caller must know about:
+ *
+ *  1. `accept` is `text/html`, because that is what the surface serves;
+ *  2. the body is **capped**. A community page is ~80 KB gzipped, and a
+ *     server that answers something unbounded (a redirect to an error page, a
+ *     misconfigured proxy) must not be able to spend the function's memory.
+ *     A body past the cap is a failure, not a truncated success — a half-read
+ *     document would fail the schema anyway, and failing here says why.
+ */
+export const MAX_HTML_BYTES = 4_000_000;
+
+export async function callUpstreamText({
+  service,
+  url,
+  timeoutMs,
+  maxBytes = MAX_HTML_BYTES,
+}: {
+  readonly service: string;
+  readonly url: string;
+  readonly timeoutMs: number;
+  readonly maxBytes?: number;
+}): Promise<string> {
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      method: "GET",
+      headers: { accept: "text/html" },
+      signal: AbortSignal.timeout(timeoutMs),
+      cache: "no-store",
+    });
+  } catch (cause) {
+    const reason = cause instanceof Error ? cause.name : "network error";
+    throw new UpstreamError(service, reason === "TimeoutError" ? `timeout after ${timeoutMs} ms` : reason);
+  }
+
+  if (!response.ok) throw new UpstreamError(service, `HTTP ${response.status}`, response.status);
+
+  const declared = Number(response.headers.get("content-length"));
+  if (Number.isFinite(declared) && declared > maxBytes) {
+    throw new UpstreamError(service, `response larger than ${maxBytes} bytes`, response.status);
+  }
+
+  let body: string;
+  try {
+    body = await response.text();
+  } catch {
+    throw new UpstreamError(service, "response body could not be read", response.status);
+  }
+  if (body.length > maxBytes) {
+    throw new UpstreamError(service, `response larger than ${maxBytes} bytes`, response.status);
+  }
+  return body;
+}
