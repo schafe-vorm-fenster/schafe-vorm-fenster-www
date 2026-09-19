@@ -1,11 +1,12 @@
-import { Suspense } from "react";
+import { Suspense, cache } from "react";
 
 import { Button } from "@/src/components/button/button";
 import { EmptyStateBlock } from "@/src/components/empty-state-block/empty-state-block";
-import { HeroBlock } from "@/src/components/hero-block/hero-block";
+import { HeroBlock, HeroContent } from "@/src/components/hero-block/hero-block";
 import { MediaFrame } from "@/src/components/media-frame/media-frame";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
+import { SearchSubmit } from "@/src/components/search-field/search-field";
 import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
@@ -37,6 +38,7 @@ import { localeFrom, pageMetadataFor } from "./_locale";
 import { PageFrame } from "./_page-frame";
 import { HOME_META } from "./page.meta";
 
+import type { HeroContentProps } from "@/src/components/hero-block/hero-block";
 import type { ProofCandidate } from "./_proof";
 import type { Place } from "@/src/lib/live/types";
 import type { RenderableImage } from "@/src/lib/content/images";
@@ -173,21 +175,30 @@ function proofCandidates(proof: ContentSlot, geoLabel: string): ProofCandidate[]
 }
 
 /**
- * Block 1 in TS-019 D2's four states (F-2-30).
+ * Block 1 in TS-019 D2's four states (F-2-30), split along DEC-078's line.
  *
- * D2 keys block 1 on **what is known about the place**, and until round 3 `/`
- * ignored `?ort=` altogether: `07743`, `38165` and `99999` all rendered the
- * same stage-0 anchor, so S2, S3 and S4 were written, specified and
- * unreachable. The three sections below are the same three in every state —
- * PHOTO hero, ink module slot, surface-2 nearby — so the page rhythm and the
- * DOM order of TS-019-A9 do not move when the state does.
+ * D2 keys block 1 on **what is known about the place**, and the place is a
+ * request value, so part of block 1 has to arrive through a `<Suspense>`
+ * boundary — that is what keeps `/` a prerendered route (`state/open.md`
+ * row 131) while still answering a stated place.
  *
- * S1 stays the **prerendered shell** (D2, TS-010 D8): this component with
- * `place === undefined` is the `<Suspense>` fallback, and the stated states
- * stream over it. That is what keeps `/` a prerendered route while still
- * answering a stated place — `state/open.md` row 131 counts `/` among the
- * eight that prerender, and nothing here reads a request value outside the
- * boundary.
+ * What DEC-078 changed is **where the line runs**. Until this round the
+ * boundary's fallback was the whole of block 1, search field included, so on
+ * every load of `/` — `?ort=` or not — React removed the fallback's DOM and
+ * inserted the resolved branch's, and a postcode typed into the hero search
+ * in the first ~350 ms went with it (row 213: present at 96 ms, gone at
+ * 349 ms, 3/3 on the production build). Now the boundary carries only what
+ * genuinely varies and holds no visitor input:
+ *
+ *  - `StatedHeroContent` — the headline · lead · CTA trio (`HeroContent`);
+ *  - `StatedSubmit` — the submit button, because `data-cta="primary"` moves
+ *    from the submit (S1) to the hero's CTA (S2/S3) and an attribute cannot
+ *    be streamed on its own;
+ *  - `StatedFocusModules` — the ink module slot and S3's widened radius.
+ *
+ * The `<form>`, its label and the **input** stand in the prerendered shell,
+ * under `hero-block`'s own `search` slot. The input the visitor first sees
+ * is the input that stays.
  */
 interface FocusCopy {
   readonly locale: Locale;
@@ -200,6 +211,8 @@ interface FocusCopy {
   /** S1's hero headline and the search module in both treatments. */
   readonly s1Headline: string;
   readonly search: (primary: boolean) => ReactNode;
+  /** The submit control's label, already resolved — `StatedSubmit` renders it. */
+  readonly submitLabel: string;
   /** S2 — `home-2-place-dates`: `{place}` headline and app-handover label. */
   readonly datesHeadline: string;
   readonly datesCta: string;
@@ -218,7 +231,127 @@ function splitInvitation(text: string): { headline: string; lead?: string } {
   return { headline: text.slice(0, cut + 1).trim(), lead: text.slice(cut + 1).trim() };
 }
 
-function FocusBlocks({
+/**
+ * What `?ort=` resolves to, for block 1 — read once per request.
+ *
+ * DEC-078 splits block 1 across three boundaries, and all three need the same
+ * answer. `cache()` is what keeps that one geo lookup and one dates read:
+ * the three components below call this with the same `searchParams` promise,
+ * so React returns the same in-flight promise to each.
+ *
+ * S4 — "a search resolved to an uncovered place" — carries *nothing* on `/`
+ * per D2: the search navigates away instead (`/dein-ort` classifies and
+ * forwards, TS-008 D7). So an uncovered value answers the S1 shape here, and
+ * TS-019-A5's "`/` itself renders no uncovered place as data" holds by
+ * construction.
+ */
+const focusState = cache(
+  async (
+    searchParams: Promise<Record<string, string | string[] | undefined>>,
+  ): Promise<{ readonly place?: Place; readonly hasDates?: boolean }> => {
+    const outcome = await resolvePlaceOutcome((await searchParams)["ort"]);
+    if (outcome.kind !== "covered") return {};
+    const envelope = await placeEvents({ slug: outcome.place.slug, rowCount: 3 });
+    return { place: outcome.place, hasDates: (envelope?.data.events.length ?? 0) > 0 };
+  },
+);
+
+/**
+ * The hero's headline · lead · CTA trio in whichever of TS-019 D2's states
+ * the place resolves to — the one function both branches of the hero's
+ * boundary call, so the reserved space cannot drift between them.
+ */
+function heroContentFor(copy: FocusCopy, place?: Place, hasDates?: boolean): HeroContentProps {
+  // S1 — nothing known. No CTA node: the search below the trio carries the
+  // page's primary, and an empty `cta` slot renders no box at all.
+  if (place === undefined) return { headline: copy.s1Headline };
+
+  const values = { place: place.name };
+
+  // S3 — covered, no dates. The primary conversion is publishing, and it is
+  // a link: "on `/` the shift stays a link" (TS-019 D2, open point 2).
+  if (hasDates === false) {
+    const invitation = splitInvitation(fillTemplate(copy.invitation, values));
+    return {
+      headline: invitation.headline,
+      lead: invitation.lead,
+      cta: (
+        <Button
+          dataCta="primary"
+          locale={copy.locale}
+          onward
+          query={{ ort: place.slug }}
+          to="register"
+          variant="primary-light"
+        >
+          {copy.publishCta}
+        </Button>
+      ),
+    };
+  }
+
+  // S2 — the app handover, carrying the place slug as its one attribute
+  // (TS-012 D4 rule 3).
+  return {
+    headline: fillTemplate(copy.datesHeadline, values),
+    cta: (
+      <ConversionTracker
+        attributes={{ ...SAVE_CALENDAR_ATTRIBUTES, place: place.slug }}
+        goalId={SAVE_CALENDAR.goalId}
+        stage={SAVE_CALENDAR.stage}
+      >
+        <OutboundLink
+          dataCta="primary"
+          href={calendarUrl(place)}
+          locale={copy.locale}
+          variant="secondary"
+        >
+          {fillTemplate(copy.datesCta, values)}
+        </OutboundLink>
+      </ConversionTracker>
+    ),
+  };
+}
+
+/** The hero trio for a stated place — the resolved branch of boundary 1. */
+async function StatedHeroContent({
+  copy,
+  searchParams,
+}: {
+  readonly copy: FocusCopy;
+  readonly searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const { place, hasDates } = await focusState(searchParams);
+  return <HeroContent {...heroContentFor(copy, place, hasDates)} />;
+}
+
+/**
+ * The hero search's submit — boundary 2, and the reason it exists.
+ *
+ * TS-006 D3 allows exactly one `data-cta="primary"` per page and TS-019 D2
+ * moves it: in S1 it is this submit, in S2/S3 it is the hero's own CTA. An
+ * attribute cannot be streamed on its own, so the *button* is what varies,
+ * and the `<form>`, the label and the input around it stay in the shell
+ * (DEC-078). `SearchSubmit` renders both branches, so they are the same
+ * 44 px pill in the same place and the swap moves nothing.
+ */
+async function StatedSubmit({
+  copy,
+  searchParams,
+}: {
+  readonly copy: FocusCopy;
+  readonly searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const { place } = await focusState(searchParams);
+  return <SearchSubmit dataCta={place === undefined ? "primary" : undefined} label={copy.submitLabel} />;
+}
+
+/**
+ * Block 1's module slot — boundary 3. The ink section is the same section in
+ * every state (the page rhythm and TS-019-A9's DOM order do not move when
+ * the state does); S3 adds the widened radius under it.
+ */
+function FocusModules({
   copy,
   place,
   hasDates,
@@ -230,69 +363,14 @@ function FocusBlocks({
 }) {
   const { locale } = copy;
   const words = dictionary(locale);
-  const stated = place !== undefined;
-  const empty = stated && hasDates === false;
+  // S3, with the place carried through the narrowing so the widened module
+  // below can take its coordinate.
+  const emptyPlace = place !== undefined && hasDates === false ? place : undefined;
+  const empty = emptyPlace !== undefined;
   const values = { place: place?.name ?? "" };
 
   return (
     <>
-      {/* Block 1 — the focus block. `hero-block` brings its own
-          `photo-surface` section at `ratio-hero`; the photograph is the
-          generated placeholder of DEC-068 until a real one exists. */}
-      <HeroBlock
-        cta={
-          !stated ? (
-            copy.search(true)
-          ) : empty ? (
-            // S3: the primary conversion is publishing, and it is a link —
-            // "on `/` the shift stays a link" (TS-019 D2, open point 2).
-            <Button
-              dataCta="primary"
-              locale={locale}
-              onward
-              query={{ ort: place.slug }}
-              to="register"
-              variant="primary-light"
-            >
-              {copy.publishCta}
-            </Button>
-          ) : (
-            // S2: the app handover, carrying the place slug as its one
-            // attribute (TS-012 D4 rule 3).
-            <ConversionTracker
-              attributes={{ ...SAVE_CALENDAR_ATTRIBUTES, place: place.slug }}
-              goalId={SAVE_CALENDAR.goalId}
-              stage={SAVE_CALENDAR.stage}
-            >
-              <OutboundLink
-                dataCta="primary"
-                href={calendarUrl(place)}
-                locale={locale}
-                variant="secondary"
-              >
-                {fillTemplate(copy.datesCta, values)}
-              </OutboundLink>
-            </ConversionTracker>
-          )
-        }
-        headline={
-          !stated
-            ? copy.s1Headline
-            : empty
-              ? splitInvitation(fillTemplate(copy.invitation, values)).headline
-              : fillTemplate(copy.datesHeadline, values)
-        }
-        id="focus-block"
-        lead={empty ? splitInvitation(fillTemplate(copy.invitation, values)).lead : undefined}
-        // F-2-33: the surface badges itself out of the dictionary, so it
-        // needs the page's language or it badges an English page in German.
-        locale={locale}
-        notDepicting={copy.hero?.notDepicting}
-        placeholderId={copy.hero?.placeholderId}
-        src={copy.hero?.src}
-        wideSrc={copy.hero?.wideSrc}
-      />
-
       {/* Block 1′ — the live dates of a known place. The one `ink` section of
           the page rhythm, and the anchor the live data sits on. In S3 the
           slot carries the publish invitation instead of an empty date box
@@ -314,7 +392,7 @@ function FocusBlocks({
           ) : (
             <PlaceDatesIsland
               conversion={SAVE_CALENDAR}
-              ctaTemplate={stated ? undefined : copy.datesCta}
+              ctaTemplate={place === undefined ? copy.datesCta : undefined}
               locale={locale}
               role="illustrative"
               rowCount={3}
@@ -349,12 +427,12 @@ function FocusBlocks({
           not, it is the whole answer, and `/dein-ort` carries the radius
           argument for everyone else. Its shell names its own radius — never
           the place name (TS-008 D1). */}
-      {empty ? (
+      {emptyPlace ? (
         <MotionReveal>
           <SectionShell id="nearby" kicker={words.kickers.widerRadius} surface="surface-2">
             <NearbyIsland
-              lat={place.lat}
-              lng={place.lng}
+              lat={emptyPlace.lat}
+              lng={emptyPlace.lng}
               locale={locale}
               role="answering"
               rowCount={5}
@@ -367,34 +445,16 @@ function FocusBlocks({
   );
 }
 
-/**
- * The stated half of block 1 — the only place on `/` that reads `?ort=`, and
- * it reads it **inside** the `<Suspense>` boundary (Next.js "maximizing the
- * static shell"), so the shell above stays prerendered.
- *
- * S4 — "a search resolved to an uncovered place" — carries *nothing* on `/`
- * per D2: the search navigates away instead (`/dein-ort` classifies and
- * forwards, TS-008 D7). So an uncovered value renders S1 here, and TS-019-A5's
- * "`/` itself renders no uncovered place as data" holds by construction.
- */
-async function StatedFocusBlocks({
+/** The module slot for a stated place — the resolved branch of boundary 3. */
+async function StatedFocusModules({
   copy,
   searchParams,
 }: {
   readonly copy: FocusCopy;
   readonly searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const outcome = await resolvePlaceOutcome((await searchParams)["ort"]);
-  if (outcome.kind !== "covered") return <FocusBlocks copy={copy} />;
-
-  const envelope = await placeEvents({ slug: outcome.place.slug, rowCount: 3 });
-  return (
-    <FocusBlocks
-      copy={copy}
-      hasDates={(envelope?.data.events.length ?? 0) > 0}
-      place={outcome.place}
-    />
-  );
+  const { place, hasDates } = await focusState(searchParams);
+  return <FocusModules copy={copy} hasDates={hasDates} place={place} />;
 }
 
 export default async function HomePage({
@@ -476,6 +536,8 @@ export default async function HomePage({
    * label as the block-1 primary of the current state" — without the marker,
    * which exists exactly once.
    */
+  const submitLabel = hero.cta ?? words.search.submit;
+
   const search = (primary: boolean) => (
     <PlaceSearch
       typeahead
@@ -484,8 +546,17 @@ export default async function HomePage({
       label={searchPlaceholder ?? ""}
       locale={locale}
       placeholder={searchPlaceholder}
-      submitDataCta={primary ? "primary" : undefined}
-      submitLabel={hero.cta}
+      // DEC-078: the hero instance is the one whose `data-cta="primary"`
+      // moves with the place, so only that instance hands its submit to a
+      // boundary. The closing block's copy keeps the plain default.
+      submit={
+        primary ? (
+          <Suspense fallback={<SearchSubmit dataCta="primary" label={submitLabel} />}>
+            <StatedSubmit copy={focusCopy} searchParams={searchParams} />
+          </Suspense>
+        ) : undefined
+      }
+      submitLabel={submitLabel}
       to="place"
       tone={primary ? "dark" : "light"}
     />
@@ -496,6 +567,7 @@ export default async function HomePage({
     hero: pageImage(page, HERO_IMAGE_ID.home),
     s1Headline: hero.fields["Headline"] ?? "",
     search,
+    submitLabel,
     datesHeadline: dates.fields["Headline"] ?? "",
     datesCta: dates.cta ?? "",
     nearbyHeading: fieldAt(nearby.blocks, 0) ?? "",
@@ -522,8 +594,28 @@ export default async function HomePage({
       {/* Block 1 and its module slot, in whichever of TS-019 D2's states the
           place parameter resolves to. The fallback **is** S1 — the
           prerendered shell — and S2/S3 stream over it. */}
-      <Suspense fallback={<FocusBlocks copy={focusCopy} />}>
-        <StatedFocusBlocks copy={focusCopy} searchParams={searchParams} />
+      {/* DEC-078 — the hero's photograph, its kicker and the **search module**
+          are the prerendered shell; only the headline · lead · CTA trio
+          arrives through a boundary. The input a visitor sees at first paint
+          is therefore the input she keeps typing into (row 213). */}
+      <HeroBlock
+        content={
+          <Suspense fallback={<HeroContent {...heroContentFor(focusCopy)} />}>
+            <StatedHeroContent copy={focusCopy} searchParams={searchParams} />
+          </Suspense>
+        }
+        id="focus-block"
+        // F-2-33: the surface badges itself out of the dictionary, so it
+        // needs the page's language or it badges an English page in German.
+        locale={locale}
+        notDepicting={focusCopy.hero?.notDepicting}
+        placeholderId={focusCopy.hero?.placeholderId}
+        search={focusCopy.search(true)}
+        src={focusCopy.hero?.src}
+        wideSrc={focusCopy.hero?.wideSrc}
+      />
+      <Suspense fallback={<FocusModules copy={focusCopy} />}>
+        <StatedFocusModules copy={focusCopy} searchParams={searchParams} />
       </Suspense>
       {/* Block 2a — three scenes, one mechanism each (TS-006 D7), in the
           `direct`/stage-0 order of TS-019 D3a. The trait-dependent order is

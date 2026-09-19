@@ -126,6 +126,14 @@ Two consequences worth knowing before editing a page:
   errors**. Use `use cache` + `cacheLife`, or `<Suspense>`, or `instant`.
 - `new Date()`, `Math.random()` and `crypto.randomUUID()` fail the prerender
   unless they sit inside a `use cache` scope or behind `await connection()`.
+- A `<Suspense>` boundary must not contain an `<input>`, `<textarea>` or
+  `<select>` (TS-009 D2, DEC-078). A boundary is revealed by *replacing*
+  DOM, so a field inside one is a different element a beat after first paint
+  and whatever had been typed into it is gone — measured on `/`, where the
+  hero search lost a postcode typed in the first 350 ms on every load
+  (`state/open.md` row 213). Put the field in the shell and stream only what
+  varies; `e2e/search-persistence.spec.ts` checks every route's HTML for
+  this.
 
 `next build --debug-prerender` is the stricter gate: it reports the blocking
 reads a normal build tolerates, and it is clean today.

@@ -7,6 +7,7 @@ import { dictionary } from "@/src/lib/i18n/dictionary";
 import { MAX_PLACE_LENGTH } from "@/src/lib/pages/place-parameter";
 
 import type { RouteId } from "@/src/lib/routes/routes";
+import type { ReactNode } from "react";
 
 import styles from "./search-field.module.css";
 
@@ -43,7 +44,41 @@ export interface SearchFieldProps extends Omit<LinkOptions, "hash"> {
    * state, so there the field asks the browser to insist.
    */
   readonly required?: boolean;
+  /**
+   * The submit control, where the page needs to own it — DEC-078.
+   *
+   * `/` is the one page whose *primary conversion marker* moves with a
+   * request value: in S1 it is this submit, in S2/S3 it is the hero's own
+   * CTA (TS-019 D2). A `data-cta` attribute cannot be streamed, so the page
+   * puts a `<Suspense>` boundary around the button itself and keeps the
+   * `<form>`, the label and the **input** in the prerendered shell, where
+   * nothing can replace them. Everywhere else this stays unset and the
+   * default submit below renders.
+   */
+  readonly submit?: ReactNode;
   readonly className?: string;
+}
+
+export interface SearchSubmitProps {
+  readonly label: string;
+  /** TS-006 D3's one-per-page marker, where this submit is the page's primary. */
+  readonly dataCta?: string;
+  /** The `arrow-right` of a flow step (brief, page 5). */
+  readonly onward?: boolean;
+}
+
+/**
+ * The 44 px submit pill nested in the field — its own component so a page
+ * that streams the `data-cta` marker (DEC-078) renders the identical button
+ * in both branches of its boundary.
+ */
+export function SearchSubmit({ label, dataCta, onward = false }: SearchSubmitProps) {
+  return (
+    <button className={styles.submit} data-cta={dataCta} type="submit">
+      {label}
+      {onward ? <Icon name="arrow-right" size={18} /> : null}
+    </button>
+  );
 }
 
 /**
@@ -75,6 +110,7 @@ export function SearchField({
   id = "ort-suche",
   submitDataCta,
   required = false,
+  submit,
   className,
 }: SearchFieldProps) {
   // F-2-33: the two defaults were German literals, so the submit control of
@@ -119,10 +155,13 @@ export function SearchField({
           spellCheck={false}
           type="search"
         />
-        <button className={styles.submit} data-cta={submitDataCta} type="submit">
-          {resolvedSubmitLabel}
-          {submitOnward ? <Icon name="arrow-right" size={18} /> : null}
-        </button>
+        {submit ?? (
+          <SearchSubmit
+            dataCta={submitDataCta}
+            label={resolvedSubmitLabel}
+            onward={submitOnward}
+          />
+        )}
       </div>
     </SearchForm>
   );

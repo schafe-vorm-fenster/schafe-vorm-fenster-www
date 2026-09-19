@@ -15,12 +15,32 @@ export interface HeroBlockProps extends DataStateProps {
   readonly kickerIcon?: IconName;
   /** `display` (54/0.90/−0.045em/800) or `place-name` (50 px, may break by hand). */
   readonly variant?: "display" | "place-name";
-  readonly headline: string;
+  /** Required unless `content` below replaces the whole trio. */
+  readonly headline?: string;
   /** Reserves the headline's box before paint (SRC-014 §Reserved text space). */
   readonly headlineLines?: number;
   readonly lead?: string;
   /** The page's single conversion, marked `data-cta="primary"` by the caller. */
   readonly cta?: ReactNode;
+  /**
+   * The headline · lead · CTA trio as a node, replacing the three props
+   * above — the seam DEC-078 needs.
+   *
+   * `/` varies exactly this trio by what is known about the place, and it
+   * has to vary it *behind a `<Suspense>` boundary*, because the place is a
+   * request value. Everything else the hero carries — the photograph, the
+   * kicker and the search module below — stays in the prerendered shell,
+   * where a streamed boundary can never replace it. The page passes the
+   * boundary in here; `HeroContent` below is what both of its branches
+   * render, so the fallback and the resolved branch cannot drift apart.
+   */
+  readonly content?: ReactNode;
+  /**
+   * The search module, rendered under the CTA slot and **outside** any
+   * boundary the page puts in `content` (DEC-078). A control that holds what
+   * a visitor types must live in the prerendered shell.
+   */
+  readonly search?: ReactNode;
   readonly src?: string;
   /** The hero's landscape rendition, swapped in from 48rem. */
   readonly wideSrc?: string;
@@ -43,6 +63,43 @@ export interface HeroBlockProps extends DataStateProps {
   readonly locale?: Locale;
   readonly id?: string;
   readonly className?: string;
+}
+
+/**
+ * The headline · lead · CTA trio, as its own component.
+ *
+ * Extracted for one reason (DEC-078): on `/` this trio is the only part of
+ * the hero that varies by request, so it is the only part that may sit
+ * inside a `<Suspense>` boundary. The page renders it twice — once as the
+ * boundary's fallback, once as its resolved branch — and both reads go
+ * through here, so "the reserved space is identical whichever branch the
+ * page renders" (TS-019 D2's free choice) holds by construction rather than
+ * by review.
+ */
+export type HeroContentProps = Pick<
+  HeroBlockProps,
+  "variant" | "headlineLines" | "lead" | "cta"
+> & { readonly headline: string };
+
+export function HeroContent({
+  variant = "display",
+  headline,
+  headlineLines = 2,
+  lead,
+  cta,
+}: HeroContentProps) {
+  return (
+    <>
+      <h1
+        className={variant === "place-name" ? styles.placeName : styles.headline}
+        style={{ "--hero-headline-lines": headlineLines } as CSSProperties}
+      >
+        {headline}
+      </h1>
+      {lead ? <p className={styles.lead}>{lead}</p> : null}
+      {cta ? <div className={styles.cta}>{cta}</div> : null}
+    </>
+  );
 }
 
 /**
@@ -74,6 +131,8 @@ export function HeroBlock({
   headlineLines = 2,
   lead,
   cta,
+  content,
+  search,
   src,
   wideSrc,
   priority = true,
@@ -109,14 +168,16 @@ export function HeroBlock({
           {kicker}
         </Badge>
       ) : null}
-      <h1
-        className={variant === "place-name" ? styles.placeName : styles.headline}
-        style={{ "--hero-headline-lines": headlineLines } as CSSProperties}
-      >
-        {headline}
-      </h1>
-      {lead ? <p className={styles.lead}>{lead}</p> : null}
-      {cta ? <div className={styles.cta}>{cta}</div> : null}
+      {content ?? (
+        <HeroContent
+          cta={cta}
+          headline={headline ?? ""}
+          headlineLines={headlineLines}
+          lead={lead}
+          variant={variant}
+        />
+      )}
+      {search ? <div className={styles.cta}>{search}</div> : null}
     </PhotoSurface>
   );
 }

@@ -62,6 +62,18 @@ S1 is what is prerendered and what a crawler and a JS-less visitor get
 re-implementing the `/dein-ort` focus-job shift: on `/` the shift stays
 a link, on `/dein-ort` it is the page (TS-008 D4) — Open point 2.
 
+**Where the boundary runs** (DEC-078). The place is a request value, so the
+part of block 1 that varies with it arrives through `<Suspense>` — that is
+what keeps `/` a prerendered route. What may sit inside that boundary is
+bounded by TS-009 D2's last rule: never a control that holds what a visitor
+types. So the hero's photograph, its kicker and the **whole search module**
+are the prerendered shell, and three small boundaries carry the rest — the
+headline · lead · CTA trio, the search's submit button (because
+`data-cta="primary"` moves from it to the hero CTA between S1 and S2/S3,
+and an attribute cannot be streamed on its own), and the module slot. Each
+boundary renders its fallback and its resolved branch through the same
+component, which is how the "identical reserved space" below is held.
+
 ### D3 — Block sequence [FIXED: SRC-003#home structure, TS-006 D2; section types SRC-014 "Page Rhythm"]
 
 | # | Block | Content | Fed by | Rhythm section |
@@ -136,7 +148,9 @@ not conversion.
   spec fixes order, count and data, not appearance.
 - [FREE] Whether block 1's two shapes (S1 search, S2/S3 place) are one
   component with two states or two components, as long as the reserved
-  space is identical so no state swap shifts layout (SRC-014).
+  space is identical so no state swap shifts layout (SRC-014) — and as
+  long as the search field itself is in neither branch but in the
+  prerendered shell (D2 above, TS-009 D2, DEC-078).
 - [FREE] Component and file naming; where block 2d's counters sit inside
   2b or 2c.
 - [FREE] All copy. The content phase writes it (repository working rule 4).
@@ -160,12 +174,13 @@ not conversion.
 | TS-019-A13 | e2e | With the analytics collector observed: the calendar-open click of A3 emits `save-calendar-to-homescreen` with `stage=handover` exactly once; the search submit of A2, a scene click and a context-band click emit no conversion event. |
 | TS-019-A14 | e2e | The counter block on `/` renders only the dates figure; no places figure, no updates-today figure, and no static traction number anywhere on the page. |
 | TS-019-A15 | manual | The eight-point compliance check of SRC-001 passes for the home brief, with point 8 (stage 0 complete on its own) evidenced by A2 and A11. |
+| TS-019-A16 | e2e | Open `/` (and `/en`) over a throttled document so the streamed branch is still on the wire at first paint, and type a postcode into the hero search with real key events as soon as the field exists. After the page settles the field still carries the typed value and its submit lands on the place route with it; across the load exactly **one** element ever carries the field's id. The same holds on every other route with a place search. |
 
 ## Coverage
 
 | Requirement | Aspect discharged here | Discharged by | Owned elsewhere |
 | --- | --- | --- | --- |
-| WEB-F-010 (`/` exists, focus job set by entry context with default "know what is on", primary conversion = the focus job's CTA, none of its own) | the **composition**: manifest values, above-the-fold states, block sequence, scene and proof counts, module set, page-level metadata and the single event | D1–D7 · A1–A15 | the **route** `/` itself — its place in the URL inventory, its rendering layer, navigation and the link facade: TS-004 D1/D2/D4/D6. The generic composition rules it obeys: TS-006 D2–D7. Module behaviour: TS-008. Proof selection: TS-005. Stage resolution: TS-010. |
+| WEB-F-010 (`/` exists, focus job set by entry context with default "know what is on", primary conversion = the focus job's CTA, none of its own) | the **composition**: manifest values, above-the-fold states, block sequence, scene and proof counts, module set, page-level metadata and the single event | D1–D7 · A1–A16 | the **route** `/` itself — its place in the URL inventory, its rendering layer, navigation and the link facade: TS-004 D1/D2/D4/D6. The generic composition rules it obeys: TS-006 D2–D7. Module behaviour: TS-008. Proof selection: TS-005. Stage resolution: TS-010. |
 
 ## Open points
 

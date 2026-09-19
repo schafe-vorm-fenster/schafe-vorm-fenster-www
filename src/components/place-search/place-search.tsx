@@ -10,6 +10,7 @@ import { dictionary } from "@/src/lib/i18n/dictionary";
 
 import type { LinkOptions } from "../route-link/href";
 import type { RouteId } from "@/src/lib/routes/routes";
+import type { ReactNode } from "react";
 
 import styles from "./place-search.module.css";
 
@@ -41,6 +42,8 @@ export interface PlaceSearchProps extends DataStateProps, Omit<LinkOptions, "has
   readonly id?: string;
   /** Native validation, where an empty submit is not a page state (F-3-14). */
   readonly required?: boolean;
+  /** The submit control, where the page owns it — DEC-078. See `search-field`. */
+  readonly submit?: ReactNode;
   /**
    * The typeahead, off by default. It is a **pure enhancement**: the module
    * stays a plain GET form, the suggestion popup takes no layout space, and
@@ -86,6 +89,7 @@ export function PlaceSearch({
   tone = "light",
   id,
   required = false,
+  submit,
   typeahead = false,
   state = "ready",
   className,
@@ -126,6 +130,7 @@ export function PlaceSearch({
         placeholder={resolvedPlaceholder}
         query={query}
         required={required}
+        submit={submit}
         submitDataCta={submitDataCta}
         submitLabel={submitLabel}
         submitOnward={submitOnward}

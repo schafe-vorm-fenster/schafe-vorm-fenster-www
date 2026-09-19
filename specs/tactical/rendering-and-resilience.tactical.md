@@ -69,6 +69,19 @@ a community id, not a full geo object; a trait enum, not a referrer
 string. A key that carries more than the island distinguishes multiplies
 cache entries for nothing.
 
+Rule: **a `<Suspense>` boundary never contains a control that holds what a
+visitor types** — no `<input>`, `<textarea>` or `<select>` in either
+branch (DEC-078). A boundary is revealed by *replacing* DOM: React inserts
+the resolved branch and removes the fallback, so a field inside one is a
+different element a beat after first paint and whatever had been typed into
+it is gone. Measured on `/` (`state/open.md` row 213): the hero search's
+value was present at 96 ms and absent at 349 ms on every load, `?ort=` or
+not, because the fallback was the whole of block 1. Where a page's state
+*does* change a control — `/`'s `data-cta="primary"` moves from the search
+submit to the hero CTA — the boundary carries the **button**, never the
+field around it. The dynamic resolver still returns props, not markup; this
+rule says which markup may be downstream of one.
+
 ### D3 — Module inventory and its layer assignment [FIXED: TS-004 D6, TS-003 D5; assignment PROPOSED]
 
 Consistent with TS-004 D6 ("all content pages: static + ISR, live modules
@@ -302,12 +315,13 @@ a `<Suspense>`; a resolver stays as small as the props it produces.
 | TS-009-A11 | integration | An island whose fetcher throws does not affect the route: page status 200, the other islands render, the failing island shows its fallback state. |
 | TS-009-A12 | tool | Snapshot build step produces a file for every D3 module with fallback "tiers 1–3", produces none for counters, and fails the build if a required file is missing. |
 | TS-009-A13 | manual | Screen reader: skeletons are not announced; the `/dein-ort` empty state is announced once on arrival. Under `prefers-reduced-motion` no skeleton animates. |
+| TS-009-A14 | e2e | On every TS-004 D1 route, the shipped HTML contains no `<input>`, `<textarea>` or `<select>` inside a streamed boundary — neither in a pending segment nor in the resolved branch parked at the end of the body (D2's last rule, DEC-078). |
 
 ## Coverage
 
 | Requirement | Discharged by |
 | --- | --- |
-| WEB-F-100 (server render, cached; shell never blocks; TTFB) | D1, D2, D3, D10 · A1, A2, A3 |
+| WEB-F-100 (server render, cached; shell never blocks; TTFB) | D1, D2, D3, D10 · A1, A2, A3, A14 |
 | WEB-F-101 (tier 1: fetch server-side, stream, cache) | D1, D3, D4 · A3, A4, A5 |
 | WEB-F-102 (tier 2: last cached answer, freshness label) | D4, D5, D9 · A4, A6, A10, A11 |
 | WEB-F-103 (tier 3: build-time snapshot) | D4, D8 · A4, A7, A12 |
