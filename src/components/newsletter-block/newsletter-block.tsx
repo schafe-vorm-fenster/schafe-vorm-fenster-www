@@ -19,6 +19,13 @@ export interface NewsletterBlockProps {
    */
   readonly lead?: string;
   readonly locale?: Locale;
+  /**
+   * The footer's form, on every one of the 24 routes: the email label is
+   * read rather than drawn and the consent line sets tighter, so the block
+   * is a heading, a field and one note instead of five stacked lines. The
+   * page's own inline instance on `/ueber-uns` is unaffected.
+   */
+  readonly compact?: boolean;
   readonly className?: string;
 }
 
@@ -61,13 +68,21 @@ export interface NewsletterBlockProps {
  * page instead of at the privacy section. And the mock says what it is
  * without naming the question behind it (F-2-35).
  */
-export function NewsletterBlock({ heading, lead, locale = "de", className }: NewsletterBlockProps) {
+export function NewsletterBlock({
+  heading,
+  lead,
+  locale = "de",
+  compact = false,
+  className,
+}: NewsletterBlockProps) {
   const words = dictionary(locale).newsletter;
   const [beforeLink, afterLink] = words.consent.split("%s");
 
   return (
     <div
-      className={[styles.block, className].filter(Boolean).join(" ")}
+      className={[styles.block, compact ? styles.compact : undefined, className]
+        .filter(Boolean)
+        .join(" ")}
       // The mock's marking, where Jan can read it and a visitor cannot
       // (2026-09-18). Q-020, `state/open.md` row 22.
       data-mock="true"
@@ -82,6 +97,7 @@ export function NewsletterBlock({ heading, lead, locale = "de", className }: New
           is built here, because the link resolves through `legalAnchor` and
           `RouteLink`, both of which belong to the server tree. */}
       <NewsletterForm
+        compact={compact}
         consent={
           <>
             {beforeLink}

@@ -41,6 +41,14 @@ import styles from "./newsletter-block.module.css";
 
 export interface NewsletterFormProps {
   readonly emailLabel: string;
+  /**
+   * The footer's own instance (polish brief, the shared-component pass): the
+   * block's heading already says what the field is for and the placeholder
+   * carries the shape, so the label line is read rather than drawn — one
+   * line instead of two, on all 24 routes. It stays a real `<label>` bound
+   * by `htmlFor`; only its box is taken out of the flow.
+   */
+  readonly compact?: boolean;
   readonly emailPlaceholder: string;
   readonly submitLabel: string;
   readonly successHeadline: string;
@@ -51,6 +59,7 @@ export interface NewsletterFormProps {
 
 export function NewsletterForm({
   emailLabel,
+  compact = false,
   emailPlaceholder,
   submitLabel,
   successHeadline,
@@ -87,7 +96,7 @@ export function NewsletterForm({
         setSent(true);
       }}
     >
-      <label className={styles.label} htmlFor="newsletter-email">
+      <label className={compact ? styles.srOnlyLabel : styles.label} htmlFor="newsletter-email">
         {emailLabel}
       </label>
       <div className={styles.field}>

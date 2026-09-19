@@ -161,7 +161,7 @@ export default async function RootLayout({
         <SiteChrome
           heroPhoto={heroPhoto}
           locale={locale}
-          newsletter={<NewsletterBlock locale={locale} />}
+          newsletter={<NewsletterBlock compact locale={locale} />}
         >
           {children}
         </SiteChrome>

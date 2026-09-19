@@ -116,10 +116,152 @@
   color: var(--color-lime-300);
 }
 
-/* Right-aligned (SRC-014 §Event row), on the meta's line, and never in the
-   title's column: a long category name must not narrow the title. */
+/*
+ * The category — two forms of one element, `min-width` queries only.
+ *
+ * Phone: the brand package's `categoryDisplay.listRow`, "bare 24px icon in
+ * the category colour". The pill was `auto`-width in a 358 px grid and a
+ * 244 px category name ("BILDUNG & GESUNDHEIT") left the meta 30 px — the
+ * place and the time, the two facts a visitor scans a list for, ellipsised
+ * to "An…". A glyph is 24 px whatever the category is called, so the meta
+ * can never be starved again by a word.
+ *
+ * Right-aligned (SRC-014 §Event row), on the meta's line, and never in the
+ * title's column: a long category name must not narrow the title either.
+ */
 .category {
+  align-items: center;
   align-self: center;
+  color: var(--category-bare);
+  display: inline-flex;
+  gap: var(--space-2);
   grid-area: badge;
   justify-self: end;
+}
+
+/* The label is read, not drawn — `categoryDisplay`'s "the label is always
+   present" holds in the accessibility tree while the glyph and its colour
+   carry it visually. `display: none` would take it out of the tree too. */
+.categoryLabel {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.category[data-tone="fest"] {
+  --category-bare: var(--category-fest-bare);
+}
+
+.category[data-tone="merchants"] {
+  --category-bare: var(--category-merchants-bare);
+}
+
+.category[data-tone="culture"] {
+  --category-bare: var(--category-culture-bare);
+}
+
+.category[data-tone="official"] {
+  --category-bare: var(--category-official-bare);
+}
+
+.category[data-tone="social"] {
+  --category-bare: var(--category-social-bare);
+}
+
+.category[data-tone="neighbouring"] {
+  --category-bare: var(--category-neighbouring-bare);
+}
+
+/* On the one ink list per page the same six hues, lightened until they
+   clear 3:1 the other way round (`app/styles/components.css`). */
+.dark .category[data-tone="fest"] {
+  --category-bare: var(--category-fest-bare-dark);
+}
+
+.dark .category[data-tone="merchants"] {
+  --category-bare: var(--category-merchants-bare-dark);
+}
+
+.dark .category[data-tone="culture"] {
+  --category-bare: var(--category-culture-bare-dark);
+}
+
+.dark .category[data-tone="official"] {
+  --category-bare: var(--category-official-bare-dark);
+}
+
+.dark .category[data-tone="social"] {
+  --category-bare: var(--category-social-bare-dark);
+}
+
+.dark .category[data-tone="neighbouring"] {
+  --category-bare: var(--category-neighbouring-bare-dark);
+}
+
+/*
+ * md — 48rem / 768px: the row is wide enough for the badge SRC-014 §Event
+ * row specifies, so the same element becomes it. The glyph steps aside: a
+ * badge with an 18 px icon is a *kicker* in this design system, and a
+ * category is not a kicker.
+ */
+@media (min-width: 48rem) {
+  .category {
+    background: var(--category-fill);
+    border-radius: var(--radius-pill);
+    color: var(--category-text);
+    font-family: var(--font-mono);
+    font-size: var(--type-label-size);
+    font-weight: 700;
+    letter-spacing: var(--type-label-tracking);
+    line-height: 1;
+    min-height: var(--height-badge);
+    padding: 7px 15px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .categoryIcon {
+    display: none;
+  }
+
+  .categoryLabel {
+    clip-path: none;
+    height: auto;
+    overflow: visible;
+    position: static;
+    width: auto;
+  }
+
+  .category[data-tone="fest"] {
+    --category-fill: var(--category-fest-fill);
+    --category-text: var(--category-fest-text);
+  }
+
+  .category[data-tone="merchants"] {
+    --category-fill: var(--category-merchants-fill);
+    --category-text: var(--category-merchants-text);
+  }
+
+  .category[data-tone="culture"] {
+    --category-fill: var(--category-culture-fill);
+    --category-text: var(--category-culture-text);
+  }
+
+  .category[data-tone="official"] {
+    --category-fill: var(--category-official-fill);
+    --category-text: var(--category-official-text);
+  }
+
+  .category[data-tone="social"] {
+    --category-fill: var(--category-social-fill);
+    --category-text: var(--category-social-text);
+  }
+
+  .category[data-tone="neighbouring"] {
+    --category-fill: var(--category-neighbouring-fill);
+    --category-text: var(--category-neighbouring-text);
+  }
 }

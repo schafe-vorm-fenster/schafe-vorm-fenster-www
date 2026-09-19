@@ -1,5 +1,6 @@
-import { Badge, type BadgeTone } from "../badge/badge";
+import { type BadgeTone } from "../badge/badge";
 import { isMocked, isPending, type DataState, type DataStateProps } from "../data-state";
+import { Icon, type IconName } from "../icon/icon";
 import { RouteLink } from "../route-link/route-link";
 import { Skeleton } from "../skeleton/skeleton";
 
@@ -47,6 +48,27 @@ const CATEGORY_TONE: Record<EventCategory, BadgeTone> = {
 };
 
 /**
+ * The glyph each category shows in its bare, phone-width form — brand
+ * `categoryDisplay.listRow`, "bare 24px icon in the category colour", under
+ * the rule "icon and colour always together; the label is always present".
+ *
+ * Every entry is the design system's own role → glyph assignment
+ * (`concept/website-design-system.md` §Icons), not a fresh choice: culture is
+ * "Culture, stage" → `theater` (`landmark` is taken, by "Municipality,
+ * council, office", which is what `official` is), merchants is "Merchants,
+ * delivery routes" → `shopping-basket`, social is "Community, association" →
+ * `users`, and `neighbouring` is the neighbouring *place* → `map-pin`.
+ */
+const CATEGORY_ICON: Record<EventCategory, IconName> = {
+  fest: "party-popper",
+  merchants: "shopping-basket",
+  culture: "theater",
+  official: "landmark",
+  social: "users",
+  neighbouring: "map-pin",
+};
+
+/**
  * 5 `event-row` [FIXED] — SRC-014 §Event row.
  *
  * Structure: a flat row with a hairline above, 76 px tall — mono day number
@@ -61,6 +83,17 @@ const CATEGORY_TONE: Record<EventCategory, BadgeTone> = {
  * system's 76 (polish brief G-2). The title now spans the full column, which
  * is the width the desktop always had and where the same titles have always
  * rendered in one line.
+ *
+ * The badge then starved the **meta** instead. "BILDUNG & GESUNDHEIT" is
+ * 244 px of a 358 px row at 390 px wide: 52 px of date and two 16 px gaps
+ * later the meta had 30 px and rendered "An…", and three of the nine rows on
+ * `/dein-ort?ort=17390` measured 94 px rather than 76. A category may not
+ * cost the visitor the place and the time, so below `md` the row takes the
+ * brand package's own list-row form of a category (`categoryDisplay.listRow`,
+ * "bare 24px icon in the category colour"): 24 px of glyph instead of 244 px
+ * of pill, the label still in the accessibility tree, and the whole rest of
+ * the line for the meta. From `md` the pill returns unchanged — the desktop
+ * row always had room for it.
  * States (D-9, all four):
  *   loading  → the row's own geometry as a `skeleton`, no animation;
  *   empty    → nothing. A single row cannot be empty; the list around it owns
@@ -73,8 +106,11 @@ const CATEGORY_TONE: Record<EventCategory, BadgeTone> = {
  * Inherits: category fill/text pairs from the table only; radius 999 on the
  * badge, 0 everywhere else; no border but the hairline.
  * Space: fixed 76 px, both clamps enforced in CSS.
- * A11y: the date is a `<time datetime>`; the category is words, not colour;
- * the whole row is one link target when `to` is given.
+ * A11y: the date is a `<time datetime>`; the category is words at every
+ * width — visually a glyph plus its colour on the phone, drawn text from
+ * `md`, but the same text node in the accessibility tree either way, so the
+ * category is never colour alone; the whole row is one link target when `to`
+ * is given.
  */
 export function EventRow({
   date,
@@ -126,9 +162,17 @@ export function EventRow({
       </time>
       <h3 className={styles.title}>{title_}</h3>
       {meta ? <p className={styles.meta}>{meta}</p> : null}
-      <Badge className={styles.category} tone={CATEGORY_TONE[category]}>
-        {categoryLabel}
-      </Badge>
+      {/* One element, two widths (SRC-014's mobile-first rule: `min-width`
+          queries only, one component tree). On the phone it is the bare
+          24 px glyph of `categoryDisplay.listRow` and the label is read but
+          not drawn; from `md` the same element is the badge the design
+          system's §Event row asks for, glyph hidden, label visible. The
+          label exists in the markup at every width — it is the category's
+          accessible name in both forms. */}
+      <span className={styles.category} data-tone={CATEGORY_TONE[category]}>
+        <Icon className={styles.categoryIcon} name={CATEGORY_ICON[category]} size={24} />
+        <span className={styles.categoryLabel}>{categoryLabel}</span>
+      </span>
     </article>
   );
 }

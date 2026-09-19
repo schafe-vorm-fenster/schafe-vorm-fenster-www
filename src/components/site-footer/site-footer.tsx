@@ -26,12 +26,13 @@ export interface SiteFooterProps {
 /**
  * 9 `site-footer` [PROPOSED] — TS-004 D4, TS-016 D10.
  *
- * Structure: contact (the `envoy-form-mount` target, S1) · the newsletter
- * block (S5) · the legal links Impressum / Datenschutz / Barrierefreiheit as
- * anchors on the one legal page · the `language-switch`. The link list and
- * the anchors come from `src/lib/routes/` (DEC-039: an anchor is permanent),
- * the labels from the dictionary. Nothing renders after the closing CTA
- * except this (TS-006 D2).
+ * Structure: the wordmark · the newsletter block (S5) · contact (the
+ * `envoy-form-mount` target, S1) behind its own disclosure · a base line
+ * carrying the legal links Impressum / Datenschutz / Barrierefreiheit as
+ * anchors on the one legal page and the `language-switch` beside them. The
+ * link list and the anchors come from `src/lib/routes/` (DEC-039: an anchor
+ * is permanent), the labels from the dictionary. Nothing renders after the
+ * closing CTA except this (TS-006 D2).
  * States: the newsletter slot degrades on its own terms — in M2 it is a
  * visibly labelled mock, and this component only holds the slot, so the
  * footer never has to know whether a sending system exists. Everything else
@@ -39,7 +40,28 @@ export interface SiteFooterProps {
  * Inherits: a flat surface, radius 0, hairline separators, Meta and
  * Label-mono type.
  * Space: no reserved-space problem — nothing here arrives late.
- * A11y: one `footer` landmark and two named link lists.
+ * A11y: one `footer` landmark and two named link lists; the disclosure is a
+ * native `<summary>`, 44 px, and works with no JavaScript at all.
+ *
+ * ### Why contact is a disclosure (polish brief, the shared-component pass)
+ *
+ * The footer stands under **every** one of the 24 routes, so its height is
+ * subtracted from every page's own budget before the page has written a
+ * word. It measured 1110 px at 390 × 844 — one and a third phone screens,
+ * more than G-4 allows a whole *section*, and the reason no page reached the
+ * brief's length target.
+ *
+ * 480 px of that was one thing: the contact form, rendered open, with three
+ * fields and a textarea, on a page the visitor came to for something else.
+ * The other surfaces here are one line each and cannot be cut further
+ * without losing what TS-004-A9 asks for — the newsletter has to be usable
+ * where it stands (it is the conversion), and a legal link behind a
+ * disclosure is not "footer-linked on every page" in the sense TS-002-A8
+ * means. A contact **form** is not what that criterion names either: it
+ * names contact, and a `<details>` labelled "Kontakt" carries contact,
+ * visibly, one tap away, in the DOM on every route, with the form's own
+ * markup server-rendered inside it and the whole thing working with
+ * scripting off. Nothing is removed; 480 px of unasked-for form is folded.
  */
 export function SiteFooter({
   route,
@@ -53,43 +75,46 @@ export function SiteFooter({
   return (
     <footer className={[styles.footer, className].filter(Boolean).join(" ")}>
       <div className={`container ${styles.inner}`}>
-        <div className={styles.brand}>
-          <Logo locale={locale} variant="wordmark" />
+        <div className={styles.top}>
+          <div className={styles.brand}>
+            <Logo locale={locale} variant="wordmark" />
+          </div>
+          {/* The newsletter keeps its own heading, so the slot adds no second
+              label above it — "NEWSLETTER" over "Neuigkeiten aus dem Projekt"
+              was the site naming one thing twice, 28 px apart. */}
+          {newsletter ? <div className={styles.newsletter}>{newsletter}</div> : null}
         </div>
         {contact ? (
-          <div className={styles.slot}>
-            <p className={styles.slotTitle}>{d.footer.contact}</p>
-            {contact}
-          </div>
+          <details className={styles.contact}>
+            <summary className={styles.summary}>{d.footer.contact}</summary>
+            <div className={styles.contactBody}>{contact}</div>
+          </details>
         ) : null}
-        {newsletter ? (
-          <div className={styles.slot}>
-            <p className={styles.slotTitle}>{d.footer.newsletter}</p>
-            {newsletter}
-          </div>
-        ) : null}
-        <nav aria-label={d.footer.imprint} className={styles.legal}>
-          <p className={styles.slotTitle}>{d.footer.imprint}</p>
-          <ul className={styles.list}>
-            {FOOTER_LEGAL_LINKS.map((entry) => (
-              <li key={entry.section}>
-                <RouteLink
-                  hash={legalAnchor(entry.section, locale)}
-                  locale={locale}
-                  to={entry.route}
-                >
-                  {d.footer[entry.label]}
-                </RouteLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <LanguageSwitch
-          className={styles.language}
-          current={locale}
-          label={d.footer.language}
-          route={route}
-        />
+        {/* One base line: the three legal links and the two languages, wrapped
+            rather than stacked in three labelled blocks of their own. */}
+        <div className={styles.base}>
+          <nav aria-label={d.footer.imprint} className={styles.legal}>
+            <ul className={styles.list}>
+              {FOOTER_LEGAL_LINKS.map((entry) => (
+                <li key={entry.section}>
+                  <RouteLink
+                    hash={legalAnchor(entry.section, locale)}
+                    locale={locale}
+                    to={entry.route}
+                  >
+                    {d.footer[entry.label]}
+                  </RouteLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <LanguageSwitch
+            className={styles.language}
+            current={locale}
+            label={d.footer.language}
+            route={route}
+          />
+        </div>
       </div>
     </footer>
   );

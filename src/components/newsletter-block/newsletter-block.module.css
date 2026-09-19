@@ -29,6 +29,31 @@
   font-size: var(--type-meta-size);
 }
 
+/*
+ * The footer's compact form: the label is read, not drawn. The block's own
+ * heading names the letter and the placeholder carries the address shape, so
+ * a third line saying "E-Mail-Adresse" cost 28 px on all 24 routes and said
+ * nothing the field did not. Still a real `<label htmlFor>` — an input with
+ * only a placeholder is an unlabelled input.
+ */
+.srOnlyLabel {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* Heading, field, note — three lines, the footer's own rhythm. */
+.compact {
+  gap: var(--space-2);
+}
+
+.compact .heading {
+  font-size: var(--type-body-size);
+}
+
 .field {
   display: flex;
   flex-wrap: wrap;

@@ -164,6 +164,40 @@
   --category-neighbouring-fill: var(--color-status-warning);
   --category-neighbouring-text: var(--color-neutral-paper);
 
+  /* ── Bare category colours — brand `categoryDisplay.listRow` ───────────
+   * "bare 24px icon in the category colour", with `category.bare` as its
+   * own value because a *fill* is not usable as a *foreground*: `lime-600`
+   * clears 6.8:1 against the ink it carries as a badge and only 2.4:1
+   * against paper, so a bare icon in it would be invisible. The brand token
+   * sheet makes the same distinction itself (every `color.category.*` entry
+   * carries a `dot` for fills and a darker `bare` for foregrounds) — these
+   * are the six-category equivalents, composed from the scales like the
+   * pairs above.
+   *
+   * Every value clears 3:1 (non-text contrast, WCAG 1.4.11) against the
+   * ground it stands on. `merchants` takes `lime-700` rather than the
+   * `lime-800` of `official`, so the two greens stay distinguishable; their
+   * glyphs (`shopping-basket` versus `landmark`) carry the distinction
+   * anyway, which is what "icon and colour always together" is for.
+   */
+  --category-fest-bare: var(--color-himbeere-600); /* 5.8:1 on paper */
+  --category-merchants-bare: var(--color-lime-700); /* 4.0:1 */
+  --category-culture-bare: var(--color-violet-500); /* 7.8:1 */
+  --category-official-bare: var(--color-lime-800); /* 6.7:1 */
+  --category-social-bare: var(--color-status-error); /* 6.3:1 */
+  --category-neighbouring-bare: var(--color-status-warning); /* 4.9:1 */
+
+  /* The same six on an ink ground (the one dark list per page): the hue
+     lightened towards paper until it clears 3:1 the other way round. Mixed
+     rather than hand-picked, so a change to a fill carries through. All six
+     land between 6.9:1 and 11.2:1 on `ink`. */
+  --category-fest-bare-dark: color-mix(in srgb, var(--category-fest-fill) 45%, var(--color-neutral-paper));
+  --category-merchants-bare-dark: color-mix(in srgb, var(--category-merchants-fill) 45%, var(--color-neutral-paper));
+  --category-culture-bare-dark: color-mix(in srgb, var(--category-culture-fill) 45%, var(--color-neutral-paper));
+  --category-official-bare-dark: color-mix(in srgb, var(--category-official-fill) 45%, var(--color-neutral-paper));
+  --category-social-bare-dark: color-mix(in srgb, var(--category-social-fill) 45%, var(--color-neutral-paper));
+  --category-neighbouring-bare-dark: color-mix(in srgb, var(--category-neighbouring-fill) 45%, var(--color-neutral-paper));
+
   /* ── The header height, published for `scroll-margin-top` (TS-029 D3) ── */
   --site-header-height: 64px;
 }
