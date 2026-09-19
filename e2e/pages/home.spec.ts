@@ -40,7 +40,24 @@ async function blockOneSettled(page: Page): Promise<void> {
  * environment and Lassan has dates. The walk therefore asks the BFF which of
  * a handful of covered communities is empty right now.
  */
-const EMPTY_PLACE_CANDIDATES = ["achimswalde", "altenhof", "kattenberg", "zwiedorf"];
+/*
+ * `lassan` is back on the list — **last**, and for the other backend.
+ *
+ * The note above is about `LIVE_DATA=auto`, where Lassan has real dates and
+ * so is not empty. Under `LIVE_DATA=mock` the four candidates above are not
+ * covered at all (`/api/places/<slug>/events` answers "place not covered"),
+ * and `lassan` is the mock's own `EMPTY_DEMO_SLUG` — the covered community
+ * F-2-61 gave a neighbour (`zuessow`) precisely so the empty state has
+ * something to widen to. With no candidate left, `emptyPlace()` returned
+ * `undefined` and three state-B walks skipped themselves silently on every
+ * mock run (TS-020-A3, TS-020-A8's second half, TS-019-A4).
+ *
+ * Appending it costs the `auto` backend nothing: the helper asks the BFF
+ * whether a candidate is *actually* empty before returning it, so on `auto`
+ * Lassan is passed over exactly as the note above intends, and the earlier
+ * candidates answer first anyway.
+ */
+const EMPTY_PLACE_CANDIDATES = ["achimswalde", "altenhof", "kattenberg", "zwiedorf", "lassan"];
 
 async function emptyPlace(request: APIRequestContext): Promise<string | undefined> {
   for (const slug of EMPTY_PLACE_CANDIDATES) {

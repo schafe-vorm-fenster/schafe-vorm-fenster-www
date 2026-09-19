@@ -39,7 +39,24 @@ const PLACE_WITH_DATES = "schlatkow";
  * the BFF before it walks — a village entering its first date is content
  * news, not a regression, and the list is long enough to survive it.
  */
-const EMPTY_PLACE_CANDIDATES = ["achimswalde", "altenhof", "kattenberg", "zwiedorf"];
+/*
+ * `lassan` is back on the list — **last**, and for the other backend.
+ *
+ * The note above is about `LIVE_DATA=auto`, where Lassan has real dates and
+ * so is not empty. Under `LIVE_DATA=mock` the four candidates above are not
+ * covered at all (`/api/places/<slug>/events` answers "place not covered"),
+ * and `lassan` is the mock's own `EMPTY_DEMO_SLUG` — the covered community
+ * F-2-61 gave a neighbour (`zuessow`) precisely so the empty state has
+ * something to widen to. With no candidate left, `emptyPlace()` returned
+ * `undefined` and three state-B walks skipped themselves silently on every
+ * mock run (TS-020-A3, TS-020-A8's second half, TS-019-A4).
+ *
+ * Appending it costs the `auto` backend nothing: the helper asks the BFF
+ * whether a candidate is *actually* empty before returning it, so on `auto`
+ * Lassan is passed over exactly as the note above intends, and the earlier
+ * candidates answer first anyway.
+ */
+const EMPTY_PLACE_CANDIDATES = ["achimswalde", "altenhof", "kattenberg", "zwiedorf", "lassan"];
 
 /** The first candidate the live layer still answers empty for. */
 async function emptyPlace(request: APIRequestContext): Promise<string | undefined> {
@@ -418,14 +435,27 @@ test.describe("TS-020 — your place", () => {
 
   test("TS-020-A11: the canonical is the parameter-free path for every `?ort=`", async ({
     page,
+    request,
   }) => {
     // The criterion names "`/dein-ort`, `?ort=<A slug>` and `?ort=<B slug>`" —
     // a state-A and a state-B place, not a value that classifies as uncovered
     // and is forwarded to the founding route (TS-020 D2 row 5, F-2-30).
+    //
+    // The state-B slug is *asked for*, not assumed. Taking
+    // `EMPTY_PLACE_CANDIDATES[0]` on faith is what made this case red under
+    // `LIVE_DATA=mock`: none of the first four candidates is covered by the
+    // mock backend, so the proxy hopped `?ort=achimswalde` to the founding
+    // route and the canonical this case read was `/dein-ort/starten` — the
+    // page behaving exactly as TS-020 D2 row 5 says it must, measured against
+    // an input the criterion excludes. `emptyPlace()` confirms coverage and
+    // emptiness against the BFF first, and every other state-B case in this
+    // file already goes through it.
+    const emptySlug = await emptyPlace(request);
+    test.skip(emptySlug === undefined, "no covered community is empty right now");
     for (const path of [
       "/dein-ort",
       "/dein-ort?ort=17390",
-      `/dein-ort?ort=${EMPTY_PLACE_CANDIDATES[0]}`,
+      `/dein-ort?ort=${emptySlug}`,
     ]) {
       await page.goto(path);
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
