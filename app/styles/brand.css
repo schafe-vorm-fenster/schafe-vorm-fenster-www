@@ -8,31 +8,105 @@
  * literal or `font-family` literal outside this file.
  *
  * Fonts — TS-003 D3 / DEC-043: Atkinson Hyperlegible Next plus the Mono
- * variant, latin subset, weights 400 · 700 · 800, `font-display: swap`
- * (fontsource sets it). Self-hosted: the woff2 files are bundled from the
- * package, never fetched from a CDN (TS-014 D1 has no font host).
+ * variant, latin subset, weights 400 · 700 · 800, `font-display: optional`
+ * (declared below; DEC-043 fixes the family, never the display strategy).
+ * Self-hosted: the woff2 files are bundled from the package, never fetched
+ * from a CDN (TS-014 D1 has no font host).
  */
 
-@import "@fontsource/atkinson-hyperlegible-next/latin-400.css";
-@import "@fontsource/atkinson-hyperlegible-next/latin-700.css";
-@import "@fontsource/atkinson-hyperlegible-next/latin-800.css";
-@import "@fontsource/atkinson-hyperlegible-mono/latin-400.css";
-@import "@fontsource/atkinson-hyperlegible-mono/latin-700.css";
-@import "@fontsource/atkinson-hyperlegible-mono/latin-800.css";
 @import "@schafe-vorm-fenster/brand-design/tokens.css";
+
+/*
+ * The six real faces, declared here rather than `@import`ed from fontsource's
+ * own stylesheets — same package, same self-hosted woff2 files, same weights.
+ * The one descriptor that changes is `font-display`, and it is the reason for
+ * writing them out: fontsource hardcodes `swap`, and a stylesheet cannot
+ * override a `@font-face` descriptor from the outside.
+ *
+ * `optional`, not `swap` — see the fallback block below for the measurement.
+ */
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  font-style: normal;
+  font-weight: 400;
+  font-display: optional;
+  src: url("@fontsource/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  font-style: normal;
+  font-weight: 700;
+  font-display: optional;
+  src: url("@fontsource/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-700-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  font-style: normal;
+  font-weight: 800;
+  font-display: optional;
+  src: url("@fontsource/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-800-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: optional;
+  src: url("@fontsource/atkinson-hyperlegible-mono/files/atkinson-hyperlegible-mono-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: optional;
+  src: url("@fontsource/atkinson-hyperlegible-mono/files/atkinson-hyperlegible-mono-latin-700-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible Mono";
+  font-style: normal;
+  font-weight: 800;
+  font-display: optional;
+  src: url("@fontsource/atkinson-hyperlegible-mono/files/atkinson-hyperlegible-mono-latin-800-normal.woff2") format("woff2");
+}
 
 /*
  * F-2-68 — the font-swap half of the 174px shift on `/`.
  *
- * `font-display: swap` (fontsource's default, kept per DEC-043) paints the
- * fallback immediately and swaps to Atkinson Hyperlegible Next once it
- * loads. The fallback in the token package's stack — `'Atkinson
- * Hyperlegible'` (a distinct, rarely-installed accessibility font, not this
- * one) then system sans — has a materially different average glyph width,
- * so the swap reflows every line, cascading into the ~174px the chaos run
- * measured at the footer (C-H-12).
+ * Two mechanisms, and both are needed; neither is sufficient alone.
  *
- * This declares one metric-matched fallback face per weight actually used
+ * (1) The metric-matched fallback below. The fallback in the token package's
+ * stack — `'Atkinson Hyperlegible'` (a distinct, rarely-installed
+ * accessibility font, not this one) then system sans — has a materially
+ * different average glyph width, so rendering in it reflows every line,
+ * cascading into the ~174px the chaos run measured at the footer (C-H-12).
+ *
+ * (2) `font-display: optional` on the real faces above, replacing
+ * fontsource's `swap`. A metric-matched fallback makes the *average* line
+ * width agree to about a percent; it cannot make the two fonts break lines
+ * in the same places. Row 146 recorded that residual for one headline; the
+ * M6 measurement found it is general — with the font requests delayed 1.5 s
+ * (`page.route`), `/mitmachen` at 1280×800 moved its closing CTA 114.8 px on
+ * the swap and `/dein-kalender` 134.7 px, every contributing section changing
+ * height by exactly one line (24–32 px) as a paragraph tipped across a wrap
+ * boundary. No single `size-adjust` percentage can prevent that, because the
+ * failure is discrete, not proportional.
+ *
+ * `optional` removes the swap itself: the browser blocks ~100 ms for the real
+ * font, and if it has not arrived, renders the page in the metric-matched
+ * fallback *for that page view* and never re-lays it out. The font keeps
+ * loading into the HTTP cache, so it is there from the first paint of the
+ * next navigation. The cost is named rather than hidden: a first-ever visit
+ * on a slow connection may read one page in Arial metrics instead of
+ * Atkinson Hyperlegible Next — a typeface DEC-043 chose partly as an
+ * accessibility argument. That trade (one page view of a different sans, vs.
+ * every page reflowing up to 135 px under the reader's eyes) is recorded in
+ * `state/open.md` for the design-system owner rather than decided silently.
+ *
+ * The block below declares one metric-matched fallback face per weight used
  * (400/700/800 — the type roles this project has), aliased to a local Arial
  * install (or an Arial-metric-compatible substitute), and inserts it right
  * after the real font in `--font-sans`.

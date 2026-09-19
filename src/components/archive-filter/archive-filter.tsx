@@ -40,6 +40,36 @@ export interface ArchiveFilterType {
 }
 
 /**
+ * The reset's own space, held open while there is nothing to reset.
+ *
+ * The reset is the eighth item in a wrapping flex row, so whether it is in
+ * the row decides where the row breaks. Measured on `/ueber-uns/archiv` at
+ * the three DEC-067 widths, pressing the first chip: at 360 px and 768 px the
+ * reset happened to land on a line that already had room (row height 200 px
+ * and 96 px, unchanged), but at **1024 px the seven type chips fit on one
+ * line and the reset did not** — the chip row went 44 px → 96 px and pushed
+ * all 31 rows down 52 px on a click. That is the "a chip row that re-wrapped"
+ * case TS-028-A13's own guard is written to catch, and it caught it.
+ *
+ * So the row always contains the reset's box and only ever changes what is
+ * painted in it. `visibility: hidden` is the same mechanism, and the same
+ * `.reserved` rule, that `ReservedChipRow` and the count line already use:
+ * the box keeps its place in the wrap, and the copy is a `span` outside the
+ * accessibility tree and the tab order, carrying neither `data-archive-reset`
+ * nor a `button` role — so "a reset only exists while there is a selection to
+ * clear" (polish brief page 11, item 1) still holds for every visitor and
+ * every assistive technology. Only the layout knows it is there.
+ */
+function ReservedReset({ label }: { readonly label: string }) {
+  return (
+    <span aria-hidden="true" className={[styles.reset, styles.reserved].join(" ")}>
+      <Icon name="circle-x" size={18} />
+      {label}
+    </span>
+  );
+}
+
+/**
  * F-2-69 — the reserved chip row, rendered until hydration replaces it.
  *
  * The chip group is client-only by determination (TS-028 D8: without
@@ -64,7 +94,13 @@ export interface ArchiveFilterType {
  * `visibility: hidden` subtree is outside both the accessibility tree and the
  * tab order, so a visitor without JavaScript is offered nothing dead.
  */
-function ReservedChipRow({ types }: { readonly types: readonly ArchiveFilterType[] }) {
+function ReservedChipRow({
+  types,
+  allText,
+}: {
+  readonly types: readonly ArchiveFilterType[];
+  readonly allText: string;
+}) {
   const chipClass = [chipStyles.chip, chipStyles.light].join(" ");
 
   return (
@@ -79,6 +115,10 @@ function ReservedChipRow({ types }: { readonly types: readonly ArchiveFilterType
           {type.label}
         </span>
       ))}
+      {/* …and the reset's box too, so this row and the mounted one break at
+          the same places. Without it the swap at hydration is itself a
+          re-wrap at 1024 px. */}
+      <ReservedReset label={allText} />
     </div>
   );
 }
@@ -214,10 +254,12 @@ export function ArchiveFilter({
               <Icon name="circle-x" size={18} />
               {allText}
             </button>
-          ) : null}
+          ) : (
+            <ReservedReset label={allText} />
+          )}
         </div>
       ) : (
-        <ReservedChipRow types={types} />
+        <ReservedChipRow allText={allText} types={types} />
       )}
       <div ref={listRef}>{children}</div>
     </div>

@@ -44,10 +44,26 @@ describe("F-2-69: the chip row occupies its final height before hydration", () =
     // Polish brief page 11: the *all* chip is no longer one of them. It was
     // pressed by default and did nothing when pressed again; it is a text
     // **reset** now, and a reset only exists while there is a selection to
-    // clear — so the row the visitor first sees is the type chips alone, and
-    // the reserved copy is that same row.
+    // clear — so the row the visitor first sees is the type chips alone.
     for (const type of TYPES) expect(html).toContain(type.label);
-    expect(html, "the reset has nothing to reset yet").not.toContain("Alle");
+
+    // The reset's *box*, however, is in the row from the first render on.
+    // This assertion is the inverse of what it used to say ("the reset has
+    // nothing to reset yet" → `not.toContain("Alle")`), and the change is
+    // deliberate: measured at 1024 px, seven type chips fit on one line and
+    // the reset did not, so adding it on the first chip press re-wrapped the
+    // row (44 px → 96 px) and pushed all 31 archive rows down 52 px — the
+    // exact "a chip row that re-wrapped" failure TS-028-A13's own guard
+    // watches for. A row whose wrap depends on the selection cannot be
+    // stable, so the reset now always occupies its place and only changes
+    // what is painted in it.
+    //
+    // What the old assertion actually protected — no reset is *offered*
+    // before there is something to reset — is protected below and by
+    // `e2e/pages/archiv.spec.ts` TS-028-A3, which requires
+    // `[data-archive-reset]` to have count 0 until a chip is pressed.
+    expect(html, "the reset's box is reserved, so the row cannot re-wrap").toContain("Alle");
+    expect(html, "…but it is not a control yet").not.toContain("data-archive-reset");
   });
 
   it("hides the reserved row and the reserved count line without collapsing them", () => {

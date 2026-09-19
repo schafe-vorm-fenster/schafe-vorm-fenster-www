@@ -37,16 +37,60 @@ interface Landmarks {
 const ONE: Landmarks = { header: 1, main: 1, idMain: 1, footer: 1 };
 
 /**
+ * This file is the slowest in the suite by construction: 26 walks, each one
+ * clicking every internal link a page offers and coming back from each. The
+ * longest already ran at 25–27 s against Playwright's 30 s default, so a
+ * worker under load failed on the clock rather than on a landmark count — a
+ * failure that says nothing about the thing being tested. The budget is
+ * raised to match the shape of the walk; it is not a threshold this suite
+ * asserts anything against.
+ */
+test.describe.configure({ timeout: 120_000 });
+
+/**
  * Everything the bfcache keeps is still in the DOM, so these count nodes
  * rather than roles — the hidden copies are what has to be absent.
  */
+/**
+ * A navigation that commits while this reads tears the execution context down
+ * underneath it — `page.evaluate: Execution context was destroyed`, which is
+ * what this walk started failing with on `/en/your-place` (R-6, M6 round).
+ *
+ * Measured before changing anything, by tracing every navigation request,
+ * response and history call for every link out of that page: **no link double-
+ * navigates.** There is no 3xx on any of them (the `?ort=` proxy hop, the one
+ * redirect this walk could have met, is not on a link this page offers), and
+ * every click and every back lands on the URL it should. What does happen is
+ * that the App Router commits a second, same-document history entry of its
+ * own a beat after a back navigation settles — every extra entry traced to
+ * `next/dist/client`, none to app code — and on a back that re-fetches the
+ * document, that second commit can land inside this read.
+ *
+ * So this is the walk racing the router, not the product navigating twice,
+ * and the answer is to read the steady state rather than whatever instant the
+ * timeout happened to end on: re-settle and read again, for that one error
+ * class only. Any other failure still throws on the first attempt.
+ */
+function isContextDestroyed(error: unknown): boolean {
+  return (
+    error instanceof Error && /Execution context was destroyed|Target closed/u.test(error.message)
+  );
+}
+
 async function landmarks(page: Page): Promise<Landmarks> {
-  return page.evaluate(() => ({
-    header: document.querySelectorAll("body > header").length,
-    main: document.querySelectorAll("main").length,
-    idMain: document.querySelectorAll("#main").length,
-    footer: document.querySelectorAll("body > footer").length,
-  }));
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      return await page.evaluate(() => ({
+        header: document.querySelectorAll("body > header").length,
+        main: document.querySelectorAll("main").length,
+        idMain: document.querySelectorAll("#main").length,
+        footer: document.querySelectorAll("body > footer").length,
+      }));
+    } catch (error) {
+      if (attempt >= 3 || !isContextDestroyed(error)) throw error;
+      await settle(page);
+    }
+  }
 }
 
 /**

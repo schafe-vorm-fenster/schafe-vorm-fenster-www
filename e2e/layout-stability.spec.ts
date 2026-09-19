@@ -214,10 +214,25 @@ for (const width of ARCHIVE_WIDTHS) {
     // ready state is what makes the three interactions below deterministic.
     await expect(page.locator("[data-archive-filter]")).toHaveAttribute("data-hydrated", "true");
 
-    const chips = page.getByRole("group").getByRole("button");
-    await chips.nth(1).click(); // one type
-    await chips.nth(2).click(); // a second type, OR-combined
-    await chips.nth(0).click(); // "Alle" — back to the full list
+    // The polish brief (page 11, item 1) retired the *all* chip: it was chip 0
+    // and pressed by default, and it is a trailing text **reset** now that
+    // exists only while there is a selection to clear. The three interactions
+    // this case measures are unchanged in meaning — narrow, narrow again,
+    // return to the full list — but the controls that perform them are not, so
+    // they are addressed the way `e2e/pages/archiv.spec.ts` addresses them:
+    // the type chips by index among the type chips alone, and the reset by its
+    // own `data-archive-reset` seam.
+    //
+    // Reading `nth(0..2)` off the whole group instead, as this case did when
+    // *all* was chip 0, silently turned the third interaction into "select a
+    // third type" — three narrowings and no return — which is both a different
+    // gesture than the one documented here and a strictly larger amount of row
+    // movement (measured at 1024 px: 1.0017 for three narrowings against
+    // 0.2148 for narrow/narrow/reset).
+    const chips = page.getByRole("group").locator("button:not([data-archive-reset])");
+    await chips.nth(0).click(); // one type
+    await chips.nth(1).click(); // a second type, OR-combined
+    await page.locator("[data-archive-reset]").click(); // reset — back to the full list
 
     const cls = await settleAndReadCls(page);
     expect(cls, `archive at ${width}px accumulated CLS ${cls.toFixed(4)}`).toBeLessThan(CLS_BUDGET);

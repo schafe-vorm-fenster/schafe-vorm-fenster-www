@@ -9,3 +9,26 @@
   /* The row is reserved by the frame, so this never pushes anything. */
   min-height: var(--height-badge-icon);
 }
+
+/*
+ * The same ground-aware pairing `outbound-link`'s `.meta` already carries.
+ *
+ * `--color-neutral-muted` is the muted pairing for a *paper* ground; on
+ * `--color-neutral-ink` it measures **2.9:1**, against WCAG AA's 4.5:1 for
+ * text this size — and the freshness label lives inside
+ * `live-module-frame`, which stands on `data-surface="ink"` on `/` ,
+ * `/dein-ort` and `/mitmachen`. It only showed up intermittently in the axe
+ * sweep because the label is rendered only in the `degraded` tier ("Stand:
+ * …"), so a run where the module answered fresh never painted it.
+ *
+ * The ground's own secondary text colour is what the design system pairs
+ * there, so this reads it rather than inventing a value — and the `<time>`
+ * inside the label inherits it, which is the second of the two nodes axe
+ * flagged.
+ */
+.ink .label,
+[data-surface="ink"] .label,
+[data-surface="violet-500"] .label,
+[data-hero="true"] .label {
+  color: var(--color-lime-300);
+}

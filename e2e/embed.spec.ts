@@ -159,18 +159,39 @@ test.describe("the embed frame", () => {
     expect(errors, "console errors while the embed loads").toEqual([]);
   });
 
+  /**
+   * What this case protects is unchanged: a visitor can read which places the
+   * real calendar above is filtered to, and what every one of its settings is
+   * set to.
+   *
+   * **Where she reads it moved.** The polish brief split the section in two:
+   * `embed-demo` is now the widget and its introduction alone ("it gets the
+   * room it deserves and nothing else in its section"), and the settings list
+   * stands one section lower under its own `WARUM DAS ZÄHLT` heading, in a new
+   * `embed-config` block — because together they measured 1772 px and the list
+   * read as fine print under the picture rather than as the answer to "but can
+   * we decide what is in it?" (`app/[lang]/dein-kalender/page.tsx`). Asserting
+   * both halves against `embed-demo` is what failed; the split is the product
+   * decision, so the case follows it rather than the other way round.
+   */
   test("the page explains what is configured", async ({ page }) => {
     await page.goto(CALENDAR);
-    const block = page.locator("[data-block='embed-demo']");
+    const demo = page.locator("[data-block='embed-demo']");
+    const config = page.locator("[data-block='embed-config']");
 
-    // The copy names the places the calendar is filtered to, and the
-    // configuration list names every setting the embed actually has.
-    await expect(block).toContainText("Schlatkow");
+    // The demo's own copy names the places the calendar is filtered to, next
+    // to the widget that shows them.
+    await expect(demo).toContainText("Schlatkow");
+
+    // And the configuration list names every setting the embed actually has.
+    // The keys are asserted by name rather than by count: the split added a
+    // `Veranstalter` row, and a list that grows a row is not a regression —
+    // one that loses one is.
     for (const key of ["Orte", "Kategorien", "Zeitraum", "Darstellung", "Aktualisierung"]) {
-      await expect(block.locator("dt", { hasText: new RegExp(`^${key}$`, "u") })).toBeVisible();
+      await expect(config.locator("dt", { hasText: new RegExp(`^${key}$`, "u") })).toBeVisible();
     }
     // And the values, not only the labels — a list of empty keys explains
     // nothing.
-    await expect(block.locator("dd").first()).toContainText("Schmatzin");
+    await expect(config.locator("dd").first()).toContainText("Schmatzin");
   });
 });

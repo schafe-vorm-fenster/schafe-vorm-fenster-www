@@ -3,22 +3,55 @@
   display: block;
 }
 
+/*
+ * Armed: transparent, and — deliberately — *not* displaced.
+ *
+ * The rise belongs to the reveal animation below, never to the resting state.
+ * A `transform` held on an armed wrapper moves its border box for every
+ * geometric reader there is — `getBoundingClientRect`, hit testing, an in-page
+ * anchor jump, find-in-page, a screen reader's bounds — while the content it
+ * offsets is at `opacity: 0` and so can never be seen in that position. The
+ * displacement is real and permanent (an armed section stays armed until it is
+ * scrolled to), and it is the one kind of movement that buys nothing: the
+ * visitor cannot perceive the 22px, only the machinery can.
+ *
+ * TS-009-A8's cumulative-displacement budget measured exactly this — 22px on
+ * the closing section of eight route/viewport pairs, with the page's own CLS
+ * at 0.0000 because a compositor transform reflows nothing. Both readings are
+ * correct; the transform moves a box without moving the layout.
+ *
+ * Expressing the rise as a one-shot `@keyframes` instead keeps SRC-014
+ * §Motion intact to the pixel and the millisecond (rise 22px, fade, 550ms,
+ * once, on enter) and leaves both resting states — armed and revealed — at
+ * `transform: none`.
+ */
 .reveal[data-armed="true"] {
   opacity: 0;
-  transform: translateY(var(--motion-reveal-distance));
 }
 
 .reveal[data-armed="true"][data-revealed="true"] {
   opacity: 1;
-  transform: translateY(0);
-  transition:
-    opacity var(--motion-reveal-duration) var(--motion-reveal-easing),
-    transform var(--motion-reveal-duration) var(--motion-reveal-easing);
+  animation: motion-reveal-rise var(--motion-reveal-duration) var(--motion-reveal-easing) both;
+}
+
+@keyframes motion-reveal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-reveal-distance));
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .reveal[data-armed="true"] {
     opacity: 1;
-    transform: none;
+  }
+
+  .reveal[data-armed="true"][data-revealed="true"] {
+    animation: none;
   }
 }
