@@ -5,7 +5,7 @@ profile: system
 status: DRAFT
 implements: [WEB-F-040, WEB-F-041, WEB-F-043, WEB-F-044, WEB-F-045, WEB-F-046, WEB-F-049]
 sources: [SRC-001, SRC-002, SRC-003, SRC-011]
-decisions: [DEC-013, DEC-019, DEC-021, DEC-024, DEC-025, DEC-029, DEC-030, DEC-034, DEC-035, DEC-037]
+decisions: [DEC-013, DEC-019, DEC-021, DEC-024, DEC-025, DEC-029, DEC-030, DEC-034, DEC-035, DEC-037, DEC-079]
 ---
 
 # TS-008 — Live Modules and Place Search
@@ -13,9 +13,10 @@ decisions: [DEC-013, DEC-019, DEC-021, DEC-024, DEC-025, DEC-029, DEC-030, DEC-0
 ## Purpose
 
 What the live modules show, where each figure comes from, and how the
-place search behaves across all of Germany — including the two cases the
-website earns its conversions from: a covered place with no dates, and a
-place that is not covered at all.
+place search behaves — it asks for a **place name** (DEC-079) and
+resolves it against the covered communities — including the two cases
+the website earns its conversions from: a covered place with no dates,
+and a place that is not covered at all.
 
 Scope boundary: *which* elements a widened module selects and in which
 order is the relevance engine (TS-005 D1/D6/D8, WEB-F-042). This spec
@@ -69,7 +70,8 @@ Responses are validated against Zod schemas derived from the pinned
 | 2 | `GET /api/nearby?lat=&lng=&radius=` | geo-api `GET|POST /api/{token}/community/search` (geoPoint) → events-api events search | geoPoint; then `communities: [ids]`, `after`/`before` |
 | 3 | `GET /api/region/{county}/examples` | events-api events search by `counties`, ranked by activity | `counties: [geonameId]` |
 | 4 | `GET /api/stats` | events-api `GET /api/stats` (tokenless, cache-controlled) | none |
-| place search | `GET /api/places/search?q=&zip=` | geo-api `community/search` (zips today; name search via Q-025) | `countryCode=DE`, `zips` |
+| place search | `GET /api/places/search?q=` | the committed covered-community index — `src/generated/snapshots/communities.json`, built by `scripts/build-place-index.ts` from the public calendar site, ~1,760 entries of name · slug · position · municipality. Not an ecosystem call and needs no token | `q` — the typed name |
+| scope postcode (order flow only, TS-025 D3) | `GET /api/places/search?zip=` | geo-api `community/search` (zips) | `countryCode=DE`, `zips` |
 | handover | — (link built server-side) | geo-api `GET /api/{token}/community/slug/{slug}` | `slug` |
 
 Verified in the service repositories on 2026-09-10, because three of
@@ -88,6 +90,13 @@ these shapes constrain what the modules can promise:
 3. **geo-api results carry `geo` (position), `slug`, `geonameId` and the
    full hierarchy**, so distance filtering and slug-based handover (D9)
    are possible on our side without a second call.
+4. **geo-api has no name parameter, and the place search does not need
+   one.** `community/search` 3.1.3 takes `countryCode`, `lat`/`lng`,
+   `zips` and geoname id lists; the name lookup is therefore answered
+   from the committed index, which carries the municipality name the
+   suggestion row needs. Which store answers a name is **free** (D7);
+   a geo-api name endpoint (Q-025) may replace the index behind the same
+   BFF route without touching this spec.
 
 `findbyaddress` is **forbidden** (DEC-024): it triggers a paid, slow
 external Google lookup. Enforced statically (A1).
@@ -179,29 +188,40 @@ web-component mode (the default; iframe mode exists and is not used).
 | Failure | the loader failing to load leaves the section's static copy and the CTA — the page never shows an empty frame. |
 | Not a third-party embed exception | DEC-013 bans third-party embeds; this is our own product, which is why it is decided separately (DEC-030). |
 
-### D7 — Place search [FIXED: DEC-024, WEB-F-046, WEB-F-023/DEC-037]
+### D7 — Place search: the visitor types a name [FIXED: DEC-079, DEC-024, WEB-F-046, WEB-F-023/DEC-037]
 
 One component, one BFF route, the same behaviour everywhere it appears
-(D1). It covers **all of Germany**, not only covered places.
+(D1). The input is a **place name**. A postcode is not offered: not as an
+input mode, not in the label, the placeholder, a helper text or page
+copy, and no surface states an interim (WEB-F-046). A postcode is an
+administrative abstraction; a place name is what a person says when she
+says where she lives, and that is the sentence this field is asking for.
 
-| Input | Status | Upstream |
+| Input | Status | Resolved against |
 | --- | --- | --- |
-| ZIP (5 digits) | works today | geo-api `community/search?countryCode=DE&zips=` |
-| place / municipality name | **blocked on Q-025** (Typesense-backed endpoint) | geo-api, new operation |
-| coordinates (browser geolocation, opt-in) | works today | geo-api geoPoint search |
+| place name | **the feature** — matched against place names **and** municipality names | the covered-community index (D2) |
+| coordinates (browser geolocation, opt-in) | works today, offered as a control beside the field (WEB-F-053, TS-010 D5) | geo-api geoPoint search |
+| postcode | **not offered.** Five typed digits are treated like any other query: no match, no suggestion, the submit reaches the founding route | — |
 | address | **forbidden** — `findbyaddress` (DEC-024) | — |
 
-Until Q-025 lands, the search field accepts ZIP input and says so in its
-placeholder; it does not silently return nothing for a typed name.
-[PROPOSED]
+**Where the names come from is free** (see Free for the generator): today
+the committed index of D2, tomorrow a geo-api name endpoint (Q-025), or
+both behind the one BFF route. What this determination fixes is what the
+visitor is promised — a name — not which store answers her. Replacing the
+store is not a change to this spec.
+
+**Scope is the covered communities** until Q-071 is decided: the index
+knows ~1,760 of them and nothing else. A name it does not know is not an
+error (see the classification below), and no surface of the search states
+that a limit exists.
 
 Result classification — three outcomes, three destinations:
 
 | Outcome | Meaning | Destination |
 | --- | --- | --- |
-| covered, has dates | geo-api resolves it, events exist | stay / go to `/dein-ort?ort=<slug>`, chain from step 1 |
-| covered, no dates | geo-api resolves it, events empty | `/dein-ort?ort=<slug>` in the empty state (D4) |
-| not covered | geo-api returns no community | `/dein-ort/starten?ort=<slug-or-query>` (WEB-F-047) |
+| covered, has dates | a place matched, events exist | stay / go to `/dein-ort?ort=<slug>`, chain from step 1 |
+| covered, no dates | a place matched, events empty | `/dein-ort?ort=<slug>` in the empty state (D4) |
+| not covered | nothing matched the typed name | `/dein-ort/starten?ort=<slug-or-query>` (WEB-F-047) |
 
 Mechanics:
 
@@ -216,6 +236,30 @@ Mechanics:
   from ranking. SEO landing
   pages are a separate surface (WEB-F-074, TS-004 D7). [PROPOSED]
 - Input is never echoed unescaped (see D4).
+- **No surface of this module names a postcode.** Where a page carries a
+  helper text under the field it speaks about names ("tipp den Ortsnamen
+  ein"), never about a postcode and never about a feature that is still
+  to come. Asserted statically across both locales (A16).
+
+### D7a — The suggestion overlay [FIXED: DEC-079; mechanics below these properties stay free]
+
+Without suggestions a name search asks a visitor to spell a village
+correctly on the first attempt, which is exactly the failure that made
+the postcode look attractive. The overlay is therefore part of the
+feature, not a nicety, and its properties are determined.
+
+| Property | Determination |
+| --- | --- |
+| Trigger | from the **second** typed character — one letter matches hundreds of villages |
+| Matching | the typed string matches a **place name** or its **municipality name**; either way the suggestion is the place |
+| Row format | **"Ort (Gemeinde)"** — the place first, its municipality in brackets, so two villages of the same name are told apart |
+| Rows shown | **3–4**. The list is a shortcut, not a result page: further matches are neither paged nor scrolled — the visitor types one more letter |
+| Placement | an **overlay**, drawn over the page and anchored to the field; it occupies no space in the flow |
+| Layout | nothing below the field moves when the list opens or closes — no reserved space while absent, no shift while present (WEB-Q-002, CLS) |
+| No match | one non-interactive row stating that no place was found; the form still submits and reaches `/dein-ort/starten` (WEB-F-047). Never "try a postcode", never an error treatment |
+| Without JavaScript | the list does not exist and nothing is lost — the field stays the plain GET form of D7 |
+| Keyboard and a11y | the ARIA combobox pattern of TS-002 on the existing input; each suggestion is a real link, so pointer, keyboard and "open in new tab" behave alike |
+| Where | every surface that carries the search (D1); a surface may decline the enhancement (the 404 page, the order flow's scope step) but may not alter its shape |
 
 ### D8 — Live counters [FIXED: WEB-F-041, WEB-F-104; figure set constrained by Q-015]
 
@@ -269,9 +313,13 @@ Links from the website into the app are built from the geo-api community
 
 - [FREE] Visual design of module skeletons and of the empty-state block,
   within WEB-F-106 and TS-002.
-- [FREE] Typeahead mechanics of the place search (debounce, keyboard
-  handling), provided D7's no-JS path and the combobox pattern of TS-002
-  hold.
+- [FREE] Typeahead mechanics **below** D7a's determined properties:
+  debounce interval, cancellation of an in-flight request, how the active
+  row is highlighted, how the overlay is positioned — provided D7's no-JS
+  path and the combobox pattern of TS-002 hold.
+- [FREE] **Where the names come from** (D7): the committed index, a
+  geo-api name endpoint once Q-025 lands, or both behind the one BFF
+  route. The visitor is promised a name, not a store.
 - [FREE] Internal file layout of the BFF handlers and the service
   clients, provided D2 and D10 hold.
 - [FREE] Copy of the empty state and the counter labels — content phase,
@@ -294,7 +342,9 @@ Links from the website into the app are built from the geo-api community
 | TS-008-A11 | unit | Handover URL is `{APP_HOST}/{slug}` with the slug taken from a geo-api response; an unresolved slug yields the founding route, never an app link; inbound `etcc_*` parameters survive. |
 | TS-008-A12 | manual | Q-026 verification: the Portalize embed sets no cookie and introduces no consent duty, and the place-filter parameter behaves as documented — recorded before the module ships. |
 | TS-008-A13 | tool | Build fetches each service's `openapi.json`, compares it with the pinned copy, and fails on drift affecting the operations in D2 (DEC-021). |
-| TS-008-A14 | integration | Place search: a ZIP from an uncovered region returns a classified "not covered" result, never an empty answer; a typed name while Q-025 is open produces the documented ZIP hint, not a silent empty state. |
+| TS-008-A14 | integration | Place search by name: a typed place name and a typed municipality name each answer with at least one suggestion carrying that place, each rendered "Ort (Gemeinde)"; a name that matches nothing answers with the classified "not covered" outcome whose destination is `/dein-ort/starten?ort=…` — never an empty answer, never a hint to type something else, and never a postcode fallback. |
+| TS-008-A15 | e2e | The suggestion overlay (D7a): typing two characters opens a list of at most 4 rows, each matching `Ort (Gemeinde)`; the bounding box of the element directly below the field is byte-identical between closed and open state and the interaction contributes 0 to CLS; typing a name with no match shows the single no-match row and submitting still lands on `/dein-ort/starten?ort=…`; with JavaScript disabled no list exists and the form still submits. |
+| TS-008-A16 | static | No visitor-facing string of a place-search surface contains "Postleitzahl", "PLZ" or "postcode" — checked over the search module's label, placeholder, hint and submit in both locale dictionaries and over the search blocks of the page content artifacts for `/`, `/dein-ort`, `/dein-ort/starten`, `/deine-region` and `/mitmachen/registrieren` (WEB-F-046). The order flow's scope step (TS-025 D3) is out of scope: its postcode entry is a purchase configuration, not the place search. |
 
 ## Coverage
 
@@ -305,7 +355,7 @@ Links from the website into the app are built from the geo-api community
 | WEB-F-043 (embed demo via Portalize loader) | D6 · A8, A12 |
 | WEB-F-044 (empty state shifts the focus job) | D4, D3 step 2 · A6 |
 | WEB-F-045 (empty is a conversion occasion, not an error) | D4, D5 · A4, A5, A6 |
-| WEB-F-046 (Germany-wide place search, no findbyaddress) | D7, D2 · A1, A7, A14 |
+| WEB-F-046 (place search by name, no postcode offered, no findbyaddress) | D7, D7a, D2 · A1, A7, A14, A15, A16 |
 | WEB-F-049 (handover by geo-api community slug) | D9, D2 handover row · A11 |
 
 Adjacent, discharged elsewhere and only consumed here: WEB-F-042
@@ -315,10 +365,25 @@ skeletons) TS-003 D5 · WEB-Q-037/038 (BFF) TS-004 D5.
 
 ## Open points
 
-- **Q-025 (geo-api, name search).** Until it lands, WEB-F-046 is only
-  half met: Germany-wide *coverage* holds via ZIP, Germany-wide *finding
-  by name* does not. D7's ZIP-only placeholder is an interim, not the
-  target.
+- **Q-071 — search scope (jan-henrik).** D7 resolves names against the
+  covered communities. DEC-024 §1 promises all of Germany; DEC-079
+  leaves that open rather than deciding it silently. Option 1:
+  Germany-wide name search through a geo-api name endpoint (Q-025), index
+  as fallback, so `/dein-ort/starten` greets a *resolved* uncovered place.
+  Option 2: covered-only suggestions, a name without a match routes to
+  `starten` — the current state. Proposal: option 2 ships, option 1 is
+  the target. Neither option lets a search surface state a limit.
+- **Q-025 (geo-api, name search) — no longer a blocker.** The name search
+  ships on the committed index (D2), so nothing here waits for the
+  endpoint. Its value is that the index could then be retired, that the
+  refresh step (`pnpm build:place-index`) would disappear with it, and
+  that Q-071 option 1 becomes possible at all.
+- **The committed index is load-bearing and has a freshness duty (D2).**
+  It is rebuilt from the public calendar site, not per request. A release
+  whose covered-village set moved needs a rebuilt index; a stale one
+  costs *suggestions*, never the search — an unmatched name still reaches
+  `/dein-ort/starten`. Open: whether the rebuild is wired into the
+  content-update trigger (DEC-050) or stays a manual release step.
 - **Q-026 (Portalize).** Two answers needed before D6 ships: the
   place-filter parameter of the loader, and written confirmation of
   cookie freedom. Without the filter the demo is generic, which weakens

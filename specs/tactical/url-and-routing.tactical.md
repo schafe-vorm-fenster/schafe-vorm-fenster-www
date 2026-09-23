@@ -175,7 +175,8 @@ TTLs from TS-003 D5:
 
 | Route | Serves | Upstream |
 | --- | --- | --- |
-| `GET /api/places/search?q=&zip=` | place search (all pages) | geo-api (ZIP today, name via Q-025) |
+| `GET /api/places/search?q=` | place search by name (all pages) | the committed covered-community index (TS-008 D2/D7) |
+| `GET /api/places/search?zip=` | postcode → places, order flow scope step only (TS-025 D3) | geo-api `community/search` (zips) |
 | `GET /api/places/{slug}/events?window=` | dein-ort live dates, empty-state detection | events-api search |
 | `GET /api/nearby?lat=&lng=&radius=` | "this week nearby" | events-api + geo-api |
 | `GET /api/region/{county}/examples` | active example places (DEC-034) | events-api (activity signal, Q-015/Q-025) |
