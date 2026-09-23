@@ -403,3 +403,68 @@ composition rule in `TS-006` so a generator cannot pick grounds freely.
 10. **Explain-module animation** — exception to "no looping animation".
 
 Everything else above is derivable and can be written without a decision.
+
+---
+
+# Cross-check after the first four corrections (2026-09-23, evening)
+
+Themes L, H, E and A landed (design guide + contract `9572763`; place search
+`761de95`/`03c3d37`/`05061d3`; copy guide `3d0456e`/`ac629f1`/`7b14145`;
+tokens PR #447 unmerged, site `cb79f63`/`6d891cd`; hub PR #454 unmerged).
+`pnpm check:specs` reports no errors. The tree is formally consistent and
+materially not: the concept documents now state rules the specs still
+contradict. Fifteen contradictions, six of twelve routes blocked.
+
+## Contradictions, most severe first
+
+| # | What collides | Where |
+| --- | --- | --- |
+| C1 | "There is no contact form" (design guide, copy guide CG-031) vs `WEB-F-090` "all lead forms are the envoy widget" + `TS-016 D1` + `TS-016-A2` + the built `envoy-form-mount`. **No DEC records the 2026-09-23 contact decision** — it lives as a parenthesis in the guide | SRC-014:350, SRC-017:311 |
+| C2 | The explain module and the contact section each demand a primary CTA; `TS-006 D3`/`A2` allow exactly one per page. `/mitmachen` would carry five | SRC-014:363,389 vs TS-006:86 |
+| C3 | `TS-024 D6`/`A8` **require** a question heading; CG-005/CG-022 and the new lint fail on a `?` in a section title. DEC-080 inverted only TS-019-A6 and TS-022-A4 | TS-024:94 |
+| C4 | The `/ueber-uns` h1 is FIXED by `DEC-036 §3` and asserted by `TS-027-A3`; CG-033/CG-040 put it on the build-failing avoid list | SRC-017:340 |
+| C5 | "~400 inhabitants" survives in `TS-027 D3` and in `DEC-066` — which CG-001 cites as its own authority | TS-027:70 |
+| C6 | Explain module FIXED in the guide, explicitly FREE in `TS-022 D4` ("three steps is a working assumption, not a rule") | TS-022:82,147 |
+| C7 | CG-030 budgets a context-band blurb; `TS-006 D5` gives one entry, no blurb field, and phrases it as a rhetorical question CG-006 forbids | TS-006:142 |
+| C8 | CG-012/CG-008 ("deine Veranstaltung") vs `TS-021 D9` "never direct" (DEC-071 §4). No carve-out in the guide | TS-021:154 |
+| C9 | CG-003 makes `Sie` a build failure with no carve-out for the five imported legal documents rendered verbatim on `/rechtliches` | TS-029 D2, DEC-012/027 |
+| C10 | The guide says `archive ink` hex is "pending"; the token PR ships `#7A4F00`. Today the archive block references a colour that resolves to nothing and a literal is forbidden by `TS-017-A5` | SRC-014:113 |
+| C11 | Badge/tag sizes 11–13 px in the guide vs the site's "no sub-15 px font-size" and SRC-013 §5, which requests no such role | SRC-014:172,270,279 |
+| C12 | Guide's Do-Not says "no second animation until the open decisions say otherwise"; the motion exception for the explain module was granted in the same file, without a DEC and without appearing in its own open list | SRC-014:677,705 |
+| C13 | The overlay's no-match row: DEC-079 §4 (no suggestion), `TS-008 D7a` (non-interactive row), SRC-014 (row with an onward action) — three rules, one element | |
+| C14 | SRC-014's search-field rule contradicts itself on a light ground and therefore does not fix the review's "weiß auf weiß" item | SRC-014:242 |
+| C15 | CG-018 offers question headings as `use` examples under "Headings", legal only as kickers | SRC-017 |
+
+Residues: `GL-004` still defines a scene as "aha question + one mechanism";
+`TS-022:145` still frees "hero aha question"; `Q-051` still asks about "an
+unresolvable name or ZIP"; SRC-018 says "three exceptions" over four rows and
+lists CG-027 twice; CG-028 asserts a lint over fields no schema carries, with
+no `[PROPOSED]` marker; the guide's `ink` ratios run ~2 % high.
+
+## Readiness per route
+
+**green** `/mitmachen/registrieren` · **amber** `/dein-ort`,
+`/dein-ort/starten`, `/dein-kalender/bestellen`, `/deine-region/angebot`,
+`/ueber-uns/archiv`, `/rechtliches` · **red** `/`, `/mitmachen`,
+`/dein-kalender`, `/deine-region`, `/ueber-uns`.
+
+## Decisions that unblock the red routes
+
+1. Contact section supersedes DEC-009/DEC-010? (C1)
+2. One primary per page vs per-module CTAs (C2)
+3. `/ueber-uns` conversion — booking as primary, or none
+4. Amend `DEC-036 §3` to release the fixed h1 (C4)
+5. Hero scrim ladder + text shadow
+6. Header contrast — blur primitive or solid wells
+7. Category taxonomy 5 vs 6, and whether event rows keep the badge
+8. Explain-module animation — ratify the exception or revert it (C12)
+9. Free-tier position in the price section
+10. Product name
+11. Region pricing wording + map-view claim
+12. Path-03 free/paid boundary
+13. Search scope `Q-071` (proposal written, non-blocking)
+
+Safe to write without a decision: the proof split and its schema fields,
+the curation determination and the source→calendar module, the context-band
+blurb field, the language-switch determination, the newsletter block on `/`,
+the biography reconciliation, and the residues listed above.
