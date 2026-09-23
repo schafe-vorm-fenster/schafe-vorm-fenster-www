@@ -11,7 +11,7 @@ work done in this repository belongs here.
 | | Lives in `go-to-market-os` | Lives here |
 | --- | --- | --- |
 | Answers | what the website communicates | how it is produced |
-| Documents | communication principles, relevance model, information architecture | [`website-content-production.concept.md`](./website-content-production.concept.md) |
+| Documents | communication principles, relevance model, information architecture, brand voice | [`website-content-production.concept.md`](./website-content-production.concept.md), [`website-design-system.md`](./website-design-system.md), [`website-copy-guide.md`](./website-copy-guide.md) |
 | Status | binding | draft, and not binding until its decision point |
 | References | `audiences/`, `offerings/`, `proof/` by relative path | this repository's schemas, compositions, components, playbooks |
 
@@ -46,7 +46,7 @@ The documents reference `strategy/conversion-goals/`, `audiences/`,
 exist only in `go-to-market-os`, which is why the documents cannot live
 here.
 
-## The two concept documents that live here
+## The three concept documents that live here
 
 `website-content-production.concept.md` specifies the content pipeline —
 source layer, schema hierarchy, mapping skeleton, components, processes.
@@ -61,6 +61,15 @@ of `@schafe-vorm-fenster/brand-design` and adds the layer above them —
 the components and composition that the tokens alone do not carry. The
 visual boards are in [`v2.0/`](v2.0/).
 
+`website-copy-guide.md` is the same move one layer over: it consumes the
+hub's tone of voice (`packages/identity/brand-identity/tone-of-voice.md`)
+and the communication principles, and adds the website's own cut — the
+register per page, the structure of a section, the per-block length
+budgets at 390 px, and the use/avoid word list. It is bound to the build
+by [`../specs/contracts/copy-contract.md`](../specs/contracts/copy-contract.md),
+exactly as the design system is bound by the design-system contract
+(DEC-080).
+
 ## What stays in this repository
 
 - `website-content-production.concept.md` — the content production system:
@@ -69,6 +78,11 @@ visual boards are in [`v2.0/`](v2.0/).
   multilingual page copy. It implements ADR-001 and DEC-020 and carries
   the relevance contract of TS-005. Draft; it is a working concept, not a
   governing document.
+- `website-design-system.md` (SRC-014) — the binding visual specification,
+  bound by the design-system contract (SRC-013, DEC-056).
+- `website-copy-guide.md` (SRC-017) — the binding wording specification,
+  bound by the copy contract (SRC-018, DEC-080). It governs how the
+  website writes; what it says stays in the hub.
 - `v1.0/` — the clickable prototype. It is an implementation artifact, not
   content: it renders the relevance model rather than defining it.
 - `_archive/` — raw workshop input the concept documents were derived from.
