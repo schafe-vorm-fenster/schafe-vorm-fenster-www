@@ -21,7 +21,7 @@ files themselves.
 | content-pipeline | WEB-F-080–089 | SRC-006, SRC-009 | DEC-012, DEC-020 | Q-018 |
 | forms-and-leads | WEB-F-090–096 | SRC-003 | DEC-009–013 | Q-017, Q-020, Q-022 |
 | rendering-and-resilience | WEB-F-100–106 | SRC-002 | DEC-019, DEC-033 | — |
-| place-search | WEB-F-023, 046–049 | SRC-003, SRC-011, entre | DEC-024, DEC-028, DEC-029, DEC-036, DEC-037 | Q-025, Q-028 |
+| place-search | WEB-F-023, 046–049 | SRC-003, SRC-011, entre | DEC-024, DEC-028, DEC-029, DEC-036, DEC-037, DEC-079 | Q-025, Q-028, Q-071 |
 | delivery-pipeline | WEB-C-020–023 | SRC-012 | DEC-031 | Q-027 |
 | performance | WEB-Q-001–008 | SRC-006, SRC-007 | DEC-007 | — |
 | accessibility | WEB-Q-010–019, 026–027 | SRC-006 | DEC-012 | Q-013, Q-021 |

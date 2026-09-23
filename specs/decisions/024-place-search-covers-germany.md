@@ -23,3 +23,26 @@ decided_by: jan-henrik.hempel
 Coverage is fragmented; the wireframes do not handle the unknown place
 (verified 2026-09-09). geo-api currently searches by ZIP and geoname IDs
 only.
+
+## Amendment 2026-09-23 — DEC-079
+
+This record is not rewritten; two of its four points are re-read.
+
+**Point 3 is superseded.** Name search was described here as something
+geo-api has to build first. It is not: the website searches by name
+today, over the committed covered-community index, and `Q-025` continues
+as an upstream demand that blocks nothing that ships (DEC-079 §2).
+`findbyaddress` stays forbidden — that half of point 3 is untouched.
+
+**Point 1 is now an open question, not a settled fact.** "All of
+Germany" was written when the ZIP lookup was assumed to be the search:
+geo-api resolves any German postcode, so coverage looked Germany-wide by
+construction. The name index knows the ~1,760 covered communities only,
+so a name outside them yields no suggestion — and still reaches
+`/dein-ort/starten` on submit, which is point 2 working as intended.
+Whether Germany-wide *finding by name* becomes a requirement is
+**Q-071**; until it is answered, read point 1 as the target, not as the
+current state.
+
+**Points 2 and 4 stand unchanged** and still carry WEB-F-047 and the
+proof rule.
