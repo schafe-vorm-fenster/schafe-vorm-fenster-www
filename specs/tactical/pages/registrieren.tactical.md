@@ -147,7 +147,7 @@ only network calls are the read-only BFF routes of TS-004 D5.
 | ID | Level | Check |
 | --- | --- | --- |
 | TS-023-A1 | e2e | `/mitmachen/registrieren` with no parameters shows step 1 with the place search as the first interactive element, no proof block and no other live module, and exactly one `data-cta="primary"`. |
-| TS-023-A2 | e2e | Answering step 1 with a resolving ZIP puts `ort=<slug>` in the URL and shows step 2; reload keeps step 2 with the place answered and named; browser Back returns to step 1 with the place still answered. |
+| TS-023-A2 | e2e | Answering step 1 with a typed place name that matches puts `ort=<slug>` in the URL and shows step 2; reload keeps step 2 with the place answered and named; browser Back returns to step 1 with the place still answered. |
 | TS-023-A3 | e2e | The URL after step 2, opened in a fresh private window, shows the same step with the same answers; the devtools Application panel shows no cookie and no `localStorage`/`sessionStorage`/IndexedDB entry set by the page. |
 | TS-023-A4 | unit | Step derivation: the shown step follows from the answers present; `schritt` pointing forward past an unanswered step is ignored, pointing back to an answered step is honoured; an invalid enum or slug is dropped and its step re-asked. |
 | TS-023-A5 | integration | `?ort=` with an unknown slug renders step 1 unanswered, no error page, no outbound app link, and the raw value appears nowhere except escaped inside the search field. |
@@ -188,9 +188,13 @@ WEB-F-090 / WEB-F-092 (TS-016) · WEB-F-087 (TS-007).
   TS-006 states for every page. Decision point: jan-henrik.
 - **TS-008 D1 omits this route** from its place-search surface list
   although step 1 is one. The row belongs there, not here — TS-008.
-- **Q-025 bites hardest here.** Until geo-api has name search, step 1
-  accepts ZIP only — on the one page whose visitor is most likely to type
-  a village name. Addressee: geo-api.
+- **Step 1 is the page that needed name search most, and has it.** The
+  visitor here types the name of her own village (TS-008 D7), and the
+  overlay of D7a disambiguates it by municipality — which is what
+  A6's several-communities case is about. Residual, not a blocker: the
+  scope of that matching is Q-071, and an unmatched name on this page
+  leads to the founding route like everywhere else. Addressee:
+  jan-henrik (Q-071).
 - **Q-044 leaves steps 2 and 3 without a component.** SRC-014 specifies
   no single-choice control. Addressee: design.
 - **Parameter names are [PROPOSED].** `ort` is fixed (WEB-F-023); `wer`,

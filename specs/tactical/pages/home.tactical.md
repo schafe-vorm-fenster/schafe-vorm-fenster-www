@@ -174,7 +174,7 @@ not conversion.
 | TS-019-A13 | e2e | With the analytics collector observed: the calendar-open click of A3 emits `save-calendar-to-homescreen` with `stage=handover` exactly once; the search submit of A2, a scene click and a context-band click emit no conversion event. |
 | TS-019-A14 | e2e | The counter block on `/` renders only the dates figure; no places figure, no updates-today figure, and no static traction number anywhere on the page. |
 | TS-019-A15 | manual | The eight-point compliance check of SRC-001 passes for the home brief, with point 8 (stage 0 complete on its own) evidenced by A2 and A11. |
-| TS-019-A16 | e2e | Open `/` (and `/en`) over a throttled document so the streamed branch is still on the wire at first paint, and type a postcode into the hero search with real key events as soon as the field exists. After the page settles the field still carries the typed value and its submit lands on the place route with it; across the load exactly **one** element ever carries the field's id. The same holds on every other route with a place search. |
+| TS-019-A16 | e2e | Open `/` (and `/en`) over a throttled document so the streamed branch is still on the wire at first paint, and type a place name into the hero search with real key events as soon as the field exists. After the page settles the field still carries the typed value and its submit lands on the place route with it; across the load exactly **one** element ever carries the field's id. The same holds on every other route with a place search. |
 
 ## Coverage
 
@@ -205,10 +205,14 @@ not conversion.
   the starting *proof type* per entry, not a scene order; D3a maps it
   across. **Answered by:** gtm, by extending the matrix with a scene
   column — or by confirming the mapping.
-- **Place search accepts ZIP only until Q-025.** S1 is the dominant
-  element of the whole page, so the restriction is visible in the hero
-  placeholder. Blocked on Q-025 (geo-api name search); the wording is a
-  content-phase task once it resolves.
+- **Search scope on the page's dominant element (Q-071).** S1 is the
+  search, and the search asks for a place name (TS-008 D7) with the
+  overlay of D7a. Its suggestions come from the covered communities, so a
+  name outside them yields none and submits to `/dein-ort/starten` (S4).
+  Whether the scope becomes Germany-wide is Q-071. The page's copy does
+  not depend on the answer, because no surface of the field states a
+  limit — but the hero is where a wrong answer would be most expensive.
+  **Answered by:** jan-henrik.
 - **Q-044 blocks generation of this page.** Proof card and stream, the
   live-module shells and the context band are not in SRC-014's six
   specified components, and no component declares what it renders.

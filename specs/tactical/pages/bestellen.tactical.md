@@ -46,8 +46,8 @@ one screen (tick → the chosen scope beside it; the live preview of its content
 
 | Mode | Input | Resolution | State today |
 | --- | --- | --- | --- |
-| Places | the place search component (TS-008 D7), unchanged | each hit becomes a removable chip carrying the geo-api `slug` | ZIP-only until Q-025 lands — a Verwaltung normally types its municipality name, so this bites hardest here |
-| Postcode | 5 digits | resolves to the places the ZIP covers; each becomes its own chip, never a single opaque "ZIP" item | works today |
+| Places | the place search component (TS-008 D7), unchanged — a typed **name**, matched against place and municipality names | each hit becomes a removable chip carrying the geo-api `slug` | works today; a Verwaltung types its municipality name, which the name matching of TS-008 D7 answers with the places behind it |
+| Postcode | 5 digits, in a field of its own | resolves to the places the postcode covers; each becomes its own chip, never a single opaque "PLZ" item | works today. This is a **purchase configuration**, not the visitor's place search: DEC-079 removes the postcode from the search, and DEC-069 §8 keeps it here, because a buyer drawing a boundary is a different act from a resident naming her village |
 | County | county selection | one chip for the county; the places behind it are **not** expanded into chips (DEC-034) | no contracted route returns the places of a county — UNKNOWN, see Open points |
 
 The selection lives in the URL (D8), never in a path segment (WEB-F-023, DEC-037);
@@ -227,9 +227,10 @@ rendering concern, not a commercial one.
 - **TS-004 owner — `GET /api/scope/preview` is a new BFF route** absent from the D5
   inventory; **TS-014 owner — it needs a limit row** (30/min, D10). Without it the
   preview degenerates into browser-side fan-out.
-- **geo-api (Q-025 + new) — county scope.** No contracted operation returns a
+- **geo-api (new) — county scope.** No contracted operation returns a
   county's places or their event counts, so D3's county mode and D4's county preview
-  rest on nothing. ZIP-only search hurts most here.
+  rest on nothing. The places and postcode modes are unaffected: names resolve
+  against the committed index (TS-008 D2) and postcodes against `community/search`.
 - **Product / pricing (SRC-003 pricing rule) — what does a scope cost?** 480 €/year
   is published for "your places" with no rule for how many, none for a county; the
   flow can assemble a scope it cannot price.

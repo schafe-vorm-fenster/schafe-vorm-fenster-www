@@ -53,22 +53,27 @@ the place's name and the page's only primary treatment. Block 2:
 | 2.3 | Who usually starts it: Verein, Feuerwehr, Kirche, Gemeinde | — the scene | a scene, not a feature list, not a role switcher (TS-006 D8) |
 | 2.4 | Place search, so a visitor who mistyped can search again | — live module | same component, same behaviour as everywhere (TS-008 D7) |
 
-### D3 — The boundary: what makes a visitor land here [FIXED: TS-008 D7, DEC-024]
+### D3 — The boundary: what makes a visitor land here [FIXED: TS-008 D7, DEC-024, DEC-079]
 
 The classification is made **once, by the BFF, at search time**, and is
-not re-derived by any page from the result of a second lookup.
+not re-derived by any page from the result of a second lookup. The
+visitor got here by typing a **name** (TS-008 D7) — a name the place
+lookup matched to nothing.
 
-| geo-api `community/search` | events in window | Destination |
+| Place lookup (TS-008 D7) | events in window | Destination |
 | --- | --- | --- |
-| ≥ 1 community, dates exist | yes | `/dein-ort?ort=<slug>` |
-| ≥ 1 community, no dates | no | `/dein-ort?ort=<slug>`, empty state (TS-008 D4) |
-| **zero communities** | not asked | **`/dein-ort/starten?ort=<raw query>`** |
+| ≥ 1 match, dates exist | yes | `/dein-ort?ort=<slug>` |
+| ≥ 1 match, no dates | no | `/dein-ort?ort=<slug>`, empty state (TS-008 D4) |
+| **no match for the typed name** | not asked | **`/dein-ort/starten?ort=<raw query>`** |
 | upstream error | — | not a classification: TS-008 D5 applies, the visitor stays where she is |
 
 Binding: the two "nothing here" surfaces share no copy string — one is a
-place with no *dates*, this one a place with no *entry* (A6); "not
-covered" is a positive answer from geo-api, so a failure never produces a
-founding page; entry without a parameter is legitimate (D4), not an error.
+place with no *dates*, this one a place with no *entry* (A6); "no match"
+is a positive answer from the lookup, so a failure never produces a
+founding page; entry without a parameter is legitimate (D4), not an
+error. A name that matched nothing is never treated as a mistyping to be
+corrected with another kind of input — the page is the answer, not a
+retry prompt (WEB-F-047, DEC-079 §4).
 
 ### D4 — The place is a query parameter, and the URL is the whole payload [FIXED: DEC-037, WEB-F-023; validation PROPOSED]
 
@@ -213,14 +218,21 @@ D7 · WEB-F-024 TS-005 D5 · WEB-F-049 TS-008 D9 · WEB-F-001–009 TS-006.
   block list or the empty-state rule invalidates them. DRAFT until Q-028
   closes.
 - **No geo anchor for an uncovered place — new demand to geo-api,
-  extending Q-025/Q-032.** D7 falls back to IP geo or a build-time
-  example. Can `community/search` return the nearest covered community,
-  or at least coordinates, for an unresolvable ZIP or name?
+  extending Q-025/Q-032 (Q-051).** D7 falls back to IP geo or a
+  build-time example. Can `community/search` return the nearest covered
+  community, or at least coordinates, for a name the index does not know?
+  Q-071 option 1 would answer this by construction: a Germany-wide name
+  endpoint resolves the place before it is declared uncovered.
 - **Indexing contradiction — SEO/spec owner.** TS-011 D9 makes `?ort=`
   place pages indexable with a parameter-free canonical; TS-008 D7
   proposes `noindex, follow`. D10 follows TS-011; one must be withdrawn.
-- **Q-025 gates the real entry path (geo-api).** Until name search lands
-  a village is reachable only by ZIP; a typed name gets the ZIP hint.
+- **Q-071 — how far the entry path reaches (jan-henrik).** The typed
+  name is matched against the covered communities (TS-008 D7), so a
+  resident of an uncovered village gets no suggestion and arrives here
+  with her raw query in `?ort=` (D4). That is the specified behaviour,
+  not a defect. What is open is whether the search should first *resolve*
+  her village Germany-wide — which would give this page a real place name
+  and an anchor — carried by Q-071 with Q-025 as its upstream demand.
 - **`?ort=` carries a non-slug value into TS-023 (its author / app
   team).** Here the parameter is raw user input, not a geo-api slug.
   TS-023 must accept and re-validate it, and never build an app URL from
