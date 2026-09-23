@@ -12,6 +12,8 @@ it.
 
 - `api-contracts.md` — the service contract register (SRC-011)
 - `design-system-contract.md` — what the website needs from the styleguide (SRC-013)
+- `copy-contract.md` — which copy rule of SRC-017 is enforced by which
+  mechanism, and which are declared human review (SRC-018, DEC-080)
 - Content-format Zod schemas live in code (`src/domain/`), required by
   WEB-F-089; this folder documents *which* contracts exist and where.
 

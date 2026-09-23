@@ -4,8 +4,8 @@ id: TS-007
 profile: system
 status: DRAFT
 implements: [WEB-F-025, WEB-F-039, WEB-F-080, WEB-F-081, WEB-F-082, WEB-F-083, WEB-F-084, WEB-F-085, WEB-F-086, WEB-F-087, WEB-F-088, WEB-F-089]
-sources: [SRC-006, SRC-008, SRC-009]
-decisions: [DEC-012, DEC-020, DEC-022, DEC-026, DEC-027, DEC-039, DEC-041]
+sources: [SRC-006, SRC-008, SRC-009, SRC-017, SRC-018]
+decisions: [DEC-012, DEC-020, DEC-022, DEC-026, DEC-027, DEC-039, DEC-041, DEC-080]
 ---
 
 # TS-007 — Content Pipeline
@@ -138,8 +138,8 @@ Binding schema rules:
 
 | Rule | Realisation |
 | --- | --- |
-| authoring guidance is machine-readable | every field carries `describe()`: what belongs in it, phrasing, tone |
-| length budget is machine-readable | every field with a visual limit carries `max()`; the number comes from the component and the design kit |
+| authoring guidance is machine-readable | every field carries `describe()`: what belongs in it, phrasing, tone — naming the `CG-###` rule of SRC-017 that governs it, rather than paraphrasing it |
+| length budget is machine-readable | every field with a visual limit carries `max()`; the number comes from SRC-017 §6 until the component manifest (SRC-013 §1) supersedes it, and §6 records the derivation so the replacement is comparable |
 | types are closed | discriminated union over `type`; an unknown `type` fails to parse |
 | source entities are constrained per type | each type declares its allowed source entities; a `proof-card` claiming to derive from `offerings` fails validation |
 | selectable types are complete or invalid | types 3, 10, 12, 14, 16 must carry full `RelevanceFacets` (D7); the engine has no fallback |
@@ -239,9 +239,17 @@ TS-004 D7.
 Terminology is the same problem one layer down: the word used in copy for
 a bound term is governed by `specs/glossary/glossary.md`, which is a
 production input, not documentation (concept A.3). A term in copy that
-the glossary does not carry is a finding. The register currently lacks
-the two columns generation needs — use-this-word and avoid-this-word per
-locale (open points).
+the glossary does not carry is a finding.
+
+**The register carries the two columns generation needs** — *use* and
+*avoid*, per locale (DEC-080). They are filled only where the review of
+2026-09-22 supports a word; an empty cell is a gap on the record, never a
+licence to invent one. The website-specific additions — the rejected
+headings, the back-reference phrases, the generic claims — live in
+SRC-017 §9, and SRC-018 binds both lists as the single avoid list
+`check:content` reads (CG-040). Q-057 stays open for the hub import; it
+is about where the vocabulary finally lives, not about whether the
+columns exist.
 
 ### D10 — Legal texts: imported, validated, never generated [FIXED: WEB-F-088, DEC-012, DEC-027, DEC-039]
 
@@ -292,8 +300,17 @@ non-zero exit, named file, named record. Nothing on this list warns.
 | 8 | harmonisation | left-column divergence between locale variants of one id (D8.6) |
 | 9 | slot binding | a content file bound to no composition slot, or to more than one; a required slot with no file (concept C.3) |
 | 10 | segment independence | a resolved place name in a generated string instead of a named slot (D7) |
-| 11 | glossary conformance | a banned term in a field where it is banned — `Portalize` in a navigation label or route-facing field (D9, WEB-F-002) |
+| 11 | glossary conformance | a banned term in a field where it is banned — the glossary's **avoid** column, the avoid list of SRC-017 §9, and `Portalize` outside the one sentence DEC-052 §1 allows or in any navigation label (D9, WEB-F-002, WEB-C-014, CG-038/CG-040) |
 | 12 | legal | a legal file with an anchor outside the TS-004 D8 registry, or carrying generation-only fields (D10) |
+| 13 | copy structure | a question mark in a section-title field; a back-reference phrase; a word stem repeated inside one field; `im Amt` without a second addressee beside it; a typed traction figure in a claim field (SRC-018: CG-004, CG-005, CG-015, CG-034, CG-036) |
+| 14 | register | a `Sie`/`Ihnen`/`Ihre*` form, or one field mixing `du` and `ihr` address (DEC-066, SRC-018: CG-002, CG-003) |
+
+**Where rows 11, 13 and 14 come from.** They are the lint column of
+`specs/contracts/copy-contract.md` (SRC-018), which assigns every rule of
+SRC-017 to a mechanism — schema `max()`/`describe()` (D5), one of these
+rows, an e2e assertion, or the editorial gate (D11). A copy rule with no
+mechanism is not a rule; the contract is where that is prevented, and
+this table is where the machine half of it runs.
 
 Check 4 is the one with a timing problem rather than a logic problem:
 clearance is denormalised at generation time and can be revoked
@@ -422,15 +439,17 @@ first playbook is written. [PROPOSED]
   Question: who owns the composition spec, and is the format TypeScript
   (typed, references the Zod schemas) or YAML?
 - **Length budgets are provisional.** D5 requires `max()` from the
-  component; the components do not exist. Interim: take them from the
-  wireframes at 390 px and mark them provisional in `describe()`.
-  Question: what re-flags content when a component later changes its
-  budget?
-- **Glossary columns.** D9 leans on `specs/glossary/glossary.md` as a
-  production input, but the `GL-###` register carries meanings, not copy
-  words. Question: who fills the use-this-word / avoid-this-word columns
-  per locale, and does the register stay in `specs/` once it is a
-  production input?
+  component; the components do not exist. Interim: **SRC-017 §6**, which
+  derives every budget from the SRC-014 type scale at 390 px and records
+  the derivation, marked provisional in `describe()`. Question unchanged:
+  what re-flags content when a component later changes its budget?
+- **Glossary columns.** ~~The `GL-###` register carries meanings, not copy
+  words.~~ **The columns exist** (DEC-080): *use* and *avoid*, filled from
+  the 2026-09-22 review, empty where it supports no word. Two parts of the
+  question stay open: who fills the empty cells — the review rejects
+  three headings without naming replacements — and whether the register
+  stays in `specs/` once `@schafe-vorm-fenster/glossary` ships (Q-057,
+  DEC-062).
 - **Legal import owns no locale dimension yet.** `import.yaml` lists five
   documents with single targets while DEC-027 requires DE and EN.
   Question: do the English Google Docs exist, and who changes the import

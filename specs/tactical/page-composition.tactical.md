@@ -4,8 +4,8 @@ id: TS-006
 profile: rule
 status: DRAFT
 implements: [WEB-F-001, WEB-F-003, WEB-F-004, WEB-F-005, WEB-F-006, WEB-F-007, WEB-F-008, WEB-F-009, WEB-F-019, WEB-F-020, WEB-F-022]
-sources: [SRC-001, SRC-003]
-decisions: [DEC-036, DEC-039]
+sources: [SRC-001, SRC-003, SRC-017, SRC-018]
+decisions: [DEC-036, DEC-039, DEC-080]
 ---
 
 # TS-006 — Page Composition Rules
@@ -166,23 +166,38 @@ context band: the band's content and the closing block are the same
 three jobs, so they render once, as the last block, rather than twice in
 sequence [PROPOSED].
 
-### D7 — Scenes, not labels [FIXED: SRC-001 §1a; lint artefact PROPOSED]
+### D7 — Scenes, not labels [FIXED: SRC-001 §1a as applied by SRC-017; DEC-080]
 
 Every job introduction on every page is a scene block with a fixed shape:
 
-1. an opener phrased as the visitor's own question ("… and the date just
-   appears in the calendar?");
+1. an **opener that is a statement**, and one that says what works
+   (SRC-017 CG-005). A question is permitted only where it is addressed
+   to the reader and the block answers it in the next sentence
+   (CG-006) — SRC-001 §1a's "aha question" is the *stance* the opener
+   takes, not a punctuation mark it has to carry, and the review of
+   2026-09-22 rejected the rhetorical form the earlier wording of this
+   determination required;
 2. exactly **one** mechanism, declared as the block's `mechanism` prop
    (e.g. WhatsApp, calendar connection, embed) — a block with two
    mechanisms is two blocks;
 3. one concrete instance, live or proof-backed, as close to the visitor
    as the data allows (TS-005).
 
+**A block is self-contained** (CG-004). It carries no reference to an
+earlier block: a reader who arrived by scrolling, by a deep link or from
+a search result reads it whole. Dramaturgy still builds across blocks;
+reference does not.
+
 Feature lists are not a permitted block type anywhere on the site.
-Generic claims are not copy: a term list ("einfach", "digital", "für
-alle", "modern", "innovativ", …) is maintained as a content lint list and
-fails the build on a hit [PROPOSED — see Open points: no such list exists
-as an artefact yet].
+Generic claims are not copy, and **the term list now exists**: it is the
+avoid list of SRC-017 §9 together with the avoid column of
+`specs/glossary/glossary.md`. SRC-018 binds it as a `check:content` row
+(CG-040), so a hit fails the build rather than a review.
+
+The remaining wording rules of SRC-017 — register and address, economy,
+heading vocabulary, the per-block length budgets — are not restated here.
+They reach the page through the schema and the lint (SRC-018), and this
+determination owns only what is true of a block's *structure*.
 
 ### D8 — No self-classification [FIXED: SRC-001 §6]
 
@@ -271,7 +286,7 @@ the promise is removed rather than softened.
 | TS-006-A5 | e2e | From every page, each of the four jobs is reachable in ≤ 1 click (header and context band targets resolve inside the TS-004 D1 inventory). |
 | TS-006-A6 | e2e | Every page renders exactly one context band, naming exactly the three non-focus jobs, in DOM order after the last argument block and before the closing block. |
 | TS-006-A7 | e2e | The last block of every page is the closing CTA with the same conversion goal ID and target as the primary conversion — or, where `primaryConversion` is `null`, the merged three-job block. |
-| TS-006-A8 | static | Content lint: zero hits of the generic-claims term list in page copy; every scene block declares exactly one `mechanism` and an opener in question form. |
+| TS-006-A8 | static | Content lint (SRC-018): zero hits of the avoid list — SRC-017 §9 plus the glossary's avoid column — in page copy; no section-title field contains a question mark (CG-005); every scene block declares exactly one `mechanism`. |
 | TS-006-A9 | static | No role switcher, audience selector, or self-classification control exists in the component inventory or in any rendered page. |
 | TS-006-A10 | e2e | Stage-0 render (no geo, no referrer, no UTM, no params) and stage-3 render of the same page have identical block structure and identical `focusJob`; only module selection and order differ. The `/dein-ort` empty state is the one registered exception. |
 | TS-006-A11 | static | Manifest set validates both ways against the SRC-003 conversion map; `order-promotion-material` is reported as the one accepted gap with Q-005. |
@@ -279,6 +294,7 @@ the promise is removed rather than softened.
 | TS-006-A13 | e2e | `/deine-region` shows the two-working-day promise at the quote form and in the confirmation, both from the same constant. |
 | TS-006-A14 | manual | The eight-point compliance check of SRC-001 passes for each page brief before its content ships — points 4, 7 and 8 reviewed by hand, the rest evidenced by A1–A13. |
 | TS-006-A15 | e2e | The five second-level pages (`/dein-ort/starten`, `/mitmachen/registrieren`, `/dein-kalender/bestellen`, `/deine-region/angebot`, `/ueber-uns/archiv`) each render exactly one breadcrumb `<nav>` with an accessible name, positioned before the `h1` in DOM order, whose last item is not a link. No `data-cta` attribute occurs inside it, and no other page renders one. |
+| TS-006-A16 | manual | The copy rules SRC-018 assigns to `review` pass for every slot before it is approved: a reader-directed question is answered in its block (CG-006), each section hands off to the next (CG-008), the benefit stands before the concept (CG-010), every claim carries an example (CG-011), no heading is flat or abstract (CG-017/CG-018), a proof card states a win (CG-027), and nothing on the page is literally untrue (CG-033). |
 
 ## Coverage
 
@@ -290,7 +306,7 @@ the promise is removed rather than softened.
 | WEB-F-005 (context band, position and contents) | D2, D5 · A6 |
 | WEB-F-006 (page ends in its focus job's CTA) | D2, D6 · A7 |
 | WEB-F-007 ("know what is on" fulfilled in place) | D4 · A4 |
-| WEB-F-008 (scenes, one mechanism, no generic claims) | D7 · A8 |
+| WEB-F-008 (scenes, one mechanism, no generic claims) | D7 · A8, A16 |
 | WEB-F-009 (no role switcher, no self-classification) | D8 · A9, A10 |
 | WEB-F-019 (conversion map complete) | D9 · A11 |
 | WEB-F-020 (pricing display rule) | D10 · A12 |
@@ -314,10 +330,14 @@ the promise is removed rather than softened.
   them for `/ueber-uns` and `/ueber-uns/archiv`; SRC-001 §7 requires band
   *then* CTA, SRC-003 makes them the same three jobs. Confirm the merge,
   or accept the same three jobs twice in a row.
-- **The generic-claims term list does not exist.** D7 and A8 depend on
-  it. UNKNOWN: does the tone-of-voice foundation in `go-to-market-os`
-  carry a banned-term list that A8 can consume, or must one be created —
-  and if created, where does it live so the hub stays the single source?
+- ~~**The generic-claims term list does not exist.**~~ **Closed by
+  DEC-080.** It is the avoid list of SRC-017 §9 plus the avoid column of
+  `specs/glossary/glossary.md`, bound as a lint row by SRC-018 (CG-040).
+  The hub stays the single source for the brand-level word rules; the
+  guide carries the website's cut and cites the hub by path. What is
+  still open is the handover: which anti-patterns move into
+  `brand-identity/tone-of-voice.md` once it is rewritten (SRC-017 open
+  decision 3).
 - **Q-005 keeps the conversion map incomplete.** `order-promotion-material`
   has no page. D9 accepts it as a named exception; the decision (website
   page or app) is still open.

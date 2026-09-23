@@ -24,6 +24,8 @@ date: 2026-09-09
 | SRC-015 | `src/clients/*/openapi.json` — the six pinned service specifications | machine contract | high | fetched from production 2026-09-11 and committed; refreshed by `pnpm fetch:openapi` (DEC-058) | read |
 | SRC-013 | `specs/contracts/design-system-contract.md` — the expectation against `@schafe-vorm-fenster/brand-design` | contract | high | states what the component layer must deliver; tokens already read from the installed package v2.6.0 | registered |
 | SRC-012 | `classification-api/.github/workflows/` — reference CI/CD setup (typecheck · lint · coverage · knip · jscpd · preview · auto-merge · deploy) | external reference setup | high | running production pipeline of a sibling service; adopted as the model by DEC-031 | read |
+| SRC-017 | `concept/website-copy-guide.md` — the website's wording specification | copy specification, governed | high | derived rule by rule from the owner's review of 2026-09-22 (`plan/reviews/2026-09-23/`), binding per DEC-080; inherits from SRC-001 and the hub's `brand-identity/tone-of-voice.md` | read |
+| SRC-018 | `specs/contracts/copy-contract.md` — which copy rule is enforced by which mechanism | contract | high | states what schema, lint, e2e and the editorial gate owe SRC-017; the copy counterpart of SRC-013 | registered |
 
 ## Notes
 

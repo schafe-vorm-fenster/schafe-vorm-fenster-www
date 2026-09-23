@@ -164,7 +164,7 @@ not conversion.
 | TS-019-A3 | e2e | Open `/?ort=<covered place with dates>`. Block 1 shows the place name and exactly 3 event rows; the primary CTA opens the place calendar on `app.*` and carries the place slug. |
 | TS-019-A4 | e2e | Open `/?ort=<covered place with no dates>`. Block 1 shows the nearby module under a heading that names its radius (not the place), plus a publish-the-first-date CTA targeting the registration route. No text claims dates in that place. |
 | TS-019-A5 | e2e | Type an uncovered place into the search on `/` and submit. The browser navigates to `/dein-ort/starten?ort=…`; `/` itself renders no uncovered place as data. |
-| TS-019-A6 | e2e | Count scene blocks on `/`: exactly 3, each with exactly one `mechanism` of `whatsapp` · `embed` · `provenance`, each opener in question form. |
+| TS-019-A6 | e2e | Count scene blocks on `/`: exactly 3, each with exactly one `mechanism` of `whatsapp` · `embed` · `provenance`. Every scene opener is a **statement** — it carries no question mark unless the same block renders the answering sentence directly beneath it (TS-006 D7, SRC-017 CG-005/CG-006). |
 | TS-019-A7 | e2e | Load `/` once with `Referer: https://www.linkedin.com/` and once with no referrer. Scene DOM order matches the D3a table for `professional` and for `direct` respectively; block set and block order are otherwise identical between the two loads. |
 | TS-019-A8 | e2e | The proof stream on `/` renders exactly 5 elements in every one of the loads of A7 and A2. |
 | TS-019-A9 | e2e | DOM order on `/` is: block 1 · scenes · provenance · proof stream · context band · closing CTA, with nothing but the global footer after the closing CTA. |

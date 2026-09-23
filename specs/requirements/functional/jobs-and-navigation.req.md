@@ -2,7 +2,7 @@
 artefact: requirements
 area: jobs-and-navigation
 status: DRAFT
-sources: [SRC-001, SRC-003]
+sources: [SRC-001, SRC-003, SRC-017, SRC-018]
 ---
 
 # Jobs and Navigation
@@ -20,7 +20,7 @@ The four jobs, their conversions and audience mappings are defined there
 | WEB-F-005 | Every page shall carry a context band naming the other three jobs, phrased as an offer, placed below the main argument and above the closing CTA. | SRC-001#2 | S2 |
 | WEB-F-006 | The last block of every page shall be the CTA of its focus job (identical to the primary conversion), preceded by the context band. Section order and colour rhythm follow SRC-014 "Page Rhythm". | SRC-001#7, SRC-014#page-rhythm | S2 |
 | WEB-F-007 | The job "know what is on" shall be fulfilled in place on the home page (place search, or live dates of the visitor's place), not offered as a click target. | SRC-001#1 | S2 |
-| WEB-F-008 | Each job shall be introduced through a concrete scene: opening with the visitor's own "aha" question, showing exactly one mechanism, never a feature list; generic claims ("simple", "digital") are not copy. | SRC-001#1a-scenes-not-labels | S2 |
+| WEB-F-008 | Each job shall be introduced through a concrete scene: an opener that is a statement of what works, exactly one mechanism, a block that stands without the one above it, never a feature list. Generic claims ("einfach", "digital") are not copy. How that copy is written — register, structure, concreteness, economy, headings, length budgets, truth — is SRC-017; which mechanism enforces which rule is SRC-018. | SRC-001#1a-scenes-not-labels, SRC-017, SRC-018, DEC-080 | S3 |
 | WEB-F-009 | The website shall not present a visible role switcher or any "who are you?" self-classification prompt. | SRC-001#6-assumptions-not-switches | S2 |
 
 ## Compliance
@@ -28,3 +28,8 @@ The four jobs, their conversions and audience mappings are defined there
 A page brief ships only when the eight-point check in SRC-001 "Compliance
 Check for a Page Brief" passes. That check is normative for every page
 requirement in `pages.req.md`.
+
+Copy ships only when the rules of SRC-017 hold. SRC-018 assigns each of
+them to a schema budget, a `check:content` row, an e2e assertion or the
+editorial gate, so "holds" is a run, not an opinion — except for the
+eleven rules the contract declares review-only, which TS-006-A16 carries.
