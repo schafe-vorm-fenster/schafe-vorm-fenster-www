@@ -104,6 +104,16 @@ export async function generateMetadata({
      * It is the brand owner's own logo — neither mocked nor generated — so
      * neither the mock rule nor the dummy-content rule applies and it carries
      * no badge.
+     *
+     * **Shape, and why it is still a rounded square.** `logo.radius` in
+     * brand-design is `radius.pill` on every surface, favicon included, and
+     * the on-page mark obeys it (`logo.module.css` clips with
+     * `border-radius: var(--radius-pill)`). A browser tab applies no CSS, so
+     * the favicon is whatever the file is — a 915x915 plate with `rx="35"`.
+     * The fix belongs in the package, as a circular favicon variant this
+     * import then points at; `state/open.md` row 214 has the three
+     * alternatives and why the other two are closed by TS-017-A6 and
+     * F-3-13.
      */
     icons: {
       icon: [
