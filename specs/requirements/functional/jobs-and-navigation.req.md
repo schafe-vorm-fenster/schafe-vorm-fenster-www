@@ -32,4 +32,4 @@ requirement in `pages.req.md`.
 Copy ships only when the rules of SRC-017 hold. SRC-018 assigns each of
 them to a schema budget, a `check:content` row, an e2e assertion or the
 editorial gate, so "holds" is a run, not an opinion — except for the
-eleven rules the contract declares review-only, which TS-006-A16 carries.
+eight rules the contract declares review-only, which TS-006-A16 carries.

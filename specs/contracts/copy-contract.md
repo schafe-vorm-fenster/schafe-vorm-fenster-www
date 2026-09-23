@@ -124,10 +124,15 @@ All thirteen are `schema` — one `max()` per field, the number from SRC-017 §6
 
 ## Counts
 
-41 rules. 21 carry a `lint` row, 18 carry a `schema` obligation, 3 carry an
-`e2e` assertion, and 17 name `review` as an owning or co-owning mechanism.
-Eleven rules are review-only: CG-006, CG-008, CG-010, CG-012, CG-013, CG-016,
-CG-019, CG-033, and the judgement halves of CG-001, CG-011 and CG-027.
+41 rules, counted from the tables above rather than estimated: **17** carry a
+`lint` row, **17** a `schema` obligation, **3** an `e2e` assertion, and **19**
+name `review` as an owning or co-owning mechanism. Most rules carry two.
+
+**Eight are review-only** — no machine sees them at all: CG-006, CG-008,
+CG-010, CG-012, CG-013, CG-016, CG-019, CG-033. Three more are half-manual,
+where a mechanism holds the measurable part and a person holds the judgement:
+CG-001 (which number a block takes), CG-011 (whether the example is
+picturable), CG-027 (whether the card states a win).
 
 ## The interface to TS-006 and TS-007
 
