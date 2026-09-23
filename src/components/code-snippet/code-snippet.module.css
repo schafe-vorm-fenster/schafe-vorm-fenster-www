@@ -47,7 +47,8 @@
   margin: 0;
 }
 
+/* Body-size copy takes `text2`, not the `muted` floor — see scope-picker. */
 .pending {
-  color: var(--color-neutral-muted);
+  color: var(--color-neutral-text2);
   margin: 0;
 }

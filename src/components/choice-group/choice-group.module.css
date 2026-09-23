@@ -21,8 +21,9 @@
   padding: 0;
 }
 
+/* Body-size copy takes `text2`, not the `muted` floor — see scope-picker. */
 .none {
-  color: var(--color-neutral-muted);
+  color: var(--color-neutral-text2);
   margin: 0;
 }
 
