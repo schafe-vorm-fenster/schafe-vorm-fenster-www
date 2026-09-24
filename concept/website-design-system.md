@@ -1,7 +1,7 @@
 ---
 title: "Website Design System — www.schafe-vorm-fenster.de"
 created_at: 2026-09-10
-updated_at: 2026-09-23
+updated_at: 2026-09-24
 status: draft
 source: workshop
 intent: inform
@@ -45,6 +45,24 @@ All values come from the Brand & UI Kit scales. No other hex is allowed.
 Every ratio in this document is computed from the sRGB token values against
 the ground the element actually sits on — never against pure white or black.
 That is the same basis the token package declares (`color.contrastBasis`).
+
+**The method, so a number can be checked rather than believed.** WCAG 2.2
+relative luminance over the sRGB hex — channel `c/255`, linearised as
+`c ≤ 0.03928 ? c/12.92 : ((c+0.055)/1.055)^2.4`, weighted
+`0.2126 R + 0.7152 G + 0.0722 B` — and the ratio `(L₁+0.05)/(L₂+0.05)`,
+rounded to two places. Recomputed in full against
+`@schafe-vorm-fenster/brand-design` on **2026-09-24**, for the token change
+described under *Archive* below.
+
+**One named exception to "never pure white or black": the scrim.** The
+gradient laid over a photograph is neutral black. The reason is that a
+scrim is not a surface colour. Nothing is *set in* it and nothing is read
+*against* it as a ground; it is a filter over someone else's photograph,
+and any tint in it shifts that photograph's colour — which is exactly what
+the dark-green scrim did and what the review rejected (decision 5,
+2026-09-23). The exception covers the scrim ladder and the text shadow that
+rides with it, and nothing else: no section ground, no fill, no icon and no
+text colour is ever `#000000` or `#FFFFFF`.
 
 ### Neutrals
 
@@ -107,39 +125,98 @@ nothing"), `#9A6300` for placeholders and unresolved clearance.
 One ground and one ink, for content that says *what does not work today*.
 Nothing positive is ever set in it.
 
-| Role | Value | Use |
-| --- | --- | --- |
-| `archive ground` | `#FBF1DC` today | The section ground of an archive block |
-| `archive ink` | **hex pending in brand-design** | Kicker, heading and the bold core line inside an archive block |
-| `archive line` | a tan derived from the ground, hex pending | Hairlines between archive rows — `line` disappears on this ground (1.32:1) |
+| Token | Hex | Use | Ratio |
+| --- | --- | --- | --- |
+| `color.archive.ground` | `#FBF1DC` | The section ground of an archive block | — |
+| `color.archive.ink` | `#7A4F00` | Kicker, heading and the bold core line inside an archive block | 6.35:1 on the ground, 6.85:1 on `paper` |
+| `color.archive.line` | `#DFCB9D` | Hairlines between archive rows — `line` disappears on this ground (1.32:1) | 1.42:1 on the ground — exactly the weight `line` has on `paper` |
 
 `#9A6300` is **not** `archive ink`. It measures exactly 4.50:1 on
 `#FBF1DC` — at the threshold, with no margin — so it stays what it is: a
-status colour for short placeholder labels. The token must clear 4.5:1 with
-margin before it carries a heading; until it ships, an archive block sets
-its headline in `ink` (15.37:1) and its body in `text-2` (9.52:1), and only
-the kicker waits.
+status colour for short placeholder labels. `#7A4F00` clears the floor with
+margin and is therefore the one that carries type.
+
+**Version and interim.** All three roles arrive in
+`@schafe-vorm-fenster/brand-design` **2.7.0** (change-request PR **#447**,
+**unmerged** at 2026-09-24; the website is pinned at `0.1.3`). Until that
+version is published and the pin moves, an archive block behaves as
+follows, and the rule is not "wait":
+
+- The **ground** is the stand-in `--color-placeholder-ground: #FBF1DC` in
+  `app/styles/brand.css` — the one file a brand value may enter through
+  (TS-017 D3). No call site carries the literal.
+- The **headline and the bold core line** are set in `ink` (15.37:1) and
+  the detail line in `text-2` (9.52:1). Both are real tokens today and both
+  clear the floor, so the block ships complete rather than half-drawn.
+- The **kicker** is the one part that waits: it is set in `ink` with the
+  block's other type until `archive.ink` resolves, not in `#9A6300`.
+- The **hairline** is `line` until `archive.line` resolves, accepting that
+  it is near-invisible (1.32:1) — an invisible hairline is a weaker
+  failure than a literal, which `TS-017-A5` rejects outright.
+
+When 2.7.0 lands, the three tokens replace those stand-ins, the
+`app/styles/brand.css` declaration becomes a `var()` and then goes away,
+and every ratio in this document is recomputed (see *Accessibility*).
 
 ### Category colours
 
-Every event carries one, each with the text colour that clears 4.5:1 at
-badge size (12 px / 700):
+**The taxonomy is not the website's to invent.** The canonical list is the
+classification the platform actually indexes events by:
+`classification-api`, `packages/rural-event-categories/src/types/
+ruralEventCategory.ts` — **four** ids, read on 2026-09-24 at
+`classification-api@3.4.2`. The app's own schema
+(`src/rural-event-types/rural-event-category.types.ts`) adds `unknown` as
+the fallback for an event that has not been classified, which is a fifth
+rendering case and not a fifth category. `color.category` in
+`@schafe-vorm-fenster/brand-design` carries exactly these five keys, so the
+package is already aligned and this guide's earlier six rows were the
+outlier (decision 7, 2026-09-23).
 
-| Category | Fill | Text | Ratio |
-| --- | --- | --- | --- |
-| Fest | `himbeere-600` `#BC1C5A` | `paper` | 5.84:1 |
-| Merchants | `lime-600` `#83AF09` | `ink` | 6.65:1 |
-| Culture | `violet-500` `#531BDE` | `paper` | 7.82:1 |
-| Official | `lime-800` `#486202` | `paper` | 6.67:1 |
-| Social | `#B02A1C` | `paper` | 6.31:1 |
-| Neighbouring place | `#9A6300` | `paper` | 4.85:1 |
+The package's own `color.categoryStatus` still reads "PROVISIONAL — …
+canonical source … was not reachable and has not been read". It has now
+been read; clearing that marker is part of the change request below.
 
-Never assume paper text on a category fill — `lime-600` and `lime-500` both
-require `ink`.
+| id | Label (`color.category.*.label`) | Icon | Coin fill (`dot`) | Glyph | Ratio | Bare icon (`bare`) on `paper` |
+| --- | --- | --- | --- | --- | --- | --- |
+| `community-life` | Gemeinschaft | `users` | `himbeere-600` `#BC1C5A` — see below | `paper` | 5.84:1 | `#BC1C5A`, 5.84:1 |
+| `education-health` | Bildung & Gesundheit | `graduation-cap` | `#1FB2A6` | `ink` | 6.55:1 | `#178E85`, 3.85:1 |
+| `everyday-supply` | Versorgung | `shopping-basket` | `#D4A017` | `ink` | 7.26:1 | `#B4830C`, 3.26:1 |
+| `culture-tourism` | Kultur & Ausflug | `landmark` | `violet-500` `#531BDE` | `paper` | 7.82:1 | `#531BDE`, 7.82:1 |
+| `unknown` | Ohne Kategorie | `circle-help` | `border` `#6F7467` | `paper` | 4.62:1 | `#6F7467`, 4.62:1 |
 
-"Neighbouring place" clears the floor with little margin. It is good for a
-badge and for nothing longer; for a run of text on a light ground, use
-`archive ink` once it lands, or `lime-800` (6.67:1).
+`#1FB2A6` and `#D4A017` are the two hexes in this document that belong to
+no lime / violet / himbeere ramp. They are not exceptions to "no other hex":
+they are `color.category.*` in the token package, a data scale whose job is
+to be told apart, and they enter the site as those tokens like everything
+else.
+
+The `bare` values are list-row icons — non-text, so the floor is 3:1, which
+all five clear. The `dot` values are coins carrying a glyph, so the floor is
+4.5:1.
+
+**Two change requests, both measured.**
+
+1. `category.community-life.dot` ships as `himbeere-500` `#E0286E`, and the
+   package pairs it with a `paper` glyph at **4.29:1** — below the floor.
+   `ink` on it is **3.86:1**, also below. Neither glyph works, so the fill
+   has to move: `himbeere-600` `#BC1C5A` clears at 5.84:1 with `paper` and
+   is one step down the same ramp. The table above already states
+   `himbeere-600`; the website renders it that way, by token substitution,
+   until the package follows.
+2. `himbeere` is this system's **pulse** (see below) and a category colour
+   on every event row spends it. The coin is data, not pulse, and does not
+   count towards the one-`himbeere`-per-screen budget — but a
+   `community-life` colour off the himbeere ramp entirely would remove the
+   collision instead of carving it out, and that is the preferred fix.
+
+Never assume `paper` text on a category fill — `lime-600` and `lime-500`
+both require `ink`, and `himbeere-500` takes neither.
+
+**The neighbouring-place chip is not a category.** It is a control, and it
+keeps `#9A6300` on `paper` (4.85:1). That clears the floor with little
+margin: good for a chip label and for nothing longer. For a run of text on
+a light ground use `archive ink` `#7A4F00` (6.85:1 on `paper`) or
+`lime-800` (6.67:1).
 
 ### Pairs that do not clear
 
@@ -149,7 +226,8 @@ badge and for nothing longer; for a run of text on a light ground, use
 | `paper` on `lime-600` | 2.49:1 | Forbidden. `lime-600` takes `ink`. |
 | `paper` on `lime-500` | 1.62:1 | Forbidden. `lime-500` takes `ink` or `lime-900`. |
 | `himbeere-500` on `paper` | 4.29:1 | Display fills at 32 px and above only. `himbeere-600` (5.84:1) for anything smaller or anything carrying text. |
-| `line` on `lime-100` | 1.27:1 | Invisible. On a lime ground the hairline is `lime-400` (1.31:1 — the weight `line` has on paper, 1.42:1). A dedicated token is a change request to brand-design. |
+| `paper` on `himbeere-500` | 4.29:1 | Forbidden at label size — the reason `category.community-life` moves to `himbeere-600`. `ink` on it is worse (3.86:1). |
+| `line` on `lime-100` | 1.27:1 | Invisible. On a lime ground the hairline is `lime-400` (1.31:1 — the weight `line` has on paper, 1.42:1). `border.hairlineOnLime` in brand-design 2.7.0 ships `lime-300` `#C6E593`, which measures **1.19:1** on `lime-100` — weaker than what it replaces. Measured 2026-09-24; the website keeps `lime-400` and the value is a change request. |
 
 ## Typography
 
@@ -168,21 +246,29 @@ Mono for labels, dates, numbers, prices, and the wordmark. Two weights only:
 | Lead | 20 px / 1.35 | 600 |
 | Body | 18 px / 1.50 | 400 |
 | Meta | 15 px / 1.35 | 400 |
-| Kicker (mono) | 15 px / uppercase / 0.08em | 700 |
-| Label (mono) | 12 px / uppercase / 0.08em | 700 |
+| Kicker / label (mono) | 15 px / uppercase / 0.08em | 700 |
 
-Nothing below 15 px **outside a badge**. 12 px is reserved for text set
-inside a badge or chip, where the pill is the reading aid; a label standing
-on its own ground never goes below 15 px. Display sizes always break by hand
-where the line reads better — the place name may split across two lines
-(`SCHLAT / KOW`).
+**15 px is the floor, and there is no carve-out.** The badge, the chip, the
+tag and the placeholder label are all mono 15 px / 700 like every other
+label; a pill is not a reading aid that buys back three pixels. The guide
+used to allow 11–13 px inside a badge, and that allowance is retired for
+three reasons, all of them already true elsewhere: `TS-002 D3` floors at
+15 px and `TS-002-A10` asserts it; the built site has no `font-size` below
+15 px anywhere; and `font.size.label` is `0.9375rem` (15 px) from
+brand-design 2.7.0, which the website has been overriding it to since
+F-2-44. Resolving C11 by raising the sizes rather than by writing a
+badge-only exception is what keeps those four statements one statement.
+
+The consequence is a taller badge — see *Fixed heights*. Display sizes
+always break by hand where the line reads better; the place name may split
+across two lines (`SCHLAT / KOW`).
 
 **Letter-spacing on mono labels is `0.08em`**, for both kicker roles and the
-badge label. One value, everywhere. The token package carries `0.06em`
-(`font.letterSpacing.label`) and `0.875rem` (`font.size.label`); both must
-follow this guide — the tracking to `0.08em`, the size to `0.9375rem` for
-the bare kicker. Until they do, the website overrides them and records the
-override.
+badge label. One value, everywhere. Both values are settled upstream in
+brand-design **2.7.0** — `font.letterSpacing.label` `0.06em → 0.08em` and
+`font.size.label` `0.875rem → 0.9375rem` — and until that version is
+published the website's `app/styles/brand.css` carries the recorded
+override, which becomes a no-op and is deleted when the pin moves.
 
 ## Shape and Space
 
@@ -237,10 +323,28 @@ Height 56 px, padding 0 24 px, radius 999, weight 800, 18 px, with a 24 px
 ### Search field
 
 One pill: `map-pin` icon, placeholder in `muted`, and the submit button as a
-44 px pill nested inside the 56 px field with 6 px inset. On a photo the
-field is `paper`; on a colour surface it is `paper` too. A search field on a
-light ground repeats the hero's treatment — `paper` on `paper` has no edge
-and is not a search field.
+44 px pill nested inside the 56 px field with 6 px inset. The field itself is
+always `paper` — that is what makes it read as the thing you type into.
+
+**The field needs a dark ground under it, and the section provides one.**
+The rule used to say "on a colour surface it is `paper` too" and then that a
+light ground "repeats the hero's treatment", which is a contradiction and is
+why the closing search on `/` shipped as white on white. Resolved: a search
+field only ever sits on a photo surface or on the `ink` section. There are
+two variants and no third.
+
+| Variant | Where | Field | Submit pill | Edge |
+| --- | --- | --- | --- | --- |
+| on-photo | The hero, over the scrim | `paper` ground, `ink` text, `muted` placeholder | `ink` fill, `paper` label | none — the scrim is the contrast |
+| on-ink | Any other surface that carries the search, the closing block on `/` included | `paper` ground, `ink` text, `muted` placeholder | `lime-500` fill, `ink` label (10.20:1) | none — `paper` on `ink` is 16.56:1 |
+
+**A section that carries a search field takes the `ink` ground.** That is a
+composition rule, not a field property: the closing block on `/` that binds
+off with the Dorfkalender and the place search is an `ink` section, so the
+reader meets the same shape they met in the hero. A search field never sits
+on `paper`, `surface`, `surface-2` or `lime-100` — `paper` on `paper` has
+no edge and is not a search field, and giving it one would need a fourth
+border exception.
 
 ### Place-search result overlay
 
@@ -261,22 +365,39 @@ The autosuggest list that belongs to the search field.
   `aria-expanded` and `aria-activedescendant` on the field, rows as options.
   The focus ring rule applies to the field, not to the active row, which is
   marked by a `surface` ground.
-- No match is a designed row, never an empty panel — the honest "we do not
-  have this place yet" line with its onward action. Where it routes is a
-  spec question, not a design one.
+- **No match is a designed row, never an empty panel.** One row, 56 px, the
+  same ground and hairline as the others, stating plainly that this place is
+  not there yet. It shows a `map-pin` glyph in `muted`, the line in `ink`
+  18 px / 400, and **no arrow** — the arrow is what says "this is a link"
+  and this row is not one. It carries no button, no "try a postcode", no
+  error colour and no `triangle-alert`: it is an empty result, not a fault.
+  It is not counted against the 3–4 row budget, because it replaces the
+  list rather than joining it.
+- **The row is not interactive, and the spec owns that.** `TS-008 D7a`
+  determines it as "one non-interactive row stating that no place was
+  found; the form still submits and reaches `/dein-ort/starten`", and
+  `DEC-079 §4` is the decision that there is no suggestion to offer. The
+  onward action is therefore the field's own submit, which stays live — not
+  a control inside the row. This guide described "a row with its onward
+  action", which read as a second target and contradicted both; it does
+  not any more. Where submitting routes, and what the row says, are
+  `TS-008 D7a`'s to state, asserted by `TS-008-A15`; this entry describes
+  only how the row looks.
 
 ### Badge and chip
 
-Radius 999, mono 12–13 px, weight 700, padding 7 × 15 px. A badge labels
+Radius 999, **mono 15 px**, weight 700, padding 6 × 15 px. A badge labels
 (category, kicker, award); a chip is tappable (a neighbouring place) and
 therefore at least 40 px tall. Kickers are badges with an 18 px icon.
 
-Because badge text is small, every fill/text pair must be checked against
-4.5:1 before use — see the category table above. The placeholder badge is
-`#9A6300` on `archive ground` (4.50:1) and is the reason that pair may not
-grow into a heading.
+Badge text is label type at the 15 px floor, not small type — the badge got
+taller rather than the type smaller (see *Typography*). Every fill/text pair
+is still checked against 4.5:1 before use: the pill is not a contrast aid
+either. See the category table above. The placeholder badge is `#9A6300` on
+`archive ground` (4.50:1) and is the reason that pair may not grow into a
+heading.
 
-**Tag** — the non-tappable size. 30 px, mono 13 px / 700, padding 5 × 12 px,
+**Tag** — the non-tappable size. 30 px, mono 15 px / 700, padding 5 × 12 px,
 radius 999. A tag names a value the reader cannot act on: the places,
 organisers and categories a calendar is configured for. Fill `ink` with
 `paper` text, or `surface` with `ink` text inside a lime section.
@@ -359,11 +480,20 @@ everywhere. There is no contact form.
   One `Lead` line names the channels.
 - **Action rows**, 72 px, radius 999, full width, in order: a leading 24 px
   icon, a bold title (18 px / 700), a sub-label beneath it (15 px / 400),
-  and a trailing 24 px `arrow-right`. The first row is the primary
+  and a trailing 24 px `arrow-right`. The first row takes the **filled**
   treatment (`ink` ground, `paper` title at 16.56:1, `lime-400` sub-label at
-  11.21:1); every further row is secondary (`paper` ground, `ink` title,
+  11.21:1); every further row is **outlined** (`paper` ground, `ink` title,
   `muted` sub-label at 5.70:1). Each row carries its own ground, so nothing
   is ever read against `lime-100` directly.
+- **Filled is a weight, not a conversion rank.** The first row is
+  `data-cta="secondary"` — on every page, including the one whose primary
+  conversion is a booking. `TS-006 D3` allows exactly one
+  `data-cta="primary"` per page and the contact section is never it
+  (decision 2, 2026-09-23); a page that reaches the section already spent
+  its primary above. The ink ground says "start here among these four
+  channels", which is a reading order inside one component, and the earlier
+  wording "the first row is the primary treatment" was read as the marker
+  and is corrected.
 - **Phone and mail rows** below them: no fill, a `lime-400` hairline above
   each, a 24 px `phone`/`mail` icon and the number or address set in mono
   18 px `ink`. 56 px, the whole row is the target.
@@ -377,28 +507,63 @@ and reused unchanged on `/`.
 
 - **Ordinal** at mono 48 px / 800 `ink`, with the module **title** at card
   title size beside it.
-- **Graphic stage**: one box with a declared ratio, holding three states.
-  The next state is cropped in at the trailing edge so the stage reads as
-  something that continues. The box never changes size, so a state change
-  cannot shift the page.
-- **Three step lines** beneath it, each a numbered disc plus two lines: the
-  bold core (18 px / 700) and the normal detail (15 px / 400). **Each line
-  is a single line at 390 px viewport width** — that is the length budget
-  the copy is written to, not a hope. The active step's disc is `lime-500`
-  with `ink`; the others are `surface` with `muted`.
-- **One CTA** at the bottom, the module's own conversion, at primary
-  treatment.
-- **The module plus its three step lines fit one phone screen** — one
-  viewport height at the phone breakpoint. If they do not, the copy is too
-  long; the module does not grow.
-- **Motion exception.** The stage may auto-advance through its three
-  states. This is the one exception to "one movement only" in the whole
-  system, and it exists only here. 550 ms per transition with the standard
-  easing, at least 4 s dwell per state, pausing on focus or on any
-  interaction. The three step lines are also the controls: activating one
-  shows its state. Under `prefers-reduced-motion` the stage shows **state 1
-  static**, step 1 active, and the step lines remain the way to reach
-  states 2 and 3.
+- **Three step lines**, each a numbered disc plus two lines: the bold core
+  (18 px / 700) and the normal detail (15 px / 400). **Each line is a single
+  line at 390 px viewport width** — that is the length budget the copy is
+  written to, not a hope. The active step's disc is `lime-500` with `ink`;
+  the others are `surface` with `muted`.
+- **One CTA** at the bottom, the module's own conversion, at **secondary**
+  treatment and marked `data-cta="secondary"`. Never `primary`: `TS-006 D3`
+  allows exactly one `data-cta="primary"` per page, and `/mitmachen` carries
+  three of these modules (decision 2, 2026-09-23). The module's CTA points
+  at the deeper page, whose own primary is the one that counts.
+
+#### Two layouts, and the breakpoint decides which
+
+The module is one component with one content tree and one `min-width`
+switch, at **`lg` = `48rem` (768 px)** from the brand-design `breakpoint`
+scale — the tablet step, and the only breakpoint this component uses.
+
+**Below `lg` — the phone.** There is no room for three graphics side by
+side, so there is a **graphic stage**: one box at `ratio-square`, holding
+three states, the next cropped in at the trailing edge so the stage reads as
+something that continues. The box never changes size, so a state change
+cannot shift the page. The three step lines sit beneath it. **The module
+plus its three step lines fit one phone screen** — one viewport height at
+the phone breakpoint. If they do not, the copy is too long; the module does
+not grow.
+
+**From `lg` — tablet and up.** The three steps **stand side by side**, each
+with its own graphic above its own two lines. There is no stage, no crop and
+**no slide**: everything is visible at once, which is the whole reason the
+stage existed. Nothing auto-advances here. An animation at this size may
+only **highlight the active step** — the disc and its graphic take the
+active treatment, the other two do not — and it moves nothing.
+
+From `lg` the constraint is the row, not the viewport height.
+
+#### Motion exception — the auto-advance
+
+**This is an owner decision, not a guide liberty** (decision 8,
+2026-09-23). It is the one exception to "one movement only" in the whole
+system, it is scoped, and the scope is part of the exception:
+
+- It exists **only below `lg`**, because only there is a state hidden.
+  From `lg` there is nothing to advance to, so there is no auto-advance to
+  grant — which is also why "no second animation" and "a motion exception"
+  are no longer two rules pointing opposite ways.
+- 550 ms per transition with the standard easing, at least 4 s dwell per
+  state, **pausing on focus or on any interaction** and not resuming.
+- The three step lines are also the controls: activating one shows its
+  state. They are real buttons — reachable by `Tab`, operated by `Enter`
+  and `Space`, with `aria-current` on the active one — **at every size**,
+  below `lg` and above it alike. A step is never reachable only by waiting.
+- Under `prefers-reduced-motion` the stage shows **state 1 static**, step 1
+  active, and the step lines remain the way to reach states 2 and 3. The
+  fallback is a static state, never a faster animation.
+- The highlight-only animation from `lg` is not a second exception: it
+  changes colour, not position, and a colour change on an active state is
+  what *active* has always meant in this system.
 
 ### Transparent overlay header
 
@@ -408,27 +573,160 @@ photo.
 - Mark-only logo, 40 px, clipped to radius 999. No wordmark over a photo.
 - The calendar entry as a `lime-500` pill, 44 px, `calendar-days` 24 px plus
   an `ink` label (10.20:1).
-- Every other control in a 44 px `ink` control well with a `paper` glyph.
+- Every other control in a 44 px round well — see the blur rule below for
+  what fills it.
 - Nothing else. The header carries no fill, no bar, no shadow.
 
-The wells are what gives the controls contrast on an unknown photo. The
-alternative the review asks for — a backdrop blur behind logo and controls,
-so the photo stays visible through them — is a new primitive with a
-rendering cost and is an **open decision**; until it is taken, the solid
-wells above are the rule.
+#### The blur primitive
+
+**Decision 6, 2026-09-23: the header treatment over a photograph is a
+backdrop blur.** The problem it solves is that the logo mark and the
+controls sit on an unknown photograph and a solid well solves contrast by
+hiding the picture behind a disc. The blur keeps the photograph visible and
+still separates the control from it.
+
+`backdrop-filter` is the **only** blur in the system and this is the only
+place it is used. It is a primitive, so it is defined once:
+
+| Property | Value |
+| --- | --- |
+| Filter | `backdrop-filter: blur(12px) saturate(120%)` |
+| Shape | the control's own shape — radius 999, 44 px well, 40 px logo mark. Never a bar across the header |
+| Tint above it | `scrim.38` over the blurred area, so the glyph has a measured ground rather than whatever the photograph happens to be |
+| Glyph | `paper` on the tinted blur |
+| Also covered | the top scrim band of the hero (`scrim.35 → scrim.0` over the first 16 %) is what carries the header when the photograph behind it is bright; blur and band are one treatment, not two |
+
+**The fallback is the solid ink well, and it is documented, not implied.**
+Where `backdrop-filter` is unavailable the control falls back to the
+44 px `ink` control well with a `paper` glyph (16.56:1) — the treatment the
+site ships today, unchanged. It is selected by capability, never by user
+agent:
+
+```css
+.header-control { background: var(--color-ink); }          /* the floor */
+@supports (backdrop-filter: blur(12px)) {
+  .header-control { background: var(--color-scrim-38);
+                    backdrop-filter: blur(12px) saturate(120%); }
+}
+```
+
+Three conditions take the fallback, and each is a real one:
+
+1. **The browser cannot do it** — no `@supports` match.
+2. **`prefers-reduced-transparency`** is set. A blur is a transparency
+   effect and this is the preference that asks for it to stop.
+3. **The performance budget says no.** `backdrop-filter` forces a
+   compositor layer that re-rasterises on scroll, over a sticky element,
+   above the largest image on the page — which is the LCP element on four of
+   the routes in `TS-003 D2`. The budget interaction is therefore concrete,
+   not theoretical: the treatment is legal only while the route stays inside
+   `TS-003 D1` (LCP < 2.5 s, INP < 200 ms, CLS < 0.1) with it applied. If a
+   route falls out of that on the measured run, that route takes the
+   fallback — the budget wins, and `TS-003 D4`'s rule that Lighthouse is the
+   floor and bytes are the proxy applies here unchanged.
+
+The blur never carries contrast on its own. Whatever is behind it, the glyph
+is read against `scrim.38`, which is why the tint is part of the primitive
+and not a decoration on top of it.
 
 ### Photo surface
 
 Full width, no radius, no border. The photograph is the section's first
-background layer with a `linear-gradient` above it in the same declaration —
-transparent at 12–26 %, 0.82–0.86 at 38–62 %, 0.96 at the bottom. Text sits
-in the dark part. Ink gradient by default, violet for the municipal path.
+background layer with the scrim above it in the same declaration. Text sits
+in the dark part.
 
-**The scrim colour comes from a scrim token derived from `ink` (and
-`dark.paper` in the dark theme). A literal `rgba(0,0,0,…)` never enters the
-stylesheet** — whichever ladder wins, the neutral look is expressed as a
-token with an alpha ladder, not as a raw black. The ladder itself is an
-**open decision**; see below.
+#### The scrim
+
+**The 2026-09-23 draft is binding** (decision 5; *Design – Optimized Hero
+Gradients and Colors*, variant 1b "Neutral · transparent"). It replaces the
+old fixed ladder — transparent at 12–26 %, 0.82–0.86 at 38–62 %, 0.96 at the
+bottom — and it replaces the ink-tinted and violet variants with one
+treatment for **every** hero on the site, not only the home page.
+
+- **Neutral black.** Not `ink`, not `violet-500`, not a tint of either. A
+  tinted scrim dyes the photograph, which is what made the old one read
+  "dreckig, schlammig". This is the one named exception to "never pure white
+  or black" (see *Colour*).
+- **Maximum 0.72.** Nothing in a scrim is ever more opaque than that. The
+  0.96 step is retired; at 0.96 the photograph is gone and the text is
+  sitting on a black band, which is the thing the reader was told it was not
+  sitting on.
+- **Multi-stop, two gradients**, exactly as the draft states them:
+
+```css
+background-image:
+  linear-gradient(180deg, var(--color-scrim-35) 0,  var(--color-scrim-0)  16%),
+  linear-gradient(180deg, var(--color-scrim-0)  38%, var(--color-scrim-38) 58%,
+                          var(--color-scrim-72) 100%),
+  url(<photo>);
+```
+
+  The first gradient is the top band that carries the header (see
+  *Transparent overlay header*); the second is the reading band under the
+  headline, the search field and the CTAs.
+
+- **The soft text shadow is part of the treatment**, not an extra. Every
+  piece of type on a photo surface — display, lead, button label, search
+  placeholder — carries:
+
+```css
+text-shadow: 0 1px 2px var(--color-scrim-45), 0 2px 10px var(--color-scrim-30);
+```
+
+  Two stops: a tight one that gives each glyph an edge where it crosses a
+  detail, and a wide, faint one that lifts the whole block off a busy
+  surface. It is soft by construction — no offset beyond 2 px, no stop above
+  0.45 — because a hard shadow is a second design element and this one is
+  meant to be invisible until you cover it up. It exists **only** on a photo
+  surface; type on any flat ground carries no shadow at all.
+
+- **It is still a token, and never a literal.** `color.scrim.*` is an alpha
+  ladder in `@schafe-vorm-fenster/brand-design`; `TS-017 D3` and
+  `TS-017-A5` reject an `rgba(…)` at a call site whatever its colour. The
+  ladder this treatment needs is `0 · .30 · .35 · .38 · .45 · .72`. The
+  2.7.0 package ships `0 · .16 · .38 · .72 · .96` **derived from `ink`
+  `rgba(23,29,13,…)`** — the pre-decision shape. Two change requests
+  therefore ride with this section: the base becomes neutral black, and the
+  ladder gains `.30`, `.35` and `.45` and drops `.96`. Until the package
+  follows, the ladder is declared in `app/styles/brand.css`, the one file a
+  brand value may enter through, exactly as `--color-archive-ground` is.
+
+#### Contrast is measured, not assumed
+
+The fixed-opacity rule is gone, and nothing replaces it with another fixed
+number. **What is fixed is the outcome:**
+
+> The composite of photograph **plus** scrim, sampled where the type
+> actually sits, clears **4.5:1 behind body text** and **3:1 behind display
+> type** — measured **per photograph**, not once for the component.
+
+That is `WEB-Q-011` and this document's *Accessibility* rule stated as an
+acceptance condition instead of as a recipe. A ladder cannot be measured
+because the photograph is the other half of the pair: 0.72 over a dark
+barn roof and 0.72 over a white gable are not the same surface. The
+0.72 ceiling and the 4.5:1 floor together are what constrain the choice of
+photograph — a motif that only clears the floor at 0.85 is the wrong motif,
+and the answer is a different crop or a different picture, not a darker
+scrim.
+
+**How it is verified.** By `pnpm check:contrast`, extended to a hero row:
+for each hero photograph and each rendition, composite the two gradients
+over the image at the declared `object-position`, sample the text box of the
+display line and of the lead line, and take the **worst** pixel in each box
+against the type colour. Under the floor is an error, not a warning — the
+same exit contract the token guard already has.
+
+> **Owed, and named so nobody assumes it exists.** That row is not written.
+> `pnpm check:contrast` today measures the **token set** (TS-002-A3) and
+> knows nothing about photographs; `WEB-Q-011` states the requirement and
+> `DEC-056` fixes the basis, but no acceptance criterion asserts the
+> composite. The specs are a parallel owner's file, so this guide states the
+> requirement and records the test as **owed**: a `check:contrast` hero row
+> plus the acceptance criterion that binds it, against `TS-002` (the guard
+> lives with the contrast check) and cited from `TS-003 D8`/`DEC-077`, which
+> already own the per-hero renditions the row would iterate. Until it
+> exists, the measurement is a manual step at the editorial gate and every
+> hero photograph carries its measured pair of ratios in its own record.
 
 **Crop and focal point.** The photo is `cover` with `object-position` taken
 from the motif's declared focal point, never `center` by default. Village
@@ -446,12 +744,8 @@ act itself: a flyer, a phone, a hand. Never dark, never sad, never
 empty-at-dusk. The full imagery rules live in `brand-identity/imagery.md`
 in `go-to-market-os`; this is the website's cut of them.
 
-**No text shadow.** The scrim does the work. The review asks for a soft one;
-that request rides with the scrim decision and is not in force until it is
-taken.
-
 A photo that does not depict what the copy claims carries the placeholder
-badge (`#9A6300` on `archive ground`, radius 999, mono 11 px): *"Nicht
+badge (`#9A6300` on `archive ground`, radius 999, mono 15 px): *"Nicht
 motivgenau · Platzhalter"*. A missing photo becomes a diagonal hatch of
 `surface-2` and `line` with the badge *"Foto gesucht"* and an invitation to
 contribute one. Not a dashed drop zone, not file-picker chrome.
@@ -490,6 +784,7 @@ PHOTO    hatched placeholder, "send us a photo"
 COLOUR   surface, the municipal argument, deliberately sober
 COLOUR   violet-500, provenance as badges
 COLOUR   paper, context band into the other jobs
+COLOUR   ink, the closing Dorfkalender block with the place search
 ```
 
 Rules:
@@ -497,9 +792,14 @@ Rules:
 - Never two photo sections in a row.
 - At most two consecutive sections in the same colour family.
 - Exactly one `himbeere` element per screen (`himbeere-600` for anything
-  carrying text).
+  carrying text). A category coin is data, not pulse, and does not count —
+  see *Category colours*.
 - The dark ink section carries the live data; it is the anchor of the page
-  and appears once.
+  and appears once. **A closing search block is the one further `ink`
+  section a page may carry**, because a search field has no other legal
+  ground (see *Search field*). It sits last, after the context band, and the
+  two ink sections are never adjacent — on `/` the whole middle of the page
+  lies between them.
 
 ### "Per screen"
 
@@ -581,7 +881,7 @@ Components whose content length varies but whose box must not move:
 | Icon well | 40 px |
 | Chip (tappable) | 40 px |
 | Tag (label only) | 30 px |
-| Badge (label only) | 26 px, or 30 px with an icon |
+| Badge (label only) | 28 px, or 32 px with an 18 px icon |
 | Event row | 76 px, two lines of content |
 | Search field | 56 px |
 | Search-result row | 56 px |
@@ -674,16 +974,32 @@ One movement only: sections rise 22 px and fade in over 550 ms
 parallax, no hover choreography, no looping animation. Motion respects
 `prefers-reduced-motion`.
 
-**One exception, named:** the explain module's graphic stage may
-auto-advance through its three states (see the component). It exists there
-and nowhere else, and it has a `prefers-reduced-motion` fallback that is a
-static state, not a faster animation.
+**One exception, named, and taken by the owner:** the explain module's
+graphic stage may auto-advance through its three states — **decision 8,
+2026-09-23**, not a liberty this document took for itself. Its scope is part
+of it: only inside that component, and only **below `lg` (48 rem)**, where
+one of the three states is hidden and there is something to advance to. From
+`lg` the three steps stand side by side and nothing advances; the only
+animation there changes the active step's colour, which is a state, not a
+movement. The fallback under `prefers-reduced-motion` is state 1 static, not
+a faster animation, and the step lines stay operable by keyboard at every
+size.
+
+There is no second exception, and nothing below `lg` may be read as one: a
+skeleton still does not pulse, and a looping animation anywhere else is
+still forbidden.
 
 ## Accessibility
 
 - Body text at 4.5:1 minimum, display type at 3:1, measured against the
-  composite of photo plus gradient — not against the gradient alone.
+  composite of photo plus scrim — not against the scrim alone, and per
+  photograph (see *Photo surface*). The check that asserts it is **owed**
+  and named there.
 - Focus ring: 3 px `violet-500`, 2 px offset, on every interactive element.
+- 15 px is the type floor everywhere, with no exception for a badge, a chip
+  or a tag (`TS-002 D3`, `TS-002-A10`).
+- A blur is a transparency effect: `prefers-reduced-transparency` takes the
+  solid fallback (see *Transparent overlay header*).
 - Icons are decorative and always accompanied by text; alt text only where
   an image carries meaning.
 - Atkinson Hyperlegible is the accessibility decision — do not substitute.
@@ -699,18 +1015,33 @@ static state, not a faster animation.
 - No photo section adjacent to another photo section.
 - No stock photography. An honest hatched placeholder is better and doubles
   as a conversion.
-- No colour outside the scales above, and no literal `rgba(0,0,0,…)` scrim.
+- No colour outside the scales above; no colour literal at a call site, a
+  scrim included — the ladder is a token like everything else.
 - No grey-green ground under positive content.
-- No text shadow, no blur primitive, no second animation — until the open
-  decisions below say otherwise.
+- No type below 15 px, badges and tags included.
+- No text shadow **off** a photo surface; the one on it is specified under
+  *Photo surface* and has no other use.
+- No blur outside the header primitive, and no second animation beyond the
+  explain module's auto-advance below `lg`.
+- No search field on a light ground.
 
 ## Open decisions
 
-Three, and the guide states the current rule for each. Until a decision is
-taken, what is written above is in force.
+**None in this document.** The three that stood here were taken on
+2026-09-23 and are written into the rules above rather than kept as
+options:
 
-| # | Decision | Options | In force today |
+| # | Was | Taken as | Where it now lives |
 | --- | --- | --- | --- |
-| 1 | **Scrim ladder** | (a) the fixed ladder above, ending at 0.96; (b) a measured floor — "composite ≥ 4.5:1 behind body, ≥ 3:1 behind display, measured per photograph" — which is what makes the 0.72 neutral-black draft legal. The soft text shadow rides with this decision. | (a), and no text shadow |
-| 2 | **Header contrast** | (a) the solid `ink` control wells the site has today; (b) a backdrop blur behind logo and controls — a new primitive with a rendering cost. | (a) |
-| 3 | **Category taxonomy** | The token package carries five category keys, this guide carries six rows. Two taxonomies, one to be retired. **The taxonomy is not changed here.** The decision also covers whether website event rows keep the category the drafts dropped — this guide says they do. | The six rows above, category always present |
+| 1 | Scrim ladder, and text shadow yes/no | **Decision 5** — the draft is binding: neutral black, multi-stop, max 0.72, soft text shadow, and a measured contrast floor instead of a fixed ladder | *Colour* (the named exception), *Photo surface* |
+| 2 | Header contrast — solid wells or a blur primitive | **Decision 6** — the blur primitive, with a documented capability fallback to the solid ink well and a stated performance-budget interaction | *Transparent overlay header* |
+| 3 | Category taxonomy — five token keys or six guide rows | **Decision 7** — neither: the canonical list is `classification-api`'s four ids plus the `unknown` fallback, which is what the token package already carries. Event rows keep the category, as this guide always said | *Category colours* |
+
+What is still **outstanding** is not a decision but work owed elsewhere, and
+each one is named at the rule it belongs to: the `check:contrast` hero row
+(*Photo surface*), and the change requests to
+`@schafe-vorm-fenster/brand-design` — the neutral-black scrim base and its
+three new stops, `category.community-life.dot`, `border.hairlineOnLime`,
+and clearing `color.categoryStatus`'s PROVISIONAL marker now that the
+canonical source has been read. The full list is
+`specs/contracts/design-system-contract.md` §5.

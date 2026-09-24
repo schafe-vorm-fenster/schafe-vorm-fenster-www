@@ -3,7 +3,7 @@ artefact: contract
 id: SRC-013
 status: DRAFT
 date: 2026-09-10
-updated: 2026-09-23
+updated: 2026-09-24
 decisions: [DEC-044, DEC-054]
 ---
 
@@ -28,12 +28,29 @@ bump with a changelog.
 
 ## What already suffices
 
-Read from v2.6.0 — the specs consume these and restate none of them:
+**Two version numbers, and they are not the same number.** The package is
+published as `@schafe-vorm-fenster/brand-design`, and the website is pinned
+at **`0.1.3`** — that is the npm version, the one in `package.json` and the
+one a `pnpm why` reports. Inside it, the token sheet declares its own
+`meta.version`, **`2.6.0`**, which is the Brand & UI Kit's editorial
+version and the number every changelog entry and every change request in
+this contract uses. "Read from v2.6.0" used to stand here on its own and
+was read as a package version that does not exist; it is a *kit* version.
+Both are stated wherever a version is stated below.
+
+Read from kit **2.6.0** (package `0.1.3`) — the specs consume these and
+restate none of them:
 
 `color` (incl. `dark`, `category`, semantic `roles`) · `font`
 (family, weight, size with `clamp()`, lineHeight, letterSpacing, usage) ·
 `space` · `breakpoint` (xs…2xl) · `radius` · `border` · `shadow` ·
 `target` · `measure` · `logo` · `button` · `categoryDisplay` · `print`.
+
+Kit **2.7.0** is prepared but **unmerged** (PR **#447**). Everything §5
+marks as arriving in 2.7.0 is written, measured and reviewable in that PR
+and reaches the website only when it is published *and* the `0.1.3` pin
+moves. Until both happen, the website's stand-ins live in
+`app/styles/brand.css` (TS-017 D3), never at a call site.
 
 ## What is still missing
 
@@ -61,23 +78,23 @@ added.
 | id | Variants / notes |
 | --- | --- |
 | `button` | primary-on-light · primary-on-dark · pulse · secondary · quiet |
-| `search-field` | on-photo · on-colour; nested 44 px submit |
-| `badge` | category · kicker · status · placeholder |
-| `chip` | default · selected · **excluded** |
-| `tag` | the non-tappable 30 px size; default · **excluded** |
+| `search-field` | **on-photo · on-ink** — two variants and no third; nested 44 px submit. A light ground is not a variant (SRC-014 "Search field") |
+| `badge` | category · kicker · status · placeholder. Mono **15 px**, 28 px tall, 32 px with an 18 px icon |
+| `chip` | default · selected · **excluded**. Mono 15 px, 40 px tall |
+| `tag` | the non-tappable 30 px size, mono **15 px**; default · **excluded** |
 | `kicker` | **bare** (no pill, 15 px mono, tracking 0.08em) · badge |
 | `event-row` | with category icon, colour **and** label; day numeral + month |
-| `photo-surface` | ink · violet; scrim from a token, focal point per motif |
+| `photo-surface` | **one variant** — neutral-black scrim from `color.scrim.*`, two multi-stop gradients, max `.72`, soft text shadow, focal point per motif. The ink and violet variants are retired (decision 5) |
 | `logo` | mark-only · mark + wordmark · mark + URL |
 | `icon-well` | 40 px, non-interactive — distinct from the 44 px control well |
 | `control-well` | 44 px, interactive |
 | `contact-section` | one component, one fixed `lime-100` ground, every page |
-| `contact-action-row` | 72 px, two lines, trailing arrow; primary · secondary |
-| `explain-module` | ordinal · title · three-state stage · three step lines · one CTA |
-| `place-search-overlay` | 3–4 rows `Ort (Gemeinde)`, out of flow, combobox keyboard |
+| `contact-action-row` | 72 px, two lines, trailing arrow; **filled · outlined** — a visual weight, never a conversion rank. Every row is `data-cta="secondary"` |
+| `explain-module` | ordinal · title · three step lines · one **secondary** CTA. **Two layouts at one `min-width` switch (`lg` = 48rem)**: below it a three-state stage with the auto-advance; from it three steps side by side, no stage, no slide |
+| `place-search-overlay` | 3–4 rows `Ort (Gemeinde)`, out of flow, combobox keyboard; plus the **non-interactive no-match row** (`TS-008 D7a` owns its behaviour and wording) |
 | `quote-card` | quote · author with role and organisation · sourced outbound link |
 | `event-status-badge` | `neu` · `verschoben` · `abgesagt` |
-| `overlay-header` | transparent over a photo; mark, calendar pill, control wells |
+| `overlay-header` | transparent over a photo; mark, calendar pill, controls on the **blur primitive** (`backdrop-filter`) with the solid `ink` control well as the declared fallback |
 | `archive-block` | the "old world" section type: archive ground, archive ink, neutral icons |
 | `price-tier-row` | three rows in **one** section, `line` hairline between them |
 
@@ -85,7 +102,16 @@ Two of these carry a rule the manifest has to express, not only name:
 
 - `contact-section` is the single ground in the system that means
   something. Its ground is not a variant and not a prop.
-- `explain-module` is the only component allowed to animate (§3).
+- `explain-module` is the only component allowed to animate, and only
+  **below `lg`** (§3).
+- `overlay-header` is the only component allowed to declare
+  `backdrop-filter`, and it must declare its fallback in the same
+  entry — a blur without a stated fallback is not a legal component.
+- Exactly **one** `data-cta="primary"` per page (`TS-006 D3`).
+  `explain-module` and `contact-action-row` are therefore `secondary` by
+  definition, not by configuration: neither may take `primary` as a prop
+  value (decision 2, 2026-09-23). The manifest expresses that as a fixed
+  value, not a default.
 
 ### 2. Composition rules
 
@@ -107,6 +133,14 @@ Two of these carry a rule the manifest has to express, not only name:
   grey-green one.
 - The price tiers are **rows in one section**, not three sections — a
   composition rule, because the consecutive-ground count depends on it.
+- **A section carrying a `search-field` takes the `ink` ground** (or is a
+  photo surface). The field has only two variants and a light ground is
+  neither, so the ground is a property of the *section*, not of the field —
+  which is why it belongs here and not in §1. This is what the closing
+  block on `/` needs so it stops being white on white (C14).
+- **`explain-module` switches layout at `lg` (48rem) and nowhere else.**
+  A generator does not choose that breakpoint; it is the component's own
+  and the only `min-width` it declares.
 
 ### 3. States, named and specified
 
@@ -122,8 +156,9 @@ criteria test them:
 | hover · active · disabled · loading | ordinary interaction |
 | `prefers-reduced-motion` · `prefers-contrast` · dark | TS-002 D4 — three themes, browser-selected, no toggle |
 | excluded | `chip` and `tag`: fill removed, `border` outline, label struck through in `muted` — "your calendar leaves this out" |
-| active-step | `explain-module`: the current step line and the stage state it shows. A `lime-500` fill on a light ground means *active*, never decoration |
-| auto-advance | `explain-module` only — the one exception to the single-motion rule. Under `prefers-reduced-motion` the stage renders **state 1 static** and the step lines remain the control that reaches states 2 and 3 |
+| active-step | `explain-module`: the current step line and the state it shows. A `lime-500` fill on a light ground means *active*, never decoration. From `lg` the active step is highlighted in place — a colour change, not a movement |
+| auto-advance | `explain-module` **below `lg` only** — the one exception to the single-motion rule, and an owner decision (decision 8, 2026-09-23), not a component liberty. From `lg` there is no stage and nothing advances. Under `prefers-reduced-motion` the stage renders **state 1 static**. At every size the step lines are buttons: `Tab`, `Enter`/`Space`, `aria-current` — a step is never reachable only by waiting |
+| blur-fallback | `overlay-header`: `@supports (backdrop-filter: …)` selects the blur; no support, `prefers-reduced-transparency`, or a route outside `TS-003 D1` with the blur applied selects the solid `ink` well. The fallback is a declared state, not an absence |
 | open · active-option | `place-search-overlay`: `aria-expanded` / `aria-activedescendant`, arrow keys, `Enter`, `Escape`; the overlay is out of flow, so opening it shifts nothing (same CLS floor as skeleton) |
 | event status | `neu` · `verschoben` · `abgesagt` — a status badge sits **beside** the category badge, never instead of it |
 
@@ -141,20 +176,25 @@ The components in §1 reference token roles that the package does not carry
 yet. SRC-014 names them by role and states what the website does until they
 ship; the package is where they belong.
 
-| Role | Demand |
-| --- | --- |
-| `scrim.*` | An alpha ladder derived from `ink` (light) and `dark.paper` (dark). No component may write a literal `rgba(0,0,0,…)` — TS-017 D3 would reject it anyway, and the neutral hero look has to be expressible as a token |
-| `archive.ground` | `#FBF1DC` today, already a literal in `app/styles/brand.css` with a "reconcile" comment |
-| `archive.ink` | Must clear 4.5:1 on `archive.ground` **with margin**. `#9A6300` measures exactly 4.50:1 and is therefore a status colour, not this |
-| `archive.line` | A tan hairline for the archive ground — `line` measures 1.32:1 on it and is invisible |
-| hairline on lime | `line` measures 1.27:1 on `lime-100`. The website uses `lime-400` (1.31:1, the weight `line` has on paper) until a token exists |
-| mono display size | The explain module's ordinal (~48 px) and the price figures (~54 px) have no size role |
-| `font.letterSpacing.label` | `0.06em` in the package, `0.08em` in SRC-014, ~0.1em in the drafts. SRC-014 settles it at **0.08em**; the package follows or the website records an override |
-| `font.size.label` | `0.875rem` (14 px) is below the 15 px floor for a bare kicker. `0.9375rem`, or a recorded website override |
-| `color.category` | Five PROVISIONAL keys against SRC-014's six rows. Two taxonomies; one has to be retired. **Not resolved here** — an open decision, and neither artefact changes its taxonomy until it is taken |
-| event-status roles | `neu` · `verschoben` · `abgesagt` all clear contrast and none is named in the package |
-| `button.treatment` | The package says weighted-base 6 px + 3 px edge; SRC-014, the site and every draft use `radius.pill` with `border: 0`. Record the web variant or retire weighted-base |
-| `logo.*` | Four named files sit in `logos/legacy/` and never shipped; the shipped SVG carries `fill="white"` and `#222222`, neither a token; `logos/README.md` says `radius-lg` where SRC-014 and every draft use a full circle |
+Each row states the role, what the website needs, and **where it stands** —
+`2.7.0` means written in PR #447 and unmerged; `open` means the package
+does not have it and neither does the PR.
+
+| Role | Demand | Stands |
+| --- | --- | --- |
+| `scrim.*` | An alpha ladder over a **neutral-black** base, with the stops `0 · .30 · .35 · .38 · .45 · .72`. Decision 5 fixes the base: a scrim is not a surface colour, and a tinted one dyes the photograph. No component may write a literal `rgba(…)` of any colour — TS-017 D3 rejects it — so the neutral look has to *be* a token | **2.7.0 ships the wrong shape.** It is `rgba(23,29,13,…)`, derived from `ink`, with stops `0 · .16 · .38 · .72 · .96`. Two change requests: neutral-black base, and `+.30 +.35 +.45 −.96` (the maximum is `.72`) |
+| `archive.ground` | `#FBF1DC` | **2.7.0**, as `color.archive.ground`. Stand-in `--color-placeholder-ground` in `app/styles/brand.css` until the pin moves |
+| `archive.ink` | Must clear 4.5:1 on `archive.ground` **with margin**. `#9A6300` measures exactly 4.50:1 and is therefore a status colour, not this | **2.7.0**: `#7A4F00`, measured **6.35:1** on the ground and 6.85:1 on `paper`. Until then the archive block sets its heading in `ink` (15.37:1) and its body in `text-2` (9.52:1); only the kicker waits (SRC-014 "Archive") |
+| `archive.line` | A tan hairline for the archive ground — `line` measures 1.32:1 on it and is invisible | **2.7.0**: `#DFCB9D`, **1.42:1** on the ground, which is exactly the weight `line` has on `paper` |
+| hairline on lime | `line` measures 1.27:1 on `lime-100`. The website uses `lime-400` (1.31:1, the weight `line` has on paper) | **2.7.0 ships a weaker value.** `border.hairlineOnLime` is `lime-300` `#C6E593`, **1.19:1** on `lime-100` — below what it replaces. Change request: `lime-400` or darker. Measured 2026-09-24 |
+| mono display size | The explain module's ordinal (~48 px) and the price figures (~54 px) have no size role | **2.7.0**: `font.size.displayMono` (3rem) |
+| `font.letterSpacing.label` | One value, `0.08em` | **2.7.0**: `0.06em → 0.08em` |
+| `font.size.label` | `0.875rem` (14 px) is below the 15 px floor | **2.7.0**: `0.9375rem`. Website override in `app/styles/brand.css` until the pin moves, then deleted |
+| **badge / tag / chip sizing** | The roles the components in §1 actually need, and which nothing carries today: a label size **at the 15 px floor** for badge, tag and chip alike (`font.size.label` is that role — the components take it, they do not get a smaller one of their own), and the three heights `badge 28` / `badge-with-icon 32` / `tag 30` / `chip 40` px beside `target.*`. C11 is resolved by **raising the sizes**, not by a badge-only carve-out: `TS-002 D3` floors at 15 px, `TS-002-A10` asserts it, and the built site already has no `font-size` below 15 px | `font.size.label` **2.7.0**; the four heights **open** — `target` carries only the 44 px touch floor |
+| `color.category` | The canonical taxonomy is **`classification-api`**, `packages/rural-event-categories/src/types/ruralEventCategory.ts`, read at `3.4.2` on 2026-09-24: four ids — `community-life`, `education-health`, `everyday-supply`, `culture-tourism` — plus `unknown` as the app schema's unclassified fallback (decision 7, 2026-09-23) | **Aligned, with two corrections.** The package's five keys *are* that list; SRC-014's six rows were the outlier and now follow it. (a) `color.categoryStatus` still reads "PROVISIONAL — … canonical source … was not reachable and has not been read"; it has been read, and the marker is cleared. (b) `community-life.dot` is `himbeere-500` `#E0286E`, which carries **no** legal glyph at label size — `paper` 4.29:1, `ink` 3.86:1. It moves to `himbeere-600` `#BC1C5A` (5.84:1 with `paper`); better still, off the himbeere ramp entirely, which is the pulse |
+| event-status roles | `neu` · `verschoben` · `abgesagt` all clear contrast and none is named in the package | **2.7.0**: `color.status.event` |
+| `button.treatment` | SRC-014, the site and every draft use `radius.pill` with `border: 0` | **2.7.0**: an object — `treatment.web` = `pill`, `treatment.print` = `weighted-base`. Nothing retired; read `button.treatment.print` where `button.treatment` was read |
+| `logo.*` | The names must match the files that ship, the SVG must carry tokens, and the mark is a full circle | **2.7.0**: the two shipping files named, `fill="white"`/`#222222` replaced by `paper`/`ink`, `logo.radius` = `radius.pill` everywhere including the favicon |
 
 Where a role is missing, the manifest still references it by name. A
 component that inlines a hex because the token is not there is the failure
@@ -173,3 +213,22 @@ Once the manifest lands, the page specs reference component ids, and
 `check:specs` can verify that every component a page names exists — the
 same closure the requirement → acceptance criterion → test matrix already
 provides.
+
+**One check is owed, and it is owed by the specs, not by the package.**
+Decision 5 replaces the hero's fixed opacity ladder with a measured floor:
+the composite of photograph **plus** scrim clears 4.5:1 behind body text and
+3:1 behind display type, **per photograph**. `WEB-Q-011` already states that
+requirement and `DEC-056` fixes the basis, but nothing asserts it:
+`pnpm check:contrast` measures the *token set* (`TS-002-A3`) and knows
+nothing about photographs, and axe in `e2e/a11y.spec.ts` judges what a page
+happened to compose.
+
+What is owed is a `check:contrast` **hero row** — composite the two
+gradients over each hero rendition at its declared `object-position`, sample
+the display and lead text boxes, take the worst pixel in each against the
+type colour, exit non-zero under the floor — and the acceptance criterion
+that binds it. It belongs with `TS-002` (where the contrast guard lives) and
+iterates the per-hero renditions `DEC-077` and `TS-003 D8` already own.
+SRC-014 states the requirement and marks the test as owed rather than
+implying one exists; writing the row is the specs owner's, not this
+contract's.
