@@ -1,6 +1,6 @@
 /**
  * `GET /api/places/{slug}/events?window=` — position 1 and the empty-state
- * detection of TS-008 D4.
+ * detection of TS-WEB-0008 D4.
  *
  * A place that geo-api does not resolve is **404**, which is a different fact
  * from an empty list: an empty list is the covered place with no dates, and

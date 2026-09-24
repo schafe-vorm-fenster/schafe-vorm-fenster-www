@@ -1,5 +1,5 @@
 /**
- * `check:content` — the validation gate of TS-007 D12.
+ * `check:content` — the validation gate of TS-WEB-0007 D12.
  *
  * One command, every row non-zero on failure, nothing on the list a warning.
  * What runs here is the part of D12 the shipped artifacts and the installed
@@ -12,11 +12,11 @@
  * | 1 schema parse | `schema` | runs |
  * | 3 provenance | `provenance`, `dummy-content` | runs |
  * | 5 facet completeness | `slot-meta` (provenance + status on every slot) | partial |
- * | — TS-007 D11/A14 | `lifecycle` (the editorial gate) | runs |
+ * | — TS-WEB-0007 D11/A14 | `lifecycle` (the editorial gate) | runs |
  * | 7 locale completeness | `locale-completeness` | runs |
  * | 8 harmonisation | `harmonisation` (records, slot set, provenance) | partial |
  * | 9 slot binding | `slot-binding` (unique ids inside a page) | partial |
- * | — TS-017-A14 | `spec-binding` | runs |
+ * | — TS-WEB-0017-A14 | `spec-binding` | runs |
  *
  * Rows 2, 4, 6, 10, 11 and 12 are open — see the README.
  */
@@ -51,7 +51,7 @@ export interface Finding {
   readonly message: string;
 }
 
-/** Validates one page artifact against TS-007 D5/D6/D11 and TS-017-A14. */
+/** Validates one page artifact against TS-WEB-0007 D5/D6/D11 and TS-WEB-0017-A14. */
 export function checkPage(page: PageContent, resolver: HubResolver): Finding[] {
   const findings: Finding[] = [];
   const at = (finding: Omit<Finding, "file" | "level">, level: Finding["level"] = "error") =>
@@ -63,7 +63,7 @@ export function checkPage(page: PageContent, resolver: HubResolver): Finding[] {
       message:
         page.reason === "page-file-missing"
           ? "the artifact is missing"
-          : "the frontmatter does not validate against PageFrontmatterSchema (TS-007 D5/D6)",
+          : "the frontmatter does not validate against PageFrontmatterSchema (TS-WEB-0007 D5/D6)",
     });
     return findings;
   }
@@ -73,7 +73,7 @@ export function checkPage(page: PageContent, resolver: HubResolver): Finding[] {
   if (frontmatter.page_id !== ROUTES[page.routeId].spec) {
     at({
       check: "spec-binding",
-      message: `\`page_id: ${frontmatter.page_id}\` but the route table gives ${page.routeId} the spec ${ROUTES[page.routeId].spec} (TS-017-A14)`,
+      message: `\`page_id: ${frontmatter.page_id}\` but the route table gives ${page.routeId} the spec ${ROUTES[page.routeId].spec} (TS-WEB-0017-A14)`,
     });
   }
 
@@ -135,8 +135,8 @@ export function checkPage(page: PageContent, resolver: HubResolver): Finding[] {
     if (slot.derivedFrom.length === 0 && !isDummyContent) {
       // `sourced` claims a source and must name it — that is D6's rule and
       // its reason (no source, no update path). `withheld` and `mixed`
-      // legitimately have none for the part that is missing (TS-024 D10,
-      // TS-026 D5): reported, not failed.
+      // legitimately have none for the part that is missing (TS-WEB-0024 D10,
+      // TS-WEB-0026 D5): reported, not failed.
       //
       // Dummy content is the third case and is exempt [PROPOSED, amends D6]:
       // an invented demo card derives from nothing, and writing
@@ -148,7 +148,7 @@ export function checkPage(page: PageContent, resolver: HubResolver): Finding[] {
           check: "provenance",
           slot: slot.id,
           message:
-            "empty `derived_from`: content that derives from nothing has no update path (TS-007 D6)",
+            "empty `derived_from`: content that derives from nothing has no update path (TS-WEB-0007 D6)",
         },
         claimsASource ? "error" : "warning",
       );
@@ -166,7 +166,7 @@ export function checkPage(page: PageContent, resolver: HubResolver): Finding[] {
 }
 
 /**
- * TS-007 D11 / A14, the editorial gate as a build check (F-2-40).
+ * TS-WEB-0007 D11 / A14, the editorial gate as a build check (F-2-40).
  *
  * `loader.ts` drops what the *running* build may not render; this asks the
  * production question from wherever `check:content` happens to run, so the
@@ -197,7 +197,7 @@ export function checkLifecycle(
       level,
       file: page.file,
       check: "lifecycle",
-      message: `\`status: ${page.status}\` — a production build contains only ${allowed} content (TS-007 D11, A14); this page renders in preview and reaches no production page`,
+      message: `\`status: ${page.status}\` — a production build contains only ${allowed} content (TS-WEB-0007 D11, A14); this page renders in preview and reaches no production page`,
     });
 
   for (const slot of [...page.slots, ...page.gatedSlots.map((id) => ({ id, status: null }))]) {
@@ -209,7 +209,7 @@ export function checkLifecycle(
       file: page.file,
       slot: slot.id,
       check: "lifecycle",
-      message: `\`status: ${status}\` — a production build contains only ${allowed} content (TS-007 D11, A14)`,
+      message: `\`status: ${status}\` — a production build contains only ${allowed} content (TS-WEB-0007 D11, A14)`,
     });
   }
 
@@ -218,7 +218,7 @@ export function checkLifecycle(
 
 export interface LocaleSetOptions {
   /**
-   * How a missing locale sibling is reported. `error` is TS-007 D8/D12 row 7;
+   * How a missing locale sibling is reported. `error` is TS-WEB-0007 D8/D12 row 7;
    * `warning` is the interim while a locale is being written.
    */
   readonly missingLocale?: "error" | "warning";
@@ -249,7 +249,7 @@ export function checkLocaleSet(
         level: missingLevel,
         file: sibling?.file ?? `${routeId}/${locale}`,
         check: "locale-completeness",
-        message: `no valid \`${locale}\` sibling for ${routeId} (TS-007 D8.1)`,
+        message: `no valid \`${locale}\` sibling for ${routeId} (TS-WEB-0007 D8.1)`,
       });
       continue;
     }
@@ -313,7 +313,7 @@ export interface CheckTreeOptions extends LocaleSetOptions {
   readonly contentRoot?: string;
   readonly resolver?: HubResolver;
   /**
-   * Which build the tree is being validated for (TS-007 D11). Defaults to
+   * Which build the tree is being validated for (TS-WEB-0007 D11). Defaults to
    * this process's own `VERCEL_ENV`. The *loading* always uses `preview`, so
    * the gate can report what production would drop instead of silently not
    * seeing it.
@@ -347,7 +347,7 @@ export async function checkContentTree(
     findings.push(...checkLocaleSet(routeId, pages, options));
   }
 
-  // Two routes share one artifact (TS-026), so the same file is checked twice.
+  // Two routes share one artifact (TS-WEB-0026), so the same file is checked twice.
   const seen = new Set<string>();
   return findings.filter((finding) => {
     const key = `${finding.file}|${finding.slot ?? ""}|${finding.check}|${finding.message}`;

@@ -23,7 +23,7 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe("TS-008-A11: the handover URL is {APP_ORIGIN}/{slug}, built from a geo-api slug", () => {
+describe("TS-WEB-0008-A11: the handover URL is {APP_ORIGIN}/{slug}, built from a geo-api slug", () => {
   it("builds the calendar URL from a resolved place", () => {
     expect(calendarUrl(resolved)).toBe(`${APP_ORIGIN}/schlatkow`);
   });
@@ -38,7 +38,7 @@ describe("TS-008-A11: the handover URL is {APP_ORIGIN}/{slug}, built from a geo-
     expect(isSlugShaped("gross-kiesow")).toBe(true);
   });
 
-  it("preserves inbound campaign parameters across the handover (WEB-F-048)", () => {
+  it("preserves inbound campaign parameters across the handover (FUN-WEB-0048)", () => {
     const url = calendarUrl(resolved, {
       campaign: new URLSearchParams({ etcc_cmp: "plakat-2026", etcc_med: "qr", unrelated: "x" }),
     });
@@ -47,13 +47,13 @@ describe("TS-008-A11: the handover URL is {APP_ORIGIN}/{slug}, built from a geo-
     expect(url).not.toContain("unrelated");
   });
 
-  it("appends nothing to the app URL for registration — no prefill contract exists (DEC-029)", () => {
+  it("appends nothing to the app URL for registration — no prefill contract exists (DEC-0029)", () => {
     expect(calendarUrl(resolved)).not.toContain("ort=");
     expect(registrationQuery(resolved)).toEqual({ ort: "schlatkow" });
     expect(registrationQuery(undefined)).toEqual({});
   });
 
-  it("follows the environment when the calendars move off the apex (DEC-035)", async () => {
+  it("follows the environment when the calendars move off the apex (DEC-0035)", async () => {
     vi.stubEnv("NEXT_PUBLIC_APP_ORIGIN", "https://schafe-vorm-fenster.de");
     vi.resetModules();
     const fresh = await import("./app-handover");
@@ -62,8 +62,8 @@ describe("TS-008-A11: the handover URL is {APP_ORIGIN}/{slug}, built from a geo-
   });
 });
 
-describe("TS-017-A11: help URLs come out of the same one module", () => {
-  it("answers the app root for an article the mocked table does not know (Q-041)", () => {
+describe("TS-WEB-0017-A11: help URLs come out of the same one module", () => {
+  it("answers the app root for an article the mocked table does not know (Q-0041)", () => {
     expect(helpUrl("gibt-es-nicht")).toBe(APP_ORIGIN);
     expect(helpUrl()).toBe(APP_ORIGIN);
   });

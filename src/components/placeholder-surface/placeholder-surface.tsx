@@ -14,7 +14,7 @@ export interface PlaceholderSurfaceProps {
 }
 
 /**
- * 58 `placeholder-surface` [PROPOSED] — SRC-014 §Photo surface.
+ * 58 `placeholder-surface` [PROPOSED] — SRC-0014 §Photo surface.
  *
  * Structure: a flat brand-colour surface at the ratio the photograph will
  * fill. No hatch, no badge, no caption — Jan's decision of 2026-09-18: the

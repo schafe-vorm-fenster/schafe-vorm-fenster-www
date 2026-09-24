@@ -11,7 +11,7 @@ import type { MouseEvent, ReactNode } from "react";
 import styles from "./site-header.module.css";
 
 /**
- * `xl` — 64rem, the switch point the burger lives below (TS-017 D2(b)).
+ * `xl` — 64rem, the switch point the burger lives below (TS-WEB-0017 D2(b)).
  *
  * Jan's round-3 wording says `md`; measured, the four German job labels do not
  * fit an inline row until `xl` (the header's own container scrolls by 262 px
@@ -44,7 +44,7 @@ export interface HeaderShellProps {
 const MENU_ID = "site-menu";
 
 /**
- * The one client component of the chrome — TS-004 D4, Jan's round-3 points 2
+ * The one client component of the chrome — TS-WEB-0004 D4, Jan's round-3 points 2
  * and 3.
  *
  * It owns exactly two runtime facts and nothing else: whether the header has
@@ -64,7 +64,7 @@ const MENU_ID = "site-menu";
  * No layout shift: over a hero the header is `position: fixed`, so it takes
  * no space in the flow at any scroll position and turning solid changes only
  * colours. The reserved height is published as `--site-header-height` either
- * way (TS-029 D3).
+ * way (TS-WEB-0029 D3).
  */
 export function HeaderShell({
   overHero,
@@ -91,7 +91,7 @@ export function HeaderShell({
    *
    * Measured on every scroll rather than watched with an `IntersectionObserver`
    * for one reason: on `/` the hero is rendered twice — once as the Suspense
-   * fallback, once by the streamed branch that replaces it (TS-019 D2's place
+   * fallback, once by the streamed branch that replaces it (TS-WEB-0019 D2's place
    * states) — so the element an observer bound to at mount is detached a beat
    * later and stops reporting. Measured live, the query finds whichever hero is
    * currently in the document. The listener is passive and reads one

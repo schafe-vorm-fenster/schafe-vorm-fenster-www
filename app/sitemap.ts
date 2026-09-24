@@ -8,27 +8,27 @@ import {
 import type { MetadataRoute } from "next";
 
 /**
- * The sitemap — TS-004 D1/A5, TS-011.
+ * The sitemap — TS-WEB-0004 D1/A5, TS-WEB-0011.
  *
  * Built from the route registry, so it cannot list a URL that does not exist
  * and cannot miss one that does — one entry **per route, per locale**
  * (`ROUTE_IDS × LOCALES`), each carrying the full hreflang-equivalent set as
- * its `alternates.languages` from the same row TS-001 D6's `<link
+ * its `alternates.languages` from the same row TS-WEB-0001 D6's `<link
  * rel="alternate">` set comes from, so the two can never drift apart. No
- * entry carries a query parameter (TS-011 D9/D6 last row: `etcc_*` never
+ * entry carries a query parameter (TS-WEB-0011 D9/D6 last row: `etcc_*` never
  * appears here).
  *
  * ### M4 domain-matrix decision, recorded
  *
- * TS-004 D1's per-domain narrowing (landing-only domains list `/`, the
+ * TS-WEB-0004 D1's per-domain narrowing (landing-only domains list `/`, the
  * legal routes and the machine surfaces only) is **not** built here. Two
  * reasons hold it back, not just one missing input:
  *
  *   1. `sitemap.ts` is a cached, static route (no per-request host) —
  *      reading the request host here would make the sitemap
  *      per-request, which contradicts the same cacheability argument
- *      DEC-038/TS-001 D3 make for pages.
- *   2. `robots.ts` (TS-015 D3, not owned by this work package) hard-links
+ *      DEC-0038/TS-WEB-0001 D3 make for pages.
+ *   2. `robots.ts` (TS-WEB-0015 D3, not owned by this work package) hard-links
  *      the single canonical `/sitemap.xml` URL; splitting this file with
  *      `generateSitemaps()` moves the output to `/sitemap/[id].xml` and
  *      would silently break that reference and its test.

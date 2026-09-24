@@ -38,7 +38,7 @@ already exists.
 The website is a Next.js 16 application in the App Router, server-first,
 deployed to Vercel. TypeScript throughout, pnpm as the package manager,
 plain CSS and CSS Modules over the `@schafe-vorm-fenster/brand-design`
-tokens. `specs/decisions/072-the-foundation-stack.md` records why each of
+tokens. `specs/decisions/DEC-0072--the-foundation-stack.md` records why each of
 those is what it is.
 
 ### Getting Started
@@ -66,7 +66,7 @@ registry is where the **STRICT** specification method lives:
 `@leafcutter-strict/blueprint-complete` is a devDependency pinned exact, and
 `scripts/check-specs.ts` reads five of its controlled vocabularies straight
 out of `@leafcutter-strict/library-schemas` instead of repeating them
-(DEC-085). `stack.allow.json` does not cover either, because both are
+(DEC-0085). `stack.allow.json` does not cover either, because both are
 devDependencies and the register is for runtime dependencies.
 
 ### Commands
@@ -93,21 +93,21 @@ Protection with `VERCEL_AUTOMATION_BYPASS_SECRET` — the suite sends it as
 | Path | What |
 | --- | --- |
 | `app/` | routes, layouts and the app-router tree |
-| `app/[lang]/_islands.tsx` | **the cached islands** (TS-009 D1): one `use cache` component per TS-008 live-module position, `cacheLife`/`cacheTag` from `src/lib/live/cache-profiles.ts`. A page renders them; it never fetches |
+| `app/[lang]/_islands.tsx` | **the cached islands** (TS-WEB-0009 D1): one `use cache` component per TS-WEB-0008 live-module position, `cacheLife`/`cacheTag` from `src/lib/live/cache-profiles.ts`. A page renders them; it never fetches |
 | `app/[lang]/_content.ts` | the content pipeline on the cache side — `loadPage`/`loadLegalDocument` at `cacheLife("max")`, which is what keeps a page's copy inside the prerendered shell |
-| `app/[lang]/_proof.ts` | the relevance engine's one seam into the pages: candidates in, DEC-048's positions out, cached per viewer segment and ISO week |
-| `app/[lang]/_structured-data.tsx` | TS-011 D4's table as one function — which JSON-LD node sits on which page, in the one graph per page |
+| `app/[lang]/_proof.ts` | the relevance engine's one seam into the pages: candidates in, DEC-0048's positions out, cached per viewer segment and ISO week |
+| `app/[lang]/_structured-data.tsx` | TS-WEB-0011 D4's table as one function — which JSON-LD node sits on which page, in the one graph per page |
 | `app/styles/brand.css` | **the single token-import file** — the only place a brand value enters. No colour literal and no `font-family` literal exists anywhere else, and `pnpm check:brand` fails one that does. |
 | `app/styles/base.css` | the mobile-first shell: phone base, `min-width` queries only, the six `breakpoint.*` token values |
 | `proxy.ts` | the CSP, the HSTS variance and the `X-Robots-Tag`, on every response |
 | `src/lib/security/` | the policy as one typed structure, in one module |
 | `src/lib/seo/` | the indexability predicate and the robots surface |
-| `app/api/` | **the BFF** (TS-004 D5): five GET-only route handlers, the browser's only data surface. No ecosystem host, token or visitor IP ever appears in a client request |
-| `src/lib/live/` | **the live-data layer** (TS-008/TS-009): one interface module per live module, the real/mock switch, the three-tier fallback, and the one module that knows the app's hostname. `src/lib/live/README.md` has the module map and the page-wiring example |
+| `app/api/` | **the BFF** (TS-WEB-0004 D5): five GET-only route handlers, the browser's only data surface. No ecosystem host, token or visitor IP ever appears in a client request |
+| `src/lib/live/` | **the live-data layer** (TS-WEB-0008/TS-WEB-0009): one interface module per live module, the real/mock switch, the three-tier fallback, and the one module that knows the app's hostname. `src/lib/live/README.md` has the module map and the page-wiring example |
 | `src/clients/` | the pinned OpenAPI specs and the service clients built on them — one closed header set, one place a host or read token is read. Three clients: the two token-scoped APIs, and `community-site/`, which reads the **public** village calendar and is what puts real dates on a deployment with no credential at all |
-| `src/generated/snapshots/` | tier 3: the committed build-time payloads a live module renders when the upstream is down and the cache is cold (TS-009 D8) — plus `communities.json`, the 1760 covered communities the place search's name lookup reads (`pnpm build:place-index`) |
+| `src/generated/snapshots/` | tier 3: the committed build-time payloads a live module renders when the upstream is down and the cache is cold (TS-WEB-0009 D8) — plus `communities.json`, the 1760 covered communities the place search's name lookup reads (`pnpm build:place-index`) |
 | `src/lib/embed/` | which Portalize calendar `/dein-kalender` embeds and why — the loader URL, the reserved height, and the organizer id, which is a public identifier and not a credential |
-| `src/lib/content/` | **the content pipeline** (TS-007): `loadPage(routeId, locale)` gives a page its typed slots — provenance, `Demo-Daten` marking and all — out of `content/pages/<route>/<locale>.md`. Request time reads the local tree only; the hub-package adapter beside it is build-time. `src/lib/content/README.md` has the call example |
+| `src/lib/content/` | **the content pipeline** (TS-WEB-0007): `loadPage(routeId, locale)` gives a page its typed slots — provenance, `Demo-Daten` marking and all — out of `content/pages/<route>/<locale>.md`. Request time reads the local tree only; the hub-package adapter beside it is build-time. `src/lib/content/README.md` has the call example |
 | `content/pages/` | the page artifacts the pipeline reads: one file per page per locale, one section per slot, provenance per slot. Written by the content playbook, validated by `pnpm check:content` |
 | `e2e/` | Playwright specs |
 | `stack.allow.json` | the register of every runtime dependency with its reason |
@@ -116,14 +116,14 @@ Protection with `VERCEL_AUTOMATION_BYPASS_SECRET` — the suite sends it as
 
 Unit tests sit beside the code as `*.test.ts`, integration tests as
 `*.integration.test.ts`. A test names the spec id it verifies in its
-`describe` title — `describe("TS-015-A1: …")` — which is how
+`describe` title — `describe("TS-WEB-0015-A1: …")` — which is how
 `pnpm check:specs` reads coverage off the suite.
 
 ### Rendering
 
 **Cache Components is on** (`cacheComponents: true`, Next.js 16). Every page is
-a prerendered shell plus cached islands (TS-009 D1): page copy and every live
-module carry `use cache` with the TS-003 D5 lifetimes, and a request value —
+a prerendered shell plus cached islands (TS-WEB-0009 D1): page copy and every live
+module carry `use cache` with the TS-WEB-0003 D5 lifetimes, and a request value —
 `?ort=`, a header — is read outside every cache boundary and handed down as a
 prop.
 
@@ -140,7 +140,7 @@ Two consequences worth knowing before editing a page:
 - `new Date()`, `Math.random()` and `crypto.randomUUID()` fail the prerender
   unless they sit inside a `use cache` scope or behind `await connection()`.
 - A `<Suspense>` boundary must not contain an `<input>`, `<textarea>` or
-  `<select>` (TS-009 D2, DEC-078). A boundary is revealed by *replacing*
+  `<select>` (TS-WEB-0009 D2, DEC-0078). A boundary is revealed by *replacing*
   DOM, so a field inside one is a different element a beat after first paint
   and whatever had been typed into it is gone — measured on `/`, where the
   hero search lost a postcode typed in the first 350 ms on every load
@@ -161,8 +161,8 @@ variables.
 ### Continuous Integration
 
 `.github/workflows/` carries the M4 minimal-CI slice of
-`specs/tactical/delivery-pipeline.tactical.md` (TS-015) — a prototype
-subset of DEC-031's stage 2, not the full merge-gating job graph:
+`specs/tactical/TS-WEB-0015--delivery-pipeline.tactical.md` (TS-WEB-0015) — a prototype
+subset of DEC-0031's stage 2, not the full merge-gating job graph:
 
 - **`check.yml`** — every push to `next-2026` and every pull request
   targeting it: install (the `@schafe-vorm-fenster` scope resolves from
@@ -170,13 +170,13 @@ subset of DEC-031's stage 2, not the full merge-gating job graph:
   · `pnpm check` · `pnpm build` · `pnpm e2e` against the production build
   (`next start`, not `next dev` — see `playwright.config.ts`), with
   Playwright's Chromium browser cached between runs.
-- **`preview-e2e.yml`** — the TS-015 preview smoke. Vercel's Git
+- **`preview-e2e.yml`** — the TS-WEB-0015 preview smoke. Vercel's Git
   integration deploys every push to `next-2026` automatically (confirmed via
   `vercel ls` / the deployments API: `source: git`, matching commit SHAs);
   this workflow reacts to the resulting `deployment_status` event and runs
   the same Playwright suite against `environment_url`, authenticating past
   Vercel Deployment Protection with the `VERCEL_AUTOMATION_BYPASS_SECRET`
-  repository secret (`x-vercel-protection-bypass`, TS-015 D3/D10).
+  repository secret (`x-vercel-protection-bypass`, TS-WEB-0015 D3/D10).
 
 See a run: the repository's **Actions** tab, or `gh run list` /
 `gh run watch <id>` (`gh auth switch --user schafevormfenster` first — a
@@ -186,8 +186,8 @@ different GitHub account is used for this repository, per
 Not shipped in M4, on purpose: the `Quality` job (knip/jscpd/security),
 `Preview-Deployment` as its own gate, `Budgets` (Lighthouse/bundle/axe),
 `auto-merge*.yml`, branch protection, and the production canary/rollback
-pipeline (`deploy.yml`). These are DEC-031 stage-2 work for after the
-prototype — TS-015-A3–A5/A9/A10/A12's current status (pass / not-yet, with
+pipeline (`deploy.yml`). These are DEC-0031 stage-2 work for after the
+prototype — TS-WEB-0015-A3–A5/A9/A10/A12's current status (pass / not-yet, with
 the reason) is recorded in this work package's completion report and in
 `state/open.md`.
 

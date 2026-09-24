@@ -5,7 +5,7 @@ import { SHOWCASE_CALENDAR } from "../src/lib/embed/portalize";
 import { href } from "../src/lib/routes/routes";
 
 /**
- * TS-008 D6 / `state/open.md` row 82 — the real Portalize calendar on
+ * TS-WEB-0008 D6 / `state/open.md` row 82 — the real Portalize calendar on
  * `/dein-kalender`.
  *
  * What a browser has to establish, and nothing else can:
@@ -17,7 +17,7 @@ import { href } from "../src/lib/routes/routes";
  *    round trips the widget makes move nothing below it;
  *  - the loader is lazy: it is not in the document until the block is
  *    approached;
- *  - every host the embed contacts is in the TS-014 D1 allowlist, and the
+ *  - every host the embed contacts is in the TS-WEB-0014 D1 allowlist, and the
  *    console stays clean — a CSP refusal would show up as both.
  */
 

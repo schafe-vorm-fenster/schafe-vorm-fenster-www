@@ -1,6 +1,6 @@
 /**
- * Emphasis and order — DEC-059, `plan/component-inventory.md` §5 D-1
- * (Q-052), TS-019 D3a.
+ * Emphasis and order — DEC-0059, `plan/component-inventory.md` §5 D-1
+ * (Q-0052), TS-WEB-0019 D3a.
  *
  * A page's focus job is stable at every stage. What the entry trait changes is
  * **the order of the scenes and which offer is emphasised** — nothing else.
@@ -10,7 +10,7 @@
  * refused at render time (the default order stands) and reported by
  * `validateEmphasisTable()`, which a page's own test calls.
  *
- * The tables themselves belong to the pages — TS-019 D3a is the home page's.
+ * The tables themselves belong to the pages — TS-WEB-0019 D3a is the home page's.
  */
 
 import type { EntryTrait } from "../relevance/types";

@@ -1,7 +1,7 @@
 /**
  * The one place a route turns its `[lang]` segment into a language.
  *
- * TS-001 D4: a first segment that is not a language served on this domain is
+ * TS-WEB-0001 D4: a first segment that is not a language served on this domain is
  * a **404**, not a silent fallback to German. Every page calls this; the
  * layout does not, because a layout that throws cannot render the
  * `not-found.tsx` that lives inside it.
@@ -35,7 +35,7 @@ export async function localeFrom(
  * above `[lang]`, so a throw there escapes the shell and Next falls back to
  * its built-in 404. The *page* answers 404 (through `localeFrom` above); this
  * resolves, and for an unknown language it resolves to the 404's own
- * `noindex, follow` (DEC-032, TS-004-A4) rather than to the metadata of a page
+ * `noindex, follow` (DEC-0032, TS-WEB-0004-A4) rather than to the metadata of a page
  * that will not render.
  *
  * The pairing used to be implicit: `dynamicParams = false` kept an unknown

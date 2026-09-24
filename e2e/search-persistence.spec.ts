@@ -5,8 +5,8 @@ import { ROUTE_IDS, href } from "../src/lib/routes/routes";
 import type { Page } from "@playwright/test";
 
 /**
- * DEC-078 — what a visitor types is never thrown away by a streamed
- * boundary. TS-019-A16 (`/`'s hero search) and TS-009-A14 (the site-wide
+ * DEC-0078 — what a visitor types is never thrown away by a streamed
+ * boundary. TS-WEB-0019-A16 (`/`'s hero search) and TS-WEB-0009-A14 (the site-wide
  * rule).
  *
  * `state/open.md` row 213, measured on the production build: a postcode
@@ -113,9 +113,9 @@ async function settled(page: Page): Promise<void> {
   await page.waitForTimeout(1_500);
 }
 
-test.describe("DEC-078 — a streamed boundary never holds what a visitor types", () => {
+test.describe("DEC-0078 — a streamed boundary never holds what a visitor types", () => {
   for (const route of SEARCH_ROUTES) {
-    test(`TS-019-A16: the field on ${route.path} is never replaced after first paint`, async ({
+    test(`TS-WEB-0019-A16: the field on ${route.path} is never replaced after first paint`, async ({
       page,
     }) => {
       await watchFieldIdentity(page, route.inputId);
@@ -129,7 +129,7 @@ test.describe("DEC-078 — a streamed boundary never holds what a visitor types"
       expect(nodes, `distinct #${route.inputId} elements on ${route.path}`).toBe(1);
     });
 
-    test(`TS-019-A16: a value typed into ${route.path} in the first frames survives and submits`, async ({
+    test(`TS-WEB-0019-A16: a value typed into ${route.path} in the first frames survives and submits`, async ({
       page,
     }) => {
       // The window the defect lives in is the one between first paint and
@@ -168,10 +168,10 @@ test.describe("DEC-078 — a streamed boundary never holds what a visitor types"
    * behaviour: React marks a pending boundary with `<!--$?-->…<!--/$-->` and
    * parks the resolved branch in a `<div hidden id="S:…">` at the end of the
    * body. Neither half may contain a control that holds a value, on any
-   * route — that is the invariant DEC-078 adds, and the one a future page
+   * route — that is the invariant DEC-0078 adds, and the one a future page
    * would otherwise break silently.
    */
-  test("TS-009-A14: no value-holding control arrives through a streamed boundary", async ({
+  test("TS-WEB-0009-A14: no value-holding control arrives through a streamed boundary", async ({
     request,
   }) => {
     const paths = [...ROUTE_IDS.map((id) => href(id, "de")), href("home", "en")];

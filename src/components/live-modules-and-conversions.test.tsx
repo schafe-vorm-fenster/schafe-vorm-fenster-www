@@ -114,7 +114,7 @@ describe("D-9: the ten data-dependent §2.4/§2.5 components declare all four st
     }
   });
 
-  it("never renders a spinner, an error sentence or a retry control (TS-008 D5)", () => {
+  it("never renders a spinner, an error sentence or a retry control (TS-WEB-0008 D5)", () => {
     const lowered = GALLERY_HTML.toLowerCase();
     expect(lowered).not.toContain("spinner");
     expect(lowered).not.toContain("erneut versuchen");
@@ -130,7 +130,7 @@ describe("plan/guardrails.md mock rule: mocked modules are marked in `data-*`, n
     expect(html).toContain('data-mock="true"');
     for (const word of FORBIDDEN_MARKINGS) expect(html, word).not.toContain(word);
     // No form control carries a `name` — even a submission of this mock form
-    // sends zero fields anywhere (TS-016 D5). Unchanged by Jan's 2026-09-18
+    // sends zero fields anywhere (TS-WEB-0016 D5). Unchanged by Jan's 2026-09-18
     // decision: the safety property is not what came off the page.
     expect(html).not.toMatch(/<(input|textarea)\b[^>]*\sname="/);
   });
@@ -152,7 +152,7 @@ describe("plan/guardrails.md mock rule: mocked modules are marked in `data-*`, n
   });
 });
 
-describe("TS-008 D1/D4/D5: live-module-frame and event-list", () => {
+describe("TS-WEB-0008 D1/D4/D5: live-module-frame and event-list", () => {
   it("live-module-frame's loading state is aria-hidden and shows no data", () => {
     const html = renderToStaticMarkup(
       <LiveModuleFrame state="loading" title="Termine in Beispieldorf">
@@ -184,12 +184,12 @@ describe("TS-008 D1/D4/D5: live-module-frame and event-list", () => {
     expect(html).toContain("Leer");
   });
 
-  it("place-example-set renders nothing at all when empty (module absent from the DOM, DEC-034)", () => {
+  it("place-example-set renders nothing at all when empty (module absent from the DOM, DEC-0034)", () => {
     const html = renderToStaticMarkup(<PlaceExampleSet examples={[]} state="empty" />);
     expect(html).toBe("");
   });
 
-  it("live-counters hides the whole module when no figure is present (WEB-F-041)", () => {
+  it("live-counters hides the whole module when no figure is present (FUN-WEB-0041)", () => {
     const html = renderToStaticMarkup(<LiveCounters state="ready" />);
     expect(html).toBe("");
   });
@@ -206,7 +206,7 @@ describe("TS-008 D1/D4/D5: live-module-frame and event-list", () => {
   });
 });
 
-describe("TS-008 D6: embed-frame keeps its copy and CTA regardless of the loader's state", () => {
+describe("TS-WEB-0008 D6: embed-frame keeps its copy and CTA regardless of the loader's state", () => {
   it("never renders an empty frame when the loader is blocked (state=empty)", () => {
     const html = renderToStaticMarkup(
       <EmbedFrame copy="Beispieltext" cta={<button type="button">Weiter</button>} heading="Beispiel" state="empty" />,
@@ -221,14 +221,14 @@ describe("TS-008 D6: embed-frame keeps its copy and CTA regardless of the loader
   });
 });
 
-describe("TS-006 D5/D6: context-band and closing-cta share one job registry", () => {
+describe("TS-WEB-0006 D5/D6: context-band and closing-cta share one job registry", () => {
   it("otherJobs excludes exactly the current job and returns the other three", () => {
     const jobs = otherJobs("knowWhatIsOn");
     expect(jobs).toHaveLength(3);
     expect(jobs.map((job) => job.label)).not.toContain("knowWhatIsOn");
   });
 
-  it("context-band never carries the primary-CTA marker (TS-006 D3)", () => {
+  it("context-band never carries the primary-CTA marker (TS-WEB-0006 D3)", () => {
     const html = renderToStaticMarkup(<ContextBand currentJob="knowWhatIsOn" />);
     expect(html).not.toContain('data-cta="primary"');
     expect(html).toMatch(/<nav[^>]*aria-label="[^"]+"/);
@@ -253,8 +253,8 @@ describe("TS-006 D5/D6: context-band and closing-cta share one job registry", ()
   });
 });
 
-describe("TS-006 D11: response-promise renders nothing while the constant is null", () => {
-  it("the shipped constant is null (Q-022 C11 unanswered)", () => {
+describe("TS-WEB-0006 D11: response-promise renders nothing while the constant is null", () => {
+  it("the shipped constant is null (Q-0022 C11 unanswered)", () => {
     expect(RESPONSE_PROMISE_TEXT).toBeNull();
   });
 
@@ -268,7 +268,7 @@ describe("TS-006 D11: response-promise renders nothing while the constant is nul
   });
 });
 
-describe("TS-023 D8 / decision D-6: choice-group is a real radiogroup, chip-shaped", () => {
+describe("TS-WEB-0023 D8 / decision D-6: choice-group is a real radiogroup, chip-shaped", () => {
   it("marks exactly the selected option as checked, with a non-colour-only check glyph", () => {
     const html = renderToStaticMarkup(
       <ChoiceGroup
@@ -296,7 +296,7 @@ describe("TS-023 D8 / decision D-6: choice-group is a real radiogroup, chip-shap
   });
 });
 
-describe("TS-025 D3/D3a: scope-picker collapses above its threshold", () => {
+describe("TS-WEB-0025 D3/D3a: scope-picker collapses above its threshold", () => {
   const manyItems = Array.from({ length: 13 }, (_, index) => ({
     id: `place-${index}`,
     kind: "place" as const,
@@ -324,7 +324,7 @@ describe("TS-025 D3/D3a: scope-picker collapses above its threshold", () => {
   });
 });
 
-describe("TS-025 D7: code-snippet reserves the pending case and never invents a code", () => {
+describe("TS-WEB-0025 D7: code-snippet reserves the pending case and never invents a code", () => {
   it("shows the pending note instead of a code block when the code cannot be issued yet", () => {
     const html = renderToStaticMarkup(<CodeSnippet code="" state="empty" />);
     expect(html).not.toContain("<pre");
@@ -341,7 +341,7 @@ describe("TS-025 D7: code-snippet reserves the pending case and never invents a 
   });
 });
 
-describe("TS-017 D3: no colour literal or raw breakpoint enters through these seventeen components", () => {
+describe("TS-WEB-0017 D3: no colour literal or raw breakpoint enters through these seventeen components", () => {
   it("keeps every inline style in the gallery a token or layout reference", () => {
     const inlineStyles = GALLERY_HTML.match(/style="[^"]*"/g) ?? [];
     for (const style of inlineStyles) {

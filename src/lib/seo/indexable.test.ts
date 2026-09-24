@@ -7,7 +7,7 @@ import {
   normaliseHost,
 } from "@/src/lib/seo/indexable";
 
-describe("TS-015 D3: the indexability predicate", () => {
+describe("TS-WEB-0015 D3: the indexability predicate", () => {
   it("is true only for production on a canonical host", () => {
     expect(isIndexable("production", "www.schafe-vorm-fenster.de")).toBe(true);
     for (const host of CANONICAL_PUBLIC_HOSTS) {
@@ -37,7 +37,7 @@ describe("TS-015 D3: the indexability predicate", () => {
     );
   });
 
-  it("maps VERCEL_ENV onto the three environments of TS-014 D5", () => {
+  it("maps VERCEL_ENV onto the three environments of TS-WEB-0014 D5", () => {
     expect(environmentFrom("production")).toBe("production");
     expect(environmentFrom("preview")).toBe("preview");
     expect(environmentFrom("development")).toBe("development");

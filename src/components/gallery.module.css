@@ -44,7 +44,7 @@
   display: grid;
   gap: var(--space-4);
   /* `minmax(0, …)`: a grid track's default min is min-content, which would
-     let a nowrap badge push the page sideways (TS-017 D2/A9). */
+     let a nowrap badge push the page sideways (TS-WEB-0017 D2/A9). */
   grid-template-columns: minmax(0, 1fr);
   margin-top: var(--space-6);
 }

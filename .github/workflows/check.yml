@@ -1,13 +1,13 @@
 name: Check
 
-# M4 — minimal CI (DEC-031 stage 2, prototype subset; TS-015).
+# M4 — minimal CI (DEC-0031 stage 2, prototype subset; TS-WEB-0015).
 #
-# This is not the full D4 job graph of specs/tactical/delivery-pipeline.tactical.md
+# This is not the full D4 job graph of specs/tactical/TS-WEB-0015--delivery-pipeline.tactical.md
 # (no Quality/knip/jscpd/security job, no Preview-Deployment job, no Budgets
 # job, no branch-protection wiring) — the work package that shipped this file
 # (M4) explicitly scopes it to: install · `pnpm check` · `pnpm build` ·
 # `pnpm e2e` against the local production build. It does not gate merges yet
-# (TS-015-A3/A4/A5/A10/A12 stay "not yet" — see README.md's CI section for
+# (TS-WEB-0015-A3/A4/A5/A10/A12 stay "not yet" — see README.md's CI section for
 # the per-AC status). The full graph, auto-merge and rolling production
 # promotion are stage-2 follow-up work, not part of this run.
 #

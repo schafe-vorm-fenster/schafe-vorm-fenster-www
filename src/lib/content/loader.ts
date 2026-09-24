@@ -1,8 +1,8 @@
 /**
- * `loadPage(routeId, locale)` — what a page calls (TS-007 D3, D4).
+ * `loadPage(routeId, locale)` — what a page calls (TS-WEB-0007 D3, D4).
  *
  * Request time reads the local content tree and nothing else: no hub
- * package, no GTM artefact, no registry (TS-007-A12). That is why this
+ * package, no GTM artefact, no registry (TS-WEB-0007-A12). That is why this
  * module imports `source-refs.ts` nowhere — resolving a provenance reference
  * is a build-time concern and lives in `scripts/check-content.ts`.
  *
@@ -33,13 +33,13 @@ import type { ContentGap, ContentSlot, PageContent } from "@/src/lib/content/typ
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { RouteId } from "@/src/lib/routes/routes";
 
-/** The content tree, relative to the repository root (TS-007 D4). */
+/** The content tree, relative to the repository root (TS-WEB-0007 D4). */
 export const CONTENT_ROOT = "content/pages";
 
 /**
  * Which page artifact a route reads.
  *
- * Two routes share a file: `/deine-region/angebot` is specified by TS-026
+ * Two routes share a file: `/deine-region/angebot` is specified by TS-WEB-0026
  * together with `/deine-region`, and its slots (`deine-region-angebot-*`)
  * live in that page's file. `home` has no route segment to name a folder, so
  * it takes its own.
@@ -149,7 +149,7 @@ export interface ParsePageOptions {
   /** Repository-relative path, for messages. */
   readonly file: string;
   /**
-   * Which build is being produced — TS-007 D11's editorial gate. Defaults to
+   * Which build is being produced — TS-WEB-0007 D11's editorial gate. Defaults to
    * this process's own (`VERCEL_ENV`); `check:content` passes it explicitly
    * so it can ask the *production* question from any environment.
    */
@@ -169,18 +169,18 @@ export function parsePage(raw: string, options: ParsePageOptions): PageContent {
   if (!parsed.success) {
     warnOnce(
       `frontmatter:${file}`,
-      `${file}: frontmatter does not validate (TS-007 D5) — the page renders empty`,
+      `${file}: frontmatter does not validate (TS-WEB-0007 D5) — the page renders empty`,
     );
     return emptyPage(routeId, locale, file, "page-frontmatter-invalid");
   }
 
-  // TS-007 D11 / A14 — the editorial gate. A page the build may not contain
+  // TS-WEB-0007 D11 / A14 — the editorial gate. A page the build may not contain
   // renders nothing at all rather than a half page: the empty states are the
   // honest answer, and `check:content` is what refuses the build.
   if (!rendersIn(parsed.data.status, environment)) {
     warnOnce(
       `lifecycle:${file}:${environment}`,
-      `${file}: \`status: ${parsed.data.status}\` does not render in a ${environment} build (TS-007 D11) — the page renders empty`,
+      `${file}: \`status: ${parsed.data.status}\` does not render in a ${environment} build (TS-WEB-0007 D11) — the page renders empty`,
     );
     return {
       ...emptyPage(routeId, locale, file, "page-not-approved"),
@@ -225,7 +225,7 @@ export function parsePage(raw: string, options: ParsePageOptions): PageContent {
     if (!rendersIn(meta.meta.status, environment)) {
       warnOnce(
         `lifecycle:${file}:${meta.meta.id}:${environment}`,
-        `${file} › ${meta.meta.id}: \`status: ${meta.meta.status}\` does not render in a ${environment} build (TS-007 D11)`,
+        `${file} › ${meta.meta.id}: \`status: ${meta.meta.status}\` does not render in a ${environment} build (TS-WEB-0007 D11)`,
       );
       gatedSlots.push(meta.meta.id);
       continue;
@@ -271,7 +271,7 @@ export interface LoadPageOptions {
    * never does.
    */
   readonly contentRoot?: string;
-  /** TS-007 D11's build axis — see `ParsePageOptions.environment`. */
+  /** TS-WEB-0007 D11's build axis — see `ParsePageOptions.environment`. */
   readonly environment?: Environment;
 }
 
@@ -284,7 +284,7 @@ export function pageFile(routeId: RouteId, locale: Locale): string {
 
 /**
  * Loads one page artifact. Never throws and never falls back to another
- * language — DEC-026 forbids showing German copy on an English page as much
+ * language — DEC-0026 forbids showing German copy on an English page as much
  * as it forbids machine translation, so a missing sibling renders empty and
  * `pnpm check:content` fails the commit that caused it.
  *
@@ -316,7 +316,7 @@ export async function loadPage(
   } catch {
     warnOnce(
       `missing:${file}`,
-      `${file} is missing — the page renders its empty states (TS-007 D11)`,
+      `${file} is missing — the page renders its empty states (TS-WEB-0007 D11)`,
     );
     return emptyPage(routeId, locale, file, "page-file-missing");
   }

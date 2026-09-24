@@ -17,7 +17,7 @@ const viewer: ViewerContext = {
   locale: "de",
 };
 
-describe("TS-005-A8: the engine never renders per visitor — it renders per segment", () => {
+describe("TS-WEB-0005-A8: the engine never renders per visitor — it renders per segment", () => {
   it("keys on community, entry trait, focus job and the ISO week", () => {
     expect(segmentKey(viewer, "2026-W37")).toEqual({
       community: "flechtorf",
@@ -32,7 +32,7 @@ describe("TS-005-A8: the engine never renders per visitor — it renders per seg
     expect(segmentCacheKey(viewer, "2026-W37")).toBe(segmentCacheKey(other, "2026-W37"));
   });
 
-  it("falls back to municipality when DEC-055's parameter change is applied", () => {
+  it("falls back to municipality when DEC-0055's parameter change is applied", () => {
     expect(segmentKey(viewer, "2026-W37", { geoAxis: "municipality" }).community).toBe("lehre");
   });
 

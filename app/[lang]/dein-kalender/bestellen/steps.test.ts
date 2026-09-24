@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { addPlace, parseOrte, removePlace, resolveOrderStep } from "./steps";
 
-describe("TS-025-A4: scope in the URL", () => {
+describe("TS-WEB-0025-A4: scope in the URL", () => {
   it("parses and serializes the comma-separated slug list", () => {
     expect(parseOrte(undefined)).toEqual([]);
     expect(parseOrte("")).toEqual([]);
@@ -21,7 +21,7 @@ describe("TS-025-A4: scope in the URL", () => {
   });
 });
 
-describe("TS-025-A4: step resolution", () => {
+describe("TS-WEB-0025-A4: step resolution", () => {
   it("stays on the scope screen (step 1) with nothing selected", () => {
     expect(resolveOrderStep(false, undefined)).toBe(1);
     expect(resolveOrderStep(false, "3")).toBe(1);

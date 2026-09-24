@@ -12,7 +12,7 @@ const seeded = (key: string, entry: LastGoodEntry<string>) =>
 
 const silent = () => undefined;
 
-describe("TS-009-A4: resilient() decides the tier per call", () => {
+describe("TS-WEB-0009-A4: resilient() decides the tier per call", () => {
   it("answers tier 1 and writes last-good when the upstream answers", async () => {
     const store = memoryStore();
     const envelope = await resilient(async () => "live payload", {
@@ -135,7 +135,7 @@ describe("TS-009-A4: resilient() decides the tier per call", () => {
   });
 });
 
-describe("TS-009-A4 / TS-009 D6: the counters have no tier 3", () => {
+describe("TS-WEB-0009-A4 / TS-WEB-0009 D6: the counters have no tier 3", () => {
   it("throws NoFallbackError when no snapshot is offered and no last-good survives", async () => {
     await expect(
       resilient<string>(
@@ -148,7 +148,7 @@ describe("TS-009-A4 / TS-009 D6: the counters have no tier 3", () => {
   });
 });
 
-describe("TS-009-A10: the freshness label's conditions", () => {
+describe("TS-WEB-0009-A10: the freshness label's conditions", () => {
   it("stays absent for a tier-1 answer inside its fresh TTL", () => {
     const envelope = {
       data: 1,
@@ -186,8 +186,8 @@ describe("TS-009-A10: the freshness label's conditions", () => {
   });
 });
 
-describe("TS-003 D5: the cache table is the only place these numbers exist", () => {
-  it("carries TS-003 D5's fresh TTL and serve-stale window per data kind", () => {
+describe("TS-WEB-0003 D5: the cache table is the only place these numbers exist", () => {
+  it("carries TS-WEB-0003 D5's fresh TTL and serve-stale window per data kind", () => {
     expect(cacheProfile("dates")).toEqual({ freshTtlSeconds: 300, staleWindowSeconds: 259_200 });
     expect(cacheProfile("activePlaces")).toEqual({ freshTtlSeconds: 3600, staleWindowSeconds: 604_800 });
     expect(cacheProfile("counters")).toEqual({ freshTtlSeconds: 900, staleWindowSeconds: 259_200 });

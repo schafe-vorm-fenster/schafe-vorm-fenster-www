@@ -1,7 +1,7 @@
 /*
  * The few page-level layout values the three pages of this work package
  * need on top of the components' own styles. Tokens only — no colour, no
- * font-family, no `max-width` media query (TS-017 D2/D3, `pnpm check:brand`).
+ * font-family, no `max-width` media query (TS-WEB-0017 D2/D3, `pnpm check:brand`).
  */
 
 /*
@@ -38,7 +38,7 @@
   margin: 0 0 var(--space-2);
 }
 
-/* The counters stand inline in the provenance band (TS-019 D3, block 2d). */
+/* The counters stand inline in the provenance band (TS-WEB-0019 D3, block 2d). */
 .counters {
   display: flex;
   flex-direction: column;

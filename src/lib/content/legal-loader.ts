@@ -1,14 +1,14 @@
 /**
  * Reads `content/legal/*.md` — the five imported documents plus the
- * generated accessibility statement (TS-029, TS-007 D10).
+ * generated accessibility statement (TS-WEB-0029, TS-WEB-0007 D10).
  *
  * `content/legal/` is still the flat, pre-relaunch tree (`content_type:
  * legal`, `locale: de` only, no `anchor` field on five of the six files —
- * `state/open.md` #8, TS-029 open points #2/#3/#8). TS-007 D10's own import
+ * `state/open.md` #8, TS-WEB-0029 open points #2/#3/#8). TS-WEB-0007 D10's own import
  * step is not built yet, so this module is this work package's reading of
  * it: map the registry anchor (`src/lib/routes/legal-anchors.ts`, the
- * authoritative TS-004 D8 source) straight to its file, read the frontmatter
- * and body the same way `loadPage` does (`splitFrontmatter`, TS-007's own
+ * authoritative TS-WEB-0004 D8 source) straight to its file, read the frontmatter
+ * and body the same way `loadPage` does (`splitFrontmatter`, TS-WEB-0007's own
  * convention), and hand the page typed blocks via `legal-markdown.ts` — never
  * an HTML string.
  *
@@ -28,7 +28,7 @@ import type { LegalSectionId } from "@/src/lib/routes/legal-anchors";
 export const LEGAL_CONTENT_ROOT = "content/legal";
 
 /**
- * Registry anchor → its file. `barrierefreiheit` is TS-029 D8's exception:
+ * Registry anchor → its file. `barrierefreiheit` is TS-WEB-0029 D8's exception:
  * the one anchor without a document until legal counsel clears it
  * (`state/open.md` #21) — its file exists today as a marked draft, and D8
  * fails the *production* build while it does, not this reader.
@@ -74,7 +74,7 @@ const cache = new Map<string, LegalDocument | null>();
 
 /**
  * One legal document by its registry section id. `null` when the file is
- * missing (TS-029 D1: "a registry entry whose document is absent renders
+ * missing (TS-WEB-0029 D1: "a registry entry whose document is absent renders
  * nothing"; D8's production-only failure is the build-time gate, not this
  * reader).
  */

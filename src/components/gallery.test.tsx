@@ -96,7 +96,7 @@ const DATA_DEPENDENT = [
   "code-snippet",
 ] as const;
 
-describe("Q-044: the M2 component set is complete and named as the inventory names it", () => {
+describe("Q-0044: the M2 component set is complete and named as the inventory names it", () => {
   it("carries all 61 components of sections 2.1–2.6, in inventory order", () => {
     expect(GALLERY.map((entry) => entry.name)).toEqual([...INVENTORY]);
   });
@@ -144,7 +144,7 @@ describe("D-9: every data-dependent component declares all four states", () => {
   });
 });
 
-describe("TS-002: the accessibility contracts of the foundation set", () => {
+describe("TS-WEB-0002: the accessibility contracts of the foundation set", () => {
   it("hides every icon from assistive technology", () => {
     const svgs = html.match(/<svg\b[^>]*>/g) ?? [];
     expect(svgs.length).toBeGreaterThan(0);
@@ -197,7 +197,7 @@ describe("TS-002: the accessibility contracts of the foundation set", () => {
   });
 });
 
-describe("TS-017 D3: no brand value enters through a component", () => {
+describe("TS-WEB-0017 D3: no brand value enters through a component", () => {
   it("writes no colour literal into the rendered markup", () => {
     const inlineStyles = html.match(/style="[^"]*"/g) ?? [];
     for (const style of inlineStyles) {
@@ -221,7 +221,7 @@ describe("TS-017 D3: no brand value enters through a component", () => {
   });
 });
 
-describe("TS-001 D5: no component holds a literal internal href", () => {
+describe("TS-WEB-0001 D5: no component holds a literal internal href", () => {
   it("routes every internal link through the facade's paths", () => {
     // Anchors only: `priority` images also emit a preload link.
     const hrefs = (html.match(/<a\b[^>]*href="([^"]*)"/g) ?? []).map(
@@ -245,8 +245,8 @@ describe("TS-001 D5: no component holds a literal internal href", () => {
       "/ueber-uns/archiv",
       "/rechtliches",
       "/en",
-      // `/start` (TS-016 D6, DEC-069): the redirect-only path `lead-fallback`
-      // links to. It is not a route-facade path — it joins the TS-004 D1
+      // `/start` (TS-WEB-0016 D6, DEC-0069): the redirect-only path `lead-fallback`
+      // links to. It is not a route-facade path — it joins the TS-WEB-0004 D1
       // route inventory once the app work package builds the redirect
       // (state/open.md) — so it is named here rather than through `href()`.
       "/start",

@@ -12,7 +12,7 @@ is what he reads afterwards.
   ordered?
 - Verdict per criterion: accepted / rejected with a concrete,
   actionable reason ("the order flow's confirmation gives no
-  timeline — WEB-F-094's promise is unmet"). Rejections feed the
+  timeline — FUN-WEB-0094's promise is unmet"). Rejections feed the
   next fix round.
 - Spot-check, don't re-test: QA proves the criteria ran; the Customer
   probes whether the result is what a paying customer meant by them —

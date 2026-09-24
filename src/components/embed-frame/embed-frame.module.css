@@ -142,7 +142,7 @@
   margin: 0;
 }
 
-/* TS-008 D6: a blocked or failing loader shows no error and no empty frame —
+/* TS-WEB-0008 D6: a blocked or failing loader shows no error and no empty frame —
    the heading, the copy and the CTA around it stay exactly as they are. */
 .box:has(> [data-portalize-failed="true"]) {
   display: none;

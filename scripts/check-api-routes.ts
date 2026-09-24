@@ -1,15 +1,15 @@
 /**
- * BFF boundary guard — the static half of TS-017 D4 (F-1-3, round 1).
+ * BFF boundary guard — the static half of TS-WEB-0017 D4 (F-1-3, round 1).
  *
  *  A10 Every `app/**\/route.ts` handler exports `GET` and nothing else — no
  *      `POST`/`PUT`/`PATCH`/`DELETE`/`OPTIONS`/`HEAD` handler anywhere in the
  *      route tree. "Read-only by construction": a write handler in the
  *      website's route tree means the website took over a write the app
- *      owns (TS-017 D4).
+ *      owns (TS-WEB-0017 D4).
  *  A11 The app hostname (`app.schafe-vorm-fenster.de`) occurs in at most one
- *      authored module — the DEC-029 handover builder, or, until that is
+ *      authored module — the DEC-0029 handover builder, or, until that is
  *      built, `src/lib/routes/routes.ts`'s `APP_ORIGIN` constant — and
- *      nowhere else: "no hard-coded app URL" (TS-017 D4).
+ *      nowhere else: "no hard-coded app URL" (TS-WEB-0017 D4).
  *
  * Both rules hold today only because the features that would violate them
  * don't exist yet (no `app/api/*` route, no handover module) — F-1-3 is
@@ -23,11 +23,11 @@
  *     and its demo props are not "a link assembled" in the D4 sense. The
  *     gallery's source lives in `src/components/` (only ever imported by
  *     the `app/dev/**` page), so both paths are named.
- *   - `src/lib/security/csp.ts` — TS-014 D1 independently and deliberately
+ *   - `src/lib/security/csp.ts` — TS-WEB-0014 D1 independently and deliberately
  *     names `app.schafe-vorm-fenster.de` in the CSP allowlist's single typed
- *     structure (TS-014 D7), a different determination for a different
+ *     structure (TS-WEB-0014 D7), a different determination for a different
  *     reason (a reserved policy slot, not a navigable link). That file is
- *     owned by the developer currently working TS-014 in this round; TS-017
+ *     owned by the developer currently working TS-WEB-0014 in this round; TS-WEB-0017
  *     D4 governs link construction, not CSP directives.
  *   - test files — asserting an expected literal is not assembling a link.
  *
@@ -42,7 +42,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const EXCLUDED_DIR_NAMES = new Set(["node_modules", ".next", ".vercel", ".git"]);
 
-/** The four-segment public-facing app subdomain named in TS-014 D1 / TS-017 D4. */
+/** The four-segment public-facing app subdomain named in TS-WEB-0014 D1 / TS-WEB-0017 D4. */
 const APP_HOSTNAME = "app.schafe-vorm-fenster.de";
 
 /** A11: files a hard-coded app-hostname literal is not held against. */

@@ -4,7 +4,7 @@ import { isoWeekSeed, rotateTies } from "./rotation";
 
 const scored = (id: string, score: number) => ({ id, score });
 
-describe("TS-005-A11: the rotation seed is the ISO week, and it is an input", () => {
+describe("TS-WEB-0005-A11: the rotation seed is the ISO week, and it is an input", () => {
   it("formats the ISO year and week, not the calendar year", () => {
     expect(isoWeekSeed(new Date("2026-09-11T00:00:00Z"))).toBe("2026-W37");
     // 1 January 2027 is a Friday and belongs to ISO week 53 of 2026.

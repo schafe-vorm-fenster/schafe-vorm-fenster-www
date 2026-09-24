@@ -28,7 +28,7 @@ Hub, siehe [`../README.md`](../README.md).
 
 Die Boards maskieren Icons aus `assets/icons/<name>.svg`. Diese Dateien
 liegen hier bewusst nicht: Das Set ist **Lucide**, und die Website holt es
-sich als Abhängigkeit in den eigenen Stack (WEB-C-007) — es wird nicht als
+sich als Abhängigkeit in den eigenen Stack (CON-WEB-0007) — es wird nicht als
 Asset geliefert und nicht ins Repo eingecheckt. Die Boards stellen die
 Icons lokal deshalb nicht dar; das ist kosmetisch und ohne Bedeutung für
 die Spezifikation.

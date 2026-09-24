@@ -1,7 +1,7 @@
 /**
- * The live-data islands — TS-009 D1/D2/D3, one module per file section.
+ * The live-data islands — TS-WEB-0009 D1/D2/D3, one module per file section.
  *
- * TS-009 D1 splits every page into a **prerendered shell** and a set of
+ * TS-WEB-0009 D1 splits every page into a **prerendered shell** and a set of
  * **cached islands**. This file is the islands: each one is a `use cache`
  * component that calls exactly one interface module of `src/lib/live/`,
  * reads its envelope, and renders the module's shell in the state the
@@ -12,18 +12,18 @@
  *
  *  - **A request value never enters an island.** `?ort=` and every header
  *    are read in the page, outside the cache boundary, and handed down as a
- *    prop (TS-009 D2). An island takes strings and numbers, which is also
+ *    prop (TS-WEB-0009 D2). An island takes strings and numbers, which is also
  *    what makes the prop set the cache key.
  *  - **`cacheLife` and `cacheTag` come from one table.** The numbers are
- *    TS-003 D5's, in `src/lib/live/cache-profiles.ts`, and the BFF routes
+ *    TS-WEB-0003 D5's, in `src/lib/live/cache-profiles.ts`, and the BFF routes
  *    send the same two numbers as `Cache-Control` — an island and its route
  *    cannot disagree about what "5 minutes" means.
- *  - **A module that has nothing is removed, never zeroed** (TS-009 D6).
+ *  - **A module that has nothing is removed, never zeroed** (TS-WEB-0009 D6).
  *    Counters answer `undefined` when both fallback tiers are exhausted, and
  *    `null` is what this file returns for that.
  *
  * Every island is rendered inside a `<Suspense>` whose fallback is the
- * module's own skeleton at its final geometry (TS-009 D7) — `moduleSkeleton`
+ * module's own skeleton at its final geometry (TS-WEB-0009 D7) — `moduleSkeleton`
  * below builds it, so the shell and the island cannot drift apart.
  */
 
@@ -82,7 +82,7 @@ function tierOf(envelope: LiveEnvelope<unknown>): "stale" | "snapshot" {
   return envelope.tier === "snapshot" ? "snapshot" : "stale";
 }
 
-/** `LiveEvent` → the row shape `event-list` takes. The one mapping (TS-005 owns the vocabulary). */
+/** `LiveEvent` → the row shape `event-list` takes. The one mapping (TS-WEB-0005 owns the vocabulary). */
 export function toListItems(
   events: readonly LiveEvent[],
   locale: Locale,
@@ -101,7 +101,7 @@ export function toListItems(
       date: event.startsAt,
       title: event.title,
       // Every row names its own place — the rule that lets a widened module
-      // stand beside a narrow one without lying (TS-008 D1). The place comes
+      // stand beside a narrow one without lying (TS-WEB-0008 D1). The place comes
       // **first**: the meta line is one line of 76 px and ellipsises at its
       // end, and with the clock in front a row from the next village over
       // read "13:…" on a phone — the one word the rule is about, cut.
@@ -122,7 +122,7 @@ export function moduleSkeleton(rowCount: number): ReactNode {
 /* ------------------------------------------------------------------ */
 
 export interface PlaceDatesIslandProps {
-  /** A geo-api slug, resolved outside the cache boundary (TS-009 D2). */
+  /** A geo-api slug, resolved outside the cache boundary (TS-WEB-0009 D2). */
   readonly slug: string;
   readonly locale: Locale;
   /** The module's own heading, already naming its radius. `{place}` is filled in. */
@@ -161,13 +161,13 @@ export interface PlaceDatesIslandProps {
   /** `true` where arriving content changes the page's meaning (`/dein-ort`). */
   readonly announced?: boolean;
   /**
-   * The goal this module's app handover completes (TS-012 D4). The island
+   * The goal this module's app handover completes (TS-WEB-0012 D4). The island
    * arms the link itself and adds the resolved place slug as the one
    * attribute — a slug is fine, a form value is not (D4 rule 3).
    */
   readonly conversion?: ConversionBinding;
   /**
-   * The publish invitation of TS-008 D4, as the page's own copy — **strings
+   * The publish invitation of TS-WEB-0008 D4, as the page's own copy — **strings
    * only**. A cached component's props are its cache key, so a `ReactNode`
    * here would be a non-serializable argument ("Unexpected cache miss after
    * cache warming phase"); the island builds the button itself.
@@ -227,7 +227,7 @@ export async function PlaceDatesIsland({
       announced={announced || data.publishInvitation}
       cta={
         // State B suppresses the calendar handover: a covered place with no
-        // dates shifts the focus job to publishing (TS-008 D4, TS-020 D2),
+        // dates shifts the focus job to publishing (TS-WEB-0008 D4, TS-WEB-0020 D2),
         // and an "open the calendar" link beside "nothing is in it yet" is
         // the one offer that state must not carry.
         ctaTemplate === undefined || (empty && invitation !== undefined) ? undefined : conversion === undefined ? (
@@ -291,14 +291,14 @@ export interface NearbyIslandProps {
   readonly lat: number;
   readonly lng: number;
   readonly locale: Locale;
-  /** Names its own radius — never the place name (TS-008 D1). `{radius}` is the km figure. */
+  /** Names its own radius — never the place name (TS-WEB-0008 D1). `{radius}` is the km figure. */
   readonly titleTemplate: string;
   readonly rowCount?: number;
   /** The list's role, which caps its rows (G-2) — position 2 is the `answering` five. */
   readonly role?: EventListRole;
   readonly headingLevel?: "h2" | "h3";
   /**
-   * The goal this module's calendar link completes (TS-012 D4: *every* click
+   * The goal this module's calendar link completes (TS-WEB-0012 D4: *every* click
    * that opens a place calendar on `app.*`). Position 2's own link went
    * unarmed, so one of the four handovers on `/dein-ort` fired nothing —
    * measured, not reviewed.
@@ -322,14 +322,14 @@ export async function NearbyIsland({
 
   const envelope = await nearbyEvents({ lat, lng, rowCount });
   const { data, fetchedAt } = envelope;
-  // TS-008 D1: zero rows nearby removes the module rather than showing an
+  // TS-WEB-0008 D1: zero rows nearby removes the module rather than showing an
   // empty list — the page's other blocks carry the screen.
   if (data.events.length === 0) return null;
 
   // The list is an example, not the calendar: three rows on a phone, five on
   // a desktop, and the rest behind one handover. The link is built from the
   // covered community the coordinate sits in — a `Place` out of the community
-  // index, never a slug assembled from a request value (TS-008 D9).
+  // index, never a slug assembled from a request value (TS-WEB-0008 D9).
   const anchor = nearestPlace({ lat, lng });
 
   return (
@@ -371,7 +371,7 @@ export async function NearbyIsland({
 }
 
 /* ------------------------------------------------------------------ */
-/* Position 3 — active example places in a county (DEC-034)            */
+/* Position 3 — active example places in a county (DEC-0034)            */
 /* ------------------------------------------------------------------ */
 
 export interface RegionExamplesIslandProps {
@@ -396,7 +396,7 @@ export async function RegionExamplesIsland({
 
   const envelope = await regionExamples({ county, max });
   const { data, fetchedAt } = envelope;
-  // DEC-034: a designed set, never a place list — and absent, never empty.
+  // DEC-0034: a designed set, never a place list — and absent, never empty.
   if (data.examples.length === 0) return null;
 
   return (
@@ -432,7 +432,7 @@ export async function RegionExamplesIsland({
 
 export interface CountersIslandProps {
   readonly locale: Locale;
-  /** Only the figures this surface is allowed to claim (TS-008 D8, WEB-F-041). */
+  /** Only the figures this surface is allowed to claim (TS-WEB-0008 D8, FUN-WEB-0041). */
   readonly show?: readonly ("dates" | "places" | "updatesToday")[];
   readonly className?: string;
 }
@@ -447,7 +447,7 @@ export async function CountersIsland({
   cacheTag(cacheTags.stats());
 
   const envelope = await liveCounters();
-  // TS-009 D6: both fallback tiers exhausted removes the band. Never a zero,
+  // TS-WEB-0009 D6: both fallback tiers exhausted removes the band. Never a zero,
   // never an estimate.
   if (envelope === undefined) return null;
 
@@ -468,7 +468,7 @@ export async function CountersIsland({
 
 /**
  * The example rows a static block borrows from the live modules — the
- * "snapshot rung of the example ladder" of TS-020 D3, where a value story
+ * "snapshot rung of the example ladder" of TS-WEB-0020 D3, where a value story
  * shows one real row instead of an invented one.
  *
  * Cached, not suspended: the rows stand *inside* prose, so a skeleton there

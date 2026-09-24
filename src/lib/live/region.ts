@@ -1,9 +1,9 @@
 /**
- * Position 3 — active example places in a county, TS-008 D3 step 3, DEC-034.
+ * Position 3 — active example places in a county, TS-WEB-0008 D3 step 3, DEC-0034.
  *
  * A **designed set**, never a place list and never an "alle Orte anzeigen"
  * control. The activity ranking this module needs has no upstream operation
- * anywhere (TS-008's open points, Q-015 residue, `state/open.md` row 6), so
+ * anywhere (TS-WEB-0008's open points, Q-0015 residue, `state/open.md` row 6), so
  * every source below is a ranking this website derives itself. What changed
  * on 2026-09-18 is *what it derives it from*:
  *
@@ -39,7 +39,7 @@ import { EVENT_WINDOWS } from "./widening";
 
 import type { LiveEnvelope, RegionExamples } from "./types";
 
-/** DEC-034 caps the set at six on `/deine-region`, one on `/dein-ort/starten`. */
+/** DEC-0034 caps the set at six on `/deine-region`, one on `/dein-ort/starten`. */
 export const REGION_EXAMPLE_MAX = 6;
 
 export interface RegionExamplesInput {

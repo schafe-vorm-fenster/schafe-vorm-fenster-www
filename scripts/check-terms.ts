@@ -1,15 +1,15 @@
 /**
- * `pnpm check:terms` — TS-026-A8's single-source wording lint (F-2-43).
+ * `pnpm check:terms` — TS-WEB-0026-A8's single-source wording lint (F-2-43).
  *
  * A8: "The response-time wording exists in exactly one module; a content lint
  * fails on that wording in any content file." Neither half existed.
  *
- * The wording is the two-working-day promise of WEB-F-022 / TS-026 D5, and
+ * The wording is the two-working-day promise of FUN-WEB-0022 / TS-WEB-0026 D5, and
  * D5 is unambiguous about why this needs a lint rather than a review: while
- * Q-022 C11 is unanswered the promise is **removed, never softened** — "a
+ * Q-0022 C11 is unanswered the promise is **removed, never softened** — "a
  * vaguer promise is still an unbacked promise". A softened variant is
  * therefore exactly what a human reviewer would wave through and a term list
- * will not. The terms are the ones TS-026-A7 names, plus their English
+ * will not. The terms are the ones TS-WEB-0026-A7 names, plus their English
  * twins, because the site ships both languages and an unbacked promise is
  * unbacked in either.
  *
@@ -34,7 +34,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 /**
- * The response-time wording. TS-026-A7 names the first three by hand; the
+ * The response-time wording. TS-WEB-0026-A7 names the first three by hand; the
  * rest are the same promise in the site's other language and in the
  * softenings D5 forbids.
  */

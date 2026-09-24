@@ -1,12 +1,12 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * TS-022 — `/mitmachen`, the publishing entry.
+ * TS-WEB-0022 — `/mitmachen`, the publishing entry.
  *
- * ACs requiring real personalization/geo-ranking (stage 1–3, TS-008 D1 has
- * no row for this route) are not-yet-M4: TS-022-A7/A8 are covered at unit
- * level instead (`app/[lang]/mitmachen/example-place.test.ts`); TS-022-A10's
- * stage-3 branch and TS-022-A14's "resolved place" branch cannot be
+ * ACs requiring real personalization/geo-ranking (stage 1–3, TS-WEB-0008 D1 has
+ * no row for this route) are not-yet-M4: TS-WEB-0022-A7/A8 are covered at unit
+ * level instead (`app/[lang]/mitmachen/example-place.test.ts`); TS-WEB-0022-A10's
+ * stage-3 branch and TS-WEB-0022-A14's "resolved place" branch cannot be
  * exercised until personalization is built (no anchor ever reaches this
  * page today, per D8: "no place search on this route").
  */
@@ -16,9 +16,9 @@ const VIEWPORTS = [
   { name: "1280x800", width: 1280, height: 800 },
 ];
 
-test.describe("TS-022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
+test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
   for (const viewport of VIEWPORTS) {
-    test(`TS-022-A2: exactly one data-cta="primary", visible without scrolling, resolves to /mitmachen/registrieren at ${viewport.name}`, async ({
+    test(`TS-WEB-0022-A2: exactly one data-cta="primary", visible without scrolling, resolves to /mitmachen/registrieren at ${viewport.name}`, async ({
       page,
     }) => {
       await page.setViewportSize(viewport);
@@ -36,7 +36,7 @@ test.describe("TS-022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
     });
   }
 
-  test("TS-022-A3: DOM order is hero, objections, three paths, live example, proof", async ({
+  test("TS-WEB-0022-A3: DOM order is hero, objections, three paths, live example, proof", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
@@ -65,7 +65,7 @@ test.describe("TS-022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
     ]);
   });
 
-  test("TS-022-A4: exactly one data-block=\"scene\", mechanism whatsapp, opener ends in a question mark", async ({
+  test("TS-WEB-0022-A4: exactly one data-block=\"scene\", mechanism whatsapp, opener ends in a question mark", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
@@ -76,7 +76,7 @@ test.describe("TS-022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
     expect(headline?.trim().endsWith("?")).toBe(true);
   });
 
-  test("TS-022-A5: exactly three publishing paths, ordered whatsapp/calendar-connection/website-import, alpha badge visible", async ({
+  test("TS-WEB-0022-A5: exactly three publishing paths, ordered whatsapp/calendar-connection/website-import, alpha badge visible", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
@@ -89,7 +89,7 @@ test.describe("TS-022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
     await expect(page.getByText("In Erprobung (Alpha)")).toBeVisible();
   });
 
-  test("TS-022-A6: the objection block is three channels and the line it ends on, with no proof position at all", async ({
+  test("TS-WEB-0022-A6: the objection block is three channels and the line it ends on, with no proof position at all", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
@@ -119,7 +119,7 @@ test.describe("TS-022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
     }
   });
 
-  test("TS-022-A9: the live example names its radius \"in <place>\" and no page URL carries a place slug as a path segment", async ({
+  test("TS-WEB-0022-A9: the live example names its radius \"in <place>\" and no page URL carries a place slug as a path segment", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
@@ -127,20 +127,20 @@ test.describe("TS-022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
     expect(page.url()).not.toMatch(/gross-kiesow|musterdorf/);
   });
 
-  test("TS-022-A12: no price, no 'Portalize', no 'local-advertising'; exactly one JSON-LD graph with WebPage only", async ({
+  test("TS-WEB-0022-A12: no price, no 'Portalize', no 'local-advertising'; exactly one JSON-LD graph with WebPage only", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
     const bodyText = await page.locator("body").innerText();
     expect(bodyText).not.toMatch(/480|Portalize|local-advertising|€/);
-    // JSON-LD is TS-011 territory (not yet wired) — recorded as not-yet-M4.
+    // JSON-LD is TS-WEB-0011 territory (not yet wired) — recorded as not-yet-M4.
   });
 
-  test("TS-022-A13: exactly one link to /dein-kalender in the page's own body, inside an aside, without primary treatment", async ({
+  test("TS-WEB-0022-A13: exactly one link to /dein-kalender in the page's own body, inside an aside, without primary treatment", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
-    // Excludes `#context-band`: TS-011-A4 makes it an `aside` too (F-2-41),
+    // Excludes `#context-band`: TS-WEB-0011-A4 makes it an `aside` too (F-2-41),
     // and its "other jobs" list links `/dein-kalender` on every page — not
     // this page's own D9 rule, which is about its own blocks 1–2.
     const ownAsideLinks = await page
@@ -153,7 +153,7 @@ test.describe("TS-022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
     expect(ownAsideLinks).toHaveLength(1);
     expect(ownAsideLinks[0]).not.toBe("primary");
     // Scoped to `main`, excluding the context band: the header's persistent
-    // job nav (chrome, TS-004 D4) and TS-006 D5's context band both link to
+    // job nav (chrome, TS-WEB-0004 D4) and TS-WEB-0006 D5's context band both link to
     // /dein-kalender as "the other jobs" on every page — neither is this
     // page's own D9 rule, which is about its own blocks 1–2.
     const ownBodyLinks = await page
@@ -218,7 +218,7 @@ test.describe("TS-022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
     await expect(page.locator('[data-mechanism="whatsapp"] img')).toHaveCount(1);
   });
 
-  test("TS-022-A16: no horizontal scroll and no reflow-prone empty box at either reference viewport", async ({
+  test("TS-WEB-0022-A16: no horizontal scroll and no reflow-prone empty box at either reference viewport", async ({
     page,
   }) => {
     for (const viewport of VIEWPORTS) {

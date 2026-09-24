@@ -1,6 +1,6 @@
 ---
 id: deine-region-de
-page_id: TS-026
+page_id: TS-WEB-0026
 route: "/deine-region"
 seo:
   "/deine-region":
@@ -37,13 +37,13 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — 6 sourced (slot 6 now carries three real proof elements, two of them clearance-pending), 1 withheld (slot 7 response-time promise, no named handling process, TS-026 D5), 0 generated demo additions"
-compliance_check: "state/content-map.md#compliance-checks — TS-026"
-schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+provenance: "mixed — 6 sourced (slot 6 now carries three real proof elements, two of them clearance-pending), 1 withheld (slot 7 response-time promise, no named handling process, TS-WEB-0026 D5), 0 generated demo additions"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0026"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
-  - "state/open.md #20 — the two-working-day response promise is withheld entirely (constant null), no named process/owner yet (Q-022/C11). Re-checked 2026-09-12 against go-to-market-os: no handling process with a named owner exists anywhere in the hub, so the slot stays withheld"
-  - "Clearance pending — slot 6 uses `eichler-wasserschloss-quilow` and `lehre-lelender`, both `usage_rights: unverified` (Q-014). Protected preview only; go-live needs written clearance per element. `impftermine-landkreis` is `cleared`"
-  - "Pool extension — TS-026 row 6 in state/content-map.md named only `portalize-enterprise.proof[]` (eichler-wasserschloss-quilow, partner-network). `partner-network` has no named partner list and no cleared logos, so it is replaced here by two real territory-scale cases (impftermine-landkreis, lehre-lelender). Neither is a delivered `portalize-enterprise` territory and the slot says so"
+  - "state/open.md #20 — the two-working-day response promise is withheld entirely (constant null), no named process/owner yet (Q-0022/C11). Re-checked 2026-09-12 against go-to-market-os: no handling process with a named owner exists anywhere in the hub, so the slot stays withheld"
+  - "Clearance pending — slot 6 uses `eichler-wasserschloss-quilow` and `lehre-lelender`, both `usage_rights: unverified` (Q-0014). Protected preview only; go-live needs written clearance per element. `impftermine-landkreis` is `cleared`"
+  - "Pool extension — TS-WEB-0026 row 6 in state/content-map.md named only `portalize-enterprise.proof[]` (eichler-wasserschloss-quilow, partner-network). `partner-network` has no named partner list and no cleared logos, so it is replaced here by two real territory-scale cases (impftermine-landkreis, lehre-lelender). Neither is a delivered `portalize-enterprise` territory and the slot says so"
 images:
   - id: deine-region-hero
     slot: deine-region-1-focus
@@ -104,13 +104,13 @@ images:
 # Deine Region (`/deine-region`)
 
 Für Landkreise, Landesbehörden, Netzwerke und große Städte, die einen
-Kalender für ein **ganzes Gebiet** wollen (TS-026 D1). Kein Kartenmodul
-und keine Kartenzusage auf dieser Seite: TS-026-A17 verlangt, dass ein
+Kalender für ein **ganzes Gebiet** wollen (TS-WEB-0026 D1). Kein Kartenmodul
+und keine Kartenzusage auf dieser Seite: TS-WEB-0026-A17 verlangt, dass ein
 unbestätigtes Merkmal entfernt wird statt eingeschränkt, und für die Karte
-(DEC-061) liegt keine Bestätigung des Offering-Owners vor. Ein
-Interims-Modul trägt die Seite (DEC-034). Keine Entfernungsangabe als
+(DEC-0061) liegt keine Bestätigung des Offering-Owners vor. Ein
+Interims-Modul trägt die Seite (DEC-0034). Keine Entfernungsangabe als
 Modul-, Filter- oder Ergebnisbeschriftung — nur als Frage der Besucherin
-(TS-026 D3).
+(TS-WEB-0026 D3).
 
 ## Slot 1 — Fokusblock (Mechanismus: embed)
 
@@ -133,12 +133,12 @@ zweite Schaltfläche: eine Seite trägt pro Bildschirm genau eine primäre
 Handlung. Der Hinweis nennt, was das Antippen auslöst; wohin die Daten
 gehen, steht im Datenschutz-Abschnitt, auf den die Seite ohnehin
 verlinkt. Die Abschluss-Überschrift wiederholt dieselbe Conversion wie
-oben — gleiches Ziel, gleiches Label (TS-006 D6). Kein
+oben — gleiches Ziel, gleiches Label (TS-WEB-0006 D6). Kein
 Zeitversprechen, solange C11 offen ist.
 
 Quelle: `headline` von `counties--portalize-enterprise` — „The whole
 district on one map, without a portal project." Die Kartenhälfte der
-Schlagzeile steht hier nicht: TS-026-A17 macht die Bestätigung des
+Schlagzeile steht hier nicht: TS-WEB-0026-A17 macht die Bestätigung des
 Offering-Owners zur Bedingung und schreibt vor, das Merkmal sonst zu
 entfernen, nicht zu qualifizieren (F-2-57). Die Schlagzeile wird wieder
 vollständig übernommen, sobald die Bestätigung vorliegt.
@@ -153,7 +153,7 @@ vollständig übernommen, sobald die Bestätigung vorliegt.
 
 Quelle: `pains[]` von `counties--portalize-enterprise`. „Dreißig
 Kilometer" bleibt hier Frage der Besucherin, nie Beschriftung eines
-Moduls (TS-026 D3).
+Moduls (TS-WEB-0026 D3).
 
 ## Slot 3 — Interims-Modul: Beispiele, Zähler, Suche
 
@@ -171,10 +171,10 @@ Moduls (TS-026 D3).
 
 Solange kein Landkreis bekannt ist, nennt die Überschrift keinen: der
 Fallback benannte bis hierher „den Landkreis deiner Region", was kein
-Landkreis ist (TS-026-A10). Höchstens 6 Orte, als gestaltete Auswahl — nie als
-„die aktivsten Orte" und nie als vollständige Liste (TS-026 D4). Der
+Landkreis ist (TS-WEB-0026-A10). Höchstens 6 Orte, als gestaltete Auswahl — nie als
+„die aktivsten Orte" und nie als vollständige Liste (TS-WEB-0026 D4). Der
 Zähler rendert nur, wenn `/api/stats` den Wert tatsächlich liefert
-(Q-037) — sonst bleibt er weg, keine Schätzung.
+(Q-0037) — sonst bleibt er weg, keine Schätzung.
 
 ## Slot 4 — Einbindungs-Demo
 
@@ -182,7 +182,7 @@ Zähler rendert nur, wenn `/api/stats` den Wert tatsächlich liefert
 
 **Überschrift:** So sieht die Einbindung aus
 
-Dieselbe Komponente wie auf `/dein-kalender` Slot 3 (TS-008 Position 1′).
+Dieselbe Komponente wie auf `/dein-kalender` Slot 3 (TS-WEB-0008 Position 1′).
 
 ## Slot 5 — Was dazukommt
 
@@ -194,7 +194,7 @@ Dieselbe Komponente wie auf `/dein-kalender` Slot 3 (TS-008 Position 1′).
 
 **Erwähnung (ohne CTA):** Wer eigene Termindatenbanken hat — ein Kursprogramm, einen kirchlichen Dienst, die Abfallkalender-Daten der Kreisverwaltung — kann sie über die Datenanbindung einmalig anschließen lassen.
 
-Die Kartenansicht steht nicht in dieser Aufzählung. TS-026-A17: solange
+Die Kartenansicht steht nicht in dieser Aufzählung. TS-WEB-0026-A17: solange
 der Offering-Owner nicht bestätigt hat, dass sie an einen Käufer
 auslieferbar ist, wird das Merkmal entfernt und nicht datiert
 eingeschränkt (F-2-57, `state/open.md`). `custom-data-integration` wird
@@ -205,7 +205,7 @@ erwähnt, nie bepreist, ohne eigenen CTA (`promotion: on-request-only`).
 <!-- id: deine-region-6-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"]; status: draft -->
 
 Pool: `eichler-wasserschloss-quilow`, `partner-network` — beide heute
-`unverified` (Q-014). Kein Referenzfall für ein bereits ausgeliefertes
+`unverified` (Q-0014). Kein Referenzfall für ein bereits ausgeliefertes
 `portalize-enterprise`-Gebiet existiert; keiner wird simuliert. Der Slot
 darunter zeigt stattdessen drei echte, benannte Belege aus dem
 Gesamtbestand und sagt dazu, was sie belegen und was nicht.
@@ -237,13 +237,13 @@ Partner namentlich und hat keine geklärten Logorechte.
 <!-- id: deine-region-7-response-promise; content_type: closing-cta; provenance: withheld; derived_from: []; status: draft -->
 
 *Kein Text — der Konstante bleibt `null`, solange kein benannter
-Bearbeitungsprozess mit benannter Zuständigkeit vorliegt (Q-022/C11,
-TS-026 D5, `state/open.md` #20).* Sobald C11 beantwortet ist, erscheint
+Bearbeitungsprozess mit benannter Zuständigkeit vorliegt (Q-0022/C11,
+TS-WEB-0026 D5, `state/open.md` #20).* Sobald C11 beantwortet ist, erscheint
 derselbe Satz an drei Stellen unverändert: bei der CTA auf dieser Seite,
 im Formular auf `/deine-region/angebot` und in der Bestätigung danach —
 nie an einer Stelle abweichend von den anderen.
 
-Kein Demo-Platzhalter an dieser Stelle. TS-016-A13 macht den benannten,
+Kein Demo-Platzhalter an dieser Stelle. TS-WEB-0016-A13 macht den benannten,
 freigegebenen Bearbeitungsprozess zur Bedingung für jede Zeitzusage und
 schreibt vor, dass der Satz sonst **fehlt** — auch als Beispieltext, weil
 ein Beispielsatz über die eigene Antwortzeit dieselbe Erwartung setzt wie
@@ -270,8 +270,8 @@ Preis-Baustein gelesen, nie getippt.
 
 **Einleitung:** Sag uns, um welches Gebiet es geht — den Rest klären wir im Gespräch.
 
-Eine envoy-Instanz (TS-016 S2) — Feldset und Erfolgsverhalten sind noch
-nicht spezifiziert (Q-022). Diese Seite trägt keinen eigenen
+Eine envoy-Instanz (TS-WEB-0016 S2) — Feldset und Erfolgsverhalten sind noch
+nicht spezifiziert (Q-0022). Diese Seite trägt keinen eigenen
 Argumentationstext; die Argumentation steht auf `/deine-region`.
 
 **Bestätigungstext nach dem Absenden:** Deine Anfrage ist bei uns. {Antwortversprechen, falls C11 beantwortet ist — sonst kein Zeitversprechen.}

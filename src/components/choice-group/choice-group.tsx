@@ -31,7 +31,7 @@ export interface ChoiceGroupProps extends DataStateProps {
 }
 
 /**
- * 54 `choice-group` [PROPOSED] — TS-023 D8 (Q-044 gap, decision D-6,
+ * 54 `choice-group` [PROPOSED] — TS-WEB-0023 D8 (Q-0044 gap, decision D-6,
  * `state/open.md` row 23).
  *
  * Structure: a single-choice control for "who publishes" (step 2) and
@@ -50,7 +50,7 @@ export interface ChoiceGroupProps extends DataStateProps {
  *   mocked   → the placeholder vocabulary (step 2's "who publishes" list is
  *              UNKNOWN, `state/open.md` row 18) plus `demo-data-badge`.
  * Inherits: not self-classification — it asks who *publishes*, account data,
- * and never changes what any page shows (TS-006 D8).
+ * and never changes what any page shows (TS-WEB-0006 D8).
  * A11y: real `radiogroup` semantics via `<fieldset>`/`<legend>`; the checked
  * state is marked by fill and the `check` glyph together; every option is
  * `required`, so a step submitted with nothing chosen is refused by the

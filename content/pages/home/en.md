@@ -1,6 +1,6 @@
 ---
 id: home-de
-page_id: TS-019
+page_id: TS-WEB-0019
 route: "/"
 seo:
   "/":
@@ -29,11 +29,11 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — every slot; slot 8 (proof stream) now carries real proof and media-echo records instead of demo cards, three of them with clearance pending (Q-014, Q-045); EN translation of content/pages/home/de.md, same source ids per slot"
-compliance_check: "state/content-map.md#compliance-checks — TS-019"
+provenance: "sourced — every slot; slot 8 (proof stream) now carries real proof and media-echo records instead of demo cards, three of them with clearance pending (Q-0014, Q-0045); EN translation of content/pages/home/de.md, same source ids per slot"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0019"
 schema_note: >-
-  src/domain/content-frontmatter.schema.ts predates TS-007 (8 content types,
-  no derived_from/RelevanceFacets). The fields above follow TS-007 D6/D7
+  src/domain/content-frontmatter.schema.ts predates TS-WEB-0007 (8 content types,
+  no derived_from/RelevanceFacets). The fields above follow TS-WEB-0007 D6/D7
   and are carried through even though the current schema neither requires
   nor validates them — see state/open.md #37.
 images:
@@ -94,7 +94,7 @@ images:
 
 # Home page (`/`)
 
-Focus area "know-what-is-on" with state logic (TS-019 D2); order and
+Focus area "know-what-is-on" with state logic (TS-WEB-0019 D2); order and
 states are layout logic, not part of this file. Placeholders in
 `{curly braces}` are runtime values, not authored text.
 
@@ -110,7 +110,7 @@ states are layout logic, not part of this file. Placeholders in
 
 **Helper text under the field:** Search by place name is coming — until then, the postcode works fine.
 
-Rationale: place search today runs on postcode only (Q-025, geo-api
+Rationale: place search today runs on postcode only (Q-0025, geo-api
 name search is pending). The limitation is stated in the search field
 itself rather than in a separate error message.
 
@@ -122,9 +122,9 @@ itself rather than in a separate error message.
 
 **CTA label (primary):** Open the {place} calendar
 
-Place name and dates are live data (TS-008 position 1); the headline
+Place name and dates are live data (TS-WEB-0008 position 1); the headline
 is a text template with a named placeholder, not a sentence generated
-per place (segment independence, TS-007 D7).
+per place (segment independence, TS-WEB-0007 D7).
 
 ## Slot 3 — Place known, no dates (Block 1 / State S3)
 
@@ -137,7 +137,7 @@ per place (segment independence, TS-007 D7).
 **CTA label:** Publish the first date
 
 Its own wording, distinct from `/dein-ort` state B and
-`/dein-ort/starten` (TS-019 slot table row 3): this text addresses the
+`/dein-ort/starten` (TS-WEB-0019 slot table row 3): this text addresses the
 gap in the visitor's own place, not a gap in the system.
 
 ## Scene 1 — WhatsApp (mechanism: whatsapp)
@@ -201,14 +201,14 @@ citable is "running since 2018", not "eight years at full operation".
 
 ## Block 2c — Proof stream (5 elements)
 
-<!-- clearance: pending — `lehre-lelender` and `volkshochschule-uecker-randow` are `usage_rights: unverified` (Q-014), the three media-echo entries carry no `usage_rights` at all (Q-045, state/open.md #1). The protected preview shows them; the pre-go-live hardening round clears them. `noerd-award-2026-smart-community` and `in-operation-since-2018` are `cleared`. -->
+<!-- clearance: pending — `lehre-lelender` and `volkshochschule-uecker-randow` are `usage_rights: unverified` (Q-0014), the three media-echo entries carry no `usage_rights` at all (Q-0045, state/open.md #1). The protected preview shows them; the pre-go-live hardening round clears them. `noerd-award-2026-smart-community` and `in-operation-since-2018` are `cleared`. -->
 <!-- source_note: the stage-0 rule "widest spread, most recent first" comes from gtm:concept/website-relevance-model.concept.md (context matrix, row "Direct visit, unknown"); the proof rule from gtm:concept/website-communication-principles.concept.md §4. -->
 <!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2026-04-nord-award-nordkurier", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
 
 **Kicker above the stream:** Awards, press, and places already using the village calendar
 
 Selection and order of the five elements stay the relevance engine's job
-at runtime (TS-005 D5, DEC-048). This slot supplies the frame sentence and
+at runtime (TS-WEB-0005 D5, DEC-0048). This slot supplies the frame sentence and
 the candidate set it draws from — pool:
 `@schafe-vorm-fenster/proof@0.3.5` and
 `@schafe-vorm-fenster/media-echo@0.3.3`.
@@ -239,9 +239,9 @@ wording limit).
 
 **Number:** {dates_count} (live, `/api/stats`)
 
-Only the date count is verifiable today (Q-037: "places" and "updates
+Only the date count is verifiable today (Q-0037: "places" and "updates
 today" fields are missing from `/api/stats`); no static reach figure
-replaces it (SRC-001 §5, `reach-and-usage` is `expired`).
+replaces it (SRC-0001 §5, `reach-and-usage` is `expired`).
 
 ## Context band (3 non-focus jobs)
 
@@ -269,7 +269,7 @@ field rather than under a calendar button.
 
 Mirrors block 1's primary CTA in whichever state is current (S1 search,
 S2 open calendar, S3 publish first date) — no new text, same target id
-(TS-006 D6).
+(TS-WEB-0006 D6).
 
 ## Slot 12 — UI strings no other slot carries
 

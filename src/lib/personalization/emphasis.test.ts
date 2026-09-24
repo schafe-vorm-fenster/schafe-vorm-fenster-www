@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { emphasise, orderByTrait, validateEmphasisTable } from "./emphasis";
 
-/** TS-019 D3a's table, as the home page will pass it. */
+/** TS-WEB-0019 D3a's table, as the home page will pass it. */
 const scenes = ["whatsapp", "embed", "provenance"] as const;
 const sceneOrder = {
   professional: ["embed", "provenance", "whatsapp"],
@@ -10,7 +10,7 @@ const sceneOrder = {
   press: ["provenance", "whatsapp", "embed"],
 } as const;
 
-describe("DEC-059 / Q-052: entry context sets emphasis and order, never the focus job", () => {
+describe("DEC-0059 / Q-0052: entry context sets emphasis and order, never the focus job", () => {
   it("reorders the scenes for a trait the table names", () => {
     expect(orderByTrait(scenes, sceneOrder, "professional")).toEqual([
       "embed",

@@ -5,7 +5,7 @@
  * Pattern adopted from the sibling services (see
  * `events-api/src/clients/<service>/fetch-openapi.mjs`) and from the
  * product's documented convention, which specs/contracts/api-contracts.md
- * registers as SRC-011: fetch, validate, store locally, commit.
+ * registers as SRC-0011: fetch, validate, store locally, commit.
  *
  * The stored `openapi.json` is the review anchor — an upstream change
  * shows up as a diff in a pull request instead of as a surprise at

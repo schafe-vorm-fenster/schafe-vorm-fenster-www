@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * TS-001 — the host-dependent half of the detection algorithm, which only
+ * TS-WEB-0001 — the host-dependent half of the detection algorithm, which only
  * `proxy.ts` runs (`src/lib/routes/host-matrix.ts`,
  * `src/lib/routes/locale-suggestion.ts` carry the pure logic and its unit
  * tests; this is the one thing that needs a real HTTP round trip).
@@ -55,7 +55,7 @@ function isHostSpoofable(baseURL: string | undefined): boolean {
 const SKIP_REASON =
   "Host-header spoof: E2E_BASE_URL is neither localhost nor a real D1 domain (looks like a Vercel preview URL) — Host-header spoofing against the platform's own edge routing is not a meaningful test of this app's proxy.ts (measured: a flat platform 404, not a real response from this app)";
 
-test.describe("TS-001-A4/D2: the canonical-host redirect", () => {
+test.describe("TS-WEB-0001-A4/D2: the canonical-host redirect", () => {
   test("a bare known domain 301s to its https www form, path and query intact", async ({
     request,
     baseURL,
@@ -101,7 +101,7 @@ test.describe("TS-001-A4/D2: the canonical-host redirect", () => {
   });
 });
 
-test.describe("TS-001-A6: an unrecognised host mirrors .de rather than being redirected away", () => {
+test.describe("TS-WEB-0001-A6: an unrecognised host mirrors .de rather than being redirected away", () => {
   test("a *.vercel.app host renders the page instead of redirecting to a different domain", async ({
     request,
     baseURL,
@@ -116,7 +116,7 @@ test.describe("TS-001-A6: an unrecognised host mirrors .de rather than being red
   });
 });
 
-test.describe("DEC-038/053: the Accept-Language suggestion signal", () => {
+test.describe("DEC-0038/053: the Accept-Language suggestion signal", () => {
   test("exposes a Server-Timing suggestion when the visitor prefers a different offered language", async ({
     request,
     baseURL,
@@ -144,7 +144,7 @@ test.describe("DEC-038/053: the Accept-Language suggestion signal", () => {
     expect(serverTiming).not.toContain("suggested-locale");
   });
 
-  test("sets no cookie and no locale storage (TS-001-A8)", async ({ request, baseURL }) => {
+  test("sets no cookie and no locale storage (TS-WEB-0001-A8)", async ({ request, baseURL }) => {
     test.skip(!isHostSpoofable(baseURL), SKIP_REASON);
     const target = new URL("/mitmachen", baseURL);
     const response = await request.get(target.toString(), {

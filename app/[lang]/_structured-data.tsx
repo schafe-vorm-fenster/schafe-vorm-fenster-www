@@ -1,5 +1,5 @@
 /**
- * The JSON-LD graph of a page — TS-011 D4's table, as one function.
+ * The JSON-LD graph of a page — TS-WEB-0011 D4's table, as one function.
  *
  * The builders in `src/lib/seo/structured-data/` return nodes and are
  * deliberately unwired ("Nothing here is wired into a route — the page work
@@ -64,9 +64,9 @@ export interface PageGraphInput {
   readonly imageUrl?: string;
   /**
    * Nodes only this page can build — `/ueber-uns/archiv`'s `ItemList` is the
-   * one case today. TS-028-A10 fixes it as **JSON-LD** ("JSON-LD parses as
+   * one case today. TS-WEB-0028-A10 fixes it as **JSON-LD** ("JSON-LD parses as
    * one `ItemList`; `itemListElement` count equals the unfiltered visible row
-   * count"), which is more specific than TS-011 D4's microdata row for that
+   * count"), which is more specific than TS-WEB-0011 D4's microdata row for that
    * page, so the per-page spec wins — and it goes into *this* graph rather
    * than a second `<script>`, because "one graph per page" is D4's rule and
    * two scripts is what the page had before.
@@ -93,17 +93,17 @@ export async function pageGraph({
     webPageNode({ route, locale, title, description, ...(imageUrl ? { imageUrl } : {}) }),
     // `/` — the one full `Organization`, and the `WebSite` it belongs to.
     ...(route === "home" ? [websiteNode(locale), await organizationNode()] : []),
-    // All five second-level pages (DEC-071). `breadcrumbListNode` answers
+    // All five second-level pages (DEC-0071). `breadcrumbListNode` answers
     // `undefined` for the other seven, and `jsonLdGraph` drops it.
     breadcrumbListNode(route, locale, (item) => pageTitle(item, locale)),
-    // The two service pages; `/deine-region` carries no price (WEB-F-020).
+    // The two service pages; `/deine-region` carries no price (FUN-WEB-0020).
     ...(route === "calendar" ? [calendarServiceNode(locale, title)] : []),
     ...(route === "region" ? [regionServiceNode(locale, title)] : []),
     // `/ueber-uns` — D4: "`Organization` (reference by `@id`, not a second
     // full node)". A typed node carrying nothing but its `@id` is JSON-LD's
     // own way to *refer* to an entity defined elsewhere: it adds no second
     // description (the full node lives on `/`), and it is still an
-    // `Organization` node, which is what TS-027-A12 counts.
+    // `Organization` node, which is what TS-WEB-0027-A12 counts.
     ...(route === "about"
       ? [{ "@type": "Organization", ...organizationReference() }]
       : []),

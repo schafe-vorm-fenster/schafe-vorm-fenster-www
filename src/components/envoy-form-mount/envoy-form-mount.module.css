@@ -99,7 +99,7 @@
   opacity: 0.6;
 }
 
-/* TS-016-A10: present in the DOM, hidden from assistive technology and not
+/* TS-WEB-0016-A10: present in the DOM, hidden from assistive technology and not
    focusable — `display: none` would take it out of the DOM's layout entirely,
    which some bots detect; an off-screen box does not. */
 .honeypot {

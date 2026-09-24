@@ -5,13 +5,13 @@
  * copy.
  *
  * M4 wires `/api/places/{slug}/events`, `/api/nearby`, `/api/places/search`
- * and `/api/stats` (TS-008 D2) behind the same module interfaces the pages
+ * and `/api/stats` (TS-WEB-0008 D2) behind the same module interfaces the pages
  * already render. Until then every one of those modules is handed the rows
  * below in the `mocked` state, which is what puts `data-demo="true"` on the
  * module frame (`src/components/data-state.ts`). Nothing here is fetched.
  * Place names are real municipalities of Vorpommern-Greifswald that the
  * brand's own sources already name; the real ones come from geo-api at M4
- * (WEB-F-024).
+ * (FUN-WEB-0024).
  *
  * Rows in `state/open.md`: `Mock aktiv` per module.
  */
@@ -34,10 +34,10 @@ export function demoAppHref(slug: string = DEMO_PLACE.slug): string {
 }
 
 /**
- * The counter figure of TS-008 position 4. A figure is a claim, so this one
+ * The counter figure of TS-WEB-0008 position 4. A figure is a claim, so this one
  * is only ever rendered inside a module carrying `data-demo="true"`;
- * `/api/stats` replaces it at M4, and Q-037 keeps the other two figures
- * absent rather than estimated (TS-019-A14).
+ * `/api/stats` replaces it at M4, and Q-0037 keeps the other two figures
+ * absent rather than estimated (TS-WEB-0019-A14).
  */
 export const DEMO_DATE_COUNT = 1234;
 
@@ -134,17 +134,17 @@ function rows(source: readonly DemoRow[], locale: Locale): EventListItem[] {
   }));
 }
 
-/** TS-008 position 1 — the next 3 dates of the known place. */
+/** TS-WEB-0008 position 1 — the next 3 dates of the known place. */
 export function demoPlaceEvents(locale: Locale): EventListItem[] {
   return rows(PLACE_ROWS, locale);
 }
 
-/** TS-008 position 2 — 5 dates nearby, each naming its own place. */
+/** TS-WEB-0008 position 2 — 5 dates nearby, each naming its own place. */
 export function demoNearbyEvents(locale: Locale): EventListItem[] {
   return rows(NEARBY_ROWS, locale);
 }
 
-/** TS-008 position 3 — the small set of active example places (DEC-034). */
+/** TS-WEB-0008 position 3 — the small set of active example places (DEC-0034). */
 export function demoExamplePlaces(locale: Locale): readonly string[] {
   return locale === "de"
     ? ["Schmatzin", "Rubkow", "Quilow"]

@@ -24,7 +24,7 @@ export interface StepIndicatorProps {
 }
 
 /**
- * 53 `step-indicator` [PROPOSED] — TS-023 D8, TS-025 D2.
+ * 53 `step-indicator` [PROPOSED] — TS-WEB-0023 D8, TS-WEB-0025 D2.
  *
  * Structure: one dot per step, the reached ones filled, the current one
  * marked — mono, 26 px, above the step's heading. The polish brief replaced

@@ -21,10 +21,10 @@ export interface PlaceSuggestion {
 }
 
 export interface PlaceSearchProps extends DataStateProps, Omit<LinkOptions, "hash"> {
-  /** Where the plain GET form navigates — the classification target (TS-008 D7). */
+  /** Where the plain GET form navigates — the classification target (TS-WEB-0008 D7). */
   readonly to: RouteId;
   readonly label?: string;
-  /** Interim ZIP-only hint until Q-025 (name search) lands. */
+  /** Interim ZIP-only hint until Q-0025 (name search) lands. */
   readonly hint?: string;
   /** Typeahead enhancement — chips, never a fetch in this component. */
   readonly suggestions?: readonly PlaceSuggestion[];
@@ -34,7 +34,7 @@ export interface PlaceSearchProps extends DataStateProps, Omit<LinkOptions, "has
   readonly submitLabel?: string;
   /** The submit carries `arrow-right` — a flow step, not a search (brief, page 5). */
   readonly submitOnward?: boolean;
-  /** Passed to the submit control: the primary conversion of a "know what is on" page (TS-006 D4). */
+  /** Passed to the submit control: the primary conversion of a "know what is on" page (TS-WEB-0006 D4). */
   readonly submitDataCta?: string;
   /** `dark` where the module stands on a photo surface or the ink section. */
   readonly tone?: "light" | "dark";
@@ -42,7 +42,7 @@ export interface PlaceSearchProps extends DataStateProps, Omit<LinkOptions, "has
   readonly id?: string;
   /** Native validation, where an empty submit is not a page state (F-3-14). */
   readonly required?: boolean;
-  /** The submit control, where the page owns it — DEC-078. See `search-field`. */
+  /** The submit control, where the page owns it — DEC-0078. See `search-field`. */
   readonly submit?: ReactNode;
   /**
    * The typeahead, off by default. It is a **pure enhancement**: the module
@@ -55,19 +55,19 @@ export interface PlaceSearchProps extends DataStateProps, Omit<LinkOptions, "has
 }
 
 /**
- * 41 `place-search` [PROPOSED] — TS-008 D7.
+ * 41 `place-search` [PROPOSED] — TS-WEB-0008 D7.
  *
  * Structure: `search-field` plus an optional suggestion list rendered as
  * `chip`s (≥ 40 px) — the same component and behaviour everywhere it stands
  * (`/`, `/dein-ort`, `/dein-ort/starten`, the order flow's scope step, 404).
- * ZIP-only until Q-025 lands; the placeholder and the hint say so.
+ * ZIP-only until Q-0025 lands; the placeholder and the hint say so.
  * States (D-9, all four):
  *   loading  → the field's own 56 px reserved as a `skeleton` control;
  *   empty    → the field alone, no suggestion row;
  *   degraded → the field alone — an upstream error is never shown as an
- *              error here (TS-008 D7): the visitor stays where she is;
+ *              error here (TS-WEB-0008 D7): the visitor stays where she is;
  *   mocked   → the field plus mocked suggestion chips and `demo-data-badge`,
- *              for the geo-api capabilities still behind Q-025/032/038/051.
+ *              for the geo-api capabilities still behind Q-0025/032/038/051.
  * Inherits: the 56 px pill with the nested 44 px submit; `paper` everywhere.
  * Space: 56 px fixed for the field; the suggestion row reserves nothing when
  * absent, so it never appears as a layout shift.

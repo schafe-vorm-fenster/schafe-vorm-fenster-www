@@ -16,7 +16,7 @@ export interface SectionNavProps {
 }
 
 /**
- * 17 `section-nav` [PROPOSED] — TS-029 D4.
+ * 17 `section-nav` [PROPOSED] — TS-WEB-0029 D4.
  *
  * Structure: one `nav` listing the registry sections in order, server-
  * rendered plain links. From the xl switch point it is a sticky column beside

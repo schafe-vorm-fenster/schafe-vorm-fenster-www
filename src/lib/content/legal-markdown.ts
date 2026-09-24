@@ -1,5 +1,5 @@
 /**
- * A minimal markdown reader for `content/legal/*.md` (TS-029 D1–D6).
+ * A minimal markdown reader for `content/legal/*.md` (TS-WEB-0029 D1–D6).
  *
  * `src/lib/content/blocks.ts` reads the page artifacts' labelled-value
  * convention (`**Label:** value`) — real prose documents (imprint, privacy
@@ -7,7 +7,7 @@
  * inline bold and the occasional link. No dependency is added for it
  * (ADR-074's reasoning for `blocks.ts` applies unchanged: nothing in the
  * sibling repositories carries a markdown parser, and a parser would only
- * produce the HTML string TS-013's security baseline has no room for via
+ * produce the HTML string TS-WEB-0013's security baseline has no room for via
  * `dangerouslySetInnerHTML`). This is a reader for the conventions the five
  * imported legal documents and the generated accessibility statement
  * actually use — not a general markdown engine.
@@ -141,7 +141,7 @@ export function parseLegalMarkdown(markdown: string): LegalBlock[] {
 }
 
 /**
- * Shifts every heading level by `shiftBy`, capped at `h6` — TS-029 D6: "the
+ * Shifts every heading level by `shiftBy`, capped at `h6` — TS-WEB-0029 D6: "the
  * imported document's structure, shifted down so nothing skips", including
  * its own top-level heading, which is demoted rather than rendered a second
  * time beside the registry's own `h2` (`legal-section`'s `title` prop).

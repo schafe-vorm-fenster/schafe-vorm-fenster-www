@@ -146,7 +146,7 @@ and the rule is not "wait":
 
 - The **ground** is the stand-in `--color-placeholder-ground: #FBF1DC` in
   `app/styles/brand.css` — the one file a brand value may enter through
-  (TS-017 D3). No call site carries the literal.
+  (TS-WEB-0017 D3). No call site carries the literal.
 - The **headline and the bold core line** are set in `ink` (15.37:1) and
   the detail line in `text-2` (9.52:1). Both are real tokens today and both
   clear the floor, so the block ships complete rather than half-drawn.
@@ -154,7 +154,7 @@ and the rule is not "wait":
   block's other type until `archive.ink` resolves, not in `#9A6300`.
 - The **hairline** is `line` until `archive.line` resolves, accepting that
   it is near-invisible (1.32:1) — an invisible hairline is a weaker
-  failure than a literal, which `TS-017-A5` rejects outright.
+  failure than a literal, which `TS-WEB-0017-A5` rejects outright.
 
 When the pin moves to `2.8.x`, the three tokens replace those stand-ins,
 the `app/styles/brand.css` declaration becomes
@@ -260,8 +260,8 @@ Mono for labels, dates, numbers, prices, and the wordmark. Two weights only:
 tag and the placeholder label are all mono 15 px / 700 like every other
 label; a pill is not a reading aid that buys back three pixels. The guide
 used to allow 11–13 px inside a badge, and that allowance is retired for
-three reasons, all of them already true elsewhere: `TS-002 D3` floors at
-15 px and `TS-002-A10` asserts it; the built site has no `font-size` below
+three reasons, all of them already true elsewhere: `TS-WEB-0002 D3` floors at
+15 px and `TS-WEB-0002-A10` asserts it; the built site has no `font-size` below
 15 px anywhere; and `font.size.label` is `0.9375rem` (15 px) as shipped in
 brand-design **2.8.0**, which the website has been overriding it to since
 F-2-44. Resolving C11 by raising the sizes rather than by writing a
@@ -369,7 +369,7 @@ The autosuggest list that belongs to the search field.
   Nothing below it moves when it opens, closes, or changes length. It is
   the one element in the system with a boundary of its own: a 1 px `line`
   hairline on all four sides, radius 0.
-- Keyboard and ARIA follow TS-002 D5: `ArrowDown`/`ArrowUp` move the active
+- Keyboard and ARIA follow TS-WEB-0002 D5: `ArrowDown`/`ArrowUp` move the active
   row, `Enter` selects, `Escape` closes and returns focus to the field;
   `aria-expanded` and `aria-activedescendant` on the field, rows as options.
   The focus ring rule applies to the field, not to the active row, which is
@@ -382,15 +382,15 @@ The autosuggest list that belongs to the search field.
   error colour and no `triangle-alert`: it is an empty result, not a fault.
   It is not counted against the 3–4 row budget, because it replaces the
   list rather than joining it.
-- **The row is not interactive, and the spec owns that.** `TS-008 D7a`
+- **The row is not interactive, and the spec owns that.** `TS-WEB-0008 D7a`
   determines it as "one non-interactive row stating that no place was
   found; the form still submits and reaches `/dein-ort/starten`", and
-  `DEC-079 §4` is the decision that there is no suggestion to offer. The
+  `DEC-0079 §4` is the decision that there is no suggestion to offer. The
   onward action is therefore the field's own submit, which stays live — not
   a control inside the row. This guide described "a row with its onward
   action", which read as a second target and contradicted both; it does
   not any more. Where submitting routes, and what the row says, are
-  `TS-008 D7a`'s to state, asserted by `TS-008-A15`; this entry describes
+  `TS-WEB-0008 D7a`'s to state, asserted by `TS-WEB-0008-A15`; this entry describes
   only how the row looks.
 
 ### Badge and chip
@@ -496,7 +496,7 @@ everywhere. There is no contact form.
   is ever read against `lime-100` directly.
 - **Filled is a weight, not a conversion rank.** The first row is
   `data-cta="secondary"` — on every page, including the one whose primary
-  conversion is a booking. `TS-006 D3` allows exactly one
+  conversion is a booking. `TS-WEB-0006 D3` allows exactly one
   `data-cta="primary"` per page and the contact section is never it
   (decision 2, 2026-09-23); a page that reaches the section already spent
   its primary above. The ink ground says "start here among these four
@@ -522,7 +522,7 @@ and reused unchanged on `/`.
   written to, not a hope. The active step's disc is `lime-500` with `ink`;
   the others are `surface` with `muted`.
 - **One CTA** at the bottom, the module's own conversion, at **secondary**
-  treatment and marked `data-cta="secondary"`. Never `primary`: `TS-006 D3`
+  treatment and marked `data-cta="secondary"`. Never `primary`: `TS-WEB-0006 D3`
   allows exactly one `data-cta="primary"` per page, and `/mitmachen` carries
   three of these modules (decision 2, 2026-09-23). The module's CTA points
   at the deeper page, whose own primary is the one that counts.
@@ -627,11 +627,11 @@ Three conditions take the fallback, and each is a real one:
 3. **The performance budget says no.** `backdrop-filter` forces a
    compositor layer that re-rasterises on scroll, over a sticky element,
    above the largest image on the page — which is the LCP element on four of
-   the routes in `TS-003 D2`. The budget interaction is therefore concrete,
+   the routes in `TS-WEB-0003 D2`. The budget interaction is therefore concrete,
    not theoretical: the treatment is legal only while the route stays inside
-   `TS-003 D1` (LCP < 2.5 s, INP < 200 ms, CLS < 0.1) with it applied. If a
+   `TS-WEB-0003 D1` (LCP < 2.5 s, INP < 200 ms, CLS < 0.1) with it applied. If a
    route falls out of that on the measured run, that route takes the
-   fallback — the budget wins, and `TS-003 D4`'s rule that Lighthouse is the
+   fallback — the budget wins, and `TS-WEB-0003 D4`'s rule that Lighthouse is the
    floor and bytes are the proxy applies here unchanged.
 
 The blur never carries contrast on its own. Whatever is behind it, the glyph
@@ -692,8 +692,8 @@ text-shadow: 0 1px 2px var(--color-scrim-45), 0 2px 10px var(--color-scrim-30);
   the component reads one token instead of composing two scrim steps.
 
 - **It is still a token, and never a literal.** `color.scrim.*` is an alpha
-  ladder in `@schafe-vorm-fenster/brand-design`; `TS-017 D3` and
-  `TS-017-A5` reject an `rgba(…)` at a call site whatever its colour. The
+  ladder in `@schafe-vorm-fenster/brand-design`; `TS-WEB-0017 D3` and
+  `TS-WEB-0017-A5` reject an `rgba(…)` at a call site whatever its colour. The
   ladder this treatment needs is `0 · .30 · .35 · .38 · .45 · .72`. The
   shipped **2.8.0** carries `0 · .16 · .38 · .72 · .96` **derived from
   `ink`, `rgba(23,29,13,α)`** — the pre-decision shape, published. PR
@@ -734,7 +734,7 @@ number. **What is fixed is the outcome:**
 > actually sits, clears **4.5:1 behind body text** and **3:1 behind display
 > type** — measured **per photograph**, not once for the component.
 
-That is `WEB-Q-011` and this document's *Accessibility* rule stated as an
+That is `NFR-WEB-0011` and this document's *Accessibility* rule stated as an
 acceptance condition instead of as a recipe. A ladder cannot be measured
 because the photograph is the other half of the pair: 0.72 over a dark
 barn roof and 0.72 over a white gable are not the same surface. The
@@ -751,13 +751,13 @@ against the type colour. Under the floor is an error, not a warning — the
 same exit contract the token guard already has.
 
 > **Owed, and named so nobody assumes it exists.** That row is not written.
-> `pnpm check:contrast` today measures the **token set** (TS-002-A3) and
-> knows nothing about photographs; `WEB-Q-011` states the requirement and
-> `DEC-056` fixes the basis, but no acceptance criterion asserts the
+> `pnpm check:contrast` today measures the **token set** (TS-WEB-0002-A3) and
+> knows nothing about photographs; `NFR-WEB-0011` states the requirement and
+> `DEC-0056` fixes the basis, but no acceptance criterion asserts the
 > composite. The specs are a parallel owner's file, so this guide states the
 > requirement and records the test as **owed**: a `check:contrast` hero row
-> plus the acceptance criterion that binds it, against `TS-002` (the guard
-> lives with the contrast check) and cited from `TS-003 D8`/`DEC-077`, which
+> plus the acceptance criterion that binds it, against `TS-WEB-0002` (the guard
+> lives with the contrast check) and cited from `TS-WEB-0003 D8`/`DEC-0077`, which
 > already own the per-hero renditions the row would iterate. Until it
 > exists, the measurement is a manual step at the editorial gate and every
 > hero photograph carries its measured pair of ratios in its own record.
@@ -1031,7 +1031,7 @@ still forbidden.
   and named there.
 - Focus ring: 3 px `violet-500`, 2 px offset, on every interactive element.
 - 15 px is the type floor everywhere, with no exception for a badge, a chip
-  or a tag (`TS-002 D3`, `TS-002-A10`).
+  or a tag (`TS-WEB-0002 D3`, `TS-WEB-0002-A10`).
 - A blur is a transparency effect: `prefers-reduced-transparency` takes the
   solid fallback (see *Transparent overlay header*).
 - Icons are decorative and always accompanied by text; alt text only where

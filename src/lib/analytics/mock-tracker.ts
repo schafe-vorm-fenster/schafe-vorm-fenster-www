@@ -1,12 +1,12 @@
 /**
- * The mock tracker — plan/guardrails.md's mock rule, applied to TS-012 D2.
+ * The mock tracker — plan/guardrails.md's mock rule, applied to TS-WEB-0012 D2.
  *
  * Logs to the console and records nothing: no cookie, no `localStorage`,
  * `sessionStorage` or IndexedDB write, no network call. This is the
  * implementation every environment runs today (see `index.ts`) — the real
  * eTracker adapter exists (`etracker-tracker.ts`) but stays switched off
  * until the account/field-mapping open point closes (state/open.md row 12,
- * Q-040, TS-012 D4 rule 4).
+ * Q-0040, TS-WEB-0012 D4 rule 4).
  */
 
 import type { AnalyticsTracker, ConversionAttributes, EventStage } from "./types";

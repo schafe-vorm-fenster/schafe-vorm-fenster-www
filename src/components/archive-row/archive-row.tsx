@@ -15,7 +15,7 @@ import styles from "./archive-row.module.css";
 export { ARCHIVE_PRECISIONS, type ArchivePrecision } from "./format";
 
 export interface ArchiveRowProps {
-  /** The original title, in its source language (DEC-026) — never translated. */
+  /** The original title, in its source language (DEC-0026) — never translated. */
   readonly title: string;
   readonly date: string | Date;
   readonly precision?: ArchivePrecision;
@@ -30,8 +30,8 @@ export interface ArchiveRowProps {
   readonly previewSrc?: string;
   readonly previewAlt?: string;
   /**
-   * Additive (plan/component-inventory.md §4 TS-028, mock rule): marks the
-   * row as generated dummy content (`data-demo="true"`) while `Q-045`
+   * Additive (plan/component-inventory.md §4 TS-WEB-0028, mock rule): marks the
+   * row as generated dummy content (`data-demo="true"`) while `Q-0045`
    * leaves every real entry uncleared (`state/open.md` #1). The group badge
    * is the caller's (`src/components/README.md` — "the module owns the
    * marking, not the row"); this only carries the check-visible attribute.
@@ -49,7 +49,7 @@ export interface ArchiveRowProps {
 }
 
 /**
- * 33 `archive-row` [PROPOSED] — content type 12 `archive-entry`, TS-028 D7.
+ * 33 `archive-row` [PROPOSED] — content type 12 `archive-entry`, TS-WEB-0028 D7.
  *
  * Structure: the `event-row` shape, not a card — a meta line carrying the
  * date at its stated precision and the type badges, the original title in

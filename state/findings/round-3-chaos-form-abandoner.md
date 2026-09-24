@@ -24,7 +24,7 @@ typing/bookmarking a URL.
 | C-A-02 (German labels on EN quote form) | **Fixed** | All checked labels (`E-Mail-Adresse`→`Email address`, `Telefon`→`Phone (optional)`, `Worum geht es?`→`What is it about?`, `Absenden`→`Send`, `Nachricht`→`Message`) are English on the EN form. Note: the label "Organisation" is unchanged between locales — that is **not** a residual German string, it's the deliberate EN copy too (`src/components/envoy-form-mount/fields.ts:61`, `label: { de: "Organisation", en: "Organisation" }`, a valid English spelling). My first automated pass flagged it as a false positive; visual/DOM inspection confirms it's intentional. |
 | C-A-03 (mixed-language footer on EN quote page) | **Fixed** | Footer and quote form both read English after switching to `ENGLISH`. |
 | C-A-04 (billing/contact fields not retained across sessions) | **Still true — by design, unchanged** | Same on-page disclaimer, same behaviour. Not a defect. |
-| C-A-05 (registration restarts at step 1 in a fresh session via bare URL) | **Still true — by design, unchanged** | Confirmed intentional: the flow's *entire* state lives in the URL query string (`?ort=&wer=&weg=`), never in storage — matches `e2e/pages/registrieren.spec.ts` (`TS-023-A2/A3/A7`). A bookmarked/full URL *does* resume correctly mid-flow (verified in C3-A-04 below); only a bare route restarts. Not a defect. |
+| C-A-05 (registration restarts at step 1 in a fresh session via bare URL) | **Still true — by design, unchanged** | Confirmed intentional: the flow's *entire* state lives in the URL query string (`?ort=&wer=&weg=`), never in storage — matches `e2e/pages/registrieren.spec.ts` (`TS-WEB-0023-A2/A3/A7`). A bookmarked/full URL *does* resume correctly mid-flow (verified in C3-A-04 below); only a bare route restarts. Not a defect. |
 | C-A-06 (quote form data lost across a DE→EN→DE language-switch round trip) | **Still reproduces** | Filled `#envoy-quote-organisation`, switched to `ENGLISH` then back to `DEUTSCH`: field is empty on return, same URL (`/deine-region/angebot`). |
 
 ---
@@ -83,7 +83,7 @@ typing/bookmarking a URL.
 
 - Source: chaos:form-abandoner
 - Where: site-wide (`proxy.ts`)
-- Observed: the persona brief specifically calls out leaving "the language-suggestion … prompt unanswered". `proxy.ts` computes a `suggestedLanguage` signal and exposes it only as a `Server-Timing` response header; its own comment says outright: "the deferred client-side banner (Q-011) is not built here". No banner appeared in any test (Accept-Language mismatches were not specifically forced via headers, but no UI consumer of the signal exists in the client bundle either). Recording this so its absence isn't mistaken for "nothing to report" — the feature this instruction targets isn't shipped yet.
+- Observed: the persona brief specifically calls out leaving "the language-suggestion … prompt unanswered". `proxy.ts` computes a `suggestedLanguage` signal and exposes it only as a `Server-Timing` response header; its own comment says outright: "the deferred client-side banner (Q-0011) is not built here". No banner appeared in any test (Accept-Language mismatches were not specifically forced via headers, but no UI consumer of the signal exists in the client bundle either). Recording this so its absence isn't mistaken for "nothing to report" — the feature this instruction targets isn't shipped yet.
 
 ---
 

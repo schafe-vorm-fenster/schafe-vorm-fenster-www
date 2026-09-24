@@ -23,7 +23,7 @@
   max-width: var(--measure-reading);
 }
 
-/* The search reserves 56 px here as everywhere (SRC-014 §Fixed heights). */
+/* The search reserves 56 px here as everywhere (SRC-0014 §Fixed heights). */
 .search {
   min-height: var(--height-search);
 }

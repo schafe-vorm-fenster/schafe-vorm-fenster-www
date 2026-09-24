@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import { TrustBlock } from "./trust-block";
 
-describe("TS-024 D10: a subject without a hub record does not ship", () => {
+describe("TS-WEB-0024 D10: a subject without a hub record does not ship", () => {
   it("renders only the subject that carries a body", () => {
     const html = renderToStaticMarkup(
       <TrustBlock

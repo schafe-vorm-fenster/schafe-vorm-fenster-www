@@ -1,15 +1,15 @@
 /**
- * Position 4 — the live counters, WEB-F-041 / TS-008 D8 / TS-009 D6.
+ * Position 4 — the live counters, FUN-WEB-0041 / TS-WEB-0008 D8 / TS-WEB-0009 D6.
  *
  * "Counted live or not shown." Three rules make that true rather than said:
  *
  *  1. **Only figures that were counted.** `/api/stats` carries `totalEvents`
  *     and nothing else the band needs — no places count, no updates-today
- *     count (Q-037, `state/open.md` row 6). A figure with no field stays
+ *     count (Q-0037, `state/open.md` row 6). A figure with no field stays
  *     `undefined`; `live-counters` then renders one fewer slot. No estimate,
  *     no substitute, no static traction number anywhere.
  *  2. **Two tiers, never three.** Beyond the serve-stale window the module is
- *     **removed from the page** (TS-009 D6). `liveCounters()` answers
+ *     **removed from the page** (TS-WEB-0009 D6). `liveCounters()` answers
  *     `undefined` for exactly that case — there is no snapshot file and no
  *     branch that could produce one.
  *  3. **The band may be part real and part demo.** `/api/stats` is the one
@@ -34,7 +34,7 @@ export interface CountersInput {
 
 /**
  * `undefined` means: remove the counter band from the page. It is the
- * documented tier-2-expired branch of TS-009 D6, not an error.
+ * documented tier-2-expired branch of TS-WEB-0009 D6, not an error.
  */
 export async function liveCounters({ store, now }: CountersInput = {}): Promise<
   LiveEnvelope<LiveCounters> | undefined

@@ -1,8 +1,8 @@
 /**
- * TS-025 D2/D3/D3a/D4 — the order flow's step and scope model.
+ * TS-WEB-0025 D2/D3/D3a/D4 — the order flow's step and scope model.
  *
  * Everything lives in the URL (D8): `orte` (comma-separated resolved
- * community slugs), `kreis` (one fixed demo county id, DEC-034 — a county is
+ * community slugs), `kreis` (one fixed demo county id, DEC-0034 — a county is
  * one chip, never expanded into places), and `schritt` (1..4). Steps 1 and 2
  * share one screen (D2); this module still resolves a `schritt` value so the
  * step indicator and back/forward navigation have one number to show.

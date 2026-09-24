@@ -36,13 +36,13 @@ chain is proven once end to end.
 
 | Work package | Spec anchor |
 | --- | --- |
-| Technical foundation: Next.js (current major, App Router), root `tsconfig.json` `strict: true`, `pnpm typecheck` wired into `pnpm check`, `stack.allow.json` | TS-017 D1, D5 |
-| Test harness: Vitest (unit + integration), Playwright (e2e), real `pnpm test` | verification-strategy, TS-017 |
-| Brand binding: single token-import file, brand package pinned exact, no colour/font literal elsewhere | TS-017 D3 |
-| Layout shell: mobile-first base, breakpoints and container per TS-017 D2 as currently specified (the spec, not this row, binds), security headers + CSP scaffold | TS-017 D2, TS-014 |
-| Preview chain: `vercel deploy` (preview) from `next-2026`, deployment protection respected, e2e smoke against the preview URL | TS-015, DEC-031 Stage 1 |
+| Technical foundation: Next.js (current major, App Router), root `tsconfig.json` `strict: true`, `pnpm typecheck` wired into `pnpm check`, `stack.allow.json` | TS-WEB-0017 D1, D5 |
+| Test harness: Vitest (unit + integration), Playwright (e2e), real `pnpm test` | verification-strategy, TS-WEB-0017 |
+| Brand binding: single token-import file, brand package pinned exact, no colour/font literal elsewhere | TS-WEB-0017 D3 |
+| Layout shell: mobile-first base, breakpoints and container per TS-WEB-0017 D2 as currently specified (the spec, not this row, binds), security headers + CSP scaffold | TS-WEB-0017 D2, TS-WEB-0014 |
+| Preview chain: `vercel deploy` (preview) from `next-2026`, deployment protection respected, e2e smoke against the preview URL | TS-WEB-0015, DEC-0031 Stage 1 |
 
-Gate scope: TS-017, TS-015 ACs plus one deployed, reachable preview.
+Gate scope: TS-WEB-0017, TS-WEB-0015 ACs plus one deployed, reachable preview.
 
 ### M2 — Structure
 
@@ -50,13 +50,13 @@ Every page and component exists with placeholder content.
 
 | Work package | Spec anchor |
 | --- | --- |
-| Route tree, translation map (`de` bare, `/en/…`), error pages, redirects skeleton | TS-004 |
-| Component library per design system: the six specified components plus the derived set (header, context band, proof card, live-module shells) marked [PROPOSED] | design-system contract, Q-044 assumption |
-| All 11 pages composed per page spec, placeholder copy, reserved-space/skeleton discipline | TS-019–TS-029, TS-006 |
-| Accessibility foundations: landmarks, focus ring, keyboard order, contrast pairs from the category table | TS-002 |
-| Locale routing skeleton: domain matrix, `<html lang>`, hreflang | TS-001 |
+| Route tree, translation map (`de` bare, `/en/…`), error pages, redirects skeleton | TS-WEB-0004 |
+| Component library per design system: the six specified components plus the derived set (header, context band, proof card, live-module shells) marked [PROPOSED] | design-system contract, Q-0044 assumption |
+| All 11 pages composed per page spec, placeholder copy, reserved-space/skeleton discipline | TS-WEB-0019–TS-WEB-0029, TS-WEB-0006 |
+| Accessibility foundations: landmarks, focus ring, keyboard order, contrast pairs from the category table | TS-WEB-0002 |
+| Locale routing skeleton: domain matrix, `<html lang>`, hreflang | TS-WEB-0001 |
 
-Gate scope: TS-004, TS-006, TS-002 structural ACs, page-spec
+Gate scope: TS-WEB-0004, TS-WEB-0006, TS-WEB-0002 structural ACs, page-spec
 composition ACs (placeholder level).
 
 ### M3 — Content
@@ -65,12 +65,12 @@ Texts, images, translations complete; the content pipeline runs.
 
 | Work package | Spec anchor |
 | --- | --- |
-| Content pipeline: hub packages in, per-locale markdown out, schema + provenance, `TS-###` frontmatter field | TS-007 |
+| Content pipeline: hub packages in, per-locale markdown out, schema + provenance, `TS-WEB-####` frontmatter field | TS-WEB-0007 |
 | Page copy DE + EN from go-to-market-os sources per communication principles and tone of voice; missing slots per the dummy-content rule | content playbook |
-| Legal content via existing Google-Docs import, one page with anchor navigation | DEC-039, DEC-027 |
+| Legal content via existing Google-Docs import, one page with anchor navigation | DEC-0039, DEC-0027 |
 | Imagery per design system (photo surfaces, honest placeholders, generated images marked) | design system, dummy-content rule |
 
-Gate scope: TS-007 ACs, per-page content ACs; content compliance
+Gate scope: TS-WEB-0007 ACs, per-page content ACs; content compliance
 check (eight-point check from the communication principles).
 
 ### M4 — Behaviour
@@ -79,16 +79,16 @@ Interactions, live data, forms, conversion paths work.
 
 | Work package | Spec anchor |
 | --- | --- |
-| Relevance engine: scoring, ordering, segmentation | TS-005 |
-| Live modules + place search, widening chain, BFF, app handover | TS-008 |
-| Personalization stages 0–3, geolocation | TS-010 |
-| Forms and leads: envoy widget as mock behind its interface module (Q-022), briefing, order flow with mocked organizerId minting (Q-046), newsletter | TS-016 |
+| Relevance engine: scoring, ordering, segmentation | TS-WEB-0005 |
+| Live modules + place search, widening chain, BFF, app handover | TS-WEB-0008 |
+| Personalization stages 0–3, geolocation | TS-WEB-0010 |
+| Forms and leads: envoy widget as mock behind its interface module (Q-0022), briefing, order flow with mocked organizerId minting (Q-0046), newsletter | TS-WEB-0016 |
 | Mock layer for every missing external system, dummy data labeled, per the mock rule (plan/guardrails.md) | mock rule |
-| Analytics cookieless, event registry, attribution | TS-012 |
-| SEO: redirect map, structured data, sitemaps, landing pages | TS-011 |
-| Rendering and resilience: static shell, cached islands, three-tier fallback | TS-009, DEC-045/046 |
-| Privacy: closed client-request set verified | TS-013 |
-| Locale detection algorithm complete | TS-001 |
+| Analytics cookieless, event registry, attribution | TS-WEB-0012 |
+| SEO: redirect map, structured data, sitemaps, landing pages | TS-WEB-0011 |
+| Rendering and resilience: static shell, cached islands, three-tier fallback | TS-WEB-0009, DEC-0045/046 |
+| Privacy: closed client-request set verified | TS-WEB-0013 |
+| Locale detection algorithm complete | TS-WEB-0001 |
 
 Gate scope: the ACs of every TS in this table.
 

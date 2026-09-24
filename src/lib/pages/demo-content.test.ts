@@ -3,12 +3,12 @@ import { describe, expect, it } from "vitest";
 import { fillTemplate, parseDemoProofElement, splitSteps } from "@/src/lib/pages/demo-content";
 
 /**
- * TS-019-A8 / plan/guardrails.md (dummy-content rule): the five demo proof
+ * TS-WEB-0019-A8 / plan/guardrails.md (dummy-content rule): the five demo proof
  * elements of `/` come out of the content artifact's own list, never out of
  * the page — so the one place that reads them is tested against the exact
  * lines `content/pages/home/{de,en}.md` ships.
  */
-describe("TS-019-A8: demo proof lines are read, never re-typed", () => {
+describe("TS-WEB-0019-A8: demo proof lines are read, never re-typed", () => {
   it("splits a quoted claim from its role and its place", () => {
     expect(
       parseDemoProofElement(
@@ -66,7 +66,7 @@ describe("TS-019-A8: demo proof lines are read, never re-typed", () => {
   });
 });
 
-describe("TS-007 D7: runtime values are substituted, the sentence is not rewritten", () => {
+describe("TS-WEB-0007 D7: runtime values are substituted, the sentence is not rewritten", () => {
   it("fills every named slot it knows", () => {
     expect(fillTemplate("Das ist los in {place}", { place: "Musterdorf" })).toBe(
       "Das ist los in Musterdorf",
@@ -80,7 +80,7 @@ describe("TS-007 D7: runtime values are substituted, the sentence is not rewritt
   });
 });
 
-describe("TS-020 D4: the homescreen instruction becomes an ordered list", () => {
+describe("TS-WEB-0020 D4: the homescreen instruction becomes an ordered list", () => {
   it("splits running prose at its sentence boundaries", () => {
     expect(
       splitSteps(

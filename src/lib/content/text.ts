@@ -7,7 +7,7 @@
 /**
  * A CTA field sometimes carries its target inline for the content reviewer
  * — `"Angebot anfragen → \`/deine-region/angebot\`"`. The page already knows
- * the target from the route table (TS-004 D3a); this returns the human
+ * the target from the route table (TS-WEB-0004 D3a); this returns the human
  * label only.
  */
 export function ctaLabelOnly(value: string | undefined): string | undefined {

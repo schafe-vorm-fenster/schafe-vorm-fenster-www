@@ -1,5 +1,5 @@
 /**
- * Campaign attribution — TS-012 D6.
+ * Campaign attribution — TS-WEB-0012 D6.
  *
  * `etcc_cmp` (campaign) and `etcc_med` (medium) are the two parameters in
  * productive use, inherited from the `entre` QR-shortlink convention. The
@@ -9,7 +9,7 @@
  * `app.*` handover.
  *
  * The companion rule — a canonical URL strips *every* query parameter,
- * `etcc_*` included (TS-011 D9) — lives in `src/lib/seo`, not here: it is a
+ * `etcc_*` included (TS-WEB-0011 D9) — lives in `src/lib/seo`, not here: it is a
  * findability rule with no campaign-specific logic, and applies to
  * `?ort=…` exactly as it applies to `?etcc_cmp=…`.
  */

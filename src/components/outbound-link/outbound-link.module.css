@@ -74,7 +74,7 @@
  *
  * The same words stay in the link's accessible name (`.hidden` below, the
  * `clip-path` pattern `search-field` and `scope-picker` already use), so
- * TS-016 D9's "the recipient is named in the link's own line" and the
+ * TS-WEB-0016 D9's "the recipient is named in the link's own line" and the
  * new-tab announcement both hold — what changes is that they no longer set
  * the pill's width and height. On `/deine-region` they made the secondary
  * three lines tall and full width, directly above the page's own primary.

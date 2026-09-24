@@ -1,9 +1,9 @@
 /**
- * The `?ort=` contract of TS-021 D4 — "the place is a query parameter, and
+ * The `?ort=` contract of TS-WEB-0021 D4 — "the place is a query parameter, and
  * the URL is the whole payload".
  *
- * The value is **raw user input**, not a geo-api slug (TS-021 D4, and the
- * open point TS-023 inherits). Everything the page is allowed to do with it
+ * The value is **raw user input**, not a geo-api slug (TS-WEB-0021 D4, and the
+ * open point TS-WEB-0023 inherits). Everything the page is allowed to do with it
  * depends on it having passed through here first:
  *
  * | Rule | Determination |

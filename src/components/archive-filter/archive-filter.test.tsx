@@ -16,13 +16,13 @@ function serverHtml() {
   );
 }
 
-describe("TS-028 D4/D5: without JavaScript the chip row is not visible, never dead", () => {
+describe("TS-WEB-0028 D4/D5: without JavaScript the chip row is not visible, never dead", () => {
   it("renders the archive rows but no filter control before hydration", () => {
     const html = serverHtml();
     expect(html).toContain("Ein Zeitungsartikel");
     expect(html).not.toContain("Presse</button>");
     expect(html).not.toContain('role="group"');
-    // TS-028-A9 reads the group by role, so nothing in the pre-hydration
+    // TS-WEB-0028-A9 reads the group by role, so nothing in the pre-hydration
     // render may answer to it — the reserved row is spans, not buttons.
     expect(html).not.toContain("<button");
   });
@@ -32,7 +32,7 @@ describe("F-2-69: the chip row occupies its final height before hydration", () =
   /**
    * The regression this locks down: the chip group used to be absent from the
    * server render, so hydration inserted it and pushed the row list 262 px
-   * down — CLS 0.2197 against TS-028-A13 / TS-009-A8 (< 0.1). The seam a unit
+   * down — CLS 0.2197 against TS-WEB-0028-A13 / TS-WEB-0009-A8 (< 0.1). The seam a unit
    * test can hold is the server markup: the box has to be *there*, carry the
    * same chips, and be hidden by `visibility` rather than removed from flow.
    */
@@ -53,14 +53,14 @@ describe("F-2-69: the chip row occupies its final height before hydration", () =
     // deliberate: measured at 1024 px, seven type chips fit on one line and
     // the reset did not, so adding it on the first chip press re-wrapped the
     // row (44 px → 96 px) and pushed all 31 archive rows down 52 px — the
-    // exact "a chip row that re-wrapped" failure TS-028-A13's own guard
+    // exact "a chip row that re-wrapped" failure TS-WEB-0028-A13's own guard
     // watches for. A row whose wrap depends on the selection cannot be
     // stable, so the reset now always occupies its place and only changes
     // what is painted in it.
     //
     // What the old assertion actually protected — no reset is *offered*
     // before there is something to reset — is protected below and by
-    // `e2e/pages/archiv.spec.ts` TS-028-A3, which requires
+    // `e2e/pages/archiv.spec.ts` TS-WEB-0028-A3, which requires
     // `[data-archive-reset]` to have count 0 until a chip is pressed.
     expect(html, "the reset's box is reserved, so the row cannot re-wrap").toContain("Alle");
     expect(html, "…but it is not a control yet").not.toContain("data-archive-reset");

@@ -1,11 +1,11 @@
 /*
- * The mobile-first layout shell — TS-017 D2.
+ * The mobile-first layout shell — TS-WEB-0017 D2.
  *
  * D2(a) Direction: everything below the first `@media` line is the phone.
  *   Every query is `min-width`; a `max-width` query is a defect, because it
  *   makes the desktop the base case (checked by scripts/check-brand.ts, A4).
  * D2(b) Breakpoints: the six `breakpoint.*` token values of brand-design
- *   (DEC-067) — xs 22.5rem · sm 26.75rem · md 40rem · lg 48rem · xl 64rem ·
+ *   (DEC-0067) — xs 22.5rem · sm 26.75rem · md 40rem · lg 48rem · xl 64rem ·
  *   2xl 80rem. No call site invents one. CSS media queries cannot read custom
  *   properties, so the literals appear here and are checked against the token
  *   set rather than being free.
@@ -16,7 +16,7 @@
  *   aspect and the column count of a block that declares `data-columns-*`.
  *   It may never change block order, block presence or wording.
  *
- * No colour and no font-family literal appears here — TS-017 D3.1. Every
+ * No colour and no font-family literal appears here — TS-WEB-0017 D3.1. Every
  * value is a token from app/styles/brand.css.
  */
 
@@ -33,7 +33,7 @@
 :root {
   color-scheme: light;
   /* The outer gutter. The design system fixes 16px inside the viewport on
-     every section; the per-breakpoint gutter table is still owed (DEC-067
+     every section; the per-breakpoint gutter table is still owed (DEC-0067
      consequences, state/open.md). */
   --gutter: var(--space-4);
 }
@@ -192,7 +192,7 @@ textarea {
 
 /* ── Switch points ─────────────────────────────────────────────────────────
  * Only spacing and type steps change. The tree, the order and the wording
- * are identical at every width (D2(d)); TS-017-A8 tests exactly that.
+ * are identical at every width (D2(d)); TS-WEB-0017-A8 tests exactly that.
  * ─────────────────────────────────────────────────────────────────────── */
 
 /* sm — 26.75rem / 428px: large phones, where the extra width is spent. */

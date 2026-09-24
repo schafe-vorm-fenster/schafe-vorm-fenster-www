@@ -8,7 +8,7 @@ const pl = domainConfigFor("www.owcezaoknem.pl");
 const com = domainConfigFor("www.sheepoutside.com");
 const de = domainConfigFor("www.schafe-vorm-fenster.de");
 
-describe("TS-004-A3: landing-only domain — `/` and legal 200, `/mitmachen` 404", () => {
+describe("TS-WEB-0004-A3: landing-only domain — `/` and legal 200, `/mitmachen` 404", () => {
   it("blocks every page outside the landing set on all three landing domains", () => {
     for (const domain of [at, pl, com])
       for (const path of [

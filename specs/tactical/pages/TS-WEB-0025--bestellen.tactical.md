@@ -1,0 +1,245 @@
+---
+artefact: tactical-spec
+id: TS-WEB-0025
+kind: interaction
+status: DRAFT
+implements: [FUN-WEB-0015]
+sources: [SRC-0001, SRC-0003, SRC-0008, SRC-0011, SRC-0014]
+decisions: [DEC-0010, DEC-0011, DEC-0013, DEC-0024, DEC-0025, DEC-0030, DEC-0034, DEC-0036, DEC-0051, DEC-0056, DEC-0081]
+---
+
+# TS-WEB-0025 — Order the Calendar (`/dein-kalender/bestellen`)
+
+## Purpose
+
+The page brief of `/dein-kalender/bestellen` (SRC-0003 §Order the calendar) in
+buildable form: how the scope is configured, what the invoice step demands
+of the Verwaltung, what leaves the page in step 4. Page-specific matter only —
+composition TS-WEB-0006 · components SRC-0014 · routes and BFF TS-WEB-0004 · live modules
+TS-WEB-0008 · fallback tiers TS-WEB-0009 · forms, briefing exit and the four-step model
+TS-WEB-0016 D7/D8 · events TS-WEB-0012 D4 · rate limits TS-WEB-0014 D9–D11 · SEO TS-WEB-0011. Two
+suppliers gate the page: the handover belongs to envoy (DEC-0051, open as Q-0022),
+the embed code to Portalize (DEC-0030, D7).
+
+## Determinations
+
+### D1 — Page manifest [FIXED: SRC-0003; representation per TS-WEB-0006 D1]
+
+| Field | Value |
+| --- | --- |
+| `focusJob` | run our own calendar |
+| `primaryConversion` | `buy-calendar-licence` |
+| `equalWeightConversion` | `null` — the briefing is an exit on every step (D5), not a second goal; equal weight lives on `/dein-kalender` (FUN-WEB-0014) |
+| `audiences` | municipalities, institutions (in that order) |
+| `liveModules` · `proofSlots` | **none** in V1 — the scope preview is deferred (D4) and there is no proof slot; the decision was made on `/dein-kalender` and the flow does not re-argue it |
+
+One route, not four (TS-WEB-0004 D1/D2); TS-WEB-0006 D2's blocks 3 and 4 render once, after step 4.
+
+### D2 — Step model [FIXED: TS-WEB-0016 D8, SRC-0003]
+
+Steps and their binding properties are TS-WEB-0016 D8. This page adds: the step travels
+as `schritt=1..4`, so back and forward work and no step is reachable past an
+unsatisfied one — `schritt=3` without a scope lands on step 1. Steps 1 and 2 share
+one screen (tick → the chosen scope beside it; the live preview of its contents is deferred, D4).
+
+### D3 — Scope selection [FIXED: DEC-0024, TS-WEB-0008 D7; amended by DEC-0060, see D3a; realisation PROPOSED]
+
+| Mode | Input | Resolution | State today |
+| --- | --- | --- | --- |
+| Places | the place search component (TS-WEB-0008 D7), unchanged — a typed **name**, matched against place and municipality names | each hit becomes a removable chip carrying the geo-api `slug` | works today; a Verwaltung types its municipality name, which the name matching of TS-WEB-0008 D7 answers with the places behind it |
+| Postcode | 5 digits, in a field of its own | resolves to the places the postcode covers; each becomes its own chip, never a single opaque "PLZ" item | works today. This is a **purchase configuration**, not the visitor's place search: DEC-0079 removes the postcode from the search, and DEC-0069 §8 keeps it here, because a buyer drawing a boundary is a different act from a resident naming her village |
+| County | county selection | one chip for the county; the places behind it are **not** expanded into chips (DEC-0034) | no contracted route returns the places of a county — UNKNOWN, see Open points |
+
+The selection lives in the URL (D8), never in a path segment (FUN-WEB-0023, DEC-0037);
+above 12 chips the row collapses to "n Orte ausgewählt" plus a disclosure. No cap
+on the scope — what a scope costs is open (Open points).
+
+### D4 — The live preview: **not in V1** [FIXED: DEC-0069]
+
+**The live preview does not ship in V1.** The scope step itself stays —
+choosing places, ZIP codes or a county is the configuration the order is
+made of, and nothing about it changes. What is deferred is the *live
+answer* to "what would be in my calendar": the counters, the next dates,
+the example places, and the BFF route that would serve them.
+
+Deferred rather than dropped, because the reasoning behind it still
+holds — a buyer who sees eleven upcoming dates in their own villages is
+persuaded by something a sentence cannot do. It is simply not what V1
+turns on: the order works without it, and the route it needs
+(`GET /api/scope/preview`) is the only BFF endpoint in the whole flow, so
+deferring it removes an entire upstream dependency from launch.
+
+**Backlog entry.** The determination below is the specification, kept
+intact so the feature does not have to be re-derived. It is not built for
+V1, no acceptance criterion tests it, and `GET /api/scope/preview` does
+**not** join the TS-WEB-0004 D5 route inventory until it is scheduled.
+
+<details>
+<summary>Deferred specification — the live preview as designed</summary>
+
+The preview answers "what would be in my calendar", not "what will my calendar look
+like": rendering the product needs the loader's place filter (Q-0026), and an
+unfiltered reference calendar would misrepresent the purchase.
+
+| Aspect | Determination |
+| --- | --- |
+| Content | number of places in scope · number of upcoming dates · up to 5 next dates as event rows (SRC-0014) · for a county additionally the active example places (DEC-0034) |
+| Source and cost | one BFF route, `GET /api/scope/preview?orte=&plz=&kreis=` — an addition to the TS-WEB-0004 D5 inventory, upstream events-api + geo-api. At most one request per scope change, debounced 400 ms, the in-flight request cancelled by the next, results cached per scope key. Never a per-place fan-out from the browser |
+| Layout | the preview box declares its height before the data arrives (NFR-WEB-0009, SRC-0014 §Reserved space): fixed-height counter badges, five reserved event rows at 76 px, skeleton per TS-WEB-0009 D7. Ticking a box never moves anything below the preview |
+| Scope extremes | empty scope: no request, designed empty state, step 3 unreachable. Zero dates *in* a scope: the honest publishing invitation, never a fabricated figure (FUN-WEB-0041). County: never a place list (DEC-0034) — counters plus examples, same fixed box, same one request |
+| Failure / 429 | tiers per TS-WEB-0009 D4; a `429` renders as a component state (TS-WEB-0014 D10), never an error page. A failed preview never blocks the order — step 3 stays reachable |
+
+</details>
+
+**What V1 does instead.** The scope step shows what the visitor has chosen — the chips they ticked and their count — and nothing about what is in it. A count of *selected places* is not a claim about content and needs no upstream call. Step 3 stays gated on a non-empty scope exactly as before; only the reason changes from "the preview is empty" to "nothing is selected".
+
+### D5 — The consult exit, on every step [FIXED: DEC-0010, DEC-0013, DEC-0081, TS-WEB-0016 D7]
+
+An exit to the consult path is visible on all four steps, secondary
+treatment, never above the primary CTA (TS-WEB-0006 D3). **It is an in-page
+target, not an outbound link**: it points at this route's contact section,
+which the layout renders once below the flow (TS-WEB-0006 D2, DEC-0081 §3).
+
+| Aspect | Determination |
+| --- | --- |
+| Per step | one exit per step, all four pointing at the same section on the same document |
+| Outbound occurrence | exactly one on the route — the section's first action row, carrying the configured appointment URL (TS-WEB-0016 D7) |
+| Measurement | the exit emits nothing; `request-product-briefing` fires on the section's row with `/dein-kalender/bestellen` as the route (TS-WEB-0016 D12) |
+| Unchanged | no embed, iframe, Google script or font on any step. A visitor who leaves for the appointment page leaves by a plain navigation, and the scope is in the URL, so back restores it (D8) |
+
+### D6 — Invoice details are addressed to an authority [DEMANDED — the form belongs to envoy (DEC-0051), field set PROPOSED]
+
+Step 3 is an envoy instance under TS-WEB-0016 D2/D5 — mount point only, nothing
+held, no endpoint. The field set is a **row of the Q-0022 demand**.
+
+| Field | Required | Why it is not a consumer field |
+| --- | --- | --- |
+| Körperschaft / Behörde (legal name), Amt / Abteilung | yes / no | the buyer is the authority; a person's name never stands alone, and invoices inside a Verwaltung are routed by department |
+| Rechnungsanschrift (Straße, PLZ, Ort), abweichende Rechnungsstelle | yes / no | an official address, never a private one; commonly the Kämmerei receives what the Amt ordered |
+| Ansprechperson + dienstliche E-Mail | yes | contact for the order, not the contracting party |
+| Bestellzeichen, Leitweg-ID (E-Rechnung), USt-IdNr. | no | offered because public-sector accounting routes on them; without a Bestellzeichen or a Leitweg-ID the invoice may bounce |
+
+Forbidden: any payment field (DEC-0011), any private address, any field the invoice
+does not need. Price per FUN-WEB-0020 / TS-WEB-0006 D10. Tone: an office doing its job.
+
+### D7 — What "embed code out immediately" is [FIXED that it is immediate: DEC-0011; artefact UNKNOWN]
+
+The artefact is the DEC-0030 loader snippet — the two lines `/dein-kalender`
+promises: `<script src=".../api/{organizerId}/load.js">` plus its mount element,
+carrying the organizer id created by this order. What is unclear is not its shape
+but where it comes from.
+
+| Aspect | State |
+| --- | --- |
+| Rendering | selectable text in a code block plus a copy control; the text is server-rendered content, never produced by a download or a script-only path |
+| Who mints `organizerId` | Portalize. **No contracted provisioning endpoint exists** — Q-0026 covers cookie-freedom and the place filter only. UNKNOWN |
+| Synchronicity | TS-WEB-0016 D8 requires the receiving system to produce the code synchronously. Until Portalize confirms it can, DEC-0011's "immediately" is unbacked — this is the page's hardest blocker, not a detail |
+| If it cannot be issued synchronously | step 4 shows the confirmation, names when the code arrives, and the `buy-calendar-licence` event does **not** fire (D11) — a confirmation without a code is not the goal |
+| Second copy | the code must also reach the visitor by email, so closing the tab does not lose the purchase — an unanswered row of the envoy/Portalize demand |
+
+### D8 — The flow across a reload: nothing is stored [FIXED: NFR-WEB-0020/023, TS-WEB-0013 D1; carrier PROPOSED]
+
+The website sets no cookie and writes no `localStorage`, `sessionStorage`
+or IndexedDB entry — here as everywhere. No "pending" state is ever held.
+
+| What | Carrier | Reload behaviour |
+| --- | --- | --- |
+| Scope + step | URL query (D2, D3) | survives; the URL is also shareable and pasteable into a mail to the Kämmerei, which is a real use in a Verwaltung |
+| Invoice details | component state inside the envoy widget | **lost**. The visitor returns to step 3 with the scope intact, the fields empty, and a visible note saying so — never a silent blank form |
+| Embed code | not held anywhere by the website | lost on reload; step 4 says "kopiere den Code jetzt" as permanent copy next to it, not as a dialog or an unload prompt |
+
+### D9 — The flow is `noindex` [PROPOSED — TS-WEB-0011 D9 says otherwise and must be amended]
+
+`noindex, follow` as both `X-Robots-Tag` and meta tag on every response; the route
+is absent from `sitemap.xml`. `/dein-kalender` is the search surface, its checkout
+is not. **TS-WEB-0011 D9 does not cover this** — it names `/dein-kalender/bestellen`
+explicitly as "indexable, no special treatment ... not funnels". Wrong here: scope
+parameters would produce unbounded near-duplicate URLs, and a searcher landing
+mid-flow has skipped the argument. Until it is resolved (Open points) the two specs
+disagree in writing rather than silently.
+
+### D10 — Security: the one flow that takes billing data [FIXED: TS-WEB-0014 D9–D11, TS-WEB-0016 D5, NFR-WEB-0038]
+
+| Rule | Here |
+| --- | --- |
+| Billing data never traverses the website | no POST route, no server action, no edge function — envoy receives directly (DEC-0025); no field value appears in Vercel runtime logs, error reports or D11's payloads |
+| Rate limit, origin check, spam layers | V1 has no BFF route here to rate-limit (D4), so TS-WEB-0014 D10 gains nothing from this page and TS-WEB-0014 D11 is unchanged; honeypot and timing belong to envoy (TS-WEB-0014 D9) — the website adds no competing layer and no captcha, here least of all. When the preview is scheduled, its route joins TS-WEB-0014 D10 at 30/min per IP with `429` + `Retry-After: 60`, limits high for carrier-NAT villages |
+| CSP | envoy and Portalize hosts are allowlist entries (TS-WEB-0014 D1) — both UNKNOWN. No payment-provider host exists in the policy, now or later (DEC-0011) |
+
+### D11 — Measurement [FIXED: TS-WEB-0012 D4]
+
+One `buy-calendar-licence` event, stage `completed`, fired once when step 4 renders
+a code — not on reaching step 4, not on submitting step 3 (D7). A briefing click
+fires `request-product-briefing`, stage `handover`. Payloads carry goal ID, route
+and step, never a field value. Both wait on envoy's event contract (Q-0022 C3).
+
+## Free for the generator
+
+- [FREE] Arrangement of scope input and preview, within D4 and SRC-0014.
+- [FREE] Stepper, back navigation, file layout — within D2 and TS-WEB-0016 D8.
+- [FREE] Copy, labels and empty/lost-state notes (FUN-WEB-0087), within D6.
+
+## Acceptance criteria
+
+| ID | Level | Check |
+| --- | --- | --- |
+| TS-WEB-0025-A1 | static | `page.meta.ts` for the route matches D1 field for field; `primaryConversion` resolves in the hub goal set; `equalWeightConversion` is `null`. |
+| TS-WEB-0025-A2 | e2e | All four steps are walked; on each one the consult exit is visible and resolves to this route's contact section. The section's first action row is the only element carrying the configured Google Calendar URL. No step loads a Google script, iframe or font, and no Google host appears in any request. |
+| TS-WEB-0025-A3 | e2e | With a layout-shift observer running, ticking three places one after another updates the visible chip list and its count each time and produces zero layout shift in and below the scope block. |
+| TS-WEB-0025-A4 | e2e | With no place selected: the empty state is visible and step 3 cannot be reached — neither by the CTA nor by editing `schritt=3` into the URL. Selecting a county renders the county as one chip, never a place list (DEC-0034). |
+| TS-WEB-0025-A5 | integration | The order flow issues **no** request to any ecosystem host and carries no token in the browser: the only network calls from `/dein-kalender/bestellen` are to the same origin, and `/api/scope/preview` does not exist in V1 (D4). |
+| TS-WEB-0025-A6 | e2e | No step contains a card, IBAN or payment field; no payment-provider host appears in any request or in the CSP; step 4 is reached without any payment interaction. |
+| TS-WEB-0025-A7 | e2e | Step 4 shows the embed code as selectable text with a copy control, and no "pending payment" or "code follows after payment" state exists anywhere in the flow. |
+| TS-WEB-0025-A8 | e2e | Reload on step 2 restores the scope from the URL. Reload on step 3 restores the scope, leaves the invoice fields empty and shows the note. After a full run no cookie is set and `localStorage` / `sessionStorage` / IndexedDB are empty. |
+| TS-WEB-0025-A9 | e2e | Network and log trace of a full run: no invoice field value reaches our origin, any Vercel log line, or any analytics payload. |
+| TS-WEB-0025-A10 | integration | Every step URL returns `noindex, follow` in both the `X-Robots-Tag` header and the meta tag; the route does not appear in `sitemap.xml`. |
+| TS-WEB-0025-A11 | e2e | Exactly one `buy-calendar-licence` event with stage `completed` fires, and only when a code is shown; a run ending without a code fires none. A click on a step's consult exit fires nothing; a click on the contact section's first action row fires exactly one `request-product-briefing` handover event carrying this route. |
+| TS-WEB-0025-A12 | tool | axe-core: zero violations on all four steps in light, dark and high contrast, including inside the order form's shadow root. |
+| TS-WEB-0025-A13 | manual | Keyboard-only run through all four steps: every chip is removable, focus moves to the scope-change announcement, invalid invoice fields identify the error in text, and the code in step 4 is reachable and copyable. |
+| TS-WEB-0025-A14 | e2e | With the envoy script blocked, step 3 renders the static fallback (an email link plus the consult exit into the contact section) — never an empty slot and never a spinner that does not resolve. The contact section itself renders unchanged; it loads nothing. |
+
+## Coverage
+
+| Requirement | Discharged by |
+| --- | --- |
+| FUN-WEB-0015 (`/dein-kalender/bestellen`, focus job "run our own calendar", conversion `buy-calendar-licence`) | D1 brief · D2, D5 flow and exit · D3, D4 scope and preview · D6 invoice step · D7 code · D8 no storage · D9 indexing · D10 security · D11 measurement · A1–A14 |
+
+Served, not claimed: FUN-WEB-0093/094 · NFR-WEB-0009 · NFR-WEB-0038 · NFR-WEB-0028 ·
+FUN-WEB-0020 · FUN-WEB-0041.
+
+### D3a — Scope does not drive price [FIXED: DEC-0060]
+
+Corrected 2026-09-11. An earlier reading treated the scope step as a
+pricing input and recorded that the flow could assemble a scope it could
+not price. It cannot: **480 € is per organisation**, whatever the scope
+contains. The step configures what the calendar *shows*; the price is
+fixed before it starts and does not move.
+
+What remains true is the practical warning of DEC-0034: a county can hold
+hundreds of places, so the preview must stay bounded — but that is a
+rendering concern, not a commercial one.
+
+## Open points
+
+- **Portalize (Q-0026 extension) — synchronous organizer provisioning.** Nothing
+  mints an `organizerId` during an order, so DEC-0011's "code immediately" has no
+  mechanism behind it. Blocks D7, A7, A11 — this page's release blocker. Also
+  demanded: the snippet text and the loader's place filter (D4).
+- **envoy (Q-0022) — the order form kind.** DEC-0051 fixes that envoy receives, but
+  the contract holds no order form: field set (D6), the event carrying the scope,
+  the `success` payload handing back the code, an emailed second copy. Blocks D6,
+  D7, D11, A14.
+- **TS-WEB-0011 owner — D9 contradiction.** TS-WEB-0011 D9 calls this route indexable, TS-WEB-0025
+  D9 sets `noindex, follow`. Both cannot ship.
+- **TS-WEB-0004 owner — `GET /api/scope/preview` is a new BFF route** absent from the D5
+  inventory; **TS-WEB-0014 owner — it needs a limit row** (30/min, D10). Without it the
+  preview degenerates into browser-side fan-out.
+- **geo-api (new) — county scope.** No contracted operation returns a
+  county's places or their event counts, so D3's county mode and D4's county preview
+  rest on nothing. The places and postcode modes are unaffected: names resolve
+  against the committed index (TS-WEB-0008 D2) and postcodes against `community/search`.
+- **Product / pricing (SRC-0003 pricing rule) — what does a scope cost?** 480 €/year
+  is published for "your places" with no rule for how many, none for a county; the
+  flow can assemble a scope it cannot price.
+- **TS-WEB-0016 owner** — D8's "two candidates for step 3" is stale; DEC-0051 chose envoy.
+- [PROPOSED]: D2, D3 realisation, D6 field set, D8 carrier, D9, D10's limit row. D4 is fixed by DEC-0069 as deferred to the backlog.

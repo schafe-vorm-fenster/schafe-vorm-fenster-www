@@ -1,5 +1,5 @@
 /**
- * `pnpm check:contrast` — TS-002-A3, "automated contrast check of the token
+ * `pnpm check:contrast` — TS-WEB-0002-A3, "automated contrast check of the token
  * set passes for all themes" (F-2-43).
  *
  * The criterion existed and nothing measured it: the only contrast assertion
@@ -12,7 +12,7 @@
  *
  * The semantic layer of `@schafe-vorm-fenster/brand-design`'s token sheet —
  * the `--bg`/`--text`/`--link`/… roles, which is the layer components consume
- * — plus the one value `app/styles/brand.css` adds (TS-017 D3 makes that the
+ * — plus the one value `app/styles/brand.css` adds (TS-WEB-0017 D3 makes that the
  * only file a brand value may enter through, so the guard reads both). The
  * palette scales (`--color-lime-500` and friends) are raw material and carry
  * no foreground/background relationship of their own; pairing them is what
@@ -23,7 +23,7 @@
  *
  * ### Thresholds
  *
- * WCAG 2.2 AA, which TS-002 takes as its floor: 4.5:1 for body text, 3:1 for
+ * WCAG 2.2 AA, which TS-WEB-0002 takes as its floor: 4.5:1 for body text, 3:1 for
  * large text and for non-text contrast (borders, focus rings). Each pair
  * below names which it is and why, so a failure says what broke rather than
  * only that something did.
@@ -64,7 +64,7 @@ const PAIRS: readonly Pair[] = [
   { foreground: "--text", background: "--bg-inset", minimum: 4.5, why: "body copy on an inset surface" },
   { foreground: "--text-secondary", background: "--bg", minimum: 4.5, why: "secondary copy on the page ground" },
   { foreground: "--text-secondary", background: "--bg-subtle", minimum: 4.5, why: "secondary copy on a subtle surface" },
-  { foreground: "--text-muted", background: "--bg", minimum: 4.5, why: "muted copy is still copy (TS-002 D1)" },
+  { foreground: "--text-muted", background: "--bg", minimum: 4.5, why: "muted copy is still copy (TS-WEB-0002 D1)" },
   { foreground: "--text-muted", background: "--bg-subtle", minimum: 4.5, why: "muted copy on a subtle surface" },
   { foreground: "--link", background: "--bg", minimum: 4.5, why: "link text on the page ground" },
   { foreground: "--link-hover", background: "--bg", minimum: 4.5, why: "link text in its hover state" },
@@ -78,7 +78,7 @@ const PAIRS: readonly Pair[] = [
     foreground: "--color-status-warning",
     background: "--color-placeholder-ground",
     minimum: 4.5,
-    why: "the placeholder pair SRC-014 fixes at 6.0:1",
+    why: "the placeholder pair SRC-0014 fixes at 6.0:1",
   },
   // `--color-status-error` / `--color-status-success` are palette-level and
   // the sheet declares no dark variant of either, so on a dark ground they

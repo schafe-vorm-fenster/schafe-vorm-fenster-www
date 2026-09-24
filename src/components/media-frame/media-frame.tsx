@@ -30,8 +30,8 @@ export interface MediaFrameProps extends DataStateProps {
   /** The asset does not depict what the copy claims. */
   readonly notDepicting?: boolean;
   /**
-   * The page's **declared** LCP element (TS-003 D2) — everything else loads
-   * lazily. Exactly one frame per page may set it (TS-003-A8: "No image
+   * The page's **declared** LCP element (TS-WEB-0003 D2) — everything else loads
+   * lazily. Exactly one frame per page may set it (TS-WEB-0003-A8: "No image
    * outside the D2 table is eager").
    */
   readonly priority?: boolean;
@@ -39,7 +39,7 @@ export interface MediaFrameProps extends DataStateProps {
   /** Skips the image optimizer, for SVG and for hosts without a remote pattern. */
   readonly unoptimized?: boolean;
   readonly caption?: ReactNode;
-  /** The manifest slot id when this frame shows a generated image (DEC-068). */
+  /** The manifest slot id when this frame shows a generated image (DEC-0068). */
   readonly placeholderId?: string;
   /**
    * Kept in the interface so every page composes the frame the same way;
@@ -50,7 +50,7 @@ export interface MediaFrameProps extends DataStateProps {
 }
 
 /**
- * 19 `media-frame` [PROPOSED] — SRC-014 §Aspect Ratios.
+ * 19 `media-frame` [PROPOSED] — SRC-0014 §Aspect Ratios.
  *
  * Structure: the ratio box for any image that is not a full-width
  * `photo-surface` — proof images, portraits, path images, screenshots. The
@@ -107,7 +107,7 @@ export function MediaFrame({
         <Image
           alt={alt}
           className={styles.image}
-          // TS-003-A8 asks for the two attributes by name, and F-3-2 measured
+          // TS-WEB-0003-A8 asks for the two attributes by name, and F-3-2 measured
           // zero of either anywhere in the tree. `priority` was the wrong
           // instrument twice over: it was `false` here, and Next 16
           // deprecated it in favour of `preload` — which inserts a `<link>`

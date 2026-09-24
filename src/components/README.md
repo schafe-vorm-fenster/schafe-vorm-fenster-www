@@ -26,7 +26,7 @@ src/components/<inventory-name>/
   `EventRow`. One vocabulary for content, schema and component (D-2).
 - **Server-first.** `motion-reveal` and `back-to-top` carry `"use client"`
   because both need an observer; `archive-filter` (§2.3) is the one
-  exception the inventory itself requires (TS-028 D4/D5: client-side
+  exception the inventory itself requires (TS-WEB-0028 D4/D5: client-side
   filtering over rows already in the static HTML) — it renders nothing until
   mounted, so a visitor without JavaScript sees the full, unfiltered list
   rather than a dead control. Everything else renders on the server and

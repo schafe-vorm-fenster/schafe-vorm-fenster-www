@@ -29,7 +29,7 @@ import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
 /**
- * TS-023 — `/mitmachen/registrieren`, a flow, not an argument.
+ * TS-WEB-0023 — `/mitmachen/registrieren`, a flow, not an argument.
  *
  * Every step is a plain GET navigation on the same route (D4): the state is
  * `?ort=&wer=&weg=`, re-validated server-side on every request, never a
@@ -64,7 +64,7 @@ const WEG_IDS = ["whatsapp", "calendar-connection", "website-import"] as const;
 /**
  * The last screen has to read **finished** — the three questions are
  * answered and the website's part is over — without claiming a registration
- * it cannot confirm: the account is the app's, and TS-023 D6 forbids a
+ * it cannot confirm: the account is the app's, and TS-WEB-0023 D6 forbids a
  * confirmation, an instruction or an event field on this route.
  */
 const HANDOVER_HEADING = {
@@ -107,7 +107,7 @@ const ANSWERED_PLACE: Record<Locale, { label: string; change: string }> = {
 };
 
 /**
- * **Cache Components: this route blocks on purpose** (TS-009 D1, the dynamic
+ * **Cache Components: this route blocks on purpose** (TS-WEB-0009 D1, the dynamic
  * layer). The step this flow renders *is* the query — heading, form, step
  * indicator and closing block all change with it — so there is no static
  * shell to split off: a `<Suspense>` around the body would prerender a
@@ -156,11 +156,11 @@ export default async function Page({
    * The answer is not designed here, it is **reused**: the founding page is
    * what this site says to an uncovered place, and its acknowledgment slot
    * already writes the words. The **placeless** half of that slot is the one
-   * this page may use — TS-023-A5 is explicit that an unresolvable value is
+   * this page may use — TS-WEB-0023-A5 is explicit that an unresolvable value is
    * "echoed only in the search field", and the founding page's
    * "{ort} steht noch nicht…" variant would put it in body text. So the
    * heading names no place and the value travels in the call to action's URL,
-   * to the one page TS-021 D6 does let it name.
+   * to the one page TS-WEB-0021 D6 does let it name.
    *
    * The empty-field half needs no copy at all: the field asks the browser to
    * insist (`required` below), so an empty submit never leaves the page.
@@ -175,7 +175,7 @@ export default async function Page({
   const foundingAck = founding === undefined ? undefined : slot(founding, "dein-ort-starten-1-ack");
   const foundingCta = founding === undefined ? undefined : slot(founding, "dein-ort-starten-6-cta");
   // Index 1 is the artifact's "Headline (ohne Ort, Fallback)" — authored
-  // copy, not a blank, and it names no place (TS-023-A5).
+  // copy, not a blank, and it names no place (TS-WEB-0023-A5).
   const notFoundHeadline = foundingAck === undefined ? "" : (fieldAt(foundingAck.blocks, 1) ?? "");
   const notFoundLead = foundingAck === undefined ? undefined : fieldAt(foundingAck.blocks, 2);
   const notFoundCtaLabel =
@@ -212,7 +212,7 @@ export default async function Page({
 
   return (
     <>
-      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
       <SectionShell surface="paper">
         {/* The progress row stands on the handover too, complete — "how much
@@ -356,7 +356,7 @@ export default async function Page({
           2/3 and the handover — a mid-flow exit offer costs the conversion
           the page exists for. */}
       {step === 1 ? (
-        // TS-011-A4 (F-2-41): the band is an `aside` on every page it
+        // TS-WEB-0011-A4 (F-2-41): the band is an `aside` on every page it
         // renders on — this file hand-rolls its own because D7 makes it
         // conditional, so `PageFrame`'s `as="aside"` does not reach it.
         // `tight`: the band sat between the question and the footer as the

@@ -1,5 +1,5 @@
 /**
- * The per-slot metadata comment (TS-007 D4/D6, `state/content-map.md`).
+ * The per-slot metadata comment (TS-WEB-0007 D4/D6, `state/content-map.md`).
  *
  * The Phase-2 artifacts are one file per page per locale, with one Markdown
  * section per slot and the slot's metadata in an inline HTML comment:

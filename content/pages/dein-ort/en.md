@@ -1,6 +1,6 @@
 ---
 id: dein-ort-de
-page_id: TS-020
+page_id: TS-WEB-0020
 route: "/dein-ort"
 seo:
   "/dein-ort":
@@ -38,9 +38,9 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — every slot. The four value-story proof cards now carry the real testimonials of the hub (kurzweg-baeckerei, zschiesche-gross-kiesow, eichler-wasserschloss-quilow, wendt-rubkow) and the Volkshochschule reference case instead of generated demo quotes; all five are clearance: pending (Q-014); EN translation of content/pages/dein-ort/de.md, same source ids per slot"
-compliance_check: "state/content-map.md#compliance-checks — TS-020"
-schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+provenance: "sourced — every slot. The four value-story proof cards now carry the real testimonials of the hub (kurzweg-baeckerei, zschiesche-gross-kiesow, eichler-wasserschloss-quilow, wendt-rubkow) and the Volkshochschule reference case instead of generated demo quotes; all five are clearance: pending (Q-0014); EN translation of content/pages/dein-ort/de.md, same source ids per slot"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0020"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 images:
   - id: dein-ort-hero
     slot: dein-ort-1-state-a
@@ -102,8 +102,8 @@ images:
     provenance: real
     source: >-
       Screenshot der eigenen Kalender-Ansicht unter {APP_HOST}/{ort}, iOS/Safari — muss aufgenommen
-      werden. Keine Rendition: eine erfundene Oberfläche wäre eine Produktbehauptung (DEC-068 Regel
-      3). Bis dahin bleibt die schraffierte Fläche (TS-020-A7).
+      werden. Keine Rendition: eine erfundene Oberfläche wäre eine Produktbehauptung (DEC-0068 Regel
+      3). Bis dahin bleibt die schraffierte Fläche (TS-WEB-0020-A7).
     alt: >-
       An iPhone screen showing Safari's share menu with the entry for adding a page to the home
       screen.
@@ -115,14 +115,14 @@ images:
     source: >-
       Screenshot der eigenen Kalender-Ansicht unter {APP_HOST}/{ort}, Android/Chrome — muss
       aufgenommen werden. Keine Rendition, gleicher Grund wie bei der iOS-Aufnahme. Bis dahin bleibt
-      die schraffierte Fläche (TS-020-A7).
+      die schraffierte Fläche (TS-WEB-0020-A7).
     alt: An Android screen showing the Chrome menu with the entry for adding a page to the home screen.
     status: needed
 ---
 
 # Your place (`/dein-ort`)
 
-Two states on one route (TS-020 D2): **A** — dates exist, **B** — the
+Two states on one route (TS-WEB-0020 D2): **A** — dates exist, **B** — the
 place is on file but empty (focus job switches to "publish our
 dates"). Block and DOM order stay the same in both states; only
 block 1's offer text changes.
@@ -167,7 +167,7 @@ Place name and dates are live data from `/api/places/{slug}/events`.
 
 **Closing heading:** One date is enough to put something in {place}.
 
-Literal quote from SRC-002 (TS-020 D2, DEC-071): this sentence belongs
+Literal quote from SRC-0002 (TS-WEB-0020 D2, DEC-0071): this sentence belongs
 only here. It implies no fault and no apology — the calendar for this
 place already exists and is waiting.
 
@@ -185,7 +185,7 @@ place already exists and is waiting.
 
 **Testimonial:** Elisabeth Kurzweg, Bäckerei Kurzweg — wording on the proof card below.
 
-<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; clearance: pending (usage_rights unverified, Q-014) -->
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
 The story rests on two cleared records: the Google search for the baker in
 Schlatkow, which finds the bakery van and the day it comes rather than a
@@ -198,7 +198,7 @@ revenue — the account stands, the figure does not.
 
 ### Proof card for story 1
 
-<!-- clearance: pending — `kurzweg-baeckerei` is `usage_rights: unverified` (Q-014). The quote comes from the old website's testimonial section; no written clearance is on file in the hub. The protected preview shows it; the pre-go-live hardening round clears it. -->
+<!-- clearance: pending — `kurzweg-baeckerei` is `usage_rights: unverified` (Q-0014). The quote comes from the old website's testimonial section; no written clearance is on file in the hub. The protected preview shows it; the pre-go-live hardening round clears it. -->
 <!-- source_note: the package stores the quote in ASCII transliteration ("Digitale Terminliste fuer die Doerfer"); set here with umlauts, wording unchanged. The quote is not translated — a testimonial is quoted in the language it was given in. -->
 <!-- id: dein-ort-3-story-baeckerwagen-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; status: draft -->
 
@@ -223,11 +223,11 @@ day-current and place-accurate through the village calendars
 
 **Testimonial:** Dr. A. Zschiesche, mayor of Groß Kiesow — wording on the proof card below.
 
-<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; clearance: pending (usage_rights unverified, Q-014) -->
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
 ### Proof card for story 2
 
-<!-- clearance: pending — `zschiesche-gross-kiesow` is `usage_rights: unverified` (Q-014), same origin as the other four testimonials from the old website. -->
+<!-- clearance: pending — `zschiesche-gross-kiesow` is `usage_rights: unverified` (Q-0014), same origin as the other four testimonials from the old website. -->
 <!-- source_note: the package stores the quote in ASCII transliteration ("Fuer dieses Projekt", "Landbevoelkerung", "Haendler"); set here with umlauts, wording unchanged. The quote is not translated. -->
 <!-- id: dein-ort-4-story-ratssitzung-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; status: draft -->
 
@@ -247,7 +247,7 @@ day-current and place-accurate through the village calendars
 
 **Testimonial:** Uwe Eichler, Wasserschloss Quilow — wording on the proof card below.
 
-<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; clearance: pending (usage_rights unverified, Q-014) -->
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
 The story now has a real anchor: the Volkshochschule Uecker-Randow
 publishes its entire course programme through the village calendar, at its
@@ -258,7 +258,7 @@ calendar, on the record.
 
 ### Proof card for story 3
 
-<!-- clearance: pending — `eichler-wasserschloss-quilow` and `volkshochschule-uecker-randow` are both `usage_rights: unverified` (Q-014). -->
+<!-- clearance: pending — `eichler-wasserschloss-quilow` and `volkshochschule-uecker-randow` are both `usage_rights: unverified` (Q-0014). -->
 <!-- source_note: the package stores the quote in ASCII transliteration ("Flaechenland"); set here with umlauts, wording unchanged. The quote is not translated. -->
 <!-- id: dein-ort-5-story-kultur-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"]; status: draft -->
 
@@ -286,11 +286,11 @@ statement, no reach figure).
 
 **Testimonial:** Holger Wendt, mayor of Rubkow — wording on the proof card below.
 
-<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; clearance: pending (usage_rights unverified, Q-014) -->
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
 ### Proof card for story 4
 
-<!-- clearance: pending — `wendt-rubkow` is `usage_rights: unverified` (Q-014). -->
+<!-- clearance: pending — `wendt-rubkow` is `usage_rights: unverified` (Q-0014). -->
 <!-- source_note: wording unchanged from the record's evidence block. The quote is not translated. -->
 <!-- id: dein-ort-6-story-radius-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; status: draft -->
 
@@ -307,7 +307,7 @@ statement, no reach figure).
 **Android:** Open the {place} calendar in Chrome. Tap the menu (three dots), then "Add to Home screen". Done.
 
 Both instructions always sit side by side, regardless of the visitor's
-device (no user-agent sniffing, TS-020 D4). In state B, this block
+device (no user-agent sniffing, TS-WEB-0020 D4). In state B, this block
 moves behind the neighbourhood module.
 
 ## Slot 8 — CTA reassurance (permanence promise)

@@ -1,7 +1,7 @@
 import type { SectionSurface } from "./section-shell";
 
 /**
- * The page-rhythm rules of SRC-014 §Page Rhythm, as a predicate.
+ * The page-rhythm rules of SRC-0014 §Page Rhythm, as a predicate.
  *
  * "The order of section types is part of the design, not a layout accident."
  * A single `section-shell` cannot see its neighbours, so the rules are

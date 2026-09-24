@@ -1,11 +1,11 @@
 /**
- * The event registry — TS-012 D4: one event per conversion goal, the event
+ * The event registry — TS-WEB-0012 D4: one event per conversion goal, the event
  * name **is** the hub goal id verbatim.
  *
  * This is the only place a `(goalId, stage)` pair is decided for a surface;
  * a page or CTA looks its own entry up here rather than inventing one
  * (`conversionEvent(goalId)`). `eventRegistryViolations()` is the static
- * half of TS-012-A3, run by `event-registry.test.ts` as part of `pnpm test`
+ * half of TS-WEB-0012-A3, run by `event-registry.test.ts` as part of `pnpm test`
  * (hence `pnpm check`) — an id that does not resolve against
  * `@schafe-vorm-fenster/goals` fails the build there.
  *
@@ -59,14 +59,14 @@ export const CONVERSION_EVENTS: readonly ConversionEventDefinition[] = [
   {
     goalId: "buy-calendar-licence",
     stage: "completed",
-    trigger: "invoice checkout concluded, embed code shown (WEB-F-094)",
+    trigger: "invoice checkout concluded, embed code shown (FUN-WEB-0094)",
     surface: ["order"],
     wired: true,
   },
   {
     goalId: "request-licence-quote",
     stage: "completed",
-    trigger: "envoy widget reports a successful submission (WEB-F-090)",
+    trigger: "envoy widget reports a successful submission (FUN-WEB-0090)",
     surface: ["regionQuote"],
     wired: true,
   },
@@ -74,7 +74,7 @@ export const CONVERSION_EVENTS: readonly ConversionEventDefinition[] = [
     goalId: "request-product-briefing",
     stage: "handover",
     trigger:
-      "outbound click to the Google Calendar booking link (WEB-F-093) — the booking itself is off-site with no callback",
+      "outbound click to the Google Calendar booking link (FUN-WEB-0093) — the booking itself is off-site with no callback",
     surface: ["calendar", "region"],
     wired: true,
   },
@@ -82,14 +82,14 @@ export const CONVERSION_EVENTS: readonly ConversionEventDefinition[] = [
     goalId: "request-ad-placement",
     stage: null,
     trigger:
-      "not wired at launch — offering `local-advertising` is `promotion: withheld` (Q-006)",
+      "not wired at launch — offering `local-advertising` is `promotion: withheld` (Q-0006)",
     surface: "app",
     wired: false,
   },
   {
     goalId: "order-promotion-material",
     stage: null,
-    trigger: "not wired at launch — no page yet (Q-005)",
+    trigger: "not wired at launch — no page yet (Q-0005)",
     surface: "app",
     wired: false,
   },
@@ -116,7 +116,7 @@ export function wiredConversionEvents(): readonly ConversionEventDefinition[] {
 }
 
 /**
- * TS-012-A3, static half: no duplicate goal id, and every id resolves
+ * TS-WEB-0012-A3, static half: no duplicate goal id, and every id resolves
  * against the hub package. Returns the violations, `[]` when clean.
  */
 export function eventRegistryViolations(

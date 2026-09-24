@@ -9,7 +9,7 @@ const generated =
 const multi =
   '<!-- id: home-6-scene-provenance; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"]; status: draft -->';
 
-describe("TS-007-A1: the slot metadata comment parses against the schema", () => {
+describe("TS-WEB-0007-A1: the slot metadata comment parses against the schema", () => {
   it("reads id, content type, provenance, derived_from and status", () => {
     const result = parseSlotMeta(sourced);
     expect(result.ok).toBe(true);
@@ -75,7 +75,7 @@ describe("TS-007-A1: the slot metadata comment parses against the schema", () =>
     expect(result.ok).toBe(false);
   });
 
-  it("fails on a malformed source ref — a repository path is never an address (TS-007 D1)", () => {
+  it("fails on a malformed source ref — a repository path is never an address (TS-WEB-0007 D1)", () => {
     const result = parseSlotMeta(
       '<!-- id: x-1-y; content_type: hero; provenance: sourced; derived_from: ["packages/evidence/proof/founder.md"]; status: draft -->',
     );

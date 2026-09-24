@@ -1,5 +1,5 @@
 /**
- * The resolver — TS-010 D1 and D2. One pass per request, cheapest first,
+ * The resolver — TS-WEB-0010 D1 and D2. One pass per request, cheapest first,
  * **stated intent always winning over inferred intent**:
  *
  *   1 route + language   the page's own declaration        → `job`, `locale`
@@ -15,7 +15,7 @@
  * The result is **one flat object** (`ViewerContext`) plus the two request
  * facts that travel with it — the rotation seed and where the location came
  * from. It is resolved *outside* any `use cache` boundary and passed as props
- * (TS-005 D8): the cache key is `segmentKey()`, not this object.
+ * (TS-WEB-0005 D8): the cache key is `segmentKey()`, not this object.
  *
  * Step 5 is a page concern and deliberately absent here: browser geolocation
  * is client-side only, never triggered on load, and its only effect is a
@@ -37,7 +37,7 @@ import type { Locale } from "../i18n/locales";
 import type { RouteId } from "../routes/routes";
 
 export interface ViewerContextInput {
-  /** The page's declared focus job (TS-006 D1). An input, so no trait can change it. */
+  /** The page's declared focus job (TS-WEB-0006 D1). An input, so no trait can change it. */
   readonly focusJob: FocusJob;
   readonly locale: Locale;
   /** The reference date — the page's clock. Everything downstream is pure. */
@@ -109,7 +109,7 @@ export async function composeViewerContext(input: ViewerContextInput): Promise<R
     geo: location.geo,
     trait,
     // The focus job is the page's, at every stage. A trait may reorder within
-    // the page (`emphasis.ts`), never redefine what the page is for (DEC-059).
+    // the page (`emphasis.ts`), never redefine what the page is for (DEC-0059).
     job: input.focusJob,
     stage: stageOf({ geo: location.geo, trait }),
     locale: input.locale,

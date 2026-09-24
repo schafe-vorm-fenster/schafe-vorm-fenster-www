@@ -1,5 +1,5 @@
 /**
- * Where the visitor is — TS-010 D2 steps 3–5, D4, D6.
+ * Where the visitor is — TS-WEB-0010 D2 steps 3–5, D4, D6.
  *
  * **The interface is the point.** Real geolocation reads the platform's
  * request geo headers, and that is the proxy's job (`proxy.ts`, a later work
@@ -14,7 +14,7 @@
  * - **The ceiling is a hard truncation.** `community` is never reached from an
  *   IP, even when the lookup knows it, and `municipality` only when the lookup
  *   is unambiguous. A visitor must never be shown that the site knows her
- *   village before she said it — which is what makes TS-005 D1's honest limit
+ *   village before she said it — which is what makes TS-WEB-0005 D1's honest limit
  *   true (tiers 0 and 1 fire only after a place search).
  * - **A stated place overwrites the inferred hierarchy in full**, never field
  *   by field (D2).
@@ -117,7 +117,7 @@ const NOWHERE: ViewerLocation = Object.freeze({
 });
 
 /**
- * Production while Q-008 is unanswered: the site runs at stage 0/2/3, which
+ * Production while Q-0008 is unanswered: the site runs at stage 0/2/3, which
  * D8 makes a complete site. No launch depends on the flag being on.
  */
 export const disabledLocationResolver: ViewerLocationResolver = {
@@ -142,7 +142,7 @@ export const mockLocationResolver: ViewerLocationResolver = {
 };
 
 export interface ResolverConfig {
-  /** `off` is the production default while Q-008 is open; `mock` is the prototype. */
+  /** `off` is the production default while Q-0008 is open; `mock` is the prototype. */
   readonly source?: "off" | "mock";
 }
 

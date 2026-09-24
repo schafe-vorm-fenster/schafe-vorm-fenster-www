@@ -1,9 +1,9 @@
 /**
- * Position 2 — "this week nearby", TS-008 D3 step 2.
+ * Position 2 — "this week nearby", TS-WEB-0008 D3 step 2.
  *
  * The one module whose radius is an **approximation, and the approximation is
  * ours**: geo-api's proximity search runs against a server-side 20 km
- * constant and caps the result count (TS-008 D2.2), so the ~15 km cut happens
+ * constant and caps the result count (TS-WEB-0008 D2.2), so the ~15 km cut happens
  * here, on the positions the response carries, and a truncated candidate set
  * is reported as `truncated` so the module claims no completeness.
  */
@@ -91,7 +91,7 @@ export async function nearbyEvents({
 
   return resilient(fetcher, {
     // The key is the rounded anchor, not the exact coordinate: a cache key
-    // carries a segment, never something traceable to a visitor (TS-013 D6).
+    // carries a segment, never something traceable to a visitor (TS-WEB-0013 D6).
     key: `nearby:${lat.toFixed(2)}:${lng.toFixed(2)}:${radiusKm}`,
     kind: "dates",
     tags: [cacheTags.places()],

@@ -38,7 +38,7 @@ Date: 2026-09-11
 
 - **Where:** Footer on `/dein-kalender/bestellen` and `/deine-region/angebot`
 - **Steps:** Navigate to both target pages, scroll to footer to locate language toggle
-- **Expected:** Language switcher visible in footer (TS-001-A7 requirement)
+- **Expected:** Language switcher visible in footer (TS-WEB-0001-A7 requirement)
 - **Observed:** Language switcher buttons present in footer ("DEUTSCH" and "ENGLISH"). DEUTSCH appears as active state. Located in consistent position at page bottom.
 - **Source:** chaos:hasty-clicker
 - **Assessment:** Language switcher UI present and positioned correctly
@@ -50,7 +50,7 @@ Date: 2026-09-11
 - **Expected:** Page should navigate to English version (`/en/your-calendar/order`), content should display in English
 - **Observed:** Selector `text=ENGLISH` failed to match DOM element. Language switcher click could not be executed via agent-browser automation.
 - **Source:** chaos:hasty-clicker
-- **Impact:** Unable to test language switch behavior (TS-001-A7: "equivalent page, never the home page"), navigation state during language switch, or event firing during language change
+- **Impact:** Unable to test language switch behavior (TS-WEB-0001-A7: "equivalent page, never the home page"), navigation state during language switch, or event firing during language change
 
 ### C-H-5 — Page navigation via Back button
 
@@ -75,7 +75,7 @@ Date: 2026-09-11
 - Reload during form submission behavior
 - Back/Forward button hammering through multi-step form
 - Multiple tab interference (C-H-9 skipped — form submission unreachable)
-- Conversion event firing (`buy-calendar-licence` and `request-licence-quote` should fire exactly once at `completed` stage per TS-011/TS-012)
+- Conversion event firing (`buy-calendar-licence` and `request-licence-quote` should fire exactly once at `completed` stage per TS-WEB-0011/TS-WEB-0012)
 - Language switch state during form interaction
 - Analytics event deduplication
 

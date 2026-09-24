@@ -1,29 +1,29 @@
 /**
- * The proof selection every page shares — TS-005, run for real.
+ * The proof selection every page shares — TS-WEB-0005, run for real.
  *
  * Until now each page mapped its own list of demo proof lines straight onto
  * `proof-card`s: the order was file order, the count was whatever the artifact
  * happened to carry, and the relevance engine (`src/lib/relevance/`) — gate,
  * score, rotate, order, count — ran nowhere outside its unit tests
- * (TS-005-A8/A9/A13 were all "🔜 page work packages").
+ * (TS-WEB-0005-A8/A9/A13 were all "🔜 page work packages").
  *
  * This module is that seam, and it is deliberately **thin**: a page keeps its
  * own card rendering (context line, geo badge, image slot — they differ per
  * page and per spec), and hands the engine only what the engine scores. What
- * comes back is the selection: exactly as many positions as DEC-048 gives the
+ * comes back is the selection: exactly as many positions as DEC-0048 gives the
  * surface, each either an element or an honest gap.
  *
  * Three properties it enforces rather than documents:
  *
  *  - **the focus job is an input**, taken from the page's own `page.meta.ts`,
- *    so no trait can change what the page is for (DEC-059);
+ *    so no trait can change what the page is for (DEC-0059);
  *  - **`now` and the seed are arguments** to the engine, never read inside it
- *    (TS-005 D7) — this module reads the clock, the engine does not;
- *  - **an unfilled position is a position**, not a shorter list (SRC-001 §4).
+ *    (TS-WEB-0005 D7) — this module reads the clock, the engine does not;
+ *  - **an unfilled position is a position**, not a shorter list (SRC-0001 §4).
  *
  * It is a `use cache` function: the selection is a pure function of the
  * candidates, the viewer segment and the ISO week, which is exactly the cache
- * key TS-005 D8 / TS-009 D3 describe. `?ort=` reaches it as a **slug prop**,
+ * key TS-WEB-0005 D8 / TS-WEB-0009 D3 describe. `?ort=` reaches it as a **slug prop**,
  * resolved by the page outside the cache boundary.
  */
 
@@ -47,7 +47,7 @@ import type { RouteId } from "@/src/lib/routes/routes";
  *
  * The facets are separate from the badge on purpose. The badge is what the
  * card *says* ("Beispiel", "Beispielregion"); `geoCommunity`/`geoCounty` are
- * what the element *covers*, which is what TS-005 D1 scores — "the coverage
+ * what the element *covers*, which is what TS-WEB-0005 D1 scores — "the coverage
  * level, not the venue".
  */
 export interface ProofCandidate {
@@ -69,7 +69,7 @@ export interface ProofCandidate {
   /** The community the element covers, where it names one. */
   readonly geoCommunity?: string | null;
   readonly geoCounty?: string | null;
-  /** TS-005 D4 — multiplies freshness, never replaces it. */
+  /** TS-WEB-0005 D4 — multiplies freshness, never replaces it. */
   readonly editorialWeight?: number;
 }
 
@@ -80,7 +80,7 @@ export type ProofEntry =
 
 export interface ProofSelection {
   readonly entries: readonly ProofEntry[];
-  /** TS-010's stage label — observability only; nothing branches on it. */
+  /** TS-WEB-0010's stage label — observability only; nothing branches on it. */
   readonly stage: 0 | 1 | 2 | 3;
   readonly seed: string;
   /** How many of the surface's positions carry an element. */
@@ -92,7 +92,7 @@ export interface ProofRequest {
   readonly locale: Locale;
   /** The page's declared focus job — `page.meta.ts`, never a trait. */
   readonly focusJob: FocusJob;
-  /** DEC-048: `inline` 3 · `home` 5 · `stream` 7. */
+  /** DEC-0048: `inline` 3 · `home` 5 · `stream` 7. */
   readonly surface: Surface;
   readonly candidates: readonly ProofCandidate[];
   /** `?ort=`, already validated by `place-parameter.ts`. Stage 3 when it resolves. */
@@ -114,7 +114,7 @@ export async function selectProof({
 
   const now = new Date();
   const seed = isoWeekSeed(now);
-  // TS-005 D7: "Include the seed in the `cacheTag` so a week boundary
+  // TS-WEB-0005 D7: "Include the seed in the `cacheTag` so a week boundary
   // invalidates cleanly."
   cacheTag(`proof:${seed}`, `proof:${routeId}:${locale}`);
 
@@ -142,7 +142,7 @@ export async function selectProof({
       county: candidate.geoCounty ?? null,
       community: candidate.geoCommunity ?? null,
     }),
-    // The artifacts carry no `job_relation` facet yet (TS-007 D12 row 4), so a
+    // The artifacts carry no `job_relation` facet yet (TS-WEB-0007 D12 row 4), so a
     // page's own proof is `neutral` for its own job — the honest default the
     // engine treats as "assessed, no claim either way".
     jobRelation: { [focusJob]: "neutral" },
@@ -150,7 +150,7 @@ export async function selectProof({
     ...(candidate.editorialWeight === undefined
       ? {}
       : { editorialWeight: candidate.editorialWeight }),
-    // The mock rule's exception (TS-005 gate): a `demo` element passes the
+    // The mock rule's exception (TS-WEB-0005 gate): a `demo` element passes the
     // clearance gate carrying its flag, and comes back as the `mocked` state
     // so the card badges itself.
     clearance: candidate.demo ? "unverified" : "cleared",

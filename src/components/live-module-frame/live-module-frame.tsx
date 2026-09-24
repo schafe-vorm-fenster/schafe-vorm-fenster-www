@@ -11,7 +11,7 @@ export interface LiveModuleFrameProps extends DataStateProps {
   /** The full heading, already naming its own radius — "in <place>", "in der Umgebung", "im Kreis <county>". */
   readonly title: string;
   /**
-   * Read, not seen. The heading still names the module's own radius (TS-008
+   * Read, not seen. The heading still names the module's own radius (TS-WEB-0008
    * D1) — it is only taken out of sight where the block directly above
    * already says the same sentence, which on `/dein-ort` state A is the
    * page's `h1` (polish brief, page 2, fix 2: "the second identical heading
@@ -32,7 +32,7 @@ export interface LiveModuleFrameProps extends DataStateProps {
    * The heading level of the module's title. `h3` by default, because a
    * module usually stands inside a section that has its own `h2`; a page
    * whose section *is* the module passes `h2`, so the document keeps a
-   * hierarchical heading order (TS-002, Web Interface Guidelines).
+   * hierarchical heading order (TS-WEB-0002, Web Interface Guidelines).
    */
   readonly headingLevel?: "h2" | "h3";
   /** The page's language — the freshness label reads it. */
@@ -42,7 +42,7 @@ export interface LiveModuleFrameProps extends DataStateProps {
 }
 
 /**
- * 40 `live-module-frame` [PROPOSED] — content type 19, TS-008, TS-009.
+ * 40 `live-module-frame` [PROPOSED] — content type 19, TS-WEB-0008, TS-WEB-0009.
  *
  * Structure: the shell every live module stands in — the title naming its own
  * radius, an optional subline, the module body, an optional onward `cta`. A

@@ -17,32 +17,32 @@ only what those decisions do not answer. Answers become DEC entries, and the
 determinations they settle flip to `[FIXED]`.
 
 **All thirteen are answered.** This document stays as the reasoning
-behind them; the decisions themselves are DEC-067 … DEC-070, and the
-register rows are Q-058 … Q-070 in [open-questions.md](open-questions.md).
+behind them; the decisions themselves are DEC-0067 … DEC-0070, and the
+register rows are Q-0058 … Q-0070 in [open-questions.md](open-questions.md).
 
 | # | Question | Outcome |
 | --- | --- | --- |
-| Q-058 | Breakpoints | Six, dense below the tablet — the spec's two were the error · DEC-067 |
-| Q-059 | LCP photographs | Both image LCPs stay; gaps get marked placeholders · DEC-068 |
-| Q-060 | Price predicate | Stands; 4.000 € never appears. Withheld amounts unguarded as an accepted risk · DEC-070 |
-| Q-061 | Machine-readable Offer | Emitted, with net and organisation scope in a `priceSpecification` · DEC-069 |
-| Q-062 | AAA criteria | Eight, not four; 2.5.5 raises every target to 44 × 44 · DEC-069 |
-| Q-063 | Order preview | Deferred to the backlog, spec kept intact · DEC-069 |
-| Q-064 | Committed snapshots | Yes — the keep-the-last-good rule needs a file to keep · DEC-069 |
-| Q-065 | `/deine-termine` | Reserved but not built; 404 until the widget is sellable · DEC-071 |
-| Q-066 | Lead fallback | The Google Form at `/start`, linked never embedded · DEC-069 |
-| Q-067 | Cache lifetimes | Stale to three days; fresh TTLs untouched · DEC-069 |
-| Q-068 | Context proximity | Not a question — the tag was wrong. SRC-002 fixes 1.0 and 0.3 · DEC-069 |
-| Q-069 | JS budget | Reports; Lighthouse gates · DEC-069 |
-| Q-070 | The low-stakes block | All eight confirmed · DEC-070 |
+| Q-0058 | Breakpoints | Six, dense below the tablet — the spec's two were the error · DEC-0067 |
+| Q-0059 | LCP photographs | Both image LCPs stay; gaps get marked placeholders · DEC-0068 |
+| Q-0060 | Price predicate | Stands; 4.000 € never appears. Withheld amounts unguarded as an accepted risk · DEC-0070 |
+| Q-0061 | Machine-readable Offer | Emitted, with net and organisation scope in a `priceSpecification` · DEC-0069 |
+| Q-0062 | AAA criteria | Eight, not four; 2.5.5 raises every target to 44 × 44 · DEC-0069 |
+| Q-0063 | Order preview | Deferred to the backlog, spec kept intact · DEC-0069 |
+| Q-0064 | Committed snapshots | Yes — the keep-the-last-good rule needs a file to keep · DEC-0069 |
+| Q-0065 | `/deine-termine` | Reserved but not built; 404 until the widget is sellable · DEC-0071 |
+| Q-0066 | Lead fallback | The Google Form at `/start`, linked never embedded · DEC-0069 |
+| Q-0067 | Cache lifetimes | Stale to three days; fresh TTLs untouched · DEC-0069 |
+| Q-0068 | Context proximity | Not a question — the tag was wrong. SRC-0002 fixes 1.0 and 0.3 · DEC-0069 |
+| Q-0069 | JS budget | Reports; Lighthouse gates · DEC-0069 |
+| Q-0070 | The low-stakes block | All eight confirmed · DEC-0070 |
 
 ---
 
 ## A. Resolved while this catalogue was being written
 
-### Q-058 — Breakpoints: six, and dense at the phone end **[resolved — DEC-067]**
+### Q-0058 — Breakpoints: six, and dense at the phone end **[resolved — DEC-0067]**
 
-`brand-design` ships six breakpoint tokens. TS-017 D1(b) had fixed **two**
+`brand-design` ships six breakpoint tokens. TS-WEB-0017 D1(b) had fixed **two**
 and, worse, reused the names `md` and `lg` for 768 and 1024 — widths the
 token set calls `lg` and `xl`. Writing `md:` against the tokens would have
 yielded 640 px where the spec meant 768, silently, with no error anywhere.
@@ -52,7 +52,7 @@ density below the tablet is the decision:
 
 | Token | px | What it is for |
 | --- | --- | --- |
-| base | 0 | below `xs`: 320 px phones, the floor TS-002 A7 guards |
+| base | 0 | below `xs`: 320 px phones, the floor TS-WEB-0002 A7 guards |
 | `xs` | 360 | the small-phone reference viewport |
 | `sm` | 428 | large phones — where the extra width is actually spent |
 | `md` | 640 | phone landscape and the smallest tablets |
@@ -71,8 +71,8 @@ one "mobile" spends that difference on nothing.
 What survives unchanged is the single-tree rule: six switch points do not
 license six layouts. Density buys tuning, never a second component tree.
 
-Carried through to TS-017 D2, TS-006 D3 (428 × 926 as a third reference
-viewport, deliberately not a fold viewport), WEB-C-002, the design-system
+Carried through to TS-WEB-0017 D2, TS-WEB-0006 D3 (428 × 926 as a third reference
+viewport, deliberately not a fold viewport), CON-WEB-0002, the design-system
 contract, and the acceptance regime — A8 and A9 now sample the small range,
 because a check that looks only at 360 and 1280 cannot see whether the
 dense end does anything at all.
@@ -85,7 +85,7 @@ and the three below 640 px are the ones nothing delivered so far answers.
 
 ## B. Determinations that bind the content phase
 
-### Q-059 — LCP element per page (TS-003 D2)
+### Q-0059 — LCP element per page (TS-WEB-0003 D2)
 
 The per-page LCP declaration names two photographs that do not exist yet:
 `/mitmachen` → a WhatsApp scene image, `/ueber-uns` → a founder photo. Every
@@ -99,7 +99,7 @@ it being produced, sized and licensed before launch.
 | B — text-first everywhere (recommended) | Both pages declare a text LCP; the photographs load below or lazily. No page's performance budget depends on an asset that does not exist. |
 | C — keep `/ueber-uns`, drop `/mitmachen` | The founder photo is the one image whose absence would be felt. |
 
-### Q-060 — How a price may reach the page (TS-018 D3)
+### Q-0060 — How a price may reach the page (TS-WEB-0018 D3)
 
 The spec derives a predicate — `promotion === 'promoted' && price_status === 'fixed'` —
 and draws two conclusions the sources do not state:
@@ -113,7 +113,7 @@ and draws two conclusions the sources do not state:
 Confirm the predicate, and decide whether conclusion 2 needs a guard of its own
 (a build check that no withheld amount appears in rendered output).
 
-### Q-061 — Do we publish a machine-readable price? (TS-011 D4)
+### Q-0061 — Do we publish a machine-readable price? (TS-WEB-0011 D4)
 
 `/dein-kalender` would emit JSON-LD `Service` + `Offer` with `price: 480`,
 `priceCurrency: EUR`, `unitCode: ANN`. That is a structured price claim that
@@ -131,7 +131,7 @@ Also open in D4: second-level pages emit `BreadcrumbList` "if the IA adopts a
 visible trail". The IA has not said. Visible breadcrumb trail on the five
 second-level pages — yes or no?
 
-### Q-062 — The AAA criteria we adopt beyond AA (TS-002 D2)
+### Q-0062 — The AAA criteria we adopt beyond AA (TS-WEB-0002 D2)
 
 Four AAA criteria are proposed for this audience: link purpose from link text
 alone (no "hier klicken"), visual presentation (≤ 80ch, line-height ≥ 1.5),
@@ -146,7 +146,7 @@ and warm" and would apply to the legal register too.
 
 ## C. Additions that cost something
 
-### Q-063 — A BFF route for the order preview (TS-025 D4)
+### Q-0063 — A BFF route for the order preview (TS-WEB-0025 D4)
 
 `/dein-kalender/bestellen` would gain a live preview — places in scope, upcoming
 dates, up to five next dates — served by a new route
@@ -161,7 +161,7 @@ people *configuring* rather than *ordering*.
 | B — counters only, no date rows | One cheaper aggregate call; the preview loses the concreteness that makes it persuasive. |
 | C — no preview at launch | The order flow ships without it; the route stays in the spec as a later addition. |
 
-### Q-064 — Generated snapshots in the repository (TS-009 D8)
+### Q-0064 — Generated snapshots in the repository (TS-WEB-0009 D8)
 
 Tier 3 of the resilience cascade needs a payload that exists before the first
 request. The spec generates it at build time into `src/generated/snapshots/`,
@@ -176,7 +176,7 @@ changing on most builds.
 | B — generate fresh, never commit | Clean tree; a build during an outage ships without a tier-3 payload, and the cascade ends at tier 2. |
 | C — commit, but fail the build on a failed fetch | No stale snapshots ever, at the price of upstream outages blocking deploys. |
 
-### Q-065 — Is `/deine-termine` reserved at launch? (TS-004 D7)
+### Q-0065 — Is `/deine-termine` reserved at launch? (TS-WEB-0004 D7)
 
 The offering→surface map reserves `/deine-termine` for the
 `portalize-website-widget`, which is `withheld` and has no surface built. A
@@ -186,7 +186,7 @@ ourselves, or a page that must exist.
 Reserve the path in the inventory without building it, or leave it out entirely
 until the widget is sellable?
 
-### Q-066 — The lead fallback when the envoy widget is late (TS-016 D6)
+### Q-0066 — The lead fallback when the envoy widget is late (TS-WEB-0016 D6)
 
 Delivery of the envoy widget is UNKNOWN, so every lead surface ships a static
 fallback: "the contact route of last resort (an email address rendered as a
@@ -207,7 +207,7 @@ an address that survives for months is the wrong thing to optimise.
 Each of these is a defensible guess with no source behind it. Confirming them
 makes them binding; replacing them costs one line each.
 
-### Q-067 — Cache lifetimes (TS-003 D5)
+### Q-0067 — Cache lifetimes (TS-WEB-0003 D5)
 
 | Data | Fresh | Serve-stale |
 | --- | --- | --- |
@@ -222,15 +222,15 @@ by an organiser stays wrong on the website for up to five minutes, and stale for
 up to 24 hours in an outage. Both are defensible for a weekly rhythm; neither is
 decided.
 
-### Q-068 — Context-proximity weights (TS-005 D2)
+### Q-0068 — Context-proximity weights (TS-WEB-0005 D2)
 
 Every element type gets a proximity to every entry context: starting type 1.0,
-named widening type 0.6, anything else 0.3. The shape follows SRC-002's context
+named widening type 0.6, anything else 0.3. The shape follows SRC-0002's context
 matrix; the three numbers do not. The consequence of 0.3 rather than 0.0 is that
 an unrelated type can still surface when nothing better exists — deliberate, and
 worth confirming.
 
-### Q-069 — The JavaScript budget (TS-003 D1)
+### Q-0069 — The JavaScript budget (TS-WEB-0003 D1)
 
 Per-route first-load JS ≤ 100 KB hard, ≤ 70 KB target. No source names a figure.
 The hard limit becomes a build-failing gate, so it is the number that decides
@@ -240,7 +240,7 @@ whether a future library is allowed in.
 
 ## E. One block to confirm together
 
-### Q-070 — Eight low-stakes determinations
+### Q-0070 — Eight low-stakes determinations
 
 These follow from decisions already taken and have no plausible alternative
 worth a page. They are listed so that confirming them is a deliberate act rather
@@ -248,14 +248,14 @@ than an omission.
 
 | Spec | Determination | In short |
 | --- | --- | --- |
-| TS-015 D8 | Canary gate signals | Readiness, journeys, route smoke gate the promotion; canary error logs are reported, never a verdict |
-| TS-015 D9 | Spec checker in CI | E1–E10 block the merge; W1–W3 are reported per release, never gated |
-| TS-015 D11 | Runner and toolchain | `ubuntu-latest`, Node from `.nvmrc`, pnpm 10.x, frozen lockfile, no custom image |
-| TS-014 D5 | Three environments | CSP enforced in all three; HSTS 2 y production / 1 d preview / off locally |
-| TS-029 D3/D4 | Anchors and on-page nav | `scroll-margin-top` from the header variable; a server-rendered section nav, sticky ≥ 1024 px |
-| TS-028 D4/D7 | Archive filter and rows | Client-side chips over static rows, only types with entries; year spine as the heading outline |
-| TS-021 D5 | Late-link re-resolution | A shared `?ort=` link that resolves later 302s to `/dein-ort`; an upstream error never redirects |
-| TS-010 D2 | Resolution precedence | Route → entry context → IP → stated place → browser geolocation; later overwrites earlier, no step blocks the response |
+| TS-WEB-0015 D8 | Canary gate signals | Readiness, journeys, route smoke gate the promotion; canary error logs are reported, never a verdict |
+| TS-WEB-0015 D9 | Spec checker in CI | E1–E10 block the merge; W1–W3 are reported per release, never gated |
+| TS-WEB-0015 D11 | Runner and toolchain | `ubuntu-latest`, Node from `.nvmrc`, pnpm 10.x, frozen lockfile, no custom image |
+| TS-WEB-0014 D5 | Three environments | CSP enforced in all three; HSTS 2 y production / 1 d preview / off locally |
+| TS-WEB-0029 D3/D4 | Anchors and on-page nav | `scroll-margin-top` from the header variable; a server-rendered section nav, sticky ≥ 1024 px |
+| TS-WEB-0028 D4/D7 | Archive filter and rows | Client-side chips over static rows, only types with entries; year spine as the heading outline |
+| TS-WEB-0021 D5 | Late-link re-resolution | A shared `?ort=` link that resolves later 302s to `/dein-ort`; an upstream error never redirects |
+| TS-WEB-0010 D2 | Resolution precedence | Route → entry context → IP → stated place → browser geolocation; later overwrites earlier, no step blocks the response |
 
 ---
 
@@ -263,9 +263,9 @@ than an omission.
 
 Seventeen determinations carry `[PROPOSED]` on a sub-clause only — a number
 inside an otherwise fixed rule, or a row awaiting an external answer. They are
-already tracked by the question they wait on (Q-008, Q-015, Q-019, Q-045, Q-054,
-Q-056) and are not repeated here.
+already tracked by the question they wait on (Q-0008, Q-0015, Q-0019, Q-0045, Q-0054,
+Q-0056) and are not repeated here.
 
-One was not a question but a defect: TS-004 D7 still granted
-`local-advertising` one sentence on `/dein-kalender` after DEC-052 §3 narrowed
+One was not a question but a defect: TS-WEB-0004 D7 still granted
+`local-advertising` one sentence on `/dein-kalender` after DEC-0052 §3 narrowed
 that to no occurrence. Corrected, not asked.

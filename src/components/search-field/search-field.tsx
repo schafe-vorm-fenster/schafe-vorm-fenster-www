@@ -30,26 +30,26 @@ export interface SearchFieldProps extends Omit<LinkOptions, "hash"> {
   /**
    * The conversion marker on the submit control. Where the focus job is
    * "know what is on", the primary conversion **is** this submit and not a
-   * link to another page (TS-006 D4, TS-019-A2) — so the marker has to be
+   * link to another page (TS-WEB-0006 D4, TS-WEB-0019-A2) — so the marker has to be
    * reachable from the page that owns it. Absent by default: only one
-   * element per page carries it (TS-006 D3).
+   * element per page carries it (TS-WEB-0006 D3).
    */
   readonly submitDataCta?: string;
   /**
    * Native validation, where an empty submit is not a page state (F-3-14).
    *
    * Off by default, and deliberately: on `/` and `/dein-ort` an empty search
-   * is TS-020-A9's own row — the value is dropped and stage 0 renders at 200,
+   * is TS-WEB-0020-A9's own row — the value is dropped and stage 0 renders at 200,
    * which is a designed answer. Step 1 of the registration flow has no such
    * state, so there the field asks the browser to insist.
    */
   readonly required?: boolean;
   /**
-   * The submit control, where the page needs to own it — DEC-078.
+   * The submit control, where the page needs to own it — DEC-0078.
    *
    * `/` is the one page whose *primary conversion marker* moves with a
    * request value: in S1 it is this submit, in S2/S3 it is the hero's own
-   * CTA (TS-019 D2). A `data-cta` attribute cannot be streamed, so the page
+   * CTA (TS-WEB-0019 D2). A `data-cta` attribute cannot be streamed, so the page
    * puts a `<Suspense>` boundary around the button itself and keeps the
    * `<form>`, the label and the **input** in the prerendered shell, where
    * nothing can replace them. Everywhere else this stays unset and the
@@ -61,7 +61,7 @@ export interface SearchFieldProps extends Omit<LinkOptions, "hash"> {
 
 export interface SearchSubmitProps {
   readonly label: string;
-  /** TS-006 D3's one-per-page marker, where this submit is the page's primary. */
+  /** TS-WEB-0006 D3's one-per-page marker, where this submit is the page's primary. */
   readonly dataCta?: string;
   /** The `arrow-right` of a flow step (brief, page 5). */
   readonly onward?: boolean;
@@ -69,7 +69,7 @@ export interface SearchSubmitProps {
 
 /**
  * The 44 px submit pill nested in the field — its own component so a page
- * that streams the `data-cta` marker (DEC-078) renders the identical button
+ * that streams the `data-cta` marker (DEC-0078) renders the identical button
  * in both branches of its boundary.
  */
 export function SearchSubmit({ label, dataCta, onward = false }: SearchSubmitProps) {
@@ -82,7 +82,7 @@ export function SearchSubmit({ label, dataCta, onward = false }: SearchSubmitPro
 }
 
 /**
- * 2 `search-field` [FIXED] — SRC-014 §Search field.
+ * 2 `search-field` [FIXED] — SRC-0014 §Search field.
  *
  * Structure: one 56 px `paper` pill holding the `map-pin`, the input with its
  * placeholder in `muted`, and the submit button as a 44 px pill nested inside

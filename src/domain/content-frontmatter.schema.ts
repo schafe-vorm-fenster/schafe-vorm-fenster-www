@@ -48,8 +48,8 @@ export const ContentStatusSchema = z.enum([
 ]);
 
 /**
- * TS-007 D8.1 / DEC-006: the pipeline takes a locale **set**, never a
- * hard-coded pair. The set is `src/lib/i18n/locales.ts`, which TS-001-A11
+ * TS-WEB-0007 D8.1 / DEC-0006: the pipeline takes a locale **set**, never a
+ * hard-coded pair. The set is `src/lib/i18n/locales.ts`, which TS-WEB-0001-A11
  * makes the single place a language is declared — adding one is a row there.
  */
 export const ContentLocaleSchema = z.enum(LOCALES);
@@ -205,24 +205,24 @@ export const AnyFrontmatterSchema = z.union([
 export type AnyFrontmatter = z.infer<typeof AnyFrontmatterSchema>;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// TS-007 — the content pipeline layer
+// TS-WEB-0007 — the content pipeline layer
 //
 // Added, not forked: everything above is the pre-relaunch taxonomy that
 // `content/features/`, `content/support/` and `content/legal/` still validate
-// against (TS-007 D4 calls them archive). Everything below is the schema the
+// against (TS-WEB-0007 D4 calls them archive). Everything below is the schema the
 // M3 pipeline reads — the page artifacts under `content/pages/**` and the
 // per-slot metadata comments inside them.
 //
 // The full 26-type reshape of D5 is *not* done here. D5 rewrites the whole
-// file against Layer C compositions that do not exist yet (TS-007's own open
+// file against Layer C compositions that do not exist yet (TS-WEB-0007's own open
 // point "Layer C has no tactical spec"). What lands here is the part M3
 // actually needs and can check today: the provenance key (D6), the lifecycle
-// (D11), the slot vocabulary of concept B.3, and the `TS-###` spec binding
-// that TS-017-A14 demands. See ADR-074.
+// (D11), the slot vocabulary of concept B.3, and the `TS-WEB-####` spec binding
+// that TS-WEB-0017-A14 demands. See ADR-074.
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * The lifecycle of TS-007 D11: an agent emits `draft`, a person sets
+ * The lifecycle of TS-WEB-0007 D11: an agent emits `draft`, a person sets
  * `approved` at the editorial decision point. `imported` survives for the
  * legal family only (D10), which never enters generation.
  *
@@ -299,14 +299,14 @@ export const SLOT_CONTENT_TYPE_ALIASES: Readonly<Record<string, SlotContentType>
 };
 
 /**
- * Where a slot's copy comes from. `sourced` and `generated` are TS-007 D6 and
+ * Where a slot's copy comes from. `sourced` and `generated` are TS-WEB-0007 D6 and
  * the dummy-content rule; the other three are determinations the content map
  * made and the pipeline has to carry rather than flatten:
  *
  *   sourced-empty-by-design  a clearance-gated proof slot that stays empty
- *                            (SRC-001 rule 4, TS-007 D2) — never substituted
+ *                            (SRC-0001 rule 4, TS-WEB-0007 D2) — never substituted
  *   withheld                 a slot a page spec forbids filling without a
- *                            named source (TS-024 D10, TS-026 D5)
+ *                            named source (TS-WEB-0024 D10, TS-WEB-0026 D5)
  *   mixed                    a slot whose parts differ in provenance
  *
  * `demo` is orthogonal: it marks the slot the prototype shows in place of an
@@ -324,15 +324,15 @@ export const SlotProvenanceSchema = z.enum([
 export type SlotProvenance = z.infer<typeof SlotProvenanceSchema>;
 
 /**
- * A provenance reference of TS-007 D6 — `<package>@<version>#<record-id>`,
+ * A provenance reference of TS-WEB-0007 D6 — `<package>@<version>#<record-id>`,
  * the exact installed version, never a range and never a repository path
- * (DEC-042). Two forms beyond the canonical one are accepted:
+ * (DEC-0042). Two forms beyond the canonical one are accepted:
  *
  *   `ia`                     the copy shell with no source record, declared
  *                            against the information architecture (D6)
  *   `<package>@<version>`    a whole-package *pool* reference: the slot draws
  *                            from every record of that package and the
- *                            relevance engine (TS-005) picks. It still
+ *                            relevance engine (TS-WEB-0005) picks. It still
  *                            resolves, and a version bump still selects the
  *                            file for P7 — which is all D6 asks of the key.
  *                            [PROPOSED — D6 writes only the `#record` form]
@@ -344,7 +344,7 @@ export const SourceRefSchema = z
   .string()
   .regex(
     SOURCE_REF_PATTERN,
-    "must be `<package>@<version>#<record-id>`, `<package>@<version>`, or `ia` (TS-007 D6)",
+    "must be `<package>@<version>#<record-id>`, `<package>@<version>`, or `ia` (TS-WEB-0007 D6)",
   );
 
 /**
@@ -356,7 +356,7 @@ export const SourceRefSchema = z
  * or `reviewed_by` pass validation and then be invisible to the editorial
  * gate — a gate that can be bypassed by a typo is not a gate.
  *
- * It carries what TS-007 D4/D6 would put in a per-slot file's own
+ * It carries what TS-WEB-0007 D4/D6 would put in a per-slot file's own
  * frontmatter. `state/content-map.md` explains why the artifacts are one file
  * per page instead; ADR-074 records the determination that the loader reads
  * that shape as is.
@@ -377,7 +377,7 @@ export type SlotMeta = z.infer<typeof SlotMetaSchema>;
 
 /**
  * The `<title>` and meta description of **one route** in one language
- * (TS-011 D5, TS-021-A11).
+ * (TS-WEB-0011 D5, TS-WEB-0021-A11).
  *
  * D5 is explicit that both are content, not code: they live in the page's own
  * frontmatter and are "never derived at runtime from body copy or from the
@@ -386,7 +386,7 @@ export type SlotMeta = z.infer<typeof SlotMetaSchema>;
  * the page's own focus slot rather than lifting from a hub record, which is
  * what the dummy-content rule (plan/guardrails.md) asks to be registered.
  *
- * The lengths are *not* checked here. TS-011-A7 owns those numbers and
+ * The lengths are *not* checked here. TS-WEB-0011-A7 owns those numbers and
  * `scripts/check-seo-budget.ts` is the one place they are written down; a
  * second copy in the schema would be a second thing to keep in step.
  */
@@ -401,11 +401,11 @@ export type PageSeo = z.infer<typeof PageSeoSchema>;
 /**
  * A page artifact's `seo` block, keyed by the **German route path** — the
  * same locale-free key the `route` field carries, so the `de` and the `en`
- * file of a page name their routes identically (TS-007 D4's rule for slot
+ * file of a page name their routes identically (TS-WEB-0007 D4's rule for slot
  * ids, applied to routes).
  *
  * It is a map rather than a single pair because one artifact can serve more
- * than one route: `/deine-region/angebot` is specified by TS-026 together
+ * than one route: `/deine-region/angebot` is specified by TS-WEB-0026 together
  * with `/deine-region` and its slots live in that page's file
  * (`CONTENT_PAGE_DIRS` in `src/lib/content/loader.ts`). Two routes are two
  * documents to a search engine, so they get two titles.
@@ -438,7 +438,7 @@ export type ImageRatio = z.infer<typeof ImageRatioSchema>;
 /**
  * Where the pixels come from. `real` is a photograph or an asset somebody
  * actually owns — it must name its `source`, because an image carries no
- * frontmatter a reviewer could check (DEC-068 guardrail 3). `generated` is a
+ * frontmatter a reviewer could check (DEC-0068 guardrail 3). `generated` is a
  * model rendition standing in for a photograph nobody has taken yet; it is a
  * *placeholder* and the page marks it as one.
  */
@@ -463,7 +463,7 @@ export type ImageStatus = z.infer<typeof ImageStatusSchema>;
  * The entry **is** the provenance record. There is no sidecar file: an image
  * that is not in this list is not on the page, and an image in this list
  * carries its brief, its prompt hash and the model that rendered it in the
- * same place the copy's provenance lives (TS-007 D6, applied to pixels).
+ * same place the copy's provenance lives (TS-WEB-0007 D6, applied to pixels).
  *
  * **Strict**, for the reason `SlotMetaSchema` is strict: a misspelt `status`
  * that validates is a gate that a typo can walk past.
@@ -514,7 +514,7 @@ export const ImageEntrySchema = z
      */
     licence: z.string().min(1).optional(),
     /**
-     * Set on the one image per route that TS-003 D2 declares the LCP element.
+     * Set on the one image per route that TS-WEB-0003 D2 declares the LCP element.
      * It is the only image that may be `priority`.
      */
     lcp: z.boolean().optional(),
@@ -536,7 +536,7 @@ export const ImageEntrySchema = z
     /**
      * The landscape rendition of a `ratio: hero` image. The design system
      * makes the hero 8:9 on the phone and 21:9 from 48rem, and one frame
-     * cannot be both — `file` is the phone rendition (mobile-first, TS-017
+     * cannot be both — `file` is the phone rendition (mobile-first, TS-WEB-0017
      * D2), this is the one the media query swaps in above that width.
      */
     wide_file: z
@@ -556,7 +556,7 @@ export const ImageEntrySchema = z
       ctx.addIssue({
         code: "custom",
         path: ["source"],
-        message: "`provenance: real` must name a source (DEC-068 guardrail 3)",
+        message: "`provenance: real` must name a source (DEC-0068 guardrail 3)",
       });
     }
     // Only once the asset is actually placed: an entry that is still
@@ -595,29 +595,35 @@ export type ImageEntry = z.infer<typeof ImageEntrySchema>;
  *
  * Extends the pre-relaunch base rather than replacing it, so
  * `pnpm check:frontmatter` keeps validating these files through the same
- * union — with the TS-007 fields now actually required instead of silently
+ * union — with the TS-WEB-0007 fields now actually required instead of silently
  * dropped as unknown keys (which is what `state/open.md` #43 reported).
  */
 export const PageFrontmatterSchema = BaseFrontmatterSchema.extend({
   status: LifecycleStatusSchema,
-  /** The tactical spec the page realises — TS-017-A14. */
+  /** The tactical spec the page realises — TS-WEB-0017-A14. */
   page_id: z
     .string()
-    .regex(/^TS-\d{3}$/, "must name the tactical spec as `TS-###` (TS-017-A14)"),
+    .regex(
+      // The tactical-specification contract's shape, spelled here rather than
+      // imported: `@leafcutter-strict/library-schemas` is a devDependency and
+      // this module is bundled (DEC-0086).
+      /^TS-[A-Z]{2,5}-\d{4}$/,
+      "must name the tactical spec as `TS-<DOMAIN>-####` (TS-WEB-0017-A14)",
+    ),
   /** The German route path the page answers on, per `src/lib/routes/routes.ts`. */
   route: z.string().startsWith("/"),
-  /** TS-007 D6: one entry per record actually used; never empty. */
+  /** TS-WEB-0007 D6: one entry per record actually used; never empty. */
   derived_from: z.array(SourceRefSchema).min(1),
-  /** TS-007 D6: `<playbook>@<version>`, so a prompt change is traceable. */
+  /** TS-WEB-0007 D6: `<playbook>@<version>`, so a prompt change is traceable. */
   generated_by: z.string().min(1),
-  /** TS-007 D6: ISO date of the draft. */
+  /** TS-WEB-0007 D6: ISO date of the draft. */
   generated_at: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   /** Page-level summary; the binding per-slot value is in the slot comment. */
   provenance: z.string().min(1),
   /**
-   * TS-011 D5 — the indexed surface of every route this artifact serves.
+   * TS-WEB-0011 D5 — the indexed surface of every route this artifact serves.
    * Required: a page without it has no title and no description, and
-   * `pnpm check:seo-budget` (TS-011-A7) fails the build rather than letting
+   * `pnpm check:seo-budget` (TS-WEB-0011-A7) fails the build rather than letting
    * a template in code answer for the content (F-2-72).
    */
   seo: PageSeoMapSchema,
@@ -625,7 +631,7 @@ export const PageFrontmatterSchema = BaseFrontmatterSchema.extend({
   compliance_check: z.string().optional(),
   schema_note: z.string().optional(),
   open_points: z.array(z.string()).optional(),
-  /** Where a price shown on the page comes from — TS-024/TS-025. */
+  /** Where a price shown on the page comes from — TS-WEB-0024/TS-WEB-0025. */
   price_source_note: z.string().optional(),
   /**
    * The page's image inventory — one entry per image the page shows, in the
@@ -637,7 +643,7 @@ export const PageFrontmatterSchema = BaseFrontmatterSchema.extend({
    * photograph nobody has taken, and `pnpm images:generate` fills it in.
    */
   images: z.array(ImageEntrySchema).optional(),
-  /** TS-007 D11: set by a person at the editorial decision point, never by an agent. */
+  /** TS-WEB-0007 D11: set by a person at the editorial decision point, never by an agent. */
   reviewed_by: z.string().optional(),
   reviewed_at: z.string().optional(),
   // F-2-40 / F-2-46's owned clause: **strict**. A non-strict object drops an

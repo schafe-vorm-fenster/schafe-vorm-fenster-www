@@ -6,7 +6,7 @@
       "aspect": "4:3",
       "tone": "lime",
       "label": "Porträt",
-      "note": "Gründerfoto — LCP-Element von /ueber-uns (TS-003 D2)",
+      "note": "Gründerfoto — LCP-Element von /ueber-uns (TS-WEB-0003 D2)",
       "w": 1600,
       "h": 1200,
       "src": "/src/generated/placeholders/ueber-uns/gruender.svg"
@@ -16,7 +16,7 @@
       "aspect": "16:9",
       "tone": "violet",
       "label": "Szene",
-      "note": "Termin per WhatsApp einreichen — LCP-Element von /mitmachen (TS-003 D2)",
+      "note": "Termin per WhatsApp einreichen — LCP-Element von /mitmachen (TS-WEB-0003 D2)",
       "w": 1600,
       "h": 900,
       "src": "/src/generated/placeholders/mitmachen/whatsapp-szene.svg"
@@ -46,7 +46,7 @@
       "aspect": "3:2",
       "tone": "violet",
       "label": "Kartenausschnitt",
-      "note": "Aktive Orte im Landkreis — NOT USED: TS-026 D3 forbids a map-labelled placeholder anywhere on /deine-region ('no hatched ratio-map box, no placeholder shaped like a map'); kept for the record rather than deleted (not this work package's file to remove), see state/open.md",
+      "note": "Aktive Orte im Landkreis — NOT USED: TS-WEB-0026 D3 forbids a map-labelled placeholder anywhere on /deine-region ('no hatched ratio-map box, no placeholder shaped like a map'); kept for the record rather than deleted (not this work package's file to remove), see state/open.md",
       "w": 1600,
       "h": 1067,
       "src": "/src/generated/placeholders/deine-region/karte.svg"
@@ -56,7 +56,7 @@
       "aspect": "21:9",
       "tone": "violet",
       "label": "Gebietsübersicht",
-      "note": "Hero von /deine-region — Landkreise, Institutionen, große Städte (TS-026 D2); deliberately not map-labelled (D3)",
+      "note": "Hero von /deine-region — Landkreise, Institutionen, große Städte (TS-WEB-0026 D2); deliberately not map-labelled (D3)",
       "w": 1600,
       "h": 686,
       "src": "/src/generated/placeholders/deine-region/hero.svg"
@@ -76,7 +76,7 @@
       "aspect": "21:9",
       "tone": "lime",
       "label": "Ortsansicht",
-      "note": "Hero von / — Headline und Ortssuche stehen auf dieser Fläche (TS-019 D3)",
+      "note": "Hero von / — Headline und Ortssuche stehen auf dieser Fläche (TS-WEB-0019 D3)",
       "w": 1600,
       "h": 686,
       "src": "/src/generated/placeholders/home/hero.svg"
@@ -86,7 +86,7 @@
       "aspect": "21:9",
       "tone": "lime",
       "label": "Ortsansicht",
-      "note": "Hero von /dein-ort — Ortsname und nächste Termine (TS-020 D1)",
+      "note": "Hero von /dein-ort — Ortsname und nächste Termine (TS-WEB-0020 D1)",
       "w": 1600,
       "h": 686,
       "src": "/src/generated/placeholders/dein-ort/hero.svg"
@@ -96,7 +96,7 @@
       "aspect": "21:9",
       "tone": "violet",
       "label": "Ortsansicht",
-      "note": "Hero von /dein-ort/starten — Bestätigung mit Ortsname (TS-021 D2)",
+      "note": "Hero von /dein-ort/starten — Bestätigung mit Ortsname (TS-WEB-0021 D2)",
       "w": 1600,
       "h": 686,
       "src": "/src/generated/placeholders/dein-ort-starten/hero.svg"

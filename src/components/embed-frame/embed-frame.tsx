@@ -13,7 +13,7 @@ import type { Locale } from "@/src/lib/i18n/locales";
 import styles from "./embed-frame.module.css";
 
 export interface EmbedFrameProps extends DataStateProps {
-  /** States the radius it is actually showing — never "your place" until Q-026. */
+  /** States the radius it is actually showing — never "your place" until Q-0026. */
   readonly heading: string;
   readonly copy?: string;
   readonly cta?: ReactNode;
@@ -35,7 +35,7 @@ export interface EmbedFrameProps extends DataStateProps {
   /**
    * What the embed is actually set to, as key and value — authored beside
    * the copy, so a visitor reads the settings rather than guessing at them
-   * (TS-024 D5: the frame says what it is showing).
+   * (TS-WEB-0024 D5: the frame says what it is showing).
    */
   readonly config?: readonly { readonly key: string; readonly value: string }[];
   /** The settings list's own heading, from the same slot. */
@@ -50,7 +50,7 @@ export interface EmbedFrameProps extends DataStateProps {
 }
 
 /**
- * 45 `embed-frame` [PROPOSED] — TS-008 D6, DEC-030.
+ * 45 `embed-frame` [PROPOSED] — TS-WEB-0008 D6, DEC-0030.
  *
  * Structure: the real Portalize widget's mount, injected lazily and never
  * render-blocking (`portalize-mount.tsx`). The heading states the filter it
@@ -61,7 +61,7 @@ export interface EmbedFrameProps extends DataStateProps {
  *              stay, no box at all, no error sentence, no empty frame;
  *   degraded → the reference organizer, unfiltered, labelled as an example
  *              via `freshness-label` ("Beispiel") — never "your place" while
- *              the place-filter parameter (Q-026) is open;
+ *              the place-filter parameter (Q-0026) is open;
  *   mocked   → the reserved box plus `demo-data-badge`, dummy `organizerId`.
  * Inherits: violet embed frame, radius 0.
  * Space: the box declares a fixed height before the loader runs and the

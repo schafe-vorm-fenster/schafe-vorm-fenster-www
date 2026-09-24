@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 
 import styles from "./value-story.module.css";
 
-/** The example ladder, place first (TS-020 D3) — where the label comes from. */
+/** The example ladder, place first (TS-WEB-0020 D3) — where the label comes from. */
 export const EXAMPLE_LEVELS = ["place", "surrounding", "county", "snapshot", "invite"] as const;
 
 export type ExampleLevel = (typeof EXAMPLE_LEVELS)[number];
@@ -48,7 +48,7 @@ export interface ValueStoryProps {
 }
 
 /**
- * 23 `value-story` [PROPOSED] — content type 3 `value-story`, TS-020 D3.
+ * 23 `value-story` [PROPOSED] — content type 3 `value-story`, TS-WEB-0020 D3.
  *
  * Structure: aspect → why it matters → live example → testimonial. Four
  * render on `/dein-ort`, always, in both states the page can be in.

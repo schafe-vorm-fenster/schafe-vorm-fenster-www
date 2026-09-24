@@ -21,20 +21,20 @@ export interface CodeSnippetProps extends DataStateProps {
 }
 
 /**
- * 56 `code-snippet` [PROPOSED] — TS-025 D7.
+ * 56 `code-snippet` [PROPOSED] — TS-WEB-0025 D7.
  *
  * Structure: the loader snippet as selectable, server-rendered text in a
  * code block, plus a copy control. A permanent note beside it says to copy
  * the code now — not a dialog, not an unload prompt.
  * States (D-9, all four):
  *   loading  → a `skeleton` reserving the block's height;
- *   empty    → the code cannot be issued synchronously (TS-025 D8 step 4):
+ *   empty    → the code cannot be issued synchronously (TS-WEB-0025 D8 step 4):
  *              the pending note renders instead of a code block, and the
  *              `buy-calendar-licence` event does not fire (a page-level
  *              concern, not this component's);
  *   degraded → a build-time snapshot of the loader, unlabelled — the
  *              provenance is `data-demo` on the block, not a word on it;
- *   mocked   → code built from the mocked `organizerId` (Q-046,
+ *   mocked   → code built from the mocked `organizerId` (Q-0046,
  *              `state/open.md` row 2), marked `data-demo="true"`.
  * Inherits: mono type role; radius 0 block; `copy`/`check` icons.
  * Space: the block reserves its height for the longest snippet.

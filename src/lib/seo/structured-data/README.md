@@ -1,4 +1,4 @@
-# Structured data — TS-011 D4
+# Structured data — TS-WEB-0011 D4
 
 Builders, not pages: this folder returns plain JSON-LD node objects (and, for
 the archive, microdata prop objects). Nothing here is wired into a route —
@@ -51,7 +51,7 @@ export default async function CalendarPage({ params }: PageProps) {
 | `/ueber-uns/archiv` | **no JSON-LD** — spread `itemListProps()`/`listItemProps()`/`citationWorkProps()` from `archive-microdata.ts` onto the existing list markup instead |
 | `/rechtliches`, 404, 500 | `webPageNode()` only (404/500: omit even that per D4) |
 
-## The one-entity rule (TS-011-A6)
+## The one-entity rule (TS-WEB-0011-A6)
 
 An entity described in JSON-LD is never also described in microdata on the
 same page. In practice: every page above emits JSON-LD *or* the archive's
@@ -82,7 +82,7 @@ vaguely" — but that copy is the page's own content, not this builder's.
 
 ## Not built here
 
-- **Rich Results / schema.org validator runs (TS-011-A5)** are a tool-level
+- **Rich Results / schema.org validator runs (TS-WEB-0011-A5)** are a tool-level
   acceptance check against a deployed page, not a unit test.
 - **Per-page wiring** into `app/[lang]/**/page.tsx` — owned by the page work
   packages, using this library.

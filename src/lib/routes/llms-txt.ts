@@ -1,6 +1,6 @@
 /**
- * `/llms.txt` — TS-004 D1's third machine surface, "per domain"
- * (WEB-F-079, TS-004-A5), missing until F-2-55.
+ * `/llms.txt` — TS-WEB-0004 D1's third machine surface, "per domain"
+ * (FUN-WEB-0079, TS-WEB-0004-A5), missing until F-2-55.
  *
  * The body is the D1 inventory written for a machine reader, in the
  * llmstxt.org shape: an `# H1` naming the site, a `>` summary line, then one
@@ -17,7 +17,7 @@
  *
  * No copy is authored here: the page titles are the dictionary's, the same
  * source `<title>` uses, so this surface cannot make a claim a page does not.
- * TS-011-A11 holds by construction — nothing outside the route table and the
+ * TS-WEB-0011-A11 holds by construction — nothing outside the route table and the
  * dictionary reaches the output.
  *
  * Kept beside the inventory rather than inside `app/llms.txt/route.ts` for

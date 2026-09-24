@@ -9,7 +9,7 @@ import { isKnownConversionGoalId } from "@/src/lib/analytics/goal-ids";
 
 import type { ConversionEventDefinition } from "@/src/lib/analytics/event-registry";
 
-describe("TS-012-A3: the event registry resolves against @schafe-vorm-fenster/goals", () => {
+describe("TS-WEB-0012-A3: the event registry resolves against @schafe-vorm-fenster/goals", () => {
   it("carries the nine goal ids of D4, one event per conversion goal", () => {
     expect(CONVERSION_EVENTS).toHaveLength(9);
   });

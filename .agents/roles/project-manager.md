@@ -13,7 +13,7 @@ Owns the plan and the priorities. The judge the orchestrator is not.
 - Translate UAT signals into decisions: a hesitation point becomes a
   finding, a work package, or an open-list entry — with one line of
   reasoning.
-- Decide [PROPOSED] questions the specs leave open (e.g. Q-052 entry
+- Decide [PROPOSED] questions the specs leave open (e.g. Q-0052 entry
   context) and record each decision as an ADR in `specs/decisions/`
   plus a `state/open.md` entry for Jan's later review.
 - Guard scope: unspecified features die here, onto the open list.

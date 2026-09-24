@@ -4,7 +4,7 @@
  * The events search itself exists upstream and is token-scoped; this mock
  * answers while no read token is provisioned. The **county activity ranking**
  * behind `/api/region/{county}/examples` has no upstream operation at all
- * (TS-008 open points, Q-015 residue), so that one is a mock by necessity and
+ * (TS-WEB-0008 open points, Q-0015 residue), so that one is a mock by necessity and
  * not by environment.
  */
 
@@ -25,7 +25,7 @@ export function mockEventsForPlaces(places: readonly Place[], count: number, now
 
 /**
  * Active example places in a county — a *designed set*, never a place list
- * and never an "alle Orte anzeigen" control (DEC-034).
+ * and never an "alle Orte anzeigen" control (DEC-0034).
  */
 export function mockRegionExamples(county: string, max: number, now: Date): RegionExamples {
   const examples = DEMO_PLACES.filter((place) => demoEvents(place, 3, now).length > 0)
@@ -42,7 +42,7 @@ export function mockRegionExamples(county: string, max: number, now: Date): Regi
  * The figures the mock backend supplies. `dates` is only read when the events
  * backend itself is mocked — in the default mode the real, tokenless
  * `/api/stats` answers it, so the band is part real and part demo, which is
- * exactly what Q-037 leaves us with.
+ * exactly what Q-0037 leaves us with.
  */
 export function mockCounterFigures(): Required<LiveCounters> {
   return { ...DEMO_COUNTER_FIGURES };

@@ -1,11 +1,11 @@
 /**
- * `pnpm check:seo-budget` — TS-011-A7 (F-2-43).
+ * `pnpm check:seo-budget` — TS-WEB-0011-A7 (F-2-43).
  *
  * A7: "Every (path, language) has a unique non-empty title ≤ 60 chars and a
  * description of 120–158 chars; violations fail the build." Nothing measured
  * either.
  *
- * The source has since moved where TS-011 D5 wants it (F-2-72, closing
+ * The source has since moved where TS-WEB-0011 D5 wants it (F-2-72, closing
  * `state/open.md` rows 103 and 138): the values are the `seo` block of each
  * page artifact, read by `src/lib/content/page-seo.ts`. This guard did not
  * have to change for that — it measures whatever `pageTitle`/`pageDescription`

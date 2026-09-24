@@ -21,7 +21,7 @@ export interface PhotoSurfaceProps extends DataStateProps {
    */
   readonly wideSrc?: string;
   /**
-   * This surface carries the page's **declared** LCP element (TS-003 D2).
+   * This surface carries the page's **declared** LCP element (TS-WEB-0003 D2).
    * The photograph is a CSS background — the design system requires it to be
    * one (§Photo surface: photo and gradient in the same declaration), and a
    * background carries neither `loading` nor `fetchpriority`. So the priority
@@ -47,7 +47,7 @@ export interface PhotoSurfaceProps extends DataStateProps {
    */
   readonly notDepicting?: boolean;
   readonly id?: string;
-  /** The manifest slot id when this surface shows a generated image (DEC-068). */
+  /** The manifest slot id when this surface shows a generated image (DEC-0068). */
   readonly placeholderId?: string;
   /**
    * Kept in the interface so every page composes the surface the same way;
@@ -59,7 +59,7 @@ export interface PhotoSurfaceProps extends DataStateProps {
 }
 
 /**
- * 6 `photo-surface` [FIXED] — SRC-014 §Photo surface.
+ * 6 `photo-surface` [FIXED] — SRC-0014 §Photo surface.
  *
  * Structure: a full-width section with no radius and no border. The
  * photograph is the section's first background layer with the gradient above

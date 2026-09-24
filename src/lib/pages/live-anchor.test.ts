@@ -5,7 +5,7 @@ import { UNCOVERED_DEMO_ZIP } from "@/src/lib/live/mocks/fixtures";
 import { resolveLiveAnchor, resolvePlaceOutcome, STAGE_ZERO_ANCHOR } from "./live-anchor";
 
 /**
- * F-2-30 — the three outcomes of TS-008 D7 have to survive the trip from
+ * F-2-30 — the three outcomes of TS-WEB-0008 D7 have to survive the trip from
  * `src/lib/live/places.ts` into a page. Before this test `resolveLiveAnchor`
  * collapsed all three into "stage 0", so the uncovered branch that
  * `/dein-ort/starten` exists for was produced and consumed by nothing.
@@ -16,7 +16,7 @@ describe("resolvePlaceOutcome", () => {
     expect(await resolvePlaceOutcome("")).toEqual({ kind: "none" });
   });
 
-  it("answers `none` for a value the validator drops — TS-020 D2 row 4", async () => {
+  it("answers `none` for a value the validator drops — TS-WEB-0020 D2 row 4", async () => {
     // Fails the D4 grammar: the parameter is dropped and the placeless
     // variant renders, never a redirect and never an error page.
     expect(await resolvePlaceOutcome("<script>alert(1)</script>")).toEqual({ kind: "none" });
@@ -34,7 +34,7 @@ describe("resolvePlaceOutcome", () => {
     expect(outcome.kind).toBe("covered");
   });
 
-  it("answers `uncovered` for the fixture's uncovered postcode — TS-008 D7 row 3", async () => {
+  it("answers `uncovered` for the fixture's uncovered postcode — TS-WEB-0008 D7 row 3", async () => {
     expect(await resolvePlaceOutcome(UNCOVERED_DEMO_ZIP)).toEqual({
       kind: "uncovered",
       query: UNCOVERED_DEMO_ZIP,

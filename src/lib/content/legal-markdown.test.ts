@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { parseLegalMarkdown, shiftHeadings } from "./legal-markdown";
 
-describe("TS-029 D1-D6: legal markdown reader", () => {
+describe("TS-WEB-0029 D1-D6: legal markdown reader", () => {
   it("parses headings at every level 1-6", () => {
     const blocks = parseLegalMarkdown("# One\n## Two\n### Three\n#### Four");
     expect(blocks).toEqual([

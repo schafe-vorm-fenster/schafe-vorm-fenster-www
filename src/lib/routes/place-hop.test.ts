@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { placeHop, placeHopRoute } from "./place-hop";
 
 /**
- * TS-021-A7, TS-020 D2 row 5, TS-008 D7 row 3 — DEC-070's re-resolution hop
+ * TS-WEB-0021-A7, TS-WEB-0020 D2 row 5, TS-WEB-0008 D7 row 3 — DEC-0070's re-resolution hop
  * as the proxy computes it (F-2-49).
  *
  * The fixtures are the shared demo backend's own
@@ -31,7 +31,7 @@ describe("placeHopRoute: only the two `?ort=` routes, in every language", () => 
   );
 });
 
-describe("TS-021-A7: a value that now resolves leaves `/dein-ort/starten`", () => {
+describe("TS-WEB-0021-A7: a value that now resolves leaves `/dein-ort/starten`", () => {
   it("hops to `/dein-ort` with the resolved slug", async () => {
     await expect(hop("/dein-ort/starten", "ort=quilow")).resolves.toBe(
       "/dein-ort?ort=quilow",
@@ -50,7 +50,7 @@ describe("TS-021-A7: a value that now resolves leaves `/dein-ort/starten`", () =
     );
   });
 
-  it("carries the campaign parameters across the hop (TS-023 D4)", async () => {
+  it("carries the campaign parameters across the hop (TS-WEB-0023 D4)", async () => {
     await expect(
       hop("/dein-ort/starten", "ort=quilow&etcc_med=display&etcc_cmp=herbst&foo=bar"),
     ).resolves.toBe("/dein-ort?ort=quilow&etcc_cmp=herbst&etcc_med=display");
@@ -65,7 +65,7 @@ describe("TS-021-A7: a value that now resolves leaves `/dein-ort/starten`", () =
   });
 });
 
-describe("TS-020 D2 row 5: an uncovered value leaves `/dein-ort`", () => {
+describe("TS-WEB-0020 D2 row 5: an uncovered value leaves `/dein-ort`", () => {
   it("hops to `/dein-ort/starten` with the query verbatim", async () => {
     await expect(hop("/dein-ort", "ort=99999")).resolves.toBe(
       "/dein-ort/starten?ort=99999",
@@ -78,7 +78,7 @@ describe("TS-020 D2 row 5: an uncovered value leaves `/dein-ort`", () => {
     );
   });
 
-  it("carries nothing but the query — TS-021 D4 re-validates on arrival", async () => {
+  it("carries nothing but the query — TS-WEB-0021 D4 re-validates on arrival", async () => {
     await expect(hop("/dein-ort", "ort=99999&etcc_med=display")).resolves.toBe(
       "/dein-ort/starten?ort=99999",
     );
@@ -88,7 +88,7 @@ describe("TS-020 D2 row 5: an uncovered value leaves `/dein-ort`", () => {
     await expect(hop("/dein-ort", "ort=quilow")).resolves.toBeUndefined();
   });
 
-  it("stays put for a value the grammar drops (TS-020-A9)", async () => {
+  it("stays put for a value the grammar drops (TS-WEB-0020-A9)", async () => {
     await expect(hop("/dein-ort", "ort=" + "x".repeat(200))).resolves.toBeUndefined();
   });
 });

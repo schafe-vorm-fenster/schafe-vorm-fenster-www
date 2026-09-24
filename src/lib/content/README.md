@@ -1,12 +1,12 @@
 # The content pipeline
 
-TS-007, the website side. Hub packages in, schema-validated markdown per
+TS-WEB-0007, the website side. Hub packages in, schema-validated markdown per
 locale out, with a provenance key that makes updates diffable. This folder is
 the *read* half — the loader a page calls, the parser under it, the source
 adapter, and the rules `pnpm check:content` runs. Generation (P3/P7) is a
 playbook, not code, and lives in `.agents/`.
 
-`specs/tactical/content-pipeline.tactical.md` is the law; ADR-074 records the
+`specs/tactical/TS-WEB-0007--content-pipeline.tactical.md` is the law; ADR-074 records the
 determinations this implementation had to make on top of it.
 
 ## What a page calls
@@ -93,7 +93,7 @@ badge, and never touches a file path or a YAML key.
   contentType: "hero",
   provenance: "sourced",          // sourced | generated | sourced-empty-by-design | withheld | mixed
   demo: false,                    // dummy content → the Demo-Daten badge
-  derivedFrom: ["ia"],            // TS-007 D6, the update key
+  derivedFrom: ["ia"],            // TS-WEB-0007 D6, the update key
   status: "draft",
   title: "Slot 1 — Suchfeld, kein Ort bekannt",
   cta: "Suchen",
@@ -112,7 +112,7 @@ content as typed props, and no HTML string ever needs
 ## The artifact shape it reads
 
 One file per page per locale, one `##` section per slot, per-slot metadata in
-an inline comment (ADR-074 §1 — TS-007 D4 writes one file per *slot*; the
+an inline comment (ADR-074 §1 — TS-WEB-0007 D4 writes one file per *slot*; the
 loader reads what M3 shipped):
 
 ```
@@ -126,7 +126,7 @@ content/pages/<route-slug>/<locale>.md
 **Headline:** Was ist bei dir los?
 ```
 
-`/deine-region/angebot` has no file of its own: TS-026 specifies it together
+`/deine-region/angebot` has no file of its own: TS-WEB-0026 specifies it together
 with `/deine-region`, and its slots (`deine-region-angebot-*`) live in that
 page's artifact. `CONTENT_PAGE_DIRS` in `loader.ts` is the map.
 
@@ -138,20 +138,20 @@ page's artifact. `CONTENT_PAGE_DIRS` in `loader.ts` is the map.
 | `slot-meta.ts` | the one place that knows the metadata-comment syntax |
 | `blocks.ts` | a slot body → typed blocks; `fieldAt`, `fieldsOf`, `ctaOf` |
 | `provenance.ts` | `slotState`, `isDemoSlot` — the badge decision, once |
-| `page-seo.ts` | `pageSeo(route, locale)` — the `seo` block of TS-011 D5, read synchronously |
-| `source-refs.ts` | the source adapter of TS-007 D2: `resolve(ref) → record \| fail`, over the packages' `index.json` |
+| `page-seo.ts` | `pageSeo(route, locale)` — the `seo` block of TS-WEB-0011 D5, read synchronously |
+| `source-refs.ts` | the source adapter of TS-WEB-0007 D2: `resolve(ref) → record \| fail`, over the packages' `index.json` |
 | `validate.ts` | the D12 rules, shared by `scripts/check-content.ts` and the tests |
 | `types.ts` | `PageContent`, `ContentSlot`, `ContentBlock` |
 
 **There is no `index.ts`, on purpose.** `source-refs.ts` opens hub packages
-in `node_modules`, which TS-007 D3 forbids at request time; a barrel would
+in `node_modules`, which TS-WEB-0007 D3 forbids at request time; a barrel would
 let a page pull it into the request path by importing one symbol. The loader
 imports it nowhere.
 
-The schemas live in `src/domain/content-frontmatter.schema.ts` — the TS-007
+The schemas live in `src/domain/content-frontmatter.schema.ts` — the TS-WEB-0007
 layer at the bottom of the file.
 
-## The `seo` block (TS-011 D5)
+## The `seo` block (TS-WEB-0011 D5)
 
 A page artifact's frontmatter carries the `<title>` and the meta description
 of every route it serves, keyed by the German route path:
@@ -173,7 +173,7 @@ ids follow.
 `page-seo.ts` reads it **synchronously**, unlike everything else here:
 `pageTitle()` is called from inside a render, and an async metadata source
 would make those call sites async. A missing or malformed block is `null` plus
-one warning, never a throw; `pnpm check:seo-budget` (TS-011-A7) is the gate
+one warning, never a throw; `pnpm check:seo-budget` (TS-WEB-0011-A7) is the gate
 that refuses the build. Before F-2-72, a template in
 `src/lib/i18n/dictionary.ts` answered for these two strings, and every route
 in both languages served a work-package name and a spec-clause id as its meta
@@ -184,7 +184,7 @@ description.
 `pnpm check:content` (in `pnpm check`, before `check:specs`). ~0.3 s.
 
 Errors: an artifact that does not parse · a `page_id` that is not the spec
-the route table names (TS-017-A14) · a slot comment that does not validate ·
+the route table names (TS-WEB-0017-A14) · a slot comment that does not validate ·
 a duplicate slot id · an unresolvable, malformed or version-mismatched
 `derived_from` · an empty `derived_from` on a `sourced` slot · a missing
 locale sibling · a locale that ships a different slot set, different records
@@ -197,7 +197,7 @@ error, for the window while a locale is being written.
 
 ### Not implemented yet
 
-Of TS-007 D12's twelve rows, six do not run, and the reason is always that
+Of TS-WEB-0007 D12's twelve rows, six do not run, and the reason is always that
 the artefact they check against does not exist yet:
 
 | D12 | Missing |
@@ -205,9 +205,9 @@ the artefact they check against does not exist yet:
 | 2 length budgets | the per-field `max()` of the full D5 reshape |
 | 4 clearance re-validation | the `clearance` facet on the artifacts (and D7's `RelevanceFacets` as a whole) |
 | 6 hub id resolution | audience/goal/offering ids are not yet carried in page frontmatter |
-| 9 slot binding (the composition half) | Layer C — page compositions have no spec (TS-007 open point) |
+| 9 slot binding (the composition half) | Layer C — page compositions have no spec (TS-WEB-0007 open point) |
 | 10 segment independence | a rule for which strings are "generated" once facets exist |
-| 11 glossary conformance | the use-this-word/avoid-this-word columns (TS-007 open point) |
+| 11 glossary conformance | the use-this-word/avoid-this-word columns (TS-WEB-0007 open point) |
 | 12 legal | `content/legal/` is still the flat pre-relaunch tree without `locale`/`anchor` |
 
 They are on `state/open.md`, not silently absent.

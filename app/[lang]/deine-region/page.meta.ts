@@ -1,19 +1,19 @@
 import type { PageMeta } from "@/src/lib/pages/page-meta";
 
 /**
- * TS-026 D1 — the `/deine-region` manifest.
+ * TS-WEB-0026 D1 — the `/deine-region` manifest.
  *
- * `equalWeightConversion` is `request-product-briefing`: TS-026 D1 names it
- * as equal weight even though TS-006 D9's own conversion map assigns equal
- * weight explicitly only to `/dein-kalender` (open point, TS-026 "Open
+ * `equalWeightConversion` is `request-product-briefing`: TS-WEB-0026 D1 names it
+ * as equal weight even though TS-WEB-0006 D9's own conversion map assigns equal
+ * weight explicitly only to `/dein-kalender` (open point, TS-WEB-0026 "Open
  * points" — "`equalWeightConversion` is the wrong word for the briefing").
  * Recorded, not resolved here: rendered as the adjacent secondary action
- * beside the primary CTA (TS-006 D3), never a second primary treatment.
+ * beside the primary CTA (TS-WEB-0006 D3), never a second primary treatment.
  *
  * `liveModules` names the interim module (D4) at the closest `page-meta.ts`
  * vocabulary match — `position-3-active-places-in-the-county` — since the
- * closed `LiveModuleId` set is TS-008's four positions plus the search, and
- * D4's "examples · counters · search" is exactly TS-008 position 3 read at
+ * closed `LiveModuleId` set is TS-WEB-0008's four positions plus the search, and
+ * D4's "examples · counters · search" is exactly TS-WEB-0008 position 3 read at
  * county scope.
  */
 export const pageMeta: PageMeta = {
@@ -31,12 +31,12 @@ export const pageMeta: PageMeta = {
     {
       id: "position-4-live-counters",
       emptyState:
-        "both fallback tiers exhausted (TS-009 D6): the counter band is removed, never zeroed and never estimated — WEB-F-041's 'counted live or not shown'",
+        "both fallback tiers exhausted (TS-WEB-0009 D6): the counter band is removed, never zeroed and never estimated — FUN-WEB-0041's 'counted live or not shown'",
     },
     {
       id: "place-search",
       emptyState:
-        "never empty: the field is static and stands beside the ranking, so block 3 keeps an action even when the module above it has nothing (TS-008 D1, DEC-034)",
+        "never empty: the field is static and stands beside the ranking, so block 3 keeps an action even when the module above it has nothing (TS-WEB-0008 D1, DEC-0034)",
     },
   ],
   proofSlots: ["deine-region-6-proof"],

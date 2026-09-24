@@ -4,12 +4,12 @@ import { legalAnchor } from "@/src/lib/routes/legal-anchors";
 import { LEGACY_REDIRECTS, redirectMapViolations } from "@/src/lib/routes/redirect-map";
 import { href } from "@/src/lib/routes/routes";
 
-describe("TS-011-A1: the redirect map — no chains, no duplicates, valid targets", () => {
+describe("TS-WEB-0011-A1: the redirect map — no chains, no duplicates, valid targets", () => {
   it("has no violations", () => {
     expect(redirectMapViolations()).toEqual([]);
   });
 
-  it("carries the TS-011 D2 confirmed floor", () => {
+  it("carries the TS-WEB-0011 D2 confirmed floor", () => {
     const sources = LEGACY_REDIRECTS.map((row) => row.from);
     expect(sources).toEqual(
       expect.arrayContaining(["/hilfe", "/funktionen", "/presse", "/impressum"]),
@@ -26,12 +26,12 @@ describe("TS-011-A1: the redirect map — no chains, no duplicates, valid target
     expect(row?.to).toBe(href("archive", "de"));
   });
 
-  it("/impressum resolves to the legal page's imprint anchor (TS-004 D8)", () => {
+  it("/impressum resolves to the legal page's imprint anchor (TS-WEB-0004 D8)", () => {
     const row = LEGACY_REDIRECTS.find((r) => r.from === "/impressum");
     expect(row?.to).toBe(`${href("legal", "de")}#${legalAnchor("imprint", "de")}`);
   });
 
-  it("row 40: /start carries no redirect-map row — it stays TS-016's live route", () => {
+  it("row 40: /start carries no redirect-map row — it stays TS-WEB-0016's live route", () => {
     expect(LEGACY_REDIRECTS.some((row) => row.from === "/start")).toBe(false);
   });
 

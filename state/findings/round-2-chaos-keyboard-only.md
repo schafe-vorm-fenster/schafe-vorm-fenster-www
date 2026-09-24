@@ -12,7 +12,7 @@
   3. Shift+Tab 3 times to reach language switch
   4. Tab once to focus ENGLISH link
   5. Press Enter to activate language switch
-- Expected: Per TS-001-A7 ("equivalent page, never the home page"), activating the language switch should navigate to `/en/about/archive` (the English equivalent of the current German page `/ueber-uns/archiv`)
+- Expected: Per TS-WEB-0001-A7 ("equivalent page, never the home page"), activating the language switch should navigate to `/en/about/archive` (the English equivalent of the current German page `/ueber-uns/archiv`)
 - Observed: Language switch navigated to `/dein-kalender` instead, which is a different page entirely. The language switch does not preserve the current page context when switching languages.
 - Evidence: Browser evaluated `window.location.href` after activation returned `https://schafe-vorm-fenster-83x6zbys4-schafe-vorm-fenster.vercel.app/dein-kalender`
 
@@ -139,12 +139,12 @@
 
 **Routes not covered**: English equivalents of conversion paths (`/en/your-place`, `/en/take-part/register`) — per gate-2-scope.md section 2, the language switch issue found in C-K-1 blocks confident English-path testing
 
-**Focus ring visibility**: Not rigorously measured in this round; screenshots are low-magnification. Follow-up measurement recommended for TS-002-A1 (axe instrument pending, noted as F-2-6 blocker)
+**Focus ring visibility**: Not rigorously measured in this round; screenshots are low-magnification. Follow-up measurement recommended for TS-WEB-0002-A1 (axe instrument pending, noted as F-2-6 blocker)
 
 ---
 
 ## Known Issues Referenced
 
 - **F-2-3**: Two `<nav>` landmarks share accessible name "Startseite" (mentioned in C-K-2)
-- **F-2-6**: Axe accessibility instrument pending (blocking TS-002-A1 focus ring measurement)
-- **TS-001-A7**: Language switch spec states "equivalent page, never the home page" (requirement violated in C-K-1)
+- **F-2-6**: Axe accessibility instrument pending (blocking TS-WEB-0002-A1 focus ring measurement)
+- **TS-WEB-0001-A7**: Language switch spec states "equivalent page, never the home page" (requirement violated in C-K-1)

@@ -53,7 +53,7 @@ pnpm dev                               # http://localhost:3100
 is what the token is for, and `@leafcutter-strict` plus `@leafcutter-os` to
 `https://packages.leafcutteros.ai/`, which needs none. The second registry
 carries the **STRICT** specification method — a devDependency with a version
-since DEC-085, not a path on one machine.
+since DEC-0085, not a path on one machine.
 
 **Port 3100 everywhere.** Port 3000 is taken on the build machine, so the
 `dev` and `start` scripts, the Playwright `webServer` and every documented
@@ -81,11 +81,11 @@ It currently runs, in order:
    of its vocabularies — the `S0–S3` ladder, the requirement and tactical
    status sets, the four tactical `kind` values and the source trust levels
    — are read out of `@leafcutter-strict/library-schemas` at startup rather
-   than repeated in the script (DEC-085 §4)
-3. `check:stack` — TS-017-A1/A2/A7/A17: every runtime dependency registered
+   than repeated in the script (DEC-0085 §4)
+3. `check:stack` — TS-WEB-0017-A1/A2/A7/A17: every runtime dependency registered
    in `stack.allow.json`, one lockfile, the brand package pinned exact, one
    icon set, and `.npmrc` mapping both the hub scope and the method scope
-4. `check:brand` — TS-017-A4/A5/A6: no `max-width` media query, every
+4. `check:brand` — TS-WEB-0017-A4/A5/A6: no `max-width` media query, every
    `min-width` a breakpoint token, no colour or `font-family` literal
    outside `app/styles/brand.css`, no brand asset committed here
 5. `typecheck` · `lint` · `test`
@@ -104,13 +104,13 @@ The level is chosen by what the thing actually is, per
 A test names the id it verifies in its title:
 
 ```ts
-describe("TS-015-A1: noindex on everything that is not production", () => { … });
+describe("TS-WEB-0015-A1: noindex on everything that is not production", () => { … });
 ```
 
 That single convention is what lets `pnpm check:specs` report which
 acceptance criteria still have no test (W3).
 
-E2E viewports sample **360, 428 and 1280** (DEC-067). Three of the six
+E2E viewports sample **360, 428 and 1280** (DEC-0067). Three of the six
 breakpoints sit below 640px, so a suite that samples only 360 and 1280
 cannot see whether the small range does anything.
 
@@ -162,7 +162,7 @@ cannot see whether the small range does anything.
 - **A `<Suspense>` fallback may not suspend.** It is the static shell's
   content, so it has to be synchronous — a skeleton, or nothing. An async
   component in a fallback leaves *both* trees in the DOM (measured), and a
-  skeleton a JS-less visitor never gets past is what TS-020-A10 forbids by
+  skeleton a JS-less visitor never gets past is what TS-WEB-0020-A10 forbids by
   name. Where a page must be complete without JavaScript, read the request
   value in the page and let the route block.
 - **A new dependency needs an ADR.** Look sideways at the sibling repos
@@ -189,7 +189,7 @@ e2e suite again against the Vercel preview that Vercel's Git integration
 deploys for that push, once GitHub's `deployment_status` event reports it
 ready, past Vercel Deployment Protection via the
 `VERCEL_AUTOMATION_BYPASS_SECRET` repository secret. Both are the M4
-prototype subset of TS-015 (`specs/tactical/delivery-pipeline.tactical.md`)
+prototype subset of TS-WEB-0015 (`specs/tactical/TS-WEB-0015--delivery-pipeline.tactical.md`)
 — see `README.md`'s Continuous Integration section for what is and is not
 in this slice, and each workflow file's header comment for the detail.
 

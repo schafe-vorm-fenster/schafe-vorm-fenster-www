@@ -1,5 +1,5 @@
 /**
- * Geo proximity — TS-005 D1, axis one of the concept's two axes.
+ * Geo proximity — TS-WEB-0005 D1, axis one of the concept's two axes.
  *
  * **Administrative containment is the only measure** in phase 1. A visitor
  * 8 km away across a Kreisgrenze scores as *same state*; the spec records
@@ -27,7 +27,7 @@ export const GEO_TIER_WEIGHTS = [1.0, 0.8, 0.6, 0.45, 0.3, 0.15, 0.1] as const;
  * Containment, not name equality: a level counts only when every coarser
  * level above it matches too, so a `flechtorf` in Bayern is not the
  * `flechtorf` in Gemeinde Lehre. Unknown levels on either side end the walk —
- * which is why a county-level viewer (TS-010 D4's honest ceiling) can never
+ * which is why a county-level viewer (TS-WEB-0010 D4's honest ceiling) can never
  * reach tiers 0 and 1 before she has searched for a place.
  */
 export function geoTier(element: GeoScope, viewer: GeoScope): GeoTier {

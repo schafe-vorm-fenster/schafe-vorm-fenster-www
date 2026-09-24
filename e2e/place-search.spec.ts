@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 import { href } from "../src/lib/routes/routes";
 
 /**
- * TS-008 D7 — the place search, end to end.
+ * TS-WEB-0008 D7 — the place search, end to end.
  *
  * Two things only a browser can establish, which is why they are here and not
  * in the BFF's integration tests:
@@ -69,7 +69,7 @@ test.describe("the search works without the enhancement", () => {
 
     await expect(page).toHaveURL(/[?&]ort=/u);
     // No listbox can exist here, and the page still answers 200 with its own
-    // shell — TS-020 D2's "never an error page".
+    // shell — TS-WEB-0020 D2's "never an error page".
     await expect(page.getByRole("listbox")).toHaveCount(0);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   });

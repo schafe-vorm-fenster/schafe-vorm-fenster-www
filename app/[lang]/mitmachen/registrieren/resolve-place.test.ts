@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { resolveRegisterPlace } from "./resolve-place";
 
 /**
- * TS-023-A5/A6, unit level — the parts of D3/D4 the shared live-data mock
+ * TS-WEB-0023-A5/A6, unit level — the parts of D3/D4 the shared live-data mock
  * (`src/lib/live/mocks/geo.ts`) can and cannot exercise on its own.
  *
  * `mockSearchByZip` answers at most one place per postcode (never several),
@@ -13,7 +13,7 @@ import { resolveRegisterPlace } from "./resolve-place";
  * against a stubbed `searchPlaces` result instead, so the page's own
  * handling is verified independently of the fixture's current shape.
  */
-describe("TS-023-A5: place resolution (real interface, mocked backend)", () => {
+describe("TS-WEB-0023-A5: place resolution (real interface, mocked backend)", () => {
   it("resolves an already-known community slug", async () => {
     const result = await resolveRegisterPlace("schlatkow");
     expect(result.kind).toBe("resolved");
@@ -32,7 +32,7 @@ describe("TS-023-A5: place resolution (real interface, mocked backend)", () => {
   });
 });
 
-describe("TS-023-A6: a municipality hit with several communities does not advance", () => {
+describe("TS-WEB-0023-A6: a municipality hit with several communities does not advance", () => {
   it("reports every candidate rather than auto-selecting one", async () => {
     vi.resetModules();
     vi.doMock("@/src/lib/live/places", async () => {

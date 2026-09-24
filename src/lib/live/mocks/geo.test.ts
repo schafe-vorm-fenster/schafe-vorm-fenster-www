@@ -14,7 +14,7 @@ import { haversineKm, NEARBY_RADIUS_KM, selectNearby } from "../widening";
 import { mockSearchByPoint, mockSearchByZip } from "./geo";
 
 /**
- * TS-023-A6 (F-2-5, round 2): before `AMBIGUOUS_DEMO_ZIP` existed,
+ * TS-WEB-0023-A6 (F-2-5, round 2): before `AMBIGUOUS_DEMO_ZIP` existed,
  * `mockSearchByZip` answered at most one place per postcode, so a
  * municipality hit with several communities never occurred against the
  * demo data — `resolve-place.test.ts` (app/[lang]/mitmachen/registrieren)
@@ -22,7 +22,7 @@ import { mockSearchByPoint, mockSearchByZip } from "./geo";
  * `searchPlaces` result, not the shared mock. This file is the mock's own
  * unit coverage of that fixture.
  */
-describe("TS-023-A6: mockSearchByZip's ambiguous-municipality fixture", () => {
+describe("TS-WEB-0023-A6: mockSearchByZip's ambiguous-municipality fixture", () => {
   it("answers both communities for the ambiguous ZIP, same name, different counties", () => {
     const result = mockSearchByZip(AMBIGUOUS_DEMO_ZIP);
     expect(result).toEqual(AMBIGUOUS_DEMO_PLACES);
@@ -57,8 +57,8 @@ describe("TS-023-A6: mockSearchByZip's ambiguous-municipality fixture", () => {
 });
 
 /**
- * F-2-61 — TS-020 D2 gives state B's position 2 the *first* evidence ("the
- * chain starts here"), and TS-008-A6 requires it to render. The empty demo
+ * F-2-61 — TS-WEB-0020 D2 gives state B's position 2 the *first* evidence ("the
+ * chain starts here"), and TS-WEB-0008-A6 requires it to render. The empty demo
  * place sits at the outer edge of the ring, so before `ZIP_DEMO_PLACES` and
  * the seventh community the ~15 km cut around it admitted nothing and the
  * designed state showed its strongest module empty.
@@ -66,7 +66,7 @@ describe("TS-023-A6: mockSearchByZip's ambiguous-municipality fixture", () => {
 describe("F-2-61: the empty demo place has a neighbour inside the ~15 km cut", () => {
   const emptyPlace = demoPlaceBySlug(EMPTY_DEMO_SLUG)!;
 
-  it("is itself a covered place with no dates — TS-008 D4's trigger", () => {
+  it("is itself a covered place with no dates — TS-WEB-0008 D4's trigger", () => {
     expect(emptyPlace).toBeDefined();
     expect(demoEvents(emptyPlace, 3, new Date("2026-09-11T10:00:00Z"))).toHaveLength(0);
   });

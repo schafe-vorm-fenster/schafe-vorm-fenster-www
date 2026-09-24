@@ -1,6 +1,6 @@
 ---
 artefact: contract-register
-id: SRC-011
+id: SRC-0011
 status: DRAFT
 date: 2026-09-09
 ---
@@ -24,7 +24,7 @@ values the product (`community-calendar`) already consumes.
 
 Since 2026-09-11 every specification above is pinned at
 `src/clients/<service>/openapi.json` and refreshed with
-`pnpm fetch:openapi` (DEC-058). Each folder's README records what the
+`pnpm fetch:openapi` (DEC-0058). Each folder's README records what the
 website uses the service for and what it measurably cannot do. The
 operation lists in this register are read from those pinned files, not
 assumed.
@@ -32,11 +32,11 @@ assumed.
 ## Notes
 
 - `events-api /api/stats` is tokenless and cache-controlled — the natural
-  source for the live counters (WEB-F-041, WEB-F-104); whether its fields
+  source for the live counters (FUN-WEB-0041, FUN-WEB-0104); whether its fields
   suffice for "places · dates · updates today" is the remaining sliver of
-  Q-015.
+  Q-0015.
 - Data endpoints are token-scoped (`/api/{token}/…`); the website needs
   read tokens per service as environment variables — same pattern as the
   product (`EVENTSAPI_HOST`/`…_READ_TOKEN`).
-- Specs are fetched and pinned per the adopted convention (DEC-021);
+- Specs are fetched and pinned per the adopted convention (DEC-0021);
   the stored `openapi.json` files are the review anchor for API changes.

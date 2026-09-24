@@ -153,13 +153,13 @@ with labelled dummy data, accepted **as prototype** with its
 
 | Row | System standing in | What I saw | Verdict |
 | --- | --- | --- | --- |
-| 1 | Media-echo entries (Q-045 — 0/32 cleared) | six fictitious archive rows, `Demo-Daten` on the list | accepted as prototype; the missing link and image are rejected separately (§2.3 R-2) |
-| 2, 129 | `organizerId` minting (Q-046) | order step 4 renders the full success state with a real, copyable snippet and a visible `demo-organizer-bestellen` id under a `Demo-Daten` badge | accepted as prototype |
+| 1 | Media-echo entries (Q-0045 — 0/32 cleared) | six fictitious archive rows, `Demo-Daten` on the list | accepted as prototype; the missing link and image are rejected separately (§2.3 R-2) |
+| 2, 129 | `organizerId` minting (Q-0046) | order step 4 renders the full success state with a real, copyable snippet and a visible `demo-organizer-bestellen` id under a `Demo-Daten` badge | accepted as prototype |
 | 5, 78 | geo-api gaps — name search, county, radius, nearest covered place | `?ort=24937` and `?ort=Blütenhagen` both resolve correctly and differently; the "search by name is coming" note is on the search itself | accepted as prototype |
 | 6, 91 | events-api `/api/stats` fields | one counter renders (`8.892 Termine`) behind a `Demo-Daten` badge; the two unavailable figures are absent rather than invented | accepted as prototype, and I prefer this to three fake numbers |
-| 7 | envoy widget (Q-022) | the quote form fills, guards, submits and confirms, honestly | accepted as prototype |
-| 8 | app help-URL contract (Q-041) | not visitor-reachable in this scope | accepted as recorded |
-| 22 | newsletter sending system (Q-020) | full UX, `Demo-Daten`, "Es wird nichts verschickt — der Versand ist noch nicht angeschlossen" / "Nothing is sent — the mailing system is not connected yet" | accepted as prototype; §3 names it as Jan's decision |
+| 7 | envoy widget (Q-0022) | the quote form fills, guards, submits and confirms, honestly | accepted as prototype |
+| 8 | app help-URL contract (Q-0041) | not visitor-reachable in this scope | accepted as recorded |
+| 22 | newsletter sending system (Q-0020) | full UX, `Demo-Daten`, "Es wird nichts verschickt — der Versand ist noch nicht angeschlossen" / "Nothing is sent — the mailing system is not connected yet" | accepted as prototype; §3 names it as Jan's decision |
 | 70, 136 | stage-1 geolocation, stage-0 anchor | the placeless variants speak about one configured reference community, labelled | accepted as recorded |
 | 77, 79 | no read token for geo-api or events-api in any environment | every data surface answers from mock or snapshot | accepted as prototype — this is the keystone row; most of the others move the day a token lands |
 | 90 | dates in the place, this week nearby | demo rows on `/`, `/dein-ort`, `/dein-ort/starten`, badged | accepted as prototype |
@@ -190,7 +190,7 @@ blocks the prototype milestone; all of them are why I will not say the
 word "finished".
 
 **R-1 — No `og:image` on any page, in either language.**
-*Fails TS-011-A8, TS-011-A9 (finding F-2-42).* Verified myself across all
+*Fails TS-WEB-0011-A8, TS-WEB-0011-A9 (finding F-2-42).* Verified myself across all
 24 routes: `og:title`, `og:description`, `og:url`, `og:site_name`,
 `og:locale` and `og:locale:alternate` are all present and correct;
 `og:image` appears zero times, and `twitter:card` is `summary`, not
@@ -203,13 +203,13 @@ I would fix first.
 
 **R-2 — The archive's rows carry no outbound link and no image, and the
 page now promises otherwise.**
-*Fails TS-028-A14, TS-016-A7 (finding F-2-47).* I counted inside
+*Fails TS-WEB-0028-A14, TS-WEB-0016-A7 (finding F-2-47).* I counted inside
 `<main>` on `/ueber-uns/archiv`: zero `http` links, zero `<img>`.
 **Rejected**, and the reason is stronger than at gate 2: this round gave
 the page a real meta description, and it reads *"jede Zeile verlinkt auf
 die Originalquelle beim Medium selbst"* — in English, *"every row links
 to the original at the outlet."* The page now advertises, to search
-engines and link previews, a behaviour it does not have. Q-045 explains
+engines and link previews, a behaviour it does not have. Q-0045 explains
 why the *content* is fictitious; it does not explain why six already
 fictitious rows cannot carry a placeholder link and a placeholder image,
 which is the treatment every other dummy-content slot in this run
@@ -218,8 +218,8 @@ stops promising them.
 
 **R-3 — German interface strings on English pages, wider than the
 finding records.**
-*Fails the locale-completeness ACs of TS-001 and the page copy ACs of
-TS-024, TS-025 and TS-027 (finding F-3-24).* This is the class I rejected
+*Fails the locale-completeness ACs of TS-WEB-0001 and the page copy ACs of
+TS-WEB-0024, TS-WEB-0025 and TS-WEB-0027 (finding F-3-24).* This is the class I rejected
 at gate 2. Its badge half is genuinely closed. What is left, verified by
 me on this build:
 
@@ -248,7 +248,7 @@ rejecting is that this is the third gate at which "fixed in German, still
 broken in English" is the shape of the remaining work.
 
 **R-4 — A raw internal proof identifier is rendered as visible body copy,
-in both languages.** *New on this walk; fails TS-027's proof-card ACs and
+in both languages.** *New on this walk; fails TS-WEB-0027's proof-card ACs and
 the same standard under which this run already fixed the meta-description
 leak and the `geoname.900001` leak.* `/ueber-uns` and `/en/about` both
 render a visible paragraph reading **"Beleg: founder-former-volunteer-mayor
@@ -260,14 +260,14 @@ card's context line should say what the evidence is, in words, or say
 nothing.
 
 **R-5 — Literal Markdown backticks in the accessibility statement.**
-*New on this walk; fails TS-007's content-pipeline rendering and TS-029.*
+*New on this walk; fails TS-WEB-0007's content-pipeline rendering and TS-WEB-0029.*
 Both `/rechtliches` and `/en/legal` render the sentence *"Diese Erklärung
 gilt für die Website unter \`www.schafe-vorm-fenster.de\`."* — with the
 backticks visible. An unrendered code span in a legal text. **Rejected**,
 trivially: one source edit or one renderer case.
 
 **R-6 — A duplicate `<main id="main">` survives every client-side
-navigation into a flow route.** *New on this walk; fails TS-002's landmark
+navigation into a flow route.** *New on this walk; fails TS-WEB-0002's landmark
 ACs and basic HTML validity.* Measured in the browser: entering
 `/en/take-part/register` from `/en/take-part`, and `/mitmachen/registrieren`
 from `/mitmachen`, leaves **two** elements with `id="main"` in the DOM
@@ -278,7 +278,7 @@ ambiguous. **Rejected**, low. Same family as open row 158 (the transient
 duplicate search-input id); worth recording because row 158 describes a
 window that closes and this one does not.
 
-**R-7 — TS-002-A1 and TS-029-A12 are unmet as written.**
+**R-7 — TS-WEB-0002-A1 and TS-WEB-0029-A12 are unmet as written.**
 *Open rows 155 and 156.* The criterion says axe-core reports zero
 violations on every page in all three themes. QA's presence-based sweep
 reports six moderate nodes: `landmark-unique` ×4 and `heading-order` ×2.
@@ -290,12 +290,12 @@ the record because the state is much better than the verdict sounds: the
 gone, Lighthouse accessibility scores 100 on every page and every run, and
 zero serious and zero critical findings exist in any theme. What holds the
 two criteria at `fail` is two deliberate decisions somebody else owns —
-naming two search landmarks, which TS-006 D6's "no new text" rule
+naming two search landmarks, which TS-WEB-0006 D6's "no new text" rule
 constrains, and normalising an `<h6>` inside a verbatim legal import.
 Both need a decision, not a fix.
 
 **R-8 — The performance floor is missed.** *F-3-3, F-3-4.* Mobile
-Lighthouse 96 on `/` against TS-003 D7's floor of 98, re-measured
+Lighthouse 96 on `/` against TS-WEB-0003 D7's floor of 98, re-measured
 unchanged across two runs; `Save-Data: on` saves 0 %. I did not measure
 these myself — Lighthouse is QA's instrument, not mine. **Rejected as
 unmet**, to the performance owner, and §3 says it out loud because QA
@@ -314,7 +314,7 @@ cosmetic, a plural rule rather than a string. It sits on the paid path,
 which is why I keep naming it.
 
 **R-11 — The German legal bodies on `/en/legal` carry no `lang="de"`.**
-*Open row 151; fails WCAG 3.1.2 under TS-029.* Verified: the only
+*Open row 151; fails WCAG 3.1.2 under TS-WEB-0029.* Verified: the only
 `lang="de"` on the page is the language-switch link. The English
 disclaimer above the texts now tells a sighted reader what is coming — a
 screen-reader user still hears German prose read in an English voice.
@@ -322,7 +322,7 @@ screen-reader user still hears German prose read in an English voice.
 
 ### 2.4 Accepted as decided, tracked, or outside a customer's remit
 
-- **Row 145 / TS-005-A9, TS-009-A3, TS-009-A9** — the Suspense/PPR shell
+- **Row 145 / TS-WEB-0005-A9, TS-WEB-0009-A3, TS-WEB-0009-A9** — the Suspense/PPR shell
   against the no-JavaScript completeness guarantee, deliberately not
   shipped broken. At gate 2 I said I wanted this settled before calling
   the prototype finished, because F-2-49 and F-2-70 were concrete
@@ -331,12 +331,12 @@ screen-reader user still hears German prose read in an English voice.
   is still owed, but it is no longer holding a visitor-visible defect
   behind it. Accepted as recorded, decision owed by the
   rendering-and-resilience spec owner.
-- **Row 131 / TS-009-A2** — four routes stay fully dynamic, each because
+- **Row 131 / TS-WEB-0009-A2** — four routes stay fully dynamic, each because
   the request value *is* the page. Accepted as recorded.
-- **Row 157 / TS-003-A8** — the hero is a CSS background and cannot carry
-  `fetchpriority`; the `/ueber-uns` half is fixed. Accepted as a TS-003 D2
+- **Row 157 / TS-WEB-0003-A8** — the hero is a CSS background and cannot carry
+  `fetchpriority`; the `/ueber-uns` half is fixed. Accepted as a TS-WEB-0003 D2
   conversation, travelling with R-8.
-- **Rows 143/152 / TS-026-A8** — `check:terms` outside the `check` chain.
+- **Rows 143/152 / TS-WEB-0026-A8** — `check:terms` outside the `check` chain.
   A build guard, not page content; no visitor sees anything different.
   Accepted as tracked debt.
 - **F-3-26** — the preview e2e suite fails a different single case on
@@ -356,7 +356,7 @@ screen-reader user still hears German prose read in an English voice.
   content review rather than the code: "Das ging sehr schnell. Sieh die
   Angaben noch einmal durch" reads, to somebody who simply typed fast, as
   an accusation.
-- **F-2-19 / TS-029-A14** — a skipped heading level inside imported
+- **F-2-19 / TS-WEB-0029-A14** — a skipped heading level inside imported
   privacy text. Accepted as tracked; I am not the right judge of a legal
   document's heading structure.
 
@@ -376,8 +376,8 @@ screen-reader user still hears German prose read in an English voice.
 
 The eleven rejections are items, not criteria, and they do not partition
 the 28 fails. Seven map onto existing criteria or findings — R-1 to
-TS-011-A8/A9 (F-2-42), R-2 to TS-028-A14 and TS-016-A7 (F-2-47), R-3 to
-F-3-24, R-7 to TS-002-A1 and TS-029-A12 (rows 155, 156), R-8 to F-3-3 and
+TS-WEB-0011-A8/A9 (F-2-42), R-2 to TS-WEB-0028-A14 and TS-WEB-0016-A7 (F-2-47), R-3 to
+F-3-24, R-7 to TS-WEB-0002-A1 and TS-WEB-0029-A12 (rows 155, 156), R-8 to F-3-3 and
 F-3-4, R-11 to open row 151, and R-9/R-10 to F-3-19 and F-2-53, which are
 open-list findings rather than failing criteria. Four are mine from this
 walk and are not findings anywhere yet: R-4, R-5, R-6, and the
@@ -403,12 +403,12 @@ handlers, no conversion events, React error #412. The preview hydrates
 because a preview gets `'unsafe-inline'`. Two of those four routes are
 conversion flows, so the failure mode is that the order flow and the
 registration flow stop working on the day the site goes live and on no
-day before it. This needs a DEC-045 amendment — a nonce — not a fix
+day before it. This needs a DEC-0045 amendment — a nonce — not a fix
 round. Rows 139, 147 and 148 are its consequences and close with it.
 **Nothing may be promoted to production until this is answered.**
 
 **2. Row 145 — the Suspense/PPR shell was left unresolved on purpose.**
-Three criteria fail (TS-005-A9, TS-009-A3, TS-009-A9) because the
+Three criteria fail (TS-WEB-0005-A9, TS-WEB-0009-A3, TS-WEB-0009-A9) because the
 loading-shell mechanism and this site's no-JavaScript completeness
 guarantee genuinely collide, with row 131 beside it. The run wrote the
 collision down instead of shipping something broken, and I would rather
@@ -419,8 +419,8 @@ the one that won.
 
 **3. The sharing and performance floor.** No page in either language
 emits an `og:image`, so every share of this prototype is a bare link
-(R-1, F-2-42, TS-011-A8/A9). Mobile Lighthouse measures 96 on `/` against
-TS-003 D7's floor of 98, re-measured and unchanged, and `Save-Data: on`
+(R-1, F-2-42, TS-WEB-0011-A8/A9). Mobile Lighthouse measures 96 on `/` against
+TS-WEB-0003 D7's floor of 98, re-measured and unchanged, and `Save-Data: on`
 saves 0 % (R-8, F-3-3/F-3-4). QA asked explicitly that these be stated
 rather than quietly accepted, and they are right to: a prototype that
 travels by link and is reviewed on phones is judged on exactly these two
@@ -443,7 +443,7 @@ are, between them, the whole distance from this prototype to a live site.
 **Jan's two dashboard items — neither has an API, neither can be done
 from this repository:**
 
-- **Row 22 — the newsletter's sending system (Q-020) is undecided.**
+- **Row 22 — the newsletter's sending system (Q-0020) is undecided.**
   Until it is answered, the block stays a labelled mock that sends
   nothing. It is on every page of the site, in both languages, saying so.
   Decision: envoy/ops, with Jan.
@@ -522,7 +522,7 @@ row at which it is the same shape of problem.
 I asked for.**
 At gate 2 every page in both languages carried a description reading
 *"Schafe vorm Fenster — Platzhalter aus dem Routing-Gerüst (M2). Titel
-und Beschreibung kommen in M3 aus dem Content-Frontmatter (TS-011 D5)."*
+und Beschreibung kommen in M3 aus dem Content-Frontmatter (TS-WEB-0011 D5)."*
 I asked for "even a temporary, hand-written title and description per
 page". What shipped is a real one for each of the 24 routes, in the
 page's own language, written as marketing copy rather than as a
@@ -584,7 +584,7 @@ show it to you.** Under the security policy we ship, four pages —
 including the order flow and the registration flow — will load in
 production without their JavaScript attached. They work perfectly on the
 preview because a preview runs a looser policy. That is row 132, it is a
-decision about DEC-045 rather than a bug to fix, and it is the first
+decision about DEC-0045 rather than a bug to fix, and it is the first
 thing on the list for whatever comes after the break.
 
 **Two things I would want done before anyone shares a link.** Nobody has

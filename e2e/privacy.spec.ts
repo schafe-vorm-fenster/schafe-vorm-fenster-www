@@ -4,11 +4,11 @@ import { ALLOWLIST } from "../src/lib/security/csp";
 import { everyRoute, href } from "../src/lib/routes/routes";
 
 /**
- * TS-013 — the closed client-request set. TS-013 D2's own words: "The CSP
- * allowlist (WEB-Q-030) and this table are the same set seen from two
+ * TS-WEB-0013 — the closed client-request set. TS-WEB-0013 D2's own words: "The CSP
+ * allowlist (NFR-WEB-0030) and this table are the same set seen from two
  * sides. If they diverge, one of them is wrong." — so the allowed-host set
  * here is built from `src/lib/security/csp.ts`'s `ALLOWLIST`, the one typed
- * structure TS-014 D7 names as the single source, rather than a second,
+ * structure TS-WEB-0014 D7 names as the single source, rather than a second,
  * independently maintained list that could quietly drift from it.
  *
  * Own-origin covers everything D2 lists as same-origin, including
@@ -39,7 +39,7 @@ const ROUTES = everyRoute().map(({ route, locale }) => ({
   locale,
 }));
 
-test.describe("TS-013-A1: the client-request inventory is closed (D2)", () => {
+test.describe("TS-WEB-0013-A1: the client-request inventory is closed (D2)", () => {
   for (const { path, route, locale } of ROUTES) {
     test(`${path} (${route}/${locale}): every request host is in the D2 allowlist`, async ({
       page,
@@ -74,7 +74,7 @@ test.describe("TS-013-A1: the client-request inventory is closed (D2)", () => {
   }
 });
 
-test.describe("TS-013-A2: no analytics identifier survives a full session", () => {
+test.describe("TS-WEB-0013-A2: no analytics identifier survives a full session", () => {
   test("home → calendar → legal carries no tracking cookie or storage identifier", async ({
     page,
   }) => {

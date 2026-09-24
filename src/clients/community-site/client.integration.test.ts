@@ -64,7 +64,7 @@ describe("a community's page", () => {
     const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
     expect(url).toBe("https://example.invalid/schlatkow.2838887");
     expect(init.method).toBe("GET");
-    // TS-013 D3: the closed header set, and nothing of the visitor's.
+    // TS-WEB-0013 D3: the closed header set, and nothing of the visitor's.
     expect(Object.keys(init.headers as Record<string, string>)).toEqual(["accept"]);
   });
 });

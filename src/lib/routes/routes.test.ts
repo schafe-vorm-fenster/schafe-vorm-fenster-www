@@ -16,7 +16,7 @@ import {
   trail,
 } from "@/src/lib/routes/routes";
 
-/** The TS-004 D1 inventory, written out so the table cannot drift silently. */
+/** The TS-WEB-0004 D1 inventory, written out so the table cannot drift silently. */
 const GERMAN_INVENTORY = [
   "/",
   "/dein-ort",
@@ -47,7 +47,7 @@ const ENGLISH_INVENTORY = [
   "/legal",
 ];
 
-describe("TS-004 D1/D3a: the route table is the URL inventory", () => {
+describe("TS-WEB-0004 D1/D3a: the route table is the URL inventory", () => {
   it("carries exactly the German paths of the inventory", () => {
     expect(ROUTE_IDS.map((id) => ROUTES[id].path.de)).toEqual(GERMAN_INVENTORY);
   });
@@ -65,7 +65,7 @@ describe("TS-004 D1/D3a: the route table is the URL inventory", () => {
   });
 });
 
-describe("TS-004-A10: no route segment is a place slug", () => {
+describe("TS-WEB-0004-A10: no route segment is a place slug", () => {
   it("declares no dynamic segment anywhere in the inventory", () => {
     for (const id of ROUTE_IDS)
       for (const locale of LOCALES)
@@ -86,7 +86,7 @@ describe("TS-004-A10: no route segment is a place slug", () => {
   });
 });
 
-describe("TS-001-A1/A2: the link facade prefixes iff the language is not the default", () => {
+describe("TS-WEB-0001-A1/A2: the link facade prefixes iff the language is not the default", () => {
   it("emits the bare path for the TLD default", () => {
     expect(href("takePart", "de")).toBe("/mitmachen");
     expect(href("home", "de")).toBe("/");
@@ -106,7 +106,7 @@ describe("TS-001-A1/A2: the link facade prefixes iff the language is not the def
   });
 });
 
-describe("TS-004 D2: the internal path is the German tree under the language", () => {
+describe("TS-WEB-0004 D2: the internal path is the German tree under the language", () => {
   it("maps every public path onto a German-segment internal path", () => {
     expect(internalPath("takePart", "en")).toBe("/en/mitmachen");
     expect(internalPath("takePart", "de")).toBe("/de/mitmachen");
@@ -114,7 +114,7 @@ describe("TS-004 D2: the internal path is the German tree under the language", (
   });
 });
 
-describe("TS-001-A5: the hreflang set is symmetric and self-canonical", () => {
+describe("TS-WEB-0001-A5: the hreflang set is symmetric and self-canonical", () => {
   it("gives both variants of a page the same alternate set", () => {
     expect(alternateUrls("place")).toEqual(alternateUrls("place"));
     for (const id of ROUTE_IDS) {
@@ -139,14 +139,14 @@ describe("TS-001-A5: the hreflang set is symmetric and self-canonical", () => {
   });
 });
 
-describe("TS-004 D8/DEC-071: the breadcrumb trail comes out of the table", () => {
+describe("TS-WEB-0004 D8/DEC-0071: the breadcrumb trail comes out of the table", () => {
   it("returns the root first and the page last", () => {
     expect(trail("archive")).toEqual(["about", "archive"]);
     expect(trail("home")).toEqual(["home"]);
   });
 });
 
-describe("TS-011 D1: path normalisation before the map is consulted", () => {
+describe("TS-WEB-0011 D1: path normalisation before the map is consulted", () => {
   it("lowercases and strips a trailing slash", () => {
     expect(normalisePath("/Mitmachen/")).toBe("/mitmachen");
     expect(normalisePath("/")).toBe("/");

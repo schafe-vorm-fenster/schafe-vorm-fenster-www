@@ -14,7 +14,7 @@ export interface SkipLinkProps {
 }
 
 /**
- * 12 `skip-link` [PROPOSED] — TS-002 D5.
+ * 12 `skip-link` [PROPOSED] — TS-WEB-0002 D5.
  *
  * Structure: the first focusable element of the document; it jumps to `main`.
  * States: visually hidden until focused — `clip-path`, not `display: none`,

@@ -25,7 +25,7 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe("TS-015-A1: noindex on everything that is not production", () => {
+describe("TS-WEB-0015-A1: noindex on everything that is not production", () => {
   it("disallows all and names no sitemap on a preview deployment", async () => {
     const robots = await robotsFor("preview", "next.schafe-vorm-fenster.de");
     expect(robots.rules).toEqual([{ userAgent: "*", disallow: "/" }]);

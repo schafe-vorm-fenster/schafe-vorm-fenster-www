@@ -1,6 +1,6 @@
 # Personalization
 
-TS-010 — how the website learns about a visitor without ever asking her, and
+TS-WEB-0010 — how the website learns about a visitor without ever asking her, and
 what it is allowed to do with what it learns. The stage table is normative in
 `go-to-market-os/concept/website-communication-principles.concept.md` §6
 ("Assumptions, not switches"); the entry contexts are the context matrix of
@@ -9,7 +9,7 @@ the relevance model. This folder realises them.
 It owns the **resolver**: the step that turns a request into the one flat
 object the relevance engine consumes. It does not own scoring, ordering or
 caching (that is `../relevance/`), and it does not own the empty place
-calendar (that is TS-008).
+calendar (that is TS-WEB-0008).
 
 ## The one rule
 
@@ -23,7 +23,7 @@ the empty place calendar, and that one is triggered by *data*, not by a stage.
 Two of those invariants are enforced by shape rather than by discipline:
 
 - the **focus job is an input** to `composeViewerContext()`, taken from the
-  page's own declaration — no trait can change it (DEC-059, Q-052);
+  page's own declaration — no trait can change it (DEC-0059, Q-0052);
 - an emphasis variant must be a **permutation** of the page's default order,
   so no trait can add, remove or rewrite a block (`emphasis.ts`).
 
@@ -39,7 +39,7 @@ import { composeViewerContext, statedPlaceSlug } from "@/src/lib/personalization
 import { selectRelevant } from "@/src/lib/relevance/select";
 import { segmentCacheKey } from "@/src/lib/relevance/segments";
 
-/** TS-019 D3a — the home page's own table. Ordering only. */
+/** TS-WEB-0019 D3a — the home page's own table. Ordering only. */
 const SCENES = ["whatsapp", "embed", "provenance"] as const;
 const SCENE_ORDER = {
   professional: ["embed", "provenance", "whatsapp"],
@@ -109,7 +109,7 @@ crawler and a visitor whose lookup timed out all get it.
 | 3 | a stated place | the place search, `?ort=<slug>`, or browser geolocation after an interaction | the same, now around the visitor's own place | `statedPlace` |
 
 `stageOf()` derives the label; **nothing branches on it**. A field is either
-known or `null`, and that is the whole mechanism (TS-010 D1).
+known or `null`, and that is the whole mechanism (TS-WEB-0010 D1).
 
 ### The traits (stage 2)
 
@@ -147,8 +147,8 @@ Three implementations:
 | Resolver | Answers | Used |
 | --- | --- | --- |
 | `mockLocationResolver` | a county-level demo location, `demo: true`, label `Demo-Standort` | the prototype — `Mock aktiv`, `state/open.md` |
-| `disabledLocationResolver` | nothing known | production while Q-008 (the legal check) is open |
-| the proxy's, later | the real hierarchy, truncated by `truncateToCeiling()` | after Q-008 and geo-api's coordinate → hierarchy endpoint (Q-032) |
+| `disabledLocationResolver` | nothing known | production while Q-0008 (the legal check) is open |
+| the proxy's, later | the real hierarchy, truncated by `truncateToCeiling()` | after Q-0008 and geo-api's coordinate → hierarchy endpoint (Q-0032) |
 
 `createViewerLocationResolver()` picks by configuration —
 `GEO_STAGE1_SOURCE=mock` switches the mock on, and **anything else is off**,
@@ -180,21 +180,21 @@ No `index.ts`, for the reason `src/lib/content/README.md` gives.
 
 | AC | State | Where |
 | --- | --- | --- |
-| TS-010-A1 resolver over every input path | ✅ unit | `viewer-context.test.ts`, `geolocation.test.ts` |
-| TS-010-A2 granularity ceiling, stated place overwrites | ✅ unit | `geolocation.test.ts`, `viewer-context.test.ts` |
-| TS-010-A3 trait mapping, one shared constant | ✅ unit | `entry-context.test.ts` |
-| TS-010-A4 structure invariance across stages | ⚠️ integration | `/dein-ort` walks stage 0 and stage 3 (`e2e/pages/dein-ort.spec.ts` A2/A3) with the same blocks in the same order; the trait half (stage 2) cannot fire while the proxy hands no `Referer` down |
-| TS-010-A5 stage-0 completeness, no geo lookup | ✅ integration | `e2e/pages/dein-ort.spec.ts` TS-020-A10 and `home.spec.ts` TS-019-A11 — both with JavaScript disabled |
-| TS-010-A6 cacheability, no `Vary`, no `Set-Cookie` | 🔜 integration | pages and `proxy.ts` |
-| TS-010-A7 no classification control | 🔜 e2e | pages |
-| TS-010-A8 browser geolocation only after an interaction | 🔜 e2e | the place-search control (D5) — client-side, another package |
-| TS-010-A9 build check on variant sets | ⚠️ tool | `validateVariantSet()` exists; wiring it into `pnpm check` belongs to whoever ships the sets as content |
-| TS-010-A10 county → state → neutral | ✅ unit | `regional.test.ts` |
-| TS-010-A11 no IP value anywhere | 🔜 static | the interface forbids carrying one; the check over the proxy is M5's |
-| TS-010-A12 nothing persisted | 🔜 e2e | pages — nothing in this folder writes anything |
-| TS-010-A13 language suggestion | ⛔ not built | D10, deferred by Q-011 |
-| TS-010-A14 focus-job stability | 🔜 e2e | pages — enforced here by the shape of the call |
-| TS-010-A15 Q-008 sign-off before production | ⛔ manual | the flag is off unless `GEO_STAGE1_SOURCE=mock` |
+| TS-WEB-0010-A1 resolver over every input path | ✅ unit | `viewer-context.test.ts`, `geolocation.test.ts` |
+| TS-WEB-0010-A2 granularity ceiling, stated place overwrites | ✅ unit | `geolocation.test.ts`, `viewer-context.test.ts` |
+| TS-WEB-0010-A3 trait mapping, one shared constant | ✅ unit | `entry-context.test.ts` |
+| TS-WEB-0010-A4 structure invariance across stages | ⚠️ integration | `/dein-ort` walks stage 0 and stage 3 (`e2e/pages/dein-ort.spec.ts` A2/A3) with the same blocks in the same order; the trait half (stage 2) cannot fire while the proxy hands no `Referer` down |
+| TS-WEB-0010-A5 stage-0 completeness, no geo lookup | ✅ integration | `e2e/pages/dein-ort.spec.ts` TS-WEB-0020-A10 and `home.spec.ts` TS-WEB-0019-A11 — both with JavaScript disabled |
+| TS-WEB-0010-A6 cacheability, no `Vary`, no `Set-Cookie` | 🔜 integration | pages and `proxy.ts` |
+| TS-WEB-0010-A7 no classification control | 🔜 e2e | pages |
+| TS-WEB-0010-A8 browser geolocation only after an interaction | 🔜 e2e | the place-search control (D5) — client-side, another package |
+| TS-WEB-0010-A9 build check on variant sets | ⚠️ tool | `validateVariantSet()` exists; wiring it into `pnpm check` belongs to whoever ships the sets as content |
+| TS-WEB-0010-A10 county → state → neutral | ✅ unit | `regional.test.ts` |
+| TS-WEB-0010-A11 no IP value anywhere | 🔜 static | the interface forbids carrying one; the check over the proxy is M5's |
+| TS-WEB-0010-A12 nothing persisted | 🔜 e2e | pages — nothing in this folder writes anything |
+| TS-WEB-0010-A13 language suggestion | ⛔ not built | D10, deferred by Q-0011 |
+| TS-WEB-0010-A14 focus-job stability | 🔜 e2e | pages — enforced here by the shape of the call |
+| TS-WEB-0010-A15 Q-0008 sign-off before production | ⛔ manual | the flag is off unless `GEO_STAGE1_SOURCE=mock` |
 
 ## What this folder needs from others
 

@@ -11,17 +11,17 @@ import { geo, type RelevanceItem, type ViewerContext } from "./types";
  * (`lehre-lelender`, `noerd-award-2026-smart-community`, `wendt-rubkow`), so
  * the fixture is not tuned to produce the answer. `job_relation` is assessed
  * here with its reason, because no package carries the facet yet
- * (state/open.md — the content-schema gap of TS-005's own open points).
+ * (state/open.md — the content-schema gap of TS-WEB-0005's own open points).
  *
  * An element whose shipped `usage_rights` is `unverified` runs as a labelled
- * demo element (Q-045, the run's mock rule), which is exactly what the
+ * demo element (Q-0045, the run's mock rule), which is exactly what the
  * prototype renders today.
  */
 const now = new Date("2026-09-11T12:00:00Z");
 const seed = "2026-W37";
 
 const viewer: ViewerContext = {
-  // Stage 1 with a trustworthy municipality (TS-010 D4); `community` stays
+  // Stage 1 with a trustworthy municipality (TS-WEB-0010 D4); `community` stays
   // null, because IP never reaches it.
   geo: geo({ country: "de", state: "niedersachsen", county: "helmstedt", municipality: "lehre" }),
   trait: "direct",
@@ -145,7 +145,7 @@ const elements: RelevanceItem[] = [
   },
 ];
 
-describe("TS-005-A3: the worked example of the concept, visitor from Lehre, stage 1", () => {
+describe("TS-WEB-0005-A3: the worked example of the concept, visitor from Lehre, stage 1", () => {
   const selection = selectRelevant({ items: elements, viewer, surface: "stream", now, seed });
   const ids = selection.entries.map((entry) => entry.id);
   const tiers = selection.entries.map((entry) => (entry.kind === "item" ? entry.tier : null));
@@ -184,7 +184,7 @@ describe("TS-005-A3: the worked example of the concept, visitor from Lehre, stag
 
   it("is the concept's shape: near · near · far · near · far · far · far", () => {
     // The sequence above is the documented one, position for position. The
-    // *tiers* are coarser than the concept's prose: TS-005 D1 measures
+    // *tiers* are coarser than the concept's prose: TS-WEB-0005 D1 measures
     // administrative **containment**, so for a visitor in Niedersachsen an MV
     // award, a Baden-Württemberg podcast and a nationwide award are all
     // "same country", tier 4. "very far · middle · far" is therefore a

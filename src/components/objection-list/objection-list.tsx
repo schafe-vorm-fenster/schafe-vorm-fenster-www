@@ -38,7 +38,7 @@ export interface ObjectionListProps {
 
 /**
  * 24 `objection-list` [PROPOSED] — content type 4 `objection-list`,
- * TS-022 D3.
+ * TS-WEB-0022 D3.
  *
  * Structure: one headline plus *n* items, each the channel in the visitor's
  * own words and the one concrete way it fails, and — where the copy has one

@@ -1,8 +1,8 @@
 /**
- * Place search and a place's dates — TS-008 D7 and D3 step 1, D4.
+ * Place search and a place's dates — TS-WEB-0008 D7 and D3 step 1, D4.
  *
  * The interface module the BFF routes call. It picks a backend per capability
- * (`config.ts`), wraps every upstream call in `resilient()` (TS-009 D4), and
+ * (`config.ts`), wraps every upstream call in `resilient()` (TS-WEB-0009 D4), and
  * returns an envelope — never markup, never a thrown error for an empty
  * result.
  *
@@ -41,7 +41,7 @@ export function isZip(query: string): boolean {
   return ZIP.test(query.trim());
 }
 
-/** How many suggestions the typeahead may show (TS-008 D7's chip row). */
+/** How many suggestions the typeahead may show (TS-WEB-0008 D7's chip row). */
 export const MAX_SUGGESTIONS = 6;
 
 export interface PlaceSearchInput {
@@ -51,11 +51,11 @@ export interface PlaceSearchInput {
 }
 
 /**
- * The three outcomes of TS-008 D7 — covered, uncovered, and the interim
+ * The three outcomes of TS-WEB-0008 D7 — covered, uncovered, and the interim
  * "typed a name while there is nothing to ask".
  *
  * The third one used to be the normal answer for every typed name, because
- * geo-api has no name search (Q-025). It is now the **exceptional** answer:
+ * geo-api has no name search (Q-0025). It is now the **exceptional** answer:
  * the committed community index resolves names without a credential, so
  * `unsupported` is reached only where that index did not ship at all.
  */
@@ -66,7 +66,7 @@ export async function searchPlaces({ query, store, now }: PlaceSearchInput): Pro
   const real = hasRealBackend(capability) && (byZip || hasPlaceIndex());
 
   // A typed name with no index shipped and no mock in play: answer the
-  // documented hint rather than nothing (TS-008-A14).
+  // documented hint rather than nothing (TS-WEB-0008-A14).
   if (!byZip && !real && hasRealBackend("placeSearchByZip")) {
     return {
       data: { query: trimmed, outcome: { kind: "unsupported", query: trimmed, hint: "zip-only" }, suggestions: [] },
@@ -98,7 +98,7 @@ export async function searchPlaces({ query, store, now }: PlaceSearchInput): Pro
     kind: "activePlaces",
     tags: [cacheTags.places()],
     // No snapshot: a search that cannot run keeps its own inline state
-    // (TS-009 D9) rather than answering with an unrelated place.
+    // (TS-WEB-0009 D9) rather than answering with an unrelated place.
     snapshot: () => ({ query: trimmed, outcome: { kind: "uncovered", query: trimmed }, suggestions: [] }),
     store,
     now,
@@ -108,7 +108,7 @@ export async function searchPlaces({ query, store, now }: PlaceSearchInput): Pro
 
 /**
  * Resolves a slug that arrived on `?ort=` — the precondition of the handover
- * (TS-008 D9).
+ * (TS-WEB-0008 D9).
  *
  * geo-api first, because it is the authority and carries the hierarchy the
  * index does not. The committed index second, because it holds the same
@@ -128,7 +128,7 @@ export async function resolvePlace(slug: string): Promise<Place | undefined> {
     if (indexed) return indexed;
   }
   // An unresolvable slug leads to the founding route, never to a broken app
-  // link (TS-008 D9) — the caller decides, this returns nothing.
+  // link (TS-WEB-0008 D9) — the caller decides, this returns nothing.
   return mockCommunityBySlug(slug);
 }
 
@@ -144,7 +144,7 @@ export interface PlaceEventsInput {
  * Position 1 — the next dates of one place, and the empty-state verdict.
  *
  * `publishInvitation` is set when the place resolved **and** the window is
- * empty: TS-008 D4's conversion moment, tier 1, no error styling, no retry.
+ * empty: TS-WEB-0008 D4's conversion moment, tier 1, no error styling, no retry.
  * A place that does not resolve is a different state entirely and is
  * signalled by `undefined`, not by an empty list.
  */

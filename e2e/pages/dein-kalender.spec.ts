@@ -1,13 +1,13 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * TS-024 — `/dein-kalender`, the 480 € page.
+ * TS-WEB-0024 — `/dein-kalender`, the 480 € page.
  *
- * Not-yet-M4: TS-024-A6/A7 (embed loader block/allow behaviour — the real
+ * Not-yet-M4: TS-WEB-0024-A6/A7 (embed loader block/allow behaviour — the real
  * Portalize loader is not wired, `embed-frame` is a mock per the mock rule)
- * and TS-024-A12 (relevance-engine job-fit weighting — no relevance engine
- * runs against this page's proof pool yet). JSON-LD (`Offer`, TS-024-A11's
- * structured-data half) is TS-011 territory, not yet wired on any page.
+ * and TS-WEB-0024-A12 (relevance-engine job-fit weighting — no relevance engine
+ * runs against this page's proof pool yet). JSON-LD (`Offer`, TS-WEB-0024-A11's
+ * structured-data half) is TS-WEB-0011 territory, not yet wired on any page.
  */
 
 const VIEWPORTS = [
@@ -17,8 +17,8 @@ const VIEWPORTS = [
 
 const ROUTE = "/dein-kalender";
 
-test.describe("TS-024: /dein-kalender", () => {
-  test("TS-024-A2: data-block order is focus, contrast, embed-demo, tiers, proof, trust", async ({
+test.describe("TS-WEB-0024: /dein-kalender", () => {
+  test("TS-WEB-0024-A2: data-block order is focus, contrast, embed-demo, tiers, proof, trust", async ({
     page,
   }) => {
     await page.goto(ROUTE);
@@ -43,7 +43,7 @@ test.describe("TS-024: /dein-kalender", () => {
     ]);
   });
 
-  test("TS-024-A3: exactly one Pulse primary CTA to /dein-kalender/bestellen, one equal-weight CTA inside focus", async ({
+  test("TS-WEB-0024-A3: exactly one Pulse primary CTA to /dein-kalender/bestellen, one equal-weight CTA inside focus", async ({
     page,
   }) => {
     await page.goto(ROUTE);
@@ -60,7 +60,7 @@ test.describe("TS-024: /dein-kalender", () => {
   });
 
   for (const viewport of VIEWPORTS) {
-    test(`TS-024-A4: both CTAs fully visible without scrolling at ${viewport.name}`, async ({
+    test(`TS-WEB-0024-A4: both CTAs fully visible without scrolling at ${viewport.name}`, async ({
       page,
     }) => {
       await page.setViewportSize(viewport);
@@ -73,7 +73,7 @@ test.describe("TS-024: /dein-kalender", () => {
     });
   }
 
-  test("TS-024-A5: the contrast block has exactly four rows, each with a today and a with-product cell", async ({
+  test("TS-WEB-0024-A5: the contrast block has exactly four rows, each with a today and a with-product cell", async ({
     page,
   }) => {
     await page.goto(ROUTE);
@@ -91,7 +91,7 @@ test.describe("TS-024: /dein-kalender", () => {
     expect(first).toContain("mit dem produkt:");
   });
 
-  test("TS-024-A8: the tiers block has one heading and exactly three tiers, in order, tier 3 links to /deine-region", async ({
+  test("TS-WEB-0024-A8: the tiers block has one heading and exactly three tiers, in order, tier 3 links to /deine-region", async ({
     page,
   }) => {
     await page.goto(ROUTE);
@@ -107,7 +107,7 @@ test.describe("TS-024: /dein-kalender", () => {
     ).toHaveCount(1);
   });
 
-  test("TS-024-A9: 'Portalize' occurs exactly once, inside the tiers block's portalize-calendar tier, never in a heading or the title", async ({
+  test("TS-WEB-0024-A9: 'Portalize' occurs exactly once, inside the tiers block's portalize-calendar tier, never in a heading or the title", async ({
     page,
   }) => {
     await page.goto(ROUTE);
@@ -120,7 +120,7 @@ test.describe("TS-024: /dein-kalender", () => {
     await expect(page.locator('h1:has-text("Portalize"), h2:has-text("Portalize")')).toHaveCount(0);
   });
 
-  test("TS-024-A10/A11: exactly one price, 480, with currency, year, net, read from the offerings package", async ({
+  test("TS-WEB-0024-A10/A11: exactly one price, 480, with currency, year, net, read from the offerings package", async ({
     page,
   }) => {
     await page.goto(ROUTE);
@@ -131,7 +131,7 @@ test.describe("TS-024: /dein-kalender", () => {
     expect(bodyText).not.toMatch(/\bab\s+\d/);
   });
 
-  test("TS-024-A13: the proof block renders three cards, one featured and two compact, and no image slot at all", async ({
+  test("TS-WEB-0024-A13: the proof block renders three cards, one featured and two compact, and no image slot at all", async ({
     page,
   }) => {
     await page.goto(ROUTE);
@@ -221,7 +221,7 @@ test.describe("TS-024: /dein-kalender", () => {
     await expect(closing.locator('[data-cta="primary"]')).toHaveCount(0);
   });
 
-  test("TS-024-A14: the trust block occurs exactly once, states the data-protection claim, links both legal anchors", async ({
+  test("TS-WEB-0024-A14: the trust block occurs exactly once, states the data-protection claim, links both legal anchors", async ({
     page,
   }) => {
     await page.goto(ROUTE);
@@ -232,7 +232,7 @@ test.describe("TS-024: /dein-kalender", () => {
     await expect(page.locator('[data-block="trust"] a[href*="#auftragsverarbeitung"]')).toHaveCount(1);
   });
 
-  test("TS-024-A15: the equal-weight CTA navigates to the configured briefing URL and fires request-product-briefing once, no Google script/iframe", async ({
+  test("TS-WEB-0024-A15: the equal-weight CTA navigates to the configured briefing URL and fires request-product-briefing once, no Google script/iframe", async ({
     page,
     context,
   }) => {
@@ -256,7 +256,7 @@ test.describe("TS-024: /dein-kalender", () => {
     await expect(page.locator('script[src*="google"], iframe[src*="google"]')).toHaveCount(0);
   });
 
-  test("TS-024-A16: the primary CTA lands on /dein-kalender/bestellen and fires no conversion event from this page", async ({
+  test("TS-WEB-0024-A16: the primary CTA lands on /dein-kalender/bestellen and fires no conversion event from this page", async ({
     page,
   }) => {
     const consoleMessages: string[] = [];
@@ -267,7 +267,7 @@ test.describe("TS-024: /dein-kalender", () => {
     expect(consoleMessages.some((text) => text.includes("buy-calendar-licence"))).toBe(false);
   });
 
-  test("TS-024-A18: no local-advertising mention or ad CTA anywhere on the page", async ({
+  test("TS-WEB-0024-A18: no local-advertising mention or ad CTA anywhere on the page", async ({
     page,
   }) => {
     await page.goto(ROUTE);

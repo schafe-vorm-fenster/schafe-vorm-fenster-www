@@ -4,7 +4,7 @@
  *
  * Why a committed snapshot rather than a request-time call:
  *
- *  - geo-api has **no name search** (Q-025, state/open.md row 5). Its
+ *  - geo-api has **no name search** (Q-0025, state/open.md row 5). Its
  *    `community/search` takes ZIPs and administrative ids, nothing else. So
  *    a typed name has no upstream operation to reach, with or without a token.
  *  - The public village-calendar site solves the same problem the same way:
@@ -17,7 +17,7 @@
  *    an environment with no token at all.
  *
  * Refresh: `pnpm build:place-index`. The file is committed on purpose —
- * the same reason TS-009 D8 commits the tier-3 snapshots: a build that
+ * the same reason TS-WEB-0009 D8 commits the tier-3 snapshots: a build that
  * cannot reach the source keeps the previous file.
  *
  * What is **not** in it: postcodes (the public index carries none — ZIP

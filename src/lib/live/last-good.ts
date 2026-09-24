@@ -1,5 +1,5 @@
 /**
- * The `last-good` store — TS-009 D4, DEC-045/046.
+ * The `last-good` store — TS-WEB-0009 D4, DEC-0045/046.
  *
  * **Why this is not the render cache.** An expired `'use cache'` entry is
  * gone; it cannot answer when the upstream then fails. Tier 2 needs a store
@@ -18,7 +18,7 @@
  *    age it, or assert a write.
  *
  * Regionality is a known limitation, not a bug: a cold region falls straight
- * to tier 3. TS-009's own open points carry the question; `state/open.md`
+ * to tier 3. TS-WEB-0009's own open points carry the question; `state/open.md`
  * repeats it.
  */
 
@@ -26,7 +26,7 @@ import { getCache } from "@vercel/functions";
 
 export interface LastGoodEntry<T> {
   readonly data: T;
-  /** ISO-8601 — the `fetchedAt` the freshness label renders (TS-009 D5). */
+  /** ISO-8601 — the `fetchedAt` the freshness label renders (TS-WEB-0009 D5). */
   readonly fetchedAt: string;
 }
 
@@ -39,7 +39,7 @@ export interface LastGoodStore {
   ): Promise<void>;
 }
 
-/** Cache keys are segments, never visitors (TS-008 D10, TS-013 D6). */
+/** Cache keys are segments, never visitors (TS-WEB-0008 D10, TS-WEB-0013 D6). */
 export const LAST_GOOD_NAMESPACE = "last-good";
 
 function isEntry(value: unknown): value is LastGoodEntry<unknown> {
@@ -54,7 +54,7 @@ function isEntry(value: unknown): value is LastGoodEntry<unknown> {
 /**
  * The platform store. Every failure of the cache itself is swallowed: a store
  * that cannot answer must degrade the module to tier 3, never throw into the
- * render (TS-009 D9).
+ * render (TS-WEB-0009 D9).
  */
 export function runtimeCacheStore(): LastGoodStore {
   return {

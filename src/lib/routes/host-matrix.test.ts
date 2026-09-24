@@ -9,7 +9,7 @@ import {
   renderedLanguage,
 } from "@/src/lib/routes/host-matrix";
 
-describe("TS-001 D1: the domain matrix", () => {
+describe("TS-WEB-0001 D1: the domain matrix", () => {
   it("names exactly the four phase-1 domains", () => {
     expect(DOMAIN_MATRIX.map((d) => d.host)).toEqual([
       "www.schafe-vorm-fenster.de",
@@ -35,7 +35,7 @@ describe("TS-001 D1: the domain matrix", () => {
   });
 });
 
-describe("TS-001-A6: unknown hosts mirror .de", () => {
+describe("TS-WEB-0001-A6: unknown hosts mirror .de", () => {
   it("resolves *.vercel.app to the default domain", () => {
     expect(domainConfigFor("schafe-vorm-fenster-www.vercel.app")).toBe(DEFAULT_DOMAIN);
   });
@@ -56,7 +56,7 @@ describe("TS-001-A6: unknown hosts mirror .de", () => {
   });
 });
 
-describe("TS-001-A4/D2: the canonical-host redirect target", () => {
+describe("TS-WEB-0001-A4/D2: the canonical-host redirect target", () => {
   it("names the www. form for every known bare domain", () => {
     expect(canonicalHostFor("schafe-vorm-fenster.de")).toBe("www.schafe-vorm-fenster.de");
     expect(canonicalHostFor("owcezaoknem.pl")).toBe("www.owcezaoknem.pl");
@@ -74,7 +74,7 @@ describe("TS-001-A4/D2: the canonical-host redirect target", () => {
   });
 });
 
-describe("TS-001 D3, generalised: the rendered language per domain", () => {
+describe("TS-WEB-0001 D3, generalised: the rendered language per domain", () => {
   const deDomain = DOMAIN_MATRIX[0]!;
   const plDomain = DOMAIN_MATRIX[1]!;
 

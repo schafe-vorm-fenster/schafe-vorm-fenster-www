@@ -9,7 +9,7 @@ import { regionExamples } from "./region";
 
 /**
  * Integration level: the interface modules with a **failing upstream**, so
- * the three-tier chain of TS-009 D4 is exercised end to end rather than only
+ * the three-tier chain of TS-WEB-0009 D4 is exercised end to end rather than only
  * in `resilient()`'s own unit test.
  *
  * The failure is a real one: a real backend pointed at an unroutable host.
@@ -42,7 +42,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe("TS-008-A5 / TS-009-A6: upstream down, cache warm — tier 2 with a freshness label", () => {
+describe("TS-WEB-0008-A5 / TS-WEB-0009-A6: upstream down, cache warm — tier 2 with a freshness label", () => {
   it("serves the last good dates and says how old they are", async () => {
     const store = memoryStore(
       new Map<string, LastGoodEntry<unknown>>([
@@ -70,7 +70,7 @@ describe("TS-008-A5 / TS-009-A6: upstream down, cache warm — tier 2 with a fre
   });
 });
 
-describe("TS-008-A5 / TS-009-A7: upstream down, cache cold — the tier-3 snapshot, labelled", () => {
+describe("TS-WEB-0008-A5 / TS-WEB-0009-A7: upstream down, cache cold — the tier-3 snapshot, labelled", () => {
   it("serves the committed snapshot for the place module", async () => {
     outage();
     const envelope = await placeEvents({ slug: "schlatkow", store: memoryStore(), ...silent });
@@ -91,7 +91,7 @@ describe("TS-008-A5 / TS-009-A7: upstream down, cache cold — the tier-3 snapsh
   });
 
   it("serves the committed snapshot for the region module", async () => {
-    // The county activity ranking still has no upstream operation (Q-015
+    // The county activity ranking still has no upstream operation (Q-0015
     // residue), but the ranking is now derived from a real, tokenless source,
     // so this module *can* lose an upstream and degrades like the others.
     outage();
@@ -119,7 +119,7 @@ describe("TS-008-A5 / TS-009-A7: upstream down, cache cold — the tier-3 snapsh
   });
 });
 
-describe("TS-009-A11: a failing module degrades one module, not the page", () => {
+describe("TS-WEB-0009-A11: a failing module degrades one module, not the page", () => {
   it("lets a tier-3 module, a tier-2 module and a tier-1 module stand side by side", async () => {
     const store = memoryStore(
       new Map<string, LastGoodEntry<unknown>>([
@@ -151,7 +151,7 @@ describe("TS-009-A11: a failing module degrades one module, not the page", () =>
   });
 });
 
-describe("TS-008-A4 / WEB-F-045: an empty answer is tier 1, not a degradation", () => {
+describe("TS-WEB-0008-A4 / FUN-WEB-0045: an empty answer is tier 1, not a degradation", () => {
   it("keeps the covered place with no dates at tier 1 and sets the publish invitation", async () => {
     vi.stubEnv("LIVE_DATA", "mock");
     const envelope = await placeEvents({ slug: EMPTY_DEMO_SLUG, store: memoryStore(), ...silent });

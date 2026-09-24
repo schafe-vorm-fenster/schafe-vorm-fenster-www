@@ -9,7 +9,7 @@ import {
 
 const deDomain = DOMAIN_MATRIX[0]!;
 
-describe("DEC-038/053: Accept-Language parsing", () => {
+describe("DEC-0038/053: Accept-Language parsing", () => {
   it("orders by descending quality", () => {
     expect(parseAcceptLanguage("en;q=0.5, de;q=0.9, fr;q=0.1")).toEqual(["de", "en", "fr"]);
   });
@@ -28,7 +28,7 @@ describe("DEC-038/053: Accept-Language parsing", () => {
   });
 });
 
-describe("TS-001 D3 note / DEC-038: the suggestion signal never matches the render", () => {
+describe("TS-WEB-0001 D3 note / DEC-0038: the suggestion signal never matches the render", () => {
   it("suggests nothing when the preferred language is already rendering", () => {
     expect(suggestedLanguage("de", deDomain, "/mitmachen")).toBeUndefined();
   });

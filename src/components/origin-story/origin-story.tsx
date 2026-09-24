@@ -9,7 +9,7 @@ import type { Locale } from "@/src/lib/i18n/locales";
 import styles from "./origin-story.module.css";
 
 export interface OriginStoryProps {
-  /** Fixed by TS-027 D3, from brand-identity's own "## Origin story" section. */
+  /** Fixed by TS-WEB-0027 D3, from brand-identity's own "## Origin story" section. */
   readonly headline?: string;
   /**
    * `false` where the page's own hero already carries the `h1` (polish brief
@@ -41,7 +41,7 @@ export interface OriginStoryProps {
 }
 
 /**
- * 35 `origin-story` [PROPOSED] — content type 13 `origin-story`, TS-027 D3.
+ * 35 `origin-story` [PROPOSED] — content type 13 `origin-story`, TS-WEB-0027 D3.
  *
  * Structure: the page's one `h1`, "Gebaut in einem Dorf, betrieben aus einem
  * Dorf." · the causal chain (a village of ~400 → the free community calendar
@@ -87,7 +87,7 @@ export function OriginStory({
           className={styles.portrait}
           locale={locale}
           notDepicting={portraitNotDepicting}
-          // TS-003 D2 declares this portrait as `/ueber-uns`'s LCP element,
+          // TS-WEB-0003 D2 declares this portrait as `/ueber-uns`'s LCP element,
           // and the browser agrees: QA measured it as the LCP on the same
           // load, carrying `loading="lazy"` (F-3-2). `origin-story` is the
           // page's first block and stands on no other route, so the

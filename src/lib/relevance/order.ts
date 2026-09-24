@@ -2,7 +2,7 @@
  * The sequence rule — *near · near · far · near · very far · middle · far*.
  *
  * The **concept** (`website-relevance-model.concept.md`, "Sequence Rule" and
- * the spread rule) is the law here, and where TS-005 D6 simplifies it this
+ * the spread rule) is the law here, and where TS-WEB-0005 D6 simplifies it this
  * module follows the concept (repo rule: the concept wins over a spec):
  *
  *  1. Sort by score, descending. Ties break by `id`, ascending — the rotation

@@ -9,7 +9,7 @@
  *
  * An entry with no file yet — `status: needed`, the shot nobody has taken, the
  * asset whose rights are unverified — returns `undefined`, and the component
- * renders the "Foto gesucht" hatch it already renders today (DEC-068). That
+ * renders the "Foto gesucht" hatch it already renders today (DEC-0068). That
  * is deliberate: a missing image is an honest empty state and, per the design
  * system, an invitation to send one.
  */
@@ -34,17 +34,17 @@ export interface RenderableImage {
   /**
    * True for every generated rendition: it stands in for a photograph nobody
    * has taken, so it does not depict what the copy claims and the design
-   * system's placeholder badge goes on it (SRC-014 § Photo surface).
+   * system's placeholder badge goes on it (SRC-0014 § Photo surface).
    */
   readonly notDepicting: boolean;
-  /** The page's one declared LCP image (TS-003 D2) — nothing else is eager. */
+  /** The page's one declared LCP image (TS-WEB-0003 D2) — nothing else is eager. */
   readonly priority: boolean;
   readonly caption?: string;
   /** The rights holder's attribution string, verbatim, where one is required. */
   readonly credit?: string;
   /**
    * What `data-placeholder` carries, so a build can enumerate every image that
-   * still has to be replaced (DEC-068 guardrail 1). `undefined` for a real
+   * still has to be replaced (DEC-0068 guardrail 1). `undefined` for a real
    * photograph — that one is finished.
    */
   readonly placeholderId?: string;

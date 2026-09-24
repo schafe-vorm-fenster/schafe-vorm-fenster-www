@@ -1,5 +1,5 @@
 /*
- * Link treatment: `lime-800` on light (SRC-014 §Colour), never CTA styling.
+ * Link treatment: `lime-800` on light (SRC-0014 §Colour), never CTA styling.
  * The colour comes from the ground (`--ground-link`), so the same class reads
  * correctly on ink, violet and lime-500 without a second selector.
  */
@@ -16,7 +16,7 @@
 }
 
 /* The current page is marked by weight and a thicker rule, not by colour
-   alone (SRC-014 §Accessibility). */
+   alone (SRC-0014 §Accessibility). */
 .link[data-current="true"] {
   text-decoration-thickness: 3px;
 }

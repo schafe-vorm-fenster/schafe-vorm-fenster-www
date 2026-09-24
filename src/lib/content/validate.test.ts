@@ -9,13 +9,13 @@ import type { PageContent } from "@/src/lib/content/types";
 const resolver = createHubResolver();
 
 // Every fixture below carries an `seo` block because `PageFrontmatterSchema`
-// requires one (TS-011 D5, F-2-72): a page artifact without a title and a
+// requires one (TS-WEB-0011 D5, F-2-72): a page artifact without a title and a
 // description is a page that cannot be indexed, so it does not validate.
 function page(body: string, frontmatterPatch = ""): PageContent {
   return parsePage(
     `---
 id: home-de
-page_id: TS-019
+page_id: TS-WEB-0019
 route: "/"
 seo:
   "/":
@@ -41,7 +41,7 @@ ${body}`,
 
 const checks = (findings: { check: string }[]) => findings.map((f) => f.check);
 
-describe("TS-007-A2: the checker resolves every provenance reference", () => {
+describe("TS-WEB-0007-A2: the checker resolves every provenance reference", () => {
   it("passes a slot whose record exists in the installed package", () => {
     const findings = checkPage(
       page(
@@ -129,7 +129,7 @@ describe("TS-007-A2: the checker resolves every provenance reference", () => {
   });
 });
 
-describe("TS-007-A1: the checker validates the page artifact itself", () => {
+describe("TS-WEB-0007-A1: the checker validates the page artifact itself", () => {
   it("fails a slot comment that does not parse", () => {
     const findings = checkPage(
       page(
@@ -158,7 +158,7 @@ describe("TS-007-A1: the checker validates the page artifact itself", () => {
       parsePage(
         `---
 id: home-de
-page_id: TS-999
+page_id: TS-WEB-0999
 route: "/"
 seo:
   "/":
@@ -207,7 +207,7 @@ provenance: "sourced"
   });
 });
 
-describe("TS-007-A5: locale completeness and harmonisation", () => {
+describe("TS-WEB-0007-A5: locale completeness and harmonisation", () => {
   const de = page(
     `## Slot 1
 
@@ -219,7 +219,7 @@ describe("TS-007-A5: locale completeness and harmonisation", () => {
   const en = parsePage(
     `---
 id: home-de
-page_id: TS-019
+page_id: TS-WEB-0019
 route: "/"
 seo:
   "/":
@@ -269,7 +269,7 @@ provenance: "sourced"
     const short = parsePage(
       `---
 id: home-de
-page_id: TS-019
+page_id: TS-WEB-0019
 route: "/"
 seo:
   "/":
@@ -298,7 +298,7 @@ provenance: "sourced"
     const diverged = parsePage(
       `---
 id: home-de
-page_id: TS-019
+page_id: TS-WEB-0019
 route: "/"
 seo:
   "/":
@@ -327,7 +327,7 @@ provenance: "sourced"
   });
 });
 
-describe("TS-007-A14 (F-2-40): `check:content` asks the production question", () => {
+describe("TS-WEB-0007-A14 (F-2-40): `check:content` asks the production question", () => {
   const draftPage = page(
     `<!-- id: home-1-search-hero; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
 
@@ -354,7 +354,7 @@ describe("TS-007-A14 (F-2-40): `check:content` asks the production question", ()
     const approved = parsePage(
       `---
 id: home-de
-page_id: TS-019
+page_id: TS-WEB-0019
 route: "/"
 seo:
   "/":

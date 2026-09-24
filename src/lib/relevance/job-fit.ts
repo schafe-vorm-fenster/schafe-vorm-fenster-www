@@ -1,5 +1,5 @@
 /**
- * Job fit — TS-005 D3. `job_fit(e, j)` of the scoring block.
+ * Job fit — TS-WEB-0005 D3. `job_fit(e, j)` of the scoring block.
  *
  * Every selectable element carries a **profile over all four jobs**, set as an
  * assessment at generation time with a stated reason — never derived from the

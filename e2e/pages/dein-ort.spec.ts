@@ -7,10 +7,10 @@ import { checkRhythm } from "../../src/components/section-shell/rhythm";
 import type { RhythmEntry } from "../../src/components/section-shell/rhythm";
 
 /**
- * TS-020 — `/dein-ort`, the acceptance walk.
+ * TS-WEB-0020 — `/dein-ort`, the acceptance walk.
  *
  * Without `?ort=` the page renders **S0**, "the prerendered shell, complete
- * on its own" (TS-020 D2) — that is what the static shell contains, and most
+ * on its own" (TS-WEB-0020 D2) — that is what the static shell contains, and most
  * criteria below walk it.
  *
  * M4 wired `?ort=` through `src/lib/live/places.ts`, so states A and B are
@@ -25,7 +25,7 @@ import type { RhythmEntry } from "../../src/components/section-shell/rhythm";
 const PLACE_WITH_DATES = "schlatkow";
 
 /**
- * A covered community whose window is **empty** — TS-008 D4's conversion
+ * A covered community whose window is **empty** — TS-WEB-0008 D4's conversion
  * moment, and the state this page changes its primary conversion for.
  *
  * It used to be `EMPTY_DEMO_SLUG` (`lassan`), the mock backend's own marker.
@@ -49,7 +49,7 @@ const PLACE_WITH_DATES = "schlatkow";
  * F-2-61 gave a neighbour (`zuessow`) precisely so the empty state has
  * something to widen to. With no candidate left, `emptyPlace()` returned
  * `undefined` and three state-B walks skipped themselves silently on every
- * mock run (TS-020-A3, TS-020-A8's second half, TS-019-A4).
+ * mock run (TS-WEB-0020-A3, TS-WEB-0020-A8's second half, TS-WEB-0019-A4).
  *
  * Appending it costs the `auto` backend nothing: the helper asks the BFF
  * whether a candidate is *actually* empty before returning it, so on `auto`
@@ -72,20 +72,20 @@ async function emptyPlace(request: APIRequestContext): Promise<string | undefine
 const PHONE = { width: 360, height: 640 };
 const DESKTOP = { width: 1280, height: 800 };
 
-test.describe("TS-020 — your place", () => {
-  test("TS-020-A2: walk state A — place name as h1, ≤ 3 rows, the handover is the primary CTA", async ({
+test.describe("TS-WEB-0020 — your place", () => {
+  test("TS-WEB-0020-A2: walk state A — place name as h1, ≤ 3 rows, the handover is the primary CTA", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto(`/dein-ort?ort=${PLACE_WITH_DATES}`);
 
     // The `h1` is the place name in every state and at the same DOM position
-    // (TS-020 D5). S0 carries the generic one; state A carries the resolved
+    // (TS-WEB-0020 D5). S0 carries the generic one; state A carries the resolved
     // place, and the module's own heading names it too.
     const dates = page.locator("#place-dates");
     await expect(dates.locator("h2")).toContainText("Schlatkow");
 
-    // "≤ 3 rows" — position 1's fixed row count (TS-008 D1).
+    // "≤ 3 rows" — position 1's fixed row count (TS-WEB-0008 D1).
     const rows = dates.locator("article");
     expect(await rows.count()).toBeGreaterThan(0);
     expect(await rows.count()).toBeLessThanOrEqual(3);
@@ -99,7 +99,7 @@ test.describe("TS-020 — your place", () => {
     // control at all and the search was offered to a visitor who had just
     // searched. The hero therefore has no CTA of its own in this state;
     // repeating the offer above the rows it is about would be the third of
-    // three (TS-006 D4 keeps the search as the primary only while no place
+    // three (TS-WEB-0006 D4 keeps the search as the primary only while no place
     // is known, which is state S0 and state B's publish offer).
     const handover = dates.locator('a[href^="https://app."]');
     await expect(handover).toHaveCount(1);
@@ -116,7 +116,7 @@ test.describe("TS-020 — your place", () => {
     ).toBeLessThan(4);
   });
 
-  test("TS-020-A3: walk state B — the publish offer in the module slot, the focus job shifts", async ({
+  test("TS-WEB-0020-A3: walk state B — the publish offer in the module slot, the focus job shifts", async ({
     page,
     request,
   }) => {
@@ -125,7 +125,7 @@ test.describe("TS-020 — your place", () => {
     await page.setViewportSize(DESKTOP);
     await page.goto(`/dein-ort?ort=${slug}`);
 
-    // SRC-002's sentence belongs to this page and stands once, as the `h1`.
+    // SRC-0002's sentence belongs to this page and stands once, as the `h1`.
     // It used to stand twice — as the headline and again, verbatim, as the
     // first line of the block right under it (brief, page 2: the second
     // identical heading goes away).
@@ -137,7 +137,7 @@ test.describe("TS-020 — your place", () => {
     ).toBe(1);
 
     const dates = page.locator("#place-dates");
-    // TS-008 D4: a covered place with zero dates is the conversion moment,
+    // TS-WEB-0008 D4: a covered place with zero dates is the conversion moment,
     // not an error — the publish offer *occupies* the module slot, with its
     // own line over the button rather than the headline's sentence again.
     await expect(dates.locator("p").first()).not.toBeEmpty();
@@ -148,7 +148,7 @@ test.describe("TS-020 — your place", () => {
     // (`page.meta.ts`'s `emptyState`), not to the calendar handover — and it
     // carries the page's one `data-cta="primary"` (F-2-61). The target is
     // inside `/mitmachen`, at the route the goal is actually fired on, with
-    // the resolved slug: TS-023 D5 names "the `/dein-ort` empty state" as one
+    // the resolved slug: TS-WEB-0023 D5 names "the `/dein-ort` empty state" as one
     // of the four surfaces `?ort=` reaches `/mitmachen/registrieren` from.
     const offer = dates.locator('a[href^="/mitmachen"]');
     await expect(offer).toHaveCount(1);
@@ -156,7 +156,7 @@ test.describe("TS-020 — your place", () => {
     await expect(offer).toHaveAttribute("href", `/mitmachen/registrieren?ort=${slug}`);
     await expect(dates.locator('a[href^="https://app."]')).toHaveCount(0);
 
-    // TS-008-A6: position 2 renders, labelled as surroundings — in state B it
+    // TS-WEB-0008-A6: position 2 renders, labelled as surroundings — in state B it
     // is the *first* evidence, so an empty module is the defect, not a state.
     const nearby = page.locator("#nearby");
     await expect(nearby.locator("article").first()).toBeVisible();
@@ -172,7 +172,7 @@ test.describe("TS-020 — your place", () => {
     expect(body).not.toContain("`");
     expect(body).not.toContain("→");
 
-    // `role="status"`: the shift is announced once (TS-009 D7).
+    // `role="status"`: the shift is announced once (TS-WEB-0009 D7).
     await expect(dates.locator('[role="status"]')).toHaveCount(1);
   });
 
@@ -187,7 +187,7 @@ test.describe("TS-020 — your place", () => {
    * picture, a live row *and* a quote is three pieces of evidence for one
    * argument, and four stories built that way were a 3 000 px wall).
    */
-  test("TS-020-A4: exactly four value stories, each with a title, a story and its own evidence", async ({
+  test("TS-WEB-0020-A4: exactly four value stories, each with a title, a story and its own evidence", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -223,7 +223,7 @@ test.describe("TS-020 — your place", () => {
   });
 
   test.fixme(
-    "TS-020-A5: the four stories' proof_refs resolve in the installed @schafe-vorm-fenster/proof [M4 — TS-005 D5 relevance engine; the stories carry no proof_ref in the artifact yet]",
+    "TS-WEB-0020-A5: the four stories' proof_refs resolve in the installed @schafe-vorm-fenster/proof [M4 — TS-WEB-0005 D5 relevance engine; the stories carry no proof_ref in the artifact yet]",
     () => {},
   );
 
@@ -233,8 +233,8 @@ test.describe("TS-020 — your place", () => {
    * `content/pages/dein-ort/de.md`"; fix 3: "render them").
    *
    * The criterion this replaces asserted the *absence* of every quote, on the
-   * reading of TS-020-A6 that no testimonial may stand while its
-   * `usage_rights` are unverified (Q-014). What the artifact carries is not
+   * reading of TS-WEB-0020-A6 that no testimonial may stand while its
+   * `usage_rights` are unverified (Q-0014). What the artifact carries is not
    * an unverified paraphrase: four named people, quoted verbatim from the
    * hub's own proof records, each with its attribution and its year, each
    * with a `clearance: pending` note naming the record and the reason. The
@@ -242,7 +242,7 @@ test.describe("TS-020 — your place", () => {
    * the page ships with them; this test holds the half that did not change —
    * that no quote is anonymous, invented, or a stock sentence about "users".
    */
-  test("TS-020-A6: every story closes on a named, attributed quote", async ({ page }) => {
+  test("TS-WEB-0020-A6: every story closes on a named, attributed quote", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/dein-ort");
 
@@ -265,7 +265,7 @@ test.describe("TS-020 — your place", () => {
     }
   });
 
-  test("TS-020-A7: the homescreen block renders iOS and Android, always, with the app handover", async ({
+  test("TS-WEB-0020-A7: the homescreen block renders iOS and Android, always, with the app handover", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -281,7 +281,7 @@ test.describe("TS-020 — your place", () => {
     expect(href).toMatch(/^https:\/\/app\.schafe-vorm-fenster\.de\//);
   });
 
-  test("TS-020-A7: the DOM is identical under an iPhone and an Android user agent", async ({
+  test("TS-WEB-0020-A7: the DOM is identical under an iPhone and an Android user agent", async ({
     browser,
   }) => {
     const markup: string[] = [];
@@ -307,10 +307,10 @@ test.describe("TS-020 — your place", () => {
   /**
    * The analytics collector is `mock-tracker.ts` by decision (`state/open.md`
    * row 130) and it logs every conversion to the console, so the trigger
-   * contract is walkable — the skip that said "TS-012 analytics is not built"
+   * contract is walkable — the skip that said "TS-WEB-0012 analytics is not built"
    * was reading the *adapter*, not the wiring.
    */
-  test("TS-020-A8: every app handover emits save-calendar-to-homescreen exactly once", async ({
+  test("TS-WEB-0020-A8: every app handover emits save-calendar-to-homescreen exactly once", async ({
     page,
   }) => {
     // Three call sites, each walked from its own fresh page view, each
@@ -353,7 +353,7 @@ test.describe("TS-020 — your place", () => {
     }
   });
 
-  test("TS-020-A8 (second half): in state B the publish CTA emits no conversion event", async ({
+  test("TS-WEB-0020-A8 (second half): in state B the publish CTA emits no conversion event", async ({
     page,
     request,
   }) => {
@@ -368,8 +368,8 @@ test.describe("TS-020 — your place", () => {
     await page.goto(`/dein-ort?ort=${slug}`);
     // Block 1 carries no calendar handover in state B: "an 'open the
     // calendar' link beside 'nothing is in it yet' is the one offer that
-    // state must not carry" (TS-008 D4). The homescreen block keeps its own —
-    // TS-020 D2 demotes it below position 2, it does not remove it.
+    // state must not carry" (TS-WEB-0008 D4). The homescreen block keeps its own —
+    // TS-WEB-0020 D2 demotes it below position 2, it does not remove it.
     await expect(page.locator('#place-dates a[href^="https://app."]')).toHaveCount(0);
     await expect(page.locator('#homescreen a[href^="https://app."]')).toHaveCount(1);
 
@@ -379,7 +379,7 @@ test.describe("TS-020 — your place", () => {
     expect(fires).toHaveLength(0);
   });
 
-  test("TS-020-A9: no parameter, an empty one and a garbage one all answer 200 in the search state", async ({
+  test("TS-WEB-0020-A9: no parameter, an empty one and a garbage one all answer 200 in the search state", async ({
     page,
   }) => {
     for (const path of ["/dein-ort", "/dein-ort?ort=", "/dein-ort?ort=%3Cscript%3E"]) {
@@ -395,7 +395,7 @@ test.describe("TS-020 — your place", () => {
       //
       // `innerText`, not `textContent`: since state/open.md row 204 the chrome
       // is the layout's, so the page's own tree — the JSON-LD graph of
-      // TS-011 D4 included — sits inside the `main` landmark. `textContent`
+      // TS-WEB-0011 D4 included — sits inside the `main` landmark. `textContent`
       // reads that graph's source, where the key `"description"` contains the
       // substring this line looks for. `innerText` reads what is rendered,
       // which is what "appears as data" means, and the count below is the
@@ -409,7 +409,7 @@ test.describe("TS-020 — your place", () => {
     }
   });
 
-  test("TS-020-A10: stage 0 is complete — search, four labelled example stories, band, closing CTA", async ({
+  test("TS-WEB-0020-A10: stage 0 is complete — search, four labelled example stories, band, closing CTA", async ({
     browser,
   }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
@@ -433,20 +433,20 @@ test.describe("TS-020 — your place", () => {
     await context.close();
   });
 
-  test("TS-020-A11: the canonical is the parameter-free path for every `?ort=`", async ({
+  test("TS-WEB-0020-A11: the canonical is the parameter-free path for every `?ort=`", async ({
     page,
     request,
   }) => {
     // The criterion names "`/dein-ort`, `?ort=<A slug>` and `?ort=<B slug>`" —
     // a state-A and a state-B place, not a value that classifies as uncovered
-    // and is forwarded to the founding route (TS-020 D2 row 5, F-2-30).
+    // and is forwarded to the founding route (TS-WEB-0020 D2 row 5, F-2-30).
     //
     // The state-B slug is *asked for*, not assumed. Taking
     // `EMPTY_PLACE_CANDIDATES[0]` on faith is what made this case red under
     // `LIVE_DATA=mock`: none of the first four candidates is covered by the
     // mock backend, so the proxy hopped `?ort=achimswalde` to the founding
     // route and the canonical this case read was `/dein-ort/starten` — the
-    // page behaving exactly as TS-020 D2 row 5 says it must, measured against
+    // page behaving exactly as TS-WEB-0020 D2 row 5 says it must, measured against
     // an input the criterion excludes. `emptyPlace()` confirms coverage and
     // emptiness against the BFF first, and every other state-B case in this
     // file already goes through it.
@@ -463,7 +463,7 @@ test.describe("TS-020 — your place", () => {
         "https://www.schafe-vorm-fenster.de/dein-ort",
       );
     }
-    // JSON-LD: no `Event` node anywhere (TS-011 D4). The `WebPage` half is
+    // JSON-LD: no `Event` node anywhere (TS-WEB-0011 D4). The `WebPage` half is
     // not built yet — see the fixme below.
     const jsonLd = await page
       .locator('script[type="application/ld+json"]')
@@ -471,11 +471,11 @@ test.describe("TS-020 — your place", () => {
     expect(jsonLd.join("")).not.toContain('"Event"');
   });
 
-  test("TS-020-A11 (second half): the JSON-LD graph contains WebPage", async ({ page }) => {
+  test("TS-WEB-0020-A11 (second half): the JSON-LD graph contains WebPage", async ({ page }) => {
     await page.goto("/dein-ort");
 
     const scripts = page.locator('script[type="application/ld+json"]');
-    await expect(scripts).toHaveCount(1); // TS-011 D4: one graph per page
+    await expect(scripts).toHaveCount(1); // TS-WEB-0011 D4: one graph per page
 
     const graph = JSON.parse((await scripts.textContent()) ?? "{}");
     const nodes = graph["@graph"] as { "@type": string; url?: string }[];
@@ -487,12 +487,12 @@ test.describe("TS-020 — your place", () => {
   });
 
   test.fixme(
-    "TS-020-A12: with the BFF delayed beyond 2 s the box keeps its geometry and CLS stays < 0.1 [M4 — TS-008 D2 BFF routes]",
+    "TS-WEB-0020-A12: with the BFF delayed beyond 2 s the box keeps its geometry and CLS stays < 0.1 [M4 — TS-WEB-0008 D2 BFF routes]",
     () => {},
   );
 
   for (const viewport of [PHONE, DESKTOP]) {
-    test(`TS-006-A3: the primary CTA is above the fold at ${viewport.width}×${viewport.height}`, async ({
+    test(`TS-WEB-0006-A3: the primary CTA is above the fold at ${viewport.width}×${viewport.height}`, async ({
       page,
     }) => {
       await page.setViewportSize(viewport);
@@ -504,7 +504,7 @@ test.describe("TS-020 — your place", () => {
       expect(box!.y + box!.height).toBeLessThanOrEqual(viewport.height);
     });
 
-    test(`TS-017-A9: no horizontal scroll at ${viewport.width}×${viewport.height}`, async ({
+    test(`TS-WEB-0017-A9: no horizontal scroll at ${viewport.width}×${viewport.height}`, async ({
       page,
     }) => {
       await page.setViewportSize(viewport);
@@ -516,7 +516,7 @@ test.describe("TS-020 — your place", () => {
     });
   }
 
-  test("TS-006-A6 / A7: one context band with the three non-focus jobs, then the closing block", async ({
+  test("TS-WEB-0006-A6 / A7: one context band with the three non-focus jobs, then the closing block", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -561,14 +561,14 @@ test.describe("TS-020 — your place", () => {
     ]);
   });
 
-  test("TS-006-A15: `/dein-ort` is a first-level page and renders no breadcrumb", async ({
+  test("TS-WEB-0006-A15: `/dein-ort` is a first-level page and renders no breadcrumb", async ({
     page,
   }) => {
     await page.goto("/dein-ort");
     await expect(page.locator("nav ol")).toHaveCount(0);
   });
 
-  test("SRC-014 §Page Rhythm: photo/colour alternation holds on /dein-ort", async ({ page }) => {
+  test("SRC-0014 §Page Rhythm: photo/colour alternation holds on /dein-ort", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/dein-ort");
     const sections = (await page.evaluate(() =>
@@ -582,7 +582,7 @@ test.describe("TS-020 — your place", () => {
   });
 
 
-  test("TS-020 D2 row 5 (F-2-49): an uncovered value leaves the page with a real 307", async ({
+  test("TS-WEB-0020 D2 row 5 (F-2-49): an uncovered value leaves the page with a real 307", async ({
     request,
     browser,
   }) => {
@@ -604,7 +604,7 @@ test.describe("TS-020 — your place", () => {
     await context.close();
   });
 
-  test("TS-001: the English variant renders the English artifact", async ({ page }) => {
+  test("TS-WEB-0001: the English variant renders the English artifact", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/en/your-place");
     await expect(page.locator("html")).toHaveAttribute("lang", "en");

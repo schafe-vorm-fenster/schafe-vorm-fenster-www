@@ -1,10 +1,10 @@
 # Gate 2 — QA Acceptance Run 1
 
-Scope: `plan/gate-2-scope.md` — structure (TS-004, TS-006, TS-002, TS-001),
-the twelve page specs (TS-019–TS-029) in both locales at 360 px and
-desktop, content (TS-007 plus the compliance check), the M4 systems
-(TS-005, TS-008, TS-009, TS-010, TS-011, TS-012, TS-013, TS-016) and the
-TS-014 security sweep. **333 acceptance criteria**, each at the level its
+Scope: `plan/gate-2-scope.md` — structure (TS-WEB-0004, TS-WEB-0006, TS-WEB-0002, TS-WEB-0001),
+the twelve page specs (TS-WEB-0019–TS-WEB-0029) in both locales at 360 px and
+desktop, content (TS-WEB-0007 plus the compliance check), the M4 systems
+(TS-WEB-0005, TS-WEB-0008, TS-WEB-0009, TS-WEB-0010, TS-WEB-0011, TS-WEB-0012, TS-WEB-0013, TS-WEB-0016) and the
+TS-WEB-0014 security sweep. **333 acceptance criteria**, each at the level its
 own spec declares (`specs/verification/verification-strategy.md`).
 
 Skills loaded: `webapp-testing` (browser-level criteria, Playwright
@@ -38,7 +38,7 @@ documented check for `manual`.
 
 Two warnings about the other 210. First, "the suite is green" is not by
 itself a verdict, and three criteria were **overridden to fail despite a
-green test naming them** — TS-004-A1, TS-004-A4 and TS-004-A5, where the
+green test naming them** — TS-WEB-0004-A1, TS-WEB-0004-A4 and TS-WEB-0004-A5, where the
 tests assert a narrower thing than the criterion says (F-2-31, F-2-55).
 Second, sixteen e2e cases are `test.skip`ped with reasons; several of those
 reasons read "[M4 — … not built]", and M4 is in scope at this gate, so
@@ -47,7 +47,7 @@ F-2-30 surfaced.
 
 ## Verdicts per criterion
 
-### TS-004 — URL and routing
+### TS-WEB-0004 — URL and routing
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -63,7 +63,7 @@ F-2-30 surfaced.
 | A10 | static | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A11 | integration | **not-testable** | `/{community}` forwarding is not built — skipped with a recorded reason, which the criterion itself prescribes |
 
-### TS-006 — Page composition
+### TS-WEB-0006 — Page composition
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -79,11 +79,11 @@ F-2-30 surfaced.
 | A10 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A11 | static | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A12 | static | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
-| A13 | e2e | **not-testable** | neither page carries the two-working-day wording — it is withheld while C11/Q-022 is unsigned, which is what TS-016-A13 requires; that withholding is itself F-2-57 |
-| A14 | manual | **not-testable** | SRC-001's eight-point check is not reachable from this repo → F-2-18 |
+| A13 | e2e | **not-testable** | neither page carries the two-working-day wording — it is withheld while C11/Q-0022 is unsigned, which is what TS-WEB-0016-A13 requires; that withholding is itself F-2-57 |
+| A14 | manual | **not-testable** | SRC-0001's eight-point check is not reachable from this repo → F-2-18 |
 | A15 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 
-### TS-002 — Accessibility
+### TS-WEB-0002 — Accessibility
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -92,7 +92,7 @@ F-2-30 surfaced.
 | A3 | static | **fail** | no contrast check over the token set exists anywhere → F-2-43 |
 | A4 | manual | **not-testable** | chaos:keyboard-only walked the entry points (C-K-3..C-K-8) with no traps; no complete per-release walkthrough of all four jobs exists |
 | A5 | manual | **not-testable** | no VoiceOver/NVDA available to this run |
-| A6 | tool | **not-testable** | the real envoy widget is undelivered (Q-022); only the mock mount is sweepable |
+| A6 | tool | **not-testable** | the real envoy widget is undelivered (Q-0022); only the mock mount is sweepable |
 | A7 | e2e | **pass** | 320x800 on all 24 routes: scrollWidth == clientWidth everywhere (two independent runs) |
 | A8 | integration | **pass** | code read + curl against :3100 |
 | A9 | e2e | **pass** | `reducedMotion: reduce` on all 24 routes: zero elements with an animation or a non-opacity transition > 50 ms |
@@ -100,7 +100,7 @@ F-2-30 surfaced.
 | A11 | tool | **pass** | axe `image-alt` clean across 24 routes x 2 viewports (`e2e/a11y.spec.ts`) |
 | A12 | manual | **pass** | `content/legal/accessibility.md` names self-assessment and claims no audit; the ticket ids in it are F-2-35 |
 
-### TS-001 — Locale routing
+### TS-WEB-0001 — Locale routing
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -114,7 +114,7 @@ F-2-30 surfaced.
 | A10 | integration | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A11 | static | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 
-### TS-019 — / (home)
+### TS-WEB-0019 — / (home)
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -132,9 +132,9 @@ F-2-30 surfaced.
 | A12 | static | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A13 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A14 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
-| A15 | manual | **not-testable** | SRC-001's eight-point check is not reachable from this repo → F-2-18 |
+| A15 | manual | **not-testable** | SRC-0001's eight-point check is not reachable from this repo → F-2-18 |
 
-### TS-020 — /dein-ort
+### TS-WEB-0020 — /dein-ort
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -142,7 +142,7 @@ F-2-30 surfaced.
 | A2 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A3 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A4 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
-| A5 | static | **fail** | the stories carry no `proof_ref` — the criterion's subject is absent → F-2-43 (TS-005-A15) |
+| A5 | static | **fail** | the stories carry no `proof_ref` — the criterion's subject is absent → F-2-43 (TS-WEB-0005-A15) |
 | A6 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A7 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A8 | integration | **not-testable** | emission goes to `createMockTracker()` by decision; two of the wrapped call sites were observed in the markup |
@@ -152,12 +152,12 @@ F-2-30 surfaced.
 | A12 | e2e | **not-testable** | no CLS measurement harness in this run; and with no skeletons (F-2-39) the counter branches do not exist |
 | A13 | manual | **not-testable** | no content/tone review record exists for this run |
 
-### TS-021 — /dein-ort/starten
+### TS-WEB-0021 — /dein-ort/starten
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
 | A1 | static | **pass** | static read of the guard/manifest; `pnpm check` green |
-| A2 | e2e | **fail** | `/dein-ort/starten` is a dynamic route against TS-021 D10 → F-2-13, recorded not re-filed |
+| A2 | e2e | **fail** | `/dein-ort/starten` is a dynamic route against TS-WEB-0021 D10 → F-2-13, recorded not re-filed |
 | A3 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A4 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A5 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
@@ -172,7 +172,7 @@ F-2-30 surfaced.
 | A14 | e2e | **fail** | the uncovered branch is consumed by nothing; searching 99999 renders a covered demo place → F-2-30 |
 | A15 | manual | **not-testable** | no content/tone review record exists for this run |
 
-### TS-022 — /mitmachen
+### TS-WEB-0022 — /mitmachen
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -193,7 +193,7 @@ F-2-30 surfaced.
 | A15 | integration | **pass** | code read + curl against :3100 |
 | A16 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 
-### TS-023 — /mitmachen/registrieren
+### TS-WEB-0023 — /mitmachen/registrieren
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -214,7 +214,7 @@ F-2-30 surfaced.
 | A15 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A16 | tool | **not-testable** | axe sweeps the light theme only and not the flows' later steps or the shadow root → F-2-58 |
 
-### TS-024 — /dein-kalender
+### TS-WEB-0024 — /dein-kalender
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -238,7 +238,7 @@ F-2-30 surfaced.
 | A18 | static | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A19 | manual | **fail** | `dein-kalender-6-trust` has an empty `derived_from` and ships anyway → F-2-57 |
 
-### TS-025 — /dein-kalender/bestellen
+### TS-WEB-0025 — /dein-kalender/bestellen
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -257,7 +257,7 @@ F-2-30 surfaced.
 | A13 | manual | **not-testable** | no screen reader available; the keyboard half was walked at entry-point level only |
 | A14 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 
-### TS-026 — /deine-region (+ /angebot)
+### TS-WEB-0026 — /deine-region (+ /angebot)
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -279,7 +279,7 @@ F-2-30 surfaced.
 | A16 | static | **pass** | static read of the guard/manifest; `pnpm check` green |
 | A17 | manual | **fail** | the map claim ships without an owner confirmation → F-2-57 |
 
-### TS-027 — /ueber-uns
+### TS-WEB-0027 — /ueber-uns
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -299,7 +299,7 @@ F-2-30 surfaced.
 | A14 | e2e | **pass** | hero 21/9, proof slot 5/2, portrait 4/5 all declared before data; PerformanceObserver over load plus full scroll measured CLS = 0.0048 |
 | A15 | manual | **pass** | every photo carries `Nicht motivgenau · Platzhalter`; `Foto gesucht` surfaces present |
 
-### TS-028 — /ueber-uns/archiv
+### TS-WEB-0028 — /ueber-uns/archiv
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -309,7 +309,7 @@ F-2-30 surfaced.
 | A4 | e2e | **fail** | selecting a chip changes the count line to "1 VON 6" but leaves all six rows rendered and visible → F-2-59 |
 | A5 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A6 | e2e | **not-testable** | vacuous while F-2-59 is open: no row is ever removed, so there is no surviving subset whose order could differ |
-| A7 | integration | **not-testable** | the media-echo pipeline has zero cleared entries (Q-045) |
+| A7 | integration | **not-testable** | the media-echo pipeline has zero cleared entries (Q-0045) |
 | A8 | tool | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A9 | e2e | **pass** | JavaScript disabled: all six cleared rows render and are visible; the chip container is absent from the DOM entirely |
 | A10 | tool | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
@@ -318,7 +318,7 @@ F-2-30 surfaced.
 | A13 | tool | **not-testable** | no CLS measurement harness in this run; and with no skeletons (F-2-39) the counter branches do not exist |
 | A14 | manual | **fail** | no archive row carries an outbound link → F-2-47 |
 
-### TS-029 — /rechtliches
+### TS-WEB-0029 — /rechtliches
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -336,7 +336,7 @@ F-2-30 surfaced.
 | A13 | e2e | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A14 | integration | **fail** | a heading level is skipped inside the imported privacy policy → F-2-19, recorded not re-filed |
 
-### TS-007 — Content pipeline
+### TS-WEB-0007 — Content pipeline
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -357,7 +357,7 @@ F-2-30 surfaced.
 | A15 | manual | **not-testable** | no bumped package version to dry-run P7 against → F-2-18 |
 | A16 | tool | **not-testable** | no segment-independence lint exists — blocked, reported against F-2-18 (F-2-34 is the counter-example) |
 
-### TS-005 — Relevance engine
+### TS-WEB-0005 — Relevance engine
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -378,7 +378,7 @@ F-2-30 surfaced.
 | A15 | static | **fail** | no `claims` key, no proof resolution in `validate.ts` → F-2-43 |
 | A16 | unit | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 
-### TS-008 — Live data
+### TS-WEB-0008 — Live data
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -397,7 +397,7 @@ F-2-30 surfaced.
 | A13 | tool | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A14 | integration | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 
-### TS-009 — Rendering and resilience
+### TS-WEB-0009 — Rendering and resilience
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -415,7 +415,7 @@ F-2-30 surfaced.
 | A12 | tool | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A13 | manual | **not-testable** | no screen reader available; and no skeleton renders anywhere (F-2-39) |
 
-### TS-010 — Personalization
+### TS-WEB-0010 — Personalization
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -431,11 +431,11 @@ F-2-30 surfaced.
 | A10 | unit | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A11 | static | **pass** | static read of the guard/manifest; `pnpm check` green |
 | A12 | e2e | **pass** | across six walked routes: zero cookies, zero `Set-Cookie`, empty `localStorage`/`sessionStorage`. The D10 session flag is not built, so "the only stored key" is vacuous |
-| A13 | e2e | **not-testable** | the language suggestion is not built in phase 1 (TS-010 D10); the criterion says "(when built)" |
-| A14 | e2e | **pass** | primary conversion identical at stage 0 and stage 3 on all 12 DE routes; only `/dein-ort/starten` gains `?ort=` on the same target, which TS-022-A14 sanctions |
-| A15 | manual | **not-testable** | the geo flag is off (verified), but no Q-008 sign-off record exists in this repo |
+| A13 | e2e | **not-testable** | the language suggestion is not built in phase 1 (TS-WEB-0010 D10); the criterion says "(when built)" |
+| A14 | e2e | **pass** | primary conversion identical at stage 0 and stage 3 on all 12 DE routes; only `/dein-ort/starten` gains `?ort=` on the same target, which TS-WEB-0022-A14 sanctions |
+| A15 | manual | **not-testable** | the geo flag is off (verified), but no Q-0008 sign-off record exists in this repo |
 
-### TS-011 — SEO
+### TS-WEB-0011 — SEO
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -454,7 +454,7 @@ F-2-30 surfaced.
 | A13 | manual | **not-testable** | post-cutover Search Console observation; nothing is launched |
 | A14 | integration | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 
-### TS-012 — Analytics
+### TS-WEB-0012 — Analytics
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -470,7 +470,7 @@ F-2-30 surfaced.
 | A10 | manual | **not-testable** | `EtrackerLoader` is never imported and the tracker is the mock adapter (`state/open.md` row 83) |
 | A11 | static | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 
-### TS-013 — Privacy
+### TS-WEB-0013 — Privacy
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -479,14 +479,14 @@ F-2-30 surfaced.
 | A3 | static | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 | A5 | integration | **pass** | named by a green test in `pnpm check` / `pnpm e2e` |
 
-### TS-016 — Forms and leads
+### TS-WEB-0016 — Forms and leads
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
 | A1 | static | **pass** | static read of the guard/manifest; `pnpm check` green |
 | A2 | integration | **fail** | S2's quote mount is missing on `/deine-region` → F-2-48 |
 | A3 | e2e | **pass** | five sentinel-filled quote fields submitted: zero external requests, no sentinel in any URL, console line or analytics payload. Judged against the envoy mock, whose fields carry no `name` |
-| A4 | static | **not-testable** | the widget contract's published variable set is UNKNOWN (Q-022); no mapping file exists |
+| A4 | static | **not-testable** | the widget contract's published variable set is UNKNOWN (Q-0022); no mapping file exists |
 | A5 | e2e | **fail** | `/deine-region` and `/deine-region/angebot` paste a second, different placeholder URL → F-2-32 |
 | A6 | e2e | **pass** | all four D8 steps walked with the briefing exit visible on each; step 4 shows a copyable snippet, zero payment fields, no payment host in any request or in the CSP |
 | A7 | static | **fail** | no archive row renders a preview image or an outbound link → F-2-47 |
@@ -498,7 +498,7 @@ F-2-30 surfaced.
 | A13 | manual | **fail** | the two-working-day promise ships while C11 is UNKNOWN → F-2-57 |
 | A14 | e2e | **not-testable** | there is no widget script to block — the mount is a server-rendered mock, so the fallback branch is unreachable from the browser. The "no empty or permanently loading slot" half passes |
 
-### TS-014 — Security (sweep scope)
+### TS-WEB-0014 — Security (sweep scope)
 
 | AC | Level | Verdict | Evidence |
 | --- | --- | --- | --- |
@@ -523,7 +523,7 @@ subject does not exist yet (the Portalize embed — F-2-15, personalization
 stage 2 — F-2-14, interest landing pages), and the five axe criteria that
 demand three themes where the sweep covers one (F-2-58).
 
-## Security sweep (TS-014 scope)
+## Security sweep (TS-WEB-0014 scope)
 
 **`semgrep`**, OSS 1.155.0, important-only (`category=security`,
 confidence and impact medium-to-high), over `app/ src/ scripts/` — 443
@@ -556,14 +556,14 @@ are interpolated into `script-src` without shape validation. The module is
 new, handles a secret, performs a request-derived fetch, and has zero
 tests. Reachability was **not** reproduced end to end and the report says
 so. **F-2-37** records the dead `report-uri /api/csp-report` pointer, which
-is a TS-014 D2 vs TS-017 D4 collision rather than a coding slip.
+is a TS-WEB-0014 D2 vs TS-WEB-0017 D4 collision rather than a coding slip.
 
 The chaos personas' XSS hypothesis (C-B-3, C-B-4) does **not** hold and is
 dismissed below with its evidence. Their `maxlength` observation does hold
 and is F-2-38.
 
-TS-014-A1 now **passes**: `scripts/check-csp.ts` exists and runs inside
-`pnpm check`, which discharges F-1-2. TS-014-A2 passes locally and against
+TS-WEB-0014-A1 now **passes**: `scripts/check-csp.ts` exists and runs inside
+`pnpm check`, which discharges F-1-2. TS-WEB-0014-A2 passes locally and against
 the preview (`e2e/smoke.spec.ts` asserts every D2 directive); the preview's
 `'unsafe-inline'` branch stays recorded as F-2-27 and is not re-filed.
 
@@ -587,11 +587,11 @@ Each observation below is either a finding or a dismissal with its reason.
 | C-H-3 (language switcher present in footer) | **dismissed** — working as designed |
 | C-A-01 (`{county-or-organization}`) | **finding F-2-34** — reproduced locally and on the fresh preview |
 | C-A-02, C-A-03 (German form labels and footer on the English quote page) | **finding F-2-33** |
-| C-A-04, C-A-05 (form data lost across sessions; registration resumes at step 1) | **dismissed** — TS-023-A2/A3 and TS-025 D8 fix this as the intended behaviour ("the state lives entirely in the URL"; invoice details are deliberately lost), the order page says so in its own copy, and the e2e tests for both pass. The persona's own note calls it intentional |
-| C-A-06 (form data lost across a language switch) | **dismissed** — same rule; the route context is correctly preserved, which is what TS-001-A7 asks for |
-| C-K-1 (language switch from `/ueber-uns/archiv` lands on `/dein-kalender`) | **dismissed as stale.** Re-checked on both the dev server and the fresh preview: the switch points at `/en/about/archive`, the correct equivalent. The observation was made against the superseded preview `83x6zbys4`. TS-001-A7 **passes** |
+| C-A-04, C-A-05 (form data lost across sessions; registration resumes at step 1) | **dismissed** — TS-WEB-0023-A2/A3 and TS-WEB-0025 D8 fix this as the intended behaviour ("the state lives entirely in the URL"; invoice details are deliberately lost), the order page says so in its own copy, and the e2e tests for both pass. The persona's own note calls it intentional |
+| C-A-06 (form data lost across a language switch) | **dismissed** — same rule; the route context is correctly preserved, which is what TS-WEB-0001-A7 asks for |
+| C-K-1 (language switch from `/ueber-uns/archiv` lands on `/dein-kalender`) | **dismissed as stale.** Re-checked on both the dev server and the fresh preview: the switch points at `/en/about/archive`, the correct equivalent. The observation was made against the superseded preview `83x6zbys4`. TS-WEB-0001-A7 **passes** |
 | C-K-2 (duplicate `nav` accessible name) | **dismissed as already filed and since fixed** — F-2-3, resolved in `2eeab26` |
-| C-K-3 – C-K-8 (archive filter, place search, flow entry points, skip link all keyboard-reachable) | **dismissed** — positive observations, re-confirmed; they are the evidence behind TS-002-A4's partial coverage note |
+| C-K-3 – C-K-8 (archive filter, place search, flow entry points, skip link all keyboard-reachable) | **dismissed** — positive observations, re-confirmed; they are the evidence behind TS-WEB-0002-A4's partial coverage note |
 
 ## Triage of the UAT signals
 
@@ -601,7 +601,7 @@ Each observation below is either a finding or a dismissal with its reason.
 | The 404 body is a developer note and has no place search | **finding F-2-31** |
 | Both briefing links answer "Termin nicht gefunden" | **finding F-2-32** — and the real booking link is in the installed hub package |
 | German labels and buttons in the English registration and quote flows | **finding F-2-33** |
-| "Demo-Daten — … solange Q-020 offen ist" and other internal ids in copy | **finding F-2-35** |
+| "Demo-Daten — … solange Q-0020 offen ist" and other internal ids in copy | **finding F-2-35** |
 | "Weiter" next to "Absenden" on order step 3 | **finding F-2-51**, with a correction: "Weiter" *does* navigate (verified); the confusion is the inert "Absenden" beside it |
 | "1 Orte ausgewählt" | **finding F-2-53** |
 | Step 4 promises the code will be emailed | **finding F-2-54** |
@@ -609,7 +609,7 @@ Each observation below is either a finding or a dismissal with its reason.
 | "Heute gegen mit dem Produkt" reads like a dropped word; "…aus dem Landkreis geoname.900001"; "1 Orte" | the raw county id is the same class as F-2-35 and is recorded there; the dropped-word headline is an editorial item for the content workstream, below the finding bar |
 | `DEMO-DATEN` on a question about the visitor's own real club made her doubt the form | **dismissed as the guardrail working.** The mock rule requires the badge; the discomfort is the honest cost of shipping a mocked flow. Worth a copy review, not a finding |
 | The English handover link ends at `app.schafe-vorm-fenster.de/registrieren` (German segment) | **dismissed** — the app is a separate system outside this repo's scope (`plan/gate-2-scope.md`); recorded as a cross-system note |
-| The nav label "WAS IST LOS" does not say "search for your town here" | **dismissed** — TS-004 D4 fixes the navigation labels; changing them is a concept decision, not a defect |
+| The nav label "WAS IST LOS" does not say "search for your town here" | **dismissed** — TS-WEB-0004 D4 fixes the navigation labels; changing them is a concept decision, not a defect |
 
 ## Out of scope at this gate
 
@@ -618,30 +618,30 @@ its owner.
 
 | AC / area | Owner |
 | --- | --- |
-| TS-015-A3, A4, A5 (stage-2 CI; GitHub Packages org setting) | Jan (org owner), then M5 |
-| TS-015-A7, A8, A10 (canary production deploy, rollback, auto-merge) | after the run (go-live) |
-| TS-015-A9 (Lighthouse CI, bundle guard, axe as a pipeline job) | M5 |
-| TS-015-A11 (`next.schafe-vorm-fenster.de` serves `next-2026`) | Jan (domains), after the run |
-| TS-015-A12 (branch protection contexts, repository secrets) | after the run |
-| TS-001-A4 (`.de` apex → `www` 301 against the real domain) | after the run (production domains) |
-| TS-001-A9 (every D1 domain over HTTPS in its TLD default language) | after the run |
-| TS-013-A4, A6, A7, A8 (deployed CSP allowlist, closed request set) | M5 preview-smoke strand |
-| TS-029-A11 (production build fails without an accessibility document) | M5 / CI owner |
-| TS-003 (A1–A8), TS-017 (A1–A17) (performance budgets, foundation) | closed at M1; regression at M5 |
-| TS-018 (scope boundaries) | M5 |
+| TS-WEB-0015-A3, A4, A5 (stage-2 CI; GitHub Packages org setting) | Jan (org owner), then M5 |
+| TS-WEB-0015-A7, A8, A10 (canary production deploy, rollback, auto-merge) | after the run (go-live) |
+| TS-WEB-0015-A9 (Lighthouse CI, bundle guard, axe as a pipeline job) | M5 |
+| TS-WEB-0015-A11 (`next.schafe-vorm-fenster.de` serves `next-2026`) | Jan (domains), after the run |
+| TS-WEB-0015-A12 (branch protection contexts, repository secrets) | after the run |
+| TS-WEB-0001-A4 (`.de` apex → `www` 301 against the real domain) | after the run (production domains) |
+| TS-WEB-0001-A9 (every D1 domain over HTTPS in its TLD default language) | after the run |
+| TS-WEB-0013-A4, A6, A7, A8 (deployed CSP allowlist, closed request set) | M5 preview-smoke strand |
+| TS-WEB-0029-A11 (production build fails without an accessibility document) | M5 / CI owner |
+| TS-WEB-0003 (A1–A8), TS-WEB-0017 (A1–A17) (performance budgets, foundation) | closed at M1; regression at M5 |
+| TS-WEB-0018 (scope boundaries) | M5 |
 
-Consequence for the tool strand: **Lighthouse was not run for TS-003's
-budgets**, because TS-003 is out of scope at this gate by the scope
-document's own §4. It was run for TS-002-A2, which is in scope, and passes.
+Consequence for the tool strand: **Lighthouse was not run for TS-WEB-0003's
+budgets**, because TS-WEB-0003 is out of scope at this gate by the scope
+document's own §4. It was run for TS-WEB-0002-A2, which is in scope, and passes.
 
 ## Known deviations recorded, not re-filed
 
-Per `plan/gate-2-scope.md` §1.2 and §1.5: TS-021-A2/D10 → F-2-13;
-TS-023-A6 → F-2-5 (now resolved, `2b50928`; the AC passes); TS-026 D3 →
-F-2-21; TS-029-A12 → F-2-6 (instrument delivered; the remaining theme gap
-is F-2-58); TS-029-A14 → F-2-19; TS-025 D9 vs TS-011 D9 → F-2-23;
-TS-006-A6 on registration steps 2–3 → F-2-10; TS-005-A6 unsatisfiable as
-written → open row 66, recorded not reworded; TS-007-A3/A6/A13/A16 →
+Per `plan/gate-2-scope.md` §1.2 and §1.5: TS-WEB-0021-A2/D10 → F-2-13;
+TS-WEB-0023-A6 → F-2-5 (now resolved, `2b50928`; the AC passes); TS-WEB-0026 D3 →
+F-2-21; TS-WEB-0029-A12 → F-2-6 (instrument delivered; the remaining theme gap
+is F-2-58); TS-WEB-0029-A14 → F-2-19; TS-WEB-0025 D9 vs TS-WEB-0011 D9 → F-2-23;
+TS-WEB-0006-A6 on registration steps 2–3 → F-2-10; TS-WEB-0005-A6 unsatisfiable as
+written → open row 66, recorded not reworded; TS-WEB-0007-A3/A6/A13/A16 →
 F-2-18; the preview `'unsafe-inline'` branch → F-2-27; F-1-2 → **discharged**
 this run.
 
@@ -654,39 +654,39 @@ has one. No fix was made anywhere in this run.
 
 | Finding | Sev | What | AC(s) |
 | --- | --- | --- | --- |
-| F-2-30 | **critical** | the uncovered-place branch never fires; any unresolved search answers with a confident demo place | TS-019-A3/A4/A5, TS-021-A6/A14, TS-008-A7 |
-| F-2-31 | high | the 404 ships a developer note as copy and has neither place search nor jobs band | TS-004-A4 |
-| F-2-32 | high | `request-product-briefing` is a dead link; two pages paste a second placeholder URL | TS-016-A5 |
-| F-2-33 | high | the English conversion flows render German UI strings, including the primary buttons | locale/TS-007 (tail of F-2-4) |
-| F-2-34 | high | `{county-or-organization}` renders literally in the English quote `h1` | TS-026 quote half |
-| F-2-35 | high | internal ids (`Q-020`, `TS-007 D12`, `TS-029 Open Point #1`, `DEC-027`) in visitor copy on every route | content compliance |
-| F-2-36 | high | the bypass secret is sent to a Host-controlled origin; the answer is cached process-wide and written into `script-src` unvalidated | TS-014 scope |
-| F-2-39 | high | no island renders a skeleton; no `<Suspense>` exists in the tree | TS-005-A9, TS-009-A3/A9 |
-| F-2-40 | high | every content artefact is `status: draft` and every one renders | TS-007-A14 |
-| F-2-59 | high | the archive filter updates its count but hides no rows | TS-028-A4 |
-| F-2-60 | high | `buy-calendar-licence` fires twice on soft back/forward | TS-012-A5, TS-016-A12, TS-025-A11 |
-| F-2-61 | high | `/dein-ort`'s empty state switches neither CTA nor position 2, and leaks raw markdown | TS-008-A6 |
-| F-2-62 | high | registration skips step 1 from `/dein-ort/starten`; the place is neither shown nor changeable | TS-023-A7 |
-| F-2-37 | medium | `report-uri /api/csp-report` names a route that cannot exist (TS-014 D2 vs TS-017 D4) | TS-014 scope |
-| F-2-38 | medium | two pages read `?ort=` raw; no input anywhere has a length bound | TS-014 scope |
-| F-2-41 | medium | the context band is a `section` in `main`, absent on four pages | TS-011-A4 |
-| F-2-42 | medium | no OG image on any page; `twitter:card` is `summary` | TS-011-A8/A9 |
-| F-2-43 | medium | six declared build guards do not exist | TS-002-A3, TS-005-A15, TS-006-A8, TS-007-A4, TS-011-A7, TS-026-A8 |
-| F-2-44 | medium | the type scale is declared outside the token import and goes to 11 px | TS-002-A10 |
-| F-2-45 | medium | the landing-only domain rule is not implemented | TS-004-A3 |
-| F-2-46 | medium | `/en/legal` renders German bodies; generation-only frontmatter validates | TS-007-A11 |
-| F-2-47 | medium | archive rows carry neither a preview image nor an outbound link | TS-016-A7, TS-028-A14 |
-| F-2-48 | medium | S2's quote mount is missing on `/deine-region`; no honeypot, no timing gate | TS-016-A2/A10 |
-| F-2-49 | medium | `/dein-ort/starten` never re-resolves and echoes the raw parameter as the place name | TS-021-A7 |
-| F-2-50 | medium | `/deine-region`'s manifest declares one live module where D1 names four | TS-026-A15 |
-| F-2-51 | medium | order step 3 offers two calls to action, one of them inert | TS-006 D-level |
-| F-2-52 | medium | TS-010-A5 and TS-027-A7 contradict each other on the stage-0 empty slot | both |
-| F-2-55 | medium | `/start` and `/llms.txt` do not exist; the guarding tests are self-referential | TS-004-A1/A5 |
-| F-2-56 | medium | no route is partially prerendered; four content routes are fully dynamic | TS-009-A2 |
-| F-2-57 | medium | three claims ship without the confirmation their criteria make a precondition | TS-016-A13, TS-024-A19, TS-026-A17 |
-| F-2-58 | medium | the axe sweep covers one of three declared themes | TS-002-A1, TS-029-A12, TS-016-A8, TS-023-A16, TS-025-A12 |
-| F-2-63 | medium | `/deine-region` asserts a county at stage 0 and names it `geoname.900001` | TS-026-A10 |
-| F-2-64 | medium | the newsletter consent line links `/en/legal#datenschutz`, an anchor that does not exist | TS-004-A8/A9 |
+| F-2-30 | **critical** | the uncovered-place branch never fires; any unresolved search answers with a confident demo place | TS-WEB-0019-A3/A4/A5, TS-WEB-0021-A6/A14, TS-WEB-0008-A7 |
+| F-2-31 | high | the 404 ships a developer note as copy and has neither place search nor jobs band | TS-WEB-0004-A4 |
+| F-2-32 | high | `request-product-briefing` is a dead link; two pages paste a second placeholder URL | TS-WEB-0016-A5 |
+| F-2-33 | high | the English conversion flows render German UI strings, including the primary buttons | locale/TS-WEB-0007 (tail of F-2-4) |
+| F-2-34 | high | `{county-or-organization}` renders literally in the English quote `h1` | TS-WEB-0026 quote half |
+| F-2-35 | high | internal ids (`Q-0020`, `TS-WEB-0007 D12`, `TS-WEB-0029 Open Point #1`, `DEC-0027`) in visitor copy on every route | content compliance |
+| F-2-36 | high | the bypass secret is sent to a Host-controlled origin; the answer is cached process-wide and written into `script-src` unvalidated | TS-WEB-0014 scope |
+| F-2-39 | high | no island renders a skeleton; no `<Suspense>` exists in the tree | TS-WEB-0005-A9, TS-WEB-0009-A3/A9 |
+| F-2-40 | high | every content artefact is `status: draft` and every one renders | TS-WEB-0007-A14 |
+| F-2-59 | high | the archive filter updates its count but hides no rows | TS-WEB-0028-A4 |
+| F-2-60 | high | `buy-calendar-licence` fires twice on soft back/forward | TS-WEB-0012-A5, TS-WEB-0016-A12, TS-WEB-0025-A11 |
+| F-2-61 | high | `/dein-ort`'s empty state switches neither CTA nor position 2, and leaks raw markdown | TS-WEB-0008-A6 |
+| F-2-62 | high | registration skips step 1 from `/dein-ort/starten`; the place is neither shown nor changeable | TS-WEB-0023-A7 |
+| F-2-37 | medium | `report-uri /api/csp-report` names a route that cannot exist (TS-WEB-0014 D2 vs TS-WEB-0017 D4) | TS-WEB-0014 scope |
+| F-2-38 | medium | two pages read `?ort=` raw; no input anywhere has a length bound | TS-WEB-0014 scope |
+| F-2-41 | medium | the context band is a `section` in `main`, absent on four pages | TS-WEB-0011-A4 |
+| F-2-42 | medium | no OG image on any page; `twitter:card` is `summary` | TS-WEB-0011-A8/A9 |
+| F-2-43 | medium | six declared build guards do not exist | TS-WEB-0002-A3, TS-WEB-0005-A15, TS-WEB-0006-A8, TS-WEB-0007-A4, TS-WEB-0011-A7, TS-WEB-0026-A8 |
+| F-2-44 | medium | the type scale is declared outside the token import and goes to 11 px | TS-WEB-0002-A10 |
+| F-2-45 | medium | the landing-only domain rule is not implemented | TS-WEB-0004-A3 |
+| F-2-46 | medium | `/en/legal` renders German bodies; generation-only frontmatter validates | TS-WEB-0007-A11 |
+| F-2-47 | medium | archive rows carry neither a preview image nor an outbound link | TS-WEB-0016-A7, TS-WEB-0028-A14 |
+| F-2-48 | medium | S2's quote mount is missing on `/deine-region`; no honeypot, no timing gate | TS-WEB-0016-A2/A10 |
+| F-2-49 | medium | `/dein-ort/starten` never re-resolves and echoes the raw parameter as the place name | TS-WEB-0021-A7 |
+| F-2-50 | medium | `/deine-region`'s manifest declares one live module where D1 names four | TS-WEB-0026-A15 |
+| F-2-51 | medium | order step 3 offers two calls to action, one of them inert | TS-WEB-0006 D-level |
+| F-2-52 | medium | TS-WEB-0010-A5 and TS-WEB-0027-A7 contradict each other on the stage-0 empty slot | both |
+| F-2-55 | medium | `/start` and `/llms.txt` do not exist; the guarding tests are self-referential | TS-WEB-0004-A1/A5 |
+| F-2-56 | medium | no route is partially prerendered; four content routes are fully dynamic | TS-WEB-0009-A2 |
+| F-2-57 | medium | three claims ship without the confirmation their criteria make a precondition | TS-WEB-0016-A13, TS-WEB-0024-A19, TS-WEB-0026-A17 |
+| F-2-58 | medium | the axe sweep covers one of three declared themes | TS-WEB-0002-A1, TS-WEB-0029-A12, TS-WEB-0016-A8, TS-WEB-0023-A16, TS-WEB-0025-A12 |
+| F-2-63 | medium | `/deine-region` asserts a county at stage 0 and names it `geoname.900001` | TS-WEB-0026-A10 |
+| F-2-64 | medium | the newsletter consent line links `/en/legal#datenschutz`, an anchor that does not exist | TS-WEB-0004-A8/A9 |
 | F-2-53 | low | "1 Orte ausgewählt" — plural form for a count of one | — |
 | F-2-54 | low | step 4 promises an email that nothing sends | — |
 
@@ -749,7 +749,7 @@ The three things I would put in the next round before anything else:
 
 One methodological point for the retest, because it changes how evidence
 should be read here. Three criteria were overridden to **fail despite a
-green test naming them** (TS-004-A1, A4, A5): the tests assert against the
+green test naming them** (TS-WEB-0004-A1, A4, A5): the tests assert against the
 route registry or against a subset of the criterion's clauses rather than
 against the criterion. `check:specs` reports coverage by id, not by clause,
 so an id being "covered" is not evidence. I would treat the W3 list as a

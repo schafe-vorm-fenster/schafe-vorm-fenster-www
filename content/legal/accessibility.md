@@ -8,7 +8,7 @@ derived_from: []
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 provenance: generated
-review_required: "legal counsel, before any production build (TS-029 D8, state/open.md #21)"
+review_required: "legal counsel, before any production build (TS-WEB-0029 D8, state/open.md #21)"
 anchor: barrierefreiheit
 ---
 

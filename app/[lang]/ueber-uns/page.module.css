@@ -1,5 +1,5 @@
 /*
- * `/ueber-uns`'s own two layout values. Tokens only (TS-017 D2/D3,
+ * `/ueber-uns`'s own two layout values. Tokens only (TS-WEB-0017 D2/D3,
  * `pnpm check:brand`): no colour literal, no font family, no raw length that
  * the design system does not already name.
  */
@@ -47,7 +47,7 @@
 }
 
 /*
- * The reserved seventh position of the proof stream (TS-027 D5): still in
+ * The reserved seventh position of the proof stream (TS-WEB-0027 D5): still in
  * the DOM, still countable through `data-empty-proof`, and in the `rows`
  * layout it closes the list the way every compact row opens it, with the
  * stream's own hairline, rather than standing there as a 5:2 grey

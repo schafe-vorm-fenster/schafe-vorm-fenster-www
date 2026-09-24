@@ -2,13 +2,13 @@
 /**
  * `pnpm images:generate` — renders the missing imagery of the page artifacts.
  *
- * DEC-068 fills a gap with a marked placeholder rather than leaving a hole.
+ * DEC-0068 fills a gap with a marked placeholder rather than leaving a hole.
  * The first placeholder generation (`scripts/make-placeholders.mjs`) answers
  * with a flat hatch; this one answers with a photographic rendition, because
  * a hatch cannot show what a photo section looks like when there is a photo
  * in it, and the run's target is a prototype that can be reviewed and
  * measured. See ADR-077 for the decision and for the guardrails that keep it
- * on the safe side of DEC-068 rule 3 — the badge stays on, no portrait is
+ * on the safe side of DEC-0068 rule 3 — the badge stays on, no portrait is
  * ever generated, and no proof slot is ever filled by one.
  *
  * What it reads: the `images:` block of every `content/pages/**\/de.md`
@@ -66,7 +66,7 @@ const PRICE_PER_IMAGE_USD = 0.04;
  * `hero` is the only two-rendition case: the design system makes the hero
  * 8:9 on the phone and 21:9 from 48rem (`app/styles/components.css`), and a
  * 21:9 frame centre-cropped into an 8:9 box loses most of the motif. Base is
- * the phone rendition — mobile-first, TS-017 D2 — and `<id>-wide.webp` is the
+ * the phone rendition — mobile-first, TS-WEB-0017 D2 — and `<id>-wide.webp` is the
  * landscape one the media query swaps in.
  */
 const RATIOS = {
@@ -83,7 +83,7 @@ const RATIOS = {
 };
 
 /**
- * TS-003 D1: every image stays under 100 KB. Quality 80 is the start; a busy
+ * TS-WEB-0003 D1: every image stays under 100 KB. Quality 80 is the start; a busy
  * motif that misses the budget is re-encoded down the ladder rather than
  * shipped over it, because the budget is the promise and the image is a
  * placeholder either way.
@@ -106,7 +106,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  *
  * No text and no signage, because rendered lettering is always wrong and a
  * legible sign would name a place the picture is not. No identifiable face,
- * because DEC-068 rule 3 forbids a synthetic person — portraits come from
+ * because DEC-0068 rule 3 forbids a synthetic person — portraits come from
  * `@schafe-vorm-fenster/people` or they do not exist.
  */
 const GUARDRAILS = [
@@ -217,7 +217,7 @@ function tokenExpiry(token) {
  *
  * `.env.local` is read, never written: it carries a manually added secret that
  * `vercel env pull` would drop. A missing or expired token is refreshed into a
- * scratch file under the OS temp directory instead (TS-014 / guardrails —
+ * scratch file under the OS temp directory instead (TS-WEB-0014 / guardrails —
  * credentials never land in a file that reaches the repository).
  */
 function ensureToken() {
@@ -304,7 +304,7 @@ async function renderWithRetry(ai, prompt, size, out, file, force = false) {
 
 /**
  * The budget pass. A busy motif — fog, foliage, a wall of detail — can miss
- * TS-003 D1's 100 KB even at the bottom of the quality ladder, and the file
+ * TS-WEB-0003 D1's 100 KB even at the bottom of the quality ladder, and the file
  * is already written by then. Rather than pay for the frame again, the file
  * itself is re-encoded and, if that is still not enough, narrowed: a
  * placeholder that is 200 px less wide is a better answer than a placeholder
@@ -356,7 +356,7 @@ async function fitBudget() {
     }
   }
   if (fitted.length > 0) {
-    console.log(`\nre-encoded to fit the 100 KB budget (TS-003 D1):`);
+    console.log(`\nre-encoded to fit the 100 KB budget (TS-WEB-0003 D1):`);
     for (const line of fitted) console.log(`  · ${line}`);
   }
 

@@ -1,7 +1,7 @@
 /**
  * Provenance on the page — the one place a module's `data-demo` marking is
  * decided
- * (plan/guardrails.md mock and dummy-content rules, TS-007 D6).
+ * (plan/guardrails.md mock and dummy-content rules, TS-WEB-0007 D6).
  *
  * The components already know how to show it: every module that depends on
  * late or external data takes one `state` prop, and `mocked` is "full dummy
@@ -19,7 +19,7 @@ import type { DataState } from "@/src/components/data-state";
  *
  * `sourced-empty-by-design` and `withheld` are deliberately *not* demo: those
  * slots stay visibly empty because a clearance is missing or a page spec
- * forbids the sentence (SRC-001 rule 4, TS-007 D2). Substituting copy there
+ * forbids the sentence (SRC-0001 rule 4, TS-WEB-0007 D2). Substituting copy there
  * is the one thing the guardrails forbid outright.
  */
 export function isDemoSlot(slot: ContentSlot): boolean {

@@ -57,7 +57,7 @@ hesitated — it does not judge pass/fail.
 - Visited a made-up path expecting either a normal 404 or another chance to
   search for my town. Instead the page's own body text reads: "Diese Adresse
   gibt es nicht. [Platzhalter M2 — Ortssuche und Job-Band folgen mit den
-  Komponenten, DEC-032.]" — a raw developer note, ticket ID included, shown as
+  Komponenten, DEC-0032.]" — a raw developer note, ticket ID included, shown as
   the page's actual content. Below it, a labeled placeholder region says
   "Platzhalter: place-search + context-band." There is no search here at all.
   As a visitor who mistyped a link, I have nowhere to go but "Zur Startseite."
@@ -75,7 +75,7 @@ hesitated — it does not judge pass/fail.
   answer was actually going to be recorded anywhere, or if I was filling out
   a sample form.
 - The footer contact form on this same page carries the note "DEMO-DATEN — es
-  wird nichts verschickt, solange Q-020 offen ist." — an internal ticket ID
+  wird nichts verschickt, solange Q-0020 offen ist." — an internal ticket ID
   exposed to visitors, sitting right next to a real "Absenden" button I might
   otherwise have tried.
 - Reached "Fast geschafft" / "Weiter in der App" at the end, pointing to

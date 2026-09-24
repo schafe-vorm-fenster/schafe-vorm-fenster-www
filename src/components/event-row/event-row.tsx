@@ -69,7 +69,7 @@ const CATEGORY_ICON: Record<EventCategory, IconName> = {
 };
 
 /**
- * 5 `event-row` [FIXED] — SRC-014 §Event row.
+ * 5 `event-row` [FIXED] — SRC-0014 §Event row.
  *
  * Structure: a flat row with a hairline above, 76 px tall — mono day number
  * at 28 px with the month beneath, the title at 21/700, the meta at 15 px
@@ -162,7 +162,7 @@ export function EventRow({
       </time>
       <h3 className={styles.title}>{title_}</h3>
       {meta ? <p className={styles.meta}>{meta}</p> : null}
-      {/* One element, two widths (SRC-014's mobile-first rule: `min-width`
+      {/* One element, two widths (SRC-0014's mobile-first rule: `min-width`
           queries only, one component tree). On the phone it is the bare
           24 px glyph of `categoryDisplay.listRow` and the label is read but
           not drawn; from `md` the same element is the badge the design

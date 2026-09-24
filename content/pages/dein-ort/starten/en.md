@@ -1,6 +1,6 @@
 ---
 id: dein-ort-starten-de
-page_id: TS-021
+page_id: TS-WEB-0021
 route: "/dein-ort/starten"
 seo:
   "/dein-ort/starten":
@@ -25,9 +25,9 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — 0 generated slots. Slot 2 now cites the 2022 Nordkurier record behind the permanence commitment and slot 4 the Lehre reference case; both are clearance: pending (Q-045, Q-014)"
-compliance_check: "state/content-map.md#compliance-checks — TS-021"
-schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+provenance: "sourced — 0 generated slots. Slot 2 now cites the 2022 Nordkurier record behind the permanence commitment and slot 4 the Lehre reference case; both are clearance: pending (Q-0045, Q-0014)"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0021"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 images:
   - id: dein-ort-starten-hero
     slot: dein-ort-starten-1-ack
@@ -53,11 +53,11 @@ images:
 
 # Start your place (`/dein-ort/starten`)
 
-Reached when the place search finds **no** place at all (TS-021 D3) —
+Reached when the place search finds **no** place at all (TS-WEB-0021 D3) —
 the difference from `/dein-ort` state B is deliberate: there, dates are
 missing; here, the place itself is missing from the system. This page
 never addresses the visitor directly with "you could be the first"
-(TS-021 D9, DEC-071) — that sentence belongs exclusively to
+(TS-WEB-0021 D9, DEC-0071) — that sentence belongs exclusively to
 `/dein-ort`.
 
 ## Slot 1 — Acknowledgment with place name
@@ -71,11 +71,11 @@ never addresses the visitor directly with "you could be the first"
 **Subline:** That can change — with one WhatsApp photo of the next flyer.
 
 The place name is plain text, escaped, never part of a link, a
-calendar row, or a number (TS-021 D6).
+calendar row, or a number (TS-WEB-0021 D6).
 
 ## Slot 2 — What it takes
 
-<!-- clearance: pending for the press record — the 2022 Nordkurier entry carries no `usage_rights` (Q-045, state/open.md #1). The offering record itself is free to use. -->
+<!-- clearance: pending for the press record — the 2022 Nordkurier entry carries no `usage_rights` (Q-0045, state/open.md #1). The offering record itself is free to use. -->
 <!-- id: dein-ort-starten-2-was-es-braucht; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
 
 **Heading:** One person is enough to get {place} into the calendar
@@ -102,7 +102,7 @@ commitment rather than a pricing decision that can be quietly reversed
 **Kicker:** This is what it looks like
 
 The place name shown comes from an actually covered, active
-place (TS-021 D7) — never from the searched-for, not-found place.
+place (TS-WEB-0021 D7) — never from the searched-for, not-found place.
 
 ## Slot 4 — Who usually starts it
 
@@ -118,7 +118,7 @@ place (TS-021 D7) — never from the searched-for, not-found place.
 Source: `@schafe-vorm-fenster/audiences#actors`, "Context" field — the
 audience record's own enumeration, no new invention.
 
-Tone (TS-021 D9): this paragraph assigns the task to no one. It names
+Tone (TS-WEB-0021 D9): this paragraph assigns the task to no one. It names
 who it usually is and leaves the reader to recognize herself in it.
 
 One documented case: in the municipality of Lehre (Helmstedt district,
@@ -138,7 +138,7 @@ outstanding).
 
 **Hint below the field:** Searching by place name is still to come — until then a postcode does it.
 
-Same component as on `/` and `/dein-ort` (TS-008 D7) — no behaviour of
+Same component as on `/` and `/dein-ort` (TS-WEB-0008 D7) — no behaviour of
 its own. The hint now lives here rather than only in code (state/open.md
 row 94), so the English page does not inherit the component's German
 default.
@@ -155,9 +155,9 @@ default.
 
 **Reassurance text:** Free, no signup fee, permanent.
 
-The value carries over unchanged and URL-encoded (TS-021 D8) — no app
+The value carries over unchanged and URL-encoded (TS-WEB-0021 D8) — no app
 link, no pre-filled account, no claim that {place} is already
-registered (honesty rule, TS-021 D8). With no place name, the second
+registered (honesty rule, TS-WEB-0021 D8). With no place name, the second
 label stands in: it names no place because none is settled, and so
 promises none either (state/open.md row 94).
 

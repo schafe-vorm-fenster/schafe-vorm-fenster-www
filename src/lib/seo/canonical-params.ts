@@ -1,5 +1,5 @@
 /**
- * Query-parameter canonicalisation — TS-011 D9, refining TS-001 D6's
+ * Query-parameter canonicalisation — TS-WEB-0011 D9, refining TS-WEB-0001 D6's
  * "self, exactly as served".
  *
  * "A query parameter changes what a page *shows*, never which page it

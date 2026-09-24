@@ -3,11 +3,11 @@ import { describe, expect, it } from "vitest";
 import { loadPage, parsePage, slot, slotsOfType } from "@/src/lib/content/loader";
 import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
 
-// The `seo` block is required frontmatter (TS-011 D5, F-2-72) — the page's
+// The `seo` block is required frontmatter (TS-WEB-0011 D5, F-2-72) — the page's
 // own title and meta description, keyed by the German route path.
 const artifact = `---
 id: home-de
-page_id: TS-019
+page_id: TS-WEB-0019
 route: "/"
 seo:
   "/":
@@ -41,7 +41,7 @@ provenance: "mixed"
 **Karte 1:** Schlatkow
 `;
 
-describe("TS-007-A1: a page artifact parses into a typed page", () => {
+describe("TS-WEB-0007-A1: a page artifact parses into a typed page", () => {
   const page = parsePage(artifact, {
     routeId: "home",
     locale: "de",
@@ -50,8 +50,8 @@ describe("TS-007-A1: a page artifact parses into a typed page", () => {
 
   it("validates the frontmatter and carries the spec id, route and provenance key", () => {
     expect(page.ok).toBe(true);
-    expect(page.specId).toBe("TS-019");
-    expect(page.frontmatter?.page_id).toBe("TS-019");
+    expect(page.specId).toBe("TS-WEB-0019");
+    expect(page.frontmatter?.page_id).toBe("TS-WEB-0019");
     expect(page.frontmatter?.derived_from).toEqual(["ia"]);
     expect(page.status).toBe("draft");
   });
@@ -83,7 +83,7 @@ describe("TS-007-A1: a page artifact parses into a typed page", () => {
   });
 });
 
-describe("TS-007-A5: an unknown or missing slot is a typed empty, never a throw", () => {
+describe("TS-WEB-0007-A5: an unknown or missing slot is a typed empty, never a throw", () => {
   const page = parsePage(artifact, {
     routeId: "home",
     locale: "de",
@@ -129,7 +129,7 @@ describe("TS-007-A5: an unknown or missing slot is a typed empty, never a throw"
   });
 });
 
-describe("TS-007-A1: the provenance surface a page renders the badge from", () => {
+describe("TS-WEB-0007-A1: the provenance surface a page renders the badge from", () => {
   const page = parsePage(artifact, {
     routeId: "home",
     locale: "de",
@@ -151,7 +151,7 @@ describe("TS-007-A1: the provenance surface a page renders the badge from", () =
     expect(slotState(slot(page, "home-99-nope"))).toBe("empty");
   });
 
-  it("keeps a clearance-gated slot empty rather than substituting copy (SRC-001 rule 4)", () => {
+  it("keeps a clearance-gated slot empty rather than substituting copy (SRC-0001 rule 4)", () => {
     const gated = parsePage(
       artifact.replace("provenance: sourced;", "provenance: sourced-empty-by-design;"),
       { routeId: "home", locale: "de", file: "content/pages/home/de.md" },
@@ -163,7 +163,7 @@ describe("TS-007-A1: the provenance surface a page renders the badge from", () =
   });
 });
 
-describe("TS-007-A14 (F-2-40): the editorial gate of D11", () => {
+describe("TS-WEB-0007-A14 (F-2-40): the editorial gate of D11", () => {
   const approved = artifact
     .replace("status: draft\nlocale: de", "status: approved\nlocale: de")
     .replaceAll("status: draft -->", "status: approved -->")

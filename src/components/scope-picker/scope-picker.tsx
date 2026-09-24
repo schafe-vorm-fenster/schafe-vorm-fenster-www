@@ -28,7 +28,7 @@ export interface ScopePickerProps extends DataStateProps {
 }
 
 /**
- * 55 `scope-picker` [PROPOSED] — TS-025 D3/D3a.
+ * 55 `scope-picker` [PROPOSED] — TS-WEB-0025 D3/D3a.
  *
  * Structure: `place-search` (rendered by the caller, above this component) +
  * removable `chip`s; each hit, each ZIP's places, and a county become chips

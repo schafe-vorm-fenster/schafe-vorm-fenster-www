@@ -1,9 +1,9 @@
 /**
- * TS-023 D2/D4 — the step model, without any store.
+ * TS-WEB-0023 D2/D4 — the step model, without any store.
  *
  * The state lives entirely in the URL query string; this module is the pure
  * derivation the page calls on every request. Nothing here reads
- * `searchParams` itself, so it is trivially unit-testable (TS-023-A4).
+ * `searchParams` itself, so it is trivially unit-testable (TS-WEB-0023-A4).
  */
 
 export type RegisterStepId = 1 | 2 | 3 | "handover";

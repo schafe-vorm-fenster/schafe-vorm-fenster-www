@@ -34,17 +34,17 @@ import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
 /**
- * TS-027 — `/ueber-uns` — the trust surface.
+ * TS-WEB-0027 — `/ueber-uns` — the trust surface.
  *
- * Composition (TS-027 D2 plus polish brief page 10, which turns the scanning
+ * Composition (TS-WEB-0027 D2 plus polish brief page 10, which turns the scanning
  * order into a story): hero — the `h1` on the photograph, nothing else →
  * the causal chain with the founder portrait and the honorary-mayor proof →
  * **the origin story** (the baker's van, the sheep pasture behind the name,
  * the founder quote) → the operating counters → the proof stream, one
  * feature card and five compact rows, with the archive link under it → team
  * → newsletter → band + closing, merged into the three-job offer
- * (`primaryConversion: null`, TS-006 D6). Zero `data-cta="primary"` elements
- * on this page (TS-027-A10).
+ * (`primaryConversion: null`, TS-WEB-0006 D6). Zero `data-cta="primary"` elements
+ * on this page (TS-WEB-0027-A10).
  *
  * Three things the brief changed here, each of which was a visible defect:
  *
@@ -62,7 +62,7 @@ import type { Metadata } from "next";
  *
  * [ASSUMPTION] The reserved 7th slot still renders as `empty-proof-slot`,
  * not the content file's real, clearance-pending testimonial
- * (`ueber-uns-3-testimonial-slot-demo`, `kulturlandbuero-broellin`). TS-027
+ * (`ueber-uns-3-testimonial-slot-demo`, `kulturlandbuero-broellin`). TS-WEB-0027
  * D5 and its acceptance criteria (A6/A7) are [FIXED] and explicit —
  * "Backfill: never", "exactly one empty slot is visible" — and an
  * acceptance criterion is never reworded to fit new content
@@ -164,7 +164,7 @@ function splitQuote(line: string | undefined): { text: string; source?: string }
 
 /**
  * The six cleared proof elements `ueber-uns-3-proof-stream` names, as
- * relevance candidates (TS-005). Read off the slot, never re-typed: `demo`
+ * relevance candidates (TS-WEB-0005). Read off the slot, never re-typed: `demo`
  * is `isDemoSlot(proofStream)`, `false` today (state/open.md row 51, row 109).
  *
  * Each authored line is `claim — source, date`, so the source becomes the
@@ -191,7 +191,7 @@ function proofCandidates(proofStream: ContentSlot, fallbackContext: string): Pro
   });
 }
 
-/** The four-digit year an authored attribution ends on, for TS-005 freshness. */
+/** The four-digit year an authored attribution ends on, for TS-WEB-0005 freshness. */
 function proofYear(attribution: string): string | null {
   const match = /\b(19|20)\d{2}\b/.exec(attribution);
   return match === null ? null : match[0];
@@ -216,7 +216,7 @@ export default async function Page({
   const proofStream = slot(page, "ueber-uns-3-proof-stream");
 
   /**
-   * TS-005 through, not around: DEC-048's `/ueber-uns` **stream** count is 7,
+   * TS-WEB-0005 through, not around: DEC-0048's `/ueber-uns` **stream** count is 7,
    * and the slot names six cleared elements — so the engine itself leaves
    * the seventh position empty rather than the page hard-coding the gap
    * (D5, A6/A7).
@@ -240,7 +240,7 @@ export default async function Page({
     .map((block) => parsePerson(block.text));
 
   // The causal-chain prose (`origin.blocks[1]`) already states "480 € im
-  // Jahr" verbatim, matching `@schafe-vorm-fenster/offerings` (TS-027-A4).
+  // Jahr" verbatim, matching `@schafe-vorm-fenster/offerings` (TS-WEB-0027-A4).
   // `origin-story`'s own `price-tag` is suppressed (`display: "withheld"`,
   // which renders nothing) rather than repeating the identical figure a
   // second time in the same block — content is never reworded to remove
@@ -261,7 +261,7 @@ export default async function Page({
 
   return (
     <>
-      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{ variant: "merged" }}
@@ -361,8 +361,8 @@ export default async function Page({
           always renders; the figures come off `/api/stats` through
           `liveCounters()`, and a field the upstream does not count is simply
           absent from the band — never a zero, never a substitute
-          (WEB-F-041). Both fallback tiers exhausted removes the band
-          entirely (TS-009 D6), which is why it sits under its own
+          (FUN-WEB-0041). Both fallback tiers exhausted removes the band
+          entirely (TS-WEB-0009 D6), which is why it sits under its own
           `<Suspense>` with a `null` fallback rather than a skeleton. */}
       <SectionShell
         dataBlock="betrieb"
@@ -377,7 +377,7 @@ export default async function Page({
         </MotionReveal>
       </SectionShell>
 
-      {/* Block 5 — the proof stream (7 positions, DEC-048): one feature card
+      {/* Block 5 — the proof stream (7 positions, DEC-0048): one feature card
           carrying the emphasis, five compact hairline rows, and the reserved,
           never-backfilled seventh position (D5, A6/A7). The archive link
           (D6 — exactly one link, no teasers, no count) closes this section
@@ -451,7 +451,7 @@ export default async function Page({
       </SectionShell>
 
       {/* Block 7 — newsletter (inline, permitted only here, D8) — a labelled
-          mock (Q-020, `state/open.md`); still zero `data-cta="primary"`.
+          mock (Q-0020, `state/open.md`); still zero `data-cta="primary"`.
           It carries the page's **own** heading and lead now
           (`ueber-uns-6-newsletter`): the footer renders the same widget on
           every route, and with the component's default heading this page

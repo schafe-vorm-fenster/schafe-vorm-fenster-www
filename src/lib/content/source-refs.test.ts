@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { createHubResolver, parseSourceRef } from "@/src/lib/content/source-refs";
 
-describe("TS-007-A7: the source adapter resolves `<package>@<version>#<record-id>`", () => {
+describe("TS-WEB-0007-A7: the source adapter resolves `<package>@<version>#<record-id>`", () => {
   const resolver = createHubResolver();
 
   it("parses the three accepted address forms", () => {
@@ -17,7 +17,7 @@ describe("TS-007-A7: the source adapter resolves `<package>@<version>#<record-id
     expect(parseSourceRef("ia")?.kind).toBe("ia");
   });
 
-  it("refuses a repository path and a version range (TS-007 D1, DEC-042)", () => {
+  it("refuses a repository path and a version range (TS-WEB-0007 D1, DEC-0042)", () => {
     expect(parseSourceRef("packages/evidence/proof/founder.proof.md")).toBeNull();
     expect(parseSourceRef("@schafe-vorm-fenster/proof@^0.3.5#x")).toBeNull();
     expect(parseSourceRef("")).toBeNull();
@@ -61,7 +61,7 @@ describe("TS-007-A7: the source adapter resolves `<package>@<version>#<record-id
     expect(result.problem).toBe("malformed");
   });
 
-  it("resolves `ia` — the copy shell with no source record (TS-007 D6)", () => {
+  it("resolves `ia` — the copy shell with no source record (TS-WEB-0007 D6)", () => {
     const result = resolver.resolve("ia");
     expect(result.ok).toBe(true);
     if (!result.ok) return;

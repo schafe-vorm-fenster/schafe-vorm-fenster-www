@@ -177,7 +177,7 @@ describe("/api/stats — the one operation that needs no token", () => {
     expect(url).toBe("https://events.invalid/api/stats");
     expect(url).not.toContain(config.token);
     expect(stats.totalEvents).toBe(8889);
-    // Q-037: no places count and no updates-today count exist upstream.
+    // Q-0037: no places count and no updates-today count exist upstream.
     expect(stats).not.toHaveProperty("places");
     expect(stats).not.toHaveProperty("updatesToday");
   });

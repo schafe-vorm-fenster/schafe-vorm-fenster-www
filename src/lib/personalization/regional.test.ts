@@ -10,7 +10,7 @@ const set = [
   { key: { state: "niedersachsen" }, value: "NI copy" },
 ];
 
-describe("TS-010-A10: county beats state beats neutral", () => {
+describe("TS-WEB-0010-A10: county beats state beats neutral", () => {
   it("takes the county variant where one exists", () => {
     expect(
       selectRegionalVariant(set, geo({ country: "de", state: "mecklenburg-vorpommern", county: "vorpommern-greifswald" })),

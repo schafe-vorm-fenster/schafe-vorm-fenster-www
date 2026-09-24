@@ -27,7 +27,7 @@ the running dev server; pairs with the `next-devtools` MCP in
 ships version-matched docs in `node_modules/next/dist/docs/` and
 auto-generates `AGENTS.md`; the cache-components skills from
 `vercel/next.js` are worth adding when M4 adopts `use cache`/PPR
-(TS-009).
+(TS-WEB-0009).
 
 **QA (anthropics/skills)** — `webapp-testing` (Playwright-driven
 browser QA).
@@ -55,7 +55,7 @@ mattpocock set), hardikpandya/stop-slop (overlaps humanizer; its
 em-dash ban is wrong for German), anthropics pr-review-toolkit
 (six reviewer agents — our two-axis `code-review` covers the run),
 the broader trailofbits research skills (fuzzing, CodeQL, audit
-prep — beyond TS-014's baseline; the review-relevant subset IS
+prep — beyond TS-WEB-0014's baseline; the review-relevant subset IS
 installed, see Security above; revisit the rest for the hardening
 round), senshinji/claude-translation-skill (multi-agent translation
 — Content role + tone-of-voice cover DE/EN). Register:

@@ -1,8 +1,8 @@
 /*
- * The header — TS-004 D4, and Jan's round-3 points 2 and 3, re-cut by his
+ * The header — TS-WEB-0004 D4, and Jan's round-3 points 2 and 3, re-cut by his
  * round-4 change request (state/open.md row 200).
  *
- * Mobile-first (TS-017 D2(a)): everything above the first `@media` line is
+ * Mobile-first (TS-WEB-0017 D2(a)): everything above the first `@media` line is
  * the phone. The two `min-width` queries are `md` (40rem) and `lg` (48rem),
  * both `breakpoint.*` token values (D2(b)).
  *
@@ -20,7 +20,7 @@
  * Jan's finding on that preview: the scrim is a grey bar over the
  * photograph, and the photograph is what the page is for. So the scrim is
  * gone and every item that is not already a filled control carries its own
- * **44 px control well** instead — the one ground SRC-014 §Icons sanctions
+ * **44 px control well** instead — the one ground SRC-0014 §Icons sanctions
  * ("never in a coloured circle unless that circle is a 44 px control well"),
  * at radius 999, with no border and no shadow (§Shape and Space: "Borders
  * and shadows: none").
@@ -53,7 +53,7 @@
    * The solid ground's values. Every item rule below reads these, and the
    * transparent ground re-declares them — one switch, no rule that only one
    * of the two states knows about. The calendar pill's pair repeats
-   * `button.primaryLight`/`primaryDark` (SRC-014 §Button) rather than
+   * `button.primaryLight`/`primaryDark` (SRC-0014 §Button) rather than
    * overriding it in one direction only, because a one-way override cannot
    * be taken back in the `scripting: none` branch.
    */
@@ -274,7 +274,7 @@
 /*
  * The calendar entry is already a filled control, so it needs no well: on
  * the photograph it takes the design system's "primary on dark" pair
- * (`lime-500` behind `ink`, SRC-014 §Button) — the swap the boards draw —
+ * (`lime-500` behind `ink`, SRC-0014 §Button) — the swap the boards draw —
  * and on paper the "primary on light" pair the Button itself would use.
  * Both are declared, so the `scripting: none` branch can put it back.
  */
@@ -295,7 +295,7 @@
 }
 
 /*
- * The burger's 44 px control well — SRC-014 §Icons is explicit that this is
+ * The burger's 44 px control well — SRC-0014 §Icons is explicit that this is
  * the one ground an icon may have ("never in a coloured circle unless that
  * circle is a 44 px control well"), and the button was already exactly that
  * square at radius 999, so the well costs no geometry: on the solid ground
@@ -355,7 +355,7 @@
 }
 
 /*
- * Burger → X. A second movement beside SRC-014 §Motion's one, on Jan's
+ * Burger → X. A second movement beside SRC-0014 §Motion's one, on Jan's
  * instruction (state/open.md row 202). It plays when the overlay's own
  * instance mounts, and `prefers-reduced-motion` removes it in `base.css`.
  */

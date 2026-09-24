@@ -83,13 +83,13 @@ Accepted as prototype. The four-step order flow renders correctly; the
 `/dein-kalender` headline UAT flagged as garbled ("Heute gegen mit dem
 Produkt") now reads as a real sentence ("Euer Kalender, eure Website, euer
 Name..."). Step 4's embed snippet carries `Mock aktiv` per `state/open.md`
-row 129 (organizerId minting, Q-046) — accepted as prototype on that row,
+row 129 (organizerId minting, Q-0046) — accepted as prototype on that row,
 because the snippet is visibly a real, pasteable code block, not a hole.
 
 **`request-licence-quote` (`/deine-region` → `/deine-region/angebot`).**
 Accepted as prototype. The quote form's fields are all present and clearly
 carry the `Demo-Daten` tag (`state/open.md` row 22, row 7 — envoy widget
-mock, Q-022). I did not submit it a second time to avoid depending on
+mock, Q-0022). I did not submit it a second time to avoid depending on
 timing that only a live browser can exercise; QA's F-2-48/F-2-65/F-2-66
 retest results (honeypot, disabled-on-submit, a real confirmation state
 with focus) are credible on their own evidence and I accept them.
@@ -100,7 +100,7 @@ Grouped by what a customer actually experiences, not by finding id.
 
 ### Must be fixed before I accept the prototype as done — recommended for M5
 
-1. **`TS-021-A7` / `TS-021` behaviour on `/dein-ort?ort=…` — F-2-49,
+1. **`TS-WEB-0021-A7` / `TS-WEB-0021` behaviour on `/dein-ort?ort=…` — F-2-49,
    reopened.** I reproduced this myself against the preview, without
    JavaScript: `curl` against `/dein-ort/starten?ort=beispielwalde` and
    `/dein-ort?ort=99999` both return **200 with an empty document body** —
@@ -158,9 +158,9 @@ Grouped by what a customer actually experiences, not by finding id.
 ### Rejected, but lower priority than the above
 
 6. **The archive shows no outbound link or preview image on any row —
-   F-2-47 (`TS-028-A14`, `TS-016-A7`).** I confirmed the six demo rows
+   F-2-47 (`TS-WEB-0028-A14`, `TS-WEB-0016-A7`).** I confirmed the six demo rows
    render, but none carries a link a reader could actually follow.
-   `state/open.md` row 52 explains the clearance gap (Q-045) behind the
+   `state/open.md` row 52 explains the clearance gap (Q-0045) behind the
    *content*, but does not explain why the demo rows themselves — already
    fictitious and already labeled — could not also carry a placeholder
    outbound link and image, the same treatment every other Dummy-Content
@@ -170,7 +170,7 @@ Grouped by what a customer actually experiences, not by finding id.
    it alone.
 7. **`/en/legal` renders its six legal documents entirely in German, with
    no notice to the reader that this is intentional — F-2-46
-   (`TS-007-A11`).** I read the page myself: the section labels in the
+   (`TS-WEB-0007-A11`).** I read the page myself: the section labels in the
    navigation ("Privacy policy", "Terms of use") are in English, and then
    the body under each is unannounced German prose. `state/open.md` row
    53 describes an intended mitigation — "the EN page frame ... states
@@ -199,20 +199,20 @@ Grouped by what a customer actually experiences, not by finding id.
 
 ### Not rejected — accepted as decided or as out of my remit
 
-- `TS-006-A6` (F-2-10, band suppressed on registration steps 2–3) —
+- `TS-WEB-0006-A6` (F-2-10, band suppressed on registration steps 2–3) —
   accepted as the decided deviation it already is (`state/open.md` row
   24); not re-rejected.
-- `TS-006-A8`, `TS-005-A15`, `TS-007-A4`, `TS-020-A5`, `TS-026-A8`
+- `TS-WEB-0006-A8`, `TS-WEB-0005-A15`, `TS-WEB-0007-A4`, `TS-WEB-0020-A5`, `TS-WEB-0026-A8`
   (all F-2-43) — these are missing **internal build guards**, not missing
   page content; nothing a visitor sees is different because the check
   does not exist yet. Accepted as tracked engineering debt, not a
   prototype defect.
-- `TS-021-A2` (F-2-13), `TS-021-A11` (title/description placeholders,
-  see below), `TS-009-A2` (F-2-56, four dynamic routes), `TS-010-A5`
+- `TS-WEB-0021-A2` (F-2-13), `TS-WEB-0021-A11` (title/description placeholders,
+  see below), `TS-WEB-0009-A2` (F-2-56, four dynamic routes), `TS-WEB-0010-A5`
   (F-2-52, spec collision) — architecture-level or spec-contradiction
   items with no visible defect on the page I loaded; accepted as recorded,
   decision needed from the named owner.
-- `TS-029-A14` / `TS-011-A3` (F-2-19, a skipped heading level inside the
+- `TS-WEB-0029-A14` / `TS-WEB-0011-A3` (F-2-19, a skipped heading level inside the
   imported privacy policy) — a real accessibility defect, but inside
   imported legal text I am not the right judge of; accepted as tracked,
   not blocking.
@@ -236,14 +236,14 @@ variant.
 
 **2. Every page's meta description exposes an internal ticket reference
 to anyone who views source, shares the link, or finds the page on a
-search engine — same root cause as the already-known `TS-021-A11` fail,
+search engine — same root cause as the already-known `TS-WEB-0021-A11` fail,
 but I want its actual visible words on the record.** Every page I fetched,
 in both languages, carries a `<meta name="description">` reading, for
 example: *"Schafe vorm Fenster — Platzhalter aus dem Routing-Gerüst (M2).
 Titel und Beschreibung kommen in M3 aus dem Content-Frontmatter
-(TS-011 D5)."* — a raw work-package name and spec-clause id, in the
+(TS-WEB-0011 D5)."* — a raw work-package name and spec-clause id, in the
 description search engines index and social previews display. QA's table
-records the underlying cause (`TS-021-A11`, `TS-011-D5`, open rows 103/138)
+records the underlying cause (`TS-WEB-0021-A11`, `TS-011-D5`, open rows 103/138)
 as a **fail**, correctly, but files it as a metadata-sourcing defect. I am
 elevating it here because the actual string a stranger would see in a
 Google result or a Slack link preview is an internal ticket number — a
@@ -268,7 +268,7 @@ fully visible, usable, and honestly labeled:
 - The envoy quote and registration forms, and the newsletter block —
   rows 7, 22. Accepted: full form UX, honeypot, no data leaves the
   browser, clearly tagged.
-- The order flow's `organizerId` / embed code — row 129 (Q-046). Accepted:
+- The order flow's `organizerId` / embed code — row 129 (Q-0046). Accepted:
   a real, working, pasteable snippet, visibly a demo id
   (`demo-organizer-bestellen`).
 - The registration handover target and the briefing URL — row 125.
@@ -276,9 +276,9 @@ fully visible, usable, and honestly labeled:
   placeholder.
 - Stage-1 geolocation mock, stage-0 anchor — rows 70, 136, 137. Accepted:
   not independently walkable by a naive visitor (no consent prompt is
-  built yet, per `TS-010-A8`), consistent with the scope note that stage 2
+  built yet, per `TS-WEB-0010-A8`), consistent with the scope note that stage 2
   never fires.
-- The media-echo archive's demo rows (Q-045) — row 1, row 52. Accepted for
+- The media-echo archive's demo rows (Q-0045) — row 1, row 52. Accepted for
   the rows themselves (honestly fictitious, clearly labeled); rejected
   separately above (F-2-47) for the missing outbound link/image on those
   same rows.
@@ -295,7 +295,7 @@ Everything `plan/gate-2-scope.md` §4 lists — production domains, the CI
 GitHub Packages block, canary/rollback, Lighthouse CI as a pipeline gate,
 the `.de` apex redirect against the real domain, the deployed CSP
 allowlist, the accessibility-statement production-build guard, M1's
-performance budgets, TS-018 — is out of scope for this gate by the run's
+performance budgets, TS-WEB-0018 — is out of scope for this gate by the run's
 own design, and I am not judging it here. The two named font-budget
 deviations (open rows 19, 20) and the two Vercel-Proxy CSP-delivery
 attempts (row 21/31) are engineering matters with no visible effect on
@@ -335,7 +335,7 @@ I would work it:
    (`Demo-Daten`, `Foto gesucht`, `Nicht motivgenau · Platzhalter`), plus
    the **new** `geoname.900001` leak on `/en/your-region` I found on this
    walk. All five are the same class of fix, all mechanical.
-6. **The meta-description ticket leak** (`TS-021-A11`/`TS-011-D5`) — a raw
+6. **The meta-description ticket leak** (`TS-WEB-0021-A11`/`TS-011-D5`) — a raw
    spec reference is visible to search engines and link previews on every
    single page in both languages. Small to fix, disproportionately public.
 7. **`/en/legal`'s missing English disclaimer** that the legal texts are

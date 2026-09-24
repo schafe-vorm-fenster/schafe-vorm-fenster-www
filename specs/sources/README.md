@@ -9,7 +9,7 @@ first cold-start artefact; no statement without an exact source locator).
 
 ## Contents
 
-- `source-inventory.md` — the L0 source set, `SRC-###` IDs
+- `source-inventory.md` — the L0 source set, `SRC-####` IDs
 
 ## Conventions
 
@@ -17,7 +17,7 @@ first cold-start artefact; no statement without an exact source locator).
   `@leafcutter-strict/method-identifier-and-locator-schema` wants the finest
   granularity a source supports — `#L102`, `#P45`, `#¶12`, `#M45:12` — plus
   the excerpt on every locator. The rows here carry a source id and
-  sometimes a section. That gap is owed (DEC-085 §6); closing it means
+  sometimes a section. That gap is owed (DEC-0085 §6); closing it means
   re-reading all 18 sources.
 - Trust is `high | medium | low | unusable` with a one-line rationale. The
   vocabulary is the source-inventory contract's and `pnpm check:specs`
@@ -30,5 +30,5 @@ first cold-start artefact; no statement without an exact source locator).
 - Evidence sufficiency per requirement follows
   `@leafcutter-strict/method-evidence-sufficiency-rating`, read here as:
   `S0` no source · `S1` single unconfirmed source · `S2` corroborated or
-  high-trust source · `S3` confirmed by an explicit decision (`DEC-###`).
+  high-trust source · `S3` confirmed by an explicit decision (`DEC-####`).
   The `S0–S3` set itself comes from the requirement-shell contract.

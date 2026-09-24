@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { ConversionTracker } from "./conversion-tracker";
 
 /**
- * The server half of TS-012 D2/D9 and of F-2-71's hydration signal.
+ * The server half of TS-WEB-0012 D2/D9 and of F-2-71's hydration signal.
  *
  * The component had no unit test at all (differential review of this round's
  * diff), while carrying two contracts a page depends on: the CTA underneath
@@ -13,7 +13,7 @@ import { ConversionTracker } from "./conversion-tracker";
  * `data-hydrated` is `"false"` in the server pass, which is what makes it a
  * signal rather than a decoration.
  */
-describe("TS-012 D2: the CTA is server-rendered, the tracker only wraps it", () => {
+describe("TS-WEB-0012 D2: the CTA is server-rendered, the tracker only wraps it", () => {
   const markup = renderToStaticMarkup(
     <ConversionTracker goalId="save-calendar-to-homescreen" stage="handover">
       <a href="https://app.example.test/ort">Kalender öffnen</a>

@@ -13,7 +13,7 @@ export interface LegalSectionProps {
   readonly title: string;
   /**
    * Already-imported document content (headings shifted to `h3`+ by the
-   * import step, TS-029 D1–D6). Absent → the entry reserves its anchor and
+   * import step, TS-WEB-0029 D1–D6). Absent → the entry reserves its anchor and
    * renders nothing visible.
    */
   readonly body?: ReactNode;
@@ -27,7 +27,7 @@ export interface LegalSectionProps {
 
 /**
  * 39 `legal-section` [PROPOSED] — content type 26 `legal-section`,
- * TS-029 D1–D6.
+ * TS-WEB-0029 D1–D6.
  *
  * Structure: one section per registry entry (`src/lib/routes/legal-anchors.ts`),
  * in registry order; the `id` is the registry anchor for the page language,

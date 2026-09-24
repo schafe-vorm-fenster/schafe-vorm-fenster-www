@@ -1,6 +1,6 @@
 ---
 id: rechtliches-de
-page_id: TS-029
+page_id: TS-WEB-0029
 route: "/legal"
 seo:
   "/rechtliches":
@@ -18,18 +18,18 @@ generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
 provenance: "sourced — page-level composition/navigation copy only; the seven sections themselves are content/legal/*.md, imported (5, DE only today), generated-pending-counsel (1, accessibility, DE only today) or maintained here (1, image credits, DE only today); EN translation of content/pages/rechtliches/de.md frame copy — the five imported legal documents themselves are NOT translated here, see slot 5"
-compliance_check: "state/content-map.md#compliance-checks — TS-029"
-schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0029"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
   - "state/open.md #21 — accessibility statement is generated, provenance: generated, flagged for legal-counsel review before production. Re-checked 2026-09-12 against the hub packages and go-to-market-os (including the brand-identity org-profile intake, which holds only .gdoc pointers): no source exists anywhere, so this slot stays generated"
-  - "TS-029 open point #2 / state/open.md #53 — English siblings of the five imported documents do not exist yet; this playbook never machine-translates legal text, and the EN page frame below says so explicitly instead of silently showing German text under an English URL"
+  - "TS-WEB-0029 open point #2 / state/open.md #53 — English siblings of the five imported documents do not exist yet; this playbook never machine-translates legal text, and the EN page frame below says so explicitly instead of silently showing German text under an English URL"
 ---
 
 # Legal (`/legal`)
 
 This file supplies **only** the page-frame copy (h1, navigation label,
 footer link text). The seven sections themselves come from
-`content/legal/*.md` via import (TS-007 D10) — this playbook does not
+`content/legal/*.md` via import (TS-WEB-0007 D10) — this playbook does not
 rewrite legal text, it references it (repository working rule / the
 Content & Translation role's "Must not: touch code outside content
 files … never rewrite legal text"). Today, every one of those six
@@ -45,7 +45,7 @@ translation.
 
 **Navigation label (`<nav>`, named for accessibility):** Sections
 
-## Section registry (order = TS-004 D8)
+## Section registry (order = TS-WEB-0004 D8)
 
 <!-- id: rechtliches-2-registry; content_type: legal-section; provenance: sourced; derived_from: [ia]; status: draft -->
 
@@ -71,8 +71,8 @@ translation.
 
 <!-- id: rechtliches-4-accessibility-note; content_type: section; provenance: generated; derived_from: []; status: draft -->
 
-No Google Doc and no source exists for `#accessibility` yet (TS-029
-D8, TS-004 D8: "to be written"). Searched again on 2026-09-12: neither
+No Google Doc and no source exists for `#accessibility` yet (TS-WEB-0029
+D8, TS-WEB-0004 D8: "to be written"). Searched again on 2026-09-12: neither
 the hub packages nor `go-to-market-os` carry an accessibility record,
 and the intake documents under
 `packages/identity/brand-identity/intake/org-profile-gdocs/` are bare
@@ -92,10 +92,10 @@ German only today, like the other five; it is not translated here.
 **The legal texts on this page are provided in German only.** All six
 sections above — the five imported documents and the accessibility
 statement — exist in German today; `import.yaml` only ever declares
-`locale: de` targets (TS-029 open point #2), and this playbook never
+`locale: de` targets (TS-WEB-0029 open point #2), and this playbook never
 machine-translates or invents legal text. English siblings will be
 imported once English source documents (Google Docs) exist and are
-added to `import.yaml` — DEC-027 records that DE and EN versions of
+added to `import.yaml` — DEC-0027 records that DE and EN versions of
 the legal texts both arrive through that same import path, on its own
 schedule, not through this page-copy run. This gap is registered as
 its own row in `state/open.md` (#53) rather than papered over with a

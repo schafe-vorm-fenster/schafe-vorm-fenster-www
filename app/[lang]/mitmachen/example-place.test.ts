@@ -4,7 +4,7 @@ import { REFERENCE_PLACE, selectExamplePlace } from "./example-place";
 
 import type { ExamplePlaceCandidate } from "./example-place";
 
-describe("TS-022-A7: example-place selection", () => {
+describe("TS-WEB-0022-A7: example-place selection", () => {
   it("returns the configured reference place with no anchor", () => {
     expect(selectExamplePlace(undefined)).toBe(REFERENCE_PLACE);
   });

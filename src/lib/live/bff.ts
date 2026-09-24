@@ -1,13 +1,13 @@
 /**
- * The BFF boundary itself — TS-004 D5, TS-008 D10, TS-013 D3, TS-017 D4.
+ * The BFF boundary itself — TS-WEB-0004 D5, TS-WEB-0008 D10, TS-WEB-0013 D3, TS-WEB-0017 D4.
  *
  * Everything every `app/api/*` handler does before and after it calls an
  * interface module, so no handler re-derives it:
  *
- *  - **GET only.** TS-017 D4's "read-only by construction" is a property of
+ *  - **GET only.** TS-WEB-0017 D4's "read-only by construction" is a property of
  *    the route files (they export `GET` and nothing else) and is checked
- *    statically by `scripts/check-api-routes.ts` (TS-017-A10).
- *  - **Origin check.** A cross-origin `Origin` header is refused (WEB-Q-038):
+ *    statically by `scripts/check-api-routes.ts` (TS-WEB-0017-A10).
+ *  - **Origin check.** A cross-origin `Origin` header is refused (NFR-WEB-0038):
  *    these routes exist for this site's own pages, not as a public API. A
  *    request with no `Origin` (a plain navigation, a server-side call, curl)
  *    passes — the header is advisory, not an authentication.
@@ -16,17 +16,17 @@
  *    honest about what it is (`state/open.md`), and enough to keep the
  *    prototype's BFF from being trivially hammered.
  *  - **No visitor identity anywhere.** The bucket key is a coarse hash, never
- *    a stored IP, and nothing about the caller reaches an upstream (TS-013
+ *    a stored IP, and nothing about the caller reaches an upstream (TS-WEB-0013
  *    D3/D6, the client IP never leaves `callUpstream`'s closed header set).
  *  - **One response shape.** `{ data, tier, fetchedAt, stale, demo }` plus
- *    the `Cache-Control` of TS-003 D5 for that data kind.
+ *    the `Cache-Control` of TS-WEB-0003 D5 for that data kind.
  */
 
 import { cacheControlFor, type CacheKind } from "./cache-profiles";
 
 import type { LiveEnvelope } from "./types";
 
-/** The site's own origins (TS-013 D2 first-party row) plus the dev host. */
+/** The site's own origins (TS-WEB-0013 D2 first-party row) plus the dev host. */
 const ALLOWED_ORIGIN_HOSTS = [
   "schafe-vorm-fenster.de",
   "sheepoutside.com",
@@ -58,7 +58,7 @@ const buckets = new Map<string, RateLimitState>();
 
 /**
  * A coarse bucket key. It uses the platform's own geo headers and the route,
- * never the IP itself: TS-013 D6 forbids an address in a key, and a region
+ * never the IP itself: TS-WEB-0013 D6 forbids an address in a key, and a region
  * plus a route is enough to bound one client's share of a warm instance.
  */
 export function rateLimitKey(request: Request, route: string): string {
@@ -103,7 +103,7 @@ export function guard(request: Request, route: string): GuardResult {
 /**
  * An error answer. It carries no upstream detail: a failing upstream is a
  * tier decision inside the module, and what reaches the browser is the
- * module's fallback, never a message about a service (TS-009 D9).
+ * module's fallback, never a message about a service (TS-WEB-0009 D9).
  */
 export function problem(status: number, message: string): Response {
   return Response.json(

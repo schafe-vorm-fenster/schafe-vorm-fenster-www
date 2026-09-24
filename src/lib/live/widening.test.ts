@@ -25,7 +25,7 @@ const communityAnchor: ChainAnchor = { kind: "community", place: anchorPlace };
 const countyAnchor: ChainAnchor = { kind: "county", countyId: "geoname.900001" };
 const noAnchor: ChainAnchor = { kind: "none" };
 
-describe("TS-008-A2: the widening chain resolves per anchor precision", () => {
+describe("TS-WEB-0008-A2: the widening chain resolves per anchor precision", () => {
   it("stops at step 1 for a place with dates", () => {
     const plan = planChain(communityAnchor, { placeEvents: 3, nearbyEvents: 5, countyExamples: 4 });
     expect(chainStart(communityAnchor)).toBe(1);
@@ -64,7 +64,7 @@ describe("TS-008-A2: the widening chain resolves per anchor precision", () => {
   });
 });
 
-describe("TS-008-A3: the step-2 distance filter is ours, and it never claims completeness", () => {
+describe("TS-WEB-0008-A3: the step-2 distance filter is ours, and it never claims completeness", () => {
   // Roughly 0 / 4 / 8 / 13 / 22 / 40 km from the anchor.
   const candidates = [
     place("null-km", 54.0, 13.4),
@@ -98,7 +98,7 @@ describe("TS-008-A3: the step-2 distance filter is ours, and it never claims com
   });
 });
 
-describe("TS-008 D3: the windows position 1 and position 2 ask for", () => {
+describe("TS-WEB-0008 D3: the windows position 1 and position 2 ask for", () => {
   it("asks after=now for the place and a seven-day window for the surroundings", () => {
     expect(EVENT_WINDOWS.upcoming.after).toBe("now");
     expect(EVENT_WINDOWS.week).toEqual({ after: "now", before: "7d" });

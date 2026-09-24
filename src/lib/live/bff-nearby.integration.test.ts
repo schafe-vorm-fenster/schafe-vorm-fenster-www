@@ -19,7 +19,7 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe("TS-008-A3: the ~15 km cut happens in the BFF, on geo positions", () => {
+describe("TS-WEB-0008-A3: the ~15 km cut happens in the BFF, on geo positions", () => {
   it("returns only dates from places inside the radius, and states the radius it used", async () => {
     const body = await (await call(`?lat=${anchor.lat}&lng=${anchor.lng}`)).json();
 
@@ -54,7 +54,7 @@ describe("TS-008-A3: the ~15 km cut happens in the BFF, on geo positions", () =>
   });
 });
 
-describe("TS-013-A5 / TS-013 D6: the nearby key is a segment, never a visitor", () => {
+describe("TS-WEB-0013-A5 / TS-WEB-0013 D6: the nearby key is a segment, never a visitor", () => {
   it("marks the mocked answer demo:true and exposes no coordinate back to the caller", async () => {
     const response = await call(`?lat=${anchor.lat}&lng=${anchor.lng}`);
     const body = await response.json();

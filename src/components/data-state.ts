@@ -4,7 +4,7 @@
  *
  * Every component that depends on late or external data declares all four.
  * A component that only knows "has data / has none" reintroduces the spinner
- * and the error sentence that TS-008 D5 and TS-009 D4 forbid, because
+ * and the error sentence that TS-WEB-0008 D5 and TS-WEB-0009 D4 forbid, because
  * emptiness, staleness, failure and mock data are four different things:
  *
  *   ready     the data arrived and is real

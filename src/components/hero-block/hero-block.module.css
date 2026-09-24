@@ -15,7 +15,7 @@
 /*
  * G-8: the `h1` is never clamped.
  *
- * SRC-014 §Fixed heights allows a **place name** two display lines, so a
+ * SRC-0014 §Fixed heights allows a **place name** two display lines, so a
  * long village never grows the reserved box. This variant is also what a
  * page renders when it has no resolved place — `/dein-ort`'s S0 headline is
  * a whole sentence — and the clamp then cut it mid-word: "Such deinen Ort,
@@ -28,7 +28,7 @@
  * that grows it. A cut sentence is the worse failure of the two, and the one
  * a visitor sees on the first screen of the site's highest-traffic page.
  *
- * Hand breaks in a display headline (`SCHLAT / KOW`, SRC-014 §Typography)
+ * Hand breaks in a display headline (`SCHLAT / KOW`, SRC-0014 §Typography)
  * are unaffected: nothing here collapses white space, so a break the author
  * writes still renders.
  */
@@ -58,7 +58,7 @@
  * Round 3, Jan's point 1: on the 8:9 phone rendition the stack's own internal
  * spacing is what decides how far up the picture the headline starts. It is
  * a step tighter below `md` and the design system's own values return above
- * it — spacing per breakpoint, which is exactly what TS-017 D2(d) allows a
+ * it — spacing per breakpoint, which is exactly what TS-WEB-0017 D2(d) allows a
  * switch point to change.
  */
 @media (min-width: 40rem) {

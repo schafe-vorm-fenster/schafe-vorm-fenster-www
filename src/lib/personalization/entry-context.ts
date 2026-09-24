@@ -1,16 +1,16 @@
 /**
- * Entry-context traits — TS-010 D3, stage 2.
+ * Entry-context traits — TS-WEB-0010 D3, stage 2.
  *
  * One request in, **one trait id out** — and the id is the shared constant of
- * `src/lib/relevance/types.ts`, which TS-005 D2 scores against and TS-005 D8
+ * `src/lib/relevance/types.ts`, which TS-WEB-0005 D2 scores against and TS-WEB-0005 D8
  * uses as a cache-key axis. Two vocabularies would silently produce two
  * segmentations, so there is one.
  *
  * The trait is derived per request and **never persisted**: no cookie, no
- * storage, no server-side session (WEB-Q-020). A visitor who returns from a
+ * storage, no server-side session (NFR-WEB-0020). A visitor who returns from a
  * different entry is a different segment, by design.
  *
- * Precedence follows TS-010 D2 — **stated intent beats inferred intent**:
+ * Precedence follows TS-WEB-0010 D2 — **stated intent beats inferred intent**:
  * a campaign parameter (the visitor followed a link we printed) outranks a
  * referrer host (the browser told us where she came from).
  */
@@ -20,7 +20,7 @@ import { APP_ORIGIN } from "../live/app-handover";
 import type { EntryTrait, FocusJob } from "../relevance/types";
 import type { RouteId } from "../routes/routes";
 
-/** `etcc_*` is the house convention (WEB-Q-028); `utm_*` is an accepted alias. */
+/** `etcc_*` is the house convention (NFR-WEB-0028); `utm_*` is an accepted alias. */
 const MEDIUM_PARAMS = ["etcc_med", "utm_medium"] as const;
 
 const MEDIUM_TRAITS: Record<string, EntryTrait> = {
@@ -32,9 +32,9 @@ const MEDIUM_TRAITS: Record<string, EntryTrait> = {
 const SOCIAL_HOSTS = ["instagram.com", "facebook.com", "whatsapp.com", "fb.me", "fb.com", "threads.net"];
 const PROFESSIONAL_HOSTS = ["linkedin.com", "lnkd.in"];
 /**
- * Derived from the one module that knows where the app is (TS-017 D4): the
+ * Derived from the one module that knows where the app is (TS-WEB-0017 D4): the
  * hostname may not be typed a second time, and this way the classification
- * follows the DEC-035 move off the apex automatically.
+ * follows the DEC-0035 move off the apex automatically.
  */
 const ACTIVATED_HOSTS = [new URL(APP_ORIGIN).hostname];
 const SEARCH_HOSTS = [
@@ -52,7 +52,7 @@ const SEARCH_HOSTS = [
 const OWN_HOSTS = ["schafe-vorm-fenster.de", "schafe-vorm-fenster.com", "localhost"];
 
 /**
- * The press and podcast allowlist. TS-010 D3 requires this list to be
+ * The press and podcast allowlist. TS-WEB-0010 D3 requires this list to be
  * **content, not code** — shipped with the content build from `media-echo`, so
  * a new outlet does not need a deployment. Until that build exists it is this
  * seed list, derived from the publishers in `@schafe-vorm-fenster/media-echo`,

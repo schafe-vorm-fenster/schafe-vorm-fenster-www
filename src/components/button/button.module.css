@@ -35,7 +35,7 @@
   padding: 0 var(--space-4);
 }
 
-/* ── The five variants — SRC-014 §Button ──────────────────────────────────
+/* ── The five variants — SRC-0014 §Button ──────────────────────────────────
  *
  * Every variant re-asserts its own fill/text pair at **two classes**
  * (`.button.primaryLight`), which is the pattern `chip` and `outbound-link`
@@ -56,7 +56,7 @@
  */
 
 /*
- * "Primary on light" and "primary on dark" are one role in SRC-014's own
+ * "Primary on light" and "primary on dark" are one role in SRC-0014's own
  * table — same action, same weight, the pair swapped for the ground. This
  * variant takes the ground's pair, so a page that composes its hero CTA the
  * way every other page does gets a legible pill on a photograph instead of

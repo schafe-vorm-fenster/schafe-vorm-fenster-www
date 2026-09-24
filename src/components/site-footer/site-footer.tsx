@@ -24,15 +24,15 @@ export interface SiteFooterProps {
 }
 
 /**
- * 9 `site-footer` [PROPOSED] — TS-004 D4, TS-016 D10.
+ * 9 `site-footer` [PROPOSED] — TS-WEB-0004 D4, TS-WEB-0016 D10.
  *
  * Structure: the wordmark · the newsletter block (S5) · contact (the
  * `envoy-form-mount` target, S1) behind its own disclosure · a base line
  * carrying the legal links Impressum / Datenschutz / Barrierefreiheit as
  * anchors on the one legal page and the `language-switch` beside them. The
- * link list and the anchors come from `src/lib/routes/` (DEC-039: an anchor
+ * link list and the anchors come from `src/lib/routes/` (DEC-0039: an anchor
  * is permanent), the labels from the dictionary. Nothing renders after the
- * closing CTA except this (TS-006 D2).
+ * closing CTA except this (TS-WEB-0006 D2).
  * States: the newsletter slot degrades on its own terms — in M2 it is a
  * visibly labelled mock, and this component only holds the slot, so the
  * footer never has to know whether a sending system exists. Everything else
@@ -54,9 +54,9 @@ export interface SiteFooterProps {
  * 480 px of that was one thing: the contact form, rendered open, with three
  * fields and a textarea, on a page the visitor came to for something else.
  * The other surfaces here are one line each and cannot be cut further
- * without losing what TS-004-A9 asks for — the newsletter has to be usable
+ * without losing what TS-WEB-0004-A9 asks for — the newsletter has to be usable
  * where it stands (it is the conversion), and a legal link behind a
- * disclosure is not "footer-linked on every page" in the sense TS-002-A8
+ * disclosure is not "footer-linked on every page" in the sense TS-WEB-0002-A8
  * means. A contact **form** is not what that criterion names either: it
  * names contact, and a `<details>` labelled "Kontakt" carries contact,
  * visibly, one tap away, in the DOM on every route, with the form's own

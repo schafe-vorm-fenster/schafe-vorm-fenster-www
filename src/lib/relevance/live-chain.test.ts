@@ -17,7 +17,7 @@ const viewer: ViewerContext = {
   locale: "de",
 };
 
-describe("TS-005-A16: the widening chain resolves place → surroundings → county → all regions", () => {
+describe("TS-WEB-0005-A16: the widening chain resolves place → surroundings → county → all regions", () => {
   it("emits the four modules in the documented order, each with the id list of its level", () => {
     const chain = liveModuleChain({ viewer, surroundingCommunities: ["flechtorf", "wendhausen"] });
     expect(chain.steps.map((step) => step.radius)).toEqual([

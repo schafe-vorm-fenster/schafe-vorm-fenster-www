@@ -1,6 +1,6 @@
 name: Preview E2E Smoke
 
-# TS-015 preview smoke (M4 — minimal CI, DEC-031 stage 2 prototype subset).
+# TS-WEB-0015 preview smoke (M4 — minimal CI, DEC-0031 stage 2 prototype subset).
 #
 # `vercel project inspect schafe-vorm-fenster-www` shows the project linked
 # to this GitHub repo (`link.type: github`), and `vercel ls`/the

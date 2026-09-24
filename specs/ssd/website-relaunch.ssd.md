@@ -1,9 +1,9 @@
 ---
 artefact: ssd
-id: SSD-WEB
+id: SSD-WEB-0001
 status: DRAFT
 date: 2026-09-09
-sources: [SRC-001, SRC-003, SRC-006, SRC-008, SRC-009]
+sources: [SRC-0001, SRC-0003, SRC-0006, SRC-0008, SRC-0009]
 ---
 
 # SSD — Schafe vorm Fenster Website Relaunch
@@ -13,19 +13,19 @@ sources: [SRC-001, SRC-003, SRC-006, SRC-008, SRC-009]
 The website communicates what Schafe vorm Fenster is, organised around the
 concerns a visitor has right now, and converts each concern into its one
 primary action. It argues with live data and proof instead of claims
-(SRC-001 "The Architecture in One Paragraph").
+(SRC-0001 "The Architecture in One Paragraph").
 
 ## Scope
 
 - In scope: `www.schafe-vorm-fenster.de` and its country/language variants
-  (DEC-003: `.de`, `.pl`, `.at`, one international domain — TLD open, Q-001).
+  (DEC-0003: `.de`, `.pl`, `.at`, one international domain — TLD open, Q-0001).
 - Out of scope: the product itself (village calendars on
   `app.schafe-vorm-fenster.de`), help and instructions (live in the app),
-  the AI-coaching track (different brand; SRC-001 "Boundaries").
+  the AI-coaching track (different brand; SRC-0001 "Boundaries").
 
 ## Goals
 
-Referenced, not restated (SRC-008):
+Referenced, not restated (SRC-0008):
 
 | Goal | Reference |
 | --- | --- |
@@ -39,8 +39,8 @@ carried by this website.
 ## Stakeholders
 
 The audience model (two axes: audience × relation) is defined in
-`@schafe-vorm-fenster/audiences` (ADR-003, SRC-009). The website serves, in
-the priority order given per page by SRC-003:
+`@schafe-vorm-fenster/audiences` (ADR-003, SRC-0009). The website serves, in
+the priority order given per page by SRC-0003:
 
 `rural-residents` · `actors` · `municipalities` · `institutions` ·
 `counties` · `companies` — each defined in
@@ -56,10 +56,10 @@ The websites' conversions are the conversion goals referenced per page in
 
 ## Constraints Summary
 
-See `requirements/constraints/`. Binding: Next.js + Vercel (DEC-002),
+See `requirements/constraints/`. Binding: Next.js + Vercel (DEC-0002),
 brand kit (`@schafe-vorm-fenster/brand-design`),
-mobile-first, cookieless analytics (DEC-004).
+mobile-first, cookieless analytics (DEC-0004).
 
 ## Open Issues
 
-Tracked in `questions/open-questions.md` (`Q-###`).
+Tracked in `questions/open-questions.md` (`Q-####`).

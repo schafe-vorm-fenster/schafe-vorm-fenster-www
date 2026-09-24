@@ -10,7 +10,7 @@ import {
   strictTransportSecurity,
 } from "@/src/lib/security/csp";
 
-describe("TS-014 D2: the Content-Security-Policy, written out", () => {
+describe("TS-WEB-0014 D2: the Content-Security-Policy, written out", () => {
   it("names every directive of the determination", () => {
     const directives = Object.keys(policyDirectives({ environment: "production" }));
     expect(directives).toEqual([
@@ -71,7 +71,7 @@ describe("TS-014 D2: the Content-Security-Policy, written out", () => {
   });
 });
 
-describe("TS-014 D3 (DEC-045): per-build hashes, not a nonce", () => {
+describe("TS-WEB-0014 D3 (DEC-0045): per-build hashes, not a nonce", () => {
   it("places every supplied hash in script-src and emits no nonce", () => {
     const header = contentSecurityPolicy({
       environment: "production",
@@ -146,7 +146,7 @@ describe("state/open.md rows 21 & 31: the CSP that actually hydrates", () => {
   });
 });
 
-describe("TS-014 D7: no wildcard, ever", () => {
+describe("TS-WEB-0014 D7: no wildcard, ever", () => {
   const forbiddenInScriptOrConnect = [
     "*",
     "https:",
@@ -178,7 +178,7 @@ describe("TS-014 D7: no wildcard, ever", () => {
   });
 });
 
-describe("TS-014 D4/D5: security headers, header by header", () => {
+describe("TS-WEB-0014 D4/D5: security headers, header by header", () => {
   it("sets the static header set with the specified values", () => {
     const headers = Object.fromEntries(
       STATIC_SECURITY_HEADERS.map(({ key, value }) => [key, value]),

@@ -5,7 +5,7 @@ import { resetRateLimits } from "./bff";
 import { GET } from "@/app/api/stats/route";
 
 /**
- * TS-009-A7 / TS-009 D6 — the counter exception, in its own file on purpose.
+ * TS-WEB-0009-A7 / TS-WEB-0009 D6 — the counter exception, in its own file on purpose.
  *
  * The `last-good` store is process-wide, so a test that must see a **cold**
  * cache cannot share a worker with one that warms it. Vitest isolates test
@@ -24,7 +24,7 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe("TS-008-A5 / TS-009-A7: counters with a cold cache are removed, never snapshotted", () => {
+describe("TS-WEB-0008-A5 / TS-WEB-0009-A7: counters with a cold cache are removed, never snapshotted", () => {
   it("answers 204 with no body — the module is absent from the page", async () => {
     const response = await GET(new Request("http://localhost:3100/api/stats"));
 

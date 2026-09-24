@@ -1,7 +1,7 @@
 /**
  * The M2 page scaffolding.
  *
- * Every route of TS-004 D1 renders its title and then the ordered module
+ * Every route of TS-WEB-0004 D1 renders its title and then the ordered module
  * list of its composition sheet (`plan/component-inventory.md` §4) as
  * labelled placeholder sections with a reserved height. The page
  * implementers replace a `<PlaceholderSection>` **in place**: the id, the

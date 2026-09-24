@@ -15,7 +15,7 @@ export interface MenuToggleProps {
  * The phone header's disclosure control — Jan's round-3 point 3.
  *
  * Structure: three stripes in a radius-999 touch target of at least 44 px
- * (SRC-014 §Shape and Space) — which is exactly the **control well** §Icons
+ * (SRC-0014 §Shape and Space) — which is exactly the **control well** §Icons
  * sanctions, so over a hero photograph the same square is filled with ink
  * and the stripes turn paper (16.56:1, whatever the photograph does), while
  * on the solid ground the fill is `transparent` and nothing about the
@@ -29,7 +29,7 @@ export interface MenuToggleProps {
  * no text, so the name comes from `aria-label` in the page's own language.
  * The burger→X movement is a CSS animation that plays when the overlay's own
  * instance mounts, and `prefers-reduced-motion` removes it (`base.css`). It
- * is a second movement beside SRC-014 §Motion's one — recorded in
+ * is a second movement beside SRC-0014 §Motion's one — recorded in
  * `state/open.md`, on Jan's instruction.
  */
 export function MenuToggle({

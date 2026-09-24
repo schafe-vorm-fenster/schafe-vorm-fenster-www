@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import { LegalSection } from "./legal-section";
 
-describe("TS-029 D1–D6: a registry entry without a document reserves its anchor and stays silent", () => {
+describe("TS-WEB-0029 D1–D6: a registry entry without a document reserves its anchor and stays silent", () => {
   it("renders no heading and no placeholder when the body is absent", () => {
     const html = renderToStaticMarkup(<LegalSection section="terms" title="Nutzungsbedingungen" />);
     expect(html).not.toContain("<h2");

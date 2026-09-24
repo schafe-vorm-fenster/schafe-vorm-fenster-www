@@ -6,12 +6,12 @@ import type { RhythmEntry } from "../../src/components/section-shell/rhythm";
 import type { APIRequestContext, Page } from "@playwright/test";
 
 /**
- * TS-019 — `/`, the acceptance walk.
+ * TS-WEB-0019 — `/`, the acceptance walk.
  *
  * One test per acceptance criterion, named by its id, at the two reference
- * viewports of TS-006 D3 (360 × 640 and 1280 × 800). Criteria that need M4
- * behaviour — live BFF routes (TS-008 D2), entry-trait stages (TS-010), the
- * JSON-LD graph (TS-011 D4) and the analytics collector (TS-012) — are
+ * viewports of TS-WEB-0006 D3 (360 × 640 and 1280 × 800). Criteria that need M4
+ * behaviour — live BFF routes (TS-WEB-0008 D2), entry-trait stages (TS-WEB-0010), the
+ * JSON-LD graph (TS-WEB-0011 D4) and the analytics collector (TS-WEB-0012) — are
  * marked `test.fixme` with the milestone, so they are *listed and red-flagged*
  * rather than quietly missing. Nothing here is reworded from the spec.
  */
@@ -21,7 +21,7 @@ const DESKTOP = { width: 1280, height: 800 };
 
 /**
  * Block 1 arrives behind a `<Suspense>` boundary whose fallback **is** S1
- * (TS-019 D2: "S2 and S3 arrive by island"), so a cold cache serves the
+ * (TS-WEB-0019 D2: "S2 and S3 arrive by island"), so a cold cache serves the
  * fallback first and the resolved block a beat later. Between the two the
  * document briefly holds both — React reveals a boundary by inserting the
  * streamed content and removing the fallback, in that order. Every assertion
@@ -33,7 +33,7 @@ async function blockOneSettled(page: Page): Promise<void> {
 }
 
 /**
- * A covered community whose window is empty — TS-019 D2's S3, and the only
+ * A covered community whose window is empty — TS-WEB-0019 D2's S3, and the only
  * state in which the widening module still renders (polish brief, page 1,
  * fix 2). `EMPTY_DEMO_SLUG` no longer reaches it: the dates capability needs
  * no credential, so the public village calendar answers for Lassan in every
@@ -50,7 +50,7 @@ async function blockOneSettled(page: Page): Promise<void> {
  * F-2-61 gave a neighbour (`zuessow`) precisely so the empty state has
  * something to widen to. With no candidate left, `emptyPlace()` returned
  * `undefined` and three state-B walks skipped themselves silently on every
- * mock run (TS-020-A3, TS-020-A8's second half, TS-019-A4).
+ * mock run (TS-WEB-0020-A3, TS-WEB-0020-A8's second half, TS-WEB-0019-A4).
  *
  * Appending it costs the `auto` backend nothing: the helper asks the BFF
  * whether a candidate is *actually* empty before returning it, so on `auto`
@@ -70,7 +70,7 @@ async function emptyPlace(request: APIRequestContext): Promise<string | undefine
 
     // S3's answer *is* the widened radius, so the walk needs a community
     // that has something within it — an empty place in an empty region
-    // renders no module at all (TS-008 D1: absent, never empty).
+    // renders no module at all (TS-WEB-0008 D1: absent, never empty).
     const place = body.data?.place;
     if (place === undefined) continue;
     const near = await request.get(`/api/nearby?lat=${place.lat}&lng=${place.lng}&radius=15`);
@@ -99,8 +99,8 @@ async function sectionRhythm(page: Page): Promise<RhythmEntry[]> {
   );
 }
 
-test.describe("TS-019 — home", () => {
-  test("TS-019-A2: stage 0 shows a search, and the one primary CTA is its submit", async ({
+test.describe("TS-WEB-0019 — home", () => {
+  test("TS-WEB-0019-A2: stage 0 shows a search, and the one primary CTA is its submit", async ({
     page,
   }) => {
     await page.setViewportSize(PHONE);
@@ -125,7 +125,7 @@ test.describe("TS-019 — home", () => {
 
     // "No element in the first screen links to another page to see what is
     // on": inside the content. The header's four job labels are the *switch*
-    // between jobs and stay as they are (TS-006 D4).
+    // between jobs and stay as they are (TS-WEB-0006 D4).
     const linksAboveTheFold = await page.evaluate((foldHeight) => {
       const main = document.querySelector("main");
       if (!main) return -1;
@@ -137,7 +137,7 @@ test.describe("TS-019 — home", () => {
   });
 
   for (const viewport of [PHONE, DESKTOP]) {
-    test(`TS-006-A3 / TS-019-A2: the primary CTA is above the fold at ${viewport.width}×${viewport.height}`, async ({
+    test(`TS-WEB-0006-A3 / TS-WEB-0019-A2: the primary CTA is above the fold at ${viewport.width}×${viewport.height}`, async ({
       page,
     }) => {
       await page.setViewportSize(viewport);
@@ -149,7 +149,7 @@ test.describe("TS-019 — home", () => {
       expect(box!.y + box!.height).toBeLessThanOrEqual(viewport.height);
     });
 
-    test(`TS-017-A9: no horizontal scroll at ${viewport.width}×${viewport.height}`, async ({
+    test(`TS-WEB-0017-A9: no horizontal scroll at ${viewport.width}×${viewport.height}`, async ({
       page,
     }) => {
       await page.setViewportSize(viewport);
@@ -161,7 +161,7 @@ test.describe("TS-019 — home", () => {
     });
   }
 
-  test("TS-019-A3: `?ort=<covered place with dates>` shows the place and 3 rows", async ({
+  test("TS-WEB-0019-A3: `?ort=<covered place with dates>` shows the place and 3 rows", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -183,7 +183,7 @@ test.describe("TS-019 — home", () => {
     );
   });
 
-  test("TS-019-A4: `?ort=<covered place without dates>` shows the nearby module and the publish CTA", async ({
+  test("TS-WEB-0019-A4: `?ort=<covered place without dates>` shows the nearby module and the publish CTA", async ({
     page,
     request,
   }) => {
@@ -208,7 +208,7 @@ test.describe("TS-019 — home", () => {
     expect(dates).not.toMatch(/^Das ist los in/m);
   });
 
-  test("TS-019-A5: an uncovered place typed into the search navigates to /dein-ort/starten?ort=", async ({
+  test("TS-WEB-0019-A5: an uncovered place typed into the search navigates to /dein-ort/starten?ort=", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -227,7 +227,7 @@ test.describe("TS-019 — home", () => {
     expect(main).not.toContain("99999");
   });
 
-  test("TS-019-A6: exactly three scenes, one mechanism each, every opener a question", async ({
+  test("TS-WEB-0019-A6: exactly three scenes, one mechanism each, every opener a question", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -246,17 +246,17 @@ test.describe("TS-019 — home", () => {
   });
 
   test.fixme(
-    "TS-019-A7: the entry trait reorders the scenes and changes nothing else [M4 — TS-010 stages]",
+    "TS-WEB-0019-A7: the entry trait reorders the scenes and changes nothing else [M4 — TS-WEB-0010 stages]",
     () => {},
   );
 
-  test("TS-019-A8: the proof stream renders exactly 5 elements", async ({ page }) => {
+  test("TS-WEB-0019-A8: the proof stream renders exactly 5 elements", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/");
     await expect(page.locator("#proof-stream article")).toHaveCount(5);
   });
 
-  test("TS-019-A9: DOM order is block 1 · scenes · provenance · proof · band · closing", async ({
+  test("TS-WEB-0019-A9: DOM order is block 1 · scenes · provenance · proof · band · closing", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -307,7 +307,7 @@ test.describe("TS-019 — home", () => {
       "closing-cta",
     ]);
 
-    // Nothing after the closing CTA but the global footer (TS-006 D2).
+    // Nothing after the closing CTA but the global footer (TS-WEB-0006 D2).
     const afterClosing = await page.evaluate(() => {
       const closing = document.querySelector("#closing-cta");
       const nodes: string[] = [];
@@ -321,7 +321,7 @@ test.describe("TS-019 — home", () => {
     expect(afterClosing).toEqual([]);
   });
 
-  test("TS-019-A10 / TS-006-A6: the context band names the three non-focus jobs, the closing block repeats block 1", async ({
+  test("TS-WEB-0019-A10 / TS-WEB-0006-A6: the context band names the three non-focus jobs, the closing block repeats block 1", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -353,7 +353,7 @@ test.describe("TS-019 — home", () => {
     expect(closingSubmit).toBe(heroSubmit);
   });
 
-  test("TS-019-A11: with JavaScript disabled the page is complete", async ({ browser }) => {
+  test("TS-WEB-0019-A11: with JavaScript disabled the page is complete", async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
     await page.setViewportSize(DESKTOP);
@@ -380,12 +380,12 @@ test.describe("TS-019 — home", () => {
     await context.close();
   });
 
-  test("TS-005-A13: the selection is the engine's, and reproducible across reloads", async ({
+  test("TS-WEB-0005-A13: the selection is the engine's, and reproducible across reloads", async ({
     page,
   }) => {
-    // DEC-048's count for this surface is 5, and it holds while the pool is
+    // DEC-0048's count for this surface is 5, and it holds while the pool is
     // smaller than the surface: "an unfilled position weakens the claim, it
-    // does not shorten the stream" (SRC-001 §4).
+    // does not shorten the stream" (SRC-0001 §4).
     //
     // The `/ueber-uns` half of this walk moved to that page's own spec. A
     // home-page acceptance test asserting another page's card count was a
@@ -403,19 +403,19 @@ test.describe("TS-019 — home", () => {
     const home = await positionsOf("/", selector);
     expect(home).toHaveLength(5);
 
-    // TS-005-A4: same trait, same place, same result. The page is stage 0
+    // TS-WEB-0005-A4: same trait, same place, same result. The page is stage 0
     // here and the ISO-week seed is the only variety input, so a reload
     // inside the same week reproduces the order exactly.
     expect(await positionsOf("/", selector)).toEqual(home);
   });
 
-  test("TS-019-A12: the JSON-LD graph is one WebSite and one Organization, no Event", async ({
+  test("TS-WEB-0019-A12: the JSON-LD graph is one WebSite and one Organization, no Event", async ({
     page,
   }) => {
     await page.goto("/");
 
     const scripts = page.locator('script[type="application/ld+json"]');
-    // TS-011 D4: one graph per page, not one script per node.
+    // TS-WEB-0011 D4: one graph per page, not one script per node.
     await expect(scripts).toHaveCount(1);
 
     const graph = JSON.parse((await scripts.textContent()) ?? "{}");
@@ -429,10 +429,10 @@ test.describe("TS-019 — home", () => {
     expect(JSON.stringify(graph)).not.toContain('"Event"');
   });
 
-  test("TS-019-A13: the calendar handover emits save-calendar-to-homescreen once", async ({
+  test("TS-WEB-0019-A13: the calendar handover emits save-calendar-to-homescreen once", async ({
     page,
   }) => {
-    // The tracker is the mock (TS-012, plan/guardrails.md): it logs and
+    // The tracker is the mock (TS-WEB-0012, plan/guardrails.md): it logs and
     // records nothing, so the console line *is* the event, and its absence
     // from the network is half of what A13 asserts.
     const events: string[] = [];
@@ -457,7 +457,7 @@ test.describe("TS-019 — home", () => {
     ).toHaveAttribute("data-hydrated", "true");
 
     // The click navigates off-site; the event must fire without the link
-    // being delayed (TS-012 D9), so the listener is enough — no
+    // being delayed (TS-WEB-0012 D9), so the listener is enough — no
     // `preventDefault`, and the assertion is on what was logged.
     await handover.click({ modifiers: ["Shift"] }).catch(() => undefined);
     await expect
@@ -468,7 +468,7 @@ test.describe("TS-019 — home", () => {
     expect(saves).toHaveLength(1);
   });
 
-  test("TS-019-A14: the counter block renders the dates figure and nothing else", async ({
+  test("TS-WEB-0019-A14: the counter block renders the dates figure and nothing else", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -486,7 +486,7 @@ test.describe("TS-019 — home", () => {
     await expect(counters.locator("span[data-tone]")).toHaveCount(1);
   });
 
-  test("SRC-014 §Page Rhythm: photo/colour alternation holds on /", async ({ page }) => {
+  test("SRC-0014 §Page Rhythm: photo/colour alternation holds on /", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/");
     const sections = await sectionRhythm(page);
@@ -494,7 +494,7 @@ test.describe("TS-019 — home", () => {
     expect(checkRhythm(sections, 0)).toEqual([]);
   });
 
-  test("TS-006-A5: all four jobs are one click away", async ({ page }) => {
+  test("TS-WEB-0006-A5: all four jobs are one click away", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/");
     const hrefs = await page.evaluate(() =>
@@ -505,13 +505,13 @@ test.describe("TS-019 — home", () => {
     }
   });
 
-  test("TS-006-A15: `/` renders no breadcrumb trail", async ({ page }) => {
+  test("TS-WEB-0006-A15: `/` renders no breadcrumb trail", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("navigation", { name: "Startseite" })).toHaveCount(1); // the header nav only
     await expect(page.locator("nav ol")).toHaveCount(0);
   });
 
-  test("TS-001: the English variant renders the English artifact", async ({ page }) => {
+  test("TS-WEB-0001: the English variant renders the English artifact", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/en");
     await expect(page.locator("html")).toHaveAttribute("lang", "en");

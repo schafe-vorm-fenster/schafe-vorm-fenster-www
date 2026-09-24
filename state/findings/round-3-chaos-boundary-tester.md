@@ -27,7 +27,7 @@ Per the persona brief: React escapes output by default, so an accepted `<script>
 | C-B-7 | `/EN/DEIN-ORT` → 404 (working as designed) | `HTTP/2 404` | unchanged |
 | C-B-8 | `/en/nonexistent-page` → 404 | `HTTP/2 404`; body now confirmed to render the full `global-not-found` page (`<h1>Seite nicht gefunden</h1>` literally in HTML), not an empty shell | unchanged / confirmed healthy |
 | C-B-9 | 500-char slug → 404 | `HTTP/2 404` | unchanged |
-| C-B-10 | `?ort=garbage&<script>=alert` query garbage silently ignored, 200 | Now **307** → `/dein-ort/starten?ort=garbage` | **behavior changed** — expected: this is the new DEC-070 `?ort=` re-resolution hop (`place-hop.ts`), not a regression |
+| C-B-10 | `?ort=garbage&<script>=alert` query garbage silently ignored, 200 | Now **307** → `/dein-ort/starten?ort=garbage` | **behavior changed** — expected: this is the new DEC-0070 `?ort=` re-resolution hop (`place-hop.ts`), not a regression |
 | C-B-11 | Emoji in name field accepted | Still accepted | unchanged |
 | C-B-12 | RTL Arabic text in name field accepted | Still accepted, no `dir` attribute | unchanged |
 | C-B-13 | Surrogate-pair Unicode accepted | Not re-driven this round (no code path touched it); no reason to expect a regression | not retested |

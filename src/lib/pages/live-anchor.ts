@@ -1,12 +1,12 @@
 /**
  * The anchor the live modules speak about when the visitor has not said
- * where she is — TS-010's stage 0, from the live layer's point of view.
+ * where she is — TS-WEB-0010's stage 0, from the live layer's point of view.
  *
  * Position 1 needs a place slug and position 2 needs a coordinate. At stage 0
  * the website has neither: the platform's request geo headers are not handed
  * down yet (`src/lib/personalization/README.md` → "What this folder needs
  * from others", row 1), and geo-api has no coordinate → hierarchy endpoint
- * (Q-032). Two ways to answer that:
+ * (Q-0032). Two ways to answer that:
  *
  *   1. render no live module at all, which the mock rule forbids — "never as
  *      a hole, never as a bare empty state" (plan/guardrails.md);
@@ -43,7 +43,7 @@ export interface LiveAnchor {
   readonly lat: number;
   readonly lng: number;
   readonly county: string;
-  /** `true` once the visitor stated a place — TS-010 stage 3. */
+  /** `true` once the visitor stated a place — TS-WEB-0010 stage 3. */
   readonly stated: boolean;
 }
 
@@ -54,7 +54,7 @@ export interface LiveAnchor {
  * every other place lookup on the site uses.
  *
  * An unresolvable value is **not an error**: the placeless variant renders,
- * which is TS-020 D2's own rule ("the parameter is dropped and the placeless
+ * which is TS-WEB-0020 D2's own rule ("the parameter is dropped and the placeless
  * variant renders — never an error page").
  */
 export async function resolveLiveAnchor(raw: string | undefined): Promise<LiveAnchor> {
@@ -69,7 +69,7 @@ export async function resolveLiveAnchor(raw: string | undefined): Promise<LiveAn
   };
 }
 
-/** The place behind `?ort=`, by slug first and by postcode second (TS-008 D7). */
+/** The place behind `?ort=`, by slug first and by postcode second (TS-WEB-0008 D7). */
 export async function resolveAnchorPlace(
   raw: string | undefined,
 ): Promise<Place | undefined> {
@@ -78,7 +78,7 @@ export async function resolveAnchorPlace(
 }
 
 /**
- * What `?ort=` turned out to be — TS-008 D7's **three** outcomes, kept apart
+ * What `?ort=` turned out to be — TS-WEB-0008 D7's **three** outcomes, kept apart
  * all the way into the page (F-2-30).
  *
  * `searchPlaces` has classified covered / uncovered / unsupported since M4,
@@ -87,15 +87,15 @@ export async function resolveAnchorPlace(
  * — was produced by the live layer and consumed by nothing. This type is the
  * seam that keeps it: a page switches on `kind`, never on `undefined`.
  *
- * | `kind` | Means | Destination (TS-008 D7, TS-020 D2) |
+ * | `kind` | Means | Destination (TS-WEB-0008 D7, TS-WEB-0020 D2) |
  * | --- | --- | --- |
  * | `none` | no parameter, or one the validator dropped | the placeless variant, status 200, no redirect |
  * | `covered` | geo-api resolved a community | `/dein-ort?ort=<slug>`; dates or the empty state decide which |
  * | `uncovered` | geo-api answered, and has no community for it | `/dein-ort/starten?ort=<query>` |
  *
  * The interim `unsupported` outcome (a typed name while geo-api's name
- * search is Q-025) is **`none`, not `uncovered`**: the value never reached
- * geo-api, so nothing has been established about the place. TS-020 D2 makes
+ * search is Q-0025) is **`none`, not `uncovered`**: the value never reached
+ * geo-api, so nothing has been established about the place. TS-WEB-0020 D2 makes
  * the same distinction in words — "present but unresolvable" stays on the
  * page at 200, "not covered by geo-api" leaves it.
  */
@@ -105,7 +105,7 @@ export type PlaceOutcome =
   | { readonly kind: "uncovered"; readonly query: string };
 
 /**
- * `?ort=` → one of TS-008 D7's three outcomes.
+ * `?ort=` → one of TS-WEB-0008 D7's three outcomes.
  *
  * Takes the raw `searchParams` entry (string, repeated, or absent) and runs
  * it through `readPlaceParameter` first, so every page that switches on the

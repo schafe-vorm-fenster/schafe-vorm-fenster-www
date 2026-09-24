@@ -1,6 +1,6 @@
 {
   "$note": "Tier 3 for position 2 (this week nearby). Widest scope; the module marks it with data-demo, never with rendered copy.",
-  "$generated": "mock backend, committed per TS-009 D8",
+  "$generated": "mock backend, committed per TS-WEB-0009 D8",
   "builtAt": "2026-09-11T00:00:00.000Z",
   "events": [
     {

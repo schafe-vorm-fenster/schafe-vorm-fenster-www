@@ -1,13 +1,13 @@
 /**
- * The Accept-Language suggestion signal — TS-001 D3's closing note,
- * DEC-038, DEC-053.
+ * The Accept-Language suggestion signal — TS-WEB-0001 D3's closing note,
+ * DEC-0038, DEC-0053.
  *
  * D3: the *rendered* language is a pure function of the URL — no cookie, no
  * session, no `Accept-Language` at render time, because pages must stay
- * statically cacheable. DEC-038 carries a first-visit suggestion forward as
+ * statically cacheable. DEC-0038 carries a first-visit suggestion forward as
  * a **future, client-side, once-per-session** feature (`sessionStorage`,
- * Q-011) that "offers a link; it does not redirect the render." This module
- * is the one thing D3/DEC-038 assign to the proxy today: exposing the raw
+ * Q-0011) that "offers a link; it does not redirect the render." This module
+ * is the one thing D3/DEC-0038 assign to the proxy today: exposing the raw
  * signal, never acting on it.
  *
  * The signal travels as a `Server-Timing` response header rather than a

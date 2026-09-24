@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 /**
  * The root layout for `app/dev/**`.
  *
- * `app/[lang]/layout.tsx` is the site's root layout (TS-004 D2), but
+ * `app/[lang]/layout.tsx` is the site's root layout (TS-WEB-0004 D2), but
  * `app/dev` is a sibling tree outside `[lang]` — the language segment is not
  * a language here, it is a development tool. Next.js requires exactly one
  * root layout per independent route subtree to render `<html>` and `<body>`;

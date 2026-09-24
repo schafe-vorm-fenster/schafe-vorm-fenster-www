@@ -20,7 +20,7 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe("TS-008 D1 pos 3 / DEC-034: a designed set of examples, never a place list", () => {
+describe("TS-WEB-0008 D1 pos 3 / DEC-0034: a designed set of examples, never a place list", () => {
   it("answers a capped set of active example places with their date counts", async () => {
     const body = await (await call(DEMO_COUNTY.id)).json();
 
@@ -47,7 +47,7 @@ describe("TS-008 D1 pos 3 / DEC-034: a designed set of examples, never a place l
     expect(body.demo).toBe(true);
   });
 
-  it("carries the active-places cache lifetime of TS-003 D5", async () => {
+  it("carries the active-places cache lifetime of TS-WEB-0003 D5", async () => {
     const response = await call(DEMO_COUNTY.id);
     expect(response.headers.get("cache-control")).toBe(
       "public, s-maxage=3600, stale-while-revalidate=604800",

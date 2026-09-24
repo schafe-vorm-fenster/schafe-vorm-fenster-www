@@ -45,7 +45,7 @@ export interface PersonProfileProps {
 
 /**
  * 36 `person-profile` [PROPOSED] — content type 15 `person-profile`,
- * TS-027 D7.
+ * TS-WEB-0027 D7.
  *
  * Structure: portrait · name · role line · optional bio. Nothing about a
  * person is written into website copy beyond what `@schafe-vorm-fenster/
@@ -58,7 +58,7 @@ export interface PersonProfileProps {
  * Space: the ratio is declared before the portrait loads; equal card heights
  * in a grid come from the page's own layout, not from this component.
  * A11y: the portrait's `alt` names the person; no `Person` JSON-LD node is
- * emitted here (TS-011 D4) — that is a page-level structured-data concern.
+ * emitted here (TS-WEB-0011 D4) — that is a page-level structured-data concern.
  */
 export function PersonProfile({
   name,

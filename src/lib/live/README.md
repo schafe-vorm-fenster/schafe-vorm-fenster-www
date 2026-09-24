@@ -4,10 +4,10 @@ Everything the website knows about its own ecosystem's data: which module
 asks what, which backend answers, what happens when the answer does not come,
 and how the result reaches a page.
 
-Specs: **TS-008** (live modules, place search, widening chain, handover),
-**TS-009** (static shell, cached islands, three-tier fallback), **TS-013**
-(the closed client-request set), **TS-017 D4** (the app boundary),
-**TS-003 D5** (cache lifetimes), **TS-004 D5** (the BFF route inventory).
+Specs: **TS-WEB-0008** (live modules, place search, widening chain, handover),
+**TS-WEB-0009** (static shell, cached islands, three-tier fallback), **TS-WEB-0013**
+(the closed client-request set), **TS-WEB-0017 D4** (the app boundary),
+**TS-WEB-0003 D5** (cache lifetimes), **TS-WEB-0004 D5** (the BFF route inventory).
 
 ## The one rule everything else follows
 
@@ -30,14 +30,14 @@ A page sees one thing: an **envelope**.
 | `GET /api/places/search?q=` | `places.ts` → `searchPlaces()` | **real** for a name (the committed index), **mock** for a ZIP (no `GEOAPI_READ_TOKEN`) | the place search and its typeahead, position 0 |
 | `GET /api/places/{slug}/events?window=` | `places.ts` → `placeEvents()` | **real** — the public village calendar | position 1, dates in the place, and the empty-state verdict |
 | `GET /api/nearby?lat=&lng=&radius=` | `nearby.ts` → `nearbyEvents()` | **real** — the index cuts the radius, the public calendar carries the dates | position 2, this week within ~15 km |
-| `GET /api/region/{county}/examples` | `region.ts` → `regionExamples()` | **real, approximated** — no activity ranking exists upstream (DEC-034) | position 3, active example places |
+| `GET /api/region/{county}/examples` | `region.ts` → `regionExamples()` | **real, approximated** — no activity ranking exists upstream (DEC-0034) | position 3, active example places |
 | `GET /api/stats` | `counters.ts` → `liveCounters()` | **real** for `dates`, **mock** for `places` / `updates today` | position 4, the live counters |
-| — (built server-side, never fetched) | `app-handover.ts` | — | every link into the app (DEC-029) |
+| — (built server-side, never fetched) | `app-handover.ts` | — | every link into the app (DEC-0029) |
 
 Supporting modules: `types.ts` (the envelope and the domain shapes),
 `widening.ts` (the chain, the ~15 km cut and the `Europe/Berlin` windows),
 `resilient.ts` (the three tiers), `last-good.ts` (the tier-2 store),
-`cache-profiles.ts` (TS-003 D5's numbers), `snapshots.ts` (tier 3),
+`cache-profiles.ts` (TS-WEB-0003 D5's numbers), `snapshots.ts` (tier 3),
 `bff.ts` (origin check, rate limit, the response shape), `adapters.ts`
 (upstream shape → ours), `categories.ts` (events-api's five category ids →
 the design system's six tones), `place-index.ts` (the committed
@@ -88,8 +88,8 @@ LIVE_DATA=real   # force the real clients; capabilities upstream lacks stay mock
 `auto` decides **per capability**, in this order:
 
 1. does the operation exist at all? Three do not, and they are measured, not
-   guessed — the county activity ranking (Q-015 residue) and the
-   `/api/stats` *places* and *updates today* fields (Q-037). Those are mocked
+   guessed — the county activity ranking (Q-0015 residue) and the
+   `/api/stats` *places* and *updates today* fields (Q-0037). Those are mocked
    whatever the flag says. `state/open.md` rows 6 and 78.
 2. does the capability's service need a **credential**? `credential: "none"`
    in `CAPABILITIES` means the public calendar or the committed index
@@ -98,7 +98,7 @@ LIVE_DATA=real   # force the real clients; capabilities upstream lacks stay mock
 3. otherwise: is a read token present? Without one, `auto` picks the mock and
    says so in the payload.
 
-Name search is the row that moved: geo-api still has none (Q-025 stays open,
+Name search is the row that moved: geo-api still has none (Q-0025 stays open,
 row 5), but the committed index answers it, so typing `Schlat` suggests
 Schlatkow with no token anywhere.
 
@@ -114,9 +114,9 @@ data never produces on its own:
 
 | Constant | What it walks |
 | --- | --- |
-| `UNCOVERED_DEMO_ZIP` (`"99999"`) | TS-008 D7's **uncovered** outcome — no place resolves. |
-| `EMPTY_DEMO_SLUG` | TS-008 D4's conversion moment — a covered place with zero dates. |
-| `AMBIGUOUS_DEMO_ZIP` (`"18299"`) | TS-023-A6 — a municipality search that resolves to **several** communities. |
+| `UNCOVERED_DEMO_ZIP` (`"99999"`) | TS-WEB-0008 D7's **uncovered** outcome — no place resolves. |
+| `EMPTY_DEMO_SLUG` | TS-WEB-0008 D4's conversion moment — a covered place with zero dates. |
+| `AMBIGUOUS_DEMO_ZIP` (`"18299"`) | TS-WEB-0023-A6 — a municipality search that resolves to **several** communities. |
 
 Every one of these is a postcode or slug nobody would type by accident —
 finding them is the point of naming them here, not an obstacle.
@@ -129,7 +129,7 @@ state off it:
 ```ts
 interface LiveEnvelope<T> {
   data: T;
-  tier: "live" | "stale" | "snapshot";  // TS-009 D4 tiers 1 / 2 / 3
+  tier: "live" | "stale" | "snapshot";  // TS-WEB-0009 D4 tiers 1 / 2 / 3
   fetchedAt: string;                     // ISO; tier 3 carries the build time
   stale: boolean;                        // the freshness label's condition
   demo: boolean;                         // reaches the markup as data-demo, never as copy
@@ -151,7 +151,7 @@ module — tier 1, 2 and 3 modules may stand side by side on a page.
 | upstream answered, zero results | `live` | `empty` | the module's own conversion state — for `/dein-ort` the publish invitation (`publishInvitation: true`) |
 | upstream failed, `last-good` warm | `stale` | `degraded` + `tier="stale"` | the last good answer plus "Stand: …" |
 | upstream failed, `last-good` cold or expired | `snapshot` | `degraded` + `tier="snapshot"` | the committed snapshot, labelled as an example |
-| counters, both above exhausted | — (`undefined`) | — | **the module is removed from the page** (TS-009 D6) |
+| counters, both above exhausted | — (`undefined`) | — | **the module is removed from the page** (TS-WEB-0009 D6) |
 
 Rules the layer enforces rather than documents:
 
@@ -160,7 +160,7 @@ Rules the layer enforces rather than documents:
   never reaches a page.
 - **One attempt per render.** No in-request retry.
 - **An empty result is tier 1**, not a failure. Zero dates in a covered place
-  is the conversion moment of TS-008 D4, and it renders as a normal module
+  is the conversion moment of TS-WEB-0008 D4, and it renders as a normal module
   with a different offer — no error styling, no warning icon, no retry.
 - **No error text ever reaches the visitor.** Degradations are logged
   server-side as events (`onDegrade`), and the page stays 200.
@@ -220,13 +220,13 @@ async function DatesInThePlace({ slug }: { slug: string }) {
 export default function Page({ searchParams }: { searchParams: Promise<{ ort?: string }> }) {
   return (
     <Suspense fallback={<Skeleton rows={3} variant="row" />}>
-      <DatesInThePlace slug={/* resolved outside the cache boundary, TS-009 D2 */ ""} />
+      <DatesInThePlace slug={/* resolved outside the cache boundary, TS-WEB-0009 D2 */ ""} />
     </Suspense>
   );
 }
 ```
 
-Two rules from TS-009 D2 the example obeys: the request value (`?ort=`) is
+Two rules from TS-WEB-0009 D2 the example obeys: the request value (`?ort=`) is
 read in the **page**, outside any cache boundary, and handed to the island as
 a **prop**; the island itself reads no `searchParams`, `cookies()` or
 `headers()`.
@@ -235,7 +235,7 @@ a **prop**; the island itself reads no `searchParams`, `cookies()` or
 
 ```tsx
 const counters = await liveCounters();
-if (counters === undefined) return null;   // TS-009 D6: removed, never zeroed
+if (counters === undefined) return null;   // TS-WEB-0009 D6: removed, never zeroed
 
 <LiveCounters
   dates={counters.data.dates}
@@ -270,11 +270,11 @@ const { data, demo } = (await response.json()) as BffResponse<PlaceSearchResult>
 ```
 
 `place-search` works without JavaScript as a plain GET form; the typeahead is
-an enhancement on top of it (TS-008 D7).
+an enhancement on top of it (TS-WEB-0008 D7).
 
 ## Caching
 
-`cache-profiles.ts` holds TS-003 D5's two numbers per data kind and nothing
+`cache-profiles.ts` holds TS-WEB-0003 D5's two numbers per data kind and nothing
 else in the tree types them:
 
 | Kind | Fresh TTL | Serve-stale window |
@@ -285,12 +285,12 @@ else in the tree types them:
 
 - The **BFF routes** send them as `Cache-Control: public, s-maxage=…,
   stale-while-revalidate=…` (`cacheControlFor()`), the Vercel SWR semantics
-  DEC-019 fixes.
+  DEC-0019 fixes.
 - The **`last-good` store** uses the stale window as its TTL.
 - The **islands** use `cacheLifeProfile()` with `cacheLife()` and the
   `cacheTags` of `cacheTags.*`. Cache Components (`cacheComponents: true`) is
   on since M4 (`state/open.md` row 76), and the islands live in
-  `app/[lang]/_islands.tsx` — one `use cache` component per TS-008 position,
+  `app/[lang]/_islands.tsx` — one `use cache` component per TS-WEB-0008 position,
   each calling exactly one interface module of this folder. A page renders
   them; it does not fetch.
 

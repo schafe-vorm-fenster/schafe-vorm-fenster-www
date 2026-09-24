@@ -9,7 +9,7 @@ import type { ReactNode } from "react";
 
 import styles from "./closing-cta.module.css";
 
-/** Every variant but `pulse` — `/dein-kalender` repeats its goal here, never Pulse (TS-006 D6). */
+/** Every variant but `pulse` — `/dein-kalender` repeats its goal here, never Pulse (TS-WEB-0006 D6). */
 export type ClosingCtaButtonVariant = Exclude<ButtonVariant, "pulse">;
 
 export interface ClosingCtaRepeatProps extends LinkOptions {
@@ -36,7 +36,7 @@ export interface ClosingCtaRepeatProps extends LinkOptions {
 
 export interface ClosingCtaMergedProps {
   readonly variant: "merged";
-  /** The page's focus job — `primaryConversion: null` pages merge the band and the closing block into the same three-job offer (TS-006 D6). */
+  /** The page's focus job — `primaryConversion: null` pages merge the band and the closing block into the same three-job offer (TS-WEB-0006 D6). */
   readonly currentJob: NavEntry["label"];
   readonly heading?: string;
   readonly locale?: Locale;
@@ -44,7 +44,7 @@ export interface ClosingCtaMergedProps {
    * Block 4's anchor, where the merged block is rendered inside the band's
    * own `aside#context-band` — the merged shape is one block carrying both
    * ids, so a page keeps exactly one `#context-band` and one `#closing-cta`
-   * (TS-006 D6 + TS-011-A4, F-2-41).
+   * (TS-WEB-0006 D6 + TS-WEB-0011-A4, F-2-41).
    */
   readonly id?: string;
   readonly className?: string;
@@ -92,7 +92,7 @@ export function ClosingCtaModule({
 }
 
 /**
- * 48 `closing-cta` [PROPOSED] — content type 22, TS-006 D6.
+ * 48 `closing-cta` [PROPOSED] — content type 22, TS-WEB-0006 D6.
  *
  * Structure: the last block. `repeat` mode is identical to the primary
  * conversion — same goal, same target, same label — plus its reassurance.
@@ -140,7 +140,7 @@ export function ClosingCta(props: ClosingCtaProps) {
     <div className={[styles.repeat, className].filter(Boolean).join(" ")}>
       {heading ? <p className={styles.heading}>{heading}</p> : null}
       {/* `data-cta="repeat"`, never `"primary"` — the marker block 1 keeps
-          (TS-006 D6). It is here so the label is inside the contrast sweep
+          (TS-WEB-0006 D6). It is here so the label is inside the contrast sweep
           that walks `[data-cta]` on every route (`e2e/cta-contrast.spec.ts`);
           this button computed ink on ink in the production build and nothing
           measured it. */}

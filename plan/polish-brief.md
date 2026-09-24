@@ -615,7 +615,7 @@ This page is the closest to right already. Three fixes.
    solange du hier bist."
    *en:* "Three questions and you're in. No email address needed while
    you're here."
-   Sourced: the page carries no identity fields by design (TS-023 D6).
+   Sourced: the page carries no identity fields by design (TS-WEB-0023 D6).
 4. Move the context band **below** the step card and set it `tight`.
 
 ---
@@ -694,7 +694,7 @@ This page is the closest to right already. Three fixes.
 
 **Conversion moment.** Hero Pulse button (`buy-calendar-licence`) with
 the briefing as an equal-weight quiet link beside it; closing block
-repeats both, Pulse becomes `primary-light` there (TS-006 D6).
+repeats both, Pulse becomes `primary-light` there (TS-WEB-0006 D6).
 
 ---
 
@@ -718,7 +718,7 @@ repeats both, Pulse becomes `primary-light` there (TS-006 D6).
 3. Put a persistent summary strip above the step, mono:
    *de:* „480 € pro Jahr, netto · {n} Orte ausgewählt" /
    *en:* "€480 per year, excl. VAT · {n} places selected". The price is
-   fixed per organisation regardless of scope (DEC-060), which is
+   fixed per organisation regardless of scope (DEC-0060), which is
    reassuring and must be said: under the strip, one meta line
    *de:* „Der Preis ändert sich mit der Auswahl nicht." /
    *en:* "The price does not change with your selection."

@@ -26,7 +26,7 @@ export interface OutboundLinkProps {
    */
   readonly disclosure?: string;
   readonly variant?: "inline" | "secondary" | "quiet";
-  /** The conversion marker the analytics registry reads (TS-006 D3) — e.g. `"equal-weight"`. */
+  /** The conversion marker the analytics registry reads (TS-WEB-0006 D3) — e.g. `"equal-weight"`. */
   readonly dataCta?: string;
   /**
    * The page's language — the new-tab announcement was hard-coded German
@@ -38,7 +38,7 @@ export interface OutboundLinkProps {
 }
 
 /**
- * 16 `outbound-link` [PROPOSED] — TS-016 D9, DEC-013.
+ * 16 `outbound-link` [PROPOSED] — TS-WEB-0016 D9, DEC-0013.
  *
  * Structure: the external link — app handover, outlet original, briefing
  * schedule, the `/start` fallback. The link text names source and subject;
@@ -46,7 +46,7 @@ export interface OutboundLinkProps {
  * opens a new tab; and where a third party receives data, the recipient is
  * named in the link's own line, not in a tooltip.
  * States: static — no embed, no iframe, no third-party script. A link is the
- * privacy-preserving form of an integration (TS-016 D9).
+ * privacy-preserving form of an integration (TS-WEB-0016 D9).
  * Inherits: inline link treatment, or the secondary/quiet button treatment.
  * Space: inline; the glyph never shifts the line box, because it sits in an
  * inline-flex box with the text.

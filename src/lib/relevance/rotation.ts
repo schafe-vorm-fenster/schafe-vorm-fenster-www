@@ -1,5 +1,5 @@
 /**
- * Determinism and rotation — TS-005 D7.
+ * Determinism and rotation — TS-WEB-0005 D7.
  *
  * Same trait, same place, same result — always. No `Math.random()`, no
  * request-time entropy, no LLM. Variety comes from **one** deterministic
@@ -8,7 +8,7 @@
  *
  * The seed is an **explicit input**: this module can compute it from a date,
  * but the engine never calls a clock itself — so tests pin the seed and a
- * cached segment carries it (`cacheTag`, TS-005 D8).
+ * cached segment carries it (`cacheTag`, TS-WEB-0005 D8).
  */
 
 /** `ISO-year + ISO-week`, e.g. `2026-W37`. */

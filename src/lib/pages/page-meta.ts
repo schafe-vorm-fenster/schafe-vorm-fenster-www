@@ -1,5 +1,5 @@
 /**
- * `page.meta.ts` in typed form — TS-006 D1.
+ * `page.meta.ts` in typed form — TS-WEB-0006 D1.
  *
  * "Each route carries one `page.meta.ts` next to its `page.tsx`. It is the
  * page brief in typed form — the layout reads it, the checks read it, and no
@@ -10,14 +10,14 @@
  *
  *   1. the page frame (`app/[lang]/_page-frame.tsx`), which renders blocks 3
  *      and 4 — context band and closing CTA — from `focusJob`, so neither is
- *      hand-placed per page (TS-006 D2/D5/D6);
+ *      hand-placed per page (TS-WEB-0006 D2/D5/D6);
  *   2. `page-meta.test.ts`, which resolves every declared id against the
- *      installed hub packages — the static half of TS-006-A1 and A11;
+ *      installed hub packages — the static half of TS-WEB-0006-A1 and A11;
  *   3. the page itself, which never re-states a value the manifest carries.
  *
- * **The four job ids are a closed set** (TS-006 D1) and they resolve onto the
+ * **The four job ids are a closed set** (TS-WEB-0006 D1) and they resolve onto the
  * one job registry the header and the context band already use
- * (`HEADER_JOBS`, TS-004 D4) — a second list of jobs is exactly what D5
+ * (`HEADER_JOBS`, TS-WEB-0004 D4) — a second list of jobs is exactly what D5
  * forbids, so this module maps rather than repeats.
  *
  * Ids are typed as unions rather than imported from
@@ -33,7 +33,7 @@ import { HEADER_JOBS } from "@/src/lib/routes/navigation";
 import type { NavEntry } from "@/src/lib/routes/navigation";
 import type { RouteId } from "@/src/lib/routes/routes";
 
-/** The four jobs of SRC-001 §1 — the closed set of TS-006 D1. */
+/** The four jobs of SRC-0001 §1 — the closed set of TS-WEB-0006 D1. */
 export const JOB_IDS = [
   "know-what-is-on",
   "publish-our-dates",
@@ -47,7 +47,7 @@ export type JobId = (typeof JOB_IDS)[number];
  * job id → the registry entry that owns its label and its target.
  *
  * The right-hand side is `HEADER_JOBS` itself, so a job's target can only
- * ever be changed in `src/lib/routes/navigation.ts` (TS-004 D4).
+ * ever be changed in `src/lib/routes/navigation.ts` (TS-WEB-0004 D4).
  */
 export const JOB_REGISTRY: Readonly<Record<JobId, NavEntry>> = Object.freeze({
   "know-what-is-on": HEADER_JOBS[0],
@@ -61,7 +61,7 @@ export function jobLabelKey(job: JobId): NavEntry["label"] {
   return JOB_REGISTRY[job].label;
 }
 
-/** The route a job leads to — never typed at a call site (TS-004 D4). */
+/** The route a job leads to — never typed at a call site (TS-WEB-0004 D4). */
 export function jobRoute(job: JobId): RouteId {
   return JOB_REGISTRY[job].route;
 }
@@ -102,7 +102,7 @@ export const AUDIENCE_IDS = [
 
 export type AudienceId = (typeof AUDIENCE_IDS)[number];
 
-/** The live modules of TS-008 D1 — four positions plus the place search. */
+/** The live modules of TS-WEB-0008 D1 — four positions plus the place search. */
 export const LIVE_MODULE_IDS = [
   "place-search",
   "position-1-dates-in-the-place",
@@ -116,10 +116,10 @@ export type LiveModuleId = (typeof LIVE_MODULE_IDS)[number];
 
 /**
  * A live module as the manifest declares it: the module id **and its empty
- * state**, because TS-006 D1 requires "≥ 1 module ID, each with its empty
- * state declared (TS-005)". The empty state is a sentence naming what the
+ * state**, because TS-WEB-0006 D1 requires "≥ 1 module ID, each with its empty
+ * state declared (TS-WEB-0005)". The empty state is a sentence naming what the
  * module renders when it has no rows — it is a declaration, not copy: the
- * visible wording comes from the content artifact (TS-007).
+ * visible wording comes from the content artifact (TS-WEB-0007).
  */
 export interface LiveModuleDeclaration {
   readonly id: LiveModuleId;
@@ -127,34 +127,34 @@ export interface LiveModuleDeclaration {
   readonly emptyState: string;
 }
 
-/** The runtime focus-job shift of `/dein-ort` — the one registered exception (TS-020 D1, TS-006-A10). */
+/** The runtime focus-job shift of `/dein-ort` — the one registered exception (TS-WEB-0020 D1, TS-WEB-0006-A10). */
 export interface EmptyStateManifest {
   readonly focusJob: JobId;
   readonly primaryConversion: ConversionGoalId;
 }
 
-/** The page brief of one route, in typed form (TS-006 D1). */
+/** The page brief of one route, in typed form (TS-WEB-0006 D1). */
 export interface PageMeta {
   /** The route this manifest belongs to — its `page.tsx` sits beside it. */
   readonly route: RouteId;
-  /** Exactly one; no page has zero or two (TS-006 D1). */
+  /** Exactly one; no page has zero or two (TS-WEB-0006 D1). */
   readonly focusJob: JobId;
-  /** `null` only where SRC-003 gives the focus job no conversion of its own. */
+  /** `null` only where SRC-0003 gives the focus job no conversion of its own. */
   readonly primaryConversion: ConversionGoalId | null;
-  /** Rendered as an adjacent *secondary* action in the same block (TS-006 D3). */
+  /** Rendered as an adjacent *secondary* action in the same block (TS-WEB-0006 D3). */
   readonly equalWeightConversion?: ConversionGoalId;
-  /** Priority order per SRC-003; the first one is the primary audience. */
+  /** Priority order per SRC-0003; the first one is the primary audience. */
   readonly audiences: readonly AudienceId[];
   /** At least one, each with its empty state declared. */
   readonly liveModules: readonly LiveModuleDeclaration[];
-  /** Slot ids; a slot with no cleared proof stays empty (SRC-001 §4). */
+  /** Slot ids; a slot with no cleared proof stays empty (SRC-0001 §4). */
   readonly proofSlots: readonly string[];
-  /** Only `/dein-ort` fills this (TS-020 D1). */
+  /** Only `/dein-ort` fills this (TS-WEB-0020 D1). */
   readonly emptyState?: EmptyStateManifest;
 }
 
 /**
- * The structural rules of TS-006 D1, as a predicate — used by the test and
+ * The structural rules of TS-WEB-0006 D1, as a predicate — used by the test and
  * available to any later check that wants the same answer without importing
  * a test file. Returns the violations; an empty array is a valid manifest.
  */
@@ -187,7 +187,7 @@ export function checkPageMeta(meta: PageMeta): string[] {
   if (meta.liveModules.length === 0) problems.push("no live module declared");
   for (const declared of meta.liveModules) {
     if (!LIVE_MODULE_IDS.includes(declared.id)) {
-      problems.push(`live module "${declared.id}" is not a TS-008 D1 module`);
+      problems.push(`live module "${declared.id}" is not a TS-WEB-0008 D1 module`);
     }
     if (declared.emptyState.trim() === "") {
       problems.push(`live module "${declared.id}" declares no empty state`);

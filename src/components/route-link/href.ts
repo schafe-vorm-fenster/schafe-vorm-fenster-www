@@ -7,10 +7,10 @@ import type { RouteId } from "@/src/lib/routes/routes";
  * Query and fragment on top of the route facade.
  *
  * The route table and `href()` live in `src/lib/routes/routes.ts` — one
- * source for every path on this website (TS-004 D3a). This module adds
+ * source for every path on this website (TS-WEB-0004 D3a). This module adds
  * nothing to it but the two parts a link may carry beyond the path, so that
  * no component builds a query string by hand and none of them ever types a
- * path (TS-001 D5).
+ * path (TS-WEB-0001 D5).
  */
 export interface LinkOptions {
   /** The language of the current page. Defaults to the TLD default. */

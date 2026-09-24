@@ -10,7 +10,7 @@ const publisherTestimonial: JobRelationProfile = {
   "understand-who-is-behind-it": "neutral",
 };
 
-describe("TS-005-A1 (D3): job relation is a profile over all four jobs", () => {
+describe("TS-WEB-0005-A1 (D3): job relation is a profile over all four jobs", () => {
   it("scores supports 1.0, neutral 0.5, peripheral 0.2", () => {
     expect(JOB_RELATION_WEIGHTS).toEqual({ supports: 1.0, neutral: 0.5, peripheral: 0.2 });
     expect(jobFit(publisherTestimonial, "publish-our-dates")).toBe(1.0);

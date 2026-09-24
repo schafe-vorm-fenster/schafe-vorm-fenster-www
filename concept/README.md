@@ -52,7 +52,7 @@ here.
 source layer, schema hierarchy, mapping skeleton, components, processes.
 It lives in this repository because it is about how *this* repository
 turns hub packages into rendered pages; the hub owns what is said, this
-document owns how it gets here. TS-007 implements it.
+document owns how it gets here. TS-WEB-0007 implements it.
 
 `website-design-system.md` specifies how the brand is applied to this
 website: colour roles, type scale, components, page rhythm, aspect ratios
@@ -68,20 +68,20 @@ register per page, the structure of a section, the per-block length
 budgets at 390 px, and the use/avoid word list. It is bound to the build
 by [`../specs/contracts/copy-contract.md`](../specs/contracts/copy-contract.md),
 exactly as the design system is bound by the design-system contract
-(DEC-080).
+(DEC-0080).
 
 ## What stays in this repository
 
 - `website-content-production.concept.md` — the content production system:
   source entities, the content schema hierarchy, page compositions,
   components, and the playbooks that transform hub records into
-  multilingual page copy. It implements ADR-001 and DEC-020 and carries
-  the relevance contract of TS-005. Draft; it is a working concept, not a
+  multilingual page copy. It implements ADR-001 and DEC-0020 and carries
+  the relevance contract of TS-WEB-0005. Draft; it is a working concept, not a
   governing document.
-- `website-design-system.md` (SRC-014) — the binding visual specification,
-  bound by the design-system contract (SRC-013, DEC-056).
-- `website-copy-guide.md` (SRC-017) — the binding wording specification,
-  bound by the copy contract (SRC-018, DEC-080). It governs how the
+- `website-design-system.md` (SRC-0014) — the binding visual specification,
+  bound by the design-system contract (SRC-0013, DEC-0056).
+- `website-copy-guide.md` (SRC-0017) — the binding wording specification,
+  bound by the copy contract (SRC-0018, DEC-0080). It governs how the
   website writes; what it says stays in the hub.
 - `v1.0/` — the clickable prototype. It is an implementation artifact, not
   content: it renders the relevance model rather than defining it.

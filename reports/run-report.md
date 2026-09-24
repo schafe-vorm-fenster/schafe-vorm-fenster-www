@@ -31,10 +31,10 @@ Two verification lessons the run had to learn (rows 147/148): a local production
 
 ## What the run could not close — read `state/open.md` (169 rows)
 
-- **Row 132 — the one go-live blocker:** under DEC-045's hash-only CSP the four dynamic routes (incl. the order and registration flows) ship unhydrated in production. Invisible on the preview (`'unsafe-inline'` fallback there). Needs a DEC-045 amendment (nonce) — hardening round.
+- **Row 132 — the one go-live blocker:** under DEC-0045's hash-only CSP the four dynamic routes (incl. the order and registration flows) ship unhydrated in production. Invisible on the preview (`'unsafe-inline'` fallback there). Needs a DEC-0045 amendment (nonce) — hardening round.
 - **Row 145:** Suspense/PPR shell vs "page complete without JavaScript" — spec against spec, three criteria fail as written.
 - **R-1…R-11 in the final protocol:** OG images (none), archive rows without outbound links/images, remaining German strings on English pages (F-3-24), a raw `Beleg:` id in body copy, Markdown backticks in the accessibility statement, duplicate `main` after client navigation, the performance floor (96 vs 98, no Save-Data), empty invoice accepted, a pluralisation, `lang` on legal bodies.
-- **Jan, dashboard-only:** row 22 (Vercel project: yarn → pnpm, Node 24; newsletter system Q-020), row 64 (GitHub Packages "Manage Actions access" for the 11 consumed packages — CI is red at install until then).
+- **Jan, dashboard-only:** row 22 (Vercel project: yarn → pnpm, Node 24; newsletter system Q-0020), row 64 (GitHub Packages "Manage Actions access" for the 11 consumed packages — CI is red at install until then).
 - **Mocks:** no read token for geo-api/events-api exists in any environment (row 77) — no page has ever fetched real place data; the `Mock aktiv` register is the hardening checklist.
 
 ## After the prototype (plan/round-4.md, handover section)

@@ -1,5 +1,5 @@
 /*
- * TS-029 D4 — the on-page navigation layout. Below `xl` the nav sits once
+ * TS-WEB-0029 D4 — the on-page navigation layout. Below `xl` the nav sits once
  * under the `h1`, not sticky (`section-nav`'s own CSS governs that); at
  * `xl` (1024px, same switch point `section-nav.module.css` already uses)
  * it becomes a sticky column beside the text. Mobile-first: base is the
@@ -30,11 +30,11 @@
  * legal sections themselves are German. It stands between the `h1` and the
  * section navigation, so an English reader meets it before the first German
  * body. A note, not a warning: no new colour, only tokens the design system
- * already carries (TS-017 D3), and D5's reading measure so it wraps like the
+ * already carries (TS-WEB-0017 D3), and D5's reading measure so it wraps like the
  * text it introduces.
  */
 .germanOnly {
-  /* A hairline is 1px `line` (SRC-014; 2026-09-23 review, theme H). */
+  /* A hairline is 1px `line` (SRC-0014; 2026-09-23 review, theme H). */
   border-left: 1px solid var(--color-neutral-line);
   font-size: var(--type-meta-size);
   margin: var(--space-4) 0 0;

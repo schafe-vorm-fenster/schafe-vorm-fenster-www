@@ -33,11 +33,11 @@ import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
 /**
- * TS-022 — `/mitmachen`, the publishing entry.
+ * TS-WEB-0022 — `/mitmachen`, the publishing entry.
  *
  * Own blocks, in D2 order: hero (scene) → objections → three publishing
  * paths → live example (ink, the page's single dark section, D10) → proof.
- * The context band and the closing CTA are block 3/4 of TS-006 D2 and are
+ * The context band and the closing CTA are block 3/4 of TS-WEB-0006 D2 and are
  * rendered by `PageFrame` from `page.meta.ts` — this page never renders them
  * itself.
  */
@@ -64,7 +64,7 @@ function stepsOf(items: readonly string[]): Step[] {
 /**
  * `<channel> — <the one concrete way it fails>` when the copy carries the
  * em-dash split (3 of 5 items); otherwise the whole sentence stands as the
- * failure and the channel names itself from context. Content is TS-022 D3's;
+ * failure and the channel names itself from context. Content is TS-WEB-0022 D3's;
  * this two-part rendering split is [PROPOSED], a UI decision only.
  */
 function splitObjection(text: string): { channel: string; failure: string } {
@@ -161,8 +161,8 @@ export default async function Page({
   const exampleSlug = selectExamplePlace(undefined).slug;
 
   /**
-   * TS-005 through, not around: the inline surface is **3** positions
-   * (DEC-048), gated, scored, rotated and ordered by the engine. The three
+   * TS-WEB-0005 through, not around: the inline surface is **3** positions
+   * (DEC-0048), gated, scored, rotated and ordered by the engine. The three
    * quotes are real (sourced, clearance pending), so `demo` and every
    * displayed label come off `isDemoSlot(proofDemo)`, not a hard-coded flag.
    */
@@ -194,7 +194,7 @@ export default async function Page({
   });
   const heroCtaLabel = fieldAt(hero.blocks, 2) ?? "";
 
-  // TS-003 D2 declares this page's LCP element to be the WhatsApp scene
+  // TS-WEB-0003 D2 declares this page's LCP element to be the WhatsApp scene
   // image, which is the hero itself (`data-block="scene"` below). The entry
   // carries `lcp: true`, and `photo-surface` turns that into the preload a
   // CSS background image can actually carry.
@@ -207,7 +207,7 @@ export default async function Page({
 
   return (
     <>
-      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{
@@ -215,7 +215,7 @@ export default async function Page({
         label: heroCtaLabel,
         heading: fieldAt(closing.blocks, 0),
         /*
-         * TS-022-A11 asks for a cleared backing before the permanence
+         * TS-WEB-0022-A11 asks for a cleared backing before the permanence
          * promise ships, and the artifact now names one: the offering
          * record `community-calendar` calls free access "a public
          * commitment, not a pricing decision that can be quietly
@@ -300,7 +300,7 @@ export default async function Page({
           no section is over the 1270 px budget any more.
 
           `surface-2 → lime-100 → surface-2` rather than three neutrals: the
-          page's own rhythm test (TS-022-A16) forbids three consecutive
+          page's own rhythm test (TS-WEB-0022-A16) forbids three consecutive
           sections of one colour family, and `objections` above is already
           `paper`. */}
       <SectionShell
@@ -380,7 +380,7 @@ export default async function Page({
       </SectionShell>
 
       {/* The lime ground moved one section down, to the cross-reference: the
-          rhythm rule this page's own test checks (TS-022-A16, D10) forbids
+          rhythm rule this page's own test checks (TS-WEB-0022-A16, D10) forbids
           three consecutive `neutral`-family sections, and `PageFrame` appends
           `surface` (band) and `paper` (closing) after the aside. */}
       <SectionShell
@@ -415,7 +415,7 @@ export default async function Page({
         </ProofStream>
       </SectionShell>
 
-      {/* The one cross-reference this page may carry (TS-022 D9), out of
+      {/* The one cross-reference this page may carry (TS-WEB-0022 D9), out of
           path 3 and into a block of its own — inside the path it read as a
           fourth step of "your website as the source" (brief, page 4, item
           5). One sentence, a quiet link, unchanged wording, and it stands

@@ -1,12 +1,12 @@
 /**
- * The language table — TS-001 D1/D3/D4, DEC-006, DEC-053.
+ * The language table — TS-WEB-0001 D1/D3/D4, DEC-0006, DEC-0053.
  *
- * This module is the *single place a language is declared* (TS-001-A11).
+ * This module is the *single place a language is declared* (TS-WEB-0001-A11).
  * Adding a language is a row here plus a dictionary file — never a code
- * change at a call site (TS-001 D7).
+ * change at a call site (TS-WEB-0001 D7).
  *
  * Phase 1 ships `.de` only: German bare, English under `/en/…`. The other
- * domains of TS-001 D1 are landing-only and are not routed by this skeleton;
+ * domains of TS-WEB-0001 D1 are landing-only and are not routed by this skeleton;
  * the domain matrix lands with the full detection algorithm in M4.
  */
 
@@ -16,8 +16,8 @@ export const LOCALES = ["de", "en"] as const;
 export type Locale = (typeof LOCALES)[number];
 
 /**
- * The TLD default of `www.schafe-vorm-fenster.de` (TS-001 D1). The default
- * language is always served **bare**, without a path prefix (TS-001 D4).
+ * The TLD default of `www.schafe-vorm-fenster.de` (TS-WEB-0001 D1). The default
+ * language is always served **bare**, without a path prefix (TS-WEB-0001 D4).
  */
 export const DEFAULT_LOCALE: Locale = "de";
 
@@ -35,20 +35,20 @@ export function isLocale(value: unknown): value is Locale {
  *
  * Used only where a *rendering* decision needs a language even though the
  * request carried an unsupported one — the 404 body, for instance. A route
- * that can answer 404 calls `isLocale` and `notFound()` instead: TS-001 D4
+ * that can answer 404 calls `isLocale` and `notFound()` instead: TS-WEB-0001 D4
  * says an unsupported code is a 404, not a silent fallback.
  */
 export function resolveLocale(value: string | undefined): Locale {
   return isLocale(value) ? value : DEFAULT_LOCALE;
 }
 
-/** The `<html lang>` value per language (TS-001 D3). */
+/** The `<html lang>` value per language (TS-WEB-0001 D3). */
 export const HTML_LANG: Record<Locale, string> = {
   de: "de",
   en: "en",
 };
 
-/** `og:locale` per language — language plus region (TS-011 D6). */
+/** `og:locale` per language — language plus region (TS-WEB-0011 D6). */
 export const OG_LOCALE: Record<Locale, string> = {
   de: "de_DE",
   en: "en_GB",

@@ -14,7 +14,7 @@ import { expect, test } from "@playwright/test";
  * The pattern to hold it to is `envoy-form-mount`'s, one directory away:
  * cancel the default and swap in a `role="status"` confirmation. The input
  * keeps its missing `name`, so no address leaves the browser in any branch —
- * Q-020 (`state/open.md` row 22) stays open and untouched.
+ * Q-0020 (`state/open.md` row 22) stays open and untouched.
  */
 
 const NEWSLETTER_SUBMIT = '[data-newsletter] button[type="submit"]';

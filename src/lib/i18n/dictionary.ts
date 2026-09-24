@@ -1,5 +1,5 @@
 /**
- * The UI-string dictionary — TS-001 D7.
+ * The UI-string dictionary — TS-WEB-0001 D7.
  *
  * System texts (navigation, buttons, form labels, error pages) exist per
  * language, **keyed, not inline**. The keys are the `Dictionary` interface,
@@ -15,7 +15,7 @@
  *
  * **Page copy is not here.** Titles below are working placeholders for the
  * routing skeleton; from M3 `seo.title` and `seo.description` come from the
- * page's content frontmatter (TS-011 D5, WEB-F-089) and this block shrinks
+ * page's content frontmatter (TS-WEB-0011 D5, FUN-WEB-0089) and this block shrinks
  * to the chrome strings.
  */
 
@@ -28,7 +28,7 @@ export interface Dictionary {
   /** The site name, as it appears in the title template and `og:site_name`. */
   siteName: string;
   skipToContent: string;
-  /** Header and context-band labels — the four jobs (TS-004 D4). */
+  /** Header and context-band labels — the four jobs (TS-WEB-0004 D4). */
   nav: {
     home: string;
     knowWhatIsOn: string;
@@ -67,7 +67,7 @@ export interface Dictionary {
   };
   /**
    * The newsletter block's own words — heading, field, submit, consent and
-   * the confirmation (TS-016 S5, D10).
+   * the confirmation (TS-WEB-0016 S5, D10).
    *
    * German-only before F-2-33, in the footer of **every** `/en` route. The
    * note that named the open question behind the mock in visitor copy is
@@ -96,7 +96,7 @@ export interface Dictionary {
     title: string;
     body: string;
     backHome: string;
-    /** The heading over the four jobs on the 404 (TS-004-A4's jobs band). */
+    /** The heading over the four jobs on the 404 (TS-WEB-0004-A4's jobs band). */
     jobsHeading: string;
   };
   error: {
@@ -119,10 +119,10 @@ export interface Dictionary {
      * What a heading calls the county when the live layer has only geo-api's
      * identifier for it — "deiner Region" / "your region". Never the
      * identifier itself (F-2-73), and never an asserted county name, which
-     * TS-026 D4 forbids without an anchor.
+     * TS-WEB-0026 D4 forbids without an anchor.
      */
     genericCounty: string;
-    /** The counter band's three units (TS-008 D8). */
+    /** The counter band's three units (TS-WEB-0008 D8). */
     dates: string;
     places: string;
     updatesToday: string;
@@ -165,7 +165,7 @@ export interface Dictionary {
     /** The people behind it — `/ueber-uns`'s team block. */
     team: string;
     /**
-     * The newsletter block, where a page carries one inline (TS-027 D8) —
+     * The newsletter block, where a page carries one inline (TS-WEB-0027 D8) —
      * the same label the footer's own block already uses, so the site names
      * the thing once. The block's own heading is the page's authored one
      * ("Auf dem Laufenden bleiben"), which is why the kicker does not repeat
@@ -185,7 +185,7 @@ export interface Dictionary {
     noOptions: string;
   };
   /**
-   * The two price states that are words rather than figures (TS-006 D10).
+   * The two price states that are words rather than figures (TS-WEB-0006 D10).
    *
    * They lived as German literal defaults inside `price-tag`, so
    * `/en/your-calendar` priced its free tier "Dauerhaft kostenfrei" and its
@@ -211,7 +211,7 @@ export interface Dictionary {
     of: (step: number, total: number) => string;
   };
   /**
-   * `archive-filter`'s own chrome (TS-028 D4). Same failure class as
+   * `archive-filter`'s own chrome (TS-WEB-0028 D4). Same failure class as
    * `forms.noOptions`: the component's defaults were hard-coded German and
    * rendered on `/en/about/archive` too (F-2-33 residue).
    */
@@ -231,7 +231,7 @@ export interface Dictionary {
     original: string;
   };
   /**
-   * `place-search`'s own ZIP-only-until-Q-025 words (TS-008 D7). A page
+   * `place-search`'s own ZIP-only-until-Q-025 words (TS-WEB-0008 D7). A page
    * usually supplies its own copy from content, but the component's default
    * — used wherever a page does not — hard-coded German and rendered it on
    * `/en` too (F-2-4), the same failure `live` and `media` above exist to
@@ -262,15 +262,15 @@ export interface Dictionary {
    * `/rechtliches` (EN `/legal`) — the one string of this dictionary that
    * exists in English only.
    *
-   * TS-029 open point #2 and `state/open.md` row 53: `import.yaml` carries
+   * TS-WEB-0029 open point #2 and `state/open.md` row 53: `import.yaml` carries
    * no locale dimension, so the five imported documents plus the generated
-   * accessibility statement exist in German, and DEC-027's English versions
+   * accessibility statement exist in German, and DEC-0027's English versions
    * arrive later through the same import. Row 53's mitigation is that the EN
    * page frame "states explicitly, in English, that the six legal sections
    * themselves are provided in German only — no machine translation, no
    * invented English legal text". It never shipped; the Customer met six
    * unannounced German bodies under English section labels at gate 2
-   * (F-2-74, TS-007-A11 / TS-029).
+   * (F-2-74, TS-WEB-0007-A11 / TS-WEB-0029).
    *
    * A German reader needs no such notice — the page is in her language — so
    * `de` is `null` and the German page renders nothing at all. `null`, not
@@ -284,7 +284,7 @@ export interface Dictionary {
   };
   /**
    * Page titles, keyed by route id — the fallback for a route whose artifact
-   * carries no `seo.title` (TS-011 D5; the artifact is the source, F-2-72).
+   * carries no `seo.title` (TS-WEB-0011 D5; the artifact is the source, F-2-72).
    */
   pages: Record<RouteId, string>;
 }

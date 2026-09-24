@@ -1,11 +1,11 @@
 # Findings — Round 1 (M1 gate)
 
-## F-1-1 — TS-014-A2 e2e smoke test asserts only a subset of the required headers
+## F-1-1 — TS-WEB-0014-A2 e2e smoke test asserts only a subset of the required headers
 
 - Severity: low
 - Source: qa
-- Where: `e2e/smoke.spec.ts`, test "TS-014-A2: the security headers of TS-014 D4 are on the response"
-- Steps: Read the test; compare its assertions against TS-014 D4's full
+- Where: `e2e/smoke.spec.ts`, test "TS-WEB-0014-A2: the security headers of TS-WEB-0014 D4 are on the response"
+- Steps: Read the test; compare its assertions against TS-WEB-0014 D4's full
   header table and D2's CSP. The test checks
   `x-content-type-options`, `referrer-policy`, `x-frame-options`,
   `cross-origin-opener-policy`, and two substrings of the CSP
@@ -14,7 +14,7 @@
   `Reporting-Endpoints`, or the CSP in full. Separately, `curl
   localhost:3100/` shows all of these are in fact present today with
   the exact D4/D2 values.
-- Expected: TS-014-A2 ("Every production response carries the D2 CSP
+- Expected: TS-WEB-0014-A2 ("Every production response carries the D2 CSP
   and all D4 headers with exactly the specified values") — a test
   claiming to cover this AC should assert the full set, so a future
   regression in an unasserted header is caught.
@@ -26,7 +26,7 @@
 - Round decision: fix-now
 - Resolved: 26176ff
 
-## F-1-2 — No automated guard for TS-014-A1 (CSP allowlist / no-wildcard rule)
+## F-1-2 — No automated guard for TS-WEB-0014-A1 (CSP allowlist / no-wildcard rule)
 
 - Severity: medium
 - Source: qa
@@ -39,20 +39,20 @@
   directive, or D1 host-list symmetry. The rule currently holds
   (verified by manual code reading this run), but nothing would fail
   if a future edit reintroduced one of these.
-- Expected: TS-014 D7 states explicitly: "A1 asserts this statically,
+- Expected: TS-WEB-0014 D7 states explicitly: "A1 asserts this statically,
   so the rule fails in CI rather than in review" — the spec itself
   demands a machine check, not a manual one.
 - Observed: The check exists only as this round's manual QA read, not
   as a script `pnpm check` runs.
 - Round decision:
 
-## F-1-3 — No automated guard for TS-017-A10 / TS-017-A11
+## F-1-3 — No automated guard for TS-WEB-0017-A10 / TS-WEB-0017-A11
 
 - Severity: low
 - Source: qa
 - Where: route tree (`app/`) for A10; whole-tree hostname search for
   A11 — neither has a corresponding script
-- Steps: Same method as F-1-2, scoped to TS-017. A10 ("every
+- Steps: Same method as F-1-2, scoped to TS-WEB-0017. A10 ("every
   website `/api/*` route handler exports GET only") and A11 ("the
   app hostname occurs in exactly one module") both hold today, but
   only because the features that would violate them (BFF routes, the
@@ -63,7 +63,7 @@
   a `scripts/check-*.ts`" — an automated, repeatable check.
 - Observed: Verified by one-off manual `grep`/directory search this
   round, not by a script. Once M4 adds `app/api/*` routes and the
-  DEC-029 handover module, a violation could land without `pnpm check`
+  DEC-0029 handover module, a violation could land without `pnpm check`
   catching it.
 - Round decision: fix-now
 - Resolved: 26176ff

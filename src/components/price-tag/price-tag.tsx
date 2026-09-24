@@ -12,7 +12,7 @@ export interface PriceTagProps {
   readonly display: PriceDisplay;
   /** Required when `display` is `"priced"`. */
   readonly figure?: PriceFigure;
-  /** The free tier's permanence statement — not a price (TS-006 D10). */
+  /** The free tier's permanence statement — not a price (TS-WEB-0006 D10). */
   readonly permanentLabel?: string;
   readonly onRequestLabel?: string;
   readonly locale?: Locale;
@@ -20,14 +20,14 @@ export interface PriceTagProps {
 }
 
 /**
- * 29 `price-tag` [PROPOSED] — TS-006 D10, TS-018 D3.
+ * 29 `price-tag` [PROPOSED] — TS-WEB-0006 D10, TS-WEB-0018 D3.
  *
  * Structure: the only component that renders a price. It takes the figure as
  * a typed prop rather than reading a package directly — the content pipeline
  * (M3) is what will resolve `@schafe-vorm-fenster/offerings` into this shape,
  * so no page or component ever types a literal figure.
  * States: not the D-9 vocabulary — a price is static content, not late data.
- * Its own four states are the offering's publication state (TS-006 D10):
+ * Its own four states are the offering's publication state (TS-WEB-0006 D10):
  *   priced      → the figure with its net qualifier and interval;
  *   on-request  → "auf Anfrage" — no figure, no range, no "ab";
  *   permanent   → the free tier's permanence statement, not a price;

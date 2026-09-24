@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * The chrome of TS-004 D4 — header, breadcrumb trail, the `main` landmark,
+ * The chrome of TS-WEB-0004 D4 — header, breadcrumb trail, the `main` landmark,
  * footer — **once per document**, owned by `app/[lang]/layout.tsx`.
  *
  * ```
@@ -14,7 +14,7 @@
  * because a Next.js layout receives only `children` and its own segment
  * `params` and therefore cannot know which of the twelve routes renders below
  * it — and the header's `aria-current`, the trail, and the footer's language
- * switch (TS-001-A7) all need the route id.
+ * switch (TS-WEB-0001-A7) all need the route id.
  *
  * With Cache Components on, that is not a seam question any more, it is a
  * defect. The App Router does not unmount the page you navigate away from: it
@@ -44,7 +44,7 @@
  * newsletter slot arrive server-rendered from the layout.
  *
  * `usePathname()` would have been the wrong hook: the public path is rewritten
- * onto the internal one (TS-004 D3), and the Next.js `usePathname` reference
+ * onto the internal one (TS-WEB-0004 D3), and the Next.js `usePathname` reference
  * names exactly that pairing as a hydration-mismatch trap. Segments are the
  * internal, German path by construction.
  *
@@ -70,7 +70,7 @@ import type { ReactNode } from "react";
 /**
  * The imprint's own contact address (`content/legal/imprint.md`) — the
  * `lead-fallback` behind the mocked envoy widget must reach a real inbox, so
- * this is read from the legal text rather than invented (TS-016 D6).
+ * this is read from the legal text rather than invented (TS-WEB-0016 D6).
  */
 const CONTACT_EMAIL = "jan@schafe-vorm-fenster.de";
 
@@ -107,7 +107,7 @@ export function SiteChrome({
   const route = routeFromSegments(useSelectedLayoutSegments()) ?? FALLBACK_ROUTE;
   const d = dictionary(locale);
 
-  /** The five second-level pages carry a visible trail (TS-006 D2, DEC-071). */
+  /** The five second-level pages carry a visible trail (TS-WEB-0006 D2, DEC-0071). */
   const ancestors = ROUTES[route].parent ? trail(route).slice(0, -1) : [];
   const trailShown = ancestors.length > 0;
 

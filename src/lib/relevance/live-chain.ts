@@ -1,6 +1,6 @@
 /**
  * Live content widens the same way proof does — the concept's "Live Content"
- * table, TS-005 D1/D8 and A16.
+ * table, TS-WEB-0005 D1/D8 and A16.
  *
  *   1 "Today in <place>"        place
  *   2 "This week nearby"        surroundings (~15 km)
@@ -10,13 +10,13 @@
  * Each step names **the id list of its level**, so the caller queries
  * events-api with ids rather than with a free-text place. No step is skipped
  * when the previous one returns results: the chain is a widening, not a
- * fallback (that is DEC-019 / TS-003 D5, a different mechanism).
+ * fallback (that is DEC-0019 / TS-WEB-0003 D5, a different mechanism).
  *
  * Two documented shifts:
  *
  * - **Empty place.** A place with no dates starts the chain at radius 2. The
- *   page's focus-job shift that goes with it (WEB-F-044, "you could be the
- *   first") belongs to **TS-008**; this module only reports `placeIsEmpty`.
+ *   page's focus-job shift that goes with it (FUN-WEB-0044, "you could be the
+ *   first") belongs to **TS-WEB-0008**; this module only reports `placeIsEmpty`.
  * - **Own calendar.** Where the focus job is `run-our-own-calendar`, module 1
  *   is the **embed demo** — the Portalize calendar filtered to the place just
  *   searched for, so the visitor sees her own product before buying it.
@@ -46,13 +46,13 @@ export interface LiveChainInput {
   readonly viewer: ViewerContext;
   /**
    * The communities around the visitor, as the caller resolved them (geo-api
-   * radius search — a demand, mocked today: state/open.md row 5, Q-038).
+   * radius search — a demand, mocked today: state/open.md row 5, Q-0038).
    * Defaults to the visitor's own community.
    */
   readonly surroundingCommunities?: readonly string[];
   /**
    * Whether the place carries dates. `undefined` means "not asked" and keeps
-   * the full chain — the module renders its own empty state then (TS-008 D5).
+   * the full chain — the module renders its own empty state then (TS-WEB-0008 D5).
    */
   readonly placeHasDates?: boolean;
 }

@@ -4,7 +4,7 @@ import { ageInDays, freshness, timeScore } from "./freshness";
 
 const now = new Date("2026-09-11T12:00:00Z");
 
-describe("TS-005-A6: time is one weight among four, never a verdict", () => {
+describe("TS-WEB-0005-A6: time is one weight among four, never a verdict", () => {
   it("steps down the D4 table and floors at 0.35", () => {
     expect(freshness("2026-08-01", now)).toBe(1.0); // ≤ 90 days
     expect(freshness("2026-01-15", now)).toBe(0.8); // ≤ 1 year
@@ -34,7 +34,7 @@ describe("TS-005-A6: time is one weight among four, never a verdict", () => {
     );
   });
 
-  it("does NOT let a five-year-old element at weight 2.0 outrank a fresh one — TS-005-A6 is unsatisfiable as written", () => {
+  it("does NOT let a five-year-old element at weight 2.0 outrank a fresh one — TS-WEB-0005-A6 is unsatisfiable as written", () => {
     // The finding, not a workaround: D4's five-year step is 0.45, so the
     // weight needed is > 1/0.45 ≈ 2.23, and A6 names 2.0. The engine
     // implements D4 verbatim; the criterion is recorded in state/open.md

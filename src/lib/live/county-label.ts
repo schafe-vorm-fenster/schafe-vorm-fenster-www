@@ -14,7 +14,7 @@
  * something a visitor can read, in her language, and an identifier can no
  * longer reach a heading by any route.
  *
- * TS-026 D4 decides what the generic phrase *means*: without an anchor no
+ * TS-WEB-0026 D4 decides what the generic phrase *means*: without an anchor no
  * county name is asserted. So an unresolved county does not become "the
  * county" — it becomes "your region", which claims nothing.
  */
@@ -48,7 +48,7 @@ const COUNTY_NAMES = new Map<string, string>(
  * trailing letter). A written-out name always carries a space or a capital,
  * which is what keeps "Landkreis St. Wendel" out of this — and a value we are
  * unsure about is answered with the generic phrase, which is never wrong,
- * only less specific (TS-026 D4).
+ * only less specific (TS-WEB-0026 D4).
  */
 const GEO_IDENTIFIER = /^[a-z][a-z0-9-]*(?:\.[a-z0-9-]+)+$/;
 
@@ -56,7 +56,7 @@ export function isGeoIdentifier(value: string): boolean {
   return GEO_IDENTIFIER.test(value.trim());
 }
 
-/** What a heading says where no county may be asserted (TS-026 D4). */
+/** What a heading says where no county may be asserted (TS-WEB-0026 D4). */
 export function genericCountyLabel(locale: Locale): string {
   return dictionary(locale).live.genericCounty;
 }

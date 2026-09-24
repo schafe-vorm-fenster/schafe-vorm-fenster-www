@@ -10,7 +10,7 @@ import { everyD1Path } from "./url-inventory";
 import { LOCALES } from "../i18n/locales";
 
 /**
- * TS-004-A4 / TS-004 D6 and TS-001 D1/D4 — the predicate that keeps an
+ * TS-WEB-0004-A4 / TS-WEB-0004 D6 and TS-WEB-0001 D1/D4 — the predicate that keeps an
  * unknown URL out of `app/[lang]` (F-2-70).
  *
  * The safety property is the important half: a false positive here turns a
@@ -30,7 +30,7 @@ describe("isUnservablePath: every path the site really serves stays served", () 
     "/dev/components",
     "/_next/static/chunks/main.js",
     "/.well-known/security.txt",
-    // F-3-8 — platform-owned paths. TS-003 D7 names Vercel Speed Insights as
+    // F-3-8 — platform-owned paths. TS-WEB-0003 D7 names Vercel Speed Insights as
     // the production RUM mechanism, and its beacon posts to one of these.
     "/_vercel/insights/view",
     "/_vercel/speed-insights/vitals",
@@ -78,7 +78,7 @@ describe("NOT_FOUND_PATH matches nothing in the route tree", () => {
   });
 });
 
-describe("notFoundLocale: TS-001 D1/D4", () => {
+describe("notFoundLocale: TS-WEB-0001 D1/D4", () => {
   it.each(LOCALES)("reads the %s prefix off the path", (locale) => {
     expect(notFoundLocale(`/${locale}/anything`)).toBe(locale);
   });
@@ -88,7 +88,7 @@ describe("notFoundLocale: TS-001 D1/D4", () => {
   });
 
   it("ignores a TLD default this phase does not serve", () => {
-    // `.pl` is a landing-only domain (TS-001 D1) and has no German-or-English
+    // `.pl` is a landing-only domain (TS-WEB-0001 D1) and has no German-or-English
     // 404 of its own; the default language answers rather than a missing one.
     expect(notFoundLocale("/mitmachen", "pl")).toBe("de");
   });

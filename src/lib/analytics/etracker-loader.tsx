@@ -1,9 +1,9 @@
 /**
- * The eTracker loader tag — TS-012 D2, extracted from SRC-010
+ * The eTracker loader tag — TS-WEB-0012 D2, extracted from SRC-0010
  * (`legacy-content/app/layout.tsx`) and carried over unchanged in meaning.
  *
  * **Not mounted anywhere yet.** `getAnalyticsTracker()` (`index.ts`) never
- * returns the real adapter today (row 12/Q-040 open), so there is nothing
+ * returns the real adapter today (row 12/Q-0040 open), so there is nothing
  * for this script to talk to — mounting it before then would load a
  * third-party script for no measurement, which D9's "no page waits on the
  * tracker" spirit and the mock rule both argue against. It is exported so
@@ -16,7 +16,7 @@
  * ```
  *
  * `next/script` with `strategy="afterInteractive"` keeps it out of the LCP
- * critical path (TS-003 D4, TS-012 D9) without hand-rolling `async`.
+ * critical path (TS-WEB-0003 D4, TS-WEB-0012 D9) without hand-rolling `async`.
  */
 
 import Script from "next/script";

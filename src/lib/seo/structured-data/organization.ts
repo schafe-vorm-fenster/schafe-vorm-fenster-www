@@ -1,5 +1,5 @@
 /**
- * The `Organization` node — TS-011 D4.
+ * The `Organization` node — TS-WEB-0011 D4.
  *
  * Emitted as a full node only on `/` (inside the `WebSite`+`Organization`
  * graph); every other page that needs it references it **by `@id`**
@@ -51,7 +51,7 @@ export async function organizationNode(): Promise<OrganizationNode> {
       addressCountry: "DE",
     },
     // D4: "`sameAs` lists only profiles that exist." None are confirmed yet
-    // (TS-011 open points: "which social profiles exist?") — omitted rather
+    // (TS-WEB-0011 open points: "which social profiles exist?") — omitted rather
     // than guessed.
     ...(identity.vatId
       ? {

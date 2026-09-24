@@ -1,8 +1,8 @@
 # The relevance engine
 
-TS-005, the website side of the concept's relevance model
+TS-WEB-0005, the website side of the concept's relevance model
 (`go-to-market-os/concept/website-relevance-model.concept.md` — the concept is
-the law here; where TS-005 simplifies it, this folder follows the concept and
+the law here; where TS-WEB-0005 simplifies it, this folder follows the concept and
 says so).
 
 Two axes, one formula, one sequence rule, and **no I/O**. Every function in
@@ -51,7 +51,7 @@ export default async function HomePage({
   });
 
   // 2 — the pool: content slots with their relevance facets. Until the
-  //     artifacts carry the facets (TS-007 D12 row 4) a page maps what it has.
+  //     artifacts carry the facets (TS-WEB-0007 D12 row 4) a page maps what it has.
   const items: RelevanceItem[] = slotsOfType(page, "proof-card").map((slot) => ({
     id: slot.id,
     type: "reference-case",
@@ -97,7 +97,7 @@ export default async function HomePage({
 Three things that example does on purpose:
 
 - **The focus job is an input**, taken from the page's own declaration. No
-  trait can change it — DEC-059 is enforced by the shape of the call, not by a
+  trait can change it — DEC-0059 is enforced by the shape of the call, not by a
   rule somebody has to remember.
 - **`now` and `seed` are arguments.** The page reads the clock; the engine
   never does (D7). That is what lets a test pin a week and a cached segment
@@ -133,20 +133,20 @@ tie and the tie-break and rotation can fire.
 | understand who is behind it | 0.25 | 0.25 | 0.35 | 0.15 |
 
 At **stage 0** (no location known) `w_geo` is 0 and its share moves to time and
-job in DEC-048's ratio 4 : 3. For the 0.35 profile that reproduces DEC-048
+job in DEC-0048's ratio 4 : 3. For the 0.35 profile that reproduces DEC-0048
 exactly — `w_time 0.35 · w_ctx 0.25 · w_job 0.40`. For the other three the
-ratio is this module's generalisation; DEC-048 decided one profile, not four
+ratio is this module's generalisation; DEC-0048 decided one profile, not four
 (→ `state/open.md`).
 
 ### The gates, before scoring
 
-- **Clearance** (WEB-F-033): only `usage_rights: cleared` enters the pool. An
+- **Clearance** (FUN-WEB-0033): only `usage_rights: cleared` enters the pool. An
   uncleared element is not down-weighted — it does not exist for the engine.
   The one exception is the run's mock rule: an element marked `demo` passes
   carrying its flag, and the selection reports it as the `mocked` state so the
   page badges it as `Demo-Daten`. That is why the prototype shows the
-  mechanism while Q-045 is open.
-- **Place coverage** (WEB-F-024): a `placeBound` element is dropped unless its
+  mechanism while Q-0045 is open.
+- **Place coverage** (FUN-WEB-0024): a `placeBound` element is dropped unless its
   place is in the caller's covered set. Passing no set means "not asked", and
   the element stays — the gate never invents a coverage answer.
 
@@ -168,7 +168,7 @@ concept's spread rule:
    the centre of gravity;
 4. if the wanted side is empty, the top candidate is taken — alternation is a
    preference, never a deadlock;
-5. cut to the surface's count (DEC-048): **3** inline beside a claim · **5**
+5. cut to the surface's count (DEC-0048): **3** inline beside a claim · **5**
    on the home page · **7** in the `/ueber-uns` stream. Fewer candidates give
    empty entries, never a shorter list.
 
@@ -185,7 +185,7 @@ it. Include the seed in the `cacheTag` so a week boundary invalidates cleanly.
 ### Segmentation
 
 `segmentKey(viewer, seed)` → `{ community, trait, job, isoWeek }`, the props a
-cached component takes (TS-005 D8, TS-009 D3). Resolve them *outside* the
+cached component takes (TS-WEB-0005 D8, TS-WEB-0009 D3). Resolve them *outside* the
 `use cache` boundary — `headers()` and `cookies()` may not be read inside it —
 and let the props be the cache key. `segmentCacheKey()` is the same thing as
 one string.
@@ -196,7 +196,7 @@ one string.
 | --- | --- |
 | `types.ts` | the shared vocabulary: geo levels, focus jobs, entry traits, item types, `RelevanceItem`, `ViewerContext` |
 | `geo.ts` | `geoTier`, `geoProximity`, `hasGeo` — containment, not distance |
-| `context-matrix.ts` | SRC-002's context matrix as data; `contextProximity`, `contextRow` |
+| `context-matrix.ts` | SRC-0002's context matrix as data; `contextProximity`, `contextRow` |
 | `job-fit.ts` | `jobFit`, `unassessedJobs` — the profile over all four jobs |
 | `freshness.ts` | `freshness`, `timeScore`, `ageInDays` |
 | `weights.ts` | the D5 profiles and the stage-0 redistribution |
@@ -218,29 +218,29 @@ One direction, so the entry-trait ids are literally one constant.
 
 | AC | State | Where |
 | --- | --- | --- |
-| TS-005-A1 geo tiers | ✅ unit | `geo.test.ts` |
-| TS-005-A2 clearance filter | ✅ unit | `gate.test.ts`, `select.test.ts` |
-| TS-005-A3 the worked example | ✅ unit | `worked-example.test.ts` — positions 1–7 reproduce the concept's table |
-| TS-005-A4 determinism, 1000 runs | ✅ unit | `score.test.ts`, `select.test.ts` |
-| TS-005-A5 stage 0 | ✅ unit | `weights.test.ts`, `score.test.ts` |
-| TS-005-A6 editorial weight | ⚠️ unit | `freshness.test.ts` — the mechanism holds, **the criterion as written does not**: D4's five-year step is 0.45, so a fresh element is overtaken at a weight above ≈ 2.23, not at 2.0. → `state/open.md` |
-| TS-005-A7 no deadlock | ✅ unit | `order.test.ts` |
-| TS-005-A8 cached per segment | ✅ integration | `app/[lang]/_proof.ts` — a `use cache` function keyed on the candidates, the viewer and the ISO week, `cacheTag("proof:<iso-week>")` |
-| TS-005-A9 prerendered shell first | ✅ integration | `cacheComponents: true` since M4; the selection sits inside the shell on every page that takes no place parameter |
-| TS-005-A10 place-bound proof | 🔜 e2e | the gate is here; the covered-place list comes from events-api (mocked) |
-| TS-005-A11 rotation | ✅ unit | `rotation.test.ts`, `select.test.ts` |
-| TS-005-A12 ordering, ties by id | ✅ unit | `order.test.ts` |
-| TS-005-A13 spot check on two pages | ✅ e2e | `e2e/pages/home.spec.ts` — DEC-048's counts on `/` and `/ueber-uns`, reproduced across reloads |
-| TS-005-A14 context matrix | ✅ unit | `context-matrix.test.ts` |
-| TS-005-A15 every claim resolves to a cleared proof | 🔜 static | a content check; the facets are not on the artifacts yet |
-| TS-005-A16 the widening chain | ✅ unit | `live-chain.test.ts` |
+| TS-WEB-0005-A1 geo tiers | ✅ unit | `geo.test.ts` |
+| TS-WEB-0005-A2 clearance filter | ✅ unit | `gate.test.ts`, `select.test.ts` |
+| TS-WEB-0005-A3 the worked example | ✅ unit | `worked-example.test.ts` — positions 1–7 reproduce the concept's table |
+| TS-WEB-0005-A4 determinism, 1000 runs | ✅ unit | `score.test.ts`, `select.test.ts` |
+| TS-WEB-0005-A5 stage 0 | ✅ unit | `weights.test.ts`, `score.test.ts` |
+| TS-WEB-0005-A6 editorial weight | ⚠️ unit | `freshness.test.ts` — the mechanism holds, **the criterion as written does not**: D4's five-year step is 0.45, so a fresh element is overtaken at a weight above ≈ 2.23, not at 2.0. → `state/open.md` |
+| TS-WEB-0005-A7 no deadlock | ✅ unit | `order.test.ts` |
+| TS-WEB-0005-A8 cached per segment | ✅ integration | `app/[lang]/_proof.ts` — a `use cache` function keyed on the candidates, the viewer and the ISO week, `cacheTag("proof:<iso-week>")` |
+| TS-WEB-0005-A9 prerendered shell first | ✅ integration | `cacheComponents: true` since M4; the selection sits inside the shell on every page that takes no place parameter |
+| TS-WEB-0005-A10 place-bound proof | 🔜 e2e | the gate is here; the covered-place list comes from events-api (mocked) |
+| TS-WEB-0005-A11 rotation | ✅ unit | `rotation.test.ts`, `select.test.ts` |
+| TS-WEB-0005-A12 ordering, ties by id | ✅ unit | `order.test.ts` |
+| TS-WEB-0005-A13 spot check on two pages | ✅ e2e | `e2e/pages/home.spec.ts` — DEC-0048's counts on `/` and `/ueber-uns`, reproduced across reloads |
+| TS-WEB-0005-A14 context matrix | ✅ unit | `context-matrix.test.ts` |
+| TS-WEB-0005-A15 every claim resolves to a cleared proof | 🔜 static | a content check; the facets are not on the artifacts yet |
+| TS-WEB-0005-A16 the widening chain | ✅ unit | `live-chain.test.ts` |
 
 ## What this folder needs from others
 
 Additive changes, written here rather than made in someone else's file:
 
 1. **`src/lib/content/`** — a page cannot fill a `RelevanceItem` from a slot
-   yet: the artifacts carry no `RelevanceFacets` (TS-007 D12 rows 4 and 6 are
+   yet: the artifacts carry no `RelevanceFacets` (TS-WEB-0007 D12 rows 4 and 6 are
    the same gap). When they do, the loader should expose one
    `relevanceFacets(slot)` so pages stop hand-mapping, and `check:content`
    should validate `geo`, `job_relation`, `editorial_weight` and `clearance`
@@ -253,7 +253,7 @@ Additive changes, written here rather than made in someone else's file:
 
 ## Deviations, recorded
 
-- **Placement.** TS-005 D9 asks for `src/services/relevance/`. This repository
+- **Placement.** TS-WEB-0005 D9 asks for `src/services/relevance/`. This repository
   has no `src/services/`; the run's libraries live in `src/lib/*` and the M4
   work package names `src/lib/relevance/`. The D9 boundary — pure scoring, no
   direct fetching, clients called from outside — holds either way.

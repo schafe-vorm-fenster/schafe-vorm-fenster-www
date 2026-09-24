@@ -11,7 +11,7 @@ import type { RouteId } from "@/src/lib/routes/routes";
  * (decision D-2), not as a private shape invented per component.
  */
 
-/** The one mechanism a scene or a publishing path may declare (TS-006 D7). */
+/** The one mechanism a scene or a publishing path may declare (TS-WEB-0006 D7). */
 export const MECHANISMS = [
   "whatsapp",
   "embed",
@@ -43,7 +43,7 @@ export interface ComparisonRow {
   readonly withProduct: string;
 }
 
-/** Exactly four rows, machine-countable at the type level (TS-024 D4). */
+/** Exactly four rows, machine-countable at the type level (TS-WEB-0024 D4). */
 export type FourComparisonRows = readonly [
   ComparisonRow,
   ComparisonRow,

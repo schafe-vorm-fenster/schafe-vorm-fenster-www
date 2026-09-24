@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 import { CONVERSION_EVENTS, wiredConversionEvents } from "@/src/lib/analytics/event-registry";
 
 /**
- * TS-012-A2 — "every conversion goal that the website can complete emits its
+ * TS-WEB-0012-A2 — "every conversion goal that the website can complete emits its
  * event, exactly once per completed trigger", read as the half a static check
  * can answer: **a wired goal has a call site, and no call site names a goal
  * the registry does not wire.**
@@ -47,7 +47,7 @@ function goalIdsInAppTree(): Map<string, string[]> {
   return found;
 }
 
-describe("TS-012-A2: every wired conversion goal has a call site", () => {
+describe("TS-WEB-0012-A2: every wired conversion goal has a call site", () => {
   const callSites = goalIdsInAppTree();
 
   for (const event of wiredConversionEvents()) {

@@ -16,7 +16,7 @@ playbook:
       required: true
     composition-rules:
       from: repository-file
-      selector: specs/tactical/page-composition.tactical.md
+      selector: specs/tactical/TS-WEB-0006--page-composition.tactical.md
       required: true
     design-system:
       from: repository-glob
@@ -33,7 +33,7 @@ playbook:
       required: true
     content-model:
       from: repository-glob
-      selector: "specs/tactical/content-pipeline.tactical.md"
+      selector: "specs/tactical/TS-WEB-0007--content-pipeline.tactical.md"
       required: true
     state-files:
       from: repository-glob

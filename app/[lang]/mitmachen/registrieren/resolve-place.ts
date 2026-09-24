@@ -1,5 +1,5 @@
 /**
- * TS-023 D3/D4/D5 — step 1's place resolution, on top of the shared live-data
+ * TS-WEB-0023 D3/D4/D5 — step 1's place resolution, on top of the shared live-data
  * layer (`src/lib/live/places.ts`) rather than a page-local mock: the same
  * `resolvePlace`/`searchPlaces` pair `/dein-ort` and `/dein-ort/starten` use,
  * so this route degrades and demo-labels exactly like every other place
@@ -9,7 +9,7 @@
  * `?ort=` arrives two ways (D5): already a resolved community slug (from
  * `/dein-ort/starten`, `/mitmachen`, the empty calendar state), or whatever
  * the visitor just typed into this page's own search field — a postcode,
- * per the ZIP-only floor (Q-025). Both are re-validated here, every request
+ * per the ZIP-only floor (Q-0025). Both are re-validated here, every request
  * (D4).
  */
 

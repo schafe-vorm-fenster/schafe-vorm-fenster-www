@@ -16,7 +16,7 @@ import { ROUTE_IDS } from "@/src/lib/routes/routes";
 import type { RouteId } from "@/src/lib/routes/routes";
 
 /**
- * TS-011-A4 — "the structured-data type of each page type is the one D4's
+ * TS-WEB-0011-A4 — "the structured-data type of each page type is the one D4's
  * table names", checked **per page against the builders' own output**: the
  * test never restates a node's fields, it compares the graph the page emits
  * with what the builder returns for the same input. A builder change that is
@@ -44,7 +44,7 @@ function typesOf(graph: { readonly "@graph": readonly unknown[] }): string[] {
   return graph["@graph"].map((node) => (node as { "@type": string })["@type"]);
 }
 
-describe("TS-011-A4: every page emits exactly the nodes D4's table names", () => {
+describe("TS-WEB-0011-A4: every page emits exactly the nodes D4's table names", () => {
   for (const route of ROUTE_IDS) {
     for (const locale of LOCALES) {
       it(`${route} (${locale})`, async () => {
@@ -112,7 +112,7 @@ describe("TS-011-A4: every page emits exactly the nodes D4's table names", () =>
     }
   });
 
-  it("prices the calendar service and never the region one (WEB-F-020)", async () => {
+  it("prices the calendar service and never the region one (FUN-WEB-0020)", async () => {
     const calendar = await pageGraph({ route: "calendar", locale: "de" });
     expect(calendar["@graph"][1]).toEqual(
       calendarServiceNode("de", pageTitle("calendar", "de")),

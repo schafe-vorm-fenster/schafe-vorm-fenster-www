@@ -1,5 +1,5 @@
 /**
- * The redirect map — TS-011 D1.
+ * The redirect map — TS-WEB-0011 D1.
  *
  * **One source, one hop.** Every URL the old site exposed either resolves
  * unchanged or answers a 301 to its successor, and a legacy URL is known in
@@ -8,14 +8,14 @@
  *
  * ### State at M4
  *
- * The table now carries the confirmed floor of TS-011 D2 — extracted from
- * SRC-010's route files (`legacy-content/app/`), which is what exists: a
- * route inventory, not an indexed-URL export. Q-016 (that export) is still
+ * The table now carries the confirmed floor of TS-WEB-0011 D2 — extracted from
+ * SRC-0010's route files (`legacy-content/app/`), which is what exists: a
+ * route inventory, not an indexed-URL export. Q-0016 (that export) is still
  * open, so D2 stays [PROPOSED] until it lands and this table is the
  * confirmed floor, not the finished inventory (`redirectMapViolations` is
  * what a wider inventory has to keep passing).
  *
- * ### Deviation from TS-011 D1, recorded
+ * ### Deviation from TS-WEB-0011 D1, recorded
  *
  * D1 names `proxy.ts` as the single consumer and rules out config-level
  * `redirects()`. This table is still consumed via `next.config.ts`
@@ -29,8 +29,8 @@
  *
  * ### `/start` — row 40's contradiction, resolved
  *
- * TS-011 D2 proposed `/start` → `/mitmachen`. TS-016 D6 (forms-and-leads)
- * separately makes `/start` a **live route** that joins the TS-004 D1
+ * TS-WEB-0011 D2 proposed `/start` → `/mitmachen`. TS-WEB-0016 D6 (forms-and-leads)
+ * separately makes `/start` a **live route** that joins the TS-WEB-0004 D1
  * inventory itself, redirecting on to the Google Form lead fallback — the
  * same functional job the legacy "Anmelden" page at that exact URL did.
  * One path cannot carry both a redirect-map row and a page route: whichever
@@ -38,7 +38,7 @@
  * any route matches).
  *
  * **Decision:** no redirect-map row for `/start`. The URL stays live,
- * unchanged, as TS-016's route — which satisfies WEB-F-070 ("stable URLs or
+ * unchanged, as TS-WEB-0016's route — which satisfies FUN-WEB-0070 ("stable URLs or
  * 301") more directly than moving it: nothing about the URL changes, and
  * its audience (visitors wanting to register) lands exactly where the
  * legacy page put them, one hop closer to signup than a stop at
@@ -55,8 +55,8 @@ export interface RedirectRow {
    */
   readonly from: string;
   /**
-   * The successor: a public path of the TS-004 D1 inventory, or an absolute
-   * URL on an owned host. Nothing else (TS-011 D1).
+   * The successor: a public path of the TS-WEB-0004 D1 inventory, or an absolute
+   * URL on an owned host. Nothing else (TS-WEB-0011 D1).
    */
   readonly to: string;
   /** `true` when the row covers `from` and every path below it. */
@@ -66,7 +66,7 @@ export interface RedirectRow {
 }
 
 /**
- * The table. Status is always 301 (TS-011 D1); the query string is preserved
+ * The table. Status is always 301 (TS-WEB-0011 D1); the query string is preserved
  * verbatim by the redirect mechanism, so `etcc_*` survives every hop.
  */
 export const LEGACY_REDIRECTS: readonly RedirectRow[] = [
@@ -75,14 +75,14 @@ export const LEGACY_REDIRECTS: readonly RedirectRow[] = [
     to: APP_ORIGIN,
     wildcard: true,
     reason:
-      "DEC-047 — support articles moved to the app. Interim target is the app root " +
-      "until the app publishes a per-article URL contract (Q-041, state/open.md row 8).",
+      "DEC-0047 — support articles moved to the app. Interim target is the app root " +
+      "until the app publishes a per-article URL contract (Q-0041, state/open.md row 8).",
   },
   {
     from: "/funktionen",
     to: href("calendar", "de"),
     reason:
-      "TS-011 D2 — the legacy feature list (10 markdown features under " +
+      "TS-WEB-0011 D2 — the legacy feature list (10 markdown features under " +
       "legacy-content/app/funktionen/). /dein-kalender is the only page that " +
       "still argues features.",
   },
@@ -90,24 +90,24 @@ export const LEGACY_REDIRECTS: readonly RedirectRow[] = [
     from: "/presse",
     to: href("archive", "de"),
     reason:
-      "TS-011 D2 — the legacy press page. The proof archive is its successor " +
-      "(WEB-F-018).",
+      "TS-WEB-0011 D2 — the legacy press page. The proof archive is its successor " +
+      "(FUN-WEB-0018).",
   },
   {
     from: "/impressum",
     to: `${href("legal", "de")}#${legalAnchor("imprint", "de")}`,
     reason:
-      "TS-011 D2 — the legacy page carried imprint and privacy together " +
-      "(one page, footer linked both here); the anchor is TS-004 D8's.",
+      "TS-WEB-0011 D2 — the legacy page carried imprint and privacy together " +
+      "(one page, footer linked both here); the anchor is TS-WEB-0004 D8's.",
   },
-  // `/hilfe/{slug}` is covered by the `/hilfe` wildcard row above (DEC-047).
+  // `/hilfe/{slug}` is covered by the `/hilfe` wildcard row above (DEC-0047).
   // `/start` is deliberately **not** a row here — see the module doc above
   // ("`/start` — row 40's contradiction, resolved"): it stays a live route
-  // under TS-016, not a legacy redirect.
+  // under TS-WEB-0016, not a legacy redirect.
 ];
 
 /**
- * The static half of TS-011-A1: no chains, no duplicates, targets are either
+ * The static half of TS-WEB-0011-A1: no chains, no duplicates, targets are either
  * an absolute URL on an owned host or a path. Returns the violations.
  */
 export function redirectMapViolations(

@@ -18,7 +18,7 @@ site is being rebuilt from scratch, in three phases:
 Everything else in this repository predates the relaunch. `legacy-content/`
 and `content/` are archive: material to look something up in, not a
 specification and not a starting point. (`docs/` was deleted — it held stale
-product-doc copies; see `specs/decisions/DEC-001/008`.)
+product-doc copies; see DEC-0001 and DEC-0008.)
 
 ## Read First
 
@@ -51,20 +51,26 @@ own.
 ## The Specification Method
 
 Specs are written against **STRICT**, which is installed here:
-`@leafcutter-strict/blueprint-complete@0.2.4`, a devDependency (DEC-085).
+`@leafcutter-strict/blueprint-complete@0.2.4`, a devDependency (DEC-0085).
 It is no longer a path on one laptop — it is a versioned dependency, and
 `.npmrc` resolves the `@leafcutter-strict` and `@leafcutter-os` scopes from
 `https://packages.leafcutteros.ai/` without a credential.
 
-Cite a STRICT artefact **by package name**, the way DEC-042 has you cite hub
+Cite a STRICT artefact **by package name**, the way DEC-0042 has you cite hub
 content — `@leafcutter-strict/method-statement-grammar`, never a directory
 under `LeafcutterOS/`. `specs/README.md` lists the nine packages this
-specification leans on, and **DEC-085 §6** lists every place where this
+specification leans on, and **DEC-0085 §6** lists every place where this
 repository's form deviates from the packages, with what closing it would
-cost. Do not silently "fix" one of those deviations: the ids in particular
-(`WEB-F-###`, `TS-###`, `DEC-###`, `Q-###`, `SRC-###`) are cited from
-sibling repositories and from `plan/reviews/`, and the method itself forbids
-renumbering.
+cost. Do not silently "fix" one of those deviations.
+
+The identifiers are no longer one of them. DEC-0086 moved every family onto
+the method's `<TYPE>-<DOMAIN>-<NNNN>`: `FUN-WEB-####`, `NFR-WEB-####`,
+`CON-WEB-####`, `TS-WEB-####` (with `TS-WEB-####-A#` acceptance criteria),
+`DEC-####`, `Q-####`, `SRC-####`, `GL-####`. No number was reassigned, and
+`specs/traceability/identifier-map.md` maps every old id to its new one. A
+file that holds one identified artefact is named for it —
+`DEC-####--<slug>.md`, `TS-WEB-####--<slug>.tactical.md`. Do not invent a
+family the method does not define and this repository does not hold.
 
 ## Working Rules
 

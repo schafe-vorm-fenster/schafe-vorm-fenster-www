@@ -11,7 +11,7 @@ const lehre = geo({
   community: "flechtorf",
 });
 
-describe("TS-005-A1: geo tiers 0–6 per D1 for every level combination", () => {
+describe("TS-WEB-0005-A1: geo tiers 0–6 per D1 for every level combination", () => {
   it("tier 0 — same community", () => {
     expect(geoTier(lehre, lehre)).toBe(0);
   });
@@ -49,7 +49,7 @@ describe("TS-005-A1: geo tiers 0–6 per D1 for every level combination", () => 
   });
 
   it("matches on the most specific level both sides carry, not on a finer one", () => {
-    // The viewer knows only her county (stage 1's realistic ceiling, TS-010 D4);
+    // The viewer knows only her county (stage 1's realistic ceiling, TS-WEB-0010 D4);
     // a community-level element in that county is tier 2, never tier 0.
     const countyOnly = geo({ country: "de", state: "niedersachsen", county: "helmstedt" });
     expect(geoTier(lehre, countyOnly)).toBe(2);

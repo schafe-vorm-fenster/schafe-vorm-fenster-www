@@ -8,7 +8,7 @@ import { defineConfig, devices } from "@playwright/test";
  * Port 3100 is the run's convention: 3000 is occupied on the build machine
  * (state/open.md #15). `E2E_BASE_URL` points the same suite at a preview
  * deployment; `VERCEL_AUTOMATION_BYPASS_SECRET` gets it past Vercel
- * Deployment Protection (TS-015 D3 layer 1, D10) without ever disabling it.
+ * Deployment Protection (TS-WEB-0015 D3 layer 1, D10) without ever disabling it.
  */
 const PORT = Number(process.env.PORT ?? 3100);
 const localBaseUrl = `http://localhost:${PORT}`;

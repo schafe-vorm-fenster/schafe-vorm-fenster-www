@@ -10,17 +10,17 @@ it.
 
 ## Contents
 
-- `api-contracts.md` — the service contract register (SRC-011)
-- `design-system-contract.md` — what the website needs from the styleguide (SRC-013)
-- `copy-contract.md` — which copy rule of SRC-017 is enforced by which
-  mechanism, and which are declared human review (SRC-018, DEC-080)
+- `api-contracts.md` — the service contract register (SRC-0011)
+- `design-system-contract.md` — what the website needs from the styleguide (SRC-0013)
+- `copy-contract.md` — which copy rule of SRC-0017 is enforced by which
+  mechanism, and which are declared human review (SRC-0018, DEC-0080)
 - Content-format Zod schemas live in code (`src/domain/`), required by
-  WEB-F-089; this folder documents *which* contracts exist and where.
+  FUN-WEB-0089; this folder documents *which* contracts exist and where.
 
 ## Convention
 
 API contracts follow the product's proven pattern
 (`community-calendar/docs/api-clients/openapi-requirements.md`, adopted by
-DEC-021): every service publishes OpenAPI 3.0+ at a well-known endpoint;
+DEC-0021): every service publishes OpenAPI 3.0+ at a well-known endpoint;
 consumers fetch, validate, and store the spec locally at build time and
 validate responses at runtime with Zod schemas derived from it.

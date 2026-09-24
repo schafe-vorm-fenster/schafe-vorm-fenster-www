@@ -1,5 +1,5 @@
 /**
- * Regional content variation — TS-010 D9, WEB-F-056.
+ * Regional content variation — TS-WEB-0010 D9, FUN-WEB-0056.
  *
  * Keys on **`state`, optionally refined by `county`** — the levels stage 1
  * actually delivers (D4). It is content *selection*, never structure: a
@@ -52,7 +52,7 @@ export function selectRegionalVariant<Value>(
 }
 
 /**
- * The build check of TS-010-A9. It lives here so the rule has one
+ * The build check of TS-WEB-0010-A9. It lives here so the rule has one
  * implementation; wiring it into `pnpm check` belongs to whoever ships the
  * variant sets as content (`state/open.md`).
  */

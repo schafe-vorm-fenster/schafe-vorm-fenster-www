@@ -1104,7 +1104,7 @@ export const GALLERY: readonly GalleryEntry[] = [
     section: "2.5",
     demo: (
       <div className={styles.stack}>
-        <p>Ohne bestätigten Prozess (Q-022 C11 offen) — nichts wird gerendert:</p>
+        <p>Ohne bestätigten Prozess (Q-0022 C11 offen) — nichts wird gerendert:</p>
         <ResponsePromise text={null} />
         <p>Sobald ein Prozess steht, zur Ansicht:</p>
         <ResponsePromise text="Antwort innerhalb von zwei Werktagen" />

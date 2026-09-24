@@ -107,7 +107,7 @@ describe("the slug lookup", () => {
 
 describe("the forbidden operation and the failure type", () => {
   it("names the paid address lookup in no request this client can build", () => {
-    // TS-008-A1 / DEC-024: the operation is not implemented, so no caller can
+    // TS-WEB-0008-A1 / DEC-0024: the operation is not implemented, so no caller can
     // reach it by accident. `boundary.test.ts` proves the literal is absent
     // from the whole tree; this states the client's own half.
     expect(Object.keys({ searchByZip, searchByPoint, communityBySlug })).toEqual([

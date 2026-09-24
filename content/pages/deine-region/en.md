@@ -1,6 +1,6 @@
 ---
 id: deine-region-de
-page_id: TS-026
+page_id: TS-WEB-0026
 route: "/deine-region"
 seo:
   "/deine-region":
@@ -37,13 +37,13 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — 6 sourced (slot 6 now carries three real proof elements, two of them clearance-pending), 1 withheld (slot 7 response-time promise, no named handling process, TS-026 D5), 0 generated demo additions; EN translation of content/pages/deine-region/de.md, same source ids per slot"
-compliance_check: "state/content-map.md#compliance-checks — TS-026"
-schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+provenance: "mixed — 6 sourced (slot 6 now carries three real proof elements, two of them clearance-pending), 1 withheld (slot 7 response-time promise, no named handling process, TS-WEB-0026 D5), 0 generated demo additions; EN translation of content/pages/deine-region/de.md, same source ids per slot"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0026"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
-  - "state/open.md #20 — the two-working-day response promise is withheld entirely (constant null), no named process/owner yet (Q-022/C11). Re-checked 2026-09-12 against go-to-market-os: no handling process with a named owner exists anywhere in the hub, so the slot stays withheld"
-  - "Clearance pending — slot 6 uses `eichler-wasserschloss-quilow` and `lehre-lelender`, both `usage_rights: unverified` (Q-014). Protected preview only; go-live needs written clearance per element. `impftermine-landkreis` is `cleared`"
-  - "Pool extension — TS-026 row 6 in state/content-map.md named only `portalize-enterprise.proof[]` (eichler-wasserschloss-quilow, partner-network). `partner-network` has no named partner list and no cleared logos, so it is replaced here by two real territory-scale cases (impftermine-landkreis, lehre-lelender). Neither is a delivered `portalize-enterprise` territory and the slot says so"
+  - "state/open.md #20 — the two-working-day response promise is withheld entirely (constant null), no named process/owner yet (Q-0022/C11). Re-checked 2026-09-12 against go-to-market-os: no handling process with a named owner exists anywhere in the hub, so the slot stays withheld"
+  - "Clearance pending — slot 6 uses `eichler-wasserschloss-quilow` and `lehre-lelender`, both `usage_rights: unverified` (Q-0014). Protected preview only; go-live needs written clearance per element. `impftermine-landkreis` is `cleared`"
+  - "Pool extension — TS-WEB-0026 row 6 in state/content-map.md named only `portalize-enterprise.proof[]` (eichler-wasserschloss-quilow, partner-network). `partner-network` has no named partner list and no cleared logos, so it is replaced here by two real territory-scale cases (impftermine-landkreis, lehre-lelender). Neither is a delivered `portalize-enterprise` territory and the slot says so"
 images:
   - id: deine-region-hero
     slot: deine-region-1-focus
@@ -106,13 +106,13 @@ images:
 # Your region (`/deine-region`)
 
 For counties, state authorities, networks, and large cities that want
-a calendar for a **whole territory** (TS-026 D1). No map module and no
-map promise on this page: TS-026-A17 requires an unconfirmed feature to
+a calendar for a **whole territory** (TS-WEB-0026 D1). No map module and no
+map promise on this page: TS-WEB-0026-A17 requires an unconfirmed feature to
 be removed rather than qualified, and no owner confirmation exists for
-the map (DEC-061). Until then, an
-interim module carries the page (DEC-034). No distance stated as a
+the map (DEC-0061). Until then, an
+interim module carries the page (DEC-0034). No distance stated as a
 module, filter, or result label — only ever as the visitor's own
-question (TS-026 D3).
+question (TS-WEB-0026 D3).
 
 ## Slot 1 — Focus block (mechanism: embed)
 
@@ -135,11 +135,11 @@ and never as a second button: a page carries exactly one primary action
 per screenful. The note says what tapping it does; where the data goes
 is in the privacy section the page already links to. The closing
 heading repeats the same conversion as the hero — same goal, same label
-(TS-006 D6). No time promise while C11 is open.
+(TS-WEB-0006 D6). No time promise while C11 is open.
 
 Source: `headline` from `counties--portalize-enterprise` — "The whole
 district on one map, without a portal project." The map half of that
-headline is not used here: TS-026-A17 makes the offering owner's
+headline is not used here: TS-WEB-0026-A17 makes the offering owner's
 confirmation a precondition and prescribes removing the feature rather
 than qualifying it (F-2-57). The headline is used in full again once the
 confirmation exists.
@@ -154,7 +154,7 @@ confirmation exists.
 
 Source: `pains[]` from `counties--portalize-enterprise`. "Thirty
 kilometres" stays the visitor's own question here, never a module's
-label (TS-026 D3).
+label (TS-WEB-0026 D3).
 
 ## Slot 3 — Interim module: examples, counter, search
 
@@ -172,9 +172,9 @@ label (TS-026 D3).
 
 While no county is known, the heading names none: the fallback read
 "the county of your region" until here, which is not a county
-(TS-026-A10). At most 6 places, as a designed set — never "the most
-active places" and never a complete list (TS-026 D4). The counter only
-renders when `/api/stats` actually supplies the value (Q-037) —
+(TS-WEB-0026-A10). At most 6 places, as a designed set — never "the most
+active places" and never a complete list (TS-WEB-0026 D4). The counter only
+renders when `/api/stats` actually supplies the value (Q-0037) —
 otherwise it stays off, no estimate.
 
 ## Slot 4 — Embedding demo
@@ -183,7 +183,7 @@ otherwise it stays off, no estimate.
 
 **Heading:** Here's what the embedding looks like
 
-The same component as on `/dein-kalender` slot 3 (TS-008 position 1′).
+The same component as on `/dein-kalender` slot 3 (TS-WEB-0008 position 1′).
 
 ## Slot 5 — What it adds
 
@@ -195,7 +195,7 @@ The same component as on `/dein-kalender` slot 3 (TS-008 position 1′).
 
 **Mention (no CTA):** Anyone with their own date databases — a course programme, a church service schedule, the county administration's waste-collection calendar data — can have them connected once via the data integration.
 
-The map view is not in this list. TS-026-A17: until the offering owner
+The map view is not in this list. TS-WEB-0026-A17: until the offering owner
 confirms it is shippable to a buyer, the feature is removed rather than
 qualified with a date (F-2-57, `state/open.md`).
 `custom-data-integration` is mentioned,
@@ -206,7 +206,7 @@ never priced, with no CTA of its own (`promotion: on-request-only`).
 <!-- id: deine-region-6-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"]; status: draft -->
 
 Pool: `eichler-wasserschloss-quilow`, `partner-network` — both
-`unverified` today (Q-014). No reference case for an already delivered
+`unverified` today (Q-0014). No reference case for an already delivered
 `portalize-enterprise` territory exists; none is simulated. The slot
 below instead shows three real, named proof elements from the full set,
 and says what they do and do not prove.
@@ -237,13 +237,13 @@ partner and has no cleared logo rights.
 <!-- id: deine-region-7-response-promise; content_type: closing-cta; provenance: withheld; derived_from: []; status: draft -->
 
 *No text — the constant stays `null` as long as no named handling
-process with a named owner exists (Q-022/C11, TS-026 D5,
+process with a named owner exists (Q-0022/C11, TS-WEB-0026 D5,
 `state/open.md` #20).* Once C11 is answered, the same sentence appears
 unchanged in three places: at the CTA on this page, in the form on
 `/deine-region/angebot`, and in the confirmation afterwards — never
 differing from one place to the next.
 
-No demo placeholder here. TS-016-A13 makes the named, signed-off
+No demo placeholder here. TS-WEB-0016-A13 makes the named, signed-off
 handling process a precondition for any time promise and prescribes that
 the sentence is **absent** otherwise — example text included, because an
 example sentence about our own response time sets the same expectation as
@@ -270,8 +270,8 @@ price component, never typed.
 
 **Intro:** Tell us which territory this is about — we'll sort the rest out in conversation.
 
-An envoy instance (TS-016 S2) — field set and success behaviour are
-not yet specified (Q-022). This page carries no argument text of its
+An envoy instance (TS-WEB-0016 S2) — field set and success behaviour are
+not yet specified (Q-0022). This page carries no argument text of its
 own; the argument lives on `/deine-region`.
 
 **Confirmation text after submitting:** Your request has reached us. {Response promise, if C11 is answered — otherwise no time promise.}

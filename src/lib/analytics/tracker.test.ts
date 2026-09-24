@@ -4,7 +4,7 @@ import { createEtrackerTracker } from "@/src/lib/analytics/etracker-tracker";
 import { getAnalyticsTracker, resetAnalyticsTrackerForTests } from "@/src/lib/analytics/index";
 import { createMockTracker } from "@/src/lib/analytics/mock-tracker";
 
-describe("TS-012-A1/A9: the mock tracker records nothing", () => {
+describe("TS-WEB-0012-A1/A9: the mock tracker records nothing", () => {
   it("never touches document.cookie or web storage", () => {
     const cookieBefore = typeof document === "undefined" ? "" : document.cookie;
     const tracker = createMockTracker();
@@ -27,7 +27,7 @@ describe("TS-012-A1/A9: the mock tracker records nothing", () => {
   });
 });
 
-describe("TS-012-A4: trackConversion never throws and never blocks", () => {
+describe("TS-WEB-0012-A4: trackConversion never throws and never blocks", () => {
   it("the mock tracker never throws, loader ready or not", () => {
     const tracker = createMockTracker();
     expect(() => tracker.trackConversion("buy-calendar-licence", "completed")).not.toThrow();
@@ -53,7 +53,7 @@ describe("TS-012-A4: trackConversion never throws and never blocks", () => {
   });
 });
 
-describe("TS-012 D2: getAnalyticsTracker is the one injection point", () => {
+describe("TS-WEB-0012 D2: getAnalyticsTracker is the one injection point", () => {
   beforeEach(() => {
     resetAnalyticsTrackerForTests();
   });
@@ -63,7 +63,7 @@ describe("TS-012 D2: getAnalyticsTracker is the one injection point", () => {
     resetAnalyticsTrackerForTests();
   });
 
-  it("returns the mock while the real adapter is disabled (row 12/Q-040)", () => {
+  it("returns the mock while the real adapter is disabled (row 12/Q-0040)", () => {
     vi.stubEnv("NEXT_PUBLIC_ETRACKER_REAL_ADAPTER", "");
     const tracker = getAnalyticsTracker();
     const spy = vi.spyOn(console, "info").mockImplementation(() => {});

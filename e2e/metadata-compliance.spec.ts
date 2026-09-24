@@ -3,12 +3,12 @@ import { expect, test } from "@playwright/test";
 import { everyRoute, href } from "../src/lib/routes/routes";
 
 /**
- * Metadata compliance — the indexed surface, TS-011 D5 and TS-021-A11.
+ * Metadata compliance — the indexed surface, TS-WEB-0011 D5 and TS-WEB-0021-A11.
  *
  * F-2-72: `e2e/content-compliance.spec.ts` greps what a visitor can read, and
  * it was green while every route in both languages served
  * "Schafe vorm Fenster — Platzhalter aus dem Routing-Gerüst (M2). Titel und
- * Beschreibung kommen in M3 aus dem Content-Frontmatter (TS-011 D5)." as its
+ * Beschreibung kommen in M3 aus dem Content-Frontmatter (TS-WEB-0011 D5)." as its
  * meta description. `innerText` cannot see the head, so the work-package name
  * and the spec-clause id sat in the one string search engines index and link
  * previews display, on 24 of 24 routes, unseen by every check in the repo.
@@ -32,10 +32,16 @@ import { everyRoute, href } from "../src/lib/routes/routes";
  * prefix in any form.
  */
 const INTERNAL_MARKERS = [
+  // DEC-0086 shapes, then the pre-DEC-0086 ones, which would still be a leak.
+  /TS-WEB-/,
+  /\b(?:FUN|NFR|CON|BUS)-[A-Z]{2,5}-\d/,
+  /\bGL-\d{4}\b/,
   /TS-0/,
   /DEC-/,
   /\bQ-0\d{2}\b/,
+  /\bQ-\d{4}\b/,
   /\bSRC-0\d{2}\b/,
+  /\bSRC-\d{4}\b/,
   /\bWEB-[A-Z]-?\d/,
   /\bF-\d-\d{1,2}\b/,
   /\bM[23]\b/,
@@ -67,7 +73,7 @@ async function indexedStrings(page: import("@playwright/test").Page) {
 }
 
 for (const { path, route, locale } of ROUTES) {
-  test(`TS-011 D5: ${path} (${route}/${locale}) indexes no internal identifier`, async ({
+  test(`TS-WEB-0011 D5: ${path} (${route}/${locale}) indexes no internal identifier`, async ({
     page,
   }) => {
     await page.goto(path);
@@ -89,7 +95,7 @@ for (const { path, route, locale } of ROUTES) {
     }
   });
 
-  test(`TS-011 D5: ${path} (${route}/${locale}) has a title and a description of its own`, async ({
+  test(`TS-WEB-0011 D5: ${path} (${route}/${locale}) has a title and a description of its own`, async ({
     page,
   }) => {
     await page.goto(path);
@@ -102,6 +108,6 @@ for (const { path, route, locale } of ROUTES) {
   });
 }
 
-test("TS-011-A7: the walk covers both languages of every route", () => {
+test("TS-WEB-0011-A7: the walk covers both languages of every route", () => {
   expect(ROUTES).toHaveLength(24);
 });

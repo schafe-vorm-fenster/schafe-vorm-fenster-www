@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * TS-027 — `/ueber-uns` — acceptance pass.
+ * TS-WEB-0027 — `/ueber-uns` — acceptance pass.
  *
- * **TS-027-A9 changed with the polish brief (page 10, item 6).** The
+ * **TS-WEB-0027-A9 changed with the polish brief (page 10, item 6).** The
  * criterion asks for every person in `@schafe-vorm-fenster/people` to appear
  * with a real portrait. Two do not have one that may ship: the team card's
  * photograph of Jan-Henrik Hempel is a candid with a hand in front of his
@@ -14,17 +14,17 @@ import { expect, test } from "@playwright/test";
  * text-only rows until a portrait exists" — so the case below now asserts
  * the **people**, their roles and their bios, and that neither entry ships a
  * portrait box at all. The founder's cleared portrait still stands on the
- * page, in the causal chain, which is what TS-027-A9's own intent is about.
+ * page, in the causal chain, which is what TS-WEB-0027-A9's own intent is about.
  * `state/open.md` keeps the row: the portraits return when they are cleared.
  */
 
 test.describe("/ueber-uns", () => {
-  test("TS-027-A1: manifest matches D1 — no primary CTA on this page", async ({ page }) => {
+  test("TS-WEB-0027-A1: manifest matches D1 — no primary CTA on this page", async ({ page }) => {
     await page.goto("/ueber-uns");
     await expect(page.locator('[data-cta="primary"]')).toHaveCount(0);
   });
 
-  test("TS-027-A9: the cleared founder portrait renders, with its credit line", async ({
+  test("TS-WEB-0027-A9: the cleared founder portrait renders, with its credit line", async ({
     page,
   }) => {
     await page.goto("/ueber-uns");
@@ -33,7 +33,7 @@ test.describe("/ueber-uns", () => {
     await expect(page.getByText("@rightvisionstudios & NØRD2026").first()).toBeVisible();
   });
 
-  test("TS-027-A2: exactly one photo section, at the top", async ({ page }) => {
+  test("TS-WEB-0027-A2: exactly one photo section, at the top", async ({ page }) => {
     await page.goto("/ueber-uns");
     const photoSections = page.locator("section[data-surface] [style*='--photo-image'], section[style*='--photo-image']");
     expect(await photoSections.count()).toBeGreaterThanOrEqual(0);
@@ -41,7 +41,7 @@ test.describe("/ueber-uns", () => {
     await expect(h1).toHaveText("Gebaut in einem Dorf, betrieben aus einem Dorf.");
   });
 
-  test("TS-027-A3: the h1 and the honorary-mayor sentence are on the first screen at 1280x800", async ({
+  test("TS-WEB-0027-A3: the h1 and the honorary-mayor sentence are on the first screen at 1280x800", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
@@ -49,7 +49,7 @@ test.describe("/ueber-uns", () => {
     await expect(page.locator("h1")).toBeInViewport();
   });
 
-  test("TS-027-A4: the origin copy states the free-calendar promise and exactly one 480 € price", async ({
+  test("TS-WEB-0027-A4: the origin copy states the free-calendar promise and exactly one 480 € price", async ({
     page,
   }) => {
     await page.goto("/ueber-uns");
@@ -58,7 +58,7 @@ test.describe("/ueber-uns", () => {
     expect(matches).toHaveLength(1);
   });
 
-  test("TS-027-A5 / A6: the stream renders at most 7 elements and exactly one empty slot, never backfilled", async ({
+  test("TS-WEB-0027-A5 / A6: the stream renders at most 7 elements and exactly one empty slot, never backfilled", async ({
     page,
   }) => {
     await page.goto("/ueber-uns");
@@ -77,7 +77,7 @@ test.describe("/ueber-uns", () => {
     await expect(page.getByText("Kein Nachweis")).toHaveCount(0);
   });
 
-  test("TS-027-A8: the archive block has exactly one outgoing link to /ueber-uns/archiv", async ({
+  test("TS-WEB-0027-A8: the archive block has exactly one outgoing link to /ueber-uns/archiv", async ({
     page,
   }) => {
     await page.goto("/ueber-uns");
@@ -85,7 +85,7 @@ test.describe("/ueber-uns", () => {
     await expect(archiveLinks).toHaveCount(1);
   });
 
-  test("TS-027-A9: every team member renders once, with a name and a role, and no empty portrait box", async ({
+  test("TS-WEB-0027-A9: every team member renders once, with a name and a role, and no empty portrait box", async ({
     page,
   }) => {
     await page.goto("/ueber-uns");
@@ -166,15 +166,15 @@ test.describe("/ueber-uns", () => {
     await expect(section.locator("h2")).toHaveText("Running since 2018");
   });
 
-  test("TS-027-A10: the newsletter stands after the team block, zero data-cta=\"primary\", last block is the merged three-job offer", async ({
+  test("TS-WEB-0027-A10: the newsletter stands after the team block, zero data-cta=\"primary\", last block is the merged three-job offer", async ({
     page,
   }) => {
     await page.goto("/ueber-uns");
     await expect(page.locator('[data-cta="primary"]')).toHaveCount(0);
     // "Rendered once, not twice": the merged block **is** the context band
-    // (TS-006 D6, `plan/component-inventory.md` TS-027 block 7 — "`context-
+    // (TS-WEB-0006 D6, `plan/component-inventory.md` TS-WEB-0027 block 7 — "`context-
     // band` in `merged` mode … rendered once, as the last block"), so it is
-    // the one `aside#context-band` TS-011-A4 requires on every page and it
+    // the one `aside#context-band` TS-WEB-0011-A4 requires on every page and it
     // carries block 4's `#closing-cta` anchor inside. This used to assert
     // the band's *absence*, which is what left the page without an `aside`
     // at all (F-2-41, reopened at gate 2).
@@ -187,9 +187,9 @@ test.describe("/ueber-uns", () => {
     expect(await jobs.count()).toBe(3);
   });
 
-  test("TS-027-A12: exactly one Organization JSON-LD node, no Person nodes", async ({ page }) => {
+  test("TS-WEB-0027-A12: exactly one Organization JSON-LD node, no Person nodes", async ({ page }) => {
     await page.goto("/ueber-uns");
-    // One `<script>` per page (TS-011 D4), so the nodes are read out of the
+    // One `<script>` per page (TS-WEB-0011 D4), so the nodes are read out of the
     // page's one `@graph`. The criterion is unchanged.
     const scripts = page.locator('script[type="application/ld+json"]');
     await expect(scripts).toHaveCount(1);
@@ -205,7 +205,7 @@ test.describe("/ueber-uns", () => {
     expect(Object.keys(organizations[0]!).sort()).toEqual(["@id", "@type"]);
   });
 
-  test("TS-004-A1: no horizontal scroll at 360px", async ({ page }) => {
+  test("TS-WEB-0004-A1: no horizontal scroll at 360px", async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 640 });
     const response = await page.goto("/ueber-uns");
     expect(response?.status()).toBe(200);

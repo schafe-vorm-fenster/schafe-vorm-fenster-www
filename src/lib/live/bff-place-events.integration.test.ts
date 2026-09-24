@@ -19,7 +19,7 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe("TS-008-A4: an empty upstream result is 200 and a conversion, not an error", () => {
+describe("TS-WEB-0008-A4: an empty upstream result is 200 and a conversion, not an error", () => {
   it("answers 200 with an empty list and the publish invitation for a covered place with no dates", async () => {
     const response = await call(EMPTY_DEMO_SLUG);
     const body = await response.json();
@@ -42,7 +42,7 @@ describe("TS-008-A4: an empty upstream result is 200 and a conversion, not an er
     expect(body.data.place.name).toBe("Schlatkow");
   });
 
-  it("keeps the uncovered place a 404 — a different fact from an empty list (TS-008 D7)", async () => {
+  it("keeps the uncovered place a 404 — a different fact from an empty list (TS-WEB-0008 D7)", async () => {
     expect((await call("gibt-es-hier-nicht")).status).toBe(404);
   });
 
@@ -56,7 +56,7 @@ describe("TS-008-A4: an empty upstream result is 200 and a conversion, not an er
   });
 });
 
-describe("TS-009-A5: the dates route carries the dates cache lifetime of TS-003 D5", () => {
+describe("TS-WEB-0009-A5: the dates route carries the dates cache lifetime of TS-WEB-0003 D5", () => {
   it("sends s-maxage=300 with a three-day serve-stale window", async () => {
     const response = await call("schlatkow");
     expect(response.headers.get("cache-control")).toBe(
@@ -65,7 +65,7 @@ describe("TS-009-A5: the dates route carries the dates cache lifetime of TS-003 
   });
 });
 
-describe("TS-017-A10: the route is read-only by construction", () => {
+describe("TS-WEB-0017-A10: the route is read-only by construction", () => {
   it("exports GET and nothing else", async () => {
     const handlers = await import("@/app/api/places/[slug]/events/route");
     expect(Object.keys(handlers)).toEqual(["GET"]);

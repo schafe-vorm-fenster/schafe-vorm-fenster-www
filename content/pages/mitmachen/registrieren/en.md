@@ -1,6 +1,6 @@
 ---
 id: mitmachen-registrieren-de
-page_id: TS-023
+page_id: TS-WEB-0023
 route: "/mitmachen/registrieren"
 seo:
   "/mitmachen/registrieren":
@@ -24,18 +24,18 @@ generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
 provenance: "sourced — every slot. Step 2's option list is now drawn from the `actors` and `municipalities` audience records' own enumerations; the binding enum still belongs to the app's account model (state/open.md #18)"
-compliance_check: "state/content-map.md#compliance-checks — TS-023"
-schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0023"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
   - "state/open.md #18 — the step-2 labels are now sourced from the audience records, but the binding value set is still the app account model's to publish"
 ---
 
 # Register (`/mitmachen/registrieren`)
 
-Three steps, then handover to the app (TS-023 D1, D2). No form, no
+Three steps, then handover to the app (TS-WEB-0023 D1, D2). No form, no
 real name, no email — every identity-bearing field belongs to the
-account, and the account belongs to the app (TS-023 D6). Context band
-only on step 1 (TS-023 D7).
+account, and the account belongs to the app (TS-WEB-0023 D6). Context band
+only on step 1 (TS-WEB-0023 D7).
 
 ## Step 1 — Which place
 
@@ -47,7 +47,7 @@ only on step 1 (TS-023 D7).
 
 Pre-filled, visible, and editable when `?ort=` arrives from
 `/dein-ort/starten`, `/mitmachen`, or the empty calendar view
-(TS-023 D5) — never skipped.
+(TS-WEB-0023 D5) — never skipped.
 
 ## Step 2 — Who's publishing
 
@@ -75,8 +75,8 @@ organization and not about the person.
 
 What stays open is the binding: which values the app's account finally
 stores is the app's account model to decide, and it has not published it
-(TS-023 D2, `state/open.md` #18). This answer doesn't classify the visitor
-for the website — it's account information for the app (TS-023 D8).
+(TS-WEB-0023 D2, `state/open.md` #18). This answer doesn't classify the visitor
+for the website — it's account information for the app (TS-WEB-0023 D8).
 
 ## Step 3 — Which publishing path
 
@@ -108,14 +108,14 @@ option.
 **Note after (generic, no prefill promise):** The app will ask you for the details of your first date next.
 
 Phrased generically, because there's no prefill contract between the
-website and the app (DEC-029, TS-023 D6) — the page does not claim
+website and the app (DEC-0029, TS-WEB-0023 D6) — the page does not claim
 that place, role, or path are already pre-filled in the app. After the
 click, no confirmation, no instructions, and no further form follow on
 this website — the app takes over completely.
 
 ## Context band (step 1 only)
 
-<!-- source_note: the offer phrasing instead of a menu comes from gtm:concept/website-communication-principles.concept.md principle 2; the three jobs and their wording from the job table in principle 1. The band renders on step 1 only (TS-023 D7, state/open.md #24). Answers state/open.md row 95 for this page. -->
+<!-- source_note: the offer phrasing instead of a menu comes from gtm:concept/website-communication-principles.concept.md principle 2; the three jobs and their wording from the job table in principle 1. The band renders on step 1 only (TS-WEB-0023 D7, state/open.md #24). Answers state/open.md row 95 for this page. -->
 <!-- id: registrieren-6-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
 
 **Kicker:** Here for something else today?
@@ -126,4 +126,4 @@ this website — the app takes over completely.
 
 From step 2 the band disappears: someone inside the flow should be able to
 finish it without the page offering three other routes out of it
-(TS-023 D7, a registered deviation from TS-006).
+(TS-WEB-0023 D7, a registered deviation from TS-WEB-0006).

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { canonicalAbsoluteUrl, canonicalPath } from "@/src/lib/seo/canonical-params";
 
-describe("TS-011-A10 / D9: canonical strips every query parameter", () => {
+describe("TS-WEB-0011-A10 / D9: canonical strips every query parameter", () => {
   it("strips a place-search parameter", () => {
     expect(canonicalPath("/dein-ort?ort=schlatkow")).toBe("/dein-ort");
   });

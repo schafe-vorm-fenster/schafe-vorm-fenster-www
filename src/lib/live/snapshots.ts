@@ -1,5 +1,5 @@
 /**
- * Tier 3 — the build-time snapshot artefacts of TS-009 D8.
+ * Tier 3 — the build-time snapshot artefacts of TS-WEB-0009 D8.
  *
  * They are committed on purpose (D8's own "why"): the "keep the previous file
  * when the build fetch fails" rule only works if a previous file exists in
@@ -9,15 +9,15 @@
  *
  * Two rules the payloads obey:
  *
- *  - **No counters snapshot exists, and none may.** TS-009 D6 removes the
+ *  - **No counters snapshot exists, and none may.** TS-WEB-0009 D6 removes the
  *    counter band rather than letting it show an old figure, so the tier-3
  *    path must not be reachable by accident — there is no file and no branch.
  *  - **Never place-specific.** Tier 3 has no segment, so the snapshot is the
- *    widest scope it can be and is always labelled ("Beispiel", TS-009 D5).
+ *    widest scope it can be and is always labelled ("Beispiel", TS-WEB-0009 D5).
  *
  * The snapshots shipped today were produced from the mock backend, so they
  * are demo data and say so. The build step that regenerates them from the
- * real upstreams (TS-009-A12) is not built — `state/open.md` carries it.
+ * real upstreams (TS-WEB-0009-A12) is not built — `state/open.md` carries it.
  */
 
 import nearbySnapshot from "@/src/generated/snapshots/nearby.json";
@@ -43,5 +43,5 @@ export function regionExamplesFallback(county: string): RegionExamples {
   return { county, examples: regionExamplesSnapshot.examples };
 }
 
-/** TS-009 D6 / TS-009-A12: the counters have no snapshot, and must not get one. */
+/** TS-WEB-0009 D6 / TS-WEB-0009-A12: the counters have no snapshot, and must not get one. */
 export const COUNTERS_HAVE_NO_SNAPSHOT = true;

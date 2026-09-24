@@ -1,5 +1,5 @@
 /**
- * Time and editorial weight — TS-005 D4.
+ * Time and editorial weight — TS-WEB-0005 D4.
  *
  * Recency is one weight among four, never a verdict. The floor is
  * deliberately high (0.35, not 0.2): an old element with strong context
@@ -63,7 +63,7 @@ export function freshness(date: string | null, now: Date): number {
 /**
  * `freshness(e) · editorial_weight(e)` — the time term of D5. The product is
  * deliberately **not** clamped to 1.0: a weight above 1.0 is how an evergreen
- * element outranks a fresh one (TS-005-A6).
+ * element outranks a fresh one (TS-WEB-0005-A6).
  */
 export function timeScore(
   item: { readonly date: string | null; readonly editorialWeight?: number },

@@ -13,7 +13,7 @@ import type { PageContent } from "@/src/lib/content/types";
  */
 const artifact = (images: string) => `---
 id: home-de
-page_id: TS-019
+page_id: TS-WEB-0019
 route: "/"
 seo:
   "/":

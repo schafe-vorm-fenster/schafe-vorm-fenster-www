@@ -5,7 +5,7 @@ import { expect, test } from "@playwright/test";
  * renders, the layout law holds at the three sampled widths, and the
  * non-production noindex regime is on every response.
  *
- * The three widths are DEC-067's: 360 and 428 are where the breakpoint scale
+ * The three widths are DEC-0067's: 360 and 428 are where the breakpoint scale
  * is dense, 1280 is the desktop reference viewport. A suite that samples only
  * 360 and 1280 cannot see whether the small range does anything.
  */
@@ -20,7 +20,7 @@ const VIEWPORTS = [
  * The visible text of the rendered DOM, in document order — **the page**, not
  * the header.
  *
- * TS-017 D2(d)'s single-tree rule is what this checks, and it still holds for
+ * TS-WEB-0017 D2(d)'s single-tree rule is what this checks, and it still holds for
  * everything a page composes: no block appears, disappears or reorders between
  * 360, 428 and 1280. The site header is the one named exception, on Jan's
  * round-3 decision (point 3, `state/open.md` rows 35 and 201): below `md` the
@@ -79,7 +79,7 @@ test("the shell renders and declares its language", async ({ page }) => {
   await expect(page.getByRole("contentinfo")).toBeVisible();
 });
 
-test("TS-017-A8: the page's visible text order is identical at 360, 428 and 1280", async ({
+test("TS-WEB-0017-A8: the page's visible text order is identical at 360, 428 and 1280", async ({
   page,
 }) => {
   const orders: string[][] = [];
@@ -97,7 +97,7 @@ test("TS-017-A8: the page's visible text order is identical at 360, 428 and 1280
 });
 
 for (const viewport of VIEWPORTS) {
-  test(`TS-017-A9: no horizontal scroll at ${viewport.name}`, async ({
+  test(`TS-WEB-0017-A9: no horizontal scroll at ${viewport.name}`, async ({
     page,
   }) => {
     await page.setViewportSize({
@@ -112,7 +112,7 @@ for (const viewport of VIEWPORTS) {
   });
 }
 
-test("TS-017-A9: at 320px no page scrolls horizontally (the floor)", async ({
+test("TS-WEB-0017-A9: at 320px no page scrolls horizontally (the floor)", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 320, height: 640 });
@@ -123,7 +123,7 @@ test("TS-017-A9: at 320px no page scrolls horizontally (the floor)", async ({
   expect(overflows).toBe(false);
 });
 
-test("TS-017-A9: at 1920px the container stops at measure.page", async ({
+test("TS-WEB-0017-A9: at 1920px the container stops at measure.page", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1920, height: 1080 });
@@ -139,7 +139,7 @@ test("TS-017-A9: at 1920px the container stops at measure.page", async ({
   expect(width).toBeLessThanOrEqual(1200);
 });
 
-test("TS-015-A1: a non-production deployment is noindex on all three surfaces", async ({
+test("TS-WEB-0015-A1: a non-production deployment is noindex on all three surfaces", async ({
   page,
   request,
 }) => {
@@ -155,7 +155,7 @@ test("TS-015-A1: a non-production deployment is noindex on all three surfaces", 
 });
 
 /**
- * TS-014-A2: "Every production response carries the D2 CSP and all D4
+ * TS-WEB-0014-A2: "Every production response carries the D2 CSP and all D4
  * headers with exactly the specified values."
  *
  * F-1-1 (round 1): the previous version of this test asserted four of the
@@ -163,7 +163,7 @@ test("TS-015-A1: a non-production deployment is noindex on all three surfaces", 
  * asserts the full D4 header table and the full D2 directive set.
  *
  * Two things are deliberately environment-aware rather than a single fixed
- * expectation, both per TS-014 D5 (three environments, not one):
+ * expectation, both per TS-WEB-0014 D5 (three environments, not one):
  *
  *  - `Strict-Transport-Security` is absent in local development and
  *    present with a different `max-age` in preview vs. production — its
@@ -172,7 +172,7 @@ test("TS-015-A1: a non-production deployment is noindex on all three surfaces", 
  *    when the header is present at all, against either allowed value.
  *  - `script-src` and `connect-src` carry extra, environment-specific
  *    tokens (`'unsafe-eval'`, dev's `ws:`/`localhost` entries, the D3
- *    hash set or its `'unsafe-inline'` fallback) that D5 and DEC-045
+ *    hash set or its `'unsafe-inline'` fallback) that D5 and DEC-0045
  *    deliberately vary and that `src/lib/security/csp.ts` is under active
  *    revision on this round (state/open.md rows 21/31) — this asserts the
  *    D1 allowlist hosts and `'self'` are present in each, per the spec's
@@ -182,7 +182,7 @@ test("TS-015-A1: a non-production deployment is noindex on all three surfaces", 
  * Every other D2 directive is fixed by the spec regardless of environment
  * and is asserted on its exact value.
  */
-test("TS-014-A2: the security headers of TS-014 D4 are on the response", async ({
+test("TS-WEB-0014-A2: the security headers of TS-WEB-0014 D4 are on the response", async ({
   page,
 }) => {
   const response = await page.goto("/");
@@ -249,9 +249,9 @@ test("TS-014-A2: the security headers of TS-014 D4 are on the response", async (
   expect(csp).toContain("report-uri /api/csp-report");
 
   // D1's three active external hosts (a fourth, `app.…`, is reserved —
-  // "none today", TS-014 D1) must be reachable in both directives that
+  // "none today", TS-WEB-0014 D1) must be reachable in both directives that
   // govern them, in every environment — the environment-specific extras
-  // (D5, DEC-045) are additions, never a substitute for the allowlist.
+  // (D5, DEC-0045) are additions, never a substitute for the allowlist.
   const scriptSrcMatch = /script-src ([^;]+);/.exec(csp);
   const connectSrcMatch = /connect-src ([^;]+);/.exec(csp);
   const scriptSrc = scriptSrcMatch?.[1] ?? "";
@@ -274,7 +274,7 @@ test("TS-014-A2: the security headers of TS-014 D4 are on the response", async (
  * fetches, so this is the one assertion that covers the whole path —
  * generator, fetch, validation, serialisation — against a real deployment.
  */
-test("TS-014-A2 / F-2-36: script-src carries no token that is not a real hash", async ({
+test("TS-WEB-0014-A2 / F-2-36: script-src carries no token that is not a real hash", async ({
   page,
 }) => {
   const response = await page.goto("/");
@@ -284,7 +284,7 @@ test("TS-014-A2 / F-2-36: script-src carries no token that is not a real hash", 
 
   const allowed = new Set([
     "'self'",
-    "'unsafe-eval'", // TS-014 D5, local development only
+    "'unsafe-eval'", // TS-WEB-0014 D5, local development only
     "'unsafe-inline'", // state/open.md rows 21/31, dev + preview only
     "https://code.etracker.com",
     "https://portalize.schafe-vorm-fenster.de",

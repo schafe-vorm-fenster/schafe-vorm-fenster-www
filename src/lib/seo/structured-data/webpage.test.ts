@@ -4,7 +4,7 @@ import { canonicalUrl } from "@/src/lib/routes/routes";
 import { WEBSITE_ID } from "@/src/lib/seo/structured-data/website";
 import { webPageNode } from "@/src/lib/seo/structured-data/webpage";
 
-describe("TS-011 D4: the WebPage node, emitted on every page", () => {
+describe("TS-WEB-0011 D4: the WebPage node, emitted on every page", () => {
   it("derives url/id/inLanguage from the route table and takes title/description as given", () => {
     const node = webPageNode({
       route: "calendar",

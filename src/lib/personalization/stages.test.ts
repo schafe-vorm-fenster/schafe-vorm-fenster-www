@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { MAY_CHANGE, MAY_NEVER_CHANGE, STAGE_MODEL, stageOf } from "./stages";
 import { geo, NO_GEO } from "../relevance/types";
 
-describe("TS-010-A1: the stage is a label on a resolved object, never a mode", () => {
+describe("TS-WEB-0010-A1: the stage is a label on a resolved object, never a mode", () => {
   it("stage 0 — nothing known", () => {
     expect(stageOf({ geo: NO_GEO, trait: "direct" })).toBe(0);
   });
@@ -22,7 +22,7 @@ describe("TS-010-A1: the stage is a label on a resolved object, never a mode", (
     expect(stageOf({ geo: geo({ community: "flechtorf" }), trait: "press" })).toBe(3);
   });
 
-  it("names the four stages of SRC-001 §6 and what each one may do", () => {
+  it("names the four stages of SRC-0001 §6 and what each one may do", () => {
     expect(STAGE_MODEL.map((stage) => stage.stage)).toEqual([0, 1, 2, 3]);
     for (const stage of STAGE_MODEL) {
       expect(stage.mayChange).toEqual(MAY_CHANGE);

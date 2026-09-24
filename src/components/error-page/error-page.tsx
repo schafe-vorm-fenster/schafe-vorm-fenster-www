@@ -17,7 +17,7 @@ export interface ErrorPageProps {
 }
 
 /**
- * 63 `error-page` [PROPOSED] — content type 25, TS-004 D2/D6, DEC-032.
+ * 63 `error-page` [PROPOSED] — content type 25, TS-WEB-0004 D2/D6, DEC-0032.
  *
  * Structure: the 404 offers `place-search` plus the jobs band, answers with a
  * real 404 status and is `noindex`; the 500 is static, minimal and has **no

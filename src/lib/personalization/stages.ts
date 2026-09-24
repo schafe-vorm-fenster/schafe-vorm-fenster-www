@@ -1,5 +1,5 @@
 /**
- * The stage model — SRC-001 §6 "Assumptions, not switches", TS-010 D1 and D7.
+ * The stage model — SRC-0001 §6 "Assumptions, not switches", TS-WEB-0010 D1 and D7.
  *
  * **There is no `stage` variable in the render path.** Nothing branches on
  * "stage 2". The resolver fills one flat object; a field is either known or
@@ -9,18 +9,18 @@
  *
  * What a higher stage may do is one line long: **change which elements are
  * selected and in which order**. Everything else is invariant, and the single
- * exception on the whole website is the empty place calendar (WEB-F-044,
- * owned by TS-008), which is triggered by *data*, not by a stage.
+ * exception on the whole website is the empty place calendar (FUN-WEB-0044,
+ * owned by TS-WEB-0008), which is triggered by *data*, not by a stage.
  */
 
 import { hasGeo } from "../relevance/geo";
 
 import type { EntryTrait, GeoScope, PersonalizationStage } from "../relevance/types";
 
-/** The only two things a stage is allowed to move (SRC-001 §6, WEB-F-052). */
+/** The only two things a stage is allowed to move (SRC-0001 §6, FUN-WEB-0052). */
 export const MAY_CHANGE = ["selection", "order"] as const;
 
-/** TS-010 D7's table, as data — the list a reviewer checks a page against. */
+/** TS-WEB-0010 D7's table, as data — the list a reviewer checks a page against. */
 export const MAY_NEVER_CHANGE = [
   {
     invariant: "page structure",
@@ -30,7 +30,7 @@ export const MAY_NEVER_CHANGE = [
   {
     invariant: "focus job",
     meaning:
-      "fixed per page by the IA; the entry trait may reorder within the page, never redefine what the page is for (DEC-059)",
+      "fixed per page by the IA; the entry trait may reorder within the page, never redefine what the page is for (DEC-0059)",
   },
   { invariant: "conversion", meaning: "the page's primary conversion is the same at every stage" },
   { invariant: "navigation", meaning: "header and footer are identical at every stage" },
@@ -48,7 +48,7 @@ export interface StageDescription {
   readonly mayChange: typeof MAY_CHANGE;
 }
 
-/** SRC-001 §6, verbatim in substance. */
+/** SRC-0001 §6, verbatim in substance. */
 export const STAGE_MODEL: readonly StageDescription[] = [
   {
     stage: 0,
@@ -70,7 +70,7 @@ export const STAGE_MODEL: readonly StageDescription[] = [
     knows: "the entry context",
     source: "referrer, campaign parameter, deep link",
     effect:
-      "the proof type the stream opens with is preselected, and the scenes are emphasised in the trait's order — never the focus job (DEC-059)",
+      "the proof type the stream opens with is preselected, and the scenes are emphasised in the trait's order — never the focus job (DEC-0059)",
     mayChange: MAY_CHANGE,
   },
   {

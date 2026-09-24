@@ -7,10 +7,10 @@ import { everyRoute, href } from "../src/lib/routes/routes";
  *
  * F-2-35: internal ticket, decision and spec identifiers were rendered as
  * visitor copy on 24/24 routes — "Demo-Daten — es wird nichts verschickt,
- * solange **Q-020** offen ist" in the footer of every page, "(kein
- * Textproblem, **TS-007 D12**)" on `/ueber-uns`, "**TS-029 Open Point #1**"
- * and "**DEC-027**" on `/rechtliches`. F-2-31 added the 404's own
- * "[Platzhalter M2 — … DEC-032.]".
+ * solange **Q-0020** offen ist" in the footer of every page, "(kein
+ * Textproblem, **TS-WEB-0007 D12**)" on `/ueber-uns`, "**TS-WEB-0029 Open Point #1**"
+ * and "**DEC-0027**" on `/rechtliches`. F-2-31 added the 404's own
+ * "[Platzhalter M2 — … DEC-0032.]".
  *
  * The grep is the instrument, not the fix: it walks every route in both
  * languages, strips the markup, and fails on the id shapes the repository
@@ -18,8 +18,19 @@ import { everyRoute, href } from "../src/lib/routes/routes";
  * *in* the artefacts' own prose and only a defect once rendered.
  */
 
-/** The id shapes this repository uses. Word-bounded, so prose is not caught. */
+/**
+ * The id shapes this repository uses. Word-bounded, so prose is not caught.
+ * DEC-0086 moved every family to `<TYPE>-<DOMAIN>-<NNNN>`; the pre-DEC-0086
+ * shapes stay in the list because copy written before the rename would still
+ * be a leak.
+ */
 const INTERNAL_IDS = [
+  /\bTS-WEB-\d{4}\b/,
+  /\bDEC-\d{4}\b/,
+  /\bQ-\d{4}\b/,
+  /\bGL-\d{4}\b/,
+  /\b(?:FUN|NFR|CON|BUS)-[A-Z]{2,5}-\d/,
+  /\bSRC-\d{4}\b/,
   /\bTS-0\d{2}\b/,
   /\bDEC-0\d{2}\b/,
   /\bQ-0\d{2}\b/,
@@ -70,13 +81,13 @@ for (const { path, route, locale } of ROUTES) {
 }
 
 /**
- * F-2-31 / TS-004-A4 — "404 renders place search + jobs band with status 404
+ * F-2-31 / TS-WEB-0004-A4 — "404 renders place search + jobs band with status 404
  * and `noindex`". The routing tests assert the status, the robots value and
  * the heading; neither clause the criterion is actually about was asserted
  * anywhere, which is why a green suite hid a page whose body was a developer
  * note and whose two required modules were a dashed placeholder box.
  */
-test("F-2-31 / TS-004-A4: the 404 carries the place search and the jobs band", async ({
+test("F-2-31 / TS-WEB-0004-A4: the 404 carries the place search and the jobs band", async ({
   page,
 }) => {
   const response = await page.goto("/dies-gibt-es-nicht");
@@ -98,7 +109,7 @@ test("F-2-31 / TS-004-A4: the 404 carries the place search and the jobs band", a
   // No placeholder box, and `noindex` still holds.
   await expect(page.locator("[data-placeholder]")).toHaveCount(0);
   // Next.js emits its own `noindex` for a 404 response; the page adds the
-  // `follow` half of DEC-032, so both tags stand.
+  // `follow` half of DEC-0032, so both tags stand.
   const robots = await page
     .locator('meta[name="robots"]')
     .evaluateAll((tags) => tags.map((tag) => tag.getAttribute("content") ?? ""));
@@ -164,7 +175,7 @@ test("F-2-33: the logo's accessible name follows the page language", async ({ pa
   );
 });
 
-test("F-2-64 / TS-004-A9: the consent line's legal link resolves to its own anchor", async ({
+test("F-2-64 / TS-WEB-0004-A9: the consent line's legal link resolves to its own anchor", async ({
   page,
 }) => {
   for (const [path, expected, anchorId] of [
@@ -327,7 +338,7 @@ test("the footer's mocked newsletter block declares itself in `data-mock`", asyn
 });
 
 /**
- * F-2-73 / TS-026-A10, TS-026 D4 — block 3 of `/deine-region`, in **both**
+ * F-2-73 / TS-WEB-0026-A10, TS-WEB-0026 D4 — block 3 of `/deine-region`, in **both**
  * languages. F-2-63 fixed the German heading and left the English one
  * filling its own `{county}` slot with the stage-0 anchor's geo-api id, so
  * `/en/your-region` read "examples from geoname.900001".
@@ -337,7 +348,7 @@ test("the footer's mocked newsletter block declares itself in `data-mock`", asyn
  * stand-in F-2-63 put in the `{landkreis}` slot. The brief's finding is that
  * this *is* the defect: "'Beispiele aus dem Landkreis deiner Region' is the
  * fallback string showing through. When no district is known the heading
- * must not name one." So the criterion TS-026-A10 is actually about — no
+ * must not name one." So the criterion TS-WEB-0026-A10 is actually about — no
  * county asserted without an anchor, and no identifier rendered as copy — is
  * asserted directly, and the stand-in phrase is asserted **absent**.
  */
@@ -345,7 +356,7 @@ for (const [path, standIn] of [
   ["/deine-region", /Landkreis deiner Region/i],
   ["/en/your-region", /county of your region|in your region/i],
 ] as const) {
-  test(`F-2-73 / TS-026-A10: ${path} asserts no county and no identifier in block 3`, async ({
+  test(`F-2-73 / TS-WEB-0026-A10: ${path} asserts no county and no identifier in block 3`, async ({
     page,
   }) => {
     await page.goto(path);

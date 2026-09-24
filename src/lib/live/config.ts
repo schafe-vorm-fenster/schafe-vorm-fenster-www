@@ -22,7 +22,7 @@
  *
  * `/api/stats` is the one operation that is tokenless and really answers
  * today, so the *dates* counter is real data even while the other two figures
- * are not (WEB-F-041: counted live or not shown).
+ * are not (FUN-WEB-0041: counted live or not shown).
  */
 
 import {
@@ -59,7 +59,7 @@ export function liveDataMode(): LiveDataMode {
  *    not a temporary lack of effort.
  *
  * `placeSearchByName` moved from `upstream: false` to a real backend on
- * 2026-09-18: geo-api still has no name search (Q-025 stays open, row 5), but
+ * 2026-09-18: geo-api still has no name search (Q-0025 stays open, row 5), but
  * the covered-community index the village calendar publishes does, and this
  * website now ships it (`place-index.ts`). The gap is upstream's; the answer
  * is no longer a mock.
@@ -67,7 +67,7 @@ export function liveDataMode(): LiveDataMode {
 export const CAPABILITIES = {
   /** geo-api ZIP search — exists, token-scoped. No public equivalent: the index carries no postcodes. */
   placeSearchByZip: { service: "geo", credential: "token", upstream: true, openRow: undefined },
-  /** Name search — geo-api has none (Q-025, open row 5); the committed index answers it. */
+  /** Name search — geo-api has none (Q-0025, open row 5); the committed index answers it. */
   placeSearchByName: { service: "index", credential: "none", upstream: true, openRow: "5" },
   /** geo-api proximity search — exists, but with a fixed radius (open row 5). */
   placesNearPoint: { service: "geo", credential: "token", upstream: true, openRow: "5" },
@@ -132,7 +132,7 @@ export function hasRealBackend(capability: Capability): boolean {
   return credentialsFor(service as "geo" | "events").token !== undefined;
 }
 
-/** The timeout every JSON client gets — one budget, named in one place (TS-009 D4). */
+/** The timeout every JSON client gets — one budget, named in one place (TS-WEB-0009 D4). */
 export function timeoutMs(): number {
   const raw = Number(process.env.LIVE_TIMEOUT_MS);
   return Number.isFinite(raw) && raw > 0 ? raw : UPSTREAM_TIMEOUT_MS;

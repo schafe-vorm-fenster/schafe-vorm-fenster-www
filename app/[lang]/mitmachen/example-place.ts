@@ -1,10 +1,10 @@
 /**
- * TS-022 D5 — the live example's place selection.
+ * TS-WEB-0022 D5 — the live example's place selection.
  *
- * No source assigns `/mitmachen` a row in TS-008 D1's module-to-page table
+ * No source assigns `/mitmachen` a row in TS-WEB-0008 D1's module-to-page table
  * (D5 is [PROPOSED] against that gap, `state/open.md` rows 17 and 194), and no
  * geo-api ranking operation exists yet to resolve "nearest active place"
- * (TS-008 D1's own open point). Until both land, this is a pure, unit-tested
+ * (TS-WEB-0008 D1's own open point). Until both land, this is a pure, unit-tested
  * decision function over a small candidate list the page supplies — the
  * mocked upstream behind the real interface the mock rule asks for
  * (plan/guardrails.md).

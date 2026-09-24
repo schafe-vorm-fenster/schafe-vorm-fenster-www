@@ -12,18 +12,18 @@ export interface RouteLinkProps
     LinkOptions {
   /** The route id from `src/lib/routes/routes.ts` — never a path. */
   readonly to: RouteId;
-  /** Mark the link as the current page, non-colour-only (TS-002). */
+  /** Mark the link as the current page, non-colour-only (TS-WEB-0002). */
   readonly current?: boolean;
   /** `false` drops the link treatment, for links wrapped in a control. */
   readonly styled?: boolean;
-  /** The conversion marker the analytics registry reads (TS-006 D3). */
+  /** The conversion marker the analytics registry reads (TS-WEB-0006 D3). */
   readonly "data-cta"?: string;
   readonly children: ReactNode;
 }
 
 /**
- * 15 `route-link` [PROPOSED] — the link facade's component half (TS-001 D5,
- * TS-004 D3a).
+ * 15 `route-link` [PROPOSED] — the link facade's component half (TS-WEB-0001 D5,
+ * TS-WEB-0004 D3a).
  *
  * Structure: takes a route id plus params and emits the language-correct
  * path through `href()`. No component holds a literal internal `href`, and

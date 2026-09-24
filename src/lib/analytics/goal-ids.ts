@@ -1,16 +1,16 @@
 /**
- * Hub goal-id resolution — TS-012 D4 rule 1 / TS-012-A3.
+ * Hub goal-id resolution — TS-WEB-0012 D4 rule 1 / TS-WEB-0012-A3.
  *
  * "Every event ID in the registry resolves to a conversion goal ID in
  * `@schafe-vorm-fenster/goals`; an unknown ID fails the build." The
  * registry (`event-registry.ts`) is validated against this module, and
  * `event-registry.test.ts` is what makes an unknown id fail `pnpm check`
- * (part of `pnpm test`, TS-012-A3's static level).
+ * (part of `pnpm test`, TS-WEB-0012-A3's static level).
  *
  * Reads the hub package's generated `index.json` (its frontmatter index,
  * `@schafe-vorm-fenster/goals` exports it at `./index.json`) rather than
  * globbing `conversion-goals/*.md` at runtime — the same shape the content
- * pipeline's source adapter reads for other hub packages (TS-007).
+ * pipeline's source adapter reads for other hub packages (TS-WEB-0007).
  */
 
 import goalsIndex from "@schafe-vorm-fenster/goals/index.json";

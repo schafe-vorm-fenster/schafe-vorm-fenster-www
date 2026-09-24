@@ -3,10 +3,10 @@ import { describe, expect, it } from "vitest";
 import { MAX_PLACE_LENGTH, readPlaceParameter } from "@/src/lib/pages/place-parameter";
 
 /**
- * TS-021-A3 and TS-021-A5, at the unit level: what `?ort=` may carry, and
+ * TS-WEB-0021-A3 and TS-WEB-0021-A5, at the unit level: what `?ort=` may carry, and
  * what silently becomes the placeless variant instead of an error page.
  */
-describe("TS-021-A3: `?ort=` validation per D4", () => {
+describe("TS-WEB-0021-A3: `?ort=` validation per D4", () => {
   it("accepts a place name, a postcode and the punctuation D4 lists", () => {
     expect(readPlaceParameter("Testdorf")).toBe("Testdorf");
     expect(readPlaceParameter("17390")).toBe("17390");
@@ -35,12 +35,12 @@ describe("TS-021-A3: `?ort=` validation per D4", () => {
 });
 
 /**
- * TS-021-A5: `?ort=<script>alert(1)</script>` and
+ * TS-WEB-0021-A5: `?ort=<script>alert(1)</script>` and
  * `?ort="><img src=x onerror=alert(1)>` — "the value appears only as escaped
  * text or as an encoded query value, and the page renders normally". The
  * page's first line of defence is that neither value is echoed at all.
  */
-describe("TS-021-A5: an injection payload never becomes a place name", () => {
+describe("TS-WEB-0021-A5: an injection payload never becomes a place name", () => {
   for (const payload of [
     "<script>alert(1)</script>",
     '"><img src=x onerror=alert(1)>',

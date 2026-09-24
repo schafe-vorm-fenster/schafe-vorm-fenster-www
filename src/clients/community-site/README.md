@@ -24,7 +24,7 @@ The site publishes a third public surface, `POST
 geo-api's proximity search. It is deliberately not used: it answers five
 communities, and a cap truncates a radius silently. `src/lib/live/place-index.ts`
 holds every covered community's coordinate and makes the ~15 km cut of
-TS-008 D3 exactly and locally instead.
+TS-WEB-0008 D3 exactly and locally instead.
 
 The two HTML surfaces are read through the `<script id="__NEXT_DATA__">`
 block Next.js writes into every page of a Pages-Router application: the JSON
@@ -37,13 +37,13 @@ turns that into tier 2 or tier 3, and the page keeps standing.
 ## What is not read
 
 - **Nothing that costs money upstream.** The forbidden geo-api address lookup
-  (DEC-024, TS-013 D3) has no equivalent here and is not reachable through
+  (DEC-0024, TS-WEB-0013 D3) has no equivalent here and is not reachable through
   this site either.
 - **No visitor data goes out.** These calls are made from the server with the
   closed header set of `../http.ts`: no cookie, no IP header, no user agent
   of the visitor. The site never learns who asked.
 - **No write.** All three surfaces are reads. The website has no write path
-  into the ecosystem at all (TS-017 D4).
+  into the ecosystem at all (TS-WEB-0017 D4).
 
 ## Sizes and budgets
 

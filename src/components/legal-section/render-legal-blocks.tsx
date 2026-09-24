@@ -1,8 +1,8 @@
 /**
- * Renders `legal-markdown.ts` blocks to JSX — TS-029 D2/D6.
+ * Renders `legal-markdown.ts` blocks to JSX — TS-WEB-0029 D2/D6.
  *
  * The one place that turns an imported legal document into elements: no
- * `dangerouslySetInnerHTML` anywhere (TS-013), headings already shifted by
+ * `dangerouslySetInnerHTML` anywhere (TS-WEB-0013), headings already shifted by
  * the caller (`shiftHeadings`, D6 — the document's own top-level heading
  * demotes with everything else rather than duplicating `legal-section`'s
  * own `h2`), and every heading level 1-6 covered so a document can never

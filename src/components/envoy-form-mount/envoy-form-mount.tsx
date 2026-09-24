@@ -24,11 +24,11 @@ export interface EnvoyFormMountProps extends DataStateProps {
   readonly briefingHref?: string;
   readonly briefingLabel?: string;
   /**
-   * The goal a successful submission completes (TS-012 D4). The mount wraps
+   * The goal a successful submission completes (TS-WEB-0012 D4). The mount wraps
    * its **own** submit button — arming the whole form from outside would fire
    * on every click in a field.
    *
-   * While the widget is the mock (Q-022), the mocked submit *is* the success
+   * While the widget is the mock (Q-0022), the mocked submit *is* the success
    * signal, the same reading `/dein-kalender/bestellen` step 4 already
    * records for its own mocked completion (`state/open.md`).
    */
@@ -50,17 +50,17 @@ export interface EnvoyFormMountProps extends DataStateProps {
   /** What the submit says while the next step loads (F-2-67). */
   readonly pendingLabel?: string;
   /** The conversion marker on the submit control, where this form is the
-   *  page's or the step's one action (TS-006 D3). */
+   *  page's or the step's one action (TS-WEB-0006 D3). */
   readonly submitDataCta?: string;
   readonly className?: string;
 }
 
 /**
- * 50 `envoy-form-mount` [PROPOSED] — TS-016 D1/D2/D5.
+ * 50 `envoy-form-mount` [PROPOSED] — TS-WEB-0016 D1/D2/D5.
  *
  * Structure: in the finished product a mount point only — a custom element
  * with attributes (form kind, page language, source route, offering/goal
- * context). The envoy widget itself is undelivered (Q-022, `state/open.md`
+ * context). The envoy widget itself is undelivered (Q-0022, `state/open.md`
  * row 7), so per the mock rule this component **is** the mock behind that
  * same interface: it renders the full form UX for `kind` and submits
  * nothing — every field carries no `name` attribute, so even a
@@ -69,19 +69,19 @@ export interface EnvoyFormMountProps extends DataStateProps {
  * States (D-9, all four):
  *   loading  → the slot reserves the widget's geometry as a `skeleton`;
  *   empty    → `lead-fallback` — the "script blocked or not yet delivered"
- *              case (TS-016 D6): never an empty slot, never an unresolved
+ *              case (TS-WEB-0016 D6): never an empty slot, never an unresolved
  *              spinner;
  *   degraded → `lead-fallback` as well — the widget's own submission errors
  *              are the widget's to own once it exists; this mock has no
  *              submission to fail, so degraded and empty share the fallback;
  *   mocked   → the mocked field set, marked `data-mock="true"` on the mount
  *              element, plus the submitted state `envoy-form.tsx` owns
- *              (TS-016-A9).
+ *              (TS-WEB-0016-A9).
  * Inherits: the page renders and is fully usable without any script; no
  * field value ever reaches this origin, a log or analytics (D5).
  * Space: the success message replaces the form in the same slot.
  * A11y: every field has a bound label; the submit control is a real button;
- * the honeypot of TS-016-A10 is hidden from assistive technology and not
+ * the honeypot of TS-WEB-0016-A10 is hidden from assistive technology and not
  * focusable; focus moves to the success message.
  */
 export function EnvoyFormMount({

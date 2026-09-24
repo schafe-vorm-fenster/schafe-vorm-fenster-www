@@ -61,7 +61,7 @@ mechanically.
    wordmark line spans (or the whole visible string inside the
    `aria-label`), **plus** enabling `label-content-name-mismatch` in
    `e2e/a11y.spec.ts` and making the sweep fail on presence rather than
-   impact. Turns TS-002-A1 and TS-029-A12 from `fail` to `pass`.
+   impact. Turns TS-WEB-0002-A1 and TS-WEB-0029-A12 from `fail` to `pass`.
    `src/components/logo/logo.tsx`, `e2e/a11y.spec.ts`.
 3. **F-3-11 — the newsletter mock's native submit.** Intercept the submit
    the way `envoy-form-mount` already does and swap in a `role="status"`
@@ -109,21 +109,21 @@ a work package, per `.agents/roles/project-manager.md`.
 | Signal | Decision |
 | --- | --- |
 | C3-A-05 — the ambiguous-postcode picker is not reachable from the live search | **Not a defect** — the fixture's ambiguous zip resolves through to one place; the multi-candidate picker has no naturally-occurring fixture and the repository says so itself. A coverage note for the geo-api hardening (row 77), not a defect. |
-| C3-A-06 — the language-suggestion prompt does not exist | **Not a defect** — `proxy.ts` computes the signal and exposes it as a `Server-Timing` header; the client banner is Q-011, deferred by decision. Absence of an unbuilt feature is not a finding. |
-| C-A-06 — quote-form data lost across a DE→EN→DE switch | **Already settled** — `plan/round-3.md` decided it: nothing is stored between page views, and TS-001-A7 asks for the route context, which is preserved. |
+| C3-A-06 — the language-suggestion prompt does not exist | **Not a defect** — `proxy.ts` computes the signal and exposes it as a `Server-Timing` header; the client banner is Q-0011, deferred by decision. Absence of an unbuilt feature is not a finding. |
+| C-A-06 — quote-form data lost across a DE→EN→DE switch | **Already settled** — `plan/round-3.md` decided it: nothing is stored between page views, and TS-WEB-0001-A7 asks for the route context, which is preserved. |
 | C3-B-3 — repeated `?ort=` collapses to the first value | **Not a defect** — first-value-wins is ordinary query-string semantics and `place-hop.ts` documents it. Erroring on a repeat would be a new rule nobody asked for. |
 | C3-B-4 — the whole BFF answers `"demo":true` | **Not a defect — a scope note** — `state/open.md` row 77: no geo-api or events-api read token exists in any environment. The gate should know the round's `/api/*` probing never touched a real upstream error path; that is row 77's to close, not a fix round's. |
-| C3-B-5 — `/start` 302s to a Google Form | **Specified** — TS-004 D1's one redirect-only row and TS-016 D6's lead fallback; `app/start/route.ts` documents why it is a 302 (the target swaps when the envoy widget lands) and why it carries `noindex`. |
+| C3-B-5 — `/start` 302s to a Google Form | **Specified** — TS-WEB-0004 D1's one redirect-only row and TS-WEB-0016 D6's lead fallback; `app/start/route.ts` documents why it is a 302 (the target swaps when the envoy widget lands) and why it carries `noindex`. |
 | C-B-5 — a foreign ZIP ("1010") is accepted | **Not a defect** — no spec asks for a country check, and the value resolves to the founding page like any other uncovered input. Feature request, not defect. |
 | C-B-6 — `/en/dein-ort` answers 200 | **Already open-list** — F-2-8, same reasoning as F-3-6: canonical and sitemap are correct, one row in `localeRedirects()` whenever a review wants it. |
 | C-B-15 — `test%00@example.com` passes the email field | **Not a defect** — HTML5 treats `%00` as literal local-part text, and nothing is sent anywhere (envoy is a mock, row 7). Re-decide against the real widget's contract. |
 | C3-H-4 — the two-tab interleave now fires 0 events, not 2 | **Not a defect — a coverage note** — both tabs tripped the new timing guard; tab isolation itself held with no field bleed. The original "one event per tab" result wants re-driving past the guard window, which is a QA method note, not a finding. |
 | C3-K-3 — tab-stop counts identical at 360 and 1280 on every route | **Clean pass** — recorded so the round knows what was tried and found sound. |
 | C3-K-4 — a consistent, visible 3 px focus ring everywhere, ~700 stops | **Clean pass** — including the `:focus-within`-on-wrapper pattern, which a future check must account for or it will misreport it. |
-| UAT — the nav label "WAS IST LOS" says nothing about searching | **Already settled** — `plan/round-3.md`: TS-004 D4 fixes the navigation labels; changing them is a concept decision. |
+| UAT — the nav label "WAS IST LOS" says nothing about searching | **Already settled** — `plan/round-3.md`: TS-WEB-0004 D4 fixes the navigation labels; changing them is a concept decision. |
 | UAT — "Heute gegen mit dem Produkt" reads like a dropped word | **Already open-list** — an editorial slip below the finding bar, visitor-visible on a conversion page; content follow-up workstream. |
 | UAT — "1 Orte ausgewählt" / "1 places selected" | **Already open-list** — F-2-53. It looks like a string but is a plural rule in the dictionary; the round's hour is committed elsewhere, and the content review touches every one of these strings anyway. |
-| UAT — order step 1 needs a second click to add the found place | **Already settled** — TS-025's scope picker selects several places, so an explicit add is specified. UX-polish row. |
+| UAT — order step 1 needs a second click to add the found place | **Already settled** — TS-WEB-0025's scope picker selects several places, so an explicit add is specified. UX-polish row. |
 | UAT — the embed snippet's `demo-organizer-bestellen` id | **Already settled** — a `Demo-Daten` badge renders beside the snippet, so the mock-labelling guardrail holds; the minting itself is rows 2 and 129. |
 | UAT — "DEMO-DATEN" above a question about her own real club | **Already settled** — the mock rule requires the badge; the discomfort is the honest cost of a mocked flow. Copy-tone item for the content workstream. |
 | UAT — the English registration hands over to `…/registrieren` | **Already settled** — the app is a separate system outside this repository; recorded as a cross-system note (row 125). |
@@ -143,17 +143,17 @@ acceptance protocol names each one.
    preview.** A hash-only CSP cannot cover Next's request-time flight
    payload, so the four dynamic routes ship **unhydrated in production**.
    The prototype runs on a preview, where `'unsafe-inline'` applies and
-   everything hydrates. It needs a DEC-045 amendment (a nonce), not a fix
+   everything hydrates. It needs a DEC-0045 amendment (a nonce), not a fix
    round. Rows 139, 147 and 148 are its consequences and travel with it.
 2. **Row 145 — the Suspense/PPR shell was deliberately not shipped
-   broken.** F-2-39 and F-2-56, three failing criteria (TS-005-A9,
-   TS-009-A3, TS-009-A9): a genuine architectural tension between
-   TS-009's shell and this site's no-JavaScript completeness guarantee,
+   broken.** F-2-39 and F-2-56, three failing criteria (TS-WEB-0005-A9,
+   TS-WEB-0009-A3, TS-WEB-0009-A9): a genuine architectural tension between
+   TS-WEB-0009's shell and this site's no-JavaScript completeness guarantee,
    with row 131 beside it. The round was right to leave it. It needs the
    rendering-and-resilience spec owner.
 3. **F-2-42 — no OG image on any page, in either language.** The largest
    remaining gap that is neither a decision nor a mock: every share of
-   every page is a bare link today (TS-011-A8, TS-011-A9).
+   every page is a bare link today (TS-WEB-0011-A8, TS-WEB-0011-A9).
 4. **F-3-3 and F-3-4 — named, not quietly fixed.** Mobile Lighthouse 96
    and 97 against D7's 98 floor on two of five routes, and `Save-Data: on`
    saving 0 %. Both belong to the performance owner after the prototype;
@@ -179,9 +179,9 @@ Replace every `Dummy-Content` row with real, sourced content.
 
 - **Rows: 17, 18, 19, 20, 21, 44, 46, 47, 48, 49, 50, 51, 52, 69, 92, 93,
   94, 95, 107, 109** — twenty rows.
-- The gating dependencies are external, not editorial: **Q-045** (0/32
+- The gating dependencies are external, not editorial: **Q-0045** (0/32
   media-echo entries carry `usage_rights`, so the archive and every proof
-  pool render dummy rows — rows 1, 46, 49, 50, 51, 52), **Q-014** (all
+  pool render dummy rows — rows 1, 46, 49, 50, 51, 52), **Q-0014** (all
   candidate testimonials `unverified` — rows 47, 48, 51), **the app's
   account model** (row 18's step-2 vocabulary), and **an owner for the
   two-working-day promise** (row 20 / C11, withheld rather than invented).
@@ -245,7 +245,7 @@ and only then production.
   in any environment) is the keystone: `LIVE_DATA=auto` switches each
   capability to its real client the moment a token is provisioned, with
   no code change, so most of the others move with it.
-- **Row 132 — the go-live blocker.** The DEC-045 amendment (nonce-based
+- **Row 132 — the go-live blocker.** The DEC-0045 amendment (nonce-based
   `script-src`) that lets a dynamic route hydrate in production. Rows 139,
   147 and 148 close with it, and rows 147/148 also owe `plan/process.md`
   and `CONTRIBUTING.md` the local production-build command
@@ -260,7 +260,7 @@ and only then production.
   `ReservedChipRow` class copy.
 - **Jan's two dashboard items** — neither has an API and neither can be
   done from this repository:
-  - **Row 22** — Q-020, the newsletter's sending system, is undecided.
+  - **Row 22** — Q-0020, the newsletter's sending system, is undecided.
     Until it is answered the block stays a labelled mock that sends
     nothing. Decision: envoy/ops, with Jan.
   - **Row 64** — CI cannot install the private packages: `pnpm install`

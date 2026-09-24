@@ -46,7 +46,7 @@ playbook:
       required: true
     pipeline-spec:
       from: repository-file
-      selector: specs/tactical/content-pipeline.tactical.md
+      selector: specs/tactical/TS-WEB-0007--content-pipeline.tactical.md
       required: true
     state-files:
       from: repository-glob

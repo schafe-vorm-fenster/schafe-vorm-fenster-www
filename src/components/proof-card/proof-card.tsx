@@ -58,7 +58,7 @@ export interface ProofCardProps extends DataStateProps {
  * nothing — an uncleared proof element does not exist on the page, which is
  * a hard content filter rather than a runtime gap; `degraded` → the card
  * renders what it has, unchanged; `mocked` → `demo-data-badge`, plus a
- * `Mock aktiv` row in `state/open.md` for the press-entry mock (Q-045). The
+ * `Mock aktiv` row in `state/open.md` for the press-entry mock (Q-0045). The
  * `image` slot, where present at all, carries its own D-9 states through
  * `media-frame` — an image without cleared usage right becomes the "Foto
  * gesucht" placeholder there, never a text-only card missing the badge.

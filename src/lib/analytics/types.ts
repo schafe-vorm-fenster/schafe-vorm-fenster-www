@@ -1,5 +1,5 @@
 /**
- * The tracker interface — TS-012 D2's exported surface.
+ * The tracker interface — TS-WEB-0012 D2's exported surface.
  *
  * D2: "No page, component, or content file calls the eTracker API directly.
  * Everything goes through one internal module … exposing exactly:
@@ -15,7 +15,7 @@ export type EventStage = "handover" | "completed";
 /**
  * D4 rule 3: attributes carry no personal data and no free text. A place
  * slug is fine (public, not personal); form contents are not — the website
- * holds no submission data anyway (WEB-F-092).
+ * holds no submission data anyway (FUN-WEB-0092).
  */
 export type ConversionAttributes = Readonly<Record<string, string | number | boolean>>;
 
@@ -30,7 +30,7 @@ export type ConversionAttributes = Readonly<Record<string, string | number | boo
 export interface AnalyticsTracker {
   /**
    * Only called if `data-page-changed-detection="url"` (D2) ever proves
-   * insufficient for App Router client navigation — [FREE] per TS-012.
+   * insufficient for App Router client navigation — [FREE] per TS-WEB-0012.
    * Optional so the mock and the real adapter need not both implement it
    * before that need is confirmed.
    */

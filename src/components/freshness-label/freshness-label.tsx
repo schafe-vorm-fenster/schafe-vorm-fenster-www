@@ -8,7 +8,7 @@ import type { Locale } from "@/src/lib/i18n/locales";
 import styles from "./freshness-label.module.css";
 
 /**
- * The three fallback tiers of TS-008 D5 / TS-009 D4:
+ * The three fallback tiers of TS-WEB-0008 D5 / TS-WEB-0009 D4:
  *   fresh     the data is current — no label at all;
  *   stale     a cached answer — "Stand: <time>";
  *   snapshot  a build-time snapshot — no label at all: Jan's decision of
@@ -32,7 +32,7 @@ export interface FreshnessLabelProps {
 
 
 /**
- * 61 `freshness-label` [PROPOSED] — TS-008 D5, TS-009 D4.
+ * 61 `freshness-label` [PROPOSED] — TS-WEB-0008 D5, TS-WEB-0009 D4.
  *
  * Structure: tier 2 renders "Stand: <time>" beside the module's heading.
  * States: absent at tier 1 and at tier 3 — a build-time snapshot is a

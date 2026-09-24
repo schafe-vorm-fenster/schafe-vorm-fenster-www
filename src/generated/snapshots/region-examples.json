@@ -1,6 +1,6 @@
 {
-  "$note": "Tier 3 for position 3 (active example places). A designed set, never a place list (DEC-034).",
-  "$generated": "mock backend, committed per TS-009 D8",
+  "$note": "Tier 3 for position 3 (active example places). A designed set, never a place list (DEC-0034).",
+  "$generated": "mock backend, committed per TS-WEB-0009 D8",
   "builtAt": "2026-09-11T00:00:00.000Z",
   "examples": [
     {

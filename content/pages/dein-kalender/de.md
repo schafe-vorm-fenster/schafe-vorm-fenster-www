@@ -1,6 +1,6 @@
 ---
 id: dein-kalender-de
-page_id: TS-024
+page_id: TS-WEB-0024
 route: "/dein-kalender"
 seo:
   "/dein-kalender":
@@ -36,15 +36,15 @@ generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
 provenance: "mixed — 7 sourced (slot 5 now carries the three real, verbatim proof quotes, clearance pending; slot 6 carries a sourced operations sentence), 1 generated demo addition left (slot 6 AI-use placeholder — no hub record documents AI handling of publisher data)"
-compliance_check: "state/content-map.md#compliance-checks — TS-024"
-schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0024"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
   - "state/open.md #19 — the trust block's AI-use sentence is still withheld: no hub record documents how AI handles publisher data. The operations sentence is resolved and sourced (people#jan-henrik-hempel, proof#in-operation-since-2018)"
-  - "Clearance pending — the three proof quotes in slot 5 (wendt-rubkow, zschiesche-gross-kiesow, eichler-wasserschloss-quilow) carry `usage_rights: unverified` (Q-014). They render in the protected preview only; go-live needs written clearance per quote or the card drops"
+  - "Clearance pending — the three proof quotes in slot 5 (wendt-rubkow, zschiesche-gross-kiesow, eichler-wasserschloss-quilow) carry `usage_rights: unverified` (Q-0014). They render in the protected preview only; go-live needs written clearance per quote or the card drops"
 price_source_note: >-
   Every price token below (480, jährlich, netto; portalize-enterprise
   auf Anfrage) must render from the offerings package at build time,
-  never as a typed literal (TS-024 D8) — this file records the source
+  never as a typed literal (TS-WEB-0024 D8) — this file records the source
   value for the page developer, it is not the rendering mechanism.
 images:
   - id: dein-kalender-hero
@@ -74,8 +74,8 @@ images:
     source: >-
       @schafe-vorm-fenster/proof@0.3.5#wendt-rubkow — Testimonial von Holger Wendt, Bürgermeister in
       Rubkow. `usage_rights: unverified`, kein Bildasset vorhanden. Ein Beleg wird nie mit einer
-      Rendition bebildert (DEC-068 Regel 3, `src/generated/placeholders/README.md`); bis zur
-      Freigabe zeigt die Karte die Fläche „Foto gesucht“ (TS-024-A13).
+      Rendition bebildert (DEC-0068 Regel 3, `src/generated/placeholders/README.md`); bis zur
+      Freigabe zeigt die Karte die Fläche „Foto gesucht“ (TS-WEB-0024-A13).
     alt: Holger Wendt vor dem Gemeindeamt in Rubkow.
     status: needed
   - id: dein-kalender-proof-gross-kiesow
@@ -103,10 +103,10 @@ images:
 # Dein Kalender (`/dein-kalender`)
 
 „Portalize" fällt auf dieser Seite **genau einmal** (Slot 4, Tarif 2;
-TS-024 D7). Kein lokales `local-advertising` irgendwo auf der Seite
-(TS-024 D11). Zwei gleichwertige Conversions: bestellen (Pulse, primär)
+TS-WEB-0024 D7). Kein lokales `local-advertising` irgendwo auf der Seite
+(TS-WEB-0024 D11). Zwei gleichwertige Conversions: bestellen (Pulse, primär)
 und Beratungstermin buchen (sekundär, gleiche Sichtbarkeit) — Pulse
-kommt nur im Fokusblock vor (TS-024 D3).
+kommt nur im Fokusblock vor (TS-WEB-0024 D3).
 
 ## Slot 1 — Fokusblock
 
@@ -135,7 +135,7 @@ calendar is current again — and nobody here maintains it."
 Vier Zeilen, abgeleitet aus `portalize-calendar` (`summary`, Kategorie)
 und den Feldern `pains[]`/`gains[]`/`relievers[]` von
 `municipalities--portalize-calendar` — nicht wörtlich übernommen, keine
-fünfte Zeile für ein zusätzliches Feature (TS-024 D4).
+fünfte Zeile für ein zusätzliches Feature (TS-WEB-0024 D4).
 
 ## Slot 3 — Einbindungs-Demo
 
@@ -196,7 +196,7 @@ Offering-ID: `community-calendar`.
 **CTA (Quiet):** Beratungstermin buchen
 
 Offering-ID: `portalize-calendar`; Preis 480/EUR/Jahr, `vat: excluded` —
-aus dem Paket gelesen, nicht getippt (TS-024 D8). „Portalize" erscheint
+aus dem Paket gelesen, nicht getippt (TS-WEB-0024 D8). „Portalize" erscheint
 in der gesamten Seite ausschließlich in diesem Absatz.
 
 ### Tarif 3 — für eine ganze Region
@@ -210,7 +210,7 @@ in der gesamten Seite ausschließlich in diesem Absatz.
 **CTA (Quiet):** Für eine ganze Region → `/deine-region`
 
 Offering-ID: `portalize-enterprise`, `price_status: on-request` — nie
-eine Zahl, nie „ab", nie eine Größenordnung (TS-024 D8). Die interne
+eine Zahl, nie „ab", nie eine Größenordnung (TS-WEB-0024 D8). Die interne
 4.000-€-Marke aus dem Paket darf an keiner Stelle dieser Seite
 erscheinen.
 
@@ -221,7 +221,7 @@ erscheinen.
 Pool: die vier Proof-IDs, auf die `portalize-calendar` verweist
 (`kulturlandbuero-broellin`, `eichler-wasserschloss-quilow`,
 `zschiesche-gross-kiesow`, `wendt-rubkow`) — alle heute `unverified`
-(Q-014). Für Produktion bleibt dieser Slot leer, bis eine Freigabe
+(Q-0014). Für Produktion bleibt dieser Slot leer, bis eine Freigabe
 vorliegt. Im geschützten Preview zeigt der Slot darunter drei dieser
 Elemente im Wortlaut, mit offener Freigabe; die Freigabe wird im
 Frontmatter und in `state/open.md` geführt, nicht auf der Seite.
@@ -235,7 +235,7 @@ Pool von `portalize-calendar`, wörtlich aus den Proof-Datensätzen:
 2. „Für dieses Projekt sehe ich unsere Landbevölkerung, aber auch mobile Händler als Gewinner." — Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow
 3. „Der Dienst hilft dabei, Angebote in einem Flächenland besser sichtbar und auffindbar zu machen." — Uwe Eichler, Wasserschloss Quilow
 
-Alle drei Datensätze tragen `usage_rights: unverified` (Q-014). Die
+Alle drei Datensätze tragen `usage_rights: unverified` (Q-0014). Die
 Karten stehen deshalb im geschützten Preview, nicht auf einer
 öffentlichen Fläche: Vor dem Go-live liegt je Zitat eine schriftliche
 Freigabe vor, oder die Karte fällt weg (`state/open.md`). In den
@@ -256,10 +256,10 @@ Markenfläche, nie ein geliehenes Foto (Jan, 2026-09-18).
 
 **KI-Nutzung (fehlt, nicht generiert):** *Kein Satz — kein Hub-Datensatz belegt, wie KI mit Veröffentlicher-Daten umgeht.*
 
-Der Datenschutz-Absatz steht auf TS-013 D1/D2. Der Betriebssatz steht auf
+Der Datenschutz-Absatz steht auf TS-WEB-0013 D1/D2. Der Betriebssatz steht auf
 `people@0.3.6#jan-henrik-hempel` (Rolle, Wohnort) und
 `proof@0.3.5#in-operation-since-2018` (`cleared`) und erfüllt damit
-TS-024-A19, weil er einen Hub-Datensatz benennt. Rechtsform und
+TS-WEB-0024-A19, weil er einen Hub-Datensatz benennt. Rechtsform und
 Betriebsanschrift stehen im Impressum und in keinem Hub-Datensatz — sie
 bleiben hier weg. Die KI-Aussage bleibt unveröffentlicht, bis ein
 Hub-Eintrag existiert (`state/open.md` #19).
@@ -300,4 +300,4 @@ darunter statt als zweiter Knopf daneben.
 
 Negativabgleich, kein Text-Slot: `local-advertising` (`promotion:
 withheld`) darf auf dieser Seite null Mal vorkommen — kein Satz, kein
-Feld, kein CTA, kein Link (TS-024 D11).
+Feld, kein CTA, kein Link (TS-WEB-0024 D11).

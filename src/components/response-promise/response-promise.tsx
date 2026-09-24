@@ -11,12 +11,12 @@ export interface ResponsePromiseProps {
 }
 
 /**
- * 52 `response-promise` [PROPOSED] — TS-006 D11, TS-026 D5.
+ * 52 `response-promise` [PROPOSED] — TS-WEB-0006 D11, TS-WEB-0026 D5.
  *
  * Structure: one constant, one component, three call sites — the CTA on
  * `/deine-region`, the form on `/deine-region/angebot`, and the confirmation
  * after submit — so the three can never disagree.
- * States: while the constant is `null` (Q-022 C11 unanswered) the component
+ * States: while the constant is `null` (Q-0022 C11 unanswered) the component
  * renders nothing at all: no response-time wording of any kind, removed
  * rather than softened.
  * Inherits: Meta type, `clock` icon, no badge implying certification.

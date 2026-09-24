@@ -7,8 +7,8 @@ acceptance criterion in scope walked at the level its own spec
 declares, both locales, on a **production build** in two environments.
 
 Scope: `plan/gate-2-scope.md` — its 333 criteria and its out-of-scope
-list are still valid — **plus** the M5 regression over `TS-003` (A1–A8)
-and `TS-017` (A1–A17). **358 criteria.** Baseline for every delta:
+list are still valid — **plus** the M5 regression over `TS-WEB-0003` (A1–A8)
+and `TS-WEB-0017` (A1–A17). **358 criteria.** Baseline for every delta:
 `reports/qa/gate-2-run-2.md` (264 / 26 / 43).
 
 Skills loaded, all four mandatory ones: `webapp-testing` (every browser
@@ -35,7 +35,7 @@ self-approved) and `differential-review` (over the M5 fix round,
 | `e2e/layout-stability.spec.ts` | 39/39 green in both environments |
 | `e2e/content-compliance.spec.ts` | 56/56 · `e2e/metadata-compliance.spec.ts` 49/49 · `e2e/routes.spec.ts` 67/67 · `e2e/smoke.spec.ts` 10/10 — all green in both |
 | axe-core, three themes | own sweep, 24 routes × 3 themes at 360 px (light, `prefers-color-scheme: dark`, `prefers-contrast: more`), WCAG 2.1 A/AA tags: **0 violations of any impact** in all three. With axe's experimental `label-content-name-mismatch` enabled: **48 serious nodes**, 2 per route, in every theme → **F-3-1** |
-| Lighthouse, preview | mobile `/` 96 · `/dein-ort` 100 · `/dein-kalender` 98 · `/mitmachen` 98 · `/ueber-uns` 97 · `/ueber-uns/archiv` 98 · `/mitmachen/registrieren` 100. Desktop 100 on all five D7 routes. **Accessibility 100 on all 12 runs.** Best-practices 92 and SEO 69 everywhere — the SEO deduction is the preview's own `noindex` (TS-015-A1), the best-practices one the `vercel.live` CSP block (F-2-27) |
+| Lighthouse, preview | mobile `/` 96 · `/dein-ort` 100 · `/dein-kalender` 98 · `/mitmachen` 98 · `/ueber-uns` 97 · `/ueber-uns/archiv` 98 · `/mitmachen/registrieren` 100. Desktop 100 on all five D7 routes. **Accessibility 100 on all 12 runs.** Best-practices 92 and SEO 69 everywhere — the SEO deduction is the preview's own `noindex` (TS-WEB-0015-A1), the best-practices one the `vercel.live` CSP block (F-2-27) |
 | Lighthouse, local production build | mobile `/` 93 · `/dein-kalender` 93 · `/mitmachen` 95 · `/ueber-uns` 96 · `/dein-ort` 97 → **F-3-3** |
 | CLS sweep, 24 routes × 2 viewports, `PerformanceObserver` | local worst **0.0006**, preview worst **0.0007**. `/ueber-uns/archiv` at 360 px: **0.0000** (run 2: 0.2197) |
 | Browser sweep, 24 routes × 2 viewports × 2 environments (96 page loads) | no horizontal scroll anywhere; exactly one `<h1>` everywhere; `<aside id="context-band">` on 22 of 24 routes; console errors: **0** local, 48 preview (all F-2-27) |
@@ -83,7 +83,7 @@ changed row is visible without diffing two files. Rows whose evidence
 is a green suite name it; rows this run measured by hand carry the
 measurement.
 
-### TS-004 — URL and routing
+### TS-WEB-0004 — URL and routing
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -99,7 +99,7 @@ measurement.
 | A10 | static | pass | **pass** | `pnpm check:api-routes` green |
 | A11 | integration | not-testable | **not-testable** | `/{community}` forwarding is not built — the criterion prescribes the skip |
 
-### TS-006 — Page composition
+### TS-WEB-0006 — Page composition
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -115,11 +115,11 @@ measurement.
 | A10 | e2e | pass | **pass** | green in `pnpm e2e` |
 | A11 | static | pass | **pass** | green in `pnpm check` |
 | A12 | static | pass | **pass** | green in `pnpm check` |
-| A13 | e2e | not-testable | **not-testable** | the two-working-day wording stays withheld while C11/Q-022 is unsigned |
-| A14 | manual | not-testable | **not-testable** | SRC-001's eight-point check is not reachable from this repository → F-2-18 |
+| A13 | e2e | not-testable | **not-testable** | the two-working-day wording stays withheld while C11/Q-0022 is unsigned |
+| A14 | manual | not-testable | **not-testable** | SRC-0001's eight-point check is not reachable from this repository → F-2-18 |
 | A15 | e2e | pass | **pass** | green in `pnpm e2e` |
 
-### TS-002 — Accessibility
+### TS-WEB-0002 — Accessibility
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -128,7 +128,7 @@ measurement.
 | A3 | static | pass | **pass** | `pnpm check:contrast` green — 68 token pairs × 4 themes |
 | A4 | manual | not-testable | **not-testable** | keyboard pass walked 9 surfaces / 242 tab stops with no trap and a ring on every stop, but no per-release walkthrough record of all four jobs exists |
 | A5 | manual | not-testable | **not-testable** | no VoiceOver/NVDA available to this run |
-| A6 | tool | not-testable | **not-testable** | the real envoy widget is undelivered (Q-022) |
+| A6 | tool | not-testable | **not-testable** | the real envoy widget is undelivered (Q-0022) |
 | A7 | e2e | pass | **pass** | `smoke.spec.ts` 320 px case green in both environments; own sweep confirms `scrollWidth == clientWidth` on 96 loads |
 | A8 | integration | pass | **pass** | code read + curl against :3100 |
 | A9 | e2e | pass | **pass** | green in `pnpm e2e` |
@@ -136,7 +136,7 @@ measurement.
 | A11 | tool | pass | **pass** | axe `image-alt` clean on 24 routes × 3 themes |
 | A12 | manual | pass | **pass** | `content/legal/accessibility.md` names self-assessment and claims no audit |
 
-### TS-001 — Locale routing
+### TS-WEB-0001 — Locale routing
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -150,7 +150,7 @@ measurement.
 | A10 | integration | pass | **pass** | green in `pnpm check` |
 | A11 | static | pass | **pass** | green in `pnpm check` |
 
-### TS-019 — / (home)
+### TS-WEB-0019 — / (home)
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -164,15 +164,15 @@ measurement.
 | A8–A11 | e2e | pass | **pass** | green in `pnpm e2e` |
 | A12 | static | pass | **pass** | green in `pnpm check` |
 | A13, A14 | e2e | pass | **pass** | green in `pnpm e2e`; A13's conversion event re-measured by hand |
-| A15 | manual | not-testable | **not-testable** | SRC-001's eight-point check → F-2-18 |
+| A15 | manual | not-testable | **not-testable** | SRC-0001's eight-point check → F-2-18 |
 
-### TS-020 — /dein-ort
+### TS-WEB-0020 — /dein-ort
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
 | A1 | static | pass | **pass** | guard/manifest read |
 | A2–A4 | e2e | pass | **pass** | green in `pnpm e2e` |
-| A5 | static | fail | **fail** | the stories still carry no `proof_ref` → F-2-43 (TS-005-A15) |
+| A5 | static | fail | **fail** | the stories still carry no `proof_ref` → F-2-43 (TS-WEB-0005-A15) |
 | A6, A7 | e2e | pass | **pass** | green in `pnpm e2e` |
 | A8 | integration | not-testable | **not-testable** | emission goes to `createMockTracker()` by decision |
 | A9, A10 | e2e | pass | **pass** | green in `pnpm e2e` |
@@ -180,12 +180,12 @@ measurement.
 | A12 | e2e | not-testable | **not-testable** | the BFF-delay harness is a skipped case; with no skeletons (F-2-39) the counter branches do not exist |
 | A13 | manual | not-testable | **not-testable** | no content/tone review record exists for this run |
 
-### TS-021 — /dein-ort/starten
+### TS-WEB-0021 — /dein-ort/starten
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
 | A1 | static | pass | **pass** | guard/manifest read |
-| A2 | e2e | fail | **fail** | still a dynamic route against TS-021 D10 → F-2-13, recorded not re-filed |
+| A2 | e2e | fail | **fail** | still a dynamic route against TS-WEB-0021 D10 → F-2-13, recorded not re-filed |
 | A3–A5 | e2e | pass | **pass** | green in `pnpm e2e` |
 | A6 | integration | pass | **pass** | `/dein-ort?ort=99999` → 307 `/dein-ort/starten?ort=99999` on the **production build** |
 | A7 | integration | fail | **pass** | **F-2-49 resolved.** Production build, local and preview: `/dein-ort/starten?ort=beispielwalde` → **307** `/dein-ort?ort=beispielwalde`; `/en/your-place/start?ort=beispielwalde` → 307 `/en/your-place?ort=…`. The hop moved into `proxy.ts` |
@@ -195,7 +195,7 @@ measurement.
 | A12–A14 | e2e | pass | **pass** | green in `pnpm e2e` |
 | A15 | manual | not-testable | **not-testable** | no content/tone review record exists for this run |
 
-### TS-022 — /mitmachen
+### TS-WEB-0022 — /mitmachen
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -208,7 +208,7 @@ measurement.
 | A13, A14, A16 | e2e | pass | **pass** | green in `pnpm e2e` |
 | A15 | integration | pass | **pass** | code read + curl against :3100 |
 
-### TS-023 — /mitmachen/registrieren
+### TS-WEB-0023 — /mitmachen/registrieren
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -225,7 +225,7 @@ measurement.
 | A13–A15 | e2e | pass | **pass** | green in `pnpm e2e` |
 | A16 | tool | not-testable | **not-testable** | the axe sweep now covers three themes but still not the flows' later steps or a shadow root → F-2-58 |
 
-### TS-024 — /dein-kalender
+### TS-WEB-0024 — /dein-kalender
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -239,7 +239,7 @@ measurement.
 | A18 | static | pass | **pass** | green in `pnpm check` |
 | A19 | manual | pass | **pass** | `dein-kalender-6-trust` carries `derived_from: [ia]`; no unconfirmed claim |
 
-### TS-025 — /dein-kalender/bestellen
+### TS-WEB-0025 — /dein-kalender/bestellen
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -254,7 +254,7 @@ measurement.
 | A13 | manual | not-testable | **not-testable** | no screen reader available |
 | A14 | e2e | pass | **pass** | green in `pnpm e2e` |
 
-### TS-026 — /deine-region (+ /angebot)
+### TS-WEB-0026 — /deine-region (+ /angebot)
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -272,7 +272,7 @@ measurement.
 | A16 | static | pass | **pass** | guard/manifest read |
 | A17 | manual | pass | **pass** | the map claim stays out of the claim set |
 
-### TS-027 — /ueber-uns
+### TS-WEB-0027 — /ueber-uns
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -286,7 +286,7 @@ measurement.
 | A14 | e2e | pass | **pass** | `e2e/layout-stability.spec.ts` green; own CLS measurement on `/ueber-uns` at 360 px: 0.0000 |
 | A15 | manual | pass | **pass** | every photo carries its placeholder mark; the `Foto gesucht` / "Photo wanted" surfaces are present in both locales |
 
-### TS-028 — /ueber-uns/archiv
+### TS-WEB-0028 — /ueber-uns/archiv
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -294,14 +294,14 @@ measurement.
 | A2 | static | pass | **pass** | green in `pnpm check` |
 | A3 | e2e | pass | **pass** | green in both environments — the hydration race of F-2-71 is gone |
 | A4–A6 | e2e | pass | **pass** | green in `pnpm e2e` |
-| A7 | integration | not-testable | **not-testable** | the media-echo pipeline has zero cleared entries (Q-045) |
+| A7 | integration | not-testable | **not-testable** | the media-echo pipeline has zero cleared entries (Q-0045) |
 | A8 | tool | pass | **pass** | green in `pnpm e2e` |
 | A9 | e2e | pass | **pass** | JavaScript disabled: all six cleared rows render |
 | A10–A12 | e2e/tool | pass | **pass** | green in `pnpm e2e` |
 | A13 | tool | fail | **pass** | **F-2-69 resolved.** CLS **0.0000** at 360 px on load and through the filter interactions (was 0.2197); Lighthouse mobile CLS 0 on the same route |
 | A14 | manual | fail | **fail** | no archive row carries an outbound link → F-2-47 |
 
-### TS-029 — /rechtliches
+### TS-WEB-0029 — /rechtliches
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -310,11 +310,11 @@ measurement.
 | A4 | static | pass | **pass** | guard/manifest read |
 | A5–A9 | e2e | pass | **pass** | green in `pnpm e2e` |
 | A10 | integration | pass | **pass** | green in `pnpm check` |
-| A12 | tool | not-testable | **fail** | same instrument as TS-002-A1, same result: the three-theme sweep now runs and `/rechtliches` carries the two `label-content-name-mismatch` nodes in all three themes → **F-3-1** |
+| A12 | tool | not-testable | **fail** | same instrument as TS-WEB-0002-A1, same result: the three-theme sweep now runs and `/rechtliches` carries the two `label-content-name-mismatch` nodes in all three themes → **F-3-1** |
 | A13 | e2e | pass | **pass** | green in `pnpm e2e` |
 | A14 | integration | fail | **fail** | heading scan of `/rechtliches` and `/en/legal`: one `h4 → h6` skip at the same position in both → F-2-19 |
 
-### TS-007 — Content pipeline
+### TS-WEB-0007 — Content pipeline
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -335,7 +335,7 @@ measurement.
 | A15 | manual | not-testable | **not-testable** | no bumped package version to dry-run P7 against |
 | A16 | tool | not-testable | **not-testable** | no segment-independence lint exists → F-2-18 |
 
-### TS-005 — Relevance engine
+### TS-WEB-0005 — Relevance engine
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -346,7 +346,7 @@ measurement.
 | A15 | static | fail | **fail** | no `claims` key, no proof resolution in `validate.ts` → F-2-43 |
 | A16 | unit | pass | **pass** | green in `pnpm check` |
 
-### TS-008 — Live data
+### TS-WEB-0008 — Live data
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -363,7 +363,7 @@ measurement.
 | A13 | tool | pass | **pass** | green in `pnpm check` |
 | A14 | integration | pass | **pass** | green in `pnpm check` |
 
-### TS-009 — Rendering and resilience
+### TS-WEB-0009 — Rendering and resilience
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -380,7 +380,7 @@ measurement.
 | A12 | tool | pass | **pass** | green in `pnpm check` |
 | A13 | manual | not-testable | **not-testable** | no screen reader; and no skeleton renders anywhere |
 
-### TS-010 — Personalization
+### TS-WEB-0010 — Personalization
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -396,9 +396,9 @@ measurement.
 | A12 | e2e | pass | **pass** | `e2e/privacy.spec.ts` 25/25 in both environments; own sweep: zero cookies, empty storage |
 | A13 | e2e | not-testable | **not-testable** | the language suggestion is not built in phase 1 |
 | A14 | e2e | pass | **pass** | green in `pnpm e2e` |
-| A15 | manual | not-testable | **not-testable** | no Q-008 sign-off record exists in this repository |
+| A15 | manual | not-testable | **not-testable** | no Q-0008 sign-off record exists in this repository |
 
-### TS-011 — SEO
+### TS-WEB-0011 — SEO
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -417,7 +417,7 @@ measurement.
 | A13 | manual | not-testable | **not-testable** | post-cutover Search Console observation; nothing is launched |
 | A14 | integration | pass | **pass** | green in `pnpm check` |
 
-### TS-012 — Analytics
+### TS-WEB-0012 — Analytics
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -433,7 +433,7 @@ measurement.
 | A10 | manual | not-testable | **not-testable** | same reason as A8 |
 | A11 | static | pass | **pass** | green in `pnpm check` |
 
-### TS-013 — Privacy (A1–A3, A5; A4/A6–A8 out of scope, §4)
+### TS-WEB-0013 — Privacy (A1–A3, A5; A4/A6–A8 out of scope, §4)
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
@@ -442,14 +442,14 @@ measurement.
 | A3 | static | pass | **pass** | green in `pnpm check` |
 | A5 | integration | pass | **pass** | green in `pnpm check` |
 
-### TS-016 — Forms and leads
+### TS-WEB-0016 — Forms and leads
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
 | A1 | static | pass | **pass** | guard/manifest read |
 | A2 | integration | pass | **pass** | one `form[data-envoy-form-kind="quote"]` per surface |
 | A3 | e2e | pass | **pass** | sentinel-filled quote fields: zero external requests, no sentinel in any URL, console line or analytics payload |
-| A4 | static | not-testable | **not-testable** | the widget contract's variable set is UNKNOWN (Q-022) |
+| A4 | static | not-testable | **not-testable** | the widget contract's variable set is UNKNOWN (Q-0022) |
 | A5 | e2e | pass | **pass** | every S3 placement resolves to the one configured briefing URL |
 | A6 | e2e | pass | **pass** | own four-step walk: briefing exit visible on each step, step 4 shows a copyable snippet, zero payment fields, no payment host in any request or in the CSP |
 | A7 | static | fail | **fail** | no archive row renders a preview image or an outbound link → F-2-47 |
@@ -461,19 +461,19 @@ measurement.
 | A13 | manual | pass | **pass** | the two-working-day promise stays removed rather than softened |
 | A14 | e2e | not-testable | **not-testable** | there is no widget script to block — the mount is a server-rendered mock |
 
-### TS-014 — Security (sweep scope)
+### TS-WEB-0014 — Security (sweep scope)
 
 | AC | Level | Run 2 | M5 run 1 | Evidence |
 | --- | --- | --- | --- | --- |
 | A1 | static | pass | **pass** | `scripts/check-csp.ts` runs inside `pnpm check` and is green |
 | A2 | integration | pass | **pass** | `e2e/smoke.spec.ts:160` and `:252` green in both environments; both environments serve the identical directive set. Preview `'unsafe-inline'` = F-2-27, recorded |
 
-### TS-003 — Performance (M5 regression, new to this run)
+### TS-WEB-0003 — Performance (M5 regression, new to this run)
 
 | AC | Level | M5 run 1 | Evidence |
 | --- | --- | --- | --- |
 | A1 | tool | **fail** | mobile Lighthouse below D7's 98 floor on `/` (96) and `/ueber-uns` (97) on the preview, and on all five D7 routes against the local production build (93–97). Desktop 100 on all five → **F-3-3** |
-| A2 | tool | **not-testable** | no bundle guard exists and there is no run summary to write measured first-load bytes into. The CI job that would host it is TS-015-A9, kept out of scope by `plan/gate-2-scope.md` §4 → open point |
+| A2 | tool | **not-testable** | no bundle guard exists and there is no run summary to write measured first-load bytes into. The CI job that would host it is TS-WEB-0015-A9, kept out of scope by `plan/gate-2-scope.md` §4 → open point |
 | A3 | static | **fail** | six static latin `woff2` faces (67.5 KB), not one variable file; **no font preload** on any route (the only `rel="preload"` is a script); `font-display: swap` on all six is correct. Open rows 19 and 20 cover the size and the variable-build halves; the *preload* clause is unmet and is not on either row |
 | A4 | e2e | **not-testable** | no e2e simulated-outage harness exists. The tiering it would exercise is covered at integration level (`resilience.integration.test.ts`, `bff-stats-cold-cache.integration.test.ts`) and by `resilient.test.ts`'s 13 unit cases, all green — but that is not the criterion's level, and "every page" is not walked |
 | A5 | tool | **pass** | vacuously and verifiably: across 96 page loads in two environments neither `code.etracker.com` nor the envoy host was requested at all, so neither can sit in the LCP element's critical chain |
@@ -481,7 +481,7 @@ measurement.
 | A7 | tool | **pass** | CLS < 0.1 on every content page with all islands streaming: worst measurement anywhere is 0.0006 (local) / 0.0007 (preview); Lighthouse mobile 0–0.015, desktop 0–0.012 |
 | A8 | static | **fail** | zero `loading="eager"` and zero `fetchpriority="high"` in the whole tree; `/ueber-uns`'s declared LCP image carries `loading="lazy"`; `/` and `/dein-ort` paint an undeclared image above the fold as the measured LCP element → **F-3-2** |
 
-### TS-017 — Technical foundation (M5 regression, new to this run)
+### TS-WEB-0017 — Technical foundation (M5 regression, new to this run)
 
 | AC | Level | M5 run 1 | Evidence |
 | --- | --- | --- | --- |
@@ -513,46 +513,46 @@ measurement.
 | **total in scope** | 333 | **358** | +25 |
 
 On the **common 333** the delta is pass **+4**, fail **−2**,
-not-testable **−2**. The 25 added criteria (TS-003 + TS-017) contribute
+not-testable **−2**. The 25 added criteria (TS-WEB-0003 + TS-WEB-0017) contribute
 17 pass, 4 fail, 4 not-testable.
 
 Movements, every one of them:
 
 | AC | Run 2 | M5 run 1 | Why |
 | --- | --- | --- | --- |
-| TS-021-A7 | fail | **pass** | F-2-49 resolved — the 307 hop now happens in `proxy.ts`, before the render |
-| TS-021-A11 | fail | **pass** | F-2-72 resolved — titles and descriptions come from the content frontmatter |
-| TS-009-A8 | fail | **pass** | F-2-69 resolved — worst CLS anywhere is 0.0007 |
-| TS-028-A13 | fail | **pass** | F-2-69 resolved — `/ueber-uns/archiv` CLS 0.2197 → 0.0000 |
-| TS-002-A1 | not-testable | **fail** | the three-theme sweep finally ran, and found a serious violation on every page → F-3-1 |
-| TS-029-A12 | not-testable | **fail** | same instrument, same result |
+| TS-WEB-0021-A7 | fail | **pass** | F-2-49 resolved — the 307 hop now happens in `proxy.ts`, before the render |
+| TS-WEB-0021-A11 | fail | **pass** | F-2-72 resolved — titles and descriptions come from the content frontmatter |
+| TS-WEB-0009-A8 | fail | **pass** | F-2-69 resolved — worst CLS anywhere is 0.0007 |
+| TS-WEB-0028-A13 | fail | **pass** | F-2-69 resolved — `/ueber-uns/archiv` CLS 0.2197 → 0.0000 |
+| TS-WEB-0002-A1 | not-testable | **fail** | the three-theme sweep finally ran, and found a serious violation on every page → F-3-1 |
+| TS-WEB-0029-A12 | not-testable | **fail** | same instrument, same result |
 
 Two verdicts moved the wrong way, and both for the same honest reason
-run 2 recorded for TS-009-A8: a criterion that had no instrument got
+run 2 recorded for TS-WEB-0009-A8: a criterion that had no instrument got
 one, and the instrument found something. Nothing regressed.
 
 ## The 28 fails, by owner
 
 | AC(s) | Finding | Why it is open |
 | --- | --- | --- |
-| TS-006-A6 | F-2-10 | spec against spec, open list by decision |
-| TS-006-A8, TS-005-A15, TS-007-A4, TS-020-A5 | F-2-43 | the guards whose inputs do not exist yet |
-| TS-026-A8 | open row 143 | `check:terms` is written, red, and not in the `pnpm check` chain |
-| TS-021-A2 | F-2-13 | open list |
-| TS-026-A12, TS-008-A8 | F-2-15 | the Portalize embed is not wired |
-| TS-028-A14, TS-016-A7 | F-2-47 | archive rows carry no outbound link or preview image |
-| TS-029-A14, TS-011-A3 | F-2-19 | a heading level is skipped inside the imported privacy policy |
-| TS-007-A11 | F-2-46 | no `content/legal/<locale>/` |
-| TS-005-A9, TS-009-A3, TS-009-A9 | F-2-39 / open row 145 | no island renders a skeleton — a spec decision, deliberately not shipped broken |
-| TS-009-A2 | F-2-56 / open row 131 | four routes stay fully dynamic, as row 131 decided |
-| TS-010-A5 | F-2-52 | spec against spec |
-| TS-011-A4 | F-2-41 | the band is an `aside` on 22 of 24 routes; two render none |
-| TS-011-A8, TS-011-A9 | F-2-42 | no OG image on any page |
-| TS-002-A1, TS-029-A12 | **F-3-1** (new) | `label-content-name-mismatch`, serious, 48 nodes, every page, every theme |
-| TS-003-A1 | **F-3-3** (new) | mobile Lighthouse below D7's 98 floor on two of five D7 routes |
-| TS-003-A3 | open rows 19, 20 (+ preload) | six static faces instead of one variable file; no font preload |
-| TS-003-A6 | **F-3-4** (new) | the reduced-data path is not built |
-| TS-003-A8 | **F-3-2** (new) | the declared LCP element is lazy; two pages paint an undeclared image above the fold |
+| TS-WEB-0006-A6 | F-2-10 | spec against spec, open list by decision |
+| TS-WEB-0006-A8, TS-WEB-0005-A15, TS-WEB-0007-A4, TS-WEB-0020-A5 | F-2-43 | the guards whose inputs do not exist yet |
+| TS-WEB-0026-A8 | open row 143 | `check:terms` is written, red, and not in the `pnpm check` chain |
+| TS-WEB-0021-A2 | F-2-13 | open list |
+| TS-WEB-0026-A12, TS-WEB-0008-A8 | F-2-15 | the Portalize embed is not wired |
+| TS-WEB-0028-A14, TS-WEB-0016-A7 | F-2-47 | archive rows carry no outbound link or preview image |
+| TS-WEB-0029-A14, TS-WEB-0011-A3 | F-2-19 | a heading level is skipped inside the imported privacy policy |
+| TS-WEB-0007-A11 | F-2-46 | no `content/legal/<locale>/` |
+| TS-WEB-0005-A9, TS-WEB-0009-A3, TS-WEB-0009-A9 | F-2-39 / open row 145 | no island renders a skeleton — a spec decision, deliberately not shipped broken |
+| TS-WEB-0009-A2 | F-2-56 / open row 131 | four routes stay fully dynamic, as row 131 decided |
+| TS-WEB-0010-A5 | F-2-52 | spec against spec |
+| TS-WEB-0011-A4 | F-2-41 | the band is an `aside` on 22 of 24 routes; two render none |
+| TS-WEB-0011-A8, TS-WEB-0011-A9 | F-2-42 | no OG image on any page |
+| TS-WEB-0002-A1, TS-WEB-0029-A12 | **F-3-1** (new) | `label-content-name-mismatch`, serious, 48 nodes, every page, every theme |
+| TS-WEB-0003-A1 | **F-3-3** (new) | mobile Lighthouse below D7's 98 floor on two of five D7 routes |
+| TS-WEB-0003-A3 | open rows 19, 20 (+ preload) | six static faces instead of one variable file; no font preload |
+| TS-WEB-0003-A6 | **F-3-4** (new) | the reduced-data path is not built |
+| TS-WEB-0003-A8 | **F-3-2** (new) | the declared LCP element is lazy; two pages paint an undeclared image above the fold |
 
 ## Findings raised this run
 
@@ -561,14 +561,14 @@ Nine, in `state/findings/round-3.md`: **0 critical · 0 high · 5 medium
 
 | Finding | Sev | What | AC(s) |
 | --- | --- | --- | --- |
-| F-3-1 | medium | the logo link's visible text is not part of its accessible name, on every page, in every theme (WCAG 2.1 SC 2.5.3) | TS-002-A1, TS-029-A12 |
-| F-3-2 | medium | the declared LCP image is `loading="lazy"`; nothing is eager or `fetchpriority="high"`; `/` and `/dein-ort` paint an undeclared image above the fold | TS-003-A8, TS-003 D2 |
-| F-3-3 | medium | mobile Lighthouse 96 / 97 on two of the five D7 routes against D7's 98 floor | TS-003-A1 |
-| F-3-4 | medium | `Save-Data: on` changes nothing — 0 % image bytes saved | TS-003-A6 |
+| F-3-1 | medium | the logo link's visible text is not part of its accessible name, on every page, in every theme (WCAG 2.1 SC 2.5.3) | TS-WEB-0002-A1, TS-WEB-0029-A12 |
+| F-3-2 | medium | the declared LCP image is `loading="lazy"`; nothing is eager or `fetchpriority="high"`; `/` and `/dein-ort` paint an undeclared image above the fold | TS-WEB-0003-A8, TS-WEB-0003 D2 |
+| F-3-3 | medium | mobile Lighthouse 96 / 97 on two of the five D7 routes against D7's 98 floor | TS-WEB-0003-A1 |
+| F-3-4 | medium | `Save-Data: on` changes nothing — 0 % image bytes saved | TS-WEB-0003-A6 |
 | F-3-5 | low | the founder photo's `alt` is German on `/en/about` and `/en/about/archive` | F-2-33 residue |
-| F-3-6 | low | upper-case path variants answer 200 instead of redirecting to the canonical URL | TS-004 D1 |
-| F-3-7 | medium | the proxy resolves `?ort=` upstream per request, uncached, in front of the cache, and the page resolves it again; no rate limit. Latent while geo-api is mocked (open row 77) | TS-004 D5, TS-009 D4 |
-| F-3-8 | low | `/_vercel/**` is not a reserved prefix, so a Speed-Insights beacon would 404 | TS-003 D7 |
+| F-3-6 | low | upper-case path variants answer 200 instead of redirecting to the canonical URL | TS-WEB-0004 D1 |
+| F-3-7 | medium | the proxy resolves `?ort=` upstream per request, uncached, in front of the cache, and the page resolves it again; no rate limit. Latent while geo-api is mocked (open row 77) | TS-WEB-0004 D5, TS-WEB-0009 D4 |
+| F-3-8 | low | `/_vercel/**` is not a reserved prefix, so a Speed-Insights beacon would 404 | TS-WEB-0003 D7 |
 | F-3-9 | low | the proxy's place-hop catch arm is silent, and its failure mode is the defect it fixes | — |
 
 Two things this run deliberately did **not** file as new findings:
@@ -577,7 +577,7 @@ preview-only by decision) and the "1 Orte ausgewählt" / "1 places
 selected" plural (F-2-53, low, already on the open list for M5's
 budget).
 
-## Security sweep (TS-014 scope)
+## Security sweep (TS-WEB-0014 scope)
 
 - **`semgrep`**, important-only, over `app/ src/ scripts/`: 30 scans,
   10 rulesets per path. **6 findings, all false positives, 0 true
@@ -601,7 +601,7 @@ budget).
   static code-path argument about a security boundary did not survive
   its first execution (F-2-36 was the first); it is worth making the
   rule explicit.
-- **TS-014-A1 and A2 both pass** in both environments, on the same
+- **TS-WEB-0014-A1 and A2 both pass** in both environments, on the same
   directive set.
 
 ## Methodological notes for whoever reads this next
@@ -627,11 +627,11 @@ have.** `e2e/a11y.spec.ts` has been green on 49/49 cases for three
 rounds while a serious, page-wide WCAG 2.1 Level A violation sat on
 every route, because axe ships `label-content-name-mismatch`
 `enabled: false`. The same sweep also fails on impact rather than on
-presence, while TS-002-A1 asks for *zero violations*. Two independent
+presence, while TS-WEB-0002-A1 asks for *zero violations*. Two independent
 reasons a green sweep is not the criterion.
 
 **Emulating the wrong thing produces confident nonsense.** An earlier
-pass of this run emulated TS-002 D4's high-contrast theme with
+pass of this run emulated TS-WEB-0002 D4's high-contrast theme with
 Playwright's `forcedColors: 'active'` and measured 186 serious
 `color-contrast` violations across all 24 routes. D4 selects its themes
 by `prefers-contrast`, not by Windows High Contrast Mode. Re-run with
@@ -641,16 +641,16 @@ re-discovers them.
 
 **The dark theme is still vacuous.** `app/styles/base.css` declares
 `color-scheme: light` and `[data-theme]` is set in no file, so the
-`prefers-color-scheme: dark` sweep measures the light theme. TS-002-A1
+`prefers-color-scheme: dark` sweep measures the light theme. TS-WEB-0002-A1
 literally names three themes; two of them are reachable. Open row 142
 records the consequence for the contrast guard; the sweep's coverage
 gap (F-2-58) narrows but does not close.
 
 **Manual-level criteria.** The three `manual` criteria that run 1
-failed and run 2 recovered (TS-024-A19, TS-026-A17, TS-016-A13) were
-re-performed and still pass; TS-027-A15 was re-performed and still
-passes. TS-028-A14 still fails (F-2-47). Run 2's twenty `manual`
-not-testables are unchanged, and **TS-017-A15 and A16 join them** — a
+failed and run 2 recovered (TS-WEB-0024-A19, TS-WEB-0026-A17, TS-WEB-0016-A13) were
+re-performed and still pass; TS-WEB-0027-A15 was re-performed and still
+passes. TS-WEB-0028-A14 still fails (F-2-47). Run 2's twenty `manual`
+not-testables are unchanged, and **TS-WEB-0017-A15 and A16 join them** — a
 per-release imagery review by the brand owner and a per-PR dependency
 review, neither of which has a record. Those two are process
 artefacts, not code.
@@ -677,7 +677,7 @@ work it:
    spans, or the whole visible string inside the `aria-label`. It
    turns two `fail` verdicts into `pass`. Enable the rule in
    `e2e/a11y.spec.ts` in the same change, and make the sweep fail on
-   *presence* rather than on impact, or TS-002-A1 stays unenforced.
+   *presence* rather than on impact, or TS-WEB-0002-A1 stays unenforced.
 2. **F-3-2.** `priority` on `/ueber-uns`'s founder photo is one prop,
    and it is the page's declared LCP element. The `photo-surface`
    background question on `/` and `/dein-ort` is bigger and is a D2
@@ -702,9 +702,9 @@ defect this run can close:
   unhydrated in *production*. The prototype runs on a preview, where
   `'unsafe-inline'` applies and everything hydrates — which is exactly
   why it must be said out loud at acceptance rather than discovered at
-  cutover. It needs a DEC-045 amendment (nonce), not a fix round.
+  cutover. It needs a DEC-0045 amendment (nonce), not a fix round.
 - **Open row 145** (F-2-39 / F-2-56, three failing criteria) is a
-  genuine architectural tension between TS-009's Suspense/PPR shell and
+  genuine architectural tension between TS-WEB-0009's Suspense/PPR shell and
   this site's no-JavaScript completeness guarantee. The round was right
   not to ship one of them broken. It needs the rendering-and-resilience
   spec owner.

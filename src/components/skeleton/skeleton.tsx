@@ -25,7 +25,7 @@ export interface SkeletonProps {
 }
 
 /**
- * 57 `skeleton` [PROPOSED] — SRC-014 §Skeletons, TS-009 D7.
+ * 57 `skeleton` [PROPOSED] — SRC-0014 §Skeletons, TS-WEB-0009 D7.
  *
  * Structure: the box at its declared ratio filled with the placeholder hatch;
  * text skeletons are `line` bars at the text's own line height, the last one

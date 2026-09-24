@@ -1,16 +1,16 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * TS-026 — `/deine-region` and `/deine-region/angebot` — acceptance pass.
+ * TS-WEB-0026 — `/deine-region` and `/deine-region/angebot` — acceptance pass.
  *
- * TS-026-A9 (integration, county-examples stub), TS-026-A11 (integration,
- * counter stub) and TS-026-A13 (the `request-licence-quote` analytics event
+ * TS-WEB-0026-A9 (integration, county-examples stub), TS-WEB-0026-A11 (integration,
+ * counter stub) and TS-WEB-0026-A13 (the `request-licence-quote` analytics event
  * on submit) are not built here: no `/api/*` stub exists in this run and
- * `envoy-form-mount` has no real submission target (Q-022) — `state/open.md`
+ * `envoy-form-mount` has no real submission target (Q-0022) — `state/open.md`
  * lists them not-yet-M4.
  *
  * **Changed for the polish brief (page 8, item 2): `/deine-region` no longer
- * renders the quote form inline.** F-2-48's reading of TS-016 D1 row S2 was
+ * renders the quote form inline.** F-2-48's reading of TS-WEB-0016 D1 row S2 was
  * that both quote surfaces must carry the `envoy` mount, and the case below
  * asserted it on both. What that produced is what the brief measured: the
  * argument page ended in a five-field form whose submit button ("Absenden")
@@ -31,7 +31,7 @@ const FOLD_VIEWPORTS = [
 ];
 
 test.describe("/deine-region", () => {
-  test("TS-026-A1: no map anywhere", async ({ page }) => {
+  test("TS-WEB-0026-A1: no map anywhere", async ({ page }) => {
     await page.goto("/deine-region");
     await expect(page.locator("canvas")).toHaveCount(0);
     await expect(page.locator('[class*="ratio-map"], [style*="ratio-map"]')).toHaveCount(0);
@@ -43,14 +43,14 @@ test.describe("/deine-region", () => {
     );
   });
 
-  test("TS-026-A2: no distance/radius wording as a module or result label", async ({ page }) => {
+  test("TS-WEB-0026-A2: no distance/radius wording as a module or result label", async ({ page }) => {
     await page.goto("/deine-region");
     const headings = await page.locator("h1, h2, h3, button, label").allTextContents();
     const distanceWords = /\bkm\b|Umkreis|Entfernung/i;
     for (const text of headings) expect(text).not.toMatch(distanceWords);
   });
 
-  test("TS-026-A3: at most 6 example places, and the place search stands beside them", async ({
+  test("TS-WEB-0026-A3: at most 6 example places, and the place search stands beside them", async ({
     page,
   }) => {
     await page.goto("/deine-region");
@@ -59,7 +59,7 @@ test.describe("/deine-region", () => {
     await expect(page.getByLabel("Dein Ort")).toBeVisible();
   });
 
-  test("TS-026-A5 / TS-006-A12: 480 appears at most once, from the price component", async ({
+  test("TS-WEB-0026-A5 / TS-WEB-0006-A12: 480 appears at most once, from the price component", async ({
     page,
   }) => {
     await page.goto("/deine-region");
@@ -71,7 +71,7 @@ test.describe("/deine-region", () => {
     expect(bodyText).not.toContain("4000");
   });
 
-  test("TS-026-A6 / TS-006-A2: exactly one primary CTA, targets /deine-region/angebot, repeated at the close", async ({
+  test("TS-WEB-0026-A6 / TS-WEB-0006-A2: exactly one primary CTA, targets /deine-region/angebot, repeated at the close", async ({
     page,
   }) => {
     await page.goto("/deine-region");
@@ -90,7 +90,7 @@ test.describe("/deine-region", () => {
     await expect(briefing.first()).toBeVisible();
   });
 
-  test("TS-026-A7 / A8: no response-time wording while the promise constant is unset", async ({
+  test("TS-WEB-0026-A7 / A8: no response-time wording while the promise constant is unset", async ({
     page,
   }) => {
     await page.goto("/deine-region");
@@ -98,13 +98,13 @@ test.describe("/deine-region", () => {
     expect(bodyText).not.toMatch(/Werktage|48 Stunden|schnellstmöglich/);
   });
 
-  test("TS-026-A14 / TS-006-A9: no audience selector, tab or interstitial", async ({ page }) => {
+  test("TS-WEB-0026-A14 / TS-WEB-0006-A9: no audience selector, tab or interstitial", async ({ page }) => {
     await page.goto("/deine-region");
     await expect(page.locator("[role=tablist]")).toHaveCount(0);
     await expect(page.getByRole("dialog")).toHaveCount(0);
   });
 
-  test("TS-006-A6: exactly one context band, after the last argument block, before the closing block", async ({
+  test("TS-WEB-0006-A6: exactly one context band, after the last argument block, before the closing block", async ({
     page,
   }) => {
     await page.goto("/deine-region");
@@ -112,7 +112,7 @@ test.describe("/deine-region", () => {
     await expect(bands).toHaveCount(1);
   });
 
-  test("TS-006-A7: the closing block repeats the primary conversion's goal and target", async ({
+  test("TS-WEB-0006-A7: the closing block repeats the primary conversion's goal and target", async ({
     page,
   }) => {
     await page.goto("/deine-region");
@@ -124,7 +124,7 @@ test.describe("/deine-region", () => {
   });
 
   for (const viewport of FOLD_VIEWPORTS) {
-    test(`TS-006-A3: the primary CTA is fully visible without scrolling at ${viewport.name}`, async ({
+    test(`TS-WEB-0006-A3: the primary CTA is fully visible without scrolling at ${viewport.name}`, async ({
       page,
     }) => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
@@ -209,7 +209,7 @@ test.describe("/deine-region", () => {
     await expect(closing).not.toContainText(/Werktage/);
   });
 
-  test("TS-004-A1: the page carries no horizontal scroll at 360px and has a heading", async ({
+  test("TS-WEB-0004-A1: the page carries no horizontal scroll at 360px and has a heading", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 360, height: 640 });
@@ -223,7 +223,7 @@ test.describe("/deine-region", () => {
 });
 
 test.describe("/deine-region/angebot", () => {
-  test("TS-006-A15: the breadcrumb trail precedes the page content, names the current page last, carries no data-cta", async ({
+  test("TS-WEB-0006-A15: the breadcrumb trail precedes the page content, names the current page last, carries no data-cta", async ({
     page,
   }) => {
     await page.goto("/deine-region/angebot");
@@ -248,14 +248,14 @@ test.describe("/deine-region/angebot", () => {
     expect(unnamedInputs).toBe(true);
   });
 
-  test("TS-026-A7: no response-time wording on the form route either", async ({ page }) => {
+  test("TS-WEB-0026-A7: no response-time wording on the form route either", async ({ page }) => {
     await page.goto("/deine-region/angebot");
     const bodyText = await page.locator("body").innerText();
     expect(bodyText).not.toMatch(/Werktage|48 Stunden|schnellstmöglich/);
   });
 
   /**
-   * A filled quote form, ready to submit. The timing gate of TS-016-A10
+   * A filled quote form, ready to submit. The timing gate of TS-WEB-0016-A10
    * refuses anything faster than a human could manage, so the walk waits it
    * out the way a visitor does.
    */
@@ -267,7 +267,7 @@ test.describe("/deine-region/angebot", () => {
     await page.waitForTimeout(2600);
   };
 
-  test("TS-026-A13 / TS-016-A12: submitting fires exactly one request-licence-quote event", async ({
+  test("TS-WEB-0026-A13 / TS-WEB-0016-A12: submitting fires exactly one request-licence-quote event", async ({
     page,
   }) => {
     const fires: string[] = [];
@@ -288,7 +288,7 @@ test.describe("/deine-region/angebot", () => {
    * to start two tracked submissions, because nothing disabled or debounced
    * the button.
    */
-  test("F-2-65 / TS-012-A5: a rapid double-click submits once", async ({ page }) => {
+  test("F-2-65 / TS-WEB-0012-A5: a rapid double-click submits once", async ({ page }) => {
     const fires: string[] = [];
     page.on("console", (message) => {
       if (message.text().includes("request-licence-quote")) fires.push(message.text());
@@ -314,7 +314,7 @@ test.describe("/deine-region/angebot", () => {
    * simply empty again: same layout, same button, nothing distinguishing
    * "submitted" from "page just loaded".
    */
-  test("F-2-66 / TS-016-A9: a submission leaves a labelled success state that takes focus", async ({
+  test("F-2-66 / TS-WEB-0016-A9: a submission leaves a labelled success state that takes focus", async ({
     page,
   }) => {
     await page.goto("/deine-region/angebot");
@@ -335,11 +335,11 @@ test.describe("/deine-region/angebot", () => {
   });
 
   /**
-   * F-2-48 / TS-016-A10 — the website's half of the spam contract: a honeypot
+   * F-2-48 / TS-WEB-0016-A10 — the website's half of the spam contract: a honeypot
    * in the DOM, hidden from assistive technology and not focusable, and a
    * submission faster than a human could make one refused.
    */
-  test("F-2-48 / TS-016-A10: a honeypot is present and unreachable, and a too-fast submission is refused", async ({
+  test("F-2-48 / TS-WEB-0016-A10: a honeypot is present and unreachable, and a too-fast submission is refused", async ({
     page,
   }) => {
     await page.goto("/deine-region/angebot");
@@ -367,10 +367,10 @@ test.describe("/deine-region/angebot", () => {
   });
 
   /**
-   * F-2-48 / TS-016-A2 — D1 row S2 names both `/deine-region` and
+   * F-2-48 / TS-WEB-0016-A2 — D1 row S2 names both `/deine-region` and
    * `/deine-region/angebot`; the mount was absent from the first.
    */
-  test("F-2-48 / TS-016-A2: the quote mount stands once, on the form route, with the D2 attributes", async ({
+  test("F-2-48 / TS-WEB-0016-A2: the quote mount stands once, on the form route, with the D2 attributes", async ({
     page,
   }) => {
     await page.goto("/deine-region/angebot");
@@ -394,10 +394,10 @@ test.describe("/deine-region/angebot", () => {
   });
 
   /**
-   * F-2-32 / TS-016 D7 — one configured value, referenced by every S3
+   * F-2-32 / TS-WEB-0016 D7 — one configured value, referenced by every S3
    * placement, never pasted per page.
    */
-  test("F-2-32 / TS-016 D7: every briefing link is the one configured booking URL", async ({
+  test("F-2-32 / TS-WEB-0016 D7: every briefing link is the one configured booking URL", async ({
     page,
   }) => {
     for (const path of [
@@ -417,7 +417,7 @@ test.describe("/deine-region/angebot", () => {
     }
   });
 
-  test("TS-001 / F-2-33: the English quote flow is English", async ({ page }) => {
+  test("TS-WEB-0001 / F-2-33: the English quote flow is English", async ({ page }) => {
     await page.goto("/en/your-region/quote");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Request a quote for your organisation",

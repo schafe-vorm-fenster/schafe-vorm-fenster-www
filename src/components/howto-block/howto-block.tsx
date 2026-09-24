@@ -22,7 +22,7 @@ export interface HowtoBlockProps {
   readonly appHref: string;
   readonly appLinkLabel?: string;
   /**
-   * The goal this block's app handover completes (TS-012 D4). The block wraps
+   * The goal this block's app handover completes (TS-WEB-0012 D4). The block wraps
    * its **own** link, because arming the whole block from outside would fire
    * on any click in the instructions.
    */
@@ -30,7 +30,7 @@ export interface HowtoBlockProps {
   /**
    * Which platforms open behind their own `summary` instead of standing
    * open. Both instructions stay in the DOM for every visitor, in the same
-   * order, under every user agent (TS-020 D4) — a collapsed one is disclosed,
+   * order, under every user agent (TS-WEB-0020 D4) — a collapsed one is disclosed,
    * not branched away. `/dein-ort` collapses Android, which halves the
    * block's height on a phone without taking the instruction off the page
    * (polish brief, page 2, fix 6).
@@ -46,7 +46,7 @@ export interface HowtoBlockProps {
 }
 
 /**
- * 38 `howto-block` [PROPOSED] — content type 18 `howto-block`, TS-020 D4.
+ * 38 `howto-block` [PROPOSED] — content type 18 `howto-block`, TS-WEB-0020 D4.
  *
  * Structure: one iOS and one Android instruction side by side, both always
  * rendered, plus the action to `{APP_HOST}/{slug}`. **No branching:** no

@@ -1,11 +1,11 @@
 /**
  * The manifest set — every route's `page.meta.ts`, in one place, so the
- * cross-page rules of TS-006 D1 and D9 can be checked as a *set* rather than
+ * cross-page rules of TS-WEB-0006 D1 and D9 can be checked as a *set* rather than
  * one file at a time.
  *
  * `page-meta.ts` is the shape and the vocabulary; each route's own
  * `page.meta.ts` is the value; this module is the **register**. It exists
- * because two of TS-006's acceptance criteria are statements about all
+ * because two of TS-WEB-0006's acceptance criteria are statements about all
  * twelve manifests together, and neither can be expressed inside a single
  * route's test:
  *
@@ -13,12 +13,12 @@
  *     *every* is the part a per-route test cannot see. `MANIFESTS` is keyed
  *     by `RouteId`, so a new route without a manifest is a type error before
  *     it is a test failure.
- *   - **A11** "Manifest set validates both ways against the SRC-003
+ *   - **A11** "Manifest set validates both ways against the SRC-0003
  *     conversion map" — both directions need the whole set.
  *
  * There is deliberately **no second statement of a manifest's values here**:
  * this module re-exports what the twelve files already declare. A route's
- * brief has exactly one home, and it is next to its `page.tsx` (TS-006 D1).
+ * brief has exactly one home, and it is next to its `page.tsx` (TS-WEB-0006 D1).
  */
 
 import { pageMeta as ORDER_META } from "@/app/[lang]/dein-kalender/bestellen/page.meta";
@@ -54,7 +54,7 @@ export const MANIFESTS: Readonly<Record<RouteId, PageMeta>> = Object.freeze({
 });
 
 /**
- * The conversion map of SRC-003 (`go-to-market-os/concept/
+ * The conversion map of SRC-0003 (`go-to-market-os/concept/
  * website-information-architecture.concept.md` § "Conversion Map"), as data.
  *
  * Read exactly as the source writes it — goal → the pages that carry it.
@@ -81,7 +81,7 @@ export const CONVERSION_MAP: Readonly<
  */
 export const UNCARRIED_GOALS: Readonly<Partial<Record<ConversionGoalId, string>>> =
   Object.freeze({
-    "order-promotion-material": "Q-005 — no page yet; candidate /mitmachen/vor-ort-werben",
+    "order-promotion-material": "Q-0005 — no page yet; candidate /mitmachen/vor-ort-werben",
   });
 
 /**
@@ -102,7 +102,7 @@ export const CARRIED_BY_CHROME: readonly ConversionGoalId[] = Object.freeze([
  * added here on purpose.
  *
  * Shape: `route → goal → why`. The three entries are all cases where a
- * per-page tactical spec (TS-023/TS-025/TS-026) made a determination the
+ * per-page tactical spec (TS-WEB-0023/TS-WEB-0025/TS-WEB-0026) made a determination the
  * concept's one-line map does not carry.
  */
 export const MAP_DEVIATIONS: Readonly<
@@ -110,34 +110,34 @@ export const MAP_DEVIATIONS: Readonly<
 > = Object.freeze({
   "register:register-as-publisher": {
     goal: "register-as-publisher",
-    why: "TS-023 D6 — the route's `primaryConversion` is `publish-first-event`; `register-as-publisher` fires here as the handover *event* (TS-012 D4), which is measurement, not a manifest field",
+    why: "TS-WEB-0023 D6 — the route's `primaryConversion` is `publish-first-event`; `register-as-publisher` fires here as the handover *event* (TS-WEB-0012 D4), which is measurement, not a manifest field",
   },
   "order:request-product-briefing": {
     goal: "request-product-briefing",
-    why: "TS-025 D5 — the briefing link is an exit on every step of the order flow, not a second goal; equal weight lives on `/dein-kalender` (WEB-F-014)",
+    why: "TS-WEB-0025 D5 — the briefing link is an exit on every step of the order flow, not a second goal; equal weight lives on `/dein-kalender` (FUN-WEB-0014)",
   },
   "regionQuote:request-licence-quote": {
     goal: "request-licence-quote",
-    why: "TS-026 D1 — the quote request is the CTA on `/deine-region` and the *form* on `/deine-region/angebot`: one goal across the parent route and its flow child",
+    why: "TS-WEB-0026 D1 — the quote request is the CTA on `/deine-region` and the *form* on `/deine-region/angebot`: one goal across the parent route and its flow child",
   },
   "region:request-product-briefing": {
     goal: "request-product-briefing",
-    why: "TS-026 D1 declares it as `equalWeightConversion`; the map names it for `/deine-region` too, so this is an agreement, kept here because TS-026's own open point questions the word",
+    why: "TS-WEB-0026 D1 declares it as `equalWeightConversion`; the map names it for `/deine-region` too, so this is an agreement, kept here because TS-WEB-0026's own open point questions the word",
   },
 });
 
 /**
  * The four routes whose manifest declares no live module, each with the
- * determination that put it there. TS-006 D1 sets a "≥ 1 live module" floor
+ * determination that put it there. TS-WEB-0006 D1 sets a "≥ 1 live module" floor
  * that four per-page specs explicitly contradict for their own route
  * (state/open.md row 117); the contradiction is carried here as a named,
  * reasoned exception rather than resolved by weakening `checkPageMeta`.
  */
 export const NO_LIVE_MODULE: Readonly<Partial<Record<RouteId, string>>> = Object.freeze({
-  order: "TS-025 D1 — none in V1, the scope preview is deferred (D4)",
-  regionQuote: "TS-026 D1/D2 — the quote form only, no live-data module",
-  archive: "TS-028 D2/D8 — fully static from the build-time media-echo fetch",
-  legal: "TS-029 D7 — fully static, no live data, no client dependencies",
+  order: "TS-WEB-0025 D1 — none in V1, the scope preview is deferred (D4)",
+  regionQuote: "TS-WEB-0026 D1/D2 — the quote form only, no live-data module",
+  archive: "TS-WEB-0028 D2/D8 — fully static from the build-time media-echo fetch",
+  legal: "TS-WEB-0029 D7 — fully static, no live data, no client dependencies",
 });
 
 /** Every goal a manifest declares, primary or equal weight, empty state included. */

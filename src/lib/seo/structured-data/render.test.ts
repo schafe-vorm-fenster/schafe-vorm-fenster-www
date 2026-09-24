@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { jsonLdGraph, jsonLdScriptProps } from "@/src/lib/seo/structured-data/render";
 
-describe("TS-011 D4: one JSON-LD graph, escaped, per page", () => {
+describe("TS-WEB-0011 D4: one JSON-LD graph, escaped, per page", () => {
   it("wraps nodes in one @graph under @context, dropping undefined entries", () => {
     const graph = jsonLdGraph([{ "@type": "WebPage" }, undefined, { "@type": "WebSite" }]);
     expect(graph["@context"]).toBe("https://schema.org");

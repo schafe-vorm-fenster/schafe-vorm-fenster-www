@@ -22,7 +22,7 @@ import styles from "./archive-filter.module.css";
  * which the `react-hooks/set-state-in-effect` rule refuses: no subscription
  * ever fires, so the snapshot only changes because client and server disagree
  * on it once, which is exactly the progressive-enhancement gate this
- * component needs — the chip row is inert until then (TS-028 D4/D5).
+ * component needs — the chip row is inert until then (TS-WEB-0028 D4/D5).
  */
 function subscribeNever() {
   return () => {};
@@ -44,12 +44,12 @@ export interface ArchiveFilterType {
  *
  * The reset is the eighth item in a wrapping flex row, so whether it is in
  * the row decides where the row breaks. Measured on `/ueber-uns/archiv` at
- * the three DEC-067 widths, pressing the first chip: at 360 px and 768 px the
+ * the three DEC-0067 widths, pressing the first chip: at 360 px and 768 px the
  * reset happened to land on a line that already had room (row height 200 px
  * and 96 px, unchanged), but at **1024 px the seven type chips fit on one
  * line and the reset did not** — the chip row went 44 px → 96 px and pushed
  * all 31 rows down 52 px on a click. That is the "a chip row that re-wrapped"
- * case TS-028-A13's own guard is written to catch, and it caught it.
+ * case TS-WEB-0028-A13's own guard is written to catch, and it caught it.
  *
  * So the row always contains the reset's box and only ever changes what is
  * painted in it. `visibility: hidden` is the same mechanism, and the same
@@ -72,12 +72,12 @@ function ReservedReset({ label }: { readonly label: string }) {
 /**
  * F-2-69 — the reserved chip row, rendered until hydration replaces it.
  *
- * The chip group is client-only by determination (TS-028 D8: without
+ * The chip group is client-only by determination (TS-WEB-0028 D8: without
  * JavaScript the chip row is "not displayed (hidden until hydration)"), so it
  * enters the DOM only after mount. Inserted into a flow layout that had not
  * accounted for it, that insertion pushed the row list **262 px** down and
- * measured CLS 0.2197 on `/ueber-uns/archiv` — against TS-028-A13 and
- * TS-009-A8, which both ask for < 0.1.
+ * measured CLS 0.2197 on `/ueber-uns/archiv` — against TS-WEB-0028-A13 and
+ * TS-WEB-0009-A8, which both ask for < 0.1.
  *
  * So the pre-hydration render reserves the box rather than leaving it out. It
  * reserves it with the **same labels in the same chip geometry** — the chip's
@@ -85,10 +85,10 @@ function ReservedReset({ label }: { readonly label: string }) {
  * the pressed *all* chip carries from the very first mounted render — laid
  * out by the same `.chips` rule. The reserved block therefore wraps to
  * exactly as many lines as the real one at every width, 360, 768 and 1024
- * alike (TS-017 D2, mobile-first), instead of trusting one hand-measured
+ * alike (TS-WEB-0017 D2, mobile-first), instead of trusting one hand-measured
  * height that would only hold at the width it was measured at.
  *
- * It stays legal under TS-028-A9 and D8: `visibility: hidden` (the `.reserved`
+ * It stays legal under TS-WEB-0028-A9 and D8: `visibility: hidden` (the `.reserved`
  * rule) means the chip row is *not visible*, and the reserved chips are spans
  * rather than buttons, carry no `role="group"` and are `aria-hidden`. A
  * `visibility: hidden` subtree is outside both the accessibility tree and the
@@ -136,7 +136,7 @@ export interface ArchiveFilterProps {
 }
 
 /**
- * 34 `archive-filter` [PROPOSED] — TS-028 D4/D5.
+ * 34 `archive-filter` [PROPOSED] — TS-WEB-0028 D4/D5.
  *
  * Structure: one row of `chip`s plus *all*, multi-select, OR-combined; only
  * types with ≥ 1 cleared entry get a chip. Filtering runs client-side over
@@ -156,7 +156,7 @@ export interface ArchiveFilterProps {
  * reorders the ones that remain.
  * Space: the chip row and the count line occupy their final height from the
  * **server** render on, so neither hydration nor the first count measurement
- * moves the rows below them (TS-028-A13, TS-009-A8 — CLS < 0.1). Row removal
+ * moves the rows below them (TS-WEB-0028-A13, TS-WEB-0009-A8 — CLS < 0.1). Row removal
  * does not shift the rows that remain — hidden rows collapse to nothing
  * rather than leaving a gap, which is the one layout shift this component
  * accepts, because it happens once, on a deliberate user action, not on late

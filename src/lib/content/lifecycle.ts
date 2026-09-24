@@ -1,6 +1,6 @@
 /**
- * The editorial gate of TS-007 D11 — which lifecycle status renders in which
- * build (TS-007-A14, F-2-40).
+ * The editorial gate of TS-WEB-0007 D11 — which lifecycle status renders in which
+ * build (TS-WEB-0007-A14, F-2-40).
  *
  * D11's table, verbatim:
  *
@@ -62,8 +62,8 @@ export function rendersIn(
 }
 
 /**
- * The build this process is producing — the same `VERCEL_ENV` axis TS-014 D5
- * and TS-015 D3 use, so "production" means one thing across the codebase.
+ * The build this process is producing — the same `VERCEL_ENV` axis TS-WEB-0014 D5
+ * and TS-WEB-0015 D3 use, so "production" means one thing across the codebase.
  */
 export function contentEnvironment(
   env: Record<string, string | undefined> = process.env,

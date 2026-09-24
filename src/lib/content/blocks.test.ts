@@ -9,7 +9,7 @@ const body = `**Headline:** Was ist bei dir los?
 **Button:** Suchen
 
 Begründung: Die Ortssuche läuft heute ausschließlich über die
-Postleitzahl (Q-025).
+Postleitzahl (Q-0025).
 
 - Presse
 - Auszeichnung
@@ -20,7 +20,7 @@ Postleitzahl (Q-025).
 | Beispiel B | Podcast |
 `;
 
-describe("TS-007-A1: a slot body parses into typed blocks, never into HTML", () => {
+describe("TS-WEB-0007-A1: a slot body parses into typed blocks, never into HTML", () => {
   const blocks = parseBlocks(body);
 
   it("reads `**Label:** value` as a field", () => {
@@ -98,7 +98,7 @@ describe("TS-007-A1: a slot body parses into typed blocks, never into HTML", () 
     expect(parseBlocks("   \n\n  ")).toEqual([]);
   });
 
-  it("keeps a runtime placeholder intact — segment independence (TS-007 D7)", () => {
+  it("keeps a runtime placeholder intact — segment independence (TS-WEB-0007 D7)", () => {
     const [block] = parseBlocks("**Headline:** Das ist los in {place}");
     expect(block.kind === "field" && block.value).toBe("Das ist los in {place}");
   });

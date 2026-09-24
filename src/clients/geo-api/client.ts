@@ -2,15 +2,15 @@
  * geo-api client — places, the hierarchy, and the app-handover slug.
  *
  * Operations the website is allowed to reach (README of this folder,
- * TS-008 D2): `community/search` and `community/slug/{slug}`.
+ * TS-WEB-0008 D2): `community/search` and `community/slug/{slug}`.
  * The address-lookup operation geo-api also publishes is **forbidden**
- * (DEC-024, TS-013 D3): it triggers a paid external Google lookup and would
+ * (DEC-0024, TS-WEB-0013 D3): it triggers a paid external Google lookup and would
  * carry the visitor's search term to a third party through our server. It is
  * deliberately not implemented here, so a caller cannot reach it by accident,
- * and its name occurs in no source file — checked by TS-008-A1.
+ * and its name occurs in no source file — checked by TS-WEB-0008-A1.
  *
  * The token is a server-side environment value (`GEOAPI_READ_TOKEN`) and is
- * read here only — no token ever crosses the BFF boundary (TS-008 D10).
+ * read here only — no token ever crosses the BFF boundary (TS-WEB-0008 D10).
  */
 
 import { z } from "zod";
@@ -30,7 +30,7 @@ const HIERARCHY_NODE = z
 /**
  * The subset of a geo-api community the website reads. `.loose()` on purpose:
  * an upstream that adds a field must not turn every live module to tier 2
- * (TS-009 D4 treats a schema failure as a failure). A field we *use* that
+ * (TS-WEB-0009 D4 treats a schema failure as a failure). A field we *use* that
  * goes missing still fails, which is the half that matters.
  */
 export const GeoCommunitySchema = z
@@ -84,7 +84,7 @@ function parse<T>(schema: z.ZodType<T>, payload: unknown): T {
   return result.data;
 }
 
-/** ZIP search — the only name-free lookup geo-api offers today (Q-025). */
+/** ZIP search — the only name-free lookup geo-api offers today (Q-0025). */
 export async function searchByZip(config: GeoApiConfig, zip: string): Promise<GeoCommunity[]> {
   const payload = await callUpstream({
     service: "geo-api",
@@ -96,7 +96,7 @@ export async function searchByZip(config: GeoApiConfig, zip: string): Promise<Ge
 
 /**
  * Proximity search. geo-api applies its own server-side radius constant and
- * `maxResults` default (TS-008 D2.2) — the caller's radius is **not** a
+ * `maxResults` default (TS-WEB-0008 D2.2) — the caller's radius is **not** a
  * parameter here, because it is not one upstream. The ~15 km cut is the BFF's
  * own, in `widening.ts`.
  */
@@ -113,7 +113,7 @@ export async function searchByPoint(
   return parse(GeoEnvelopeSchema, payload).data;
 }
 
-/** Validates a slug that arrived from outside — the handover's precondition (TS-008 D9). */
+/** Validates a slug that arrived from outside — the handover's precondition (TS-WEB-0008 D9). */
 export async function communityBySlug(config: GeoApiConfig, slug: string): Promise<GeoCommunity | undefined> {
   const payload = await callUpstream({
     service: "geo-api",

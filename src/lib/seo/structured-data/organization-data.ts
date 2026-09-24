@@ -1,6 +1,6 @@
 /**
- * Organization identity fields — TS-011 D4: "every `Organization` field …
- * is read at build time from `content/legal/` (WEB-F-088) — no identity
+ * Organization identity fields — TS-WEB-0011 D4: "every `Organization` field …
+ * is read at build time from `content/legal/` (FUN-WEB-0088) — no identity
  * data is written into code or into this spec."
  *
  * `content/legal/imprint.md` is prose (§5 DDG boilerplate), not per-field

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { leadFallbackUrl } from "@/src/lib/routes/lead-fallback";
 
-describe("TS-016 D6 / TS-004 D1: `/start`'s one configured target", () => {
+describe("TS-WEB-0016 D6 / TS-WEB-0004 D1: `/start`'s one configured target", () => {
   it("falls back to the live lead form when nothing is configured", () => {
     expect(leadFallbackUrl({})).toMatch(/^https:\/\/docs\.google\.com\/forms\//);
   });

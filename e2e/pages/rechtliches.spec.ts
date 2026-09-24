@@ -3,9 +3,9 @@ import { expect, test } from "@playwright/test";
 import { dictionary } from "../../src/lib/i18n/dictionary";
 
 /**
- * TS-029 — `/rechtliches` (EN `/legal`) — acceptance pass.
+ * TS-WEB-0029 — `/rechtliches` (EN `/legal`) — acceptance pass.
  *
- * **TS-029-A6 changed with the polish brief (page 12, item 1).** The
+ * **TS-WEB-0029-A6 changed with the polish brief (page 12, item 1).** The
  * criterion's own wording — "at 390px the nav is not sticky" — dates from
  * before the page carried seven sections and fifty phone screens: a table of
  * contents that scrolls away after the first screen is a table of contents
@@ -29,7 +29,7 @@ const SECTIONS_DE = [
 ];
 
 test.describe("/rechtliches", () => {
-  test("TS-029-A1: responds 200, correct html lang, one main, one h1", async ({ page }) => {
+  test("TS-WEB-0029-A1: responds 200, correct html lang, one main, one h1", async ({ page }) => {
     const response = await page.goto("/rechtliches");
     expect(response?.status()).toBe(200);
     await expect(page.locator("html")).toHaveAttribute("lang", "de");
@@ -37,7 +37,7 @@ test.describe("/rechtliches", () => {
     await expect(page.locator("h1")).toHaveCount(1);
   });
 
-  test("TS-029-A2: every registry anchor appears exactly once, in registry order", async ({
+  test("TS-WEB-0029-A2: every registry anchor appears exactly once, in registry order", async ({
     page,
   }) => {
     await page.goto("/rechtliches");
@@ -52,7 +52,7 @@ test.describe("/rechtliches", () => {
     }
   });
 
-  test("TS-029-A3: opening #datenschutz directly lands the heading below the sticky header, focused", async ({
+  test("TS-WEB-0029-A3: opening #datenschutz directly lands the heading below the sticky header, focused", async ({
     page,
   }) => {
     await page.goto("/rechtliches#datenschutz");
@@ -63,7 +63,7 @@ test.describe("/rechtliches", () => {
     if (box) expect(box.y).toBeGreaterThanOrEqual(-1);
   });
 
-  test("TS-029-A5: the section nav lists the registry sections in order and links resolve", async ({
+  test("TS-WEB-0029-A5: the section nav lists the registry sections in order and links resolve", async ({
     page,
   }) => {
     await page.goto("/rechtliches");
@@ -75,7 +75,7 @@ test.describe("/rechtliches", () => {
     expect(hrefs).toEqual(SECTIONS_DE.map((anchor) => `#${anchor}`));
   });
 
-  test("TS-029-A6 (brief page 12): at 390px the nav sticks under the header, no horizontal scroll; back-to-top appears after scrolling", async ({
+  test("TS-WEB-0029-A6 (brief page 12): at 390px the nav sticks under the header, no horizontal scroll; back-to-top appears after scrolling", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 700 });
@@ -161,7 +161,7 @@ test.describe("/rechtliches", () => {
     expect(last).toBe("bildnachweise");
   });
 
-  test("TS-029-A7: with JavaScript disabled every section renders and nav links jump correctly", async ({
+  test("TS-WEB-0029-A7: with JavaScript disabled every section renders and nav links jump correctly", async ({
     browser,
   }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
@@ -173,19 +173,19 @@ test.describe("/rechtliches", () => {
     await context.close();
   });
 
-  test("TS-029-A9: footer legal links resolve to the matching anchors", async ({ page }) => {
+  test("TS-WEB-0029-A9: footer legal links resolve to the matching anchors", async ({ page }) => {
     await page.goto("/rechtliches");
     const footer = page.getByRole("contentinfo");
     // The footer's own three legal links, plus the newsletter's consent
     // wording ("… stimmst du unserer Datenschutzerklärung zu.") also links
-    // `#datenschutz` (TS-016 D10) — both are legitimate, so `.first()`
+    // `#datenschutz` (TS-WEB-0016 D10) — both are legitimate, so `.first()`
     // suffices to prove the anchor resolves, not uniqueness.
     await expect(footer.locator('a[href="/rechtliches#impressum"]').first()).toBeVisible();
     await expect(footer.locator('a[href="/rechtliches#datenschutz"]').first()).toBeVisible();
     await expect(footer.locator('a[href="/rechtliches#barrierefreiheit"]').first()).toBeVisible();
   });
 
-  test("TS-029-A10: #auftragsverarbeitung renders anonymously — no redirect, no auth, no gate", async ({
+  test("TS-WEB-0029-A10: #auftragsverarbeitung renders anonymously — no redirect, no auth, no gate", async ({
     page,
   }) => {
     const response = await page.goto("/rechtliches#auftragsverarbeitung");
@@ -193,7 +193,7 @@ test.describe("/rechtliches", () => {
     await expect(page.locator("#auftragsverarbeitung")).toBeVisible();
   });
 
-  test("TS-029-A13: with reduced motion, an in-page jump performs no smooth scroll", async ({
+  test("TS-WEB-0029-A13: with reduced motion, an in-page jump performs no smooth scroll", async ({
     browser,
   }) => {
     const context = await browser.newContext({ reducedMotion: "reduce" });
@@ -206,7 +206,7 @@ test.describe("/rechtliches", () => {
     await context.close();
   });
 
-  test("TS-029-A14: one h1, one h2 per rendered section", async ({ page }) => {
+  test("TS-WEB-0029-A14: one h1, one h2 per rendered section", async ({ page }) => {
     await page.goto("/rechtliches");
     await expect(page.locator("h1")).toHaveCount(1);
     const h2Count = await page.locator("h2").count();
@@ -214,7 +214,7 @@ test.describe("/rechtliches", () => {
   });
 
   /**
-   * TS-029-A14's "no skipped level inside any imported document" half is
+   * TS-WEB-0029-A14's "no skipped level inside any imported document" half is
    * not satisfiable as written: `content/legal/privacy-policy.md` itself
    * skips `h3` (line 100 `## 5. Wenn du dich registrierst …` straight to
    * line 108 `#### Zweck`) — a pre-existing defect in the imported source,
@@ -224,11 +224,11 @@ test.describe("/rechtliches", () => {
    * recorded rather than the AC silently relaxed: `state/open.md`.
    */
   test.skip(
-    "TS-029-A14 (content defect): content/legal/privacy-policy.md skips h3 between '5. Wenn du dich registrierst' (h2) and 'Zweck' (h4) — not fixable here (content is never rewritten), see state/open.md",
+    "TS-WEB-0029-A14 (content defect): content/legal/privacy-policy.md skips h3 between '5. Wenn du dich registrierst' (h2) and 'Zweck' (h4) — not fixable here (content is never rewritten), see state/open.md",
     () => {},
   );
 
-  test("TS-029-A8: body text column measure is at most 80ch at 360/428/768/1440", async ({
+  test("TS-WEB-0029-A8: body text column measure is at most 80ch at 360/428/768/1440", async ({
     page,
   }) => {
     for (const width of [360, 428, 768, 1440]) {
@@ -253,12 +253,12 @@ test.describe("/rechtliches", () => {
   });
 
   test.skip(
-    "TS-029-A11: production build fails when the accessibility-statement section is absent — not run here: this suite runs against `next dev`/preview, not a production VERCEL_ENV build; the page.tsx throw is unit-verifiable but not exercised by an actual `next build` in this e2e run",
+    "TS-WEB-0029-A11: production build fails when the accessibility-statement section is absent — not run here: this suite runs against `next dev`/preview, not a production VERCEL_ENV build; the page.tsx throw is unit-verifiable but not exercised by an actual `next build` in this e2e run",
     () => {},
   );
 
   test.skip(
-    "TS-029-A12: axe-core, zero violations across all three themes — not-yet: no axe-core dependency is installed in this repository (would need the stack-harmony ADR, plan/guardrails.md, outside this work package's mandate)",
+    "TS-WEB-0029-A12: axe-core, zero violations across all three themes — not-yet: no axe-core dependency is installed in this repository (would need the stack-harmony ADR, plan/guardrails.md, outside this work package's mandate)",
     () => {},
   );
 
@@ -275,13 +275,13 @@ test.describe("/rechtliches", () => {
 });
 
 test.describe("/legal (EN)", () => {
-  test("TS-029-A1: the English variant responds 200 with html lang=en", async ({ page }) => {
+  test("TS-WEB-0029-A1: the English variant responds 200 with html lang=en", async ({ page }) => {
     const response = await page.goto("/en/legal");
     expect(response?.status()).toBe(200);
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
   });
 
-  test("TS-029-A3: /legal#imprint lands the heading correctly", async ({ page }) => {
+  test("TS-WEB-0029-A3: /legal#imprint lands the heading correctly", async ({ page }) => {
     await page.goto("/en/legal#imprint");
     await expect(page.locator("#imprint h2")).toBeVisible();
   });
@@ -311,7 +311,7 @@ test.describe("/legal (EN)", () => {
 
   /**
    * F-2-74 (gate-2 protocol item 7) / `state/open.md` row 53 — the six legal
-   * documents are imported German-only (TS-029 open point #2), and row 53's
+   * documents are imported German-only (TS-WEB-0029 open point #2), and row 53's
    * mitigation is that the EN page frame "states explicitly, in English,
    * that the six legal sections themselves are provided in German only".
    * Until gate 2 it had not shipped: an English reader met English section

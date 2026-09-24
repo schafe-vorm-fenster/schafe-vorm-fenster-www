@@ -8,7 +8,7 @@ import type { ReactNode } from "react";
 
 import styles from "./offer-tier.module.css";
 
-/** The three tiers, in the fixed order TS-024 D6/D6a names. */
+/** The three tiers, in the fixed order TS-WEB-0024 D6/D6a names. */
 export const OFFER_TIERS = ["community-calendar", "portalize-calendar", "portalize-enterprise"] as const;
 
 export type OfferTierId = (typeof OFFER_TIERS)[number];
@@ -39,7 +39,7 @@ export interface OfferTierProps {
 }
 
 /**
- * 27 `offer-tier` [PROPOSED] — content type 7 `offer-tier`, TS-024 D6/D6a.
+ * 27 `offer-tier` [PROPOSED] — content type 7 `offer-tier`, TS-WEB-0024 D6/D6a.
  *
  * Structure: one tier under the page's own "who is the calendar for?"
  * heading — a short argument, `price-tag`, and up to two CTAs. The group

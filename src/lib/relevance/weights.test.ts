@@ -6,7 +6,7 @@ import { FOCUS_JOBS } from "./types";
 const sum = (w: { w_geo: number; w_ctx: number; w_job: number; w_time: number }) =>
   Number((w.w_geo + w.w_ctx + w.w_job + w.w_time).toFixed(6));
 
-describe("TS-005-A5: the weights are a profile per focus job, and stage 0 zeroes w_geo", () => {
+describe("TS-WEB-0005-A5: the weights are a profile per focus job, and stage 0 zeroes w_geo", () => {
   it("carries the D5 profile of every focus job, each summing to 1", () => {
     expect(FOCUS_JOB_WEIGHTS["know-what-is-on"]).toEqual({
       w_geo: 0.45,
@@ -35,7 +35,7 @@ describe("TS-005-A5: the weights are a profile per focus job, and stage 0 zeroes
     for (const job of FOCUS_JOBS) expect(sum(FOCUS_JOB_WEIGHTS[job])).toBe(1);
   });
 
-  it("reproduces DEC-048 exactly for the 0.35 profile: w_time 0.35 · w_ctx 0.25 · w_job 0.40", () => {
+  it("reproduces DEC-0048 exactly for the 0.35 profile: w_time 0.35 · w_ctx 0.25 · w_job 0.40", () => {
     expect(weightsFor("publish-our-dates", { geoKnown: false })).toEqual({
       w_geo: 0,
       w_ctx: 0.25,

@@ -1,20 +1,20 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * TS-025 — `/dein-kalender/bestellen`, walked through all four steps.
+ * TS-WEB-0025 — `/dein-kalender/bestellen`, walked through all four steps.
  *
- * Not-yet-M4: TS-025-A5's full network-trace assertion (no ecosystem host
+ * Not-yet-M4: TS-WEB-0025-A5's full network-trace assertion (no ecosystem host
  * reachable) needs the real Portalize/envoy hosts wired to assert their
  * absence meaningfully; here it is checked as "no cross-origin request
  * fires on this flow" instead, which is the same claim against what exists
- * today. The live preview (D4) is deferred by DEC-069 and is not tested
+ * today. The live preview (D4) is deferred by DEC-0069 and is not tested
  * because it is not built.
  */
 
 const ROUTE = "/dein-kalender/bestellen";
 
-test.describe("TS-025: the order flow", () => {
-  test("TS-025-A2: the briefing link is visible on every step and never loads a Google script", async ({
+test.describe("TS-WEB-0025: the order flow", () => {
+  test("TS-WEB-0025-A2: the briefing link is visible on every step and never loads a Google script", async ({
     page,
   }) => {
     for (const query of [
@@ -29,7 +29,7 @@ test.describe("TS-025: the order flow", () => {
     await expect(page.locator('script[src*="google"], iframe[src*="google"]')).toHaveCount(0);
   });
 
-  test("TS-025-A3: ticking places updates the visible chip list and its count each time", async ({
+  test("TS-WEB-0025-A3: ticking places updates the visible chip list and its count each time", async ({
     page,
   }) => {
     await page.goto(ROUTE);
@@ -72,7 +72,7 @@ test.describe("TS-025: the order flow", () => {
     await expect(page.getByRole("link", { name: /Weiter/ })).toBeEnabled();
   });
 
-  test("TS-025-A4: with no place selected, step 3 is unreachable — neither by CTA nor by editing schritt=3", async ({
+  test("TS-WEB-0025-A4: with no place selected, step 3 is unreachable — neither by CTA nor by editing schritt=3", async ({
     page,
   }) => {
     await page.goto(ROUTE);
@@ -92,7 +92,7 @@ test.describe("TS-025: the order flow", () => {
     await expect(page.getByText("Noch keine Auswahl.")).toHaveCount(0);
   });
 
-  test("TS-025-A6: no payment field anywhere in the flow; step 4 is reached with no payment interaction", async ({
+  test("TS-WEB-0025-A6: no payment field anywhere in the flow; step 4 is reached with no payment interaction", async ({
     page,
   }) => {
     for (const query of [
@@ -106,7 +106,7 @@ test.describe("TS-025: the order flow", () => {
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Einbindungscode");
   });
 
-  test("TS-025-A7: step 4 shows the embed code as selectable text with a copy control, no pending-payment state", async ({
+  test("TS-WEB-0025-A7: step 4 shows the embed code as selectable text with a copy control, no pending-payment state", async ({
     page,
   }) => {
     await page.goto(`${ROUTE}?orte=schlatkow&schritt=4`);
@@ -116,7 +116,7 @@ test.describe("TS-025: the order flow", () => {
     expect(bodyText).not.toMatch(/pending payment|zahlung ausstehend/);
   });
 
-  test("TS-025-A8: reload on step 2 restores scope from the URL; reload on step 3 keeps scope, empties invoice fields, no storage used", async ({
+  test("TS-WEB-0025-A8: reload on step 2 restores scope from the URL; reload on step 3 keeps scope, empties invoice fields, no storage used", async ({
     page,
   }) => {
     await page.goto(`${ROUTE}?orte=schlatkow`);
@@ -137,7 +137,7 @@ test.describe("TS-025: the order flow", () => {
     expect(storage).toEqual({ cookie: "", local: 0, session: 0 });
   });
 
-  test("TS-025-A10: every step URL is noindex, follow", async ({ page }) => {
+  test("TS-WEB-0025-A10: every step URL is noindex, follow", async ({ page }) => {
     for (const query of ["", "?orte=schlatkow&schritt=3", "?orte=schlatkow&schritt=4"]) {
       const response = await page.goto(`${ROUTE}${query}`);
       await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
@@ -148,7 +148,7 @@ test.describe("TS-025: the order flow", () => {
     }
   });
 
-  test("TS-025-A11: buy-calendar-licence fires exactly once, only when step 4 shows a code", async ({
+  test("TS-WEB-0025-A11: buy-calendar-licence fires exactly once, only when step 4 shows a code", async ({
     page,
   }) => {
     const consoleMessages: string[] = [];
@@ -167,12 +167,12 @@ test.describe("TS-025: the order flow", () => {
   });
 
   /**
-   * F-2-60 / TS-012-A5 — "client-side navigation back and forth does not
+   * F-2-60 / TS-WEB-0012-A5 — "client-side navigation back and forth does not
    * replay it". The step-4 completion used to fire again on the forward
    * navigation, because `FireConversionOnMount` re-mounted and its `useRef`
    * guard went with the unmount.
    */
-  test("F-2-60 / TS-012-A5: Back and Forward through step 4 does not replay the completion", async ({
+  test("F-2-60 / TS-WEB-0012-A5: Back and Forward through step 4 does not replay the completion", async ({
     page,
   }) => {
     const fires: string[] = [];
@@ -198,7 +198,7 @@ test.describe("TS-025: the order flow", () => {
     expect(fires, "the forward navigation replayed the completion").toHaveLength(1);
   });
 
-  test("TS-025-A14: with the envoy script blocked, step 3 renders the static fallback, never a spinner", async ({
+  test("TS-WEB-0025-A14: with the envoy script blocked, step 3 renders the static fallback, never a spinner", async ({
     page,
   }) => {
     // The mocked `envoy-form-mount` never loads an external script, so the
@@ -226,7 +226,7 @@ test.describe("TS-025: the order flow", () => {
     );
   }
 
-  /** The four required invoice fields of TS-025 D6, as a real order fills them. */
+  /** The four required invoice fields of TS-WEB-0025 D6, as a real order fills them. */
   async function fillInvoice(page: import("@playwright/test").Page) {
     await page.fill('input[id$="authority"]', "Gemeinde Schlatkow");
     await page.fill('textarea[id$="address"]', "Dorfstraße 1, 17390 Schlatkow");
@@ -290,7 +290,7 @@ test.describe("TS-025: the order flow", () => {
    * beside a `data-cta="primary"` "Weiter" link, and the button a visitor
    * filling in invoice details reaches for was the one that did nothing.
    */
-  test("F-2-51 / TS-006 D3: step 3 offers exactly one call to action, and it advances", async ({
+  test("F-2-51 / TS-WEB-0006 D3: step 3 offers exactly one call to action, and it advances", async ({
     page,
   }) => {
     await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);

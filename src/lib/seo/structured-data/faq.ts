@@ -1,8 +1,8 @@
 /**
- * `FAQPage` — TS-011 D4: emitted on any page with a visible Q&A block.
+ * `FAQPage` — TS-WEB-0011 D4: emitted on any page with a visible Q&A block.
  * "No longer produces rich results for a site of this kind. It is emitted
  * anyway: it is valid, it makes the answer machine-readable, and answer
- * engines are an explicit channel (DEC-018)."
+ * engines are an explicit channel (DEC-0018)."
  *
  * One-entity rule: a page that emits this must not also mark the same
  * block up as microdata.

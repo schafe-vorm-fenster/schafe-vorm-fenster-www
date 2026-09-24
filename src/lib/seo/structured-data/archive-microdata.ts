@@ -1,5 +1,5 @@
 /**
- * Microdata prop builders for `/ueber-uns/archiv` — TS-011 D4: an
+ * Microdata prop builders for `/ueber-uns/archiv` — TS-WEB-0011 D4: an
  * `ItemList` of `NewsArticle`/`CreativeWork`, each with the **outlet** as
  * `publisher` and `url` to the original — a citation list, never authored
  * content. Microdata, not JSON-LD (one-entity rule): this module hands the

@@ -1,6 +1,6 @@
 ---
 id: dein-kalender-de
-page_id: TS-024
+page_id: TS-WEB-0024
 route: "/dein-kalender"
 seo:
   "/dein-kalender":
@@ -36,15 +36,15 @@ generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
 provenance: "mixed — 7 sourced (slot 5 now carries the three real, verbatim proof quotes in translation, clearance pending; slot 6 carries a sourced operations sentence), 1 generated demo addition left (slot 6 AI-use placeholder — no hub record documents AI handling of publisher data); EN translation of content/pages/dein-kalender/de.md, same source ids per slot"
-compliance_check: "state/content-map.md#compliance-checks — TS-024"
-schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0024"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
   - "state/open.md #19 — the trust block's AI-use sentence is still withheld: no hub record documents how AI handles publisher data. The operations sentence is resolved and sourced (people#jan-henrik-hempel, proof#in-operation-since-2018)"
-  - "Clearance pending — the three proof quotes in slot 5 (wendt-rubkow, zschiesche-gross-kiesow, eichler-wasserschloss-quilow) carry `usage_rights: unverified` (Q-014). They render in the protected preview only; go-live needs written clearance per quote or the card drops"
+  - "Clearance pending — the three proof quotes in slot 5 (wendt-rubkow, zschiesche-gross-kiesow, eichler-wasserschloss-quilow) carry `usage_rights: unverified` (Q-0014). They render in the protected preview only; go-live needs written clearance per quote or the card drops"
 price_source_note: >-
   Every price token below (480, per year, net; portalize-enterprise
   on request) must render from the offerings package at build time,
-  never as a typed literal (TS-024 D8) — this file records the source
+  never as a typed literal (TS-WEB-0024 D8) — this file records the source
   value for the page developer, it is not the rendering mechanism.
 images:
   - id: dein-kalender-hero
@@ -72,8 +72,8 @@ images:
     source: >-
       @schafe-vorm-fenster/proof@0.3.5#wendt-rubkow — Testimonial von Holger Wendt, Bürgermeister in
       Rubkow. `usage_rights: unverified`, kein Bildasset vorhanden. Ein Beleg wird nie mit einer
-      Rendition bebildert (DEC-068 Regel 3, `src/generated/placeholders/README.md`); bis zur
-      Freigabe zeigt die Karte die Fläche „Foto gesucht“ (TS-024-A13).
+      Rendition bebildert (DEC-0068 Regel 3, `src/generated/placeholders/README.md`); bis zur
+      Freigabe zeigt die Karte die Fläche „Foto gesucht“ (TS-WEB-0024-A13).
     alt: Holger Wendt outside the council office in Rubkow.
     status: needed
   - id: dein-kalender-proof-gross-kiesow
@@ -101,10 +101,10 @@ images:
 # Your calendar (`/dein-kalender`)
 
 "Portalize" appears on this page **exactly once** (slot 4, tier 2;
-TS-024 D7). No local `local-advertising` anywhere on the page
-(TS-024 D11). Two equally weighted conversions: order (Pulse, primary)
+TS-WEB-0024 D7). No local `local-advertising` anywhere on the page
+(TS-WEB-0024 D11). Two equally weighted conversions: order (Pulse, primary)
 and book a briefing (secondary, same visibility) — Pulse appears only
-in the focus block (TS-024 D3).
+in the focus block (TS-WEB-0024 D3).
 
 ## Slot 1 — Focus block
 
@@ -133,7 +133,7 @@ calendar is current again — and nobody here maintains it."
 Four rows, derived from `portalize-calendar` (`summary`, category) and
 the `pains[]`/`gains[]`/`relievers[]` fields of
 `municipalities--portalize-calendar` — not copied verbatim, no fifth
-row for an extra feature (TS-024 D4).
+row for an extra feature (TS-WEB-0024 D4).
 
 ## Slot 3 — Embedding demo
 
@@ -193,7 +193,7 @@ Offering id: `community-calendar`.
 **CTA (quiet):** Book a briefing
 
 Offering id: `portalize-calendar`; price 480/EUR/year, `vat: excluded`
-— read from the package, never typed (TS-024 D8). "Portalize" appears
+— read from the package, never typed (TS-WEB-0024 D8). "Portalize" appears
 on this entire page exclusively in this paragraph.
 
 ### Tier 3 — for a whole region
@@ -207,7 +207,7 @@ on this entire page exclusively in this paragraph.
 **CTA (quiet):** For a whole region → `/deine-region`
 
 Offering id: `portalize-enterprise`, `price_status: on-request` — never
-a number, never "from", never an order of magnitude (TS-024 D8). The
+a number, never "from", never an order of magnitude (TS-WEB-0024 D8). The
 internal €4,000 figure from the package must never appear anywhere on
 this page.
 
@@ -218,7 +218,7 @@ this page.
 Pool: the four proof ids `portalize-calendar` references
 (`kulturlandbuero-broellin`, `eichler-wasserschloss-quilow`,
 `zschiesche-gross-kiesow`, `wendt-rubkow`) — all `unverified` today
-(Q-014). For production this slot stays empty until a clearance
+(Q-0014). For production this slot stays empty until a clearance
 exists. In the protected preview the slot below shows three of those
 elements verbatim, clearance open; the clearance is tracked in the
 frontmatter and in `state/open.md`, not on the page.
@@ -232,7 +232,7 @@ frontmatter and in `state/open.md`, not on the page.
 2. "For this project I see our rural population, and mobile traders too, as the winners." — Dr A. Zschiesche, mayor of Groß Kiesow
 3. "The service helps make what's on offer more visible and easier to find across a thinly settled area." — Uwe Eichler, Wasserschloss Quilow
 
-All three records carry `usage_rights: unverified` (Q-014). The cards
+All three records carry `usage_rights: unverified` (Q-0014). The cards
 therefore stand in the protected preview, not on a public surface:
 before go-live there is a written clearance per quote, or the card
 goes (`state/open.md`). The quotes are German originals, translated
@@ -252,10 +252,10 @@ never a borrowed photo.
 
 **AI use (missing, not generated):** *No sentence — no hub record documents how AI handles publisher data.*
 
-The data-protection paragraph rests on TS-013 D1/D2. The operations
+The data-protection paragraph rests on TS-WEB-0013 D1/D2. The operations
 sentence rests on `people@0.3.6#jan-henrik-hempel` (role, place of
 residence) and `proof@0.3.5#in-operation-since-2018` (`cleared`), which
-satisfies TS-024-A19: it names a hub record. Legal form and operating
+satisfies TS-WEB-0024-A19: it names a hub record. Legal form and operating
 address live in the imprint and in no hub record, so they stay out of
 this block. The AI statement stays unpublished until a hub record
 exists (`state/open.md` #19).
@@ -295,4 +295,4 @@ link rather than beside it as a second button.
 
 A negative check, not a text slot: `local-advertising` (`promotion:
 withheld`) must occur zero times on this page — no sentence, no field,
-no CTA, no link (TS-024 D11).
+no CTA, no link (TS-WEB-0024 D11).

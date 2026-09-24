@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Generates the placeholder image set (DEC-068).
+ * Generates the placeholder image set (DEC-0068).
  *
  * A placeholder fills a gap so the site is complete enough to look at,
  * click through and measure while the real material is still being made.
@@ -8,7 +8,7 @@
  * here is flatly graphic: a brand-token colour field, a hatch, the slot
  * label, the aspect ratio, and the word PLATZHALTER.
  *
- * What this script must never produce — DEC-068 rule 3:
+ * What this script must never produce — DEC-0068 rule 3:
  *   no synthetic photograph of a person, no invented village, no invented
  *   outlet, no invented testimonial, no figure that could read as data.
  *   A placeholder may occupy a slot; it may not assert anything.
@@ -48,7 +48,7 @@ function svg({ id, aspect, tone, label }) {
   const unit = Math.round(Math.min(w, h) / 22);
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="Platzhalter: ${label}">
   <title>Platzhalter: ${label}</title>
-  <desc>Generiertes Platzhalterbild fuer den Slot ${id} (DEC-068). Kein Foto, keine Aussage.</desc>
+  <desc>Generiertes Platzhalterbild fuer den Slot ${id} (DEC-0068). Kein Foto, keine Aussage.</desc>
   <defs>
     <pattern id="h" width="${unit}" height="${unit}" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
       <line x1="0" y1="0" x2="0" y2="${unit}" stroke="${t.hatch}" stroke-width="${Math.max(2, unit / 6)}"/>

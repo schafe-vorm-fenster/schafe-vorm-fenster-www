@@ -6,7 +6,7 @@ import { mockLocationResolver, disabledLocationResolver } from "./geolocation";
 const now = new Date("2026-09-11T12:00:00Z");
 const base = { focusJob: "know-what-is-on", locale: "de", now } as const;
 
-describe("TS-010-A1: the composer answers every input path, and never throws", () => {
+describe("TS-WEB-0010-A1: the composer answers every input path, and never throws", () => {
   it("a bare request is stage 0 — direct, no geo, the page's own focus job", async () => {
     const resolved = await composeViewerContext({ ...base, resolver: disabledLocationResolver });
     expect(resolved.viewer.stage).toBe(0);
@@ -52,7 +52,7 @@ describe("TS-010-A1: the composer answers every input path, and never throws", (
     expect(resolved.location.demo).toBe(false);
   });
 
-  it("keeps the page's focus job whatever the entry says (DEC-059)", async () => {
+  it("keeps the page's focus job whatever the entry says (DEC-0059)", async () => {
     for (const referrer of ["https://www.linkedin.com/", "https://www.instagram.com/", null]) {
       const resolved = await composeViewerContext({ ...base, referrer, resolver: mockLocationResolver });
       expect(resolved.viewer.job).toBe("know-what-is-on");

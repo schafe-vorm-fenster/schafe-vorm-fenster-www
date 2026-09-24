@@ -1,15 +1,15 @@
 /**
- * The route translation map — TS-004 D3a, the **single source** for every
+ * The route translation map — TS-WEB-0004 D3a, the **single source** for every
  * path on this website.
  *
- * TS-004 D3a fixes the contract: `routeId → { de: path, en: path, … }`, and
+ * TS-WEB-0004 D3a fixes the contract: `routeId → { de: path, en: path, … }`, and
  * three consumers know a path — nobody else.
  *
  *   1. the URL mapping (`next.config.ts`, built from `next-routing.ts`)
  *      translates inbound public paths to internal routes;
- *   2. the link facade (`href()`, TS-001 D5) renders outbound links in the
+ *   2. the link facade (`href()`, TS-WEB-0001 D5) renders outbound links in the
  *      current language — components never type a path;
- *   3. canonical and hreflang (TS-001 D6) derive from the same table, which
+ *   3. canonical and hreflang (TS-WEB-0001 D6) derive from the same table, which
  *      is *how* the language variants know they belong together.
  *
  * The candidate `next-intl` of D3a was not taken: no sibling repository in
@@ -20,7 +20,7 @@
  *
  * ### The internal path
  *
- * The App Router tree (TS-004 D2) is `app/[lang]/…` and its directory names
+ * The App Router tree (TS-WEB-0004 D2) is `app/[lang]/…` and its directory names
  * are the **German** segments. So the internal path of a route is
  * `/{lang}{path.de}` for every language, and the public path is what the
  * table says. `/en/your-place` is served by `app/[lang]/dein-ort`.
@@ -31,26 +31,26 @@ import { DEFAULT_LOCALE, LOCALES } from "../i18n/locales";
 import type { Locale } from "../i18n/locales";
 
 /**
- * The canonical origin of the full site (TS-001 D1/D2, DEC-035). `www.` is
+ * The canonical origin of the full site (TS-WEB-0001 D1/D2, DEC-0035). `www.` is
  * canonical on every domain. Absolute metadata URLs are built on it: the
  * pages are statically rendered, so they cannot read a request host, and
- * every non-canonical host is `noindex` anyway (TS-011 D9).
+ * every non-canonical host is `noindex` anyway (TS-WEB-0011 D9).
  */
 export const SITE_ORIGIN = "https://www.schafe-vorm-fenster.de";
 
 /**
- * Where the village calendars live after the move off the apex (DEC-035).
- * Used by the interim `/hilfe/*` redirect (DEC-047) and by the app handovers.
+ * Where the village calendars live after the move off the apex (DEC-0035).
+ * Used by the interim `/hilfe/*` redirect (DEC-0047) and by the app handovers.
  *
- * The constant itself now lives in the **one handover module** TS-017 D4
+ * The constant itself now lives in the **one handover module** TS-WEB-0017 D4
  * demands (`src/lib/live/app-handover.ts`), which is the only file in the
- * tree where the app hostname occurs — `pnpm check:api-routes` (TS-017-A11)
+ * tree where the app hostname occurs — `pnpm check:api-routes` (TS-WEB-0017-A11)
  * fails a second occurrence. Re-exported here so this module's existing
  * consumers keep their import.
  */
 export { APP_ORIGIN } from "../live/app-handover";
 
-/** Every page of the TS-004 D1 inventory, in inventory order. */
+/** Every page of the TS-WEB-0004 D1 inventory, in inventory order. */
 export const ROUTE_IDS = [
   "home",
   "place",
@@ -71,57 +71,57 @@ export type RouteId = (typeof ROUTE_IDS)[number];
 export interface RouteDefinition {
   /** Localized paths, without the language prefix. `/` for the home page. */
   readonly path: Readonly<Record<Locale, string>>;
-  /** The tactical spec that owns the page — TS-019 … TS-029. */
+  /** The tactical spec that owns the page — TS-WEB-0019 … TS-WEB-0029. */
   readonly spec: string;
-  /** The parent route, for the breadcrumb trail of TS-006 D2 / DEC-071. */
+  /** The parent route, for the breadcrumb trail of TS-WEB-0006 D2 / DEC-0071. */
   readonly parent?: RouteId;
 }
 
 /**
- * The table. German segments are fixed by DEC-036; the English segments are
- * TS-004 D3a's proposal, adopted verbatim.
+ * The table. German segments are fixed by DEC-0036; the English segments are
+ * TS-WEB-0004 D3a's proposal, adopted verbatim.
  */
 export const ROUTES: Readonly<Record<RouteId, RouteDefinition>> = {
-  home: { path: { de: "/", en: "/" }, spec: "TS-019" },
-  place: { path: { de: "/dein-ort", en: "/your-place" }, spec: "TS-020" },
+  home: { path: { de: "/", en: "/" }, spec: "TS-WEB-0019" },
+  place: { path: { de: "/dein-ort", en: "/your-place" }, spec: "TS-WEB-0020" },
   placeStart: {
     path: { de: "/dein-ort/starten", en: "/your-place/start" },
-    spec: "TS-021",
+    spec: "TS-WEB-0021",
     parent: "place",
   },
-  takePart: { path: { de: "/mitmachen", en: "/take-part" }, spec: "TS-022" },
+  takePart: { path: { de: "/mitmachen", en: "/take-part" }, spec: "TS-WEB-0022" },
   register: {
     path: { de: "/mitmachen/registrieren", en: "/take-part/register" },
-    spec: "TS-023",
+    spec: "TS-WEB-0023",
     parent: "takePart",
   },
   calendar: {
     path: { de: "/dein-kalender", en: "/your-calendar" },
-    spec: "TS-024",
+    spec: "TS-WEB-0024",
   },
   order: {
     path: { de: "/dein-kalender/bestellen", en: "/your-calendar/order" },
-    spec: "TS-025",
+    spec: "TS-WEB-0025",
     parent: "calendar",
   },
-  region: { path: { de: "/deine-region", en: "/your-region" }, spec: "TS-026" },
+  region: { path: { de: "/deine-region", en: "/your-region" }, spec: "TS-WEB-0026" },
   regionQuote: {
     path: { de: "/deine-region/angebot", en: "/your-region/quote" },
-    spec: "TS-026",
+    spec: "TS-WEB-0026",
     parent: "region",
   },
-  about: { path: { de: "/ueber-uns", en: "/about" }, spec: "TS-027" },
+  about: { path: { de: "/ueber-uns", en: "/about" }, spec: "TS-WEB-0027" },
   archive: {
     path: { de: "/ueber-uns/archiv", en: "/about/archive" },
-    spec: "TS-028",
+    spec: "TS-WEB-0028",
     parent: "about",
   },
-  legal: { path: { de: "/rechtliches", en: "/legal" }, spec: "TS-029" },
+  legal: { path: { de: "/rechtliches", en: "/legal" }, spec: "TS-WEB-0029" },
 };
 
 /**
- * The public path of a route in a language — the link facade of TS-001 D5.
- * The prefix appears iff the language is not the TLD default (TS-001 D4).
+ * The public path of a route in a language — the link facade of TS-WEB-0001 D5.
+ * The prefix appears iff the language is not the TLD default (TS-WEB-0001 D4).
  *
  * This is the only function a component may use to build an internal href.
  */
@@ -132,7 +132,7 @@ export function href(route: RouteId, locale: Locale): string {
 }
 
 /**
- * The path inside the App Router tree — `/{lang}{germanPath}` (TS-004 D2).
+ * The path inside the App Router tree — `/{lang}{germanPath}` (TS-WEB-0004 D2).
  * This is the destination of the URL mapping, never a link target.
  */
 export function internalPath(route: RouteId, locale: Locale): string {
@@ -140,7 +140,7 @@ export function internalPath(route: RouteId, locale: Locale): string {
   return path === "/" ? `/${locale}` : `/${locale}${path}`;
 }
 
-/** The absolute canonical URL of a route in a language (TS-001 D6). */
+/** The absolute canonical URL of a route in a language (TS-WEB-0001 D6). */
 export function canonicalUrl(route: RouteId, locale: Locale): string {
   const path = href(route, locale);
   return path === "/" ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${path}`;
@@ -148,7 +148,7 @@ export function canonicalUrl(route: RouteId, locale: Locale): string {
 
 /**
  * The hreflang set of a route: every language the page exists in, plus
- * `x-default` on the TLD default (TS-001 D6). Symmetric by construction —
+ * `x-default` on the TLD default (TS-WEB-0001 D6). Symmetric by construction —
  * both variants of a page derive their set from the same row.
  */
 export function alternateUrls(route: RouteId): Record<string, string> {
@@ -171,7 +171,7 @@ export function trail(route: RouteId): RouteId[] {
  * This is the **layout's** way of learning which page renders below it, and
  * the only one that costs nothing: `useSelectedLayoutSegments()` reads the
  * router tree, which is the *internal* path (`app/[lang]/…`, German segments
- * by TS-004 D2), so it is immune to the locale rewrite — `/en/about/archive`
+ * by TS-WEB-0004 D2), so it is immune to the locale rewrite — `/en/about/archive`
  * and `/ueber-uns/archiv` both arrive here as `["ueber-uns", "archiv"]`.
  * `usePathname()` would not be: the prerender sees the rewritten path and the
  * browser sees the public one, which is the hydration mismatch the Next.js
@@ -204,7 +204,7 @@ export function routeIdForPath(
   return ROUTE_IDS.find((id) => ROUTES[id].path[locale] === normalised);
 }
 
-/** Lowercases and strips a trailing slash — TS-011 D1's normalisation rule. */
+/** Lowercases and strips a trailing slash — TS-WEB-0011 D1's normalisation rule. */
 export function normalisePath(path: string): string {
   const lowered = path.toLowerCase();
   if (lowered.length > 1 && lowered.endsWith("/")) return lowered.slice(0, -1);

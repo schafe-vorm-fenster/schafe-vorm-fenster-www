@@ -26,14 +26,14 @@ import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
 /**
- * TS-021 — `/dein-ort/starten` — the founding offer.
+ * TS-WEB-0021 — `/dein-ort/starten` — the founding offer.
  *
  * The page a visitor reaches when the place search finds **no place at all**.
- * Blocks per TS-021 D2: the acknowledgment with the place's name and the
+ * Blocks per TS-WEB-0021 D2: the acknowledgment with the place's name and the
  * page's only primary treatment · what it takes (WhatsApp) · the live
  * example · who usually starts it · search again · context band · closing
  * CTA, the last two from `page.meta.ts` through `PageFrame`. The breadcrumb
- * trail above block 1 is DEC-071's, and the frame renders it because
+ * trail above block 1 is DEC-0071's, and the frame renders it because
  * `placeStart` has a parent in the route table.
  *
  * **The place is a query parameter and nothing else** (D4). `?ort=` is raw
@@ -51,9 +51,9 @@ import type { Metadata } from "next";
  * `/dein-ort` state B's "du könntest die Erste sein" belongs there and is
  * absent here, by construction — the two artifacts share no copy string.
  *
- * **Reading `searchParams` makes this route dynamic today.** TS-021 D10
+ * **Reading `searchParams` makes this route dynamic today.** TS-WEB-0021 D10
  * wants the shell prerendered with the parameter resolved outside the cache
- * boundary; that is PPR, which TS-009 adopts at M4. TS-021-A2 meanwhile
+ * boundary; that is PPR, which TS-WEB-0009 adopts at M4. TS-WEB-0021-A2 meanwhile
  * requires the `h1` to contain the searched place **with JavaScript
  * disabled**, which only a server render can do. The AC wins; the divergence
  * from D10 is a `state/open.md` row, and the fix is one `Suspense` boundary
@@ -70,7 +70,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
-  // Parameter-free by construction (TS-011 D5): no runtime value reaches the
+  // Parameter-free by construction (TS-WEB-0011 D5): no runtime value reaches the
   // indexed surface, which is what makes D6's leak impossible rather than
   // merely unlikely.
   return pageMetadataFor(ROUTE, params);
@@ -104,7 +104,7 @@ function labelOf(field: string | undefined): string {
 }
 
 /**
- * **Cache Components: this route blocks on purpose** (TS-009 D1, the dynamic
+ * **Cache Components: this route blocks on purpose** (TS-WEB-0009 D1, the dynamic
  * layer). `?ort=` is not one module's input here — it is the page's headline,
  * its primary CTA's query and its closing block, all three (D4/D8). Splitting
  * that into a `<Suspense>` island would put the *hero* behind a skeleton and
@@ -134,14 +134,14 @@ export default async function PlaceStartPage({
   const query = await searchParams;
 
   /**
-   * DEC-070's re-resolution, as TS-021-A7 states it (F-2-49): this page is
+   * DEC-0070's re-resolution, as TS-WEB-0021-A7 states it (F-2-49): this page is
    * the answer to "geo-api has no community for that". The moment it *does*
    * — the place was added, or the visitor arrived on a stale link — the page
    * is the wrong one, and the visitor belongs on `/dein-ort?ort=<slug>`.
    * Before this, a covered place like `quilow` was told in its own
    * name that it "steht noch nicht im Dorfkalender".
    *
-   * Exactly one hop, and the campaign parameters survive it (TS-023 D4's
+   * Exactly one hop, and the campaign parameters survive it (TS-WEB-0023 D4's
    * `etcc_*` rule, which the whole founding path shares); the language
    * prefix comes from `linkHref` and is never typed.
    */
@@ -233,7 +233,7 @@ export default async function PlaceStartPage({
 
   return (
     <>
-      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{
@@ -321,12 +321,12 @@ export default async function PlaceStartPage({
         </SectionShell>
       </MotionReveal>
 
-      {/* Block 2.3 — who usually starts it. Not a `scene-block`: TS-006 D7
+      {/* Block 2.3 — who usually starts it. Not a `scene-block`: TS-WEB-0006 D7
           gives a scene exactly one declared mechanism and an opener in
           question form, and this block has neither — D2's own table writes
           "— the scene" in its mechanism column. Naming a mechanism here
           would invent one. It is also emphatically not a role switcher
-          (TS-006 D8): it names who it usually is and lets the reader
+          (TS-WEB-0006 D8): it names who it usually is and lets the reader
           recognise someone (D9). */}
       <MotionReveal>
         <SectionShell

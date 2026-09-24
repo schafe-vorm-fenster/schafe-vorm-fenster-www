@@ -14,7 +14,7 @@ export interface BackToTopProps {
 }
 
 /**
- * 18 `back-to-top` [PROPOSED] — TS-029 D4.
+ * 18 `back-to-top` [PROPOSED] — TS-WEB-0029 D4.
  *
  * Structure: one fixed control in the bottom-right corner below the xl
  * switch point, appearing once the visitor is past section one and returning

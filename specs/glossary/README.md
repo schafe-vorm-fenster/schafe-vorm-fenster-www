@@ -8,4 +8,4 @@ of redefining it (no-duplication rule).
 
 ## Contents
 
-- `glossary.md` — `GL-###` entries
+- `glossary.md` — `GL-####` entries

@@ -1,5 +1,5 @@
 /**
- * `pnpm check:content` — the content pipeline gate (TS-007 D12).
+ * `pnpm check:content` — the content pipeline gate (TS-WEB-0007 D12).
  *
  * Reads the eleven page artifacts in every configured locale, validates them
  * against the schema in `src/domain/content-frontmatter.schema.ts`, and
@@ -43,7 +43,7 @@ async function main(): Promise<void> {
   }
 
   if (errors.length === 0) {
-    console.log("Content pipeline is valid (TS-007 D12).");
+    console.log("Content pipeline is valid (TS-WEB-0007 D12).");
     return;
   }
 

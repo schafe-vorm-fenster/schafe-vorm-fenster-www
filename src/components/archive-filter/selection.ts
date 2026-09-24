@@ -1,5 +1,5 @@
 /**
- * The pure OR-combined multi-select rule (TS-028 D4/D5): zero selected means
+ * The pure OR-combined multi-select rule (TS-WEB-0028 D4/D5): zero selected means
  * every row shows, otherwise a row shows if it carries at least one of the
  * selected types. Kept apart from the DOM-touching component so the rule
  * itself is tested without a browser.

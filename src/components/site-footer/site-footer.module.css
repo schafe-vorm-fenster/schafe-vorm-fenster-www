@@ -44,7 +44,7 @@
 }
 
 /*
- * A 44 px target (SRC-014 §Touch targets) that reads as the control it is.
+ * A 44 px target (SRC-0014 §Touch targets) that reads as the control it is.
  *
  * `display: list-item` deliberately — it is `<summary>`'s own display type
  * and the one that keeps the native disclosure triangle, which turns with
@@ -105,7 +105,7 @@
 
 /* The three legal links are the footer's own targets and were 24 px tall
    inline text. `min-height` on the anchor itself makes each one a 44 px
-   target (SRC-014 §Touch targets) without a gap between the rows — the line
+   target (SRC-0014 §Touch targets) without a gap between the rows — the line
    box grows, the words stay where they are. */
 .list a {
   align-items: center;

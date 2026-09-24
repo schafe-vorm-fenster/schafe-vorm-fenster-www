@@ -15,12 +15,12 @@
  * scrolled to), and it is the one kind of movement that buys nothing: the
  * visitor cannot perceive the 22px, only the machinery can.
  *
- * TS-009-A8's cumulative-displacement budget measured exactly this — 22px on
+ * TS-WEB-0009-A8's cumulative-displacement budget measured exactly this — 22px on
  * the closing section of eight route/viewport pairs, with the page's own CLS
  * at 0.0000 because a compositor transform reflows nothing. Both readings are
  * correct; the transform moves a box without moving the layout.
  *
- * Expressing the rise as a one-shot `@keyframes` instead keeps SRC-014
+ * Expressing the rise as a one-shot `@keyframes` instead keeps SRC-0014
  * §Motion intact to the pixel and the millisecond (rise 22px, fade, 550ms,
  * once, on enter) and leaves both resting states — armed and revealed — at
  * `transform: none`.

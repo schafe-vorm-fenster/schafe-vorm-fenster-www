@@ -1,5 +1,5 @@
 /**
- * The content pipeline, on the cache side of TS-009 D1.
+ * The content pipeline, on the cache side of TS-WEB-0009 D1.
  *
  * `loadPage()` reads `content/pages/<route>/<locale>.md` off disk. That is an
  * IO access, and under Cache Components an uncached IO access in a page body
@@ -42,7 +42,7 @@ export async function pageContent(
 
 /**
  * The same, for the imported legal documents `/rechtliches` renders
- * (TS-029 D2). Same reasoning: a build-time file read, cached at `max`, so
+ * (TS-WEB-0029 D2). Same reasoning: a build-time file read, cached at `max`, so
  * the one legal page keeps its static shell.
  */
 export async function legalDocument(

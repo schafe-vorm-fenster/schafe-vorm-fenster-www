@@ -8,7 +8,7 @@ import type { RouteId } from "@/src/lib/routes/routes";
 import styles from "./language-switch.module.css";
 
 export interface LanguageSwitchProps {
-  /** The page the visitor is on — switching keeps them on it (TS-001-A7). */
+  /** The page the visitor is on — switching keeps them on it (TS-WEB-0001-A7). */
   readonly route: RouteId;
   readonly current: Locale;
   /**
@@ -24,7 +24,7 @@ export interface LanguageSwitchProps {
 }
 
 /**
- * 10 `language-switch` [PROPOSED] — TS-001 D5.
+ * 10 `language-switch` [PROPOSED] — TS-WEB-0001 D5.
  *
  * Structure: plain `<a>` links, one per configured language, each resolved
  * through `href()` — so `de` stays bare, `/en/…` carries the prefix, and the

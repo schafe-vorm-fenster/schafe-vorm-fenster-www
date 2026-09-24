@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { CONTEXT_MATRIX, contextProximity, contextRow } from "./context-matrix";
 import { ENTRY_TRAITS, ITEM_TYPES } from "./types";
 
-describe("TS-005-A14: the SRC-002 context matrix decides the starting type and the time window", () => {
+describe("TS-WEB-0005-A14: the SRC-0002 context matrix decides the starting type and the time window", () => {
   it("carries a row for every entry trait", () => {
     expect(Object.keys(CONTEXT_MATRIX).sort()).toEqual([...ENTRY_TRAITS].sort());
   });

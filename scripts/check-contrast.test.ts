@@ -8,7 +8,7 @@ import {
   themeValues,
 } from "./check-contrast";
 
-describe("TS-002-A3: the contrast maths", () => {
+describe("TS-WEB-0002-A3: the contrast maths", () => {
   it("gives black on white the textbook 21:1", () => {
     expect(contrastRatio("#000000", "#FFFFFF")).toBeCloseTo(21, 1);
   });
@@ -25,7 +25,7 @@ describe("TS-002-A3: the contrast maths", () => {
   });
 });
 
-describe("TS-002-A3: the token reader", () => {
+describe("TS-WEB-0002-A3: the token reader", () => {
   const css = `
 /* a header comment with an @ and a { brace */
 @import "somewhere.css";
@@ -46,7 +46,7 @@ describe("TS-002-A3: the token reader", () => {
   });
 });
 
-describe("TS-002-A3: the guard fails what it is meant to fail", () => {
+describe("TS-WEB-0002-A3: the guard fails what it is meant to fail", () => {
   it("passes the real token set in every theme", () => {
     const { errors, pairsChecked } = checkContrast();
     expect(errors).toEqual([]);

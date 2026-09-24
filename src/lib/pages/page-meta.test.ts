@@ -16,7 +16,7 @@ import { HEADER_JOBS } from "@/src/lib/routes/navigation";
 import type { PageMeta } from "@/src/lib/pages/page-meta";
 
 /**
- * The vocabulary half of TS-006-A1: "conversion IDs resolve against the
+ * The vocabulary half of TS-WEB-0006-A1: "conversion IDs resolve against the
  * `go-to-market-os` conversion goals; `audiences` non-empty and ordered".
  *
  * The ids are a union in `page-meta.ts` rather than an import, because both
@@ -34,7 +34,7 @@ function idsOf(dir: string, suffix: string): string[] {
     .sort();
 }
 
-describe("TS-006-A1: the manifest vocabulary resolves against the hub packages", () => {
+describe("TS-WEB-0006-A1: the manifest vocabulary resolves against the hub packages", () => {
   it("knows exactly the conversion goals the goals package ships", () => {
     expect([...CONVERSION_GOAL_IDS].sort()).toEqual(
       idsOf("goals/conversion-goals", ".conversion-goal.md"),
@@ -53,7 +53,7 @@ describe("TS-006-A1: the manifest vocabulary resolves against the hub packages",
   });
 });
 
-describe("TS-006-A1: `checkPageMeta` refuses a manifest the rule forbids", () => {
+describe("TS-WEB-0006-A1: `checkPageMeta` refuses a manifest the rule forbids", () => {
   const valid: PageMeta = {
     route: "home",
     focusJob: "know-what-is-on",

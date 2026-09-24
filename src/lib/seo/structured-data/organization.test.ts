@@ -14,7 +14,7 @@ afterEach(() => {
   resetOrganizationIdentityCache();
 });
 
-describe("TS-011 D4: the Organization node", () => {
+describe("TS-WEB-0011 D4: the Organization node", () => {
   it("reads the real content/legal/imprint.md without throwing", async () => {
     const identity = await organizationIdentity();
     expect(identity.legalName).toContain("Schafe vorm Fenster");

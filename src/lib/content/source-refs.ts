@@ -1,16 +1,16 @@
 /**
- * The source adapter (TS-007 D2) — the only module that knows hub package
+ * The source adapter (TS-WEB-0007 D2) — the only module that knows hub package
  * layout, and the only one that opens a hub package at all.
  *
  * Contract: `resolve(sourceRef) → record | fail`, where a `sourceRef` is
- * `<package>@<version>#<record-id>` (TS-007 D6, DEC-042). A version that does
+ * `<package>@<version>#<record-id>` (TS-WEB-0007 D6, DEC-0042). A version that does
  * not match the installed package fails loudly; an unknown record id fails
  * loudly; nothing paraphrases around a missing record.
  *
- * **Build-time and generation-time only** (TS-007 D3). It is imported by
+ * **Build-time and generation-time only** (TS-WEB-0007 D3). It is imported by
  * `scripts/check-content.ts` and by tests. `loader.ts`, which is what a page
  * calls, never imports it — request-time content reads stay inside
- * `content/` (TS-007-A12).
+ * `content/` (TS-WEB-0007-A12).
  *
  * The consumption interface is `index.json` and nothing else (D1): no module
  * here reads a `.md` file out of a package directory.
@@ -90,7 +90,7 @@ interface PackageIndex {
  * The record id of an indexed file. Packages differ: `proof`, `offerings`,
  * `audiences` and `goals` carry `id`, `brand-identity` carries `key`, and
  * `media-echo` carries neither — its entries are addressed by file stem,
- * which is the id `proof`'s own `media_echo[]` uses. [PROPOSED — TS-007 D1
+ * which is the id `proof`'s own `media_echo[]` uses. [PROPOSED — TS-WEB-0007 D1
  * fixes `index.json` as the interface but not how an id is spelled in it.]
  */
 function recordIdOf(file: { path?: string; frontmatter?: HubRecord }): string | null {
@@ -147,7 +147,7 @@ export function createHubResolver(
           ok: false,
           ref: null,
           problem: "malformed",
-          message: `\`${raw}\` is not \`<package>@<version>#<record-id>\`, \`<package>@<version>\` or \`ia\` (TS-007 D6)`,
+          message: `\`${raw}\` is not \`<package>@<version>#<record-id>\`, \`<package>@<version>\` or \`ia\` (TS-WEB-0007 D6)`,
         };
       }
       if (ref.kind === "ia") return { ok: true, ref, record: null };
@@ -158,7 +158,7 @@ export function createHubResolver(
           ok: false,
           ref,
           problem: "unknown-package",
-          message: `\`${ref.packageName}\` is not installed, or ships no index.json (TS-007 D1)`,
+          message: `\`${ref.packageName}\` is not installed, or ships no index.json (TS-WEB-0007 D1)`,
         };
       }
       if (index.version !== ref.version) {

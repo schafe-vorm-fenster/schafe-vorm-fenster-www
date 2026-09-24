@@ -31,9 +31,9 @@ export const DEMO_COUNTY = { id: "geoname.900001", name: "Vorpommern-Greifswald"
  * inside, three outside).
  *
  * The seventh, `Züssow`, is the **neighbour of the empty place** (F-2-61).
- * `EMPTY_DEMO_SLUG` below is what makes TS-008 D4's empty state reachable,
- * and TS-020 D2 has that state's position 2 carry the *first* evidence ("the
- * chain starts here", TS-008-A6). Without a community inside the 15 km cut
+ * `EMPTY_DEMO_SLUG` below is what makes TS-WEB-0008 D4's empty state reachable,
+ * and TS-WEB-0020 D2 has that state's position 2 carry the *first* evidence ("the
+ * chain starts here", TS-WEB-0008-A6). Without a community inside the 15 km cut
  * around `Lassan` the widening chain had nothing to widen to, so the
  * designed state rendered its strongest module empty. It is deliberately
  * **not** ZIP-addressable (`ZIP_DEMO_PLACES` below): the ring's existing
@@ -59,7 +59,7 @@ export const DEMO_PLACES: readonly Place[] = [
 export const ZIP_DEMO_PLACES: readonly Place[] = DEMO_PLACES.slice(0, 6);
 
 /**
- * The ZIP that demonstrates the **uncovered** branch of TS-008 D7 — the
+ * The ZIP that demonstrates the **uncovered** branch of TS-WEB-0008 D7 — the
  * third outcome, which the conversion argument of `/dein-ort/starten` lives
  * on. Every other well-formed ZIP resolves to a demo place, so the covered
  * branches are reachable without knowing a magic number.
@@ -73,7 +73,7 @@ const NEIGHBOURING_DEMO_COUNTY = {
 } as const;
 
 /**
- * TS-023-A6 fixture (F-2-5, round 2): the ZIP that demonstrates the
+ * TS-WEB-0023-A6 fixture (F-2-5, round 2): the ZIP that demonstrates the
  * **ambiguous** branch — a municipality search that resolves to several
  * communities, which must not auto-advance
  * (`app/[lang]/mitmachen/registrieren/resolve-place.ts`'s `PlaceLookup`
@@ -115,7 +115,7 @@ export const AMBIGUOUS_DEMO_PLACES: readonly Place[] = [
 ];
 
 /**
- * The demo place whose dates are empty — the conversion moment of TS-008 D4
+ * The demo place whose dates are empty — the conversion moment of TS-WEB-0008 D4
  * ("nothing entered in <place> yet") has to be reachable in the prototype,
  * or the strongest state of `/dein-ort` never gets reviewed.
  */
@@ -167,15 +167,15 @@ export function demoEvents(place: Place, count: number, from: Date): LiveEvent[]
 /**
  * The counter figures the mock backend supplies.
  *
- * `places` and `updatesToday` have **no field** in `/api/stats` (Q-037, open
+ * `places` and `updatesToday` have **no field** in `/api/stats` (Q-0037, open
  * row 6), so they are mocked whatever the environment. `dates` is only used
  * when the events backend is forced to the mock (`LIVE_DATA=mock`): in the
  * default `auto` mode `/api/stats` is tokenless and really answers, so the
  * dates counter is a counted figure, not this one.
  *
- * How this stays inside WEB-F-041 / TS-008-A10 ("counted live or not shown",
+ * How this stays inside FUN-WEB-0041 / TS-WEB-0008-A10 ("counted live or not shown",
  * no static traction figure): these numbers never stand in for a failed
- * count. There is no counters snapshot and no tier-3 path (TS-009 D6), so a
+ * count. There is no counters snapshot and no tier-3 path (TS-WEB-0009 D6), so a
  * cold counter band is **removed**, never filled from here. They leave the
  * BFF only inside a `demo: true` envelope, which reaches the markup as a
  * `data-demo` attribute beside them — never as rendered copy.

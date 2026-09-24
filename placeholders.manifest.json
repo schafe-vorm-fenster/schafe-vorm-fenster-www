@@ -1,16 +1,16 @@
 {
-  "$comment": "Placeholder slots per DEC-068. A slot listed here renders a generated image until the real asset lands. Rule 3 of DEC-068: a placeholder may occupy a slot, never assert anything — no synthetic person, place, outlet or record.",
+  "$comment": "Placeholder slots per DEC-0068. A slot listed here renders a generated image until the real asset lands. Rule 3 of DEC-0068: a placeholder may occupy a slot, never assert anything — no synthetic person, place, outlet or record.",
   "slots": [
-    { "id": "ueber-uns/gruender",        "aspect": "4:3",   "tone": "lime",      "label": "Porträt",            "note": "Gründerfoto — LCP-Element von /ueber-uns (TS-003 D2)" },
-    { "id": "mitmachen/whatsapp-szene",  "aspect": "16:9",  "tone": "violet",    "label": "Szene",              "note": "Termin per WhatsApp einreichen — LCP-Element von /mitmachen (TS-003 D2)" },
+    { "id": "ueber-uns/gruender",        "aspect": "4:3",   "tone": "lime",      "label": "Porträt",            "note": "Gründerfoto — LCP-Element von /ueber-uns (TS-WEB-0003 D2)" },
+    { "id": "mitmachen/whatsapp-szene",  "aspect": "16:9",  "tone": "violet",    "label": "Szene",              "note": "Termin per WhatsApp einreichen — LCP-Element von /mitmachen (TS-WEB-0003 D2)" },
     { "id": "dein-kalender/portalize",   "aspect": "16:10", "tone": "himbeere",  "label": "Produktansicht",     "note": "Kalender unter eigenem Namen" },
     { "id": "ueber-uns/dorf",            "aspect": "3:2",   "tone": "lime",      "label": "Ort",                "note": "Das Dorf, aus dem heraus betrieben wird" },
-    { "id": "deine-region/karte",        "aspect": "3:2",   "tone": "violet",    "label": "Kartenausschnitt",   "note": "Aktive Orte im Landkreis — NOT USED: TS-026 D3 forbids a map-labelled placeholder anywhere on /deine-region ('no hatched ratio-map box, no placeholder shaped like a map'); kept for the record rather than deleted (not this work package's file to remove), see state/open.md" },
-    { "id": "deine-region/hero",         "aspect": "21:9",  "tone": "violet",    "label": "Gebietsübersicht",   "note": "Hero von /deine-region — Landkreise, Institutionen, große Städte (TS-026 D2); deliberately not map-labelled (D3)" },
+    { "id": "deine-region/karte",        "aspect": "3:2",   "tone": "violet",    "label": "Kartenausschnitt",   "note": "Aktive Orte im Landkreis — NOT USED: TS-WEB-0026 D3 forbids a map-labelled placeholder anywhere on /deine-region ('no hatched ratio-map box, no placeholder shaped like a map'); kept for the record rather than deleted (not this work package's file to remove), see state/open.md" },
+    { "id": "deine-region/hero",         "aspect": "21:9",  "tone": "violet",    "label": "Gebietsübersicht",   "note": "Hero von /deine-region — Landkreise, Institutionen, große Städte (TS-WEB-0026 D2); deliberately not map-labelled (D3)" },
     { "id": "deine-region/gebietsschnitt","aspect": "16:10", "tone": "violet",    "label": "Gebietsschnitt",     "note": "Feature-Benefit-Bild von /deine-region Block 5 ('was dazukommt'); deliberately not map-labelled (D3)" },
-    { "id": "home/hero",                 "aspect": "21:9",  "tone": "lime",      "label": "Ortsansicht",        "note": "Hero von / — Headline und Ortssuche stehen auf dieser Fläche (TS-019 D3)" },
-    { "id": "dein-ort/hero",             "aspect": "21:9",  "tone": "lime",      "label": "Ortsansicht",        "note": "Hero von /dein-ort — Ortsname und nächste Termine (TS-020 D1)" },
-    { "id": "dein-ort-starten/hero",     "aspect": "21:9",  "tone": "violet",    "label": "Ortsansicht",        "note": "Hero von /dein-ort/starten — Bestätigung mit Ortsname (TS-021 D2)" },
+    { "id": "home/hero",                 "aspect": "21:9",  "tone": "lime",      "label": "Ortsansicht",        "note": "Hero von / — Headline und Ortssuche stehen auf dieser Fläche (TS-WEB-0019 D3)" },
+    { "id": "dein-ort/hero",             "aspect": "21:9",  "tone": "lime",      "label": "Ortsansicht",        "note": "Hero von /dein-ort — Ortsname und nächste Termine (TS-WEB-0020 D1)" },
+    { "id": "dein-ort-starten/hero",     "aspect": "21:9",  "tone": "violet",    "label": "Ortsansicht",        "note": "Hero von /dein-ort/starten — Bestätigung mit Ortsname (TS-WEB-0021 D2)" },
     { "id": "og/default",                "aspect": "1.91:1","tone": "lime",      "label": "Vorschaubild",       "note": "Open-Graph-Fallback" }
   ]
 }

@@ -6,7 +6,7 @@ export interface EmptyStateBlockProps {
   /** Names the place — resolved text, already escaped by the caller. */
   readonly headline: string;
   readonly lead?: string;
-  /** The shifted conversion, `register-as-publisher` (TS-008 D4). */
+  /** The shifted conversion, `register-as-publisher` (TS-WEB-0008 D4). */
   readonly cta: ReactNode;
   readonly fallbackNote?: string;
   /** `true` where this occupies the module slot and the frame's own `role="status"` is not already announcing it. */
@@ -17,7 +17,7 @@ export interface EmptyStateBlockProps {
 }
 
 /**
- * 46 `empty-state-block` [PROPOSED] — content type 20, TS-020 D2, TS-008 D4.
+ * 46 `empty-state-block` [PROPOSED] — content type 20, TS-WEB-0020 D2, TS-WEB-0008 D4.
  *
  * Structure: headline naming the place · lead · `cta` · fallback note. On
  * `/dein-ort` state B it occupies the module slot and the focus job shifts

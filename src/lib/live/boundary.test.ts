@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 import { FORBIDDEN_FORWARD_HEADERS, upstreamHeaders } from "@/src/clients/http";
 
 /**
- * The static half of the BFF boundary — TS-008-A1 and TS-013-A3/A5.
+ * The static half of the BFF boundary — TS-WEB-0008-A1 and TS-WEB-0013-A3/A5.
  *
  * These read the source tree rather than running it, because the criteria are
  * about what exists, not about what happens: a forbidden endpoint that is
@@ -38,7 +38,7 @@ const sourceFiles = [
 
 const insideClients = (path: string) => path.startsWith(`src${sep}clients${sep}`);
 
-describe("TS-008-A1: the forbidden endpoint and the closed host set", () => {
+describe("TS-WEB-0008-A1: the forbidden endpoint and the closed host set", () => {
   it("references the forbidden geo-api address lookup nowhere in the source tree", () => {
     // Assembled from parts so this assertion is not its own counter-example.
     const forbidden = `findby${"address"}`;
@@ -70,13 +70,13 @@ describe("TS-008-A1: the forbidden endpoint and the closed host set", () => {
   });
 });
 
-describe("TS-013-A5: no client identity crosses the BFF boundary", () => {
+describe("TS-WEB-0013-A5: no client identity crosses the BFF boundary", () => {
   it("builds upstream requests from a closed header set", () => {
     expect(Object.keys(upstreamHeaders(false))).toEqual(["accept"]);
     expect(Object.keys(upstreamHeaders(true)).sort()).toEqual(["accept", "content-type"]);
   });
 
-  it("carries none of the client-IP headers TS-013 D3 forbids forwarding", () => {
+  it("carries none of the client-IP headers TS-WEB-0013 D3 forbids forwarding", () => {
     const headerNames = Object.keys({ ...upstreamHeaders(true), ...upstreamHeaders(false) });
     for (const forbidden of FORBIDDEN_FORWARD_HEADERS) {
       expect(headerNames).not.toContain(forbidden);
@@ -97,7 +97,7 @@ describe("TS-013-A5: no client identity crosses the BFF boundary", () => {
   });
 });
 
-describe("TS-008-A10: no static traction figure exists as a fallback", () => {
+describe("TS-WEB-0008-A10: no static traction figure exists as a fallback", () => {
   it("ships no counters snapshot file — tier 3 is unreachable for the counters", () => {
     const snapshots = readdirSync(join(ROOT, "src", "generated", "snapshots"));
     expect(snapshots).not.toContain("counters.json");

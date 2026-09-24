@@ -5,7 +5,7 @@ import { BREADCRUMB_ROUTES, breadcrumbListNode } from "@/src/lib/seo/structured-
 
 const titleFor = (route: string) => `Title:${route}`;
 
-describe("TS-011-A14 / DEC-071: exactly the five second-level pages emit a BreadcrumbList", () => {
+describe("TS-WEB-0011-A14 / DEC-0071: exactly the five second-level pages emit a BreadcrumbList", () => {
   it("names exactly the five routes D4 assigns", () => {
     expect([...BREADCRUMB_ROUTES].sort()).toEqual(
       ["archive", "order", "placeStart", "register", "regionQuote"].sort(),

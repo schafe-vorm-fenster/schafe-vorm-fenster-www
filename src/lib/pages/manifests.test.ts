@@ -16,7 +16,7 @@ import type { ConversionGoalId } from "@/src/lib/pages/page-meta";
 import type { RouteId } from "@/src/lib/routes/routes";
 
 /**
- * The cross-page half of TS-006-A1 and the whole of TS-006-A11 — the checks
+ * The cross-page half of TS-WEB-0006-A1 and the whole of TS-WEB-0006-A11 — the checks
  * that are statements about the manifest *set* and therefore cannot live in
  * a single route's own `page.meta.test.ts`.
  *
@@ -24,7 +24,7 @@ import type { RouteId } from "@/src/lib/routes/routes";
  * that drifts from the conversion map fails the gate rather than a review.
  */
 
-describe("TS-006-A1: every route carries a complete manifest", () => {
+describe("TS-WEB-0006-A1: every route carries a complete manifest", () => {
   it("has one manifest per route, and no manifest without a route", () => {
     expect(Object.keys(MANIFESTS).sort()).toEqual([...ROUTE_IDS].sort());
   });
@@ -55,7 +55,7 @@ describe("TS-006-A1: every route carries a complete manifest", () => {
         MANIFESTS[route].liveModules,
         `${route} declares live modules — take it off the exception list`,
       ).toEqual([]);
-      expect(NO_LIVE_MODULE[route]).toMatch(/TS-0\d\d/);
+      expect(NO_LIVE_MODULE[route]).toMatch(/TS-[A-Z]{2,5}-\d{4}/);
     }
     for (const route of ROUTE_IDS) {
       if (route in NO_LIVE_MODULE) continue;
@@ -75,7 +75,7 @@ describe("TS-006-A1: every route carries a complete manifest", () => {
   });
 });
 
-describe("TS-006-A11: the manifest set validates both ways against the conversion map", () => {
+describe("TS-WEB-0006-A11: the manifest set validates both ways against the conversion map", () => {
   /** goal → the routes whose manifest declares it. */
   const declared = new Map<ConversionGoalId, RouteId[]>();
   for (const route of ROUTE_IDS) {
@@ -125,7 +125,7 @@ describe("TS-006-A11: the manifest set validates both ways against the conversio
     // The website carries the six goals of the map; the remaining seven are
     // LinkedIn/contact goals with no website page. Only the map's own named
     // gap needs an accepted-exception entry.
-    expect(UNCARRIED_GOALS["order-promotion-material"]).toContain("Q-005");
+    expect(UNCARRIED_GOALS["order-promotion-material"]).toContain("Q-0005");
     expect(uncarried, "a goal fell out of the map without an exception row").toContain(
       "order-promotion-material",
     );
@@ -137,7 +137,7 @@ describe("TS-006-A11: the manifest set validates both ways against the conversio
       expect(ROUTE_IDS).toContain(route);
       expect(CONVERSION_GOAL_IDS).toContain(goal);
       expect(deviation.goal).toBe(goal);
-      expect(deviation.why, `${key} has no spec anchor`).toMatch(/TS-0\d\d|WEB-F-\d+/);
+      expect(deviation.why, `${key} has no spec anchor`).toMatch(/TS-[A-Z]{2,5}-\d{4}|FUN-[A-Z]{2,5}-\d{4}/);
     }
   });
 

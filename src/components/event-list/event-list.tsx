@@ -63,7 +63,7 @@ export interface EventListProps extends DataStateProps {
    * layout shift.
    */
   readonly capOnPhone?: boolean;
-  /** The conversion state for zero results — never an empty list (TS-008 D4). */
+  /** The conversion state for zero results — never an empty list (TS-WEB-0008 D4). */
   readonly emptyState?: ReactNode;
   /** `dark` inside the ink section that carries the live data — forwarded to every row. */
   readonly tone?: "light" | "dark";
@@ -72,7 +72,7 @@ export interface EventListProps extends DataStateProps {
 }
 
 /**
- * 42 `event-list` [PROPOSED] — TS-008 pos 1 / 2.
+ * 42 `event-list` [PROPOSED] — TS-WEB-0008 pos 1 / 2.
  *
  * Structure: `event-row`s inside a `live-module-frame` — position 1 the next
  * 3 dates of the known place, position 2 the 5 dates this week nearby, each

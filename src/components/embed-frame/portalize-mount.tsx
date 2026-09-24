@@ -16,7 +16,7 @@ export interface PortalizeMountProps {
 }
 
 /**
- * The real Portalize widget's mount — TS-008 D6, `state/open.md` row 82.
+ * The real Portalize widget's mount — TS-WEB-0008 D6, `state/open.md` row 82.
  *
  * Two properties it exists to give, neither of which the loader provides:
  *
@@ -25,7 +25,7 @@ export interface PortalizeMountProps {
  *    calls. An `IntersectionObserver` with a 300 px margin injects the
  *    `<script>` only when the block is about to be reached, so a visitor who
  *    never scrolls that far pays nothing for it.
- *  - **failure is silence.** TS-008 D6: a blocked or failing loader leaves
+ *  - **failure is silence.** TS-WEB-0008 D6: a blocked or failing loader leaves
  *    the heading, the copy and the CTA standing and shows no error sentence
  *    and no empty frame. The `<script onerror>` marks the mount, the CSS
  *    hides the reserved box, and the block around it is unchanged.
@@ -33,7 +33,7 @@ export interface PortalizeMountProps {
  * The loader mounts a `<portalize-widget>` custom element with an open
  * shadow root; there is **no iframe**, so the site's `frame-src 'none'`
  * stays as it is. The script and the module both come from the one Portalize
- * origin already in the TS-014 D1 allowlist.
+ * origin already in the TS-WEB-0014 D1 allowlist.
  */
 export function PortalizeMount({
   organizerId,

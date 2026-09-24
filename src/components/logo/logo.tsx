@@ -18,7 +18,7 @@ export interface LogoProps {
   readonly link?: boolean;
   /**
    * Below `md` the wordmark is not painted and the mark stands alone — the
-   * design system allows the mark at 38–40 px on its own (SRC-014 §Logo), and
+   * design system allows the mark at 38–40 px on its own (SRC-0014 §Logo), and
    * the phone header needs the width for the calendar pill and the burger
    * (Jan's round-3 point 3). The wordmark stays in the markup and returns at
    * `md`; the link's accessible name is the dictionary's either way, so
@@ -33,13 +33,13 @@ const WORDMARK_LINES = ["Schafe vorm", "Fenster"] as const;
 const EDITORIAL_URL = "schafe-vorm-fenster.de";
 
 /**
- * 7 `logo` [FIXED] — SRC-014 §Logo.
+ * 7 `logo` [FIXED] — SRC-0014 §Logo.
  *
  * Structure: the sheep mark at 38–40 px, clipped to radius 999 — the same
  * radius as every control — beside the wordmark in two lines at 15/800, or
  * the URL in mono where the context is editorial.
  * States: none; the asset is a package subpath resolved at build time, never
- * a fetch (TS-017-A6 forbids a logo file in this repository).
+ * a fetch (TS-WEB-0017-A6 forbids a logo file in this repository).
  * Inherits: radius 999 on the mark. The brand package's README says
  * `radius-lg`; the website design system says 999 and the concept document
  * wins — state/open.md row 9.

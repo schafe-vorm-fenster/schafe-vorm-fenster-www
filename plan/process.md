@@ -78,7 +78,7 @@ that skipped its skills has not finished its step.
 | 1 — Chaos run | Chaos personas | persona file is the method (no further skills) |
 | 3 — Fix round (PR) | Developer | `diagnosing-bugs`; `differential-review` on the PR diff |
 | 5 — Retest | QA | `webapp-testing` on the round's findings |
-| M4 + M5 gate: security sweep | QA | `semgrep` (scan), `differential-review` over the milestone diff — findings feed the normal loop (TS-014 scope) |
+| M4 + M5 gate: security sweep | QA | `semgrep` (scan), `differential-review` over the milestone diff — findings feed the normal loop (TS-WEB-0014 scope) |
 | Gate — customer acceptance | Customer | none — the criteria and the preview are the instrument |
 | Gate — UAT | UAT persona | none — naive eyes are the instrument |
 

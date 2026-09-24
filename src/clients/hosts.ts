@@ -1,5 +1,5 @@
 /**
- * Every ecosystem host, in one file inside `src/clients/` — TS-008-A1.
+ * Every ecosystem host, in one file inside `src/clients/` — TS-WEB-0008-A1.
  *
  * The acceptance criterion is literal: "no ecosystem host or read token
  * appears outside `src/clients/*`". Keeping the fallbacks here rather than in
@@ -7,7 +7,7 @@
  * instead of a convention, and it is also where the value belongs: a host is
  * a property of the client, not of the module that chooses between clients.
  *
- * Hosts are the production values SRC-011 registers; the environment variable
+ * Hosts are the production values SRC-0011 registers; the environment variable
  * overrides each one, which is how a preview points at a staging service.
  */
 
@@ -67,7 +67,7 @@ export function communitySiteHost(): string {
  * identifier — the widget's own `<script src>` puts it in the page source of
  * every site that embeds one.
  *
- * `src/lib/security/csp.ts` names the same origin in the TS-014 D1 allowlist,
+ * `src/lib/security/csp.ts` names the same origin in the TS-WEB-0014 D1 allowlist,
  * because the browser loads the widget from it. This constant is the
  * server-side half: the value `src/lib/embed/portalize.ts` builds the loader
  * URL from.

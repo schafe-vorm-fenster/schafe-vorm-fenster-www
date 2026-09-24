@@ -17,14 +17,14 @@ export interface HeroBlockProps extends DataStateProps {
   readonly variant?: "display" | "place-name";
   /** Required unless `content` below replaces the whole trio. */
   readonly headline?: string;
-  /** Reserves the headline's box before paint (SRC-014 §Reserved text space). */
+  /** Reserves the headline's box before paint (SRC-0014 §Reserved text space). */
   readonly headlineLines?: number;
   readonly lead?: string;
   /** The page's single conversion, marked `data-cta="primary"` by the caller. */
   readonly cta?: ReactNode;
   /**
    * The headline · lead · CTA trio as a node, replacing the three props
-   * above — the seam DEC-078 needs.
+   * above — the seam DEC-0078 needs.
    *
    * `/` varies exactly this trio by what is known about the place, and it
    * has to vary it *behind a `<Suspense>` boundary*, because the place is a
@@ -37,7 +37,7 @@ export interface HeroBlockProps extends DataStateProps {
   readonly content?: ReactNode;
   /**
    * The search module, rendered under the CTA slot and **outside** any
-   * boundary the page puts in `content` (DEC-078). A control that holds what
+   * boundary the page puts in `content` (DEC-0078). A control that holds what
    * a visitor types must live in the prerendered shell.
    */
   readonly search?: ReactNode;
@@ -50,7 +50,7 @@ export interface HeroBlockProps extends DataStateProps {
    * the browser paints largest and last: measured on the production build,
    * the home hero became the LCP element the moment a real photograph stood
    * in it, at 4.3 s, because a CSS background is discovered only after the
-   * stylesheet is parsed. TS-003 D2's table names an image LCP for two pages
+   * stylesheet is parsed. TS-WEB-0003 D2's table names an image LCP for two pages
    * only — that table was written when no photograph existed anywhere, and
    * the design system's page rhythm puts one in every hero (see
    * `state/open.md`). Pass `false` for a hero that must not compete.
@@ -68,12 +68,12 @@ export interface HeroBlockProps extends DataStateProps {
 /**
  * The headline · lead · CTA trio, as its own component.
  *
- * Extracted for one reason (DEC-078): on `/` this trio is the only part of
+ * Extracted for one reason (DEC-0078): on `/` this trio is the only part of
  * the hero that varies by request, so it is the only part that may sit
  * inside a `<Suspense>` boundary. The page renders it twice — once as the
  * boundary's fallback, once as its resolved branch — and both reads go
  * through here, so "the reserved space is identical whichever branch the
- * page renders" (TS-019 D2's free choice) holds by construction rather than
+ * page renders" (TS-WEB-0019 D2's free choice) holds by construction rather than
  * by review.
  */
 export type HeroContentProps = Pick<
@@ -108,7 +108,7 @@ export function HeroContent({
  * Structure: an optional kicker `badge`, the headline as the page's one `h1`
  * in the Display or Place-name role, an optional lead, one `cta` slot, all
  * inside `photo-surface` at `ratio-hero`. Where `cta` is omitted the page's
- * `primaryConversion` is `null` (TS-006 D3) and no CTA treatment is implied.
+ * `primaryConversion` is `null` (TS-WEB-0006 D3) and no CTA treatment is implied.
  * States (D-9, forwarded to the inner `photo-surface`, all four): the hero
  * swaps content by place knowledge (S1/S2/S3) at the page level, not here —
  * this component's own contract is that the reserved space is identical

@@ -1,10 +1,10 @@
 /**
- * A slot body as typed blocks (TS-007 "[FREE] Markdown body conventions
+ * A slot body as typed blocks (TS-WEB-0007 "[FREE] Markdown body conventions
  * below the frontmatter where no schema field governs the text").
  *
  * The pipeline does not hand pages an HTML string. Components take content
  * as typed props (`src/components/README.md`), the security baseline has no
- * room for `dangerouslySetInnerHTML` (TS-013), and the authored bodies are
+ * room for `dangerouslySetInnerHTML` (TS-WEB-0013), and the authored bodies are
  * not prose documents but labelled values:
  *
  *     **Headline:** Was ist bei dir los?

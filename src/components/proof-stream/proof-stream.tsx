@@ -4,7 +4,7 @@ import styles from "./proof-stream.module.css";
 
 export interface ProofStreamProps {
   /** Already-composed `proof-card` / `empty-proof-slot` elements, in the
-   * relevance engine's order (TS-005 D5–D8) — this container never reorders. */
+   * relevance engine's order (TS-WEB-0005 D5–D8) — this container never reorders. */
   readonly children: ReactNode;
   /**
    * `grid` — the default card grid. `scroller` — a horizontal set.
@@ -18,7 +18,7 @@ export interface ProofStreamProps {
 }
 
 /**
- * 31 `proof-stream` [PROPOSED] — TS-005 D5–D8, DEC-048.
+ * 31 `proof-stream` [PROPOSED] — TS-WEB-0005 D5–D8, DEC-0048.
  *
  * Structure: the container around a page's proof cards; the count per page
  * (19 → 5, 22/24/26 → 3, 27 → 7) and the order are the caller's, from the

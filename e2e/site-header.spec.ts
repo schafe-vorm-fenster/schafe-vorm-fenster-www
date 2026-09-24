@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * The header — TS-004 D4, and Jan's round-3 points 2 and 3
+ * The header — TS-WEB-0004 D4, and Jan's round-3 points 2 and 3
  * (`state/open.md` rows 35, 200, 201).
  *
  * Three things are under test, in this order:
@@ -27,7 +27,7 @@ const DESKTOP = { width: 1280, height: 800 };
  */
 const BELOW_XL = { width: 768, height: 900 };
 
-/** The four jobs of TS-004 D4, verbatim, in IA order. */
+/** The four jobs of TS-WEB-0004 D4, verbatim, in IA order. */
 const JOBS = ["Was ist los", "Termine veröffentlichen", "Dein Kalender", "Warum wir"];
 const CALENDAR = "Kalender";
 
@@ -44,7 +44,7 @@ const dialog = (page: import("@playwright/test").Page) =>
 /**
  * A colour expression as the browser computes it — a design token, or
  * `transparent`. The assertions below compare against these rather than
- * against literals, because TS-017 D3 lets brand values enter the repository
+ * against literals, because TS-WEB-0017 D3 lets brand values enter the repository
  * through `app/styles/brand.css` and nowhere else (`pnpm check:brand` fails a
  * literal even in a comment), and because a token that changes should move
  * the test with it rather than break it.
@@ -74,7 +74,7 @@ async function expectColor(
   await expect(locator).toHaveCSS(property, await computed(page, token));
 }
 
-test.describe("TS-004-A8: the header inventory at both widths", () => {
+test.describe("TS-WEB-0004-A8: the header inventory at both widths", () => {
   test("above `xl` the four job labels and the calendar entry are inline", async ({
     page,
   }) => {
@@ -93,8 +93,8 @@ test.describe("TS-004-A8: the header inventory at both widths", () => {
     await page.setViewportSize(PHONE);
     await page.goto("/");
 
-    // The calendar entry never leaves the bar — TS-004 D4's persistent entry,
-    // and TS-017-A12's "on every page" (state/open.md row 30).
+    // The calendar entry never leaves the bar — TS-WEB-0004 D4's persistent entry,
+    // and TS-WEB-0017-A12's "on every page" (state/open.md row 30).
     await expect(header(page).getByRole("link", { exact: true, name: CALENDAR })).toBeVisible();
     await expect(burger(page)).toBeVisible();
 
@@ -137,7 +137,7 @@ test.describe("TS-004-A8: the header inventory at both widths", () => {
   });
 });
 
-test.describe("TS-002-A4: the phone menu, from the keyboard alone", () => {
+test.describe("TS-WEB-0002-A4: the phone menu, from the keyboard alone", () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize(PHONE);
     await page.goto("/");
@@ -205,7 +205,7 @@ test.describe("TS-002-A4: the phone menu, from the keyboard alone", () => {
   });
 });
 
-test.describe("TS-009-A8: the header's two grounds, without a layout shift", () => {
+test.describe("TS-WEB-0009-A8: the header's two grounds, without a layout shift", () => {
   test("lies transparent on the hero photograph and turns solid past it", async ({
     page,
   }) => {
@@ -253,7 +253,7 @@ test.describe("TS-009-A8: the header's two grounds, without a layout shift", () 
  * would go red if a ground ever crept back in, and the ones that keep the
  * wells opaque, which is the whole of what makes the measured ratios hold.
  */
-test.describe("TS-004-A8: completely transparent over the hero, wells instead of a scrim", () => {
+test.describe("TS-WEB-0004-A8: completely transparent over the hero, wells instead of a scrim", () => {
   test("paints no ground and no border while it lies on the photograph", async ({
     page,
   }) => {
@@ -354,7 +354,7 @@ test.describe("TS-004-A8: completely transparent over the hero, wells instead of
  * labels paper-on-paper (measured 1:1, four invisible links on every hero
  * page); this is the test that keeps them readable.
  */
-test.describe("TS-004-A8: without JavaScript the header is solid, items included", () => {
+test.describe("TS-WEB-0004-A8: without JavaScript the header is solid, items included", () => {
   test.use({ javaScriptEnabled: false });
 
   test("solid ground, solid items", async ({ page }) => {

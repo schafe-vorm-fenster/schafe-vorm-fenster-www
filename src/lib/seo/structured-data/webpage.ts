@@ -1,5 +1,5 @@
 /**
- * The `WebPage` node — TS-011 D4, emitted on every page: `inLanguage`,
+ * The `WebPage` node — TS-WEB-0011 D4, emitted on every page: `inLanguage`,
  * `isPartOf` → `WebSite`, `primaryImageOfPage`, `description`.
  *
  * Title and description are content (D5) — this builder takes them as

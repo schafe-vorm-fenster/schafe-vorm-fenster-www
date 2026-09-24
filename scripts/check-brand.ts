@@ -1,5 +1,5 @@
 /**
- * Brand and layout-law guard — the static half of TS-017 D2 and D3.
+ * Brand and layout-law guard — the static half of TS-WEB-0017 D2 and D3.
  *
  *  A4  No `@media (max-width: …)` anywhere, and every `min-width` value is one
  *      of the six `breakpoint.*` token values of brand-design. A literal px
@@ -34,10 +34,10 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-/** The single file brand values are allowed to enter through (TS-017 D3). */
+/** The single file brand values are allowed to enter through (TS-WEB-0017 D3). */
 const TOKEN_FILE = "app/styles/brand.css";
 
-/** brand-design `breakpoint.*` — the only legal `min-width` values (DEC-067). */
+/** brand-design `breakpoint.*` — the only legal `min-width` values (DEC-0067). */
 const BREAKPOINTS = new Map<string, string>([
   ["22.5rem", "xs"],
   ["26.75rem", "sm"],
@@ -53,7 +53,7 @@ const SOURCE_EXTENSIONS = /\.(css|ts|tsx)$/;
 const ASSET_DIRS = ["app", "src", "public"];
 const FONT_FILES = /\.(woff2?|ttf|otf|eot)$/i;
 const LOGO_FILES = /(logo|wordmark|brandmark)[^/]*\.(svg|png|jpg|jpeg|webp)$/i;
-/** Generated placeholder imagery (DEC-068) is not brand asset material. */
+/** Generated placeholder imagery (DEC-0068) is not brand asset material. */
 const ASSET_EXCEPTIONS = [join("src", "generated", "placeholders")];
 
 /** Never descended into, from any starting point — build output, not source. */

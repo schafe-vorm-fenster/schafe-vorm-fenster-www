@@ -1,14 +1,14 @@
 /**
  * The mocked field sets for `envoy-form-mount`, one per lead surface kind
- * (TS-016 D1). The real widget's field set is part of the undelivered
- * contract (Q-022 C2) — these are the website's own conservative reading,
+ * (TS-WEB-0016 D1). The real widget's field set is part of the undelivered
+ * contract (Q-0022 C2) — these are the website's own conservative reading,
  * generic content per the dummy-content rule, replaced wholesale once the
  * real custom element lands.
  *
  * **Every label exists in both languages** (F-2-33). Before round 3 the set
  * was German-only, so an English visitor met "Organisation", "E-Mail-Adresse"
  * and "Absenden" on `/en/your-region/quote` — the primary action of a wired
- * conversion goal, in the wrong language. TS-016 D2 passes the page language
+ * conversion goal, in the wrong language. TS-WEB-0016 D2 passes the page language
  * to the real widget as an attribute for exactly this reason; the mock reads
  * it from the same prop.
  *
@@ -87,7 +87,7 @@ const QUOTE_FIELDS: readonly EnvoyFormField[] = [
 ];
 
 /**
- * The invoice step's field set is **specified**, not invented here: TS-025 D6
+ * The invoice step's field set is **specified**, not invented here: TS-WEB-0025 D6
  * fixes it, and `content/pages/dein-kalender/bestellen/*.md` writes the nine
  * labels out, four of them required. Until the polish pass this mount carried
  * four generic fields and the step advanced whether they were filled or not —
@@ -172,7 +172,7 @@ export const ENVOY_FORM_FIELDS: Readonly<Record<EnvoyFormKind, readonly EnvoyFor
  * The words the form itself says — submit, success, the two spam refusals and
  * the honeypot's own label. Generated copy in the tone of voice, both
  * languages, with a `Dummy-Content` row in `state/open.md`; the real widget
- * brings its own strings once Q-022 answers.
+ * brings its own strings once Q-0022 answers.
  */
 export interface EnvoyFormWords {
   readonly submit: string;

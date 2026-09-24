@@ -7,7 +7,7 @@ import {
   TITLE_MAX,
 } from "./check-seo-budget";
 
-describe("TS-011-A7: the title and description budget", () => {
+describe("TS-WEB-0011-A7: the title and description budget", () => {
   it("passes every (path, language) pair the site has today", () => {
     const { errors, pagesChecked } = checkSeoBudget();
     expect(errors).toEqual([]);

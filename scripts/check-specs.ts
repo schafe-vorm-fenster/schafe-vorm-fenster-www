@@ -8,10 +8,10 @@
  * Checks
  * ──────
  *  E1  Frontmatter present and well-formed on governed artefacts
- *  E2  Requirement IDs (WEB-F/Q/C-###) unique across all files
+ *  E2  Requirement IDs ((FUN|NFR|CON)-WEB-####) unique across all files
  *  E3  Requirement rows carry 4 cells: id · statement · source · S0–S3
- *  E4  Sufficiency S3 requires a DEC-### or ADR-### token in the row
- *  E5  Every referenced ID (WEB-*, DEC-*, Q-*, SRC-*, TS-*, GL-*) exists
+ *  E4  Sufficiency S3 requires a DEC-#### or ADR-### token in the row
+ *  E5  Every referenced ID (FUN/NFR/CON-*, TS-*, DEC-*, Q-*, SRC-*, GL-*) exists
  *  E6  Tactical `implements:` ↔ Coverage table match bidirectionally
  *  E7  decisions/README.md index ↔ decision files match both ways
  *  E8  Acceptance criteria: unique ID, valid verification level
@@ -26,7 +26,7 @@
  *
  * Exit code: number of errors (0 = green). Warnings never fail the run.
  *
- * What this script delegates (DEC-085)
+ * What this script delegates (DEC-0085)
  * ────────────────────────────────────
  * STRICT is a versioned dependency of this repository, so every controlled
  * vocabulary this script used to repeat is now read out of the installed
@@ -35,12 +35,24 @@
  * (E11/E12), the four tactical kinds (E12) and the source trust levels
  * (E13). Change the package version and these checks follow it.
  *
+ * The identifier shapes are the package's too (DEC-0086)
+ * ──────────────────────────────────────────────────────
+ * `method-identifier-and-locator-schema` composes an identifier as
+ * `<TYPE>-<DOMAIN>-<NNNN>`, and `library-schemas` fixes the type tokens per
+ * class: `(FUN|NFR|CON|BUS)-[A-Z]{2,5}-\d{4}` for a requirement,
+ * `TS-[A-Z]{2,5}-\d{4}` for a tactical specification, `SRC-\d{4}` for a
+ * source. Those three patterns are read out of the installed schemas rather
+ * than spelled here — see `idPattern()` for the one repair they need — so a
+ * narrowing upstream fails this check instead of passing unnoticed.
+ *
  * What stays local, and why
  * ─────────────────────────
- *  - The identifier schema. STRICT composes ids as `<TYPE>-<DOMAIN>-<NNNN>`
- *    (`FUN-WEB-0001`); this repository has `WEB-F-###` / `TS-###` / `DEC-###`,
- *    cited from sibling repositories and from `plan/reviews/`. The method
- *    forbids renumbering, so the local patterns are the correct ones here.
+ *  - `DEC-<NNNN>`, `Q-<NNNN>` and `GL-<NNNN>`. STRICT's decision record is an
+ *    `SDR-<yyyy>-<mmdd>-<nnnn>` taken at a numbered decision point, its
+ *    nearest thing to an open question is a `DEM-<nnnn>` demand, and it
+ *    defines no glossary identifier at all. None of the three is this
+ *    repository's artefact, so the type token stays and only the composition
+ *    and the four-digit width are the method's. Owed in DEC-0085 §6.
  *  - Statement grammar and the fit-criterion form. The requirement rows are
  *    shall-form prose, not the per-class slots of `method-statement-grammar`;
  *    nothing deterministic can be checked against them yet.
@@ -50,7 +62,8 @@
  *    chain this repository actually has.
  *  - The locator form. `method-identifier-and-locator-schema` wants
  *    `<file>#L102` plus an excerpt; the rows carry source ids.
- * Each of those is recorded as owed in DEC-085.
+ * Each of those is recorded as owed in DEC-0085; the identifier row of its
+ * §6 now points at DEC-0086, which closed it.
  */
 
 import { readdirSync, readFileSync, statSync } from "node:fs";
@@ -100,6 +113,50 @@ const TACTICAL_STATUS = vocabulary(tacticalSpecification, "status");
 const TACTICAL_KIND = vocabulary(tacticalSpecification, "kind");
 const SOURCE_TRUST = vocabulary(sourceInventory, "sources.[].trust");
 
+/**
+ * The identifier pattern a contract declares (DEC-0086).
+ *
+ * `@leafcutter-strict/library-schemas@0.4.1` ships every `pattern` with its
+ * backslashes doubled — the JSON holds `\\\\d`, so `JSON.parse` yields `\\d`,
+ * a literal backslash followed by `d`, and the expression matches nothing.
+ * DEC-0085 recorded the bug; collapsing each doubled backslash is the
+ * deterministic repair, and it is done here rather than by copying the regex,
+ * so the tokens and the width stay the package's. Remove this when upstream
+ * fixes the escaping — the call sites do not change.
+ */
+function idPattern(schema: JsonSchema, path: string): RegExp {
+  let node: JsonSchema | undefined = schema;
+  for (const step of path.split(".")) {
+    node = step === "[]" ? node?.items : node?.properties?.[step];
+  }
+  const declared = (node as { pattern?: string } | undefined)?.pattern;
+  if (!declared) throw new Error(`library-schemas: no pattern at ${path}`);
+  return new RegExp(declared.replace(/\\\\/g, "\\"));
+}
+
+/** An anchored `^…$` pattern as an unanchored, group-free fragment. */
+const bare = (re: RegExp) =>
+  `(?:${re.source.replace(/^\^/, "").replace(/\$$/, "").replace(/\((?!\?)/g, "(?:")})`;
+
+/**
+ * The same pattern as a scanner over prose. Word-bounded on both sides, so
+ * `TS-WEB-0019` never matches inside `TS-WEB-0019-A6` and `DEC-0008` never
+ * inside `DEC-0085`.
+ */
+const scanner = (anchored: RegExp, flags = "g") =>
+  new RegExp(`(?<![A-Za-z0-9-])${bare(anchored)}(?![0-9A-Za-z-])`, flags);
+
+const REQUIREMENT_ID = idPattern(requirementShell, "id");
+const TACTICAL_ID = idPattern(tacticalSpecification, "id");
+const SOURCE_ID = idPattern(sourceInventory, "sources.[].id");
+
+/** Local families: the method defines no identifier for any of the three. */
+const DECISION_ID = /^DEC-\d{4}$/;
+const QUESTION_ID = /^Q-\d{4}$/;
+const GLOSSARY_ID = /^GL-\d{4}$/;
+/** An acceptance criterion carries its spec's id; the contract leaves the id free. */
+const ACCEPTANCE_ID = new RegExp(`${TACTICAL_ID.source.replace(/\$$/, "")}-A\\d+$`);
+
 const list = (set: Set<string>) => [...set].join(" | ");
 
 // ── File collection ──────────────────────────────────────────────────────
@@ -145,7 +202,7 @@ const err = (f: string, msg: string) => errors.push(`${rel(f)}: ${msg}`);
 const NEEDS_FRONTMATTER = [
   /\/requirements\/.+\.req\.md$/,
   /\/tactical\/.+\.tactical\.md$/,
-  /\/decisions\/\d{3}-.+\.md$/,
+  /\/decisions\/DEC-\d{4}--.+\.md$/,
   /\/(ssd|sources|glossary|questions|traceability|contracts)\/(?!README).+\.md$/,
 ];
 
@@ -157,14 +214,14 @@ for (const d of docs) {
 
 // ── Registries: where IDs are DEFINED ────────────────────────────────────
 
-const reqDefs = new Map<string, string>(); // WEB-x-### → file
+const reqDefs = new Map<string, string>(); // (FUN|NFR|CON)-WEB-#### → file
 const decDefs = new Set<string>();
 const qDefs = new Set<string>();
 const srcDefs = new Set<string>();
 const tsDefs = new Set<string>();
 const glDefs = new Set<string>();
 
-const REQ_ROW = /^\|\s*(WEB-[FQC]-\d{3})\s*\|(.+)$/;
+const REQ_ROW = new RegExp(`^\\|\\s*(${bare(REQUIREMENT_ID)})\\s*\\|(.+)$`);
 
 for (const d of docs) {
   if (/\.req\.md$/.test(d.file)) {
@@ -195,27 +252,29 @@ for (const d of docs) {
         err(d.file, `E3 ${id}: sufficiency "${suff}" is not one of ${list(SUFFICIENCY)}`);
       if (!source) err(d.file, `E3 ${id}: empty source cell`);
       // E4: S3 needs a decision anchor in the row itself
-      if (suff === "S3" && !/(DEC-\d{3}|ADR-\d{3}|ADR-00\d)/.test(statement + " " + source)) {
+      if (suff === "S3" && !/(DEC-\d{4}|ADR-\d{3}|ADR-00\d)/.test(statement + " " + source)) {
         err(d.file, `E4 ${id}: S3 without DEC/ADR reference in the row`);
       }
     }
   }
-  if (/\/decisions\/\d{3}-/.test(d.file)) {
+  if (/\/decisions\/DEC-\d{4}--/.test(d.file)) {
     const id = d.frontmatter?.id;
-    if (typeof id === "string" && /^DEC-\d{3}$/.test(id)) {
+    if (typeof id === "string" && DECISION_ID.test(id)) {
       decDefs.add(id);
-      const fileNum = rel(d.file).match(/\/(\d{3})-/)?.[1];
-      if (fileNum && id !== `DEC-${fileNum}`) err(d.file, `E1 frontmatter id ${id} does not match filename number ${fileNum}`);
+      // The file is named for the artefact it holds (DEC-0086).
+      const fileId = rel(d.file).match(/\/(DEC-\d{4})--/)?.[1];
+      if (!fileId) err(d.file, `E1 ${id}: file name does not carry the identifier (DEC-####--<slug>.md)`);
+      else if (id !== fileId) err(d.file, `E1 frontmatter id ${id} does not match file name ${fileId}`);
     } else {
-      err(d.file, "E1 decision without valid frontmatter id (DEC-###)");
+      err(d.file, "E1 decision without valid frontmatter id (DEC-####)");
     }
   }
   if (/open-questions\.md$/.test(d.file)) {
-    for (const m of d.body.matchAll(/^\|\s*(Q-\d{3})\s*\|/gm)) qDefs.add(m[1]);
+    for (const m of d.body.matchAll(new RegExp(`^\\|\\s*(${bare(QUESTION_ID)})\\s*\\|`, "gm"))) qDefs.add(m[1]);
   }
   if (/source-inventory\.md$/.test(d.file)) {
     for (const line of d.body.split("\n")) {
-      const m = line.match(/^\|\s*(SRC-\d{3})\s*\|/);
+      const m = line.match(new RegExp(`^\\|\\s*(${bare(SOURCE_ID)})\\s*\\|`));
       if (!m) continue;
       srcDefs.add(m[1]);
       // E13: the trust vocabulary belongs to the source-inventory contract
@@ -226,8 +285,12 @@ for (const d of docs) {
   }
   if (/\.tactical\.md$/.test(d.file)) {
     const id = d.frontmatter?.id;
-    if (typeof id === "string" && /^TS-\d{3}$/.test(id)) tsDefs.add(id);
-    else err(d.file, "E1 tactical spec without valid frontmatter id (TS-###)");
+    if (typeof id === "string" && TACTICAL_ID.test(id)) {
+      tsDefs.add(id);
+      // The file is named for the artefact it holds (DEC-0086).
+      if (!rel(d.file).split("/").pop()!.startsWith(`${id}--`))
+        err(d.file, `E1 ${id}: file name does not carry the identifier (${id}--<slug>.tactical.md)`);
+    } else err(d.file, "E1 tactical spec without valid frontmatter id (TS-<DOMAIN>-####)");
     // E12: kind and status belong to the tactical-specification contract
     const kind = d.frontmatter?.kind;
     if (typeof kind !== "string" || !TACTICAL_KIND.has(kind)) {
@@ -239,10 +302,10 @@ for (const d of docs) {
     }
   }
   if (/glossary\.md$/.test(d.file)) {
-    for (const m of d.body.matchAll(/^\|\s*(GL-\d{3})\s*\|/gm)) glDefs.add(m[1]);
+    for (const m of d.body.matchAll(new RegExp(`^\\|\\s*(${bare(GLOSSARY_ID)})\\s*\\|`, "gm"))) glDefs.add(m[1]);
   }
   // contracts register may define an SRC id in frontmatter
-  if (/\/contracts\//.test(d.file) && typeof d.frontmatter?.id === "string" && /^SRC-\d{3}$/.test(d.frontmatter.id as string)) {
+  if (/\/contracts\//.test(d.file) && typeof d.frontmatter?.id === "string" && SOURCE_ID.test(d.frontmatter.id as string)) {
     srcDefs.add(d.frontmatter.id as string);
   }
 }
@@ -250,16 +313,16 @@ for (const d of docs) {
 // ── E5: every REFERENCE resolves ─────────────────────────────────────────
 
 const REF_PATTERNS: Array<[RegExp, (id: string) => boolean, string]> = [
-  [/WEB-[FQC]-\d{3}/g, (id) => reqDefs.has(id), "requirement"],
-  [/DEC-\d{3}/g, (id) => decDefs.has(id), "decision"],
-  [/(?<![A-Z]-)\bQ-\d{3}\b/g, (id) => qDefs.has(id), "question"],
-  [/SRC-\d{3}/g, (id) => srcDefs.has(id), "source"],
-  [/\bTS-\d{3}\b/g, (id) => tsDefs.has(id), "tactical spec"],
-  [/\bGL-\d{3}\b/g, (id) => glDefs.has(id), "glossary term"],
+  [scanner(REQUIREMENT_ID), (id) => reqDefs.has(id), "requirement"],
+  [scanner(DECISION_ID), (id) => decDefs.has(id), "decision"],
+  [scanner(QUESTION_ID), (id) => qDefs.has(id), "question"],
+  [scanner(SOURCE_ID), (id) => srcDefs.has(id), "source"],
+  [scanner(TACTICAL_ID), (id) => tsDefs.has(id), "tactical spec"],
+  [scanner(GLOSSARY_ID), (id) => glDefs.has(id), "glossary term"],
 ];
 
 /**
- * The identifier map is the generated record of the rename (DEC-086): it holds
+ * The identifier map is the generated record of the rename (DEC-0086): it holds
  * every identifier this repository had *before* the migration beside the one it
  * has now, so it is the one file whose left-hand column is meant not to resolve.
  * Generated by `scripts/migrate-identifiers.mjs --emit-map`, never hand-edited.
@@ -287,7 +350,7 @@ for (const d of docs.filter((d) => /\.tactical\.md$/.test(d.file))) {
     err(d.file, "E6 missing Coverage section");
     continue;
   }
-  const covIds = new Set([...covSection.matchAll(/^\|\s*(WEB-[FQC]-\d{3})/gm)].map((m) => m[1]));
+  const covIds = new Set([...covSection.matchAll(new RegExp(`^\\|\\s*(${bare(REQUIREMENT_ID)})`, "gm"))].map((m) => m[1]));
   for (const id of implSet) {
     if (!covIds.has(id)) err(d.file, `E6 ${id} listed in implements: but absent from Coverage table`);
     covered.add(id);
@@ -301,7 +364,7 @@ for (const d of docs.filter((d) => /\.tactical\.md$/.test(d.file))) {
 
 const decReadme = docs.find((d) => /\/decisions\/README\.md$/.test(d.file));
 if (decReadme) {
-  const indexed = new Set([...decReadme.raw.matchAll(/\[DEC-(\d{3})/g)].map((m) => `DEC-${m[1]}`));
+  const indexed = new Set([...decReadme.raw.matchAll(/\[DEC-(\d{4})/g)].map((m) => `DEC-${m[1]}`));
   for (const id of decDefs) if (!indexed.has(id)) err(decReadme.file, `E7 ${id} exists as file but is missing from the index`);
   for (const id of indexed) if (!decDefs.has(id)) err(decReadme.file, `E7 index lists ${id} but no such decision file exists`);
 }
@@ -323,7 +386,7 @@ const acByReq = new Map<string, Set<string>>();   // requirement → AC ids
 for (const d of docs.filter((d) => /\.tactical\.md$/.test(d.file))) {
   const tsId = (d.frontmatter?.id as string) ?? "";
   const acSection = d.body.split(/^## Acceptance criteria$/m)[1]?.split(/^## /m)[0] ?? "";
-  for (const m of acSection.matchAll(/^\|\s*(TS-\d{3}-A\d+)\s*\|\s*([a-z0-9]+)\s*\|/gm)) {
+  for (const m of acSection.matchAll(new RegExp(`^\\|\\s*(${bare(ACCEPTANCE_ID)})\\s*\\|\\s*([a-z0-9]+)\\s*\\|`, "gm"))) {
     const [, id, level] = m;
     if (acDefs.has(id)) err(d.file, `E8 duplicate acceptance criterion ${id}`);
     if (!LEVELS.has(level)) err(d.file, `E8 ${id}: unknown level "${level}" (expected ${[...LEVELS].join(" | ")})`);
@@ -334,7 +397,7 @@ for (const d of docs.filter((d) => /\.tactical\.md$/.test(d.file))) {
   // Coverage: bare A# resolve within the spec
   const covSection = d.body.split(/^## Coverage$/m)[1]?.split(/^## /m)[0] ?? "";
   for (const line of covSection.split("\n")) {
-    const reqM = line.match(/^\|\s*(WEB-[FQC]-\d{3})/);
+    const reqM = line.match(new RegExp(`^\\|\\s*(${bare(REQUIREMENT_ID)})`));
     if (!reqM) continue;
     const ids = new Set<string>();
     for (const a of line.matchAll(/\bA(\d+)\b/g)) {
@@ -361,7 +424,7 @@ for (const [dir, pattern] of testGlobs) {
   try { entries = walk(full).filter((f) => pattern.test(f)); } catch { /* dir absent yet */ }
   for (const f of entries) {
     const raw = readFileSync(f, "utf8");
-    for (const m of raw.matchAll(/\b(TS-\d{3}-A\d+|WEB-[FQC]-\d{3})\b/g)) {
+    for (const m of raw.matchAll(new RegExp(`(?<![A-Za-z0-9-])(${bare(ACCEPTANCE_ID)}|${bare(REQUIREMENT_ID)})(?![0-9A-Za-z-])`, "g"))) {
       const id = m[1];
       const known = id.startsWith("TS-") ? acDefs.has(id) : reqDefs.has(id);
       if (!known) err(f, `E10 references unknown id ${id}`);

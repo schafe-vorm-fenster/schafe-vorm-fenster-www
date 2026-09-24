@@ -15,16 +15,16 @@ export interface ContextBandProps {
 }
 
 /**
- * 47 `context-band` [PROPOSED] — content type 21, TS-006 D5.
+ * 47 `context-band` [PROPOSED] — content type 21, TS-WEB-0006 D5.
  *
  * Structure: one component, rendered by the layout on every page, filled
  * from the job registry as all four jobs minus this page's focus job — never
  * a hand-written list. Three entries, targets from `HEADER_JOBS` via
  * `route-link`.
  * States: none of its own — it is static and identical at every
- * personalization stage (TS-006 D8).
+ * personalization stage (TS-WEB-0006 D8).
  * Inherits: secondary treatment, never the primary; `paper` surface; no
- * `data-cta="primary"` inside it (TS-006 D3).
+ * `data-cta="primary"` inside it (TS-WEB-0006 D3).
  * Space: three equal entries, fixed height.
  * A11y: a `nav` with an accessible name; three links, each naming its job.
  */

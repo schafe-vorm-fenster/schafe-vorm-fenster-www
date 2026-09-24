@@ -46,7 +46,7 @@ describe("position 1 — a place's own dates", () => {
     const events = await publicPlaceEvents(PLACE, { window: "upcoming", rowCount: 5, now: NOW });
 
     expect(events.length).toBeGreaterThan(0);
-    // TS-008 D1: position 1 may not present a widened list as the narrow one.
+    // TS-WEB-0008 D1: position 1 may not present a widened list as the narrow one.
     for (const event of events) expect(event.placeName).toBe("Schlatkow");
   });
 

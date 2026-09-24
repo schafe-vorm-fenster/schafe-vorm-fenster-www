@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { checkApiRoutes, checkAppHostname } from "./check-api-routes";
 
 /**
- * F-1-3 (round 1): TS-017-A10 and A11 held only because no `app/api/*`
+ * F-1-3 (round 1): TS-WEB-0017-A10 and A11 held only because no `app/api/*`
  * route and no handover module existed yet to violate them — this suite
  * proves the checks actually fire, with fixtures built fresh per test
  * (never committed to the tree) and removed afterwards.
@@ -31,7 +31,7 @@ function newRoot(): string {
   return fixtureRoot;
 }
 
-describe("TS-017-A10: every app/**/route.ts exports GET and nothing else", () => {
+describe("TS-WEB-0017-A10: every app/**/route.ts exports GET and nothing else", () => {
   it("passes a route.ts that exports only GET", () => {
     const root = newRoot();
     writeFileSync(
@@ -121,7 +121,7 @@ describe("TS-017-A10: every app/**/route.ts exports GET and nothing else", () =>
   });
 });
 
-describe("TS-017-A11: the app hostname occurs in at most one module", () => {
+describe("TS-WEB-0017-A11: the app hostname occurs in at most one module", () => {
   it("passes when the hostname sits in exactly one file", () => {
     const root = newRoot();
     writeFileSync(
@@ -185,7 +185,7 @@ describe("TS-017-A11: the app hostname occurs in at most one module", () => {
     expect(result.occurrences).toEqual([join("src", "lib", "routes", "routes.ts")]);
   });
 
-  it("ignores the CSP allowlist module (TS-014 D1's own, separately justified entry)", () => {
+  it("ignores the CSP allowlist module (TS-WEB-0014 D1's own, separately justified entry)", () => {
     const root = newRoot();
     writeFileSync(
       fixture("src", "lib", "routes", "routes.ts"),

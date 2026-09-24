@@ -20,8 +20,8 @@ vi.mock("@/src/lib/routes/place-hop", async (importOriginal) => {
 /**
  * `proxy.ts` had no test of its own (F-2-36). These are the guarantees it
  * makes for *every* request on the site — the canonical-host redirect
- * (TS-001 D2), the CSP and HSTS headers (TS-014 D4/D5), `X-Robots-Tag`
- * (TS-015 D3) — plus the one a security finding put on it: a request that
+ * (TS-WEB-0001 D2), the CSP and HSTS headers (TS-WEB-0014 D4/D5), `X-Robots-Tag`
+ * (TS-WEB-0015 D3) — plus the one a security finding put on it: a request that
  * chooses its own `Host` must not be able to aim the deployment's
  * secret-bearing self-fetch at an origin of its choosing.
  */
@@ -122,7 +122,7 @@ describe("F-2-36: a spoofed Host cannot aim the self-fetch", () => {
   });
 });
 
-describe("TS-014 D4/D5: every response carries the policy", () => {
+describe("TS-WEB-0014 D4/D5: every response carries the policy", () => {
   it("sets a Content-Security-Policy on an ordinary request", async () => {
     const response = await proxy(request("http://localhost:3100/mitmachen"));
     const csp = response.headers.get("Content-Security-Policy");
@@ -146,7 +146,7 @@ describe("TS-014 D4/D5: every response carries the policy", () => {
   });
 });
 
-describe("TS-015 D3: X-Robots-Tag on everything that is not the production site", () => {
+describe("TS-WEB-0015 D3: X-Robots-Tag on everything that is not the production site", () => {
   it("marks a preview noindex", async () => {
     vi.stubEnv("VERCEL_ENV", "preview");
     const response = await proxy(request("https://sheep-abc123.vercel.app/"));
@@ -160,7 +160,7 @@ describe("TS-015 D3: X-Robots-Tag on everything that is not the production site"
   });
 });
 
-describe("TS-001 D2: the canonical-host redirect", () => {
+describe("TS-WEB-0001 D2: the canonical-host redirect", () => {
   it("redirects the bare apex to www with a 301, path and query intact", async () => {
     const response = await proxy(
       request("https://schafe-vorm-fenster.de/mitmachen?ort=beispieldorf"),
@@ -177,7 +177,7 @@ describe("TS-001 D2: the canonical-host redirect", () => {
   });
 });
 
-describe("TS-004-A3 (F-2-45): the landing-only domain rule", () => {
+describe("TS-WEB-0004-A3 (F-2-45): the landing-only domain rule", () => {
   it("404s every path outside the landing set on a landing-only domain", async () => {
     for (const host of [
       "www.schafvormfenster.at",
@@ -259,7 +259,7 @@ describe("TS-004-A3 (F-2-45): the landing-only domain rule", () => {
   });
 });
 
-describe("TS-004-A4 (F-2-70): an unknown URL reaches a 404 that renders", () => {
+describe("TS-WEB-0004-A4 (F-2-70): an unknown URL reaches a 404 that renders", () => {
   it.each(["/dies-gibt-es-nicht", "/uk/mitmachen", "/irgendwas/irgendwo"])(
     "rewrites %s onto the 404 surface before the route renders",
     async (path) => {
@@ -314,7 +314,7 @@ describe("TS-004-A4 (F-2-70): an unknown URL reaches a 404 that renders", () => 
   });
 });
 
-describe("TS-021-A7 (F-2-49): the re-resolution hop is an HTTP redirect", () => {
+describe("TS-WEB-0021-A7 (F-2-49): the re-resolution hop is an HTTP redirect", () => {
   it("307s a now-covered value off `/dein-ort/starten`", async () => {
     const response = await proxy(
       request("https://www.schafe-vorm-fenster.de/dein-ort/starten?ort=quilow"),

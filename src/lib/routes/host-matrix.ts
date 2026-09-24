@@ -1,5 +1,5 @@
 /**
- * The domain matrix — TS-001 D1, and the host-detection half of D3/D2.
+ * The domain matrix — TS-WEB-0001 D1, and the host-detection half of D3/D2.
  *
  * This is a `proxy.ts`-only concept, deliberately independent of
  * `src/lib/i18n/locales.ts`'s `Locale` type (`"de" | "en"`, phase 1's
@@ -13,7 +13,7 @@
  * What *is* built here, precisely because it does not need that content:
  * which host is which kind (D1), the canonical `www.` redirect (D2), and
  * the language set a domain offers for the Accept-Language suggestion
- * signal (`locale-suggestion.ts`, DEC-038/053). Building the landing pages
+ * signal (`locale-suggestion.ts`, DEC-0038/053). Building the landing pages
  * themselves is a content/page work package this one does not own —
  * recorded in `state/open.md`.
  */
@@ -21,17 +21,17 @@
 export type TldLanguage = "de" | "en" | "pl";
 
 export interface DomainConfig {
-  /** The canonical `www.` host (TS-001 D2). */
+  /** The canonical `www.` host (TS-WEB-0001 D2). */
   readonly host: string;
   /** The bare (apex) form of the same domain — what D2's redirect corrects. */
   readonly bareHost: string;
   readonly tldDefault: TldLanguage;
   readonly kind: "full-site" | "landing";
-  /** Every language this domain currently offers (D1, DEC-053: national + English). */
+  /** Every language this domain currently offers (D1, DEC-0053: national + English). */
   readonly offers: readonly TldLanguage[];
 }
 
-/** TS-001 D1, phase 1 — the confirmed four. */
+/** TS-WEB-0001 D1, phase 1 — the confirmed four. */
 export const DOMAIN_MATRIX: readonly DomainConfig[] = [
   {
     host: "www.schafe-vorm-fenster.de",
@@ -89,10 +89,10 @@ export function domainConfigFor(host: string | null | undefined): DomainConfig {
  *
  * **Phasing note (D2), recorded rather than silently applied:** D2 exempts
  * the `.de` apex from this redirect only until the `/:community`
- * forwarding it currently carries moves to `app.*` (TS-004 D3 rule 6). That
+ * forwarding it currently carries moves to `app.*` (TS-WEB-0004 D3 rule 6). That
  * forwarding is not built in this app tree, so there is nothing here for
  * the exemption to protect yet — redirecting the bare apex today matches
- * TS-001-A4 literally and breaks no route that exists. When `/:community`
+ * TS-WEB-0001-A4 literally and breaks no route that exists. When `/:community`
  * forwarding is built, it must run **before** this redirect (or exempt its
  * own paths from it); flagged in `state/open.md` for whoever builds it.
  */

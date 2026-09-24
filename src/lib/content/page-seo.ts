@@ -1,6 +1,6 @@
 /**
  * `pageSeo(route, locale)` — the title and description of one route, read
- * from the page's own content frontmatter (TS-011 D5, TS-021-A11).
+ * from the page's own content frontmatter (TS-WEB-0011 D5, TS-WEB-0021-A11).
  *
  * D5 puts both strings in `seo.title`/`seo.description` of the artifact and
  * forbids deriving either at runtime from body copy or from the `h1`. This
@@ -20,7 +20,7 @@
  * Nothing here throws, for the same reason nothing in `loader.ts` does: a
  * missing or malformed `seo` block is a `null` with a warning, so a content
  * gap never takes a route down mid-render. `pnpm check:seo-budget`
- * (TS-011-A7) is what refuses the build.
+ * (TS-WEB-0011-A7) is what refuses the build.
  */
 
 import { readFileSync } from "node:fs";
@@ -39,7 +39,7 @@ import type { RouteId } from "@/src/lib/routes/routes";
 export interface PageSeoOptions {
   /** Where the content tree lives. Tests pass it; a page never does. */
   readonly contentRoot?: string;
-  /** Which build this is, for TS-007 D11's gate. Defaults to the real one. */
+  /** Which build this is, for TS-WEB-0007 D11's gate. Defaults to the real one. */
   readonly environment?: Environment;
 }
 
@@ -68,7 +68,7 @@ function readSeoMap(
   if (frontmatter === null || typeof frontmatter !== "object") return null;
 
   /**
-   * TS-007 D11's editorial gate applies to the head as much as to the body.
+   * TS-WEB-0007 D11's editorial gate applies to the head as much as to the body.
    * `loadPage()` drops an artifact whose status this build does not render;
    * without the same check here a production build would serve unreviewed
    * `seo.title`/`seo.description` — and the `WebPage` JSON-LD built from them
@@ -82,7 +82,7 @@ function readSeoMap(
   if (!status.success || !rendersIn(status.data, environment)) {
     warnOnce(
       `seo-gated:${file}`,
-      `${file}: \`status: ${String((frontmatter as Record<string, unknown>).status)}\` does not render in this build (TS-007 D11) — the page falls back to its navigation name and emits no description`,
+      `${file}: \`status: ${String((frontmatter as Record<string, unknown>).status)}\` does not render in this build (TS-WEB-0007 D11) — the page falls back to its navigation name and emits no description`,
     );
     return null;
   }
@@ -93,7 +93,7 @@ function readSeoMap(
   if (!parsed.success) {
     warnOnce(
       `seo:${file}`,
-      `${file}: the \`seo\` block does not validate (TS-011 D5) — the page falls back to its navigation name and emits no description`,
+      `${file}: the \`seo\` block does not validate (TS-WEB-0011 D5) — the page falls back to its navigation name and emits no description`,
     );
     return null;
   }
@@ -142,7 +142,7 @@ export function pageSeo(
   if (!entry) {
     warnOnce(
       `seo-route:${file}:${route}`,
-      `${file}: no \`seo\` entry for \`${ROUTES[route].path.de}\` (TS-011 D5) — the page falls back to its navigation name and emits no description`,
+      `${file}: no \`seo\` entry for \`${ROUTES[route].path.de}\` (TS-WEB-0011 D5) — the page falls back to its navigation name and emits no description`,
     );
     return null;
   }

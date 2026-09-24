@@ -1,12 +1,12 @@
 /**
- * Context proximity — TS-005 D2, axis two. The matrix itself is the concept's
+ * Context proximity — TS-WEB-0005 D2, axis two. The matrix itself is the concept's
  * ("Context Matrix: the Entry Decides the Starting Type"); this module is that
  * table **as data**, plus the two values the source leaves open.
  *
- *   starting type        1.0   SRC-002, verbatim
+ *   starting type        1.0   SRC-0002, verbatim
  *   named widening type  0.6   this spec — one value, not a gradient, because
  *                              the matrix carries no ordering to rank by
- *   any other type       0.3   SRC-002's "widest widening", extended to types
+ *   any other type       0.3   SRC-0002's "widest widening", extended to types
  *                              the matrix names for neither role
  *
  * The floor applies to everything: a type named nowhere still scores, which is
@@ -18,7 +18,7 @@ import { ITEM_TYPES } from "./types";
 
 /**
  * The matrix's "time window first" column. The engine does not score against
- * it — freshness is TS-005 D4 — it is the window a live module queries and
+ * it — freshness is TS-WEB-0005 D4 — it is the window a live module queries and
  * the preference an editor reads off the row (A14).
  */
 export type TimeWindow =
@@ -50,7 +50,7 @@ const TYPE_ALIASES: Partial<Record<ItemType, ItemType>> = {
   podcast: "press",
 };
 
-/** SRC-002's context matrix, row by row, keyed by the TS-010 D3 trait id. */
+/** SRC-0002's context matrix, row by row, keyed by the TS-WEB-0010 D3 trait id. */
 export const CONTEXT_MATRIX: Record<EntryTrait, ContextRow> = {
   social: {
     assumption: "impulsive, event-driven, private",

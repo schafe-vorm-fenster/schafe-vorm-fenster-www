@@ -6,7 +6,7 @@ export interface EmptyProofSlotProps {
 
 /**
  * 32 `empty-proof-slot` [PROPOSED] — content type 11 `empty-proof-slot`,
- * TS-027 D5.
+ * TS-WEB-0027 D5.
  *
  * Structure: a flat brand-colour panel at `ratio-proof`, holding the
  * position a cleared `proof-card` will take. It says nothing about itself:
@@ -24,8 +24,8 @@ export interface EmptyProofSlotProps {
 export function EmptyProofSlot({ className }: EmptyProofSlotProps) {
   return (
     // `data-empty-proof` makes the gap countable from outside — the
-    // selection's positions are cards *and* gaps, and SRC-001 §4 is about the
-    // count (DEC-048), not about how many cards happen to be cleared.
+    // selection's positions are cards *and* gaps, and SRC-0001 §4 is about the
+    // count (DEC-0048), not about how many cards happen to be cleared.
     <div
       aria-hidden="true"
       className={[styles.slot, className].filter(Boolean).join(" ")}

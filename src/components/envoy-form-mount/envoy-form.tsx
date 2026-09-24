@@ -4,7 +4,7 @@
  * The mocked envoy form's own behaviour — submit, spam gate, success.
  *
  * **Why a client component in a server-first tree.** `src/components/README.md`
- * allows the exception the inventory itself requires, and this is one: TS-016
+ * allows the exception the inventory itself requires, and this is one: TS-WEB-0016
  * D2 fixes the real integration as a *custom element* the browser loads and
  * runs, so the thing being mocked is client behaviour. Three round-2 findings
  * are exactly that behaviour and cannot be answered on the server:
@@ -16,13 +16,13 @@
  *  - **F-2-66** — a clean submission left the fields empty and the page
  *    otherwise unchanged: nothing distinguished "submitted" from "just
  *    loaded". The form is replaced by a labelled success message that takes
- *    focus (TS-016-A9).
- *  - **F-2-48** — the honeypot and the timing gate of TS-016-A10. Both are
+ *    focus (TS-WEB-0016-A9).
+ *  - **F-2-48** — the honeypot and the timing gate of TS-WEB-0016-A10. Both are
  *    the website's half of C4; the widget owns the server half.
  *
  * The markup still server-renders, so a visitor without JavaScript sees the
  * complete form rather than a dead slot — it simply has no success state,
- * which is the same trade `archive-filter` makes (TS-028 D4/D5).
+ * which is the same trade `archive-filter` makes (TS-WEB-0028 D4/D5).
  *
  * **Nothing leaves the browser, in any branch.** No field carries a `name`,
  * so even a submitted form is a request with no values in it (HTML: an
@@ -55,7 +55,7 @@ import type { ReactNode } from "react";
 import styles from "./envoy-form-mount.module.css";
 
 /**
- * TS-016-A10's timing threshold. A human filling in four fields needs longer
+ * TS-WEB-0016-A10's timing threshold. A human filling in four fields needs longer
  * than this; a script does not. Deliberately short enough that a fast, honest
  * visitor is never refused twice — the refusal is a sentence, not a lockout.
  */
@@ -73,7 +73,7 @@ export interface EnvoyFormProps {
   readonly conversion?: ConversionBinding;
   /**
    * `false` where the form stands **inside a flow** and the step's own
-   * control is the action (order step 3, TS-025 D2).
+   * control is the action (order step 3, TS-WEB-0025 D2).
    *
    * F-2-51: that step used to render this form's "Absenden" *and* the step's
    * "Weiter" — two calls to action, and the one a visitor filling in invoice
@@ -82,7 +82,7 @@ export interface EnvoyFormProps {
    */
   readonly ownSubmit?: boolean;
   /**
-   * The conversion marker on the submit control (TS-006 D3). Where this form
+   * The conversion marker on the submit control (TS-WEB-0006 D3). Where this form
    * *is* the step's or the page's one action — order step 3, the quote page —
    * the marker belongs on its button and nowhere else.
    */
@@ -150,7 +150,7 @@ export function EnvoyForm({
    * on the completed step at module scope, which survives every soft
    * navigation in the document and, by design, nothing beyond it — so a full
    * page load on the advance would make Back-then-Forward through step 4
-   * count the paid goal twice (F-2-60 / TS-012-A5). `useRouter()` would do
+   * count the paid goal twice (F-2-60 / TS-WEB-0012-A5). `useRouter()` would do
    * the same navigation but throws wherever no app router is mounted, which
    * is every server-render test this component appears in; a `next/link`
    * anchor renders happily there and navigates identically here.
@@ -296,7 +296,7 @@ export function EnvoyForm({
           return;
         }
 
-        // TS-016-A10's two spam gates guard a **lead**: something a person at
+        // TS-WEB-0016-A10's two spam gates guard a **lead**: something a person at
         // this end would otherwise have to read. A flow's own advance sends
         // nothing to anyone — it is a GET to the next step of the same route
         // — so a script that "beats" it has won a page view. Running the
@@ -323,8 +323,8 @@ export function EnvoyForm({
         }
 
         // One event per completed submission, keyed on the step being
-        // completed rather than on the click that completed it (TS-012-A5,
-        // TS-016-A12) — a second press cannot reach this line.
+        // completed rather than on the click that completed it (TS-WEB-0012-A5,
+        // TS-WEB-0016-A12) — a second press cannot reach this line.
         submitted.current = true;
         setRefusal(undefined);
 
@@ -352,7 +352,7 @@ export function EnvoyForm({
           );
         }
 
-        // Focus moves to the success message (TS-016-A9); the node exists
+        // Focus moves to the success message (TS-WEB-0016-A9); the node exists
         // after this render, so the move waits for it.
         requestAnimationFrame(() => successRef.current?.focus());
       }}
@@ -448,7 +448,7 @@ export function EnvoyForm({
         );
       })}
 
-      {/* TS-016-A10's honeypot: in the DOM, hidden from assistive technology,
+      {/* TS-WEB-0016-A10's honeypot: in the DOM, hidden from assistive technology,
           not focusable, and — like every other field here — unnamed, so it
           carries nothing out of the browser either. */}
       <div aria-hidden="true" className={styles.honeypot}>

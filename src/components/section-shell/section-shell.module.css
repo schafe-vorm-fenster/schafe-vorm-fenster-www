@@ -1,5 +1,5 @@
 .section {
-  /* Surfaces are square: no border, no shadow, no radius (SRC-014). */
+  /* Surfaces are square: no border, no shadow, no radius (SRC-0014). */
   border-radius: 0;
   display: block;
   width: 100%;
@@ -114,7 +114,7 @@
   --ground-link-hover: var(--color-lime-300);
   --link: var(--color-lime-400);
   --link-hover: var(--color-lime-300);
-  /* SRC-014 §Button: the primary inside an ink or photo section. */
+  /* SRC-0014 §Button: the primary inside an ink or photo section. */
   --ground-primary-fill: var(--color-lime-500);
   --ground-primary-text: var(--color-neutral-ink);
   --ground-primary-fill-hover: var(--color-lime-400);

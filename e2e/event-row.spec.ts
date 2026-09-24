@@ -25,7 +25,7 @@ import { expect, test } from "@playwright/test";
 
 const ROW = "article[class*='event-row']";
 
-/** DEC-067's phone reference, and the narrowest width the brief reviewed. */
+/** DEC-0067's phone reference, and the narrowest width the brief reviewed. */
 const PHONE_WIDTHS = [390, 360] as const;
 
 /** `src/lib/live/mocks/fixtures.ts` — a covered place that always has dates. */
@@ -80,7 +80,7 @@ for (const width of PHONE_WIDTHS) {
   }
 }
 
-test("G-2: from `md` the category is the badge SRC-014 §Event row specifies", async ({ page }) => {
+test("G-2: from `md` the category is the badge SRC-0014 §Event row specifies", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto(WITH_DATES);
   await expect(page.locator(ROW).first()).toBeVisible();

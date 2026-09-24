@@ -18,7 +18,7 @@ function tree(files: Record<string, string>): string {
   return root;
 }
 
-describe("TS-026-A8: the response-time wording lint", () => {
+describe("TS-WEB-0026-A8: the response-time wording lint", () => {
   it("finds the wording in every spelling A7 names", () => {
     for (const line of [
       "Antwort in zwei Werktagen",

@@ -13,11 +13,11 @@ import {
 /**
  * F-2-55. The inventory and the registry are two lists, and the whole point
  * of having both is that one can catch the other drifting. These are the
- * assertions that make that true — held against TS-004 D1's *text*, quoted
+ * assertions that make that true — held against TS-WEB-0004 D1's *text*, quoted
  * in each name, rather than against either list's own contents.
  */
 
-describe("TS-004 D1: the inventory is the spec's table, not the registry's", () => {
+describe("TS-WEB-0004 D1: the inventory is the spec's table, not the registry's", () => {
   it("carries every page row of the registry, in both languages", () => {
     const pages = d1Inventory().filter((row) => row.kind === "page");
     expect(pages).toHaveLength(ROUTE_IDS.length * LOCALES.length);
@@ -48,7 +48,7 @@ describe("TS-004 D1: the inventory is the spec's table, not the registry's", () 
   });
 });
 
-describe("TS-004-A3 / D1: landing-only domains serve `/`, the legal routes and the machine surfaces", () => {
+describe("TS-WEB-0004-A3 / D1: landing-only domains serve `/`, the legal routes and the machine surfaces", () => {
   it("admits exactly those", () => {
     const admitted = d1Inventory()
       .filter((row) => row.onLandingDomain)

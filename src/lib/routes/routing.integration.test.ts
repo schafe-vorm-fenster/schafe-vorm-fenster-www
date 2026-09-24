@@ -113,7 +113,7 @@ async function layoutFor(lang: string) {
   return layout.default({ children: null, params: Promise.resolve({ lang }) });
 }
 
-describe("TS-004-A1: every path of the D1 inventory exists in both languages", () => {
+describe("TS-WEB-0004-A1: every path of the D1 inventory exists in both languages", () => {
   /**
    * F-2-55: this block used to iterate `ROUTE_IDS` — the registry — which is
    * the one list that cannot be missing a row it defines. Two D1 rows
@@ -185,7 +185,7 @@ describe("TS-004-A1: every path of the D1 inventory exists in both languages", (
   });
 });
 
-describe("TS-001-A1: the German page declares German", () => {
+describe("TS-WEB-0001-A1: the German page declares German", () => {
   it("renders <html lang=\"de\">", async () => {
     const html = await layoutFor("de");
     expect(html.type).toBe("html");
@@ -193,7 +193,7 @@ describe("TS-001-A1: the German page declares German", () => {
   });
 });
 
-describe("TS-001-A2: the English page declares English", () => {
+describe("TS-WEB-0001-A2: the English page declares English", () => {
   it("renders <html lang=\"en\">", async () => {
     const html = await layoutFor("en");
     expect(html.props.lang).toBe("en");
@@ -205,7 +205,7 @@ describe("TS-001-A2: the English page declares English", () => {
   });
 });
 
-describe("TS-001-A5: every page carries the hreflang set and its self-canonical", () => {
+describe("TS-WEB-0001-A5: every page carries the hreflang set and its self-canonical", () => {
   it("emits canonical plus de, en and x-default on every page", async () => {
     for (const { route, locale } of everyRoute()) {
       const page = await loadPage(route);
@@ -224,7 +224,7 @@ describe("TS-001-A5: every page carries the hreflang set and its self-canonical"
   });
 });
 
-describe("TS-004-A2: the redundant default prefix redirects, an unknown code 404s", () => {
+describe("TS-WEB-0004-A2: the redundant default prefix redirects, an unknown code 404s", () => {
   it("redirects /de and /de/… with a 301, not a 308", () => {
     expect(localeRedirects()).toEqual([
       { source: "/de", destination: "/", statusCode: 301 },
@@ -240,7 +240,7 @@ describe("TS-004-A2: the redundant default prefix redirects, an unknown code 404
   });
 });
 
-describe("TS-004-A3: the landing-only domain rule", () => {
+describe("TS-WEB-0004-A3: the landing-only domain rule", () => {
   it("serves `/`, the legal route and the machine surfaces there, and nothing else", () => {
     for (const path of ["/", "/en", "/rechtliches", "/en/legal", "/llms.txt", "/robots.txt", "/sitemap.xml"])
       expect(servedOnLandingDomain(path), path).toBe(true);
@@ -249,8 +249,8 @@ describe("TS-004-A3: the landing-only domain rule", () => {
   });
 });
 
-describe("TS-004-A4: an unknown path answers 404, noindex, inside the language", () => {
-  it("carries all four error surfaces of TS-004 D2", () => {
+describe("TS-WEB-0004-A4: an unknown path answers 404, noindex, inside the language", () => {
+  it("carries all four error surfaces of TS-WEB-0004 D2", () => {
     expect(existsSync(join(ROOT, "app", "global-not-found.tsx"))).toBe(true);
     expect(existsSync(join(ROOT, "app", "global-error.tsx"))).toBe(true);
     expect(existsSync(join(APP_TREE, "not-found.tsx"))).toBe(true);
@@ -310,7 +310,7 @@ describe("TS-004-A4: an unknown path answers 404, noindex, inside the language",
     expect(textOf(await global.default())).toContain("Seite nicht gefunden");
 
     // A header that is not a language this site serves falls back to the TLD
-    // default (TS-001 D4), it never renders half a page.
+    // default (TS-WEB-0001 D4), it never renders half a page.
     requestHeaders[NOT_FOUND_LOCALE_HEADER] = "uk";
     expect(textOf(await global.default())).toContain("Seite nicht gefunden");
     delete requestHeaders[NOT_FOUND_LOCALE_HEADER];
@@ -330,7 +330,7 @@ describe("TS-004-A4: an unknown path answers 404, noindex, inside the language",
   });
 });
 
-describe("TS-004-A5: the three machine surfaces answer, per domain", () => {
+describe("TS-WEB-0004-A5: the three machine surfaces answer, per domain", () => {
   /**
    * F-2-55: this block checked the sitemap alone and never requested
    * `llms.txt`, which is why the criterion stayed green while the route did
@@ -390,7 +390,7 @@ describe("TS-004-A5: the three machine surfaces answer, per domain", () => {
   });
 });
 
-describe("TS-004 D3: the URL mapping is derived from the table", () => {
+describe("TS-WEB-0004 D3: the URL mapping is derived from the table", () => {
   it("rewrites every public path onto its internal route", () => {
     const rewrites = localeRewrites();
     for (const { route, locale } of everyRoute()) {
@@ -412,15 +412,15 @@ describe("TS-004 D3: the URL mapping is derived from the table", () => {
   });
 });
 
-describe("TS-011-A1: the redirect map has one source per URL and no chains", () => {
+describe("TS-WEB-0011-A1: the redirect map has one source per URL and no chains", () => {
   it("reports no violation", () => {
     expect(redirectMapViolations()).toEqual([]);
   });
 });
 
-describe("TS-011-A2: the /hilfe family redirects in one hop to the app", () => {
-  // The legacy map is append-only (TS-011 D1) and grew at M4 with the rest
-  // of SRC-010's inventory (`redirect-map.ts`) — this checks the /hilfe
+describe("TS-WEB-0011-A2: the /hilfe family redirects in one hop to the app", () => {
+  // The legacy map is append-only (TS-WEB-0011 D1) and grew at M4 with the rest
+  // of SRC-0010's inventory (`redirect-map.ts`) — this checks the /hilfe
   // family specifically, not the whole table's exact shape.
   it("carries the path and its subtree, both 301", () => {
     expect(legacyRedirects()).toEqual(

@@ -38,7 +38,7 @@ import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
 /**
- * TS-024 — `/dein-kalender`, the 480 € page.
+ * TS-WEB-0024 — `/dein-kalender`, the 480 € page.
  *
  * Own blocks, D2 order: focus (Pulse + equal-weight briefing) → contrast →
  * embed demo → tiers → proof → trust. Context band and closing CTA are
@@ -224,12 +224,12 @@ export default async function Page({
   const tier3Cta = pageTitle("region", locale);
 
   /**
-   * TS-005 through, not around: DEC-048's **3** inline positions beside the
+   * TS-WEB-0005 through, not around: DEC-0048's **3** inline positions beside the
    * claim, selected by the engine rather than by file order.
    *
    * `dein-kalender-5-proof-demo` is `provenance: sourced` (state/open.md
    * row 48, row 162), not `generated` — three real, named quotes, clearance
-   * pending (Q-014). `demo` and every displayed label are therefore read off
+   * pending (Q-0014). `demo` and every displayed label are therefore read off
    * the slot (`isDemoSlot`), never hard-coded: a real quote no longer comes
    * back `mocked`, and only a genuinely generated quote would still badge
    * itself in `data-demo`; the words a visitor reads are the same either
@@ -268,7 +268,7 @@ export default async function Page({
 
   return (
     <>
-      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{
@@ -549,7 +549,7 @@ export default async function Page({
               body: withoutArrow(fieldAt(trust.blocks, 1)),
             },
             {
-              // TS-024-A19 / state/open.md row 163, row 19: the slot now carries a
+              // TS-WEB-0024-A19 / state/open.md row 163, row 19: the slot now carries a
               // sourced operations sentence naming a hub record
               // (`people@0.3.6#jan-henrik-hempel`,
               // `proof@0.3.5#in-operation-since-2018`), so it ships. AI use

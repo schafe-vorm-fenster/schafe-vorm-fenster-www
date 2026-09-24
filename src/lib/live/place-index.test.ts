@@ -14,7 +14,7 @@ import { SHOWCASE_COMMUNITY } from "./showcase";
 
 /**
  * The committed community index — the answer to a question geo-api cannot
- * answer at all (name search, Q-025) and to one events-api cannot (a
+ * answer at all (name search, Q-0025) and to one events-api cannot (a
  * community id back to a slug).
  *
  * These run against the real committed artefact rather than a fixture: the

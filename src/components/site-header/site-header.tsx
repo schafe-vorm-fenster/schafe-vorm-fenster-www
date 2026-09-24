@@ -31,20 +31,20 @@ export interface SiteHeaderProps {
 }
 
 /**
- * 8 `site-header` [PROPOSED] — TS-004 D4.
+ * 8 `site-header` [PROPOSED] — TS-WEB-0004 D4.
  *
  * Structure: the `logo` home, the four job labels, and the persistent
  * calendar entry as a `button`. Both lists come from
  * `src/lib/routes/navigation.ts` and every label from the dictionary — the
- * header holds no path and no string of its own (TS-004 D4, TS-001 D5/D7).
+ * header holds no path and no string of its own (TS-WEB-0004 D4, TS-WEB-0001 D5/D7).
  * Its height is published as `--site-header-height` so `legal-section` can use
- * it for `scroll-margin-top` (TS-029 D3).
+ * it for `scroll-margin-top` (TS-WEB-0029 D3).
  * States: two, and both are chrome rather than data — the ground (transparent
  * over a hero photograph, solid once past it) and the phone disclosure (the
  * overlay open or closed). No loading, empty or error state, and identical at
- * every personalization stage (TS-006 D8). No role switcher, no audience tab,
- * no segmented entry: forbidden on every page (TS-006-A9).
- * Inherits: a flat surface, no shadow and no border in either state (SRC-014
+ * every personalization stage (TS-WEB-0006 D8). No role switcher, no audience tab,
+ * no segmented entry: forbidden on every page (TS-WEB-0006-A9).
+ * Inherits: a flat surface, no shadow and no border in either state (SRC-0014
  * §Shape and Space: "Borders and shadows: none" — surface contrast does the
  * dividing); controls at radius 999; labels in Label-mono.
  *
@@ -78,7 +78,7 @@ export interface SiteHeaderProps {
  * the measurement says otherwise, which row 201 records. This is **one component tree** — every destination, label and
  * control exists in the markup at every width and the breakpoint changes only
  * which of them is disclosed — but it *is* a change of visible presence, which
- * TS-017 D2(d) as written does not allow and TS-004 D4 does not describe.
+ * TS-WEB-0017 D2(d) as written does not allow and TS-WEB-0004 D4 does not describe.
  * Jan's wording is the decision; the deviation is recorded, not silent.
  */
 export function SiteHeader({

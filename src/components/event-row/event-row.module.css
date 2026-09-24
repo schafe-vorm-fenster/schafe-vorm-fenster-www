@@ -1,5 +1,5 @@
 /*
- * Four parts, two lines, 76 px — SRC-014 §Event row and §Fixed heights.
+ * Four parts, two lines, 76 px — SRC-0014 §Event row and §Fixed heights.
  *
  * A grid rather than a flex row, because the badge belongs on the meta's
  * line and not in the title's line box. As a flex sibling it was 126 px wide
@@ -126,7 +126,7 @@
  * to "An…". A glyph is 24 px whatever the category is called, so the meta
  * can never be starved again by a word.
  *
- * Right-aligned (SRC-014 §Event row), on the meta's line, and never in the
+ * Right-aligned (SRC-0014 §Event row), on the meta's line, and never in the
  * title's column: a long category name must not narrow the title either.
  */
 .category {
@@ -202,7 +202,7 @@
 }
 
 /*
- * md — 48rem / 768px: the row is wide enough for the badge SRC-014 §Event
+ * md — 48rem / 768px: the row is wide enough for the badge SRC-0014 §Event
  * row specifies, so the same element becomes it. The glyph steps aside: a
  * badge with an 18 px icon is a *kicker* in this design system, and a
  * category is not a kicker.

@@ -7,7 +7,7 @@ import {
   hasCampaignParams,
 } from "@/src/lib/analytics/attribution";
 
-describe("TS-012-A6/A7: campaign attribution (etcc_*)", () => {
+describe("TS-WEB-0012-A6/A7: campaign attribution (etcc_*)", () => {
   it("names exactly the two parameters in productive use", () => {
     expect(CAMPAIGN_PARAMS).toEqual(["etcc_cmp", "etcc_med"]);
   });

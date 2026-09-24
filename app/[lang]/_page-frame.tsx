@@ -1,5 +1,5 @@
 /**
- * Blocks 3 and 4 of TS-006 D2 — the context band and the closing CTA — built
+ * Blocks 3 and 4 of TS-WEB-0006 D2 — the context band and the closing CTA — built
  * from the page's `page.meta.ts`, for every page, in one place.
  *
  * ```
@@ -22,7 +22,7 @@
  * route from the router tree (`_chrome.tsx`).
  *
  * What stays here is what was never chrome: two **content** blocks that live
- * inside `main`, that TS-006 D2 wants "rendered by the shared layout from
+ * inside `main`, that TS-WEB-0006 D2 wants "rendered by the shared layout from
  * `page.meta.ts`, not hand-placed per page", and that are built from the
  * page's own manifest:
  *
@@ -52,7 +52,7 @@ import type { ReactNode } from "react";
  * `registrieren-6-context-band` each carry the page's own kicker sentence
  * now (state/open.md row 95, row 161; identical wording today, so a page
  * without its own slot yet loses nothing by falling back here). The band
- * itself still renders on every page by construction (TS-006 D5); the
+ * itself still renders on every page by construction (TS-WEB-0006 D5); the
  * remaining pages without a dedicated slot fall back to this constant
  * rather than the component's German default.
  */
@@ -61,7 +61,7 @@ const BAND_HEADING: Record<Locale, string> = {
   en: "Here for something else today?",
 };
 
-/** The closing block of TS-006 D6, as the page hands it over. */
+/** The closing block of TS-WEB-0006 D6, as the page hands it over. */
 export type ClosingBlock =
   | {
       readonly variant?: "repeat";
@@ -80,10 +80,10 @@ export type ClosingBlock =
   /**
    * The block-1 primary repeated as the **module** it is [PROPOSED].
    *
-   * TS-006 D6 names two shapes, a goal CTA and the merged three-job offer.
+   * TS-WEB-0006 D6 names two shapes, a goal CTA and the merged three-job offer.
    * Neither fits a state whose primary conversion is a module rather than a
    * link: where the focus job is "know what is on" and no place is known,
-   * block 1 carries the place search and TS-019 D2 gives that state no goal
+   * block 1 carries the place search and TS-WEB-0019 D2 gives that state no goal
    * at all ("a search is not a conversion"). The closing block then repeats
    * the same module with the same submit label and the same target — which
    * is what "no new text, same target" asks for — and without the
@@ -117,7 +117,7 @@ export interface PageFrameProps {
  * A page never writes a `context-band` or a `closing-cta` itself — it hands
  * over its manifest and, for the repeat case, the label and target its
  * block-1 primary already uses, so "same goal, same target, same label"
- * (TS-006 D6) holds by construction rather than by review.
+ * (TS-WEB-0006 D6) holds by construction rather than by review.
  */
 export function PageFrame({
   meta,
@@ -135,27 +135,27 @@ export function PageFrame({
       {children}
 
       {merged ? (
-        /* Blocks 3 and 4 in one, where block 4 *is* the band's list: TS-006
+        /* Blocks 3 and 4 in one, where block 4 *is* the band's list: TS-WEB-0006
            D6 merges them on the `primaryConversion: null` pages, "so they
            render once, as the last block, rather than twice in sequence".
            The merged block is the band, not a replacement for it — the
            composition sheets compose it as "`context-band` in `merged` mode
            = the three-job block, rendered **once**, as the last block"
-           (`plan/component-inventory.md` §4, TS-027 block 7 / TS-028 block
+           (`plan/component-inventory.md` §4, TS-WEB-0027 block 7 / TS-WEB-0028 block
            4; §47 lists `merged` as the band's second mode). So it renders as
-           the band's own `aside#context-band` — TS-011-A4: "the context band
-           is an `aside` on **every** page", TS-006-A6: "every page renders
+           the band's own `aside#context-band` — TS-WEB-0011-A4: "the context band
+           is an `aside` on **every** page", TS-WEB-0006-A6: "every page renders
            exactly one context band" — and carries block 4's `#closing-cta`
            anchor inside it, which keeps exactly one of each per page and the
-           three job links exactly once (TS-027-A10: "rendered once, not
+           three job links exactly once (TS-WEB-0027-A10: "rendered once, not
            twice").
 
            F-2-41, reopened at gate 2: the merge was built as a suppression,
            which left `/ueber-uns`, `/ueber-uns/archiv` and `/rechtliches`
            with no `aside` at all. No page spec exempts them — the only band
            exemption the specs carry is F-2-10's mid-flow suppression on
-           `/mitmachen/registrieren` and `/dein-kalender/bestellen` (TS-023
-           D7 / TS-025, `state/open.md` row 24), and those two pages compose
+           `/mitmachen/registrieren` and `/dein-kalender/bestellen` (TS-WEB-0023
+           D7 / TS-WEB-0025, `state/open.md` row 24), and those two pages compose
            their blocks by hand, never through this component. */
         <MotionReveal>
           <SectionShell as="aside" id="context-band" label={bandHeading} surface="paper">
@@ -173,7 +173,7 @@ export function PageFrame({
         </MotionReveal>
       ) : (
         <>
-          {/* Block 3 — the three non-focus jobs. `as="aside"` — TS-011-A4:
+          {/* Block 3 — the three non-focus jobs. `as="aside"` — TS-WEB-0011-A4:
               "the context band is an `aside` on every page." It rendered as
               a plain `section` before (F-2-41). */}
           <MotionReveal>
@@ -183,7 +183,7 @@ export function PageFrame({
           </MotionReveal>
 
           {/* Block 4 — the focus job's conversion, repeated. Nothing but the
-              global footer renders after it (TS-006 D2). */}
+              global footer renders after it (TS-WEB-0006 D2). */}
           <MotionReveal>
             <SectionShell id="closing-cta" label={dictionary(locale).nav.home} surface="paper">
               {closing.variant === "module" ? (

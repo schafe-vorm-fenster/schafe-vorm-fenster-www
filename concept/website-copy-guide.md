@@ -64,7 +64,7 @@ Three rules make it coherent:
 
 ### CG-001 — `du` to a person, `ihr` to an organisation
 
-Both informal. This is **number, not register**: DEC-066 fixes one register,
+Both informal. This is **number, not register**: DEC-0066 fixes one register,
 `du`, for the whole site including the Verwaltung, and is untouched here.
 `ihr` is the plural of the same informal address, used when the thing is done
 by a group rather than by one pair of hands.
@@ -81,7 +81,7 @@ by a group rather than by one pair of hands.
 
 ### CG-002 — One address per page, declared, and a block departs whole
 
-The page's default follows `audiences[0]` in `page.meta.ts` (TS-006 D1). A
+The page's default follows `audiences[0]` in `page.meta.ts` (TS-WEB-0006 D1). A
 block may take the other number only where its actor plainly is the other one,
 and then for the whole block — never inside a paragraph, never inside a
 sentence.
@@ -102,12 +102,12 @@ sentence.
 
 Not on a page, not in a form label, not in an error message, not in the
 English mirror's tone. A register switch is a validation failure, not a
-stylistic finding (DEC-066).
+stylistic finding (DEC-0066).
 
 **One exemption, and it is a whole page: `/rechtliches`.** Decision 14
 (2026-09-23) exempts the page, not only the five imported documents on it.
 Impressum, Datenschutzerklärung, AGB, Widerrufsbelehrung and
-Nutzungsbedingungen are rendered verbatim (TS-029 D2, DEC-012, DEC-027) and
+Nutzungsbedingungen are rendered verbatim (TS-WEB-0029 D2, DEC-0012, DEC-0027) and
 their source register is `Sie`; a page that switches to `du` in its own
 headings and back to `Sie` inside every document would read as two voices
 arguing, and editing the documents to fix that would change legal text.
@@ -168,7 +168,7 @@ statement with the wrong punctuation.
 
 ### CG-007 — One idea per section
 
-A second mechanism is a second block (TS-006 D7). A second argument is a
+A second mechanism is a second block (TS-WEB-0006 D7). A second argument is a
 second section. A sentence that repeats the previous one is cut, not softened.
 
 - Avoid: *"Der Termin erscheint in deinem Ort und in den Nachbarorten, ohne
@@ -212,7 +212,7 @@ website.
 
 An abstract capability gets one concrete case, named. Where the offering
 record carries no example, the claim is weakened, not illustrated by
-invention (TS-007 D2).
+invention (TS-WEB-0007 D2).
 
 - Avoid: *"Über die Einstellungen legt ihr fest, welche Orte, welcher Verein
   und welche Kategorien"* — true, unpicturable.
@@ -230,8 +230,8 @@ cheapest concreteness there is.
 - Use: *"Dein Termin …"*
 
 **Direct address holds on every page, `/dein-ort/starten` included — there
-is no carve-out here and none is needed.** `TS-021 D9` said the activation
-page must "never" address the reader directly, and `DEC-071 §4` carried the
+is no carve-out here and none is needed.** `TS-WEB-0021 D9` said the activation
+page must "never" address the reader directly, and `DEC-0071 §4` carried the
 same carve-out; **both are retired** by decision 15 (2026-09-23). The rule
 they were written against no longer exists, so this guide does not gain an
 exception to a rule nobody holds — CG-012 and CG-008 read exactly as they
@@ -243,7 +243,7 @@ who just typed it is the one place the distance is most expensive, and the
 page's whole job — CG-008's hand-off, "Fehlt deine Veranstaltung, jetzt
 selbst eintragen" — is a sentence the old rule forbade.
 
-Anything still citing `TS-021 D9`'s "never direct" is citing a retired
+Anything still citing `TS-WEB-0021 D9`'s "never direct" is citing a retired
 determination; the spec rows are the parallel owner's to correct.
 
 ---
@@ -324,7 +324,7 @@ grant is a question mark one line lower.
 ### CG-019 — Kicker vocabulary per section role
 
 The kicker names the role the section plays; the title says what goes
-(CG-005). One kicker per section, mono uppercase (SRC-014 "Kicker").
+(CG-005). One kicker per section, mono uppercase (SRC-0014 "Kicker").
 
 | Section role | The kicker says | From the review |
 | --- | --- | --- |
@@ -346,13 +346,13 @@ without naming a replacement. Writing one here would be invention.
 ## 6. Per block type — the length budgets
 
 **How these numbers were derived.** Content width at the authoring viewport is
-`390 − 2 × 16 = 358 px` (SRC-014 "Shape and Space"). Each budget is that width
-divided by the average advance of the role's type from the SRC-014 scale, minus
+`390 − 2 × 16 = 358 px` (SRC-0014 "Shape and Space"). Each budget is that width
+divided by the average advance of the role's type from the SRC-0014 scale, minus
 the block's own furniture (a disc, an icon, a trailing arrow). They are
-**provisional** in the sense of TS-007's open point — the component manifest
-(SRC-013 §1) replaces them with the component's own budget. The derivation is
+**provisional** in the sense of TS-WEB-0007's open point — the component manifest
+(SRC-0013 §1) replaces them with the component's own budget. The derivation is
 recorded so a later number can be re-derived instead of re-guessed. In the
-schema each one is a `max()` (TS-007 D5).
+schema each one is a `max()` (TS-WEB-0007 D5).
 
 | # | Block / field | Type role | Budget at 390 px | The rule |
 | --- | --- | --- | --- | --- |
@@ -361,14 +361,14 @@ schema each one is a `max()` (TS-007 D5).
 | CG-022 | section title | Section head 38/800 | ≤ 40 characters, ≤ 2 lines | Statement, positive, no question mark (CG-005). |
 | CG-023 | kicker | Kicker mono 15/700 | ≤ 28 characters, 1 line | Names the section's role (CG-019). |
 | CG-024 | lead paragraph | Lead 20/400 | ≤ 160 characters, ≤ 4 lines | One idea, one example. |
-| CG-025 | explain-module step line | core 18/700 · detail 15/400 | core ≤ 30, detail ≤ 40 characters, **each exactly one line** | Bold core = the step, normal detail = the addition. The module plus its three lines fit one phone screen; if they do not, the copy is too long — the module does not grow (SRC-014 "Explain module"). |
+| CG-025 | explain-module step line | core 18/700 · detail 15/400 | core ≤ 30, detail ≤ 40 characters, **each exactly one line** | Bold core = the step, normal detail = the addition. The module plus its three lines fit one phone screen; if they do not, the copy is too long — the module does not grow (SRC-0014 "Explain module"). |
 | CG-026 | CTA label | Button 18/800 + arrow | ≤ 28 characters, 1 line | Verb + object. What happens on tap, in the reader's words. |
 | CG-027 | proof card | Card title 21/700 + Meta | claim ≤ 70, context ≤ 140 characters | **State the win.** A proof card is a persuasion, not a report. |
-| CG-028 | quote card | Lead 20/400 + mono 15 | quote ≤ 200, name ≤ 40, role + organisation ≤ 60, source ≤ 60 characters | Verbatim, never shortened in a way that changes the sentence; the concrete publication and article as source, with a working link (SRC-014 "Quote card"). |
+| CG-028 | quote card | Lead 20/400 + mono 15 | quote ≤ 200, name ≤ 40, role + organisation ≤ 60, source ≤ 60 characters | Verbatim, never shortened in a way that changes the sentence; the concrete publication and article as source, with a working link (SRC-0014 "Quote card"). |
 | CG-029 | newsletter block | Section head + Lead | title ≤ 40, benefit ≤ 120 characters | Name at least two concrete things that arrive: new functions, current offers, how other places do it. |
 | CG-030 | context-band entry | Card title + Meta | ≤ 80 characters **[PROPOSED — the field does not exist yet]** | One half-sentence naming **audience and content together**, then the link. |
 | CG-031 | contact section | Section head + rows | title ≤ 40, lead ≤ 100, action-row title ≤ 24, sub-label ≤ 32 characters | Four concrete channels, always all four and always in the same order, no form, no "nimm Kontakt auf" — and **no sub-label promises a response time**. |
-| CG-032 | empty state | Lead + CTA | ≤ 90 characters + one CTA | An invitation, never an error (WEB-F-044/045). |
+| CG-032 | empty state | Lead + CTA | ≤ 90 characters + one CTA | An invitation, never an error (FUN-WEB-0044/045). |
 
 Examples, all from the review:
 
@@ -386,7 +386,7 @@ Examples, all from the review:
 - CG-031 — **four** channels, in this order: Videotermin buchen · per
   WhatsApp schreiben · anrufen · Mail schreiben. An earlier version of this
   line collapsed the last two into "anrufen oder Mail"; the section has four
-  rows, not three (`TS-016 D13`), and phone and mail are two of them even
+  rows, not three (`TS-WEB-0016 D13`), and phone and mail are two of them even
   though phone and WhatsApp share one number. Avoid: a general contact form
   — there is none. Avoid too: any sub-label that states how fast an answer
   comes ("Antwort noch heute", "innerhalb von 24 Stunden"). No cleared
@@ -397,7 +397,7 @@ Examples, all from the review:
 
 **CG-030 budgets a field that does not exist**, which is why it carries the
 `[PROPOSED]` marker CG-011 carries. A context-band entry is built from the
-job registry (`TS-006 D5`), and a registry entry has a label and a target
+job registry (`TS-WEB-0006 D5`), and a registry entry has a label and a target
 and nothing to put a half-sentence in. The budget is therefore a number
 against a hole: until the field lands, a generator writes the entry from the
 label alone and CG-030 governs nothing.
@@ -406,12 +406,12 @@ What the spec must add, named so it can be asked for rather than inferred:
 
 | What | Where |
 | --- | --- |
-| A `blurb` field on the context-band entry type — required, one per entry, `max(80)`, `describe()` citing CG-030 | `TS-007 D5`'s Zod hierarchy |
-| The blurb as a rendered property of `TS-006 D5`'s entry, beside label and target, and per locale | `TS-006 D5` |
-| Where the text comes from: the job registry carries it per job, so the three non-focus entries cannot drift from the fourth page's own description | the job registry, cited by `TS-006 D5` |
+| A `blurb` field on the context-band entry type — required, one per entry, `max(80)`, `describe()` citing CG-030 | `TS-WEB-0007 D5`'s Zod hierarchy |
+| The blurb as a rendered property of `TS-WEB-0006 D5`'s entry, beside label and target, and per locale | `TS-WEB-0006 D5` |
+| Where the text comes from: the job registry carries it per job, so the three non-focus entries cannot drift from the fourth page's own description | the job registry, cited by `TS-WEB-0006 D5` |
 
 Two rules already constrain that field before it is written: it is a
-**statement**, because CG-005 governs it and `TS-006 D5` no longer phrases
+**statement**, because CG-005 governs it and `TS-WEB-0006 D5` no longer phrases
 the band as a rhetorical question, and it names **audience and content
 together**, which is what makes the band an offer rather than a menu.
 
@@ -430,7 +430,7 @@ notices, and the page loses the credibility it was buying.
 
 ### CG-034 — No volatile numbers
 
-Traction figures are counted live or not shown (`WEB-F-041`). A number typed
+Traction figures are counted live or not shown (`FUN-WEB-0041`). A number typed
 into copy is stale the week after.
 
 - Avoid: *"Seit 2018 in Betrieb, 120 Orte"* · *"8.622 Termine"* ·
@@ -446,7 +446,7 @@ A label that explains the page to its own authors does not belong on the page.
 ### CG-036 — "im Amt" is never the only addressee
 
 The reader may be a Verein, a Stiftung, a Kulturgesellschaft, a
-Volkshochschule. `WEB-C-012` holds: municipalities and institutions are not
+Volkshochschule. `CON-WEB-0012` holds: municipalities and institutions are not
 separated, so copy may not silently address only one of them.
 
 - Avoid: *"Niemand im Amt tippt mehr Termine ein."* · *"Im Amt tippt dafür
@@ -456,7 +456,7 @@ separated, so copy may not silently address only one of them.
 ### CG-037 — No promise without a process
 
 A response time, an availability, a permanence promise appears only where an
-operational commitment backs it (TS-006 D11). Where the process is unconfirmed
+operational commitment backs it (TS-WEB-0006 D11). Where the process is unconfirmed
 the promise is removed, not softened.
 
 ---
@@ -465,7 +465,7 @@ the promise is removed, not softened.
 
 ### CG-038 — The product name appears exactly once
 
-`DEC-052 §1` and `WEB-C-014`: "Portalize" is introduced once, on
+`DEC-0052 §1` and `CON-WEB-0014`: "Portalize" is introduced once, on
 `/dein-kalender` at the 480 € tier, in one sentence. It is never a navigation
 label, never a route, never a heading.
 
@@ -488,14 +488,14 @@ page writes "das Produkt" to work around them.
 
 Binding per locale. DE is authored, EN mirrors it (CG-041). The canonical
 vocabulary is not here: geographic terms, product terms and roles come from
-the bilingual glossary (SRC-016, becoming `@schafe-vorm-fenster/glossary`,
-DEC-062). `specs/glossary/glossary.md` carries the per-term columns; this list
+the bilingual glossary (SRC-0016, becoming `@schafe-vorm-fenster/glossary`,
+DEC-0062). `specs/glossary/glossary.md` carries the per-term columns; this list
 is the website's additions and the ones the review supplied.
 
 ### CG-040 — The avoid list fails the build
 
 A hit in page copy is an error, not a finding (`copy-contract.md`, and
-TS-007 D12).
+TS-WEB-0007 D12).
 
 **German**
 
@@ -506,16 +506,16 @@ TS-007 D12).
 | im Amt (as the only addressee) | bei euch | CG-036 |
 | das Produkt | euer Kalender · der Dorfkalender | CG-039 |
 | Vereinswebseite | eure eigene Website | not only Vereine |
-| Postleitzahl · PLZ | Ortsname | DEC-079 — a place name is where you are from, a postcode is an abstraction |
-| Organizer | Akteur | DEC-062 — nothing user-facing says Organizer |
-| Portalize (outside the one sentence) | Kalender | WEB-C-014, DEC-052 §1 |
+| Postleitzahl · PLZ | Ortsname | DEC-0079 — a place name is where you are from, a postcode is an abstraction |
+| Organizer | Akteur | DEC-0062 — nothing user-facing says Organizer |
+| Portalize (outside the one sentence) | Kalender | CON-WEB-0014, DEC-0052 §1 |
 | Warum das zählt | Was hilft euch das? | CG-018 |
 | Warum wir | Über uns · Wer dahintersteckt | CG-017 |
 | Wo das herkommt *(as a heading)* | | CG-017 — the review names no replacement |
 | Wer das schon macht | Was andere sagen *(for press proof only)* | CG-017 |
 | Warum es hakt · Warum es heute hakt *(as a title)* | | CG-005 — allowed as a kicker |
 | gebaut · betrieben *(about this product)* | | CG-033 |
-| einfach · digital · für alle · modern · innovativ | | generic claims are not copy (TS-006 D7, WEB-F-008) |
+| einfach · digital · für alle · modern · innovativ | | generic claims are not copy (TS-WEB-0006 D7, FUN-WEB-0008) |
 | Presse- und Auftrittshistorie | | CG-035 |
 | Beides gibt es · Dieselben Termine · Der Name der Firma | write the thing out | CG-004 |
 | Genau so. | | CG-016 |
@@ -539,10 +539,10 @@ TS-007 D12).
 ### CG-041 — EN mirrors DE, and is not a translation of the page
 
 The English file is generated from the same source record with the same
-playbook, never translated from the German file (TS-007 D8.5). What must match
+playbook, never translated from the German file (TS-WEB-0007 D8.5). What must match
 is the claim, the record, the CTA target and the numbers; what may differ is
-the phrasing (TS-007 D8.6). Original artifacts — a clipping headline, a quoted
-sentence, an award's own name — stay in their language (DEC-026).
+the phrasing (TS-WEB-0007 D8.6). Original artifacts — a clipping headline, a quoted
+sentence, an award's own name — stay in their language (DEC-0026).
 
 ---
 
@@ -551,20 +551,20 @@ sentence, an award's own name — stay in their language (DEC-026).
 Nothing here is read by a generation run as prose. It reaches a run in three
 forms, and the binding of each rule to its form is `copy-contract.md`:
 
-1. **The schema** (`src/domain/content/`, TS-007 D5). Every field carries a
+1. **The schema** (`src/domain/content/`, TS-WEB-0007 D5). Every field carries a
    `describe()` naming the rule that governs it and a `max()` carrying its
    budget from §6. A guide sentence that never becomes a `describe()` or a
    `max()` is guidance a generator will not follow.
-2. **The glossary** (`specs/glossary/glossary.md`, TS-007 D9). The use column
+2. **The glossary** (`specs/glossary/glossary.md`, TS-WEB-0007 D9). The use column
    is what a generator writes; the avoid column is what it may not. Both are a
    production input, not documentation.
-3. **The lint** (`pnpm check:content`, TS-007 D12). The avoid list and the
+3. **The lint** (`pnpm check:content`, TS-WEB-0007 D12). The avoid list and the
    forbidden patterns of §2 run as rows that exit non-zero with file, field
    and term named. Nothing on that list warns.
 
 The rules a machine cannot check — whether a heading is flat, whether an
 example is picturable, whether a proof card states a win — are the human
-review at the editorial gate (TS-007 D11), listed as such in the contract.
+review at the editorial gate (TS-WEB-0007 D11), listed as such in the contract.
 
 ## Do Not
 
@@ -588,8 +588,8 @@ taken, what is written above is in force.
 
 | # | Decision | Options | In force today |
 | --- | --- | --- | --- |
-| 1 | **Product name** | (a) keep "Portalize", introduced once (`DEC-052 §1`, Q-012); (b) a new name that carries in the German Ehrenamt context. | (a), plus CG-039 — no page writes "das Produkt" |
+| 1 | **Product name** | (a) keep "Portalize", introduced once (`DEC-0052 §1`, Q-0012); (b) a new name that carries in the German Ehrenamt context. | (a), plus CG-039 — no page writes "das Produkt" |
 | 2 | **Headings the review rejects without a replacement** | The provenance section and the two proof sections need headings. The review rejects *"Wo das herkommt"*, *"Wer das schon macht"* and *"Presse- und Auftrittshistorie"* and names a replacement for one of the three only. | The rejections hold; the empty cells stay empty until the hub's principles carry the wording |
 | 3 | **Where the brand-level word rules live** | (a) the hub's `tone-of-voice.md` gains the word-level anti-patterns and this guide keeps only the website's cut; (b) this guide carries both until the hub catches up. | (a) is the target — the hub is being written in parallel; (b) is the state while it is |
-| 4 | **Glossary home** | `specs/glossary/glossary.md` is a production input carrying copy words (TS-007 D9, Q-057). Does the register stay in `specs/` once it is one, or move into `@schafe-vorm-fenster/glossary`? | It stays in `specs/` and the two columns live there |
-| 5 | **Budget authority** | §6's numbers are derived from the type scale. The component manifest (SRC-013 §1) is meant to own them. | §6 is in force; a component budget supersedes its row on arrival, and the row records the derivation so the replacement is comparable |
+| 4 | **Glossary home** | `specs/glossary/glossary.md` is a production input carrying copy words (TS-WEB-0007 D9, Q-0057). Does the register stay in `specs/` once it is one, or move into `@schafe-vorm-fenster/glossary`? | It stays in `specs/` and the two columns live there |
+| 5 | **Budget authority** | §6's numbers are derived from the type scale. The component manifest (SRC-0013 §1) is meant to own them. | §6 is in force; a component budget supersedes its row on arrival, and the row records the derivation so the replacement is comparable |

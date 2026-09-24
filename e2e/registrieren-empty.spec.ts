@@ -39,9 +39,9 @@ test("F-3-14: an uncovered postcode gets the founding page's empty state", async
   const empty = page.locator("[data-place-not-found]");
   await expect(empty).toBeVisible();
   await expect(empty).toContainText("Dorfkalender");
-  // TS-023-A5: an unresolvable value is echoed **only** in the search field.
+  // TS-WEB-0023-A5: an unresolvable value is echoed **only** in the search field.
   // So the empty state names no place, and the typed value travels in the
-  // call to action's URL — to the founding page, which TS-021 D6 does let
+  // call to action's URL — to the founding page, which TS-WEB-0021 D6 does let
   // name it.
   await expect(empty).not.toContainText("99999");
   await expect(empty.getByRole("link")).toHaveAttribute(

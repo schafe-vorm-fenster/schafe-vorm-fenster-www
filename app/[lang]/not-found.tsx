@@ -10,14 +10,14 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 /**
- * 404 — DEC-032, TS-004 D6: real 404 status, `noindex` (Next.js emits it for
+ * 404 — DEC-0032, TS-WEB-0004 D6: real 404 status, `noindex` (Next.js emits it for
  * a 404 response), a static shell.
  *
  * `not-found.tsx` takes no props, so the language comes from the root
  * parameter (`next/root-params`, Next 16.3) — which is exactly why `[lang]`
  * sits above the root layout.
  *
- * The place search and the jobs band TS-004-A4 requires are built here as
+ * The place search and the jobs band TS-WEB-0004-A4 requires are built here as
  * well as in `app/global-not-found.tsx` (F-2-31), so the two 404 surfaces
  * carry the same offer and the localized one is ready the moment the
  * framework renders it.

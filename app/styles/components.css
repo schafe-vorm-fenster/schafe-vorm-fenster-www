@@ -1,9 +1,9 @@
 /*
  * The component layer — the derived values every component of the M2 set
- * shares (plan/component-inventory.md §1, SRC-014).
+ * shares (plan/component-inventory.md §1, SRC-0014).
  *
  * Why this file exists: `brand.css` is the only file a *brand* value may
- * enter through (TS-017 D3), and it holds the token sheet verbatim. The
+ * enter through (TS-WEB-0017 D3), and it holds the token sheet verbatim. The
  * design system, however, names roles the token sheet does not carry as
  * single values — the nine type roles, the six category fill/text pairs, the
  * six aspect ratios, the seven fixed heights, the one motion. Each of them is
@@ -12,12 +12,12 @@
  * `var(--color-*)`.
  *
  * Imported by `base.css`, so it reaches every route through the one layout
- * stylesheet chain. Mobile-first (TS-017 D2): the only media queries are
+ * stylesheet chain. Mobile-first (TS-WEB-0017 D2): the only media queries are
  * `min-width` on breakpoint token values.
  */
 
 :root {
-  /* ── Type roles — SRC-014 §Typography ─────────────────────────────────
+  /* ── Type roles — SRC-0014 §Typography ─────────────────────────────────
    * Nine roles, two weights plus 800. Sizes are the design system's desktop
    * values; below the switch point the phone value is the smaller end of the
    * clamp, so one component tree serves every width (D2(d)).
@@ -39,7 +39,7 @@
   --type-lead-size: 1.25rem;
   --type-body-size: var(--font-size-body);
   --type-meta-size: var(--font-size-meta);
-  /* F-2-44: was 0.75rem (12px), below TS-002-A10's 15px floor. Raised to the
+  /* F-2-44: was 0.75rem (12px), below TS-WEB-0002-A10's 15px floor. Raised to the
      floor itself rather than to a newly invented value between it and
      `--type-meta-size` — the two roles collapsing to one size until the
      scale is redesigned is the recorded, cheaper half of the fix
@@ -47,19 +47,19 @@
      import and teaching `scripts/check-brand.ts` the size/weight halves). */
   --type-label-size: 0.9375rem;
   --type-label-tracking: 0.08em;
-  /* F-2-44: was 0.6875rem (11px) — the design system's own SRC-014 §Photo
-     surface value for the placeholder badge, below the a11y floor TS-002-A10
-     fixes regardless. The floor is the fixed rule this round buys; SRC-014's
+  /* F-2-44: was 0.6875rem (11px) — the design system's own SRC-0014 §Photo
+     surface value for the placeholder badge, below the a11y floor TS-WEB-0002-A10
+     fixes regardless. The floor is the fixed rule this round buys; SRC-0014's
      11px is recorded in state/open.md for the design-system owner. */
   --type-microlabel-size: 0.9375rem;
   /* F-2-44: `event-row`'s day-of-month figure was a bare `28px` literal
-     (TS-002-A10's "no size... declared outside the token import" half) —
+     (TS-WEB-0002-A10's "no size... declared outside the token import" half) —
      one fixed size, not part of the fluid section/subhead/place roles above
      it, so it gets its own named role rather than borrowing a mismatched
      one. */
   --type-figure-size: 1.75rem;
 
-  /* ── Fixed heights — SRC-014 §Fixed heights ─────────────────────────── */
+  /* ── Fixed heights — SRC-0014 §Fixed heights ─────────────────────────── */
   --height-button: var(--target-comfortable); /* 56 */
   --height-control: var(--target-min); /* 44 — secondary, nested submit, well */
   --height-chip: var(--target-min); /* ≥ 40 specified; 44 also clears 2.5.5 */
@@ -68,7 +68,7 @@
   --height-event-row: 76px;
   --height-search: var(--target-comfortable); /* 56 */
 
-  /* ── Aspect ratios — SRC-014 §Media ratios ──────────────────────────── */
+  /* ── Aspect ratios — SRC-0014 §Media ratios ──────────────────────────── */
   --ratio-hero: 8 / 9; /* 21 / 9 from the lg switch point, below */
   --ratio-feature: 7 / 5;
   --ratio-proof: 5 / 2;
@@ -76,19 +76,19 @@
   --ratio-portrait: 4 / 5;
   --ratio-square: 1 / 1;
 
-  /* ── Section rhythm — SRC-014 §Shape and Space ──────────────────────── */
+  /* ── Section rhythm — SRC-0014 §Shape and Space ──────────────────────── */
   --section-padding-block: 28px; /* 26–30 standard */
   --section-padding-block-tight: 22px; /* 20–24 tight */
   --control-gap: 10px; /* 8–10 between controls */
 
-  /* ── The one motion — SRC-014 §Motion ───────────────────────────────── */
+  /* ── The one motion — SRC-0014 §Motion ───────────────────────────────── */
   --motion-reveal-distance: 22px;
   --motion-reveal-duration: 550ms;
   --motion-reveal-easing: cubic-bezier(0.2, 0.7, 0.3, 1);
   /*
    * The chrome's own, much shorter movement — the header's two grounds fading
    * into each other and the burger crossing into an X (Jan's round-3 points 2
-   * and 3). SRC-014 §Motion names one movement, the section reveal; these are
+   * and 3). SRC-0014 §Motion names one movement, the section reveal; these are
    * a second, on Jan's instruction, and the duration is deliberately a
    * quarter of it so a control never feels like a section.
    * `prefers-reduced-motion` removes both in `base.css`.
@@ -99,7 +99,7 @@
   --measure-reading: 66ch;
   --measure-reading-max: 80ch;
 
-  /* ── The ground's own link colour — SRC-014 §Colour ───────────────────
+  /* ── The ground's own link colour — SRC-0014 §Colour ───────────────────
    * A link's colour is a property of the **ground it stands on**, not of a
    * selector that happens to load last. Every surface that is not the light
    * page ground republishes this one custom property (`section-shell`,
@@ -114,7 +114,7 @@
   /* The section kicker's label colour on a light ground (G-3). */
   --ground-kicker: var(--color-neutral-muted);
 
-  /* ── The ground's own primary control — SRC-014 §Button ───────────────
+  /* ── The ground's own primary control — SRC-0014 §Button ───────────────
    * The design system lists "primary on light" (`ink`/`paper`) and "primary
    * on dark" (`lime-500`/`ink`) as one role with two grounds — "**Same**,
    * inside an ink or photo section". A page that names the light one inside
@@ -129,7 +129,7 @@
   --ground-primary-text: var(--color-neutral-paper);
   --ground-primary-fill-hover: var(--color-lime-900);
 
-  /* ── Focus ring — SRC-014 §Accessibility ────────────────────────────── */
+  /* ── Focus ring — SRC-0014 §Accessibility ────────────────────────────── */
   --focus-ring-width: 3px;
   --focus-ring-offset: 2px;
 
@@ -145,7 +145,7 @@
     var(--color-neutral-line) 16px 32px
   );
 
-  /* ── Category colours — SRC-014 §Category colours ─────────────────────
+  /* ── Category colours — SRC-0014 §Category colours ─────────────────────
    * The website's six categories, each with the text colour that clears
    * 4.5:1 at badge size. The token sheet's `--color-category-*` set is a
    * different, PROVISIONAL five-category taxonomy (state/open.md row 10);
@@ -198,11 +198,11 @@
   --category-social-bare-dark: color-mix(in srgb, var(--category-social-fill) 45%, var(--color-neutral-paper));
   --category-neighbouring-bare-dark: color-mix(in srgb, var(--category-neighbouring-fill) 45%, var(--color-neutral-paper));
 
-  /* ── The header height, published for `scroll-margin-top` (TS-029 D3) ── */
+  /* ── The header height, published for `scroll-margin-top` (TS-WEB-0029 D3) ── */
   --site-header-height: 64px;
 }
 
-/* lg — 48rem / 768px: the hero ratio turns landscape (SRC-014 §Media ratios
+/* lg — 48rem / 768px: the hero ratio turns landscape (SRC-0014 §Media ratios
    says "from 900px"; 768 is the nearest breakpoint token below it, and the
    next one up, 64rem, would leave the tablet on the 8:9 phone crop). */
 @media (min-width: 48rem) {

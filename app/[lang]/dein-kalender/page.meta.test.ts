@@ -4,8 +4,8 @@ import { checkPageMeta } from "@/src/lib/pages/page-meta";
 
 import { pageMeta } from "./page.meta";
 
-describe("TS-024-A1: /dein-kalender manifest", () => {
-  it("passes the TS-006 D1 structural check", () => {
+describe("TS-WEB-0024-A1: /dein-kalender manifest", () => {
+  it("passes the TS-WEB-0006 D1 structural check", () => {
     expect(checkPageMeta(pageMeta)).toEqual([]);
   });
 

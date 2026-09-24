@@ -43,7 +43,7 @@ procedure for every new tool or package:
 2. Decide, then **record the decision as an ADR** in
    `specs/decisions/` (next free number, normal index update) naming
    the alternatives and the sideways evidence.
-3. Register the runtime dependency in `stack.allow.json` (TS-017 D1).
+3. Register the runtime dependency in `stack.allow.json` (TS-WEB-0017 D1).
 
 ## The mock rule (prototype decision)
 

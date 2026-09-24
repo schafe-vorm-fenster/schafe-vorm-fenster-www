@@ -26,9 +26,9 @@ Three things in its payload matter to the website:
 | `zipcode` | "drives the community assignment" — the place reaches the CRM through it |
 | `tarif` · `tarifStatus` | Starter / Professional …, and prospect / verified — so a **licence order can be recorded through the same endpoint** |
 
-This narrows Q-022 considerably. The **API** contract exists and covers
-both the actor registration (TS-023) and the order handover (TS-025,
-DEC-051). What is still missing is the **web component widget** DEC-009
+This narrows Q-0022 considerably. The **API** contract exists and covers
+both the actor registration (TS-WEB-0023) and the order handover (TS-WEB-0025,
+DEC-0051). What is still missing is the **web component widget** DEC-0009
 specifies — its CSS variables, events, spam handling and delivery date.
 
 ### Not present

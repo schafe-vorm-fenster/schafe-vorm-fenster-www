@@ -6,7 +6,7 @@ import { GET } from "@/app/api/places/search/route";
 
 /**
  * Integration level: the actual route handler, in-process, against the mock
- * backend (`LIVE_DATA=mock`) — TS-008 D7/D10, TS-013 D2.
+ * backend (`LIVE_DATA=mock`) — TS-WEB-0008 D7/D10, TS-WEB-0013 D2.
  */
 
 const call = (url: string, headers?: Record<string, string>) =>
@@ -21,7 +21,7 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe("TS-008-A14: place search classifies, and never answers a bare nothing", () => {
+describe("TS-WEB-0008-A14: place search classifies, and never answers a bare nothing", () => {
   it("classifies a covered ZIP and returns the resolved place with its slug", async () => {
     const response = await call("http://localhost:3100/api/places/search?q=17509");
     const body = await response.json();
@@ -40,7 +40,7 @@ describe("TS-008-A14: place search classifies, and never answers a bare nothing"
     expect(body.data.suggestions).toEqual([]);
   });
 
-  it("answers a typed name from the mocked name search while Q-025 is open", async () => {
+  it("answers a typed name from the mocked name search while Q-0025 is open", async () => {
     const response = await call("http://localhost:3100/api/places/search?q=Schlat");
     const body = await response.json();
 
@@ -48,7 +48,7 @@ describe("TS-008-A14: place search classifies, and never answers a bare nothing"
     expect(body.demo).toBe(true);
   });
 
-  it("accepts `zip` as well as `q` — both parameters TS-004 D5 names", async () => {
+  it("accepts `zip` as well as `q` — both parameters TS-WEB-0004 D5 names", async () => {
     const response = await call("http://localhost:3100/api/places/search?zip=17509");
     expect(response.status).toBe(200);
   });
@@ -58,7 +58,7 @@ describe("TS-008-A14: place search classifies, and never answers a bare nothing"
   });
 });
 
-describe("TS-008-A1 / TS-013-A5: the route is the browser's only reachable surface", () => {
+describe("TS-WEB-0008-A1 / TS-WEB-0013-A5: the route is the browser's only reachable surface", () => {
   it("marks every mocked payload demo:true so the Demo-Daten badge renders", async () => {
     const body = await (await call("http://localhost:3100/api/places/search?q=17509")).json();
     expect(body.demo).toBe(true);
@@ -73,7 +73,7 @@ describe("TS-008-A1 / TS-013-A5: the route is the browser's only reachable surfa
     expect(text).not.toContain("token");
   });
 
-  it("refuses a cross-origin request (WEB-Q-038)", async () => {
+  it("refuses a cross-origin request (NFR-WEB-0038)", async () => {
     const response = await call("http://localhost:3100/api/places/search?q=17509", {
       origin: "https://not-our-site.example",
     });
@@ -96,7 +96,7 @@ describe("TS-008-A1 / TS-013-A5: the route is the browser's only reachable surfa
   });
 });
 
-describe("TS-003 D5 / TS-009-A5: the route carries its data kind's cache lifetime", () => {
+describe("TS-WEB-0003 D5 / TS-WEB-0009-A5: the route carries its data kind's cache lifetime", () => {
   it("sends the active-places TTL and serve-stale window as Cache-Control", async () => {
     const response = await call("http://localhost:3100/api/places/search?q=17509");
     expect(response.headers.get("cache-control")).toBe(
@@ -140,7 +140,7 @@ describe("auto mode: the typeahead's upstream, without a credential", () => {
     expect(body.data.suggestions).toEqual([]);
   });
 
-  it("still sends the cache lifetime of its data kind (TS-003 D5)", async () => {
+  it("still sends the cache lifetime of its data kind (TS-WEB-0003 D5)", async () => {
     const response = await call("http://localhost:3100/api/places/search?q=Schlat");
     expect(response.headers.get("cache-control")).toMatch(/s-maxage=3600/u);
   });

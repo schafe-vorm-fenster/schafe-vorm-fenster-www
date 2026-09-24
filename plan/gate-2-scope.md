@@ -20,10 +20,10 @@ Skills per `plan/process.md`: `webapp-testing`, plus
 
 | TS | Spec | AC group to sweep | Notes |
 | --- | --- | --- | --- |
-| TS-004 | `url-and-routing.tactical.md` | A1–A11 | route tree, translation map, error pages, redirect skeleton, the `/api/*` GET-only rule (A10) and the one-hostname rule (A11) — both now have live `app/api/*` routes to check against |
-| TS-006 | `page-composition.tactical.md` | A1–A15 | A6 (band on every page) fails on registration steps 2–3 by design — record as F-2-10, not as a new finding |
-| TS-002 | `accessibility.tactical.md` | A1–A12 | A1 needs the axe instrument from F-2-6; until it lands, A1 is reported blocked, not passed |
-| TS-001 | `locale-routing.tactical.md` | A1–A3, A5–A8, A10, A11 | A4 and A9 are out of scope (§4) |
+| TS-WEB-0004 | `TS-WEB-0004--url-and-routing.tactical.md` | A1–A11 | route tree, translation map, error pages, redirect skeleton, the `/api/*` GET-only rule (A10) and the one-hostname rule (A11) — both now have live `app/api/*` routes to check against |
+| TS-WEB-0006 | `TS-WEB-0006--page-composition.tactical.md` | A1–A15 | A6 (band on every page) fails on registration steps 2–3 by design — record as F-2-10, not as a new finding |
+| TS-WEB-0002 | `TS-WEB-0002--accessibility.tactical.md` | A1–A12 | A1 needs the axe instrument from F-2-6; until it lands, A1 is reported blocked, not passed |
+| TS-WEB-0001 | `TS-WEB-0001--locale-routing.tactical.md` | A1–A3, A5–A8, A10, A11 | A4 and A9 are out of scope (§4) |
 
 ### 1.2 Pages
 
@@ -32,30 +32,30 @@ viewports (360 px and desktop):
 
 | Route (de / en) | TS | AC group |
 | --- | --- | --- |
-| `/` · `/en/` | TS-019 | A1–A15 |
-| `/dein-ort` · `/en/your-place` | TS-020 | A1–A13 |
-| `/dein-ort/starten` · `/en/your-place/start` | TS-021 | A1–A15 |
-| `/mitmachen` · `/en/take-part` | TS-022 | A1–A16 |
-| `/mitmachen/registrieren` · `/en/take-part/register` | TS-023 | A1–A16 |
-| `/dein-kalender` · `/en/your-calendar` | TS-024 | A1–A19 |
-| `/dein-kalender/bestellen` · `/en/your-calendar/order` | TS-025 | A1–A14 |
-| `/deine-region` · `/en/your-region` | TS-026 | A1–A17 |
-| `/deine-region/angebot` · `/en/your-region/quote` | TS-026 | A1–A17 (the quote-flow half) |
-| `/ueber-uns` · `/en/about` | TS-027 | A1–A15 |
-| `/ueber-uns/archiv` · `/en/about/archive` | TS-028 | A1–A14 |
-| `/rechtliches` · `/en/legal` | TS-029 | A1–A10, A12–A14 (A11 out of scope, §4) |
+| `/` · `/en/` | TS-WEB-0019 | A1–A15 |
+| `/dein-ort` · `/en/your-place` | TS-WEB-0020 | A1–A13 |
+| `/dein-ort/starten` · `/en/your-place/start` | TS-WEB-0021 | A1–A15 |
+| `/mitmachen` · `/en/take-part` | TS-WEB-0022 | A1–A16 |
+| `/mitmachen/registrieren` · `/en/take-part/register` | TS-WEB-0023 | A1–A16 |
+| `/dein-kalender` · `/en/your-calendar` | TS-WEB-0024 | A1–A19 |
+| `/dein-kalender/bestellen` · `/en/your-calendar/order` | TS-WEB-0025 | A1–A14 |
+| `/deine-region` · `/en/your-region` | TS-WEB-0026 | A1–A17 |
+| `/deine-region/angebot` · `/en/your-region/quote` | TS-WEB-0026 | A1–A17 (the quote-flow half) |
+| `/ueber-uns` · `/en/about` | TS-WEB-0027 | A1–A15 |
+| `/ueber-uns/archiv` · `/en/about/archive` | TS-WEB-0028 | A1–A14 |
+| `/rechtliches` · `/en/legal` | TS-WEB-0029 | A1–A10, A12–A14 (A11 out of scope, §4) |
 
 Known-deviating ACs, to be **recorded against the finding id, not
-re-filed**: TS-021-A2/D10 (F-2-13), TS-023-A6 (F-2-5, blocked until the
-fixture lands), TS-026 D3 (F-2-21), TS-029-A12 (F-2-6), TS-029-A14
-(F-2-19), TS-025 D9 vs TS-011 D9 (F-2-23).
+re-filed**: TS-WEB-0021-A2/D10 (F-2-13), TS-WEB-0023-A6 (F-2-5, blocked until the
+fixture lands), TS-WEB-0026 D3 (F-2-21), TS-WEB-0029-A12 (F-2-6), TS-WEB-0029-A14
+(F-2-19), TS-WEB-0025 D9 vs TS-WEB-0011 D9 (F-2-23).
 
 ### 1.3 Content
 
 | TS | AC group | Notes |
 | --- | --- | --- |
-| TS-007 | A1, A2, A4, A5, A7, A8, A9, A11, A12, A14, A15 | sweep normally |
-| TS-007 | A3, A6, A10, A13, A16 | blocked — no check exists; report against F-2-18 |
+| TS-WEB-0007 | A1, A2, A4, A5, A7, A8, A9, A11, A12, A14, A15 | sweep normally |
+| TS-WEB-0007 | A3, A6, A10, A13, A16 | blocked — no check exists; report against F-2-18 |
 
 Plus the eight-point content compliance check from the communication
 principles over all twelve routes in both languages, and the
@@ -67,20 +67,20 @@ principles over all twelve routes in both languages, and the
 
 | TS | Spec | AC group | Notes |
 | --- | --- | --- | --- |
-| TS-005 | `relevance-engine.tactical.md` | A1–A16 | A6 is unsatisfiable as written (open row 66) — record, do not reword |
-| TS-008 | `live-data.tactical.md` | A1–A14 | positions 1, 2, 4 answer from mocks (rows 90, 91); A8/A12 not built (F-2-15) |
-| TS-009 | `rendering-and-resilience.tactical.md` | A1–A13 | A1 depends on the Cache Components flip in flight; A12 is F-2-16 |
-| TS-010 | `personalization.tactical.md` | A1–A15 | stage 0 and stage 1 (mocked resolver, row 70) are walkable; stage 2 is F-2-14 |
-| TS-011 | `seo.tactical.md` | A1–A14 | JSON-LD wiring is in flight; A5/A6/A14 are re-checked at retest |
-| TS-012 | `analytics.tactical.md` | A1–A11 | event registry is green; the eTracker mount is in flight (row 83) |
-| TS-013 | `privacy.tactical.md` | A1–A3, A5 | A4, A6–A8 need the deployed surface (§4) |
-| TS-016 | `forms-and-leads.tactical.md` | A1–A14 | envoy widget and newsletter are declared mocks (rows 7, 22) |
+| TS-WEB-0005 | `TS-WEB-0005--relevance-engine.tactical.md` | A1–A16 | A6 is unsatisfiable as written (open row 66) — record, do not reword |
+| TS-WEB-0008 | `TS-WEB-0008--live-data.tactical.md` | A1–A14 | positions 1, 2, 4 answer from mocks (rows 90, 91); A8/A12 not built (F-2-15) |
+| TS-WEB-0009 | `TS-WEB-0009--rendering-and-resilience.tactical.md` | A1–A13 | A1 depends on the Cache Components flip in flight; A12 is F-2-16 |
+| TS-WEB-0010 | `TS-WEB-0010--personalization.tactical.md` | A1–A15 | stage 0 and stage 1 (mocked resolver, row 70) are walkable; stage 2 is F-2-14 |
+| TS-WEB-0011 | `TS-WEB-0011--seo.tactical.md` | A1–A14 | JSON-LD wiring is in flight; A5/A6/A14 are re-checked at retest |
+| TS-WEB-0012 | `TS-WEB-0012--analytics.tactical.md` | A1–A11 | event registry is green; the eTracker mount is in flight (row 83) |
+| TS-WEB-0013 | `TS-WEB-0013--privacy.tactical.md` | A1–A3, A5 | A4, A6–A8 need the deployed surface (§4) |
+| TS-WEB-0016 | `TS-WEB-0016--forms-and-leads.tactical.md` | A1–A14 | envoy widget and newsletter are declared mocks (rows 7, 22) |
 
-### 1.5 Security sweep (TS-014 scope)
+### 1.5 Security sweep (TS-WEB-0014 scope)
 
 `semgrep` over the tree and `differential-review` over the milestone
-diff, per the skill matrix. Header and CSP criteria: TS-014-A1 and
-TS-014-A2 — A1's static guard is F-1-2 and is `fix-now`; the preview's
+diff, per the skill matrix. Header and CSP criteria: TS-WEB-0014-A1 and
+TS-WEB-0014-A2 — A1's static guard is F-1-2 and is `fix-now`; the preview's
 `'unsafe-inline'` branch is F-2-27 and is recorded, not re-filed.
 
 ## 2 — UAT walk
@@ -104,7 +104,7 @@ German labels sit and where a naive English visitor first loses trust.
 
 Not walked, because nothing is wired to walk (registry `stage: null`):
 `publish-first-event` (happens in the app), `request-ad-placement`
-(Q-006), `order-promotion-material` (Q-005), `publish-events-regularly`
+(Q-0006), `order-promotion-material` (Q-0005), `publish-events-regularly`
 (recurrence rule open in the hub).
 
 Record hesitation points, not verdicts. Each one becomes a finding, a
@@ -124,7 +124,7 @@ Four personas, one local Chrome session each against the dev server
 | Keyboard-Only | the **archive filter** on `/ueber-uns/archiv` (client-side, no-refetch chips) and the **language switch** in the footer, then every conversion path end to end without a mouse. The 3 px violet focus ring must always show. Two `<nav>` landmarks currently share one accessible name on every second-level page (F-2-3) |
 
 Every persona additionally touches the **language switch** on whatever
-page it happens to be on: TS-001-A7's "equivalent page, never the home
+page it happens to be on: TS-WEB-0001-A7's "equivalent page, never the home
 page" was only recently wired, and the layout still carries a second
 chrome tree in flight.
 
@@ -132,17 +132,17 @@ chrome tree in flight.
 
 | AC / area | Why | Owner |
 | --- | --- | --- |
-| TS-015-A3, A4, A5 | stage-2 CI (DEC-031): the GitHub Actions workflows exist but `pnpm install` is refused by GitHub Packages for every `@schafe-vorm-fenster/*` package; unblocking needs a dashboard-only org setting (open row 64) | Jan (org owner), then M5 |
-| TS-015-A7, A8, A10 | canary production deployment, rollback, auto-merge — production surface | after the run (go-live), never this run (`plan/guardrails.md`) |
-| TS-015-A9 | Lighthouse CI, bundle guard, axe sweep as a pipeline `Budgets` job | M5 (the tool checks gate at M5; the axe *instrument* itself is F-2-6 and is due now) |
-| TS-015-A11 | `next.schafe-vorm-fenster.de` serves `next-2026` | after the run — the `next.*` domain is not wired, and domains are Jan's |
-| TS-015-A12 | branch protection contexts and repository secrets | after the run |
-| TS-001-A4 | the `.de` apex → `www` 301 against the real domain | after the run (production domains); the host matrix is implemented and unit-tested (open row 86) |
-| TS-001-A9 | every D1 domain resolves over HTTPS in its TLD default language | after the run; the landing-only `.pl`/`.at`/`.com` domains have no distinct content in this tree (open row 85) |
-| TS-013-A4, A6, A7, A8 | the deployed CSP allowlist and the closed request set measured on the deployment | M5 preview-smoke strand (open row 89); A1–A3 and A5 are swept locally now |
-| TS-029-A11 | production build fails while `#barrierefreiheit` has no document — needs a real `next build` with `VERCEL_ENV=production` | M5 / CI owner (open row 115); the guard is written and typechecks |
-| TS-003 (A1–A8), TS-017 (A1–A17) | performance budgets and the technical foundation | closed at the M1 gate; re-checked as regression at M5 (font budget deviation: open rows 19, 20) |
-| TS-018 | scope boundaries | M5 |
+| TS-WEB-0015-A3, A4, A5 | stage-2 CI (DEC-0031): the GitHub Actions workflows exist but `pnpm install` is refused by GitHub Packages for every `@schafe-vorm-fenster/*` package; unblocking needs a dashboard-only org setting (open row 64) | Jan (org owner), then M5 |
+| TS-WEB-0015-A7, A8, A10 | canary production deployment, rollback, auto-merge — production surface | after the run (go-live), never this run (`plan/guardrails.md`) |
+| TS-WEB-0015-A9 | Lighthouse CI, bundle guard, axe sweep as a pipeline `Budgets` job | M5 (the tool checks gate at M5; the axe *instrument* itself is F-2-6 and is due now) |
+| TS-WEB-0015-A11 | `next.schafe-vorm-fenster.de` serves `next-2026` | after the run — the `next.*` domain is not wired, and domains are Jan's |
+| TS-WEB-0015-A12 | branch protection contexts and repository secrets | after the run |
+| TS-WEB-0001-A4 | the `.de` apex → `www` 301 against the real domain | after the run (production domains); the host matrix is implemented and unit-tested (open row 86) |
+| TS-WEB-0001-A9 | every D1 domain resolves over HTTPS in its TLD default language | after the run; the landing-only `.pl`/`.at`/`.com` domains have no distinct content in this tree (open row 85) |
+| TS-WEB-0013-A4, A6, A7, A8 | the deployed CSP allowlist and the closed request set measured on the deployment | M5 preview-smoke strand (open row 89); A1–A3 and A5 are swept locally now |
+| TS-WEB-0029-A11 | production build fails while `#barrierefreiheit` has no document — needs a real `next build` with `VERCEL_ENV=production` | M5 / CI owner (open row 115); the guard is written and typechecks |
+| TS-WEB-0003 (A1–A8), TS-WEB-0017 (A1–A17) | performance budgets and the technical foundation | closed at the M1 gate; re-checked as regression at M5 (font budget deviation: open rows 19, 20) |
+| TS-WEB-0018 | scope boundaries | M5 |
 
 Two systems are in scope but answer from **mocks** by decision, not by
 defect — the mock rule (`plan/guardrails.md`) makes that the expected

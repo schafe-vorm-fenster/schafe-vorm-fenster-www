@@ -15,8 +15,8 @@ import type { ClosingBlock } from "@/app/[lang]/_page-frame";
 import type { PageMeta } from "@/src/lib/pages/page-meta";
 
 /**
- * TS-011-A4 — "the context band is an `aside` on **every** page" — against
- * TS-006 D6, which merges the band and the closing block on the pages whose
+ * TS-WEB-0011-A4 — "the context band is an `aside` on **every** page" — against
+ * TS-WEB-0006 D6, which merges the band and the closing block on the pages whose
  * `primaryConversion` is `null`.
  *
  * F-2-41 (round 2, reopened at gate 2): the merge was built as a
@@ -29,8 +29,8 @@ import type { PageMeta } from "@/src/lib/pages/page-meta";
  * anchor inside — one of each per page, the three job links once.
  *
  * The two pages that legitimately carry no band — `/mitmachen/registrieren`
- * and `/dein-kalender/bestellen` on their flow steps (F-2-10, TS-023 D7 /
- * TS-025, `state/open.md` row 24) — compose their blocks by hand, never
+ * and `/dein-kalender/bestellen` on their flow steps (F-2-10, TS-WEB-0023 D7 /
+ * TS-WEB-0025, `state/open.md` row 24) — compose their blocks by hand, never
  * through `PageFrame`, and are therefore outside this file by construction;
  * `e2e/routes.spec.ts` names them as the two exceptions of the route walk.
  */
@@ -73,7 +73,7 @@ function render(meta: PageMeta, closing: ClosingBlock): string {
   );
 }
 
-describe("TS-011-A4 / TS-006 D5+D6: every PageFrame page carries one context band", () => {
+describe("TS-WEB-0011-A4 / TS-WEB-0006 D5+D6: every PageFrame page carries one context band", () => {
   for (const { name, meta, closing } of CLOSINGS) {
     it(`renders one aside#context-band and one #closing-cta — ${name}`, () => {
       const html = render(meta, closing);

@@ -6,7 +6,7 @@
   text-decoration: none;
 }
 
-/* Radius 999 — the same radius as every control (SRC-014 §Logo). */
+/* Radius 999 — the same radius as every control (SRC-0014 §Logo). */
 .mark {
   border-radius: var(--radius-pill);
   flex: none;
@@ -37,7 +37,7 @@
 /*
  * The mark alone below `md` — Jan's round-3 point 3.
  *
- * Mobile-first (TS-017 D2(a)): the base rule is the phone's, and the `md`
+ * Mobile-first (TS-WEB-0017 D2(a)): the base rule is the phone's, and the `md`
  * query below brings the wordmark back. The wordmark is never removed from
  * the markup, and the link's accessible name comes from `aria-label` in both
  * cases, so the accessibility tree reads the same at every width.

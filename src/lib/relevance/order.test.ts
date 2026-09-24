@@ -5,7 +5,7 @@ import { orderBySequenceRule } from "./order";
 /** A scored stand-in: the ordering rule only ever reads id, score and tier. */
 const candidate = (id: string, score: number, tier: number) => ({ id, score, tier });
 
-describe("TS-005-A12: the sequence rule orders the stream, never the calendar", () => {
+describe("TS-WEB-0005-A12: the sequence rule orders the stream, never the calendar", () => {
   it("puts the two highest scorers in positions 1 and 2", () => {
     const ordered = orderBySequenceRule([
       candidate("near-a", 0.9, 0),
@@ -67,7 +67,7 @@ describe("TS-005-A12: the sequence rule orders the stream, never the calendar", 
   });
 });
 
-describe("TS-005-A7: ordering never deadlocks", () => {
+describe("TS-WEB-0005-A7: ordering never deadlocks", () => {
   it("fills the stream when every candidate is near", () => {
     const pool = [0, 1, 2, 3, 4, 5, 6].map((n) => candidate(`near-${n}`, 0.9 - n / 100, 0));
     expect(orderBySequenceRule(pool)).toHaveLength(7);

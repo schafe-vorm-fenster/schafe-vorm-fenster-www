@@ -15,7 +15,7 @@ export interface EventDayParts {
 /** Everything on this website happens in one time zone. */
 export const SITE_TIME_ZONE = "Europe/Berlin";
 
-/** `de_DE` → `de-DE`: the BCP-47 tag of the one locale table (TS-011 D6). */
+/** `de_DE` → `de-DE`: the BCP-47 tag of the one locale table (TS-WEB-0011 D6). */
 const intlLocale = (locale: Locale): string => OG_LOCALE[locale].replace("_", "-");
 
 /**

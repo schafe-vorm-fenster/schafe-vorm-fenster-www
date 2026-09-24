@@ -1,5 +1,5 @@
 /**
- * The hard filters — TS-005 D5, WEB-F-033 and WEB-F-024.
+ * The hard filters — TS-WEB-0005 D5, FUN-WEB-0033 and FUN-WEB-0024.
  *
  * Clearance and place coverage are applied **before** scoring. An uncleared
  * element is not down-weighted, it does not enter the pool: a high-scoring
@@ -8,7 +8,7 @@
  * The one deliberate exception is the run's mock rule
  * (`plan/guardrails.md`): an element marked `demo` passes the gate carrying
  * its flag, so the prototype shows the mechanism working while the real
- * clearances are still open (state/open.md row 1, Q-045). The flag travels
+ * clearances are still open (state/open.md row 1, Q-0045). The flag travels
  * with the selection; the page renders it as the `mocked` state with its
  * `Demo-Daten` badge, never as a real element.
  */
@@ -28,7 +28,7 @@ export interface GateOptions {
    * The communities events-api reports as covered. **Omitted means "not
    * asked"**, and a place-bound element then passes — the gate never invents
    * a coverage answer it was not given. A page that renders "in <place>" is
-   * required to pass this (WEB-F-024).
+   * required to pass this (FUN-WEB-0024).
    */
   readonly coveredPlaces?: readonly string[];
 }

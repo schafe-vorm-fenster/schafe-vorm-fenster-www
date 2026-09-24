@@ -1,6 +1,6 @@
 /**
- * DEC-070's re-resolution hop, as a **routing** decision — TS-021-A7,
- * TS-020 D2 row 5, TS-008 D7 row 3 (F-2-49).
+ * DEC-0070's re-resolution hop, as a **routing** decision — TS-WEB-0021-A7,
+ * TS-WEB-0020 D2 row 5, TS-WEB-0008 D7 row 3 (F-2-49).
  *
  * Two pages answer for the same `?ort=` value and each of them owes the
  * visitor one hop when the value belongs to the other:
@@ -55,7 +55,7 @@ export interface PlaceHopRoute {
  * Is this public path one of the two `?ort=` routes — and in which language?
  *
  * Derived from the route registry, in every language, so no path is typed
- * here (TS-001 D5). The proxy runs *before* `next.config.ts`'s rewrites
+ * here (TS-WEB-0001 D5). The proxy runs *before* `next.config.ts`'s rewrites
  * (`proxy.md`, "Execution order"), so the path it hands in is the public one
  * — `/dein-ort`, `/en/your-place` — never the internal `/de/…` form.
  */
@@ -74,14 +74,14 @@ export function placeHopRoute(pathname: string): PlaceHopRoute | undefined {
  * majority that owe none.
  *
  * Mirrors the two page rules exactly, including what each carries:
- * `/dein-ort/starten` → `/dein-ort` keeps the campaign parameters (TS-023 D4
+ * `/dein-ort/starten` → `/dein-ort` keeps the campaign parameters (TS-WEB-0023 D4
  * applies to the whole founding path), while `/dein-ort` → `/dein-ort/starten`
- * carries the query verbatim and nothing else, because TS-021 D4 re-validates
+ * carries the query verbatim and nothing else, because TS-WEB-0021 D4 re-validates
  * it on arrival.
  *
  * A value the grammar drops, a value geo-api cannot be asked about, and an
  * upstream that does not answer all take the same road: no hop, the page
- * renders its placeless variant at 200 (TS-020-A9, TS-021-A3/A5).
+ * renders its placeless variant at 200 (TS-WEB-0020-A9, TS-WEB-0021-A3/A5).
  */
 export async function placeHop(
   pathname: string,

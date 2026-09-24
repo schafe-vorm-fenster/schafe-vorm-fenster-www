@@ -13,7 +13,7 @@ export type TrustSubjectId = (typeof TRUST_SUBJECTS)[number];
 export interface TrustSubject {
   readonly id: TrustSubjectId;
   readonly label: string;
-  /** Absent → the subject does not ship — no hub record, no sentence (TS-024 D10). */
+  /** Absent → the subject does not ship — no hub record, no sentence (TS-WEB-0024 D10). */
   readonly body?: string;
 }
 
@@ -28,7 +28,7 @@ export interface TrustBlockProps {
 }
 
 /**
- * 37 `trust-block` [PROPOSED] — content type 17 `trust-block`, TS-024 D10.
+ * 37 `trust-block` [PROPOSED] — content type 17 `trust-block`, TS-WEB-0024 D10.
  *
  * Structure: one block, three possible subjects (data protection ·
  * operations · AI), with links to `/rechtliches#datenschutz` and

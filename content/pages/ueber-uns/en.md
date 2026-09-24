@@ -1,6 +1,6 @@
 ---
 id: ueber-uns-de
-page_id: TS-027
+page_id: TS-WEB-0027
 route: "/ueber-uns"
 seo:
   "/ueber-uns":
@@ -48,11 +48,11 @@ generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
 provenance: "sourced — 0 generated slots left. Slot 1 gained the real origin story and a real founder quote; slot 3 names six cleared proof elements and fills the reserved testimonial place with a real, clearance-pending testimonial; EN translation of content/pages/ueber-uns/de.md, same source ids per slot"
-compliance_check: "state/content-map.md#compliance-checks — TS-027"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0027"
 open_points:
-  - "Clearance pending — the testimonial in slot 3 (`kulturlandbuero-broellin`) carries `usage_rights: unverified` (Q-014) and its own record says 'nicht für neue öffentliche Flächen verwenden'. Protected preview only; go-live needs written clearance or the place goes back to empty"
+  - "Clearance pending — the testimonial in slot 3 (`kulturlandbuero-broellin`) carries `usage_rights: unverified` (Q-0014) and its own record says 'nicht für neue öffentliche Flächen verwenden'. Protected preview only; go-live needs written clearance or the place goes back to empty"
   - "Code follow-up — `app/[lang]/ueber-uns/page.tsx` still builds block 3 from a hard-coded `DEMO_PROOF` array with `demo: true`. Slot 3 now carries six real, cleared elements; the page should read them instead (state/open.md #109)"
-schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 images:
   - id: ueber-uns-hero
     slot: ueber-uns-1-origin
@@ -112,8 +112,8 @@ images:
     source: >-
       @schafe-vorm-fenster/people@0.3.6#christian-sauer/assets/2019-christian.jpg — `license:
       unverified`, Fotograf unbekannt, `press_clearance: unverified`. Nicht freigegeben, und ein
-      Porträt einer realen Person wird nie generiert (DEC-068 Regel 3); bis zur Klärung zeigt die
-      Karte die Fläche „Foto gesucht“ (TS-027-A9).
+      Porträt einer realen Person wird nie generiert (DEC-0068 Regel 3); bis zur Klärung zeigt die
+      Karte die Fläche „Foto gesucht“ (TS-WEB-0027-A9).
     alt: Christian Sauer outdoors, looking into the camera.
     status: needed
 ---
@@ -121,14 +121,14 @@ images:
 # About us (`/ueber-uns`)
 
 Focus job "understand who is behind it", **no conversion of its own**
-(TS-027 D1). The fixed headline from DEC-036 §3 appears only here — on
+(TS-WEB-0027 D1). The fixed headline from DEC-0036 §3 appears only here — on
 no other page.
 
 ## Slot 1 — Origin (h1, fixed)
 
 <!-- id: ueber-uns-1-origin; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/offerings@0.3.3#community-calendar", "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"]; status: draft -->
 
-**h1 (fixed, DEC-036 §3 — not to be reworded):** Built in a village, run from a village.
+**h1 (fixed, DEC-0036 §3 — not to be reworded):** Built in a village, run from a village.
 
 **Text (causal chain):** A village of around 400 people can't afford a service that needs a sales team. That's why the village calendar is free, and stays that way. That's why the licence for your own calendar costs €480 a year instead of a project budget.
 
@@ -162,7 +162,7 @@ carries the German original.
 
 Only the year is a fixed proof point (`in-operation-since-2018`,
 `cleared`) — the place count counts live. No static reach figure
-(`reach-and-usage` is `expired`, SRC-001 §5); with no live value, only
+(`reach-and-usage` is `expired`, SRC-0001 §5); with no live value, only
 the sentence stands, with no number, never an estimated one.
 
 ## Slot 3 — Proof stream (7 elements, 1 type-reserved)
@@ -184,9 +184,9 @@ seven places can be filled today with cleared proof — all six carry
 
 The order here is chronological, newest first — not the display
 order: which element
-sits in which place is decided by the relevance engine (TS-005) out of
+sits in which place is decided by the relevance engine (TS-WEB-0005) out of
 the same pool. The seventh place is reserved for the `testimonial` type
-and is never backfilled with an element of another type (TS-027 D5).
+and is never backfilled with an element of another type (TS-WEB-0027 D5).
 
 <!-- id: ueber-uns-3-testimonial-slot-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; status: draft -->
 
@@ -194,10 +194,10 @@ and is never backfilled with an element of another type (TS-027 D5).
 
 A real quote from `kulturlandbuero-broellin`, translated from the German
 original in the record. That record carries `usage_rights: unverified`
-and an explicit note not to use it on new public surfaces (Q-014), so
+and an explicit note not to use it on new public surfaces (Q-0014), so
 the card stands in the protected preview only. With no written clearance
 by go-live, the place stays empty and shows the hatched area again, with
-the sentence that names the gap (TS-027 D5).
+the sentence that names the gap (TS-WEB-0027 D5).
 
 ## Slot 4 — Archive link
 
@@ -205,7 +205,7 @@ the sentence that names the gap (TS-027 D5).
 
 **Link text:** The full press and awards archive → `/ueber-uns/archiv`
 
-Exactly one link, no preview, no list, no counter (TS-027 D6).
+Exactly one link, no preview, no list, no counter (TS-WEB-0027 D6).
 
 ## Slot 5 — Team
 

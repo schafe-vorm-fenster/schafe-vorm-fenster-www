@@ -149,7 +149,7 @@ for (const { route, locale } of everyRoute()) {
       expect(await landmarks(page), `${target} → back`).toEqual(ONE);
 
       // A route that answers a redirect for the parameter it was entered with
-      // (TS-020 D2 row 5 / F-2-49) bounces the back step forward again. The
+      // (TS-WEB-0020 D2 row 5 / F-2-49) bounces the back step forward again. The
       // landmark count has to hold wherever it lands — it was asserted above —
       // but the next link has to be clicked from this page, so reset.
       if (new URL(page.url()).pathname !== startPath) {
@@ -186,7 +186,7 @@ test("row 204: a chain of client navigations never accumulates chrome", async ({
 });
 
 /**
- * TS-002 D5 — the skip link's target. `#main` resolved to whichever copy
+ * TS-WEB-0002 D5 — the skip link's target. `#main` resolved to whichever copy
  * stood first in the document while row 204 was open; a visitor who had
  * clicked once was jumping into an ambiguous id.
  */

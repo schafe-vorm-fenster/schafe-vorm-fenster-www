@@ -1,5 +1,5 @@
 /**
- * `resilient()` — the three-tier chain of TS-009 D4, as one wrapper every
+ * `resilient()` — the three-tier chain of TS-WEB-0009 D4, as one wrapper every
  * upstream call goes through.
  *
  *   resilient(fetcher, { key, kind, snapshot })
@@ -13,11 +13,11 @@
  *    `UpstreamError` for all four, so there is one thing to catch.
  *  - **One attempt per render.** No in-request retry.
  *  - **An empty result is tier 1.** Zero dates in a place is an answer, and
- *    the page converts on it (WEB-F-045). This wrapper never inspects the
+ *    the page converts on it (FUN-WEB-0045). This wrapper never inspects the
  *    payload's emptiness — `places.ts` does, as a conversion, not a failure.
  *  - **Per call, not per page.** One failing upstream degrades one module;
- *    tier 1, 2 and 3 modules may stand side by side (TS-009 D4).
- *  - **Counters have no tier 3** (TS-009 D6). A caller that passes no
+ *    tier 1, 2 and 3 modules may stand side by side (TS-WEB-0009 D4).
+ *  - **Counters have no tier 3** (TS-WEB-0009 D6). A caller that passes no
  *    `snapshot` gets `NoFallbackError`, which is the signal to remove the
  *    module from the page — never a zero, never a placeholder figure.
  */
@@ -27,7 +27,7 @@ import { lastGoodStore, type LastGoodStore } from "./last-good";
 
 import type { LiveEnvelope, LiveSource } from "./types";
 
-/** The timeout of TS-009 D4 — set, not measured (its own open point says so). */
+/** The timeout of TS-WEB-0009 D4 — set, not measured (its own open point says so). */
 export const UPSTREAM_TIMEOUT_MS = 800;
 
 /** Raised when no tier can answer. For the counters this is the expected path. */
@@ -52,14 +52,14 @@ export interface ResilientOptions<T> {
   /** The `last-good` key. A segment (`dates:geoname.123:week`), never a visitor. */
   readonly key: string;
   readonly kind: CacheKind;
-  /** Runtime-cache tags, so a purge can reach one module's entries (DEC-046). */
+  /** Runtime-cache tags, so a purge can reach one module's entries (DEC-0046). */
   readonly tags?: readonly string[];
-  /** Tier 3. Omitted deliberately by the counters (TS-009 D6). */
+  /** Tier 3. Omitted deliberately by the counters (TS-WEB-0009 D6). */
   readonly snapshot?: () => T | undefined;
   readonly store?: LastGoodStore;
   readonly now?: () => Date;
   /**
-   * TS-009 D9: every degradation is an event for monitoring, never a message
+   * TS-WEB-0009 D9: every degradation is an event for monitoring, never a message
    * to the visitor. The default logs server-side and returns.
    */
   readonly onDegrade?: (event: DegradationEvent) => void;
@@ -127,7 +127,7 @@ export async function resilient<T>(
 }
 
 /**
- * Tier 3's `fetchedAt` is the build time (TS-009 D5) — the same value for
+ * Tier 3's `fetchedAt` is the build time (TS-WEB-0009 D5) — the same value for
  * every snapshot, because they are all produced by one build.
  */
 export function snapshotBuiltAt(): string {
@@ -135,7 +135,7 @@ export function snapshotBuiltAt(): string {
 }
 
 /**
- * The other half of TS-009 D5: a tier-1 answer served past its fresh TTL
+ * The other half of TS-WEB-0009 D5: a tier-1 answer served past its fresh TTL
  * carries the label too. Route handlers read from a shared cache, so an
  * envelope can legitimately arrive older than its fresh TTL.
  */

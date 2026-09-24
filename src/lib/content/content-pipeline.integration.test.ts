@@ -13,7 +13,7 @@ import type { RouteId } from "@/src/lib/routes/routes";
 
 const ROUTE_LIST = ROUTE_IDS as readonly RouteId[];
 
-describe("TS-007-A5: every route of the inventory loads its German page artifact", () => {
+describe("TS-WEB-0007-A5: every route of the inventory loads its German page artifact", () => {
   it("loads all eleven German page artifacts without an error", async () => {
     const pages = await Promise.all(
       ROUTE_LIST.map((routeId) => loadPage(routeId, "de")),
@@ -39,14 +39,14 @@ describe("TS-007-A5: every route of the inventory loads its German page artifact
     }
   });
 
-  it("binds every page to the tactical spec the route table names (TS-017-A14)", async () => {
+  it("binds every page to the tactical spec the route table names (TS-WEB-0017-A14)", async () => {
     for (const routeId of ROUTE_LIST) {
       const page = await loadPage(routeId, "de");
       expect(page.frontmatter?.page_id, routeId).toBe(ROUTES[routeId].spec);
     }
   });
 
-  it("keeps slot ids unique inside a page and locale-free across locales (TS-007 D4)", async () => {
+  it("keeps slot ids unique inside a page and locale-free across locales (TS-WEB-0007 D4)", async () => {
     for (const routeId of ROUTE_LIST) {
       const de = await loadPage(routeId, "de");
       const en = await loadPage(routeId, "en");
@@ -56,7 +56,7 @@ describe("TS-007-A5: every route of the inventory loads its German page artifact
     }
   });
 
-  it("serves every configured locale from a sibling file (TS-007 D8)", async () => {
+  it("serves every configured locale from a sibling file (TS-WEB-0007 D8)", async () => {
     for (const locale of LOCALES) {
       for (const routeId of ROUTE_LIST) {
         const page = await loadPage(routeId, locale);
@@ -66,7 +66,7 @@ describe("TS-007-A5: every route of the inventory loads its German page artifact
   });
 });
 
-describe("TS-007-A2: every `derived_from` of the shipped tree resolves", () => {
+describe("TS-WEB-0007-A2: every `derived_from` of the shipped tree resolves", () => {
   it("resolves every page-level and slot-level reference against the installed packages", async () => {
     const resolver = createHubResolver();
     const unresolved: string[] = [];
@@ -87,8 +87,8 @@ describe("TS-007-A2: every `derived_from` of the shipped tree resolves", () => {
   });
 });
 
-describe("TS-007-A8: no content reference is a repository path", () => {
-  it("addresses every source by package name and exact version (DEC-042)", async () => {
+describe("TS-WEB-0007-A8: no content reference is a repository path", () => {
+  it("addresses every source by package name and exact version (DEC-0042)", async () => {
     for (const locale of LOCALES) {
       for (const routeId of ROUTE_LIST) {
         const page = await loadPage(routeId, locale);
@@ -101,7 +101,7 @@ describe("TS-007-A8: no content reference is a repository path", () => {
   });
 });
 
-describe("TS-007-A12: no request-time module reads a hub package", () => {
+describe("TS-WEB-0007-A12: no request-time module reads a hub package", () => {
   it("keeps the source adapter out of everything a page imports", () => {
     const requestTime = ["loader.ts", "blocks.ts", "slot-meta.ts", "provenance.ts", "types.ts"];
     for (const file of requestTime) {
@@ -121,7 +121,7 @@ describe("TS-007-A12: no request-time module reads a hub package", () => {
   });
 });
 
-describe("TS-007-A5: `pnpm check:content` is green on the shipped tree", () => {
+describe("TS-WEB-0007-A5: `pnpm check:content` is green on the shipped tree", () => {
   it("reports no error-level finding", async () => {
     const findings = await checkContentTree();
     const errors = findings.filter((finding) => finding.level === "error");
@@ -131,7 +131,7 @@ describe("TS-007-A5: `pnpm check:content` is green on the shipped tree", () => {
   });
 });
 
-describe("TS-007-A1: a page renders its slots as typed content, not as markdown", () => {
+describe("TS-WEB-0007-A1: a page renders its slots as typed content, not as markdown", () => {
   it("hands the home hero its authored fields", async () => {
     const page = await loadPage("home", "de");
     const hero = slot(page, "home-1-search-hero");
@@ -146,7 +146,7 @@ describe("TS-007-A1: a page renders its slots as typed content, not as markdown"
     // real 31 media-echo entries now (sourced, clearance pending), so it
     // carries no `demo` slot at all. The one dummy-content slot left on this
     // page group is the trust block's AI-use placeholder, which has no hub
-    // record behind it (TS-024 D10, state/open.md #19).
+    // record behind it (TS-WEB-0024 D10, state/open.md #19).
     const page = await loadPage("calendar", "de");
     const demo = page.slots.filter((s) => s.demo);
     expect(demo.length).toBeGreaterThan(0);

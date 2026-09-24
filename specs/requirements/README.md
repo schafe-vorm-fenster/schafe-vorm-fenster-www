@@ -12,28 +12,32 @@ point, not by being written down.
 
 | Folder | Class | ID prefix |
 | --- | --- | --- |
-| `functional/` | what the website does | `WEB-F-###` |
-| `quality/` | how well it does it (performance, accessibility, privacy) | `WEB-Q-###` |
-| `constraints/` | fixed decisions bounding the solution space | `WEB-C-###` |
+| `functional/` | what the website does | `FUN-WEB-####` |
+| `quality/` | how well it does it (performance, accessibility, privacy) | `NFR-WEB-####` |
+| `constraints/` | fixed decisions bounding the solution space | `CON-WEB-####` |
 
 This three-class split **deviates** from
 `@leafcutter-strict/method-requirement-classification`, which classifies by
 a four-step decision tree into FUN · NFR · CON · BUS and records the Volere
-type number alongside. The mapping, and why it stands (DEC-085 §6):
+type number alongside. The mapping, and why it stands (DEC-0085 §6):
 
 | STRICT class | Here | Note |
 | --- | --- | --- |
-| FUN — functional | `WEB-F-###` | 1:1 |
-| NFR — quality | `WEB-Q-###` | 1:1 |
-| CON — constraint | `WEB-C-###` | also carries the scope boundaries |
+| FUN — functional | `FUN-WEB-####` | 1:1 |
+| NFR — quality | `NFR-WEB-####` | 1:1 |
+| CON — constraint | `CON-WEB-####` | also carries the scope boundaries |
 | BUS — business rule | — | **no class here** |
 
 The method is explicit that a business rule and the requirement applying it
 are two artefacts, and that merging them hides the rule. Splitting them here
 means a fourth ID family and an extraction pass over 155 rows, so it is
-owed, not done. The id prefixes themselves stay: the method forbids
-renumbering, and `WEB-F-###` is cited from sibling repositories and from
-`plan/reviews/`.
+owed, not done.
+
+The identifiers themselves are no longer a deviation. DEC-0086 moved every
+family onto `<TYPE>-<DOMAIN>-<NNNN>`, taking the class tokens from the
+requirement-shell contract, without reassigning a single number:
+`WEB-F-007` became `FUN-WEB-0007`. `specs/traceability/identifier-map.md`
+records the whole mapping.
 
 ## Conventions
 

@@ -40,7 +40,7 @@ export interface ButtonProps extends LinkOptions {
   readonly to?: RouteId;
   /**
    * Renders a link to an external URL — the app handover
-   * (`/mitmachen/registrieren`, TS-023 D6), an outbound target that still
+   * (`/mitmachen/registrieren`, TS-WEB-0023 D6), an outbound target that still
    * needs the primary treatment. Ignored when `to` is set; mutually
    * exclusive with the plain-`<button>` form.
    */
@@ -58,14 +58,14 @@ export interface ButtonProps extends LinkOptions {
    */
   readonly describedBy?: string;
   readonly id?: string;
-  /** The conversion marker the analytics registry reads (TS-006). */
+  /** The conversion marker the analytics registry reads (TS-WEB-0006). */
   readonly dataCta?: string;
   readonly className?: string;
   readonly children: ReactNode;
 }
 
 /**
- * 1 `button` [FIXED] — SRC-014 §Button.
+ * 1 `button` [FIXED] — SRC-0014 §Button.
  *
  * Structure: five variants — primary on light (`ink`/`paper`), primary on
  * dark (`lime-500`/`ink`), pulse (`himbeere-600`/`paper`, the paid conversion

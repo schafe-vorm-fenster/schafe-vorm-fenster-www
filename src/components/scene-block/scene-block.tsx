@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
 import styles from "./scene-block.module.css";
 
 export interface SceneBlockProps {
-  /** Exactly one mechanism per block (TS-006 D7) — a second one is two blocks. */
+  /** Exactly one mechanism per block (TS-WEB-0006 D7) — a second one is two blocks. */
   readonly mechanism: MechanismId;
   /** The opener, phrased as the visitor's own question. Also the block heading. */
   readonly opener: string;
@@ -25,7 +25,7 @@ export interface SceneBlockProps {
 }
 
 /**
- * 22 `scene-block` [PROPOSED] — content type 2 `scene`, TS-006 D7.
+ * 22 `scene-block` [PROPOSED] — content type 2 `scene`, TS-WEB-0006 D7.
  *
  * Structure: three parts, always — the opener as the visitor's own question,
  * exactly one mechanism (declared, not inferred), and one concrete instance,

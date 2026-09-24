@@ -1,12 +1,12 @@
 /**
- * Stack guard — the static half of TS-017 D1, D5 and D7.
+ * Stack guard — the static half of TS-WEB-0017 D1, D5 and D7.
  *
  *  A1  `next` present · no dependency from the deny-set · every `dependencies`
  *      entry has a reason line in stack.allow.json, and every register entry
  *      exists as a dependency.
  *  A2  `pnpm-lock.yaml` is the only lockfile · `packageManager` pins pnpm ·
  *      `.npmrc` maps the `@schafe-vorm-fenster` scope to the private registry
- *      and the `@leafcutter-strict` scope to the method registry (DEC-085).
+ *      and the `@leafcutter-strict` scope to the method registry (DEC-0085).
  *  A7  The brand package is pinned to an exact version, and the lockfile
  *      resolves that same version.
  *  A17 Exactly one icon dependency.

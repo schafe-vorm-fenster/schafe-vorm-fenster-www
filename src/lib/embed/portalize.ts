@@ -1,5 +1,5 @@
 /**
- * The Portalize embed — TS-008 D6, DEC-030, `state/open.md` row 82.
+ * The Portalize embed — TS-WEB-0008 D6, DEC-0030, `state/open.md` row 82.
  *
  * One module knows what the embedded calendar is and how it is addressed, so
  * a page mounts it without knowing either. The three facts it holds:

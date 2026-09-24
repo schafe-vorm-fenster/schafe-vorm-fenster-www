@@ -11,7 +11,7 @@ import { regionExamples } from "./region";
 import { SHOWCASE_COMMUNITY } from "./showcase";
 
 /**
- * The one suite that talks to the **real** ecosystem services — TS-008-A13's
+ * The one suite that talks to the **real** ecosystem services — TS-WEB-0008-A13's
  * runtime half and the evidence behind "these two APIs are reachable".
  *
  * It is guarded twice, so it never turns a network outage or a missing
@@ -53,14 +53,14 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe.skipIf(!eventsUp)("TS-008-A13 (live): events-api answers the shape the pinned spec promises", () => {
+describe.skipIf(!eventsUp)("TS-WEB-0008-A13 (live): events-api answers the shape the pinned spec promises", () => {
   it("returns a numeric totalEvents from the tokenless /api/stats", async () => {
     const stats = await fetchStats({ host: eventsApiHost(), timeoutMs: 5000 });
     expect(typeof stats.totalEvents).toBe("number");
     expect(stats.totalEvents).toBeGreaterThan(0);
   });
 
-  it("still carries no places and no updates-today field — Q-037 is unresolved", async () => {
+  it("still carries no places and no updates-today field — Q-0037 is unresolved", async () => {
     const stats = await fetchStats({ host: eventsApiHost(), timeoutMs: 5000 });
     expect(stats).not.toHaveProperty("totalCommunities");
     expect(stats).not.toHaveProperty("updatesToday");
@@ -73,7 +73,7 @@ describe.skipIf(!eventsUp)("TS-008-A13 (live): events-api answers the shape the 
   });
 });
 
-describe.skipIf(!geoUp)("TS-008-A14 (live): geo-api resolves a ZIP to a community with a slug", () => {
+describe.skipIf(!geoUp)("TS-WEB-0008-A14 (live): geo-api resolves a ZIP to a community with a slug", () => {
   it("classifies a real covered ZIP as covered and hands back its geo-api slug", async () => {
     const envelope = await searchPlaces({ query: "17509", store: memoryStore() });
     expect(envelope.demo).toBe(false);

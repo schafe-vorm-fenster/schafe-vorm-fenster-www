@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 /**
- * TS-012-A1, TS-012-A9, TS-012-A11 — static checks that do not need a
+ * TS-WEB-0012-A1, TS-WEB-0012-A9, TS-WEB-0012-A11 — static checks that do not need a
  * running app: the vendor is only ever addressed from inside this module,
  * no second analytics/tag/pixel vendor and no consent-banner component
  * exists in the tree, and no A/B testing package is a dependency.
@@ -37,7 +37,7 @@ function sourceFiles(): { path: string; text: string }[] {
   });
 }
 
-describe("TS-012-A1: no analytics call site outside lib/analytics", () => {
+describe("TS-WEB-0012-A1: no analytics call site outside lib/analytics", () => {
   // The bare host also lives in the CSP allowlist (`src/lib/security/csp.ts`)
   // — a legitimate, non-call-site reference — so the script path is the
   // token, not the host by itself.
@@ -73,7 +73,7 @@ describe("TS-012-A1: no analytics call site outside lib/analytics", () => {
   });
 });
 
-describe("TS-012-A9: exactly one analytics vendor is set up", () => {
+describe("TS-WEB-0012-A9: exactly one analytics vendor is set up", () => {
   it("names no second analytics/tag/pixel dependency in package.json", () => {
     const pkg = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")) as {
       dependencies?: Record<string, string>;
@@ -97,7 +97,7 @@ describe("TS-012-A9: exactly one analytics vendor is set up", () => {
   });
 });
 
-describe("TS-012-A11: no experimentation/A-B infrastructure ships (D8)", () => {
+describe("TS-WEB-0012-A11: no experimentation/A-B infrastructure ships (D8)", () => {
   it("names no A/B or feature-flag experimentation package", () => {
     const pkg = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")) as {
       dependencies?: Record<string, string>;

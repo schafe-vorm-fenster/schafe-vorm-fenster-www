@@ -18,7 +18,7 @@ import { expect, test } from "@playwright/test";
  * is exactly that: jump to the end of the document in one step, and require
  * every revealable wrapper to be visible.
  *
- * Both DEC-067 reference viewports, and the three routes the finding names
+ * Both DEC-0067 reference viewports, and the three routes the finding names
  * plus `/` (the same wrapper on the most-visited page).
  */
 

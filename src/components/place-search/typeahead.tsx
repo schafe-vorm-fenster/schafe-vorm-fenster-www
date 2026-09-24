@@ -37,7 +37,7 @@ export const MIN_QUERY = 2;
 export const DEBOUNCE_MS = 180;
 
 /**
- * The place search's typeahead — TS-008 D7, **progressive enhancement only**.
+ * The place search's typeahead — TS-WEB-0008 D7, **progressive enhancement only**.
  *
  * `place-search` is a plain GET form and stays one: this component renders
  * nothing until the visitor has typed, adds no control the form needs, and
@@ -45,10 +45,10 @@ export const DEBOUNCE_MS = 180;
  * the field submits and the page answers exactly as it did before.
  *
  * It reaches `/api/places/search` and nothing else — the BFF is the browser's
- * only data surface (TS-008 D10), so no ecosystem host and no read token is
+ * only data surface (TS-WEB-0008 D10), so no ecosystem host and no read token is
  * ever part of a client request. The answer is a list of covered communities
  * out of the committed index, which is why a typed name suggests anything at
- * all: geo-api has no name search (Q-025).
+ * all: geo-api has no name search (Q-0025).
  *
  * The popup is an ARIA combobox on the existing input — the input keeps its
  * own `<label>` and gains `aria-expanded`/`aria-controls`, and the options
@@ -144,7 +144,7 @@ export function PlaceTypeahead({ inputId, action, name = "ort", locale = "de" }:
           const body = (await response.json()) as SearchResponse;
           setAnswer({ query: value, items: body.data.suggestions });
         } catch {
-          // A failing search is never an error the visitor sees (TS-008 D7):
+          // A failing search is never an error the visitor sees (TS-WEB-0008 D7):
           // the popup stays away and the form still submits.
           if (!controller.signal.aborted) setAnswer(undefined);
         }

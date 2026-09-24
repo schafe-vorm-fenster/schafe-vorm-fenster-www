@@ -25,7 +25,7 @@ export interface FeatureBenefitProps {
 
 /**
  * 28 `feature-benefit` [PROPOSED] — content type 8 `feature-benefit`,
- * TS-026 block 5.
+ * TS-WEB-0026 block 5.
  *
  * Structure: feature ↔ what it does for you, with an optional `proof_ref`.
  * Carries "what the enterprise licence adds" on `/deine-region`: territory

@@ -1,11 +1,11 @@
 /**
- * The typed shapes the content pipeline hands to a page (TS-007).
+ * The typed shapes the content pipeline hands to a page (TS-WEB-0007).
  *
  * A page implementer never sees markdown, never sees a YAML key and never
  * sees a file path: `loadPage()` returns this, and the components take it as
  * typed props (`src/components/README.md`). Nothing here throws — a missing
  * page and an unknown slot are values with a reason, because a content gap
- * must not take a route down (TS-007 D11 makes a *production build* fail on a
+ * must not take a route down (TS-WEB-0007 D11 makes a *production build* fail on a
  * missing approved slot; the renderer stays honest and empty).
  */
 
@@ -21,7 +21,7 @@ import type { RouteId } from "@/src/lib/routes/routes";
 
 /**
  * What a slot's copy comes from, as the page sees it: the five file-level
- * values of TS-007 plus `unavailable`, which is what a slot that could not be
+ * values of TS-WEB-0007 plus `unavailable`, which is what a slot that could not be
  * read carries. `unavailable` is never written to a content file — it is the
  * loader's honest answer, paired with a `reason`.
  */
@@ -33,7 +33,7 @@ export type ContentGap =
   | "page-frontmatter-invalid"
   | "slot-unknown"
   | "slot-meta-invalid"
-  /** TS-007 D11: the status this build does not render (A14). */
+  /** TS-WEB-0007 D11: the status this build does not render (A14). */
   | "page-not-approved"
   | "slot-not-approved";
 
@@ -43,7 +43,7 @@ export type ContentGap =
  * The bodies are markdown, but the page gets structure, not HTML: the four
  * shapes below are everything the eleven page artifacts use, and passing
  * typed values into components beats handing React an HTML string it would
- * have to `dangerouslySetInnerHTML` past the CSP (TS-013).
+ * have to `dangerouslySetInnerHTML` past the CSP (TS-WEB-0013).
  */
 export type ContentBlock =
   /** `**Label:** value` — the shape almost all authored copy takes. */
@@ -61,7 +61,7 @@ export type ContentBlock =
 
 /** One content slot of a page — the unit a component renders. */
 export interface ContentSlot {
-  /** Locale-free slot id (TS-007 D4): the `de` and `en` file share it. */
+  /** Locale-free slot id (TS-WEB-0007 D4): the `de` and `en` file share it. */
   readonly id: string;
   readonly contentType: SlotContentType;
   readonly provenance: RenderedProvenance;
@@ -70,7 +70,7 @@ export interface ContentSlot {
    * `data-demo` marking. Use `slotState()` rather than reading this directly.
    */
   readonly demo: boolean;
-  /** TS-007 D6 — the update key. `ia` for a copy shell with no source record. */
+  /** TS-WEB-0007 D6 — the update key. `ia` for a copy shell with no source record. */
   readonly derivedFrom: readonly string[];
   readonly status: LifecycleStatus;
   /** The markdown heading the slot stands under, without the `##`. */
@@ -90,7 +90,7 @@ export interface ContentSlot {
 export interface PageContent {
   readonly routeId: RouteId;
   readonly locale: Locale;
-  /** The tactical spec the page realises, from the route table (TS-017-A14). */
+  /** The tactical spec the page realises, from the route table (TS-WEB-0017-A14). */
   readonly specId: string;
   /** Repository-relative path of the artifact this came from. */
   readonly file: string;
@@ -109,7 +109,7 @@ export interface PageContent {
    */
   readonly invalidSlots: readonly { readonly problems: readonly string[] }[];
   /**
-   * Slot ids the editorial gate of TS-007 D11 removed for *this* build. They
+   * Slot ids the editorial gate of TS-WEB-0007 D11 removed for *this* build. They
    * are absent from `slots`, so a page renders its empty states, and
    * `check:content` reports them against a production build.
    */

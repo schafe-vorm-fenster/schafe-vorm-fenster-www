@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { faqPageNode } from "@/src/lib/seo/structured-data/faq";
 
-describe("TS-011 D4: FAQPage, only where a visible Q&A block exists", () => {
+describe("TS-WEB-0011 D4: FAQPage, only where a visible Q&A block exists", () => {
   it("returns undefined for an empty list — no block, no node", () => {
     expect(faqPageNode([])).toBeUndefined();
   });

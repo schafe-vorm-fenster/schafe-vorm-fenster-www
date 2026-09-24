@@ -1,6 +1,6 @@
 ---
 id: home-de
-page_id: TS-019
+page_id: TS-WEB-0019
 route: "/"
 seo:
   "/":
@@ -29,11 +29,11 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — every slot; slot 8 (proof stream) now carries real proof and media-echo records instead of demo cards, three of them with clearance pending (Q-014, Q-045)"
-compliance_check: "state/content-map.md#compliance-checks — TS-019"
+provenance: "sourced — every slot; slot 8 (proof stream) now carries real proof and media-echo records instead of demo cards, three of them with clearance pending (Q-0014, Q-0045)"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0019"
 schema_note: >-
-  src/domain/content-frontmatter.schema.ts predates TS-007 (8 content types,
-  no derived_from/RelevanceFacets). The fields above follow TS-007 D6/D7
+  src/domain/content-frontmatter.schema.ts predates TS-WEB-0007 (8 content types,
+  no derived_from/RelevanceFacets). The fields above follow TS-WEB-0007 D6/D7
   and are carried through even though the current schema neither requires
   nor validates them — see state/open.md #37.
 images:
@@ -94,7 +94,7 @@ images:
 
 # Startseite (`/`)
 
-Fokusbereich „know-what-is-on" mit Zustandslogik (TS-019 D2); Reihenfolge
+Fokusbereich „know-what-is-on" mit Zustandslogik (TS-WEB-0019 D2); Reihenfolge
 und Zustände sind Layoutlogik, nicht Teil dieser Datei. Platzhalter in
 `{geschweiften Klammern}` sind Laufzeitwerte, keine Autorentexte.
 
@@ -111,7 +111,7 @@ und Zustände sind Layoutlogik, nicht Teil dieser Datei. Platzhalter in
 **Hinweistext unter dem Feld:** Suche nach Ortsnamen kommt noch dazu — bis dahin reicht die Postleitzahl.
 
 Begründung: Die Ortssuche läuft heute ausschließlich über die Postleitzahl
-(Q-025, geo-api-Namenssuche steht aus). Die Einschränkung steht deshalb im
+(Q-0025, geo-api-Namenssuche steht aus). Die Einschränkung steht deshalb im
 Suchfeld selbst statt in einer separaten Fehlermeldung.
 
 ## Slot 2 — Ort bekannt, Termine vorhanden (Block 1 / Zustand S2)
@@ -122,9 +122,9 @@ Suchfeld selbst statt in einer separaten Fehlermeldung.
 
 **CTA-Label (primär):** Kalender von {place} öffnen
 
-Ortsname und Termine sind Live-Daten (TS-008 Position 1); die Headline ist
+Ortsname und Termine sind Live-Daten (TS-WEB-0008 Position 1); die Headline ist
 ein Textbaustein mit benanntem Platzhalter, kein pro Ort erzeugter Satz
-(Segmentunabhängigkeit, TS-007 D7).
+(Segmentunabhängigkeit, TS-WEB-0007 D7).
 
 ## Slot 3 — Ort bekannt, keine Termine (Block 1 / Zustand S3)
 
@@ -137,7 +137,7 @@ ein Textbaustein mit benanntem Platzhalter, kein pro Ort erzeugter Satz
 **CTA-Label:** Ersten Termin veröffentlichen
 
 Eigene Formulierung, abweichend von `/dein-ort` Zustand B und
-`/dein-ort/starten` (TS-019 Slot-Tabelle Zeile 3): Dieser Text spricht die
+`/dein-ort/starten` (TS-WEB-0019 Slot-Tabelle Zeile 3): Dieser Text spricht die
 Lücke im eigenen Ort an, nicht die Lücke im System.
 
 ## Szene 1 — WhatsApp (Mechanismus: whatsapp)
@@ -200,14 +200,14 @@ zitierfähig ist „seit 2018 in Betrieb", nicht „acht Jahre Vollbetrieb".
 
 ## Block 2c — Belegstrom (5 Elemente)
 
-<!-- clearance: pending — `lehre-lelender` und `volkshochschule-uecker-randow` stehen auf `usage_rights: unverified` (Q-014), die drei media-echo-Einträge tragen gar kein `usage_rights` (Q-045, state/open.md #1). Die geschützte Vorschau zeigt sie, der Härtungslauf vor dem Go-live klärt sie. `noerd-award-2026-smart-community` und `in-operation-since-2018` sind `cleared`. -->
+<!-- clearance: pending — `lehre-lelender` und `volkshochschule-uecker-randow` stehen auf `usage_rights: unverified` (Q-0014), die drei media-echo-Einträge tragen gar kein `usage_rights` (Q-0045, state/open.md #1). Die geschützte Vorschau zeigt sie, der Härtungslauf vor dem Go-live klärt sie. `noerd-award-2026-smart-community` und `in-operation-since-2018` sind `cleared`. -->
 <!-- source_note: Stufe-0-Regel „weiteste Streuung, jüngste zuerst" aus gtm:concept/website-relevance-model.concept.md (Kontextmatrix, Zeile „Direkter Besuch, unbekannt"); Belegregel aus gtm:concept/website-communication-principles.concept.md §4. -->
 <!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2026-04-nord-award-nordkurier", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
 
 **Kicker über dem Strom:** Auszeichnungen, Presse und Orte, die den Dorfkalender schon nutzen
 
 Auswahl und Reihenfolge der fünf Elemente bleiben Aufgabe der
-Relevanz-Engine zur Laufzeit (TS-005 D5, DEC-048). Dieser Slot liefert den
+Relevanz-Engine zur Laufzeit (TS-WEB-0005 D5, DEC-0048). Dieser Slot liefert den
 Rahmensatz und den Kandidatensatz, aus dem gezogen wird — Pool:
 `@schafe-vorm-fenster/proof@0.3.5` und
 `@schafe-vorm-fenster/media-echo@0.3.3`.
@@ -238,9 +238,9 @@ ihre Freigabe und laufen deshalb mit `clearance: pending`. Zitierfähig ist
 
 **Zahl:** {dates_count} (live, `/api/stats`)
 
-Nur die Terminzahl ist heute belegbar (Q-037: „Orte"- und
+Nur die Terminzahl ist heute belegbar (Q-0037: „Orte"- und
 „Aktualisierungen heute"-Felder fehlen in `/api/stats`); keine statische
-Reichweitenzahl ersetzt sie (SRC-001 §5, `reach-and-usage` ist `expired`).
+Reichweitenzahl ersetzt sie (SRC-0001 §5, `reach-and-usage` ist `expired`).
 
 ## Kontextband (3 Nicht-Fokus-Jobs)
 
@@ -268,7 +268,7 @@ steht und nicht unter einem Kalender-Knopf.
 
 Spiegelt die primäre CTA von Block 1 im jeweils aktuellen Zustand (S1
 Suche, S2 Kalender öffnen, S3 ersten Termin veröffentlichen) — kein neuer
-Text, gleiche Ziel-ID (TS-006 D6).
+Text, gleiche Ziel-ID (TS-WEB-0006 D6).
 
 ## Slot 12 — UI-Strings, die kein anderer Slot trägt
 

@@ -1,8 +1,8 @@
 /**
- * `GET /api/nearby?lat=&lng=&radius=` — position 2, TS-008 D3 step 2.
+ * `GET /api/nearby?lat=&lng=&radius=` — position 2, TS-WEB-0008 D3 step 2.
  *
  * The caller's radius is honoured **here**, not upstream: geo-api's proximity
- * search has no radius parameter (TS-008 D2.2), so the ~15 km cut is the
+ * search has no radius parameter (TS-WEB-0008 D2.2), so the ~15 km cut is the
  * BFF's own and the answer says whether the upstream result cap truncated it.
  */
 

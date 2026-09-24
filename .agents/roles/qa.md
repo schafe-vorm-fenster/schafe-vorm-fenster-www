@@ -23,7 +23,7 @@ walkthroughs); `web-design-guidelines` is the audit list for a11y/UX
 criteria; `code-review` (two-axis) when a finding needs a
 spec-vs-standards judgement. At the M4 and M5 gates run the security
 sweep: `semgrep` over the codebase and `differential-review` over
-the milestone diff (TS-014 scope) — security findings enter the
+the milestone diff (TS-WEB-0014 scope) — security findings enter the
 normal findings loop with severities.
 
 ## Must not

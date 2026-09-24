@@ -1,8 +1,8 @@
 /**
- * CSP no-wildcard / allowlist / no-unsafe-inline guard — TS-014-A1, D7
+ * CSP no-wildcard / allowlist / no-unsafe-inline guard — TS-WEB-0014-A1, D7
  * (F-1-2, round 1 carry-over, fixed round 2).
  *
- * TS-014-A1 (`specs/tactical/security.tactical.md`): "`lib/security/csp.ts`
+ * TS-WEB-0014-A1 (`specs/tactical/TS-WEB-0014--security.tactical.md`): "`lib/security/csp.ts`
  * contains no `*`, no bare scheme in `script-src`/`connect-src`, no
  * `'unsafe-inline'`/`'unsafe-eval'` in a production script directive; every
  * host in it has a row in D1 and vice versa." D7 makes `csp.ts` the single
@@ -20,10 +20,10 @@
  *  - **no wildcard** anywhere in any directive's value list;
  *  - **no bare scheme** (`https:`, `http:`) in `script-src` or `connect-src`;
  *  - **every external host is in the D1 allowlist** (`ALLOWLIST` from
- *    `csp.ts` — the same table D1 names, TS-014 D7's "one typed structure");
+ *    `csp.ts` — the same table D1 names, TS-WEB-0014 D7's "one typed structure");
  *  - **`'unsafe-inline'`/`'unsafe-eval'` never appear in `script-src` for
  *    `production`**, with or without a build hash set;
- *  - **the preview-only `'unsafe-inline'` fence (F-2-27, DEC-045)** holds
+ *  - **the preview-only `'unsafe-inline'` fence (F-2-27, DEC-0045)** holds
  *    exactly: present in `preview`'s `script-src` when no hash set exists,
  *    absent the moment one does, and never present for `production` either
  *    way — the branch `state/findings/round-2.md` F-1-2 exists to fence.
@@ -58,7 +58,7 @@ export interface PolicyCheckCase {
  * The pure check: given one environment's label (for messages only — the
  * rule that actually varies by environment is "production never carries
  * unsafe-inline/unsafe-eval, preview may when hashless") and a directive
- * record, returns every TS-014-A1 violation found. No filesystem, no
+ * record, returns every TS-WEB-0014-A1 violation found. No filesystem, no
  * `policyDirectives()` call — a test can hand this a fixture directly.
  */
 export function checkPolicyDirectives(
@@ -93,7 +93,7 @@ export function checkPolicyDirectives(
 }
 
 /**
- * The preview-only `'unsafe-inline'` fence (F-2-27, DEC-045): present iff
+ * The preview-only `'unsafe-inline'` fence (F-2-27, DEC-0045): present iff
  * `preview` and no hash set, absent the moment a hash set exists, and never
  * present for `production` regardless. Checked against a directive
  * builder — the real `policyDirectives()` by default, or a fixture builder

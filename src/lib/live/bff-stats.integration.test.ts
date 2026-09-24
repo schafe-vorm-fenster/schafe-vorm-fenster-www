@@ -15,7 +15,7 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe("TS-008-A9: the counter band renders figures, never substitutes", () => {
+describe("TS-WEB-0008-A9: the counter band renders figures, never substitutes", () => {
   it("answers the figures the backend supplied, each as a number", async () => {
     const response = await call();
     const body = await response.json();
@@ -26,19 +26,19 @@ describe("TS-008-A9: the counter band renders figures, never substitutes", () =>
     }
   });
 
-  it("marks the mocked figures demo:true — Q-037 leaves two of three unbacked", async () => {
+  it("marks the mocked figures demo:true — Q-0037 leaves two of three unbacked", async () => {
     const body = await (await call()).json();
     expect(body.demo).toBe(true);
   });
 
-  it("carries the counters cache lifetime of TS-003 D5", async () => {
+  it("carries the counters cache lifetime of TS-WEB-0003 D5", async () => {
     const response = await call();
     expect(response.headers.get("cache-control")).toBe(
       "public, s-maxage=900, stale-while-revalidate=259200",
     );
   });
 
-  it("exports GET and nothing else (TS-017-A10)", async () => {
+  it("exports GET and nothing else (TS-WEB-0017-A10)", async () => {
     expect(Object.keys(await import("@/app/api/stats/route"))).toEqual(["GET"]);
   });
 });

@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { PRESS_REFERRER_HOSTS, resolveEntryTrait } from "./entry-context";
 import { ENTRY_TRAITS } from "../relevance/types";
 
-describe("TS-010-A3: every row of the D3 table is recognised from its fixture", () => {
+describe("TS-WEB-0010-A3: every row of the D3 table is recognised from its fixture", () => {
   it("social — an Instagram, Facebook or WhatsApp referrer", () => {
     for (const referrer of [
       "https://l.instagram.com/",
@@ -68,7 +68,7 @@ describe("TS-010-A3: every row of the D3 table is recognised from its fixture", 
     );
   });
 
-  it("lets stated intent win over inferred intent (TS-010 D2)", () => {
+  it("lets stated intent win over inferred intent (TS-WEB-0010 D2)", () => {
     expect(
       resolveEntryTrait({ referrer: "https://www.linkedin.com/", params: { etcc_med: "print" } }),
     ).toBe("print-qr");

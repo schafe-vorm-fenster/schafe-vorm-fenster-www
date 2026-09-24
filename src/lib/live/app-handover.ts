@@ -1,10 +1,10 @@
 /**
- * The app handover — TS-008 D9, TS-017 D4, DEC-029/DEC-035.
+ * The app handover — TS-WEB-0008 D9, TS-WEB-0017 D4, DEC-0029/DEC-0035.
  *
  * **The one module that knows where the app is.** Every link from the website
  * into the village calendars is built here, from a geo-api community slug,
  * and the app hostname appears in this file and nowhere else in the tree —
- * `scripts/check-api-routes.ts` (TS-017-A11) fails a second occurrence.
+ * `scripts/check-api-routes.ts` (TS-WEB-0017-A11) fails a second occurrence.
  * `src/lib/routes/routes.ts` re-exports `APP_ORIGIN` from here so the
  * `/hilfe` redirect keeps its import and the constant keeps one home.
  *
@@ -15,24 +15,24 @@
  *    geo-api confirmed it. An unresolved slug leads to `/dein-ort/starten`,
  *    never to a broken app link;
  *  - campaign parameters present on the inbound request are preserved
- *    (WEB-F-048, TS-004 D3 rule 6);
- *  - **no registration prefill.** No contract exists (DEC-029), so nothing is
+ *    (FUN-WEB-0048, TS-WEB-0004 D3 rule 6);
+ *  - **no registration prefill.** No contract exists (DEC-0029), so nothing is
  *    appended to the app URL; `?ort=<slug>` goes on our own route instead;
- *  - app links are external links, not route-facade links (TS-001 D5 covers
+ *  - app links are external links, not route-facade links (TS-WEB-0001 D5 covers
  *    website routes only).
  */
 
 import type { Place } from "./types";
 
 /**
- * Where the village calendars live after the move off the apex (DEC-035).
+ * Where the village calendars live after the move off the apex (DEC-0035).
  * An environment value, because both hosts must work during the transition —
  * who flips it is `state/open.md`'s question, not this module's.
  */
 export const APP_ORIGIN =
   process.env.NEXT_PUBLIC_APP_ORIGIN ?? "https://app.schafe-vorm-fenster.de";
 
-/** The campaign parameters that survive a handover (WEB-F-048). */
+/** The campaign parameters that survive a handover (FUN-WEB-0048). */
 export const CAMPAIGN_PARAMETERS = ["etcc_cmp", "etcc_med", "etcc_par", "etcc_ctv", "etcc_bky", "etcc_bof"] as const;
 
 /** A geo-api slug shape. Defensive only — the slug still has to come from a response. */
@@ -84,8 +84,8 @@ export function calendarUrlForSlug(
 }
 
 /**
- * The help surface (DEC-047). Per-article mapping is a demand on the app team
- * (Q-041, `state/open.md` row 8) — until it lands every article redirects to
+ * The help surface (DEC-0047). Per-article mapping is a demand on the app team
+ * (Q-0041, `state/open.md` row 8) — until it lands every article redirects to
  * the app root, which is the honest behaviour rather than a guessed path.
  */
 export const HELP_ARTICLE_MAP: Readonly<Record<string, string>> = {
@@ -108,7 +108,7 @@ export function helpUrlIsMocked(article?: string): boolean {
 }
 
 /**
- * The registration handover — **our own route**, never the app's. DEC-029
+ * The registration handover — **our own route**, never the app's. DEC-0029
  * leaves the app's prefill contract unwritten, so nothing is appended there.
  */
 export function registrationQuery(place: Place | { readonly slug: string } | undefined): Readonly<Record<string, string>> {

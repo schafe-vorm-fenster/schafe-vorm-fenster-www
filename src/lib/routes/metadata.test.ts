@@ -6,13 +6,13 @@ import { pageDescription, pageMetadata, pageTitle } from "@/src/lib/routes/metad
 import { everyRoute, ROUTES } from "@/src/lib/routes/routes";
 
 /**
- * TS-011 D5 and TS-021-A11: a page's title and description are **content**.
+ * TS-WEB-0011 D5 and TS-WEB-0021-A11: a page's title and description are **content**.
  * They come from the `seo` block of the page's own artifact, per route and
  * per language, and never from a template in code.
  *
  * F-2-72 is why this file exists: every route in both languages served
  * `… — Platzhalter aus dem Routing-Gerüst (M2). Titel und Beschreibung
- * kommen in M3 aus dem Content-Frontmatter (TS-011 D5).` as its meta
+ * kommen in M3 aus dem Content-Frontmatter (TS-WEB-0011 D5).` as its meta
  * description — a work-package name and a spec-clause id in the one string
  * search engines index and link previews show. The guard is the same shape
  * `e2e/content-compliance.spec.ts` uses for visible copy, moved onto the
@@ -21,11 +21,18 @@ import { everyRoute, ROUTES } from "@/src/lib/routes/routes";
 
 /** The id shapes this repository uses, plus the milestone names of the plan. */
 const INTERNAL_IDS = [
+  // DEC-0086 shapes, then the pre-DEC-0086 ones, which would still be a leak.
+  /\bTS-WEB-\d{4}\b/,
+  /TS-WEB-/,
+  /\b(?:FUN|NFR|CON|BUS)-[A-Z]{2,5}-\d/,
+  /\bGL-\d{4}\b/,
   /\bTS-0\d{2}\b/,
   /TS-0/,
   /\bDEC-/,
   /\bQ-0\d{2}\b/,
+  /\bQ-\d{4}\b/,
   /\bSRC-0\d{2}\b/,
+  /\bSRC-\d{4}\b/,
   /\bWEB-[A-Z]-?\d/,
   /\bF-\d-\d{1,2}\b/,
   /\bM[23]\b/,
@@ -35,7 +42,7 @@ const INTERNAL_IDS = [
   /routing skeleton/i,
 ];
 
-describe("TS-011 D5: titles and descriptions come from the content frontmatter", () => {
+describe("TS-WEB-0011 D5: titles and descriptions come from the content frontmatter", () => {
   it.each(everyRoute())(
     "$route/$locale carries no internal identifier in title or description",
     ({ route, locale }) => {
@@ -69,7 +76,7 @@ describe("TS-011 D5: titles and descriptions come from the content frontmatter",
   it.each(everyRoute())(
     "$route/$locale writes its title in the language of the route",
     ({ route, locale }) => {
-      // A German title on an English route is the failure DEC-026 forbids.
+      // A German title on an English route is the failure DEC-0026 forbids.
       expect(ROUTES[route].path[locale]).toBeTruthy();
       expect(pageTitle(route, locale)).not.toBe(
         locale === "de" ? pageTitle(route, "en") : pageTitle(route, "de"),
@@ -81,7 +88,7 @@ describe("TS-011 D5: titles and descriptions come from the content frontmatter",
     "$route/$locale leaves room for the brand suffix the layout appends",
     ({ route, locale }) => {
       // D5 reads the 60-character title budget as including the suffix,
-      // TS-011-A7 measures the page's own title alone, and
+      // TS-WEB-0011-A7 measures the page's own title alone, and
       // `scripts/check-seo-budget.ts` implements the criterion as written.
       // The stricter half is asserted here so both readings hold at once.
       // `/` is exempt by D5's own row: it carries the brand itself and the

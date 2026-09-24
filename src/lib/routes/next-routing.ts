@@ -1,18 +1,18 @@
 /**
- * The URL mapping, derived from the route table — TS-004 D3 and D3a.
+ * The URL mapping, derived from the route table — TS-WEB-0004 D3 and D3a.
  *
  * Public URL → internal App Router path, as a pure function of the path.
  * Three rules, in the order Next.js evaluates them (redirects before
  * rewrites):
  *
- *   0. the legacy redirect map (TS-011 D1) — before any locale rule;
- *   1. `/de/…` requested literally → 301 to the bare path (TS-004 D3.1);
- *   2. a bare path → invisible rewrite to `/de/…` (TS-004 D3.2);
+ *   0. the legacy redirect map (TS-WEB-0011 D1) — before any locale rule;
+ *   1. `/de/…` requested literally → 301 to the bare path (TS-WEB-0004 D3.1);
+ *   2. a bare path → invisible rewrite to `/de/…` (TS-WEB-0004 D3.2);
  *      an `/en/…` path → invisible rewrite to its German-segment twin,
  *      because the app tree's directory names are the German segments.
  *
  * Everything else falls through to `app/[lang]/[...rest]`, which answers the
- * localized 404 (TS-004 D3.4). The host-dependent rules of D3 — landing-only
+ * localized 404 (TS-WEB-0004 D3.4). The host-dependent rules of D3 — landing-only
  * domains, the apex/`app.*` phasing, `/:community` forwarding — are M4 and
  * belong in `proxy.ts`, which has the request host.
  */
@@ -30,7 +30,7 @@ export interface NextRedirect {
   readonly source: string;
   readonly destination: string;
   /**
-   * **301, not 308.** TS-001 D4, TS-004-A2 and TS-011 D1 all name 301, and
+   * **301, not 308.** TS-WEB-0001 D4, TS-WEB-0004-A2 and TS-WEB-0011 D1 all name 301, and
    * Next.js `permanent: true` emits 308 — a different status with different
    * method-rewriting semantics. `statusCode` states the one the specs fixed.
    */
@@ -66,7 +66,7 @@ export function localeRedirects(): NextRedirect[] {
   ];
 }
 
-/** Rule 0 — the legacy map, as Next.js redirect rows (TS-011 D1). */
+/** Rule 0 — the legacy map, as Next.js redirect rows (TS-WEB-0011 D1). */
 export function legacyRedirects(): NextRedirect[] {
   return LEGACY_REDIRECTS.flatMap((row) => {
     const target = { destination: row.to, statusCode: 301 } as const;

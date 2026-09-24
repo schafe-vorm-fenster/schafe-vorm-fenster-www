@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import { ValueStory } from "./value-story";
 
-describe("TS-020 D3: the testimonial is absent, not empty, when uncleared", () => {
+describe("TS-WEB-0020 D3: the testimonial is absent, not empty, when uncleared", () => {
   it("renders no blockquote at all when no testimonial is given", () => {
     const html = renderToStaticMarkup(
       <ValueStory

@@ -5,10 +5,10 @@
  * offers, so `places.ts` calls one or the other without knowing which. What
  * it stands in for, measured against the pinned specification:
  *
- *  - **name search** (Q-025) does not exist upstream at all;
- *  - **coordinate → county** (Q-032) and **nearest covered community**
- *    (Q-051) have no operation;
- *  - **a caller-supplied radius** (Q-038) is not a parameter, so the mock
+ *  - **name search** (Q-0025) does not exist upstream at all;
+ *  - **coordinate → county** (Q-0032) and **nearest covered community**
+ *    (Q-0051) have no operation;
+ *  - **a caller-supplied radius** (Q-0038) is not a parameter, so the mock
  *    answers the same shape the real proximity search does and the ~15 km cut
  *    stays in `widening.ts` for both.
  *
@@ -29,7 +29,7 @@ import { haversineKm } from "../widening";
 import type { Place } from "../types";
 
 /**
- * TS-023-A6 (F-2-5, round 2): `AMBIGUOUS_DEMO_ZIP` is the one postcode that
+ * TS-WEB-0023-A6 (F-2-5, round 2): `AMBIGUOUS_DEMO_ZIP` is the one postcode that
  * answers more than one place, so `searchPlaces`' `suggestions.length > 1`
  * branch — "a municipality hit with several communities does not advance"
  * — has a real fixture to walk, not only the stubbed unit test in
@@ -42,8 +42,8 @@ export function mockSearchByZip(zip: string): Place[] {
 }
 
 /**
- * Name search (Q-025). The real endpoint does not exist; the mock matches on
- * a case-insensitive prefix over the demo places, so the typeahead of TS-008
+ * Name search (Q-0025). The real endpoint does not exist; the mock matches on
+ * a case-insensitive prefix over the demo places, so the typeahead of TS-WEB-0008
  * D7 is reviewable as the feature it will be.
  */
 export function mockSearchByName(name: string): Place[] {
@@ -66,7 +66,7 @@ export function mockCommunityBySlug(slug: string): Place | undefined {
   return demoPlaceBySlug(slug);
 }
 
-/** Coordinate → county (Q-032): upstream has no such operation. */
+/** Coordinate → county (Q-0032): upstream has no such operation. */
 export function mockCountyForPoint(point: { readonly lat: number; readonly lng: number }): Place["county"] {
   return mockSearchByPoint(point, 1)[0]?.county;
 }

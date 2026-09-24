@@ -41,7 +41,7 @@ gestures — `state/open.md` row 159).
 - Severity: medium
 - Source: qa-tool (Lighthouse a11y audit, confirmed with axe-core)
 - Where: `src/components/logo/logo.tsx` (header and footer instance) ·
-  all 24 routes · TS-002-A1, TS-029-A12 (WCAG 2.1 SC 2.5.3 Label in
+  all 24 routes · TS-WEB-0002-A1, TS-WEB-0029-A12 (WCAG 2.1 SC 2.5.3 Label in
   Name, Level A)
 - Steps:
   1. `VERCEL_ENV=preview pnpm start`, open any route.
@@ -55,8 +55,8 @@ gestures — `state/open.md` row 159).
      flattened text has no space.
   4. `"Schafe vormFenster"` is not a substring of
      `"Schafe vorm Fenster — zur Startseite"`, so SC 2.5.3 fails.
-- Expected: TS-002-A1 — "axe-core: zero violations on every page, in
-  all three themes"; TS-029-A12 the same for `/rechtliches`.
+- Expected: TS-WEB-0002-A1 — "axe-core: zero violations on every page, in
+  all three themes"; TS-WEB-0029-A12 the same for `/rechtliches`.
 - Observed: axe-core rule `label-content-name-mismatch`, impact
   **serious**, **48 nodes** — two per route (header + footer) across
   all 24 routes — in every theme this run could reach (light,
@@ -83,12 +83,12 @@ gestures — `state/open.md` row 159).
   spans, or the whole visible string inside the `aria-label`. It turns two
   `fail` verdicts into `pass`. Enable `label-content-name-mismatch` in
   `e2e/a11y.spec.ts` in the **same** change and make the sweep fail on
-  *presence* rather than on impact, or TS-002-A1 stays unenforced and the
+  *presence* rather than on impact, or TS-WEB-0002-A1 stays unenforced and the
   next round re-discovers this one.
 
 - **Resolved: f7e7883** (round 4). Whitespace between the two wordmark line spans — `.wordmark` is a column flex container, so a white-space-only anonymous flex item is not rendered and the line boxes are unchanged (measured: both 88.27x15.75 px on `/`). `textContent` is now "Schafe vorm Fenster". `e2e/a11y.spec.ts` enables `label-content-name-mismatch` explicitly and fails on **presence** rather than impact; dropping the impact filter surfaced two pre-existing `moderate` rules (`landmark-unique`, `heading-order`), both named in `KNOWN_OPEN_RULES`, printed on every run and carried as `state/open.md` rows 155 and 156. 48/48 nodes gone; the full sweep is green on all 24 routes at both viewports.
 
-- **Retest (M5 run 2): resolved.** Preview and local production build: the logo anchor's `textContent` is `"Schafe vorm Fenster"` on `/`, `/dein-ort?ort=07743`, `/rechtliches`, `/ueber-uns/archiv` and `/en/legal`, header and footer instance each, and it is a substring of the `aria-label` in both languages (`… — zur Startseite` / `… — to the home page`). Own axe sweep, 24 routes x 3 themes at 360 px with `label-content-name-mismatch` explicitly enabled: **0 nodes of that rule in every theme** (run 1: 48 serious per theme). Lighthouse mobile scores the `label-content-name-mismatch` audit 1 on `/`, `/dein-ort` and `/ueber-uns/archiv`; accessibility category 100 on all four runs. `e2e/a11y.spec.ts` 49/49 in both environments, failing on presence. **What does not follow: TS-002-A1 and TS-029-A12 do not flip to `pass`.** The same presence-based sweep leaves `landmark-unique(moderate)` x4 (`/`, `/dein-ort`, `/en`, `/en/your-place`) and `heading-order(moderate)` x2 (`/rechtliches`, `/en/legal`) in all three themes — `state/open.md` rows 155 and 156, opened by this very change — and both criteria read "zero violations". The 48-node serious violation this finding named is gone; the criteria stay `fail` on their own wording, with a new owner.
+- **Retest (M5 run 2): resolved.** Preview and local production build: the logo anchor's `textContent` is `"Schafe vorm Fenster"` on `/`, `/dein-ort?ort=07743`, `/rechtliches`, `/ueber-uns/archiv` and `/en/legal`, header and footer instance each, and it is a substring of the `aria-label` in both languages (`… — zur Startseite` / `… — to the home page`). Own axe sweep, 24 routes x 3 themes at 360 px with `label-content-name-mismatch` explicitly enabled: **0 nodes of that rule in every theme** (run 1: 48 serious per theme). Lighthouse mobile scores the `label-content-name-mismatch` audit 1 on `/`, `/dein-ort` and `/ueber-uns/archiv`; accessibility category 100 on all four runs. `e2e/a11y.spec.ts` 49/49 in both environments, failing on presence. **What does not follow: TS-WEB-0002-A1 and TS-WEB-0029-A12 do not flip to `pass`.** The same presence-based sweep leaves `landmark-unique(moderate)` x4 (`/`, `/dein-ort`, `/en`, `/en/your-place`) and `heading-order(moderate)` x2 (`/rechtliches`, `/en/legal`) in all three themes — `state/open.md` rows 155 and 156, opened by this very change — and both criteria read "zero violations". The 48-node serious violation this finding named is gone; the criteria stay `fail` on their own wording, with a new owner.
 
 ---
 
@@ -99,23 +99,23 @@ gestures — `state/open.md` row 159).
   `largest-contentful-paint` at 360 px on the local production build)
 - Where: `src/components/media-frame/*` on `/ueber-uns` ·
   `src/components/photo-surface/*` on `/` and `/dein-ort` ·
-  TS-003-A8, TS-003 D2
+  TS-WEB-0003-A8, TS-WEB-0003 D2
 - Steps:
   1. Open `/ueber-uns` at 360 px and read the founder photo's markup:
      `<img alt="Jan-Henrik Hempel, Gründer" loading="lazy"
      decoding="async" … src="/_next/static/media/gruender.…svg">`.
   2. Measure the LCP element on the same load: `IMG`,
      `class="media-frame-module__…__image"`, i.e. exactly the founder
-     photo TS-003 D2 declares as `/ueber-uns`'s LCP element.
+     photo TS-WEB-0003 D2 declares as `/ueber-uns`'s LCP element.
   3. `grep -oE 'fetchpriority="high"'` over all 24 rendered routes →
      **0 hits**; `loading="eager"` → **0 hits**.
   4. Measure the LCP element on `/` and `/dein-ort`: a `SECTION` with
      `class="photo-surface-module__…__surface"` whose LCP `url` is
      `/_next/static/media/hero.….svg` — an image, above the fold.
-- Expected: TS-003-A8 — "Every image below the fold carries
+- Expected: TS-WEB-0003-A8 — "Every image below the fold carries
   `loading="lazy"`; the declared LCP element of each page (D2) carries
   `loading="eager"` and `fetchpriority="high"`. No image outside the
-  D2 table is eager." TS-003 D2 — "`/` → place-search block
+  D2 table is eager." TS-WEB-0003 D2 — "`/` → place-search block
   (text/input, no image)", "`/dein-ort` → place name + next dates
   (text)", and "images never above the fold without being the declared
   LCP element".
@@ -139,7 +139,7 @@ gestures — `state/open.md` row 159).
 - Reasoning: Split, because the finding is two things. The `/ueber-uns` half is one
   prop — `priority` on the declared LCP image — and it closes the only lazy
   `<img>` on the page. The `photo-surface` half on `/` and `/dein-ort` is a
-  TS-003 D2 conversation, not a page fix: a CSS `background-image` can carry
+  TS-WEB-0003 D2 conversation, not a page fix: a CSS `background-image` can carry
   neither `loading` nor `fetchpriority`, so A8's second and third clauses are
   unreachable for those two pages as long as the hero is painted that way.
   That half goes **open-list**, to the rendering/performance owner. Name both
@@ -147,7 +147,7 @@ gestures — `state/open.md` row 159).
 
 - **Resolved: 2392913** (round 4). The `/ueber-uns` half only. `media-frame` sets `loading="eager"` and `fetchPriority="high"` directly instead of Next's `priority`, which is deprecated in Next 16 in favour of `preload` — and `preload` is explicitly not what the docs recommend for a known LCP image. `origin-story` declares it, because it is `/ueber-uns`'s first block and stands on no other route. `e2e/lcp-image.spec.ts` asserts both attributes on the portrait and that no other image on the page is eager, DE and EN. The `photo-surface` half is **not** fixed and is `state/open.md` row 157.
 
-- **Retest (M5 run 2): resolved (the `/ueber-uns` half).** Preview: `/ueber-uns` and `/en/about` render exactly **one** `<img loading="eager" fetchPriority="high">` — the founder portrait, the D2-declared LCP element — and no other image on either page is eager; `/`, `/dein-ort`, `/mitmachen` and `/dein-kalender` render **0** eager images. `e2e/lcp-image.spec.ts` green in both environments. TS-003-A8 stays `fail` on the untouched `photo-surface` half (`state/open.md` row 157).
+- **Retest (M5 run 2): resolved (the `/ueber-uns` half).** Preview: `/ueber-uns` and `/en/about` render exactly **one** `<img loading="eager" fetchPriority="high">` — the founder portrait, the D2-declared LCP element — and no other image on either page is eager; `/`, `/dein-ort`, `/mitmachen` and `/dein-kalender` render **0** eager images. `e2e/lcp-image.spec.ts` green in both environments. TS-WEB-0003-A8 stays `fail` on the untouched `photo-surface` half (`state/open.md` row 157).
 
 ---
 
@@ -155,12 +155,12 @@ gestures — `state/open.md` row 159).
 
 - Severity: medium
 - Source: qa-tool (Lighthouse 12 runs)
-- Where: `/` and `/ueber-uns` (mobile) · TS-003-A1, TS-003 D7, D1
+- Where: `/` and `/ueber-uns` (mobile) · TS-WEB-0003-A1, TS-WEB-0003 D7, D1
 - Steps: `npx lighthouse <route> --only-categories=performance,…` with
   mobile emulation against the preview, and the same five routes
   against the local production build.
-- Expected: TS-003-A1 — "Lighthouse CI green on the five D7 routes,
-  mobile + desktop"; TS-003 D7 — "Performance < 98 fails the build".
+- Expected: TS-WEB-0003-A1 — "Lighthouse CI green on the five D7 routes,
+  mobile + desktop"; TS-WEB-0003 D7 — "Performance < 98 fails the build".
 - Observed, preview, mobile: `/` **96**, `/ueber-uns` **97**,
   `/mitmachen` 98, `/dein-kalender` 98, `/dein-ort` 100. Desktop is
   **100** on all five. Against the **local** production build, mobile
@@ -172,9 +172,9 @@ gestures — `state/open.md` row 159).
   (`redirects` audit, score 0). The local runs have no such hop and
   score *lower*, so the floor is missed on the merits, not because of
   the bypass. The a11y category is **100** on every one of the 12 runs
-  (TS-002-A2 holds).
+  (TS-WEB-0002-A2 holds).
 - Not part of this finding: there is no Lighthouse CI job. That is
-  TS-015-A9, which `plan/gate-2-scope.md` §4 keeps out of scope; A1's
+  TS-WEB-0015-A9, which `plan/gate-2-scope.md` §4 keeps out of scope; A1's
   *numbers* are what this finding is about.
 - Round decision: **open-list**
 - Reasoning: A two-point gap on two of five routes, and the LCP it is made of is 2.8 s
@@ -190,15 +190,15 @@ gestures — `state/open.md` row 159).
 - Severity: medium
 - Source: qa
 - Where: `src/components/photo-surface/*`, the image pipeline ·
-  TS-003-A6, TS-003 D6
+  TS-WEB-0003-A6, TS-WEB-0003 D6
 - Steps:
   1. `curl -s http://localhost:3100/ | wc -c` → **117 834** bytes.
   2. `curl -s -H "Save-Data: on" http://localhost:3100/ | wc -c` →
      **117 834** bytes — byte-identical.
   3. The hero image URL is the same in both responses:
      `photo-image:url("/_next/static/media/hero.16oktkbro_590.svg")`.
-- Expected: TS-003-A6 — "`Save-Data: on` responses are measurably
-  lighter (≥ 30 % image bytes saved)"; TS-003 D6 — hero/scene images
+- Expected: TS-WEB-0003-A6 — "`Save-Data: on` responses are measurably
+  lighter (≥ 30 % image bytes saved)"; TS-WEB-0003 D6 — hero/scene images
   drop to low-res variants, map module renders as list.
 - Observed: **0 %** saved. No request header is read anywhere: no
   `Save-Data`, no `prefers-reduced-data` occurs in `app/` or `src/`.
@@ -251,7 +251,7 @@ gestures — `state/open.md` row 159).
   by hand
 - Where: `src/lib/routes/not-found-routing.ts:115` (`normalisePath`
   lower-cases before the servable test) · `next.config.ts` rewrites
-  (path-to-regexp, case-sensitive) · TS-004 D1
+  (path-to-regexp, case-sensitive) · TS-WEB-0004 D1
 - Steps:
 
   | URL | status | bytes |
@@ -262,7 +262,7 @@ gestures — `state/open.md` row 159).
   | `/EN/your-place` | 200 | 82 420 |
 
   Identical on the preview (`/DEIN-ORT` 200, 83 203 bytes).
-- Expected: one URL per page (TS-004 D1's inventory), or a redirect to
+- Expected: one URL per page (TS-WEB-0004 D1's inventory), or a redirect to
   the canonical spelling.
 - Observed: the case variant serves the full page. It is not a broken
   page and not an empty document: `<html lang="de">` is right and
@@ -297,7 +297,7 @@ gestures — `state/open.md` row 159).
 - Source: qa-tool (`differential-review` over the M5 diff)
 - Where: `proxy.ts:93-99` → `src/lib/routes/place-hop.ts:96` →
   `src/lib/pages/live-anchor.ts` → `src/lib/live/places.ts:89-100`
-  (`resolvePlace`) · TS-004 D5, TS-008, TS-009 D4
+  (`resolvePlace`) · TS-WEB-0004 D5, TS-WEB-0008, TS-WEB-0009 D4
 - Steps (code path; the runtime half is currently masked, see below):
   1. `GET /dein-ort?ort=<value>` reaches `proxy.ts`, which awaits
      `placeHop(pathname, searchParams)` — the F-2-49 fix's hop.
@@ -312,7 +312,7 @@ gestures — `state/open.md` row 159).
      boundary.
 - Expected: per-request work on a cached route is a cache read, not an
   upstream call (`state/open.md` row 131's own working assumption,
-  TS-009 D4's tiering).
+  TS-WEB-0009 D4's tiering).
 - Observed: on Vercel the proxy runs *before* any cache, so an
   unauthenticated request with a fresh `?ort=` value forces at least
   one uncached upstream call ahead of the cache, plus the render's own.
@@ -355,12 +355,12 @@ gestures — `state/open.md` row 159).
 - Observed: `/_vercel/insights/view`, `/_vercel/speed-insights/vitals`
   and `/_vercel/image` are classified unservable and rewritten to the
   404 surface. No impact today — neither `@vercel/analytics` nor
-  `@vercel/speed-insights` is a dependency — but TS-003 D7 names
+  `@vercel/speed-insights` is a dependency — but TS-WEB-0003 D7 names
   "RUM: Vercel Speed Insights (cookieless)" as the production
   mechanism, and switching it on from the dashboard would silently
   break the beacon with nothing in the repository to explain why.
 - Round decision: **fix-now**
-- Reasoning: Three strings in `RESERVED_PREFIXES`. TS-003 D7 names Vercel Speed
+- Reasoning: Three strings in `RESERVED_PREFIXES`. TS-WEB-0003 D7 names Vercel Speed
   Insights as the production RUM mechanism, and switching it on from the
   dashboard would silently break the beacon with nothing in the repository to
   explain why. The cheapest insurance in the list.
@@ -405,7 +405,7 @@ gestures — `state/open.md` row 159).
 
 | What | Result |
 | --- | --- |
-| `label-content-name-mismatch` under forced colours | An earlier pass of this run emulated the third theme with Playwright's `forcedColors: 'active'` and measured **186 serious `color-contrast` nodes** across all 24 routes. That emulation is Windows High Contrast Mode, not TS-002 D4's `prefers-contrast`. Re-run with `contrast: 'more'` alone, the correct emulation, axe reports **zero** violations on all 24 routes. The 186 were an instrument artefact; no finding. |
+| `label-content-name-mismatch` under forced colours | An earlier pass of this run emulated the third theme with Playwright's `forcedColors: 'active'` and measured **186 serious `color-contrast` nodes** across all 24 routes. That emulation is Windows High Contrast Mode, not TS-WEB-0002 D4's `prefers-contrast`. Re-run with `contrast: 'more'` alone, the correct emulation, axe reports **zero** violations on all 24 routes. The 186 were an instrument artefact; no finding. |
 | Empty-document 404 for case variants and asset-shaped paths | Did not reproduce — see F-3-6. |
 | F-2-36's `Host`-spoof path | Unchanged in the M5 diff; there is no `x-forwarded-*` read anywhere in the repository, and the new routing predicates are pure functions of pathname and search params. The correction recorded under F-2-36 stands. |
 | Open redirect through the new hop | `place-hop.ts:100-110` returns a registry literal plus `URLSearchParams.toString()`; `//evil.com` and `/\evil.com` are classified unservable and **rewritten**, never redirected. |
@@ -427,7 +427,7 @@ gestures — `state/open.md` row 159).
 | F-2-71 | **resolved** | `pnpm e2e` 471 passed / 0 failed / 8 skipped against the local production build; 464 passed / 0 failed / 15 skipped against the preview. |
 | F-2-72 | **resolved** | titles come from content frontmatter: `/dein-ort/starten` → "Kalender für deinen Ort starten — Schafe vorm Fenster"; `/en/your-place/start` → "Start the calendar for your place — …". |
 | F-2-33 | **resolved** | over all twelve `/en` routes: zero hits for `Demo-Daten`, `Foto gesucht`, `Nicht motivgenau`, `Platzhalter`; the English labels "Demo data" and "Photo wanted" are present instead. Residue: the `alt` text of F-3-5. |
-| F-2-41 | **narrowed, still open** | `<aside id="context-band">` now renders on **22 of 24** routes. Absent on `/dein-kalender/bestellen` and `/en/your-calendar/order`, which render no band at all, and on registration steps 2–3 (F-2-10). TS-011-A4 says "on every page". |
+| F-2-41 | **narrowed, still open** | `<aside id="context-band">` now renders on **22 of 24** routes. Absent on `/dein-kalender/bestellen` and `/en/your-calendar/order`, which render no band at all, and on registration steps 2–3 (F-2-10). TS-WEB-0011-A4 says "on every page". |
 | F-2-39 / F-2-56 | **unchanged** | `grep -ci skeleton` = 0 on all 24 rendered routes; the build manifest still has four `ƒ` routes. Both are `state/open.md` rows 145 and 131 — a spec decision, not a fix-round item. |
 | F-2-42 | **unchanged** | `grep -c og:image` = 0 on all 24 routes. |
 | F-2-19 | **unchanged** | heading-level scan of `/rechtliches` and `/en/legal`: one skip, `h4 → h6`, at the same position in both. |
@@ -458,7 +458,7 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
 - Source: uat (M5 walk, phone 360×640 and desktop 1280×800, DE and EN)
 - Where: `/dein-ort`, `/en/your-place`, `/dein-ort/starten` — every
   variant walked (dates, no dates, founding page) · `app/[lang]/_islands.tsx`,
-  `app/[lang]/_page-frame.tsx` · TS-020, TS-021, TS-008
+  `app/[lang]/_page-frame.tsx` · TS-WEB-0020, TS-WEB-0021, TS-WEB-0008
 - Steps:
   1. Open `/dein-ort?ort=07743` on the preview at 360 px.
   2. Scroll past the postcode search, the headline and the date list.
@@ -470,7 +470,7 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
   visible on screen** in any of the walks. Same gap on the founding page,
   between the green "Was es braucht…" band and the footer, where an example
   events section is likewise in the text and not on screen.
-- Expected: either the module renders, or it is removed — TS-009 D6's own
+- Expected: either the module renders, or it is removed — TS-WEB-0009 D6's own
   rule ("a module that has nothing is removed, never zeroed").
 - Not measured by QA: the M5 sweep did not report this. Whether it is a
   reserved-space height left standing after an empty island, a module
@@ -492,9 +492,9 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
   retest**: a blank screen on a conversion path that nobody has measured
   is not something the final acceptance should meet for the first time.
 
-- **Resolved: 6e4d74f** (round 4). **Reproduced, and it is the reserved-space cause, not row 145.** Measured on the local production build at 360x640 on `/dein-ort?ort=07743`: after one `scrollTo(0, scrollHeight)` the value stories (1397 px), "Diese Woche in der Nähe" (647 px), the homescreen block (697 px), the context band and the closing CTA were all `opacity: 0` at full height — 3223 px of blank band. Also on `/`, so it was never place-pages-only. Root cause: `motion-reveal` arms an off-screen section to `opacity: 0` and un-arms it on an `IntersectionObserver` callback, and an `IntersectionObserver` notifies only when `isIntersecting` **changes** — a section that goes from below the viewport to above it inside one scroll step never changes it (`false` -> `false`), so no callback runs and the section stays transparent for the rest of the visit. Every ordinary jump gesture produces it: a flick to the bottom, `End`, an anchor jump, a full-page screenshot (which is how the UAT walk met it). No `<Suspense>` boundary is involved and the markup is server-rendered and present, so row 145's tension is not the cause. Fix: the observer's root now extends far above the viewport, so "intersecting" means "has entered, or has already passed above" and the skipped section's `false -> true` transition is a change the observer must report. `e2e/motion-reveal.spec.ts`: red 10/10 before, green 10/10 after, both DEC-067 viewports on the three routes named plus `/`.
+- **Resolved: 6e4d74f** (round 4). **Reproduced, and it is the reserved-space cause, not row 145.** Measured on the local production build at 360x640 on `/dein-ort?ort=07743`: after one `scrollTo(0, scrollHeight)` the value stories (1397 px), "Diese Woche in der Nähe" (647 px), the homescreen block (697 px), the context band and the closing CTA were all `opacity: 0` at full height — 3223 px of blank band. Also on `/`, so it was never place-pages-only. Root cause: `motion-reveal` arms an off-screen section to `opacity: 0` and un-arms it on an `IntersectionObserver` callback, and an `IntersectionObserver` notifies only when `isIntersecting` **changes** — a section that goes from below the viewport to above it inside one scroll step never changes it (`false` -> `false`), so no callback runs and the section stays transparent for the rest of the visit. Every ordinary jump gesture produces it: a flick to the bottom, `End`, an anchor jump, a full-page screenshot (which is how the UAT walk met it). No `<Suspense>` boundary is involved and the markup is server-rendered and present, so row 145's tension is not the cause. Fix: the observer's root now extends far above the viewport, so "intersecting" means "has entered, or has already passed above" and the skipped section's `false -> true` transition is a change the observer must report. `e2e/motion-reveal.spec.ts`: red 10/10 before, green 10/10 after, both DEC-0067 viewports on the three routes named plus `/`.
 
-- **Retest (M5 run 2): resolved, measured on the preview and again locally.** At 360x640, after one `scrollTo(0, document.documentElement.scrollHeight)` and again after `End` — the two jump gestures the finding names — the summed height of every `opacity: 0` block taller than 40 px is **0 px** on `/dein-ort?ort=07743` (run 1's measurement: 3 223 px), **0 px** on `/`, on `/dein-ort?ort=10115` and on `/dein-ort/starten?ort=99999`. Repeated at 1280x800 on the same routes plus `/en/your-place?ort=07743`: 0 px. Repeated on the local production build at 360x640 on `/dein-ort?ort=07743`, `/` and `/en/your-place?ort=07743`: 0 px. No transparent block remains anywhere on any of them, at either DEC-067 viewport, in either language. QA verified it either way, as the round instructed: the band is gone.
+- **Retest (M5 run 2): resolved, measured on the preview and again locally.** At 360x640, after one `scrollTo(0, document.documentElement.scrollHeight)` and again after `End` — the two jump gestures the finding names — the summed height of every `opacity: 0` block taller than 40 px is **0 px** on `/dein-ort?ort=07743` (run 1's measurement: 3 223 px), **0 px** on `/`, on `/dein-ort?ort=10115` and on `/dein-ort/starten?ort=99999`. Repeated at 1280x800 on the same routes plus `/en/your-place?ort=07743`: 0 px. Repeated on the local production build at 360x640 on `/dein-ort?ort=07743`, `/` and `/en/your-place?ort=07743`: 0 px. No transparent block remains anywhere on any of them, at either DEC-0067 viewport, in either language. QA verified it either way, as the round instructed: the band is gone.
 
 ---
 
@@ -505,7 +505,7 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
   three manifestations)
 - Where: `src/components/newsletter-block/newsletter-block.tsx`, in the
   footer of all 24 routes · `state/open.md` row 22 (`Mock aktiv`) ·
-  TS-016 D10, the mock rule (`plan/guardrails.md`)
+  TS-WEB-0016 D10, the mock rule (`plan/guardrails.md`)
 - Steps:
   1. On `/deine-region/angebot`, fill the quote form but do not submit it.
   2. Scroll to the footer, type a valid address into `#newsletter-email`,
@@ -529,9 +529,9 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
   calls `preventDefault()` and swaps in a `role="status"` confirmation —
   and copying it closes the missing-feedback half in the same change. The
   input keeps its missing `name`, so no address leaves the browser either
-  way; Q-020 (row 22) stays open and untouched.
+  way; Q-0020 (row 22) stays open and untouched.
 
-- **Resolved: 4b923da** (round 4). `newsletter-form.tsx` is the `<form>` as a client component: `preventDefault()`, a synchronous `submitted` ref so a double click cannot get past it, and the form swapped for a `role="status"` confirmation in new dictionary copy that says what did and did not happen. The block stays a server component and keeps the consent sentence. The input still carries no `name`, so no address leaves the browser in any branch, and Q-020 (row 22) is untouched. `e2e/newsletter.spec.ts`: red 3/4 before, green 4/4 after — the URL and an unsent quote form survive, the flow routes keep `?ort=`/`?wer=`, and the confirmation is English on `/en`.
+- **Resolved: 4b923da** (round 4). `newsletter-form.tsx` is the `<form>` as a client component: `preventDefault()`, a synchronous `submitted` ref so a double click cannot get past it, and the form swapped for a `role="status"` confirmation in new dictionary copy that says what did and did not happen. The block stays a server component and keeps the consent sentence. The input still carries no `name`, so no address leaves the browser in any branch, and Q-0020 (row 22) is untouched. `e2e/newsletter.spec.ts`: red 3/4 before, green 4/4 after — the URL and an unsent quote form survive, the flow routes keep `?ort=`/`?wer=`, and the confirmation is English on `/en`.
 
 - **Retest (M5 run 2): resolved.** Preview at 360 px, on `/deine-region/angebot`, `/mitmachen/registrieren?ort=07743&wer=verein` and `/dein-kalender/bestellen?kreis=musterkreis`: submitting the newsletter leaves the URL byte-identical (`?ort=`, `?wer=`, `?kreis=` all intact — no navigation at all), replaces the form with a `role="status"` confirmation ("Notiert — hier in der Demo. Das ist die Demo-Fassung des Newsletters: Deine Adresse hat den Browser nicht verlassen …"), and an unsent value typed into the page's other form is still there afterwards. All three manifestations closed. `e2e/newsletter.spec.ts` green in both environments.
 
@@ -544,7 +544,7 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
 - Where: `src/components/search-field/search-field.tsx` as used on `/`
   (`#ort-suche-fokus`, `#ort-suche-abschluss`), `/dein-ort`, and the true
   404's recovery widget (`#ort-suche-404`). **Not** reproducible on
-  `/dein-kalender/bestellen`'s instance (`#ort-suche`) · TS-019-A2, TS-020
+  `/dein-kalender/bestellen`'s instance (`#ort-suche`) · TS-WEB-0019-A2, TS-WEB-0020
 - Steps: fill the field with `10115` (confirmed held by `inputValue()`
   immediately before), fire two clicks at the submit button back to back.
 - Observed: navigates to `/dein-ort?ort=` — the parameter is there and
@@ -601,7 +601,7 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
   and it needs no badge. `state/open.md` row 153 (the closed
   `ASSET_EXTENSIONS` list) rides along as the test that walks `public/`.
 
-- **Resolved: 9591a02** (round 4). Both halves. The 404: `isServableAssetPath()` replaces `isAssetPath()` in the 404 predicate — `/_next/**` always, otherwise a file this repository really ships (`PUBLIC_FILES`, empty, because `public/` does not exist). `/favicon.ico`, `/does-not-exist.js`, `/nope.css` and `/robots.txt.map` now answer 404 with the complete styled document **with JavaScript disabled**, asserted in `e2e/routes.spec.ts`. Row 153 rides along: `landing-domain.public-files.test.ts` walks `public/` and fails if a file in it would be 404'd. The icon: the brand package's `./logo.svg` subpath as `metadata.icons` in the root layout, so every page carries `<link rel="icon">` and the asset resolves 200. **Not** `app/icon.*` — TS-017-A6 forbids committing a logo file (`pnpm check:brand` enforces it) and the generated-icon Route Handler cannot read the package's bytes back, because Turbopack rewrites a `require.resolve` of an `.svg` into an asset reference and the read fails at runtime (measured). Trap worth naming: Next 16 resolves an `.svg` import to the emitted **URL string** while the ambient declaration still types it as `StaticImageData`, so reading `.src` yields `undefined`, which throws inside Next's metadata resolution and silently drops the whole `<head>` block.
+- **Resolved: 9591a02** (round 4). Both halves. The 404: `isServableAssetPath()` replaces `isAssetPath()` in the 404 predicate — `/_next/**` always, otherwise a file this repository really ships (`PUBLIC_FILES`, empty, because `public/` does not exist). `/favicon.ico`, `/does-not-exist.js`, `/nope.css` and `/robots.txt.map` now answer 404 with the complete styled document **with JavaScript disabled**, asserted in `e2e/routes.spec.ts`. Row 153 rides along: `landing-domain.public-files.test.ts` walks `public/` and fails if a file in it would be 404'd. The icon: the brand package's `./logo.svg` subpath as `metadata.icons` in the root layout, so every page carries `<link rel="icon">` and the asset resolves 200. **Not** `app/icon.*` — TS-WEB-0017-A6 forbids committing a logo file (`pnpm check:brand` enforces it) and the generated-icon Route Handler cannot read the package's bytes back, because Turbopack rewrites a `require.resolve` of an `.svg` into an asset reference and the read fails at runtime (measured). Trap worth naming: Next 16 resolves an `.svg` import to the emitted **URL string** while the ambient declaration still types it as `StaticImageData`, so reading `.src` yields `undefined`, which throws inside Next's metadata resolution and silently drops the whole `<head>` block.
 
 - **Retest (M5 run 2): resolved, both halves.** Preview: `/favicon.ico`, `/does-not-exist.js`, `/nope.css`, `/nope.png` and `/robots.txt.map` each answer **404** with an 11 716-11 725 byte document that contains no `__next_error__` and does contain the rendered "Seite nicht gefunden" — the complete styled 404, not the empty shell. The icon: `<link rel="icon" href="/_next/static/immutable/media/Schafe-vorm-Fenster_Logo_V2.1.<hash>.svg" type="image/svg+xml">` is in `<head>` on `/`, and the asset answers 200 `image/svg+xml`. `e2e/routes.spec.ts` green in both environments.
 
@@ -612,7 +612,7 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
 - Severity: medium
 - Source: chaos:boundary-tester (C3-B-2)
 - Where: `/mitmachen/registrieren`, `/en/take-part/register`, step 1 of 3
-  · TS-023
+  · TS-WEB-0023
 - Steps: click "Suchen"/"Search" with the field empty; separately, fill it
   with 80 characters of junk and click.
 - Observed: in both cases the page silently re-renders itself with `?ort=`
@@ -630,9 +630,9 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
   already exists and is already translated; this is wiring an answer, not
   designing one.
 
-- **Resolved: 6c48a24** (round 4). Two answers, neither newly designed. The empty field: `required`, threaded through `place-search` and `search-field` as an opt-in prop and set on this one instance — off elsewhere, because an empty search on `/` and `/dein-ort` is TS-020-A9's own designed row. The unresolvable value: the founding page's acknowledgment slot, read from the artifact. One constraint the fix had to bend to — TS-023-A5 says an unresolvable value is "echoed only in the search field", and the slot's "{ort} steht noch nicht…" variant would have put it in body text (`e2e/pages/registrieren.spec.ts` caught exactly that), so the heading is the artifact's own **placeless** fallback and the typed value travels only in the CTA's URL, to the one page TS-021 D6 lets name it. `e2e/registrieren-empty.spec.ts`: red 4/5 before, green 5/5 after; `registrieren.spec.ts` stays 12/12.
+- **Resolved: 6c48a24** (round 4). Two answers, neither newly designed. The empty field: `required`, threaded through `place-search` and `search-field` as an opt-in prop and set on this one instance — off elsewhere, because an empty search on `/` and `/dein-ort` is TS-WEB-0020-A9's own designed row. The unresolvable value: the founding page's acknowledgment slot, read from the artifact. One constraint the fix had to bend to — TS-WEB-0023-A5 says an unresolvable value is "echoed only in the search field", and the slot's "{ort} steht noch nicht…" variant would have put it in body text (`e2e/pages/registrieren.spec.ts` caught exactly that), so the heading is the artifact's own **placeless** fallback and the typed value travels only in the CTA's URL, to the one page TS-WEB-0021 D6 lets name it. `e2e/registrieren-empty.spec.ts`: red 4/5 before, green 5/5 after; `registrieren.spec.ts` stays 12/12.
 
-- **Retest (M5 run 2): resolved.** Preview, both languages. Empty field: the input now carries `required`, `validationMessage` reads "Please fill out this field.", and the click does not change the URL — the silent self-re-render is gone. 80 characters of junk: `/mitmachen/registrieren?ort=xxxx…` renders the founding page's acknowledgment — "Dieser Ort steht noch nicht im Dorfkalender. Das lässt sich ändern — mit einem WhatsApp-Foto vom nächsten Flyer." plus the "deinen Ort eintragen" call to action; `/en/take-part/register` the English equivalent. The typed value appears only in the search field's `value` attribute and in the CTA's URL, never in body text, so **TS-023-A5 keeps its `pass`** — re-checked, because the fix bent to that constraint. `e2e/registrieren-empty.spec.ts` and `e2e/pages/registrieren.spec.ts` green in both environments.
+- **Retest (M5 run 2): resolved.** Preview, both languages. Empty field: the input now carries `required`, `validationMessage` reads "Please fill out this field.", and the click does not change the URL — the silent self-re-render is gone. 80 characters of junk: `/mitmachen/registrieren?ort=xxxx…` renders the founding page's acknowledgment — "Dieser Ort steht noch nicht im Dorfkalender. Das lässt sich ändern — mit einem WhatsApp-Foto vom nächsten Flyer." plus the "deinen Ort eintragen" call to action; `/en/take-part/register` the English equivalent. The typed value appears only in the search field's `value` attribute and in the CTA's URL, never in body text, so **TS-WEB-0023-A5 keeps its `pass`** — re-checked, because the fix bent to that constraint. `e2e/registrieren-empty.spec.ts` and `e2e/pages/registrieren.spec.ts` green in both environments.
 
 ---
 
@@ -668,7 +668,7 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
 - Source: chaos:keyboard-only (C3-K-2)
 - Where: `app/global-not-found.tsx` — the surface any genuinely unknown
   URL reaches; it renders its own `<html><body>` and bypasses
-  `SiteChrome` entirely · TS-002, C-K-8
+  `SiteChrome` entirely · TS-WEB-0002, C-K-8
 - Steps: open `/dies-gibt-es-nicht-xyz`, press Tab once.
 - Observed: focus lands directly on the postcode input. The full sequence
   is input → "Suchen" → 4 job-band links → "Zur Startseite" → cycle: seven
@@ -697,7 +697,7 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
 - Source: chaos:hasty-clicker (C3-H-1), corroborated by uat
 - Where: `src/components/envoy-form-mount/*` (`envoy-form.tsx`'s timing
   guard) on `/deine-region/angebot`, `/en/your-region/quote` ·
-  `state/open.md` row 7 (`Mock aktiv`, Q-022)
+  `state/open.md` row 7 (`Mock aktiv`, Q-0022)
 - Steps: fill the form and submit within ~2 s of load; the guard shows
   "Das ging sehr schnell. Sieh die Angaben noch einmal durch und schick
   sie dann ab." Click "Absenden" again 500 ms later.
@@ -711,7 +711,7 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
 - Round decision: **open-list**
 - Reasoning: the guard itself is right and this round should not weaken
   it. What is missing is a second message, and it sits inside the timing
-  contract of the envoy **mock** — Q-022 (row 7) has not delivered the
+  contract of the envoy **mock** — Q-0022 (row 7) has not delivered the
   real widget's spam-protection behaviour, and whatever cool-down
   messaging is written now is re-decided the day it lands. Goes to the
   hardening workstream with row 7, and the wording goes to the content
@@ -723,7 +723,7 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
 
 - Severity: medium
 - Source: chaos:hasty-clicker (C-H-9, re-reproduced unchanged in round 3)
-- Where: `/dein-kalender/bestellen`, step 3 → 4 · TS-025
+- Where: `/dein-kalender/bestellen`, step 3 → 4 · TS-WEB-0025
 - Steps: click "Weiter" on step 3, reload before the navigation settles.
 - Observed: lands back on step 3, **0** conversion events, all fields
   empty, and no toast or message telling the visitor the click did not
@@ -732,9 +732,9 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
 - Reasoning: a reload fired inside the click-to-navigation window of a
   plain GET flow genuinely loses the navigation — the browser re-requests
   the URL it still holds. Making the click survive it means moving the
-  step transition off a GET, which is TS-025's own design and not a fix
+  step transition off a GET, which is TS-WEB-0025's own design and not a fix
   round's call. Recorded with a name so the usability workstream and the
-  TS-025 owner inherit it instead of re-finding it.
+  TS-WEB-0025 owner inherit it instead of re-finding it.
 
 ---
 
@@ -743,13 +743,13 @@ Fourteen findings: **0 critical · 0 high · 8 medium · 6 low.**
 - Severity: medium
 - Source: uat (M5, desktop)
 - Where: `/dein-kalender/bestellen` step 3 ("Wohin geht die Rechnung?"),
-  `src/components/envoy-form-mount/*` · `state/open.md` row 7, TS-025
+  `src/components/envoy-form-mount/*` · `state/open.md` row 7, TS-WEB-0025
 - Observed: clicking "Weiter" with organisation, contact, email and
   address all blank moves the flow to step 4. Nothing marks a field
   required and nothing stops the visitor.
 - Round decision: **open-list**
 - Reasoning: those fields live in the envoy mount, and field-level
-  validation is precisely the part of the widget contract Q-022 has not
+  validation is precisely the part of the widget contract Q-0022 has not
   delivered (row 7). Writing `required` into a mock now writes a rule the
   real widget re-decides, on a flow that is labelled a mock end to end and
   stores and sends nothing. Goes to the hardening workstream with row 7,
@@ -887,7 +887,7 @@ through the automation bypass.
   titles (rows 90/91, dummy content), and the two German testimonial
   quotes on `/en/about`, which are quotations from German speakers.
 - Why it is not a verdict change: no acceptance criterion binds "every
-  interface string follows the page language" — TS-001-A2 checks
+  interface string follows the page language" — TS-WEB-0001-A2 checks
   `<html lang>` and link prefixes only. The same was true of F-2-33,
   F-3-5 and F-3-15, all of which were handled as findings.
 - Severity reasoning: `plan/process.md` — "visible defect, spec deviation
@@ -903,7 +903,7 @@ through the automation bypass.
   preview)
 - Where: `/ueber-uns/archiv` at 360x800 · `src/components/archive-filter/**`,
   `src/components/chip/**` · `state/open.md` rows 146 and 154 · F-2-69,
-  TS-009-A8, TS-028-A13
+  TS-WEB-0009-A8, TS-WEB-0028-A13
 - Steps:
   1. `E2E_BASE_URL=<preview> npx playwright test e2e/layout-stability.spec.ts
      -g "CLS < 0.1 — /ueber-uns/archiv" --repeat-each=12 --workers=8`
@@ -921,8 +921,8 @@ through the automation bypass.
   criterion's **stability on the environment the acceptance runs on**, and
   the mechanism was not isolated by this run — it does not reproduce
   outside Playwright's own worker pool.
-- Expected: TS-009-A8 — CLS < 0.1.
-- Why the verdicts do not move: TS-009-A8 and TS-028-A13 keep their `pass`,
+- Expected: TS-WEB-0009-A8 — CLS < 0.1.
+- Why the verdicts do not move: TS-WEB-0009-A8 and TS-WEB-0028-A13 keep their `pass`,
   because every measurement taken the way run 1 took them (one page load,
   local and preview, plus Lighthouse) is ≤ 0.0007. Recorded as a finding
   rather than as a verdict change, and named at the acceptance.
@@ -945,9 +945,9 @@ through the automation bypass.
   1. `search-double-submit.spec.ts` — F-3-12's `/dies-gibt-es-nicht-xyz`
      case, 30 s timeout on `waitForURL(/[?&]ort=/)`: the double click
      produced no navigation at all.
-  2. `layout-stability.spec.ts` — `TS-009-A8: CLS < 0.1 — /ueber-uns/archiv
+  2. `layout-stability.spec.ts` — `TS-WEB-0009-A8: CLS < 0.1 — /ueber-uns/archiv
      at 360x800`, 0.2795 → F-3-25.
-  3. `layout-stability.spec.ts` — `TS-009-A8 — /mitmachen ≤ 8px cumulative
+  3. `layout-stability.spec.ts` — `TS-WEB-0009-A8 — /mitmachen ≤ 8px cumulative
      shift at 1280x800`, 32 px → the known residual of `state/open.md`
      row 146, which also failed 1 of 6 isolated repeats on the preview and
      0 of 6 locally.

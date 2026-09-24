@@ -21,7 +21,7 @@ export interface HeaderMenuProps {
  * The same two inventories the bar reads (`src/lib/routes/navigation.ts`) plus
  * the language switch the footer already carries, so the overlay adds no
  * destination of its own and no string of its own: it is a second *disclosure*
- * of the header inventory, not a second navigation model (TS-004 D4).
+ * of the header inventory, not a second navigation model (TS-WEB-0004 D4).
  *
  * Server-rendered and handed to `header-shell` as a prop, so opening the
  * overlay costs no request and no client-side route table.
@@ -58,7 +58,7 @@ export function HeaderMenu({ current, locale }: HeaderMenuProps) {
         locale={locale}
         to={HEADER_CALENDAR_ENTRY.route}
         // The overlay is an ink ground, so the calendar entry takes the
-        // design system's "primary on dark" pair (SRC-014 §Button).
+        // design system's "primary on dark" pair (SRC-0014 §Button).
         variant="primary-dark"
       >
         {d.nav[HEADER_CALENDAR_ENTRY.label]}

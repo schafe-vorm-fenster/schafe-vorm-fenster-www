@@ -40,21 +40,21 @@ import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
 /**
- * TS-026 — `/deine-region` — the region page.
+ * TS-WEB-0026 — `/deine-region` — the region page.
  *
- * Composition (`plan/component-inventory.md` §4, TS-026 D2, as the polish
+ * Composition (`plan/component-inventory.md` §4, TS-WEB-0026 D2, as the polish
  * brief's page 8 orders it): focus (hero — headline and the one primary CTA,
  * the briefing quiet beneath it) → the territory question, which is where
  * the hero's own lead sentence now stands → what is already live here →
  * embed demo → what the district tier adds → proof (3) → band + closing
- * (rendered by `PageFrame` from `page.meta.ts`, TS-006 D2).
+ * (rendered by `PageFrame` from `page.meta.ts`, TS-WEB-0006 D2).
  *
  * **The inline quote form is gone** (brief page 8, item 2). It stood on this
  * page *and* on `/deine-region/angebot`, so the argument page ended in a
  * five-field form whose "Absenden" was followed by a second button reading
  * "Angebot anfragen" — two controls, one action, and ~800 px of form between
  * the proof and the page's own closing CTA. This page is the argument; the
- * form is the form. `/deine-region` is still the quote surface TS-016 D1 row
+ * form is the form. `/deine-region` is still the quote surface TS-WEB-0016 D1 row
  * S2 names, through the CTA that opens it.
  *
  * [ASSUMPTION] The composition sheet's block-1 component list also names a
@@ -70,7 +70,7 @@ import type { Metadata } from "next";
  *
  * D3: no map anywhere — no `ratio-map`, no map library, no map image, no
  * "Karte folgt" caption; every module labels itself by administrative scope
- * only (no distance language in the UI, TS-026-A2).
+ * only (no distance language in the UI, TS-WEB-0026-A2).
  */
 
 const ROUTE = "region" as const;
@@ -158,20 +158,20 @@ export default async function Page({
   const embedDemo = slot(page, "deine-region-4-embed-demo");
   const whatItAdds = slot(page, "deine-region-5-was-dazukommt");
   // `deine-region-6-proof` (real, sourced-empty-by-design) carries no cleared
-  // reference case (Q-014) — the demo slot below stands in per the mock rule.
+  // reference case (Q-0014) — the demo slot below stands in per the mock rule.
   const proofDemo = slot(page, "deine-region-6-proof-demo");
 
   const enterprise = offeringPrice("portalize-enterprise");
 
-  // D4: stage 0 (no county anchor, Q-032) — the honest render this work
+  // D4: stage 0 (no county anchor, Q-0032) — the honest render this work
   // package can ship without a geo/BFF integration: examples and search
   // stand, the county-scoped heading and counter stay generic/absent
-  // (TS-026-A10). The interim ranking (D4, Q-037) is mocked accordingly.
+  // (TS-WEB-0026-A10). The interim ranking (D4, Q-0037) is mocked accordingly.
   // F-2-63: at stage 0 the heading carries **no county slot at all**. It used
   // to keep `{county}` for the island to fill, and the island filled it with
   // whatever `county` it was handed — the stage-0 anchor's raw geo-api id —
   // so block 3 read "Beispiele aus dem Landkreis geoname.900001": a county
-  // asserted with no anchor (TS-026-A10, TS-026 D4) *and* an internal
+  // asserted with no anchor (TS-WEB-0026-A10, TS-WEB-0026 D4) *and* an internal
   // identifier rendered as visitor copy. The county-scoped heading returns
   // with the anchor it needs, not before.
   // F-2-73: the German template's slot is `{landkreis}`, the English one's
@@ -204,7 +204,7 @@ export default async function Page({
       : [];
 
   /**
-   * TS-005 through, not around: DEC-048's **3** inline positions, selected by
+   * TS-WEB-0005 through, not around: DEC-0048's **3** inline positions, selected by
    * the engine. This route takes no place parameter — the visitor's own place
    * is `/dein-ort`'s subject, not this page's — so the selection is stage 0
    * and stays inside the prerendered shell.
@@ -253,7 +253,7 @@ export default async function Page({
 
   return (
     <>
-      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
       closing={{
@@ -300,7 +300,7 @@ export default async function Page({
               >
                 {ctaLabel}
               </Button>
-              {/* F-2-32: the one configured value of TS-016 D7, never a
+              {/* F-2-32: the one configured value of TS-WEB-0016 D7, never a
                   second URL pasted per page. */}
               {briefingLink}
             </>
@@ -325,7 +325,7 @@ export default async function Page({
       </SectionShell>
 
       {/* Block 3 — what is already live here: the one swappable interim
-          module (D3/D4) — examples, search; no county count until Q-037,
+          module (D3/D4) — examples, search; no county count until Q-0037,
           no distance language anywhere (A2). */}
       {/* `label`, not `labelledBy`: `live-module-frame` renders its own
           heading with no id to point to. */}
@@ -337,8 +337,8 @@ export default async function Page({
         transition={fieldAt(interim.blocks, 4)}
       >
         <MotionReveal>
-          {/* The examples come off `regionExamples()` — TS-008 position 3 at
-              county scope, DEC-034's designed set rather than a place list.
+          {/* The examples come off `regionExamples()` — TS-WEB-0008 position 3 at
+              county scope, DEC-0034's designed set rather than a place list.
               The stage-0 anchor is the `<Suspense>` fallback, `?ort=` streams
               the visitor's own county over it. */}
           <RegionExamplesIsland
@@ -348,7 +348,7 @@ export default async function Page({
             titleTemplate={interimFallbackHeading}
           />
           {/* The search stands *beside* the module, so the block never
-              collapses when the ranking has nothing (TS-008 D1, DEC-034). */}
+              collapses when the ranking has nothing (TS-WEB-0008 D1, DEC-0034). */}
           <PlaceSearch
             typeahead
             hint={words.search.hint}
@@ -362,13 +362,13 @@ export default async function Page({
             tone="dark"
           />
           {/* D4's county-scoped figure: counted or absent, never estimated
-              (WEB-F-041). `places` has no `/api/stats` field (Q-037), so the
+              (FUN-WEB-0041). `places` has no `/api/stats` field (Q-0037), so the
               band renders the one figure that is counted. */}
           <CountersIsland locale={locale} show={["dates"]} />
         </MotionReveal>
       </SectionShell>
 
-      {/* Block 4 — the product: embed demo, position 1' (TS-008 D6). `label`,
+      {/* Block 4 — the product: embed demo, position 1' (TS-WEB-0008 D6). `label`,
           not `labelledBy`: `embed-frame` renders its own heading with no id
           to point to. */}
       <SectionShell
@@ -404,7 +404,7 @@ export default async function Page({
           proof-card-style claim (`media-frame`, contained, not full-bleed;
           the same non-photo classification `proof-card`'s own inline image
           already gets for the page-rhythm rule). No real asset for this
-          work package: a generated DEC-068 placeholder
+          work package: a generated DEC-0068 placeholder
           (`placeholders.manifest.json`), deliberately labelled
           "Gebietsschnitt", never "Karte"/map — D3 forbids a placeholder
           shaped like a map anywhere on this page, which is also why the
@@ -431,7 +431,7 @@ export default async function Page({
         </MotionReveal>
       </SectionShell>
 
-      {/* Block 6 — proof at this level (D7): three demo cards, Q-014 —
+      {/* Block 6 — proof at this level (D7): three demo cards, Q-0014 —
           no cleared reference case for a delivered territory exists. */}
       <SectionShell
         dataBlock="beleg"

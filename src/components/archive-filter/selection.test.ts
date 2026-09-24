@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { matchesSelection, toggleSelection } from "./selection";
 
-describe("TS-028 D4/D5: zero selected shows all, otherwise OR-combined", () => {
+describe("TS-WEB-0028 D4/D5: zero selected shows all, otherwise OR-combined", () => {
   it("shows every row when nothing is selected", () => {
     expect(matchesSelection(["presse"], new Set())).toBe(true);
     expect(matchesSelection([], new Set())).toBe(true);

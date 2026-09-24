@@ -34,7 +34,7 @@ describe("the mock rule's switch — plan/guardrails.md", () => {
   });
 
   it("still records geo-api's missing name search as an open row, though the index answers it", () => {
-    // Q-025 is upstream's gap and stays open (state/open.md row 5); what
+    // Q-0025 is upstream's gap and stays open (state/open.md row 5); what
     // changed is only that this website no longer needs it to answer a name.
     expect(CAPABILITIES.placeSearchByName.openRow).toBe("5");
     expect(CAPABILITIES.placeSearchByName.service).toBe("index");
@@ -72,7 +72,7 @@ describe("the mock rule's switch — plan/guardrails.md", () => {
   });
 });
 
-describe("TS-009 D4: one timeout budget, in one place", () => {
+describe("TS-WEB-0009 D4: one timeout budget, in one place", () => {
   it("is 800 ms unless the environment overrides it", () => {
     vi.stubEnv("LIVE_TIMEOUT_MS", "");
     expect(timeoutMs()).toBe(800);

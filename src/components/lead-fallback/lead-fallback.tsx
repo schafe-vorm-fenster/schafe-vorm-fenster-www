@@ -4,14 +4,14 @@ import styles from "./lead-fallback.module.css";
 
 export interface LeadFallbackProps {
   readonly email: string;
-  /** Shown on S2 and S4 only (TS-016 D6). */
+  /** Shown on S2 and S4 only (TS-WEB-0016 D6). */
   readonly briefingHref?: string;
   readonly briefingLabel?: string;
   readonly className?: string;
 }
 
 /**
- * 51 `lead-fallback` [PROPOSED] — TS-016 D6, DEC-069.
+ * 51 `lead-fallback` [PROPOSED] — TS-WEB-0016 D6, DEC-0069.
  *
  * Structure: **one** component reused by every lead surface — an outbound
  * link to our own `/start` path (which redirects to the Google Form that
@@ -21,7 +21,7 @@ export interface LeadFallbackProps {
  * States: it is itself the degraded state — server-rendered markup, not
  * script-generated, so it stands whether the widget failed to load, errored,
  * was never delivered, or JavaScript is disabled. No `state` prop.
- * Inherits: `outbound-link` marking (linked, never embedded — DEC-013);
+ * Inherits: `outbound-link` marking (linked, never embedded — DEC-0013);
  * secondary treatment; never above the primary CTA.
  * Space: fixed height, so the swap widget ↔ fallback never reflows the page.
  * A11y: the visitor is told where each link goes before following it.

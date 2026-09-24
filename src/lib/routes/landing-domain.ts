@@ -1,5 +1,5 @@
 /**
- * TS-004 D1's landing-only domain rule, TS-004-A3 — the consumer
+ * TS-WEB-0004 D1's landing-only domain rule, TS-WEB-0004-A3 — the consumer
  * `host-matrix.ts`'s `kind: "landing"` never had (F-2-45).
  *
  * D1: the landing-only domains (`.pl`, `.at`, `sheepoutside.com`) "serve `/`,
@@ -13,7 +13,7 @@
  *
  * ### What is deliberately *not* blocked
  *
- * The proxy has no matcher (TS-015 D3 runs it on "all routes incl. assets"),
+ * The proxy has no matcher (TS-WEB-0015 D3 runs it on "all routes incl. assets"),
  * so this predicate has to let the landing page's own assets through or the
  * one page the domain does serve would render unstyled. Two exemptions, both
  * narrow:
@@ -61,10 +61,10 @@ const ASSET_EXTENSIONS = [
  *
  * Until the imagery workstream the list was empty and `public/` did not
  * exist: every asset was a package subpath import that Next emits under
- * `/_next/static/`. TS-017-A6 still forbids committing a logo, a mark or a
+ * `/_next/static/`. TS-WEB-0017-A6 still forbids committing a logo, a mark or a
  * font file here — what `public/images/` holds is photography, and since the
  * photo round it holds **only** photography: `public/images/generated/` is
- * gone with the 21 model renditions of DEC-077, and every path below is a
+ * gone with the 21 model renditions of DEC-0077, and every path below is a
  * real photograph with a named rights holder (`content/legal/image-credits.md`).
  */
 const PUBLIC_FILES: readonly string[] = [
@@ -130,7 +130,7 @@ export function isServableAssetPath(pathname: string): boolean {
 }
 
 /**
- * TS-004-A3: does this domain refuse this path? False for every full-site
+ * TS-WEB-0004-A3: does this domain refuse this path? False for every full-site
  * domain, for the landing set, and for assets.
  */
 export function landingDomainBlocks(

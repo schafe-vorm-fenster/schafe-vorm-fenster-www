@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { formatPriceFigure } from "./format";
 
-describe("TS-006 D10: the price figure is one readable string", () => {
+describe("TS-WEB-0006 D10: the price figure is one readable string", () => {
   it("formats the amount, the interval and the VAT qualifier together", () => {
     const value = formatPriceFigure({ amount: 480, currency: "EUR", interval: "year", vatNote: "zzgl. USt." });
     expect(value).toContain("480");

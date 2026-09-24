@@ -1,5 +1,5 @@
 /**
- * The weight profiles — TS-005 D5, DEC-048.
+ * The weight profiles — TS-WEB-0005 D5, DEC-0048.
  *
  * Weights are **a profile per focus job**, not one set for the whole site.
  * That is what settles the relevance model's open point "whether `w_job` may
@@ -8,7 +8,7 @@
  * a mayor from Baden-Württemberg is better served by Rubkow than by an
  * arbitrary local clipping.
  *
- * The numbers are [PROPOSED] (TS-005 D5) — the shape is fixed, the values are
+ * The numbers are [PROPOSED] (TS-WEB-0005 D5) — the shape is fixed, the values are
  * revised from measurement (H1–H6), which is why `selectRelevant()` accepts an
  * override instead of making a caller fork this table.
  */
@@ -31,10 +31,10 @@ export const FOCUS_JOB_WEIGHTS: Record<FocusJob, Weights> = {
 };
 
 /**
- * DEC-048 fixes the stage-0 split for a `w_geo` of 0.35: 0.20 to time, 0.15 to
+ * DEC-0048 fixes the stage-0 split for a `w_geo` of 0.35: 0.20 to time, 0.15 to
  * job. That is a ratio of 4 : 3, and this module generalises it to the other
  * three profiles, whose `w_geo` is not 0.35. The generalisation is
- * [PROPOSED] — DEC-048 decided one profile, not four (state/open.md).
+ * [PROPOSED] — DEC-0048 decided one profile, not four (state/open.md).
  */
 const STAGE_ZERO_TIME_SHARE = 4 / 7;
 

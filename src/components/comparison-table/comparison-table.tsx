@@ -4,7 +4,7 @@ import styles from "./comparison-table.module.css";
 
 export interface ComparisonTableProps {
   readonly headline?: string;
-  /** Exactly four rows — enforced at the type level (TS-024 D4). */
+  /** Exactly four rows — enforced at the type level (TS-WEB-0024 D4). */
   readonly rows: FourComparisonRows;
   readonly todayLabel?: string;
   readonly withProductLabel?: string;
@@ -13,7 +13,7 @@ export interface ComparisonTableProps {
 
 /**
  * 26 `comparison-table` [PROPOSED] — content type 6 `comparison`,
- * TS-024 D4.
+ * TS-WEB-0024 D4.
  *
  * Structure: exactly four rows, two columns (today · with the product), one
  * sentence per cell. Built as a list rather than a `<table>` — free per the

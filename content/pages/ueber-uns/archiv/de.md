@@ -1,6 +1,6 @@
 ---
 id: ueber-uns-archiv-de
-page_id: TS-028
+page_id: TS-WEB-0028
 route: "/ueber-uns/archiv"
 seo:
   "/ueber-uns/archiv":
@@ -20,10 +20,10 @@ generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
 provenance: "sourced — the archive now carries all 31 real media-echo entries, verbatim from the package frontmatter (title, type, date, source, geo, url). No entry carries usage_rights, so every row is clearance-pending and the page is protected-preview only; 0 generated demo rows left"
-compliance_check: "state/content-map.md#compliance-checks — TS-028"
-schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0028"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
-  - "state/open.md #1 — Q-045: none of the 31 media-echo entries carries `usage_rights`. The rows are real and cited, so they ship as `provenance: sourced` with clearance pending, in the protected preview only. Go-live needs the clearance per entry, or the row goes"
+  - "state/open.md #1 — Q-0045: none of the 31 media-echo entries carries `usage_rights`. The rows are real and cited, so they ship as `provenance: sourced` with clearance pending, in the protected preview only. Go-live needs the clearance per entry, or the row goes"
   - "Counted 31 real entries on 2026-09-12, not the 32 the Phase-1 map and state/open.md #1 quote. The package ships 31 `.media-echo.md` files at 0.3.3"
   - "Code follow-up — `app/[lang]/ueber-uns/archiv/page.tsx` passes `demo` to every `ArchiveRow` and renders a `DemoDataBadge` whenever rows exist. Both are hard-coded and now mislabel real, cited entries as demo data; the page should read `demo` off the slot (`isDemoSlot`) as `/deine-region` already does"
   - "One entry (`2026-05-noerd-2026-rostock`) carries two types, `award` and `conference`. The table shows the first; the archive-row component takes one type string and uses it as both label and filter id"
@@ -32,9 +32,9 @@ open_points:
 # Archiv (`/ueber-uns/archiv`)
 
 Keine eigene Conversion, kein Einstieg über die Hauptnavigation
-(TS-028 D1). Chronologisch, neueste zuerst — die einzige Ausnahme von der
+(TS-WEB-0028 D1). Chronologisch, neueste zuerst — die einzige Ausnahme von der
 Relevanz-Sortierung auf dieser Website, weil diese Seite der
-Überprüfung dient, nicht der Breite (TS-028 D2).
+Überprüfung dient, nicht der Breite (TS-WEB-0028 D2).
 
 ## Slot 1 — Seitenüberschrift
 
@@ -42,7 +42,7 @@ Relevanz-Sortierung auf dieser Website, weil diese Seite der
 
 **h1:** Archiv
 
-Bewusst ohne Einleitungstext, der den Bestand verkauft (TS-028 D1) — die
+Bewusst ohne Einleitungstext, der den Bestand verkauft (TS-WEB-0028 D1) — die
 Liste ist die Seite.
 
 ## Slot 2 — Archiv-Zeilen
@@ -52,7 +52,7 @@ Liste ist die Seite.
 Eine Zeile pro media-echo-Eintrag, generiert aus `title`, `type`,
 `date`, `source`, `geo` und `url`. **Stand 2026-09-12: keiner der 31
 Einträge trägt `usage_rights`** — ein fehlendes Feld ist keine Freigabe
-(TS-007 D2). Für Produktion filtert diese Regel weiterhin alles heraus.
+(TS-WEB-0007 D2). Für Produktion filtert diese Regel weiterhin alles heraus.
 Erfunden wird trotzdem nichts: Der Slot darunter führt alle 31 echten
 Einträge im Wortlaut ihres Frontmatters, als `sourced` mit offener
 Freigabe, sichtbar nur im geschützten Preview.
@@ -98,7 +98,7 @@ Eintrags:
 | Nordkurier — Schafe vorm Fenster Bericht (August) | Presse | 2018-08 | Nordkurier | Mecklenburg-Vorpommern | — |
 | Nordkurier — Schafe vorm Fenster Bericht (Juni) | Presse | 2018-06 | Nordkurier | Mecklenburg-Vorpommern | — |
 
-Kein Eintrag trägt heute `usage_rights` (Q-045). Die Zeilen sind
+Kein Eintrag trägt heute `usage_rights` (Q-0045). Die Zeilen sind
 trotzdem echt und belegt — jede führt auf ihren Eintrag im Paket zurück
 —, also stehen sie hier als `sourced` mit offener Freigabe und ohne
 Demo-Kennzeichnung, sichtbar nur im geschützten Preview. Vor dem
@@ -113,7 +113,7 @@ zeigt den ersten, weil eine Zeile im Archiv genau einen Typ-Chip trägt.
 <!-- id: archiv-3-context-line; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft -->
 
 Mechanische Übersetzung der Metadaten je freigegebenem Eintrag zur
-Build-Zeit (TS-007 D3) — kein redaktioneller Fließtext pro Eintrag, kein
+Build-Zeit (TS-WEB-0007 D3) — kein redaktioneller Fließtext pro Eintrag, kein
 Erfindungsspielraum.
 
 ## Slot 4 — Typ-Filter (Chips)
@@ -131,7 +131,7 @@ Erfindungsspielraum.
 - Social Media
 - Alle
 
-Nur Typen mit mindestens einem Eintrag bekommen einen Chip (TS-028 D4).
+Nur Typen mit mindestens einem Eintrag bekommen einen Chip (TS-WEB-0028 D4).
 Der Bestand deckt heute alle sieben ab: 14-mal Presse, 8-mal
 Auszeichnung, 6-mal Konferenz, je einmal Podcast, Porträt, Anerkennung
 und Social Media. Vier der acht Auszeichnungs-Einträge sind Bewerbungen

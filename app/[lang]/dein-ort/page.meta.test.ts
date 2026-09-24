@@ -5,14 +5,14 @@ import { checkPageMeta } from "@/src/lib/pages/page-meta";
 import { PLACE_META } from "./page.meta";
 
 /**
- * TS-020-A1 (static): "`page.meta.ts` of `/dein-ort` declares exactly D1's
+ * TS-WEB-0020-A1 (static): "`page.meta.ts` of `/dein-ort` declares exactly D1's
  * values including `emptyState`; conversion ids resolve in
  * `@schafe-vorm-fenster/goals`; both audiences resolve, in that order."
  *
  * The id resolution itself runs once, in `src/lib/pages/page-meta.test.ts`;
- * this asserts the values TS-020 D1 fixes.
+ * this asserts the values TS-WEB-0020 D1 fixes.
  */
-describe("TS-020-A1: the page manifest of `/dein-ort`", () => {
+describe("TS-WEB-0020-A1: the page manifest of `/dein-ort`", () => {
   it("declares exactly D1's values", () => {
     expect(PLACE_META.route).toBe("place");
     expect(PLACE_META.focusJob).toBe("know-what-is-on");
@@ -35,7 +35,7 @@ describe("TS-020-A1: the page manifest of `/dein-ort`", () => {
   });
 
   /**
-   * TS-006-A10 / TS-020 D2: the one registered runtime focus-job change on
+   * TS-WEB-0006-A10 / TS-WEB-0020 D2: the one registered runtime focus-job change on
    * the website. The register is this field.
    */
   it("is the one page that declares an emptyState", () => {

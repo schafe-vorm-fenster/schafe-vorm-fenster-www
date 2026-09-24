@@ -12,7 +12,7 @@ three phases and their order.
 Consistency and Traceability*.
 
 **Installed as:** `@leafcutter-strict/blueprint-complete@0.2.4`, a
-devDependency of this repository (DEC-085). The `@leafcutter-strict` and
+devDependency of this repository (DEC-0085). The `@leafcutter-strict` and
 `@leafcutter-os` scopes resolve to `https://packages.leafcutteros.ai/`
 through `.npmrc`; reading them needs no credential.
 
@@ -22,10 +22,10 @@ eight families — `foundation-*`, `role-*`, `method-*`, `library-schemas`,
 `skill-*`, `playbook-*`, `agent-*` and `blueprint-*`. A blueprint is a
 curated selection and carries no content of its own; `blueprint-complete`
 selects all of them, because this repository does bootstrap, delivery and
-assurance work at once (DEC-085 §1).
+assurance work at once (DEC-0085 §1).
 
 **Reference a STRICT artefact by package name, never by path** — the same
-rule `DEC-042` set for hub content. `@leafcutter-strict/method-statement-grammar`,
+rule `DEC-0042` set for hub content. `@leafcutter-strict/method-statement-grammar`,
 not a directory. The nine method packages this specification leans on
 hardest:
 
@@ -42,7 +42,7 @@ hardest:
 | the output contracts the checker reads | `@leafcutter-strict/library-schemas` |
 
 Where this specification's form deviates from a package's, the deviation is
-listed with its price in **DEC-085 §6** — the identifier schema, the missing
+listed with its price in **DEC-0085 §6** — the identifier schema, the missing
 business-rule class, statement grammar, locator granularity, the source
 rating vector, the need and goal layer, the decision policy, the decision
 record shape, the conflict and defect registers, the acceptance-criterion
@@ -117,20 +117,20 @@ Cold start executed on 2026-09-09 (source inventory → SSD → extraction).
 
 ```text
 specs/
-├── sources/            SRC-### source inventory with trust ratings
+├── sources/            SRC-#### source inventory with trust ratings
 ├── ssd/                system specification document (scope, goals, stakeholders — by reference)
-├── glossary/           GL-### terms; canonical definitions stay in go-to-market-os
-├── contracts/          SRC-011 API contract register; Zod content formats (in src/domain)
+├── glossary/           GL-#### terms; canonical definitions stay in go-to-market-os
+├── contracts/          SRC-0011 API contract register; Zod content formats (in src/domain)
 ├── requirements/
-│   ├── functional/     WEB-F-### — jobs, pages, relevance, live data, personalization,
+│   ├── functional/     FUN-WEB-#### — jobs, pages, relevance, live data, personalization,
 │   │                   localization, SEO, content pipeline
-│   ├── quality/        WEB-Q-### — performance, accessibility, privacy
-│   └── constraints/    WEB-C-### — stack, brand, scope boundaries
-├── decisions/          DEC-### decision records (S3 evidence anchor)
-├── questions/          Q-### open-question register (UNKNOWN + resolving question)
-├── tactical/           TS-### tactical specs — the generation prompts (FIXED/PROPOSED/FREE)
-│                       with TS-###-A# acceptance criteria carrying a verification level
-├── verification/       test strategy + Gherkin journeys (DEC-040)
+│   ├── quality/        NFR-WEB-#### — performance, accessibility, privacy
+│   └── constraints/    CON-WEB-#### — stack, brand, scope boundaries
+├── decisions/          DEC-#### decision records (S3 evidence anchor)
+├── questions/          Q-#### open-question register (UNKNOWN + resolving question)
+├── tactical/           TS-WEB-#### tactical specs — the generation prompts (FIXED/PROPOSED/FREE)
+│                       with TS-WEB-####-A# acceptance criteria carrying a verification level
+├── verification/       test strategy + Gherkin journeys (DEC-0040)
 └── traceability/       RTM: requirement → source → decision → question
 ```
 
@@ -142,11 +142,18 @@ specs/
 - Every requirement row carries source locator(s) and an evidence level
   `S0–S3` (`@leafcutter-strict/method-evidence-sufficiency-rating`; the
   project's reading of it is in `sources/README.md`).
-- The ID scheme, the three-class split and the statement grammar are
-  documented project conventions that **deviate** from the packages. They
-  are not pending a reconciliation any more — DEC-085 §6 says what each
-  deviation is and what closing it would cost, and `WEB-C-006` names the
-  dependency.
+- **The identifier scheme is the method's** (DEC-0086):
+  `<TYPE>-<DOMAIN>-<NNNN>` from
+  `@leafcutter-strict/method-identifier-and-locator-schema`, with the type
+  tokens the installed contracts fix and four-digit numbering.
+  `specs/traceability/identifier-map.md` maps every pre-DEC-0086 identifier
+  to the one it holds now; no number was reassigned. A file that holds one
+  identified artefact is named for it — `DEC-####--<slug>.md`,
+  `TS-WEB-####--<slug>.tactical.md`.
+- The three-class split and the statement grammar are still documented
+  project conventions that **deviate** from the packages. They are not
+  pending a reconciliation — DEC-0085 §6 says what each deviation is and
+  what closing it would cost, and `CON-WEB-0006` names the dependency.
 - **Consistency is machine-checked**: `pnpm check:specs`
   (`scripts/check-specs.ts`, part of `pnpm check` and the pre-commit
   hook) validates frontmatter, ID uniqueness, row shape, the S3-needs-a-
@@ -158,10 +165,14 @@ specs/
   discharged by no acceptance criterion (W2), acceptance criteria no test
   references (W3). It also prints the verification pyramid.
 - **Five of its vocabularies come from the package, not from the script**
-  (DEC-085 §4): the `S0–S3` ladder (E3/E4), the requirement status set
+  (DEC-0085 §4): the `S0–S3` ladder (E3/E4), the requirement status set
   (E11), the tactical status set and the four tactical `kind` values (E12),
   and the source trust levels (E13). They are read out of
   `@leafcutter-strict/library-schemas` at startup, so a version bump moves
-  the checks. What the script still owns — the local identifier patterns,
-  the chain this repository actually has, and everything grammar-shaped — is
-  listed at the top of `scripts/check-specs.ts` with the reason.
+  the checks. Since DEC-0086 the three identifier **patterns** the contracts
+  declare come from the same place — requirement, tactical specification and
+  source — with the package's doubled backslashes collapsed at the one place
+  that reads them. What the script still owns — `DEC-####`, `Q-####` and
+  `GL-####`, the chain this repository actually has, and everything
+  grammar-shaped — is listed at the top of `scripts/check-specs.ts` with the
+  reason.

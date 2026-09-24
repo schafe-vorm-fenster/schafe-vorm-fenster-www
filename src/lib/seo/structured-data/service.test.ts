@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { calendarServiceNode, regionServiceNode } from "@/src/lib/seo/structured-data/service";
 
-describe("TS-011 D4a: the calendar Service carries a scoped, net price", () => {
+describe("TS-WEB-0011 D4a: the calendar Service carries a scoped, net price", () => {
   it("emits 480 EUR/year, net, per organisation", () => {
     const node = calendarServiceNode("de", "Kalenderlizenz");
     const spec = node.offers?.priceSpecification;
@@ -22,7 +22,7 @@ describe("TS-011 D4a: the calendar Service carries a scoped, net price", () => {
   });
 });
 
-describe("TS-011 D4: the region Service carries no price (WEB-F-020)", () => {
+describe("TS-WEB-0011 D4: the region Service carries no price (FUN-WEB-0020)", () => {
   it("emits no offers property at all", () => {
     const node = regionServiceNode("de", "Regionalkalender");
     expect(node).not.toHaveProperty("offers");

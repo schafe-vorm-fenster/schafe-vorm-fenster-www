@@ -23,7 +23,7 @@ import type { LegalSectionId } from "@/src/lib/routes/legal-anchors";
 import type { Metadata } from "next";
 
 /**
- * TS-029 — `/rechtliches` (EN `/legal`) — the one legal page.
+ * TS-WEB-0029 — `/rechtliches` (EN `/legal`) — the one legal page.
  *
  * D1: one section per `LEGAL_SECTION_IDS` registry entry, in registry
  * order — appending a document to `content/legal/` plus its registry entry
@@ -38,7 +38,7 @@ import type { Metadata } from "next";
  * section's `h2` (never rendered twice).
  *
  * D8: `#barrierefreiheit` is the one registry anchor with no document today
- * (TS-004 D8: "to be written", `state/open.md` #21) — the production build
+ * (TS-WEB-0004 D8: "to be written", `state/open.md` #21) — the production build
  * fails while it is missing; a preview build omits it.
  *
  * ### The heading the page said twice (polish brief page 12)
@@ -137,10 +137,10 @@ export default async function Page({
   // D8: the accessibility statement is the one release-blocking exception —
   // production fails while it is missing; preview/dev renders the page
   // without that section, exactly like any other registry entry with no
-  // document (TS-029-A11).
+  // document (TS-WEB-0029-A11).
   if (process.env.VERCEL_ENV === "production" && !docsBySection.get("accessibility")) {
     throw new Error(
-      "TS-029 D8: #barrierefreiheit/#accessibility has no document — the production build must not ship the legal page without it (state/open.md #21).",
+      "TS-WEB-0029 D8: #barrierefreiheit/#accessibility has no document — the production build must not ship the legal page without it (state/open.md #21).",
     );
   }
 
@@ -151,7 +151,7 @@ export default async function Page({
 
   return (
     <>
-      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame closing={{ variant: "merged" }} locale={locale} meta={pageMeta}>
       {/* One section, not two: `PageFrame`'s merged closing block is
@@ -164,7 +164,7 @@ export default async function Page({
         <MotionReveal>
           <h1 id="rechtliches-h1">{h1}</h1>
           {/* F-2-74 / `state/open.md` row 53 — the six sections are imported
-              German-only (TS-029 open point #2), so the EN page frame says
+              German-only (TS-WEB-0029 open point #2), so the EN page frame says
               so, in English, *before* the first German body: between the `h1`
               and the section navigation, server-rendered, no JavaScript. The
               German page has no such string in the dictionary and renders
@@ -180,7 +180,7 @@ export default async function Page({
                 const title =
                   navItems.find((item) => item.id === legalAnchor(section, locale))?.label ?? section;
                 // The section's own title **and** its German anchor: the
-                // documents are German (TS-029 open point #2), so on
+                // documents are German (TS-WEB-0029 open point #2), so on
                 // `/en/legal` the English title "Imprint" never matches the
                 // German "Impressum" the document opens with, and the page
                 // said the same thing twice in two languages. The anchor

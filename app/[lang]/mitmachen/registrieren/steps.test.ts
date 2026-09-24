@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { derivedStep, resolveDisplayedStep, resolveEnum } from "./steps";
 
-describe("TS-023-A4: step derivation", () => {
+describe("TS-WEB-0023-A4: step derivation", () => {
   it("shows step 1 with no answers", () => {
     expect(derivedStep({})).toBe(1);
   });

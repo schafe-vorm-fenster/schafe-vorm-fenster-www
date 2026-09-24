@@ -9,7 +9,7 @@ import { EVENT_CATEGORIES, EventRow } from "./event-row";
  * The category's own contract — the polish brief's shared-component pass.
  *
  * The row renders the category in two forms at two widths (bare glyph below
- * `md`, the SRC-014 badge from `md`), which is a CSS fact and belongs to
+ * `md`, the SRC-0014 badge from `md`), which is a CSS fact and belongs to
  * `e2e/event-row.spec.ts`. What belongs here is the part CSS cannot hold:
  * **the markup carries the label in every form**. `categoryDisplay`'s rule is
  * "icon and colour always together; the label is always present", and the

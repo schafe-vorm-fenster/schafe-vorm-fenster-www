@@ -27,7 +27,7 @@ Registernummer: HRB 22906 Umsatzsteuer-Identifikationsnummer gemäß § 27 a
 Umsatzsteuergesetz: DE323153438
 `;
 
-describe("TS-011 D4: Organization identity is read from content/legal/imprint.md", () => {
+describe("TS-WEB-0011 D4: Organization identity is read from content/legal/imprint.md", () => {
   it("extracts every field the Organization node needs", () => {
     const identity = parseOrganizationIdentity(FIXTURE);
     expect(identity).toEqual({

@@ -34,7 +34,7 @@ function newRoot(): string {
   return fixtureRoot;
 }
 
-describe("TS-017-A4: check-brand excludes build output from the scan", () => {
+describe("TS-WEB-0017-A4: check-brand excludes build output from the scan", () => {
   it("does not trip on a built .next tree carrying a minified min-width property", () => {
     const root = newRoot();
     // A shape modelled on real Next.js output: no whitespace, and a

@@ -227,7 +227,7 @@ Name field (required) has no visible max-length constraint. Potential for paste-
 - **Steps:** Inspect `<a hreflang="en">` link and check href attribute
 - **Observed:** Language switch link href points to `/en/take-part/register` (correct English equivalent)
 - **Expected:** Link to equivalent English page, not home
-- **Severity:** none (working as designed per TS-001-A7)
+- **Severity:** none (working as designed per TS-WEB-0001-A7)
 - **Source:** chaos:boundary-tester
 
 ---

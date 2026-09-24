@@ -30,22 +30,22 @@ export interface NewsletterBlockProps {
 }
 
 /**
- * 49 `newsletter-block` [PROPOSED] — TS-016 D10, S5, decision D-4.
+ * 49 `newsletter-block` [PROPOSED] — TS-WEB-0016 D10, S5, decision D-4.
  *
  * Structure: email address only, double opt-in, no cookie, no persistent
  * identifier; consent wording links `/rechtliches#datenschutz`. Footer on
  * every page; inline once on `/ueber-uns` (permitted only there).
- * States: Q-020 (the sending system) is unanswered, so per the mock rule
+ * States: Q-0020 (the sending system) is unanswered, so per the mock rule
  * this ships as a mock — the full UX, `data-mock="true"` on the block, and a
  * `Mock aktiv` row (`state/open.md` row 22). Nothing on the surface says so:
  * Jan's decision of 2026-09-18 keeps the marking out of the rendered copy.
  * No `state` prop: the mock is not late data arriving, it is the permanent
- * M2 shape until Q-020 answers.
+ * M2 shape until Q-0020 answers.
  * The email input carries no `name` — the one way a plain, no-JS `<form>`
  * can offer the full control surface (label, type="email", required) while
  * genuinely submitting nothing: an unnamed control is not a successful
  * control (HTML forms), so no address ever leaves the browser even if the
- * form is submitted before Q-020 wires a real destination. That is unchanged
+ * form is submitted before Q-0020 wires a real destination. That is unchanged
  * by F-3-11; what changed is that the form no longer *navigates*. It was the
  * only `<form>` on the site with neither `action` nor `onSubmit`, so one
  * mis-click on an ever-present footer widget reloaded the page with the query
@@ -84,7 +84,7 @@ export function NewsletterBlock({
         .filter(Boolean)
         .join(" ")}
       // The mock's marking, where Jan can read it and a visitor cannot
-      // (2026-09-18). Q-020, `state/open.md` row 22.
+      // (2026-09-18). Q-0020, `state/open.md` row 22.
       data-mock="true"
       // F-3-11's own handle: the block is in the footer of all 24 routes and
       // the tests need to address *this* form rather than the page's.

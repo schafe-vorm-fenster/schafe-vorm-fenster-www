@@ -1,6 +1,6 @@
 ---
 id: dein-ort-de
-page_id: TS-020
+page_id: TS-WEB-0020
 route: "/dein-ort"
 seo:
   "/dein-ort":
@@ -38,9 +38,9 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — every slot. The four value-story proof cards now carry the real testimonials of the hub (kurzweg-baeckerei, zschiesche-gross-kiesow, eichler-wasserschloss-quilow, wendt-rubkow) and the Volkshochschule reference case instead of generated demo quotes; all five are clearance: pending (Q-014)"
-compliance_check: "state/content-map.md#compliance-checks — TS-020"
-schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+provenance: "sourced — every slot. The four value-story proof cards now carry the real testimonials of the hub (kurzweg-baeckerei, zschiesche-gross-kiesow, eichler-wasserschloss-quilow, wendt-rubkow) and the Volkshochschule reference case instead of generated demo quotes; all five are clearance: pending (Q-0014)"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0020"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 images:
   - id: dein-ort-hero
     slot: dein-ort-1-state-a
@@ -102,8 +102,8 @@ images:
     provenance: real
     source: >-
       Screenshot der eigenen Kalender-Ansicht unter {APP_HOST}/{ort}, iOS/Safari — muss aufgenommen
-      werden. Keine Rendition: eine erfundene Oberfläche wäre eine Produktbehauptung (DEC-068 Regel
-      3). Bis dahin bleibt die schraffierte Fläche (TS-020-A7).
+      werden. Keine Rendition: eine erfundene Oberfläche wäre eine Produktbehauptung (DEC-0068 Regel
+      3). Bis dahin bleibt die schraffierte Fläche (TS-WEB-0020-A7).
     alt: >-
       iPhone-Bildschirm mit dem Teilen-Menü von Safari und dem Eintrag zum Hinzufügen auf den
       Home-Bildschirm.
@@ -115,14 +115,14 @@ images:
     source: >-
       Screenshot der eigenen Kalender-Ansicht unter {APP_HOST}/{ort}, Android/Chrome — muss
       aufgenommen werden. Keine Rendition, gleicher Grund wie bei der iOS-Aufnahme. Bis dahin bleibt
-      die schraffierte Fläche (TS-020-A7).
+      die schraffierte Fläche (TS-WEB-0020-A7).
     alt: Android-Bildschirm mit dem Chrome-Menü und dem Eintrag zum Hinzufügen auf den Startbildschirm.
     status: needed
 ---
 
 # Dein Ort (`/dein-ort`)
 
-Zwei Zustände auf einer Route (TS-020 D2): **A** — Termine vorhanden,
+Zwei Zustände auf einer Route (TS-WEB-0020 D2): **A** — Termine vorhanden,
 **B** — Ort ist erfasst, aber leer (Fokusjob wechselt zu „publish our
 dates"). Block- und DOM-Reihenfolge bleiben in beiden Zuständen gleich;
 nur der Angebotstext in Block 1 wechselt.
@@ -167,7 +167,7 @@ Ortsname und Termine sind Live-Daten aus `/api/places/{slug}/events`.
 
 **Abschluss-Überschrift:** Ein Termin reicht, damit in {place} etwas steht.
 
-Wörtliches Zitat aus SRC-002 (TS-020 D2, DEC-071): Dieser Satz gehört nur
+Wörtliches Zitat aus SRC-0002 (TS-WEB-0020 D2, DEC-0071): Dieser Satz gehört nur
 hierher. Er unterstellt keinen Fehler und keine Entschuldigung — der
 Kalender für diesen Ort existiert bereits und wartet.
 
@@ -185,7 +185,7 @@ Kalender für diesen Ort existiert bereits und wartet.
 
 **Testimonial:** Elisabeth Kurzweg, Bäckerei Kurzweg — Wortlaut in der Belegkarte unten.
 
-<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; clearance: pending (usage_rights unverified, Q-014) -->
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
 Die Story stützt sich auf zwei freigegebene Belege: die Google-Suche nach
 dem Bäcker in Schlatkow, die das Bäckerauto samt Wochentag statt der
@@ -198,7 +198,7 @@ Umsatzzahlen messen lässt — die Anekdote steht, die Zahl nicht.
 
 ### Belegkarte zur Story 1
 
-<!-- clearance: pending — `kurzweg-baeckerei` steht auf `usage_rights: unverified` (Q-014). Das Zitat stammt aus der Testimonial-Sektion der alten Website; eine schriftliche Freigabe liegt im Hub nicht vor. Die geschützte Vorschau zeigt es, der Härtungslauf vor dem Go-live klärt es. -->
+<!-- clearance: pending — `kurzweg-baeckerei` steht auf `usage_rights: unverified` (Q-0014). Das Zitat stammt aus der Testimonial-Sektion der alten Website; eine schriftliche Freigabe liegt im Hub nicht vor. Die geschützte Vorschau zeigt es, der Härtungslauf vor dem Go-live klärt es. -->
 <!-- source_note: Das Zitat liegt im Paket in ASCII-Umschrift („Digitale Terminliste fuer die Doerfer"); hier mit Umlauten gesetzt, Wortlaut unverändert. -->
 <!-- id: dein-ort-3-story-baeckerwagen-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; status: draft -->
 
@@ -223,11 +223,11 @@ tagesaktuell und ortsgenau über die Dorfkalender (`impftermine-landkreis`,
 
 **Testimonial:** Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow — Wortlaut in der Belegkarte unten.
 
-<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; clearance: pending (usage_rights unverified, Q-014) -->
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
 ### Belegkarte zur Story 2
 
-<!-- clearance: pending — `zschiesche-gross-kiesow` steht auf `usage_rights: unverified` (Q-014), gleiche Herkunft wie die übrigen vier Testimonials der alten Website. -->
+<!-- clearance: pending — `zschiesche-gross-kiesow` steht auf `usage_rights: unverified` (Q-0014), gleiche Herkunft wie die übrigen vier Testimonials der alten Website. -->
 <!-- source_note: Das Zitat liegt im Paket in ASCII-Umschrift („Fuer dieses Projekt", „Landbevoelkerung", „Haendler"); hier mit Umlauten gesetzt, Wortlaut unverändert. -->
 <!-- id: dein-ort-4-story-ratssitzung-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; status: draft -->
 
@@ -247,7 +247,7 @@ tagesaktuell und ortsgenau über die Dorfkalender (`impftermine-landkreis`,
 
 **Testimonial:** Uwe Eichler, Wasserschloss Quilow — Wortlaut in der Belegkarte unten.
 
-<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; clearance: pending (usage_rights unverified, Q-014) -->
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
 Die Story hat jetzt einen echten Anker: Die Volkshochschule Uecker-Randow
 veröffentlicht ihr komplettes Kursprogramm über den Dorfkalender, am
@@ -258,7 +258,7 @@ Kalender.
 
 ### Belegkarte zur Story 3
 
-<!-- clearance: pending — `eichler-wasserschloss-quilow` und `volkshochschule-uecker-randow` stehen beide auf `usage_rights: unverified` (Q-014). -->
+<!-- clearance: pending — `eichler-wasserschloss-quilow` und `volkshochschule-uecker-randow` stehen beide auf `usage_rights: unverified` (Q-0014). -->
 <!-- source_note: Das Zitat liegt im Paket in ASCII-Umschrift („Flaechenland"); hier mit Umlauten gesetzt, Wortlaut unverändert. -->
 <!-- id: dein-ort-5-story-kultur-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"]; status: draft -->
 
@@ -286,11 +286,11 @@ keine Reichweitenzahl).
 
 **Testimonial:** Holger Wendt, Bürgermeister in Rubkow — Wortlaut in der Belegkarte unten.
 
-<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; clearance: pending (usage_rights unverified, Q-014) -->
+<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
 ### Belegkarte zur Story 4
 
-<!-- clearance: pending — `wendt-rubkow` steht auf `usage_rights: unverified` (Q-014). -->
+<!-- clearance: pending — `wendt-rubkow` steht auf `usage_rights: unverified` (Q-0014). -->
 <!-- source_note: Wortlaut unverändert aus dem Evidence-Block des Belegs. -->
 <!-- id: dein-ort-6-story-radius-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; status: draft -->
 
@@ -307,7 +307,7 @@ keine Reichweitenzahl).
 **Android:** Öffne den Kalender von {place} in Chrome. Tipp auf das Menü (drei Punkte), dann auf „Zum Startbildschirm hinzufügen". Fertig.
 
 Beide Anleitungen stehen immer nebeneinander, unabhängig vom Gerät der
-Besucherin (kein User-Agent-Sniffing, TS-020 D4). In Zustand B rückt
+Besucherin (kein User-Agent-Sniffing, TS-WEB-0020 D4). In Zustand B rückt
 dieser Block hinter das Nachbarschafts-Modul.
 
 ## Slot 8 — CTA-Zusicherung (Permanenz-Versprechen)

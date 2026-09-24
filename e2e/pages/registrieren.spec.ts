@@ -1,13 +1,13 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * TS-023 — `/mitmachen/registrieren`, walked step by step to its handover.
+ * TS-WEB-0023 — `/mitmachen/registrieren`, walked step by step to its handover.
  *
  * "schlatkow" is `src/lib/live/mocks/fixtures.ts`'s
  * `DEMO_PLACES[0]` — the shared live-data mock every place lookup on the
  * site resolves against, not a page-local fixture.
  *
- * TS-023-A6 (a municipality hit with several communities) has no
+ * TS-WEB-0023-A6 (a municipality hit with several communities) has no
  * naturally-occurring fixture in the shared mock (`mockSearchByZip` answers
  * at most one place per postcode) — covered at unit level instead
  * (`resolve-place.test.ts`, against a stubbed multi-suggestion result); not
@@ -17,8 +17,8 @@ import { expect, test } from "@playwright/test";
 
 const ROUTE = "/mitmachen/registrieren";
 
-test.describe("TS-023: the register flow", () => {
-  test("TS-023-A1: step 1 shows the place search first, no proof block, exactly one primary CTA", async ({
+test.describe("TS-WEB-0023: the register flow", () => {
+  test("TS-WEB-0023-A1: step 1 shows the place search first, no proof block, exactly one primary CTA", async ({
     page,
   }) => {
     await page.goto(ROUTE);
@@ -83,7 +83,7 @@ test.describe("TS-023: the register flow", () => {
 
   /**
    * The last screen reads finished — the website's part is over — without
-   * claiming a registration it cannot confirm (D6, and TS-023-A11 below).
+   * claiming a registration it cannot confirm (D6, and TS-WEB-0023-A11 below).
    */
   test("the handover reads as the end of the flow, with every step marked done", async ({
     page,
@@ -93,7 +93,7 @@ test.describe("TS-023: the register flow", () => {
     await expect(page.getByRole("group", { name: "Schritt 3 von 3" })).toBeVisible();
   });
 
-  test("TS-023-A2/A3/A7: walking the flow keeps state in the URL, survives reload and a fresh window, never in storage", async ({
+  test("TS-WEB-0023-A2/A3/A7: walking the flow keeps state in the URL, survives reload and a fresh window, never in storage", async ({
     page,
     context,
   }) => {
@@ -125,7 +125,7 @@ test.describe("TS-023: the register flow", () => {
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
   });
 
-  test("TS-023-A7: step 1 arrives answered — the place is named and changeable, never skipped", async ({
+  test("TS-WEB-0023-A7: step 1 arrives answered — the place is named and changeable, never skipped", async ({
     page,
   }) => {
     // The hand-over the founding path makes: `/dein-ort/starten?ort=X` → this.
@@ -164,7 +164,7 @@ test.describe("TS-023: the register flow", () => {
     }
   });
 
-  test("TS-023-A4: an invalid `schritt` and an invalid enum are dropped, re-asking the step", async ({
+  test("TS-WEB-0023-A4: an invalid `schritt` and an invalid enum are dropped, re-asking the step", async ({
     page,
   }) => {
     await page.goto(`${ROUTE}?ort=schlatkow&schritt=3`);
@@ -175,7 +175,7 @@ test.describe("TS-023: the register flow", () => {
     await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
   });
 
-  test("TS-023-A5: an unresolvable value leaves step 1 unanswered, echoed only in the search field", async ({
+  test("TS-WEB-0023-A5: an unresolvable value leaves step 1 unanswered, echoed only in the search field", async ({
     page,
   }) => {
     await page.goto(`${ROUTE}?ort=not-a-real-place-at-all`);
@@ -188,13 +188,13 @@ test.describe("TS-023: the register flow", () => {
     expect(bodyText).not.toContain("not-a-real-place-at-all");
   });
 
-  test("TS-023-A8: step 3 offers exactly three publishing paths", async ({ page }) => {
+  test("TS-WEB-0023-A8: step 3 offers exactly three publishing paths", async ({ page }) => {
     await page.goto(`${ROUTE}?ort=schlatkow&wer=opt-1`);
     const options = page.locator('input[name="weg"]');
     await expect(options).toHaveCount(3);
   });
 
-  test("TS-023-A9/A10: completing all three steps offers exactly one external app action, firing register-as-publisher once", async ({
+  test("TS-WEB-0023-A9/A10: completing all three steps offers exactly one external app action, firing register-as-publisher once", async ({
     page,
   }) => {
     // `mock-tracker.ts` logs `console.info("[analytics:mock] conversion",
@@ -246,7 +246,7 @@ test.describe("TS-023: the register flow", () => {
     expect(consoleMessages.some((text) => text.includes("publish-first-event"))).toBe(false);
   });
 
-  test("TS-023-A11: no step or the handover state shows a confirmation, instructions or an event field", async ({
+  test("TS-WEB-0023-A11: no step or the handover state shows a confirmation, instructions or an event field", async ({
     page,
   }) => {
     await page.goto(`${ROUTE}?ort=schlatkow&wer=opt-1&weg=whatsapp`);
@@ -255,7 +255,7 @@ test.describe("TS-023: the register flow", () => {
     await expect(page.locator('input[type="date"], input[name="event"]')).toHaveCount(0);
   });
 
-  test("TS-023-A12: no envoy element, no POST route, no server action on this route", async ({
+  test("TS-WEB-0023-A12: no envoy element, no POST route, no server action on this route", async ({
     page,
   }) => {
     const requests: string[] = [];
@@ -275,7 +275,7 @@ test.describe("TS-023: the register flow", () => {
     await expect(page.locator("main [data-envoy-form-kind]")).toHaveCount(0);
   });
 
-  test("TS-023-A13: every step is completable with JavaScript disabled", async ({ browser }) => {
+  test("TS-WEB-0023-A13: every step is completable with JavaScript disabled", async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
     await page.goto(ROUTE);
@@ -291,9 +291,9 @@ test.describe("TS-023: the register flow", () => {
     await context.close();
   });
 
-  test("TS-023-A14: every step URL canonicalises to the parameter-free path", async ({ page }) => {
+  test("TS-WEB-0023-A14: every step URL canonicalises to the parameter-free path", async ({ page }) => {
     // The route's own indexability is not the environment-wide noindex
-    // regime (TS-015 D3 puts every non-production build behind `noindex`,
+    // regime (TS-WEB-0015 D3 puts every non-production build behind `noindex`,
     // which this suite always runs under) — only the canonical claim is
     // testable outside production.
     await page.goto(`${ROUTE}?ort=schlatkow`);
@@ -301,7 +301,7 @@ test.describe("TS-023: the register flow", () => {
     expect(canonical).toMatch(new RegExp(`${ROUTE}$`));
   });
 
-  test("TS-023-A15: the context band renders on step 1 and is absent on steps 2, 3 and the handover", async ({
+  test("TS-WEB-0023-A15: the context band renders on step 1 and is absent on steps 2, 3 and the handover", async ({
     page,
   }) => {
     await page.goto(ROUTE);

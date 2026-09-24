@@ -1,5 +1,5 @@
 /**
- * `GET /api/region/{county}/examples` — position 3, DEC-034.
+ * `GET /api/region/{county}/examples` — position 3, DEC-0034.
  *
  * A designed set of active example places, capped. Never a place list, never
  * an "alle Orte anzeigen" control — the cap is part of the contract, not a

@@ -1,6 +1,6 @@
 /**
  * The showcase community — what the live modules speak about before the
- * visitor has said where she is (TS-010 stage 0).
+ * visitor has said where she is (TS-WEB-0010 stage 0).
  *
  * Position 1 needs a place slug and position 2 a coordinate. At stage 0 the
  * website has neither, and the two ways out are: render no live module at
@@ -32,7 +32,7 @@ export const SHOWCASE_COUNTY = {
 export const SHOWCASE_COMMUNITY = {
   communityId: "geoname.2838887",
   name: "Schlatkow",
-  /** The geo-api slug — the app handover's only contract (DEC-029). */
+  /** The geo-api slug — the app handover's only contract (DEC-0029). */
   slug: "schlatkow",
   lat: 53.92153,
   lng: 13.58116,

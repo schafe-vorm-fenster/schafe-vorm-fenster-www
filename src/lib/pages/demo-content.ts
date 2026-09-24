@@ -2,7 +2,7 @@
  * The demo elements a content artifact carries as a list, turned into the
  * props the block components take.
  *
- * Where a proof pool has no cleared selection yet (Q-014, Q-045), the
+ * Where a proof pool has no cleared selection yet (Q-0014, Q-0045), the
  * content playbook wrote the prototype's stand-ins **into the artifact**, as
  * a `demo: true` slot with a numbered list — one line per card:
  *
@@ -68,7 +68,7 @@ export function parseDemoProofElement(
  * Fills the named runtime slots of an authored template.
  *
  * The artifacts write `{place}` and `{ort}` rather than a per-place sentence
- * — segment independence, TS-007 D7 — so the page substitutes rather than
+ * — segment independence, TS-WEB-0007 D7 — so the page substitutes rather than
  * rewrites. An unknown name is left standing: a visible `{place}` is a
  * content bug that has to be seen, and is far better than a silent gap in a
  * sentence.

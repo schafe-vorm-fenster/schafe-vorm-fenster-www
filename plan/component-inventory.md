@@ -5,8 +5,8 @@ M2 does not produce eleven private variants of the same header, the same
 skeleton and the same proof card.
 
 **Status:** working document of the Project Manager for M2, answering
-`state/open.md` row 4 (Q-044). The design system
-(`concept/website-design-system.md`, SRC-014) is **binding** and is not
+`state/open.md` row 4 (Q-0044). The design system
+(`concept/website-design-system.md`, SRC-0014) is **binding** and is not
 re-designed here. Six components are specified there — everything else on
 these pages is *derived*, and every derivation is marked `[PROPOSED]`,
 reviewed at the M2 customer acceptance.
@@ -21,12 +21,12 @@ file says *which component* it is.
 
 | Source | What is taken from it |
 | --- | --- |
-| `concept/website-design-system.md` (SRC-014) | the six specified components, colour, typography, shape, page rhythm, aspect ratios, skeletons, icons, motion, a11y — binding |
+| `concept/website-design-system.md` (SRC-0014) | the six specified components, colour, typography, shape, page rhythm, aspect ratios, skeletons, icons, motion, a11y — binding |
 | `concept/v2.0/*.dc.html` | rendered confirmation of the same rules (Bausteine, Seitenverhältnisse, Rhythmus); no rule is read *only* from a board |
-| `specs/tactical/page-composition.tactical.md` (TS-006) | block order, context band, closing CTA, one primary conversion, no self-classification |
-| `specs/tactical/pages/*.tactical.md` (TS-019…TS-029) | the modules each page composes, in order |
+| `specs/tactical/TS-WEB-0006--page-composition.tactical.md` (TS-WEB-0006) | block order, context band, closing CTA, one primary conversion, no self-classification |
+| `specs/tactical/pages/*.tactical.md` (TS-WEB-0019…TS-WEB-0029) | the modules each page composes, in order |
 | `concept/website-content-production.concept.md` B.2/B.3 | the 26 content types and the fragments — the naming backbone (decision D-2) |
-| TS-004 D4/D8, TS-008 D1/D5, TS-009 D4/D7, TS-016 D1/D6/D10, TS-001 D5, TS-002 D5 | header/footer/anchors, live modules, fallback tiers and skeletons, lead surfaces, link facade, landmarks |
+| TS-WEB-0004 D4/D8, TS-WEB-0008 D1/D5, TS-WEB-0009 D4/D7, TS-WEB-0016 D1/D6/D10, TS-WEB-0001 D5, TS-WEB-0002 D5 | header/footer/anchors, live modules, fallback tiers and skeletons, lead surfaces, link facade, landmarks |
 | `plan/guardrails.md` | mock rule and dummy-content rule — every missing system is a labelled mock, never a hole |
 
 ## 1 Conventions
@@ -57,7 +57,7 @@ file says *which component* it is.
      "Foto gesucht", or the module omitted) — never a blank box;
    - *error/degraded* → tier 2 `freshness-label` ("Stand: …"), tier 3
      build-time snapshot labelled as an example, or module omitted
-     (TS-009 D4, TS-008 D5). **Never** a spinner, an error sentence, a
+     (TS-WEB-0009 D4, TS-WEB-0008 D5). **Never** a spinner, an error sentence, a
      warning icon or a retry control in front of the visitor;
    - *mocked* → per `plan/guardrails.md`: the component renders full
      dummy data plus the `demo-data-badge`, and gets a `Mock aktiv` row
@@ -69,9 +69,9 @@ file says *which component* it is.
 8. **Icons are Lucide, 24 / 18 / 32 px only**, monochrome, decorative,
    always accompanied by text.
 9. **Focus ring: 3 px `violet-500`, 2 px offset, on every interactive
-   element.** Touch targets ≥ 44 px (TS-002 D2 adopts 2.5.5 AAA).
+   element.** Touch targets ≥ 44 px (TS-WEB-0002 D2 adopts 2.5.5 AAA).
 10. **Every internal link goes through the route facade** (`route-link`,
-    TS-001 D5 / TS-004 D3a). No hard-coded `href` in any component.
+    TS-WEB-0001 D5 / TS-WEB-0004 D3a). No hard-coded `href` in any component.
 
 ## 2 The inventory
 
@@ -144,7 +144,7 @@ the design system and two components in code (decision D-3).
 | --- | --- | --- | --- |
 | 40 | `live-module-frame` (type 19) | 19·20·21·22·26·27 | [PROPOSED] |
 | 41 | `place-search` (module around `search-field`) | 19·20·21·23·25·26 + 404 | [PROPOSED] |
-| 42 | `event-list` (TS-008 pos 1 / 2) | 19·20·21·22 | [PROPOSED] |
+| 42 | `event-list` (TS-WEB-0008 pos 1 / 2) | 19·20·21·22 | [PROPOSED] |
 | 43 | `place-example-set` (pos 3) | 21·26 | [PROPOSED] |
 | 44 | `live-counters` (pos 4) | 19·26·27 | [PROPOSED] |
 | 45 | `embed-frame` (pos 1′) | 24·26 | [PROPOSED] |
@@ -188,27 +188,27 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 
 ### 3.1 Chrome and layout
 
-#### 8 `site-header` [PROPOSED] — TS-004 D4
+#### 8 `site-header` [PROPOSED] — TS-WEB-0004 D4
 - **Structure:** `logo` → `/`; the four job labels (Was ist los →
   `/dein-ort`, Termine veröffentlichen → `/mitmachen`, Dein Kalender →
   `/dein-kalender`, Warum wir → `/ueber-uns`); persistent "Kalender"
   `button` → `/dein-ort`. Sticky; its height is one CSS variable, read
-  by `legal-section` for `scroll-margin-top` (TS-029 D3).
+  by `legal-section` for `scroll-margin-top` (TS-WEB-0029 D3).
 - **States:** static, no data — no loading, empty or error state. Renders
-  identically at every personalization stage (TS-006 D8).
+  identically at every personalization stage (TS-WEB-0006 D8).
 - **Inherits:** flat surface, no shadow, no border, hairline at most;
   controls radius 999; labels in Label-mono or Meta; header is *switch*
-  between jobs, never fulfilment (TS-006 D4).
+  between jobs, never fulfilment (TS-WEB-0006 D4).
 - **Space:** fixed height, declared before paint; 16 px side padding.
 - **A11y:** one `header` landmark, one `nav` with an accessible name,
   ≥ 44 px targets, current page marked non-colour-only. The only
   navigation permitted above block 1 besides `breadcrumb-trail`.
 
-#### 9 `site-footer` [PROPOSED] — TS-004 D4
+#### 9 `site-footer` [PROPOSED] — TS-WEB-0004 D4
 - **Structure:** contact (`envoy-form-mount` target, S1) · `newsletter-block`
   (S5) · legal links Impressum / Datenschutz / Barrierefreiheit as
   anchors on `/rechtliches` · `language-switch`. Nothing renders after
-  the closing CTA except this (TS-006 D2).
+  the closing CTA except this (TS-WEB-0006 D2).
 - **States:** the newsletter slot degrades per component 49; everything
   else is static.
 - **Inherits:** flat surface (`surface` or `ink`), radius 0, hairline
@@ -216,7 +216,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** no reserved-space problem — nothing here arrives late.
 - **A11y:** one `footer` landmark, link list with an accessible name.
 
-#### 10 `language-switch` [PROPOSED] — TS-001 D5
+#### 10 `language-switch` [PROPOSED] — TS-WEB-0001 D5
 - **Structure:** plain `<a>` links per configured locale, emitting the
   prefix iff `lang !== tldDefault` (`de` bare, `/en/…`).
 - **States:** none — no JS, no dropdown, no detection UI.
@@ -225,7 +225,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** `hreflang` on each link, current language marked
   `aria-current="true"`, ≥ 44 px.
 
-#### 11 `breadcrumb-trail` [PROPOSED] — TS-006 D2 (FIXED by DEC-071 that it exists)
+#### 11 `breadcrumb-trail` [PROPOSED] — TS-WEB-0006 D2 (FIXED by DEC-0071 that it exists)
 - **Structure:** one `nav` above block 1 on the five second-level pages,
   server-rendered plain links, last item (current page) not a link.
 - **States:** static.
@@ -234,14 +234,14 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** one line, reserved.
 - **A11y:** accessible name, ordered list, no skipped heading levels.
 
-#### 12 `skip-link` [PROPOSED] — TS-002 D5
+#### 12 `skip-link` [PROPOSED] — TS-WEB-0002 D5
 - **Structure:** first focusable element, jumps to `main`.
 - **States:** visually hidden until focused.
 - **Inherits:** `button` secondary treatment when visible, radius 999.
 - **Space:** occupies none until focused; must not shift layout on focus.
 - **A11y:** the reason it exists; visible 3 px `violet-500` ring.
 
-#### 13 `section-shell` [PROPOSED] — SRC-014 §Shape and Space, §Page Rhythm
+#### 13 `section-shell` [PROPOSED] — SRC-0014 §Shape and Space, §Page Rhythm
 - **Structure:** the one wrapper every block stands in. Props: surface
   (`paper` · `surface` · `surface-2` · `lime-100` · `lime-500` · `ink` ·
   `violet-500` · photo) and density (standard / tight). Sections butt
@@ -258,7 +258,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** renders `section` with an accessible name where it carries a
   heading; contrast pairs taken from the colour tables only.
 
-#### 14 `motion-reveal` [PROPOSED] — SRC-014 §Motion
+#### 14 `motion-reveal` [PROPOSED] — SRC-0014 §Motion
 - **Structure:** wrapper applying the site's single movement: rise 22 px
   + fade, 550 ms, `cubic-bezier(.2,.7,.3,1)`, once on enter.
 - **States:** disabled entirely under `prefers-reduced-motion: reduce`.
@@ -266,7 +266,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** must not affect layout; transform only, never height.
 - **A11y:** content is present and readable before the animation runs.
 
-#### 15 `route-link` [PROPOSED] — TS-001 D5, TS-004 D3a
+#### 15 `route-link` [PROPOSED] — TS-WEB-0001 D5, TS-WEB-0004 D3a
 - **Structure:** the link facade. Takes a route id + params, emits the
   language-correct path. No component holds a literal internal `href`.
 - **States:** none.
@@ -275,7 +275,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** inline.
 - **A11y:** link text names its destination; no "hier klicken".
 
-#### 16 `outbound-link` [PROPOSED] — TS-016 D9, DEC-013
+#### 16 `outbound-link` [PROPOSED] — TS-WEB-0016 D9, DEC-0013
 - **Structure:** external link (app handover, outlet original, briefing
   schedule, `/start` fallback). Names source and subject in the link
   text; `external-link` icon 18/24 px; `rel="noopener"` when it opens a
@@ -285,7 +285,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** inline; icon never shifts the line box.
 - **A11y:** the new-tab behaviour is announced in the link text.
 
-#### 17 `section-nav` [PROPOSED] — TS-029 D4
+#### 17 `section-nav` [PROPOSED] — TS-WEB-0029 D4
 - **Structure:** one `nav` ("Abschnitte" / "Sections") listing the
   registry sections in order, server-rendered plain links. ≥ 1024 px:
   sticky column beside the text, below the header. < 1024 px: once,
@@ -298,7 +298,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** accessible name, `aria-current="true"` plus a non-colour-only
   mark, ≥ 44 px targets.
 
-#### 18 `back-to-top` [PROPOSED] — TS-029 D4
+#### 18 `back-to-top` [PROPOSED] — TS-WEB-0029 D4
 - **Structure:** one fixed bottom-right control below `xl`, appearing
   past section one, returning to `section-nav`.
 - **States:** hidden above `xl` and before section one. No overlay, no
@@ -308,7 +308,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** real button with a text label, keyboard reachable, smooth
   scroll only under `prefers-reduced-motion: no-preference`.
 
-#### 19 `media-frame` [PROPOSED] — SRC-014 §Aspect Ratios
+#### 19 `media-frame` [PROPOSED] — SRC-0014 §Aspect Ratios
 - **Structure:** the ratio box for any image that is not a full-width
   `photo-surface`: proof images, portraits, path images, screenshots.
   `aspect-ratio` on the media element, `cover`, centred.
@@ -323,7 +323,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** meaningful `alt` from content frontmatter, `alt=""` when
   decorative.
 
-#### 20 `icon` [PROPOSED] — SRC-014 §Icons
+#### 20 `icon` [PROPOSED] — SRC-0014 §Icons
 - **Structure:** Lucide only, 24 × 24 grid, 2 px stroke, round caps; the
   role→glyph table of the design system is the allowed set.
 - **States:** none.
@@ -343,7 +343,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
   `data-cta="primary"` where the page declares a conversion.
 - **States:** on `/` and `/dein-ort` the hero swaps content by place
   knowledge (S1/S2/S3, A/B) — **the reserved space is identical across
-  states so no swap shifts layout** (TS-019 FREE clause). Where
+  states so no swap shifts layout** (TS-WEB-0019 FREE clause). Where
   `primaryConversion` is `null` (27, 28) it carries no CTA treatment.
 - **Inherits:** Display 54/0.90/−0.045em/800; a place name may break by
   hand across two lines and is clamped to two lines; text sits in the
@@ -353,7 +353,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** exactly one `h1` per page, contrast measured against the
   composite of photo + gradient, not the gradient alone.
 
-#### 22 `scene-block` [PROPOSED] — content type 2, TS-006 D7
+#### 22 `scene-block` [PROPOSED] — content type 2, TS-WEB-0006 D7
 - **Structure:** three parts, always: opener as the visitor's own
   question · exactly **one** `mechanism` declared as a prop (`whatsapp`,
   `embed`, `calendar-connection`, `website-import`, `provenance`) · one
@@ -366,7 +366,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** instance box declares its ratio (`ratio-feature`).
 - **A11y:** the opener is the block heading; one mechanism, one heading.
 
-#### 23 `value-story` [PROPOSED] — content type 3, TS-020 D3
+#### 23 `value-story` [PROPOSED] — content type 3, TS-WEB-0020 D3
 - **Structure:** aspect → why it matters → live example → testimonial.
   Four render on `/dein-ort`, always, in both states.
 - **States:** *example ladder*: place → surroundings ≤ 15 km (labelled
@@ -381,7 +381,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
   `ratio-feature`; the absent testimonial reserves nothing.
 - **A11y:** heading per story, no heading-level skip.
 
-#### 24 `objection-list` [PROPOSED] — content type 4, TS-022 D3
+#### 24 `objection-list` [PROPOSED] — content type 4, TS-WEB-0022 D3
 - **Structure:** one headline + *n* items; each item = the channel in
   the visitor's own words + the one concrete way it fails. One proof
   slot beside the block. No numeral asserting how many channels exist.
@@ -394,7 +394,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
   problem.
 - **A11y:** a real list; the failure is text, never colour alone.
 
-#### 25 `publishing-path` [PROPOSED] — content type 5, TS-022 D4
+#### 25 `publishing-path` [PROPOSED] — content type 5, TS-WEB-0022 D4
 - **Structure:** one mechanism per block, `Step` items inside (index,
   title, body, hint, status badge). Three instances on `/mitmachen`,
   ordered whatsapp · calendar-connection · website-import.
@@ -405,7 +405,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** media ratio declared; step list is static content.
 - **A11y:** ordered list for steps, badge text readable (not colour).
 
-#### 26 `comparison-table` [PROPOSED] — content type 6, TS-024 D4
+#### 26 `comparison-table` [PROPOSED] — content type 6, TS-WEB-0024 D4
 - **Structure:** exactly four rows, two columns (today · with the
   product), one sentence per cell. Grid, list or two columns — free —
   but the four rows must be machine-countable.
@@ -417,7 +417,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** if rendered as a table, real `th` scope; if as a list, each
   row is one item with both cells labelled.
 
-#### 27 `offer-tier` [PROPOSED] — content type 7, TS-024 D6/D6a
+#### 27 `offer-tier` [PROPOSED] — content type 7, TS-WEB-0024 D6/D6a
 - **Structure:** one question heading above three tiers; each tier =
   short argument + `price-tag` + CTAs. Order `community-calendar`,
   `portalize-calendar`, `portalize-enterprise`, each carrying
@@ -425,25 +425,25 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
   tier 3's is quiet.
 - **States:** static; the price comes from the offering package.
 - **Inherits:** **not an audience selector** — no tab, toggle, radio or
-  `select` anywhere (TS-006 D8). No feature matrix. Radius 0 panels,
+  `select` anywhere (TS-WEB-0006 D8). No feature matrix. Radius 0 panels,
   hairline separation, never floating cards.
 - **Space:** equal-height tiers so the group does not reflow when copy
   differs in length.
 - **A11y:** three headings at one level; CTA labels distinguish the
   tiers ("Kalender bestellen" ≠ three identical "Mehr erfahren").
 
-#### 28 `feature-benefit` [PROPOSED] — content type 8, TS-026 block 5
+#### 28 `feature-benefit` [PROPOSED] — content type 8, TS-WEB-0026 block 5
 - **Structure:** feature ↔ what it does for you, optional `proof_ref`.
   Carries "what the enterprise licence adds": territory cut, map view
-  (dated January 2027, DEC-061), white-label registration,
+  (dated January 2027, DEC-0061), white-label registration,
   `custom-data-integration` as the add-on.
 - **States:** an unshippable claim is **removed, not qualified**
-  (TS-026 A17).
+  (TS-WEB-0026 A17).
 - **Inherits:** never a checkmark grid; `ratio-feature` media; no price.
 - **Space:** media ratio declared before paint.
 - **A11y:** pairs are readable in linear order.
 
-#### 29 `price-tag` [PROPOSED] — TS-006 D10, TS-018 D3
+#### 29 `price-tag` [PROPOSED] — TS-WEB-0006 D10, TS-WEB-0018 D3
 - **Structure:** the only component that renders a price. Reads amount,
   currency, interval and `vat` from `@schafe-vorm-fenster/offerings` —
   no literal figure in any page or component source.
@@ -461,15 +461,15 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
   optional image in `media-frame` at `ratio-proof` · link.
 - **States:** *image without cleared usage right* →
   `placeholder-surface` + "Foto gesucht" badge, never a borrowed photo
-  and never a text-only card without the badge (TS-024 D9); *element not
+  and never a text-only card without the badge (TS-WEB-0024 D9); *element not
   cleared* → the card does not exist (clearance is a hard filter);
-  *mocked press entry* (Q-045) → `demo-data-badge`, `Mock aktiv` row.
+  *mocked press entry* (Q-0045) → `demo-data-badge`, `Mock aktiv` row.
 - **Inherits:** `ratio-proof` 5:2; radius 0; the card sits **inside** a
   colour section, so it never counts as a photo section.
 - **Space:** fixed card height per stream; ratio declared before load.
 - **A11y:** the quote's attribution is text, not an image.
 
-#### 31 `proof-stream` [PROPOSED] — TS-005 D5–D8, DEC-048
+#### 31 `proof-stream` [PROPOSED] — TS-WEB-0005 D5–D8, DEC-0048
 - **Structure:** the container: count per page (19 → 5, 22/24/26 → 3,
   27 → 7), order from the relevance engine, grid or scroller free.
 - **States:** an unfilled slot **weakens the claim, it never shortens
@@ -483,7 +483,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** reading order equals the engine's order; the empty slot sits
   in that order, in the accessibility tree.
 
-#### 32 `empty-proof-slot` [PROPOSED] — content type 11, TS-027 D5
+#### 32 `empty-proof-slot` [PROPOSED] — content type 11, TS-WEB-0027 D5
 - **Structure:** the placeholder hatch at `ratio-proof` with a label
   badge and one sentence naming what is missing.
 - **States:** **terminal, not transitional** — it is not a skeleton, it
@@ -496,7 +496,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** real content with its label and sentence in the
   accessibility tree, never `aria-hidden`.
 
-#### 33 `archive-row` [PROPOSED] — content type 12, TS-028 D7
+#### 33 `archive-row` [PROPOSED] — content type 12, TS-WEB-0028 D7
 - **Structure:** the `event-row` shape, not a card: date at stated
   precision · original title in its source language · outlet · type
   badge(s) · one localized context line · one outbound link. **Two fixed
@@ -512,7 +512,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
   preview ≤ 100 KB at `ratio-proof`, lazy and async-decoded.
 - **A11y:** heading outline `h1` → year `h2`, no skipped level.
 
-#### 34 `archive-filter` [PROPOSED] — TS-028 D4/D5
+#### 34 `archive-filter` [PROPOSED] — TS-WEB-0028 D4/D5
 - **Structure:** one row of `chip`s plus *all*, multi-select,
   OR-combined; only types with ≥ 1 cleared entry get a chip; client-side
   over rows already in the static HTML — no navigation, no refetch, no
@@ -527,7 +527,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** visible row count in an `aria-live="polite"` region; focus
   stays on the pressed chip; pressed state is not colour-only.
 
-#### 35 `origin-story` [PROPOSED] — content type 13, TS-027 D3
+#### 35 `origin-story` [PROPOSED] — content type 13, TS-WEB-0027 D3
 - **Structure:** `h1` "Gebaut in einem Dorf, betrieben aus einem Dorf."
   · the causal chain (village of ~400 → free community calendar → 480 €
   licence, price via `price-tag`) · founder photo from
@@ -540,7 +540,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** `ratio-hero` declared before paint (this is an LCP element).
 - **A11y:** the headline is the page's only `h1`.
 
-#### 36 `person-profile` [PROPOSED] — content type 15, TS-027 D7
+#### 36 `person-profile` [PROPOSED] — content type 15, TS-WEB-0027 D7
 - **Structure:** portrait · name · role line · optional bio, read from
   `@schafe-vorm-fenster/people`; nothing about a person is written into
   website copy.
@@ -550,21 +550,21 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** ratio declared; equal card heights so the grid does not
   reflow with name length.
 - **A11y:** the portrait's `alt` names the person; no `Person` JSON-LD
-  node (TS-011 D4).
+  node (TS-WEB-0011 D4).
 
-#### 37 `trust-block` [PROPOSED] — content type 17, TS-024 D10
+#### 37 `trust-block` [PROPOSED] — content type 17, TS-WEB-0024 D10
 - **Structure:** one block, three subjects (data protection ·
   operations · AI), links to `/rechtliches#datenschutz` and
   `/rechtliches#auftragsverarbeitung`. Occurs once per page.
 - **States:** a sentence without a hub record behind it **does not
   ship** — today the data-protection part alone renders. No claim
-  stronger than TS-013 D1 supports.
+  stronger than TS-WEB-0013 D1 supports.
 - **Inherits:** sober `surface` section; `info` / `circle-check` icons;
   no badge implying certification.
 - **Space:** static content.
 - **A11y:** the two links name their targets.
 
-#### 38 `howto-block` [PROPOSED] — content type 18, TS-020 D4
+#### 38 `howto-block` [PROPOSED] — content type 18, TS-WEB-0020 D4
 - **Structure:** one iOS and one Android instruction side by side, both
   always rendered, plus the action to `{APP_HOST}/{slug}`. **No
   branching:** no user-agent sniffing, no `navigator.standalone`, no
@@ -577,7 +577,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** byte-identical DOM under both UAs, so the box never varies.
 - **A11y:** both instructions readable in linear order.
 
-#### 39 `legal-section` [PROPOSED] — content type 26, TS-029 D1–D6
+#### 39 `legal-section` [PROPOSED] — content type 26, TS-WEB-0029 D1–D6
 - **Structure:** one section per registry entry, in registry order; the
   `id` is the registry anchor for the page language, **never slugified
   from the heading**; markdown headings inside get no auto ids; `h2` per
@@ -599,7 +599,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 
 ### 3.3 Live-module shells
 
-#### 40 `live-module-frame` [PROPOSED] — content type 19, TS-008, TS-009
+#### 40 `live-module-frame` [PROPOSED] — content type 19, TS-WEB-0008, TS-WEB-0009
 - **Structure:** the shell every live module stands in: title template
   naming its own radius ("in `<place>`", "in der Umgebung", "im Kreis
   `<county>`"), subline, the module body, optional `Cta`. A widened
@@ -621,17 +621,17 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
   changes the page's *meaning* (the `/dein-ort` focus-job shift) the
   frame's container is a `role="status"` region announced once.
 
-#### 41 `place-search` [PROPOSED] — TS-008 D7
+#### 41 `place-search` [PROPOSED] — TS-WEB-0008 D7
 - **Structure:** `search-field` + results; a `<form method="get">` so it
   works without JavaScript, typeahead as enhancement only. Results are
-  `chip`s (≥ 40 px). ZIP-only until Q-025 lands, and the placeholder
+  `chip`s (≥ 40 px). ZIP-only until Q-0025 lands, and the placeholder
   says so.
 - **States:** *no hit* → navigate to `/dein-ort/starten?ort=<raw query>`
   (the classification is made once, by the BFF, at search time);
   *covered with dates* → `/dein-ort?ort=<slug>`; *covered without dates*
   → `/dein-ort?ort=<slug>` empty state; *upstream error* → not a
   classification: the visitor stays where she is, no error styling;
-  *mocked geo-api capability* (Q-025/032/038/051) → `demo-data-badge` on
+  *mocked geo-api capability* (Q-0025/032/038/051) → `demo-data-badge` on
   the result set, `Mock aktiv` row.
 - **Inherits:** the 56 px pill with nested 44 px submit; on a photo and
   on a colour surface alike the field is `paper`.
@@ -639,7 +639,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** labelled input, results reachable by keyboard, no focus
   steal; raw input is escaped wherever echoed and never rendered as data.
 
-#### 42 `event-list` [PROPOSED] — TS-008 pos 1 / 2
+#### 42 `event-list` [PROPOSED] — TS-WEB-0008 pos 1 / 2
 - **Structure:** `event-row`s inside a `live-module-frame`: position 1 =
   the next **3** dates of the known place; position 2 = **5** dates this
   week nearby (~15 km), each row naming its own place.
@@ -652,7 +652,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
   shrinking the box.
 - **A11y:** a list; the date is readable text, not an image.
 
-#### 43 `place-example-set` [PROPOSED] — TS-008 pos 3, DEC-034
+#### 43 `place-example-set` [PROPOSED] — TS-WEB-0008 pos 3, DEC-0034
 - **Structure:** a small **designed set** of active example places —
   never a place list, never an "alle Orte anzeigen" control. Capped at
   6 on `/deine-region`; on `/dein-ort/starten` it is the nearest active
@@ -667,12 +667,12 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** fixed row/chip count reserved before paint.
 - **A11y:** each example names its place in text.
 
-#### 44 `live-counters` [PROPOSED] — TS-008 pos 4, D8
+#### 44 `live-counters` [PROPOSED] — TS-WEB-0008 pos 4, D8
 - **Structure:** one band, three figure slots (places · dates · updates
   today), each figure inside a fixed-height `badge`.
 - **States:** only figures present in the upstream response render — a
   missing field means **no counter**, never an estimate, never a
-  substitute (today only the dates figure renders, Q-037). Cold cache →
+  substitute (today only the dates figure renders, Q-0037). Cold cache →
   hide the module, never tier 3. Mocked stats fields → `demo-data-badge`
   + `Mock aktiv` row (`state/open.md` row 6).
 - **Inherits:** mono type for numbers; no static traction figure anywhere
@@ -681,10 +681,10 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
   reflow the row.
 - **A11y:** the figure and its label are one readable string.
 
-#### 45 `embed-frame` [PROPOSED] — TS-008 D6, DEC-030
+#### 45 `embed-frame` [PROPOSED] — TS-WEB-0008 D6, DEC-0030
 - **Structure:** the real Portalize widget loaded from the allowlisted
   host, deferred, never render-blocking, excluded from the LCP path. The
-  heading states the radius/filter it is actually showing; while Q-026 is
+  heading states the radius/filter it is actually showing; while Q-0026 is
   open it is labelled an example and must not say "your place".
 - **States:** *loader blocked or failing* → the block's copy and CTA
   remain, **no empty frame, no error sentence**, and the page height
@@ -696,7 +696,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** the widget may use a shadow root; the page does not reach
   into it; axe must pass including inside that root.
 
-#### 46 `empty-state-block` [PROPOSED] — content type 20, TS-020 D2, TS-008 D4
+#### 46 `empty-state-block` [PROPOSED] — content type 20, TS-WEB-0020 D2, TS-WEB-0008 D4
 - **Structure:** headline naming the place · lead · `Cta` · fallback
   note. On `/dein-ort` state B it **occupies the module slot** and the
   focus job shifts (`register-as-publisher` → `/mitmachen`); on `/` S3 it
@@ -715,7 +715,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 
 ### 3.4 Conversion blocks, forms, flows
 
-#### 47 `context-band` [PROPOSED] — content type 21, TS-006 D5
+#### 47 `context-band` [PROPOSED] — content type 21, TS-WEB-0006 D5
 - **Structure:** one component, rendered by the **layout** on every page,
   filled from the job registry as *all four jobs minus this page's focus
   job* — never a hand-written list. Three entries, phrased as an offer in
@@ -731,7 +731,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** a `nav` with an accessible name; three links, each naming its
   job.
 
-#### 48 `closing-cta` [PROPOSED] — content type 22, TS-006 D6
+#### 48 `closing-cta` [PROPOSED] — content type 22, TS-WEB-0006 D6
 - **Structure:** the last block: **identical** to the primary conversion
   — same goal id, same target, same label — plus its reassurance.
   Nothing renders after it but `site-footer`.
@@ -745,12 +745,12 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** fixed height.
 - **A11y:** not `data-cta="primary"` (that marker belongs to block 1).
 
-#### 49 `newsletter-block` [PROPOSED] — TS-016 D10, S5
+#### 49 `newsletter-block` [PROPOSED] — TS-WEB-0016 D10, S5
 - **Structure:** email address only, double opt-in, no cookie, no
   persistent identifier; consent wording links `/rechtliches#datenschutz`.
   Footer on every page; inline once on `/ueber-uns` (permitted **only**
   there, because that page has no conversion of its own).
-- **States:** *sending system undecided* (Q-020) — per the run's mock
+- **States:** *sending system undecided* (Q-0020) — per the run's mock
   rule the block **ships as a labelled mock**: full UX, `demo-data-badge`,
   no address leaves the browser, no subscription is claimed, plus a
   `Mock aktiv` row (decision D-4, `state/open.md` row 22). Widget failure → the
@@ -762,7 +762,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** label association and error identification are part of the
   widget demand; the website's acceptance still covers them.
 
-#### 50 `envoy-form-mount` [PROPOSED] — TS-016 D1/D2/D5
+#### 50 `envoy-form-mount` [PROPOSED] — TS-WEB-0016 D1/D2/D5
 - **Structure:** mount point only — a custom element with attributes
   (form kind, page language, source route, offering/goal context) and a
   theming wrapper carrying CSS variables. The website holds nothing,
@@ -774,7 +774,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
   `lead-fallback`, server-rendered, never an empty slot and never a
   spinner that does not resolve; *submission error* → the widget owns the
   message, the page adds nothing and does not retry; *JS disabled* →
-  same static fallback; *widget undelivered at M2* (Q-022) → the mock
+  same static fallback; *widget undelivered at M2* (Q-0022) → the mock
   behind the same interface module, `demo-data-badge`, `Mock aktiv` row
   (`state/open.md` row 7).
 - **Inherits:** the page renders and is fully usable without the widget;
@@ -783,30 +783,30 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** axe passes including inside the shadow root; no page CSS
   targets the widget's internals.
 
-#### 51 `lead-fallback` [PROPOSED] — TS-016 D6, DEC-069
+#### 51 `lead-fallback` [PROPOSED] — TS-WEB-0016 D6, DEC-0069
 - **Structure:** **one** component reused by every lead surface: an
   outbound link to our own `/start` path (which redirects to the form),
   naming Google as the recipient, **plus** the email address beside it,
   plus the briefing link on S2 and S4.
 - **States:** it is itself the degraded state; it is server-rendered
-  markup, not script-generated. Linked, never embedded (DEC-013).
+  markup, not script-generated. Linked, never embedded (DEC-0013).
 - **Inherits:** `outbound-link` marking; secondary treatment; never above
   the primary CTA.
 - **Space:** fixed height so the swap widget↔fallback does not reflow.
 - **A11y:** the visitor is told where the link goes before following it.
 
-#### 52 `response-promise` [PROPOSED] — TS-006 D11, TS-026 D5
+#### 52 `response-promise` [PROPOSED] — TS-WEB-0006 D11, TS-WEB-0026 D5
 - **Structure:** one constant, one component, three call sites (the CTA
   on `/deine-region`, the form on `/deine-region/angebot`, the
   confirmation after submit) — so the three cannot disagree.
-- **States:** while the constant is `null` (Q-022 C11 unanswered) the
+- **States:** while the constant is `null` (Q-0022 C11 unanswered) the
   component **renders nothing**: no response-time wording of any kind,
   removed rather than softened.
 - **Inherits:** Meta type, `clock` icon, no badge implying certification.
 - **Space:** renders no reserved space when null.
 - **A11y:** plain text beside the submit action.
 
-#### 53 `step-indicator` [PROPOSED] — TS-023 D8, TS-025 D2
+#### 53 `step-indicator` [PROPOSED] — TS-WEB-0023 D8, TS-WEB-0025 D2
 - **Structure:** a kicker `badge` ("Schritt 2 von 3" / "… von 4"),
   reserved height, above the step's heading.
 - **States:** static per step; the step itself travels in the URL
@@ -818,7 +818,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** the step count is text; after each advance focus moves to the
   new step's heading.
 
-#### 54 `choice-group` [PROPOSED] — TS-023 D8 (Q-044 gap, decision D-6)
+#### 54 `choice-group` [PROPOSED] — TS-WEB-0023 D8 (Q-0044 gap, decision D-6)
 - **Structure:** single-choice control for "who publishes" (step 2) and
   "which publishing path" (step 3). **The design system specifies no
   such control**, so the conservative reading: tappable `chip`s in a
@@ -836,14 +836,14 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** real `radiogroup` semantics with a group label; selection is
   not colour-only.
 
-#### 55 `scope-picker` [PROPOSED] — TS-025 D3/D3a
+#### 55 `scope-picker` [PROPOSED] — TS-WEB-0025 D3/D3a
 - **Structure:** `place-search` + removable `chip`s; each hit, each ZIP's
   places and a county become chips (a county is **one** chip, never
   expanded into a place list). Above 12 chips the row collapses to
   "n Orte ausgewählt" plus a disclosure. Selection lives in the URL.
 - **States:** *empty scope* → designed empty state and step 3 is
   unreachable (also by editing `schritt=3`); *no live preview in V1*
-  (DEC-069) — the step shows what was chosen and its count, and claims
+  (DEC-0069) — the step shows what was chosen and its count, and claims
   nothing about content; *reload* → scope restored from the URL.
 - **Inherits:** chips ≥ 40 px, radius 999; scope does not drive price
   (480 € is per organisation).
@@ -852,7 +852,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **A11y:** every chip removable by keyboard; focus moves to the
   scope-change announcement (`aria-live`).
 
-#### 56 `code-snippet` [PROPOSED] — TS-025 D7
+#### 56 `code-snippet` [PROPOSED] — TS-WEB-0025 D7
 - **Structure:** the loader snippet as **selectable, server-rendered
   text** in a code block plus a copy control; never produced by a
   download or a script-only path. Permanent note beside it: copy the code
@@ -860,7 +860,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **States:** *code cannot be issued synchronously* → step 4 shows the
   confirmation, names when the code arrives, and the
   `buy-calendar-licence` event does **not** fire; *mocked `organizerId`*
-  (Q-046, `state/open.md` row 2) → full instant-embed experience with
+  (Q-0046, `state/open.md` row 2) → full instant-embed experience with
   dummy code and `demo-data-badge`, `Mock aktiv`; *reload* → the code is
   gone, because nothing is stored.
 - **Inherits:** mono type role; radius 0 block; `copy`/`check` icons.
@@ -870,7 +870,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 
 ### 3.5 Placeholders, states, errors
 
-#### 57 `skeleton` [PROPOSED] — SRC-014 §Skeletons, TS-009 D7
+#### 57 `skeleton` [PROPOSED] — SRC-0014 §Skeletons, TS-WEB-0009 D7
 - **Structure:** the box at its declared ratio filled with
   `repeating-linear-gradient(45deg, surface-2 0 16px, line 16px 32px)`;
   text skeletons are `line` bars at the text's own line height, 60 %
@@ -888,19 +888,19 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
   shrinking the box.
 - **A11y:** `aria-hidden="true"`.
 
-#### 58 `placeholder-surface` [PROPOSED] — SRC-014 §Photo surface
+#### 58 `placeholder-surface` [PROPOSED] — SRC-0014 §Photo surface
 - **Structure:** a missing photograph becomes the diagonal hatch of
   `surface-2` and `line` with the badge "Foto gesucht" and an invitation
   to contribute one.
 - **States:** terminal, not transitional; it is a **conversion**, so it
   carries its CTA — except on `/ueber-uns/archiv`, which has no
-  conversion and therefore uses a text-only row instead (TS-028 D6).
+  conversion and therefore uses a text-only row instead (TS-WEB-0028 D6).
 - **Inherits:** hatch tokens as above; badge `#9A6300` on `#FBF1DC`
   (6.0:1), radius 999.
 - **Space:** the declared ratio of the box it replaces.
 - **A11y:** real content in the accessibility tree; never `aria-hidden`.
 
-#### 59 `placeholder-badge` [PROPOSED] — SRC-014 §Photo surface
+#### 59 `placeholder-badge` [PROPOSED] — SRC-0014 §Photo surface
 - **Structure:** "Nicht motivgenau · Platzhalter", mono 11 px, radius
   999, on any photograph that does not depict what the copy claims.
 - **States:** present or absent; never softened into a caption.
@@ -922,7 +922,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** badge height 26 / 30 px, reserved.
 - **A11y:** text, in the accessibility tree, never colour-only.
 
-#### 61 `freshness-label` [PROPOSED] — TS-008 D5, TS-009 D4
+#### 61 `freshness-label` [PROPOSED] — TS-WEB-0008 D5, TS-WEB-0009 D4
 - **Structure:** tier 2 → "Stand: `<time>`" beside the module's heading;
   tier 3 → the snapshot labelled as an example.
 - **States:** absent at tier 1 (fresh). Never an error sentence, never a
@@ -932,7 +932,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
   not shift the module.
 - **A11y:** plain text; the time is machine-readable via `<time>`.
 
-#### 62 `status-badge` [PROPOSED] — TS-022 D4
+#### 62 `status-badge` [PROPOSED] — TS-WEB-0022 D4
 - **Structure:** availability badge on a mechanism whose hub record is
   not `generally-available` (today: `website-import`, alpha).
 - **States:** rendered while the record says so; removed only when the
@@ -942,7 +942,7 @@ component stays `[PROPOSED]` until the M2 customer acceptance.
 - **Space:** badge height, reserved.
 - **A11y:** the badge text says what it claims; not colour-only.
 
-#### 63 `error-page` [PROPOSED] — content type 25, TS-004 D2/D6, DEC-032
+#### 63 `error-page` [PROPOSED] — content type 25, TS-WEB-0004 D2/D6, DEC-0032
 - **Structure:** 404 → `place-search` + the jobs band (`context-band`),
   real 404 status, `noindex`; 500 → static, minimal, **no data
   dependency of any kind**.
@@ -964,10 +964,10 @@ Every page is wrapped by the shared layout: `skip-link` → `site-header`
 → (`breadcrumb-trail` on the five second-level pages) → `main` →
 `context-band` → `closing-cta` → `site-footer`. Blocks 3 and 4 are
 rendered **by the layout from `page.meta.ts`**, never hand-placed
-(TS-006 D2). Every section stands in a `section-shell` wrapped by
+(TS-WEB-0006 D2). Every section stands in a `section-shell` wrapped by
 `motion-reveal`; the rhythm rules are checked per page, not per block.
 
-### TS-019 `/` — home *(longest list: 11 own modules)*
+### TS-WEB-0019 `/` — home *(longest list: 11 own modules)*
 `focusJob: know-what-is-on` · `primaryConversion: save-calendar-to-homescreen` · proof 5
 
 | # | Module | Component(s) | Section |
@@ -988,7 +988,7 @@ Scene order varies by entry trait (ordering only, never the set — see
 decision D-1). S4 (uncovered place) is not a state of this page: the
 search navigates away.
 
-### TS-020 `/dein-ort` — your place
+### TS-WEB-0020 `/dein-ort` — your place
 `focusJob: know-what-is-on` · `save-calendar-to-homescreen` · `emptyState` declared
 
 | # | Module | Component(s) |
@@ -1004,7 +1004,7 @@ Unchanged between A and B: route, URL, canonical, hreflang, title,
 header, footer, band, block order, every DOM position. `h1` is the place
 name in both.
 
-### TS-021 `/dein-ort/starten` — start the calendar
+### TS-WEB-0021 `/dein-ort/starten` — start the calendar
 `focusJob: publish our dates` · `register-as-publisher` · no proof slot
 
 | # | Module | Component(s) |
@@ -1020,7 +1020,7 @@ name in both.
 The searched place may appear in `h1`, body copy, CTA labels and the
 registration `href` — and **nowhere** as data.
 
-### TS-022 `/mitmachen` — the publishing entry
+### TS-WEB-0022 `/mitmachen` — the publishing entry
 `focusJob: publish our dates` · `register-as-publisher` · proof 3
 
 | # | Slot | Component(s) |
@@ -1032,7 +1032,7 @@ registration `href` — and **nowhere** as data.
 | 5 | proof | `proof-stream` (3) of `proof-card` |
 | 6–7 | band + closing | `context-band` · `closing-cta` (reassurance = permanence promise, removed if unbacked) |
 
-### TS-023 `/mitmachen/registrieren` — register *(a flow, not an argument)*
+### TS-WEB-0023 `/mitmachen/registrieren` — register *(a flow, not an argument)*
 `focusJob: publish our dates` · `primaryConversion: publish-first-event` (fired by the app)
 
 | # | Module | Component(s) |
@@ -1049,7 +1049,7 @@ registration `href` — and **nowhere** as data.
 Zero argument blocks. No proof, no live module besides the step-1 search.
 Every advance is a real GET navigation with a shareable URL.
 
-### TS-024 `/dein-kalender` — the 480 € page
+### TS-WEB-0024 `/dein-kalender` — the 480 € page
 `focusJob: run-our-own-calendar` · `buy-calendar-licence` + equal-weight `request-product-briefing` · proof 3 ×3 slots
 
 | # | `data-block` | Component(s) |
@@ -1064,14 +1064,14 @@ Every advance is a real GET navigation with a shareable URL.
 
 Pulse occurs exactly once on the page, in `focus`.
 
-### TS-025 `/dein-kalender/bestellen` — order flow
+### TS-WEB-0025 `/dein-kalender/bestellen` — order flow
 `focusJob: run our own calendar` · `buy-calendar-licence` · no live module, no proof
 
 | # | Module | Component(s) |
 | --- | --- | --- |
 | 0 | trail | `breadcrumb-trail` |
 | 1 | step indicator | `step-indicator` ("… von 4", `schritt=1..4` in the URL) |
-| 2 | steps 1+2 — scope | `place-search` + `scope-picker` (chips, county = one chip, collapse above 12). **No live preview in V1** (DEC-069) |
+| 2 | steps 1+2 — scope | `place-search` + `scope-picker` (chips, county = one chip, collapse above 12). **No live preview in V1** (DEC-0069) |
 | 3 | step 3 — invoice | `envoy-form-mount` (authority field set) with `lead-fallback` |
 | 4 | step 4 — code | `code-snippet` + confirmation, plus the lost-state note |
 | — | on every step | briefing `outbound-link` (secondary, never above the primary CTA) |
@@ -1080,7 +1080,7 @@ Pulse occurs exactly once on the page, in `focus`.
 No payment field anywhere; nothing is stored; the flow is `noindex,
 follow` on every step.
 
-### TS-026 `/deine-region` — the region page *(longest list after home: 9 own modules)*
+### TS-WEB-0026 `/deine-region` — the region page *(longest list after home: 9 own modules)*
 `focusJob: run-our-own-calendar` · `request-licence-quote` · equal-weight briefing · proof 3
 
 | # | Block | Component(s) | Surface |
@@ -1102,7 +1102,7 @@ follow` on every step.
 `response-promise` + `lead-fallback` → confirmation state (same promise
 constant) → `context-band` → `closing-cta`.
 
-### TS-027 `/ueber-uns` — the trust surface *(9 own modules)*
+### TS-WEB-0027 `/ueber-uns` — the trust surface *(9 own modules)*
 `focusJob: understand-who-is-behind-it` · `primaryConversion: null` · proof 7
 
 | # | Block | Component(s) |
@@ -1118,7 +1118,7 @@ constant) → `context-band` → `closing-cta`.
 The page contains zero `data-cta="primary"` elements. Exactly one photo
 section (block 1); stream images are cards inside a colour section.
 
-### TS-028 `/ueber-uns/archiv` — the archive
+### TS-WEB-0028 `/ueber-uns/archiv` — the archive
 `primaryConversion: null` · no conversion, no form, no hero photo
 
 | # | Block | Component(s) |
@@ -1134,8 +1134,8 @@ for everyone. Uncleared entries exist nowhere: not in HTML, chip counts,
 row total or JSON-LD (today that is **all** of them — mocked per
 `state/open.md` row 1 with `demo-data-badge`).
 
-### TS-029 `/rechtliches` — the one legal page
-No focus job in the four-job sense (open point, TS-029 #5) · no conversion of its own
+### TS-WEB-0029 `/rechtliches` — the one legal page
+No focus job in the four-job sense (open point, TS-WEB-0029 #5) · no conversion of its own
 
 | # | Block | Component(s) |
 | --- | --- | --- |
@@ -1143,7 +1143,7 @@ No focus job in the four-job sense (open point, TS-029 #5) · no conversion of i
 | 2 | section navigation | `section-nav` (sticky column ≥ 1024 px, inline below the `h1` under it) |
 | 3 | the sections | `legal-section` ×6 in registry order, ids from the registry, `scroll-margin-top` from the header variable |
 | 4 | back to top | `back-to-top` (< `xl`, past section one) |
-| 5–6 | band + closing | `context-band` · `closing-cta` (TS-006 D2: the sender surfaces end in blocks 3 and 4 too) |
+| 5–6 | band + closing | `context-band` · `closing-cta` (TS-WEB-0006 D2: the sender surfaces end in blocks 3 and 4 too) |
 
 Fully static; the only client JS is the current-section marker.
 
@@ -1151,17 +1151,17 @@ Fully static; the only client JS is the current-section marker.
 
 | Page | Own modules (excl. layout) |
 | --- | --- |
-| TS-019 `/` | **11** (3 focus states + 3 scenes + stamps + stream + counters) |
-| TS-026 `/deine-region` | **9** |
-| TS-027 `/ueber-uns` | **9** |
-| TS-024 `/dein-kalender` | 8 |
-| TS-020 `/dein-ort` | 7 (incl. the second focus state) |
-| TS-021 `/dein-ort/starten` | 6 |
-| TS-022 `/mitmachen` | 6 |
-| TS-025 `/dein-kalender/bestellen` | 6 |
-| TS-023 `/mitmachen/registrieren` | 6 |
-| TS-029 `/rechtliches` | 5 |
-| TS-028 `/ueber-uns/archiv` | 4 |
+| TS-WEB-0019 `/` | **11** (3 focus states + 3 scenes + stamps + stream + counters) |
+| TS-WEB-0026 `/deine-region` | **9** |
+| TS-WEB-0027 `/ueber-uns` | **9** |
+| TS-WEB-0024 `/dein-kalender` | 8 |
+| TS-WEB-0020 `/dein-ort` | 7 (incl. the second focus state) |
+| TS-WEB-0021 `/dein-ort/starten` | 6 |
+| TS-WEB-0022 `/mitmachen` | 6 |
+| TS-WEB-0025 `/dein-kalender/bestellen` | 6 |
+| TS-WEB-0023 `/mitmachen/registrieren` | 6 |
+| TS-WEB-0029 `/rechtliches` | 5 |
+| TS-WEB-0028 `/ueber-uns/archiv` | 4 |
 
 ## 5 Decisions taken
 
@@ -1169,7 +1169,7 @@ Decisions the Project Manager takes so M2 can start; each is a working
 decision with its reasoning, reviewable at the M2 customer acceptance.
 Nobody is asked (`plan/guardrails.md`).
 
-### D-1 — Q-052: entry context sets emphasis and order, never the focus job
+### D-1 — Q-0052: entry context sets emphasis and order, never the focus job
 
 **Decision.** On `/` the focus job is `know-what-is-on` at every stage.
 The entry trait changes **the order of the scenes and which offer is
@@ -1179,20 +1179,20 @@ the whole website stays `/dein-ort`'s empty state.
 
 **Reasoning, two lines.** (1) The other reading contradicts the
 conversion map: a trait-swapped focus job would make `/` declare goals
-SRC-003 does not assign it, which TS-006 D9 validates in both
-directions — and SRC-001 §6 permits a stage to change *selection and
-order* only. (2) Module one is always the place search (TS-006 D4: the
+SRC-0003 does not assign it, which TS-WEB-0006 D9 validates in both
+directions — and SRC-0001 §6 permits a stage to change *selection and
+order* only. (2) Module one is always the place search (TS-WEB-0006 D4: the
 job is fulfilled in place, never linked), so the page's structure cannot
 vary by entry anyway; "focus job set by entry context" was an imprecise
 sentence, not a second design.
 
 **Status.** This is the same reading a parallel human session recorded as
-**DEC-059** ("The home page's focus job is stable; entry context changes
+**DEC-0059** ("The home page's focus job is stable; entry context changes
 emphasis only", accepted 2026-09-11), which also sharpens the IA brief to
 "the emphasised offer is set by entry context". No new ADR is written
-here — decision numbering is contended by that session, and DEC-059
-already carries the decision. The behaviour is built in **M4** (TS-010
-stages, TS-019 D3a scene order); if an implementation-level record turns
+here — decision numbering is contended by that session, and DEC-0059
+already carries the decision. The behaviour is built in **M4** (TS-WEB-0010
+stages, TS-WEB-0019 D3a scene order); if an implementation-level record turns
 out to be needed, it is written there.
 
 ### D-2 — Component names follow the 26 content types
@@ -1200,11 +1200,11 @@ out to be needed, it is written there.
 Where a component renders one of the content types of the content
 concept (B.3), it carries that type's name (`hero-block` for `hero`,
 `proof-card`, `context-band`, `closing-cta`, `live-module-frame`,
-`legal-section`, …). Reasoning: TS-007 D5 makes the Zod schema the
-binding output contract and TS-007 check 9 validates slot bindings —
+`legal-section`, …). Reasoning: TS-WEB-0007 D5 makes the Zod schema the
+binding output contract and TS-WEB-0007 check 9 validates slot bindings —
 one vocabulary across content, schema and component keeps that check
-meaningful, and page specs already speak in content types (TS-020 D1,
-TS-022 D2). Where no content type exists (chrome, live shells, form
+meaningful, and page specs already speak in content types (TS-WEB-0020 D1,
+TS-WEB-0022 D2). Where no content type exists (chrome, live shells, form
 mounts, states) the name is new and kebab-case.
 
 ### D-3 — `badge` and `chip` are two components
@@ -1216,7 +1216,7 @@ in code is the conservative reading of the ≥ 40 px rule; both stay
 
 ### D-4 — The newsletter block ships in M2 as a labelled mock
 
-TS-016 D10 says the footer carries the newsletter entry only when a
+TS-WEB-0016 D10 says the footer carries the newsletter entry only when a
 sending system exists and forbids "a placeholder form that discards
 addresses". The run's mock rule requires every missing external system to
 be built as a mock with labelled dummy data, never as a hole. Both hold
@@ -1227,15 +1227,15 @@ not a form pretending to work, it is a visibly demo module.
 
 ### D-5 — The context band is suppressed on flow steps 2 and 3
 
-TS-006 D5 renders the band on every page; TS-023 D7 suppresses it
+TS-WEB-0006 D5 renders the band on every page; TS-WEB-0023 D7 suppresses it
 mid-flow because a mid-flow exit offer costs the conversion the page
-exists for. M2 follows TS-023 (the page-level spec), renders the band on
+exists for. M2 follows TS-WEB-0023 (the page-level spec), renders the band on
 step 1, and records the deviation rather than silently satisfying
-TS-006-A6. → `state/open.md` row 24.
+TS-WEB-0006-A6. → `state/open.md` row 24.
 
 ### D-6 — The single-choice control is chip-derived
 
-Q-044's sharpest gap: `/mitmachen/registrieren` steps 2 and 3 need a
+Q-0044's sharpest gap: `/mitmachen/registrieren` steps 2 and 3 need a
 control the design system does not specify. The most conservative
 reading is to derive it from an existing specified control rather than
 invent a new shape: tappable chips in a real `radiogroup`, radius 999,
@@ -1244,7 +1244,7 @@ no new colour. → `state/open.md` row 23.
 
 ### D-7 — The reading measure applies to every reading surface
 
-TS-029 D5 sets 66 ch ideal / 80 ch maximum for the legal page. The design
+TS-WEB-0029 D5 sets 66 ch ideal / 80 ch maximum for the legal page. The design
 system has no measure token, so M2 applies the same measure to every
 long-form text column (`legal-section`, `objection-list`, `trust-block`,
 `origin-story` body) instead of letting each page invent one.
@@ -1261,7 +1261,7 @@ unresolved clearance and demo data into one visual register.
 ### D-9 — Four states are declared by every data-dependent component
 
 Loading / empty / error-degraded / mocked (section 1, rule 6). Reasoning:
-TS-008 D5 insists emptiness, staleness and failure are three different
+TS-WEB-0008 D5 insists emptiness, staleness and failure are three different
 things and the mock rule adds a fourth; a component that declares only
 "has data / has none" will reintroduce the spinner and the error sentence
 both specs forbid.
@@ -1270,10 +1270,10 @@ both specs forbid.
 
 | Row | Point | Kind |
 | --- | --- | --- |
-| 22 | Newsletter block ships as a labelled mock while Q-020 is unanswered (D-4) | `Mock aktiv` |
-| 23 | Single-choice control has no design-system component (Q-044 residue, D-6) | design review |
-| 24 | Context band suppressed on registration steps 2–3 — TS-023 D7 against TS-006 D5/A6 (D-5) | spec conflict |
-| 25 | Design system has no measure token; 66/80 ch generalised from TS-029 D5 (D-7) | design review |
+| 22 | Newsletter block ships as a labelled mock while Q-0020 is unanswered (D-4) | `Mock aktiv` |
+| 23 | Single-choice control has no design-system component (Q-0044 residue, D-6) | design review |
+| 24 | Context band suppressed on registration steps 2–3 — TS-WEB-0023 D7 against TS-WEB-0006 D5/A6 (D-5) | spec conflict |
+| 25 | Design system has no measure token; 66/80 ch generalised from TS-WEB-0029 D5 (D-7) | design review |
 | 26 | Content type `partner-mention` is composed by no page spec — not built in M2 | scope |
 
 ## 7 Deliberately not built in M2
@@ -1282,12 +1282,12 @@ both specs forbid.
   `/deine-region` and `/ueber-uns`, but neither page spec composes it.
   Unspecified features die here (`plan/guardrails.md`). → row 26.
 - The **scope preview** and `GET /api/scope/preview` — deferred by
-  DEC-069; `scope-picker` ships without it.
-- The **map module** — DEC-061 dates it January 2027; block 3 of
+  DEC-0069; `scope-picker` ships without it.
+- The **map module** — DEC-0061 dates it January 2027; block 3 of
   `/deine-region` stays one swappable slot and nothing on the page
   depicts a map.
 - `/deine-termine` and `/mitmachen/vor-ort-werben` — reserved names that
-  answer 404 (DEC-071); no component, no link, not in the sitemap.
+  answer 404 (DEC-0071); no component, no link, not in the sitemap.
 - Any **role switcher, audience tab, segmented entry or interstitial** —
-  forbidden on every page at every stage (TS-006 D8); it must not appear
-  in the component inventory either (TS-006-A9).
+  forbidden on every page at every stage (TS-WEB-0006 D8); it must not appear
+  in the component inventory either (TS-WEB-0006-A9).

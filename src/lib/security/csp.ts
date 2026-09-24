@@ -1,19 +1,19 @@
 /**
- * The Content-Security-Policy and the static security headers — TS-014.
+ * The Content-Security-Policy and the static security headers — TS-WEB-0014.
  *
- * TS-014 D7 makes this module the *single* source of the policy: "The policy
+ * TS-WEB-0014 D7 makes this module the *single* source of the policy: "The policy
  * is one typed structure in one module — never a string spread across config
  * files." D1's allowlist table and `ALLOWLIST` below are the same list; a host
- * in one and not the other is a defect (TS-014-A1).
+ * in one and not the other is a defect (TS-WEB-0014-A1).
  *
- * DEC-045 fixes the script strategy: per-build `'sha256-…'` hashes, no
- * per-request nonce, so the prerendered shell of TS-004 D6 survives. The hash
+ * DEC-0045 fixes the script strategy: per-build `'sha256-…'` hashes, no
+ * per-request nonce, so the prerendered shell of TS-WEB-0004 D6 survives. The hash
  * set is injected at build time — see `scriptHashes` below,
  * `scripts/generate-csp-hashes.mjs` (the extraction step, run as part of
  * `pnpm build`, after `next build`) and `src/lib/security/csp-hashes.ts` (how
  * `proxy.ts` reads the result at runtime).
  *
- * `'strict-dynamic'` is **not** part of the policy — a correction to DEC-045,
+ * `'strict-dynamic'` is **not** part of the policy — a correction to DEC-0045,
  * recorded in state/open.md rows 21 and 31. The scaffolded module shipped it
  * unconditionally with an empty hash set, which blocked every script,
  * hydration included: 'strict-dynamic' makes the browser stop honouring
@@ -28,7 +28,7 @@
  */
 
 /**
- * The external origins of TS-014 D1. Every one of them is Jan's own
+ * The external origins of TS-WEB-0014 D1. Every one of them is Jan's own
  * infrastructure except eTracker, which is the one named third party.
  *
  * `assets` joined the table on 2026-09-18, when the real Portalize calendar
@@ -46,7 +46,7 @@ export const ALLOWLIST = {
   envoy: "https://envoy-api.api.schafe-vorm-fenster.de",
   /** The ecosystem's image proxy — the embedded calendar's event images. */
   assets: "https://assets.api.schafe-vorm-fenster.de",
-  /** TS-014 D1: named by WEB-Q-030, but active in no directive today. */
+  /** TS-WEB-0014 D1: named by NFR-WEB-0030, but active in no directive today. */
   app: "https://app.schafe-vorm-fenster.de",
 } as const;
 
@@ -73,7 +73,7 @@ export type Environment = "production" | "preview" | "development";
 export interface PolicyInput {
   readonly environment: Environment;
   /**
-   * DEC-045: the per-build `'sha256-…'` hashes of every inline script, from
+   * DEC-0045: the per-build `'sha256-…'` hashes of every inline script, from
    * `src/lib/security/csp-hashes.ts`. When empty, the inline scripts have
    * nothing to run on except the `'unsafe-inline'` concession below — which
    * applies in `next dev` (no build has run the extraction step) and, for
@@ -83,7 +83,7 @@ export interface PolicyInput {
   readonly scriptHashes?: readonly string[];
 }
 
-/** The directive set of TS-014 D2, as data rather than as a string. */
+/** The directive set of TS-WEB-0014 D2, as data rather than as a string. */
 export function policyDirectives({
   environment,
   scriptHashes = [],
@@ -102,7 +102,7 @@ export function policyDirectives({
     "'self'",
     ...validHashes.map((hash) => `'${hash}'`),
     // No 'strict-dynamic', by measurement rather than by the original design
-    // (DEC-045 assumed it would "still apply" once hashes exist — see
+    // (DEC-0045 assumed it would "still apply" once hashes exist — see
     // state/open.md rows 21/31 for the correction). Every script tag Next
     // renders here — the framework/page chunks *and* the inline flight
     // payload — is parser-inserted straight into the static HTML, not
@@ -118,11 +118,11 @@ export function policyDirectives({
     etracker,
     portalize,
     envoy,
-    // TS-014 D5: HMR needs eval, and only in local development.
+    // TS-WEB-0014 D5: HMR needs eval, and only in local development.
     ...(isDev ? ["'unsafe-eval'"] : []),
     // `next dev` never produces the static HTML the hash extraction scans, so
     // there is no hash set to trust Next's inline bootstrap/flight scripts
-    // with. TS-014 D7's 'unsafe-inline' ban is scoped to "a production
+    // with. TS-WEB-0014 D7's 'unsafe-inline' ban is scoped to "a production
     // script directive" — this is the same kind of dev-only concession as
     // 'unsafe-eval' just above, not a production relaxation.
     ...(isDev && !hasHashes ? ["'unsafe-inline'"] : []),
@@ -154,12 +154,12 @@ export function policyDirectives({
     "default-src": ["'self'"],
     "base-uri": ["'self'"],
     "script-src": scriptSrc,
-    // TS-014 D2: the one bounded concession — Next inlines critical CSS and
+    // TS-WEB-0014 D2: the one bounded concession — Next inlines critical CSS and
     // both web components style their shadow roots inline.
     "style-src": ["'self'", "'unsafe-inline'"],
     // `assets` carries the embedded Portalize calendar's event images; the
     // widget sets them from the events data, so they are real requests from
-    // the visitor's browser and need a real source (TS-014 D1).
+    // the visitor's browser and need a real source (TS-WEB-0014 D1).
     "img-src": ["'self'", "data:", etracker, assets],
     "font-src": ["'self'"],
     "connect-src": connectSrc,
@@ -187,7 +187,7 @@ export function contentSecurityPolicy(input: PolicyInput): string {
 }
 
 /**
- * TS-014 D4 — the static header set, applied to every route.
+ * TS-WEB-0014 D4 — the static header set, applied to every route.
  * `Strict-Transport-Security` is per-environment (D5) and therefore not here;
  * it is added in the proxy alongside the CSP.
  */
@@ -228,7 +228,7 @@ export const STATIC_SECURITY_HEADERS: ReadonlyArray<{
   { key: "Reporting-Endpoints", value: 'csp="/api/csp-report"' },
 ];
 
-/** TS-014 D5 — HSTS differs per environment; off in local development. */
+/** TS-WEB-0014 D5 — HSTS differs per environment; off in local development. */
 export function strictTransportSecurity(
   environment: Environment,
 ): string | null {

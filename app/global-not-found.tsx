@@ -17,12 +17,12 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 /**
- * 404 — TS-004-A4: real 404 status, `noindex`, mini content, **the place
+ * 404 — TS-WEB-0004-A4: real 404 status, `noindex`, mini content, **the place
  * search as the dominant element and the four jobs as the band**.
  *
  * Both modules are built (F-2-31). Until round 3 the body read "Diese Adresse
  * gibt es nicht. [Platzhalter M2 — Ortssuche und Job-Band folgen mit den
- * Komponenten, DEC-032.]" — a developer note with a decision id, rendered as
+ * Komponenten, DEC-0032.]" — a developer note with a decision id, rendered as
  * visitor copy — and a dashed box labelled "Platzhalter: place-search +
  * context-band" stood in for both required modules. The 404 is part of the
  * `save-calendar-to-homescreen` walk (`plan/gate-2-scope.md` §2), so it is
@@ -30,7 +30,7 @@ import type { ReactNode } from "react";
  *
  * `place-search` is a plain GET form to `/dein-ort`, so it works here exactly
  * as it does everywhere else, with no JavaScript and no data dependency —
- * which is what lets this surface stay the static shell DEC-032 asks for.
+ * which is what lets this surface stay the static shell DEC-0032 asks for.
  *
  * **Why this file and not `app/[lang]/not-found.tsx`.** Next.js 16.3 does not
  * server-render the body of a `notFound()` raised inside the route tree: the
@@ -55,7 +55,7 @@ import type { ReactNode } from "react";
  * `[lang]`, so it has no language parameter and no request path of its own;
  * the proxy still has the URL and puts the resolved language on a request
  * header. It is the server's view of the path, not a client-side swap, so
- * DEC-038 holds, and `generateMetadata` reads the same header, so the
+ * DEC-0038 holds, and `generateMetadata` reads the same header, so the
  * `<title>` follows the body's language rather than the TLD default. (That is
  * possible *here* and not in `app/[lang]/**`: those routes are prerendered, and
  * `_locale.ts` records why a metadata function there may not read request
@@ -77,7 +77,7 @@ import type { ReactNode } from "react";
  *
  * The other way out, a `<Suspense>` boundary, is the one thing this surface
  * may not have: the fallback is what a visitor without JavaScript would be
- * left with, and TS-004 D6 asks for a complete document. Nothing is lost by
+ * left with, and TS-WEB-0004 D6 asks for a complete document. Nothing is lost by
  * blocking — the body is static markup once the language is known, and a 404
  * is not a cached surface.
  */
@@ -120,7 +120,7 @@ export default async function GlobalNotFound(): Promise<ReactNode> {
               <p>{d.notFound.body}</p>
 
               {/* The dominant element: the same component, the same submit
-                  and the same target as on `/` and `/dein-ort` (TS-008 D7 —
+                  and the same target as on `/` and `/dein-ort` (TS-WEB-0008 D7 —
                   one place search everywhere it stands). */}
               <section aria-label={d.search.label} data-module="place-search" id="place-search">
                 <PlaceSearch
@@ -132,7 +132,7 @@ export default async function GlobalNotFound(): Promise<ReactNode> {
               </section>
 
               {/* The jobs band. No focus job belongs to a 404, so all four
-                  entries render rather than three (TS-006 D5's "minus this
+                  entries render rather than three (TS-WEB-0006 D5's "minus this
                   page's focus job" has nothing to subtract here). */}
               <section data-module="context-band" id="context-band">
                 <ContextBand

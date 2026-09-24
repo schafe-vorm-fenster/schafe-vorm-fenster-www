@@ -8,13 +8,13 @@
  * The pipeline, in order:
  *
  *   1. **gate**   clearance and place coverage — hard filters before scoring
- *                 (TS-005 D5, WEB-F-033, WEB-F-024)
+ *                 (TS-WEB-0005 D5, FUN-WEB-0033, FUN-WEB-0024)
  *   2. **score**  the D5 formula with the weight profile of the page's focus
- *                 job, stage-0 redistribution included (DEC-048)
+ *                 job, stage-0 redistribution included (DEC-0048)
  *   3. **rotate** the ISO-week seed shifts equal-score groups, nothing else
  *                 (D7)
  *   4. **order**  the sequence rule of the concept (D6, `order.ts`)
- *   5. **count**  the surface's element count (DEC-048), padded with empty
+ *   5. **count**  the surface's element count (DEC-0048), padded with empty
  *                 slots rather than shortened
  */
 
@@ -27,14 +27,14 @@ import type { GeoTier } from "./geo";
 import type { RelevanceItem, ViewerContext } from "./types";
 import type { Weights } from "./weights";
 
-/** DEC-048. Three is the minimum the sequence rule needs; seven carries the full pattern. */
+/** DEC-0048. Three is the minimum the sequence rule needs; seven carries the full pattern. */
 export const SURFACE_COUNTS = { inline: 3, home: 5, stream: 7 } as const;
 
 export type Surface = keyof typeof SURFACE_COUNTS;
 
 /**
  * A filled position, or an honest gap. An unfilled position **weakens the
- * claim** rather than shortening the stream (SRC-001 §4, TS-019 D4): the page
+ * claim** rather than shortening the stream (SRC-0001 §4, TS-WEB-0019 D4): the page
  * renders an `empty-proof-slot` in its place, never one child fewer.
  */
 export type SelectionEntry<Payload = unknown> =
@@ -65,7 +65,7 @@ export interface RelevanceSelection<Payload = unknown> {
 export interface SelectionRequest<Payload = unknown> extends GateOptions {
   readonly items: readonly RelevanceItem<Payload>[];
   readonly viewer: ViewerContext;
-  /** A named surface of DEC-048, or an explicit count. */
+  /** A named surface of DEC-0048, or an explicit count. */
   readonly surface: Surface | { readonly count: number };
   /** The reference date for freshness — the page's clock, never the engine's. */
   readonly now: Date;

@@ -15,6 +15,6 @@ journey specifications; the tests themselves live in the code
 ## The rule
 
 Traceability rides on IDs, not on a uniform test format
-([DEC-040](../decisions/040-verification-architecture.md)). Every
+([DEC-0040](../decisions/DEC-0040--verification-architecture.md)). Every
 acceptance criterion carries a global ID and a level; every test names
 the ID it verifies; `pnpm check:specs` reports the gaps.

@@ -1,7 +1,7 @@
 version: 1
 kind: command-dispatch
 command: cmd:foundation
-description: Stand up the technical foundation (M1) per TS-017/TS-015 with a proven preview chain.
+description: Stand up the technical foundation (M1) per TS-WEB-0017/TS-WEB-0015 with a proven preview chain.
 match:
   labels:
     all:
@@ -16,7 +16,7 @@ playbook:
       required: true
     delivery-spec:
       from: repository-glob
-      selector: "specs/{tactical/delivery-pipeline.tactical.md,decisions/031-*.md,decisions/035-*.md}"
+      selector: "specs/{tactical/TS-WEB-0015--delivery-pipeline.tactical.md,decisions/031-*.md,decisions/035-*.md}"
       required: true
     brand-package:
       from: literal

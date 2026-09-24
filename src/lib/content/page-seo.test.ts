@@ -7,7 +7,7 @@ import { beforeAll, describe, expect, it, vi } from "vitest";
 import { pageSeo } from "@/src/lib/content/page-seo";
 
 /**
- * TS-011 D5 — the `seo` block of a page artifact is where a route's title and
+ * TS-WEB-0011 D5 — the `seo` block of a page artifact is where a route's title and
  * description live. This suite tests the reader at its seam: a content root on
  * disk in, a `{ title, description, provenance }` or `null` out.
  *
@@ -30,7 +30,7 @@ function contentRootWith(files: Record<string, string>): string {
 
 const frontmatter = (seo: string) => `---
 id: fixture
-page_id: TS-026
+page_id: TS-WEB-0026
 route: "/deine-region"
 ${seo}
 content_type: section
@@ -46,7 +46,7 @@ provenance: "generated"
 # Fixture
 `;
 
-describe("TS-011 D5: a route's title and description come from its artifact", () => {
+describe("TS-WEB-0011 D5: a route's title and description come from its artifact", () => {
   const root = contentRootWith({
     "deine-region/de.md": frontmatter(`seo:
   "/deine-region":
@@ -68,9 +68,9 @@ describe("TS-011 D5: a route's title and description come from its artifact", ()
   });
 
   it("gives two routes that share one artifact two different documents", () => {
-    // `/deine-region/angebot` is specified by TS-026 together with
+    // `/deine-region/angebot` is specified by TS-WEB-0026 together with
     // `/deine-region` and lives in its file, so the map is keyed per route —
-    // two documents to a search engine, two titles (TS-011-A7's uniqueness).
+    // two documents to a search engine, two titles (TS-WEB-0011-A7's uniqueness).
     expect(pageSeo("regionQuote", "de", { contentRoot: root })?.title).toBe(
       "Angebot für eure Region anfragen",
     );
@@ -93,7 +93,7 @@ describe("TS-011 D5: a route's title and description come from its artifact", ()
   });
 });
 
-describe("TS-011 D5: a content gap is a value, never a throw", () => {
+describe("TS-WEB-0011 D5: a content gap is a value, never a throw", () => {
   beforeAll(() => {
     vi.spyOn(console, "warn").mockImplementation(() => {});
   });
@@ -144,12 +144,12 @@ describe("TS-011 D5: a content gap is a value, never a throw", () => {
 });
 
 /**
- * TS-007 D11 applies to the head as much as to the body (differential review
+ * TS-WEB-0007 D11 applies to the head as much as to the body (differential review
  * of the F-2-72 change): without the gate a production build would serve an
  * unreviewed title and description — and the `WebPage` JSON-LD built from
  * them — on a page whose body the same gate had just emptied.
  */
-describe("TS-007 D11: the editorial gate reaches the head too", () => {
+describe("TS-WEB-0007 D11: the editorial gate reaches the head too", () => {
   const artifactWith = (status: string) =>
     contentRootWith({
       "deine-region/de.md": frontmatter(`seo:

@@ -1,5 +1,5 @@
 /**
- * The formula — TS-005 D5, SRC-002's scoring block:
+ * The formula — TS-WEB-0005 D5, SRC-0002's scoring block:
  *
  * ```text
  * score(e) = w_geo · geo(e) + w_ctx · ctx(e) + w_job · job(e)

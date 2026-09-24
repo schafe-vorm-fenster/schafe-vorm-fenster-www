@@ -8,7 +8,7 @@ import {
   rendersIn,
 } from "@/src/lib/content/lifecycle";
 
-describe("TS-007 D11 / A14: which status renders in which build", () => {
+describe("TS-WEB-0007 D11 / A14: which status renders in which build", () => {
   it("lets a production build contain approved content only", () => {
     expect(rendersIn("approved", "production")).toBe(true);
     expect(rendersIn("draft", "production")).toBe(false);

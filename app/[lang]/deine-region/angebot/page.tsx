@@ -20,11 +20,11 @@ import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
 /**
- * TS-026 — `/deine-region/angebot` — the quote form.
+ * TS-WEB-0026 — `/deine-region/angebot` — the quote form.
  *
  * Composition (D1/D2): `breadcrumb-trail` (rendered by `PageFrame`, this
  * route's `ROUTES.regionQuote.parent` is `region`) → the headline on the
- * violet ground → `envoy-form-mount` (kind `quote`, TS-016 S2) with its own
+ * violet ground → `envoy-form-mount` (kind `quote`, TS-WEB-0016 S2) with its own
  * `lead-fallback` → `response-promise` → band + closing.
  *
  * **No hero photograph** (polish brief page 9, item 1). The hero was an
@@ -41,7 +41,7 @@ import type { Metadata } from "next";
  * visitor who submits and sees the same screen again cannot tell whether to
  * wait for a reply or try once more. `envoy-form-mount` owns the state, says
  * in its own words that this is the demo and that nothing was sent, and moves
- * focus to it (TS-016-A9). The real widget replaces the whole mount.
+ * focus to it (TS-WEB-0016-A9). The real widget replaces the whole mount.
  */
 
 const ROUTE = "regionQuote" as const;
@@ -85,7 +85,7 @@ export default async function Page({
   params: Promise<{ lang: string }>;
 }) {
   const locale = await localeFrom(params);
-  // TS-007 README: `/deine-region/angebot` has no artifact of its own —
+  // TS-WEB-0007 README: `/deine-region/angebot` has no artifact of its own —
   // its slots live in the `region` artifact (`deine-region-angebot-*`).
   const page = await pageContent("region", locale);
   // `/deine-region/angebot` is specified together with `/deine-region`, so its
@@ -109,10 +109,10 @@ export default async function Page({
 
   return (
     <>
-      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
-      // TS-006 D6 — the same goal and the same label as the page's own
+      // TS-WEB-0006 D6 — the same goal and the same label as the page's own
       // conversion. The label used to be the interpolated `h1`, so the
       // closing button read "Angebot für eure Organisation anfragen" on the
       // page that *is* that form.
@@ -145,8 +145,8 @@ export default async function Page({
             briefingHref={BRIEFING_URL}
             briefingLabel={copy.briefingLabel}
             context={{ goal: "request-licence-quote" }}
-            // TS-012 D4 / TS-026-A13: the page's own goal, at the stage the
-            // registry fixes. The widget is the mock (Q-022) and its submit
+            // TS-WEB-0012 D4 / TS-WEB-0026-A13: the page's own goal, at the stage the
+            // registry fixes. The widget is the mock (Q-0022) and its submit
             // is therefore its success signal — the same reading
             // `/dein-kalender/bestellen` step 4 records for its own mocked
             // completion. `state/open.md`.

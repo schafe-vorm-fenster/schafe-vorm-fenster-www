@@ -13,9 +13,9 @@ import { everyRoute, href } from "../src/lib/routes/routes";
  * rendered open on a page the visitor came to for something else.
  *
  * This file is that measurement made repeatable, plus the four things the
- * shrink was not allowed to cost: TS-004-A9's contact, newsletter and three
- * legal links, TS-001-A7's language switch, the 44 px target of SRC-014
- * §Touch targets, and the no-JavaScript behaviour of TS-009.
+ * shrink was not allowed to cost: TS-WEB-0004-A9's contact, newsletter and three
+ * legal links, TS-WEB-0001-A7's language switch, the 44 px target of SRC-0014
+ * §Touch targets, and the no-JavaScript behaviour of TS-WEB-0009.
  *
  * ### Why 0.6 screens
  *
@@ -59,7 +59,7 @@ test("the desktop footer is tidier than the phone one, not looser", async ({ pag
   expect(await footerHeight(page)).toBeLessThanOrEqual(400);
 });
 
-test("TS-004-A9: contact, newsletter and the three legal links are all still there", async ({
+test("TS-WEB-0004-A9: contact, newsletter and the three legal links are all still there", async ({
   page,
 }) => {
   await page.setViewportSize(PHONE);
@@ -77,23 +77,23 @@ test("TS-004-A9: contact, newsletter and the three legal links are all still the
   await expect(footer.locator("[data-newsletter] input")).toBeVisible();
   await expect(footer.locator("[data-newsletter] button[type=submit]")).toBeVisible();
 
-  // The three legal links, visible — TS-002-A8 asks for footer-linked on
+  // The three legal links, visible — TS-WEB-0002-A8 asks for footer-linked on
   // every page, which a link behind a disclosure would not be.
   for (const hash of ["impressum", "datenschutz", "barrierefreiheit"]) {
     await expect(footer.locator(`a[href="/rechtliches#${hash}"]`).first()).toBeVisible();
   }
 
-  // TS-001-A7's switch, on the same base line.
+  // TS-WEB-0001-A7's switch, on the same base line.
   await expect(footer.getByRole("navigation", { name: "Sprache" })).toBeVisible();
 });
 
 /**
- * SRC-014 §Touch targets — 44 px, on the controls the rule is about.
+ * SRC-0014 §Touch targets — 44 px, on the controls the rule is about.
  *
  * Two things in this footer are deliberately not on the list, named rather
  * than filtered out of a selector without a reason:
  *
- *  - the **logo**, which SRC-014 §Logo fixes at "38–40 px, clipped to radius
+ *  - the **logo**, which SRC-0014 §Logo fixes at "38–40 px, clipped to radius
  *    999"; it is a size the design system states, not a target that slipped;
  *  - the **consent sentence's inline link** to the privacy policy, which is
  *    a link inside running text. WCAG 2.5.8 exempts inline links for the
@@ -109,7 +109,7 @@ const FOOTER_TARGETS = [
   "body > footer [data-newsletter] button",
 ].join(", ");
 
-test("SRC-014 §Touch targets: every standalone footer control clears 44 px", async ({ page }) => {
+test("SRC-0014 §Touch targets: every standalone footer control clears 44 px", async ({ page }) => {
   await page.setViewportSize(PHONE);
   await page.goto("/");
   const heights = await page.$$eval(FOOTER_TARGETS, (elements) =>

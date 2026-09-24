@@ -1,6 +1,6 @@
 ---
 id: ueber-uns-archiv-de
-page_id: TS-028
+page_id: TS-WEB-0028
 route: "/ueber-uns/archiv"
 seo:
   "/ueber-uns/archiv":
@@ -20,10 +20,10 @@ generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
 provenance: "sourced — the archive now carries all 31 real media-echo entries, verbatim from the package frontmatter (title, type, date, source, geo, url). No entry carries usage_rights, so every row is clearance-pending and the page is protected-preview only; 0 generated demo rows left. EN translation of content/pages/ueber-uns/archiv/de.md, same source ids per slot; entry titles stay in their original language"
-compliance_check: "state/content-map.md#compliance-checks — TS-028"
-schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0028"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
-  - "state/open.md #1 — Q-045: none of the 31 media-echo entries carries `usage_rights`. The rows are real and cited, so they ship as `provenance: sourced` with clearance pending, in the protected preview only. Go-live needs the clearance per entry, or the row goes"
+  - "state/open.md #1 — Q-0045: none of the 31 media-echo entries carries `usage_rights`. The rows are real and cited, so they ship as `provenance: sourced` with clearance pending, in the protected preview only. Go-live needs the clearance per entry, or the row goes"
   - "Counted 31 real entries on 2026-09-12, not the 32 the Phase-1 map and state/open.md #1 quote. The package ships 31 `.media-echo.md` files at 0.3.3"
   - "Code follow-up — `app/[lang]/ueber-uns/archiv/page.tsx` passes `demo` to every `ArchiveRow` and renders a `DemoDataBadge` whenever rows exist. Both are hard-coded and now mislabel real, cited entries as demo data; the page should read `demo` off the slot (`isDemoSlot`) as `/deine-region` already does"
   - "One entry (`2026-05-noerd-2026-rostock`) carries two types, `award` and `conference`. The table shows the first; the archive-row component takes one type string and uses it as both label and filter id"
@@ -32,9 +32,9 @@ open_points:
 # Archive (`/ueber-uns/archiv`)
 
 No conversion of its own, no entry point via the main navigation
-(TS-028 D1). Chronological, newest first — the only exception to
+(TS-WEB-0028 D1). Chronological, newest first — the only exception to
 relevance sorting on this website, because this page serves scrutiny,
-not reach (TS-028 D2).
+not reach (TS-WEB-0028 D2).
 
 ## Slot 1 — Page heading
 
@@ -42,7 +42,7 @@ not reach (TS-028 D2).
 
 **h1:** Archive
 
-Deliberately with no intro text selling the collection (TS-028 D1) —
+Deliberately with no intro text selling the collection (TS-WEB-0028 D1) —
 the list is the page.
 
 ## Slot 2 — Archive rows
@@ -51,7 +51,7 @@ the list is the page.
 
 One row per media-echo entry, generated from `title`, `type`, `date`,
 `source`, `geo`, and `url`. **As of 2026-09-12: none of the 31 entries
-carries `usage_rights`** — a missing field is not a clearance (TS-007
+carries `usage_rights`** — a missing field is not a clearance (TS-WEB-0007
 D2). For production that filter still removes everything. Nothing is
 invented in its place: the slot below carries all 31 real entries in
 the wording of their frontmatter, as `sourced` with clearance pending,
@@ -98,7 +98,7 @@ frontmatter:
 | Nordkurier — Schafe vorm Fenster Bericht (August) | Press | 2018-08 | Nordkurier | Mecklenburg-Vorpommern | — |
 | Nordkurier — Schafe vorm Fenster Bericht (Juni) | Press | 2018-06 | Nordkurier | Mecklenburg-Vorpommern | — |
 
-No entry carries `usage_rights` today (Q-045). The rows are real and
+No entry carries `usage_rights` today (Q-0045). The rows are real and
 evidenced all the same — each one traces back to its entry in the
 package — so they stand here as `sourced` with clearance open and no
 demo marking, visible in the protected preview only. Before go-live
@@ -114,7 +114,7 @@ first, because an archive row carries exactly one type chip.
 <!-- id: archiv-3-context-line; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft -->
 
 Mechanical translation of the metadata for each cleared entry at build
-time (TS-007 D3) — no editorial running text per entry, no room for
+time (TS-WEB-0007 D3) — no editorial running text per entry, no room for
 invention.
 
 ## Slot 4 — Type filter (chips)
@@ -132,7 +132,7 @@ invention.
 - Social media
 - All
 
-Only types with at least one entry get a chip (TS-028 D4). The set
+Only types with at least one entry get a chip (TS-WEB-0028 D4). The set
 covers all seven today: press 14 times, award 8, conference 6, and once
 each for podcast, portrait, recognition, and social media. Four of the
 eight award entries are applications rather than prizes — the titles say

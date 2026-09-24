@@ -14,7 +14,7 @@ export interface CopyButtonProps {
 
 /**
  * The one client-side sliver of `code-snippet` (56 `code-snippet`,
- * TS-025 D7): the Clipboard API is not available without JavaScript, so this
+ * TS-WEB-0025 D7): the Clipboard API is not available without JavaScript, so this
  * one control — not the snippet itself, which stays server-rendered,
  * selectable text — is a client component, matching the same rule
  * `motion-reveal` and `back-to-top` follow in the foundation set.

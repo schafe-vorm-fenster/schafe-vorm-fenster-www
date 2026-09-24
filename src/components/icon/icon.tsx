@@ -43,7 +43,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 
 /**
- * The role → glyph table of the design system (SRC-014 §Icons), verbatim.
+ * The role → glyph table of the design system (SRC-0014 §Icons), verbatim.
  * "Any new requirement takes the matching Lucide glyph" — it is added here,
  * never drawn by hand and never taken from another family. `arrow-up` is the
  * one addition M2 needs (`back-to-top`), and it is a Lucide glyph.
@@ -105,7 +105,7 @@ export interface IconProps {
 }
 
 /**
- * 20 `icon` [PROPOSED] — SRC-014 §Icons.
+ * 20 `icon` [PROPOSED] — SRC-0014 §Icons.
  *
  * Structure: Lucide only, 24 × 24 grid, 2 px stroke, round caps; the
  * role → glyph table above is the allowed set, and the type makes anything

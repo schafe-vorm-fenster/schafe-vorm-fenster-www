@@ -1,8 +1,8 @@
 /**
- * The indexability predicate — TS-015 D3, layer 2.
+ * The indexability predicate — TS-WEB-0015 D3, layer 2.
  *
  *   indexable = VERCEL_ENV === "production"
- *               && requestHost ∈ canonicalPublicHosts   (TS-001 D1 domain set)
+ *               && requestHost ∈ canonicalPublicHosts   (TS-WEB-0001 D1 domain set)
  *
  * Layer 2 is deliberately independent of layer 1 (Vercel Deployment
  * Protection): protection can be lifted for a demo, and the indexing rule has
@@ -13,7 +13,7 @@
 
 import type { Environment } from "@/src/lib/security/csp";
 
-/** TS-001 D1 — the canonical public hosts. `www.` is canonical everywhere. */
+/** TS-WEB-0001 D1 — the canonical public hosts. `www.` is canonical everywhere. */
 export const CANONICAL_PUBLIC_HOSTS: readonly string[] = [
   "www.schafe-vorm-fenster.de",
   "www.owcezaoknem.pl",
@@ -21,7 +21,7 @@ export const CANONICAL_PUBLIC_HOSTS: readonly string[] = [
   "www.sheepoutside.com",
 ];
 
-/** Maps `VERCEL_ENV` (absent locally) onto the three environments of TS-014 D5. */
+/** Maps `VERCEL_ENV` (absent locally) onto the three environments of TS-WEB-0014 D5. */
 export function environmentFrom(
   vercelEnv: string | undefined,
 ): Environment {

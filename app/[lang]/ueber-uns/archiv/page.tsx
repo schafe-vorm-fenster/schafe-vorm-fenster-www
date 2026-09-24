@@ -20,16 +20,16 @@ import { pageMeta } from "./page.meta";
 import type { Metadata } from "next";
 
 /**
- * TS-028 — `/ueber-uns/archiv` — the archive.
+ * TS-WEB-0028 — `/ueber-uns/archiv` — the archive.
  *
  * Composition (D1, D2, D7): `h1` (the LCP element, text) → `archive-filter`
  * (client-side, hidden until mounted, D4/D8) → the record, one `h2` per
  * year, `archive-row` ×n, `date` descending → band + closing, merged
- * (`primaryConversion: null`, TS-006 D6).
+ * (`primaryConversion: null`, TS-WEB-0006 D6).
  *
- * [ASSUMPTION, per plan/guardrails.md] `Q-045`: 0 of 31 media-echo entries
+ * [ASSUMPTION, per plan/guardrails.md] `Q-0045`: 0 of 31 media-echo entries
  * carry `usage_rights` today, so the real list (`archiv-2-rows`) renders
- * zero rows (D3, WEB-F-033 — exactly the honest behaviour the mock rule
+ * zero rows (D3, FUN-WEB-0033 — exactly the honest behaviour the mock rule
  * exists for). The content follow-up's second pass (2026-09-12, state/open.md
  * row 52) replaced the six invented demo rows with all 31 real media-echo
  * entries, verbatim from the package frontmatter — `archiv-2-rows-demo`
@@ -40,7 +40,7 @@ import type { Metadata } from "next";
  * rows back in this slot. Clearance itself stays open — 0 of the 31 entries
  * carry `usage_rights`, recorded as `open_points[]` in the page frontmatter,
  * not as a badge (guardrails: the badge marks *generated* content, not
- * *clearance-pending* content). TS-028-A14/R-2: each row's own `url` field
+ * *clearance-pending* content). TS-WEB-0028-A14/R-2: each row's own `url` field
  * is now wired to `ArchiveRow`'s outbound link, since the meta description
  * already promises "jede Zeile verlinkt auf die Originalquelle".
  */
@@ -122,8 +122,8 @@ export default async function Page({
   /**
    * One `ItemList`, byte-identical before and after filtering — the filter is
    * client-side over already-rendered rows and never touches it (D9,
-   * TS-028-A10). It now travels inside the page's **one** JSON-LD graph
-   * rather than a second `<script>`, which is TS-011 D4's own rule.
+   * TS-WEB-0028-A10). It now travels inside the page's **one** JSON-LD graph
+   * rather than a second `<script>`, which is TS-WEB-0011 D4's own rule.
    */
   const itemList = {
     "@type": "ItemList",
@@ -144,7 +144,7 @@ export default async function Page({
 
   return (
     <>
-      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} nodes={[itemList]} route={ROUTE} />
     <PageFrame closing={{ variant: "merged" }} locale={locale} meta={pageMeta}>
       <SectionShell labelledBy="archiv-h1" surface="paper">
@@ -164,7 +164,7 @@ export default async function Page({
                     contextLine={row.place === "—" ? "" : row.place}
                     date={row.date}
                     demo={demo}
-                    // TS-028-A14/R-2: the outlet's own `url`, verbatim — a
+                    // TS-WEB-0028-A14/R-2: the outlet's own `url`, verbatim — a
                     // missing one ("—") leaves the row without a link rather
                     // than pointing at nothing.
                     href={row.url && row.url !== "—" ? row.url : undefined}

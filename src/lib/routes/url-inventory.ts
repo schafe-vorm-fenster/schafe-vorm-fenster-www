@@ -1,5 +1,5 @@
 /**
- * TS-004 D1's public URL inventory, as data — the list the *site* is
+ * TS-WEB-0004 D1's public URL inventory, as data — the list the *site* is
  * measured against (F-2-55).
  *
  * `routes.ts` is the page registry: twelve content routes and their
@@ -7,7 +7,7 @@
  * surfaces (`/sitemap.xml`, `/robots.txt`, `/llms.txt`) and one
  * redirect-only row (`/start`), and it says which of them a landing-only
  * domain serves. Until this module existed, the criteria that guard D1
- * (TS-004-A1, A3, A5) asserted against `ROUTE_IDS` — i.e. against the
+ * (TS-WEB-0004-A1, A3, A5) asserted against `ROUTE_IDS` — i.e. against the
  * registry, which cannot be missing a row it defines. Two D1 rows were
  * absent from the site and every suite was green.
  *
@@ -52,7 +52,7 @@ export const D1_NON_PAGE_ROWS: readonly D1Row[] = [
   { path: "/robots.txt", kind: "machine", onLandingDomain: true, status: 200 },
   { path: "/llms.txt", kind: "machine", onLandingDomain: true, status: 200 },
   // "redirect only, renders nothing" — the lead fallback's indirection
-  // target (TS-016 D6). Not part of a landing domain's set: D1 names `/`,
+  // target (TS-WEB-0016 D6). Not part of a landing domain's set: D1 names `/`,
   // the legal routes and the machine surfaces there, and nothing else.
   { path: "/start", kind: "redirect", onLandingDomain: false, status: 302 },
 ];
@@ -81,17 +81,17 @@ export function d1Inventory(): D1Row[] {
   return [...pages, ...D1_NON_PAGE_ROWS];
 }
 
-/** Every D1 path, deduplicated — the walk TS-004-A1 and A5 are about. */
+/** Every D1 path, deduplicated — the walk TS-WEB-0004-A1 and A5 are about. */
 export function everyD1Path(): string[] {
   return [...new Set(d1Inventory().map((row) => row.path))];
 }
 
 /**
- * TS-004-A3 / D1's landing-only rule: may this path be served on a
+ * TS-WEB-0004-A3 / D1's landing-only rule: may this path be served on a
  * landing-only domain? Everything else 404s there.
  *
  * Compares on the normalised path, so `/EN/Legal/` and `/en/legal` are the
- * same row (TS-011 D1's normalisation).
+ * same row (TS-WEB-0011 D1's normalisation).
  */
 export function servedOnLandingDomain(path: string): boolean {
   const normalised = normalise(path);

@@ -18,7 +18,7 @@ export interface ChipProps extends LinkOptions {
   readonly tone?: "light" | "dark";
   readonly icon?: IconName;
   /**
-   * Client-side toggling only (`archive-filter`, TS-028 D4/D5) — a chip that
+   * Client-side toggling only (`archive-filter`, TS-WEB-0028 D4/D5) — a chip that
    * neither navigates nor submits still needs a way to react to a press.
    * Additive: every other caller leaves it out and gets the original two
    * forms (link or plain GET submit).
@@ -29,7 +29,7 @@ export interface ChipProps extends LinkOptions {
 }
 
 /**
- * 4 `chip` [FIXED] — SRC-014 §Badge and chip, decision D-3.
+ * 4 `chip` [FIXED] — SRC-0014 §Badge and chip, decision D-3.
  *
  * Structure: the tappable sibling of `badge` — neighbouring places, scope
  * items, the archive type filter. Radius 999, mono, weight 700.
@@ -37,7 +37,7 @@ export interface ChipProps extends LinkOptions {
  * glyph, never by colour alone.
  * Inherits: the badge's shape and type; the button's focus ring.
  * Space: the design system says at least 40 px; the component ships 44 px,
- * because TS-002 D2 adopts WCAG 2.5.5 AAA and 44 also satisfies "≥ 40".
+ * because TS-WEB-0002 D2 adopts WCAG 2.5.5 AAA and 44 also satisfies "≥ 40".
  * A11y: a real `<a>` when it navigates, a real `<button>` when it filters.
  */
 export function Chip({

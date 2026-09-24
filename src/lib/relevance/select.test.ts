@@ -35,7 +35,7 @@ const pool = [
   item("h", { type: "portrait", date: "2020-01-01" }),
 ];
 
-describe("DEC-048: the element count is a property of the surface", () => {
+describe("DEC-0048: the element count is a property of the surface", () => {
   it("selects 3 inline beside a claim, 5 on the home page, 7 in the stream", () => {
     expect(SURFACE_COUNTS).toEqual({ inline: 3, home: 5, stream: 7 });
     for (const [surface, count] of Object.entries(SURFACE_COUNTS)) {
@@ -63,7 +63,7 @@ describe("DEC-048: the element count is a property of the surface", () => {
   });
 });
 
-describe("TS-005-A2: a high-scoring uncleared element never appears", () => {
+describe("TS-WEB-0005-A2: a high-scoring uncleared element never appears", () => {
   it("drops it before scoring and says why", () => {
     const uncleared = item("uncleared", {
       clearance: "unverified",
@@ -91,7 +91,7 @@ describe("TS-005-A2: a high-scoring uncleared element never appears", () => {
   });
 });
 
-describe("TS-005-A4: determinism — identical input yields identical output across 1000 runs", () => {
+describe("TS-WEB-0005-A4: determinism — identical input yields identical output across 1000 runs", () => {
   it("returns the same ids in the same positions", () => {
     const run = () =>
       selectRelevant({ items: pool, viewer, surface: "stream", now, seed }).entries.map((e) => e.id);
@@ -106,7 +106,7 @@ describe("TS-005-A4: determinism — identical input yields identical output acr
   });
 });
 
-describe("TS-005-A11: a different ISO week reorders only equally-scored candidates", () => {
+describe("TS-WEB-0005-A11: a different ISO week reorders only equally-scored candidates", () => {
   it("keeps the score sequence identical under a different seed", () => {
     const scores = (usedSeed: string) =>
       selectRelevant({ items: pool, viewer, surface: "stream", now, seed: usedSeed }).entries.map(

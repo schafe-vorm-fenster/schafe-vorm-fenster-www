@@ -9,7 +9,7 @@ import { href } from "@/src/lib/routes/routes";
 import type { ReactNode } from "react";
 
 /**
- * The route-segment error boundary — TS-004 D2, DEC-032.
+ * The route-segment error boundary — TS-WEB-0004 D2, DEC-0032.
  *
  * Minimal and data-free: whatever failed below must not be able to fail here
  * too. An error boundary is a Client Component by contract, so the language

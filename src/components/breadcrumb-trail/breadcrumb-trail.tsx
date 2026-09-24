@@ -20,7 +20,7 @@ export interface BreadcrumbTrailProps {
 }
 
 /**
- * 11 `breadcrumb-trail` [PROPOSED] — TS-006 D2, DEC-071 fixes that it exists.
+ * 11 `breadcrumb-trail` [PROPOSED] — TS-WEB-0006 D2, DEC-0071 fixes that it exists.
  *
  * Structure: one `nav` above block 1 on the five second-level pages,
  * server-rendered plain links, the last item — the current page — not a link.

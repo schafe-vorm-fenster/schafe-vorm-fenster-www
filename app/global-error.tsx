@@ -10,12 +10,12 @@ import "./styles/base.css";
 import type { ReactNode } from "react";
 
 /**
- * 500 — DEC-032: statically pre-rendered, minimal (mark, one sentence, home
+ * 500 — DEC-0032: statically pre-rendered, minimal (mark, one sentence, home
  * link). No live module, no search, nothing that can itself fail.
  *
  * `global-error` replaces the root layout, so it renders its own document and
  * imports the token file itself. It also sits above `[lang]`, so it cannot
- * know the request language: it speaks the TLD default (TS-001 D1).
+ * know the request language: it speaks the TLD default (TS-WEB-0001 D1).
  */
 export default function GlobalError(): ReactNode {
   const d = dictionary(DEFAULT_LOCALE);

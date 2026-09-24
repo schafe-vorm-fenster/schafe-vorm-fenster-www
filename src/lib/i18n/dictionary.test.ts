@@ -21,7 +21,7 @@ function keyPaths(value: unknown, prefix = ""): string[] {
   );
 }
 
-describe("TS-001 D7: the dictionary is keyed and complete in every language", () => {
+describe("TS-WEB-0001 D7: the dictionary is keyed and complete in every language", () => {
   it("has the same key set in every language", () => {
     const reference = keyPaths(dictionary(DEFAULT_LOCALE)).sort();
     for (const locale of LOCALES)
@@ -50,7 +50,7 @@ describe("TS-001 D7: the dictionary is keyed and complete in every language", ()
    * (`content/pages/**` `seo:`), and both the template and the unused
    * routing-skeleton `placeholder` group are gone — this asserts neither can
    * come back through the dictionary. "Platzhalter" itself stays allowed: it
-   * is DEC-068's own visitor-facing marking on an image that depicts nothing
+   * is DEC-0068's own visitor-facing marking on an image that depicts nothing
    * real.
    */
   it("carries no internal identifier in any string", () => {
@@ -63,7 +63,7 @@ describe("TS-001 D7: the dictionary is keyed and complete in every language", ()
   });
 });
 
-describe("TS-001-A10/A11: the language table is the single declaration", () => {
+describe("TS-WEB-0001-A10/A11: the language table is the single declaration", () => {
   it("ships exactly German and English", () => {
     expect([...LOCALES]).toEqual(["de", "en"]);
     expect(DEFAULT_LOCALE).toBe("de");

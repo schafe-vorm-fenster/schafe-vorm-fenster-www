@@ -2,7 +2,7 @@
 artefact: verification-strategy
 status: DRAFT
 date: 2026-09-10
-decisions: [DEC-040]
+decisions: [DEC-0040]
 ---
 
 # Verification Strategy
@@ -33,16 +33,16 @@ A test names the ID it verifies. That is the entire mechanism.
 
 ```ts
 // Vitest — a determination contract
-describe("TS-001 D3: locale detection", () => { … });
+describe("TS-WEB-0001 D3: locale detection", () => { … });
 // Vitest — a requirement
-describe("WEB-F-032: relevance scoring", () => { … });
+describe("FUN-WEB-0032: relevance scoring", () => { … });
 // Vitest — an acceptance criterion
-describe("TS-004-A2: redundant prefix redirects", () => { … });
+describe("TS-WEB-0004-A2: redundant prefix redirects", () => { … });
 // Playwright
-test("TS-001-A7: language switch keeps the equivalent page", async () => { … });
+test("TS-WEB-0001-A7: language switch keeps the equivalent page", async () => { … });
 ```
 
-Gherkin scenarios carry the same IDs as tags (`@WEB-F-044 @TS-004-A4`).
+Gherkin scenarios carry the same IDs as tags (`@FUN-WEB-0044 @TS-WEB-0004-A4`).
 
 ## What tests what
 
@@ -50,13 +50,13 @@ Gherkin scenarios carry the same IDs as tags (`@WEB-F-044 @TS-004-A4`).
   `e2e`, or `tool`.
 - **Determinations** are *contracts* — this is where the numerous `unit`
   tests hang: the scoring formula (relevance model §Scoring), the
-  detection algorithm (TS-001 D3), the route translation map (TS-004
-  D3a), the three-tier fallback (DEC-019).
+  detection algorithm (TS-WEB-0001 D3), the route translation map (TS-WEB-0004
+  D3a), the three-tier fallback (DEC-0019).
 
 Specs already carry usable fixtures. The relevance model's worked
 example — "visitor from Lehre, Lower Saxony, stage 1" with seven
-expected positions — is a ready-made unit test table for WEB-F-031 and
-WEB-F-034.
+expected positions — is a ready-made unit test table for FUN-WEB-0031 and
+FUN-WEB-0034.
 
 ## Closure
 

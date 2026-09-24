@@ -2,14 +2,14 @@
 
 Do not edit these files. They are produced by `pnpm placeholders` from
 `placeholders.manifest.json`, and they are **committed on purpose**
-(DEC-068): a file that must exist on a clean checkout cannot be produced
+(DEC-0068): a file that must exist on a clean checkout cannot be produced
 on demand.
 
 ## What they are for
 
 A gap in the content is filled with a placeholder, never left as an empty
 slot — showing something everywhere beats showing only what is finished
-and ours (DEC-068). The real asset is swapped in later; the aspect ratio
+and ours (DEC-0068). The real asset is swapped in later; the aspect ratio
 declared here is what it will be cropped to.
 
 ## The line that must not be crossed

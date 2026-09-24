@@ -38,7 +38,7 @@ export interface MotionRevealProps {
 const OBSERVER_ROOT_MARGIN = "100000px 0px -10% 0px";
 
 /**
- * 14 `motion-reveal` [PROPOSED] — SRC-014 §Motion.
+ * 14 `motion-reveal` [PROPOSED] — SRC-0014 §Motion.
  *
  * Structure: the wrapper that applies the site's single movement — rise
  * 22 px and fade over 550 ms, `cubic-bezier(.2,.7,.3,1)`, once, on enter.

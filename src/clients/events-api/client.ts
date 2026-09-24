@@ -4,13 +4,13 @@
  * Every shape here is measured against the service's own contract
  * (`~/Projects/events-api`, `src/app/api/[token]/events/search/events-search.schema.ts`
  * and `src/events/types/localized-event.types.ts`) rather than assumed
- * (TS-008 D2). Four properties of that contract the website has to obey:
+ * (TS-WEB-0008 D2). Four properties of that contract the website has to obey:
  *
  *  - `POST /api/{token}/events/search` filters by **administrative id lists**
  *    (`communities`, `municipalities`, `counties`, `states`) plus
  *    `after`/`before`. There is no radius parameter, which is why the
  *    widening chain is "which id list is sent" and never a distance
- *    (TS-008 D3).
+ *    (TS-WEB-0008 D3).
  *  - **At least one filter is required.** The request schema refuses a body
  *    with no location and no text filter, so a query that would be unbounded
  *    is caught here rather than spent on a guaranteed 400.
@@ -23,7 +23,7 @@
  *
  * `GET /api/stats` is the one **tokenless** operation. It carries
  * `totalEvents` and a handful of quality counters — no places count, no
- * updates-today count (Q-037, state/open.md row 6). Its
+ * updates-today count (Q-0037, state/open.md row 6). Its
  * `earliestEventDate` / `latestEventDate` are currently nonsense values
  * (year 58221 in production on 2026-09-18), so they are parsed and ignored.
  */
@@ -80,7 +80,7 @@ const EventsEnvelopeSchema = z.object({
   data: z.array(EventSchema).default([]),
 });
 
-/** Only the fields `/api/stats` actually has. Missing figures stay missing (WEB-F-041). */
+/** Only the fields `/api/stats` actually has. Missing figures stay missing (FUN-WEB-0041). */
 export const StatsSchema = z
   .object({
     totalEvents: z.number(),
@@ -99,7 +99,7 @@ export interface EventsApiConfig {
   readonly timeoutMs: number;
 }
 
-/** The search body, exactly as TS-008 D3 expresses a widening step. */
+/** The search body, exactly as TS-WEB-0008 D3 expresses a widening step. */
 export interface EventsSearchQuery {
   readonly communities?: readonly string[];
   readonly municipalities?: readonly string[];
@@ -139,7 +139,7 @@ const ids = (value: readonly string[] | undefined): string[] | undefined =>
  * One search. The date window is expressed in the upstream's own relative
  * words where they exist, so both systems cut the local day the same way —
  * the service resolves them in `Europe/Berlin`, which is why the website
- * never sends a hand-built midnight (TS-008 D3).
+ * never sends a hand-built midnight (TS-WEB-0008 D3).
  */
 export async function searchEvents(
   config: EventsApiConfig,

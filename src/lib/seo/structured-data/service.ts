@@ -1,5 +1,5 @@
 /**
- * `Service` (+ `Offer`) nodes — TS-011 D4 / D4a.
+ * `Service` (+ `Offer`) nodes — TS-WEB-0011 D4 / D4a.
  *
  * D4a: 480 € is per organisation and per year, net, however many places
  * that organisation covers. `valueAddedTaxIncluded: false` states the net
@@ -71,7 +71,7 @@ export function calendarServiceNode(locale: Locale, name: string): ServiceNode {
   };
 }
 
-/** D4 `/deine-region`: `Service` **without** any price or `Offer` (WEB-F-020). */
+/** D4 `/deine-region`: `Service` **without** any price or `Offer` (FUN-WEB-0020). */
 export function regionServiceNode(locale: Locale, name: string): ServiceNode {
   return {
     "@type": "Service",

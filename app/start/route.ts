@@ -4,7 +4,7 @@ import { leadFallbackUrl } from "@/src/lib/routes/lead-fallback";
 import { NOINDEX } from "@/src/lib/seo/indexable";
 
 /**
- * `/start` — TS-004 D1's one redirect-only row, TS-016 D6.
+ * `/start` — TS-WEB-0004 D1's one redirect-only row, TS-WEB-0016 D6.
  *
  * "Redirect only, renders nothing": the lead fallback's indirection target,
  * so no lead surface hard-codes a third-party URL. The redirect is

@@ -4,7 +4,7 @@
  *
  * Two problems it solves, both of which had no upstream operation:
  *
- *  1. **Name search** (Q-025, state/open.md row 5). geo-api's
+ *  1. **Name search** (Q-0025, state/open.md row 5). geo-api's
  *     `community/search` takes postcodes and administrative ids and nothing
  *     else, so a typed name could not be resolved at all and the search
  *     answered the `zip-only` hint. The public village-calendar site has the
@@ -152,9 +152,9 @@ export function communityRouteSlugFor(place: Place): string {
  * The covered communities within `radiusKm` of a point, nearest first.
  *
  * geo-api's proximity search exists but is token-scoped and runs against its
- * own fixed radius constant (TS-008 D2.2, Q-038); the village calendar's
+ * own fixed radius constant (TS-WEB-0008 D2.2, Q-0038); the village calendar's
  * public proxy in front of it answers five. The index has every community's
- * own coordinate, so the ~15 km cut of TS-008 D3 step 2 can be made **here**,
+ * own coordinate, so the ~15 km cut of TS-WEB-0008 D3 step 2 can be made **here**,
  * exactly, for free, and without a cap that would truncate it.
  */
 export function placesWithin(

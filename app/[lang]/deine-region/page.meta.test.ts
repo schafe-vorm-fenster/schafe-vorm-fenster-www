@@ -5,7 +5,7 @@ import { checkPageMeta } from "@/src/lib/pages/page-meta";
 import { pageMeta } from "./page.meta";
 
 /**
- * TS-026-A15 (static): "`page.meta.ts` for `/deine-region` matches D1 field
+ * TS-WEB-0026-A15 (static): "`page.meta.ts` for `/deine-region` matches D1 field
  * by field."
  *
  * F-2-50: this was the only one of seven manifests with no test, which is
@@ -13,7 +13,7 @@ import { pageMeta } from "./page.meta";
  * and nothing caught it. The id resolution itself runs once, in
  * `src/lib/pages/page-meta.test.ts`; this asserts the values D1 fixes.
  */
-describe("TS-026-A15: the page manifest of `/deine-region`", () => {
+describe("TS-WEB-0026-A15: the page manifest of `/deine-region`", () => {
   it("declares exactly D1's values", () => {
     expect(pageMeta.route).toBe("region");
     expect(pageMeta.focusJob).toBe("run-our-own-calendar");

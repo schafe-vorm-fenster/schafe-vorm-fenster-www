@@ -22,7 +22,7 @@ export interface PlaceExampleSetProps extends DataStateProps {
 }
 
 /**
- * 43 `place-example-set` [PROPOSED] — TS-008 pos 3, DEC-034.
+ * 43 `place-example-set` [PROPOSED] — TS-WEB-0008 pos 3, DEC-0034.
  *
  * Structure: a small designed set of active example places — never a place
  * list, never an "alle Orte anzeigen" control. Rendered as `chip`s, capped at

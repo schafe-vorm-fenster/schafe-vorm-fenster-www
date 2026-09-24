@@ -9,7 +9,7 @@ import {
 } from "./geolocation";
 import { geo } from "../relevance/types";
 
-describe("TS-010-A2: the granularity ceiling is a hard truncation, not a preference", () => {
+describe("TS-WEB-0010-A2: the granularity ceiling is a hard truncation, not a preference", () => {
   it("drops a community the lookup returned, and keeps county", () => {
     const truncated = truncateToCeiling(
       geo({
@@ -31,7 +31,7 @@ describe("TS-010-A2: the granularity ceiling is a hard truncation, not a prefere
   });
 });
 
-describe("TS-010-A1: the location resolver answers every input path without throwing", () => {
+describe("TS-WEB-0010-A1: the location resolver answers every input path without throwing", () => {
   it("the mock returns a labelled demo location at the stage-1 ceiling", async () => {
     const location = await mockLocationResolver.resolveViewerLocation({});
     expect(location.demo).toBe(true);
@@ -57,7 +57,7 @@ describe("TS-010-A1: the location resolver answers every input path without thro
     expect(location.geo.state).toBe("niedersachsen");
   });
 
-  it("the disabled resolver — production while Q-008 is open — knows nothing and says so", async () => {
+  it("the disabled resolver — production while Q-0008 is open — knows nothing and says so", async () => {
     const location = await disabledLocationResolver.resolveViewerLocation({});
     expect(location.source).toBe("none");
     expect(location.geo.country).toBeNull();

@@ -1,5 +1,5 @@
 /**
- * Emission mechanics — TS-011 D4: "one `<script type=\"application/ld+json\">`
+ * Emission mechanics — TS-WEB-0011 D4: "one `<script type=\"application/ld+json\">`
  * graph per page, never injected by client JS." [FREE] per D4's own text.
  *
  * `@graph` combines every node a page emits into the one script tag D4

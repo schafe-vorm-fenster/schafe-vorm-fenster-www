@@ -10,10 +10,10 @@ import type { Locale } from "@/src/lib/i18n/locales";
 import styles from "./live-counters.module.css";
 
 export interface LiveCountersProps extends DataStateProps {
-  /** No field in `/api/stats` today (Q-037) — omitted until it exists. */
+  /** No field in `/api/stats` today (Q-0037) — omitted until it exists. */
   readonly places?: number;
   readonly dates?: number;
-  /** No field in `/api/stats` today (Q-037) — omitted until it exists. */
+  /** No field in `/api/stats` today (Q-0037) — omitted until it exists. */
   readonly updatesToday?: number;
   readonly placesLabel?: string;
   readonly datesLabel?: string;
@@ -24,7 +24,7 @@ export interface LiveCountersProps extends DataStateProps {
 }
 
 /**
- * 44 `live-counters` [PROPOSED] — TS-008 pos 4, D8.
+ * 44 `live-counters` [PROPOSED] — TS-WEB-0008 pos 4, D8.
  *
  * Structure: one band, up to three figure slots (places · dates · updates
  * today), each a fixed-height `badge` whose text is the figure and its label
@@ -32,11 +32,11 @@ export interface LiveCountersProps extends DataStateProps {
  * States (D-9, all four):
  *   loading  → three `skeleton` pills;
  *   empty    → nothing — a missing field is never a substitute or an
- *              estimate (WEB-F-041); cold cache hides the whole module,
+ *              estimate (FUN-WEB-0041); cold cache hides the whole module,
  *              never a tier-3 snapshot;
  *   degraded → the same figures, tier labelled by the surrounding
  *              `live-module-frame`;
- *   mocked   → the figures plus `demo-data-badge` (Q-037, `state/open.md`
+ *   mocked   → the figures plus `demo-data-badge` (Q-0037, `state/open.md`
  *              row 6).
  * Inherits: mono type for the numbers; no static traction figure anywhere.
  * Space: the badge's fixed height means one digit → two digits never

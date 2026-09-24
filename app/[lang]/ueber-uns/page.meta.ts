@@ -1,13 +1,13 @@
 import type { PageMeta } from "@/src/lib/pages/page-meta";
 
 /**
- * TS-027 D1 — the `/ueber-uns` manifest.
+ * TS-WEB-0027 D1 — the `/ueber-uns` manifest.
  *
  * `primaryConversion: null` — the page carries no CTA treatment at all
- * (TS-006 D3); the closing block is the merged three-job offer (TS-006 D6).
+ * (TS-WEB-0006 D3); the closing block is the merged three-job offer (TS-WEB-0006 D6).
  * `liveModules` names the operating counters (D4: years in operation + live
  * active places) at the closest `LiveModuleId` — `position-4-live-counters`,
- * TS-008's own live-counters position.
+ * TS-WEB-0008's own live-counters position.
  */
 export const pageMeta: PageMeta = {
   route: "about",

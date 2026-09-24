@@ -3,7 +3,7 @@
 }
 
 /* The hatch: `repeating-linear-gradient(45deg, surface-2 0 16px, line 16px 32px)`
-   — SRC-014 §Skeletons, composed once in app/styles/components.css. */
+   — SRC-0014 §Skeletons, composed once in app/styles/components.css. */
 .box {
   aspect-ratio: var(--skeleton-ratio, var(--ratio-feature));
   background-image: var(--placeholder-hatch);

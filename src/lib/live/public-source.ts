@@ -55,7 +55,7 @@ const OWN_SCOPES = new Set(["community", "municipality"]);
  * Position 1's rows for one place — its own dates, in its own window.
  *
  * The page carries the widened rows too, so they are filtered out here:
- * TS-008 D1 forbids a module presenting a widened list as the narrow one,
+ * TS-WEB-0008 D1 forbids a module presenting a widened list as the narrow one,
  * and the empty result is not a failure but the conversion moment of D4.
  */
 export async function publicPlaceEvents(
@@ -82,7 +82,7 @@ export interface PublicNearby {
 /**
  * The village calendar caps one community page at 100 rows; a page that long
  * may have had more behind it, and the module then claims no completeness
- * (TS-008 D3 rule 2).
+ * (TS-WEB-0008 D3 rule 2).
  */
 export const PUBLIC_PAGE_ROW_CAP = 100;
 
@@ -98,7 +98,7 @@ export const PUBLIC_PAGE_ROW_CAP = 100;
  *
  * The anchor's own community is excluded: position 1 already showed those
  * dates, and a widened module repeating the narrow one beside it is not a
- * widening (TS-008 D1).
+ * widening (TS-WEB-0008 D1).
  */
 export async function publicNearbyEvents(
   anchor: { readonly lat: number; readonly lng: number },
@@ -138,7 +138,7 @@ export interface RankedPlace {
 /**
  * Position 3's ranking, approximated.
  *
- * There is no activity-ranking operation anywhere (Q-015 residue,
+ * There is no activity-ranking operation anywhere (Q-0015 residue,
  * state/open.md row 6), so this counts the dates the **seed community's own
  * region feed** carries per place — the same ~20–30 km the village calendar
  * itself calls a region. It is an approximation of a county, not a county

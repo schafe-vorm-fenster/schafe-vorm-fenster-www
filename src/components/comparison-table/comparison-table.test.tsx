@@ -12,7 +12,7 @@ const ROWS: FourComparisonRows = [
   { today: "Papierzettel am Brett", withProduct: "Digital und dauerhaft" },
 ];
 
-describe("TS-024 D4: exactly four rows, machine-countable, no checkmark column", () => {
+describe("TS-WEB-0024 D4: exactly four rows, machine-countable, no checkmark column", () => {
   it("renders exactly four list items", () => {
     const html = renderToStaticMarkup(<ComparisonTable rows={ROWS} />);
     const items = html.match(/<li\b/g) ?? [];

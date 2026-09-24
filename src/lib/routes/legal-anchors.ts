@@ -1,12 +1,12 @@
 /**
- * The legal anchor registry — TS-004 D8, DEC-039.
+ * The legal anchor registry — TS-WEB-0004 D8, DEC-0039.
  *
  * **These anchors are permanent.** Once published they are linked from
  * contracts, invoices, app screens, printed material and third-party records.
  * An anchor is never renamed and never removed; a retired section keeps its
  * anchor with a pointer to its successor. New sections append.
  *
- * The anchors are localized like path segments (TS-004 D3a) and stable
+ * The anchors are localized like path segments (TS-WEB-0004 D3a) and stable
  * across languages in *meaning*: `/rechtliches#impressum` and
  * `/legal#imprint` are the same section.
  */
@@ -30,7 +30,7 @@ export const LEGAL_SECTION_IDS = [
 
 export type LegalSectionId = (typeof LEGAL_SECTION_IDS)[number];
 
-/** Anchor per section and language, in registry order (TS-004 D8). */
+/** Anchor per section and language, in registry order (TS-WEB-0004 D8). */
 export const LEGAL_ANCHORS: Readonly<
   Record<LegalSectionId, Readonly<Record<Locale, string>>>
 > = {

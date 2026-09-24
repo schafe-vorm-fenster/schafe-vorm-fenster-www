@@ -1,6 +1,6 @@
 import type { Locale } from "@/src/lib/i18n/locales";
 
-/** The four ways a price may be shown — TS-006 D10, distinct from `DataState`:
+/** The four ways a price may be shown — TS-WEB-0006 D10, distinct from `DataState`:
  * this is what the *offering* permits, never what late data does to a page. */
 export const PRICE_DISPLAYS = ["priced", "on-request", "permanent", "withheld"] as const;
 
@@ -20,7 +20,7 @@ const INTERVAL_LABEL: Record<"de" | "en", Record<"year" | "month", string>> = {
 };
 
 /**
- * One readable string for the figure and its qualifier (TS-006 D10 a11y) —
+ * One readable string for the figure and its qualifier (TS-WEB-0006 D10 a11y) —
  * "480 € / Jahr, zzgl. USt." rather than three separately-styled fragments a
  * screen reader would announce out of order.
  */

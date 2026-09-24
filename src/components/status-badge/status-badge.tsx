@@ -23,7 +23,7 @@ const DEFAULT_LABELS: Record<Availability, string> = {
 };
 
 /**
- * 62 `status-badge` [PROPOSED] — TS-022 D4.
+ * 62 `status-badge` [PROPOSED] — TS-WEB-0022 D4.
  *
  * Structure: the availability badge on a mechanism whose hub record is not
  * `generally-available` — today `website-import`, which is alpha.

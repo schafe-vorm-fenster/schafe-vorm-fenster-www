@@ -1,10 +1,10 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * TS-003-A8, the `/ueber-uns` half of F-3-2.
+ * TS-WEB-0003-A8, the `/ueber-uns` half of F-3-2.
  *
  * Since the imagery workstream the portrait is the **real** photograph from
- * `@schafe-vorm-fenster/people` rather than the DEC-068 hatch, so the file it
+ * `@schafe-vorm-fenster/people` rather than the DEC-0068 hatch, so the file it
  * is served from is `/images/real/ueber-uns-founder-portrait.webp` (through
  * the image optimiser, hence the substring match).
  *
@@ -12,7 +12,7 @@ import { expect, test } from "@playwright/test";
  * element of each page (D2) carries `loading="eager"` and
  * `fetchpriority="high"`. No image outside the D2 table is eager."
  *
- * TS-003 D2 declares the founder portrait as `/ueber-uns`'s LCP element, and
+ * TS-WEB-0003 D2 declares the founder portrait as `/ueber-uns`'s LCP element, and
  * the QA sweep measured it as the LCP element in the browser — carrying
  * `loading="lazy"` and no `fetchpriority` at all. A `grep` for
  * `fetchpriority="high"` over all 24 rendered routes returned **0 hits**, and
@@ -27,7 +27,7 @@ import { expect, test } from "@playwright/test";
 const PAGES = ["/ueber-uns", "/en/about"] as const;
 
 for (const path of PAGES) {
-  test(`TS-003-A8: the declared LCP image on ${path} is eager and high priority`, async ({
+  test(`TS-WEB-0003-A8: the declared LCP image on ${path} is eager and high priority`, async ({
     page,
   }) => {
     await page.goto(path);
@@ -37,7 +37,7 @@ for (const path of PAGES) {
     await expect(portrait).toHaveAttribute("fetchpriority", "high");
   });
 
-  test(`TS-003-A8: no other image on ${path} is eager`, async ({ page }) => {
+  test(`TS-WEB-0003-A8: no other image on ${path} is eager`, async ({ page }) => {
     await page.goto(path);
 
     const eager = await page.evaluate(() =>

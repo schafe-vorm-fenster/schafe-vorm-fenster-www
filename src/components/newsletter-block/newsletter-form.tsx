@@ -23,7 +23,7 @@
  * **Nothing leaves the browser, in any branch — unchanged.** The input still
  * carries no `name`, so even a submit that got past this handler would be a
  * request with no values in it (HTML: an unnamed control is not a successful
- * control). Q-020 (`state/open.md` row 22) stays open and untouched: this
+ * control). Q-0020 (`state/open.md` row 22) stays open and untouched: this
  * fixes what the mock does to the page, not what it does with an address.
  *
  * The markup server-renders, so a visitor without JavaScript still sees the

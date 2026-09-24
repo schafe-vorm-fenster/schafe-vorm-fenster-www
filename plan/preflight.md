@@ -61,5 +61,5 @@ plan/project-plan.md) proves the toolchain dynamically.
 
 - Vercel dashboard: deployment protection on the preview scope
   active; `next.schafe-vorm-fenster.de` wiring is Jan's task
-  (DEC-035) — the run uses the generated `*.vercel.app` preview URLs
+  (DEC-0035) — the run uses the generated `*.vercel.app` preview URLs
   until then.

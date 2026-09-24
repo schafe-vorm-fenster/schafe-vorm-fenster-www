@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * DEC-045 / TS-014 D3: the per-build inline-script hash extraction.
+ * DEC-0045 / TS-WEB-0014 D3: the per-build inline-script hash extraction.
  *
  * Runs after `next build` (see the `build` script in package.json). Scans
  * every static/ISR page `next build` wrote to `.next/server/app` for literal
@@ -19,7 +19,7 @@
  * (`src/lib/security/csp-hashes.ts`) rather than reading it off disk, so it
  * needs to be something Vercel actually serves.
  *
- * Failure is loud on purpose (DEC-045: "a new inline block that does not
+ * Failure is loud on purpose (DEC-0045: "a new inline block that does not
  * pass through that step breaks the policy loudly rather than silently
  * weakening it") — a build with zero hashes found, or with no `.next/server`
  * output at all, exits non-zero rather than shipping an empty set.

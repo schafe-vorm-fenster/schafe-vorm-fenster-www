@@ -17,7 +17,7 @@ afterEach(() => {
   fetchStats.mockReset();
 });
 
-describe("TS-008-A9: only counted figures render, and none is ever substituted", () => {
+describe("TS-WEB-0008-A9: only counted figures render, and none is ever substituted", () => {
   it("renders the dates figure from the upstream's own totalEvents", async () => {
     vi.stubEnv("LIVE_DATA", "auto");
     fetchStats.mockResolvedValue({ totalEvents: 9125 });
@@ -41,7 +41,7 @@ describe("TS-008-A9: only counted figures render, and none is ever substituted",
     await expect(liveCounters({ store: memoryStore() })).resolves.toBeUndefined();
   });
 
-  it("marks the band demo:true while two of the three figures have no upstream field (Q-037)", async () => {
+  it("marks the band demo:true while two of the three figures have no upstream field (Q-0037)", async () => {
     vi.stubEnv("LIVE_DATA", "auto");
     fetchStats.mockResolvedValue({ totalEvents: 9125 });
 

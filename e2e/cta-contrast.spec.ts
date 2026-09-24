@@ -30,7 +30,7 @@ import { everyRoute, href } from "../src/lib/routes/routes";
  * that stops winning over `route-link`'s `.bare`, or over a ground rule, or
  * over whatever loads after it in a future bundle, lands here.
  *
- * The floor is 4.5:1 (WCAG 1.4.3, TS-002 D1). CTA labels are 18 px at weight
+ * The floor is 4.5:1 (WCAG 1.4.3, TS-WEB-0002 D1). CTA labels are 18 px at weight
  * 800, which is below the 18.66 px large-text threshold, so none of them may
  * take the 3:1 relaxation.
  */
@@ -40,7 +40,7 @@ const ROUTES = everyRoute().map(({ route, locale }) => ({
   name: `${route} (${locale})`,
 }));
 
-/** The phone the brief reviewed — DEC-067's reference width is narrower still. */
+/** The phone the brief reviewed — DEC-0067's reference width is narrower still. */
 const PHONE = { width: 390, height: 844 };
 
 const FLOOR = 4.5;

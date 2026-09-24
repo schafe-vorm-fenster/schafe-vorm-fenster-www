@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { checkRhythm, type RhythmEntry } from "@/src/components/section-shell/rhythm";
 
 /**
- * TS-026 / SRC-014 §Page Rhythm — the section surface sequence of both
+ * TS-WEB-0026 / SRC-0014 §Page Rhythm — the section surface sequence of both
  * routes, checked the way `src/components/README.md` prescribes: "no two
  * photo sections adjacent, at most two consecutive sections of one colour
  * family, one `ink` section per page". `PageFrame` always appends `surface`
@@ -11,7 +11,7 @@ import { checkRhythm, type RhythmEntry } from "@/src/components/section-shell/rh
  * blocks (`app/[lang]/_page-frame.tsx`), so both lists include that tail.
  */
 
-describe("TS-026: /deine-region page rhythm", () => {
+describe("TS-WEB-0026: /deine-region page rhythm", () => {
   it("has no rhythm violation across focus, argument blocks, band and closing", () => {
     const sections: RhythmEntry[] = [
       "photo", // 1 focus (hero-block)
@@ -33,7 +33,7 @@ describe("TS-026: /deine-region page rhythm", () => {
   });
 });
 
-describe("TS-026: /deine-region/angebot page rhythm", () => {
+describe("TS-WEB-0026: /deine-region/angebot page rhythm", () => {
   it("has no rhythm violation across hero, form, band and closing", () => {
     const sections: RhythmEntry[] = [
       // No hero photograph: `/deine-region/angebot` is a form page, and the

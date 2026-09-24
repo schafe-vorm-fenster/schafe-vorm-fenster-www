@@ -2,7 +2,7 @@ import type { ElementType, ReactNode } from "react";
 
 import styles from "./section-shell.module.css";
 
-/** The grounds a section may stand on — SRC-014 §Colour, §Page Rhythm. */
+/** The grounds a section may stand on — SRC-0014 §Colour, §Page Rhythm. */
 export const SECTION_SURFACES = [
   "paper",
   "surface",
@@ -35,7 +35,7 @@ export interface SectionShellProps {
   /** 26–30 px standard, 20–24 px tight. One value per section. */
   readonly density?: "standard" | "tight";
   readonly id?: string;
-  /** The stable `data-block` id a page's own composition sheet names (e.g. TS-024 D2). */
+  /** The stable `data-block` id a page's own composition sheet names (e.g. TS-WEB-0024 D2). */
   readonly dataBlock?: string;
   /** The id of the heading that names this section, for `aria-labelledby`. */
   readonly labelledBy?: string;
@@ -59,7 +59,7 @@ const SURFACE_CLASS: Record<SectionSurface, string> = {
 };
 
 /**
- * 13 `section-shell` [PROPOSED] — SRC-014 §Shape and Space, §Page Rhythm.
+ * 13 `section-shell` [PROPOSED] — SRC-0014 §Shape and Space, §Page Rhythm.
  *
  * Structure: the one wrapper every block stands in. It takes a surface, a
  * density and — since polish brief G-3 — its role as a `kicker` and its

@@ -37,16 +37,16 @@ import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
 /**
- * TS-025 — `/dein-kalender/bestellen`, the order flow.
+ * TS-WEB-0025 — `/dein-kalender/bestellen`, the order flow.
  *
  * One route, `schritt=1..4` (D2). Steps 1/2 share a screen (scope), 3 is the
  * invoice mock (`envoy-form-mount`), 4 is the embed code. Context band and
- * closing CTA render **once**, after step 4 (component-inventory §TS-025) —
+ * closing CTA render **once**, after step 4 (component-inventory §TS-WEB-0025) —
  * hand-rendered here via `SiteChrome`, not `PageFrame`, for the same reason
  * as `/mitmachen/registrieren`: a per-step suppression `PageFrame` has no
  * hook for.
  *
- * `noindex, follow` (D9) — this amends TS-011 D9, which called this route
+ * `noindex, follow` (D9) — this amends TS-WEB-0011 D9, which called this route
  * indexable; the contradiction is recorded in `state/open.md`. The meta tag
  * is this page's own concern; the `X-Robots-Tag` **header** is `proxy.ts`'s
  * (README: "the CSP, the HSTS variance and the X-Robots-Tag, on every
@@ -81,7 +81,7 @@ const SCOPE_QUESTION_FALLBACK: Record<Locale, string> = {
   en: "Which area should the calendar cover?",
 };
 
-// Short enough to fit a pill chip's single line at 360 px (TS-017 A9) —
+// Short enough to fit a pill chip's single line at 360 px (TS-WEB-0017 A9) —
 // `scope-picker` appends its own " (ganzer Landkreis)" suffix once selected
 // (`src/components/scope-picker/scope-picker.tsx`), so this "add" affordance
 // does not repeat it.
@@ -128,7 +128,7 @@ const ADD_COUNTY: Record<Locale, (county: string) => string> = {
  *
  * Someone who arrives from the 480 € tier card loses the one number that
  * made her click the moment the flow starts — and the price is fixed per
- * organisation regardless of scope (DEC-060), which is reassuring and has to
+ * organisation regardless of scope (DEC-0060), which is reassuring and has to
  * be said rather than left to be discovered.
  */
 const PRICE_NOTE: Record<Locale, string> = {
@@ -157,7 +157,7 @@ const PENDING_LABEL: Record<Locale, string> = { de: "Moment …", en: "One momen
 const STEP_TOTAL = 4;
 
 /**
- * **Cache Components: this route blocks on purpose** (TS-009 D1, the dynamic
+ * **Cache Components: this route blocks on purpose** (TS-WEB-0009 D1, the dynamic
  * layer). The step this flow renders *is* the query — heading, form, step
  * indicator and closing block all change with it — so there is no static
  * shell to split off: a `<Suspense>` around the body would prerender a
@@ -231,7 +231,7 @@ export default async function Page({
 
   /**
    * 480 € per year, net — read from the offering package like every other
-   * price on the site (TS-006 D10), never typed into the flow.
+   * price on the site (TS-WEB-0006 D10), never typed into the flow.
    */
   const priceFigure = offeringPrice("portalize-calendar", locale).figure;
   const priceLine = priceFigure ? formatPriceFigure(priceFigure, locale) : "";
@@ -249,7 +249,7 @@ export default async function Page({
       goalId="request-product-briefing"
       stage="handover"
     >
-      {/* G-5 / TS-025 D5: an exit, never a button. It was the only
+      {/* G-5 / TS-WEB-0025 D5: an exit, never a button. It was the only
           control on the screen that looked like an action, so the way out
           outranked the way on. */}
       <OutboundLink
@@ -265,14 +265,14 @@ export default async function Page({
   );
 
   // The id shape the CRM really issues, so the snippet a visitor copies in
-  // the prototype looks exactly like the one she will be sent (Q-046,
+  // the prototype looks exactly like the one she will be sent (Q-0046,
   // `state/open.md` row 2). The block itself carries `data-demo="true"`.
   const demoCode =
     '<script defer src="https://portalize.schafe-vorm-fenster.de/api/65f3a9c1d4e27b0912af4c38/load.js"></script>\n<div data-portalize-organizer-id="65f3a9c1d4e27b0912af4c38"></div>';
 
   return (
     <>
-      {/* TS-011 D4 — one JSON-LD graph per page, server-rendered. */}
+      {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
       <SectionShell surface="paper">
         <StepIndicator
@@ -427,8 +427,8 @@ export default async function Page({
       </SectionShell>
 
       {step === 4 ? (
-        // TS-011-A4 (F-2-41): an `aside`, like every other band — this page
-        // renders its own because TS-025 places it after step 4 only.
+        // TS-WEB-0011-A4 (F-2-41): an `aside`, like every other band — this page
+        // renders its own because TS-WEB-0025 places it after step 4 only.
         <SectionShell as="aside" id="context-band" label={contextBandHeading} surface="surface">
           <ContextBand currentJob={jobLabelKey(pageMeta.focusJob)} heading={contextBandHeading} locale={locale} />
         </SectionShell>

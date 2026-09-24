@@ -1,5 +1,5 @@
 /**
- * The one way an ecosystem host is reached — TS-008 D2/D10, TS-013 D3.
+ * The one way an ecosystem host is reached — TS-WEB-0008 D2/D10, TS-WEB-0013 D3.
  *
  * Three properties every upstream call in this repository has, and has only
  * because they live here rather than in each client:
@@ -7,13 +7,13 @@
  *  1. **No client identity leaves the server.** The request headers are built
  *     from a closed set (`accept`, `content-type`, and nothing else). No
  *     `x-forwarded-for`, no `x-real-ip`, no cookie, no user agent of the
- *     visitor — TS-013 D3 rule 1, checked by TS-013-A5.
+ *     visitor — TS-WEB-0013 D3 rule 1, checked by TS-WEB-0013-A5.
  *  2. **One attempt, bounded.** `AbortSignal.timeout` cuts the call at the
- *     budget of TS-009 D4 (800 ms). There is no in-request retry: a retry
+ *     budget of TS-WEB-0009 D4 (800 ms). There is no in-request retry: a retry
  *     spends the visitor's time on a service that is already failing.
  *  3. **Failure is one type.** Network error, non-2xx and a body that is not
  *     JSON all arrive as `UpstreamError`, so `resilient()` has a single thing
- *     to catch (TS-009 D4: "failure is anything that is not a valid answer" —
+ *     to catch (TS-WEB-0009 D4: "failure is anything that is not a valid answer" —
  *     schema validation is the caller's half of that).
  */
 
@@ -41,7 +41,7 @@ export interface UpstreamCall {
 
 /**
  * The closed header set. A header not built here never reaches an upstream —
- * which is what makes TS-013-A5 a property of the code and not of a review.
+ * which is what makes TS-WEB-0013-A5 a property of the code and not of a review.
  */
 export function upstreamHeaders(hasBody: boolean): Readonly<Record<string, string>> {
   return hasBody
@@ -49,7 +49,7 @@ export function upstreamHeaders(hasBody: boolean): Readonly<Record<string, strin
     : { accept: "application/json" };
 }
 
-/** The headers TS-013 D3 forbids forwarding, as data, so a test can name them. */
+/** The headers TS-WEB-0013 D3 forbids forwarding, as data, so a test can name them. */
 export const FORBIDDEN_FORWARD_HEADERS = [
   "x-forwarded-for",
   "x-real-ip",
@@ -75,7 +75,7 @@ export async function callUpstream({
       headers: upstreamHeaders(body !== undefined),
       body: body === undefined ? undefined : JSON.stringify(body),
       signal: AbortSignal.timeout(timeoutMs),
-      // The BFF is the cache boundary (TS-003 D5); the fetch itself is raw.
+      // The BFF is the cache boundary (TS-WEB-0003 D5); the fetch itself is raw.
       cache: "no-store",
     });
   } catch (cause) {

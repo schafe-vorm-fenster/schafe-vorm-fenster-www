@@ -1,5 +1,5 @@
 /**
- * Segmentation — TS-005 D8.
+ * Segmentation — TS-WEB-0005 D8.
  *
  * The engine never renders per visitor. Two axes: **geo** (community, per the
  * 2026-09-10 correction — municipality made tier 0 unreachable) and the
@@ -25,7 +25,7 @@ export interface SegmentKey {
 
 export interface SegmentOptions {
   /**
-   * DEC-055 keeps the fallback to `municipality` as a **parameter change**:
+   * DEC-0055 keeps the fallback to `municipality` as a **parameter change**:
    * if the production cache figures demand it, this is the one line that
    * moves, and tier 0 becomes unreachable again as the price.
    */

@@ -1,5 +1,5 @@
 /**
- * Where `/start` sends a visitor — TS-016 D6 / DEC-069, TS-004 D1.
+ * Where `/start` sends a visitor — TS-WEB-0016 D6 / DEC-0069, TS-WEB-0004 D1.
  *
  * D6 fixes the shape and D1 fixes the path: every lead surface links to our
  * own `/start`, never to a third-party URL, "so that the swap to envoy
@@ -11,7 +11,7 @@
  * `LEAD_FALLBACK_URL` when that is configured, so the envoy swap is an
  * environment change rather than a deploy; the constant below is the value
  * the live site uses today and is not a credential (it is the form's public
- * viewform URL, and DEC-069 forbids embedding it).
+ * viewform URL, and DEC-0069 forbids embedding it).
  */
 
 /** The live site's current lead form — a public Google Forms `viewform` URL. */

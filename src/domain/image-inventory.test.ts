@@ -109,7 +109,7 @@ describe("ImageEntrySchema", () => {
 describe("PageFrontmatterSchema carries the inventory", () => {
   const frontmatter = {
     id: "home-de",
-    page_id: "TS-019",
+    page_id: "TS-WEB-0019",
     route: "/",
     seo: {
       "/": { title: "t", description: "d", provenance: "generated" },

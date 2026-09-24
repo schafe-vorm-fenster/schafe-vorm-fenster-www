@@ -1,6 +1,6 @@
 /*
  * The photograph and the gradient are one declaration, so the scrim scales
- * with the image (SRC-014 §Photo surface). The stops follow the specified
+ * with the image (SRC-0014 §Photo surface). The stops follow the specified
  * band: transparent at 12–26 %, 0.82–0.86 at 38–62 %, 0.96 at the bottom.
  * `color-mix` keeps the alpha values inside the token system — no colour
  * literal exists anywhere in this repository outside brand.css.
@@ -29,7 +29,7 @@
 .surface {
   align-items: flex-end;
   /*
-   * The scrim and the photograph are one declaration (SRC-014 §Photo
+   * The scrim and the photograph are one declaration (SRC-0014 §Photo
    * surface), so the gradient scales with the image. The gradient itself is a
    * variable set by the tone class below, which lets the hero swap in its
    * landscape rendition at the width where `--ratio-hero` turns landscape
@@ -67,7 +67,7 @@
   color: var(--color-neutral-paper);
 }
 
-/* The municipal path (SRC-014 §Photo surface). */
+/* The municipal path (SRC-0014 §Photo surface). */
 .violet {
   --photo-scrim: var(--color-violet-500);
   --ground-link: var(--color-lime-400);
@@ -125,7 +125,7 @@
  * section's, so it grows and shrinks with the text stack itself: by the
  * stack's own top edge (16 px in the gradient below, the pseudo-element's own
  * top inset) it has already reached the 0.82 floor the design system sets
- * (SRC-014 §Photo surface, §Accessibility), regardless of how tall the stack
+ * (SRC-0014 §Photo surface, §Accessibility), regardless of how tall the stack
  * is. `z-index: 0` on `.content` gives it its own stacking context so the
  * pseudo-element's `z-index: -1` stays behind the real content and above
  * `.surface`'s own image, rather than escaping to a lower level of the

@@ -3,14 +3,14 @@ import { expect, test } from "@playwright/test";
 import { ROUTE_IDS, href } from "../src/lib/routes/routes";
 
 /**
- * TS-009-A8 — layout stability between first paint and settle.
+ * TS-WEB-0009-A8 — layout stability between first paint and settle.
  *
  * F-2-68: the chaos hasty-clicker persona measured up to 174px of movement
  * on `/` between `domcontentloaded` and settle (`state/findings/
  * round-2-chaos-hasty-clicker.md` C-H-12) — a visitor who clicks a
  * below-the-fold control in that window hits the wrong element. This file
- * is that measurement made repeatable, at both DEC-067 reference viewports,
- * on every TS-004 D1 route (the twelve German paths; the English mirrors
+ * is that measurement made repeatable, at both DEC-0067 reference viewports,
+ * on every TS-WEB-0004 D1 route (the twelve German paths; the English mirrors
  * share the same components and styles, so a locale sweep would not catch a
  * different class of defect).
  *
@@ -23,7 +23,7 @@ import { ROUTE_IDS, href } from "../src/lib/routes/routes";
  * which is stable across a font swap or a cache warming (neither changes
  * what a control says, only where it sits).
  *
- * Target: TS-009-A8 asks for CLS < 0.1; the task's own bar is tighter and
+ * Target: TS-WEB-0009-A8 asks for CLS < 0.1; the task's own bar is tighter and
  * more directly checkable without a CLS harness — ≤ 8px of cumulative
  * movement (the sum of every matched anchor's own displacement) per route
  * per viewport.
@@ -69,7 +69,7 @@ async function readAnchors(page: import("@playwright/test").Page): Promise<Ancho
 for (const routeId of ROUTE_IDS) {
   const path = href(routeId, "de");
 
-  test.describe(`TS-009-A8: layout stability — ${path}`, () => {
+  test.describe(`TS-WEB-0009-A8: layout stability — ${path}`, () => {
     for (const viewport of VIEWPORTS) {
       test(`≤ ${CUMULATIVE_SHIFT_BUDGET_PX}px cumulative shift at ${viewport.name}`, async ({
         page,
@@ -117,8 +117,8 @@ for (const routeId of ROUTE_IDS) {
  * shift of everything *between* those anchors, so this block measures the
  * metric the criteria actually name:
  *
- *   TS-009-A8  — "CLS < 0.1 on every content page … with all islands streaming"
- *   TS-028-A13 — "CLS measured over load plus three filter interactions stays < 0.1"
+ *   TS-WEB-0009-A8  — "CLS < 0.1 on every content page … with all islands streaming"
+ *   TS-WEB-0028-A13 — "CLS measured over load plus three filter interactions stays < 0.1"
  *
  * Method, the same one the finding used so the numbers are comparable: a
  * `layout-shift` `PerformanceObserver` installed with `buffered: true` in an
@@ -127,19 +127,19 @@ for (const routeId of ROUTE_IDS) {
  *
  * Deliberately stricter than the browser's own CLS: shifts carrying
  * `hadRecentInput` are counted too, rather than discounted, because
- * TS-028-A13 asks explicitly for the three filter interactions to be inside
+ * TS-WEB-0028-A13 asks explicitly for the three filter interactions to be inside
  * the measured window. (In the finding's measurement they contributed 0.0008
  * of the 0.2197, so this costs the budget nothing and closes a hiding place.)
  *
  * The primary viewport is 360×800 — the finding's own, and the mobile-first
- * base case (TS-017 D2). The archive is measured at all three reference
+ * base case (TS-WEB-0017 D2). The archive is measured at all three reference
  * widths on top, because its fix is a *reserved* block whose height has to
  * match the chip row after wrapping at each of them, not only at 360.
  */
 
 const CLS_BUDGET = 0.1;
 const CLS_VIEWPORT = { width: 360, height: 800 } as const;
-/** DEC-067's reference widths — the chip row wraps to a different line count at each. */
+/** DEC-0067's reference widths — the chip row wraps to a different line count at each. */
 const ARCHIVE_WIDTHS = [360, 768, 1024] as const;
 
 interface ClsWindow {
@@ -164,7 +164,7 @@ async function installClsObserver(page: import("@playwright/test").Page): Promis
         };
         // CLS is defined as the sum of *unexpected* shifts: a shift within
         // 500 ms of a user input is excluded by the metric itself, and
-        // TS-028-A13 asks for "CLS measured over load plus three filter
+        // TS-WEB-0028-A13 asks for "CLS measured over load plus three filter
         // interactions", not for a stricter number of our own. Removing rows
         // moves what stands below them — that is the one shift the component
         // accepts, on a deliberate action, and counting it made the archive
@@ -192,7 +192,7 @@ async function settleAndReadCls(page: import("@playwright/test").Page): Promise<
 for (const routeId of ROUTE_IDS) {
   const path = href(routeId, "de");
 
-  test(`TS-009-A8: CLS < ${CLS_BUDGET} — ${path} at 360×800`, async ({ page }) => {
+  test(`TS-WEB-0009-A8: CLS < ${CLS_BUDGET} — ${path} at 360×800`, async ({ page }) => {
     await page.setViewportSize({ ...CLS_VIEWPORT });
     await installClsObserver(page);
     await page.goto(path);
@@ -202,14 +202,14 @@ for (const routeId of ROUTE_IDS) {
 }
 
 for (const width of ARCHIVE_WIDTHS) {
-  test(`TS-028-A13: CLS < ${CLS_BUDGET} over load plus three filter interactions at ${width}px`, async ({
+  test(`TS-WEB-0028-A13: CLS < ${CLS_BUDGET} over load plus three filter interactions at ${width}px`, async ({
     page,
   }) => {
     await page.setViewportSize({ width, height: 800 });
     await installClsObserver(page);
     await page.goto(href("archive", "de"));
 
-    // The chip row is client-only (TS-028 D8) and replaces a reserved block of
+    // The chip row is client-only (TS-WEB-0028 D8) and replaces a reserved block of
     // its own size at hydration (F-2-69) — waiting for the component's own
     // ready state is what makes the three interactions below deterministic.
     await expect(page.locator("[data-archive-filter]")).toHaveAttribute("data-hydrated", "true");

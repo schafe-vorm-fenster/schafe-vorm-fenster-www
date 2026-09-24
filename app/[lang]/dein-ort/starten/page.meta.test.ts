@@ -5,12 +5,12 @@ import { checkPageMeta } from "@/src/lib/pages/page-meta";
 import { PLACE_START_META } from "./page.meta";
 
 /**
- * TS-021-A1 (static): "`page.meta.ts` matches D1 exactly: focus job
+ * TS-WEB-0021-A1 (static): "`page.meta.ts` matches D1 exactly: focus job
  * 'publish our dates', `primaryConversion` `register-as-publisher`,
  * audiences in the order `actors`, `municipalities`, `rural-residents`, both
  * live modules declared, no proof slot, no `equalWeightConversion`."
  */
-describe("TS-021-A1: the page manifest of `/dein-ort/starten`", () => {
+describe("TS-WEB-0021-A1: the page manifest of `/dein-ort/starten`", () => {
   it("matches D1 exactly", () => {
     expect(PLACE_START_META.route).toBe("placeStart");
     expect(PLACE_START_META.focusJob).toBe("publish-our-dates");
@@ -29,7 +29,7 @@ describe("TS-021-A1: the page manifest of `/dein-ort/starten`", () => {
     expect(checkPageMeta(PLACE_START_META)).toEqual([]);
   });
 
-  /** D1: "The focus job is **static**" — this page is not the TS-008 D4 shift. */
+  /** D1: "The focus job is **static**" — this page is not the TS-WEB-0008 D4 shift. */
   it("declares no runtime focus-job change", () => {
     expect(PLACE_START_META.emptyState).toBeUndefined();
   });

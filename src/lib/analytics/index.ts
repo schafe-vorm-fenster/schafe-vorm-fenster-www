@@ -1,12 +1,12 @@
 /**
- * The one factory a page or component calls — TS-012 D2's replaceability
+ * The one factory a page or component calls — TS-WEB-0012 D2's replaceability
  * rule made concrete: swapping the vendor touches this function, nothing
  * else.
  *
  * Today it always returns the mock (`mock-tracker.ts`): the real adapter
  * (`etracker-tracker.ts`) is written but stays off until the eTracker
- * account and field mapping are confirmed (state/open.md row 12, Q-040,
- * TS-012 D4 rule 4). `NEXT_PUBLIC_ETRACKER_REAL_ADAPTER` is that one
+ * account and field mapping are confirmed (state/open.md row 12, Q-0040,
+ * TS-WEB-0012 D4 rule 4). `NEXT_PUBLIC_ETRACKER_REAL_ADAPTER` is that one
  * injection point — flipping it to `"true"` after the confirmation is the
  * entire hardening step for this module.
  */

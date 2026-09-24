@@ -1,7 +1,7 @@
 /**
  * Reads the per-build inline-script hash set that
- * `scripts/generate-csp-hashes.mjs` writes after `next build` — TS-014 D3 /
- * DEC-045, state/open.md rows 21 and 31.
+ * `scripts/generate-csp-hashes.mjs` writes after `next build` — TS-WEB-0014 D3 /
+ * DEC-0045, state/open.md rows 21 and 31.
  *
  * First attempt (superseded): a synchronous `fs` read of a hand-written file
  * under `.next/security/`. Verified working for a self-hosted
@@ -15,7 +15,7 @@
  * serves like any other `_next/static` asset — no function file-tracing
  * involved. This module fetches it **from the deployment's own origin**,
  * once per deployment. `proxy.ts` stays a pure function of hostname + path
- * (TS-004 D3): the fetch reads a build artifact, not per-request state, and
+ * (TS-WEB-0004 D3): the fetch reads a build artifact, not per-request state, and
  * its result never varies with *this* request's path.
  *
  * Preview deployments sit behind Vercel Deployment Protection, so the
@@ -36,7 +36,7 @@
  *     `VERCEL_PROJECT_PRODUCTION_URL`, and only a bare hostname passes the
  *     shape check. Off Vercel — a self-hosted `next start`, `next dev`, the
  *     e2e run — there is no such variable, so the request origin is used,
- *     but only when its host is one this site actually answers on (TS-001
+ *     but only when its host is one this site actually answers on (TS-WEB-0001
  *     D1's matrix plus loopback) and then **without** the bypass secret,
  *     which no non-Vercel deployment needs. The secret therefore only ever
  *     travels to an origin the environment named.
@@ -86,7 +86,7 @@ const HOSTNAME = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?
 /**
  * The public hosts this site answers on — the only request-derived origins
  * the fallback branch may fetch, and only on their default port. Derived
- * from TS-001 D1's matrix so a new domain is one row there, not a second
+ * from TS-WEB-0001 D1's matrix so a new domain is one row there, not a second
  * list here.
  */
 const PUBLIC_SELF_HOSTS: ReadonlySet<string> = new Set(

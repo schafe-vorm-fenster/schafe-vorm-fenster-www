@@ -31,7 +31,7 @@ const item: RelevanceItem = {
   clearance: "cleared",
 };
 
-describe("TS-005-A3: score(e) = w_geo·geo + w_ctx·ctx + w_job·job + w_time·(freshness·editorial)", () => {
+describe("TS-WEB-0005-A3: score(e) = w_geo·geo + w_ctx·ctx + w_job·job + w_time·(freshness·editorial)", () => {
   it("is the weighted sum of the four terms, and says which term contributed what", () => {
     const scored = scoreItem(item, viewer, { now });
     const w = weightsFor("know-what-is-on", { geoKnown: true });
@@ -53,7 +53,7 @@ describe("TS-005-A3: score(e) = w_geo·geo + w_ctx·ctx + w_job·job + w_time·(
   });
 });
 
-describe("TS-005-A5: stage 0 has no geo term — time and job fit drive the order", () => {
+describe("TS-WEB-0005-A5: stage 0 has no geo term — time and job fit drive the order", () => {
   const stageZero: ViewerContext = { ...viewer, geo: NO_GEO, stage: 0 };
 
   it("zeroes the geo term however near the element is", () => {
@@ -74,7 +74,7 @@ describe("TS-005-A5: stage 0 has no geo term — time and job fit drive the orde
   });
 });
 
-describe("TS-005-A4: determinism — identical input yields identical output", () => {
+describe("TS-WEB-0005-A4: determinism — identical input yields identical output", () => {
   it("produces the same scores across 1000 runs", () => {
     const first = scoreAll([item], viewer, { now }).map((scored) => scored.score);
     for (let run = 0; run < 1000; run += 1) {

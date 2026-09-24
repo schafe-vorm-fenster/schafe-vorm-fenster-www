@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { checkCsp, checkPolicyDirectives, checkPreviewUnsafeInlineFence } from "./check-csp";
 
 /**
- * TS-014-A1 / D7 (F-1-2). Negative tests with fixture policies: each one
+ * TS-WEB-0014-A1 / D7 (F-1-2). Negative tests with fixture policies: each one
  * hands `checkPolicyDirectives` a directive record shaped like a real
  * mistake — a wildcard, a bare scheme, a foreign host, a production
  * `'unsafe-inline'` — and asserts the guard actually flags it, not just
@@ -11,7 +11,7 @@ import { checkCsp, checkPolicyDirectives, checkPreviewUnsafeInlineFence } from "
  * real module through `checkCsp()`/`checkPreviewUnsafeInlineFence()` to
  * pin the positive case too.
  */
-describe("TS-014-A1: checkPolicyDirectives — fixture policies", () => {
+describe("TS-WEB-0014-A1: checkPolicyDirectives — fixture policies", () => {
   it("passes a clean, minimal policy", () => {
     const errors = checkPolicyDirectives("production", {
       "default-src": ["'self'"],
@@ -146,7 +146,7 @@ describe("F-2-27: the preview-only 'unsafe-inline' fence, asserted exactly", () 
   });
 });
 
-describe("TS-014-A1: checkCsp — the real module, all four cases", () => {
+describe("TS-WEB-0014-A1: checkCsp — the real module, all four cases", () => {
   it("is green: no wildcard, every host in D1, no unsafe-inline/unsafe-eval in production, the preview fence exact", () => {
     const { errors, casesChecked } = checkCsp();
     expect(errors).toEqual([]);

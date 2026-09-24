@@ -1,6 +1,6 @@
 ---
 id: mitmachen-de
-page_id: TS-022
+page_id: TS-WEB-0022
 route: "/mitmachen"
 seo:
   "/mitmachen":
@@ -33,11 +33,11 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — every slot. Slot 6a names Groß Kiesow against the real record anchored there, slot 7 carries three real publish-weighted reference cases instead of demo quotes, and slot 8 cites the offering record together with the 2022 Nordkurier entry behind the permanence commitment; all of those are clearance: pending (Q-014, Q-045)"
-compliance_check: "state/content-map.md#compliance-checks — TS-022"
-schema_note: "see content/pages/home/de.md — same TS-007/schema gap, state/open.md #37"
+provenance: "sourced — every slot. Slot 6a names Groß Kiesow against the real record anchored there, slot 7 carries three real publish-weighted reference cases instead of demo quotes, and slot 8 cites the offering record together with the 2022 Nordkurier entry behind the permanence commitment; all of those are clearance: pending (Q-0014, Q-0045)"
+compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0022"
+schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
-  - "state/open.md #17 — the permanence promise is now cited from `community-calendar` plus the 2022 Nordkurier media-echo entry; whether a proof element of its own gets minted stays open, and the press record has no `usage_rights` yet (Q-045)"
+  - "state/open.md #17 — the permanence promise is now cited from `community-calendar` plus the 2022 Nordkurier media-echo entry; whether a proof element of its own gets minted stays open, and the press record has no `usage_rights` yet (Q-0045)"
 images:
   - id: mitmachen-hero
     slot: mitmachen-1-hero
@@ -111,9 +111,9 @@ images:
 # Mitmachen (`/mitmachen`)
 
 Fokusjob „publish our dates" durchgängig, kein Preis, kein „Portalize",
-kein `local-advertising` auf dieser Seite (TS-022 D1, D7, D11; DEC-052
+kein `local-advertising` auf dieser Seite (TS-WEB-0022 D1, D7, D11; DEC-0052
 §1/§3). Reihenfolge: Hero → Einwände → drei Publizierwege → Live-Beispiel
-→ Beleg (TS-022 D2).
+→ Beleg (TS-WEB-0022 D2).
 
 ## Slot 1 — Hero (Mechanismus: whatsapp)
 
@@ -127,7 +127,7 @@ kein `local-advertising` auf dieser Seite (TS-022 D1, D7, D11; DEC-052
 
 Quelle: `headline` und `relievers[0]` von
 `actors--community-calendar`. Nur dieser Block trägt `data-block="scene"`
-und das Mechanismus-Attribut `whatsapp` (TS-022 D4).
+und das Mechanismus-Attribut `whatsapp` (TS-WEB-0022 D4).
 
 ## Slot 2 — Einwandblock: warum die üblichen Wege nicht reichen
 
@@ -145,7 +145,7 @@ Quelle: `@schafe-vorm-fenster/audiences#actors` Feld „Problem" (Termine
 werden „by hand" in mehrere Kanäle getippt) und `pains[]` aus
 `actors--community-calendar` (5 Einträge). Keine Kanalzahl wird genannt —
 „sechs" ist im Audience-Record eine Redewendung, keine Aufzählung
-(TS-022 D3).
+(TS-WEB-0022 D3).
 
 Drei Kanäle als Zeilen, die beiden Einträge über die Organisatorin selbst
 als der Satz, auf dem der Block endet: Der Einwandblock maß 1116 px auf
@@ -197,11 +197,11 @@ Verfügbarkeit: `generally-available` (Hub-Datensatz `community-calendar`).
 3. Neue Termine auf eurer Website erscheinen automatisch im Dorfkalender.
 
 Verfügbarkeit: laut Hub-Datensatz **Alpha**, nicht `generally-available`
-— der Status-Badge muss sichtbar bleiben, solange das gilt (TS-022 D4).
+— der Status-Badge muss sichtbar bleiben, solange das gilt (TS-WEB-0022 D4).
 
 **Querverweis (ausschließlich hier, ein Satz, sekundär):** Wenn eurem Verein oder eurer Gemeinde ein eigener Kalender auf der eigenen Website vorschwebt statt einer Quelle für den Dorfkalender, ist das ein anderes Angebot: → `/dein-kalender`
 
-Quelle: TS-022 D9 — genau ein Link zu `/dein-kalender`, in einem
+Quelle: TS-WEB-0022 D9 — genau ein Link zu `/dein-kalender`, in einem
 `aside`, ohne Preis, ohne Tarifliste, nie `data-cta="primary"`.
 
 ## Slot 6 — Live-Beispiel
@@ -210,13 +210,13 @@ Quelle: TS-022 D9 — genau ein Link zu `/dein-kalender`, in einem
 
 **Modul-Überschrift:** So sieht das in {ort} aus
 
-Bei bekanntem Ort: der nächste aktive Ort mit Terminen (TS-008 Position
+Bei bekanntem Ort: der nächste aktive Ort mit Terminen (TS-WEB-0008 Position
 3 → 1). Nie der gesuchte Ort der Besucherin selbst und nie ein nicht
-abgedeckter Ort als Daten (WEB-F-024).
+abgedeckter Ort als Daten (FUN-WEB-0024).
 
 ### Slot 6a — Referenzort für Stufe 0 (kein Kontext bekannt)
 
-<!-- clearance: pending — `zschiesche-gross-kiesow` steht auf `usage_rights: unverified` (Q-014). Der Ort selbst ist eine Konfiguration, kein Zitat; zitiert wird hier nichts. -->
+<!-- clearance: pending — `zschiesche-gross-kiesow` steht auf `usage_rights: unverified` (Q-0014). Der Ort selbst ist eine Konfiguration, kein Zitat; zitiert wird hier nichts. -->
 <!-- source_note: Ehrlichkeitsregel „das Live-Beispiel ist immer ein real abgedeckter Ort" aus gtm:concept/website-information-architecture.concept.md, Seitenbrief `/dein-ort/starten` („Empty-state rule"). -->
 <!-- id: mitmachen-6a-reference-place; content_type: configuration; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; status: draft -->
 
@@ -235,12 +235,12 @@ benennt (`state/open.md` #44).
 <!-- id: mitmachen-7-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/proof@0.3.5"]; status: draft -->
 
 Auswahl und Reihenfolge sind Aufgabe der Relevanz-Engine mit dem
-Gewichtsprofil „publish-our-dates" (TS-005 D5, DEC-048). Ein leerer Slot
+Gewichtsprofil „publish-our-dates" (TS-WEB-0005 D5, DEC-0048). Ein leerer Slot
 schwächt den Anspruch, wird aber nie durch erfundenen Text ersetzt.
 
 ### Belegkarten, publish-gewichtet
 
-<!-- clearance: pending — alle drei Belege stehen auf `usage_rights: unverified` (Q-014): `lehre-lelender` (schriftliche Freigabe der Stiftung steht aus), `volkshochschule-uecker-randow` (Freigabe der VHS steht aus), `zukunftswege-ost-newsletter` (Freigabe steht aus). Die geschützte Vorschau zeigt sie, der Härtungslauf vor dem Go-live klärt sie. -->
+<!-- clearance: pending — alle drei Belege stehen auf `usage_rights: unverified` (Q-0014): `lehre-lelender` (schriftliche Freigabe der Stiftung steht aus), `volkshochschule-uecker-randow` (Freigabe der VHS steht aus), `zukunftswege-ost-newsletter` (Freigabe steht aus). Die geschützte Vorschau zeigt sie, der Härtungslauf vor dem Go-live klärt sie. -->
 <!-- source_note: Gewichtung „publish our dates" aus gtm:concept/website-relevance-model.concept.md (job_fit) und der Job-Tabelle in gtm:concept/website-communication-principles.concept.md Prinzip 1. -->
 <!-- id: mitmachen-7-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"]; status: draft -->
 
@@ -260,7 +260,7 @@ Porträt von Zukunftswege Ost-Vorpommern, Januar 2026).
 
 ## Slot 8 — Abschluss-CTA mit Permanenz-Zusicherung
 
-<!-- clearance: pending für den Presse-Beleg — der Nordkurier-Eintrag von 2022 trägt kein `usage_rights` (Q-045, `state/open.md` #1). Der Angebots-Datensatz selbst ist frei verwendbar. -->
+<!-- clearance: pending für den Presse-Beleg — der Nordkurier-Eintrag von 2022 trägt kein `usage_rights` (Q-0045, `state/open.md` #1). Der Angebots-Datensatz selbst ist frei verwendbar. -->
 <!-- id: mitmachen-8-closing; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
 
 **Abschluss-Überschrift:** Der nächste Flyer kann der erste Termin sein.

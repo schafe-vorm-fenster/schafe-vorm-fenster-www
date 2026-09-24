@@ -5,14 +5,14 @@ import { checkRhythm } from "../../src/components/section-shell/rhythm";
 import type { RhythmEntry } from "../../src/components/section-shell/rhythm";
 
 /**
- * TS-021 — `/dein-ort/starten`, the acceptance walk.
+ * TS-WEB-0021 — `/dein-ort/starten`, the acceptance walk.
  *
  * This page is a pure function of URL and language (D4), so most of its
  * criteria are testable today: the parameter contract, the no-fake-coverage
  * rule, the handover, the tone boundary against `/dein-ort` state B.
  *
- * Round 3 (F-2-30, F-2-49): the classification that *leads* here (TS-008 D7)
- * and the re-resolution redirect of DEC-070 are built, so A6, A7 and A14 are
+ * Round 3 (F-2-30, F-2-49): the classification that *leads* here (TS-WEB-0008 D7)
+ * and the re-resolution redirect of DEC-0070 are built, so A6, A7 and A14 are
  * real walks instead of `test.fixme` placeholders. A8 (upstream down) still
  * needs a fault-injection seam and keeps its marker. Nothing is reworded.
  */
@@ -25,15 +25,15 @@ const PLACE = "Testdorf";
 /**
  * The fixture's own uncovered postcode (`src/lib/live/mocks/fixtures.ts`
  * `UNCOVERED_DEMO_ZIP`) and a covered slug, so the classification of
- * TS-008 D7 has both of its live rows to walk.
+ * TS-WEB-0008 D7 has both of its live rows to walk.
  */
 const UNCOVERED_ZIP = "99999";
 const COVERED_ZIP = "17390";
 const COVERED_SLUG = "rubkow";
 
-test.describe("TS-021 — start the calendar in your place", () => {
+test.describe("TS-WEB-0021 — start the calendar in your place", () => {
   for (const viewport of [PHONE, DESKTOP]) {
-    test(`TS-021-A2: with JavaScript disabled the page renders and the CTA is above the fold at ${viewport.width}×${viewport.height}`, async ({
+    test(`TS-WEB-0021-A2: with JavaScript disabled the page renders and the CTA is above the fold at ${viewport.width}×${viewport.height}`, async ({
       browser,
     }) => {
       const context = await browser.newContext({ javaScriptEnabled: false });
@@ -52,7 +52,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
       await context.close();
     });
 
-    test(`TS-017-A9: no horizontal scroll at ${viewport.width}×${viewport.height}`, async ({
+    test(`TS-WEB-0017-A9: no horizontal scroll at ${viewport.width}×${viewport.height}`, async ({
       page,
     }) => {
       await page.setViewportSize(viewport);
@@ -64,7 +64,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     });
   }
 
-  test("TS-021-A3: no parameter, an empty one and a 200-character one all render the placeless variant", async ({
+  test("TS-WEB-0021-A3: no parameter, an empty one and a 200-character one all render the placeless variant", async ({
     page,
   }) => {
     const long = "a".repeat(200);
@@ -99,7 +99,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     }
   });
 
-  test("TS-021-A4: the searched place appears only where D6 allows it", async ({ page }) => {
+  test("TS-WEB-0021-A4: the searched place appears only where D6 allows it", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto(`/dein-ort/starten?ort=${PLACE}`);
 
@@ -136,7 +136,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     expect(hrefs.some((href) => href.includes("app.schafe-vorm-fenster.de"))).toBe(false);
   });
 
-  test("TS-021-A5: an injection payload executes nothing and is never echoed", async ({
+  test("TS-WEB-0021-A5: an injection payload executes nothing and is never echoed", async ({
     page,
   }) => {
     let dialogs = 0;
@@ -161,7 +161,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     expect(dialogs).toBe(0);
   });
 
-  test("TS-021-A6: this page and `/dein-ort` share no copy string", async ({ page }) => {
+  test("TS-WEB-0021-A6: this page and `/dein-ort` share no copy string", async ({ page }) => {
     /**
      * The page's *own* sentences: `main` without the two blocks the layout
      * renders on every page (context band, closing CTA) and without the
@@ -191,19 +191,19 @@ test.describe("TS-021 — start the calendar in your place", () => {
     const place = new Set(await ownCopy());
 
     // The interim ZIP-only hint is the one string the search module carries
-    // wherever it stands (TS-008 D7, one component everywhere).
+    // wherever it stands (TS-WEB-0008 D7, one component everywhere).
     const shared = start.filter(
       (line) => place.has(line) && !line.startsWith("Suche nach Ortsnamen"),
     );
     expect(shared).toEqual([]);
 
-    // And the sentence SRC-002 reserves for `/dein-ort` state B is not here.
+    // And the sentence SRC-0002 reserves for `/dein-ort` state B is not here.
     await page.goto(`/dein-ort/starten?ort=${PLACE}`);
     const text = (await page.locator("main").innerText()) ?? "";
     expect(text).not.toContain("du könntest die Erste sein");
   });
 
-  test("TS-021-A6 (first half): searching an uncovered place from `/` or `/dein-ort` lands here", async ({
+  test("TS-WEB-0021-A6 (first half): searching an uncovered place from `/` or `/dein-ort` lands here", async ({
     page,
   }) => {
     for (const entry of ["/", "/dein-ort"]) {
@@ -219,7 +219,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     }
   });
 
-  test("TS-021-A6 (second half): a covered place with no dates lands on /dein-ort in the empty state", async ({
+  test("TS-WEB-0021-A6 (second half): a covered place with no dates lands on /dein-ort in the empty state", async ({
     page,
   }) => {
     // `38165` is the fixture's covered-but-empty place (`EMPTY_DEMO_SLUG`).
@@ -231,7 +231,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     await expect(page.locator("#place-dates")).toContainText("Lassan");
   });
 
-  test("TS-021-A7: a value that now resolves produces exactly one 302 to /dein-ort?ort=<slug>", async ({
+  test("TS-WEB-0021-A7: a value that now resolves produces exactly one 302 to /dein-ort?ort=<slug>", async ({
     request,
   }) => {
     const response = await request.get(`/dein-ort/starten?ort=${COVERED_ZIP}`, {
@@ -267,7 +267,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     expect(second.status()).toBe(200);
   });
 
-  test("TS-021-A7: the hop happens with JavaScript disabled (F-2-49)", async ({
+  test("TS-WEB-0021-A7: the hop happens with JavaScript disabled (F-2-49)", async ({
     browser,
   }) => {
     // The half the retest reopened: with a page-level `redirect()` the forward
@@ -285,11 +285,11 @@ test.describe("TS-021 — start the calendar in your place", () => {
   });
 
   test.fixme(
-    "TS-021-A8: with the place-search upstream down the page renders as uncovered [M4 — TS-008 D5]",
+    "TS-WEB-0021-A8: with the place-search upstream down the page renders as uncovered [M4 — TS-WEB-0008 D5]",
     () => {},
   );
 
-  test("TS-021-A9: the primary CTA is a plain link to the registration route, JavaScript or not", async ({
+  test("TS-WEB-0021-A9: the primary CTA is a plain link to the registration route, JavaScript or not", async ({
     browser,
   }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
@@ -307,22 +307,22 @@ test.describe("TS-021 — start the calendar in your place", () => {
     await context.close();
   });
 
-  test("TS-021-A9: a value that needs encoding travels encoded and unchanged", async ({
+  test("TS-WEB-0021-A9: a value that needs encoding travels encoded and unchanged", async ({
     page,
   }) => {
     // A name that needs encoding **and stays uncovered**. It used to be
     // "Groß Kiesow", which is a real community: name search was geo-api's
-    // and geo-api had none (Q-025), so the value classified as uncovered and
+    // and geo-api had none (Q-0025), so the value classified as uncovered and
     // this page rendered it. The committed community index answers name
     // searches now, so Groß Kiesow resolves, and the visitor is forwarded to
-    // `/dein-ort` — which is DEC-070 working, not this criterion failing.
+    // `/dein-ort` — which is DEC-0070 working, not this criterion failing.
     await page.goto("/dein-ort/starten?ort=Gro%C3%9F%20Testdorf");
     const href = await page.locator('[data-cta="primary"]').getAttribute("href");
     expect(href).toBe("/mitmachen/registrieren?ort=Gro%C3%9F+Testdorf");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Groß Testdorf");
   });
 
-  test("TS-021-A10: exactly one primary CTA, a context band of three jobs, a closing block that repeats block 1", async ({
+  test("TS-WEB-0021-A10: exactly one primary CTA, a context band of three jobs, a closing block that repeats block 1", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -345,10 +345,10 @@ test.describe("TS-021 — start the calendar in your place", () => {
     await expect(page.locator('#closing-cta [data-cta="primary"]')).toHaveCount(0);
   });
 
-  test("TS-021-A12: no tracker request carries a conversion-goal name", async ({ page }) => {
+  test("TS-WEB-0021-A12: no tracker request carries a conversion-goal name", async ({ page }) => {
     // Every request the page makes, whatever its host. The criterion is
     // about the *payload* — a goal name must not travel — so the assertion is
-    // on the URLs, not on the host list. (The host list is TS-013-A1's, in
+    // on the URLs, not on the host list. (The host list is TS-WEB-0013-A1's, in
     // `e2e/privacy.spec.ts`; on a Vercel preview it also sees the platform's
     // own `vercel.live` toolbar, which is the deployment's, not the page's.)
     const requests: string[] = [];
@@ -367,13 +367,13 @@ test.describe("TS-021 — start the calendar in your place", () => {
       expect(url).not.toContain("request-licence-quote");
     }
 
-    // TS-012 D1/D2 and the mock rule: the tracker in every environment today
+    // TS-WEB-0012 D1/D2 and the mock rule: the tracker in every environment today
     // is `mock-tracker.ts` — it logs and records nothing, and makes no
     // network call at all. No etracker host is contacted.
     expect(requests.filter((url) => url.includes("etracker"))).toEqual([]);
   });
 
-  test("TS-021-A13: the place name reserves its box before paint, and nothing shifts", async ({
+  test("TS-WEB-0021-A13: the place name reserves its box before paint, and nothing shifts", async ({
     page,
   }) => {
     await page.setViewportSize(PHONE);
@@ -422,7 +422,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     }
   });
 
-  test("TS-021-A14: walk `/` → search an uncovered place → this page → CTA → registration", async ({
+  test("TS-WEB-0021-A14: walk `/` → search an uncovered place → this page → CTA → registration", async ({
     page,
   }) => {
     const visited: string[] = [];
@@ -440,7 +440,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     await expect(page).toHaveURL(new RegExp(`/mitmachen/registrieren\\?ort=${UNCOVERED_ZIP}$`));
 
     // Every URL visited is in the D1 inventory, and no path segment ever
-    // carries a place name or slug (DEC-037).
+    // carries a place name or slug (DEC-0037).
     const inventory = new Set(["/", "/dein-ort", "/dein-ort/starten", "/mitmachen/registrieren"]);
     for (const path of visited) {
       expect(inventory.has(path), `outside the inventory: ${path}`).toBe(true);
@@ -448,7 +448,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     }
   });
 
-  test("TS-006-A15: the breadcrumb trail stands before the h1, and its last item is not a link", async ({
+  test("TS-WEB-0006-A15: the breadcrumb trail stands before the h1, and its last item is not a link", async ({
     page,
   }) => {
     await page.goto(`/dein-ort/starten?ort=${PLACE}`);
@@ -462,7 +462,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     expect(
       await trail.locator('[aria-current="page"]').evaluate((node) => node.tagName),
     ).not.toBe("A");
-    // No CTA treatment inside the trail (TS-006 D2).
+    // No CTA treatment inside the trail (TS-WEB-0006 D2).
     await expect(trail.locator("[data-cta]")).toHaveCount(0);
 
     // Before the h1 in DOM order.
@@ -477,7 +477,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     expect(trailBeforeHeading).toBe(true);
   });
 
-  test("SRC-014 §Page Rhythm: photo/colour alternation holds on /dein-ort/starten", async ({
+  test("SRC-0014 §Page Rhythm: photo/colour alternation holds on /dein-ort/starten", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -491,7 +491,7 @@ test.describe("TS-021 — start the calendar in your place", () => {
     expect(checkRhythm(sections, 0)).toEqual([]);
   });
 
-  test("TS-001: the English variant renders the English artifact and keeps the parameter", async ({
+  test("TS-WEB-0001: the English variant renders the English artifact and keeps the parameter", async ({
     page,
   }) => {
     await page.goto(`/en/your-place/start?ort=${PLACE}`);

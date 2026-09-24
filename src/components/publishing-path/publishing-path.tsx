@@ -44,7 +44,7 @@ export interface PublishingPathProps {
 
 /**
  * 25 `publishing-path` [PROPOSED] — content type 5 `publishing-path`,
- * TS-022 D4.
+ * TS-WEB-0022 D4.
  *
  * Structure: one mechanism per block, `Step` items inside — index, title,
  * body, hint, status badge. Three instances stand on `/mitmachen`, ordered

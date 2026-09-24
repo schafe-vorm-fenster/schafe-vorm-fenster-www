@@ -1,12 +1,12 @@
 /**
  * Where a request this site cannot serve goes, and which language its 404
- * speaks — TS-004-A4, TS-004 D6, TS-001 D4 (F-2-70).
+ * speaks — TS-WEB-0004-A4, TS-WEB-0004 D6, TS-WEB-0001 D4 (F-2-70).
  *
  * ### The bug this module exists to remove
  *
  * `app/[lang]/**` matches *any* first segment, so `/dies-gibt-es-nicht` and
  * `/uk/mitmachen` land **inside** the route tree with a `lang` that is not a
- * language. The page then calls `notFound()` (`_locale.ts`, TS-001 D4), which
+ * language. The page then calls `notFound()` (`_locale.ts`, TS-WEB-0001 D4), which
  * is the right decision one render too late: with Cache Components every
  * route resumes from a postponed prerender, and an error thrown during the
  * resume can no longer replace the document that is already being written.
@@ -55,9 +55,9 @@ export const NOT_FOUND_PATH = "/__not-found/404";
  * The 404 surface sits above `[lang]`, so it has no language parameter and no
  * request path of its own (`state/open.md` row 37). The language is a pure
  * function of the URL the visitor asked for — the path prefix first, the
- * domain's TLD default second (TS-001 D1/D4) — so the proxy, which is the
+ * domain's TLD default second (TS-WEB-0001 D1/D4) — so the proxy, which is the
  * only place that still has the URL, computes it and hands it down. Nothing
- * client-side is involved, which is what DEC-038 requires.
+ * client-side is involved, which is what DEC-0038 requires.
  */
 export const NOT_FOUND_LOCALE_HEADER = "x-svf-not-found-locale";
 
@@ -70,7 +70,7 @@ export const NOT_FOUND_LOCALE_HEADER = "x-svf-not-found-locale";
  * later: `/_vercel/insights/view`, `/_vercel/speed-insights/vitals` and
  * `/_vercel/image` were classified unservable and rewritten to the 404
  * surface. Nothing breaks today — neither `@vercel/analytics` nor
- * `@vercel/speed-insights` is a dependency — but TS-003 D7 names "RUM: Vercel
+ * `@vercel/speed-insights` is a dependency — but TS-WEB-0003 D7 names "RUM: Vercel
  * Speed Insights (cookieless)" as the production mechanism, and switching it
  * on from the dashboard would silently break the beacon with nothing in this
  * repository to explain why.
@@ -87,14 +87,14 @@ const DEV_PREFIX = "/dev/";
 
 let servedPaths: Set<string> | undefined;
 
-/** Every public path of TS-004 D1, normalised. Computed once per process. */
+/** Every public path of TS-WEB-0004 D1, normalised. Computed once per process. */
 function served(): Set<string> {
   servedPaths ??= new Set(everyD1Path().map(normalisePath));
   return servedPaths;
 }
 
 /**
- * The language a 404 for this URL is written in (TS-001 D1/D4).
+ * The language a 404 for this URL is written in (TS-WEB-0001 D1/D4).
  *
  * A served language prefix wins; otherwise the domain's TLD default, and
  * where that is a language this phase does not ship (`pl`), the default.

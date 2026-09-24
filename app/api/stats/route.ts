@@ -1,8 +1,8 @@
 /**
- * `GET /api/stats` — position 4, the live counters (WEB-F-041, TS-008 D8).
+ * `GET /api/stats` — position 4, the live counters (FUN-WEB-0041, TS-WEB-0008 D8).
  *
  * **204, not an empty object**, when the module must be removed from the page
- * (TS-009 D6: beyond the serve-stale window the counters are hidden, never
+ * (TS-WEB-0009 D6: beyond the serve-stale window the counters are hidden, never
  * snapshotted and never zeroed). A body with missing figures is the other
  * case — a figure `/api/stats` has no field for simply is not in the payload,
  * and `live-counters` then renders one slot fewer.
