@@ -42,6 +42,12 @@ importers:
       '@axe-core/playwright':
         specifier: 4.13.0
         version: 4.13.0(playwright-core@1.63.0)
+      '@leafcutter-strict/blueprint-complete':
+        specifier: 0.2.4
+        version: 0.2.4(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/library-schemas':
+        specifier: 0.4.1
+        version: 0.4.1(@leafcutter-os/schemas@0.14.1)
       '@playwright/test':
         specifier: 1.63.0
         version: 1.63.0
@@ -815,6 +821,208 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@leafcutter-os/schemas@0.14.1':
+    resolution: {integrity: sha512-6id3sbH0au0P+nvdrAxrS30LddjuwLAXKWekm6ZKa1qlpHqkEJ0BYNXXRrOrx9wM/DSMXpcQLAgF++KjohEXjQ==}
+    engines: {node: ^22.17.0 || >=24}
+
+  '@leafcutter-strict/agent-clarifier@0.1.5':
+    resolution: {integrity: sha512-xOHmA/5Nn1rKndW6i6qdHlUQ4+ZlzCVN0e9NvPJrO3tah+ZQQ9cM8Emuoa9UNItx6w0OvyM57JIzgbUfKRzcaQ==}
+
+  '@leafcutter-strict/agent-consistency-arbiter@0.1.5':
+    resolution: {integrity: sha512-o2ulhMN636YRhcON2lfQgbJYYuCfixDbJR6IdVgwNWvihpOgjchHKSUF9n0U1cbuv+yHpgC6+Sasb1z0TFdN5Q==}
+
+  '@leafcutter-strict/agent-decision-engine@0.1.5':
+    resolution: {integrity: sha512-CAYmWyLxXPGF53KZXS2PaayAQn4YaJ2qSYZkiKxLdWLBE/4x4K4h7SFqm10chyDRJ1Iph8Rlco5370GPNPnTIA==}
+
+  '@leafcutter-strict/agent-glossary-curator@0.1.5':
+    resolution: {integrity: sha512-9FSC9ugwG4qfMroSd1chC8OzdaoKiQfNpp1Kdc4GkFSVIOUToEy4sSurMLSnwRurloXIg3r+nSo/Pov3a0NK+A==}
+
+  '@leafcutter-strict/agent-governance-reviewer@0.1.5':
+    resolution: {integrity: sha512-ewv56L1mmy2OfBxPKm5hDNO0hV4nijaPW5X1SluZ2RUkQfDtsraMw09jK36RFH6p/KETksPvw2pbLHueqTH4qg==}
+
+  '@leafcutter-strict/agent-quality-reviewer@0.1.5':
+    resolution: {integrity: sha512-dn83Aw62Gw63MZsEv3VcfMkDFPPfTfxLv3Zd/b2c9nsb2nKlo+1zgfSl9Zex9HXP+brGOjGzi7jrmHBNgrBqkw==}
+
+  '@leafcutter-strict/agent-requirements-analyst@0.1.5':
+    resolution: {integrity: sha512-wuwHZS5vpz8UB8JCQxpGnPHsU2N56ZYoWXyNoN1lyQVS4Mszugj9LJDZAUhr0WYDASPG7IJM7RckkQPuTgSRPQ==}
+
+  '@leafcutter-strict/agent-source-scout@0.1.5':
+    resolution: {integrity: sha512-kFKx3Lq9SB95VTAFImoTuaoVlcFuYkEnSnlGSTQ4jylINOiDA9Hk/ZrH5443u1DhljdsoD6kR1Ql2WABWTNRUg==}
+
+  '@leafcutter-strict/agent-specification-engineer@0.1.5':
+    resolution: {integrity: sha512-CZGD59D+8FgdJZaZvV4iB5ZCqHesdAc+Cq+ulzfamxsqnzESpSh7V/mX8MdOiE2VJ6T7hkvbLdBSzb/mP+GzJg==}
+
+  '@leafcutter-strict/agent-traceability-auditor@0.1.5':
+    resolution: {integrity: sha512-n5yTWgEGeEVgkYsUyZEMvUiW7lEpmEiAwqQvnx4yd/PQTGGZ+OwyexPLmHYX4ibg92a4fB8bpZ3nzgIp0Kb1yQ==}
+
+  '@leafcutter-strict/blueprint-assurance@0.2.4':
+    resolution: {integrity: sha512-kzzlp4Geng2cyGfTUDWZOhq7fD5/Lx6kwe1JjU2PvK71RKY4TRoFkp+ValM2S9NU9jKwFB1RBaDP/Zub8fZdpw==}
+
+  '@leafcutter-strict/blueprint-bootstrap@0.2.4':
+    resolution: {integrity: sha512-Js0WWlndQZ0TOVZlLdu0hp8eIy9kRy2/1VdXfbat9YtDLzTNOXRJa7R/sUjHpcHmS4ENKJmNLrmne9buyr/LLQ==}
+
+  '@leafcutter-strict/blueprint-complete@0.2.4':
+    resolution: {integrity: sha512-dQtUF4udjmxMVpusXyD03+mtX1hbteIwAwfHmhHH0pKijRZOK6afoMMtNhOTCE/ZUWUDCqayrNkITiVJCiEvcA==}
+
+  '@leafcutter-strict/blueprint-delivery@0.2.4':
+    resolution: {integrity: sha512-2L7FpH+meLAUjdokO7ord2iNjBZwS4o5rxXMzd+GYiZE1qxVNASgLbH9kwYEh6jnB4XlSSovjJaj+FArFOglaA==}
+
+  '@leafcutter-strict/blueprint-essentials@0.2.4':
+    resolution: {integrity: sha512-brXxL8xkMiKxBuJjmZLFD/TUK3t09rjHOvhBzsVDXU6w8v3UqsM/mZ3miLgAvoJrRJf++H7Nuda9Ey3IvxExwQ==}
+
+  '@leafcutter-strict/foundation-confidence-calibration@0.2.0':
+    resolution: {integrity: sha512-mbpRDljcDHXzQ76OaEpJo9Fv5qirdCsiuhRjWT2EQ5ErnN+aJxIGlqX7o+PRwPv3tDJ+34VJvZJMHRFLqYwV9w==}
+
+  '@leafcutter-strict/foundation-controlled-vocabulary@0.2.0':
+    resolution: {integrity: sha512-Djn4xafqmkncp3luc2TJSzSq/9CmPFyahS2dRzPJMmaBioUka1lNivrS4oFM48V8Rf1Gmp+pnj8H5JZ/6o9Bpw==}
+
+  '@leafcutter-strict/foundation-draft-only-output@0.2.0':
+    resolution: {integrity: sha512-VGzL8KJ4miBnU7p0UqIo4SC+SZs8AC5IdGyi3hDmNYSEKuudVKdxB7g8xFZQ/VKYebid2/lgVnx6ORzUlUR+4w==}
+
+  '@leafcutter-strict/foundation-evidence-discipline@0.2.0':
+    resolution: {integrity: sha512-K24CJZGPd3iKwNH6u3ASlnxsGOXz5TbGot5XE0jfgtAtFXAYHdSUeGewL/t5oHki4iy+ilu+7zSYawZFZ3w5xg==}
+
+  '@leafcutter-strict/foundation-executor-preamble@0.2.0':
+    resolution: {integrity: sha512-0U7ihl+AFKTId8gP7VWKcQSVqQNZFOWEnNbxWYx3SkCBzWAL+dIq+4pBsWja+hfYnXBv2dl3Xb4My0g2ME4gFw==}
+
+  '@leafcutter-strict/foundation-separation-of-duties@0.2.0':
+    resolution: {integrity: sha512-Ut4R+4bLUPaR7UAqSxfTa03ozk1/H+EVVQj+jzgyHwShR6KqLJNyc1xKHxlG/5zHDquqwcbXoAr7j6JSviN0/Q==}
+
+  '@leafcutter-strict/library-schemas@0.4.1':
+    resolution: {integrity: sha512-1DIBtDqsrk7z4IpaqVWb6oeVwMoinOtbNgdt/Cu49JB5piFSm6Jo9fVjIW7Y5rkzm677+QY6THu8HxGX1dIbbQ==}
+    engines: {node: ^22.17.0 || ^24.0.0 || >=26}
+    peerDependencies:
+      '@leafcutter-os/schemas': ^0.14.0
+
+  '@leafcutter-strict/method-chain-linkage@0.1.1':
+    resolution: {integrity: sha512-Zx4R2trFu3+bCOwm5O5S04plgIR69mn2oAQ/xh7X5yD4W6wG2bM5UpIAMiGkYHmKg/QyU5UO9jv6kNc01iDOVw==}
+
+  '@leafcutter-strict/method-conflict-taxonomy@0.1.0':
+    resolution: {integrity: sha512-RFSH5nbZM/04y3q514sxEiXoxl/FgWbVaTp6+HnW4yKekJfrX+RraTwmQAe0M+39NlbEX+oK/dGtOSTz2zlzNg==}
+
+  '@leafcutter-strict/method-conformance-assessment@0.1.0':
+    resolution: {integrity: sha512-/LAodc4XgVQZDiwz6Sk0dC17E/4QGiNAlWZXWTNSbD9mwB6St4DwaWDnQKc3dzKHg9T6TS1pmixObGTsyTYCqw==}
+
+  '@leafcutter-strict/method-decision-policy-resolution@0.1.1':
+    resolution: {integrity: sha512-gemy8wIJQY3NDKowK3MYVX9C1ruw/e8eBQ5G00y2XRhxF3MLwjkflfJ3Fp8A9YxwDbNjqeK/B3TPe9b7ZfWG8g==}
+
+  '@leafcutter-strict/method-defect-taxonomy@0.1.1':
+    resolution: {integrity: sha512-iwXw9G3oONftHe1QauWKrancjBypQVBdJ+gw560rPGzCw33DYyKL0rbrUpypVsiHugcxUvxv5zfY3s2nSCGUvQ==}
+
+  '@leafcutter-strict/method-demand-recording@0.1.1':
+    resolution: {integrity: sha512-yj419oLzDivTywsq8d0pVQSORdY5w3rlyerKhmSSJqVOwffeYZmtYYAPvxhXSwsKhSN53e78EI1PCNPuiAgXNw==}
+
+  '@leafcutter-strict/method-evidence-sufficiency-rating@0.1.1':
+    resolution: {integrity: sha512-Pb4M6ImwIc/4h3Hru6H2CsxkdY0fG65BYtk4w+BAP3y/Vpmrmdcq2XxC4u7aucnApkbAY5NYiouvCWTvKtQSKw==}
+
+  '@leafcutter-strict/method-framework-metrics@0.1.0':
+    resolution: {integrity: sha512-c45t6SKN4/VIJo0/+BAJLduaPaC+PG/POGcYLdPQqdS3dzcgczhwoNnGyC+IwJ2FDwtEXfd2WRNY7TxHDnp1dw==}
+
+  '@leafcutter-strict/method-glossary-policy@0.1.1':
+    resolution: {integrity: sha512-qZ6sPd/TtAmXLgl6omX02joKkhbQYu+MB48BFOhq1kRNwgQzGqzLcUr+PaPcMIBE7HoJd/cS9bw0SnpUShn1LQ==}
+
+  '@leafcutter-strict/method-identifier-and-locator-schema@0.1.1':
+    resolution: {integrity: sha512-fGTQlTROuE+blq3QKlGTuYjoZqdqEdCjecFzo5hDN0gyygmcFAsGGjc/JRcgfPtDOhCa9juKXhYNWKqm+fy1fg==}
+
+  '@leafcutter-strict/method-impact-level-assignment@0.1.0':
+    resolution: {integrity: sha512-+YI+rbqiVGRPge1E1vdmq7o64n2Swwi4io5pOlExlsy/V67a39lzNK5MY52hAoGRimC22+TD8TwwqGj0ddvu0Q==}
+
+  '@leafcutter-strict/method-quality-characteristics@0.1.1':
+    resolution: {integrity: sha512-EPM70QviLQirUWIxnoP/Pb4VM3+RbiU5zIaxg5VqPosjOkwROa5KycrEHWbY7HSqA0QRMyAl7tMbeypUYZHtDg==}
+
+  '@leafcutter-strict/method-requirement-classification@0.1.1':
+    resolution: {integrity: sha512-OLaiNm83OpMssJcKcAw8VztwcxNkQbw4GybrGWWynB/NjCxY+gb0DIjEU5cdhp9q9MgtVLsjHClVmOv6KqjWhw==}
+
+  '@leafcutter-strict/method-signal-word-scanning@0.1.1':
+    resolution: {integrity: sha512-paSKwNLqXZewp7riZgfMNS/m3ooKoaqMDj+cNvkMKE8nhZd2VNyEgWHDsE4ikXHtBGmET4CLGcKcTU+V+Ci3fg==}
+
+  '@leafcutter-strict/method-source-quality-rating@0.1.1':
+    resolution: {integrity: sha512-viYjijufHMzGoRi0Nj+T8E7DeDSKY48F2b1Y31FAaEFfZbILiAYlBJIrVuoOqQizn46LUEmk4GWkd0Wrntos8Q==}
+
+  '@leafcutter-strict/method-statement-grammar@0.1.1':
+    resolution: {integrity: sha512-3sjbVjSF/kyWXXo/FF7UIAYleTBnjLt7OYdaE7H0jDwETEo/3DwVb10BKsCGHqIm6fNmf7o1MDOZwnToKzY0gQ==}
+
+  '@leafcutter-strict/method-version-increment@0.1.0':
+    resolution: {integrity: sha512-HQaVk39eD6IzE9NIMYHlyOTRZCerxFUd2eYbh/h7nYCPW5HnjOUQKbBMz48TUIrzreKLzIofMWrdCPqo/IgXiQ==}
+
+  '@leafcutter-strict/playbook-baseline-release@0.1.5':
+    resolution: {integrity: sha512-fhvVuqwbcRIUSUiT/ETVnEgPT9Ki9oAu8LvlLURYTTjdhNO1Ndb3zXIDU91uTHI16jGhEZTsIeJYuKRGRrJw6Q==}
+
+  '@leafcutter-strict/playbook-clarification-loop@0.1.5':
+    resolution: {integrity: sha512-EoqG3M53sTsAml4EiiBYVnfp3zSuUGUg5whf6l6Y9izoMrFKk1+QemBSd44KBDOmoR+eMraOHZp/C6ksScfVnw==}
+
+  '@leafcutter-strict/playbook-cold-start@0.1.5':
+    resolution: {integrity: sha512-iHDDpWAnIROdULxGBhNXneQDAoZKkfhTUNC4I9Ec1+CLfzs3zt30SseoD7H4A8tu/JA3t2utXfDfotNkvDLzTg==}
+
+  '@leafcutter-strict/playbook-conflict-resolution@0.1.5':
+    resolution: {integrity: sha512-cL8VyFSmft0EWr5yodrYQQ4ePE30HoTUvf0T8iUCSDf/jDim5j8llCohe8DJZRUjXSW+Uxf9+CoDa6HBs6YoTg==}
+
+  '@leafcutter-strict/playbook-governance-change@0.1.5':
+    resolution: {integrity: sha512-JW3iiixlR7m5OTvl4ydGojI4F6GUvNdcFQgv8ff8JrvqYzSo2OmikxXgxNb5zc1OhcIC3K8O+EdPZmKifrFtSA==}
+
+  '@leafcutter-strict/playbook-readiness-assessment@0.1.5':
+    resolution: {integrity: sha512-BESvW+fjNg4EesA+oKKNVClhit2gVR4EYZgDmilkp/4Hj9wLWbp6rw9UtbRcT8LEB554+Ugj25nLmbRMepRvlg==}
+
+  '@leafcutter-strict/playbook-steady-state-increment@0.1.5':
+    resolution: {integrity: sha512-65knoQUnbzE0S1xSK8azkI8wVDknwgA11Aq3lNiL8PKfBEg3h1vm7tzI+d92sDa0FCFiFcPi138djmNNnYeEwg==}
+
+  '@leafcutter-strict/playbook-tactical-specification@0.1.5':
+    resolution: {integrity: sha512-5hfjDIaJoejW0zvDXH31Yjos3OB9NhPTr62EKxCjoOAJ+TGXAaMGhtBFGav2zzvIkkaxY4z8RO4tmEOGDvKg1g==}
+
+  '@leafcutter-strict/role-agent-executor@0.2.0':
+    resolution: {integrity: sha512-7F/4Iyld6OtUTfGG1YjH6GZiBamkkljp8xehwZIx1RboRDV0ZFX6j1F2tDHhwwr0pdyO7Hs8p+HZH+y7W9vOQA==}
+
+  '@leafcutter-strict/role-domain-requirements-engineer@0.2.0':
+    resolution: {integrity: sha512-CclKAdZ23w+JCMutK2Ty9XMknXrwURPV+E3tK6CATxLCuSy09JB/OpyaQGqBNqzfqwBwUQhqaYoqv+n8aNfzCg==}
+
+  '@leafcutter-strict/role-lead-architect@0.2.0':
+    resolution: {integrity: sha512-Ypnh5I81zMRpybDa8/xvopXbzFhwfQwpqsBjXiBeKrHlFBDT7hW9fvAGOsFIWtkkWSJKVmOV8Jk6c2m1pTaN4Q==}
+
+  '@leafcutter-strict/role-requirements-author@0.2.0':
+    resolution: {integrity: sha512-xRYp/ioiVqtsbZtgcaEB8f6l4zRcjPYBublLwo8e4WBwcVCqlPhvlGsA7HbEP/E5Dk08DVt2mU4k5fQpjWt8Iw==}
+
+  '@leafcutter-strict/role-steering-board@0.2.0':
+    resolution: {integrity: sha512-Nt2kEwNF2cdlFr9RPBQQv1nVIyScIZVg2S5H76MCJsSHbO24nRQqKgqS3g4qYpUSX9jpnWdpmX9RXnlrAkh+hQ==}
+
+  '@leafcutter-strict/skill-clarification@0.1.5':
+    resolution: {integrity: sha512-wVBqZSUmh5r/BX37e1IDhh6VaAET0b0R33tUVqg3T9ToIricsw776ftW5UCqN263uKeNueA62WDVMs0FeQP4jA==}
+
+  '@leafcutter-strict/skill-consistency@0.1.5':
+    resolution: {integrity: sha512-9K/9jaQgJxrYRc1WDydu+cgQo3J/NrnwU9HpeaR9UtlZ5GoLShN+H5Qm9qEVTWD8QF/THTe4sXChY6XKfzYTXQ==}
+
+  '@leafcutter-strict/skill-decision@0.1.5':
+    resolution: {integrity: sha512-GJHRY3bZ7zDscdZ2zsP1lalo1eSoGT1e4+CBkl4ukgAljGzxGwFP3fIyyA51g1kMZXCFzREGRPfIfI9PHbEDcA==}
+
+  '@leafcutter-strict/skill-extraction@0.1.5':
+    resolution: {integrity: sha512-WBnc8veIy1aZWIzRyPIGhf++iIk3GCscSp8jV0qFNQJKi73qouI5z8TTZPHM/Dfdk2UV91d1//2WBr7MRZEMlg==}
+
+  '@leafcutter-strict/skill-glossary-bootstrap@0.1.5':
+    resolution: {integrity: sha512-YKyqTOvIjlNbJqHwrDVIU6+UB655KwfuYh19hek8VsZicevjyyz9yxpQn1PMQMXHIZaWfMnjZqqgWlK6lFAhoA==}
+
+  '@leafcutter-strict/skill-input-quality@0.1.5':
+    resolution: {integrity: sha512-iIvnwoFG9H0DzLd2znmxijPInqYcEhOKULdKAGYAEqAo1ObrRGZLawAfC6Iu/S4eo52RtPFGbrJOwh/6gywNNQ==}
+
+  '@leafcutter-strict/skill-pr-review@0.1.5':
+    resolution: {integrity: sha512-1OpCDV2DMWHatzMiOWRmaG8776X4hiG7/UBBdScXAnCoDFd8EugV+mmHIUKmrjWDRrtlI9YxkBqENQXXGIpo8A==}
+
+  '@leafcutter-strict/skill-quality-review@0.1.5':
+    resolution: {integrity: sha512-ScxY6lKQkfwmTR+1Z2jwozaXzJUTKdY9f3uEHwJ5CA5ZcnBfxsXk1Mn14ckyyDZb8LHHBAEQLALxrKM35V9M/Q==}
+
+  '@leafcutter-strict/skill-readiness-audit@0.1.5':
+    resolution: {integrity: sha512-UlcLIAV22chs0YEcwm0EuWuDu96eG4svxd6uu9hyeHHYrlSGDk0YfdDg7IVGjVL9rGk0EbKoB5yWx4rsO2ggog==}
+
+  '@leafcutter-strict/skill-source-inventory@0.1.5':
+    resolution: {integrity: sha512-kzoFIWmPLhwtxxMdKpmwq5eS/jntVdM5GxFuykmhj8fJ+9lSTQdVZZNCOJc1kbyMmfk7ctjCnpSIuuonhBZrYQ==}
+
+  '@leafcutter-strict/skill-ssd-bootstrap@0.1.5':
+    resolution: {integrity: sha512-lGXrDKwWmLg6MtGLyfJ7QpKiZH/RRqwdAv1aig8vTk0rO2EmxAB/npteG5Zo3CckGj00ZxEfaqNR0UAnV/4h6g==}
+
+  '@leafcutter-strict/skill-tactical-spec@0.1.5':
+    resolution: {integrity: sha512-ymX0FP7hyW4rPC2FfmJ4yRQ6fCQ9rmxASOBcYIR92Ans3HglNrDxD4LC/d7cGi3T9yJr79+HPj8r8g4YNwSQMQ==}
+
+  '@leafcutter-strict/skill-traceability-audit@0.1.5':
+    resolution: {integrity: sha512-nzk2zl8Jq5OJKIRHhJj4+5f+B2Iip1n9Hkdx4ymUwlF2DxuP52URvlRwt7PMY/oKgBa9ELGAL1gI0jcTJMEp9Q==}
 
   '@mapbox/node-pre-gyp@2.0.3':
     resolution: {integrity: sha512-uwPAhccfFJlsfCxMYTwOdVfOz3xqyj8xYL3zJj8f0pb30tLohnnFPhLuqp4/qoEz8sNxe4SESZedcBojRefIzg==}
@@ -2758,6 +2966,10 @@ packages:
     resolution: {integrity: sha512-SFNOvSJ+Dgf/9An904Yx+CgSlIPCkIpao4qo51lpee25TIRejdH3rhR4EZMGoNx3/TP3O+wzWuiTFl4sqbltzA==}
     hasBin: true
 
+  js-yaml@5.4.2:
+    resolution: {integrity: sha512-m+aqu+LwO1O6sIopafj8HUVl5aawITwZQe/yHpMCKjaWBaA/d07B/QdMb3529REftiU+RMMHL3Vlsw3hON7vWg==}
+    hasBin: true
+
   jsesc@3.1.0:
     resolution: {integrity: sha512-/sM3dO2FOzXjKQhJuo0Q173wf2KOo8t4I8vHy6lF9poUp7bKT0/NHE8fPX23PwfhnykfqnC2xRxOnVw5XuGIaA==}
     engines: {node: '>=6'}
@@ -3953,6 +4165,9 @@ packages:
   zod@4.4.3:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
 
+  zod@4.6.5:
+    resolution: {integrity: sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==}
+
 snapshots:
 
   '@ai-sdk/gateway@4.0.80(zod@4.4.3)':
@@ -4480,6 +4695,505 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
+
+  '@leafcutter-os/schemas@0.14.1':
+    dependencies:
+      js-yaml: 5.4.2
+      zod: 4.6.5
+
+  '@leafcutter-strict/agent-clarifier@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/playbook-clarification-loop': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/role-requirements-author': 0.2.0
+      '@leafcutter-strict/skill-clarification': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/agent-consistency-arbiter@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/method-conflict-taxonomy': 0.1.0
+      '@leafcutter-strict/method-impact-level-assignment': 0.1.0
+      '@leafcutter-strict/playbook-conflict-resolution': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/role-domain-requirements-engineer': 0.2.0
+      '@leafcutter-strict/skill-consistency': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/agent-decision-engine@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/method-decision-policy-resolution': 0.1.1
+      '@leafcutter-strict/method-evidence-sufficiency-rating': 0.1.1
+      '@leafcutter-strict/role-agent-executor': 0.2.0
+      '@leafcutter-strict/skill-decision': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/agent-glossary-curator@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/method-glossary-policy': 0.1.1
+      '@leafcutter-strict/role-domain-requirements-engineer': 0.2.0
+      '@leafcutter-strict/skill-glossary-bootstrap': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/agent-governance-reviewer@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/method-version-increment': 0.1.0
+      '@leafcutter-strict/playbook-governance-change': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/role-lead-architect': 0.2.0
+      '@leafcutter-strict/skill-pr-review': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/agent-quality-reviewer@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/method-quality-characteristics': 0.1.1
+      '@leafcutter-strict/role-domain-requirements-engineer': 0.2.0
+      '@leafcutter-strict/skill-quality-review': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/agent-requirements-analyst@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/playbook-steady-state-increment': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/role-requirements-author': 0.2.0
+      '@leafcutter-strict/skill-extraction': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-ssd-bootstrap': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/agent-source-scout@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/playbook-cold-start': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/role-requirements-author': 0.2.0
+      '@leafcutter-strict/skill-input-quality': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-source-inventory': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/agent-specification-engineer@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/playbook-tactical-specification': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/role-requirements-author': 0.2.0
+      '@leafcutter-strict/skill-tactical-spec': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/agent-traceability-auditor@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/playbook-baseline-release': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/playbook-readiness-assessment': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/role-domain-requirements-engineer': 0.2.0
+      '@leafcutter-strict/skill-readiness-audit': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-traceability-audit': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/blueprint-assurance@0.2.4(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/agent-decision-engine': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/agent-governance-reviewer': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/agent-traceability-auditor': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/blueprint-essentials': 0.2.4(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/playbook-baseline-release': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/playbook-governance-change': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/playbook-readiness-assessment': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-decision': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-pr-review': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-readiness-audit': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-traceability-audit': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/blueprint-bootstrap@0.2.4(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/agent-clarifier': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/agent-glossary-curator': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/agent-source-scout': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/blueprint-essentials': 0.2.4(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/playbook-clarification-loop': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/playbook-cold-start': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-clarification': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-glossary-bootstrap': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-input-quality': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-source-inventory': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-ssd-bootstrap': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/blueprint-complete@0.2.4(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/blueprint-assurance': 0.2.4(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/blueprint-bootstrap': 0.2.4(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/blueprint-delivery': 0.2.4(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/blueprint-essentials': 0.2.4(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/blueprint-delivery@0.2.4(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/agent-consistency-arbiter': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/agent-decision-engine': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/agent-quality-reviewer': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/agent-requirements-analyst': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/agent-specification-engineer': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/blueprint-essentials': 0.2.4(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/playbook-conflict-resolution': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/playbook-steady-state-increment': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/playbook-tactical-specification': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-consistency': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-decision': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-extraction': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-quality-review': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-tactical-spec': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/blueprint-essentials@0.2.4(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-confidence-calibration': 0.2.0
+      '@leafcutter-strict/foundation-controlled-vocabulary': 0.2.0
+      '@leafcutter-strict/foundation-draft-only-output': 0.2.0
+      '@leafcutter-strict/foundation-evidence-discipline': 0.2.0
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/foundation-separation-of-duties': 0.2.0
+      '@leafcutter-strict/library-schemas': 0.4.1(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/method-chain-linkage': 0.1.1
+      '@leafcutter-strict/method-conflict-taxonomy': 0.1.0
+      '@leafcutter-strict/method-conformance-assessment': 0.1.0
+      '@leafcutter-strict/method-decision-policy-resolution': 0.1.1
+      '@leafcutter-strict/method-defect-taxonomy': 0.1.1
+      '@leafcutter-strict/method-demand-recording': 0.1.1
+      '@leafcutter-strict/method-evidence-sufficiency-rating': 0.1.1
+      '@leafcutter-strict/method-framework-metrics': 0.1.0
+      '@leafcutter-strict/method-glossary-policy': 0.1.1
+      '@leafcutter-strict/method-identifier-and-locator-schema': 0.1.1
+      '@leafcutter-strict/method-impact-level-assignment': 0.1.0
+      '@leafcutter-strict/method-quality-characteristics': 0.1.1
+      '@leafcutter-strict/method-requirement-classification': 0.1.1
+      '@leafcutter-strict/method-signal-word-scanning': 0.1.1
+      '@leafcutter-strict/method-source-quality-rating': 0.1.1
+      '@leafcutter-strict/method-statement-grammar': 0.1.1
+      '@leafcutter-strict/method-version-increment': 0.1.0
+      '@leafcutter-strict/role-agent-executor': 0.2.0
+      '@leafcutter-strict/role-domain-requirements-engineer': 0.2.0
+      '@leafcutter-strict/role-lead-architect': 0.2.0
+      '@leafcutter-strict/role-requirements-author': 0.2.0
+      '@leafcutter-strict/role-steering-board': 0.2.0
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/foundation-confidence-calibration@0.2.0': {}
+
+  '@leafcutter-strict/foundation-controlled-vocabulary@0.2.0': {}
+
+  '@leafcutter-strict/foundation-draft-only-output@0.2.0': {}
+
+  '@leafcutter-strict/foundation-evidence-discipline@0.2.0': {}
+
+  '@leafcutter-strict/foundation-executor-preamble@0.2.0':
+    dependencies:
+      '@leafcutter-strict/foundation-confidence-calibration': 0.2.0
+      '@leafcutter-strict/foundation-controlled-vocabulary': 0.2.0
+      '@leafcutter-strict/foundation-draft-only-output': 0.2.0
+      '@leafcutter-strict/foundation-evidence-discipline': 0.2.0
+      '@leafcutter-strict/foundation-separation-of-duties': 0.2.0
+
+  '@leafcutter-strict/foundation-separation-of-duties@0.2.0': {}
+
+  '@leafcutter-strict/library-schemas@0.4.1(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-os/schemas': 0.14.1
+      zod: 4.6.5
+
+  '@leafcutter-strict/method-chain-linkage@0.1.1':
+    dependencies:
+      '@leafcutter-strict/method-identifier-and-locator-schema': 0.1.1
+
+  '@leafcutter-strict/method-conflict-taxonomy@0.1.0': {}
+
+  '@leafcutter-strict/method-conformance-assessment@0.1.0': {}
+
+  '@leafcutter-strict/method-decision-policy-resolution@0.1.1':
+    dependencies:
+      '@leafcutter-strict/foundation-separation-of-duties': 0.2.0
+
+  '@leafcutter-strict/method-defect-taxonomy@0.1.1':
+    dependencies:
+      '@leafcutter-strict/method-source-quality-rating': 0.1.1
+
+  '@leafcutter-strict/method-demand-recording@0.1.1':
+    dependencies:
+      '@leafcutter-strict/method-defect-taxonomy': 0.1.1
+
+  '@leafcutter-strict/method-evidence-sufficiency-rating@0.1.1':
+    dependencies:
+      '@leafcutter-strict/method-source-quality-rating': 0.1.1
+
+  '@leafcutter-strict/method-framework-metrics@0.1.0':
+    dependencies:
+      '@leafcutter-strict/method-conformance-assessment': 0.1.0
+
+  '@leafcutter-strict/method-glossary-policy@0.1.1':
+    dependencies:
+      '@leafcutter-strict/foundation-controlled-vocabulary': 0.2.0
+
+  '@leafcutter-strict/method-identifier-and-locator-schema@0.1.1':
+    dependencies:
+      '@leafcutter-strict/foundation-evidence-discipline': 0.2.0
+
+  '@leafcutter-strict/method-impact-level-assignment@0.1.0': {}
+
+  '@leafcutter-strict/method-quality-characteristics@0.1.1':
+    dependencies:
+      '@leafcutter-strict/foundation-controlled-vocabulary': 0.2.0
+
+  '@leafcutter-strict/method-requirement-classification@0.1.1':
+    dependencies:
+      '@leafcutter-strict/method-statement-grammar': 0.1.1
+
+  '@leafcutter-strict/method-signal-word-scanning@0.1.1':
+    dependencies:
+      '@leafcutter-strict/foundation-controlled-vocabulary': 0.2.0
+
+  '@leafcutter-strict/method-source-quality-rating@0.1.1':
+    dependencies:
+      '@leafcutter-strict/foundation-evidence-discipline': 0.2.0
+
+  '@leafcutter-strict/method-statement-grammar@0.1.1':
+    dependencies:
+      '@leafcutter-strict/foundation-controlled-vocabulary': 0.2.0
+
+  '@leafcutter-strict/method-version-increment@0.1.0': {}
+
+  '@leafcutter-strict/playbook-baseline-release@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/method-chain-linkage': 0.1.1
+      '@leafcutter-strict/method-framework-metrics': 0.1.0
+      '@leafcutter-strict/skill-decision': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-traceability-audit': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/playbook-clarification-loop@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/method-demand-recording': 0.1.1
+      '@leafcutter-strict/skill-clarification': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-input-quality': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/playbook-cold-start@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/skill-clarification': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-glossary-bootstrap': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-input-quality': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-source-inventory': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-ssd-bootstrap': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/playbook-conflict-resolution@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/method-conflict-taxonomy': 0.1.0
+      '@leafcutter-strict/method-impact-level-assignment': 0.1.0
+      '@leafcutter-strict/method-version-increment': 0.1.0
+      '@leafcutter-strict/skill-consistency': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-decision': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/playbook-governance-change@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-separation-of-duties': 0.2.0
+      '@leafcutter-strict/method-version-increment': 0.1.0
+      '@leafcutter-strict/skill-decision': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-pr-review': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/playbook-readiness-assessment@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/method-conformance-assessment': 0.1.0
+      '@leafcutter-strict/method-framework-metrics': 0.1.0
+      '@leafcutter-strict/skill-readiness-audit': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/playbook-steady-state-increment@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/skill-consistency': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-decision': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-extraction': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-input-quality': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-quality-review': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-source-inventory': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/playbook-tactical-specification@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/method-quality-characteristics': 0.1.1
+      '@leafcutter-strict/skill-decision': 0.1.5(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/skill-tactical-spec': 0.1.5(@leafcutter-os/schemas@0.14.1)
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/role-agent-executor@0.2.0': {}
+
+  '@leafcutter-strict/role-domain-requirements-engineer@0.2.0':
+    dependencies:
+      '@leafcutter-strict/role-lead-architect': 0.2.0
+      '@leafcutter-strict/role-steering-board': 0.2.0
+
+  '@leafcutter-strict/role-lead-architect@0.2.0':
+    dependencies:
+      '@leafcutter-strict/role-steering-board': 0.2.0
+
+  '@leafcutter-strict/role-requirements-author@0.2.0':
+    dependencies:
+      '@leafcutter-strict/role-domain-requirements-engineer': 0.2.0
+
+  '@leafcutter-strict/role-steering-board@0.2.0': {}
+
+  '@leafcutter-strict/skill-clarification@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/library-schemas': 0.4.1(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/method-demand-recording': 0.1.1
+      '@leafcutter-strict/method-identifier-and-locator-schema': 0.1.1
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/skill-consistency@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/library-schemas': 0.4.1(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/method-conflict-taxonomy': 0.1.0
+      '@leafcutter-strict/method-glossary-policy': 0.1.1
+      '@leafcutter-strict/method-impact-level-assignment': 0.1.0
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/skill-decision@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/foundation-separation-of-duties': 0.2.0
+      '@leafcutter-strict/library-schemas': 0.4.1(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/method-decision-policy-resolution': 0.1.1
+      '@leafcutter-strict/method-evidence-sufficiency-rating': 0.1.1
+      '@leafcutter-strict/method-impact-level-assignment': 0.1.0
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/skill-extraction@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/library-schemas': 0.4.1(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/method-chain-linkage': 0.1.1
+      '@leafcutter-strict/method-identifier-and-locator-schema': 0.1.1
+      '@leafcutter-strict/method-requirement-classification': 0.1.1
+      '@leafcutter-strict/method-signal-word-scanning': 0.1.1
+      '@leafcutter-strict/method-statement-grammar': 0.1.1
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/skill-glossary-bootstrap@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/library-schemas': 0.4.1(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/method-glossary-policy': 0.1.1
+      '@leafcutter-strict/method-identifier-and-locator-schema': 0.1.1
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/skill-input-quality@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/library-schemas': 0.4.1(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/method-defect-taxonomy': 0.1.1
+      '@leafcutter-strict/method-demand-recording': 0.1.1
+      '@leafcutter-strict/method-evidence-sufficiency-rating': 0.1.1
+      '@leafcutter-strict/method-source-quality-rating': 0.1.1
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/skill-pr-review@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/library-schemas': 0.4.1(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/method-decision-policy-resolution': 0.1.1
+      '@leafcutter-strict/method-version-increment': 0.1.0
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/skill-quality-review@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/library-schemas': 0.4.1(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/method-evidence-sufficiency-rating': 0.1.1
+      '@leafcutter-strict/method-quality-characteristics': 0.1.1
+      '@leafcutter-strict/method-statement-grammar': 0.1.1
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/skill-readiness-audit@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/library-schemas': 0.4.1(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/method-conformance-assessment': 0.1.0
+      '@leafcutter-strict/method-framework-metrics': 0.1.0
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/skill-source-inventory@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/library-schemas': 0.4.1(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/method-defect-taxonomy': 0.1.1
+      '@leafcutter-strict/method-identifier-and-locator-schema': 0.1.1
+      '@leafcutter-strict/method-source-quality-rating': 0.1.1
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/skill-ssd-bootstrap@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/library-schemas': 0.4.1(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/method-evidence-sufficiency-rating': 0.1.1
+      '@leafcutter-strict/method-signal-word-scanning': 0.1.1
+      '@leafcutter-strict/method-statement-grammar': 0.1.1
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/skill-tactical-spec@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/library-schemas': 0.4.1(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/method-chain-linkage': 0.1.1
+      '@leafcutter-strict/method-quality-characteristics': 0.1.1
+      '@leafcutter-strict/method-statement-grammar': 0.1.1
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
+
+  '@leafcutter-strict/skill-traceability-audit@0.1.5(@leafcutter-os/schemas@0.14.1)':
+    dependencies:
+      '@leafcutter-strict/foundation-executor-preamble': 0.2.0
+      '@leafcutter-strict/library-schemas': 0.4.1(@leafcutter-os/schemas@0.14.1)
+      '@leafcutter-strict/method-chain-linkage': 0.1.1
+      '@leafcutter-strict/method-framework-metrics': 0.1.0
+    transitivePeerDependencies:
+      - '@leafcutter-os/schemas'
 
   '@mapbox/node-pre-gyp@2.0.3':
     dependencies:
@@ -6669,6 +7383,10 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
+  js-yaml@5.4.2:
+    dependencies:
+      argparse: 2.0.1
+
   jsesc@3.1.0: {}
 
   json-bigint@1.0.0:
@@ -7976,3 +8694,5 @@ snapshots:
   zod@4.1.11: {}
 
   zod@4.4.3: {}
+
+  zod@4.6.5: {}
