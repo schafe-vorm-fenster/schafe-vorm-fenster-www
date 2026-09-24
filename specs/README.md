@@ -138,6 +138,24 @@ specs/
 
 ## Conventions
 
+- **Everything is `DRAFT`, and that is not laziness.**
+  `@leafcutter-strict/foundation-draft-only-output` is a company-layer
+  foundation: *"An executor that writes `status: APPROVED` has not saved a
+  step; it has removed the record that makes the approval auditable."* A
+  status moves at the decision point named in the project's decision policy
+  — DP-03 for a requirement, DP-08 for a tactical specification, DP-09 for
+  verification — and this repository has adopted **no decision policy**
+  (DEC-0085 §6). `library-schemas/policies` ships three profiles and refuses
+  to pick one for you, because *"a pair the policy does not cover fails the
+  pipeline rather than falling back to something nobody decided"*, and a
+  scope starts at *conservative*, where every decision point is `HUMAN` at
+  every impact level. So there is no point at which anything here could be
+  approved, and passing tests do not become one. `check:specs` E15 rejects
+  any status but `DRAFT` until a `POL-*` policy exists under `specs/`, and
+  W5 reports what the evidence would support if one did — the sufficiency
+  gate the policies name (*"Nothing is decided at … requirement approval
+  below S2"*) plus tactical coverage for DP-03, and full test reference for
+  DP-09. Evidence for a decision, never the decision.
 - Statements in the slot form their class prescribes
   (`@leafcutter-strict/method-statement-grammar`), recorded on the artefact
   as `form`; where a statement is not in its form yet, `form` ends in `0`

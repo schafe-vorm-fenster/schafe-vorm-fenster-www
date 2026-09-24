@@ -21,10 +21,12 @@
  *  E12 Tactical specs carry a `kind` and a status from the tactical contract
  *  E13 Source inventory rows carry a trust level from the source contract
  *  E14 Requirements carry the grammar form their class prescribes
+ *  E15 No status but DRAFT while no decision policy binds this repository
  *  W1  (warning) requirements not covered by any tactical spec
  *  W2  (warning) covered requirements discharged by no acceptance criterion
  *  W3  (warning) acceptance criteria no test references
  *  W4  (warning) requirements whose statement is not yet in its class's form
+ *  W5  (report) what a decision point could resolve today, were one bound
  *
  * Exit code: number of errors (0 = green). Warnings never fail the run.
  *
@@ -162,6 +164,13 @@ const ACCEPTANCE_ID = new RegExp(`${TACTICAL_ID.source.replace(/\$$/, "")}-A\\d+
 
 const list = (set: Set<string>) => [...set].join(" | ");
 
+/** Every governed artefact's status, for E15. */
+const statuses: Array<[string, string, string]> = [];
+/** Requirement → evidence level, for W5's sufficiency gate. */
+const sufficiencyOf = new Map<string, string>();
+/** "Nothing is decided at … requirement approval below S2" (library-schemas/policies). */
+const GATE_S2 = new Set(["S2", "S3"]);
+
 /**
  * The grammar form a class prescribes (`@leafcutter-strict/method-statement-grammar`).
  *
@@ -174,6 +183,32 @@ const list = (set: Set<string>) => [...set].join(" | ");
  */
 const FORM_OF_CLASS: Record<string, string> = { FUN: "F", NFR: "Q", CON: "C", BUS: "B" };
 const notInForm: string[] = [];
+
+/**
+ * Who may write a status other than DRAFT (E15).
+ *
+ * `@leafcutter-strict/foundation-draft-only-output` is a company-layer
+ * foundation and it is blunt about it: an executor may not "approve, merge,
+ * baseline, release, or change a status … An executor that writes
+ * `status: APPROVED` has not saved a step; it has removed the record that
+ * makes the approval auditable." A status changes at the decision point
+ * named in the project's decision policy, and nowhere else.
+ *
+ * This repository has no decision policy. `library-schemas/policies` ships
+ * three reference profiles and says no blueprint selects one, because "how
+ * much authority an agent holds is a decision, and it should not arrive as
+ * an install default" — and that "a pair the policy does not cover fails the
+ * pipeline rather than falling back to something nobody decided". DEC-0085
+ * §6 keeps the row open.
+ *
+ * So until a `POL-*` policy exists under `specs/`, DRAFT is the only status
+ * anything here may carry, and E15 says so rather than letting a future run
+ * quietly promote 155 requirements because their tests are green. Green
+ * tests are evidence for a decision; they are not the decision. What the
+ * evidence supports is reported instead, as W5.
+ */
+const POLICY_ID = /^POL-[A-Z0-9-]+$/;
+const policies: string[] = [];
 
 // ── File collection ──────────────────────────────────────────────────────
 
@@ -272,6 +307,7 @@ for (const d of docs) {
       if (typeof status !== "string" || !REQUIREMENT_STATUS.has(status)) {
         err(d.file, `E11 ${id}: status ${JSON.stringify(status ?? null)} is not one of ${list(REQUIREMENT_STATUS)}`);
       }
+      statuses.push([d.file, id, String(status)]);
       // E14: the grammar form belongs to the class (`method-statement-grammar`)
       const form = d.frontmatter?.form;
       const expectedForm = FORM_OF_CLASS[id.slice(0, id.indexOf("-"))];
@@ -290,6 +326,7 @@ for (const d of docs) {
       if (!source) err(d.file, `E3 ${id}: empty source`);
       if (typeof suff !== "string" || !SUFFICIENCY.has(suff))
         err(d.file, `E3 ${id}: sufficiency ${JSON.stringify(suff ?? null)} is not one of ${list(SUFFICIENCY)}`);
+      else sufficiencyOf.set(id, suff);
       // E4: S3 needs a decision anchor in the artefact itself
       if (suff === "S3" && !/(DEC-\d{4}|ADR-\d{3}|ADR-00\d)/.test(statement + " " + source)) {
         err(d.file, `E4 ${id}: S3 without DEC/ADR reference in the requirement`);
@@ -339,9 +376,14 @@ for (const d of docs) {
     if (typeof tsStatus !== "string" || !TACTICAL_STATUS.has(tsStatus)) {
       err(d.file, `E12 status ${JSON.stringify(tsStatus ?? null)} is not one of ${list(TACTICAL_STATUS)}`);
     }
+    statuses.push([d.file, String(d.frontmatter?.id ?? "?"), String(tsStatus)]);
   }
   if (/glossary\.md$/.test(d.file)) {
     for (const m of d.body.matchAll(new RegExp(`^\\|\\s*(${bare(GLOSSARY_ID)})\\s*\\|`, "gm"))) glDefs.add(m[1]);
+  }
+  // A decision policy, if this repository ever adopts one (E15).
+  if (typeof d.frontmatter?.id === "string" && POLICY_ID.test(d.frontmatter.id as string)) {
+    policies.push(d.frontmatter.id as string);
   }
   // contracts register may define an SRC id in frontmatter
   if (/\/contracts\//.test(d.file) && typeof d.frontmatter?.id === "string" && SOURCE_ID.test(d.frontmatter.id as string)) {
@@ -482,6 +524,42 @@ if (coveredNoAc.length) {
 
 const acsByLevel = new Map<string, number>();
 for (const { level } of acDefs.values()) acsByLevel.set(level, (acsByLevel.get(level) ?? 0) + 1);
+// ── E15: only a decision point moves a status off DRAFT ──────────────────
+
+if (!policies.length) {
+  for (const [file, id, status] of statuses) {
+    if (status !== "DRAFT")
+      err(
+        file,
+        `E15 ${id}: status ${status} — no decision policy binds this repository, so no decision ` +
+          `point exists to set it. @leafcutter-strict/foundation-draft-only-output: an executor ` +
+          `"may not approve, merge, baseline, release, or change a status". Adopt a POL-* policy first.`,
+      );
+  }
+}
+
+// ── W5: what the evidence would support, were a decision point bound ─────
+// Not a decision. The sufficiency gate is the policies' own: "Nothing is
+// decided at goal acceptance or requirement approval below S2."
+
+const dp03 = [...reqDefs.keys()]
+  .filter((id) => covered.has(id) && GATE_S2.has(sufficiencyOf.get(id) ?? ""))
+  .sort();
+const dp09 = [...tsDefs]
+  .filter((ts) => {
+    const own = [...acDefs.keys()].filter((a) => a.startsWith(ts + "-"));
+    return own.length > 0 && own.every((a) => referencedIds.has(a));
+  })
+  .sort();
+warnings.push(
+  `W5 nothing is APPROVED or VERIFIED because no decision policy binds this repository (DEC-0085 §6).`,
+);
+warnings.push(
+  `   were one bound: ${dp03.length}/${reqDefs.size} requirements meet DP-03's evidence gate ` +
+    `(>= S2 and covered by a tactical spec); ${dp09.length}/${tsDefs.size} tactical specs meet ` +
+    `DP-09's (every acceptance criterion referenced by a test).`,
+);
+
 if (notInForm.length) {
   warnings.push(`W4 ${notInForm.length}/${reqDefs.size} requirements are not yet in the slot form their class prescribes:`);
   warnings.push(`   ${notInForm.sort().join(", ")}`);
