@@ -9,6 +9,12 @@ version: 0.1.0
 area: jobs-and-navigation
 source: "SRC-0001#1-jobs-not-audiences"
 evidence_sufficiency: S2
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0001 that pass"
+  operator: "="
+  value: 2
+  unit: criteria
+  meter: "TS-WEB-0006-A1, TS-WEB-0006-A14 — 1 of 2 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

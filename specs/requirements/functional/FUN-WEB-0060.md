@@ -9,6 +9,7 @@ version: 0.1.0
 area: localization
 source: "SRC-0006, DEC-0003, DEC-0035"
 evidence_sufficiency: S3
+fit_criterion: UNKNOWN
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

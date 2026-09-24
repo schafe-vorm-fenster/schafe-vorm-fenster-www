@@ -9,6 +9,12 @@ version: 0.1.0
 area: relevance-and-proof
 source: "SRC-0002#sequence-rule"
 evidence_sufficiency: S2
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0031 that pass"
+  operator: "="
+  value: 2
+  unit: criteria
+  meter: "TS-WEB-0005-A3, TS-WEB-0005-A7 — 2 of 2 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

@@ -9,6 +9,12 @@ version: 0.1.0
 area: accessibility
 source: "SRC-0006"
 evidence_sufficiency: S2
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0130 that pass"
+  operator: "="
+  value: 1
+  unit: criteria
+  meter: "TS-WEB-0002-A1 — 1 of 1 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

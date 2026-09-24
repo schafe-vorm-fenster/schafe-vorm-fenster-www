@@ -9,6 +9,12 @@ version: 0.1.0
 area: pages
 source: "SRC-0003#for-a-whole-region"
 evidence_sufficiency: S2
+fit_criterion:
+  scale: "acceptance criteria of BUS-WEB-0016 that pass"
+  operator: "="
+  value: 3
+  unit: criteria
+  meter: "TS-WEB-0006-A13, TS-WEB-0026-A7, TS-WEB-0026-A8 — 1 of 3 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

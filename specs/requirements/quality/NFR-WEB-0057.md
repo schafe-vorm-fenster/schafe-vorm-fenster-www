@@ -9,6 +9,12 @@ version: 0.1.0
 area: accessibility
 source: "SRC-0006"
 evidence_sufficiency: S2
+fit_criterion:
+  scale: "Violations of WCAG 2.2 level A and AA on every route"
+  operator: "="
+  value: 0
+  unit: "violations"
+  meter: "e2e/a11y.spec.ts (TS-WEB-0002-A1) — run by TS-WEB-0002-A1"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

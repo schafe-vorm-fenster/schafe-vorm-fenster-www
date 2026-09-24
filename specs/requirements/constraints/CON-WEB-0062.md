@@ -9,6 +9,12 @@ version: 0.1.0
 area: place-search
 source: "DEC-0037"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of CON-WEB-0062 that pass"
+  operator: "="
+  value: 1
+  unit: criteria
+  meter: "TS-WEB-0004-A10 — 1 of 1 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

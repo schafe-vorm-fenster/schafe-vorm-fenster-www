@@ -9,6 +9,12 @@ version: 0.1.0
 area: jobs-and-navigation
 source: "SRC-0001#2"
 evidence_sufficiency: S2
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0005 that pass"
+  operator: "="
+  value: 1
+  unit: criteria
+  meter: "TS-WEB-0006-A6 — 1 of 1 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

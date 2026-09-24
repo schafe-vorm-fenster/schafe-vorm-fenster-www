@@ -9,6 +9,12 @@ version: 0.1.0
 area: forms-and-leads
 source: "DEC-0009, DEC-0081"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of CON-WEB-0081 that pass"
+  operator: "="
+  value: 3
+  unit: criteria
+  meter: "TS-WEB-0016-A1, TS-WEB-0016-A14, TS-WEB-0016-A2 — 1 of 3 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

@@ -9,6 +9,12 @@ version: 0.1.0
 area: localization
 source: "SRC-0007, DEC-0005"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0166 that pass"
+  operator: "="
+  value: 3
+  unit: criteria
+  meter: "TS-WEB-0001-A1, TS-WEB-0001-A2, TS-WEB-0001-A7 — 3 of 3 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

@@ -9,6 +9,12 @@ version: 0.1.0
 area: privacy
 source: "SRC-0006"
 evidence_sufficiency: S1
+fit_criterion:
+  scale: "Persisted IP addresses on the geolocation path"
+  operator: "="
+  value: 0
+  unit: "addresses"
+  meter: "TS-WEB-0013-A6 — run by TS-WEB-0013-A5"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

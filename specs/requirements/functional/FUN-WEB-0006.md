@@ -9,6 +9,12 @@ version: 0.1.0
 area: jobs-and-navigation
 source: "SRC-0001#7, SRC-0014#page-rhythm"
 evidence_sufficiency: S2
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0006 that pass"
+  operator: "="
+  value: 2
+  unit: criteria
+  meter: "TS-WEB-0006-A17, TS-WEB-0006-A7 — 1 of 2 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

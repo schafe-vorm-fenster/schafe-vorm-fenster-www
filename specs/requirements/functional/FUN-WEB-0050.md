@@ -9,6 +9,12 @@ version: 0.1.0
 area: personalization
 source: "SRC-0001#6-assumptions-not-switches"
 evidence_sufficiency: S2
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0050 that pass"
+  operator: "="
+  value: 3
+  unit: criteria
+  meter: "TS-WEB-0010-A1, TS-WEB-0010-A3, TS-WEB-0010-A7 — 2 of 3 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

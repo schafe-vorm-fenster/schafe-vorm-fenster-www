@@ -9,6 +9,7 @@ version: 0.1.0
 area: performance
 source: "SRC-0006, DEC-0007"
 evidence_sufficiency: S3
+fit_criterion: UNKNOWN
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

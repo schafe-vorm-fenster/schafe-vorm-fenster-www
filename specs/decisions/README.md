@@ -109,3 +109,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-0092 — A quality requirement is a measure — the 37 split, measured or reclassified, and not one number invented](DEC-0092--the-quality-class-is-a-measure.md)
 - [DEC-0093 — The compounds are split — one modal and one predicate per artefact, and the nine page rows are a shape the method has no form for](DEC-0093--the-compounds-split.md)
 - [DEC-0094 — The four buried business rules are their own artefacts — and the one constraint filed as a functional requirement](DEC-0094--the-four-buried-business-rules.md)
+- [DEC-0095 — The fit criterion is what already checks the requirement — and UNKNOWN where nothing does](DEC-0095--the-fit-criterion-is-what-already-checks-it.md)

@@ -9,6 +9,12 @@ version: 0.1.0
 area: rendering-and-resilience
 source: "DEC-0033, SRC-0014#skeletons, DEC-0056"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0200 that pass"
+  operator: "="
+  value: 3
+  unit: criteria
+  meter: "TS-WEB-0009-A13, TS-WEB-0009-A8, TS-WEB-0009-A9 — 1 of 3 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

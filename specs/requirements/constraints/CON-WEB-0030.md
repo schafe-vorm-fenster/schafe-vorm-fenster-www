@@ -9,6 +9,12 @@ version: 0.1.0
 area: security
 source: "DEC-0015"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of CON-WEB-0030 that pass"
+  operator: "="
+  value: 4
+  unit: criteria
+  meter: "TS-WEB-0014-A1, TS-WEB-0014-A2, TS-WEB-0014-A3, TS-WEB-0014-A5 — 1 of 4 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

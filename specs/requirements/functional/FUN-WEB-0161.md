@@ -9,6 +9,12 @@ version: 0.1.0
 area: personalization
 source: "SRC-0006 (transcript), SRC-0001#6"
 evidence_sufficiency: S2
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0161 that pass"
+  operator: "="
+  value: 2
+  unit: criteria
+  meter: "TS-WEB-0010-A2, TS-WEB-0010-A8 — 1 of 2 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

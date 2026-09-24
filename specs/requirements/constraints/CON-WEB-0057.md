@@ -9,6 +9,7 @@ version: 0.1.0
 area: technical-constraints
 source: "SRC-0014#icons, DEC-0056"
 evidence_sufficiency: S3
+fit_criterion: UNKNOWN
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

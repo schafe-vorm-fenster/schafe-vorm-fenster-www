@@ -9,6 +9,12 @@ version: 0.1.0
 area: pages
 source: "SRC-0003, DEC-0036"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0016 that pass"
+  operator: "="
+  value: 8
+  unit: criteria
+  meter: "TS-WEB-0004-A1, TS-WEB-0026-A12, TS-WEB-0026-A13, TS-WEB-0026-A14, TS-WEB-0026-A15, TS-WEB-0026-A4, TS-WEB-0026-A5, TS-WEB-0026-A6 — 5 of 8 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

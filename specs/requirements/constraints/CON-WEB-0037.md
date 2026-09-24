@@ -9,6 +9,12 @@ version: 0.1.0
 area: privacy
 source: "DEC-0016, DEC-0028"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of CON-WEB-0037 that pass"
+  operator: "="
+  value: 6
+  unit: criteria
+  meter: "TS-WEB-0012-A10, TS-WEB-0012-A11, TS-WEB-0012-A3, TS-WEB-0012-A5, TS-WEB-0012-A6, TS-WEB-0012-A7 — 4 of 6 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

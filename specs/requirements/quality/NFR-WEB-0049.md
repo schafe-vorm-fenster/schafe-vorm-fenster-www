@@ -9,6 +9,11 @@ version: 0.1.0
 area: performance
 source: "SRC-0007, DEC-0007"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "Cumulative Layout Shift of every content page"
+  operator: "<"
+  value: 0.1
+  meter: "e2e/layout-stability.spec.ts (TS-WEB-0009-A8) — run by TS-WEB-0009-A8"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

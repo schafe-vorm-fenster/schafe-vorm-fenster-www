@@ -9,6 +9,12 @@ version: 0.1.0
 area: content-pipeline
 source: "SRC-0009 ADR-001, SRC-0006, DEC-0020"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of CON-WEB-0077 that pass"
+  operator: "="
+  value: 2
+  unit: criteria
+  meter: "TS-WEB-0007-A7, TS-WEB-0007-A8 — 2 of 2 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

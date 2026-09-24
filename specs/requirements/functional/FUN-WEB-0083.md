@@ -9,6 +9,12 @@ version: 0.1.0
 area: content-pipeline
 source: "SRC-0006, DEC-0020"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0083 that pass"
+  operator: "="
+  value: 2
+  unit: criteria
+  meter: "TS-WEB-0007-A15, TS-WEB-0007-A2 — 1 of 2 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

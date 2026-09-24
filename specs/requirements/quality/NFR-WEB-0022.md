@@ -9,6 +9,12 @@ version: 0.1.0
 area: privacy
 source: "SRC-0006, DEC-0004"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "Analytics, tag and pixel vendors in the build and in the rendered markup"
+  operator: "="
+  value: 1
+  unit: "vendor"
+  meter: "TS-WEB-0012-A9 — run by TS-WEB-0012-A1, TS-WEB-0012-A11, TS-WEB-0012-A9"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

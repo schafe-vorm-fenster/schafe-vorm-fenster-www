@@ -9,6 +9,12 @@ version: 0.1.0
 area: technical-constraints
 source: "SRC-0006, DEC-0043, DEC-0044"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of CON-WEB-0003 that pass"
+  operator: "="
+  value: 4
+  unit: criteria
+  meter: "TS-WEB-0017-A15, TS-WEB-0017-A5, TS-WEB-0017-A6, TS-WEB-0017-A7 — 1 of 4 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

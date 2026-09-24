@@ -9,6 +9,12 @@ version: 0.1.0
 area: pages
 source: "SRC-0003, DEC-0060, DEC-0052"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of BUS-WEB-0015 that pass"
+  operator: "="
+  value: 5
+  unit: criteria
+  meter: "TS-WEB-0006-A12, TS-WEB-0024-A10, TS-WEB-0024-A11, TS-WEB-0024-A18, TS-WEB-0024-A8 — 5 of 5 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

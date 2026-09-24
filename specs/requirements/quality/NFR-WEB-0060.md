@@ -9,6 +9,7 @@ version: 0.1.0
 area: accessibility
 source: "SRC-0006 (implied by AA)"
 evidence_sufficiency: S2
+fit_criterion: UNKNOWN
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

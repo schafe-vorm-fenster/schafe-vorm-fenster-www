@@ -9,6 +9,7 @@ version: 0.1.0
 area: delivery-pipeline
 source: "DEC-0031"
 evidence_sufficiency: S3
+fit_criterion: UNKNOWN
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

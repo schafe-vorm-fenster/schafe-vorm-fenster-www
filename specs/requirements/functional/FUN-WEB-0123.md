@@ -9,6 +9,12 @@ version: 0.1.0
 area: accessibility
 source: "derived; convention"
 evidence_sufficiency: S1
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0123 that pass"
+  operator: "="
+  value: 2
+  unit: criteria
+  meter: "TS-WEB-0002-A1, TS-WEB-0002-A5 — 1 of 2 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

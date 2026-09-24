@@ -27,6 +27,8 @@
  *  E16 Every artefact whose contract carries `version` has one
  *  E17 Every artefact whose contract carries `ai_provenance` has one, with
  *      the four fields the contract names
+ *  E18 Every requirement carries a `fit_criterion` — a measure in the shape
+ *      the contract types, or `UNKNOWN`
  *  W1  (warning) requirements not covered by any tactical spec
  *  W2  (warning) covered requirements discharged by no acceptance criterion
  *  W3  (warning) acceptance criteria no test references
@@ -34,6 +36,8 @@
  *  W5  (report) what the bound policy resolves today, and what escalates
  *  W6  (report) how much of the provenance is UNKNOWN, because bound 3 of
  *      POL-GRADED-BY-IMPACT escalates on an unverifiable separation of duties
+ *  W7  (report) the fit-criterion fill rate, because bound 2 of
+ *      POL-GRADED-BY-IMPACT escalates on an UNKNOWN criterion
  *
  * Exit code: number of errors (0 = green). Warnings never fail the run.
  *
@@ -305,6 +309,48 @@ const checkVersion = (d: Doc, id: string) => {
  * hidden: bound 3 of `POL-GRADED-BY-IMPACT` escalates on provenance that
  * cannot be checked, and the count is what says how far that reaches.
  */
+/**
+ * The fit criterion a requirement carries (E18).
+ *
+ * `requirement-shell` lists `fit_criterion` in its `required` array and types
+ * it as a `oneOf`: the string `UNKNOWN`, or an object requiring `scale`,
+ * `operator`, `value` and `meter`, with `unit` optional and
+ * `additionalProperties: false`. The contract's own gloss — "Scale, operator,
+ * value, unit and meter — or `UNKNOWN`, which is expected until a measure
+ * arrives" — and `method-statement-grammar`'s FC form are the same shape:
+ * `<scale>` `<operator>` `<value>` `<unit>`, measured by `<meter>`.
+ *
+ * What fills it here is DEC-0095: the acceptance criteria that verify the
+ * requirement, and for a quality requirement the measure its own statement
+ * already carries. Where no criterion of a requirement is referenced by a
+ * test, nothing checks it, and the value is `UNKNOWN` rather than a criterion
+ * nobody runs. W7 counts both sides.
+ */
+const FIT_FIELDS = ["scale", "operator", "value", "unit", "meter"] as const;
+const FIT_REQUIRED = ["scale", "operator", "value", "meter"] as const;
+let fitMeasured = 0;
+let fitUnknown = 0;
+
+const checkFitCriterion = (d: Doc, id: string) => {
+  const fit = d.frontmatter?.fit_criterion;
+  if (fit === "UNKNOWN") {
+    fitUnknown += 1;
+    return;
+  }
+  if (typeof fit !== "object" || fit === null || Array.isArray(fit)) {
+    err(d.file, `E18 ${id}: fit_criterion is ${JSON.stringify(fit ?? null)} — the contract requires a measure or "UNKNOWN"`);
+    return;
+  }
+  fitMeasured += 1;
+  const record = fit as Record<string, unknown>;
+  for (const extra of Object.keys(record))
+    if (!(FIT_FIELDS as readonly string[]).includes(extra))
+      err(d.file, `E18 ${id}: fit_criterion.${extra} is not one of ${FIT_FIELDS.join(", ")}`);
+  for (const field of FIT_REQUIRED)
+    if (record[field] === undefined || record[field] === null || record[field] === "")
+      err(d.file, `E18 ${id}: fit_criterion.${field} is missing — the contract requires ${FIT_REQUIRED.join(", ")}`);
+};
+
 const PROVENANCE_FIELDS = ["prompt_id", "prompt_version", "model", "generated_at"] as const;
 const RFC3339 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
 /** field → how many artefacts answer it `UNKNOWN` (W6). */
@@ -437,6 +483,7 @@ for (const d of docs) {
       statuses.push([d.file, id, String(status)]);
       checkVersion(d, id);
       checkProvenance(d, id);
+      checkFitCriterion(d, id);
       // E14: the grammar form belongs to the class (`method-statement-grammar`)
       const form = d.frontmatter?.form;
       const expectedForm = FORM_OF_CLASS[id.slice(0, id.indexOf("-"))];
@@ -842,6 +889,12 @@ if (!boundRules || !boundPolicy) {
     `   everything else escalates to the accountable role. Evidence for a decision, never the decision.`,
   );
 }
+
+warnings.push(
+  `W7 fit_criterion: ${fitMeasured}/${fitMeasured + fitUnknown} requirements carry a measure, ` +
+    `${fitUnknown} carry UNKNOWN because no acceptance criterion of theirs is referenced by a test. ` +
+    `POL-GRADED-BY-IMPACT bound 2 escalates on an unknown criterion.`,
+);
 
 const unknownFields = [...unknownProvenance].filter(([, n]) => n > 0);
 if (unknownFields.length) {

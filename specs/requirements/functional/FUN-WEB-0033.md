@@ -9,6 +9,12 @@ version: 0.1.0
 area: relevance-and-proof
 source: "SRC-0002#scoring"
 evidence_sufficiency: S2
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0033 that pass"
+  operator: "="
+  value: 1
+  unit: criteria
+  meter: "TS-WEB-0005-A2 — 1 of 1 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

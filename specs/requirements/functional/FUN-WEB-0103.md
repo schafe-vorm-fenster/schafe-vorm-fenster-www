@@ -9,6 +9,12 @@ version: 0.1.0
 area: rendering-and-resilience
 source: "DEC-0019"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0103 that pass"
+  operator: "="
+  value: 3
+  unit: criteria
+  meter: "TS-WEB-0009-A12, TS-WEB-0009-A4, TS-WEB-0009-A7 — 2 of 3 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

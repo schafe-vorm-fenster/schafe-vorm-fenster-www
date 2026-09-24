@@ -9,6 +9,12 @@ version: 0.1.0
 area: live-data
 source: "SRC-0001#5-live-data-carries-the-argument"
 evidence_sufficiency: S2
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0040 that pass"
+  operator: "="
+  value: 4
+  unit: criteria
+  meter: "TS-WEB-0008-A14, TS-WEB-0008-A2, TS-WEB-0008-A4, TS-WEB-0008-A9 — 4 of 4 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

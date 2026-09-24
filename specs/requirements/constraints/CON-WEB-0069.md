@@ -9,6 +9,7 @@ version: 0.1.0
 area: relevance-and-proof
 source: "SRC-0001#4-proof-is-context"
 evidence_sufficiency: S2
+fit_criterion: UNKNOWN
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

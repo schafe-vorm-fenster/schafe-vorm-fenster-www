@@ -94,6 +94,16 @@ the parent into `specs/traceability/identifier-map.md` and gives the children
 new numbers; a reclassification keeps the number where it is free in the target
 class and takes the next one above the family's highest where it is not.
 
+DEC-0093 then split the remaining 71 compounds, DEC-0094 extracted the four
+business rules that were buried inside other requirements — a rule and the
+requirement that applies it are two artefacts — and DEC-0095 filled
+`fit_criterion` on all 273 from what already checks each requirement, with
+`UNKNOWN` wherever no acceptance criterion of a requirement is referenced by
+a test. **273 requirements · 10 still outside their slot form**, and each of
+those ten says on the artefact why. `check:specs` runs E1–E18 and reports
+W1–W7; W3 (untested criteria) and W7 (unknown fit criteria) are the same gap
+seen from two ends.
+
 A status moves at a decision point, and since DEC-0088 one policy says which:
 `POL-GRADED-BY-IMPACT` in `specs/policy/`. It grades by impact — an agent may
 decide at the **low** impact level, inside four bounds and with a decision

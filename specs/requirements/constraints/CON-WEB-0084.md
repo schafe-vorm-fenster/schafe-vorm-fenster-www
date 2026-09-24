@@ -9,6 +9,7 @@ version: 0.1.0
 area: forms-and-leads
 source: "DEC-0011, DEC-0051"
 evidence_sufficiency: S3
+fit_criterion: UNKNOWN
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

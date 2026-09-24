@@ -9,6 +9,7 @@ version: 0.1.0
 area: content-pipeline
 source: "SRC-0009 ADR-001"
 evidence_sufficiency: S3
+fit_criterion: UNKNOWN
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

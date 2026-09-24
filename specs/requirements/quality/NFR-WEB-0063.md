@@ -9,6 +9,12 @@ version: 0.1.0
 area: privacy
 source: "derived; convention"
 evidence_sufficiency: S1
+fit_criterion:
+  scale: "External asset hosts in the built output and in the source"
+  operator: "="
+  value: 0
+  unit: "hosts"
+  meter: "TS-WEB-0013-A3 — run by TS-WEB-0013-A1, TS-WEB-0013-A3, TS-WEB-0013-A5"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

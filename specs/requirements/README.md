@@ -31,7 +31,7 @@ functional — and the `requirement-shell` contract fixes the four tokens:
 | FUN — functional | `FUN-WEB-####` | 1:1 |
 | NFR — quality | `NFR-WEB-####` | 1:1 |
 | CON — constraint | `CON-WEB-####` | also carries the scope boundaries |
-| BUS — business rule | `BUS-WEB-####` | one rule so far, `BUS-WEB-0012` |
+| BUS — business rule | `BUS-WEB-####` | five rules; four of them were extracted from inside other requirements by DEC-0094 |
 
 The Volere type number the method also asks for is not recorded yet; that
 row of DEC-0085 §6 stays open.
@@ -51,11 +51,26 @@ follows in `form`:
 
 The method defines exactly one variant per class, so the digit the contract
 asks for reads: **`1` — the description is in that form**; **`0` — it is
-not yet**, and the statement is the one extraction wrote, kept word for
-word because recasting it would drop a qualification no slot holds. The
-method's own rule decides which: *"Compound statements. One modal, one
-predicate. A statement joined by 'and' is split."* Splitting makes new
-artefacts, which this wave did not do.
+not yet**. The method's own rule decides which: *"Compound statements. One
+modal, one predicate. A statement joined by 'and' is split."* An enumeration
+that is the object of one predicate is not a compound; two verbs joined by
+"and" are. DEC-0092, DEC-0093 and DEC-0094 ran that split across the whole
+set, so **10 of 273** are still at `0` and each of them says on the artefact
+why: nine are the page rows `FUN-WEB-0010`…`FUN-WEB-0018`, a three-column
+tuple the method has no form for (Q-0075), and `FUN-WEB-0068` is a target
+picture whose values are UNKNOWN (Q-0010).
+
+## Fit criterion
+
+Every requirement carries `fit_criterion`, which the shell contract requires
+and types as a `oneOf`: a measure — `scale`, `operator`, `value`, optional
+`unit`, `meter` — or the string `UNKNOWN`. DEC-0095 fills it from what
+already checks the requirement: a quality requirement's own Q statement is
+the measure, and every other requirement is measured by its acceptance
+criteria passing, with the criteria named as the meter. Where **no**
+acceptance criterion of a requirement is referenced by a test, nothing checks
+it and the value is `UNKNOWN` — never a criterion nobody runs. `check:specs`
+E18 validates the shape, W7 reports the fill rate.
 
 `check:specs` E14 checks the form token against the class; W4 counts the
 `0`s and names them. They are the burn-down, and they are honest.

@@ -9,6 +9,12 @@ version: 0.1.0
 area: privacy
 source: "SRC-0006, DEC-0004, DEC-0028"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0124 that pass"
+  operator: "="
+  value: 3
+  unit: criteria
+  meter: "TS-WEB-0012-A10, TS-WEB-0012-A3, TS-WEB-0012-A9 — 2 of 3 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

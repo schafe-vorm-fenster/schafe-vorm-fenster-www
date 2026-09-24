@@ -9,6 +9,12 @@ version: 0.1.0
 area: pages
 source: "SRC-0003#your-place-dein-ort"
 evidence_sufficiency: S2
+fit_criterion:
+  scale: "acceptance criteria of FUN-WEB-0011 that pass"
+  operator: "="
+  value: 5
+  unit: criteria
+  meter: "TS-WEB-0004-A1, TS-WEB-0020-A1, TS-WEB-0020-A4, TS-WEB-0020-A7, TS-WEB-0020-A8 — 4 of 5 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

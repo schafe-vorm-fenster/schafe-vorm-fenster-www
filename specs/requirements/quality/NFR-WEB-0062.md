@@ -9,6 +9,12 @@ version: 0.1.0
 area: privacy
 source: "SRC-0006, DEC-0004"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "Consent-banner components in the rendered tree"
+  operator: "="
+  value: 0
+  unit: "components"
+  meter: "TS-WEB-0012-A1 — run by TS-WEB-0012-A1, TS-WEB-0012-A2, TS-WEB-0012-A9"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

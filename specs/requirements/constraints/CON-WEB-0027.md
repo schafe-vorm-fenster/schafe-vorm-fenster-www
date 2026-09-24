@@ -9,6 +9,12 @@ version: 0.1.0
 area: accessibility
 source: "DEC-0012, DEC-0039"
 evidence_sufficiency: S3
+fit_criterion:
+  scale: "acceptance criteria of CON-WEB-0027 that pass"
+  operator: "="
+  value: 1
+  unit: criteria
+  meter: "TS-WEB-0002-A8 — 1 of 1 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

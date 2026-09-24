@@ -9,6 +9,7 @@ version: 0.1.0
 area: place-search
 source: "entre repo, DEC-0028, DEC-0035"
 evidence_sufficiency: S3
+fit_criterion: UNKNOWN
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

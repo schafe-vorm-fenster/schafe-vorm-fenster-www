@@ -9,6 +9,7 @@ version: 0.1.0
 area: content-pipeline
 source: "DEC-0012, DEC-0027"
 evidence_sufficiency: S3
+fit_criterion: UNKNOWN
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

@@ -9,6 +9,7 @@ version: 0.1.0
 area: live-data
 source: "SRC-0002#live-content, DEC-0030"
 evidence_sufficiency: S3
+fit_criterion: UNKNOWN
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
