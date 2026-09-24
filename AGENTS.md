@@ -100,9 +100,33 @@ requirement that applies it are two artefacts — and DEC-0095 filled
 `fit_criterion` on all 273 from what already checks each requirement, with
 `UNKNOWN` wherever no acceptance criterion of a requirement is referenced by
 a test. **273 requirements · 10 still outside their slot form**, and each of
-those ten says on the artefact why. `check:specs` runs E1–E18 and reports
-W1–W7; W3 (untested criteria) and W7 (unknown fit criteria) are the same gap
-seen from two ends.
+those ten says on the artefact why.
+
+DEC-0097 then gave every requirement the locator the method asks for. `source`
+is no longer a source id but the contract's `{source_id, loc, excerpt}` —
+`<file>#L102` plus at most 25 words copied from that exact position — and the
+reference list the contract has no room for lives in a `## Source` section of
+the document, together with what reading the source found. **186 of 273
+resolve to a line; 87 are `UNKNOWN`**, 64 of them because `SRC-0006` is one
+line with no line terminators and supports no position scheme at all. Never
+invent a line number: an unlocatable source is a defect of the source.
+
+DEC-0098 made a source's trust level **computed**: the six-dimension vector of
+`@leafcutter-strict/method-source-quality-rating`, and the level is the
+minimum, never the average. 15 of the 18 levels changed and not one source
+did. DEC-0099 created the two registers the method defines and this repository
+did not have — `specs/conflicts/` (24 `CONF-####`) and
+`specs/demands/demand-register.md` (59 `DEM-####`) — populated from the
+decision records and the question register, never from an invented conflict.
+DEC-0100 settled the decision-record shape: an ADR and a STRICT decision
+record are **two artefacts**, both are kept, and `specs/decisions/` now holds
+`DEC-####--<slug>.md` beside `SDR-<yyyy>-<mmdd>-<nnnn>.yaml`.
+
+`check:specs` runs E1–E23 and reports W1–W8. W3 (untested criteria) and W7
+(unknown fit criteria) are the same gap seen from two ends; W8 is the locator
+fill rate. The test-reference scan behind W3 is read off the runners
+themselves — both Vitest configs and the `check` chain — so it cannot drift
+from what actually runs (DEC-0096).
 
 A status moves at a decision point, and since DEC-0088 one policy says which:
 `POL-GRADED-BY-IMPACT` in `specs/policy/`. It grades by impact — an agent may
@@ -116,7 +140,8 @@ now carries the `ai_provenance` the separation-of-duties bound reads (DEC-0091,
 was never recorded, so `prompt_id` and `prompt_version` are `UNKNOWN` and
 bound 3 still escalates. `check:specs` E15 enforces the policy —
 it validates that every pair is bound, and refuses a status off `DRAFT` that
-no decision record anchors. Passing tests are evidence for a decision, not
+no **SDR** anchors. Since DEC-0100 an ADR is not that anchor: the record of an
+executed decision point is, and there are none yet. Passing tests are evidence for a decision, not
 the decision. Do not edit the policy: changing it is DP-14, governance
 change, and that is never an agent's.
 

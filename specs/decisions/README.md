@@ -13,6 +13,34 @@ to be resolvable by its identifier (DEC-0086).
 Repository-level decisions (content SSOT, audience model) live in
 `go-to-market-os/handbook/decisions/` and are referenced, not repeated.
 
+## Two artefacts live here
+
+- **`DEC-####--<slug>.md`** — an ADR: a choice and the reasoning behind it,
+  in the organisation's context/decision/consequences sections. 100 of them,
+  cited 3,113 times.
+- **`SDR-<yyyy>-<mmdd>-<nnnn>.yaml`** — a STRICT decision record: the
+  execution of one decision point on one subject, with every criterion of that
+  decision point, the mode and executor copied off the policy row, the bounds
+  evaluated and the subject's evidence sufficiency at the time. Immutable; a
+  reversal is a new record naming the old one in `supersedes`.
+
+DEC-0100 argues from the contracts that these are **not the same artefact**
+and keeps both. The decisive field is `dp`: it is required and its pattern is
+closed at `DP-01…DP-14`, and most decisions recorded here — a stack choice, a
+compound split, a copy rule — are none of the fourteen.
+
+**There are no SDRs yet.** No decision point has been executed under
+`POL-GRADED-BY-IMPACT` since it was bound, because every artefact has a
+dependant and none reaches the low impact level (DEC-0089). `check:specs` E15
+anchors a status off `DRAFT` on an SDR, so the register's first row will be
+the first status move; E23 validates any record that appears.
+
+## Amending a record
+
+An ADR is amended where a later decision spends one of its reasons, and the
+amendment says so — DEC-0085 §6 carries five such rows. An SDR is never
+amended. That difference is the difference between the two artefacts.
+
 ## Index
 
 - [DEC-0001 — Product docs are reviewed item by item, then removed](DEC-0001--product-docs-reviewed-then-removed.md)
@@ -114,3 +142,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-0097 — Every statement carries the position it rests on — 186 of 273 resolve to a line, and the 87 that cannot say why](DEC-0097--every-statement-carries-its-position.md)
 - [DEC-0098 — A source's trust level is the minimum of its six-dimension vector — computed, and fifteen of eighteen were not](DEC-0098--the-trust-level-is-computed.md)
 - [DEC-0099 — The conflict and demand registers exist, populated from what already happened — 22 conflicts and 57 demands, none invented](DEC-0099--the-conflict-and-demand-registers.md)
+- [DEC-0100 — An ADR and a STRICT decision record are two artefacts — both are kept, and the SDR starts at the next executed decision point](DEC-0100--an-adr-and-an-sdr-are-two-artefacts.md)

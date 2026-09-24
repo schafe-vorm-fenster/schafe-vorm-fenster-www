@@ -37,6 +37,8 @@
  *      impact, status and outcome set, and both positions with their evidence
  *  E22 Demand rows: unique id, the taxonomy's defect type, a status, an
  *      addressee and a concrete request
+ *  E23 STRICT decision records: the identifier, the fields both contracts
+ *      require, the status enum, and a locator on every piece of evidence
  *  W1  (warning) requirements not covered by any tactical spec
  *  W2  (warning) covered requirements discharged by no acceptance criterion
  *  W3  (warning) acceptance criteria no test references
@@ -904,19 +906,93 @@ const retired = new Set(
  * dangling citations to be repointed, and it cannot ask for that without
  * naming them. `method-demand-recording` is explicit that "'More detail' is
  * not a demand".
+ *
+ * This is *not* the set of documents that can anchor a status move — that is
+ * `DECISION_RECORD` below, and the two are deliberately different: a conflict
+ * record says what collided, never what was decided.
  */
-const RECORD = /\/(?:decisions\/DEC-\d{4}--|conflicts\/CONF-\d{4}--|demands\/demand-register\.md$)/;
+const NAMES_RETIRED = /\/(?:decisions\/DEC-\d{4}--|conflicts\/CONF-\d{4}--|demands\/demand-register\.md$)/;
+
+/** An ADR of this repository. E7 indexes these; E15 no longer anchors on them. */
+const DECISION_RECORD = /\/decisions\/DEC-\d{4}--/;
 
 for (const d of docs) {
   if (GENERATED.test(d.file)) continue;
   for (const [re, exists, kind] of REF_PATTERNS) {
     for (const m of d.raw.matchAll(re)) {
       if (exists(m[0])) continue;
-      if (RECORD.test(d.file) && retired.has(m[0])) continue;
+      if (NAMES_RETIRED.test(d.file) && retired.has(m[0])) continue;
       err(d.file, `E5 reference to unknown ${kind} ${m[0]}`);
     }
   }
 }
+
+// ── E23: the STRICT decision records ─────────────────────────────────────
+//
+// `SDR-<yyyy>-<mmdd>-<nnnn>.yaml` beside the ADRs in `specs/decisions/`, one
+// YAML document under the key `decision_record`, immutable once written
+// (DEC-0100). Two contracts type it and they disagree in two places; this
+// repository takes the wider of each and records the deviation:
+//
+//   · the identifier. `@leafcutter-os/schemas` types `SDR-\d{4}-\d{4}-\d{4}`
+//     and `library-schemas@0.4.1` types `SDR-\d{4}-\d{4}` — no sequence
+//     number, so two decisions on one day collide. The four-group form is
+//     taken, because "never reuse, never renumber" needs a unique id (CONF-0023).
+//   · the executor mode. `library-schemas` enumerates HUMAN, AGENT_PROPOSE,
+//     AGENT_BOUNDED and AUTO; `@leafcutter-os/schemas` enumerates HUMAN and
+//     AGENT only, which cannot express the `AGENT_BOUNDED` row that
+//     POL-GRADED-BY-IMPACT actually uses. The four-value enum is taken, and it
+//     is the one the policy's own frontmatter declares (CONF-0024).
+
+const SDR_ID = /^SDR-\d{4}-\d{4}-\d{4}$/;
+const decisionRecord = contract("decision-record");
+const SDR_STATUS = vocabulary(decisionRecord, "status");
+const SDR_REQUIRED = [
+  // library-schemas `required`, plus what `@leafcutter-os/schemas` adds.
+  "id", "dp", "subject", "impact", "mode", "executor", "accountable",
+  "criteria", "outcome", "status", "evidence_sufficiency",
+  "rationale", "evidence", "timestamp", "supersedes", "recorded_by",
+] as const;
+
+interface Sdr { file: string; raw: string; id: string; dp: string; subject: string; mode: string }
+const sdrs: Sdr[] = [];
+
+for (const file of walk(join(SPECS_DIR, "decisions")).filter((f) => /\/SDR-[\d-]+\.yaml$/.test(f))) {
+  const raw = readFileSync(file, "utf8");
+  let doc: Record<string, unknown> | null = null;
+  try {
+    doc = (yaml.load(raw) as { decision_record?: Record<string, unknown> })?.decision_record ?? null;
+  } catch (e) {
+    err(file, `E23 not parseable YAML: ${(e as Error).message}`);
+    continue;
+  }
+  if (!doc) { err(file, "E23 no `decision_record` key — the contract types one YAML document under it"); continue; }
+  const id = String(doc.id ?? "");
+  if (!SDR_ID.test(id)) err(file, `E23 id ${JSON.stringify(doc.id ?? null)} is not SDR-<yyyy>-<mmdd>-<nnnn>`);
+  const fileId = rel(file).match(/\/(SDR-[\d-]+)\.yaml$/)?.[1];
+  if (fileId !== id) err(file, `E23 ${id}: file name carries ${fileId}`);
+  for (const field of SDR_REQUIRED)
+    if (doc[field] === undefined) err(file, `E23 ${id}: no \`${field}\` — the contract requires it`);
+  if (!SDR_STATUS.has(String(doc.status ?? "")))
+    err(file, `E23 ${id}: status ${JSON.stringify(doc.status ?? null)} is not one of ${list(SDR_STATUS)}`);
+  // "A record with any UNKNOWN criterion cannot approve; it escalates."
+  const criteria = Array.isArray(doc.criteria) ? doc.criteria : [];
+  const unknown = criteria.filter((c) => JSON.stringify(c).includes("UNKNOWN"));
+  if (unknown.length && String(doc.outcome ?? "").toUpperCase().includes("APPROVE"))
+    err(file, `E23 ${id}: ${unknown.length} criterion/criteria are UNKNOWN and the outcome approves — the contract escalates instead`);
+  // Every piece of evidence is a locator in the same form E19 requires.
+  for (const e of (Array.isArray(doc.evidence) ? doc.evidence : []) as Array<Record<string, unknown>>) {
+    const where = String(e.loc ?? "");
+    if (where !== "UNKNOWN" && !LOC_PATTERN.test(where))
+      err(file, `E23 ${id}: evidence loc ${JSON.stringify(where)} is not <file>#L… / #P… / #¶… / #M…:…`);
+    if (String(e.excerpt ?? "").trim().split(/\s+/).length > EXCERPT_MAX_WORDS)
+      err(file, `E23 ${id}: an evidence excerpt is over the method's ${EXCERPT_MAX_WORDS} words`);
+  }
+  sdrs.push({ file, raw, id, dp: String(doc.dp ?? ""), subject: String(doc.subject ?? ""), mode: String(doc.mode ?? "") });
+}
+
+const sdrIds = new Set(sdrs.map((r) => r.id));
+if (sdrIds.size !== sdrs.length) err("specs/decisions", "E23 two decision records share an identifier");
 
 // ── E20: every registered source carries a vector ────────────────────────
 
@@ -1122,20 +1198,26 @@ function policyRules(doc: Doc): Map<string, Record<string, string>> {
 }
 
 /**
- * A decision record that could have moved this artefact's status.
+ * A record that could have moved this artefact's status (DEC-0100).
  *
- * It names the artefact, cites the policy by its id, and names a decision
- * point. The record's own shape is not checked — `SDR-####-####` is owed in
- * DEC-0085 §6 — only that the link from artefact to policy to decision point
- * exists in one document somebody can read.
+ * It is an **SDR**, not an ADR. `decision-record` types what an SDR holds —
+ * the decision point, the subject with its version, every criterion of that
+ * decision point with its evidence, the mode and executor copied off the
+ * policy row, the bounds evaluated and the subject's evidence sufficiency at
+ * the time — and an ADR has a slot for none of it. DEC-0100 argues that they
+ * are two artefacts rather than one; the consequence for this check is that
+ * a status off `DRAFT` is anchored by the record of the executed decision
+ * point, and a `DEC-####` beside it is reasoning, not the anchor.
+ *
+ * There are no SDRs today, and that is the honest state: no decision point
+ * has been executed under `POL-GRADED-BY-IMPACT` since it was bound, which
+ * is the same finding DEC-0089 reported from the other side.
  */
-const decisionRecords = docs.filter((d) => RECORD.test(d.file));
 const anchoredBy = (id: string, policyId: string) =>
-  decisionRecords.find(
-    (d) =>
-      new RegExp(`(?<![A-Za-z0-9-])${id}(?![0-9A-Za-z-])`).test(d.raw) &&
-      d.raw.includes(policyId) &&
-      /(?<![A-Za-z0-9-])DP-(?:\d{2}|P\d{2})(?![0-9A-Za-z-])/.test(d.raw),
+  sdrs.find(
+    (r) =>
+      (r.subject === id || new RegExp(`(?<![A-Za-z0-9-])${id}(?![0-9A-Za-z-])`).test(r.raw)) &&
+      r.raw.includes(policyId),
   );
 
 let boundRules: Map<string, Record<string, string>> | null = null;
@@ -1301,7 +1383,7 @@ if (untested.length) {
 
 // ── Report ───────────────────────────────────────────────────────────────
 
-console.log(`specs check: ${files.length} files · ${reqDefs.size} requirements · ${decDefs.size} decisions · ${qDefs.size} questions · ${srcDefs.size} sources · ${tsDefs.size} tactical specs · ${glDefs.size} glossary terms · ${acDefs.size} acceptance criteria · ${confDefs.size} conflicts · ${demDefs.size} demands`);
+console.log(`specs check: ${files.length} files · ${reqDefs.size} requirements · ${decDefs.size} decisions · ${qDefs.size} questions · ${srcDefs.size} sources · ${tsDefs.size} tactical specs · ${glDefs.size} glossary terms · ${acDefs.size} acceptance criteria · ${confDefs.size} conflicts · ${demDefs.size} demands · ${sdrs.length} decision records`);
 if (acDefs.size) {
   const pyramid = [...LEVELS].map((l) => `${l} ${acsByLevel.get(l) ?? 0}`).join(" · ");
   console.log(`  verification pyramid: ${pyramid}`);
