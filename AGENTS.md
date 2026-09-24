@@ -65,12 +65,25 @@ cost. Do not silently "fix" one of those deviations.
 
 The identifiers are no longer one of them. DEC-0086 moved every family onto
 the method's `<TYPE>-<DOMAIN>-<NNNN>`: `FUN-WEB-####`, `NFR-WEB-####`,
-`CON-WEB-####`, `TS-WEB-####` (with `TS-WEB-####-A#` acceptance criteria),
-`DEC-####`, `Q-####`, `SRC-####`, `GL-####`. No number was reassigned, and
-`specs/traceability/identifier-map.md` maps every old id to its new one. A
-file that holds one identified artefact is named for it —
-`DEC-####--<slug>.md`, `TS-WEB-####--<slug>.tactical.md`. Do not invent a
-family the method does not define and this repository does not hold.
+`CON-WEB-####`, `BUS-WEB-####`, `TS-WEB-####` (with `TS-WEB-####-A#`
+acceptance criteria), `DEC-####`, `Q-####`, `SRC-####`, `GL-####`. No number
+was reassigned, and `specs/traceability/identifier-map.md` maps every old id
+to its new one and registers the ones a later decision retired. A file that
+holds one identified artefact is named for it — `DEC-####--<slug>.md`,
+`TS-WEB-####--<slug>.tactical.md`, `FUN-WEB-####.md`. Do not invent a family
+the method does not define and this repository does not hold.
+
+The artefact shape is no longer one of them either. DEC-0087 made **one
+requirement one document** under `specs/requirements/<class>/<id>.md` — the
+directory README is the index, not a second home for the statement — added
+the `BUS` class, put 47 of the 155 statements into the slot form of
+`@leafcutter-strict/method-statement-grammar` (`form: F1`; `form: F0` means
+not yet, and `check:specs` W4 counts them), and gave every versioned artefact
+`version: 0.1.0`. **Do not set a status other than `DRAFT`.** No decision
+policy binds this repository, so no decision point exists to move one, and
+`@leafcutter-strict/foundation-draft-only-output` is explicit that an
+executor writing `status: APPROVED` destroys the audit record. `check:specs`
+E15 enforces it; passing tests are evidence for a decision, not the decision.
 
 ## Working Rules
 

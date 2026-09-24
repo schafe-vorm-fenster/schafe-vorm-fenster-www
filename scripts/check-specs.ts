@@ -8,10 +8,11 @@
  * Checks
  * ──────
  *  E1  Frontmatter present and well-formed on governed artefacts
- *  E2  Requirement IDs ((FUN|NFR|CON)-WEB-####) unique across all files
+ *  E2  Requirement IDs ((FUN|NFR|CON|BUS)-WEB-####) unique, class matches the id
  *  E3  Requirement documents carry a statement, a source and an S0–S3 level
  *  E4  Sufficiency S3 requires a DEC-#### or ADR-### token in the requirement
- *  E5  Every referenced ID (FUN/NFR/CON-*, TS-*, DEC-*, Q-*, SRC-*, GL-*) exists
+ *  E5  Every referenced ID (FUN/NFR/CON/BUS-*, TS-*, DEC-*, Q-*, SRC-*, GL-*)
+ *      exists — or, in a decision record only, is a retired identifier
  *  E6  Tactical `implements:` ↔ Coverage table match bidirectionally
  *  E7  decisions/README.md index ↔ decision files match both ways
  *  E8  Acceptance criteria: unique ID, valid verification level
@@ -444,11 +445,31 @@ const REF_PATTERNS: Array<[RegExp, (id: string) => boolean, string]> = [
  */
 const GENERATED = /\/traceability\/identifier-map\.md$/;
 
+/**
+ * Identifiers a later decision retired (DEC-0087).
+ *
+ * A reclassification changes an identifier's type token and keeps its number
+ * — never a renumber, which the method forbids outright. The artefact under
+ * the old id no longer exists, but the decision record that retired it has
+ * to be able to name it, or the record cannot say what it changed. The
+ * `## Retired identifiers` table of the identifier map is the register; a
+ * decision record may cite a row of it, and nothing else may.
+ */
+const retired = new Set(
+  [...(docs.find((d) => GENERATED.test(d.file))?.raw ?? "")
+    .split(/^## Retired identifiers$/m)[1]
+    ?.split(/^## /m)[0]
+    ?.matchAll(/^\|\s*`([A-Z]+-[A-Z]+-\d{4})`\s*\|/gm) ?? []].map((m) => m[1]),
+);
+const RECORD = /\/decisions\/DEC-\d{4}--/;
+
 for (const d of docs) {
   if (GENERATED.test(d.file)) continue;
   for (const [re, exists, kind] of REF_PATTERNS) {
     for (const m of d.raw.matchAll(re)) {
-      if (!exists(m[0])) err(d.file, `E5 reference to unknown ${kind} ${m[0]}`);
+      if (exists(m[0])) continue;
+      if (RECORD.test(d.file) && retired.has(m[0])) continue;
+      err(d.file, `E5 reference to unknown ${kind} ${m[0]}`);
     }
   }
 }

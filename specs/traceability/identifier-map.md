@@ -18,14 +18,18 @@ table is a record of the rename, not its source.
 This is the one file in the repository where the old identifier forms still
 appear. That is what it is for.
 
-## One row has moved on since
+## Retired identifiers
 
 The tables below record what DEC-0086 did on 2026-09-24 and are not edited
-after the fact. One identifier they produced has since changed class, by
-DEC-0087: `CON-WEB-0012` is `BUS-WEB-0012`. The number is the same one it
-has held since `WEB-C-012`; only the class token moved, because the method's
-decision tree puts the statement in its first class rather than its second.
-Follow `WEB-C-012` → `CON-WEB-0012` → `BUS-WEB-0012`.
+after the fact. An identifier they produced can still be retired later — by
+a reclassification, which changes the type token and keeps the number, never
+by a renumber. This table is where those go. A decision record may cite a
+retired identifier, because that is how it says what it changed;
+`check:specs` E5 resolves one here and nowhere else.
+
+| Retired | Now | Retired by | Why |
+| --- | --- | --- | --- |
+| `CON-WEB-0012` | `BUS-WEB-0012` | DEC-0087 | The method's decision tree puts the statement in its first class, not its second. The number is the one it has held since `WEB-C-012`; only the class token moved. Follow `WEB-C-012` → `CON-WEB-0012` → `BUS-WEB-0012` |
 
 ## The rule
 

@@ -101,3 +101,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-0084 — The village argument, re-derived — 280 inhabitants, no salesperson clause, and the counter module goes](DEC-0084--the-village-argument-and-the-counter-that-goes.md)
 - [DEC-0085 — STRICT is a versioned dependency, not a path — and the checker reads its vocabularies out of the package](DEC-0085--strict-is-a-versioned-dependency.md)
 - [DEC-0086 — Identifiers and file names follow the STRICT scheme — `<TYPE>-<DOMAIN>-<NNNN>`, and a file is named for the artefact it holds](DEC-0086--identifiers-and-file-names-follow-strict.md)
+- [DEC-0087 — The artefact shape follows STRICT — one requirement per document, the business-rule class, the slot grammar where meaning survives it, and DRAFT until a decision policy exists](DEC-0087--the-artefact-shape-follows-strict.md)
