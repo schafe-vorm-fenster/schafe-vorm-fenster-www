@@ -136,11 +136,13 @@ Nothing positive is ever set in it.
 status colour for short placeholder labels. `#7A4F00` clears the floor with
 margin and is therefore the one that carries type.
 
-**Version and interim.** All three roles arrive in
-`@schafe-vorm-fenster/brand-design` **2.7.0** (change-request PR **#447**,
-**unmerged** at 2026-09-24; the website is pinned at `0.1.3`). Until that
-version is published and the pin moves, an archive block behaves as
-follows, and the rule is not "wait":
+**Version and interim.** All three roles **shipped**: PR **#447** was
+squash-merged on **2026-09-23** (merge commit `a1201c4`), and the package
+on `main` is **2.8.0**. They are published and reviewable upstream today.
+What has not happened is the website's side: the pin here is still the
+exact version `0.1.3`, so none of the three is consumable in this
+repository yet. Until that pin moves, an archive block behaves as follows,
+and the rule is not "wait":
 
 - The **ground** is the stand-in `--color-placeholder-ground: #FBF1DC` in
   `app/styles/brand.css` — the one file a brand value may enter through
@@ -154,27 +156,30 @@ follows, and the rule is not "wait":
   it is near-invisible (1.32:1) — an invisible hairline is a weaker
   failure than a literal, which `TS-017-A5` rejects outright.
 
-When 2.7.0 lands, the three tokens replace those stand-ins, the
-`app/styles/brand.css` declaration becomes a `var()` and then goes away,
-and every ratio in this document is recomputed (see *Accessibility*).
+When the pin moves to `2.8.x`, the three tokens replace those stand-ins,
+the `app/styles/brand.css` declaration becomes
+`var(--color-archive-ground)` and then goes away with its call sites, and
+every ratio in this document is recomputed (see *Accessibility*). The
+foreground is not part of that swap — see the pin-move section in
+`specs/contracts/design-system-contract.md`.
 
 ### Category colours
 
 **The taxonomy is not the website's to invent.** The canonical list is the
 classification the platform actually indexes events by:
-`classification-api`, `packages/rural-event-categories/src/types/
-ruralEventCategory.ts` — **four** ids, read on 2026-09-24 at
-`classification-api@3.4.2`. The app's own schema
-(`src/rural-event-types/rural-event-category.types.ts`) adds `unknown` as
-the fallback for an event that has not been classified, which is a fifth
-rendering case and not a fifth category. `color.category` in
+`@schafevormfenster/rural-event-types` **`0.0.1`**, the package that lives
+inside `classification-api` (repo root `3.4.2`) — **four** ids, read on
+**2026-09-24**. The same source carries `unknown` as the value returned for
+an event that has not been classified, which is a fifth rendering case and
+not a fifth category. `color.category` in
 `@schafe-vorm-fenster/brand-design` carries exactly these five keys, so the
 package is already aligned and this guide's earlier six rows were the
 outlier (decision 7, 2026-09-23).
 
 The package's own `color.categoryStatus` still reads "PROVISIONAL — …
-canonical source … was not reachable and has not been read". It has now
-been read; clearing that marker is part of the change request below.
+canonical source … was not reachable and has not been read" — that note is
+in the shipped **2.8.0** as well. It has now been read, and PR **#464**
+replaces the marker with the read source named above.
 
 | id | Label (`color.category.*.label`) | Icon | Coin fill (`dot`) | Glyph | Ratio | Bare icon (`bare`) on `paper` |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -194,15 +199,18 @@ The `bare` values are list-row icons — non-text, so the floor is 3:1, which
 all five clear. The `dot` values are coins carrying a glyph, so the floor is
 4.5:1.
 
-**Two change requests, both measured.**
+**Two corrections, both measured — one written, one still open.**
 
-1. `category.community-life.dot` ships as `himbeere-500` `#E0286E`, and the
-   package pairs it with a `paper` glyph at **4.29:1** — below the floor.
-   `ink` on it is **3.86:1**, also below. Neither glyph works, so the fill
-   has to move: `himbeere-600` `#BC1C5A` clears at 5.84:1 with `paper` and
-   is one step down the same ramp. The table above already states
-   `himbeere-600`; the website renders it that way, by token substitution,
-   until the package follows.
+1. `category.community-life.dot` and `.bare` ship in **2.8.0** as
+   `himbeere-500` `#E0286E`, and the package pairs the coin with a `paper`
+   glyph at **4.29:1** — below the floor. `ink` on it is **3.86:1**, also
+   below. Neither glyph works at badge size, so the fill has to move:
+   `himbeere-600` `#BC1C5A` clears at 5.84:1 with `paper` and is one step
+   down the same ramp. PR **#464** (open, unmerged, branch
+   `brand-design/measured-corrections-2026-09-24`) makes that change
+   upstream. The table above already states `himbeere-600`; the website
+   renders it that way, by token substitution, until #464 lands and the pin
+   moves.
 2. `himbeere` is this system's **pulse** (see below) and a category colour
    on every event row spends it. The coin is data, not pulse, and does not
    count towards the one-`himbeere`-per-screen budget — but a
@@ -227,7 +235,7 @@ a light ground use `archive ink` `#7A4F00` (6.85:1 on `paper`) or
 | `paper` on `lime-500` | 1.62:1 | Forbidden. `lime-500` takes `ink` or `lime-900`. |
 | `himbeere-500` on `paper` | 4.29:1 | Display fills at 32 px and above only. `himbeere-600` (5.84:1) for anything smaller or anything carrying text. |
 | `paper` on `himbeere-500` | 4.29:1 | Forbidden at label size — the reason `category.community-life` moves to `himbeere-600`. `ink` on it is worse (3.86:1). |
-| `line` on `lime-100` | 1.27:1 | Invisible. On a lime ground the hairline is `lime-400` (1.31:1 — the weight `line` has on paper, 1.42:1). `border.hairlineOnLime` in brand-design 2.7.0 ships `lime-300` `#C6E593`, which measures **1.19:1** on `lime-100` — weaker than what it replaces. Measured 2026-09-24; the website keeps `lime-400` and the value is a change request. |
+| `line` on `lime-100` | 1.27:1 | Invisible. `border.hairlineOnLime` shipped in brand-design **2.8.0** as `lime-300` `#C6E593`, which measures **1.19:1** on `lime-100` — weaker than the `line` it replaces. PR **#464** (open) corrects it to `lime-500` `#A4D822`, **1.45:1**, which matches the 1.42:1 weight `line` has on `paper` instead of undercutting it. Measured 2026-09-24. Until #464 lands and the pin moves, the website's own interim hairline on a lime ground is `lime-400` (1.31:1); after it, the hairline is `border.hairlineOnLime` and the interim goes away. |
 
 ## Typography
 
@@ -254,8 +262,8 @@ label; a pill is not a reading aid that buys back three pixels. The guide
 used to allow 11–13 px inside a badge, and that allowance is retired for
 three reasons, all of them already true elsewhere: `TS-002 D3` floors at
 15 px and `TS-002-A10` asserts it; the built site has no `font-size` below
-15 px anywhere; and `font.size.label` is `0.9375rem` (15 px) from
-brand-design 2.7.0, which the website has been overriding it to since
+15 px anywhere; and `font.size.label` is `0.9375rem` (15 px) as shipped in
+brand-design **2.8.0**, which the website has been overriding it to since
 F-2-44. Resolving C11 by raising the sizes rather than by writing a
 badge-only exception is what keeps those four statements one statement.
 
@@ -264,11 +272,12 @@ always break by hand where the line reads better; the place name may split
 across two lines (`SCHLAT / KOW`).
 
 **Letter-spacing on mono labels is `0.08em`**, for both kicker roles and the
-badge label. One value, everywhere. Both values are settled upstream in
-brand-design **2.7.0** — `font.letterSpacing.label` `0.06em → 0.08em` and
-`font.size.label` `0.875rem → 0.9375rem` — and until that version is
-published the website's `app/styles/brand.css` carries the recorded
-override, which becomes a no-op and is deleted when the pin moves.
+badge label. One value, everywhere. Both values **shipped** in brand-design
+**2.8.0** — `font.letterSpacing.label` `0.06em → 0.08em` and
+`font.size.label` `0.875rem → 0.9375rem`. The website is still pinned at
+`0.1.3`, so `app/styles/brand.css` carries the recorded `--font-size-label`
+override until the pin moves; at `2.8.x` it is an exact no-op and is
+deleted rather than kept.
 
 ## Shape and Space
 
@@ -678,18 +687,43 @@ text-shadow: 0 1px 2px var(--color-scrim-45), 0 2px 10px var(--color-scrim-30);
   surface. It is soft by construction — no offset beyond 2 px, no stop above
   0.45 — because a hard shadow is a second design element and this one is
   meant to be invisible until you cover it up. It exists **only** on a photo
-  surface; type on any flat ground carries no shadow at all.
+  surface; type on any flat ground carries no shadow at all. PR **#464**
+  gives the whole declaration a name of its own, `shadow.textOnPhoto`, so
+  the component reads one token instead of composing two scrim steps.
 
 - **It is still a token, and never a literal.** `color.scrim.*` is an alpha
   ladder in `@schafe-vorm-fenster/brand-design`; `TS-017 D3` and
   `TS-017-A5` reject an `rgba(…)` at a call site whatever its colour. The
   ladder this treatment needs is `0 · .30 · .35 · .38 · .45 · .72`. The
-  2.7.0 package ships `0 · .16 · .38 · .72 · .96` **derived from `ink`
-  `rgba(23,29,13,…)`** — the pre-decision shape. Two change requests
-  therefore ride with this section: the base becomes neutral black, and the
-  ladder gains `.30`, `.35` and `.45` and drops `.96`. Until the package
-  follows, the ladder is declared in `app/styles/brand.css`, the one file a
-  brand value may enter through, exactly as `--color-archive-ground` is.
+  shipped **2.8.0** carries `0 · .16 · .38 · .72 · .96` **derived from
+  `ink`, `rgba(23,29,13,α)`** — the pre-decision shape, published. PR
+  **#464** (open, unmerged, branch
+  `brand-design/measured-corrections-2026-09-24`) corrects it to
+  `rgba(0,0,0,α)` at `0 · .30 · .35 · .38 · .45 · .72`, and adds
+  `shadow.textOnPhoto` = `0 1px 2px scrim-45, 0 2px 10px scrim-30` so the
+  text shadow is a token too rather than two scrim steps composed at the
+  call site.
+
+- **What the site renders today is none of the above, and the rewrite is
+  owed.** `app/styles/brand.css` declares **no scrim ladder** — the scrim
+  is built in the component —
+  `src/components/photo-surface/photo-surface.module.css` — the
+  pre-decision way:
+  `--photo-scrim: var(--color-neutral-ink)` with a
+  `var(--color-violet-500)` tone variant, composed with `color-mix()` to
+  82 %, 84 % and 96 %. That is the ink-tinted scrim with the violet variant
+  that decision 5 retired, and 0.96 runs above the 0.72 ceiling this
+  section sets. Because it is mixed from tokens rather than written as a
+  hex literal, `pnpm check:brand` cannot see it: the guard catches colour
+  literals, not a token used against its own rule. So the position is three
+  things at once — **the ladder above is the rule**, **the package carries
+  it once #464 lands**, and **the component does not implement it yet**.
+  What the component rewrite involves, named so it is not mistaken for a
+  token swap: the surface's two gradients in `.surface` / `.ink` /
+  `.violet` (the variants collapse into one neutral treatment), the
+  content-anchored second scrim in `.content::before` (its 0.82 floor and
+  0.96 end are the same retired ladder), and the `check:contrast` hero row
+  owed below, which is what would have caught this.
 
 #### Contrast is measured, not assumed
 
@@ -1038,10 +1072,18 @@ options:
 | 3 | Category taxonomy — five token keys or six guide rows | **Decision 7** — neither: the canonical list is `classification-api`'s four ids plus the `unknown` fallback, which is what the token package already carries. Event rows keep the category, as this guide always said | *Category colours* |
 
 What is still **outstanding** is not a decision but work owed elsewhere, and
-each one is named at the rule it belongs to: the `check:contrast` hero row
-(*Photo surface*), and the change requests to
-`@schafe-vorm-fenster/brand-design` — the neutral-black scrim base and its
-three new stops, `category.community-life.dot`, `border.hairlineOnLime`,
-and clearing `color.categoryStatus`'s PROVISIONAL marker now that the
-canonical source has been read. The full list is
-`specs/contracts/design-system-contract.md` §5.
+each one is named at the rule it belongs to:
+
+- **Upstream, written but unmerged.** PR **#464** against
+  `@schafe-vorm-fenster/brand-design` carries the four measured
+  corrections to what 2.8.0 shipped: the neutral-black scrim base with its
+  full ladder plus `shadow.textOnPhoto`, `category.community-life.dot` and
+  `.bare`, `border.hairlineOnLime`, and the `color.categoryStatus`
+  PROVISIONAL marker replaced by the source that has now been read.
+- **In this repository.** The `0.1.3 → 2.8.x` pin move, which is what makes
+  anything above consumable at all (`specs/contracts/design-system-contract.md`,
+  *Consuming it*); the `photo-surface` component rewrite onto the scrim
+  ladder (*Photo surface*); and the `check:contrast` hero row that would
+  assert it (*Photo surface*).
+
+The full per-role list is `specs/contracts/design-system-contract.md` §5.
