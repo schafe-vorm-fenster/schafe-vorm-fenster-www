@@ -5,7 +5,7 @@ profile: interaction
 status: DRAFT
 implements: [WEB-F-016, WEB-F-022, WEB-F-028]
 sources: [SRC-002, SRC-003, SRC-008, SRC-014]
-decisions: [DEC-009, DEC-030, DEC-034, DEC-036, DEC-037, DEC-041, DEC-048]
+decisions: [DEC-009, DEC-030, DEC-034, DEC-036, DEC-037, DEC-041, DEC-048, DEC-081, DEC-082, DEC-083]
 ---
 
 # TS-026 — `/deine-region`: The Region Page
@@ -37,7 +37,7 @@ TS-011 · boundaries and price TS-018.
 
 | Route | Carries | Fires |
 | --- | --- | --- |
-| `/deine-region` | the whole argument; the quote request as **CTA** (primary, target `/deine-region/angebot`), repeated identically in the closing block; the briefing link as the secondary action beside it | `request-product-briefing` on the briefing click |
+| `/deine-region` | the whole argument; the quote request as **CTA** (primary, target `/deine-region/angebot`), repeated identically in the closing block; the consult action beside it, pointing at this page's contact section (DEC-081 §3) | `request-product-briefing` on the contact section's first action row, not on the in-page action (TS-016 D12) |
 | `/deine-region/angebot` | the one envoy widget instance for the quote (TS-016 S2) and its confirmation | `request-licence-quote` on widget success (TS-012 D4) |
 
 ### D2 — Block sequence [FIXED: TS-006 D2 for the frame; the argument blocks are this page's own]
@@ -51,6 +51,7 @@ TS-011 · boundaries and price TS-018.
 | 5 | what it adds over the 480 € tier: territory cut, map view, `custom-data-integration` as the add-on (D6) | photo, `ratio-feature` |
 | 6–7 | proof at this level (D7), then the quote CTA + response promise (D5) | colour |
 | 8–9 | context band, closing CTA (TS-006 D5/D6) | paper |
+| — | contact section, rendered by the layout below the closing CTA (TS-006 D2, DEC-081) | its own fixed ground |
 
 ### D3 — The map story, told without a map [until January 2027, DEC-061] [FIXED: DEC-034; copy contract PROPOSED]
 
@@ -69,8 +70,8 @@ a chronological list cannot answer that, a map can.
 
 | Part | Rule |
 | --- | --- |
-| Active example places (TS-008 pos 3) | **never a full place list** — at county level or above no list is offered and no "alle Orte anzeigen" control exists. The set is capped at **6** [PROPOSED]: a designed set, not a truncated list. Copy says "examples", never "the most active places" |
-| Live counters (TS-008 pos 4) | the county figure ("{n} Orte im Kreis sind dabei") needs a places-per-scope count `/api/stats` does not have (TS-008 D8, Q-037). Until then only backed figures render, or the counter is absent — no estimate, no substitute |
+| Active example places (TS-008 pos 3) | **never a full place list** — at county level or above no list is offered and no control expands to one. The set is capped at **6** [PROPOSED]: a designed set, not a truncated list. The block's label may claim no more than the data supports: these are examples, not a ranking of the most active places, because the activity signal is ours and approximate (below). What it says is copy (DEC-083) |
+| Live counters (TS-008 pos 4) | a figure naming how many places in the county are already covered needs a places-per-scope count `/api/stats` does not have (TS-008 D8, Q-037). Until then only backed figures render, or the counter is absent — no estimate, no substitute. The sentence around the figure is copy (DEC-083) |
 | Place search (TS-008 D7) | the answer to "and my place?". It is what makes the absence of a list legitimate, so it stands in this block, not in the header only |
 | Ranking | TS-005 orders the set and the page does not re-rank. **The activity signal is missing** — `/api/region/{county}/examples` has no upstream ranking operation (Q-037). Interim [PROPOSED]: the BFF ranks by dates per place in the next **30 days**, from the county events search it already runs; our approximation, labelled as examples, replaced when the signal lands |
 | Anchor | the chain of TS-008 D3, nothing more: IP geolocation resolves to county (Q-032), a place search sharpens it. Without an anchor no county name is asserted and the county-dependent parts do not render |
@@ -84,7 +85,7 @@ a chronological list cannot answer that, a map can.
 | Mechanism | one constant, one component; the constant is `null` while the condition is unmet and the component renders nothing on `null` [PROPOSED] |
 | Where | exactly three places, all from that constant: at the CTA on `/deine-region`, at the form on `/deine-region/angebot`, and in the confirmation after submit — so they cannot disagree |
 | If unmet | **removed, never softened.** No response-time wording of any kind on either route: a vaguer promise is still an unbacked promise |
-| Widget missing | TS-016 D6 applies (briefing link + email); the promise stays withheld either way |
+| Widget missing | TS-016 D6 applies — an email link plus the consult exit into the contact section; the promise stays withheld either way |
 
 ### D6 — Price: mentioned, never figured [FIXED: WEB-F-020, TS-018 D2/D3]
 
@@ -141,17 +142,17 @@ so `publishablePrice` is false: promoted buys the page and the CTA, not a figure
 | --- | --- | --- |
 | TS-026-A1 | e2e | On `/deine-region` no map exists: no `<canvas>`, no map-library script, no image or placeholder box declared at `ratio-map`, no request to a tile host. |
 | TS-026-A2 | e2e | No heading, label, caption or button on either route states a distance or radius ("km", "Umkreis", "Entfernung") as the scope of a module or result; module headings name administrative scope only ("im Kreis …"). |
-| TS-026-A3 | e2e | Block 3 renders at most 6 example places, each labelled as an example; no control on the page expands to a full place list; the place search is present in the same block. |
+| TS-026-A3 | e2e | Block 3 renders at most 6 example places, each labelled as an example; no control on the page expands to a full place list; the place search is present in the same block. The label asserts no ranking claim. |
 | TS-026-A4 | static | In the rendered HTML of both routes every currency token resolves to a `publishablePrice` amount; `4000` and its formatted variants are absent; the enterprise offering renders "auf Anfrage"; no range, "ab" or price-multiple construction occurs; no price string exists in a content source file. |
 | TS-026-A5 | e2e | The 480 € figure appears at most once, in the comparison block, and its node is produced by the price component reading `portalize-calendar`. |
-| TS-026-A6 | e2e | The primary CTA on `/deine-region` targets `/deine-region/angebot`; the closing block repeats the same goal id, target and label; the briefing action sits beside it with the secondary treatment. |
+| TS-026-A6 | e2e | The primary CTA on `/deine-region` targets `/deine-region/angebot`; the closing block repeats the same goal id, target and label; the consult action sits beside it with the secondary treatment and resolves to this page's contact section, which renders once below the closing block. The section's first action row is the only element on either route carrying the appointment URL. |
 | TS-026-A7 | e2e | With the response-promise constant unset, no response-time wording appears on either route ("Werktage", "48 Stunden", "schnellstmöglich"). With it set, the identical string appears at the CTA, at the form and in the post-submit confirmation. |
 | TS-026-A8 | static | The response-time wording exists in exactly one module; a content lint fails on that wording in any content file. |
 | TS-026-A9 | integration | County examples route returns empty, then 500: the module is absent from the DOM in both cases, with no error styling, warning icon or retry control; the place search and the static copy of block 3 still render. |
 | TS-026-A10 | e2e | Stage 0 (no geolocation, no `?ort=`, no referrer): block 3 renders the place search, asserts no county name and shows no county-dependent counter; the block sequence is otherwise identical to the located render. |
 | TS-026-A11 | integration | Counters render only figures present in the upstream response; a stub omitting the places field omits the county counter entirely and substitutes no number. |
 | TS-026-A12 | e2e | The embed demo loads from the allowlisted Portalize host, is labelled as an example and sets no cookie; with the loader blocked the block's copy and CTA stay intact. |
-| TS-026-A13 | e2e | Submitting the quote form on `/deine-region/angebot` fires exactly one `request-licence-quote` event carrying that route; the briefing link fires exactly one `request-product-briefing`; no payload contains a form field value. |
+| TS-026-A13 | e2e | Submitting the quote form on `/deine-region/angebot` fires exactly one `request-licence-quote` event carrying that route. The in-page consult action fires nothing; the contact section's first action row fires exactly one `request-product-briefing` carrying the route it was rendered on. No payload contains a form field value. |
 | TS-026-A14 | e2e | No audience selector, tab, toggle or interstitial exists on either route; the same block structure renders for every entry path. |
 | TS-026-A15 | static | `page.meta.ts` for `/deine-region` matches D1 field by field, and the page emits `Service` JSON-LD with no `Offer` and no price property. |
 | TS-026-A16 | static | Map-readiness: blocks 2 and 3 contain no copy describing the examples as a permanent state, and the interim module is imported in exactly one place, so swapping it for the map module touches no content file. |
@@ -206,11 +207,13 @@ features.
   routes while TS-012 D4 attributes the completion to `/angebot`. D1 here
   resolves it as CTA-then-form; confirm, or move the widget onto
   `/deine-region` and re-point the event.
-- **`equalWeightConversion` is the wrong word for the briefing (TS-006
+- **`equalWeightConversion` is the wrong word for the consult (TS-006
   owner).** SRC-003 names equal weight only for `/dein-kalender`, yet
-  TS-006 D9's check offers no other slot for a second goal the map
-  assigns here. Either the manifest gains `secondaryConversion`, or the
-  briefing is equal weight here too.
+  TS-006 D9's check offers no other slot for a second goal the map assigns
+  here. Either the manifest gains `secondaryConversion`, or the consult is
+  equal weight here too. DEC-082's ladder settles the *treatment* — the
+  consult is secondary either way — and leaves only the manifest field
+  open.
 - **Two [PROPOSED] constants with no source (design + content owner):**
   the cap of 6 example places and the 30-day window of the interim
   ranking — both keep the block honest, neither is derived.

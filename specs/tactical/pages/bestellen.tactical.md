@@ -5,7 +5,7 @@ profile: interaction
 status: DRAFT
 implements: [WEB-F-015]
 sources: [SRC-001, SRC-003, SRC-008, SRC-011, SRC-014]
-decisions: [DEC-010, DEC-011, DEC-013, DEC-024, DEC-025, DEC-030, DEC-034, DEC-036, DEC-051, DEC-056]
+decisions: [DEC-010, DEC-011, DEC-013, DEC-024, DEC-025, DEC-030, DEC-034, DEC-036, DEC-051, DEC-056, DEC-081]
 ---
 
 # TS-025 — Order the Calendar (`/dein-kalender/bestellen`)
@@ -93,12 +93,19 @@ unfiltered reference calendar would misrepresent the purchase.
 
 **What V1 does instead.** The scope step shows what the visitor has chosen — the chips they ticked and their count — and nothing about what is in it. A count of *selected places* is not a claim about content and needs no upstream call. Step 3 stays gated on a non-empty scope exactly as before; only the reason changes from "the preview is empty" to "nothing is selected".
 
-### D5 — The briefing exit, on every step [FIXED: DEC-010, DEC-013, TS-016 D7]
+### D5 — The consult exit, on every step [FIXED: DEC-010, DEC-013, DEC-081, TS-016 D7]
 
-One outbound link to the configured appointment schedule, visible on all four
-steps, secondary treatment, never above the primary CTA (TS-006 D3). No embed,
-iframe, Google script or font on any step. Leaving is a plain navigation — the
-scope is in the URL, so back restores it (D8).
+An exit to the consult path is visible on all four steps, secondary
+treatment, never above the primary CTA (TS-006 D3). **It is an in-page
+target, not an outbound link**: it points at this route's contact section,
+which the layout renders once below the flow (TS-006 D2, DEC-081 §3).
+
+| Aspect | Determination |
+| --- | --- |
+| Per step | one exit per step, all four pointing at the same section on the same document |
+| Outbound occurrence | exactly one on the route — the section's first action row, carrying the configured appointment URL (TS-016 D7) |
+| Measurement | the exit emits nothing; `request-product-briefing` fires on the section's row with `/dein-kalender/bestellen` as the route (TS-016 D12) |
+| Unchanged | no embed, iframe, Google script or font on any step. A visitor who leaves for the appointment page leaves by a plain navigation, and the scope is in the URL, so back restores it (D8) |
 
 ### D6 — Invoice details are addressed to an authority [DEMANDED — the form belongs to envoy (DEC-051), field set PROPOSED]
 
@@ -177,7 +184,7 @@ and step, never a field value. Both wait on envoy's event contract (Q-022 C3).
 | ID | Level | Check |
 | --- | --- | --- |
 | TS-025-A1 | static | `page.meta.ts` for the route matches D1 field for field; `primaryConversion` resolves in the hub goal set; `equalWeightConversion` is `null`. |
-| TS-025-A2 | e2e | All four steps are walked; on each one the briefing link is visible and navigates to the configured Google Calendar URL; no step loads a Google script, iframe or font, and no Google host appears in any request. |
+| TS-025-A2 | e2e | All four steps are walked; on each one the consult exit is visible and resolves to this route's contact section. The section's first action row is the only element carrying the configured Google Calendar URL. No step loads a Google script, iframe or font, and no Google host appears in any request. |
 | TS-025-A3 | e2e | With a layout-shift observer running, ticking three places one after another updates the visible chip list and its count each time and produces zero layout shift in and below the scope block. |
 | TS-025-A4 | e2e | With no place selected: the empty state is visible and step 3 cannot be reached — neither by the CTA nor by editing `schritt=3` into the URL. Selecting a county renders the county as one chip, never a place list (DEC-034). |
 | TS-025-A5 | integration | The order flow issues **no** request to any ecosystem host and carries no token in the browser: the only network calls from `/dein-kalender/bestellen` are to the same origin, and `/api/scope/preview` does not exist in V1 (D4). |
@@ -186,10 +193,10 @@ and step, never a field value. Both wait on envoy's event contract (Q-022 C3).
 | TS-025-A8 | e2e | Reload on step 2 restores the scope from the URL. Reload on step 3 restores the scope, leaves the invoice fields empty and shows the note. After a full run no cookie is set and `localStorage` / `sessionStorage` / IndexedDB are empty. |
 | TS-025-A9 | e2e | Network and log trace of a full run: no invoice field value reaches our origin, any Vercel log line, or any analytics payload. |
 | TS-025-A10 | integration | Every step URL returns `noindex, follow` in both the `X-Robots-Tag` header and the meta tag; the route does not appear in `sitemap.xml`. |
-| TS-025-A11 | e2e | Exactly one `buy-calendar-licence` event with stage `completed` fires, and only when a code is shown; a run ending without a code fires none; each briefing click fires one `request-product-briefing` handover event. |
+| TS-025-A11 | e2e | Exactly one `buy-calendar-licence` event with stage `completed` fires, and only when a code is shown; a run ending without a code fires none. A click on a step's consult exit fires nothing; a click on the contact section's first action row fires exactly one `request-product-briefing` handover event carrying this route. |
 | TS-025-A12 | tool | axe-core: zero violations on all four steps in light, dark and high contrast, including inside the order form's shadow root. |
 | TS-025-A13 | manual | Keyboard-only run through all four steps: every chip is removable, focus moves to the scope-change announcement, invalid invoice fields identify the error in text, and the code in step 4 is reachable and copyable. |
-| TS-025-A14 | e2e | With the envoy script blocked, step 3 renders the static fallback (contact link plus briefing link) — never an empty slot and never a spinner that does not resolve. |
+| TS-025-A14 | e2e | With the envoy script blocked, step 3 renders the static fallback (an email link plus the consult exit into the contact section) — never an empty slot and never a spinner that does not resolve. The contact section itself renders unchanged; it loads nothing. |
 
 ## Coverage
 

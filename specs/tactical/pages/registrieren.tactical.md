@@ -121,7 +121,7 @@ page, and need a decision point (Open points).
 | Step 1 results | tappable chips, ≥ 40 px (SRC-014) |
 | Steps 2 and 3 | a single-choice control; **no component is specified** for it — Q-044 |
 | Continue / handover | primary button, 56 px, with `arrow-right` (SRC-014) |
-| Step indicator | a badge kicker ("Schritt 2 von 3"), reserved height so it cannot shift the layout (SRC-014) [PROPOSED] |
+| Step indicator | a badge kicker naming the current step and the total, with reserved height so it cannot shift the layout (SRC-014). Its wording is copy under SRC-017 CG-023 — this spec states no string (DEC-083) [PROPOSED] |
 | Focus | after each advance, focus moves to the new step's heading; the flow is keyboard-completable |
 | No-JS | each step is a `<form method="get">`; typeahead is enhancement only (TS-008 D7) |
 | Not self-classification | step 2 asks who *publishes* — data the account needs, not a visitor classification. It must not change what any page shows (SRC-001 §6, TS-006 D8) |
@@ -191,10 +191,11 @@ WEB-F-090 / WEB-F-092 (TS-016) · WEB-F-087 (TS-007).
 - **Step 1 is the page that needed name search most, and has it.** The
   visitor here types the name of her own village (TS-008 D7), and the
   overlay of D7a disambiguates it by municipality — which is what
-  A6's several-communities case is about. Residual, not a blocker: the
-  scope of that matching is Q-071, and an unmatched name on this page
-  leads to the founding route like everywhere else. Addressee:
-  jan-henrik (Q-071).
+  A6's several-communities case is about. The scope of that matching was
+  Q-071 and is now settled — the covered communities, with Germany-wide
+  finding as the target carried by Q-025 (DEC-079 amendment 2026-09-24).
+  An unmatched name on this page leads to the founding route like
+  everywhere else.
 - **Q-044 leaves steps 2 and 3 without a component.** SRC-014 specifies
   no single-choice control. Addressee: design.
 - **Parameter names are [PROPOSED].** `ort` is fixed (WEB-F-023); `wer`,

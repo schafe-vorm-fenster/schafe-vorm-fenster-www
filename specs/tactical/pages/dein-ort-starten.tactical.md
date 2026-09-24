@@ -5,7 +5,7 @@ profile: interaction
 status: DRAFT
 implements: [WEB-F-047]
 sources: [SRC-001, SRC-002, SRC-003, SRC-014]
-decisions: [DEC-013, DEC-024, DEC-029, DEC-034, DEC-036, DEC-037]
+decisions: [DEC-013, DEC-024, DEC-029, DEC-034, DEC-036, DEC-037, DEC-066, DEC-071, DEC-083]
 ---
 
 # TS-021 — `/dein-ort/starten`: Start the Calendar in Your Place
@@ -133,35 +133,35 @@ anchorless module never claims proximity (TS-008 D1).
 | Analytics | **no event fires here**: `register-as-publisher` is emitted as `handover` on `/mitmachen/registrieren` (TS-012 D4), and this page adds none of its own (TS-012 D7) |
 | Out of scope | what `/mitmachen/registrieren` does with the value — TS-023 |
 
-### D9 — Tone for the third audience [FIXED: DEC-071]
+### D9 — Tone for the third audience [FIXED: DEC-071 as amended 2026-09-24]
 
 The resident who searched and found nothing is on a publishing page she
-did not ask for. The page never tells *her* to publish — it names who
-usually starts it (block 2.3) and lets her recognise someone. No blame,
-no scarcity: the missing place is our gap. The forwarding affordance is
-the URL itself — no share buttons, no share SDK (DEC-013, TS-013).
+did not ask for. **She is addressed directly, like every reader on every
+page** — the site has one form of address and no page opts out of it
+(DEC-066, SRC-017 CG-008/CG-012, DEC-071 amendment 2026-09-24). What this
+page does not do is make the gap her job: it names who usually starts a
+calendar (block 2.3) and lets her recognise someone. No blame, no
+scarcity — the missing place is our gap, not her omission. The forwarding
+affordance is the URL itself: no share buttons, no share SDK (DEC-013,
+TS-013).
 
-**Why this reads as the opposite of `/dein-ort` state B, and is not**
-[FIXED: DEC-071]. SRC-002 gives the empty place a direct address:
-*"nothing has been entered in <place> yet — you could be the first."*
-That belongs on `/dein-ort` state B and stays there. The two pages answer
-two different situations, and the difference is not tone for its own
-sake:
+**How this still differs from `/dein-ort` state B.** The difference is
+what the page *asks for*, not how it addresses the reader:
 
 | | `/dein-ort` state B | `/dein-ort/starten` (this page) |
 | --- | --- | --- |
 | Situation | the place **is** covered; nothing is entered this moment | the place is **not** covered at all |
 | What is missing | dates | the place itself, in our system |
 | Whose gap | the calendar exists and is empty — filling it is a small, obvious step | ours: we have not reached this place |
-| Address | direct — *"du könntest die erste sein"* | never direct; name who usually starts it and let her recognise someone |
+| Address | direct | direct |
+| What is asked of the reader | to be the first to publish — the strongest publisher-acquisition moment the site has (SRC-002) | nothing. The page names who usually starts a calendar and offers the step to whoever recognises herself in it |
 
-Telling a resident who searched for the weekend that she could be the
-first to publish makes sense where a calendar is waiting for her. Where
-there is no calendar at all, the same sentence hands a stranger our
-distribution problem. State B is the strongest publisher-acquisition
-moment the site has (SRC-002); this page is not that moment, and treating
-it as one spends the goodwill of someone who only wanted to know what is
-on.
+Asking a resident who searched for the weekend to publish makes sense
+where a calendar is waiting for her. Where there is no calendar at all,
+the same request hands a stranger our distribution problem, and spends the
+goodwill of someone who only wanted to know what is on. The earlier
+"never direct" was the wrong instrument for that distinction: it changed
+the voice where only the ask should change.
 
 ### D10 — Rendering and indexing [FIXED: TS-009 D1/D8, TS-010 D8, TS-011 D4/D9]
 
@@ -200,7 +200,7 @@ and a skeleton older than 2 s resolves to the example-less state (SRC-014
 | TS-021-A12 | e2e | With the network log recorded for a full visit including the CTA click, no tracker request carries a conversion-goal name — the goal is emitted on `/mitmachen/registrieren`, not here. |
 | TS-021-A13 | e2e | At 360 × 640 with the live-module response delayed 2 s, layout shift attributable to the place name and to the example module is 0: the name box reserves two display lines, the module reserves its geometry before content arrives. |
 | TS-021-A14 | e2e | Walk `/` → search an uncovered place → this page → CTA → registration. Every URL visited is in the TS-004 D1 inventory; no path segment ever carries a place name or slug (DEC-037). |
-| TS-021-A15 | manual | Tone review against D9 for audience 3: a resident who cannot publish is not instructed to, the absence of the place is framed as our gap, and no share widget was added. |
+| TS-021-A15 | manual | Tone review against D9 for audience 3: the reader is addressed directly, a resident who cannot publish is not instructed to, the absence of the place is framed as our gap, and no share widget was added. |
 
 ## Coverage
 
@@ -221,18 +221,21 @@ D7 · WEB-F-024 TS-005 D5 · WEB-F-049 TS-008 D9 · WEB-F-001–009 TS-006.
   extending Q-025/Q-032 (Q-051).** D7 falls back to IP geo or a
   build-time example. Can `community/search` return the nearest covered
   community, or at least coordinates, for a name the index does not know?
-  Q-071 option 1 would answer this by construction: a Germany-wide name
-  endpoint resolves the place before it is declared uncovered.
+  A Germany-wide name endpoint would answer this by construction — it
+  resolves the place before the page declares it uncovered — which is why
+  Q-025 stays open as the upstream demand even though it blocks nothing
+  that ships (DEC-079 amendment 2026-09-24).
 - **Indexing contradiction — SEO/spec owner.** TS-011 D9 makes `?ort=`
   place pages indexable with a parameter-free canonical; TS-008 D7
   proposes `noindex, follow`. D10 follows TS-011; one must be withdrawn.
-- **Q-071 — how far the entry path reaches (jan-henrik).** The typed
-  name is matched against the covered communities (TS-008 D7), so a
-  resident of an uncovered village gets no suggestion and arrives here
-  with her raw query in `?ort=` (D4). That is the specified behaviour,
-  not a defect. What is open is whether the search should first *resolve*
-  her village Germany-wide — which would give this page a real place name
-  and an anchor — carried by Q-071 with Q-025 as its upstream demand.
+- ~~**Q-071 — how far the entry path reaches (jan-henrik).**~~ **Closed
+  by the DEC-079 amendment of 2026-09-24.** The typed name is matched
+  against the covered communities (TS-008 D7), so a resident of an
+  uncovered village gets no suggestion and arrives here with her raw query
+  in `?ort=` (D4) — specified behaviour, and the reason covered-only is
+  acceptable at all. Resolving her village Germany-wide first, which would
+  give this page a real place name and an anchor, stays the target and is
+  carried by Q-025 together with Q-051.
 - **`?ort=` carries a non-slug value into TS-023 (its author / app
   team).** Here the parameter is raw user input, not a geo-api slug.
   TS-023 must accept and re-validate it, and never build an app URL from

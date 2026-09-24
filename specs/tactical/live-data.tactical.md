@@ -210,10 +210,12 @@ both behind the one BFF route. What this determination fixes is what the
 visitor is promised — a name — not which store answers her. Replacing the
 store is not a change to this spec.
 
-**Scope is the covered communities** until Q-071 is decided: the index
-knows ~1,760 of them and nothing else. A name it does not know is not an
-error (see the classification below), and no surface of the search states
-that a limit exists.
+**Scope is the covered communities** [FIXED: DEC-079 amendment
+2026-09-24, closing Q-071]: the index knows ~1,760 of them and nothing
+else. A name it does not know is not an error (see the classification
+below), and no surface of the search states that a limit exists.
+Germany-wide finding by name is the target, carried by Q-025 as an
+upstream demand; it changes the store, not this determination.
 
 Result classification — three outcomes, three destinations:
 
@@ -365,14 +367,11 @@ skeletons) TS-003 D5 · WEB-Q-037/038 (BFF) TS-004 D5.
 
 ## Open points
 
-- **Q-071 — search scope (jan-henrik).** D7 resolves names against the
-  covered communities. DEC-024 §1 promises all of Germany; DEC-079
-  leaves that open rather than deciding it silently. Option 1:
-  Germany-wide name search through a geo-api name endpoint (Q-025), index
-  as fallback, so `/dein-ort/starten` greets a *resolved* uncovered place.
-  Option 2: covered-only suggestions, a name without a match routes to
-  `starten` — the current state. Proposal: option 2 ships, option 1 is
-  the target. Neither option lets a search surface state a limit.
+- ~~**Q-071 — search scope (jan-henrik).**~~ **Closed by the DEC-079
+  amendment of 2026-09-24:** covered-only suggestions ship, a name without
+  a match routes to `starten`, and Germany-wide finding by name stays the
+  target carried by Q-025. No search surface states a limit either way.
+  What remains is the upstream demand below, not a decision.
 - **Q-025 (geo-api, name search) — no longer a blocker.** The name search
   ships on the committed index (D2), so nothing here waits for the
   endpoint. Its value is that the index could then be retired, that the

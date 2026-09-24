@@ -5,7 +5,7 @@ profile: interaction
 status: DRAFT
 implements: [WEB-F-012]
 sources: [SRC-001, SRC-003, SRC-008, SRC-014]
-decisions: [DEC-029, DEC-036, DEC-048, DEC-052, DEC-056]
+decisions: [DEC-029, DEC-036, DEC-048, DEC-052, DEC-056, DEC-080, DEC-082, DEC-083]
 ---
 
 # TS-022 — `/mitmachen`, the publishing entry
@@ -79,6 +79,7 @@ other block type is permitted — no feature list, no tier table.
 | One appearance | each mechanism appears once. The hero is the WhatsApp scene; the WhatsApp path block is its step detail and repeats neither opener nor instance, so only slot 1 carries `data-block="scene"` [PROPOSED — a test hook] |
 | Honest availability | a path whose hub record is not `generally-available` renders the `status_badge` of its `Step` fragment; it may not be shown as dependable while the hub marks it alpha, and the badge goes only when that record changes |
 | Not a feature list | a path is a mechanism; three steps is a working assumption, not a rule. Steps derive from `@schafe-vorm-fenster/offerings#community-calendar` |
+| **One CTA per path** [FIXED: DEC-082 §4] | each of the three path blocks ends in exactly one CTA at secondary treatment, pointing at that path's own next step — the WhatsApp path at its chat handover, paths 2 and 3 at `/mitmachen/registrieren` through the route facade. None of them carries `data-cta="primary"`: the page's one primary stays the hero CTA (D7), and a CTA in a module is a link, not a conversion declaration (TS-006 D9). A path without a CTA is the review's finding, not a variant |
 | Cross-link | path 3 is where the website-owning Verein appears, so D9's link sits at the end of this slot and nowhere else |
 
 ### D5 — The live example: a real place, never the visitor's own [PROPOSED — TS-008 D1 carries no row for this route]
@@ -105,7 +106,7 @@ D5, not restated. Three elements (TS-005 D6 / DEC-048).
 
 | Property | Rule |
 | --- | --- |
-| Label | "Kalender anmelden – kostenlos" — content, placeholder until the content phase |
+| Label | names the action and that it costs nothing. The wording is copy, written under SRC-017 CG-026 — this spec states no label string and no grammatical form (DEC-083) |
 | Target | `/mitmachen/registrieren` through the route facade (TS-004 D3a) |
 | Goal ID | `register-as-publisher`, on the hero CTA and the closing CTA alike (TS-006 D6) |
 | Prefill | `?ort=<slug>` only when geo-api resolved the slug (TS-008 D9, DEC-029); an unresolved value is never forwarded |
@@ -142,8 +143,12 @@ boxes declare their ratio before paint; paths use `ratio-feature`.
 
 ## Free for the generator
 
-- [FREE] All copy — hero aha question, objection items, step wording;
-  content phase, placeholders until then.
+- [FREE] All copy — the hero opener, objection items, step wording, every
+  CTA label; content phase, placeholders until then. The opener is a scene
+  opener under TS-006 D7: a statement of what works, a question only where
+  the block answers it in the next sentence (SRC-017 CG-005/CG-006). The
+  earlier "aha question" is withdrawn — SRC-001 §1a's aha is the stance the
+  opener takes, not a punctuation mark it has to carry (DEC-080, DEC-083).
 - [FREE] Visual design and markup of the five own slots, within SRC-014,
   TS-002 and D10; icon choice from the permitted set; whether the paths
   render as grid, stack or stepper, and their `Step` count.
@@ -158,7 +163,7 @@ boxes declare their ratio before paint; paths use `ratio-feature`.
 | TS-022-A2 | e2e | At 360 × 640 and 1280 × 800 exactly one element carries `data-cta="primary"`, it is fully visible without scrolling, and its href resolves to `/mitmachen/registrieren`. |
 | TS-022-A3 | e2e | DOM order of the page's own blocks is hero · objections · three paths · live example · proof, followed by the layout's context band and closing CTA. |
 | TS-022-A4 | e2e | Exactly one block declares `data-block="scene"`; its mechanism is `whatsapp` and its opening line is a **statement** — no question mark unless the block answers it in the next sentence (TS-006 D7, SRC-017 CG-005/CG-006). No other block declares the same mechanism as a scene. |
-| TS-022-A5 | e2e | Exactly three publishing-path blocks exist, mechanisms distinct and ordered `whatsapp`, `calendar-connection`, `website-import`; each renders step items; the `website-import` block shows a visible status badge while its hub record is not `generally-available`. |
+| TS-022-A5 | e2e | Exactly three publishing-path blocks exist, mechanisms distinct and ordered `whatsapp`, `calendar-connection`, `website-import`; each renders step items and exactly one CTA carrying `data-cta="secondary"`, resolving to that path's next step; the `website-import` block shows a visible status badge while its hub record is not `generally-available`. The count of `data-cta="primary"` on the page stays 1 (A2). |
 | TS-022-A6 | e2e | The objection block renders a headline and *n* items; no item contains a product name, a term from the generic-claims lint list, or a numeral asserting how many channels exist. A proof slot sits beside it or is visibly empty. |
 | TS-022-A7 | unit | Example-place selection: with no anchor it returns the configured reference place; with an anchor the nearest active covered place with dates; a candidate with zero dates is skipped, never rendered. |
 | TS-022-A8 | integration | Events upstream answering zero dates for the first candidate → the next candidate renders; upstream failing → TS-008 D5 tier 2/3 with its freshness label. Neither case produces error markup, a retry control, or a changed focus job. |
@@ -175,7 +180,7 @@ boxes declare their ratio before paint; paths use `ratio-feature`.
 
 | Requirement | Discharged by |
 | --- | --- |
-| WEB-F-012 (`/mitmachen`, focus job publish our dates, `register-as-publisher`) | D1–D10 · A1–A16 |
+| WEB-F-012 (`/mitmachen`, focus job publish our dates, `register-as-publisher`, one CTA per publishing path) | D1–D10 · A1–A16 |
 
 Split against TS-004: TS-004 discharges the *route* — the path, its EN
 sibling, its place in the App Router tree, its rendering mode (TS-004 D1,

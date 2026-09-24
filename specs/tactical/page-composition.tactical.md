@@ -5,7 +5,7 @@ profile: rule
 status: DRAFT
 implements: [WEB-F-001, WEB-F-003, WEB-F-004, WEB-F-005, WEB-F-006, WEB-F-007, WEB-F-008, WEB-F-009, WEB-F-019, WEB-F-020, WEB-F-022]
 sources: [SRC-001, SRC-003, SRC-017, SRC-018]
-decisions: [DEC-036, DEC-039, DEC-080]
+decisions: [DEC-036, DEC-039, DEC-080, DEC-081, DEC-082, DEC-083, DEC-084]
 ---
 
 # TS-006 — Page Composition Rules
@@ -37,7 +37,7 @@ it, and no second place states the same fact.
 | `primaryConversion` | conversion goal ID or `null` | resolves in `go-to-market-os` conversion goals; `null` only where SRC-003 says the focus job has none of its own |
 | `equalWeightConversion` | conversion goal ID, optional | see D3 |
 | `audiences` | ordered audience IDs | priority order per SRC-003, first one is the primary |
-| `liveModules` | ≥ 1 module ID | each with its empty state declared (TS-005) |
+| `liveModules` | ≥ 1 module ID, or `[]` on a sender surface | each declared module carries its empty state (TS-005). The empty set is permitted on `/ueber-uns`, `/ueber-uns/archiv` and `/rechtliches` and nowhere else: a live module makes currency visible where the job is about current dates, and on a provenance page the only live figures available are traction figures, which WEB-F-041 forbids (DEC-084 §3) |
 | `proofSlots` | slot IDs | a slot with no cleared proof stays empty; the claim is weakened, never invented (SRC-001 §4) |
 
 The four job IDs are a closed set derived from SRC-001 §1 and live in one
@@ -58,8 +58,26 @@ check machine-checkable; points 4, 7 and 8 are checked by D5–D8 and A14.
 
 Blocks 3 and 4 are rendered by the shared layout from `page.meta.ts`, not
 hand-placed per page — that is what makes "every page" enforceable rather
-than aspirational. Nothing renders after block 4 except the global footer
-(TS-004 D4).
+than aspirational. After block 4 stand exactly two things: the contact
+section, then the global footer (TS-004 D4).
+
+**The contact section is not a block** [FIXED: DEC-081]. One contact
+surface exists for the whole site — video appointment, WhatsApp, phone,
+mail, portrait — and the layout renders it on **every page**, between
+block 4 and the footer. It sits outside the D2 sequence for the same
+reason the breadcrumb trail does: it is a standing surface, not an
+argument, so `WEB-F-006` ("the last block of every page is the CTA of its
+focus job") stays literally true with it below. Two rules keep it from
+competing with block 4:
+
+- No `data-cta="primary"` occurs inside it. Its first action row is a
+  secondary CTA (D3), whatever emphasis the component gives it internally.
+- It is the only place on the site that offers a channel to a person. A
+  page that wants to send someone to the booking points **at the section**
+  on its own page; only the section's first row navigates off-site
+  (DEC-081 §3).
+
+There is no general contact form anywhere, in the footer or elsewhere.
 
 **The breadcrumb trail is not a block** [FIXED: DEC-071]. The five
 second-level pages carry a visible trail; it belongs to the page header,
@@ -81,7 +99,7 @@ and the one legal page `/rechtliches` (DEC-039) each end in blocks 3 and
 instead of three times (SRC-001 §7 names "pages adjacent to the imprint"
 explicitly).
 
-### D3 — One primary conversion, above the fold, visually unrivalled [FIXED: SRC-001 §2; fold measurement and equal-weight handling PROPOSED]
+### D3 — One primary conversion, above the fold, visually unrivalled [FIXED: SRC-001 §2, DEC-082; fold measurement PROPOSED]
 
 - Exactly one element per page carries the primary-CTA treatment. It is
   marked `data-cta="primary"` so the rule is testable, not a matter of
@@ -103,12 +121,33 @@ explicitly).
 - **Visually unrivalled** = no other element on the page uses the primary
   treatment; secondary actions use the secondary treatment and sit below
   or beside, never above, the primary one.
+- **The ladder, in full** [FIXED: DEC-082]. Three rungs, and everything on
+  a page sits on one of them:
+
+  | Rung | Marker | How many | What occupies it |
+  | --- | --- | --- | --- |
+  | primary | `data-cta="primary"` | exactly one per page | the page's own conversion |
+  | repeat | none | exactly one per page | the closing CTA of D6 — same goal id, target and label, without the marker |
+  | secondary | `data-cta="secondary"` / `="equal-weight"` | any number | every other action: module and scene CTAs, tier CTAs, context-band entries, every row of the contact section |
+
+  **Every explanatory module carries exactly one CTA, at secondary
+  treatment, pointing at the deeper page's primary conversion.** That is
+  the review's per-module rule and the one-primary rule in one sentence;
+  an in-body link to another page's goal is a link, not a declaration
+  (D9). Where the design system gives such a component "the primary
+  treatment" — the explain module's CTA, the contact section's first
+  action row — **the guide is corrected, not this rule** (DEC-082 §2);
+  component-internal emphasis is permitted, a second page-level primary is
+  not.
 - **Equal-weight second goal** (SRC-003 gives `/dein-kalender`
   `request-product-briefing` beside `buy-calendar-licence`): it is
   declared as `equalWeightConversion` and rendered in the *same* block as
   an adjacent secondary-treatment action. Equal weight in the brief means
   equal prominence of the offer, not a second primary style — otherwise
-  "visually unrivalled" would have no meaning [PROPOSED].
+  "visually unrivalled" would have no meaning [FIXED: DEC-082 §3]. The
+  shape this takes on `/dein-kalender` is the two-CTA hero the review
+  accepts: the purchase carries the marker, the consult stands beside it
+  and points at the contact section (DEC-081 §3).
 - On a page whose `primaryConversion` is `null`, block 1 carries the
   focus job's argument and no CTA treatment at all; the conversion
   obligation is discharged by block 4 (D6).
@@ -140,7 +179,7 @@ hand-written list, so it can never drift out of sync.
 | Property | Rule |
 | --- | --- |
 | Contents | exactly the three non-focus jobs, one entry each |
-| Phrasing | an offer in the visitor's own voice ("wearing a different hat today?"), not a menu; copy comes from the content phase |
+| Phrasing | an offer in the visitor's own voice, not a menu: each entry names an audience and a content together, so a reader recognises whether it is meant for her. Wording is copy and is written in the content phase under SRC-017 CG-030 — this spec states no example sentence and no grammatical form (DEC-083) |
 | Position | after the last argument block, before the closing CTA (D2) |
 | Links | through the route facade (TS-004 D3a/D5); targets from the job registry |
 | Treatment | secondary; never the primary treatment (D3) |
@@ -159,7 +198,11 @@ Two shapes, chosen by the manifest:
 | `primaryConversion` | Closing block |
 | --- | --- |
 | a goal ID | that goal's CTA, repeated |
-| `null` (SRC-003: `/ueber-uns`, `/ueber-uns/archiv`) | one block offering the three jobs that carry conversions |
+| `null` (`/ueber-uns/archiv`) | one block offering the three jobs that carry conversions |
+
+`/ueber-uns` no longer takes the second row: it declares
+`request-product-briefing` and repeats it like any other page
+(DEC-081 §6). The `null` shape now has exactly one holder.
 
 Where the closing block is the three-job offer, it **merges** with the
 context band: the band's content and the closing block are the same
@@ -295,16 +338,18 @@ the promise is removed rather than softened.
 | TS-006-A14 | manual | The eight-point compliance check of SRC-001 passes for each page brief before its content ships — points 4, 7 and 8 reviewed by hand, the rest evidenced by A1–A13. |
 | TS-006-A15 | e2e | The five second-level pages (`/dein-ort/starten`, `/mitmachen/registrieren`, `/dein-kalender/bestellen`, `/deine-region/angebot`, `/ueber-uns/archiv`) each render exactly one breadcrumb `<nav>` with an accessible name, positioned before the `h1` in DOM order, whose last item is not a link. No `data-cta` attribute occurs inside it, and no other page renders one. |
 | TS-006-A16 | manual | The copy rules SRC-018 assigns to `review` pass for every slot before it is approved: a reader-directed question is answered in its block (CG-006), each section hands off to the next (CG-008), the benefit stands before the concept (CG-010), every claim carries an example (CG-011), no heading is flat or abstract (CG-017/CG-018), a proof card states a win (CG-027), and nothing on the page is literally untrue (CG-033). |
+| TS-006-A17 | e2e | Every page renders exactly one contact section, in DOM order after the closing block and before the global footer. It contains no `data-cta="primary"`; its first action row is the only element on the site whose href is the configured appointment URL. No page anywhere renders a general contact form: no `form` element and no envoy mount point exists outside `/deine-region/angebot` and the order flow's invoice step. |
+| TS-006-A18 | e2e | Every explanatory module (scene block, publishing path, price tier) contains exactly one CTA, and it carries `data-cta="secondary"` or `="equal-weight"`; the count of `data-cta="primary"` on the page is unchanged by their presence. |
 
 ## Coverage
 
 | Requirement | Discharged by |
 | --- | --- |
 | WEB-F-001 (one focus job per page, declared) | D1 · A1, A14 |
-| WEB-F-003 (one primary conversion, above the fold) | D3 · A2, A3, A15 |
+| WEB-F-003 (one primary conversion, above the fold; the CTA ladder) | D3 · A2, A3, A15, A18 |
 | WEB-F-004 (four jobs, one click from anywhere) | D5 (with TS-004 D4) · A5 |
 | WEB-F-005 (context band, position and contents) | D2, D5 · A6 |
-| WEB-F-006 (page ends in its focus job's CTA) | D2, D6 · A7 |
+| WEB-F-006 (page ends in its focus job's CTA) | D2, D6 · A7, A17 |
 | WEB-F-007 ("know what is on" fulfilled in place) | D4 · A4 |
 | WEB-F-008 (scenes, one mechanism, no generic claims) | D7 · A8, A16 |
 | WEB-F-009 (no role switcher, no self-classification) | D8 · A9, A10 |
@@ -321,15 +366,28 @@ the promise is removed rather than softened.
   where it may be unreachable for the longer CTAs? The third reference
   viewport (428 × 926) is settled and not part of this question — it
   carries the small-range checks, not the fold promise.
-- **Equal weight versus "visually unrivalled".** SRC-003 gives
-  `/dein-kalender` two equal conversions while SRC-001 §2 allows one
-  unrivalled primary. D3 reconciles them by rendering the second as an
-  adjacent secondary action. This is a proposal, not a derivation, and
-  needs a decision point.
+- ~~**Equal weight versus "visually unrivalled".**~~ **Closed by
+  DEC-082 §3.** The second goal renders as an adjacent secondary action in
+  the same block — the two-CTA hero, order beside consult. What was a
+  proposal is now the rule, and the ladder in D3 says where every other
+  action on a page sits, so a component can no longer resolve the question
+  for itself.
 - **Merged band and closing block on conversion-less pages.** D6 merges
-  them for `/ueber-uns` and `/ueber-uns/archiv`; SRC-001 §7 requires band
-  *then* CTA, SRC-003 makes them the same three jobs. Confirm the merge,
-  or accept the same three jobs twice in a row.
+  them; since DEC-081 §6 the case is `/ueber-uns/archiv` alone. SRC-001 §7
+  requires band *then* CTA, SRC-003 makes them the same three jobs.
+  Confirm the merge, or accept the same three jobs twice in a row.
+- **Does SRC-001's compliance check mandate a live element on every
+  page?** D1 now permits `liveModules: []` on the three sender surfaces
+  (DEC-084 §3), because the only live figures a provenance page could
+  carry are the traction figures WEB-F-041 forbids. If the check mandates
+  one unconditionally rather than as a property of the page brief, the
+  concept document is amended first and this exemption follows it
+  (`specs/README.md` rule 4). **Answered by:** the IA owner.
+- **The design guide still gives two components a primary CTA.** SRC-014's
+  explain module and contact section each specify "the primary treatment"
+  for their CTA. DEC-082 §2 corrects the guide, not the rule; until that
+  correction lands, SRC-014 and D3 disagree in writing. **Answered by:**
+  the owner of `concept/website-design-system.md` and SRC-013.
 - ~~**The generic-claims term list does not exist.**~~ **Closed by
   DEC-080.** It is the avoid list of SRC-017 §9 plus the avoid column of
   `specs/glossary/glossary.md`, bound as a lint row by SRC-018 (CG-040).

@@ -266,9 +266,10 @@ payload per module, at the widest scope".
   each degradation increments a counter with the module and the tier, so
   an outage is visible in operations rather than only in the page.
 - The place search is a client interaction, not an island: it keeps its
-  own inline failure state ("Suche gerade nicht möglich") because a
-  search that returns nothing must not look like a place that has
-  nothing.
+  own inline failure state — one line saying the search itself is
+  unavailable, not that the place has nothing — because a search that
+  cannot answer must never look like a place without dates. The wording is
+  copy (SRC-017 CG-032; DEC-083).
 
 ### D10 — Guard against the per-request-function failure mode [FIXED: DEC-041 §8; enforcement PROPOSED]
 

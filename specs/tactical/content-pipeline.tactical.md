@@ -303,7 +303,7 @@ non-zero exit, named file, named record. Nothing on this list warns.
 | 11 | glossary conformance | a banned term in a field where it is banned — the glossary's **avoid** column, the avoid list of SRC-017 §9, and `Portalize` outside the one sentence DEC-052 §1 allows or in any navigation label (D9, WEB-F-002, WEB-C-014, CG-038/CG-040) |
 | 12 | legal | a legal file with an anchor outside the TS-004 D8 registry, or carrying generation-only fields (D10) |
 | 13 | copy structure | a question mark in a section-title field; a back-reference phrase; a word stem repeated inside one field; `im Amt` without a second addressee beside it; a typed traction figure in a claim field (SRC-018: CG-004, CG-005, CG-015, CG-034, CG-036) |
-| 14 | register | a `Sie`/`Ihnen`/`Ihre*` form, or one field mixing `du` and `ihr` address (DEC-066, SRC-018: CG-002, CG-003) |
+| 14 | register | a `Sie`/`Ihnen`/`Ihre*` form, or one field mixing `du` and `ihr` address (DEC-066, SRC-018: CG-002, CG-003). **One exemption, by route: `/rechtliches`** (DEC-066 amendment 2026-09-24) — the whole page, not only the imported document bodies, because the five legal texts are imported verbatim in the formal register (DEC-012, DEC-027) and a page whose headings say `du` over text that says `Sie` reproduces inside one page the seam DEC-066 exists to prevent. The exemption is keyed on the route, never on a field name, so it cannot spread |
 
 **Where rows 11, 13 and 14 come from.** They are the lint column of
 `specs/contracts/copy-contract.md` (SRC-018), which assigns every rule of

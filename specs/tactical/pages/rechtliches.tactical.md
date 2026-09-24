@@ -5,7 +5,7 @@ profile: interaction
 status: DRAFT
 implements: [WEB-F-029]
 sources: [SRC-001, SRC-003, SRC-014]
-decisions: [DEC-012, DEC-027, DEC-039, DEC-052]
+decisions: [DEC-012, DEC-027, DEC-039, DEC-052, DEC-066, DEC-083]
 ---
 
 # TS-029 — `/rechtliches` (EN `/legal`): the one legal page
@@ -105,6 +105,20 @@ The imported document's top-level heading is demoted, not rendered twice.
 The page is `main > article`, the section `nav` preceding the article
 (TS-011 D3 does not register that element yet — open point 6).
 
+### D6a — The whole page is exempt from the register rule [FIXED: DEC-066 amendment 2026-09-24]
+
+`DEC-066` puts the whole site in one register, `du`, and `TS-007 D12`
+row 14 fails a build on a `Sie` form. **This route is the one exemption,
+and it covers the page, not only the imported bodies.**
+
+| Rule | Detail |
+| --- | --- |
+| Scope | the route `/rechtliches` and its EN sibling `/legal`, in full: the `h1`, the section navigation, the section names, the retired-section pointers and the five imported documents |
+| Why not half | an exemption limited to the document bodies would give the page headings that address the reader as `du` over text that addresses her as `Sie` — the seam `DEC-066` exists to prevent, reproduced inside one page instead of between two. This is a document surface: read, cited and printed, not spoken to |
+| Mechanism | the lint is keyed on the **route**, never on a field name or a document id (`TS-007 D12` row 14), so the exemption cannot spread to a page that merely imports something |
+| What is not exempt | every other page, including `/ueber-uns` and the footer's legal labels rendered elsewhere. A `Sie` form anywhere else stays a build failure |
+| Not a tone decision | the page is exempt from the *register* rule only. Everything else in `SRC-017` — truth, economy, headings, no abstraction — applies to the words this page owns |
+
 ### D7 — Static, no live data, no client dependencies [FIXED: TS-009 D1, DEC-013]
 
 Fully static from the committed markdown; no live module, no external
@@ -155,14 +169,15 @@ the anchors are not URLs of their own.
 | TS-029-A12 | tool | axe-core: zero violations on the page in all three themes, including nav landmark naming and heading order. |
 | TS-029-A13 | e2e | With `prefers-reduced-motion: reduce` an in-page jump performs no smooth scroll and no animation beyond opacity. |
 | TS-029-A14 | integration | Heading outline: one `h1`, one `h2` per rendered section, no skipped level inside any imported document. |
+| TS-029-A15 | static | The register lint (TS-007 D12 row 14) exempts this route and only this route: a `Sie` form in any content file bound to `/rechtliches` passes, the same form in a file bound to any other route fails, and the exemption is expressed as a route, not as a document id or field name. |
 
-Levels: integration 5 · e2e 7 · static 1 · tool 1.
+Levels: integration 5 · e2e 7 · static 2 · tool 1.
 
 ## Coverage
 
 | Requirement | Discharged by |
 | --- | --- |
-| WEB-F-029 (legal content on one route, on-page navigation, permanent anchors of TS-004 D8, footer keeps conventional labels) | D1 (registry-driven section stack, retired-section pointer), D2 (ids from the registry), D3 (anchor landing), D4 (on-page navigation), D6 (headings), D10 (indexing) · A1, A2, A3, A4, A5, A6, A7, A9, A14 |
+| WEB-F-029 (legal content on one route, on-page navigation, permanent anchors of TS-004 D8, footer keeps conventional labels) | D1 (registry-driven section stack, retired-section pointer), D2 (ids from the registry), D3 (anchor landing), D4 (on-page navigation), D6 (headings), D6a (register exemption), D10 (indexing) · A1, A2, A3, A4, A5, A6, A7, A9, A14, A15 |
 
 Touched, owned elsewhere: WEB-Q-027 → TS-002 D6 · WEB-F-088 → TS-007 D10 · WEB-F-021 → TS-004 D4.
 

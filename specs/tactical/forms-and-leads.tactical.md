@@ -5,7 +5,7 @@ profile: interaction
 status: DRAFT
 implements: [WEB-F-090, WEB-F-091, WEB-F-092, WEB-F-093, WEB-F-094, WEB-F-095, WEB-F-096]
 sources: [SRC-003, SRC-008, SRC-011]
-decisions: [DEC-009, DEC-010, DEC-011, DEC-013, DEC-014, DEC-015, DEC-025, DEC-026, DEC-030]
+decisions: [DEC-009, DEC-010, DEC-011, DEC-013, DEC-014, DEC-015, DEC-025, DEC-026, DEC-030, DEC-081, DEC-083]
 ---
 
 # TS-016 — Forms, Leads and Outbound Handovers
@@ -13,9 +13,14 @@ decisions: [DEC-009, DEC-010, DEC-011, DEC-013, DEC-014, DEC-015, DEC-025, DEC-0
 ## Purpose
 
 Every place where the website takes something from a visitor or hands
-them onward: lead forms (owned by the envoy widget), briefing booking
-(an outbound Google Calendar link), the on-invoice order flow, external
+them onward: lead forms (owned by the envoy widget), the contact section
+and the briefing booking inside it, the on-invoice order flow, external
 media (own previews plus outbound links), and newsletter signup.
+
+**There is no general contact form** (DEC-081). Contact is a standing
+section of static channel rows rendered by the layout on every page
+(TS-006 D2), and the briefing's outbound Google Calendar link is its first
+action row. The widget carries the two forms that remain.
 
 **This spec is partly blocked and says so.** The envoy widget is not
 finished and its contract is an open demand (Q-022): the CSS variable
@@ -41,9 +46,9 @@ the website receives none of them.
 
 | # | Surface | Route(s) | Kind | Owner | Conversion goal |
 | --- | --- | --- | --- | --- | --- |
-| S1 | Contact | footer, every page (WEB-F-021) | lead form | envoy widget | none (service contact) |
+| S1 | Contact section | standing section on every page, between the closing CTA and the footer (TS-006 D2) | static channel rows — appointment link, WhatsApp, `tel:`, `mailto:` — no form | none; the website renders links | `request-product-briefing`, on the first row (D12) |
 | S2 | Quote request, with the two-working-day promise (WEB-F-022) | `/deine-region`, `/deine-region/angebot` | lead form | envoy widget | `request-licence-quote` |
-| S3 | Briefing booking | `/dein-kalender`, `/deine-region`, every step of S4 | outbound link | Google Calendar appointment schedule | `request-product-briefing` |
+| S3 | Briefing booking | the first action row of S1 — therefore every page | outbound link | Google Calendar appointment schedule | `request-product-briefing` |
 | S4 | Order the calendar | `/dein-kalender/bestellen` | multi-step order, concludes on invoice | open (D8) | `buy-calendar-licence` |
 | S5 | Newsletter signup | footer (WEB-F-021); inline placement still open in SRC-003 | signup form, double opt-in | UNKNOWN (Q-020) | none defined |
 | S6 | External media preview | `/ueber-uns/archiv`, inline proof anywhere | own preview + outbound link | none (static link) | none |
@@ -52,6 +57,12 @@ the website receives none of them.
 S7 is listed for completeness of the "hands them onward" set and is
 specified elsewhere (DEC-029); it is not a form and is not claimed by
 this spec's `implements`.
+
+S1 and S3 are one surface seen twice: the section is where a visitor
+reaches a person, and the booking is its first row. They are kept as two
+rows because they answer to different things — the section to the design
+system's component rules (SRC-014), the booking to DEC-010's mechanism —
+and because only one of them fires an event.
 
 Rules that hold for every row: the website ships **no form backend and
 no form route** — nothing under `app/api/` accepts a submission
@@ -102,7 +113,7 @@ today; each is what the website needs in order to integrate, and the
 | # | Demanded | Website depends on it for | State |
 | --- | --- | --- | --- |
 | C1 | The complete CSS variable set, with defaults and semantics | D3 mapping file, A4 | UNKNOWN |
-| C2 | Element name, attribute names and allowed values (form kind, language, source, context) | D2 configuration row | UNKNOWN |
+| C2 | Element name, attribute names and allowed values (form kind, language, source, context). The demanded form kinds are **quote** and **order** — the contact kind left the demand with DEC-081 | D2 configuration row | UNKNOWN |
 | C3 | Emitted DOM events for `submit`, `success`, `error`, `validation-error`, with a payload that carries **no field values** | D12 conversion measurement, D6 error handling, D5 boundary | UNKNOWN |
 | C4 | Spam handling: honeypot field, submission-timing check, server-side rate limiting, **no captcha of any kind** | WEB-Q-035, DEC-014 — binding on the widget, not negotiable | DEMANDED, unconfirmed |
 | C5 | Accessibility conformance: WCAG 2.2 AA inside the host page — label association, error identification, focus management, visible focus, target sizes | TS-002 D5/A6, this spec A8/A9 | UNKNOWN |
@@ -135,13 +146,15 @@ website must be buildable and shippable regardless.
 
 | Case | Behaviour |
 | --- | --- |
-| Widget script fails to load or errors | The surface renders a visible, static fallback: the contact route of last resort (an email address rendered as a link) plus, on S2 and S4, the briefing link (S3). Never an empty slot, never a spinner that never resolves |
+| Widget script fails to load or errors | The surface renders a visible, static fallback: the contact route of last resort (an email address rendered as a link) plus the booking row of the contact section, which stands on the same page either way. Never an empty slot, never a spinner that never resolves |
 | Widget reports a submission error (C3) | The widget owns the message; the page adds nothing and does not retry on the visitor's behalf |
-| Widget not delivered by launch | Lead surfaces ship with the same static fallback. `/deine-region`'s quote request degrades to briefing link plus email; the two-working-day promise copy is withheld under A13 either way |
+| Widget not delivered by launch | The two remaining lead surfaces ship with the same static fallback. `/deine-region`'s quote request degrades to the contact section plus email; the two-working-day promise copy is withheld under A13 either way. General contact is unaffected — it is a static section, not a widget (DEC-081 §7) |
 | JavaScript disabled | Same static fallback — the fallback is server-rendered markup, not script-generated |
 
-The fallback is one component reused by every surface, so removing it
-later is one deletion.
+The fallback is one component reused by both remaining surfaces, so
+removing it later is one deletion. What it no longer has to stand in for
+is general contact: that surface can no longer fail, because it loads
+nothing.
 
 **What the "contact route of last resort" is** [FIXED: DEC-069]: the
 form that already runs today at `https://www.schafe-vorm-fenster.de/start`
@@ -158,18 +171,19 @@ The Google Form is the fallback's *target*, not its shape: the fallback
 component stays one component, and the swap to envoy is a change of the
 redirect behind `/start`.
 
-### D7 — Briefing booking is an outbound link [FIXED: DEC-010, DEC-013]
+### D7 — Briefing booking is the contact section's first row [FIXED: DEC-010, DEC-013, DEC-081]
 
 | Aspect | Determination |
 | --- | --- |
 | Mechanism | A plain link to a Google Calendar appointment schedule URL. No embed, no iframe, no Google script, no click-to-load layer |
+| Where it lives | **the first action row of the contact section (S1)** — one placement for the whole site. A booking CTA in any block on any page targets that section on its own page, in-page; it does not navigate off-site and it is not a second occurrence of the URL |
 | Why it stays off the CSP | An outbound navigation loads nothing into the page, so the allowlist is untouched (DEC-015). Anything that would need a CSP entry is by definition not this |
 | URL source | One configured value (environment/config), referenced by every S3 placement — never pasted per page |
 | Link attributes | Opens in the same tab by default; if a new tab is used it carries `rel="noopener"` and the link text says so (TS-002 D2, 2.4.9 link purpose) |
 | Link text | Names the action and its destination, not "hier klicken"; the label is content (WEB-F-087 placeholder rules apply) |
 | Localization | The link *text* is localized; the appointment page itself is an original artifact under Google's terms and is not localized by us (DEC-026) |
-| Placement | `/dein-kalender` (equal-weight with the order CTA, WEB-F-014), `/deine-region`, and visible on **every step** of S4 (SRC-003) |
-| Measurement | Click completes `request-product-briefing` as a conversion event (D12); the booking itself happens off-site and is not observable to the website |
+| Reachability | the pages SRC-003 names — `/dein-kalender` (equal-weight with the order CTA, WEB-F-014), `/deine-region`, every step of S4, and `/ueber-uns` as its primary (DEC-081 §6) — each carry a CTA pointing at their own contact section. Every other page reaches the booking through the standing section itself |
+| Measurement | The click **on the section's row** completes `request-product-briefing` (D12). An in-page booking CTA emits nothing: it is navigation inside a document, and counting it would count one intent twice. The booking itself happens off-site and is not observable to the website |
 
 ### D8 — The order flow concludes on invoice [FIXED: DEC-011, SRC-003; submission target OPEN]
 
@@ -258,9 +272,15 @@ side.
 | Surface | Event fires on | Goal ID |
 | --- | --- | --- |
 | S2 quote request | widget `success` event (C3) | `request-licence-quote` |
-| S3 briefing link | click on the outbound link | `request-product-briefing` |
+| S3 briefing link | click on the **contact section's first action row**, carrying the route the section was rendered on | `request-product-briefing` |
 | S4 order | reaching step 4 (embed code shown) | `buy-calendar-licence` |
-| S1 contact, S5 newsletter, S6 media links | no conversion event | — |
+| S1's other rows (WhatsApp, phone, mail), S5 newsletter, S6 media links | no conversion event | — |
+| in-page booking CTAs (any block, any page) | no event — the section's row is the single firing point | — |
+
+Because the section stands on every page, the **route** is what
+distinguishes one booking intent from another; no page adds an event of
+its own, and DEC-071 §3 still forbids any geographic value in the
+payload.
 
 Rules: one eTracker event per conversion goal ID, fired at most once per
 completed flow (WEB-Q-028); the payload carries the goal ID and the
@@ -286,10 +306,10 @@ SRC-008 and never invented here.
 | ID | Level | Check |
 | --- | --- | --- |
 | TS-016-A1 | static | No submission endpoint exists in the website: no POST/PUT route or server action under `app/api/` or elsewhere accepts form data; the BFF inventory equals TS-004 D5. |
-| TS-016-A2 | integration | Every D1 lead surface (S1, S2) renders the envoy mount point with the D2 attributes for its form kind, language and source route; a submission against envoy staging is accepted by envoy. |
+| TS-016-A2 | integration | Every D1 lead surface that is a form (S2, and S4 step 3 once its receiver is decided) renders the envoy mount point with the D2 attributes for its form kind, language and source route; a submission against envoy staging is accepted by envoy. No envoy mount point exists on any other route, and no page renders a general contact form. |
 | TS-016-A3 | e2e | Network trace of a full submission: form values leave the browser only to the envoy host; no website request, log line or analytics call contains a field value. |
 | TS-016-A4 | static | Every CSS variable published by the widget contract is mapped to a design token in the single mapping file, in all three themes; an unmapped published variable fails the build. |
-| TS-016-A5 | e2e | The briefing CTA on `/dein-kalender`, `/deine-region` and every step of `/dein-kalender/bestellen` navigates to the configured Google Calendar URL; the pages load no Google script, iframe or font, and the CSP contains no Google host. |
+| TS-016-A5 | e2e | The briefing CTA on `/dein-kalender`, `/deine-region`, `/ueber-uns` and every step of `/dein-kalender/bestellen` resolves to the contact section of the same page, not to an external host. The section's first action row navigates to the configured Google Calendar URL, and it is the only element on the page carrying that href. The pages load no Google script, iframe or font, and the CSP contains no Google host. |
 | TS-016-A6 | e2e | The order flow runs the four D8 steps with the briefing exit visible on each; step 4 shows a copyable embed code without any payment step, and no payment-provider host appears in any request or in the CSP. |
 | TS-016-A7 | static | No page contains an iframe, player script or social embed from a media host; every archive entry renders an own preview image served from our own origin plus one outbound link with descriptive text. |
 | TS-016-A8 | tool | axe-core: zero violations on every page with the widget mounted, including inside its shadow root, in light, dark and high-contrast. |
@@ -298,16 +318,16 @@ SRC-008 and never invented here.
 | TS-016-A11 | integration | Newsletter signup: no address is usable before the confirmation link is followed; signup sets no cookie and no persistent identifier; the website exposes no subscriber endpoint. |
 | TS-016-A12 | e2e | Each of S2, S3, S4 fires exactly one eTracker event carrying its conversion goal ID and route, once per completed flow, with no field values in the payload. |
 | TS-016-A13 | manual | The two-working-day promise copy on `/deine-region` is present only when the lead-handling process behind it is named and signed off (C11); absent otherwise. |
-| TS-016-A14 | e2e | With the widget script blocked, every lead surface still renders the static fallback (contact link; plus the briefing link on S2 and S4) and no empty or permanently loading slot. |
+| TS-016-A14 | e2e | With the widget script blocked, S2 and S4 still render the static fallback (contact link plus the booking row of the page's contact section) and no empty or permanently loading slot. The contact section itself renders unchanged, since it loads nothing. |
 
 ## Coverage
 
 | Requirement | Discharged by |
 | --- | --- |
-| WEB-F-090 (all lead forms are the envoy widget; no own form backend) | D1, D2, D5, D6 · A1, A2, A14 |
+| WEB-F-090 (the remaining lead forms are the envoy widget; no own form backend; no general contact form) | D1, D2, D5, D6 · A1, A2, A14 |
 | WEB-F-091 (theming via website-supplied CSS variables) | D3, D4 (C1) · A4 |
 | WEB-F-092 (envoy owns storage; website holds no submission data) | D5, D2 network path · A1, A3 |
-| WEB-F-093 (briefing = Google Calendar link, no embed) | D7 · A5 |
+| WEB-F-093 (booking resolves to the contact section; its first row is the Google Calendar link, no embed) | D7, D12 · A5, A12 |
 | WEB-F-094 (purchase concludes on invoice, embed code immediately) | D8 · A6 |
 | WEB-F-095 (external media as own previews + outbound links) | D9 · A7 |
 | WEB-F-096 (newsletter: double opt-in, cookieless, GDPR) | D10 · A11 |
@@ -321,8 +341,14 @@ website-side half of TS-002 A6).
 ## Open points
 
 - **Q-022 (demand to envoy) blocks D3 content, D2's host and attribute
-  names, D12's wiring, and A2/A4/A8/A9/A10/A12 as executable tests.** All
-  eleven rows of D4 are the concrete form of this question. Nothing in
+  names, D12's wiring for S2/S4, and A2/A4/A8/A9/A10 as executable
+  tests.** All eleven rows of D4 are the concrete form of this question.
+  It no longer blocks a visitor's ability to reach a person at all: that
+  is the standing contact section, which needs no widget (DEC-081 §7).
+- **Q-072 — the phone channel has no record.** The section shows a phone
+  row while `@schafe-vorm-fenster/goals` names video appointment, WhatsApp
+  and e-mail only. The row's number and its answering process are UNKNOWN
+  content until the hub carries them; this spec states no value for it. Nothing in
   this spec guesses at an answer; the integration is written to be
   completable once the contract exists.
 - envoy-api's production host is UNKNOWN (SRC-011), so the CSP allowlist

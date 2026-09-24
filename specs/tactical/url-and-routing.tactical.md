@@ -160,10 +160,14 @@ Proposed EN segments (de → en):
   Termine veröffentlichen → `/mitmachen`, Dein Kalender →
   `/dein-kalender`, Warum wir → `/ueber-uns`), persistent "Kalender"
   button → `/dein-ort`.
-- Footer: Kontakt (envoy widget target), Newsletter, and the legal links
-  "Impressum" / "Datenschutz" / "Barrierefreiheit" pointing at their
-  anchors on `/rechtliches`, language switcher (plain links, TS-001 D5).
-- The context band is a component on every page, never a route.
+- Footer: Newsletter, the legal links "Impressum" / "Datenschutz" /
+  "Barrierefreiheit" pointing at their anchors on `/rechtliches`, and the
+  language switcher (plain links, TS-001 D5). **No contact entry**: the
+  contact section stands immediately above the footer on every page and is
+  the site's one contact surface (DEC-081, TS-006 D2). The three legal
+  labels are conventional landmarks bound to the anchor registry (D8), not
+  copy a spec is stating (DEC-083 §4).
+- The context band and the contact section are components on every page, never routes.
 - All internal links go through the route facade (TS-001 D5); no
   hard-coded hrefs.
 
@@ -256,7 +260,7 @@ labels (D4).
 | TS-004-A6 | e2e | No external API host appears in any client-initiated request except envoy and Portalize (verified via CSP report / network trace). |
 | TS-004-A7 | integration | BFF routes return 429 beyond the rate limit and reject foreign origins. |
 | TS-004-A8 | e2e | Navigation labels match D4 exactly on every page; every internal link resolves within the D1 inventory. |
-| TS-004-A9 | integration | Footer on every page carries contact, newsletter and the three legal links under their conventional labels ("Impressum", "Datenschutz", "Barrierefreiheit"), each resolving to its anchor on `/rechtliches`. |
+| TS-004-A9 | integration | Footer on every page carries newsletter and the three legal links under their conventional labels ("Impressum", "Datenschutz", "Barrierefreiheit"), each resolving to its anchor on `/rechtliches`. The footer carries no contact entry and no form; the contact section renders once, directly above it (TS-006-A17). |
 | TS-004-A10 | static | No route segment in the app tree is a place slug or a place-shaped parameter: the route inventory equals D1 exactly, and no dynamic segment resolves against the place set. A place reaches a page only as a query parameter. |
 | TS-004-A11 | integration | Once the calendars have moved to `app.*`: a request to `/{community}` carrying `etcc_cmp`/`etcc_med` redirects to that place's calendar on `app.*` with both parameters intact. Before the move the rule is inactive and the path is served by the apex — the criterion is skipped with a recorded reason, not silently passed. |
 

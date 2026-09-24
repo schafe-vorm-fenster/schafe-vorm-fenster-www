@@ -5,7 +5,7 @@ profile: interaction
 status: DRAFT
 implements: [WEB-F-011]
 sources: [SRC-001, SRC-002, SRC-003]
-decisions: [DEC-029, DEC-036, DEC-037, DEC-046, DEC-048, DEC-056]
+decisions: [DEC-029, DEC-036, DEC-037, DEC-046, DEC-048, DEC-056, DEC-066, DEC-071, DEC-083]
 ---
 
 # TS-020 — Your Place (`/dein-ort`)
@@ -62,15 +62,17 @@ all of them the visitor is asked for a place, never for a role (TS-006 D8):
 | `?ort=` present but unresolvable | **S0**, status 200, no redirect; the raw value is escaped and never rendered as data |
 | place not covered by geo-api | not this page → `/dein-ort/starten?ort=…` (TS-021, TS-008 D7) |
 
-**State B addresses the reader directly, and it is the only place that
-does** [FIXED: DEC-071]. SRC-002's wording — *"nothing has been entered in
-<place> yet — you could be the first"* — is right here and nowhere else:
-the calendar for this place exists and is waiting, so publishing is a
-small step, and SRC-002 calls this the strongest publisher-acquisition
-moment the site has. On `/dein-ort/starten`, where the place is not
-covered at all, the same sentence would hand a stranger our distribution
-problem; TS-021 D9 forbids it there. The two are a deliberate pair, not a
-contradiction.
+**State B is the one place that asks the reader to publish**
+[FIXED: DEC-071 as amended 2026-09-24]. Direct address is not what
+distinguishes it — the whole site addresses the reader directly (DEC-066,
+SRC-017 CG-008/CG-012), and the earlier carve-out is dropped. What belongs
+here and nowhere else is the **invitation**: the calendar for this place
+exists and is waiting, so publishing is a small step, and SRC-002 calls
+this the strongest publisher-acquisition moment the site has. On
+`/dein-ort/starten`, where the place is not covered at all, the same
+request would hand a stranger our distribution problem; TS-021 D9 keeps
+the ask off that page while keeping the voice. The wording of the
+invitation is copy (SRC-017 CG-032, DEC-083).
 
 **The B trigger is "no future dates at all", not "nothing this week."** Position
 1 asks `after=now` without an upper bound (TS-008 D3), so a place whose next

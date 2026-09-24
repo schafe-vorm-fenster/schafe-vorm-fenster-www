@@ -5,7 +5,7 @@ profile: interaction
 status: DRAFT
 implements: [WEB-F-010]
 sources: [SRC-001, SRC-003, SRC-014]
-decisions: [DEC-048]
+decisions: [DEC-048, DEC-081, DEC-082]
 ---
 
 # TS-019 — Home `/`
@@ -100,8 +100,15 @@ website · `provenance` → who built this.
 | `professional`, `purchase-intent` | embed · provenance · whatsapp |
 | `press` | provenance · whatsapp · embed |
 
-Ordering only. No trait adds, removes or rewrites a scene, and each
-scene keeps its own CTA at secondary treatment (TS-006 D3).
+Ordering only. No trait adds, removes or rewrites a scene.
+
+**Each scene carries exactly one CTA, at secondary treatment, pointing at
+the page that owns its job** [FIXED: DEC-082 §4] — `whatsapp` and `embed`
+at `/mitmachen` and `/dein-kalender`, `provenance` at `/ueber-uns`. None of
+them carries `data-cta="primary"`: the page's one primary stays block 1's
+search or place module (D2, TS-006 D4), and a scene CTA is a link, not a
+conversion declaration (TS-006 D9). What the label says is copy
+(SRC-017 CG-026).
 
 ### D4 — Proof stream [FIXED: DEC-048; profile TS-005 D5]
 
@@ -164,10 +171,10 @@ not conversion.
 | TS-019-A3 | e2e | Open `/?ort=<covered place with dates>`. Block 1 shows the place name and exactly 3 event rows; the primary CTA opens the place calendar on `app.*` and carries the place slug. |
 | TS-019-A4 | e2e | Open `/?ort=<covered place with no dates>`. Block 1 shows the nearby module under a heading that names its radius (not the place), plus a publish-the-first-date CTA targeting the registration route. No text claims dates in that place. |
 | TS-019-A5 | e2e | Type an uncovered place into the search on `/` and submit. The browser navigates to `/dein-ort/starten?ort=…`; `/` itself renders no uncovered place as data. |
-| TS-019-A6 | e2e | Count scene blocks on `/`: exactly 3, each with exactly one `mechanism` of `whatsapp` · `embed` · `provenance`. Every scene opener is a **statement** — it carries no question mark unless the same block renders the answering sentence directly beneath it (TS-006 D7, SRC-017 CG-005/CG-006). |
+| TS-019-A6 | e2e | Count scene blocks on `/`: exactly 3, each with exactly one `mechanism` of `whatsapp` · `embed` · `provenance`, and each with exactly one CTA carrying `data-cta="secondary"` that resolves to the page owning its job (D3a). Every scene opener is a **statement** — it carries no question mark unless the same block renders the answering sentence directly beneath it (TS-006 D7, SRC-017 CG-005/CG-006). |
 | TS-019-A7 | e2e | Load `/` once with `Referer: https://www.linkedin.com/` and once with no referrer. Scene DOM order matches the D3a table for `professional` and for `direct` respectively; block set and block order are otherwise identical between the two loads. |
 | TS-019-A8 | e2e | The proof stream on `/` renders exactly 5 elements in every one of the loads of A7 and A2. |
-| TS-019-A9 | e2e | DOM order on `/` is: block 1 · scenes · provenance · proof stream · context band · closing CTA, with nothing but the global footer after the closing CTA. |
+| TS-019-A9 | e2e | DOM order on `/` is: block 1 · scenes · provenance · proof stream · context band · closing CTA · contact section, with nothing but the global footer after the contact section (TS-006-A17). |
 | TS-019-A10 | e2e | The context band on `/` names exactly the three jobs that are not `know-what-is-on`; the closing CTA carries the same conversion goal ID, target and label as the block-1 primary of the current state. |
 | TS-019-A11 | e2e | Disable JavaScript and load `/`. The page is complete: search present, 3 scenes, 5 proof elements, context band, closing CTA; no skeleton and no empty box remains. |
 | TS-019-A12 | static | The JSON-LD graph of `/` contains one `WebSite` and one full `Organization` node and no `Event` node; no other page emits a second full `Organization`. |
@@ -205,14 +212,13 @@ not conversion.
   the starting *proof type* per entry, not a scene order; D3a maps it
   across. **Answered by:** gtm, by extending the matrix with a scene
   column — or by confirming the mapping.
-- **Search scope on the page's dominant element (Q-071).** S1 is the
-  search, and the search asks for a place name (TS-008 D7) with the
-  overlay of D7a. Its suggestions come from the covered communities, so a
-  name outside them yields none and submits to `/dein-ort/starten` (S4).
-  Whether the scope becomes Germany-wide is Q-071. The page's copy does
-  not depend on the answer, because no surface of the field states a
-  limit — but the hero is where a wrong answer would be most expensive.
-  **Answered by:** jan-henrik.
+- ~~**Search scope on the page's dominant element (Q-071).**~~ **Answered**
+  by the DEC-079 amendment of 2026-09-24: suggestions come from the covered
+  communities, a name outside them yields none and submits to
+  `/dein-ort/starten` (S4), and Germany-wide finding by name is the target
+  carried by Q-025. The page's copy never depended on it, because no
+  surface of the field states a limit; it stays that way if the store
+  changes.
 - **Q-044 blocks generation of this page.** Proof card and stream, the
   live-module shells and the context band are not in SRC-014's six
   specified components, and no component declares what it renders.
