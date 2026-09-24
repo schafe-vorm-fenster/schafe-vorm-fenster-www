@@ -1,7 +1,7 @@
 ---
 artefact: tactical-spec
 id: TS-006
-profile: rule
+kind: rule
 status: DRAFT
 implements: [WEB-F-001, WEB-F-003, WEB-F-004, WEB-F-005, WEB-F-006, WEB-F-007, WEB-F-008, WEB-F-009, WEB-F-019, WEB-F-020, WEB-F-022]
 sources: [SRC-001, SRC-003, SRC-017, SRC-018]

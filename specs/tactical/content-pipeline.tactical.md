@@ -1,7 +1,7 @@
 ---
 artefact: tactical-spec
 id: TS-007
-profile: system
+kind: system
 status: DRAFT
 implements: [WEB-F-025, WEB-F-039, WEB-F-080, WEB-F-081, WEB-F-082, WEB-F-083, WEB-F-084, WEB-F-085, WEB-F-086, WEB-F-087, WEB-F-088, WEB-F-089]
 sources: [SRC-006, SRC-008, SRC-009, SRC-017, SRC-018]

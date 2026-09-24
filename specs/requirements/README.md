@@ -16,9 +16,24 @@ point, not by being written down.
 | `quality/` | how well it does it (performance, accessibility, privacy) | `WEB-Q-###` |
 | `constraints/` | fixed decisions bounding the solution space | `WEB-C-###` |
 
-This three-class split is a project convention pending local availability
-of the STRICT Core Specification's classification method
-(`method-requirement-classification`, Core Spec 4.2/5.9).
+This three-class split **deviates** from
+`@leafcutter-strict/method-requirement-classification`, which classifies by
+a four-step decision tree into FUN · NFR · CON · BUS and records the Volere
+type number alongside. The mapping, and why it stands (DEC-085 §6):
+
+| STRICT class | Here | Note |
+| --- | --- | --- |
+| FUN — functional | `WEB-F-###` | 1:1 |
+| NFR — quality | `WEB-Q-###` | 1:1 |
+| CON — constraint | `WEB-C-###` | also carries the scope boundaries |
+| BUS — business rule | — | **no class here** |
+
+The method is explicit that a business rule and the requirement applying it
+are two artefacts, and that merging them hides the rule. Splitting them here
+means a fourth ID family and an extraction pass over 155 rows, so it is
+owed, not done. The id prefixes themselves stay: the method forbids
+renumbering, and `WEB-F-###` is cited from sibling repositories and from
+`plan/reviews/`.
 
 ## Conventions
 

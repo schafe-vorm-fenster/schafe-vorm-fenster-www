@@ -52,9 +52,22 @@ pnpm dev                # http://localhost:3100
 whole run uses 3100 — the `dev` and `start` scripts, the Playwright
 `webServer`, and every URL in the documentation.
 
-`pnpm install` resolves `@schafe-vorm-fenster/*` from GitHub Packages via
-`.npmrc`, which reads `${GITHUB_TOKEN}`. If your shell does not export one,
-`export GITHUB_TOKEN=$(gh auth token)` before installing.
+`pnpm install` resolves from two private registries, both mapped in
+`.npmrc`:
+
+| Scope | Registry | Credential |
+| --- | --- | --- |
+| `@schafe-vorm-fenster` | GitHub Packages | `${GITHUB_TOKEN}` |
+| `@leafcutter-strict`, `@leafcutter-os` | `https://packages.leafcutteros.ai/` | none |
+
+If your shell does not export a GitHub token,
+`export GITHUB_TOKEN=$(gh auth token)` before installing. The second
+registry is where the **STRICT** specification method lives:
+`@leafcutter-strict/blueprint-complete` is a devDependency pinned exact, and
+`scripts/check-specs.ts` reads five of its controlled vocabularies straight
+out of `@leafcutter-strict/library-schemas` instead of repeating them
+(DEC-085). `stack.allow.json` does not cover either, because both are
+devDependencies and the register is for runtime dependencies.
 
 ### Commands
 

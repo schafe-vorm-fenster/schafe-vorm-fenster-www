@@ -1,11 +1,11 @@
 ---
 artefact: tactical-spec
 id: TS-017
-profile: rule
+kind: rule
 status: DRAFT
 implements: [WEB-C-001, WEB-C-002, WEB-C-003, WEB-C-004, WEB-C-005, WEB-C-006, WEB-C-007]
 sources: [SRC-006, SRC-008, SRC-011, SRC-012]
-decisions: [DEC-002, DEC-020, DEC-023, DEC-029, DEC-031, DEC-035]
+decisions: [DEC-002, DEC-020, DEC-023, DEC-029, DEC-031, DEC-035, DEC-085]
 ---
 
 # TS-017 — Technical Foundation
@@ -207,6 +207,7 @@ the two that are missing and states all of them as checks.
 | --- | --- | --- |
 | package manager | pnpm, pinned via `packageManager` in `package.json`. `pnpm-lock.yaml` is the only lockfile; a `package-lock.json` or `yarn.lock` is a defect. | exists |
 | private registry | the `@schafe-vorm-fenster` scope resolves to GitHub Packages via `.npmrc`; hub packages (brand, offering model, content raw material per DEC-020) install from there. | exists |
+| method registry | the `@leafcutter-strict` and `@leafcutter-os` scopes resolve to `https://packages.leafcutteros.ai/` via `.npmrc`. That is where the specification method lives as a versioned dependency (DEC-085, WEB-C-006); reading it needs no credential. | exists |
 | language | TypeScript throughout — application code, repository scripts, tests. Repository scripts run under `tsx`. | exists |
 | type strictness | a root `tsconfig.json` with `strict: true`; `pnpm typecheck` exists and is part of `pnpm check`. | **missing** [PROPOSED] |
 | one gate | `pnpm check` is the single entry point for every check. A new check is added *to* it, never run beside it. | exists |
@@ -218,11 +219,10 @@ strategy, not with this spec.
 
 ### D6 — STRICT is the method; specs precede content [FIXED: DEC-023, WEB-C-006]
 
-The specification method is STRICT
-(`/Users/jan-henrik.hempel/LeafcutterOS/leafcutter-strict` — not
-reachable from this repository, which is why `specs/README.md` names the
-absolute path). Three of its operating principles bind every artefact
-here:
+The specification method is STRICT, installed as
+`@leafcutter-strict/blueprint-complete@0.2.4` and cited by package name,
+never by path (DEC-085). Three of its operating principles bind every
+artefact here:
 
 | Principle | What it means for a spec in this folder |
 | --- | --- |
@@ -267,7 +267,7 @@ for the spec side, and needs the content frontmatter schema
 | ID | Level | Check |
 | --- | --- | --- |
 | TS-017-A1 | static | `package.json`: `next` present; no dependency from the D1 deny-set; every `dependencies` entry has a reason line in `stack.allow.json`, and every register entry exists as a dependency. |
-| TS-017-A2 | static | `pnpm-lock.yaml` is the only lockfile; `packageManager` pins pnpm; `.npmrc` maps the `@schafe-vorm-fenster` scope to the private registry. |
+| TS-017-A2 | static | `pnpm-lock.yaml` is the only lockfile; `packageManager` pins pnpm; `.npmrc` maps the `@schafe-vorm-fenster` scope to the private registry and the `@leafcutter-strict` scope to the method registry (DEC-085). |
 | TS-017-A3 | static | Root `tsconfig.json` exists with `strict: true`; `pnpm typecheck` is a script, is part of `pnpm check`, and exits 0. |
 | TS-017-A4 | static | Generated CSS contains no `@media (max-width: …)`, and every `min-width` value in it is one of the six `breakpoint.*` token values — a literal px breakpoint at a call site fails. |
 | TS-017-A5 | static | No colour literal and no `font-family` literal outside the single brand-token import file (`app/`, `src/`, stylesheets). |

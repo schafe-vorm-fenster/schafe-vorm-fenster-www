@@ -1,7 +1,7 @@
 ---
 artefact: tactical-spec
 id: TS-029
-profile: interaction
+kind: interaction
 status: DRAFT
 implements: [WEB-F-029]
 sources: [SRC-001, SRC-003, SRC-014]

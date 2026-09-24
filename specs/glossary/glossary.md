@@ -3,7 +3,7 @@ artefact: glossary
 status: DRAFT
 date: 2026-09-09
 updated: 2026-09-24
-decisions: [DEC-062, DEC-080, DEC-083]
+decisions: [DEC-062, DEC-080, DEC-083, DEC-085]
 ---
 
 # Glossary
@@ -57,4 +57,4 @@ Two conventions, so an empty cell means something:
 | GL-017 | publisher / actor | An actor (club, church, business) that publishes dates; the `actors` audience once registered. | Akteur · der Verein, die Feuerwehr, die Kirchgemeinde / actor | *Organizer* (DEC-062); *die Leute* · *the people* (CG-009) |
 | GL-018 | content hub | The GTM content packages the website consumes (WEB-F-080). | — | — |
 | GL-019 | empty state | A place without dates — a conversion occasion, not an error (WEB-F-044/045). | An invitation that names the next step and asks for one thing, in direct address. No word is fixed here: the sentence is copy under SRC-017 CG-032, and this register carries terms, not sentences (DEC-083) | |
-| GL-020 | STRICT | The requirements framework this spec follows; executing layer at `/Users/jan-henrik.hempel/LeafcutterOS/leafcutter-strict`. | — | — |
+| GL-020 | STRICT | The requirements framework this spec follows, installed as `@leafcutter-strict/blueprint-complete` and cited by package name (DEC-085). | — | — |

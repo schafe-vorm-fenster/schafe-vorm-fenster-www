@@ -96,3 +96,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-082 — One primary conversion per page stands — and the ladder every other CTA sits on](082-one-primary-per-page-and-the-cta-ladder.md)
 - [DEC-083 — A spec never carries the words — no verbatim copy, no fixed grammatical form](083-no-verbatim-copy-in-a-spec.md)
 - [DEC-084 — The village argument, re-derived — 280 inhabitants, no salesperson clause, and the counter module goes](084-the-village-argument-and-the-counter-that-goes.md)
+- [DEC-085 — STRICT is a versioned dependency, not a path — and the checker reads its vocabularies out of the package](085-strict-is-a-versioned-dependency.md)

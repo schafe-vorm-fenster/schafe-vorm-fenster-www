@@ -49,6 +49,12 @@ pnpm install
 pnpm dev                               # http://localhost:3100
 ```
 
+`.npmrc` maps three scopes: `@schafe-vorm-fenster` to GitHub Packages, which
+is what the token is for, and `@leafcutter-strict` plus `@leafcutter-os` to
+`https://packages.leafcutteros.ai/`, which needs none. The second registry
+carries the **STRICT** specification method — a devDependency with a version
+since DEC-085, not a path on one machine.
+
 **Port 3100 everywhere.** Port 3000 is taken on the build machine, so the
 `dev` and `start` scripts, the Playwright `webServer` and every documented
 URL use 3100. `pnpm stop` frees it.
@@ -71,10 +77,14 @@ is paid on every commit, and today it costs about three seconds.
 It currently runs, in order:
 
 1. `check:frontmatter` — content frontmatter against its schema
-2. `check:specs` — the STRICT spec guard (E1–E10 fail, W1–W3 report)
+2. `check:specs` — the STRICT spec guard (E1–E13 fail, W1–W3 report). Five
+   of its vocabularies — the `S0–S3` ladder, the requirement and tactical
+   status sets, the four tactical `kind` values and the source trust levels
+   — are read out of `@leafcutter-strict/library-schemas` at startup rather
+   than repeated in the script (DEC-085 §4)
 3. `check:stack` — TS-017-A1/A2/A7/A17: every runtime dependency registered
    in `stack.allow.json`, one lockfile, the brand package pinned exact, one
-   icon set
+   icon set, and `.npmrc` mapping both the hub scope and the method scope
 4. `check:brand` — TS-017-A4/A5/A6: no `max-width` media query, every
    `min-width` a breakpoint token, no colour or `font-family` literal
    outside `app/styles/brand.css`, no brand asset committed here
@@ -159,7 +169,9 @@ cannot see whether the small range does anything.
   first (`../classification-api`, `../events-api`, `../geo-api`,
   `../community-calendar`, `../envoy-api`), decide, write the decision into
   `specs/decisions/`, register the runtime dependency in `stack.allow.json`
-  with its reason. Pin the version exactly.
+  with its reason. Pin the version exactly. A devDependency gets the
+  decision and the exact pin but no register entry — the register is the
+  runtime list, and `check:stack` reads `dependencies` only.
 
 ### Deployments
 

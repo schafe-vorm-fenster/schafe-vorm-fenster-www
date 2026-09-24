@@ -1,7 +1,7 @@
 ---
 artefact: tactical-spec
 id: TS-015
-profile: procedure
+kind: procedure
 status: DRAFT
 implements: [WEB-C-020, WEB-C-021, WEB-C-022, WEB-C-023]
 sources: [SRC-012]

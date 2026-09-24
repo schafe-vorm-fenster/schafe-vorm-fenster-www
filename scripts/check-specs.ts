@@ -17,28 +17,90 @@
  *  E8  Acceptance criteria: unique ID, valid verification level
  *  E9  Coverage tables reference only existing acceptance criteria
  *  E10 Tests/features reference only IDs that exist
+ *  E11 Requirement files carry a status from the requirement-shell contract
+ *  E12 Tactical specs carry a `kind` and a status from the tactical contract
+ *  E13 Source inventory rows carry a trust level from the source contract
  *  W1  (warning) requirements not covered by any tactical spec
  *  W2  (warning) covered requirements discharged by no acceptance criterion
  *  W3  (warning) acceptance criteria no test references
  *
  * Exit code: number of errors (0 = green). Warnings never fail the run.
  *
- * TODO(migration): This checker is an interim, repo-local implementation.
- * It will be migrated to a Leafcutter validator (LeafcutterOS) so the
- * checks are shared, versioned, and consumed as a package instead of
- * being maintained here. Per STRICT's tier model, deterministic checks
- * belong to shared tooling (`strict-core`), not to a consumer repository
- * — keep this script free of website-specific assumptions so the rule
- * set lifts out cleanly.
+ * What this script delegates (DEC-085)
+ * ────────────────────────────────────
+ * STRICT is a versioned dependency of this repository, so every controlled
+ * vocabulary this script used to repeat is now read out of the installed
+ * `@leafcutter-strict/library-schemas` contracts at startup: the evidence
+ * sufficiency levels (E3/E4), the requirement and tactical status sets
+ * (E11/E12), the four tactical kinds (E12) and the source trust levels
+ * (E13). Change the package version and these checks follow it.
+ *
+ * What stays local, and why
+ * ─────────────────────────
+ *  - The identifier schema. STRICT composes ids as `<TYPE>-<DOMAIN>-<NNNN>`
+ *    (`FUN-WEB-0001`); this repository has `WEB-F-###` / `TS-###` / `DEC-###`,
+ *    cited from sibling repositories and from `plan/reviews/`. The method
+ *    forbids renumbering, so the local patterns are the correct ones here.
+ *  - Statement grammar and the fit-criterion form. The requirement rows are
+ *    shall-form prose, not the per-class slots of `method-statement-grammar`;
+ *    nothing deterministic can be checked against them yet.
+ *  - The chain. STRICT links requirement → need → goal; this repository links
+ *    requirement → source → decision → question and requirement → tactical
+ *    spec → acceptance criterion → test. E5/E6/E9/E10 and W1–W3 check the
+ *    chain this repository actually has.
+ *  - The locator form. `method-identifier-and-locator-schema` wants
+ *    `<file>#L102` plus an excerpt; the rows carry source ids.
+ * Each of those is recorded as owed in DEC-085.
  */
 
 import { readdirSync, readFileSync, statSync } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as yaml from "js-yaml";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SPECS_DIR = join(__dirname, "..", "specs");
+
+// ── The vocabularies STRICT owns ─────────────────────────────────────────
+// Read from the installed contracts, never copied. `library-schemas` ships
+// the JSON Schemas but does not export them as subpaths, so the directory is
+// resolved off an entry point the package does export.
+
+const SCHEMA_DIR = join(
+  dirname(createRequire(import.meta.url).resolve("@leafcutter-strict/library-schemas/pack.mjs")),
+  "contracts",
+  "schemas",
+);
+
+type JsonSchema = { properties?: Record<string, JsonSchema>; items?: JsonSchema; enum?: string[] };
+
+function contract(name: string): JsonSchema {
+  return JSON.parse(readFileSync(join(SCHEMA_DIR, `${name}.schema.json`), "utf8")) as JsonSchema;
+}
+
+/** Walk a dotted path of `properties`/`items` hops and return the enum it ends on. */
+function vocabulary(schema: JsonSchema, path: string): Set<string> {
+  let node: JsonSchema | undefined = schema;
+  for (const step of path.split(".")) {
+    node = step === "[]" ? node?.items : node?.properties?.[step];
+  }
+  const values = node?.enum;
+  if (!values?.length) throw new Error(`library-schemas: no enum at ${path}`);
+  return new Set(values);
+}
+
+const requirementShell = contract("requirement-shell");
+const tacticalSpecification = contract("tactical-specification");
+const sourceInventory = contract("source-inventory");
+
+const SUFFICIENCY = vocabulary(requirementShell, "evidence_sufficiency");
+const REQUIREMENT_STATUS = vocabulary(requirementShell, "status");
+const TACTICAL_STATUS = vocabulary(tacticalSpecification, "status");
+const TACTICAL_KIND = vocabulary(tacticalSpecification, "kind");
+const SOURCE_TRUST = vocabulary(sourceInventory, "sources.[].trust");
+
+const list = (set: Set<string>) => [...set].join(" | ");
 
 // ── File collection ──────────────────────────────────────────────────────
 
@@ -106,6 +168,11 @@ const REQ_ROW = /^\|\s*(WEB-[FQC]-\d{3})\s*\|(.+)$/;
 
 for (const d of docs) {
   if (/\.req\.md$/.test(d.file)) {
+    // E11: the status vocabulary belongs to the requirement-shell contract
+    const status = d.frontmatter?.status;
+    if (typeof status !== "string" || !REQUIREMENT_STATUS.has(status)) {
+      err(d.file, `E11 status ${JSON.stringify(status ?? null)} is not one of ${list(REQUIREMENT_STATUS)}`);
+    }
     for (const line of d.body.split("\n")) {
       const m = line.match(REQ_ROW);
       if (!m) continue;
@@ -124,7 +191,8 @@ for (const d of docs) {
       const suff = cells[cells.length - 1];
       const source = cells[cells.length - 2];
       const statement = cells.slice(1, -2).join(" ");
-      if (!/^S[0-3]$/.test(suff)) err(d.file, `E3 ${id}: sufficiency "${suff}" is not S0–S3`);
+      if (!SUFFICIENCY.has(suff))
+        err(d.file, `E3 ${id}: sufficiency "${suff}" is not one of ${list(SUFFICIENCY)}`);
       if (!source) err(d.file, `E3 ${id}: empty source cell`);
       // E4: S3 needs a decision anchor in the row itself
       if (suff === "S3" && !/(DEC-\d{3}|ADR-\d{3}|ADR-00\d)/.test(statement + " " + source)) {
@@ -146,12 +214,29 @@ for (const d of docs) {
     for (const m of d.body.matchAll(/^\|\s*(Q-\d{3})\s*\|/gm)) qDefs.add(m[1]);
   }
   if (/source-inventory\.md$/.test(d.file)) {
-    for (const m of d.body.matchAll(/^\|\s*(SRC-\d{3})\s*\|/gm)) srcDefs.add(m[1]);
+    for (const line of d.body.split("\n")) {
+      const m = line.match(/^\|\s*(SRC-\d{3})\s*\|/);
+      if (!m) continue;
+      srcDefs.add(m[1]);
+      // E13: the trust vocabulary belongs to the source-inventory contract
+      const trust = line.split("|").map((c) => c.trim())[4];
+      if (!SOURCE_TRUST.has(trust ?? ""))
+        err(d.file, `E13 ${m[1]}: trust "${trust ?? ""}" is not one of ${list(SOURCE_TRUST)}`);
+    }
   }
   if (/\.tactical\.md$/.test(d.file)) {
     const id = d.frontmatter?.id;
     if (typeof id === "string" && /^TS-\d{3}$/.test(id)) tsDefs.add(id);
     else err(d.file, "E1 tactical spec without valid frontmatter id (TS-###)");
+    // E12: kind and status belong to the tactical-specification contract
+    const kind = d.frontmatter?.kind;
+    if (typeof kind !== "string" || !TACTICAL_KIND.has(kind)) {
+      err(d.file, `E12 kind ${JSON.stringify(kind ?? null)} is not one of ${list(TACTICAL_KIND)}`);
+    }
+    const tsStatus = d.frontmatter?.status;
+    if (typeof tsStatus !== "string" || !TACTICAL_STATUS.has(tsStatus)) {
+      err(d.file, `E12 status ${JSON.stringify(tsStatus ?? null)} is not one of ${list(TACTICAL_STATUS)}`);
+    }
   }
   if (/glossary\.md$/.test(d.file)) {
     for (const m of d.body.matchAll(/^\|\s*(GL-\d{3})\s*\|/gm)) glDefs.add(m[1]);

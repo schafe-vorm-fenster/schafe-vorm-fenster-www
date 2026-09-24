@@ -14,10 +14,21 @@ first cold-start artefact; no statement without an exact source locator).
 ## Conventions
 
 - Locators are `<repo>/<path>#<anchor-or-section>`; excerpts max 25 words.
-- Trust is rated `high | medium | low` with a one-line rationale. The full
-  six-dimension rating of STRICT 13.4.1 is applied once the Core
-  Specification is available locally; until then this coarse scale is a
-  documented project convention.
-- Evidence sufficiency per requirement: `S0` no source · `S1` single
-  unconfirmed source · `S2` corroborated or high-trust source · `S3`
-  confirmed by an explicit decision (`DEC-###`).
+  `@leafcutter-strict/method-identifier-and-locator-schema` wants the finest
+  granularity a source supports — `#L102`, `#P45`, `#¶12`, `#M45:12` — plus
+  the excerpt on every locator. The rows here carry a source id and
+  sometimes a section. That gap is owed (DEC-085 §6); closing it means
+  re-reading all 18 sources.
+- Trust is `high | medium | low | unusable` with a one-line rationale. The
+  vocabulary is the source-inventory contract's and `pnpm check:specs`
+  validates the column against it (E13). What is **not** recorded is the
+  six-dimension vector
+  (`@leafcutter-strict/method-source-quality-rating`: locatability,
+  authority, currency, completeness, specificity, internal consistency,
+  each 0–3, trust = the minimum, never the average). Only the derived level
+  survives here, so the vector cannot say what to fix. Owed.
+- Evidence sufficiency per requirement follows
+  `@leafcutter-strict/method-evidence-sufficiency-rating`, read here as:
+  `S0` no source · `S1` single unconfirmed source · `S2` corroborated or
+  high-trust source · `S3` confirmed by an explicit decision (`DEC-###`).
+  The `S0–S3` set itself comes from the requirement-shell contract.

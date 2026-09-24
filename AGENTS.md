@@ -44,13 +44,27 @@ and pricing, tone of voice, brand, proof, and media echo.
 `specs/README.md` maps each of them to its path; `concept/README.md` covers
 the three concept documents.
 
-Specs are written against the **STRICT** framework at
-`/Users/jan-henrik.hempel/LeafcutterOS/leafcutter-strict`. It is not
-reachable from this repository, so the path is named explicitly.
-
 Conversion goal IDs, audience IDs, offering IDs, and proof IDs are defined
 in `go-to-market-os`. This repository consumes them; it does not define its
 own.
+
+## The Specification Method
+
+Specs are written against **STRICT**, which is installed here:
+`@leafcutter-strict/blueprint-complete@0.2.4`, a devDependency (DEC-085).
+It is no longer a path on one laptop — it is a versioned dependency, and
+`.npmrc` resolves the `@leafcutter-strict` and `@leafcutter-os` scopes from
+`https://packages.leafcutteros.ai/` without a credential.
+
+Cite a STRICT artefact **by package name**, the way DEC-042 has you cite hub
+content — `@leafcutter-strict/method-statement-grammar`, never a directory
+under `LeafcutterOS/`. `specs/README.md` lists the nine packages this
+specification leans on, and **DEC-085 §6** lists every place where this
+repository's form deviates from the packages, with what closing it would
+cost. Do not silently "fix" one of those deviations: the ids in particular
+(`WEB-F-###`, `TS-###`, `DEC-###`, `Q-###`, `SRC-###`) are cited from
+sibling repositories and from `plan/reviews/`, and the method itself forbids
+renumbering.
 
 ## Working Rules
 

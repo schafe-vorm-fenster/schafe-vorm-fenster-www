@@ -20,10 +20,18 @@ Every determination carries one of three tags:
 
 ## Format
 
-`<area>.tactical.md` with frontmatter: `id` (TS-###), `profile`
-(system · rule · interaction · procedure), `implements` (WEB-* IDs),
+`<area>.tactical.md` with frontmatter: `id` (TS-###), `kind`
+(system · procedure · interaction · rule), `implements` (WEB-* IDs),
 `sources`, `decisions`. Sections: Purpose · Determinations ·
 Free for the generator · Acceptance criteria · Coverage · Open points.
+
+`kind` carries the four values of the tactical-specification contract in
+`@leafcutter-strict/library-schemas`; `pnpm check:specs` reads that set out
+of the installed package rather than repeating it. The field was called
+`profile` until DEC-085 — the word was already spent three times over in
+this repository (weight profile, tone profile, the `person-profile`
+component), so taking the package's name removed a collision as well as a
+divergence.
 
 **The unit of a tactical spec is one coherent solution — one buildable
 system, one testable rule set, one page — not one requirement.**
@@ -36,7 +44,7 @@ of the spec.
 
 ## Contents
 
-| ID | File | Profile | Implements |
+| ID | File | Kind | Implements |
 | --- | --- | --- | --- |
 | TS-001 | `locale-routing.tactical.md` | system | WEB-F-060–069 |
 | TS-002 | `accessibility.tactical.md` | rule | WEB-Q-010–019, 026–027 |

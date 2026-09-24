@@ -5,7 +5,8 @@
  *      entry has a reason line in stack.allow.json, and every register entry
  *      exists as a dependency.
  *  A2  `pnpm-lock.yaml` is the only lockfile · `packageManager` pins pnpm ·
- *      `.npmrc` maps the `@schafe-vorm-fenster` scope to the private registry.
+ *      `.npmrc` maps the `@schafe-vorm-fenster` scope to the private registry
+ *      and the `@leafcutter-strict` scope to the method registry (DEC-085).
  *  A7  The brand package is pinned to an exact version, and the lockfile
  *      resolves that same version.
  *  A17 Exactly one icon dependency.
@@ -74,6 +75,8 @@ if (!/^pnpm@\d+\.\d+\.\d+/.test(pkg.packageManager ?? ""))
 const npmrc = existsSync(join(ROOT, ".npmrc")) ? read(".npmrc") : "";
 if (!/^@schafe-vorm-fenster:registry=https:\/\/npm\.pkg\.github\.com$/m.test(npmrc))
   fail("A2", ".npmrc does not map @schafe-vorm-fenster to GitHub Packages");
+if (!/^@leafcutter-strict:registry=https:\/\/packages\.leafcutteros\.ai\/?$/m.test(npmrc))
+  fail("A2", ".npmrc does not map @leafcutter-strict to the method registry");
 
 // ── A7: the brand package is pinned exact, and the lockfile agrees ──────────
 

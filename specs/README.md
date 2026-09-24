@@ -6,24 +6,48 @@ three phases and their order.
 
 ## The Two Sources
 
-Neither source is reachable from inside this repository. Both are named
-here with their full local paths so an agent can find them.
-
 ### 1. STRICT — how a spec is written
 
 **Framework:** STRICT — *Systematic Thorough Requirements for Integrated
 Consistency and Traceability*.
 
-**Local path:** `/Users/jan-henrik.hempel/LeafcutterOS/leafcutter-strict`
+**Installed as:** `@leafcutter-strict/blueprint-complete@0.2.4`, a
+devDependency of this repository (DEC-085). The `@leafcutter-strict` and
+`@leafcutter-os` scopes resolve to `https://packages.leafcutteros.ai/`
+through `.npmrc`; reading them needs no credential.
 
-**Repository:** `LeafcutterOS/leafcutter-strict` (private)
+All specs in this folder are written against STRICT, at that version. The
+framework is an inventory of atomic, separately installable packages in
+eight families — `foundation-*`, `role-*`, `method-*`, `library-schemas`,
+`skill-*`, `playbook-*`, `agent-*` and `blueprint-*`. A blueprint is a
+curated selection and carries no content of its own; `blueprint-complete`
+selects all of them, because this repository does bootstrap, delivery and
+assurance work at once (DEC-085 §1).
 
-All specs in this folder are written against STRICT. The repository is the
-executing layer of that framework: an inventory of atomic, separately
-installable packages in nine families — `foundations`, `contracts`, `roles`,
-`methods`, `policies`, `skills`, `playbooks`, `agents`, and `config`. Start
-at its `README.md`, then take the artefacts a given task needs rather than
-the whole framework.
+**Reference a STRICT artefact by package name, never by path** — the same
+rule `DEC-042` set for hub content. `@leafcutter-strict/method-statement-grammar`,
+not a directory. The nine method packages this specification leans on
+hardest:
+
+| What it settles | Package |
+| --- | --- |
+| identifiers and source locators | `@leafcutter-strict/method-identifier-and-locator-schema` |
+| functional · quality · constraint · business rule | `@leafcutter-strict/method-requirement-classification` |
+| the sentence form each class takes | `@leafcutter-strict/method-statement-grammar` |
+| `S0–S3` and the gates it opens | `@leafcutter-strict/method-evidence-sufficiency-rating` |
+| the six-dimension source rating behind a trust level | `@leafcutter-strict/method-source-quality-rating` |
+| the chain, and what an orphan actually is | `@leafcutter-strict/method-chain-linkage` |
+| admit · map · reject, and the three tiers | `@leafcutter-strict/method-glossary-policy` |
+| naming a defect so it becomes a demand | `@leafcutter-strict/method-defect-taxonomy` |
+| the output contracts the checker reads | `@leafcutter-strict/library-schemas` |
+
+Where this specification's form deviates from a package's, the deviation is
+listed with its price in **DEC-085 §6** — the identifier schema, the missing
+business-rule class, statement grammar, locator granularity, the source
+rating vector, the need and goal layer, the decision policy, the decision
+record shape, the conflict and defect registers, the acceptance-criterion
+shape, and per-artefact versions. None of them is an oversight and none is
+free.
 
 Three of its operating principles bind everything written here:
 
@@ -39,9 +63,14 @@ Three of its operating principles bind everything written here:
    workaround.
 
 For a cold start — a pile of input with no baseline — use
-`playbook-cold-start`. For ongoing work, `playbook-steady-state-increment`.
+`@leafcutter-strict/playbook-cold-start`. For ongoing work,
+`@leafcutter-strict/playbook-steady-state-increment`. The cold start ran on
+2026-09-09; this specification has been in the steady-state loop since.
 
 ### 2. go-to-market-os — what is specified
+
+This one is still not reachable from inside this repository, so it is named
+with its full local path.
 
 **Local path:** `/Users/jan-henrik.hempel/Projects/go-to-market-os`
 
@@ -107,12 +136,17 @@ specs/
 
 ## Conventions
 
-- Statements in shall-form, status `DRAFT` until their decision point.
+- Statements in shall-form, status `DRAFT` until their decision point. The
+  status vocabulary is the requirement-shell contract's, and `check:specs`
+  reads it out of the installed package (E11).
 - Every requirement row carries source locator(s) and an evidence level
-  `S0–S3` (defined in `sources/README.md`).
-- The STRICT Core Specification is not yet locally available; ID scheme,
-  class split, and grammar are documented project conventions to be
-  reconciled against it (see `constraints/technical.req.md` WEB-C-006).
+  `S0–S3` (`@leafcutter-strict/method-evidence-sufficiency-rating`; the
+  project's reading of it is in `sources/README.md`).
+- The ID scheme, the three-class split and the statement grammar are
+  documented project conventions that **deviate** from the packages. They
+  are not pending a reconciliation any more — DEC-085 §6 says what each
+  deviation is and what closing it would cost, and `WEB-C-006` names the
+  dependency.
 - **Consistency is machine-checked**: `pnpm check:specs`
   (`scripts/check-specs.ts`, part of `pnpm check` and the pre-commit
   hook) validates frontmatter, ID uniqueness, row shape, the S3-needs-a-
@@ -123,3 +157,11 @@ specs/
   gap: requirements without a tactical spec (W1), covered requirements
   discharged by no acceptance criterion (W2), acceptance criteria no test
   references (W3). It also prints the verification pyramid.
+- **Five of its vocabularies come from the package, not from the script**
+  (DEC-085 §4): the `S0–S3` ladder (E3/E4), the requirement status set
+  (E11), the tactical status set and the four tactical `kind` values (E12),
+  and the source trust levels (E13). They are read out of
+  `@leafcutter-strict/library-schemas` at startup, so a version bump moves
+  the checks. What the script still owns — the local identifier patterns,
+  the chain this repository actually has, and everything grammar-shaped — is
+  listed at the top of `scripts/check-specs.ts` with the reason.
