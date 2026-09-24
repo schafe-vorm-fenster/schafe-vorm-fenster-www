@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003, DEC-0036"
+source:
+  source_id: SRC-0003
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L192"
+  excerpt: "**Primary conversion:** `request-licence-quote`."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0016 that pass"
@@ -27,6 +30,12 @@ ai_provenance:
 | Route | Focus job | Primary conversion |
 | --- | --- | --- |
 | `/deine-region` | run our own calendar | `request-licence-quote` |
+
+## Source
+
+SRC-0003, DEC-0036
+
+Finding: Focus job line 191; route heading line 189.
 
 ## Notes
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "DEC-0012, DEC-0027"
+source:
+  source_id: DEC-0012
+  loc: "specs/decisions/DEC-0012--bfsg-and-legal-import.md#L14"
+  excerpt: "Google Workspace import pipeline (`content/legal/` + `import.yaml`)."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0180 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0180
 
 For the legal texts, the website SHALL import them through the Google Workspace pipeline in German and English.
+
+## Source
+
+DEC-0012, DEC-0027
+
+Finding: DEC-0012 names no languages; 'in German and English' comes from the second source DEC-0027 (line 11).
 
 ## Notes
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: accessibility
-source: "derived; convention"
+source:
+  source_id: UNKNOWN
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S1
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0123 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0123
 
 Per release, the release owner SHALL run a screen-reader spot check on VoiceOver iOS and NVDA.
+
+## Source
+
+derived; convention
+
+Unlocatable: the source is "derived; convention" — no document is named.

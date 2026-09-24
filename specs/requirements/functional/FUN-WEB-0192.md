@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: rendering-and-resilience
-source: "DEC-0019"
+source:
+  source_id: DEC-0019
+  loc: "specs/decisions/DEC-0019--three-tier-data-resilience.md#L11"
+  excerpt: "the site must ship fast (server-rendered,"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0192 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0192
 
 For every page, the website SHALL render it server-side with caching.
+
+## Source
+
+DEC-0019
+
+Finding: This is the Context section, not the Decision; the Decision's line 16 covers tier-1 live modules, not every page. 'cached)' continues on line 12.

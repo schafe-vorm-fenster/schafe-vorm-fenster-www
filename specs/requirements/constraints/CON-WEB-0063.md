@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "DEC-0026"
+source:
+  source_id: DEC-0026
+  loc: "specs/decisions/DEC-0026--localize-everything-but-artifacts.md#L16"
+  excerpt: "nothing is machine-translated at request time."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0063 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # CON-WEB-0063
 
 The solution SHALL NOT machine-translate at request time, imposed by DEC-0026.
+
+## Source
+
+DEC-0026

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: security
-source: "DEC-0014"
+source:
+  source_id: DEC-0014
+  loc: "specs/decisions/DEC-0014--spam-protection-honeypot.md#L11"
+  excerpt: "Forms are protected by invisible honeypot fields, submission-timing"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,10 @@ ai_provenance:
 # CON-WEB-0039
 
 The solution SHALL protect every form submission with a honeypot field, a submission-timing floor and server-side rate limiting, imposed by DEC-0014.
+
+## Source
+
+DEC-0014
 
 ## Notes
 

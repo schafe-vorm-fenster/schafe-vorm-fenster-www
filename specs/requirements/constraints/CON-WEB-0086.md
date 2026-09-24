@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0051, DEC-0052"
+source:
+  source_id: DEC-0052
+  loc: "specs/decisions/DEC-0052--page-level-answers.md#L116"
+  excerpt: "Therefore the block ships only when one does."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0086 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # CON-WEB-0086
 
 The solution SHALL NOT ship either newsletter route before a sending system is in operation, imposed by DEC-0051.
+
+## Source
+
+DEC-0051, DEC-0052
+
+Finding: The second source DEC-0052 supports it (amendment §5), while the first-named DEC-0051 only decides which system carries the newsletter; the two surfaces this binds — footer entry and inline block — are named across lines 116-117.
 
 ## Notes
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: rendering-and-resilience
-source: "DEC-0019"
+source:
+  source_id: UNKNOWN
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S1
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0105 that pass"
@@ -25,6 +28,14 @@ ai_provenance:
 # FUN-WEB-0105
 
 For every module and page type, the website SHALL use the cache lifetime of TS-WEB-0003 D5.
+
+## Source
+
+DEC-0019
+
+Unlocatable: Confirmed: the source list is DEC-0019 alone, and DEC-0019 names the three tiers and their stale-while-revalidate mapping but no cache lifetime, no per-module/page-type table and no TS-WEB-0003 D5.
+
+Finding: Nothing later is cited, so there is no second record to fall back to; the lifetime table lives in the tactical spec TS-WEB-0003, which this requirement does not cite.
 
 ## Notes
 

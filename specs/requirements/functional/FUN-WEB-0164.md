@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: localization
-source: "SRC-0007, DEC-0005"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/domains.md#L56"
+  excerpt: "If a language prefix exists in the URL path (e.g., `/en/...`), it overrides the TLD default"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0164 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # FUN-WEB-0164
 
 Where a URL carries a path prefix such as `/en/`, the website SHALL let it override the TLD default.
+
+## Source
+
+SRC-0007, DEC-0005

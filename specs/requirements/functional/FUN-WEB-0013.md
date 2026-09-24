@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003#register-mitmachenregistrieren"
+source:
+  source_id: SRC-0003
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L118"
+  excerpt: "**Primary conversion:** `publish-first-event`."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0013 that pass"
@@ -27,6 +30,12 @@ ai_provenance:
 | Route | Focus job | Primary conversion |
 | --- | --- | --- |
 | `/mitmachen/registrieren` | publish our dates | `publish-first-event` (handover to the app) |
+
+## Source
+
+SRC-0003#register-mitmachenregistrieren
+
+Finding: Focus job line 117; the qualifier "(handover to the app)" comes from the conversion map, line 231.
 
 ## Notes
 

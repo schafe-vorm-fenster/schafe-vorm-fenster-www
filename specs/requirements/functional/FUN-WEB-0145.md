@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "DEC-0032"
+source:
+  source_id: DEC-0032
+  loc: "specs/decisions/DEC-0032--error-pages.md#L11"
+  excerpt: "**404**: real status 404, `noindex`"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0145 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # FUN-WEB-0145
 
 For an unknown path, the website SHALL answer with status 404 and `noindex`.
+
+## Source
+
+DEC-0032

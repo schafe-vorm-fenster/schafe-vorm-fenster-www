@@ -111,3 +111,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-0094 — The four buried business rules are their own artefacts — and the one constraint filed as a functional requirement](DEC-0094--the-four-buried-business-rules.md)
 - [DEC-0095 — The fit criterion is what already checks the requirement — and UNKNOWN where nothing does](DEC-0095--the-fit-criterion-is-what-already-checks-it.md)
 - [DEC-0096 — The test-reference scan is what actually runs — read off the runners, not listed by hand](DEC-0096--the-scan-set-is-what-runs.md)
+- [DEC-0097 — Every statement carries the position it rests on — 186 of 273 resolve to a line, and the 87 that cannot say why](DEC-0097--every-statement-carries-its-position.md)

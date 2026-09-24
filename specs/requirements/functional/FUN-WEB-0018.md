@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003#archive"
+source:
+  source_id: SRC-0003
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L222"
+  excerpt: "This is the only list-shaped page on the"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0018 that pass"
@@ -27,6 +30,12 @@ ai_provenance:
 | Route | Focus job | Primary conversion |
 | --- | --- | --- |
 | `/ueber-uns/archiv` | understand who is behind it | none; only list-shaped page, not a destination |
+
+## Source
+
+SRC-0003#archive
+
+Finding: "Primary conversion: none." is line 219; "deliberately not a destination" continues on line 223.
 
 ## Notes
 

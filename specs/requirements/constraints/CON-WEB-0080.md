@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "SRC-0009 ADR-001, DEC-0022"
+source:
+  source_id: SRC-0009
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0080 that pass"
@@ -25,6 +28,14 @@ ai_provenance:
 # CON-WEB-0080
 
 The solution SHALL NOT carry a news section, imposed by DEC-0022.
+
+## Source
+
+SRC-0009 ADR-001, DEC-0022
+
+Unlocatable: No line in ADR-001 (or ADR-002/003/004) says the website carries no news section. ADR-001 only assigns `news/` to the hub as source of truth (line 149) and mentions `published posts for the news section` as feed-like content (line 170).
+
+Finding: Attribution is misleading: the `source` field itself says the constraint is imposed by DEC-0022, yet SRC-0009 ADR-001 is listed first and supports the opposite reading -- it presumes a news section exists.
 
 ## Rationale
 

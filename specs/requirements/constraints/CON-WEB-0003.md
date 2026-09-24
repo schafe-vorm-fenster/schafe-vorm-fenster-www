@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: technical-constraints
-source: "SRC-0006, DEC-0043, DEC-0044"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Das fängt schon beim Branding mit der Schriftart an. Wir müssen im Brandkit nochmal nachgucken."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0003 that pass"
@@ -25,3 +28,11 @@ ai_provenance:
 # CON-WEB-0003
 
 The solution SHALL take typography (Atkinson Hyperlegible Next), tokens, logos and imagery rules from `@schafe-vorm-fenster/brand-design` (tokens, assets) and `@schafe-vorm-fenster/brand-identity` (imagery, tone), imposed by DEC-0043 and DEC-0044.
+
+## Source
+
+SRC-0006, DEC-0043, DEC-0044
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
+
+Finding: Transcript says only that the brand kit and its font must be used; it never names Atkinson Hyperlegible, @schafe-vorm-fenster/brand-design or @schafe-vorm-fenster/brand-identity.

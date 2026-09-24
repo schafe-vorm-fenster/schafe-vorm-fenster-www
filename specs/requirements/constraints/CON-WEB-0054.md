@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: technical-constraints
-source: "existing repo, convention"
+source:
+  source_id: UNKNOWN
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S1
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,9 @@ ai_provenance:
 # CON-WEB-0054
 
 The solution SHALL use pnpm as its package manager, imposed by TS-WEB-0017 D1.
+
+## Source
+
+existing repo, convention
+
+Unlocatable: the source is "existing repo, convention" — no document is named.

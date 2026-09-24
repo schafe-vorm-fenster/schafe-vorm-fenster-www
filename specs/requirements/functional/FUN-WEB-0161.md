@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: personalization
-source: "SRC-0006 (transcript), SRC-0001#6"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0161 that pass"
@@ -25,3 +28,11 @@ ai_provenance:
 # FUN-WEB-0161
 
 For browser geolocation, the website SHALL ask only after an interaction.
+
+## Source
+
+SRC-0006 (transcript), SRC-0001#6
+
+Unlocatable: Transcript never mentions the browser geolocation API or asking after an interaction.
+
+Finding: The interaction-gated browser permission prompt is not in SRC-0006.

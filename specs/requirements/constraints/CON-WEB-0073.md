@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: personalization
-source: "SRC-0006 (transcript), SRC-0001#6"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Nee, Ort brauche ich nicht, das ist Spookie."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0073 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # CON-WEB-0073
 
 The solution SHALL NOT resolve a visitor's location to place level, imposed by SRC-0006.
+
+## Source
+
+SRC-0006 (transcript), SRC-0001#6
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
 
 ## Rationale
 

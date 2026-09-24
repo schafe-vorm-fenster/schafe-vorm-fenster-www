@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: seo
-source: "DEC-0018"
+source:
+  source_id: DEC-0018
+  loc: "specs/decisions/DEC-0018--allow-ai-crawlers-llms-txt.md#L11"
+  excerpt: "AI crawlers are explicitly permitted in robots.txt"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0169 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # FUN-WEB-0169
 
 In `robots.txt`, the website SHALL explicitly allow AI crawlers.
+
+## Source
+
+DEC-0018

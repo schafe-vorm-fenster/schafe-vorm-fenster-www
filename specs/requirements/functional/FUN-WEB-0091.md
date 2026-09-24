@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0009"
+source:
+  source_id: DEC-0009
+  loc: "specs/decisions/DEC-0009--envoy-lead-widget.md#L18"
+  excerpt: "themed via CSS variables"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,12 @@ ai_provenance:
 # FUN-WEB-0091
 
 Where the envoy widget is embedded, the website SHALL theme it through CSS variables carrying brand kit values.
+
+## Source
+
+DEC-0009
+
+Finding: DEC-0009 does not mention brand kit values; only the CSS-variable theming mechanism.
 
 ## Notes
 

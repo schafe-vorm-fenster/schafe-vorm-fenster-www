@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: rendering-and-resilience
-source: "DEC-0033, SRC-0014#skeletons, DEC-0056"
+source:
+  source_id: DEC-0033
+  loc: "specs/decisions/DEC-0033--skeletons-and-streaming.md#L12"
+  excerpt: "renders a skeleton immediately and streams in."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0198 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0198
 
 For a module whose data arrives after the shell, the website SHALL render a skeleton immediately.
+
+## Source
+
+DEC-0033, SRC-0014#skeletons, DEC-0056
+
+Finding: The subject ('Every module whose data arrives after the shell') is on line 11.

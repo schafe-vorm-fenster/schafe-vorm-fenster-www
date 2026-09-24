@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0011, DEC-0051"
+source:
+  source_id: DEC-0051
+  loc: "specs/decisions/DEC-0051--envoy-carries-newsletter-and-invoicing.md#L16"
+  excerpt: "**Invoicing**: the completed order goes to envoy as a structured event"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,12 @@ ai_provenance:
 # FUN-WEB-0189
 
 For a completed order, the website SHALL send it to envoy as a structured event.
+
+## Source
+
+DEC-0011, DEC-0051
+
+Finding: DEC-0051 supports it and is named second; DEC-0011 is named first and never mentions envoy or a structured event.
 
 ## Notes
 

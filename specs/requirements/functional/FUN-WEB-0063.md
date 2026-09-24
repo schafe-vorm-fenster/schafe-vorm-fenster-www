@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: localization
-source: "SRC-0007, DEC-0005"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/localization-architecture.md#L58"
+  excerpt: "Both are standard `<a href=\"...\">` link navigations — no client-side JavaScript required."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0063 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # FUN-WEB-0063
 
 When the visitor switches language or country, the website SHALL do it as plain link navigation (prefix change / TLD change).
+
+## Source
+
+SRC-0007, DEC-0005

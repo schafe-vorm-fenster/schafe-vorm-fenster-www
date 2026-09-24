@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: place-search
-source: "DEC-0079, DEC-0024"
+source:
+  source_id: DEC-0079
+  loc: "specs/decisions/DEC-0079--place-search-by-name.md#L47"
+  excerpt: "The place search takes a **place name**."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0155 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # FUN-WEB-0155
 
 In the place search, the website SHALL ask for a place name.
+
+## Source
+
+DEC-0079, DEC-0024

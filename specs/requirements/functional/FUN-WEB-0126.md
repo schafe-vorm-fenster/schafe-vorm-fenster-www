@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: privacy
-source: "derived; convention"
+source:
+  source_id: UNKNOWN
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S1
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0126 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0126
 
 For a pull request that adds an outbound request, the reviewer SHALL require the rung-3 evidence of TS-WEB-0013 D5.
+
+## Source
+
+derived; convention
+
+Unlocatable: the source is "derived; convention" — no document is named.

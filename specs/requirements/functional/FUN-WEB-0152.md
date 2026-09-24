@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0010, DEC-0081"
+source:
+  source_id: UNKNOWN
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0152 that pass"
@@ -25,6 +28,14 @@ ai_provenance:
 # FUN-WEB-0152
 
 On every row of the contact section, the website SHALL carry `make-contact` as an intent, counted per channel and with the route.
+
+## Source
+
+DEC-0010, DEC-0081
+
+Unlocatable: DEC-0081 does not carry it either. Its §4 (lines 88-89) fires `request-product-briefing` on the section's *first* action row with the route, and the 2026-09-24 amendment (lines 176-177) points at the hub record for per-channel goals. The string `make-contact` occurs in no decision record.
+
+Finding: Neither the first-named DEC-0010 nor the later DEC-0081 supports it; `make-contact` appears only in tactical specs (TS-WEB-0016, TS-WEB-0027) and in the requirement files themselves, so no cited decision record is a source for this statement.
 
 ## Rationale
 

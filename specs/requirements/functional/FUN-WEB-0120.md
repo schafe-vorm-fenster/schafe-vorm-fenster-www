@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: accessibility
-source: "SRC-0006, SRC-0014, DEC-0056"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0120 that pass"
@@ -25,3 +28,11 @@ ai_provenance:
 # FUN-WEB-0120
 
 For every interactive element, the website SHALL render a focus ring of 3 px `violet-500` at 2 px offset.
+
+## Source
+
+SRC-0006, SRC-0014, DEC-0056
+
+Unlocatable: Transcript never mentions focus rings, pixel widths or a colour token.
+
+Finding: "3 px violet-500 at 2 px offset" is a precise design value that does not occur anywhere in SRC-0006.

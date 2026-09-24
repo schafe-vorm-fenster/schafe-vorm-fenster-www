@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: technical-constraints
-source: "SRC-0014#icons, DEC-0056"
+source:
+  source_id: SRC-0014
+  loc: "concept/website-design-system.md#L954"
+  excerpt: "One set only: **Lucide**, 24 × 24 grid, 2 px stroke, round caps and joins."
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,10 @@ ai_provenance:
 # CON-WEB-0055
 
 The solution SHALL take every icon from exactly one set, Lucide, imposed by SRC-0014 and DEC-0056.
+
+## Source
+
+SRC-0014#icons, DEC-0056
 
 ## Notes
 

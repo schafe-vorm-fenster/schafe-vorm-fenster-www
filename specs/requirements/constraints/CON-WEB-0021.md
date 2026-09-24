@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: delivery-pipeline
-source: "DEC-0031"
+source:
+  source_id: DEC-0031
+  loc: "specs/decisions/DEC-0031--two-stage-deployment-model.md#L17"
+  excerpt: "Actions pipeline modelled on `classification-api` (SRC-0012)"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,10 @@ ai_provenance:
 # CON-WEB-0021
 
 The solution SHALL gate every merge with a GitHub Actions pipeline modelled on `classification-api`, imposed by DEC-0031.
+
+## Source
+
+DEC-0031
 
 ## Notes
 

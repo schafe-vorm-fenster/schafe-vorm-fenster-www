@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "DEC-0020"
+source:
+  source_id: DEC-0020
+  loc: "specs/decisions/DEC-0020--content-architecture.md#L25"
+  excerpt: "The formats are defined as Zod schemas in this repository: frontmatter"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0089 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0089
 
 For every website content format, the repository SHALL define a Zod schema — frontmatter fields plus `describe()` guidance on lengths, phrasing and tone per field — as the binding contract for generation agents.
+
+## Source
+
+DEC-0020
+
+Finding: The record's describe() guidance covers 'lengths and phrasing' (line 26); 'tone' is not in DEC-0020.
 
 ## Notes
 

@@ -7,7 +7,8 @@ Requirement shells extracted from the governed sources, grouped by class.
 `@leafcutter-os/schemas` types as `spec/requirements/<id>.md`, level L3, and
 `@leafcutter-strict/library-schemas`' `requirement-shell` contract records as
 "a single requirement". Each carries its ID, its class, its status, at least
-one source locator and an evidence-sufficiency level in frontmatter, and its
+one source locator — a position and an excerpt, never a bare file name — and
+an evidence-sufficiency level in frontmatter, and its
 statement in the body. The directory README is the index and defines nothing.
 Nothing here approves itself: a requirement becomes binding at its decision
 point, not by being written down.
@@ -74,6 +75,27 @@ E18 validates the shape, W7 reports the fill rate.
 
 `check:specs` E14 checks the form token against the class; W4 counts the
 `0`s and names them. They are the burn-down, and they are honest.
+
+## Source locator
+
+`source` is the contract's `$defs/locator`: `source_id`, a `loc` of the form
+`<file>#L102` — or `#P45`, `#¶12`, `#M45:12`, the four schemes
+`@leafcutter-strict/method-identifier-and-locator-schema` tabulates — and an
+`excerpt` of at most 25 words copied out of that exact position, in the
+source's own language. DEC-0097 resolved all 273.
+
+`loc` is `UNKNOWN` where the source supports no position scheme, and the
+method says what that means: *"Where the source carries no position scheme at
+all, the locator is `UNKNOWN` and the source is reported as unlocatable —
+which is a defect of the source, not of the run."* The excerpt may still be
+there — the words are evidence even where the position is not.
+
+The contract's `source` holds **one** locator and this repository's
+requirements often rest on several references at once. The full list is the
+`## Source` section of the document, which also carries what the reading of
+the source found: where the listed order misleads, where only half a
+statement is in the source, where nothing in the source says it at all.
+`check:specs` E19 validates the shape, W8 reports the fill rate.
 
 Where a statement carried material the form has no slot for — the reason
 behind the rule, a pointer to where something else is defined — that

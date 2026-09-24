@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: performance
-source: "SRC-0007, DEC-0007"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/performance-budget.md#L22"
+  excerpt: "| Web fonts | < 50KB | Variable font, woff2 format |"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,12 @@ ai_provenance:
 # NFR-WEB-0055
 
 Compressed size of the web fonts of the website SHALL be <= 50 KB, measured by TS-WEB-0003-A3.
+
+## Source
+
+SRC-0007, DEC-0007
+
+Finding: The source budget is strictly < 50KB; the requirement relaxes it to <= 50 KB.
 
 ## Notes
 

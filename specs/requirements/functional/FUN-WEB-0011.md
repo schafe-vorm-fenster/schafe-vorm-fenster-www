@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003#your-place-dein-ort"
+source:
+  source_id: SRC-0003
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L88"
+  excerpt: "**Primary conversion:** `save-calendar-to-homescreen`."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0011 that pass"
@@ -27,6 +30,12 @@ ai_provenance:
 | Route | Focus job | Primary conversion |
 | --- | --- | --- |
 | `/dein-ort` | know what is on | `save-calendar-to-homescreen` |
+
+## Source
+
+SRC-0003#your-place-dein-ort
+
+Finding: Focus job "know what is on" is line 87; route heading line 85.
 
 ## Notes
 

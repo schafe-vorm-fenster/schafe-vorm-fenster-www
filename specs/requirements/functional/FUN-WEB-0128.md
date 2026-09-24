@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: accessibility
-source: "SRC-0006"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Farbenkontraste, logisch, aber natürlich auch Area-Label, Struktur, semantisches Markup und so weiter."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0128 that pass"
@@ -25,6 +28,14 @@ ai_provenance:
 # FUN-WEB-0128
 
 For every page, the website SHALL render semantic markup — landmarks, a heading outline and ARIA labels.
+
+## Source
+
+SRC-0006
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
+
+Finding: "Area-Label" is the transcript's rendering of "ARIA-Label".
 
 ## Rationale
 

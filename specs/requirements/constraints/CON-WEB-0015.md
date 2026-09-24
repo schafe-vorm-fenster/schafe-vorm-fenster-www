@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: scope-boundaries
-source: "DEC-0052"
+source:
+  source_id: DEC-0052
+  loc: "specs/decisions/DEC-0052--page-level-answers.md#L21"
+  excerpt: "becomes \"no occurrence\" while the offering is `withheld`"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,12 @@ ai_provenance:
 # CON-WEB-0015
 
 While an offering is `promotion: withheld`, the solution SHALL NOT present it at all — companies and local advertising today — imposed by DEC-0052.
+
+## Source
+
+DEC-0052
+
+Finding: DEC-0052 §3 covers local advertising only; the requirement's second subject (companies) is not named anywhere in this record.
 
 ## Rationale
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: accessibility
-source: "SRC-0006"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Wir machen keine Optimierung für komplett blinde oder ähnliche."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0024 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # CON-WEB-0024
 
 The solution SHALL NOT take full non-visual optimisation as a launch criterion, imposed by SRC-0006 "Accessibility".
+
+## Source
+
+SRC-0006
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
 
 ## Rationale
 

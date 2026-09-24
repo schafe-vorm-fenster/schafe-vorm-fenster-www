@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: personalization
-source: "SRC-0006"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Ich möchte für die Nutzer andere Contest aufstellen, wenn sie aus Niedersachsen kommen oder wenn sie aus Mecklenburg-Vorpommern kommen."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0056 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0056
 
 When varying content regionally, the website SHALL key on the visitor's state or county (e.g. Niedersachsen vs Mecklenburg-Vorpommern entry).
+
+## Source
+
+SRC-0006
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.

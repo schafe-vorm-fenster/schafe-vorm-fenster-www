@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0051, DEC-0052"
+source:
+  source_id: UNKNOWN
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0191 that pass"
@@ -25,3 +28,11 @@ ai_provenance:
 # FUN-WEB-0191
 
 For the WhatsApp route of newsletter signup, the website SHALL use a click-to-chat link with a prefilled subscribe message.
+
+## Source
+
+DEC-0051, DEC-0052
+
+Unlocatable: DEC-0052 §4 establishes the WhatsApp route and its preference, then explicitly defers what that route needs to `TS-WEB-0016 D10` (lines 99-100). No click-to-chat link and no prefilled subscribe message appear anywhere in the record.
+
+Finding: Neither cited record carries the mechanism: DEC-0051 is named first and routes signup through envoy, DEC-0052 names the channel but hands the implementation to the tactical spec TS-WEB-0016 D10, which is not cited here.

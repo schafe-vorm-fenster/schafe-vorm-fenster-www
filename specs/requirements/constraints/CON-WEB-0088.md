@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: rendering-and-resilience
-source: "DEC-0019"
+source:
+  source_id: DEC-0019
+  loc: "specs/decisions/DEC-0019--three-tier-data-resilience.md#L21"
+  excerpt: "The page shell never blocks on an API (streaming)."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0088 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # CON-WEB-0088
 
 The solution SHALL NOT let a page shell block on an app API, imposed by DEC-0019.
+
+## Source
+
+DEC-0019
 
 ## Rationale
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "DEC-0026"
+source:
+  source_id: DEC-0026
+  loc: "specs/decisions/DEC-0026--localize-everything-but-artifacts.md#L13"
+  excerpt: "Original artifacts (a newspaper clipping, a quoted headline) remain in"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0144 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # FUN-WEB-0144
 
 For an original artifact — a press clipping, a quoted headline — the website SHALL render it in its source language.
+
+## Source
+
+DEC-0026

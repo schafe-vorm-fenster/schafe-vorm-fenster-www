@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: relevance-and-proof
-source: "DEC-0024"
+source:
+  source_id: DEC-0024
+  loc: "specs/decisions/DEC-0024--place-search-covers-germany.md#L18"
+  excerpt: "Proof elements that reference places are drawn only from covered"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,10 @@ ai_provenance:
 # FUN-WEB-0024
 
 For a place-bound proof element, the website SHALL draw it only from a covered place.
+
+## Source
+
+DEC-0024
 
 ## Rationale
 

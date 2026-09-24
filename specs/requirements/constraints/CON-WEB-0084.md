@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0011, DEC-0051"
+source:
+  source_id: DEC-0011
+  loc: "specs/decisions/DEC-0011--purchase-on-invoice.md#L17"
+  excerpt: "the invoice follows out-of-band. No payment"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,9 @@ ai_provenance:
 # CON-WEB-0084
 
 The solution SHALL NOT use a payment provider, imposed by DEC-0011.
+
+## Source
+
+DEC-0011, DEC-0051
+
+Finding: The sentence 'No payment provider in phase 1.' wraps across lines 17-18; only the part on line 17 is quoted.

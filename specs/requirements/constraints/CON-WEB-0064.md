@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "DEC-0032"
+source:
+  source_id: DEC-0032
+  loc: "specs/decisions/DEC-0032--error-pages.md#L13"
+  excerpt: "fuzzy place-slug guessing on arbitrary paths"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0064 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # CON-WEB-0064
 
 The solution SHALL NOT guess a place slug from an unknown path, imposed by DEC-0032.
+
+## Source
+
+DEC-0032
+
+Finding: The sentence begins with 'No' at the end of line 12; only the part on line 13 is quoted.

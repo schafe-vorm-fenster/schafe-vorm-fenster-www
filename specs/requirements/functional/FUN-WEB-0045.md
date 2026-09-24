@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: live-data
-source: "SRC-0001#5"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L270"
+  excerpt: "Live modules degrade gracefully: an empty result is a conversion occasion,"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0045 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0045
 
 When a live module's result is empty, the website SHALL present it as a conversion occasion, never as an error state.
+
+## Source
+
+SRC-0001#5
+
+Finding: "not an error state" wraps onto line 271.

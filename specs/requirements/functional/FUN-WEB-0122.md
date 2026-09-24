@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: accessibility
-source: "derived; convention"
+source:
+  source_id: UNKNOWN
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S1
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0122 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0122
 
 On every pull request, the delivery pipeline SHALL run the axe sweep over every route.
+
+## Source
+
+derived; convention
+
+Unlocatable: the source is "derived; convention" — no document is named.

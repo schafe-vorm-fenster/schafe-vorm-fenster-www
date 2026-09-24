@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: technical-constraints
-source: "SRC-0006, SRC-0014, DEC-0056"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0051 that pass"
@@ -25,6 +28,14 @@ ai_provenance:
 # CON-WEB-0051
 
 The solution SHALL take its breakpoints from `@schafe-vorm-fenster/brand-design` (`breakpoint.xs…2xl`), imposed by DEC-0056.
+
+## Source
+
+SRC-0006, SRC-0014, DEC-0056
+
+Unlocatable: Transcript never mentions breakpoints or a design-token package.
+
+Finding: `breakpoint.xs…2xl` and the package name come from DEC-0056; nothing in SRC-0006 supports them.
 
 ## Rationale
 

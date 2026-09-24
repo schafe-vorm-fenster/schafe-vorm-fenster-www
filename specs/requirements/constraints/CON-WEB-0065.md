@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "DEC-0034"
+source:
+  source_id: DEC-0034
+  loc: "specs/decisions/DEC-0034--region-interim-active-examples.md#L11"
+  excerpt: "Until the map project lands, the region page shows **no full place"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0065 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # CON-WEB-0065
 
 The solution SHALL NOT render a full place list at county level or above, imposed by DEC-0034.
+
+## Source
+
+DEC-0034
+
+Finding: 'at county level or above' rests on line 12-13 ('a county already has hundreds of places; lists collapse at any / level above the village'), which wraps.

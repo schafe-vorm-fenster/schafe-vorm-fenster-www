@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: audience-model
-source: "SRC-0001#boundaries"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L310"
+  excerpt: "The website does not separate municipalities from institutions: same"
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,7 @@ ai_provenance:
 # BUS-WEB-0012
 
 For product, argument and job, a municipality and an institution count as one customer category.
+
+## Source
+
+SRC-0001#boundaries

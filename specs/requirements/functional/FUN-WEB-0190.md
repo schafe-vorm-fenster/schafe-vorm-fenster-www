@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0051, DEC-0052"
+source:
+  source_id: DEC-0051
+  loc: "specs/decisions/DEC-0051--envoy-carries-newsletter-and-invoicing.md#L13"
+  excerpt: "**Newsletter**: signup and double opt-in run through envoy"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0190 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0190
 
 For the e-mail route of newsletter signup, the website SHALL implement double opt-in through envoy.
+
+## Source
+
+DEC-0051, DEC-0052
+
+Finding: DEC-0051 does not distinguish channels; 'the e-mail route' is a narrowing that this record does not make.
 
 ## Notes
 

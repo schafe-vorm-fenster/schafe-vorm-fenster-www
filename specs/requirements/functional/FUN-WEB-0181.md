@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "DEC-0012, DEC-0027"
+source:
+  source_id: UNKNOWN
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0181 that pass"
@@ -25,6 +28,14 @@ ai_provenance:
 # FUN-WEB-0181
 
 For an imported legal text, the website SHALL render it as a section of the single legal page.
+
+## Source
+
+DEC-0012, DEC-0027
+
+Unlocatable: DEC-0027 states only that the existing Google-Docs import carries German and English legal documents and that further languages/jurisdictions follow the same process. It says nothing about how an imported text is rendered, and names neither a single legal page nor sections.
+
+Finding: Neither cited record supports it: DEC-0012 is named first and covers the import pipeline, DEC-0027 covers languages. The one-page-with-sections rule is DEC-0039 (lines 11, 31), which this requirement does not cite.
 
 ## Notes
 

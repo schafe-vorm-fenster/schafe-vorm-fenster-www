@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0009, DEC-0081"
+source:
+  source_id: DEC-0009
+  loc: "specs/decisions/DEC-0009--envoy-lead-widget.md#L19"
+  excerpt: "the website ships no own form backend."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0081 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # CON-WEB-0081
 
 The solution SHALL NOT ship a form backend of its own, imposed by DEC-0009.
+
+## Source
+
+DEC-0009, DEC-0081

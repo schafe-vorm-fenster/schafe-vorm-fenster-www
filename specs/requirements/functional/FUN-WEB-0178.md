@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "SRC-0009 ADR-001"
+source:
+  source_id: SRC-0009
+  loc: "go-to-market-os/handbook/decisions/001-content-source-of-truth.adr.md#L55"
+  excerpt: "**This repository is the single source of truth for content**, including"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,9 @@ ai_provenance:
 # FUN-WEB-0178
 
 For a conversion goal, audience, offering or proof id, the website SHALL reference it from `go-to-market-os`.
+
+## Source
+
+SRC-0009 ADR-001
+
+Finding: Same vocabulary gap as CON-WEB-0079: `conversion goal`, `offering` and `proof id` are ADR-002 terms; ADR-001 speaks of audiences, brand, tone and communication goals.

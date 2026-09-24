@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: live-data
-source: "SRC-0002#live-content, SRC-0003#your-place"
+source:
+  source_id: SRC-0002
+  loc: "go-to-market-os/concept/website-relevance-model.concept.md#L120"
+  excerpt: "the page shifts its focus job to \"publish our dates\""
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0154 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # FUN-WEB-0154
 
 Where a place carries no dates, the website SHALL shift the page's focus job to "publish our dates".
+
+## Source
+
+SRC-0002#live-content, SRC-0003#your-place
 
 ## Notes
 

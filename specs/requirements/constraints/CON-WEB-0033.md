@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: privacy
-source: "SRC-0001#boundaries, SRC-0003"
+source:
+  source_id: SRC-0001
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0033 that pass"
@@ -25,3 +28,11 @@ ai_provenance:
 # CON-WEB-0033
 
 The solution SHALL NOT make a data-protection claim its implementation does not support, imposed by SRC-0001 "Boundaries".
+
+## Source
+
+SRC-0001#boundaries, SRC-0003
+
+Unlocatable: The file contains no mention of data protection, privacy, cookies or tracking; grep for Datenschutz/privacy/cookie/tracking returns nothing.
+
+Finding: Anchor #boundaries does not carry this; the Boundaries section covers features, prices, municipalities/institutions and the AI-coaching track only. Claim must come from SRC-0003.

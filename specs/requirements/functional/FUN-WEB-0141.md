@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003#navigation, DEC-0012, DEC-0039, DEC-0052, DEC-0081"
+source:
+  source_id: SRC-0003
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L36"
+  excerpt: "\"Impressum\", \"Datenschutz\" and \"Barrierefreiheit\" — all three point at"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0141 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0141
 
 In the footer, the website SHALL carry the legal links "Impressum", "Datenschutz" and "Barrierefreiheit", each pointing at its anchor on `/rechtliches`.
+
+## Source
+
+SRC-0003#navigation, DEC-0012, DEC-0039, DEC-0052, DEC-0081
+
+Finding: The anchor target `/rechtliches` is on the continuation line 37.
 
 ## Notes
 

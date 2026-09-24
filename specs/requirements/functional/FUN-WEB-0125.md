@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: privacy
-source: "SRC-0001#boundaries, SRC-0003"
+source:
+  source_id: SRC-0001
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0125 that pass"
@@ -25,3 +28,11 @@ ai_provenance:
 # FUN-WEB-0125
 
 On `/dein-kalender`, the website SHALL carry a data-protection block naming the absence of tracking cookies.
+
+## Source
+
+SRC-0001#boundaries, SRC-0003
+
+Unlocatable: No line mentions a data-protection block, tracking cookies, or the path `/dein-kalender`.
+
+Finding: Anchor #boundaries does not support it; must originate in SRC-0003.

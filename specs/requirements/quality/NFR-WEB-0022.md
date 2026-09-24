@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: privacy
-source: "SRC-0006, DEC-0004"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Wir machen jetzt auch kein neues Tracking-Ad-Hoc, sondern wir nutzen E-Tracker erstmal genauso weiter."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "Analytics, tag and pixel vendors in the build and in the rendered markup"
@@ -25,6 +28,12 @@ ai_provenance:
 # NFR-WEB-0022
 
 Analytics, tag and pixel vendors in the build and in the rendered markup SHALL be = 1 vendor, measured by TS-WEB-0012-A9.
+
+## Source
+
+SRC-0006, DEC-0004
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
 
 ## Notes
 

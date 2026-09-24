@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003#navigation, DEC-0012, DEC-0039, DEC-0052, DEC-0081"
+source:
+  source_id: SRC-0003
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0061 that pass"
@@ -25,6 +28,14 @@ ai_provenance:
 # CON-WEB-0061
 
 The solution SHALL NOT place contact inside the footer, imposed by DEC-0081.
+
+## Source
+
+SRC-0003#navigation, DEC-0012, DEC-0039, DEC-0052, DEC-0081
+
+Unlocatable: SRC-0003 states the opposite: line 35 reads "Contact and newsletter live in the footer". No line prohibits contact in the footer.
+
+Finding: Contradiction: the prohibition comes from DEC-0081 and overrides SRC-0003 line 35; SRC-0003 has not been amended.
 
 ## Rationale
 

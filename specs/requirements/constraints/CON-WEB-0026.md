@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: accessibility
-source: "DEC-0012"
+source:
+  source_id: DEC-0012
+  loc: "specs/decisions/DEC-0012--bfsg-and-legal-import.md#L11"
+  excerpt: "The website targets BFSG conformity including a published accessibility"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,10 @@ ai_provenance:
 # CON-WEB-0026
 
 The solution SHALL conform to the Barrierefreiheitsstärkungsgesetz, imposed by DEC-0012.
+
+## Source
+
+DEC-0012
 
 ## Notes
 

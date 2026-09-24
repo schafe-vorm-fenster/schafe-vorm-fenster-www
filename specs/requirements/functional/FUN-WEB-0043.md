@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: live-data
-source: "SRC-0002#live-content, DEC-0030"
+source:
+  source_id: SRC-0002
+  loc: "go-to-market-os/concept/website-relevance-model.concept.md#L115"
+  excerpt: "On pages whose focus job is \"run our own calendar\", module 1 is replaced by the"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,12 @@ ai_provenance:
 # FUN-WEB-0043
 
 On pages whose focus job is "run our own calendar", the website SHALL replace module 1 with the embed demo — the **real Portalize widget via its loader** (`/api/{organizerId}/load.js`, web-component mode), filtered to the place just searched for.
+
+## Source
+
+SRC-0002#live-content, DEC-0030
+
+Finding: SRC-0002 says only "the Portalize calendar filtered to the place just searched for" (line 116); the loader path `/api/{organizerId}/load.js` and web-component mode are not in this file (DEC-0030).
 
 ## Notes
 

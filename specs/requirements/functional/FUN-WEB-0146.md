@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "DEC-0039"
+source:
+  source_id: DEC-0039
+  loc: "specs/decisions/DEC-0039--legal-as-one-page.md#L11"
+  excerpt: "All legal content lives on **one** route"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0146 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0146
 
 For legal content, the website SHALL serve one route `/rechtliches` (EN `/legal`) as a long page with on-page navigation and the anchors of the registry in TS-WEB-0004 D8.
+
+## Source
+
+DEC-0039
+
+Finding: The anchors are on lines 12-13; DEC-0039 does not reference the TS-WEB-0004 D8 registry.
 
 ## Notes
 

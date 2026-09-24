@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0010, DEC-0081"
+source:
+  source_id: DEC-0010
+  loc: "specs/decisions/DEC-0010--briefing-via-google-calendar.md#L30"
+  excerpt: "lives in the first action row of the contact section (DEC-0081 §3)"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0185 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0185
 
 As the contact section's first action row, the website SHALL carry the Google Calendar appointment link as outbound navigation.
+
+## Source
+
+DEC-0010, DEC-0081
+
+Finding: The subject 'The appointment link' ends line 29; the outbound-navigation character is stated on lines 18 and 32.

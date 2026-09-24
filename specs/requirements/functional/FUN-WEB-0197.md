@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: rendering-and-resilience
-source: "DEC-0019"
+source:
+  source_id: DEC-0019
+  loc: "specs/decisions/DEC-0019--three-tier-data-resilience.md#L23"
+  excerpt: "are hidden instead of falling to tier 3."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0197 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # FUN-WEB-0197
 
 For a live counter whose data would be tier 3, the website SHALL hide the module.
+
+## Source
+
+DEC-0019
 
 ## Rationale
 

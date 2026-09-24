@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: localization
-source: "SRC-0006, DEC-0006"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Deutschland kann es ja zum Beispiel Deutsch, Englisch und Polnisch, Ukrainisch geben oder so. Und in Polen können es zum Beispiel Polnisch, Englisch und Deutsch"
 evidence_sufficiency: S1
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,12 @@ ai_provenance:
 # FUN-WEB-0068
 
 Per-country language sets beyond phase 1 (e.g. `.de`: de/en/pl/uk · `.pl`: pl/en/de) are the target picture; exact sets per country: UNKNOWN (Q-0010).
+
+## Source
+
+SRC-0006, DEC-0006
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
 
 ## Notes
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: technical-constraints
-source: "SRC-0001#purpose, SRC-0003"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L25"
+  excerpt: "`app.schafe-vorm-fenster.de` and are a separate product surface."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0052 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # CON-WEB-0052
 
 The solution SHALL NOT reimplement the village calendars, which run on `app.schafe-vorm-fenster.de`, imposed by SRC-0001 "Purpose".
+
+## Source
+
+SRC-0001#purpose, SRC-0003
+
+Finding: Source states the calendars are a separate product surface (line 24 adds "The village calendars run on"); the prohibition on reimplementing them is an inference, not stated.

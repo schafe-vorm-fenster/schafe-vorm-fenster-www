@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: performance
-source: "SRC-0007"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/performance-budget.md#L47"
+  excerpt: "Real User Monitoring (RUM) for production"
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,9 @@ ai_provenance:
 # FUN-WEB-0115
 
 In production, the website SHALL report field performance through cookieless real-user monitoring.
+
+## Source
+
+SRC-0007
+
+Finding: "cookieless" does not appear in any of the three documents; only the existence of production RUM is supported.

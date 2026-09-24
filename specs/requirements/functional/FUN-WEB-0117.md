@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: performance
-source: "SRC-0014#aspect-ratios-and-reserved-space, DEC-0056"
+source:
+  source_id: SRC-0014
+  loc: "concept/website-design-system.md#L933"
+  excerpt: "Text that arrives with data reserves its height in line units:"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,7 @@ ai_provenance:
 # FUN-WEB-0117
 
 For text that arrives with data, the website SHALL reserve its height in line units.
+
+## Source
+
+SRC-0014#aspect-ratios-and-reserved-space, DEC-0056

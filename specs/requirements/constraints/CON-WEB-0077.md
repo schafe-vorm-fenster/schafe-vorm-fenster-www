@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "SRC-0009 ADR-001, SRC-0006, DEC-0020"
+source:
+  source_id: SRC-0009
+  loc: "go-to-market-os/handbook/decisions/001-content-source-of-truth.adr.md#L108"
+  excerpt: "The website repository deletes its duplicates rather than syncing them."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0077 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # CON-WEB-0077
 
 The solution SHALL NOT copy raw hub content into this repository, imposed by SRC-0009 ADR-001.
+
+## Source
+
+SRC-0009 ADR-001, SRC-0006, DEC-0020

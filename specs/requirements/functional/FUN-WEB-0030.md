@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: relevance-and-proof
-source: "SRC-0001#3"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L225"
+  excerpt: "Any list longer than three items is ordered by the relevance model, not"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0030 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # FUN-WEB-0030
 
 Where a list holds more than three items, the website SHALL order it by the relevance model rather than chronologically.
+
+## Source
+
+SRC-0001#3

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: place-search
-source: "DEC-0079, DEC-0024"
+source:
+  source_id: DEC-0079
+  loc: "specs/decisions/DEC-0079--place-search-by-name.md#L74"
+  excerpt: "`findbyaddress` stays forbidden"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0072 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # CON-WEB-0072
 
 The solution SHALL NOT use `findbyaddress`, imposed by DEC-0079.
+
+## Source
+
+DEC-0079, DEC-0024
 
 ## Rationale
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: personalization
-source: "SRC-0001#6, SRC-0002#context-matrix"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L282"
+  excerpt: "entry context | referrer, UTM, campaign, deep link | focus job and proof type preselected"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0055 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0055
 
 From the entry context (referrer, UTM, campaign, deep link), the website SHALL preselect the focus job and proof type per the context matrix (SRC-0002).
+
+## Source
+
+SRC-0001#6, SRC-0002#context-matrix
+
+Finding: The reference to a context matrix in SRC-0002 is not in this source; this file gives the examples inline (social, LinkedIn, print QR).

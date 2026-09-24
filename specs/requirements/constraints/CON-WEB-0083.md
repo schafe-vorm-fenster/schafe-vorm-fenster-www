@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0010, DEC-0081"
+source:
+  source_id: DEC-0010
+  loc: "specs/decisions/DEC-0010--briefing-via-google-calendar.md#L33"
+  excerpt: "it fires on that row's click, with the route"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0083 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # CON-WEB-0083
 
 The solution SHALL NOT emit an event for an in-page action of the contact section, imposed by DEC-0010.
+
+## Source
+
+DEC-0010, DEC-0081
+
+Finding: DEC-0010 states the positive relocation of the conversion event onto the contact row; the prohibition on emitting an event for the in-page action is implied, not stated, and its explicit form is DEC-0081 §4.

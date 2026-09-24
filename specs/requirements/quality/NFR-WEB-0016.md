@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: accessibility
-source: "SRC-0006"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S1
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,14 @@ ai_provenance:
 # NFR-WEB-0016
 
 Rendered font size of any text on the website SHALL be >= 15 CSS px, measured by TS-WEB-0002-A10.
+
+## Source
+
+SRC-0006
+
+Unlocatable: Transcript mentions the browser's large-font hint ("große Schrift") but states no minimum font size.
+
+Finding: 15 CSS px is a number SRC-0006 never gives.
 
 ## Notes
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: performance
-source: "SRC-0006, DEC-0007"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Ich hätte gerne Auch die Accessibility, Leo und Dingsbumps-Scores bei Lighthouse auf 100"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,11 @@ ai_provenance:
 # NFR-WEB-0045
 
 Lighthouse SEO score of every route of TS-WEB-0003 D7, on mobile, SHALL be = 100 points, measured by TS-WEB-0003-A1.
+
+## Source
+
+SRC-0006, DEC-0007
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
+
+Finding: "Leo" is the transcript's rendering of "SEO".

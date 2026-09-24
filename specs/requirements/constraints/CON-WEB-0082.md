@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0009, DEC-0081"
+source:
+  source_id: DEC-0009
+  loc: "specs/decisions/DEC-0009--envoy-lead-widget.md#L32"
+  excerpt: "The contact form is gone."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0082 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # CON-WEB-0082
 
 The solution SHALL NOT carry a general contact form, imposed by DEC-0081.
+
+## Source
+
+DEC-0009, DEC-0081
+
+Finding: Found in DEC-0009's 'Superseded in part 2026-09-24 — DEC-0081' section, which is where this record records the withdrawal; the originating decision is DEC-0081.
 
 ## Rationale
 

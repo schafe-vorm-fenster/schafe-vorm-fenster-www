@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: scope-boundaries
-source: "SRC-0001#boundaries"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L312"
+  excerpt: "The AI-coaching track belongs to a different brand and does not appear."
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,10 @@ ai_provenance:
 # CON-WEB-0092
 
 The solution SHALL NOT present the AI-coaching track, imposed by SRC-0001 "Boundaries".
+
+## Source
+
+SRC-0001#boundaries
 
 ## Notes
 

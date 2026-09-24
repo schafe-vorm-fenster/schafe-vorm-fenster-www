@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: security
-source: "DEC-0015"
+source:
+  source_id: DEC-0015
+  loc: "specs/decisions/DEC-0015--strict-security-baseline.md#L13"
+  excerpt: "dependency scanning in CI are binding from the first deployment."
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,9 @@ ai_provenance:
 # FUN-WEB-0127
 
 On every pull request, the delivery pipeline SHALL run a dependency scan.
+
+## Source
+
+DEC-0015
+
+Finding: The record binds dependency scanning 'in CI' from the first deployment; it does not say 'on every pull request'. That trigger is narrower than the record.

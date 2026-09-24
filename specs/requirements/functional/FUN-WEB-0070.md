@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: seo
-source: "SRC-0006"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "entweder die Einstiegs-URLs zu Content-Seiten zur bisherigen Live-Seite stabil bleiben müssen oder wir vernünftige Umleitungen auf die neuen Content-Seiten brauchen."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0070 that pass"
@@ -25,6 +28,14 @@ ai_provenance:
 # FUN-WEB-0070
 
 For an existing entry URL of the live site, the website SHALL keep it stable or answer it with a 301 redirect to its successor.
+
+## Source
+
+SRC-0006
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
+
+Finding: Transcript says "vernünftige Umleitungen"; the HTTP status 301 is not in the source.
 
 ## Rationale
 

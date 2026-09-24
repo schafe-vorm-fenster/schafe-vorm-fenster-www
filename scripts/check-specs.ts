@@ -29,6 +29,8 @@
  *      the four fields the contract names
  *  E18 Every requirement carries a `fit_criterion` — a measure in the shape
  *      the contract types, or `UNKNOWN`
+ *  E19 Every requirement's `source` is the contract's locator — a position in
+ *      a named file and an excerpt of at most 25 words, or `UNKNOWN`
  *  W1  (warning) requirements not covered by any tactical spec
  *  W2  (warning) covered requirements discharged by no acceptance criterion
  *  W3  (warning) acceptance criteria no test references
@@ -38,6 +40,7 @@
  *      POL-GRADED-BY-IMPACT escalates on an unverifiable separation of duties
  *  W7  (report) the fit-criterion fill rate, because bound 2 of
  *      POL-GRADED-BY-IMPACT escalates on an UNKNOWN criterion
+ *  W8  (report) the locator fill rate, and what stays unlocatable
  *
  * Exit code: number of errors (0 = green). Warnings never fail the run.
  *
@@ -76,8 +79,10 @@
  *    requirement → source → decision → question and requirement → tactical
  *    spec → acceptance criterion → test. E5/E6/E9/E10 and W1–W3 check the
  *    chain this repository actually has.
- *  - The locator form. `method-identifier-and-locator-schema` wants
- *    `<file>#L102` plus an excerpt; the artefacts carry source ids.
+ *  - Whether the excerpt really supports the statement. E19 checks that a
+ *    locator is a position and that the excerpt is inside the method's
+ *    25 words; only reading the source says whether those words carry the
+ *    claim. DEC-0097 records what that reading found.
  * Each of those is recorded as owed in DEC-0085; the identifier row of its
  * §6 now points at DEC-0086, which closed it.
  */
@@ -102,7 +107,7 @@ const SCHEMA_DIR = join(
   "schemas",
 );
 
-type JsonSchema = { properties?: Record<string, JsonSchema>; items?: JsonSchema; enum?: string[] };
+type JsonSchema = { properties?: Record<string, JsonSchema>; items?: JsonSchema; enum?: string[]; $defs?: Record<string, JsonSchema> };
 
 function contract(name: string): JsonSchema {
   return JSON.parse(readFileSync(join(SCHEMA_DIR, `${name}.schema.json`), "utf8")) as JsonSchema;
@@ -351,6 +356,75 @@ const checkFitCriterion = (d: Doc, id: string) => {
       err(d.file, `E18 ${id}: fit_criterion.${field} is missing — the contract requires ${FIT_REQUIRED.join(", ")}`);
 };
 
+/**
+ * The source locator a requirement carries (E19).
+ *
+ * `requirement-shell` types `source` as its `$defs/locator`: `source_id`,
+ * `loc` and `excerpt`, `additionalProperties: false`, with `loc` and
+ * `excerpt` required. `loc` is patterned
+ * `^.+#(L\d+|P\d+|¶\d+|M\d+:\d+)$` — file plus line, page, paragraph or
+ * timestamp — which is `method-identifier-and-locator-schema`'s table of
+ * four schemes, and the method caps the excerpt at 25 words:
+ *
+ *   4. Pick the locator granularity the source supports — the finest
+ *      available, never a finer one invented for tidiness.
+ *   5. Attach an excerpt of at most 25 words to every locator, in the
+ *      source's language.
+ *
+ * The pattern is read out of the installed schema rather than spelled here,
+ * through the same repair `idPattern()` makes for the doubled backslashes.
+ *
+ * `UNKNOWN` is accepted for `loc` and for `excerpt`, and the contract's
+ * pattern does not allow it — a recorded deviation (DEC-0097). The method
+ * itself requires the value: "Where the source carries no position scheme at
+ * all, the locator is `UNKNOWN` and the source is reported as unlocatable —
+ * which is a defect of the source, not of the run." A pattern with no
+ * `UNKNOWN` branch would force either a fabricated line number or an absent
+ * field, and `foundation-evidence-discipline` rules out the first while the
+ * contract's `required` rules out the second. W8 counts what is still
+ * `UNKNOWN`, so the deviation is measured rather than merely tolerated.
+ */
+const LOCATOR_FIELDS = ["source_id", "loc", "excerpt"] as const;
+const LOCATOR_REQUIRED = ["loc", "excerpt"] as const;
+const locatorDef = requirementShell.$defs?.locator;
+if (!locatorDef) throw new Error("library-schemas: requirement-shell has no $defs.locator");
+const LOC_PATTERN = idPattern(locatorDef, "loc");
+/** `maxLength` of the contract's excerpt, beside the method's 25-word cap. */
+const EXCERPT_MAX_CHARS =
+  (locatorDef.properties?.excerpt as { maxLength?: number } | undefined)?.maxLength ?? 200;
+const EXCERPT_MAX_WORDS = 25;
+let locResolved = 0;
+let locUnknown = 0;
+
+const checkLocator = (d: Doc, id: string) => {
+  const loc = d.frontmatter?.source;
+  if (typeof loc !== "object" || loc === null || Array.isArray(loc)) {
+    err(d.file, `E19 ${id}: source is ${JSON.stringify(loc ?? null)} — the contract requires a locator with loc and excerpt`);
+    return;
+  }
+  const record = loc as Record<string, unknown>;
+  for (const extra of Object.keys(record))
+    if (!(LOCATOR_FIELDS as readonly string[]).includes(extra))
+      err(d.file, `E19 ${id}: source.${extra} is not one of ${LOCATOR_FIELDS.join(", ")}`);
+  for (const field of LOCATOR_REQUIRED)
+    if (typeof record[field] !== "string" || record[field] === "")
+      err(d.file, `E19 ${id}: source.${field} is missing — the contract requires ${LOCATOR_REQUIRED.join(", ")}`);
+  const where = record.loc;
+  if (typeof where === "string" && where !== "UNKNOWN") {
+    if (!LOC_PATTERN.test(where))
+      err(d.file, `E19 ${id}: source.loc ${JSON.stringify(where)} is neither UNKNOWN nor <file>#L… / #P… / #¶… / #M…:…`);
+    else locResolved += 1;
+  } else if (where === "UNKNOWN") locUnknown += 1;
+  const excerpt = record.excerpt;
+  if (typeof excerpt === "string" && excerpt !== "UNKNOWN") {
+    if (excerpt.length > EXCERPT_MAX_CHARS)
+      err(d.file, `E19 ${id}: source.excerpt is ${excerpt.length} characters, over the contract's ${EXCERPT_MAX_CHARS}`);
+    const words = excerpt.trim().split(/\s+/).length;
+    if (words > EXCERPT_MAX_WORDS)
+      err(d.file, `E19 ${id}: source.excerpt is ${words} words, over the method's ${EXCERPT_MAX_WORDS}`);
+  }
+};
+
 const PROVENANCE_FIELDS = ["prompt_id", "prompt_version", "model", "generated_at"] as const;
 const RFC3339 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
 /** field → how many artefacts answer it `UNKNOWN` (W6). */
@@ -484,6 +558,7 @@ for (const d of docs) {
       checkVersion(d, id);
       checkProvenance(d, id);
       checkFitCriterion(d, id);
+      checkLocator(d, id);
       // E14: the grammar form belongs to the class (`method-statement-grammar`)
       const form = d.frontmatter?.form;
       const expectedForm = FORM_OF_CLASS[id.slice(0, id.indexOf("-"))];
@@ -496,15 +571,17 @@ for (const d of docs) {
       // The statement is the body down to the first section heading; `##
       // Rationale` and `## Notes` carry what the form has no slot for.
       const statement = d.body.replace(/^#[^\n]*\n/m, "").split(/^## /m)[0].trim();
-      const source = typeof d.frontmatter?.source === "string" ? d.frontmatter.source.trim() : "";
       const suff = d.frontmatter?.evidence_sufficiency;
       if (!statement) err(d.file, `E3 ${id}: empty statement`);
-      if (!source) err(d.file, `E3 ${id}: empty source`);
+      if (d.frontmatter?.source === undefined) err(d.file, `E3 ${id}: no source`);
       if (typeof suff !== "string" || !SUFFICIENCY.has(suff))
         err(d.file, `E3 ${id}: sufficiency ${JSON.stringify(suff ?? null)} is not one of ${list(SUFFICIENCY)}`);
       else sufficiencyOf.set(id, suff);
       // E4: S3 needs a decision anchor in the artefact itself
-      if (suff === "S3" && !/(DEC-\d{4}|ADR-\d{3}|ADR-00\d)/.test(statement + " " + source)) {
+      // The decision anchor may sit in the statement, in the `## Source`
+      // section that carries the references the contract's single locator
+      // has no room for, or in the locator itself (DEC-0097).
+      if (suff === "S3" && !/(DEC-\d{4}|ADR-\d{3}|ADR-00\d)/.test(d.raw)) {
         err(d.file, `E4 ${id}: S3 without DEC/ADR reference in the requirement`);
       }
     }
@@ -963,6 +1040,12 @@ if (!boundRules || !boundPolicy) {
     `   everything else escalates to the accountable role. Evidence for a decision, never the decision.`,
   );
 }
+
+warnings.push(
+  `W8 source locator: ${locResolved}/${locResolved + locUnknown} requirements resolve to a position in their source; ` +
+    `${locUnknown} carry UNKNOWN because the source supports no position scheme or names no document. ` +
+    `method-identifier-and-locator-schema reports an unlocatable source as a defect of the source.`,
+);
 
 warnings.push(
   `W7 fit_criterion: ${fitMeasured}/${fitMeasured + fitUnknown} requirements carry a measure, ` +

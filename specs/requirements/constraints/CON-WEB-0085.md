@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0051, DEC-0052"
+source:
+  source_id: UNKNOWN
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0085 that pass"
@@ -25,3 +28,11 @@ ai_provenance:
 # CON-WEB-0085
 
 The solution SHALL keep both newsletter routes cookieless and GDPR-compliant, imposed by DEC-0004 and DEC-0051.
+
+## Source
+
+DEC-0051, DEC-0052
+
+Unlocatable: DEC-0052 does not carry it either. Its §4 (lines 95-96) establishes the two channels (e-mail and WhatsApp), but no line of DEC-0052 states cookieless operation or GDPR compliance — a grep for cookie/GDPR/DSGVO/Datenschutz/privacy over the record returns only 'double opt-in' on line 110, which is a restatement of DEC-0051's Q-0020 resolution, not a data-protection property.
+
+Finding: Neither record in this requirement's own source list (DEC-0051 first, DEC-0052 second) states the cookieless/GDPR property; per instruction DEC-0004, which the requirement's prose names but its source list does not, was not used.

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003, DEC-0036"
+source:
+  source_id: SRC-0003
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L156"
+  excerpt: "**Primary conversion:** `buy-calendar-licence`; equal-weight"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0014 that pass"
@@ -27,6 +30,12 @@ ai_provenance:
 | Route | Focus job | Primary conversion |
 | --- | --- | --- |
 | `/dein-kalender` | run our own calendar | `buy-calendar-licence`; equal `request-product-briefing` |
+
+## Source
+
+SRC-0003, DEC-0036
+
+Finding: `request-product-briefing` continues on line 157; focus job line 155.
 
 ## Notes
 

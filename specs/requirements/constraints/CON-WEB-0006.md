@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: technical-constraints
-source: "DEC-0023, DEC-0085"
+source:
+  source_id: DEC-0023
+  loc: "specs/decisions/DEC-0023--three-phases-and-strict.md#L13"
+  excerpt: "are authored against the STRICT framework"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0006 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # CON-WEB-0006
 
 The solution SHALL be specified against `@leafcutter-strict/blueprint-complete`, referenced by package name, imposed by DEC-0023 and DEC-0085.
+
+## Source
+
+DEC-0023, DEC-0085
+
+Finding: The sentence starts with 'Specifications' at the end of line 12. DEC-0023 names STRICT by filesystem path (line 14), not by package name; the package form `@leafcutter-strict/blueprint-complete` comes from the second source DEC-0085, whose Context explicitly records that CON-WEB-0006 used to carry the path as its statement.
 
 ## Notes
 

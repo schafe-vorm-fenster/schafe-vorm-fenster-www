@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003, DEC-0060, DEC-0052"
+source:
+  source_id: SRC-0003
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L169"
+  excerpt: "*Under your name — 480 €/year.* Your places, categories, actors;"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0202 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0202
 
 On `/dein-kalender`, the website SHALL publish the licence price of 480 €/year for a configured calendar on the organisation's own website.
+
+## Source
+
+SRC-0003, DEC-0060, DEC-0052
+
+Finding: That the price is published is stated by the pricing rule on line 176 ("480 € is public because the offering is").
 
 ## Notes
 

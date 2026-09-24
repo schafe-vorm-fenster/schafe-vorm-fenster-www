@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: place-search
-source: "DEC-0037"
+source:
+  source_id: DEC-0037
+  loc: "specs/decisions/DEC-0037--no-place-slugs-on-the-website.md#L11"
+  excerpt: "No website path ever contains a place slug."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0062 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # CON-WEB-0062
 
 The solution SHALL NOT put a place slug in a website path, imposed by DEC-0037.
+
+## Source
+
+DEC-0037
 
 ## Rationale
 

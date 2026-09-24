@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0010, DEC-0081"
+source:
+  source_id: DEC-0010
+  loc: "specs/decisions/DEC-0010--briefing-via-google-calendar.md#L33"
+  excerpt: "it fires on that row's click, with the route"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0187 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0187
 
 On activation of the appointment row, the website SHALL complete `request-product-briefing`.
+
+## Source
+
+DEC-0010, DEC-0081
+
+Finding: The event name `request-product-briefing` is not on this line; it is on lines 11 and 25.

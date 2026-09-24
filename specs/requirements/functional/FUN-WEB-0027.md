@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "DEC-0032"
+source:
+  source_id: DEC-0032
+  loc: "specs/decisions/DEC-0032--error-pages.md#L16"
+  excerpt: "**500**: statically pre-rendered, minimal"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0027 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0027
 
 For the 500 page, the website SHALL serve a statically pre-rendered, minimal page — no live modules, no search, nothing that can itself fail.
+
+## Source
+
+DEC-0032
+
+Finding: 'no live modules, no search, nothing that can itself fail' is on the following line 17.

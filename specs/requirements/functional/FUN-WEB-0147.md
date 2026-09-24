@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "DEC-0032"
+source:
+  source_id: DEC-0032
+  loc: "specs/decisions/DEC-0032--error-pages.md#L12"
+  excerpt: "place search as dominant element, the four jobs as context band."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0147 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0147
 
 On the 404 page, the website SHALL render one sentence, the place search as the dominant element, and the four jobs as the context band.
+
+## Source
+
+DEC-0032
+
+Finding: 'one sentence' sits at the end of line 11; the chosen line carries the other two elements.

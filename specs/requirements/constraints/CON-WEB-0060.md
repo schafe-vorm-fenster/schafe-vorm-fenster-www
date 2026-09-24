@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003#conversion-map, DEC-0052, DEC-0081"
+source:
+  source_id: SRC-0003
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L235"
+  excerpt: "`order-promotion-material` | not on the website yet"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0060 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # CON-WEB-0060
 
 The solution SHALL NOT carry a page for `order-promotion-material`, imposed by DEC-0052.
+
+## Source
+
+SRC-0003#conversion-map, DEC-0052, DEC-0081
 
 ## Rationale
 

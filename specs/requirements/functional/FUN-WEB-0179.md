@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "SRC-0009 ADR-001, DEC-0022"
+source:
+  source_id: SRC-0009
+  loc: "go-to-market-os/handbook/decisions/001-content-source-of-truth.adr.md#L171"
+  excerpt: "is better fetched at build time than versioned."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0179 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0179
 
 For feed-like content, the website SHALL fetch it at build time rather than version it as a package.
+
+## Source
+
+SRC-0009 ADR-001, DEC-0022
+
+Finding: The line sits under `## Open Questions` (`2. **Packaged or fetched at build time?**`) and is phrased as `is better ... than`, i.e. an undecided preference. The requirement upgrades it to a SHALL.
 
 ## Notes
 

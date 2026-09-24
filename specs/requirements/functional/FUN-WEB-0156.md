@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: place-search
-source: "DEC-0079, DEC-0024"
+source:
+  source_id: DEC-0079
+  loc: "specs/decisions/DEC-0079--place-search-by-name.md#L48"
+  excerpt: "against place names **and** municipality names, and a match is offered"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0156 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0156
 
 For a typed string, the place search SHALL match it against place names and municipality names and offer a match as the place, rendered "Ort (Gemeinde)".
+
+## Source
+
+DEC-0079, DEC-0024
+
+Finding: The 'Ort (Gemeinde)' rendering is not on this line; it appears in §3 at line 62.

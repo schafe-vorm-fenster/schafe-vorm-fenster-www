@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: performance
-source: "SRC-0007"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/performance-budget.md#L40"
+  excerpt: "**Images**: Lazy load below-fold, eager load hero images"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0113 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0113
 
 For the LCP element a page declares in TS-WEB-0003 D2, the website SHALL load it eagerly at high fetch priority.
+
+## Source
+
+SRC-0007
+
+Finding: The line supports eager loading, but of "hero images", not of a declared LCP element, and neither `fetchpriority` nor any notion of fetch priority occurs anywhere in the three documents.

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: technical-constraints
-source: "SRC-0006, DEC-0002"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,14 @@ ai_provenance:
 # CON-WEB-0048
 
 The solution SHALL NOT introduce a second framework, imposed by DEC-0002.
+
+## Source
+
+SRC-0006, DEC-0002
+
+Unlocatable: Transcript says the site stays on Next.js, but never prohibits adding a second framework.
+
+Finding: The prohibition is derived from DEC-0002, not stated in SRC-0006.
 
 ## Rationale
 

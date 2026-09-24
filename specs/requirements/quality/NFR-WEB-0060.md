@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: accessibility
-source: "SRC-0006 (implied by AA)"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,11 @@ ai_provenance:
 # NFR-WEB-0060
 
 Informative images without a text alternative SHALL be = 0 images, measured by TS-WEB-0002-A11.
+
+## Source
+
+SRC-0006 (implied by AA)
+
+Unlocatable: Transcript never mentions text alternatives for images.
+
+Finding: The source field itself concedes this is "implied by AA", i.e. derived, not stated.

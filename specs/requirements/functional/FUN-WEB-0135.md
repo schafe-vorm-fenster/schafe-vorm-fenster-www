@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: jobs-and-navigation
-source: "SRC-0001#2-order-do-not-exclude, DEC-0082"
+source:
+  source_id: SRC-0001
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0135 that pass"
@@ -25,6 +28,14 @@ ai_provenance:
 # FUN-WEB-0135
 
 For every action that is not the primary conversion, the website SHALL render it at secondary treatment.
+
+## Source
+
+SRC-0001#2-order-do-not-exclude, DEC-0082
+
+Unlocatable: No line prescribes a treatment for non-primary actions. The word "secondary" does not occur in the file.
+
+Finding: Parent line 207 ("One primary conversion per page, above the fold, visually unrivalled") governs the primary action only and does not state that other actions get secondary treatment; that rule comes from DEC-0082, so I did not reuse the parent line.
 
 ## Notes
 

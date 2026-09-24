@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: performance
-source: "SRC-0007"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/performance-budget.md#L39"
+  excerpt: "**JavaScript**: Defer non-critical, use `client:visible` for islands"
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,7 @@ ai_provenance:
 # FUN-WEB-0108
 
 For non-critical JavaScript, the website SHALL defer its execution.
+
+## Source
+
+SRC-0007

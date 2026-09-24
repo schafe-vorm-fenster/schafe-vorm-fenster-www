@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: security
-source: "DEC-0025"
+source:
+  source_id: DEC-0025
+  loc: "specs/decisions/DEC-0025--bff-no-external-tokens-client.md#L12"
+  excerpt: "calls the ecosystem APIs exclusively server-side"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,10 @@ ai_provenance:
 # CON-WEB-0043
 
 The solution SHALL call ecosystem APIs server-side only, through its own use-case-tailored endpoints, imposed by DEC-0025.
+
+## Source
+
+DEC-0025
 
 ## Notes
 

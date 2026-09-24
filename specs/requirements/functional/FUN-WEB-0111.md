@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: performance
-source: "SRC-0007, brand kit"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/performance-budget.md#L56"
+  excerpt: "Fonts preloaded and using `font-display: swap`"
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,7 @@ ai_provenance:
 # FUN-WEB-0111
 
 For every web font, the website SHALL preload the file.
+
+## Source
+
+SRC-0007, brand kit

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: relevance-and-proof
-source: "SRC-0002#scoring"
+source:
+  source_id: SRC-0002
+  loc: "go-to-market-os/concept/website-relevance-model.concept.md#L25"
+  excerpt: "they are revised from measurement, not from opinion."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0068 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # CON-WEB-0068
 
 The solution SHALL NOT revise a relevance weight except from measurement, imposed by SRC-0002 §Scoring.
+
+## Source
+
+SRC-0002#scoring
+
+Finding: Reference anchor is #scoring, but the revise-only-from-measurement rule sits in §Purpose (lines 24–25), not in §Scoring.

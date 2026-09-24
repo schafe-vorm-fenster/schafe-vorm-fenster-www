@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: performance
-source: "SRC-0007"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/performance-budget.md#L37"
+  excerpt: "**Critical CSS**: Inline in `<head>` for above-fold content"
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,7 @@ ai_provenance:
 # FUN-WEB-0107
 
 For above-the-fold content, the website SHALL inline the critical CSS.
+
+## Source
+
+SRC-0007

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: performance
-source: "SRC-0007, brand kit"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/performance-budget.md#L38"
+  excerpt: "**Fonts**: Self-hosted variable fonts with `font-display: swap`"
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,7 @@ ai_provenance:
 # FUN-WEB-0110
 
 For every web font, the website SHALL declare `font-display: swap`.
+
+## Source
+
+SRC-0007, brand kit

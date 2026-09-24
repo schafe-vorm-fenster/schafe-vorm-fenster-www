@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: jobs-and-navigation
-source: "SRC-0001#2-order-do-not-exclude, DEC-0082"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L207"
+  excerpt: "One primary conversion per page, above the fold, visually unrivalled."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0133 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # FUN-WEB-0133
 
 On every page, the website SHALL present exactly one primary conversion, above the fold and visually unrivalled.
+
+## Source
+
+SRC-0001#2-order-do-not-exclude, DEC-0082

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: accessibility
-source: "SRC-0006"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Eine sehr barrierefreie Seite, also double-A-konform auf jeden Fall und die Basics von AAA mit berücksichtigt."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "Violations of WCAG 2.2 level A and AA on every route"
@@ -25,6 +28,14 @@ ai_provenance:
 # NFR-WEB-0057
 
 Violations of WCAG 2.2 level A and AA on every route SHALL be = 0 violations, measured by `e2e/a11y.spec.ts` (TS-WEB-0002-A1).
+
+## Source
+
+SRC-0006
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
+
+Finding: Transcript says "double-A-konform"; the WCAG version 2.2 is not stated in SRC-0006.
 
 ## Notes
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: rendering-and-resilience
-source: "DEC-0019"
+source:
+  source_id: DEC-0019
+  loc: "specs/decisions/DEC-0019--three-tier-data-resilience.md#L16"
+  excerpt: "fetch server-side"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0193 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # FUN-WEB-0193
 
 For a tier-1 live module, the website SHALL fetch its data server-side.
+
+## Source
+
+DEC-0019

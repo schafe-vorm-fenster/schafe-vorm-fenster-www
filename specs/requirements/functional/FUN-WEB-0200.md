@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: rendering-and-resilience
-source: "DEC-0033, SRC-0014#skeletons, DEC-0056"
+source:
+  source_id: DEC-0056
+  loc: "specs/decisions/DEC-0056--design-system-delivered.md#L35"
+  excerpt: "A skeleton standing longer than two seconds is"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0200 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0200
 
 After two seconds, the website SHALL replace a skeleton with the designed empty state.
+
+## Source
+
+DEC-0033, SRC-0014#skeletons, DEC-0056
+
+Finding: DEC-0056 supports it and is named third; DEC-0033 is named first and contains no timing. 'replaced by the honest empty state.' continues on line 36 — the record says 'honest', the requirement says 'designed'.

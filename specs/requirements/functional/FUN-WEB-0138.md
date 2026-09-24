@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: jobs-and-navigation
-source: "SRC-0001#1a-scenes-not-labels, SRC-0017, SRC-0018, DEC-0080"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L67"
+  excerpt: "Every job is introduced through a concrete scene the visitor can picture"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,10 @@ ai_provenance:
 # FUN-WEB-0138
 
 For every job, the website SHALL introduce it through a concrete scene.
+
+## Source
+
+SRC-0001#1a-scenes-not-labels, SRC-0017, SRC-0018, DEC-0080
 
 ## Notes
 

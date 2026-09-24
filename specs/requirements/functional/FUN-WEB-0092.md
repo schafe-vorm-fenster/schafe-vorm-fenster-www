@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0009"
+source:
+  source_id: DEC-0009
+  loc: "specs/decisions/DEC-0009--envoy-lead-widget.md#L18"
+  excerpt: "The widget owns data storage"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,9 @@ ai_provenance:
 # FUN-WEB-0092
 
 For lead submissions, the website SHALL hold no submission data — storage and delivery of submissions are owned by envoy-api.
+
+## Source
+
+DEC-0009
+
+Finding: 'through envoy-api' continues on line 19.

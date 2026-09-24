@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: jobs-and-navigation
-source: "SRC-0001#2-order-do-not-exclude, DEC-0082"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L326"
+  excerpt: "A closing CTA identical to the primary conversion."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0134 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0134
 
 In the closing block of every page, the website SHALL repeat the primary conversion without the primary marker.
+
+## Source
+
+SRC-0001#2-order-do-not-exclude, DEC-0082
+
+Finding: Only the repetition is supported. "without the primary marker" appears nowhere in the file; it comes from DEC-0082. Anchor #2 (lines 201-213) does not carry this either.

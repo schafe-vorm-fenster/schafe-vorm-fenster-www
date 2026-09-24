@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003, DEC-0036, DEC-0052, DEC-0081"
+source:
+  source_id: SRC-0003
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0017 that pass"
@@ -27,6 +30,14 @@ ai_provenance:
 | Route | Focus job | Primary conversion |
 | --- | --- | --- |
 | `/ueber-uns` | understand who is behind it | `request-product-briefing`, carried by the page's contact section and repeated in the closing block (DEC-0081 §6). Secondary, below it: `subscribe-to-newsletter` in the inline block — the two asks serve two readiness levels (DEC-0052 §4 as amended) |
+
+## Source
+
+SRC-0003, DEC-0036, DEC-0052, DEC-0081
+
+Unlocatable: SRC-0003 line 205 states for `/ueber-uns`: "Primary conversion: none of its own; the closing CTA offers all three jobs" — the opposite of `request-product-briefing` as primary; the conversion map (line 234) does not list `/ueber-uns` either.
+
+Finding: Contradiction: the statement follows DEC-0081 §6 / DEC-0052 §4 as amended; SRC-0003 still carries the unamended "none of its own".
 
 ## Notes
 

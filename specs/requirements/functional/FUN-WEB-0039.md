@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: relevance-and-proof
-source: "SRC-0002#required-data"
+source:
+  source_id: SRC-0002
+  loc: "go-to-market-os/concept/website-relevance-model.concept.md#L141"
+  excerpt: "`audiences: []` | job fit"
 evidence_sufficiency: S1
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0039 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # FUN-WEB-0039
 
 For job fit, the relevance engine SHALL read `audiences` from a media-echo entry.
+
+## Source
+
+SRC-0002#required-data
 
 ## Notes
 

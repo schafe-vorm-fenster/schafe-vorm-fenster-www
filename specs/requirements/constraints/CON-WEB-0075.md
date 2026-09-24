@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: seo
-source: "SRC-0006"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "für die Konkurrenzanalyse Wir müssen rechtlich nochmal klären, deswegen auch ein bisschen später."
 evidence_sufficiency: S1
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,12 @@ ai_provenance:
 # CON-WEB-0075
 
 The solution SHALL NOT publish a keyword-oriented landing page targeting a competitor search term before a legal review, imposed by SRC-0006.
+
+## Source
+
+SRC-0006
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
 
 ## Notes
 

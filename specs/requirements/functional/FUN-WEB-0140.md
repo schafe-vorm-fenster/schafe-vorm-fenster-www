@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003#navigation, DEC-0012, DEC-0039, DEC-0052, DEC-0081"
+source:
+  source_id: SRC-0003
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L35"
+  excerpt: "Contact and newsletter live in the footer"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0140 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0140
 
 In the footer, the website SHALL carry the newsletter entry with the goal `subscribe-to-newsletter`.
+
+## Source
+
+SRC-0003#navigation, DEC-0012, DEC-0039, DEC-0052, DEC-0081
+
+Finding: SRC-0003 never names the goal `subscribe-to-newsletter` (it is absent from the conversion map), and line 243 still lists footer-only placement as an open point.
 
 ## Notes
 

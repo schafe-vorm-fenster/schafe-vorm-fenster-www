@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003, DEC-0060, DEC-0052"
+source:
+  source_id: SRC-0003
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of BUS-WEB-0015 that pass"
@@ -25,6 +28,14 @@ ai_provenance:
 # BUS-WEB-0015
 
 For a village-calendar licence, the billable unit is the organisation and not the place, the municipality or the region, and the number of places is unlimited.
+
+## Source
+
+SRC-0003, DEC-0060, DEC-0052
+
+Unlocatable: SRC-0003 names the 480 €/year tier and the region tier but never states the billable unit (organisation vs place/municipality/region) nor an unlimited number of places; no occurrence of "organisation"/"unlimited" in the file.
+
+Finding: Claim originates in DEC-0060/DEC-0052, not in SRC-0003.
 
 ## Rationale
 

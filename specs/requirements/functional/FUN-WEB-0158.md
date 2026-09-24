@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: place-search
-source: "DEC-0024, DEC-0036, DEC-0037, DEC-0079"
+source:
+  source_id: DEC-0079
+  loc: "specs/decisions/DEC-0079--place-search-by-name.md#L70"
+  excerpt: "`/dein-ort/starten?ort=<query>` — the founding flow"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0158 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0158
 
 For a place the system does not carry, the place search SHALL lead to `/dein-ort/starten` with the place as a query parameter.
+
+## Source
+
+DEC-0024, DEC-0036, DEC-0037, DEC-0079
+
+Finding: DEC-0079 §4 supports it and is named fourth; DEC-0024 is named first and never mentions a query parameter. The no-match condition is on lines 68-69; line 70 carries the destination with the parameter. · the source cites a requirement identifier at this locator that this repository has since retired, so the excerpt stops before it.
 
 ## Notes
 

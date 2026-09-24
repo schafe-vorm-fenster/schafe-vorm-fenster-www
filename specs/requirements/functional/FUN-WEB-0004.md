@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: jobs-and-navigation
-source: "SRC-0001#2"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L208"
+  excerpt: "All four jobs reachable from every page, at most one click away."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0004 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # FUN-WEB-0004
 
 From every page, the website SHALL make all four jobs reachable within at most one click.
+
+## Source
+
+SRC-0001#2

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: performance
-source: "SRC-0007, DEC-0007"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/performance-budget.md#L21"
+  excerpt: "| CSS (total) | < 30KB | Compressed, includes Tailwind |"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,7 @@ ai_provenance:
 # NFR-WEB-0054
 
 Compressed size of the CSS of every route SHALL be < 30 KB, measured by TS-WEB-0003-A2.
+
+## Source
+
+SRC-0007, DEC-0007

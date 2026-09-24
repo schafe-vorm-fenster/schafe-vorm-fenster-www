@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: localization
-source: "SRC-0006, DEC-0006"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Als erstes machen wir die Website für Deutschland auf Deutsch und die Website für Deutschland auf Deutsch. Englisch."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0066 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0066
 
 In phase 1, the website SHALL serve `.de` in German and English.
+
+## Source
+
+SRC-0006, DEC-0006
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.

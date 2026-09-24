@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: privacy
-source: "DEC-0016, DEC-0028"
+source:
+  source_id: DEC-0016
+  loc: "specs/decisions/DEC-0016--measure-first-experiment-later.md#L16"
+  excerpt: "Launch ships conversion measurement only (eTracker events per conversion"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0035 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # CON-WEB-0035
 
 The solution SHALL ship conversion measurement only at launch, one eTracker event per conversion goal ID, imposed by DEC-0016 and DEC-0028.
+
+## Source
+
+DEC-0016, DEC-0028

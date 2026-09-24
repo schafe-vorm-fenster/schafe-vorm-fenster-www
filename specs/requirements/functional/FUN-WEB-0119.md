@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: accessibility
-source: "SRC-0006, SRC-0014, DEC-0056"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Screen wieder optimiert, Tastatursteuerung ist optimiert."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0119 that pass"
@@ -25,3 +28,11 @@ ai_provenance:
 # FUN-WEB-0119
 
 For every page, the website SHALL present its content to a screen reader in the page's reading order.
+
+## Source
+
+SRC-0006, SRC-0014, DEC-0056
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
+
+Finding: "Screen wieder" is the transcript's rendering of "Screenreader"; reading order is not mentioned in SRC-0006.

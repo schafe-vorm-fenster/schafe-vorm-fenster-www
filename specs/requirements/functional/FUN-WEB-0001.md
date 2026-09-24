@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: jobs-and-navigation
-source: "SRC-0001#1-jobs-not-audiences"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L58"
+  excerpt: "Every page declares exactly one focus job in its brief."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0001 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # FUN-WEB-0001
 
 For every page, the website SHALL declare exactly one focus job in the page's brief.
+
+## Source
+
+SRC-0001#1-jobs-not-audiences
 
 ## Notes
 

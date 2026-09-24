@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: live-data
-source: "SRC-0001#5"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L267"
+  excerpt: "Traction figures are counted live or not shown. Static figures are"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0041 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # FUN-WEB-0041
 
 For a traction figure, the website SHALL count it live or not show it at all.
+
+## Source
+
+SRC-0001#5
 
 ## Rationale
 

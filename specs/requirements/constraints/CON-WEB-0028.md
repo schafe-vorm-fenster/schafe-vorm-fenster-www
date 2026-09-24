@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: privacy
-source: "SRC-0006, DEC-0004, DEC-0028"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Im Moment machen wir das mit E-Tracker."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0028 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # CON-WEB-0028
 
 The solution SHALL use eTracker as its analytics implementation, imposed by DEC-0004 and DEC-0028.
+
+## Source
+
+SRC-0006, DEC-0004, DEC-0028
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
 
 ## Rationale
 

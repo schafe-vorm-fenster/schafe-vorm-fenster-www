@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: place-search
-source: "DEC-0037"
+source:
+  source_id: DEC-0037
+  loc: "specs/decisions/DEC-0037--no-place-slugs-on-the-website.md#L14"
+  excerpt: "the place travels as a **query parameter**"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0142 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0142
 
 On the website, a place SHALL travel as the query parameter `?ort=<slug>`.
+
+## Source
+
+DEC-0037
+
+Finding: DEC-0037 says 'query parameter' but never names the parameter `?ort=<slug>`; the concrete `?ort=` spelling appears only in DEC-0079 (lines 70, 131).

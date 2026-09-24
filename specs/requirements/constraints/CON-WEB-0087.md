@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "DEC-0023"
+source:
+  source_id: DEC-0023
+  loc: "specs/decisions/DEC-0023--three-phases-and-strict.md#L12"
+  excerpt: "copy is not written while the specification phase runs."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0087 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # CON-WEB-0087
 
 The solution SHALL NOT produce page copy before its specification phase has ended, imposed by DEC-0023.
+
+## Source
+
+DEC-0023
 
 ## Rationale
 

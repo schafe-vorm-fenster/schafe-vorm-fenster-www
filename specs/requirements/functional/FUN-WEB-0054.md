@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: personalization
-source: "SRC-0006, SRC-0005#blockers"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S1
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,14 @@ ai_provenance:
 # FUN-WEB-0054
 
 When geolocating by IP, the website SHALL process without storing personal data.
+
+## Source
+
+SRC-0006, SRC-0005#blockers
+
+Unlocatable: Transcript calls tracking "Datenschutzkonform" but says nothing about geolocation processing without storing personal data.
+
+Finding: Data-minimisation on the geolocation path is not in SRC-0006; it appears to come from SRC-0005.
 
 ## Notes
 

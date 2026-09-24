@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: personalization
-source: "SRC-0001#6-assumptions-not-switches"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L278"
+  excerpt: "Stage | What is known | Source | Effect"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0050 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0050
 
 For personalization, the website SHALL operate the four knowledge stages of SRC-0001 §6.
+
+## Source
+
+SRC-0001#6-assumptions-not-switches
+
+Finding: No single line states "four knowledge stages"; the four stages are the table rows 280-283 (stages 0-3). This is the table header that defines them.
 
 ## Notes
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: scope-boundaries
-source: "SRC-0001#boundaries, `@schafe-vorm-fenster/offerings`"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L308"
+  excerpt: "Enterprise is presented on request"
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,10 @@ ai_provenance:
 # FUN-WEB-0201
 
 On a pricing surface, the website SHALL show the enterprise offering as priced on request.
+
+## Source
+
+SRC-0001#boundaries, `@schafe-vorm-fenster/offerings`
 
 ## Notes
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: seo
-source: "SRC-0006"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Das bedeutet interessensorientiert, wenn ich als Landkreis für Kulturplattform etc. suche oder als Kommune oder Stadt nach einer Kalenderlösung."
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,9 @@ ai_provenance:
 # FUN-WEB-0074
 
 For interest-oriented search, the website SHALL provide SEO-optimised landing pages (e.g. county searching for a culture platform; municipality searching for a calendar solution).
+
+## Source
+
+SRC-0006
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.

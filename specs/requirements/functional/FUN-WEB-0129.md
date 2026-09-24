@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: accessibility
-source: "SRC-0006"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Da will ich auf jeden Fall Anforderungen drin haben, im Dokument über High Contrast, Darkli. Wenig Bandbreite, schneller Laden, große Schrift."
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,14 @@ ai_provenance:
 # FUN-WEB-0129
 
 For the browser preference hints `prefers-color-scheme`, `prefers-contrast`, `prefers-reduced-motion`, reduced-data and the user's font-size setting, the website SHALL render accordingly.
+
+## Source
+
+SRC-0006
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
+
+Finding: Transcript covers contrast, dark mode, low bandwidth and large type; prefers-reduced-motion is not mentioned in SRC-0006.
 
 ## Rationale
 

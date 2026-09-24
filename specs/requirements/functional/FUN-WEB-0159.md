@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: place-search
-source: "DEC-0024, DEC-0036, DEC-0037, DEC-0079"
+source:
+  source_id: DEC-0024
+  loc: "specs/decisions/DEC-0024--place-search-covers-germany.md#L42"
+  excerpt: "`/dein-ort/starten` on submit, which is point 2 working as intended."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0159 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # FUN-WEB-0159
 
 For a typed name that matches nothing, the place search SHALL reach `/dein-ort/starten` on submit.
+
+## Source
+
+DEC-0024, DEC-0036, DEC-0037, DEC-0079
 
 ## Rationale
 

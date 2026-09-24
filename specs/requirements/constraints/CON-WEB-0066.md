@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "DEC-0034"
+source:
+  source_id: DEC-0034
+  loc: "specs/decisions/DEC-0034--region-interim-active-examples.md#L16"
+  excerpt: "The story copy stays map-ready"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0066 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # CON-WEB-0066
 
 The solution SHALL keep the region page's story copy map-ready, imposed by DEC-0034.
+
+## Source
+
+DEC-0034

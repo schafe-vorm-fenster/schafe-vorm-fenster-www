@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: performance
-source: "SRC-0007, DEC-0007"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/performance-budget.md#L11"
+  excerpt: "**CLS** (Cumulative Layout Shift) | < 0.1"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "Cumulative Layout Shift of every content page"
@@ -24,6 +27,10 @@ ai_provenance:
 # NFR-WEB-0049
 
 Cumulative Layout Shift of every content page SHALL be < 0.1, measured by `e2e/layout-stability.spec.ts` (TS-WEB-0009-A8).
+
+## Source
+
+SRC-0007, DEC-0007
 
 ## Notes
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: localization
-source: "SRC-0007, DEC-0005"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/localization-architecture.md#L76"
+  excerpt: "(non-default language paths need the prefix; default language paths are bare)"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0166 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # FUN-WEB-0166
 
 Where the language differs from the TLD default, the website SHALL emit the path prefix, and otherwise SHALL NOT.
+
+## Source
+
+SRC-0007, DEC-0005

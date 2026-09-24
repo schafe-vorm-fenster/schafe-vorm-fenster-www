@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: security
-source: "DEC-0017"
+source:
+  source_id: DEC-0017
+  loc: "specs/decisions/DEC-0017--vercel-native-monitoring.md#L11"
+  excerpt: "Error and availability monitoring relies on Vercel logs, runtime error"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,10 @@ ai_provenance:
 # CON-WEB-0040
 
 The solution SHALL observe production errors and availability through Vercel-native means, imposed by DEC-0017.
+
+## Source
+
+DEC-0017
 
 ## Notes
 

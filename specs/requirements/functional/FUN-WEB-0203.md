@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003#for-a-whole-region"
+source:
+  source_id: SRC-0003
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L198"
+  excerpt: "request with a two-working-day promise"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0203 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0203
 
 On `/deine-region`, the website SHALL state the two-working-day response promise on the quote request.
+
+## Source
+
+SRC-0003#for-a-whole-region
+
+Finding: Same line also carries BUS-WEB-0016; it sits in the `/deine-region` structure bullet (lines 194–199).
 
 ## Notes
 

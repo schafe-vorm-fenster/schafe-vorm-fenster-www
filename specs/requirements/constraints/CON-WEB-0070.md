@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: place-search
-source: "DEC-0079, DEC-0024"
+source:
+  source_id: DEC-0079
+  loc: "specs/decisions/DEC-0079--place-search-by-name.md#L44"
+  excerpt: "The website searches places by name. A postcode is not offered as a"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0070 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # CON-WEB-0070
 
 The solution SHALL NOT offer a postcode as a product feature, imposed by DEC-0079.
+
+## Source
+
+DEC-0079, DEC-0024
+
+Finding: 'product feature.' continues on line 45.
 
 ## Rationale
 

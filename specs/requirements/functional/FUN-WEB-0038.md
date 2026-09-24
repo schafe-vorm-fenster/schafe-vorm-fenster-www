@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: relevance-and-proof
-source: "SRC-0002#required-data"
+source:
+  source_id: SRC-0002
+  loc: "go-to-market-os/concept/website-relevance-model.concept.md#L140"
+  excerpt: "`geo: {place, municipality, county, state, country}` | geo proximity"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0038 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0038
 
 When ranking proof, the website SHALL compute geo proximity against the five-level location model `place · municipality · county · state · country` carried by `geo:` frontmatter in `@schafe-vorm-fenster/media-echo` and `proof/`.
+
+## Source
+
+SRC-0002#required-data
+
+Finding: Source names the folder `packages/evidence/media-echo/verified/*`, not the package `@schafe-vorm-fenster/media-echo`; the `proof/` geo row is line 142.
 
 ## Notes
 

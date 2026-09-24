@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: relevance-and-proof
-source: "SRC-0002#sequence-rule"
+source:
+  source_id: SRC-0002
+  loc: "go-to-market-os/concept/website-relevance-model.concept.md#L38"
+  excerpt: "The resulting shape is **near · near · far · near · very far"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0031 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0031
 
 In every proof stream, the website SHALL follow the sequence rule "two near, then widen" (near · near · far · near · very far · middle · far) as specified in SRC-0002.
+
+## Source
+
+SRC-0002#sequence-rule
+
+Finding: Sequence wraps onto line 39 ("middle · far**."); the rule name is the heading on line 34.

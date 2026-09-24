@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: privacy
-source: "SRC-0006"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S1
 fit_criterion:
   scale: "Persisted IP addresses on the geolocation path"
@@ -25,6 +28,14 @@ ai_provenance:
 # NFR-WEB-0024
 
 Persisted IP addresses on the geolocation path SHALL be = 0 addresses, measured by TS-WEB-0013-A6.
+
+## Source
+
+SRC-0006
+
+Unlocatable: Transcript never discusses storing or not storing IP addresses on the geolocation path.
+
+Finding: The zero-persisted-IP measure is not in SRC-0006.
 
 ## Notes
 

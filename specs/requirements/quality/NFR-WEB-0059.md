@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: accessibility
-source: "SRC-0006, SRC-0014#accessibility, DEC-0056"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of NFR-WEB-0059 that pass"
@@ -25,6 +28,14 @@ ai_provenance:
 # NFR-WEB-0059
 
 Contrast ratio of display type and of non-text contrast against its background SHALL be >= 3 :1, measured by `scripts/check-contrast.ts` (TS-WEB-0002-A3).
+
+## Source
+
+SRC-0006, SRC-0014#accessibility, DEC-0056
+
+Unlocatable: Transcript never mentions display type or non-text contrast, nor a 3:1 ratio.
+
+Finding: The numeric ratio comes from WCAG/DEC-0056, not from SRC-0006.
 
 ## Notes
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: jobs-and-navigation
-source: "SRC-0001#6-assumptions-not-switches"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L291"
+  excerpt: "No visible role switcher, no interstitial \"who are you?\" question."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0009 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # FUN-WEB-0009
 
 On every page, the website SHALL NOT present a visible role switcher or any "who are you?" self-classification prompt.
+
+## Source
+
+SRC-0001#6-assumptions-not-switches

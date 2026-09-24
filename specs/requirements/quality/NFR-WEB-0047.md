@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: performance
-source: "SRC-0007, DEC-0007"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/performance-budget.md#L9"
+  excerpt: "**LCP** (Largest Contentful Paint) | < 2.5s"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,7 @@ ai_provenance:
 # NFR-WEB-0047
 
 Largest Contentful Paint of every route of TS-WEB-0003 D7 SHALL be < 2.5 s, measured by TS-WEB-0003-A1.
+
+## Source
+
+SRC-0007, DEC-0007

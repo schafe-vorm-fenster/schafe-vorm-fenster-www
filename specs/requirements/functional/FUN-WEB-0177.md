@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "SRC-0006, SRC-0009"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Und dann eben Content Updates über einen PR in der Website hochschlagen"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0177 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0177
 
 For a resulting content update, the content pipeline SHALL open a pull request against the website.
+
+## Source
+
+SRC-0006, SRC-0009
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.

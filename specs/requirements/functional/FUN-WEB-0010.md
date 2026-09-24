@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003#home"
+source:
+  source_id: SRC-0003
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L73"
+  excerpt: "**Primary conversion:** the focus job's CTA. No conversion of its own."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0010 that pass"
@@ -27,6 +30,12 @@ ai_provenance:
 | Route | Focus job | Primary conversion |
 | --- | --- | --- |
 | `/` | set by entry context (default: know what is on) | the focus job's CTA; none of its own |
+
+## Source
+
+SRC-0003#home
+
+Finding: Row spans two lines: focus job "set by entry context; the default is ‘know what is on’" is line 72; route heading is line 70.
 
 ## Notes
 

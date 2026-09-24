@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: place-search
-source: "DEC-0079, DEC-0024"
+source:
+  source_id: DEC-0079
+  loc: "specs/decisions/DEC-0079--place-search-by-name.md#L125"
+  excerpt: "**Suggestions cover the covered communities only.**"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0157 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # FUN-WEB-0157
 
 For suggestions, the place search SHALL cover the covered communities.
+
+## Source
+
+DEC-0079, DEC-0024
 
 ## Notes
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: privacy
-source: "SRC-0006, DEC-0004"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Das bedeutet auch keine wiederkehrenden User, keine Cookies fürs Tracking und so weiter."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "Analytics cookies and persistent identifiers after a full journey across the website"
@@ -24,6 +27,12 @@ ai_provenance:
 # NFR-WEB-0061
 
 Analytics cookies and persistent identifiers after a full journey across the website SHALL be = 0, measured by TS-WEB-0012-A2.
+
+## Source
+
+SRC-0006, DEC-0004
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
 
 ## Notes
 

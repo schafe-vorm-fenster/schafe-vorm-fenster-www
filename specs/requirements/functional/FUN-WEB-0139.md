@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003#conversion-map, DEC-0052, DEC-0081"
+source:
+  source_id: SRC-0003
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L227"
+  excerpt: "| Conversion goal | Pages that carry it |"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0139 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0139
 
 For every conversion goal of the map in SRC-0003, the website SHALL carry it on the page that map names.
+
+## Source
+
+SRC-0003#conversion-map, DEC-0052, DEC-0081
+
+Finding: The heading of the map table is the claim; the goal-to-page assignments are lines 229–235.
 
 ## Notes
 

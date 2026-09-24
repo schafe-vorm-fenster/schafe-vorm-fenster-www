@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: personalization
-source: "SRC-0001#6"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L288"
+  excerpt: "Higher stages change only the selection and order of proof and live"
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,12 @@ ai_provenance:
 # FUN-WEB-0052
 
 For a higher knowledge stage, the website SHALL change only the selection and order of proof and live modules.
+
+## Source
+
+SRC-0001#6
+
+Finding: The exclusions ("never the page structure, never the focus job") and the relevance-model exception continue on lines 289-290.
 
 ## Rationale
 

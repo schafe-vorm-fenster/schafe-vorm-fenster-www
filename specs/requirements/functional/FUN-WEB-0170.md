@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: seo
-source: "DEC-0018"
+source:
+  source_id: DEC-0018
+  loc: "specs/decisions/DEC-0018--allow-ai-crawlers-llms-txt.md#L12"
+  excerpt: "an `llms.txt` carrying the short description and core facts"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0170 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # FUN-WEB-0170
 
 At `/llms.txt`, the website SHALL maintain a short description and its core facts.
+
+## Source
+
+DEC-0018

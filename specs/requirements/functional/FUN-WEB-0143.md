@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "DEC-0026"
+source:
+  source_id: DEC-0026
+  loc: "specs/decisions/DEC-0026--localize-everything-but-artifacts.md#L11"
+  excerpt: "On non-German pages, everything the content pipeline generates renders in"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0143 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # FUN-WEB-0143
 
 On a non-German page, the website SHALL render everything the content pipeline generates in the page language.
+
+## Source
+
+DEC-0026
 
 ## Notes
 

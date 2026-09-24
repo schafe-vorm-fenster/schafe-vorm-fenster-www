@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003#for-a-whole-region"
+source:
+  source_id: SRC-0003
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L198"
+  excerpt: "request with a two-working-day promise"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of BUS-WEB-0016 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # BUS-WEB-0016
 
 For a quote request, the answer is due within two working days of its receipt.
+
+## Source
+
+SRC-0003#for-a-whole-region
 
 ## Rationale
 

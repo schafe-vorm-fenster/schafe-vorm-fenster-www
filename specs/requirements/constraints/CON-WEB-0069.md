@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: relevance-and-proof
-source: "SRC-0001#4-proof-is-context"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L241"
+  excerpt: "Proof is never invented or implied."
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,7 @@ ai_provenance:
 # CON-WEB-0069
 
 The solution SHALL NOT invent or imply a proof, imposed by SRC-0001 §4.
+
+## Source
+
+SRC-0001#4-proof-is-context

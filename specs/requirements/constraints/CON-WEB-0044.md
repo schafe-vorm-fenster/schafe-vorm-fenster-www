@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: security
-source: "DEC-0025"
+source:
+  source_id: DEC-0025
+  loc: "specs/decisions/DEC-0025--bff-no-external-tokens-client.md#L13"
+  excerpt: "Client-facing website endpoints are protected by rate limiting and"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,10 @@ ai_provenance:
 # CON-WEB-0044
 
 The solution SHALL protect its client-facing endpoints with rate limiting and an origin check, imposed by DEC-0025.
+
+## Source
+
+DEC-0025
 
 ## Notes
 

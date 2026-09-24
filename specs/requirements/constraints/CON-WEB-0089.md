@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: rendering-and-resilience
-source: "DEC-0033, SRC-0014#skeletons, DEC-0056"
+source:
+  source_id: DEC-0056
+  loc: "specs/decisions/DEC-0056--design-system-delivered.md#L33"
+  excerpt: "**Skeletons** are specified down to the hatch, and they do **not**"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0089 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # CON-WEB-0089
 
 The solution SHALL NOT animate a skeleton, imposed by DEC-0033.
+
+## Source
+
+DEC-0033, SRC-0014#skeletons, DEC-0056
+
+Finding: The third source DEC-0056 supports it, while the first-named DEC-0033 says nothing about animation; the rule wraps, so line 33 carries subject and negation and the verb 'animate' opens line 34.

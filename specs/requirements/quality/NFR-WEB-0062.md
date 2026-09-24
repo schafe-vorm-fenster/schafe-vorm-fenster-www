@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: privacy
-source: "SRC-0006, DEC-0004"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Das heißt, ich will tracken, ohne dass ich einen Cookie Banner anzeigen muss."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "Consent-banner components in the rendered tree"
@@ -25,3 +28,9 @@ ai_provenance:
 # NFR-WEB-0062
 
 Consent-banner components in the rendered tree SHALL be = 0 components, measured by TS-WEB-0012-A1.
+
+## Source
+
+SRC-0006, DEC-0004
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.

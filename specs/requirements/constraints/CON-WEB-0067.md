@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "DEC-0039"
+source:
+  source_id: DEC-0039
+  loc: "specs/decisions/DEC-0039--legal-as-one-page.md#L26"
+  excerpt: "anchors are stable and must not change"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0067 that pass"
@@ -25,6 +28,10 @@ ai_provenance:
 # CON-WEB-0067
 
 The solution SHALL NOT rename or remove a legal anchor, imposed by DEC-0039.
+
+## Source
+
+DEC-0039
 
 ## Rationale
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: performance
-source: "SRC-0007, DEC-0007"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/performance-budget.md#L20"
+  excerpt: "| JavaScript (total) | < 100KB | Compressed, all bundles combined |"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,10 @@ ai_provenance:
 # NFR-WEB-0053
 
 Compressed size of the JavaScript of every route SHALL be < 100 KB, measured by TS-WEB-0003-A2.
+
+## Source
+
+SRC-0007, DEC-0007
 
 ## Rationale
 

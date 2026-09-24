@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: localization
-source: "SRC-0007, DEC-0005"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/domains.md#L5"
+  excerpt: "The hostname's TLD determines the default language"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0163 that pass"
@@ -25,3 +28,7 @@ ai_provenance:
 # FUN-WEB-0163
 
 For the default language, the website SHALL take it from the country TLD.
+
+## Source
+
+SRC-0007, DEC-0005

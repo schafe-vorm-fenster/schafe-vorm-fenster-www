@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: relevance-and-proof
-source: "SRC-0001#4-proof-is-context"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L239"
+  excerpt: "Every claim on the website has a proof slot beside it."
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,7 @@ ai_provenance:
 # FUN-WEB-0150
 
 Beside every claim, the website SHALL carry a proof slot.
+
+## Source
+
+SRC-0001#4-proof-is-context

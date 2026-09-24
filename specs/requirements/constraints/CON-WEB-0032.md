@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: security
-source: "DEC-0015"
+source:
+  source_id: DEC-0015
+  loc: "specs/decisions/DEC-0015--strict-security-baseline.md#L12"
+  excerpt: "security headers (HSTS, frame-ancestors, referrer-policy, etc.)"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0032 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # CON-WEB-0032
 
 The solution SHALL set the security headers of TS-WEB-0014 D4 on every production response, imposed by DEC-0015.
+
+## Source
+
+DEC-0015
+
+Finding: DEC-0015 names the header set; the enumeration 'of TS-WEB-0014 D4' and 'every production response' are not in this record.
 
 ## Notes
 

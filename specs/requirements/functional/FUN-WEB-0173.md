@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "SRC-0006, DEC-0020"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "in den jeweiligen Formaten und Textlängen erzeugen bzw. dann überarbeiten."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0173 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0173
 
 For a generated website text, the editor SHALL rework it before it ships.
+
+## Source
+
+SRC-0006, DEC-0020
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.

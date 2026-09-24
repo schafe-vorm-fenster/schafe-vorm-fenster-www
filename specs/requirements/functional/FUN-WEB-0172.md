@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "SRC-0006, DEC-0020"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "auf Basis der Dependencies dann Playbooks bauen und auf Basis dieser Playbooks dann am Ende die konkreten Contents in den jeweiligen Sprachen, die wir brauchen."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0172 that pass"
@@ -25,3 +28,11 @@ ai_provenance:
 # FUN-WEB-0172
 
 For a website text, the content pipeline SHALL generate it from the package raw material through the agent skills and playbooks.
+
+## Source
+
+SRC-0006, DEC-0020
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
+
+Finding: Transcript names playbooks and packages; "agent skills" as the generation mechanism is not mentioned (an agent appears only in the later diff step).

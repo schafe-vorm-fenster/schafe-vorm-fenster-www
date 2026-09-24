@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: place-search
-source: "DEC-0029"
+source:
+  source_id: DEC-0029
+  loc: "specs/decisions/DEC-0029--app-handover-via-slugs.md#L12"
+  excerpt: "built from geo-api community slugs"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0049 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0049
 
 For a handover link into the app, the website SHALL build it from a geo-api community slug (`/api/{token}/community/slug/{slug}`).
+
+## Source
+
+DEC-0029
+
+Finding: DEC-0029 names geo-api community slugs as the contract but does not contain the endpoint path `/api/{token}/community/slug/{slug}` the requirement quotes.
 
 ## Notes
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0011, DEC-0051"
+source:
+  source_id: DEC-0011
+  loc: "specs/decisions/DEC-0011--purchase-on-invoice.md#L16"
+  excerpt: "`/eigener-kalender/zusammenstellen` ends with invoice details and"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,9 @@ ai_provenance:
 # FUN-WEB-0188
 
 For the compose and checkout flow, the website SHALL conclude on invoice — invoice details in, embed code out immediately.
+
+## Source
+
+DEC-0011, DEC-0051
+
+Finding: 'immediate embed-code delivery' continues on line 17.

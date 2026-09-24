@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: technical-constraints
-source: "SRC-0001#purpose, SRC-0003"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L261"
+  excerpt: "The website embeds live data from the app wherever it proves something:"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0131 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0131
 
 For calendar data, the website SHALL embed what `app.schafe-vorm-fenster.de` serves rather than hold its own.
+
+## Source
+
+SRC-0001#purpose, SRC-0003
+
+Finding: "rather than hold its own" is not on this line; the nearest support is line 25 ("a separate product surface").
 
 ## Notes
 

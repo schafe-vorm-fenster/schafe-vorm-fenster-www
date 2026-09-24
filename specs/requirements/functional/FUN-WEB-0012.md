@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
-source: "SRC-0003#publish-our-dates-mitmachen"
+source:
+  source_id: SRC-0003
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L107"
+  excerpt: "**Primary conversion:** `register-as-publisher`."
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0012 that pass"
@@ -27,6 +30,12 @@ ai_provenance:
 | Route | Focus job | Primary conversion |
 | --- | --- | --- |
 | `/mitmachen` | publish our dates | `register-as-publisher` |
+
+## Source
+
+SRC-0003#publish-our-dates-mitmachen
+
+Finding: Focus job line 106; route heading line 104.
 
 ## Notes
 

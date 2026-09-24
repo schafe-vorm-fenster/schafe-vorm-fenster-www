@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: privacy
-source: "DEC-0016, DEC-0028"
+source:
+  source_id: DEC-0016
+  loc: "specs/decisions/DEC-0016--measure-first-experiment-later.md#L17"
+  excerpt: "A/B infrastructure is a separate post-launch effort"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "Experiment, variant and bucketing code in the build"
@@ -24,6 +27,12 @@ ai_provenance:
 # NFR-WEB-0064
 
 Experiment, variant and bucketing code in the build SHALL be = 0, measured by TS-WEB-0012-A11.
+
+## Source
+
+DEC-0016, DEC-0028
+
+Finding: The record forbids shipping A/B infrastructure at launch; it does not phrase this as a count of experiment/variant/bucketing code and does not reference TS-WEB-0012-A11.
 
 ## Notes
 

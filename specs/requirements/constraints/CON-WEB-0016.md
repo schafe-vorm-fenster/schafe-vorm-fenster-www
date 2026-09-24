@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: scope-boundaries
-source: "SRC-0001#4, #5"
+source:
+  source_id: SRC-0001
+  loc: "go-to-market-os/concept/website-communication-principles.concept.md#L240"
+  excerpt: "A slot with no cleared, available proof stays empty and the claim is"
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,12 @@ ai_provenance:
 # CON-WEB-0016
 
 The solution SHALL make no claim it cannot prove with a cleared proof element or live data, imposed by SRC-0001 §4 and §5.
+
+## Source
+
+SRC-0001#4, #5
+
+Finding: Merged requirement: the cleared-proof half sits here (§4); the live-data half is a separate line, 267 ("Traction figures are counted live or not shown"). No single line states the combined rule.
 
 ## Notes
 

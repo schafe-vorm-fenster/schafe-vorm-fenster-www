@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
-source: "SRC-0006, DEC-0020"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0083 that pass"
@@ -25,6 +28,14 @@ ai_provenance:
 # FUN-WEB-0083
 
 In every content file, the website SHALL carry a machine-readable frontmatter reference to the GTM package(s) and version(s) it derives from.
+
+## Source
+
+SRC-0006, DEC-0020
+
+Unlocatable: Transcript mentions markdown frontmatter and wanting versioning, but never a machine-readable frontmatter reference to the source package and its version.
+
+Finding: The frontmatter provenance field is DEC-0020's design, not stated in SRC-0006.
 
 ## Notes
 

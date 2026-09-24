@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: delivery-pipeline
-source: "DEC-0031"
+source:
+  source_id: DEC-0031
+  loc: "specs/decisions/DEC-0031--two-stage-deployment-model.md#L13"
+  excerpt: "deployment protection on, `noindex`"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0023 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # CON-WEB-0023
 
 The solution SHALL carry deployment protection and `noindex` on every non-production deployment, imposed by DEC-0031.
+
+## Source
+
+DEC-0031
+
+Finding: DEC-0031 states this for the Stage-1 migration preview specifically; 'every non-production deployment' is a generalisation the record does not make.
 
 ## Rationale
 

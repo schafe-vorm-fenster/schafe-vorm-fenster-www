@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: technical-constraints
-source: "SRC-0006, SRC-0014, DEC-0056"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Wir müssen aber da nicht allzu sehr die breite ausnutzen, sondern können sozusagen sehr nah mobile bleiben"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0050 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # CON-WEB-0050
 
 The solution SHALL keep the tablet and desktop layout close to the mobile one rather than maximising width, imposed by SRC-0014 and DEC-0056.
+
+## Source
+
+SRC-0006, SRC-0014, DEC-0056
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.

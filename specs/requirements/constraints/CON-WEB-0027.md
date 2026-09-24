@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: accessibility
-source: "DEC-0012, DEC-0039"
+source:
+  source_id: DEC-0012
+  loc: "specs/decisions/DEC-0012--bfsg-and-legal-import.md#L18"
+  excerpt: "footer gains the accessibility statement"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0027 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # CON-WEB-0027
 
 The solution SHALL publish an accessibility statement as a footer-reachable section at a stable anchor on `/rechtliches`, imposed by DEC-0012 and DEC-0039.
+
+## Source
+
+DEC-0012, DEC-0039
+
+Finding: DEC-0012 gives only the footer reachability (in Consequences); '/rechtliches' and the stable anchor come from the second source DEC-0039 (lines 11-13, 28-30).
 
 ## Notes
 

@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: jobs-and-navigation
-source: "SRC-0001#2-order-do-not-exclude, DEC-0082"
+source:
+  source_id: SRC-0001
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0136 that pass"
@@ -25,6 +28,14 @@ ai_provenance:
 # FUN-WEB-0136
 
 Where the page brief declares a goal of equal weight, the hero MAY carry a second, adjacent secondary action.
+
+## Source
+
+SRC-0001#2-order-do-not-exclude, DEC-0082
+
+Unlocatable: Nothing in the file permits a second, adjacent action in the hero or mentions a page brief declaring a goal of equal weight; "hero" does not occur.
+
+Finding: Parent line 207 states the opposite emphasis (one primary conversion, visually unrivalled), so it does not support this permission; it comes from DEC-0082.
 
 ## Rationale
 

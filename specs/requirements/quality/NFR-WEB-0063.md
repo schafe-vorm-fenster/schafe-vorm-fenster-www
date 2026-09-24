@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: privacy
-source: "derived; convention"
+source:
+  source_id: UNKNOWN
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S1
 fit_criterion:
   scale: "External asset hosts in the built output and in the source"
@@ -25,6 +28,12 @@ ai_provenance:
 # NFR-WEB-0063
 
 External asset hosts in the built output and in the source SHALL be = 0 hosts, measured by TS-WEB-0013-A3.
+
+## Source
+
+derived; convention
+
+Unlocatable: the source is "derived; convention" — no document is named.
 
 ## Notes
 

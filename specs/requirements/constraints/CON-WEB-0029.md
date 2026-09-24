@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: privacy
-source: "SRC-0006, DEC-0004, DEC-0028"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0029 that pass"
@@ -25,6 +28,14 @@ ai_provenance:
 # CON-WEB-0029
 
 The solution SHALL use one eTracker account and one property across all domains and the app, imposed by DEC-0028.
+
+## Source
+
+SRC-0006, DEC-0004, DEC-0028
+
+Unlocatable: Transcript says eTracker stays in use, but says nothing about one account, one property, or coverage across all domains and the app.
+
+Finding: Account/property consolidation is attributed to SRC-0006 but originates in DEC-0028.
 
 ## Rationale
 

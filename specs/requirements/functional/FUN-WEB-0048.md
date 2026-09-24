@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: place-search
-source: "entre repo, DEC-0028, DEC-0035"
+source:
+  source_id: DEC-0035
+  loc: "specs/decisions/DEC-0035--domain-layout-and-preview.md#L29"
+  excerpt: "Once apex redirects to www, legacy `/:community` paths (svf.li QR"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,12 @@ ai_provenance:
 # FUN-WEB-0048
 
 Once the calendars move to `app.*` and the apex redirects to `www.`, the website SHALL forward a `/:community` path to that place's calendar on `app.*`, preserving the campaign parameters.
+
+## Source
+
+entre repo, DEC-0028, DEC-0035
+
+Finding: the source list names `entre repo` first; DEC-0035 is what carries the rule.
 
 ## Notes
 

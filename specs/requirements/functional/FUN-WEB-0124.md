@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: privacy
-source: "SRC-0006, DEC-0004, DEC-0028"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Und das steht auch, das müssen wir auch rausextrahieren aus der jetzigen Webseite."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0124 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0124
 
 Before launch, the release owner SHALL extract the eTracker configuration from the legacy site.
+
+## Source
+
+SRC-0006, DEC-0004, DEC-0028
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.

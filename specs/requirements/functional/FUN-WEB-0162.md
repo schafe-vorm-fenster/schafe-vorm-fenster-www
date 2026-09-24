@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: personalization
-source: "SRC-0006 (transcript), SRC-0001#6"
+source:
+  source_id: SRC-0006
+  loc: "UNKNOWN"
+  excerpt: "Aber auf Gemeinde wäre schon nett. Auf Landkreis auf jeden Fall"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0162 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0162
 
 For a detected location, the website SHALL resolve it to at least county level.
+
+## Source
+
+SRC-0006 (transcript), SRC-0001#6
+
+Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
 
 ## Notes
 

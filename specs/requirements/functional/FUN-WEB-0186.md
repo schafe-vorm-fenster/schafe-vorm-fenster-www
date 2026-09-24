@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
-source: "DEC-0051, DEC-0052"
+source:
+  source_id: DEC-0052
+  loc: "specs/decisions/DEC-0052--page-level-answers.md#L95"
+  excerpt: "**The newsletter reaches people by e-mail or by WhatsApp, and WhatsApp"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0186 that pass"
@@ -25,6 +28,12 @@ ai_provenance:
 # FUN-WEB-0186
 
 For newsletter signup, the website SHALL offer both channels — e-mail and WhatsApp, WhatsApp preferred — carrying `subscribe-to-newsletter`.
+
+## Source
+
+DEC-0051, DEC-0052
+
+Finding: DEC-0052 §4 (as amended 2026-09-24) supports it and is named second; DEC-0051 is named first and knows no channels. 'is the preferred route.**' completes the sentence on line 96, and the `subscribe-to-newsletter` goal id is at line 87 (§3).
 
 ## Rationale
 

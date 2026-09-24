@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: relevance-and-proof
-source: "SRC-0002#scoring"
+source:
+  source_id: SRC-0002
+  loc: "go-to-market-os/concept/website-relevance-model.concept.md#L91"
+  excerpt: "Clearance is a hard filter applied before scoring: elements without"
 evidence_sufficiency: S2
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0033 that pass"
@@ -25,3 +28,9 @@ ai_provenance:
 # FUN-WEB-0033
 
 Before scoring, the website SHALL exclude every element without `usage_rights: cleared` — a hard filter, never a down-weighting.
+
+## Source
+
+SRC-0002#scoring
+
+Finding: The `usage_rights: cleared` token and "never down-weighted" are on the continuation line 92.

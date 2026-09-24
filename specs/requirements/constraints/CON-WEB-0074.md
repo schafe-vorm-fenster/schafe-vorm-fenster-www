@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: localization
-source: "SRC-0007, DEC-0038"
+source:
+  source_id: SRC-0007
+  loc: "community-calendar/docs/localization-architecture.md#L66"
+  excerpt: "A lightweight client-side Svelte island (`client:idle`) detects the mismatch between `navigator.languages` and `<html lang>`"
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,3 +23,7 @@ ai_provenance:
 # CON-WEB-0074
 
 The solution SHALL render the first-visit language suggestion client-side only, imposed by DEC-0038.
+
+## Source
+
+SRC-0007, DEC-0038

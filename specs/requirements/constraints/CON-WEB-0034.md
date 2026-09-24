@@ -7,7 +7,10 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: security
-source: "platform default"
+source:
+  source_id: UNKNOWN
+  loc: "UNKNOWN"
+  excerpt: "UNKNOWN"
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -20,6 +23,12 @@ ai_provenance:
 # CON-WEB-0034
 
 The solution SHALL serve every request over HTTPS and answer an `http://` request with a permanent redirect, imposed by TS-WEB-0014 D4 and the platform default it records.
+
+## Source
+
+platform default
+
+Unlocatable: the source is "platform default" — no document is named, so there is nothing to locate.
 
 ## Notes
 
