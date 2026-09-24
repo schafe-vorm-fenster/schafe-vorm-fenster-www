@@ -15,7 +15,7 @@ The four jobs, their conversions and audience mappings are defined there
 | --- | --- | --- | --- |
 | WEB-F-001 | Every page shall declare exactly one focus job in its brief; the four jobs are defined in SRC-001 §1. | SRC-001#1-jobs-not-audiences | S2 |
 | WEB-F-002 | Navigation labels shall name jobs — never audiences and never product names. The four labels and targets are defined in SRC-003 "Navigation". | SRC-001#1, SRC-003#navigation | S2 |
-| WEB-F-003 | Each page shall present exactly one primary conversion, above the fold, visually unrivalled. | SRC-001#2-order-do-not-exclude | S2 |
+| WEB-F-003 | Each page shall present exactly one primary conversion, above the fold, visually unrivalled — exactly one element carrying the primary marker, one unmarked repeat in the closing block, and every other action at secondary treatment: module CTAs, tier CTAs, the context band and every row of the contact section. A hero may carry a second, adjacent secondary action where the page brief declares a goal of equal weight (order versus consult). | SRC-001#2-order-do-not-exclude, DEC-082 | S3 |
 | WEB-F-004 | All four jobs shall be reachable from every page within at most one click. | SRC-001#2 | S2 |
 | WEB-F-005 | Every page shall carry a context band naming the other three jobs, phrased as an offer, placed below the main argument and above the closing CTA. | SRC-001#2 | S2 |
 | WEB-F-006 | The last block of every page shall be the CTA of its focus job (identical to the primary conversion), preceded by the context band. Section order and colour rhythm follow SRC-014 "Page Rhythm". | SRC-001#7, SRC-014#page-rhythm | S2 |
