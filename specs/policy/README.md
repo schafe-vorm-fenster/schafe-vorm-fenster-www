@@ -28,6 +28,29 @@ status anything may carry; with one, a status other than `DRAFT` needs a
 decision record that names the artefact. W5 reports, per decision point, what
 the policy would resolve today and what escalates instead.
 
+## DP-01 has a docket since 2026-09-24
+
+Goal and need acceptance was bound in DEC-0088 and resolved in DEC-0089
+against an empty set: there was no goal and no need in this repository, so the
+row had nothing to be exercised on. DEC-0101 and DEC-0102 gave it 47 subjects
+— 13 `GOAL-WEB-####` and 34 `NEED-WEB-####` — and three things follow.
+
+- **The evidence gate is met on every one.** *"Below S2 no acceptance or
+  approval decision may be taken at all"*, and all 47 are S2, derived rather
+  than asserted. This is the first layer here where the gate is met by every
+  artefact rather than by most of them.
+- **It is `HUMAN` anyway, and not because of an impact count.** The owner
+  bound DP-01 to `HUMAN` in all four columns before any subject existed. No
+  dependant count and no evidence level moves that, which is why the chain
+  wave moved nothing off `DRAFT`.
+- **`priority` is the one field an acceptance cannot settle from the
+  sources.** `needSchema` requires it, nothing ranks the needs, and DEM-0062
+  asks the accountable role for the ranking. An owner may accept with the
+  field `UNKNOWN`; the record has to say so.
+
+DEC-0103 §6 is the full reading. This section describes the policy; it does
+not change it.
+
 ## Changing it
 
 A change to this document is DP-14, governance change, and DP-14 is the

@@ -61,6 +61,23 @@ why: nine are the page rows `FUN-WEB-0010`…`FUN-WEB-0018`, a three-column
 tuple the method has no form for (Q-0075), and `FUN-WEB-0068` is a target
 picture whose values are UNKNOWN (Q-0010).
 
+## The need above it
+
+Every requirement carries `needs[]`, which the shell contract requires with
+`minItems: 1` and explains in one line: *"At least one. A requirement without
+a need is a defect of the run, not of the source."* DEC-0102 built the layer
+and DEC-0103 wired it — **222 of 273 name a need, 51 carry `[UNKNOWN]`**.
+
+`UNKNOWN` is not a placeholder to be filled in later with something
+plausible. It says that no readable source states why the requirement exists
+in terms of a stakeholder the specification lists, and each of the 51 falls
+into one of two groups that DEC-0103 names and DEM-0063 addresses. A need
+written to make a requirement resolve would be worth less than the
+`UNKNOWN`, because it would look like evidence.
+
+`check:specs` E24 validates the field; W9 reports the chain in both
+directions.
+
 ## Fit criterion
 
 Every requirement carries `fit_criterion`, which the shell contract requires

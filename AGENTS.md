@@ -66,7 +66,8 @@ cost. Do not silently "fix" one of those deviations.
 The identifiers are no longer one of them. DEC-0086 moved every family onto
 the method's `<TYPE>-<DOMAIN>-<NNNN>`: `FUN-WEB-####`, `NFR-WEB-####`,
 `CON-WEB-####`, `BUS-WEB-####`, `TS-WEB-####` (with `TS-WEB-####-A#`
-acceptance criteria), `DEC-####`, `Q-####`, `SRC-####`, `GL-####`. No number
+acceptance criteria), `DEC-####`, `Q-####`, `SRC-####`, `GL-####`, and since
+DEC-0101/DEC-0102 `GOAL-WEB-####` and `NEED-WEB-####`. No number
 was reassigned, and `specs/traceability/identifier-map.md` maps every old id
 to its new one and registers the ones a later decision retired. A file that
 holds one identified artefact is named for it — `DEC-####--<slug>.md`,
@@ -122,9 +123,28 @@ DEC-0100 settled the decision-record shape: an ADR and a STRICT decision
 record are **two artefacts**, both are kept, and `specs/decisions/` now holds
 `DEC-####--<slug>.md` beside `SDR-<yyyy>-<mmdd>-<nnnn>.yaml`.
 
-`check:specs` runs E1–E23 and reports W1–W8. W3 (untested criteria) and W7
+DEC-0101, DEC-0102 and DEC-0103 closed the last structural row of DEC-0085
+§6: **the chain**. `specs/goals/` holds 13 `GOAL-WEB-####` at level L1 —
+*references* into `@schafe-vorm-fenster/goals`, never copies of it, because
+rule 7 below and `specs/README.md` rule 1 forbid copying and because the
+extraction-result contract's own goal item carries `matched_existing` for
+exactly this case. `specs/needs/` holds 34 `NEED-WEB-####` at level L2, every
+one **read off a source line** — 31 from the six audience files, 3 from
+SRC-0001 — with a locator verified as an exact substring, and `inferred:
+false` on all of them. Nothing here was reconstructed behind a requirement,
+and nothing may be: a need no source supports is a guess, and the requirement
+gets `needs: [UNKNOWN]` and a demand instead. **222 of 273 requirements name
+a need; 51 carry `UNKNOWN`**, 38 of them because the specification lists no
+supply-side stakeholder (DEM-0063) and 13 because no audience states a need
+for the expansion `GOAL-WEB-0002` carries. A need may name only a stakeholder
+`SSD-WEB-0001`'s `stakeholders[]` lists; adding one is DP-07, not an
+executor's.
+
+`check:specs` runs E1–E26 and reports W1–W9. W3 (untested criteria) and W7
 (unknown fit criteria) are the same gap seen from two ends; W8 is the locator
-fill rate. The test-reference scan behind W3 is read off the runners
+fill rate; W9 is the chain report in both directions — orphan requirement,
+orphan need, uncovered need, uncovered goal, each as a fraction, with the
+fifth finding of `method-chain-linkage` counted once by W7. The test-reference scan behind W3 is read off the runners
 themselves — both Vitest configs and the `check` chain — so it cannot drift
 from what actually runs (DEC-0096).
 

@@ -46,9 +46,12 @@ listed with its price in **DEC-0085 §6** — the identifier schema, the missing
 business-rule class, statement grammar, locator granularity, the source
 rating vector, the need and goal layer, the decision record shape, the
 conflict and defect registers, the acceptance-criterion shape, and
-per-artefact versions. None of them is an oversight and none is free. Four of
-its rows are closed: identifiers (DEC-0086), the business-rule class and
-per-artefact versions (DEC-0087), and the decision policy (DEC-0088).
+per-artefact versions. None of them is an oversight and none is free. Eleven
+of its thirteen rows are closed — the need and goal layer by DEC-0101,
+DEC-0102 and DEC-0103 on 2026-09-24, and it was the last structural one. What
+stays owed is the **prompt identity** in `ai_provenance`, which is an
+extraction rather than a migration; the acceptance-criterion shape is a
+recorded deviation with a price and a demand upstream, not a gap.
 
 Three of its operating principles bind everything written here:
 
@@ -104,7 +107,10 @@ The clickable prototype for the concept documents is in
 
 1. A spec cites IDs from `go-to-market-os` — audience IDs, conversion goal
    IDs, offering IDs, proof IDs. It does not invent its own and does not
-   copy the definitions in.
+   copy the definitions in. `specs/goals/` is that rule made checkable: a
+   `GOAL-WEB-####` is a reference to a hub goal with this specification's own
+   judgement about it, and carries no metric, target or horizon of its own
+   (DEC-0101).
 2. A spec that needs a fact the sources do not carry emits `UNKNOWN` with
    the question, and a demand addressed to whoever can answer it.
 3. Page copy is not written during this phase. Where a spec needs example
@@ -120,6 +126,10 @@ Cold start executed on 2026-09-09 (source inventory → SSD → extraction).
 specs/
 ├── sources/            SRC-#### source inventory with trust ratings
 ├── ssd/                system specification document (scope, goals, stakeholders — by reference)
+├── goals/              GOAL-WEB-#### level L1 — references into @schafe-vorm-fenster/goals,
+│                       never copies of it (DEC-0101)
+├── needs/              NEED-WEB-#### level L2 — what a stakeholder needs, read off a source
+│                       line, with the goal it answers to (DEC-0102)
 ├── glossary/           GL-#### terms; canonical definitions stay in go-to-market-os
 ├── contracts/          SRC-0011 API contract register; Zod content formats (in src/domain)
 ├── requirements/       one document per requirement, named for its identifier;
@@ -197,6 +207,15 @@ specs/
   project conventions that **deviate** from the packages. They are not
   pending a reconciliation — DEC-0085 §6 says what each deviation is and
   what closing it would cost, and `CON-WEB-0006` names the dependency.
+- **The chain is goal → need → requirement → tactical specification →
+  verification**, and it is checked in both directions (DEC-0101, DEC-0102,
+  DEC-0103). A goal is a reference into `@schafe-vorm-fenster/goals` and never
+  a copy of one; a need is read off a source line and never reconstructed
+  behind a requirement; a requirement names at least one need or the
+  contract's `UNKNOWN`. `check:specs` E24–E26 check the links and W9 reports
+  the four link findings of `@leafcutter-strict/method-chain-linkage` as
+  fractions — never as a bare percentage — with the fifth, the unverified
+  requirement, counted once by W7.
 - **Consistency is machine-checked**: `pnpm check:specs`
   (`scripts/check-specs.ts`, part of `pnpm check` and the pre-commit
   hook) validates frontmatter, ID uniqueness, row shape, the S3-needs-a-
@@ -215,7 +234,9 @@ specs/
   the checks. Since DEC-0086 the three identifier **patterns** the contracts
   declare come from the same place — requirement, tactical specification and
   source — with the package's doubled backslashes collapsed at the one place
-  that reads them. What the script still owns — `DEC-####`, `Q-####` and
+  that reads them, and since DEC-0103 the goal and need patterns and their
+  field lists are read out of `@leafcutter-os/schemas`' `goal.schema.mjs` and
+  `need.schema.mjs`. What the script still owns — `DEC-####`, `Q-####` and
   `GL-####`, the chain this repository actually has, and everything
   grammar-shaped — is listed at the top of `scripts/check-specs.ts` with the
   reason.
