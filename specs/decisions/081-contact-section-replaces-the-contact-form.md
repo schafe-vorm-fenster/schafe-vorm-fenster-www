@@ -151,10 +151,10 @@ standing section rather than a widget that might not arrive.
   is still demanded is the quote form and the order form (`TS-016 D4`
   C2). The widget's delivery date no longer gates whether a visitor can
   reach a person at all.
-- **Phone is a channel with no record behind it.** The section shows a
-  number; `@schafe-vorm-fenster/goals` does not name the channel.
-  `Q-072` demands the hub record; until it lands the row is UNKNOWN
-  content, not a spec value.
+- **Phone was a channel with no record behind it** — see the amendment
+  below, which closes that point. The section shows a number;
+  `@schafe-vorm-fenster/goals` did not name the channel. `Q-072`
+  demanded the hub record.
 - **The newsletter block on `/ueber-uns` loses its stated reason.**
   `DEC-052` §4 permitted it inline *because* the page had no conversion
   of its own. The block itself is unaffected — it is secondary treatment
@@ -168,3 +168,36 @@ standing section rather than a widget that might not arrive.
   record cannot resolve: SRC-014 gives the section's first action row
   "the primary treatment". `DEC-082` settles what that means for the
   one-primary rule and names the correction the guide needs.
+
+## Amendment 2026-09-24 — Q-072 closed, and the four channels are recorded
+
+The gap §1 named and the consequence above carried is closed. The hub
+carries `contact-channels.md` in `@schafe-vorm-fenster/goals` (SRC-008):
+all four channels of §1 — video appointment, WhatsApp, phone, e-mail —
+each with its address, the conversion goal it serves and who answers it.
+`request-product-briefing` names phone in its `measurement`,
+its action and its instrumentation.
+
+What changes for this record:
+
+- **The phone row ships.** It is no longer UNKNOWN content waiting on an
+  upstream record. §1's enumeration of four channels stands as written
+  and now has a record behind every one of them.
+- **The channel set, its order and what each row does** are
+  `TS-016 D13`, which this amendment establishes as the spec-side home
+  for them. §1 continues to own only what a decision owns: that the
+  section exists once, that it is the only contact surface, and that
+  there is no general contact form.
+- **Phone and WhatsApp are one number and two rows.** The published
+  imprint and privacy policy carry the number as the telephone number;
+  the published QR-code support page names the same number as the
+  WhatsApp number. The two rows are two affordances, not a duplication
+  to be collapsed.
+- **Still no value in a spec.** The number and the address are content
+  and resolve from the hub record at build time or from the legal import
+  (`DEC-083` §1). This record names no address either.
+- **No response expectation was produced by the closure.** No cleared
+  source states one on any channel, so the section promises none. That
+  is the same reason `TS-016 A13` withholds the two-working-day promise
+  on the quote request, and it is carried as an open point in the hub
+  record rather than filled in here.

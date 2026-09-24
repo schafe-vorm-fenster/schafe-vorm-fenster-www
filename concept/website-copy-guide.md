@@ -367,7 +367,7 @@ schema each one is a `max()` (TS-007 D5).
 | CG-028 | quote card | Lead 20/400 + mono 15 | quote ≤ 200, name ≤ 40, role + organisation ≤ 60, source ≤ 60 characters | Verbatim, never shortened in a way that changes the sentence; the concrete publication and article as source, with a working link (SRC-014 "Quote card"). |
 | CG-029 | newsletter block | Section head + Lead | title ≤ 40, benefit ≤ 120 characters | Name at least two concrete things that arrive: new functions, current offers, how other places do it. |
 | CG-030 | context-band entry | Card title + Meta | ≤ 80 characters **[PROPOSED — the field does not exist yet]** | One half-sentence naming **audience and content together**, then the link. |
-| CG-031 | contact section | Section head + rows | title ≤ 40, lead ≤ 100, action-row title ≤ 24, sub-label ≤ 32 characters | Concrete channels in order, no form, no "nimm Kontakt auf". |
+| CG-031 | contact section | Section head + rows | title ≤ 40, lead ≤ 100, action-row title ≤ 24, sub-label ≤ 32 characters | Four concrete channels, always all four and always in the same order, no form, no "nimm Kontakt auf" — and **no sub-label promises a response time**. |
 | CG-032 | empty state | Lead + CTA | ≤ 90 characters + one CTA | An invitation, never an error (WEB-F-044/045). |
 
 Examples, all from the review:
@@ -383,9 +383,17 @@ Examples, all from the review:
 - CG-029 — avoid: *"Neuigkeiten aus dem Projekt"* with no benefit at all.
 - CG-030 — use the review's own shape: *"Wie du einfach Termine per WhatsApp
   oder Kalender veröffentlichen kannst"*.
-- CG-031 — the three channels in order: Videotermin buchen · per WhatsApp
-  schreiben · anrufen oder Mail. Avoid: a general contact form — there is
-  none.
+- CG-031 — **four** channels, in this order: Videotermin buchen · per
+  WhatsApp schreiben · anrufen · Mail schreiben. An earlier version of this
+  line collapsed the last two into "anrufen oder Mail"; the section has four
+  rows, not three (`TS-016 D13`), and phone and mail are two of them even
+  though phone and WhatsApp share one number. Avoid: a general contact form
+  — there is none. Avoid too: any sub-label that states how fast an answer
+  comes ("Antwort noch heute", "innerhalb von 24 Stunden"). No cleared
+  source gives a response time for these channels, and CG-033 makes an
+  unbacked promise a truth problem, not a tone problem. The sub-label says
+  what the row *is* — the number, the address, what a booking covers — not
+  what it will do for you.
 
 **CG-030 budgets a field that does not exist**, which is why it carries the
 `[PROPOSED]` marker CG-011 carries. A context-band entry is built from the

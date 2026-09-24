@@ -18,9 +18,10 @@ and the briefing booking inside it, the on-invoice order flow, external
 media (own previews plus outbound links), and newsletter signup.
 
 **There is no general contact form** (DEC-081). Contact is a standing
-section of static channel rows rendered by the layout on every page
-(TS-006 D2), and the briefing's outbound Google Calendar link is its first
-action row. The widget carries the two forms that remain.
+section of four static channel rows — video appointment, WhatsApp, phone,
+e-mail (D13) — rendered by the layout on every page (TS-006 D2), and the
+briefing's outbound Google Calendar link is its first action row. The
+widget carries the two forms that remain.
 
 **This spec is partly blocked and says so.** The envoy widget is not
 finished and its contract is an open demand (Q-022): the CSS variable
@@ -46,7 +47,7 @@ the website receives none of them.
 
 | # | Surface | Route(s) | Kind | Owner | Conversion goal |
 | --- | --- | --- | --- | --- | --- |
-| S1 | Contact section | standing section on every page, between the closing CTA and the footer (TS-006 D2) | static channel rows — appointment link, WhatsApp, `tel:`, `mailto:` — no form | none; the website renders links | `request-product-briefing`, on the first row (D12) |
+| S1 | Contact section | standing section on every page, between the closing CTA and the footer (TS-006 D2) | four static channel rows — appointment link, WhatsApp, `tel:`, `mailto:`, in that order — no form (D13) | none; the website renders links | `request-product-briefing`, on the first row (D12) |
 | S2 | Quote request, with the two-working-day promise (WEB-F-022) | `/deine-region`, `/deine-region/angebot` | lead form | envoy widget | `request-licence-quote` |
 | S3 | Briefing booking | the first action row of S1 — therefore every page | outbound link | Google Calendar appointment schedule | `request-product-briefing` |
 | S4 | Order the calendar | `/dein-kalender/bestellen` | multi-step order, concludes on invoice | open (D8) | `buy-calendar-licence` |
@@ -176,7 +177,7 @@ redirect behind `/start`.
 | Aspect | Determination |
 | --- | --- |
 | Mechanism | A plain link to a Google Calendar appointment schedule URL. No embed, no iframe, no Google script, no click-to-load layer |
-| Where it lives | **the first action row of the contact section (S1)** — one placement for the whole site. A booking CTA in any block on any page targets that section on its own page, in-page; it does not navigate off-site and it is not a second occurrence of the URL |
+| Where it lives | **the first action row of the contact section (S1)**, whose four rows and their order are D13 — one placement for the whole site. A booking CTA in any block on any page targets that section on its own page, in-page; it does not navigate off-site and it is not a second occurrence of the URL |
 | Why it stays off the CSP | An outbound navigation loads nothing into the page, so the allowlist is untouched (DEC-015). Anything that would need a CSP entry is by definition not this |
 | URL source | One configured value (environment/config), referenced by every S3 placement — never pasted per page |
 | Link attributes | Opens in the same tab by default; if a new tab is used it carries `rel="noopener"` and the link text says so (TS-002 D2, 2.4.9 link purpose) |
@@ -289,6 +290,65 @@ event contract exists, the measurement cannot be wired, and guessing an
 event name would produce silent zero-counts. Goal IDs are consumed from
 SRC-008 and never invented here.
 
+### D13 — The contact section's four channel rows [FIXED: DEC-081, SRC-014, SRC-008; values are content]
+
+S1 is four rows and nothing else. This determination fixes **which
+channels, in which order, and what each one does** — not what any of them
+says and not what any of them is set to.
+
+| # | Row | What it does | Scheme | Event |
+| --- | --- | --- | --- | --- |
+| 1 | Video appointment | Hands the visitor to the configured appointment schedule to book a briefing. The outbound row, and the only one (D7) | `https:` to the configured appointment URL | `request-product-briefing`, with the route (D12) |
+| 2 | WhatsApp | Opens a chat with the company's number in the visitor's WhatsApp client | `https:` to the WhatsApp click-to-chat host | none |
+| 3 | Phone | Places a call to the company's number | `tel:` | none |
+| 4 | E-mail | Opens the visitor's mail client addressed to the company's address | `mailto:` | none |
+
+**The order is fixed** and is SRC-014 §"Contact section" — it is what the
+filled/outlined treatment is built on: row 1 takes the filled treatment,
+rows 2–4 are outlined, and rows 3 and 4 carry the hairline variant. The
+order does not change per page, per audience or per locale; the section
+is one component rendered once from the layout (DEC-081 §2), so there is
+one order for the whole site.
+
+**Rows 2 and 3 are one number and two rows.** The same line takes a
+message and a call. They stay separate rows because they are two
+affordances with two schemes and two situations — a visitor who will
+write is not a visitor who will ring. A build that renders three rows
+because the two addresses matched has a defect, not an optimisation.
+
+**Four rows, one event.** Only row 1 is observable to a website: an
+outbound navigation can be counted, a `tel:` or a `mailto:` handover
+cannot. Rows 2–4 are counted by hand where the conversation arrives,
+which is the hub goal's own instrumentation. The section therefore fires
+exactly one event for four rows — that is what the channels allow, not a
+gap in the wiring (D12).
+
+#### Where the values come from
+
+| Value | Source |
+| --- | --- |
+| The appointment URL | one configured value (environment/config), per D7 |
+| The phone number, the WhatsApp number, the e-mail address | the hub record `contact-channels.md` in `@schafe-vorm-fenster/goals` (SRC-008), reaching the site through the content pipeline at build time; the same values also arrive with the legal import that produces `content/legal/**` |
+| Who answers | the same hub record — one person for all four channels |
+
+**No determination and no criterion here states any of those values**
+(DEC-083 §1): a number and an address are content, and content is not a
+spec's to carry. What this spec fixes is that the row exists, which
+scheme it uses, and that its value resolves from the hub record rather
+than being typed per page. A row whose value is missing is a build
+failure, not an empty row.
+
+#### No response expectation
+
+**The section states no response time, on any row.** The hub record
+carries none, and no cleared source states one — the only response
+promise anywhere in the model is the two-working-day promise on the quote
+request (S2), a different goal on a different surface, and itself
+demanded and unconfirmed (D4 C11, A13). A sub-label that implies a speed
+of answer is out of budget for the same reason A13 withholds the S2
+promise: no process is held to it. SRC-017 CG-031 carries the wording
+rule.
+
 ## Free for the generator
 
 - [FREE] Visual design of the widget wrapper, the static fallback
@@ -319,6 +379,8 @@ SRC-008 and never invented here.
 | TS-016-A12 | e2e | Each of S2, S3, S4 fires exactly one eTracker event carrying its conversion goal ID and route, once per completed flow, with no field values in the payload. |
 | TS-016-A13 | manual | The two-working-day promise copy on `/deine-region` is present only when the lead-handling process behind it is named and signed off (C11); absent otherwise. |
 | TS-016-A14 | e2e | With the widget script blocked, S2 and S4 still render the static fallback (contact link plus the booking row of the page's contact section) and no empty or permanently loading slot. The contact section itself renders unchanged, since it loads nothing. |
+| TS-016-A15 | e2e | The contact section renders exactly four action rows, in the D13 order: row 1's href is the configured appointment URL, row 2's is a WhatsApp click-to-chat URL, row 3's scheme is `tel:` and row 4's is `mailto:`. No row is omitted or merged, including when rows 2 and 3 resolve to the same number. Only row 1 emits an event. |
+| TS-016-A16 | static | Every value rendered in a contact row resolves from the hub record or the configured appointment URL — no phone number, WhatsApp number or contact e-mail address is hard-coded in a page, a component or a spec file. A row whose value does not resolve fails the build rather than rendering empty. |
 
 ## Coverage
 
@@ -327,7 +389,7 @@ SRC-008 and never invented here.
 | WEB-F-090 (the remaining lead forms are the envoy widget; no own form backend; no general contact form) | D1, D2, D5, D6 · A1, A2, A14 |
 | WEB-F-091 (theming via website-supplied CSS variables) | D3, D4 (C1) · A4 |
 | WEB-F-092 (envoy owns storage; website holds no submission data) | D5, D2 network path · A1, A3 |
-| WEB-F-093 (booking resolves to the contact section; its first row is the Google Calendar link, no embed) | D7, D12 · A5, A12 |
+| WEB-F-093 (booking resolves to the contact section; its first row is the Google Calendar link, no embed) | D7, D12, D13 · A5, A12, A15, A16 |
 | WEB-F-094 (purchase concludes on invoice, embed code immediately) | D8 · A6 |
 | WEB-F-095 (external media as own previews + outbound links) | D9 · A7 |
 | WEB-F-096 (newsletter: double opt-in, cookieless, GDPR) | D10 · A11 |
@@ -345,12 +407,13 @@ website-side half of TS-002 A6).
   tests.** All eleven rows of D4 are the concrete form of this question.
   It no longer blocks a visitor's ability to reach a person at all: that
   is the standing contact section, which needs no widget (DEC-081 §7).
-- **Q-072 — the phone channel has no record.** The section shows a phone
-  row while `@schafe-vorm-fenster/goals` names video appointment, WhatsApp
-  and e-mail only. The row's number and its answering process are UNKNOWN
-  content until the hub carries them; this spec states no value for it. Nothing in
-  this spec guesses at an answer; the integration is written to be
-  completable once the contract exists.
+- **Q-072 is closed (2026-09-24).** The hub carries `contact-channels.md`
+  in `@schafe-vorm-fenster/goals` (SRC-008): four channels, their
+  addresses, the goal each serves and who answers. The phone row ships,
+  and D13 carries its position, its scheme and where its value resolves
+  from. This spec still states no value for it — that is DEC-083, not a
+  gap. What the closure did **not** produce is a response expectation:
+  none is recorded on any channel, so no row states one (D13).
 - envoy-api's production host is UNKNOWN (SRC-011), so the CSP allowlist
   entry required by WEB-Q-030 cannot be written yet. Part of Q-022 (C8).
 - The widget's delivery date is UNKNOWN (C10). D6 defines the shippable
