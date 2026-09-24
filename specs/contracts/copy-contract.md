@@ -3,6 +3,7 @@ artefact: contract
 id: SRC-018
 status: DRAFT
 date: 2026-09-23
+updated: 2026-09-24
 decisions: [DEC-066, DEC-080]
 ---
 
@@ -47,7 +48,7 @@ content `describe()` names the rule rather than restating it.
 | --- | --- | --- |
 | CG-001 `du` to a person, `ihr` to an organisation | `schema` · `review` | Each field's `describe()` names the page's default address (SRC-017 §1); which number a given block takes is judgement. |
 | CG-002 one address per page, a block departs whole | `lint` · `review` | Lint: one field containing both a `du`/`dein`/`dich` form and an `ihr`/`euer`/`euch` form fails. Whether a whole block may depart is review. |
-| CG-003 no `Sie` | `lint` | A capitalised `Sie`, `Ihnen`, `Ihre*` mid-sentence, or an imperative `<Verb> Sie`, fails. This is the register check DEC-066 asks TS-007 D12 for. |
+| CG-003 no `Sie` | `lint` | A capitalised `Sie`, `Ihnen`, `Ihre*` mid-sentence, or an imperative `<Verb> Sie`, fails. This is the register check DEC-066 asks TS-007 D12 for. **One exemption, as a path allowlist of exactly one route**: `/rechtliches` and its localised sibling, whole — decision 14, 2026-09-23 (TS-029 D2, DEC-012, DEC-027). It is a route list in the lint row, never a per-field opt-out and never a flag in a content file, so the exemption is auditable in one place. Nothing inherits it: a legal sentence quoted elsewhere, a footer link, a consent line and an error message are all `du`. |
 
 ### Structure
 
@@ -66,7 +67,7 @@ content `describe()` names the rule rather than restating it.
 | CG-009 real people with roles, never "die Leute" | `lint` | Avoid-list row. |
 | CG-010 the benefit, not the concept | `review` | — |
 | CG-011 one example per claim | `schema` · `review` | Schema: the claim-carrying types declare an `example` field [PROPOSED — the field does not exist yet]. Whether the example is picturable is review. |
-| CG-012 address whoever acts | `review` | — |
+| CG-012 address whoever acts | `review` | No page-scoped carve-out exists or is needed. `TS-021 D9`'s "never direct" on `/dein-ort/starten` and the `DEC-071 §4` exception are **retired** (decision 15, 2026-09-23); direct address holds everywhere, so this rule and CG-008 need no exception list. A spec row still citing "never direct" cites a retired determination. |
 
 ### Economy
 
@@ -82,21 +83,26 @@ content `describe()` names the rule rather than restating it.
 | Rule | Mechanism | The check |
 | --- | --- | --- |
 | CG-017 casual, never flat | `lint` · `review` | Lint: the four rejected headings are avoid-list rows. Flatness in a new heading is review. |
-| CG-018 no abstraction heading | `lint` · `review` | Same shape. |
+| CG-018 no abstraction heading | `lint` · `review` | Same shape — the rejected headings are avoid-list rows, flatness is review. CG-018's *use* examples are **question forms and are legal only as kickers**; the CG-005 lint (a `?` in a section-title field fails) is unchanged by them and is what keeps the two apart. A generator that reads CG-018 as permission to title a section *"Was hilft euch das?"* fails that row, which is the intended outcome. |
 | CG-019 kicker vocabulary per section role | `review` | The role table has three deliberately empty rows (SRC-017 §5); a lint over it would enforce a gap. |
 
 ### Block budgets
 
-All thirteen are `schema` — one `max()` per field, the number from SRC-017 §6
-— with three exceptions that need a rendered page to be true:
+All thirteen are `schema` — one `max()` per field, the number from SRC-017 §6.
+**Five of them carry something a `max()` cannot express**, and each has its
+own row below; the other eight share the first row and are listed there once.
+(This table used to announce "three exceptions" over four rows and to name
+CG-027 both in the shared row and in its own. Both are fixed: the count is
+five and every rule appears exactly once.)
 
 | Rule | Mechanism | The check |
 | --- | --- | --- |
-| CG-020 – CG-024, CG-027, CG-029 – CG-032 | `schema` | `max()` per field; over budget fails the parse (TS-007-A1) and the `check:content` run (TS-007 D12 row 2). |
-| CG-025 explain-module step line | `schema` · `e2e` | `max()` per line, **plus** an e2e assertion that neither line wraps at 390 px and that the module with its three lines fits one viewport height (SRC-014 "Explain module"). |
+| CG-020 – CG-024, CG-029, CG-031, CG-032 | `schema` | `max()` per field; over budget fails the parse (TS-007-A1) and the `check:content` run (TS-007 D12 row 2). Eight rules. |
+| CG-025 explain-module step line | `schema` · `e2e` | `max()` per line, **plus** an e2e assertion that neither line wraps at 390 px and that the module with its three lines fits one viewport height (SRC-014 "Explain module"). Both assertions are **below `lg`**: from the tablet breakpoint the three steps stand side by side and the one-viewport constraint does not apply. |
 | CG-026 CTA label | `schema` · `e2e` | `max()`, plus an e2e assertion that no button label wraps at 390 px. |
 | CG-027 proof card states the win | `schema` · `review` | The budget is schema; "a persuasion, not a report" is review. |
-| CG-028 quote card | `schema` · `lint` · `review` | Schema: `quote`, `quote_author`, role, organisation and `source_url` are all required on a quote card. Lint: a quote card whose `source_url` does not resolve fails. Verbatimness against the source is review. |
+| CG-028 quote card | `schema` · `lint` · `review` **[PROPOSED — none of these fields exists yet]** | Schema: `quote`, `quote_author`, role, organisation and `source_url` all required on a quote card. Lint: a quote card whose `source_url` does not resolve fails. Verbatimness is review. **No schema carries `quote`, `quote_author`, `quote_date` or `source_url` today** — on the website's content types or on the hub's proof records — so both mechanisms are proposed, not live. The fields are a hub change request (proof schema) plus a website content type; until they land, a quote card cannot be authored at all, which is the honest state and better than a lint that silently passes over absent fields. |
+| CG-030 context-band entry | `schema` **[PROPOSED — the field does not exist yet]** | `max(80)` on a `blurb` field that `TS-006 D5`'s entry and `TS-007 D5`'s hierarchy do not have. SRC-017 §6 names what must be added: a required per-entry `blurb`, sourced from the job registry so the three non-focus entries cannot drift from the fourth page's own description. Until then the budget governs nothing. |
 
 ### Truth
 
@@ -133,6 +139,14 @@ CG-010, CG-012, CG-013, CG-016, CG-019, CG-033. Three more are half-manual,
 where a mechanism holds the measurable part and a person holds the judgement:
 CG-001 (which number a block takes), CG-011 (whether the example is
 picturable), CG-027 (whether the card states a win).
+
+**Three are `[PROPOSED]`** — the mechanism is named and the field it would
+run over does not exist yet: CG-011 (`example`), CG-028 (`quote`,
+`quote_author`, `quote_date`, `source_url`) and CG-030 (`blurb`). They are
+counted above because the obligation is real and citable; they are marked
+here because a rule whose mechanism cannot run yet must not be mistaken for
+one that passes. The counts do not change when the fields land — only the
+markers go.
 
 ## The interface to TS-006 and TS-007
 

@@ -1,7 +1,7 @@
 ---
 title: "Website Copy Guide — www.schafe-vorm-fenster.de"
 created_at: 2026-09-23
-updated_at: 2026-09-23
+updated_at: 2026-09-24
 status: draft
 source: review
 intent: inform
@@ -104,6 +104,31 @@ Not on a page, not in a form label, not in an error message, not in the
 English mirror's tone. A register switch is a validation failure, not a
 stylistic finding (DEC-066).
 
+**One exemption, and it is a whole page: `/rechtliches`.** Decision 14
+(2026-09-23) exempts the page, not only the five imported documents on it.
+Impressum, Datenschutzerklärung, AGB, Widerrufsbelehrung and
+Nutzungsbedingungen are rendered verbatim (TS-029 D2, DEC-012, DEC-027) and
+their source register is `Sie`; a page that switches to `du` in its own
+headings and back to `Sie` inside every document would read as two voices
+arguing, and editing the documents to fix that would change legal text.
+Exempting the page instead keeps one voice on it.
+
+The exemption is precise:
+
+- **Scope** is the route `/rechtliches` and its localised sibling, whole —
+  headings, intro lines, link labels, the table of contents, and the
+  imported bodies alike.
+- **Nothing inherits it.** Not a legal sentence quoted on another page, not
+  a footer link label, not a form's consent line, not an error message
+  — those are `du` like everything else. A carve-out that travels with the
+  text would exempt the site.
+- **Mechanically** it is a path allowlist of exactly one route in the
+  CG-003 lint row, not a per-field opt-out and not a directive in a content
+  file (`copy-contract.md`). One entry is auditable; a flag is not.
+- CG-002 lists `/rechtliches` as a `du` page. That row governs *number*
+  (`du` against `ihr`) and is unaffected: a page outside the register rule
+  has no number to choose either.
+
 ---
 
 ## 2. Structure
@@ -204,6 +229,23 @@ cheapest concreteness there is.
   the organiser.
 - Use: *"Dein Termin …"*
 
+**Direct address holds on every page, `/dein-ort/starten` included — there
+is no carve-out here and none is needed.** `TS-021 D9` said the activation
+page must "never" address the reader directly, and `DEC-071 §4` carried the
+same carve-out; **both are retired** by decision 15 (2026-09-23). The rule
+they were written against no longer exists, so this guide does not gain an
+exception to a rule nobody holds — CG-012 and CG-008 read exactly as they
+did before, and they now read the same way everywhere.
+
+Why it went: `/dein-ort/starten` is the page a person reaches after typing
+their own village and not finding it. Refusing to say *dein Ort* to someone
+who just typed it is the one place the distance is most expensive, and the
+page's whole job — CG-008's hand-off, "Fehlt deine Veranstaltung, jetzt
+selbst eintragen" — is a sentence the old rule forbade.
+
+Anything still citing `TS-021 D9`'s "never direct" is citing a retired
+determination; the spec rows are the parallel owner's to correct.
+
 ---
 
 ## 4. Economy
@@ -259,8 +301,25 @@ site is not a heading.
 Ask the reader's question instead.
 
 - Avoid: *"Warum das zählt"* · *"Neuigkeiten aus dem Projekt"*
-- Use: *"Was hilft euch das?"* · *"Warum ist das wichtig?"* · *"Was sind die
-  Vorteile?"*
+- Use **as a kicker**: *"Was hilft euch das?"* · *"Warum ist das wichtig?"* ·
+  *"Was sind die Vorteile?"*
+
+**All three of those are questions, and a question is not a section title.**
+CG-005 makes a `?` in a section title a build failure, and these sit under a
+"Headings" chapter, which read as permission to write one. It is not.
+
+Read CG-018 as the two-part move CG-005 already describes: the reader's
+question goes in the **kicker**, and the **title** beneath it answers. The
+review accepts exactly that split — kicker *"Warum es heute hakt"*, title
+*"Wer euren Termin heute nicht mitbekommt"* — and CG-019 lists
+`WAS HILFT EUCH DAS?` as a kicker for the benefit role, which is where the
+first example above actually belongs.
+
+So: a question form is legal **only as a kicker**, and only where the
+section that follows answers it (CG-006). A section title is a statement,
+always, and CG-018 removes the abstraction from it without turning it into
+a question. What CG-018 forbids is the *flat abstraction*; what it does not
+grant is a question mark one line lower.
 
 ### CG-019 — Kicker vocabulary per section role
 
@@ -307,7 +366,7 @@ schema each one is a `max()` (TS-007 D5).
 | CG-027 | proof card | Card title 21/700 + Meta | claim ≤ 70, context ≤ 140 characters | **State the win.** A proof card is a persuasion, not a report. |
 | CG-028 | quote card | Lead 20/400 + mono 15 | quote ≤ 200, name ≤ 40, role + organisation ≤ 60, source ≤ 60 characters | Verbatim, never shortened in a way that changes the sentence; the concrete publication and article as source, with a working link (SRC-014 "Quote card"). |
 | CG-029 | newsletter block | Section head + Lead | title ≤ 40, benefit ≤ 120 characters | Name at least two concrete things that arrive: new functions, current offers, how other places do it. |
-| CG-030 | context-band entry | Card title + Meta | ≤ 80 characters | One half-sentence naming **audience and content together**, then the link. |
+| CG-030 | context-band entry | Card title + Meta | ≤ 80 characters **[PROPOSED — the field does not exist yet]** | One half-sentence naming **audience and content together**, then the link. |
 | CG-031 | contact section | Section head + rows | title ≤ 40, lead ≤ 100, action-row title ≤ 24, sub-label ≤ 32 characters | Concrete channels in order, no form, no "nimm Kontakt auf". |
 | CG-032 | empty state | Lead + CTA | ≤ 90 characters + one CTA | An invitation, never an error (WEB-F-044/045). |
 
@@ -327,6 +386,26 @@ Examples, all from the review:
 - CG-031 — the three channels in order: Videotermin buchen · per WhatsApp
   schreiben · anrufen oder Mail. Avoid: a general contact form — there is
   none.
+
+**CG-030 budgets a field that does not exist**, which is why it carries the
+`[PROPOSED]` marker CG-011 carries. A context-band entry is built from the
+job registry (`TS-006 D5`), and a registry entry has a label and a target
+and nothing to put a half-sentence in. The budget is therefore a number
+against a hole: until the field lands, a generator writes the entry from the
+label alone and CG-030 governs nothing.
+
+What the spec must add, named so it can be asked for rather than inferred:
+
+| What | Where |
+| --- | --- |
+| A `blurb` field on the context-band entry type — required, one per entry, `max(80)`, `describe()` citing CG-030 | `TS-007 D5`'s Zod hierarchy |
+| The blurb as a rendered property of `TS-006 D5`'s entry, beside label and target, and per locale | `TS-006 D5` |
+| Where the text comes from: the job registry carries it per job, so the three non-focus entries cannot drift from the fourth page's own description | the job registry, cited by `TS-006 D5` |
+
+Two rules already constrain that field before it is written: it is a
+**statement**, because CG-005 governs it and `TS-006 D5` no longer phrases
+the band as a rhetorical question, and it names **audience and content
+together**, which is what makes the band an offer rather than a menu.
 
 ---
 
@@ -490,7 +569,8 @@ review at the editorial gate (TS-007 D11), listed as such in the contract.
 - No word doubling, no padding line, no sentence that repeats the one above.
 - No typed traction figure, no internal meta line, no sentence that is
   literally untrue.
-- No `Sie`, on any page, in any field.
+- No `Sie`, on any page, in any field — except `/rechtliches`, which is
+  exempt as a whole page and exempts nothing else (CG-003).
 - No "das Produkt", and no second occurrence of the product name.
 
 ## Open decisions
