@@ -2,7 +2,7 @@
 artefact: requirement
 id: NFR-WEB-0022
 class: NFR
-form: Q0
+form: Q1
 domain: WEB
 status: DRAFT
 version: 0.1.0
@@ -13,9 +13,13 @@ ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
   model: "Claude Opus 5 (1M context)"
-  generated_at: "2026-09-09T16:07:54+02:00"
+  generated_at: "2026-09-24T16:45:00+02:00"
 ---
 
 # NFR-WEB-0022
 
-No new ad-hoc tracking is introduced with the relaunch.
+Analytics, tag and pixel vendors in the build and in the rendered markup SHALL be = 1 vendor, measured by TS-WEB-0012-A9.
+
+## Notes
+
+Original statement: "No new ad-hoc tracking is introduced with the relaunch." DEC-0087 read this as a quality requirement with no measure. The measure exists: TS-WEB-0012-A9 is "Exactly one analytics loader in the rendered HTML, with `data-block-cookies=\"true\"` and the secure code from an env var; no second analytics/tag/pixel vendor in dependencies or markup." The one vendor is eTracker (CON-WEB-0028).

@@ -18,4 +18,4 @@ ai_provenance:
 
 # FUN-WEB-0100
 
-Pages shall render server-side with caching; the page shell shall never block on an app API (streamed live modules), preserving TTFB < 200 ms (NFR-WEB-0002).
+Pages shall render server-side with caching; the page shell shall never block on an app API (streamed live modules), preserving TTFB < 200 ms (NFR-WEB-0051).

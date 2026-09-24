@@ -152,7 +152,7 @@ specs/
   with a decision record; from medium upward, and at the four decision points
   the impact method leaves undefined, the owner decides. **Everything is still
   `DRAFT`**, and now for a measured reason rather than a missing document:
-  low impact means *"no dependants"*, and every one of the 155 requirements is
+  low impact means *"no dependants"*, and every one of the 196 requirements is
   implemented by a tactical spec while every one of the 29 tactical specs
   carries 8 to 21 acceptance criteria. Nothing in the repository is on an agent
   row — DEC-0089 is the run of the policy over all 185 artefacts, with the

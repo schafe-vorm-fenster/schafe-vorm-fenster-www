@@ -18,4 +18,4 @@ ai_provenance:
 
 # FUN-WEB-0106
 
-Every module whose data arrives after the shell — above all geo-personalized content — renders a skeleton immediately and streams in. Skeletons reserve the final space at the declared ratio (NFR-WEB-0009), do **not** animate, and are replaced by the designed empty state after two seconds. Blocking spinners are forbidden.
+Every module whose data arrives after the shell — above all geo-personalized content — renders a skeleton immediately and streams in. Skeletons reserve the final space at the declared ratio (FUN-WEB-0116, FUN-WEB-0117), do **not** animate, and are replaced by the designed empty state after two seconds. Blocking spinners are forbidden.

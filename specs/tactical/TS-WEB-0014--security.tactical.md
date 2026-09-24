@@ -4,7 +4,7 @@ id: TS-WEB-0014
 kind: rule
 status: DRAFT
 version: 0.1.0
-implements: [NFR-WEB-0030, NFR-WEB-0031, NFR-WEB-0032, NFR-WEB-0033, NFR-WEB-0034, NFR-WEB-0035, NFR-WEB-0036]
+implements: [CON-WEB-0030, CON-WEB-0031, CON-WEB-0032, FUN-WEB-0127, CON-WEB-0038, CON-WEB-0034, CON-WEB-0039, NFR-WEB-0065, CON-WEB-0040, CON-WEB-0041]
 sources: [SRC-0006, SRC-0010, SRC-0011, SRC-0012]
 decisions: [DEC-0009, DEC-0013, DEC-0014, DEC-0015, DEC-0017, DEC-0025, DEC-0030, DEC-0031, DEC-0035]
 ai_provenance:
@@ -27,7 +27,7 @@ belong to TS-WEB-0004; this spec only adds the rules that constrain them.
 
 ## Determinations
 
-### D1 — The allowlist: every external host, named [FIXED: NFR-WEB-0030, DEC-0015, DEC-0013; hosts PROPOSED]
+### D1 — The allowlist: every external host, named [FIXED: CON-WEB-0030, DEC-0015, DEC-0013; hosts PROPOSED]
 
 The complete set. Four external origins, no fifth. Hosts marked
 [PROPOSED] are read off the sibling repositories, not confirmed by their
@@ -39,7 +39,7 @@ owners.
 | `https://code.etracker.com` | eTracker loader `e.js` and its beacon; legacy config `data-secure-code="i9strK"`, `data-block-cookies="true"` | `script-src`, `connect-src`, `img-src` | SRC-0010 `legacy-content/app/layout.tsx`, DEC-0004/DEC-0028 |
 | `https://portalize.schafe-vorm-fenster.de` | Portalize loader `/api/{organizerId}/load.js`, web-component mode — the embed demo (FUN-WEB-0043) | `script-src`, `connect-src` | DEC-0030, `portalize/DEPLOYMENT.md` |
 | `https://envoy-api.api.schafe-vorm-fenster.de` [PROPOSED] | envoy lead widget: its web-component script and its own submission endpoint | `script-src`, `connect-src` | DEC-0009; host read from `envoy-api`, widget host unconfirmed (Q-0022) |
-| `https://app.schafe-vorm-fenster.de` | named by NFR-WEB-0030; the handover (FUN-WEB-0013, DEC-0029) is a plain `GET` navigation, which CSP does not govern | **none today** — reserved slots: `frame-ancestors` (D4) and `form-action` (if the handover ever becomes a POST) | DEC-0035, NFR-WEB-0030 |
+| `https://app.schafe-vorm-fenster.de` | named by CON-WEB-0030; the handover (FUN-WEB-0013, DEC-0029) is a plain `GET` navigation, which CSP does not govern | **none today** — reserved slots: `frame-ancestors` (D4) and `form-action` (if the handover ever becomes a POST) | DEC-0035, CON-WEB-0030 |
 
 **Deliberate non-entries.** Each is an origin someone will otherwise add
 by reflex:
@@ -48,7 +48,7 @@ by reflex:
 | --- | --- |
 | `events.api.`, `geo.api.`, `calendar.api.`, `classify.api.` (SRC-0011) | the browser never talks to them — the website is its own BFF (DEC-0025, TS-WEB-0004 D5) |
 | `assets.api.schafe-vorm-fenster.de` | images pass through the Next image optimizer and are served from `'self'` |
-| any font CDN | fonts are self-hosted (NFR-WEB-0005, TS-WEB-0003 D3) |
+| any font CDN | fonts are self-hosted (FUN-WEB-0109, FUN-WEB-0110, FUN-WEB-0111, TS-WEB-0003 D3) |
 | any player, social or embed host | DEC-0013 — own preview plus outbound link, never an embed |
 | any error/APM SDK host | DEC-0017 (D13) |
 | any captcha or challenge host | DEC-0014 (D9) |
@@ -84,7 +84,7 @@ default:
 | Choice | Reason |
 | --- | --- |
 | `default-src 'self'`, not `'none'` | `'none'` reads stricter but also governs every directive that has no name of its own — prefetch first. Next.js route prefetching is the first casualty, and the failure is silent. Every directive that matters is named explicitly anyway. |
-| `'strict-dynamic'` **and** a host allowlist in `script-src` | CSP3 browsers ignore the host list once `'strict-dynamic'` is present — enforcement runs on the nonce, and the three third-party loaders are trusted because *we* render their `<script src>` tags **with the nonce**, which then propagates to what they load. The host list stays as the CSP2 fallback and as the written allowlist NFR-WEB-0030 asks for. Both halves are required; dropping either breaks a browser class. |
+| `'strict-dynamic'` **and** a host allowlist in `script-src` | CSP3 browsers ignore the host list once `'strict-dynamic'` is present — enforcement runs on the nonce, and the three third-party loaders are trusted because *we* render their `<script src>` tags **with the nonce**, which then propagates to what they load. The host list stays as the CSP2 fallback and as the written allowlist CON-WEB-0030 asks for. Both halves are required; dropping either breaks a browser class. |
 | `style-src 'unsafe-inline'` | the one bounded concession. Next.js inlines critical CSS and both web components style their shadow roots inline. Script injection stays fully locked; CSS-based exfiltration is the residual risk, accepted and flagged. Tightening path: a style nonce, once D3 resolves nonce delivery. |
 | `frame-src 'none'` | pins Portalize to web-component mode. DEC-0030 chose it; this makes the iframe fallback fail loudly instead of quietly loading a second document. |
 
@@ -118,14 +118,14 @@ statement about *routing* state. A nonce is derived per request and
 stored nowhere; it does not make the proxy stateful. Variant A does not
 violate that rule.
 
-### D4 — Security headers, header by header [FIXED: NFR-WEB-0032; values PROPOSED]
+### D4 — Security headers, header by header [FIXED: CON-WEB-0032; values PROPOSED]
 
 | Header | Value | Note |
 | --- | --- | --- |
 | `Strict-Transport-Security` | `max-age=63072000; includeSubDomains` | **no `preload` at launch** — see Open points; production only |
 | `X-Content-Type-Options` | `nosniff` | |
 | `Referrer-Policy` | `strict-origin-when-cross-origin` | the app handover carries its slugs in the URL (DEC-0029), so origin-only referrer costs nothing |
-| `Permissions-Policy` | `accelerometer=(), autoplay=(), browsing-topics=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(self), gyroscope=(), idle-detection=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), serial=(), usb=(), xr-spatial-tracking=()` | `geolocation=(self)` is needed by "this week nearby" (TS-WEB-0004 D5 `/api/nearby`); `browsing-topics=()` keeps the no-identifier promise (NFR-WEB-0020) true at the browser level |
+| `Permissions-Policy` | `accelerometer=(), autoplay=(), browsing-topics=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(self), gyroscope=(), idle-detection=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), serial=(), usb=(), xr-spatial-tracking=()` | `geolocation=(self)` is needed by "this week nearby" (TS-WEB-0004 D5 `/api/nearby`); `browsing-topics=()` keeps the no-identifier promise (NFR-WEB-0061, NFR-WEB-0062) true at the browser level |
 | `X-Frame-Options` | `DENY` | legacy companion to `frame-ancestors 'none'`; the two must never disagree |
 | `Cross-Origin-Opener-Policy` | `same-origin` | |
 | `Cross-Origin-Resource-Policy` | `same-origin` | |
@@ -161,7 +161,7 @@ source per header, no exceptions.
 | `X-Robots-Tag` | absent on pages | `noindex, nofollow` (CON-WEB-0020/023) | — |
 | `upgrade-insecure-requests` | on | on | off |
 
-NFR-WEB-0030 says *enforced*, so report-only is never a substitute. A
+CON-WEB-0030 says *enforced*, so report-only is never a substitute. A
 `Content-Security-Policy-Report-Only` header may run **alongside** the
 enforced one to trial a tightening (e.g. removing
 `style-src 'unsafe-inline'`); it never replaces it.
@@ -177,9 +177,9 @@ additional service DEC-0017 refuses.
 Rules: always answers `204`; body cap 8 KB; `Cache-Control: no-store`;
 rate-limited per D10; logs only `violated-directive`, `blocked-uri`,
 `effective-directive` and the **path** of `document-uri` — the query
-string is stripped, because a place search sits in it (NFR-WEB-0020).
+string is stripped, because a place search sits in it (NFR-WEB-0061, NFR-WEB-0062).
 
-### D7 — Allowlist change control [FIXED: NFR-WEB-0031]
+### D7 — Allowlist change control [FIXED: CON-WEB-0031]
 
 - The policy is one typed structure in one module, `lib/security/csp.ts`
   — never a string spread across config files. D1's table and that
@@ -194,10 +194,10 @@ string is stripped, because a place search sits in it (NFR-WEB-0020).
 - Adding an origin means adding a row to D1 in the same PR, including
   the "why it exists" cell. An entry nobody can explain is removed.
 
-### D8 — HTTPS everywhere [FIXED: NFR-WEB-0034]
+### D8 — HTTPS everywhere [FIXED: CON-WEB-0034]
 
 - Vercel terminates TLS and answers plain HTTP with a `308` — a
-  permanent redirect; the platform default satisfies NFR-WEB-0034 and the
+  permanent redirect; the platform default satisfies CON-WEB-0034 and the
   website adds no redirect of its own.
 - All hosts are covered: `www` and apex on `schafe-vorm-fenster.de`,
   `app.`, `next.`, plus `owcezaoknem.pl`, `schafvormfenster.at` and
@@ -209,7 +209,7 @@ string is stripped, because a place search sits in it (NFR-WEB-0020).
   used `//code.etracker.com/code/e.js` (SRC-0010); the relaunch writes the
   scheme. A7 is the gate.
 
-### D9 — Form abuse protection: three layers, no captcha [FIXED: DEC-0014, NFR-WEB-0035; parameters PROPOSED]
+### D9 — Form abuse protection: three layers, no captcha [FIXED: DEC-0014, CON-WEB-0039, NFR-WEB-0065; parameters PROPOSED]
 
 **No captcha of any kind** — not reCAPTCHA, hCaptcha, Turnstile, an
 "invisible" challenge, or a proof-of-work interstitial. This is
@@ -219,7 +219,7 @@ structural, not a preference; three separate rules already forbid it:
    AAA plain-language stance (TS-WEB-0002 D2) for exactly the audience this
    site is for;
 2. it loads a third-party script and sets identifiers, which
-   contradicts NFR-WEB-0020/023 and DEC-0004;
+   contradicts NFR-WEB-0061, NFR-WEB-0062/023 and DEC-0004;
 3. its host is not in D1 and would have to be argued through D7 first.
 
 The three layers that replace it:
@@ -238,7 +238,7 @@ its own. What binds the website: DEC-0014 travels with the widget demand
 (A8, A9) — the same arrangement TS-WEB-0002 A6 uses for the widget's
 accessibility.
 
-### D10 — Rate limiting on the BFF routes [FIXED: NFR-WEB-0038, DEC-0025; limits PROPOSED]
+### D10 — Rate limiting on the BFF routes [FIXED: CON-WEB-0044, CON-WEB-0045, DEC-0025; limits PROPOSED]
 
 Per client IP, sliding window, on the TS-WEB-0004 D5 inventory:
 
@@ -265,7 +265,7 @@ the exact audience this site is built for.
 A `429` renders as a component state ("gleich nochmal versuchen"), never
 as an error page — the 404/500 surfaces of DEC-0032 do not apply here.
 
-### D11 — Origin checks, and what they are actually worth [FIXED: NFR-WEB-0038; rule PROPOSED]
+### D11 — Origin checks, and what they are actually worth [FIXED: CON-WEB-0044, CON-WEB-0045; rule PROPOSED]
 
 DEC-0025 already says it: for public read data a client token is theatre,
 and quota is the real control. The origin check is a **quota-protection
@@ -287,7 +287,7 @@ The website has no state-changing client endpoint today (forms belong to
 envoy, DEC-0009). If one ever appears it requires a same-origin `Origin`
 header with no `Sec-Fetch-Site: none` exemption.
 
-### D12 — Dependency scanning in CI [FIXED: NFR-WEB-0033; shape PROPOSED — SRC-0012, DEC-0031]
+### D12 — Dependency scanning in CI [FIXED: FUN-WEB-0127, CON-WEB-0038; shape PROPOSED — SRC-0012, DEC-0031]
 
 Lives in the `Quality` job of the pipeline modelled on
 `classification-api` (CON-WEB-0021), in the same shape: scan, write to
@@ -302,7 +302,7 @@ Lives in the `Quality` job of the pipeline modelled on
 | Dependency updates | Dependabot, ecosystems `npm` + `github-actions`, weekly | continuous | — |
 | Secret scanning | GitHub secret scanning with push protection | continuous | push rejected |
 
-"Critical findings block release" (NFR-WEB-0033) is realised twice: the
+"Critical findings block release" (FUN-WEB-0127, CON-WEB-0038) is realised twice: the
 `Quality` job is a required check for merge, and the rolling production
 promotion (CON-WEB-0022) does not start when it failed.
 
@@ -310,7 +310,7 @@ A finding that cannot be fixed is suppressed only through a
 `.trivyignore` entry carrying a justification and an **expiry date**;
 an expired entry fails the job. Never a silent dismissal.
 
-### D13 — Production error observation [FIXED: DEC-0017, NFR-WEB-0036]
+### D13 — Production error observation [FIXED: DEC-0017, CON-WEB-0040, CON-WEB-0041]
 
 | Signal | Vercel-native means |
 | --- | --- |
@@ -324,12 +324,12 @@ Rules:
 
 - **No error SDK.** No Sentry, Datadog, LogRocket or equivalent: its
   script would need a D1 allowlist entry and a privacy review
-  (NFR-WEB-0025), and DEC-0017 refuses both.
+  (NFR-WEB-0063, FUN-WEB-0126), and DEC-0017 refuses both.
 - **Log discipline.** One structured JSON line per event, through a
   single logging facade. It carries route, status, error name, message
   and a request id. It never carries a request body, a query string, an
   IP address, or an e-mail address — the place someone searched for is
-  exactly the identifier NFR-WEB-0020 promises not to keep. A13 is the gate.
+  exactly the identifier NFR-WEB-0061, NFR-WEB-0062 promises not to keep. A13 is the gate.
 - `global-error.tsx` (TS-WEB-0004 D2) reports nothing outbound; the 500 page
   stays free of data dependencies.
 
@@ -366,13 +366,16 @@ Rules:
 
 | Requirement | Discharged by |
 | --- | --- |
-| NFR-WEB-0030 (enforced CSP, explicit allowlist from day one) | D1, D2, D3, D5 · A1, A2, A3, A5 |
-| NFR-WEB-0031 (every allowlist change reviewed, no wildcard) | D1, D7 · A1 |
-| NFR-WEB-0032 (site-wide security headers) | D4, D5 · A2, A5 |
-| NFR-WEB-0033 (dependency scanning in CI, criticals block) | D12 · A11 |
-| NFR-WEB-0034 (HTTPS everywhere, permanent redirect) | D8 · A6, A7 |
-| NFR-WEB-0035 (honeypot + timing + rate limit, no captcha) | D9, D10 · A8, A9 |
-| NFR-WEB-0036 (Vercel-native error and availability observation) | D6, D13 · A4, A12, A13 |
+| CON-WEB-0030 (serve an enforced Content-Security-Policy with an explicit) | D1, D2, D3, D5 · A1, A2, A3, A5 |
+| CON-WEB-0031 (admit a Content-Security-Policy allowlist entry only as) | D1, D7 · A1 |
+| CON-WEB-0032 (set the security headers of TS-WEB-0014 D4) | D4, D5 · A2, A5 |
+| FUN-WEB-0127 (run a dependency scan) | D12 · A11 |
+| CON-WEB-0038 (not be released while a dependency scan) | D12 · A11 |
+| CON-WEB-0034 (serve every request over HTTPS and answer) | D8 · A6, A7 |
+| CON-WEB-0039 (protect every form submission with a honeypot) | D9, D10 · A8, A9 |
+| NFR-WEB-0065 (Captchas, challenge iframes and third-party challenge scripts = 0) | D9, D10 · A8, A9 |
+| CON-WEB-0040 (observe production errors and availability through Vercel-native) | D6, D13 · A4, A12, A13 |
+| CON-WEB-0041 (not add a third-party error or monitoring) | D6, D13 · A4, A12, A13 |
 
 ## Open points
 
@@ -409,9 +412,9 @@ Rules:
   service does?
 - **D13 — runtime log retention.** Vercel keeps runtime logs for a short,
   plan-dependent window; an error nobody reads inside it is gone. Is that
-  acceptable for launch, or does NFR-WEB-0036 need a log drain — and would a
+  acceptable for launch, or does CON-WEB-0040, CON-WEB-0041 need a log drain — and would a
   drain target itself be the additional service DEC-0017 refuses?
-- **D4 — the `frame-ancestors` app-embed exception.** NFR-WEB-0032
+- **D4 — the `frame-ancestors` app-embed exception.** CON-WEB-0032
   anticipates "app-embed needs"; none is known today. Does
   `app.schafe-vorm-fenster.de` ever embed a website page in an iframe?
   Question to the product side; until answered, `'none'`.

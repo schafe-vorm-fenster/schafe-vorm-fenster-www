@@ -4,7 +4,7 @@ id: TS-WEB-0012
 kind: system
 status: DRAFT
 version: 0.1.0
-implements: [NFR-WEB-0020, NFR-WEB-0021, NFR-WEB-0022, NFR-WEB-0028]
+implements: [NFR-WEB-0061, NFR-WEB-0062, CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124, NFR-WEB-0022, CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064]
 sources: [SRC-0006, SRC-0010, SRC-0003]
 decisions: [DEC-0004, DEC-0013, DEC-0016, DEC-0017, DEC-0028]
 ai_provenance:
@@ -29,13 +29,13 @@ Conversion goals themselves are **not defined here**. They live in
 `@schafe-vorm-fenster/goals` and are
 referenced by ID (ADR-001). Which page carries which goal is the
 `pages` area of `../requirements/functional/` (FUN-WEB-0010–019). Loading budgets are TS-WEB-0003; the CSP
-allowlist is NFR-WEB-0030 (security spec); the trust claim made from
-cookielessness on `/dein-kalender` is NFR-WEB-0023 (content spec) — this
+allowlist is CON-WEB-0030 (security spec); the trust claim made from
+cookielessness on `/dein-kalender` is FUN-WEB-0125, CON-WEB-0033 (content spec) — this
 spec only keeps that claim true.
 
 ## Determinations
 
-### D1 — The binding property: cookieless, banner-free [FIXED: DEC-0004, NFR-WEB-0020]
+### D1 — The binding property: cookieless, banner-free [FIXED: DEC-0004, NFR-WEB-0061, NFR-WEB-0062]
 
 The property is the requirement; eTracker is one implementation of it
 (D2). Any successor inherits this table unchanged.
@@ -53,7 +53,7 @@ The absence of a banner is not a design choice that can be traded away
 later: a banner would have to appear the moment any collector outside D7
 is added.
 
-### D2 — eTracker as interim implementation [FIXED: DEC-0004, NFR-WEB-0021, SRC-0010; loader details PROPOSED]
+### D2 — eTracker as interim implementation [FIXED: DEC-0004, CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124, SRC-0010; loader details PROPOSED]
 
 The legacy configuration is extracted from SRC-0010
 (`legacy-content/app/layout.tsx`) and carried over unchanged in meaning:
@@ -64,7 +64,7 @@ The legacy configuration is extracted from SRC-0010
 | `data-block-cookies` | `true` | this is what makes D1 true at the vendor |
 | `data-secure-code` | the legacy account code, from SRC-0010, supplied as a build-time env var — never inlined in a committed file | one code = one property (D3) |
 | `data-page-changed-detection` | `url` | App Router client navigation must produce page views without a full load |
-| `src` | `https://code.etracker.com/code/e.js` | scheme pinned (legacy used protocol-relative); host is the CSP entry (NFR-WEB-0030) |
+| `src` | `https://code.etracker.com/code/e.js` | scheme pinned (legacy used protocol-relative); host is the CSP entry (CON-WEB-0030) |
 | loading | `async`, deferred, outside the LCP critical path | TS-WEB-0003 D4 |
 
 **Replaceability is a build rule, not an intention.** No page, component,
@@ -90,7 +90,7 @@ Consequence for reporting: because there is no visitor identity (D1),
 joined per-user funnel. Website handover counts and app completion counts
 sit in the same report and are compared as ratios over a period.
 
-### D4 — Event registry: one event per conversion goal [FIXED: DEC-0016, NFR-WEB-0028; per-goal triggers PROPOSED]
+### D4 — Event registry: one event per conversion goal [FIXED: DEC-0016, CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064; per-goal triggers PROPOSED]
 
 Launch ships **conversion measurement only**. One event per conversion
 goal, no exploratory event zoo (D7). The event name **is** the hub goal
@@ -128,7 +128,7 @@ Rules:
    is verified in the account before launch — the *contract* above binds,
    the field mapping is [PROPOSED].
 
-### D5 — The measurement boundary [FIXED: DEC-0028, NFR-WEB-0028]
+### D5 — The measurement boundary [FIXED: DEC-0028, CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064]
 
 The website measures up to and including the handover. It does not try to
 observe what happens afterwards.
@@ -174,8 +174,8 @@ is a decision, not an implementation detail.
 
 | Collector | Scope | Basis |
 | --- | --- | --- |
-| eTracker | page views + the D4 conversion events | DEC-0004, NFR-WEB-0021 |
-| Vercel Speed Insights | Web Vitals only, cookieless, no behavioural data | NFR-WEB-0007, TS-WEB-0003 D7 |
+| eTracker | page views + the D4 conversion events | DEC-0004, CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124 |
+| Vercel Speed Insights | Web Vitals only, cookieless, no behavioural data | FUN-WEB-0114, FUN-WEB-0115, TS-WEB-0003 D7 |
 
 Excluded by this determination, with no exception at launch: tag
 managers, a second analytics vendor, ad or remarketing pixels, session
@@ -237,10 +237,16 @@ cannot be attributed to a returning visitor.
 
 | Requirement | Discharged by |
 | --- | --- |
-| NFR-WEB-0020 (cookieless, banner-free) | D1, D2 (`data-block-cookies`), D5 (no cross-domain identity), D6 (no storage), D7 · A1, A2, A9 |
-| NFR-WEB-0021 (eTracker interim, config from SRC-0010, one account/property incl. app) | D2, D3, D4 (tool-independent registry) · A3, A9, A10 |
-| NFR-WEB-0022 (no new ad-hoc tracking) | D7, D8, D4 rule 1 · A1, A9, A11 |
-| NFR-WEB-0028 (one event per goal, boundary at handover, `etcc_*`, A/B deferred) | D4, D5, D6, D8, D9 · A3, A5, A6, A7, A10, A11 |
+| NFR-WEB-0061 (Analytics cookies and persistent identifiers = 0) | D1, D2 (`data-block-cookies`), D5 (no cross-domain identity), D6 (no storage), D7 · A1, A2, A9 |
+| NFR-WEB-0062 (Consent-banner components = 0 components) | D1, D2 (`data-block-cookies`), D5 (no cross-domain identity), D6 (no storage), D7 · A1, A2, A9 |
+| CON-WEB-0028 (use eTracker as its analytics implementation) | D2, D3, D4 (tool-independent registry) · A3, A9, A10 |
+| CON-WEB-0029 (use one eTracker account and one property) | D2, D3, D4 (tool-independent registry) · A3, A9, A10 |
+| FUN-WEB-0124 (extract the eTracker configuration from the legacy) | D2, D3, D4 (tool-independent registry) · A3, A9, A10 |
+| NFR-WEB-0022 (Analytics, tag and pixel vendors = 1 vendor) | D7, D8, D4 rule 1 · A1, A9, A11 |
+| CON-WEB-0035 (ship conversion measurement only at launch) | D4, D5, D6, D8, D9 · A3, A5, A6, A7, A10, A11 |
+| CON-WEB-0036 (measure up to the handover only) | D4, D5, D6, D8, D9 · A3, A5, A6, A7, A10, A11 |
+| CON-WEB-0037 (keep the etcc_* convention for campaign attribution) | D4, D5, D6, D8, D9 · A3, A5, A6, A7, A10, A11 |
+| NFR-WEB-0064 (Experiment, variant and bucketing code in the build = 0) | D4, D5, D6, D8, D9 · A3, A5, A6, A7, A10, A11 |
 
 ## Open points
 
@@ -266,7 +272,7 @@ cannot be attributed to a returning visitor.
   (hub goal file, not this spec).
 - **`publish-events-regularly` is not countable anywhere** until the hub
   fixes a recurrence rule. Until then "one event per conversion goal"
-  (NFR-WEB-0028) is complete only for the countable goals — stated here so
+  (CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064) is complete only for the countable goals — stated here so
   the gap is not read as an omission. Addressee: jan-henrik (hub).
 - **Two goals have no surface at launch:** `order-promotion-material`
   (Q-0005, no page) and `request-ad-placement` (Q-0006, offering withheld).

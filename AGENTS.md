@@ -81,6 +81,19 @@ the `BUS` class, put 47 of the 155 statements into the slot form of
 not yet, and `check:specs` W4 counts them), and gave every versioned artefact
 `version: 0.1.0`.
 
+DEC-0092 then took the whole quality class through it. A quality requirement
+**is** a measure, so a statement carrying several was split into one
+requirement per measure, a statement carrying none was reclassified out of the
+class by the method's tree, and the five that were single measures took their
+value from the artefact that already enforces it — `TS-WEB-0003` D1,
+`TS-WEB-0002` D2, `scripts/check-contrast.ts`, `e2e/layout-stability.spec.ts`.
+**No number was invented, and none may be.** If a requirement needs a
+threshold this repository does not hold, the fit criterion is `UNKNOWN` and a
+question is raised; it is never filled with a plausible figure. A split retires
+the parent into `specs/traceability/identifier-map.md` and gives the children
+new numbers; a reclassification keeps the number where it is free in the target
+class and takes the next one above the family's highest where it is not.
+
 A status moves at a decision point, and since DEC-0088 one policy says which:
 `POL-GRADED-BY-IMPACT` in `specs/policy/`. It grades by impact — an agent may
 decide at the **low** impact level, inside four bounds and with a decision

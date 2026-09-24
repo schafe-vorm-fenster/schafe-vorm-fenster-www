@@ -5,7 +5,7 @@ import { everyRoute, href } from "../src/lib/routes/routes";
 
 /**
  * TS-WEB-0013 — the closed client-request set. TS-WEB-0013 D2's own words: "The CSP
- * allowlist (NFR-WEB-0030) and this table are the same set seen from two
+ * allowlist (CON-WEB-0030) and this table are the same set seen from two
  * sides. If they diverge, one of them is wrong." — so the allowed-host set
  * here is built from `src/lib/security/csp.ts`'s `ALLOWLIST`, the one typed
  * structure TS-WEB-0014 D7 names as the single source, rather than a second,

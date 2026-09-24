@@ -4,7 +4,7 @@ id: TS-WEB-0004
 kind: system
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0002, FUN-WEB-0023, FUN-WEB-0029, FUN-WEB-0010, FUN-WEB-0011, FUN-WEB-0012, FUN-WEB-0013, FUN-WEB-0014, FUN-WEB-0015, FUN-WEB-0016, FUN-WEB-0017, FUN-WEB-0018, FUN-WEB-0021, FUN-WEB-0026, FUN-WEB-0027, FUN-WEB-0047, FUN-WEB-0048, FUN-WEB-0067, FUN-WEB-0073, FUN-WEB-0079, NFR-WEB-0037, NFR-WEB-0038]
+implements: [FUN-WEB-0002, FUN-WEB-0023, FUN-WEB-0029, FUN-WEB-0010, FUN-WEB-0011, FUN-WEB-0012, FUN-WEB-0013, FUN-WEB-0014, FUN-WEB-0015, FUN-WEB-0016, FUN-WEB-0017, FUN-WEB-0018, FUN-WEB-0021, FUN-WEB-0026, FUN-WEB-0027, FUN-WEB-0047, FUN-WEB-0048, FUN-WEB-0067, FUN-WEB-0073, FUN-WEB-0079, CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045]
 sources: [SRC-0003]
 decisions: [DEC-0002, DEC-0024, DEC-0025, DEC-0032, DEC-0035]
 ai_provenance:
@@ -43,7 +43,7 @@ every row on `.de` (phase 1). One row per page; conversions per the `pages` area
 | `/deine-region` + `/deine-region/angebot` | whole region | FUN-WEB-0016 |
 | `/ueber-uns` | who is behind it | FUN-WEB-0017 |
 | `/ueber-uns/archiv` | proof archive | FUN-WEB-0018 |
-| `/rechtliches` | all legal content, one page, anchors `#impressum` · `#datenschutz` · `#barrierefreiheit` | FUN-WEB-0029, NFR-WEB-0027 |
+| `/rechtliches` | all legal content, one page, anchors `#impressum` · `#datenschutz` · `#barrierefreiheit` | FUN-WEB-0029, CON-WEB-0027 |
 | `/sitemap.xml` · `/robots.txt` · `/llms.txt` | machine surfaces, per domain | FUN-WEB-0073, FUN-WEB-0079 |
 | `/start` | **redirect only, renders nothing** — the lead fallback's target while the envoy widget is undelivered (TS-WEB-0016 D6). Points at the existing Google Form today; the swap to envoy changes this one redirect and no lead surface | FUN-WEB-0093 |
 
@@ -132,7 +132,7 @@ The proxy is a pure function of hostname + path and holds no state. The
 binding rules it must not break are stated where they belong, not as a
 technology ban: locale is determined by the URL alone (TS-WEB-0001 D3), and
 external APIs are reached server-side only, through the website's own
-client endpoints (DEC-0025, NFR-WEB-0037/038).
+client endpoints (DEC-0025, CON-WEB-0042, CON-WEB-0043/038).
 
 ### D3a — Localized pathnames: one route translation map [FIXED: DEC-0036; EN segments PROPOSED]
 
@@ -179,7 +179,7 @@ Proposed EN segments (de → en):
 
 ### D5 — BFF route inventory [FIXED: DEC-0025; shapes PROPOSED]
 
-Client-facing, use-case-cut, rate-limited + origin-checked (NFR-WEB-0038);
+Client-facing, use-case-cut, rate-limited + origin-checked (CON-WEB-0044, CON-WEB-0045);
 each proxies exactly one upstream need, server-side tokens only, cache
 TTLs from TS-WEB-0003 D5:
 
@@ -193,7 +193,7 @@ TTLs from TS-WEB-0003 D5:
 | `GET /api/stats` | live counters | events-api `/api/stats` (public) |
 
 envoy widget and Portalize loader talk to their own backends directly —
-they are not proxied (their hosts are CSP-allowlisted, TS-WEB-0003 D4/NFR-WEB-0030).
+they are not proxied (their hosts are CSP-allowlisted, TS-WEB-0003 D4/CON-WEB-0030).
 
 ### D6 — Rendering per route [FIXED: DEC-0019; assignment PROPOSED]
 
@@ -236,7 +236,7 @@ successor. New sections append.
 | --- | --- | --- | --- |
 | `#impressum` | `#imprint` | Impressum | `content/legal/imprint.md` |
 | `#datenschutz` | `#privacy` | Datenschutzerklärung | `content/legal/privacy-policy.md` |
-| `#barrierefreiheit` | `#accessibility` | Barrierefreiheitserklärung (BFSG, NFR-WEB-0027) | to be written |
+| `#barrierefreiheit` | `#accessibility` | Barrierefreiheitserklärung (BFSG, CON-WEB-0027) | to be written |
 | `#nutzungsbedingungen` | `#terms` | Nutzungsbedingungen | `content/legal/terms-of-use.md` |
 | `#community-richtlinien` | `#community-guidelines` | Community-Richtlinien | `content/legal/community-guidelines.md` |
 | `#auftragsverarbeitung` | `#data-processing` | Auftragsverarbeitung (Q-0029) | `content/legal/dpa.md` |
@@ -294,8 +294,10 @@ labels (D4).
 | FUN-WEB-0067 (other domains navigable) | D1 landing set · A3 |
 | FUN-WEB-0073 (sitemaps + canonicals) | D1, sitemap.ts · A5 |
 | FUN-WEB-0079 (robots + llms.txt) | D1 · A5 |
-| NFR-WEB-0037 (BFF, no client tokens) | D5 · A6 |
-| NFR-WEB-0038 (rate limits + origin checks) | D5 · A7 |
+| CON-WEB-0042 (not expose an external API token to) | D5 · A6 |
+| CON-WEB-0043 (call ecosystem APIs server-side only) | D5 · A6 |
+| CON-WEB-0044 (protect its client-facing endpoints with rate limiting) | D5 · A7 |
+| CON-WEB-0045 (not issue a client-side auth token for) | D5 · A7 |
 | FUN-WEB-0021 (footer inventory) | D4 · A9 |
 | FUN-WEB-0023 (no place slugs in paths) | D1, D1a · A10 |
 | FUN-WEB-0048 (community-slug forwarding) | D3 rule 6 · A11 |

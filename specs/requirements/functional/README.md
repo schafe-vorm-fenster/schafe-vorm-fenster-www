@@ -68,15 +68,15 @@ focus job, and primary conversion. Conversion goal IDs resolve in
 | [FUN-WEB-0022](FUN-WEB-0022.md) | SRC-0003#for-a-whole-region | S2 |
 | [FUN-WEB-0026](FUN-WEB-0026.md) | DEC-0032 | S3 |
 | [FUN-WEB-0027](FUN-WEB-0027.md) | DEC-0032 | S3 |
-| [FUN-WEB-0029](FUN-WEB-0029.md) | DEC-0039 | S3 |
 | [FUN-WEB-0028](FUN-WEB-0028.md) | DEC-0034 | S3 |
+| [FUN-WEB-0029](FUN-WEB-0029.md) | DEC-0039 | S3 |
 
 ### Place Search and Coverage
 
 | ID | Source | Suff. |
 | --- | --- | --- |
-| [FUN-WEB-0046](FUN-WEB-0046.md) | DEC-0079, DEC-0024 | S3 |
 | [FUN-WEB-0023](FUN-WEB-0023.md) | DEC-0037 | S3 |
+| [FUN-WEB-0046](FUN-WEB-0046.md) | DEC-0079, DEC-0024 | S3 |
 | [FUN-WEB-0047](FUN-WEB-0047.md) | DEC-0024, DEC-0036, DEC-0037, DEC-0079 | S3 |
 | [FUN-WEB-0048](FUN-WEB-0048.md) | entre repo, DEC-0028, DEC-0035 | S3 |
 | [FUN-WEB-0049](FUN-WEB-0049.md) | DEC-0029 | S3 |
@@ -89,6 +89,7 @@ live content". Formula, weights, matrices are defined there and referenced.
 
 | ID | Source | Suff. |
 | --- | --- | --- |
+| [FUN-WEB-0024](FUN-WEB-0024.md) | DEC-0024 | S3 |
 | [FUN-WEB-0030](FUN-WEB-0030.md) | SRC-0001#3 | S2 |
 | [FUN-WEB-0031](FUN-WEB-0031.md) | SRC-0002#sequence-rule | S2 |
 | [FUN-WEB-0032](FUN-WEB-0032.md) | SRC-0002#scoring | S2 |
@@ -99,7 +100,6 @@ live content". Formula, weights, matrices are defined there and referenced.
 | [FUN-WEB-0037](FUN-WEB-0037.md) | SRC-0001#4, SRC-0003#archive | S2 |
 | [FUN-WEB-0038](FUN-WEB-0038.md) | SRC-0002#required-data | S2 |
 | [FUN-WEB-0039](FUN-WEB-0039.md) | SRC-0002#required-data | S1 |
-| [FUN-WEB-0024](FUN-WEB-0024.md) | DEC-0024 | S3 |
 
 ### Live Data
 
@@ -176,6 +176,7 @@ content, delivered as packages; SRC-0009).
 
 | ID | Source | Suff. |
 | --- | --- | --- |
+| [FUN-WEB-0025](FUN-WEB-0025.md) | DEC-0026 | S3 |
 | [FUN-WEB-0080](FUN-WEB-0080.md) | SRC-0009 ADR-001, SRC-0006, DEC-0020 | S3 |
 | [FUN-WEB-0081](FUN-WEB-0081.md) | SRC-0006, DEC-0020 | S3 |
 | [FUN-WEB-0082](FUN-WEB-0082.md) | SRC-0006, DEC-0020 | S3 |
@@ -186,7 +187,6 @@ content, delivered as packages; SRC-0009).
 | [FUN-WEB-0087](FUN-WEB-0087.md) | DEC-0023 | S3 |
 | [FUN-WEB-0088](FUN-WEB-0088.md) | DEC-0012, DEC-0027 | S3 |
 | [FUN-WEB-0089](FUN-WEB-0089.md) | DEC-0020 | S3 |
-| [FUN-WEB-0025](FUN-WEB-0025.md) | DEC-0026 | S3 |
 
 ### Forms and Leads
 
@@ -211,3 +211,47 @@ content, delivered as packages; SRC-0009).
 | [FUN-WEB-0104](FUN-WEB-0104.md) | DEC-0019 | S3 |
 | [FUN-WEB-0105](FUN-WEB-0105.md) | DEC-0019 | S1 |
 | [FUN-WEB-0106](FUN-WEB-0106.md) | DEC-0033, SRC-0014#skeletons, DEC-0056 | S3 |
+
+### Accessibility
+
+| ID | Source | Suff. |
+| --- | --- | --- |
+| [FUN-WEB-0118](FUN-WEB-0118.md) | SRC-0006, SRC-0014, DEC-0056 | S3 |
+| [FUN-WEB-0119](FUN-WEB-0119.md) | SRC-0006, SRC-0014, DEC-0056 | S3 |
+| [FUN-WEB-0120](FUN-WEB-0120.md) | SRC-0006, SRC-0014, DEC-0056 | S3 |
+| [FUN-WEB-0121](FUN-WEB-0121.md) | SRC-0006 (implied by AA) | S2 |
+| [FUN-WEB-0122](FUN-WEB-0122.md) | derived; convention | S1 |
+| [FUN-WEB-0123](FUN-WEB-0123.md) | derived; convention | S1 |
+| [FUN-WEB-0128](FUN-WEB-0128.md) | SRC-0006 | S2 |
+| [FUN-WEB-0129](FUN-WEB-0129.md) | SRC-0006 | S2 |
+| [FUN-WEB-0130](FUN-WEB-0130.md) | SRC-0006 | S2 |
+
+### Performance
+
+| ID | Source | Suff. |
+| --- | --- | --- |
+| [FUN-WEB-0107](FUN-WEB-0107.md) | SRC-0007 | S2 |
+| [FUN-WEB-0108](FUN-WEB-0108.md) | SRC-0007 | S2 |
+| [FUN-WEB-0109](FUN-WEB-0109.md) | SRC-0007, brand kit | S2 |
+| [FUN-WEB-0110](FUN-WEB-0110.md) | SRC-0007, brand kit | S2 |
+| [FUN-WEB-0111](FUN-WEB-0111.md) | SRC-0007, brand kit | S2 |
+| [FUN-WEB-0112](FUN-WEB-0112.md) | SRC-0007 | S2 |
+| [FUN-WEB-0113](FUN-WEB-0113.md) | SRC-0007 | S2 |
+| [FUN-WEB-0114](FUN-WEB-0114.md) | SRC-0007 | S2 |
+| [FUN-WEB-0115](FUN-WEB-0115.md) | SRC-0007 | S2 |
+| [FUN-WEB-0116](FUN-WEB-0116.md) | SRC-0014#aspect-ratios-and-reserved-space, DEC-0056 | S3 |
+| [FUN-WEB-0117](FUN-WEB-0117.md) | SRC-0014#aspect-ratios-and-reserved-space, DEC-0056 | S3 |
+
+### Privacy
+
+| ID | Source | Suff. |
+| --- | --- | --- |
+| [FUN-WEB-0124](FUN-WEB-0124.md) | SRC-0006, DEC-0004, DEC-0028 | S3 |
+| [FUN-WEB-0125](FUN-WEB-0125.md) | SRC-0001#boundaries, SRC-0003 | S2 |
+| [FUN-WEB-0126](FUN-WEB-0126.md) | derived; convention | S1 |
+
+### Security
+
+| ID | Source | Suff. |
+| --- | --- | --- |
+| [FUN-WEB-0127](FUN-WEB-0127.md) | DEC-0015 | S3 |

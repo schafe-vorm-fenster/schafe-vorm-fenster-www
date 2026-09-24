@@ -18,59 +18,59 @@ to carry their own artefact's id.
 
 | Area (file) | IDs | Sources | Decisions | Open questions |
 | --- | --- | --- | --- | --- |
-| jobs-and-navigation | FUN-WEB-0001–009 | SRC-0001, SRC-0003, SRC-0017, SRC-0018 | DEC-0080, DEC-0082, DEC-0083 | — |
-| pages | FUN-WEB-0010–022, 026–029 | SRC-0003, SRC-0008 | DEC-0032, DEC-0034, DEC-0039, DEC-0066, DEC-0081, DEC-0084 | Q-0005, Q-0006, Q-0007, Q-0017, Q-0022, Q-0072 |
-| relevance-and-proof | FUN-WEB-0030–039 | SRC-0001, SRC-0002 | — | Q-0002, Q-0003, Q-0004, Q-0014, Q-0019 |
-| live-data | FUN-WEB-0040–045 | SRC-0001, SRC-0002, SRC-0003, SRC-0011 | DEC-0021 | Q-0015 (Rest) |
-| personalization | FUN-WEB-0050–056 | SRC-0001, SRC-0002, SRC-0006 | — | Q-0008 |
-| localization | FUN-WEB-0060–069 | SRC-0006, SRC-0007 | DEC-0003, DEC-0005, DEC-0006 | Q-0001, Q-0010, Q-0011 |
-| seo | FUN-WEB-0070–079 | SRC-0006, SRC-0010 | DEC-0018 | Q-0009, Q-0016 |
-| content-pipeline | FUN-WEB-0080–089 | SRC-0006, SRC-0009, SRC-0017, SRC-0018 | DEC-0012, DEC-0020, DEC-0080, DEC-0066, DEC-0083 | Q-0018, Q-0057 |
-| forms-and-leads | FUN-WEB-0090–096 | SRC-0003 | DEC-0009–013, DEC-0081 | Q-0017, Q-0020, Q-0022, Q-0072 |
-| rendering-and-resilience | FUN-WEB-0100–106 | SRC-0002 | DEC-0019, DEC-0033 | — |
-| place-search | FUN-WEB-0023, 046–049 | SRC-0003, SRC-0011, entre | DEC-0024, DEC-0028, DEC-0029, DEC-0036, DEC-0037, DEC-0079 | Q-0025, Q-0028, Q-0051 (Q-0071 closed) |
-| delivery-pipeline | CON-WEB-0020–023 | SRC-0012 | DEC-0031 | Q-0027 |
-| performance | NFR-WEB-0001–008 | SRC-0006, SRC-0007 | DEC-0007 | — |
-| accessibility | NFR-WEB-0010–019, 026–027 | SRC-0006 | DEC-0012 | Q-0013, Q-0021 |
-| privacy | NFR-WEB-0020–025, 028 | SRC-0001, SRC-0006 | DEC-0004, DEC-0016 | Q-0008 |
-| security | NFR-WEB-0030–038 | SRC-0006 | DEC-0014, DEC-0015, DEC-0017, DEC-0025 | Q-0022 |
-| technical constraints | CON-WEB-0001–006 | SRC-0006, SRC-0008 | DEC-0002 | — |
-| scope boundaries | CON-WEB-0010–011, BUS-WEB-0012, CON-WEB-0013–016 | SRC-0001, SRC-0003 | — | Q-0006, Q-0012 |
+| jobs-and-navigation | FUN-WEB-0001–0009 | SRC-0001, SRC-0003, SRC-0017, SRC-0018 | DEC-0080, DEC-0082, DEC-0083 | — |
+| pages | FUN-WEB-0010–0022, FUN-WEB-0026–0029 | SRC-0003, SRC-0008 | DEC-0032, DEC-0034, DEC-0039, DEC-0066, DEC-0081, DEC-0084 | Q-0005, Q-0006, Q-0007, Q-0017, Q-0022, Q-0072 |
+| relevance-and-proof | FUN-WEB-0024, FUN-WEB-0030–0039 | SRC-0001, SRC-0002 | — | Q-0002, Q-0003, Q-0004, Q-0014, Q-0019 |
+| live-data | FUN-WEB-0040–0045 | SRC-0001, SRC-0002, SRC-0003, SRC-0011 | DEC-0021 | Q-0015 (Rest) |
+| personalization | FUN-WEB-0050–0056 | SRC-0001, SRC-0002, SRC-0006 | — | Q-0008 |
+| localization | FUN-WEB-0060–0069 | SRC-0006, SRC-0007 | DEC-0003, DEC-0005, DEC-0006 | Q-0001, Q-0010, Q-0011 |
+| seo | FUN-WEB-0070–0079 | SRC-0006, SRC-0010 | DEC-0018 | Q-0009, Q-0016 |
+| content-pipeline | FUN-WEB-0025, FUN-WEB-0080–0089 | SRC-0006, SRC-0009, SRC-0017, SRC-0018 | DEC-0012, DEC-0020, DEC-0080, DEC-0066, DEC-0083 | Q-0018, Q-0057 |
+| forms-and-leads | FUN-WEB-0090–0096 | SRC-0003 | DEC-0009–013, DEC-0081 | Q-0017, Q-0020, Q-0022, Q-0072 |
+| rendering-and-resilience | FUN-WEB-0100–0106 | SRC-0002 | DEC-0019, DEC-0033 | — |
+| place-search | FUN-WEB-0023, FUN-WEB-0046–0049 | SRC-0003, SRC-0011, entre | DEC-0024, DEC-0028, DEC-0029, DEC-0036, DEC-0037, DEC-0079 | Q-0025, Q-0028, Q-0051 (Q-0071 closed) |
+| delivery-pipeline | CON-WEB-0020–0023 | SRC-0012 | DEC-0031 | Q-0027 |
+| performance | FUN-WEB-0107–0117, NFR-WEB-0008, NFR-WEB-0039–0056 | SRC-0006, SRC-0007 | DEC-0007 | — |
+| accessibility | CON-WEB-0024–0027, FUN-WEB-0118–0123, FUN-WEB-0128–0130, NFR-WEB-0016, NFR-WEB-0018, NFR-WEB-0057–0060 | SRC-0006 | DEC-0012 | Q-0013, Q-0021 |
+| privacy | CON-WEB-0028–0029, CON-WEB-0033, CON-WEB-0035–0037, FUN-WEB-0124–0126, NFR-WEB-0022, NFR-WEB-0024, NFR-WEB-0061–0064 | SRC-0001, SRC-0006 | DEC-0004, DEC-0016 | Q-0008 |
+| security | CON-WEB-0030–0032, CON-WEB-0034, CON-WEB-0038–0045, FUN-WEB-0127, NFR-WEB-0065 | SRC-0006 | DEC-0014, DEC-0015, DEC-0017, DEC-0025 | Q-0022 |
+| technical constraints | CON-WEB-0001–0007 | SRC-0006, SRC-0008 | DEC-0002 | — |
+| scope boundaries | CON-WEB-0010–0011, CON-WEB-0013–0016 | SRC-0001, SRC-0003 | — | Q-0006, Q-0012 |
+| audience-model | BUS-WEB-0012 | SRC-0001 | DEC-0087 | — |
 
 ## Tactical layer
 
 | Tactical spec | Implements |
 | --- | --- |
-| TS-WEB-0001 locale-routing | FUN-WEB-0060–069 |
-| TS-WEB-0002 accessibility | NFR-WEB-0010–019, 026–027 |
-| TS-WEB-0003 performance | NFR-WEB-0001–008, FUN-WEB-0105 |
-| TS-WEB-0004 url-and-routing | FUN-WEB-0002, 010–018, 021, 026–027, 047–048, 067, 073, 079 · NFR-WEB-0037–038 |
-| TS-WEB-0005 relevance-engine | FUN-WEB-0024, 030–036, 038, 042, 052, 055 |
-| TS-WEB-0006 page-composition | FUN-WEB-0001, 003–009, 019, 020, 022 |
-| TS-WEB-0007 content-pipeline | FUN-WEB-0025, 039, 080–089 |
-| TS-WEB-0008 live-data | FUN-WEB-0040, 041, 043–046, 049 |
-| TS-WEB-0009 rendering-and-resilience | FUN-WEB-0100–104, 106 |
-| TS-WEB-0010 personalization | FUN-WEB-0050, 051, 053, 054, 056, 069 |
-| TS-WEB-0011 seo | FUN-WEB-0070–072, 074–078 |
-| TS-WEB-0012 analytics | NFR-WEB-0020–022, 028 |
-| TS-WEB-0013 privacy | NFR-WEB-0023–025 |
-| TS-WEB-0014 security | NFR-WEB-0030–036 |
-| TS-WEB-0015 delivery-pipeline | CON-WEB-0020–023 |
-| TS-WEB-0016 forms-and-leads | FUN-WEB-0090–096 |
-| TS-WEB-0017 technical-foundation | CON-WEB-0001–006 |
-| TS-WEB-0018 scope-boundaries | CON-WEB-0010–011, BUS-WEB-0012, CON-WEB-0013–016 |
+| TS-WEB-0001 locale-routing | FUN-WEB-0060–0068 |
+| TS-WEB-0002 accessibility | CON-WEB-0024–0027, FUN-WEB-0118–0123, FUN-WEB-0128–0130, NFR-WEB-0016, NFR-WEB-0018, NFR-WEB-0057–0060 |
+| TS-WEB-0003 performance | FUN-WEB-0105, FUN-WEB-0107–0117, NFR-WEB-0008, NFR-WEB-0039–0056 |
+| TS-WEB-0004 url-and-routing | CON-WEB-0042–0045, FUN-WEB-0002, FUN-WEB-0010–0018, FUN-WEB-0021, FUN-WEB-0023, FUN-WEB-0026–0027, FUN-WEB-0029, FUN-WEB-0047–0048, FUN-WEB-0067, FUN-WEB-0073, FUN-WEB-0079 |
+| TS-WEB-0005 relevance-engine | FUN-WEB-0024, FUN-WEB-0030–0036, FUN-WEB-0038, FUN-WEB-0042, FUN-WEB-0052, FUN-WEB-0055 |
+| TS-WEB-0006 page-composition | FUN-WEB-0001, FUN-WEB-0003–0009, FUN-WEB-0019–0020, FUN-WEB-0022 |
+| TS-WEB-0007 content-pipeline | FUN-WEB-0025, FUN-WEB-0039, FUN-WEB-0080–0089 |
+| TS-WEB-0008 live-data | FUN-WEB-0040–0041, FUN-WEB-0043–0046, FUN-WEB-0049 |
+| TS-WEB-0009 rendering-and-resilience | FUN-WEB-0100–0104, FUN-WEB-0106 |
+| TS-WEB-0010 personalization | FUN-WEB-0050–0051, FUN-WEB-0053–0054, FUN-WEB-0056, FUN-WEB-0069 |
+| TS-WEB-0011 seo | FUN-WEB-0070–0072, FUN-WEB-0074–0078 |
+| TS-WEB-0012 analytics | CON-WEB-0028–0029, CON-WEB-0035–0037, FUN-WEB-0124, NFR-WEB-0022, NFR-WEB-0061–0062, NFR-WEB-0064 |
+| TS-WEB-0013 privacy | CON-WEB-0033, FUN-WEB-0125–0126, NFR-WEB-0024, NFR-WEB-0063 |
+| TS-WEB-0014 security | CON-WEB-0030–0032, CON-WEB-0034, CON-WEB-0038–0041, FUN-WEB-0127, NFR-WEB-0065 |
+| TS-WEB-0015 delivery-pipeline | CON-WEB-0020–0023 |
+| TS-WEB-0016 forms-and-leads | FUN-WEB-0090–0096 |
+| TS-WEB-0017 technical-foundation | CON-WEB-0001–0007 |
+| TS-WEB-0018 scope-boundaries | BUS-WEB-0012, CON-WEB-0010–0011, CON-WEB-0013–0016 |
 | TS-WEB-0019 home | FUN-WEB-0010 |
 | TS-WEB-0020 dein-ort | FUN-WEB-0011 |
 | TS-WEB-0021 dein-ort/starten | FUN-WEB-0047 |
 | TS-WEB-0022 mitmachen | FUN-WEB-0012 |
 | TS-WEB-0023 registrieren | FUN-WEB-0013 |
-| TS-WEB-0024 dein-kalender | FUN-WEB-0014, 020 |
+| TS-WEB-0024 dein-kalender | FUN-WEB-0014, FUN-WEB-0020 |
 | TS-WEB-0025 bestellen | FUN-WEB-0015 |
-| TS-WEB-0026 deine-region | FUN-WEB-0016, 022, 028 |
+| TS-WEB-0026 deine-region | FUN-WEB-0016, FUN-WEB-0022, FUN-WEB-0028 |
 | TS-WEB-0027 ueber-uns | FUN-WEB-0017 |
-| TS-WEB-0028 archiv | FUN-WEB-0018, 037 |
+| TS-WEB-0028 archiv | FUN-WEB-0018, FUN-WEB-0037 |
 | TS-WEB-0029 rechtliches | FUN-WEB-0029 |
-
 ## Guides and their contracts
 
 Two pairs, same shape: a guide in `concept/` states what is right, a
@@ -79,7 +79,7 @@ wrong. Specs cite them; they do not restate them.
 
 | Guide | Contract | Bound by | Cited from |
 | --- | --- | --- | --- |
-| SRC-0014 design system | SRC-0013 design-system contract | DEC-0056, DEC-0054 | TS-WEB-0006, TS-WEB-0017, FUN-WEB-0006, NFR-WEB-0011 |
+| SRC-0014 design system | SRC-0013 design-system contract | DEC-0056, DEC-0054 | TS-WEB-0006, TS-WEB-0017, FUN-WEB-0006, NFR-WEB-0058, NFR-WEB-0059, CON-WEB-0025 |
 | SRC-0017 copy guide | SRC-0018 copy contract | DEC-0080, DEC-0083 | FUN-WEB-0008, TS-WEB-0006 D5/D7/A8/A16, TS-WEB-0007 D5/D9/D12, every determination that used to state a string, `specs/glossary/glossary.md` |
 
 **Where the words live** (DEC-0083): a spec states the element and what it

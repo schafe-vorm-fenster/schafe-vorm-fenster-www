@@ -46,7 +46,7 @@ export const ALLOWLIST = {
   envoy: "https://envoy-api.api.schafe-vorm-fenster.de",
   /** The ecosystem's image proxy — the embedded calendar's event images. */
   assets: "https://assets.api.schafe-vorm-fenster.de",
-  /** TS-WEB-0014 D1: named by NFR-WEB-0030, but active in no directive today. */
+  /** TS-WEB-0014 D1: named by CON-WEB-0030, but active in no directive today. */
   app: "https://app.schafe-vorm-fenster.de",
 } as const;
 

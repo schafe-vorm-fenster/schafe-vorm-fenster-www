@@ -4,7 +4,7 @@ id: TS-WEB-0003
 kind: rule
 status: DRAFT
 version: 0.1.0
-implements: [NFR-WEB-0001, NFR-WEB-0002, NFR-WEB-0003, NFR-WEB-0004, NFR-WEB-0005, NFR-WEB-0006, NFR-WEB-0007, NFR-WEB-0008, NFR-WEB-0009, FUN-WEB-0105]
+implements: [NFR-WEB-0039, NFR-WEB-0040, NFR-WEB-0041, NFR-WEB-0042, NFR-WEB-0043, NFR-WEB-0044, NFR-WEB-0045, NFR-WEB-0046, NFR-WEB-0047, NFR-WEB-0048, NFR-WEB-0049, NFR-WEB-0050, NFR-WEB-0051, NFR-WEB-0052, NFR-WEB-0053, NFR-WEB-0054, NFR-WEB-0055, NFR-WEB-0056, FUN-WEB-0107, FUN-WEB-0108, FUN-WEB-0109, FUN-WEB-0110, FUN-WEB-0111, FUN-WEB-0112, FUN-WEB-0113, FUN-WEB-0114, FUN-WEB-0115, NFR-WEB-0008, FUN-WEB-0116, FUN-WEB-0117, FUN-WEB-0105]
 sources: [SRC-0006, SRC-0007]
 decisions: [DEC-0007, DEC-0019]
 ai_provenance:
@@ -54,7 +54,7 @@ the real photograph later changes the bytes, not the layout and not the
 budget. What the swap must not change is the aspect — the placeholder
 declares it, and the real image is cropped to it.
 
-### D3 — Fonts [FIXED: NFR-WEB-0005; subset PROPOSED]
+### D3 — Fonts [FIXED: FUN-WEB-0109, FUN-WEB-0110, FUN-WEB-0111; subset PROPOSED]
 
 **Atkinson Hyperlegible Next** (plus the Mono variant for labels, dates
 and numbers), `woff2`, latin subset, self-hosted, preloaded,
@@ -62,7 +62,7 @@ and numbers), `woff2`, latin subset, self-hosted, preloaded,
 weights in use (400 · 700 · 800). Corrected 2026-09-11 per DEC-0043 — an
 earlier version named Inter, which was wrong.
 
-### D4 — JavaScript [FIXED: NFR-WEB-0003/004; split PROPOSED]
+### D4 — JavaScript [FIXED: NFR-WEB-0052, NFR-WEB-0053, NFR-WEB-0054, NFR-WEB-0055, NFR-WEB-0056/004; split PROPOSED]
 
 Server-first rendering (DEC-0019); client JS only for: live-module
 hydration, place search, envoy widget, eTracker. Third-party rule:
@@ -111,7 +111,7 @@ On `Save-Data: on` / `prefers-reduced-data`: hero/scene images drop to
 low-res variants, non-LCP images stay lazy with tighter thresholds, map
 module renders as list.
 
-### D7 — Enforcement [FIXED: NFR-WEB-0007; config PROPOSED]
+### D7 — Enforcement [FIXED: FUN-WEB-0114, FUN-WEB-0115; config PROPOSED]
 
 - **Lighthouse CI** on every PR against: `/`, `/dein-ort`, `/mitmachen`,
   `/dein-kalender`, `/ueber-uns` (mobile emulation, throttled);
@@ -158,16 +158,37 @@ determination produces rather than hopes for.
 
 | Requirement | Discharged by |
 | --- | --- |
-| NFR-WEB-0001 (Lighthouse 100/98) | D1 · D7 enforcement · A1 |
-| NFR-WEB-0002 (Core Web Vitals) | D1, D2 · A1, A7 |
-| NFR-WEB-0003 (bundle budgets) | D1, D4 · A2, A3 |
-| NFR-WEB-0004 (critical CSS, deferred JS) | D4 · A5 |
-| NFR-WEB-0005 (self-hosted fonts) | D3 · A3 |
-| NFR-WEB-0007 (CI + RUM) | D7 · A1, A2 |
-| NFR-WEB-0009 (reserved space) | D8 · A7 |
-| NFR-WEB-0008 (reduced data) | D6 · A6 |
+| NFR-WEB-0039 (Lighthouse Performance score (mobile) >= 98 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0040 (Lighthouse Performance score (desktop) >= 98 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0041 (Lighthouse Accessibility score (mobile) = 100 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0042 (Lighthouse Accessibility score (desktop) = 100 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0043 (Lighthouse Best Practices score (mobile) = 100 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0044 (Lighthouse Best Practices score (desktop) = 100 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0045 (Lighthouse SEO score (mobile) = 100 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0046 (Lighthouse SEO score (desktop) = 100 points) | D1 · D7 enforcement · A1 |
+| NFR-WEB-0047 (Largest Contentful Paint < 2.5 s) | D1, D2 · A1, A7 |
+| NFR-WEB-0048 (Interaction to Next Paint < 200 ms) | D1, D2 · A1, A7 |
+| NFR-WEB-0049 (Cumulative Layout Shift < 0.1) | D1, D2 · A1, A7 |
+| NFR-WEB-0050 (First Contentful Paint < 800 ms) | D1, D2 · A1, A7 |
+| NFR-WEB-0051 (Time to First Byte < 200 ms) | D1, D2 · A1, A7 |
+| NFR-WEB-0052 (Compressed size of the initial HTML, critical CSS included < 50 KB) | D1, D4 · A2, A3 |
+| NFR-WEB-0053 (Compressed size of the JavaScript < 100 KB) | D1, D4 · A2, A3 |
+| NFR-WEB-0054 (Compressed size of the CSS < 30 KB) | D1, D4 · A2, A3 |
+| NFR-WEB-0055 (Compressed size of the web fonts <= 50 KB) | D1, D4 · A2, A3 |
+| NFR-WEB-0056 (Size of every image the website serves < 100 KB) | D1, D4 · A2, A3 |
+| FUN-WEB-0107 (inline the critical CSS) | D4 · A5 |
+| FUN-WEB-0108 (defer its execution) | D4 · A5 |
+| FUN-WEB-0109 (serve the brand kit's woff2 file from) | D3 · A3 |
+| FUN-WEB-0110 (declare font-display: swap) | D3 · A3 |
+| FUN-WEB-0111 (preload the file) | D3 · A3 |
+| FUN-WEB-0114 (run Lighthouse CI against the routes of) | D7 · A1, A2 |
+| FUN-WEB-0115 (report field performance through cookieless real-user monitoring) | D7 · A1, A2 |
+| FUN-WEB-0116 (declare the holding box's aspect-ratio rather than) | D8 · A7 |
+| FUN-WEB-0117 (reserve its height in line units) | D8 · A7 |
+| NFR-WEB-0008 (Image payload of a page response served under Save-Data: on or prefers-red) | D6 · A6 |
 | FUN-WEB-0105 (cache lifetimes) | D5 · A4 |
-| NFR-WEB-0006 (image loading) | D2, D6 · A8 |
+| FUN-WEB-0112 (load it lazily) | D2, D6 · A8 |
+| FUN-WEB-0113 (load it eagerly at high fetch priority) | D2, D6 · A8 |
 
 ## Open points
 

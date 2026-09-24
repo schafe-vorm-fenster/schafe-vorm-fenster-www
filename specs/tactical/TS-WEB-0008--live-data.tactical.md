@@ -66,7 +66,7 @@ Rules that hold for every position:
 ### D2 — Data sources per module [FIXED: SRC-0011; upstream shapes verified 2026-09-10]
 
 Every module reaches its upstream through the BFF route of TS-WEB-0004 D5 —
-no component fetches an ecosystem host directly (DEC-0025, NFR-WEB-0037).
+no component fetches an ecosystem host directly (DEC-0025, CON-WEB-0042, CON-WEB-0043).
 Responses are validated against Zod schemas derived from the pinned
 `openapi.json` (DEC-0021).
 
@@ -187,7 +187,7 @@ web-component mode (the default; iframe mode exists and is not used).
 
 | Aspect | Determination |
 | --- | --- |
-| Proxying | none — the loader talks to its own backend, its host is CSP-allowlisted (TS-WEB-0003 D4, NFR-WEB-0030). It is not a BFF route. |
+| Proxying | none — the loader talks to its own backend, its host is CSP-allowlisted (TS-WEB-0003 D4, CON-WEB-0030). It is not a BFF route. |
 | Place filter | the loader parameter that filters to the searched place is a demand (Q-0026). Until it exists, the demo renders the reference organizer unfiltered and is labelled as an example, never as "your place". |
 | Cookies | the embed must set no cookie and introduce no consent duty; verification is part of Q-0026 and blocks shipping the module (A12). |
 | Loading | lazy, when the container approaches the viewport (TS-WEB-0003 D4); the demo is never on the LCP path. |
@@ -263,7 +263,7 @@ feature, not a nicety, and its properties are determined.
 | Row format | **"Ort (Gemeinde)"** — the place first, its municipality in brackets, so two villages of the same name are told apart |
 | Rows shown | **3–4**. The list is a shortcut, not a result page: further matches are neither paged nor scrolled — the visitor types one more letter |
 | Placement | an **overlay**, drawn over the page and anchored to the field; it occupies no space in the flow |
-| Layout | nothing below the field moves when the list opens or closes — no reserved space while absent, no shift while present (NFR-WEB-0002, CLS) |
+| Layout | nothing below the field moves when the list opens or closes — no reserved space while absent, no shift while present (NFR-WEB-0047, NFR-WEB-0048, NFR-WEB-0049, NFR-WEB-0050, NFR-WEB-0051, CLS) |
 | No match | one non-interactive row stating that no place was found; the form still submits and reaches `/dein-ort/starten` (FUN-WEB-0047). Never "try a postcode", never an error treatment |
 | Without JavaScript | the list does not exist and nothing is lost — the field stays the plain GET form of D7 |
 | Keyboard and a11y | the ARIA combobox pattern of TS-WEB-0002 on the existing input; each suggestion is a real link, so pointer, keyboard and "open in new tab" behave alike |
@@ -307,7 +307,7 @@ Links from the website into the app are built from the geo-api community
 | Registration prefill | **no contract exists** (DEC-0029). `/mitmachen/registrieren` receives `?ort=<slug>` on our own route and prefills its own place step; nothing is appended to the app URL until the app defines it. |
 | Never | a slug is never guessed, never string-built from user input, never used before geo-api confirmed it. An unresolvable slug leads to `/dein-ort/starten`, not to a broken app link. |
 
-### D10 — Client contract for live modules [FIXED: DEC-0025, NFR-WEB-0037/038, DEC-0021]
+### D10 — Client contract for live modules [FIXED: DEC-0025, CON-WEB-0042, CON-WEB-0043/038, DEC-0021]
 
 | Rule | Consequence |
 | --- | --- |
@@ -315,7 +315,7 @@ Links from the website into the app are built from the geo-api community
 | Tokens are environment values read server-side | one client module per service under `src/clients/{service}-api/`, mirroring TS-WEB-0005 D9 |
 | Responses are validated | Zod schemas derived from the pinned `openapi.json`; a validation failure is treated as an upstream error (D5), never rendered |
 | Cache keys carry no visitor identity | keys are `{slug|county|window}` and, for segmented modules, `{community, trait, job}` (TS-WEB-0005 D8); no IP, no session |
-| Rate limit + origin check | per TS-WEB-0004 D5 / NFR-WEB-0038 |
+| Rate limit + origin check | per TS-WEB-0004 D5 / CON-WEB-0044, CON-WEB-0045 |
 
 ## Free for the generator
 
@@ -369,7 +369,7 @@ Links from the website into the app are built from the geo-api community
 Adjacent, discharged elsewhere and only consumed here: FUN-WEB-0042
 (widening) TS-WEB-0005 D1/D8 · FUN-WEB-0047 (founding route) TS-WEB-0004 D1 ·
 FUN-WEB-0048 (QR forwarding) TS-WEB-0004 D3 · FUN-WEB-0100–106 (resilience,
-skeletons) TS-WEB-0003 D5 · NFR-WEB-0037/038 (BFF) TS-WEB-0004 D5.
+skeletons) TS-WEB-0003 D5 · CON-WEB-0042, CON-WEB-0043/038 (BFF) TS-WEB-0004 D5.
 
 ## Open points
 

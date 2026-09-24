@@ -7,7 +7,7 @@
  * segmentations, so there is one.
  *
  * The trait is derived per request and **never persisted**: no cookie, no
- * storage, no server-side session (NFR-WEB-0020). A visitor who returns from a
+ * storage, no server-side session (NFR-WEB-0061 · NFR-WEB-0062). A visitor who returns from a
  * different entry is a different segment, by design.
  *
  * Precedence follows TS-WEB-0010 D2 — **stated intent beats inferred intent**:
@@ -20,7 +20,7 @@ import { APP_ORIGIN } from "../live/app-handover";
 import type { EntryTrait, FocusJob } from "../relevance/types";
 import type { RouteId } from "../routes/routes";
 
-/** `etcc_*` is the house convention (NFR-WEB-0028); `utm_*` is an accepted alias. */
+/** `etcc_*` is the house convention (CON-WEB-0035 · CON-WEB-0036 · CON-WEB-0037 · NFR-WEB-0064); `utm_*` is an accepted alias. */
 const MEDIUM_PARAMS = ["etcc_med", "utm_medium"] as const;
 
 const MEDIUM_TRAITS: Record<string, EntryTrait> = {

@@ -4,7 +4,7 @@ id: TS-WEB-0013
 kind: rule
 status: DRAFT
 version: 0.1.0
-implements: [NFR-WEB-0023, NFR-WEB-0024, NFR-WEB-0025]
+implements: [FUN-WEB-0125, CON-WEB-0033, NFR-WEB-0024, NFR-WEB-0063, FUN-WEB-0126]
 sources: [SRC-0001, SRC-0003, SRC-0006, SRC-0010, SRC-0011]
 decisions: [DEC-0004, DEC-0009, DEC-0013, DEC-0015, DEC-0024, DEC-0025, DEC-0030, DEC-0039]
 ai_provenance:
@@ -22,12 +22,12 @@ The site *says* it sets no tracking cookies. This spec is what makes the
 sentence true and keeps it true: the closed inventory of hosts a visitor's
 browser may contact, the rule that governs adding one, and the handling
 rule for IP geolocation. Analytics behaviour itself (cookieless mode,
-event set, eTracker configuration — NFR-WEB-0020/021/022/028) belongs to the
+event set, eTracker configuration — NFR-WEB-0061, NFR-WEB-0062/021/022/028) belongs to the
 analytics spec; this spec only counts eTracker as a request.
 
 ## Determinations
 
-### D1 — The claim, and where it is made [FIXED: NFR-WEB-0023, SRC-0001#boundaries, SRC-0003]
+### D1 — The claim, and where it is made [FIXED: FUN-WEB-0125, CON-WEB-0033, SRC-0001#boundaries, SRC-0003]
 
 The absence of tracking is a sales argument, not only a legal posture. It
 appears as a data-protection block on `/dein-kalender` (the page that asks
@@ -70,17 +70,17 @@ media. Under DEC-0013 external media are represented by our own preview
 (screenshot, quote from `media-echo/`) plus a link; there is no embedded
 player and no click-to-load layer, so no third-party host is contacted
 until the visitor leaves the site. What leaks on leaving is governed by
-the referrer-policy header (NFR-WEB-0032, security spec).
+the referrer-policy header (CON-WEB-0032, security spec).
 
 **Explicitly absent, and to stay absent**: `fonts.googleapis.com` /
 `fonts.gstatic.com`, any script or CSS CDN, map tiles, social buttons and
-pixels, video/audio players, captcha services (NFR-WEB-0035 excludes them),
+pixels, video/audio players, captcha services (CON-WEB-0039, NFR-WEB-0065 excludes them),
 consent-management platforms, session-replay and heatmap tools.
 
-The CSP allowlist (NFR-WEB-0030) and this table are the same set seen from
+The CSP allowlist (CON-WEB-0030) and this table are the same set seen from
 two sides. If they diverge, one of them is wrong.
 
-### D3 — Everything else leaves from the server [FIXED: DEC-0025, NFR-WEB-0037]
+### D3 — Everything else leaves from the server [FIXED: DEC-0025, CON-WEB-0042, CON-WEB-0043]
 
 Every ecosystem API is called server-side through the site's own BFF
 routes (TS-WEB-0004 D5), so no API host appears in a client request and no
@@ -107,7 +107,7 @@ Images sourced from `assets.api.…` are served through the site's own
 image pipeline, so the asset host does not appear in the browser either.
 [PROPOSED]
 
-### D4 — Self-hosting is the default [FIXED: NFR-WEB-0025, NFR-WEB-0005, TS-WEB-0003 D3]
+### D4 — Self-hosting is the default [FIXED: NFR-WEB-0063, FUN-WEB-0126, FUN-WEB-0109, FUN-WEB-0110, FUN-WEB-0111, TS-WEB-0003 D3]
 
 Every static asset ships from our own origin. Fonts are the settled case
 and the precedent: the brand typeface is self-hosted as a variable `woff2`
@@ -116,7 +116,7 @@ move, because a font CDN would hand the visitor's IP to a third party on
 every page view. The same rule covers icons, images, stylesheets and
 JavaScript libraries: vendored into the build, never linked from a CDN.
 
-### D5 — The rule for additions [FIXED: NFR-WEB-0025, NFR-WEB-0031, DEC-0013]
+### D5 — The rule for additions [FIXED: NFR-WEB-0063, FUN-WEB-0126, CON-WEB-0031, DEC-0013]
 
 A new outbound request is never a code change alone. Candidates are taken
 in this order, and a lower rung may only be used once the ones above are
@@ -130,13 +130,13 @@ shown not to work:
 | — | embed it as a third party | **not available** (DEC-0013) |
 
 Rung 3 requires all of: a reviewed PR against the CSP allowlist, never a
-wildcard (NFR-WEB-0031); a named section in the privacy policy on
+wildcard (CON-WEB-0031); a named section in the privacy policy on
 `/rechtliches#datenschutz` before the host goes live; a row added to D2;
 and evidence that the host sets no cookie and no persistent identifier.
 
 **The disqualifier is consent.** If a candidate would make a consent
 banner necessary, it is rejected at rung 3 regardless of its merits —
-banner-freedom is a requirement (NFR-WEB-0020) and a published sales
+banner-freedom is a requirement (NFR-WEB-0061, NFR-WEB-0062) and a published sales
 argument (D1), not a preference to be traded against a feature.
 
 ### D6 — IP geolocation without storage [FIXED: NFR-WEB-0024, FUN-WEB-0053/054; mechanism PROPOSED]
@@ -188,9 +188,11 @@ The legal confirmation for this handling is outstanding — see Open points.
 
 | Requirement | Discharged by |
 | --- | --- |
-| NFR-WEB-0023 (no-cookie claim as trust argument, kept true) | D1, D2, D4 · A1, A2, A3, A7 |
-| NFR-WEB-0024 (IP geolocation without storage) | D6, D3 · A5, A6 |
-| NFR-WEB-0025 (third-party requests reviewed, self-hosting preferred) | D2, D3, D4, D5 · A1, A3, A4, A5, A8 |
+| FUN-WEB-0125 (carry a data-protection block naming the absence) | D1, D2, D4 · A1, A2, A3, A7 |
+| CON-WEB-0033 (not make a data-protection claim its implementation) | D1, D2, D4 · A1, A2, A3, A7 |
+| NFR-WEB-0024 (Persisted IP addresses = 0 addresses) | D6, D3 · A5, A6 |
+| NFR-WEB-0063 (External asset hosts = 0 hosts) | D2, D3, D4, D5 · A1, A3, A4, A5, A8 |
+| FUN-WEB-0126 (require the rung-3 evidence of TS-WEB-0013 D5) | D2, D3, D4, D5 · A1, A3, A4, A5, A8 |
 
 ## Open points
 
@@ -216,7 +218,7 @@ The legal confirmation for this handling is outstanding — see Open points.
   needs a client-side script, it enters D5 at rung 3 and may not ship
   before that review; a sender that would require consent is disqualified
   by D5.
-- **eTracker is interim (NFR-WEB-0021).** It is the only external company in
+- **eTracker is interim (CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124).** It is the only external company in
   D2; replacing it changes the table, the CSP allowlist and the privacy
   policy in one move. Any successor must clear D5 including the consent
   disqualifier.

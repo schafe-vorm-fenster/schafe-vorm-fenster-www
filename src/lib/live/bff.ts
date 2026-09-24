@@ -7,7 +7,7 @@
  *  - **GET only.** TS-WEB-0017 D4's "read-only by construction" is a property of
  *    the route files (they export `GET` and nothing else) and is checked
  *    statically by `scripts/check-api-routes.ts` (TS-WEB-0017-A10).
- *  - **Origin check.** A cross-origin `Origin` header is refused (NFR-WEB-0038):
+ *  - **Origin check.** A cross-origin `Origin` header is refused (CON-WEB-0044 · CON-WEB-0045):
  *    these routes exist for this site's own pages, not as a public API. A
  *    request with no `Origin` (a plain navigation, a server-side call, curl)
  *    passes — the header is advisory, not an authentication.

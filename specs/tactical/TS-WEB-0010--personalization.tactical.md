@@ -105,9 +105,9 @@ vocabularies would silently produce two segmentations.
 | `direct` | everything else, including an unrecognised referrer and an empty one | Direct visit, unknown |
 
 - Campaign parameters follow the existing `etcc_*` convention
-  (NFR-WEB-0028); `utm_*` is accepted as an alias where it is unambiguous.
+  (CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064); `utm_*` is accepted as an alias where it is unambiguous.
 - The trait is derived per request and **never persisted** — no cookie,
-  no storage, no server-side session (NFR-WEB-0020). A visitor who returns
+  no storage, no server-side session (NFR-WEB-0061, NFR-WEB-0062). A visitor who returns
   from a different entry is a different segment, by design.
 - The referrer host lists are content, not code (allowlists shipped with
   the content build), so a new press outlet does not need a deployment
@@ -134,7 +134,7 @@ Rules:
   and 1 fire only after a place search.
 - The lookup has a **budget of 150 ms** [PROPOSED]; beyond it the fields
   stay `null` and the request is stage 0. Geo resolution is never on the
-  critical path of the shell (NFR-WEB-0001 ff., TS-WEB-0003 D1).
+  critical path of the shell (NFR-WEB-0039, NFR-WEB-0040, NFR-WEB-0041, NFR-WEB-0042, NFR-WEB-0043, NFR-WEB-0044, NFR-WEB-0045, NFR-WEB-0046 ff., TS-WEB-0003 D1).
 - Resolution results are cached by the coarse geo key, not per request
   or per IP.
 - `findbyaddress` is out of bounds for this path (it performs an
@@ -163,7 +163,7 @@ Rules:
 | derived `country`/`state`/`county` | the request + the cache key | props of a cached component (TS-WEB-0005 D8), the regional content key (D9) |
 | `community` from a stated place | the request + the URL the visitor sees | `?ort=` in the URL, cache key |
 | `trait` | the request | cache key |
-| anything per visitor | — | **nothing.** No cookie, no `localStorage`, no server-side session, no returning-visitor recognition (NFR-WEB-0020) |
+| anything per visitor | — | **nothing.** No cookie, no `localStorage`, no server-side session, no returning-visitor recognition (NFR-WEB-0061, NFR-WEB-0062) |
 
 The derived area is a **segment key of at least county size**, shared by
 many visitors — it identifies a cache entry, not a person. The single
@@ -264,7 +264,7 @@ built.
 
 ### D11 — What is measured [FIXED: DEC-0071]
 
-Launch ships conversion measurement only (NFR-WEB-0028), so no stage
+Launch ships conversion measurement only (CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064), so no stage
 dimension is sent at launch. When one is added later it is bound by a
 rule that does not soften:
 

@@ -73,7 +73,7 @@ describe("TS-WEB-0008-A1 / TS-WEB-0013-A5: the route is the browser's only reach
     expect(text).not.toContain("token");
   });
 
-  it("refuses a cross-origin request (NFR-WEB-0038)", async () => {
+  it("refuses a cross-origin request (CON-WEB-0044 · CON-WEB-0045)", async () => {
     const response = await call("http://localhost:3100/api/places/search?q=17509", {
       origin: "https://not-our-site.example",
     });

@@ -47,9 +47,9 @@ of the spec.
 
 | ID | File | Kind | Implements |
 | --- | --- | --- | --- |
-| TS-WEB-0001 | `TS-WEB-0001--locale-routing.tactical.md` | system | FUN-WEB-0060–069 |
-| TS-WEB-0002 | `TS-WEB-0002--accessibility.tactical.md` | rule | NFR-WEB-0010–019, 026–027 |
-| TS-WEB-0003 | `TS-WEB-0003--performance.tactical.md` | rule | NFR-WEB-0001–008, FUN-WEB-0105 |
+| TS-WEB-0001 | `TS-WEB-0001--locale-routing.tactical.md` | system | FUN-WEB-0060–0068 |
+| TS-WEB-0002 | `TS-WEB-0002--accessibility.tactical.md` | rule | WCAG 2.2 AA, the eight AAA adoptions, contrast, keyboard and screen reader |
+| TS-WEB-0003 | `TS-WEB-0003--performance.tactical.md` | rule | Lighthouse, Core Web Vitals, byte budgets, loading rules, cache lifetimes |
 | TS-WEB-0004 | `TS-WEB-0004--url-and-routing.tactical.md` | system | routes, navigation, BFF, error pages |
 | TS-WEB-0005 | `TS-WEB-0005--relevance-engine.tactical.md` | system | proof/live scoring, ordering, segmentation |
 | TS-WEB-0006 | `TS-WEB-0006--page-composition.tactical.md` | rule | what holds on every page: focus job, context band, closing CTA |

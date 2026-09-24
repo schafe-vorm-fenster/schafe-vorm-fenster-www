@@ -1,0 +1,29 @@
+---
+artefact: requirement
+id: FUN-WEB-0130
+class: FUN
+form: F1
+domain: WEB
+status: DRAFT
+version: 0.1.0
+area: accessibility
+source: "SRC-0006"
+evidence_sufficiency: S2
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-24T16:45:00+02:00"
+---
+
+# FUN-WEB-0130
+
+For theme selection, the website SHALL take the browser preference as its only input.
+
+## Rationale
+
+"Theme selection follows the user's browser exclusively; the website provides no manual theme switcher."
+
+## Notes
+
+Reclassified from the quality class by DEC-0092. "the website provides no manual theme switcher" is the same rule stated negatively — the observable consequence of taking the browser preference as the only input — not a second predicate. The number could not be kept: 0015 is taken in the functional class by the `/dein-kalender/bestellen` page row.

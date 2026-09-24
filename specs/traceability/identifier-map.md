@@ -30,6 +30,38 @@ retired identifier, because that is how it says what it changed;
 | Retired | Now | Retired by | Why |
 | --- | --- | --- | --- |
 | `CON-WEB-0012` | `BUS-WEB-0012` | DEC-0087 | The method's decision tree puts the statement in its first class, not its second. The number is the one it has held since `WEB-C-012`; only the class token moved. Follow `WEB-C-012` → `CON-WEB-0012` → `BUS-WEB-0012` |
+| `NFR-WEB-0001` | `NFR-WEB-0039` · `NFR-WEB-0040` · `NFR-WEB-0041` · `NFR-WEB-0042` · `NFR-WEB-0043` · `NFR-WEB-0044` · `NFR-WEB-0045` · `NFR-WEB-0046` | DEC-0092 | Four Lighthouse categories across two form factors are eight measures; the Performance floor is the value the gate enforces, not a ninth measure. |
+| `NFR-WEB-0002` | `NFR-WEB-0047` · `NFR-WEB-0048` · `NFR-WEB-0049` · `NFR-WEB-0050` · `NFR-WEB-0051` | DEC-0092 | Five Core Web Vitals are five measures wearing one identifier. |
+| `NFR-WEB-0003` | `NFR-WEB-0052` · `NFR-WEB-0053` · `NFR-WEB-0054` · `NFR-WEB-0055` · `NFR-WEB-0056` | DEC-0092 | Five byte budgets are five measures wearing one identifier. |
+| `NFR-WEB-0004` | `FUN-WEB-0107` · `FUN-WEB-0108` | DEC-0092 | Two predicates — inline the critical CSS, defer the non-critical JavaScript — and neither carries a measure, so each child is classified afresh and lands in the functional class. |
+| `NFR-WEB-0005` | `FUN-WEB-0109` · `FUN-WEB-0110` · `FUN-WEB-0111` | DEC-0092 | Three predicates — serve from own origin, declare `font-display`, preload — and no measure between them. The byte budget that was attached to them is NFR-WEB-0055. |
+| `NFR-WEB-0006` | `FUN-WEB-0112` · `FUN-WEB-0113` | DEC-0092 | Two predicates over two different subjects — images below the fold, and the page's declared LCP element. |
+| `NFR-WEB-0007` | `FUN-WEB-0114` · `FUN-WEB-0115` | DEC-0092 | Two predicates over two different actors — the delivery pipeline before merge, and the production deployment afterwards. |
+| `NFR-WEB-0009` | `FUN-WEB-0116` · `FUN-WEB-0117` | DEC-0092 | Two predicates — the box declares its shape, and text reserves its height. The third clause, "Nothing may push the page down after paint", is the outcome those two produce and is the subject of NFR-WEB-0049. |
+| `NFR-WEB-0010` | `NFR-WEB-0057` · `CON-WEB-0024` | DEC-0092 | One measurable conformance statement and one scope boundary, which are two different artefacts. The AAA clause names no criterion and is carried as the Notes of the conformance requirement, where TS-WEB-0002 D2 lists the eight that were adopted. |
+| `NFR-WEB-0011` | `NFR-WEB-0058` · `NFR-WEB-0059` · `CON-WEB-0025` | DEC-0092 | Two ratios are two measures, and "where brand colours fail, the accessible variant wins" is a limit on the solution rather than a measure of it. |
+| `NFR-WEB-0012` | `FUN-WEB-0128` | DEC-0092 | The number was not free in the target class, so the artefact took the next free one; no number was reassigned. |
+| `NFR-WEB-0013` | `FUN-WEB-0118` · `FUN-WEB-0119` · `FUN-WEB-0120` | DEC-0092 | Three predicates — keyboard operation, screen-reader presentation, and the focus ring's own geometry. |
+| `NFR-WEB-0014` | `FUN-WEB-0129` | DEC-0092 | The number was not free in the target class, so the artefact took the next free one; no number was reassigned. |
+| `NFR-WEB-0015` | `FUN-WEB-0130` | DEC-0092 | The number was not free in the target class, so the artefact took the next free one; no number was reassigned. |
+| `NFR-WEB-0017` | `NFR-WEB-0060` · `FUN-WEB-0121` | DEC-0092 | Two predicates over two different subjects: an informative image carries an alternative, a decorative one is marked as carrying none. The first has a count; the second is a rendering rule. |
+| `NFR-WEB-0019` | `FUN-WEB-0122` · `FUN-WEB-0123` | DEC-0092 | Two predicates over two different actors and two different cadences — the pipeline on every pull request, a person per release. |
+| `NFR-WEB-0020` | `NFR-WEB-0061` · `NFR-WEB-0062` | DEC-0092 | "cookieless" and "consent-banner-free" are two predicates, and each has its own count in the tactical layer. |
+| `NFR-WEB-0021` | `CON-WEB-0028` · `CON-WEB-0029` · `FUN-WEB-0124` | DEC-0092 | Three predicates — the implementation choice, the account shape, and a migration task on the legacy configuration. |
+| `NFR-WEB-0023` | `FUN-WEB-0125` · `CON-WEB-0033` | DEC-0092 | One predicate about what the page says, one about what the implementation may not do. The method's own trap: a claim and the limit that keeps it true are two artefacts. |
+| `NFR-WEB-0025` | `NFR-WEB-0063` · `FUN-WEB-0126` | DEC-0092 | One measurable count of external hosts, and one review obligation on a pull request. The second is a procedure, not a property of the website. |
+| `NFR-WEB-0026` | `CON-WEB-0026` | DEC-0092 | The number is free in the target class and is kept. |
+| `NFR-WEB-0027` | `CON-WEB-0027` | DEC-0092 | The number is free in the target class and is kept. |
+| `NFR-WEB-0028` | `CON-WEB-0035` · `CON-WEB-0036` · `CON-WEB-0037` · `NFR-WEB-0064` | DEC-0092 | Four predicates — the launch scope of measurement, the boundary between website and app, the campaign convention, and the deferral of experimentation. Only the last has a count. |
+| `NFR-WEB-0030` | `CON-WEB-0030` | DEC-0092 | The number is free in the target class and is kept. |
+| `NFR-WEB-0031` | `CON-WEB-0031` | DEC-0092 | The number is free in the target class and is kept. |
+| `NFR-WEB-0032` | `CON-WEB-0032` | DEC-0092 | The number is free in the target class and is kept. |
+| `NFR-WEB-0033` | `FUN-WEB-0127` · `CON-WEB-0038` | DEC-0092 | Two predicates over two different actors — the pipeline runs the scan, and the release gate reads its result. |
+| `NFR-WEB-0034` | `CON-WEB-0034` | DEC-0092 | The number is free in the target class and is kept. |
+| `NFR-WEB-0035` | `CON-WEB-0039` · `NFR-WEB-0065` | DEC-0092 | One predicate naming the protection set, one naming what may never be used. The prohibition has a count of its own. |
+| `NFR-WEB-0036` | `CON-WEB-0040` · `CON-WEB-0041` | DEC-0092 | One predicate naming the instrument, one naming what may not be added. Merging them hides that the second outlives any particular instrument. |
+| `NFR-WEB-0037` | `CON-WEB-0042` · `CON-WEB-0043` | DEC-0092 | Two predicates — what may never leave the server, and how the client is served instead. |
+| `NFR-WEB-0038` | `CON-WEB-0044` · `CON-WEB-0045` | DEC-0092 | Two predicates — what protects the endpoints, and what may never be handed to the client. |
 
 ## The rule
 

@@ -65,7 +65,7 @@ app's (D6, D9).
 | Unresolvable input | "not covered" means geo-api returns no community for the input, not that a place is unserved; the step stays unanswered (D5) |
 | Echo | the place name comes from the geo-api response, never from raw input (TS-WEB-0008 D4) |
 
-### D4 — Step state without any store [FIXED: DEC-0009 boundary, DEC-0037, NFR-WEB-0020; parameter names PROPOSED]
+### D4 — Step state without any store [FIXED: DEC-0009 boundary, DEC-0037, NFR-WEB-0061, NFR-WEB-0062; parameter names PROPOSED]
 
 The website has no session, cookie or client store, so the state travels
 in the URL — and only values that may be public go in.
@@ -176,7 +176,7 @@ only network calls are the read-only BFF routes of TS-WEB-0004 D5.
 | FUN-WEB-0013 (`/mitmachen/registrieren`: publish our dates, handover to the app) | D1–D9 · A1–A16 |
 
 Consumed, discharged elsewhere: FUN-WEB-0023 / FUN-WEB-0046 / FUN-WEB-0049
-(TS-WEB-0008) · NFR-WEB-0020 (TS-WEB-0012 D1) · NFR-WEB-0028 (TS-WEB-0012 D4/D5) ·
+(TS-WEB-0008) · NFR-WEB-0061, NFR-WEB-0062 (TS-WEB-0012 D1) · CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064 (TS-WEB-0012 D4/D5) ·
 FUN-WEB-0090 / FUN-WEB-0092 (TS-WEB-0016) · FUN-WEB-0087 (TS-WEB-0007).
 
 ## Open points

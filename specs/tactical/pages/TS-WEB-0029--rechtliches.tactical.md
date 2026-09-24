@@ -130,7 +130,7 @@ and it covers the page, not only the imported bodies.**
 Fully static from the committed markdown; no live module, no external
 request, no embed. The only client JS is D4's current-section marker.
 
-### D8 — The accessibility statement is a required but missing section [FIXED: NFR-WEB-0027, DEC-0012]
+### D8 — The accessibility statement is a required but missing section [FIXED: CON-WEB-0027, DEC-0012]
 
 `#barrierefreiheit` / `#accessibility` is the one registry anchor with no
 document (TS-WEB-0004 D8: "to be written"). BFSG requires it published and the
@@ -185,7 +185,7 @@ Levels: integration 5 · e2e 7 · static 2 · tool 1.
 | --- | --- |
 | FUN-WEB-0029 (legal content on one route, on-page navigation, permanent anchors of TS-WEB-0004 D8, footer keeps conventional labels) | D1 (registry-driven section stack, retired-section pointer), D2 (ids from the registry), D3 (anchor landing), D4 (on-page navigation), D6 (headings), D6a (register exemption), D10 (indexing) · A1, A2, A3, A4, A5, A6, A7, A9, A14, A15 |
 
-Touched, owned elsewhere: NFR-WEB-0027 → TS-WEB-0002 D6 · FUN-WEB-0088 → TS-WEB-0007 D10 · FUN-WEB-0021 → TS-WEB-0004 D4.
+Touched, owned elsewhere: CON-WEB-0027 → TS-WEB-0002 D6 · FUN-WEB-0088 → TS-WEB-0007 D10 · FUN-WEB-0021 → TS-WEB-0004 D4.
 
 ## Open points
 

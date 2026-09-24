@@ -174,7 +174,7 @@ deliberate, and not to be "fixed" by raising `w_geo` here.
   never a text-only card without the badge.
 - An empty slot weakens the claim; it is never filled by invention (SRC-0001 §4).
 
-### D10 — Data protection, operations and AI: one block that must stay true [FIXED: NFR-WEB-0023, TS-WEB-0013 D1; the operations and AI sentences PROPOSED]
+### D10 — Data protection, operations and AI: one block that must stay true [FIXED: FUN-WEB-0125, CON-WEB-0033, TS-WEB-0013 D1; the operations and AI sentences PROPOSED]
 
 One block, three subjects, no second occurrence on the page.
 

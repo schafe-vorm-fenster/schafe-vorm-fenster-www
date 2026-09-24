@@ -95,7 +95,7 @@ own backends directly and are **not** proxied through the BFF.
 | Loading | Widget script loaded deferred, never render-blocking, excluded from the LCP path (TS-WEB-0003 D2/D5) | FIXED: TS-WEB-0003 |
 | Placement | One instance per surface in D1; never more than one instance of the same form kind per page | PROPOSED |
 | Configuration | Passed as attributes on the element: form kind, page language (TS-WEB-0001), source route, and the offering/goal context of the surface — attribute *names* are part of Q-0022 | PROPOSED |
-| Network path | Direct browser → envoy host. Not proxied; CSP `connect-src`/`script-src` entry for that host (NFR-WEB-0030/031) | FIXED: DEC-0025, DEC-0015 |
+| Network path | Direct browser → envoy host. Not proxied; CSP `connect-src`/`script-src` entry for that host (CON-WEB-0030/031) | FIXED: DEC-0025, DEC-0015 |
 | Host value | UNKNOWN — SRC-0011 records envoy-api's host as not yet published. The CSP entry cannot be written until it is (Q-0022) | UNKNOWN |
 | Server rendering | The page renders and is fully usable without the widget having loaded; no page is blocked on it (TS-WEB-0005/FUN-WEB-0106 skeleton rules apply to the slot) | FIXED: DEC-0019 |
 | Isolation | The widget may use a shadow root; the page must not reach into it, and no page CSS may target its internals — theming happens only through D3 | PROPOSED |
@@ -132,10 +132,10 @@ today; each is what the website needs in order to integrate, and the
 | C1 | The complete CSS variable set, with defaults and semantics | D3 mapping file, A4 | UNKNOWN |
 | C2 | Element name, attribute names and allowed values (form kind, language, source, context). The demanded form kinds are **quote** and **order** — the contact kind left the demand with DEC-0081 | D2 configuration row | UNKNOWN |
 | C3 | Emitted DOM events for `submit`, `success`, `error`, `validation-error`, with a payload that carries **no field values** | D12 conversion measurement, D6 error handling, D5 boundary | UNKNOWN |
-| C4 | Spam handling: honeypot field, submission-timing check, server-side rate limiting, **no captcha of any kind** | NFR-WEB-0035, DEC-0014 — binding on the widget, not negotiable | DEMANDED, unconfirmed |
+| C4 | Spam handling: honeypot field, submission-timing check, server-side rate limiting, **no captcha of any kind** | CON-WEB-0039, NFR-WEB-0065, DEC-0014 — binding on the widget, not negotiable | DEMANDED, unconfirmed |
 | C5 | Accessibility conformance: WCAG 2.2 AA inside the host page — label association, error identification, focus management, visible focus, target sizes | TS-WEB-0002 D5/A6, this spec A8/A9 | UNKNOWN |
 | C6 | Testability of the above: the widget's DOM reachable for axe-core and for keyboard/screen-reader runs even behind a shadow root | A8 | UNKNOWN |
-| C7 | Cookie-freedom and no persistent identifiers in the browser | NFR-WEB-0020/023 — the banner-free promise must stay true | DEMANDED, unconfirmed |
+| C7 | Cookie-freedom and no persistent identifiers in the browser | NFR-WEB-0061, NFR-WEB-0062/023 — the banner-free promise must stay true | DEMANDED, unconfirmed |
 | C8 | Production host(s) for script and submissions | D2 CSP entry, A1 | UNKNOWN |
 | C9 | Localization: German and English form copy and error messages, selected by the page language | TS-WEB-0001, DEC-0026 | UNKNOWN |
 | C10 | Delivery date | D6 contingency, launch scope | UNKNOWN |
@@ -152,7 +152,7 @@ C8–C10 are genuinely open.
 | Submissions never traverse the website | No POST route, no server action, no edge function touches form data |
 | No field value is logged | Vercel logs, error reports and monitoring (DEC-0017) must not contain form input; error payloads from C3 carry codes, not content |
 | No submission data at rest | The website has no store for leads, no email relay, no queue |
-| No field value reaches analytics | Conversion measurement records the goal ID and the route only (D12, NFR-WEB-0028) |
+| No field value reaches analytics | Conversion measurement records the goal ID and the route only (D12, CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064) |
 | Data protection texts follow the fact | The processing description for lead data belongs to envoy-api and is referenced from `/rechtliches#datenschutz` (TS-WEB-0004 D8), not authored as if the website were the processor |
 | Prefill is one-way | A prefilled place or offering context is passed *into* the widget as configuration (D2); nothing comes back out that the website stores |
 
@@ -277,7 +277,7 @@ spec. What binds here is the consequence: two routes, WhatsApp first.
 | Property | Determination | Tag |
 | --- | --- | --- |
 | Consent model | E-mail route: double opt-in, the address unusable until the confirmation link is followed. WhatsApp route: the visitor's own sent message **is** the opt-in — she composes and sends it from her own client, so there is no second confirmation step to build and none to fake | FIXED: FUN-WEB-0096 |
-| Cookieless | Neither route sets a cookie or a persistent identifier; the banner-free promise holds here too | FIXED: NFR-WEB-0020/023 |
+| Cookieless | Neither route sets a cookie or a persistent identifier; the banner-free promise holds here too | FIXED: NFR-WEB-0061, NFR-WEB-0062/023 |
 | Backend | Not the website, on either route. No subscriber endpoint, no list, no address and no phone number ever at rest here (same boundary as D5) | FIXED: DEC-0009 pattern |
 | Confirmation URL | E-mail route only; owned by the sending system, not a website route — the website has no DOI endpoint to build | PROPOSED |
 | Fields | E-mail route: address only. WhatsApp route: **no field at all** — a link, not a form. Anything more on either route is a decision nobody has taken | PROPOSED |
@@ -334,7 +334,7 @@ Gate: no envoy release is integrated into production before A8 and A9
 pass against it. TS-WEB-0002 A6 is the same gate seen from the accessibility
 side.
 
-### D12 — Conversion measurement of these flows [PROPOSED; frame FIXED: NFR-WEB-0028]
+### D12 — Conversion measurement of these flows [PROPOSED; frame FIXED: CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064]
 
 | Surface | Event fires on | Goal ID | Counts |
 | --- | --- | --- | --- |
@@ -390,7 +390,7 @@ distinguishes one intent from another; no page adds an event of its
 own, and DEC-0071 §3 still forbids any geographic value in the payload.
 
 Rules: one eTracker event per conversion goal ID, fired at most once per
-completed flow or per click (NFR-WEB-0028); the payload carries the goal
+completed flow or per click (CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064); the payload carries the goal
 ID, the channel where there is one, and the route — never a field value
 (D5), and never a per-visitor identifier (D14). S2, S4 and S5's e-mail
 route depend on C3 — until the event contract exists, the measurement
@@ -487,7 +487,7 @@ Nothing else.
 A per-click token would make the message personal data: it would link an
 anonymous read to an identified person, which puts it in the privacy
 policy and, on one reading, behind consent — and the cookieless,
-consent-free posture (DEC-0004, NFR-WEB-0020/023) is not worth trading for
+consent-free posture (DEC-0004, NFR-WEB-0061, NFR-WEB-0062/023) is not worth trading for
 an attribution number.
 
 Attribution is therefore **aggregate**: "this came from `/dein-kalender`
@@ -611,11 +611,11 @@ prefill is a working row, not a broken one.
 | FUN-WEB-0095 (external media as own previews + outbound links) | D9 · A7 |
 | FUN-WEB-0096 (newsletter: two channels, WhatsApp preferred; double opt-in on the e-mail route, cookieless, GDPR) | D10, D12 · A11, A12, A21 |
 
-Cross-cutting requirements this spec serves without claiming: NFR-WEB-0035
-(spam, D11 · A10), NFR-WEB-0030/031 (CSP entries, D2 · A5, A6), NFR-WEB-0028
-(conversion measurement, D12 · A12, A17, A18), NFR-WEB-0020/023
+Cross-cutting requirements this spec serves without claiming: CON-WEB-0039, NFR-WEB-0065
+(spam, D11 · A10), CON-WEB-0030/031 (CSP entries, D2 · A5, A6), CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064
+(conversion measurement, D12 · A12, A17, A18), NFR-WEB-0061, NFR-WEB-0062/023
 (cookie-freedom across the prefilled message, D14 · A19), FUN-WEB-0022
-(response promise, D4 C11 · A13), NFR-WEB-0010–013 across the widget
+(response promise, D4 C11 · A13), NFR-WEB-0057, CON-WEB-0024–013 across the widget
 boundary (D11 · A8, A9 — the website-side half of TS-WEB-0002 A6).
 
 ## Open points
@@ -633,7 +633,7 @@ boundary (D11 · A8, A9 — the website-side half of TS-WEB-0002 A6).
   gap. What the closure did **not** produce is a response expectation:
   none is recorded on any channel, so no row states one (D13).
 - envoy-api's production host is UNKNOWN (SRC-0011), so the CSP allowlist
-  entry required by NFR-WEB-0030 cannot be written yet. Part of Q-0022 (C8).
+  entry required by CON-WEB-0030 cannot be written yet. Part of Q-0022 (C8).
 - The widget's delivery date is UNKNOWN (C10). D6 defines the shippable
   state without it; the decision on whether to launch with the fallback
   is not this spec's to make.

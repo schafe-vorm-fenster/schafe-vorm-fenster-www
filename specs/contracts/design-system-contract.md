@@ -277,8 +277,9 @@ provides.
 **One check is owed, and it is owed by the specs, not by the package.**
 Decision 5 replaces the hero's fixed opacity ladder with a measured floor:
 the composite of photograph **plus** scrim clears 4.5:1 behind body text and
-3:1 behind display type, **per photograph**. `NFR-WEB-0011` already states that
-requirement and `DEC-0056` fixes the basis, but nothing asserts it:
+3:1 behind display type, **per photograph**. `NFR-WEB-0058` and `NFR-WEB-0059`
+already state that requirement and `DEC-0056` fixes the basis, but nothing
+asserts it:
 `pnpm check:contrast` measures the *token set* (`TS-WEB-0002-A3`) and knows
 nothing about photographs, and axe in `e2e/a11y.spec.ts` judges what a page
 happened to compose.

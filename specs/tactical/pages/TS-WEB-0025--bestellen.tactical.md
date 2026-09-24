@@ -91,7 +91,7 @@ unfiltered reference calendar would misrepresent the purchase.
 | --- | --- |
 | Content | number of places in scope · number of upcoming dates · up to 5 next dates as event rows (SRC-0014) · for a county additionally the active example places (DEC-0034) |
 | Source and cost | one BFF route, `GET /api/scope/preview?orte=&plz=&kreis=` — an addition to the TS-WEB-0004 D5 inventory, upstream events-api + geo-api. At most one request per scope change, debounced 400 ms, the in-flight request cancelled by the next, results cached per scope key. Never a per-place fan-out from the browser |
-| Layout | the preview box declares its height before the data arrives (NFR-WEB-0009, SRC-0014 §Reserved space): fixed-height counter badges, five reserved event rows at 76 px, skeleton per TS-WEB-0009 D7. Ticking a box never moves anything below the preview |
+| Layout | the preview box declares its height before the data arrives (FUN-WEB-0116, FUN-WEB-0117, SRC-0014 §Reserved space): fixed-height counter badges, five reserved event rows at 76 px, skeleton per TS-WEB-0009 D7. Ticking a box never moves anything below the preview |
 | Scope extremes | empty scope: no request, designed empty state, step 3 unreachable. Zero dates *in* a scope: the honest publishing invitation, never a fabricated figure (FUN-WEB-0041). County: never a place list (DEC-0034) — counters plus examples, same fixed box, same one request |
 | Failure / 429 | tiers per TS-WEB-0009 D4; a `429` renders as a component state (TS-WEB-0014 D10), never an error page. A failed preview never blocks the order — step 3 stays reachable |
 
@@ -143,7 +143,7 @@ but where it comes from.
 | If it cannot be issued synchronously | step 4 shows the confirmation, names when the code arrives, and the `buy-calendar-licence` event does **not** fire (D11) — a confirmation without a code is not the goal |
 | Second copy | the code must also reach the visitor by email, so closing the tab does not lose the purchase — an unanswered row of the envoy/Portalize demand |
 
-### D8 — The flow across a reload: nothing is stored [FIXED: NFR-WEB-0020/023, TS-WEB-0013 D1; carrier PROPOSED]
+### D8 — The flow across a reload: nothing is stored [FIXED: NFR-WEB-0061, NFR-WEB-0062/023, TS-WEB-0013 D1; carrier PROPOSED]
 
 The website sets no cookie and writes no `localStorage`, `sessionStorage`
 or IndexedDB entry — here as everywhere. No "pending" state is ever held.
@@ -164,7 +164,7 @@ parameters would produce unbounded near-duplicate URLs, and a searcher landing
 mid-flow has skipped the argument. Until it is resolved (Open points) the two specs
 disagree in writing rather than silently.
 
-### D10 — Security: the one flow that takes billing data [FIXED: TS-WEB-0014 D9–D11, TS-WEB-0016 D5, NFR-WEB-0038]
+### D10 — Security: the one flow that takes billing data [FIXED: TS-WEB-0014 D9–D11, TS-WEB-0016 D5, CON-WEB-0044, CON-WEB-0045]
 
 | Rule | Here |
 | --- | --- |
@@ -210,7 +210,7 @@ and step, never a field value. Both wait on envoy's event contract (Q-0022 C3).
 | --- | --- |
 | FUN-WEB-0015 (`/dein-kalender/bestellen`, focus job "run our own calendar", conversion `buy-calendar-licence`) | D1 brief · D2, D5 flow and exit · D3, D4 scope and preview · D6 invoice step · D7 code · D8 no storage · D9 indexing · D10 security · D11 measurement · A1–A14 |
 
-Served, not claimed: FUN-WEB-0093/094 · NFR-WEB-0009 · NFR-WEB-0038 · NFR-WEB-0028 ·
+Served, not claimed: FUN-WEB-0093/094 · FUN-WEB-0116, FUN-WEB-0117 · CON-WEB-0044, CON-WEB-0045 · CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064 ·
 FUN-WEB-0020 · FUN-WEB-0041.
 
 ### D3a — Scope does not drive price [FIXED: DEC-0060]

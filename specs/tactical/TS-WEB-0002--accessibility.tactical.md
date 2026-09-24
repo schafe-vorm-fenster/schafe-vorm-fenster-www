@@ -4,7 +4,7 @@ id: TS-WEB-0002
 kind: rule
 status: DRAFT
 version: 0.1.0
-implements: [NFR-WEB-0010, NFR-WEB-0011, NFR-WEB-0012, NFR-WEB-0013, NFR-WEB-0014, NFR-WEB-0015, NFR-WEB-0016, NFR-WEB-0017, NFR-WEB-0018, NFR-WEB-0019, NFR-WEB-0026, NFR-WEB-0027]
+implements: [NFR-WEB-0057, CON-WEB-0024, NFR-WEB-0058, NFR-WEB-0059, CON-WEB-0025, FUN-WEB-0128, FUN-WEB-0118, FUN-WEB-0119, FUN-WEB-0120, FUN-WEB-0129, FUN-WEB-0130, NFR-WEB-0016, NFR-WEB-0060, FUN-WEB-0121, NFR-WEB-0018, FUN-WEB-0122, FUN-WEB-0123, CON-WEB-0026, CON-WEB-0027]
 sources: [SRC-0006]
 decisions: [DEC-0012]
 ai_provenance:
@@ -23,7 +23,7 @@ set every page and component is built and tested against.
 
 ## Determinations
 
-### D1 — Conformance target [FIXED: NFR-WEB-0010, DEC-0012]
+### D1 — Conformance target [FIXED: NFR-WEB-0057, CON-WEB-0024, DEC-0012]
 
 WCAG 2.2 Level AA, all criteria, no exceptions. BFSG conformity is the
 legal frame (Q-0021 confirms applicability).
@@ -60,7 +60,7 @@ personalisation vocabulary on controls that no source asks for);
 **1.4.9** Images of Text (no images of text exist to constrain); sign
 language and extended audio description (no video).
 
-### D3 — Contrast and brand [FIXED: NFR-WEB-0011; weights PROPOSED]
+### D3 — Contrast and brand [FIXED: NFR-WEB-0058, NFR-WEB-0059, CON-WEB-0025; weights PROPOSED]
 
 - Text 4.5:1 minimum; large text (≥ 24px / ≥ 18.66px bold) and UI
   components 3:1. Brand green `#B4CF39` fails on white for text → it is
@@ -73,7 +73,7 @@ language and extended audio description (no video).
   `@schafe-vorm-fenster/brand-design`, which is already responsive
   (`clamp()`) and floors at 15 px; the specs restate none of them.
 
-### D4 — Themes via browser hints only [FIXED: NFR-WEB-0014/015]
+### D4 — Themes via browser hints only [FIXED: FUN-WEB-0129/015]
 
 Three themes — light (default), dark, high-contrast — selected solely by
 `prefers-color-scheme` and `prefers-contrast`. No toggle, no storage.
@@ -83,7 +83,7 @@ Also honoured: `prefers-reduced-motion` (no non-essential motion),
 `Save-Data`/reduced-data (→ TS-WEB-0003 D6), OS font-size scaling (rem-based
 type, no px font sizes) [FIXED: SRC-0006].
 
-### D5 — Structure and operation [FIXED: NFR-WEB-0012/013]
+### D5 — Structure and operation [FIXED: FUN-WEB-0128/013]
 
 - Landmarks: exactly one `main`; `nav`, `header`, `footer`, `aside` per
   their roles (ties FUN-WEB-0071); heading levels never skip.
@@ -93,12 +93,12 @@ type, no px font sizes) [FIXED: SRC-0006].
 - Zoom: usable at 200 %; reflow at 320px width without 2D scrolling.
 - Images: informative → meaningful `alt` from content frontmatter
   (FUN-WEB-0089 schema carries the field); decorative → `alt=""`
-  [FIXED: NFR-WEB-0017].
+  [FIXED: NFR-WEB-0060, FUN-WEB-0121].
 - Forms are the envoy widget: label association, error identification,
   and focus management are part of the widget demand (Q-0022) — the
   website's acceptance still covers them (A6).
 
-### D6 — Accessibility statement [FIXED: NFR-WEB-0027; route PROPOSED]
+### D6 — Accessibility statement [FIXED: CON-WEB-0027; route PROPOSED]
 
 A section at the permanent anchor `#barrierefreiheit` on `/rechtliches`
 (DEC-0039; the anchor registry is TS-WEB-0004 D8), footer-linked on every page, content
@@ -135,21 +135,29 @@ claim:
 
 | Requirement | Discharged by |
 | --- | --- |
-| NFR-WEB-0010 (WCAG 2.2 AA + AAA basics) | D1, D2 · A1, A2 |
-| NFR-WEB-0011 (contrast vs brand) | D3 · A3 |
-| NFR-WEB-0012 (semantics, ARIA) | D5 · A1 |
-| NFR-WEB-0013 (keyboard, screen reader) | D5 · A4, A5 |
-| NFR-WEB-0014 (browser preference hints) | D4 · A9 |
-| NFR-WEB-0015 (no manual theme switcher) | D4 · A1 (three themes) |
-| NFR-WEB-0016 (brand typeface readability) | D3 weight floor · Q-0034 rest |
-| NFR-WEB-0017 (text alternatives) | D5 images rule |
-| NFR-WEB-0018 (touch targets, mobile) | D5 target sizes · A7 |
-| NFR-WEB-0019 (automated + manual testing) | A1–A5 (the acceptance regime) |
-| NFR-WEB-0026 (BFSG conformity) | D1 · Q-0021 |
-| NFR-WEB-0027 (accessibility statement) | D6 · A8 |
-| NFR-WEB-0016 (brand typeface) | D3 · A10 · Q-0034 for the colour world |
-| NFR-WEB-0017 (text alternatives) | D5 images rule · A11 |
-| NFR-WEB-0026 (BFSG conformity) | D1 · A12 · Q-0021 for applicability |
+| NFR-WEB-0057 (Violations of WCAG 2.2 level A and AA = 0 violations) | D1, D2 · A1, A2 |
+| CON-WEB-0024 (not take full non-visual optimisation as a) | D1, D2 · A1, A2 |
+| NFR-WEB-0058 (Contrast ratio of body text against its background >= 4.5 :1) | D3 · A3 |
+| NFR-WEB-0059 (Contrast ratio of display type and of non-text contrast against its backgr) | D3 · A3 |
+| CON-WEB-0025 (use the accessible colour variant wherever a) | D3 · A3 |
+| FUN-WEB-0128 (render semantic markup — landmarks) | D5 · A1 |
+| FUN-WEB-0118 (be operable by keyboard alone) | D5 · A4, A5 |
+| FUN-WEB-0119 (present its content to a screen reader) | D5 · A4, A5 |
+| FUN-WEB-0120 (render a focus ring of 3 px) | D5 · A4, A5 |
+| FUN-WEB-0129 (render accordingly) | D4 · A9 |
+| FUN-WEB-0130 (take the browser preference as its only) | D4 · A1 (three themes) |
+| NFR-WEB-0016 (Rendered font size of any text on the website >= 15 CSS px) | D3 weight floor · Q-0034 rest |
+| NFR-WEB-0060 (Informative images without a text alternative = 0 images) | D5 images rule |
+| FUN-WEB-0121 (mark it alt="") | D5 images rule |
+| NFR-WEB-0018 (Size of every touch target on the website >= 44 x 44 CSS px) | D5 target sizes · A7 |
+| FUN-WEB-0122 (run the axe sweep over every route) | A1–A5 (the acceptance regime) |
+| FUN-WEB-0123 (run a screen-reader spot check on VoiceOver) | A1–A5 (the acceptance regime) |
+| CON-WEB-0026 (conform to the Barrierefreiheitsstärkungsgesetz) | D1 · Q-0021 |
+| CON-WEB-0027 (publish an accessibility statement as a footer-reachable) | D6 · A8 |
+| NFR-WEB-0016 (Rendered font size of any text on the website >= 15 CSS px) | D3 · A10 · Q-0034 for the colour world |
+| NFR-WEB-0060 (Informative images without a text alternative = 0 images) | D5 images rule · A11 |
+| FUN-WEB-0121 (mark it alt="") | D5 images rule · A11 |
+| CON-WEB-0026 (conform to the Barrierefreiheitsstärkungsgesetz) | D1 · A12 · Q-0021 for applicability |
 
 ## Open points
 
