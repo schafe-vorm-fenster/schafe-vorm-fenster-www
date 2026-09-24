@@ -113,3 +113,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-0096 — The test-reference scan is what actually runs — read off the runners, not listed by hand](DEC-0096--the-scan-set-is-what-runs.md)
 - [DEC-0097 — Every statement carries the position it rests on — 186 of 273 resolve to a line, and the 87 that cannot say why](DEC-0097--every-statement-carries-its-position.md)
 - [DEC-0098 — A source's trust level is the minimum of its six-dimension vector — computed, and fifteen of eighteen were not](DEC-0098--the-trust-level-is-computed.md)
+- [DEC-0099 — The conflict and demand registers exist, populated from what already happened — 22 conflicts and 57 demands, none invented](DEC-0099--the-conflict-and-demand-registers.md)

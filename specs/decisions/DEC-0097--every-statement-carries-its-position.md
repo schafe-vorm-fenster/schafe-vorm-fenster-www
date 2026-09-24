@@ -138,7 +138,8 @@ either a fabricated line number, which
 `@leafcutter-strict/foundation-evidence-discipline` calls "a defect — and the
 worse kind", or an absent field, which the contract's own `required` array
 forbids. E19 accepts `UNKNOWN` for `loc` and `excerpt`, W8 counts it, and the
-same slot is owed upstream as Q-0074's — raised as `DEM-0017`.
+same slot is owed upstream as Q-0074's, and goes into the demand register
+beside it.
 
 ## Consequences
 

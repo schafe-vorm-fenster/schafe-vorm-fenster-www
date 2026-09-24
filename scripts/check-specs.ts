@@ -33,6 +33,10 @@
  *      a named file and an excerpt of at most 25 words, or `UNKNOWN`
  *  E20 Every source carries a six-dimension quality vector, and its trust
  *      level is the minimum of that vector rather than an assertion
+ *  E21 Conflict records: unique id, the taxonomy's type, the contract's
+ *      impact, status and outcome set, and both positions with their evidence
+ *  E22 Demand rows: unique id, the taxonomy's defect type, a status, an
+ *      addressee and a concrete request
  *  W1  (warning) requirements not covered by any tactical spec
  *  W2  (warning) covered requirements discharged by no acceptance criterion
  *  W3  (warning) acceptance criteria no test references
@@ -172,6 +176,19 @@ const scanner = (anchored: RegExp, flags = "g") =>
 const REQUIREMENT_ID = idPattern(requirementShell, "id");
 const TACTICAL_ID = idPattern(tacticalSpecification, "id");
 const SOURCE_ID = idPattern(sourceInventory, "sources.[].id");
+
+/**
+ * The two cross-cutting registers (DEC-0099).
+ *
+ * `@leafcutter-os/schemas` types `CONF-<nnnn>` and `DEM-<nnnn>`, and DEC-0086
+ * §1 already recorded that neither carries a domain token: the domain sits on
+ * the chain artefacts — goal, need, requirement, tactical specification — and
+ * not on the registers that cut across them. The patterns are spelled here
+ * rather than read, because those schemas are Zod modules rather than JSON
+ * Schema and `idPattern()` reads JSON.
+ */
+const CONFLICT_ID = /^CONF-\d{4}$/;
+const DEMAND_ID = /^DEM-\d{4}$/;
 
 /** Local families: the method defines no identifier for any of the three. */
 const DECISION_ID = /^DEC-\d{4}$/;
@@ -489,6 +506,91 @@ function checkQualityVector(d: Doc, id: string, line: string) {
     err(d.file, `E20 ${id}: the register says trust "${asserted}", the vector produces "${computed}"`);
 }
 
+/**
+ * The conflict register (E21) and the demand register (E22).
+ *
+ * `@leafcutter-strict/method-conflict-taxonomy` fixes six conflict types and
+ * `library-schemas`' `conflict-record` schema spells them, together with the
+ * impact levels, the outcome set and the two statuses. `method-defect-taxonomy`
+ * fixes eleven defect types. All of those are read here from the installed
+ * contract where the contract has them, and spelled from the method's own
+ * table where — as for the defect types — the schema does not.
+ *
+ * The conflict record's own rule, verbatim: "A conflict record that names only
+ * the new candidate is half a record; the reviewer cannot see what it collides
+ * with." So E21 requires two positions, each with a locator and an excerpt in
+ * the same form E19 requires of a requirement.
+ */
+const conflictRecord = contract("conflict-record");
+const CONFLICT_TYPE = vocabulary(conflictRecord, "type");
+const CONFLICT_IMPACT = vocabulary(conflictRecord, "impact");
+const CONFLICT_OUTCOME = vocabulary(conflictRecord, "permitted_outcomes.[]");
+const CONFLICT_STATUS = vocabulary(conflictRecord, "status");
+
+/**
+ * The eleven defect types of `@leafcutter-strict/method-defect-taxonomy`.
+ *
+ * Spelled, not read: the method is prose and no installed schema enumerates
+ * them. Each token is the method's own row label, lowercased and joined.
+ */
+const DEFECT_TYPE = new Set([
+  "unlocatable", "unauthoritative", "stale", "vague", "incomplete", "contradictory",
+  "single_source", "solution_only", "hearsay", "unmandated", "noise",
+]);
+const DEMAND_STATUS = new Set(["OPEN", "ANSWERED", "WAIVED"]);
+
+function checkConflict(d: Doc, id: string) {
+  const f = d.frontmatter ?? {};
+  const one = (key: string, allowed: Set<string>) => {
+    const v = f[key];
+    if (typeof v !== "string" || !allowed.has(v))
+      err(d.file, `E21 ${id}: ${key} ${JSON.stringify(v ?? null)} is not one of ${list(allowed)}`);
+  };
+  one("type", CONFLICT_TYPE);
+  one("impact", CONFLICT_IMPACT);
+  one("status", CONFLICT_STATUS);
+  one("recommended_action", CONFLICT_OUTCOME);
+  const permitted = f.permitted_outcomes;
+  if (!Array.isArray(permitted) || permitted.length === 0)
+    err(d.file, `E21 ${id}: permitted_outcomes is empty — the type derives it, it is not a free choice`);
+  else {
+    for (const o of permitted)
+      if (typeof o !== "string" || !CONFLICT_OUTCOME.has(o))
+        err(d.file, `E21 ${id}: permitted_outcomes ${JSON.stringify(o)} is not one of ${list(CONFLICT_OUTCOME)}`);
+    if (typeof f.recommended_action === "string" && !permitted.includes(f.recommended_action))
+      err(d.file, `E21 ${id}: recommended_action ${f.recommended_action} is not among its own permitted_outcomes`);
+  }
+  if (!Array.isArray(f.involved) || f.involved.length < 2)
+    err(d.file, `E21 ${id}: involved names fewer than two artefacts — a record naming one side is half a record`);
+  // Both positions, each with a locator and an excerpt.
+  const positions = [...d.body.matchAll(/^ {2}`(.+?#(?:L\d+|P\d+|¶\d+|M\d+:\d+))`$/gm)];
+  const excerpts = [...d.body.matchAll(/^ {2}> (.+)$/gm)];
+  if (positions.length < 2)
+    err(d.file, `E21 ${id}: ${positions.length} position locator(s) — the contract requires at least two`);
+  if (excerpts.length !== positions.length)
+    err(d.file, `E21 ${id}: ${positions.length} locator(s) but ${excerpts.length} excerpt(s)`);
+  for (const e of excerpts)
+    if (e[1].trim().split(/\s+/).length > EXCERPT_MAX_WORDS)
+      err(d.file, `E21 ${id}: a position excerpt is over the method's ${EXCERPT_MAX_WORDS} words`);
+}
+
+/** Demand-register columns: | ID | Defect | Status | Blocks | From | Required | Answer format | Raised by | Q | */
+function checkDemand(d: Doc, id: string, line: string) {
+  const cells = line.split("|").map((c) => c.trim());
+  const defect = cells[2];
+  const status = cells[3];
+  if (!DEFECT_TYPE.has(defect ?? ""))
+    err(d.file, `E22 ${id}: defect "${defect ?? ""}" is not one of ${list(DEFECT_TYPE)}`);
+  if (!DEMAND_STATUS.has(status ?? ""))
+    err(d.file, `E22 ${id}: status "${status ?? ""}" is not one of ${list(DEMAND_STATUS)}`);
+  // "More detail is not a demand" — the required input and the addressee are
+  // the two fields that make a demand one, and neither may be empty.
+  if (!cells[5] || cells[5] === "—")
+    err(d.file, `E22 ${id}: no addressee — a demand addressed to nobody is a note`);
+  if (!cells[6] || cells[6] === "—")
+    err(d.file, `E22 ${id}: nothing is required — "More detail" is not a demand`);
+}
+
 const PROVENANCE_FIELDS = ["prompt_id", "prompt_version", "model", "generated_at"] as const;
 const RFC3339 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
 /** field → how many artefacts answer it `UNKNOWN` (W6). */
@@ -582,6 +684,8 @@ const qDefs = new Set<string>();
 const srcDefs = new Set<string>();
 const tsDefs = new Set<string>();
 const glDefs = new Set<string>();
+const confDefs = new Set<string>();
+const demDefs = new Set<string>();
 
 /**
  * A requirement is one document (wave 2).
@@ -662,6 +766,26 @@ for (const d of docs) {
       err(d.file, "E1 decision without valid frontmatter id (DEC-####)");
     }
   }
+  if (/\/conflicts\/CONF-\d{4}--/.test(d.file)) {
+    const id = d.frontmatter?.id;
+    if (typeof id === "string" && CONFLICT_ID.test(id)) {
+      if (confDefs.has(id)) err(d.file, `E21 duplicate conflict id ${id}`);
+      confDefs.add(id);
+      const fileId = rel(d.file).match(/\/(CONF-\d{4})--/)?.[1];
+      if (id !== fileId) err(d.file, `E21 frontmatter id ${id} does not match file name ${fileId}`);
+      checkProvenance(d, id);
+      checkConflict(d, id);
+    } else err(d.file, "E21 conflict without valid frontmatter id (CONF-####)");
+  }
+  if (/demand-register\.md$/.test(d.file)) {
+    for (const line of d.body.split("\n")) {
+      const m = line.match(new RegExp(`^\\|\\s*(${bare(DEMAND_ID)})\\s*\\|`));
+      if (!m) continue;
+      if (demDefs.has(m[1])) err(d.file, `E22 duplicate demand id ${m[1]}`);
+      demDefs.add(m[1]);
+      checkDemand(d, m[1], line);
+    }
+  }
   if (/open-questions\.md$/.test(d.file)) {
     for (const m of d.body.matchAll(new RegExp(`^\\|\\s*(${bare(QUESTION_ID)})\\s*\\|`, "gm"))) qDefs.add(m[1]);
   }
@@ -738,6 +862,8 @@ const REF_PATTERNS: Array<[RegExp, (id: string) => boolean, string]> = [
   [scanner(SOURCE_ID), (id) => srcDefs.has(id), "source"],
   [scanner(TACTICAL_ID), (id) => tsDefs.has(id), "tactical spec"],
   [scanner(GLOSSARY_ID), (id) => glDefs.has(id), "glossary term"],
+  [scanner(CONFLICT_ID), (id) => confDefs.has(id), "conflict"],
+  [scanner(DEMAND_ID), (id) => demDefs.has(id), "demand"],
 ];
 
 /**
@@ -764,7 +890,22 @@ const retired = new Set(
     ?.split(/^## /m)[0]
     ?.matchAll(/^\|\s*`([A-Z]+-[A-Z]+-\d{4})`\s*\|/gm) ?? []].map((m) => m[1]),
 );
-const RECORD = /\/decisions\/DEC-\d{4}--/;
+/**
+ * The two record kinds that may name a retired identifier.
+ *
+ * A decision record has to, or it cannot say what it changed (DEC-0086 §5).
+ * A conflict record has the same need for the same reason: it records a
+ * contradiction that was had, between the artefacts that had it, and several
+ * of those artefacts were split or reclassified by the decision that resolved
+ * it. A conflict record naming the survivors instead would be a record of a
+ * conflict nobody had.
+ *
+ * The demand register has it once, and narrowly: one demand asks for two
+ * dangling citations to be repointed, and it cannot ask for that without
+ * naming them. `method-demand-recording` is explicit that "'More detail' is
+ * not a demand".
+ */
+const RECORD = /\/(?:decisions\/DEC-\d{4}--|conflicts\/CONF-\d{4}--|demands\/demand-register\.md$)/;
 
 for (const d of docs) {
   if (GENERATED.test(d.file)) continue;
@@ -1160,7 +1301,7 @@ if (untested.length) {
 
 // ── Report ───────────────────────────────────────────────────────────────
 
-console.log(`specs check: ${files.length} files · ${reqDefs.size} requirements · ${decDefs.size} decisions · ${qDefs.size} questions · ${srcDefs.size} sources · ${tsDefs.size} tactical specs · ${glDefs.size} glossary terms · ${acDefs.size} acceptance criteria`);
+console.log(`specs check: ${files.length} files · ${reqDefs.size} requirements · ${decDefs.size} decisions · ${qDefs.size} questions · ${srcDefs.size} sources · ${tsDefs.size} tactical specs · ${glDefs.size} glossary terms · ${acDefs.size} acceptance criteria · ${confDefs.size} conflicts · ${demDefs.size} demands`);
 if (acDefs.size) {
   const pyramid = [...LEVELS].map((l) => `${l} ${acsByLevel.get(l) ?? 0}`).join(" · ");
   console.log(`  verification pyramid: ${pyramid}`);
