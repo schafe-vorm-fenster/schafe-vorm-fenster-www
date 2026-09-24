@@ -5,7 +5,7 @@ profile: interaction
 status: DRAFT
 implements: [WEB-F-017]
 sources: [SRC-001, SRC-002, SRC-003, SRC-014]
-decisions: [DEC-036, DEC-042, DEC-048, DEC-052, DEC-056, DEC-081, DEC-083, DEC-084]
+decisions: [DEC-036, DEC-042, DEC-048, DEC-051, DEC-052, DEC-056, DEC-081, DEC-082, DEC-083, DEC-084]
 ---
 
 # TS-027 — `/ueber-uns`, the Trust Surface
@@ -39,7 +39,7 @@ components, photo surface, badges, ratios, page rhythm →
 | Field | Value |
 | --- | --- |
 | `focusJob` | `understand-who-is-behind-it` |
-| `primaryConversion` | `request-product-briefing` (DEC-081 §6) — one `data-cta="primary"` above the fold, targeting this page's contact section; the outbound appointment link is the section's first row, and the event fires there (TS-016 D7/D12) |
+| `primaryConversion` | `request-product-briefing` (DEC-081 §6) — **unchanged by the 2026-09-24 amendment to DEC-052 §4** — one `data-cta="primary"` above the fold, targeting this page's contact section; the outbound appointment link is the section's first row, and the event fires there (TS-016 D7/D12) |
 | `equalWeightConversion` | — |
 | `audiences` | `municipalities, institutions, counties, actors, rural-residents` — SRC-003's "1 municipalities and funders · 2 everyone" resolved against `@schafe-vorm-fenster/audiences` [PROPOSED] |
 | `liveModules` | `[]` — the sender-surface exemption of TS-006 D1 (DEC-084 §3). The operating-counter module is deleted; see D4 |
@@ -153,33 +153,72 @@ website copy. Portraits use `ratio-portrait` (4:5). A person whose folder
 carries no usable portrait gets the *"Foto gesucht"* hatch — the person is
 never omitted and the box is never left blank.
 
-### D8 — The newsletter sits inside block 2, before the context band [FIXED: DEC-052 §4, TS-006 D2; its justification is an open point]
+### D8 — The newsletter is secondary, below the booking [FIXED: DEC-052 §4 as amended 2026-09-24, DEC-082, TS-006 D2]
 
 It is an **argument block**: after Team, before the context band and the
-closing CTA. Secondary treatment, never the primary marker — the page's
-one primary is the booking in block 1 (D1, DEC-082's ladder). Mechanics
-and the Q-020 block are TS-016 D10; with no sending system at launch the
-block simply does not ship.
+closing CTA. **Secondary treatment, never the primary marker** — the
+page's one primary is the booking in block 1 (D1), and the block sits
+below every argument on the page. Mechanics are TS-016 D10.
 
-**Its stated reason no longer holds.** DEC-052 §4 permitted an inline
-signup here *because* this was the one page without a conversion of its
-own. Since DEC-081 §6 the page has one. The block is unchanged in
-placement and treatment — it sits below every argument and competes with
-nothing above it — but the justification is that record's to restate. See
-Open points.
+**Its justification has been restated**, and the block stays. DEC-052 §4
+permitted an inline signup here *because* this was the one page without
+a conversion of its own; DEC-081 §6 spent that reason. The amendment of
+2026-09-24 replaces it: **the two asks serve two readiness levels.**
 
-### D9 — One conversion is measured, and not on this page's own blocks [FIXED: TS-012 D4/D7, TS-016 D12, DEC-081 §4]
+| State the reader is in | Ask | Rung |
+| --- | --- | --- |
+| ready to talk | the booking | primary (D1) |
+| still looking | the newsletter | secondary, here |
 
-`request-product-briefing` completes on the contact section's first action
-row, with `/ueber-uns` as the route (TS-016 D12). That firing point
-belongs to the section, which the layout renders on every page; this page
-adds nothing to it.
+They do not compete, because they are not addressed to the same reader.
+That is DEC-082's ladder — one primary, everything else beneath it — and
+it is what lets the page carry a second ask without carrying a second
+conversion declaration. The withdrawal option the old open point named
+was considered by the owner and rejected.
 
-Everything this page owns stays unmeasured: the primary CTA and the
+**The block carries a named goal now.** `subscribe-to-newsletter`
+(SRC-008); at the time of DEC-052 §4 the newsletter was not in the hub
+model at all, which is why a placement could be decided without one.
+
+**Two channels, WhatsApp preferred.** The signup offers e-mail **and**
+WhatsApp, and a block that offers e-mail only does not satisfy the goal
+(TS-016 D10). The WhatsApp route is a new capability whose receiving
+side does not exist; what it needs is TS-016 D10 N1–N5, not this page's
+to resolve.
+
+**Nothing ships without a sending system.** No system is in operation
+(TS-016 open points, Q-020 as answered in DEC-052 §4 as amended), so at
+launch the block does not render — no form that posts nowhere, and no
+click-to-chat link whose arriving message nothing records
+(TS-016-A21). The page is complete without it: its primary conversion is
+elsewhere.
+
+### D9 — What is measured here, and what deliberately is not [FIXED: TS-012 D4/D7, TS-016 D12, DEC-081 §4]
+
+Three goals can fire on a render of this page. **None of their firing
+points is this page's own** — two belong to the standing contact section
+and one to the newsletter block's mechanics (TS-016 D10/D12):
+
+| Goal | Fires on | Counts |
+| --- | --- | --- |
+| `make-contact` | a click on any of the contact section's four rows, with the channel and `/ueber-uns` as the route | an intent |
+| `request-product-briefing` | the same click, on row 1 only | an intent |
+| `subscribe-to-newsletter` | the block's signup handover, either route — only once the block ships at all (D8) | an intent; the confirmation is not observable |
+
+Row 1 carrying two goal ids on one click is a ladder, not a double
+count (TS-016 D12); the two are different goals, and neither fires
+twice.
+
+**Everything this page owns stays unmeasured.** The primary CTA and the
 closing CTA are in-page navigation into the section and emit nothing —
 counting them would count one intent twice — and the archive link, the
 team block and the context band emit nothing either. No ad-hoc "archive
 opened" or "scrolled to team" event is added.
+
+The page adds no event of its own to any of the three, and defines none:
+the section is one component rendered by the layout, the newsletter
+block's mechanics are TS-016's, and `/ueber-uns` appears in all three
+payloads only as the route.
 
 ### D10 — Structured data stays at `Organization` [FIXED: TS-011 D4]
 
@@ -210,10 +249,11 @@ assigns types per page type and its A5 checks "no more".
 | TS-027-A7 | integration | Fixture with one cleared `type: testimonial` element: the reserved slot is filled and **no** empty slot renders. Fixture with none: 6 filled + 1 empty, and the 7th position is not backfilled by another type. |
 | TS-027-A8 | e2e | The archive block has exactly one outgoing link, target `/ueber-uns/archiv`, and zero list entries, thumbnails or counts. |
 | TS-027-A9 | e2e | Every person in `@schafe-vorm-fenster/people` appears once, in a 4:5 media box; a person without a portrait shows the "Foto gesucht" surface — never an empty box, never omitted. |
-| TS-027-A10 | e2e | The newsletter block stands after the team block and before the context band; the page contains exactly one `data-cta="primary"`, in block 1, resolving to this page's contact section; the last block is the closing CTA with the same goal id, target and label, and the contact section follows it (TS-006-A17). |
+| TS-027-A10 | e2e | The newsletter block stands after the team block and before the context band, and carries no `data-cta="primary"`; the page contains exactly one `data-cta="primary"`, in block 1, resolving to this page's contact section; the last block is the closing CTA with the same goal id, target and label, and the contact section follows it (TS-006-A17). |
 | TS-027-A11 | e2e | Stage 0 and stage 1 (geo set) renders have identical block order and both contain the empty slot; only the selection and order of the six filled elements differ. |
 | TS-027-A12 | static | Structured data on the page: exactly one `Organization` reference by `@id`, zero `Person` nodes, zero `ItemList`. |
-| TS-027-A13 | integration | Loading the page, clicking the archive link, clicking the primary or the closing CTA, and submitting the newsletter form emit no conversion event. `request-product-briefing` is emitted exactly once, on the contact section's first action row, carrying `/ueber-uns` as the route. |
+| TS-027-A13 | integration | Loading the page, clicking the archive link, and clicking the primary or the closing CTA emit no conversion event. On the contact section's first action row, exactly one `request-product-briefing` **and** exactly one `make-contact` are emitted, both carrying `/ueber-uns` as the route; on rows 2–4, exactly one `make-contact` with the row's channel and no `request-product-briefing`. No goal id is emitted twice for one click. |
+| TS-027-A16 | integration | Where the newsletter block renders, its signup handover emits exactly one `subscribe-to-newsletter` with `/ueber-uns` as the route, and the block offers both the WhatsApp and the e-mail route (TS-016-A11). Where no sending system exists, the block does not render at all and emits nothing (TS-016-A21). |
 | TS-027-A14 | e2e | No layout shift from late content: hero, proof cards and portraits declare `ratio-hero`, `ratio-proof`, `ratio-portrait` before data arrives; measured CLS on this page is ≤ 0.02. |
 | TS-027-A15 | manual | Photo honesty: every photograph either depicts what its copy claims, or carries the badge "Nicht motivgenau · Platzhalter"; every missing photo is the "Foto gesucht" surface. |
 
@@ -240,18 +280,23 @@ assigns types per page type and its A5 checks "no more".
   stop.~~ **Void.** There is no headline in this spec to punctuate: the
   fixed h1 is released (DEC-083 §5, DEC-036 amendment) and the sentence is
   written in the content phase under SRC-017.
-- **DEC-052 §4's reason for the inline newsletter is spent.** It permitted
-  the block here because this was the one page without a conversion of its
-  own; the page now has one (DEC-081 §6). The block's placement and
-  treatment are unaffected and D8 keeps it, but the justification is that
-  record's to restate — or to withdraw, if the owner reads the newsletter
-  as competition for a conversion this page did not have before.
-  Addressee: jan-henrik (owner of DEC-052).
+- ~~**DEC-052 §4's reason for the inline newsletter is spent.** It
+  permitted the block here because this was the one page without a
+  conversion of its own; the page now has one (DEC-081 §6).~~ **Closed
+  2026-09-24 by the amendment to DEC-052 §4.** The owner restated the
+  justification rather than withdrawing the block: the two asks serve
+  two readiness levels — ready to talk books, still looking subscribes —
+  which is DEC-082's ladder. Placement and treatment are unchanged, the
+  primary stays the booking, and D8 now carries the new reason.
 - **Empty-slot framing has two variants** (missing type vs. missing
   region); which is spoken at which stage is [PROPOSED] in D5. The
   sentences themselves are copy. Addressee: content.
-- **Q-020 gates the newsletter block** (no sending system decided). If it
-  is unanswered at launch, D8 does not ship. Addressee: envoy/ops.
+- **Q-020 gates the newsletter block — and it is not a question any
+  more, it is a delivery.** DEC-051 decided *which* system (envoy);
+  **no sending system is in operation**, and the widget's date is
+  UNKNOWN. If none exists at launch, D8 does not ship. The WhatsApp
+  route needs three things that exist nowhere (TS-016 D10 N3–N5).
+  Addressee: envoy/ops.
 - ~~**TS-006 D6's merge of band and closing block is [PROPOSED]**; this
   page is one of the two depending on it.~~ **No longer this page's
   question.** With a conversion of its own it renders band *then* closing

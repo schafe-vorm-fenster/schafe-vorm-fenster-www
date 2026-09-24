@@ -5,7 +5,7 @@ profile: interaction
 status: DRAFT
 implements: [WEB-F-090, WEB-F-091, WEB-F-092, WEB-F-093, WEB-F-094, WEB-F-095, WEB-F-096]
 sources: [SRC-003, SRC-008, SRC-011]
-decisions: [DEC-009, DEC-010, DEC-011, DEC-013, DEC-014, DEC-015, DEC-025, DEC-026, DEC-030, DEC-081, DEC-083]
+decisions: [DEC-004, DEC-009, DEC-010, DEC-011, DEC-013, DEC-014, DEC-015, DEC-025, DEC-026, DEC-030, DEC-051, DEC-052, DEC-081, DEC-082, DEC-083]
 ---
 
 # TS-016 — Forms, Leads and Outbound Handovers
@@ -22,6 +22,16 @@ section of four static channel rows — video appointment, WhatsApp, phone,
 e-mail (D13) — rendered by the layout on every page (TS-006 D2), and the
 briefing's outbound Google Calendar link is its first action row. The
 widget carries the two forms that remain.
+
+**Reaching out is now a conversion goal of its own** (2026-09-24):
+`make-contact` counts the act, whatever the errand, and
+`request-product-briefing` stays the qualified goal above it. What the
+website can actually observe is an **intent** per channel — three of the
+four rows hand the visitor to another application — and this spec names
+it as intent wherever it appears (D12, D13). The newsletter likewise has
+a goal now, `subscribe-to-newsletter`, and reaches people on **two**
+channels: e-mail or WhatsApp, WhatsApp preferred (D10, DEC-052 §4 as
+amended).
 
 **This spec is partly blocked and says so.** The envoy widget is not
 finished and its contract is an open demand (Q-022): the CSS variable
@@ -47,11 +57,11 @@ the website receives none of them.
 
 | # | Surface | Route(s) | Kind | Owner | Conversion goal |
 | --- | --- | --- | --- | --- | --- |
-| S1 | Contact section | standing section on every page, between the closing CTA and the footer (TS-006 D2) | four static channel rows — appointment link, WhatsApp, `tel:`, `mailto:`, in that order — no form (D13) | none; the website renders links | `request-product-briefing`, on the first row (D12) |
+| S1 | Contact section | standing section on every page, between the closing CTA and the footer (TS-006 D2) | four static channel rows — appointment link, WhatsApp, `tel:`, `mailto:`, in that order — no form (D13) | none; the website renders links | `make-contact` on **every** row, as an intent, per channel; the first row additionally completes `request-product-briefing` (D12) |
 | S2 | Quote request, with the two-working-day promise (WEB-F-022) | `/deine-region`, `/deine-region/angebot` | lead form | envoy widget | `request-licence-quote` |
 | S3 | Briefing booking | the first action row of S1 — therefore every page | outbound link | Google Calendar appointment schedule | `request-product-briefing` |
 | S4 | Order the calendar | `/dein-kalender/bestellen` | multi-step order, concludes on invoice | open (D8) | `buy-calendar-licence` |
-| S5 | Newsletter signup | footer (WEB-F-021); inline placement still open in SRC-003 | signup form, double opt-in | UNKNOWN (Q-020) | none defined |
+| S5 | Newsletter signup | footer on every page (WEB-F-021), plus inline on `/ueber-uns` at secondary treatment (DEC-052 §4 as amended, TS-027 D8) | **two routes** — WhatsApp (preferred) and e-mail with double opt-in (D10) | envoy for the e-mail route (DEC-051); **nothing for the WhatsApp route** (D10) | `subscribe-to-newsletter` |
 | S6 | External media preview | `/ueber-uns/archiv`, inline proof anywhere | own preview + outbound link | none (static link) | none |
 | S7 | Registration handover | `/mitmachen/registrieren` | handover to the app | app (DEC-029) | `register-as-publisher` → `publish-first-event` |
 
@@ -233,21 +243,71 @@ on `/ueber-uns/archiv` and to inline proof anywhere.
 | Original artifacts stay original | A quoted headline or clipping remains in its source language even on EN pages (DEC-026); surrounding context is localized |
 | Static | The archive is fully static from the build-time fetch (TS-004 D6); no client request ever goes to a media host |
 
-### D10 — Newsletter signup [PROPOSED — sending system blocked by Q-020]
+### D10 — Newsletter signup: two channels, WhatsApp preferred [FIXED: DEC-052 §4 as amended, DEC-051, WEB-F-096; the WhatsApp route is a new capability and is owed]
 
-Website-side contract, valid whichever system Q-020 picks:
+The newsletter is a conversion goal now — `subscribe-to-newsletter`
+(SRC-008) — and it reaches people **by e-mail or by WhatsApp, WhatsApp
+preferred.** The goal counts a *confirmed* subscription, per channel.
+
+#### The two routes
+
+| | WhatsApp — **preferred** | E-mail |
+| --- | --- | --- |
+| How the visitor subscribes | a click-to-chat link opens her WhatsApp client with a prefilled subscribe message she sends | a form takes her address |
+| Confirmation | the opt-in message arrives on the company's number | double opt-in: the address is unusable until the confirmation link is followed |
+| Who receives it | **nobody yet** — no system covers this route | envoy (DEC-051) |
+| Website's part | render a link. No form, no field, no submission | render the envoy mount point (D2–D3) |
+
+**Preferred means offered first, not offered alone.** A signup surface
+that offers e-mail only does not satisfy the goal (DEC-052 §4 as
+amended). Both routes are always present; which one leads is a design
+question inside that rule, not a licence to drop one.
+
+The preference and its reasons belong to the hub record, not to this
+spec. What binds here is the consequence: two routes, WhatsApp first.
+
+#### Website-side contract
 
 | Property | Determination | Tag |
 | --- | --- | --- |
-| Consent model | Double opt-in: the address is unusable until the confirmation link is followed | FIXED: WEB-F-096 |
-| Cookieless | Signup sets no cookie and no persistent identifier; the banner-free promise holds here too | FIXED: WEB-Q-020/023 |
-| Backend | Not the website. No subscriber endpoint, no list, no address ever at rest here (same boundary as D5) | FIXED: DEC-009 pattern |
-| Confirmation URL | Owned by the sending system, not a website route — the website has no DOI endpoint to build | PROPOSED |
-| Fields | Email address only; anything more is a decision Q-020 has not made | PROPOSED |
-| Placement | Footer on every page (WEB-F-021). Inline placement on trust pages is an open point in SRC-003 and is **not** built until it closes | FIXED: WEB-F-021 / open for inline |
-| Legal text | Consent wording and the processing reference point at `/rechtliches#datenschutz` (TS-004 D8) | FIXED: DEC-039 |
-| Likely realisation | If envoy covers newsletter subscription, S5 is another widget instance under D2–D3 and nothing else changes. If it does not, Q-020's tool decides, and its embed must satisfy C4, C5 and C7 before it is allowed on the page | PROPOSED |
-| Until Q-020 answers | The footer carries the newsletter entry only when a sending system exists; no placeholder form that discards addresses is ever shipped | PROPOSED |
+| Consent model | E-mail route: double opt-in, the address unusable until the confirmation link is followed. WhatsApp route: the visitor's own sent message **is** the opt-in — she composes and sends it from her own client, so there is no second confirmation step to build and none to fake | FIXED: WEB-F-096 |
+| Cookieless | Neither route sets a cookie or a persistent identifier; the banner-free promise holds here too | FIXED: WEB-Q-020/023 |
+| Backend | Not the website, on either route. No subscriber endpoint, no list, no address and no phone number ever at rest here (same boundary as D5) | FIXED: DEC-009 pattern |
+| Confirmation URL | E-mail route only; owned by the sending system, not a website route — the website has no DOI endpoint to build | PROPOSED |
+| Fields | E-mail route: address only. WhatsApp route: **no field at all** — a link, not a form. Anything more on either route is a decision nobody has taken | PROPOSED |
+| Placement | Footer on every page (WEB-F-021), plus inline on `/ueber-uns` at secondary treatment below the booking (DEC-052 §4 as amended, TS-027 D8). SRC-003's open point on inline placement is closed by that amendment | FIXED: WEB-F-021, DEC-052 §4 |
+| Weight | Secondary wherever it stands. It is never a page's primary conversion and never carries `data-cta="primary"` (DEC-082) | FIXED: DEC-082 |
+| Legal text | Consent wording and the processing reference point at `/rechtliches#datenschutz` (TS-004 D8), on both routes — the WhatsApp route hands data to a third party too, and the fact that the visitor sends the message herself does not remove the duty to say who receives it | FIXED: DEC-039 |
+| Measurement | The website observes a **signup intent**, not a subscription: the e-mail route's widget `success` event and the WhatsApp route's click are both handovers, and the confirmation happens where the website cannot see it. The goal's number is the confirmation, counted by the sending system and by hand on WhatsApp (D12) | PROPOSED |
+| Until a sending system exists | Neither entry is built — not in the footer, not inline. No placeholder form that discards addresses, and no click-to-chat link whose arriving message nobody records | FIXED: DEC-052 §4 as amended |
+
+#### What the WhatsApp route needs, and does not have
+
+**This is a new capability.** Nothing on either side of the boundary
+covers it today, and the parts are not all the website's to build:
+
+| # | Needed | Whose | State |
+| --- | --- | --- | --- |
+| N1 | A click-to-chat link, `https://wa.me/<number>?text=<urlencoded>`, to the company's WhatsApp number — the same number as the contact section's row 2, resolving from the hub record, never typed (D13) | website | buildable today |
+| N2 | The **prefilled subscribe message**: an intent line complete on its own, and the origin as a closing postscript (D14 governs its shape; the sentences are copy) | content, under SRC-017 | owed — no rule id exists yet (D14) |
+| N3 | A place where the arriving opt-in is **recorded as a subscription** and added to the broadcast list | envoy or ops | **does not exist.** The customer newsletter is a manual broadcast to a hand-maintained contact list |
+| N4 | An unsubscribe that is as easy as the subscribe, and a record of it | envoy or ops | **does not exist.** A broadcast list with no way out is a contact list, not a subscription |
+| N5 | The confirmed-subscription count per channel, so the goal can be read | envoy or ops | **does not exist** |
+
+N1 is a day's work and is blocked by nothing except N3: shipping a link
+whose arriving messages nobody records would collect opt-ins into an
+inbox and lose them. **N3, N4 and N5 are demanded and unowned** — they
+are not part of the Q-022 envoy contract as it stands, which covers
+signup and double opt-in for the e-mail route only (DEC-051). The demand
+is **Q-073**, addressed to envoy/ops. This spec records it; it does not
+assign it.
+
+#### The e-mail route's realisation
+
+envoy covers newsletter subscription (DEC-051), so the e-mail route is
+another widget instance under D2–D3 and nothing else changes. It
+inherits C4, C5, C7 and C9 unchanged, and it inherits C10: the widget is
+undelivered and its date is UNKNOWN.
 
 ### D11 — Spam protection and accessibility across the boundary [FIXED: DEC-014, TS-002 D5]
 
@@ -270,25 +330,68 @@ side.
 
 ### D12 — Conversion measurement of these flows [PROPOSED; frame FIXED: WEB-Q-028]
 
-| Surface | Event fires on | Goal ID |
-| --- | --- | --- |
-| S2 quote request | widget `success` event (C3) | `request-licence-quote` |
-| S3 briefing link | click on the **contact section's first action row**, carrying the route the section was rendered on | `request-product-briefing` |
-| S4 order | reaching step 4 (embed code shown) | `buy-calendar-licence` |
-| S1's other rows (WhatsApp, phone, mail), S5 newsletter, S6 media links | no conversion event | — |
-| in-page booking CTAs (any block, any page) | no event — the section's row is the single firing point | — |
+| Surface | Event fires on | Goal ID | Counts |
+| --- | --- | --- | --- |
+| S1 contact rows, **each of the four** | click on the row, carrying **the channel** and the route the section was rendered on | `make-contact` | an **intent** |
+| S3 briefing link = S1 row 1 | the same click, additionally | `request-product-briefing` | an **intent** |
+| S2 quote request | widget `success` event (C3) | `request-licence-quote` | a submission |
+| S4 order | reaching step 4 (embed code shown) | `buy-calendar-licence` | a completed order |
+| S5 newsletter, either route | e-mail route: widget `success` (C3). WhatsApp route: click on the click-to-chat link | `subscribe-to-newsletter` | an **intent** — the confirmation is not observable (D10) |
+| S6 media links | no conversion event | — | — |
+| in-page booking CTAs, and any in-page link that scrolls to the contact section | no event — the section's rows are the single firing point | — | — |
+
+#### Intent is named as intent
+
+**Three of the four contact rows leave the site with the visitor**, and
+so does the WhatsApp newsletter route: a `tel:`, a `mailto:` and a
+click-to-chat hand over to another application, and the website sees the
+handover and nothing after it. The fourth row navigates to Google.
+
+So the event is an **intent event**, and it is named as one — in the
+event name, in any report built on it, and in this spec. Calling the
+number "contacts" or "subscriptions" would claim knowledge of
+conversations and confirmations that were never observed. Where the
+number is reported, it is reported as *intents per channel*.
+
+The per-channel dimension is part of the event, not an afterthought:
+`make-contact`'s number is meaningless without it, because a phone
+intent and a mail intent are worth different things and neither is
+worth what a booking is worth.
+
+#### Row 1 carries two goals, and that is not double counting
+
+The appointment row fires `make-contact` **and**
+`request-product-briefing` on one click. Two goals on one action is a
+ladder — one counts the act of reaching out, the other counts the
+qualified errand — not one goal counted twice. The rule that must hold
+is narrower and is checked:
+
+- **one event per goal id per click.** No goal fires twice for the same
+  interaction.
+- **no in-page CTA fires anything.** A booking CTA in an argument block,
+  and any link that scrolls to the section, emit nothing. Counting them
+  would count one intent twice, which is the double counting this rule
+  is actually about (DEC-081 §4).
+- **rows 2–4 never fire `request-product-briefing`.** That goal's errand
+  test cannot be applied to a click, and a WhatsApp message about a
+  quote is not a briefing request. Whether a contact was a briefing
+  request is decided where the message arrives, not on the website.
+
+#### The rest
 
 Because the section stands on every page, the **route** is what
-distinguishes one booking intent from another; no page adds an event of
-its own, and DEC-071 §3 still forbids any geographic value in the
-payload.
+distinguishes one intent from another; no page adds an event of its
+own, and DEC-071 §3 still forbids any geographic value in the payload.
 
 Rules: one eTracker event per conversion goal ID, fired at most once per
-completed flow (WEB-Q-028); the payload carries the goal ID and the
-route, never a field value (D5). S2 and S4 depend on C3 — until the
-event contract exists, the measurement cannot be wired, and guessing an
-event name would produce silent zero-counts. Goal IDs are consumed from
-SRC-008 and never invented here.
+completed flow or per click (WEB-Q-028); the payload carries the goal
+ID, the channel where there is one, and the route — never a field value
+(D5), and never a per-visitor identifier (D14). S2, S4 and S5's e-mail
+route depend on C3 — until the event contract exists, the measurement
+cannot be wired, and guessing an event name would produce silent
+zero-counts. The S1 rows depend on nothing: they are ordinary clicks on
+static markup and can be wired today. Goal IDs are consumed from SRC-008
+and never invented here.
 
 ### D13 — The contact section's four channel rows [FIXED: DEC-081, SRC-014, SRC-008; values are content]
 
@@ -298,10 +401,10 @@ says and not what any of them is set to.
 
 | # | Row | What it does | Scheme | Event |
 | --- | --- | --- | --- | --- |
-| 1 | Video appointment | Hands the visitor to the configured appointment schedule to book a briefing. The outbound row, and the only one (D7) | `https:` to the configured appointment URL | `request-product-briefing`, with the route (D12) |
-| 2 | WhatsApp | Opens a chat with the company's number in the visitor's WhatsApp client | `https:` to the WhatsApp click-to-chat host | none |
-| 3 | Phone | Places a call to the company's number | `tel:` | none |
-| 4 | E-mail | Opens the visitor's mail client addressed to the company's address | `mailto:` | none |
+| 1 | Video appointment | Hands the visitor to the configured appointment schedule to book a briefing. The outbound row, and the only one (D7) | `https:` to the configured appointment URL | `make-contact` **and** `request-product-briefing`, both with channel and route (D12) |
+| 2 | WhatsApp | Opens a chat with the company's number in the visitor's WhatsApp client, with a prefilled message (D14) | `https:` to the WhatsApp click-to-chat host | `make-contact`, channel `whatsapp` |
+| 3 | Phone | Places a call to the company's number | `tel:` | `make-contact`, channel `phone` |
+| 4 | E-mail | Opens the visitor's mail client addressed to the company's address, with a prefilled subject and body (D14) | `mailto:` | `make-contact`, channel `mail` |
 
 **The order is fixed** and is SRC-014 §"Contact section" — it is what the
 filled/outlined treatment is built on: row 1 takes the filled treatment,
@@ -316,12 +419,21 @@ affordances with two schemes and two situations — a visitor who will
 write is not a visitor who will ring. A build that renders three rows
 because the two addresses matched has a defect, not an optimisation.
 
-**Four rows, one event.** Only row 1 is observable to a website: an
-outbound navigation can be counted, a `tel:` or a `mailto:` handover
-cannot. Rows 2–4 are counted by hand where the conversation arrives,
-which is the hub goal's own instrumentation. The section therefore fires
-exactly one event for four rows — that is what the channels allow, not a
-gap in the wiring (D12).
+**Four rows, four intents — and one of them is also a briefing.** Every
+row's *click* is observable, including `tel:` and `mailto:`, and each
+fires `make-contact` with its channel. What is **not** observable is
+whether the contact happened: the call may not be placed, the mail may
+not be sent. That is why D12 counts and names an intent rather than a
+contact, and why the conversation itself is still counted by hand where
+it arrives, which is the hub goal's own instrumentation.
+
+Row 1 additionally completes `request-product-briefing`, because its
+destination is the booking. Rows 2–4 never do — see D12.
+
+This supersedes the earlier reading that the section "fires exactly one
+event for four rows". That was true while `request-product-briefing` was
+the only goal the section could serve; it stopped being true when
+reaching out became a goal of its own.
 
 #### Where the values come from
 
@@ -349,6 +461,100 @@ of answer is out of budget for the same reason A13 withholds the S2
 promise: no process is held to it. SRC-017 CG-031 carries the wording
 rule.
 
+### D14 — The prefilled message: context, never identity [FIXED: owner decision 2026-09-24, DEC-004, DEC-083; the sentences are copy]
+
+The CRM sees every inbound WhatsApp message and e-mail. This
+determination is how a website-side intent is joined to the message that
+arrives — and, more importantly, how it is **not**.
+
+#### 1. Context, never identity
+
+The marker names **the page and the channel the contact came from.**
+Nothing else.
+
+| Allowed | Forbidden |
+| --- | --- |
+| the origin page | a per-click random token |
+| the channel | a pseudonymous or hashed visitor identifier |
+| | anything that distinguishes one visitor from another |
+
+A per-click token would make the message personal data: it would link an
+anonymous read to an identified person, which puts it in the privacy
+policy and, on one reading, behind consent — and the cookieless,
+consent-free posture (DEC-004, WEB-Q-020/023) is not worth trading for
+an attribution number.
+
+Attribution is therefore **aggregate**: "this came from `/dein-kalender`
+via WhatsApp", never "this is the person who viewed X".
+
+#### 2. It is a real message, not a tracking string
+
+The prefilled text is written **from the visitor's perspective** and
+must be a message a person sends without discomfort. A bare reference
+code reads as surveillance and gets deleted before sending, which
+destroys both the attribution and the contact.
+
+The shape, and this spec fixes the shape and not the words (DEC-083):
+
+| Part | What it must do |
+| --- | --- |
+| greeting | open the message as a person would |
+| **the intent line** | say what she wants, **complete on its own** |
+| sign-off | close it as a person would |
+| **postscript** | name where she came from — this is the entire attribution mechanism |
+
+**The intent line must be complete as it stands.** A prefill that leaves
+the visitor to fill in a gap in the middle is worse than an empty field:
+an empty field she writes; a half-sentence she has to repair before she
+can send, in an app where she is now doing our editing work.
+
+#### 3. Per page, per errand
+
+Each page prefills an intent that fits **its own** errand, so the
+visitor can send the message as it stands or edit it. The contact
+section is one component on every page, so the intent resolves from the
+route the section was rendered on — the same value D12 puts in the
+event, and the same mechanism, one place to change.
+
+#### 4. Mechanics
+
+| Row | How the text is carried |
+| --- | --- |
+| WhatsApp (D13 row 2, and S5's WhatsApp route) | `https://wa.me/<number>?text=<urlencoded>` |
+| E-mail (D13 row 4) | `mailto:` with a prefilled `subject` and `body` |
+| Phone (D13 row 3) | **not correlatable at all.** A call carries no text, and call-tracking numbers are out of proportion to what the answer is worth. The phone row is an intent and stays one |
+| Appointment (D13 row 1) | no prefill; the destination is a booking page, not a message |
+
+**Best-effort by construction, and the spec says so.** The visitor can
+edit or delete the text before sending, and should be able to. The
+postscript is a signal, not a key, and a message that arrives without it
+is a normal contact, not a defect.
+
+#### 5. What this does not give us
+
+**No exact per-click conversion rate.** The website-side number stays an
+intent per channel and per route (D12); the CRM side is where a contact
+is actually observed; the two are joined **by page and channel, never by
+visitor**. "Seven intents from `/dein-kalender` via WhatsApp, four
+conversations that month naming that origin" is the shape of the answer.
+Dividing those two numbers into a rate would claim a match that was
+never made.
+
+#### 6. The sentences are owed
+
+The greeting, the intent lines, the sign-off and the postscript are
+**copy**, and live in the content artifacts under SRC-017 (DEC-083 §1/§3).
+This spec states what the message must contain and that the origin rides
+in a postscript; it states no sentence.
+
+**What is owed:** a copy-guide rule governing the prefilled message —
+its register, the postscript's form, and the per-page intent lines for
+every route the contact section stands on. No such rule id exists in
+SRC-017 today. Addressee: the owner of the copy guide (DEC-080). This
+spec does not edit the guide; the WhatsApp and mail rows carry no
+prefill until the rule and the sentences exist, and a row without a
+prefill is a working row, not a broken one.
+
 ## Free for the generator
 
 - [FREE] Visual design of the widget wrapper, the static fallback
@@ -375,8 +581,13 @@ rule.
 | TS-016-A8 | tool | axe-core: zero violations on every page with the widget mounted, including inside its shadow root, in light, dark and high-contrast. |
 | TS-016-A9 | manual | Keyboard-only and screen-reader run of one full lead form per release: labels announced, an invalid submission identifies the error in text, focus moves to the first error and to the success message. |
 | TS-016-A10 | integration | Honeypot field present, hidden from assistive technology and not focusable; a submission faster than the timing threshold is rejected; no captcha library or captcha host exists in the bundle or the CSP. |
-| TS-016-A11 | integration | Newsletter signup: no address is usable before the confirmation link is followed; signup sets no cookie and no persistent identifier; the website exposes no subscriber endpoint. |
-| TS-016-A12 | e2e | Each of S2, S3, S4 fires exactly one eTracker event carrying its conversion goal ID and route, once per completed flow, with no field values in the payload. |
+| TS-016-A11 | integration | Newsletter signup: on the e-mail route no address is usable before the confirmation link is followed; neither route sets a cookie or a persistent identifier; the website exposes no subscriber endpoint. Where the signup renders at all, it offers **both** routes — a page that offers e-mail only fails (D10). |
+| TS-016-A12 | e2e | Each of S2, S4 and S5 fires exactly one eTracker event carrying its conversion goal ID and route, once per completed flow, with no field values in the payload. |
+| TS-016-A17 | e2e | Each of the four contact rows fires exactly one `make-contact` event on click, carrying its channel and the route the section was rendered on. Row 1 fires `request-product-briefing` in addition, on the same click; rows 2–4 never fire it. No goal id fires twice for one click. Clicking an in-page booking CTA, or any in-page link that scrolls to the section, fires nothing. |
+| TS-016-A18 | static | Every conversion event name and every reporting label for the S1 rows and the S5 WhatsApp route identifies the number as an **intent**, not as a contact or a subscription (D12). |
+| TS-016-A19 | static | No prefilled message on any contact row or newsletter link contains a per-click token, a random value, a hash or any per-visitor identifier; the only varying parts are the page of origin and the channel (D14). The same check applies to the `text`, `subject` and `body` parameters of the rendered URLs. |
+| TS-016-A20 | e2e | Where a prefilled message is rendered: the WhatsApp row's URL is `https://wa.me/<number>?text=<urlencoded>` and the mail row's `mailto:` carries a subject and a body; the decoded text ends with a postscript naming the page of origin, and contains no empty placeholder or unresolved token for the visitor to fill in (D14). The phone row carries no text parameter. |
+| TS-016-A21 | static | Neither the footer newsletter entry nor the inline block on `/ueber-uns` renders while no sending system accepts a subscription: no form that posts nowhere, and no click-to-chat link whose arriving message nothing records (D10, DEC-052 §4 as amended). |
 | TS-016-A13 | manual | The two-working-day promise copy on `/deine-region` is present only when the lead-handling process behind it is named and signed off (C11); absent otherwise. |
 | TS-016-A14 | e2e | With the widget script blocked, S2 and S4 still render the static fallback (contact link plus the booking row of the page's contact section) and no empty or permanently loading slot. The contact section itself renders unchanged, since it loads nothing. |
 | TS-016-A15 | e2e | The contact section renders exactly four action rows, in the D13 order: row 1's href is the configured appointment URL, row 2's is a WhatsApp click-to-chat URL, row 3's scheme is `tel:` and row 4's is `mailto:`. No row is omitted or merged, including when rows 2 and 3 resolve to the same number. Only row 1 emits an event. |
@@ -389,16 +600,17 @@ rule.
 | WEB-F-090 (the remaining lead forms are the envoy widget; no own form backend; no general contact form) | D1, D2, D5, D6 · A1, A2, A14 |
 | WEB-F-091 (theming via website-supplied CSS variables) | D3, D4 (C1) · A4 |
 | WEB-F-092 (envoy owns storage; website holds no submission data) | D5, D2 network path · A1, A3 |
-| WEB-F-093 (booking resolves to the contact section; its first row is the Google Calendar link, no embed) | D7, D12, D13 · A5, A12, A15, A16 |
+| WEB-F-093 (booking resolves to the contact section; its first row is the Google Calendar link, no embed; `make-contact` as an intent on every row) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
 | WEB-F-094 (purchase concludes on invoice, embed code immediately) | D8 · A6 |
 | WEB-F-095 (external media as own previews + outbound links) | D9 · A7 |
-| WEB-F-096 (newsletter: double opt-in, cookieless, GDPR) | D10 · A11 |
+| WEB-F-096 (newsletter: two channels, WhatsApp preferred; double opt-in on the e-mail route, cookieless, GDPR) | D10, D12 · A11, A12, A21 |
 
 Cross-cutting requirements this spec serves without claiming: WEB-Q-035
 (spam, D11 · A10), WEB-Q-030/031 (CSP entries, D2 · A5, A6), WEB-Q-028
-(conversion measurement, D12 · A12), WEB-F-022 (response promise, D4 C11
-· A13), WEB-Q-010–013 across the widget boundary (D11 · A8, A9 — the
-website-side half of TS-002 A6).
+(conversion measurement, D12 · A12, A17, A18), WEB-Q-020/023
+(cookie-freedom across the prefilled message, D14 · A19), WEB-F-022
+(response promise, D4 C11 · A13), WEB-Q-010–013 across the widget
+boundary (D11 · A8, A9 — the website-side half of TS-002 A6).
 
 ## Open points
 
@@ -423,11 +635,27 @@ website-side half of TS-002 A6).
   step 3's receiving system open. Payment method itself is decided
   (DEC-011); the receiving system is not, and the two candidates named in
   D8 differ in integration work, not in constraints.
-- **Q-020 (newsletter sending system)** leaves D10's confirmation URL,
-  field set and realisation [PROPOSED]. No signup ships before a system
-  exists.
-- SRC-003 leaves newsletter placement open (footer only versus inline on
-  trust pages). D10 builds footer only until it closes.
+- **Q-020 is closed as a question and open as a delivery.** `DEC-051`
+  resolved *which* system: envoy carries signup and double opt-in. **No
+  sending system is in operation** — Q-022's measurement of 2026-09-11
+  says so in as many words, and the widget's date is UNKNOWN (C10).
+  Choosing a system did not produce one, so no signup ships (A21). What
+  stays [PROPOSED] in D10 is the confirmation URL and the field set.
+- **Q-073 — the WhatsApp newsletter route is a new capability and three
+  of its five parts do not exist** (D10, N3–N5): nothing records an
+  arriving opt-in as a subscription, there is no unsubscribe, and there
+  is no per-channel confirmed-subscription count. They are **not** part
+  of the Q-022 contract, which covers the e-mail route only. Demanded
+  and unowned. Addressee: envoy/ops.
+- **The prefilled message has no copy-guide rule** (D14 §6). SRC-017
+  carries none, and the WhatsApp and mail rows carry no prefill until
+  one and its sentences exist. Addressee: the owner of the copy guide
+  (DEC-080).
+- ~~SRC-003 leaves newsletter placement open (footer only versus inline
+  on trust pages).~~ **Closed by `DEC-052` §4 as amended (2026-09-24):**
+  footer everywhere plus inline on `/ueber-uns`, secondary, below the
+  booking. The amendment also re-derives the reason, which the page's
+  new primary conversion had spent.
 - WEB-F-022's two-working-day promise is an operational commitment with
   no owner recorded (D4 C11). A13 withholds the copy rather than
   publishing a promise the process cannot keep.
