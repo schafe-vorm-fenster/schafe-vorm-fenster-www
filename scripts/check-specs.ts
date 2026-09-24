@@ -22,13 +22,14 @@
  *  E12 Tactical specs carry a `kind` and a status from the tactical contract
  *  E13 Source inventory rows carry a trust level from the source contract
  *  E14 Requirements carry the grammar form their class prescribes
- *  E15 No status but DRAFT while no decision policy binds this repository
+ *  E15 The decision policy binds every pair, and a status moves only at a
+ *      decision point it names — with the record that makes it auditable
  *  E16 Every artefact whose contract carries `version` has one
  *  W1  (warning) requirements not covered by any tactical spec
  *  W2  (warning) covered requirements discharged by no acceptance criterion
  *  W3  (warning) acceptance criteria no test references
  *  W4  (warning) requirements whose statement is not yet in its class's form
- *  W5  (report) what a decision point could resolve today, were one bound
+ *  W5  (report) what the bound policy resolves today, and what escalates
  *
  * Exit code: number of errors (0 = green). Warnings never fail the run.
  *
@@ -196,21 +197,60 @@ const notInForm: string[] = [];
  * makes the approval auditable." A status changes at the decision point
  * named in the project's decision policy, and nowhere else.
  *
- * This repository has no decision policy. `library-schemas/policies` ships
- * three reference profiles and says no blueprint selects one, because "how
- * much authority an agent holds is a decision, and it should not arrive as
- * an install default" — and that "a pair the policy does not cover fails the
- * pipeline rather than falling back to something nobody decided". DEC-0085
- * §6 keeps the row open.
+ * Until 2026-09-24 there was no such policy, and E15 was that sentence with
+ * nothing behind it: `DRAFT` or an error. DEC-0088 adopted
+ * `POL-GRADED-BY-IMPACT`, so E15 now enforces the policy instead of its
+ * absence. Three rules, of which the first is the old one:
  *
- * So until a `POL-*` policy exists under `specs/`, DRAFT is the only status
- * anything here may carry, and E15 says so rather than letting a future run
- * quietly promote 155 requirements because their tests are green. Green
- * tests are evidence for a decision; they are not the decision. What the
- * evidence supports is reported instead, as W5.
+ *  1. **No `POL-*` document under `specs/`** — `DRAFT` only, unchanged.
+ *  2. **The bound policy is well-formed.** Exactly one policy binds. It
+ *     carries the frontmatter its type declares (`id`, `policy-owner`,
+ *     `modes`, `conformance-level`, `human-only`), `DP-14` is in `human-only`
+ *     because "a governance change is never an agent's", and its Rules table
+ *     binds all fourteen decision points across all four impact levels to a
+ *     mode the frontmatter declares. That is the contract's own
+ *     `policy-covers-every-pair` rule — an agent-evaluated rule upstream —
+ *     made deterministic here. `library-schemas/policies`: "There is no
+ *     default row: a pair the policy does not cover fails the pipeline rather
+ *     than falling back to something nobody decided."
+ *  3. **A status other than `DRAFT` is anchored in a decision record.** The
+ *     record has to name the artefact, cite the policy by its id, and name a
+ *     decision point. That holds in either mode: `HUMAN` because that is what
+ *     a decision record is, `AGENT_BOUNDED` because
+ *     `method-decision-policy-resolution` says "a record naming only the
+ *     outcome cannot be audited against the policy". The shape of the record
+ *     itself is not prescribed here — `SDR-####-####` is still owed in
+ *     DEC-0085 §6 — only that one exists and can be found from the artefact.
+ *
+ * What E15 deliberately does not do is resolve the decision itself. It cannot
+ * know whether the owner read the evidence. W5 reports the resolution the
+ * policy gives for every governed artefact; the record is what says somebody
+ * acted on it.
  */
 const POLICY_ID = /^POL-[A-Z0-9-]+$/;
-const policies: string[] = [];
+const policies: Doc[] = [];
+
+/** The four impact levels of `@leafcutter-strict/method-impact-level-assignment`. */
+const IMPACT_LEVELS = ["Low", "Medium", "High", "Critical"] as const;
+/** The fourteen catalogue decision points; a project may add `DP-Pnn`, never remove one. */
+const DECISION_POINTS = Array.from({ length: 14 }, (_, i) => `DP-${String(i + 1).padStart(2, "0")}`);
+/** The four executor modes, from `library-schemas/documents/decision-policy.type.mjs`. */
+const EXECUTOR_MODES = new Set(["HUMAN", "AGENT_PROPOSE", "AGENT_BOUNDED", "AUTO"]);
+
+/**
+ * The impact level an artefact's decision reaches, from its dependant count.
+ *
+ * `method-impact-level-assignment` is explicit that the count is the input —
+ * "assigning the level from the dependants — a number the traceability matrix
+ * supplies — is what makes it checkable" — and that the levels do not average:
+ * "Take the highest level any criterion reaches."
+ *
+ * This is the floor, never the answer. The method's second cross-cutting rule
+ * ("in a regulated domain, the lowest available level for a meaning change is
+ * high") and its critical row can only raise it, and neither is derivable from
+ * a count. W5 says so where it prints the number.
+ */
+const impactFromDependants = (n: number) => (n === 0 ? "Low" : n <= 2 ? "Medium" : "High");
 
 /**
  * The version an artefact carries (E16).
@@ -284,7 +324,7 @@ const NEEDS_FRONTMATTER = [
   /\/requirements\/.+\/(?!README)[^/]+\.md$/,
   /\/tactical\/.+\.tactical\.md$/,
   /\/decisions\/DEC-\d{4}--.+\.md$/,
-  /\/(ssd|sources|glossary|questions|traceability|contracts)\/(?!README).+\.md$/,
+  /\/(ssd|sources|glossary|questions|traceability|contracts|policy)\/(?!README).+\.md$/,
 ];
 
 for (const d of docs) {
@@ -411,14 +451,18 @@ for (const d of docs) {
     checkVersion(d, String(d.frontmatter?.id ?? "?"));
   }
   if (/\.ssd\.md$/.test(d.file)) {
-    checkVersion(d, String(d.frontmatter?.id ?? "?"));
+    const ssdId = String(d.frontmatter?.id ?? "?");
+    checkVersion(d, ssdId);
+    // The specification document carries a status too, and `decision_policy_ref`
+    // is the contract's own field for the policy that governs it (DEC-0088).
+    statuses.push([d.file, ssdId, String(d.frontmatter?.status ?? "?")]);
   }
   if (/glossary\.md$/.test(d.file)) {
     for (const m of d.body.matchAll(new RegExp(`^\\|\\s*(${bare(GLOSSARY_ID)})\\s*\\|`, "gm"))) glDefs.add(m[1]);
   }
-  // A decision policy, if this repository ever adopts one (E15).
+  // The decision policy that binds this repository (E15, W5).
   if (typeof d.frontmatter?.id === "string" && POLICY_ID.test(d.frontmatter.id as string)) {
-    policies.push(d.frontmatter.id as string);
+    policies.push(d);
   }
   // contracts register may define an SRC id in frontmatter
   if (/\/contracts\//.test(d.file) && typeof d.frontmatter?.id === "string" && SOURCE_ID.test(d.frontmatter.id as string)) {
@@ -579,7 +623,40 @@ if (coveredNoAc.length) {
 
 const acsByLevel = new Map<string, number>();
 for (const { level } of acDefs.values()) acsByLevel.set(level, (acsByLevel.get(level) ?? 0) + 1);
-// ── E15: only a decision point moves a status off DRAFT ──────────────────
+// ── E15: the policy binds every pair, and a status moves only at one ─────
+
+/** The rules table of a policy document: `DP-nn` → mode per impact level. */
+function policyRules(doc: Doc): Map<string, Record<string, string>> {
+  const rules = new Map<string, Record<string, string>>();
+  const section = doc.body.split(/^## Rules$/m)[1]?.split(/^## /m)[0] ?? "";
+  for (const line of section.split("\n")) {
+    const cells = line.split("|").map((c) => c.trim());
+    const dp = cells[1]?.match(/^(DP-(?:\d{2}|P\d{2}))\b/)?.[1];
+    if (!dp) continue;
+    rules.set(dp, Object.fromEntries(IMPACT_LEVELS.map((lvl, i) => [lvl, cells[2 + i] ?? ""])));
+  }
+  return rules;
+}
+
+/**
+ * A decision record that could have moved this artefact's status.
+ *
+ * It names the artefact, cites the policy by its id, and names a decision
+ * point. The record's own shape is not checked — `SDR-####-####` is owed in
+ * DEC-0085 §6 — only that the link from artefact to policy to decision point
+ * exists in one document somebody can read.
+ */
+const decisionRecords = docs.filter((d) => RECORD.test(d.file));
+const anchoredBy = (id: string, policyId: string) =>
+  decisionRecords.find(
+    (d) =>
+      new RegExp(`(?<![A-Za-z0-9-])${id}(?![0-9A-Za-z-])`).test(d.raw) &&
+      d.raw.includes(policyId) &&
+      /(?<![A-Za-z0-9-])DP-(?:\d{2}|P\d{2})(?![0-9A-Za-z-])/.test(d.raw),
+  );
+
+let boundRules: Map<string, Record<string, string>> | null = null;
+let boundPolicy: string | null = null;
 
 if (!policies.length) {
   for (const [file, id, status] of statuses) {
@@ -591,11 +668,65 @@ if (!policies.length) {
           `"may not approve, merge, baseline, release, or change a status". Adopt a POL-* policy first.`,
       );
   }
+} else if (policies.length > 1) {
+  for (const d of policies)
+    err(
+      d.file,
+      `E15 ${policies.length} policies bind this repository (${policies
+        .map((p) => p.frontmatter?.id)
+        .join(", ")}). A decision point resolves against exactly one; two is a pair with two rows.`,
+    );
+} else {
+  const doc = policies[0];
+  const fm = doc.frontmatter ?? {};
+  boundPolicy = String(fm.id);
+
+  // The frontmatter the decision-policy type declares.
+  for (const field of ["title", "policy-owner", "modes", "conformance-level", "human-only"]) {
+    if (fm[field] === undefined) err(doc.file, `E15 ${boundPolicy}: frontmatter is missing \`${field}\``);
+  }
+  const modes = new Set((fm.modes as string[] | undefined) ?? []);
+  for (const m of modes) if (!EXECUTOR_MODES.has(m)) err(doc.file, `E15 ${boundPolicy}: "${m}" is not an executor mode`);
+  const humanOnly = new Set((fm["human-only"] as string[] | undefined) ?? []);
+  if (!humanOnly.has("DP-14"))
+    err(doc.file, `E15 ${boundPolicy}: human-only must include DP-14 — a governance change is never an agent's`);
+
+  // Every pair is bound, to a mode the frontmatter declares.
+  const rules = policyRules(doc);
+  boundRules = rules;
+  for (const dp of DECISION_POINTS) {
+    const row = rules.get(dp);
+    if (!row) {
+      err(doc.file, `E15 ${boundPolicy}: no rule for ${dp}. A decision point is never removed.`);
+      continue;
+    }
+    for (const level of IMPACT_LEVELS) {
+      const mode = row[level];
+      if (!mode) err(doc.file, `E15 ${boundPolicy}: ${dp} has no mode at ${level} impact`);
+      else if (!modes.has(mode))
+        err(doc.file, `E15 ${boundPolicy}: ${dp} at ${level} is ${mode}, which the frontmatter does not declare`);
+    }
+    if (humanOnly.has(dp) && IMPACT_LEVELS.some((l) => row[l] !== "HUMAN"))
+      err(doc.file, `E15 ${boundPolicy}: ${dp} is in human-only but its row is not HUMAN at every level`);
+  }
+
+  // A status off DRAFT needs the record that makes it auditable.
+  for (const [file, id, status] of statuses) {
+    if (status === "DRAFT") continue;
+    if (!anchoredBy(id, boundPolicy))
+      err(
+        file,
+        `E15 ${id}: status ${status} without a decision record naming ${id}, citing ${boundPolicy} ` +
+          `and a decision point. @leafcutter-strict/method-decision-policy-resolution: "a record ` +
+          `naming only the outcome cannot be audited against the policy".`,
+      );
+  }
 }
 
-// ── W5: what the evidence would support, were a decision point bound ─────
-// Not a decision. The sufficiency gate is the policies' own: "Nothing is
-// decided at goal acceptance or requirement approval below S2."
+// ── W5: what the bound policy resolves today, and what escalates ─────────
+// Not a decision. The impact level is the floor the dependant count gives —
+// "assigning the level from the dependants … is what makes it checkable" —
+// and the method's regulated-domain rule can only raise it.
 
 const dp03 = [...reqDefs.keys()]
   .filter((id) => covered.has(id) && GATE_S2.has(sufficiencyOf.get(id) ?? ""))
@@ -606,14 +737,52 @@ const dp09 = [...tsDefs]
     return own.length > 0 && own.every((a) => referencedIds.has(a));
   })
   .sort();
-warnings.push(
-  `W5 nothing is APPROVED or VERIFIED because no decision policy binds this repository (DEC-0085 §6).`,
-);
-warnings.push(
-  `   were one bound: ${dp03.length}/${reqDefs.size} requirements meet DP-03's evidence gate ` +
-    `(>= S2 and covered by a tactical spec); ${dp09.length}/${tsDefs.size} tactical specs meet ` +
-    `DP-09's (every acceptance criterion referenced by a test).`,
-);
+
+if (!boundRules || !boundPolicy) {
+  warnings.push(`W5 nothing is APPROVED or VERIFIED because no decision policy binds this repository (DEC-0085 §6).`);
+  warnings.push(
+    `   were one bound: ${dp03.length}/${reqDefs.size} requirements meet DP-03's evidence gate ` +
+      `(>= S2 and covered by a tactical spec); ${dp09.length}/${tsDefs.size} tactical specs meet ` +
+      `DP-09's (every acceptance criterion referenced by a test).`,
+  );
+} else {
+  // Dependants, from the chain this repository has: a requirement's are the
+  // tactical specs that implement it, a tactical spec's are its criteria.
+  const dependants = new Map<string, number>();
+  for (const id of reqDefs.keys()) dependants.set(id, 0);
+  for (const d of docs.filter((d) => /\.tactical\.md$/.test(d.file))) {
+    for (const r of ((d.frontmatter?.implements as string[] | undefined) ?? []))
+      if (dependants.has(r)) dependants.set(r, dependants.get(r)! + 1);
+  }
+  for (const ts of tsDefs) dependants.set(ts, [...acDefs.keys()].filter((a) => a.startsWith(ts + "-")).length);
+
+  const tally = (ids: string[]) => {
+    const byLevel: Record<string, number> = {};
+    for (const id of ids) {
+      const level = impactFromDependants(dependants.get(id) ?? 0);
+      byLevel[level] = (byLevel[level] ?? 0) + 1;
+    }
+    return IMPACT_LEVELS.filter((l) => byLevel[l]).map((l) => `${byLevel[l]} ${l.toLowerCase()}`).join(" · ");
+  };
+  const agentRow = (dp: string, ids: string[]) =>
+    ids.filter((id) => (boundRules!.get(dp)?.[impactFromDependants(dependants.get(id) ?? 0)] ?? "HUMAN") !== "HUMAN");
+
+  const reqIds = [...reqDefs.keys()];
+  const tsIds = [...tsDefs];
+  warnings.push(
+    `W5 ${boundPolicy} binds this repository. Impact from the dependant count, which is the floor: ` +
+      `requirements ${tally(reqIds)}; tactical specs ${tally(tsIds)}.`,
+  );
+  warnings.push(
+    `   DP-03 requirement approval: ${agentRow("DP-03", reqIds).length}/${reqIds.length} on an agent row, ` +
+      `${dp03.length} meet the >= S2 gate; DP-08 tactical approval: ${agentRow("DP-08", tsIds).length}/${tsIds.length} ` +
+      `on an agent row; DP-09 verification acceptance is ${boundRules.get("DP-09")?.Low ?? "?"} at every level, ` +
+      `${dp09.length}/${tsIds.length} would meet its gate.`,
+  );
+  warnings.push(
+    `   everything else escalates to the accountable role. Evidence for a decision, never the decision.`,
+  );
+}
 
 if (notInForm.length) {
   warnings.push(`W4 ${notInForm.length}/${reqDefs.size} requirements are not yet in the slot form their class prescribes:`);

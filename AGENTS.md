@@ -79,11 +79,20 @@ directory README is the index, not a second home for the statement — added
 the `BUS` class, put 47 of the 155 statements into the slot form of
 `@leafcutter-strict/method-statement-grammar` (`form: F1`; `form: F0` means
 not yet, and `check:specs` W4 counts them), and gave every versioned artefact
-`version: 0.1.0`. **Do not set a status other than `DRAFT`.** No decision
-policy binds this repository, so no decision point exists to move one, and
-`@leafcutter-strict/foundation-draft-only-output` is explicit that an
-executor writing `status: APPROVED` destroys the audit record. `check:specs`
-E15 enforces it; passing tests are evidence for a decision, not the decision.
+`version: 0.1.0`.
+
+A status moves at a decision point, and since DEC-0088 one policy says which:
+`POL-GRADED-BY-IMPACT` in `specs/policy/`. It grades by impact — an agent may
+decide at the **low** impact level, inside four bounds and with a decision
+record; from medium upward, and at every decision point the impact method
+leaves undefined, the decision is the owner's. **In practice that still means
+`DRAFT`**: every artefact here has at least one dependant, so none of them
+reaches the low level, and no artefact carries the `ai_provenance`
+the separation-of-duties bound needs. `check:specs` E15 enforces the policy —
+it validates that every pair is bound, and refuses a status off `DRAFT` that
+no decision record anchors. Passing tests are evidence for a decision, not
+the decision. Do not edit the policy: changing it is DP-14, governance
+change, and that is never an agent's.
 
 ## Working Rules
 

@@ -44,10 +44,11 @@ hardest:
 Where this specification's form deviates from a package's, the deviation is
 listed with its price in **DEC-0085 §6** — the identifier schema, the missing
 business-rule class, statement grammar, locator granularity, the source
-rating vector, the need and goal layer, the decision policy, the decision
-record shape, the conflict and defect registers, the acceptance-criterion
-shape, and per-artefact versions. None of them is an oversight and none is
-free.
+rating vector, the need and goal layer, the decision record shape, the
+conflict and defect registers, the acceptance-criterion shape, and
+per-artefact versions. None of them is an oversight and none is free. Four of
+its rows are closed: identifiers (DEC-0086), the business-rule class and
+per-artefact versions (DEC-0087), and the decision policy (DEC-0088).
 
 Three of its operating principles bind everything written here:
 
@@ -128,6 +129,7 @@ specs/
 │   ├── quality/        NFR-WEB-####.md — performance, accessibility, privacy
 │   ├── constraints/    CON-WEB-####.md — stack, brand, scope boundaries
 │   └── business-rules/ BUS-WEB-####.md — true of the business, not of the solution
+├── policy/             POL-* decision policy in force — who may decide what, at which impact
 ├── decisions/          DEC-#### decision records (S3 evidence anchor)
 ├── questions/          Q-#### open-question register (UNKNOWN + resolving question)
 ├── tactical/           TS-WEB-#### tactical specs — the generation prompts (FIXED/PROPOSED/FREE)
@@ -138,24 +140,28 @@ specs/
 
 ## Conventions
 
-- **Everything is `DRAFT`, and that is not laziness.**
+- **A status moves at a decision point, and one policy says which.**
   `@leafcutter-strict/foundation-draft-only-output` is a company-layer
   foundation: *"An executor that writes `status: APPROVED` has not saved a
-  step; it has removed the record that makes the approval auditable."* A
-  status moves at the decision point named in the project's decision policy
-  — DP-03 for a requirement, DP-08 for a tactical specification, DP-09 for
-  verification — and this repository has adopted **no decision policy**
-  (DEC-0085 §6). `library-schemas/policies` ships three profiles and refuses
-  to pick one for you, because *"a pair the policy does not cover fails the
-  pipeline rather than falling back to something nobody decided"*, and a
-  scope starts at *conservative*, where every decision point is `HUMAN` at
-  every impact level. So there is no point at which anything here could be
-  approved, and passing tests do not become one. `check:specs` E15 rejects
-  any status but `DRAFT` until a `POL-*` policy exists under `specs/`, and
-  W5 reports what the evidence would support if one did — the sufficiency
-  gate the policies name (*"Nothing is decided at … requirement approval
-  below S2"*) plus tactical coverage for DP-03, and full test reference for
-  DP-09. Evidence for a decision, never the decision.
+  step; it has removed the record that makes the approval auditable."* The
+  decision point that may move it is named by the project's decision policy,
+  and since DEC-0088 this repository has one: `POL-GRADED-BY-IMPACT` in
+  [`policy/`](policy/graded-by-impact.decision-policy.md). It is graded by
+  impact — an agent may decide at the **low** level of
+  `@leafcutter-strict/method-impact-level-assignment`, inside four bounds and
+  with a decision record; from medium upward, and at the four decision points
+  the impact method leaves undefined, the owner decides. **Everything is still
+  `DRAFT`**, and now for a measured reason rather than a missing document:
+  low impact means *"no dependants"*, and every one of the 155 requirements is
+  implemented by a tactical spec while every one of the 29 tactical specs
+  carries 8 to 21 acceptance criteria. Nothing in the repository is on an agent
+  row. `check:specs` E15 enforces the policy — exactly one binds, every pair of
+  decision point and impact level is bound to a declared mode, and a status off
+  `DRAFT` needs a decision record that names the artefact, cites the policy and
+  names a decision point. W5 reports the resolution: the impact level of every
+  governed artefact, how many land on an agent row, and the evidence gates
+  (*"Nothing is decided at … requirement approval below S2"*). Evidence for a
+  decision, never the decision.
 - **Every artefact that the contract gives a `version` carries one, at
   `0.1.0`.** `@leafcutter-strict/method-version-increment` is a rule for
   increments and nothing else — its inputs are *"the artefact's current
