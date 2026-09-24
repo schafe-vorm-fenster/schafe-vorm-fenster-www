@@ -14,7 +14,7 @@ fit_criterion:
   operator: "="
   value: 3
   unit: criteria
-  meter: "TS-WEB-0004-A1, TS-WEB-0022-A1, TS-WEB-0022-A16 — 2 of 3 referenced by a test"
+  meter: "TS-WEB-0004-A1, TS-WEB-0022-A1, TS-WEB-0022-A16 — 3 of 3 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

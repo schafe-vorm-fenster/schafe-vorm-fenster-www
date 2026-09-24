@@ -696,19 +696,93 @@ for (const d of docs.filter((d) => /\.tactical\.md$/.test(d.file))) {
 }
 
 // ── E10/W3: what the tests reference ─────────────────────────────────────
+//
+// The scan set is what actually runs, read off the runners instead of listed
+// here by hand (DEC-0096). Until wave 5 it was three hand-written pairs —
+// `src/`, `e2e/` and the journey features — and three runners' worth of files
+// were invisible to it although every one of them runs on every commit
+// through the husky hook:
+//
+//   · `app/**/*.test.ts` and root-level `proxy.test.ts`, both in the root
+//     Vitest config's `test.include` and both carrying criterion citations;
+//   · `scripts/**/*.test.ts`, the second Vitest config behind
+//     `check:static-tests`;
+//   · the meter scripts the `check` chain invokes directly —
+//     `check-contrast.ts`, `check-csp.ts` and `check-seo-budget.ts` are
+//     meters in their own right, named as such by DEC-0095 §4.
+//
+// Reading the globs out of the configs rather than repeating them is the same
+// move DEC-0085 §4 made for the controlled vocabularies: narrowing a runner
+// narrows this scan, instead of the two drifting apart unnoticed.
+
+const REPO_DIR = join(SPECS_DIR, "..");
+
+/** `test.include` of a Vitest config file, in the order the config lists it. */
+function vitestInclude(configFile: string): string[] {
+  const raw = readFileSync(join(REPO_DIR, configFile), "utf8");
+  const block = raw.match(/include:\s*\[([\s\S]*?)\]/)?.[1];
+  if (!block) throw new Error(`${configFile}: no test.include to read`);
+  return [...block.matchAll(/["']([^"']+)["']/g)].map((m) => m[1]);
+}
+
+/**
+ * The `scripts/*.ts` entry points `pnpm check` runs, read out of the chain in
+ * `package.json`. A meter that is not in the chain does not run on every
+ * commit and does not count here — `check:terms` is the one such script, and
+ * the criteria it names stay in W3 until something in the chain runs it.
+ */
+function checkChainMeters(): string[] {
+  const pkg = JSON.parse(readFileSync(join(REPO_DIR, "package.json"), "utf8")) as {
+    scripts: Record<string, string>;
+  };
+  return (pkg.scripts.check ?? "")
+    .split("&&")
+    .map((step) => step.trim().match(/^pnpm\s+(check:[\w-]+)$/)?.[1])
+    .flatMap((name) => {
+      const target = name ? pkg.scripts[name]?.match(/tsx\s+(scripts\/[\w.-]+\.ts)/)?.[1] : undefined;
+      return target ? [target] : [];
+    });
+}
+
+/** A `test.include` glob as an anchored matcher over repository-relative paths. */
+function globMatcher(glob: string): RegExp {
+  const body = glob
+    .replace(/[.+^${}()|[\]\\]/g, "\\$&")
+    .replace(/\*\*\//g, "\u0000")
+    .replace(/\*/g, "[^/]*")
+    .replace(/\u0000/g, "(?:[^/]*/)*");
+  return new RegExp(`^${body}$`);
+}
+
+/** Every existing file a glob names. A glob with no wildcard is one file. */
+function expandGlob(glob: string): string[] {
+  const full = join(REPO_DIR, glob);
+  if (!glob.includes("*")) {
+    try { return statSync(full).isFile() ? [full] : []; } catch { return []; }
+  }
+  const head = glob.slice(0, glob.indexOf("*"));
+  const root = join(REPO_DIR, head.endsWith("/") ? head : dirname(head));
+  const match = globMatcher(glob);
+  try {
+    return walk(root).filter((f) => match.test(rel(f)));
+  } catch { return []; /* directory absent yet */ }
+}
 
 const testGlobs = [
-  ["src", /\.(test|integration\.test)\.tsx?$/],
-  ["e2e", /\.spec\.tsx?$/],
-  ["specs/verification/journeys", /\.feature$/],
-] as const;
+  ...vitestInclude("vitest.config.mts"),
+  ...vitestInclude("scripts/vitest.config.mts"),
+  "e2e/**/*.spec.ts",
+  "e2e/**/*.spec.tsx",
+  "specs/verification/journeys/**/*.feature",
+  ...checkChainMeters(),
+];
 
 const referencedIds = new Set<string>();
-for (const [dir, pattern] of testGlobs) {
-  const full = join(SPECS_DIR, "..", dir);
-  let entries: string[] = [];
-  try { entries = walk(full).filter((f) => pattern.test(f)); } catch { /* dir absent yet */ }
-  for (const f of entries) {
+const scannedTestFiles = new Set<string>();
+for (const glob of testGlobs) {
+  for (const f of expandGlob(glob)) {
+    if (scannedTestFiles.has(f)) continue;
+    scannedTestFiles.add(f);
     const raw = readFileSync(f, "utf8");
     for (const m of raw.matchAll(new RegExp(`(?<![A-Za-z0-9-])(${bare(ACCEPTANCE_ID)}|${bare(REQUIREMENT_ID)})(?![0-9A-Za-z-])`, "g"))) {
       const id = m[1];

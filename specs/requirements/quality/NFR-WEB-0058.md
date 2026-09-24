@@ -9,7 +9,12 @@ version: 0.1.0
 area: accessibility
 source: "SRC-0006, SRC-0014#accessibility, DEC-0056"
 evidence_sufficiency: S3
-fit_criterion: UNKNOWN
+fit_criterion:
+  scale: "acceptance criteria of NFR-WEB-0058 that pass"
+  operator: "="
+  value: 1
+  unit: criteria
+  meter: "TS-WEB-0002-A3 — 1 of 1 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN

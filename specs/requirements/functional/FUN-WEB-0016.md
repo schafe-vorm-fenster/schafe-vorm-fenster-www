@@ -14,7 +14,7 @@ fit_criterion:
   operator: "="
   value: 8
   unit: criteria
-  meter: "TS-WEB-0004-A1, TS-WEB-0026-A12, TS-WEB-0026-A13, TS-WEB-0026-A14, TS-WEB-0026-A15, TS-WEB-0026-A4, TS-WEB-0026-A5, TS-WEB-0026-A6 — 5 of 8 referenced by a test"
+  meter: "TS-WEB-0004-A1, TS-WEB-0026-A12, TS-WEB-0026-A13, TS-WEB-0026-A14, TS-WEB-0026-A15, TS-WEB-0026-A4, TS-WEB-0026-A5, TS-WEB-0026-A6 — 6 of 8 referenced by a test"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
