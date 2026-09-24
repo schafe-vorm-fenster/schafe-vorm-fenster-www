@@ -11,17 +11,17 @@ files themselves.
 
 | Area (file) | IDs | Sources | Decisions | Open questions |
 | --- | --- | --- | --- | --- |
-| jobs-and-navigation | WEB-F-001–009 | SRC-001, SRC-003, SRC-017, SRC-018 | DEC-080 | — |
-| pages | WEB-F-010–022, 026–029 | SRC-003, SRC-008 | DEC-032, DEC-034, DEC-039 | Q-005, Q-006, Q-007, Q-017, Q-022 |
+| jobs-and-navigation | WEB-F-001–009 | SRC-001, SRC-003, SRC-017, SRC-018 | DEC-080, DEC-082, DEC-083 | — |
+| pages | WEB-F-010–022, 026–029 | SRC-003, SRC-008 | DEC-032, DEC-034, DEC-039, DEC-066, DEC-081, DEC-084 | Q-005, Q-006, Q-007, Q-017, Q-022, Q-072 |
 | relevance-and-proof | WEB-F-030–039 | SRC-001, SRC-002 | — | Q-002, Q-003, Q-004, Q-014, Q-019 |
 | live-data | WEB-F-040–045 | SRC-001, SRC-002, SRC-003, SRC-011 | DEC-021 | Q-015 (Rest) |
 | personalization | WEB-F-050–056 | SRC-001, SRC-002, SRC-006 | — | Q-008 |
 | localization | WEB-F-060–069 | SRC-006, SRC-007 | DEC-003, DEC-005, DEC-006 | Q-001, Q-010, Q-011 |
 | seo | WEB-F-070–079 | SRC-006, SRC-010 | DEC-018 | Q-009, Q-016 |
-| content-pipeline | WEB-F-080–089 | SRC-006, SRC-009, SRC-017, SRC-018 | DEC-012, DEC-020, DEC-080 | Q-018, Q-057 |
-| forms-and-leads | WEB-F-090–096 | SRC-003 | DEC-009–013 | Q-017, Q-020, Q-022 |
+| content-pipeline | WEB-F-080–089 | SRC-006, SRC-009, SRC-017, SRC-018 | DEC-012, DEC-020, DEC-080, DEC-066, DEC-083 | Q-018, Q-057 |
+| forms-and-leads | WEB-F-090–096 | SRC-003 | DEC-009–013, DEC-081 | Q-017, Q-020, Q-022, Q-072 |
 | rendering-and-resilience | WEB-F-100–106 | SRC-002 | DEC-019, DEC-033 | — |
-| place-search | WEB-F-023, 046–049 | SRC-003, SRC-011, entre | DEC-024, DEC-028, DEC-029, DEC-036, DEC-037, DEC-079 | Q-025, Q-028, Q-071 |
+| place-search | WEB-F-023, 046–049 | SRC-003, SRC-011, entre | DEC-024, DEC-028, DEC-029, DEC-036, DEC-037, DEC-079 | Q-025, Q-028, Q-051 (Q-071 closed) |
 | delivery-pipeline | WEB-C-020–023 | SRC-012 | DEC-031 | Q-027 |
 | performance | WEB-Q-001–008 | SRC-006, SRC-007 | DEC-007 | — |
 | accessibility | WEB-Q-010–019, 026–027 | SRC-006 | DEC-012 | Q-013, Q-021 |
@@ -73,7 +73,27 @@ wrong. Specs cite them; they do not restate them.
 | Guide | Contract | Bound by | Cited from |
 | --- | --- | --- | --- |
 | SRC-014 design system | SRC-013 design-system contract | DEC-056, DEC-054 | TS-006, TS-017, WEB-F-006, WEB-Q-011 |
-| SRC-017 copy guide | SRC-018 copy contract | DEC-080 | WEB-F-008, TS-006 D7/A8/A16, TS-007 D5/D9/D12, `specs/glossary/glossary.md` |
+| SRC-017 copy guide | SRC-018 copy contract | DEC-080, DEC-083 | WEB-F-008, TS-006 D5/D7/A8/A16, TS-007 D5/D9/D12, every determination that used to state a string, `specs/glossary/glossary.md` |
+
+**Where the words live** (DEC-083): a spec states the element and what it
+must achieve; SRC-017 and its contract state the wording; the sentence
+itself is written in `content/pages/**` during the content phase. Two
+carve-outs on the spec side, both narrow: a literal inside a check that
+names what must *not* appear, and a label a registry or a decision owns —
+the legal anchors (`WEB-F-029`, TS-004 D8), the freshness label (DEC-019)
+and the placeholder badges (DEC-077).
+
+## Standing surfaces rendered by the layout
+
+Not blocks, not routes, and therefore easy to lose in a per-page reading:
+
+| Surface | Rendered | Owned by | Bound by |
+| --- | --- | --- | --- |
+| breadcrumb trail | above block 1, five second-level pages | TS-006 D2, TS-004 | DEC-071 §2 |
+| context band | after the last argument block | TS-006 D5 | SRC-001 §2 |
+| closing CTA | last block | TS-006 D6 | SRC-001 §7 |
+| contact section | between the closing CTA and the footer, **every page** | TS-006 D2, TS-016 D1 S1/S3 | DEC-081 |
+| global footer | last | TS-004 D4 | WEB-F-021 |
 
 ## Chain upward
 

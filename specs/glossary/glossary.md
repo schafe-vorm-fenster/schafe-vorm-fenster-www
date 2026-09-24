@@ -2,8 +2,8 @@
 artefact: glossary
 status: DRAFT
 date: 2026-09-09
-updated: 2026-09-23
-decisions: [DEC-062, DEC-080]
+updated: 2026-09-24
+decisions: [DEC-062, DEC-080, DEC-083]
 ---
 
 # Glossary
@@ -41,7 +41,7 @@ Two conventions, so an empty cell means something:
 | GL-001 | job | A visitor's concern in the moment, not a role. Four jobs carry the site. Canonical: SRC-001 §1. | — | — |
 | GL-002 | focus job | The one job a page owns; exactly one per page (WEB-F-001). | — | — |
 | GL-003 | context band | The block naming the other three jobs, phrased as an offer (WEB-F-005). | — | — |
-| GL-004 | scene | Concrete, picturable introduction of a job: aha question + one mechanism (WEB-F-008). | — | — |
+| GL-004 | scene | Concrete, picturable introduction of a job: an opener that says what works, exactly one mechanism, one concrete instance (WEB-F-008, TS-006 D7). Not a question by construction — SRC-001 §1a's "aha" is the stance the opener takes, not a punctuation mark it carries (DEC-080, DEC-083). | — | — |
 | GL-005 | proof element | Entry from `@schafe-vorm-fenster/proof` or `media-echo/verified/` embedded beside a claim. | — | — |
 | GL-006 | clearance | `usage_rights: cleared` — the hard publishability filter (WEB-F-033). | — | — |
 | GL-007 | media echo | Press, awards, appearances. Canonical: `@schafe-vorm-fenster/media-echo`. | | *Presse- und Auftrittshistorie* — an internal label on a public page (CG-035) |
@@ -49,12 +49,12 @@ Two conventions, so an empty cell means something:
 | GL-009 | live module | Page block rendering current app data (place search, nearby dates, counters). | — | — |
 | GL-010 | stage | Knowledge level 0–3 about the visitor (WEB-F-050). | — | — |
 | GL-011 | entry context | Referrer/UTM-derived assumption about the visit (SRC-002 context matrix). | — | — |
-| GL-012 | geo hierarchy | place · municipality · county · state · country (WEB-F-038). | Ort · Gemeinde · Landkreis · Bundesland / place · municipality · county · state | *Postleitzahl* · *PLZ* · *ZIP code* — a place name is where someone is from, a postcode is an abstraction (DEC-079) |
+| GL-012 | geo hierarchy | place · municipality · county · state · country (WEB-F-038). | Ort · Gemeinde · Landkreis · Bundesland / place · municipality · county · state | *Postleitzahl* · *PLZ* · *ZIP code* on every **search** surface — a place name is where someone is from, a postcode is an abstraction (DEC-079). One exemption: the order flow's scope step (`TS-025 D3`), where a buyer draws the boundary of a purchased calendar rather than naming her village — confirmed unchanged 2026-09-24 (DEC-079 §7, DEC-069 §8) |
 | GL-013 | TLD default language | The language a country domain renders without a URL prefix (WEB-F-061). | — | — |
 | GL-014 | conversion goal | Measurable action; canonical IDs in `@schafe-vorm-fenster/goals`. | — | — |
 | GL-015 | offering | Sellable product/service; canonical in `@schafe-vorm-fenster/offerings`; `promotion:` gates visibility. | Dorfkalender · euer Kalender / community calendar · your calendar | *das Produkt* · *the product* (CG-039); *Portalize* outside the one sentence DEC-052 §1 allows (WEB-C-014) |
 | GL-016 | audience / relation | Two-axis stakeholder model; canonical in `@schafe-vorm-fenster/audiences` (ADR-003). | — | — |
 | GL-017 | publisher / actor | An actor (club, church, business) that publishes dates; the `actors` audience once registered. | Akteur · der Verein, die Feuerwehr, die Kirchgemeinde / actor | *Organizer* (DEC-062); *die Leute* · *the people* (CG-009) |
 | GL-018 | content hub | The GTM content packages the website consumes (WEB-F-080). | — | — |
-| GL-019 | empty state | A place without dates — a conversion occasion, not an error (WEB-F-044/045). | An invitation naming the next step — the review's own shape: *"Fehlt deine Veranstaltung, jetzt selbst eintragen."* | |
+| GL-019 | empty state | A place without dates — a conversion occasion, not an error (WEB-F-044/045). | An invitation that names the next step and asks for one thing, in direct address. No word is fixed here: the sentence is copy under SRC-017 CG-032, and this register carries terms, not sentences (DEC-083) | |
 | GL-020 | STRICT | The requirements framework this spec follows; executing layer at `/Users/jan-henrik.hempel/LeafcutterOS/leafcutter-strict`. | — | — |
