@@ -121,11 +121,12 @@ specs/
 ├── ssd/                system specification document (scope, goals, stakeholders — by reference)
 ├── glossary/           GL-#### terms; canonical definitions stay in go-to-market-os
 ├── contracts/          SRC-0011 API contract register; Zod content formats (in src/domain)
-├── requirements/
-│   ├── functional/     FUN-WEB-#### — jobs, pages, relevance, live data, personalization,
+├── requirements/       one document per requirement, named for its identifier;
+│   │                   each directory README is the index over them
+│   ├── functional/     FUN-WEB-####.md — jobs, pages, relevance, live data, personalization,
 │   │                   localization, SEO, content pipeline
-│   ├── quality/        NFR-WEB-#### — performance, accessibility, privacy
-│   └── constraints/    CON-WEB-#### — stack, brand, scope boundaries
+│   ├── quality/        NFR-WEB-####.md — performance, accessibility, privacy
+│   └── constraints/    CON-WEB-####.md — stack, brand, scope boundaries
 ├── decisions/          DEC-#### decision records (S3 evidence anchor)
 ├── questions/          Q-#### open-question register (UNKNOWN + resolving question)
 ├── tactical/           TS-WEB-#### tactical specs — the generation prompts (FIXED/PROPOSED/FREE)
@@ -139,7 +140,7 @@ specs/
 - Statements in shall-form, status `DRAFT` until their decision point. The
   status vocabulary is the requirement-shell contract's, and `check:specs`
   reads it out of the installed package (E11).
-- Every requirement row carries source locator(s) and an evidence level
+- Every requirement carries source locator(s) and an evidence level
   `S0–S3` (`@leafcutter-strict/method-evidence-sufficiency-rating`; the
   project's reading of it is in `sources/README.md`).
 - **The identifier scheme is the method's** (DEC-0086):

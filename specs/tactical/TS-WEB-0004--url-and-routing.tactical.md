@@ -22,8 +22,8 @@ on. Locale *detection* is TS-WEB-0001; this spec fixes *which URLs exist* and
 ### D1 — Public URL inventory [FIXED: SRC-0003, DEC-0012, DEC-0024, DEC-0032]
 
 Bare paths render the TLD-default language; `/en/…` variants exist for
-every row on `.de` (phase 1). One row per page; conversions per
-`pages.req.md`.
+every row on `.de` (phase 1). One row per page; conversions per the `pages` area of
+`../requirements/functional/`.
 
 | Path | Page | Req |
 | --- | --- | --- |

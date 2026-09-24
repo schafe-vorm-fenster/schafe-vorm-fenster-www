@@ -21,8 +21,8 @@ inherited `etcc_*` parameters.
 
 Conversion goals themselves are **not defined here**. They live in
 `@schafe-vorm-fenster/goals` and are
-referenced by ID (ADR-001). Which page carries which goal is
-`pages.req.md` (FUN-WEB-0010–019). Loading budgets are TS-WEB-0003; the CSP
+referenced by ID (ADR-001). Which page carries which goal is the
+`pages` area of `../requirements/functional/` (FUN-WEB-0010–019). Loading budgets are TS-WEB-0003; the CSP
 allowlist is NFR-WEB-0030 (security spec); the trust claim made from
 cookielessness on `/dein-kalender` is NFR-WEB-0023 (content spec) — this
 spec only keeps that claim true.

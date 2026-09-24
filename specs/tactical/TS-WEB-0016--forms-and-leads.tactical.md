@@ -49,7 +49,7 @@ TS-WEB-0001 D5.
 
 ## Determinations
 
-### D1 — Lead and handover surface inventory [FIXED: SRC-0003, pages.req.md; in-page placement PROPOSED]
+### D1 — Lead and handover surface inventory [FIXED: SRC-0003, the `pages` requirement area; in-page placement PROPOSED]
 
 Every surface that takes input or hands the visitor onward. One row =
 one surface. "Owner" says which system receives the interaction —

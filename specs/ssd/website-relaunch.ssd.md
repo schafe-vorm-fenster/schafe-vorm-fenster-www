@@ -51,7 +51,7 @@ and `information_needs` (these are the STRICT needs layer for this spec).
 ## Success Measures
 
 The websites' conversions are the conversion goals referenced per page in
-`requirements/functional/pages.req.md`, defined in
+the `pages` area of `requirements/functional/`, defined in
 `@schafe-vorm-fenster/goals`.
 
 ## Constraints Summary

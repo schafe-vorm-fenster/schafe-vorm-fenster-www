@@ -1,0 +1,14 @@
+---
+artefact: requirement
+id: FUN-WEB-0019
+class: FUN
+domain: WEB
+status: DRAFT
+area: pages
+source: "SRC-0003#conversion-map, DEC-0052, DEC-0081"
+evidence_sufficiency: S2
+---
+
+# FUN-WEB-0019
+
+The conversion map in SRC-0003 shall be complete on the website: every conversion goal listed there is carried by the pages named there; `order-promotion-material` is deliberately unwired — the goal stays in the hub, the website carries no page (DEC-0052). Two goals are carried by standing surfaces rather than by a page and are primary for none: `make-contact` on every row of the contact section, and `subscribe-to-newsletter` in the footer and the `/ueber-uns` block (DEC-0081, DEC-0052 §4 as amended).

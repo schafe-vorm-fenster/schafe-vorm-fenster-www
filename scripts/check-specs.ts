@@ -9,15 +9,15 @@
  * ──────
  *  E1  Frontmatter present and well-formed on governed artefacts
  *  E2  Requirement IDs ((FUN|NFR|CON)-WEB-####) unique across all files
- *  E3  Requirement rows carry 4 cells: id · statement · source · S0–S3
- *  E4  Sufficiency S3 requires a DEC-#### or ADR-### token in the row
+ *  E3  Requirement documents carry a statement, a source and an S0–S3 level
+ *  E4  Sufficiency S3 requires a DEC-#### or ADR-### token in the requirement
  *  E5  Every referenced ID (FUN/NFR/CON-*, TS-*, DEC-*, Q-*, SRC-*, GL-*) exists
  *  E6  Tactical `implements:` ↔ Coverage table match bidirectionally
  *  E7  decisions/README.md index ↔ decision files match both ways
  *  E8  Acceptance criteria: unique ID, valid verification level
  *  E9  Coverage tables reference only existing acceptance criteria
  *  E10 Tests/features reference only IDs that exist
- *  E11 Requirement files carry a status from the requirement-shell contract
+ *  E11 Requirements carry a status from the requirement-shell contract
  *  E12 Tactical specs carry a `kind` and a status from the tactical contract
  *  E13 Source inventory rows carry a trust level from the source contract
  *  W1  (warning) requirements not covered by any tactical spec
@@ -53,7 +53,7 @@
  *    defines no glossary identifier at all. None of the three is this
  *    repository's artefact, so the type token stays and only the composition
  *    and the four-digit width are the method's. Owed in DEC-0085 §6.
- *  - Statement grammar and the fit-criterion form. The requirement rows are
+ *  - Statement grammar and the fit-criterion form. The statements are
  *    shall-form prose, not the per-class slots of `method-statement-grammar`;
  *    nothing deterministic can be checked against them yet.
  *  - The chain. STRICT links requirement → need → goal; this repository links
@@ -61,7 +61,7 @@
  *    spec → acceptance criterion → test. E5/E6/E9/E10 and W1–W3 check the
  *    chain this repository actually has.
  *  - The locator form. `method-identifier-and-locator-schema` wants
- *    `<file>#L102` plus an excerpt; the rows carry source ids.
+ *    `<file>#L102` plus an excerpt; the artefacts carry source ids.
  * Each of those is recorded as owed in DEC-0085; the identifier row of its
  * §6 now points at DEC-0086, which closed it.
  */
@@ -200,7 +200,7 @@ const err = (f: string, msg: string) => errors.push(`${rel(f)}: ${msg}`);
 // ── E1: frontmatter on governed artefact types ───────────────────────────
 
 const NEEDS_FRONTMATTER = [
-  /\/requirements\/.+\.req\.md$/,
+  /\/requirements\/.+\/(?!README)[^/]+\.md$/,
   /\/tactical\/.+\.tactical\.md$/,
   /\/decisions\/DEC-\d{4}--.+\.md$/,
   /\/(ssd|sources|glossary|questions|traceability|contracts)\/(?!README).+\.md$/,
@@ -221,39 +221,52 @@ const srcDefs = new Set<string>();
 const tsDefs = new Set<string>();
 const glDefs = new Set<string>();
 
-const REQ_ROW = new RegExp(`^\\|\\s*(${bare(REQUIREMENT_ID)})\\s*\\|(.+)$`);
+/**
+ * A requirement is one document (wave 2).
+ *
+ * `@leafcutter-os/schemas` types a requirement as `spec/requirements/<id>.md`,
+ * level L3 — a document, not a row — and `library-schemas`'
+ * `requirement-shell` contract records "a single requirement". So the id, the
+ * class, the source locator and the evidence level are frontmatter, and the
+ * statement is the body. The directory README is an index over them and
+ * defines nothing.
+ */
+const REQUIREMENT_DOC = /\/requirements\/[^/]+\/(?!README)([^/]+)\.md$/;
 
 for (const d of docs) {
-  if (/\.req\.md$/.test(d.file)) {
-    // E11: the status vocabulary belongs to the requirement-shell contract
-    const status = d.frontmatter?.status;
-    if (typeof status !== "string" || !REQUIREMENT_STATUS.has(status)) {
-      err(d.file, `E11 status ${JSON.stringify(status ?? null)} is not one of ${list(REQUIREMENT_STATUS)}`);
-    }
-    for (const line of d.body.split("\n")) {
-      const m = line.match(REQ_ROW);
-      if (!m) continue;
-      const id = m[1];
+  const reqFile = d.file.match(REQUIREMENT_DOC);
+  if (reqFile) {
+    const id = d.frontmatter?.id;
+    if (typeof id !== "string" || !REQUIREMENT_ID.test(id)) {
+      err(d.file, "E1 requirement without valid frontmatter id (<CLASS>-<DOMAIN>-####)");
+    } else {
+      // The file is named for the artefact it holds (DEC-0086 §4).
+      if (reqFile[1] !== id) err(d.file, `E1 frontmatter id ${id} does not match file name ${reqFile[1]}`);
       if (reqDefs.has(id)) {
         err(d.file, `E2 duplicate definition of ${id} (also in ${rel(reqDefs.get(id)!)})`);
       } else {
         reqDefs.set(id, d.file);
       }
-      // E3: cell shape — id | statement | source | sufficiency
-      const cells = line.split("|").map((c) => c.trim()).filter((c, i, a) => !(c === "" && (i === 0 || i === a.length - 1)));
-      if (cells.length < 4) {
-        err(d.file, `E3 ${id}: expected at least 4 cells (… · source · sufficiency), got ${cells.length}`);
-        continue;
+      // The class token of the id is the `class` field, and nothing else.
+      const cls = d.frontmatter?.class;
+      if (cls !== id.slice(0, id.indexOf("-")))
+        err(d.file, `E2 ${id}: class ${JSON.stringify(cls ?? null)} does not match the id's type token`);
+      // E11: the status vocabulary belongs to the requirement-shell contract
+      const status = d.frontmatter?.status;
+      if (typeof status !== "string" || !REQUIREMENT_STATUS.has(status)) {
+        err(d.file, `E11 ${id}: status ${JSON.stringify(status ?? null)} is not one of ${list(REQUIREMENT_STATUS)}`);
       }
-      const suff = cells[cells.length - 1];
-      const source = cells[cells.length - 2];
-      const statement = cells.slice(1, -2).join(" ");
-      if (!SUFFICIENCY.has(suff))
-        err(d.file, `E3 ${id}: sufficiency "${suff}" is not one of ${list(SUFFICIENCY)}`);
-      if (!source) err(d.file, `E3 ${id}: empty source cell`);
-      // E4: S3 needs a decision anchor in the row itself
+      // E3: the attributes the shell requires — statement, source, sufficiency
+      const statement = d.body.replace(/^#[^\n]*\n/m, "").trim();
+      const source = typeof d.frontmatter?.source === "string" ? d.frontmatter.source.trim() : "";
+      const suff = d.frontmatter?.evidence_sufficiency;
+      if (!statement) err(d.file, `E3 ${id}: empty statement`);
+      if (!source) err(d.file, `E3 ${id}: empty source`);
+      if (typeof suff !== "string" || !SUFFICIENCY.has(suff))
+        err(d.file, `E3 ${id}: sufficiency ${JSON.stringify(suff ?? null)} is not one of ${list(SUFFICIENCY)}`);
+      // E4: S3 needs a decision anchor in the artefact itself
       if (suff === "S3" && !/(DEC-\d{4}|ADR-\d{3}|ADR-00\d)/.test(statement + " " + source)) {
-        err(d.file, `E4 ${id}: S3 without DEC/ADR reference in the row`);
+        err(d.file, `E4 ${id}: S3 without DEC/ADR reference in the requirement`);
       }
     }
   }
