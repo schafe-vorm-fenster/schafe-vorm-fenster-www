@@ -143,3 +143,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0098 — A source's trust level is the minimum of its six-dimension vector — computed, and fifteen of eighteen were not](DEC-0098--the-trust-level-is-computed.md)
 - [DEC-0099 — The conflict and demand registers exist, populated from what already happened — 22 conflicts and 57 demands, none invented](DEC-0099--the-conflict-and-demand-registers.md)
 - [DEC-0100 — An ADR and a STRICT decision record are two artefacts — both are kept, and the SDR starts at the next executed decision point](DEC-0100--an-adr-and-an-sdr-are-two-artefacts.md)
+- [DEC-0101 — The goal layer references the hub, it does not duplicate it — thirteen GOAL-WEB artefacts, no goal content copied](DEC-0101--the-goal-layer-references-the-hub.md)
