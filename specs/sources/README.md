@@ -16,17 +16,21 @@ first cold-start artefact; no statement without an exact source locator).
 - Locators are `<repo>/<path>#<anchor-or-section>`; excerpts max 25 words.
   `@leafcutter-strict/method-identifier-and-locator-schema` wants the finest
   granularity a source supports — `#L102`, `#P45`, `#¶12`, `#M45:12` — plus
-  the excerpt on every locator. The rows here carry a source id and
-  sometimes a section. That gap is owed (DEC-0085 §6); closing it means
-  re-reading all 18 sources.
-- Trust is `high | medium | low | unusable` with a one-line rationale. The
-  vocabulary is the source-inventory contract's and `pnpm check:specs`
-  validates the column against it (E13). What is **not** recorded is the
-  six-dimension vector
-  (`@leafcutter-strict/method-source-quality-rating`: locatability,
-  authority, currency, completeness, specificity, internal consistency,
-  each 0–3, trust = the minimum, never the average). Only the derived level
-  survives here, so the vector cannot say what to fix. Owed.
+  the excerpt on every locator. All 18 sources were read and every
+  requirement's locator resolved (DEC-0097): the position lives on the
+  requirement, and the `Sch.` column here records which scheme each source
+  supports. `SRC-0006` supports `none` — it is one line with no line
+  terminators — and `SRC-0016` is not readable from this repository at all.
+- Trust is `high | medium | low | unusable`, and it is **computed, not
+  asserted**: the six-dimension vector of
+  `@leafcutter-strict/method-source-quality-rating` — locatability,
+  authority, currency, completeness, specificity, internal consistency, each
+  0–3 — and the level is the **minimum**, never the average. The vocabulary
+  is the source-inventory contract's; `pnpm check:specs` validates the column
+  against it (E13) and recomputes the level from the vector (E20), so a level
+  that disagrees with its evidence is an error. DEC-0098 scored all eighteen
+  and 15 of the 18 levels changed, none of them because a source did. The
+  vector is kept beside the minimum because the vector says what to fix.
 - Evidence sufficiency per requirement follows
   `@leafcutter-strict/method-evidence-sufficiency-rating`, read here as:
   `S0` no source · `S1` single unconfirmed source · `S2` corroborated or

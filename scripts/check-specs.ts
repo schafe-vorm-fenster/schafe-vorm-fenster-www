@@ -31,6 +31,8 @@
  *      the contract types, or `UNKNOWN`
  *  E19 Every requirement's `source` is the contract's locator — a position in
  *      a named file and an excerpt of at most 25 words, or `UNKNOWN`
+ *  E20 Every source carries a six-dimension quality vector, and its trust
+ *      level is the minimum of that vector rather than an assertion
  *  W1  (warning) requirements not covered by any tactical spec
  *  W2  (warning) covered requirements discharged by no acceptance criterion
  *  W3  (warning) acceptance criteria no test references
@@ -425,6 +427,68 @@ const checkLocator = (d: Doc, id: string) => {
   }
 };
 
+/**
+ * The six-dimension source-quality vector (E20).
+ *
+ * `@leafcutter-strict/method-source-quality-rating` scores locatability,
+ * authority, currency, completeness, specificity and internal consistency
+ * from 0 to 3, and then:
+ *
+ *   Then take the **minimum**, not the average: a source is as weak as its
+ *   weakest dimension. […] Map the minimum to a trust level: 3 on all is
+ *   high, minimum 2 is medium, minimum 1 is low. A 0 on locatability or
+ *   authority makes the source unusable as sole evidence.
+ *
+ * So the trust level is not an opinion that sits beside the vector; it is
+ * computed from it. E20 recomputes it and fails where the register asserts a
+ * different one — which is how DEC-0098 found that fifteen of the eighteen
+ * levels had never been derived at all. The `locator_scheme` is the
+ * contract's enum, read from the schema like every other vocabulary.
+ */
+const QUALITY_DIMENSIONS = [
+  "locatability",
+  "authority",
+  "currency",
+  "completeness",
+  "specificity",
+  "internal_consistency",
+] as const;
+const LOCATOR_SCHEME = vocabulary(sourceInventory, "sources.[].locator_scheme");
+/** Source id → the level the register asserts, for E20 to check against. */
+const assertedTrust = new Map<string, string>();
+const vectorSources = new Set<string>();
+
+/** The method's mapping, and nothing else: min 3 high, 2 medium, 1 low, 0 unusable. */
+function trustOf(vector: number[]): string {
+  const min = Math.min(...vector);
+  return min >= 3 ? "high" : min === 2 ? "medium" : min === 1 ? "low" : "unusable";
+}
+
+function checkQualityVector(d: Doc, id: string, line: string) {
+  const cells = line.split("|").map((c) => c.trim());
+  // | ID | Sch. | L | A | C | Cp | Sp | IC | Min | Level | Was | Defects |
+  const scheme = cells[2];
+  const scores = cells.slice(3, 9).map((c) => Number(c));
+  const min = Number(cells[9]);
+  const level = cells[10];
+  vectorSources.add(id);
+  if (!LOCATOR_SCHEME.has(scheme ?? ""))
+    err(d.file, `E20 ${id}: locator_scheme "${scheme ?? ""}" is not one of ${list(LOCATOR_SCHEME)}`);
+  if (scores.length !== QUALITY_DIMENSIONS.length || scores.some((n) => !Number.isInteger(n) || n < 0 || n > 3)) {
+    err(d.file, `E20 ${id}: the vector is not six integers 0–3 (${cells.slice(3, 9).join(", ")})`);
+    return;
+  }
+  const computedMin = Math.min(...scores);
+  if (min !== computedMin)
+    err(d.file, `E20 ${id}: Min is ${min}, but the vector's minimum is ${computedMin}`);
+  const computed = trustOf(scores);
+  if (level !== computed)
+    err(d.file, `E20 ${id}: Level is "${level}", but the vector ${scores.join("·")} produces "${computed}"`);
+  const asserted = assertedTrust.get(id);
+  if (asserted !== undefined && asserted !== computed)
+    err(d.file, `E20 ${id}: the register says trust "${asserted}", the vector produces "${computed}"`);
+}
+
 const PROVENANCE_FIELDS = ["prompt_id", "prompt_version", "model", "generated_at"] as const;
 const RFC3339 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
 /** field → how many artefacts answer it `UNKNOWN` (W6). */
@@ -602,7 +666,13 @@ for (const d of docs) {
     for (const m of d.body.matchAll(new RegExp(`^\\|\\s*(${bare(QUESTION_ID)})\\s*\\|`, "gm"))) qDefs.add(m[1]);
   }
   if (/source-inventory\.md$/.test(d.file)) {
-    for (const line of d.body.split("\n")) {
+    /**
+     * The inventory carries two tables keyed by source id: the register, and
+     * the six-dimension quality vectors DEC-0098 added. They are read
+     * separately — `## Quality vectors` opens the second.
+     */
+    const [register, vectors] = d.body.split(/^## Quality vectors$/m);
+    for (const line of register.split("\n")) {
       const m = line.match(new RegExp(`^\\|\\s*(${bare(SOURCE_ID)})\\s*\\|`));
       if (!m) continue;
       srcDefs.add(m[1]);
@@ -610,6 +680,12 @@ for (const d of docs) {
       const trust = line.split("|").map((c) => c.trim())[4];
       if (!SOURCE_TRUST.has(trust ?? ""))
         err(d.file, `E13 ${m[1]}: trust "${trust ?? ""}" is not one of ${list(SOURCE_TRUST)}`);
+      else assertedTrust.set(m[1], trust);
+    }
+    for (const line of (vectors ?? "").split("\n")) {
+      const m = line.match(new RegExp(`^\\|\\s*(${bare(SOURCE_ID)})\\s*\\|`));
+      if (!m) continue;
+      checkQualityVector(d, m[1], line);
     }
   }
   if (/\.tactical\.md$/.test(d.file)) {
@@ -700,6 +776,15 @@ for (const d of docs) {
     }
   }
 }
+
+// ── E20: every registered source carries a vector ────────────────────────
+
+const withoutVector = [...srcDefs].filter((id) => !vectorSources.has(id)).sort();
+if (withoutVector.length)
+  err(
+    "specs/sources/source-inventory.md",
+    `E20 ${withoutVector.length} source(s) carry no quality vector: ${withoutVector.join(", ")}`,
+  );
 
 // ── E6: implements ↔ Coverage, bidirectional ─────────────────────────────
 
