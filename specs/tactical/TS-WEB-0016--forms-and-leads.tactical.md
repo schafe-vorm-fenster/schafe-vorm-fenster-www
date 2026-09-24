@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [FUN-WEB-0090, FUN-WEB-0091, FUN-WEB-0092, FUN-WEB-0093, FUN-WEB-0094, FUN-WEB-0095, FUN-WEB-0096]
 sources: [SRC-0003, SRC-0008, SRC-0011]
 decisions: [DEC-0004, DEC-0009, DEC-0010, DEC-0011, DEC-0013, DEC-0014, DEC-0015, DEC-0025, DEC-0026, DEC-0030, DEC-0051, DEC-0052, DEC-0081, DEC-0082, DEC-0083]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
 ---
 
 # TS-WEB-0016 — Forms, Leads and Outbound Handovers

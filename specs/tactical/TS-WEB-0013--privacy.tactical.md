@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [NFR-WEB-0023, NFR-WEB-0024, NFR-WEB-0025]
 sources: [SRC-0001, SRC-0003, SRC-0006, SRC-0010, SRC-0011]
 decisions: [DEC-0004, DEC-0009, DEC-0013, DEC-0015, DEC-0024, DEC-0025, DEC-0030, DEC-0039]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
 ---
 
 # TS-WEB-0013 — Data Protection as an Implementation Property

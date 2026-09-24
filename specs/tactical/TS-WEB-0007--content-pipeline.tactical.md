@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [FUN-WEB-0025, FUN-WEB-0039, FUN-WEB-0080, FUN-WEB-0081, FUN-WEB-0082, FUN-WEB-0083, FUN-WEB-0084, FUN-WEB-0085, FUN-WEB-0086, FUN-WEB-0087, FUN-WEB-0088, FUN-WEB-0089]
 sources: [SRC-0006, SRC-0008, SRC-0009, SRC-0017, SRC-0018]
 decisions: [DEC-0012, DEC-0020, DEC-0022, DEC-0026, DEC-0027, DEC-0039, DEC-0041, DEC-0080]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
 ---
 
 # TS-WEB-0007 — Content Pipeline

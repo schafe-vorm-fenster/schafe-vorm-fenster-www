@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [FUN-WEB-0014, FUN-WEB-0020]
 sources: [SRC-0001, SRC-0003, SRC-0014]
 decisions: [DEC-0011, DEC-0030, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-11T07:13:07+02:00"
 ---
 
 # TS-WEB-0024 — `/dein-kalender`

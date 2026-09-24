@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [FUN-WEB-0012]
 sources: [SRC-0001, SRC-0003, SRC-0008, SRC-0014]
 decisions: [DEC-0029, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0080, DEC-0082, DEC-0083]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-11T07:13:07+02:00"
 ---
 
 # TS-WEB-0022 — `/mitmachen`, the publishing entry

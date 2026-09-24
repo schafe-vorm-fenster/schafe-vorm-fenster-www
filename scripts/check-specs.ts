@@ -25,11 +25,15 @@
  *  E15 The decision policy binds every pair, and a status moves only at a
  *      decision point it names — with the record that makes it auditable
  *  E16 Every artefact whose contract carries `version` has one
+ *  E17 Every artefact whose contract carries `ai_provenance` has one, with
+ *      the four fields the contract names
  *  W1  (warning) requirements not covered by any tactical spec
  *  W2  (warning) covered requirements discharged by no acceptance criterion
  *  W3  (warning) acceptance criteria no test references
  *  W4  (warning) requirements whose statement is not yet in its class's form
  *  W5  (report) what the bound policy resolves today, and what escalates
+ *  W6  (report) how much of the provenance is UNKNOWN, because bound 3 of
+ *      POL-GRADED-BY-IMPACT escalates on an unverifiable separation of duties
  *
  * Exit code: number of errors (0 = green). Warnings never fail the run.
  *
@@ -280,6 +284,59 @@ const checkVersion = (d: Doc, id: string) => {
     err(d.file, `E16 ${id}: version ${JSON.stringify(v ?? null)} is not <major>.<minor>.<patch>`);
 };
 
+/**
+ * The provenance an artefact carries (E17).
+ *
+ * `requirement-shell` and `tactical-specification` both close their prose with
+ * the same sentence — "Every record additionally carries `ai_provenance` — the
+ * prompt, its version, the model and the time of the run" — and both `$defs`
+ * type it as an object requiring exactly `prompt_id`, `prompt_version`,
+ * `model` and `generated_at`, with `additionalProperties: false`. The field is
+ * missing from the schemas' own top-level `required` list, which is why 184
+ * artefacts could carry none and still validate; the contract prose is the
+ * canonical form here, as DEC-0085 §6 has it, and the schema's omission is the
+ * same class of upstream slip as the over-escaped `pattern` values.
+ *
+ * `@leafcutter-strict/foundation-evidence-discipline` supplies the value for a
+ * field the input does not support: "Where the input does not support a value,
+ * write `UNKNOWN`. An `UNKNOWN` is a valid, expected output. A fabricated
+ * value is a defect — and the worse kind, because it reads exactly like a
+ * supported one." So `UNKNOWN` passes here and is counted by W6 rather than
+ * hidden: bound 3 of `POL-GRADED-BY-IMPACT` escalates on provenance that
+ * cannot be checked, and the count is what says how far that reaches.
+ */
+const PROVENANCE_FIELDS = ["prompt_id", "prompt_version", "model", "generated_at"] as const;
+const RFC3339 = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
+/** field → how many artefacts answer it `UNKNOWN` (W6). */
+const unknownProvenance = new Map<string, number>(PROVENANCE_FIELDS.map((f) => [f, 0]));
+let provenanceSubjects = 0;
+
+const checkProvenance = (d: Doc, id: string) => {
+  provenanceSubjects += 1;
+  const p = d.frontmatter?.ai_provenance;
+  if (typeof p !== "object" || p === null || Array.isArray(p)) {
+    err(d.file, `E17 ${id}: no ai_provenance. Both contracts: "Every record additionally carries \`ai_provenance\`".`);
+    return;
+  }
+  const record = p as Record<string, unknown>;
+  for (const extra of Object.keys(record))
+    if (!(PROVENANCE_FIELDS as readonly string[]).includes(extra))
+      err(d.file, `E17 ${id}: ai_provenance.${extra} is not one of ${PROVENANCE_FIELDS.join(", ")}`);
+  for (const field of PROVENANCE_FIELDS) {
+    const value = record[field];
+    if (typeof value !== "string" || !value.trim()) {
+      err(d.file, `E17 ${id}: ai_provenance.${field} is ${JSON.stringify(value ?? null)}, not a string`);
+      continue;
+    }
+    if (value === "UNKNOWN") {
+      unknownProvenance.set(field, unknownProvenance.get(field)! + 1);
+      continue;
+    }
+    if (field === "generated_at" && !RFC3339.test(value))
+      err(d.file, `E17 ${id}: ai_provenance.generated_at "${value}" is neither UNKNOWN nor an RFC-3339 date-time`);
+  }
+};
+
 // ── File collection ──────────────────────────────────────────────────────
 
 function walk(dir: string): string[] {
@@ -379,6 +436,7 @@ for (const d of docs) {
       }
       statuses.push([d.file, id, String(status)]);
       checkVersion(d, id);
+      checkProvenance(d, id);
       // E14: the grammar form belongs to the class (`method-statement-grammar`)
       const form = d.frontmatter?.form;
       const expectedForm = FORM_OF_CLASS[id.slice(0, id.indexOf("-"))];
@@ -449,6 +507,7 @@ for (const d of docs) {
     }
     statuses.push([d.file, String(d.frontmatter?.id ?? "?"), String(tsStatus)]);
     checkVersion(d, String(d.frontmatter?.id ?? "?"));
+    checkProvenance(d, String(d.frontmatter?.id ?? "?"));
   }
   if (/\.ssd\.md$/.test(d.file)) {
     const ssdId = String(d.frontmatter?.id ?? "?");
@@ -781,6 +840,15 @@ if (!boundRules || !boundPolicy) {
   );
   warnings.push(
     `   everything else escalates to the accountable role. Evidence for a decision, never the decision.`,
+  );
+}
+
+const unknownFields = [...unknownProvenance].filter(([, n]) => n > 0);
+if (unknownFields.length) {
+  warnings.push(
+    `W6 ai_provenance is on ${provenanceSubjects}/${provenanceSubjects} artefacts; ` +
+      `${unknownFields.map(([f, n]) => `${f} UNKNOWN on ${n}`).join(" · ")}. ` +
+      `POL-GRADED-BY-IMPACT bound 3 escalates where the separation of duties cannot be checked.`,
   );
 }
 

@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [FUN-WEB-0013]
 sources: [SRC-0001, SRC-0003, SRC-0008, SRC-0011, SRC-0014]
 decisions: [DEC-0009, DEC-0025, DEC-0029, DEC-0035, DEC-0037]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-11T07:13:07+02:00"
 ---
 
 # TS-WEB-0023 — Register (`/mitmachen/registrieren`)

@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [CON-WEB-0010, CON-WEB-0011, BUS-WEB-0012, CON-WEB-0013, CON-WEB-0014, CON-WEB-0015, CON-WEB-0016]
 sources: [SRC-0001, SRC-0003, SRC-0009]
 decisions: [DEC-0020, DEC-0022, DEC-0036, DEC-0040]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
 ---
 
 # TS-WEB-0018 — Scope Boundaries

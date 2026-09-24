@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [FUN-WEB-0050, FUN-WEB-0051, FUN-WEB-0053, FUN-WEB-0054, FUN-WEB-0056, FUN-WEB-0069]
 sources: [SRC-0001, SRC-0002, SRC-0006, SRC-0007]
 decisions: [DEC-0004, DEC-0019, DEC-0038, DEC-0041]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
 ---
 
 # TS-WEB-0010 — Personalization Stages

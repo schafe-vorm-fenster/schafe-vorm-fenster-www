@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [FUN-WEB-0040, FUN-WEB-0041, FUN-WEB-0043, FUN-WEB-0044, FUN-WEB-0045, FUN-WEB-0046, FUN-WEB-0049]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0011]
 decisions: [DEC-0013, DEC-0019, DEC-0021, DEC-0024, DEC-0025, DEC-0029, DEC-0030, DEC-0034, DEC-0035, DEC-0037, DEC-0079]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
 ---
 
 # TS-WEB-0008 — Live Modules and Place Search

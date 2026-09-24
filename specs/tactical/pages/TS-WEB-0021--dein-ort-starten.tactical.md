@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [FUN-WEB-0047]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0014]
 decisions: [DEC-0013, DEC-0024, DEC-0029, DEC-0034, DEC-0036, DEC-0037, DEC-0066, DEC-0071, DEC-0083]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-11T07:13:07+02:00"
 ---
 
 # TS-WEB-0021 — `/dein-ort/starten`: Start the Calendar in Your Place

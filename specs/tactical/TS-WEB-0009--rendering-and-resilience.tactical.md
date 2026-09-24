@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [FUN-WEB-0100, FUN-WEB-0101, FUN-WEB-0102, FUN-WEB-0103, FUN-WEB-0104, FUN-WEB-0106]
 sources: [SRC-0002, SRC-0011]
 decisions: [DEC-0002, DEC-0019, DEC-0021, DEC-0032, DEC-0033, DEC-0041]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
 ---
 
 # TS-WEB-0009 — Rendering and Resilience

@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [NFR-WEB-0020, NFR-WEB-0021, NFR-WEB-0022, NFR-WEB-0028]
 sources: [SRC-0006, SRC-0010, SRC-0003]
 decisions: [DEC-0004, DEC-0013, DEC-0016, DEC-0017, DEC-0028]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
 ---
 
 # TS-WEB-0012 — Analytics and Conversion Measurement

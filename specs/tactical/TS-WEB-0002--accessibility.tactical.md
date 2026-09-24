@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [NFR-WEB-0010, NFR-WEB-0011, NFR-WEB-0012, NFR-WEB-0013, NFR-WEB-0014, NFR-WEB-0015, NFR-WEB-0016, NFR-WEB-0017, NFR-WEB-0018, NFR-WEB-0019, NFR-WEB-0026, NFR-WEB-0027]
 sources: [SRC-0006]
 decisions: [DEC-0012]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-09T16:07:54+02:00"
 ---
 
 # TS-WEB-0002 — Accessibility

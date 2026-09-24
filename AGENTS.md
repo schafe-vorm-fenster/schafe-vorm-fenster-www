@@ -87,8 +87,11 @@ decide at the **low** impact level, inside four bounds and with a decision
 record; from medium upward, and at every decision point the impact method
 leaves undefined, the decision is the owner's. **In practice that still means
 `DRAFT`**: every artefact here has at least one dependant, so none of them
-reaches the low level (DEC-0089), and no artefact carries the `ai_provenance`
-the separation-of-duties bound needs. `check:specs` E15 enforces the policy —
+reaches the low level (DEC-0089). Every requirement and tactical specification
+now carries the `ai_provenance` the separation-of-duties bound reads (DEC-0091,
+`check:specs` E17), but the prompt identity behind the 2026-09 authoring run
+was never recorded, so `prompt_id` and `prompt_version` are `UNKNOWN` and
+bound 3 still escalates. `check:specs` E15 enforces the policy —
 it validates that every pair is bound, and refuses a status off `DRAFT` that
 no decision record anchors. Passing tests are evidence for a decision, not
 the decision. Do not edit the policy: changing it is DP-14, governance

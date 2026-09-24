@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [NFR-WEB-0030, NFR-WEB-0031, NFR-WEB-0032, NFR-WEB-0033, NFR-WEB-0034, NFR-WEB-0035, NFR-WEB-0036]
 sources: [SRC-0006, SRC-0010, SRC-0011, SRC-0012]
 decisions: [DEC-0009, DEC-0013, DEC-0014, DEC-0015, DEC-0017, DEC-0025, DEC-0030, DEC-0031, DEC-0035]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
 ---
 
 # TS-WEB-0014 — Security Baseline

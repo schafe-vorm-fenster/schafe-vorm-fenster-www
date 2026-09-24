@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [CON-WEB-0020, CON-WEB-0021, CON-WEB-0022, CON-WEB-0023]
 sources: [SRC-0012]
 decisions: [DEC-0002, DEC-0031, DEC-0035, DEC-0040]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
 ---
 
 # TS-WEB-0015 — Delivery Pipeline

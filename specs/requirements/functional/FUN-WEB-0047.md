@@ -9,6 +9,11 @@ version: 0.1.0
 area: place-search
 source: "DEC-0024, DEC-0036, DEC-0037, DEC-0079"
 evidence_sufficiency: S3
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T13:40:06+02:00"
 ---
 
 # FUN-WEB-0047

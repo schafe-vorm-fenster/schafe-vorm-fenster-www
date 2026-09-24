@@ -7,6 +7,11 @@ version: 0.1.0
 implements: [FUN-WEB-0001, FUN-WEB-0003, FUN-WEB-0004, FUN-WEB-0005, FUN-WEB-0006, FUN-WEB-0007, FUN-WEB-0008, FUN-WEB-0009, FUN-WEB-0019, FUN-WEB-0020, FUN-WEB-0022]
 sources: [SRC-0001, SRC-0003, SRC-0017, SRC-0018]
 decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084]
+ai_provenance:
+  prompt_id: UNKNOWN
+  prompt_version: UNKNOWN
+  model: "Claude Opus 5 (1M context)"
+  generated_at: "2026-09-10T14:39:53+02:00"
 ---
 
 # TS-WEB-0006 — Page Composition Rules
