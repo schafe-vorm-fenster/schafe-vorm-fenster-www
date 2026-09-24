@@ -2,6 +2,7 @@
 artefact: requirement
 id: BUS-WEB-0012
 class: BUS
+form: B1
 domain: WEB
 status: DRAFT
 area: audience-model
@@ -11,4 +12,4 @@ evidence_sufficiency: S2
 
 # BUS-WEB-0012
 
-Municipalities and institutions are not separated: same product, same argument, one job.
+For product, argument and job, a municipality and an institution count as one customer category.

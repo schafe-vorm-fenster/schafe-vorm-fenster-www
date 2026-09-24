@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0021
 class: FUN
+form: F0
 domain: WEB
 status: DRAFT
 area: pages

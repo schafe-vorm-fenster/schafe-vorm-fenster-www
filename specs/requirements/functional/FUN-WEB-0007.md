@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0007
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: jobs-and-navigation
@@ -11,4 +12,4 @@ evidence_sufficiency: S2
 
 # FUN-WEB-0007
 
-The job "know what is on" shall be fulfilled in place on the home page (place search, or live dates of the visitor's place), not offered as a click target.
+On the home page, the website SHALL fulfil the job "know what is on" in place — place search, or the live dates of the visitor's place — rather than offering it as a click target.

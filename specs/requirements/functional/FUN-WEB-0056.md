@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0056
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: personalization
@@ -11,4 +12,4 @@ evidence_sufficiency: S2
 
 # FUN-WEB-0056
 
-Regional content variation shall key on the visitor's state/county (e.g. Niedersachsen vs Mecklenburg-Vorpommern entry).
+When varying content regionally, the website SHALL key on the visitor's state or county (e.g. Niedersachsen vs Mecklenburg-Vorpommern entry).

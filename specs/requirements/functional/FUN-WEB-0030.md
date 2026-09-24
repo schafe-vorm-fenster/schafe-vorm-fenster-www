@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0030
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: relevance-and-proof
@@ -11,4 +12,4 @@ evidence_sufficiency: S2
 
 # FUN-WEB-0030
 
-Any list longer than three items shall be ordered by the relevance model, not chronologically.
+Where a list holds more than three items, the website SHALL order it by the relevance model rather than chronologically.

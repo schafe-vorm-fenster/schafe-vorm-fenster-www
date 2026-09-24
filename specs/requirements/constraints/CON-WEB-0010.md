@@ -2,6 +2,7 @@
 artefact: requirement
 id: CON-WEB-0010
 class: CON
+form: C1
 domain: WEB
 status: DRAFT
 area: scope-boundaries
@@ -11,4 +12,4 @@ evidence_sufficiency: S2
 
 # CON-WEB-0010
 
-The website does not explain features; help and instructions live in the app.
+The solution SHALL NOT explain product features — help and instructions live in the app — imposed by SRC-0001 "Boundaries".

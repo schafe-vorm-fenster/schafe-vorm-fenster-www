@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0076
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: seo
@@ -11,4 +12,4 @@ evidence_sufficiency: S2
 
 # FUN-WEB-0076
 
-Every page shall carry purposeful meta descriptions and titles derived from its page brief.
+On every page, the website SHALL carry a purposeful meta description and title derived from its page brief.

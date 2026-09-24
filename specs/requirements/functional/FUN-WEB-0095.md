@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0095
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: forms-and-leads
@@ -11,4 +12,4 @@ evidence_sufficiency: S3
 
 # FUN-WEB-0095
 
-External media (podcast, TV, social) shall be represented by own previews plus outbound links — never by third-party embeds.
+For external media (podcast, TV, social), the website SHALL present its own previews plus outbound links, never a third-party embed.

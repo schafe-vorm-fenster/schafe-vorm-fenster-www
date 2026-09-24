@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0092
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: forms-and-leads
@@ -11,4 +12,4 @@ evidence_sufficiency: S3
 
 # FUN-WEB-0092
 
-Data storage and delivery of submissions is owned by envoy-api; the website holds no submission data.
+For lead submissions, the website SHALL hold no submission data — storage and delivery of submissions are owned by envoy-api.

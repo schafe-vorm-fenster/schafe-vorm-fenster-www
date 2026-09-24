@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0033
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: relevance-and-proof
@@ -11,4 +12,4 @@ evidence_sufficiency: S2
 
 # FUN-WEB-0033
 
-Elements without `usage_rights: cleared` shall be excluded before scoring (hard filter), never down-weighted.
+Before scoring, the website SHALL exclude every element without `usage_rights: cleared` — a hard filter, never a down-weighting.

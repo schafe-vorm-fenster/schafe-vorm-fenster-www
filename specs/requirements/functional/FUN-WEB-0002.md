@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0002
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: jobs-and-navigation
@@ -11,4 +12,8 @@ evidence_sufficiency: S2
 
 # FUN-WEB-0002
 
-Navigation labels shall name jobs — never audiences and never product names. The four labels and targets are defined in SRC-0003 "Navigation".
+In navigation, the website SHALL label every target with its job — never with an audience and never with a product name.
+
+## Notes
+
+The four labels and their targets are defined in SRC-0003 "Navigation".

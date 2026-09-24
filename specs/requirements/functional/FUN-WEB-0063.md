@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0063
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: localization
@@ -11,4 +12,4 @@ evidence_sufficiency: S3
 
 # FUN-WEB-0063
 
-Language and country switching shall be plain link navigation (prefix change / TLD change).
+When the visitor switches language or country, the website SHALL do it as plain link navigation (prefix change / TLD change).

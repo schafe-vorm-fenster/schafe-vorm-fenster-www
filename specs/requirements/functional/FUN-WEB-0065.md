@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0065
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: localization
@@ -11,4 +12,4 @@ evidence_sufficiency: S3
 
 # FUN-WEB-0065
 
-A complete hreflang matrix shall link all domain × language combinations.
+On every full-site page, the website SHALL emit a complete hreflang matrix linking all domain × language combinations.

@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0062
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: localization
@@ -11,4 +12,8 @@ evidence_sufficiency: S3
 
 # FUN-WEB-0062
 
-Locale determination shall be entirely server-side: no middleware state, no cookies, no `Accept-Language` at render time. The URL is the preference.
+For every request, the website SHALL determine the locale entirely server-side — no middleware state, no cookies, no `Accept-Language` at render time.
+
+## Notes
+
+The URL is the preference.

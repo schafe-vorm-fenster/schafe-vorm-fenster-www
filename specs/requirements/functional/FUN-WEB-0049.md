@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0049
 class: FUN
+form: F0
 domain: WEB
 status: DRAFT
 area: place-search

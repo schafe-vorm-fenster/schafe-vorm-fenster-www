@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0103
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: rendering-and-resilience
@@ -11,4 +12,12 @@ evidence_sufficiency: S3
 
 # FUN-WEB-0103
 
-Tier 3: on empty cache, a build-time snapshot is served, so every module always has content.
+On empty cache, the website SHALL serve a build-time snapshot.
+
+## Rationale
+
+So that every module always has content.
+
+## Notes
+
+Tier 3 of the three-tier resilience model.

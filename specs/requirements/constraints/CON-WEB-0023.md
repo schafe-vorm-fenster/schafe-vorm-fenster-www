@@ -2,6 +2,7 @@
 artefact: requirement
 id: CON-WEB-0023
 class: CON
+form: C0
 domain: WEB
 status: DRAFT
 area: delivery-pipeline

@@ -20,9 +20,11 @@
  *  E11 Requirements carry a status from the requirement-shell contract
  *  E12 Tactical specs carry a `kind` and a status from the tactical contract
  *  E13 Source inventory rows carry a trust level from the source contract
+ *  E14 Requirements carry the grammar form their class prescribes
  *  W1  (warning) requirements not covered by any tactical spec
  *  W2  (warning) covered requirements discharged by no acceptance criterion
  *  W3  (warning) acceptance criteria no test references
+ *  W4  (warning) requirements whose statement is not yet in its class's form
  *
  * Exit code: number of errors (0 = green). Warnings never fail the run.
  *
@@ -53,9 +55,10 @@
  *    defines no glossary identifier at all. None of the three is this
  *    repository's artefact, so the type token stays and only the composition
  *    and the four-digit width are the method's. Owed in DEC-0085 §6.
- *  - Statement grammar and the fit-criterion form. The statements are
- *    shall-form prose, not the per-class slots of `method-statement-grammar`;
- *    nothing deterministic can be checked against them yet.
+ *  - Whether a statement really fills its slots. E14 checks that the form
+ *    token belongs to the class and W4 counts the statements still outside
+ *    it, but no regular expression can tell a filled slot from a plausible
+ *    sentence. The fit criterion is still owed entirely.
  *  - The chain. STRICT links requirement → need → goal; this repository links
  *    requirement → source → decision → question and requirement → tactical
  *    spec → acceptance criterion → test. E5/E6/E9/E10 and W1–W3 check the
@@ -159,6 +162,19 @@ const ACCEPTANCE_ID = new RegExp(`${TACTICAL_ID.source.replace(/\$$/, "")}-A\\d+
 
 const list = (set: Set<string>) => [...set].join(" | ");
 
+/**
+ * The grammar form a class prescribes (`@leafcutter-strict/method-statement-grammar`).
+ *
+ * The method gives one shape per class — F, Q, C, B — and the shell contract
+ * types `form` as that letter plus a digit, without saying what the digit
+ * enumerates. The method defines exactly one variant per class, so `1` is
+ * that variant and `0` says the description does not follow it yet: the
+ * statement is the one extraction wrote, kept word for word because recasting
+ * it would drop a qualification the form has no slot for. W4 counts them.
+ */
+const FORM_OF_CLASS: Record<string, string> = { FUN: "F", NFR: "Q", CON: "C", BUS: "B" };
+const notInForm: string[] = [];
+
 // ── File collection ──────────────────────────────────────────────────────
 
 function walk(dir: string): string[] {
@@ -256,8 +272,18 @@ for (const d of docs) {
       if (typeof status !== "string" || !REQUIREMENT_STATUS.has(status)) {
         err(d.file, `E11 ${id}: status ${JSON.stringify(status ?? null)} is not one of ${list(REQUIREMENT_STATUS)}`);
       }
-      // E3: the attributes the shell requires — statement, source, sufficiency
-      const statement = d.body.replace(/^#[^\n]*\n/m, "").trim();
+      // E14: the grammar form belongs to the class (`method-statement-grammar`)
+      const form = d.frontmatter?.form;
+      const expectedForm = FORM_OF_CLASS[id.slice(0, id.indexOf("-"))];
+      if (typeof form !== "string" || !new RegExp(`^${expectedForm}[01]$`).test(form)) {
+        err(d.file, `E14 ${id}: form ${JSON.stringify(form ?? null)} is not ${expectedForm}0 or ${expectedForm}1`);
+      } else if (form.endsWith("0")) {
+        notInForm.push(id);
+      }
+      // E3: the attributes the shell requires — statement, source, sufficiency.
+      // The statement is the body down to the first section heading; `##
+      // Rationale` and `## Notes` carry what the form has no slot for.
+      const statement = d.body.replace(/^#[^\n]*\n/m, "").split(/^## /m)[0].trim();
       const source = typeof d.frontmatter?.source === "string" ? d.frontmatter.source.trim() : "";
       const suff = d.frontmatter?.evidence_sufficiency;
       if (!statement) err(d.file, `E3 ${id}: empty statement`);
@@ -456,6 +482,11 @@ if (coveredNoAc.length) {
 
 const acsByLevel = new Map<string, number>();
 for (const { level } of acDefs.values()) acsByLevel.set(level, (acsByLevel.get(level) ?? 0) + 1);
+if (notInForm.length) {
+  warnings.push(`W4 ${notInForm.length}/${reqDefs.size} requirements are not yet in the slot form their class prescribes:`);
+  warnings.push(`   ${notInForm.sort().join(", ")}`);
+}
+
 const untested = [...acDefs.keys()].filter((id) => !referencedIds.has(id)).sort();
 if (untested.length) {
   warnings.push(`W3 ${untested.length}/${acDefs.size} acceptance criteria have no test referencing them:`);

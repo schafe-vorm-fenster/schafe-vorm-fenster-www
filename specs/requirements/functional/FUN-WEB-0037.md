@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0037
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: relevance-and-proof
@@ -11,4 +12,4 @@ evidence_sufficiency: S2
 
 # FUN-WEB-0037
 
-The full proof archive shall exist exactly once, as `/ueber-uns/archiv`, filterable by type, chronological.
+For the full proof archive, the website SHALL hold it exactly once, as `/ueber-uns/archiv`, filterable by type and chronological.

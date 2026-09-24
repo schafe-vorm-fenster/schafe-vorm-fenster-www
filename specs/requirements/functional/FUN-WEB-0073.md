@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0073
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: seo
@@ -11,4 +12,4 @@ evidence_sufficiency: S2
 
 # FUN-WEB-0073
 
-Canonical tags and per-domain, language-aware XML sitemaps shall be provided site-wide, coordinated with the hreflang matrix (FUN-WEB-0065).
+Site-wide, the website SHALL provide canonical tags and per-domain, language-aware XML sitemaps, coordinated with the hreflang matrix (FUN-WEB-0065).

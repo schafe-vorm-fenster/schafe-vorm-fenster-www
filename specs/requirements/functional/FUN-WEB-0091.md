@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0091
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: forms-and-leads
@@ -11,4 +12,8 @@ evidence_sufficiency: S3
 
 # FUN-WEB-0091
 
-The envoy widget shall be themed through CSS variables supplied by the website (brand kit values); the required variable set is part of the widget contract (Q-0022).
+Where the envoy widget is embedded, the website SHALL theme it through CSS variables carrying brand kit values.
+
+## Notes
+
+The required variable set is part of the widget contract (Q-0022).

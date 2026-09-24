@@ -2,6 +2,7 @@
 artefact: requirement
 id: CON-WEB-0003
 class: CON
+form: C1
 domain: WEB
 status: DRAFT
 area: technical-constraints
@@ -11,4 +12,4 @@ evidence_sufficiency: S3
 
 # CON-WEB-0003
 
-The brand kit is binding: typography (Atkinson Hyperlegible Next, DEC-0043), tokens, logos and imagery rules from `@schafe-vorm-fenster/brand-design` (tokens, assets) and `@schafe-vorm-fenster/brand-identity` (imagery, tone) per DEC-0044.
+The solution SHALL take typography (Atkinson Hyperlegible Next), tokens, logos and imagery rules from `@schafe-vorm-fenster/brand-design` (tokens, assets) and `@schafe-vorm-fenster/brand-identity` (imagery, tone), imposed by DEC-0043 and DEC-0044.

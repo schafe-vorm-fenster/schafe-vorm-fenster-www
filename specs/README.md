@@ -138,9 +138,12 @@ specs/
 
 ## Conventions
 
-- Statements in shall-form, status `DRAFT` until their decision point. The
-  status vocabulary is the requirement-shell contract's, and `check:specs`
-  reads it out of the installed package (E11).
+- Statements in the slot form their class prescribes
+  (`@leafcutter-strict/method-statement-grammar`), recorded on the artefact
+  as `form`; where a statement is not in its form yet, `form` ends in `0`
+  and `check:specs` W4 counts it. The status vocabulary is the
+  requirement-shell contract's, and `check:specs` reads it out of the
+  installed package (E11).
 - Every requirement carries source locator(s) and an evidence level
   `S0–S3` (`@leafcutter-strict/method-evidence-sufficiency-rating`; the
   project's reading of it is in `sources/README.md`).

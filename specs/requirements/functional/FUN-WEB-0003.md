@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0003
 class: FUN
+form: F0
 domain: WEB
 status: DRAFT
 area: jobs-and-navigation

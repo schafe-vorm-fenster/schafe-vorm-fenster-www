@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0055
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: personalization
@@ -11,4 +12,4 @@ evidence_sufficiency: S2
 
 # FUN-WEB-0055
 
-Entry context (referrer, UTM, campaign, deep link) shall preselect focus job and proof type per the context matrix (SRC-0002).
+From the entry context (referrer, UTM, campaign, deep link), the website SHALL preselect the focus job and proof type per the context matrix (SRC-0002).

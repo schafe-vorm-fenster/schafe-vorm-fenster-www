@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0027
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: pages
@@ -11,4 +12,4 @@ evidence_sufficiency: S3
 
 # FUN-WEB-0027
 
-The 500 page is statically pre-rendered and minimal — no live modules, no search, nothing that can itself fail.
+For the 500 page, the website SHALL serve a statically pre-rendered, minimal page — no live modules, no search, nothing that can itself fail.

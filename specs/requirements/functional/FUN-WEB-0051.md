@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0051
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: personalization
@@ -11,4 +12,4 @@ evidence_sufficiency: S2
 
 # FUN-WEB-0051
 
-Stage 0 shall be complete and convincing on its own.
+At knowledge stage 0, the website SHALL be complete and convincing on its own.

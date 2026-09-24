@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0006
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: jobs-and-navigation
@@ -11,4 +12,8 @@ evidence_sufficiency: S2
 
 # FUN-WEB-0006
 
-The last block of every page shall be the CTA of its focus job (identical to the primary conversion), preceded by the context band. Section order and colour rhythm follow SRC-0014 "Page Rhythm".
+On every page, the website SHALL make the last block the CTA of the page's focus job — identical to the primary conversion and preceded by the context band.
+
+## Notes
+
+Section order and colour rhythm follow SRC-0014 "Page Rhythm".

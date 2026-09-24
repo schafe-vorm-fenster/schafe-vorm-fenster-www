@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0066
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: localization
@@ -11,4 +12,4 @@ evidence_sufficiency: S3
 
 # FUN-WEB-0066
 
-Phase 1 ships `.de` in German and English.
+In phase 1, the website SHALL serve `.de` in German and English.

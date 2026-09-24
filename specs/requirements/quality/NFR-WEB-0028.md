@@ -2,6 +2,7 @@
 artefact: requirement
 id: NFR-WEB-0028
 class: NFR
+form: Q0
 domain: WEB
 status: DRAFT
 area: privacy

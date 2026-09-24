@@ -36,6 +36,36 @@ functional — and the `requirement-shell` contract fixes the four tokens:
 The Volere type number the method also asks for is not recorded yet; that
 row of DEC-0085 §6 stays open.
 
+## Statement grammar
+
+`@leafcutter-strict/method-statement-grammar` gives each class one sentence
+shape, and the requirement-shell contract records which one the description
+follows in `form`:
+
+| Class | Form | Shape |
+| --- | --- | --- |
+| Functional | F | `<condition>`, the `<actor>` SHALL `<action>` `<object>` |
+| Quality | Q | `<scale>` of `<object>` SHALL be `<operator>` `<value>` `<unit>` measured by `<meter>` |
+| Constraint | C | The solution SHALL `<limit>`, imposed by `<mandate and clause>` |
+| Business rule | B | `<condition>`, `<subject>` `<is or counts as>` `<consequence>` |
+
+The method defines exactly one variant per class, so the digit the contract
+asks for reads: **`1` — the description is in that form**; **`0` — it is
+not yet**, and the statement is the one extraction wrote, kept word for
+word because recasting it would drop a qualification no slot holds. The
+method's own rule decides which: *"Compound statements. One modal, one
+predicate. A statement joined by 'and' is split."* Splitting makes new
+artefacts, which this wave did not do.
+
+`check:specs` E14 checks the form token against the class; W4 counts the
+`0`s and names them. They are the burn-down, and they are honest.
+
+Where a statement carried material the form has no slot for — the reason
+behind the rule, a pointer to where something else is defined — that
+material moved into a `## Rationale` or `## Notes` section of the same
+document, word for word. The shell contract types `rationale` as its own
+field for exactly that reason. Nothing was deleted.
+
 The identifiers themselves are no longer a deviation. DEC-0086 moved every
 family onto `<TYPE>-<DOMAIN>-<NNNN>`, taking the class tokens from the
 requirement-shell contract, without reassigning a single number:

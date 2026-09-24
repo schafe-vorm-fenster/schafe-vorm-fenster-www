@@ -2,6 +2,7 @@
 artefact: requirement
 id: CON-WEB-0011
 class: CON
+form: C0
 domain: WEB
 status: DRAFT
 area: scope-boundaries

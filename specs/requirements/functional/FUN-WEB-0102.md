@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0102
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: rendering-and-resilience
@@ -11,4 +12,8 @@ evidence_sufficiency: S3
 
 # FUN-WEB-0102
 
-Tier 2: on API failure, the last cached response is served, visibly labelled with its freshness ("Stand: …").
+On API failure, the website SHALL serve the last cached response, visibly labelled with its freshness ("Stand: …").
+
+## Notes
+
+Tier 2 of the three-tier resilience model.

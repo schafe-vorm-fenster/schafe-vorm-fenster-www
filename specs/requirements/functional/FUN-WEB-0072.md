@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0072
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: seo
@@ -11,4 +12,8 @@ evidence_sufficiency: S2
 
 # FUN-WEB-0072
 
-Everything structured shall be marked up structured: JSON-LD metadata wherever applicable, plus HTML microdata/microformats (exact vocabulary set: to be defined in the tactical spec).
+Wherever content is structured, the website SHALL mark it up structured: JSON-LD metadata plus HTML microdata/microformats.
+
+## Notes
+
+The exact vocabulary set is defined in the tactical spec.

@@ -2,6 +2,7 @@
 artefact: requirement
 id: CON-WEB-0001
 class: CON
+form: C0
 domain: WEB
 status: DRAFT
 area: technical-constraints

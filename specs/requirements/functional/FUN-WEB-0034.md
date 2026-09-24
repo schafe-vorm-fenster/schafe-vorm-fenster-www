@@ -2,6 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0034
 class: FUN
+form: F1
 domain: WEB
 status: DRAFT
 area: relevance-and-proof
@@ -11,4 +12,4 @@ evidence_sufficiency: S2
 
 # FUN-WEB-0034
 
-The spread rule of SRC-0002 (positions 1–2 top scorers; from position 3 furthest-on-geo-axis candidate at ≥50 % of top score; alternate near/far) shall produce the sequence without hand curation.
+In every proof stream, the website SHALL produce the sequence from the spread rule of SRC-0002 (positions 1–2 top scorers; from position 3 furthest-on-geo-axis candidate at ≥50 % of top score; alternate near/far), without hand curation.
