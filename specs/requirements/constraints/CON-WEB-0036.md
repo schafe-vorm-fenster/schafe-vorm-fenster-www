@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: privacy
+needs: [NEED-WEB-0017, NEED-WEB-0022, NEED-WEB-0029]
 source:
   source_id: DEC-0028
   loc: "specs/decisions/DEC-0028--single-etracker-account.md#L13"

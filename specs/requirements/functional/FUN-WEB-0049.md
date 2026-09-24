@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: place-search
+needs: [NEED-WEB-0002]
 source:
   source_id: DEC-0029
   loc: "specs/decisions/DEC-0029--app-handover-via-slugs.md#L12"

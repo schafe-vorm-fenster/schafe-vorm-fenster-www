@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
+needs: [NEED-WEB-0024, NEED-WEB-0025]
 source:
   source_id: SRC-0003
   loc: "UNKNOWN"

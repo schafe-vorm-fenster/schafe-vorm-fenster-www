@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
+needs: [UNKNOWN]
 source:
   source_id: DEC-0027
   loc: "specs/decisions/DEC-0027--legal-multilanguage-same-import.md#L13"

@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: localization
+needs: [NEED-WEB-0006]
 source:
   source_id: SRC-0007
   loc: "community-calendar/docs/localization-architecture.md#L354"

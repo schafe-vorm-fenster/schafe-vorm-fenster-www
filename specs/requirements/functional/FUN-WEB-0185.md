@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
+needs: [NEED-WEB-0015, NEED-WEB-0025]
 source:
   source_id: DEC-0010
   loc: "specs/decisions/DEC-0010--briefing-via-google-calendar.md#L30"

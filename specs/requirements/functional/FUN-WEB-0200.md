@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: rendering-and-resilience
+needs: [NEED-WEB-0005]
 source:
   source_id: DEC-0056
   loc: "specs/decisions/DEC-0056--design-system-delivered.md#L35"

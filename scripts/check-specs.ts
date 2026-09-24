@@ -39,6 +39,12 @@
  *      addressee and a concrete request
  *  E23 STRICT decision records: the identifier, the fields both contracts
  *      require, the status enum, and a locator on every piece of evidence
+ *  E24 Every requirement names at least one need — an existing `NEED-WEB-####`
+ *      or the contract's `UNKNOWN` (`method-chain-linkage` step 1, upward)
+ *  E25 Every need is the need contract's shape, names at least one existing
+ *      goal, and names a stakeholder the specification document lists
+ *  E26 Every goal is the goal contract's shape and falls inside scope — it
+ *      names the specification document, and its parent goal resolves
  *  W1  (warning) requirements not covered by any tactical spec
  *  W2  (warning) covered requirements discharged by no acceptance criterion
  *  W3  (warning) acceptance criteria no test references
@@ -49,6 +55,9 @@
  *  W7  (report) the fit-criterion fill rate, because bound 2 of
  *      POL-GRADED-BY-IMPACT escalates on an UNKNOWN criterion
  *  W8  (report) the locator fill rate, and what stays unlocatable
+ *  W9  (report) chain linkage, both directions: the five findings
+ *      `method-chain-linkage` names, each as a fraction with its numerator
+ *      and denominator, "never as a bare percentage"
  *
  * Exit code: number of errors (0 = green). Warnings never fail the run.
  *
@@ -83,10 +92,10 @@
  *    token belongs to the class and W4 counts the statements still outside
  *    it, but no regular expression can tell a filled slot from a plausible
  *    sentence. The fit criterion is still owed entirely.
- *  - The chain. STRICT links requirement → need → goal; this repository links
- *    requirement → source → decision → question and requirement → tactical
- *    spec → acceptance criterion → test. E5/E6/E9/E10 and W1–W3 check the
- *    chain this repository actually has.
+ *  - Which missing link is a defect of the artefact and which means the need
+ *    was never real. `method-chain-linkage` is explicit that "the counting is
+ *    deterministic and belongs to the validator" and that the method covers
+ *    what the numbers do not say. E24–E26 and W9 count; DEC-0103 reads.
  *  - Whether the excerpt really supports the statement. E19 checks that a
  *    locator is a position and that the excerpt is inside the method's
  *    25 words; only reading the source says whether those words carry the
@@ -191,6 +200,46 @@ const SOURCE_ID = idPattern(sourceInventory, "sources.[].id");
  */
 const CONFLICT_ID = /^CONF-\d{4}$/;
 const DEMAND_ID = /^DEM-\d{4}$/;
+
+/**
+ * The chain's two upper levels (DEC-0101, DEC-0102).
+ *
+ * `@leafcutter-os/schemas` is the only installed package that types a goal or
+ * a need, and it types them as Zod modules rather than JSON Schema, so
+ * `contract()` cannot read them and `idPattern()` cannot either. The module is
+ * ESM-only and this script runs as CommonJS, so it is read as text rather than
+ * imported: the identifier pattern and the field list come out of the shipped
+ * `goal.schema.mjs` and `need.schema.mjs`, and a shape that stops matching
+ * fails this check loudly instead of passing unnoticed. The package is not a
+ * direct dependency of this repository — it arrives underneath
+ * `@leafcutter-strict/library-schemas` — so it is resolved from there.
+ */
+const OS_SPEC_DIR = dirname(
+  createRequire(
+    createRequire(import.meta.url).resolve("@leafcutter-strict/library-schemas/pack.mjs"),
+  ).resolve("@leafcutter-os/schemas/spec"),
+);
+
+interface ZodContract {
+  id: RegExp;
+  fields: string[];
+}
+
+function zodContract(name: string): ZodContract {
+  const src = readFileSync(join(OS_SPEC_DIR, `${name}.schema.mjs`), "utf8");
+  const body = src.split(/z\.object\(\{/)[1];
+  if (!body) throw new Error(`@leafcutter-os/schemas: no object literal in ${name}.schema.mjs`);
+  const declared = body.match(/id:\s*z\.string\(\)\.regex\((\/.+?\/)\)/)?.[1];
+  if (!declared) throw new Error(`@leafcutter-os/schemas: no id pattern in ${name}.schema.mjs`);
+  const fields = [...body.matchAll(/^\s{2}(\w+):\s*z\./gm)].map((m) => m[1]);
+  if (fields.length < 5) throw new Error(`@leafcutter-os/schemas: ${name} declares ${fields.length} fields`);
+  return { id: new RegExp(declared.slice(1, -1)), fields };
+}
+
+const goalContract = zodContract("goal");
+const needContract = zodContract("need");
+const GOAL_ID = goalContract.id;
+const NEED_ID = needContract.id;
 
 /** Local families: the method defines no identifier for any of the three. */
 const DECISION_ID = /^DEC-\d{4}$/;
@@ -688,6 +737,13 @@ const tsDefs = new Set<string>();
 const glDefs = new Set<string>();
 const confDefs = new Set<string>();
 const demDefs = new Set<string>();
+/** The chain's upper two levels, and what each one links to (E24–E26, W9). */
+const goalDefs = new Map<string, { parent: string | null; scope: string }>();
+const needDefs = new Map<string, { goals: string[]; stakeholder: string }>();
+const reqNeeds = new Map<string, string[]>();
+/** The specification document the chain answers to, and the stakeholders it lists. */
+let ssdIdentifier = "";
+let ssdStakeholders: string[] = [];
 
 /**
  * A requirement is one document (wave 2).
@@ -744,6 +800,19 @@ for (const d of docs) {
       const suff = d.frontmatter?.evidence_sufficiency;
       if (!statement) err(d.file, `E3 ${id}: empty statement`);
       if (d.frontmatter?.source === undefined) err(d.file, `E3 ${id}: no source`);
+      // E24: the requirement shell's `needs` is required with `minItems: 1` —
+      // "At least one. A requirement without a need is a defect of the run,
+      // not of the source." `UNKNOWN` is the contract's own value for a field
+      // the input does not support, and W9 counts it rather than hiding it.
+      const needs = d.frontmatter?.needs;
+      if (!Array.isArray(needs) || needs.length < 1) {
+        err(d.file, `E24 ${id}: needs is ${JSON.stringify(needs ?? null)}, not a list of at least one`);
+      } else {
+        reqNeeds.set(id, needs.map(String));
+        for (const n of needs)
+          if (typeof n !== "string" || (n !== "UNKNOWN" && !NEED_ID.test(n)))
+            err(d.file, `E24 ${id}: needs entry ${JSON.stringify(n)} is neither a NEED id nor UNKNOWN`);
+      }
       if (typeof suff !== "string" || !SUFFICIENCY.has(suff))
         err(d.file, `E3 ${id}: sufficiency ${JSON.stringify(suff ?? null)} is not one of ${list(SUFFICIENCY)}`);
       else sufficiencyOf.set(id, suff);
@@ -778,6 +847,47 @@ for (const d of docs) {
       checkProvenance(d, id);
       checkConflict(d, id);
     } else err(d.file, "E21 conflict without valid frontmatter id (CONF-####)");
+  }
+  if (/\/goals\/GOAL-[A-Z]+-\d{4}\.md$/.test(d.file)) {
+    const id = String(d.frontmatter?.id ?? "");
+    if (!GOAL_ID.test(id)) {
+      err(d.file, "E26 goal without valid frontmatter id (GOAL-<DOMAIN>-####)");
+    } else if (goalDefs.has(id)) {
+      err(d.file, `E26 duplicate goal id ${id}`);
+    } else {
+      if (!rel(d.file).endsWith(`/${id}.md`)) err(d.file, `E26 ${id}: file name does not carry the identifier`);
+      for (const field of goalContract.fields)
+        if (d.frontmatter?.[field] === undefined)
+          err(d.file, `E26 ${id}: no \`${field}\` — @leafcutter-os/schemas' goalSchema requires it`);
+      if (d.frontmatter?.level !== "L1") err(d.file, `E26 ${id}: level is ${JSON.stringify(d.frontmatter?.level ?? null)}, not L1`);
+      const parent = d.frontmatter?.contributes_to;
+      goalDefs.set(id, { parent: typeof parent === "string" ? parent : null, scope: String(d.frontmatter?.scope ?? "") });
+      statuses.push([d.file, id, String(d.frontmatter?.status ?? "?")]);
+      checkVersion(d, id);
+    }
+  }
+  if (/\/needs\/NEED-[A-Z]+-\d{4}\.md$/.test(d.file)) {
+    const id = String(d.frontmatter?.id ?? "");
+    if (!NEED_ID.test(id)) {
+      err(d.file, "E25 need without valid frontmatter id (NEED-<DOMAIN>-####)");
+    } else if (needDefs.has(id)) {
+      err(d.file, `E25 duplicate need id ${id}`);
+    } else {
+      if (!rel(d.file).endsWith(`/${id}.md`)) err(d.file, `E25 ${id}: file name does not carry the identifier`);
+      for (const field of needContract.fields)
+        if (d.frontmatter?.[field] === undefined)
+          err(d.file, `E25 ${id}: no \`${field}\` — @leafcutter-os/schemas' needSchema requires it`);
+      if (d.frontmatter?.level !== "L2") err(d.file, `E25 ${id}: level is ${JSON.stringify(d.frontmatter?.level ?? null)}, not L2`);
+      const goals = d.frontmatter?.goals;
+      if (!Array.isArray(goals) || goals.length < 1)
+        err(d.file, `E25 ${id}: goals is ${JSON.stringify(goals ?? null)} — a need names at least one goal`);
+      needDefs.set(id, {
+        goals: Array.isArray(goals) ? goals.map(String) : [],
+        stakeholder: String(d.frontmatter?.stakeholder ?? ""),
+      });
+      statuses.push([d.file, id, String(d.frontmatter?.status ?? "?")]);
+      checkVersion(d, id);
+    }
   }
   if (/demand-register\.md$/.test(d.file)) {
     for (const line of d.body.split("\n")) {
@@ -837,6 +947,14 @@ for (const d of docs) {
   }
   if (/\.ssd\.md$/.test(d.file)) {
     const ssdId = String(d.frontmatter?.id ?? "?");
+    ssdIdentifier = ssdId;
+    // The specification-document contract's `stakeholders[]`: "Who holds a
+    // position, in which role, with what mandate. A need may only name a
+    // stakeholder listed here." E25 reads the list from here and nowhere else.
+    const declared = d.frontmatter?.stakeholders;
+    if (!Array.isArray(declared) || declared.length < 1)
+      err(d.file, `E25 ${ssdId}: no stakeholders[] — a need may only name a stakeholder the specification lists`);
+    else ssdStakeholders = declared.map(String);
     checkVersion(d, ssdId);
     // The specification document carries a status too, and `decision_policy_ref`
     // is the contract's own field for the policy that governs it (DEC-0088).
@@ -857,7 +975,7 @@ for (const d of docs) {
 
 // ── E5: every REFERENCE resolves ─────────────────────────────────────────
 
-const REF_PATTERNS: Array<[RegExp, (id: string) => boolean, string]> = [
+const REF_PATTERNS: Array<[RegExp, (id: string) => boolean, string, boolean?]> = [
   [scanner(REQUIREMENT_ID), (id) => reqDefs.has(id), "requirement"],
   [scanner(DECISION_ID), (id) => decDefs.has(id), "decision"],
   [scanner(QUESTION_ID), (id) => qDefs.has(id), "question"],
@@ -866,7 +984,21 @@ const REF_PATTERNS: Array<[RegExp, (id: string) => boolean, string]> = [
   [scanner(GLOSSARY_ID), (id) => glDefs.has(id), "glossary term"],
   [scanner(CONFLICT_ID), (id) => confDefs.has(id), "conflict"],
   [scanner(DEMAND_ID), (id) => demDefs.has(id), "demand"],
+  [scanner(GOAL_ID), (id) => goalDefs.has(id), "goal", true],
+  [scanner(NEED_ID), (id) => needDefs.has(id), "need", true],
 ];
+
+/**
+ * The fourth element: skip block quotations for this family.
+ *
+ * `method-identifier-and-locator-schema` composes its worked example as
+ * `NEED-ACC-0004`, and DEC-0086 quotes that procedure verbatim. `ACC` is not
+ * a domain of this repository and the quotation is not a citation — it is the
+ * method saying what an identifier looks like. The exemption is only for the
+ * two families whose contracts ship such an example, and only inside a
+ * quotation, so a real citation outside one is still checked.
+ */
+const unquoted = (raw: string) => raw.split("\n").filter((l) => !/^\s*>/.test(l)).join("\n");
 
 /**
  * The identifier map is the generated record of the rename (DEC-0086): it holds
@@ -918,8 +1050,8 @@ const DECISION_RECORD = /\/decisions\/DEC-\d{4}--/;
 
 for (const d of docs) {
   if (GENERATED.test(d.file)) continue;
-  for (const [re, exists, kind] of REF_PATTERNS) {
-    for (const m of d.raw.matchAll(re)) {
+  for (const [re, exists, kind, skipQuotes] of REF_PATTERNS) {
+    for (const m of (skipQuotes ? unquoted(d.raw) : d.raw).matchAll(re)) {
       if (exists(m[0])) continue;
       if (NAMES_RETIRED.test(d.file) && retired.has(m[0])) continue;
       err(d.file, `E5 reference to unknown ${kind} ${m[0]}`);
@@ -993,6 +1125,64 @@ for (const file of walk(join(SPECS_DIR, "decisions")).filter((f) => /\/SDR-[\d-]
 
 const sdrIds = new Set(sdrs.map((r) => r.id));
 if (sdrIds.size !== sdrs.length) err("specs/decisions", "E23 two decision records share an identifier");
+
+// ── E25/E26 across the chain, and W9 both ways ───────────────────────────
+//
+// `method-chain-linkage` step 1, verbatim: "Every requirement names at least
+// one need; every need names at least one goal and one stakeholder listed in
+// the specification; every goal falls inside scope." E24 did the first clause
+// inside the requirement loop; the other two need the whole registry, so they
+// run here.
+
+for (const [id, need] of needDefs) {
+  for (const g of need.goals)
+    if (!goalDefs.has(g)) err("specs/needs", `E25 ${id}: names goal ${g}, which no goal document defines`);
+  if (!ssdStakeholders.includes(need.stakeholder))
+    err(
+      "specs/needs",
+      `E25 ${id}: stakeholder "${need.stakeholder}" is not one the specification lists ` +
+        `(${ssdStakeholders.join(", ") || "none"})`,
+    );
+}
+
+for (const [id, goal] of goalDefs) {
+  // "every goal falls inside scope" — the goal names the specification
+  // document whose scope it falls inside, and that document exists.
+  if (!goal.scope || goal.scope !== ssdIdentifier)
+    err("specs/goals", `E26 ${id}: scope is ${JSON.stringify(goal.scope || null)}, not the specification document ${ssdIdentifier || "(none)"}`);
+  if (goal.parent && !goalDefs.has(goal.parent))
+    err("specs/goals", `E26 ${id}: contributes_to ${goal.parent}, which no goal document defines`);
+  if (goal.parent === id) err("specs/goals", `E26 ${id}: contributes_to itself`);
+}
+
+/**
+ * W9 — the linkage report (`method-chain-linkage` steps 3 and 4).
+ *
+ * Five findings, each with the repair the method names, and coverage "as a
+ * fraction with its numerator and denominator — never as a bare percentage".
+ * A goal counts as covered when a need names it **or** when a goal that
+ * contributes to it is covered: the parent chain is the hub's own
+ * `contributes_to`, read not invented (DEC-0101 §3), and a business goal that
+ * eleven conversion goals pay into is not an uncovered goal.
+ */
+const orphanRequirements = [...reqNeeds].filter(([, ns]) => ns.every((n) => n === "UNKNOWN")).map(([id]) => id).sort();
+const needsWithARequirement = new Set<string>();
+for (const ns of reqNeeds.values()) for (const n of ns) if (n !== "UNKNOWN") needsWithARequirement.add(n);
+const uncoveredNeeds = [...needDefs.keys()].filter((n) => !needsWithARequirement.has(n)).sort();
+const orphanNeeds = [...needDefs].filter(([, n]) => n.goals.length === 0).map(([id]) => id).sort();
+
+const goalsNamedByANeed = new Set<string>();
+for (const n of needDefs.values()) for (const g of n.goals) goalsNamedByANeed.add(g);
+const coveredGoals = new Set(goalsNamedByANeed);
+for (let moved = true; moved; ) {
+  moved = false;
+  for (const [id, goal] of goalDefs)
+    if (goal.parent && coveredGoals.has(id) && !coveredGoals.has(goal.parent)) {
+      coveredGoals.add(goal.parent);
+      moved = true;
+    }
+}
+const uncoveredGoals = [...goalDefs.keys()].filter((g) => !coveredGoals.has(g)).sort();
 
 // ── E20: every registered source carries a vector ────────────────────────
 
@@ -1349,6 +1539,26 @@ if (!boundRules || !boundPolicy) {
   );
 }
 
+const chainLine = (label: string, ids: string[], of: number, repair: string) =>
+  warnings.push(`   ${label}: ${ids.length}/${of}${ids.length ? ` — ${ids.join(", ")} · ${repair}` : ""}`);
+
+warnings.push(
+  `W9 chain linkage (method-chain-linkage). Upward: ${reqNeeds.size - orphanRequirements.length}/${reqNeeds.size} ` +
+    `requirements name a need, ${needDefs.size - orphanNeeds.length}/${needDefs.size} needs name a goal, ` +
+    `${goalDefs.size}/${goalDefs.size} goals name the specification. Downward: ` +
+    `${needsWithARequirement.size}/${needDefs.size} needs have a requirement, ` +
+    `${coveredGoals.size}/${goalDefs.size} goals have a need below them, directly or through contributes_to.`,
+);
+chainLine("orphan requirement", orphanRequirements, reqNeeds.size, "find the need, or withdraw the requirement");
+chainLine("orphan need", orphanNeeds, needDefs.size, "find the goal, or question the need");
+chainLine("uncovered need", uncoveredNeeds, needDefs.size, "the need is unimplemented — or unnoticed");
+chainLine("uncovered goal", uncoveredGoals, goalDefs.size, "the goal is aspiration, not work");
+warnings.push(
+  `   unverified requirement: the method's fifth finding is W7 and W3 below — ` +
+    `${fitUnknown}/${fitMeasured + fitUnknown} requirements have no test below their fit criterion. ` +
+    `It is counted once, there.`,
+);
+
 warnings.push(
   `W8 source locator: ${locResolved}/${locResolved + locUnknown} requirements resolve to a position in their source; ` +
     `${locUnknown} carry UNKNOWN because the source supports no position scheme or names no document. ` +
@@ -1383,7 +1593,7 @@ if (untested.length) {
 
 // ── Report ───────────────────────────────────────────────────────────────
 
-console.log(`specs check: ${files.length} files · ${reqDefs.size} requirements · ${decDefs.size} decisions · ${qDefs.size} questions · ${srcDefs.size} sources · ${tsDefs.size} tactical specs · ${glDefs.size} glossary terms · ${acDefs.size} acceptance criteria · ${confDefs.size} conflicts · ${demDefs.size} demands · ${sdrs.length} decision records`);
+console.log(`specs check: ${files.length} files · ${goalDefs.size} goals · ${needDefs.size} needs · ${reqDefs.size} requirements · ${decDefs.size} decisions · ${qDefs.size} questions · ${srcDefs.size} sources · ${tsDefs.size} tactical specs · ${glDefs.size} glossary terms · ${acDefs.size} acceptance criteria · ${confDefs.size} conflicts · ${demDefs.size} demands · ${sdrs.length} decision records`);
 if (acDefs.size) {
   const pyramid = [...LEVELS].map((l) => `${l} ${acsByLevel.get(l) ?? 0}`).join(" · ");
   console.log(`  verification pyramid: ${pyramid}`);

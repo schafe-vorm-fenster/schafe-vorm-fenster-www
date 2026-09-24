@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
+needs: [NEED-WEB-0010, NEED-WEB-0014]
 source:
   source_id: SRC-0003
   loc: "go-to-market-os/concept/website-information-architecture.concept.md#L107"

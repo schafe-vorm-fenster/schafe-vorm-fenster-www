@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
+needs: [NEED-WEB-0030]
 source:
   source_id: DEC-0034
   loc: "specs/decisions/DEC-0034--region-interim-active-examples.md#L13"

@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: live-data
+needs: [NEED-WEB-0009]
 source:
   source_id: SRC-0001
   loc: "go-to-market-os/concept/website-communication-principles.concept.md#L270"

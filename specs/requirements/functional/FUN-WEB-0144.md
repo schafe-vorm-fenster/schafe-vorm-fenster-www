@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
+needs: [UNKNOWN]
 source:
   source_id: DEC-0026
   loc: "specs/decisions/DEC-0026--localize-everything-but-artifacts.md#L13"

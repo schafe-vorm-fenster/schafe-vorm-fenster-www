@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: delivery-pipeline
+needs: [UNKNOWN]
 source:
   source_id: DEC-0031
   loc: "specs/decisions/DEC-0031--two-stage-deployment-model.md#L17"

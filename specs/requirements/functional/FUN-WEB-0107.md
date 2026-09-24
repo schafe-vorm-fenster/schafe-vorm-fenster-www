@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: performance
+needs: [NEED-WEB-0005, NEED-WEB-0014]
 source:
   source_id: SRC-0007
   loc: "community-calendar/docs/performance-budget.md#L37"

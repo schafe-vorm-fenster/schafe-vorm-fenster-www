@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: accessibility
+needs: [NEED-WEB-0006]
 source:
   source_id: DEC-0012
   loc: "specs/decisions/DEC-0012--bfsg-and-legal-import.md#L11"

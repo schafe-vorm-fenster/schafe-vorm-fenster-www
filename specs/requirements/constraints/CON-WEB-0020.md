@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: delivery-pipeline
+needs: [UNKNOWN]
 source:
   source_id: DEC-0035
   loc: "specs/decisions/DEC-0035--domain-layout-and-preview.md#L18"

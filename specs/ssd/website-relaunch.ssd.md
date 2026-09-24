@@ -6,6 +6,12 @@ version: 0.1.0
 decision_policy_ref: POL-GRADED-BY-IMPACT
 date: 2026-09-09
 sources: [SRC-0001, SRC-0003, SRC-0006, SRC-0008, SRC-0009]
+# The specification-document contract's `stakeholders[]`, read off the
+# `## Stakeholders` section below and carrying nothing the section does not
+# already say. A need may name one of these and nothing else (DEC-0102 §3);
+# `tech-leaders` is out of scope and is therefore not one of them.
+stakeholders: [rural-residents, actors, municipalities, institutions, counties, companies]
+goals: [GOAL-WEB-0001, GOAL-WEB-0002]
 ---
 
 # SSD — Schafe vorm Fenster Website Relaunch

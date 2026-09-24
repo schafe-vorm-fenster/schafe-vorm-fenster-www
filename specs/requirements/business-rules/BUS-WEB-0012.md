@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: audience-model
+needs: [NEED-WEB-0015, NEED-WEB-0020]
 source:
   source_id: SRC-0001
   loc: "go-to-market-os/concept/website-communication-principles.concept.md#L310"

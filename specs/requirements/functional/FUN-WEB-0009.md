@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: jobs-and-navigation
+needs: [NEED-WEB-0007]
 source:
   source_id: SRC-0001
   loc: "go-to-market-os/concept/website-communication-principles.concept.md#L291"

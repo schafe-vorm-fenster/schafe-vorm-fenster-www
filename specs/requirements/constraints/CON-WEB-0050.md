@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: technical-constraints
+needs: [NEED-WEB-0005]
 source:
   source_id: SRC-0006
   loc: "UNKNOWN"

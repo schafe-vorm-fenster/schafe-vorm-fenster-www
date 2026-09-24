@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: rendering-and-resilience
+needs: [NEED-WEB-0025]
 source:
   source_id: DEC-0019
   loc: "specs/decisions/DEC-0019--three-tier-data-resilience.md#L23"

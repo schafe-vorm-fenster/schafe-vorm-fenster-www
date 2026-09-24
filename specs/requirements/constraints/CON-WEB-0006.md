@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: technical-constraints
+needs: [UNKNOWN]
 source:
   source_id: DEC-0023
   loc: "specs/decisions/DEC-0023--three-phases-and-strict.md#L13"

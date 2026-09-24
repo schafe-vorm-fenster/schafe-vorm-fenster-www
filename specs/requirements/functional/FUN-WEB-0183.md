@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
+needs: [NEED-WEB-0020, NEED-WEB-0026]
 source:
   source_id: DEC-0009
   loc: "specs/decisions/DEC-0009--envoy-lead-widget.md#L17"

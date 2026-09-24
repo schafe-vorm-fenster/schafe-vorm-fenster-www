@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: forms-and-leads
+needs: [NEED-WEB-0015, NEED-WEB-0025]
 source:
   source_id: UNKNOWN
   loc: "UNKNOWN"

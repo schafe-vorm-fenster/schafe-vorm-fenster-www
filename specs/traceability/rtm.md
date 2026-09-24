@@ -109,3 +109,44 @@ Goals: `@schafe-vorm-fenster/goals` · Needs: audience
 `communication_goals` / `information_needs` in `@schafe-vorm-fenster/audiences`
 · Conversions: `@schafe-vorm-fenster/goals`. See
 `ssd/website-relaunch.ssd.md`.
+
+## Chain layer — goal → need → requirement (DEC-0101, DEC-0102, DEC-0103)
+
+The upper two levels of `method-chain-linkage` exist since 2026-09-24:
+`specs/goals/` (13 `GOAL-WEB-####`, references into
+`@schafe-vorm-fenster/goals`) and `specs/needs/` (34 `NEED-WEB-####`, read off
+the audience files and the communication principles). Each requirement's own
+`needs[]` is the authoritative link; the table below is the area-level view,
+and `check:specs` W9 is the report.
+
+| Area | Needs the area's requirements name |
+| --- | --- |
+| accessibility | NEED-WEB-0006 ×19 |
+| audience-model | NEED-WEB-0015 ×1, NEED-WEB-0020 ×1 |
+| content-pipeline | **UNKNOWN ×22** |
+| delivery-pipeline | **UNKNOWN ×4** |
+| forms-and-leads | NEED-WEB-0011 ×4, NEED-WEB-0015 ×10, NEED-WEB-0017 ×2, NEED-WEB-0020 ×2, NEED-WEB-0021 ×1, NEED-WEB-0022 ×2, NEED-WEB-0024 ×4, NEED-WEB-0025 ×11, NEED-WEB-0026 ×1, NEED-WEB-0029 ×1 |
+| jobs-and-navigation | NEED-WEB-0001 ×1, NEED-WEB-0007 ×13, NEED-WEB-0008 ×9 |
+| live-data | NEED-WEB-0001 ×2, NEED-WEB-0004 ×1, NEED-WEB-0009 ×3, NEED-WEB-0015 ×1, NEED-WEB-0016 ×1, NEED-WEB-0025 ×1 |
+| localization | NEED-WEB-0006 ×1, **UNKNOWN ×13** |
+| pages | NEED-WEB-0001 ×1, NEED-WEB-0002 ×4, NEED-WEB-0003 ×1, NEED-WEB-0005 ×1, NEED-WEB-0006 ×3, NEED-WEB-0007 ×2, NEED-WEB-0009 ×1, NEED-WEB-0010 ×2, NEED-WEB-0011 ×1, NEED-WEB-0013 ×1, NEED-WEB-0014 ×2, NEED-WEB-0015 ×5, NEED-WEB-0016 ×1, NEED-WEB-0019 ×1, NEED-WEB-0021 ×1, NEED-WEB-0024 ×3, NEED-WEB-0025 ×2, NEED-WEB-0026 ×3, NEED-WEB-0030 ×4 |
+| performance | NEED-WEB-0005 ×26, NEED-WEB-0006 ×4, NEED-WEB-0014 ×25, NEED-WEB-0017 ×1 |
+| personalization | NEED-WEB-0001 ×4, NEED-WEB-0007 ×4, NEED-WEB-0008 ×4, NEED-WEB-0017 ×2, NEED-WEB-0022 ×2, NEED-WEB-0029 ×2 |
+| place-search | NEED-WEB-0002 ×10, NEED-WEB-0004 ×2, NEED-WEB-0009 ×2 |
+| privacy | NEED-WEB-0017 ×15, NEED-WEB-0022 ×14, NEED-WEB-0029 ×14 |
+| relevance-and-proof | NEED-WEB-0001 ×1, NEED-WEB-0007 ×1, NEED-WEB-0018 ×7, NEED-WEB-0021 ×2, NEED-WEB-0024 ×1, NEED-WEB-0025 ×4, NEED-WEB-0027 ×6 |
+| rendering-and-resilience | NEED-WEB-0005 ×13, NEED-WEB-0025 ×2 |
+| scope-boundaries | NEED-WEB-0002 ×1, NEED-WEB-0007 ×1, NEED-WEB-0015 ×2, NEED-WEB-0016 ×1, NEED-WEB-0018 ×1, NEED-WEB-0020 ×2, NEED-WEB-0021 ×1, NEED-WEB-0025 ×2, NEED-WEB-0026 ×2, NEED-WEB-0027 ×1, NEED-WEB-0032 ×1 |
+| security | NEED-WEB-0006 ×1, NEED-WEB-0017 ×13, NEED-WEB-0022 ×13, NEED-WEB-0029 ×13 |
+| seo | NEED-WEB-0006 ×10, NEED-WEB-0015 ×1, NEED-WEB-0026 ×1 |
+| technical-constraints | NEED-WEB-0001 ×1, NEED-WEB-0005 ×2, NEED-WEB-0014 ×1, **UNKNOWN ×12** |
+
+### What the report says today
+
+| Finding | Count | Which |
+| --- | --- | --- |
+| orphan requirement | 51/273 | the content pipeline (22), the localization layer (13), the technical constraints (12) and the delivery pipeline (4) — DEM-0063 |
+| orphan need | 0/34 | every need names a goal |
+| uncovered need | 6/34 | NEED-WEB-0012, NEED-WEB-0023, NEED-WEB-0028, NEED-WEB-0031, NEED-WEB-0033, NEED-WEB-0034 |
+| uncovered goal | 1/13 | GOAL-WEB-0002 `proven-outside-home-regions` |
+| unverified requirement | 93/273 | counted once, by W7 |

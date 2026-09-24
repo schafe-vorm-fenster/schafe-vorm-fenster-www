@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: content-pipeline
+needs: [UNKNOWN]
 source:
   source_id: SRC-0009
   loc: "go-to-market-os/handbook/decisions/001-content-source-of-truth.adr.md#L106"

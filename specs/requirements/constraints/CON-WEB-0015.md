@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: scope-boundaries
+needs: [NEED-WEB-0032]
 source:
   source_id: DEC-0052
   loc: "specs/decisions/DEC-0052--page-level-answers.md#L21"

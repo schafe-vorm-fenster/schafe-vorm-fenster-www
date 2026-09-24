@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: relevance-and-proof
+needs: [NEED-WEB-0018, NEED-WEB-0027]
 source:
   source_id: SRC-0002
   loc: "go-to-market-os/concept/website-relevance-model.concept.md#L94"

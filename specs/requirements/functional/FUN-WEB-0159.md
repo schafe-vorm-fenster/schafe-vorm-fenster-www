@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: place-search
+needs: [NEED-WEB-0004, NEED-WEB-0009]
 source:
   source_id: DEC-0024
   loc: "specs/decisions/DEC-0024--place-search-covers-germany.md#L42"

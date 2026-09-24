@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: scope-boundaries
+needs: [NEED-WEB-0015, NEED-WEB-0016]
 source:
   source_id: SRC-0003
   loc: "UNKNOWN"

@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: pages
+needs: [NEED-WEB-0002, NEED-WEB-0009]
 source:
   source_id: DEC-0032
   loc: "specs/decisions/DEC-0032--error-pages.md#L12"

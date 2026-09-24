@@ -7,6 +7,7 @@ domain: WEB
 status: DRAFT
 version: 0.1.0
 area: security
+needs: [NEED-WEB-0017, NEED-WEB-0022, NEED-WEB-0029]
 source:
   source_id: DEC-0017
   loc: "specs/decisions/DEC-0017--vercel-native-monitoring.md#L12"
