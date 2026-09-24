@@ -115,3 +115,26 @@ product feature.**
 - **`DEC-024` is amended rather than replaced.** Its points 2 and 4 (the
   uncovered place as a conversion moment; proof only from covered places)
   are untouched and still carry `WEB-F-047`.
+
+## Amendment 2026-09-24 — §6 is closed: covered-only ships, Germany-wide is the target
+
+§6 left one thing open — whether the search must find *uncovered* places
+Germany-wide — and named `Q-071` for it. **Q-071 is answered**
+(owner, 2026-09-23/24), along the proposal it carried:
+
+1. **Suggestions cover the covered communities only.** The overlay of §3
+   is fed by the committed index; a name outside the ~1,760 covered
+   communities produces no suggestion. That is the current state and it
+   ships.
+2. **A typed name with no match still reaches `/dein-ort/starten` on
+   submit**, with the raw query as `?ort=` (§4, `WEB-F-047`). The
+   activation path stays intact, which is the whole reason covered-only is
+   acceptable: the visitor is not stopped, she is routed.
+3. **Germany-wide finding by name remains the target**, carried by
+   `Q-025` as an upstream demand to geo-api. It is a target, not a
+   commitment on a page: no search surface states a limit, states an
+   interim, or promises a reach it does not have (§1 unchanged).
+
+`DEC-024` §1 is re-read accordingly — see its second amendment. §7 (the
+order flow keeps its postcode mode) is untouched and was confirmed
+unchanged by the same round of decisions.

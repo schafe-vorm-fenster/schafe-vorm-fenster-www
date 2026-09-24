@@ -96,3 +96,30 @@ something.
   provenance tag. Seventeen keep `[PROPOSED]` on a **sub-clause** — a
   number inside a fixed rule, or a row awaiting an external answer — and
   each stays tracked by the question it waits on, not by this review.
+
+## Amendment 2026-09-24 — point 4 is withdrawn
+
+This record is not rewritten; **point 4 no longer holds.**
+
+"One tone, split across two situations" gave `/dein-ort` state B a direct
+address and forbade it on `/dein-ort/starten` — *never direct: name who
+usually starts it and let her recognise someone.* The 2026-09-22 review
+decides the opposite, as a rule for the whole site: **the site addresses
+the reader directly, everywhere** (contradiction C8 of
+`plan/reviews/2026-09-23/spec-impact.md`; SRC-017 CG-008/CG-012). The copy
+guide needs no exception, and `TS-021 D9`'s "never direct" is dropped with
+it.
+
+**What the point was protecting is kept, and it was never about address.**
+The two situations do differ, and the difference is what the page *asks
+for*: on `/dein-ort` state B a calendar exists and is empty, so asking the
+reader to be the first to publish is a small, obvious step. On
+`/dein-ort/starten` the place is not in the system at all — the gap is
+ours, not hers, and a page that hands a stranger our distribution problem
+spends the goodwill of someone who only wanted to know what was on. So
+`/dein-ort/starten` still names who usually starts a calendar, still makes
+no demand of the resident and still carries no blame and no scarcity — in
+direct address, like every other page.
+
+Points 1, 2 and 3 — the reserved route, breadcrumbs on the five
+second-level pages, and no geographic value in analytics — are untouched.

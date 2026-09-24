@@ -1,0 +1,170 @@
+---
+id: DEC-081
+title: The contact section replaces the contact form — one contact surface, and it hosts the booking
+status: accepted
+date: 2026-09-24
+decided_by: jan-henrik.hempel
+---
+
+## Context
+
+Two things collided, and the collision had no record.
+
+The design guide (SRC-014 §"Contact section") and the copy guide
+(SRC-017 CG-031) both state, since 2026-09-23, that **one** contact
+section exists for the whole site, that it looks the same everywhere, and
+that **there is no contact form**. The specification said the opposite in
+three places: `WEB-F-090` ("all lead forms … envoy widget") listed contact
+first, `TS-016 D1` gave contact its own surface row in the footer, and
+`TS-016-A2` asserted that the footer renders an envoy mount point for it.
+The decision behind the guides lived as a parenthesis inside them
+(contradiction C1 of `plan/reviews/2026-09-23/spec-impact.md`) — a rule
+with no decision record, which is exactly what the framework forbids.
+
+The second half is the booking. `DEC-010` resolved
+`request-product-briefing` to a Google Calendar appointment schedule
+reached by an outbound link, and `TS-016 D7` placed that link as a CTA on
+`/dein-kalender`, on `/deine-region` and on every step of the order flow.
+The 2026-09-22 review rejected the *placement*, not the mechanism: a
+visitor who is ready to talk is sent off-site from a hero CTA, with a
+disclaimer about who receives the data, instead of being shown the ways
+she can reach a person. The consult path is the one place on this site
+where the answer is a human being, and it was rendered as a link away.
+
+`request-product-briefing` in `@schafe-vorm-fenster/goals` names video
+appointment, WhatsApp and e-mail. **Phone appears in no record** — and
+the section has a phone row. That gap is `Q-072`, not an invention here.
+
+## Decision
+
+**One contact surface exists for the whole website: the contact section.
+There is no general contact form anywhere, and the briefing booking runs
+through the section.**
+
+### 1. What the section is
+
+Video appointment · WhatsApp · phone · mail, plus the portrait of the
+person who answers. The channels, their order and their visual form are
+SRC-014 §"Contact section"; their wording budgets are SRC-017 CG-031.
+This record fixes only what the specification owns: that the section
+exists once, that it is the *only* contact surface, and that no page
+offers a general contact form — not in the footer, not inline, not as a
+fallback.
+
+### 2. Where it stands
+
+The section is rendered by the shared layout on **every page**, between
+the closing CTA (`TS-006 D2` block 4) and the global footer.
+
+It is **not a block in the D2 sequence** — the same construction
+`DEC-071` §2 used for the breadcrumb trail. That is what keeps
+`WEB-F-006` ("the last block of every page is the CTA of its focus job")
+literally true while a standing surface sits below it: the trail is
+position, the section is a channel list, and neither is an argument
+block. Its position is also where the superseded surface already was: the
+contact form was a footer element on every page (`TS-016 D1` S1), and the
+replacement takes that place, promoted from a form inside the footer to a
+section above it.
+
+### 3. The booking runs through the section
+
+The outbound Google Calendar appointment link of `DEC-010` **still
+exists, inside the section's first action row.** What is superseded is
+the placement:
+
+- No hero CTA, no tier CTA and no order step links out to Google.
+- A booking CTA anywhere on a page resolves to **that page's contact
+  section** — an in-page target, not an outbound navigation. Only the
+  section's first action row navigates off-site.
+- The disclaimer wording that told the visitor she was leaving for
+  Google belongs to that one row (`TS-016 D9` outbound marking), not to
+  a CTA in an argument block.
+
+`DEC-013` and `DEC-015` are untouched: still a link, still no embed, no
+Google script, no iframe, no font, no CSP entry.
+
+### 4. Where the conversion event fires
+
+`request-product-briefing` fires on the **click of the section's first
+action row**, on the route the section was rendered on (`TS-016 D12`).
+
+Because the section stands on every page, the route is what distinguishes
+one booking intent from another, and no page adds a second event. A click
+on an in-page booking CTA emits nothing — it is navigation inside a
+document, and counting it would count one intent twice.
+
+### 5. The forms that stay
+
+Quote and briefing **forms** stay envoy widgets. `WEB-F-090` narrows from
+"all lead forms" to the lead forms that exist: the quote request on
+`/deine-region/angebot` and the invoice step of the order flow. The
+website still ships no form backend and no submission route (`DEC-025`),
+and the data boundary of `TS-016 D5` is unchanged — there is simply one
+fewer form on the site.
+
+### 6. `/ueber-uns` gets a primary conversion: the booking
+
+The trust surface had `primaryConversion: null` (`WEB-F-017`,
+`TS-027 D1`) because the site had no conversion that fitted a page whose
+job is provenance. It has one now. A Landrat, a journalist or a funder who
+finishes reading about the sender is at the closest thing this site has to
+a sales conversation, and the review's funnel demand is explicit: the page
+should push toward a booking rather than open more content.
+
+So `/ueber-uns` declares `primaryConversion: request-product-briefing`,
+carries exactly one `data-cta="primary"` above the fold pointing at its
+contact section, and repeats it in the closing block. `TS-006 D6`'s
+`null` shape — the merged three-job block — applies from now on to
+`/ueber-uns/archiv` only.
+
+### 7. Failure
+
+The section is static markup: an appointment URL, a WhatsApp link, a
+`tel:` and a `mailto:`. There is nothing to load and nothing to fail, so
+it needs no fallback of its own. `TS-016 D6`'s static fallback keeps its
+job for the surfaces that *are* widgets (S2, S4); what it no longer has
+to stand in for is general contact, because general contact is now a
+standing section rather than a widget that might not arrive.
+
+## Superseded statements
+
+| Where | Said | Now |
+| --- | --- | --- |
+| `DEC-009` | all lead forms — contact, quote, briefing — are the envoy widget | the general contact form does not exist; the widget carries the quote request and the order's invoice step |
+| `DEC-010` | the briefing is reached by an outbound link placed as a page CTA | the appointment link lives in the contact section's first action row; page CTAs point at the section |
+| `WEB-F-090` | "all lead forms (contact, quote request, briefing request)" | the quote request and the invoice step; contact is a section, booking is a link inside it |
+| `WEB-F-093` | `request-product-briefing` resolves to a Google Calendar link | it resolves to the contact section; the section's first row is the Google Calendar link |
+| `WEB-F-021` | the footer carries contact | the footer carries newsletter and the legal links; contact is the standing section above it |
+| `WEB-F-017` | `/ueber-uns` has no conversion of its own | `primaryConversion: request-product-briefing` |
+| `TS-016 D1` S1 | contact = an envoy lead form in the footer | the standing contact section, static channel rows, carrying `request-product-briefing` |
+| `TS-016 D7` | placement on `/dein-kalender`, `/deine-region` and every order step | one placement: the section's first action row, on every page |
+| `TS-016 D12` | the event fires on the click of the outbound briefing link | it fires on the click of the section's first action row, with the route |
+| `TS-006 D2` | "nothing renders after block 4 except the global footer" | the contact section stands between block 4 and the footer |
+| `TS-024 D3`/`A15` | the equal-weight CTA targets the configured Google Calendar URL | it targets the page's contact section; the section's row navigates onward |
+| `TS-025 D5` | a briefing exit link on each of the four steps | each step's exit points at the page's contact section |
+| `TS-026 D1` | the briefing link as the secondary action beside the quote CTA | the booking action beside it points at the contact section |
+| `TS-027 D1`/`A10` | `primaryConversion: null`, zero `data-cta="primary"` | the booking, one primary CTA, repeated in the closing block |
+
+## Consequences
+
+- **The envoy demand shrinks.** `Q-022` loses the contact form kind; what
+  is still demanded is the quote form and the order form (`TS-016 D4`
+  C2). The widget's delivery date no longer gates whether a visitor can
+  reach a person at all.
+- **Phone is a channel with no record behind it.** The section shows a
+  number; `@schafe-vorm-fenster/goals` does not name the channel.
+  `Q-072` demands the hub record; until it lands the row is UNKNOWN
+  content, not a spec value.
+- **The newsletter block on `/ueber-uns` loses its stated reason.**
+  `DEC-052` §4 permitted it inline *because* the page had no conversion
+  of its own. The block itself is unaffected — it is secondary treatment
+  and stands below the argument blocks — but the justification now needs
+  restating by that record's owner. Recorded as an open point on
+  `TS-027`, not silently repaired here.
+- **One surface, one place to change it.** The section is one component
+  rendered from the layout, so its channel set, its order and its
+  measurement change in one file rather than on nine pages.
+- **The design guide keeps a component-level contradiction** that this
+  record cannot resolve: SRC-014 gives the section's first action row
+  "the primary treatment". `DEC-082` settles what that means for the
+  one-primary rule and names the correction the guide needs.

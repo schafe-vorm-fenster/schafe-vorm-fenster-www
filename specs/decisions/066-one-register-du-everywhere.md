@@ -59,3 +59,41 @@ uses ("Dein Dorf. Deine Termine.").
   Verwaltung, funding applications — is untouched. This record governs
   `www.schafe-vorm-fenster.de`, and the foundation already provides for
   switching to formal salutations where the context requires it.
+
+## Amendment 2026-09-24 — DEC-084 and the `/rechtliches` exemption
+
+This record is not rewritten. The decision — one register, `du`, for every
+audience, job and page — stands. Two things attached to it are corrected.
+
+### The aside is wrong on both counts (DEC-084)
+
+The sentence "a product built in a village of four hundred people and sold
+without a salesperson" carried a wrong figure and an argument the owner
+rejects. Schlatkow has **about 280 inhabitants**; and nothing about this
+product follows from the absence of a salesperson. What is true is the
+need: a village needs a simple way for everyone who volunteers to get a
+date in front of the people it concerns, and neither buying an app nor
+building a website nobody looks at answers that. The full re-derivation is
+DEC-084 §2.
+
+This matters beyond a number: SRC-017 CG-001 cites this record as its own
+authority, so the aside had propagated into the copy guide.
+
+### `/rechtliches` is exempt from the register rule
+
+The five legal documents on `/rechtliches` are imported verbatim
+(DEC-012, DEC-027) and are written in the formal register, as such
+documents are. SRC-017 CG-003 makes a `Sie` form a build failure and
+carries no carve-out (contradiction C9 of
+`plan/reviews/2026-09-23/spec-impact.md`), so the page could not ship.
+
+**The whole page is exempt** — not only the imported document bodies. Half
+an exemption would mean a page whose headings and navigation address the
+reader as `du` while the text beneath says `Sie`, which is the seam this
+record exists to prevent, reproduced inside one page instead of between
+two. `/rechtliches` is a document surface: it is read, cited and printed,
+not spoken to.
+
+The exemption is one route, named in the lint (`TS-007 D12` register row)
+and in `TS-029`. Every other page keeps `du`, and a register switch
+anywhere else stays a validation failure.

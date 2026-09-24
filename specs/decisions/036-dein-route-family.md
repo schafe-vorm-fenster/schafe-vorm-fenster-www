@@ -50,3 +50,22 @@ decided_by: jan-henrik.hempel
 
 IA amended first (DEC-022), specs synchronised after. The naming rule is
 a candidate for the communication principles in `go-to-market-os`.
+
+## Amendment 2026-09-24 — DEC-083
+
+This record is not rewritten; point 3 loses one clause.
+
+**The headline is released.** Point 3 illustrated "the distinctive voice
+belongs in the headline, not the URL" by naming the `/ueber-uns` headline
+word for word. That string was then treated as binding — `TS-027 D3` tagged
+it `[FIXED: DEC-036 §3]` and `TS-027-A3` asserted it in an e2e criterion —
+and the 2026-09-22 review rejected it as literally untrue (the service runs
+in a data centre; SRC-017 CG-033).
+
+**What survives is the point it was making:** a sender surface uses a
+plain, conventional route (`/ueber-uns`, `/rechtliches`) and carries its
+distinctive voice on the page. Which sentence does that is copy, written
+in `content/pages/**` under SRC-017, and no spec states it (DEC-083).
+
+Points 1, 2, 4 and 5 — the rule, the family, the `region` reasoning and the
+superseded candidates — are untouched.

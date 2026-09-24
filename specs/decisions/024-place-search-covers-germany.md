@@ -46,3 +46,17 @@ current state.
 
 **Points 2 and 4 stand unchanged** and still carry WEB-F-047 and the
 proof rule.
+
+## Amendment 2026-09-24 — point 1 is settled
+
+The first amendment left point 1 as an open question (`Q-071`). It is now
+answered: **suggestions cover the covered communities, and Germany-wide
+finding by name is the target, not the shipped state** (DEC-079 amendment
+2026-09-24).
+
+Read point 1 as: the place search is *open to* all of Germany — it never
+tells a visitor that her place is out of scope, and a name it cannot
+suggest still reaches `/dein-ort/starten` (point 2). What it *finds by
+name* is the covered set, until `Q-025` provides a name endpoint.
+
+Points 2, 3 and 4 stand as the first amendment left them.

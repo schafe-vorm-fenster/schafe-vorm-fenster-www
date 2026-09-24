@@ -92,3 +92,7 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-078 — A streamed boundary never carries a control that holds what a visitor types — the search field lives in the static shell](078-the-search-field-lives-in-the-static-shell.md)
 - [DEC-079 — The place search asks for a place name; a postcode is not offered](079-place-search-by-name.md)
 - [DEC-080 — The website carries its own copy guide, bound by a contract](080-website-copy-guide-bound-by-a-contract.md)
+- [DEC-081 — The contact section replaces the contact form — one contact surface, and it hosts the booking](081-contact-section-replaces-the-contact-form.md)
+- [DEC-082 — One primary conversion per page stands — and the ladder every other CTA sits on](082-one-primary-per-page-and-the-cta-ladder.md)
+- [DEC-083 — A spec never carries the words — no verbatim copy, no fixed grammatical form](083-no-verbatim-copy-in-a-spec.md)
+- [DEC-084 — The village argument, re-derived — 280 inhabitants, no salesperson clause, and the counter module goes](084-the-village-argument-and-the-counter-that-goes.md)
