@@ -65,8 +65,6 @@ focus job, and primary conversion. Conversion goal IDs resolve in
 | [FUN-WEB-0016](FUN-WEB-0016.md) | SRC-0003, DEC-0036 | S3 |
 | [FUN-WEB-0017](FUN-WEB-0017.md) | SRC-0003, DEC-0036, DEC-0052, DEC-0081 | S3 |
 | [FUN-WEB-0018](FUN-WEB-0018.md) | SRC-0003#archive | S2 |
-| [FUN-WEB-0020](FUN-WEB-0020.md) | SRC-0003, DEC-0060, DEC-0052 | S3 |
-| [FUN-WEB-0022](FUN-WEB-0022.md) | SRC-0003#for-a-whole-region | S2 |
 | [FUN-WEB-0027](FUN-WEB-0027.md) | DEC-0032 | S3 |
 | [FUN-WEB-0137](FUN-WEB-0137.md) | SRC-0003#navigation, DEC-0012, DEC-0039, DEC-0052, DEC-0081 | S3 |
 | [FUN-WEB-0139](FUN-WEB-0139.md) | SRC-0003#conversion-map, DEC-0052, DEC-0081 | S2 |
@@ -76,6 +74,8 @@ focus job, and primary conversion. Conversion goal IDs resolve in
 | [FUN-WEB-0146](FUN-WEB-0146.md) | DEC-0039 | S3 |
 | [FUN-WEB-0147](FUN-WEB-0147.md) | DEC-0032 | S3 |
 | [FUN-WEB-0148](FUN-WEB-0148.md) | DEC-0034 | S3 |
+| [FUN-WEB-0202](FUN-WEB-0202.md) | SRC-0003, DEC-0060, DEC-0052 | S3 |
+| [FUN-WEB-0203](FUN-WEB-0203.md) | SRC-0003#for-a-whole-region | S2 |
 
 ### Place Search and Coverage
 
@@ -192,7 +192,6 @@ content, delivered as packages; SRC-0009).
 | ID | Source | Suff. |
 | --- | --- | --- |
 | [FUN-WEB-0083](FUN-WEB-0083.md) | SRC-0006, DEC-0020 | S3 |
-| [FUN-WEB-0087](FUN-WEB-0087.md) | DEC-0023 | S3 |
 | [FUN-WEB-0089](FUN-WEB-0089.md) | DEC-0020 | S3 |
 | [FUN-WEB-0143](FUN-WEB-0143.md) | DEC-0026 | S3 |
 | [FUN-WEB-0144](FUN-WEB-0144.md) | DEC-0026 | S3 |
@@ -293,6 +292,7 @@ content, delivered as packages; SRC-0009).
 | ID | Source | Suff. |
 | --- | --- | --- |
 | [FUN-WEB-0132](FUN-WEB-0132.md) | SRC-0003#navigation | S2 |
+| [FUN-WEB-0201](FUN-WEB-0201.md) | SRC-0001#boundaries, `@schafe-vorm-fenster/offerings` | S2 |
 
 ### Technical Constraints
 

@@ -22,7 +22,7 @@ describe("TS-WEB-0011 D4a: the calendar Service carries a scoped, net price", ()
   });
 });
 
-describe("TS-WEB-0011 D4: the region Service carries no price (FUN-WEB-0020)", () => {
+describe("TS-WEB-0011 D4: the region Service carries no price (BUS-WEB-0015, FUN-WEB-0202)", () => {
   it("emits no offers property at all", () => {
     const node = regionServiceNode("de", "Regionalkalender");
     expect(node).not.toHaveProperty("offers");

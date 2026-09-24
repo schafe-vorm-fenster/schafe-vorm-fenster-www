@@ -135,7 +135,7 @@ Emitted types:
 | `/` | `WebSite` + `Organization` (the full node, `@id` = site root) | — |
 | second-level pages (`/dein-ort/starten`, `/mitmachen/registrieren`, `/dein-kalender/bestellen`, `/deine-region/angebot`, `/ueber-uns/archiv`) | `BreadcrumbList` — **all five** (DEC-0071) | — (one entity, one representation: the trail is described in JSON-LD, so it is not also marked up in microdata) |
 | `/dein-kalender` | `Service` + `Offer` with a `priceSpecification` (`price` 480, `priceCurrency` EUR, `valueAddedTaxIncluded: false`, `unitCode` ANN, `referenceQuantity` 1 with `unitText` naming the **organisation**, `provider` → `Organization` `@id`) — see D4a | — |
-| `/deine-region` | `Service` **without** any price or `Offer` (FUN-WEB-0020: the region price is not published) | — |
+| `/deine-region` | `Service` **without** any price or `Offer` (BUS-WEB-0015, FUN-WEB-0202: the region price is not published) | — |
 | `/ueber-uns` | `Organization` (reference by `@id`, not a second full node) | — |
 | `/ueber-uns/archiv` | — | `ItemList` of `NewsArticle`/`CreativeWork`, each with the **outlet** as `publisher` and `url` to the original — a citation list, never authored content |
 | any page with a visible Q&A block | `FAQPage` | alternatively microdata on the block; one of the two, per the one-entity rule |
@@ -282,7 +282,7 @@ Rule of thumb behind the table: a query parameter changes what a page
 - [FREE] Visual design of the OG image template, within D6's format,
   size and localization constraints.
 - [FREE] The wording of titles and descriptions — content phase
-  (FUN-WEB-0087), within D5's limits.
+  (CON-WEB-0087), within D5's limits.
 - [FREE] Internal file layout and build-time generation of the redirect
   map, provided D1's single-source and single-hop rules hold.
 
@@ -340,7 +340,7 @@ Rule of thumb behind the table: a query parameter changes what a page
   Either the IA is amended or the breadcrumb markup is dropped.
 - **New question: do the three D7 landing-page candidates enter the IA?**
   They are buildable only after the IA amendment (DEC-0022) and the
-  content phase (FUN-WEB-0087).
+  content phase (CON-WEB-0087).
 - **New question: which social profiles exist?** Needed for
   `Organization.sameAs` (D4) and `twitter:site` (D6). Both are omitted
   rather than guessed until answered.

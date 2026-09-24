@@ -39,11 +39,11 @@ From SRC-0001 "Boundaries" — what the website is not.
 | ID | Source | Suff. |
 | --- | --- | --- |
 | [CON-WEB-0010](CON-WEB-0010.md) | SRC-0001#boundaries | S2 |
-| [CON-WEB-0011](CON-WEB-0011.md) | SRC-0001#boundaries, `@schafe-vorm-fenster/offerings` | S2 |
-| [CON-WEB-0013](CON-WEB-0013.md) | SRC-0001#boundaries | S2 |
 | [CON-WEB-0015](CON-WEB-0015.md) | DEC-0052 | S3 |
 | [CON-WEB-0016](CON-WEB-0016.md) | SRC-0001#4, #5 | S2 |
 | [CON-WEB-0058](CON-WEB-0058.md) | SRC-0003#navigation | S2 |
+| [CON-WEB-0091](CON-WEB-0091.md) | SRC-0001#boundaries, `@schafe-vorm-fenster/offerings` | S2 |
+| [CON-WEB-0092](CON-WEB-0092.md) | SRC-0001#boundaries | S2 |
 
 ### Delivery Pipeline
 
@@ -100,6 +100,7 @@ From SRC-0001 "Boundaries" — what the website is not.
 | [CON-WEB-0078](CON-WEB-0078.md) | SRC-0006, DEC-0020 | S3 |
 | [CON-WEB-0079](CON-WEB-0079.md) | SRC-0009 ADR-001 | S3 |
 | [CON-WEB-0080](CON-WEB-0080.md) | SRC-0009 ADR-001, DEC-0022 | S3 |
+| [CON-WEB-0087](CON-WEB-0087.md) | DEC-0023 | S3 |
 
 ### Forms and Leads
 

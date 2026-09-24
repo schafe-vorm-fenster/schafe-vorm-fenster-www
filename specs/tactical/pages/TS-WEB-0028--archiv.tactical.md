@@ -136,7 +136,7 @@ list, so they cannot disagree; and filtering never touches it.
 - [FREE] Filter implementation technique, within D8's budget and D5's no-URL
   rule; year-grouping markup below D7's heading rule.
 - [FREE] Preview-image derivation, within TS-WEB-0003's free scope; all wording —
-  content phase (FUN-WEB-0087).
+  content phase (CON-WEB-0087).
 
 ## Acceptance criteria
 

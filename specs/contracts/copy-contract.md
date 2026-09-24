@@ -167,7 +167,7 @@ by this contract.
 | the human rules of this contract at the editorial gate | D11 |
 
 **What this contract does not own.** Which copy is written, and when — that is
-the content phase (FUN-WEB-0087). Which claims may be made at all — SRC-0001 and
+the content phase (CON-WEB-0087). Which claims may be made at all — SRC-0001 and
 the offering records. How copy is laid out — SRC-0014.
 
 ## Consequence for the specs

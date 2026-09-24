@@ -47,7 +47,7 @@ of the spec.
 
 | ID | File | Kind | Implements |
 | --- | --- | --- | --- |
-| TS-WEB-0001 | `TS-WEB-0001--locale-routing.tactical.md` | system | FUN-WEB-0060–0068 |
+| TS-WEB-0001 | `TS-WEB-0001--locale-routing.tactical.md` | system | TLD-determined language, path prefixes, link context |
 | TS-WEB-0002 | `TS-WEB-0002--accessibility.tactical.md` | rule | WCAG 2.2 AA, the eight AAA adoptions, contrast, keyboard and screen reader |
 | TS-WEB-0003 | `TS-WEB-0003--performance.tactical.md` | rule | Lighthouse, Core Web Vitals, byte budgets, loading rules, cache lifetimes |
 | TS-WEB-0004 | `TS-WEB-0004--url-and-routing.tactical.md` | system | routes, navigation, BFF, error pages |

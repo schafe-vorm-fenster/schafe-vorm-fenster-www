@@ -126,7 +126,7 @@ held, no endpoint. The field set is a **row of the Q-0022 demand**.
 | Bestellzeichen, Leitweg-ID (E-Rechnung), USt-IdNr. | no | offered because public-sector accounting routes on them; without a Bestellzeichen or a Leitweg-ID the invoice may bounce |
 
 Forbidden: any payment field (DEC-0011), any private address, any field the invoice
-does not need. Price per FUN-WEB-0020 / TS-WEB-0006 D10. Tone: an office doing its job.
+does not need. Price per BUS-WEB-0015, FUN-WEB-0202 / TS-WEB-0006 D10. Tone: an office doing its job.
 
 ### D7 — What "embed code out immediately" is [FIXED that it is immediate: DEC-0011; artefact UNKNOWN]
 
@@ -183,7 +183,7 @@ and step, never a field value. Both wait on envoy's event contract (Q-0022 C3).
 
 - [FREE] Arrangement of scope input and preview, within D4 and SRC-0014.
 - [FREE] Stepper, back navigation, file layout — within D2 and TS-WEB-0016 D8.
-- [FREE] Copy, labels and empty/lost-state notes (FUN-WEB-0087), within D6.
+- [FREE] Copy, labels and empty/lost-state notes (CON-WEB-0087), within D6.
 
 ## Acceptance criteria
 
@@ -211,7 +211,7 @@ and step, never a field value. Both wait on envoy's event contract (Q-0022 C3).
 | FUN-WEB-0015 (`/dein-kalender/bestellen`, focus job "run our own calendar", conversion `buy-calendar-licence`) | D1 brief · D2, D5 flow and exit · D3, D4 scope and preview · D6 invoice step · D7 code · D8 no storage · D9 indexing · D10 security · D11 measurement · A1–A14 |
 
 Served, not claimed: FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083, FUN-WEB-0188, FUN-WEB-0189, CON-WEB-0084 · FUN-WEB-0116, FUN-WEB-0117 · CON-WEB-0044, CON-WEB-0045 · CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064 ·
-FUN-WEB-0020 · FUN-WEB-0041.
+BUS-WEB-0015, FUN-WEB-0202 · FUN-WEB-0041.
 
 ### D3a — Scope does not drive price [FIXED: DEC-0060]
 

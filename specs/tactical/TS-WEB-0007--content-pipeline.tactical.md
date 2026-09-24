@@ -4,7 +4,7 @@ id: TS-WEB-0007
 kind: system
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0143, FUN-WEB-0144, CON-WEB-0063, FUN-WEB-0039, FUN-WEB-0171, CON-WEB-0077, FUN-WEB-0172, FUN-WEB-0173, FUN-WEB-0174, CON-WEB-0078, FUN-WEB-0083, FUN-WEB-0175, FUN-WEB-0176, FUN-WEB-0177, FUN-WEB-0178, CON-WEB-0079, FUN-WEB-0179, CON-WEB-0080, FUN-WEB-0087, FUN-WEB-0180, FUN-WEB-0181, FUN-WEB-0182, FUN-WEB-0089]
+implements: [FUN-WEB-0143, FUN-WEB-0144, CON-WEB-0063, FUN-WEB-0039, FUN-WEB-0171, CON-WEB-0077, FUN-WEB-0172, FUN-WEB-0173, FUN-WEB-0174, CON-WEB-0078, FUN-WEB-0083, FUN-WEB-0175, FUN-WEB-0176, FUN-WEB-0177, FUN-WEB-0178, CON-WEB-0079, FUN-WEB-0179, CON-WEB-0080, CON-WEB-0087, FUN-WEB-0180, FUN-WEB-0181, FUN-WEB-0182, FUN-WEB-0089]
 sources: [SRC-0006, SRC-0008, SRC-0009, SRC-0017, SRC-0018]
 decisions: [DEC-0012, DEC-0020, DEC-0022, DEC-0026, DEC-0027, DEC-0039, DEC-0041, DEC-0080]
 ai_provenance:
@@ -272,7 +272,7 @@ languages/jurisdictions are added as Google Docs, same process.
 | anchors | from the permanent registry in TS-WEB-0004 D8; the importer never invents one, and a document whose anchor is not in the registry fails validation |
 | rendering | sections of the single legal page (FUN-WEB-0146, CON-WEB-0067, TS-WEB-0004 D1/D8), in registry order |
 
-### D11 — Status lifecycle and the editorial gate [FIXED: FUN-WEB-0172, FUN-WEB-0173, FUN-WEB-0087, DEC-0023, concept B.1/E.1 P4]
+### D11 — Status lifecycle and the editorial gate [FIXED: FUN-WEB-0172, FUN-WEB-0173, CON-WEB-0087, DEC-0023, concept B.1/E.1 P4]
 
 `draft → in-review → approved`. What an agent emits is **`draft`**;
 `approved` is set only at the editorial decision point by a person
@@ -285,7 +285,7 @@ languages/jurisdictions are added as Google Docs, same process.
 
 A missing `approved` file for a required slot is a build failure in
 production, not a silently empty section. During the specification phase
-no page copy is produced at all (FUN-WEB-0087); specs and fixtures use
+no page copy is produced at all (CON-WEB-0087); specs and fixtures use
 marked placeholders, and a placeholder never carries `approved`.
 
 ### D12 — `pnpm check:content` — the validation gate [FIXED: FUN-WEB-0089, concept C.3/E.1 P5]
@@ -423,7 +423,7 @@ first playbook is written. [PROPOSED]
 | CON-WEB-0079 (never define a conversion goal) | D9 · A10 |
 | FUN-WEB-0179 (fetch it at build time rather than version it …) | D1, D3 · A2, A12 |
 | CON-WEB-0080 (never carry a news section) | D1, D3 · A2, A12 |
-| FUN-WEB-0087 (copy after the spec phase; placeholders) | D11 · A14 |
+| CON-WEB-0087 (never produce page copy before its specification phase has …) | D11 · A14 |
 | FUN-WEB-0180 (import them through the Google Workspace pipeline in German …) | D10 · A11 |
 | FUN-WEB-0181 (render it as a section of the single legal …) | D10 · A11 |
 | FUN-WEB-0182 (add the legal text in Google Docs through the …) | D10 · A11 |

@@ -112,7 +112,7 @@ describe("TS-WEB-0011-A4: every page emits exactly the nodes D4's table names", 
     }
   });
 
-  it("prices the calendar service and never the region one (FUN-WEB-0020)", async () => {
+  it("prices the calendar service and never the region one (BUS-WEB-0015, FUN-WEB-0202)", async () => {
     const calendar = await pageGraph({ route: "calendar", locale: "de" });
     expect(calendar["@graph"][1]).toEqual(
       calendarServiceNode("de", pageTitle("calendar", "de")),

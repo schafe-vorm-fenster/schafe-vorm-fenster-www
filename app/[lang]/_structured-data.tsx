@@ -96,7 +96,7 @@ export async function pageGraph({
     // All five second-level pages (DEC-0071). `breadcrumbListNode` answers
     // `undefined` for the other seven, and `jsonLdGraph` drops it.
     breadcrumbListNode(route, locale, (item) => pageTitle(item, locale)),
-    // The two service pages; `/deine-region` carries no price (FUN-WEB-0020).
+    // The two service pages; `/deine-region` carries no price (BUS-WEB-0015, FUN-WEB-0202).
     ...(route === "calendar" ? [calendarServiceNode(locale, title)] : []),
     ...(route === "region" ? [regionServiceNode(locale, title)] : []),
     // `/ueber-uns` — D4: "`Organization` (reference by `@id`, not a second

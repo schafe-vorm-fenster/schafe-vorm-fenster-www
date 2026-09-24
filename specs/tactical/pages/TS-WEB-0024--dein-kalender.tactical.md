@@ -4,7 +4,7 @@ id: TS-WEB-0024
 kind: interaction
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0014, FUN-WEB-0020]
+implements: [FUN-WEB-0014, BUS-WEB-0015, FUN-WEB-0202]
 sources: [SRC-0001, SRC-0003, SRC-0014]
 decisions: [DEC-0011, DEC-0030, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083]
 ai_provenance:
@@ -150,7 +150,7 @@ This **fixes the floor** TS-WEB-0018 D5 left open: on this route the count is
 exactly 1, not ≤ 1. Its exemptions (loader origin, CSP, `data-*`) stand and
 do not count towards it.
 
-### D8 — Pricing on this page [FIXED: FUN-WEB-0020, TS-WEB-0006 D10]
+### D8 — Pricing on this page [FIXED: BUS-WEB-0015, FUN-WEB-0202, TS-WEB-0006 D10]
 
 | Rule | Realisation |
 | --- | --- |
@@ -236,7 +236,8 @@ TS-WEB-0018 D8's budget constant is 0 for this route.
 | Requirement | Discharged by |
 | --- | --- |
 | FUN-WEB-0014 (`/dein-kalender`, focus job *run our own calendar*, primary `buy-calendar-licence`, equal `request-product-briefing`) | D1, D2, D3, D4, D5, D6, D9, D10 · A1–A9, A12–A17, A19 |
-| FUN-WEB-0020 (pricing display: 480 € public, enterprise unpriced, withheld offerings not offered) | D6, D8, D11 · A8, A10, A11, A18 |
+| BUS-WEB-0015 (the billable unit is the organisation and not the place, …) | D6, D8, D11 · A8, A10, A11, A18 |
+| FUN-WEB-0202 (publish the licence price of 480 €/year for a …) | D6, D8, D11 · A8, A10, A11, A18 |
 
 ### D6a — What the tiers actually differ by [FIXED: DEC-0060]
 

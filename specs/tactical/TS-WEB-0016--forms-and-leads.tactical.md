@@ -64,7 +64,7 @@ the website receives none of them.
 | # | Surface | Route(s) | Kind | Owner | Conversion goal |
 | --- | --- | --- | --- | --- | --- |
 | S1 | Contact section | standing section on every page, between the closing CTA and the footer (TS-WEB-0006 D2) | four static channel rows — appointment link, WhatsApp, `tel:`, `mailto:`, in that order — no form (D13) | none; the website renders links | `make-contact` on **every** row, as an intent, per channel; the first row additionally completes `request-product-briefing` (D12) |
-| S2 | Quote request, with the two-working-day promise (FUN-WEB-0022) | `/deine-region`, `/deine-region/angebot` | lead form | envoy widget | `request-licence-quote` |
+| S2 | Quote request, with the two-working-day promise (BUS-WEB-0016, FUN-WEB-0203) | `/deine-region`, `/deine-region/angebot` | lead form | envoy widget | `request-licence-quote` |
 | S3 | Briefing booking | the first action row of S1 — therefore every page | outbound link | Google Calendar appointment schedule | `request-product-briefing` |
 | S4 | Order the calendar | `/dein-kalender/bestellen` | multi-step order, concludes on invoice | open (D8) | `buy-calendar-licence` |
 | S5 | Newsletter signup | footer on every page (FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061), plus inline on `/ueber-uns` at secondary treatment (DEC-0052 §4 as amended, TS-WEB-0027 D8) | **two routes** — WhatsApp (preferred) and e-mail with double opt-in (D10) | envoy for the e-mail route (DEC-0051); **nothing for the WhatsApp route** (D10) | `subscribe-to-newsletter` |
@@ -121,7 +121,7 @@ determined now; the variable *names* are not.
    and a build check fails on any published variable left unmapped
    (A4). No variable is guessed in advance.
 
-### D4 — The demand to envoy (Q-0022), as the website needs it [FIXED as demand: DEC-0009, DEC-0014, TS-WEB-0002, FUN-WEB-0022; answers UNKNOWN]
+### D4 — The demand to envoy (Q-0022), as the website needs it [FIXED as demand: DEC-0009, DEC-0014, TS-WEB-0002, BUS-WEB-0016, FUN-WEB-0203; answers UNKNOWN]
 
 This is the concrete form of the open demand. Every row is unanswered
 today; each is what the website needs in order to integrate, and the
@@ -139,7 +139,7 @@ today; each is what the website needs in order to integrate, and the
 | C8 | Production host(s) for script and submissions | D2 CSP entry, A1 | UNKNOWN |
 | C9 | Localization: German and English form copy and error messages, selected by the page language | TS-WEB-0001, DEC-0026 | UNKNOWN |
 | C10 | Delivery date | D6 contingency, launch scope | UNKNOWN |
-| C11 | Lead handling behind the widget fast enough to keep the two-working-day response promise on S2 — an operational commitment, not a technical one (FUN-WEB-0022) | The promise copy may not ship without it (A13) | DEMANDED, unconfirmed |
+| C11 | Lead handling behind the widget fast enough to keep the two-working-day response promise on S2 — an operational commitment, not a technical one (BUS-WEB-0016, FUN-WEB-0203) | The promise copy may not ship without it (A13) | DEMANDED, unconfirmed |
 
 C4, C7 and C11 are not questions to envoy — they are constraints the
 website has already fixed and the widget must satisfy. C1–C3, C5, C6,
@@ -197,7 +197,7 @@ redirect behind `/start`.
 | Why it stays off the CSP | An outbound navigation loads nothing into the page, so the allowlist is untouched (DEC-0015). Anything that would need a CSP entry is by definition not this |
 | URL source | One configured value (environment/config), referenced by every S3 placement — never pasted per page |
 | Link attributes | Opens in the same tab by default; if a new tab is used it carries `rel="noopener"` and the link text says so (TS-WEB-0002 D2, 2.4.9 link purpose) |
-| Link text | Names the action and its destination, not "hier klicken"; the label is content (FUN-WEB-0087 placeholder rules apply) |
+| Link text | Names the action and its destination, not "hier klicken"; the label is content (CON-WEB-0087 placeholder rules apply) |
 | Localization | The link *text* is localized; the appointment page itself is an original artifact under Google's terms and is not localized by us (DEC-0026) |
 | Reachability | the pages SRC-0003 names — `/dein-kalender` (equal-weight with the order CTA, FUN-WEB-0014), `/deine-region`, every step of S4, and `/ueber-uns` as its primary (DEC-0081 §6) — each carry a CTA pointing at their own contact section. Every other page reaches the booking through the standing section itself |
 | Measurement | The click **on the section's row** completes `request-product-briefing` (D12). An in-page booking CTA emits nothing: it is navigation inside a document, and counting it would count one intent twice. The booking itself happens off-site and is not observable to the website |
@@ -223,7 +223,7 @@ Binding properties:
 - Step state is client-side and non-persistent; the website stores no
   order (D5). A reload may restart the flow — acceptable, and preferable
   to holding buyer data.
-- Price display follows FUN-WEB-0020 (480 €/year public; net/VAT wording is
+- Price display follows BUS-WEB-0015, FUN-WEB-0202 (480 €/year public; net/VAT wording is
   content, not spec).
 - **Open, deliberately unresolved here:** which system receives step 3
   and issues the embed code. Two candidates — an order variant of the
@@ -571,7 +571,7 @@ prefill is a working row, not a broken one.
 - [FREE] Component and file organisation of the shared fallback and the
   media preview, within TS-WEB-0004 D2.
 - [FREE] Copy for every label, link text and confirmation message —
-  placeholders during the specification phase (FUN-WEB-0087).
+  placeholders during the specification phase (CON-WEB-0087).
 
 ## Acceptance criteria
 
@@ -626,7 +626,7 @@ prefill is a working row, not a broken one.
 Cross-cutting requirements this spec serves without claiming: CON-WEB-0039, NFR-WEB-0065
 (spam, D11 · A10), CON-WEB-0030, CON-WEB-0031 (CSP entries, D2 · A5, A6), CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064
 (conversion measurement, D12 · A12, A17, A18), NFR-WEB-0061, NFR-WEB-0062, FUN-WEB-0125, CON-WEB-0033
-(cookie-freedom across the prefilled message, D14 · A19), FUN-WEB-0022
+(cookie-freedom across the prefilled message, D14 · A19), BUS-WEB-0016, FUN-WEB-0203
 (response promise, D4 C11 · A13), NFR-WEB-0057, CON-WEB-0024, NFR-WEB-0058, NFR-WEB-0059, CON-WEB-0025, FUN-WEB-0128, FUN-WEB-0118, FUN-WEB-0119, FUN-WEB-0120 across the widget
 boundary (D11 · A8, A9 — the website-side half of TS-WEB-0002 A6).
 
@@ -674,7 +674,7 @@ boundary (D11 · A8, A9 — the website-side half of TS-WEB-0002 A6).
   footer everywhere plus inline on `/ueber-uns`, secondary, below the
   booking. The amendment also re-derives the reason, which the page's
   new primary conversion had spent.
-- FUN-WEB-0022's two-working-day promise is an operational commitment with
+- BUS-WEB-0016, FUN-WEB-0203's two-working-day promise is an operational commitment with
   no owner recorded (D4 C11). A13 withholds the copy rather than
   publishing a promise the process cannot keep.
 - D1 in-page placement, D2 mechanics, D3, D6, D10 and D12 are

@@ -103,6 +103,11 @@ retired identifier, because that is how it says what it changed;
 | `FUN-WEB-0101` | `FUN-WEB-0193` · `FUN-WEB-0194` · `FUN-WEB-0195` | DEC-0093 | Three verbs joined by "and" — fetch, stream, cache — and the method splits exactly that. |
 | `FUN-WEB-0104` | `FUN-WEB-0196` · `FUN-WEB-0197` | DEC-0093 | A permission and a prohibition, which are two modals. |
 | `FUN-WEB-0106` | `FUN-WEB-0198` · `FUN-WEB-0199` · `FUN-WEB-0200` · `CON-WEB-0089` · `CON-WEB-0090` | DEC-0093 | Five rules about a skeleton — when it appears, what it reserves, what it may not do, what replaces it, and what may never be used instead. |
+| `CON-WEB-0011` | `BUS-WEB-0013` · `CON-WEB-0091` · `FUN-WEB-0201` | DEC-0094 | A rule about how an enterprise price is set, the requirement that applies it, and a publishing limit. `@leafcutter-strict/method-requirement-classification`: "A business rule and the requirement that applies it are two artefacts. […] Merging them hides the rule from every other consumer of it." |
+| `CON-WEB-0013` | `BUS-WEB-0014` · `CON-WEB-0092` | DEC-0094 | A fact about who owns the track, and the limit the website observes because of it. The fact holds whoever acts on it. |
+| `FUN-WEB-0020` | `BUS-WEB-0015` · `FUN-WEB-0202` | DEC-0094 | A pricing rule that holds of the licence itself, and the page behaviour that publishes it. |
+| `FUN-WEB-0022` | `BUS-WEB-0016` · `FUN-WEB-0203` | DEC-0094 | A promise the business makes, and the page that states it. The promise binds the lead-handling process whether or not any page mentions it. |
+| `FUN-WEB-0087` | `CON-WEB-0087` | DEC-0094 | The number is free in the target class and is kept. |
 
 ## The rule
 

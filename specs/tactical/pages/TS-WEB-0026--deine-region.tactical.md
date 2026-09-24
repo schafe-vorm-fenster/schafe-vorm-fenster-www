@@ -4,7 +4,7 @@ id: TS-WEB-0026
 kind: interaction
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0016, FUN-WEB-0022, FUN-WEB-0148, CON-WEB-0065, CON-WEB-0066]
+implements: [FUN-WEB-0016, BUS-WEB-0016, FUN-WEB-0203, FUN-WEB-0148, CON-WEB-0065, CON-WEB-0066]
 sources: [SRC-0002, SRC-0003, SRC-0008, SRC-0014]
 decisions: [DEC-0009, DEC-0030, DEC-0034, DEC-0036, DEC-0037, DEC-0041, DEC-0048, DEC-0081, DEC-0082, DEC-0083]
 ai_provenance:
@@ -83,7 +83,7 @@ a chronological list cannot answer that, a map can.
 | Anchor | the chain of TS-WEB-0008 D3, nothing more: IP geolocation resolves to county (Q-0032), a place search sharpens it. Without an anchor no county name is asserted and the county-dependent parts do not render |
 | Failure | TS-WEB-0008 D5 / TS-WEB-0009 D4: module omitted, no error styling, no retry control. The block never collapses, because the place search is static |
 
-### D5 — The response promise and the condition for publishing it [FIXED: FUN-WEB-0022, TS-WEB-0006 D11; mechanism PROPOSED]
+### D5 — The response promise and the condition for publishing it [FIXED: BUS-WEB-0016, FUN-WEB-0203, TS-WEB-0006 D11; mechanism PROPOSED]
 
 | Aspect | Determination |
 | --- | --- |
@@ -93,7 +93,7 @@ a chronological list cannot answer that, a map can.
 | If unmet | **removed, never softened.** No response-time wording of any kind on either route: a vaguer promise is still an unbacked promise |
 | Widget missing | TS-WEB-0016 D6 applies — an email link plus the consult exit into the contact section; the promise stays withheld either way |
 
-### D6 — Price: mentioned, never figured [FIXED: FUN-WEB-0020, TS-WEB-0018 D2/D3]
+### D6 — Price: mentioned, never figured [FIXED: BUS-WEB-0015, FUN-WEB-0202, TS-WEB-0018 D2/D3]
 
 `portalize-enterprise` is `promoted` **and** `price_status: on-request`,
 so `publishablePrice` is false: promoted buys the page and the CTA, not a figure.
@@ -169,12 +169,13 @@ so `publishablePrice` is false: promoted buys the page and the CTA, not a figure
 | Requirement | Discharged by |
 | --- | --- |
 | FUN-WEB-0016 (region page, focus job, quote conversion) | D1, D2, D6, D7, D8 · A4, A5, A6, A12, A13, A14, A15 |
-| FUN-WEB-0022 (two-working-day response promise) | D5 · A7, A8 |
+| BUS-WEB-0016 (the answer is due within two working days of its …) | D5 · A7, A8 |
+| FUN-WEB-0203 (state the two-working-day response promise on the quote request) | D5 · A7, A8 |
 | FUN-WEB-0148 (render active example places) | D3, D4 · A1, A2, A3, A9, A10, A11, A16, A17 |
 | CON-WEB-0065 (never render a full place list at county level …) | D3, D4 · A1, A2, A3, A9, A10, A11, A16, A17 |
 | CON-WEB-0066 (keep the region page's story copy map-ready) | D3, D4 · A1, A2, A3, A9, A10, A11, A16, A17 |
 
-Consumed, discharged elsewhere: FUN-WEB-0020 TS-WEB-0006 D10 / TS-WEB-0018 D3 ·
+Consumed, discharged elsewhere: BUS-WEB-0015, FUN-WEB-0202 TS-WEB-0006 D10 / TS-WEB-0018 D3 ·
 FUN-WEB-0040, FUN-WEB-0041, FUN-WEB-0042, FUN-WEB-0043, FUN-WEB-0153, FUN-WEB-0154, FUN-WEB-0045, FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072 TS-WEB-0008 · FUN-WEB-0150, FUN-WEB-0151, CON-WEB-0069 TS-WEB-0005 · FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082, FUN-WEB-0091, FUN-WEB-0092, FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083 TS-WEB-0016 · BUS-WEB-0012 and CON-WEB-0016 TS-WEB-0018.
 
 ### D3a — The map has a date; the tier has features [FIXED: DEC-0060, DEC-0061]

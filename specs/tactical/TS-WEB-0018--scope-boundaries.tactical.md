@@ -4,7 +4,7 @@ id: TS-WEB-0018
 kind: rule
 status: DRAFT
 version: 0.1.0
-implements: [CON-WEB-0010, CON-WEB-0011, BUS-WEB-0012, CON-WEB-0013, CON-WEB-0058, FUN-WEB-0132, CON-WEB-0015, CON-WEB-0016]
+implements: [CON-WEB-0010, BUS-WEB-0013, CON-WEB-0091, FUN-WEB-0201, BUS-WEB-0012, BUS-WEB-0014, CON-WEB-0092, CON-WEB-0058, FUN-WEB-0132, CON-WEB-0015, CON-WEB-0016]
 sources: [SRC-0001, SRC-0003, SRC-0009]
 decisions: [DEC-0020, DEC-0022, DEC-0036, DEC-0040]
 ai_provenance:
@@ -46,9 +46,12 @@ be caught".
 | Req | Boundary | Carried by | Class |
 | --- | --- | --- | --- |
 | CON-WEB-0010 | no feature explanation; help lives in the app | D6, D10 | gate (input set, content types) + review (the positive half) |
-| CON-WEB-0011 | prices only for promoted offerings | D2, D3 | gate + guard |
+| BUS-WEB-0013 (the price is a quotation and not a list rate) | prices only for promoted offerings | D2, D3 | gate + guard |
+| CON-WEB-0091 (publish a price only for an offering carrying promotion: …) | prices only for promoted offerings | D2, D3 | gate + guard |
+| FUN-WEB-0201 (show the enterprise offering as priced on request) | prices only for promoted offerings | D2, D3 | gate + guard |
 | BUS-WEB-0012 | municipalities and institutions are not separated | D7 | gate (narrow) + review |
-| CON-WEB-0013 | the AI-coaching track does not appear | D4 | gate + guard |
+| BUS-WEB-0014 (the AI-coaching track belongs to a brand other than Schafe …) | the AI-coaching track does not appear | D4 | gate + guard |
+| CON-WEB-0092 (never present the AI-coaching track) | the AI-coaching track does not appear | D4 | gate + guard |
 | CON-WEB-0058 (never use the product name "Portalize" as a navigation …) | the product name is never a navigation label | D5 | gate |
 | FUN-WEB-0132 (introduce the product name "Portalize" once) | the product name is never a navigation label | D5 | gate |
 | CON-WEB-0015 | local advertising: no occurrence at all while withheld (DEC-0052 §3) | D8 | gate |
@@ -58,7 +61,7 @@ Only CON-WEB-0058, FUN-WEB-0132 is fully machine-decidable. CON-WEB-0010 and CON
 mostly editorial; D10 states where the machine stops and who owns the
 rest.
 
-### D2 — Offering eligibility gate [FIXED: CON-WEB-0011, `promotion` field in `@schafe-vorm-fenster/model-offerings`]
+### D2 — Offering eligibility gate [FIXED: BUS-WEB-0013, CON-WEB-0091, FUN-WEB-0201, `promotion` field in `@schafe-vorm-fenster/model-offerings`]
 
 Every website content file lists the hub offering ids it touches
 (`offerings: []`, FUN-WEB-0178, CON-WEB-0079 — ids are referenced, never redefined). Each
@@ -280,9 +283,12 @@ and 2.
 | Boundary | Machine catches | Machine cannot catch | Owned by |
 | --- | --- | --- | --- |
 | CON-WEB-0010 | forbidden input sets, help content types, help routes | explanatory prose inside a permitted page | moment 1, moment 2 |
-| CON-WEB-0011 | ineligible ids, non-publishable price figures | a price described in words ("unter 500 Euro") | moment 2 |
+| BUS-WEB-0013 (the price is a quotation and not a list rate) | ineligible ids, non-publishable price figures | a price described in words ("unter 500 Euro") | moment 2 |
+| CON-WEB-0091 (publish a price only for an offering carrying promotion: …) | ineligible ids, non-publishable price figures | a price described in words ("unter 500 Euro") | moment 2 |
+| FUN-WEB-0201 (show the enterprise offering as priced on request) | ineligible ids, non-publishable price figures | a price described in words ("unter 500 Euro") | moment 2 |
 | BUS-WEB-0012 | audience-keyed surfaces, a split across briefs | two audience-specific arguments inside one page | moment 1 |
-| CON-WEB-0013 | denied ids and brand terms | a coaching argument written in fresh words | moment 2, moment 3 |
+| BUS-WEB-0014 (the AI-coaching track belongs to a brand other than Schafe …) | denied ids and brand terms | a coaching argument written in fresh words | moment 2, moment 3 |
+| CON-WEB-0092 (never present the AI-coaching track) | denied ids and brand terms | a coaching argument written in fresh words | moment 2, moment 3 |
 | CON-WEB-0058 (never use the product name "Portalize" as a navigation …) | every label and path surface | — (fully gated) | — |
 | FUN-WEB-0132 (introduce the product name "Portalize" once) | every label and path surface | — (fully gated) | — |
 | CON-WEB-0015 | count, binding, sentence shape | whether the sentence promises something | moment 2 |
@@ -344,9 +350,12 @@ The four boundary questions:
 | Requirement | Discharged by |
 | --- | --- |
 | CON-WEB-0010 (no feature explanation; help in the app) | D6, D10 · A8, A13, A14, A15 |
-| CON-WEB-0011 (prices only for promoted offerings) | D2, D3 · A1, A2, A3 |
+| BUS-WEB-0013 (the price is a quotation and not a list rate) | D2, D3 · A1, A2, A3 |
+| CON-WEB-0091 (publish a price only for an offering carrying promotion: …) | D2, D3 · A1, A2, A3 |
+| FUN-WEB-0201 (show the enterprise offering as priced on request) | D2, D3 · A1, A2, A3 |
 | BUS-WEB-0012 (no municipality/institution split) | D7, D10 · A9, A14 |
-| CON-WEB-0013 (AI-coaching track absent) | D4, D10 · A4, A5, A16 |
+| BUS-WEB-0014 (the AI-coaching track belongs to a brand other than Schafe …) | D4, D10 · A4, A5, A16 |
+| CON-WEB-0092 (never present the AI-coaching track) | D4, D10 · A4, A5, A16 |
 | CON-WEB-0058 (never use the product name "Portalize" as a navigation …) | D5 · A6, A7 |
 | FUN-WEB-0132 (introduce the product name "Portalize" once) | D5 · A6, A7 |
 | CON-WEB-0015 (local advertising: one sentence while withheld) | D2, D8 · A10, A15 |

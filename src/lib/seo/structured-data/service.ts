@@ -71,7 +71,7 @@ export function calendarServiceNode(locale: Locale, name: string): ServiceNode {
   };
 }
 
-/** D4 `/deine-region`: `Service` **without** any price or `Offer` (FUN-WEB-0020). */
+/** D4 `/deine-region`: `Service` **without** any price or `Offer` (BUS-WEB-0015, FUN-WEB-0202). */
 export function regionServiceNode(locale: Locale, name: string): ServiceNode {
   return {
     "@type": "Service",

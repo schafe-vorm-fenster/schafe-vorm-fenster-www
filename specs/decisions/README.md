@@ -108,3 +108,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-0091 — Provenance is on every record — the model and the hour come from the commit that wrote it, the prompt identity is UNKNOWN and says so](DEC-0091--provenance-on-every-record.md)
 - [DEC-0092 — A quality requirement is a measure — the 37 split, measured or reclassified, and not one number invented](DEC-0092--the-quality-class-is-a-measure.md)
 - [DEC-0093 — The compounds are split — one modal and one predicate per artefact, and the nine page rows are a shape the method has no form for](DEC-0093--the-compounds-split.md)
+- [DEC-0094 — The four buried business rules are their own artefacts — and the one constraint filed as a functional requirement](DEC-0094--the-four-buried-business-rules.md)

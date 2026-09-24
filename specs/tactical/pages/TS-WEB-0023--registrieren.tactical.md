@@ -146,7 +146,7 @@ only network calls are the read-only BFF routes of TS-WEB-0004 D5.
   a real navigation with a shareable URL (D4).
 - [FREE] Typeahead mechanics in step 1 above the no-JS floor.
 - [FREE] All copy: step questions, option labels, the handover button,
-  and what the page says about what the app will ask next (FUN-WEB-0087).
+  and what the page says about what the app will ask next (CON-WEB-0087).
 
 ## Acceptance criteria
 
@@ -177,7 +177,7 @@ only network calls are the read-only BFF routes of TS-WEB-0004 D5.
 
 Consumed, discharged elsewhere: CON-WEB-0062, FUN-WEB-0142 / FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072 / FUN-WEB-0049
 (TS-WEB-0008) · NFR-WEB-0061, NFR-WEB-0062 (TS-WEB-0012 D1) · CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064 (TS-WEB-0012 D4/D5) ·
-FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082 / FUN-WEB-0092 (TS-WEB-0016) · FUN-WEB-0087 (TS-WEB-0007).
+FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082 / FUN-WEB-0092 (TS-WEB-0016) · CON-WEB-0087 (TS-WEB-0007).
 
 ## Open points
 

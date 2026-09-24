@@ -24,3 +24,17 @@ Each rule is **one document**, named for its identifier
 | ID | Source | Suff. |
 | --- | --- | --- |
 | [BUS-WEB-0012](BUS-WEB-0012.md) | SRC-0001#boundaries | S2 |
+
+### Pages
+
+| ID | Source | Suff. |
+| --- | --- | --- |
+| [BUS-WEB-0015](BUS-WEB-0015.md) | SRC-0003, DEC-0060, DEC-0052 | S3 |
+| [BUS-WEB-0016](BUS-WEB-0016.md) | SRC-0003#for-a-whole-region | S2 |
+
+### Scope Boundaries
+
+| ID | Source | Suff. |
+| --- | --- | --- |
+| [BUS-WEB-0013](BUS-WEB-0013.md) | SRC-0001#boundaries, `@schafe-vorm-fenster/offerings` | S2 |
+| [BUS-WEB-0014](BUS-WEB-0014.md) | SRC-0001#boundaries | S2 |

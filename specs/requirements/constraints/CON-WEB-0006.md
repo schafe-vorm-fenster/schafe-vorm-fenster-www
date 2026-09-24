@@ -22,4 +22,4 @@ The solution SHALL be specified against `@leafcutter-strict/blueprint-complete`,
 
 ## Notes
 
-"specs precede content" is the second limit of the original statement. It is carried by FUN-WEB-0087, which states it on its own.
+"specs precede content" is the second limit of the original statement. It is carried by CON-WEB-0087, which states it on its own.

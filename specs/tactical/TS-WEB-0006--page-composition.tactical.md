@@ -4,7 +4,7 @@ id: TS-WEB-0006
 kind: rule
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0001, FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136, FUN-WEB-0004, FUN-WEB-0005, FUN-WEB-0006, FUN-WEB-0007, FUN-WEB-0138, CON-WEB-0059, FUN-WEB-0009, FUN-WEB-0139, CON-WEB-0060, FUN-WEB-0020, FUN-WEB-0022]
+implements: [FUN-WEB-0001, FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136, FUN-WEB-0004, FUN-WEB-0005, FUN-WEB-0006, FUN-WEB-0007, FUN-WEB-0138, CON-WEB-0059, FUN-WEB-0009, FUN-WEB-0139, CON-WEB-0060, BUS-WEB-0015, FUN-WEB-0202, BUS-WEB-0016, FUN-WEB-0203]
 sources: [SRC-0001, SRC-0003, SRC-0017, SRC-0018]
 decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084]
 ai_provenance:
@@ -281,7 +281,7 @@ Known gap: `order-promotion-material` is carried by no page (Q-0005). The
 check lists it as an accepted exception with its question ID, so it stays
 visible instead of quietly passing.
 
-### D10 — Pricing display [FIXED: SRC-0001 Boundaries, SRC-0003 pricing rules, FUN-WEB-0020; sourcing PROPOSED]
+### D10 — Pricing display [FIXED: SRC-0001 Boundaries, SRC-0003 pricing rules, BUS-WEB-0015, FUN-WEB-0202; sourcing PROPOSED]
 
 | Offering promotion | On the website |
 | --- | --- |
@@ -296,7 +296,7 @@ page's copy is a defect, not a variant. The free community calendar tier
 is not a price and not subject to this rule; its permanence promise is
 content, backed by the 2022 public commitment (SRC-0003).
 
-### D11 — Promises are only displayed where a process backs them [FIXED: SRC-0003 `/deine-region`, FUN-WEB-0022; enforcement PROPOSED]
+### D11 — Promises are only displayed where a process backs them [FIXED: SRC-0003 `/deine-region`, BUS-WEB-0016, FUN-WEB-0203; enforcement PROPOSED]
 
 The general rule: a page states a response time, an availability or a
 permanence promise only where an operational commitment exists to keep
@@ -365,8 +365,10 @@ the promise is removed rather than softened.
 | FUN-WEB-0009 (no role switcher, no self-classification) | D8 · A9, A10 |
 | FUN-WEB-0139 (carry it on the page that map names) | D9 · A11 |
 | CON-WEB-0060 (never carry a page for order-promotion-material) | D9 · A11 |
-| FUN-WEB-0020 (pricing display rule) | D10 · A12 |
-| FUN-WEB-0022 (two-working-day response promise) | D11 · A13 |
+| BUS-WEB-0015 (the billable unit is the organisation and not the place, …) | D10 · A12 |
+| FUN-WEB-0202 (publish the licence price of 480 €/year for a …) | D10 · A12 |
+| BUS-WEB-0016 (the answer is due within two working days of its …) | D11 · A13 |
+| FUN-WEB-0203 (state the two-working-day response promise on the quote request) | D11 · A13 |
 
 ## Open points
 

@@ -4,7 +4,7 @@ import type { PageMeta } from "@/src/lib/pages/page-meta";
  * `/dein-ort` — the page brief of TS-WEB-0020 D1 in typed form (TS-WEB-0006 D1).
  *
  * `emptyState` is the field only this page fills: `/dein-ort` is the one
- * surface whose focus job changes at runtime (FUN-WEB-0044, TS-WEB-0008 D4), and
+ * surface whose focus job changes at runtime (FUN-WEB-0153, FUN-WEB-0154, TS-WEB-0008 D4), and
  * TS-WEB-0006-A10 calls that "the one registered exception" — a register needs an
  * entry, and this is it.
  */
