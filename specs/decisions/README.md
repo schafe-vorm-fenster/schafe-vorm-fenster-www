@@ -144,3 +144,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0099 — The conflict and demand registers exist, populated from what already happened — 22 conflicts and 57 demands, none invented](DEC-0099--the-conflict-and-demand-registers.md)
 - [DEC-0100 — An ADR and a STRICT decision record are two artefacts — both are kept, and the SDR starts at the next executed decision point](DEC-0100--an-adr-and-an-sdr-are-two-artefacts.md)
 - [DEC-0101 — The goal layer references the hub, it does not duplicate it — thirteen GOAL-WEB artefacts, no goal content copied](DEC-0101--the-goal-layer-references-the-hub.md)
+- [DEC-0102 — The need layer is read off the sources, never reconstructed — thirty-four needs, every one with a verified line](DEC-0102--the-need-layer-is-read-off-the-sources.md)
