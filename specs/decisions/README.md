@@ -103,3 +103,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-0086 — Identifiers and file names follow the STRICT scheme — `<TYPE>-<DOMAIN>-<NNNN>`, and a file is named for the artefact it holds](DEC-0086--identifiers-and-file-names-follow-strict.md)
 - [DEC-0087 — The artefact shape follows STRICT — one requirement per document, the business-rule class, the slot grammar where meaning survives it, and DRAFT until a decision policy exists](DEC-0087--the-artefact-shape-follows-strict.md)
 - [DEC-0088 — A decision policy binds this repository — graded by impact, agent at the lowest level inside four bounds, owner everywhere else](DEC-0088--decision-policy-graded-by-impact.md)
+- [DEC-0089 — The policy applied — every artefact resolves to the owner, nothing moves off DRAFT, and the impact levels that decided it](DEC-0089--the-policy-applied-nothing-moves-off-draft.md)

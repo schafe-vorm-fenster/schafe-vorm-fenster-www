@@ -155,7 +155,8 @@ specs/
   low impact means *"no dependants"*, and every one of the 155 requirements is
   implemented by a tactical spec while every one of the 29 tactical specs
   carries 8 to 21 acceptance criteria. Nothing in the repository is on an agent
-  row. `check:specs` E15 enforces the policy — exactly one binds, every pair of
+  row — DEC-0089 is the run of the policy over all 185 artefacts, with the
+  impact level and the escalation for each. `check:specs` E15 enforces the policy — exactly one binds, every pair of
   decision point and impact level is bound to a declared mode, and a status off
   `DRAFT` needs a decision record that names the artefact, cites the policy and
   names a decision point. W5 reports the resolution: the impact level of every
