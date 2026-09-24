@@ -182,6 +182,15 @@ The components in §1 reference token roles that the pinned package `0.1.3`
 does not carry. SRC-014 names them by role and states what the website does
 until the pin moves; the package is where they belong.
 
+**Two names for one value.** A role is written as its authored path
+(`font.letterSpacing.label`, `font.size.label`, `color.archive.ground`) and
+reaches a stylesheet as a custom property, which is not always the same
+word: `font.letterSpacing.label` emits `--tracking-label`, not
+`--letter-spacing-label`. The rows below name the role; `--tracking-label`,
+`--font-size-label`, `--color-archive-ground` and the rest are what a
+stylesheet writes. Where the two diverge, `tokens/svf-tokens.css` in the
+package is the answer — grep it for the property before assuming the name.
+
 Each row states the role, what the website needs, and **where it stands** —
 one of three:
 
