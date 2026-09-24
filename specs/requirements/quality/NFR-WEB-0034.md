@@ -5,6 +5,7 @@ class: NFR
 form: Q0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: security
 source: "platform default"
 evidence_sufficiency: S2

@@ -5,6 +5,7 @@ class: FUN
 form: F0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: place-search
 source: "DEC-0024, DEC-0036, DEC-0037, DEC-0079"
 evidence_sufficiency: S3

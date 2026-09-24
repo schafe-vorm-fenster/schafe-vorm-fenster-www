@@ -5,6 +5,7 @@ class: FUN
 form: F0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: forms-and-leads
 source: "DEC-0051, DEC-0052"
 evidence_sufficiency: S3

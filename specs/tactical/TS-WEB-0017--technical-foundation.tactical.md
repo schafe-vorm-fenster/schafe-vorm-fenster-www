@@ -3,6 +3,7 @@ artefact: tactical-spec
 id: TS-WEB-0017
 kind: rule
 status: DRAFT
+version: 0.1.0
 implements: [CON-WEB-0001, CON-WEB-0002, CON-WEB-0003, CON-WEB-0004, CON-WEB-0005, CON-WEB-0006, CON-WEB-0007]
 sources: [SRC-0006, SRC-0008, SRC-0011, SRC-0012]
 decisions: [DEC-0002, DEC-0020, DEC-0023, DEC-0029, DEC-0031, DEC-0035, DEC-0085]

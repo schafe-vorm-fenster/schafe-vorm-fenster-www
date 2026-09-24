@@ -5,6 +5,7 @@ class: FUN
 form: F1
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: personalization
 source: "SRC-0001#6, SRC-0002#context-matrix"
 evidence_sufficiency: S2

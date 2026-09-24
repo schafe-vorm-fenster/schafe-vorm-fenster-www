@@ -3,6 +3,7 @@ artefact: tactical-spec
 id: TS-WEB-0003
 kind: rule
 status: DRAFT
+version: 0.1.0
 implements: [NFR-WEB-0001, NFR-WEB-0002, NFR-WEB-0003, NFR-WEB-0004, NFR-WEB-0005, NFR-WEB-0006, NFR-WEB-0007, NFR-WEB-0008, NFR-WEB-0009, FUN-WEB-0105]
 sources: [SRC-0006, SRC-0007]
 decisions: [DEC-0007, DEC-0019]

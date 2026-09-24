@@ -5,6 +5,7 @@ class: CON
 form: C0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: technical-constraints
 source: "SRC-0014#icons, DEC-0056"
 evidence_sufficiency: S3

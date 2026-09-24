@@ -5,6 +5,7 @@ class: FUN
 form: F0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: place-search
 source: "entre repo, DEC-0028, DEC-0035"
 evidence_sufficiency: S3

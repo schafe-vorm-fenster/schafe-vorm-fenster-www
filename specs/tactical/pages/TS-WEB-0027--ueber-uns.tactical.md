@@ -3,6 +3,7 @@ artefact: tactical-spec
 id: TS-WEB-0027
 kind: interaction
 status: DRAFT
+version: 0.1.0
 implements: [FUN-WEB-0017]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0014]
 decisions: [DEC-0036, DEC-0042, DEC-0048, DEC-0051, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0084]

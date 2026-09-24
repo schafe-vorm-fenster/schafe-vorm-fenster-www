@@ -5,6 +5,7 @@ class: FUN
 form: F0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: pages
 source: "SRC-0003#navigation, DEC-0012, DEC-0039, DEC-0052, DEC-0081"
 evidence_sufficiency: S3

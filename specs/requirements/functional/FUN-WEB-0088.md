@@ -5,6 +5,7 @@ class: FUN
 form: F0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: content-pipeline
 source: "DEC-0012, DEC-0027"
 evidence_sufficiency: S3

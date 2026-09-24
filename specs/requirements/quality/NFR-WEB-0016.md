@@ -5,6 +5,7 @@ class: NFR
 form: Q0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: accessibility
 source: "SRC-0006"
 evidence_sufficiency: S1

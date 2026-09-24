@@ -5,6 +5,7 @@ class: NFR
 form: Q0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: accessibility
 source: "DEC-0012, DEC-0039"
 evidence_sufficiency: S3

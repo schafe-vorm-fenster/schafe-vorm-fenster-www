@@ -5,6 +5,7 @@ class: CON
 form: C0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: delivery-pipeline
 source: "DEC-0031, DEC-0035"
 evidence_sufficiency: S3

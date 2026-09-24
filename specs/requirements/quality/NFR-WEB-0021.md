@@ -5,6 +5,7 @@ class: NFR
 form: Q0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: privacy
 source: "SRC-0006, DEC-0004, DEC-0028"
 evidence_sufficiency: S3

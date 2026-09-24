@@ -5,6 +5,7 @@ class: FUN
 form: F0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: rendering-and-resilience
 source: "DEC-0019"
 evidence_sufficiency: S1

@@ -5,6 +5,7 @@ class: FUN
 form: F1
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: seo
 source: "convention"
 evidence_sufficiency: S2

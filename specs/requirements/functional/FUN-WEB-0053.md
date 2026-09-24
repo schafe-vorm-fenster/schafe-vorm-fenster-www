@@ -5,6 +5,7 @@ class: FUN
 form: F0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: personalization
 source: "SRC-0006 (transcript), SRC-0001#6"
 evidence_sufficiency: S2

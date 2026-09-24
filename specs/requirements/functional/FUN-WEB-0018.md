@@ -5,6 +5,7 @@ class: FUN
 form: F0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: pages
 source: "SRC-0003#archive"
 evidence_sufficiency: S2

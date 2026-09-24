@@ -2,6 +2,7 @@
 artefact: ssd
 id: SSD-WEB-0001
 status: DRAFT
+version: 0.1.0
 date: 2026-09-09
 sources: [SRC-0001, SRC-0003, SRC-0006, SRC-0008, SRC-0009]
 ---

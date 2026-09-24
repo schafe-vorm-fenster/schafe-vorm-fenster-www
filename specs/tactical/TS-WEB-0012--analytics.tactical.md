@@ -3,6 +3,7 @@ artefact: tactical-spec
 id: TS-WEB-0012
 kind: system
 status: DRAFT
+version: 0.1.0
 implements: [NFR-WEB-0020, NFR-WEB-0021, NFR-WEB-0022, NFR-WEB-0028]
 sources: [SRC-0006, SRC-0010, SRC-0003]
 decisions: [DEC-0004, DEC-0013, DEC-0016, DEC-0017, DEC-0028]

@@ -5,6 +5,7 @@ class: FUN
 form: F0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: live-data
 source: "SRC-0002#live-content, SRC-0003#your-place"
 evidence_sufficiency: S2

@@ -5,6 +5,7 @@ class: FUN
 form: F1
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: jobs-and-navigation
 source: "SRC-0001#1-jobs-not-audiences"
 evidence_sufficiency: S2

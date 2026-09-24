@@ -5,6 +5,7 @@ class: CON
 form: C1
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: scope-boundaries
 source: "DEC-0052"
 evidence_sufficiency: S3

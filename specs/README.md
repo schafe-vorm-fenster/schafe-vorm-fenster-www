@@ -156,6 +156,19 @@ specs/
   gate the policies name (*"Nothing is decided at … requirement approval
   below S2"*) plus tactical coverage for DP-03, and full test reference for
   DP-09. Evidence for a decision, never the decision.
+- **Every artefact that the contract gives a `version` carries one, at
+  `0.1.0`.** `@leafcutter-strict/method-version-increment` is a rule for
+  increments and nothing else — its inputs are *"the artefact's current
+  version and its diff"* — so it says nothing about the first version of
+  an artefact that predates versioning, and the schemas type `version` as
+  a bare string. `0.1.0` is therefore argued, not read off: no artefact
+  here has passed a decision point, DP-13 baseline release has never run,
+  and a `1.x` would claim a baseline nobody released. The first increment
+  the method governs is the one after the first approval, and its reason
+  goes in the change record — *"a version bumped without one cannot be
+  reviewed"*. Three contracts carry the field, so three kinds of artefact
+  do: requirement, tactical specification, specification document.
+  `check:specs` E16 enforces it.
 - Statements in the slot form their class prescribes
   (`@leafcutter-strict/method-statement-grammar`), recorded on the artefact
   as `form`; where a statement is not in its form yet, `form` ends in `0`

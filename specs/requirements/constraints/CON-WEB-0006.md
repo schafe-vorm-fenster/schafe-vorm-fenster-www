@@ -5,6 +5,7 @@ class: CON
 form: C0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: technical-constraints
 source: "DEC-0023, DEC-0085"
 evidence_sufficiency: S3

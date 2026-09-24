@@ -5,6 +5,7 @@ class: BUS
 form: B1
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: audience-model
 source: "SRC-0001#boundaries"
 evidence_sufficiency: S2

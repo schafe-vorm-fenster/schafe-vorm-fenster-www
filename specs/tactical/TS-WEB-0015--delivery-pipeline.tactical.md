@@ -3,6 +3,7 @@ artefact: tactical-spec
 id: TS-WEB-0015
 kind: procedure
 status: DRAFT
+version: 0.1.0
 implements: [CON-WEB-0020, CON-WEB-0021, CON-WEB-0022, CON-WEB-0023]
 sources: [SRC-0012]
 decisions: [DEC-0002, DEC-0031, DEC-0035, DEC-0040]

@@ -5,6 +5,7 @@ class: NFR
 form: Q0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: privacy
 source: "derived; convention"
 evidence_sufficiency: S1

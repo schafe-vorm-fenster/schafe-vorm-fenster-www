@@ -5,6 +5,7 @@ class: FUN
 form: F1
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: relevance-and-proof
 source: "SRC-0002#context-matrix"
 evidence_sufficiency: S2

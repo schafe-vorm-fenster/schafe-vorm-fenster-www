@@ -5,6 +5,7 @@ class: FUN
 form: F1
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: jobs-and-navigation
 source: "SRC-0001#6-assumptions-not-switches"
 evidence_sufficiency: S2

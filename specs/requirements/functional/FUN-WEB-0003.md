@@ -5,6 +5,7 @@ class: FUN
 form: F0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: jobs-and-navigation
 source: "SRC-0001#2-order-do-not-exclude, DEC-0082"
 evidence_sufficiency: S3

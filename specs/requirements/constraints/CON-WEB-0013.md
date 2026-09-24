@@ -5,6 +5,7 @@ class: CON
 form: C0
 domain: WEB
 status: DRAFT
+version: 0.1.0
 area: scope-boundaries
 source: "SRC-0001#boundaries"
 evidence_sufficiency: S2

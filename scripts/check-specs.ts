@@ -22,6 +22,7 @@
  *  E13 Source inventory rows carry a trust level from the source contract
  *  E14 Requirements carry the grammar form their class prescribes
  *  E15 No status but DRAFT while no decision policy binds this repository
+ *  E16 Every artefact whose contract carries `version` has one
  *  W1  (warning) requirements not covered by any tactical spec
  *  W2  (warning) covered requirements discharged by no acceptance criterion
  *  W3  (warning) acceptance criteria no test references
@@ -210,6 +211,34 @@ const notInForm: string[] = [];
 const POLICY_ID = /^POL-[A-Z0-9-]+$/;
 const policies: string[] = [];
 
+/**
+ * The version an artefact carries (E16).
+ *
+ * `@leafcutter-strict/method-version-increment` is a rule for *increments*
+ * and nothing else: its inputs are "the artefact's current version and its
+ * diff", and its output is major, minor or patch with the reason. It never
+ * says what the first version of an artefact is, and `@leafcutter-os/schemas`
+ * types `version` as a bare string with no pattern, so neither does the
+ * contract. The value has to be argued rather than read off.
+ *
+ * Every artefact here starts at **0.1.0**, because the one thing this
+ * repository can state about all of them is that none has passed a decision
+ * point: DP-13 baseline release has never run, so nothing is at a released
+ * baseline and a 1.x would claim one. The first increment the method governs
+ * is the one after the first approval.
+ *
+ * Three contracts carry the field, so three kinds of artefact do:
+ * `requirement-shell`, `tactical-specification` and `specification-document`.
+ * The decision record, the glossary proposal, the question set and the source
+ * inventory declare no `version`, and none is invented for them.
+ */
+const VERSION = /^\d+\.\d+\.\d+$/;
+const checkVersion = (d: Doc, id: string) => {
+  const v = d.frontmatter?.version;
+  if (typeof v !== "string" || !VERSION.test(v))
+    err(d.file, `E16 ${id}: version ${JSON.stringify(v ?? null)} is not <major>.<minor>.<patch>`);
+};
+
 // ── File collection ──────────────────────────────────────────────────────
 
 function walk(dir: string): string[] {
@@ -308,6 +337,7 @@ for (const d of docs) {
         err(d.file, `E11 ${id}: status ${JSON.stringify(status ?? null)} is not one of ${list(REQUIREMENT_STATUS)}`);
       }
       statuses.push([d.file, id, String(status)]);
+      checkVersion(d, id);
       // E14: the grammar form belongs to the class (`method-statement-grammar`)
       const form = d.frontmatter?.form;
       const expectedForm = FORM_OF_CLASS[id.slice(0, id.indexOf("-"))];
@@ -377,6 +407,10 @@ for (const d of docs) {
       err(d.file, `E12 status ${JSON.stringify(tsStatus ?? null)} is not one of ${list(TACTICAL_STATUS)}`);
     }
     statuses.push([d.file, String(d.frontmatter?.id ?? "?"), String(tsStatus)]);
+    checkVersion(d, String(d.frontmatter?.id ?? "?"));
+  }
+  if (/\.ssd\.md$/.test(d.file)) {
+    checkVersion(d, String(d.frontmatter?.id ?? "?"));
   }
   if (/glossary\.md$/.test(d.file)) {
     for (const m of d.body.matchAll(new RegExp(`^\\|\\s*(${bare(GLOSSARY_ID)})\\s*\\|`, "gm"))) glDefs.add(m[1]);

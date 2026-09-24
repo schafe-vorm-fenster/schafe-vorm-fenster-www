@@ -3,6 +3,7 @@ artefact: tactical-spec
 id: TS-WEB-0005
 kind: system
 status: DRAFT
+version: 0.1.0
 implements: [FUN-WEB-0024, FUN-WEB-0030, FUN-WEB-0031, FUN-WEB-0032, FUN-WEB-0033, FUN-WEB-0034, FUN-WEB-0035, FUN-WEB-0036, FUN-WEB-0038, FUN-WEB-0042, FUN-WEB-0052, FUN-WEB-0055]
 sources: [SRC-0002]
 decisions: [DEC-0019, DEC-0025, DEC-0041]
