@@ -35,7 +35,7 @@ to carry their own artefact's id.
 | privacy | NFR-WEB-0020–025, 028 | SRC-0001, SRC-0006 | DEC-0004, DEC-0016 | Q-0008 |
 | security | NFR-WEB-0030–038 | SRC-0006 | DEC-0014, DEC-0015, DEC-0017, DEC-0025 | Q-0022 |
 | technical constraints | CON-WEB-0001–006 | SRC-0006, SRC-0008 | DEC-0002 | — |
-| scope boundaries | CON-WEB-0010–016 | SRC-0001, SRC-0003 | — | Q-0006, Q-0012 |
+| scope boundaries | CON-WEB-0010–011, BUS-WEB-0012, CON-WEB-0013–016 | SRC-0001, SRC-0003 | — | Q-0006, Q-0012 |
 
 ## Tactical layer
 
@@ -58,7 +58,7 @@ to carry their own artefact's id.
 | TS-WEB-0015 delivery-pipeline | CON-WEB-0020–023 |
 | TS-WEB-0016 forms-and-leads | FUN-WEB-0090–096 |
 | TS-WEB-0017 technical-foundation | CON-WEB-0001–006 |
-| TS-WEB-0018 scope-boundaries | CON-WEB-0010–016 |
+| TS-WEB-0018 scope-boundaries | CON-WEB-0010–011, BUS-WEB-0012, CON-WEB-0013–016 |
 | TS-WEB-0019 home | FUN-WEB-0010 |
 | TS-WEB-0020 dein-ort | FUN-WEB-0011 |
 | TS-WEB-0021 dein-ort/starten | FUN-WEB-0047 |

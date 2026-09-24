@@ -446,7 +446,7 @@ A label that explains the page to its own authors does not belong on the page.
 ### CG-036 — "im Amt" is never the only addressee
 
 The reader may be a Verein, a Stiftung, a Kulturgesellschaft, a
-Volkshochschule. `CON-WEB-0012` holds: municipalities and institutions are not
+Volkshochschule. `BUS-WEB-0012` holds: municipalities and institutions are not
 separated, so copy may not silently address only one of them.
 
 - Avoid: *"Niemand im Amt tippt mehr Termine ein."* · *"Im Amt tippt dafür

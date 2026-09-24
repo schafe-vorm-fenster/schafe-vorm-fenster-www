@@ -19,23 +19,22 @@ point, not by being written down.
 | `functional/` | what the website does | `FUN-WEB-####` |
 | `quality/` | how well it does it (performance, accessibility, privacy) | `NFR-WEB-####` |
 | `constraints/` | fixed decisions bounding the solution space | `CON-WEB-####` |
+| `business-rules/` | true of the business whoever applies it | `BUS-WEB-####` |
 
-This three-class split **deviates** from
-`@leafcutter-strict/method-requirement-classification`, which classifies by
-a four-step decision tree into FUN · NFR · CON · BUS and records the Volere
-type number alongside. The mapping, and why it stands (DEC-0085 §6):
+The four classes are the method's.
+`@leafcutter-strict/method-requirement-classification` classifies by a
+four-step decision tree — business rule, then constraint, then quality, then
+functional — and the `requirement-shell` contract fixes the four tokens:
 
 | STRICT class | Here | Note |
 | --- | --- | --- |
 | FUN — functional | `FUN-WEB-####` | 1:1 |
 | NFR — quality | `NFR-WEB-####` | 1:1 |
 | CON — constraint | `CON-WEB-####` | also carries the scope boundaries |
-| BUS — business rule | — | **no class here** |
+| BUS — business rule | `BUS-WEB-####` | one rule so far, `BUS-WEB-0012` |
 
-The method is explicit that a business rule and the requirement applying it
-are two artefacts, and that merging them hides the rule. Splitting them here
-means a fourth ID family and an extraction pass over 155 rows, so it is
-owed, not done.
+The Volere type number the method also asks for is not recorded yet; that
+row of DEC-0085 §6 stays open.
 
 The identifiers themselves are no longer a deviation. DEC-0086 moved every
 family onto `<TYPE>-<DOMAIN>-<NNNN>`, taking the class tokens from the

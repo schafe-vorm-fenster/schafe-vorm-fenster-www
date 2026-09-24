@@ -33,7 +33,6 @@ From SRC-0001 "Boundaries" — what the website is not.
 | --- | --- | --- |
 | [CON-WEB-0010](CON-WEB-0010.md) | SRC-0001#boundaries | S2 |
 | [CON-WEB-0011](CON-WEB-0011.md) | SRC-0001#boundaries, `@schafe-vorm-fenster/offerings` | S2 |
-| [CON-WEB-0012](CON-WEB-0012.md) | SRC-0001#boundaries | S2 |
 | [CON-WEB-0013](CON-WEB-0013.md) | SRC-0001#boundaries | S2 |
 | [CON-WEB-0014](CON-WEB-0014.md) | SRC-0003#navigation | S2 |
 | [CON-WEB-0015](CON-WEB-0015.md) | DEC-0052 | S3 |

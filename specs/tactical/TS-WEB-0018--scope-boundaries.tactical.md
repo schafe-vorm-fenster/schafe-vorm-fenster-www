@@ -3,7 +3,7 @@ artefact: tactical-spec
 id: TS-WEB-0018
 kind: rule
 status: DRAFT
-implements: [CON-WEB-0010, CON-WEB-0011, CON-WEB-0012, CON-WEB-0013, CON-WEB-0014, CON-WEB-0015, CON-WEB-0016]
+implements: [CON-WEB-0010, CON-WEB-0011, BUS-WEB-0012, CON-WEB-0013, CON-WEB-0014, CON-WEB-0015, CON-WEB-0016]
 sources: [SRC-0001, SRC-0003, SRC-0009]
 decisions: [DEC-0020, DEC-0022, DEC-0036, DEC-0040]
 ---
@@ -41,7 +41,7 @@ be caught".
 | --- | --- | --- | --- |
 | CON-WEB-0010 | no feature explanation; help lives in the app | D6, D10 | gate (input set, content types) + review (the positive half) |
 | CON-WEB-0011 | prices only for promoted offerings | D2, D3 | gate + guard |
-| CON-WEB-0012 | municipalities and institutions are not separated | D7 | gate (narrow) + review |
+| BUS-WEB-0012 | municipalities and institutions are not separated | D7 | gate (narrow) + review |
 | CON-WEB-0013 | the AI-coaching track does not appear | D4 | gate + guard |
 | CON-WEB-0014 | the product name is never a navigation label | D5 | gate |
 | CON-WEB-0015 | local advertising: no occurrence at all while withheld (DEC-0052 §3) | D8 | gate |
@@ -274,7 +274,7 @@ and 2.
 | --- | --- | --- | --- |
 | CON-WEB-0010 | forbidden input sets, help content types, help routes | explanatory prose inside a permitted page | moment 1, moment 2 |
 | CON-WEB-0011 | ineligible ids, non-publishable price figures | a price described in words ("unter 500 Euro") | moment 2 |
-| CON-WEB-0012 | audience-keyed surfaces, a split across briefs | two audience-specific arguments inside one page | moment 1 |
+| BUS-WEB-0012 | audience-keyed surfaces, a split across briefs | two audience-specific arguments inside one page | moment 1 |
 | CON-WEB-0013 | denied ids and brand terms | a coaching argument written in fresh words | moment 2, moment 3 |
 | CON-WEB-0014 | every label and path surface | — (fully gated) | — |
 | CON-WEB-0015 | count, binding, sentence shape | whether the sentence promises something | moment 2 |
@@ -337,7 +337,7 @@ The four boundary questions:
 | --- | --- |
 | CON-WEB-0010 (no feature explanation; help in the app) | D6, D10 · A8, A13, A14, A15 |
 | CON-WEB-0011 (prices only for promoted offerings) | D2, D3 · A1, A2, A3 |
-| CON-WEB-0012 (no municipality/institution split) | D7, D10 · A9, A14 |
+| BUS-WEB-0012 (no municipality/institution split) | D7, D10 · A9, A14 |
 | CON-WEB-0013 (AI-coaching track absent) | D4, D10 · A4, A5, A16 |
 | CON-WEB-0014 (product name never a navigation label) | D5 · A6, A7 |
 | CON-WEB-0015 (local advertising: one sentence while withheld) | D2, D8 · A10, A15 |

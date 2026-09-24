@@ -53,7 +53,7 @@ the organisation, both informal.
 exist") · `TS-WEB-0019-A6`, `TS-WEB-0022-A4` assert the question mark · `DEC-0066` (one
 register, `du`) says nothing about number · `TS-WEB-0007 D5/D9/D12` (schema
 `describe()`/`max()`, glossary as production input) · `glossary.md` has no
-use/avoid columns · `CON-WEB-0012` (municipalities and institutions not
+use/avoid columns · `BUS-WEB-0012` (municipalities and institutions not
 separated).
 
 **Change.**

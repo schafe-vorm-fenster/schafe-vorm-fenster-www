@@ -113,7 +113,7 @@ so `publishablePrice` is false: promoted buys the page and the CTA, not a figure
   testimonials remain `usage_rights: unverified`, Q-0014). No reference
   case for a delivered territory exists, and none is simulated.
 
-### D8 — Three audiences, one argument; metadata [FIXED: FUN-WEB-0009, CON-WEB-0012, TS-WEB-0011 D4, TS-WEB-0012 D4]
+### D8 — Three audiences, one argument; metadata [FIXED: FUN-WEB-0009, BUS-WEB-0012, TS-WEB-0011 D4, TS-WEB-0012 D4]
 
 - No audience tabs, no "Landkreis / Stadt / Institution?" control, no
   segmented entry — this page is where the temptation is greatest and the
@@ -167,7 +167,7 @@ so `publishablePrice` is false: promoted buys the page and the CTA, not a figure
 | FUN-WEB-0028 (region interim: examples, counters, search; no place lists; map-ready) | D3, D4 · A1, A2, A3, A9, A10, A11, A16, A17 |
 
 Consumed, discharged elsewhere: FUN-WEB-0020 TS-WEB-0006 D10 / TS-WEB-0018 D3 ·
-FUN-WEB-0040–046 TS-WEB-0008 · FUN-WEB-0036 TS-WEB-0005 · FUN-WEB-0090–093 TS-WEB-0016 · CON-WEB-0012/016 TS-WEB-0018.
+FUN-WEB-0040–046 TS-WEB-0008 · FUN-WEB-0036 TS-WEB-0005 · FUN-WEB-0090–093 TS-WEB-0016 · BUS-WEB-0012 and CON-WEB-0016 TS-WEB-0018.
 
 ### D3a — The map has a date; the tier has features [FIXED: DEC-0060, DEC-0061]
 

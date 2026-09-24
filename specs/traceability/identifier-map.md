@@ -18,6 +18,15 @@ table is a record of the rename, not its source.
 This is the one file in the repository where the old identifier forms still
 appear. That is what it is for.
 
+## One row has moved on since
+
+The tables below record what DEC-0086 did on 2026-09-24 and are not edited
+after the fact. One identifier they produced has since changed class, by
+DEC-0087: `CON-WEB-0012` is `BUS-WEB-0012`. The number is the same one it
+has held since `WEB-C-012`; only the class token moved, because the method's
+decision tree puts the statement in its first class rather than its second.
+Follow `WEB-C-012` → `CON-WEB-0012` → `BUS-WEB-0012`.
+
 ## The rule
 
 `@leafcutter-strict/method-identifier-and-locator-schema` composes an

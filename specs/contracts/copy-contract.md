@@ -111,7 +111,7 @@ five and every rule appears exactly once.)
 | CG-033 nothing literally untrue | `review` | The single most expensive rule to get wrong, and the only mechanism for it is a person who knows the facts. |
 | CG-034 no volatile numbers | `lint` | A numeral of three digits or more, or a bare year, in a claim field of `hero`, `value-story`, `trust-block` or `proof-card` fails unless the field is read from an offering or a live module (FUN-WEB-0041; TS-WEB-0008-A10 asserts the rendered side). |
 | CG-035 no internal meta lines | `lint` | Avoid-list row. |
-| CG-036 "im Amt" is never the only addressee | `lint` | A field containing `im Amt` must also name one of `Verein`, `Stiftung`, `Kulturgesellschaft`, `Volkshochschule`, `Akteur` — otherwise it fails (CON-WEB-0012). |
+| CG-036 "im Amt" is never the only addressee | `lint` | A field containing `im Amt` must also name one of `Verein`, `Stiftung`, `Kulturgesellschaft`, `Volkshochschule`, `Akteur` — otherwise it fails (BUS-WEB-0012). |
 | CG-037 no promise without a process | `lint` | `pnpm check:terms` already is this row for the two-working-day wording (TS-WEB-0026-A8, TS-WEB-0006 D11); a further promise extends the same list. |
 
 ### Naming

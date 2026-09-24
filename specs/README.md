@@ -126,7 +126,8 @@ specs/
 │   ├── functional/     FUN-WEB-####.md — jobs, pages, relevance, live data, personalization,
 │   │                   localization, SEO, content pipeline
 │   ├── quality/        NFR-WEB-####.md — performance, accessibility, privacy
-│   └── constraints/    CON-WEB-####.md — stack, brand, scope boundaries
+│   ├── constraints/    CON-WEB-####.md — stack, brand, scope boundaries
+│   └── business-rules/ BUS-WEB-####.md — true of the business, not of the solution
 ├── decisions/          DEC-#### decision records (S3 evidence anchor)
 ├── questions/          Q-#### open-question register (UNKNOWN + resolving question)
 ├── tactical/           TS-WEB-#### tactical specs — the generation prompts (FIXED/PROPOSED/FREE)
