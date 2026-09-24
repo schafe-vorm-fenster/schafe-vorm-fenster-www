@@ -104,3 +104,4 @@ Repository-level decisions (content SSOT, audience model) live in
 - [DEC-0087 — The artefact shape follows STRICT — one requirement per document, the business-rule class, the slot grammar where meaning survives it, and DRAFT until a decision policy exists](DEC-0087--the-artefact-shape-follows-strict.md)
 - [DEC-0088 — A decision policy binds this repository — graded by impact, agent at the lowest level inside four bounds, owner everywhere else](DEC-0088--decision-policy-graded-by-impact.md)
 - [DEC-0089 — The policy applied — every artefact resolves to the owner, nothing moves off DRAFT, and the impact levels that decided it](DEC-0089--the-policy-applied-nothing-moves-off-draft.md)
+- [DEC-0090 — The acceptance criteria keep their verification level — the deviation from the contract is deliberate, recorded, and raised upstream](DEC-0090--acceptance-criteria-keep-the-verification-level.md)
