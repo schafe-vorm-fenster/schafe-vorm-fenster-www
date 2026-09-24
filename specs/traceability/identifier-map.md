@@ -62,6 +62,47 @@ retired identifier, because that is how it says what it changed;
 | `NFR-WEB-0036` | `CON-WEB-0040` · `CON-WEB-0041` | DEC-0092 | One predicate naming the instrument, one naming what may not be added. Merging them hides that the second outlives any particular instrument. |
 | `NFR-WEB-0037` | `CON-WEB-0042` · `CON-WEB-0043` | DEC-0092 | Two predicates — what may never leave the server, and how the client is served instead. |
 | `NFR-WEB-0038` | `CON-WEB-0044` · `CON-WEB-0045` | DEC-0092 | Two predicates — what protects the endpoints, and what may never be handed to the client. |
+| `CON-WEB-0001` | `CON-WEB-0046` · `CON-WEB-0047` · `CON-WEB-0048` | DEC-0093 | Three limits in one statement — the framework, the host, and the bar on a second framework. |
+| `CON-WEB-0002` | `CON-WEB-0049` · `CON-WEB-0050` · `CON-WEB-0051` | DEC-0093 | Three limits — where the layout is optimised, what the wider viewports may do, and where the breakpoints come from. |
+| `CON-WEB-0004` | `CON-WEB-0052` · `FUN-WEB-0131` | DEC-0093 | A limit on what the website may build, and a behaviour that follows from it. The method keeps a bound and the thing it bounds apart. |
+| `CON-WEB-0005` | `CON-WEB-0053` · `CON-WEB-0054` | DEC-0093 | Two conventions, one about the language and one about the package manager. |
+| `CON-WEB-0007` | `CON-WEB-0055` · `CON-WEB-0056` · `CON-WEB-0057` | DEC-0093 | Three limits — where a glyph comes from, how the set enters the build, and what may never be added by hand. |
+| `CON-WEB-0014` | `CON-WEB-0058` · `FUN-WEB-0132` | DEC-0093 | A bar on where the product name may appear, and the one place it is introduced. The second is a page behaviour, not a limit. |
+| `FUN-WEB-0003` | `FUN-WEB-0133` · `FUN-WEB-0134` · `FUN-WEB-0135` · `FUN-WEB-0136` | DEC-0093 | One rule about the primary conversion, one about its repeat, one about every other action, and one permission. Four modals, four artefacts. |
+| `FUN-WEB-0008` | `FUN-WEB-0138` · `CON-WEB-0059` | DEC-0093 | How a job is introduced, and what may not stand in for it. The second is a bar on the copy, not a shape for it. |
+| `FUN-WEB-0019` | `FUN-WEB-0139` · `CON-WEB-0060` | DEC-0093 | A completeness rule over the conversion map, and one goal deliberately left unwired. The second is a limit. |
+| `FUN-WEB-0021` | `FUN-WEB-0140` · `FUN-WEB-0141` · `FUN-WEB-0137` · `CON-WEB-0061` | DEC-0093 | Four rules about two standing surfaces: what the footer carries, what the header carries, and where contact does not live. |
+| `FUN-WEB-0023` | `CON-WEB-0062` · `FUN-WEB-0142` | DEC-0093 | A bar on the path shape, and the mechanism that replaces it. |
+| `FUN-WEB-0025` | `FUN-WEB-0143` · `FUN-WEB-0144` · `CON-WEB-0063` | DEC-0093 | Three rules — what is rendered in the page language, what keeps its own, and what may never happen at request time. |
+| `FUN-WEB-0026` | `FUN-WEB-0145` · `FUN-WEB-0147` · `CON-WEB-0064` | DEC-0093 | The status and indexing of the 404 response, what it renders, and one thing it may not do. |
+| `FUN-WEB-0028` | `FUN-WEB-0148` · `CON-WEB-0065` · `CON-WEB-0066` | DEC-0093 | What the interim region page renders, what it may never render, and a standing condition on its copy. |
+| `FUN-WEB-0029` | `FUN-WEB-0146` · `CON-WEB-0067` | DEC-0093 | Where the legal content lives, and a permanence rule on its anchors. The second outlives any particular page. |
+| `FUN-WEB-0032` | `FUN-WEB-0149` · `CON-WEB-0068` | DEC-0093 | How proof is scored, and what may move the weights. The second is a governance limit on the first. |
+| `FUN-WEB-0036` | `FUN-WEB-0150` · `FUN-WEB-0151` · `CON-WEB-0069` | DEC-0093 | A claim carries a slot; an empty slot weakens the claim; proof is never invented. Three rules, the last of them a bar. |
+| `FUN-WEB-0044` | `FUN-WEB-0153` · `FUN-WEB-0154` | DEC-0093 | Two behaviours in the empty state — where the widening chain starts, and what the page's focus job becomes. |
+| `FUN-WEB-0046` | `FUN-WEB-0155` · `FUN-WEB-0156` · `FUN-WEB-0157` · `CON-WEB-0070` · `CON-WEB-0071` · `CON-WEB-0072` | DEC-0093 | Six rules about the place search — what it asks for, what it matches, two things it may never offer, what the suggestions cover, and one lookup that is out. |
+| `FUN-WEB-0047` | `FUN-WEB-0158` · `FUN-WEB-0159` | DEC-0093 | Where an uncarried place leads, and that a name matching nothing still gets there. The second is the case the first would otherwise drop. |
+| `FUN-WEB-0053` | `FUN-WEB-0160` · `FUN-WEB-0161` · `FUN-WEB-0162` · `CON-WEB-0073` | DEC-0093 | Four rules — how location is detected, when the browser may be asked, how far the resolution must reach, and how far it may never reach. |
+| `FUN-WEB-0061` | `FUN-WEB-0163` · `FUN-WEB-0164` | DEC-0093 | What sets the default language, and what overrides it. |
+| `FUN-WEB-0064` | `FUN-WEB-0165` · `FUN-WEB-0166` | DEC-0093 | What every internal link preserves, and when the prefix is emitted. |
+| `FUN-WEB-0069` | `FUN-WEB-0168` · `CON-WEB-0074` · `CON-WEB-0076` | DEC-0093 | Three limits on a deferred feature, each of which outlives the deferral: where it may run, how often it may appear, and what it may never touch. |
+| `FUN-WEB-0075` | `CON-WEB-0075` | DEC-0093 | The number is free in the target class and is kept. |
+| `FUN-WEB-0079` | `FUN-WEB-0169` · `FUN-WEB-0170` | DEC-0093 | Two different files with two different jobs. |
+| `FUN-WEB-0080` | `FUN-WEB-0171` · `CON-WEB-0077` | DEC-0093 | How hub raw material arrives, and what may never be done with it. |
+| `FUN-WEB-0081` | `FUN-WEB-0172` · `FUN-WEB-0173` | DEC-0093 | Generation and editorial rework are two steps with two owners. |
+| `FUN-WEB-0082` | `FUN-WEB-0174` · `CON-WEB-0078` | DEC-0093 | Where generated content lives, and where it may never be read from. |
+| `FUN-WEB-0084` | `FUN-WEB-0175` · `FUN-WEB-0176` · `FUN-WEB-0177` | DEC-0093 | Three steps of the update workflow, with three different actors: the hub publishes, the pipeline diffs, the result arrives as a pull request. |
+| `FUN-WEB-0085` | `FUN-WEB-0178` · `CON-WEB-0079` | DEC-0093 | Where the ids come from, and that they are never made here. |
+| `FUN-WEB-0086` | `FUN-WEB-0179` · `CON-WEB-0080` | DEC-0093 | How feed-like content arrives, and one section that does not exist. |
+| `FUN-WEB-0088` | `FUN-WEB-0180` · `FUN-WEB-0181` · `FUN-WEB-0182` | DEC-0093 | Three steps for the legal texts: how they arrive, where they are rendered, and how a further language is added. |
+| `FUN-WEB-0090` | `FUN-WEB-0183` · `CON-WEB-0081` · `CON-WEB-0082` | DEC-0093 | What provides the lead forms, and two things the website may never have. |
+| `FUN-WEB-0093` | `FUN-WEB-0184` · `FUN-WEB-0185` · `FUN-WEB-0187` · `FUN-WEB-0152` · `CON-WEB-0083` | DEC-0093 | Where a booking resolves, what the first row is, where the goal completes, what every row carries, and what an in-page action emits. |
+| `FUN-WEB-0094` | `FUN-WEB-0188` · `FUN-WEB-0189` · `CON-WEB-0084` | DEC-0093 | Where the flow concludes, what it must not involve, and where the order goes. |
+| `FUN-WEB-0096` | `FUN-WEB-0186` · `FUN-WEB-0190` · `FUN-WEB-0191` · `CON-WEB-0085` · `CON-WEB-0086` | DEC-0093 | What the signup offers, how each of its two routes works, and two conditions that bind both. |
+| `FUN-WEB-0100` | `FUN-WEB-0192` · `CON-WEB-0088` | DEC-0093 | How a page renders, and what its shell may never wait for. |
+| `FUN-WEB-0101` | `FUN-WEB-0193` · `FUN-WEB-0194` · `FUN-WEB-0195` | DEC-0093 | Three verbs joined by "and" — fetch, stream, cache — and the method splits exactly that. |
+| `FUN-WEB-0104` | `FUN-WEB-0196` · `FUN-WEB-0197` | DEC-0093 | A permission and a prohibition, which are two modals. |
+| `FUN-WEB-0106` | `FUN-WEB-0198` · `FUN-WEB-0199` · `FUN-WEB-0200` · `CON-WEB-0089` · `CON-WEB-0090` | DEC-0093 | Five rules about a skeleton — when it appears, what it reserves, what it may not do, what replaces it, and what may never be used instead. |
 
 ## The rule
 

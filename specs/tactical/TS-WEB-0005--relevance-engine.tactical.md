@@ -4,7 +4,7 @@ id: TS-WEB-0005
 kind: system
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0024, FUN-WEB-0030, FUN-WEB-0031, FUN-WEB-0032, FUN-WEB-0033, FUN-WEB-0034, FUN-WEB-0035, FUN-WEB-0036, FUN-WEB-0038, FUN-WEB-0042, FUN-WEB-0052, FUN-WEB-0055]
+implements: [FUN-WEB-0024, FUN-WEB-0030, FUN-WEB-0031, FUN-WEB-0149, CON-WEB-0068, FUN-WEB-0033, FUN-WEB-0034, FUN-WEB-0035, FUN-WEB-0150, FUN-WEB-0151, CON-WEB-0069, FUN-WEB-0038, FUN-WEB-0042, FUN-WEB-0052, FUN-WEB-0055]
 sources: [SRC-0002]
 decisions: [DEC-0019, DEC-0025, DEC-0041]
 ai_provenance:
@@ -260,7 +260,7 @@ directly. The scoring functions are pure and free of I/O.
 
 - [FREE] Internal module split of the service, provided D9's boundary
   holds and the scoring functions stay pure.
-- [FREE] Skeleton design of the streamed elements, within FUN-WEB-0106.
+- [FREE] Skeleton design of the streamed elements, within FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090.
 
 ## Acceptance criteria
 
@@ -287,21 +287,26 @@ directly. The scoring functions are pure and free of I/O.
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0024 (place-bound proof from covered places) | D5 · A10 |
+| FUN-WEB-0024 (draw it only from a covered place) | D5 · A10 |
 | FUN-WEB-0030 (lists > 3 ordered by the model) | D6 |
 | FUN-WEB-0031 (sequence rule) | D6 · A3, A7 |
-| FUN-WEB-0032 (formula and weights) | D5 · A3, A5, A11 |
+| FUN-WEB-0149 (score it by the formula and starting weights of …) | D5 · A3, A5, A11 |
+| CON-WEB-0068 (never revise a relevance weight except from measurement) | D5 · A3, A5, A11 |
 | FUN-WEB-0033 (clearance hard filter) | D5 · A2 |
 | FUN-WEB-0034 (spread rule) | D6 · A3, A7 |
 | FUN-WEB-0035 (entry context selects starting type) | D2 |
-| FUN-WEB-0036 (proof slot beside every claim) | D5 |
+| FUN-WEB-0150 (carry a proof slot) | D5 |
+| FUN-WEB-0151 (leave it empty and weaken the claim accordingly) | D5 |
+| CON-WEB-0069 (never invent or imply a proof) | D5 |
 | FUN-WEB-0038 (geo hierarchy) | D1 · A1 |
 | FUN-WEB-0042 (live modules widen) | D1, D8 |
-| FUN-WEB-0052 (stages change selection only) | D8 · A9 |
+| FUN-WEB-0052 (change only the selection and order of proof and …) | D8 · A9 |
 | FUN-WEB-0055 (entry context preselects) | D2, D8 · A8 |
 | FUN-WEB-0030 (lists ordered by the model) | D6 · A12, A13 |
 | FUN-WEB-0035 (entry context selects starting type) | D2 · A14 |
-| FUN-WEB-0036 (proof slot beside every claim) | D5 · A15 |
+| FUN-WEB-0150 (carry a proof slot) | D5 · A15 |
+| FUN-WEB-0151 (leave it empty and weaken the claim accordingly) | D5 · A15 |
+| CON-WEB-0069 (never invent or imply a proof) | D5 · A15 |
 | FUN-WEB-0042 (live modules widen) | D1, D8 · A16 |
 
 ## Open points

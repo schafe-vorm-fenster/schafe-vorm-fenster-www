@@ -59,14 +59,14 @@ export const CONVERSION_EVENTS: readonly ConversionEventDefinition[] = [
   {
     goalId: "buy-calendar-licence",
     stage: "completed",
-    trigger: "invoice checkout concluded, embed code shown (FUN-WEB-0094)",
+    trigger: "invoice checkout concluded, embed code shown (FUN-WEB-0188, FUN-WEB-0189, CON-WEB-0084)",
     surface: ["order"],
     wired: true,
   },
   {
     goalId: "request-licence-quote",
     stage: "completed",
-    trigger: "envoy widget reports a successful submission (FUN-WEB-0090)",
+    trigger: "envoy widget reports a successful submission (FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082)",
     surface: ["regionQuote"],
     wired: true,
   },
@@ -74,7 +74,7 @@ export const CONVERSION_EVENTS: readonly ConversionEventDefinition[] = [
     goalId: "request-product-briefing",
     stage: "handover",
     trigger:
-      "outbound click to the Google Calendar booking link (FUN-WEB-0093) — the booking itself is off-site with no callback",
+      "outbound click to the Google Calendar booking link (FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083) — the booking itself is off-site with no callback",
     surface: ["calendar", "region"],
     wired: true,
   },

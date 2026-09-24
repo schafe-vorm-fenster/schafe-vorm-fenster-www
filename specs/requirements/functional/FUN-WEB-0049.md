@@ -2,7 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0049
 class: FUN
-form: F0
+form: F1
 domain: WEB
 status: DRAFT
 version: 0.1.0
@@ -13,9 +13,13 @@ ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
   model: "Claude Opus 5 (1M context)"
-  generated_at: "2026-09-10T13:40:06+02:00"
+  generated_at: "2026-09-24T17:20:00+02:00"
 ---
 
 # FUN-WEB-0049
 
-Handover links into the app shall be built from geo-api community slugs (`/api/{token}/community/slug/{slug}`) — the only current contract. Registration prefill has no contract and stays a demand to the app.
+For a handover link into the app, the website SHALL build it from a geo-api community slug (`/api/{token}/community/slug/{slug}`).
+
+## Notes
+
+The only current contract. Registration prefill has none and stays a demand to the app.

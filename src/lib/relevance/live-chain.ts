@@ -15,7 +15,7 @@
  * Two documented shifts:
  *
  * - **Empty place.** A place with no dates starts the chain at radius 2. The
- *   page's focus-job shift that goes with it (FUN-WEB-0044, "you could be the
+ *   page's focus-job shift that goes with it (FUN-WEB-0153, FUN-WEB-0154, "you could be the
  *   first") belongs to **TS-WEB-0008**; this module only reports `placeIsEmpty`.
  * - **Own calendar.** Where the focus job is `run-our-own-calendar`, module 1
  *   is the **embed demo** — the Portalize calendar filtered to the place just

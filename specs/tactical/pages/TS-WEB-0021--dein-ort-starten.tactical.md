@@ -4,7 +4,7 @@ id: TS-WEB-0021
 kind: interaction
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0047]
+implements: [FUN-WEB-0158, FUN-WEB-0159]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0014]
 decisions: [DEC-0013, DEC-0024, DEC-0029, DEC-0034, DEC-0036, DEC-0037, DEC-0066, DEC-0071, DEC-0083]
 ai_provenance:
@@ -79,9 +79,9 @@ is a positive answer from the lookup, so a failure never produces a
 founding page; entry without a parameter is legitimate (D4), not an
 error. A name that matched nothing is never treated as a mistyping to be
 corrected with another kind of input — the page is the answer, not a
-retry prompt (FUN-WEB-0047, DEC-0079 §4).
+retry prompt (FUN-WEB-0158, FUN-WEB-0159, DEC-0079 §4).
 
-### D4 — The place is a query parameter, and the URL is the whole payload [FIXED: DEC-0037, FUN-WEB-0023; validation PROPOSED]
+### D4 — The place is a query parameter, and the URL is the whole payload [FIXED: DEC-0037, CON-WEB-0062, FUN-WEB-0142; validation PROPOSED]
 
 | Rule | Determination |
 | --- | --- |
@@ -212,10 +212,11 @@ and a skeleton older than 2 s resolves to the example-less state (SRC-0014
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0047 (uncovered place → `/dein-ort/starten`, "nothing entered in \<place\> yet" plus the founding flow, place as query parameter) | entry boundary D3 · parameter contract D4, D5 · page substance D1, D2, D6, D7 · handover D8 · A2–A9, A14 |
+| FUN-WEB-0158 (lead to /dein-ort/starten with the place as a query …) | entry boundary D3 · parameter contract D4, D5 · page substance D1, D2, D6, D7 · handover D8 · A2–A9, A14 |
+| FUN-WEB-0159 (reach /dein-ort/starten on submit) | entry boundary D3 · parameter contract D4, D5 · page substance D1, D2, D6, D7 · handover D8 · A2–A9, A14 |
 
-Consumed, discharged elsewhere: FUN-WEB-0023 TS-WEB-0004 D1a · FUN-WEB-0046 TS-WEB-0008
-D7 · FUN-WEB-0024 TS-WEB-0005 D5 · FUN-WEB-0049 TS-WEB-0008 D9 · FUN-WEB-0001–009 TS-WEB-0006.
+Consumed, discharged elsewhere: CON-WEB-0062, FUN-WEB-0142 TS-WEB-0004 D1a · FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072 TS-WEB-0008
+D7 · FUN-WEB-0024 TS-WEB-0005 D5 · FUN-WEB-0049 TS-WEB-0008 D9 · FUN-WEB-0001, FUN-WEB-0002, FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136, FUN-WEB-0004, FUN-WEB-0005, FUN-WEB-0006, FUN-WEB-0007, FUN-WEB-0138, CON-WEB-0059, FUN-WEB-0009 TS-WEB-0006.
 
 ## Open points
 

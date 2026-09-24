@@ -38,4 +38,4 @@ date: 2026-09-09
   (DEC-0008); the canonical mechanism documentation lives in the
   `community-calendar` repository.
 - SRC-0008 becomes a set of npm packages shortly; references by ID and path
-  are then hardened into `devDependencies` (see FUN-WEB-0080 ff.).
+  are then hardened into `devDependencies` (see FUN-WEB-0171, CON-WEB-0077 ff.).

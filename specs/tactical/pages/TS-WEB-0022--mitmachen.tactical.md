@@ -194,9 +194,9 @@ D1a, D3a, D6 · TS-WEB-0004-A1). This spec discharges what the route *is*:
 manifest values, blocks and order, the mechanism rule, the live example,
 the proof binding, the conversion carriage.
 
-Adjacent, consumed and not discharged here: FUN-WEB-0001/003–009 (TS-WEB-0006) ·
-FUN-WEB-0024/030–036 (TS-WEB-0005) · FUN-WEB-0040/045/049 (TS-WEB-0008) · FUN-WEB-0050–052
-(TS-WEB-0010) · FUN-WEB-0071/076/078 (TS-WEB-0011) · CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064 (TS-WEB-0012).
+Adjacent, consumed and not discharged here: FUN-WEB-0001, FUN-WEB-0004–0007, FUN-WEB-0009, FUN-WEB-0133–0136, FUN-WEB-0138 (TS-WEB-0006) ·
+FUN-WEB-0024, FUN-WEB-0030–0035, FUN-WEB-0149–0151 (TS-WEB-0005) · FUN-WEB-0040, FUN-WEB-0045, FUN-WEB-0049 (TS-WEB-0008) · FUN-WEB-0050–0052
+(TS-WEB-0010) · FUN-WEB-0071, FUN-WEB-0076, FUN-WEB-0078 (TS-WEB-0011) · CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064 (TS-WEB-0012).
 
 ## Open points
 

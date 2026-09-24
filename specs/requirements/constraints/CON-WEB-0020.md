@@ -2,7 +2,7 @@
 artefact: requirement
 id: CON-WEB-0020
 class: CON
-form: C0
+form: C1
 domain: WEB
 status: DRAFT
 version: 0.1.0
@@ -13,9 +13,17 @@ ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
   model: "Claude Opus 5 (1M context)"
-  generated_at: "2026-09-10T13:40:06+02:00"
+  generated_at: "2026-09-24T17:20:00+02:00"
 ---
 
 # CON-WEB-0020
 
-Migration stage: the `next-2026` branch deploys to `next.schafe-vorm-fenster.de` (the product's pre-launch preview vacates it — internal coordination, not a blocker), with Vercel deployment protection enabled and `noindex`, so the full deploy chain runs without going live.
+The solution SHALL deploy the `next-2026` branch to `next.schafe-vorm-fenster.de`, imposed by DEC-0031 and DEC-0035.
+
+## Rationale
+
+So that the full deploy chain runs without going live. The product's pre-launch preview vacates the host — internal coordination, not a blocker.
+
+## Notes
+
+Deployment protection and `noindex` on that host are CON-WEB-0023's, which covers every non-production deployment.

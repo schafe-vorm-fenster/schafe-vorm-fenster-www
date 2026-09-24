@@ -4,7 +4,7 @@ id: TS-WEB-0011
 kind: rule
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0070, FUN-WEB-0071, FUN-WEB-0072, FUN-WEB-0074, FUN-WEB-0075, FUN-WEB-0076, FUN-WEB-0077, FUN-WEB-0078]
+implements: [FUN-WEB-0070, FUN-WEB-0071, FUN-WEB-0072, FUN-WEB-0074, CON-WEB-0075, FUN-WEB-0076, FUN-WEB-0077, FUN-WEB-0078]
 sources: [SRC-0003, SRC-0006, SRC-0010]
 decisions: [DEC-0018, DEC-0020, DEC-0022, DEC-0026, DEC-0035, DEC-0036, DEC-0037]
 ai_provenance:
@@ -25,7 +25,7 @@ structured-data type sits on which page type, titles, descriptions and
 share metadata, and what an SEO landing page may be.
 
 Not here: sitemaps, `robots.txt`, `llms.txt` (TS-WEB-0004 D1, FUN-WEB-0073 and
-FUN-WEB-0079), hreflang and the canonical rule itself (TS-WEB-0001 D6 — D9 below
+FUN-WEB-0169, FUN-WEB-0170), hreflang and the canonical rule itself (TS-WEB-0001 D6 — D9 below
 only settles the query-parameter case), the URL inventory redirect
 targets must hit (TS-WEB-0004 D1), the legal anchors they may point at
 (TS-WEB-0004 D8), and the inherited `/:community` forwarding (TS-WEB-0004 D3
@@ -70,7 +70,7 @@ does, the rows below are the confirmed floor.
 | `/funktionen` | feature list (10 markdown features) | `/dein-kalender` | the only page that still argues features |
 | `/presse` | press page | `/ueber-uns/archiv` | proof archive is its successor (FUN-WEB-0018) |
 | `/impressum` | imprint **and** privacy (one page, legacy footer linked both here) | `/rechtliches#impressum` | anchor per TS-WEB-0004 D8 |
-| `/hilfe` | help index | **open** — help lives in the app (FUN-WEB-0021), which has no public help URL contract | see Open points |
+| `/hilfe` | help index | **open** — help lives in the app (FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061), which has no public help URL contract | see Open points |
 | `/hilfe/{slug}` | help articles | **open** — same, per article | slugs not archived (Q-0016) |
 | apex `/:community` | village calendars | TS-WEB-0004 D3 rule 6 | not this spec's row |
 
@@ -81,7 +81,7 @@ One skeleton per page: `header > nav` · `main > article` · `aside`\* ·
 headline), heading levels never skip, every `nav` and every `aside`
 carries an accessible name (its own heading or `aria-label`).
 
-Streamed content (FUN-WEB-0106 skeletons) lands **inside the landmark its
+Streamed content (FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090 skeletons) lands **inside the landmark its
 final content belongs to** — the landmark structure of a page is
 identical before and after hydration.
 
@@ -89,8 +89,8 @@ Demotion is decided per element, not per page. The registry is binding:
 
 | Element | Landmark | Reason |
 | --- | --- | --- |
-| Page argument, scene, mechanism (FUN-WEB-0008) | `main > article` | the one primary argument |
-| Primary conversion CTA (FUN-WEB-0003, FUN-WEB-0006) | inside `article` | must stay dominant |
+| Page argument, scene, mechanism (FUN-WEB-0138, CON-WEB-0059) | `main > article` | the one primary argument |
+| Primary conversion CTA (FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136, FUN-WEB-0006) | inside `article` | must stay dominant |
 | Place search on `/` and `/dein-ort` | inside `article` | the job is fulfilled in place (FUN-WEB-0007) |
 | Place search anywhere else | `aside` | secondary entry point |
 | Live dates / "this week nearby" on `/dein-ort` | inside `article` | there the live data *is* the argument |
@@ -144,7 +144,7 @@ Emitted types:
 
 Rules for values: every `Organization` field (legal name, address,
 contact, registration) is read at build time from `content/legal/`
-(FUN-WEB-0088) — no identity data is written into code or into this spec.
+(FUN-WEB-0180, FUN-WEB-0181, FUN-WEB-0182) — no identity data is written into code or into this spec.
 `sameAs` lists only profiles that exist. `inLanguage` and every localized
 string come from the page language (TS-WEB-0001 D3, DEC-0026).
 
@@ -154,9 +154,9 @@ Deliberately **not** emitted, each for a reason:
 | --- | --- |
 | `LocalBusiness` | No premises customers visit and no opening hours. Emitting it would assert something untrue about a software operator that happens to sit in a village. `Organization` is the honest node. |
 | `Event` | Event markup belongs to the app's calendar pages. The website shows excerpts of the same dates under a different host; marking them up would put the two in competition for one rich result — exactly the duplication DEC-0037 avoids for place pages. |
-| `Review` / `AggregateRating` | No rating data exists. Proof is quoted, never scored (FUN-WEB-0036). |
+| `Review` / `AggregateRating` | No rating data exists. Proof is quoted, never scored (FUN-WEB-0150, FUN-WEB-0151, CON-WEB-0069). |
 | `Product` | The 480 € licence is a service, not a shippable product; product snippets additionally invite merchant signals the site cannot supply. |
-| `SearchAction` (sitelinks searchbox) | The place parameter takes a resolved slug, not free text (FUN-WEB-0023). Revisit only if a free-text search URL is ever introduced. |
+| `SearchAction` (sitelinks searchbox) | The place parameter takes a resolved slug, not free text (CON-WEB-0062, FUN-WEB-0142). Revisit only if a free-text search URL is ever introduced. |
 
 `FAQPage` no longer produces rich results for a site of this kind. It is
 emitted anyway: it is valid, it makes the answer machine-readable, and
@@ -166,8 +166,8 @@ answer engines are an explicit channel (DEC-0018).
 
 Both are content, not code: they come from `seo.title` and
 `seo.description` in the page's content frontmatter, fields of the Zod
-schema (FUN-WEB-0089), generated from the page brief in SRC-0003 (FUN-WEB-0081)
-and written per language (FUN-WEB-0025, DEC-0026). Neither is ever derived at
+schema (FUN-WEB-0089), generated from the page brief in SRC-0003 (FUN-WEB-0172, FUN-WEB-0173)
+and written per language (FUN-WEB-0143, FUN-WEB-0144, CON-WEB-0063, DEC-0026). Neither is ever derived at
 runtime from body copy or from the `h1`.
 
 | Rule | Value |
@@ -176,7 +176,7 @@ runtime from body copy or from the `h1`.
 | Title on `/` | Brand first: `Schafe vorm Fenster — <claim>`. |
 | Title content | Names the job, not the product; product names stay out (FUN-WEB-0002's rule read for metadata). |
 | Description length | 120–158 characters. |
-| Description content | The job plus the concrete next step. Generic claims ("einfach", "digital") are not copy (FUN-WEB-0008). |
+| Description content | The job plus the concrete next step. Generic claims ("einfach", "digital") are not copy (FUN-WEB-0138, CON-WEB-0059). |
 | Uniqueness | Unique per (path, language). A duplicate, a missing value, or an out-of-range length fails the build. |
 | Landing pages | Same contract, no exception (D7). |
 | Error pages | Title required, description not (they are `noindex`, D9). |
@@ -216,13 +216,13 @@ image service (DEC-0013).
 A landing page addresses an **interest** — a role with a need — and
 never a place. The bounds are hard:
 
-1. No place slug in any path, ever (FUN-WEB-0023, DEC-0037). There are no
+1. No place slug in any path, ever (CON-WEB-0062, FUN-WEB-0142, DEC-0037). There are no
    `…-<ortsname>` pages, in any phase.
 2. A landing page nests under an existing base (TS-WEB-0004 D1a). It never
    founds a URL family and never introduces a product name into a path
    (FUN-WEB-0002).
 3. It carries everything a page carries: one focus job (FUN-WEB-0001), one
-   primary conversion (FUN-WEB-0003), the context band (FUN-WEB-0005), its own
+   primary conversion (FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136), the context band (FUN-WEB-0005), its own
    title/description/OG image (D5, D6), self-canonical and the hreflang
    set of TS-WEB-0001 D6, and a sitemap entry (TS-WEB-0004).
 4. It ships only with substance that stands on its own. Near-duplicate
@@ -242,7 +242,7 @@ Candidate set, from the examples in FUN-WEB-0074:
 | `/dein-kalender/gemeinde` | municipality looking for a calendar solution | run our own calendar | `buy-calendar-licence` |
 | `/dein-kalender/tourismus` | tourism organisation with a regional date list | run our own calendar | `request-product-briefing` |
 
-### D8 — Competitor-keyword pages: not prepared, not reserved [FIXED: FUN-WEB-0075, Q-0009]
+### D8 — Competitor-keyword pages: not prepared, not reserved [FIXED: CON-WEB-0075, Q-0009]
 
 Deferred means nothing is built **and** nothing is staged: no routes
 reserved, no drafts in the content folder, no sitemap entries, no
@@ -266,7 +266,7 @@ ambiguity would open an unbounded set of indexable URLs. The refinement:
 | --- | --- |
 | `/dein-ort?ort=…`, `/dein-ort/starten?ort=…` | indexable; canonical points at the **parameter-free** path |
 | Any URL carrying `etcc_*` or other campaign parameters | canonical strips them; the parameters still reach analytics and still survive redirects (D1) |
-| 404 and 500 | `noindex, follow`, real status (FUN-WEB-0026, FUN-WEB-0027) |
+| 404 and 500 | `noindex, follow`, real status (FUN-WEB-0145, FUN-WEB-0147, CON-WEB-0064, FUN-WEB-0027) |
 | `next.*` preview and `*.vercel.app` | `noindex, nofollow` on **every** response, as both `X-Robots-Tag` header and meta tag (DEC-0035) |
 | Landing-only domains | indexable; self-canonical only (TS-WEB-0001 D6) |
 | `/mitmachen/registrieren`, `/dein-kalender/bestellen`, `/deine-region/angebot` | indexable, no special treatment — they are content pages, not funnels |
@@ -309,11 +309,11 @@ Rule of thumb behind the table: a query parameter changes what a page
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0070 (stable URLs or 301) | D1, D2, D9 · A1, A2, A13 |
+| FUN-WEB-0070 (keep it stable or answer it with a 301 …) | D1, D2, D9 · A1, A2, A13 |
 | FUN-WEB-0071 (strictly semantic markup) | D3 · A3, A4 |
 | FUN-WEB-0072 (JSON-LD plus microdata) | D4 · A5, A6, A14 |
 | FUN-WEB-0074 (interest landing pages) | D7 · A12 |
-| FUN-WEB-0075 (competitor keywords deferred) | D8 · A11 |
+| CON-WEB-0075 (never publish a keyword-oriented landing page targeting a competitor …) | D8 · A11 |
 | FUN-WEB-0076 (purposeful titles + descriptions) | D5 · A7 |
 | FUN-WEB-0077 (secondary content identifiable) | D3 demotion registry · A4 |
 | FUN-WEB-0078 (OG + Twitter, per-page image) | D6 · A8, A9 |
@@ -328,9 +328,9 @@ Rule of thumb behind the table: a query parameter changes what a page
   live site. Owner: spec work. D2 stays [PROPOSED] until it lands.
 - **Q-0009 — competitor-keyword pages (carried, not solved).** D8 holds
   the prohibition and names the questions the legal review must answer.
-  Owner: legal. FUN-WEB-0075 stays S1 until then.
+  Owner: legal. CON-WEB-0075 stays S1 until then.
 - **New question: where do `/hilfe` and `/hilfe/{slug}` redirect?** Help
-  lives in the app (FUN-WEB-0021), and the app publishes no public help URL
+  lives in the app (FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061), and the app publishes no public help URL
   contract. Without one, ranked help URLs have no successor and D1's
   "no ranked URL answers 404" rule cannot be satisfied. Demand to the app
   team; blocks two rows of D2.

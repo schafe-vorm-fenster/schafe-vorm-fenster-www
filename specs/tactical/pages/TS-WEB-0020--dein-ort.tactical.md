@@ -21,7 +21,7 @@ ai_provenance:
 The reader's page: one place, its next dates, and the one thing the site wants
 from a reader — the calendar on the homescreen. It fixes the composition and,
 above all, the **two states**, since `/dein-ort` is the only surface whose focus
-job changes at runtime (FUN-WEB-0044). Everything general is referenced: TS-WEB-0006
+job changes at runtime (FUN-WEB-0153, FUN-WEB-0154). Everything general is referenced: TS-WEB-0006
 composition · TS-WEB-0004 routes · TS-WEB-0008 live modules · TS-WEB-0005 proof · TS-WEB-0009
 rendering · TS-WEB-0010 stages · TS-WEB-0011 metadata · TS-WEB-0012 events · TS-WEB-0007 content
 types · `concept/website-design-system.md`.
@@ -55,7 +55,7 @@ TS-WEB-0006 D2, content types per TS-WEB-0007 D5:
 Blocks 2a–2c are this page's argument sequence, the rest is shared layout; the
 single ink section of Page Rhythm is block 1, where the live data sits.
 
-### D2 — Two states, one route [FIXED: FUN-WEB-0044, TS-WEB-0008 D3/D4, TS-WEB-0010 D7]
+### D2 — Two states, one route [FIXED: FUN-WEB-0153, FUN-WEB-0154, TS-WEB-0008 D3/D4, TS-WEB-0010 D7]
 
 Five resolutions of the place parameter, three of them states of this page. In
 all of them the visitor is asked for a place, never for a role (TS-WEB-0006 D8):
@@ -194,8 +194,8 @@ site is not a goal of its own.
 TS-WEB-0004 D1/D2/D6 discharge the *route* of FUN-WEB-0011 — the path exists, sits in the
 tree, renders; this spec discharges the *page*: manifest, blocks, states,
 conversion and its call sites. Neither half stands alone. Consumed but discharged
-elsewhere: FUN-WEB-0044/045 TS-WEB-0008 D4 · FUN-WEB-0042 TS-WEB-0005/TS-WEB-0008 D3 · FUN-WEB-0023
-TS-WEB-0004 D1a · FUN-WEB-0033/036 TS-WEB-0005 D5 · FUN-WEB-0106 TS-WEB-0009 D7 · FUN-WEB-0047 TS-WEB-0021.
+elsewhere: FUN-WEB-0153, FUN-WEB-0154, FUN-WEB-0045 TS-WEB-0008 D4 · FUN-WEB-0042 TS-WEB-0005/TS-WEB-0008 D3 · CON-WEB-0062, FUN-WEB-0142
+TS-WEB-0004 D1a · FUN-WEB-0033, FUN-WEB-0150, FUN-WEB-0151, CON-WEB-0069 TS-WEB-0005 D5 · FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090 TS-WEB-0009 D7 · FUN-WEB-0158, FUN-WEB-0159 TS-WEB-0021.
 
 ## Open points
 

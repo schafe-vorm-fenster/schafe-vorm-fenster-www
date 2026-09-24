@@ -2,7 +2,7 @@
 artefact: requirement
 id: CON-WEB-0023
 class: CON
-form: C0
+form: C1
 domain: WEB
 status: DRAFT
 version: 0.1.0
@@ -13,9 +13,13 @@ ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
   model: "Claude Opus 5 (1M context)"
-  generated_at: "2026-09-10T13:40:06+02:00"
+  generated_at: "2026-09-24T17:20:00+02:00"
 ---
 
 # CON-WEB-0023
 
-All preview/non-production deployments carry deployment protection and `noindex` — no preview content reaches search engines.
+The solution SHALL carry deployment protection and `noindex` on every non-production deployment, imposed by DEC-0031.
+
+## Rationale
+
+No preview content reaches a search engine.

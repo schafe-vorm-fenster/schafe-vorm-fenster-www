@@ -4,7 +4,7 @@ id: TS-WEB-0018
 kind: rule
 status: DRAFT
 version: 0.1.0
-implements: [CON-WEB-0010, CON-WEB-0011, BUS-WEB-0012, CON-WEB-0013, CON-WEB-0014, CON-WEB-0015, CON-WEB-0016]
+implements: [CON-WEB-0010, CON-WEB-0011, BUS-WEB-0012, CON-WEB-0013, CON-WEB-0058, FUN-WEB-0132, CON-WEB-0015, CON-WEB-0016]
 sources: [SRC-0001, SRC-0003, SRC-0009]
 decisions: [DEC-0020, DEC-0022, DEC-0036, DEC-0040]
 ai_provenance:
@@ -33,7 +33,7 @@ things, and says for every boundary which of the three carries it:
 
 The hub documents are referenced, never copied: the boundaries themselves
 are SRC-0001 "Boundaries", the proof and live-data rules behind CON-WEB-0016
-are SRC-0001 §4 and §5, the navigation rule behind CON-WEB-0014 is SRC-0003
+are SRC-0001 §4 and §5, the navigation rule behind CON-WEB-0058, FUN-WEB-0132 is SRC-0003
 "Navigation", and the offering→surface map is TS-WEB-0004 D7.
 
 ## Determinations
@@ -49,18 +49,19 @@ be caught".
 | CON-WEB-0011 | prices only for promoted offerings | D2, D3 | gate + guard |
 | BUS-WEB-0012 | municipalities and institutions are not separated | D7 | gate (narrow) + review |
 | CON-WEB-0013 | the AI-coaching track does not appear | D4 | gate + guard |
-| CON-WEB-0014 | the product name is never a navigation label | D5 | gate |
+| CON-WEB-0058 (never use the product name "Portalize" as a navigation …) | the product name is never a navigation label | D5 | gate |
+| FUN-WEB-0132 (introduce the product name "Portalize" once) | the product name is never a navigation label | D5 | gate |
 | CON-WEB-0015 | local advertising: no occurrence at all while withheld (DEC-0052 §3) | D8 | gate |
-| CON-WEB-0016 | no claim without cleared proof or live data | D9, D10 | gate (the reference) + review (what counts as a claim) |
+| CON-WEB-0016 (make no claim it cannot prove with a cleared …) | no claim without cleared proof or live data | D9, D10 | gate (the reference) + review (what counts as a claim) |
 
-Only CON-WEB-0014 is fully machine-decidable. CON-WEB-0010 and CON-WEB-0016 are
+Only CON-WEB-0058, FUN-WEB-0132 is fully machine-decidable. CON-WEB-0010 and CON-WEB-0016 are
 mostly editorial; D10 states where the machine stops and who owns the
 rest.
 
 ### D2 — Offering eligibility gate [FIXED: CON-WEB-0011, `promotion` field in `@schafe-vorm-fenster/model-offerings`]
 
 Every website content file lists the hub offering ids it touches
-(`offerings: []`, FUN-WEB-0085 — ids are referenced, never redefined). Each
+(`offerings: []`, FUN-WEB-0178, CON-WEB-0079 — ids are referenced, never redefined). Each
 id must resolve in the pinned offering package; an unresolvable id is a
 build failure. The package's `promotion` field then decides what the
 surface may do:
@@ -144,7 +145,7 @@ as an id: the brand name and the offering names of that track
 "AI Software Engineering Bootcamp"). Deliberately narrow — generic words
 ("Coaching", "Workshop") are not denied, because they occur legitimately.
 
-### D5 — Product names never reach a route or a label [FIXED: CON-WEB-0014, FUN-WEB-0002, DEC-0036]
+### D5 — Product names never reach a route or a label [FIXED: CON-WEB-0058, FUN-WEB-0132, FUN-WEB-0002, DEC-0036]
 
 Denied surfaces, exhaustively:
 
@@ -196,7 +197,7 @@ The gate is about **input sets and content types**, not about sentences.
 
 What is *not* caught: a page brief that answers "how does the WhatsApp
 import work" in four explanatory paragraphs on `/mitmachen` violates
-CON-WEB-0010 and passes every check above. The scene rule (FUN-WEB-0008: one
+CON-WEB-0010 and passes every check above. The scene rule (FUN-WEB-0138, CON-WEB-0059: one
 mechanism, no feature list) is the operative test and it is a human
 judgement — D10, review moment 1.
 
@@ -242,13 +243,13 @@ The budget is a single constant. If Q-0006 resolves to "nothing", the
 constant goes to zero, the field leaves the schema, and the same check
 enforces the stricter answer with no rewrite.
 
-### D9 — Claim discipline: proof or live, or the claim is weakened [FIXED: SRC-0001#4, SRC-0001#5, FUN-WEB-0036, FUN-WEB-0041]
+### D9 — Claim discipline: proof or live, or the claim is weakened [FIXED: SRC-0001#4, SRC-0001#5, FUN-WEB-0150, FUN-WEB-0151, CON-WEB-0069, FUN-WEB-0041]
 
 CON-WEB-0016 is an umbrella rule; the mechanics it binds live elsewhere and
 are referenced: the cleared-proof hard filter and the scoring are TS-WEB-0005
 (FUN-WEB-0033), the live modules and their empty states are the live-data
 requirements, the three-tier fallback with its counter exception is
-DEC-0019/FUN-WEB-0104.
+DEC-0019/FUN-WEB-0196, FUN-WEB-0197.
 
 What this spec adds is the **reference obligation** — the hook a check
 can hang on:
@@ -263,7 +264,7 @@ can hang on:
    points at nothing.
 3. Traction figures are never literals. A counter renders from a live
    response or is absent (FUN-WEB-0041; tier 2 with timestamp permitted,
-   tier 3 hides — FUN-WEB-0104).
+   tier 3 hides — FUN-WEB-0196, FUN-WEB-0197).
 4. Guard over rendered output: quantity tokens not emitted by a live
    module (`\d{2,}\s*\+?` adjacent to a countable noun) require an
    allow-list entry with a reason. This guard is weak — it catches
@@ -282,22 +283,23 @@ and 2.
 | CON-WEB-0011 | ineligible ids, non-publishable price figures | a price described in words ("unter 500 Euro") | moment 2 |
 | BUS-WEB-0012 | audience-keyed surfaces, a split across briefs | two audience-specific arguments inside one page | moment 1 |
 | CON-WEB-0013 | denied ids and brand terms | a coaching argument written in fresh words | moment 2, moment 3 |
-| CON-WEB-0014 | every label and path surface | — (fully gated) | — |
+| CON-WEB-0058 (never use the product name "Portalize" as a navigation …) | every label and path surface | — (fully gated) | — |
+| FUN-WEB-0132 (introduce the product name "Portalize" once) | every label and path surface | — (fully gated) | — |
 | CON-WEB-0015 | count, binding, sentence shape | whether the sentence promises something | moment 2 |
-| CON-WEB-0016 | claim entries that point at nothing | which sentences are claims | moment 1, moment 2 |
+| CON-WEB-0016 (make no claim it cannot prove with a cleared …) | claim entries that point at nothing | which sentences are claims | moment 1, moment 2 |
 
 Three named moments, each with the same four questions:
 
 | # | Moment | When | Artefact |
 | --- | --- | --- | --- |
 | 1 | **Page-brief review** | before content is generated for a page | the page brief; the eight-point check of SRC-0001 "Compliance Check for a Page Brief" plus the four questions below, recorded on the brief |
-| 2 | **Content PR review** | every content pull request, including the automated ones of FUN-WEB-0084 | the diff; a "yes" to any question blocks the merge |
+| 2 | **Content PR review** | every content pull request, including the automated ones of FUN-WEB-0175, FUN-WEB-0176, FUN-WEB-0177 | the diff; a "yes" to any question blocks the merge |
 | 3 | **Release checklist** | per release, DEC-0040 level `manual` | rendered `de` and `en` pages; plus a re-read of the guard allow-lists for entries that no longer have a reason |
 
 The four boundary questions:
 
 1. Does any block explain how a feature works, instead of showing one
-   mechanism (FUN-WEB-0008)?
+   mechanism (FUN-WEB-0138, CON-WEB-0059)?
 2. Does any sentence claim something that no proof slot or live module
    backs?
 3. Does the page address a segment rather than a job?
@@ -331,7 +333,7 @@ The four boundary questions:
 | TS-WEB-0018-A9 | static | No path segment, nav label, or content id equals an audience id; every page brief declares exactly one of the four focus jobs; no two briefs with the same focus job split `municipalities` and `institutions`. |
 | TS-WEB-0018-A10 | static | **No** content file references `local-advertising` while the offering is withheld (DEC-0052 §3). Formerly a budget of one sentence; the budget is now zero. Legacy row retained for the `withheld_mention` of one sentence ≤ 160 characters containing no link, price token, or CTA; `request-ad-placement` appears in no CTA registry or form target. |
 | TS-WEB-0018-A11 | static | Every `claims[]` entry names a resolvable `proof:` with `usage_rights: cleared` or a `live:` module id from the TS-WEB-0004 D5 inventory; anything else fails the build. |
-| TS-WEB-0018-A12 | integration | With the stats upstream stubbed empty, counter modules are absent from the rendered page and no figure stands in their place (FUN-WEB-0041, FUN-WEB-0104). |
+| TS-WEB-0018-A12 | integration | With the stats upstream stubbed empty, counter modules are absent from the rendered page and no figure stands in their place (FUN-WEB-0041, FUN-WEB-0196, FUN-WEB-0197). |
 | TS-WEB-0018-A13 | e2e | Every internal link resolves inside the TS-WEB-0004 D1 inventory; every help or instruction affordance targets the app host, not a website route. |
 | TS-WEB-0018-A14 | manual | Moment 1 (page-brief review): the SRC-0001 eight-point check plus the four boundary questions are answered and recorded on the brief before content generation starts. |
 | TS-WEB-0018-A15 | manual | Moment 2 (content PR review): the four boundary questions are answered for the diff; a "yes" to any of them blocks the merge. |
@@ -345,9 +347,10 @@ The four boundary questions:
 | CON-WEB-0011 (prices only for promoted offerings) | D2, D3 · A1, A2, A3 |
 | BUS-WEB-0012 (no municipality/institution split) | D7, D10 · A9, A14 |
 | CON-WEB-0013 (AI-coaching track absent) | D4, D10 · A4, A5, A16 |
-| CON-WEB-0014 (product name never a navigation label) | D5 · A6, A7 |
+| CON-WEB-0058 (never use the product name "Portalize" as a navigation …) | D5 · A6, A7 |
+| FUN-WEB-0132 (introduce the product name "Portalize" once) | D5 · A6, A7 |
 | CON-WEB-0015 (local advertising: one sentence while withheld) | D2, D8 · A10, A15 |
-| CON-WEB-0016 (no claim without cleared proof or live data) | D9, D10 · A11, A12, A14, A15 |
+| CON-WEB-0016 (make no claim it cannot prove with a cleared …) | D9, D10 · A11, A12, A14, A15 |
 
 ## Open points
 
@@ -374,7 +377,7 @@ The four boundary questions:
   the checks need a hook. `TS-WEB-0007--content-pipeline.tactical.md` did not exist
   when this was written; when it lands, its names and the Zod schemas of
   FUN-WEB-0089 win and these checks re-target. The obligation — that content
-  references hub ids machine-readably (FUN-WEB-0085) — is not provisional.
+  references hub ids machine-readably (FUN-WEB-0178, CON-WEB-0079) — is not provisional.
 - **Package-level price stripping.** D3 relies on an output guard because
   the non-publishable figures (4000, 5) ship inside the installed package.
   Open whether the content layer should strip non-publishable prices at

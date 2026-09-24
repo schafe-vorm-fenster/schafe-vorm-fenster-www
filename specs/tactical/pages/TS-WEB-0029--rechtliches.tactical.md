@@ -4,7 +4,7 @@ id: TS-WEB-0029
 kind: interaction
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0029]
+implements: [FUN-WEB-0146, CON-WEB-0067]
 sources: [SRC-0001, SRC-0003, SRC-0014]
 decisions: [DEC-0012, DEC-0027, DEC-0039, DEC-0052, DEC-0066, DEC-0083]
 ai_provenance:
@@ -37,7 +37,7 @@ survival**. Everything else is referenced, not restated:
 
 ## Determinations
 
-### D1 — The page is a section stack driven by the registry [FIXED: DEC-0039, FUN-WEB-0029, TS-WEB-0004 D8]
+### D1 — The page is a section stack driven by the registry [FIXED: DEC-0039, FUN-WEB-0146, CON-WEB-0067, TS-WEB-0004 D8]
 
 `app/[lang]/rechtliches/page.tsx` renders **one section per registry entry,
 in registry order**, by iterating TS-WEB-0004 D8; appending a document to the
@@ -46,9 +46,9 @@ appears. The page holds no copy of its own beyond the `h1` and the nav
 label. A registry entry whose document is absent renders nothing — no empty
 heading, no placeholder — while the anchor stays reserved (exception: D8);
 a retired section keeps its anchor and renders a one-line pointer to its
-successor (FUN-WEB-0029).
+successor (FUN-WEB-0146, CON-WEB-0067).
 
-### D2 — Anchors are ids from the registry, never derived from headings [FIXED: FUN-WEB-0029]
+### D2 — Anchors are ids from the registry, never derived from headings [FIXED: FUN-WEB-0146, CON-WEB-0067]
 
 The `id` of a section element is the registry anchor for the page's
 language, taken from the `anchor` field of the content file (TS-WEB-0007 D10),
@@ -183,9 +183,10 @@ Levels: integration 5 · e2e 7 · static 2 · tool 1.
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0029 (legal content on one route, on-page navigation, permanent anchors of TS-WEB-0004 D8, footer keeps conventional labels) | D1 (registry-driven section stack, retired-section pointer), D2 (ids from the registry), D3 (anchor landing), D4 (on-page navigation), D6 (headings), D6a (register exemption), D10 (indexing) · A1, A2, A3, A4, A5, A6, A7, A9, A14, A15 |
+| FUN-WEB-0146 (serve one route /rechtliches (EN /legal) as a) | D1 (registry-driven section stack, retired-section pointer), D2 (ids from the registry), D3 (anchor landing), D4 (on-page navigation), D6 (headings), D6a (register exemption), D10 (indexing) · A1, A2, A3, A4, A5, A6, A7, A9, A14, A15 |
+| CON-WEB-0067 (never rename or remove a legal anchor) | D1 (registry-driven section stack, retired-section pointer), D2 (ids from the registry), D3 (anchor landing), D4 (on-page navigation), D6 (headings), D6a (register exemption), D10 (indexing) · A1, A2, A3, A4, A5, A6, A7, A9, A14, A15 |
 
-Touched, owned elsewhere: CON-WEB-0027 → TS-WEB-0002 D6 · FUN-WEB-0088 → TS-WEB-0007 D10 · FUN-WEB-0021 → TS-WEB-0004 D4.
+Touched, owned elsewhere: CON-WEB-0027 → TS-WEB-0002 D6 · FUN-WEB-0180, FUN-WEB-0181, FUN-WEB-0182 → TS-WEB-0007 D10 · FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061 → TS-WEB-0004 D4.
 
 ## Open points
 

@@ -4,7 +4,7 @@ id: TS-WEB-0004
 kind: system
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0002, FUN-WEB-0023, FUN-WEB-0029, FUN-WEB-0010, FUN-WEB-0011, FUN-WEB-0012, FUN-WEB-0013, FUN-WEB-0014, FUN-WEB-0015, FUN-WEB-0016, FUN-WEB-0017, FUN-WEB-0018, FUN-WEB-0021, FUN-WEB-0026, FUN-WEB-0027, FUN-WEB-0047, FUN-WEB-0048, FUN-WEB-0067, FUN-WEB-0073, FUN-WEB-0079, CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045]
+implements: [FUN-WEB-0002, CON-WEB-0062, FUN-WEB-0142, FUN-WEB-0146, CON-WEB-0067, FUN-WEB-0010, FUN-WEB-0011, FUN-WEB-0012, FUN-WEB-0013, FUN-WEB-0014, FUN-WEB-0015, FUN-WEB-0016, FUN-WEB-0017, FUN-WEB-0018, FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061, FUN-WEB-0145, FUN-WEB-0147, CON-WEB-0064, FUN-WEB-0027, FUN-WEB-0158, FUN-WEB-0159, FUN-WEB-0048, FUN-WEB-0067, FUN-WEB-0073, FUN-WEB-0169, FUN-WEB-0170, CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045]
 sources: [SRC-0003]
 decisions: [DEC-0002, DEC-0024, DEC-0025, DEC-0032, DEC-0035]
 ai_provenance:
@@ -34,18 +34,18 @@ every row on `.de` (phase 1). One row per page; conversions per the `pages` area
 | Path | Page | Req |
 | --- | --- | --- |
 | `/` | Home | FUN-WEB-0010 |
-| `/dein-ort` | know what is on (place as query param, never a path segment) | FUN-WEB-0011, FUN-WEB-0023 |
+| `/dein-ort` | know what is on (place as query param, never a path segment) | FUN-WEB-0011, CON-WEB-0062, FUN-WEB-0142 |
 | `/mitmachen` | publish our dates | FUN-WEB-0012 |
 | `/mitmachen/registrieren` | register, handover to app | FUN-WEB-0013 |
-| `/dein-ort/starten` | start in my place (uncovered); place as query param | FUN-WEB-0047 |
+| `/dein-ort/starten` | start in my place (uncovered); place as query param | FUN-WEB-0158, FUN-WEB-0159 |
 | `/dein-kalender` | run our own calendar (480 €) | FUN-WEB-0014 |
 | `/dein-kalender/bestellen` | order + invoice checkout | FUN-WEB-0015 |
 | `/deine-region` + `/deine-region/angebot` | whole region | FUN-WEB-0016 |
 | `/ueber-uns` | who is behind it | FUN-WEB-0017 |
 | `/ueber-uns/archiv` | proof archive | FUN-WEB-0018 |
-| `/rechtliches` | all legal content, one page, anchors `#impressum` · `#datenschutz` · `#barrierefreiheit` | FUN-WEB-0029, CON-WEB-0027 |
-| `/sitemap.xml` · `/robots.txt` · `/llms.txt` | machine surfaces, per domain | FUN-WEB-0073, FUN-WEB-0079 |
-| `/start` | **redirect only, renders nothing** — the lead fallback's target while the envoy widget is undelivered (TS-WEB-0016 D6). Points at the existing Google Form today; the swap to envoy changes this one redirect and no lead surface | FUN-WEB-0093 |
+| `/rechtliches` | all legal content, one page, anchors `#impressum` · `#datenschutz` · `#barrierefreiheit` | FUN-WEB-0146, CON-WEB-0067, CON-WEB-0027 |
+| `/sitemap.xml` · `/robots.txt` · `/llms.txt` | machine surfaces, per domain | FUN-WEB-0073, FUN-WEB-0169, FUN-WEB-0170 |
+| `/start` | **redirect only, renders nothing** — the lead fallback's target while the envoy widget is undelivered (TS-WEB-0016 D6). Points at the existing Google Form today; the swap to envoy changes this one redirect and no lead surface | FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083 |
 
 Reserved, not built: `/mitmachen/vor-ort-werben` (Q-0005),
 `/nutzungsbedingungen` (if the legal import delivers terms).
@@ -76,7 +76,7 @@ does.
 
 A bare verb is not a base: the founding page is `/dein-ort/starten`
 (start *what*? your place), not `/starten`. **No path ever carries a
-place slug** (FUN-WEB-0023, DEC-0037) — a place travels as a query
+place slug** (CON-WEB-0062, FUN-WEB-0142, DEC-0037) — a place travels as a query
 parameter, so no segment can collide with a place name.
 
 Product names never appear in routes or labels (FUN-WEB-0002). SEO landing
@@ -132,7 +132,7 @@ The proxy is a pure function of hostname + path and holds no state. The
 binding rules it must not break are stated where they belong, not as a
 technology ban: locale is determined by the URL alone (TS-WEB-0001 D3), and
 external APIs are reached server-side only, through the website's own
-client endpoints (DEC-0025, CON-WEB-0042, CON-WEB-0043/038).
+client endpoints (DEC-0025, CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045).
 
 ### D3a — Localized pathnames: one route translation map [FIXED: DEC-0036; EN segments PROPOSED]
 
@@ -160,7 +160,7 @@ Proposed EN segments (de → en):
 | `/ueber-uns/archiv` | `/about/archive` |
 | `/rechtliches` | `/legal` |
 
-### D4 — Navigation model [FIXED: SRC-0003, FUN-WEB-0002/021]
+### D4 — Navigation model [FIXED: SRC-0003, FUN-WEB-0002, FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061]
 
 - Header: logo → `/`, the four job labels (Was ist los → `/dein-ort`,
   Termine veröffentlichen → `/mitmachen`, Dein Kalender →
@@ -199,8 +199,8 @@ they are not proxied (their hosts are CSP-allowlisted, TS-WEB-0003 D4/CON-WEB-00
 
 | Routes | Mode |
 | --- | --- |
-| all D1 content pages | static + ISR (1 h), live modules streamed via Suspense with skeletons (FUN-WEB-0106) |
-| `/ueber-uns/archiv` | fully static from build-time `media-echo` fetch (FUN-WEB-0086) |
+| all D1 content pages | static + ISR (1 h), live modules streamed via Suspense with skeletons (FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090) |
+| `/ueber-uns/archiv` | fully static from build-time `media-echo` fetch (FUN-WEB-0179, CON-WEB-0080) |
 | `/dein-kalender/bestellen` | static shell; order interaction client-side against D5 routes |
 | BFF routes | dynamic, cached per TS-WEB-0003 D5 |
 | 404 | static shell + streamed place search; 500 fully static |
@@ -209,7 +209,7 @@ they are not proxied (their hosts are CSP-allowlisted, TS-WEB-0003 D4/CON-WEB-00
 
 Offerings never define routes (FUN-WEB-0002); every promoted offering has
 exactly one primary surface. This map is the contract — later verifiable
-against content frontmatter offering references (FUN-WEB-0085):
+against content frontmatter offering references (FUN-WEB-0178, CON-WEB-0079):
 
 | Offering | Promotion | Primary surface |
 | --- | --- | --- |
@@ -251,7 +251,7 @@ labels (D4).
 ## Free for the generator
 
 - [FREE] Component/file organisation below the route level (co-location,
-  private folders), loading.tsx granularity beyond FUN-WEB-0106.
+  private folders), loading.tsx granularity beyond FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090.
 - [FREE] Exact Suspense boundary placement within a page, within D6.
 
 ## Acceptance criteria
@@ -284,23 +284,36 @@ labels (D4).
 | FUN-WEB-0016 (page route) | D1, D2, D6 · A1 |
 | FUN-WEB-0017 (page route) | D1, D2, D6 · A1 |
 | FUN-WEB-0018 (page route) | D1, D2, D6 · A1 |
-| FUN-WEB-0021 (header/footer inventory) | D4 |
-| FUN-WEB-0029 (legal as one anchored page) | D1, D4, D8 |
-| FUN-WEB-0026 (404) | D2, D6 · A4 |
+| FUN-WEB-0140 (carry the newsletter entry with the goal subscribe-to-newsletter) | D4 |
+| FUN-WEB-0141 (carry the legal links "Impressum") | D4 |
+| FUN-WEB-0137 (carry a persistent "Kalender" entry to /dein-ort) | D4 |
+| CON-WEB-0061 (never place contact inside the footer) | D4 |
+| FUN-WEB-0146 (serve one route /rechtliches (EN /legal) as a) | D1, D4, D8 |
+| CON-WEB-0067 (never rename or remove a legal anchor) | D1, D4, D8 |
+| FUN-WEB-0145 (answer with status 404 and noindex) | D2, D6 · A4 |
+| FUN-WEB-0147 (render one sentence) | D2, D6 · A4 |
+| CON-WEB-0064 (never guess a place slug from an unknown path) | D2, D6 · A4 |
 | FUN-WEB-0027 (500) | D2, D6 · A4 |
-| FUN-WEB-0047 (uncovered-place page route) | D1, D1a, D2 |
-| FUN-WEB-0023 (no place slugs in paths) | D1, D1a |
-| FUN-WEB-0048 (community-slug forwarding) | D3 rule 6 |
+| FUN-WEB-0158 (lead to /dein-ort/starten with the place as a query …) | D1, D1a, D2 |
+| FUN-WEB-0159 (reach /dein-ort/starten on submit) | D1, D1a, D2 |
+| CON-WEB-0062 (never put a place slug in a website path) | D1, D1a |
+| FUN-WEB-0142 (travel as the query parameter ?ort=<slug>) | D1, D1a |
+| FUN-WEB-0048 (forward a /:community path to that place's calendar on …) | D3 rule 6 |
 | FUN-WEB-0067 (other domains navigable) | D1 landing set · A3 |
 | FUN-WEB-0073 (sitemaps + canonicals) | D1, sitemap.ts · A5 |
-| FUN-WEB-0079 (robots + llms.txt) | D1 · A5 |
-| CON-WEB-0042 (not expose an external API token to) | D5 · A6 |
+| FUN-WEB-0169 (explicitly allow AI crawlers) | D1 · A5 |
+| FUN-WEB-0170 (maintain a short description and its core facts) | D1 · A5 |
+| CON-WEB-0042 (never expose an external API token to the client) | D5 · A6 |
 | CON-WEB-0043 (call ecosystem APIs server-side only) | D5 · A6 |
-| CON-WEB-0044 (protect its client-facing endpoints with rate limiting) | D5 · A7 |
-| CON-WEB-0045 (not issue a client-side auth token for) | D5 · A7 |
-| FUN-WEB-0021 (footer inventory) | D4 · A9 |
-| FUN-WEB-0023 (no place slugs in paths) | D1, D1a · A10 |
-| FUN-WEB-0048 (community-slug forwarding) | D3 rule 6 · A11 |
+| CON-WEB-0044 (protect its client-facing endpoints with rate limiting and an …) | D5 · A7 |
+| CON-WEB-0045 (never issue a client-side auth token for public read …) | D5 · A7 |
+| FUN-WEB-0140 (carry the newsletter entry with the goal subscribe-to-newsletter) | D4 · A9 |
+| FUN-WEB-0141 (carry the legal links "Impressum") | D4 · A9 |
+| FUN-WEB-0137 (carry a persistent "Kalender" entry to /dein-ort) | D4 · A9 |
+| CON-WEB-0061 (never place contact inside the footer) | D4 · A9 |
+| CON-WEB-0062 (never put a place slug in a website path) | D1, D1a · A10 |
+| FUN-WEB-0142 (travel as the query parameter ?ort=<slug>) | D1, D1a · A10 |
+| FUN-WEB-0048 (forward a /:community path to that place's calendar on …) | D3 rule 6 · A11 |
 
 ## Open points
 

@@ -32,7 +32,7 @@ assumed.
 ## Notes
 
 - `events-api /api/stats` is tokenless and cache-controlled — the natural
-  source for the live counters (FUN-WEB-0041, FUN-WEB-0104); whether its fields
+  source for the live counters (FUN-WEB-0041, FUN-WEB-0196, FUN-WEB-0197); whether its fields
   suffice for "places · dates · updates today" is the remaining sliver of
   Q-0015.
 - Data endpoints are token-scoped (`/api/{token}/…`); the website needs

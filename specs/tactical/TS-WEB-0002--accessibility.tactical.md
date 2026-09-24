@@ -73,7 +73,7 @@ language and extended audio description (no video).
   `@schafe-vorm-fenster/brand-design`, which is already responsive
   (`clamp()`) and floors at 15 px; the specs restate none of them.
 
-### D4 — Themes via browser hints only [FIXED: FUN-WEB-0129/015]
+### D4 — Themes via browser hints only [FIXED: FUN-WEB-0129, FUN-WEB-0130]
 
 Three themes — light (default), dark, high-contrast — selected solely by
 `prefers-color-scheme` and `prefers-contrast`. No toggle, no storage.
@@ -83,7 +83,7 @@ Also honoured: `prefers-reduced-motion` (no non-essential motion),
 `Save-Data`/reduced-data (→ TS-WEB-0003 D6), OS font-size scaling (rem-based
 type, no px font sizes) [FIXED: SRC-0006].
 
-### D5 — Structure and operation [FIXED: FUN-WEB-0128/013]
+### D5 — Structure and operation [FIXED: FUN-WEB-0128, FUN-WEB-0118, FUN-WEB-0119, FUN-WEB-0120]
 
 - Landmarks: exactly one `main`; `nav`, `header`, `footer`, `aside` per
   their roles (ties FUN-WEB-0071); heading levels never skip.
@@ -102,7 +102,7 @@ type, no px font sizes) [FIXED: SRC-0006].
 
 A section at the permanent anchor `#barrierefreiheit` on `/rechtliches`
 (DEC-0039; the anchor registry is TS-WEB-0004 D8), footer-linked on every page, content
-per BFSG requirements; maintained like a legal page (FUN-WEB-0088 pipeline).
+per BFSG requirements; maintained like a legal page (FUN-WEB-0180, FUN-WEB-0181, FUN-WEB-0182 pipeline).
 
 ## Free for the generator
 
@@ -136,24 +136,24 @@ claim:
 | Requirement | Discharged by |
 | --- | --- |
 | NFR-WEB-0057 (Violations of WCAG 2.2 level A and AA = 0 violations) | D1, D2 · A1, A2 |
-| CON-WEB-0024 (not take full non-visual optimisation as a) | D1, D2 · A1, A2 |
+| CON-WEB-0024 (never take full non-visual optimisation as a launch criterion) | D1, D2 · A1, A2 |
 | NFR-WEB-0058 (Contrast ratio of body text against its background >= 4.5 :1) | D3 · A3 |
-| NFR-WEB-0059 (Contrast ratio of display type and of non-text contrast against its backgr) | D3 · A3 |
-| CON-WEB-0025 (use the accessible colour variant wherever a) | D3 · A3 |
+| NFR-WEB-0059 (Contrast ratio of display type and of non-text contrast against its background) | D3 · A3 |
+| CON-WEB-0025 (use the accessible colour variant wherever a brand colour …) | D3 · A3 |
 | FUN-WEB-0128 (render semantic markup — landmarks) | D5 · A1 |
 | FUN-WEB-0118 (be operable by keyboard alone) | D5 · A4, A5 |
-| FUN-WEB-0119 (present its content to a screen reader) | D5 · A4, A5 |
-| FUN-WEB-0120 (render a focus ring of 3 px) | D5 · A4, A5 |
+| FUN-WEB-0119 (present its content to a screen reader in the …) | D5 · A4, A5 |
+| FUN-WEB-0120 (render a focus ring of 3 px violet-500 at …) | D5 · A4, A5 |
 | FUN-WEB-0129 (render accordingly) | D4 · A9 |
-| FUN-WEB-0130 (take the browser preference as its only) | D4 · A1 (three themes) |
+| FUN-WEB-0130 (take the browser preference as its only input) | D4 · A1 (three themes) |
 | NFR-WEB-0016 (Rendered font size of any text on the website >= 15 CSS px) | D3 weight floor · Q-0034 rest |
 | NFR-WEB-0060 (Informative images without a text alternative = 0 images) | D5 images rule |
 | FUN-WEB-0121 (mark it alt="") | D5 images rule |
 | NFR-WEB-0018 (Size of every touch target on the website >= 44 x 44 CSS px) | D5 target sizes · A7 |
 | FUN-WEB-0122 (run the axe sweep over every route) | A1–A5 (the acceptance regime) |
-| FUN-WEB-0123 (run a screen-reader spot check on VoiceOver) | A1–A5 (the acceptance regime) |
+| FUN-WEB-0123 (run a screen-reader spot check on VoiceOver iOS and …) | A1–A5 (the acceptance regime) |
 | CON-WEB-0026 (conform to the Barrierefreiheitsstärkungsgesetz) | D1 · Q-0021 |
-| CON-WEB-0027 (publish an accessibility statement as a footer-reachable) | D6 · A8 |
+| CON-WEB-0027 (publish an accessibility statement as a footer-reachable section at …) | D6 · A8 |
 | NFR-WEB-0016 (Rendered font size of any text on the website >= 15 CSS px) | D3 · A10 · Q-0034 for the colour world |
 | NFR-WEB-0060 (Informative images without a text alternative = 0 images) | D5 images rule · A11 |
 | FUN-WEB-0121 (mark it alt="") | D5 images rule · A11 |

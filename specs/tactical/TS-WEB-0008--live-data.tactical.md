@@ -4,7 +4,7 @@ id: TS-WEB-0008
 kind: system
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0040, FUN-WEB-0041, FUN-WEB-0043, FUN-WEB-0044, FUN-WEB-0045, FUN-WEB-0046, FUN-WEB-0049]
+implements: [FUN-WEB-0040, FUN-WEB-0041, FUN-WEB-0043, FUN-WEB-0153, FUN-WEB-0154, FUN-WEB-0045, FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072, FUN-WEB-0049]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0011]
 decisions: [DEC-0013, DEC-0019, DEC-0021, DEC-0024, DEC-0025, DEC-0029, DEC-0030, DEC-0034, DEC-0035, DEC-0037, DEC-0079]
 ai_provenance:
@@ -29,7 +29,7 @@ order is the relevance engine (TS-WEB-0005 D1/D6/D8, FUN-WEB-0042). This spec
 fixes the module inventory, the data sources, the resolution procedure
 that produces the candidate set, the failure behaviour, and the handover
 into the app. The BFF routes are inventoried in TS-WEB-0004 D5; cache
-lifetimes in TS-WEB-0003 D5; skeletons and streaming in FUN-WEB-0106 / DEC-0033.
+lifetimes in TS-WEB-0003 D5; skeletons and streaming in FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090 / DEC-0033.
 
 ## Determinations
 
@@ -50,12 +50,12 @@ source).
 The place search (D7) is a live module in the sense of FUN-WEB-0040 and
 appears on every page that offers an entry into a place: `/`,
 `/dein-ort`, `/dein-ort/starten`, `/dein-kalender/bestellen` (scope
-step), and 404 (FUN-WEB-0026).
+step), and 404 (FUN-WEB-0145, FUN-WEB-0147, CON-WEB-0064).
 
 Rules that hold for every position:
 
-- A module renders a skeleton and streams (FUN-WEB-0106); the shell never
-  waits (FUN-WEB-0100).
+- A module renders a skeleton and streams (FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090); the shell never
+  waits (FUN-WEB-0192, CON-WEB-0088).
 - A module states its radius in its own heading ("in <place>",
   "in der Umgebung", "im Kreis <county>"). A widened module never
   presents itself as the narrower one.
@@ -138,7 +138,7 @@ Rules:
   `after=now`, position 2 `after=now&before=7d`, in `Europe/Berlin`.
   "Today" is the local calendar day, not a rolling 24 h. [PROPOSED]
 
-### D4 — Empty state as the conversion moment [FIXED: SRC-0002 §Live Content, SRC-0003 §your-place, FUN-WEB-0044]
+### D4 — Empty state as the conversion moment [FIXED: SRC-0002 §Live Content, SRC-0003 §your-place, FUN-WEB-0153, FUN-WEB-0154]
 
 Trigger: the anchor is a **covered** place (geo-api resolved it) and step
 1 returns zero dates in its window. This is the only runtime focus-job
@@ -163,7 +163,7 @@ Constraints:
   states never share copy.
 - Position 1 is not left blank: its slot carries the publish offer.
 
-### D5 — Emptiness, staleness and failure are three different things [FIXED: DEC-0019, FUN-WEB-0045, FUN-WEB-0101–104]
+### D5 — Emptiness, staleness and failure are three different things [FIXED: DEC-0019, FUN-WEB-0193, FUN-WEB-0194, FUN-WEB-0195, FUN-WEB-0102, FUN-WEB-0103, FUN-WEB-0196, FUN-WEB-0197]
 
 | Condition | Behaviour | Tier |
 | --- | --- | --- |
@@ -194,19 +194,19 @@ web-component mode (the default; iframe mode exists and is not used).
 | Failure | the loader failing to load leaves the section's static copy and the CTA — the page never shows an empty frame. |
 | Not a third-party embed exception | DEC-0013 bans third-party embeds; this is our own product, which is why it is decided separately (DEC-0030). |
 
-### D7 — Place search: the visitor types a name [FIXED: DEC-0079, DEC-0024, FUN-WEB-0046, FUN-WEB-0023/DEC-0037]
+### D7 — Place search: the visitor types a name [FIXED: DEC-0079, DEC-0024, FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072, CON-WEB-0062, FUN-WEB-0142/DEC-0037]
 
 One component, one BFF route, the same behaviour everywhere it appears
 (D1). The input is a **place name**. A postcode is not offered: not as an
 input mode, not in the label, the placeholder, a helper text or page
-copy, and no surface states an interim (FUN-WEB-0046). A postcode is an
+copy, and no surface states an interim (FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072). A postcode is an
 administrative abstraction; a place name is what a person says when she
 says where she lives, and that is the sentence this field is asking for.
 
 | Input | Status | Resolved against |
 | --- | --- | --- |
 | place name | **the feature** — matched against place names **and** municipality names | the covered-community index (D2) |
-| coordinates (browser geolocation, opt-in) | works today, offered as a control beside the field (FUN-WEB-0053, TS-WEB-0010 D5) | geo-api geoPoint search |
+| coordinates (browser geolocation, opt-in) | works today, offered as a control beside the field (FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073, TS-WEB-0010 D5) | geo-api geoPoint search |
 | postcode | **not offered.** Five typed digits are treated like any other query: no match, no suggestion, the submit reaches the founding route | — |
 | address | **forbidden** — `findbyaddress` (DEC-0024) | — |
 
@@ -229,12 +229,12 @@ Result classification — three outcomes, three destinations:
 | --- | --- | --- |
 | covered, has dates | a place matched, events exist | stay / go to `/dein-ort?ort=<slug>`, chain from step 1 |
 | covered, no dates | a place matched, events empty | `/dein-ort?ort=<slug>` in the empty state (D4) |
-| not covered | nothing matched the typed name | `/dein-ort/starten?ort=<slug-or-query>` (FUN-WEB-0047) |
+| not covered | nothing matched the typed name | `/dein-ort/starten?ort=<slug-or-query>` (FUN-WEB-0158, FUN-WEB-0159) |
 
 Mechanics:
 
 - The place travels as the query parameter `?ort=` — **never as a path
-  segment** (FUN-WEB-0023, DEC-0037). The parameter carries the geo-api
+  segment** (CON-WEB-0062, FUN-WEB-0142, DEC-0037). The parameter carries the geo-api
   `slug`; for an uncovered place it carries the raw query, escaped.
 - Submitting is a plain navigation; the search works without JavaScript
   (progressive enhancement), typeahead is an enhancement on top.
@@ -264,12 +264,12 @@ feature, not a nicety, and its properties are determined.
 | Rows shown | **3–4**. The list is a shortcut, not a result page: further matches are neither paged nor scrolled — the visitor types one more letter |
 | Placement | an **overlay**, drawn over the page and anchored to the field; it occupies no space in the flow |
 | Layout | nothing below the field moves when the list opens or closes — no reserved space while absent, no shift while present (NFR-WEB-0047, NFR-WEB-0048, NFR-WEB-0049, NFR-WEB-0050, NFR-WEB-0051, CLS) |
-| No match | one non-interactive row stating that no place was found; the form still submits and reaches `/dein-ort/starten` (FUN-WEB-0047). Never "try a postcode", never an error treatment |
+| No match | one non-interactive row stating that no place was found; the form still submits and reaches `/dein-ort/starten` (FUN-WEB-0158, FUN-WEB-0159). Never "try a postcode", never an error treatment |
 | Without JavaScript | the list does not exist and nothing is lost — the field stays the plain GET form of D7 |
 | Keyboard and a11y | the ARIA combobox pattern of TS-WEB-0002 on the existing input; each suggestion is a real link, so pointer, keyboard and "open in new tab" behave alike |
 | Where | every surface that carries the search (D1); a surface may decline the enhancement (the 404 page, the order flow's scope step) but may not alter its shape |
 
-### D8 — Live counters [FIXED: FUN-WEB-0041, FUN-WEB-0104; figure set constrained by Q-0015]
+### D8 — Live counters [FIXED: FUN-WEB-0041, FUN-WEB-0196, FUN-WEB-0197; figure set constrained by Q-0015]
 
 "Counted live or not shown." No static traction figure exists anywhere
 on the website — not in copy, not as a fallback, not in an image.
@@ -288,7 +288,7 @@ scope, with image, with document). It is tokenless and cache-controlled.
 So the counter module ships with the figures it can count and grows when
 the demand lands — a partially filled module is correct, an invented
 number is a defect. Serving tier 2 with a timestamp is permitted; tier 3
-is not (FUN-WEB-0104, D5).
+is not (FUN-WEB-0196, FUN-WEB-0197, D5).
 
 County-level counters on `/deine-region` ("{n} places in county X are
 already in", DEC-0034) need the same missing places-per-scope signal and
@@ -307,7 +307,7 @@ Links from the website into the app are built from the geo-api community
 | Registration prefill | **no contract exists** (DEC-0029). `/mitmachen/registrieren` receives `?ort=<slug>` on our own route and prefills its own place step; nothing is appended to the app URL until the app defines it. |
 | Never | a slug is never guessed, never string-built from user input, never used before geo-api confirmed it. An unresolvable slug leads to `/dein-ort/starten`, not to a broken app link. |
 
-### D10 — Client contract for live modules [FIXED: DEC-0025, CON-WEB-0042, CON-WEB-0043/038, DEC-0021]
+### D10 — Client contract for live modules [FIXED: DEC-0025, CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045, DEC-0021]
 
 | Rule | Consequence |
 | --- | --- |
@@ -320,7 +320,7 @@ Links from the website into the app are built from the geo-api community
 ## Free for the generator
 
 - [FREE] Visual design of module skeletons and of the empty-state block,
-  within FUN-WEB-0106 and TS-WEB-0002.
+  within FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090 and TS-WEB-0002.
 - [FREE] Typeahead mechanics **below** D7a's determined properties:
   debounce interval, cancellation of an in-flight request, how the active
   row is highlighted, how the overlay is positioned — provided D7's no-JS
@@ -352,24 +352,30 @@ Links from the website into the app are built from the geo-api community
 | TS-WEB-0008-A13 | tool | Build fetches each service's `openapi.json`, compares it with the pinned copy, and fails on drift affecting the operations in D2 (DEC-0021). |
 | TS-WEB-0008-A14 | integration | Place search by name: a typed place name and a typed municipality name each answer with at least one suggestion carrying that place, each rendered "Ort (Gemeinde)"; a name that matches nothing answers with the classified "not covered" outcome whose destination is `/dein-ort/starten?ort=…` — never an empty answer, never a hint to type something else, and never a postcode fallback. |
 | TS-WEB-0008-A15 | e2e | The suggestion overlay (D7a): typing two characters opens a list of at most 4 rows, each matching `Ort (Gemeinde)`; the bounding box of the element directly below the field is byte-identical between closed and open state and the interaction contributes 0 to CLS; typing a name with no match shows the single no-match row and submitting still lands on `/dein-ort/starten?ort=…`; with JavaScript disabled no list exists and the form still submits. |
-| TS-WEB-0008-A16 | static | No visitor-facing string of a place-search surface contains "Postleitzahl", "PLZ" or "postcode" — checked over the search module's label, placeholder, hint and submit in both locale dictionaries and over the search blocks of the page content artifacts for `/`, `/dein-ort`, `/dein-ort/starten`, `/deine-region` and `/mitmachen/registrieren` (FUN-WEB-0046). The order flow's scope step (TS-WEB-0025 D3) is out of scope: its postcode entry is a purchase configuration, not the place search. |
+| TS-WEB-0008-A16 | static | No visitor-facing string of a place-search surface contains "Postleitzahl", "PLZ" or "postcode" — checked over the search module's label, placeholder, hint and submit in both locale dictionaries and over the search blocks of the page content artifacts for `/`, `/dein-ort`, `/dein-ort/starten`, `/deine-region` and `/mitmachen/registrieren` (FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072). The order flow's scope step (TS-WEB-0025 D3) is out of scope: its postcode entry is a purchase configuration, not the place search. |
 
 ## Coverage
 
 | Requirement | Discharged by |
 | --- | --- |
 | FUN-WEB-0040 (live data wherever it proves something) | D1, D2, D7, D8 · A2, A4, A9, A14 |
-| FUN-WEB-0041 (counted live or not shown) | D8, D5 counters row · A9, A10 |
+| FUN-WEB-0041 (count it live or not show it at all) | D8, D5 counters row · A9, A10 |
 | FUN-WEB-0043 (embed demo via Portalize loader) | D6 · A8, A12 |
-| FUN-WEB-0044 (empty state shifts the focus job) | D4, D3 step 2 · A6 |
+| FUN-WEB-0153 (start the widening chain at radius 2) | D4, D3 step 2 · A6 |
+| FUN-WEB-0154 (shift the page's focus job to "publish our dates") | D4, D3 step 2 · A6 |
 | FUN-WEB-0045 (empty is a conversion occasion, not an error) | D4, D5 · A4, A5, A6 |
-| FUN-WEB-0046 (place search by name, no postcode offered, no findbyaddress) | D7, D7a, D2 · A1, A7, A14, A15, A16 |
-| FUN-WEB-0049 (handover by geo-api community slug) | D9, D2 handover row · A11 |
+| FUN-WEB-0155 (ask for a place name) | D7, D7a, D2 · A1, A7, A14, A15, A16 |
+| FUN-WEB-0156 (match it against place names and municipality names and …) | D7, D7a, D2 · A1, A7, A14, A15, A16 |
+| FUN-WEB-0157 (cover the covered communities) | D7, D7a, D2 · A1, A7, A14, A15, A16 |
+| CON-WEB-0070 (never offer a postcode as a product feature) | D7, D7a, D2 · A1, A7, A14, A15, A16 |
+| CON-WEB-0071 (never state an interim on a search surface) | D7, D7a, D2 · A1, A7, A14, A15, A16 |
+| CON-WEB-0072 (never use findbyaddress) | D7, D7a, D2 · A1, A7, A14, A15, A16 |
+| FUN-WEB-0049 (build it from a geo-api community slug (/api/{token}/community/slug/{slug})) | D9, D2 handover row · A11 |
 
 Adjacent, discharged elsewhere and only consumed here: FUN-WEB-0042
-(widening) TS-WEB-0005 D1/D8 · FUN-WEB-0047 (founding route) TS-WEB-0004 D1 ·
-FUN-WEB-0048 (QR forwarding) TS-WEB-0004 D3 · FUN-WEB-0100–106 (resilience,
-skeletons) TS-WEB-0003 D5 · CON-WEB-0042, CON-WEB-0043/038 (BFF) TS-WEB-0004 D5.
+(widening) TS-WEB-0005 D1/D8 · FUN-WEB-0158, FUN-WEB-0159 (founding route) TS-WEB-0004 D1 ·
+FUN-WEB-0048 (QR forwarding) TS-WEB-0004 D3 · FUN-WEB-0192, CON-WEB-0088, FUN-WEB-0193, FUN-WEB-0194, FUN-WEB-0195, FUN-WEB-0102, FUN-WEB-0103, FUN-WEB-0196, FUN-WEB-0197, FUN-WEB-0105, FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090 (resilience,
+skeletons) TS-WEB-0003 D5 · CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045 (BFF) TS-WEB-0004 D5.
 
 ## Open points
 

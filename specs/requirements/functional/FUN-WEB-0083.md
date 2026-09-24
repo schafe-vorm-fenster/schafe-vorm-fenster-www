@@ -22,4 +22,4 @@ In every content file, the website SHALL carry a machine-readable frontmatter re
 
 ## Notes
 
-The update workflow (FUN-WEB-0084) keys on this reference.
+The update workflow (FUN-WEB-0175, FUN-WEB-0176, FUN-WEB-0177) keys on this reference.

@@ -158,7 +158,7 @@ source per header, no exceptions.
 | --- | --- | --- | --- |
 | CSP | enforced, D2 verbatim | enforced, D2 verbatim | enforced, plus `'unsafe-eval'` in `script-src` and `ws: http://localhost:*` in `connect-src` for HMR |
 | HSTS | `max-age=63072000; includeSubDomains` | `max-age=86400; includeSubDomains` | off |
-| `X-Robots-Tag` | absent on pages | `noindex, nofollow` (CON-WEB-0020/023) | — |
+| `X-Robots-Tag` | absent on pages | `noindex, nofollow` (NFR-WEB-0061, NFR-WEB-0062, FUN-WEB-0125, CON-WEB-0033) | — |
 | `upgrade-insecure-requests` | on | on | off |
 
 CON-WEB-0030 says *enforced*, so report-only is never a substitute. A
@@ -219,7 +219,7 @@ structural, not a preference; three separate rules already forbid it:
    AAA plain-language stance (TS-WEB-0002 D2) for exactly the audience this
    site is for;
 2. it loads a third-party script and sets identifiers, which
-   contradicts NFR-WEB-0061, NFR-WEB-0062/023 and DEC-0004;
+   contradicts NFR-WEB-0061, NFR-WEB-0062, FUN-WEB-0125, CON-WEB-0033 and DEC-0004;
 3. its host is not in D1 and would have to be argued through D7 first.
 
 The three layers that replace it:
@@ -366,16 +366,16 @@ Rules:
 
 | Requirement | Discharged by |
 | --- | --- |
-| CON-WEB-0030 (serve an enforced Content-Security-Policy with an explicit) | D1, D2, D3, D5 · A1, A2, A3, A5 |
-| CON-WEB-0031 (admit a Content-Security-Policy allowlist entry only as) | D1, D7 · A1 |
-| CON-WEB-0032 (set the security headers of TS-WEB-0014 D4) | D4, D5 · A2, A5 |
+| CON-WEB-0030 (serve an enforced Content-Security-Policy with an explicit allowlist from …) | D1, D2, D3, D5 · A1, A2, A3, A5 |
+| CON-WEB-0031 (admit a Content-Security-Policy allowlist entry only as an explicit …) | D1, D7 · A1 |
+| CON-WEB-0032 (set the security headers of TS-WEB-0014 D4 on every …) | D4, D5 · A2, A5 |
 | FUN-WEB-0127 (run a dependency scan) | D12 · A11 |
-| CON-WEB-0038 (not be released while a dependency scan) | D12 · A11 |
-| CON-WEB-0034 (serve every request over HTTPS and answer) | D8 · A6, A7 |
-| CON-WEB-0039 (protect every form submission with a honeypot) | D9, D10 · A8, A9 |
+| CON-WEB-0038 (never be released while a dependency scan reports a …) | D12 · A11 |
+| CON-WEB-0034 (serve every request over HTTPS and answer an http:// …) | D8 · A6, A7 |
+| CON-WEB-0039 (protect every form submission with a honeypot field) | D9, D10 · A8, A9 |
 | NFR-WEB-0065 (Captchas, challenge iframes and third-party challenge scripts = 0) | D9, D10 · A8, A9 |
-| CON-WEB-0040 (observe production errors and availability through Vercel-native) | D6, D13 · A4, A12, A13 |
-| CON-WEB-0041 (not add a third-party error or monitoring) | D6, D13 · A4, A12, A13 |
+| CON-WEB-0040 (observe production errors and availability through Vercel-native means) | D6, D13 · A4, A12, A13 |
+| CON-WEB-0041 (never add a third-party error or monitoring SDK) | D6, D13 · A4, A12, A13 |
 
 ## Open points
 

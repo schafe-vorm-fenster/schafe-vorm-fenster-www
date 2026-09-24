@@ -4,7 +4,7 @@ id: TS-WEB-0009
 kind: system
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0100, FUN-WEB-0101, FUN-WEB-0102, FUN-WEB-0103, FUN-WEB-0104, FUN-WEB-0106]
+implements: [FUN-WEB-0192, CON-WEB-0088, FUN-WEB-0193, FUN-WEB-0194, FUN-WEB-0195, FUN-WEB-0102, FUN-WEB-0103, FUN-WEB-0196, FUN-WEB-0197, FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090]
 sources: [SRC-0002, SRC-0011]
 decisions: [DEC-0002, DEC-0019, DEC-0021, DEC-0032, DEC-0033, DEC-0041]
 ai_provenance:
@@ -139,7 +139,7 @@ Rules:
   skeleton can stand; it never bounds the shell.
 - **An empty result is tier 1, not a failure** (FUN-WEB-0045). Zero dates in
   a place is an answer, and the page converts on it — the widening chain
-  and the focus-job shift of FUN-WEB-0044 handle it, not this cascade.
+  and the focus-job shift of FUN-WEB-0153, FUN-WEB-0154 handle it, not this cascade.
 - The tier is decided per call, so one failing upstream degrades one
   module. A page can legitimately show tier 1, tier 2 and tier 3 modules
   side by side.
@@ -170,7 +170,7 @@ icon, no colour signal, no "Fehler".
 The label is content, not chrome — it is inside the island, so it streams
 with the data it describes and reserves no space when absent.
 
-### D6 — Counter exception: hidden, never snapshotted [FIXED: FUN-WEB-0104, FUN-WEB-0041]
+### D6 — Counter exception: hidden, never snapshotted [FIXED: FUN-WEB-0196, FUN-WEB-0197, FUN-WEB-0041]
 
 "Counted live or not shown" outranks "every module always has content".
 The counters therefore run a two-tier chain:
@@ -191,7 +191,7 @@ is **never placed above the fold** and is never an LCP element (TS-WEB-0003
 D2 lists none), so the collapse happens outside the viewport on first
 paint. Both branches are measured — A8.
 
-### D7 — Skeletons reserve the final space [FIXED: DEC-0033, FUN-WEB-0106; geometry PROPOSED]
+### D7 — Skeletons reserve the final space [FIXED: DEC-0033, FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090; geometry PROPOSED]
 
 Every island renders a skeleton as its `<Suspense>` fallback. Rules:
 
@@ -204,14 +204,14 @@ Every island renders a skeleton as its `<Suspense>` fallback. Rules:
   five places); the count is a property of the module, not of the answer.
   A shorter answer leaves the last rows empty rather than shrinking the
   box.
-- **No spinners, no blocking overlays, no "Lädt …" text** (FUN-WEB-0106).
+- **No spinners, no blocking overlays, no "Lädt …" text** (FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090).
 - **No travelling shimmer under `prefers-reduced-motion: reduce`** — the
   skeleton falls back to a still surface or, at most, an opacity pulse
   (TS-WEB-0002 A9 permits opacity only).
 - **Skeletons are `aria-hidden="true"`.** They are visual placeholders,
   not information. Where the arriving content changes the page's meaning
   rather than just filling it — the empty state on `/dein-ort`, which
-  shifts the focus job (FUN-WEB-0044) — the island's container is a
+  shifts the focus job (FUN-WEB-0153, FUN-WEB-0154) — the island's container is a
   `role="status"` region so the change is announced once.
 - The skeleton never renders a fake value that could be read as data (no
   example figures, no placeholder place name).
@@ -328,12 +328,20 @@ a `<Suspense>`; a resolver stays as small as the props it produces.
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0100 (server render, cached; shell never blocks; TTFB) | D1, D2, D3, D10 · A1, A2, A3, A14 |
-| FUN-WEB-0101 (tier 1: fetch server-side, stream, cache) | D1, D3, D4 · A3, A4, A5 |
+| FUN-WEB-0192 (render it server-side with caching) | D1, D2, D3, D10 · A1, A2, A3, A14 |
+| CON-WEB-0088 (never let a page shell block on an app …) | D1, D2, D3, D10 · A1, A2, A3, A14 |
+| FUN-WEB-0193 (fetch its data server-side) | D1, D3, D4 · A3, A4, A5 |
+| FUN-WEB-0194 (stream it into the rendered page) | D1, D3, D4 · A3, A4, A5 |
+| FUN-WEB-0195 (cache the response) | D1, D3, D4 · A3, A4, A5 |
 | FUN-WEB-0102 (tier 2: last cached answer, freshness label) | D4, D5, D9 · A4, A6, A10, A11 |
 | FUN-WEB-0103 (tier 3: build-time snapshot) | D4, D8 · A4, A7, A12 |
-| FUN-WEB-0104 (counters: tier 2 with timestamp, never tier 3) | D6 · A4, A7, A8 |
-| FUN-WEB-0106 (skeletons reserve final space, no spinners) | D7, D1 shell · A8, A9, A13 |
+| FUN-WEB-0196 (serve tier-2 data with a timestamp) | D6 · A4, A7, A8 |
+| FUN-WEB-0197 (hide the module) | D6 · A4, A7, A8 |
+| FUN-WEB-0198 (render a skeleton immediately) | D7, D1 shell · A8, A9, A13 |
+| FUN-WEB-0199 (reserve the final space at the declared ratio) | D7, D1 shell · A8, A9, A13 |
+| FUN-WEB-0200 (replace a skeleton with the designed empty state) | D7, D1 shell · A8, A9, A13 |
+| CON-WEB-0089 (never animate a skeleton) | D7, D1 shell · A8, A9, A13 |
+| CON-WEB-0090 (never use a blocking spinner) | D7, D1 shell · A8, A9, A13 |
 
 ## Open points
 

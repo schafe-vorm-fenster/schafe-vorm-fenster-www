@@ -62,7 +62,7 @@ and numbers), `woff2`, latin subset, self-hosted, preloaded,
 weights in use (400 · 700 · 800). Corrected 2026-09-11 per DEC-0043 — an
 earlier version named Inter, which was wrong.
 
-### D4 — JavaScript [FIXED: NFR-WEB-0052, NFR-WEB-0053, NFR-WEB-0054, NFR-WEB-0055, NFR-WEB-0056/004; split PROPOSED]
+### D4 — JavaScript [FIXED: NFR-WEB-0052, NFR-WEB-0053, NFR-WEB-0054, NFR-WEB-0055, NFR-WEB-0056, FUN-WEB-0107, FUN-WEB-0108; split PROPOSED]
 
 Server-first rendering (DEC-0019); client JS only for: live-module
 hydration, place search, envoy widget, eTracker. Third-party rule:
@@ -86,7 +86,7 @@ Vercel SWR semantics per DEC-0019 (serve cached, revalidate behind):
 | --- | --- | --- |
 | dates per place ("today", "this week") | 5 min | **3 d** |
 | active places / map | 1 h | **7 d** |
-| live counters (`/api/stats`) | 15 min | **3 d** — beyond: hide (FUN-WEB-0104) |
+| live counters (`/api/stats`) | 15 min | **3 d** — beyond: hide (FUN-WEB-0196, FUN-WEB-0197) |
 | proof stream input (`media-echo`, build data) | build-time | until next deploy |
 | proof stream per segment (`{community, trait, job, isoWeek}`) | 1 week | until the ISO week turns (tagged, TS-WEB-0005 D7) |
 | pages (HTML, ISR) | 1 h | until next deploy |
@@ -178,15 +178,15 @@ determination produces rather than hopes for.
 | NFR-WEB-0056 (Size of every image the website serves < 100 KB) | D1, D4 · A2, A3 |
 | FUN-WEB-0107 (inline the critical CSS) | D4 · A5 |
 | FUN-WEB-0108 (defer its execution) | D4 · A5 |
-| FUN-WEB-0109 (serve the brand kit's woff2 file from) | D3 · A3 |
+| FUN-WEB-0109 (serve the brand kit's woff2 file from its own …) | D3 · A3 |
 | FUN-WEB-0110 (declare font-display: swap) | D3 · A3 |
 | FUN-WEB-0111 (preload the file) | D3 · A3 |
-| FUN-WEB-0114 (run Lighthouse CI against the routes of) | D7 · A1, A2 |
+| FUN-WEB-0114 (run Lighthouse CI against the routes of TS-WEB-0003 D7) | D7 · A1, A2 |
 | FUN-WEB-0115 (report field performance through cookieless real-user monitoring) | D7 · A1, A2 |
-| FUN-WEB-0116 (declare the holding box's aspect-ratio rather than) | D8 · A7 |
+| FUN-WEB-0116 (declare the holding box's aspect-ratio rather than a fixed …) | D8 · A7 |
 | FUN-WEB-0117 (reserve its height in line units) | D8 · A7 |
-| NFR-WEB-0008 (Image payload of a page response served under Save-Data: on or prefers-red) | D6 · A6 |
-| FUN-WEB-0105 (cache lifetimes) | D5 · A4 |
+| NFR-WEB-0008 (Image payload of a page response served under Save-Data: on or prefers-reduced) | D6 · A6 |
+| FUN-WEB-0105 (use the cache lifetime of TS-WEB-0003 D5) | D5 · A4 |
 | FUN-WEB-0112 (load it lazily) | D2, D6 · A8 |
 | FUN-WEB-0113 (load it eagerly at high fetch priority) | D2, D6 · A8 |
 

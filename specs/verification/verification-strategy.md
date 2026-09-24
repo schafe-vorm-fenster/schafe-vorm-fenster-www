@@ -35,14 +35,14 @@ A test names the ID it verifies. That is the entire mechanism.
 // Vitest — a determination contract
 describe("TS-WEB-0001 D3: locale detection", () => { … });
 // Vitest — a requirement
-describe("FUN-WEB-0032: relevance scoring", () => { … });
+describe("FUN-WEB-0149, CON-WEB-0068: relevance scoring", () => { … });
 // Vitest — an acceptance criterion
 describe("TS-WEB-0004-A2: redundant prefix redirects", () => { … });
 // Playwright
 test("TS-WEB-0001-A7: language switch keeps the equivalent page", async () => { … });
 ```
 
-Gherkin scenarios carry the same IDs as tags (`@FUN-WEB-0044 @TS-WEB-0004-A4`).
+Gherkin scenarios carry the same IDs as tags (`@FUN-WEB-0153, FUN-WEB-0154 @TS-WEB-0004-A4`).
 
 ## What tests what
 

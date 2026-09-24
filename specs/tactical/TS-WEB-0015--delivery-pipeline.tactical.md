@@ -87,7 +87,7 @@ Anything else is non-production and emits, in all three places:
 | Surface | Non-production output |
 | --- | --- |
 | Response header (proxy, all routes incl. assets) | `X-Robots-Tag: noindex, nofollow` |
-| `robots.ts` (FUN-WEB-0079) | `User-agent: * / Disallow: /`, no sitemap reference |
+| `robots.ts` (FUN-WEB-0169, FUN-WEB-0170) | `User-agent: * / Disallow: /`, no sitemap reference |
 | Page metadata (root layout, FUN-WEB-0073) | `<meta name="robots" content="noindex, nofollow">`, no canonical to a live host |
 
 The host test is part of the predicate on purpose: a production-target
@@ -264,7 +264,7 @@ it only if install time becomes the bottleneck — the image is an
 optimisation, not part of the contract.
 
 Node version from `.nvmrc` via `actions/setup-node` with `cache: pnpm`;
-pnpm per `packageManager` in `package.json` (10.x, CON-WEB-0005);
+pnpm per `packageManager` in `package.json` (10.x, CON-WEB-0053, CON-WEB-0054);
 `pnpm install --frozen-lockfile` everywhere. Playwright browsers are
 installed with `--with-deps` and cached by version.
 
@@ -299,10 +299,10 @@ installed with `--with-deps` and cached by version.
 
 | Requirement | Discharged by |
 | --- | --- |
-| CON-WEB-0020 (migration stage on `next.*`, protected, noindex) | D1, D2, D3 · A1, A2, A11 |
-| CON-WEB-0021 (CI pipeline gates every merge) | D4, D5, D6, D9, D10, D11 · A3, A4, A5, A6, A9, A10, A12 |
-| CON-WEB-0022 (rolling production promotion, rollout-or-rollback) | D7, D8 · A7, A8 |
-| CON-WEB-0023 (protection + noindex on all non-production) | D2, D3 · A1, A2, A11 |
+| CON-WEB-0020 (deploy the next-2026 branch to next.schafe-vorm-fenster.de) | D1, D2, D3 · A1, A2, A11 |
+| CON-WEB-0021 (gate every merge with a GitHub Actions pipeline modelled …) | D4, D5, D6, D9, D10, D11 · A3, A4, A5, A6, A9, A10, A12 |
+| CON-WEB-0022 (promote to production as a rolling deployment gated by …) | D7, D8 · A7, A8 |
+| CON-WEB-0023 (carry deployment protection and noindex on every non-production deployment) | D2, D3 · A1, A2, A11 |
 
 ## Open points
 

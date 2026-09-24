@@ -28,7 +28,7 @@ inherited `etcc_*` parameters.
 Conversion goals themselves are **not defined here**. They live in
 `@schafe-vorm-fenster/goals` and are
 referenced by ID (ADR-001). Which page carries which goal is the
-`pages` area of `../requirements/functional/` (FUN-WEB-0010–019). Loading budgets are TS-WEB-0003; the CSP
+`pages` area of `../requirements/functional/` (FUN-WEB-0010, FUN-WEB-0011, FUN-WEB-0012, FUN-WEB-0013, FUN-WEB-0014, FUN-WEB-0015, FUN-WEB-0016, FUN-WEB-0017, FUN-WEB-0018, FUN-WEB-0139, CON-WEB-0060). Loading budgets are TS-WEB-0003; the CSP
 allowlist is CON-WEB-0030 (security spec); the trust claim made from
 cookielessness on `/dein-kalender` is FUN-WEB-0125, CON-WEB-0033 (content spec) — this
 spec only keeps that claim true.
@@ -106,9 +106,9 @@ property (D3).
 | `register-as-publisher` | `handover` | click of the registration CTA that navigates to `app.*` | `/mitmachen/registrieren` (FUN-WEB-0013) |
 | `publish-first-event` | — none | happens entirely in the app | app emits `completed` |
 | `save-calendar-to-homescreen` | `handover` | click that opens a place calendar on `app.*` | `/dein-ort`, `/`, 404 place search |
-| `buy-calendar-licence` | `completed` | invoice checkout concluded, embed code shown (FUN-WEB-0094) | `/dein-kalender/bestellen` (FUN-WEB-0015) |
-| `request-licence-quote` | `completed` | envoy widget reports a successful submission (FUN-WEB-0090) | `/deine-region/angebot` (FUN-WEB-0016) |
-| `request-product-briefing` | `handover` | outbound click to the Google Calendar booking link (FUN-WEB-0093) — the booking itself is off-site with no callback | `/dein-kalender`, `/deine-region` |
+| `buy-calendar-licence` | `completed` | invoice checkout concluded, embed code shown (FUN-WEB-0188, FUN-WEB-0189, CON-WEB-0084) | `/dein-kalender/bestellen` (FUN-WEB-0015) |
+| `request-licence-quote` | `completed` | envoy widget reports a successful submission (FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082) | `/deine-region/angebot` (FUN-WEB-0016) |
+| `request-product-briefing` | `handover` | outbound click to the Google Calendar booking link (FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083) — the booking itself is off-site with no callback | `/dein-kalender`, `/deine-region` |
 | `request-ad-placement` | — not wired at launch | offering `local-advertising` is `promotion: withheld` (Q-0006) | registry entry exists, no call site |
 | `order-promotion-material` | — not wired at launch | no page yet (Q-0005) | registry entry exists, no call site |
 | `publish-events-regularly` | — not countable | the hub marks the recurrence rule open | neither side emits |
@@ -240,8 +240,8 @@ cannot be attributed to a returning visitor.
 | NFR-WEB-0061 (Analytics cookies and persistent identifiers = 0) | D1, D2 (`data-block-cookies`), D5 (no cross-domain identity), D6 (no storage), D7 · A1, A2, A9 |
 | NFR-WEB-0062 (Consent-banner components = 0 components) | D1, D2 (`data-block-cookies`), D5 (no cross-domain identity), D6 (no storage), D7 · A1, A2, A9 |
 | CON-WEB-0028 (use eTracker as its analytics implementation) | D2, D3, D4 (tool-independent registry) · A3, A9, A10 |
-| CON-WEB-0029 (use one eTracker account and one property) | D2, D3, D4 (tool-independent registry) · A3, A9, A10 |
-| FUN-WEB-0124 (extract the eTracker configuration from the legacy) | D2, D3, D4 (tool-independent registry) · A3, A9, A10 |
+| CON-WEB-0029 (use one eTracker account and one property across all …) | D2, D3, D4 (tool-independent registry) · A3, A9, A10 |
+| FUN-WEB-0124 (extract the eTracker configuration from the legacy site) | D2, D3, D4 (tool-independent registry) · A3, A9, A10 |
 | NFR-WEB-0022 (Analytics, tag and pixel vendors = 1 vendor) | D7, D8, D4 rule 1 · A1, A9, A11 |
 | CON-WEB-0035 (ship conversion measurement only at launch) | D4, D5, D6, D8, D9 · A3, A5, A6, A7, A10, A11 |
 | CON-WEB-0036 (measure up to the handover only) | D4, D5, D6, D8, D9 · A3, A5, A6, A7, A10, A11 |

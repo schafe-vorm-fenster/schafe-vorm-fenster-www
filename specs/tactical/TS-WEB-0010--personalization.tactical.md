@@ -4,7 +4,7 @@ id: TS-WEB-0010
 kind: system
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0050, FUN-WEB-0051, FUN-WEB-0053, FUN-WEB-0054, FUN-WEB-0056, FUN-WEB-0069]
+implements: [FUN-WEB-0050, FUN-WEB-0051, FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073, FUN-WEB-0054, FUN-WEB-0056, FUN-WEB-0168, CON-WEB-0074, CON-WEB-0076]
 sources: [SRC-0001, SRC-0002, SRC-0006, SRC-0007]
 decisions: [DEC-0004, DEC-0019, DEC-0038, DEC-0041]
 ai_provenance:
@@ -24,7 +24,7 @@ the step that turns a request into the props the relevance engine
 consumes (`{community, trait, job}`, TS-WEB-0005 D8) and into the regional
 content key. It does not own scoring, ordering or caching — that is
 TS-WEB-0005 — and it does not own the empty-place-calendar case — that is
-TS-WEB-0008 (FUN-WEB-0044).
+TS-WEB-0008 (FUN-WEB-0153, FUN-WEB-0154).
 
 The stage table is normative in
 `go-to-market-os/concept/website-communication-principles.concept.md`
@@ -57,7 +57,7 @@ as props (TS-WEB-0005 D8), because it reads `headers()` and
 Consequence for FUN-WEB-0050: because there is no mode, there is nothing to
 switch, and no surface can offer the visitor a classification control —
 no role chooser, no "who are you?" interstitial, no region picker
-dressed as personalization. The place search (FUN-WEB-0046) is not such a
+dressed as personalization. The place search (FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072) is not such a
 control: it answers the visitor's own question and only incidentally
 raises the stage.
 
@@ -71,7 +71,7 @@ inferred intent:
 | 1 | route + language | URL (TS-WEB-0004 D1, TS-WEB-0001 D3) | `job`, language | — (never fails) |
 | 2 | entry context | query params + `Referer` (D3) | `trait` | `trait = direct` |
 | 3 | IP geolocation | request geo headers → geo-api (D4) | `country`…`county`, sometimes `municipality` | leave `null`, continue |
-| 4 | stated place | `?ort=<slug>` (FUN-WEB-0023) → geo-api community lookup | `community` + its whole hierarchy | leave `null`, continue |
+| 4 | stated place | `?ort=<slug>` (CON-WEB-0062, FUN-WEB-0142) → geo-api community lookup | `community` + its whole hierarchy | leave `null`, continue |
 | 5 | browser geolocation | only after an interaction (D5), client-side | produces a `?ort=` navigation, then step 4 | silent, no retry |
 
 Rules:
@@ -115,12 +115,12 @@ vocabularies would silently produce two segmentations.
 - `direct` is not a degraded case: it is the row SRC-0002 calls the
   default case, and it is what stage 0 renders (D8).
 
-### D4 — Geo resolution and its granularity ceiling [FIXED: FUN-WEB-0053; source PROPOSED]
+### D4 — Geo resolution and its granularity ceiling [FIXED: FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073; source PROPOSED]
 
 | Level | Status | How it is reached |
 | --- | --- | --- |
 | country, state | required, cheap | request geo headers of the platform |
-| county | **required** (FUN-WEB-0053) | coordinates/region from the request headers resolved against geo-api's hierarchy |
+| county | **required** (FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073) | coordinates/region from the request headers resolved against geo-api's hierarchy |
 | municipality | desirable, only when the resolution is unambiguous | same lookup, accepted only when it returns exactly one municipality |
 | community | never from IP | only from a place search or `?ort=` (D2 step 4) |
 | place / address | **explicitly not pursued** — "spooky" (SRC-0006) | not implemented at all |
@@ -142,7 +142,7 @@ Rules:
   coordinate → administrative-hierarchy resolution on geo-api; see Open
   points.
 
-### D5 — Browser geolocation only after an interaction [FIXED: FUN-WEB-0053]
+### D5 — Browser geolocation only after an interaction [FIXED: FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073]
 
 - The permission prompt is **never** triggered on page load, never in an
   effect, never by scrolling into view.
@@ -197,7 +197,7 @@ May never change:
 
 **The single exception on the whole website** is the empty place
 calendar: a place with no dates shifts the page's focus job to "publish
-our dates" (FUN-WEB-0044). It is owned by **TS-WEB-0008** and is not
+our dates" (FUN-WEB-0153, FUN-WEB-0154). It is owned by **TS-WEB-0008** and is not
 re-specified here. Note that it is triggered by *data* (the place has no
 events), not by a stage — a stage-3 visitor whose place is well filled
 sees no shift.
@@ -210,7 +210,7 @@ sees no shift.
   all JavaScript, a crawler, and a visitor whose geo lookup timed out
   all see the same complete page.
 - Segment variants **swap in** where they resolve, into a reserved box,
-  without layout shift (FUN-WEB-0106, DEC-0033).
+  without layout shift (FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090, DEC-0033).
 - No route becomes a per-request function because of personalization
   (DEC-0041 §8). If a stage cannot be resolved within the shell's budget,
   the stage-0 content stands — a stage is an improvement, never a
@@ -240,7 +240,7 @@ examples and MV wording where they exist, a Niedersachsen entry meets
 the Lower Saxony set, everyone else meets the neutral set — which is
 written to stand on its own, not as a leftover.
 
-### D10 — First-visit language suggestion [FIXED: DEC-0038, FUN-WEB-0069; timing deferred by Q-0011]
+### D10 — First-visit language suggestion [FIXED: DEC-0038, FUN-WEB-0168, CON-WEB-0074, CON-WEB-0076; timing deferred by Q-0011]
 
 Not built in phase 1. Its shape is nevertheless fixed, so that whoever
 builds it cannot break caching:
@@ -322,17 +322,22 @@ consent, or they stay unanswered. That is the accepted price.
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0050 (four stages, never ask the visitor) | D1, D2, D3 · A1, A3, A7 |
+| FUN-WEB-0050 (operate the four knowledge stages of SRC-0001 §6) | D1, D2, D3 · A1, A3, A7 |
 | FUN-WEB-0051 (stage 0 complete on its own) | D8, D2 no-block rule · A5, A6 |
-| FUN-WEB-0053 (invisible detection, county required, place not pursued) | D4, D5 · A2, A8 |
+| FUN-WEB-0160 (detect it invisibly by IP geolocation) | D4, D5 · A2, A8 |
+| FUN-WEB-0161 (ask only after an interaction) | D4, D5 · A2, A8 |
+| FUN-WEB-0162 (resolve it to at least county level) | D4, D5 · A2, A8 |
+| CON-WEB-0073 (never resolve a visitor's location to place level) | D4, D5 · A2, A8 |
 | FUN-WEB-0054 (process without storing personal data) | D6 · A11, A12, A15 |
 | FUN-WEB-0056 (regional variation on state/county) | D9, D4 · A9, A10 |
-| FUN-WEB-0069 (deferred first-visit language suggestion) | D10 · A6, A13 |
+| FUN-WEB-0168 (show it once per visitor) | D10 · A6, A13 |
+| CON-WEB-0074 (render the first-visit language suggestion client-side only) | D10 · A6, A13 |
+| CON-WEB-0076 (never let the first-visit language suggestion influence server rendering …) | D10 · A6, A13 |
 
 Adjacent, deliberately **not** implemented here: FUN-WEB-0052 and
 FUN-WEB-0055 are TS-WEB-0005 (this spec supplies their inputs, D1/D3, and their
-invariants, D7); FUN-WEB-0044 is TS-WEB-0008; FUN-WEB-0046 (place search) and
-FUN-WEB-0023 (`?ort=`) are the place-search spec; locale determination is
+invariants, D7); FUN-WEB-0153, FUN-WEB-0154 is TS-WEB-0008; FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072 (place search) and
+CON-WEB-0062, FUN-WEB-0142 (`?ort=`) are the place-search spec; locale determination is
 TS-WEB-0001 D3.
 
 ## Open points
@@ -344,12 +349,12 @@ TS-WEB-0001 D3.
   suggest a country domain. The cross-origin consequence for the "once"
   guarantee (D10) has to be settled at the same time.
 - **New, needs registering as a question: how is `county` actually
-  reached?** FUN-WEB-0053 requires county, but platform request geo headers
+  reached?** FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073 requires county, but platform request geo headers
   offer country, region (state) and city — not county — and
   `findbyaddress` is out of bounds for this path (Q-0025). Either geo-api
   gains a coordinate → administrative-hierarchy resolution (a demand to
   the geo-api team, sibling of Q-0025), or county resolution at stage 1
-  is not achievable and FUN-WEB-0053 has to be relaxed to state level.
+  is not achievable and FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073 has to be relaxed to state level.
   D4's "required" row rests on this being answered.
 - **Q-0030 (cache cost).** D1's cache-key fields are geo × trait; the
   trait axis multiplies TS-WEB-0005 D8's community axis by up to eight (D3).

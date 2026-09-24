@@ -4,7 +4,7 @@ id: TS-WEB-0026
 kind: interaction
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0016, FUN-WEB-0022, FUN-WEB-0028]
+implements: [FUN-WEB-0016, FUN-WEB-0022, FUN-WEB-0148, CON-WEB-0065, CON-WEB-0066]
 sources: [SRC-0002, SRC-0003, SRC-0008, SRC-0014]
 decisions: [DEC-0009, DEC-0030, DEC-0034, DEC-0036, DEC-0037, DEC-0041, DEC-0048, DEC-0081, DEC-0082, DEC-0083]
 ai_provenance:
@@ -105,7 +105,7 @@ so `publishablePrice` is false: promoted buys the page and the CTA, not a figure
 | The 480 € comparison | permitted — it is `portalize-calendar`'s published price, read from its package by the same component, never typed into copy |
 | `custom-data-integration` | `on-request-only`: mentioned as the add-on this buyer asks for, never priced, no CTA of its own |
 
-### D7 — Proof at this level [FIXED: TS-WEB-0005 D5, FUN-WEB-0036; slot placement PROPOSED]
+### D7 — Proof at this level [FIXED: TS-WEB-0005 D5, FUN-WEB-0150, FUN-WEB-0151, CON-WEB-0069; slot placement PROPOSED]
 
 - Job fit outranks geography here (`w_job` 0.40 vs `w_geo` 0.20): a
   county decision-maker in Baden-Württemberg is better served by a
@@ -170,10 +170,12 @@ so `publishablePrice` is false: promoted buys the page and the CTA, not a figure
 | --- | --- |
 | FUN-WEB-0016 (region page, focus job, quote conversion) | D1, D2, D6, D7, D8 · A4, A5, A6, A12, A13, A14, A15 |
 | FUN-WEB-0022 (two-working-day response promise) | D5 · A7, A8 |
-| FUN-WEB-0028 (region interim: examples, counters, search; no place lists; map-ready) | D3, D4 · A1, A2, A3, A9, A10, A11, A16, A17 |
+| FUN-WEB-0148 (render active example places) | D3, D4 · A1, A2, A3, A9, A10, A11, A16, A17 |
+| CON-WEB-0065 (never render a full place list at county level …) | D3, D4 · A1, A2, A3, A9, A10, A11, A16, A17 |
+| CON-WEB-0066 (keep the region page's story copy map-ready) | D3, D4 · A1, A2, A3, A9, A10, A11, A16, A17 |
 
 Consumed, discharged elsewhere: FUN-WEB-0020 TS-WEB-0006 D10 / TS-WEB-0018 D3 ·
-FUN-WEB-0040–046 TS-WEB-0008 · FUN-WEB-0036 TS-WEB-0005 · FUN-WEB-0090–093 TS-WEB-0016 · BUS-WEB-0012 and CON-WEB-0016 TS-WEB-0018.
+FUN-WEB-0040, FUN-WEB-0041, FUN-WEB-0042, FUN-WEB-0043, FUN-WEB-0153, FUN-WEB-0154, FUN-WEB-0045, FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072 TS-WEB-0008 · FUN-WEB-0150, FUN-WEB-0151, CON-WEB-0069 TS-WEB-0005 · FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082, FUN-WEB-0091, FUN-WEB-0092, FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083 TS-WEB-0016 · BUS-WEB-0012 and CON-WEB-0016 TS-WEB-0018.
 
 ### D3a — The map has a date; the tier has features [FIXED: DEC-0060, DEC-0061]
 

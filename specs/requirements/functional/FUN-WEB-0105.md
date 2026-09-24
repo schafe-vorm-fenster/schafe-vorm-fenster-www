@@ -2,7 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0105
 class: FUN
-form: F0
+form: F1
 domain: WEB
 status: DRAFT
 version: 0.1.0
@@ -13,9 +13,13 @@ ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
   model: "Claude Opus 5 (1M context)"
-  generated_at: "2026-09-09T16:07:54+02:00"
+  generated_at: "2026-09-24T17:20:00+02:00"
 ---
 
 # FUN-WEB-0105
 
-Cache lifetimes per module/page type: UNKNOWN — set in the tactical spec (carried over from the performance area).
+For every module and page type, the website SHALL use the cache lifetime of TS-WEB-0003 D5.
+
+## Notes
+
+The statement carried `UNKNOWN` until the tactical layer set the values; TS-WEB-0003 D5 now holds the table, so the requirement names it rather than the gap.

@@ -2,7 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0041
 class: FUN
-form: F0
+form: F1
 domain: WEB
 status: DRAFT
 version: 0.1.0
@@ -13,9 +13,13 @@ ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
   model: "Claude Opus 5 (1M context)"
-  generated_at: "2026-09-09T16:07:54+02:00"
+  generated_at: "2026-09-24T17:20:00+02:00"
 ---
 
 # FUN-WEB-0041
 
-Traction figures shall be counted live or not shown; static figures are forbidden (`proof/reach-and-usage.proof.md` is `expired` for this reason).
+For a traction figure, the website SHALL count it live or not show it at all.
+
+## Rationale
+
+A static figure is forbidden; `proof/reach-and-usage.proof.md` is `expired` for exactly this reason.

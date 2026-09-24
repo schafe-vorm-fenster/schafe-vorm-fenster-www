@@ -4,7 +4,7 @@ id: TS-WEB-0016
 kind: interaction
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0090, FUN-WEB-0091, FUN-WEB-0092, FUN-WEB-0093, FUN-WEB-0094, FUN-WEB-0095, FUN-WEB-0096]
+implements: [FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082, FUN-WEB-0091, FUN-WEB-0092, FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083, FUN-WEB-0188, FUN-WEB-0189, CON-WEB-0084, FUN-WEB-0095, FUN-WEB-0186, FUN-WEB-0190, FUN-WEB-0191, CON-WEB-0085, CON-WEB-0086]
 sources: [SRC-0003, SRC-0008, SRC-0011]
 decisions: [DEC-0004, DEC-0009, DEC-0010, DEC-0011, DEC-0013, DEC-0014, DEC-0015, DEC-0025, DEC-0026, DEC-0030, DEC-0051, DEC-0052, DEC-0081, DEC-0082, DEC-0083]
 ai_provenance:
@@ -67,7 +67,7 @@ the website receives none of them.
 | S2 | Quote request, with the two-working-day promise (FUN-WEB-0022) | `/deine-region`, `/deine-region/angebot` | lead form | envoy widget | `request-licence-quote` |
 | S3 | Briefing booking | the first action row of S1 — therefore every page | outbound link | Google Calendar appointment schedule | `request-product-briefing` |
 | S4 | Order the calendar | `/dein-kalender/bestellen` | multi-step order, concludes on invoice | open (D8) | `buy-calendar-licence` |
-| S5 | Newsletter signup | footer on every page (FUN-WEB-0021), plus inline on `/ueber-uns` at secondary treatment (DEC-0052 §4 as amended, TS-WEB-0027 D8) | **two routes** — WhatsApp (preferred) and e-mail with double opt-in (D10) | envoy for the e-mail route (DEC-0051); **nothing for the WhatsApp route** (D10) | `subscribe-to-newsletter` |
+| S5 | Newsletter signup | footer on every page (FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061), plus inline on `/ueber-uns` at secondary treatment (DEC-0052 §4 as amended, TS-WEB-0027 D8) | **two routes** — WhatsApp (preferred) and e-mail with double opt-in (D10) | envoy for the e-mail route (DEC-0051); **nothing for the WhatsApp route** (D10) | `subscribe-to-newsletter` |
 | S6 | External media preview | `/ueber-uns/archiv`, inline proof anywhere | own preview + outbound link | none (static link) | none |
 | S7 | Registration handover | `/mitmachen/registrieren` | handover to the app | app (DEC-0029) | `register-as-publisher` → `publish-first-event` |
 
@@ -83,7 +83,7 @@ and because only one of them fires an event.
 
 Rules that hold for every row: the website ships **no form backend and
 no form route** — nothing under `app/api/` accepts a submission
-(FUN-WEB-0090, DEC-0025); the BFF inventory (TS-WEB-0004 D5) stays read-only and
+(FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082, DEC-0025); the BFF inventory (TS-WEB-0004 D5) stays read-only and
 gains no POST route from this spec. envoy and Portalize talk to their
 own backends directly and are **not** proxied through the BFF.
 
@@ -95,9 +95,9 @@ own backends directly and are **not** proxied through the BFF.
 | Loading | Widget script loaded deferred, never render-blocking, excluded from the LCP path (TS-WEB-0003 D2/D5) | FIXED: TS-WEB-0003 |
 | Placement | One instance per surface in D1; never more than one instance of the same form kind per page | PROPOSED |
 | Configuration | Passed as attributes on the element: form kind, page language (TS-WEB-0001), source route, and the offering/goal context of the surface — attribute *names* are part of Q-0022 | PROPOSED |
-| Network path | Direct browser → envoy host. Not proxied; CSP `connect-src`/`script-src` entry for that host (CON-WEB-0030/031) | FIXED: DEC-0025, DEC-0015 |
+| Network path | Direct browser → envoy host. Not proxied; CSP `connect-src`/`script-src` entry for that host (CON-WEB-0030, CON-WEB-0031) | FIXED: DEC-0025, DEC-0015 |
 | Host value | UNKNOWN — SRC-0011 records envoy-api's host as not yet published. The CSP entry cannot be written until it is (Q-0022) | UNKNOWN |
-| Server rendering | The page renders and is fully usable without the widget having loaded; no page is blocked on it (TS-WEB-0005/FUN-WEB-0106 skeleton rules apply to the slot) | FIXED: DEC-0019 |
+| Server rendering | The page renders and is fully usable without the widget having loaded; no page is blocked on it (TS-WEB-0005/FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090 skeleton rules apply to the slot) | FIXED: DEC-0019 |
 | Isolation | The widget may use a shadow root; the page must not reach into it, and no page CSS may target its internals — theming happens only through D3 | PROPOSED |
 
 ### D3 — Theming handoff: CSS variables on a wrapper [PROPOSED — content blocked by Q-0022]
@@ -135,7 +135,7 @@ today; each is what the website needs in order to integrate, and the
 | C4 | Spam handling: honeypot field, submission-timing check, server-side rate limiting, **no captcha of any kind** | CON-WEB-0039, NFR-WEB-0065, DEC-0014 — binding on the widget, not negotiable | DEMANDED, unconfirmed |
 | C5 | Accessibility conformance: WCAG 2.2 AA inside the host page — label association, error identification, focus management, visible focus, target sizes | TS-WEB-0002 D5/A6, this spec A8/A9 | UNKNOWN |
 | C6 | Testability of the above: the widget's DOM reachable for axe-core and for keyboard/screen-reader runs even behind a shadow root | A8 | UNKNOWN |
-| C7 | Cookie-freedom and no persistent identifiers in the browser | NFR-WEB-0061, NFR-WEB-0062/023 — the banner-free promise must stay true | DEMANDED, unconfirmed |
+| C7 | Cookie-freedom and no persistent identifiers in the browser | NFR-WEB-0061, NFR-WEB-0062, FUN-WEB-0125, CON-WEB-0033 — the banner-free promise must stay true | DEMANDED, unconfirmed |
 | C8 | Production host(s) for script and submissions | D2 CSP entry, A1 | UNKNOWN |
 | C9 | Localization: German and English form copy and error messages, selected by the page language | TS-WEB-0001, DEC-0026 | UNKNOWN |
 | C10 | Delivery date | D6 contingency, launch scope | UNKNOWN |
@@ -243,13 +243,13 @@ on `/ueber-uns/archiv` and to inline proof anywhere.
 | Rule | Detail |
 | --- | --- |
 | No third-party embed | No iframe, no player script, no social embed, no click-to-load consent layer. There is nothing to consent to, which is the point (DEC-0013) |
-| Preview composition | Own preview image plus an own short quote/summary, both sourced from the media-echo entry (FUN-WEB-0086, build-time fetch) |
+| Preview composition | Own preview image plus an own short quote/summary, both sourced from the media-echo entry (FUN-WEB-0179, CON-WEB-0080, build-time fetch) |
 | Image origin | Preview images are served from our own origin or assets-api — never hotlinked from the media host, which would leak the visitor's request |
 | Outbound link | One link per entry to the original, link text naming source and subject (2.4.9, TS-WEB-0002 D2); `rel="noopener"` when opened in a new tab |
 | Original artifacts stay original | A quoted headline or clipping remains in its source language even on EN pages (DEC-0026); surrounding context is localized |
 | Static | The archive is fully static from the build-time fetch (TS-WEB-0004 D6); no client request ever goes to a media host |
 
-### D10 — Newsletter signup: two channels, WhatsApp preferred [FIXED: DEC-0052 §4 as amended, DEC-0051, FUN-WEB-0096; the WhatsApp route is a new capability and is owed]
+### D10 — Newsletter signup: two channels, WhatsApp preferred [FIXED: DEC-0052 §4 as amended, DEC-0051, FUN-WEB-0186, FUN-WEB-0190, FUN-WEB-0191, CON-WEB-0085, CON-WEB-0086; the WhatsApp route is a new capability and is owed]
 
 The newsletter is a conversion goal now — `subscribe-to-newsletter`
 (SRC-0008) — and it reaches people **by e-mail or by WhatsApp, WhatsApp
@@ -276,12 +276,12 @@ spec. What binds here is the consequence: two routes, WhatsApp first.
 
 | Property | Determination | Tag |
 | --- | --- | --- |
-| Consent model | E-mail route: double opt-in, the address unusable until the confirmation link is followed. WhatsApp route: the visitor's own sent message **is** the opt-in — she composes and sends it from her own client, so there is no second confirmation step to build and none to fake | FIXED: FUN-WEB-0096 |
-| Cookieless | Neither route sets a cookie or a persistent identifier; the banner-free promise holds here too | FIXED: NFR-WEB-0061, NFR-WEB-0062/023 |
+| Consent model | E-mail route: double opt-in, the address unusable until the confirmation link is followed. WhatsApp route: the visitor's own sent message **is** the opt-in — she composes and sends it from her own client, so there is no second confirmation step to build and none to fake | FIXED: FUN-WEB-0186, FUN-WEB-0190, FUN-WEB-0191, CON-WEB-0085, CON-WEB-0086 |
+| Cookieless | Neither route sets a cookie or a persistent identifier; the banner-free promise holds here too | FIXED: NFR-WEB-0061, NFR-WEB-0062, FUN-WEB-0125, CON-WEB-0033 |
 | Backend | Not the website, on either route. No subscriber endpoint, no list, no address and no phone number ever at rest here (same boundary as D5) | FIXED: DEC-0009 pattern |
 | Confirmation URL | E-mail route only; owned by the sending system, not a website route — the website has no DOI endpoint to build | PROPOSED |
 | Fields | E-mail route: address only. WhatsApp route: **no field at all** — a link, not a form. Anything more on either route is a decision nobody has taken | PROPOSED |
-| Placement | Footer on every page (FUN-WEB-0021), plus inline on `/ueber-uns` at secondary treatment below the booking (DEC-0052 §4 as amended, TS-WEB-0027 D8). SRC-0003's open point on inline placement is closed by that amendment | FIXED: FUN-WEB-0021, DEC-0052 §4 |
+| Placement | Footer on every page (FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061), plus inline on `/ueber-uns` at secondary treatment below the booking (DEC-0052 §4 as amended, TS-WEB-0027 D8). SRC-0003's open point on inline placement is closed by that amendment | FIXED: FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061, DEC-0052 §4 |
 | Weight | Secondary wherever it stands. It is never a page's primary conversion and never carries `data-cta="primary"` (DEC-0082) | FIXED: DEC-0082 |
 | Legal text | Consent wording and the processing reference point at `/rechtliches#datenschutz` (TS-WEB-0004 D8), on both routes — the WhatsApp route hands data to a third party too, and the fact that the visitor sends the message herself does not remove the duty to say who receives it | FIXED: DEC-0039 |
 | Measurement | The website observes a **signup intent**, not a subscription: the e-mail route's widget `success` event and the WhatsApp route's click are both handovers, and the confirmation happens where the website cannot see it. The goal's number is the confirmation, counted by the sending system and by hand on WhatsApp (D12) | PROPOSED |
@@ -487,7 +487,7 @@ Nothing else.
 A per-click token would make the message personal data: it would link an
 anonymous read to an identified person, which puts it in the privacy
 policy and, on one reading, behind consent — and the cookieless,
-consent-free posture (DEC-0004, NFR-WEB-0061, NFR-WEB-0062/023) is not worth trading for
+consent-free posture (DEC-0004, NFR-WEB-0061, NFR-WEB-0062, FUN-WEB-0125, CON-WEB-0033) is not worth trading for
 an attribution number.
 
 Attribution is therefore **aggregate**: "this came from `/dein-kalender`
@@ -603,19 +603,31 @@ prefill is a working row, not a broken one.
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0090 (the remaining lead forms are the envoy widget; no own form backend; no general contact form) | D1, D2, D5, D6 · A1, A2, A14 |
+| FUN-WEB-0183 (embed the envoy web-component widget) | D1, D2, D5, D6 · A1, A2, A14 |
+| CON-WEB-0081 (never ship a form backend of its own) | D1, D2, D5, D6 · A1, A2, A14 |
+| CON-WEB-0082 (never carry a general contact form) | D1, D2, D5, D6 · A1, A2, A14 |
 | FUN-WEB-0091 (theming via website-supplied CSS variables) | D3, D4 (C1) · A4 |
 | FUN-WEB-0092 (envoy owns storage; website holds no submission data) | D5, D2 network path · A1, A3 |
-| FUN-WEB-0093 (booking resolves to the contact section; its first row is the Google Calendar link, no embed; `make-contact` as an intent on every row) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
-| FUN-WEB-0094 (purchase concludes on invoice, embed code immediately) | D8 · A6 |
+| FUN-WEB-0184 (resolve it to that page's contact section) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
+| FUN-WEB-0185 (carry the Google Calendar appointment link as outbound navigation) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
+| FUN-WEB-0187 (complete request-product-briefing) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
+| FUN-WEB-0152 (carry make-contact as an intent) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
+| CON-WEB-0083 (never emit an event for an in-page action of …) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
+| FUN-WEB-0188 (conclude on invoice — invoice details in) | D8 · A6 |
+| FUN-WEB-0189 (send it to envoy as a structured event) | D8 · A6 |
+| CON-WEB-0084 (never use a payment provider) | D8 · A6 |
 | FUN-WEB-0095 (external media as own previews + outbound links) | D9 · A7 |
-| FUN-WEB-0096 (newsletter: two channels, WhatsApp preferred; double opt-in on the e-mail route, cookieless, GDPR) | D10, D12 · A11, A12, A21 |
+| FUN-WEB-0186 (offer both channels — e-mail and WhatsApp) | D10, D12 · A11, A12, A21 |
+| FUN-WEB-0190 (implement double opt-in through envoy) | D10, D12 · A11, A12, A21 |
+| FUN-WEB-0191 (use a click-to-chat link with a prefilled subscribe message) | D10, D12 · A11, A12, A21 |
+| CON-WEB-0085 (keep both newsletter routes cookieless and GDPR-compliant) | D10, D12 · A11, A12, A21 |
+| CON-WEB-0086 (never ship either newsletter route before a sending system …) | D10, D12 · A11, A12, A21 |
 
 Cross-cutting requirements this spec serves without claiming: CON-WEB-0039, NFR-WEB-0065
-(spam, D11 · A10), CON-WEB-0030/031 (CSP entries, D2 · A5, A6), CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064
-(conversion measurement, D12 · A12, A17, A18), NFR-WEB-0061, NFR-WEB-0062/023
+(spam, D11 · A10), CON-WEB-0030, CON-WEB-0031 (CSP entries, D2 · A5, A6), CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064
+(conversion measurement, D12 · A12, A17, A18), NFR-WEB-0061, NFR-WEB-0062, FUN-WEB-0125, CON-WEB-0033
 (cookie-freedom across the prefilled message, D14 · A19), FUN-WEB-0022
-(response promise, D4 C11 · A13), NFR-WEB-0057, CON-WEB-0024–013 across the widget
+(response promise, D4 C11 · A13), NFR-WEB-0057, CON-WEB-0024, NFR-WEB-0058, NFR-WEB-0059, CON-WEB-0025, FUN-WEB-0128, FUN-WEB-0118, FUN-WEB-0119, FUN-WEB-0120 across the widget
 boundary (D11 · A8, A9 — the website-side half of TS-WEB-0002 A6).
 
 ## Open points

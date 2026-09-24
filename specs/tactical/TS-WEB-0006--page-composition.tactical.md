@@ -4,7 +4,7 @@ id: TS-WEB-0006
 kind: rule
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0001, FUN-WEB-0003, FUN-WEB-0004, FUN-WEB-0005, FUN-WEB-0006, FUN-WEB-0007, FUN-WEB-0008, FUN-WEB-0009, FUN-WEB-0019, FUN-WEB-0020, FUN-WEB-0022]
+implements: [FUN-WEB-0001, FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136, FUN-WEB-0004, FUN-WEB-0005, FUN-WEB-0006, FUN-WEB-0007, FUN-WEB-0138, CON-WEB-0059, FUN-WEB-0009, FUN-WEB-0139, CON-WEB-0060, FUN-WEB-0020, FUN-WEB-0022]
 sources: [SRC-0001, SRC-0003, SRC-0017, SRC-0018]
 decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084]
 ai_provenance:
@@ -92,7 +92,7 @@ rules keep it from competing with the focus block:
 
 - It uses link treatment, never CTA treatment. `data-cta` never appears
   inside it, so the "one primary conversion, visually unrivalled" rule
-  (D3, FUN-WEB-0003) is untouched by construction rather than by judgement.
+  (D3, FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136) is untouched by construction rather than by judgement.
 - It is one `<nav>` with an accessible name, server-rendered as plain
   links, and its last item — the current page — is not a link.
 - It is the only navigation permitted above block 1. A trail is a
@@ -266,7 +266,7 @@ determination owns only what is true of a block's *structure*.
   by visitor, the static shell is stage-independent and only the streamed
   modules segment (TS-WEB-0004 D6, TS-WEB-0005).
 
-### D9 — The conversion map is complete and is a check, not a diagram [FIXED: SRC-0003 "Conversion Map", FUN-WEB-0019]
+### D9 — The conversion map is complete and is a check, not a diagram [FIXED: SRC-0003 "Conversion Map", FUN-WEB-0139, CON-WEB-0060]
 
 The map in SRC-0003 is the contract. The `page.meta.ts` set is validated
 against it in both directions:
@@ -306,7 +306,7 @@ The one instance in phase 1: the **two-working-day response promise** on
 the `/deine-region` quote request. It is stated at the form before
 submit and repeated in the confirmation the visitor sees after submit,
 both from a single constant, so the two can never disagree. The promise
-is bound to the lead handling behind the envoy widget (FUN-WEB-0090) and is
+is bound to the lead handling behind the envoy widget (FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082) and is
 flagged to envoy/ops as part of Q-0022; if that process cannot keep it,
 the promise is removed rather than softened.
 
@@ -352,14 +352,19 @@ the promise is removed rather than softened.
 | Requirement | Discharged by |
 | --- | --- |
 | FUN-WEB-0001 (one focus job per page, declared) | D1 · A1, A14 |
-| FUN-WEB-0003 (one primary conversion, above the fold; the CTA ladder) | D3 · A2, A3, A15, A18 |
+| FUN-WEB-0133 (present exactly one primary conversion) | D3 · A2, A3, A15, A18 |
+| FUN-WEB-0134 (repeat the primary conversion without the primary marker) | D3 · A2, A3, A15, A18 |
+| FUN-WEB-0135 (render it at secondary treatment) | D3 · A2, A3, A15, A18 |
+| FUN-WEB-0136 (carry a second) | D3 · A2, A3, A15, A18 |
 | FUN-WEB-0004 (four jobs, one click from anywhere) | D5 (with TS-WEB-0004 D4) · A5 |
 | FUN-WEB-0005 (context band, position and contents) | D2, D5 · A6 |
 | FUN-WEB-0006 (page ends in its focus job's CTA) | D2, D6 · A7, A17 |
 | FUN-WEB-0007 ("know what is on" fulfilled in place) | D4 · A4 |
-| FUN-WEB-0008 (scenes, one mechanism, no generic claims) | D7 · A8, A16 |
+| FUN-WEB-0138 (introduce it through a concrete scene) | D7 · A8, A16 |
+| CON-WEB-0059 (never use a generic claim as copy) | D7 · A8, A16 |
 | FUN-WEB-0009 (no role switcher, no self-classification) | D8 · A9, A10 |
-| FUN-WEB-0019 (conversion map complete) | D9 · A11 |
+| FUN-WEB-0139 (carry it on the page that map names) | D9 · A11 |
+| CON-WEB-0060 (never carry a page for order-promotion-material) | D9 · A11 |
 | FUN-WEB-0020 (pricing display rule) | D10 · A12 |
 | FUN-WEB-0022 (two-working-day response promise) | D11 · A13 |
 

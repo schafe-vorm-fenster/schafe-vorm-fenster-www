@@ -4,7 +4,7 @@ id: TS-WEB-0007
 kind: system
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0025, FUN-WEB-0039, FUN-WEB-0080, FUN-WEB-0081, FUN-WEB-0082, FUN-WEB-0083, FUN-WEB-0084, FUN-WEB-0085, FUN-WEB-0086, FUN-WEB-0087, FUN-WEB-0088, FUN-WEB-0089]
+implements: [FUN-WEB-0143, FUN-WEB-0144, CON-WEB-0063, FUN-WEB-0039, FUN-WEB-0171, CON-WEB-0077, FUN-WEB-0172, FUN-WEB-0173, FUN-WEB-0174, CON-WEB-0078, FUN-WEB-0083, FUN-WEB-0175, FUN-WEB-0176, FUN-WEB-0177, FUN-WEB-0178, CON-WEB-0079, FUN-WEB-0179, CON-WEB-0080, FUN-WEB-0087, FUN-WEB-0180, FUN-WEB-0181, FUN-WEB-0182, FUN-WEB-0089]
 sources: [SRC-0006, SRC-0008, SRC-0009, SRC-0017, SRC-0018]
 decisions: [DEC-0012, DEC-0020, DEC-0022, DEC-0026, DEC-0027, DEC-0039, DEC-0041, DEC-0080]
 ai_provenance:
@@ -34,7 +34,7 @@ points).
 
 ## Determinations
 
-### D1 — Source packages are devDependencies, addressed by name [FIXED: FUN-WEB-0080, DEC-0020, ADR-001, concept A.1/A.2]
+### D1 — Source packages are devDependencies, addressed by name [FIXED: FUN-WEB-0171, CON-WEB-0077, DEC-0020, ADR-001, concept A.1/A.2]
 
 Raw material is installed from `npm.pkg.github.com` as **devDependencies
 with exact pinned versions**, never as runtime dependencies and never
@@ -93,7 +93,7 @@ stays open as a hub demand, not as a website blocker. The one gap that
 still bites is `geo` on proof: without it an element falls to TS-WEB-0005 tier
 6.
 
-### D3 — Build-time in, local-only out [FIXED: FUN-WEB-0082, FUN-WEB-0086, DEC-0020]
+### D3 — Build-time in, local-only out [FIXED: FUN-WEB-0174, CON-WEB-0078, FUN-WEB-0179, CON-WEB-0080, DEC-0020]
 
 | Phase | May read | Must not read |
 | --- | --- | --- |
@@ -105,7 +105,7 @@ Runtime — including dynamic loading and geo-based selection — reads
 exclusively from the local content tree. This is the hard line DEC-0020 §3
 draws and TS-WEB-0005 depends on (the engine reads the website's schema only).
 
-**Media echo and FUN-WEB-0086.** The requirement's premise ("fetched at
+**Media echo and FUN-WEB-0179, CON-WEB-0080.** The requirement's premise ("fetched at
 build time rather than versioned as a package") is superseded by the
 hub's package delivery: `media-echo/verified/` ships as
 `@schafe-vorm-fenster/media-echo`. The requirement's *intent* holds and is
@@ -211,7 +211,7 @@ the page only through the named interpolation slots of `PlaceholderText`
 (`{place}`, `{county}`). A content file that varies per visitor breaks
 the TS-WEB-0005 D8 cache key and with it the TS-WEB-0003 performance budget.
 
-### D8 — Localization: siblings, not translations [FIXED: DEC-0026, DEC-0006, FUN-WEB-0025, concept B.4]
+### D8 — Localization: siblings, not translations [FIXED: DEC-0026, DEC-0006, FUN-WEB-0143, FUN-WEB-0144, CON-WEB-0063, concept B.4]
 
 1. One file per locale (D4). The pipeline takes a locale **set**, never a
    hard-coded `de`/`en` pair; phase 1 is `de` + `en`.
@@ -232,7 +232,7 @@ the TS-WEB-0005 D8 cache key and with it the TS-WEB-0003 performance budget.
    is **escalated to the editorial decision point** (D11), never resolved
    silently by the harmonisation step.
 
-### D9 — Hub IDs are referenced, never redefined [FIXED: FUN-WEB-0085, ADR-001]
+### D9 — Hub IDs are referenced, never redefined [FIXED: FUN-WEB-0178, CON-WEB-0079, ADR-001]
 
 Audience ids, conversion goal ids, offering ids and proof ids come from
 the installed packages. This repository defines none of them and keeps no
@@ -257,7 +257,7 @@ SRC-0017 §9, and SRC-0018 binds both lists as the single avoid list
 is about where the vocabulary finally lives, not about whether the
 columns exist.
 
-### D10 — Legal texts: imported, validated, never generated [FIXED: FUN-WEB-0088, DEC-0012, DEC-0027, DEC-0039]
+### D10 — Legal texts: imported, validated, never generated [FIXED: FUN-WEB-0180, FUN-WEB-0181, FUN-WEB-0182, DEC-0012, DEC-0027, DEC-0039]
 
 Legal content is the one family not sourced from the hub. It arrives
 through the existing Google Workspace import (`content/legal/` +
@@ -270,9 +270,9 @@ languages/jurisdictions are added as Google Docs, same process.
 | schema | content type 26 `legal-section`; a minimal subset of `ContentBase` — `id`, `type`, `locale`, `anchor`, `status: imported`, `source` (the Google Doc) — and **no** `derived_from`, no `RelevanceFacets` |
 | layout | `content/legal/<locale>/<doc>.md`; `import.yaml` gains a `locale` and an `anchor` per document (it carries neither today, while the imported files already carry `locale: de`) [PROPOSED] |
 | anchors | from the permanent registry in TS-WEB-0004 D8; the importer never invents one, and a document whose anchor is not in the registry fails validation |
-| rendering | sections of the single legal page (FUN-WEB-0029, TS-WEB-0004 D1/D8), in registry order |
+| rendering | sections of the single legal page (FUN-WEB-0146, CON-WEB-0067, TS-WEB-0004 D1/D8), in registry order |
 
-### D11 — Status lifecycle and the editorial gate [FIXED: FUN-WEB-0081, FUN-WEB-0087, DEC-0023, concept B.1/E.1 P4]
+### D11 — Status lifecycle and the editorial gate [FIXED: FUN-WEB-0172, FUN-WEB-0173, FUN-WEB-0087, DEC-0023, concept B.1/E.1 P4]
 
 `draft → in-review → approved`. What an agent emits is **`draft`**;
 `approved` is set only at the editorial decision point by a person
@@ -306,7 +306,7 @@ non-zero exit, named file, named record. Nothing on this list warns.
 | 8 | harmonisation | left-column divergence between locale variants of one id (D8.6) |
 | 9 | slot binding | a content file bound to no composition slot, or to more than one; a required slot with no file (concept C.3) |
 | 10 | segment independence | a resolved place name in a generated string instead of a named slot (D7) |
-| 11 | glossary conformance | a banned term in a field where it is banned — the glossary's **avoid** column, the avoid list of SRC-0017 §9, and `Portalize` outside the one sentence DEC-0052 §1 allows or in any navigation label (D9, FUN-WEB-0002, CON-WEB-0014, CG-038/CG-040) |
+| 11 | glossary conformance | a banned term in a field where it is banned — the glossary's **avoid** column, the avoid list of SRC-0017 §9, and `Portalize` outside the one sentence DEC-0052 §1 allows or in any navigation label (D9, FUN-WEB-0002, CON-WEB-0058, FUN-WEB-0132, CG-038/CG-040) |
 | 12 | legal | a legal file with an anchor outside the TS-WEB-0004 D8 registry, or carrying generation-only fields (D10) |
 | 13 | copy structure | a question mark in a section-title field; a back-reference phrase; a word stem repeated inside one field; `im Amt` without a second addressee beside it; a typed traction figure in a claim field (SRC-0018: CG-004, CG-005, CG-015, CG-034, CG-036) |
 | 14 | register | a `Sie`/`Ihnen`/`Ihre*` form, or one field mixing `du` and `ihr` address (DEC-0066, SRC-0018: CG-002, CG-003). **One exemption, by route: `/rechtliches`** (DEC-0066 amendment 2026-09-24) — the whole page, not only the imported document bodies, because the five legal texts are imported verbatim in the formal register (DEC-0012, DEC-0027) and a page whose headings say `du` over text that says `Sie` reproduces inside one page the seam DEC-0066 exists to prevent. The exemption is keyed on the route, never on a field name, so it cannot spread |
@@ -322,7 +322,7 @@ Check 4 is the one with a timing problem rather than a logic problem:
 clearance is denormalised at generation time and can be revoked
 afterwards. The build catches it only when a build runs (open points).
 
-### D13 — P7, the update workflow [FIXED: FUN-WEB-0084 shape, concept E.1/E.3; trigger UNKNOWN — Q-0018]
+### D13 — P7, the update workflow [FIXED: FUN-WEB-0175, FUN-WEB-0176, FUN-WEB-0177 shape, concept E.1/E.3; trigger UNKNOWN — Q-0018]
 
 A version change in an installed content package runs the diff:
 
@@ -405,17 +405,28 @@ first playbook is written. [PROPOSED]
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0025 (localize everything but artifacts) | D8 · A9, A12 |
-| FUN-WEB-0039 (`audiences[]` gap on media echo) | D2, D7 · A6, A7 |
-| FUN-WEB-0080 (packages as devDependencies, never copied) | D1, D2 · A7, A8 |
-| FUN-WEB-0081 (agent generation, then editorial rework) | D5, D11, D14 · A1, A14, A15 |
-| FUN-WEB-0082 (local content folder, build and runtime read it only) | D3, D4 · A5, A12 |
+| FUN-WEB-0143 (render everything the content pipeline generates in the page …) | D8 · A9, A12 |
+| FUN-WEB-0144 (render it in its source language) | D8 · A9, A12 |
+| CON-WEB-0063 (never machine-translate at request time) | D8 · A9, A12 |
+| FUN-WEB-0039 (read audiences from a media-echo entry) | D2, D7 · A6, A7 |
+| FUN-WEB-0171 (consume it as npm packages from npm.pkg.github.com) | D1, D2 · A7, A8 |
+| CON-WEB-0077 (never copy raw hub content into this repository) | D1, D2 · A7, A8 |
+| FUN-WEB-0172 (generate it from the package raw material through the …) | D5, D11, D14 · A1, A14, A15 |
+| FUN-WEB-0173 (rework it before it ships) | D5, D11, D14 · A1, A14, A15 |
+| FUN-WEB-0174 (hold it in its own content folder as markdown …) | D3, D4 · A5, A12 |
+| CON-WEB-0078 (never read content from the hub at request time) | D3, D4 · A5, A12 |
 | FUN-WEB-0083 (machine-readable provenance reference) | D6 · A2, A15 |
-| FUN-WEB-0084 (update workflow → pull request) | D13 · A2, A15 |
-| FUN-WEB-0085 (hub IDs referenced, never redefined) | D9 · A10 |
-| FUN-WEB-0086 (media echo at build time, no news section) | D1, D3 · A2, A12 |
+| FUN-WEB-0175 (fire a repository_dispatch at this repository) | D13 · A2, A15 |
+| FUN-WEB-0176 (run an agent-driven diff) | D13 · A2, A15 |
+| FUN-WEB-0177 (open a pull request against the website) | D13 · A2, A15 |
+| FUN-WEB-0178 (reference it from go-to-market-os) | D9 · A10 |
+| CON-WEB-0079 (never define a conversion goal) | D9 · A10 |
+| FUN-WEB-0179 (fetch it at build time rather than version it …) | D1, D3 · A2, A12 |
+| CON-WEB-0080 (never carry a news section) | D1, D3 · A2, A12 |
 | FUN-WEB-0087 (copy after the spec phase; placeholders) | D11 · A14 |
-| FUN-WEB-0088 (legal import, DE + EN, one page) | D10 · A11 |
+| FUN-WEB-0180 (import them through the Google Workspace pipeline in German …) | D10 · A11 |
+| FUN-WEB-0181 (render it as a section of the single legal …) | D10 · A11 |
+| FUN-WEB-0182 (add the legal text in Google Docs through the …) | D10 · A11 |
 | FUN-WEB-0089 (Zod schemas are the generation contract) | D5, D6, D7, D12 · A1, A6 |
 
 ## Open points
@@ -466,5 +477,5 @@ first playbook is written. [PROPOSED]
 - **Source registration.** `concept/website-content-production.concept.md`
   is the central input of this spec and carries no `SRC-####` id in
   `specs/sources/source-inventory.md`. It needs one.
-- **FUN-WEB-0086's premise is superseded** (D3): media echo ships as a
+- **FUN-WEB-0179, CON-WEB-0080's premise is superseded** (D3): media echo ships as a
   package. The requirement text should be amended to match its intent.

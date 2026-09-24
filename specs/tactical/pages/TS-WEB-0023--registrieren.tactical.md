@@ -72,7 +72,7 @@ in the URL — and only values that may be public go in.
 
 | Rule | Determination |
 | --- | --- |
-| Where state lives | the query string of the same route: `?ort=<slug>&wer=<enum>&weg=<enum>` [PROPOSED names, consistent with `?ort=` per FUN-WEB-0023] |
+| Where state lives | the query string of the same route: `?ort=<slug>&wer=<enum>&weg=<enum>` [PROPOSED names, consistent with `?ort=` per CON-WEB-0062, FUN-WEB-0142] |
 | Where it never lives | cookie, `localStorage`, `sessionStorage`, IndexedDB, server session, BFF write route — the BFF stays read-only (TS-WEB-0004 D5) |
 | How a step advances | a plain GET navigation to the same route with one more parameter; Back, Forward and reload are the browser's, not ours |
 | Which step is shown | **derived** from which answers are present; an explicit `schritt` parameter may only move *backwards* to an already-answered step, never forwards past an unanswered one |
@@ -175,9 +175,9 @@ only network calls are the read-only BFF routes of TS-WEB-0004 D5.
 | --- | --- |
 | FUN-WEB-0013 (`/mitmachen/registrieren`: publish our dates, handover to the app) | D1–D9 · A1–A16 |
 
-Consumed, discharged elsewhere: FUN-WEB-0023 / FUN-WEB-0046 / FUN-WEB-0049
+Consumed, discharged elsewhere: CON-WEB-0062, FUN-WEB-0142 / FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072 / FUN-WEB-0049
 (TS-WEB-0008) · NFR-WEB-0061, NFR-WEB-0062 (TS-WEB-0012 D1) · CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064 (TS-WEB-0012 D4/D5) ·
-FUN-WEB-0090 / FUN-WEB-0092 (TS-WEB-0016) · FUN-WEB-0087 (TS-WEB-0007).
+FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082 / FUN-WEB-0092 (TS-WEB-0016) · FUN-WEB-0087 (TS-WEB-0007).
 
 ## Open points
 
@@ -204,7 +204,7 @@ FUN-WEB-0090 / FUN-WEB-0092 (TS-WEB-0016) · FUN-WEB-0087 (TS-WEB-0007).
   everywhere else.
 - **Q-0044 leaves steps 2 and 3 without a component.** SRC-0014 specifies
   no single-choice control. Addressee: design.
-- **Parameter names are [PROPOSED].** `ort` is fixed (FUN-WEB-0023); `wer`,
+- **Parameter names are [PROPOSED].** `ort` is fixed (CON-WEB-0062, FUN-WEB-0142); `wer`,
   `weg` and the back-only `schritt` rule are new, and `/take-part/register`
   (TS-WEB-0004 D3a) raises whether parameter names localize. Addressee: TS-WEB-0004.
 - **Q-0040 leaves the other half of the funnel unproven.** If the app does

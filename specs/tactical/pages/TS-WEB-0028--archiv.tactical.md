@@ -65,7 +65,7 @@ today (Open points).
 
 | Aspect | Determination |
 | --- | --- |
-| Vocabulary | the hub's media-echo types, never a website-local list (FUN-WEB-0085). Labels are localized (TS-WEB-0007 D8); identifiers are not |
+| Vocabulary | the hub's media-echo types, never a website-local list (FUN-WEB-0178, CON-WEB-0079). Labels are localized (TS-WEB-0007 D8); identifiers are not |
 | Control | one row of chips (SRC-0014 badge/chip: radius 999, ≥ 40 px, tappable) plus *all*; multi-select, OR-combined, zero selected means all. **Only types with at least one cleared entry get a chip** — the control cannot offer a dead end |
 | Multi-type entries | `type` is a list in the hub schema; an entry appears under every type it carries. Chip counts therefore sum above the row total, and the page never renders that sum |
 | Mechanics | client-side over rows already present in the static HTML. No navigation, no refetch, no request of any kind |

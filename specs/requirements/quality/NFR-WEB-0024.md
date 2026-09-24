@@ -22,4 +22,4 @@ Persisted IP addresses on the geolocation path SHALL be = 0 addresses, measured 
 
 ## Notes
 
-Original statement: "IP geolocation (FUN-WEB-0053) shall process without storage; DPIA/legal check pending (Q-0008)." The DPIA clause is Q-0008, an open question rather than a requirement, and is kept here. TS-WEB-0013-A6: "The geo resolver returns at most county-level, writes nothing, and no returned or cached key contains an IP address." No test references A6 yet (W3).
+Original statement: "IP geolocation (FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073) shall process without storage; DPIA/legal check pending (Q-0008)." The DPIA clause is Q-0008, an open question rather than a requirement, and is kept here. TS-WEB-0013-A6: "The geo resolver returns at most county-level, writes nothing, and no returned or cached key contains an IP address." No test references A6 yet (W3).

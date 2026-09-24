@@ -2,7 +2,7 @@
 artefact: requirement
 id: FUN-WEB-0024
 class: FUN
-form: F0
+form: F1
 domain: WEB
 status: DRAFT
 version: 0.1.0
@@ -13,9 +13,17 @@ ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
   model: "Claude Opus 5 (1M context)"
-  generated_at: "2026-09-10T13:40:06+02:00"
+  generated_at: "2026-09-24T17:20:00+02:00"
 ---
 
 # FUN-WEB-0024
 
-Place-bound proof elements (reference calendars, local events, place flyers) shall be drawn only from covered places — places with data in events-api. Coverage gaps are never illustrated with invented or uncovered examples.
+For a place-bound proof element, the website SHALL draw it only from a covered place.
+
+## Rationale
+
+A coverage gap is never illustrated with an invented or uncovered example. Covered means a place with data in events-api.
+
+## Notes
+
+Reference calendars, local events and place flyers are place-bound (DEC-0024).

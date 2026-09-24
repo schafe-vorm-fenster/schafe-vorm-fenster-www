@@ -4,7 +4,7 @@ id: TS-WEB-0017
 kind: rule
 status: DRAFT
 version: 0.1.0
-implements: [CON-WEB-0001, CON-WEB-0002, CON-WEB-0003, CON-WEB-0004, CON-WEB-0005, CON-WEB-0006, CON-WEB-0007]
+implements: [CON-WEB-0046, CON-WEB-0047, CON-WEB-0048, CON-WEB-0049, CON-WEB-0050, CON-WEB-0051, CON-WEB-0003, CON-WEB-0052, FUN-WEB-0131, CON-WEB-0053, CON-WEB-0054, CON-WEB-0006, CON-WEB-0055, CON-WEB-0056, CON-WEB-0057]
 sources: [SRC-0006, SRC-0008, SRC-0011, SRC-0012]
 decisions: [DEC-0002, DEC-0020, DEC-0023, DEC-0029, DEC-0031, DEC-0035, DEC-0085]
 ai_provenance:
@@ -32,7 +32,7 @@ TS-WEB-0006. This spec references them.
 
 ## Determinations
 
-### D1 — One framework, one host [FIXED: DEC-0002, CON-WEB-0001; deny-set PROPOSED]
+### D1 — One framework, one host [FIXED: DEC-0002, CON-WEB-0046, CON-WEB-0047, CON-WEB-0048; deny-set PROPOSED]
 
 Next.js (current major), App Router, server-first rendering (DEC-0019 via
 TS-WEB-0003 D4), hosted on Vercel; the existing Vercel project link stays
@@ -49,7 +49,7 @@ The deny-set is [PROPOSED]: no source enumerates forbidden frameworks.
 Its content is a list in `stack.allow.json`, changed by a decision, not
 by a commit.
 
-### D2 — Mobile-first as a layout law [FIXED: CON-WEB-0002, DEC-0054, DEC-0056]
+### D2 — Mobile-first as a layout law [FIXED: CON-WEB-0049, CON-WEB-0050, CON-WEB-0051, DEC-0054, DEC-0056]
 
 "Mobile first" is turned into four rules a reviewer can apply and a
 build can test. The numbers are no longer this spec's: the design system
@@ -76,7 +76,7 @@ of its own and none may be invented at a call site.
 
 **Why the small range is dense, and deliberately so.** Three of the six
 switch points sit below 640 px. That is the decision, not an accident of
-a default scale: the primary audience arrives on a phone (CON-WEB-0002), so
+a default scale: the primary audience arrives on a phone (CON-WEB-0049, CON-WEB-0050, CON-WEB-0051), so
 the phone is not one case to be survived but *the* case to be optimised —
 and "phone" is not one width. A 360 px handset and a 428 px handset differ
 by nearly a fifth of the available line; that difference is enough for a
@@ -173,7 +173,7 @@ repository currently installs `@schafe-vorm-fenster/design-tokens`,
 generated from a hub path that no longer exists; the hub now publishes
 the authored design system under a different package name.
 
-### D4 — The app owns the calendars; the website borrows their data [FIXED: CON-WEB-0004, DEC-0035, DEC-0029]
+### D4 — The app owns the calendars; the website borrows their data [FIXED: CON-WEB-0052, FUN-WEB-0131, DEC-0035, DEC-0029]
 
 The village calendars are a product surface at
 `app.schafe-vorm-fenster.de` (DEC-0035). The website links to them and
@@ -200,11 +200,11 @@ Three rules make the boundary testable:
   community slugs (DEC-0029) in exactly one module. The app hostname
   appears in that module and nowhere else — no hard-coded app URL.
 - **The persistent entry point.** A calendar entry sits in the header on
-  every page; its label and target are fixed by TS-WEB-0004 D4. CON-WEB-0004
+  every page; its label and target are fixed by TS-WEB-0004 D4. CON-WEB-0052, FUN-WEB-0131
   names a different label — see Open points; this spec does not resolve
   it and does not contradict TS-WEB-0004.
 
-### D5 — Language, package manager, repository conventions [FIXED: CON-WEB-0005, existing repo; typecheck PROPOSED]
+### D5 — Language, package manager, repository conventions [FIXED: CON-WEB-0053, CON-WEB-0054, existing repo; typecheck PROPOSED]
 
 The conventions are the ones the repository already has; the spec adds
 the two that are missing and states all of them as checks.
@@ -312,13 +312,21 @@ name used resolves to an export of it.
 
 | Requirement | Discharged by |
 | --- | --- |
-| CON-WEB-0001 (Next.js on Vercel, no second framework) | D1, D5 · A1, A2, A16 |
-| CON-WEB-0002 (mobile first; tablet/desktop stay close) | D2 · A4, A8, A9 |
+| CON-WEB-0046 (be built with Next.js at its current major version) | D1, D5 · A1, A2, A16 |
+| CON-WEB-0047 (be hosted on Vercel) | D1, D5 · A1, A2, A16 |
+| CON-WEB-0048 (never introduce a second framework) | D1, D5 · A1, A2, A16 |
+| CON-WEB-0049 (optimise its layout for the phone first) | D2 · A4, A8, A9 |
+| CON-WEB-0050 (keep the tablet and desktop layout close to the …) | D2 · A4, A8, A9 |
+| CON-WEB-0051 (take its breakpoints from @schafe-vorm-fenster/brand-design (breakpoint.xs…2xl) | D2 · A4, A8, A9 |
 | CON-WEB-0003 (brand kit binding) | D3 (with TS-WEB-0002 D3, TS-WEB-0003 D3) · A5, A6, A7, A15 |
-| CON-WEB-0004 (app owns the calendars) | D4 · A10, A11, A12 |
-| CON-WEB-0005 (TypeScript, pnpm conventions) | D5 · A2, A3, A13 |
-| CON-WEB-0007 (one icon set) | D7 · A17 |
-| CON-WEB-0006 (STRICT; specs precede content) | D6 · A13, A14 |
+| CON-WEB-0052 (never reimplement the village calendars) | D4 · A10, A11, A12 |
+| FUN-WEB-0131 (embed what app.schafe-vorm-fenster.de serves rather than hold its own) | D4 · A10, A11, A12 |
+| CON-WEB-0053 (be written in TypeScript throughout) | D5 · A2, A3, A13 |
+| CON-WEB-0054 (use pnpm as its package manager) | D5 · A2, A3, A13 |
+| CON-WEB-0055 (take every icon from exactly one set) | D7 · A17 |
+| CON-WEB-0056 (install the icon set as a dependency and import …) | D7 · A17 |
+| CON-WEB-0057 (never commit an icon file or draw a glyph …) | D7 · A17 |
+| CON-WEB-0006 (be specified against @leafcutter-strict/blueprint-complete) | D6 · A13, A14 |
 
 ## Open points
 
@@ -357,7 +365,7 @@ name used resolves to an export of it.
   the website, and who retires the others?* A7 cannot name a version
   until this is answered, and D3's package identity stays [PROPOSED].
 
-- **Header label divergence (D4).** CON-WEB-0004 specifies a persistent
+- **Header label divergence (D4).** CON-WEB-0052, FUN-WEB-0131 specifies a persistent
   header entry labelled "Dorfkalender öffnen"; TS-WEB-0004 D4 fixes a
   persistent entry with a different label, pointing at the website's own
   place page rather than at the app. Question for the IA owner: *which

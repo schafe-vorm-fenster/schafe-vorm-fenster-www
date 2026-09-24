@@ -1,6 +1,6 @@
 /**
  * `/llms.txt` — TS-WEB-0004 D1's third machine surface, "per domain"
- * (FUN-WEB-0079, TS-WEB-0004-A5), missing until F-2-55.
+ * (FUN-WEB-0169, FUN-WEB-0170, TS-WEB-0004-A5), missing until F-2-55.
  *
  * The body is the D1 inventory written for a machine reader, in the
  * llmstxt.org shape: an `# H1` naming the site, a `>` summary line, then one

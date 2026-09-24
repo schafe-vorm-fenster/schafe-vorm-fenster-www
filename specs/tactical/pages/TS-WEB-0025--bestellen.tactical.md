@@ -56,7 +56,7 @@ one screen (tick → the chosen scope beside it; the live preview of its content
 | Postcode | 5 digits, in a field of its own | resolves to the places the postcode covers; each becomes its own chip, never a single opaque "PLZ" item | works today. This is a **purchase configuration**, not the visitor's place search: DEC-0079 removes the postcode from the search, and DEC-0069 §8 keeps it here, because a buyer drawing a boundary is a different act from a resident naming her village |
 | County | county selection | one chip for the county; the places behind it are **not** expanded into chips (DEC-0034) | no contracted route returns the places of a county — UNKNOWN, see Open points |
 
-The selection lives in the URL (D8), never in a path segment (FUN-WEB-0023, DEC-0037);
+The selection lives in the URL (D8), never in a path segment (CON-WEB-0062, FUN-WEB-0142, DEC-0037);
 above 12 chips the row collapses to "n Orte ausgewählt" plus a disclosure. No cap
 on the scope — what a scope costs is open (Open points).
 
@@ -143,7 +143,7 @@ but where it comes from.
 | If it cannot be issued synchronously | step 4 shows the confirmation, names when the code arrives, and the `buy-calendar-licence` event does **not** fire (D11) — a confirmation without a code is not the goal |
 | Second copy | the code must also reach the visitor by email, so closing the tab does not lose the purchase — an unanswered row of the envoy/Portalize demand |
 
-### D8 — The flow across a reload: nothing is stored [FIXED: NFR-WEB-0061, NFR-WEB-0062/023, TS-WEB-0013 D1; carrier PROPOSED]
+### D8 — The flow across a reload: nothing is stored [FIXED: NFR-WEB-0061, NFR-WEB-0062, FUN-WEB-0125, CON-WEB-0033, TS-WEB-0013 D1; carrier PROPOSED]
 
 The website sets no cookie and writes no `localStorage`, `sessionStorage`
 or IndexedDB entry — here as everywhere. No "pending" state is ever held.
@@ -210,7 +210,7 @@ and step, never a field value. Both wait on envoy's event contract (Q-0022 C3).
 | --- | --- |
 | FUN-WEB-0015 (`/dein-kalender/bestellen`, focus job "run our own calendar", conversion `buy-calendar-licence`) | D1 brief · D2, D5 flow and exit · D3, D4 scope and preview · D6 invoice step · D7 code · D8 no storage · D9 indexing · D10 security · D11 measurement · A1–A14 |
 
-Served, not claimed: FUN-WEB-0093/094 · FUN-WEB-0116, FUN-WEB-0117 · CON-WEB-0044, CON-WEB-0045 · CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064 ·
+Served, not claimed: FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083, FUN-WEB-0188, FUN-WEB-0189, CON-WEB-0084 · FUN-WEB-0116, FUN-WEB-0117 · CON-WEB-0044, CON-WEB-0045 · CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064 ·
 FUN-WEB-0020 · FUN-WEB-0041.
 
 ### D3a — Scope does not drive price [FIXED: DEC-0060]

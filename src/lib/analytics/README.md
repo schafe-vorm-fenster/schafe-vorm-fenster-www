@@ -87,7 +87,7 @@ here.
 
 ## What is not built here
 
-- **The suggestion banner (FUN-WEB-0069, DEC-0038/053).** `proxy.ts` exposes the
+- **The suggestion banner (FUN-WEB-0168, CON-WEB-0074, CON-WEB-0076, DEC-0038/053).** `proxy.ts` exposes the
   raw `Accept-Language` signal as a `Server-Timing` entry
   (`src/lib/routes/locale-detection.ts`); a client-side, once-per-session UI
   that reads it and turns it into a link is deferred (Q-0011) and not part of

@@ -9,7 +9,7 @@
  *
  * What a higher stage may do is one line long: **change which elements are
  * selected and in which order**. Everything else is invariant, and the single
- * exception on the whole website is the empty place calendar (FUN-WEB-0044,
+ * exception on the whole website is the empty place calendar (FUN-WEB-0153, FUN-WEB-0154,
  * owned by TS-WEB-0008), which is triggered by *data*, not by a stage.
  */
 

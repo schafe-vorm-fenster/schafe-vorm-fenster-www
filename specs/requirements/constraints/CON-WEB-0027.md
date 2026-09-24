@@ -22,4 +22,4 @@ The solution SHALL publish an accessibility statement as a footer-reachable sect
 
 ## Notes
 
-Reclassified from the quality class by DEC-0092: imposed by two decisions already taken, so question 2 decides. The route and the anchor registry are FUN-WEB-0029's; TS-WEB-0002-A8 checks that the anchor resolves and is footer-linked under its conventional label. The number was free in the constraint class and is kept.
+Reclassified from the quality class by DEC-0092: imposed by two decisions already taken, so question 2 decides. The route and the anchor registry are FUN-WEB-0146, CON-WEB-0067's; TS-WEB-0002-A8 checks that the anchor resolves and is footer-linked under its conventional label. The number was free in the constraint class and is kept.

@@ -155,8 +155,8 @@ criteria test them:
 
 | State | Why it is required |
 | --- | --- |
-| skeleton | FUN-WEB-0106 — must reserve the final space, no layout shift (CLS < 0.1) |
-| empty | FUN-WEB-0044/045 — a conversion occasion, never an error |
+| skeleton | FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090 — must reserve the final space, no layout shift (CLS < 0.1) |
+| empty | FUN-WEB-0153, FUN-WEB-0154, FUN-WEB-0045 — a conversion occasion, never an error |
 | stale | DEC-0019 — carries the "Stand: …" freshness label |
 | focus-visible | WCAG 2.4.7/2.4.11 (TS-WEB-0002 D5) |
 | hover · active · disabled · loading | ordinary interaction |

@@ -72,7 +72,7 @@ What survives unchanged is the single-tree rule: six switch points do not
 license six layouts. Density buys tuning, never a second component tree.
 
 Carried through to TS-WEB-0017 D2, TS-WEB-0006 D3 (428 × 926 as a third reference
-viewport, deliberately not a fold viewport), CON-WEB-0002, the design-system
+viewport, deliberately not a fold viewport), CON-WEB-0049, CON-WEB-0050, CON-WEB-0051, the design-system
 contract, and the acceptance regime — A8 and A9 now sample the small range,
 because a check that looks only at 360 and 1280 cannot see whether the
 dense end does anything at all.

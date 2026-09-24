@@ -4,7 +4,7 @@ id: TS-WEB-0001
 kind: system
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0060, FUN-WEB-0061, FUN-WEB-0062, FUN-WEB-0063, FUN-WEB-0064, FUN-WEB-0065, FUN-WEB-0066, FUN-WEB-0067, FUN-WEB-0068]
+implements: [FUN-WEB-0060, FUN-WEB-0163, FUN-WEB-0164, FUN-WEB-0062, FUN-WEB-0063, FUN-WEB-0165, FUN-WEB-0166, FUN-WEB-0065, FUN-WEB-0066, FUN-WEB-0067, FUN-WEB-0068]
 sources: [SRC-0006, SRC-0007]
 decisions: [DEC-0003, DEC-0005, DEC-0006]
 ai_provenance:
@@ -93,7 +93,7 @@ when equivalent pages exist on both domains.
 ### D7 — System texts [FIXED: DEC-0006 scope]
 
 UI strings (navigation, buttons, form labels) exist in `de` and `en` as
-part of the website content (FUN-WEB-0082), keyed, not inline. Adding a
+part of the website content (FUN-WEB-0174, CON-WEB-0078), keyed, not inline. Adding a
 language must not require code changes [PROPOSED].
 
 ## Free for the generator
@@ -124,10 +124,12 @@ language must not require code changes [PROPOSED].
 | Requirement | Discharged by |
 | --- | --- |
 | FUN-WEB-0060 (one domain per country) | D1 · Q-0001 for the intl TLD |
-| FUN-WEB-0061 (TLD default, prefix override) | D3, D4 · A1, A2 |
+| FUN-WEB-0163 (take it from the country TLD) | D3, D4 · A1, A2 |
+| FUN-WEB-0164 (let it override the TLD default) | D3, D4 · A1, A2 |
 | FUN-WEB-0062 (server-side only, URL is preference) | D3 · A8 |
 | FUN-WEB-0063 (switching = link navigation) | D5 · A7 |
-| FUN-WEB-0064 (link language propagation) | D5 · A1, A2, A7 |
+| FUN-WEB-0165 (preserve the current language context) | D5 · A1, A2, A7 |
+| FUN-WEB-0166 (emit the path prefix) | D5 · A1, A2, A7 |
 | FUN-WEB-0065 (hreflang matrix) | D6 · A5 |
 | FUN-WEB-0066 (phase 1: de + en on .de) | D1, D7 |
 | FUN-WEB-0067 (other domains navigable) | D1 landing rows |
@@ -136,7 +138,7 @@ language must not require code changes [PROPOSED].
 | FUN-WEB-0066 (phase 1: de + en) | D1, D7 · A10 |
 | FUN-WEB-0068 (per-country sets, target picture) | D1 · A11, limited by design |
 
-FUN-WEB-0069 (suggestion banner) is deliberately **not** implemented here —
+FUN-WEB-0168, CON-WEB-0074, CON-WEB-0076 (suggestion banner) is deliberately **not** implemented here —
 open per Q-0011; it would extend D3 as an additive client feature.
 
 ## Open points

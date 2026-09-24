@@ -22,7 +22,7 @@ The site *says* it sets no tracking cookies. This spec is what makes the
 sentence true and keeps it true: the closed inventory of hosts a visitor's
 browser may contact, the rule that governs adding one, and the handling
 rule for IP geolocation. Analytics behaviour itself (cookieless mode,
-event set, eTracker configuration — NFR-WEB-0061, NFR-WEB-0062/021/022/028) belongs to the
+event set, eTracker configuration — NFR-WEB-0061, NFR-WEB-0062, CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124, NFR-WEB-0022, CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064) belongs to the
 analytics spec; this spec only counts eTracker as a request.
 
 ## Determinations
@@ -139,9 +139,9 @@ banner necessary, it is rejected at rung 3 regardless of its merits —
 banner-freedom is a requirement (NFR-WEB-0061, NFR-WEB-0062) and a published sales
 argument (D1), not a preference to be traded against a feature.
 
-### D6 — IP geolocation without storage [FIXED: NFR-WEB-0024, FUN-WEB-0053/054; mechanism PROPOSED]
+### D6 — IP geolocation without storage [FIXED: FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073, FUN-WEB-0054; mechanism PROPOSED]
 
-Location detection is invisible (FUN-WEB-0053) and must stay unlinkable to a
+Location detection is invisible (FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073) and must stay unlinkable to a
 person:
 
 | Rule | Detail |
@@ -188,8 +188,8 @@ The legal confirmation for this handling is outstanding — see Open points.
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0125 (carry a data-protection block naming the absence) | D1, D2, D4 · A1, A2, A3, A7 |
-| CON-WEB-0033 (not make a data-protection claim its implementation) | D1, D2, D4 · A1, A2, A3, A7 |
+| FUN-WEB-0125 (carry a data-protection block naming the absence of tracking …) | D1, D2, D4 · A1, A2, A3, A7 |
+| CON-WEB-0033 (never make a data-protection claim its implementation does not …) | D1, D2, D4 · A1, A2, A3, A7 |
 | NFR-WEB-0024 (Persisted IP addresses = 0 addresses) | D6, D3 · A5, A6 |
 | NFR-WEB-0063 (External asset hosts = 0 hosts) | D2, D3, D4, D5 · A1, A3, A4, A5, A8 |
 | FUN-WEB-0126 (require the rung-3 evidence of TS-WEB-0013 D5) | D2, D3, D4, D5 · A1, A3, A4, A5, A8 |
