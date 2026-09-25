@@ -214,10 +214,14 @@ meets state 3 with no sign that two came before it. `Q-0081` asked the owner,
 because this exception is his. **His answer, amended into this record rather than
 decided in a spec:**
 
-1. **It starts on intersection, not on page load, and only when the *whole*
-   module is in the viewport.** Two reasons, and they are different: an advance
-   keyed to load has already finished by the time the reader gets there, and a
-   stage half off-screen animates where nobody is looking.
+1. **It starts on intersection, not on page load, and only when at least
+   *three quarters* of the module are in the viewport.** Two reasons, and they
+   are different: an advance keyed to load has already finished by the time the
+   reader gets there, and a stage half off-screen animates where nobody is
+   looking. The fraction is the owner's answer to `Q-0083` of 2026-09-25 and
+   replaces the *"whole module"* this rule read until then; what the three
+   quarters are measured against is fixed in the **second amendment** below,
+   and so is the evidence that the reason above survives the change.
 2. **State 1 gets a full dwell before the first advance.** A reader who arrives
    mid-scroll sees step 1, not its end.
 3. **One pass, then stop at state 3. There is no loop.** A loop beside text
@@ -259,20 +263,77 @@ a design guide.
   to the end of the document can carry the module from below the viewport to above
   it with no callback — the same mechanic as finding F-3-10 in
   `e2e/motion-reveal.spec.ts`. No pass starts, and by rule 5 nothing is spent
-  either: the first moment the whole module is genuinely in the viewport still
-  starts the one pass. Rule 5 bites on a pass that ran, not on a module that was
-  skipped.
-- **A viewport shorter than the module** cannot satisfy "the whole module is in
-  the viewport" at all, and it is reachable: the one-viewport rule is authored
-  against 360 × 800 while `TS-WEB-0006 D3`'s fold viewport is 360 × 640
-  (`TS-WEB-0022 D4`). Taken literally, rule 1 would then never fire and the reader
-  would meet a stage that never moves with no indication that it could. **The
-  reading this record proposes**: where the viewport is shorter than the module,
-  the trigger is the graphic stage in full together with the first step line —
-  the smallest region rule 1's own reason protects. That sub-clause is
-  `[PROPOSED]` and is **Q-0083**, addressed to the owner of this exception; it is
-  the only part of the trigger not in his answer, and it is flagged rather than
-  folded in.
+  either: the first moment three quarters of the module are genuinely in the
+  viewport still starts the one pass. Rule 5 bites on a pass that ran, not on a
+  module that was skipped.
+- **A viewport shorter than the module** could not satisfy "the whole module is
+  in the viewport" at all, and the case is reachable: the one-viewport rule is
+  authored against 360 × 800 while `TS-WEB-0006 D3`'s fold viewport is 360 × 640
+  (`TS-WEB-0022 D4`). Taken literally, the old rule 1 would then never fire and
+  the reader would meet a stage that never moves with no indication that it
+  could. That was `Q-0083`, and it is **answered**: the owner lowered the
+  fraction rather than adding a fallback for the short case, so rule 1 now fires
+  at both heights and the `[PROPOSED]` "graphic stage plus the first step line"
+  sub-clause this record used to carry is **withdrawn** — see the second
+  amendment below. Nothing about the short viewport is special any more.
+
+#### Second amendment of 2026-09-25 — how much of the module (Q-0083)
+
+`Q-0083` put the one sub-clause rule 1 left `[PROPOSED]` to the owner of this
+exception. **His answer, amended into this record rather than decided in a
+spec: the advance starts when three quarters of the explain module are
+visible.** He lowered the fraction instead of granting the short viewport a
+fallback of its own, which is why the "graphic stage plus the first step line"
+reading is withdrawn above rather than promoted.
+
+**What the three quarters are measured against, because a fraction with no
+denominator decides nothing: the module's own height.** Not the viewport's, not
+the scene's, and not the section's. So the trigger is an
+`IntersectionObserver` on the **module element**, against the viewport as root,
+with a **`threshold` of `0.75`** — `intersectionRatio` is the intersection
+divided by the *target's* own bounding box, which is exactly what makes the
+rule independent of viewport height and of which of the three `TS-WEB-0019 D3a`
+slots the module sits in. A module 686 px tall triggers at 515 px of itself on
+screen whether the viewport is 640 px or 800 px, and that is the property
+`Q-0083` was missing.
+
+**The owner's reason, checked rather than assumed.** His reason for the trigger
+is that *"a stage half off-screen animates where nobody is looking"* — the
+reader has to see state 1. The component does not exist yet (`src/components/`
+holds `publishing-path` and `step-indicator`, and neither is the stage), so the
+check was run against the **specified** geometry at 360 px: 16 px gutter per
+side, ordinal at `font-size-display-mono` (48 px) and `leading-tight`, title at
+`type-card-size`, stage at `ratio-square` = 328 px, three step lines at 18 px
+core / 15 px detail over the 44 px `target-min` floor with `space-3` between
+them, a 44 px secondary CTA, and `space-4` between the parts. Measured in
+Chromium at both viewport heights:
+
+| Module | Height | Fits 360 × 640? | Stage visible at `0.75`, read downward | …read back upward |
+| --- | --- | --- | --- | --- |
+| one-line title | **629.5 px** | yes, by 10.5 px | **100 %** | 72.8 % |
+| two-line title | **686.8 px** | **no** | **100 %** | 85.7 % |
+
+Two things follow, and the second is a finding rather than a reassurance.
+
+- **Q-0083's premise is confirmed and the answer removes it.** The taller of
+  the two variants is 686.8 px and cannot be wholly inside a 640 px viewport, so
+  the old rule 1 really never fired there; at `0.75` it fires at 515.1 px. And
+  on the ordinary read — the reader scrolling **down** into the module — the
+  graphic stage is **fully** visible at the moment the pass starts, at 360 × 640
+  and at 360 × 800 and at both module heights. The owner's reason is intact on
+  the path he was describing.
+- **A fraction below 1 does not say *which* three quarters, and read upward the
+  missing quarter comes off the top — where the stage is.** Entering the module
+  from *above* (the reader scrolls back up, the case edge 1 above keeps alive by
+  spending "once" only on a pass that started) `0.75` is reached with the stage
+  72.8 % or 85.7 % visible and its top cropped 89.2 px / 46.8 px above the
+  viewport. The old "whole module" rule had no such asymmetry, because 100 % is
+  direction-free; the asymmetry is the price of any fraction below it, not of
+  this fraction in particular. It is **not** smoothed over here and it is not
+  decided here either: it is **Q-0084**, addressed to the same owner, because
+  adding "and the stage in full" to a fraction he chose is his call and not an
+  executor's. Until he takes it, rule 1 is the fraction as written and the
+  criteria assert it as written.
 
 ### 7. The map date is DEC-0061's, and stays there
 
@@ -319,6 +380,14 @@ Two amendments belong to it rather than to a new record, and are made here:
   carry the trigger. The 9.1 s total is computed from the dwell and the transition
   this record already fixed — nothing new was chosen. `Q-0081` closes, `Q-0083`
   opens for the one sub-clause the owner's answer did not cover.
+- **The second §6 amendment of the same day adds no criterion and one figure,
+  and the figure is the owner's.** `0.75` of the module's own height replaces
+  *"the whole module"* in rule 1, the `[PROPOSED]` short-viewport fallback is
+  withdrawn, and the same six places carry the change: the guide's §*Explain
+  module* and §*Motion*, the design-system contract's `auto-advance` row,
+  `TS-WEB-0022 D4` and `-A19`, `TS-WEB-0019 D3a`, and `TS-WEB-0002 D7` /
+  `-A13`. No acceptance criterion was added, renamed or removed. `Q-0083`
+  closes; the direction the fraction does not fix is `Q-0084`.
 - `DEM-0027` (measured ratios for colour world 3c) and `DEM-0039` / `Q-0055`
   (the category token provenance) stay open. Nothing moved off `DRAFT`.
 

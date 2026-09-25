@@ -143,16 +143,16 @@ What that means here, in full (DEC-0109 §2):
 | The two `ink` sections | unaffected: block 1's live dates and the closing search block, with the whole of 2a between them in every order |
 | One viewport below `lg` | holds identically in all three positions, because it is a property of the **module**, not of its slot. The module does not grow into an early position and does not shrink in the last one. It is the module plus its three step lines that must fit — **not** the wrapping scene, whose opener above and instance below are outside that budget (TS-WEB-0022 D4, SRC-0017 CG-025) |
 | The fold | not in play. The page's one primary is block 1's (D2, TS-WEB-0006-A3) and 2a starts below the fold in every state; the module's CTA is `secondary` by definition, fixed by the design-system contract as a value rather than a default |
-| The `lg` switch and the motion exception | the component's own and unchanged (TS-WEB-0022 D4, DEC-0105 §6 as amended 2026-09-25). The advance **starts on the first intersection of the whole module with the viewport**, gives state 1 a full dwell, runs one 9.1 s pass and stops at state 3; any interaction ends it for good. Worked through in all three positions below — no position makes the trigger unreachable, and in none of them does the page load start it |
+| The `lg` switch and the motion exception | the component's own and unchanged (TS-WEB-0022 D4, DEC-0105 §6 as amended twice on 2026-09-25). The advance **starts on the first intersection at which three quarters of the module are in the viewport** — `threshold: 0.75` on the module element, three quarters of the module's own height — gives state 1 a full dwell, runs one 9.1 s pass and stops at state 3; any interaction ends it for good. Worked through in all three positions below — no position makes the trigger unreachable, and in none of them does the page load start it. The fraction is a property of the module, so it changes nothing in the matrix below except that the trigger is now reachable at 360 × 640 too |
 
 **The trigger, in each of the three positions** [FIXED: DEC-0105 §6 as amended].
-The advance starts on the module's first full intersection with the viewport and
-runs once; what the trait matrix does to that is the question Q-0081 left for this
-spec, and the answer is nothing:
+The advance starts on the first intersection at which three quarters of the
+module are inside the viewport and runs once; what the trait matrix does to that
+is the question Q-0081 left for this spec, and the answer is nothing:
 
 | The module is | What the trigger does | Why |
 | --- | --- | --- |
-| **first** (`direct`, `social`, `print-qr`, `reader-search`, `activated`) | does not fire at load | block 2a begins below the fold in every state of D2 (DEC-0109 §2), so below `lg` the module is never fully visible at first paint. The rule "not on page load" and the first position do not collide — the geometry already separates them |
+| **first** (`direct`, `social`, `print-qr`, `reader-search`, `activated`) | does not fire at load | block 2a begins below the fold in every state of D2 (DEC-0109 §2), so below `lg` no three quarters of the module are on screen at first paint. The rule "not on page load" and the first position do not collide — the geometry already separates them, and it separates them by more at 0.75 than the module's own height would suggest, because 2a starts below the fold and not merely low in it |
 | **middle** (`press`) | fires when the reader reaches it | nothing between the two image-led scenes changes the module's own height or its visibility condition |
 | **last** (`professional`, `purchase-intent`) | fires when the reader reaches it | the module is the third block of **2a**, not the last block of the page: 2b's provenance stamps, 2c's five proof elements, the context band and the closing CTA all stand below it (D3), so it can always be scrolled entirely into view with content still beneath it. It is never the last block before the closing CTA |
 
@@ -166,12 +166,16 @@ Two edges, both decided rather than left open:
   per page view" is spent by a pass that **started**, so the first moment the
   module is genuinely in the viewport — after a scroll back up, say — still starts
   its one pass (DEC-0105 §6).
-- **A viewport shorter than the module** cannot satisfy the trigger at all. The
-  one-viewport rule is authored against 360 × 800 and TS-WEB-0006 D3's fold
-  viewport is 360 × 640, so the case is reachable on every position equally — it
-  is a property of the module and the viewport, not of the slot. DEC-0105 §6
-  proposes the graphic stage plus the first step line as the fallback and flags it
-  `[PROPOSED]`; it is **Q-0083**.
+- **A viewport shorter than the module** could not satisfy the trigger at all
+  while the trigger was "the whole module", and the case is reachable on every
+  position equally — it is a property of the module and the viewport, not of the
+  slot. **Answered 2026-09-25 by the owner (DEC-0105 §6, second amendment):** the
+  fraction is three quarters of the module's own height, which fires at 360 × 640
+  as well as at 360 × 800, so the `[PROPOSED]` short-viewport fallback is
+  withdrawn and no position needs one. `Q-0083` is closed. The residue is
+  direction, not height: entering the module from above, the quarter that is
+  outside the viewport is the top quarter, where the graphic stage is, and that is
+  **Q-0084**.
 
 **Each of the three blocks carries exactly one CTA, at secondary treatment,
 pointing at the page that owns its job** [FIXED: DEC-0082 §4] — `whatsapp` and
@@ -318,8 +322,8 @@ not conversion.
 - ~~**Nothing says what starts the auto-advance, and the module can now sit
   last.**~~ **Answered 2026-09-25 by the owner, amended into `DEC-0105 §6`** —
   that section is his motion decision, so the answer went there rather than into
-  this spec. The advance **starts on the first intersection of the whole module
-  with the viewport**, never on page load; **state 1 gets a full dwell** before the
+  this spec. The advance **starts on the first intersection at which three
+  quarters of the module are in the viewport**, never on page load; **state 1 gets a full dwell** before the
   first advance; it runs **one pass** — `4 000 + 550 + 4 000 + 550` ms = **9.1 s**
   at the specified 4 s dwell floor — and **stops at state 3** with no loop and no
   restart on the way back up; **any interaction stops it for good**. Because 9.1 s
@@ -327,9 +331,12 @@ not conversion.
   the step lines — already real buttons — are the mechanism it requires:
   `TS-WEB-0002 D7` and `TS-WEB-0002-A13` carry it, because accessibility is that
   spec's and not a guide's. The trigger is worked through in all three trait
-  positions in D3a above and none of them breaks it. `Q-0081` is closed; the one
-  sub-clause the answer did not cover — a viewport shorter than the module — is
-  `[PROPOSED]` in `DEC-0105 §6` and is **Q-0083**.
+  positions in D3a above and none of them breaks it. `Q-0081` is closed, and so
+  is the one sub-clause its answer did not cover: the owner answered `Q-0083` the
+  same day with **three quarters of the module's own height**, which fires at
+  360 × 640 as well as 360 × 800, so the short-viewport fallback is withdrawn
+  rather than adopted. What a fraction cannot fix is *which* three quarters —
+  **Q-0084**.
 - **Q-0044 blocks generation of this page.** Proof card and stream, the
   live-module shells and the context band are not among SRC-0014's
   specified components — fourteen of them as of 2026-09-25, not the six this

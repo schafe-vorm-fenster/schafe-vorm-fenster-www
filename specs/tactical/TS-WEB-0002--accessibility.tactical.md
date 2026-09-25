@@ -124,9 +124,17 @@ presented in parallel with other content. All three hold:
 
 | 2.2.2 condition | On the explain module |
 | --- | --- |
-| starts automatically | yes — on the first intersection of the whole module with the viewport, without the visitor acting (DEC-0105 §6 amendment, rule 1) |
+| starts automatically | yes — on the first intersection at which three quarters of the module are in the viewport, without the visitor acting (DEC-0105 §6 amendments, rule 1; `threshold: 0.75` on the module element, so the fraction is of the module's own height) |
 | longer than 5 s | yes — one pass is `4 000 + 550 + 4 000 + 550` ms = **9.1 s** at the specified minimum dwell of 4 s and transition of 550 ms, and longer if the dwell is raised |
 | in parallel with other content | yes — on `/` the module stands inside a scene, with the opener above it and a live event row below it (TS-WEB-0019 D3a) |
+
+The fraction matters to 2.2.2 only in that it makes the trigger reachable: at
+360 px the module measures 630–690 px, so *"the whole module"* could not be
+satisfied inside `TS-WEB-0006 D3`'s 360 × 640 fold viewport and the movement
+would simply never have started there. It does start there, so 2.2.2 binds at
+every phone height and not only at the taller one (`Q-0083`, answered by the
+owner 2026-09-25). Which three quarters is `Q-0084` and does not bear on 2.2.2:
+the mechanism below is required either way.
 
 **The mechanism 2.2.2 requires is the three step lines.** They are real
 buttons at every size — `Tab`, `Enter`/`Space`, `aria-current` on the
@@ -170,7 +178,7 @@ Not*). So this determination is the whole of 2.2.2's surface here.
 | TS-WEB-0002-A10 | static | No font family, size or weight is declared outside the token import; the rendered type scale equals `font.*` from the brand package, and no size below 15 px appears. |
 | TS-WEB-0002-A11 | tool | axe-core reports no image without a text alternative; every image is either given a meaningful `alt` from content frontmatter or marked decorative with `alt=""`. |
 | TS-WEB-0002-A12 | manual | The published accessibility statement names its method — self-assessment backed by the acceptance regime of this spec (A1–A5) — and claims no audit that did not happen. **Limitation:** automated checks cover only part of the BITV test steps; the statement must not imply more coverage than was performed. |
-| TS-WEB-0002-A13 | e2e | **WCAG 2.2.2 on the one auto-advance (D7).** Below `lg`, with `prefers-reduced-motion` off, scroll the explain module fully into the viewport and touch nothing: state 1 is shown for the full dwell before the first advance, the stage reaches state 3 no earlier than 9.1 s after the module first became fully visible, and it then **stops** — over the next 30 s no state changes, the stage never returns to state 1, and scrolling the module out of view and back does not restart it. Repeat and activate any step line during the pass, and again with `Tab` into the module: the advance stops on that interaction and never resumes, the activated step's state is shown, the step line carries `aria-current`, and every step stays reachable by keyboard afterwards. An advance that began before the module was fully in the viewport, a second pass, or a resumed one each fail this criterion (D7, DEC-0105 §6 as amended). |
+| TS-WEB-0002-A13 | e2e | **WCAG 2.2.2 on the one auto-advance (D7).** Below `lg`, with `prefers-reduced-motion` off, scroll the explain module until three quarters of its own height are inside the viewport — asserted at 360 × 640 as well as 360 × 800 — and touch nothing: state 1 is shown for the full dwell before the first advance, the stage reaches state 3 no earlier than 9.1 s after the module first reached three-quarter visibility, and it then **stops** — over the next 30 s no state changes, the stage never returns to state 1, and scrolling the module out of view and back does not restart it. Repeat and activate any step line during the pass, and again with `Tab` into the module: the advance stops on that interaction and never resumes, the activated step's state is shown, the step line carries `aria-current`, and every step stays reachable by keyboard afterwards. An advance that began before three quarters of the module were in the viewport, a second pass, or a resumed one each fail this criterion (D7, DEC-0105 §6 as amended twice on 2026-09-25). |
 
 ## Coverage
 
