@@ -91,7 +91,7 @@ export function NewsletterBlock({
       data-newsletter=""
     >
       {/* The dictionary heading is a placeholder (DEC-0120, state/open.md
-          row 217): marked on its element, lifted when a page passes its own. */}
+          row 227): marked on its element, lifted when a page passes its own. */}
       <p className={styles.heading} data-demo={heading ? undefined : "true"}>
         {heading ?? words.heading}
       </p>

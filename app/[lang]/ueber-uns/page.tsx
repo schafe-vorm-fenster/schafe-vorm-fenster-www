@@ -226,7 +226,7 @@ export default async function Page({
     locale,
     focusJob: "understand-who-is-behind-it",
     surface: "stream",
-    candidates: proofCandidates(proofStream, words.kickers.evidence),
+    candidates: proofCandidates(proofStream, words.kickers.othersSay),
   });
 
   const origin = slot(page, "ueber-uns-1-origin");
@@ -257,7 +257,7 @@ export default async function Page({
   const originHeading = fieldAt(origin.blocks, 4);
   const founderQuote = splitQuote(fieldAt(origin.blocks, 6));
   const counterHeading = firstSentence(fieldAt(counters.blocks, 0), words.pages.about);
-  const proofHeading = fieldAt(proofStream.blocks, 0) ?? words.kickers.evidence;
+  const proofHeading = fieldAt(proofStream.blocks, 0) ?? words.kickers.othersSay;
 
   return (
     <>
@@ -386,8 +386,9 @@ export default async function Page({
       <SectionShell
         dataBlock="belegstrom"
         density="tight"
-        // No kicker: the `evidence` alias resolves to the content heading's
-        // own words and doubled it (DEC-0120 §5).
+        // No kicker: press proof would take `kickers.othersSay`, and the
+        // content heading (`ueber-uns/de.md`, slot 3) already reads those
+        // three words — a kicker here doubles the h2 (DEC-0120 §5).
         labelledBy="belegstrom-h2"
         surface="surface"
       >

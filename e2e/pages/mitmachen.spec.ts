@@ -201,11 +201,13 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
     ]) {
       await expect(page.getByText(kicker, { exact: true })).toBeVisible();
     }
-    // The proof section carries no kicker: the `evidence` alias resolves to
-    // the h2's own words and doubled it (DEC-0120 §5); the h2 stands alone
-    // until T-12 picks `customers` with a marked kicker.
+    // The proof section's kicker is the customer-proof placeholder, marked
+    // on its element (DEC-0120 §5, state/open.md row 228); the h2 keeps its
+    // own words, so the two are not the same three words stacked.
+    const proofKicker = page.locator("[data-block='beleg'] p[class*='kicker']");
+    await expect(proofKicker).toHaveText("Wer den Kalender nutzt");
+    await expect(proofKicker).toHaveAttribute("data-demo", "true");
     await expect(page.locator("#beleg-heading")).toHaveText("Was andere sagen");
-    await expect(page.locator("[data-block='beleg'] p[class*='kicker']")).toHaveCount(0);
   });
 
   /**

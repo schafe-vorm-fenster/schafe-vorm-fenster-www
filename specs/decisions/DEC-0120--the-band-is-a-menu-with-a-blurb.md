@@ -92,41 +92,39 @@ a sentence nobody wrote in the markup, never in a word the visitor reads.
    hilft euch das?"; `origin` → "Die Geschichte"; `evidence` is split into
    `othersSay` ("Was andere sagen", press and appearances) and `customers`
    (customer proof), and `customers` is a **placeholder** because the copy
-   guide names no replacement. `evidence` stays in the interface as a
-   deprecated alias that resolves to the `othersSay` wording — owner copy
-   (copy guide `:516`), never the placeholder — so the five pages that read
-   it compile, none renders the avoid-list word and none renders an unmarked
-   placeholder. On `/` and `/ueber-uns` (press proof) the alias is the
-   guide's own replacement. On `/mitmachen`, `/dein-kalender` and
-   `/deine-region` (customer proof) it **overrides the guide's restriction**
-   — `:516` allows "Was andere sagen" *for press proof only* — as a stopgap
-   until each page owner picks `customers` (AGENTS.md rule 8: the override
-   is recorded here, not silent; `/mitmachen`'s own h2 has read the same
-   words over customer proof since before this record). Where the alias and
-   the block's h2 are the same three words — `/mitmachen` (`PROOF_LABEL`)
-   and `/ueber-uns` (`content/pages/ueber-uns/de.md:170`) — the kicker
-   doubled the heading directly beneath it, so those two proof sections
-   carry **no kicker**: a deviation from polish brief G-3
-   (`plan/polish-brief.md:142`, "each section after the hero opens with a
-   kicker") taken over a doubled heading, because `section-shell` offers no
-   way to mark a kicker `data-demo` and the only other kicker wording is the
-   placeholder. Only a page that chooses `customers` explicitly renders the
-   placeholder, and it marks that kicker `data-demo="true"` — which needs a
-   marking hook on the shell's kicker (T-05's `section-shell.tsx`) or a
-   page-side element; each page picks its key when its proof block is next
-   touched. `newsletter.heading` names two of the review's
+   guide names no replacement. `evidence` is removed, not aliased: every
+   proof block picks its key by what it proves. The press pages `/` and
+   `/ueber-uns` read `othersSay` — the guide's own row (`:516`, "Was andere
+   sagen *for press proof only*"), honoured, not overridden. The customer
+   pages `/mitmachen`, `/dein-kalender` and `/deine-region` read `customers`
+   and pass `SectionShell`'s new `kickerDemo` flag, which marks the kicker
+   element `data-demo="true"` — the placeholder convention applied to a
+   kicker, one optional prop on the shell (T-05's file, two lines). On
+   `/ueber-uns` the content heading beneath the kicker
+   (`content/pages/ueber-uns/de.md`, slot 3: "Was andere sagen") is owner
+   copy and already reads the three words `othersSay` would put over it, so
+   that one proof section carries **no kicker**: a deviation from polish
+   brief G-3 (`plan/polish-brief.md:142`, "each section after the hero opens
+   with a kicker") taken over a heading doubled directly beneath itself. On
+   `/mitmachen` and `/dein-kalender` the h2 (`PROOF_LABEL`, "Was andere
+   sagen" / "Belege") over customer proof predates this record; that the
+   first reads the guide's press-only words over customers (`:516`) is
+   T-12's row to settle, not this record's override — the kicker above it
+   no longer repeats them. `newsletter.heading` names two of the review's
    three concrete things ("Neue Funktionen und aktuelle Angebote"; CG-029
    title ≤ 40) as a placeholder. The block **renders in the footer of every
-   route today** (`app/[lang]/layout.tsx:174`, unchanged since the base)
-   inside `data-mock="true"`, which marks the non-sending form (Q-0020,
+   route today** (`app/[lang]/layout.tsx`, unchanged since the base) inside
+   `data-mock="true"`, which marks the non-sending form (Q-0020,
    `state/open.md` row 22), not the sentence — so the heading element itself
    carries `data-demo="true"` while the dictionary word is the placeholder
    (`newsletter-block.tsx`, one attribute; the marking lifts when a page
-   passes its own `heading`). Withholding the block behind a null constant
-   until a sending system exists is T-10's default and T-10's record, not
-   this one's. English twins of owner wording are translations, the way every
-   other dictionary string has been since TS-WEB-0001 D7 — they are not new
-   sentences.
+   passes its own `heading`). **Nothing withholds the block**: no null
+   constant exists in this tree. Withholding it until a sending system
+   exists is T-10's default (`owner_decisions_defaulted`, TS-WEB-0016-A21
+   over R-home-35) and T-10's own record (the number reserved for T-10,
+   not yet written), and this record hands it over there. English twins of
+   owner wording are translations, the way every other dictionary string
+   has been since TS-WEB-0001 D7 — they are not new sentences.
 
 ## Consequences
 
@@ -140,26 +138,34 @@ a sentence nobody wrote in the markup, never in a word the visitor reads.
   Wiring `contextBand={slot}` as the slot stands would demote that row from
   an unmarked statement to a `data-demo` question, so a page owner replaces
   the slot's publish item by the CG-030 statement before wiring the slot
-  (`state/open.md` rows 215–216).
+  (`state/open.md` rows 225–226).
 - `app/[lang]/_page-frame.tsx` (T-10's) gained more than the heading
   pass-through the task foresaw: an optional `contextBand?: ContentSlot`
   prop handed on to `ContextBand`, with the band heading falling back to
   that slot's first field. Nothing else in the file changed; T-10's owner
   keeps it.
 - Placeholders this record ships, each `data-demo="true"` in the markup and a
-  row in `state/open.md`: the three question blurbs per language (rows 215,
-  216), the German invitation (row 219), `kickers.customers` (row 218;
-  nothing renders it until a page picks the key) and `newsletter.heading`
-  (row 217; rendered in every footer, marked on its own heading element).
-- Three files of other tasks changed by the smallest edit that makes the
-  tree and this record agree, and their owners keep them:
-  `app/[lang]/mitmachen/page.tsx` (T-12, block `beleg`) and
-  `app/[lang]/ueber-uns/page.tsx` (T-14, block `belegstrom`) pass no kicker
-  where the alias doubled the h2 (§5) — one attribute line each, replaced by
-  a comment; `src/components/newsletter-block/newsletter-block.tsx` (T-10)
-  carries `data-demo` on the heading while the dictionary word is the
-  placeholder; `e2e/pages/mitmachen.spec.ts` (T-12) asserts the h2 and the
-  absence of a kicker on that block.
+  row in `state/open.md`: the three question blurbs per language (rows 225,
+  226), the German invitation (row 229), `kickers.customers` (row 228;
+  rendered on the three customer-proof pages, marked on the kicker element
+  through `kickerDemo`) and `newsletter.heading` (row 227; rendered in every
+  footer, marked on its own heading element). The rows were 215–219 before
+  the merge with `next-2026` and follow T-09's 224 since.
+- Files of other tasks changed by the smallest edit that makes the tree and
+  this record agree, and their owners keep them:
+  `src/components/section-shell/section-shell.tsx` (T-05) gains the optional
+  `kickerDemo` prop and the attribute it sets — nothing else;
+  `app/[lang]/page.tsx` (T-11) reads `othersSay` on `#proof-stream`;
+  `app/[lang]/mitmachen/page.tsx` (T-12, block `beleg`),
+  `app/[lang]/dein-kalender/page.tsx` (T-13, block `proof`) and
+  `app/[lang]/deine-region/page.tsx` (T-15, block `beleg`) read `customers`
+  with `kickerDemo`; `app/[lang]/ueber-uns/page.tsx` (T-14, block
+  `belegstrom`) reads `othersSay` for its candidates and heading fallback and
+  passes no kicker (§5); `src/components/newsletter-block/newsletter-block.tsx`
+  (T-10) carries `data-demo` on the heading while the dictionary word is the
+  placeholder; `e2e/pages/mitmachen.spec.ts` (T-12) asserts the marked
+  kicker and the h2 on that block by exact text, and
+  `e2e/pages/dein-kalender.spec.ts` (T-13) lists the new kicker.
 - Spec follow-ups outside this task's ownership: `TS-WEB-0006 D5`'s Phrasing
   row (menu with blurb, the slot as source, the registry as fallback) and
   `TS-WEB-0007 D5`'s `blurb` field on the `context-band` slot type; CG-030's

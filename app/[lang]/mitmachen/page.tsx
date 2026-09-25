@@ -386,8 +386,10 @@ export default async function Page({
           `surface` (band) and `paper` (closing) after the aside. */}
       <SectionShell
         dataBlock="beleg"
-        // No kicker: the `evidence` alias resolves to the h2's own words and
-        // doubled it (DEC-0120 §5); T-12 picks `customers` once it can be marked.
+        // Customer proof: `customers` is the placeholder kicker, marked on its
+        // element (DEC-0120 §5, state/open.md row 228).
+        kicker={dictionary(locale).kickers.customers}
+        kickerDemo
         labelledBy="beleg-heading"
         surface="surface-2"
       >

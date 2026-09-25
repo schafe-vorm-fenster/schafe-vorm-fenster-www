@@ -83,11 +83,12 @@ export interface Dictionary {
     /**
      * Names what arrives, not "news" (CG-029: at least two concrete things;
      * review R-home-35). **Placeholder** — the two things are the review's
-     * own list, the sentence is nobody's (DEC-0120, state/open.md row 217).
-     * The block renders in the footer of every route inside `data-mock`
-     * (the non-sending form's marking, Q-0020), so the heading element marks
-     * itself `data-demo="true"` while this word stands; T-10's own record
-     * withholds the block until a sending system exists.
+     * own list, the sentence is nobody's (DEC-0120, state/open.md row 227).
+     * **Rendered today**: the block stands in the footer of every route
+     * (`app/[lang]/layout.tsx`) inside `data-mock` — the non-sending form's
+     * marking, Q-0020 — so the heading element marks itself
+     * `data-demo="true"` while this word stands. Nothing withholds the block
+     * yet; that is T-10's default (a null constant) and T-10's record.
      */
     heading: string;
     emailLabel: string;
@@ -178,22 +179,11 @@ export interface Dictionary {
      * Customer proof. **Placeholder**: the review rejects "Wer das schon
      * macht" and names no replacement (copy guide, open decision 2), so this
      * is a stand-in until the hub carries the wording (DEC-0120,
-     * state/open.md row 218). A block that renders it marks itself
-     * `data-demo="true"`.
+     * state/open.md row 228). `/mitmachen`, `/dein-kalender` and
+     * `/deine-region` render it through `SectionShell`'s `kickerDemo`, which
+     * marks the kicker element `data-demo="true"`.
      */
     customers: string;
-    /**
-     * @deprecated Split into `othersSay` (press) and `customers` (customer
-     * proof) by DEC-0120. Resolves to the owner's `othersSay` wording (copy
-     * guide :516), never to the `customers` placeholder, so a page that
-     * still reads it renders cleared copy unmarked; each page picks the
-     * explicit key when its proof block is next touched, and marks the
-     * kicker `data-demo="true"` if that key is `customers`. Over customer
-     * proof the alias overrides copy guide :516's "press proof only" note as
-     * a stopgap (DEC-0120 §5); where it equals the block's h2 (`/mitmachen`,
-     * `/ueber-uns`) the page passes no kicker instead of a doubled one.
-     */
-    evidence: string;
     /** Price and scope. */
     price: string;
     /** Trust: how we work. */
@@ -501,7 +491,6 @@ const de: Dictionary = {
     objection: "Warum es heute hakt",
     othersSay: "Was andere sagen",
     customers: "Wer den Kalender nutzt",
-    evidence: "Was andere sagen",
     price: "Was es kostet",
     trust: "Wie wir arbeiten",
     origin: "Die Geschichte",
@@ -678,7 +667,6 @@ const en: Dictionary = {
     objection: "Why it snags today",
     othersSay: "What others say",
     customers: "Who uses the calendar",
-    evidence: "What others say",
     price: "What it costs",
     trust: "How we work",
     origin: "The story",
@@ -756,7 +744,7 @@ const en: Dictionary = {
     // Placeholder — the D16 sentence is copy nobody wrote yet, state/open.md.
     outboundNote: "Opens the booking calendar at Google.",
   },
-  // Nobody wrote these three words yet — state/open.md row 219.
+  // Nobody wrote these three words yet — state/open.md row 229.
   eventStatus: {
     neu: "New",
     verschoben: "Postponed",
