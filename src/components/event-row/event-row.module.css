@@ -24,7 +24,7 @@
      `display: revert` at the switch point and would take the grid with it. */
   display: var(--event-row-display, grid);
   grid-template-areas:
-    "date title title"
+    "date title status"
     "date meta  badge";
   grid-template-columns: 52px minmax(0, 1fr) auto;
   min-height: var(--height-event-row);
@@ -71,6 +71,9 @@
 
 .title {
   grid-area: title;
+  /* Both content columns (G-2) — the `status` area is empty on a row
+     without a status, and the title keeps the width the desktop always had. */
+  grid-column: title-start / status-end;
   /* The clamp needs a bounded box to clamp inside. */
   min-width: 0;
   font-size: var(--type-card-size);
@@ -95,6 +98,22 @@
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 0.15em;
+}
+
+/*
+ * The status badge — SRC-0014 §Event-status badge: beside the category,
+ * never instead of it. It takes the title line's trailing column, and only
+ * a row that carries one gives that column up; the category stays on the
+ * meta's line under it, so the two badges are stacked at the row's end.
+ */
+.status {
+  align-self: start;
+  grid-area: status;
+  justify-self: end;
+}
+
+.row[data-status] .title {
+  grid-column: title;
 }
 
 .meta {

@@ -317,6 +317,34 @@ export interface Dictionary {
     outboundNote: string;
   };
   /**
+   * The three event statuses of SRC-0014 §Event-status badge, as words —
+   * `event-status-badge` reads them, so a status is never colour alone.
+   * The German words are the design system's own ids capitalised; the
+   * English ones nobody wrote (`generated: true`, DEC-0115), so the badge
+   * marks itself `data-demo` in that language until the owner replaces them.
+   */
+  eventStatus: {
+    neu: string;
+    verschoben: string;
+    abgesagt: string;
+    generated: boolean;
+  };
+  /**
+   * The words inside the explain module's stage graphics (`explain-stage`,
+   * DEC-0115). All three German strings are taken verbatim from the owner's
+   * design drafts (`plan/reviews/2026-09-23/Design - 3-Schritte-erklären …`);
+   * the English translation is nobody's wording yet (`generated: true`).
+   */
+  explainStage: {
+    /** The label on the hatched flyer stand-in in the chat bubble. */
+    flyerFile: string;
+    /** The registration card's field label. */
+    addressLabel: string;
+    /** The registration card's lime pill — an illustration, never a control. */
+    submit: string;
+    generated: boolean;
+  };
+  /**
    * Page titles, keyed by route id — the fallback for a route whose artifact
    * carries no `seo.title` (TS-WEB-0011 D5; the artifact is the source, F-2-72).
    */
@@ -445,6 +473,18 @@ const de: Dictionary = {
     appointmentSub: "Termin im Kalender aussuchen",
     // Placeholder — the D16 sentence is copy nobody wrote yet, state/open.md.
     outboundNote: "Öffnet den Buchungskalender bei Google.",
+  },
+  eventStatus: {
+    neu: "Neu",
+    verschoben: "Verschoben",
+    abgesagt: "Abgesagt",
+    generated: false,
+  },
+  explainStage: {
+    flyerFile: "FLYER.JPG",
+    addressLabel: "Kalender-Adresse",
+    submit: "Anmelden",
+    generated: false,
   },
   pages: {
     home: "Schafe vorm Fenster",
@@ -585,6 +625,21 @@ const en: Dictionary = {
     appointmentSub: "Pick a slot in the calendar",
     // Placeholder — the D16 sentence is copy nobody wrote yet, state/open.md.
     outboundNote: "Opens the booking calendar at Google.",
+  },
+  // Nobody wrote these three words yet — state/open.md row 219.
+  eventStatus: {
+    neu: "New",
+    verschoben: "Postponed",
+    abgesagt: "Cancelled",
+    generated: true,
+  },
+  // The file name stays; the two labels are a translation nobody wrote —
+  // state/open.md row 220.
+  explainStage: {
+    flyerFile: "FLYER.JPG",
+    addressLabel: "Calendar address",
+    submit: "Register",
+    generated: true,
   },
   pages: {
     home: "Schafe vorm Fenster",
