@@ -43,4 +43,6 @@ The registration and the contact component are two mechanisms, and the review co
 
 The render form, the scope of the exception and what is owed are `TS-WEB-0016 D15`; `TS-WEB-0016-A22` is the criterion. It is an interim with a named end: the requirement lapses when the envoy widget lands (Q-0022) or the app registration entry gains a contract (DEC-0029).
 
-**Whether the embed creates a consent duty is not settled.** `NFR-WEB-0061` and `NFR-WEB-0062` require a banner-free site. CONF-0025 records the collision, DEM-0066 asks legal, and Q-0078 is the question; no consent gate is specified, because specifying one would pre-empt the answer and contradict "visible".
+**The consent treatment is settled and the legal question is not.** DEC-0108 (Q-0078, 2026-09-25) decided **ISOLATE**: the embed stays visible and immediate on this one route, with a notice above it (`FUN-WEB-0206`, `TS-WEB-0016 D17`) and no consent banner, no gate and no click-to-load layer. A notice is not consent, so `NFR-WEB-0062` stands unchanged; `NFR-WEB-0061` names this surface as its exception. `CONF-0025` is RESOLVED with outcome ISOLATE.
+
+**The residual risk is the owner's, accepted with his eyes open:** this route contacts a third party without the visitor having acted, and no legal determination says that needs no consent. `DEM-0066` is open and stays open — it is one of the two things that reopen the decision, the other being the rebuild this requirement already lapses with.

@@ -67,3 +67,11 @@ collision is real and is recorded as `CONF-0025` with `DEM-0066` against legal
 and `Q-0078` in the register — not resolved here, because the answer is a legal
 determination and this record cannot supply one.
 
+**Amended 2026-09-25 by `DEC-0108`.** The collision is now resolved, and not by
+the legal answer arriving: the owner chose **ISOLATE** — the embed stays visible
+and immediate on that one route, with a notice above it (`FUN-WEB-0206`,
+`TS-WEB-0016 D17`) and no consent UI of any kind. A notice is not consent, so
+`NFR-WEB-0062` stands unchanged; `NFR-WEB-0061` is amended to name the route it
+excludes. `DEM-0066` is still open and is what would reopen the decision. The
+`frame-src` half of the cost is unchanged and still owed.
+

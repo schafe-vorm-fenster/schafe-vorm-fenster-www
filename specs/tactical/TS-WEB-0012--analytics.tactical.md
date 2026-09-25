@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [NFR-WEB-0061, NFR-WEB-0062, CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124, NFR-WEB-0022, CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064]
 sources: [SRC-0006, SRC-0010, SRC-0003]
-decisions: [DEC-0004, DEC-0013, DEC-0016, DEC-0017, DEC-0028]
+decisions: [DEC-0004, DEC-0013, DEC-0016, DEC-0017, DEC-0028, DEC-0108]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -46,12 +46,17 @@ The property is the requirement; eTracker is one implementation of it
 | No persistent identifier in `localStorage`, `sessionStorage`, IndexedDB, cache keys, or URL | no visitor ID the website can carry or hand on |
 | No returning-visitor recognition, no fingerprinting, no cross-device stitching | sessions are the largest unit; "unique visitors" over time is not a figure this site produces |
 | No cross-domain identity transfer to `app.*` | the funnel joins at aggregate level only (D5) |
-| No consent UI anywhere on the site | there is nothing to consent to; DEC-0013 keeps it that way by banning third-party embeds |
+| No consent UI anywhere on the site | **the rule holds; its reason changed on 2026-09-25.** It used to read "there is nothing to consent to; DEC-0013 keeps it that way by banning third-party embeds", and DEC-0013 now has one named exception — the registration embed on `/start` (`FUN-WEB-0205`, `TS-WEB-0016 D15`). So the rule is no longer true by construction: it is a **decision**, DEC-0108's ISOLATE, which keeps the collision on one `noindex` route and answers it with a notice above the embed instead of a gate (`FUN-WEB-0206`). A notice is not consent UI, so the count `NFR-WEB-0062` measures is still 0 |
 | IP handling is anonymised, no raw storage | vendor-side setting, verified in the account (D2, open point) |
 
 The absence of a banner is not a design choice that can be traded away
 later: a banner would have to appear the moment any collector outside D7
-is added.
+is added. **The registration embed is not such a collector and is not a
+counter-example** — it collects nothing for us, it is scoped to one route
+outside every page's flow, and DEC-0108 chose isolation with a notice over a
+banner precisely so that this row does not have to be traded. What that choice
+costs is a residual legal risk on that one route, recorded on `NFR-WEB-0061`,
+on `CONF-0025` and in `TS-WEB-0016 D15` rather than absorbed here.
 
 ### D2 — eTracker as interim implementation [FIXED: DEC-0004, CON-WEB-0028, CON-WEB-0029, FUN-WEB-0124, SRC-0010; loader details PROPOSED]
 
@@ -222,7 +227,7 @@ cannot be attributed to a returning visitor.
 | ID | Level | Check |
 | --- | --- | --- |
 | TS-WEB-0012-A1 | static | No analytics call site outside `lib/analytics`; no cookie, `localStorage`, `sessionStorage`, or IndexedDB write for analytics anywhere in the source; no consent-banner component in the tree. |
-| TS-WEB-0012-A2 | e2e | After a journey across all D1-inventory pages (TS-WEB-0004): `document.cookie` contains no analytics cookie, web storage contains no analytics identifier, and no request goes to a host outside the D7 collectors. |
+| TS-WEB-0012-A2 | e2e | After a journey across the D1-inventory pages (TS-WEB-0004) **except `/start`**: `document.cookie` contains no analytics cookie, web storage contains no analytics identifier, and no request goes to a host outside the D7 collectors. On `/start` the assertion is narrower, because that route embeds a third party's form by decision (`FUN-WEB-0205`, DEC-0108): the configured form host is the **only** origin contacted beyond D7 and our own, and no analytics call site of ours runs there. The exclusion is the one `NFR-WEB-0061`'s scale names, and it exists because this criterion's last clause forbids a third-party *request* where the requirement forbids a persistent *identifier* — stronger than what it meters, and under the pre-2026-09-25 inventory indistinguishable from it. |
 | TS-WEB-0012-A3 | static | Every event ID in the registry resolves to a conversion goal ID in `@schafe-vorm-fenster/goals`; an unknown ID fails the build. |
 | TS-WEB-0012-A4 | unit | `trackConversion` before the loader is ready neither throws nor blocks; with the loader blocked entirely, the call is a silent no-op. |
 | TS-WEB-0012-A5 | e2e | Each wired D4 trigger emits exactly one event with the correct goal ID and `stage`; client-side navigation back and forth does not replay it; a cancelled action emits nothing. |

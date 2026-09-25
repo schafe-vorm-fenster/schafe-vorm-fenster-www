@@ -4,9 +4,9 @@ id: TS-WEB-0016
 kind: interaction
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082, FUN-WEB-0091, FUN-WEB-0092, FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083, FUN-WEB-0188, FUN-WEB-0189, CON-WEB-0084, FUN-WEB-0095, FUN-WEB-0186, FUN-WEB-0190, FUN-WEB-0191, CON-WEB-0085, CON-WEB-0086, FUN-WEB-0205]
+implements: [FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082, FUN-WEB-0091, FUN-WEB-0092, FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083, FUN-WEB-0188, FUN-WEB-0189, CON-WEB-0084, FUN-WEB-0095, FUN-WEB-0186, FUN-WEB-0190, FUN-WEB-0191, CON-WEB-0085, CON-WEB-0086, FUN-WEB-0205, FUN-WEB-0206]
 sources: [SRC-0003, SRC-0008, SRC-0011]
-decisions: [DEC-0004, DEC-0009, DEC-0010, DEC-0011, DEC-0013, DEC-0014, DEC-0015, DEC-0025, DEC-0026, DEC-0030, DEC-0051, DEC-0052, DEC-0081, DEC-0082, DEC-0083, DEC-0104]
+decisions: [DEC-0004, DEC-0009, DEC-0010, DEC-0011, DEC-0013, DEC-0014, DEC-0015, DEC-0025, DEC-0026, DEC-0030, DEC-0051, DEC-0052, DEC-0081, DEC-0082, DEC-0083, DEC-0104, DEC-0108]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -581,7 +581,7 @@ spec does not edit the guide; the WhatsApp and mail rows carry no
 prefill until the rule and the sentences exist, and a row without a
 prefill is a working row, not a broken one.
 
-### D15 — The registration surface embeds the form, visibly [FIXED: FUN-WEB-0205, DEC-0013 amendment 2026-09-25; the consent treatment is OPEN — CONF-0025]
+### D15 — The registration surface embeds the form, visibly [FIXED: FUN-WEB-0205, DEC-0013 amendment 2026-09-25; the consent treatment is FIXED — DEC-0108]
 
 This determination exists because the specification did not have one.
 `TS-WEB-0023` governs `/mitmachen/registrieren` and forbids every submission
@@ -601,7 +601,8 @@ today is the Google Form, and nothing in `specs/` said so.
 | CSP | a `frame-src` entry for the form host is **owed** and is the fifth origin `TS-WEB-0014 D1` says there is no room for. The entry is not written here: D1's allowlist is that spec's, and the row goes in with the rebuild decision |
 | Measurement | nothing. No event fires on this route: the submission is Google's and the website does not observe it (D12 row S6's reasoning, CON-WEB-0083's shape) |
 | It lapses | when the envoy widget lands (Q-0022) or the app registration entry gains a contract (DEC-0029). Then the embed goes and `/start` becomes a redirect again, or disappears |
-| **Not settled here** | whether the embed creates a consent duty. `NFR-WEB-0061`/`NFR-WEB-0062` require a banner-free site and `TS-WEB-0013 D5` calls consent *"the disqualifier"*. CONF-0025 records the collision, DEM-0066 asks legal, Q-0078 is the question. A consent gate is **not** specified here, because specifying one would pre-empt the answer and would also break the "visibly" above |
+| Consent treatment | **isolation plus a notice, and no consent UI** (DEC-0108, the owner's answer to Q-0078). No banner, no click-to-load layer, no gate: the embed stays visible and immediate, and a notice stands above it (D17). `CONF-0025` is RESOLVED with outcome ISOLATE |
+| **The residual risk, on the record** | a third party is contacted on this one route **without the visitor having acted**, and no legal determination says that needs no consent. That risk was accepted by the owner, not cleared: `DEM-0066` is open and stays open, and it is the trigger that reopens DP-04. The other trigger is the rebuild this determination already lapses with — it removes Google and the risk with it (DEC-0108 §4, §5) |
 
 ### D16 — Outbound marking: what a row that leaves the site says, and where [FIXED: DEC-0081 §3, FUN-WEB-0185, DEC-0083 for the wording]
 
@@ -623,6 +624,28 @@ The data note itself — where the data goes and under what basis — is the
 privacy section's, on `/rechtliches#datenschutz`, which the page links anyway.
 The marking names the recipient; it does not restate a privacy policy in a
 `meta` line.
+
+### D17 — The notice above the embed: what it must achieve, never its wording [FIXED: FUN-WEB-0206, DEC-0108 §2; the sentence is copy — DEC-0083]
+
+A consent gate was ruled out and a banner is forbidden (`NFR-WEB-0062`), so the
+only thing left that is still honest is that the visitor is **told**, in the same
+breath as the request going out. This determination is what "told" means here.
+
+| Aspect | Determination |
+| --- | --- |
+| Position | **above the embed** — in DOM order and visually, inside the same region, before the embed's own box. A visitor reading down the page meets it before the form; a screen reader announces it first |
+| Timing | **before the embed loads visually.** The notice is part of the prerendered document and carries no data dependency, so the frame can never be what paints first |
+| It must convey — 1 | that the form is **Google's**, not ours, and the third party is named |
+| It must convey — 2 | that **loading it contacts that third party**, on load, without her acting. The notice does not imply a choice she does not have |
+| It must convey — 3 | **where the detail is**: a link to the data-protection section on `/rechtliches#datenschutz`, which is where the host's own section lives (`TS-WEB-0013-A7`) |
+| Length and shape | short — one block, no heading of its own, no list |
+| Not a control | no button, no checkbox, no dismiss, no "load the form". Nothing on the page waits for it and nothing is stored by it. A notice that can be clicked is a consent gate with a different label, and `A23`'s last sentence already forbids a marking that is one |
+| Not a claim | `/start` makes no data-protection claim (`TS-WEB-0013 D1` as narrowed by DEC-0108 §3). It carries this notice instead, and a notice states what happens rather than what does not |
+| The wording | **not here.** The sentence is copy, written in the content phase (`DEC-0083 §1`, repository working rule 4). This determination fixes the position, the three facts and the link target |
+
+`A22` asserts it, extended rather than joined by a new criterion: the notice and
+the embed are the two halves of one determination and A22 is already the walk
+over this route.
 
 ## Free for the generator
 
@@ -659,7 +682,7 @@ The marking names the recipient; it does not restate a privacy policy in a
 | TS-WEB-0016-A21 | static | Neither the footer newsletter entry nor the inline block on `/ueber-uns` renders while no sending system accepts a subscription: no form that posts nowhere, and no click-to-chat link whose arriving message nothing records (D10, DEC-0052 §4 as amended). |
 | TS-WEB-0016-A13 | manual | The two-working-day promise copy on `/deine-region` is present only when the lead-handling process behind it is named and signed off (C11); absent otherwise. |
 | TS-WEB-0016-A14 | e2e | With the widget script blocked, S2 and S4 still render the static fallback (contact link plus the booking row of the page's contact section) and no empty or permanently loading slot. The contact section itself renders unchanged, since it loads nothing. |
-| TS-WEB-0016-A22 | e2e | `/start` renders the registration form as a visible embed: exactly one `iframe` whose source is the configured form host, rendered without a click-to-load control, without a `details`/`summary` wrapper and without a `hidden` or zero-size ancestor, together with the e-mail address as a link. No other route of the TS-WEB-0004 D1 inventory contains an `iframe` to any host but the Portalize demo's (DEC-0030). No conversion event fires on the route. |
+| TS-WEB-0016-A22 | e2e | `/start` renders the registration form as a visible embed: exactly one `iframe` whose source is the configured form host, rendered without a click-to-load control, without a `details`/`summary` wrapper and without a `hidden` or zero-size ancestor, together with the e-mail address as a link. **Above that iframe, earlier in DOM order and present in the document served before any frame paints, stands a notice that names the form's third-party host and links to `/rechtliches#datenschutz`** (D17); it is not a button, not a checkbox, not dismissible, and no element on the route waits for it. No other route of the TS-WEB-0004 D1 inventory contains an `iframe` to any host but the Portalize demo's (DEC-0030). No conversion event fires on the route, and no consent-banner component renders (NFR-WEB-0062). |
 | TS-WEB-0016-A23 | e2e | The contact section's first action row and the lead fallback's `/start` link each carry their outbound marking as a separate element **after** the control in DOM order, at the `meta` type role, programmatically associated with it; the control's own label and accessible name contain neither the recipient nor a parenthetical about a new tab. The marking is not a button, not a link and not a consent control. |
 | TS-WEB-0016-A15 | e2e | The contact section renders exactly four action rows, in the D13 order: row 1's href is the configured appointment URL, row 2's is a WhatsApp click-to-chat URL, row 3's scheme is `tel:` and row 4's is `mailto:`. No row is omitted or merged, including when rows 2 and 3 resolve to the same number. **Every row emits** — the events are A17's; this criterion asserts the rows, their order and their schemes. (It ended "Only row 1 emits an event" until 2026-09-25, which was the reading D13 itself supersedes; DEC-0081 amendment §5.) |
 | TS-WEB-0016-A16 | static | Every value rendered in a contact row resolves from the hub record or the configured appointment URL — no phone number, WhatsApp number or contact e-mail address is hard-coded in a page, a component or a spec file. A row whose value does not resolve fails the build rather than rendering empty. |
@@ -675,6 +698,7 @@ The marking names the recipient; it does not restate a privacy policy in a
 | FUN-WEB-0092 (envoy owns storage; website holds no submission data) | D5, D2 network path · A1, A3 |
 | FUN-WEB-0184 (resolve it to that page's contact section) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
 | FUN-WEB-0205 (render the registration form as a visible embed) | D15, D6 · A22 |
+| FUN-WEB-0206 (render a notice of what loading the embedded form does, above the embed) | D15, D17 · A22 |
 | FUN-WEB-0185 (carry the Google Calendar appointment link as outbound navigation) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
 | FUN-WEB-0187 (complete request-product-briefing) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
 | FUN-WEB-0152 (carry make-contact as an intent) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |

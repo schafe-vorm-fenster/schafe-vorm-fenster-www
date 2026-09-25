@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0125, CON-WEB-0033, NFR-WEB-0024, NFR-WEB-0063, FUN-WEB-0126]
 sources: [SRC-0001, SRC-0003, SRC-0006, SRC-0010, SRC-0011]
-decisions: [DEC-0004, DEC-0009, DEC-0013, DEC-0015, DEC-0024, DEC-0025, DEC-0030, DEC-0039]
+decisions: [DEC-0004, DEC-0009, DEC-0013, DEC-0015, DEC-0024, DEC-0025, DEC-0030, DEC-0039, DEC-0108]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -40,7 +40,7 @@ What the claim asserts — and therefore what the build must not break:
 | --- | --- |
 | no tracking cookies | no cookie set by the site or by any host in D2 that carries a visitor identifier |
 | no persistent identifier | no `localStorage` / `sessionStorage` / IndexedDB / ETag-style identifier used for recognition |
-| no consent banner | no processing on the page requires consent, so no consent layer exists at all (DEC-0013) |
+| no consent banner | no consent layer exists anywhere on the site (`NFR-WEB-0062`). **The stronger half of this row was withdrawn on 2026-09-25**: it read "no processing on the page requires consent, so no consent layer exists at all", which is a claim about processing, and on `/start` — the one route that embeds a third party's form (`FUN-WEB-0205`) — it cannot be proved. `CON-WEB-0016` forbids a claim the implementation does not support, so the claim is now about the layer, on the pages the claim is actually made on (`/dein-kalender`, `/rechtliches#datenschutz`). `/start` makes no claim: it carries the notice of `FUN-WEB-0206` instead, and the accepted residual risk is DEC-0108 §4's |
 | no third-party trackers | the D2 inventory is the whole set; one external company is in it (eTracker), and it is named |
 
 Under CON-WEB-0016 the site makes no claim it cannot prove. The claim may
@@ -127,7 +127,7 @@ shown not to work:
 | 1 | self-host the asset (D4) | build size |
 | 2 | proxy it server-side through a BFF route (D3) | a route, a cache TTL |
 | 3 | allowlist the third-party host | PR review, CSP change, privacy-policy section |
-| — | embed it as a third party | **not available** (DEC-0013). One named exception exists and it is not a rung: the registration form on `/start` (DEC-0013 amendment 2026-09-25, TS-WEB-0016 D15). It is scoped to one route, it lapses when the form is rebuilt, and whether it clears the consent disqualifier below is CONF-0025 / DEM-0066, unanswered |
+| — | embed it as a third party | **not available** (DEC-0013). One named exception exists and it is not a rung: the registration form on `/start` (DEC-0013 amendment 2026-09-25, TS-WEB-0016 D15). It is scoped to one route and it lapses when the form is rebuilt. It does not clear the consent disqualifier below — it was **isolated** instead, at DP-04, by DEC-0108: `CONF-0025` is RESOLVED with outcome ISOLATE, a notice stands above the embed (`FUN-WEB-0206`, TS-WEB-0016 D17), no consent UI is added, and the residual legal risk is accepted with `DEM-0066` still open as the thing that would reopen it |
 
 Rung 3 requires all of: a reviewed PR against the CSP allowlist, never a
 wildcard (CON-WEB-0031); a named section in the privacy policy on
@@ -138,6 +138,13 @@ and evidence that the host sets no cookie and no persistent identifier.
 banner necessary, it is rejected at rung 3 regardless of its merits —
 banner-freedom is a requirement (NFR-WEB-0061, NFR-WEB-0062) and a published sales
 argument (D1), not a preference to be traded against a feature.
+
+**This sentence was re-read on 2026-09-25 and needs no amendment.** It governs
+**candidates at rung 3**, and the registration embed is not a rung — the row
+above says so. A reading in which the embed had to clear this sentence would
+make the exception self-contradictory, which is not what DEC-0013's amendment
+decided and not what DEC-0108 §3 resolved. What the embed did have to clear is
+the two requirements, and it clears `NFR-WEB-0062` unchanged.
 
 ### D6 — IP geolocation without storage [FIXED: FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073, FUN-WEB-0054; mechanism PROPOSED]
 
@@ -222,5 +229,15 @@ The legal confirmation for this handling is outstanding — see Open points.
   D2; replacing it changes the table, the CSP allowlist and the privacy
   policy in one move. Any successor must clear D5 including the consent
   disqualifier.
+- **The registration form's host has no row in D2 and no entry in the CSP
+  allowlist, and two criteria fail on that rather than merely lacking it.**
+  `A1` traces every route of the `TS-WEB-0004 D1` inventory and fails on a host
+  outside D2; `/start` has been in that inventory since 2026-09-25 and contacts
+  the form host. `A4` requires the deployed CSP to equal the D2 host set
+  exactly. `TS-WEB-0016 D15` records the `frame-src` entry as owed and defers it
+  to the rebuild decision, because D1's allowlist is `TS-WEB-0014`'s and this
+  table and that allowlist are one set seen from two sides — so the row is not
+  written here. What is recorded here is the consequence, so it is met by a
+  reader of this spec instead of by a red run (DEC-0108, *Still owed*).
 - D2's classification, D3's image-pipeline rule and D6's mechanism are
   [PROPOSED].

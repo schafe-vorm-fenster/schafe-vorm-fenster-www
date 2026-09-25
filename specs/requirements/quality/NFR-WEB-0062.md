@@ -35,3 +35,7 @@ Consent-banner components in the rendered tree SHALL be = 0 components, measured
 SRC-0006, DEC-0004
 
 Unlocatable: the transcript is one line with no line terminators, so it supports no position scheme.
+
+## Notes
+
+**Read against the registration embed on 2026-09-25 and unchanged by it (DEC-0108 §3).** This requirement counts consent-banner *components*. The notice `FUN-WEB-0206` puts above the embed is not one: nothing is gated, nothing is stored, nothing on the page waits for it and it grants nothing. The count stays 0 on `/start` as everywhere else, so the banner-free claim holds — because of what this statement says, not because it was read generously. `NFR-WEB-0061` is the one that needed the exception; this one did not.
