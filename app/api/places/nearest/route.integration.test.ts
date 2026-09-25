@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { resetRateLimits } from "./bff";
-import { SHOWCASE_COMMUNITY } from "./showcase";
+import { GET } from "./route";
 
-import { GET } from "@/app/api/places/nearest/route";
+import { resetRateLimits } from "@/src/lib/live/bff";
+import { NEAREST_PLACE_RADIUS_KM } from "@/src/lib/live/places";
+import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
 
 /**
  * Integration level: `GET /api/places/nearest?lat=&lng=` in-process — the
@@ -43,6 +44,13 @@ describe("DEC-0119: a point answers the covered community it sits in or next to"
     const text = await (await nearest("54.0123", "13.4567")).text();
     expect(text).not.toContain("54.0123");
     expect(text).not.toContain("13.4567");
+  });
+
+  it("answers 404 for a point with no covered community within the radius (DEC-0119 §7)", async () => {
+    // Tokyo: the mock's demo places are all in one county, none within 15 km.
+    const response = await nearest("35.6", "139.7");
+    expect(response.status).toBe(404);
+    expect(NEAREST_PLACE_RADIUS_KM).toBe(15);
   });
 
   it("is never cacheable: the URL carries a visitor's coordinates (TS-WEB-0010 D5)", async () => {
@@ -102,11 +110,19 @@ describe("auto mode: the committed index answers, without a credential", () => {
     expect(body.data.place.municipality).toBe("Schmatzin");
   });
 
-  it("answers a place for a point far from every covered community rather than an error", async () => {
-    // Somewhere in the Alps: the nearest covered place is still a place.
-    const response = await nearest("47.5", "11.0");
+  it("answers a place for a point a few kilometres from a covered community", async () => {
+    // ~5 km north of the showcase community: whichever community is nearest,
+    // it is within the radius, and the answer is a place.
+    const response = await nearest(String(SHOWCASE_COMMUNITY.lat + 0.045), String(SHOWCASE_COMMUNITY.lng));
     expect(response.status).toBe(200);
-    expect((await response.json()).data.place.slug).toMatch(/^[a-z0-9-]+$/);
+    expect((await response.json()).data.place.slug).toMatch(/^[a-z0-9-]+$/u);
+  });
+
+  it("answers 404 far outside the region rather than the region's edge (DEC-0119 §7)", async () => {
+    // Somewhere in the Alps, and Tokyo: the index holds ~1,760 communities of
+    // one region; the globally nearest of them is not "nearby".
+    expect((await nearest("47.5", "11.0")).status).toBe(404);
+    expect((await nearest("35.6", "139.7")).status).toBe(404);
   });
 
   it("stays uncacheable in auto mode too", async () => {

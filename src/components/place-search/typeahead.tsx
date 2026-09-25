@@ -111,7 +111,9 @@ export function PlaceTypeahead({ inputId, to, query, name = "ort", locale = "de"
 
     const onInput = () => {
       setTyped(input.value);
-      setDismissed(false);
+      // A real input event comes from a focused field; the replay below may
+      // not — a restored value in a blurred field waits for the focus.
+      setDismissed(document.activeElement !== input);
       setActive(-1);
     };
     // A pointer press on an option blurs the input before the click lands.
@@ -148,6 +150,12 @@ export function PlaceTypeahead({ inputId, to, query, name = "ort", locale = "de"
     input.addEventListener("blur", onBlur);
     input.addEventListener("focus", onFocus);
     input.addEventListener("keydown", onKeyDown);
+
+    // Text that reached the field before this effect attached — a visitor
+    // faster than hydration, a value the browser restored — fired `input`
+    // before anyone listened. Replay it once, so the overlay answers what is
+    // already in the field.
+    if (input.value !== "") input.dispatchEvent(new Event("input"));
     return () => {
       input.removeEventListener("input", onInput);
       input.removeEventListener("blur", onBlur);

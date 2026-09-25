@@ -93,9 +93,14 @@ five content artifacts A16 names; and no geolocation control existed.
    the response is `Cache-Control: no-store`, and the body carries the place
    only. Sources in order: geo-api's proximity search with a token, the
    committed index (every community's own coordinate, no credential), the
-   mock. No answer is a 404, and the control then does nothing. The tension
-   is recorded for the spec owner (`state/open.md` row 217) rather than
-   resolved here.
+   mock. **The answer has a radius: 15 km** (`NEAREST_PLACE_RADIUS_KM`,
+   `TS-WEB-0008 D3`'s "nearby" cut, applied to the index and the mock alike;
+   geo-api's proximity search runs its own fixed radius, `D2.2`). The index
+   holds every community of the region and nothing beyond it, so without
+   the cut a visitor anywhere on earth would be sent to the region's edge.
+   Nothing within the radius is a 404, and the control then does nothing.
+   The tension is recorded for the spec owner (`state/open.md` row 217)
+   rather than resolved here.
 8. **A denial is not re-asked, and the page does not change.** After any
    error from the browser (denied, unavailable, timeout) the control stops
    asking for the rest of the page's life; it stays visible, enabled and
@@ -135,12 +140,21 @@ five content artifacts A16 names; and no geolocation control existed.
   no-match row and the founding route, the JS-off form, and the ask count
   observed at `navigator.geolocation.getCurrentPosition` itself — zero on
   load and scroll, one on the click, still one after a second click.
-- Pages owned by other tasks still carry the old wording in their **code
-  fallbacks** (`app/[lang]/dein-ort/page.tsx` `searchHint`,
-  `app/[lang]/dein-ort/starten/page.tsx` `PAGE_COPY`) and two e2e cases assert
-  it (`e2e/pages/dein-ort.spec.ts` "postcode", `e2e/pages/dein-ort-starten.spec.ts`
-  "Suche nach Ortsnamen"); the content now overrides the fallbacks, so the
-  pages render correctly, and the fallbacks and cases are T-16's to retire.
+- The page modules of `/dein-ort` and `/dein-ort/starten` carried the old
+  wording as **code fallbacks** for the field's label, placeholder and hint,
+  and `/dein-ort` rendered them (its slot carries no label field). Those
+  fallbacks are removed: where a slot carries no field, `place-search` falls
+  through to the dictionary, the one place `A16` keeps under check. The
+  static check now scans the five page modules' own strings too (comments
+  blanked), and `e2e/place-search.spec.ts` asserts the composed label,
+  placeholder and block on every instance of the five surfaces, in both
+  locales — the instrument measures what the visitor sees.
+- Six e2e cases in other tasks' page specs go red by `DEC-0079`'s own
+  consequence — five type five digits and expect a place, one expects the
+  word "postcode" — and are listed for their owners in `state/open.md`
+  row 218. `e2e/search-double-submit.spec.ts`
+  (no page's spec) types a slug on the three search surfaces now and keeps
+  the postcode on the order flow's scope step (`DEC-0079 §7`).
   `src/components/gallery.tsx` (T-10) still labels its demo instance "Ort
   oder Postleitzahl" — a dev route, outside A16's surfaces.
 - `e2e/search-persistence.spec.ts` types a place name (`Quilow`) instead of

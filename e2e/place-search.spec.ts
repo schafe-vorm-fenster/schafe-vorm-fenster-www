@@ -65,11 +65,25 @@ async function installClsObserver(page: Page): Promise<void> {
 
 const readCls = (page: Page) => page.evaluate(() => (window as unknown as ClsWindow).__cls);
 
+/**
+ * The typeahead attaches to the server-rendered field on hydration and marks
+ * it `role="combobox"` when it has. A fill that lands earlier is answered
+ * too (the effect reads the field once on attach), but a test that means to
+ * measure the overlay waits for the enhancement rather than racing it.
+ */
+async function hydrated(page: Page, selector: string): Promise<void> {
+  await expect(page.locator(selector).first()).toHaveAttribute("role", "combobox", { timeout: 15_000 });
+}
+
+/** The words TS-WEB-0008-A16 forbids on any search surface, as the visitor would read them. */
+const POSTCODE = /Postleitzahl|\bPLZ\b|postcode|\bZIP\b/iu;
+
 test.describe("TS-WEB-0008-A15: the suggestion overlay", () => {
   test("two characters open at most four rows, each Ort (Gemeinde), and a pick lands on the place", async ({
     page,
   }) => {
     await page.goto(href("place", "de"));
+    await hydrated(page, FIELD);
 
     const field = page.locator(FIELD);
     await field.fill(SEARCH);
@@ -115,6 +129,7 @@ test.describe("TS-WEB-0008-A15: the suggestion overlay", () => {
     const closedBox = JSON.stringify(await below.boundingBox());
     const clsBefore = await readCls(page);
 
+    await hydrated(page, FIELD);
     const field = page.locator(FIELD);
     await field.fill(SEARCH);
     await expect(page.getByRole("option").first()).toBeVisible({ timeout: 10_000 });
@@ -133,6 +148,7 @@ test.describe("TS-WEB-0008-A15: the suggestion overlay", () => {
     page,
   }) => {
     await page.goto(href("place", "de"));
+    await hydrated(page, FIELD);
 
     const field = page.locator(FIELD);
     await field.fill("Oberammergau");
@@ -149,6 +165,7 @@ test.describe("TS-WEB-0008-A15: the suggestion overlay", () => {
 
   test("five typed digits are a name like any other: no match, the founding route", async ({ page }) => {
     await page.goto(href("place", "de"));
+    await hydrated(page, FIELD);
     const field = page.locator(FIELD);
     await field.fill("17509");
     await expect(page.locator("[data-typeahead-none]")).toBeVisible({ timeout: 10_000 });
@@ -163,6 +180,7 @@ test.describe("TS-WEB-0008-A15: the suggestion overlay", () => {
     });
 
     await page.goto(href("place", "de"));
+    await hydrated(page, FIELD);
     await page.locator(FIELD).fill("S");
     await page.waitForTimeout(600);
 
@@ -172,6 +190,7 @@ test.describe("TS-WEB-0008-A15: the suggestion overlay", () => {
 
   test("the keyboard walks the rows and Enter follows the active one", async ({ page }) => {
     await page.goto(href("place", "de"));
+    await hydrated(page, FIELD);
     const field = page.locator(FIELD);
     await field.fill(SEARCH);
     await expect(page.getByRole("option").first()).toBeVisible({ timeout: 10_000 });
@@ -193,6 +212,7 @@ test.describe("TS-WEB-0023-A9: a pick from the overlay keeps the entry parameter
     // parameters as hidden inputs (TS-WEB-0023 D4); a pick has to carry the
     // same query the submit would.
     await page.goto(`${href("register", "de")}?etcc_cmp=herbst&etcc_med=mail`);
+    await hydrated(page, "#ort-suche");
     await page.locator("#ort-suche").fill(SEARCH);
     const suggestion = page.getByRole("option", { name: PLACE });
     await expect(suggestion).toBeVisible({ timeout: 10_000 });
@@ -201,6 +221,32 @@ test.describe("TS-WEB-0023-A9: a pick from the overlay keeps the entry parameter
     expect(target).toContain("etcc_cmp=herbst");
     expect(target).toContain("etcc_med=mail");
   });
+});
+
+test.describe("TS-WEB-0008-A16: what the visitor reads on the five surfaces names no postcode", () => {
+  // The static check scans the dictionary, the content slots and the page
+  // modules; this is the composed result — label, placeholder and the block
+  // around the field, on every instance, in both locales.
+  for (const locale of ["de", "en"] as const) {
+    for (const route of ["home", "place", "placeStart", "region", "register"] as const) {
+      test(`${route} (${locale})`, async ({ page }) => {
+        await page.goto(href(route, locale));
+        const fields = page.locator('input[name="ort"]');
+        const count = await fields.count();
+        expect(count, "the surface carries the place search").toBeGreaterThan(0);
+        for (let index = 0; index < count; index += 1) {
+          const field = fields.nth(index);
+          const id = await field.getAttribute("id");
+          const label = await page.locator(`label[for="${id}"]`).first().textContent();
+          const placeholder = await field.getAttribute("placeholder");
+          const block = await field.locator("xpath=ancestor::form/parent::*").textContent();
+          expect(label, `label of #${id}`).not.toMatch(POSTCODE);
+          expect(placeholder, `placeholder of #${id}`).not.toMatch(POSTCODE);
+          expect(block, `search block around #${id}`).not.toMatch(POSTCODE);
+        }
+      });
+    }
+  }
 });
 
 test.describe("the search works without the enhancement", () => {

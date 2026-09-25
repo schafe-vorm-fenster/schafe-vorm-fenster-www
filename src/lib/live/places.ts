@@ -41,7 +41,7 @@ import { hasPlaceIndex, MAX_NAME_MATCHES, nearestPlace, placeBySlug, searchByNam
 import { publicPlaceEvents } from "./public-source";
 import { resilient, type ResilientOptions } from "./resilient";
 import { placeEventsFallback } from "./snapshots";
-import { byStart, EVENT_WINDOWS, type EventWindow } from "./widening";
+import { byStart, EVENT_WINDOWS, type EventWindow, haversineKm } from "./widening";
 
 import type { LiveEnvelope, NearestPlace, Place, PlaceEvents, PlaceSearchResult } from "./types";
 
@@ -145,6 +145,15 @@ export async function searchPlacesByZip({ query, store, now }: PlaceSearchInput)
  * says the coordinates are never stored. Nothing here writes them anywhere —
  * not to a cache, not to a log — and the answer carries the place only.
  */
+/**
+ * How far a visitor's position may be from the nearest covered community
+ * before the answer is "none" (DEC-0119 §7): TS-WEB-0008 D3's ~15 km nearby
+ * cut, the distance the site already calls "in der Nähe". Applied to the
+ * committed index and the mock alike; geo-api's proximity search runs its
+ * own fixed radius (D2.2).
+ */
+export const NEAREST_PLACE_RADIUS_KM = 15;
+
 export async function nearestCoveredPlace(point: {
   readonly lat: number;
   readonly lng: number;
@@ -165,13 +174,13 @@ export async function nearestCoveredPlace(point: {
   }
 
   if (viaIndex) {
-    const place = nearestPlace(point);
+    const place = nearestPlace(point, NEAREST_PLACE_RADIUS_KM);
     return place === undefined
       ? undefined
       : { data: { place }, tier: "live", fetchedAt, stale: false, demo: false, source: "real" };
   }
 
-  const [place] = mockSearchByPoint(point, 1);
+  const [place] = mockSearchByPoint(point, 1).filter((candidate) => haversineKm(point, candidate) <= NEAREST_PLACE_RADIUS_KM);
   return place === undefined
     ? undefined
     : { data: { place }, tier: "live", fetchedAt, stale: false, demo: true, source: "mock" };

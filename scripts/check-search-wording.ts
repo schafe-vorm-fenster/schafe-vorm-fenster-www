@@ -19,6 +19,12 @@
  *     `source_note` is not visitor-facing) and scans the rest. A slot that is
  *     missing is an error, so a renamed slot cannot make the check pass by
  *     scanning nothing.
+ *  3. **The page modules that compose those five surfaces**
+ *     (`SEARCH_PAGE_MODULES`): a page may carry its own fallback copy for
+ *     the field, and a fallback the content happens to override is still a
+ *     string the visitor can be shown. The module's source is scanned with
+ *     its comments blanked — a comment is not visitor-facing, its string
+ *     literals are.
  *
  * **Out of scope, by the criterion itself:** the order flow's scope step
  * (TS-WEB-0025 D3, DEC-0079 §7). `content/pages/dein-kalender/bestellen/**`
@@ -57,6 +63,15 @@ export const SEARCH_SLOTS: readonly SearchSlot[] = [
   { page: "dein-ort/starten", slot: "dein-ort-starten-5-search" },
   { page: "deine-region", slot: "deine-region-3-interim" },
   { page: "mitmachen/registrieren", slot: "registrieren-1-ort" },
+];
+
+/** The page modules that compose the five surfaces — their own strings, the content's fallbacks included. */
+export const SEARCH_PAGE_MODULES: readonly string[] = [
+  "app/[lang]/page.tsx",
+  "app/[lang]/dein-ort/page.tsx",
+  "app/[lang]/dein-ort/starten/page.tsx",
+  "app/[lang]/deine-region/page.tsx",
+  "app/[lang]/mitmachen/registrieren/page.tsx",
 ];
 
 /** DEC-0079 §7: the order flow's scope step keeps its postcode mode and is not a search surface. */
@@ -112,6 +127,17 @@ export function slotSection(markdown: string, slotId: string): SlotSection | und
   return { startLine: start + 1, lines: section.split("\n") };
 }
 
+/**
+ * A module's source with its comments blanked, line numbers preserved: block
+ * comments wherever they stand, line comments where the line is one. What is
+ * left is code and its string literals — the strings a page can render.
+ */
+export function withoutComments(source: string): string {
+  return source
+    .replace(/\/\*[\s\S]*?\*\//gu, (comment) => comment.replace(/[^\n]/gu, ""))
+    .replace(/^(\s*)\/\/.*$/gmu, "$1");
+}
+
 export interface DictionaryString {
   readonly key: string;
   readonly value: string;
@@ -135,18 +161,22 @@ export interface SearchWordingResult {
   readonly errors: string[];
   readonly stringsScanned: number;
   readonly slotsScanned: number;
+  readonly modulesScanned: number;
 }
 
 export interface CheckOptions {
   readonly root?: string;
   readonly strings?: readonly DictionaryString[];
   readonly slots?: readonly SearchSlot[];
+  /** Page modules to scan, relative to `root`. */
+  readonly modules?: readonly string[];
 }
 
 export function checkSearchWording({
   root = ROOT,
   strings = dictionaryStrings(),
   slots = SEARCH_SLOTS,
+  modules = SEARCH_PAGE_MODULES,
 }: CheckOptions = {}): SearchWordingResult {
   const errors: string[] = [];
 
@@ -180,13 +210,26 @@ export function checkSearchWording({
     }
   }
 
-  return { errors, stringsScanned: strings.length, slotsScanned };
+  let modulesScanned = 0;
+  for (const pageModule of modules) {
+    const file = join(root, pageModule);
+    if (!existsSync(file)) {
+      errors.push(`${pageModule}: page module missing — the surface it composes cannot be checked`);
+      continue;
+    }
+    modulesScanned += 1;
+    for (const hit of postcodeHits(withoutComments(readFileSync(file, "utf-8")))) {
+      errors.push(`${pageModule}:${hit.line}: page module names a postcode ("${hit.term}") — ${hit.excerpt}`);
+    }
+  }
+
+  return { errors, stringsScanned: strings.length, slotsScanned, modulesScanned };
 }
 
 function main(): void {
-  const { errors, stringsScanned, slotsScanned } = checkSearchWording();
+  const { errors, stringsScanned, slotsScanned, modulesScanned } = checkSearchWording();
   console.log(
-    `search-wording check (TS-WEB-0008-A16): ${stringsScanned} dictionary string(s) · ${slotsScanned} content search block(s) scanned`,
+    `search-wording check (TS-WEB-0008-A16): ${stringsScanned} dictionary string(s) · ${slotsScanned} content search block(s) · ${modulesScanned} page module(s) scanned`,
   );
   for (const message of errors) console.error(`  ERROR TS-008-A16 ${message}`);
   console.log(errors.length ? `${errors.length} error(s)` : "no errors");

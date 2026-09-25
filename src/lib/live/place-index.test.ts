@@ -107,7 +107,10 @@ describe("the ~15 km cut, made locally", () => {
   const anchor = { lat: SHOWCASE_COMMUNITY.lat, lng: SHOWCASE_COMMUNITY.lng };
 
   it("answers the anchor's own community first", () => {
-    expect(nearestPlace(anchor)?.slug).toBe(SHOWCASE_COMMUNITY.slug);
+    expect(nearestPlace(anchor, 15)?.slug).toBe(SHOWCASE_COMMUNITY.slug);
+    // DEC-0119 §7: beyond the radius the index answers nothing, not its edge.
+    expect(nearestPlace({ lat: 47.5, lng: 11.0 }, 15)).toBeUndefined();
+    expect(nearestPlace({ lat: 47.5, lng: 11.0 }, 1_000)).toBeDefined();
   });
 
   it("includes what is inside the radius and excludes what is outside it", () => {

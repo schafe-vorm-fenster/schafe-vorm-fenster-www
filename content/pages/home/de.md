@@ -5,7 +5,7 @@ route: "/"
 seo:
   "/":
     title: "Schafe vorm Fenster — Was ist bei dir los?"
-    description: "Was in deinem Ort und in den Nachbarorten als Nächstes ansteht: Postleitzahl eingeben und den Kalender für deine Umgebung öffnen."
+    description: "Was in deinem Ort und in den Nachbarorten als Nächstes ansteht: Ortsnamen eingeben und den Kalender für deine Umgebung öffnen."
     provenance: generated
 content_type: section
 status: draft

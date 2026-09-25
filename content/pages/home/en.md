@@ -5,7 +5,7 @@ route: "/"
 seo:
   "/":
     title: "Schafe vorm Fenster — what's on where you live"
-    description: "What is coming up where you live and in the villages next door: enter your postcode and open the calendar for your own area."
+    description: "What is coming up where you live and in the villages next door: enter your place name and open the calendar for your own area."
     provenance: generated
 content_type: section
 status: draft

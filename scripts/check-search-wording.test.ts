@@ -9,8 +9,10 @@ import {
   dictionaryStrings,
   OUT_OF_SCOPE,
   postcodeHits,
+  SEARCH_PAGE_MODULES,
   SEARCH_SLOTS,
   slotSection,
+  withoutComments,
 } from "./check-search-wording";
 
 /**
@@ -53,6 +55,27 @@ function write(page: string, locale: string, content: string): void {
   const directory = join(root, "content", "pages", page);
   mkdirSync(directory, { recursive: true });
   writeFileSync(join(directory, `${locale}.md`), content);
+}
+
+const MODULE = "app/[lang]/fixture/page.tsx";
+
+/** A page module with a fallback label — the shape the pages' `PAGE_COPY` had. */
+function pageModule(label: string, comment = "a comment"): string {
+  return [
+    "/**",
+    ` * ${comment}`,
+    " */",
+    `const PAGE_COPY = { de: { searchLabel: "${label}" } };`,
+    `// ${comment}`,
+    "export default function Page() { return PAGE_COPY.de.searchLabel; }",
+    "",
+  ].join("\n");
+}
+
+function writeModule(content: string): void {
+  const file = join(root, MODULE);
+  mkdirSync(join(file, ".."), { recursive: true });
+  writeFileSync(file, content);
 }
 
 beforeEach(() => {
@@ -105,19 +128,54 @@ describe("slotSection: the search block and nothing around it", () => {
   });
 });
 
+describe("withoutComments: the strings a module can render, nothing it only says", () => {
+  it("blanks block and line comments and keeps line numbers", () => {
+    const source = pageModule("Dein Ort", "früher: Postleitzahl");
+    const stripped = withoutComments(source);
+    expect(stripped.split("\n").length).toBe(source.split("\n").length);
+    expect(stripped).not.toContain("Postleitzahl");
+    expect(stripped).toContain('searchLabel: "Dein Ort"');
+  });
+});
+
 describe("checkSearchWording: fixture trees", () => {
   it("passes a clean search block in both locales", () => {
     write("home", "de", artifact("Dein Ort"));
     write("home", "en", artifact("Your place"));
-    const result = checkSearchWording({ root, strings: [], slots: [SLOT] });
+    const result = checkSearchWording({ root, strings: [], slots: [SLOT], modules: [] });
     expect(result.errors).toEqual([]);
     expect(result.slotsScanned).toBe(2);
+  });
+
+  it("fails on a page module's fallback string that names a postcode, naming file and line", () => {
+    write("home", "de", artifact("Dein Ort"));
+    write("home", "en", artifact("Your place"));
+    writeModule(pageModule("Deine Postleitzahl"));
+    const { errors, modulesScanned } = checkSearchWording({ root, strings: [], slots: [SLOT], modules: [MODULE] });
+    expect(modulesScanned).toBe(1);
+    expect(errors).toEqual([
+      `${MODULE}:4: page module names a postcode ("Postleitzahl") — const PAGE_COPY = { de: { searchLabel: "Deine Postleitzahl" } };`,
+    ]);
+  });
+
+  it("does not hold a page module's comments against it", () => {
+    write("home", "de", artifact("Dein Ort"));
+    write("home", "en", artifact("Your place"));
+    writeModule(pageModule("Dein Ort", "a postcode typed here lands on the founding route"));
+    expect(checkSearchWording({ root, strings: [], slots: [SLOT], modules: [MODULE] }).errors).toEqual([]);
+  });
+
+  it("fails when a page module is missing, rather than passing by scanning nothing", () => {
+    write("home", "de", artifact("Dein Ort"));
+    write("home", "en", artifact("Your place"));
+    const { errors } = checkSearchWording({ root, strings: [], slots: [SLOT], modules: [MODULE] });
+    expect(errors).toEqual([`${MODULE}: page module missing — the surface it composes cannot be checked`]);
   });
 
   it("fails on a postcode in the search block, naming file and line", () => {
     write("home", "de", artifact("Deine Postleitzahl"));
     write("home", "en", artifact("Your postcode"));
-    const { errors } = checkSearchWording({ root, strings: [], slots: [SLOT] });
+    const { errors } = checkSearchWording({ root, strings: [], slots: [SLOT], modules: [] });
     expect(errors).toHaveLength(2);
     expect(errors[0]).toMatch(/content\/pages\/home\/de\.md:13: search block `home-1-search-hero` names a postcode \("Postleitzahl"\)/u);
     expect(errors[1]).toMatch(/content\/pages\/home\/en\.md:13: .*"postcode"/u);
@@ -128,19 +186,19 @@ describe("checkSearchWording: fixture trees", () => {
     // the place search.
     write("home", "de", artifact("Dein Ort"));
     write("home", "en", artifact("Your place"));
-    expect(checkSearchWording({ root, strings: [], slots: [SLOT] }).errors).toEqual([]);
+    expect(checkSearchWording({ root, strings: [], slots: [SLOT], modules: [] }).errors).toEqual([]);
   });
 
   it("does not hold an HTML comment inside the search block against it", () => {
     write("home", "de", artifact("Dein Ort", "<!-- source_note: bis DEC-0079 stand hier die Postleitzahl -->"));
     write("home", "en", artifact("Your place"));
-    expect(checkSearchWording({ root, strings: [], slots: [SLOT] }).errors).toEqual([]);
+    expect(checkSearchWording({ root, strings: [], slots: [SLOT], modules: [] }).errors).toEqual([]);
   });
 
   it("fails when the search slot is missing, rather than passing by scanning nothing", () => {
     write("home", "de", artifact("Dein Ort").replace(SLOT.slot, "home-1-renamed"));
     write("home", "en", artifact("Your place"));
-    const { errors, slotsScanned } = checkSearchWording({ root, strings: [], slots: [SLOT] });
+    const { errors, slotsScanned } = checkSearchWording({ root, strings: [], slots: [SLOT], modules: [] });
     expect(errors).toHaveLength(1);
     expect(errors[0]).toMatch(/de\.md: search slot `home-1-search-hero` not found/u);
     expect(slotsScanned).toBe(1);
@@ -148,7 +206,7 @@ describe("checkSearchWording: fixture trees", () => {
 
   it("fails when an artifact is missing", () => {
     write("home", "de", artifact("Dein Ort"));
-    const { errors } = checkSearchWording({ root, strings: [], slots: [SLOT] });
+    const { errors } = checkSearchWording({ root, strings: [], slots: [SLOT], modules: [] });
     expect(errors).toEqual(["content/pages/home/en.md: content artifact missing — the search block of home cannot be checked"]);
   });
 
@@ -157,6 +215,7 @@ describe("checkSearchWording: fixture trees", () => {
     write("home", "en", artifact("Your place"));
     const { errors } = checkSearchWording({
       root,
+      modules: [],
       slots: [SLOT],
       strings: [
         { key: "de.search.label", value: "Ort oder Postleitzahl" },
@@ -173,6 +232,7 @@ describe("checkSearchWording: fixture trees", () => {
     write("dein-kalender/bestellen", "en", artifact("postcode"));
     const result = checkSearchWording({
       root,
+      modules: [],
       strings: [],
       slots: [SLOT, { page: "dein-kalender/bestellen", slot: SLOT.slot }],
     });
@@ -202,10 +262,16 @@ describe("checkSearchWording: the real tree", () => {
     expect(keys).toContain("de.notFound.body");
   });
 
+  it("scans the five page modules that compose the surfaces", () => {
+    expect(SEARCH_PAGE_MODULES).toHaveLength(5);
+    expect(SEARCH_PAGE_MODULES).toContain("app/[lang]/dein-ort/page.tsx");
+  });
+
   it("passes today — TS-WEB-0008-A16 holds on the committed tree", () => {
     const result = checkSearchWording();
     expect(result.errors).toEqual([]);
     expect(result.slotsScanned).toBe(SEARCH_SLOTS.length * 2);
+    expect(result.modulesScanned).toBe(SEARCH_PAGE_MODULES.length);
     expect(result.stringsScanned).toBeGreaterThan(0);
   });
 });

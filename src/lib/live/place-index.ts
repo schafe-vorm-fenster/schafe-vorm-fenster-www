@@ -180,12 +180,23 @@ export function placesWithin(
     .map(({ place }) => place);
 }
 
-/** The covered community a coordinate sits in or next to. */
-export function nearestPlace(point: { readonly lat: number; readonly lng: number }): Place | undefined {
+/**
+ * The covered community a coordinate sits in or next to — within `radiusKm`,
+ * or nothing. The index holds every community of the region and nothing
+ * beyond it, so without a cut a visitor anywhere on earth is answered the
+ * region's edge: the geolocation control passes DEC-0119 §7's radius so that
+ * "nothing nearby" is a real answer. Callers that resolve a region-level fact
+ * for a point already known to be inside it (the county, a public source)
+ * keep the unbounded default.
+ */
+export function nearestPlace(
+  point: { readonly lat: number; readonly lng: number },
+  radiusKm: number = Number.POSITIVE_INFINITY,
+): Place | undefined {
   let best: { place: Place; distance: number } | undefined;
   for (const entry of ENTRIES) {
     const distance = haversineKm(point, entry);
     if (best === undefined || distance < best.distance) best = { place: toPlace(entry), distance };
   }
-  return best?.place;
+  return best !== undefined && best.distance <= radiusKm ? best.place : undefined;
 }
