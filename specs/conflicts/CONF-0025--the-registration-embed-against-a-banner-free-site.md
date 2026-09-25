@@ -24,12 +24,12 @@ The registration embed against a banner-free site: a third-party iframe on one r
 ## Positions
 
 - **FUN-WEB-0205** — The registration surface renders the third-party form as a visible embed, which loads that third party for the visitor.
-  `specs/requirements/functional/FUN-WEB-0205.md#L29`
+  `specs/requirements/functional/FUN-WEB-0205.md#L26`
   > On the registration surface, the website SHALL render the registration form as a visible embed.
 
 - **NFR-WEB-0062** — The site carries no consent banner, and `TS-WEB-0013 D5` rejects any candidate that would make one necessary.
   `specs/requirements/quality/NFR-WEB-0062.md#L31`
-  > Number of consent-banner components in the rendered website SHALL be 0 components
+  > Consent-banner components in the rendered tree SHALL be = 0 components
 
 ## Impact
 

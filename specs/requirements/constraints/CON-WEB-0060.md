@@ -10,7 +10,7 @@ area: pages
 needs: [NEED-WEB-0013]
 source:
   source_id: SRC-0003
-  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L235"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L266"
   excerpt: "`order-promotion-material` | not on the website yet"
 evidence_sufficiency: S2
 fit_criterion:
@@ -33,6 +33,8 @@ The solution SHALL NOT carry a page for `order-promotion-material`, imposed by D
 ## Source
 
 SRC-0003#conversion-map, DEC-0052, DEC-0081
+
+Finding: Re-resolved 2026-09-25 — the map row shifted from line 235 to line 266 and the excerpt is unchanged. The amendment also closed the open point behind it: lines 270–273 now read "it stays unwired — no page and no call site on the website", citing DEC-0052 §2 and closing Q-0005, where the source previously only asked the question.
 
 ## Rationale
 

@@ -10,7 +10,7 @@ area: pages
 needs: [NEED-WEB-0007]
 source:
   source_id: SRC-0003
-  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L73"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L89"
   excerpt: "**Primary conversion:** the focus job's CTA. No conversion of its own."
 evidence_sufficiency: S2
 fit_criterion:
@@ -36,7 +36,7 @@ ai_provenance:
 
 SRC-0003#home
 
-Finding: Row spans two lines: focus job "set by entry context; the default is ‘know what is on’" is line 72; route heading is line 70.
+Finding: Row spans two lines: focus job "set by entry context; the default is ‘know what is on’" is line 88; route heading is line 86. Re-resolved 2026-09-25 — the amendment shifted this section by 16 lines; the excerpt is unchanged.
 
 ## Notes
 

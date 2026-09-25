@@ -10,7 +10,7 @@ area: pages
 needs: [NEED-WEB-0010, NEED-WEB-0014]
 source:
   source_id: SRC-0003
-  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L118"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L134"
   excerpt: "**Primary conversion:** `publish-first-event`."
 evidence_sufficiency: S2
 fit_criterion:
@@ -36,7 +36,7 @@ ai_provenance:
 
 SRC-0003#register-mitmachenregistrieren
 
-Finding: Focus job line 117; the qualifier "(handover to the app)" comes from the conversion map, line 231.
+Finding: Focus job line 133; the qualifier "(handover to the app)" comes from the conversion map, line 262. Re-resolved 2026-09-25 — the brief shifted by 16 lines and the conversion map by 31; the excerpt is unchanged.
 
 ## Notes
 

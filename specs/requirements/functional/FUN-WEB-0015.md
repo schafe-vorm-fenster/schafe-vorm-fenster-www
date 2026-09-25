@@ -10,7 +10,7 @@ area: pages
 needs: [NEED-WEB-0015]
 source:
   source_id: SRC-0003
-  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L182"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L198"
   excerpt: "**Primary conversion:** `buy-calendar-licence`."
 evidence_sufficiency: S3
 fit_criterion:
@@ -36,7 +36,7 @@ ai_provenance:
 
 SRC-0003, DEC-0011, DEC-0036
 
-Finding: Focus job line 181; route heading line 179.
+Finding: Focus job line 197; route heading line 195. Re-resolved 2026-09-25 — shifted by 16 lines; the excerpt is unchanged.
 
 ## Notes
 

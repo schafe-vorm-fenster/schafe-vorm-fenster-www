@@ -225,8 +225,17 @@ Three artefacts said the old thing and are corrected in this change:
   permitted outcome set are unchanged — the taxonomy was right, the record was
   merely silent at the point where silence now means the opposite thing.
 
-`FUN-WEB-0136`'s finding is the same shape against SRC-0003 line 207 and is
-corrected with it, under DEM-0064.
+`FUN-WEB-0136`'s finding is the same shape and is corrected with it, under
+DEM-0064. **Corrected 2026-09-25:** this paragraph, the `Deviation:` line it
+produced and DEM-0064's first clause all named "SRC-0003 line 207". The rule
+`FUN-WEB-0136` deviates from — *"One primary conversion per page, above the
+fold, visually unrivalled"* — is line 207 of
+`website-communication-principles.concept.md`, which is **SRC-0001** and is the
+requirement's own `source_id`; SRC-0003 line 207 carried
+*"**Audiences:** 1 municipalities and funders · 2 everyone"* before the
+amendment and *"**Focus job:** run our own calendar"* after it. Found by
+re-reading every SRC-0003 locator after the amendment; nothing about the
+deviation itself changes, only which source it is recorded against.
 
 ### 5. DEC-0080 §3 is re-based, not deleted
 

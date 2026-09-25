@@ -10,7 +10,7 @@ area: pages
 needs: [NEED-WEB-0001, NEED-WEB-0003]
 source:
   source_id: SRC-0003
-  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L88"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L104"
   excerpt: "**Primary conversion:** `save-calendar-to-homescreen`."
 evidence_sufficiency: S2
 fit_criterion:
@@ -36,7 +36,7 @@ ai_provenance:
 
 SRC-0003#your-place-dein-ort
 
-Finding: Focus job "know what is on" is line 87; route heading line 85.
+Finding: Focus job "know what is on" is line 103; route heading line 101. Re-resolved 2026-09-25 — shifted by 16 lines; the excerpt is unchanged.
 
 ## Notes
 

@@ -10,7 +10,7 @@ area: pages
 needs: [NEED-WEB-0002]
 source:
   source_id: SRC-0003
-  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L30"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L40"
   excerpt: "also the header button \"Kalender\", always visible"
 evidence_sufficiency: S3
 fit_criterion:

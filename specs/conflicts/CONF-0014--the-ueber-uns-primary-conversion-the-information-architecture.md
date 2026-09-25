@@ -23,12 +23,12 @@ The /ueber-uns primary conversion: the information architecture says it has none
 
 ## Positions
 
-- **SRC-0003** — The page brief gives /ueber-uns no primary conversion of its own.
-  `go-to-market-os/concept/website-information-architecture.concept.md#L205`
-  > **Primary conversion:** none of its own; the closing CTA offers all
+- **SRC-0003** — The page brief now gives /ueber-uns the same primary conversion the requirement does. The position that collided was line 205, "**Primary conversion:** none of its own; the closing CTA offers all", and the amendment of 2026-09-25 replaced it.
+  `go-to-market-os/concept/website-information-architecture.concept.md#L221`
+  > **Primary conversion:** `request-product-briefing`. The closing CTA
 
 - **FUN-WEB-0017** — The route table gives /ueber-uns request-product-briefing as its primary conversion.
-  `specs/requirements/functional/FUN-WEB-0017.md#L32`
+  `specs/requirements/functional/FUN-WEB-0017.md#L33`
   > `/ueber-uns` | understand who is behind it | `request-product-briefing`
 
 ## Impact
@@ -54,8 +54,15 @@ changed — the taxonomy was right, the record was merely silent at the one
 place where silence now means the opposite thing.
 
 Resolved in DEC-0081, which is the record; this file is the conflict, not a
-second copy of the decision. DEM-0001 stays `OPEN` until the source is edited
-or the decision is reversed.
+second copy of the decision.
+
+**The new version landed, 2026-09-25.** Hub commit `ee17e4e` (PR #510) gave the
+page brief `request-product-briefing` and added the `/ueber-uns` row to the
+conversion map at line 265, which is what the Impact paragraph above said was
+missing. `DEM-0001` is `ANSWERED` and the SRC-0003 position above is the amended
+line. The outcome is unchanged, and the record stays `RESOLVED` for the reason
+CONF-0013 states. The FUN-WEB-0017 position was also off by one line, at 32
+rather than 33, since the record was written.
 
 ## Blocks
 

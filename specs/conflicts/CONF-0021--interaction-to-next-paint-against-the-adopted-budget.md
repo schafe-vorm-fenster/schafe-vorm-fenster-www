@@ -24,7 +24,7 @@ Interaction to Next Paint against the adopted budget's First Input Delay
 ## Positions
 
 - **NFR-WEB-0048** — The requirement fixes INP < 200 ms as the interaction budget.
-  `specs/requirements/quality/NFR-WEB-0048.md#L25`
+  `specs/requirements/quality/NFR-WEB-0048.md#L26`
   > Interaction to Next Paint of every route of TS-WEB-0003 D7 SHALL be < 200 ms
 
 - **SRC-0007** — The adopted performance budget fixes FID < 100ms and names no INP at all.

@@ -10,7 +10,7 @@ area: pages
 needs: [NEED-WEB-0026, NEED-WEB-0030]
 source:
   source_id: SRC-0003
-  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L192"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L208"
   excerpt: "**Primary conversion:** `request-licence-quote`."
 evidence_sufficiency: S3
 fit_criterion:
@@ -36,7 +36,7 @@ ai_provenance:
 
 SRC-0003, DEC-0036
 
-Finding: Focus job line 191; route heading line 189.
+Finding: Focus job line 207; route heading line 205. Re-resolved 2026-09-25 — shifted by 16 lines; the excerpt is unchanged.
 
 ## Notes
 

@@ -10,7 +10,7 @@ area: pages
 needs: [NEED-WEB-0026]
 source:
   source_id: SRC-0003
-  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L198"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L214"
   excerpt: "request with a two-working-day promise"
 evidence_sufficiency: S2
 fit_criterion:

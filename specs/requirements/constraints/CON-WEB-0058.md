@@ -10,7 +10,7 @@ area: scope-boundaries
 needs: [NEED-WEB-0002]
 source:
   source_id: SRC-0003
-  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L32"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L42"
   excerpt: "never labelled \"Portalize\" — the product name is not the visitor's word"
 evidence_sufficiency: S2
 fit_criterion: UNKNOWN

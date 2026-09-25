@@ -29,9 +29,9 @@ On `/dein-kalender`, the website SHALL introduce the product name "Portalize" on
 
 SRC-0003#navigation
 
-Unlocatable: "Portalize" occurs exactly once in SRC-0003 (line 32) and only as a prohibition on the navigation label; nothing licenses introducing the name once at the 480 € tier (lines 169–171 describe that tier without naming the product).
+Unlocatable: "Portalize" occurs exactly once in SRC-0003 (line 42) and only as a prohibition on the navigation label; nothing licenses introducing the name once at the 480 € tier (lines 185–187 describe that tier without naming the product).
 
-Finding: Shares the #navigation anchor with CON-WEB-0058, but line 32 supports only the prohibition, not this narrower permission.
+Finding: Shares the #navigation anchor with CON-WEB-0058, but line 42 supports only the prohibition, not this narrower permission. Re-resolved 2026-09-25 — the amendment shifted both positions and added nothing that licenses the permission, so the locator stays UNKNOWN.
 
 ## Rationale
 

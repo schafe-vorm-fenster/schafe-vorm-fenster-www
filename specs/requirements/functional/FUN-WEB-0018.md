@@ -10,7 +10,7 @@ area: pages
 needs: [NEED-WEB-0021, NEED-WEB-0024]
 source:
   source_id: SRC-0003
-  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L222"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L253"
   excerpt: "This is the only list-shaped page on the"
 evidence_sufficiency: S2
 fit_criterion:
@@ -36,7 +36,7 @@ ai_provenance:
 
 SRC-0003#archive
 
-Finding: "Primary conversion: none." is line 219; "deliberately not a destination" continues on line 223.
+Finding: "Primary conversion: none." is line 250; "deliberately not a destination" continues on line 254. Re-resolved 2026-09-25 — shifted by 31 lines; the excerpt is unchanged.
 
 ## Notes
 

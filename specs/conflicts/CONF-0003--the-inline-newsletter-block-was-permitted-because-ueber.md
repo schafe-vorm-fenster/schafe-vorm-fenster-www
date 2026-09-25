@@ -28,7 +28,7 @@ The inline newsletter block was permitted because /ueber-uns had no conversion o
   > `/ueber-uns` has no primary conversion of its own, so the
 
 - **DEC-0081** — DEC-0081 §6 gives /ueber-uns the booking as its primary conversion.
-  `specs/decisions/DEC-0081--contact-section-replaces-the-contact-form.md#L114`
+  `specs/decisions/DEC-0081--contact-section-replaces-the-contact-form.md#L118`
   > So `/ueber-uns` declares `primaryConversion: request-product-briefing`,
 
 ## Impact

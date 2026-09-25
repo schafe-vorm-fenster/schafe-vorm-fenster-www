@@ -10,7 +10,7 @@ area: pages
 needs: [NEED-WEB-0010, NEED-WEB-0014]
 source:
   source_id: SRC-0003
-  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L107"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L123"
   excerpt: "**Primary conversion:** `register-as-publisher`."
 evidence_sufficiency: S2
 fit_criterion:
@@ -36,7 +36,7 @@ ai_provenance:
 
 SRC-0003#publish-our-dates-mitmachen
 
-Finding: Focus job line 106; route heading line 104.
+Finding: Focus job line 122; route heading line 120. Re-resolved 2026-09-25 — shifted by 16 lines; the excerpt is unchanged.
 
 ## Notes
 

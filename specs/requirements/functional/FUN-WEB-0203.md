@@ -10,7 +10,7 @@ area: pages
 needs: [NEED-WEB-0026]
 source:
   source_id: SRC-0003
-  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L198"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L214"
   excerpt: "request with a two-working-day promise"
 evidence_sufficiency: S2
 fit_criterion:
@@ -34,7 +34,7 @@ On `/deine-region`, the website SHALL state the two-working-day response promise
 
 SRC-0003#for-a-whole-region
 
-Finding: Same line also carries BUS-WEB-0016; it sits in the `/deine-region` structure bullet (lines 194–199).
+Finding: Same line also carries BUS-WEB-0016; it sits in the `/deine-region` structure bullet (lines 210–215). Re-resolved 2026-09-25 — shifted by 16 lines; the excerpt is unchanged.
 
 ## Notes
 

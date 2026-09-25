@@ -10,8 +10,8 @@ area: pages
 needs: [NEED-WEB-0024, NEED-WEB-0025]
 source:
   source_id: SRC-0003
-  loc: "UNKNOWN"
-  excerpt: "UNKNOWN"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L221"
+  excerpt: "**Primary conversion:** `request-product-briefing`. The closing CTA"
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of FUN-WEB-0017 that pass"
@@ -36,11 +36,9 @@ ai_provenance:
 
 SRC-0003, DEC-0036, DEC-0052, DEC-0081
 
-Unlocatable: SRC-0003 line 205 states for `/ueber-uns`: "Primary conversion: none of its own; the closing CTA offers all three jobs" — the opposite of `request-product-briefing` as primary; the conversion map (line 234) does not list `/ueber-uns` either.
+Finding: Re-resolved 2026-09-25. SRC-0003 line 221 now gives `/ueber-uns` the conversion this row states, and the conversion map lists the page at line 265. Line 222 adds "nothing above the fold does", which is what this row means by the closing block and the contact section — both sit below the first viewport (DEC-0081 §6, A3 of the audit). The secondary `subscribe-to-newsletter` is line 51 of the same source, "appears a second time inline on `/ueber-uns`, where the origin story", at the secondary weight DEC-0052 §4 gives it.
 
-Finding: The statement follows DEC-0081 §6 / DEC-0052 §4 as amended; SRC-0003 still carries the unamended "none of its own". The disagreement is recorded as a deviation, not settled by precedence (DEC-0104 §2).
-
-Deviation: `go-to-market-os/concept/website-information-architecture.concept.md#L205` says "Primary conversion: none of its own; the closing CTA offers all". This requirement gives the page `request-product-briefing`, on DEC-0081 §6: a reader who finishes the provenance page is at the closest thing this site has to a sales conversation. The specification carries the truth (DEC-0104 §1); DEM-0001 asks the source to follow, including the conversion-map row at line 234.
+Amendment 2026-09-25: the recorded deviation against old line 205 is withdrawn. Hub PR #510 replaced "Primary conversion: none of its own; the closing CTA offers all three jobs" and added the missing conversion-map row, which is the edit DEM-0001 required; DEM-0001 is ANSWERED and CONF-0014 records the amendment as the NEW_VERSION it asked for. The locator is a position instead of UNKNOWN.
 
 ## Notes
 

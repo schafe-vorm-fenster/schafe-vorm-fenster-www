@@ -24,7 +24,7 @@ The web-font budget: the requirement admits 50 KB, the source excludes it
 ## Positions
 
 - **NFR-WEB-0055** — The requirement allows exactly 50 KB.
-  `specs/requirements/quality/NFR-WEB-0055.md#L25`
+  `specs/requirements/quality/NFR-WEB-0055.md#L26`
   > Compressed size of the web fonts of the website SHALL be <= 50 KB
 
 - **SRC-0007** — The adopted budget is strictly under 50KB.

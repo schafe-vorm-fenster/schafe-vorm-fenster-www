@@ -10,7 +10,7 @@ area: pages
 needs: [NEED-WEB-0015]
 source:
   source_id: SRC-0003
-  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L169"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L185"
   excerpt: "*Under your name — 480 €/year.* Your places, categories, actors;"
 evidence_sufficiency: S3
 fit_criterion:
@@ -34,7 +34,7 @@ On `/dein-kalender`, the website SHALL publish the licence price of 480 €/year
 
 SRC-0003, DEC-0060, DEC-0052
 
-Finding: That the price is published is stated by the pricing rule on line 176 ("480 € is public because the offering is").
+Finding: That the price is published is stated by the pricing rule on line 192 ("480 € is public because the offering is"). Re-resolved 2026-09-25 — shifted by 16 lines; the excerpt is unchanged.
 
 ## Notes
 

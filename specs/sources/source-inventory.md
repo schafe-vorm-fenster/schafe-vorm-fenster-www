@@ -73,12 +73,22 @@ C = currency, Cp = completeness, Sp = specificity, IC = internal consistency.
 - **SRC-0002** — Sp 3: it carries the formula, the weights and the radius.
   Cp 2: Q-0019 — the `audiences` field its own `w_job` term needs is not
   modelled.
-- **SRC-0003** — C 1, and this is the sharpest of the eighteen. Line 35 says
-  *"Contact and newsletter live in the footer"* and `CON-WEB-0061` forbids
-  exactly that on DEC-0081's authority; line 205 gives `/ueber-uns`
-  *"Primary conversion: none of its own"* and `FUN-WEB-0017` gives it
-  `request-product-briefing` on DEC-0081 §6's. Two decisions have overtaken
-  an unamended source. Q-0028 records a third amendment awaiting review.
+- **SRC-0003** — C 1. This was the sharpest of the eighteen until 2026-09-25:
+  line 35 said *"Contact and newsletter live in the footer"* against
+  `CON-WEB-0061`, and line 205 gave `/ueber-uns` *"Primary conversion: none of
+  its own"* against `FUN-WEB-0017`. **Both are amended** — hub commit `ee17e4e`
+  (PR #510) — and the two requirements now cite lines 45 and 221 of the same
+  document, which say what they say; `DEM-0001` is `ANSWERED` and the deviation
+  records are withdrawn. C stays 1 on what is left: the `/dein-ort/starten`
+  brief at line 143 is still *"Draft 2026-09-09 — … awaiting review"* after two
+  weeks, with `FUN-WEB-0158` and `FUN-WEB-0159` resting on it (Q-0028,
+  DEM-0025), and the companies open point at lines 274–275 is still open. Every
+  locator into this file moved with the amendment, which is measured in the
+  locator table of the re-resolution run rather than asserted here. **Whether
+  the amendment lifts C from 1 to 2 — and with it the level from `low` to
+  `medium`, since C is the only dimension at 1 — is not decided here**: a level
+  is what the `S0–S3` gates read, so it has dependants, which puts it above the
+  low impact level `POL-GRADED-BY-IMPACT` lets an agent decide at.
 - **SRC-0004** — C 1: the v2.0 boards of SRC-0014 replaced its visual layer.
   A 2: a prototype is a role holder's illustration, not a mandate.
 - **SRC-0005** — C 1 is the inventory's own words: *"partly overtaken by

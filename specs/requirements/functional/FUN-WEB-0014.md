@@ -10,7 +10,7 @@ area: pages
 needs: [NEED-WEB-0015, NEED-WEB-0016, NEED-WEB-0019]
 source:
   source_id: SRC-0003
-  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L156"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L172"
   excerpt: "**Primary conversion:** `buy-calendar-licence`; equal-weight"
 evidence_sufficiency: S3
 fit_criterion:
@@ -36,7 +36,7 @@ ai_provenance:
 
 SRC-0003, DEC-0036
 
-Finding: `request-product-briefing` continues on line 157; focus job line 155.
+Finding: `request-product-briefing` continues on line 173; focus job line 171. Re-resolved 2026-09-25 — shifted by 16 lines; the excerpt is unchanged.
 
 ## Notes
 

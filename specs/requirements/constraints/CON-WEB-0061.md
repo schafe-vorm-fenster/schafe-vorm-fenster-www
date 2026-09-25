@@ -10,8 +10,8 @@ area: pages
 needs: [NEED-WEB-0015, NEED-WEB-0025]
 source:
   source_id: SRC-0003
-  loc: "UNKNOWN"
-  excerpt: "UNKNOWN"
+  loc: "go-to-market-os/concept/website-information-architecture.concept.md#L45"
+  excerpt: "Contact is not a footer element."
 evidence_sufficiency: S3
 fit_criterion:
   scale: "acceptance criteria of CON-WEB-0061 that pass"
@@ -34,11 +34,9 @@ The solution SHALL NOT place contact inside the footer, imposed by DEC-0081.
 
 SRC-0003#navigation, DEC-0012, DEC-0039, DEC-0052, DEC-0081
 
-Unlocatable: SRC-0003 states the opposite: line 35 reads "Contact and newsletter live in the footer". No line prohibits contact in the footer.
+Finding: Re-resolved 2026-09-25. SRC-0003 now states the prohibition in its own words at line 45 — "Contact is not a footer element." — and line 47 gives the placement this constraint implies, "on every page between that page's closing block and the footer". The prohibition itself is still imposed by DEC-0081; the source now agrees with it rather than merely being silent, so the locator is a position instead of UNKNOWN.
 
-Finding: The prohibition comes from DEC-0081. SRC-0003 says the opposite and has not been amended, so the disagreement is recorded as a deviation rather than resolved by either side winning silently (DEC-0104 §2).
-
-Deviation: `go-to-market-os/concept/website-information-architecture.concept.md#L35` says "Contact and newsletter live in the footer, together with the legal links". This constraint says the opposite, on DEC-0081: contact is a standing section above the footer, not an entry inside it. The specification carries the truth (DEC-0104 §1) and the source is asked to follow through DEM-0001.
+Amendment 2026-09-25: the recorded deviation against old line 35 is withdrawn, not resolved in this requirement's favour. Hub PR #510 struck the sentence "Contact and newsletter live in the footer, together with the legal links" that the deviation named, which is exactly the edit DEM-0001 required, so DEM-0001 is ANSWERED and CONF-0013 records the amendment as the NEW_VERSION it asked for. Nothing is left for a `Deviation:` line to name (DEC-0104 §2 — a deviation record without a live disagreement is noise).
 
 ## Rationale
 
