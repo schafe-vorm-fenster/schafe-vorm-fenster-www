@@ -29,9 +29,8 @@ describe("resolvePlaceOutcome", () => {
     expect(outcome.kind === "covered" && outcome.place.name).toBe("Quilow");
   });
 
-  it("answers `covered` for a postcode that resolves", async () => {
-    const outcome = await resolvePlaceOutcome("07743");
-    expect(outcome.kind).toBe("covered");
+  it("answers `uncovered` for five typed digits — the place search takes a name, not a postcode (DEC-0079)", async () => {
+    expect(await resolvePlaceOutcome("07743")).toEqual({ kind: "uncovered", query: "07743" });
   });
 
   it("answers `uncovered` for the fixture's uncovered postcode — TS-WEB-0008 D7 row 3", async () => {

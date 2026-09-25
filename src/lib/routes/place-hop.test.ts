@@ -38,10 +38,8 @@ describe("TS-WEB-0021-A7: a value that now resolves leaves `/dein-ort/starten`",
     );
   });
 
-  it("resolves a postcode to the community's slug, not to the postcode", async () => {
-    await expect(hop("/dein-ort/starten", "ort=17509")).resolves.toMatch(
-      /^\/dein-ort\?ort=[a-z-]+$/,
-    );
+  it("resolves a typed name to the community's slug, not to the typed string (DEC-0079)", async () => {
+    await expect(hop("/dein-ort/starten", "ort=Quilow")).resolves.toBe("/dein-ort?ort=quilow");
   });
 
   it("keeps the language prefix", async () => {

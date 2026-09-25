@@ -22,8 +22,10 @@
  * carries instead is its build date, which `snapshotBuiltAt()` already
  * expresses for every other committed artefact.
  *
- * What it does **not** carry: postcodes (the public index has none — ZIP
- * search stays geo-api's, and stays token-gated) and county ids.
+ * What it does **not** carry: postcodes (the public index has none, and the
+ * place search offers none — DEC-0079) and county ids. What it **does**
+ * carry beside the name is the municipality, which the typeahead prints in
+ * brackets (TS-WEB-0008 D7a: "Ort (Gemeinde)").
  */
 
 import index from "@/src/generated/snapshots/communities.json";
@@ -59,8 +61,12 @@ function toPlace(entry: IndexEntry): Place {
     slug: entry.slug,
     lat: entry.lat,
     lng: entry.lng,
+    ...(entry.municipality ? { municipality: entry.municipality } : {}),
   };
 }
+
+/** D7a's row budget: 3–4 rows, never paged, never scrolled. Four is the cap (DEC-0119). */
+export const MAX_NAME_MATCHES = 4;
 
 /**
  * Fold what a German place name spells differently from what a visitor types:
@@ -96,13 +102,16 @@ const BY_SLUG = new Map<string, IndexEntry>(ENTRIES.map((entry) => [entry.slug, 
 /**
  * Name search, ranked the way a typeahead has to rank: an exact name first,
  * then a name that starts with what was typed, then one that contains it,
- * then a municipality that does — alphabetically inside each rank, so the
- * order is stable between two identical requests.
+ * then a municipality that starts with it, then one that contains it —
+ * alphabetically inside each rank, so the order is stable between two
+ * identical requests. Either way the suggestion is the place, never the
+ * municipality (TS-WEB-0008 D7a).
  *
  * Minimum two characters: one letter matches hundreds of villages, and a
- * suggestion list nobody can read is worse than none.
+ * suggestion list nobody can read is worse than none. Five typed digits are
+ * a name like any other here: nothing is called one, and nothing matches.
  */
-export function searchByName(query: string, limit = 6): Place[] {
+export function searchByName(query: string, limit = MAX_NAME_MATCHES): Place[] {
   const needle = fold(query);
   if (needle.length < 2) return [];
 
@@ -117,7 +126,9 @@ export function searchByName(query: string, limit = 6): Place[] {
             ? 2
             : municipality.startsWith(needle)
               ? 3
-              : -1;
+              : municipality.includes(needle)
+                ? 4
+                : -1;
     if (rank >= 0) ranked.push({ entry, rank });
   }
 

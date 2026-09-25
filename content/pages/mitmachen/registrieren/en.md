@@ -43,7 +43,7 @@ only on step 1 (TS-WEB-0023 D7).
 
 **Question:** Which place do you want to publish for?
 
-**Search input (placeholder):** Your postcode
+**Search input (placeholder):** Your place
 
 Pre-filled, visible, and editable when `?ort=` arrives from
 `/dein-ort/starten`, `/mitmachen`, or the empty calendar view

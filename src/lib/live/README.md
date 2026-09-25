@@ -27,7 +27,9 @@ A page sees one thing: an **envelope**.
 
 | BFF route | Interface module | Backend today | Serves |
 | --- | --- | --- | --- |
-| `GET /api/places/search?q=` | `places.ts` → `searchPlaces()` | **real** for a name (the committed index), **mock** for a ZIP (no `GEOAPI_READ_TOKEN`) | the place search and its typeahead, position 0 |
+| `GET /api/places/search?q=` | `places.ts` → `searchPlaces()` | **real** — a name against the committed index (DEC-0079: the search takes a name and nothing else) | the place search and its suggestion overlay, position 0 |
+| `GET /api/places/search?zip=` | `places.ts` → `searchPlacesByZip()` | **mock** without `GEOAPI_READ_TOKEN` | the order flow's scope step only (TS-WEB-0025 D3, DEC-0079 §7) — not a search surface |
+| `GET /api/places/nearest?lat=&lng=` | `places.ts` → `nearestCoveredPlace()` | **real** — the committed index (geo-api's proximity search with a token) | the "use my location" control beside the search (TS-WEB-0010 D5, DEC-0119); `no-store`, never cached by coordinates |
 | `GET /api/places/{slug}/events?window=` | `places.ts` → `placeEvents()` | **real** — the public village calendar | position 1, dates in the place, and the empty-state verdict |
 | `GET /api/nearby?lat=&lng=&radius=` | `nearby.ts` → `nearbyEvents()` | **real** — the index cuts the radius, the public calendar carries the dates | position 2, this week within ~15 km |
 | `GET /api/region/{county}/examples` | `region.ts` → `regionExamples()` | **real, approximated** — no activity ranking exists upstream (DEC-0034) | position 3, active example places |
@@ -66,9 +68,10 @@ row 1 with no code change; take the network away and it falls to row 3.
 
 What row 2 **cannot** do, and does not pretend to:
 
-- **no postcode lookup.** No public surface carries a ZIP, so ZIP search
-  stays geo-api's and stays token-gated. A typed name is answered; a typed
-  postcode falls to the mock.
+- **no postcode lookup.** No public surface carries a ZIP, so the order
+  flow's postcode lookup stays geo-api's and stays token-gated. The place
+  search never needs one: it takes a name, and five typed digits are a name
+  that matches nothing (DEC-0079).
 - **no county query.** The public calendar answers for a community and its
   surroundings, so `region.ts` approximates the county from its showcase
   community's region feed and says so.
@@ -269,8 +272,12 @@ const response = await fetch(`/api/places/search?q=${encodeURIComponent(value)}`
 const { data, demo } = (await response.json()) as BffResponse<PlaceSearchResult>;
 ```
 
-`place-search` works without JavaScript as a plain GET form; the typeahead is
-an enhancement on top of it (TS-WEB-0008 D7).
+`place-search` works without JavaScript as a plain GET form; the suggestion
+overlay is an enhancement on top of it (TS-WEB-0008 D7a). The "use my location"
+control beside it (`locate-control.tsx`) asks the browser only on a click,
+sends the coordinates once to `/api/places/nearest`, and navigates to the
+answered `?ort=<slug>` — nothing about the position is stored on either side
+(TS-WEB-0010 D5, DEC-0119).
 
 ## Caching
 

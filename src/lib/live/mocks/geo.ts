@@ -5,15 +5,17 @@
  * offers, so `places.ts` calls one or the other without knowing which. What
  * it stands in for, measured against the pinned specification:
  *
- *  - **name search** (Q-0025) does not exist upstream at all;
+ *  - **name search** (Q-0025) does not exist upstream at all — the committed
+ *    index answers it for real, this mock only under `LIVE_DATA=mock`;
  *  - **coordinate → county** (Q-0032) and **nearest covered community**
  *    (Q-0051) have no operation;
  *  - **a caller-supplied radius** (Q-0038) is not a parameter, so the mock
  *    answers the same shape the real proximity search does and the ~15 km cut
  *    stays in `widening.ts` for both.
  *
- * Where the real geo-api *does* answer (ZIP search, slug lookup) this mock is
- * used only because the environment has no read token — see `config.ts`.
+ * Where the real geo-api *does* answer (the order flow's postcode lookup,
+ * slug lookup, proximity search) this mock is used only because the
+ * environment has no read token — see `config.ts`.
  */
 
 import {
@@ -42,14 +44,18 @@ export function mockSearchByZip(zip: string): Place[] {
 }
 
 /**
- * Name search (Q-0025). The real endpoint does not exist; the mock matches on
- * a case-insensitive prefix over the demo places, so the typeahead of TS-WEB-0008
- * D7 is reviewable as the feature it will be.
+ * Name search. The real one is the committed index (`place-index.ts`); the
+ * mock matches a case-insensitive substring over the demo places' names
+ * **and** municipalities, the way the index does (TS-WEB-0008 D7a), so the
+ * typeahead is reviewable under `LIVE_DATA=mock` with the same shape.
  */
 export function mockSearchByName(name: string): Place[] {
   const needle = name.trim().toLowerCase();
   if (needle.length < 2) return [];
-  return DEMO_PLACES.filter((place) => place.name.toLowerCase().includes(needle));
+  return DEMO_PLACES.filter(
+    (place) =>
+      place.name.toLowerCase().includes(needle) || (place.municipality ?? "").toLowerCase().includes(needle),
+  );
 }
 
 /** Proximity search — nearest first, capped like the real default (10). */

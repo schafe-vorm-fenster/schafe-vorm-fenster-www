@@ -104,15 +104,13 @@ states are layout logic, not part of this file. Placeholders in
 
 **Headline:** What's on where you live?
 
-**Search input (placeholder):** Your postcode
+**Search input (placeholder):** Your place
 
 **Button:** Search
 
-**Helper text under the field:** Search by place name is coming — until then, the postcode works fine.
+**Helper text under the field:** Type the place name — suggestions start at the second letter.
 
-Rationale: place search today runs on postcode only (Q-0025, geo-api
-name search is pending). The limitation is stated in the search field
-itself rather than in a separate error message.
+<!-- source_note: the placeholder "Your place" is the owner's wording for this field (content/pages/deine-region/en.md, slot 3); the helper text is the existing dictionary string (src/lib/i18n/dictionary.ts, search.hint). The postcode wording and the interim rationale went with DEC-0079 §1 (T-07, DEC-0119). -->
 
 ## Slot 2 — Place known, dates exist (Block 1 / State S2)
 

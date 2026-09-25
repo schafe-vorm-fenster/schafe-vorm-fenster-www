@@ -138,7 +138,7 @@ block 1's offer text changes.
 
 **Geo badge on the module:** From the region
 
-**Hint below the search field:** Searching by place name is still to come — until then a postcode does it.
+**Hint below the search field:** Type the place name — suggestions start at the second letter.
 
 **Transition into the module:** This is what it looks like once a place is in:
 

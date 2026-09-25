@@ -41,13 +41,16 @@ export const DEMO_COUNTY = { id: "geoname.900001", name: "Vorpommern-Greifswald"
  * behaviours, and a seventh divisor would move all of them.
  */
 export const DEMO_PLACES: readonly Place[] = [
-  { communityId: "geoname.900101", name: "Schlatkow", slug: "schlatkow", lat: 54.0, lng: 13.4, county: DEMO_COUNTY },
-  { communityId: "geoname.900102", name: "Schmatzin", slug: "schmatzin", lat: 54.03, lng: 13.44, county: DEMO_COUNTY },
-  { communityId: "geoname.900103", name: "Rubkow", slug: "rubkow", lat: 54.06, lng: 13.47, county: DEMO_COUNTY },
-  { communityId: "geoname.900104", name: "Quilow", slug: "quilow", lat: 54.09, lng: 13.52, county: DEMO_COUNTY },
-  { communityId: "geoname.900105", name: "Groß Kiesow", slug: "gross-kiesow", lat: 54.2, lng: 13.7, county: DEMO_COUNTY },
-  { communityId: "geoname.900106", name: "Lassan", slug: "lassan", lat: 54.35, lng: 13.95, county: DEMO_COUNTY },
-  { communityId: "geoname.900107", name: "Züssow", slug: "zuessow", lat: 54.38, lng: 14.02, county: DEMO_COUNTY },
+  // The municipality is what the typeahead prints in brackets (TS-WEB-0008 D7a,
+  // "Ort (Gemeinde)"); the mock carries one per place so the row format is
+  // reviewable under `LIVE_DATA=mock` too.
+  { communityId: "geoname.900101", name: "Schlatkow", slug: "schlatkow", lat: 54.0, lng: 13.4, municipality: "Schmatzin", county: DEMO_COUNTY },
+  { communityId: "geoname.900102", name: "Schmatzin", slug: "schmatzin", lat: 54.03, lng: 13.44, municipality: "Schmatzin", county: DEMO_COUNTY },
+  { communityId: "geoname.900103", name: "Rubkow", slug: "rubkow", lat: 54.06, lng: 13.47, municipality: "Rubkow", county: DEMO_COUNTY },
+  { communityId: "geoname.900104", name: "Quilow", slug: "quilow", lat: 54.09, lng: 13.52, municipality: "Groß Polzin", county: DEMO_COUNTY },
+  { communityId: "geoname.900105", name: "Groß Kiesow", slug: "gross-kiesow", lat: 54.2, lng: 13.7, municipality: "Groß Kiesow", county: DEMO_COUNTY },
+  { communityId: "geoname.900106", name: "Lassan", slug: "lassan", lat: 54.35, lng: 13.95, municipality: "Lassan", county: DEMO_COUNTY },
+  { communityId: "geoname.900107", name: "Züssow", slug: "zuessow", lat: 54.38, lng: 14.02, municipality: "Züssow", county: DEMO_COUNTY },
 ];
 
 /**

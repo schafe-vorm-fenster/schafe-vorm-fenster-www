@@ -231,11 +231,14 @@ export interface Dictionary {
     original: string;
   };
   /**
-   * `place-search`'s own ZIP-only-until-Q-025 words (TS-WEB-0008 D7). A page
-   * usually supplies its own copy from content, but the component's default
-   * — used wherever a page does not — hard-coded German and rendered it on
-   * `/en` too (F-2-4), the same failure `live` and `media` above exist to
-   * prevent.
+   * `place-search`'s own words (TS-WEB-0008 D7). A page usually supplies its
+   * own copy from content, but the component's default — used wherever a
+   * page does not — hard-coded German and rendered it on `/en` too (F-2-4),
+   * the same failure `live` and `media` above exist to prevent.
+   *
+   * None of them names a postcode, in either language: the search takes a
+   * place name and offers nothing else (DEC-0079 §1, TS-WEB-0008-A16 —
+   * `pnpm check:search-wording` reads these keys).
    */
   search: {
     label: string;
@@ -247,6 +250,15 @@ export interface Dictionary {
     suggestionsLabel: string;
     /** What the typeahead says when the index knows no such place. */
     noSuggestions: string;
+    /**
+     * The "use my location" control beside the field (TS-WEB-0010 D5,
+     * TS-WEB-0008 D7's coordinates row). **Placeholder wording** — nobody has
+     * written it (DEC-0119): rendered with `data-demo="true"`, listed in
+     * `state/open.md`, replaced by the owner.
+     */
+    locate: string;
+    /** What activating the control will do — D5: the control "states what will happen". Placeholder, see `locate`. */
+    locateExplains: string;
   };
   /**
    * `outbound-link`'s own announcements — hard-coded German regardless of
@@ -326,7 +338,7 @@ const de: Dictionary = {
   },
   notFound: {
     title: "Seite nicht gefunden",
-    body: "Diese Adresse gibt es nicht. Gib deine Postleitzahl ein, dann zeigen wir dir, was in deinem Ort los ist.",
+    body: "Diese Adresse gibt es nicht.",
     backHome: "Zur Startseite",
     jobsHeading: "Oder du bist mit einem anderen Anliegen hier:",
   },
@@ -377,12 +389,16 @@ const de: Dictionary = {
     original: "Original ansehen",
   },
   search: {
-    label: "Ort oder Postleitzahl",
-    placeholder: "Ortsname oder Postleitzahl",
+    // "Dein Ort": the owner's own label for this field (content/pages/deine-region/de.md:166);
+    // "Ortsname": the noun the copy guide names in place of the postcode (concept/website-copy-guide.md:510).
+    label: "Dein Ort",
+    placeholder: "Ortsname",
     hint: "Tipp den Ortsnamen ein — Vorschläge kommen ab dem zweiten Buchstaben.",
     submit: "Suchen",
     suggestionsLabel: "Vorschläge",
     noSuggestions: "Kein Ort gefunden.",
+    locate: "Meinen Standort verwenden",
+    locateExplains: "Fragt den Browser einmal nach deinem Standort und öffnet den nächsten Ort. Gespeichert wird nichts.",
   },
   outboundLink: {
     newTab: "öffnet neuen Tab",
@@ -446,7 +462,7 @@ const en: Dictionary = {
   },
   notFound: {
     title: "Page not found",
-    body: "This address does not exist. Type your postcode and we will show you what is on where you live.",
+    body: "This address does not exist.",
     backHome: "To the home page",
     jobsHeading: "Or you are here for something else:",
   },
@@ -497,12 +513,16 @@ const en: Dictionary = {
     original: "View the original",
   },
   search: {
-    label: "Place or postcode",
-    placeholder: "Place name or postcode",
+    // "Your place": the owner's own label for this field (content/pages/deine-region/en.md:167);
+    // "place name": the copy guide's noun for the postcode (concept/website-copy-guide.md:533).
+    label: "Your place",
+    placeholder: "Place name",
     hint: "Type the place name — suggestions start at the second letter.",
     submit: "Search",
     suggestionsLabel: "Suggestions",
     noSuggestions: "No place found.",
+    locate: "Use my location",
+    locateExplains: "Asks your browser once for your location and opens the nearest place. Nothing is stored.",
   },
   outboundLink: {
     newTab: "opens new tab",

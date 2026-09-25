@@ -42,7 +42,8 @@ describe("TS-WEB-0023-A6: a municipality hit with several communities does not a
       return {
         ...actual,
         resolvePlace: async () => undefined,
-        searchPlaces: async () => ({
+        // T-07 / DEC-0119: the postcode gate calls `searchPlacesByZip` now.
+        searchPlacesByZip: async () => ({
           data: {
             query: "17389",
             outcome: {

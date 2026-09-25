@@ -4,11 +4,23 @@
   gap: var(--space-3);
 }
 
-/* The positioning context the typeahead popup hangs from, so the popup can
-   overlay the page instead of pushing the hint and the suggestion chips
-   down — the module's reserved 56 px stays 56 px whether it is open or not. */
+/* The positioning context the suggestion overlay hangs from, so the overlay
+   floats over the page instead of pushing the hint, the geolocation control
+   and the chips down — the module's reserved 56 px stays 56 px whether it
+   is open or not (TS-WEB-0008 D7a "Layout"). */
 .fieldWrap {
   position: relative;
+}
+
+/* The helper line: the hint and, beside it, the "use my location" control.
+   One row where it fits, two where it does not; neither reserves space for
+   the overlay. */
+.meta {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  justify-content: space-between;
 }
 
 .hint {
