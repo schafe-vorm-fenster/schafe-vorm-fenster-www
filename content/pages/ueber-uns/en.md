@@ -11,8 +11,8 @@ content_type: section
 status: draft
 locale: en
 sources:
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"
   - "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"
   - "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"
   - "@schafe-vorm-fenster/proof@0.3.5"
@@ -29,8 +29,8 @@ sources:
   - "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"
   - "ia"
 derived_from:
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"
   - "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"
   - "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"
   - "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"
@@ -126,7 +126,7 @@ no other page.
 
 ## Slot 1 — Origin (h1, fixed)
 
-<!-- id: ueber-uns-1-origin; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/offerings@0.3.3#community-calendar", "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"]; status: draft -->
+<!-- id: ueber-uns-1-origin; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"]; status: draft -->
 
 **h1 (fixed, DEC-0036 §3 — not to be reworded):** Built in a village, run from a village.
 

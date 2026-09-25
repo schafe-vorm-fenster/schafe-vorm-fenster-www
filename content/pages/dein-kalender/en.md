@@ -12,9 +12,9 @@ status: draft
 locale: en
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"
   - "@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"
   - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
   - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
@@ -23,9 +23,9 @@ sources:
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"
   - "@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"
   - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
   - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
@@ -121,7 +121,7 @@ calendar is current again — and nobody here maintains it."
 
 ## Slot 2 — Contrast: today vs. with the product (4 rows)
 
-<!-- id: dein-kalender-2-contrast; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar", "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
+<!-- id: dein-kalender-2-contrast; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
 
 | Today | With the product |
 | --- | --- |
@@ -164,7 +164,7 @@ never republish anything for them. This is how the calendar above is set:
 
 ## Slot 4 — Three tiers under one question
 
-<!-- id: dein-kalender-4-tiers; content_type: tier; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar", "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar", "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"]; status: draft -->
+<!-- id: dein-kalender-4-tiers; content_type: tier; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: draft -->
 
 **Question heading:** Where should the calendar live?
 
@@ -213,7 +213,7 @@ this page.
 
 ## Slot 5 — Proof (3 elements, with images)
 
-<!-- id: dein-kalender-5-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"]; status: draft -->
+<!-- id: dein-kalender-5-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"]; status: draft -->
 
 Pool: the four proof ids `portalize-calendar` references
 (`kulturlandbuero-broellin`, `eichler-wasserschloss-quilow`,

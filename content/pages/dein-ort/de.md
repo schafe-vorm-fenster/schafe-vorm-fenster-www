@@ -21,7 +21,7 @@ sources:
   - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
   - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
   - "@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"
@@ -33,7 +33,7 @@ derived_from:
   - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
   - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
   - "@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
   - "ia"
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
@@ -312,7 +312,7 @@ dieser Block hinter das Nachbarschafts-Modul.
 
 ## Slot 8 — CTA-Zusicherung (Permanenz-Versprechen)
 
-<!-- id: dein-ort-8-permanence; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar"]; status: draft -->
+<!-- id: dein-ort-8-permanence; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
 **Zusicherungstext:** Kostenlos, ohne Anmeldung, dauerhaft: keine Einführungsstufe, die später wieder verschwindet.
 

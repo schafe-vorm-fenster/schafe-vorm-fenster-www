@@ -13,7 +13,7 @@ locale: de
 sources:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
   - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
   - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
@@ -23,7 +23,7 @@ sources:
 derived_from:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
   - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
   - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
@@ -156,7 +156,7 @@ Aufzählungspunkte da.
 
 ## Slot 3 — Publizierweg 1: WhatsApp
 
-<!-- id: mitmachen-3-path-whatsapp; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar"]; status: draft -->
+<!-- id: mitmachen-3-path-whatsapp; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
 **Titel:** Flyer per WhatsApp
 
@@ -170,7 +170,7 @@ Verfügbarkeit: `generally-available` (Hub-Datensatz `community-calendar`).
 
 ## Slot 4 — Publizierweg 2: eigener Kalender verbinden
 
-<!-- id: mitmachen-4-path-calendar; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar"]; status: draft -->
+<!-- id: mitmachen-4-path-calendar; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
 **Titel:** Euren eigenen Kalender verbinden
 
@@ -184,7 +184,7 @@ Verfügbarkeit: `generally-available` (Hub-Datensatz `community-calendar`).
 
 ## Slot 5 — Publizierweg 3: eigene Website als Quelle
 
-<!-- id: mitmachen-5-path-website; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar"]; status: draft -->
+<!-- id: mitmachen-5-path-website; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
 **Titel:** Eure Website als Quelle
 
@@ -261,7 +261,7 @@ Porträt von Zukunftswege Ost-Vorpommern, Januar 2026).
 ## Slot 8 — Abschluss-CTA mit Permanenz-Zusicherung
 
 <!-- clearance: pending für den Presse-Beleg — der Nordkurier-Eintrag von 2022 trägt kein `usage_rights` (Q-0045, `state/open.md` #1). Der Angebots-Datensatz selbst ist frei verwendbar. -->
-<!-- id: mitmachen-8-closing; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
+<!-- id: mitmachen-8-closing; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
 
 **Abschluss-Überschrift:** Der nächste Flyer kann der erste Termin sein.
 

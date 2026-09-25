@@ -13,7 +13,7 @@ locale: en
 sources:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
   - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
   - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
@@ -23,7 +23,7 @@ sources:
 derived_from:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
   - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
   - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
@@ -157,7 +157,7 @@ claimed, it simply no longer stands there as two more bullet points.
 
 ## Slot 3 — Publishing path 1: WhatsApp
 
-<!-- id: mitmachen-3-path-whatsapp; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar"]; status: draft -->
+<!-- id: mitmachen-3-path-whatsapp; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
 **Title:** Flyer by WhatsApp
 
@@ -171,7 +171,7 @@ Availability: `generally-available` (hub record `community-calendar`).
 
 ## Slot 4 — Publishing path 2: connect your own calendar
 
-<!-- id: mitmachen-4-path-calendar; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar"]; status: draft -->
+<!-- id: mitmachen-4-path-calendar; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
 **Title:** Connect your own calendar
 
@@ -185,7 +185,7 @@ Availability: `generally-available` (hub record `community-calendar`).
 
 ## Slot 5 — Publishing path 3: your website as the source
 
-<!-- id: mitmachen-5-path-website; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar"]; status: draft -->
+<!-- id: mitmachen-5-path-website; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
 **Title:** Your website as the source
 
@@ -263,7 +263,7 @@ Ost-Vorpommern portrait, January 2026).
 ## Slot 8 — Closing CTA with permanence reassurance
 
 <!-- clearance: pending for the press record — the 2022 Nordkurier entry carries no `usage_rights` (Q-0045, `state/open.md` #1). The offering record itself is free to use. -->
-<!-- id: mitmachen-8-closing; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
+<!-- id: mitmachen-8-closing; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
 
 **Closing heading:** The next flyer can be the first date.
 

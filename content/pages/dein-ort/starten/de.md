@@ -11,13 +11,13 @@ content_type: section
 status: draft
 locale: de
 sources:
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
   - "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"
   - "ia"
 derived_from:
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
   - "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"
@@ -75,7 +75,7 @@ Kalender-Zeile oder einer Zahl (TS-WEB-0021 D6).
 ## Slot 2 — Was es braucht
 
 <!-- clearance: pending für den Presse-Beleg — der Nordkurier-Eintrag von 2022 trägt kein `usage_rights` (Q-0045, state/open.md #1). Der Angebots-Datensatz selbst ist frei verwendbar. -->
-<!-- id: dein-ort-starten-2-was-es-braucht; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
+<!-- id: dein-ort-starten-2-was-es-braucht; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/media-echo@0.3.3#2022-nordkurier-plattform-doerfer"]; status: draft -->
 
 **Überschrift:** Damit {ort} im Kalender steht, reicht eine Person
 

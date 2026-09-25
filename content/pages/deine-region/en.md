@@ -16,9 +16,9 @@ status: draft
 locale: en
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"
-  - "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"
-  - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#custom-data-integration"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"
   - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
   - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
@@ -26,9 +26,9 @@ sources:
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"
-  - "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"
-  - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#custom-data-integration"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"
   - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
   - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
@@ -187,7 +187,7 @@ The same component as on `/dein-kalender` slot 3 (TS-WEB-0008 position 1′).
 
 ## Slot 5 — What it adds
 
-<!-- id: deine-region-5-was-dazukommt; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise", "@schafe-vorm-fenster/offerings@0.3.3#custom-data-integration"]; status: draft -->
+<!-- id: deine-region-5-was-dazukommt; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise", "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"]; status: draft -->
 
 **Heading:** What the county tier adds on top
 
@@ -203,7 +203,7 @@ never priced, with no CTA of its own (`promotion: on-request-only`).
 
 ## Slot 6 — Proof (3 elements)
 
-<!-- id: deine-region-6-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"]; status: draft -->
+<!-- id: deine-region-6-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: draft -->
 
 Pool: `eichler-wasserschloss-quilow`, `partner-network` — both
 `unverified` today (Q-0014). No reference case for an already delivered
@@ -251,7 +251,7 @@ a promise (F-2-57). The area stays empty until C11 is answered.
 
 ## Slot 8 — Price display
 
-<!-- id: deine-region-8-price; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"]; status: draft -->
+<!-- id: deine-region-8-price; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: draft -->
 
 **Text:** Price on request.
 

@@ -133,3 +133,49 @@ repeated per path.
   and `TS-WEB-0018 D5`'s `on-request-only` row is unchanged.
 - No price, no figure and no list of sources was written into a spec. Nothing
   moved off `DRAFT`.
+
+## Amendment 2026-09-25 — the source followed, and one thing it added is wrong
+
+`DEM-0065` is **ANSWERED**. Hub commit `8af2031` (PR #511) made both edits this
+record asked for and they are published as
+`@schafe-vorm-fenster/offerings@0.3.5`, which is what is installed here:
+
+- `community-calendar.offering.md` line 111 now states the rule in the
+  offering's own words — *"A source the platform already supports publishes
+  free."* — with the three standard sources on lines 112–113, the
+  system-not-format test on lines 118–123, and lines 230–234 declaring the list
+  owned there and expected to grow.
+- `custom-data-integration.offering.md` lines 104–110 put the standard sources
+  outside the paid scope and say so about the old wording: *"An ICS feed was
+  named here as part of the paid scope until 2026-09-25; that made the price
+  turn on the format rather than on the system, and it was wrong."*
+
+So `BUS-WEB-0017`'s locator moves from line 107, which carried the included
+publishing paths, to line 111, which carries the rule; the `Deviation:` line
+against `#L88` is **withdrawn**, because the sentence it named does not exist in
+0.3.5. `TS-WEB-0022 D11`'s source-list row no longer waits on the demand, so the
+banner may enumerate — from the package at build time, never from a list written
+in a spec.
+
+### The cooperations are not instances of the rule
+
+**Owner, 2026-09-25:** `kirche-mv.de`, VEVG Karlsburg and the Volkshochschulen
+are connected **without an invoice as explicit cooperations**, not because the
+price rule makes their sources free. They stay the reference cases of the
+**paid** `custom-data-integration` add-on, and that is now noted wherever they
+could be misread.
+
+The offering record derives the same zero from the rule instead. Its Open Points
+(lines 217–230) make `kirche-mv.de` paid *"only where a parser has to be written
+for that site per customer"* and say that *"wherever VEVG Karlsburg"* offers an
+ICS export *"the connection is free from now on"*. Two different reasons for the
+same zero, and only one of them generalises: as the record reads, the next
+institution with a waste-collection feed is quoted nothing on the strength of a
+rule, and the add-on loses its last paid reference case.
+
+Nothing about the boundary changes — DEC-0107's decision stands exactly as
+written. What is added is that a cooperation is a commercial choice and not an
+application of the rule. `DEM-0067` asks the offering owner for that
+distinction; per `specs/README.md` rule 1 this specification does not restate
+the hub's worked examples, so `BUS-WEB-0017`'s Notes and `TS-WEB-0022 D11` carry
+the prohibition rather than a corrected copy of the list.

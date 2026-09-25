@@ -67,8 +67,8 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(zod@4.4.3)
       '@schafe-vorm-fenster/offerings':
-        specifier: ^0.3.3
-        version: 0.3.3(zod@4.4.3)
+        specifier: ^0.3.5
+        version: 0.3.5(zod@4.4.3)
       '@schafe-vorm-fenster/partners':
         specifier: ^0.2.4
         version: 0.2.4(zod@4.4.3)
@@ -1447,6 +1447,9 @@ packages:
     resolution: {integrity: sha512-CjYVbaVjEICPhuzgo5WwIQlh9TniEUXYuIbROWBVAl53OvhEpdbI+SPRgmdx/Wf20bjS5YuK6Hwl2b6rLaCgfQ==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/goals/0.3.3/13cdc5930d133dc9e774390d65f3eb8b3d7ba611}
     peerDependencies:
       zod: ^4.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
 
   '@schafe-vorm-fenster/media-echo@0.3.3':
     resolution: {integrity: sha512-3mFs1BB+bV3w2mIewCReHp6sgWr+b/iBhaDoRW+f+BmQqECV4TpybJ8fg7PkkG3R/7EiOPEjWV5BXJO/kH+uUQ==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/media-echo/0.3.3/17c8ebda42fb7acb1edf466fb2d389c9a762a293}
@@ -1459,13 +1462,10 @@ packages:
       zod:
         optional: true
 
-  '@schafe-vorm-fenster/offerings@0.3.3':
-    resolution: {integrity: sha512-1WYywHGU8QvthTNUDuvw8yWtSVHHnUuNpq5iYWERyhNd0jPEDn2lJem8tvkofRS7UxtiJCsFP7cUOkc70EZXOg==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/offerings/0.3.3/fb4418dbe02413c86c8d3d798e46f7d4d9240dbd}
+  '@schafe-vorm-fenster/offerings@0.3.5':
+    resolution: {integrity: sha512-/DGiL5Uz6SU+WOWx0eCG498nRaVcJ53/KnxHQtt2KODX3ODpA6Wj6bHdvUKvh7QklEs7eyfknfe30FZPWsWYhw==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/offerings/0.3.5/d5d28bd1a95b45c7826ddc6bb4434db195ed63db}
     peerDependencies:
       zod: ^4.0.0
-    peerDependenciesMeta:
-      zod:
-        optional: true
 
   '@schafe-vorm-fenster/partners@0.2.4':
     resolution: {integrity: sha512-tDlyBAxA/Pm2j8kUzO7ZgDwzSOoZApDI5XXwXCXN2ExLH6FVJdKdN7T1YJZbAw83zks56hqzdaGxqIRwmnmMQw==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/partners/0.2.4/d3f272dbfeee1817fea7c3fde3e666527cd940e8}
@@ -5456,7 +5456,7 @@ snapshots:
       zod: 4.4.3
 
   '@schafe-vorm-fenster/goals@0.3.3(zod@4.4.3)':
-    dependencies:
+    optionalDependencies:
       zod: 4.4.3
 
   '@schafe-vorm-fenster/media-echo@0.3.3': {}
@@ -5465,8 +5465,8 @@ snapshots:
     optionalDependencies:
       zod: 4.4.3
 
-  '@schafe-vorm-fenster/offerings@0.3.3(zod@4.4.3)':
-    optionalDependencies:
+  '@schafe-vorm-fenster/offerings@0.3.5(zod@4.4.3)':
+    dependencies:
       zod: 4.4.3
 
   '@schafe-vorm-fenster/partners@0.2.4(zod@4.4.3)':

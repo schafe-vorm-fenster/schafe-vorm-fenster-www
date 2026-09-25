@@ -11,12 +11,12 @@ content_type: section
 status: draft
 locale: de
 sources:
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/audiences@0.3.3#municipalities"
   - "ia"
 derived_from:
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/audiences@0.3.3#municipalities"
   - "ia"
@@ -82,7 +82,7 @@ Kontoauskunft für die App (TS-WEB-0023 D8).
 
 ## Schritt 3 — Welcher Publizierweg
 
-<!-- id: registrieren-3-weg; content_type: form; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar"]; status: draft -->
+<!-- id: registrieren-3-weg; content_type: form; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
 **Frage:** Wie kommen eure Termine zu uns?
 

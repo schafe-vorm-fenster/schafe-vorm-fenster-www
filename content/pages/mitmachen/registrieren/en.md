@@ -11,12 +11,12 @@ content_type: section
 status: draft
 locale: en
 sources:
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/audiences@0.3.3#municipalities"
   - "ia"
 derived_from:
-  - "@schafe-vorm-fenster/offerings@0.3.3#community-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/audiences@0.3.3#municipalities"
   - "ia"
@@ -80,7 +80,7 @@ for the website — it's account information for the app (TS-WEB-0023 D8).
 
 ## Step 3 — Which publishing path
 
-<!-- id: registrieren-3-weg; content_type: form; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#community-calendar"]; status: draft -->
+<!-- id: registrieren-3-weg; content_type: form; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
 **Question:** How do your dates get to us?
 

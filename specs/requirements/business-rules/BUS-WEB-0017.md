@@ -10,8 +10,8 @@ area: scope-boundaries
 needs: [NEED-WEB-0015, NEED-WEB-0016]
 source:
   source_id: SRC-0008
-  loc: "@schafe-vorm-fenster/offerings/community-calendar.offering.md#L107"
-  excerpt: "Publishing paths included: maintaining dates in the actor's own Google Calendar"
+  loc: "@schafe-vorm-fenster/offerings/community-calendar.offering.md#L111"
+  excerpt: "**A source the platform already supports publishes free.**"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
 ai_provenance:
@@ -27,11 +27,13 @@ For a publishing path whose source the platform already supports, publishing cou
 
 ## Source
 
-SRC-0008 — `@schafe-vorm-fenster/offerings`, `community-calendar.offering.md#L98`–`#L115` and `custom-data-integration.offering.md#L82`–`#L100`, read in the installed package at 0.3.3. DEC-0107.
+SRC-0008 — `@schafe-vorm-fenster/offerings`, `community-calendar.offering.md#L98`–`#L125` and `custom-data-integration.offering.md#L92`–`#L114`, read in the installed package at **0.3.5**. DEC-0107.
 
 The position is given in the published package rather than in a hub repository path, because a published version is a fixed artefact and this one was the artefact read.
 
-Deviation: `@schafe-vorm-fenster/offerings/custom-data-integration.offering.md#L88` puts "an ICS feed" inside the paid add-on's included scope. DEC-0107 §2 makes a feed the platform already reads a standard source and therefore free, and narrows the add-on to the individual integration into a system the platform does not already support. The specification carries the truth (DEC-0104 §1); DEM-0065 asks the offering owner to follow.
+Finding: Re-resolved 2026-09-25 against 0.3.5. The offering now states this rule in its own words at line 111 of `community-calendar.offering.md`, with the three standard sources on lines 112–113 and the system-not-format test on lines 118–123; the previous locator, line 107, carried the included publishing paths and the excerpt wrapped onto line 108 even in 0.3.3. `custom-data-integration.offering.md` lines 104–110 now put the standard sources outside the paid scope in so many words, including "An ICS feed was named here as part of the paid scope until 2026-09-25 … and it was wrong".
+
+Amendment 2026-09-25: the recorded deviation against `custom-data-integration.offering.md#L88` in 0.3.3 is withdrawn. That line — "Included: interpreting the source — an interface, an ICS feed, or a web interface" — does not exist in 0.3.5, which is the edit DEM-0065 required, so DEM-0065 is ANSWERED. Nothing is left for a `Deviation:` line to name.
 
 ## Rationale
 
@@ -41,4 +43,6 @@ The rule states only the **free** side, and that is deliberate rather than a hal
 
 ## Notes
 
-Applied on the website by FUN-WEB-0204. The list of standard sources is the offering's, not this specification's, and DEM-0065 is open until the offering carries it.
+Applied on the website by FUN-WEB-0204. The list of standard sources is the offering's, not this specification's, and it carries it since 0.3.5 — lines 112–113, with lines 230–234 stating that the list is owned there and grows as the platform learns to read more sources.
+
+**The cooperations are not instances of this rule.** `kirche-mv.de`, VEVG Karlsburg and the Volkshochschulen are connected without an invoice as **explicit cooperations** (owner, 2026-09-25), not because their source is one the platform already supports. They remain the reference cases of the **paid** `custom-data-integration` add-on. Nothing in this specification may present them as examples of the free path, and the offering record's own Open Points now read the other way — `custom-data-integration.offering.md` lines 217–230 make `kirche-mv.de` free where no per-customer parser is needed and VEVG Karlsburg free "wherever" it offers an ICS export. That is the hub's statement, not this specification's, and DEM-0067 asks for it to be corrected rather than restating it here.

@@ -16,9 +16,9 @@ status: draft
 locale: de
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"
-  - "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"
-  - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#custom-data-integration"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"
   - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
   - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
@@ -26,9 +26,9 @@ sources:
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"
-  - "@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"
-  - "@schafe-vorm-fenster/offerings@0.3.3#portalize-calendar"
-  - "@schafe-vorm-fenster/offerings@0.3.3#custom-data-integration"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"
+  - "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"
+  - "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"
   - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
   - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
@@ -186,7 +186,7 @@ Dieselbe Komponente wie auf `/dein-kalender` Slot 3 (TS-WEB-0008 Position 1′).
 
 ## Slot 5 — Was dazukommt
 
-<!-- id: deine-region-5-was-dazukommt; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise", "@schafe-vorm-fenster/offerings@0.3.3#custom-data-integration"]; status: draft -->
+<!-- id: deine-region-5-was-dazukommt; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise", "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"]; status: draft -->
 
 **Überschrift:** Was der Landkreis-Tarif zusätzlich bringt
 
@@ -202,7 +202,7 @@ erwähnt, nie bepreist, ohne eigenen CTA (`promotion: on-request-only`).
 
 ## Slot 6 — Beleg (3 Elemente)
 
-<!-- id: deine-region-6-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"]; status: draft -->
+<!-- id: deine-region-6-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: draft -->
 
 Pool: `eichler-wasserschloss-quilow`, `partner-network` — beide heute
 `unverified` (Q-0014). Kein Referenzfall für ein bereits ausgeliefertes
@@ -251,7 +251,7 @@ eine Zusage (F-2-57). Die Fläche bleibt leer, bis C11 beantwortet ist.
 
 ## Slot 8 — Preisanzeige
 
-<!-- id: deine-region-8-price; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.3#portalize-enterprise"]; status: draft -->
+<!-- id: deine-region-8-price; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: draft -->
 
 **Text:** Preis auf Anfrage.
 
