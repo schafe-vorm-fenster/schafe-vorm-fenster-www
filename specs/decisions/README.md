@@ -152,3 +152,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0106 — The product name is an open question again — the website names no product until it closes, and the workaround is still forbidden](DEC-0106--the-product-name-is-open-again.md)
 - [DEC-0107 — A standard source publishes free; an individual integration into a system we do not already support is the paid add-on](DEC-0107--the-publishing-path-price-boundary.md)
 - [DEC-0108 — The registration embed is isolated with a notice above it — a notice is not consent, the banner-free requirement stands, and the residual legal risk is accepted on one route](DEC-0108--the-registration-embed-is-isolated-with-a-notice.md)
+- [DEC-0109 — On `/` only the WhatsApp scene becomes the explain module — the embed and provenance blocks stay scenes, and the module has to work in any of the three trait positions](DEC-0109--the-whatsapp-scene-becomes-the-explain-module.md)

@@ -96,6 +96,16 @@ the render form used to be `[FREE]` here, and this determination used to say
 Two specification-side artefacts said opposite things about the same component;
 this is the side that was wrong.
 
+**The component is also used once on `/`** — for the WhatsApp path only, in
+whichever of the three block positions the entry trait gives it
+(`TS-WEB-0019 D3a`, `DEC-0109`). Nothing below changes for it: the component is
+not forked and `/` supplies only the slot. The one difference is which artefact
+introduces the job. Here the hero is the WhatsApp scene and the path block is its
+step detail, so the "One appearance" rule above holds; on `/` there is no
+WhatsApp hero and the module **is** the job introduction, which `TS-WEB-0006 D7`
+says should be a scene block. That contradiction is `CONF-0026` and `Q-0080`, and
+it is that page's to carry, not this one's.
+
 | Property | Determination |
 | --- | --- |
 | Ordinal | one per module, mono display size, with the module title beside it |
@@ -252,7 +262,7 @@ FUN-WEB-0024, FUN-WEB-0030–0035, FUN-WEB-0149–0151 (TS-WEB-0005) · FUN-WEB-
 | **The permanence promise has no element in `@schafe-vorm-fenster/proof`.** The 2022 public commitment is held as a `media-echo` entry, referenced from the `community-calendar` offering; `proof/` carries nothing for it. Either mint a commitment-type proof element, or let TS-WEB-0005 selection accept a media-echo element in a CTA reassurance slot. Until then D7's promise is unpublishable and A11 fails open. | hub evidence owner |
 | ~~**"Six channels" is not enumerated.**~~ **Decided by DEC-0064 §2** — the channels become a list in the hub's messaging, and the **artefact is still owed** (Q-0050, DEM-0036, `ANSWERED`). Until it lands D3 forbids the numeral and the block states no number, which is a working rule rather than a blocked one. | hub messaging owner |
 | **Website-source import is alpha** (hub open point on `community-calendar`). D4 requires the status badge — confirm the state before the page ships and say what the badge must claim. | product |
-| **Does the explain module appear on `/`, and in which slot?** `SRC-0014` §"Explain module" says the component is *"reused unchanged on `/`"* and `TS-WEB-0019` never mentions it; the three scene blocks there are three different jobs with one mechanism each, not three steps of one path, so a scene cannot simply *be* one. Three options, none of them derivable from what is written: it replaces the three scene blocks, it coexists as a further block, or the guide's sentence is withdrawn. Recorded as **Q-0079** rather than decided here (audit A6, 2026-09-25 — the review left it open and nobody had written it down). | the owner of `concept/website-design-system.md`, with TS-WEB-0019 |
+| ~~Does the explain module appear on `/`, and in which slot?~~ **Answered 2026-09-25 by the owner, `DEC-0109`**: on `/` the component renders **one** path — the WhatsApp one — in whichever of the three block positions the entry trait gives it, and the `embed` and `provenance` blocks stay scenes. None of the three options `Q-0079` listed was taken; the answer is a fourth. `Q-0079` is closed, the guide's sentence is narrowed, and what the answer leaves open is `Q-0080` (the module is a job introduction on `/` and `TS-WEB-0006 D7` says that is a scene block — `CONF-0026`) and `Q-0081` (nothing says what starts the auto-advance, which matters once the module can be last). | — |
 | **No component exists for `objection-list`, `publishing-path` or the live-module frame** (Q-0044): three of five slots need shells the design system does not specify, and no component declares which content type it renders. | design |
 | **The stage-0 reference place is unnamed.** D5 needs one covered place with dates and a cleared, place-bound proof element, held as configuration rather than in copy. | content/editorial |
 | **Registration prefill stops at our own route.** DEC-0029 leaves the app-side contract open, so `?ort=` travels no further than `/mitmachen/registrieren`; if the app later accepts a place, D7 and A14 need a second row. | app team |

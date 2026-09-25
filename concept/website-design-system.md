@@ -516,8 +516,17 @@ everywhere. There is no contact form.
 
 ### Explain module
 
-The three-step component. Used on `/mitmachen` for each of the three paths,
-and reused unchanged on `/`.
+The three-step component. Used on `/mitmachen` for each of the three
+publishing paths, and on `/` for **one** of them — the WhatsApp path, in
+whichever of the three block positions the entry trait gives it
+(`TS-WEB-0019 D3a`, `DEC-0109`).
+
+This sentence read *"and reused unchanged on `/`"* until 2026-09-25, and both
+halves were wrong. Not **unchanged**: on `/` the component renders one path, not
+three, and it stands where a scene stood. Not for all three: the `embed` and
+`provenance` blocks on `/` stay scenes, because a scene names a job and this
+module explains a path — and "who built this" has no three steps, so forcing the
+component onto it would mint three invented ones.
 
 - **Ordinal** at mono 48 px / 800 `ink`, with the module **title** at card
   title size beside it.
