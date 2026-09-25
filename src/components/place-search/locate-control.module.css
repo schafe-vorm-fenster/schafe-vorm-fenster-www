@@ -1,0 +1,62 @@
+/**
+ * The "use my location" control beside the place search (TS-WEB-0010 D5).
+ * A text control, not a pill: the pill is the field's submit, and a second
+ * pill beside it would read as a second conversion.
+ */
+.control {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+}
+
+.button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-ink);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body-sm);
+  font-weight: 700;
+  gap: var(--space-2);
+  /* The 44 px touch target the design system asks of every control. */
+  min-height: var(--height-control);
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.button:hover {
+  color: var(--color-lime-900);
+}
+
+.button:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Before hydration the control cannot act yet; it keeps its geometry and
+   its look, so enabling it shifts nothing and flashes nothing. */
+.button:disabled {
+  cursor: default;
+}
+
+.explains {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+}
+
+/* On a photo surface or the ink section the light ground's colours do not
+   clear 4.5:1 — the same paper the hero's headline and `place-search`'s own
+   hint use there. */
+.dark .button,
+.dark .explains {
+  color: var(--color-neutral-paper);
+}
+
+.dark .button:hover {
+  color: var(--color-lime-100);
+}

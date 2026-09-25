@@ -134,9 +134,9 @@ aus).
 
 **Überschrift:** Falsch getippt? Nochmal suchen
 
-**Sucheingabe (Placeholder):** Deine Postleitzahl
+**Sucheingabe (Placeholder):** Dein Ort
 
-**Hinweistext unter dem Feld:** Suche nach Ortsnamen kommt noch dazu — bis dahin reicht die Postleitzahl.
+**Hinweistext unter dem Feld:** Tipp den Ortsnamen ein — Vorschläge kommen ab dem zweiten Buchstaben.
 
 Dieselbe Komponente wie auf `/` und `/dein-ort` (TS-WEB-0008 D7) — kein
 eigenes Verhalten. Der Hinweistext steht jetzt hier statt nur im Code

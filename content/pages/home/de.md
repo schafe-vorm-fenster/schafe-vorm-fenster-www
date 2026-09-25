@@ -5,7 +5,7 @@ route: "/"
 seo:
   "/":
     title: "Schafe vorm Fenster — Was ist bei dir los?"
-    description: "Was in deinem Ort und in den Nachbarorten als Nächstes ansteht: Postleitzahl eingeben und den Kalender für deine Umgebung öffnen."
+    description: "Was in deinem Ort und in den Nachbarorten als Nächstes ansteht: Ortsnamen eingeben und den Kalender für deine Umgebung öffnen."
     provenance: generated
 content_type: section
 status: draft
@@ -104,15 +104,13 @@ und Zustände sind Layoutlogik, nicht Teil dieser Datei. Platzhalter in
 
 **Headline:** Was ist bei dir los?
 
-**Sucheingabe (Placeholder):** Deine Postleitzahl
+**Sucheingabe (Placeholder):** Dein Ort
 
 **Button:** Suchen
 
-**Hinweistext unter dem Feld:** Suche nach Ortsnamen kommt noch dazu — bis dahin reicht die Postleitzahl.
+**Hinweistext unter dem Feld:** Tipp den Ortsnamen ein — Vorschläge kommen ab dem zweiten Buchstaben.
 
-Begründung: Die Ortssuche läuft heute ausschließlich über die Postleitzahl
-(Q-0025, geo-api-Namenssuche steht aus). Die Einschränkung steht deshalb im
-Suchfeld selbst statt in einer separaten Fehlermeldung.
+<!-- source_note: Placeholder „Dein Ort" ist die Formulierung des Owners für dieses Feld (content/pages/deine-region/de.md, Slot 3); der Hinweistext ist der bestehende Dictionary-String (src/lib/i18n/dictionary.ts, search.hint). Die Postleitzahl-Formulierung und die Begründung des Interims sind mit DEC-0079 §1 entfallen (T-07, DEC-0119). -->
 
 ## Slot 2 — Ort bekannt, Termine vorhanden (Block 1 / Zustand S2)
 

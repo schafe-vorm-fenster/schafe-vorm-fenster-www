@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   communityRouteSlugFor,
   hasPlaceIndex,
+  MAX_NAME_MATCHES,
   nearestPlace,
   placeByCommunityId,
   placeBySlug,
@@ -34,6 +35,12 @@ describe("the artefact itself", () => {
     expect(place?.lat).toBeCloseTo(SHOWCASE_COMMUNITY.lat, 3);
     expect(place?.lng).toBeCloseTo(SHOWCASE_COMMUNITY.lng, 3);
   });
+
+  it("carries the municipality on the place — what the row prints in brackets (TS-WEB-0008 D7a)", () => {
+    expect(placeBySlug(SHOWCASE_COMMUNITY.slug)?.municipality).toBe("Schmatzin");
+    // Every row of the index has one, so no row of the overlay reads bare.
+    for (const place of searchByName("er", 100)) expect(place.municipality).toBeTruthy();
+  });
 });
 
 describe("name search", () => {
@@ -59,9 +66,24 @@ describe("name search", () => {
     expect(searchByName(" ")).toEqual([]);
   });
 
-  it("caps the list, so a typeahead never renders something nobody can read", () => {
+  it("caps the list at D7a's four rows by default, so the overlay never pages or scrolls", () => {
+    expect(MAX_NAME_MATCHES).toBe(4);
+    expect(searchByName("er")).toHaveLength(4);
     expect(searchByName("a", 6).length).toBeLessThanOrEqual(6);
-    expect(searchByName("er", 6).length).toBeLessThanOrEqual(6);
+  });
+
+  it("matches a typed municipality name and offers the places inside it — each row is a place", () => {
+    // Gerswalde is a municipality of several covered villages, and one village
+    // of that name: the exact name ranks first, the municipality matches follow.
+    const hits = searchByName("Gerswalde");
+    expect(hits.length).toBe(4);
+    expect(hits[0]?.name).toBe("Gerswalde");
+    for (const place of hits) expect(place.municipality).toBe("Gerswalde");
+    for (const place of hits.slice(1)) expect(place.name).not.toBe("Gerswalde");
+  });
+
+  it("treats five typed digits as a name — the index carries no postcodes, so nothing matches", () => {
+    expect(searchByName("17509")).toEqual([]);
   });
 
   it("answers an empty list for a place the calendar does not cover", () => {
@@ -85,7 +107,10 @@ describe("the ~15 km cut, made locally", () => {
   const anchor = { lat: SHOWCASE_COMMUNITY.lat, lng: SHOWCASE_COMMUNITY.lng };
 
   it("answers the anchor's own community first", () => {
-    expect(nearestPlace(anchor)?.slug).toBe(SHOWCASE_COMMUNITY.slug);
+    expect(nearestPlace(anchor, 15)?.slug).toBe(SHOWCASE_COMMUNITY.slug);
+    // DEC-0119 §7: beyond the radius the index answers nothing, not its edge.
+    expect(nearestPlace({ lat: 47.5, lng: 11.0 }, 15)).toBeUndefined();
+    expect(nearestPlace({ lat: 47.5, lng: 11.0 }, 1_000)).toBeDefined();
   });
 
   it("includes what is inside the radius and excludes what is outside it", () => {

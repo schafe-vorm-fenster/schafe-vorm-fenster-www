@@ -4,17 +4,38 @@
   gap: var(--space-3);
 }
 
-/* The positioning context the typeahead popup hangs from, so the popup can
-   overlay the page instead of pushing the hint and the suggestion chips
-   down — the module's reserved 56 px stays 56 px whether it is open or not. */
+/* The positioning context the suggestion overlay hangs from, so the overlay
+   floats over the page instead of pushing the hint, the geolocation control
+   and the chips down — the module's reserved 56 px stays 56 px whether it
+   is open or not (TS-WEB-0008 D7a "Layout"). */
 .fieldWrap {
   position: relative;
+}
+
+/* The helper line: the hint and, beside it, the "use my location" control.
+   One row where it fits, two where it does not; neither reserves space for
+   the overlay. */
+.meta {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  justify-content: space-between;
 }
 
 .hint {
   color: var(--color-neutral-muted);
   font-size: var(--type-meta-size);
   margin: 0;
+  /* As tall as one overlay row stands below the field: the row (56 px) with
+     its two hairlines and its 8 px offset, less the 12 px this line already
+     sits below the field. A one-row overlay then covers exactly this line,
+     and the geolocation control — which wraps under the hint wherever the
+     two do not fit side by side — begins below the overlay's bottom edge
+     instead of under it, cut in half. A shadow was not an option: the
+     overlay's hairline is its only boundary (design system §Place-search
+     result overlay; "Borders and shadows: none"). DEC-0119 §11. */
+  min-height: calc(var(--height-search) + 2px + var(--space-2) - var(--space-3));
 }
 
 /* On a photo surface or an ink section the muted grey of the light ground

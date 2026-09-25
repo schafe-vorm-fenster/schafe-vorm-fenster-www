@@ -43,7 +43,7 @@ Schritt 1 (TS-WEB-0023 D7).
 
 **Frage:** Für welchen Ort willst du veröffentlichen?
 
-**Sucheingabe (Placeholder):** Deine Postleitzahl
+**Sucheingabe (Placeholder):** Dein Ort
 
 Vorausgefüllt, sichtbar und änderbar, wenn `?ort=` aus `/dein-ort/starten`,
 `/mitmachen` oder der leeren Kalenderansicht ankommt (TS-WEB-0023 D5) — nie

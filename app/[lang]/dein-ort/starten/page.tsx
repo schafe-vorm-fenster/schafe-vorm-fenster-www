@@ -82,21 +82,15 @@ export async function generateMetadata({
  * own placeless CTA label, both read below; `genericPlace` remains
  * generated for the *other* templates that still interpolate a generic
  * place word (the "what it takes" opener, the live-example note) — the
- * artifact authors no dedicated placeless sentence for those two.
+ * artifact authors no dedicated placeless sentence for those two. The search
+ * field's label, placeholder and hint have no page-level fallback: where the
+ * slot carries no field, `place-search` falls through to the dictionary's
+ * `search` block, the one place TS-WEB-0008-A16 keeps under check (DEC-0079 §1).
  */
-const PAGE_COPY: Record<Locale, { genericPlace: string; searchLabel: string; searchHint: string }> =
-  {
-    de: {
-      genericPlace: "deinen Ort",
-      searchLabel: "Deine Postleitzahl",
-      searchHint: "Suche nach Ortsnamen kommt noch dazu — bis dahin reicht die Postleitzahl.",
-    },
-    en: {
-      genericPlace: "your place",
-      searchLabel: "Your postcode",
-      searchHint: "Search by place name is coming — until then, the postcode works fine.",
-    },
-  };
+const PAGE_COPY: Record<Locale, { genericPlace: string }> = {
+  de: { genericPlace: "deinen Ort" },
+  en: { genericPlace: "your place" },
+};
 
 /** The label before the `→ /route` the artifact appends to its CTA fields. */
 function labelOf(field: string | undefined): string {
@@ -221,11 +215,11 @@ export default async function PlaceStartPage({
       <p>{fieldAt(searchAgainSlot.blocks, 0)}</p>
       <PlaceSearch
         typeahead
-        hint={fieldAt(searchAgainSlot.blocks, 2) ?? copy.searchHint}
+        hint={fieldAt(searchAgainSlot.blocks, 2)}
         id="ort-suche-nochmal"
-        label={fieldAt(searchAgainSlot.blocks, 1) ?? copy.searchLabel}
+        label={fieldAt(searchAgainSlot.blocks, 1)}
         locale={locale}
-        placeholder={fieldAt(searchAgainSlot.blocks, 1) ?? copy.searchLabel}
+        placeholder={fieldAt(searchAgainSlot.blocks, 1)}
         to="place"
       />
     </div>

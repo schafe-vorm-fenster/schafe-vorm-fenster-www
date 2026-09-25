@@ -127,32 +127,17 @@ export async function generateMetadata({
  * Fallback only. `dein-ort-0-state-s0` carries S0's own headline, the nearby
  * module's place-agnostic heading, the search hint and the line that hands
  * the reader over to the live module (state/open.md row 93, row 161);
- * `searchLabel` and `genericPlace` have no field in that slot and stay
- * generated (Dummy-Content, `state/open.md`) — `genericPlace` fills state
- * A/B's own `{place}` template when no place is resolved yet, which is a
- * different sentence from S0's dedicated headline below.
+ * `genericPlace` has no field in that slot and stays generated
+ * (Dummy-Content, `state/open.md`) — it fills state A/B's own `{place}`
+ * template when no place is resolved yet, which is a different sentence from
+ * S0's dedicated headline below. The search field's label, placeholder and
+ * hint have **no** page-level fallback: `place-search` falls through to the
+ * dictionary's `search` block, the one place TS-WEB-0008-A16 keeps under
+ * check (DEC-0079 §1 — no surface of the search names a postcode).
  */
-const PAGE_COPY: Record<
-  Locale,
-  {
-    genericPlace: string;
-    nearby: string;
-    searchLabel: string;
-    searchHint: string;
-  }
-> = {
-  de: {
-    genericPlace: "deinem Ort",
-    nearby: "Diese Woche in der Nähe",
-    searchLabel: "Deine Postleitzahl",
-    searchHint: "Suche nach Ortsnamen kommt noch dazu — bis dahin reicht die Postleitzahl.",
-  },
-  en: {
-    genericPlace: "your place",
-    nearby: "This week nearby",
-    searchLabel: "Your postcode",
-    searchHint: "Search by place name is coming — until then, the postcode works fine.",
-  },
+const PAGE_COPY: Record<Locale, { genericPlace: string; nearby: string }> = {
+  de: { genericPlace: "deinem Ort", nearby: "Diese Woche in der Nähe" },
+  en: { genericPlace: "your place", nearby: "This week nearby" },
 };
 
 /**
@@ -304,7 +289,8 @@ export default async function PlacePage({
   const copy = {
     ...fallbackCopy,
     nearby: fieldAt(stateS0.blocks, 1) ?? fallbackCopy.nearby,
-    searchHint: fieldAt(stateS0.blocks, 3) ?? fallbackCopy.searchHint,
+    /** The hint from the slot; `undefined` lets the module use the dictionary's. */
+    searchHint: fieldAt(stateS0.blocks, 3),
     /** S0's hand-off from the search field into the module below it. */
     s0Transition: fieldAt(stateS0.blocks, 4),
   };
@@ -435,9 +421,7 @@ export default async function PlacePage({
       typeahead
       hint={copy.searchHint}
       id={primary ? "ort-suche-fokus" : "ort-suche-abschluss"}
-      label={copy.searchLabel}
       locale={locale}
-      placeholder={copy.searchLabel}
       submitDataCta={primary ? "primary" : undefined}
       to="place"
       tone={primary ? "dark" : "light"}

@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * F-3-12 — an impatient second click must not empty the postcode.
+ * F-3-12 — an impatient second click must not empty the typed value.
  *
  * `search-field` is a plain GET form, which is what makes it work without
  * JavaScript. It also means two clicks on "Suchen" are two submissions, and
@@ -15,6 +15,11 @@ import { expect, test } from "@playwright/test";
  * The gesture is reproduced the way it actually happens — two real clicks
  * with nothing awaited between them.
  *
+ * The place-search surfaces take a name (DEC-0079 §1): five digits no longer
+ * resolve there and would land on the founding route, so those cases type a
+ * slug that both `LIVE_DATA` backends carry. The order flow's scope step
+ * keeps its postcode entry (DEC-0079 §7) and still types one.
+ *
  * Recorded honestly: this file did **not** reproduce the finding against
  * `next dev`, in any of four gestures tried (two synchronous `click()`s in one
  * task, `dblclick`, two Playwright clicks with and without a beat between
@@ -26,14 +31,14 @@ import { expect, test } from "@playwright/test";
  */
 
 const CASES = [
-  { path: "/dies-gibt-es-nicht-xyz", id: "ort-suche-404", expected: "/dein-ort" },
-  { path: "/", id: "ort-suche-fokus", expected: "/dein-ort" },
-  { path: "/dein-ort", id: "ort-suche-fokus", expected: "/dein-ort" },
-  { path: "/dein-kalender/bestellen", id: "ort-suche", expected: undefined },
+  { path: "/dies-gibt-es-nicht-xyz", id: "ort-suche-404", value: "quilow", expected: "/dein-ort" },
+  { path: "/", id: "ort-suche-fokus", value: "quilow", expected: "/dein-ort" },
+  { path: "/dein-ort", id: "ort-suche-fokus", value: "quilow", expected: "/dein-ort" },
+  { path: "/dein-kalender/bestellen", id: "ort-suche", value: "10115", expected: undefined },
 ] as const;
 
-for (const { path, id, expected } of CASES) {
-  test(`F-3-12: a double click on ${path} keeps the typed postcode`, async ({ page }) => {
+for (const { path, id, value, expected } of CASES) {
+  test(`F-3-12: a double click on ${path} keeps the typed value`, async ({ page }) => {
     await page.goto(path);
     // `.first()`, and settled: on the production build `/` transiently
     // renders a **third** search input while the flight payload hydrates, and
@@ -44,7 +49,7 @@ for (const { path, id, expected } of CASES) {
     // in `state/open.md`.
     await page.waitForLoadState("networkidle");
     const field = page.locator(`#${id}`).first();
-    await field.fill("10115");
+    await field.fill(value);
 
     const submit = field.locator("xpath=ancestor::form").locator('button[type="submit"]');
     await Promise.all([
@@ -54,9 +59,7 @@ for (const { path, id, expected } of CASES) {
 
     await page.waitForURL(/[?&]ort=/);
     const url = new URL(page.url());
-    expect(url.searchParams.get("ort"), `?ort= after a double click on ${path}`).toBe(
-      "10115",
-    );
+    expect(url.searchParams.get("ort"), `?ort= after a double click on ${path}`).toBe(value);
     if (expected !== undefined) expect(url.pathname).toBe(expected);
   });
 }

@@ -138,7 +138,7 @@ nur der Angebotstext in Block 1 wechselt.
 
 **Geo-Badge am Modul:** Aus der Region
 
-**Hinweistext unter dem Suchfeld:** Suche nach Ortsnamen kommt noch dazu — bis dahin reicht die Postleitzahl.
+**Hinweistext unter dem Suchfeld:** Tipp den Ortsnamen ein — Vorschläge kommen ab dem zweiten Buchstaben.
 
 **Überleitung zum Modul:** So sieht das aus, wenn ein Ort schon dabei ist:
 

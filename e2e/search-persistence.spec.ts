@@ -50,8 +50,12 @@ const SLOW_LINK = {
   uploadThroughput: (120 * 1024) / 8,
 } as const;
 
-/** A covered postcode — `07743` resolves to `quilow` (see `e2e/pages/home.spec.ts`). */
-const TYPED = "07743";
+/**
+ * A covered place name — the search takes a name and nothing else (DEC-0079).
+ * `Quilow` resolves in both `LIVE_DATA` modes: the mock ring carries it and
+ * the committed index carries it.
+ */
+const TYPED = "Quilow";
 
 interface SearchRoute {
   /** The path to open. */

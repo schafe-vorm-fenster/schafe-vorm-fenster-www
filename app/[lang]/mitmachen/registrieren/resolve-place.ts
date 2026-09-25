@@ -14,7 +14,7 @@
  */
 
 import { hasRealBackend } from "@/src/lib/live/config";
-import { isZip, resolvePlace, searchPlaces } from "@/src/lib/live/places";
+import { isZip, resolvePlace, searchPlacesByZip } from "@/src/lib/live/places";
 
 import type { Place } from "@/src/lib/live/types";
 
@@ -37,7 +37,10 @@ export async function resolveRegisterPlace(raw: string | undefined): Promise<Pla
 
   if (!isZip(raw)) return { kind: "unresolved" };
 
-  const result = await searchPlaces({ query: raw });
+  // T-07 / DEC-0079: `searchPlaces` takes a name only now; the postcode lookup
+  // this gate still relies on is `searchPlacesByZip` (DEC-0119). Lifting the
+  // gate itself is TS-WEB-0023 D3's own change.
+  const result = await searchPlacesByZip({ query: raw });
   if (result.data.outcome.kind !== "covered") return { kind: "unresolved" };
 
   const demo = result.demo;

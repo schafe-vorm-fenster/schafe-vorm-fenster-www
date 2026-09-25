@@ -1,7 +1,10 @@
 /**
- * The typeahead popup. It is absolutely positioned inside `place-search`'s
- * own stacking context, so the suggestion list never takes layout space and
- * the module's reserved 56 px stays 56 px whether it is open or not.
+ * The suggestion overlay — SRC-0014 §Place-search result overlay, TS-WEB-0008 D7a.
+ *
+ * Absolutely positioned inside `place-search`'s own stacking context, so the
+ * list never takes layout space: nothing below the field moves when it
+ * opens, closes or changes length, and the module's reserved 56 px stays
+ * 56 px (NFR-WEB-0047–0051, TS-WEB-0008-A15).
  */
 .popup {
   left: 0;
@@ -11,41 +14,75 @@
   z-index: 20;
 }
 
-/* Hairline rather than a shadow: the design system has neither shadows nor
-   cards, and `event-row`'s own divider is the same 1 px line on the same
-   token. The popup is paper on paper, separated the way every other list in
-   the system is separated. */
+/* The one element in the system with a boundary of its own: a 1 px `line`
+   hairline on all four sides, radius 0, paper ground. No max-height and no
+   overflow — the list is 3–4 rows and never scrolls; further matches are for
+   the visitor's next letter, not for a scrollbar (D7a "Rows shown"). */
 .list {
   background: var(--color-neutral-paper);
   border: 1px solid var(--color-neutral-line);
+  border-radius: 0;
   list-style: none;
   margin: var(--space-2) 0 0;
-  max-height: 22rem;
-  overflow-y: auto;
   padding: 0;
 }
 
-.list > li + li .option {
+.list > li + li .option,
+.list > li + li.none {
   border-top: 1px solid var(--color-neutral-line);
 }
 
+/* Row 56 px — the same height as the field it hangs from. */
 .option {
+  align-items: baseline;
   color: var(--color-neutral-ink);
-  display: block;
-  /* The 44 px touch target the design system asks of every control. */
-  min-height: 44px;
-  padding: var(--space-2) var(--space-3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-2);
+  min-height: var(--height-search);
+  padding: var(--space-3) var(--space-3);
   text-decoration: none;
 }
 
-.option:hover,
-.option:focus-visible,
-.active {
-  background: var(--color-lime-100);
+/* The place name, 18 px / 400 `ink`; the matched substring at 700. */
+.name {
+  font-size: var(--type-body-size);
+  font-weight: 400;
 }
 
-/* Body-size copy takes `text2`, not the `muted` floor — see scope-picker. */
+.match {
+  font-weight: 700;
+}
+
+/* The municipality in brackets, 15 px / 400 `muted`. */
+.municipality {
+  color: var(--color-neutral-muted);
+  font-size: var(--font-size-body-sm);
+  font-weight: 400;
+}
+
+/* The active row is marked by a `surface` ground; the focus ring stays on
+   the field (SRC-0014: the ring rule applies to the field, not the row). */
+.option:hover,
+.active {
+  background: var(--color-neutral-surface);
+}
+
+/* No match: one designed row, the same 56 px and hairline as the others,
+   `map-pin` in muted, the line in ink, no arrow and no error colour — an
+   empty result, not a fault. Not a link: the onward action is the field's
+   own submit. */
 .none {
-  color: var(--color-neutral-text2);
-  padding: var(--space-2) var(--space-3);
+  align-items: center;
+  color: var(--color-neutral-ink);
+  display: flex;
+  font-size: var(--type-body-size);
+  gap: var(--space-2);
+  min-height: var(--height-search);
+  padding: var(--space-3) var(--space-3);
+}
+
+.pin {
+  color: var(--color-neutral-muted);
+  flex: none;
 }

@@ -134,9 +134,9 @@ outstanding).
 
 **Heading:** Typed it wrong? Search again
 
-**Search input (placeholder):** Your postcode
+**Search input (placeholder):** Your place
 
-**Hint below the field:** Searching by place name is still to come — until then a postcode does it.
+**Hint below the field:** Type the place name — suggestions start at the second letter.
 
 Same component as on `/` and `/dein-ort` (TS-WEB-0008 D7) — no behaviour of
 its own. The hint now lives here rather than only in code (state/open.md

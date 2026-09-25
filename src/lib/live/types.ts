@@ -40,6 +40,12 @@ export interface Place {
   readonly slug: string;
   readonly lat: number;
   readonly lng: number;
+  /**
+   * The municipality the community belongs to — what the typeahead prints in
+   * brackets so two villages of one name are told apart ("Ort (Gemeinde)",
+   * TS-WEB-0008 D7a). Absent where the source carries no hierarchy.
+   */
+  readonly municipality?: string;
   readonly county?: { readonly id?: string; readonly name?: string };
 }
 
@@ -89,15 +95,24 @@ export interface LiveCounters {
   readonly updatesToday?: number;
 }
 
-/** The three outcomes of TS-WEB-0008 D7, as a discriminated union. */
+/**
+ * The outcomes of TS-WEB-0008 D7, as a discriminated union. Two, since DEC-0079:
+ * a name either matched a covered place or it did not. The interim third
+ * outcome (`unsupported`, "type a postcode instead") is gone with the postcode
+ * mode itself — the search never tells a visitor to type something else.
+ */
 export type PlaceSearchOutcome =
   | { readonly kind: "covered"; readonly place: Place }
-  | { readonly kind: "uncovered"; readonly query: string }
-  | { readonly kind: "unsupported"; readonly query: string; readonly hint: "zip-only" };
+  | { readonly kind: "uncovered"; readonly query: string };
 
 export interface PlaceSearchResult {
   readonly query: string;
   readonly outcome: PlaceSearchOutcome;
-  /** Typeahead candidates; empty for every outcome but `covered` with several hits. */
+  /** Typeahead candidates — at most `MAX_SUGGESTIONS` (D7a: 3–4 rows); empty when nothing matched. */
   readonly suggestions: readonly Place[];
+}
+
+/** `GET /api/places/nearest` — the covered community a coordinate sits in or next to (DEC-0119). */
+export interface NearestPlace {
+  readonly place: Place;
 }

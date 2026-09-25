@@ -26,6 +26,7 @@ export function toPlace(community: GeoCommunity): Place {
     slug: community.slug,
     lat: community.geo.point.lat,
     lng: community.geo.point.lng,
+    ...(community.hierarchy?.municipality?.name ? { municipality: community.hierarchy.municipality.name } : {}),
     county: community.hierarchy?.county
       ? {
           id:
