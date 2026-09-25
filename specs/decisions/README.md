@@ -16,7 +16,7 @@ Repository-level decisions (content SSOT, audience model) live in
 ## Two artefacts live here
 
 - **`DEC-####--<slug>.md`** — an ADR: a choice and the reasoning behind it,
-  in the organisation's context/decision/consequences sections. 105 of them.
+  in the organisation's context/decision/consequences sections. 106 of them.
   The citation count that stood here was produced by a one-off script and has
   not been re-derived; a number nobody can reproduce is worse than none.
 - **`SDR-<yyyy>-<mmdd>-<nnnn>.yaml`** — a STRICT decision record: the
@@ -149,3 +149,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0103 — The chain is wired and checked — 222 of 273 requirements answer to a need, and the 51 that do not say why](DEC-0103--the-chain-is-wired-and-checked.md)
 - [DEC-0104 — The specification carries the truth — a source is cited, not obeyed, and every deviation from one is recorded](DEC-0104--the-specification-carries-the-truth.md)
 - [DEC-0105 — The design layer's five undocumented decisions, recorded — and the scrim's ladder is fixed, not measured](DEC-0105--the-design-layer-decisions.md)
+- [DEC-0106 — The product name is an open question again — the website names no product until it closes, and the workaround is still forbidden](DEC-0106--the-product-name-is-open-again.md)

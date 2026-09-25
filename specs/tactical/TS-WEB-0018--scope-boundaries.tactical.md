@@ -171,7 +171,9 @@ and `data-*` attributes. The boundary is about what a visitor reads as a
 name for a destination, not about hostnames.
 
 **Where the name may appear:** the body of `/dein-kalender`, at most
-once, at the 480 € tier — the proposal in Q-0012, unresolved. Until
+once, at the 480 € tier — settled by Q-0012 / DEC-0052 §1. What is **not**
+settled is whether the product keeps the name at all (Q-0077, DEC-0106), and
+that is what the floor below waits on. Until
 DEC-0052 §1 fixes it at **exactly one** occurrence on `/dein-kalender` at
 the 480 € tier — a floor as well as a ceiling. The gate enforces both (the one
 route only); it does not enforce a floor, so a page without the name also
@@ -316,8 +318,8 @@ The four boundary questions:
 
 - [FREE] The wording of the single withheld sentence within D8's budget.
 - [FREE] Where inside the `/dein-kalender` body the product name is
-  introduced once Q-0012 resolves — D5 fixes the surface and the ceiling,
-  not the paragraph.
+  introduced — D5 fixes the surface and the ceiling, not the paragraph.
+  Whether there is a name to introduce is Q-0077 (DEC-0106).
 - [FREE] Check implementation: one `scripts/check-boundaries.ts` or
   several, ESLint rule or script, as long as every gate and guard runs in
   `pnpm check` and in CI, and names the AC id it satisfies (DEC-0040).
@@ -363,9 +365,12 @@ The four boundary questions:
 
 ## Open points
 
-- **Q-0012** (where "Portalize" is introduced on the page) blocks the
-  permissive half of D5. The gate enforces the ceiling today; the floor —
-  whether the name must appear once — waits on the answer.
+- **Q-0077** (whether the product keeps the name at all) blocks the
+  permissive half of D5. Q-0012 settled *where* the name appears and stays
+  settled (DEC-0106 §3); a **floor** — whether the name must appear once —
+  cannot be fixed while the name may change. The gate enforces the ceiling and
+  the one route today and enforces no floor, which is the right behaviour
+  while this is open: a page without the name passes.
 - **Q-0006** (one sentence or nothing for local advertising) sets D8's
   constant. Both answers are enforced by the same check.
 - **Not yet in the question register: where does help live?** CON-WEB-0010

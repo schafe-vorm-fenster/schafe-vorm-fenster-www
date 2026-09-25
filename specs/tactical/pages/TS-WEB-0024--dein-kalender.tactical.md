@@ -82,12 +82,19 @@ longer leaves the site from here: it hands the visitor to the contact
 section, where appointment, WhatsApp, phone and mail stand together and
 where the conversion is measured (TS-WEB-0016 D12).
 
-### D4 — Today versus with the product: four rows [FIXED: SRC-0003; shape PROPOSED]
+### D4 — Today versus with your calendar: four rows [FIXED: SRC-0003, DEC-0106 §2; shape PROPOSED]
 
-Exactly four rows, two columns (today · with the product), derived from
-`portalize-calendar`'s problem and benefit sections — never copied, never a
-fifth row to fit a feature. Not a scene block (TS-WEB-0006 D7), not a feature list
-(CON-WEB-0010): one sentence per cell, no checkmark column.
+Exactly four rows, two columns — **today** and **with your calendar** —
+derived from `portalize-calendar`'s problem and benefit sections; never copied,
+never a fifth row to fit a feature. Not a scene block (TS-WEB-0006 D7), not a
+feature list (CON-WEB-0010): one sentence per cell, no checkmark column.
+
+**The second column names no product.** It used to read "with the product",
+which is the placeholder the review rejected and which `SRC-0017` CG-039 fails
+a build on. It is not replaced by a name: `CG-038` allows the name once on this
+page, at the 480 € tier, and spending that occurrence on a table column takes
+it from where the price is read. So this determination stands whichever way the
+naming question (`Q-0077`) goes. What either cell *says* is copy (DEC-0083 §1).
 
 ### D5 — Embed demo [FIXED: DEC-0030, TS-WEB-0008 D6]
 
@@ -215,7 +222,7 @@ TS-WEB-0018 D8's budget constant is 0 for this route.
 | TS-WEB-0024-A2 | e2e | Load `/dein-kalender`. The elements carrying `data-block` appear in DOM order `focus`, `contrast`, `embed-demo`, `tiers`, `proof`, `trust`, then the context band, then the closing CTA, then the contact section. Nothing but the global footer follows it. |
 | TS-WEB-0024-A3 | e2e | Exactly one element has `data-cta="primary"`; it links to `/dein-kalender/bestellen` and is the only element on the page using the Pulse fill. Exactly one `data-cta="equal-weight"` exists, inside `data-block="focus"`, in secondary treatment. |
 | TS-WEB-0024-A4 | e2e | At 360 × 640 and at 1280 × 800 both the primary and the equal-weight CTA are fully visible without scrolling. |
-| TS-WEB-0024-A5 | e2e | `data-block="contrast"` contains exactly four rows, each with a "today" and a "with the product" cell; no checkmark/cross column and no row beyond four. |
+| TS-WEB-0024-A5 | e2e | `data-block="contrast"` contains exactly four rows, each with a today cell and a with-your-calendar cell; no checkmark/cross column and no row beyond four. Neither column label nor any cell contains a product name or the words the avoid list carries for it ("das Produkt", "mit dem Produkt" — SRC-0017 CG-039). The criterion asserts the two cells and the absence, never their wording (DEC-0083, DEC-0106 §2). |
 | TS-WEB-0024-A6 | e2e | With the loader host blocked, `data-block="embed-demo"` still renders its copy and a working CTA, shows no empty frame and no error text, and the page height above the block is unchanged from the unblocked run (no reflow). |
 | TS-WEB-0024-A7 | e2e | With the loader allowed, the only third-party script request from this block goes to the allowlisted Portalize host; after full load `document.cookie` is empty and `localStorage`/`sessionStorage` hold no entry set by the embed. |
 | TS-WEB-0024-A8 | e2e | `data-block="tiers"` has exactly one heading element and exactly three tier elements in the order `community-calendar`, `portalize-calendar`, `portalize-enterprise` (readable from each tier's `data-offering`); each tier carries at most the CTAs D6 lists for it, none of them `data-cta="primary"`. Tier 3's CTA resolves to `/deine-region`. No tab, toggle, radio or `select` exists anywhere on the page. The heading's wording and form are not asserted (DEC-0083). |
