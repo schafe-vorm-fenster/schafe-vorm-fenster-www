@@ -244,6 +244,24 @@ Coverage symmetry · E7 decision index · E8/E9 acceptance-criterion IDs
 and levels · E10 test references, plus W1–W3 for the closure gaps. It
 runs in `pnpm check` and in the pre-commit hook (A13).
 
+### D6b — An undeclared custom property is an error, because the declaration disappears [FIXED: 2026-09-25]
+
+A `var(--x)` whose property nothing declares does not fall back to something
+sensible. It makes the **whole declaration** invalid, and the browser drops it.
+That is why this class hides: a heading loses the air a rule promised and looks
+like a heading with no rule; a focus outline falls back to the browser's and
+looks like a different outline. Two sat in the tree unnoticed —
+`var(--space-5)`, a step the brand scale deliberately does not have, and
+`var(--color-focus-ring)`, which was never a token name.
+
+`pnpm check:brand` (A19) collects every declared property — from the
+stylesheets, from the package token sheet, and from TS/TSX, where a component
+may set one through an inline style — and reports a use with no declaration.
+Two exemptions, both derived from what the browser does rather than from
+convenience: a `var()` **with a fallback** is a deliberate default and is not
+reported, and comments are blanked before the scan so a property named in prose
+is not a use.
+
 ### D6a — A locator is verified against its excerpt, and a broken one says where the statement went [FIXED: DEC-0111, Q-0082]
 
 `check:specs` counts a locator; it never reads one. So a source edit silently
@@ -327,6 +345,7 @@ for the spec side, and needs the content frontmatter schema
 | TS-WEB-0017-A17 | static | Exactly one icon dependency; every icon name used resolves to a Lucide export. |
 | TS-WEB-0017-A16 | manual | Dependency review: any dependency adopted from a sibling repository is confirmed as framework-neutral intent, not a ported implementation — per PR that changes `package.json`. |
 | TS-WEB-0017-A18 | static | Every `{source_id, loc, excerpt}` triple under `specs/` whose `loc` names a line resolves: the excerpt is an exact substring of that line in the file the locator names, resolved against the repository, the workspace parent and `node_modules`. A triple whose excerpt sits at another line of the same file fails as **moved** and the check names the line it moved to; one whose excerpt is absent from the file fails as **gone** and is reported as the different finding it is. A locator no root can read, and an anchor that is a page, paragraph or timestamp rather than a line, are reported as **not checked** — counted and printed as such, never as a pass — and gate nothing; `loc: UNKNOWN` is legitimate and is not a finding (D6a). |
+| TS-WEB-0017-A19 | static | Every `var(--x)` in a stylesheet under `app/`, `src/`, `e2e/` or `scripts/` names a custom property something declares — any stylesheet, the brand token sheet in the package, or an inline style in a TS/TSX file. A `var()` **with** a fallback is exempt: there the undeclared property is a deliberate default, not a dropped declaration. Comments are blanked before the scan, so a property named in prose is not a use. An undeclared property invalidates the whole declaration, which is why this is an error and not a warning: the rule does not degrade, it disappears (D6b). |
 
 ### D7 — One icon set [FIXED: DEC-0056, SRC-0014#icons]
 

@@ -28,7 +28,7 @@
  * Exit code of `main()`: number of errors (0 = green).
  */
 
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -190,6 +190,55 @@ export function checkBrand(root: string): BrandCheckResult {
         fail("A6", relative_, "font file committed — fonts are package subpaths");
       if (LOGO_FILES.test(relative_))
         fail("A6", relative_, "logo file committed — logos are package subpaths");
+    }
+  }
+
+  // --- A19: a `var()` whose custom property nothing declares -----------------
+  //
+  // An undeclared custom property does not fall back to something sensible: it
+  // makes the whole declaration invalid, so the browser drops it. `--space-5`
+  // and `--color-focus-ring` each sat in the tree for weeks doing exactly that
+  // — one heading lost the air the rule above it promised, two components lost
+  // their brand focus ring to the browser default. Neither showed up anywhere,
+  // because a missing outline looks like a different outline.
+  //
+  // Declarations are collected from every stylesheet including the package
+  // token sheet, and from TS/TSX, where a component may set one through an
+  // inline style. A property used but never declared is the error.
+  const declared = new Set<string>();
+  const tokenSheet = join(
+    root,
+    "node_modules/@schafe-vorm-fenster/brand-design/tokens/svf-tokens.css",
+  );
+  const declarationSources = [...cssFiles, ...sourceFiles];
+  if (existsSync(tokenSheet)) declarationSources.push(tokenSheet);
+  for (const file of declarationSources) {
+    const text = readFileSync(file, "utf8");
+    // `--x:` in CSS, and `"--x":` / `'--x':` in an inline style object.
+    for (const match of text.matchAll(/(?:^|[;{\s"'(,])(--[a-zA-Z0-9-]+)\s*"?'?\s*:/g))
+      declared.add(match[1]);
+  }
+  for (const file of cssFiles) {
+    const relative_ = rel(file);
+    const raw = readFileSync(file, "utf8");
+    // Blank comments rather than dropping them, so line numbers stay true. A
+    // comment may name a property in prose without using it.
+    const text = raw.replace(/\/\*[\s\S]*?\*\//g, (block) =>
+      block.replace(/[^\n]/g, " "),
+    );
+    const reported = new Set<string>();
+    // `var(--x)` only, never `var(--x, fallback)`: with a fallback an
+    // undeclared property is a deliberate default, not a dropped declaration.
+    for (const match of text.matchAll(/var\(\s*(--[a-zA-Z0-9-]+)\s*\)/g)) {
+      const name = match[1];
+      if (declared.has(name) || reported.has(name)) continue;
+      reported.add(name);
+      const line = text.slice(0, match.index).split("\n").length;
+      fail(
+        "A19",
+        `${relative_}:${line}`,
+        `\`var(${name})\` — nothing declares it, so the whole declaration is dropped`,
+      );
     }
   }
 

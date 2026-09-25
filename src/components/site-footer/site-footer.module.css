@@ -68,7 +68,7 @@
 }
 
 .summary:focus-visible {
-  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline: var(--focus-ring-width) solid var(--focus);
   outline-offset: var(--focus-ring-offset);
 }
 
