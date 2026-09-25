@@ -73,6 +73,10 @@
   --height-tag: 30px;
   --height-event-row: 76px;
   --height-search: var(--target-comfortable); /* 56 */
+  /* SRC-0014 §Contact section: the two action-row heights and the avatar. */
+  --height-contact-row: 72px;
+  --height-contact-hairline-row: var(--target-comfortable); /* 56 */
+  --size-contact-portrait: 96px;
 
   /* ── Aspect ratios — SRC-0014 §Media ratios ──────────────────────────── */
   --ratio-hero: 8 / 9; /* 21 / 9 from the lg switch point, below */
