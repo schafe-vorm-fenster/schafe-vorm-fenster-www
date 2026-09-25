@@ -116,7 +116,30 @@ for them:
   supplies a wrapper; `/mitmachen` supplies a hero. The component is the same
   file in both.
 
-### 4. `CONF-0026` resolves as `NEW_VERSION`, and the new version is `TS-WEB-0006 D7`
+### 4. One of `DEC-0109 §2`'s rhythm claims is withdrawn, and nothing gets harder
+
+`DEC-0109 §2` read the section-rhythm rules off the **module**, because there the
+module *was* the block. Under wrapping the block is a scene and the module is its
+middle, so two of those readings need restating and one of them was a claim that
+is no longer true:
+
+- **Withdrawn:** *"in the middle position it separates the two image-led scenes,
+  which loosens the rule"*. The module is still never a PHOTO section — its stage
+  is a graphic at `ratio-square` — but the scene wrapping it is an ordinary scene
+  and may be one, so it separates nothing by construction.
+- **Restated and now trivial:** *"the module declares no ground of its own"*. It
+  does not, and it no longer needs the sentence: the block is a scene, and a
+  scene's ground is picked the way every scene's is.
+- **Net effect: block 2a's rhythm constraint is exactly the pre-`DEC-0109` one** —
+  three ordinary rhythm sections, alternating per `SRC-0014`, satisfiable in every
+  `D3a` order. `himbeere` and the two `ink` sections are untouched, for the reasons
+  `DEC-0109 §2` gives and which wrapping does not touch.
+- **The one-viewport rule is unaffected and stays the module's.** It is the module
+  plus its three step lines that fit one viewport height; the opener above and the
+  instance below are outside that budget, because the rule is a property of the
+  component and the component did not change.
+
+### 5. `CONF-0026` resolves as `NEW_VERSION`, and the new version is `TS-WEB-0006 D7`
 
 The recommendation held; the open part is closed. `D7` takes the new version — a
 sentence on containment — and the component takes none. `REJECT_NEW` would have

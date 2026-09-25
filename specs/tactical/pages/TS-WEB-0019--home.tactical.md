@@ -85,7 +85,7 @@ component, which is how the "identical reserved space" below is held.
 | # | Block | Content | Fed by | Rhythm section |
 | --- | --- | --- | --- | --- |
 | 1 | focus | D2 | TS-WEB-0008 D7 (search), D1 pos 1 | PHOTO hero, then COLOUR ink for the live dates |
-| 2a | mechanism blocks | exactly three, one per mechanism, order per D3a — **three scene blocks, one of which contains the explain module** (D3a, DEC-0109, DEC-0110) | content (TS-WEB-0007) + one live instance each, the module's standing below it (TS-WEB-0006 D7) | COLOUR / PHOTO, alternating per SRC-0014. The module declares no ground of its own and is never a PHOTO section, so the alternation is satisfiable in any of its three positions (DEC-0109 §2) |
+| 2a | mechanism blocks | exactly three, one per mechanism, order per D3a — **three scene blocks, one of which contains the explain module** (D3a, DEC-0109, DEC-0110) | content (TS-WEB-0007) + one live instance each, the module's standing below it (TS-WEB-0006 D7) | COLOUR / PHOTO, alternating per SRC-0014. Three scene blocks are three ordinary rhythm sections, so the alternation is exactly the constraint it was before DEC-0109 and is satisfiable in any D3a order |
 | 2b | provenance | the "who built this" stamps | content | COLOUR violet |
 | 2c | proof stream | 5 elements | TS-WEB-0005 (D4 below) | COLOUR / PHOTO cards |
 | 2d | counters | position 4 | TS-WEB-0008 D8 | inline in 2b or 2c, no section of its own |
@@ -138,7 +138,7 @@ What that means here, in full (DEC-0109 §2):
 | Constraint | In every position |
 | --- | --- |
 | Section rhythm | the module declares **no ground of its own** — SRC-0014's one meaning-bearing ground is the contact section's and this is not it — so its ground is picked like a scene's and the alternation rules hold wherever it sits |
-| "Never two photo sections in a row" | not tightened: the graphic stage is a graphic at `ratio-square`, not a photograph, so the module is never a PHOTO section. In the middle position it separates the two image-led scenes, which loosens the rule |
+| "Never two photo sections in a row" | **neither tightened nor loosened.** The *module* is never a PHOTO section — its stage is a graphic at `ratio-square`, not a photograph — but the scene that wraps it is an ordinary scene and may be one, so block 2a offers the generator the same three candidates it did before DEC-0109. DEC-0109 §2 read the rule off the module because the module was then the block; under DEC-0110 the block is a scene and the module is its middle, so the claim that the `whatsapp` block "separates the two image-led scenes" no longer holds and is withdrawn. Nothing is harder: the constraint is the pre-DEC-0109 one |
 | One `himbeere` per screen | unaffected — the active step is `lime-500` on a light ground |
 | The two `ink` sections | unaffected: block 1's live dates and the closing search block, with the whole of 2a between them in every order |
 | One viewport below `lg` | holds identically in all three positions, because it is a property of the **module**, not of its slot. The module does not grow into an early position and does not shrink in the last one. It is the module plus its three step lines that must fit — **not** the wrapping scene, whose opener above and instance below are outside that budget (TS-WEB-0022 D4, SRC-0017 CG-025) |
