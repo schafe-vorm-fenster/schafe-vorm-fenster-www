@@ -71,7 +71,30 @@ export function offeringPrice(offering: OfferingId, locale: Locale = "de"): Offe
   return { ...price, figure: { ...price.figure, vatNote: VAT_NOTE[locale] } };
 }
 
-/** TS-WEB-0026 D6 / TS-WEB-0018 D2/D3 — true only for a `price_status: fixed` offering. */
+/**
+ * TS-WEB-0026 D6 / TS-WEB-0018 D2/D3 — true only for a `price_status: fixed`
+ * offering. Two of the four are fixed in the package: `portalize-calendar`
+ * (480, priced) and `community-calendar` (0, forever — rendered as the
+ * permanence statement, still a fixed price). TS-WEB-0018-A2 names both as
+ * `true`; until this pass the function read `display === "priced"` and
+ * answered `false` for the free tier, which `offerings.test.ts` now holds
+ * against the package frontmatter.
+ */
 export function publishablePrice(offering: OfferingId): boolean {
-  return OFFERING_PRICES[offering].display === "priced";
+  const { display } = OFFERING_PRICES[offering];
+  return display === "priced" || display === "permanent";
+}
+
+/**
+ * The figure of a priced offering — what the JSON-LD `Offer` and any figure
+ * render read (TS-WEB-0024-A11: one import, no literal). It throws for an
+ * offering that publishes no figure, so a template mistake fails the build
+ * rather than printing a `0` or the enterprise figure (TS-WEB-0026-A4).
+ */
+export function publishedFigure(offering: OfferingId, locale: Locale = "de"): PriceFigure {
+  const { figure } = offeringPrice(offering, locale);
+  if (figure === undefined) {
+    throw new Error(`offering ${offering} publishes no figure (TS-WEB-0018 D2/D3)`);
+  }
+  return figure;
 }

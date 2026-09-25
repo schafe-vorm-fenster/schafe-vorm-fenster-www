@@ -46,6 +46,8 @@ import { PhotoSurface } from "./photo-surface/photo-surface";
 import { PlaceExampleSet } from "./place-example-set/place-example-set";
 import { PlaceholderSurface } from "./placeholder-surface/placeholder-surface";
 import { PlaceSearch } from "./place-search/place-search";
+import { HintBanner } from "./hint-banner/hint-banner";
+import { PriceSection, PriceTierRow } from "./price-section/price-section";
 import { PriceTag } from "./price-tag/price-tag";
 import { ProofCard } from "./proof-card/proof-card";
 import { ProofStream } from "./proof-stream/proof-stream";
@@ -57,14 +59,20 @@ import { ScopePicker } from "./scope-picker/scope-picker";
 import { SearchField } from "./search-field/search-field";
 import { SectionNav } from "./section-nav/section-nav";
 import { SectionShell } from "./section-shell/section-shell";
+import { SettingRow, SettingRows } from "./setting-row/setting-row";
 import { SiteFooter } from "./site-footer/site-footer";
 import { SiteHeader } from "./site-header/site-header";
 import { Skeleton } from "./skeleton/skeleton";
 import { SkipLink } from "./skip-link/skip-link";
 import { StatusBadge } from "./status-badge/status-badge";
 import { StepIndicator } from "./step-indicator/step-indicator";
+import { Tag } from "./tag/tag";
 import { TrustBlock } from "./trust-block/trust-block";
 import { ValueStory } from "./value-story/value-story";
+
+import { dictionary } from "@/src/lib/i18n/dictionary";
+import { offeringPrice } from "@/src/lib/pricing/offerings";
+import { standardSources } from "@/src/lib/pricing/standard-sources";
 
 import type { DataState } from "./data-state";
 import type { FourComparisonRows } from "./content-fragments";
@@ -554,8 +562,7 @@ export const GALLERY: readonly GalleryEntry[] = [
             <Button variant={OFFER_TIER_CTA_VARIANT["portalize-calendar"]}>Kalender bestellen</Button>
           }
           priceDisplay="priced"
-          priceFigure={{ amount: 480, currency: "EUR", interval: "year", vatNote: "zzgl. USt." }}
-          secondaryCta={<Button variant="quiet">Angebot anfragen</Button>}
+          priceFigure={offeringPrice("portalize-calendar").figure}
         />
         <OfferTier
           audienceLine="Für Landkreise"
@@ -568,6 +575,120 @@ export const GALLERY: readonly GalleryEntry[] = [
           priceDisplay="on-request"
         />
       </div>
+    ),
+  },
+  {
+    // The composition that replaces `offer-tier` (TS-WEB-0024 D6, DEC-0118):
+    // one paper section, the lime-500 band, three rows on hairlines, one CTA
+    // each at quiet · primary-light · quiet. Row wording is the 2026-09-23
+    // drafts' (plan/reviews/2026-09-23/Design - Preis Section 1–2.png); the
+    // band's kicker is the dictionary's.
+    name: "price-section",
+    number: 64,
+    section: "2.3",
+    demo: (
+      <PriceSection
+        framing="Der Preis hängt nur davon ab, wo der Kalender stehen soll."
+        headingId="gallery-price-heading"
+        headline="Drei Wege zu eurem Kalender"
+        kicker={dictionary("de").kickers.price}
+      >
+        <PriceTierRow
+          checks={[
+            { text: "Kalender eures Orts und der Umgebung" },
+            { text: "Termine veröffentlichen, auch per WhatsApp" },
+            { text: "Für Vereine, Gemeinden, Händler, alle" },
+          ]}
+          cta={{ label: "Termine veröffentlichen", to: "takePart" }}
+          kicker="Im Dorfkalender"
+          offeringId="community-calendar"
+          price={offeringPrice("community-calendar")}
+          title="Der Kalender für euren Ort"
+        />
+        <PriceTierRow
+          checks={[
+            { text: "Unter eurem Namen, in eurem Design" },
+            { text: "Mit euren Orten, Kategorien und Akteuren" },
+            { text: "Termine kommen von selbst rein" },
+          ]}
+          cta={{ label: "Kalender bestellen", to: "order" }}
+          kicker="Auf eurer Website"
+          offeringId="portalize-calendar"
+          price={offeringPrice("portalize-calendar")}
+          title="Euer eigener Kalender"
+        />
+        <PriceTierRow
+          checks={[
+            { text: "Für Landkreise, Behörden, große Städte" },
+            { text: "Zusätzlich mit Kartenansicht" },
+            { text: "Eigene Registrierung unter eurem Namen" },
+          ]}
+          cta={{ label: "Beratungstermin buchen", to: "region" }}
+          kicker="Für eine Region"
+          offeringId="portalize-enterprise"
+          price={offeringPrice("portalize-enterprise")}
+          title="Ein Kalender für den Landkreis"
+        />
+      </PriceSection>
+    ),
+  },
+  {
+    name: "tag",
+    number: 65,
+    section: "2.1",
+    demo: (
+      <div className={styles.row}>
+        <Tag>Stadtgebiet</Tag>
+        <Tag>Ortsteile</Tag>
+        <Tag excluded>Nachbarorte</Tag>
+        <Tag tone="surface">Kultur</Tag>
+      </div>
+    ),
+  },
+  {
+    // Rows from the 2026-09-23 drafts (Design -. Portalize Einstellungen 1–2.png);
+    // the third carries the placeholder-badge marker (DEC-0118).
+    name: "setting-row",
+    number: 66,
+    section: "2.3",
+    demo: (
+      <SettingRows>
+        <SettingRow
+          core="Einzelne Orte, ganze Gemeinden oder ein Umkreis."
+          example="Beispiel: Die Kulturgesellschaft einer Stadt nimmt nur das Stadtgebiet — aus Nachbarorten taucht nichts auf."
+          icon="map-pin"
+          tags={[{ label: "Stadtgebiet" }, { label: "Ortsteile" }, { label: "Nachbarorte", excluded: true }]}
+          title="Orte"
+        />
+        <SettingRow
+          core="Nur die, die zu euch gehören — die anderen erscheinen nicht."
+          example="Beispiel: Eine Stiftung zeigt nur ihre Partner und die Projekte aus den eigenen Förderprogrammen."
+          icon="users"
+          tags={[{ label: "Partner" }, { label: "Geförderte" }, { label: "Alle anderen", excluded: true }]}
+          title="Veranstalter"
+        />
+        <SettingRow
+          core="Wie weit der Kalender nach vorn schaut."
+          icon="clock"
+          marker="wird geprüft"
+          title="Zeitraum"
+        />
+      </SettingRows>
+    ),
+  },
+  {
+    // The boundary sentence is DEC-0107's own title; the sources are the
+    // offering record's (`standard-sources.ts`), never a list written here.
+    name: "hint-banner",
+    number: 67,
+    section: "2.3",
+    demo: (
+      <HintBanner locale="en" sources={standardSources()}>
+        <p>
+          A standard source publishes free; an individual integration into a system we do not
+          already support is the paid add-on.
+        </p>
+      </HintBanner>
     ),
   },
   {

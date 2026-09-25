@@ -1,27 +1,29 @@
 import { Icon } from "../icon/icon";
+import { PRICE_TIER_CTA_VARIANT, PRICE_TIERS } from "../price-section/price-tier-row";
 import { PriceTag, type PriceDisplay, type PriceFigure } from "../price-tag/price-tag";
 
-import type { ButtonVariant } from "../button/button";
 import type { CheckItem } from "../content-fragments";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { ReactNode } from "react";
 
 import styles from "./offer-tier.module.css";
 
-/** The three tiers, in the fixed order TS-WEB-0024 D6/D6a names. */
-export const OFFER_TIERS = ["community-calendar", "portalize-calendar", "portalize-enterprise"] as const;
+/**
+ * @deprecated Replaced by `price-section` (`PriceTierRow`, DEC-0118). The
+ * order and the weight table are that module's now; these names re-export
+ * them so the one page still composing the panel (`/dein-kalender`, T-13)
+ * keeps compiling until it moves. Delete this folder once it has.
+ */
+export const OFFER_TIERS = PRICE_TIERS;
 
 export type OfferTierId = (typeof OFFER_TIERS)[number];
 
 /**
- * The variant is derived from the tier, never chosen at a call site — this is
- * what makes "tier 2 never Pulse" structural rather than a matter of taste.
+ * @deprecated See `PRICE_TIER_CTA_VARIANT`. Quiet · primary-light · quiet —
+ * TS-WEB-0024 D6 as amended 2026-09-25; the earlier `secondary` on tier 1 was
+ * the review's, not the determination's.
  */
-export const OFFER_TIER_CTA_VARIANT: Record<OfferTierId, ButtonVariant> = {
-  "community-calendar": "secondary",
-  "portalize-calendar": "primary-light",
-  "portalize-enterprise": "quiet",
-};
+export const OFFER_TIER_CTA_VARIANT = PRICE_TIER_CTA_VARIANT;
 
 export interface OfferTierProps {
   readonly offeringId: OfferTierId;
@@ -30,33 +32,27 @@ export interface OfferTierProps {
   readonly priceDisplay: PriceDisplay;
   readonly priceFigure?: PriceFigure;
   readonly checks: readonly CheckItem[];
-  /** Rendered with `OFFER_TIER_CTA_VARIANT[offeringId]` — never chosen by the caller. */
+  /** The one CTA — rendered with `OFFER_TIER_CTA_VARIANT[offeringId]`, never chosen by the caller. */
   readonly primaryCta: ReactNode;
-  readonly secondaryCta?: ReactNode;
   readonly footnote?: string;
   readonly locale?: Locale;
   readonly className?: string;
 }
 
 /**
- * 27 `offer-tier` [PROPOSED] — content type 7 `offer-tier`, TS-WEB-0024 D6/D6a.
+ * 27 `offer-tier` — **deprecated**, superseded by `price-tier-row`
+ * (`src/components/price-section/`, TS-WEB-0024 D6 as amended 2026-09-25).
  *
- * Structure: one tier under the page's own "who is the calendar for?"
- * heading — a short argument, `price-tag`, and up to two CTAs. The group
- * order (`community-calendar`, `portalize-calendar`, `portalize-enterprise`)
- * and each tier's `data-offering` are fixed; the shared question heading
- * above all three tiers is composed by the page, not repeated here.
- * States: static; the price comes from the offering package (via `price-tag`
- * props for now, until M3 wires the real one).
- * Inherits: **not an audience selector** — no tab, toggle, radio or `select`
- * anywhere near this component. No feature matrix. Radius 0 panel, hairline
- * separation, never a floating card. Tier 2's CTA is `primary-light`, never
- * `pulse`; tier 3's is `quiet` — both derived from `offeringId`, not passed.
- * Space: `min-height` matches across a rendered group via CSS `align-items:
- * stretch` on the page's grid, so the group does not reflow when copy length
- * differs between tiers.
- * A11y: the tier name is a heading; the two CTAs carry distinguishing labels
- * ("Kalender bestellen" ≠ three identical "Mehr erfahren").
+ * What changed and why the panel is on its way out: D6 fixes **exactly one
+ * CTA per tier** (DEC-0082 §4) and the weights quiet · primary-light · quiet.
+ * This panel used to offer a `secondaryCta` slot and mapped tier 1 to
+ * `secondary`; both are gone — one CTA per tier is structural now, and the
+ * weight table is shared with the row that replaces this.
+ *
+ * Structure: one tier — name, audience line, `price-tag`, check rows, one
+ * CTA. States: static. Inherits: not an audience selector; no feature
+ * matrix; radius 0. Space: stretches to the group's height. A11y: the tier
+ * name is a heading.
  */
 export function OfferTier({
   offeringId,
@@ -66,7 +62,6 @@ export function OfferTier({
   priceFigure,
   checks,
   primaryCta,
-  secondaryCta,
   footnote,
   locale,
   className,
@@ -88,10 +83,7 @@ export function OfferTier({
           </li>
         ))}
       </ul>
-      <div className={styles.ctas}>
-        {primaryCta}
-        {secondaryCta}
-      </div>
+      <div className={styles.ctas}>{primaryCta}</div>
       {footnote ? <p className={styles.footnote}>{footnote}</p> : null}
     </div>
   );

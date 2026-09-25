@@ -65,6 +65,11 @@
   --height-chip: var(--target-min); /* ≥ 40 specified; 44 also clears 2.5.5 */
   --height-badge: 26px;
   --height-badge-icon: 30px;
+  /* SRC-0014 §Badge and chip, "Tag": the non-tappable 30 px size. */
+  --height-tag: 30px;
+  /* The `lime-100` icon well of the price tier row and the setting row —
+     40 px square, a 24 px `lime-800` glyph inside (T-06 drafts, DEC-0118). */
+  --size-icon-well: 40px;
   --height-event-row: 76px;
   --height-search: var(--target-comfortable); /* 56 */
 

@@ -156,3 +156,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0110 — The scene wraps the explain module — the opener above it, the concrete instance below it, and `/` keeps three scene blocks](DEC-0110--the-scene-wraps-the-explain-module.md)
 - [DEC-0111 — The excerpt repairs the locator — a check reads every citation and says where a moved statement went](DEC-0111--the-excerpt-repairs-the-locator.md)
 - [DEC-0112 — The method registry needs a credential — the build reads it from the environment, and the claim that it did not was false for nineteen deployments](DEC-0112--the-method-registry-needs-a-credential.md)
+- [DEC-0118 — The price section is one paper section with a lime band and three rows — the row renders its one CTA itself, the setting row takes its shape from the drafts, and "wird geprüft" is the placeholder badge](DEC-0118--the-price-section-set.md)

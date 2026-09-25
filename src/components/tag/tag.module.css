@@ -1,0 +1,40 @@
+.tag {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--tracking-mono);
+  line-height: 1;
+  min-height: var(--height-tag);
+  /* 5 × 12 specified; the transparent 1 px border keeps the excluded state
+     at the same box, so a struck tag never shifts its neighbours. */
+  padding: 4px 11px;
+  white-space: nowrap;
+}
+
+/* On paper. */
+.ink {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+}
+
+/* Inside a lime section. */
+.surface {
+  background: var(--color-neutral-surface);
+  color: var(--color-neutral-ink);
+}
+
+/* The fill goes away, a 1 px `border` outline takes its place, the label
+   is struck through and set in `muted` — the only strikethrough in the system. */
+.excluded {
+  background: transparent;
+  border-color: var(--color-neutral-border);
+  color: var(--color-neutral-muted);
+}
+
+.struck {
+  text-decoration: line-through;
+}

@@ -1,0 +1,13 @@
+/*
+ * The section shell's own block padding is handed to the band and the rows:
+ * the band is flush with the section's top edge (it is the section's ground
+ * there), and the last row carries the bottom step itself.
+ */
+.section {
+  padding-block: 0;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+}
