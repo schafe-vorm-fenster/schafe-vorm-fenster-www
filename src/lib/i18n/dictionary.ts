@@ -283,6 +283,40 @@ export interface Dictionary {
     germanOnlyNotice: string | null;
   };
   /**
+   * `contact-section`'s own words (TS-WEB-0016 D13, DEC-0081, CG-031). The
+   * values — number, address, who answers — are not here: they resolve from
+   * the hub record through `src/lib/contact/contact-channels.ts`.
+   *
+   * Provenance, per key (DEC-0113): `rows.*` is the owner's wording from
+   * `concept/website-copy-guide.md` CG-031 ("Videotermin buchen · per
+   * WhatsApp schreiben · anrufen · Mail schreiben"); `portraitAlt` is the
+   * cleared alt of `content/pages/ueber-uns/{de,en}.md` (image
+   * `ueber-uns-team-jan-henrik-hempel`). `heading`, `lead`, `appointmentSub`
+   * and `outboundNote` exist only as design-draft text and are placeholders:
+   * the section carries `data-demo="true"` and `state/open.md` carries one
+   * row per string.
+   */
+  contactSection: {
+    heading: string;
+    lead: string;
+    portraitAlt: string;
+    /** The four row titles, D13 order, ≤ 24 characters each (CG-031). */
+    rows: {
+      appointment: string;
+      whatsapp: string;
+      phone: string;
+      mail: string;
+    };
+    /** Row 1's sub-label: what a booking covers — never a response time (CG-031). */
+    appointmentSub: string;
+    /**
+     * The D16 outbound marking under row 1: what activating the control
+     * does and who receives what follows. A separate `meta` line, never in
+     * the label.
+     */
+    outboundNote: string;
+  };
+  /**
    * Page titles, keyed by route id — the fallback for a route whose artifact
    * carries no `seo.title` (TS-WEB-0011 D5; the artifact is the source, F-2-72).
    */
@@ -392,6 +426,25 @@ const de: Dictionary = {
     sectionsLabel: "Abschnitte",
     // The German page carries no notice: its six sections are German (F-2-74).
     germanOnlyNotice: null,
+  },
+  contactSection: {
+    // Placeholder — design draft (plan/reviews/2026-09-23/Design - Kontakt Section.png), state/open.md.
+    heading: "Direkter Kontakt",
+    // Placeholder — design draft, state/open.md.
+    lead: "Per Video, WhatsApp, Telefon oder Mail.",
+    // content/pages/ueber-uns/de.md, image `ueber-uns-team-jan-henrik-hempel`.
+    portraitAlt: "Jan-Henrik Hempel erklärt etwas mit beiden Händen, hinter ihm Holzbalken.",
+    // concept/website-copy-guide.md CG-031, the owner's four row titles.
+    rows: {
+      appointment: "Videotermin buchen",
+      whatsapp: "Per WhatsApp schreiben",
+      phone: "Anrufen",
+      mail: "Mail schreiben",
+    },
+    // Placeholder — design draft, state/open.md.
+    appointmentSub: "Termin im Kalender aussuchen",
+    // Placeholder — the D16 sentence is copy nobody wrote yet, state/open.md.
+    outboundNote: "Öffnet den Buchungskalender bei Google.",
   },
   pages: {
     home: "Schafe vorm Fenster",
@@ -512,6 +565,26 @@ const en: Dictionary = {
     sectionsLabel: "Sections",
     germanOnlyNotice:
       "The six legal sections below are available in German only. We do not machine-translate legal text and do not write an English substitute for it. The English documents follow once they exist.",
+  },
+  contactSection: {
+    // Placeholder — design draft, state/open.md.
+    heading: "Direct contact",
+    // Placeholder — design draft, state/open.md.
+    lead: "By video, WhatsApp, phone or mail.",
+    // content/pages/ueber-uns/en.md, image `ueber-uns-team-jan-henrik-hempel`.
+    portraitAlt: "Jan-Henrik Hempel explaining something with both hands raised, timber beams behind him.",
+    // The CG-031 titles in English; "Book a video call" is the hub's own label
+    // for the schedule link (@schafe-vorm-fenster/people, jan-henrik-hempel).
+    rows: {
+      appointment: "Book a video call",
+      whatsapp: "Write on WhatsApp",
+      phone: "Call",
+      mail: "Write an e-mail",
+    },
+    // Placeholder — design draft, state/open.md.
+    appointmentSub: "Pick a slot in the calendar",
+    // Placeholder — the D16 sentence is copy nobody wrote yet, state/open.md.
+    outboundNote: "Opens the booking calendar at Google.",
   },
   pages: {
     home: "Schafe vorm Fenster",

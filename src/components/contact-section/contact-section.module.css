@@ -1,0 +1,209 @@
+/*
+ * contact-section — SRC-0014 §Contact section.
+ *
+ * One fixed ground, `lime-100`, on every page: audience addressing runs
+ * through the copy, never through the ground, which is what makes the
+ * section recognisable. Each row carries its own ground, so nothing is
+ * read against `lime-100` directly except the head, the lead, the D16 note
+ * and the two hairline rows, all in `ink`/`muted` on a near-white ground.
+ */
+.section {
+  background: var(--color-lime-100);
+  color: var(--color-neutral-ink);
+  padding-block: var(--section-padding-block);
+  /* The links inside are rows with their own grounds; a bare link would take the ground's pair. */
+  --ground-link: var(--color-lime-800);
+  --ground-link-hover: var(--color-lime-900);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ── Head: portrait, section head, name ─────────────────────────────────── */
+
+.head {
+  align-items: center;
+  display: flex;
+  gap: var(--space-4);
+}
+
+/* An avatar at the logo's radius — `ratio-square`, clipped to 999, 96 px. */
+.portrait {
+  aspect-ratio: var(--ratio-square);
+  border-radius: var(--radius-pill);
+  flex: 0 0 auto;
+  height: var(--size-contact-portrait);
+  object-fit: cover;
+  width: var(--size-contact-portrait);
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.heading {
+  font-size: var(--type-section-size);
+  font-weight: 800;
+  letter-spacing: var(--type-section-tracking);
+  line-height: 1.05;
+  margin: 0;
+}
+
+/* The person's name at card title size. */
+.name {
+  font-size: var(--type-card-size);
+  font-weight: 700;
+  letter-spacing: var(--type-card-tracking);
+  line-height: var(--type-card-leading);
+  margin: 0;
+}
+
+.lead {
+  font-size: var(--type-lead-size);
+  line-height: 1.4;
+  margin: 0;
+  max-width: var(--measure-reading);
+}
+
+/* ── The four rows ──────────────────────────────────────────────────────── */
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--control-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/*
+ * One `<a>`, the whole row the target. `.row.filled` at two classes, the
+ * pattern `button` records: a link's colour is otherwise settled by CSS-module
+ * import order, which the production bundle orders differently from `next dev`.
+ */
+.row {
+  align-items: center;
+  border-radius: var(--radius-pill);
+  color: inherit;
+  display: flex;
+  gap: var(--space-4);
+  min-height: var(--height-contact-row);
+  padding: 0 var(--space-6);
+  text-decoration: none;
+  width: 100%;
+}
+
+.glyph,
+.arrow {
+  flex: 0 0 auto;
+}
+
+.text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  padding-block: var(--space-3);
+}
+
+/* Bold title 18 / 700; sub-label 15 / 400. */
+.title {
+  font-size: var(--type-body-size);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.15;
+}
+
+.sub {
+  font-size: var(--type-meta-size);
+  font-weight: 400;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+/* Row 1: ink ground, paper title (16.56:1), lime-400 sub-label (11.21:1). */
+.row.filled {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+}
+
+.row.filled .sub {
+  color: var(--color-lime-400);
+}
+
+.row.filled:hover {
+  background: var(--color-lime-900);
+}
+
+/* Row 2: paper ground, ink title, muted sub-label (5.70:1). */
+.row.outlined {
+  background: var(--color-neutral-paper);
+  color: var(--color-neutral-ink);
+}
+
+.row.outlined .sub {
+  color: var(--color-neutral-muted);
+}
+
+.row.outlined:hover {
+  background: var(--color-neutral-surface);
+}
+
+/*
+ * Rows 3–4: no fill, a lime-400 hairline above each, the icon and the value
+ * in mono 18 px ink. 56 px, the whole row the target.
+ */
+.row.hairline {
+  background: transparent;
+  border-radius: 0;
+  border-top: 1px solid var(--color-lime-400);
+  color: var(--color-neutral-ink);
+  min-height: var(--height-contact-hairline-row);
+  padding: 0;
+}
+
+.row.hairline:hover .mono {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.15em;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--type-body-size);
+  font-weight: 700;
+  letter-spacing: var(--tracking-mono);
+  overflow-wrap: anywhere;
+}
+
+/* The D16 marking: the `meta` role, under the control, never in its label. */
+.note {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+  line-height: 1.4;
+  margin: 0;
+  padding-inline: var(--space-6);
+}
+
+/* The accessible name keeps the row title where the eye gets only the value. */
+.srOnly {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

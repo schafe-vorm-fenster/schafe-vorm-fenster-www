@@ -10,8 +10,23 @@ import { isKnownConversionGoalId } from "@/src/lib/analytics/goal-ids";
 import type { ConversionEventDefinition } from "@/src/lib/analytics/event-registry";
 
 describe("TS-WEB-0012-A3: the event registry resolves against @schafe-vorm-fenster/goals", () => {
-  it("carries the nine goal ids of D4, one event per conversion goal", () => {
-    expect(CONVERSION_EVENTS).toHaveLength(9);
+  it("carries the nine goal ids of D4 plus make-contact, one event per conversion goal", () => {
+    expect(CONVERSION_EVENTS).toHaveLength(10);
+  });
+
+  it("TS-WEB-0016 D12/A18: make-contact is wired as a handover and named as an intent", () => {
+    const event = conversionEvent("make-contact");
+    expect(event?.wired).toBe(true);
+    expect(event?.stage).toBe("handover");
+    expect(event?.surface).toBe("chrome");
+    expect(event?.trigger).toContain("intent");
+    expect(event?.trigger.toLowerCase()).not.toMatch(/counts? (a )?contact\b/);
+  });
+
+  it("DEC-0081 §4: request-product-briefing fires from the contact section, and is an intent", () => {
+    const event = conversionEvent("request-product-briefing");
+    expect(event?.surface).toBe("chrome");
+    expect(event?.trigger).toContain("intent");
   });
 
   it("has no violations against the hub package or against itself", () => {
