@@ -1,3 +1,8 @@
+/*
+ * One control per other language, framed as an invitation (DEC-0120): the
+ * half-sentence in Meta, then the language's own name as the link. The
+ * current language is not rendered at all — there is nothing to switch to.
+ */
 .nav {
   display: block;
 }
@@ -11,49 +16,54 @@
   padding: 0;
 }
 
-.link,
-.current {
+.item {
+  align-items: baseline;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  min-height: var(--target-min);
+}
+
+.invitation {
+  color: var(--color-neutral-muted);
+  font-size: var(--type-meta-size);
+}
+
+/* The control keeps the link treatment (`lime-800` on light) and a 44 px
+   box of its own, so the invitation can wrap beside it without shrinking
+   the target. */
+.link {
   align-items: center;
-  border-radius: var(--radius-pill);
+  color: var(--color-lime-800);
   display: inline-flex;
   font-family: var(--font-mono);
   font-size: var(--type-label-size);
   font-weight: 700;
   letter-spacing: var(--type-label-tracking);
   min-height: var(--target-min);
-  padding: 0 var(--space-4);
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
   text-transform: uppercase;
-}
-
-.link {
-  color: var(--color-lime-800);
+  text-underline-offset: 0.15em;
 }
 
 .link:hover {
-  background: var(--color-neutral-surface2);
+  text-decoration-thickness: 2px;
 }
 
-/* The current language is marked by the fill, not by colour of the text. */
-.current {
-  background: var(--color-neutral-ink);
-  color: var(--color-neutral-paper);
+.link:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-ring-offset);
 }
 
 /*
- * On an ink ground (the phone menu overlay) the pair inverts: the available
- * language reads in `lime-300`, the current one takes the paper fill it
- * needs to be a fill at all. Still marked by the fill, not by colour alone.
+ * On an ink ground (the phone menu overlay) the pair inverts: the
+ * invitation reads in `paper`, the link in `lime-300`.
  */
+.dark .invitation {
+  color: var(--color-neutral-paper);
+}
+
 .dark .link {
   color: var(--color-lime-300);
-}
-
-.dark .link:hover {
-  background: color-mix(in srgb, var(--color-neutral-paper) 16%, transparent);
-}
-
-.dark .current {
-  background: var(--color-neutral-paper);
-  color: var(--color-neutral-ink);
 }

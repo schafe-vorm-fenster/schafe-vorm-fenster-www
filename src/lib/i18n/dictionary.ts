@@ -34,6 +34,11 @@ export interface Dictionary {
     knowWhatIsOn: string;
     publishDates: string;
     yourCalendar: string;
+    /**
+     * The fourth job's label — "Über uns" / "About us" since DEC-0120 (review
+     * R-home-33, R-ueber-1: "Warum wir" was rejected in the band and on the
+     * page; the slug is `ueber-uns` and the label says what the page is).
+     */
     whyUs: string;
     calendarButton: string;
     /**
@@ -75,6 +80,16 @@ export interface Dictionary {
    * `data-mock`, never in the page (Jan, 2026-09-18).
    */
   newsletter: {
+    /**
+     * Names what arrives, not "news" (CG-029: at least two concrete things;
+     * review R-home-35). **Placeholder** — the two things are the review's
+     * own list, the sentence is nobody's (DEC-0120, state/open.md row 233).
+     * **Rendered today**: the block stands in the footer of every route
+     * (`app/[lang]/layout.tsx`) inside `data-mock` — the non-sending form's
+     * marking, Q-0020 — so the heading element marks itself
+     * `data-demo="true"` while this word stands. Nothing withholds the block
+     * yet; that is T-10's default (a null constant) and T-10's record.
+     */
     heading: string;
     emailLabel: string;
     emailPlaceholder: string;
@@ -148,19 +163,32 @@ export interface Dictionary {
     liveAnswer: string;
     /** The widened radius — one place over. */
     widerRadius: string;
-    /** Why the thing matters. */
+    /** What the reader gets out of it — "Was hilft euch das?" (CG-018; "Warum das zählt" is on the avoid list). */
     whyItMatters: string;
     /** How the mechanism works. */
     howItWorks: string;
     /** The objection: why it snags today. */
     objection: string;
-    /** The evidence: who already does this. */
-    evidence: string;
+    /**
+     * Press and appearance proof — "Was andere sagen" (CG-017; the review's
+     * own split: press is what others say, customers are who already works
+     * with it).
+     */
+    othersSay: string;
+    /**
+     * Customer proof. **Placeholder**: the review rejects "Wer das schon
+     * macht" and names no replacement (copy guide, open decision 2), so this
+     * is a stand-in until the hub carries the wording (DEC-0120,
+     * state/open.md row 234). `/mitmachen`, `/dein-kalender` and
+     * `/deine-region` render it through `SectionShell`'s `kickerDemo`, which
+     * marks the kicker element `data-demo="true"`.
+     */
+    customers: string;
     /** Price and scope. */
     price: string;
     /** Trust: how we work. */
     trust: string;
-    /** Origin: where this comes from. */
+    /** Origin — "Die Geschichte" (review R-ueber-3; "Wo das herkommt" is on the avoid list). */
     origin: string;
     /** The people behind it — `/ueber-uns`'s team block. */
     team: string;
@@ -174,6 +202,33 @@ export interface Dictionary {
     newsletter: string;
     /** The context band's other concerns. */
     otherConcerns: string;
+  };
+  /**
+   * The context band's registry fallback — one blurb per job, the sentence
+   * the band shows under a job label where the page's own `context-band`
+   * slot carries none (TS-WEB-0006 D5 with CG-030, DEC-0120). A page's slot
+   * wins; this is what the pages without a slot render. A blurb that is not
+   * yet a CG-030 statement (a question, or over 80 characters) renders
+   * `data-demo="true"` — see `src/lib/content/context-band.ts`.
+   */
+  contextBand: {
+    blurbs: {
+      knowWhatIsOn: string;
+      publishDates: string;
+      yourCalendar: string;
+      whyUs: string;
+    };
+  };
+  /**
+   * The language switch's invitation — the half-sentence that leads *into*
+   * this language, written in this language, so the German page shows the
+   * English one and the English page the German one (TS-WEB-0001 D5,
+   * DEC-0120; review R-home-39 "Read this page in English:").
+   */
+  languageSwitch: {
+    invitation: string;
+    /** True while the sentence is nobody's — the switch marks it `data-demo`. */
+    invitationIsPlaceholder: boolean;
   };
   /**
    * The form controls' own words — the strings a component renders when the
@@ -393,7 +448,7 @@ const de: Dictionary = {
     knowWhatIsOn: "Was ist los",
     publishDates: "Termine veröffentlichen",
     yourCalendar: "Dein Kalender",
-    whyUs: "Warum wir",
+    whyUs: "Über uns",
     calendarButton: "Kalender",
     breadcrumb: "Seitenpfad",
     logoHome: "Schafe vorm Fenster — zur Startseite",
@@ -410,7 +465,7 @@ const de: Dictionary = {
     language: "Sprache",
   },
   newsletter: {
-    heading: "Neuigkeiten aus dem Projekt",
+    heading: "Neue Funktionen und aktuelle Angebote",
     emailLabel: "E-Mail-Adresse",
     emailPlaceholder: "name@verein.de",
     submit: "Anmelden",
@@ -443,16 +498,34 @@ const de: Dictionary = {
   kickers: {
     liveAnswer: "Was gerade ansteht",
     widerRadius: "Einen Ort weiter",
-    whyItMatters: "Warum das zählt",
+    whyItMatters: "Was hilft euch das?",
     howItWorks: "So funktioniert es",
     objection: "Warum es heute hakt",
-    evidence: "Wer das schon macht",
+    othersSay: "Was andere sagen",
+    customers: "Wer den Kalender nutzt",
     price: "Was es kostet",
     trust: "Wie wir arbeiten",
-    origin: "Wo das herkommt",
+    origin: "Die Geschichte",
     team: "Wer dahintersteckt",
     newsletter: "Newsletter",
     otherConcerns: "Anderes Anliegen?",
+  },
+  contextBand: {
+    blurbs: {
+      // The three questions are the wording of the pages' own band slots
+      // (content/pages/home/de.md:251-253, dein-ort/de.md, mitmachen/de.md);
+      // CG-030 wants statements, so they render demo-marked until the owner
+      // writes them. The publish blurb is the owner's (copy guide CG-030 example,
+      // review "Heute mit einem anderen Anliegen hier?").
+      knowWhatIsOn: "Du willst wissen, was in deinem Ort als Nächstes ansteht?",
+      publishDates: "Wie du einfach Termine per WhatsApp oder Kalender veröffentlichen kannst",
+      yourCalendar: "Du willst einen Kalender unter eigenem Namen, auf eurer eigenen Website?",
+      whyUs: "Du willst wissen, wer den Dorfkalender macht?",
+    },
+  },
+  languageSwitch: {
+    invitation: "Diese Seite auf Deutsch lesen:",
+    invitationIsPlaceholder: true,
   },
   forms: {
     noOptions: "Keine Auswahl verfügbar.",
@@ -555,7 +628,7 @@ const en: Dictionary = {
     knowWhatIsOn: "What is on",
     publishDates: "Publish dates",
     yourCalendar: "Your calendar",
-    whyUs: "Why us",
+    whyUs: "About us",
     calendarButton: "Calendar",
     breadcrumb: "Page path",
     logoHome: "Schafe vorm Fenster — to the home page",
@@ -572,7 +645,7 @@ const en: Dictionary = {
     language: "Language",
   },
   newsletter: {
-    heading: "News from the project",
+    heading: "New features and current offers",
     emailLabel: "Email address",
     emailPlaceholder: "name@yourgroup.org",
     submit: "Sign up",
@@ -605,16 +678,32 @@ const en: Dictionary = {
   kickers: {
     liveAnswer: "What's on now",
     widerRadius: "One place over",
-    whyItMatters: "Why it matters",
+    whyItMatters: "What's in it for you?",
     howItWorks: "How it works",
     objection: "Why it snags today",
-    evidence: "Who already does this",
+    othersSay: "What others say",
+    customers: "Who uses the calendar",
     price: "What it costs",
     trust: "How we work",
-    origin: "Where this comes from",
+    origin: "The story",
     team: "Who is behind it",
     newsletter: "Newsletter",
     otherConcerns: "Something else today?",
+  },
+  contextBand: {
+    blurbs: {
+      // The English band slots' own wording (content/pages/home/en.md,
+      // dein-ort/en.md, mitmachen/en.md); the publish line is the English
+      // twin of the owner's German sentence.
+      knowWhatIsOn: "Want to know what's coming up where you live?",
+      publishDates: "How to publish dates the easy way, by WhatsApp or from a calendar",
+      yourCalendar: "Want a calendar under your own name, on your own website?",
+      whyUs: "Want to know who makes the village calendar?",
+    },
+  },
+  languageSwitch: {
+    invitation: "Read this page in English:",
+    invitationIsPlaceholder: false,
   },
   forms: {
     noOptions: "Nothing to choose from yet.",
@@ -675,7 +764,7 @@ const en: Dictionary = {
     // Placeholder — the D16 sentence is copy nobody wrote yet, state/open.md.
     outboundNote: "Opens the booking calendar at Google.",
   },
-  // Nobody wrote these three words yet — state/open.md row 219.
+  // Nobody wrote these three words yet — state/open.md row 235.
   eventStatus: {
     neu: "New",
     verschoben: "Postponed",

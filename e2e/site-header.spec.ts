@@ -28,7 +28,7 @@ const DESKTOP = { width: 1280, height: 800 };
 const BELOW_XL = { width: 768, height: 900 };
 
 /** The four jobs of TS-WEB-0004 D4, verbatim, in IA order. */
-const JOBS = ["Was ist los", "Termine veröffentlichen", "Dein Kalender", "Warum wir"];
+const JOBS = ["Was ist los", "Termine veröffentlichen", "Dein Kalender", "Über uns"];
 const CALENDAR = "Kalender";
 
 /** The header is the document's `banner`; a page may carry other `header`s. */

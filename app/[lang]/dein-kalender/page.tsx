@@ -480,7 +480,9 @@ export default async function Page({
           that. */}
       <SectionShell
         dataBlock="proof"
-        kicker={dictionary(locale).kickers.evidence}
+        // Customer proof: the placeholder kicker, marked (DEC-0120 §5).
+        kicker={dictionary(locale).kickers.customers}
+        kickerDemo
         labelledBy="proof-heading"
         surface="paper"
       >

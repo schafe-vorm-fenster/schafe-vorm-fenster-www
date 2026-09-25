@@ -727,7 +727,7 @@ export default async function HomePage({
       <MotionReveal>
         <SectionShell
           id="proof-stream"
-          kicker={words.kickers.evidence}
+          kicker={words.kickers.othersSay}
           labelledBy="proof-stream-heading"
           surface="lime-100"
         >

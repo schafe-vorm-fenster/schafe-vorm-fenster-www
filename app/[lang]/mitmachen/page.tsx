@@ -386,7 +386,10 @@ export default async function Page({
           `surface` (band) and `paper` (closing) after the aside. */}
       <SectionShell
         dataBlock="beleg"
-        kicker={dictionary(locale).kickers.evidence}
+        // Customer proof: `customers` is the placeholder kicker, marked on its
+        // element (DEC-0120 §5, state/open.md row 234).
+        kicker={dictionary(locale).kickers.customers}
+        kickerDemo
         labelledBy="beleg-heading"
         surface="surface-2"
       >

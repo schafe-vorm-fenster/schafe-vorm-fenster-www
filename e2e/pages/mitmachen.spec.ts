@@ -198,10 +198,16 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
       "Warum es heute hakt",
       "So funktioniert es",
       "Was gerade ansteht",
-      "Wer das schon macht",
     ]) {
       await expect(page.getByText(kicker, { exact: true })).toBeVisible();
     }
+    // The proof section's kicker is the customer-proof placeholder, marked
+    // on its element (DEC-0120 §5, state/open.md row 234); the h2 keeps its
+    // own words, so the two are not the same three words stacked.
+    const proofKicker = page.locator("[data-block='beleg'] p[class*='kicker']");
+    await expect(proofKicker).toHaveText("Wer den Kalender nutzt");
+    await expect(proofKicker).toHaveAttribute("data-demo", "true");
+    await expect(page.locator("#beleg-heading")).toHaveText("Was andere sagen");
   });
 
   /**

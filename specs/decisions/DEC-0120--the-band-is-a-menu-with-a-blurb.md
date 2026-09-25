@@ -1,0 +1,181 @@
+---
+id: DEC-0120
+title: The band is a menu with a blurb — the page's slot supplies it, the registry stands in, and the language switch offers only the other language
+status: DRAFT
+date: 2026-09-25
+decided_by: the engineering team
+---
+
+## Context
+
+The 2026-09-22 review (`plan/reviews/2026-09-23/2026-09-22 Review SVF Preview
+Website.md`, "Heute mit einem anderen Anliegen hier?", "Footer", `/ueber-uns`
+"Seitenname", "Warum das zählt", "Was andere sagen") and its spec impact
+(`plan/reviews/2026-09-23/spec-impact.md` theme J) leave the chrome vocabulary
+with five open choices that no determination takes:
+
+1. **The band's blurb.** `TS-WEB-0006 D5` wants "an offer in the visitor's own
+   voice, not a menu" — one entry per job, no blurb, wording deferred to
+   `SRC-0017 CG-030`. CG-030 (`concept/website-copy-guide.md:369`) budgets a
+   field that does not exist and carries `[PROPOSED]` for that reason; its
+   §6 note (`:398-416`) names what the spec must add — a `blurb` on the
+   entry, rendered beside label and target, per locale, and *where the text
+   comes from*: "the job registry carries it per job". The review asks for
+   the opposite of D5's phrasing: a menu, rows under each other with a
+   frame, and "zu jedem Link einen Halbsatz, der Zielgruppe und Inhalt
+   aufgreift", with one sentence supplied for the publish entry.
+2. **The fourth label.** `TS-WEB-0004 D4` fixes "Warum wir → `/ueber-uns`".
+   The review rejects it twice (R-home-33, R-ueber-1) and names "Über uns"
+   as the neutral choice; the copy guide's avoid list (`:514`) says the same.
+3. **The language switch.** `TS-WEB-0001 D5` determines plain `<a>`
+   navigation and leaves "visual form and exact footer placement" `[FREE]`
+   (`:101`). The review wants an invitation ("Read this page in Englisch:")
+   and asks whether the current language must stand there as a button at
+   all ("eigentlich unnütze").
+4. **The legal base line** — "Den Impressums-Footer optisch abheben".
+5. **The kickers.** `kickers.whyItMatters` ("Warum das zählt"),
+   `kickers.evidence` ("Wer das schon macht") and `kickers.origin` ("Wo das
+   herkommt") are on the avoid list (`:513-516`); the review replaces two
+   (CG-018 "Was hilft euch das?", R-ueber-3 "Die Geschichte"), splits the
+   third ("Was andere sagen" for press proof; customers are "wer das schon
+   macht" but that heading is rejected) and names no replacement for the
+   customer half (copy guide, open decision 2). `newsletter.heading`
+   ("Neuigkeiten aus dem Projekt") is CG-029's own avoid example.
+
+Working rule 4 (`AGENTS.md`) forbids writing page copy; the repository's
+placeholder convention (DEC-0068; `src/lib/content/validate.ts:112-133`) marks
+a sentence nobody wrote in the markup, never in a word the visitor reads.
+
+## Decision
+
+1. **The band is a menu with a blurb.** Each of the three entries renders as
+   a framed row of at least 44 px carrying the job label, a blurb of at most
+   80 characters and an arrow (`src/components/context-band/`). The blurb is
+   read **from the page's own `context-band` slot** — one list item per job,
+   `Label: blurb → /path`, matched to its job by the path through the
+   route table, never by the label text — and **the registry stands in** for
+   a page without a slot or a slot without that item
+   (`dictionary.contextBand.blurbs`, keyed by the job's label key;
+   `src/lib/content/context-band.ts`). The band's heading is the slot's
+   kicker, as before. This departs from CG-030's §6 note, which puts the
+   text in the job registry so the three entries "cannot drift from the
+   fourth page's own description": the pages already carry their band
+   wording per page (`state/open.md` row 95: "its own band text rather than
+   the shared home sentence"), and a page's slot is the place its copy is
+   reviewed, so the slot wins and the registry guarantees only that every
+   entry has a sentence. **CG-030 becomes the predicate** `isBandStatement`:
+   a statement, ≤ 80 characters, no question mark (CG-005). An entry whose
+   blurb is not one yet renders `data-demo="true"` — today that is every
+   entry except the publish one, because the artifacts phrase the band as
+   questions and only the publish sentence exists as a statement (the
+   review's own, `copy-guide.md:384-385`). `TS-WEB-0006 D5`'s "an offer, not a
+   menu" and "no blurb" are superseded by this record; the amendment of D5's
+   table and of `TS-WEB-0007 D5`'s slot type is left to the spec owner and
+   named in the consequences.
+2. **The fourth label is "Über uns" / "About us."** `TS-WEB-0004 D4` is
+   amended in place; the dictionary key stays `whyUs` because it is the job
+   id's name in code. The sender surface is the one label that names the
+   page rather than a job — the `FUN-WEB-0002` carve-out theme J asks for.
+3. **The language switch renders only the other language as a control.** The
+   current language is the page the visitor is reading and is not a control.
+   Each control is an invitation in the target language followed by the
+   language's endonym as the link, `hreflang` and `lang` on the link, `lang`
+   on the invitation; the target is the equivalent page (A7). `TS-WEB-0001
+   D5` gains this paragraph and the `[FREE]` shrinks to the footer placement.
+   The English invitation is the review's sentence, spelling corrected
+   ("Read this page in English:"); the German twin is nobody's and carries
+   `data-demo="true"`.
+4. **The legal base line stands on its own ground** — `surface2` under a
+   hairline, padded, reaching the container's edges
+   (`site-footer.module.css`; the markup is unchanged).
+5. **The kicker keys are replaced, not softened.** `whyItMatters` → "Was
+   hilft euch das?"; `origin` → "Die Geschichte"; `evidence` is split into
+   `othersSay` ("Was andere sagen", press and appearances) and `customers`
+   (customer proof), and `customers` is a **placeholder** because the copy
+   guide names no replacement. `evidence` is removed, not aliased: every
+   proof block picks its key by what it proves. The press pages `/` and
+   `/ueber-uns` read `othersSay` — the guide's own row (`:516`, "Was andere
+   sagen *for press proof only*"), honoured, not overridden. The customer
+   pages `/mitmachen`, `/dein-kalender` and `/deine-region` read `customers`
+   and pass `SectionShell`'s new `kickerDemo` flag, which marks the kicker
+   element `data-demo="true"` — the placeholder convention applied to a
+   kicker, one optional prop on the shell (T-05's file, two lines). On
+   `/ueber-uns` the content heading beneath the kicker
+   (`content/pages/ueber-uns/de.md`, slot 3: "Was andere sagen") is owner
+   copy and already reads the three words `othersSay` would put over it, so
+   that one proof section carries **no kicker**: a deviation from polish
+   brief G-3 (`plan/polish-brief.md:142`, "each section after the hero opens
+   with a kicker") taken over a heading doubled directly beneath itself. On
+   `/mitmachen` and `/dein-kalender` the h2 (`PROOF_LABEL`, "Was andere
+   sagen" / "Belege") over customer proof predates this record; that the
+   first reads the guide's press-only words over customers (`:516`) is
+   T-12's row to settle, not this record's override — the kicker above it
+   no longer repeats them. `newsletter.heading` names two of the review's
+   three concrete things ("Neue Funktionen und aktuelle Angebote"; CG-029
+   title ≤ 40) as a placeholder. The block **renders in the footer of every
+   route today** (`app/[lang]/layout.tsx`, unchanged since the base) inside
+   `data-mock="true"`, which marks the non-sending form (Q-0020,
+   `state/open.md` row 22), not the sentence — so the heading element itself
+   carries `data-demo="true"` while the dictionary word is the placeholder
+   (`newsletter-block.tsx`, one attribute; the marking lifts when a page
+   passes its own `heading`). **Nothing withholds the block**: no null
+   constant exists in this tree. Withholding it until a sending system
+   exists is T-10's default (`owner_decisions_defaulted`, TS-WEB-0016-A21
+   over R-home-35) and T-10's own record (the number reserved for T-10,
+   not yet written), and this record hands it over there. English twins of
+   owner wording are translations, the way every other dictionary string
+   has been since TS-WEB-0001 D7 — they are not new sentences.
+
+## Consequences
+
+- The band on a page that passes its slot (`PageFrame`'s new `contextBand`
+  prop) shows that page's blurbs; a page that passes only the heading shows
+  the registry's. Today no page passes its slot, so every band shows the
+  registry's words. The two are not the same words for the publish entry:
+  the slot item on `/` (`content/pages/home/de.md:251`) is a question ("Du
+  willst Termine für deinen Verein, deine Feuerwehr oder deine Gemeinde
+  eintragen?"), while the registry carries the owner's CG-030 statement.
+  Wiring `contextBand={slot}` as the slot stands would demote that row from
+  an unmarked statement to a `data-demo` question, so a page owner replaces
+  the slot's publish item by the CG-030 statement before wiring the slot
+  (`state/open.md` rows 231–232).
+- `app/[lang]/_page-frame.tsx` (T-10's) gained more than the heading
+  pass-through the task foresaw: an optional `contextBand?: ContentSlot`
+  prop handed on to `ContextBand`, with the band heading falling back to
+  that slot's first field. Nothing else in the file changed; T-10's owner
+  keeps it.
+- Placeholders this record ships, each `data-demo="true"` in the markup and a
+  row in `state/open.md`: the three question blurbs per language (rows 231,
+  232), the German invitation (row 235), `kickers.customers` (row 234;
+  rendered on the three customer-proof pages, marked on the kicker element
+  through `kickerDemo`) and `newsletter.heading` (row 233; rendered in every
+  footer, marked on its own heading element). The rows were 215–219 before
+  the merge with `next-2026` and follow T-09's 224 since.
+- Files of other tasks changed by the smallest edit that makes the tree and
+  this record agree, and their owners keep them:
+  `src/components/section-shell/section-shell.tsx` (T-05) gains the optional
+  `kickerDemo` prop and the attribute it sets — nothing else;
+  `app/[lang]/page.tsx` (T-11) reads `othersSay` on `#proof-stream`;
+  `app/[lang]/mitmachen/page.tsx` (T-12, block `beleg`),
+  `app/[lang]/dein-kalender/page.tsx` (T-13, block `proof`) and
+  `app/[lang]/deine-region/page.tsx` (T-15, block `beleg`) read `customers`
+  with `kickerDemo`; `app/[lang]/ueber-uns/page.tsx` (T-14, block
+  `belegstrom`) reads `othersSay` for its candidates and heading fallback and
+  passes no kicker (§5); `src/components/newsletter-block/newsletter-block.tsx`
+  (T-10) carries `data-demo` on the heading while the dictionary word is the
+  placeholder; `e2e/pages/mitmachen.spec.ts` (T-12) asserts the marked
+  kicker and the h2 on that block by exact text, and
+  `e2e/pages/dein-kalender.spec.ts` (T-13) lists the new kicker.
+- Spec follow-ups outside this task's ownership: `TS-WEB-0006 D5`'s Phrasing
+  row (menu with blurb, the slot as source, the registry as fallback) and
+  `TS-WEB-0007 D5`'s `blurb` field on the `context-band` slot type; CG-030's
+  `[PROPOSED]` marker can drop once both land. Until then this record is
+  what makes CG-030 a determination (AGENTS.md rule 8: the deviation from
+  D5's "offer, not a menu" is recorded here, not silent).
+- `e2e/site-header.spec.ts`, `e2e/pages/mitmachen.spec.ts`,
+  `e2e/pages/dein-kalender.spec.ts` and `e2e/content-compliance.spec.ts` pin
+  the replaced strings and were edited by one string each so the suite
+  states the tree; their owners keep them. `e2e/context-band.spec.ts` and
+  `e2e/language-switch.spec.ts` are new, written for this record's two
+  components, and belong with them although `e2e/` is outside the task's
+  listed files.

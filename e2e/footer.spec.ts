@@ -118,8 +118,9 @@ test("SRC-0014 §Touch targets: every standalone footer control clears 44 px", a
       height: element.getBoundingClientRect().height,
     })),
   );
-  // Three legal links, two languages, the summary, the field and its submit.
-  expect(heights.length).toBe(8);
+  // Three legal links, the one other language (DEC-0120: the current one is
+  // not a control), the summary, the field and its submit.
+  expect(heights.length).toBe(7);
   const small = heights.filter((entry) => entry.height < 44);
   expect(small, `controls under 44 px: ${JSON.stringify(small)}`).toEqual([]);
 });

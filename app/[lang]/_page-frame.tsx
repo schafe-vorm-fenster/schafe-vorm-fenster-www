@@ -36,9 +36,11 @@ import { ClosingCta, ClosingCtaModule } from "@/src/components/closing-cta/closi
 import { ContextBand } from "@/src/components/context-band/context-band";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
+import { fieldAt } from "@/src/lib/content/blocks";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { jobLabelKey } from "@/src/lib/pages/page-meta";
 
+import type { ContentSlot } from "@/src/lib/content/types";
 import type { PageMeta } from "@/src/lib/pages/page-meta";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { RouteId } from "@/src/lib/routes/routes";
@@ -107,6 +109,14 @@ export interface PageFrameProps {
   readonly meta: PageMeta;
   /** The band's own phrasing, from the page's `context-band` content slot. */
   readonly contextBandHeading?: string;
+  /**
+   * The page's `context-band` slot itself, where the page has one: its
+   * kicker is the heading (unless `contextBandHeading` says otherwise) and
+   * its list items are the blurbs under the three jobs (DEC-0120,
+   * `src/lib/content/context-band.ts`). Without it the band falls back to
+   * the registry's blurbs.
+   */
+  readonly contextBand?: ContentSlot;
   readonly closing: ClosingBlock;
   readonly children: ReactNode;
 }
@@ -123,11 +133,15 @@ export function PageFrame({
   meta,
   locale,
   contextBandHeading,
+  contextBand,
   closing,
   children,
 }: PageFrameProps) {
   const currentJob = jobLabelKey(meta.focusJob);
-  const bandHeading = contextBandHeading ?? BAND_HEADING[locale];
+  const bandHeading =
+    contextBandHeading ??
+    (contextBand ? fieldAt(contextBand.blocks, 0) : undefined) ??
+    BAND_HEADING[locale];
   const merged = closing.variant === "merged";
 
   return (
@@ -178,7 +192,12 @@ export function PageFrame({
               a plain `section` before (F-2-41). */}
           <MotionReveal>
             <SectionShell as="aside" id="context-band" label={bandHeading} surface="surface">
-              <ContextBand currentJob={currentJob} heading={bandHeading} locale={locale} />
+              <ContextBand
+                currentJob={currentJob}
+                heading={bandHeading}
+                locale={locale}
+                slot={contextBand}
+              />
             </SectionShell>
           </MotionReveal>
 

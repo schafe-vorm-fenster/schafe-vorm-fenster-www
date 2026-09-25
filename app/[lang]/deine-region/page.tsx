@@ -436,7 +436,9 @@ export default async function Page({
           no cleared reference case for a delivered territory exists. */}
       <SectionShell
         dataBlock="beleg"
-        kicker={words.kickers.evidence}
+        // Customer proof: the placeholder kicker, marked (DEC-0120 §5).
+        kicker={words.kickers.customers}
+        kickerDemo
         labelledBy="beleg"
         surface="lime-100"
       >

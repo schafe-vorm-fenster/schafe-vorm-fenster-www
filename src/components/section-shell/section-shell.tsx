@@ -27,6 +27,8 @@ export interface SectionShellProps {
    * a new colour.
    */
   readonly kicker?: string;
+  /** `true` marks the kicker `data-demo="true"`: a stand-in word nobody wrote (DEC-0068, DEC-0120 §5). */
+  readonly kickerDemo?: boolean;
   /**
    * One line tying this section to the one before it, where the argument
    * moves (G-3). It adds no claim; it names the joint. Rendered between the
@@ -91,6 +93,7 @@ const SURFACE_CLASS: Record<SectionSurface, string> = {
 export function SectionShell({
   surface = "paper",
   kicker,
+  kickerDemo,
   transition,
   density = "standard",
   id,
@@ -113,7 +116,11 @@ export function SectionShell({
 
   const body = (
     <>
-      {kicker ? <p className={styles.kicker}>{kicker}</p> : null}
+      {kicker ? (
+        <p className={styles.kicker} data-demo={kickerDemo ? "true" : undefined}>
+          {kicker}
+        </p>
+      ) : null}
       {transition ? <p className={styles.transition}>{transition}</p> : null}
       {children}
     </>
