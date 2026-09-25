@@ -6,8 +6,20 @@
   text-decoration: none;
 }
 
-/* Radius 999 — the same radius as every control (SRC-0014 §Logo). */
+/*
+ * Radius 999 — the same radius as every control (SRC-0014 §Logo).
+ *
+ * Over a hero photograph the mark is one of the shapes the header's blur
+ * primitive is defined on (DEC-0105 §4: "the control's own shape — 44 px
+ * well, 40 px logo mark"). The header publishes the treatment as two custom
+ * properties — `--header-well` (the tint, `scrim-38` or the solid `ink`
+ * fallback) and `--header-blur` (the filter, or `none`) — and the mark reads
+ * them here, so the logo module never has to know which state the header is
+ * in. Outside the header both fall back to nothing.
+ */
 .mark {
+  backdrop-filter: var(--header-blur, none);
+  background: var(--header-well, transparent);
   border-radius: var(--radius-pill);
   flex: none;
   height: 40px;

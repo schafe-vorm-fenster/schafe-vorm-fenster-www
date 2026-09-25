@@ -1,54 +1,31 @@
 /*
- * The photograph and the gradient are one declaration, so the scrim scales
- * with the image (SRC-0014 §Photo surface). The stops follow the specified
- * band: transparent at 12–26 %, 0.82–0.86 at 38–62 %, 0.96 at the bottom.
- * `color-mix` keeps the alpha values inside the token system — no colour
- * literal exists anywhere in this repository outside brand.css.
+ * The photograph and the scrim are one declaration, so the scrim scales with
+ * the image (SRC-0014 §Photo surface). The scrim is the design system's fixed
+ * ladder — DEC-0105 §1, the 2026-09-23 draft "Neutral · transparent" (1b):
  *
- * **Round 3, Jan's point 1 — the rebalance.** The scrim had grown until the
- * photograph was a strip at the top of its own section: the section gradient
- * reached its dark plateau at 55 % *and* the content-anchored scrim of F-2-2
- * started 32 px above a text stack that began with a badge, so on the 8:9
- * phone rendition the two together covered roughly four fifths of the box.
- * Three changes, none of which gives back the contrast F-2-2 bought:
+ *   - **neutral black**, from the `color.scrim.*` alpha ladder of
+ *     `@schafe-vorm-fenster/brand-design` 2.8.1 — never `ink`, never
+ *     `violet-500`, never a `color-mix()` of either: a tinted scrim dyes the
+ *     photograph. The ink and violet tone variants are retired, one treatment
+ *     for every hero on the site;
+ *   - **two gradients, exactly the draft's stops**: the top band that carries
+ *     the header (`scrim-35 → scrim-0` over the first 16 %), and the reading
+ *     band under the headline, the search field and the CTAs
+ *     (`scrim-0` at 38 % → `scrim-38` at 58 % → `scrim-72` at 100 %);
+ *   - **0.72 is the ceiling.** The retired 0.96 step put the text on a black
+ *     band. `pnpm check:contrast` reads this file and fails a stop above it
+ *     (TS-WEB-0002-A3, hero row; NFR-WEB-0058/0059).
  *
- *   1. the section gradient takes the **far end** of the design system's own
- *      band — transparent through 26 %, the plateau at 62 % — instead of the
- *      near end. The picture is untouched through the top quarter and only
- *      lightly veiled to about 40 %;
- *   2. the placeholder and demo marks left the text stack for the
- *      photograph's top corner (`photo-surface.tsx`), so the stack is the
- *      copy alone and starts that much lower;
- *   3. the content-anchored scrim's run-up is halved, 32 px → 16 px, so it
- *      still reaches F-2-2's 0.82 floor by the stack's own top edge but
- *      darkens half as much of the picture above it.
+ * What is gone with it: the content-anchored second scrim (`.content::before`,
+ * 0.82 → 0.96) that F-2-2 added for long headlines. The reading band replaces
+ * it; a hero whose text stack outgrows the band takes shorter copy or a
+ * different crop, never a darker scrim (DEC-0105 §2, DEC-0116).
  *
- * The numbers are measured, not asserted: `state/open.md` row 203 carries the
- * before/after contrast table at 360 and 1280 for all four sampled pages.
+ * No colour literal exists here: the ladder is read as tokens, so the guard in
+ * `scripts/check-brand.ts` cannot see a value it should not, and the one in
+ * `scripts/check-contrast.ts` can see the ceiling.
  */
 .surface {
-  align-items: flex-end;
-  /*
-   * The scrim and the photograph are one declaration (SRC-0014 §Photo
-   * surface), so the gradient scales with the image. The gradient itself is a
-   * variable set by the tone class below, which lets the hero swap in its
-   * landscape rendition at the width where `--ratio-hero` turns landscape
-   * without restating the stops a second time.
-   */
-  background-image: var(--photo-gradient), var(--photo-image);
-  aspect-ratio: var(--photo-ratio, var(--ratio-hero));
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  border-radius: 0;
-  display: flex;
-  /* The containing block for the marks in the photograph's own top corner. */
-  position: relative;
-  width: 100%;
-}
-
-.ink {
-  --photo-scrim: var(--color-neutral-ink);
   /* The ground's link colour and primary pair, the same roles
      `section-shell` publishes — a photo section is a dark section. */
   --ground-link: var(--color-lime-400);
@@ -58,46 +35,88 @@
   --ground-primary-fill: var(--color-lime-500);
   --ground-primary-text: var(--color-neutral-ink);
   --ground-primary-fill-hover: var(--color-lime-400);
-  --photo-gradient: linear-gradient(
-    to bottom,
-    transparent 26%,
-    color-mix(in srgb, var(--color-neutral-ink) 84%, transparent) 62%,
-    color-mix(in srgb, var(--color-neutral-ink) 96%, transparent) 100%
+  /*
+   * The two gradients are variables so the `lg` rule below can swap the
+   * landscape rendition in without restating the stops a second time. The
+   * stops are the draft's, verbatim, and are the only stops in this file.
+   */
+  --photo-gradient-top: linear-gradient(
+    180deg,
+    var(--color-scrim-35) 0,
+    var(--color-scrim-0) 16%
   );
+  --photo-gradient-reading: linear-gradient(
+    180deg,
+    var(--color-scrim-0) 38%,
+    var(--color-scrim-38) 58%,
+    var(--color-scrim-72) 100%
+  );
+  align-items: flex-end;
+  aspect-ratio: var(--photo-ratio, var(--ratio-hero));
+  background-image: var(--photo-gradient-top), var(--photo-gradient-reading), var(--photo-image);
+  /*
+   * The crop follows the motif's declared focal point, never `center` by
+   * default (DEC-0105 §2): village photographs are sky-heavy, and a centred
+   * crop parks the motif in the bottom third, exactly where the reading band
+   * is densest. `--photo-focal` is set per image from the inventory's
+   * `focal: {x, y}`; without one the frame sits at 50 % 40 %, which crops the
+   * sky away and lands the motif above the band's opaque end.
+   */
+  background-position: var(--photo-focal, 50% 40%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 0;
   color: var(--color-neutral-paper);
+  display: flex;
+  /* The containing block for the marks in the photograph's own top corner. */
+  position: relative;
+  /*
+   * The soft text shadow is part of the treatment, not an extra: every piece
+   * of type on a photo surface carries it — display, lead, button label,
+   * search placeholder (SRC-0014 §The scrim). `text-shadow` inherits, so one
+   * declaration on the surface reaches all of them; type on a flat ground
+   * carries none, which is why it is declared here and nowhere else.
+   */
+  text-shadow: var(--shadow-text-on-photo);
+  width: 100%;
 }
 
-/* The municipal path (SRC-0014 §Photo surface). */
-.violet {
-  --photo-scrim: var(--color-violet-500);
-  --ground-link: var(--color-lime-400);
-  --ground-link-hover: var(--color-lime-300);
-  --link: var(--color-lime-400);
-  --link-hover: var(--color-lime-300);
-  --ground-primary-fill: var(--color-lime-500);
-  --ground-primary-text: var(--color-neutral-ink);
-  --ground-primary-fill-hover: var(--color-lime-400);
-  --photo-gradient: linear-gradient(
-    to bottom,
-    transparent 26%,
-    color-mix(in srgb, var(--color-violet-500) 84%, transparent) 62%,
-    color-mix(in srgb, var(--color-violet-500) 96%, transparent) 100%
-  );
-  color: var(--color-neutral-paper);
+/*
+ * Form controls do not inherit `text-shadow` — the user-agent sheet resets it
+ * to `none` on `button`, `input`, `select` and `textarea` — so the button
+ * label and the search placeholder the design system names are given the
+ * surface's shadow back explicitly. `:where()` keeps the specificity at zero:
+ * a control that declares its own shadow would win, and none does.
+ */
+.surface :where(button, input, select, textarea),
+.surface :where(input, textarea)::placeholder {
+  text-shadow: inherit;
+}
+
+/*
+ * An overlay that opens from the surface — the place-search listbox — paints
+ * its own flat paper ground out of flow. Type on a flat ground carries no
+ * shadow, whatever it descends from.
+ */
+.surface :where([role="listbox"], [role="dialog"]) {
+  text-shadow: none;
 }
 
 /*
  * Art direction, not a second image for its own sake: `--ratio-hero` is 8:9
  * on the phone and 21:9 from 48rem (`app/styles/components.css`), and a
- * landscape frame centre-cropped into the phone's upright box loses most of
- * its motif. The generator renders both (`scripts/generate-images.mjs`);
+ * landscape frame cropped into the phone's upright box loses most of its
+ * motif. The generator renders both (`scripts/generate-images.mjs`);
  * mobile-first, so the upright one is the base and this swaps the wide one in
  * at the same width the ratio changes. A surface with no wide rendition keeps
  * the base image, so nothing here depends on both existing.
  */
 @media (min-width: 48rem) {
   .surface {
-    background-image: var(--photo-gradient), var(--photo-image-wide, var(--photo-image));
+    background-image:
+      var(--photo-gradient-top),
+      var(--photo-gradient-reading),
+      var(--photo-image-wide, var(--photo-image));
   }
 }
 
@@ -110,42 +129,6 @@
   padding: var(--section-padding-block) var(--space-4);
   position: relative;
   width: 100%;
-  z-index: 0;
-}
-
-/*
- * F-2-2: the gradient above is a percentage of the *box* (fixed by
- * `ratio-hero`/`ratio-feature`), while the text stack's height is not — a
- * longer headline, a search field, or an English translation all change how
- * much of the box the content actually fills. At 360 px the box-relative
- * gradient alone could put the first line of text above its own dark band,
- * because the content grew taller than the percentages assumed.
- *
- * This second scrim is anchored to `.content`'s own box instead of the
- * section's, so it grows and shrinks with the text stack itself: by the
- * stack's own top edge (16 px in the gradient below, the pseudo-element's own
- * top inset) it has already reached the 0.82 floor the design system sets
- * (SRC-0014 §Photo surface, §Accessibility), regardless of how tall the stack
- * is. `z-index: 0` on `.content` gives it its own stacking context so the
- * pseudo-element's `z-index: -1` stays behind the real content and above
- * `.surface`'s own image, rather than escaping to a lower level of the
- * document.
- *
- * Round 3: the run-up is 16 px rather than 32 px, and the stack it is
- * anchored to no longer begins with the placeholder badge — the floor at the
- * text's own edge is unchanged, the darkened band above it is halved.
- */
-.content::before {
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    color-mix(in srgb, var(--photo-scrim, var(--color-neutral-ink)) 82%, transparent) 16px,
-    color-mix(in srgb, var(--photo-scrim, var(--color-neutral-ink)) 96%, transparent) 100%
-  );
-  content: "";
-  inset: -16px 0 0;
-  position: absolute;
-  z-index: -1;
 }
 
 /*
@@ -173,12 +156,10 @@
  * cannot change it after paint; the band is pure CSS and resolves before the
  * first paint, so it shifts nothing.
  *
- * The text stack still sits inside the same box, on the gradient's dark end:
- * the photograph is `cover`, so a hero whose copy grows past the band simply
- * shows more of the picture through the scrim rather than running out of
- * image. `.content::before` keeps its 0.82 floor at the stack's own top edge
- * regardless of how far down the box that edge falls, which is what holds
- * the contrast (verified by pixel sampling, not by the gradient's maths).
+ * The text stack still sits inside the same box, on the reading band's dark
+ * end: the photograph is `cover`, so a hero whose copy grows past the band
+ * simply shows more of the picture through the scrim rather than running out
+ * of image.
  *
  * From `lg` the hero ratio turns 21:9 and the desktop heroes were already
  * right; there the band stays the width ratio it was.

@@ -32,6 +32,12 @@ export interface RenderableImage {
   readonly height: number;
   readonly ratio: ImageEntry["ratio"];
   /**
+   * The motif's focal point, `{x, y}` in per cent, where the inventory
+   * declares one — `photo-surface` crops to it (DEC-0105 §2). Absent, the
+   * surface's own default (`50% 40%`, never `center`) applies.
+   */
+  readonly focal?: ImageEntry["focal"];
+  /**
    * True for every generated rendition: it stands in for a photograph nobody
    * has taken, so it does not depict what the copy claims and the design
    * system's placeholder badge goes on it (SRC-0014 § Photo surface).
@@ -61,6 +67,7 @@ function renderable(entry: ImageEntry): RenderableImage | undefined {
     width: entry.width,
     height: entry.height,
     ratio: entry.ratio,
+    ...(entry.focal ? { focal: entry.focal } : {}),
     notDepicting: generated,
     priority: entry.lcp === true,
     ...(entry.caption ? { caption: entry.caption } : {}),
