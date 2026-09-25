@@ -3,7 +3,7 @@ artefact: contract
 id: SRC-0013
 status: DRAFT
 date: 2026-09-10
-updated: 2026-09-24
+updated: 2026-09-25
 decisions: [DEC-0044, DEC-0054, DEC-0104]
 ---
 
@@ -39,15 +39,18 @@ bump with a changelog.
 ## What already suffices
 
 **One version number, and it is the package version.** The package is
-published as `@schafe-vorm-fenster/brand-design`. `main` carries **2.8.0**
-— the npm version, the one `pnpm view` reports, and the one every row below
-cites. The website is pinned at the exact version **`0.1.3`**, which is
-where the old two-number confusion came from: the token sheet inside
-`0.1.3` declares its own `meta.version` `2.6.0`, an editorial kit number
-that was then read as a package version. That kit number is not used in
-this contract any more. **Every version stated below is a package version.**
+published as `@schafe-vorm-fenster/brand-design`, and **`latest` is 2.8.1**
+(published 2026-09-24T10:39:38Z; the published set is `0.1.0`, `0.1.1`,
+`0.1.2`, `0.1.3`, `2.6.0`, `2.7.0`, `2.8.0`, `2.8.1`). **The website is pinned
+at the exact version `2.8.1` since 2026-09-25**, where it was pinned at
+`0.1.3`. That old pin is where the two-number confusion came from: the token
+sheet inside `0.1.3` declares its own `meta.version` `2.6.0`, an editorial kit
+number that was then read as a package version — and `2.6.0` also exists as a
+real package version, published 2026-09-15, which is what made the confusion
+survive being noticed. That kit number is not used in this contract any more.
+**Every version stated below is a package version.**
 
-Read from the pinned package `0.1.3` — the specs consume these and restate
+Read from the pinned package `2.8.1` — the specs consume these and restate
 none of them:
 
 `color` (incl. `dark`, `category`, semantic `roles`) · `font`
@@ -57,16 +60,13 @@ none of them:
 
 **PR #447 is merged.** It was squash-merged on **2026-09-23** (merge commit
 `a1201c4`), and the version bump landed with the releases that followed
-(#449, #451, #455), so the package on `main` is **2.8.0**. Everything §5
-marks as *shipped in 2.8.0* is published upstream today; nothing about it
-is pending review. Four of the values it shipped are wrong and are
-corrected in PR **#464** (open, unmerged, branch
-`brand-design/measured-corrections-2026-09-24`).
+(#449, #451, #455), so **2.8.0** carries it. Four of the values it shipped
+were wrong; PR **#464** corrected all four and **2.8.1** publishes them, so
+§5 no longer marks anything *corrected in PR #464 (unmerged)*.
 
-None of it is consumable here yet: the pin is the exact string `0.1.3`, not
-a range, so no upgrade arrives on its own — see *Consuming it* below. Until
-the pin moves, the website's stand-ins live in `app/styles/brand.css`
-(TS-WEB-0017 D3), never at a call site.
+**All of it is consumable here since 2026-09-25**, because the pin moved to the
+exact string `2.8.1` — see *Consuming it* below. The two stand-ins that lived in
+`app/styles/brand.css` (TS-WEB-0017 D3) are deleted with it, in that order.
 
 ## What is still missing
 
@@ -188,9 +188,11 @@ which renders which.
 
 ### 5. Token roles the new components need
 
-The components in §1 reference token roles that the pinned package `0.1.3`
-does not carry. SRC-0014 names them by role and states what the website does
-until the pin moves; the package is where they belong.
+The components in §1 reference token roles that the pinned package `2.8.1`
+does not carry. Since the pin moved on 2026-09-25 this list is short: the four
+rows that read *corrected in PR #464 (unmerged)* are published and installed,
+and what is left **open** is open in every published version. SRC-0014 names
+each by role and states what the website does meanwhile.
 
 **Two names for one value.** A role is written as its authored path
 (`font.letterSpacing.label`, `font.size.label`, `color.archive.ground`) and
@@ -204,25 +206,26 @@ package is the answer — grep it for the property before assuming the name.
 Each row states the role, what the website needs, and **where it stands** —
 one of three:
 
-- **shipped in 2.8.0** — published upstream, on `main`, correct as it
-  stands. It reaches the website when the pin moves and not before.
-- **corrected in PR #464 (unmerged)** — shipped in 2.8.0 with a wrong
-  value; the measured correction is written and reviewable in PR #464 on
-  `brand-design/measured-corrections-2026-09-24`, and is not published.
-- **open** — the package does not have it and neither does either PR.
+- **shipped in 2.8.0** — published upstream and correct as it stands.
+  **Installed here since the pin moved to 2.8.1 on 2026-09-25.**
+- **corrected in PR #464, shipped in 2.8.1** — 2.8.0 shipped a wrong value and
+  the measured correction is published. All four rows that read *corrected in
+  PR #464 (unmerged)* until 2026-09-25 are in this state, and each states the
+  value read from the installed package.
+- **open** — the package does not have it, in any published version.
 
 | Role | Demand | Stands |
 | --- | --- | --- |
-| `scrim.*` | An alpha ladder over a **neutral-black** base, with the stops `0 · .30 · .35 · .38 · .45 · .72`. Decision 5 fixes the base: a scrim is not a surface colour, and a tinted one dyes the photograph. No component may write a literal `rgba(…)` of any colour — TS-WEB-0017 D3 rejects it — so the neutral look has to *be* a token | **Corrected in PR #464 (unmerged).** 2.8.0 shipped the pre-decision shape: `rgba(23,29,13,α)`, derived from `ink`, with stops `0 · .16 · .38 · .72 · .96`. #464 makes the base neutral black — `rgba(0,0,0,α)` — and the ladder `0 · .30 · .35 · .38 · .45 · .72`, and adds `shadow.textOnPhoto` = `0 1px 2px scrim-45, 0 2px 10px scrim-30` so the photo-surface text shadow is a token too |
-| `archive.ground` | `#FBF1DC` | **Shipped in 2.8.0** as `color.archive.ground`. Stand-in `--color-placeholder-ground` in `app/styles/brand.css` until the pin moves |
+| `scrim.*` | An alpha ladder over a **neutral-black** base, with the stops `0 · .30 · .35 · .38 · .45 · .72`. Decision 5 fixes the base: a scrim is not a surface colour, and a tinted one dyes the photograph. No component may write a literal `rgba(…)` of any colour — TS-WEB-0017 D3 rejects it — so the neutral look has to *be* a token | **Corrected in PR #464, shipped in 2.8.1.** 2.8.0 shipped the pre-decision shape: `rgba(23,29,13,α)`, derived from `ink`, with stops `0 · .16 · .38 · .72 · .96`. 2.8.1 ships the neutral-black base and the full ladder — read in the installed sheet: `--color-scrim-0/30/35/38/45/72` = `rgba(0,0,0,0 / 0.30 / 0.35 / 0.38 / 0.45 / 0.72)`, with `.16` and `.96` retired — and `shadow.textOnPhoto` = `0 1px 2px var(--color-scrim-45), 0 2px 10px var(--color-scrim-30)`. **The `photo-surface` component still does not implement the ladder**, which is a rewrite and not a token swap; SRC-0014 *Photo surface* owns it |
+| `archive.ground` | `#FBF1DC` | **Shipped in 2.8.0** as `color.archive.ground`, installed. The `--color-placeholder-ground` stand-in is **deleted** (2026-09-25): its one call site, `--placeholder-ground` in `app/styles/components.css`, reads `--color-archive-ground`, and `scripts/check-contrast.ts` measures that token. The production stylesheet emits `--color-archive-ground: #fbf1dc` and no `--color-placeholder-ground` |
 | `archive.ink` | Must clear 4.5:1 on `archive.ground` **with margin**. `#9A6300` measures exactly 4.50:1 and is therefore a status colour, not this | **Shipped in 2.8.0**: `#7A4F00`, measured **6.35:1** on the ground and 6.85:1 on `paper`. Until the pin moves the archive block sets its heading in `ink` (15.37:1) and its body in `text-2` (9.52:1); only the kicker waits (SRC-0014 "Archive") |
 | `archive.line` | A tan hairline for the archive ground — `line` measures 1.32:1 on it and is invisible | **Shipped in 2.8.0**: `#DFCB9D`, **1.42:1** on the ground, which is exactly the weight `line` has on `paper` |
-| hairline on lime | `line` measures 1.27:1 on `lime-100`. The website uses `lime-400` (1.31:1, the weight `line` has on paper) | **Corrected in PR #464 (unmerged).** 2.8.0 shipped `border.hairlineOnLime` as `lime-300` `#C6E593`, **1.19:1** on `lime-100` — below what it replaces. #464 makes it `lime-500` `#A4D822`, **1.45:1**, which matches `line`'s 1.42:1 weight on `paper` instead of undercutting it. Measured 2026-09-24 |
+| hairline on lime | `line` measures 1.27:1 on `lime-100`. The website used `lime-400` (1.31:1, the weight `line` has on paper) as an interim | **Corrected in PR #464, shipped in 2.8.1.** 2.8.0 shipped `border.hairlineOnLime` as `lime-300` `#C6E593`, **1.19:1** on `lime-100` — below what it replaces. 2.8.1 makes it `lime-500` `#A4D822`, **1.45:1**, which matches `line`'s 1.42:1 weight on `paper` instead of undercutting it. Measured 2026-09-24; read in the production stylesheet as `--border-hairline-on-lime: 1px solid #a4d822`, so the `lime-400` interim is retired |
 | mono display size | The explain module's ordinal (~48 px) and the price figures (~54 px) have no size role | **Shipped in 2.8.0**: `font.size.displayMono` (3rem) |
 | `font.letterSpacing.label` | One value, `0.08em` | **Shipped in 2.8.0**: `0.06em → 0.08em` |
-| `font.size.label` | `0.875rem` (14 px) is below the 15 px floor | **Shipped in 2.8.0**: `0.9375rem`. Website override in `app/styles/brand.css` until the pin moves; at `2.8.x` it is an exact no-op and is deleted |
+| `font.size.label` | `0.875rem` (14 px) is below the 15 px floor | **Shipped in 2.8.0**: `0.9375rem`, installed. The `app/styles/brand.css` override is **deleted** (2026-09-25), after the pin moved and not before. Measured in the production stylesheet: `--font-size-label: .9375rem` with no override behind it, and 0 of 147 literal `font-size` declarations below 15 px |
 | **badge / tag / chip sizing** | The roles the components in §1 actually need, and which nothing carries today: a label size **at the 15 px floor** for badge, tag and chip alike (`font.size.label` is that role — the components take it, they do not get a smaller one of their own), and the three heights `badge 28` / `badge-with-icon 32` / `tag 30` / `chip 40` px beside `target.*`. C11 is resolved by **raising the sizes**, not by a badge-only carve-out: `TS-WEB-0002 D3` floors at 15 px, `TS-WEB-0002-A10` asserts it, and the built site already has no `font-size` below 15 px | `font.size.label` **shipped in 2.8.0**; the four heights **open** — `target` carries only the 44 px touch floor |
-| `color.category` | The canonical taxonomy is **`@schafevormfenster/rural-event-types` `0.0.1`**, the package inside **`classification-api`** (repo root `3.4.2`), read on **2026-09-24**: four ids — `community-life`, `education-health`, `everyday-supply`, `culture-tourism` — plus `unknown`, the value returned for an event that has not been classified (decision 7, 2026-09-23) | **Keys aligned; two values corrected in PR #464 (unmerged).** The package's five keys *are* that list; SRC-0014's six rows were the outlier and now follow it. (a) `color.categoryStatus` still carries the "PROVISIONAL — … canonical source … was not reachable and has not been read" note in 2.8.0; #464 replaces it with the read source named in the demand column. (b) `community-life.dot` and `.bare` shipped as `himbeere-500` `#E0286E`, which carries **no** legal glyph at badge size — `paper` 4.29:1, `ink` 3.86:1; #464 moves both to `himbeere-600` `#BC1C5A` (5.84:1 with `paper`). Moving the category off the himbeere ramp entirely — himbeere is the pulse — remains **open** |
+| `color.category` | The canonical taxonomy is **`@schafevormfenster/rural-event-types` `0.0.1`**, the package inside **`classification-api`** (repo root `3.4.2`), read on **2026-09-24**: four ids — `community-life`, `education-health`, `everyday-supply`, `culture-tourism` — plus `unknown`, the value returned for an event that has not been classified (decision 7, 2026-09-23) | **Keys aligned; two values corrected in PR #464 (unmerged).** The package's five keys *are* that list; SRC-0014's six rows were the outlier and now follow it. (a) `color.categoryStatus` carried the "PROVISIONAL — … canonical source … was not reachable and has not been read" note through 2.8.0; **2.8.1** replaces it with the read source named in the demand column, and the installed note begins "Read 2026-09-24 from the canonical source: packages/rural-event-categories/src/types/ruralEventCategory.ts in classification-api". (b) `community-life.dot` and `.bare` shipped as `himbeere-500` `#E0286E`, which carries **no** legal glyph at badge size — `paper` 4.29:1, `ink` 3.86:1; **2.8.1** moves both to `himbeere-600` `#BC1C5A` (5.84:1 with `paper`), read in the production stylesheet as `--color-category-community-life: #bc1c5a`. Moving the category off the himbeere ramp entirely — himbeere is the pulse — remains **open** |
 | event-status roles | `neu` · `verschoben` · `abgesagt` all clear contrast and none is named in the package | **Shipped in 2.8.0**: `color.status.event` |
 | `button.treatment` | SRC-0014, the site and every draft use `radius.pill` with `border: 0` | **Shipped in 2.8.0**: an object — `treatment.web` = `pill`, `treatment.print` = `weighted-base`. Nothing retired; read `button.treatment.print` where `button.treatment` was read |
 | `logo.*` | The names must match the files that ship, the SVG must carry tokens, and the mark is a full circle | **Shipped in 2.8.0**: the two shipping files named, `fill="white"`/`#222222` replaced by `paper`/`ink`, `logo.radius` = `radius.pill` everywhere including the favicon |
@@ -233,11 +236,18 @@ this contract exists to prevent.
 
 ## Consuming it: the pin move the website owes
 
-Nothing in §5 reaches the website by waiting. `package.json` pins
-`@schafe-vorm-fenster/brand-design` at the exact string `"0.1.3"` — not a
-caret, not a tilde — so a published 2.8.0 changes nothing here until
-somebody writes the new version down. This is a deliberate **`0.1.3` →
-`2.8.x`** upgrade, and it is website work, not upstream work.
+**Done, 2026-09-25.** `package.json` pins
+`@schafe-vorm-fenster/brand-design` at the exact string `"2.8.1"` — where it
+pinned `"0.1.3"`. It stays **exact**, not a caret or a tilde: `stack.allow.json`
+records the reason with DEC-0044, *"pinned exact so a brand change arrives as a
+reviewable version bump"*, and `scripts/check-stack.ts` A7 fails a range and
+checks that the lockfile resolves the same version. A caret would also let a
+future release move values that every row of §5 states as measured, which is
+the drift this contract exists to catch. `2.8.1` is `latest` at the time of the
+move, so nothing is left behind by choosing exactness.
+
+Nothing in §5 reached the website by waiting, which is why this was website work
+rather than upstream work.
 
 **The upgrade is additive.** Measured against the pinned sheet: **25 new
 custom properties, none removed.** Only **four** properties the two versions
@@ -245,24 +255,35 @@ share change value:
 
 | Property | `0.1.3` → `2.8.x` |
 | --- | --- |
-| `--color-category-community-life` | new value (and still wrong — PR #464 corrects it to `#BC1C5A`) |
+| `--color-category-community-life` | `#BC1C5A` — 2.8.0's new value was still wrong and 2.8.1 carries the correction |
 | `--color-category-community-life-bare` | same change, same correction |
 | `--font-size-label` | `0.875rem` → `0.9375rem` |
 | `--tracking-label` | `0.06em` → `0.08em` |
 
-**What the upgrade settles in `app/styles/brand.css`:**
+**What the upgrade settled in `app/styles/brand.css`, and in which order:**
 
-- `--font-size-label: 0.9375rem` becomes an **exact no-op** — the package
-  then ships that value — and is deleted, not kept. Deleting it *before*
-  the pin moves drops `chip`, `choice-group`, `scope-picker` and the
-  wordmark back to 14 px.
-- `--color-placeholder-ground: #FBF1DC` becomes
-  `var(--color-archive-ground)`, and then goes away with its call sites.
-  **The foreground is not part of that swap.** Moving the archive
-  foreground off `--color-status-warning` (`#9A6300`, exactly 4.50:1 on the
-  ground) onto `color.archive.ink` (`#7A4F00`, 6.35:1) is a design change
-  with its own re-measurement, not a token substitution, and it is owned by
-  SRC-0014, not by the upgrade.
+1. The pin moved first, and the install was verified: `2.8.1` in
+   `node_modules`, with the four corrected values read out of
+   `tokens/svf-tokens.css`.
+2. `--font-size-label: 0.9375rem` was then deleted as an **exact no-op** — the
+   package ships that value. Deleting it *before* the pin moved would have
+   dropped `chip`, `choice-group`, `scope-picker` and the wordmark back to
+   14 px, which is why the order is stated rather than assumed. Measured after:
+   the production stylesheet carries `--font-size-label: .9375rem` from the
+   package, and 0 of its 147 literal `font-size` declarations are below 15 px.
+3. `--color-placeholder-ground: #FBF1DC` was deleted **with** its call sites
+   rather than kept as `var(--color-archive-ground)`: one alias for one value in
+   one place is a second name, not a layer. `--placeholder-ground` in
+   `app/styles/components.css` reads `--color-archive-ground`, and
+   `scripts/check-contrast.ts` measures the same token — necessarily, because
+   `readTokenBlocks` keeps only `#hex` declarations and would not have followed
+   a `var()` indirection. The pair it measures is unchanged:
+   `--color-status-warning` on the ground, at 4.50:1, and the `why` now says so
+   instead of repeating SRC-0014's 6.0:1 claim.
+   **The foreground is not part of that swap.** Moving the archive foreground
+   off `--color-status-warning` (`#9A6300`, exactly 4.50:1 on the ground) onto
+   `color.archive.ink` (`#7A4F00`, 6.35:1) is a design change with its own
+   re-measurement, not a token substitution, and it is owned by SRC-0014.
 
 **What the upgrade does not touch.** The `--font-sans` override and the
 three metric-matched `@font-face` blocks in the same file stay exactly as

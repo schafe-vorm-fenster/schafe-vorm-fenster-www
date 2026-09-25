@@ -62,7 +62,7 @@ describe("TS-WEB-0002-A3: the guard fails what it is meant to fail", () => {
   --link: #BBBBBB; --link-hover: #BBBBBB; --focus: #EEEEEE;
   --brand-fill: #FFFFFF; --brand-fill-text: #EEEEEE;
   --voice: #FFFFFF; --voice-text: #EEEEEE; --pulse: #FFFFFF; --pulse-text: #EEEEEE;
-  --color-status-warning: #EEEEEE; --color-placeholder-ground: #FFFFFF;
+  --color-status-warning: #EEEEEE; --color-archive-ground: #FFFFFF;
   --color-status-error: #EEEEEE; --color-status-success: #EEEEEE;
 }
 `;

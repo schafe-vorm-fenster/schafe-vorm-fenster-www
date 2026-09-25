@@ -76,9 +76,9 @@ const PAIRS: readonly Pair[] = [
   { foreground: "--focus", background: "--bg", minimum: 3, why: "non-text contrast: the focus ring (1.4.11, 2.4.13)" },
   {
     foreground: "--color-status-warning",
-    background: "--color-placeholder-ground",
+    background: "--color-archive-ground",
     minimum: 4.5,
-    why: "the placeholder pair SRC-0014 fixes at 6.0:1",
+    why: "the placeholder pair SRC-0014 fixes at 6.0:1 and measures at 4.50:1",
   },
   // `--color-status-error` / `--color-status-success` are palette-level and
   // the sheet declares no dark variant of either, so on a dark ground they

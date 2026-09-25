@@ -15,8 +15,8 @@ importers:
         specifier: 5.3.0
         version: 5.3.0
       '@schafe-vorm-fenster/brand-design':
-        specifier: 0.1.3
-        version: 0.1.3
+        specifier: 2.8.1
+        version: 2.8.1
       '@vercel/functions':
         specifier: 3.9.7
         version: 3.9.7
@@ -1432,8 +1432,8 @@ packages:
       zod:
         optional: true
 
-  '@schafe-vorm-fenster/brand-design@0.1.3':
-    resolution: {integrity: sha512-B/RHQTtOakeLHM0JdzpN90TKw5+Egc+bw9Pmvru6av0Y+FvYYkP8V5gw11Upy9uhc7Mnex/GYyoBrkUarwZ/Wg==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/brand-design/0.1.3/2c3cd940f5925083e1a89659a7338b41aa4032aa}
+  '@schafe-vorm-fenster/brand-design@2.8.1':
+    resolution: {integrity: sha512-3yta2tHsuzuAHeNvNg0iiePQ7r8sXdYMnXQIHCBXy6leCK2a8ofr4XbCmIkBkSmS864glNhPaQjwdIemPhLTwg==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/brand-design/2.8.1/4a6a97c368ddb6b690086c896d11cc99941b78b5}
 
   '@schafe-vorm-fenster/brand-identity@0.1.4':
     resolution: {integrity: sha512-EwAwerqHr8B413mzp7ph507Yzhh1sg4bXaSqonIwuC4O3NkUvbnoxlaf31Rimj9Ucw9pEo4ZK9pYSenr+K1FZw==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/brand-identity/0.1.4/e0056dedfe80121203efe71982b490b7c8af948b}
@@ -1466,6 +1466,9 @@ packages:
     resolution: {integrity: sha512-/DGiL5Uz6SU+WOWx0eCG498nRaVcJ53/KnxHQtt2KODX3ODpA6Wj6bHdvUKvh7QklEs7eyfknfe30FZPWsWYhw==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/offerings/0.3.5/d5d28bd1a95b45c7826ddc6bb4434db195ed63db}
     peerDependencies:
       zod: ^4.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
 
   '@schafe-vorm-fenster/partners@0.2.4':
     resolution: {integrity: sha512-tDlyBAxA/Pm2j8kUzO7ZgDwzSOoZApDI5XXwXCXN2ExLH6FVJdKdN7T1YJZbAw83zks56hqzdaGxqIRwmnmMQw==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/partners/0.2.4/d3f272dbfeee1817fea7c3fde3e666527cd940e8}
@@ -5446,7 +5449,7 @@ snapshots:
     optionalDependencies:
       zod: 4.4.3
 
-  '@schafe-vorm-fenster/brand-design@0.1.3':
+  '@schafe-vorm-fenster/brand-design@2.8.1':
     dependencies:
       '@fontsource/atkinson-hyperlegible-mono': 5.3.0
       '@fontsource/atkinson-hyperlegible-next': 5.3.0
@@ -5466,7 +5469,7 @@ snapshots:
       zod: 4.4.3
 
   '@schafe-vorm-fenster/offerings@0.3.5(zod@4.4.3)':
-    dependencies:
+    optionalDependencies:
       zod: 4.4.3
 
   '@schafe-vorm-fenster/partners@0.2.4(zod@4.4.3)':

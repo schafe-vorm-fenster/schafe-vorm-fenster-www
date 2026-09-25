@@ -137,7 +137,7 @@
    * Placeholder photography, unresolved clearance and demo data share it
    * (plan/component-inventory.md D-8). 6.0:1 at badge size.
    */
-  --placeholder-ground: var(--color-placeholder-ground);
+  --placeholder-ground: var(--color-archive-ground);
   --placeholder-text: var(--color-status-warning);
   --placeholder-hatch: repeating-linear-gradient(
     45deg,
