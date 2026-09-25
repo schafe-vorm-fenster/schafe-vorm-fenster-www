@@ -14,7 +14,9 @@ Consistency and Traceability*.
 **Installed as:** `@leafcutter-strict/blueprint-complete@0.2.4`, a
 devDependency of this repository (DEC-0085). The `@leafcutter-strict` and
 `@leafcutter-os` scopes resolve to `https://packages.leafcutteros.ai/`
-through `.npmrc`; reading them needs no credential.
+through `.npmrc`. The registry is private and `.npmrc` reads the token from
+`LEAFCUTTER_REGISTRY_TOKEN` (DEC-0112); the earlier claim that reading them
+needed no credential was false.
 
 All specs in this folder are written against STRICT, at that version. The
 framework is an inventory of atomic, separately installable packages in

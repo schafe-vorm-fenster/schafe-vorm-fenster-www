@@ -44,16 +44,26 @@ Useful contributions right now include:
 ## Local Development
 
 ```bash
-export GITHUB_TOKEN=$(gh auth token)   # .npmrc reads it for the private scope
+export GITHUB_TOKEN=$(gh auth token)      # .npmrc reads it for the GitHub scope
+export LEAFCUTTER_REGISTRY_TOKEN=…        # .npmrc reads it for the STRICT scopes
 pnpm install
-pnpm dev                               # http://localhost:3100
+pnpm dev                                  # http://localhost:3100
 ```
 
-`.npmrc` maps three scopes: `@schafe-vorm-fenster` to GitHub Packages, which
-is what the token is for, and `@leafcutter-strict` plus `@leafcutter-os` to
-`https://packages.leafcutteros.ai/`, which needs none. The second registry
-carries the **STRICT** specification method — a devDependency with a version
-since DEC-0085, not a path on one machine.
+`.npmrc` maps three scopes: `@schafe-vorm-fenster` to GitHub Packages, and
+`@leafcutter-strict` plus `@leafcutter-os` to
+`https://packages.leafcutteros.ai/`. The second registry carries the **STRICT**
+specification method — a devDependency with a version since DEC-0085, not a
+path on one machine.
+
+**Both registries are private, and both variables are required** (DEC-0112).
+`pnpm` has no default-value syntax here: if either variable is unset it
+discards the **whole** `.npmrc` with `Failed to replace env in config` and
+resolves every scope against npmjs.org, so the error you see is a `404` on a
+package that was never public. Set both before installing. The registry token
+lives in the Vercel project's environment and as an Actions organisation
+secret, both named `LEAFCUTTER_REGISTRY_TOKEN`; ask jan-henrik for a local
+copy rather than reading it out of a deployment.
 
 **Port 3100 everywhere.** Port 3000 is taken on the build machine, so the
 `dev` and `start` scripts, the Playwright `webServer` and every documented

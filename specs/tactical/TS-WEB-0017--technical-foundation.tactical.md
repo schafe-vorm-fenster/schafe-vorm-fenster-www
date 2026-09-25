@@ -213,7 +213,7 @@ the two that are missing and states all of them as checks.
 | --- | --- | --- |
 | package manager | pnpm, pinned via `packageManager` in `package.json`. `pnpm-lock.yaml` is the only lockfile; a `package-lock.json` or `yarn.lock` is a defect. | exists |
 | private registry | the `@schafe-vorm-fenster` scope resolves to GitHub Packages via `.npmrc`; hub packages (brand, offering model, content raw material per DEC-0020) install from there. | exists |
-| method registry | the `@leafcutter-strict` and `@leafcutter-os` scopes resolve to `https://packages.leafcutteros.ai/` via `.npmrc`. That is where the specification method lives as a versioned dependency (DEC-0085, CON-WEB-0006); reading it needs no credential. | exists |
+| method registry | the `@leafcutter-strict` and `@leafcutter-os` scopes resolve to `https://packages.leafcutteros.ai/` via `.npmrc`. That is where the specification method lives as a versioned dependency (DEC-0085, CON-WEB-0006). The registry is private: the token comes from `LEAFCUTTER_REGISTRY_TOKEN`, set in all three Vercel environments and as an Actions organisation secret, and an unset variable makes `pnpm` discard the whole `.npmrc` (DEC-0112). | exists |
 | language | TypeScript throughout — application code, repository scripts, tests. Repository scripts run under `tsx`. | exists |
 | type strictness | a root `tsconfig.json` with `strict: true`; `pnpm typecheck` exists and is part of `pnpm check`. | **missing** [PROPOSED] |
 | one gate | `pnpm check` is the single entry point for every check. A new check is added *to* it, never run beside it. | exists |

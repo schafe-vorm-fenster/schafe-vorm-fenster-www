@@ -54,7 +54,11 @@ Specs are written against **STRICT**, which is installed here:
 `@leafcutter-strict/blueprint-complete@0.2.4`, a devDependency (DEC-0085).
 It is no longer a path on one laptop — it is a versioned dependency, and
 `.npmrc` resolves the `@leafcutter-strict` and `@leafcutter-os` scopes from
-`https://packages.leafcutteros.ai/` without a credential.
+`https://packages.leafcutteros.ai/`. That registry is **private**: `.npmrc`
+reads the token from `LEAFCUTTER_REGISTRY_TOKEN`, and without that variable
+`pnpm` discards the whole file and resolves every scope against npmjs.org
+(DEC-0112). Until 2026-09-25 this paragraph claimed no credential was needed,
+which was false and broke nineteen preview deployments.
 
 Cite a STRICT artefact **by package name**, the way DEC-0042 has you cite hub
 content — `@leafcutter-strict/method-statement-grammar`, never a directory

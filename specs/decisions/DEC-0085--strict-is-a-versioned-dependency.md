@@ -30,8 +30,11 @@ That had three costs:
 
 STRICT is now published to `https://packages.leafcutteros.ai/` as about
 fifty packages in eight families — the same registry the hub's
-`@leafcutter-os` scope already resolves from, and it needs no credential to
-read. The same restructuring that produced `DEC-0042` for hub content applies
+`@leafcutter-os` scope already resolves from. **The clause that stood here —
+"and it needs no credential to read" — was false, and DEC-0112 corrects it:**
+the scope is private, the token is read from `LEAFCUTTER_REGISTRY_TOKEN`, and
+the claim went unnoticed until it broke nineteen preview builds. The decision
+below is unaffected; only this premise was wrong. The same restructuring that produced `DEC-0042` for hub content applies
 here: the package name is the real address, the repository path is not.
 
 ## Decision

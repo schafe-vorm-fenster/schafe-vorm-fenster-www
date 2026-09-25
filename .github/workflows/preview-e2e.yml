@@ -34,6 +34,10 @@ permissions:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # The `@leafcutter-strict` scope is a private registry (DEC-0112). Without
+  # this, pnpm discards the whole `.npmrc` and resolves every scope against
+  # npmjs.org, so the failure is a 404 on a package that was never public.
+  LEAFCUTTER_REGISTRY_TOKEN: ${{ secrets.LEAFCUTTER_REGISTRY_TOKEN }}
 
 jobs:
   gate:
