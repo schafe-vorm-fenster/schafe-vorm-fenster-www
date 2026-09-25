@@ -156,6 +156,11 @@ test.describe("TS-WEB-0024 D3: two conversions in one hero, stacked with a gap",
       expect(bottom!.y, "stacked, not side by side").toBeGreaterThan(top!.y + top!.height);
       expect(bottom!.y - (top!.y + top!.height), "a gap between the two").toBeGreaterThanOrEqual(8);
       expect(bottom!.x, "both start at the stack's edge").toBeCloseTo(top!.x, 0);
+      // TS-WEB-0024-A4: both conversions on the first screen, without scrolling.
+      expect(top!.y, "the primary starts inside the viewport").toBeGreaterThanOrEqual(0);
+      expect(bottom!.y + bottom!.height, "the equal-weight CTA ends inside the viewport").toBeLessThanOrEqual(
+        viewport.height,
+      );
     });
   }
 });
