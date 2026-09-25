@@ -87,6 +87,20 @@
 }
 
 /*
+ * The archive ground — SRC-0014 §Archive block, §"Section grounds carry
+ * rhythm": "what does not work today", and nothing positive is ever set on
+ * it. Body text stays `ink` (15.37:1) and `text-2` (9.52:1); the kicker takes
+ * `archive ink` (6.35:1 on the ground, DEC-0117). Links keep the light
+ * ground's `lime-800`, 6.19:1 here. The hairline that reads on this ground
+ * is `archive line` (1.42:1) — `archive-block` sets it; `line` would vanish.
+ */
+.archive {
+  --ground-kicker: var(--color-archive-ink);
+  background: var(--color-archive-ground);
+  color: var(--color-neutral-ink);
+}
+
+/*
  * The ground publishes its own link colour, rather than recolouring every
  * descendant `a` by selector.
  *

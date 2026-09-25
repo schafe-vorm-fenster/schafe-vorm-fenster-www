@@ -65,6 +65,8 @@
   --height-chip: var(--target-min); /* ≥ 40 specified; 44 also clears 2.5.5 */
   --height-badge: 26px;
   --height-badge-icon: 30px;
+  /* SRC-0014 §Wells: the 40 px icon well is decoration, not a target (T-05). */
+  --height-icon-well: 40px;
   --height-event-row: 76px;
   --height-search: var(--target-comfortable); /* 56 */
 
