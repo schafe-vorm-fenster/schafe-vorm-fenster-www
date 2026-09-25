@@ -203,6 +203,77 @@ reduced-motion fallback is a static state — so under that media query there is
 no slide to permit. `A9` is left as it stands, and the reconciliation is stated
 here rather than by loosening the criterion.
 
+#### Amendment of 2026-09-25 — what starts the advance, and where it ends (Q-0081)
+
+The exception above fixes the duration, the dwell, the pause and the
+reduced-motion fallback and says nothing about the **trigger**. That was harmless
+while the module was `/mitmachen`'s own content; `DEC-0109` put it on `/`, where
+for `professional` and `purchase-intent` it is the **last** block of 2a, so an
+advance keyed to page load has finished cycling before the reader arrives and she
+meets state 3 with no sign that two came before it. `Q-0081` asked the owner,
+because this exception is his. **His answer, amended into this record rather than
+decided in a spec:**
+
+1. **It starts on intersection, not on page load, and only when the *whole*
+   module is in the viewport.** Two reasons, and they are different: an advance
+   keyed to load has already finished by the time the reader gets there, and a
+   stage half off-screen animates where nobody is looking.
+2. **State 1 gets a full dwell before the first advance.** A reader who arrives
+   mid-scroll sees step 1, not its end.
+3. **One pass, then stop at state 3. There is no loop.** A loop beside text
+   competes for attention permanently, and it is what WCAG 2.2.2 (Pause, Stop,
+   Hide) is about.
+4. **Any interaction stops it for good** — not pause-and-resume. This is the
+   sharpened reading of the *"and not resuming"* already above: focus or a step
+   activation ends the pass, and nothing restarts it.
+5. **No restart when scrolling back.** Once per page view, and "once" is spent by
+   a pass that has *started* — not by the module having been on screen.
+6. Under `prefers-reduced-motion` there is **no advance at all**: state 1 static,
+   step lines operable. That is already what this section says and it is not
+   restated.
+
+**The total, measured rather than asserted.** The dwell in §6 above is *"at least
+4 s"* and the transition is 550 ms, so one pass is `4 000 + 550 + 4 000 + 550 =
+9 100 ms` — **9.1 s** from the trigger to the moment state 3 settles, and longer
+wherever the implementation takes the dwell above its floor. The dwell is a
+minimum, so 9.1 s is the floor of the pass, not its value.
+
+**Why that makes WCAG 2.2.2 binding, and what satisfies it.** 2.2.2 applies to
+moving content that *starts automatically*, runs *longer than five seconds* and is
+presented *in parallel with other content*. All three hold: the trigger is
+automatic (rule 1), 9.1 s > 5 s, and the module sits inside a scene with an opener
+above it and a live event row below it. So a **mechanism to pause, stop or hide**
+is required, and the exception already contains one: **the three step lines are
+real buttons at every size** (`Tab`, `Enter`/`Space`, `aria-current`), and rule 4
+makes activating one a *stop*, not a pause. That is what makes the criterion
+satisfiable, and it is why rule 4 is stop-for-good rather than pause-and-resume: a
+pause that resumes is not a stop, and a control that only re-orders the same loop
+is not a mechanism. `TS-WEB-0002` carries it as a determination and a criterion,
+because that spec governs accessibility and a WCAG obligation may not live only in
+a design guide.
+
+**Two edges of rule 1, because the rule has to be decidable.**
+
+- **A module scrolled past in one step never triggers, and that is correct.** An
+  `IntersectionObserver` reports only a *change* of `isIntersecting`, so a flick
+  to the end of the document can carry the module from below the viewport to above
+  it with no callback — the same mechanic as finding F-3-10 in
+  `e2e/motion-reveal.spec.ts`. No pass starts, and by rule 5 nothing is spent
+  either: the first moment the whole module is genuinely in the viewport still
+  starts the one pass. Rule 5 bites on a pass that ran, not on a module that was
+  skipped.
+- **A viewport shorter than the module** cannot satisfy "the whole module is in
+  the viewport" at all, and it is reachable: the one-viewport rule is authored
+  against 360 × 800 while `TS-WEB-0006 D3`'s fold viewport is 360 × 640
+  (`TS-WEB-0022 D4`). Taken literally, rule 1 would then never fire and the reader
+  would meet a stage that never moves with no indication that it could. **The
+  reading this record proposes**: where the viewport is shorter than the module,
+  the trigger is the graphic stage in full together with the first step line —
+  the smallest region rule 1's own reason protects. That sub-clause is
+  `[PROPOSED]` and is **Q-0083**, addressed to the owner of this exception; it is
+  the only part of the trigger not in his answer, and it is flagged rather than
+  folded in.
+
 ### 7. The map date is DEC-0061's, and stays there
 
 `/deine-region` names the enterprise map view as a dated, forthcoming feature —
@@ -241,6 +312,13 @@ Two amendments belong to it rather than to a new record, and are made here:
 - No acceptance criterion was added, renamed or removed; the count is
   unchanged. No token value, ratio or opacity was invented — every figure here
   is the draft's, WCAG's, or the package's.
+- **The §6 amendment of 2026-09-25 adds one criterion and no figure.**
+  `TS-WEB-0002` gains `D7` and `TS-WEB-0002-A13` for WCAG 2.2.2;
+  `TS-WEB-0022-A19` and `TS-WEB-0019 D3a` are amended; the guide's motion
+  exception and `specs/contracts/design-system-contract.md`'s `auto-advance` row
+  carry the trigger. The 9.1 s total is computed from the dwell and the transition
+  this record already fixed — nothing new was chosen. `Q-0081` closes, `Q-0083`
+  opens for the one sub-clause the owner's answer did not cover.
 - `DEM-0027` (measured ratios for colour world 3c) and `DEM-0039` / `Q-0055`
   (the category token provenance) stay open. Nothing moved off `DRAFT`.
 

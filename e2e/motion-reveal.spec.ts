@@ -35,6 +35,20 @@ const PATHS = [
   "/",
 ] as const;
 
+/**
+ * The site's other piece of motion is the explain module's auto-advance — the
+ * one exception to "one movement only" (DEC-0105 §6) and the only content WCAG
+ * 2.2.2 (Pause, Stop, Hide) applies to here (TS-WEB-0002 D7). Its walk lives in
+ * this file because this is where motion is asserted, and it is `fixme` rather
+ * than missing: `explain-module` does not exist in any form yet (Q-0044), so the
+ * assertion would fail on a component nobody has written. Listed and
+ * red-flagged, the way the page walks list their M4 criteria.
+ */
+test.fixme(
+  "TS-WEB-0002-A13: the auto-advance starts on intersection, runs one 9.1 s pass and stops for good [blocked — explain-module unbuilt, Q-0044]",
+  () => {},
+);
+
 for (const path of PATHS) {
   for (const viewport of VIEWPORTS) {
     test(`F-3-10: ${path} paints every revealable section after a jump to the end at ${viewport.name}`, async ({

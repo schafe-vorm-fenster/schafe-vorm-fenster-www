@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [NFR-WEB-0057, CON-WEB-0024, NFR-WEB-0058, NFR-WEB-0059, CON-WEB-0025, FUN-WEB-0128, FUN-WEB-0118, FUN-WEB-0119, FUN-WEB-0120, FUN-WEB-0129, FUN-WEB-0130, NFR-WEB-0016, NFR-WEB-0060, FUN-WEB-0121, NFR-WEB-0018, FUN-WEB-0122, FUN-WEB-0123, CON-WEB-0026, CON-WEB-0027]
 sources: [SRC-0006]
-decisions: [DEC-0012]
+decisions: [DEC-0012, DEC-0069, DEC-0105]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -111,6 +111,43 @@ A section at the permanent anchor `#barrierefreiheit` on `/rechtliches`
 (DEC-0039; the anchor registry is TS-WEB-0004 D8), footer-linked on every page, content
 per BFSG requirements; maintained like a legal page (FUN-WEB-0180, FUN-WEB-0181, FUN-WEB-0182 pipeline).
 
+### D7 — Moving content: the one auto-advance, and 2.2.2 [FIXED: DEC-0105 §6 as amended 2026-09-25]
+
+D1 adopts WCAG 2.2 AA with no exceptions, so **2.2.2 Pause, Stop, Hide**
+(Level A) binds. The site has exactly one piece of content it applies to
+and this determination names it rather than leaving it to a reviewer:
+the **explain module's graphic stage**, below `lg` only.
+
+Why 2.2.2 is engaged rather than trivially met. It applies to moving
+content that starts automatically, runs longer than five seconds, and is
+presented in parallel with other content. All three hold:
+
+| 2.2.2 condition | On the explain module |
+| --- | --- |
+| starts automatically | yes — on the first intersection of the whole module with the viewport, without the visitor acting (DEC-0105 §6 amendment, rule 1) |
+| longer than 5 s | yes — one pass is `4 000 + 550 + 4 000 + 550` ms = **9.1 s** at the specified minimum dwell of 4 s and transition of 550 ms, and longer if the dwell is raised |
+| in parallel with other content | yes — on `/` the module stands inside a scene, with the opener above it and a live event row below it (TS-WEB-0019 D3a) |
+
+**The mechanism 2.2.2 requires is the three step lines.** They are real
+buttons at every size — `Tab`, `Enter`/`Space`, `aria-current` on the
+active one — and activating one, or focusing the module, **stops the
+advance for good**; it does not pause it and it does not resume
+(DEC-0105 §6). That is what makes the criterion satisfiable: a pause that
+resumes is not a stop, and a control that only re-orders a running loop is
+not a mechanism. Two properties of the exception do the rest of the work:
+
+- there is **no loop** — one pass, then the stage stays at state 3, so the
+  moving content has an end even if nobody touches it;
+- under `prefers-reduced-motion` there is **no advance at all** (state 1
+  static, step lines still operable), which is the interaction between
+  2.2.2 and D2's adoption of 2.3.3 and is why A9 is compatible with the
+  exception at all.
+
+Nothing else on the site auto-advances, auto-updates or blinks: the one
+section reveal is a single 550 ms entrance, a skeleton does not pulse, and
+there is no carousel, ticker or video anywhere (SRC-0014 §*Motion*, §*Do
+Not*). So this determination is the whole of 2.2.2's surface here.
+
 ## Free for the generator
 
 - [FREE] How criteria are met (markup patterns, CSS techniques), within
@@ -133,6 +170,7 @@ per BFSG requirements; maintained like a legal page (FUN-WEB-0180, FUN-WEB-0181,
 | TS-WEB-0002-A10 | static | No font family, size or weight is declared outside the token import; the rendered type scale equals `font.*` from the brand package, and no size below 15 px appears. |
 | TS-WEB-0002-A11 | tool | axe-core reports no image without a text alternative; every image is either given a meaningful `alt` from content frontmatter or marked decorative with `alt=""`. |
 | TS-WEB-0002-A12 | manual | The published accessibility statement names its method — self-assessment backed by the acceptance regime of this spec (A1–A5) — and claims no audit that did not happen. **Limitation:** automated checks cover only part of the BITV test steps; the statement must not imply more coverage than was performed. |
+| TS-WEB-0002-A13 | e2e | **WCAG 2.2.2 on the one auto-advance (D7).** Below `lg`, with `prefers-reduced-motion` off, scroll the explain module fully into the viewport and touch nothing: state 1 is shown for the full dwell before the first advance, the stage reaches state 3 no earlier than 9.1 s after the module first became fully visible, and it then **stops** — over the next 30 s no state changes, the stage never returns to state 1, and scrolling the module out of view and back does not restart it. Repeat and activate any step line during the pass, and again with `Tab` into the module: the advance stops on that interaction and never resumes, the activated step's state is shown, the step line carries `aria-current`, and every step stays reachable by keyboard afterwards. An advance that began before the module was fully in the viewport, a second pass, or a resumed one each fail this criterion (D7, DEC-0105 §6 as amended). |
 
 ## Coverage
 
@@ -143,6 +181,7 @@ claim:
 | Requirement | Discharged by |
 | --- | --- |
 | NFR-WEB-0057 (Violations of WCAG 2.2 level A and AA = 0 violations) | D1, D2 · A1, A2 |
+| NFR-WEB-0057, specifically WCAG 2.2.2 on the one auto-advance | D7 · A13 — axe cannot detect a timed advance, so A1 does not reach it |
 | CON-WEB-0024 (never take full non-visual optimisation as a launch criterion) | D1, D2 · A1, A2 |
 | NFR-WEB-0058 (Contrast ratio of body text against its ground, the composite on a photo surface, >= 4.5 :1) | D3 · A3 |
 | NFR-WEB-0059 (Contrast ratio of display type and of non-text contrast against its ground) | D3 · A3 |
@@ -171,6 +210,12 @@ claim:
 - Q-0021 (BFSG applicability — legal), Q-0013 (formal brand-font signoff;
   D3 settles the operative rule), Q-0022 (widget conformance).
 - D3 and D6's remaining rows are [PROPOSED]; D2 and D6's target size are fixed by DEC-0069.
+- **D7's trigger has one `[PROPOSED]` sub-clause: a viewport shorter than the
+  module.** `DEC-0105 §6` starts the advance when the *whole* module is in the
+  viewport, and the one-viewport rule is authored against 360 × 800 while
+  `TS-WEB-0006 D3`'s fold viewport is 360 × 640 — so the condition is not always
+  reachable. The proposed reading is the graphic stage in full plus the first step
+  line. **Answered by:** the owner of the motion exception, as **Q-0083**.
 - **`prefers-reduced-transparency` is not in D4.** DEC-0105 §4 makes it one of
   the three conditions that select the blur primitive's solid fallback, and D4
   names only `prefers-reduced-motion`, `Save-Data` and OS font scaling. Add the

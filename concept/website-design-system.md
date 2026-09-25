@@ -601,6 +601,22 @@ system, it is scoped, and the scope is part of the exception:
   are no longer two rules pointing opposite ways.
 - 550 ms per transition with the standard easing, at least 4 s dwell per
   state, **pausing on focus or on any interaction** and not resuming.
+- **It starts on intersection, never on page load, and only when the whole
+  module is in the viewport** (owner's answer to `Q-0081`, 2026-09-25,
+  amended into `DEC-0105 §6`). An advance keyed to load has finished
+  cycling before the reader arrives, and a stage half off-screen animates
+  where nobody is looking. **State 1 gets a full dwell before the first
+  advance**, so a reader arriving mid-scroll sees step 1 rather than its
+  end.
+- **One pass, then it stops at state 3. There is no loop**, and scrolling
+  back does not restart it — once per page view, and "once" is spent by a
+  pass that started. One pass is `4 000 + 550 + 4 000 + 550` ms = **9.1 s**
+  at the dwell's 4 s floor, so it is moving content that runs longer than
+  five seconds beside other content: **WCAG 2.2.2 (Pause, Stop, Hide)
+  applies**, and the three step lines below are the mechanism it asks for.
+  **Any interaction stops the pass for good** — a pause that resumes is not
+  a stop. `TS-WEB-0002 D7` and `TS-WEB-0002-A13` carry the criterion,
+  because a WCAG obligation does not live in a design guide alone.
 - The three step lines are also the controls: activating one shows its
   state. They are real buttons — reachable by `Tab`, operated by `Enter`
   and `Space`, with `aria-current` on the active one — **at every size**,
@@ -1060,6 +1076,14 @@ animation there changes the active step's colour, which is a state, not a
 movement. The fallback under `prefers-reduced-motion` is state 1 static, not
 a faster animation, and the step lines stay operable by keyboard at every
 size.
+
+**And it runs once.** It begins when the whole module is in the viewport —
+never on page load — gives state 1 a full dwell first, and stops at state 3
+after a single 9.1 s pass. It does not loop, it does not restart on the way
+back up, and any interaction ends it for good. That is `DEC-0105 §6` as
+amended on 2026-09-25, and it is also what makes **WCAG 2.2.2** satisfiable:
+the step lines are the mechanism that stops the movement
+(`TS-WEB-0002 D7`).
 
 There is no second exception, and nothing below `lg` may be read as one: a
 skeleton still does not pulse, and a looping animation anywhere else is

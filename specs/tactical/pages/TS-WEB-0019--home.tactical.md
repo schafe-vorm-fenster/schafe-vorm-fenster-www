@@ -143,7 +143,35 @@ What that means here, in full (DEC-0109 §2):
 | The two `ink` sections | unaffected: block 1's live dates and the closing search block, with the whole of 2a between them in every order |
 | One viewport below `lg` | holds identically in all three positions, because it is a property of the **module**, not of its slot. The module does not grow into an early position and does not shrink in the last one. It is the module plus its three step lines that must fit — **not** the wrapping scene, whose opener above and instance below are outside that budget (TS-WEB-0022 D4, SRC-0017 CG-025) |
 | The fold | not in play. The page's one primary is block 1's (D2, TS-WEB-0006-A3) and 2a starts below the fold in every state; the module's CTA is `secondary` by definition, fixed by the design-system contract as a value rather than a default |
-| The `lg` switch and the motion exception | the component's own and unchanged (TS-WEB-0022 D4, DEC-0105 §6). **What starts the advance is not specified anywhere** and matters now that the module can be last — Q-0081, open point below |
+| The `lg` switch and the motion exception | the component's own and unchanged (TS-WEB-0022 D4, DEC-0105 §6 as amended 2026-09-25). The advance **starts on the first intersection of the whole module with the viewport**, gives state 1 a full dwell, runs one 9.1 s pass and stops at state 3; any interaction ends it for good. Worked through in all three positions below — no position makes the trigger unreachable, and in none of them does the page load start it |
+
+**The trigger, in each of the three positions** [FIXED: DEC-0105 §6 as amended].
+The advance starts on the module's first full intersection with the viewport and
+runs once; what the trait matrix does to that is the question Q-0081 left for this
+spec, and the answer is nothing:
+
+| The module is | What the trigger does | Why |
+| --- | --- | --- |
+| **first** (`direct`, `social`, `print-qr`, `reader-search`, `activated`) | does not fire at load | block 2a begins below the fold in every state of D2 (DEC-0109 §2), so below `lg` the module is never fully visible at first paint. The rule "not on page load" and the first position do not collide — the geometry already separates them |
+| **middle** (`press`) | fires when the reader reaches it | nothing between the two image-led scenes changes the module's own height or its visibility condition |
+| **last** (`professional`, `purchase-intent`) | fires when the reader reaches it | the module is the third block of **2a**, not the last block of the page: 2b's provenance stamps, 2c's five proof elements, the context band and the closing CTA all stand below it (D3), so it can always be scrolled entirely into view with content still beneath it. It is never the last block before the closing CTA |
+
+Two edges, both decided rather than left open:
+
+- **A single-step jump to the end of the document starts nothing, and that is
+  correct.** An `IntersectionObserver` reports only a *change* of
+  `isIntersecting`, so a flick to the bottom can carry the module from below the
+  viewport to above it with no callback — the mechanic finding F-3-10 already
+  documents in `e2e/motion-reveal.spec.ts`. No pass runs, and none is spent: "once
+  per page view" is spent by a pass that **started**, so the first moment the
+  module is genuinely in the viewport — after a scroll back up, say — still starts
+  its one pass (DEC-0105 §6).
+- **A viewport shorter than the module** cannot satisfy the trigger at all. The
+  one-viewport rule is authored against 360 × 800 and TS-WEB-0006 D3's fold
+  viewport is 360 × 640, so the case is reachable on every position equally — it
+  is a property of the module and the viewport, not of the slot. DEC-0105 §6
+  proposes the graphic stage plus the first step line as the fallback and flags it
+  `[PROPOSED]`; it is **Q-0083**.
 
 **Each of the three blocks carries exactly one CTA, at secondary treatment,
 pointing at the page that owns its job** [FIXED: DEC-0082 §4] — `whatsapp` and
@@ -287,14 +315,21 @@ not conversion.
   `NEW_VERSION` on `TS-WEB-0006 D7`; `Q-0080` is closed. The wrapping does not
   travel to `/mitmachen`: a scene wraps a module only where the module **is** the
   job introduction, and there the hero is (`DEC-0110 §3`).
-- **Nothing says what starts the auto-advance, and the module can now sit
-  last.** `DEC-0105 §6` and `SRC-0014` fix the duration, the dwell, the pause on
-  focus or interaction and the reduced-motion fallback, and say nothing about the
-  trigger. On `/mitmachen` that was harmless. Here, for `professional` and
-  `purchase-intent`, the module is the third block of 2a: an advance keyed to
-  page load has finished cycling before the visitor arrives and she meets state 3
-  with no sign that two came before it. **Answered by:** the owner of the motion
-  exception, which `DEC-0105 §6` says is his and not the guide's — **Q-0081**.
+- ~~**Nothing says what starts the auto-advance, and the module can now sit
+  last.**~~ **Answered 2026-09-25 by the owner, amended into `DEC-0105 §6`** —
+  that section is his motion decision, so the answer went there rather than into
+  this spec. The advance **starts on the first intersection of the whole module
+  with the viewport**, never on page load; **state 1 gets a full dwell** before the
+  first advance; it runs **one pass** — `4 000 + 550 + 4 000 + 550` ms = **9.1 s**
+  at the specified 4 s dwell floor — and **stops at state 3** with no loop and no
+  restart on the way back up; **any interaction stops it for good**. Because 9.1 s
+  of automatic movement stands beside other content, **WCAG 2.2.2** applies, and
+  the step lines — already real buttons — are the mechanism it requires:
+  `TS-WEB-0002 D7` and `TS-WEB-0002-A13` carry it, because accessibility is that
+  spec's and not a guide's. The trigger is worked through in all three trait
+  positions in D3a above and none of them breaks it. `Q-0081` is closed; the one
+  sub-clause the answer did not cover — a viewport shorter than the module — is
+  `[PROPOSED]` in `DEC-0105 §6` and is **Q-0083**.
 - **Q-0044 blocks generation of this page.** Proof card and stream, the
   live-module shells and the context band are not among SRC-0014's
   specified components — fourteen of them as of 2026-09-25, not the six this
