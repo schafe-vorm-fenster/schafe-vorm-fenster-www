@@ -10,7 +10,7 @@ area: technical-constraints
 needs: [UNKNOWN]
 source:
   source_id: SRC-0014
-  loc: "concept/website-design-system.md#L954"
+  loc: "concept/website-design-system.md#L1020"
   excerpt: "One set only: **Lucide**, 24 × 24 grid, 2 px stroke, round caps and joins."
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN

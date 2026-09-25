@@ -244,6 +244,43 @@ Coverage symmetry · E7 decision index · E8/E9 acceptance-criterion IDs
 and levels · E10 test references, plus W1–W3 for the closure gaps. It
 runs in `pnpm check` and in the pre-commit hook (A13).
 
+### D6a — A locator is verified against its excerpt, and a broken one says where the statement went [FIXED: DEC-0111, Q-0082]
+
+`check:specs` counts a locator; it never reads one. So a source edit silently
+invalidates every position into it — hub PR #510 inserted ten lines into
+`SRC-0003` and all 17 requirement locators into that file pointed at the wrong
+line the moment it merged, four of them at deleted text. `Q-0082` weighed three
+ways out and the owner chose **(c), automate the repair rather than change the
+scheme**: the excerpt is already the recovery key, the method mandates it, and
+it is what re-resolved all 17 by hand on 2026-09-25.
+
+`pnpm check:locators` (`scripts/check-locators.ts`) reads the line each
+`{source_id, loc, excerpt}` triple names and compares the excerpt as an **exact
+substring**. It is in the `check` chain and therefore in the pre-commit hook.
+
+| Outcome | What it means | What it gates |
+| --- | --- | --- |
+| `verified` | the excerpt is an exact substring of the named line | — |
+| `moved` | the excerpt is not on that line but **is** in the file; the check prints every line it is now on | **fails.** Reparable without a judgement: repoint the locator |
+| `gone` | the excerpt is nowhere in the file | **fails.** Not reparable here — the statement was rewritten or deleted, so the citation has no position to move to and somebody decides whether the source still supports it (a `DEM-####`, per the source-inventory contract) |
+| `not checked` | no root holds the file, or the anchor is a page / paragraph / timestamp rather than a line | **nothing.** And it is reported as `NOT CHECKED`, never as a pass |
+| `unknown` | `loc: UNKNOWN` | **nothing.** 87 of these are legitimate (DEC-0097); reporting them would report the same gap twice |
+
+**Three roots, derived rather than written down**: this repository, its parent
+directory — because `go-to-market-os/…` and `community-calendar/…` are named
+relative to the workspace — and `node_modules`, because
+`@schafe-vorm-fenster/offerings/…` is a published subpath. A path that climbs
+out of all three resolves nowhere.
+
+**Honest degradation is the determination, not an implementation detail.** Two
+of the three roots are sibling **checkouts, not dependencies**, and are absent
+in CI. The check therefore prints all five tallies and a line per root saying
+whether it is present, so a reader tells "verified" from "not checked" by the
+count rather than by the exit code. It gates exactly what it could read: in CI
+the hub locators degrade to `not checked` on their own and the in-repository
+ones are still enforced. Nothing has to be configured for that and nothing can
+be forgotten.
+
 **"Specs precede content" is the phase order** (DEC-0023): concept →
 specification → content. Copy is not written while the specification
 phase runs. Made checkable [PROPOSED]: every file under `content/`
@@ -289,6 +326,7 @@ for the spec side, and needs the content frontmatter schema
 | TS-WEB-0017-A15 | manual | Imagery review: every image shipped is checked against the imagery rules in the brand identity profile — per release, by the brand owner. |
 | TS-WEB-0017-A17 | static | Exactly one icon dependency; every icon name used resolves to a Lucide export. |
 | TS-WEB-0017-A16 | manual | Dependency review: any dependency adopted from a sibling repository is confirmed as framework-neutral intent, not a ported implementation — per PR that changes `package.json`. |
+| TS-WEB-0017-A18 | static | Every `{source_id, loc, excerpt}` triple under `specs/` whose `loc` names a line resolves: the excerpt is an exact substring of that line in the file the locator names, resolved against the repository, the workspace parent and `node_modules`. A triple whose excerpt sits at another line of the same file fails as **moved** and the check names the line it moved to; one whose excerpt is absent from the file fails as **gone** and is reported as the different finding it is. A locator no root can read, and an anchor that is a page, paragraph or timestamp rather than a line, are reported as **not checked** — counted and printed as such, never as a pass — and gate nothing; `loc: UNKNOWN` is legitimate and is not a finding (D6a). |
 
 ### D7 — One icon set [FIXED: DEC-0056, SRC-0014#icons]
 

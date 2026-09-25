@@ -154,3 +154,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0108 — The registration embed is isolated with a notice above it — a notice is not consent, the banner-free requirement stands, and the residual legal risk is accepted on one route](DEC-0108--the-registration-embed-is-isolated-with-a-notice.md)
 - [DEC-0109 — On `/` only the WhatsApp scene becomes the explain module — the embed and provenance blocks stay scenes, and the module has to work in any of the three trait positions](DEC-0109--the-whatsapp-scene-becomes-the-explain-module.md)
 - [DEC-0110 — The scene wraps the explain module — the opener above it, the concrete instance below it, and `/` keeps three scene blocks](DEC-0110--the-scene-wraps-the-explain-module.md)
+- [DEC-0111 — The excerpt repairs the locator — a check reads every citation and says where a moved statement went](DEC-0111--the-excerpt-repairs-the-locator.md)

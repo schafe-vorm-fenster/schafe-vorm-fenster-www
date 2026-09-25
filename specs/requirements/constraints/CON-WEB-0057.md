@@ -10,7 +10,7 @@ area: technical-constraints
 needs: [UNKNOWN]
 source:
   source_id: SRC-0014
-  loc: "concept/website-design-system.md#L1001"
+  loc: "concept/website-design-system.md#L1067"
   excerpt: "Any new requirement takes the matching Lucide glyph — no icon is drawn by"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN

@@ -10,7 +10,7 @@ area: performance
 needs: [NEED-WEB-0005, NEED-WEB-0014]
 source:
   source_id: SRC-0014
-  loc: "concept/website-design-system.md#L902"
+  loc: "concept/website-design-system.md#L968"
   excerpt: "Declared as `aspect-ratio` on the media element, never as a fixed pixel"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN
