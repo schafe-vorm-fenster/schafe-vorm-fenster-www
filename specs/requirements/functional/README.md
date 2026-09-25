@@ -76,6 +76,7 @@ focus job, and primary conversion. Conversion goal IDs resolve in
 | [FUN-WEB-0148](FUN-WEB-0148.md) | DEC-0034 | S3 |
 | [FUN-WEB-0202](FUN-WEB-0202.md) | SRC-0003, DEC-0060, DEC-0052 | S3 |
 | [FUN-WEB-0203](FUN-WEB-0203.md) | SRC-0003#for-a-whole-region | S2 |
+| [FUN-WEB-0204](FUN-WEB-0204.md) | SRC-0008 — `@schafe-vorm-fenster/offerings`, DEC-0107 | S3 |
 
 ### Place Search and Coverage
 

@@ -4,9 +4,9 @@ id: TS-WEB-0022
 kind: interaction
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0012]
+implements: [FUN-WEB-0012, BUS-WEB-0017, FUN-WEB-0204]
 sources: [SRC-0001, SRC-0003, SRC-0008, SRC-0014]
-decisions: [DEC-0029, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0080, DEC-0082, DEC-0083]
+decisions: [DEC-0029, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0080, DEC-0082, DEC-0083, DEC-0107]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -147,6 +147,20 @@ one colour family, one `himbeere` element per screen, and the dark `ink`
 section — here the live example — exactly once, as the anchor. Media
 boxes declare their ratio before paint; paths use `ratio-feature`.
 
+### D11 — The hint banner carries the price boundary [FIXED: BUS-WEB-0017, FUN-WEB-0204, DEC-0107 §3]
+
+One banner, at the end of slot 3, after the three path blocks.
+
+| Property | Rule |
+| --- | --- |
+| Count | exactly one on the page, and only in slot 3. The boundary is a fact about all three paths, so it is not repeated per path |
+| What it states | the boundary of `BUS-WEB-0017` — a source the platform already supports publishes free; an individual integration into a system it does not already support is the `custom-data-integration` add-on |
+| The source list | is the offering's, never this spec's (`specs/README.md` rule 1): the standard sources resolve from `@schafe-vorm-fenster/offerings#community-calendar` through the content pipeline. DEM-0065 is open until the record carries them, and until it does the banner names the boundary without enumerating |
+| No figure | no amount, no currency symbol, no "ab", no range. `/mitmachen` renders no price at all (D1, A12), and the add-on has none to render — `price_status: on-request`, and `publishablePrice` is false for it (`TS-WEB-0018-A2`) |
+| Not a CTA | no `data-cta` of any rung and no conversion declaration. One CTA per path is D4's, the page's one primary is the hero's (D7), and a boundary is not an action (DEC-0082 §1) |
+| Not a status badge | D4's `status_badge` says path 03's *mechanism* is alpha; this says what a connection *costs*. Two different facts, two elements |
+| Wording | copy, under SRC-0017 — this spec states no sentence and no grammatical form (DEC-0083) |
+
 ## Free for the generator
 
 - [FREE] All copy — the hero opener, objection items, step wording, every
@@ -180,6 +194,7 @@ boxes declare their ratio before paint; paths use `ratio-feature`.
 | TS-WEB-0022-A13 | e2e | Exactly one link to `/dein-kalender` exists in the page body, inside an `aside`, without the primary-CTA treatment and without price or tier content. |
 | TS-WEB-0022-A14 | e2e | With a resolved place the primary CTA's href carries `?ort=<slug>`; with an unresolvable or free-text place it carries no `ort` parameter. |
 | TS-WEB-0022-A15 | integration | Navigating from the primary CTA fires no analytics event on `/mitmachen`; `register-as-publisher` with stage `handover` is emitted on `/mitmachen/registrieren` (TS-WEB-0012 D4). |
+| TS-WEB-0022-A17 | e2e | Exactly one hint banner exists, inside the publishing-path slot and after the third path block. It carries no `data-cta` attribute and declares no conversion goal. It contains no numeric amount, no currency symbol and no "ab"; the page-wide price assertion of A12 is unchanged by its presence. |
 | TS-WEB-0022-A16 | e2e | Rhythm: no two adjacent sections are photo sections, exactly one is the dark live-data section, and every asynchronous box has a declared ratio or height before its content arrives (no layout shift on the live module). |
 
 ## Coverage
@@ -187,6 +202,8 @@ boxes declare their ratio before paint; paths use `ratio-feature`.
 | Requirement | Discharged by |
 | --- | --- |
 | FUN-WEB-0012 (`/mitmachen`, focus job publish our dates, `register-as-publisher`, one CTA per publishing path) | D1–D10 · A1–A16 |
+| BUS-WEB-0017 (a publishing path whose source the platform already supports publishes free) | D11 · A17 — the rule is the business's; D11 is where the website states it |
+| FUN-WEB-0204 (state the price boundary of BUS-WEB-0017 at the publishing paths) | D11 · A17 |
 
 Split against TS-WEB-0004: TS-WEB-0004 discharges the *route* — the path, its EN
 sibling, its place in the App Router tree, its rendering mode (TS-WEB-0004 D1,

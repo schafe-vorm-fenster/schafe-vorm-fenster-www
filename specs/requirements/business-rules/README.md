@@ -37,4 +37,5 @@ Each rule is **one document**, named for its identifier
 | ID | Source | Suff. |
 | --- | --- | --- |
 | [BUS-WEB-0013](BUS-WEB-0013.md) | SRC-0001#boundaries, `@schafe-vorm-fenster/offerings` | S2 |
+| [BUS-WEB-0017](BUS-WEB-0017.md) | SRC-0008 — `@schafe-vorm-fenster/offerings`, DEC-0107 | S3 |
 | [BUS-WEB-0014](BUS-WEB-0014.md) | SRC-0001#boundaries | S2 |
