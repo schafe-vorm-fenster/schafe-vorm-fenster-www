@@ -16,7 +16,7 @@ Repository-level decisions (content SSOT, audience model) live in
 ## Two artefacts live here
 
 - **`DEC-####--<slug>.md`** — an ADR: a choice and the reasoning behind it,
-  in the organisation's context/decision/consequences sections. 107 of them.
+  in the organisation's context/decision/consequences sections. 110 of them.
   The citation count that stood here was produced by a one-off script and has
   not been re-derived; a number nobody can reproduce is worse than none.
 - **`SDR-<yyyy>-<mmdd>-<nnnn>.yaml`** — a STRICT decision record: the
@@ -153,3 +153,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0107 — A standard source publishes free; an individual integration into a system we do not already support is the paid add-on](DEC-0107--the-publishing-path-price-boundary.md)
 - [DEC-0108 — The registration embed is isolated with a notice above it — a notice is not consent, the banner-free requirement stands, and the residual legal risk is accepted on one route](DEC-0108--the-registration-embed-is-isolated-with-a-notice.md)
 - [DEC-0109 — On `/` only the WhatsApp scene becomes the explain module — the embed and provenance blocks stay scenes, and the module has to work in any of the three trait positions](DEC-0109--the-whatsapp-scene-becomes-the-explain-module.md)
+- [DEC-0110 — The scene wraps the explain module — the opener above it, the concrete instance below it, and `/` keeps three scene blocks](DEC-0110--the-scene-wraps-the-explain-module.md)

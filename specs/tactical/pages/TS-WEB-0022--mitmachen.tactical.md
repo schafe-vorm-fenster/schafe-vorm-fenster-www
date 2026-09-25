@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0012, BUS-WEB-0017, FUN-WEB-0204]
 sources: [SRC-0001, SRC-0003, SRC-0008, SRC-0014]
-decisions: [DEC-0029, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0080, DEC-0082, DEC-0083, DEC-0107]
+decisions: [DEC-0029, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0080, DEC-0082, DEC-0083, DEC-0105, DEC-0107, DEC-0109, DEC-0110]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -82,7 +82,7 @@ other block type is permitted — no feature list, no tier table.
 
 | Rule | Determination |
 | --- | --- |
-| One appearance | each mechanism appears once. The hero is the WhatsApp scene; the WhatsApp path block is its step detail and repeats neither opener nor instance, so only slot 1 carries `data-block="scene"` [PROPOSED — a test hook] |
+| One appearance | each mechanism appears once. The hero is the WhatsApp scene; the WhatsApp path block is its step detail and repeats neither opener nor instance, so **on this page the hero is the only `data-block="scene"`** and no path block is wrapped in one (`DEC-0110 §3`) [PROPOSED — a test hook] |
 | Honest availability | a path whose hub record is not `generally-available` renders the `status_badge` of its `Step` fragment; it may not be shown as dependable while the hub marks it alpha, and the badge goes only when that record changes |
 | **One CTA per path** [FIXED: DEC-0082 §4] | each of the three path blocks ends in exactly one CTA at secondary treatment, pointing at that path's own next step — the WhatsApp path at its chat handover, paths 2 and 3 at `/mitmachen/registrieren` through the route facade. None of them carries `data-cta="primary"`: the page's one primary stays the hero CTA (D7), and a CTA in a module is a link, not a conversion declaration (TS-WEB-0006 D9). A path without a CTA is the review's finding, not a variant |
 | Cross-link | path 3 is where the website-owning Verein appears, so D9's link sits at the end of this slot and nowhere else |
@@ -100,11 +100,23 @@ this is the side that was wrong.
 whichever of the three block positions the entry trait gives it
 (`TS-WEB-0019 D3a`, `DEC-0109`). Nothing below changes for it: the component is
 not forked and `/` supplies only the slot. The one difference is which artefact
-introduces the job. Here the hero is the WhatsApp scene and the path block is its
-step detail, so the "One appearance" rule above holds; on `/` there is no
-WhatsApp hero and the module **is** the job introduction, which `TS-WEB-0006 D7`
-says should be a scene block. That contradiction is `CONF-0026` and `Q-0080`, and
-it is that page's to carry, not this one's.
+introduces the job, and since `DEC-0110` it has an answer rather than a conflict.
+
+**On `/` the scene wraps the module; here it does not** [FIXED: DEC-0110 §3].
+There the module **is** the job introduction, because that page has no WhatsApp
+hero, so it stands inside a `scene-block` with the opener above it and the live
+event row below it — and `TS-WEB-0006 D7` is satisfied without an exception and
+without the component gaining slots. On this page the hero *is* the WhatsApp
+scene and carries the opener and the instance, so `D7` is satisfied once, by the
+hero, and the three path blocks stay **bare modules**. The rule that decides it:
+a scene wraps a module only where the module is the job introduction. Wrapping
+the path blocks here would mint three openers and three instances, which the
+"One appearance" rule forbids and `A4` would fail on. `CONF-0026` is `RESOLVED`
+and `Q-0080` is closed; nothing in this determination changed to close them.
+
+Paths 2 and 3 need no scene of their own either. `/mitmachen` has **one** job —
+publish our dates — and three mechanisms of it, and `D7` counts introductions,
+not mechanisms.
 
 | Property | Determination |
 | --- | --- |

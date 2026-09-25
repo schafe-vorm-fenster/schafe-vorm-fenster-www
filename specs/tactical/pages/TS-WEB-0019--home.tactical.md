@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0010]
 sources: [SRC-0001, SRC-0003, SRC-0014]
-decisions: [DEC-0048, DEC-0081, DEC-0082, DEC-0105, DEC-0109]
+decisions: [DEC-0048, DEC-0081, DEC-0082, DEC-0105, DEC-0109, DEC-0110]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -85,7 +85,7 @@ component, which is how the "identical reserved space" below is held.
 | # | Block | Content | Fed by | Rhythm section |
 | --- | --- | --- | --- | --- |
 | 1 | focus | D2 | TS-WEB-0008 D7 (search), D1 pos 1 | PHOTO hero, then COLOUR ink for the live dates |
-| 2a | mechanism blocks | exactly three, one per mechanism, order per D3a — **two scenes and one explain module** (D3a, DEC-0109) | content (TS-WEB-0007) + one live instance each for the two scenes | COLOUR / PHOTO, alternating per SRC-0014. The module declares no ground of its own and is never a PHOTO section, so the alternation is satisfiable in any of its three positions (DEC-0109 §2) |
+| 2a | mechanism blocks | exactly three, one per mechanism, order per D3a — **three scene blocks, one of which contains the explain module** (D3a, DEC-0109, DEC-0110) | content (TS-WEB-0007) + one live instance each, the module's standing below it (TS-WEB-0006 D7) | COLOUR / PHOTO, alternating per SRC-0014. The module declares no ground of its own and is never a PHOTO section, so the alternation is satisfiable in any of its three positions (DEC-0109 §2) |
 | 2b | provenance | the "who built this" stamps | content | COLOUR violet |
 | 2c | proof stream | 5 elements | TS-WEB-0005 (D4 below) | COLOUR / PHOTO cards |
 | 2d | counters | position 4 | TS-WEB-0008 D8 | inline in 2b or 2c, no section of its own |
@@ -94,23 +94,33 @@ component, which is how the "identical reserved space" below is held.
 
 Blocks 3 and 4 are rendered by the layout, not by this page.
 
-### D3a — Three mechanism blocks, their order by entry trait, and which one is the explain module [order PROPOSED — from the SRC-0002 context matrix via TS-WEB-0010 D3; the block types FIXED: DEC-0109]
+### D3a — Three mechanism blocks, their order by entry trait, and which one contains the explain module [order PROPOSED — from the SRC-0002 context matrix via TS-WEB-0010 D3; the block types FIXED: DEC-0109, DEC-0110]
 
 Three blocks, one mechanism each: `whatsapp` → flyer to calendar ·
 `embed` → own event calendar on your website · `provenance` → who built this.
 
-**Two of them are scenes and one is the explain module** (DEC-0109 §1, the
-owner's answer to Q-0079):
+**All three are scene blocks, and one of them contains the explain module**
+(DEC-0109 §1 for which one, DEC-0110 §1–§2 for the containment — the owner's
+answers to Q-0079 and Q-0080):
 
-| Mechanism | Block type | Component |
+| Mechanism | Block type | What renders the mechanism |
 | --- | --- | --- |
-| `whatsapp` | **explain module** | the `explain-module` of TS-WEB-0022 D4 and SRC-0014 — unchanged as a component, not forked for this page |
-| `embed` | scene | `scene-block`, shape per TS-WEB-0006 D7 |
-| `provenance` | scene | `scene-block`, shape per TS-WEB-0006 D7 |
+| `whatsapp` | `scene-block`, shape per TS-WEB-0006 D7 | the `explain-module` of TS-WEB-0022 D4 and SRC-0014, **inside** the scene — unchanged as a component, not forked for this page. The scene's opener stands above it, the block's concrete instance (the live event row) below it |
+| `embed` | `scene-block`, shape per TS-WEB-0006 D7 | the scene's own mechanism treatment |
+| `provenance` | `scene-block`, shape per TS-WEB-0006 D7 | the scene's own mechanism treatment |
 
 Why that one: the WhatsApp path really is a path in steps, it lets an organiser
 see how simple publishing is without leaving the page, and "who built this" has
 no three steps — forcing the component onto it would mint three invented ones.
+
+**Why it is wrapped rather than substituted** (DEC-0110). The module is `/`'s
+job introduction for publishing, because this page has no WhatsApp hero to be
+it instead, and TS-WEB-0006 D7 holds on every page without exception: an opener
+that is a statement, one mechanism, one concrete instance. A bare module carries
+only the middle one, and the instance is the live event row this block already
+owns. So the scene stays and the module fills its mechanism slot. The count of
+scene blocks on `/` is **three** — it was stated as two between DEC-0109 and
+DEC-0110 on 2026-09-25, and that framing is withdrawn.
 
 | Trait (TS-WEB-0010 D3) | Block order | The module is |
 | --- | --- | --- |
@@ -119,7 +129,8 @@ no three steps — forcing the component onto it would mint three invented ones.
 | `press` | provenance · whatsapp · embed | middle |
 
 Ordering only. No trait adds, removes or rewrites a block, and **no trait
-changes which mechanism is the module** — the module travels with `whatsapp`.
+changes which mechanism carries the module** — the module travels with the
+`whatsapp` scene.
 
 **So the module has to work in any of the three positions, including last.**
 What that means here, in full (DEC-0109 §2):
@@ -130,7 +141,7 @@ What that means here, in full (DEC-0109 §2):
 | "Never two photo sections in a row" | not tightened: the graphic stage is a graphic at `ratio-square`, not a photograph, so the module is never a PHOTO section. In the middle position it separates the two image-led scenes, which loosens the rule |
 | One `himbeere` per screen | unaffected — the active step is `lime-500` on a light ground |
 | The two `ink` sections | unaffected: block 1's live dates and the closing search block, with the whole of 2a between them in every order |
-| One viewport below `lg` | holds identically in all three positions, because it is a property of the **block**, not of its slot. The module does not grow into an early position and does not shrink in the last one |
+| One viewport below `lg` | holds identically in all three positions, because it is a property of the **module**, not of its slot. The module does not grow into an early position and does not shrink in the last one. It is the module plus its three step lines that must fit — **not** the wrapping scene, whose opener above and instance below are outside that budget (TS-WEB-0022 D4, SRC-0017 CG-025) |
 | The fold | not in play. The page's one primary is block 1's (D2, TS-WEB-0006-A3) and 2a starts below the fold in every state; the module's CTA is `secondary` by definition, fixed by the design-system contract as a value rather than a default |
 | The `lg` switch and the motion exception | the component's own and unchanged (TS-WEB-0022 D4, DEC-0105 §6). **What starts the advance is not specified anywhere** and matters now that the module can be last — Q-0081, open point below |
 
@@ -142,6 +153,14 @@ search or place module (D2, TS-WEB-0006 D4), and such a CTA is a link, not a
 conversion declaration (TS-WEB-0006 D9). For the module this is not a page rule
 but the component's own — `explain-module` may not take `primary` even as a prop
 value (design-system contract). What the label says is copy (SRC-0017 CG-026).
+
+**Wrapping does not double the CTA** [FIXED: DEC-0110 §1]. The `whatsapp` block
+carries **one** CTA and it is the module's own, at the module's bottom. The scene
+adds none: "exactly one CTA per block" counts the block, and the module is inside
+the block. The block's render order is therefore opener · module (ordinal, title,
+stage or step row, step lines, CTA) · concrete instance — the owner's answer
+fixes the opener above the module and the instance below it, and the CTA's place
+inside the module is the component's and unchanged.
 
 ### D4 — Proof stream [FIXED: DEC-0048; profile TS-WEB-0005 D5]
 
@@ -204,12 +223,12 @@ not conversion.
 | TS-WEB-0019-A3 | e2e | Open `/?ort=<covered place with dates>`. Block 1 shows the place name and exactly 3 event rows; the primary CTA opens the place calendar on `app.*` and carries the place slug. |
 | TS-WEB-0019-A4 | e2e | Open `/?ort=<covered place with no dates>`. Block 1 shows the nearby module under a heading that names its radius (not the place), plus a publish-the-first-date CTA targeting the registration route. No text claims dates in that place. |
 | TS-WEB-0019-A5 | e2e | Type an uncovered place into the search on `/` and submit. The browser navigates to `/dein-ort/starten?ort=…`; `/` itself renders no uncovered place as data. |
-| TS-WEB-0019-A6 | e2e | Block 2a of `/` holds exactly 3 blocks, one `mechanism` each of `whatsapp` · `embed` · `provenance`, and each with exactly one CTA carrying `data-cta="secondary"` that resolves to the page owning its job (D3a). **Exactly 2 of them are scenes** — the `embed` and `provenance` blocks — **and exactly 1 is the explain module**, the `whatsapp` one: it renders the `explain-module` component with one ordinal and exactly three step lines, each step line a real button carrying `aria-current` on the active one, and at 360 × 800 the module and its three step lines fit one viewport height (TS-WEB-0022 D4, DEC-0109 §1). Neither scene renders step lines and the module renders no scene opener. Every **scene** opener is a statement — it carries no question mark unless the same block renders the answering sentence directly beneath it (TS-WEB-0006 D7, SRC-0017 CG-005/CG-006). The count was 3 scenes until 2026-09-25; DEC-0109 made it 2 plus the module. |
-| TS-WEB-0019-A7 | e2e | Load `/` once with `Referer: https://www.linkedin.com/` and once with no referrer. Block-2a DOM order matches the D3a table for `professional` and for `direct` respectively — so the explain module is **last** in the first load and **first** in the second — and in both it is the `whatsapp` block, renders the same three step lines and satisfies A6's one-viewport assertion in either position (DEC-0109 §2). Block set and block order are otherwise identical between the two loads, and no trait changes which mechanism is the module. |
+| TS-WEB-0019-A6 | e2e | Block 2a of `/` holds exactly 3 blocks, one `mechanism` each of `whatsapp` · `embed` · `provenance`, and each with exactly one CTA carrying `data-cta="secondary"` that resolves to the page owning its job (D3a). **All 3 declare `data-block="scene"`**, and **exactly 1 of them contains the explain module** — the `whatsapp` one: inside that scene, and in this DOM order, stand the scene opener, one `explain-module` with one ordinal and exactly three step lines (each step line a real button carrying `aria-current` on the active one), and the block's one concrete instance, a live event row. At 360 × 800 the module and its three step lines fit one viewport height; the wrapping scene is not held to that budget (TS-WEB-0022 D4, DEC-0110 §1). The other two scenes render no step lines and no module, and the `whatsapp` block's single `data-cta="secondary"` is the module's own — wrapping adds no second CTA. Every scene opener, this one included, is a statement: it carries no question mark unless the same block renders the answering sentence directly beneath it (TS-WEB-0006 D7, SRC-0017 CG-005/CG-006). The count of scenes was 3, was stated as 2 by DEC-0109 on 2026-09-25, and is 3 again under DEC-0110 — the module is inside a scene, not instead of one. |
+| TS-WEB-0019-A7 | e2e | Load `/` once with `Referer: https://www.linkedin.com/` and once with no referrer. Block-2a DOM order matches the D3a table for `professional` and for `direct` respectively — so the scene containing the explain module is **last** in the first load and **first** in the second — and in both it is the `whatsapp` scene, renders the same opener · module · instance triple with the same three step lines, and satisfies A6's one-viewport assertion in either position (DEC-0109 §2, DEC-0110 §2). Block set and block order are otherwise identical between the two loads, all three blocks stay scenes in both, and no trait changes which mechanism carries the module. |
 | TS-WEB-0019-A8 | e2e | The proof stream on `/` renders exactly 5 elements in every one of the loads of A7 and A2. |
-| TS-WEB-0019-A9 | e2e | DOM order on `/` is: block 1 · block 2a (the two scenes and the explain module, in the D3a order for the load's trait) · provenance stamps · proof stream · context band · closing CTA · contact section, with nothing but the global footer after the contact section (TS-WEB-0006-A17). |
+| TS-WEB-0019-A9 | e2e | DOM order on `/` is: block 1 · block 2a (the three scenes, one of them wrapping the explain module, in the D3a order for the load's trait) · provenance stamps · proof stream · context band · closing CTA · contact section, with nothing but the global footer after the contact section (TS-WEB-0006-A17). |
 | TS-WEB-0019-A10 | e2e | The context band on `/` names exactly the three jobs that are not `know-what-is-on`; the closing CTA carries the same conversion goal ID, target and label as the block-1 primary of the current state. |
-| TS-WEB-0019-A11 | e2e | Disable JavaScript and load `/`. The page is complete: search present, all 3 blocks of 2a — 2 scenes and the explain module, the module showing its state 1 and all three step lines as the reduced-motion fallback already requires (DEC-0105 §6) — 5 proof elements, context band, closing CTA; no skeleton and no empty box remains. |
+| TS-WEB-0019-A11 | e2e | Disable JavaScript and load `/`. The page is complete: search present, all 3 blocks of 2a — three scenes, the `whatsapp` one showing its opener, its module at state 1 with all three step lines (the reduced-motion fallback already requires that state, DEC-0105 §6) and its live event row beneath — 5 proof elements, context band, closing CTA; no skeleton and no empty box remains. |
 | TS-WEB-0019-A12 | static | The JSON-LD graph of `/` contains one `WebSite` and one full `Organization` node and no `Event` node; no other page emits a second full `Organization`. |
 | TS-WEB-0019-A13 | e2e | With the analytics collector observed: the calendar-open click of A3 emits `save-calendar-to-homescreen` with `stage=handover` exactly once; the search submit of A2, a scene click and a context-band click emit no conversion event. |
 | TS-WEB-0019-A14 | e2e | The counter block on `/` renders only the dates figure; no places figure, no updates-today figure, and no static traction number anywhere on the page. |
@@ -257,18 +276,17 @@ not conversion.
   explain module — the `whatsapp` one — and the other two stay scenes. `D3` and
   `D3a` carry it, and the guide's *"reused unchanged on `/`"* is narrowed to
   what is true. `Q-0079` is closed.
-- **`TS-WEB-0006 D7` says every job introduction on every page is a scene
-  block, and on this page one of them is not.** On `/mitmachen` the module is
-  the step detail behind a WhatsApp hero (`TS-WEB-0022 D4`, "One appearance"),
-  so D7 is satisfied there by the hero. `/` has no WhatsApp hero, so the module
-  **is** the introduction — and the component carries neither of D7's other two
-  items: an opener that is a statement, and one concrete instance. The second is
-  concrete, not theoretical: the `whatsapp` block on `/` is the one that carries
-  a **live event row** as its outcome, and the component has no slot for it.
-  Either D7 gains the exception or the module gains the two slots. `CONF-0026`
-  records the contradiction. **Answered by:** the owners of `TS-WEB-0006` and of
-  the design guide, as **Q-0080**. Not decided here — nothing on this page
-  reaches the low impact level (`POL-GRADED-BY-IMPACT`).
+- ~~**`TS-WEB-0006 D7` says every job introduction on every page is a scene
+  block, and on this page one of them is not.**~~ **Answered 2026-09-25 by the
+  owner, recorded as `DEC-0110`: the scene wraps the module.** Neither candidate
+  in `Q-0080` was taken — `D7` gains no exception and the component gains no
+  slots. The opener stands above the module, the live event row below it, and the
+  module fills the mechanism slot `D7` item 2 already reserves. `/` therefore
+  keeps **three** scene blocks, one of which contains the module, and `D3`, `D3a`,
+  `A6`, `A7`, `A9` and `A11` carry it. `CONF-0026` is `RESOLVED` with outcome
+  `NEW_VERSION` on `TS-WEB-0006 D7`; `Q-0080` is closed. The wrapping does not
+  travel to `/mitmachen`: a scene wraps a module only where the module **is** the
+  job introduction, and there the hero is (`DEC-0110 §3`).
 - **Nothing says what starts the auto-advance, and the module can now sit
   last.** `DEC-0105 §6` and `SRC-0014` fix the duration, the dwell, the pause on
   focus or interaction and the reduced-motion fallback, and say nothing about the

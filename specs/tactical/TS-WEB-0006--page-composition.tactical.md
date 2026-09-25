@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0001, FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136, FUN-WEB-0004, FUN-WEB-0005, FUN-WEB-0006, FUN-WEB-0007, FUN-WEB-0138, CON-WEB-0059, FUN-WEB-0009, FUN-WEB-0139, CON-WEB-0060, BUS-WEB-0015, FUN-WEB-0202, BUS-WEB-0016, FUN-WEB-0203]
 sources: [SRC-0001, SRC-0003, SRC-0017, SRC-0018]
-decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084]
+decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0110]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -249,6 +249,26 @@ Every job introduction on every page is a scene block with a fixed shape:
    mechanisms is two blocks;
 3. one concrete instance, live or proof-backed, as close to the visitor
    as the data allows (TS-WEB-0005).
+
+**The mechanism slot may be rendered by a module** [FIXED: DEC-0110].
+Where the mechanism is a path in steps, item 2 is an `explain-module`
+standing **inside** the scene: the opener of item 1 above it, the concrete
+instance of item 3 below it, the module in between as the one mechanism.
+The scene is not replaced by the module and the module gains neither an
+opener line nor an instance slot of its own — all three items are
+present, each at its own level. This is not an exception to the rule
+above; it is what the mechanism slot was always allowed to hold.
+
+**When it applies is a property of the page, not of the component:** a
+scene wraps a module only where the module **is** the job introduction.
+Where another block on the page already introduces that job, the module
+is a step detail and is not wrapped. `/` is the first case — no WhatsApp
+hero, so the `whatsapp` scene contains the module (TS-WEB-0019 D3a).
+`/mitmachen` is the second — the hero is the WhatsApp scene, so its three
+path blocks are bare modules and the page keeps exactly one scene
+(TS-WEB-0022 D4 "One appearance", TS-WEB-0022-A4). This determination
+counts **introductions**, never mechanisms: a page with one job and three
+mechanisms of it has one introduction.
 
 **A block is self-contained** (CG-004). It carries no reference to an
 earlier block: a reader who arrived by scrolling, by a deep link or from

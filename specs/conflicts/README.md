@@ -23,8 +23,11 @@ installed contracts themselves and were missing from this index until
 2026-09-25; `CONF-0025` was raised by the DEC-0013 amendment of the same day and
 resolved by `DEC-0108` hours later, with outcome **ISOLATE** and the residual
 legal risk recorded rather than removed. `CONF-0026` was raised by `DEC-0109` on
-the same day and is open: the decision it records deliberately did not settle it.
-**Twenty-one are `RESOLVED` and five are `OPEN`.**
+the same day, which deliberately did not settle it, and resolved by `DEC-0110`
+with outcome **NEW_VERSION** once the owner answered `Q-0080`: the scene wraps
+the explain module, so the composition rule takes the new version and the
+component takes none.
+**Twenty-two are `RESOLVED` and four are `OPEN`.**
 
 Most decisions are **not** conflicts. The method is explicit: *"A requirement
 that is merely surprising, inconvenient, or expensive"* is not one, and *"a
@@ -61,7 +64,7 @@ resolve, only an imprecise sentence" — and it is not in here.
 | [CONF-0023](CONF-0023--the-sdr-identifier-two-contracts-two-patterns.md) | direct_contradiction | OPEN | Medium | UNKNOWN | The STRICT decision record's identifier: two installed contracts pattern it two different ways, and an id cannot satisfy both |
 | [CONF-0024](CONF-0024--the-executor-mode-enum-two-contracts-disagree.md) | value_conflict | OPEN | Medium | UNKNOWN | The executor mode of a decision record: one contract knows four modes, the other two, and the policy in force uses one the narrower does not have |
 | [CONF-0025](CONF-0025--the-registration-embed-against-a-banner-free-site.md) | direct_contradiction | RESOLVED | High | DEC-0108 | The registration embed against a banner-free site: a third-party iframe on one route, and a requirement that the site needs no consent UI anywhere |
-| [CONF-0026](CONF-0026--the-explain-module-is-a-job-introduction-on.md) | direct_contradiction | OPEN | Medium | UNKNOWN | The explain module is a job introduction on `/`, and the composition rules say a job introduction is a scene block |
+| [CONF-0026](CONF-0026--the-explain-module-is-a-job-introduction-on.md) | direct_contradiction | RESOLVED | Medium | DEC-0110 | The explain module is a job introduction on `/`, and the composition rules say a job introduction is a scene block |
 
 ## How to read a record
 

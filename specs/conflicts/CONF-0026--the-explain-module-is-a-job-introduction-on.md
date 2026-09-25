@@ -2,14 +2,14 @@
 artefact: conflict
 id: CONF-0026
 type: direct_contradiction
-status: OPEN
+status: RESOLVED
 impact: Medium
 involved: ["TS-WEB-0006", "TS-WEB-0019"]
 decision_point: DP-04
 recommended_action: NEW_VERSION
 permitted_outcomes: [REJECT_NEW, NEW_VERSION, ISOLATE]
 blocking_demands: []
-decision_record: UNKNOWN
+decision_record: DEC-0110
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -27,7 +27,7 @@ The explain module is a job introduction on `/`, and the composition rules say a
   `specs/tactical/TS-WEB-0006--page-composition.tactical.md#L238`
   > Every job introduction on every page is a scene block with a fixed shape
 
-- **TS-WEB-0019 D3a** — on `/` the `whatsapp` block is the explain module, not a scene, and it is what introduces the publishing job on that page.
+- **TS-WEB-0019 D3a**, as it stood between `DEC-0109` and `DEC-0110` — on `/` the `whatsapp` block is the explain module, not a scene, and it is what introduces the publishing job on that page.
   `specs/tactical/pages/TS-WEB-0019--home.tactical.md#L107`
   > `whatsapp` | **explain module** | the `explain-module` of TS-WEB-0022 D4 and SRC-0014
 
@@ -39,11 +39,13 @@ Medium — one block on one page. It is not Low, because two of D7's three items
 
 ## Outcome
 
-**Open against no decision record.** `DEC-0109` decided which block is the module and deliberately did not decide this: it is a change either to the generic composition rule or to a component the whole system shares, and `POL-GRADED-BY-IMPACT` leaves nothing on this page at the low impact level.
+**Resolved 2026-09-25 by `DEC-0110`, outcome `NEW_VERSION`.** The recommendation held and the open part — a new version *of what* — is closed: **`TS-WEB-0006 D7` takes it, and the component takes none.**
 
-The recommendation is **NEW_VERSION**, and the open part is *of what*: either `TS-WEB-0006 D7` gains the exception — a job introduction is a scene block *or* the explain module, with the module's title carrying the opener's job — or the component gains the two slots, an opener line and an instance beneath the third step, in which case `/mitmachen` gains them too and `TS-WEB-0022 D4` follows. REJECT_NEW would withdraw the module from `/` and put `DEC-0109` back to `Q-0079`. ISOLATE would mean `/` is exempt from D7 for this one block without D7 saying so, which is the silent override `DEC-0104 §2` exists to end.
+Neither candidate `Q-0080` listed was taken. `D7` gains no exception, and the module gains no opener line and no instance slot. What `D7` gains is a sentence saying that its mechanism slot may be rendered by a module: the scene **wraps** the module, with the opener above it and the concrete instance — on `/` the live event row — below it. All three of `D7`'s items are then present, each at its own level, and the collision dissolves because it was between `D7` and a reading of `D3a` in which the module *replaces* the scene. That reading is withdrawn: `/` carries **three** scene blocks, one of which contains a module.
 
-`Q-0080` is the question, addressed to the owners of `TS-WEB-0006` and of `concept/website-design-system.md`.
+The two outcomes not taken, and why they were not needed. `REJECT_NEW` would have withdrawn the module from `/` and reopened `Q-0079`. `ISOLATE` would have exempted one block on one page from a site-wide rule without the rule saying so, which is the silent override `DEC-0104 §2` exists to end.
+
+`/mitmachen` was never in the collision and still is not: there the hero is the WhatsApp scene, so `D7` is satisfied by the hero and the three path blocks stay bare modules (`DEC-0110 §3`). `Q-0080` is closed.
 
 ## Blocks
 

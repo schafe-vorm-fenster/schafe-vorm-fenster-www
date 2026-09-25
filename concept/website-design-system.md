@@ -530,10 +530,27 @@ whichever of the three block positions the entry trait gives it
 
 This sentence read *"and reused unchanged on `/`"* until 2026-09-25, and both
 halves were wrong. Not **unchanged**: on `/` the component renders one path, not
-three, and it stands where a scene stood. Not for all three: the `embed` and
-`provenance` blocks on `/` stay scenes, because a scene names a job and this
-module explains a path — and "who built this" has no three steps, so forcing the
-component onto it would mint three invented ones.
+three. Not for all three: the `embed` and `provenance` blocks on `/` stay plain
+scenes, because a scene names a job and this module explains a path — and "who
+built this" has no three steps, so forcing the component onto it would mint three
+invented ones.
+
+**Where it stands, on each page** (`DEC-0110`):
+
+- **On `/` it stands inside a scene** — the scene's opener above it, the block's
+  one concrete instance (the live event row) below it, the module in between as
+  that scene's mechanism. It does not stand *where* a scene stood; the scene is
+  still there and the module is its middle. So `/` carries three scene blocks,
+  one of which contains a module, and the component gains **no** opener line and
+  **no** instance slot of its own.
+- **On `/mitmachen` it stands bare** — the hero is the WhatsApp scene and carries
+  the opener and the instance for the page's one job, so the three path blocks
+  are modules and nothing wraps them.
+- The rule behind both: a scene wraps a module only where the module **is** the
+  job introduction. Where another block already introduces the job, the module is
+  a step detail.
+- The block carries **one** CTA either way, and it is the module's own. Wrapping
+  adds no second one.
 
 - **Ordinal** at mono 48 px / 800 `ink`, with the module **title** at card
   title size beside it.
