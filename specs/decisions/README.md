@@ -156,3 +156,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0110 — The scene wraps the explain module — the opener above it, the concrete instance below it, and `/` keeps three scene blocks](DEC-0110--the-scene-wraps-the-explain-module.md)
 - [DEC-0111 — The excerpt repairs the locator — a check reads every citation and says where a moved statement went](DEC-0111--the-excerpt-repairs-the-locator.md)
 - [DEC-0112 — The method registry needs a credential — the build reads it from the environment, and the claim that it did not was false for nineteen deployments](DEC-0112--the-method-registry-needs-a-credential.md)
+- [DEC-0115 — The stage graphics carry no sample of their own — the page passes real rows or a marked sample, the status sits on the event row, and a picture of a control is hidden from assistive technology](DEC-0115--the-stage-graphics-carry-no-sample-of-their-own.md)
