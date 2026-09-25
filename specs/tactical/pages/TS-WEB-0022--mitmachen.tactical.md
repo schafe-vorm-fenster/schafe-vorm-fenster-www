@@ -72,7 +72,7 @@ other block type is permitted — no feature list, no tier table.
 | Forbidden | a feature, our own name, a competitor product, and any numeral asserting how many channels exist — *six* is a figure of speech in the audience record, not an enumeration, and the hub names fewer explicitly, so the block renders what the sources carry and states no number |
 | Proof | one slot beside the block, elements per TS-WEB-0005; visibly empty if nothing clears |
 
-### D4 — Three publishing paths, one mechanism each [FIXED: SRC-0003, SRC-0001 §1a, TS-WEB-0006 D7; steps FREE]
+### D4 — Three publishing paths, one mechanism each — and the path block **is** the explain module [FIXED: SRC-0003, SRC-0001 §1a, TS-WEB-0006 D7, SRC-0014 §"Explain module", SRC-0017 CG-025]
 
 | Order | Path | `mechanism` | Availability in the hub |
 | --- | --- | --- | --- |
@@ -84,9 +84,35 @@ other block type is permitted — no feature list, no tier table.
 | --- | --- |
 | One appearance | each mechanism appears once. The hero is the WhatsApp scene; the WhatsApp path block is its step detail and repeats neither opener nor instance, so only slot 1 carries `data-block="scene"` [PROPOSED — a test hook] |
 | Honest availability | a path whose hub record is not `generally-available` renders the `status_badge` of its `Step` fragment; it may not be shown as dependable while the hub marks it alpha, and the badge goes only when that record changes |
-| Not a feature list | a path is a mechanism; three steps is a working assumption, not a rule. Steps derive from `@schafe-vorm-fenster/offerings#community-calendar` |
 | **One CTA per path** [FIXED: DEC-0082 §4] | each of the three path blocks ends in exactly one CTA at secondary treatment, pointing at that path's own next step — the WhatsApp path at its chat handover, paths 2 and 3 at `/mitmachen/registrieren` through the route facade. None of them carries `data-cta="primary"`: the page's one primary stays the hero CTA (D7), and a CTA in a module is a link, not a conversion declaration (TS-WEB-0006 D9). A path without a CTA is the review's finding, not a variant |
 | Cross-link | path 3 is where the website-owning Verein appears, so D9's link sits at the end of this slot and nowhere else |
+
+#### The render form is fixed, and it is the explain module
+
+**Each of the three path blocks is the `explain-module` component** that
+`SRC-0014 §"Explain module"` specifies (audit A6, 2026-09-25). The step count and
+the render form used to be `[FREE]` here, and this determination used to say
+*"three steps is a working assumption, not a rule"* — while the guide fixed both.
+Two specification-side artefacts said opposite things about the same component;
+this is the side that was wrong.
+
+| Property | Determination |
+| --- | --- |
+| Ordinal | one per module, mono display size, with the module title beside it |
+| Step lines | **exactly three.** Each is a numbered disc plus two lines — the bold core and the normal detail. Not two, not four, and not a count derived from the offering record: `@schafe-vorm-fenster/offerings#community-calendar` supplies what each step *says*, and this determination supplies how many there are |
+| Below `lg` (`48rem`) | a **graphic stage**: one box at `ratio-square` holding three states, the next cropped in at the trailing edge, with the three step lines beneath it. The box never changes size, so a state change cannot shift the page |
+| One viewport below `lg` | the module plus its three step lines fit **one viewport height at the phone breakpoint**. If they do not, the copy is too long; the module does not grow (SRC-0017 CG-025) |
+| From `lg` | the three steps **stand side by side**, each with its own graphic above its own two lines. No stage, no crop, **no slide** — everything is visible at once, which is why the stage existed. Nothing auto-advances |
+| The one breakpoint | `lg` = `48rem` and no other. A generator does not choose it; it is the component's own and the only `min-width` it declares (`specs/contracts/design-system-contract.md`) |
+| Motion | the auto-advance exists **only below `lg`** — the system's one exception, an owner decision (DEC-0105 §6). The step lines are real buttons at every size; under `prefers-reduced-motion` the stage shows state 1 static |
+| One CTA | as the row above, at secondary treatment. `explain-module` may not take `primary` even as a prop value |
+| Line length | each step line is a **single line at 390 px** viewport width — core ≤ 30, detail ≤ 40 characters (SRC-0017 CG-025). That is the budget the copy is written to, not a hope; the lines are clamped to one line each and nothing clamps in practice |
+
+Three phone numbers are in play and they are not interchangeable: **390 px** is
+the authoring width the copy budget is derived from, **360 × 800** is what
+SRC-0014 means by "per screen", and **360 × 640** is A2's fold viewport. The
+single-line rule is 390 px, the one-viewport rule is the phone breakpoint, and
+A18/A19 assert them at those widths.
 
 ### D5 — The live example: a real place, never the visitor's own [PROPOSED — TS-WEB-0008 D1 carries no row for this route]
 
@@ -170,8 +196,9 @@ One banner, at the end of slot 3, after the three path blocks.
   earlier "aha question" is withdrawn — SRC-0001 §1a's aha is the stance the
   opener takes, not a punctuation mark it has to carry (DEC-0080, DEC-0083).
 - [FREE] Visual design and markup of the five own slots, within SRC-0014,
-  TS-WEB-0002 and D10; icon choice from the permitted set; whether the paths
-  render as grid, stack or stepper, and their `Step` count.
+  TS-WEB-0002 and D10; icon choice from the permitted set. **Not free any more:**
+  the path blocks' render form and step count, which are the `explain-module`
+  component of SRC-0014 and are fixed in D4 (audit A6, 2026-09-25).
 - [FREE] Component and file naming; the `data-*` hooks may be renamed as
   long as the acceptance criteria stay walkable.
 
@@ -183,7 +210,9 @@ One banner, at the end of slot 3, after the three path blocks.
 | TS-WEB-0022-A2 | e2e | At 360 × 640 and 1280 × 800 exactly one element carries `data-cta="primary"`, it is fully visible without scrolling, and its href resolves to `/mitmachen/registrieren`. |
 | TS-WEB-0022-A3 | e2e | DOM order of the page's own blocks is hero · objections · three paths · live example · proof, followed by the layout's context band and closing CTA. |
 | TS-WEB-0022-A4 | e2e | Exactly one block declares `data-block="scene"`; its mechanism is `whatsapp` and its opening line is a **statement** — no question mark unless the block answers it in the next sentence (TS-WEB-0006 D7, SRC-0017 CG-005/CG-006). No other block declares the same mechanism as a scene. |
-| TS-WEB-0022-A5 | e2e | Exactly three publishing-path blocks exist, mechanisms distinct and ordered `whatsapp`, `calendar-connection`, `website-import`; each renders step items and exactly one CTA carrying `data-cta="secondary"`, resolving to that path's next step; the `website-import` block shows a visible status badge while its hub record is not `generally-available`. The count of `data-cta="primary"` on the page stays 1 (A2). |
+| TS-WEB-0022-A5 | e2e | Exactly three publishing-path blocks exist, mechanisms distinct and ordered `whatsapp`, `calendar-connection`, `website-import`; **each renders an ordinal, a title and exactly three step lines**, each step line carrying a bold core and a normal detail, and exactly one CTA carrying `data-cta="secondary"` resolving to that path's next step; the `website-import` block shows a visible status badge while its hub record is not `generally-available`. The count of `data-cta="primary"` on the page stays 1 (A2). |
+| TS-WEB-0022-A18 | e2e | At 390 px viewport width every step line of all three modules renders on exactly **one** line: the rendered height of each core element equals one line box of its own computed `line-height`, and the same for each detail element. Measured per element, not per block (SRC-0017 CG-025, SRC-0014 §"Explain module"). |
+| TS-WEB-0022-A19 | e2e | Below `lg` (`48rem`): each module — ordinal, title, graphic stage and its three step lines — fits within **one viewport height** at the phone breakpoint, and the stage's box keeps the same height across all three states. From `lg` the three steps render side by side in one row, no stage element exists, and no element's position changes over 5 s without interaction. |
 | TS-WEB-0022-A6 | e2e | The objection block renders a headline and *n* items; no item contains a product name, a term from the generic-claims lint list, or a numeral asserting how many channels exist. A proof slot sits beside it or is visibly empty. |
 | TS-WEB-0022-A7 | unit | Example-place selection: with no anchor it returns the configured reference place; with an anchor the nearest active covered place with dates; a candidate with zero dates is skipped, never rendered. |
 | TS-WEB-0022-A8 | integration | Events upstream answering zero dates for the first candidate → the next candidate renders; upstream failing → TS-WEB-0008 D5 tier 2/3 with its freshness label. Neither case produces error markup, a retry control, or a changed focus job. |
@@ -201,7 +230,7 @@ One banner, at the end of slot 3, after the three path blocks.
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0012 (`/mitmachen`, focus job publish our dates, `register-as-publisher`, one CTA per publishing path) | D1–D10 · A1–A16 |
+| FUN-WEB-0012 (`/mitmachen`, focus job publish our dates, `register-as-publisher`, one CTA per publishing path) | D1–D10 · A1–A16, A18, A19 |
 | BUS-WEB-0017 (a publishing path whose source the platform already supports publishes free) | D11 · A17 — the rule is the business's; D11 is where the website states it |
 | FUN-WEB-0204 (state the price boundary of BUS-WEB-0017 at the publishing paths) | D11 · A17 |
 
@@ -223,6 +252,7 @@ FUN-WEB-0024, FUN-WEB-0030–0035, FUN-WEB-0149–0151 (TS-WEB-0005) · FUN-WEB-
 | **The permanence promise has no element in `@schafe-vorm-fenster/proof`.** The 2022 public commitment is held as a `media-echo` entry, referenced from the `community-calendar` offering; `proof/` carries nothing for it. Either mint a commitment-type proof element, or let TS-WEB-0005 selection accept a media-echo element in a CTA reassurance slot. Until then D7's promise is unpublishable and A11 fails open. | hub evidence owner |
 | **"Six channels" is not enumerated.** The audience record uses it as a figure of speech; positioning and the value proposition name a smaller set, so D3 forbids the numeral. Enumerate the six canonically, or drop the number from the brief. | hub messaging owner |
 | **Website-source import is alpha** (hub open point on `community-calendar`). D4 requires the status badge — confirm the state before the page ships and say what the badge must claim. | product |
+| **Does the explain module appear on `/`, and in which slot?** `SRC-0014` §"Explain module" says the component is *"reused unchanged on `/`"* and `TS-WEB-0019` never mentions it; the three scene blocks there are three different jobs with one mechanism each, not three steps of one path, so a scene cannot simply *be* one. Three options, none of them derivable from what is written: it replaces the three scene blocks, it coexists as a further block, or the guide's sentence is withdrawn. Recorded as **Q-0079** rather than decided here (audit A6, 2026-09-25 — the review left it open and nobody had written it down). | the owner of `concept/website-design-system.md`, with TS-WEB-0019 |
 | **No component exists for `objection-list`, `publishing-path` or the live-module frame** (Q-0044): three of five slots need shells the design system does not specify, and no component declares which content type it renders. | design |
 | **The stage-0 reference place is unnamed.** D5 needs one covered place with dates and a cleared, place-bound proof element, held as configuration rather than in copy. | content/editorial |
 | **Registration prefill stops at our own route.** DEC-0029 leaves the app-side contract open, so `?ort=` travels no further than `/mitmachen/registrieren`; if the app later accepts a place, D7 and A14 need a second row. | app team |

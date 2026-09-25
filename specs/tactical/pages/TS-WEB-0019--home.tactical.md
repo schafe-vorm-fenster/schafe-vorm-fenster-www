@@ -225,6 +225,15 @@ not conversion.
   carried by Q-0025. The page's copy never depended on it, because no
   surface of the field states a limit; it stays that way if the store
   changes.
+- **Does the explain module belong on this page?** `SRC-0014` §"Explain module"
+  says the component is *"reused unchanged on `/`"*. This spec has never
+  mentioned it, and `D3a`'s three scenes are three different jobs with one
+  mechanism each — not three steps of one path — so a scene cannot simply *be*
+  an explain module. Three options and no evidence that picks one: the module
+  replaces the three scene blocks, it coexists as a further block, or the
+  guide's sentence is withdrawn. **Q-0079**, addressed to the owner of the
+  design guide. Until it is answered `D3a` stands as written and this page
+  renders no explain module.
 - **Q-0044 blocks generation of this page.** Proof card and stream, the
   live-module shells and the context band are not in SRC-0014's six
   specified components, and no component declares what it renders.
