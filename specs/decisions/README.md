@@ -157,3 +157,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0111 — The excerpt repairs the locator — a check reads every citation and says where a moved statement went](DEC-0111--the-excerpt-repairs-the-locator.md)
 - [DEC-0112 — The method registry needs a credential — the build reads it from the environment, and the claim that it did not was false for nineteen deployments](DEC-0112--the-method-registry-needs-a-credential.md)
 - [DEC-0116 — The scrim is composed from the ladder and the header blurs — the choices the photo-surface rewrite had to take, and where the blur's budget condition lives](DEC-0116--the-scrim-is-composed-and-the-header-blurs.md)
+- [DEC-0117 — The archive ground is its own colour family, the closing search block is the one further ink section, and the objection block's failures are neutral](DEC-0117--the-archive-ground-is-its-own-family.md)
