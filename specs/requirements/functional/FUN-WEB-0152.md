@@ -34,9 +34,11 @@ On every row of the contact section, the website SHALL carry `make-contact` as a
 
 DEC-0010, DEC-0081
 
-Unlocatable: DEC-0081 does not carry it either. Its §4 (lines 88-89) fires `request-product-briefing` on the section's *first* action row with the route, and the 2026-09-24 amendment (lines 176-177) points at the hub record for per-channel goals. The string `make-contact` occurs in no decision record.
+Unlocatable: no *registered source* carries it. `GOAL-WEB-0010` references the hub goal `make-contact` with a verified line, but a goal reference is not a statement that every row of the contact section carries it as an intent.
 
-Finding: Neither the first-named DEC-0010 nor the later DEC-0081 supports it; `make-contact` appears only in tactical specs (TS-WEB-0016, TS-WEB-0027) and in the requirement files themselves, so no cited decision record is a source for this statement.
+**Closed 2026-09-25 — DEC-0081's amendment is the record.** Until then the statement rested on `TS-WEB-0016 D12`/`D13` alone: DEC-0081 §4 fired only `request-product-briefing`, on the *first* row, and the string `make-contact` occurred in no decision record at all. The amendment carries the four intent events, the per-channel dimension and the second goal on row 1, so the requirement now has a decision behind it and `DEM-0011`'s `make-contact` clause is discharged. The nine other requirements DEM-0011 names are untouched.
+
+Finding: The first-named DEC-0010 does not support it and never did; DEC-0081 does, as amended 2026-09-25.
 
 ## Rationale
 

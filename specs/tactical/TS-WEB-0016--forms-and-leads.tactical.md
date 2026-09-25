@@ -86,7 +86,9 @@ S1 and S3 are one surface seen twice: the section is where a visitor
 reaches a person, and the booking is its first row. They are kept as two
 rows because they answer to different things — the section to the design
 system's component rules (SRC-0014), the booking to DEC-0010's mechanism —
-and because only one of them fires an event.
+and because row 1 carries **two** goals where rows 2–4 carry one: the act of
+reaching out, and the qualified errand (D12, DEC-0081 amendment §3). This
+sentence read "because only one of them fires an event" until 2026-09-25.
 
 Rules that hold for every row: the website ships **no form backend and
 no form route** — nothing under `app/api/` accepts a submission
@@ -349,7 +351,7 @@ Gate: no envoy release is integrated into production before A8 and A9
 pass against it. TS-WEB-0002 A6 is the same gate seen from the accessibility
 side.
 
-### D12 — Conversion measurement of these flows [PROPOSED; frame FIXED: CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064]
+### D12 — Conversion measurement of these flows [PROPOSED; frame FIXED: CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064; the four intent events and the second goal on row 1 FIXED: DEC-0081 amendment 2026-09-25]
 
 | Surface | Event fires on | Goal ID | Counts |
 | --- | --- | --- | --- |
@@ -414,7 +416,7 @@ zero-counts. The S1 rows depend on nothing: they are ordinary clicks on
 static markup and can be wired today. Goal IDs are consumed from SRC-0008
 and never invented here.
 
-### D13 — The contact section's four channel rows [FIXED: DEC-0081, SRC-0014, SRC-0008; values are content]
+### D13 — The contact section's four channel rows [FIXED: DEC-0081 incl. its amendments of 2026-09-24 and 2026-09-25, SRC-0014, SRC-0008; values are content]
 
 S1 is four rows and nothing else. This determination fixes **which
 channels, in which order, and what each one does** — not what any of them
@@ -454,7 +456,10 @@ destination is the booking. Rows 2–4 never do — see D12.
 This supersedes the earlier reading that the section "fires exactly one
 event for four rows". That was true while `request-product-briefing` was
 the only goal the section could serve; it stopped being true when
-reaching out became a goal of its own.
+reaching out became a goal of its own. **The record for that is
+`DEC-0081`'s amendment of 2026-09-25** — until then this determination
+superseded a decision record and nothing recorded it, which is what
+`FUN-WEB-0152` and `DEM-0011` were reporting.
 
 #### Where the values come from
 
@@ -656,7 +661,7 @@ The marking names the recipient; it does not restate a privacy policy in a
 | TS-WEB-0016-A14 | e2e | With the widget script blocked, S2 and S4 still render the static fallback (contact link plus the booking row of the page's contact section) and no empty or permanently loading slot. The contact section itself renders unchanged, since it loads nothing. |
 | TS-WEB-0016-A22 | e2e | `/start` renders the registration form as a visible embed: exactly one `iframe` whose source is the configured form host, rendered without a click-to-load control, without a `details`/`summary` wrapper and without a `hidden` or zero-size ancestor, together with the e-mail address as a link. No other route of the TS-WEB-0004 D1 inventory contains an `iframe` to any host but the Portalize demo's (DEC-0030). No conversion event fires on the route. |
 | TS-WEB-0016-A23 | e2e | The contact section's first action row and the lead fallback's `/start` link each carry their outbound marking as a separate element **after** the control in DOM order, at the `meta` type role, programmatically associated with it; the control's own label and accessible name contain neither the recipient nor a parenthetical about a new tab. The marking is not a button, not a link and not a consent control. |
-| TS-WEB-0016-A15 | e2e | The contact section renders exactly four action rows, in the D13 order: row 1's href is the configured appointment URL, row 2's is a WhatsApp click-to-chat URL, row 3's scheme is `tel:` and row 4's is `mailto:`. No row is omitted or merged, including when rows 2 and 3 resolve to the same number. Only row 1 emits an event. |
+| TS-WEB-0016-A15 | e2e | The contact section renders exactly four action rows, in the D13 order: row 1's href is the configured appointment URL, row 2's is a WhatsApp click-to-chat URL, row 3's scheme is `tel:` and row 4's is `mailto:`. No row is omitted or merged, including when rows 2 and 3 resolve to the same number. **Every row emits** — the events are A17's; this criterion asserts the rows, their order and their schemes. (It ended "Only row 1 emits an event" until 2026-09-25, which was the reading D13 itself supersedes; DEC-0081 amendment §5.) |
 | TS-WEB-0016-A16 | static | Every value rendered in a contact row resolves from the hub record or the configured appointment URL — no phone number, WhatsApp number or contact e-mail address is hard-coded in a page, a component or a spec file. A row whose value does not resolve fails the build rather than rendering empty. |
 
 ## Coverage

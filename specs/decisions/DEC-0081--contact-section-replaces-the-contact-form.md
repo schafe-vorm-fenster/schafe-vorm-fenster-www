@@ -205,3 +205,75 @@ What changes for this record:
   is the same reason `TS-WEB-0016 A13` withholds the two-working-day promise
   on the quote request, and it is carried as an open point in the hub
   record rather than filled in here.
+
+## Amendment 2026-09-25 — four intent events, and the second goal on row 1
+
+`§4` said *"`request-product-briefing` fires on the click of the section's first
+action row"* and named no other event. `TS-WEB-0016 D12`/`D13` then established
+something wider — `make-contact` on **every** one of the four rows, per channel,
+with the route — and superseded a decision record by a tactical determination,
+with nothing recorded. `FUN-WEB-0152` says so on its own face: *"the string
+`make-contact` occurs in no decision record"*, and `DEM-0011` carries it as one
+of ten requirements resting on nothing.
+
+**This amendment is the record.** `§4` is extended, not replaced:
+
+### 1. Four rows, four intent events
+
+Every row of the contact section emits `make-contact` on its click, carrying
+**the channel** and the route the section was rendered on. Four rows, four
+events, four channels: appointment, WhatsApp, phone, mail.
+
+That is not a widening for its own sake. The section is the only surface on the
+site that offers a channel to a person, and the four rows are four different
+readinesses — a visitor who will write is not a visitor who will ring. A single
+number for the section would have said nothing about which of the four the site
+is actually good at.
+
+### 2. It is an **intent**, and it is named as one
+
+Three of the four rows hand the visitor to another application — a `tel:`, a
+`mailto:`, a click-to-chat — and the fourth navigates to Google. The website sees
+the handover and nothing after it. So the event counts an intent, and the word
+is in the event's name, in this record and in any report built on it
+(`TS-WEB-0016 D12`, `A18`). Calling the number "contacts" would claim knowledge
+of conversations nobody observed.
+
+### 3. Row 1 carries two goals, and that is a ladder rather than double counting
+
+The appointment row fires `make-contact` **and** completes
+`request-product-briefing` on one click. One counts the act of reaching out,
+the other the qualified errand; they are two rungs, not one goal counted twice.
+Three rules keep it honest, and all three are checked:
+
+- **One event per goal id per click.** No goal fires twice for one interaction.
+- **Rows 2–4 never fire `request-product-briefing`.** A WhatsApp message about a
+  quote is not a briefing request, and whether a contact was one is decided
+  where the message arrives, not on the website.
+- **No in-page CTA fires anything.** A booking CTA in an argument block, and any
+  link that scrolls to the section, emit nothing. That is the double counting
+  `§4` was actually about and it is unchanged.
+
+### 4. What `§4` said that is now wrong, and what is still right
+
+Wrong: that the section emits one event. `§4`'s own sentence — *"no page adds a
+second event"* — is right and stays; what it meant was that no *page* adds one,
+not that the section has only one.
+
+Still right, word for word: the event fires on the click of the row and not on
+the in-page CTA; the **route** is what distinguishes one intent from another,
+because the section stands on every page; and `DEC-0071 §3` still forbids any
+geographic value in the payload.
+
+### 5. The spec-side home, and the criterion that still said otherwise
+
+`TS-WEB-0016 D12` and `D13` are the spec-side home for the channel set, the
+events and the payload — as the 2026-09-24 amendment above already established
+for the rows themselves. `TS-WEB-0016-A15` ended *"Only row 1 emits an event"*,
+which was true while `request-product-briefing` was the only goal the section
+could serve and stopped being true when reaching out became a goal of its own.
+It is corrected, and `A17` was already asserting the four events against it.
+
+`DEM-0011`'s `make-contact` clause closes with this record. The other nine
+requirements it names are untouched and it stays `OPEN` for them.
+
