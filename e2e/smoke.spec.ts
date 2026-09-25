@@ -241,7 +241,11 @@ test("TS-WEB-0014-A2: the security headers of TS-WEB-0014 D4 are on the response
   expect(csp).toContain("manifest-src 'self'");
   expect(csp).toContain("worker-src 'self'");
   expect(csp).toContain("object-src 'none'");
-  expect(csp).toContain("frame-src 'none'");
+  // The fifth D1 origin (DEC-0121): the registration form's host, framed on
+  // `/start` (TS-WEB-0016 D15) — the one `frame-src` source, and it appears in
+  // no other directive.
+  expect(csp).toContain("frame-src https://docs.google.com;");
+  expect(csp).not.toContain("frame-src 'none'");
   expect(csp).toContain("child-src 'none'");
   expect(csp).toContain("form-action 'self'");
   expect(csp).toContain("frame-ancestors 'none'");

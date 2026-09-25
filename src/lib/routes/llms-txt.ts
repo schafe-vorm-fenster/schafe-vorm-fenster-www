@@ -29,7 +29,7 @@ import { dictionary } from "../i18n/dictionary";
 import { LOCALES } from "../i18n/locales";
 import { domainConfigFor } from "./host-matrix";
 import { href, ROUTE_IDS } from "./routes";
-import { D1_NON_PAGE_ROWS } from "./url-inventory";
+import { D1_NON_REGISTRY_ROWS } from "./url-inventory";
 
 import type { Locale } from "../i18n/locales";
 import type { DomainConfig } from "./host-matrix";
@@ -78,7 +78,7 @@ export function llmsTxtFor(host: string | null | undefined): string {
   }
 
   lines.push("## Machine surfaces", "");
-  for (const row of D1_NON_PAGE_ROWS) {
+  for (const row of D1_NON_REGISTRY_ROWS) {
     if (row.kind !== "machine") continue;
     lines.push(`- ${origin}${row.path}`);
   }
