@@ -454,7 +454,7 @@ test.describe("TS-WEB-0020 — your place", () => {
     test.skip(emptySlug === undefined, "no covered community is empty right now");
     for (const path of [
       "/dein-ort",
-      "/dein-ort?ort=17390",
+      "/dein-ort?ort=quilow",
       `/dein-ort?ort=${emptySlug}`,
     ]) {
       await page.goto(path);
@@ -611,6 +611,8 @@ test.describe("TS-WEB-0020 — your place", () => {
     await expect(page.locator('[data-block="value-story"]')).toHaveCount(4);
     await expect(page.locator("#homescreen")).toHaveCount(1);
     const hint = (await page.locator("main").textContent()) ?? "";
-    expect(hint).toContain("postcode");
+    // The English search hint (`dictionary.search.hint`, en) — the search takes a
+    // place name, and no surface says "postcode" any more (DEC-0079 §1).
+    expect(hint).toContain("place name");
   });
 });

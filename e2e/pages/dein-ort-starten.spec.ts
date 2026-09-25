@@ -23,12 +23,13 @@ const DESKTOP = { width: 1280, height: 800 };
 const PLACE = "Testdorf";
 
 /**
- * The fixture's own uncovered postcode (`src/lib/live/mocks/fixtures.ts`
- * `UNCOVERED_DEMO_ZIP`) and a covered slug, so the classification of
- * TS-WEB-0008 D7 has both of its live rows to walk.
+ * The fixture's own uncovered value (`src/lib/live/mocks/fixtures.ts`
+ * `UNCOVERED_DEMO_ZIP`), a covered place name and its slug, so the classification of
+ * TS-WEB-0008 D7 has both of its live rows to walk. Five digits classify as
+ * `uncovered` since DEC-0079 §1, so the covered row is walked with a name.
  */
 const UNCOVERED_ZIP = "99999";
-const COVERED_ZIP = "17390";
+const COVERED_NAME = "Rubkow";
 const COVERED_SLUG = "rubkow";
 
 test.describe("TS-WEB-0021 — start the calendar in your place", () => {
@@ -222,19 +223,19 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
   test("TS-WEB-0021-A6 (second half): a covered place with no dates lands on /dein-ort in the empty state", async ({
     page,
   }) => {
-    // `38165` is the fixture's covered-but-empty place (`EMPTY_DEMO_SLUG`).
+    // `lassan` is the fixture's covered-but-empty place (`EMPTY_DEMO_SLUG`).
     await page.goto("/dein-ort");
     const field = page.locator('input[type="search"]').first();
-    await field.fill("38165");
+    await field.fill("lassan");
     await field.press("Enter");
-    await expect(page).toHaveURL(/\/dein-ort\?ort=38165$/);
+    await expect(page).toHaveURL(/\/dein-ort\?ort=lassan$/);
     await expect(page.locator("#place-dates")).toContainText("Lassan");
   });
 
   test("TS-WEB-0021-A7: a value that now resolves produces exactly one 302 to /dein-ort?ort=<slug>", async ({
     request,
   }) => {
-    const response = await request.get(`/dein-ort/starten?ort=${COVERED_ZIP}`, {
+    const response = await request.get(`/dein-ort/starten?ort=${COVERED_NAME}`, {
       maxRedirects: 0,
     });
     expect(response.status()).toBe(307);
@@ -251,7 +252,7 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
     // Following it terminates in one hop, and the campaign parameters and the
     // language prefix survive.
     const followed = await request.get(
-      `/en/your-place/start?ort=${COVERED_ZIP}&etcc_cmp=herbst&etcc_med=mail`,
+      `/en/your-place/start?ort=${COVERED_NAME}&etcc_cmp=herbst&etcc_med=mail`,
       { maxRedirects: 0 },
     );
     expect(followed.status()).toBe(307);
@@ -277,7 +278,7 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
 
-    await page.goto(`/dein-ort/starten?ort=${COVERED_ZIP}`);
+    await page.goto(`/dein-ort/starten?ort=${COVERED_NAME}`);
     await expect(page).toHaveURL(new RegExp(`/dein-ort\\?ort=${COVERED_SLUG}$`));
     expect((await page.locator("body").innerText()).length).toBeGreaterThan(100);
 

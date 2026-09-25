@@ -149,10 +149,12 @@ five content artifacts A16 names; and no geolocation control existed.
   blanked), and `e2e/place-search.spec.ts` asserts the composed label,
   placeholder and block on every instance of the five surfaces, in both
   locales — the instrument measures what the visitor sees.
-- Six e2e cases in other tasks' page specs go red by `DEC-0079`'s own
-  consequence — five type five digits and expect a place, one expects the
-  word "postcode" — and are listed for their owners in `state/open.md`
-  row 218. `e2e/search-double-submit.spec.ts`
+- Six e2e cases in T-11/T-16 page specs typed five digits and expected a
+  place, or expected the word "postcode"; they went red by `DEC-0079`'s own
+  consequence and were switched on this branch to the slugs both
+  `LIVE_DATA` backends carry (`quilow`, `Rubkow`/`rubkow`, `lassan`) and to
+  the English search hint — minimal shared edits, listed for their owners in
+  `state/open.md` row 218. `e2e/search-double-submit.spec.ts`
   (no page's spec) types a slug on the three search surfaces now and keeps
   the postcode on the order flow's scope step (`DEC-0079 §7`).
   `src/components/gallery.tsx` (T-10) still labels its demo instance "Ort

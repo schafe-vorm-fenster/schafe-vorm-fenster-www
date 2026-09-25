@@ -154,8 +154,14 @@ export function PlaceTypeahead({ inputId, to, query, name = "ort", locale = "de"
     // Text that reached the field before this effect attached — a visitor
     // faster than hydration, a value the browser restored — fired `input`
     // before anyone listened. Replay it once, so the overlay answers what is
-    // already in the field.
-    if (input.value !== "") input.dispatchEvent(new Event("input"));
+    // already in the field — but only while the visitor is in the field: a
+    // value the page arrived with (`?ort=` prefilled, a browser-restored
+    // form) is not a search until the field is focused, and `onFocus`
+    // picks it up then. This keeps the rate-limited BFF free of one
+    // request per prefilled page load.
+    if (input.value !== "" && document.activeElement === input) {
+      input.dispatchEvent(new Event("input"));
+    }
     return () => {
       input.removeEventListener("input", onInput);
       input.removeEventListener("blur", onBlur);

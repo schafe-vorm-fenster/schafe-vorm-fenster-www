@@ -165,13 +165,18 @@ test.describe("TS-WEB-0019 — home", () => {
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
-    // `07743` resolves to `quilow`, a covered demo place with dates.
-    await page.goto("/?ort=07743");
+    // `quilow` is a covered demo place with dates — the search takes a name, not
+    // a postcode (DEC-0079 §1), so the parameter carries the slug.
+    await page.goto("/?ort=quilow");
 
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Das ist los in Quilow",
     );
-    const dates = page.locator("#place-dates");
+    // The module slot streams over its S1 fallback: for a few hundred ms the
+    // resolved section sits in React's hidden streaming container next to the
+    // visible Schlatkow fallback, and a strict locator sees two `#place-dates`.
+    // Measured (3 workers, `next dev`): both present at 0 ms, one at 500 ms.
+    const dates = page.locator("#place-dates").filter({ visible: true });
     await expect(dates).toContainText("Quilow");
     await expect(dates.locator("article")).toHaveCount(3);
 
