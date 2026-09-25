@@ -96,17 +96,35 @@ a sentence nobody wrote in the markup, never in a word the visitor reads.
    deprecated alias that resolves to the `othersSay` wording — owner copy
    (copy guide `:516`), never the placeholder — so the five pages that read
    it compile, none renders the avoid-list word and none renders an unmarked
-   placeholder; the alias is right for the press streams on `/` and
-   `/ueber-uns` and a generic over the customer blocks on `/mitmachen`,
-   `/dein-kalender` and `/deine-region`. Only a page that chooses
-   `customers` explicitly renders the placeholder, and it marks the block
-   `data-demo="true"`; each page picks its key when its proof block is next
-   touched — the pages belong to other tasks and are not edited here.
-   `newsletter.heading` names two of the review's
+   placeholder. On `/` and `/ueber-uns` (press proof) the alias is the
+   guide's own replacement. On `/mitmachen`, `/dein-kalender` and
+   `/deine-region` (customer proof) it **overrides the guide's restriction**
+   — `:516` allows "Was andere sagen" *for press proof only* — as a stopgap
+   until each page owner picks `customers` (AGENTS.md rule 8: the override
+   is recorded here, not silent; `/mitmachen`'s own h2 has read the same
+   words over customer proof since before this record). Where the alias and
+   the block's h2 are the same three words — `/mitmachen` (`PROOF_LABEL`)
+   and `/ueber-uns` (`content/pages/ueber-uns/de.md:170`) — the kicker
+   doubled the heading directly beneath it, so those two proof sections
+   carry **no kicker**: a deviation from polish brief G-3
+   (`plan/polish-brief.md:142`, "each section after the hero opens with a
+   kicker") taken over a doubled heading, because `section-shell` offers no
+   way to mark a kicker `data-demo` and the only other kicker wording is the
+   placeholder. Only a page that chooses `customers` explicitly renders the
+   placeholder, and it marks that kicker `data-demo="true"` — which needs a
+   marking hook on the shell's kicker (T-05's `section-shell.tsx`) or a
+   page-side element; each page picks its key when its proof block is next
+   touched. `newsletter.heading` names two of the review's
    three concrete things ("Neue Funktionen und aktuelle Angebote"; CG-029
-   title ≤ 40) as a placeholder; the block is `data-mock` already and is
-   withheld behind a null constant until a sending system exists (T-10's
-   own record). English twins of owner wording are translations, the way every
+   title ≤ 40) as a placeholder. The block **renders in the footer of every
+   route today** (`app/[lang]/layout.tsx:174`, unchanged since the base)
+   inside `data-mock="true"`, which marks the non-sending form (Q-0020,
+   `state/open.md` row 22), not the sentence — so the heading element itself
+   carries `data-demo="true"` while the dictionary word is the placeholder
+   (`newsletter-block.tsx`, one attribute; the marking lifts when a page
+   passes its own `heading`). Withholding the block behind a null constant
+   until a sending system exists is T-10's default and T-10's record, not
+   this one's. English twins of owner wording are translations, the way every
    other dictionary string has been since TS-WEB-0001 D7 — they are not new
    sentences.
 
@@ -132,7 +150,16 @@ a sentence nobody wrote in the markup, never in a word the visitor reads.
   row in `state/open.md`: the three question blurbs per language (rows 215,
   216), the German invitation (row 219), `kickers.customers` (row 218;
   nothing renders it until a page picks the key) and `newsletter.heading`
-  (row 217; withheld with the block).
+  (row 217; rendered in every footer, marked on its own heading element).
+- Three files of other tasks changed by the smallest edit that makes the
+  tree and this record agree, and their owners keep them:
+  `app/[lang]/mitmachen/page.tsx` (T-12, block `beleg`) and
+  `app/[lang]/ueber-uns/page.tsx` (T-14, block `belegstrom`) pass no kicker
+  where the alias doubled the h2 (§5) — one attribute line each, replaced by
+  a comment; `src/components/newsletter-block/newsletter-block.tsx` (T-10)
+  carries `data-demo` on the heading while the dictionary word is the
+  placeholder; `e2e/pages/mitmachen.spec.ts` (T-12) asserts the h2 and the
+  absence of a kicker on that block.
 - Spec follow-ups outside this task's ownership: `TS-WEB-0006 D5`'s Phrasing
   row (menu with blurb, the slot as source, the registry as fallback) and
   `TS-WEB-0007 D5`'s `blurb` field on the `context-band` slot type; CG-030's

@@ -385,7 +385,8 @@ export default async function Page({
       <SectionShell
         dataBlock="belegstrom"
         density="tight"
-        kicker={words.kickers.evidence}
+        // No kicker: the `evidence` alias resolves to the content heading's
+        // own words and doubled it (DEC-0120 §5).
         labelledBy="belegstrom-h2"
         surface="surface"
       >

@@ -201,9 +201,11 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
     ]) {
       await expect(page.getByText(kicker, { exact: true })).toBeVisible();
     }
-    // The proof kicker reads the deprecated `evidence` alias, which resolves
-    // to "Was andere sagen" (DEC-0120 §5) — the same words as the block's h2.
-    await expect(page.getByText("Was andere sagen", { exact: true }).first()).toBeVisible();
+    // The proof section carries no kicker: the `evidence` alias resolves to
+    // the h2's own words and doubled it (DEC-0120 §5); the h2 stands alone
+    // until T-12 picks `customers` with a marked kicker.
+    await expect(page.locator("#beleg-heading")).toHaveText("Was andere sagen");
+    await expect(page.locator("[data-block='beleg'] p[class*='kicker']")).toHaveCount(0);
   });
 
   /**

@@ -83,9 +83,11 @@ export interface Dictionary {
     /**
      * Names what arrives, not "news" (CG-029: at least two concrete things;
      * review R-home-35). **Placeholder** — the two things are the review's
-     * own list, the sentence is nobody's (DEC-0120, state/open.md row 217);
-     * the block already carries `data-mock="true"` and is withheld behind a
-     * null constant until a sending system exists (T-10's own record).
+     * own list, the sentence is nobody's (DEC-0120, state/open.md row 217).
+     * The block renders in the footer of every route inside `data-mock`
+     * (the non-sending form's marking, Q-0020), so the heading element marks
+     * itself `data-demo="true"` while this word stands; T-10's own record
+     * withholds the block until a sending system exists.
      */
     heading: string;
     emailLabel: string;
@@ -186,7 +188,10 @@ export interface Dictionary {
      * guide :516), never to the `customers` placeholder, so a page that
      * still reads it renders cleared copy unmarked; each page picks the
      * explicit key when its proof block is next touched, and marks the
-     * block `data-demo="true"` if that key is `customers`.
+     * kicker `data-demo="true"` if that key is `customers`. Over customer
+     * proof the alias overrides copy guide :516's "press proof only" note as
+     * a stopgap (DEC-0120 §5); where it equals the block's h2 (`/mitmachen`,
+     * `/ueber-uns`) the page passes no kicker instead of a doubled one.
      */
     evidence: string;
     /** Price and scope. */

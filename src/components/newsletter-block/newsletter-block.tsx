@@ -90,7 +90,11 @@ export function NewsletterBlock({
       // the tests need to address *this* form rather than the page's.
       data-newsletter=""
     >
-      <p className={styles.heading}>{heading ?? words.heading}</p>
+      {/* The dictionary heading is a placeholder (DEC-0120, state/open.md
+          row 217): marked on its element, lifted when a page passes its own. */}
+      <p className={styles.heading} data-demo={heading ? undefined : "true"}>
+        {heading ?? words.heading}
+      </p>
       {lead ? <p className={styles.lead}>{lead}</p> : null}
       {/* The `<form>` itself is a client component (F-3-11): it has to cancel
           its own submit, and a server component cannot. The consent sentence

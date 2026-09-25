@@ -385,7 +385,8 @@ export default async function Page({
           `surface` (band) and `paper` (closing) after the aside. */}
       <SectionShell
         dataBlock="beleg"
-        kicker={dictionary(locale).kickers.evidence}
+        // No kicker: the `evidence` alias resolves to the h2's own words and
+        // doubled it (DEC-0120 §5); T-12 picks `customers` once it can be marked.
         labelledBy="beleg-heading"
         surface="surface-2"
       >
