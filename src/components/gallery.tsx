@@ -71,7 +71,7 @@ import { TrustBlock } from "./trust-block/trust-block";
 import { ValueStory } from "./value-story/value-story";
 
 import { dictionary } from "@/src/lib/i18n/dictionary";
-import { offeringPrice } from "@/src/lib/pricing/offerings";
+import { offeringPrice, publishedFigure } from "@/src/lib/pricing/offerings";
 import { standardSources } from "@/src/lib/pricing/standard-sources";
 
 import type { DataState } from "./data-state";
@@ -710,10 +710,7 @@ export const GALLERY: readonly GalleryEntry[] = [
     section: "2.3",
     demo: (
       <div className={styles.stack}>
-        <PriceTag
-          display="priced"
-          figure={{ amount: 480, currency: "EUR", interval: "year", vatNote: "zzgl. USt." }}
-        />
+        <PriceTag display="priced" figure={publishedFigure("portalize-calendar")} />
         <PriceTag display="on-request" />
         <PriceTag display="permanent" />
         <PriceTag display="withheld" />
@@ -867,7 +864,7 @@ export const GALLERY: readonly GalleryEntry[] = [
         portraitAlt="Porträt einer Bürgermeisterin"
         portraitSrc={assetSrc(gruender)}
         priceDisplay="priced"
-        priceFigure={{ amount: 480, currency: "EUR", interval: "year" }}
+        priceFigure={offeringPrice("portalize-calendar").figure}
       />
     ),
   },

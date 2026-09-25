@@ -48,3 +48,19 @@
   margin: 0;
   padding: 0;
 }
+
+.sources li {
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* A source term longer than the phone column wraps inside its pill instead
+   of running past the viewport, where `body { overflow-x: hidden }` would
+   cut it off unreadable. The tag's `nowrap` is for rows that may be struck;
+   nothing here is ever struck. */
+.sources li > * {
+  line-height: var(--leading-tight);
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}

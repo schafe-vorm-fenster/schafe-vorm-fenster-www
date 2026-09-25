@@ -40,6 +40,8 @@ describe("TS-WEB-0018-A2: publishablePrice is true only for a `price_status: fix
     "portalize-calendar": true,
     "portalize-enterprise": false,
     "custom-data-integration": false,
+    "local-advertising": false,
+    "portalize-website-widget": false,
   };
 
   for (const [offering, expected] of Object.entries(EXPECTED) as [OfferingId, boolean][]) {
@@ -92,5 +94,13 @@ describe("TS-WEB-0006 D10: the free tier is a permanence statement, the enterpri
   it("never carries a figure for the add-on (DEC-0107 §3)", () => {
     expect(offeringPrice("custom-data-integration")).toEqual({ display: "on-request" });
     expect(() => publishedFigure("custom-data-integration")).toThrow();
+  });
+
+  it("holds the two withheld offerings as `withheld`, without the widget's indicative figure (TS-WEB-0018 D8, A3)", () => {
+    for (const offering of ["local-advertising", "portalize-website-widget"] as const) {
+      expect(offeringPrice(offering)).toEqual({ display: "withheld" });
+      expect(() => publishedFigure(offering)).toThrow();
+    }
+    expect(frontmatterOf("portalize-website-widget").price.amount).toBe(5);
   });
 });

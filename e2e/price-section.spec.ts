@@ -160,3 +160,33 @@ test.describe("tag, setting-row and hint-banner on the gallery", () => {
     expect(text).not.toMatch(/\bab\b/);
   });
 });
+
+test.describe("hint-banner at phone width", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test("the banner and every source tag stay inside the viewport, and the page does not scroll sideways", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    const banner = page.locator("[data-hint-banner]");
+    await expect(banner).toHaveCount(1);
+    const viewport = page.viewportSize()?.width ?? 0;
+    const tags = banner.locator("[data-standard-source] > *");
+    await expect(tags).toHaveCount(3);
+    const rightEdges = async () =>
+      Promise.all([
+        banner.evaluate((el) => Math.round(el.getBoundingClientRect().right)),
+        ...(await tags.all()).map((tag) => tag.evaluate((el) => Math.round(el.getBoundingClientRect().right))),
+      ]);
+    for (const right of await rightEdges()) expect(right).toBeLessThanOrEqual(viewport);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport);
+
+    // The CSS layer, not only the shorter label: a term wider than the column
+    // wraps inside its pill instead of pushing the page sideways.
+    await tags.first().evaluate((el) => {
+      el.textContent = "Council information system (Ratsinformationssystem) of a municipality";
+    });
+    for (const right of await rightEdges()) expect(right).toBeLessThanOrEqual(viewport);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport);
+  });
+});

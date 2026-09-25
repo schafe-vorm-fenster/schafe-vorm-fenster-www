@@ -43,7 +43,10 @@ specification disagree are settled the specification's way (`DEC-0104`).
    permanence statement, not a price*. The row renders the figure at
    `--font-size-display-mono` only for a `priced` offering, with the
    qualifier beside it in the same paragraph; `permanent` and `on-request`
-   render the `price-tag` statement at the mono card size. The qualifier is
+   render the `price-tag` statement at the mono card size — so tier 3's
+   "Auf Anfrage" stands at the 21 px mono size, not at the figure size the
+   draft gives "Anfrage / nach Größe": a request is not a price either, and
+   the figure size is reserved for the one figure. The qualifier is
    the existing `price-tag` wording ("/ Jahr, zzgl. USt."), split by a new
    `formatPriceParts()` beside `formatPriceFigure()` so there is one
    formatter. The draft's second link under tier 2 ("Wie das aussieht →") is
@@ -54,7 +57,10 @@ specification disagree are settled the specification's way (`DEC-0104`).
    the token import, so the title uses `--type-subhead-size` (the role whose
    clamp contains 26), as `publishing-path`'s headline does. The tier's icon
    well glyph is derived from the offering id (`house` · `globe` ·
-   `map-pin`, the drafts'), like the weight.
+   `map-pin`, the drafts'), like the weight. Every tier CTA carries the
+   onward `arrow-right` glyph, tier 3 included — the draft's calendar glyph
+   on "Beratungstermin buchen" is not built, because the row's CTA leads to
+   `/deine-region` (`TS-WEB-0024 D6`), not to a booking.
 
 4. **`tag` defaults to `ink`/`paper`.** The design system says "fill `ink`
    with `paper` text, or `surface` with `ink` text inside a lime section";
@@ -87,7 +93,11 @@ specification disagree are settled the specification's way (`DEC-0104`).
    `@schafe-vorm-fenster/offerings#community-calendar` lines 111–113 held
    against the package by a unit test (the `offerings.ts` pattern). No
    `data-cta`, no control, no figure; the German and English labels are the
-   record's own terms, not sentences.
+   record's own terms, not sentences — "Council information system" without
+   the German term in brackets, so the tag fits a phone column; and the
+   banner's tag row lets a term wrap inside its pill rather than push the
+   page wider than the viewport (the tag's own `nowrap` stays, for rows that
+   may be struck).
 
 8. **Two derived values enter `app/styles/components.css`**: `--height-tag:
    30px` (the design system's tag height) and `--size-icon-well: 40px` (the
@@ -100,7 +110,10 @@ specification disagree are settled the specification's way (`DEC-0104`).
    forever) as `true`; the function answered `false` because it tested
    `display === "priced"`. It now returns true for `priced` and
    `permanent`, and `offerings.test.ts` holds the table against the shipped
-   frontmatter. `publishedFigure()` is added so the JSON-LD `Offer` reads the
+   frontmatter for all six ids `TS-WEB-0018-A2` names: the two withheld
+   offerings (`local-advertising`, `portalize-website-widget`) enter the
+   table as `withheld`, without the widget's indicative figure, so the
+   truth table is complete and no page can resolve a figure for them. `publishedFigure()` is added so the JSON-LD `Offer` reads the
    480 from the same import (`TS-WEB-0024-A11`), and it throws for an
    offering without a figure rather than emitting one.
 

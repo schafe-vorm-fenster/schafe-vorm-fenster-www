@@ -29,7 +29,9 @@ export type OfferingId =
   | "community-calendar"
   | "portalize-calendar"
   | "portalize-enterprise"
-  | "custom-data-integration";
+  | "custom-data-integration"
+  | "local-advertising"
+  | "portalize-website-widget";
 
 export interface OfferingPrice {
   readonly display: PriceDisplay;
@@ -42,6 +44,11 @@ export interface OfferingPrice {
  * package, but `price_status: on-request` means `publishablePrice` is
  * `false` (TS-WEB-0018 D2/D3, TS-WEB-0026 D6) — the figure is never read here, on
  * purpose, so a template mistake cannot print it (TS-WEB-0026-A4).
+ * `local-advertising` and `portalize-website-widget` are `promotion:
+ * withheld` in the package (TS-WEB-0018 D2/D3, D8): no page renders them,
+ * and the table carries them only so `publishablePrice` answers `false`
+ * over the whole shipped index (TS-WEB-0018-A2) — the widget's indicative
+ * `5` is never transcribed (TS-WEB-0018-A3).
  */
 const OFFERING_PRICES: Readonly<Record<OfferingId, OfferingPrice>> = {
   "community-calendar": { display: "permanent" },
@@ -51,6 +58,8 @@ const OFFERING_PRICES: Readonly<Record<OfferingId, OfferingPrice>> = {
   },
   "portalize-enterprise": { display: "on-request" },
   "custom-data-integration": { display: "on-request" },
+  "local-advertising": { display: "withheld" },
+  "portalize-website-widget": { display: "withheld" },
 };
 
 /**
@@ -73,7 +82,7 @@ export function offeringPrice(offering: OfferingId, locale: Locale = "de"): Offe
 
 /**
  * TS-WEB-0026 D6 / TS-WEB-0018 D2/D3 — true only for a `price_status: fixed`
- * offering. Two of the four are fixed in the package: `portalize-calendar`
+ * offering. Two of the six are fixed in the package: `portalize-calendar`
  * (480, priced) and `community-calendar` (0, forever — rendered as the
  * permanence statement, still a fixed price). TS-WEB-0018-A2 names both as
  * `true`; until this pass the function read `display === "priced"` and

@@ -23,7 +23,11 @@ export type StandardSourceId = (typeof STANDARD_SOURCE_IDS)[number];
 
 export interface StandardSource {
   readonly id: StandardSourceId;
-  /** The name shown, per locale — the package's own term, not a sentence. */
+  /**
+   * The name shown, per locale — the package's own term, not a sentence, and
+   * short enough to sit in a 30 px tag at phone width (the banner lets a tag
+   * wrap, but a term should not need it).
+   */
   readonly label: Readonly<Record<Locale, string>>;
   /** The phrase the offering record uses, for the test that holds this list against it. */
   readonly packagePhrase: string;
@@ -37,7 +41,7 @@ const STANDARD_SOURCES: readonly StandardSource[] = [
   },
   {
     id: "ratsinformationssystem",
-    label: { de: "Ratsinformationssystem", en: "Council information system (Ratsinformationssystem)" },
+    label: { de: "Ratsinformationssystem", en: "Council information system" },
     packagePhrase: "council information system",
   },
   {
