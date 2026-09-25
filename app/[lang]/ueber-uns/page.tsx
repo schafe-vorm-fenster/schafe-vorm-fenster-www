@@ -282,6 +282,7 @@ export default async function Page({
         // the page's language `/en/about` read "Nicht motivgenau ·
         // Platzhalter".
         locale={locale}
+        focal={heroImage?.focal}
         notDepicting={heroImage?.notDepicting}
         placeholderId={heroImage?.placeholderId}
         priority

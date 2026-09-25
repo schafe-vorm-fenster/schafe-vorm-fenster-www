@@ -56,7 +56,14 @@ export interface HeroBlockProps extends DataStateProps {
    * `state/open.md`). Pass `false` for a hero that must not compete.
    */
   readonly priority?: boolean;
+  /**
+   * **Accepted and ignored** — the tone variants are retired, one neutral
+   * scrim for every hero (DEC-0105 §1). Kept so call sites compile until
+   * their owners drop it (T-14, T-19).
+   */
   readonly gradient?: "ink" | "violet";
+  /** The motif's focal point from the inventory — forwarded to `photo-surface`. */
+  readonly focal?: { readonly x: number; readonly y: number };
   readonly notDepicting?: boolean;
   readonly placeholderId?: string;
   /** The page's language — forwarded to `photo-surface`'s own badges (F-2-4). */
@@ -108,15 +115,17 @@ export function HeroContent({
  * Structure: an optional kicker `badge`, the headline as the page's one `h1`
  * in the Display or Place-name role, an optional lead, one `cta` slot, all
  * inside `photo-surface` at `ratio-hero`. Where `cta` is omitted the page's
- * `primaryConversion` is `null` (TS-WEB-0006 D3) and no CTA treatment is implied.
+ * `primaryConversion` is `null` (TS-WEB-0006 D3) and no CTA treatment is implied;
+ * where it carries two children (the primary and the equal-weight secondary
+ * of TS-WEB-0024 D3) the slot stacks them with a gap.
  * States (D-9, forwarded to the inner `photo-surface`, all four): the hero
  * swaps content by place knowledge (S1/S2/S3) at the page level, not here —
  * this component's own contract is that the reserved space is identical
  * whichever branch the page renders into it.
  * Inherits: Display 54/0.90/−0.045em/800 or Place-name 50 px; the headline
  * may break by hand and is never clamped (G-8 — the two-line clamp cut
- * `/dein-ort`'s S0 sentence mid-word); text sits in the gradient's dark part
- * (`photo-surface`'s own contract).
+ * `/dein-ort`'s S0 sentence mid-word); text sits on the reading band and
+ * carries the soft text shadow (`photo-surface`'s own contract).
  * Space: `ratio-hero`; the headline reserves `headlineLines` line boxes via
  * `min-height: calc(lines × lh × 1em)` so a content swap never shifts layout.
  * A11y: exactly one `h1` per page — the caller must render at most one
@@ -136,7 +145,7 @@ export function HeroBlock({
   src,
   wideSrc,
   priority = true,
-  gradient = "ink",
+  focal,
   notDepicting = false,
   placeholderId,
   locale = "de",
@@ -151,7 +160,7 @@ export function HeroBlock({
   return (
     <PhotoSurface
       className={className}
-      gradient={gradient}
+      focal={focal}
       hero
       id={id}
       locale={locale}
@@ -177,7 +186,7 @@ export function HeroBlock({
           variant={variant}
         />
       )}
-      {search ? <div className={styles.cta}>{search}</div> : null}
+      {search ? <div className={styles.search}>{search}</div> : null}
     </PhotoSurface>
   );
 }

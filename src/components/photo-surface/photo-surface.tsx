@@ -2,7 +2,7 @@ import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { PlaceholderSurface } from "../placeholder-surface/placeholder-surface";
 import { Skeleton } from "../skeleton/skeleton";
 
-import { photoUrl } from "./url";
+import { focalPosition, photoUrl } from "./url";
 
 import type { ReactNode } from "react";
 import type { CSSProperties } from "react";
@@ -38,8 +38,22 @@ export interface PhotoSurfaceProps extends DataStateProps {
    * ground that paper-coloured header items could not sit on.
    */
   readonly hero?: boolean;
-  /** `ink` by default, `violet` for the municipal path. */
+  /**
+   * **Accepted and ignored.** The ink and violet tone variants are retired —
+   * one neutral-black scrim for every surface (DEC-0105 §1, design-system
+   * contract `photo-surface`: one variant). The prop stays in the interface
+   * so the call sites that still pass it keep compiling until their owners
+   * remove it (T-14, T-19); it selects nothing.
+   */
   readonly gradient?: "ink" | "violet";
+  /**
+   * The motif's focal point, as percentages of the frame — the inventory's
+   * `focal: {x, y}` (`ImageEntrySchema`), what `background-position` takes.
+   * Never `center` by default (DEC-0105 §2): absent, the stylesheet's own
+   * `50% 40%` applies, which crops a sky-heavy motif's sky away and lands the
+   * subject above the reading band's opaque end.
+   */
+  readonly focal?: { readonly x: number; readonly y: number };
   readonly ratio?: "hero" | "feature";
   /**
    * The photo does not depict what the copy claims. It reaches the markup as
@@ -62,14 +76,16 @@ export interface PhotoSurfaceProps extends DataStateProps {
  * 6 `photo-surface` [FIXED] — SRC-0014 §Photo surface.
  *
  * Structure: a full-width section with no radius and no border. The
- * photograph is the section's first background layer with the gradient above
- * it *in the same declaration* — transparent through 26 %, 0.84 at 62 %,
- * 0.96 at the bottom, the far end of the design system's own band — so the
- * scrim scales with the image and the text always sits in the dark part. Ink
- * gradient by default, violet for the municipal path. The placeholder and
- * demo marks sit in the picture's top corner, not in the text stack: they
- * mark the photograph, and inside the stack they pushed the copy — and the
- * content-anchored scrim with it — a badge's height further up the picture.
+ * photograph is the section's background layer with the scrim above it *in
+ * the same declaration* — the design system's fixed neutral-black ladder,
+ * two gradients (the top band that carries the header, the reading band
+ * under the text stack), ceiling 0.72, never a tint of ink or violet
+ * (DEC-0105 §1). One treatment for every surface; the crop follows the
+ * motif's `focal` point, and every piece of type on the surface carries the
+ * soft `shadow.textOnPhoto`. The placeholder and demo marks sit in the
+ * picture's top corner, not in the text stack: they mark the photograph, and
+ * inside the stack they pushed the copy a badge's height further up the
+ * picture.
  * States (D-9, all four):
  *   loading  → the `skeleton` hatch at the same ratio;
  *   empty    → `placeholder-surface`: a flat brand-colour ground at the same
@@ -86,15 +102,17 @@ export interface PhotoSurfaceProps extends DataStateProps {
  * photograph rather than growing its box and covering all of it
  * (`state/open.md` row 203).
  * A11y: the photograph is a background and carries no alt — an image that
- * carries meaning belongs in `media-frame`. Body text clears 4.5:1 against
- * the composite of photo plus gradient, which is why the scrim is this dark.
+ * carries meaning belongs in `media-frame`. The scrim half of the contrast
+ * pair is the fixed ladder `pnpm check:contrast` measures (NFR-WEB-0058/0059);
+ * the photograph's half is the motif rule — a picture that only works when
+ * the scrim covers its subject is the wrong picture (DEC-0105 §2).
  */
 export function PhotoSurface({
   src,
   wideSrc,
   priority = false,
   hero = false,
-  gradient = "ink",
+  focal,
   ratio = "hero",
   notDepicting = false,
   state = "ready",
@@ -103,13 +121,7 @@ export function PhotoSurface({
   className,
   children,
 }: PhotoSurfaceProps) {
-  const classes = [
-    styles.surface,
-    gradient === "violet" ? styles.violet : styles.ink,
-    className,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const classes = [styles.surface, className].filter(Boolean).join(" ");
 
   if (isPending(state)) {
     return <Skeleton className={className} ratio={ratio} variant="box" />;
@@ -186,6 +198,7 @@ export function PhotoSurface({
         {
           "--photo-image": missingPhoto ? "none" : photoUrl(src!),
           ...(wideSrc && !missingPhoto ? { "--photo-image-wide": photoUrl(wideSrc) } : {}),
+          ...(focal ? { "--photo-focal": focalPosition(focal) } : {}),
           "--photo-ratio": `var(--ratio-${ratio})`,
         } as CSSProperties
       }

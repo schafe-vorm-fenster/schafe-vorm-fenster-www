@@ -25,14 +25,15 @@ const ROUTES = everyRoute().map(({ route, locale }) => ({
   route,
 }));
 
-const NON_PAGE_ROWS = d1Inventory().filter((row) => row.kind !== "page");
+/** The rows the registry does not define: the three machine surfaces and `/start`. */
+const NON_REGISTRY_ROWS = d1Inventory().filter((row) => row.routeId === undefined);
 
 test("TS-WEB-0004-A1: the inventory has both languages of every page", () => {
   expect(ROUTES).toHaveLength(24);
 });
 
-test("TS-WEB-0004-A1: D1 has four rows that are not pages, and they are walked too", () => {
-  expect(NON_PAGE_ROWS.map((row) => row.path)).toEqual([
+test("TS-WEB-0004-A1: D1 has four rows outside the registry, and they are walked too", () => {
+  expect(NON_REGISTRY_ROWS.map((row) => row.path)).toEqual([
     "/sitemap.xml",
     "/robots.txt",
     "/llms.txt",
@@ -40,7 +41,7 @@ test("TS-WEB-0004-A1: D1 has four rows that are not pages, and they are walked t
   ]);
 });
 
-for (const row of NON_PAGE_ROWS.filter((candidate) => candidate.kind === "machine")) {
+for (const row of NON_REGISTRY_ROWS.filter((candidate) => candidate.kind === "machine")) {
   test(`TS-WEB-0004-A5: ${row.path} answers 200 as a machine surface`, async ({ request }) => {
     const response = await request.get(row.path);
     expect(response.status(), `status of ${row.path}`).toBe(200);
@@ -63,15 +64,28 @@ test("TS-WEB-0004-A5: /llms.txt lists this domain's D1 pages, and only this doma
   expect(baseURL).toBeTruthy();
 });
 
-test("TS-WEB-0004-A1/TS-WEB-0016 D6: /start redirects to the lead form and is noindex", async ({
+test("TS-WEB-0004-A1/TS-WEB-0016 D15: /start is a page — 200, German, noindex, in no page's flow", async ({
+  page,
   request,
 }) => {
+  // A 302 to the form until 2026-09-25; since D15 (DEC-0108) the route
+  // renders the form itself. The embed's own assertions are
+  // `e2e/start.spec.ts` (TS-WEB-0016-A22); this is the D1 walk's row.
   const response = await request.get("/start", { maxRedirects: 0 });
-  expect(response.status()).toBe(302);
-  const location = response.headers()["location"] ?? "";
-  expect(location.startsWith("https://")).toBe(true);
-  // D1: the row carries `noindex`.
-  expect(response.headers()["x-robots-tag"]).toContain("noindex");
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("text/html");
+
+  await page.setViewportSize({ width: 360, height: 640 });
+  await page.goto("/start");
+  await expect(page.locator("html")).toHaveAttribute("lang", "de");
+  // D1: the row carries `noindex` — in the page's own metadata, in every
+  // environment, not only through the non-production `X-Robots-Tag`.
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+  // TS-WEB-0017-A9, as for every page row: nothing scrolls sideways at 360.
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(0);
 });
 
 test("TS-WEB-0004-A5: /start is absent from the sitemap", async ({ request }) => {

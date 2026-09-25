@@ -15,3 +15,18 @@ export function photoUrl(src: string): string {
   }
   return `url("${src}")`;
 }
+
+/**
+ * The motif's focal point as a `background-position` value — `x% y%`, from
+ * the inventory's `focal: {x, y}` (DEC-0105 §2). The same rule as the URL:
+ * the value is interpolated into a style attribute, so a number that is not
+ * a finite percentage is refused, not clamped.
+ */
+export function focalPosition(focal: { readonly x: number; readonly y: number }): string {
+  for (const value of [focal.x, focal.y]) {
+    if (!Number.isFinite(value) || value < 0 || value > 100) {
+      throw new Error(`photo-surface: a focal point is a percentage pair, 0–100 each: ${JSON.stringify(focal)}`);
+    }
+  }
+  return `${focal.x}% ${focal.y}%`;
+}

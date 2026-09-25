@@ -37,6 +37,18 @@ export interface Step {
   readonly statusBadge?: Availability;
 }
 
+/**
+ * `ExplainStep` — one step line of the explain module (TS-WEB-0022 D4,
+ * SRC-0014 §"Explain module"): the bold core and the normal detail, each a
+ * single line at 390 px — core ≤ 30, detail ≤ 40 characters (SRC-0017
+ * CG-025). The module fixes the count at three; the type carries no index,
+ * because the position in the tuple is the index.
+ */
+export interface ExplainStep {
+  readonly core: string;
+  readonly detail: string;
+}
+
 /** `ComparisonRow` — "Heute / Mit Portalize". */
 export interface ComparisonRow {
   readonly today: string;

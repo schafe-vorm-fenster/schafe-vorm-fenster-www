@@ -38,6 +38,11 @@ const INVENTORY = [
   "publishing-path",
   "comparison-table",
   "offer-tier",
+  // ── the price-section set (T-06, DEC-0118) — replaces `offer-tier` ──
+  "price-section",
+  "tag",
+  "setting-row",
+  "hint-banner",
   "feature-benefit",
   "price-tag",
   "proof-card",

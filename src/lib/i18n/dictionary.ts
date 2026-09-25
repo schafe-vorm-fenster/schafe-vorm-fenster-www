@@ -348,10 +348,94 @@ export interface Dictionary {
     germanOnlyNotice: string | null;
   };
   /**
+   * `contact-section`'s own words (TS-WEB-0016 D13, DEC-0081, CG-031). The
+   * values — number, address, who answers — are not here: they resolve from
+   * the hub record through `src/lib/contact/contact-channels.ts`.
+   *
+   * Provenance, per key (DEC-0113): `rows.*` is the owner's wording from
+   * `concept/website-copy-guide.md` CG-031 ("Videotermin buchen · per
+   * WhatsApp schreiben · anrufen · Mail schreiben"); `portraitAlt` is the
+   * cleared alt of `content/pages/ueber-uns/{de,en}.md` (image
+   * `ueber-uns-team-jan-henrik-hempel`). `heading`, `lead`, `appointmentSub`
+   * and `outboundNote` exist only as design-draft text and are placeholders:
+   * the section carries `data-demo="true"` and `state/open.md` carries one
+   * row per string.
+   */
+  contactSection: {
+    heading: string;
+    lead: string;
+    portraitAlt: string;
+    /** The four row titles, D13 order, ≤ 24 characters each (CG-031). */
+    rows: {
+      appointment: string;
+      whatsapp: string;
+      phone: string;
+      mail: string;
+    };
+    /** Row 1's sub-label: what a booking covers — never a response time (CG-031). */
+    appointmentSub: string;
+    /**
+     * The D16 outbound marking under row 1: what activating the control
+     * does and who receives what follows. A separate `meta` line, never in
+     * the label.
+     */
+    outboundNote: string;
+  };
+  /**
+   * The three event statuses of SRC-0014 §Event-status badge, as words —
+   * `event-status-badge` reads them, so a status is never colour alone.
+   * The German words are the design system's own ids capitalised; the
+   * English ones nobody wrote (`generated: true`, DEC-0115), so the badge
+   * marks itself `data-demo` in that language until the owner replaces them.
+   */
+  eventStatus: {
+    neu: string;
+    verschoben: string;
+    abgesagt: string;
+    generated: boolean;
+  };
+  /**
+   * The words inside the explain module's stage graphics (`explain-stage`,
+   * DEC-0115). All three German strings are taken verbatim from the owner's
+   * design drafts (`plan/reviews/2026-09-23/Design - 3-Schritte-erklären …`);
+   * the English translation is nobody's wording yet (`generated: true`).
+   */
+  explainStage: {
+    /** The label on the hatched flyer stand-in in the chat bubble. */
+    flyerFile: string;
+    /** The registration card's field label. */
+    addressLabel: string;
+    /** The registration card's lime pill — an illustration, never a control. */
+    submit: string;
+    generated: boolean;
+  };
+  /**
    * Page titles, keyed by route id — the fallback for a route whose artifact
    * carries no `seo.title` (TS-WEB-0011 D5; the artifact is the source, F-2-72).
    */
   pages: Record<RouteId, string>;
+  /**
+   * `/start`, the registration surface (TS-WEB-0016 D15/D17, DEC-0108,
+   * DEC-0121). The route is German-only and outside `app/[lang]`, so only
+   * `de` ever renders; `en` exists because the key set is one per language.
+   *
+   * The notice's three facts and its link target are the determination's
+   * (D17); its **wording is not** — nobody has written it (DEC-0108 §2, "The
+   * words"). `notice`, `noticeLink` and `frameTitle` are therefore
+   * placeholders in the repository's convention: rendered with
+   * `data-demo="true"` on the element and listed in `state/open.md`
+   * (rows 223 and 224), for the owner to replace.
+   */
+  start: {
+    /** The two facts before the link: whose form it is, and that loading it contacts them. */
+    notice: string;
+    /** The link's text — the third fact, where the detail is (`/rechtliches#datenschutz`). */
+    noticeLink: string;
+    /** The `iframe`'s accessible name. */
+    frameTitle: string;
+    /** Before the e-mail address — `lead-fallback.tsx`'s own line, verbatim. */
+    emailLead: string;
+  };
 }
 
 const de: Dictionary = {
@@ -477,6 +561,37 @@ const de: Dictionary = {
     // The German page carries no notice: its six sections are German (F-2-74).
     germanOnlyNotice: null,
   },
+  contactSection: {
+    // Placeholder — design draft (plan/reviews/2026-09-23/Design - Kontakt Section.png), state/open.md.
+    heading: "Direkter Kontakt",
+    // Placeholder — design draft, state/open.md.
+    lead: "Per Video, WhatsApp, Telefon oder Mail.",
+    // content/pages/ueber-uns/de.md, image `ueber-uns-team-jan-henrik-hempel`.
+    portraitAlt: "Jan-Henrik Hempel erklärt etwas mit beiden Händen, hinter ihm Holzbalken.",
+    // concept/website-copy-guide.md CG-031, the owner's four row titles.
+    rows: {
+      appointment: "Videotermin buchen",
+      whatsapp: "Per WhatsApp schreiben",
+      phone: "Anrufen",
+      mail: "Mail schreiben",
+    },
+    // Placeholder — design draft, state/open.md.
+    appointmentSub: "Termin im Kalender aussuchen",
+    // Placeholder — the D16 sentence is copy nobody wrote yet, state/open.md.
+    outboundNote: "Öffnet den Buchungskalender bei Google.",
+  },
+  eventStatus: {
+    neu: "Neu",
+    verschoben: "Verschoben",
+    abgesagt: "Abgesagt",
+    generated: false,
+  },
+  explainStage: {
+    flyerFile: "FLYER.JPG",
+    addressLabel: "Kalender-Adresse",
+    submit: "Anmelden",
+    generated: false,
+  },
   pages: {
     home: "Schafe vorm Fenster",
     place: "Dein Ort",
@@ -490,6 +605,13 @@ const de: Dictionary = {
     about: "Über uns",
     archive: "Archiv",
     legal: "Rechtliches",
+  },
+  start: {
+    notice:
+      "Dieses Anmeldeformular stellt Google bereit. Beim Laden dieser Seite werden Daten an Google übertragen.",
+    noticeLink: "Mehr dazu in den Datenschutzhinweisen.",
+    frameTitle: "Anmeldeformular bei Google Forms",
+    emailLead: "oder per E-Mail:",
   },
 };
 
@@ -614,6 +736,41 @@ const en: Dictionary = {
     germanOnlyNotice:
       "The six legal sections below are available in German only. We do not machine-translate legal text and do not write an English substitute for it. The English documents follow once they exist.",
   },
+  contactSection: {
+    // Placeholder — design draft, state/open.md.
+    heading: "Direct contact",
+    // Placeholder — design draft, state/open.md.
+    lead: "By video, WhatsApp, phone or mail.",
+    // content/pages/ueber-uns/en.md, image `ueber-uns-team-jan-henrik-hempel`.
+    portraitAlt: "Jan-Henrik Hempel explaining something with both hands raised, timber beams behind him.",
+    // The CG-031 titles in English; "Book a video call" is the hub's own label
+    // for the schedule link (@schafe-vorm-fenster/people, jan-henrik-hempel).
+    rows: {
+      appointment: "Book a video call",
+      whatsapp: "Write on WhatsApp",
+      phone: "Call",
+      mail: "Write an e-mail",
+    },
+    // Placeholder — design draft, state/open.md.
+    appointmentSub: "Pick a slot in the calendar",
+    // Placeholder — the D16 sentence is copy nobody wrote yet, state/open.md.
+    outboundNote: "Opens the booking calendar at Google.",
+  },
+  // Nobody wrote these three words yet — state/open.md row 219.
+  eventStatus: {
+    neu: "New",
+    verschoben: "Postponed",
+    abgesagt: "Cancelled",
+    generated: true,
+  },
+  // The file name stays; the two labels are a translation nobody wrote —
+  // state/open.md row 220.
+  explainStage: {
+    flyerFile: "FLYER.JPG",
+    addressLabel: "Calendar address",
+    submit: "Register",
+    generated: true,
+  },
   pages: {
     home: "Schafe vorm Fenster",
     place: "Your place",
@@ -627,6 +784,13 @@ const en: Dictionary = {
     about: "About us",
     archive: "Archive",
     legal: "Legal",
+  },
+  start: {
+    notice:
+      "This registration form is provided by Google. Loading this page sends data to Google.",
+    noticeLink: "More in the privacy notice.",
+    frameTitle: "Registration form at Google Forms",
+    emailLead: "or by e-mail:",
   },
 };
 

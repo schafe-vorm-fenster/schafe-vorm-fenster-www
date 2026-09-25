@@ -48,6 +48,16 @@ export const ALLOWLIST = {
   assets: "https://assets.api.schafe-vorm-fenster.de",
   /** TS-WEB-0014 D1: named by CON-WEB-0030, but active in no directive today. */
   app: "https://app.schafe-vorm-fenster.de",
+  /**
+   * The registration form's host — the fifth external origin, and the one
+   * third party besides eTracker (TS-WEB-0014 D1 row of 2026-09-25, DEC-0121).
+   * `/start` embeds the Google Form visibly (TS-WEB-0016 D15, FUN-WEB-0205,
+   * DEC-0108), so the frame needs a `frame-src` source; this host is active
+   * in that one directive and no other. The origin, not the form's path:
+   * D1 is a table of origins, and the form URL itself is
+   * `src/lib/routes/lead-fallback.ts`'s. It lapses with the embed.
+   */
+  googleForms: "https://docs.google.com",
 } as const;
 
 /**
@@ -90,7 +100,7 @@ export function policyDirectives({
 }: PolicyInput): Record<string, readonly string[]> {
   const isDev = environment === "development";
   const isPreview = environment === "preview";
-  const { etracker, portalize, envoy, assets } = ALLOWLIST;
+  const { etracker, portalize, envoy, assets, googleForms } = ALLOWLIST;
   // F-2-36: only a well-formed hash source is interpolated. A rejected entry
   // is dropped rather than escaped — there is no legitimate `script-src`
   // hash this predicate refuses, so anything it refuses is a defect or an
@@ -167,7 +177,15 @@ export function policyDirectives({
     "manifest-src": ["'self'"],
     "worker-src": ["'self'"],
     "object-src": ["'none'"],
-    "frame-src": ["'none'"],
+    // The one framed document on the site: the registration form on `/start`
+    // (TS-WEB-0016 D15, DEC-0108, DEC-0121). `'none'` until 2026-09-25, which
+    // pinned Portalize to web-component mode — that pin still holds, because
+    // the Portalize host is not a source here: its iframe fallback fails as
+    // loudly as before.
+    "frame-src": [googleForms],
+    // `child-src` is the fallback for `frame-src` and `worker-src` only when
+    // those are absent; both are named, so `'none'` here governs nothing
+    // today and stays as the floor.
     "child-src": ["'none'"],
     "form-action": ["'self'"],
     "frame-ancestors": ["'none'"],

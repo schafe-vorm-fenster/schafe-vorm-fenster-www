@@ -598,7 +598,7 @@ today is the Google Form, and nothing in `specs/` said so.
 | Beside it | the e-mail address stays on the page, as D6's third rule already requires: a visitor must be able to decline Google and still reach a person |
 | Owner | Google. The website renders a mount point and receives nothing; no form backend and no POST route appears (FUN-WEB-0183, CON-WEB-0081, DEC-0025) |
 | Indexing | `noindex`, absent from the sitemap, as the redirect-only row already was (TS-WEB-0004 D1) |
-| CSP | a `frame-src` entry for the form host is **owed** and is the fifth origin `TS-WEB-0014 D1` says there is no room for. The entry is not written here: D1's allowlist is that spec's, and the row goes in with the rebuild decision |
+| CSP | a `frame-src` entry for the form host — the fifth origin `TS-WEB-0014 D1` had said there is no room for — is **in the allowlist since 2026-09-25** (DEC-0121): D1's row and `TS-WEB-0013 D2`'s row are written together, and `src/lib/security/csp.ts` names the host in `frame-src` and in no other directive. It was recorded here as owed and deferred to the rebuild decision until then |
 | Measurement | nothing. No event fires on this route: the submission is Google's and the website does not observe it (D12 row S6's reasoning, CON-WEB-0083's shape) |
 | It lapses | when the envoy widget lands (Q-0022) or the app registration entry gains a contract (DEC-0029). Then the embed goes and `/start` becomes a redirect again, or disappears |
 | Consent treatment | **isolation plus a notice, and no consent UI** (DEC-0108, the owner's answer to Q-0078). No banner, no click-to-load layer, no gate: the embed stays visible and immediate, and a notice stands above it (D17). `CONF-0025` is RESOLVED with outcome ISOLATE |

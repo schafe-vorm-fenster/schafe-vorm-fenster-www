@@ -57,10 +57,28 @@ describe("TS-WEB-0014 D2: the Content-Security-Policy, written out", () => {
     expect(scriptSrc).toContain(ALLOWLIST.envoy);
   });
 
-  it("keeps frame-src 'none' so the Portalize iframe fallback fails loudly", () => {
-    expect(
-      policyDirectives({ environment: "production" })["frame-src"],
-    ).toEqual(["'none'"]);
+  it("admits exactly one frame source — the registration form's host (TS-WEB-0014 D1 fifth row, DEC-0121)", () => {
+    for (const environment of ["production", "preview", "development"] as const) {
+      expect(policyDirectives({ environment })["frame-src"]).toEqual([ALLOWLIST.googleForms]);
+    }
+  });
+
+  it("still keeps the Portalize host out of frame-src, so its iframe fallback fails loudly", () => {
+    const { "frame-src": frameSrc } = policyDirectives({ environment: "production" });
+    expect(frameSrc).not.toContain(ALLOWLIST.portalize);
+    expect(frameSrc).not.toContain("'self'");
+  });
+
+  it("grants the form host frame-src and nothing else — no script, no connect, no image of it", () => {
+    const directives = policyDirectives({ environment: "production" });
+    for (const [directive, values] of Object.entries(directives)) {
+      if (directive === "frame-src") continue;
+      expect(values, directive).not.toContain(ALLOWLIST.googleForms);
+    }
+  });
+
+  it("keeps child-src 'none' as the floor beneath the named frame-src and worker-src", () => {
+    expect(policyDirectives({ environment: "production" })["child-src"]).toEqual(["'none'"]);
   });
 
   it("serialises to a single header value", () => {

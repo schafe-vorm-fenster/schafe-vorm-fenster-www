@@ -21,6 +21,25 @@
  * Four themes, because the sheet declares four: light, `[data-theme="dark"]`,
  * `[data-contrast="high"]` and the two combined.
  *
+ * ### The hero row (DEC-0105 §1, NFR-WEB-0058 / NFR-WEB-0059)
+ *
+ * The scrim on a photo surface is a **fixed ladder**, not a measurement per
+ * photograph: neutral black, stops `0 · .30 · .35 · .38 · .45 · .72`, ceiling
+ * `0.72`. The per-image measurement was withdrawn because nothing performed
+ * it; what replaces it is a static assertion on the two layers that *can* be
+ * read before any page composes them — the token sheet's `--color-scrim-*`
+ * ladder, and the one stylesheet that composes it,
+ * `src/components/photo-surface/photo-surface.module.css`:
+ *
+ *   - every scrim token is neutral black at the alpha its name says;
+ *   - the surface composes exactly two gradients, from scrim tokens only —
+ *     no `color-mix()`, no literal, no other colour role;
+ *   - no stop is above the `0.72` ceiling;
+ *   - paper body text on the ceiling over a **white** pixel — the brightest
+ *     ground a photograph can put under the reading band's end — still
+ *     clears 4.5:1, and display type 3:1. The photograph's own half of the
+ *     pair is the motif rule of DEC-0105 §2 and is not measured here.
+ *
  * ### Thresholds
  *
  * WCAG 2.2 AA, which TS-WEB-0002 takes as its floor: 4.5:1 for body text, 3:1 for
@@ -188,12 +207,150 @@ export interface ContrastResult {
   readonly pairsChecked: number;
 }
 
-export function checkContrast(css?: string): ContrastResult {
+/** The scrim's ceiling — DEC-0105 §1. Nothing in a scrim is more opaque. */
+export const SCRIM_CEILING = 0.72;
+
+/** The ladder the design system authored, as the token names spell it. */
+const SCRIM_LADDER = [0, 30, 35, 38, 45, 72] as const;
+
+/** `--color-scrim-NN: <neutral black at NN/100>` per token name. */
+const SCRIM_TOKEN = /--color-scrim-(\d+)\s*:\s*rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)/g;
+
+/** The brightest pixel a photograph can put under the scrim, as channels. */
+const WHITE: readonly [number, number, number] = [255, 255, 255];
+
+/**
+ * Composites a neutral-black scrim at `alpha` over a ground given as RGB
+ * channels and returns the result as hex — the one alpha operation this
+ * guard performs, on one colour. (Channels rather than a hex string on the
+ * way in, so this file carries no colour literal for `check:brand` to find.)
+ */
+export function scrimOver(ground: readonly [number, number, number], alpha: number): string {
+  return (
+    "#" +
+    ground
+      .map((value) => Math.round(value * (1 - alpha)).toString(16).padStart(2, "0"))
+      .join("")
+      .toUpperCase()
+  );
+}
+
+/** Every `linear-gradient(…)` body in a stylesheet, parentheses balanced. */
+export function gradientBodies(css: string): string[] {
+  const bodies: string[] = [];
+  const opener = "linear-gradient(";
+  let from = css.indexOf(opener);
+  while (from !== -1) {
+    let depth = 1;
+    let index = from + opener.length;
+    while (index < css.length && depth > 0) {
+      if (css[index] === "(") depth += 1;
+      else if (css[index] === ")") depth -= 1;
+      index += 1;
+    }
+    bodies.push(css.slice(from + opener.length, index - 1));
+    from = css.indexOf(opener, index);
+  }
+  return bodies;
+}
+
+/** Splits on the commas that are not inside a nested function call. */
+function topLevelParts(body: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let current = "";
+  for (const char of body) {
+    if (char === "(") depth += 1;
+    else if (char === ")") depth -= 1;
+    if (char === "," && depth === 0) {
+      parts.push(current.trim());
+      current = "";
+    } else current += char;
+  }
+  parts.push(current.trim());
+  return parts;
+}
+
+/**
+ * The hero row: reads the scrim ladder off the token sheet and the two
+ * gradients off the photo surface's stylesheet, and fails a ladder that is
+ * not neutral black, a stop that is not a scrim token, or a stop above the
+ * ceiling. Pure, so the test suite can hand it a broken stylesheet.
+ */
+export function checkScrimLadder(tokensCss: string, surfaceCss: string): string[] {
+  const errors: string[] = [];
+  const ladder = new Map<number, number>();
+
+  for (const match of tokensCss.replace(/\/\*[\s\S]*?\*\//g, "").matchAll(SCRIM_TOKEN)) {
+    const [, step, r, g, b, alpha] = match;
+    const name = `--color-scrim-${step}`;
+    if (r !== "0" || g !== "0" || b !== "0")
+      errors.push(`hero: ${name} is not neutral black — a tinted scrim dyes the photograph (DEC-0105 §1)`);
+    if (Math.abs(Number(alpha) - Number(step) / 100) > 0.001)
+      errors.push(`hero: ${name} carries alpha ${alpha}, not the ${Number(step) / 100} its name says`);
+    ladder.set(Number(step), Number(alpha));
+  }
+  for (const step of SCRIM_LADDER)
+    if (!ladder.has(step)) errors.push(`hero: --color-scrim-${step} is missing from the token sheet`);
+  for (const step of ladder.keys())
+    if (step > SCRIM_CEILING * 100)
+      errors.push(`hero: --color-scrim-${step} is above the ${SCRIM_CEILING} ceiling — the .96 step is retired`);
+
+  const surface = surfaceCss.replace(/\/\*[\s\S]*?\*\//g, "");
+  const gradients = gradientBodies(surface);
+  if (gradients.length !== 2)
+    errors.push(`hero: the photo surface composes ${gradients.length} gradient(s); the design system states exactly two`);
+  if (/color-mix\(/.test(surface))
+    errors.push("hero: the photo surface still mixes a scrim from a colour role — the ladder is a token, never a color-mix()");
+
+  for (const [index, body] of gradients.entries()) {
+    // The first part is the direction; every part after it is a stop.
+    const stops = topLevelParts(body).slice(1);
+    for (const stop of stops) {
+      const token = stop.match(/^var\(--color-scrim-(\d+)\)/);
+      if (!token) {
+        errors.push(`hero: gradient ${index + 1} stop "${stop}" is not a scrim token`);
+        continue;
+      }
+      const step = Number(token[1]);
+      if (!ladder.has(step)) errors.push(`hero: gradient ${index + 1} uses --color-scrim-${step}, which the sheet does not declare`);
+      if (step > SCRIM_CEILING * 100)
+        errors.push(`hero: gradient ${index + 1} stop --color-scrim-${step} is above the ${SCRIM_CEILING} ceiling`);
+    }
+  }
+
+  // The ceiling over the brightest pixel a photograph can carry: paper body
+  // text must still clear 4.5:1 there (NFR-WEB-0058), display type 3:1
+  // (NFR-WEB-0059). Below the ceiling the band is lighter and the motif rule
+  // of DEC-0105 §2 carries the rest — that half is a judgement, not a number.
+  const paper = themeValues(readTokenBlocks(tokensCss), [":root"]).get("--color-neutral-paper");
+  if (!paper) {
+    errors.push("hero: --color-neutral-paper is not declared — the type on a photo surface has no colour to measure");
+    return errors;
+  }
+  const worst = scrimOver(WHITE, SCRIM_CEILING);
+  const ratio = contrastRatio(paper, worst);
+  if (ratio + 0.005 < 4.5)
+    errors.push(
+      `hero: paper (${paper}) on the ${SCRIM_CEILING} ceiling over a white pixel (${worst}) is ${ratio.toFixed(2)}:1, below 4.5:1 — the ceiling cannot carry body text`,
+    );
+
+  return errors;
+}
+
+export function checkContrast(css?: string, surfaceCss?: string): ContrastResult {
+  const tokensCss = readFileSync(
+    require_.resolve("@schafe-vorm-fenster/brand-design/tokens.css"),
+    "utf-8",
+  );
   const source =
-    css ??
-    readFileSync(require_.resolve("@schafe-vorm-fenster/brand-design/tokens.css"), "utf-8") +
-      "\n" +
-      readFileSync(join(ROOT, "app", "styles", "brand.css"), "utf-8");
+    css ?? tokensCss + "\n" + readFileSync(join(ROOT, "app", "styles", "brand.css"), "utf-8");
+  const surface =
+    surfaceCss ??
+    readFileSync(
+      join(ROOT, "src", "components", "photo-surface", "photo-surface.module.css"),
+      "utf-8",
+    );
 
   const blocks = readTokenBlocks(source);
   const errors: string[] = [];
@@ -220,13 +377,19 @@ export function checkContrast(css?: string): ContrastResult {
     }
   }
 
+  // The hero row reads the ladder off the sheet under test when the caller
+  // hands one in (the suite's broken fixtures), off the installed sheet
+  // otherwise — the ladder is not part of `brand.css` and never may be.
+  errors.push(...checkScrimLadder(css ?? tokensCss, surface));
+  pairsChecked += 1;
+
   return { errors, pairsChecked };
 }
 
 function main(): void {
   const { errors, pairsChecked } = checkContrast();
   console.log(
-    `contrast check: ${pairsChecked} token pair(s) across ${Object.keys(THEMES).length} theme(s)`,
+    `contrast check: ${pairsChecked} token pair(s) across ${Object.keys(THEMES).length} theme(s), plus the hero row (scrim ceiling ${SCRIM_CEILING})`,
   );
   for (const message of errors) console.error(`  ERROR TS-002-${message}`);
   console.log(errors.length ? `${errors.length} error(s)` : "no errors");

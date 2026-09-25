@@ -19,6 +19,9 @@ const eslintConfig = defineConfig([
     // Generated assets and reports.
     "src/generated/**",
     "reports/**",
+    // Agent worktrees checked out inside the repository. ESLint 9 no longer
+    // skips dot-directories, so `eslint .` would lint every worktree too.
+    ".claude/worktrees/**",
   ]),
 ]);
 
