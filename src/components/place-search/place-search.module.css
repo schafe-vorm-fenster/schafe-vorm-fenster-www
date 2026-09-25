@@ -27,6 +27,15 @@
   color: var(--color-neutral-muted);
   font-size: var(--type-meta-size);
   margin: 0;
+  /* As tall as one overlay row stands below the field: the row (56 px) with
+     its two hairlines and its 8 px offset, less the 12 px this line already
+     sits below the field. A one-row overlay then covers exactly this line,
+     and the geolocation control — which wraps under the hint wherever the
+     two do not fit side by side — begins below the overlay's bottom edge
+     instead of under it, cut in half. A shadow was not an option: the
+     overlay's hairline is its only boundary (design system §Place-search
+     result overlay; "Borders and shadows: none"). DEC-0119 §11. */
+  min-height: calc(var(--height-search) + 2px + var(--space-2) - var(--space-3));
 }
 
 /* On a photo surface or an ink section the muted grey of the light ground

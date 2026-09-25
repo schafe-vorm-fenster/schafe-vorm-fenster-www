@@ -1,5 +1,6 @@
 import { type BadgeTone } from "../badge/badge";
 import { isMocked, isPending, type DataState, type DataStateProps } from "../data-state";
+import { EventStatusBadge, type EventStatus } from "../event-status-badge/event-status-badge";
 import { Icon, type IconName } from "../icon/icon";
 import { RouteLink } from "../route-link/route-link";
 import { Skeleton } from "../skeleton/skeleton";
@@ -31,6 +32,15 @@ export interface EventRowProps extends DataStateProps, LinkOptions {
   readonly meta?: string;
   readonly category: EventCategory;
   readonly categoryLabel: string;
+  /**
+   * One status **beside** the category, never instead of it (SRC-0014
+   * §Event-status badge). It sits on the title's line, right-aligned; the
+   * category keeps the meta's line. DEC-0115 put it on the row rather than
+   * beside it, so a status can never be composed without its category.
+   */
+  readonly status?: EventStatus;
+  /** Overrides the dictionary's status word — content-authored, per locale. */
+  readonly statusLabel?: string;
   /** Where the row leads, through the route facade. Optional: a row may be flat. */
   readonly to?: RouteId;
   /** `dark` is the ink section that carries the live data once per page. */
@@ -118,6 +128,8 @@ export function EventRow({
   meta,
   category,
   categoryLabel,
+  status,
+  statusLabel,
   to,
   tone = "light",
   state = "ready",
@@ -155,12 +167,29 @@ export function EventRow({
   );
 
   return (
-    <article className={classes} data-demo={isMocked(state) ? "true" : undefined}>
+    <article
+      className={classes}
+      data-demo={isMocked(state) ? "true" : undefined}
+      data-status={status}
+    >
       <time className={styles.date} dateTime={iso}>
         <span className={styles.day}>{day}</span>
         <span className={styles.month}>{month}</span>
       </time>
       <h3 className={styles.title}>{title_}</h3>
+      {status ? (
+        /* On the title's line so the category keeps the meta's; the title
+           gives up the status column only when there is a status
+           (`.row[data-status] .title`), so a row without one is the row it
+           always was. */
+        <EventStatusBadge
+          className={styles.status}
+          ground={tone === "dark" ? "ink" : "paper"}
+          label={statusLabel}
+          locale={locale}
+          status={status}
+        />
+      ) : null}
       {meta ? <p className={styles.meta}>{meta}</p> : null}
       {/* One element, two widths (SRC-0014's mobile-first rule: `min-width`
           queries only, one component tree). On the phone it is the bare

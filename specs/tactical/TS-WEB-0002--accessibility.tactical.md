@@ -89,6 +89,7 @@ themes; a colour used outside the token set is a build error [PROPOSED].
 Also honoured: `prefers-reduced-motion` (no non-essential motion),
 `Save-Data`/reduced-data (→ TS-WEB-0003 D6), OS font-size scaling (rem-based
 type, no px font sizes) [FIXED: SRC-0006].
+Also honoured: `prefers-reduced-transparency: reduce` — it selects the solid `ink` well, the declared fallback of the header's blur primitive, in place of the blur (DEC-0105 §4; recorded in DEC-0116) [PROPOSED].
 
 ### D5 — Structure and operation [FIXED: FUN-WEB-0128, FUN-WEB-0118, FUN-WEB-0119, FUN-WEB-0120]
 
@@ -224,9 +225,10 @@ claim:
   `TS-WEB-0006 D3`'s fold viewport is 360 × 640 — so the condition is not always
   reachable. The proposed reading is the graphic stage in full plus the first step
   line. **Answered by:** the owner of the motion exception, as **Q-0083**.
-- **`prefers-reduced-transparency` is not in D4.** DEC-0105 §4 makes it one of
-  the three conditions that select the blur primitive's solid fallback, and D4
-  names only `prefers-reduced-motion`, `Save-Data` and OS font scaling. Add the
-  row, or say why the blur's fallback is selected somewhere this spec does not
-  govern. No criterion asserts the blur or its fallback today.
+- **`prefers-reduced-transparency` is in D4 since 2026-09-25, as [PROPOSED].**
+  DEC-0105 §4 makes it one of the three conditions that select the blur
+  primitive's solid fallback; DEC-0116 added the line to D4 with the component
+  rewrite and `e2e/photo-surface.spec.ts` asserts the blur on the header's
+  wells. What is still open: the line's status, and that no criterion asserts
+  the *fallback* under the preference (Playwright cannot emulate it).
   **Answered by:** the owner of `concept/website-design-system.md` and SRC-0013.

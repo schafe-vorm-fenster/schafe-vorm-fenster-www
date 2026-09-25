@@ -13,6 +13,10 @@
  * rightmost rows) — the registry still lists it, with `note` naming why, so
  * "one event per conversion goal" stays readable as *complete for the
  * countable goals* rather than silently missing three rows.
+ *
+ * Ten rows since DEC-0113: `make-contact` (TS-WEB-0016 D12, DEC-0081 amendment
+ * 2026-09-25) joined the nine of D4 when reaching out became a goal of its
+ * own in the hub.
  */
 
 import { isKnownConversionGoalId } from "./goal-ids";
@@ -27,8 +31,13 @@ export interface ConversionEventDefinition {
   readonly stage: EventStage | null;
   /** What fires the event, or why nothing does — content, not code. */
   readonly trigger: string;
-  /** Where it fires. `"app"` for a goal the app completes with no website role. */
-  readonly surface: readonly RouteId[] | "app";
+  /**
+   * Where it fires. `"app"` for a goal the app completes with no website
+   * role; `"chrome"` for the layout's standing contact section, which stands
+   * on every route and carries the route it was rendered on in the payload
+   * (DEC-0081 §2/§4).
+   */
+  readonly surface: readonly RouteId[] | "app" | "chrome";
   /** Whether a call site exists in this codebase today. */
   readonly wired: boolean;
 }
@@ -74,8 +83,16 @@ export const CONVERSION_EVENTS: readonly ConversionEventDefinition[] = [
     goalId: "request-product-briefing",
     stage: "handover",
     trigger:
-      "outbound click to the Google Calendar booking link (FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083) — the booking itself is off-site with no callback",
-    surface: ["calendar", "region"],
+      "click of the contact section's first action row — the outbound Google Calendar booking link (DEC-0081 §4, TS-WEB-0016 D12/D13; FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083) — an intent: the booking itself is off-site with no callback",
+    surface: "chrome",
+    wired: true,
+  },
+  {
+    goalId: "make-contact",
+    stage: "handover",
+    trigger:
+      "click on any of the four contact-section rows, carrying the channel (appointment, whatsapp, phone, mail) and the route the section was rendered on (TS-WEB-0016 D12/D13, DEC-0081 amendment 2026-09-25) — an intent, never a contact: three rows hand the visitor to another application and the site sees nothing after the click",
+    surface: "chrome",
     wired: true,
   },
   {

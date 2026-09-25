@@ -1,0 +1,126 @@
+/*
+ * Three rows inside one `paper` section, divided by a 1 px `line` hairline —
+ * never a 2 px lime rule, never three sections (SRC-0014 §Page Rhythm). The
+ * row owns no ground: it stands on the section's.
+ */
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-block: var(--section-padding-block);
+}
+
+.row + .row {
+  border-top: 1px solid var(--color-neutral-line);
+}
+
+/* The well and the kicker on one line: a 40 px `lime-100` disc with a 24 px
+   `lime-800` glyph, then the mono label — the drafts' "IM DORFKALENDER". */
+.kicker {
+  align-items: center;
+  color: var(--color-lime-800);
+  display: flex;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  gap: var(--space-3);
+  letter-spacing: var(--type-label-tracking);
+  line-height: 1.2;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.well {
+  align-items: center;
+  background: var(--color-lime-100);
+  border-radius: var(--radius-pill);
+  color: var(--color-lime-800);
+  display: inline-flex;
+  flex: none;
+  height: var(--height-icon-well);
+  justify-content: center;
+  width: var(--height-icon-well);
+}
+
+/* Sub head, 800 — the drafts' 26 px sits inside the role's clamp. */
+.title {
+  font-size: var(--type-subhead-size);
+  font-weight: 800;
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: var(--leading-tight);
+  margin: 0;
+  text-wrap: balance;
+}
+
+/*
+ * The figure at the display-mono size (SRC-0014 contract: `font.size.displayMono`
+ * for "the price figures (~54 px)"), its qualifier at Meta beside it. One
+ * line reserved at the figure's height, so a currency or digit-count change
+ * never reflows the row (SRC-0014 §Reserved text space).
+ */
+.price {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  min-height: calc(var(--font-size-display-mono) * var(--leading-tight));
+}
+
+.figure {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-display-mono);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+}
+
+.qualifier {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-meta-size);
+  font-weight: 700;
+}
+
+/* A tier without a figure: the statement, mono at the card size (`price-tag`). */
+.statement {
+  min-height: calc(var(--font-size-display-mono) * var(--leading-tight));
+  display: flex;
+  align-items: center;
+}
+
+.checks {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.check,
+.checkEmphasis {
+  align-items: flex-start;
+  border-top: 1px solid var(--color-neutral-line);
+  color: var(--color-neutral-ink);
+  display: flex;
+  font-size: var(--type-body-size);
+  gap: var(--space-3);
+  line-height: var(--leading-normal);
+  padding-block: var(--space-3);
+}
+
+.checkEmphasis {
+  font-weight: 700;
+}
+
+.check :global(svg),
+.checkEmphasis :global(svg) {
+  color: var(--color-lime-800);
+  flex: none;
+}
+
+/* Left-aligned, at its own width — a control never stretches to the column. */
+.cta {
+  align-items: flex-start;
+  display: flex;
+  margin-top: var(--space-2);
+}

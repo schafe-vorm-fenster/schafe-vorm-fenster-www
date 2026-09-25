@@ -80,6 +80,9 @@ const REAL = `images:
     credit: "@rightvisionstudios & NØRD2026"
     licence: "free use, credit required"
     lcp: true
+    focal:
+      x: 50
+      y: 30
     status: real
     file: /images/real/founder.webp
     width: 1152
@@ -118,6 +121,11 @@ describe("the page's image inventory", () => {
       credit: "@rightvisionstudios & NØRD2026",
     });
     expect(image?.placeholderId).toBeUndefined();
+  });
+
+  it("passes a declared focal point through, and leaves it absent where none is declared", () => {
+    expect(pageImage(page(REAL), "founder")?.focal).toEqual({ x: 50, y: 30 });
+    expect(pageImage(page(GENERATED), "home-hero")?.focal).toBeUndefined();
   });
 
   it("lists a slot's usable images and drops the ones with no file", () => {

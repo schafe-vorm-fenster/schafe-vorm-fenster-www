@@ -11,6 +11,8 @@ export const SECTION_SURFACES = [
   "lime-500",
   "ink",
   "violet-500",
+  /** The "old world" ground of SRC-0014 §Archive block — problem content only. */
+  "archive",
 ] as const;
 
 export type SectionSurface = (typeof SECTION_SURFACES)[number];
@@ -56,6 +58,7 @@ const SURFACE_CLASS: Record<SectionSurface, string> = {
   "lime-500": styles.lime500,
   ink: styles.ink,
   "violet-500": styles.violet500,
+  archive: styles.archive,
 };
 
 /**
@@ -79,7 +82,9 @@ const SURFACE_CLASS: Record<SectionSurface, string> = {
  * The rhythm rules the design system states — no two photo sections adjacent,
  * at most two consecutive sections of one colour family, exactly one
  * `himbeere` element per screen, the dark `ink` section once per page as the
- * live-data anchor — are composition rules. They are checked where the page
+ * live-data anchor (plus, at most, one closing search block as the page's last
+ * section), the `archive` ground for problem content only — are composition
+ * rules. They are checked where the page
  * is composed (`src/components/section-shell/rhythm.ts`), not by a single
  * section that cannot see its neighbours.
  */

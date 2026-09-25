@@ -1,0 +1,105 @@
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/*
+ * The block as the lower half of another block on a light section
+ * (`objection-list`): it paints the archive ground itself and runs out to the
+ * section's gutter, so on the phone — the authored viewport — the ground is
+ * edge to edge and the block reads as a section of its own, not as a padded
+ * card inside a padded section (SRC-0014 §Shape and Space, DEC-0117).
+ */
+.own {
+  background: var(--color-archive-ground);
+  color: var(--color-neutral-ink);
+  margin-inline: calc(-1 * var(--gutter));
+  padding: var(--section-padding-block-tight) var(--gutter);
+}
+
+/* The bare kicker, in archive ink (SRC-0014 §Kicker); the hairline under it
+   is the first row's top edge. */
+.kicker {
+  border-bottom: 1px solid var(--color-archive-line);
+  color: var(--color-archive-ink);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  line-height: 1.2;
+  margin: 0;
+  padding-bottom: var(--space-3);
+  text-transform: uppercase;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  align-items: flex-start;
+  display: flex;
+  gap: var(--space-3);
+  padding-block: var(--space-4);
+}
+
+.item + .item {
+  border-top: 1px solid var(--color-archive-line);
+}
+
+.item:first-child {
+  padding-top: 0;
+}
+
+.item:last-child {
+  padding-bottom: 0;
+}
+
+/* Bare, 24 px, in archive ink — no well on this ground (SRC-0014 §Wells). */
+.icon {
+  color: var(--color-archive-ink);
+  flex: none;
+}
+
+.text {
+  min-width: 0;
+}
+
+/*
+ * The step-line shape (CG-025): a bold core at body size, the detail beneath
+ * it at the same size, told apart by weight and colour — not a card title.
+ * Body 18 is what leaves the Lead-size closing sentence (20) larger than
+ * every row; the card size (21) would not (DEC-0117).
+ */
+.core {
+  color: var(--color-archive-ink);
+  font-size: var(--type-body-size);
+  font-weight: 700;
+  line-height: var(--leading-normal);
+  margin: 0;
+}
+
+.detail {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-body-size);
+  line-height: var(--leading-relaxed);
+  margin: var(--space-1) 0 0;
+}
+
+/*
+ * The sentence the block ends on: Lead size, so it reads as the conclusion
+ * the rows lead to and not as one more row (polish brief, page 4, item 2 —
+ * "beat 2 should sting, not grind").
+ */
+.closing {
+  color: var(--color-neutral-ink);
+  font-size: var(--type-lead-size);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+  max-width: var(--measure-reading);
+}

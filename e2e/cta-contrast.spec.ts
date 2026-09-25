@@ -59,10 +59,12 @@ interface Measurement {
  *
  * The ground is resolved by walking ancestors and compositing every
  * background layer found on the way, because a CTA may sit on a translucent
- * scrim over a photograph. Where a layer is a gradient, its **last** opaque
- * colour stop is taken — on this site that is the scrim's own 0.96 floor at
- * the bottom of a photo surface, which is the ground a hero CTA actually
- * stands on and the conservative reading everywhere else.
+ * scrim over a photograph. Where a layer is a gradient, its **last** colour
+ * stop above 0.5 alpha is taken — on this site that is the scrim ladder's
+ * 0.72 ceiling at the bottom of a photo surface (DEC-0105 §1), composited
+ * over white as the brightest pixel a photograph can put under it, which is
+ * the ground a hero CTA actually stands on and the conservative reading
+ * everywhere else.
  */
 const MEASURE = (floor: number): Measurement[] => {
   const channel = (c: number) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));

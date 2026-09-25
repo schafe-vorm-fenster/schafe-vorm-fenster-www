@@ -1,0 +1,222 @@
+/*
+ * explain-module — SRC-0014 §"Explain module", TS-WEB-0022 D4.
+ *
+ * One content tree, two layouts, one `min-width` switch at `lg` (48rem) —
+ * the only breakpoint this component declares. Mobile-first: everything
+ * outside the media query is the phone, the stage and the slide; the media
+ * query removes the stage and lays the three steps side by side.
+ */
+
+.module {
+  /* The share of the box one state takes; what is left is the next state
+     cropped in at the trailing edge, so the stage reads as something that
+     continues. A layout fraction, not a brand value. */
+  --explain-pane-width: 82%;
+  --explain-pane-gap: var(--space-2);
+  --explain-disc-size: var(--space-8);
+
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* ── Ordinal and title ─────────────────────────────────────────────────── */
+
+.header {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.ordinal {
+  color: var(--color-neutral-ink);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-display-mono);
+  font-weight: 800;
+  letter-spacing: var(--tracking-mono);
+  line-height: 1;
+  margin: 0;
+}
+
+.title {
+  font-size: var(--type-card-size);
+  font-weight: 800;
+  letter-spacing: var(--type-card-tracking);
+  line-height: var(--type-card-leading);
+  margin: 0;
+}
+
+/* ── The stage, below lg ───────────────────────────────────────────────── */
+
+/* One box at ratio-square. It clips, and its size is a function of its width
+   alone, so no state change can move anything beneath it. */
+.stage {
+  aspect-ratio: var(--ratio-square);
+  overflow: hidden;
+  width: 100%;
+}
+
+.track {
+  display: flex;
+  gap: var(--explain-pane-gap);
+  height: 100%;
+  transition: transform var(--motion-reveal-duration) var(--motion-reveal-easing);
+  will-change: transform;
+}
+
+.pane {
+  flex: none;
+  height: 100%;
+  width: var(--explain-pane-width);
+}
+
+/* The slide is keyed to the state the stage is heading for, so it starts the
+   moment the move begins and settles when `data-state` catches up. */
+.module[data-target="2"] .track {
+  transform: translateX(calc(-1 * (var(--explain-pane-width) + var(--explain-pane-gap))));
+}
+
+.module[data-target="3"] .track {
+  transform: translateX(calc(-2 * (var(--explain-pane-width) + var(--explain-pane-gap))));
+}
+
+/* ── The three step lines ──────────────────────────────────────────────── */
+
+.steps {
+  display: grid;
+  gap: 0;
+  grid-template-columns: minmax(0, 1fr);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.step {
+  margin: 0;
+  min-width: 0;
+}
+
+/* A real button, styled as a row: the disc spans both lines, the core and
+   the detail stack beside it. The whole row is the target. */
+.stepLine {
+  align-items: center;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  border-top: 1px solid var(--color-neutral-line);
+  color: var(--color-neutral-text2);
+  column-gap: var(--space-3);
+  cursor: pointer;
+  display: grid;
+  font: inherit;
+  grid-template-columns: var(--explain-disc-size) minmax(0, 1fr);
+  min-height: var(--target-min);
+  padding: var(--space-2) 0;
+  text-align: left;
+  width: 100%;
+}
+
+.stepLine[aria-current] {
+  color: var(--color-neutral-ink);
+}
+
+.disc {
+  align-items: center;
+  background: var(--color-neutral-surface);
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-muted);
+  display: flex;
+  font-size: var(--type-meta-size);
+  font-weight: 700;
+  grid-row: 1 / span 2;
+  height: var(--explain-disc-size);
+  justify-content: center;
+  transition: background-color var(--motion-control-duration), color var(--motion-control-duration);
+  width: var(--explain-disc-size);
+}
+
+/* Active: `lime-500` with `ink` — a fill on a light ground means active,
+   never decoration (design-system contract, `active-step`). */
+.stepLine[aria-current] .disc {
+  background: var(--color-lime-500);
+  color: var(--color-neutral-ink);
+}
+
+/* Each of the two lines is one line: the copy is written to the 390 px budget
+   (SRC-0017 CG-025), and the clamp is what makes a longer line a finding
+   rather than a taller module. */
+.core,
+.detail {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.core {
+  font-size: var(--type-body-size);
+  font-weight: 700;
+  line-height: var(--leading-snug);
+}
+
+.detail {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-meta-size);
+  font-weight: 400;
+  line-height: var(--leading-normal);
+}
+
+/* ── The one CTA ───────────────────────────────────────────────────────── */
+
+.cta {
+  display: flex;
+}
+
+/* ── From lg: three steps side by side, no stage, no crop, no slide ─────── */
+
+@media (min-width: 48rem) {
+  .module {
+    column-gap: var(--space-4);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .header,
+  .steps,
+  .cta {
+    grid-column: 1 / -1;
+  }
+
+  /* The stage and its track stop being boxes: the three graphics become grid
+     items of the module itself, one per column, above their own step line. */
+  .stage,
+  .track {
+    display: contents;
+  }
+
+  .pane {
+    aspect-ratio: var(--ratio-square);
+    height: auto;
+    width: auto;
+  }
+
+  .pane:nth-child(1) {
+    grid-column: 1;
+  }
+
+  .pane:nth-child(2) {
+    grid-column: 2;
+  }
+
+  .pane:nth-child(3) {
+    grid-column: 3;
+  }
+
+  /* The same three columns as the module, so step n stands under graphic n. */
+  .steps {
+    column-gap: var(--space-4);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

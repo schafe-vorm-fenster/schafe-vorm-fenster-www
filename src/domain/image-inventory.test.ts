@@ -74,6 +74,13 @@ describe("ImageEntrySchema", () => {
     expect(ImageEntrySchema.safeParse(withoutBrief).success).toBe(false);
   });
 
+  it("takes a focal point as a percentage pair, and nothing else (DEC-0105 §2)", () => {
+    expect(ImageEntrySchema.safeParse({ ...needed, focal: { x: 50, y: 40 } }).success).toBe(true);
+    expect(ImageEntrySchema.safeParse({ ...needed, focal: { x: 50, y: 140 } }).success).toBe(false);
+    expect(ImageEntrySchema.safeParse({ ...needed, focal: { x: 50 } }).success).toBe(false);
+    expect(ImageEntrySchema.safeParse({ ...needed, focal: "center" }).success).toBe(false);
+  });
+
   it("requires file, width and height once an entry claims a rendition", () => {
     expect(
       ImageEntrySchema.safeParse({ ...needed, status: "generated" }).success,
