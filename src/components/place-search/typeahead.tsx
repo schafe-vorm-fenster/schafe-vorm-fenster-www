@@ -109,16 +109,27 @@ export function PlaceTypeahead({ inputId, to, query, name = "ort", locale = "de"
     input.setAttribute("aria-autocomplete", "list");
     input.setAttribute("aria-controls", listId);
 
+    // The last value this enhancement has seen. A value that reached the
+    // field without an `input` event — a `?ort=` prefill, a browser-restored
+    // form — is one it has not.
+    let seen = "";
     const onInput = () => {
+      seen = input.value;
       setTyped(input.value);
-      // A real input event comes from a focused field; the replay below may
-      // not — a restored value in a blurred field waits for the focus.
+      // A keystroke comes from a focused field, and both replays below run
+      // only while the field is focused — so the overlay opens; the check is
+      // the guard that keeps a blurred field from ever opening.
       setDismissed(document.activeElement !== input);
       setActive(-1);
     };
     // A pointer press on an option blurs the input before the click lands.
     const onBlur = () => window.setTimeout(() => setDismissed(true), 150);
-    const onFocus = () => setDismissed(false);
+    const onFocus = () => {
+      setDismissed(false);
+      // Entering a field that holds text nobody typed (the prefill, the
+      // restore) is the first moment that text is a search: replay it once.
+      if (input.value !== "" && input.value !== seen) input.dispatchEvent(new Event("input"));
+    };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setDismissed(true);
@@ -152,13 +163,13 @@ export function PlaceTypeahead({ inputId, to, query, name = "ort", locale = "de"
     input.addEventListener("keydown", onKeyDown);
 
     // Text that reached the field before this effect attached — a visitor
-    // faster than hydration, a value the browser restored — fired `input`
-    // before anyone listened. Replay it once, so the overlay answers what is
-    // already in the field — but only while the visitor is in the field: a
-    // value the page arrived with (`?ort=` prefilled, a browser-restored
-    // form) is not a search until the field is focused, and `onFocus`
-    // picks it up then. This keeps the rate-limited BFF free of one
-    // request per prefilled page load.
+    // faster than hydration — fired `input` before anyone listened. Replay
+    // it once, so the overlay answers what is already in the field — but
+    // only while the visitor is in the field: a value the page arrived with
+    // (`?ort=` prefilled, a browser-restored form) in a blurred field is not
+    // a search until the field is focused, and `onFocus` replays it then.
+    // This keeps the rate-limited BFF free of one request per prefilled
+    // page load.
     if (input.value !== "" && document.activeElement === input) {
       input.dispatchEvent(new Event("input"));
     }

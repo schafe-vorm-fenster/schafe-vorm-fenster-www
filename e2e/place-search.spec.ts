@@ -188,6 +188,34 @@ test.describe("TS-WEB-0008-A15: the suggestion overlay", () => {
     await expect(page.getByRole("listbox")).toHaveCount(0);
   });
 
+  test("a value that reached the field without a keystroke is searched on focus, not on load", async ({
+    page,
+  }) => {
+    const calls: string[] = [];
+    page.on("request", (request) => {
+      if (request.url().includes("/api/places/search")) calls.push(request.url());
+    });
+
+    await page.goto(href("place", "de"));
+    await hydrated(page, FIELD);
+    const field = page.locator(FIELD);
+
+    // A `?ort=` prefill and a browser-restored form set the value and fire no
+    // `input` event; the field is blurred, as it is after a page load.
+    await field.evaluate((element, value) => {
+      element.blur();
+      (element as HTMLInputElement).value = value;
+    }, SEARCH);
+    await page.waitForTimeout(600);
+    expect(calls, "a prefilled value in a blurred field is not a search").toEqual([]);
+    await expect(page.getByRole("listbox")).toHaveCount(0);
+
+    await field.focus();
+    await expect(page.getByRole("option").first()).toBeVisible({ timeout: 10_000 });
+    await expect(field).toHaveAttribute("aria-expanded", "true");
+    expect(calls, "the focus searched the prefilled value once").toHaveLength(1);
+  });
+
   test("the keyboard walks the rows and Enter follows the active one", async ({ page }) => {
     await page.goto(href("place", "de"));
     await hydrated(page, FIELD);
