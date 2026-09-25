@@ -72,8 +72,19 @@ describe("TS-WEB-0014-A1: checkPolicyDirectives — fixture policies", () => {
         "https://envoy-api.api.schafe-vorm-fenster.de",
         "https://app.schafe-vorm-fenster.de",
       ],
+      // The fifth row (DEC-0121): the registration form's host, `frame-src`.
+      "frame-src": ["https://docs.google.com"],
     });
     expect(errors).toEqual([]);
+  });
+
+  it("flags a frame-src host with no row in D1 — a second framed origin needs its own row first", () => {
+    const errors = checkPolicyDirectives("production", {
+      "frame-src": ["https://docs.google.com", "https://forms.example"],
+    });
+    expect(errors).toEqual([
+      'A1 production/frame-src: host "https://forms.example" has no row in D1 (ALLOWLIST)',
+    ]);
   });
 
   it("flags 'unsafe-inline' in a production script-src", () => {

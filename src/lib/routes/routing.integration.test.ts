@@ -14,7 +14,7 @@ import {
 import { redirectMapViolations } from "@/src/lib/routes/redirect-map";
 import {
   d1Inventory,
-  D1_NON_PAGE_ROWS,
+  D1_NON_REGISTRY_ROWS,
   everyD1Path,
   servedOnLandingDomain,
 } from "@/src/lib/routes/url-inventory";
@@ -125,7 +125,12 @@ describe("TS-WEB-0004-A1: every path of the D1 inventory exists in both language
   it("has a handler behind every row of D1, not only behind every registry row", () => {
     for (const row of d1Inventory()) {
       if (row.kind === "page") {
-        expect(existsSync(pageFile(row.routeId!)), row.path).toBe(true);
+        // `/start` is the one page row outside the registry and outside
+        // `app/[lang]` (TS-WEB-0016 D15): its module sits at `app/start/`.
+        const file = row.routeId
+          ? pageFile(row.routeId)
+          : join(ROOT, "app", row.path.slice(1), "page.tsx");
+        expect(existsSync(file), `${row.path} → ${file}`).toBe(true);
         continue;
       }
       const file =
@@ -154,15 +159,23 @@ describe("TS-WEB-0004-A1: every path of the D1 inventory exists in both language
     expect(new Set(urls).size).toBe(urls.length);
   });
 
-  it("answers every non-page row through its real handler", async () => {
-    const start = (await import("@/app/start/route")) as {
-      GET: () => Response;
+  it("answers `/start` through a page that is noindex by its own metadata (TS-WEB-0004 D1, TS-WEB-0016 D15)", async () => {
+    // The row was a 302 handler until 2026-09-25; since D15 it is a page
+    // module with static metadata — no `generateMetadata`, no params, no
+    // language: it sits outside `app/[lang]` and serves German only.
+    const start = (await import("@/app/start/page")) as {
+      default: () => unknown;
+      metadata: Metadata;
     };
-    const response = start.GET();
-    expect(response.status).toBe(302);
-    expect(response.headers.get("location")).toMatch(/^https:\/\//);
-    expect(response.headers.get("x-robots-tag")).toBe("noindex, nofollow");
+    expect(typeof start.default).toBe("function");
+    expect(start.metadata.robots).toBe("noindex, nofollow");
+    expect(start.metadata.title).toBeTruthy();
+    // Not a registry route, so no canonical, no hreflang set: the sitemap
+    // and `llms.txt` are built from the registry and cannot list it.
+    expect(start.metadata.alternates).toBeUndefined();
+  });
 
+  it("answers every machine row through its real handler", async () => {
     const llms = (await import("@/app/llms.txt/route")) as {
       GET: () => Promise<Response>;
     };
@@ -360,7 +373,7 @@ describe("TS-WEB-0004-A5: the three machine surfaces answer, per domain", () => 
 
   it("names every machine surface of D1 in llms.txt", async () => {
     const body = await llmsFor("www.schafe-vorm-fenster.de");
-    for (const row of D1_NON_PAGE_ROWS)
+    for (const row of D1_NON_REGISTRY_ROWS)
       if (row.kind === "machine") expect(body).toContain(row.path);
   });
 

@@ -59,9 +59,10 @@ host is a defect, not a configuration detail.
 | --- | --- | --- | --- | --- |
 | `schafe-vorm-fenster.de` (and `.pl`, `.at`, `sheepoutside.com`) | document, CSS, JS, fonts, images, `/api/*` BFF calls | own origin | first party | everything self-hosted per D4 |
 | `/_vercel/speed-insights/*` | RUM script + beacon | TS-WEB-0003 D7 | Vercel (host, processor) | same-origin path, no separate host, cookieless |
-| `code.etracker.com` | deferred analytics script and its beacon | DEC-0004 | eTracker GmbH, Hamburg — **the only external company in this table** | `data-block-cookies="true"`, config extracted from SRC-0010 |
+| `code.etracker.com` | deferred analytics script and its beacon | DEC-0004 | eTracker GmbH, Hamburg — **the only external company in this table** until 2026-09-25, and still the only one whose script runs on a page; the form host below is the second | `data-block-cookies="true"`, config extracted from SRC-0010 |
 | `app.schafe-vorm-fenster.de` | Portalize loader `…/api/{organizerId}/load.js` and the widget's own calls | DEC-0030 | own ecosystem | cookie-freedom is a demand, not yet verified (Q-0026) |
 | envoy widget host — **UNKNOWN** | web-component script, form submission | DEC-0009 | own ecosystem | cannot be allowlisted before the host is named (Q-0022) |
+| `docs.google.com` | the registration form, framed on `/start` and nowhere else — the navigation of the one `iframe` the site renders | TS-WEB-0016 D15 (FUN-WEB-0205, DEC-0013 amendment 2026-09-25, DEC-0108); row written 2026-09-25 by DEC-0121 | Google LLC — the second external company in this table, and the one no script of ours loads | `frame-src` only (TS-WEB-0014 D1, the fifth row); one route, in no page's flow, `noindex`; what the framed document then loads from other Google hosts is that document's, outside the CSP's reach and outside A1's trace of *our* requests (DEC-0121 §6); its cookie behaviour is the residual risk DEC-0108 §4 accepts, unverified (DEM-0066). The row lapses with the embed (D15 "It lapses") |
 
 **Navigations, not subresource requests** — these load no code into the
 page and are not part of the allowlist: handover links to
@@ -229,15 +230,16 @@ The legal confirmation for this handling is outstanding — see Open points.
   D2; replacing it changes the table, the CSP allowlist and the privacy
   policy in one move. Any successor must clear D5 including the consent
   disqualifier.
-- **The registration form's host has no row in D2 and no entry in the CSP
-  allowlist, and two criteria fail on that rather than merely lacking it.**
-  `A1` traces every route of the `TS-WEB-0004 D1` inventory and fails on a host
-  outside D2; `/start` has been in that inventory since 2026-09-25 and contacts
-  the form host. `A4` requires the deployed CSP to equal the D2 host set
-  exactly. `TS-WEB-0016 D15` records the `frame-src` entry as owed and defers it
-  to the rebuild decision, because D1's allowlist is `TS-WEB-0014`'s and this
-  table and that allowlist are one set seen from two sides — so the row is not
-  written here. What is recorded here is the consequence, so it is met by a
-  reader of this spec instead of by a red run (DEC-0108, *Still owed*).
+- **The registration form's host has its D2 row and its `frame-src` entry
+  since 2026-09-25 (DEC-0121)** — written together, as D2's own rule wants,
+  because this table and `TS-WEB-0014 D1`'s allowlist are one set seen from
+  two sides. Until then `A1` (every route of the `TS-WEB-0004 D1` inventory,
+  every request host in D2) and `A4` (the deployed CSP equals the D2 host set
+  exactly) failed on `/start` rather than merely lacking it, which DEC-0108
+  *Still owed* had recorded here. What stays open is not the row but what the
+  framed document does: whether Google sets a persistent identifier inside
+  the frame is unverified (DEC-0108 §4, `DEM-0066`), and `A7`'s named section
+  for the host on `/rechtliches#datenschutz` is the legal import's
+  (`TS-WEB-0029`), not this repository's to write.
 - D2's classification, D3's image-pipeline rule and D6's mechanism are
   [PROPOSED].

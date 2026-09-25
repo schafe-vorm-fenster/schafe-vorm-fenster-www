@@ -287,6 +287,28 @@ export interface Dictionary {
    * carries no `seo.title` (TS-WEB-0011 D5; the artifact is the source, F-2-72).
    */
   pages: Record<RouteId, string>;
+  /**
+   * `/start`, the registration surface (TS-WEB-0016 D15/D17, DEC-0108,
+   * DEC-0121). The route is German-only and outside `app/[lang]`, so only
+   * `de` ever renders; `en` exists because the key set is one per language.
+   *
+   * The notice's three facts and its link target are the determination's
+   * (D17); its **wording is not** — nobody has written it (DEC-0108 §2, "The
+   * words"). `notice`, `noticeLink` and `frameTitle` are therefore
+   * placeholders in the repository's convention: rendered with
+   * `data-demo="true"` on the element and listed in `state/open.md`
+   * (rows 215 and 216), for the owner to replace.
+   */
+  start: {
+    /** The two facts before the link: whose form it is, and that loading it contacts them. */
+    notice: string;
+    /** The link's text — the third fact, where the detail is (`/rechtliches#datenschutz`). */
+    noticeLink: string;
+    /** The `iframe`'s accessible name. */
+    frameTitle: string;
+    /** Before the e-mail address — `lead-fallback.tsx`'s own line, verbatim. */
+    emailLead: string;
+  };
 }
 
 const de: Dictionary = {
@@ -407,6 +429,13 @@ const de: Dictionary = {
     archive: "Archiv",
     legal: "Rechtliches",
   },
+  start: {
+    notice:
+      "Dieses Anmeldeformular stellt Google bereit. Beim Laden dieser Seite werden Daten an Google übertragen.",
+    noticeLink: "Mehr dazu in den Datenschutzhinweisen.",
+    frameTitle: "Anmeldeformular bei Google Forms",
+    emailLead: "oder per E-Mail:",
+  },
 };
 
 const en: Dictionary = {
@@ -526,6 +555,13 @@ const en: Dictionary = {
     about: "About us",
     archive: "Archive",
     legal: "Legal",
+  },
+  start: {
+    notice:
+      "This registration form is provided by Google. Loading this page sends data to Google.",
+    noticeLink: "More in the privacy notice.",
+    frameTitle: "Registration form at Google Forms",
+    emailLead: "or by e-mail:",
   },
 };
 

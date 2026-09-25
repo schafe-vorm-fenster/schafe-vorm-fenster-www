@@ -29,9 +29,10 @@ belong to TS-WEB-0004; this spec only adds the rules that constrain them.
 
 ### D1 — The allowlist: every external host, named [FIXED: CON-WEB-0030, DEC-0015, DEC-0013; hosts PROPOSED]
 
-The complete set. Four external origins, no fifth. Hosts marked
-[PROPOSED] are read off the sibling repositories, not confirmed by their
-owners.
+The complete set. Four external origins and, since 2026-09-25, a fifth —
+the registration form's host, admitted for one directive on one route
+(TS-WEB-0016 D15, DEC-0121) — and no sixth. Hosts marked [PROPOSED] are read
+off the sibling repositories, not confirmed by their owners.
 
 | Origin | Why it exists | Active directives | Provenance |
 | --- | --- | --- | --- |
@@ -40,6 +41,7 @@ owners.
 | `https://portalize.schafe-vorm-fenster.de` | Portalize loader `/api/{organizerId}/load.js`, web-component mode — the embed demo (FUN-WEB-0043) | `script-src`, `connect-src` | DEC-0030, `portalize/DEPLOYMENT.md` |
 | `https://envoy-api.api.schafe-vorm-fenster.de` [PROPOSED] | envoy lead widget: its web-component script and its own submission endpoint | `script-src`, `connect-src` | DEC-0009; host read from `envoy-api`, widget host unconfirmed (Q-0022) |
 | `https://app.schafe-vorm-fenster.de` | named by CON-WEB-0030; the handover (FUN-WEB-0013, DEC-0029) is a plain `GET` navigation, which CSP does not govern | **none today** — reserved slots: `frame-ancestors` (D4) and `form-action` (if the handover ever becomes a POST) | DEC-0035, CON-WEB-0030 |
+| `https://docs.google.com` | the registration form `/start` embeds visibly (TS-WEB-0016 D15, FUN-WEB-0205, DEC-0108) — the one framed document on the site, on the one route that embeds a third party; the origin, not the form's path, because this is a table of origins and the form URL is `src/lib/routes/lead-fallback.ts`'s | `frame-src` — and no other: no script, no connection, no image of it is loaded by our document | DEC-0121 (row written 2026-09-25); lapses with the embed (D15 "It lapses") |
 
 **Deliberate non-entries.** Each is an origin someone will otherwise add
 by reflex:
@@ -69,7 +71,7 @@ media-src 'self';
 manifest-src 'self';
 worker-src 'self';
 object-src 'none';
-frame-src 'none';
+frame-src https://docs.google.com;
 child-src 'none';
 form-action 'self';
 frame-ancestors 'none';
@@ -86,7 +88,7 @@ default:
 | `default-src 'self'`, not `'none'` | `'none'` reads stricter but also governs every directive that has no name of its own — prefetch first. Next.js route prefetching is the first casualty, and the failure is silent. Every directive that matters is named explicitly anyway. |
 | `'strict-dynamic'` **and** a host allowlist in `script-src` | CSP3 browsers ignore the host list once `'strict-dynamic'` is present — enforcement runs on the nonce, and the three third-party loaders are trusted because *we* render their `<script src>` tags **with the nonce**, which then propagates to what they load. The host list stays as the CSP2 fallback and as the written allowlist CON-WEB-0030 asks for. Both halves are required; dropping either breaks a browser class. |
 | `style-src 'unsafe-inline'` | the one bounded concession. Next.js inlines critical CSS and both web components style their shadow roots inline. Script injection stays fully locked; CSS-based exfiltration is the residual risk, accepted and flagged. Tightening path: a style nonce, once D3 resolves nonce delivery. |
-| `frame-src 'none'` | pins Portalize to web-component mode. DEC-0030 chose it; this makes the iframe fallback fail loudly instead of quietly loading a second document. |
+| `frame-src` names one host, the registration form's | `'none'` until 2026-09-25, which pinned Portalize to web-component mode — DEC-0030 chose it, and the pin made the iframe fallback fail loudly instead of quietly loading a second document. The pin holds: the Portalize host is still no source here. The one source is the form host D1's fifth row names, for `/start` alone (TS-WEB-0016 D15, DEC-0121); `child-src 'none'` stays as the floor beneath the two directives that name their own sources. |
 
 ### D3 — Per-build hashes, not a nonce [FIXED: DEC-0045]
 
