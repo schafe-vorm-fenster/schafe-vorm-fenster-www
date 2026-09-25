@@ -20,7 +20,9 @@ request is empty.
 
 ## Contents
 
-- `demand-register.md` — the register, 57 rows
+- `demand-register.md` — the register, **67 rows** on 2026-09-25. The counts
+  in the next section are the 57 the register held when DEC-0097/DEC-0098 built
+  it; the ten added since each name the decision that raised them in `Raised by`
 
 ## How it relates to the question register
 
