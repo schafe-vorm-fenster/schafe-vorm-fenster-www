@@ -42,6 +42,15 @@ Taken: **REJECT_NEW**. Permitted for a direct contradiction: REJECT_NEW, NEW_VER
 Resolved in DEC-0082, which is the record; this file is the conflict, not a
 second copy of the decision.
 
+**The correction DEC-0082 §2 demanded has landed** (confirmed 2026-09-25).
+`SRC-0014` now reads *"Filled is a weight, not a conversion rank. The first row
+is `data-cta="secondary"`"* for the contact section and *"One CTA … at
+**secondary** treatment"* for the explain module, and
+`specs/contracts/design-system-contract.md` makes both `secondary` by definition
+rather than by configuration — *"neither may take `primary` as a prop value"*.
+`TS-WEB-0006-A18` asserts it. `TS-WEB-0006`'s open point saying the correction
+had not landed is closed.
+
 ## Blocks
 
 FUN-WEB-0003, TS-WEB-0006, TS-WEB-0022, TS-WEB-0024

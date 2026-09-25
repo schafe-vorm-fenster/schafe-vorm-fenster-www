@@ -8,9 +8,14 @@ intent: inform
 brand: schafe-vorm-fenster
 tags: ["website", "design-system", "ui", "style-guide"]
 related:
-  - ./website-communication-principles.concept.md
-  - ./website-relevance-model.concept.md
-  - ./website-information-architecture.concept.md
+  # The three hub concept documents, by their path in `go-to-market-os` — they
+  # are not in this repository and may not be copied into it (concept/README.md
+  # rule 1, AGENTS.md working rule 7). These read `./…` until 2026-09-25, which
+  # resolved to nothing.
+  - go-to-market-os/concept/website-communication-principles.concept.md # SRC-0001
+  - go-to-market-os/concept/website-relevance-model.concept.md # SRC-0002
+  - go-to-market-os/concept/website-information-architecture.concept.md # SRC-0003
+  - ../specs/contracts/design-system-contract.md # SRC-0013 — the contract that binds this guide
 ---
 
 ## Purpose

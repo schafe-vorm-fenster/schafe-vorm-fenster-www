@@ -238,13 +238,17 @@ assigns types per page type and its A5 checks "no more".
 
 ## Free for the generator
 
-- [FREE] Copy, throughout, except the h1 of D3 and the price source — the
-  content phase writes it.
+- [FREE] Copy, throughout — including the `h1`, which D3 releases: the spec
+  asserts that an `h1` exists and what it must achieve, never its wording
+  (DEC-0083 §5, DEC-0036 amendment). The price is not copy: it is read from the
+  offering package (A4). *(This bullet excepted "the h1 of D3" until 2026-09-25,
+  which had not been true since DEC-0083.)*
 - [FREE] Visual design inside every block, within the design system and
   TS-WEB-0002.
 - [FREE] Whether the stream is a grid or a scroller, as long as the empty
-  slot sits in the reading order the engine gives it, and whether origin
-  and counters are one component or two.
+  slot sits in the reading order the engine gives it. *(The second half of this
+  bullet offered a choice between "origin and counters as one component or two"
+  until 2026-09-25; D4 deleted the counters, so there was nothing to choose.)*
 
 ## Acceptance criteria
 

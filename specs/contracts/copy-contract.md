@@ -57,7 +57,7 @@ content `describe()` names the rule rather than restating it.
 | --- | --- | --- |
 | CG-001 `du` to a person, `ihr` to an organisation | `schema` · `review` | Each field's `describe()` names the page's default address (SRC-0017 §1); which number a given block takes is judgement. |
 | CG-002 one address per page, a block departs whole | `lint` · `review` | Lint: one field containing both a `du`/`dein`/`dich` form and an `ihr`/`euer`/`euch` form fails. Whether a whole block may depart is review. |
-| CG-003 no `Sie` | `lint` | A capitalised `Sie`, `Ihnen`, `Ihre*` mid-sentence, or an imperative `<Verb> Sie`, fails. This is the register check DEC-0066 asks TS-WEB-0007 D12 for. **One exemption, as a path allowlist of exactly one route**: `/rechtliches` and its localised sibling, whole — decision 14, 2026-09-23 (TS-WEB-0029 D2, DEC-0012, DEC-0027). It is a route list in the lint row, never a per-field opt-out and never a flag in a content file, so the exemption is auditable in one place. Nothing inherits it: a legal sentence quoted elsewhere, a footer link, a consent line and an error message are all `du`. |
+| CG-003 no `Sie` | `lint` | A capitalised `Sie`, `Ihnen`, `Ihre*` mid-sentence, or an imperative `<Verb> Sie`, fails. This is the register check DEC-0066 asks TS-WEB-0007 D12 for. **One exemption, as a path allowlist of exactly one route**: `/rechtliches` and its localised sibling, whole — decision 14, 2026-09-23 (TS-WEB-0029 D6a, DEC-0012, DEC-0027). It is a route list in the lint row, never a per-field opt-out and never a flag in a content file, so the exemption is auditable in one place. Nothing inherits it: a legal sentence quoted elsewhere, a footer link, a consent line and an error message are all `du`. |
 
 ### Structure
 

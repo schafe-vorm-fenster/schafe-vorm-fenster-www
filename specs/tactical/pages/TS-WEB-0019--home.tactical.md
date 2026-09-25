@@ -235,6 +235,7 @@ not conversion.
   design guide. Until it is answered `D3a` stands as written and this page
   renders no explain module.
 - **Q-0044 blocks generation of this page.** Proof card and stream, the
-  live-module shells and the context band are not in SRC-0014's six
-  specified components, and no component declares what it renders.
+  live-module shells and the context band are not among SRC-0014's
+  specified components — fourteen of them as of 2026-09-25, not the six this
+  point named — and no component declares what it renders.
   **Answered by:** design, via the component manifest.

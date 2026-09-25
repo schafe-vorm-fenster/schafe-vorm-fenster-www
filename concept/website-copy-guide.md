@@ -368,7 +368,7 @@ schema each one is a `max()` (TS-WEB-0007 D5).
 | CG-029 | newsletter block | Section head + Lead | title ≤ 40, benefit ≤ 120 characters | Name at least two concrete things that arrive: new functions, current offers, how other places do it. |
 | CG-030 | context-band entry | Card title + Meta | ≤ 80 characters **[PROPOSED — the field does not exist yet]** | One half-sentence naming **audience and content together**, then the link. |
 | CG-031 | contact section | Section head + rows | title ≤ 40, lead ≤ 100, action-row title ≤ 24, sub-label ≤ 32 characters | Four concrete channels, always all four and always in the same order, no form, no "nimm Kontakt auf" — and **no sub-label promises a response time**. |
-| CG-032 | empty state | Lead + CTA | ≤ 90 characters + one CTA | An invitation, never an error (FUN-WEB-0044/045). |
+| CG-032 | empty state | Lead + CTA | ≤ 90 characters + one CTA | An invitation, never an error (FUN-WEB-0153, FUN-WEB-0154, FUN-WEB-0045). |
 
 Examples, all from the review:
 
@@ -465,9 +465,10 @@ the promise is removed, not softened.
 
 ### CG-038 — The product name appears exactly once
 
-`DEC-0052 §1` and `CON-WEB-0014`: "Portalize" is introduced once, on
-`/dein-kalender` at the 480 € tier, in one sentence. It is never a navigation
-label, never a route, never a heading.
+`DEC-0052 §1`, `FUN-WEB-0132` and `CON-WEB-0058`: "Portalize" is introduced
+once, on `/dein-kalender` at the 480 € tier, in one sentence (`FUN-WEB-0132`).
+It is never a navigation label, never a route, never a heading
+(`CON-WEB-0058`). `CON-WEB-0014` was retired into those two by DEC-0093.
 
 ### CG-039 — "das Produkt" is not a name
 
@@ -508,14 +509,14 @@ TS-WEB-0007 D12).
 | Vereinswebseite | eure eigene Website | not only Vereine |
 | Postleitzahl · PLZ | Ortsname | DEC-0079 — a place name is where you are from, a postcode is an abstraction |
 | Organizer | Akteur | DEC-0062 — nothing user-facing says Organizer |
-| Portalize (outside the one sentence) | Kalender | CON-WEB-0014, DEC-0052 §1 |
+| Portalize (outside the one sentence) | Kalender | CON-WEB-0058, DEC-0052 §1 |
 | Warum das zählt | Was hilft euch das? | CG-018 |
 | Warum wir | Über uns · Wer dahintersteckt | CG-017 |
 | Wo das herkommt *(as a heading)* | | CG-017 — the review names no replacement |
 | Wer das schon macht | Was andere sagen *(for press proof only)* | CG-017 |
 | Warum es hakt · Warum es heute hakt *(as a title)* | | CG-005 — allowed as a kicker |
 | gebaut · betrieben *(about this product)* | | CG-033 |
-| einfach · digital · für alle · modern · innovativ | | generic claims are not copy (TS-WEB-0006 D7, FUN-WEB-0008) |
+| einfach · digital · für alle · modern · innovativ | | generic claims are not copy (TS-WEB-0006 D7, CON-WEB-0059) |
 | Presse- und Auftrittshistorie | | CG-035 |
 | Beides gibt es · Dieselben Termine · Der Name der Firma | write the thing out | CG-004 |
 | Genau so. | | CG-016 |
@@ -588,7 +589,7 @@ taken, what is written above is in force.
 
 | # | Decision | Options | In force today |
 | --- | --- | --- | --- |
-| 1 | **Product name** | (a) keep "Portalize", introduced once (`DEC-0052 §1`, Q-0012); (b) a new name that carries in the German Ehrenamt context. | (a), plus CG-039 — no page writes "das Produkt" |
+| 1 | **Product name** | (a) keep "Portalize", introduced once (`DEC-0052 §1`, `FUN-WEB-0132`); (b) a new name that carries in the German Ehrenamt context. Open as **Q-0077** since DEC-0106 — Q-0012 answered only *where* the name appears. | (a), plus CG-039 — no page writes "das Produkt" |
 | 2 | **Headings the review rejects without a replacement** | The provenance section and the two proof sections need headings. The review rejects *"Wo das herkommt"*, *"Wer das schon macht"* and *"Presse- und Auftrittshistorie"* and names a replacement for one of the three only. | The rejections hold; the empty cells stay empty until the hub's principles carry the wording |
 | 3 | **Where the brand-level word rules live** | (a) the hub's `tone-of-voice.md` gains the word-level anti-patterns and this guide keeps only the website's cut; (b) this guide carries both until the hub catches up. | (a) is the target — the hub is being written in parallel; (b) is the state while it is |
 | 4 | **Glossary home** | `specs/glossary/glossary.md` is a production input carrying copy words (TS-WEB-0007 D9, Q-0057). Does the register stay in `specs/` once it is one, or move into `@schafe-vorm-fenster/glossary`? | It stays in `specs/` and the two columns live there |

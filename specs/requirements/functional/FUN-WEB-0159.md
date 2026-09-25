@@ -28,9 +28,9 @@ ai_provenance:
 
 # FUN-WEB-0159
 
-For a typed name that matches nothing, the place search SHALL reach `/dein-ort/starten` on submit.
+For a typed name that matches nothing, the place search SHALL reach `/dein-ort/starten` on submit with the raw query as `?ort=`.
 
-## Source
+### Source
 
 DEC-0024, DEC-0036, DEC-0037, DEC-0079
 

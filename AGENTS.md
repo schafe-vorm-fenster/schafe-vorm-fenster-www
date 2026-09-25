@@ -116,7 +116,7 @@ DEC-0098 made a source's trust level **computed**: the six-dimension vector of
 `@leafcutter-strict/method-source-quality-rating`, and the level is the
 minimum, never the average. 15 of the 18 levels changed and not one source
 did. DEC-0099 created the two registers the method defines and this repository
-did not have — `specs/conflicts/` (24 `CONF-####`) and
+did not have — `specs/conflicts/` (25 `CONF-####`) and
 `specs/demands/demand-register.md` (65 `DEM-####`) — populated from the
 decision records and the question register, never from an invented conflict.
 DEC-0100 settled the decision-record shape: an ADR and a STRICT decision

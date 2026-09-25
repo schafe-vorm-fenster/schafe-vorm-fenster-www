@@ -346,7 +346,7 @@ the promise is removed rather than softened.
 
 | ID | Level | Check |
 | --- | --- | --- |
-| TS-WEB-0006-A1 | static | Every route has a `page.meta.ts` with all D1 fields; `focusJob` is one of the four; conversion IDs resolve against the `go-to-market-os` conversion goals; `audiences` non-empty and ordered; ≥ 1 live module, each with an empty state. |
+| TS-WEB-0006-A1 | static | Every route has a `page.meta.ts` with all D1 fields; `focusJob` is one of the four; conversion IDs resolve against the `go-to-market-os` conversion goals; `audiences` non-empty and ordered; `liveModules` holds ≥ 1 module id, each with an empty state — **or is empty on exactly the three sender surfaces D1 names** (`/ueber-uns`, `/ueber-uns/archiv`, `/rechtliches`), and on no other route (DEC-0084 §3). It asserted "≥ 1 live module" unconditionally until 2026-09-25, against D1's own exemption. |
 | TS-WEB-0006-A2 | static | Exactly one `data-cta="primary"` per rendered page; an `equalWeightConversion`, where declared, renders with the secondary treatment in the same block. |
 | TS-WEB-0006-A3 | e2e | At 360 × 640 and 1280 × 800 the primary conversion is fully visible without scrolling on every page that declares one, **except `/ueber-uns`**, where D3's named exception puts it in the closing block and the first viewport carries no `data-cta` at all (DEC-0082 amendment C). |
 | TS-WEB-0006-A4 | e2e | On every page whose focus job is "know what is on", the first screen contains the place-search or live-dates module and its primary conversion is not a link to another page. |

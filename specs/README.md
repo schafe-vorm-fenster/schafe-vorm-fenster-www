@@ -248,11 +248,13 @@ specs/
   hook) validates frontmatter, ID uniqueness, row shape, the S3-needs-a-
   decision rule, reference integrity across all ID families,
   implements↔Coverage symmetry, the decisions index, acceptance-criterion
-  IDs and levels, and that tests reference only ids that exist. It closes
+  IDs and levels, the shape of a recorded deviation from a source (E27,
+  rule 5), and that tests reference only ids that exist. It closes
   the requirement → acceptance criterion → test matrix and reports every
   gap: requirements without a tactical spec (W1), covered requirements
   discharged by no acceptance criterion (W2), acceptance criteria no test
-  references (W3). It also prints the verification pyramid.
+  references (W3), and the contradiction stated in prose that no deviation
+  record carries (W10). It also prints the verification pyramid.
 - **Five of its vocabularies come from the package, not from the script**
   (DEC-0085 §4): the `S0–S3` ladder (E3/E4), the requirement status set
   (E11), the tactical status set and the four tactical `kind` values (E12),
