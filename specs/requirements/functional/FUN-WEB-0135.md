@@ -28,11 +28,11 @@ ai_provenance:
 
 # FUN-WEB-0135
 
-For every action that is not the primary conversion, the website SHALL render it at secondary treatment.
+For every action that is neither the primary conversion nor its repeat, the website SHALL render it at secondary treatment.
 
 ## Source
 
-SRC-0001#2-order-do-not-exclude, DEC-0082
+SRC-0001#2-order-do-not-exclude, DEC-0082 (as amended 2026-09-25)
 
 Unlocatable: No line prescribes a treatment for non-primary actions. The word "secondary" does not occur in the file.
 
@@ -40,4 +40,8 @@ Finding: Parent line 207 ("One primary conversion per page, above the fold, visu
 
 ## Notes
 
-Module CTAs, tier CTAs, the context band and every row of the contact section (DEC-0082).
+Module CTAs, tier CTAs, the context band and every row of the contact section (DEC-0082 §1).
+
+**The repeat was the hole in the ladder.** The statement read "not the primary conversion" until 2026-09-25, and the repeat is not the primary conversion — so it put the closing CTA at secondary treatment while DEC-0082 §1 gives it the same treatment as the primary minus the marker. The missing rung is in the statement now (DEC-0082 amendment A).
+
+**The secondary *rung* is not a button variant.** The rung is the `data-cta` marker; which variant an element takes is SRC-0014's, and a secondary-rung element may carry a strong variant where the guide gives it one — the tier-2 order button does (DEC-0082 amendment B). What stays exclusive is the Pulse fill, once per page.

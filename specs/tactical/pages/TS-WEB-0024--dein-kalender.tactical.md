@@ -65,12 +65,25 @@ the two photo-wanting blocks, so "never two photo sections in a row" holds.
 
 TS-WEB-0006 D3's resolution applies unchanged and fits this page:
 
-| Element | Treatment | Target | Marked |
+Rung and weight are two things (DEC-0082 amendment B): the **rung** is the
+`data-cta` marker, the **weight** is the button variant SRC-0014 gives the
+element. Only the marker is one-per-page, and only Pulse is visually exclusive.
+
+| Element | Rung | Weight | Target |
 | --- | --- | --- | --- |
-| order the calendar | **Pulse** (`himbeere-600`; design system: paid conversion only) | `/dein-kalender/bestellen` via the route facade | `data-cta="primary"` |
-| book a briefing | Secondary, adjacent, in the **same** block | **this page's contact section** — in-page, not outbound. The appointment URL occurs once on the page, in the section's first action row (DEC-0081 §3, TS-WEB-0016 D7) | `data-cta="equal-weight"` |
-| closing CTA | Primary on light/dark — **not** Pulse | same goal, target and label as the primary | not `data-cta="primary"` |
-| tier-2 CTA (D6) | Primary on light — **not** Pulse | `/dein-kalender/bestellen` | not `data-cta="primary"` |
+| order the calendar | `data-cta="primary"` | **Pulse** (`himbeere-600`; design system: paid conversion only) | `/dein-kalender/bestellen` via the route facade |
+| book a briefing | `data-cta="equal-weight"` — secondary, adjacent, in the **same** block | secondary | **this page's contact section** — in-page, not outbound. The appointment URL occurs once on the page, in the section's first action row (DEC-0081 §3, TS-WEB-0016 D7) |
+| closing CTA | **repeat** — no marker | Primary on light/dark — **not** Pulse | same goal, target and label as the primary |
+| tier-2 CTA (D6) | secondary — no marker | **Primary on light** — the strong button, **not** Pulse | `/dein-kalender/bestellen` |
+
+The last two rows were illegal under `FUN-WEB-0135` as it read until 2026-09-25
+— *"every action that is not the primary conversion … at secondary treatment"* —
+and they are legal now, for two different reasons. The closing CTA is the
+**repeat**, which the ladder's second rung has always given the primary
+treatment minus the marker. The tier-2 CTA is a **secondary-rung element with a
+strong weight**, which the ladder permits because the guide gives it one: it is
+the paid conversion at the moment the price is read (audit A4/A8, DEC-0082
+amendment B).
 
 Pulse therefore occurs **exactly once**, in `focus` — keeping both TS-WEB-0006 D3
 ("visually unrivalled") and the one-himbeere rule true without reasoning per
@@ -123,28 +136,47 @@ on.
 Facts come from `@schafe-vorm-fenster/offerings`; this spec references ids
 only.
 
-| # | Tier | Offering id | Price shown | CTAs |
-| --- | --- | --- | --- | --- |
-| 1 | your village | `community-calendar` | free — a permanence statement, not a price (TS-WEB-0006 D10) | open the calendar · publish dates (Quiet) |
-| 2 | under your name | `portalize-calendar` | 480 €/year, net (D8) | order (Primary) · briefing (Quiet) |
-| 3 | for a whole region | `portalize-enterprise` | "auf Anfrage" — no figure, no range, no "ab" | continue to `/deine-region` via the route facade (Quiet) |
+**Each tier carries exactly one CTA**, which is DEC-0082 §4's rule for an
+explanatory module, and the **weight differs by tier**:
 
-Tier 3 keeps **one** CTA, and it is the link onward: `/deine-region` owns
-the quote conversion (FUN-WEB-0016), and DEC-0082 §4 points a module's CTA at
-the deeper page's primary. The review's "the region tier gets a booking
-plus contact" is satisfied without a second CTA inside the tier — the
-contact section stands on this page below the closing CTA, and the consult
-CTA in `focus` already points at it.
+| # | Tier | Offering id | Price shown | Its one CTA | Weight |
+| --- | --- | --- | --- | --- | --- |
+| 1 | your village | `community-calendar` | free — a permanence statement, not a price (TS-WEB-0006 D10) | publish dates → `/mitmachen` via the route facade | **Quiet** |
+| 2 | under your name | `portalize-calendar` | 480 €/year, net (D8) | order → `/dein-kalender/bestellen` | **Primary on light** — the strong button (D3) |
+| 3 | for a whole region | `portalize-enterprise` | "auf Anfrage" — no figure, no range, no "ab" | continue to `/deine-region` via the route facade | Quiet |
+
+**Why one each, and why these.** DEC-0082 §4 fixes one CTA per explanatory
+module pointing at *"the deeper page's primary conversion"*. Tier 1 carried two
+— "open the calendar" and "publish dates" — and the first is a link into the app
+rather than a next step in the decision this block is about, so it goes; the one
+that stays is the one the rule names. Tier 2 carried "order" plus a briefing
+link, and the briefing is reachable through the contact section on this very
+page — the same argument this determination already made for tier 3.
+
+**The weight flip is deliberate and deviates from the review** (audit A4,
+2026-09-25). The review said twice that the free tier belongs at the bottom;
+the order is **free first**, as the IA, this determination and the design draft
+have it (`plan/reviews/2026-09-23/decisions.md` point 9). What the review was
+reaching for — that the paid tier should not be the quietest thing on the page —
+is answered by the weight instead of by the order: the paid tier takes the
+strong button, the free tier one quiet CTA. Recorded here so the next reader
+does not take the order for an oversight and re-flip it.
+
+Tier 3's CTA is the link onward: `/deine-region` owns the quote conversion
+(FUN-WEB-0016). The review's "the region tier gets a booking plus contact" is
+satisfied without a second CTA inside the tier — the contact section stands on
+this page below the closing CTA, and the consult CTA in `focus` already points
+at it.
 
 - The tiers are **not** an audience selector (TS-WEB-0018 D7, TS-WEB-0006 D8): one
   question answered three times. No tab, toggle or "which are you?" control.
 - No feature matrix — a tier is a short argument plus its CTA; the boundary
   is scale, not a checkmark grid.
-- Every tier CTA is secondary; none carries `data-cta="primary"`
-  (DEC-0082 §1). Tier 1's CTAs are links into the community calendar and the
-  publisher registration, **not** declared conversions of this page (D1) —
-  an in-body link to another page's goal is a link, not a declaration
-  (DEC-0082 §4).
+- Every tier CTA is on the **secondary rung**; none carries
+  `data-cta="primary"` (DEC-0082 §1). Tier 2's strong button is a weight, not a
+  rung (DEC-0082 amendment B). Tier 1's CTA is a link into the publisher
+  registration, **not** a declared conversion of this page (D1) — an in-body
+  link to another page's goal is a link, not a declaration (DEC-0082 §4).
 
 ### D7 — "Portalize" is named exactly once [FIXED: DEC-0052 §1, resolves Q-0012]
 
@@ -225,7 +257,7 @@ TS-WEB-0018 D8's budget constant is 0 for this route.
 | TS-WEB-0024-A5 | e2e | `data-block="contrast"` contains exactly four rows, each with a today cell and a with-your-calendar cell; no checkmark/cross column and no row beyond four. Neither column label nor any cell contains a product name or the words the avoid list carries for it ("das Produkt", "mit dem Produkt" — SRC-0017 CG-039). The criterion asserts the two cells and the absence, never their wording (DEC-0083, DEC-0106 §2). |
 | TS-WEB-0024-A6 | e2e | With the loader host blocked, `data-block="embed-demo"` still renders its copy and a working CTA, shows no empty frame and no error text, and the page height above the block is unchanged from the unblocked run (no reflow). |
 | TS-WEB-0024-A7 | e2e | With the loader allowed, the only third-party script request from this block goes to the allowlisted Portalize host; after full load `document.cookie` is empty and `localStorage`/`sessionStorage` hold no entry set by the embed. |
-| TS-WEB-0024-A8 | e2e | `data-block="tiers"` has exactly one heading element and exactly three tier elements in the order `community-calendar`, `portalize-calendar`, `portalize-enterprise` (readable from each tier's `data-offering`); each tier carries at most the CTAs D6 lists for it, none of them `data-cta="primary"`. Tier 3's CTA resolves to `/deine-region`. No tab, toggle, radio or `select` exists anywhere on the page. The heading's wording and form are not asserted (DEC-0083). |
+| TS-WEB-0024-A8 | e2e | `data-block="tiers"` has exactly one heading element and exactly three tier elements in the order `community-calendar`, `portalize-calendar`, `portalize-enterprise` (readable from each tier's `data-offering`); **each tier carries exactly one CTA** and none of them carries `data-cta="primary"`. Tier 1's resolves to `/mitmachen`, tier 2's to `/dein-kalender/bestellen`, tier 3's to `/deine-region`. Tier 2's CTA carries the strong button variant and tiers 1 and 3 the quiet one; no tier CTA uses the Pulse fill, which occurs only in `data-block="focus"` (A3). No tab, toggle, radio or `select` exists anywhere on the page. The heading's wording and form are not asserted (DEC-0083). |
 | TS-WEB-0024-A9 | e2e | The rendered text of the page contains the string "Portalize" exactly once (case-insensitive), and that occurrence is inside `data-block="tiers"`, inside the `portalize-calendar` tier, and not inside any heading, link label, `<title>`, meta description or JSON-LD. |
 | TS-WEB-0024-A10 | e2e | Exactly one numeric price token renders: 480, with currency, the annual interval and the net qualifier. The strings "4.000", "4000", "ab " and any second price figure do not occur in the DOM, in JSON-LD, in HTML comments or in `data-*` attributes. |
 | TS-WEB-0024-A11 | static | The rendered 480 value, its currency, interval and VAT flag come from the offering package import; no literal `480` appears in page or component source. The JSON-LD `Offer` reads from the same import. |
@@ -274,5 +306,5 @@ copy, not a form this spec fixes (D6, DEC-0083).
 | 3 | **TS-WEB-0018 D5 still reads "≤ 1, no floor"** (Q-0012 open) and **TS-WEB-0018 D8/A10 still budget one advertising sentence on this page** (Q-0006 open). DEC-0052 §1 and §3 resolved both; D7 and D11 here implement exactly 1 and exactly 0. TS-WEB-0018 must be tightened to match, or the specs disagree about a passing page. | TS-WEB-0018 owner / spec work |
 | 4 | **The two equal-weight conversions are not equally observable.** `request-product-briefing` emits on this page; `buy-calendar-licence` completes only on `/dein-kalender/bestellen`. Comparing the two arms needs the internal CTA click as a measured step — TS-WEB-0012 D7 deliberately has no such event. Decide: accept the asymmetry, or add one step event. | TS-WEB-0012 owner |
 | 5 | ~~**Tier-1 CTAs point at goals this page does not declare.**~~ **Closed by DEC-0082 §4:** an in-body link to another page's goal is a link, not a declaration, and TS-WEB-0006 D9's check reads declarations only. | — |
-| 6 | **Pulse at tier 2 — still open, and now only a visual question.** D3 gives the paid conversion its Pulse only in the focus block, so the tier-2 order button — the moment the price is read — is the quieter of the two. DEC-0082 fixes that exactly one element carries the primary marker; *which* one does is a weight judgement inside one page that needs the design owner, not a new rule. | design / TS-WEB-0006 owner |
+| 6 | ~~**Pulse at tier 2.**~~ **Closed by DEC-0082 amendment B and audit A4, 2026-09-25.** Pulse stays in the focus block and occurs once; the tier-2 order button takes the **strong button variant** instead, which is what the point was reaching for — the paid tier is no longer the quieter of the two at the moment the price is read, and the one-himbeere rule is untouched. Rung and weight are two things, and only the marker is one-per-page. | — |
 | 7 | **Sell-weighted proof is thin.** The `portalize-calendar` offering references four testimonials and no written-up reference case, and five proof records are still `usage_rights: unverified` (Q-0014). The 480 € page is where that shortage is most expensive. | content phase / jan-henrik |

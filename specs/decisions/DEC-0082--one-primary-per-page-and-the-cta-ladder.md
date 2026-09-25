@@ -109,3 +109,87 @@ page's goal is a link, not a declaration. That also settles
   and stays `TS-WEB-0024` open point 6, addressed to the design owner.
 - The contact section adds no primary anywhere (`DEC-0081` §2/§4), so a
   page's CTA count is unchanged by its presence.
+
+## Amendment 2026-09-25 — the missing rung, the weight/rank split, and the sender surface
+
+Three things the 2026-09-25 audit found, none of which changes the decision:
+one primary conversion per page still stands.
+
+### A. The ladder had a hole the requirement fell into
+
+`§1`'s table has three rungs and `FUN-WEB-0135` read *"For every action that is
+**not the primary conversion**, the website SHALL render it at secondary
+treatment."* The repeat is not the primary conversion. So the statement, read
+literally, put the closing CTA at secondary treatment — while the same table
+gives it *"same goal id, same target, same label as the primary, without the
+marker"*, which is the primary treatment minus the marker. Two artefacts of the
+same record contradicted each other.
+
+**The rung is: everything that is not the primary conversion *or its repeat* is
+secondary.** `FUN-WEB-0135`'s statement takes the missing clause, and
+`TS-WEB-0006 D3` says so where it defines "visually unrivalled".
+
+### B. Rung and weight are two things, and only the marker is exclusive
+
+`§2` already said it for one component — *"Filled is a weight, not a conversion
+rank"* — and the audit showed the rule needs it generally. `TS-WEB-0024 D3`
+gives the closing CTA and the tier-2 CTA the "Primary on light" **button
+variant** while neither carries `data-cta="primary"`. Under `§1` as written that
+looked like two illegal primaries; it is one repeat and one strong secondary.
+
+So:
+
+- **The rung is the marker.** `data-cta="primary"` is what "one per page" counts,
+  and it is what `TS-WEB-0006-A2` asserts. Exactly one, always.
+- **The weight is the design system's.** Which button variant an element takes
+  is `SRC-0014`'s, and a secondary-rung element may carry a strong variant where
+  the guide gives it one. `explain-module` and `contact-action-row` are the two
+  the guide fixes at `secondary` **by definition** and may not take `primary`
+  even as a weight (`specs/contracts/design-system-contract.md`); everything
+  else is a weight judgement inside one page.
+- **One thing stays visually exclusive, and it is not the marker: Pulse.**
+  `himbeere-600` is the paid conversion's fill and occurs **exactly once per
+  page** — `TS-WEB-0024 D3`'s focus block — which is also the one-`himbeere`
+  rhythm rule. That is what "visually unrivalled" now means in practice, and it
+  is checkable.
+
+`TS-WEB-0024`'s **open point 6 closes with this.** It asked whether Pulse should
+move to tier 2. It does not: Pulse stays in the focus block, and the tier-2
+button takes the strong variant instead — which is what the open point was
+actually reaching for, because tier 2 is a purchase goal in its own right and
+is where the price is read.
+
+### C. `/ueber-uns` is a named exception to the fold clause, and its repeat rung is empty
+
+`§6` of DEC-0081 gave the page `request-product-briefing` and required *"exactly
+one `data-cta="primary"` **above the fold**"* plus a repeat in the closing block.
+The reasoning it gave was about *"a Landrat, a journalist or a funder who
+**finishes reading** about the sender"* — and a sales ask in the first viewport
+is addressed to a reader who has not finished. The criterion contradicted its own
+argument.
+
+**The CTA is in the closing block only** (audit A3, 2026-09-25). Two consequences
+inside this record:
+
+- **The fold clause of `TS-WEB-0006 D3` takes a named exception for
+  `/ueber-uns`**, and for that route alone. It is the same shape as DEC-0084 §3's
+  live-module exemption and it is granted for the same kind of reason: the rule's
+  own purpose is not served here. A primary conversion above the fold exists so
+  that a visitor who arrived to convert can. A provenance page's visitor arrived
+  to judge.
+- **The repeat rung is empty on that page.** `§1` says "exactly one per page",
+  and there is nothing to repeat below a CTA that is already last. The rung
+  reads **exactly one per page, or none where the primary is itself the closing
+  CTA** — which is `/ueber-uns` today and no other route.
+
+`/ueber-uns/archiv` is unaffected: it declares no conversion and takes
+`TS-WEB-0006 D6`'s merged three-job block.
+
+### What is unchanged
+
+`§1`'s three rungs, `§3`'s two-CTA hero, `§4`'s one CTA per explanatory module
+pointing at the deeper page's primary, and the correction `§2` demanded of the
+design guide — which has since landed in `SRC-0014` and in the design-system
+contract. `FUN-WEB-0003` reaching `S3` is unchanged, and nothing moved off
+`DRAFT`.
+

@@ -115,6 +115,15 @@ explicitly).
   source defines the fold; TS-WEB-0002 fixes 320 px only as the
   no-horizontal-scroll floor].
 
+  **One named exception: `/ueber-uns`** [FIXED: DEC-0082 amendment C,
+  2026-09-25]. Its primary conversion is the **closing block's** CTA and the
+  first viewport carries the origin story, not a sales ask. The rule's purpose
+  is not served there and that is the whole reason: a primary above the fold
+  exists so a visitor who arrived to convert can, and a provenance page's
+  visitor arrived to judge — DEC-0081 §6's own argument is about the reader who
+  *finishes*. The exception is that route and no other, the same shape as
+  DEC-0084 §3's live-module exemption.
+
   There is a third reference viewport, **428 × 926** — the large phone
   that `breakpoint.sm` exists for (TS-WEB-0017 D2b). It is deliberately *not*
   a fold viewport: it is strictly more generous than 360 × 640 in both
@@ -124,17 +133,26 @@ explicitly).
   layout identity and horizontal scroll (TS-WEB-0017 A8, A9) — because that
   is where the token scale is dense and where an unnoticed second layout
   would otherwise hide.
-- **Visually unrivalled** = no other element on the page uses the primary
-  treatment; secondary actions use the secondary treatment and sit below
-  or beside, never above, the primary one.
-- **The ladder, in full** [FIXED: DEC-0082]. Three rungs, and everything on
-  a page sits on one of them:
+- **Visually unrivalled** = exactly one element carries the primary **marker**,
+  and the Pulse fill occurs at most once on the page. Secondary actions sit
+  below or beside, never above, the primary one. The marker is the rank; the
+  button *variant* is the design system's, and a secondary-rung element may
+  carry a strong variant where SRC-0014 gives it one — the tier-2 order button
+  does (DEC-0082 amendment B). What no other element may take is the marker,
+  and what no second element may take is Pulse.
+- **The ladder, in full** [FIXED: DEC-0082 as amended 2026-09-25]. Three rungs,
+  and everything on a page sits on one of them:
 
   | Rung | Marker | How many | What occupies it |
   | --- | --- | --- | --- |
   | primary | `data-cta="primary"` | exactly one per page | the page's own conversion |
-  | repeat | none | exactly one per page | the closing CTA of D6 — same goal id, target and label, without the marker |
-  | secondary | `data-cta="secondary"` / `="equal-weight"` | any number | every other action: module and scene CTAs, tier CTAs, context-band entries, every row of the contact section |
+  | repeat | none | exactly one per page — **or none, where the primary is itself the closing CTA** (`/ueber-uns`, DEC-0082 amendment C) | the closing CTA of D6 — same goal id, target and label, without the marker |
+  | secondary | `data-cta="secondary"` / `="equal-weight"` | any number | **everything that is neither the primary conversion nor its repeat** (`FUN-WEB-0135`): module and scene CTAs, tier CTAs, context-band entries, every row of the contact section |
+
+  The third rung's wording is the correction of 2026-09-25. It read "every other
+  action", and `FUN-WEB-0135` read "not the primary conversion" — which put the
+  repeat, an element this very table gives the primary treatment, on the
+  secondary rung.
 
   **Every explanatory module carries exactly one CTA, at secondary
   treatment, pointing at the deeper page's primary conversion.** That is
@@ -330,7 +348,7 @@ the promise is removed rather than softened.
 | --- | --- | --- |
 | TS-WEB-0006-A1 | static | Every route has a `page.meta.ts` with all D1 fields; `focusJob` is one of the four; conversion IDs resolve against the `go-to-market-os` conversion goals; `audiences` non-empty and ordered; ≥ 1 live module, each with an empty state. |
 | TS-WEB-0006-A2 | static | Exactly one `data-cta="primary"` per rendered page; an `equalWeightConversion`, where declared, renders with the secondary treatment in the same block. |
-| TS-WEB-0006-A3 | e2e | At 360 × 640 and 1280 × 800 the primary conversion is fully visible without scrolling on every page that declares one. |
+| TS-WEB-0006-A3 | e2e | At 360 × 640 and 1280 × 800 the primary conversion is fully visible without scrolling on every page that declares one, **except `/ueber-uns`**, where D3's named exception puts it in the closing block and the first viewport carries no `data-cta` at all (DEC-0082 amendment C). |
 | TS-WEB-0006-A4 | e2e | On every page whose focus job is "know what is on", the first screen contains the place-search or live-dates module and its primary conversion is not a link to another page. |
 | TS-WEB-0006-A5 | e2e | From every page, each of the four jobs is reachable in ≤ 1 click (header and context band targets resolve inside the TS-WEB-0004 D1 inventory). |
 | TS-WEB-0006-A6 | e2e | Every page renders exactly one context band, naming exactly the three non-focus jobs, in DOM order after the last argument block and before the closing block. |

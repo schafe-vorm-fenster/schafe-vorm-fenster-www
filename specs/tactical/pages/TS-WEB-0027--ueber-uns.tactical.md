@@ -45,7 +45,7 @@ components, photo surface, badges, ratios, page rhythm →
 | Field | Value |
 | --- | --- |
 | `focusJob` | `understand-who-is-behind-it` |
-| `primaryConversion` | `request-product-briefing` (DEC-0081 §6) — **unchanged by the 2026-09-24 amendment to DEC-0052 §4** — one `data-cta="primary"` above the fold, targeting this page's contact section; the outbound appointment link is the section's first row, and the event fires there (TS-WEB-0016 D7/D12) |
+| `primaryConversion` | `request-product-briefing` (DEC-0081 §6) — **unchanged by the 2026-09-24 amendment to DEC-0052 §4**. One `data-cta="primary"`, in the **closing block only**, targeting this page's contact section; the outbound appointment link is the section's first row, and the event fires there (TS-WEB-0016 D7/D12). **Not above the fold**: this route is TS-WEB-0006 D3's one named exception to the fold clause, and the repeat rung is empty because the primary is already the last block (DEC-0082 amendment C, audit A3 2026-09-25) |
 | `equalWeightConversion` | — |
 | `audiences` | `municipalities, institutions, counties, actors, rural-residents` — SRC-0003's "1 municipalities and funders · 2 everyone" resolved against `@schafe-vorm-fenster/audiences` [PROPOSED] |
 | `liveModules` | `[]` — the sender-surface exemption of TS-WEB-0006 D1 (DEC-0084 §3). The operating-counter module is deleted; see D4 |
@@ -55,7 +55,7 @@ components, photo surface, badges, ratios, page rhythm →
 
 | # | Block | Type | Carries |
 | --- | --- | --- | --- |
-| 1 | Origin | photo surface, `ratio-hero`, the one neutral scrim (DEC-0105 §1 — the ink and violet variants are retired) | founder photo · h1 · the village argument (D3) · the primary CTA into the contact section |
+| 1 | Origin | photo surface, `ratio-hero`, the one neutral scrim (DEC-0105 §1 — the ink and violet variants are retired) | founder photo · h1 · the village argument (D3). **No CTA** — the ask is the closing block's (D1) |
 | 2 | Proof stream | colour, cards at `ratio-proof` | 7 elements incl. the one empty slot (D5) |
 | 3 | Archive | colour, tight | exactly one link to `/ueber-uns/archiv` (D6) |
 | 4 | Team | colour, portraits at `ratio-portrait` | profiles from `@schafe-vorm-fenster/people` (D7) |
@@ -100,8 +100,12 @@ colour section, so no two photo sections stand in a row.
   explains anything. The direction is the need, not the constraint
   (DEC-0084 §2). Any figure for the village's size is content, in the
   artefact — about 280 inhabitants, not a number this spec restates.
-- **The block carries the page's primary CTA** (D1): one
-  `data-cta="primary"` targeting the contact section of this page.
+- **The block carries no CTA at all** (D1, DEC-0082 amendment C). The page's
+  one `data-cta="primary"` is the **closing block's**, targeting the contact
+  section of this page. The first viewport carries the origin story and no sales
+  ask: DEC-0081 §6 argued the conversion from *"a Landrat, a journalist or a
+  funder who **finishes reading** about the sender"*, and a CTA above the fold
+  is addressed to a reader who has not (audit A3, 2026-09-25).
 - The honorary-mayor sentence is a **claim with a proof slot**, backed by
   `founder-former-volunteer-mayor` (`usage_rights: cleared`). It is the
   one inline proof outside the stream.
@@ -173,7 +177,7 @@ a conversion of its own; DEC-0081 §6 spent that reason. The amendment of
 
 | State the reader is in | Ask | Rung |
 | --- | --- | --- |
-| ready to talk | the booking | primary (D1) |
+| ready to talk | the booking | primary (D1) — in the closing block, not above the fold |
 | still looking | the newsletter | secondary, here |
 
 They do not compete, because they are not addressed to the same reader.
@@ -248,14 +252,14 @@ assigns types per page type and its A5 checks "no more".
 | --- | --- | --- |
 | TS-WEB-0027-A1 | static | `page.meta.ts` of `/ueber-uns` matches D1: `focusJob` `understand-who-is-behind-it`, `primaryConversion` `request-product-briefing`, audiences non-empty and ordered, `liveModules` **empty** (the route is one of the three the TS-WEB-0006 D1 exemption names), 7 proof slots. |
 | TS-WEB-0027-A2 | e2e | DOM order of the blocks is exactly D2, with the contact section after the closing CTA and the global footer last; exactly one photo section exists; no two photo sections are adjacent. No counter, no year figure and no place count renders anywhere on the page (D4). |
-| TS-WEB-0027-A3 | e2e | At 1280 × 800 the first viewport contains exactly one `h1`, the honorary-mayor claim with its proof element, and the primary CTA; the first proof element of the stream is reached within the second viewport height (≤ 1 further screen of scrolling). The criterion asserts the elements and their position, never their wording (DEC-0083). |
+| TS-WEB-0027-A3 | e2e | At 1280 × 800 the first viewport contains exactly one `h1` and the honorary-mayor claim with its proof element, and **no element carrying any `data-cta` value**; the first proof element of the stream is reached within the second viewport height (≤ 1 further screen of scrolling). The criterion asserts the elements, their position and the CTA's absence, never their wording (DEC-0083). It required the primary CTA in the first viewport until 2026-09-25, against DEC-0081 §6's own reasoning (DEC-0082 amendment C). |
 | TS-WEB-0027-A4 | e2e | The origin block contains the free-calendar promise and exactly one price token, and that token's value, currency and interval equal `@schafe-vorm-fenster/offerings`. No sentence in the block derives the price from affordability and none mentions a salesperson (DEC-0084 §2); no figure for the village's size is hard-coded in page or component source. |
 | TS-WEB-0027-A5 | e2e | The stream renders at most 7 elements; every rendered proof id resolves to an element with `usage_rights: cleared`; no `unverified` id appears anywhere in the served HTML. |
 | TS-WEB-0027-A6 | e2e | Exactly one empty slot is visible. It shows the hatch, a label and one sentence; it contains no image; it is unchanged 5 s after load; it is present in the accessibility tree with its text; it carries no animation. |
 | TS-WEB-0027-A7 | integration | Fixture with one cleared `type: testimonial` element: the reserved slot is filled and **no** empty slot renders. Fixture with none: 6 filled + 1 empty, and the 7th position is not backfilled by another type. |
 | TS-WEB-0027-A8 | e2e | The archive block has exactly one outgoing link, target `/ueber-uns/archiv`, and zero list entries, thumbnails or counts. |
 | TS-WEB-0027-A9 | e2e | Every person in `@schafe-vorm-fenster/people` appears once, in a 4:5 media box; a person without a portrait shows the "Foto gesucht" surface — never an empty box, never omitted. |
-| TS-WEB-0027-A10 | e2e | The newsletter block stands after the team block and before the context band, and carries no `data-cta="primary"`; the page contains exactly one `data-cta="primary"`, in block 1, resolving to this page's contact section; the last block is the closing CTA with the same goal id, target and label, and the contact section follows it (TS-WEB-0006-A17). |
+| TS-WEB-0027-A10 | e2e | The newsletter block stands after the team block and before the context band, and carries no `data-cta="primary"`; the page contains exactly one `data-cta="primary"` and it is **the closing CTA**, resolving to this page's contact section, with no CTA in block 1 and no second repeat below it; the contact section follows it (TS-WEB-0006-A17). |
 | TS-WEB-0027-A11 | e2e | Stage 0 and stage 1 (geo set) renders have identical block order and both contain the empty slot; only the selection and order of the six filled elements differ. |
 | TS-WEB-0027-A12 | static | Structured data on the page: exactly one `Organization` reference by `@id`, zero `Person` nodes, zero `ItemList`. |
 | TS-WEB-0027-A13 | integration | Loading the page, clicking the archive link, and clicking the primary or the closing CTA emit no conversion event. On the contact section's first action row, exactly one `request-product-briefing` **and** exactly one `make-contact` are emitted, both carrying `/ueber-uns` as the route; on rows 2–4, exactly one `make-contact` with the row's channel and no `request-product-briefing`. No goal id is emitted twice for one click. |
