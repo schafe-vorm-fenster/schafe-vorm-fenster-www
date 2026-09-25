@@ -60,7 +60,7 @@
     "@playwright/test": "1.63.0",
     "@schafe-vorm-fenster/audiences": "^0.3.3",
     "@schafe-vorm-fenster/brand-identity": "^0.1.4",
-    "@schafe-vorm-fenster/goals": "^0.3.0",
+    "@schafe-vorm-fenster/goals": "^0.3.3",
     "@schafe-vorm-fenster/media-echo": "^0.3.3",
     "@schafe-vorm-fenster/messaging": "^0.1.0",
     "@schafe-vorm-fenster/offerings": "^0.3.3",

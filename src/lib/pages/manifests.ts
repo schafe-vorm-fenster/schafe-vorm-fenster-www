@@ -93,6 +93,14 @@ export const UNCARRIED_GOALS: Readonly<Partial<Record<ConversionGoalId, string>>
  */
 export const CARRIED_BY_CHROME: readonly ConversionGoalId[] = Object.freeze([
   "register-as-publisher",
+  // The two standing asks. `make-contact` is the contact section above the
+  // footer (DEC-0081), `subscribe-to-newsletter` the newsletter block; both
+  // stand on every page beneath whatever that page's own conversion is, and
+  // the hub says the same from its side — `channel-matrix.md`, "Two Standing
+  // Asks That Are Not Rows": a matrix row asserts a *primary* goal for one
+  // audience on one surface, and these two are primary for none.
+  "make-contact",
+  "subscribe-to-newsletter",
 ]);
 
 /**

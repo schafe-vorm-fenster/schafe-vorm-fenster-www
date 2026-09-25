@@ -67,7 +67,7 @@ export function jobRoute(job: JobId): RouteId {
 }
 
 /**
- * The conversion goals of `@schafe-vorm-fenster/goals@0.3.0`
+ * The conversion goals of `@schafe-vorm-fenster/goals@0.3.3`
  * (`conversion-goals/*.conversion-goal.md`), as a closed union. The test
  * fails if the package and this list disagree in either direction.
  */
@@ -76,6 +76,7 @@ export const CONVERSION_GOAL_IDS = [
   "direct-contact-qualified-leads",
   "linkedin-company-trust",
   "linkedin-personal-awareness",
+  "make-contact",
   "order-promotion-material",
   "publish-events-regularly",
   "publish-first-event",
@@ -84,6 +85,7 @@ export const CONVERSION_GOAL_IDS = [
   "request-licence-quote",
   "request-product-briefing",
   "save-calendar-to-homescreen",
+  "subscribe-to-newsletter",
   "workshop-signup-or-trial",
 ] as const;
 
