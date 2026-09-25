@@ -39,6 +39,27 @@
  * mean on 23 of 30 measured positions against paper's 11 of 30 (median 8.2:1
  * against 2.2:1). Hero photographs open on sky far more often than on
  * anything dark, and sky is exactly where a paper well disappears.
+ *
+ * ### The blur primitive (DEC-0105 §4, SRC-0014 §The blur primitive)
+ *
+ * The solid ink well is now the **declared fallback**, not the treatment. A
+ * solid disc solves contrast by hiding the picture behind it; the design
+ * system's answer is a backdrop blur on the control's own shape — the 44 px
+ * wells and the 40 px mark, never a bar — with `scrim-38` above the blurred
+ * area so the paper glyph reads against a measured ground rather than
+ * whatever the photograph happens to be. `backdrop-filter` is the only blur
+ * in the system and this is the only component that may declare it.
+ *
+ * The treatment is two custom properties the items read — `--header-well`
+ * (the tint) and `--header-blur` (the filter) — and three conditions select
+ * the fallback, each a real one: no `@supports` match; `prefers-reduced-
+ * transparency: reduce` (a blur is a transparency effect and this is the
+ * preference that asks for it to stop; TS-WEB-0002 D4); and the performance
+ * budget — `backdrop-filter` forces a compositor layer over a sticky element
+ * above the page's LCP image, so the treatment is legal only while the route
+ * stays inside TS-WEB-0003 D1 with it applied. That third condition is a
+ * measured-run judgement, not a media query: a route that falls out takes
+ * the fallback by declaration (DEC-0116).
  */
 
 .header {
@@ -58,6 +79,7 @@
    * be taken back in the `scripting: none` branch.
    */
   --header-well: transparent;
+  --header-blur: none;
   --header-label: var(--color-neutral-text2);
   --header-label-hover: var(--color-neutral-surface);
   --header-current-fill: var(--color-neutral-surface2);
@@ -111,7 +133,9 @@
  * turning solid restores the block above without a second override.
  */
 .header[data-over-hero="true"][data-solid="false"] {
+  /* The floor: the solid ink well, paper glyph, 16.56:1 (DEC-0105 §4). */
   --header-well: var(--color-neutral-ink);
+  --header-blur: none;
   --header-label: var(--color-neutral-paper);
   --header-label-hover: color-mix(in srgb, var(--color-neutral-paper) 16%, transparent);
   --header-current-fill: var(--color-neutral-paper);
@@ -129,6 +153,29 @@
    * not move when it comes back on the solid ground.
    */
   --header-wordmark: hidden;
+}
+
+/*
+ * The blur primitive, selected by capability and never by user agent: the
+ * `scrim-38` tint over `blur(12px) saturate(120%)`, on the 44 px wells and
+ * the 40 px mark (`logo.module.css` reads the same two properties). The
+ * declaration order is the fallback order — the solid well above is what a
+ * browser without `backdrop-filter` keeps, and the reduced-transparency
+ * query inside puts it back for a visitor who asked for no transparency
+ * effects.
+ */
+@supports (backdrop-filter: blur(12px)) {
+  .header[data-over-hero="true"][data-solid="false"] {
+    --header-well: var(--color-scrim-38);
+    --header-blur: blur(12px) saturate(120%);
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .header[data-over-hero="true"][data-solid="false"] {
+      --header-well: var(--color-neutral-ink);
+      --header-blur: none;
+    }
+  }
 }
 
 .header[data-over-hero="true"][data-solid="true"] {
@@ -159,6 +206,7 @@
    */
   .header[data-over-hero="true"][data-solid="false"] {
     --header-well: transparent;
+    --header-blur: none;
     --header-label: var(--color-neutral-text2);
     --header-label-hover: var(--color-neutral-surface);
     --header-current-fill: var(--color-neutral-surface2);
@@ -227,6 +275,7 @@
  * the row does not move when the header turns solid).
  */
 .header .list {
+  backdrop-filter: var(--header-blur);
   background: var(--header-well);
   border-radius: var(--radius-pill);
   display: flex;
@@ -307,6 +356,7 @@
  */
 .header .toggle {
   align-items: center;
+  backdrop-filter: var(--header-blur);
   background: var(--header-well);
   border: 0;
   border-radius: var(--radius-pill);
@@ -397,6 +447,7 @@
   /* The overlay is its own ink surface, so the close control needs no well
      of its own — and the brand inside it keeps its wordmark. */
   --header-well: transparent;
+  --header-blur: none;
   --header-wordmark: visible;
   background: var(--color-neutral-ink);
   /* The overlay scrolls on its own; a scroll that reaches its end must not

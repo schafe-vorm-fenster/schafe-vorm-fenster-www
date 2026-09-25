@@ -60,6 +60,8 @@ const computed = (page: import("@playwright/test").Page, value: string) =>
   }, value);
 
 const INK = "var(--color-neutral-ink)";
+/** The blur primitive's tint over a hero photograph (DEC-0105 §4). */
+const SCRIM_38 = "var(--color-scrim-38)";
 const PAPER = "var(--color-neutral-paper)";
 const LABEL_INK = "var(--color-neutral-text2)";
 const NOTHING = "transparent";
@@ -291,13 +293,16 @@ test.describe("TS-WEB-0004-A8: completely transparent over the hero, wells inste
       const style = getComputedStyle(node);
       const box = node.getBoundingClientRect();
       return {
+        blurs: CSS.supports("backdrop-filter", "blur(12px)"),
         fill: style.backgroundColor,
         radius: style.borderTopLeftRadius,
         size: Math.min(box.width, box.height),
       };
     });
-    // `ink`, opaque: the stripes' 16.56:1 is a token pair, not a photograph.
-    expect(well.fill).toBe(await computed(page, INK));
+    // The blur primitive's tint (`scrim-38` over `blur(12px)`) where the
+    // browser can do it, the opaque `ink` fallback where it cannot — DEC-0105
+    // §4; `e2e/photo-surface.spec.ts` asserts the filter itself.
+    expect(well.fill).toBe(await computed(page, well.blurs ? SCRIM_38 : INK));
     expect(Number.parseFloat(well.radius)).toBeGreaterThanOrEqual(22);
     expect(well.size).toBeGreaterThanOrEqual(44);
 
@@ -312,7 +317,8 @@ test.describe("TS-WEB-0004-A8: completely transparent over the hero, wells inste
     await page.goto("/dein-ort");
 
     const list = header(page).getByRole("navigation", { name: "Startseite" }).locator("ul");
-    await expectColor(page, list, "background-color", INK);
+    const blurs = await page.evaluate(() => CSS.supports("backdrop-filter", "blur(12px)"));
+    await expectColor(page, list, "background-color", blurs ? SCRIM_38 : INK);
 
     const current = header(page)
       .getByRole("navigation", { name: "Startseite" })

@@ -331,6 +331,7 @@ export default async function Page({
           // dictionary — without the page's language it marks an English
           // page in German.
           locale={locale}
+          focal={heroImage?.focal}
           notDepicting={heroImage?.notDepicting}
           placeholderId={heroImage?.placeholderId}
           src={heroImage?.src}

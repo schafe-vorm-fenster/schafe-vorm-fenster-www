@@ -518,6 +518,20 @@ export const ImageEntrySchema = z
      * It is the only image that may be `priority`.
      */
     lcp: z.boolean().optional(),
+    /**
+     * The motif's focal point, as percentages of the frame — what the
+     * surface's `background-position` takes (DEC-0105 §2: the crop follows
+     * the motif's declared focal point, never `center` by default; for a
+     * sky-heavy motif `y` sits at or above 40 so the sky crops away and the
+     * subject lands above the scrim's opaque band). A content-side value,
+     * set per motif; absent, `photo-surface` defaults to `50% 40%`.
+     */
+    focal: z
+      .strictObject({
+        x: z.number().min(0).max(100),
+        y: z.number().min(0).max(100),
+      })
+      .optional(),
 
     // ── Written back by `pnpm images:generate`, never by hand ──────────────
     /** Site-absolute path of the rendition, e.g. `/images/generated/home-hero.webp`. */
