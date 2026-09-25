@@ -198,10 +198,12 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
       "Warum es heute hakt",
       "So funktioniert es",
       "Was gerade ansteht",
-      "Wer den Kalender nutzt",
     ]) {
       await expect(page.getByText(kicker, { exact: true })).toBeVisible();
     }
+    // The proof kicker reads the deprecated `evidence` alias, which resolves
+    // to "Was andere sagen" (DEC-0120 §5) — the same words as the block's h2.
+    await expect(page.getByText("Was andere sagen", { exact: true }).first()).toBeVisible();
   });
 
   /**

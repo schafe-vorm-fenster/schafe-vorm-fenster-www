@@ -177,7 +177,7 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
       "Warum es heute hakt",
       "So funktioniert es",
       "Was es kostet",
-      "Wer den Kalender nutzt",
+      "Was andere sagen",
       "Wie wir arbeiten",
     ]) {
       await expect(page.getByText(kicker, { exact: true })).toBeVisible();

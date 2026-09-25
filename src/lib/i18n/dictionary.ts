@@ -85,7 +85,7 @@ export interface Dictionary {
      * review R-home-35). **Placeholder** — the two things are the review's
      * own list, the sentence is nobody's (DEC-0120, state/open.md row 217);
      * the block already carries `data-mock="true"` and is withheld behind a
-     * null constant until a sending system exists (T-10, DEC-0122).
+     * null constant until a sending system exists (T-10's own record).
      */
     heading: string;
     emailLabel: string;
@@ -182,9 +182,11 @@ export interface Dictionary {
     customers: string;
     /**
      * @deprecated Split into `othersSay` (press) and `customers` (customer
-     * proof) by DEC-0120. Reads as `customers` so no page renders the
-     * avoid-list kicker; each page picks the explicit key when its proof
-     * block is next touched.
+     * proof) by DEC-0120. Resolves to the owner's `othersSay` wording (copy
+     * guide :516), never to the `customers` placeholder, so a page that
+     * still reads it renders cleared copy unmarked; each page picks the
+     * explicit key when its proof block is next touched, and marks the
+     * block `data-demo="true"` if that key is `customers`.
      */
     evidence: string;
     /** Price and scope. */
@@ -410,7 +412,7 @@ const de: Dictionary = {
     objection: "Warum es heute hakt",
     othersSay: "Was andere sagen",
     customers: "Wer den Kalender nutzt",
-    evidence: "Wer den Kalender nutzt",
+    evidence: "Was andere sagen",
     price: "Was es kostet",
     trust: "Wie wir arbeiten",
     origin: "Die Geschichte",
@@ -549,7 +551,7 @@ const en: Dictionary = {
     objection: "Why it snags today",
     othersSay: "What others say",
     customers: "Who uses the calendar",
-    evidence: "Who uses the calendar",
+    evidence: "What others say",
     price: "What it costs",
     trust: "How we work",
     origin: "The story",

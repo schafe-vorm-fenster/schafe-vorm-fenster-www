@@ -93,10 +93,16 @@ a sentence nobody wrote in the markup, never in a word the visitor reads.
    `othersSay` ("Was andere sagen", press and appearances) and `customers`
    (customer proof), and `customers` is a **placeholder** because the copy
    guide names no replacement. `evidence` stays in the interface as a
-   deprecated alias of `customers`, so the five pages that read it compile
-   and none renders the avoid-list word; each page picks the explicit key
-   when its proof block is next touched — the pages belong to other tasks
-   and are not edited here. `newsletter.heading` names two of the review's
+   deprecated alias that resolves to the `othersSay` wording — owner copy
+   (copy guide `:516`), never the placeholder — so the five pages that read
+   it compile, none renders the avoid-list word and none renders an unmarked
+   placeholder; the alias is right for the press streams on `/` and
+   `/ueber-uns` and a generic over the customer blocks on `/mitmachen`,
+   `/dein-kalender` and `/deine-region`. Only a page that chooses
+   `customers` explicitly renders the placeholder, and it marks the block
+   `data-demo="true"`; each page picks its key when its proof block is next
+   touched — the pages belong to other tasks and are not edited here.
+   `newsletter.heading` names two of the review's
    three concrete things ("Neue Funktionen und aktuelle Angebote"; CG-029
    title ≤ 40) as a placeholder; the block is `data-mock` already and is
    withheld behind a null constant until a sending system exists (T-10's
@@ -108,13 +114,25 @@ a sentence nobody wrote in the markup, never in a word the visitor reads.
 
 - The band on a page that passes its slot (`PageFrame`'s new `contextBand`
   prop) shows that page's blurbs; a page that passes only the heading shows
-  the registry's. Today the two are the same words, so no page changes its
-  wording by this record — the pages' owners wire the slot and write the
-  statements (`state/open.md` rows 215–216).
+  the registry's. Today no page passes its slot, so every band shows the
+  registry's words. The two are not the same words for the publish entry:
+  the slot item on `/` (`content/pages/home/de.md:251`) is a question ("Du
+  willst Termine für deinen Verein, deine Feuerwehr oder deine Gemeinde
+  eintragen?"), while the registry carries the owner's CG-030 statement.
+  Wiring `contextBand={slot}` as the slot stands would demote that row from
+  an unmarked statement to a `data-demo` question, so a page owner replaces
+  the slot's publish item by the CG-030 statement before wiring the slot
+  (`state/open.md` rows 215–216).
+- `app/[lang]/_page-frame.tsx` (T-10's) gained more than the heading
+  pass-through the task foresaw: an optional `contextBand?: ContentSlot`
+  prop handed on to `ContextBand`, with the band heading falling back to
+  that slot's first field. Nothing else in the file changed; T-10's owner
+  keeps it.
 - Placeholders this record ships, each `data-demo="true"` in the markup and a
   row in `state/open.md`: the three question blurbs per language (rows 215,
-  216), the German invitation (row 219), `kickers.customers` (row 218) and
-  `newsletter.heading` (row 217).
+  216), the German invitation (row 219), `kickers.customers` (row 218;
+  nothing renders it until a page picks the key) and `newsletter.heading`
+  (row 217; withheld with the block).
 - Spec follow-ups outside this task's ownership: `TS-WEB-0006 D5`'s Phrasing
   row (menu with blurb, the slot as source, the registry as fallback) and
   `TS-WEB-0007 D5`'s `blurb` field on the `context-band` slot type; CG-030's
@@ -124,4 +142,7 @@ a sentence nobody wrote in the markup, never in a word the visitor reads.
 - `e2e/site-header.spec.ts`, `e2e/pages/mitmachen.spec.ts`,
   `e2e/pages/dein-kalender.spec.ts` and `e2e/content-compliance.spec.ts` pin
   the replaced strings and were edited by one string each so the suite
-  states the tree; their owners keep them.
+  states the tree; their owners keep them. `e2e/context-band.spec.ts` and
+  `e2e/language-switch.spec.ts` are new, written for this record's two
+  components, and belong with them although `e2e/` is outside the task's
+  listed files.
