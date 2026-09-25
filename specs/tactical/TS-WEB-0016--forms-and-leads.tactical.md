@@ -4,9 +4,9 @@ id: TS-WEB-0016
 kind: interaction
 status: DRAFT
 version: 0.1.0
-implements: [FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082, FUN-WEB-0091, FUN-WEB-0092, FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083, FUN-WEB-0188, FUN-WEB-0189, CON-WEB-0084, FUN-WEB-0095, FUN-WEB-0186, FUN-WEB-0190, FUN-WEB-0191, CON-WEB-0085, CON-WEB-0086]
+implements: [FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082, FUN-WEB-0091, FUN-WEB-0092, FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083, FUN-WEB-0188, FUN-WEB-0189, CON-WEB-0084, FUN-WEB-0095, FUN-WEB-0186, FUN-WEB-0190, FUN-WEB-0191, CON-WEB-0085, CON-WEB-0086, FUN-WEB-0205]
 sources: [SRC-0003, SRC-0008, SRC-0011]
-decisions: [DEC-0004, DEC-0009, DEC-0010, DEC-0011, DEC-0013, DEC-0014, DEC-0015, DEC-0025, DEC-0026, DEC-0030, DEC-0051, DEC-0052, DEC-0081, DEC-0082, DEC-0083]
+decisions: [DEC-0004, DEC-0009, DEC-0010, DEC-0011, DEC-0013, DEC-0014, DEC-0015, DEC-0025, DEC-0026, DEC-0030, DEC-0051, DEC-0052, DEC-0081, DEC-0082, DEC-0083, DEC-0104]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -70,10 +70,17 @@ the website receives none of them.
 | S5 | Newsletter signup | footer on every page (FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061), plus inline on `/ueber-uns` at secondary treatment (DEC-0052 §4 as amended, TS-WEB-0027 D8) | **two routes** — WhatsApp (preferred) and e-mail with double opt-in (D10) | envoy for the e-mail route (DEC-0051); **nothing for the WhatsApp route** (D10) | `subscribe-to-newsletter` |
 | S6 | External media preview | `/ueber-uns/archiv`, inline proof anywhere | own preview + outbound link | none (static link) | none |
 | S7 | Registration handover | `/mitmachen/registrieren` | handover to the app | app (DEC-0029) | `register-as-publisher` → `publish-first-event` |
+| S8 | Registration form, interim | `/start` | **the Google Form, visibly embedded** (D15) — the one exception to DEC-0013, and the only registration that works until the widget or the app entry lands | Google | none — the submission is not observable to the website |
 
 S7 is listed for completeness of the "hands them onward" set and is
 specified elsewhere (DEC-0029); it is not a form and is not claimed by
 this spec's `implements`.
+
+**S7 and S8 are the two halves of registering, and conflating them is what
+the audit caught.** S7 is the three-step flow that hands a publisher to the
+app and takes no field at all (`TS-WEB-0023 D2`, `D9`); S8 is the form that
+actually receives a registration today. Neither replaces the other, and the
+embed belongs to S8 alone.
 
 S1 and S3 are one surface seen twice: the section is where a visitor
 reaches a person, and the booking is its first row. They are kept as two
@@ -180,13 +187,20 @@ decisions already taken:
 
 | Rule | Why |
 | --- | --- |
-| **Linked, never embedded.** The fallback renders an outbound link, not an iframe. Today's `/start` embeds the form; the relaunch must not | DEC-0013 / TS-WEB-0013: no third-party embed on any page. An embedded Google Form would load Google into the page for every visitor who merely *sees* the surface |
-| **The link points at our own path `/start`**, which redirects to the form — never at the `docs.google.com` URL | The target changes when envoy lands. One redirect we control means the swap touches one route, not every lead surface. `/start` joins the TS-WEB-0004 D1 route inventory as a redirect-only path |
-| **The visitor is told where the link goes** before following it: it names Google as the recipient and carries the outbound marking of TS-WEB-0016 D9 | The form submits to a third country. A visitor must be able to decline it — which is only possible if the fallback also still shows the email address beside it |
+| **Every lead surface links, and embeds nothing.** The fallback renders an outbound link, not an iframe | DEC-0013 / TS-WEB-0013: no third-party embed. An embedded Google Form would load Google into the page for every visitor who merely *sees* the surface — and every one of these surfaces is a section of a page she came to for something else |
+| **The link points at our own path `/start`** — never at the `docs.google.com` URL | The target changes when envoy lands. One indirection we control means the swap touches one route, not every lead surface. `/start` is in the TS-WEB-0004 D1 route inventory |
+| **The visitor is told where the link goes** before following it: it names Google as the recipient and carries the outbound marking of **D16** | The form submits to a third country. A visitor must be able to decline it — which is only possible if the fallback also still shows the email address beside it |
 
 The Google Form is the fallback's *target*, not its shape: the fallback
-component stays one component, and the swap to envoy is a change of the
-redirect behind `/start`.
+component stays one component, and the swap to envoy is a change behind
+`/start`.
+
+**`/start` itself is the exception, and it is the only one** [FIXED: DEC-0013
+amendment 2026-09-25, FUN-WEB-0205]. The rule above is about the *surfaces that
+link*. The registration surface at the far end of that link **embeds** the form,
+visibly, until it is rebuilt — D15. This determination used to say "today's
+`/start` embeds the form; the relaunch must not", and that sentence is
+withdrawn: it would have removed the only working registration the site has.
 
 ### D7 — Briefing booking is the contact section's first row [FIXED: DEC-0010, DEC-0013, DEC-0081]
 
@@ -197,6 +211,7 @@ redirect behind `/start`.
 | Why it stays off the CSP | An outbound navigation loads nothing into the page, so the allowlist is untouched (DEC-0015). Anything that would need a CSP entry is by definition not this |
 | URL source | One configured value (environment/config), referenced by every S3 placement — never pasted per page |
 | Link attributes | Opens in the same tab by default; if a new tab is used it carries `rel="noopener"` and the link text says so (TS-WEB-0002 D2, 2.4.9 link purpose) |
+| Outbound marking | D16 — a small note **under** the row, never inside its label |
 | Link text | Names the action and its destination, not "hier klicken"; the label is content (CON-WEB-0087 placeholder rules apply) |
 | Localization | The link *text* is localized; the appointment page itself is an original artifact under Google's terms and is not localized by us (DEC-0026) |
 | Reachability | the pages SRC-0003 names — `/dein-kalender` (equal-weight with the order CTA, FUN-WEB-0014), `/deine-region`, every step of S4, and `/ueber-uns` as its primary (DEC-0081 §6) — each carry a CTA pointing at their own contact section. Every other page reaches the booking through the standing section itself |
@@ -561,6 +576,49 @@ spec does not edit the guide; the WhatsApp and mail rows carry no
 prefill until the rule and the sentences exist, and a row without a
 prefill is a working row, not a broken one.
 
+### D15 — The registration surface embeds the form, visibly [FIXED: FUN-WEB-0205, DEC-0013 amendment 2026-09-25; the consent treatment is OPEN — CONF-0025]
+
+This determination exists because the specification did not have one.
+`TS-WEB-0023` governs `/mitmachen/registrieren` and forbids every submission
+mechanism on it — `D9`: *"no envoy instance here, no POST route, no server
+action"* — and its handover target is `UNKNOWN`, because the app's registration
+entry has no contract (DEC-0029, DEM-0034). So the only registration that works
+today is the Google Form, and nothing in `specs/` said so.
+
+| Aspect | Determination |
+| --- | --- |
+| The surface | the route `/start`, and no other. It stops being redirect-only (TS-WEB-0004 D1) and renders a page whose content is the embedded form |
+| Shape | **visibly embedded.** Not behind a click-to-load layer, not inside a `<details>`, not collapsed, not replaced by a link that claims to be the form. A visitor who reaches this route sees the form she came for |
+| Scope of the exception | one route. No component, no lead surface, no contact row and no section embeds anything (D6, D9, D13). The exception is DEC-0013's, is named there, and does not generalise |
+| Beside it | the e-mail address stays on the page, as D6's third rule already requires: a visitor must be able to decline Google and still reach a person |
+| Owner | Google. The website renders a mount point and receives nothing; no form backend and no POST route appears (FUN-WEB-0183, CON-WEB-0081, DEC-0025) |
+| Indexing | `noindex`, absent from the sitemap, as the redirect-only row already was (TS-WEB-0004 D1) |
+| CSP | a `frame-src` entry for the form host is **owed** and is the fifth origin `TS-WEB-0014 D1` says there is no room for. The entry is not written here: D1's allowlist is that spec's, and the row goes in with the rebuild decision |
+| Measurement | nothing. No event fires on this route: the submission is Google's and the website does not observe it (D12 row S6's reasoning, CON-WEB-0083's shape) |
+| It lapses | when the envoy widget lands (Q-0022) or the app registration entry gains a contract (DEC-0029). Then the embed goes and `/start` becomes a redirect again, or disappears |
+| **Not settled here** | whether the embed creates a consent duty. `NFR-WEB-0061`/`NFR-WEB-0062` require a banner-free site and `TS-WEB-0013 D5` calls consent *"the disqualifier"*. CONF-0025 records the collision, DEM-0066 asks legal, Q-0078 is the question. A consent gate is **not** specified here, because specifying one would pre-empt the answer and would also break the "visibly" above |
+
+### D16 — Outbound marking: what a row that leaves the site says, and where [FIXED: DEC-0081 §3, FUN-WEB-0185, DEC-0083 for the wording]
+
+`DEC-0081 §3` and `D6`'s third rule both cite *"the outbound marking of
+TS-WEB-0016 D9"*, and `D9` has no such rule — its rows are about media previews.
+This determination is the one they meant.
+
+| Aspect | Determination |
+| --- | --- |
+| Where it applies | every element that hands the visitor to a third party: the contact section's first action row (D13 row 1, S3) and the lead fallback's link to `/start` (D6) |
+| Position | **under the control, never inside its label.** A label states the action; a recipient is a separate fact and belongs on its own line |
+| Size | the `meta` type role — the smallest text the scale carries, above the 15 px floor (`TS-WEB-0002-A10`). Small, because it is a disclosure and not an argument, and a disclosure set at label size reads as a warning |
+| What it says | what activating the control does, and who receives what follows. The **sentence is copy** under SRC-0017 — this spec states no string and no grammatical form (DEC-0083 §1) |
+| What it does not say | it is not a consent request and not a click-to-load gate: there is nothing to consent to on an outbound navigation, which is the point (D7, D9) |
+| Not in the label | the marking may not be appended to the row's title or to a button label. That is where it stood on the preview site and it made the label read as a caveat |
+| Accessibility | programmatically associated with the control, so a screen-reader user hears the recipient with the link and not adrift after it (`TS-WEB-0002 D5`) |
+
+The data note itself — where the data goes and under what basis — is the
+privacy section's, on `/rechtliches#datenschutz`, which the page links anyway.
+The marking names the recipient; it does not restate a privacy policy in a
+`meta` line.
+
 ## Free for the generator
 
 - [FREE] Visual design of the widget wrapper, the static fallback
@@ -596,6 +654,8 @@ prefill is a working row, not a broken one.
 | TS-WEB-0016-A21 | static | Neither the footer newsletter entry nor the inline block on `/ueber-uns` renders while no sending system accepts a subscription: no form that posts nowhere, and no click-to-chat link whose arriving message nothing records (D10, DEC-0052 §4 as amended). |
 | TS-WEB-0016-A13 | manual | The two-working-day promise copy on `/deine-region` is present only when the lead-handling process behind it is named and signed off (C11); absent otherwise. |
 | TS-WEB-0016-A14 | e2e | With the widget script blocked, S2 and S4 still render the static fallback (contact link plus the booking row of the page's contact section) and no empty or permanently loading slot. The contact section itself renders unchanged, since it loads nothing. |
+| TS-WEB-0016-A22 | e2e | `/start` renders the registration form as a visible embed: exactly one `iframe` whose source is the configured form host, rendered without a click-to-load control, without a `details`/`summary` wrapper and without a `hidden` or zero-size ancestor, together with the e-mail address as a link. No other route of the TS-WEB-0004 D1 inventory contains an `iframe` to any host but the Portalize demo's (DEC-0030). No conversion event fires on the route. |
+| TS-WEB-0016-A23 | e2e | The contact section's first action row and the lead fallback's `/start` link each carry their outbound marking as a separate element **after** the control in DOM order, at the `meta` type role, programmatically associated with it; the control's own label and accessible name contain neither the recipient nor a parenthetical about a new tab. The marking is not a button, not a link and not a consent control. |
 | TS-WEB-0016-A15 | e2e | The contact section renders exactly four action rows, in the D13 order: row 1's href is the configured appointment URL, row 2's is a WhatsApp click-to-chat URL, row 3's scheme is `tel:` and row 4's is `mailto:`. No row is omitted or merged, including when rows 2 and 3 resolve to the same number. Only row 1 emits an event. |
 | TS-WEB-0016-A16 | static | Every value rendered in a contact row resolves from the hub record or the configured appointment URL — no phone number, WhatsApp number or contact e-mail address is hard-coded in a page, a component or a spec file. A row whose value does not resolve fails the build rather than rendering empty. |
 
@@ -609,6 +669,7 @@ prefill is a working row, not a broken one.
 | FUN-WEB-0091 (theming via website-supplied CSS variables) | D3, D4 (C1) · A4 |
 | FUN-WEB-0092 (envoy owns storage; website holds no submission data) | D5, D2 network path · A1, A3 |
 | FUN-WEB-0184 (resolve it to that page's contact section) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
+| FUN-WEB-0205 (render the registration form as a visible embed) | D15, D6 · A22 |
 | FUN-WEB-0185 (carry the Google Calendar appointment link as outbound navigation) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
 | FUN-WEB-0187 (complete request-product-briefing) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
 | FUN-WEB-0152 (carry make-contact as an intent) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |

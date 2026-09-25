@@ -77,8 +77,12 @@ the placement:
   section** — an in-page target, not an outbound navigation. Only the
   section's first action row navigates off-site.
 - The disclaimer wording that told the visitor she was leaving for
-  Google belongs to that one row (`TS-WEB-0016 D9` outbound marking), not to
-  a CTA in an argument block.
+  Google belongs to that one row — the outbound marking of **`TS-WEB-0016 D16`**,
+  a small note *under* the control and never inside its label — not to
+  a CTA in an argument block. *(This bullet cited `TS-WEB-0016 D9` until
+  2026-09-25; D9 is the media-preview determination and carried no marking
+  rule, so the citation resolved to nothing. D16 is the determination it
+  meant, written on 2026-09-25.)*
 
 `DEC-0013` and `DEC-0015` are untouched: still a link, still no embed, no
 Google script, no iframe, no font, no CSP entry.

@@ -16,9 +16,12 @@ stops there.
 
 ## What is in here
 
-22 conflicts, created by DEC-0099. 18 were read out of the 95 decision records
-— contradictions this project actually had — and 4 were found by the locator
-run of DEC-0097 and have no decision record, so they are `OPEN`.
+**25 conflicts.** DEC-0099 created 22 of them: 18 read out of the decision
+records — contradictions this project actually had — and 4 found by the locator
+run of DEC-0097. Two more, `CONF-0023` and `CONF-0024`, were found in the
+installed contracts themselves and were missing from this index until
+2026-09-25; `CONF-0025` was raised by the DEC-0013 amendment of the same day.
+Twenty are `RESOLVED` and five are `OPEN`.
 
 Most decisions are **not** conflicts. The method is explicit: *"A requirement
 that is merely surprising, inconvenient, or expensive"* is not one, and *"a
@@ -52,6 +55,9 @@ resolve, only an imprecise sentence" — and it is not in here.
 | [CONF-0020](CONF-0020--the-acceptance-test-contract-closes-its-item-at.md) | direct_contradiction | RESOLVED | High | DEC-0090 | The acceptance-test contract closes its item at four keys while every criterion here must carry a verification level |
 | [CONF-0021](CONF-0021--interaction-to-next-paint-against-the-adopted-budget.md) | value_conflict | OPEN | Medium | UNKNOWN | Interaction to Next Paint against the adopted budget's First Input Delay |
 | [CONF-0022](CONF-0022--the-web-font-budget-the-requirement-admits-50.md) | value_conflict | OPEN | Low | UNKNOWN | The web-font budget: the requirement admits 50 KB, the source excludes it |
+| [CONF-0023](CONF-0023--the-sdr-identifier-two-contracts-two-patterns.md) | direct_contradiction | OPEN | Medium | UNKNOWN | The STRICT decision record's identifier: two installed contracts pattern it two different ways, and an id cannot satisfy both |
+| [CONF-0024](CONF-0024--the-executor-mode-enum-two-contracts-disagree.md) | value_conflict | OPEN | Medium | UNKNOWN | The executor mode of a decision record: one contract knows four modes, the other two, and the policy in force uses one the narrower does not have |
+| [CONF-0025](CONF-0025--the-registration-embed-against-a-banner-free-site.md) | direct_contradiction | OPEN | High | UNKNOWN | The registration embed against a banner-free site: a third-party iframe on one route, and a requirement that the site needs no consent UI anywhere |
 
 ## How to read a record
 

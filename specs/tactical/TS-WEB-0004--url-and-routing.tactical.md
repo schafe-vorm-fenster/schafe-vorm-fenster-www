@@ -45,7 +45,7 @@ every row on `.de` (phase 1). One row per page; conversions per the `pages` area
 | `/ueber-uns/archiv` | proof archive | FUN-WEB-0018 |
 | `/rechtliches` | all legal content, one page, anchors `#impressum` · `#datenschutz` · `#barrierefreiheit` | FUN-WEB-0146, CON-WEB-0067, CON-WEB-0027 |
 | `/sitemap.xml` · `/robots.txt` · `/llms.txt` | machine surfaces, per domain | FUN-WEB-0073, FUN-WEB-0169, FUN-WEB-0170 |
-| `/start` | **redirect only, renders nothing** — the lead fallback's target while the envoy widget is undelivered (TS-WEB-0016 D6). Points at the existing Google Form today; the swap to envoy changes this one redirect and no lead surface | FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083 |
+| `/start` | **the registration surface** — it renders the Google Form as a visible embed while the widget is undelivered (TS-WEB-0016 D15, FUN-WEB-0205, DEC-0013 amendment 2026-09-25), and it is the one route on the site that embeds a third party. `noindex`, absent from the sitemap. It is also the lead fallback's target (TS-WEB-0016 D6), so the swap to envoy changes this one route and no lead surface. **It was specified as "redirect only, renders nothing" until 2026-09-25**, which would have removed the only registration that works | FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083, FUN-WEB-0205 |
 
 Reserved, not built: `/mitmachen/vor-ort-werben` (Q-0005),
 `/nutzungsbedingungen` (if the legal import delivers terms).

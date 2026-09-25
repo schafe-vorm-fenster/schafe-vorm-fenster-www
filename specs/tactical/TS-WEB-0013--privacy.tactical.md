@@ -127,7 +127,7 @@ shown not to work:
 | 1 | self-host the asset (D4) | build size |
 | 2 | proxy it server-side through a BFF route (D3) | a route, a cache TTL |
 | 3 | allowlist the third-party host | PR review, CSP change, privacy-policy section |
-| — | embed it as a third party | **not available** (DEC-0013) |
+| — | embed it as a third party | **not available** (DEC-0013). One named exception exists and it is not a rung: the registration form on `/start` (DEC-0013 amendment 2026-09-25, TS-WEB-0016 D15). It is scoped to one route, it lapses when the form is rebuilt, and whether it clears the consent disqualifier below is CONF-0025 / DEM-0066, unanswered |
 
 Rung 3 requires all of: a reviewed PR against the CSP allowlist, never a
 wildcard (CON-WEB-0031); a named section in the privacy policy on

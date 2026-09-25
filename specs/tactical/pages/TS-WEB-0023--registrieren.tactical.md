@@ -138,6 +138,16 @@ Nothing is submitted, so there is no envoy instance here, no POST route,
 no server action, and the spam rules of DEC-0014 have no subject. The
 only network calls are the read-only BFF routes of TS-WEB-0004 D5.
 
+**This route is not the registration form, and the two are not the same
+thing** [FIXED: DEC-0013 amendment 2026-09-25]. This page asks three questions
+and hands the visitor to the app; the form that actually receives a
+registration today is the Google Form on `/start`, visibly embedded
+(`TS-WEB-0016` S8, `D15`, `FUN-WEB-0205`). Nothing about that reaches this
+route: no embed, no iframe, no third-party script here, and the handover target
+stays the app's entry, still `UNKNOWN` (D6, DEC-0029). Conflating the two is the
+finding A1 of the 2026-09-25 audit corrects, and `A12` below is what keeps this
+page on the right side of it.
+
 ## Free for the generator
 
 - [FREE] Visual layout of a step and of the step indicator, within D8.
