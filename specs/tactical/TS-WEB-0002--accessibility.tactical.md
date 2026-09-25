@@ -60,10 +60,17 @@ personalisation vocabulary on controls that no source asks for);
 **1.4.9** Images of Text (no images of text exist to constrain); sign
 language and extended audio description (no video).
 
-### D3 — Contrast and brand [FIXED: NFR-WEB-0058, NFR-WEB-0059, CON-WEB-0025; weights PROPOSED]
+### D3 — Contrast and brand [FIXED: NFR-WEB-0058, NFR-WEB-0059, CON-WEB-0025, DEC-0105; weights PROPOSED]
 
 - Text 4.5:1 minimum; large text (≥ 24px / ≥ 18.66px bold) and UI
-  components 3:1. Brand green `#B4CF39` fails on white for text → it is
+  components 3:1.
+- **On a photo surface the ground is the composite** of the photograph with
+  the **fixed** scrim stop at that position, ceiling `0.72`
+  (SRC-0014 §*Photo surface*, DEC-0105 §1). The ladder is authored, not
+  derived from an image, and the per-photograph measurement decision 5 asked
+  for is withdrawn — nothing performed it and `A3` reaches the token layer
+  only. The photograph half is carried by the crop and focal-point rules
+  (DEC-0105 §2) and by DEM-0027, not by a number here. Brand green `#B4CF39` fails on white for text → it is
   never a text colour on light ground; usage limited to surfaces,
   accents, and large graphical elements that meet 3:1 [PROPOSED].
 - **Atkinson Hyperlegible Next** (DEC-0043). The weight-floor rule that
@@ -137,8 +144,8 @@ claim:
 | --- | --- |
 | NFR-WEB-0057 (Violations of WCAG 2.2 level A and AA = 0 violations) | D1, D2 · A1, A2 |
 | CON-WEB-0024 (never take full non-visual optimisation as a launch criterion) | D1, D2 · A1, A2 |
-| NFR-WEB-0058 (Contrast ratio of body text against its background >= 4.5 :1) | D3 · A3 |
-| NFR-WEB-0059 (Contrast ratio of display type and of non-text contrast against its background) | D3 · A3 |
+| NFR-WEB-0058 (Contrast ratio of body text against its ground, the composite on a photo surface, >= 4.5 :1) | D3 · A3 |
+| NFR-WEB-0059 (Contrast ratio of display type and of non-text contrast against its ground) | D3 · A3 |
 | CON-WEB-0025 (use the accessible colour variant wherever a brand colour …) | D3 · A3 |
 | FUN-WEB-0128 (render semantic markup — landmarks) | D5 · A1 |
 | FUN-WEB-0118 (be operable by keyboard alone) | D5 · A4, A5 |
@@ -164,3 +171,9 @@ claim:
 - Q-0021 (BFSG applicability — legal), Q-0013 (formal brand-font signoff;
   D3 settles the operative rule), Q-0022 (widget conformance).
 - D3 and D6's remaining rows are [PROPOSED]; D2 and D6's target size are fixed by DEC-0069.
+- **`prefers-reduced-transparency` is not in D4.** DEC-0105 §4 makes it one of
+  the three conditions that select the blur primitive's solid fallback, and D4
+  names only `prefers-reduced-motion`, `Save-Data` and OS font scaling. Add the
+  row, or say why the blur's fallback is selected somewhere this spec does not
+  govern. No criterion asserts the blur or its fallback today.
+  **Answered by:** the owner of `concept/website-design-system.md` and SRC-0013.

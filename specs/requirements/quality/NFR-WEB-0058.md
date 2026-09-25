@@ -28,11 +28,11 @@ ai_provenance:
 
 # NFR-WEB-0058
 
-Contrast ratio of body text against its background SHALL be >= 4.5 :1, measured by `scripts/check-contrast.ts` (TS-WEB-0002-A3).
+Contrast ratio of body text against its ground — on a photo surface the composite of the photograph with the fixed scrim stop at that position, ceiling 0.72 — SHALL be >= 4.5 :1, measured by `scripts/check-contrast.ts` (TS-WEB-0002-A3).
 
 ## Source
 
-SRC-0006, SRC-0014#accessibility, DEC-0056
+SRC-0006, SRC-0014#accessibility, DEC-0056, DEC-0105
 
 Unlocatable: Transcript demands colour contrast ("Farbenkontraste, logisch") and AA conformance, but never states a 4.5:1 ratio.
 
@@ -40,4 +40,8 @@ Finding: The numeric ratio comes from WCAG/DEC-0056, not from SRC-0006.
 
 ## Notes
 
-Measured against the composite of photo plus gradient, not the gradient alone. `scripts/check-contrast.ts` judges the token set itself, in all four themes the sheet declares, before any page composes it.
+The composite qualification is in the statement, not here, since DEC-0105 §3: a qualification in a Notes block binds nothing.
+
+**The scrim ladder is fixed, not measured per photograph** (DEC-0105 §1). The per-hero measurement decision 5 asked for was never performed and is withdrawn; what the fixed ladder gives instead is that the scrim half of the pair is a token, which is the layer the meter reaches.
+
+**What the meter reaches.** `scripts/check-contrast.ts` judges the token set itself, in all four themes the sheet declares, before any page composes it. It does not open an image, composite alpha or sample a text box. The photograph half of the composite is carried by SRC-0014's crop and focal-point rules — the focal point at or above 40 % for a sky-heavy motif, and "a photograph that only works when the scrim covers its subject is the wrong photograph" (DEC-0105 §2) — and by DEM-0027, which asks brand/design for the measured ratios.

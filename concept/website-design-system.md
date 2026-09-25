@@ -725,42 +725,43 @@ text-shadow: 0 1px 2px var(--color-scrim-45), 0 2px 10px var(--color-scrim-30);
   0.96 end are the same retired ladder), and the `check:contrast` hero row
   owed below, which is what would have caught this.
 
-#### Contrast is measured, not assumed
+#### The ladder is fixed, and the motif carries the rest
 
-The fixed-opacity rule is gone, and nothing replaces it with another fixed
-number. **What is fixed is the outcome:**
+**The ladder above is the rule — authored, not derived from any image**
+(decision 5 as corrected by `DEC-0105` §1, 2026-09-25). The floors it is
+written to are `NFR-WEB-0058` and `NFR-WEB-0059`:
 
-> The composite of photograph **plus** scrim, sampled where the type
-> actually sits, clears **4.5:1 behind body text** and **3:1 behind display
-> type** — measured **per photograph**, not once for the component.
+> The composite of photograph **plus** scrim clears **4.5:1 behind body text**
+> and **3:1 behind display type**, with the scrim at the **fixed** stop the
+> ladder gives for that position and never above the `0.72` ceiling.
 
-That is `NFR-WEB-0011` and this document's *Accessibility* rule stated as an
-acceptance condition instead of as a recipe. A ladder cannot be measured
-because the photograph is the other half of the pair: 0.72 over a dark
-barn roof and 0.72 over a white gable are not the same surface. The
-0.72 ceiling and the 4.5:1 floor together are what constrain the choice of
-photograph — a motif that only clears the floor at 0.85 is the wrong motif,
-and the answer is a different crop or a different picture, not a darker
-scrim.
+**The per-photograph measurement is withdrawn.** This section used to require
+contrast to be measured against the actual photograph, per hero, and to
+verify it by a `check:contrast` hero row that composited two gradients over
+every rendition, sampled two text boxes and took the worst pixel. Nothing
+performed it, there was no acceptance criterion behind it, and it is not
+practical: the photographs are not chosen yet and the cost recurs on every
+build. A requirement whose meter does not measure what it says reads as
+covered, which is worse than a gap that admits it (`DEC-0105` §1).
 
-**How it is verified.** By `pnpm check:contrast`, extended to a hero row:
-for each hero photograph and each rendition, composite the two gradients
-over the image at the declared `object-position`, sample the text box of the
-display line and of the lead line, and take the **worst** pixel in each box
-against the type colour. Under the floor is an error, not a warning — the
-same exit contract the token guard already has.
+**So the photograph's half of the pair is answered by the motif rules, not by
+a number.** The `0.72` ceiling is the constraint on the scrim and *Crop and
+focal point* below is the constraint on the picture: the focal point at or
+above 40 % for a sky-heavy motif, and **"a photograph that only works when the
+scrim covers its subject is the wrong photograph."** That sentence is
+load-bearing rather than an aside — it is how a motif that would fail the
+floor is excluded, and the remedy is a different crop or a different picture,
+never a darker scrim, because the ceiling does not move.
 
-> **Owed, and named so nobody assumes it exists.** That row is not written.
-> `pnpm check:contrast` today measures the **token set** (TS-WEB-0002-A3) and
-> knows nothing about photographs; `NFR-WEB-0011` states the requirement and
-> `DEC-0056` fixes the basis, but no acceptance criterion asserts the
-> composite. The specs are a parallel owner's file, so this guide states the
-> requirement and records the test as **owed**: a `check:contrast` hero row
-> plus the acceptance criterion that binds it, against `TS-WEB-0002` (the guard
-> lives with the contrast check) and cited from `TS-WEB-0003 D8`/`DEC-0077`, which
-> already own the per-hero renditions the row would iterate. Until it
-> exists, the measurement is a manual step at the editorial gate and every
-> hero photograph carries its measured pair of ratios in its own record.
+> **What is checked, and what is a judgement.** `pnpm check:contrast` measures
+> the **token set** (`TS-WEB-0002-A3`), in all four themes, before any page
+> composes it; the fixed ladder is what puts the scrim half of the pair inside
+> that layer. It does not open an image. The motif half is a judgement at the
+> editorial gate, declared as one, and `DEM-0027` is where the measured ratios
+> for colour world 3c are asked for. A static assertion of the `0.72` ceiling
+> is the obvious next check and would **fail today** — the component still
+> composes `color-mix()` to 96 % from `ink` — so it goes in with the component
+> rewrite named above, not before it.
 
 **Crop and focal point.** The photo is `cover` with `object-position` taken
 from the motif's declared focal point, never `center` by default. Village
@@ -1025,10 +1026,14 @@ still forbidden.
 
 ## Accessibility
 
-- Body text at 4.5:1 minimum, display type at 3:1, measured against the
-  composite of photo plus scrim — not against the scrim alone, and per
-  photograph (see *Photo surface*). The check that asserts it is **owed**
-  and named there.
+- Body text at 4.5:1 minimum (`NFR-WEB-0058`), display type and non-text
+  contrast at 3:1 (`NFR-WEB-0059`), against the composite of photo plus scrim
+  — not against the scrim alone. The scrim stop is the **fixed** one the
+  ladder gives for that position, ceiling `0.72`; the per-photograph
+  measurement is withdrawn (`DEC-0105` §1) and the motif is carried by the
+  crop and focal-point rules instead (see *Photo surface*). `check:contrast`
+  reaches the token layer; the ceiling assertion is **owed** with the
+  component rewrite, and is named there.
 - Focus ring: 3 px `violet-500`, 2 px offset, on every interactive element.
 - 15 px is the type floor everywhere, with no exception for a badge, a chip
   or a tag (`TS-WEB-0002 D3`, `TS-WEB-0002-A10`).
@@ -1067,7 +1072,7 @@ options:
 
 | # | Was | Taken as | Where it now lives |
 | --- | --- | --- | --- |
-| 1 | Scrim ladder, and text shadow yes/no | **Decision 5** — the draft is binding: neutral black, multi-stop, max 0.72, soft text shadow, and a measured contrast floor instead of a fixed ladder | *Colour* (the named exception), *Photo surface* |
+| 1 | Scrim ladder, and text shadow yes/no | **Decision 5**, as corrected by **DEC-0105 §1** — the draft is binding: neutral black, multi-stop, max 0.72, soft text shadow, and a **fixed** ladder. The "measured contrast floor instead of a fixed ladder" this row used to claim is withdrawn: nothing performed the per-photograph measurement, and the crop and focal-point rules carry the motif | *Colour* (the named exception), *Photo surface* |
 | 2 | Header contrast — solid wells or a blur primitive | **Decision 6** — the blur primitive, with a documented capability fallback to the solid ink well and a stated performance-budget interaction | *Transparent overlay header* |
 | 3 | Category taxonomy — five token keys or six guide rows | **Decision 7** — neither: the canonical list is `classification-api`'s four ids plus the `unknown` fallback, which is what the token package already carries. Event rows keep the category, as this guide always said | *Category colours* |
 

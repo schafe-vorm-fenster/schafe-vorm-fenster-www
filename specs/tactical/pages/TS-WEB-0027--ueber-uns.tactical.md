@@ -55,7 +55,7 @@ components, photo surface, badges, ratios, page rhythm →
 
 | # | Block | Type | Carries |
 | --- | --- | --- | --- |
-| 1 | Origin | photo surface, `ratio-hero`, ink gradient | founder photo · h1 · the village argument (D3) · the primary CTA into the contact section |
+| 1 | Origin | photo surface, `ratio-hero`, the one neutral scrim (DEC-0105 §1 — the ink and violet variants are retired) | founder photo · h1 · the village argument (D3) · the primary CTA into the contact section |
 | 2 | Proof stream | colour, cards at `ratio-proof` | 7 elements incl. the one empty slot (D5) |
 | 3 | Archive | colour, tight | exactly one link to `/ueber-uns/archiv` (D6) |
 | 4 | Team | colour, portraits at `ratio-portrait` | profiles from `@schafe-vorm-fenster/people` (D7) |

@@ -284,22 +284,27 @@ Once the manifest lands, the page specs reference component ids, and
 same closure the requirement → acceptance criterion → test matrix already
 provides.
 
-**One check is owed, and it is owed by the specs, not by the package.**
-Decision 5 replaces the hero's fixed opacity ladder with a measured floor:
-the composite of photograph **plus** scrim clears 4.5:1 behind body text and
-3:1 behind display type, **per photograph**. `NFR-WEB-0058` and `NFR-WEB-0059`
-already state that requirement and `DEC-0056` fixes the basis, but nothing
-asserts it:
-`pnpm check:contrast` measures the *token set* (`TS-WEB-0002-A3`) and knows
-nothing about photographs, and axe in `e2e/a11y.spec.ts` judges what a page
-happened to compose.
+**The hero row this section used to owe is withdrawn** (DEC-0105 §1,
+2026-09-25). Decision 5 was read here as replacing the hero's fixed opacity
+ladder with a measured floor — *"the composite of photograph plus scrim …
+per photograph"* — and what was owed was a `check:contrast` hero row that
+composited the two gradients over each rendition at its declared
+`object-position`, sampled the display and lead text boxes and took the worst
+pixel. Nothing performed it, no acceptance criterion bound it, and it is not
+practical on every build for a photograph set that is not chosen yet.
 
-What is owed is a `check:contrast` **hero row** — composite the two
-gradients over each hero rendition at its declared `object-position`, sample
-the display and lead text boxes, take the worst pixel in each against the
-type colour, exit non-zero under the floor — and the acceptance criterion
-that binds it. It belongs with `TS-WEB-0002` (where the contrast guard lives) and
-iterates the per-hero renditions `DEC-0077` and `TS-WEB-0003 D8` already own.
-SRC-0014 states the requirement and marks the test as owed rather than
-implying one exists; writing the row is the specs owner's, not this
-contract's.
+**The ladder is fixed instead**, with its `0.72` ceiling (§5's `scrim.*` row),
+and `NFR-WEB-0058`/`NFR-WEB-0059` now carry the composite qualification in
+their own statements rather than in a Notes block. `pnpm check:contrast`
+measures the *token set* (`TS-WEB-0002-A3`), which is the layer the fixed
+ladder puts the scrim half of the pair into; axe in `e2e/a11y.spec.ts` judges
+what a page happened to compose. The photograph half is SRC-0014's crop and
+focal-point rules and `DEM-0027`, not a number.
+
+**What is still owed, and it is the specs' and the component's, not this
+contract's:** the `photo-surface` rewrite onto the neutral ladder — the
+component still composes `color-mix()` to 82 %, 84 % and 96 % from `ink`, which
+is the retired ink-tinted scrim and a step above the ceiling — and, with it,
+the static assertion of the ceiling plus the acceptance criterion that binds
+it. The assertion is deliberately not added first: against today's component it
+would fail, and a check that fails is not a check.

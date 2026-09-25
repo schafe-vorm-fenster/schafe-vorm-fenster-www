@@ -28,11 +28,11 @@ ai_provenance:
 
 # NFR-WEB-0059
 
-Contrast ratio of display type and of non-text contrast against its background SHALL be >= 3 :1, measured by `scripts/check-contrast.ts` (TS-WEB-0002-A3).
+Contrast ratio of display type and of non-text contrast against its ground — on a photo surface the composite of the photograph with the fixed scrim stop at that position, ceiling 0.72 — SHALL be >= 3 :1, measured by `scripts/check-contrast.ts` (TS-WEB-0002-A3).
 
 ## Source
 
-SRC-0006, SRC-0014#accessibility, DEC-0056
+SRC-0006, SRC-0014#accessibility, DEC-0056, DEC-0105
 
 Unlocatable: Transcript never mentions display type or non-text contrast, nor a 3:1 ratio.
 
@@ -40,4 +40,8 @@ Finding: The numeric ratio comes from WCAG/DEC-0056, not from SRC-0006.
 
 ## Notes
 
-Measured against the composite of photo plus gradient, not the gradient alone. Non-text contrast covers borders and the focus ring.
+The composite qualification is in the statement, not here, since DEC-0105 §3. Non-text contrast covers borders and the focus ring.
+
+**The scrim ladder is fixed, not measured per photograph** (DEC-0105 §1). The per-hero measurement decision 5 asked for was never performed and is withdrawn.
+
+**What the meter reaches.** `scripts/check-contrast.ts` judges the token set, not an image. The photograph half of the composite is carried by SRC-0014's crop and focal-point rules (DEC-0105 §2) and by DEM-0027.
