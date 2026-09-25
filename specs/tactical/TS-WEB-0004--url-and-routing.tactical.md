@@ -164,8 +164,12 @@ Proposed EN segments (de → en):
 
 - Header: logo → `/`, the four job labels (Was ist los → `/dein-ort`,
   Termine veröffentlichen → `/mitmachen`, Dein Kalender →
-  `/dein-kalender`, Warum wir → `/ueber-uns`), persistent "Kalender"
-  button → `/dein-ort`.
+  `/dein-kalender`, Über uns → `/ueber-uns`), persistent "Kalender"
+  button → `/dein-ort`. The fourth label named the job ("Warum wir")
+  until DEC-0120; the review rejected it in the band and on the page
+  (R-home-33, R-ueber-1), and the sender surface is the one label that
+  names the page rather than a job — the FUN-WEB-0002 carve-out the review
+  asked for. English: "About us".
 - Footer: Newsletter, the legal links "Impressum" / "Datenschutz" /
   "Barrierefreiheit" pointing at their anchors on `/rechtliches`, and the
   language switcher (plain links, TS-WEB-0001 D5). **No contact entry**: the

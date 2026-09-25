@@ -143,7 +143,7 @@ const GERMAN_UI_STRINGS = [
   "Nachricht",
   "Absenden",
   "Anmelden",
-  "Neuigkeiten aus dem Projekt",
+  "Neue Funktionen und aktuelle Angebote",
   "Double-Opt-in",
   "Datenschutzerklärung",
   "Suchen",
@@ -157,7 +157,7 @@ for (const path of ENGLISH_ROUTES) {
     for (const german of GERMAN_UI_STRINGS) {
       expect(footer, `${path} renders "${german}"`).not.toContain(german);
     }
-    expect(footer).toContain("News from the project");
+    expect(footer).toContain("New features and current offers");
     expect(footer).toContain("Sign up");
   });
 }

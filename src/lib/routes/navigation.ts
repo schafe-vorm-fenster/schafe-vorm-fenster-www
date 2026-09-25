@@ -6,7 +6,18 @@
  * No component hard-codes a path or a label (TS-WEB-0004 D4, TS-WEB-0001 D5).
  *
  * The four labels are the four **jobs** — they name what a visitor wants to
- * do, never a product (FUN-WEB-0002).
+ * do, never a product (FUN-WEB-0002). The fourth reads "Über uns" / "About
+ * us" since DEC-0120 (TS-WEB-0004 D4 as amended): the sender surface is the
+ * one label that names the page rather than a job, the carve-out the review
+ * asked for (R-home-33, R-ueber-1). The key stays `whyUs` — it is the job
+ * id's name in code, and renaming it would touch every manifest for a word
+ * no visitor reads.
+ *
+ * The context band adds a blurb under each label (TS-WEB-0006 D5 with
+ * CG-030). The registry entry carries no copy: the blurb comes from the
+ * page's own `context-band` slot, and the per-language fallback is
+ * `dictionary.contextBand.blurbs`, keyed by `label` — see
+ * `src/lib/content/context-band.ts`.
  */
 
 import type { DictionaryKeyOf } from "@/src/lib/i18n/dictionary";

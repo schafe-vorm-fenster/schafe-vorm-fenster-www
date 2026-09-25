@@ -75,6 +75,16 @@ prefix iff `lang !== tldDefault`. No hard-coded hrefs in components; all
 internal links go through the link facade. Language/country switching is
 plain `<a>` navigation (no JS requirement).
 
+The language switch's form (DEC-0120; review R-home-39): it renders **only
+the other language(s)** as controls — the current language is the page the
+visitor is reading and is not rendered as a control at all. Each control is
+an invitation written in the target language ("Read this page in
+English:") followed by the language's own name as the link, with `hreflang`
+and `lang` on the link and `lang` on the invitation. The link targets the
+equivalent page (A7), never the home page. The invitation's wording is copy
+under SRC-0017; where nobody has written it yet the control carries
+`data-demo="true"`.
+
 ### D6 — hreflang and canonical (phase 1) [FIXED: DEC-0005; matrix PROPOSED]
 
 Every full-site page emits:
@@ -98,8 +108,8 @@ language must not require code changes [PROPOSED].
 
 ## Free for the generator
 
-- [FREE] The language switcher's visual form and exact footer placement
-  (IA fixes: footer).
+- [FREE] The language switcher's exact footer placement (IA fixes: footer).
+  Its form is D5's since DEC-0120.
 - [FREE] Internal organisation of the locale module (file layout, helper
   naming), provided D5's single-facade rule holds.
 

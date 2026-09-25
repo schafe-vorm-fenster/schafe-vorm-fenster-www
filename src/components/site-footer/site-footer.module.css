@@ -78,14 +78,24 @@
 
 /* ── The base line ────────────────────────────────────────────────────── */
 
+/*
+ * Visually set off (DEC-0120, review "Den Impressums-Footer optisch
+ * abheben"): the legal links and the language switch stand on their own
+ * ground — `surface2` under a hairline, padded on all sides — rather than
+ * as one more wrapped line under the newsletter. The block reaches the
+ * container's edges through the negative inline margin so the ground reads
+ * as a band of the footer, not as a card inside it.
+ */
 .base {
   align-items: center;
+  background: var(--color-neutral-surface2);
   border-top: 1px solid var(--color-neutral-line);
   column-gap: var(--space-4);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding-top: var(--space-2);
+  margin-inline: calc(-1 * var(--gutter));
+  padding: var(--space-3) var(--gutter);
   row-gap: var(--space-2);
 }
 

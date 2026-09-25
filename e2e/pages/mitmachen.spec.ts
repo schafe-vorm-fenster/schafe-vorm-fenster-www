@@ -198,7 +198,7 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16: /mitmachen", () => {
       "Warum es heute hakt",
       "So funktioniert es",
       "Was gerade ansteht",
-      "Wer das schon macht",
+      "Wer den Kalender nutzt",
     ]) {
       await expect(page.getByText(kicker, { exact: true })).toBeVisible();
     }
