@@ -4,7 +4,7 @@ id: SRC-0013
 status: DRAFT
 date: 2026-09-10
 updated: 2026-09-24
-decisions: [DEC-0044, DEC-0054]
+decisions: [DEC-0044, DEC-0054, DEC-0104]
 ---
 
 # Design System Contract
@@ -12,6 +12,16 @@ decisions: [DEC-0044, DEC-0054]
 What the website needs from the mobile-first styleguide in order to
 generate its visual layer. Written as an expectation against
 `@schafe-vorm-fenster/brand-design`, not as a design brief.
+
+## The guide it binds is specification, not input
+
+`concept/website-design-system.md` (SRC-0014) is **specification-side**
+(DEC-0104 §3): it is prescriptive — components, measures, token values — so a
+spec that contradicts it is a defect in the spec, not a licence to deviate.
+**This contract is the binding**: a guide rule reaches the build through a row
+here and nowhere else, because DEC-0080 §4's rule holds for the design layer
+too — a rule with no mechanism is advice. The guide keeps `status: draft` and
+keeps its place in `concept/`; DEC-0104 §3 says why the file did not move.
 
 ## The shape: keep the one you already have
 

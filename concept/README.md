@@ -15,6 +15,25 @@ work done in this repository belongs here.
 | Status | binding | draft, and not binding until its decision point |
 | References | `audiences/`, `offerings/`, `proof/` by relative path | this repository's schemas, compositions, components, playbooks |
 
+**Three local documents, two classes** (DEC-0104 §3). The folder holds one
+*working concept* and two *prescriptive specifications*, and the difference
+decides what happens when one of them disagrees with a spec:
+
+| | Working concept | Prescriptive, bound by a contract |
+| --- | --- | --- |
+| Document | `website-content-production.concept.md` | `website-design-system.md` (SRC-0014) · `website-copy-guide.md` (SRC-0017) |
+| Holds | how this repository turns hub packages into rendered pages | components, measures, token values, forty-one numbered copy rules |
+| Side | input | **specification** — a spec that contradicts it is a defect in the spec |
+| Binding | TS-WEB-0007 implements it | [`design-system-contract.md`](../specs/contracts/design-system-contract.md) (SRC-0013) · [`copy-contract.md`](../specs/contracts/copy-contract.md) (SRC-0018) — every rule assigned to a mechanism |
+| Status | draft | draft — being truth is not being approved |
+
+Both prescriptive documents stay in this folder rather than moving under
+`specs/`. DEC-0104 §3 gives the four reasons: `specs/` holds the method's
+artefact families and neither guide is one of them, the specification side is a
+status carried by a contract rather than a directory, a move would retire
+several hundred verified locators for no gain in checkability, and this folder
+was already two classes — what was missing was this table, not a different path.
+
 ## Where the website concept lives
 
 **The three concept documents that govern this website are not in this
@@ -79,10 +98,12 @@ exactly as the design system is bound by the design-system contract
   the relevance contract of TS-WEB-0005. Draft; it is a working concept, not a
   governing document.
 - `website-design-system.md` (SRC-0014) — the binding visual specification,
-  bound by the design-system contract (SRC-0013, DEC-0056).
+  bound by the design-system contract (SRC-0013, DEC-0056). Specification-side,
+  not concept input (DEC-0104 §3).
 - `website-copy-guide.md` (SRC-0017) — the binding wording specification,
   bound by the copy contract (SRC-0018, DEC-0080). It governs how the
-  website writes; what it says stays in the hub.
+  website writes; what it says stays in the hub. Specification-side, not
+  concept input (DEC-0104 §3).
 - `v1.0/` — the clickable prototype. It is an implementation artifact, not
   content: it renders the relevance model rather than defining it.
 - `_archive/` — raw workshop input the concept documents were derived from.
@@ -92,8 +113,17 @@ exactly as the design system is bound by the design-system contract
 1. Do not copy the three governing concept documents into this
    repository. Link to them. A locally owned process concept is not a
    copy — it says how work is done here, not what the site communicates.
-2. If a page contradicts a concept document, the concept document wins —
-   or it is changed first, in `go-to-market-os`.
+2. **The specification carries the truth; a hub concept document is input and
+   evidence** (DEC-0104, `specs/README.md` rule 4). A page is built to the
+   spec. Where the spec and a hub concept document disagree, the spec stands
+   and the deviation is recorded twice — on the artefact and as a `DEM-####`
+   against the source (`specs/README.md` rule 5). It is never settled
+   silently, and it is no longer settled by the source winning by default.
+2a. The two prescriptive local documents are the exception, because they are
+   not input: a page or a spec that contradicts `website-design-system.md` or
+   `website-copy-guide.md` is wrong, and the correction goes into the page or
+   the spec. Correcting a guide is a decision with a record — DEC-0082 §2 and
+   DEC-0080 §3 are what that looks like.
 3. Conversion goal IDs, audience IDs, offering IDs, and proof IDs are
    defined in `go-to-market-os`. This repository consumes them and does not
    invent its own.

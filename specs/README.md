@@ -115,8 +115,35 @@ The clickable prototype for the concept documents is in
    the question, and a demand addressed to whoever can answer it.
 3. Page copy is not written during this phase. Where a spec needs example
    text, it is marked as a placeholder.
-4. If a spec contradicts a concept document, the concept document wins — or
-   it is changed first, in `go-to-market-os`.
+4. **The specification carries the truth; a concept document is input and
+   evidence** (DEC-0104). A requirement *cites* a source — with a position and
+   an excerpt of at most 25 words — and a citation confers no authority over
+   the statement that cites it. Where the specification and a source disagree,
+   the specification is what the solution is built to. This is the method's
+   own posture, not a local liberty:
+   `@leafcutter-strict/method-source-quality-rating` exists so that the method
+   *"can refuse to build on [a bad source] silently"*, and the source-inventory
+   contract gives every source a defect list and a demand channel. Until
+   2026-09-25 this rule read the other way round, which let `SRC-0003` — trust
+   `low`, currency rated 1 — overrule two `S3` requirements.
+5. **A deviation from a source is recorded, never silent** (DEC-0104 §2). Twice:
+   on the artefact, as a `Deviation:` line in its `## Source` section naming the
+   source, the exact line it contradicts and why; and against the source, as a
+   `DEM-####` in
+   [`demands/demand-register.md`](demands/demand-register.md) with what is
+   required, from whom, and in what form. `check:specs` **E27** enforces the
+   shape — a `Deviation:` line needs a resolvable source position and an
+   existing demand — and **W10** reports the complement: a `Finding:` that
+   states a contradiction in prose while no `Deviation:` line records it.
+6. **The two local guides are specification-side, carried by their contracts**
+   (DEC-0104 §3). `concept/website-design-system.md` (SRC-0014) and
+   `concept/website-copy-guide.md` (SRC-0017) are prescriptive, so a spec that
+   contradicts one is a defect in the spec. They reach the build through
+   [`contracts/design-system-contract.md`](contracts/design-system-contract.md)
+   and [`contracts/copy-contract.md`](contracts/copy-contract.md), which assign
+   every rule to a mechanism; a guide rule with no contract row is advice. Both
+   guides stay `status: draft`, and both stay in `concept/` — DEC-0104 §3 says
+   why the file was not moved.
 
 ## Structure
 

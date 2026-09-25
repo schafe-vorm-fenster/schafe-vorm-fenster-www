@@ -16,8 +16,9 @@ Repository-level decisions (content SSOT, audience model) live in
 ## Two artefacts live here
 
 - **`DEC-####--<slug>.md`** — an ADR: a choice and the reasoning behind it,
-  in the organisation's context/decision/consequences sections. 100 of them,
-  cited 3,113 times.
+  in the organisation's context/decision/consequences sections. 104 of them.
+  The citation count that stood here was produced by a one-off script and has
+  not been re-derived; a number nobody can reproduce is worse than none.
 - **`SDR-<yyyy>-<mmdd>-<nnnn>.yaml`** — a STRICT decision record: the
   execution of one decision point on one subject, with every criterion of that
   decision point, the mode and executor copied off the policy row, the bounds
@@ -146,3 +147,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0101 — The goal layer references the hub, it does not duplicate it — thirteen GOAL-WEB artefacts, no goal content copied](DEC-0101--the-goal-layer-references-the-hub.md)
 - [DEC-0102 — The need layer is read off the sources, never reconstructed — thirty-four needs, every one with a verified line](DEC-0102--the-need-layer-is-read-off-the-sources.md)
 - [DEC-0103 — The chain is wired and checked — 222 of 273 requirements answer to a need, and the 51 that do not say why](DEC-0103--the-chain-is-wired-and-checked.md)
+- [DEC-0104 — The specification carries the truth — a source is cited, not obeyed, and every deviation from one is recorded](DEC-0104--the-specification-carries-the-truth.md)

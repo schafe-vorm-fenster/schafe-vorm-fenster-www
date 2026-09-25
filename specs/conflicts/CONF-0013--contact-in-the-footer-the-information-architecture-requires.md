@@ -37,10 +37,25 @@ High — the source is the reference the page briefs are read from, and it still
 
 ## Outcome
 
-Taken: **NEW_VERSION**. Permitted for a direct contradiction: REJECT_NEW, NEW_VERSION, ISOLATE.
+Taken: **NEW_VERSION**, and it falls on **SRC-0003** — not on the requirement.
+
+The taxonomy permits REJECT_NEW, NEW_VERSION and ISOLATE for a direct
+contradiction, and this record used to stop at the word. Under the rule in
+force when it was written (`specs/README.md` rule 4, "the concept document
+wins") a reader would have taken the new version to be the requirement's.
+It is not: the requirement stands as DEC-0081 decided it, and the **source**
+is the artefact asked for a new version, through DEM-0001.
+
+DEC-0104 §1 is why that is now stated rather than left implicit: the
+specification carries the truth, a source is cited rather than obeyed, and the
+deviation is recorded at the artefact (`Deviation:`) and as a demand against
+the source. Nothing about the type, the impact or the permitted outcome set
+changed — the taxonomy was right, the record was merely silent at the one
+place where silence now means the opposite thing.
 
 Resolved in DEC-0081, which is the record; this file is the conflict, not a
-second copy of the decision.
+second copy of the decision. DEM-0001 stays `OPEN` until the source is edited
+or the decision is reversed.
 
 ## Blocks
 

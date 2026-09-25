@@ -36,7 +36,9 @@ SRC-0003#navigation, DEC-0012, DEC-0039, DEC-0052, DEC-0081
 
 Unlocatable: SRC-0003 states the opposite: line 35 reads "Contact and newsletter live in the footer". No line prohibits contact in the footer.
 
-Finding: Contradiction: the prohibition comes from DEC-0081 and overrides SRC-0003 line 35; SRC-0003 has not been amended.
+Finding: The prohibition comes from DEC-0081. SRC-0003 says the opposite and has not been amended, so the disagreement is recorded as a deviation rather than resolved by either side winning silently (DEC-0104 §2).
+
+Deviation: `go-to-market-os/concept/website-information-architecture.concept.md#L35` says "Contact and newsletter live in the footer, together with the legal links". This constraint says the opposite, on DEC-0081: contact is a standing section above the footer, not an entry inside it. The specification carries the truth (DEC-0104 §1) and the source is asked to follow through DEM-0001.
 
 ## Rationale
 

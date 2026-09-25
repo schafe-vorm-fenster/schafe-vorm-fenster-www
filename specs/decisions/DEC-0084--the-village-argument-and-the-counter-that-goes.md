@@ -63,8 +63,11 @@ reason for anything. The causal direction is the need, not the
 constraint.
 
 The canonical home of this argument is the hub's positioning record, not a
-tactical spec (`specs/README.md` rule 4). Recording it there is a demand
-on the hub owner; until it lands, `TS-WEB-0027 D3` cites this record.
+tactical spec (`specs/README.md` rule 1: a spec cites, it does not restate).
+Recording it there is a demand on the hub owner; until it lands,
+`TS-WEB-0027 D3` cites this record. *(This sentence cited rule 4 until
+2026-09-25; the point it makes is about copying, which is rule 1 — see the
+amendment.)*
 
 ### 3. The counter module goes; the live-module rule gains a named exemption
 
@@ -99,10 +102,34 @@ evidence, not about compliance.
 - `DEC-0066`'s aside is corrected by amendment; its decision — one register,
   `du` everywhere — is untouched.
 - **SRC-0001's compliance check is the one thing this record cannot
-  verify.** If it mandates a live element on *every* page rather than
-  making it a property of the page brief, the concept document is amended
-  first and this exemption follows it (rule 4). Recorded as an open point
-  on `TS-WEB-0006`, addressed to the IA owner.
+  verify.** If it mandates a live element on *every* page rather than making it
+  a property of the page brief, the exemption **stands anyway** and the
+  disagreement is recorded against the source — see the amendment. Recorded as
+  an open point on `TS-WEB-0006`, addressed to the IA owner.
 - The figure and the argument both reach the copy guide through
   SRC-0017 CG-001/CG-034, which cite `DEC-0066`; that citation now resolves
   to a corrected record.
+
+## Amendment 2026-09-25 — the exemption does not wait for the source
+
+This record said twice that if `SRC-0001`'s compliance check mandates a live
+element on every page unconditionally, *"the concept document is amended first
+and this exemption follows it (rule 4)"*. DEC-0104 §1 inverts that rule: the
+specification carries the truth and a source is cited rather than obeyed.
+
+So the sequencing goes away. **The exemption stands from the moment this record
+took it**, `TS-WEB-0006 D1` permits `liveModules: []` on the three named sender
+surfaces, and if the compliance check turns out to mandate one unconditionally,
+that is a **deviation recorded against SRC-0001** plus a demand on the IA owner
+— not a reason for the exemption to wait.
+
+The reasoning §3 already gave is exactly why: *"A rule that can only be
+satisfied by breaking another rule is not satisfied, it is evaded."* That is a
+specification determination about two rules this specification holds, and it
+never needed the source's permission. What the source can still do is turn out
+to be right — in which case the demand is answered by the exemption being
+withdrawn, at a decision point, with a record.
+
+Nothing else in this record changes: the counter module stays deleted, the
+three sender surfaces are the same three, and the exemption still lapses on its
+own terms if a places-per-scope count arrives upstream (Q-0037).

@@ -38,7 +38,9 @@ SRC-0003, DEC-0036, DEC-0052, DEC-0081
 
 Unlocatable: SRC-0003 line 205 states for `/ueber-uns`: "Primary conversion: none of its own; the closing CTA offers all three jobs" — the opposite of `request-product-briefing` as primary; the conversion map (line 234) does not list `/ueber-uns` either.
 
-Finding: Contradiction: the statement follows DEC-0081 §6 / DEC-0052 §4 as amended; SRC-0003 still carries the unamended "none of its own".
+Finding: The statement follows DEC-0081 §6 / DEC-0052 §4 as amended; SRC-0003 still carries the unamended "none of its own". The disagreement is recorded as a deviation, not settled by precedence (DEC-0104 §2).
+
+Deviation: `go-to-market-os/concept/website-information-architecture.concept.md#L205` says "Primary conversion: none of its own; the closing CTA offers all". This requirement gives the page `request-product-briefing`, on DEC-0081 §6: a reader who finishes the provenance page is at the closest thing this site has to a sales conversation. The specification carries the truth (DEC-0104 §1); DEM-0001 asks the source to follow, including the conversion-map row at line 234.
 
 ## Notes
 

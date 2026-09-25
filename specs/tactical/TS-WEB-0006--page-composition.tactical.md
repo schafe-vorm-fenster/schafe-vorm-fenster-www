@@ -390,17 +390,22 @@ the promise is removed rather than softened.
   requires band *then* CTA, SRC-0003 makes them the same three jobs.
   Confirm the merge, or accept the same three jobs twice in a row.
 - **Does SRC-0001's compliance check mandate a live element on every
-  page?** D1 now permits `liveModules: []` on the three sender surfaces
-  (DEC-0084 §3), because the only live figures a provenance page could
-  carry are the traction figures FUN-WEB-0041 forbids. If the check mandates
-  one unconditionally rather than as a property of the page brief, the
-  concept document is amended first and this exemption follows it
-  (`specs/README.md` rule 4). **Answered by:** the IA owner.
-- **The design guide still gives two components a primary CTA.** SRC-0014's
-  explain module and contact section each specify "the primary treatment"
-  for their CTA. DEC-0082 §2 corrects the guide, not the rule; until that
-  correction lands, SRC-0014 and D3 disagree in writing. **Answered by:**
-  the owner of `concept/website-design-system.md` and SRC-0013.
+  page?** D1 permits `liveModules: []` on the three sender surfaces
+  (DEC-0084 §3), because the only live figures a provenance page could carry
+  are the traction figures FUN-WEB-0041 forbids. The exemption **does not wait
+  on the answer** (DEC-0104 §1, DEC-0084 amendment 2026-09-25): if the check
+  mandates one unconditionally, that is a deviation recorded against SRC-0001
+  and a demand on its owner, not a reason for D1 to change. What is still asked
+  is whether the check in fact mandates it, because a demand needs a subject.
+  **Answered by:** the IA owner.
+- ~~**The design guide still gives two components a primary CTA.**~~ **Closed
+  by DEC-0082 §2, and the correction has landed.** SRC-0014 now reads *"Filled
+  is a weight, not a conversion rank. The first row is `data-cta="secondary"`"*
+  for the contact section and *"One CTA … at **secondary** treatment"* for the
+  explain module, and `specs/contracts/design-system-contract.md` makes both
+  `secondary` by definition rather than by configuration — *"neither may take
+  `primary` as a prop value"*. SRC-0014 and D3 no longer disagree in writing,
+  and `A18` asserts it. CONF-0015 records the collision that was.
 - ~~**The generic-claims term list does not exist.**~~ **Closed by
   DEC-0080.** It is the avoid list of SRC-0017 §9 plus the avoid column of
   `specs/glossary/glossary.md`, bound as a lint row by SRC-0018 (CG-040).

@@ -34,7 +34,7 @@ The solution SHALL deploy the `next-2026` branch to `next.schafe-vorm-fenster.de
 
 DEC-0031, DEC-0035
 
-Finding: The second source DEC-0035 supports it (its Decision table assigns `next.` of `schafe-vorm-fenster.de`, named on line 11, to the website migration preview and resolves Q-0027), while the first-named DEC-0031 line 14 leaves the name open and contradicts it; DEC-0035 itself never names the `next-2026` branch, which is DEC-0031 line 11.
+Finding: The statement is carried by two records between them, and neither carries it alone. DEC-0035's Decision table assigns `next.` of `schafe-vorm-fenster.de`, named on line 11, to the website migration preview and resolves Q-0027, but never names the `next-2026` branch; DEC-0031 line 11 names the branch, and its line 14 leaves the host name open. That is a **silence in the earlier record**, not a disagreement with it: DEC-0031 left the host name to be settled and DEC-0035 settled it. The wording here previously read the silence as the earlier record standing against the statement, which over-claimed; it is corrected, because claiming a disagreement that is not there is the same defect as hiding one that is (DEC-0104 §2).
 
 ## Rationale
 

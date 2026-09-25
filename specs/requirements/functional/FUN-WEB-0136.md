@@ -36,7 +36,9 @@ SRC-0001#2-order-do-not-exclude, DEC-0082
 
 Unlocatable: Nothing in the file permits a second, adjacent action in the hero or mentions a page brief declaring a goal of equal weight; "hero" does not occur.
 
-Finding: Parent line 207 states the opposite emphasis (one primary conversion, visually unrivalled), so it does not support this permission; it comes from DEC-0082.
+Finding: Parent line 207 states the opposite emphasis (one primary conversion, visually unrivalled), so it does not support this permission; it comes from DEC-0082. Recorded as a deviation rather than left as a citation that does not hold (DEC-0104 §2).
+
+Deviation: `go-to-market-os/concept/website-information-architecture.concept.md#L207` requires "One primary conversion per page, above the fold, visually unrivalled". This requirement permits a second adjacent action, on DEC-0082 §3: equal weight in a page brief means the offer is equally available, not that two elements share one visual rank, so the consult sits beside the purchase at secondary treatment. The specification carries the truth (DEC-0104 §1); DEM-0064 asks the source to follow.
 
 ## Rationale
 

@@ -4,7 +4,7 @@ id: SRC-0018
 status: DRAFT
 date: 2026-09-23
 updated: 2026-09-24
-decisions: [DEC-0066, DEC-0080]
+decisions: [DEC-0066, DEC-0080, DEC-0104]
 ---
 
 # Copy Contract
@@ -18,6 +18,15 @@ is recorded as human review.
 It is the copy counterpart of the design-system contract (SRC-0013) and reads
 the same way: the guide says what is right, the contract says who catches it
 being wrong.
+
+**The guide it binds is specification, not input** (DEC-0104 §3). SRC-0017 is
+prescriptive — forty-one numbered rules with measures — so a spec that
+contradicts one is a defect in the spec. That is the direction DEC-0080 §3
+already took when it replaced `TS-WEB-0006 D7`, and DEC-0104 §5 re-bases its
+reason: not "a concept document wins over a spec", which is the rule DEC-0104
+inverted, but that the guide is specification-side and this contract makes
+every one of its rules checkable. The guide keeps `status: draft` and keeps its
+place in `concept/`.
 
 ## The rule of this contract
 

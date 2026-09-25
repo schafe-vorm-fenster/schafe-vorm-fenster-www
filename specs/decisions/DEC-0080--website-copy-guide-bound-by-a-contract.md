@@ -37,10 +37,11 @@ one, and two mechanisms were waiting on an artefact that did not exist.
 
 The tempting shortcut was to write the rules into the specs — a new
 requirement family, or a longer `TS-WEB-0006 D7`. That inverts the framework. A
-spec cites, it does not invent (STRICT: no invention; `specs/README.md` rules
-1 and 4). Rules about how the site speaks are a concept, and a concept that
-specs cite must be a document with a source id, not a paragraph inside a
-tactical spec.
+spec cites, it does not invent (STRICT: no invention; `specs/README.md` rule
+1). Rules about how the site speaks belong in a document with a source id, not
+in a paragraph inside a tactical spec. *(As first written this sentence also
+cited rule 4 — the precedence rule DEC-0104 inverted. The argument it actually
+makes is about citation and invention, which rule 1 carries alone.)*
 
 ## Decision
 
@@ -62,9 +63,14 @@ Four points settle how the layers divide:
    rules, the kicker vocabulary, the use/avoid list as it applies to page
    copy — these are true of this website and of nothing else, exactly as the
    design system is the website's cut of the brand kit.
-3. **A concept document wins over a spec.** `TS-WEB-0006 D7`'s question-opener
-   rule is not amended by argument; it is replaced because the guide now says
-   otherwise, and the guide is a concept document (`specs/README.md` rule 4).
+3. **The guide is specification-side, and `TS-WEB-0006 D7` was wrong.**
+   `TS-WEB-0006 D7`'s question-opener rule is not amended by argument; it is
+   replaced because the artefact carrying the right rule is the guide, and the
+   guide is prescriptive, bound by SRC-0018, with a mechanism behind every one
+   of its forty-one rules (§4). *(Amended 2026-09-25 — see the amendment
+   below. As first written this point read "A concept document wins over a spec
+   … and the guide is a concept document (`specs/README.md` rule 4)", which is
+   the precedence rule DEC-0104 inverted.)*
 4. **Every rule has an owning mechanism or is declared human.** The contract
    assigns each of the forty-one rules to a schema `max()`/`describe()`, a
    `check:content` lint row, an e2e assertion, or the editorial gate. A rule
@@ -102,3 +108,30 @@ way it cites a `DEC-####`.
   land, SRC-0017 §9 carries the word-level anti-patterns the review supplied;
   when they land, the guide keeps the website's cut and drops the rest. That
   handover is open decision 3 of the guide.
+
+## Amendment 2026-09-25 — §3's reason is re-based on DEC-0104
+
+**§3's outcome stands unchanged.** `TS-WEB-0006 D7` is replaced, `A8` is the
+static half, `A16` the reviewed half, and the two page-level criteria stay
+inverted. Nothing about the guide, the contract or the forty-one rule ids
+moves.
+
+What is withdrawn is the **reason** §3 gave. It cited `specs/README.md` rule 4
+— *"a concept document wins over a spec"* — as an authority, and DEC-0104 §1
+inverts that rule: the specification carries the truth and a source is cited,
+not obeyed. This record is the only place in the repository where the old rule
+was used as an authority rather than merely stated, which is why leaving it
+would leave a live citation of a withdrawn rule.
+
+The reason it takes instead is DEC-0104 §3: `concept/website-copy-guide.md` is
+**specification-side**, not concept input. It is prescriptive, it is bound by
+`specs/contracts/copy-contract.md` (SRC-0018), and every rule it carries has an
+owning mechanism because §4 of this record required one. So `D7` was not
+overruled by a concept document — `D7` was **wrong**, and the artefact that
+carried the right rule happened to be the guide.
+
+The distinction matters for what happens next time: under the old reason, any
+sentence in any concept document could have replaced a determination. Under
+this one, only a specification-side artefact with a contract row can, and a
+disagreement with a hub concept document is settled the other way, with the
+deviation recorded (DEC-0104 §2).

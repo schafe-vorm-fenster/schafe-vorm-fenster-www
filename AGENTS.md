@@ -117,7 +117,7 @@ DEC-0098 made a source's trust level **computed**: the six-dimension vector of
 minimum, never the average. 15 of the 18 levels changed and not one source
 did. DEC-0099 created the two registers the method defines and this repository
 did not have — `specs/conflicts/` (24 `CONF-####`) and
-`specs/demands/demand-register.md` (59 `DEM-####`) — populated from the
+`specs/demands/demand-register.md` (65 `DEM-####`) — populated from the
 decision records and the question register, never from an invented conflict.
 DEC-0100 settled the decision-record shape: an ADR and a STRICT decision
 record are **two artefacts**, both are kept, and `specs/decisions/` now holds
@@ -140,7 +140,31 @@ for the expansion `GOAL-WEB-0002` carries. A need may name only a stakeholder
 `SSD-WEB-0001`'s `stakeholders[]` lists; adding one is DP-07, not an
 executor's.
 
-`check:specs` runs E1–E26 and reports W1–W9. W3 (untested criteria) and W7
+**The specification carries the truth, and a source is cited rather than
+obeyed (DEC-0104).** Until 2026-09-25 `specs/README.md` rule 4 said the
+opposite — a concept document won over a spec — which let `SRC-0003`, trust
+`low`, overrule two `S3` requirements. It now reads the method's way:
+`foundation-evidence-discipline` makes the relation a **citation** with a
+position and an excerpt, `method-source-quality-rating` exists so the method
+*"can refuse to build on [a bad source] silently"*, and the source-inventory
+contract gives every source a defect list and a demand channel. Three
+consequences bind every change here:
+
+1. Where the specification and a source disagree, **the specification stands**.
+   That is not a licence to invent or to copy: rule 1 (cite hub ids, never
+   restate them) and working rule 7 below are untouched.
+2. **The deviation is recorded twice** — a `Deviation:` line in the
+   requirement's `## Source` section naming the source line and why, and a
+   `DEM-####` against the source. `check:specs` **E27** enforces the shape,
+   **W10** reports the contradiction that no record carries.
+3. `concept/website-design-system.md` (SRC-0014) and
+   `concept/website-copy-guide.md` (SRC-0017) are the exception because they are
+   not input: they are **specification-side**, bound by their contracts under
+   `specs/contracts/`, so a spec contradicting one is a defect in the spec.
+   Both stay in `concept/` and both stay `status: draft`; DEC-0104 §3 says why
+   neither file moved.
+
+`check:specs` runs E1–E27 and reports W1–W10. W3 (untested criteria) and W7
 (unknown fit criteria) are the same gap seen from two ends; W8 is the locator
 fill rate; W9 is the chain report in both directions — orphan requirement,
 orphan need, uncovered need, uncovered goal, each as a fraction, with the
@@ -174,6 +198,7 @@ change, and that is never an agent's.
 5. Preserve the archive folders as they are; do not move them back into the repository root or reorganise them unless explicitly asked.
 6. When adding a new technical foundation, update `README.md` and `CONTRIBUTING.md` in the same change.
 7. Never copy content or concept documents from `go-to-market-os` into this repository. Link to them.
+8. The specification carries the truth; a hub concept document is input and evidence (DEC-0104, `specs/README.md` rules 4–6). Where they disagree, the spec stands **and** the deviation is recorded — on the artefact and as a `DEM-####`. Never silently, and never by the source winning by default. The two local guides are specification-side and are the exception.
 
 ## Typical Tasks
 

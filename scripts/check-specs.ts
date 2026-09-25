@@ -45,6 +45,8 @@
  *      goal, and names a stakeholder the specification document lists
  *  E26 Every goal is the goal contract's shape and falls inside scope — it
  *      names the specification document, and its parent goal resolves
+ *  E27 A recorded deviation from a source names the line it contradicts and an
+ *      existing demand against that source (DEC-0104 §2)
  *  W1  (warning) requirements not covered by any tactical spec
  *  W2  (warning) covered requirements discharged by no acceptance criterion
  *  W3  (warning) acceptance criteria no test references
@@ -58,6 +60,8 @@
  *  W9  (report) chain linkage, both directions: the five findings
  *      `method-chain-linkage` names, each as a fraction with its numerator
  *      and denominator, "never as a bare percentage"
+ *  W10 (report) how many deviations from a source are recorded, and which
+ *      requirements state a contradiction in prose that no record carries
  *
  * Exit code: number of errors (0 = green). Warnings never fail the run.
  *
@@ -496,6 +500,49 @@ const checkLocator = (d: Doc, id: string) => {
 };
 
 /**
+ * The deviation record (E27), and the contradiction that carries none (W10).
+ *
+ * DEC-0104 inverted `specs/README.md` rule 4: the specification carries the
+ * truth and a source is cited, not obeyed. The price of that is rule 5 — a
+ * deviation from a source is recorded twice, on the artefact and as a demand
+ * against the source — and this is the half of it a script can hold.
+ *
+ * **E27.** A `Deviation:` line in a requirement's `## Source` section names
+ * the exact source position it contradicts, in the same form E19 requires of
+ * the `loc` field, and an existing `DEM-####`. A deviation without a position
+ * is the defect `method-identifier-and-locator-schema` calls unlocatable; a
+ * deviation without a demand is the silent override DEC-0104 exists to end.
+ *
+ * **W10.** The complement, and a warning rather than an error because it is a
+ * prose match: a `Finding:` that says the requirement contradicts, overrides
+ * or supersedes its source while no `Deviation:` line records it. E27 only
+ * fires on a record that is already there; W10 is how the missing one shows.
+ */
+const DEVIATION_LINE = /^Deviation:.*$/gm;
+/** A position inside a named source, as the `loc` pattern spells it. */
+const DEVIATION_LOCATOR = /\S+#(?:L\d+|P\d+|¶\d+|M\d+:\d+)/;
+/**
+ * The vocabulary of a contradiction **with the source**, in a `Finding:` line.
+ *
+ * "Supersede" is deliberately not in it: in a `Finding:` it almost always
+ * describes one decision record superseding another, which is the ordinary way
+ * this repository moves, not a specification standing against its source.
+ */
+const CONTRADICTION_PROSE = /\b(?:contradicts?|contradiction|overrid(?:es?|ing)|deviat(?:es?|ion)|the opposite)\b/i;
+/** `id` → the deviation lines it carries, checked once `demDefs` is complete. */
+const deviations = new Map<string, string[]>();
+/** Requirements whose prose states a contradiction that no `Deviation:` records. */
+const unrecordedDeviations: string[] = [];
+
+const collectDeviations = (d: Doc, id: string) => {
+  const source = d.body.split(/^## /m).find((s) => s.startsWith("Source\n"));
+  if (source === undefined) return;
+  const lines = [...source.matchAll(DEVIATION_LINE)].map((m) => m[0]);
+  if (lines.length) deviations.set(id, lines);
+  else if (CONTRADICTION_PROSE.test(source.match(/^Finding:.*$/m)?.[0] ?? "")) unrecordedDeviations.push(id);
+};
+
+/**
  * The six-dimension source-quality vector (E20).
  *
  * `@leafcutter-strict/method-source-quality-rating` scores locatability,
@@ -785,6 +832,7 @@ for (const d of docs) {
       checkProvenance(d, id);
       checkFitCriterion(d, id);
       checkLocator(d, id);
+      collectDeviations(d, id);
       // E14: the grammar form belongs to the class (`method-statement-grammar`)
       const form = d.frontmatter?.form;
       const expectedForm = FORM_OF_CLASS[id.slice(0, id.indexOf("-"))];
@@ -970,6 +1018,21 @@ for (const d of docs) {
   // contracts register may define an SRC id in frontmatter
   if (/\/contracts\//.test(d.file) && typeof d.frontmatter?.id === "string" && SOURCE_ID.test(d.frontmatter.id as string)) {
     srcDefs.add(d.frontmatter.id as string);
+  }
+}
+
+// ── E27: a recorded deviation names a line and a demand ──────────────────
+
+for (const [id, lines] of [...deviations].sort()) {
+  const file = reqDefs.get(id) ?? id;
+  for (const line of lines) {
+    if (!DEVIATION_LOCATOR.test(line))
+      err(file, `E27 ${id}: a Deviation: line names no position — "<file>#L…" is what makes the contradicted line checkable (DEC-0104 §2)`);
+    const demands = [...line.matchAll(new RegExp(bare(DEMAND_ID), "g"))].map((m) => m[0]);
+    if (!demands.length)
+      err(file, `E27 ${id}: a Deviation: line names no DEM-#### — a deviation with no demand against the source is the silent override DEC-0104 ends`);
+    for (const dem of demands)
+      if (!demDefs.has(dem)) err(file, `E27 ${id}: Deviation: names ${dem}, which the demand register does not hold`);
   }
 }
 
@@ -1558,6 +1621,18 @@ warnings.push(
     `${fitUnknown}/${fitMeasured + fitUnknown} requirements have no test below their fit criterion. ` +
     `It is counted once, there.`,
 );
+
+const deviationLines = [...deviations.values()].reduce((n, l) => n + l.length, 0);
+warnings.push(
+  `W10 recorded deviations: ${deviationLines} on ${deviations.size}/${reqDefs.size} requirements. ` +
+    `DEC-0104: the specification carries the truth, and the deviation is recorded — on the artefact and as a demand.`,
+);
+if (unrecordedDeviations.length) {
+  warnings.push(
+    `   ${unrecordedDeviations.length} state a contradiction with the source in prose while no Deviation: line records it: ` +
+      `${unrecordedDeviations.sort().join(", ")} · record it, or reword the Finding so it stops claiming one`,
+  );
+}
 
 warnings.push(
   `W8 source locator: ${locResolved}/${locResolved + locUnknown} requirements resolve to a position in their source; ` +
