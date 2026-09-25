@@ -65,8 +65,12 @@
   --height-chip: var(--target-min); /* ≥ 40 specified; 44 also clears 2.5.5 */
   --height-badge: 26px;
   --height-badge-icon: 30px;
-  /* SRC-0014 §Wells: the 40 px icon well is decoration, not a target (T-05). */
+  /* SRC-0014 §Wells: the 40 px icon well is decoration, not a target (T-05).
+     The same `lime-100` well sits in the price tier row, the setting row and
+     the hint banner, with a 24 px `lime-800` glyph inside (T-06, DEC-0118). */
   --height-icon-well: 40px;
+  /* SRC-0014 §Badge and chip, "Tag": the non-tappable 30 px size. */
+  --height-tag: 30px;
   --height-event-row: 76px;
   --height-search: var(--target-comfortable); /* 56 */
 

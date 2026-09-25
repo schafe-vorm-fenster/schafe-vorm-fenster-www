@@ -427,17 +427,6 @@ export default async function Page({
               </Button>
             }
             priceDisplay="permanent"
-            secondaryCta={
-              tier1Ctas[1] ? (
-                <Button
-                  locale={locale}
-                  to="takePart"
-                  variant={OFFER_TIER_CTA_VARIANT["community-calendar"]}
-                >
-                  {tier1Ctas[1]}
-                </Button>
-              ) : undefined
-            }
           />
 
           <OfferTier
@@ -457,23 +446,6 @@ export default async function Page({
             }
             priceDisplay={portalizePrice.display}
             priceFigure={portalizePrice.figure}
-            secondaryCta={
-              <ConversionTracker
-                attributes={{ route: ROUTE }}
-                goalId="request-product-briefing"
-                stage="handover"
-              >
-                <OutboundLink
-                  disclosure={BRIEFING_DISCLOSURE[locale]}
-                  href={BRIEFING_URL}
-                  locale={locale}
-                  newTab
-                  variant="quiet"
-                >
-                  {fieldAt(tiers.blocks, 9)}
-                </OutboundLink>
-              </ConversionTracker>
-            }
           />
 
           <OfferTier
