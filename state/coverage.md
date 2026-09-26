@@ -16,7 +16,7 @@ says what the five verdicts mean and what gates.
 | NAMED ONLY | 32 | the id is in a runner file but in no test title — **not coverage** |
 | MISSING | 145 | nothing names it |
 
-Rule 1 (a new criterion arrives with its instrument): 2 criterion(a) new in this commit, 0 without an instrument.
+Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
 
 ## By level
 
