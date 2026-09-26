@@ -4,8 +4,10 @@
  * A8: "The response-time wording exists in exactly one module; a content lint
  * fails on that wording in any content file." Neither half existed.
  *
- * The wording is the two-working-day promise of FUN-WEB-0022 / TS-WEB-0026 D5, and
- * D5 is unambiguous about why this needs a lint rather than a review: while
+ * The wording is the two-working-day promise of BUS-WEB-0016 and FUN-WEB-0203
+ * — DEC-0094 split the rule the business is bound by from the page that states
+ * it — and of TS-WEB-0026 D5. D5 is unambiguous about why this needs a lint
+ * rather than a review: while
  * Q-0022 C11 is unanswered the promise is **removed, never softened** — "a
  * vaguer promise is still an unbacked promise". A softened variant is
  * therefore exactly what a human reviewer would wave through and a term list

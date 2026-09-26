@@ -1233,7 +1233,10 @@ export const GALLERY: readonly GalleryEntry[] = [
         <p>Ohne bestätigten Prozess (Q-0022 C11 offen) — nichts wird gerendert:</p>
         <ResponsePromise text={null} />
         <p>Sobald ein Prozess steht, zur Ansicht:</p>
-        <ResponsePromise text="Antwort innerhalb von zwei Werktagen" />
+        {/* Not the promise itself: `check:terms` (TS-WEB-0026-A8) allows the
+            response-time wording in `response-promise/constant.ts` and
+            nowhere else, a gallery demo included. */}
+        <ResponsePromise text="Hier steht der bestätigte Zusagesatz." />
       </div>
     ),
   },

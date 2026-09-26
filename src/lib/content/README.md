@@ -197,8 +197,8 @@ error, for the window while a locale is being written.
 
 ### Not implemented yet
 
-Of TS-WEB-0007 D12's twelve rows, six do not run, and the reason is always that
-the artefact they check against does not exist yet:
+Of TS-WEB-0007 D12's fourteen rows, five do not run, and the reason is always
+that the artefact they check against does not exist yet:
 
 | D12 | Missing |
 | --- | --- |
@@ -207,7 +207,22 @@ the artefact they check against does not exist yet:
 | 6 hub id resolution | audience/goal/offering ids are not yet carried in page frontmatter |
 | 9 slot binding (the composition half) | Layer C — page compositions have no spec (TS-WEB-0007 open point) |
 | 10 segment independence | a rule for which strings are "generated" once facets exist |
-| 11 glossary conformance | the use-this-word/avoid-this-word columns (TS-WEB-0007 open point) |
 | 12 legal | `content/legal/` is still the flat pre-relaunch tree without `locale`/`anchor` |
 
 They are on `state/open.md`, not silently absent.
+
+### The copy lint — what rows 11, 13 and 14 do and do not do
+
+`checkCopy()` and `checkProductName()` are the machine half of
+`specs/contracts/copy-contract.md`. They read **copy**: field values, and the
+list items and table cells standing directly under a field. They do not read a
+field label (a slot-internal name) and they do not read a paragraph (the
+authoring note that says where the copy came from) — DEC-0136 says why, and
+`validate.test.ts` fixes both with a fixture.
+
+| Row | Runs | Left to review |
+| --- | --- | --- |
+| 11 avoid list (CG-040, CG-009, CG-017, CG-018, CG-035, CG-036, CG-039) | every term of the guide's DE and EN tables and of the glossary's avoid column; `AVOID_TERMS` is the list and a drift test binds it to the glossary | the generic-claims row as an *adverb* (`einfach` inside a sentence): the row carries no replacement, so failing it would force an invention — TS-WEB-0006-A16 |
+| 11 product name (CG-038) | `Portalize` in exactly one field per locale, in the `/dein-kalender` tier slot; case-sensitive, so the offering id `portalize-calendar` in a data cell is not a hit | — |
+| 13 copy structure (CG-005, CG-004) | a question mark in a section-title-role field; the back-reference phrases; `im Amt` without a second addressee | CG-015 word-stem doubling and CG-034 volatile numerals stay review-level (`copy-contract.md`); "states what works" is meaning |
+| 14 register (CG-003) | a capitalised `Sie`/`Ihnen`/`Ihre*` mid-sentence and an imperative `<Verb> Sie`, with `/rechtliches` exempt whole and by route | CG-002's other half — one field mixing `du` and `ihr` — and the imported legal bodies under `content/legal/`, which the page scan does not reach |

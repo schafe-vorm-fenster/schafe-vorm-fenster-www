@@ -1,10 +1,26 @@
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { describe, expect, it } from "vitest";
 
 import { parsePage } from "@/src/lib/content/loader";
 import { createHubResolver } from "@/src/lib/content/source-refs";
-import { checkLifecycle, checkLocaleSet, checkPage } from "@/src/lib/content/validate";
+import {
+  AVOID_TERMS,
+  checkCopy,
+  checkLifecycle,
+  checkLocaleSet,
+  checkPage,
+  checkProductName,
+  fieldRole,
+  REGISTER_EXEMPT_ROUTES,
+} from "@/src/lib/content/validate";
+import { ROUTES } from "@/src/lib/routes/routes";
 
 import type { PageContent } from "@/src/lib/content/types";
+import type { Locale } from "@/src/lib/i18n/locales";
+import type { RouteId } from "@/src/lib/routes/routes";
 
 const resolver = createHubResolver();
 
@@ -383,5 +399,323 @@ reviewed_at: "2026-09-11"
     );
     expect(approved.ok).toBe(true);
     expect(checkLifecycle(approved, "production")).toEqual([]);
+  });
+});
+
+/* ---------------------------------------------------------------------------
+ * D12 rows 11, 13 and 14 — the copy lint (DEC-0136)
+ *
+ * Every row below has a passing and a failing fixture, because half of this
+ * lint is what it must *not* fail: a kicker that asks a question, `Sie` as the
+ * plural pronoun at the start of a sentence, `einfach` as an adverb inside the
+ * owner's own sentence, an offering id that contains the product name.
+ * ------------------------------------------------------------------------ */
+
+/** A fixture bound to any route and locale — the register row keys on it. */
+function pageAt(routeId: RouteId, locale: Locale, body: string): PageContent {
+  return parsePage(
+    `---
+id: fixture
+page_id: ${ROUTES[routeId].spec}
+route: "${ROUTES[routeId].path[locale]}"
+seo:
+  "${ROUTES[routeId].path[locale]}":
+    title: "Fixture-Titel"
+    description: "Fixture-Beschreibung"
+    provenance: generated
+content_type: section
+status: draft
+locale: ${locale}
+derived_from:
+  - "ia"
+generated_by: "playbook-content-production@1.0.0"
+generated_at: "2026-09-11"
+provenance: "sourced"
+---
+
+# Fixture
+
+## Slot 1
+
+<!-- id: fixture-1; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+
+${body}`,
+    { routeId, locale, file: `content/pages/fixture/${locale}.md` },
+  );
+}
+
+const slotOf = (body: string) => pageAt("home", "de", body);
+
+describe("TS-WEB-0007-A13 / D12 row 11: the avoid list fails the build (CG-040)", () => {
+  it("fails an avoid-list term in a field, naming the field, the term and the replacement", () => {
+    const findings = checkCopy(slotOf("**Überschrift:** Was die Leute hier brauchen"));
+    const error = findings.find((finding) => finding.check === "avoid-list");
+    expect(error?.level).toBe("error");
+    expect(error?.slot).toBe("fixture-1");
+    expect(error?.message).toContain("Überschrift");
+    expect(error?.message).toContain("die Leute");
+    expect(error?.message).toContain("die Nachbarn");
+  });
+
+  it("fails the English mirror of the same term (CG-041)", () => {
+    const findings = checkCopy(pageAt("home", "en", "**Heading:** What the people here need"));
+    expect(checks(findings)).toContain("avoid-list");
+  });
+
+  it("passes a field that uses the replacement instead", () => {
+    expect(checkCopy(slotOf("**Überschrift:** Was die Nachbarn hier brauchen"))).toEqual([]);
+  });
+
+  it("reads a list item and a table cell under a field, but never an authoring note", () => {
+    const inCopy = checkCopy(
+      slotOf(`**Kandidaten:**
+
+- Die Leute aus dem Nachbardorf`),
+    );
+    expect(checks(inCopy)).toContain("avoid-list");
+
+    const inNote = checkCopy(
+      slotOf(`**Überschrift:** Was die Nachbarn hier brauchen
+
+Drei Abweichungen vom Entwurf, alle aus einer Quelle:
+
+- Kein „die Leute" in der Überschrift — CG-009, und das Review sagt es selbst.`),
+    );
+    expect(inNote).toEqual([]);
+  });
+
+  it("never reads the field label itself — a slot may be labelled `Warum es zählt`", () => {
+    expect(checkCopy(slotOf("**Warum es zählt:** Damit euer Termin ankommt"))).toEqual([]);
+  });
+
+  it("fails `im Amt` as the only addressee and passes it beside a second one (CG-036)", () => {
+    expect(checks(checkCopy(slotOf("**Text:** Bei euch im Amt liegt der Kalender.")))).toContain(
+      "avoid-list",
+    );
+    expect(checkCopy(slotOf("**Text:** Im Amt und im Verein liegt der Kalender."))).toEqual([]);
+  });
+
+  it("fails a generic claim that stands alone and passes the same word in a sentence", () => {
+    expect(checks(checkCopy(slotOf("**Überschrift:** Einfach · digital · für alle")))).toContain(
+      "avoid-list",
+    );
+    expect(
+      checkCopy(slotOf("**Text:** Ein Dorf braucht einen einfachen Weg, und einfach zu starten.")),
+    ).toEqual([]);
+  });
+
+  it("exempts the order flow's scope step from the postcode row and nothing else (GL-0012)", () => {
+    expect(
+      checkCopy(pageAt("order", "de", "**Modus:** Postleitzahl: eine PLZ, alle Orte darin")),
+    ).toEqual([]);
+    expect(checks(checkCopy(pageAt("place", "de", "**Hinweistext:** Gib deine PLZ ein")))).toContain(
+      "avoid-list",
+    );
+  });
+
+  it("carries every avoid term of the glossary's avoid column", () => {
+    const glossary = readFileSync(
+      join(dirname(fileURLToPath(import.meta.url)), "../../../specs/glossary/glossary.md"),
+      "utf-8",
+    );
+    // `Portalize` is a count, not a hit (CG-038); `search` is emphasis in
+    // GL-0012's prose, not a term.
+    const notInThisList = new Set(["Portalize", "search"]);
+    const inGlossary = new Set<string>();
+    for (const line of glossary.split("\n")) {
+      if (!line.startsWith("| GL-")) continue;
+      const avoid = line.replace(/^\|/, "").split("|")[4];
+      if (!avoid) continue;
+      for (const match of avoid.matchAll(/\*([^*]+)\*/g)) {
+        const term = match[1].trim();
+        if (!notInThisList.has(term)) inGlossary.add(term);
+      }
+    }
+    expect(inGlossary.size).toBeGreaterThan(5);
+    for (const term of inGlossary) {
+      expect(
+        AVOID_TERMS.some((entry) => entry.pattern.test(term)),
+        `the avoid list does not carry the glossary term "${term}"`,
+      ).toBe(true);
+    }
+  });
+});
+
+describe("TS-WEB-0006-A8 / D12 row 13: a section title is a statement (CG-005)", () => {
+  it("fails a question mark in every section-title-role label", () => {
+    for (const label of [
+      "Überschrift",
+      "Überschrift (ohne Landkreis)",
+      "Fragen-Überschrift",
+      "Modul-Überschrift",
+      "Abschluss-Überschrift",
+      "Section title",
+      "Heading",
+      "Closing heading",
+      "Module heading",
+    ]) {
+      const findings = checkCopy(slotOf(`**${label}:** Wer euren Termin heute nicht mitbekommt?`));
+      expect(
+        findings.map((finding) => finding.check),
+        `\`${label}\` must be read as a section title`,
+      ).toContain("copy-structure");
+    }
+  });
+
+  it("passes a question in a kicker, a form question and the hero headline (CG-020)", () => {
+    for (const label of [
+      "Kicker",
+      "Kicker der unteren Hälfte",
+      "Frage",
+      "Question",
+      "Headline",
+      "h1",
+    ]) {
+      expect(
+        checkCopy(slotOf(`**${label}:** Was hilft euch das?`)),
+        `\`${label}\` is not a section title`,
+      ).toEqual([]);
+    }
+  });
+
+  it("passes a quote's source title, which carries a title word and is not one", () => {
+    expect(checkCopy(slotOf("**Zitat — Quelle (Titel):** Wer baut hier eigentlich?"))).toEqual([]);
+  });
+
+  it("fails `Warum es hakt` as a title and passes it as a kicker (CG-005)", () => {
+    expect(checks(checkCopy(slotOf("**Überschrift:** Warum es heute hakt")))).toContain(
+      "avoid-list",
+    );
+    expect(checkCopy(slotOf("**Kicker:** Warum es heute hakt"))).toEqual([]);
+  });
+});
+
+describe("TS-WEB-0029-A15 / D12 row 14: one register, one exempt route (CG-003)", () => {
+  it("fails a capitalised `Sie` mid-sentence", () => {
+    const findings = checkCopy(slotOf("**Text:** Wenn Sie hier etwas eintragen, steht es morgen."));
+    const error = findings.find((finding) => finding.check === "register");
+    expect(error?.level).toBe("error");
+    expect(error?.message).toContain("Sie");
+  });
+
+  it("fails `Ihnen` and an imperative `<Verb> Sie`", () => {
+    expect(checks(checkCopy(slotOf("**Text:** Der Kalender hilft Ihnen dabei.")))).toContain(
+      "register",
+    );
+    const imperative = checkCopy(slotOf("**Text:** Tragen Sie den Termin ein."));
+    expect(imperative[0]?.message).toContain("imperative");
+  });
+
+  it("passes `Sie` as the plural pronoun at the start of a sentence, and `Ihr` as the informal plural", () => {
+    expect(
+      checkCopy(
+        slotOf(
+          "**Überleitung:** Die Termine tippt niemand bei uns ein. Sie kommen von den Vereinen.",
+        ),
+      ),
+    ).toEqual([]);
+    expect(checkCopy(slotOf("**Einstellungs-Überschrift:** Ihr könnt selbst bestimmen"))).toEqual(
+      [],
+    );
+  });
+
+  it("exempts the `legal` route whole, and only that route — the same sentence fails elsewhere", () => {
+    const sentence = "**Text:** Wenn Sie Ihre Daten löschen lassen wollen, schreiben Sie uns.";
+    expect(checkCopy(pageAt("legal", "de", sentence))).toEqual([]);
+    expect(checkCopy(pageAt("legal", "en", sentence))).toEqual([]);
+    expect(checks(checkCopy(pageAt("about", "de", sentence)))).toContain("register");
+    expect(REGISTER_EXEMPT_ROUTES).toEqual(["legal"]);
+  });
+});
+
+describe("TS-WEB-0018-A7 / D12 row 11: the product name appears once (CG-038)", () => {
+  const tierSlot = (locale: Locale, value: string) =>
+    parsePage(
+      `---
+id: fixture
+page_id: ${ROUTES.calendar.spec}
+route: "${ROUTES.calendar.path[locale]}"
+seo:
+  "${ROUTES.calendar.path[locale]}":
+    title: "Fixture-Titel"
+    description: "Fixture-Beschreibung"
+    provenance: generated
+content_type: section
+status: draft
+locale: ${locale}
+derived_from:
+  - "ia"
+generated_by: "playbook-content-production@1.0.0"
+generated_at: "2026-09-11"
+provenance: "sourced"
+---
+
+# Fixture
+
+<!-- id: dein-kalender-4-tiers; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+
+${value}`,
+      { routeId: "calendar", locale, file: `content/pages/dein-kalender/${locale}.md` },
+    );
+
+  it("passes one field in the tier slot per locale", () => {
+    expect(
+      checkProductName([
+        tierSlot("de", "**Produktname:** Der Kalender unter eurem Namen heißt Portalize."),
+        tierSlot("en", "**Product name:** The calendar under your own name is called Portalize."),
+      ]),
+    ).toEqual([]);
+  });
+
+  it("fails a second field of the same locale", () => {
+    const findings = checkProductName([
+      tierSlot(
+        "de",
+        `**Produktname:** Der Kalender unter eurem Namen heißt Portalize.
+
+**Stufen-Kicker:** Portalize`,
+      ),
+    ]);
+    expect(findings).toHaveLength(2);
+    expect(findings[0]?.check).toBe("product-name");
+    expect(findings[0]?.message).toContain("2 fields");
+  });
+
+  it("fails the name outside the tier slot, naming the slot it belongs to", () => {
+    const findings = checkProductName([
+      pageAt("home", "de", "**Überschrift:** So funktioniert Portalize"),
+    ]);
+    expect(findings[0]?.check).toBe("product-name");
+    expect(findings[0]?.message).toContain("dein-kalender-4-tiers");
+  });
+
+  it("passes an offering id in a data cell — `portalize-calendar` is not the name", () => {
+    expect(
+      checkProductName([
+        tierSlot(
+          "de",
+          `**Häkchen je Stufe:**
+
+| Stufe | Häkchen |
+| --- | --- |
+| portalize-calendar | drei Zeilen |`,
+        ),
+      ]),
+    ).toEqual([]);
+  });
+});
+
+describe("DEC-0136: the field-role map", () => {
+  it("reads a title word in any position of the label", () => {
+    expect(fieldRole("Überschrift des Wege-Slots")).toBe("section-title");
+    expect(fieldRole("Aussage 1 (Überschrift)")).toBe("section-title");
+    expect(fieldRole("Statement 1 (heading)")).toBe("section-title");
+    expect(fieldRole("Titel des Erklärmoduls")).toBe("section-title");
+  });
+
+  it("reads everything else as `other`", () => {
+    for (const label of ["Headline", "Aha-Frage", "Link-Label", "CTA-Label (primär)", "Text"]) {
+      expect(fieldRole(label), label).toBe("other");
+    }
   });
 });

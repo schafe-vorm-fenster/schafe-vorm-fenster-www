@@ -263,8 +263,10 @@ describe("TS-WEB-0006 D11: response-promise renders nothing while the constant i
   });
 
   it("renders the given text once a process exists", () => {
-    const html = renderToStaticMarkup(<ResponsePromise text="Antwort in zwei Werktagen" />);
-    expect(html).toContain("Antwort in zwei Werktagen");
+    // Not the promise itself — `check:terms` keeps that wording inside
+    // `response-promise/constant.ts` (TS-WEB-0026-A8).
+    const html = renderToStaticMarkup(<ResponsePromise text="Hier steht der Zusagesatz." />);
+    expect(html).toContain("Hier steht der Zusagesatz.");
   });
 });
 
