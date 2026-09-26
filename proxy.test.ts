@@ -2,11 +2,14 @@ import { NextRequest } from "next/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { proxy } from "@/proxy";
+import { ENTRY_CONTEXT_HEADER } from "@/src/lib/personalization/entry-handover";
 import {
   NOT_FOUND_LOCALE_HEADER,
   NOT_FOUND_PATH,
 } from "@/src/lib/routes/not-found-routing";
 import { CSP_HASHES_ASSET_PATH, resetScriptHashCache } from "@/src/lib/security/csp-hashes";
+
+import type { NextResponse } from "next/server";
 
 // F-3-9 needs `placeHop` to throw, which nothing in the tree could make it do
 // — `resolvePlace` swallows its own errors and `searchPlaces` has a tier-3
@@ -397,5 +400,78 @@ describe("F-3-9: a failing place hop is logged, and still costs no page", () => 
     expect(JSON.stringify(logged[0])).not.toContain("07743");
 
     error.mockRestore();
+  });
+});
+
+describe("TS-WEB-0010 D2 step 2 — the entry-context handover (DEC-0140)", () => {
+  /**
+   * `NextResponse.next({ request: { headers } })` travels as
+   * `x-middleware-request-<name>` on the response, which is what the render
+   * layer reads back as a request header.
+   */
+  function handedDown(response: NextResponse): string | null {
+    return response.headers.get(`x-middleware-request-${ENTRY_CONTEXT_HEADER}`);
+  }
+
+  it("hands the referrer's host down, without its path", async () => {
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/", {
+        referer: "https://www.linkedin.com/in/someone?utm=x",
+      }),
+    );
+
+    expect(handedDown(response)).toBe("ref=linkedin.com");
+  });
+
+  it("hands a recognised campaign medium down and drops an unrecognised one", async () => {
+    const withMedium = await proxy(
+      request("https://www.schafe-vorm-fenster.de/?etcc_med=print"),
+    );
+    expect(handedDown(withMedium)).toBe("med=print");
+
+    const withoutMedium = await proxy(
+      request("https://www.schafe-vorm-fenster.de/?etcc_med=cpc&ort=lassan"),
+    );
+    expect(handedDown(withoutMedium)).toBe("");
+  });
+
+  it("sets the header on every request, so a client cannot choose its own segment", async () => {
+    const spoofed = await proxy(
+      request("https://www.schafe-vorm-fenster.de/", {
+        [ENTRY_CONTEXT_HEADER]: "ref=linkedin.com",
+      }),
+    );
+
+    // No referrer arrived, so the handover is empty — the client's own value is
+    // overwritten, not merged.
+    expect(handedDown(spoofed)).toBe("");
+  });
+
+  it("carries no geo, IP or place value (TS-WEB-0010-A11)", async () => {
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/?ort=lassan&etcc_med=newsletter", {
+        referer: "https://www.nordkurier.de/artikel/x",
+        "x-forwarded-for": "203.0.113.7",
+        "x-vercel-ip-country": "DE",
+        "x-vercel-ip-city": "Greifswald",
+      }),
+    );
+
+    const value = handedDown(response) ?? "";
+    expect([...new URLSearchParams(value).keys()].toSorted()).toEqual(["med", "ref"]);
+    for (const leak of ["203.0.113.7", "Greifswald", "lassan"]) {
+      expect(value, leak).not.toContain(leak);
+    }
+  });
+
+  it("adds no `Vary` and no `Set-Cookie` (TS-WEB-0010-A6, TS-WEB-0010-A12)", async () => {
+    const response = await proxy(
+      request("https://www.schafe-vorm-fenster.de/", {
+        referer: "https://www.linkedin.com/",
+      }),
+    );
+
+    expect(response.headers.get("Vary")).toBeNull();
+    expect(response.headers.get("Set-Cookie")).toBeNull();
   });
 });

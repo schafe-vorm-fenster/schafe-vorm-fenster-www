@@ -73,6 +73,14 @@ export interface EntryContextInput {
   readonly params?: URLSearchParams | Readonly<Record<string, string | readonly string[] | undefined>>;
   /** The `Referer` header, as it arrived. */
   readonly referrer?: string | null;
+  /**
+   * The referrer's registrable host, already extracted — the proxy's handover
+   * (`entry-handover.ts`, DEC-0140). When present it **replaces** `referrer`:
+   * a page reached through the handover never sees the full referrer URL, and
+   * a host is all the D3 table matches on. Normalised again here, so the two
+   * input paths cannot classify one entry two ways.
+   */
+  readonly referrerHost?: string | null;
   /** The landing route, for the two rows the matrix distinguishes by page. */
   readonly routeId?: RouteId;
   /** The landing page's focus job, for the purchase-intent row. */
@@ -92,11 +100,22 @@ function firstValue(
   return Array.isArray(value) ? value[0] : (value as string);
 }
 
-/** The registrable host of a referrer, lowercase and without `www.`. */
-function hostOf(referrer: string | null | undefined): string | null {
+/** The same normalisation for a host that arrives as a host already. */
+function normaliseHost(host: string | null | undefined): string | null {
+  if (host === null || host === undefined) return null;
+  const normalised = host.trim().toLowerCase().replace(/^www\./, "");
+  return normalised === "" ? null : normalised;
+}
+
+/**
+ * The registrable host of a referrer, lowercase and without `www.` — exported
+ * because the proxy's handover (`entry-handover.ts`) extracts exactly this
+ * value, and two normalisations would be two segmentations.
+ */
+export function referrerHostOf(referrer: string | null | undefined): string | null {
   if (referrer === null || referrer === undefined || referrer.trim() === "") return null;
   try {
-    return new URL(referrer).hostname.toLowerCase().replace(/^www\./, "");
+    return normaliseHost(new URL(referrer).hostname);
   } catch {
     return null;
   }
@@ -117,7 +136,10 @@ export function resolveEntryTrait(input: EntryContextInput): EntryTrait {
     if (medium !== undefined && medium in MEDIUM_TRAITS) return MEDIUM_TRAITS[medium];
   }
 
-  const host = hostOf(input.referrer);
+  const host =
+    input.referrerHost === undefined
+      ? referrerHostOf(input.referrer)
+      : normaliseHost(input.referrerHost);
   if (host === null) return "direct";
 
   // The app is a sibling host of our own domain, so it is tested first: a
