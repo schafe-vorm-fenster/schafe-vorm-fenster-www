@@ -26,6 +26,19 @@ export interface OutboundLinkProps {
    */
   readonly disclosure?: string;
   readonly variant?: "inline" | "secondary" | "quiet";
+  /**
+   * Puts the marking on its own line below the control, whatever the variant.
+   *
+   * `TS-WEB-0016 D16`'s Position row is unconditional for the two surfaces it
+   * names — the contact section's first action row and the lead fallback's
+   * `/start` link: "**under the control, never inside its label.** A label
+   * states the action; a recipient is a separate fact and belongs on its own
+   * line". The control variants stack anyway; the `inline` variant does not,
+   * because a link inside a sentence keeps its marking in the line (an archive
+   * row, a quote card, a proof card). D16 does not reach those, so the stacked
+   * form is a caller's choice rather than the default.
+   */
+  readonly markingOwnLine?: boolean;
   /** The conversion marker the analytics registry reads (TS-WEB-0006 D3) — e.g. `"equal-weight"`. */
   readonly dataCta?: string;
   /**
@@ -52,12 +65,20 @@ export interface OutboundLinkProps {
  * would share the id — which resolves to the same sentence and so reads
  * correctly, but a page that wants two distinct markings passes `noteId`.
  *
- * The bound the derivation carries: the slug is the first **48 characters**
- * of the target, so two targets that agree on that prefix and differ only
- * after it produce the same id. No such pair exists in the route table, and
- * `noteId` is the escape hatch for the page that grows one. The dashes are
- * trimmed *after* the slice, so a cut that lands on a separator does not
- * leave a trailing dash in the id.
+ * The slug is readable but lossy: it is the first **48 characters** of the
+ * target, so two targets that agree on that prefix and differ only after it
+ * would produce the same id — a duplicate DOM id and an `aria-describedby`
+ * that resolves to the wrong sentence. The review round measured the exposed
+ * surface and it is not the route table: nine of the twelve outbound URLs the
+ * markings are rendered from (`@schafe-vorm-fenster/media-echo`,
+ * `@schafe-vorm-fenster/proof`) are already longer than 48 characters, and
+ * they are owner-editable content data. So the id carries a **fingerprint of
+ * the whole href** after the slug: the slug stays legible in the DOM, and two
+ * distinct targets cannot share an id however they were truncated. `noteId`
+ * remains the caller's override, not a collision workaround.
+ *
+ * The dashes are trimmed *after* the slice, so a cut that lands on a
+ * separator does not leave a trailing dash before the fingerprint.
  */
 export function outboundNoteId(href: string): string {
   const slug = href
@@ -66,7 +87,23 @@ export function outboundNoteId(href: string): string {
     .slice(0, 48)
     .replace(/^-+|-+$/g, "")
     .toLowerCase();
-  return `outbound-note-${slug || "link"}`;
+  return `outbound-note-${slug || "link"}-${hrefFingerprint(href)}`;
+}
+
+/**
+ * FNV-1a over the full target, base 36 — a pure function of the href, so it is
+ * identical on the server and after hydration, which is why this is not a
+ * random suffix or a counter. Seven characters of base 36 hold the whole
+ * 32-bit value; collisions need two hrefs whose entire text hashes alike, not
+ * two that share a prefix.
+ */
+function hrefFingerprint(href: string): string {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < href.length; index += 1) {
+    hash ^= href.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+  return hash.toString(36).padStart(7, "0");
 }
 
 /**
@@ -82,7 +119,10 @@ export function outboundNoteId(href: string): string {
  * Inherits: inline link treatment, or the secondary/quiet button treatment;
  * the marking takes the `meta` type role, the smallest the scale carries.
  * Space: inline; the glyph never shifts the line box, because it sits in an
- * inline-flex box with the text. The marking wraps under the control.
+ * inline-flex box with the text. The marking stands on its own line under the
+ * control wherever D16 applies — both control variants, and the `inline`
+ * variant when the caller passes `markingOwnLine` (D16 Position). In the
+ * `inline` variant otherwise it follows in the line and wraps under it.
  * A11y: TS-WEB-0016-A23 — the marking is a separate element **after** the
  * control in DOM order, associated through `aria-describedby`, and the
  * control's own label and accessible name carry neither the recipient nor a
@@ -99,6 +139,7 @@ export function OutboundLink({
   recipient,
   disclosure: writtenDisclosure,
   variant = "inline",
+  markingOwnLine = false,
   dataCta,
   noteId: givenNoteId,
   locale = "de",
@@ -133,7 +174,7 @@ export function OutboundLink({
   if (marking === undefined) return anchor;
 
   return (
-    <span className={control ? styles.control : styles.marked}>
+    <span className={control ? styles.control : markingOwnLine ? styles.stacked : styles.marked}>
       {anchor}
       {/* D16: after the control, never inside its label; the `meta` role;
           associated through `aria-describedby` above. */}

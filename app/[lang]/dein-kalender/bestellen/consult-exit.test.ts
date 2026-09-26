@@ -58,14 +58,26 @@ describe("TS-WEB-0025 D8: the order flow's in-page consult target", () => {
   /**
    * The mount and the exit have to read the builder, not rebuild the query —
    * a source assertion, because the page is an async server component whose
-   * data dependencies a unit test cannot stand up. It fails the moment either
-   * call site starts assembling its own query again.
+   * data dependencies a unit test cannot stand up.
+   *
+   * It asserts identifiers and the *absence* of a second query assembly, not
+   * the page's formatting: the review round found the first version matching
+   * three whole statements character for character, so a rename or a prettier
+   * reflow would have failed a criterion that still held.
    */
   it("is what step 3's fallback mount and the per-step exit are handed", () => {
-    expect(PAGE).toContain("const briefingHref = consultExitHref(locale, consultScope);");
-    expect(PAGE).toContain("briefingHref={briefingHref}");
-    expect(PAGE).toContain("query={consultExitQuery(consultScope)}");
-    // No second, hand-built copy of the same query survives in the page.
-    expect(PAGE).not.toMatch(/schritt: step\b/);
+    // Both builders are imported, so neither call site can be reading something
+    // else that happens to be called the same.
+    expect(PAGE).toMatch(/import \{[^}]*\bconsultExitHref\b[^}]*\}\s+from\s+"\.\/consult-exit"/s);
+    expect(PAGE).toMatch(/import \{[^}]*\bconsultExitQuery\b[^}]*\}\s+from\s+"\.\/consult-exit"/s);
+    // And both are called: the per-step exit's href and the step-3 mount's query.
+    expect(PAGE).toContain("consultExitHref(");
+    expect(PAGE).toContain("consultExitQuery(");
+    // No second, hand-built copy of *this* query survives: no `URLSearchParams`
+    // anywhere, and no object literal that pairs `schritt` with the current
+    // step. The flow's own advance links (`schritt: 3`, `schritt: 4`) are a
+    // different target and stay untouched by this.
+    expect(PAGE).not.toContain("URLSearchParams");
+    expect(PAGE).not.toMatch(/schritt:\s*step\b/);
   });
 });

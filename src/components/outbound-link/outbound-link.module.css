@@ -81,8 +81,19 @@
   gap: var(--space-2);
 }
 
-/* The `inline` variant — a link inside a sentence: the marking follows it in
-   the line and wraps under it where the line runs out. */
+/*
+ * The same stacked form for an `inline` control that D16's Position row reaches
+ * — the lead fallback's `/start` link (`markingOwnLine`). The class is its own
+ * name rather than `control`, because the link is not a control there: what the
+ * two share is only that the recipient stands on its own line.
+ */
+.stacked {
+  composes: control;
+}
+
+/* The `inline` variant everywhere D16 does not reach — a link inside a
+   sentence: the marking follows it in the line and wraps under it where the
+   line runs out. */
 .marked {
   align-items: baseline;
   column-gap: var(--space-2);

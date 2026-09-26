@@ -88,6 +88,28 @@ describe("TS-WEB-0016 D16 / A23: the marking is a separate element after the con
     expect(html.startsWith("<a")).toBe(true);
   });
 
+  it("stacks the marking under an inline control where D16 names the surface", () => {
+    const beside = rendered({ variant: "inline" });
+    const stacked = rendered({ variant: "inline", markingOwnLine: true });
+    // The wrapper's class is the only difference, and it is the stacked one:
+    // D16's Position row applies to the lead fallback's `/start` link, which is
+    // an `inline` link. The marking is still after the anchor and associated.
+    const wrapperOf = (html: string) => /^<span class="([^"]*)"/.exec(html)?.[1] ?? "";
+    // A different wrapper class from the beside-the-line one, and the stacked
+    // one. That `.stacked` *composes* `.control` — so the two stacked forms
+    // cannot drift apart — is not visible here: this transform maps the local
+    // name only. Measured in the real build instead, in the SSR chunk's class
+    // map: `"stacked": "…__stacked" + " " + "…__control"`.
+    expect(wrapperOf(beside)).not.toBe(wrapperOf(stacked));
+    expect(wrapperOf(stacked)).toContain("stacked");
+    expect(wrapperOf(beside)).not.toContain("stacked");
+    // The marking is still after the anchor, associated, and out of the name.
+    const id = /aria-describedby="([^"]+)"/.exec(stacked)?.[1] ?? "";
+    expect(id).not.toBe("");
+    expect(stacked.indexOf(`id="${id}"`)).toBeGreaterThan(stacked.indexOf("</a>"));
+    expect(accessibleName(stacked)).toBe("Termin buchen");
+  });
+
   it("takes a caller's id where one page carries two markings for one target", () => {
     const html = rendered({ noteId: "hero-outbound-note" });
     expect(html).toContain('aria-describedby="hero-outbound-note"');
@@ -97,15 +119,20 @@ describe("TS-WEB-0016 D16 / A23: the marking is a separate element after the con
 
 describe("outboundNoteId", () => {
   it("derives a stable, scheme-free id from the target", () => {
-    expect(outboundNoteId("https://calendar.app.google/VG9bZoYVnFcX1W6F8")).toBe(
-      "outbound-note-calendar-app-google-vg9bzoyvnfcx1w6f8",
+    expect(outboundNoteId("https://calendar.app.google/VG9bZoYVnFcX1W6F8")).toMatch(
+      /^outbound-note-calendar-app-google-vg9bzoyvnfcx1w6f8-[0-9a-z]{7}$/,
     );
-    expect(outboundNoteId("/start")).toBe("outbound-note-start");
-    expect(outboundNoteId("mailto:jan@example.de")).toBe("outbound-note-jan-example-de");
+    expect(outboundNoteId("/start")).toMatch(/^outbound-note-start-[0-9a-z]{7}$/);
+    expect(outboundNoteId("mailto:jan@example.de")).toMatch(
+      /^outbound-note-jan-example-de-[0-9a-z]{7}$/,
+    );
+    // Stable: the same target yields the same id on every render, which is what
+    // `aria-describedby` needs across the prerender/hydrate boundary.
+    expect(outboundNoteId("/start")).toBe(outboundNoteId("/start"));
   });
 
   it("never yields a bare prefix, even for a target with no word characters", () => {
-    expect(outboundNoteId("https://")).toBe("outbound-note-link");
+    expect(outboundNoteId("https://")).toMatch(/^outbound-note-link-[0-9a-z]{7}$/);
   });
 
   /**
@@ -113,25 +140,35 @@ describe("outboundNoteId", () => {
    * far under it, so the trim order and the collision it implies were both
    * unasserted (review round, T-15).
    */
-  it("leaves no trailing dash where the 48-character cut lands on a separator", () => {
+  it("leaves no dash between the 48-character cut and the fingerprint", () => {
     // `calendar-app-google-beratung-vorpommern-vorland-` is exactly 48
     // characters and its last one is the separator: trimming *before* the
-    // slice, which is how this read once, keeps that dash in the id.
+    // slice, which is how this read once, keeps that dash in the slug.
     const id = outboundNoteId("https://calendar.app.google/beratung-vorpommern-vorland/termin");
-    expect(id).toBe("outbound-note-calendar-app-google-beratung-vorpommern-vorland");
-    expect(id).not.toMatch(/-$/);
+    expect(id).toMatch(
+      /^outbound-note-calendar-app-google-beratung-vorpommern-vorland-[0-9a-z]{7}$/,
+    );
+    expect(id).not.toContain("vorland--");
   });
 
-  it("collides for two targets that agree on the first 48 characters — why `noteId` exists", () => {
+  it("does not collide for two targets that agree on the first 48 characters", () => {
+    // Both slugs are cut to `…beratung-vorpommern-greifswa`, so before the
+    // fingerprint these two shared one DOM id and one `aria-describedby`
+    // target. Nine of the twelve outbound URLs in the content packages the
+    // markings are rendered from are already past the bound, so the pair was
+    // one owner-edited archive row away (review round, T-15).
     const anfrage = outboundNoteId(
       "https://calendar.app.google/beratung-vorpommern-greifswald/anfrage",
     );
     const termin = outboundNoteId(
       "https://calendar.app.google/beratung-vorpommern-greifswald/termin",
     );
-    expect(anfrage).toBe(termin);
-    // The documented escape hatch, and the reason a page with such a pair has
-    // to reach for it rather than trust the derivation (see `noteId`).
-    expect(anfrage).toBe("outbound-note-calendar-app-google-beratung-vorpommern-greifswa");
+    expect(anfrage).not.toBe(termin);
+    expect(anfrage.startsWith("outbound-note-calendar-app-google-beratung-vorpommern-greifswa-")).toBe(
+      true,
+    );
+    expect(termin.startsWith("outbound-note-calendar-app-google-beratung-vorpommern-greifswa-")).toBe(
+      true,
+    );
   });
 });

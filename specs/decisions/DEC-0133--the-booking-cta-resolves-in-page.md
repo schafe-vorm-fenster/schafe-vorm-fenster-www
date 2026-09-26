@@ -162,14 +162,26 @@ closing heading is field 4 now) and the slot's explanatory prose says where
 the marking went. The label at field 3 is untouched — it is the owner's
 wording and it still describes the action.
 
-### 6. `pnpm check:terms` joins the `check` chain
+### 6. `pnpm check:terms`'s three violations go; the chain entry stays T-17's
 
-`TS-WEB-0026-A8` is "the response-time wording exists in exactly one module".
+`TS-WEB-0026-A8` is "the response-time wording exists in exactly one module; a
+content lint fails on that wording in any content file".
 `scripts/check-terms.ts` has enforced that since F-2-43 and was never wired
 into `pnpm check`, so three violations accumulated — a gallery demo and two
 lines of a component test, exactly the "page, demo surface or test fixture"
-the script's own docblock names. The script is now in the chain, and the three
-fixtures carry strings that make the same assertion without the promise.
+the script's own docblock names. This task clears those three (they are the
+residue its own review item names) and leaves the chain alone.
+
+The first version of this round did wire the guard into `package.json`'s
+`check` line, and the review round was right to send it back: `package.json
+(check chain)` and `scripts/check-terms.ts` are **T-17's** owned files, T-17's
+goal states verbatim that "`check:terms` joins the `check` chain", and the
+`check` line is one JSON string that T-01 and T-07 hold as a shared file too —
+a fourth package editing it mid-round is the merge conflict `state/open.md`
+row 143 had already reasoned its way out of. A8 does not need the chain entry
+to be citable either: `pnpm check:terms` → `terms check: 515 file(s) scanned
+for the response-time wording` / `no errors` is the measurement, and rows 143
+and 152 now say who adds the line.
 
 ## Consequences
 
@@ -178,9 +190,13 @@ fixtures carry strings that make the same assertion without the promise.
   TS-WEB-0016 and of TS-WEB-0025 do not** — they are half discharged, and the
   Open section below says which half and why (`state/open.md` row 266).
   `/dein-kalender` (T-13) and `/ueber-uns` (T-14) are the other two routes A5
-  names; `e2e/contact-section.spec.ts`'s `BRIEFING_HREF_REPOINTED_BY` keeps a
-  `test.fail` marker for `calendar` and lost the `region` and `order` entries
-  with this change, so the marker fails the moment either half is done twice.
+  names; `e2e/contact-section.spec.ts`'s `BRIEFING_HREF_REPOINTED_BY` lost its
+  `region` and `order` entries with this change and its `calendar` entry with
+  T-13's, so after merging `next-2026` **the map is empty**
+  (`contact-section.spec.ts:59-63`) and every route it covered is done. It
+  stays declared: the `test.fail` mechanism now guards future regressions
+  only — the next route whose booking link leaves the page gets a named home
+  there instead of a silently skipped assertion.
 - The `request-product-briefing` goal now fires from exactly one place per
   route — the contact section's first action row — and from nowhere in a page
   body. Nothing else about the goal changed.
@@ -222,6 +238,6 @@ fixtures carry strings that make the same assertion without the promise.
   against `149/428` without it. The gap itself lives in `state/open.md` row 266,
   where a reviewer and the owner can both find it.
 - The two-working-day promise stays withheld (`TS-WEB-0016-A13`,
-  `TS-WEB-0026-A7`): `check:terms` in the chain is what keeps a softened
-  variant out, and `RESPONSE_PROMISE_TEXT` stays `null` until `C11` is
-  answered.
+  `TS-WEB-0026-A7`): `check:terms` is what keeps a softened variant out —
+  green here, and blocking every commit once T-17 puts it in the chain — and
+  `RESPONSE_PROMISE_TEXT` stays `null` until `C11` is answered.

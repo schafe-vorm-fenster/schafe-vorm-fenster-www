@@ -44,8 +44,9 @@ export interface LeadFallbackProps {
  * secondary treatment; never above the primary CTA.
  * Space: fixed height, so the swap widget ↔ fallback never reflows the page.
  * A11y: the visitor is told where the one outbound link goes before following
- * it, as a `meta` line after the control (TS-WEB-0016-A23), and the three
- * lines are read out of the dictionary so the English surface is English.
+ * it, as a `meta` line on its own line under the control (TS-WEB-0016-A23 for
+ * the association, D16's Position row for the line), and the three lines are
+ * read out of the dictionary so the English surface is English.
  */
 export function LeadFallback({
   email,
@@ -59,7 +60,9 @@ export function LeadFallback({
   return (
     <div className={[styles.fallback, className].filter(Boolean).join(" ")}>
       <p className={styles.line}>
-        <OutboundLink href="/start" locale={locale} recipient={FORM_RECIPIENT}>
+        {/* D16's Position row names this link: the recipient belongs on its
+            own line under the control, not beside it (`markingOwnLine`). */}
+        <OutboundLink href="/start" locale={locale} markingOwnLine recipient={FORM_RECIPIENT}>
           {words.formLink}
         </OutboundLink>
       </p>

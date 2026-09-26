@@ -1,6 +1,37 @@
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { expect, test } from "@playwright/test";
 
 import { BRIEFING_URL } from "../../src/lib/live/briefing";
+
+const REPO_ROOT = join(__dirname, "..", "..");
+
+/** The one module allowed to write the appointment URL down (TS-WEB-0016 D7). */
+const BRIEFING_MODULE = join("src", "lib", "live", "briefing.ts");
+
+/**
+ * Every shipped `.ts`/`.tsx` file under `app/` and `src/`, minus the module
+ * that defines the URL and minus test files — the static half of F-2-32 below
+ * reads them to prove no second place knows the appointment target. Test
+ * fixtures are excluded because `outbound-link.test.tsx` fabricates targets on
+ * that host on purpose, to exercise the marking-id derivation.
+ */
+function shippedSourceFiles(): string[] {
+  const found: string[] = [];
+  const walk = (directory: string) => {
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      const path = join(directory, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name !== "node_modules" && !entry.name.startsWith(".")) walk(path);
+      } else if (/\.tsx?$/.test(entry.name) && !entry.name.includes(".test.")) {
+        if (!path.endsWith(BRIEFING_MODULE)) found.push(path);
+      }
+    }
+  };
+  for (const directory of ["app", "src"]) walk(join(REPO_ROOT, directory));
+  return found;
+}
 
 /**
  * TS-WEB-0026 — `/deine-region` and `/deine-region/angebot` — acceptance pass.
@@ -478,15 +509,24 @@ test.describe("/deine-region/angebot", () => {
 
     /*
      * F-2-32's own question, which the count sweep below cannot ask: the
-     * appointment target is **one configured value**, not a literal pasted per
-     * page. `BRIEFING_URL` is that value (`src/lib/live/briefing.ts`), and the
-     * literal it falls back to is the owner's configured target — so a page
-     * that pasted its own URL, or a constant quietly rewritten, fails here
-     * before the per-route sweep runs.
+     * appointment target is **one configured value** (`BRIEFING_URL` in
+     * `src/lib/live/briefing.ts`), not a literal pasted per page. So the
+     * assertion is that no page and no component knows the URL — a static
+     * sweep over everything shipped under `app/` and `src/` except that one
+     * module.
+     *
+     * The first version of this case compared `BRIEFING_URL` with the exact
+     * expression `briefing.ts` assigns it, which could only fail if someone
+     * changed that file and forgot this line — and it pasted the appointment
+     * URL into a second file, which is the duplication F-2-32 exists to
+     * prevent (review round, T-15). The env var read here is the Playwright
+     * process's anyway, not necessarily the server's.
      */
-    expect(BRIEFING_URL).toBe(
-      process.env.NEXT_PUBLIC_BRIEFING_URL ?? "https://calendar.app.google/VG9bZoYVnFcX1W6F8",
-    );
+    const shipped = shippedSourceFiles();
+    expect(shipped.length).toBeGreaterThan(100);
+    for (const file of shipped) {
+      expect(readFileSync(file, "utf8"), file).not.toContain("calendar.app.google");
+    }
 
     for (const { path, consult: hasConsult } of ROUTES) {
       await page.goto(path);
