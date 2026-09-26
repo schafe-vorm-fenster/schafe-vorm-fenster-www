@@ -6,15 +6,15 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**430 criteria · 249 closed · 181 open (58 % closed)**
+**430 criteria · 250 closed · 180 open (58 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 249 | a test title in a file a runner runs carries the id |
+| VERIFIED | 250 | a test title in a file a runner runs carries the id |
 | METERED | 0 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
 | NAMED ONLY | 32 | the id is in a runner file but in no test title — **not coverage** |
-| MISSING | 149 | nothing names it |
+| MISSING | 148 | nothing names it |
 
 Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
 
@@ -24,7 +24,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | --- | --- | --- | --- | --- |
 | static | 86 | 47 | 39 | 55 % |
 | unit | 30 | 26 | 4 | 87 % |
-| integration | 73 | 46 | 27 | 63 % |
+| integration | 73 | 47 | 26 | 64 % |
 | e2e | 171 | 130 | 41 | 76 % |
 | tool | 39 | 0 | 39 | 0 % |
 | manual | 31 | 0 | 31 | 0 % |
@@ -42,7 +42,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0007 | 16 | 5 | A2 A3 A4 A5 A6 A9 A10 A11 A13 A15 A16 |
 | TS-WEB-0008 | 16 | 11 | A6 A7 A8 A12 A13 |
 | TS-WEB-0009 | 14 | 7 | A1 A2 A3 A8 A9 A12 A13 |
-| TS-WEB-0010 | 15 | 5 | A4 A5 A6 A7 A9 A11 A12 A13 A14 A15 |
+| TS-WEB-0010 | 15 | 6 | A5 A6 A7 A9 A11 A12 A13 A14 A15 |
 | TS-WEB-0011 | 14 | 6 | A3 A5 A6 A8 A9 A11 A12 A13 |
 | TS-WEB-0012 | 11 | 8 | A7 A8 A10 |
 | TS-WEB-0013 | 8 | 3 | A3 A4 A6 A7 A8 |
@@ -121,7 +121,6 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0009-A9 | integration | MISSING | — | For every D3 island, the skeleton's rendered box equals the resolved module's box (height within 2 px); no skeleton renders a spinner or a placeholder figure. |
 | TS-WEB-0009-A12 | tool | MISSING | — | Snapshot build step produces a file for every D3 module with fallback "tiers 1–3", produces none for counters, and fails the build if a required file is missing … |
 | TS-WEB-0009-A13 | manual | MISSING | — | Screen reader: skeletons are not announced; the `/dein-ort` empty state is announced once on arrival. Under `prefers-reduced-motion` no skeleton animates. |
-| TS-WEB-0010-A4 | integration | MISSING | — | Structure invariance: for one route, the section ids, order, headings, CTAs and navigation are identical across stage-0, stage-1, stage-2 and stage-3 requests;  … |
 | TS-WEB-0010-A5 | integration | MISSING | — | Stage 0 completeness: with the geo flag off and no referrer, every page renders fully — place search present, no empty slot, no unresolved skeleton — and issues … |
 | TS-WEB-0010-A6 | integration | MISSING | — | Cacheability: two requests for the same URL with different `Accept-Language` and different IP countries return a byte-identical shell; no `Set-Cookie` and no `V … |
 | TS-WEB-0010-A7 | e2e | MISSING | — | No classification control exists on any page: no role chooser, no audience switcher, no "who are you?" interstitial. |

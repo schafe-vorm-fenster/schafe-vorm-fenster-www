@@ -30,6 +30,10 @@
 
 import { NextResponse } from "next/server";
 
+import {
+  ENTRY_CONTEXT_HEADER,
+  encodeEntryHandover,
+} from "@/src/lib/personalization/entry-handover";
 import { canonicalHostFor, domainConfigFor, normaliseHost } from "@/src/lib/routes/host-matrix";
 import { landingDomainBlocks } from "@/src/lib/routes/landing-domain";
 import {
@@ -128,6 +132,26 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     NOT_FOUND_LOCALE_HEADER,
     notFoundLocale(request.nextUrl.pathname, domain.tldDefault),
   );
+  // TS-WEB-0010 D2 step 2 — the entry-context handover (DEC-0140). The `Referer`
+  // header is a request value only this file sees before the render, and
+  // TS-WEB-0019 D3a orders block 2a of `/` by the trait derived from it. What
+  // travels is the referrer's **host** and, when it is one of the three tokens
+  // D3 recognises, the campaign medium — never the referrer's path and never a
+  // geo or IP value (TS-WEB-0010-A11; `entry-handover.ts` has no field for one).
+  //
+  // Set on **every** request, empty value included: a client that sends this
+  // header itself must not be able to choose its own segment, and `set()`
+  // overwrites what arrived. Reading it makes its reader dynamic, so the page
+  // reads it inside a `<Suspense>` boundary whose fallback is the `direct`
+  // order — the shell stays prerendered (TS-WEB-0010 D8, DEC-0045).
+  requestHeaders.set(
+    ENTRY_CONTEXT_HEADER,
+    encodeEntryHandover({
+      referrer: request.headers.get("referer"),
+      searchParams: request.nextUrl.searchParams,
+    }),
+  );
+
   const passthrough = { request: { headers: requestHeaders } };
 
   // The blocked, the unknown and the redirected request all still get the full

@@ -1,9 +1,9 @@
 {
   "note": "The ratchet of `pnpm check:coverage` (DEC-0141). `max` is the worst tally this repository is allowed to have. A run worse than a number here fails; a run better than one fails too, asking for the number to be lowered in the same commit, so that a gain is recorded instead of left as budget to spend again. Raising a number is a governance change: it needs a decision record, and the record says which criteria were let go and why.",
   "measured_at": "2026-09-26",
-  "measured_on": "the merge of next-2026 (T-15 DEC-0133/0134, T-20 DEC-0139) into coverage-gate — T-15's spelling-out of A14 of TS-WEB-0016 closed one NAMED ONLY, which is the ratchet doing its work on real changes",
+  "measured_on": "T-21 (DEC-0140) merged with next-2026. The branch closes exactly one MISSING criterion, TS-WEB-0010-A4, with a walk of its own in e2e/pages/home.spec.ts instead of a comment inside the A7 test, so MISSING falls 149 → 148. Round 2 had set 145: that run credited TS-WEB-0010-A6, TS-WEB-0010-A11 and TS-WEB-0010-A12 to two proxy unit-test titles that do not assert them at their declared levels (integration, static, e2e). The ids are out of those titles again and the three criteria are MISSING, where they were before this branch — see DEC-0140 §4 'What the coverage gate is and is not told'. TS-WEB-0019-A7/A8 and TS-WEB-0010-A3 were already VERIFIED at e619f54 and are not this branch's gain.",
   "max": {
     "NAMED ONLY": 32,
-    "MISSING": 149
+    "MISSING": 148
   }
 }

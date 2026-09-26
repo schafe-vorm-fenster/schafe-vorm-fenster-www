@@ -43,6 +43,187 @@ async function blockOneSettled(page: Page): Promise<void> {
 }
 
 /**
+ * Block 2a's mechanisms in DOM order — the one value TS-WEB-0019 D3a moves.
+ * Read as a plain array rather than asserted through a locator, because the
+ * trait-ordered branch arrives through a `<Suspense>` boundary whose fallback
+ * is the `direct` order (DEC-0140): the assertion has to be able to retry.
+ */
+async function sceneMechanisms(page: Page): Promise<readonly string[]> {
+  return page.locator('main [data-block="scene"]').evaluateAll((nodes) =>
+    nodes.map(
+      (node) => node.querySelector("[data-mechanism]")?.getAttribute("data-mechanism") ?? "",
+    ),
+  );
+}
+
+/**
+ * True when the policy the server just sent admits the inline script React
+ * emits **at request time** to complete a `<Suspense>` boundary.
+ *
+ * `DEC-0045` / `TS-WEB-0014 D7` give production a hash-only `script-src`, and
+ * `scripts/generate-csp-hashes.mjs` can only hash what stands in the
+ * prerendered HTML — never a request-time script. So under that policy no
+ * boundary on the page completes: `main` keeps every fallback, the resolved
+ * branch stays parked after `</main>`, and a trait-ordered block cannot reach
+ * the DOM at all (`state/open.md` row 132, `DEC-0140` §4). A criterion that
+ * reads a *resolved* boundary is therefore inactive there rather than red — the
+ * mechanism it tests is switched off by the policy, and switching it back on is
+ * row 132's nonce decision, not this page's work.
+ */
+function admitsRequestTimeInlineScript(csp: string | undefined): boolean {
+  if (csp === undefined || csp.trim() === "") return true;
+  const scriptSrc = csp
+    .split(";")
+    .map((directive) => directive.trim())
+    .find((directive) => /^script-src\b/.test(directive));
+  if (scriptSrc === undefined) return true;
+  // A nonce reaches a request-time script; a per-build hash set cannot.
+  if (scriptSrc.includes("'nonce-")) return true;
+  // The browser ignores 'unsafe-inline' as soon as a hash or nonce source is
+  // present (CSP3 §6.6.3.2), so it only counts when it stands alone — which is
+  // `csp.ts`'s `isDev && !hasHashes` and `isPreview && !hasHashes` branches.
+  return scriptSrc.includes("'unsafe-inline'") && !/'sha(?:256|384|512)-/.test(scriptSrc);
+}
+
+/**
+ * The hash asset `scripts/generate-csp-hashes.mjs` writes after `next build`
+ * and `src/lib/security/csp-hashes.ts` fetches — spelled out here rather than
+ * imported, so this spec keeps the one import surface Playwright resolves.
+ */
+const CSP_HASHES_ASSET_PATH = "/_next/static/security/csp-script-hashes.json";
+
+/**
+ * Whether a resolved `<Suspense>` boundary can reach the DOM in the
+ * configuration under test — asked of two independent reads, because either one
+ * alone can be absent. The policy this response carried is the direct read; the
+ * per-build hash asset is the indirect one, and it is the read that survives a
+ * response whose header never reached this runner: a build that ships the asset
+ * serves a hash-only `script-src` for *every* request (`csp.ts`'s `hasHashes`
+ * branch), which is what a `next build` + `next start` — CI's e2e job — does.
+ *
+ * So: a nonce is row 132's remedy and admits the script outright; otherwise the
+ * policy must admit a request-time inline script *and* the build must ship no
+ * hash set. `next dev` is the one configuration that passes both (no extraction
+ * step ever ran there, so `csp.ts` falls back to `'unsafe-inline'`).
+ */
+async function boundaryCompletionReachesTheDom(
+  page: Page,
+  csp: string | undefined,
+): Promise<boolean> {
+  if (csp !== undefined && csp.includes("'nonce-")) return true;
+  if (!admitsRequestTimeInlineScript(csp)) return false;
+  const hashAsset = await page.request.get(CSP_HASHES_ASSET_PATH);
+  return !hashAsset.ok();
+}
+
+/**
+ * Everything `TS-WEB-0010-A4` names, read inside `main` — the section ids, the
+ * headings, the CTAs and the navigation of one load. Block 2a's *internal*
+ * order is deliberately not part of it: that is the one thing `TS-WEB-0010 D7`
+ * lets a trait move (`state/open.md` row 273), and `TS-WEB-0019-A7` asserts it.
+ *
+ * Scoped to `main` for the same reason every other read here is: until a
+ * `<Suspense>` boundary reveals, its resolved branch stands parked after
+ * `</main>` (DEC-0140 §2).
+ */
+async function entryStageStructure(page: Page) {
+  return page.evaluate(() => {
+    const main = document.querySelector("main");
+    const scenes = [...(main?.querySelectorAll('[data-block="scene"]') ?? [])];
+    const sceneIds = new Set(scenes.map((scene) => scene.id));
+    return {
+      sectionIds: [...(main?.querySelectorAll("section[id]") ?? [])].map((section) => section.id),
+      /** Order, not just membership — for every section outside block 2a. */
+      outsideBlockTwoA: [...(main?.querySelectorAll("section[id]") ?? [])]
+        .map((section) => section.id)
+        .filter((id) => !sceneIds.has(id)),
+      headings: [...(main?.querySelectorAll("h1, h2") ?? [])].map((heading) =>
+        (heading.textContent ?? "").replace(/\s+/gu, " ").trim(),
+      ),
+      ctas: [...(main?.querySelectorAll("[data-cta]") ?? [])].map(
+        (cta) =>
+          `${cta.getAttribute("data-cta")} ${cta.getAttribute("href") ?? ""} ${(
+            cta.textContent ?? ""
+          )
+            .replace(/\s+/gu, " ")
+            .trim()}`,
+      ),
+      navigation: [...document.querySelectorAll("header a[href], footer a[href]")].map(
+        (link) => link.getAttribute("href") ?? "",
+      ),
+    };
+  });
+}
+
+/** Every fact TS-WEB-0019-A7 compares between its two loads, read in one pass. */
+async function sceneFacts(page: Page) {
+  const facts = await page.evaluate(() => {
+    const scenes = [...document.querySelectorAll('main [data-block="scene"]')];
+    const mechanismOf = (scene: Element): string =>
+      scene.querySelector("[data-mechanism]")?.getAttribute("data-mechanism") ?? "";
+
+    const position = scenes.findIndex((scene) => scene.querySelector("[data-explain-module]"));
+    const carrier = scenes[position];
+
+    return {
+      moduleScene: { mechanism: carrier === undefined ? "" : mechanismOf(carrier), position },
+      /**
+       * DOM order inside the carrying scene — A6's render order. The module's
+       * own calendar stage renders event rows as `article`s too, so an
+       * `article` counts as the block's concrete instance only outside it.
+       */
+      triple: [...(carrier?.querySelectorAll("h2, [data-explain-module], article") ?? [])]
+        .filter(
+          (element) =>
+            element.hasAttribute("data-explain-module") ||
+            element.closest("[data-explain-module]") === null,
+        )
+        .map((element) =>
+          element.tagName === "H2"
+            ? "opener"
+            : element.hasAttribute("data-explain-module")
+              ? "module"
+              : "instance",
+        ),
+      opener: carrier?.querySelector("h2")?.textContent?.trim() ?? "",
+      steps: [...(carrier?.querySelectorAll("[data-explain-step]") ?? [])].map((step) =>
+        (step.textContent ?? "").replace(/\s+/gu, " ").trim(),
+      ),
+      /** One secondary CTA per mechanism, so the set is comparable across loads. */
+      ctas: Object.fromEntries(
+        scenes.map((scene) => [
+          mechanismOf(scene),
+          [...scene.querySelectorAll('[data-cta="secondary"]')].map((cta) =>
+            cta.getAttribute("href"),
+          ),
+        ]),
+      ),
+      sceneIds: scenes.map((scene) => scene.id),
+      /** Every other section of the page, in its own DOM order. */
+      otherIds: [...document.querySelectorAll("main [id]")]
+        .map((element) => element.id)
+        .filter((id) =>
+          [
+            "focus-block",
+            "place-dates",
+            "live-counters",
+            "proof-stream",
+            "context-band",
+            "closing-cta",
+          ].includes(id),
+        ),
+      proofElements: document.querySelectorAll("#proof-stream article").length,
+    };
+  });
+
+  // Every `/` read of the module is scoped to `main`: block 2a streams from a
+  // `<Suspense>` boundary (DEC-0140 §2), so until the boundary reveals, a second
+  // copy of the module stands in the parked branch after `</main>`.
+  const box = await page.locator("main [data-explain-module]").first().boundingBox();
+  return { ...facts, moduleHeight: box?.height ?? 0 };
+}
+
+/**
  * A covered community whose window is empty — TS-WEB-0019 D2's S3, and the only
  * state in which the widening module still renders (polish brief, page 1,
  * fix 2). `EMPTY_DEMO_SLUG` no longer reaches it: the dates capability needs
@@ -327,7 +508,7 @@ test.describe("TS-WEB-0019 — home", () => {
     // the measurement is the module element, opener and instance excluded.
     await page.setViewportSize({ width: 360, height: 800 });
     await page.goto("/");
-    const box = await page.locator("[data-explain-module]").first().boundingBox();
+    const box = await page.locator("main [data-explain-module]").first().boundingBox();
     expect(box).not.toBeNull();
     expect(box!.height).toBeLessThanOrEqual(800);
   });
@@ -347,7 +528,7 @@ test.describe("TS-WEB-0019 — home", () => {
     await page.goto("/");
     await page.waitForLoadState("networkidle");
 
-    const explainModule = page.locator("[data-explain-module]").first();
+    const explainModule = page.locator("main [data-explain-module]").first();
     await expect(explainModule).toHaveAttribute("data-state", "1");
 
     // Block 2a begins below the fold in every state of D2, so page load
@@ -402,7 +583,7 @@ test.describe("TS-WEB-0019 — home", () => {
     await page.goto("/");
     await page.waitForLoadState("networkidle");
 
-    const explainModule = page.locator("[data-explain-module]").first();
+    const explainModule = page.locator("main [data-explain-module]").first();
     const steps = explainModule.locator("[data-explain-step]");
     await expect(steps).toHaveCount(3);
     await steps.nth(2).focus();
@@ -422,10 +603,135 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(explainModule).toHaveAttribute("data-advance", "stopped");
   });
 
-  test.fixme(
-    "TS-WEB-0019-A7: the entry trait reorders the scenes and changes nothing else [M4 — TS-WEB-0010 stages]",
-    () => {},
-  );
+  test("TS-WEB-0019-A7: the entry trait reorders the scenes and changes nothing else", async ({
+    page,
+  }) => {
+    /**
+     * The two loads A7 names, in the order it names them: a LinkedIn
+     * `Referer` is D3's `professional` row, an absent one is `direct`. The
+     * proxy hands the referrer's host down as one request header and the page
+     * reads it inside a boundary whose fallback is the `direct` order, so the
+     * `professional` order arrives a beat after first paint — hence the
+     * polling read (DEC-0140, `app/[lang]/_scenes.tsx`).
+     */
+    test.setTimeout(90_000);
+    // 360 × 800 is the viewport A6's one-viewport clause is measured at, and
+    // A7 asks for that clause "in either position".
+    await page.setViewportSize({ width: 360, height: 800 });
+
+    const professionalResponse = await page.goto("/", {
+      referer: "https://www.linkedin.com/",
+    });
+    // The one configuration where D3a cannot be observed in the DOM: a
+    // hash-only `script-src` refuses React's boundary-completion script, so
+    // `main` keeps the `direct` fallback for every trait while the response
+    // body still carries the resolved run. That is `state/open.md` row 132 —
+    // production's shipped behaviour, and what `pnpm e2e` with `CI=true` (a
+    // `next build` + `next start`) serves. A7 is inactive there, not failing;
+    // `next dev` is the one configuration this walk has been run green in.
+    // A deployed preview is expected to activate it too — not because of
+    // `pnpm build`, which does write the hash asset, but because that asset
+    // never reaches the deployed Proxy function (`state/open.md` rows 21/31),
+    // so `csp.ts`'s preview fallback applies — but no preview deployment has
+    // been walked; `DEC-0140` §4's table says which row is measured and which
+    // is inferred. Closing the gap for production is row 132's nonce decision.
+    test.skip(
+      !(await boundaryCompletionReachesTheDom(
+        page,
+        professionalResponse?.headers()["content-security-policy"],
+      )),
+      "The served script-src admits no request-time inline script (or this build ships the hash set that produces such a policy), so no <Suspense> boundary completes and block 2a cannot be reordered in the DOM — state/open.md row 132, DEC-0140 §4. A7 is parked here, not failing; the shipped state is the direct order everywhere.",
+    );
+    await expect.poll(() => sceneMechanisms(page), { timeout: 20_000 }).toEqual([
+      "embed",
+      "provenance",
+      "whatsapp",
+    ]);
+    const professional = await sceneFacts(page);
+
+    await page.goto("/");
+    await expect.poll(() => sceneMechanisms(page), { timeout: 20_000 }).toEqual([
+      "whatsapp",
+      "embed",
+      "provenance",
+    ]);
+    const direct = await sceneFacts(page);
+
+    // The scene containing the module is last in the first load and first in
+    // the second, and in both it is the `whatsapp` one: "no trait changes
+    // which mechanism carries the module" (D3a, DEC-0109 §2).
+    expect(professional.moduleScene).toEqual({ mechanism: "whatsapp", position: 2 });
+    expect(direct.moduleScene).toEqual({ mechanism: "whatsapp", position: 0 });
+
+    // The same opener · module · instance triple with the same three step
+    // lines — the module is not forked for a position (DEC-0110 §2).
+    expect(professional.triple).toEqual(["opener", "module", "instance"]);
+    expect(professional.triple).toEqual(direct.triple);
+    expect(professional.steps).toHaveLength(3);
+    expect(professional.steps).toEqual(direct.steps);
+    expect(professional.opener).toBe(direct.opener);
+
+    // All three blocks stay scenes in both, with the same one secondary CTA
+    // each — ordering only, no block added, removed or rewritten.
+    expect(professional.ctas).toEqual(direct.ctas);
+    expect(professional.sceneIds.toSorted()).toEqual(direct.sceneIds.toSorted());
+    expect(professional.sceneIds).toEqual(["scene-2", "scene-3", "scene-1"]);
+    expect(direct.sceneIds).toEqual(["scene-1", "scene-2", "scene-3"]);
+
+    // Block set and block order are otherwise identical: every section
+    // outside block 2a stands where it stood (TS-WEB-0010 D7, TS-WEB-0010-A4).
+    expect(professional.otherIds).toEqual(direct.otherIds);
+
+    // A6's one-viewport clause holds in either position.
+    for (const height of [professional.moduleHeight, direct.moduleHeight]) {
+      expect(height).toBeGreaterThan(0);
+      expect(height).toBeLessThanOrEqual(800);
+    }
+
+    // TS-WEB-0019-A8 — "in every one of the loads of A7".
+    expect(professional.proofElements).toBe(5);
+    expect(direct.proofElements).toBe(5);
+  });
+
+  test("TS-WEB-0010-A4: the two entry stages differ in nothing but the order inside block 2a", async ({
+    page,
+  }) => {
+    /**
+     * A4 asks that "the section ids, order, headings, CTAs and navigation are
+     * identical across stage-0 … stage-3 requests". `TS-WEB-0019 D3a` orders
+     * block 2a by the entry trait and `TS-WEB-0010 D7` permits exactly that
+     * ("`trait` may reorder within a page, never redefine what the page is
+     * for"), so A4's word "order" cannot be the DOM order of block 2a's
+     * members. The reading this walk asserts is `state/open.md` row 273's: the
+     * set of sections, their headings, their CTAs and the navigation are
+     * invariant across the two entry stages, and so is the order of every
+     * section outside the trait-ordered block.
+     *
+     * Unlike `TS-WEB-0019-A7` this asserts nothing about a *resolved*
+     * boundary, so it holds under both policies of row 132 — where the
+     * boundary completes, block 2a is reordered and everything below is still
+     * identical; where it does not, nothing moved and everything below is
+     * identical too.
+     */
+    await page.setViewportSize(DESKTOP);
+
+    // Stage 2 (a `professional` trait, D3's LinkedIn row) and stage 0 (no
+    // referrer, no parameter — `direct`), the two loads A7 also uses.
+    await page.goto("/", { referer: "https://www.linkedin.com/" });
+    await page.waitForLoadState("networkidle");
+    const professional = await entryStageStructure(page);
+
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+    const direct = await entryStageStructure(page);
+
+    expect(professional.sectionIds.length).toBeGreaterThan(0);
+    expect(professional.sectionIds.toSorted()).toEqual(direct.sectionIds.toSorted());
+    expect(professional.outsideBlockTwoA).toEqual(direct.outsideBlockTwoA);
+    expect(professional.headings.toSorted()).toEqual(direct.headings.toSorted());
+    expect(professional.ctas.toSorted()).toEqual(direct.ctas.toSorted());
+    expect(professional.navigation).toEqual(direct.navigation);
+  });
 
   test("TS-WEB-0019-A8: the proof stream renders exactly 5 elements", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
@@ -489,8 +795,13 @@ test.describe("TS-WEB-0019 — home", () => {
       "closing-cta",
     ]);
 
-    // Block 2b, where D3 puts it and on the ground D3 gives it.
-    await expect(page.locator("#scene-3")).toHaveAttribute("data-surface", "violet-500");
+    // Block 2b, where D3 puts it and on the ground D3 gives it. Scoped to
+    // `main` for the same reason the id walk above is: block 2a stands inside a
+    // `<Suspense>` boundary (DEC-0140 §2), so between the first paint and the
+    // boundary's reveal the fallback run is in `main` and the resolved run is
+    // parked in a hidden div after `</main>` — an unscoped `#scene-3` resolves
+    // to two elements and Playwright's strict mode throws.
+    await expect(page.locator("main #scene-3")).toHaveAttribute("data-surface", "violet-500");
 
     // Nothing after the closing CTA inside `main`; the contact section and
     // the footer follow it as chrome (TS-WEB-0006 D2 as amended by DEC-0081
@@ -566,7 +877,13 @@ test.describe("TS-WEB-0019 — home", () => {
     // The `whatsapp` scene's module is server-rendered at state 1 with all
     // three step lines, so a JavaScript-less load is complete (A11,
     // DEC-0105 §6's reduced-motion fallback already requires that state).
-    const explainModule = page.locator("[data-explain-module]");
+    //
+    // Scoped to `main` for the same reason as the fields above: since DEC-0140
+    // block 2a arrives through a boundary of its own, and with JavaScript off
+    // the branch React parks after `</main>` stays in the document as a second,
+    // unreachable copy of the three scenes. What A11 asserts is the page the
+    // visitor gets, and that is the one inside `main`.
+    const explainModule = page.locator("main [data-explain-module]");
     await expect(explainModule).toHaveCount(1);
     await expect(explainModule).toHaveAttribute("data-state", "1");
     await expect(explainModule.locator("[data-explain-step]")).toHaveCount(3);

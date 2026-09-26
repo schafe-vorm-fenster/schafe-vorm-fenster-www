@@ -64,7 +64,9 @@ export default async function HomePage({
     locale,
     routeId: "home",
     params: query,
-    referrer: null, // the proxy hands the `Referer` down — state/open.md
+    // The proxy hands the referrer's host down as one request header, read
+    // inside a `<Suspense>` boundary (`entry-handover.ts`, DEC-0140).
+    referrerHost: decodeEntryHandover((await headers()).get(ENTRY_CONTEXT_HEADER)).referrerHost,
     statedPlace: await resolvePlace(statedPlaceSlug(query)), // geo-api, mocked today
     now: new Date(),
   });
@@ -168,7 +170,8 @@ overwrites the inferred hierarchy **in full**, never field by field. A
 | File | What |
 | --- | --- |
 | `viewer-context.ts` | **`composeViewerContext`** — the resolver; `stageZeroViewer`, `statedPlaceSlug` |
-| `entry-context.ts` | `resolveEntryTrait` — query, referrer and landing route → one trait |
+| `entry-context.ts` | `resolveEntryTrait` — query, referrer and landing route → one trait; `referrerHostOf` |
+| `entry-handover.ts` | `encodeEntryHandover`, `decodeEntryHandover`, `ENTRY_CONTEXT_HEADER` — the proxy's hand-down of the two D2 step-2 inputs, host and medium only (DEC-0140) |
 | `geolocation.ts` | the resolver interface, the mock, the disabled resolver, `truncateToCeiling` |
 | `stages.ts` | `stageOf`, `STAGE_MODEL`, `MAY_CHANGE`, `MAY_NEVER_CHANGE` |
 | `emphasis.ts` | `emphasise`, `orderByTrait`, `validateEmphasisTable` — order and emphasis, never structure |
@@ -182,8 +185,8 @@ No `index.ts`, for the reason `src/lib/content/README.md` gives.
 | --- | --- | --- |
 | TS-WEB-0010-A1 resolver over every input path | ✅ unit | `viewer-context.test.ts`, `geolocation.test.ts` |
 | TS-WEB-0010-A2 granularity ceiling, stated place overwrites | ✅ unit | `geolocation.test.ts`, `viewer-context.test.ts` |
-| TS-WEB-0010-A3 trait mapping, one shared constant | ✅ unit | `entry-context.test.ts` |
-| TS-WEB-0010-A4 structure invariance across stages | ⚠️ integration | `/dein-ort` walks stage 0 and stage 3 (`e2e/pages/dein-ort.spec.ts` A2/A3) with the same blocks in the same order; the trait half (stage 2) cannot fire while the proxy hands no `Referer` down |
+| TS-WEB-0010-A3 trait mapping, one shared constant | ✅ unit | `entry-context.test.ts`, and across the proxy's handover in `entry-handover.test.ts` and `proxy.test.ts` |
+| TS-WEB-0010-A4 structure invariance across stages | ⚠️ integration | `/dein-ort` walks stage 0 and stage 3 (`e2e/pages/dein-ort.spec.ts` A2/A3) with the same blocks in the same order. The trait half fires since DEC-0140: `e2e/pages/home.spec.ts` TS-WEB-0019-A7 loads `/` twice and compares the two, and what changes is the order **inside** block 2a — which is the one thing D7 and TS-WEB-0019 D3a let a trait change. A4's own word "order" therefore cannot be read as the DOM order of block 2a's members; `state/open.md` row 273 carries that reading |
 | TS-WEB-0010-A5 stage-0 completeness, no geo lookup | ✅ integration | `e2e/pages/dein-ort.spec.ts` TS-WEB-0020-A10 and `home.spec.ts` TS-WEB-0019-A11 — both with JavaScript disabled |
 | TS-WEB-0010-A6 cacheability, no `Vary`, no `Set-Cookie` | 🔜 integration | pages and `proxy.ts` |
 | TS-WEB-0010-A7 no classification control | 🔜 e2e | pages |
