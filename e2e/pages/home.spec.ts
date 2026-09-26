@@ -628,8 +628,11 @@ test.describe("TS-WEB-0019 — home", () => {
     // body still carries the resolved run. That is `state/open.md` row 132 —
     // production's shipped behaviour, and what `pnpm e2e` with `CI=true` (a
     // `next build` + `next start`) serves. A7 is inactive there, not failing;
-    // it holds in `next dev` and on a preview-CSP build, and closing the gap
-    // is row 132's nonce decision (`DEC-0140` §4).
+    // `next dev` is the one configuration measured to order by the trait;
+    // a Vercel preview built by `pnpm build` ships the hash set too
+    // (`src/lib/security/csp.ts` grants `'unsafe-inline'` only when no hash
+    // set exists), so it parks A7 here as well. Closing the gap is row 132's
+    // nonce decision (`DEC-0140` §4).
     test.skip(
       !(await boundaryCompletionReachesTheDom(
         page,

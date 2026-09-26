@@ -121,8 +121,9 @@ Two smaller readings, both taken rather than left open:
 
 The task brief permitted shipping *"direct order everywhere, A7 fixme kept"* if
 the trait handover endangered the milestone. The handover itself was built and
-is not a milestone risk: `next dev` and every preview build order block 2a by
-the trait, and A7 walks both loads there. **In production the shipped order is
+is not a milestone risk: in `next dev` block 2a is ordered by the trait and A7
+walks both loads there. `next dev` is also the **only** configuration in which
+that has been measured — see the correction at the end of this section. **In production the shipped order is
 the `direct` order for every trait anyway**, and not by choice — see below.
 
 **Under the production CSP the reorder does not reach the DOM.** The swap from
@@ -169,9 +170,8 @@ Measured on this branch after merging `next-2026`:
 criterion: CI's production-build e2e job does not exercise `TS-WEB-0019-A7` at
 all.** The shipped state is the brief's fallback — the `direct` order for every
 trait — with A7 parked on the policy rather than on a bare `fixme`. So the suite
-reports A7 as inactive on the production build and green in `next dev` and on a
-preview-CSP build, and it never reports it as passing where the order it asserts
-is not in the DOM. It is un-`fixme`d — the mechanism is built and measured — but
+reports A7 as inactive on the production build and green in `next dev`, and it
+never reports it as passing where the order it asserts is not in the DOM. It is un-`fixme`d — the mechanism is built and measured — but
 the criterion is **blocked** and does not close until row 132 does.
 
 What *is* asserted unconditionally is the half of the criterion set that holds
@@ -180,6 +180,37 @@ entry stages (`e2e/pages/home.spec.ts`, its own walk since the QA round) runs on
 the production build too, because the set of sections, the headings, the CTAs,
 the navigation and the order of every section *outside* block 2a are the same in
 both loads whether or not the boundary completes.
+
+### What the coverage gate is and is not told
+
+`pnpm check:coverage` reads criterion ids out of **test titles** and credits the
+criterion VERIFIED on the strength of the title alone, whatever level the
+criterion declares (`scripts/check-coverage.ts:243-263`). Round 2 of this branch
+used that: three ids went into two `proxy.test.ts` titles and `max.MISSING` in
+`specs/verification/coverage-budget.json` was lowered 149 → 145. The QA round of
+2026-09-26 called it what it is — the failure mode `DEC-0141` exists to prevent —
+and the ids are out again:
+
+| Criterion | Level | What the proxy test asserts | What the criterion asks |
+| --- | --- | --- | --- |
+| `TS-WEB-0010-A6` | integration | one response carries no `Vary` and no `Set-Cookie` | *two* requests with different `Accept-Language` and different IP countries return a **byte-identical shell** — two responses, compared |
+| `TS-WEB-0010-A11` | static | the handover header holds `{ref, med}` and no IP, geo or place value | the request geo/IP headers are read in **exactly one module** of the tree and referenced in no other — a repository-wide read, which is an ESLint rule or a `scripts/check-*.ts` |
+| `TS-WEB-0010-A12` | e2e | nothing | after a stage-3 visit no cookie, `localStorage` entry or server session carries a location or a trait, and the only stored key is the `D10` session flag |
+
+So this branch closes **one** MISSING criterion, `TS-WEB-0010-A4`, and
+`max.MISSING` is `148`, the number `pnpm check:coverage` prints — a gain of one
+over `e619f54`'s `149`, not four. The three criteria above keep the verdict they
+had before the branch: MISSING. Their instruments are real work and none of it is
+this task's: A6 needs an integration test that builds two shells and diffs them,
+A12 an e2e walk of storage after a stage-3 visit (stage 3 needs the geo source
+`Q-0008` gates, `TS-WEB-0010-A15`), A11 a repository-wide static check —
+`src/lib/live/bff.ts` is today the only module reading `x-vercel-ip-*`, so the
+invariant looks true and is simply unasserted. What the shape of
+`entry-handover.ts` does give A11 is recorded in §1 and nowhere claimed as its
+instrument. Neither the proxy tests nor
+`src/lib/personalization/entry-handover.test.ts` names any of the three ids now,
+in a title or in prose, because a bare mention in a scanned test file is what
+`check-coverage` counts as NAMED ONLY.
 
 ## Consequences
 
@@ -201,13 +232,19 @@ both loads whether or not the boundary completes.
   violation and `React error #412` row 132 describes, while
   `curl -H 'Referer: https://www.linkedin.com/'` shows the resolved run
   (`scene-2 · scene-3 · scene-1`) in the parked branch. Every e2e assertion of
-  A7 is therefore scoped to `next dev` or to a **preview**-CSP build: on the
-  same production build with the hash asset moved aside and `VERCEL_ENV=preview`
-  — `state/open.md` row 148's procedure — A7, A9 and A11 are green, the
-  `linkedin.com` load reorders to `scene-2 · scene-3 · scene-1`, and the
-  document holds three scenes and one module with no console error. This is the
-  first feature whose **content**, not only its interactivity, depends on that
-  row.
+  A7 is therefore scoped to `next dev`. One further configuration was measured
+  and is **not** a Vercel preview: the same production build with the hash asset
+  moved aside and `VERCEL_ENV=preview` — `state/open.md` row 148's procedure —
+  where A7, A9 and A11 are green, the `linkedin.com` load reorders to
+  `scene-2 · scene-3 · scene-1`, and the document holds three scenes and one
+  module with no console error. A preview **deployment** does not reach that
+  state on its own: `package.json`'s `build` is
+  `next build && node scripts/generate-csp-hashes.mjs`, so a preview ships the
+  hash asset, and `src/lib/security/csp.ts:152` grants `'unsafe-inline'` only
+  when `isPreview && !hasHashes`. Until one preview deployment is measured and
+  cited, the claim is `next dev` and the hash-asset-removed build, nothing
+  wider. This is the first feature whose **content**, not only its
+  interactivity, depends on row 132.
 - **The `press` order seats two `lime` grounds together.** The grounds travel
   with their scenes (DEC-0129 §11), so `press` — `provenance · whatsapp ·
   embed` — puts the `lime-100` embed scene directly above the `lime-100` proof
@@ -232,7 +269,18 @@ both loads whether or not the boundary completes.
   and is out of the accessibility tree, but a document-wide id or attribute read
   now matches twice: that is why A9's `#scene-3` read and the four
   `[data-explain-module]` reads on `/` are scoped to `main`
-  (`e2e/pages/home.spec.ts`). Dropping the ids instead was not taken: they are
+  (`e2e/pages/home.spec.ts`). **The cost, measured** on this branch's
+  `pnpm build` + `next start` on port 3251 with `VERCEL_ENV` unset and the hash
+  asset present, `curl -H 'Referer: https://www.linkedin.com/' /`: 140 810 bytes,
+  6 `[data-block="scene"]`, 2 `[data-explain-module]`, and `id` values appearing
+  twice are `place-dates`, `live-counters` (both pre-existing) and `scene-1`,
+  `scene-2`, `scene-3` (this branch's, in the parked copy after `</main>`). The
+  QA round of 2026-09-26 measured the same page built from `next-2026`'s
+  `app/[lang]/page.tsx` at 124 096 bytes with 3 scenes, so this branch adds
+  roughly **+16.5 KB to every production response** and three newly duplicated
+  ids for a mechanism that, under §4's CSP, changes nothing a visitor sees. That
+  is the price row 132's nonce decision removes, and it is the strongest argument
+  for taking that decision rather than leaving it open. Dropping the ids instead was not taken: they are
   what `A7` compares between its two loads (the same id **set** in a different
   order — "no block added, removed or rewritten") and what `A9` walks the DOM
   order with, so removing them would remove the evidence for the very criteria

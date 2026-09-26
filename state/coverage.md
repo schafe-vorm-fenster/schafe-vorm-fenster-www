@@ -6,15 +6,15 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**430 criteria · 253 closed · 177 open (59 % closed)**
+**430 criteria · 250 closed · 180 open (58 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 253 | a test title in a file a runner runs carries the id |
+| VERIFIED | 250 | a test title in a file a runner runs carries the id |
 | METERED | 0 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
 | NAMED ONLY | 32 | the id is in a runner file but in no test title — **not coverage** |
-| MISSING | 145 | nothing names it |
+| MISSING | 148 | nothing names it |
 
 Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
 
@@ -22,10 +22,10 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 
 | Level | Criteria | Closed | Open | Closed |
 | --- | --- | --- | --- | --- |
-| static | 86 | 48 | 38 | 56 % |
+| static | 86 | 47 | 39 | 55 % |
 | unit | 30 | 26 | 4 | 87 % |
-| integration | 73 | 48 | 25 | 66 % |
-| e2e | 171 | 131 | 40 | 77 % |
+| integration | 73 | 47 | 26 | 64 % |
+| e2e | 171 | 130 | 41 | 76 % |
 | tool | 39 | 0 | 39 | 0 % |
 | manual | 31 | 0 | 31 | 0 % |
 
@@ -42,7 +42,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0007 | 16 | 5 | A2 A3 A4 A5 A6 A9 A10 A11 A13 A15 A16 |
 | TS-WEB-0008 | 16 | 11 | A6 A7 A8 A12 A13 |
 | TS-WEB-0009 | 14 | 7 | A1 A2 A3 A8 A9 A12 A13 |
-| TS-WEB-0010 | 15 | 9 | A5 A7 A9 A13 A14 A15 |
+| TS-WEB-0010 | 15 | 6 | A5 A6 A7 A9 A11 A12 A13 A14 A15 |
 | TS-WEB-0011 | 14 | 6 | A3 A5 A6 A8 A9 A11 A12 A13 |
 | TS-WEB-0012 | 11 | 8 | A7 A8 A10 |
 | TS-WEB-0013 | 8 | 3 | A3 A4 A6 A7 A8 |
@@ -122,8 +122,11 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0009-A12 | tool | MISSING | — | Snapshot build step produces a file for every D3 module with fallback "tiers 1–3", produces none for counters, and fails the build if a required file is missing … |
 | TS-WEB-0009-A13 | manual | MISSING | — | Screen reader: skeletons are not announced; the `/dein-ort` empty state is announced once on arrival. Under `prefers-reduced-motion` no skeleton animates. |
 | TS-WEB-0010-A5 | integration | MISSING | — | Stage 0 completeness: with the geo flag off and no referrer, every page renders fully — place search present, no empty slot, no unresolved skeleton — and issues … |
+| TS-WEB-0010-A6 | integration | MISSING | — | Cacheability: two requests for the same URL with different `Accept-Language` and different IP countries return a byte-identical shell; no `Set-Cookie` and no `V … |
 | TS-WEB-0010-A7 | e2e | MISSING | — | No classification control exists on any page: no role chooser, no audience switcher, no "who are you?" interstitial. |
 | TS-WEB-0010-A9 | tool | MISSING | — | Build check: every regional variant set has a neutral variant, and no variant is keyed below county level (D9). |
+| TS-WEB-0010-A11 | static | MISSING | — | No IP value reaches a log, trace attribute or outbound payload: the request geo/IP headers are read in exactly one module, and no other module references them. |
+| TS-WEB-0010-A12 | e2e | MISSING | — | Persistence: after a visit at stage 3, no cookie, `localStorage` entry or server session carries a location or a trait; the only stored key is the D10 session f … |
 | TS-WEB-0010-A13 | e2e | MISSING | — | Language suggestion (when built): appears at most once per session, dismissal holds, navigating is a link, the served HTML is identical whether or not it applie … |
 | TS-WEB-0010-A14 | e2e | MISSING | — | Focus job stability: the primary conversion of every route is identical at stage 0 and stage 3, with the empty-place-calendar case (TS-WEB-0008) as the only exc … |
 | TS-WEB-0010-A15 | manual | MISSING | — | Q-0008 sign-off is recorded before IP geolocation is enabled in production; until then the flag is off in production and A5 passes. |

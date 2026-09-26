@@ -14,7 +14,11 @@ import type { EntryTrait } from "../relevance/types";
  * (TS-WEB-0010 D2 step 2, DEC-0140). Two things are asserted here: that a trait
  * survives the round trip unchanged — `TS-WEB-0010-A3`'s "resolver and engine
  * read the same trait constant", now across a header as well — and that
- * nothing but the two named values ever crosses it (`TS-WEB-0010-A11`).
+ * nothing but the two named values ever crosses it. That last part is the shape
+ * TS-WEB-0010's `static` no-IP-value criterion relies on, not that criterion
+ * itself: it asks that the request geo/IP headers are read in exactly one
+ * module across the whole tree, which no test of this module can see, so its id
+ * is in no title here (DEC-0140 §4).
  */
 
 /** The page's side of the hop, as `app/[lang]/_scenes.tsx` does it. */
@@ -91,7 +95,7 @@ describe("TS-WEB-0010-A3 across the handover: every D3 row survives the header",
   });
 });
 
-describe("TS-WEB-0010-A11 / D3: only the host and a recognised medium travel", () => {
+describe("D3: only the host and a recognised medium travel", () => {
   it("drops the referrer's path, query and fragment, and the `www.` prefix", () => {
     expect(headerFor("https://www.linkedin.com/in/someone?ref=abc#top")).toBe("ref=linkedin.com");
   });

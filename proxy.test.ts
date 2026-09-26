@@ -447,7 +447,12 @@ describe("TS-WEB-0010 D2 step 2 — the entry-context handover (DEC-0140)", () =
     expect(handedDown(spoofed)).toBe("");
   });
 
-  it("carries no geo, IP or place value (TS-WEB-0010-A11)", async () => {
+  // Deliberately carries no criterion id. TS-WEB-0010's `static` no-IP-value
+  // criterion is about which modules of the whole tree may read the request
+  // geo/IP headers, which no unit test of this file can see; the assertion here
+  // is the narrower one this task owns — the handover header carries neither.
+  // DEC-0140 §1 and §4 name the missing instrument.
+  it("carries no geo, IP or place value in the handover", async () => {
     const response = await proxy(
       request("https://www.schafe-vorm-fenster.de/?ort=lassan&etcc_med=newsletter", {
         referer: "https://www.nordkurier.de/artikel/x",
@@ -464,7 +469,12 @@ describe("TS-WEB-0010 D2 step 2 — the entry-context handover (DEC-0140)", () =
     }
   });
 
-  it("adds no `Vary` and no `Set-Cookie` (TS-WEB-0010-A6, TS-WEB-0010-A12)", async () => {
+  // Deliberately carries no criterion id either. This is one clause of
+  // TS-WEB-0010's cacheability criterion (no `Vary`, no `Set-Cookie`); that
+  // criterion also asks for two byte-identical shells across `Accept-Language`
+  // and IP country, and its persistence sibling is an `e2e` walk of what a
+  // visit stores. Neither is observable from a proxy unit test.
+  it("adds no `Vary` and no `Set-Cookie` to the response", async () => {
     const response = await proxy(
       request("https://www.schafe-vorm-fenster.de/", {
         referer: "https://www.linkedin.com/",
