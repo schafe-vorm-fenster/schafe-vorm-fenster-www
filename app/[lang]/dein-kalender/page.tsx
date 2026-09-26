@@ -6,6 +6,7 @@ import { Icon } from "@/src/components/icon/icon";
 import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
 import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import {
+  PRICE_TIERS,
   PriceSection,
   PriceTierRow,
   type PriceTierId,
@@ -34,7 +35,7 @@ import { selectProof } from "../_proof";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
-import { settingRows, tierChecks } from "./content";
+import { comparisonLabels, settingRows, tierChecks } from "./content";
 import { pageMeta } from "./page.meta";
 
 import { Fragment } from "react";
@@ -77,23 +78,6 @@ function listItems(blocks: readonly ContentBlock[]): string[] {
  */
 function withoutArrow(text: string | undefined): string {
   return (text ?? "").split(/→|`/)[0].trim();
-}
-
-/**
- * The two column labels of the contrast block — the artifact's own table
- * head, read off the content rather than typed here.
- *
- * They used to be a constant in this file, reading "Mit dem Produkt" over a
- * heading "Heute — und mit dem Produkt". `SRC-0017` CG-039 fails a build on
- * both, `DEC-0106 §2` makes "today" and "with your calendar" a determination
- * rather than a placeholder, and `plan/reviews/2026-09-23/decisions.md` row
- * 10 writes the two German words. The wording is copy (DEC-0083 §1), so it
- * lives in `content/pages/dein-kalender/**` with the four rows it labels —
- * one table, one source.
- */
-function comparisonLabels(table: ContentBlock | undefined): { today: string; withCalendar: string } {
-  const head = table && table.kind === "table" ? table.head : [];
-  return { today: head[0] ?? "", withCalendar: head[1] ?? "" };
 }
 
 /**
@@ -223,14 +207,16 @@ export default async function Page({
   // own slot, `provenance: generated; demo: true`, one row in state/open.md
   // (DEC-0068, DEC-0131 §3).
   const tierCheckSlot = slot(page, "dein-kalender-4-tiers-checks-demo");
-  const checks = tierChecks(tierCheckSlot.blocks);
+  const checks = tierChecks(tierCheckSlot.blocks, PRICE_TIERS);
+  /** Read off the slot, never hard-coded: the marking goes when the slot does. */
+  const tierChecksAreDemo = isDemoSlot(tierCheckSlot);
   const proofDemo = slot(page, "dein-kalender-5-proof-demo");
   const trust = slot(page, "dein-kalender-6-trust");
   const closing = slot(page, "dein-kalender-7-closing");
   const contextBand = slot(home, "home-10-context-band");
 
   const table = contrast.blocks.find((block) => block.kind === "table");
-  const labels = comparisonLabels(table);
+  const labels = comparisonLabels(contrast.blocks);
   const comparisonRows: FourComparisonRows =
     table && table.kind === "table" && table.rows.length === 4
       ? (table.rows.map((row) => ({ today: row[0] ?? "", withProduct: row[1] ?? "" })) as unknown as FourComparisonRows)
@@ -522,6 +508,11 @@ export default async function Page({
           <Fragment key={tier.offeringId}>
             <PriceTierRow
               checks={checks[tier.offeringId] ?? []}
+              // The nine check lines are the drafts', not the owner's, so the
+              // list they stand in says so in the markup — the marking the
+              // slot carries, published where a build can enumerate it
+              // (DEC-0068 guardrail 1, DEC-0131 §5, state/open.md row 244).
+              checksDemo={tierChecksAreDemo}
               cta={{ label: tier.cta.label, to: tier.cta.to }}
               kicker={tier.kicker}
               locale={locale}

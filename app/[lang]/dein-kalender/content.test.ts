@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 
+import { PRICE_TIERS } from "@/src/components/price-section/price-section";
 import { parseBlocks } from "@/src/lib/content/blocks";
 
-import { settingRows, settingTags, tierChecks } from "./content";
+import { comparisonLabels, settingRows, settingTags, tierChecks } from "./content";
 
 /**
  * The two tables `/dein-kalender` reads (DEC-0131 §1/§3). The fixtures are
@@ -74,7 +75,7 @@ describe("settingRows", () => {
 });
 
 describe("tierChecks", () => {
-  const checks = tierChecks(parseBlocks(CHECKS_TABLE));
+  const checks = tierChecks(parseBlocks(CHECKS_TABLE), PRICE_TIERS);
 
   it("keys the rows by offering id, never by position", () => {
     expect(Object.keys(checks).sort()).toEqual(["community-calendar", "portalize-enterprise"]);
@@ -91,5 +92,44 @@ describe("tierChecks", () => {
 
   it("gives a tier the table does not name no checks at all", () => {
     expect(checks["portalize-calendar"]).toBeUndefined();
+  });
+
+  it("throws on a `Stufe` cell that names no tier rather than dropping its checks", () => {
+    const typo = `
+| Stufe | Häkchen 1 |
+| --- | --- |
+| portalize-kalender | eins |
+`;
+    expect(() => tierChecks(parseBlocks(typo), PRICE_TIERS)).toThrow(/portalize-kalender/u);
+  });
+});
+
+describe("comparisonLabels", () => {
+  const CONTRAST_TABLE = `
+| Heute | Mit eurem Kalender |
+| --- | --- |
+| eins heute | eins mit Kalender |
+`;
+
+  it("reads both column labels off the table head", () => {
+    expect(comparisonLabels(parseBlocks(CONTRAST_TABLE))).toEqual({
+      today: "Heute",
+      withCalendar: "Mit eurem Kalender",
+    });
+  });
+
+  it("throws where a label is missing rather than rendering a bare colon", () => {
+    const missing = `
+| Heute |  |
+| --- | --- |
+| eins heute | eins mit Kalender |
+`;
+    expect(() => comparisonLabels(parseBlocks(missing))).toThrow(/column labels/u);
+  });
+
+  it("throws where the slot carries no table at all", () => {
+    expect(() => comparisonLabels(parseBlocks("**Überschrift:** ohne Tabelle"))).toThrow(
+      /column labels/u,
+    );
   });
 });

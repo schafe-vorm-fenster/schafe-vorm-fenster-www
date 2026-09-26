@@ -127,6 +127,19 @@ with a row in `state/open.md` (`DEC-0068`, `src/lib/content/validate.ts`
 lines 112–133). This too is the owner's default (*"the drafts' three lines per
 tier, demo-marked"*).
 
+The marking is threefold, because `DEC-0068`'s first guardrail asks for it
+**in the markup** — "so a build can enumerate what still needs replacing" —
+and the artifact's front matter is not markup: `price-tier-row` takes a
+`checksDemo` flag, derived from the slot (`isDemoSlot`), and puts
+`data-demo="true"` on the check list, the smallest element that holds exactly
+the nine lines and nothing the owner wrote. It is asserted
+(`e2e/pages/dein-kalender.spec.ts`, three marked lists inside
+`[data-block="tiers"]`), which is the same regime `/mitmachen` runs on its
+`*-steps-demo` slots. Adding the flag is a two-line, additive change to
+`T-06`'s component — reported as a shared-file edit — because the alternative,
+a wrapper `div` around each row, would break the hairline rhythm the section
+is built on.
+
 Three deviations from the drafts, each with a source rather than a taste:
 
 - **No "Umkreis"** under the `Orte` setting —
@@ -200,6 +213,23 @@ Kalender"*), the same pair `/dein-kalender` reads off its content. The unit
 test no longer asserts a literal the component owns: it asserts that the labels
 the caller passed are the labels that render, and that no product name survives
 a render.
+
+A required prop moves the hole one file up rather than closing it, so the
+page-local parsing closes it: `comparisonLabels` and `tierChecks` live in
+`app/[lang]/dein-kalender/content.ts`, and each **throws** where the artifact
+does not carry what the page needs — a missing column label, which would render
+that bare colon one file further down, and a `Stufe` cell naming no tier, which
+used to drop that tier's three check lines with no error and no failing test.
+An empty *example* or *chip* cell stays absence rather than an error, because
+absence is what the `Zeitraum` row means. Both failure cases are covered in
+`content.test.ts`.
+
+The tier vocabulary is **passed into** `tierChecks` (`PRICE_TIERS`, from the
+page) rather than imported by it: importing the component module into the
+page-local parser pulled `price-section` — CSS modules and all — into a graph
+that had only types in it, and `src/lib/routes/routing.integration.test.ts`
+went from 3.7 s to over its 5 s timeout. A parser of strings keeps no component
+in its graph.
 
 ## Consequences
 

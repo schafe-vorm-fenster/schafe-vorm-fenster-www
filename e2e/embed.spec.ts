@@ -199,12 +199,17 @@ test.describe("the embed frame", () => {
       "Darstellung",
       "Aktualisierung",
     ]) {
-      await expect(
-        config.locator("h3", { hasText: new RegExp(`^\\s*${key}`, "u") }),
-      ).toBeVisible();
+      const keyText = new RegExp(`^\\s*${key}`, "u");
+      await expect(config.locator("h3", { hasText: keyText })).toBeVisible();
+      // And the explanation, not only the label — a row that renders a bare
+      // key explains nothing, and a non-emptiness check passes on any stray
+      // paragraph. The wording is copy (DEC-0083), so the assertion is the
+      // sentence's presence rather than its text: 20 characters is well under
+      // the shortest of the six core sentences and well over a bare key or a
+      // chip.
+      const row = config.locator("li").filter({ has: page.locator("h3", { hasText: keyText }) });
+      const core = (await row.locator("p").first().innerText()).trim();
+      expect(core.length, `${key}: the row explains itself`).toBeGreaterThan(20);
     }
-    // And the explanations, not only the labels — a list of bare keys
-    // explains nothing.
-    await expect(config.locator("li p").first()).not.toBeEmpty();
   });
 });

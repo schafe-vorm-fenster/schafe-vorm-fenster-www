@@ -87,11 +87,12 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
     await expect(block.locator("h2")).toHaveCount(1);
     const rows = block.locator("li");
     await expect(rows).toHaveCount(4);
-    // `innerText` reflects the rendered (CSS-uppercased) text, so compare
-    // case-insensitively rather than assuming sentence case survives.
-    const first = (await rows.first().innerText()).toLowerCase();
-    expect(first).toContain("heute:");
-    expect(first).toContain("mit eurem kalender:");
+    // Both cells carry their column's label as visible text, so the pairing
+    // survives outside the two-column layout (`comparison-table`'s A11y
+    // rule). A5 says the criterion asserts the two cells and the absence,
+    // "never their wording", so the labels are asserted structurally — one
+    // label element per cell — and an owner rewording them breaks no test.
+    await expect(block.locator("li p > span")).toHaveCount(8);
     // TS-WEB-0024-A5 / TS-WEB-0018-A7 — neither column label nor any cell
     // carries a product name or the avoid list's words for one (CG-039).
     const blockText = (await block.innerText()).toLowerCase();
@@ -158,6 +159,22 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
 
     // Pulse occurs once, in `focus`, and never on a tier (A3).
     await expect(page.locator('[data-block="tiers"] [data-cta="primary"]')).toHaveCount(0);
+  });
+
+  test("the nine tier check lines are marked as placeholders in the markup, one marking per tier", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    // The check lines come out of `dein-kalender-4-tiers-checks-demo`
+    // (`provenance: generated; demo: true`), so the list that holds them says
+    // so where a build can enumerate it — DEC-0068's first guardrail, the
+    // same regime `/mitmachen` runs on its `*-steps-demo` slots. When the
+    // owner confirms the nine lines the slot loses `demo: true`, this
+    // assertion fails, and that is the reminder to drop it with the marking
+    // (DEC-0131 §5, state/open.md row 244).
+    await expect(page.locator('[data-block="tiers"] [data-offering] ul[data-demo="true"]')).toHaveCount(
+      3,
+    );
   });
 
   test("TS-WEB-0024-A9: 'Portalize' occurs exactly once, inside the tiers block at the 480 € tier, never in a heading or the title", async ({
