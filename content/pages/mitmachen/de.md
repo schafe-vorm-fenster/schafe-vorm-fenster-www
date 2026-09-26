@@ -215,15 +215,31 @@ rein · Drei Wege. Alle nutzt ihr eh schon.", CG-014).
 2. Per WhatsApp an uns schicken — Über „Teilen" direkt in unseren Chat.
 3. Termin steht im Kalender — In eurem Ort und drumherum.
 
-**Chat-Antwort (Zustand 2):** Danke! Der Termin steht ab morgen im Kalender.
+**Chat-Antwort (Zustand 2):** Danke! Der Termin steht im Kalender.
 
 **Chat-Uhrzeit (Zustand 2):** 14:06
+
+**Beispielzeilen (Zustand 3):**
+
+- Feuerwehrfest | Sa · 15:00 · Gerätehaus | social | Vereinsleben
+- Laternenumzug | Fr · 17:30 · Kirche | culture | Kultur
+- Dorfflohmarkt | So · 11:00 · Dorfplatz | social | Vereinsleben
 
 Die drei Zeilen stehen so im Entwurf „3-Schritte-erklären" vom 2026-09-23
 (11.20.03) und sind bis zur Freigabe Platzhalter: `provenance: generated`,
 `demo: true`, im Markup `data-demo="true"` (DEC-0068, DEC-0124,
 `state/open.md`). Die Chat-Antwort und die Uhrzeit beschriften eine
-Illustration; sie versprechen keine Antwortzeit (CG-031).
+Illustration; sie nennen keine Antwortzeit und keine Bearbeitungsdauer
+(CG-031, CG-033) — deshalb steht dort „steht im Kalender" und nicht „ab
+morgen": keine freigegebene Quelle nennt eine Frist.
+
+Die drei Beispielzeilen sind der Rückfall des Live-Panels in Zustand 3,
+wenn der Live-Abruf weniger als drei Zeilen liefert. Es sind gewöhnliche
+kommende Termine ohne „verschoben"/„abgesagt", weil dieser Weg auf „Termin
+steht im Kalender" endet — die Muster von Weg 2 illustrieren „neu,
+verschoben, abgesagt" und passen hier nicht (DEC-0124 §5, `state/open.md`).
+Markierung wie bei Weg 2: `data-placeholder="sample-events"`, jede Zeile
+`data-demo`.
 
 ## Slot 4 — Publizierweg 2: euren eigenen Kalender verbinden
 
@@ -314,6 +330,31 @@ Entwurf; die Zeilen sind aus den Sätzen des Reviews gebaut und deshalb
 ebenfalls Platzhalter. Konkret werden die Quellen im Banner, nicht in den
 Schritten — WordPress-Plugin und Ratsinformationssystem stehen im
 Angebots-Datensatz, nicht hier (`specs/README.md` Regel 1).
+
+### Slot 5b — Die Preisgrenze im Hinweis-Banner (Platzhalter)
+
+<!-- id: mitmachen-5b-path-website-banner-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Preisgrenze:** Quellen, die wir schon unterstützen, veröffentlichen kostenlos. Nur die einzelne Anbindung an ein System, das wir noch nicht lesen, ist kostenpflichtig.
+
+Der Satz des Reviews in Slot 5 („Bitte nachfragen, geht bisher nur für
+einige Webseiten") sagt, für wie viele Webseiten der Weg heute reicht —
+nicht, was eine Anbindung kostet. FUN-WEB-0204 und TS-WEB-0022 D11
+verlangen aber genau die Preisgrenze von BUS-WEB-0017, und D11 trennt sie
+ausdrücklich vom Alpha-Badge: „D4's status_badge says path 03's mechanism
+is alpha; this says what a connection costs. Two different facts, two
+elements" (TS-WEB-0022:205, :210; DEC-0107 §3). Deshalb steht sie als
+zweiter Satz im Banner.
+
+Die Tatsachen stehen im Angebots-Datensatz
+(`community-calendar.offering.md`, Zeilen 112–123: „A source the platform
+already supports publishes free" und „Only an individual integration into a
+system the platform does not already support is priced, and that is
+custom-data-integration"). Die deutsche Formulierung hat niemand
+geschrieben, deshalb `provenance: generated`, `demo: true` und im Markup
+`data-demo="true"` (DEC-0068, DEC-0124, `state/open.md`). Kein Betrag, kein
+Währungszeichen, kein „ab": der Zusatz hat `price_status: on-request` und
+ist auf `/mitmachen` ohne Zahl zu nennen (TS-WEB-0022 D1/D11, A12, A17).
 
 ## Slot 6 — Live-Beispiel
 

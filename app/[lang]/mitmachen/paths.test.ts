@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
 
-import { parseBlocks } from "@/src/lib/content/blocks";
+import { fieldAt, parseBlocks } from "@/src/lib/content/blocks";
 
 import {
   listAt,
@@ -31,6 +31,14 @@ const STEP_SLOTS = [
   "mitmachen-4a-path-calendar-steps-demo",
   "mitmachen-5a-path-website-steps-demo",
 ] as const;
+
+/**
+ * The price boundary of `BUS-WEB-0017` — the banner's second sentence
+ * (`FUN-WEB-0204`, TS-WEB-0022 D11, DEC-0107 §3). Its own slot, because the
+ * owner's review sentence above it states path 3's *reach*, not what a
+ * connection costs, and D11:210 keeps the two facts in two elements.
+ */
+const BANNER_SLOT = "mitmachen-5b-path-website-banner-demo";
 
 /** The slots of a shipped artifact, by the id in their metadata comment. */
 function slotsOf(locale: (typeof LOCALES)[number]): Map<string, string> {
@@ -150,7 +158,7 @@ describe("the shipped artifacts", () => {
       });
     }
 
-    for (const id of STEP_SLOTS.slice(1)) {
+    for (const id of STEP_SLOTS) {
       it(`${locale}: ${id} carries three sample event rows`, () => {
         const rows = threeSampleRows(listAt(parseBlocks(slots.get(id) ?? ""), 1), id);
         expect(rows).toHaveLength(3);
@@ -167,10 +175,31 @@ describe("the shipped artifacts", () => {
       }
     });
 
-    it(`${locale}: no step line and no objection row states a price`, () => {
+    it(`${locale}: the banner slot states the price boundary, with no figure`, () => {
+      const boundary = fieldAt(parseBlocks(slots.get(BANNER_SLOT) ?? ""), 0) ?? "";
+      // FUN-WEB-0204 asks the page to state the boundary; the words are a
+      // placeholder, so what is pinned here is that the sentence exists and
+      // carries no figure — not its wording.
+      expect(boundary.length, `${BANNER_SLOT} carries the boundary sentence`).toBeGreaterThan(20);
+      expect(boundary, "TS-WEB-0022-A12/A17: no figure in the banner").not.toMatch(
+        /\d+\s*€|€|480|\bab\b|\bfrom €/,
+      );
+    });
+
+    it(`${locale}: no rendered line of a path slot or the objection block states a price`, () => {
+      // Every rendered string of the path slots, not only the step lines: the
+      // T-12 review found "steht ab morgen" in a *field* (the stage chat
+      // reply), which a list-only walk cannot see (DEC-0124 §4).
+      const pathSlots = [...STEP_SLOTS, BANNER_SLOT, "mitmachen-5-path-website"];
       const lines = [
         ...listsOf(parseBlocks(slots.get("mitmachen-2-objections") ?? "")).flat(),
-        ...STEP_SLOTS.flatMap((id) => listAt(parseBlocks(slots.get(id) ?? ""), 0)),
+        ...pathSlots.flatMap((id) => {
+          const blocks = parseBlocks(slots.get(id) ?? "");
+          return [
+            ...listsOf(blocks).flat(),
+            ...blocks.flatMap((block) => (block.kind === "field" ? [block.value] : [])),
+          ];
+        }),
       ];
       for (const line of lines) {
         expect(line, "TS-WEB-0022-A12: no figure on this route").not.toMatch(/\d+\s*€|480|\bab\b/);

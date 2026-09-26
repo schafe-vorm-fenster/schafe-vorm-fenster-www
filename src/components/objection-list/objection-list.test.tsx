@@ -54,6 +54,29 @@ describe("TS-WEB-0022 D3 / A6: one headline, n items, no numeral, a proof slot w
     expect(none).not.toContain("data-empty-proof");
   });
 
+  it("renders the upper half alone with an empty item list — headline, reach rows, proof slot, no archive block, and `closing` is not rendered", () => {
+    // `/mitmachen` splits the two halves across two sections, because
+    // together they measure 1627 px at 390 px and G-4 caps a section at 1270
+    // (DEC-0124 §1). The upper half then renders with no `items`. `closing`
+    // belongs to the archive half and is dropped here by design — the prop
+    // doc says so, and this pins it.
+    const html = renderToStaticMarkup(
+      <ObjectionList
+        closing="Und keine Zeit fürs Bewerben."
+        headline="Warum es hakt"
+        items={[]}
+        reach={REACH}
+      />,
+    );
+    expect(html).toContain("<h2");
+    expect(html).toContain("Warum es hakt");
+    expect(html).toContain("data-objection-reach");
+    expect(html.match(/<li/g)).toHaveLength(3);
+    expect(html).toContain("data-empty-proof");
+    expect(html).not.toContain("data-archive-block");
+    expect(html).not.toContain("Und keine Zeit fürs Bewerben.");
+  });
+
   it("carries the closing sentence after the rows, inside the archive half", () => {
     const html = renderToStaticMarkup(
       <ObjectionList closing="Und keine Zeit fürs Bewerben." headline="H" items={ITEMS} proofSlot={false} />,

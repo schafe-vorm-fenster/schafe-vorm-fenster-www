@@ -8,6 +8,14 @@ import { checkRhythm } from "@/src/components/section-shell/rhythm";
  * through the shared rhythm predicate: no two photo sections adjacent, at
  * most two consecutive of one colour family, the dark `ink` section exactly
  * once (the live example, D10's anchor).
+ *
+ * This list is declared, not read off the render, so it can drift from
+ * `page.tsx`. Its counterpart in `e2e/pages/mitmachen.spec.ts`
+ * (`TS-WEB-0022-A16`) reads the `data-surface` sequence off the served DOM and
+ * asserts the clauses that can be read there — no two adjacent photo sections,
+ * exactly one `ink` section and it being the live-data one, and the reserved
+ * boxes — so a composition change this file did not follow fails there
+ * (T-12 review).
  */
 describe("TS-WEB-0022-A16: /mitmachen section rhythm", () => {
   it("has no rhythm violations, own blocks plus the frame's band and closing", () => {

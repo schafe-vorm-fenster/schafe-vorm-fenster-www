@@ -214,15 +214,30 @@ with the German ones.
 2. Send it to us by WhatsApp — Straight into our chat via "share".
 3. The date is in the calendar — In your place and around it.
 
-**Chat reply (state 2):** Thanks! The date will be in the calendar tomorrow.
+**Chat reply (state 2):** Thanks! The date is in the calendar.
 
 **Chat time (state 2):** 14:06
+
+**Sample rows (state 3):**
+
+- Fire brigade fête | Sat · 15:00 · Fire station | social | Community
+- Lantern parade | Fri · 17:30 · Church | culture | Culture
+- Village flea market | Sun · 11:00 · Village square | social | Community
 
 The three lines are the 2026-09-23 "3-Schritte-erklären" draft (11.20.03)
 and are placeholders until they are signed off: `provenance: generated`,
 `demo: true`, `data-demo="true"` in the markup (DEC-0068, DEC-0124,
 `state/open.md`). The chat reply and the time label an illustration; they
-promise no response time (CG-031).
+name no response time and no processing time (CG-031, CG-033) — which is
+why it reads "the date is in the calendar" and not "tomorrow": no cleared
+source states a turnaround.
+
+The three sample rows are the live panel's fallback in state 3, for when
+the live read returns fewer than three rows. They are ordinary upcoming
+dates with no "moved"/"cancelled", because this path ends in "the date is
+in the calendar" — path 2's samples illustrate "new, moved, cancelled" and
+do not fit here (DEC-0124 §5, `state/open.md`). Marked like path 2's:
+`data-placeholder="sample-events"`, every row `data-demo`.
 
 ## Slot 4 — Publishing path 2: connect your own calendar
 
@@ -313,6 +328,31 @@ the lines are built from the review's sentences and are therefore
 placeholders as well. The concrete sources are named in the banner, not in
 the steps — the WordPress plugin and the council information system live
 in the offering record, not here (`specs/README.md` rule 1).
+
+### Slot 5b — The price boundary in the hint banner (placeholder)
+
+<!-- id: mitmachen-5b-path-website-banner-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Price boundary:** A source we already support publishes free. Only an individual integration into a system we do not read yet is paid.
+
+The review's sentence in slot 5 ("Please ask us first — so far this works
+for some websites only") says how many websites the path reaches today, not
+what a connection costs. FUN-WEB-0204 and TS-WEB-0022 D11 ask for exactly
+the price boundary of BUS-WEB-0017, and D11 separates it from the alpha
+badge in as many words: "D4's status_badge says path 03's mechanism is
+alpha; this says what a connection costs. Two different facts, two
+elements" (TS-WEB-0022:205, :210; DEC-0107 §3). So it stands as the
+banner's second sentence.
+
+The facts are the offering record's (`community-calendar.offering.md`,
+lines 112–123: "A source the platform already supports publishes free" and
+"Only an individual integration into a system the platform does not already
+support is priced, and that is custom-data-integration"). The rendered
+wording is nobody's, hence `provenance: generated`, `demo: true` and
+`data-demo="true"` in the markup (DEC-0068, DEC-0124, `state/open.md`). No
+amount, no currency symbol, no "from": the add-on is `price_status:
+on-request` and is named on `/mitmachen` without a figure (TS-WEB-0022
+D1/D11, A12, A17).
 
 ## Slot 6 — Live example
 

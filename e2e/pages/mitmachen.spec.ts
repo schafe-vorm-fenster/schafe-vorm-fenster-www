@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { STANDARD_SOURCE_IDS } from "../../src/lib/pricing/standard-sources";
+
 import type { Locator, Page } from "@playwright/test";
 
 /**
@@ -221,12 +223,20 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     expect(page.url()).not.toMatch(/gross-kiesow|musterdorf/);
   });
 
-  test("TS-WEB-0022-A12: no price, no 'Portalize', no 'local-advertising'; exactly one JSON-LD graph with WebPage only", async ({
+  test("TS-WEB-0022-A12: no numeric price, no currency symbol, no 'ab', no 'Portalize', no 'local-advertising'", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
     const bodyText = await page.locator("body").innerText();
+    // Clauses walked here: the two figures the criterion names (`480`, any
+    // `€`), the two offering names, a price-shaped number, and `ab` as its
+    // own word — the "from …" opener a price boundary invites and which D11
+    // forbids on this page. `ab` was missing from this pattern until the
+    // T-12 review, while a stage chat reply said "steht ab morgen"
+    // (DEC-0124 §4). `\bab\b` matches the word only: "abgesagt" does not.
     expect(bodyText).not.toMatch(/480|Portalize|local-advertising|€/);
+    expect(bodyText).not.toMatch(/\bab\b/i);
+    expect(bodyText).not.toMatch(/\d+[,.]\d{2}\s*(?:€|EUR)|\bEUR\b/);
     // JSON-LD is TS-WEB-0011 territory (not yet wired) — recorded as not-yet-M4.
   });
 
@@ -287,10 +297,28 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     const sources = await banner
       .locator("[data-standard-source]")
       .evaluateAll((elements) => elements.map((element) => element.getAttribute("data-standard-source")));
-    expect(sources).toEqual(["wordpress-plugin", "ratsinformationssystem", "ics-feed"]);
+    // The relation, not a snapshot: the ids rendered are the record's ids, in
+    // the record's order, so a fourth standard source in the offering record
+    // makes this test say "the banner does not name it" instead of "the list
+    // changed" (D11, `standard-sources.test.ts` holds the module against the
+    // package).
+    expect(sources).toEqual([...STANDARD_SOURCE_IDS]);
 
     const bannerText = await banner.innerText();
     expect(bannerText).not.toMatch(/\d+\s*€|€|\bab\b/);
+
+    // FUN-WEB-0204 / D11: the banner carries the price boundary, and it is a
+    // second element from the availability sentence the owner wrote and from
+    // path 3's alpha badge ("Two different facts, two elements", D11:210).
+    // The boundary's words are a placeholder slot, so what is asserted is the
+    // structure: two statements, the boundary one marked `data-demo`.
+    await expect(banner.locator("p")).toHaveCount(2);
+    await expect(banner.locator('p[data-demo="true"]')).toHaveCount(1);
+    const boundary = (await banner.locator('p[data-demo="true"]').innerText()).trim();
+    expect(boundary.length).toBeGreaterThan(20);
+    // The badge says the mechanism is alpha; the banner says what a
+    // connection costs. Two elements, and the alpha words are not in here.
+    expect(boundary).not.toMatch(/Alpha|alpha/);
 
     // The cooperations are not free-path examples and are named nowhere in
     // the banner or the three path blocks (D11, owner 2026-09-25).
@@ -436,9 +464,10 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     await expect(page.locator('[data-block="wege"] [data-stage="image"] img')).toHaveCount(0);
   });
 
-  test("TS-WEB-0022-A16: no horizontal scroll and no reflow-prone empty box at either reference viewport", async ({
-    page,
-  }) => {
+  test("no horizontal scroll at either reference viewport", async ({ page }) => {
+    // Not A16 — A16 is the rhythm and the reserved boxes, asserted below.
+    // This is the overflow guard the page has carried since it was written,
+    // kept under its own name (T-12 review).
     for (const viewport of VIEWPORTS) {
       await page.setViewportSize(viewport);
       await page.goto("/mitmachen");
@@ -446,6 +475,68 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
         () => document.documentElement.scrollWidth > window.innerWidth + 1,
       );
       expect(overflows).toBe(false);
+    }
+  });
+
+  test("TS-WEB-0022-A16: no two adjacent photo sections, exactly one dark live-data section, and the live module's box does not move once its rows arrive", async ({
+    page,
+  }) => {
+    // Read off the render, not off a hand-kept list: `section-shell` writes
+    // `data-surface` on every section, so the sequence the eye sees is the
+    // sequence asserted here. `app/[lang]/mitmachen/rhythm.test.ts` runs the
+    // same sequence through the shared predicate at unit level; this is the
+    // page saying what it actually emits (T-12 review).
+    await page.goto("/mitmachen", { waitUntil: "domcontentloaded" });
+
+    const surfaces = await page
+      .locator("main [data-surface]")
+      .evaluateAll((elements) => elements.map((element) => element.getAttribute("data-surface")));
+    expect(surfaces.length).toBeGreaterThan(5);
+    for (let index = 1; index < surfaces.length; index += 1) {
+      expect(
+        [surfaces[index - 1], surfaces[index]],
+        `two adjacent photo sections at position ${index}`,
+      ).not.toEqual(["photo", "photo"]);
+    }
+
+    // Exactly one dark section, and it is the live-data one (D10's anchor).
+    expect(surfaces.filter((surface) => surface === "ink")).toHaveLength(1);
+    await expect(page.locator('main [data-surface="ink"]')).toHaveAttribute(
+      "data-block",
+      "beispiel",
+    );
+
+    // The asynchronous boxes keep their height from first paint to settle:
+    // the live module (D5) and the three stage panels this page added with
+    // DEC-0124. Measured at `domcontentloaded` and again after the network
+    // has gone quiet, which is the window `e2e/layout-stability.spec.ts`
+    // measures site-wide and which this route is not in.
+    const heightsOf = () =>
+      page.evaluate(() =>
+        [
+          ...document.querySelectorAll('[data-block="beispiel"], [data-block="wege"]'),
+        ].map((element) => Math.round(element.getBoundingClientRect().height)),
+      );
+
+    // Every stage box already has a height at `domcontentloaded` — nothing
+    // here waits for data to get its size (`ratio-square`, DEC-0115).
+    const stageHeights = await page
+      .locator('[data-block="wege"] [data-stage]')
+      .evaluateAll((elements) =>
+        elements.map((element) => Math.round(element.getBoundingClientRect().height)),
+      );
+    expect(stageHeights.length).toBeGreaterThanOrEqual(3);
+    for (const height of stageHeights) expect(height).toBeGreaterThan(0);
+
+    const early = await heightsOf();
+    expect(early.length).toBe(4); // three `wege` sections plus the live one
+    await page.waitForLoadState("networkidle");
+    const late = await heightsOf();
+    for (const [index, height] of late.entries()) {
+      expect(
+        Math.abs(height - early[index]),
+        `section ${index} changed height after settle`,
+      ).toBeLessThanOrEqual(1);
     }
   });
 });

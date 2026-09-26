@@ -88,11 +88,6 @@ function listItems(blocks: readonly ContentBlock[]): string[] {
   return blocks.flatMap((block) => (block.kind === "list" ? block.items : []));
 }
 
-const PROOF_LABEL: Record<Locale, string> = {
-  de: "Was andere sagen",
-  en: "What others say",
-};
-
 /** The accessible name of the cross-reference aside, which carries no heading. */
 const CROSS_REFERENCE_LABEL: Record<Locale, string> = {
   de: "Anderes Angebot",
@@ -150,6 +145,12 @@ export default async function Page({
   const calendarSteps = slot(page, "mitmachen-4a-path-calendar-steps-demo");
   const pathWebsite = slot(page, "mitmachen-5-path-website");
   const websiteSteps = slot(page, "mitmachen-5a-path-website-steps-demo");
+  // D11's own half of the banner: the boundary of BUS-WEB-0017. The owner's
+  // review sentence in slot 5 states the *reach* of path 3 ("geht bisher nur
+  // für einige Webseiten"), which is a different fact; FUN-WEB-0204 asks for
+  // the price boundary, and D11:210 forbids folding it into the alpha badge.
+  // Nobody wrote the German sentence, so it is a marked demo slot (DEC-0124).
+  const bannerBoundary = slot(page, "mitmachen-5b-path-website-banner-demo");
   const example = slot(page, "mitmachen-6-beispiel");
   const proofDemo = slot(page, "mitmachen-7-proof-demo");
   const closing = slot(page, "mitmachen-8-closing");
@@ -376,9 +377,12 @@ export default async function Page({
               key="3"
               locale={locale}
               place={SHOWCASE_COMMUNITY.name}
+              // The fallback is this path's own sample, not path 2's: those
+              // rows illustrate "neu, verschoben, abgesagt", and this path
+              // ends in "Termin steht im Kalender" (DEC-0124 §5).
               sample={threeSampleRows(
-                listAt(calendarSteps.blocks, 1),
-                "mitmachen-4a-path-calendar-steps-demo",
+                listAt(whatsappSteps.blocks, 1),
+                "mitmachen-3a-path-whatsapp-steps-demo",
               )}
               slug={liveSlug}
             />,
@@ -476,6 +480,13 @@ export default async function Page({
             conversion (DEC-0107 §3). */}
         <HintBanner locale={locale} sources={standardSources()}>
           <p>{fieldAt(pathWebsite.blocks, 3)}</p>
+          {/* The boundary itself, as the second sentence: what a connection
+              costs, which the review's availability sentence above does not
+              say and which D11:210 keeps apart from path 3's alpha badge.
+              Its words are nobody's (slot 5b), so the paragraph is marked. */}
+          <p data-demo={isDemoSlot(bannerBoundary) ? "true" : undefined}>
+            {fieldAt(bannerBoundary.blocks, 0)}
+          </p>
         </HintBanner>
       </SectionShell>
 
@@ -531,14 +542,20 @@ export default async function Page({
         // a row is the rule this page's own rhythm test checks (A16, D10).
         surface="lime-100"
       >
-        <h2 id="beleg-heading">{PROOF_LABEL[locale]}</h2>
+        {/* The h2 is the dictionary's `othersSay` — "Was andere sagen" /
+            "What others say", the review's own line (R-mitmachen-16, copy
+            guide :516). It was a page-local constant with the same two
+            strings; reading the dictionary closes the T-12 half of
+            state/open.md row 234. The kicker above it is `customers`, which
+            is the marked placeholder and a different string. */}
+        <h2 id="beleg-heading">{dictionary(locale).kickers.othersSay}</h2>
         {/* G-7: one emphasis per stream. The first card opens it at sub-head
             size, the rest are hairline rows — three identical filled cards
             read as one block rather than as three institutions. No `geo`
             badge either: every card here already names its source in its
             own context line, and `BELEG` beside `Stiftung Lebendiges Lehre`
             is the same word twice. */}
-        <ProofStream label={PROOF_LABEL[locale]} layout="rows">
+        <ProofStream label={dictionary(locale).kickers.othersSay} layout="rows">
           {proofSelection.entries.map((entry, position) =>
             entry.kind === "item" ? (
               <ProofCard

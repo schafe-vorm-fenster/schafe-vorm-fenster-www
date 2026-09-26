@@ -56,6 +56,12 @@ export interface ObjectionListProps {
    * organiser rather than about a channel, folded into one sentence instead
    * of two more rows (polish brief, page 4, item 2). Beat 2 should sting,
    * not grind. Set larger than the rows.
+   *
+   * It belongs to the **archive half** and renders only with it: with no
+   * `items` there is no archive block (see below), and a `closing` passed
+   * alongside an empty `items` is not rendered. A page that splits the two
+   * halves across sections passes `closing` to the half that carries the
+   * rows (`objection-list.test.tsx`, "an empty item list").
    */
   readonly closing?: string;
   /** A cleared `proof-card`. Omitted → `empty-proof-slot`, never backfilled. */
