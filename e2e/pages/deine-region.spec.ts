@@ -274,10 +274,45 @@ test.describe("/deine-region", () => {
     await page.goto("/deine-region");
     const closing = page.locator("#closing-cta");
     await expect(closing).toContainText("Sollen wir euch ein Angebot rechnen?");
+    // A question in the closing block is a `<p>`, never an `h2` (CG-006/CG-005).
+    await expect(closing.locator("h2")).toHaveCount(0);
     await expect(closing.getByRole("link", { name: /Kennenlerngespräch/ })).toBeVisible();
     // No response-time promise is invented to fill the reassurance line.
     await expect(closing).not.toContainText(/Werktage/);
   });
+
+  /**
+   * CG-005 on the territory block, in both locales: the owner's question is a
+   * `Kicker` field of `deine-region-2-territory` since 2026-09-26, and the page
+   * reads it by field index with the dictionary kicker as a fallback
+   * (`app/[lang]/deine-region/page.tsx`). A field inserted into that slot would
+   * shift the index and the section would quietly show the dictionary word
+   * instead, leaving the h2's statement without the referent it needs — so the
+   * question is asserted, not the mechanism (DEC-0142 §8).
+   */
+  for (const locale of [
+    {
+      name: "de",
+      path: "/deine-region",
+      kicker: "Was ist in meiner Nähe?",
+      title: "Bei Landkreisgröße keine Frage für eine Liste",
+    },
+    {
+      name: "en",
+      path: "/en/your-region",
+      kicker: "What's near me?",
+      title: "At county scale, that's not a question for a list",
+    },
+  ]) {
+    test(`TS-WEB-0006-A8 / CG-005 (${locale.name}): the gebietsfrage kicker carries the visitor's question, the h2 the statement`, async ({
+      page,
+    }) => {
+      await page.goto(locale.path);
+      const section = page.locator("[data-block='gebietsfrage']");
+      await expect(section.locator("p").first()).toHaveText(locale.kicker);
+      await expect(section.getByRole("heading", { level: 2 })).toHaveText(locale.title);
+    });
+  }
 
   test("TS-WEB-0004-A1: the page carries no horizontal scroll at 360px and has a heading", async ({
     page,

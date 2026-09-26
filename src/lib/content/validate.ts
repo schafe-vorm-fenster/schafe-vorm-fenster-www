@@ -16,9 +16,13 @@
  * | 7 locale completeness | `locale-completeness` | runs |
  * | 8 harmonisation | `harmonisation` (records, slot set, provenance) | partial |
  * | 9 slot binding | `slot-binding` (unique ids inside a page) | partial |
+ * | 11 glossary conformance | `avoid-list`, `product-name` | runs |
+ * | 13 copy structure | `copy-structure` (CG-005, CG-004, CG-036) | partial |
+ * | 14 register | `register` (CG-003, one exemption by route) | partial |
  * | — TS-WEB-0017-A14 | `spec-binding` | runs |
  *
- * Rows 2, 4, 6, 10, 11 and 12 are open — see the README.
+ * Rows 2, 4, 6, 10 and 12 are open, and so are the halves of 13 and 14 that
+ * the copy contract leaves to review — see the README.
  */
 
 import { loadPage } from "@/src/lib/content/loader";
@@ -47,8 +51,787 @@ export interface Finding {
     | "dummy-content"
     | "locale-completeness"
     | "harmonisation"
-    | "lifecycle";
+    | "lifecycle"
+    | "avoid-list"
+    | "copy-structure"
+    | "register"
+    | "product-name"
+    | "note-marker";
   readonly message: string;
+}
+
+/* ---------------------------------------------------------------------------
+ * D12 rows 11, 13 and 14 — the copy lint (SRC-0018, DEC-0136)
+ *
+ * The three rows share one traversal, because they ask the same question of
+ * the same strings: *which text on this page is copy, and what is that field
+ * for?* Everything below is the machine half of `specs/contracts/copy-
+ * contract.md`; the halves that contract assigns to `review` are not here and
+ * are named in the README.
+ * ------------------------------------------------------------------------ */
+
+/**
+ * What a field's label says the field is **for** — the field-role map
+ * (DEC-0136).
+ *
+ * Only one distinction has a rule behind it today: `CG-005` forbids a question
+ * mark in a **section title** and allows it in a kicker (*"Was hilft euch
+ * das?"*), in a form step's question and in the hero headline, which is
+ * `CG-020`'s own shape. A lint that cannot tell a title from a kicker either
+ * fails the kickers or passes the titles, so the role is read off the label.
+ *
+ * The labels are authored German and English (`CG-041`: EN mirrors DE), so the
+ * map is a pattern over both rather than a list of eleven pages' labels: a
+ * label carrying `Überschrift`, `heading`, `Titel` or `title` as a word is a
+ * section title, unless its head names something else the artifacts label with
+ * a title word — a quote's source title, a link label, a hero `Headline`.
+ *
+ * **The label is the contract, and the label can be wrong.** An artifact is a
+ * text file: this function cannot see whether the page sets the field as an
+ * `h2` or as a paragraph, so a field the page renders as prose while its label
+ * says `Überschrift` is typed here as a section title and reported. That
+ * report is about the **label**, never about the words:
+ * `dein-ort-starten-5-search` carried the polish brief's quiet line
+ * (*„Falsch getippt? Nochmal suchen"*, plan/polish-brief.md page 3 fix 3)
+ * under a `Überschrift` label, and the repair is the relabel (`Frage`) that
+ * `/dein-kalender/bestellen` step 3 already uses — not a shorter sentence.
+ * The finding says so in its own message, and the rendered half of `CG-005`
+ * (no `h2` of a rendered page carries a `?`) is checked where the render
+ * exists, in `e2e/copy-structure.spec.ts`.
+ */
+export type FieldRole = "section-title" | "other";
+
+const TITLE_WORD = /(?:^|[\s(\[\-–—/])(überschrift|heading|titel|title)(?=$|[\s)\]:\-–—/])/i;
+
+/**
+ * Heads that carry a title word and are not section titles: the hero headline
+ * (`Headline`, `h1` — exempt as CG-020), the kicker, a form step's question,
+ * a quote's source title, a link or button label.
+ */
+const NOT_A_SECTION_TITLE =
+  /^(headline|h1|kicker|frage|question|zitat|quote|quelle|source|beleg|proof|link|cta|button|beschriftung|label|sucheingabe|search input)\b/i;
+
+export function fieldRole(label: string): FieldRole {
+  const head = label.trim();
+  if (NOT_A_SECTION_TITLE.test(head)) return "other";
+  return TITLE_WORD.test(head) ? "section-title" : "other";
+}
+
+/** One authored string the lint judges, with the field it was authored in. */
+export interface CopyText {
+  readonly slot: string;
+  readonly label: string;
+  readonly role: FieldRole;
+  readonly kind: "field" | "paragraph" | "list item" | "table cell";
+  readonly text: string;
+}
+
+/**
+ * The copy of a page artifact: field values, and the list items and table
+ * cells that belong to a field of the same slot.
+ *
+ * What is deliberately not copy (DEC-0136): the `**Label:**` itself — a
+ * slot-internal name, not a rendered string, which is why a field may be
+ * labelled `Warum es zählt` while the avoid list forbids that wording on the
+ * page.
+ *
+ * **Everything a slot authors is copy, whatever its shape, unless the slot
+ * says otherwise** (DEC-0142 §1): a field value, a paragraph, and the list
+ * items and table cells that belong to a field of the same slot. A list or
+ * table binds to the last field above it, across any paragraph between them;
+ * a paragraph carries that field's label too, and never its title role — a
+ * paragraph under `**Überschrift:**` is the lead below the heading, not a
+ * second heading.
+ *
+ * The one exclusion is the slot's own `<!-- note -->` marker
+ * (`src/lib/content/blocks.ts`), never a block's position or shape. A note
+ * quoting a forbidden term in order to forbid it (`Kein „im Amt" im
+ * Benefit-Band`) must not fail the build that its own slot passes, and it is
+ * the marker that says so. Position used to decide it, and position exempted
+ * fourteen blocks the pages **render**: the proof lists of
+ * `dein-kalender-5-proof-demo`, `deine-region-6-proof-demo` and
+ * `ueber-uns-3-proof-stream` and the `archiv-2-rows-demo` table (shape: a
+ * list or table under an intro paragraph), plus the three paragraphs of
+ * `/dein-kalender` that the page reads by index — `dein-kalender-3-embed-demo`
+ * paragraph 0 and `dein-kalender-3b-embed-config` paragraphs 0 and 1
+ * (`app/[lang]/dein-kalender/page.tsx:402`, `:437`, `:460`) — in both
+ * locales.
+ */
+export function copyOf(page: PageContent): CopyText[] {
+  const texts: CopyText[] = [];
+  if (!page.ok) return texts;
+
+  for (const slot of page.slots) {
+    let field: { readonly label: string; readonly role: FieldRole } | null = null;
+    for (const block of slot.blocks) {
+      if (block.kind === "field") {
+        field = { label: block.label, role: fieldRole(block.label) };
+        if (block.value) {
+          texts.push({ slot: slot.id, ...field, kind: "field", text: block.value });
+        }
+        continue;
+      }
+      // The one exclusion, and it is explicit (DEC-0142).
+      if (block.note) continue;
+      if (block.kind === "paragraph") {
+        // A paragraph is copy where the page renders one, and it is not a
+        // boundary: the list under `Pool: …` is still the field's content.
+        if (block.text) {
+          texts.push({
+            slot: slot.id,
+            label: field?.label ?? "",
+            // Prose below a title is the title's content, never a second title.
+            role: "other",
+            kind: "paragraph",
+            text: block.text,
+          });
+        }
+        continue;
+      }
+      if (!field) continue;
+      const cells =
+        block.kind === "list" ? block.items : [...block.head, ...block.rows.flat()];
+      for (const cell of cells) {
+        if (!cell) continue;
+        texts.push({
+          slot: slot.id,
+          label: field.label,
+          // A list under a title is the title's content, never a second title.
+          role: "other",
+          kind: block.kind === "list" ? "list item" : "table cell",
+          text: cell,
+        });
+      }
+    }
+  }
+
+  return texts;
+}
+
+/**
+ * How a term of the avoid list is matched where the guide's row carries a
+ * scope a plain pattern cannot decide.
+ *
+ * - `standalone-claim` — the term must **be** a whole segment of the field
+ *   (*"Einfach · digital · für alle"*), not a word inside a sentence. The
+ *   generic-claims row has an empty *use instead* column, and the glossary's
+ *   own convention says an empty cell is "a gap on the record, not a licence
+ *   to invent one": failing *"mit dem man einfach starten kann"* — the owner's
+ *   sentence in DEC-0084 §2 — would force an invention. The adverb stays with
+ *   review (`TS-WEB-0006-A16`).
+ * - `section-title` — the row says *(as a title)* / *(as a heading)*, and the
+ *   same words are allowed in a kicker (`CG-005`).
+ * - `sole-addressee` — `CG-036`: `im Amt` fails only where no second
+ *   addressee stands beside it (`copy-contract.md` CG-036).
+ * - `product-origin` — the row says *(about this product)*; `gebaut` and
+ *   `betrieben` are ordinary German words and fail only where the same field
+ *   also names the village (DEC-0066 §2, CG-033).
+ */
+export type AvoidScope =
+  | "standalone-claim"
+  | "section-title"
+  | "sole-addressee"
+  | "product-origin";
+
+export interface AvoidTerm {
+  /** The rule this row belongs to — `CG-####` or a `GL-####`/`DEC-####`. */
+  readonly rule: string;
+  readonly pattern: RegExp;
+  /** The guide's *use instead* column, where it carries one. */
+  readonly instead?: string;
+  readonly scope?: AvoidScope;
+  /** Routes the term's own row exempts — never a field, never a flag. */
+  readonly exemptRoutes?: readonly RouteId[];
+}
+
+const CO_ADDRESSEE =
+  /\b(Verein|Vereins|Vereine|Vereinen|Stiftung|Stiftungen|Kulturgesellschaft|Volkshochschule|Akteur|Akteure|Akteuren|club|clubs|foundation|actor|actors)\b/i;
+
+const NAMES_THE_VILLAGE = /\b(Dorf|Dorfes|Dörfer|Schlatkow|village)\b/i;
+
+/**
+ * `CG-040` — the avoid list, as the lint reads it: the German and English
+ * tables of `concept/website-copy-guide.md` §9 plus the **avoid** column of
+ * `specs/glossary/glossary.md`. `validate.test.ts` holds the drift test that
+ * fails when the glossary grows a term this list does not carry.
+ *
+ * `Portalize` is on both lists and is **not** here: it is a count, not a
+ * hit (`CG-038`, `checkProductName`).
+ */
+export const AVOID_TERMS: readonly AvoidTerm[] = [
+  // — the glossary's avoid column, and the guide's DE/EN tables
+  {
+    rule: "CG-009",
+    pattern: /\bdie Leute\b/i,
+    instead: "die Nachbarn · das Nachbardorf · die Neuen · wer hier etwas organisiert",
+  },
+  {
+    rule: "CG-009",
+    pattern: /\bthe people\b/i,
+    instead: "the neighbours · the next village · the newcomers",
+  },
+  { rule: "CG-004", pattern: /\bdie Firma\b/i, instead: "Schafe vorm Fenster" },
+  { rule: "CG-004", pattern: /\bthe company\b/i, instead: "Schafe vorm Fenster" },
+  {
+    rule: "CG-036",
+    pattern: /\bim Amt\b/i,
+    instead: "bei euch, or a second addressee beside it",
+    scope: "sole-addressee",
+  },
+  {
+    rule: "CG-036",
+    pattern: /\bat the council\b/i,
+    instead: "at your end, or a second addressee beside it",
+    scope: "sole-addressee",
+  },
+  {
+    rule: "CG-039",
+    pattern: /\b(das|dem) Produkt\b/i,
+    instead: "euer Kalender · der Dorfkalender",
+  },
+  {
+    rule: "CG-039",
+    pattern: /\bthe product\b/i,
+    instead: "your calendar · the community calendar",
+  },
+  {
+    // The guide writes `Vereinswebseite`; the artifacts wrote
+    // `Vereinswebsite`. One word, one rule (DEC-0136).
+    rule: "CG-040",
+    pattern: /\bVereinsweb(seite|site)\b/i,
+    instead: "eure eigene Website",
+  },
+  { rule: "CG-040", pattern: /\bclub website\b/i, instead: "your own website" },
+  {
+    rule: "GL-0012",
+    pattern: /\bPostleitzahl(en)?\b/i,
+    instead: "Ortsname",
+    exemptRoutes: ["order"],
+  },
+  { rule: "GL-0012", pattern: /\bPLZ\b/, instead: "Ortsname", exemptRoutes: ["order"] },
+  {
+    rule: "GL-0012",
+    pattern: /\bZIP ?codes?\b/i,
+    instead: "place name",
+    exemptRoutes: ["order"],
+  },
+  {
+    rule: "GL-0012",
+    pattern: /\bpost(al )?codes?\b/i,
+    instead: "place name",
+    exemptRoutes: ["order"],
+  },
+  { rule: "DEC-0062", pattern: /\bOrganizer[ns]?\b/i, instead: "Akteur · actor" },
+  { rule: "CG-018", pattern: /\bWarum das zählt\b/i, instead: "Was hilft euch das?" },
+  {
+    rule: "CG-018",
+    pattern: /\bWhy this matters\b/i,
+    instead: "What does this do for you?",
+  },
+  { rule: "CG-017", pattern: /\bWarum wir\b/i, instead: "Über uns · Wer dahintersteckt" },
+  { rule: "CG-017", pattern: /\bWhy us\b/i, instead: "About us · Who is behind it" },
+  { rule: "CG-017", pattern: /\bWo das herkommt\b/i, scope: "section-title" },
+  {
+    rule: "CG-017",
+    pattern: /\bWer das schon macht\b/i,
+    instead: "Was andere sagen (press proof only)",
+  },
+  { rule: "CG-005", pattern: /\bWarum es (heute )?hakt\b/i, scope: "section-title" },
+  { rule: "CG-035", pattern: /\bPresse- und Auftrittshistorie\b/i },
+  { rule: "CG-004", pattern: /\bBeides gibt es\b/i, instead: "write the thing out" },
+  { rule: "CG-004", pattern: /\bDieselben Termine\b/i, instead: "write the thing out" },
+  { rule: "CG-004", pattern: /\bDer Name der Firma\b/i, instead: "write the thing out" },
+  { rule: "CG-016", pattern: /\bGenau so\./i },
+  // — CG-033: the origin claim DEC-0066 §2 took off the page
+  { rule: "CG-033", pattern: /\bgebaut\b/i, scope: "product-origin" },
+  { rule: "CG-033", pattern: /\bbetrieben\b/i, scope: "product-origin" },
+  { rule: "CG-033", pattern: /\bbuilt in a village\b/i },
+  { rule: "CG-033", pattern: /\boperated from a village\b/i },
+  // — the generic claims: a claim, not a word in a sentence
+  { rule: "CG-040", pattern: /\beinfach\b/i, scope: "standalone-claim" },
+  { rule: "CG-040", pattern: /\bdigital\b/i, scope: "standalone-claim" },
+  { rule: "CG-040", pattern: /\bfür alle\b/i, scope: "standalone-claim" },
+  { rule: "CG-040", pattern: /\bmodern\b/i, scope: "standalone-claim" },
+  { rule: "CG-040", pattern: /\binnovativ\b/i, scope: "standalone-claim" },
+  { rule: "CG-040", pattern: /\bsimple\b/i, scope: "standalone-claim" },
+  { rule: "CG-040", pattern: /\bfor everyone\b/i, scope: "standalone-claim" },
+  { rule: "CG-040", pattern: /\binnovative\b/i, scope: "standalone-claim" },
+];
+
+/** Segments of one field: what a reader reads as one claim. */
+const SEGMENTS = /[.!?;:·|,\n]+|\s[–—-]\s/;
+
+/** The term this text hits, or `null`. Scope decides what counts as a hit. */
+export function avoidHit(term: AvoidTerm, copy: CopyText): string | null {
+  if (term.scope === "standalone-claim") {
+    for (const segment of copy.text.split(SEGMENTS)) {
+      const trimmed = segment.trim();
+      const match = term.pattern.exec(trimmed);
+      if (match && match[0].length === trimmed.length) return match[0];
+    }
+    return null;
+  }
+
+  const match = term.pattern.exec(copy.text);
+  if (!match) return null;
+  if (term.scope === "section-title" && copy.role !== "section-title") return null;
+  if (term.scope === "sole-addressee" && CO_ADDRESSEE.test(copy.text)) return null;
+  if (term.scope === "product-origin" && !NAMES_THE_VILLAGE.test(copy.text)) return null;
+  return match[0];
+}
+
+/**
+ * `CG-003` / D12 row 14 — a formal-register form. Capitalised mid-sentence, or
+ * an imperative `<Verb> Sie`.
+ *
+ * Sentence-initial is the whole difficulty: *"Die Termine oben tippt niemand
+ * bei uns ein. **Sie** kommen von den Vereinen"* is the plural pronoun and
+ * *"**Ihr** könnt selbst bestimmen"* is the informal plural — both are the
+ * register this site writes, both are capitalised because a German sentence
+ * begins in upper case. A lint that flags them flags the copy it exists to
+ * protect, so position decides: at the start of a sentence, a clause opened by
+ * a dash, or inside an opening quotation mark, the form passes.
+ */
+const FORMAL_FORM = /\b(Sie|Ihnen|Ihre|Ihrem|Ihren|Ihrer|Ihres|Ihr)\b/;
+const SENTENCE_START = /(?:^|[.!?:;…]|[„“"»«(\[]|\n|\s[–—-])\s*$/;
+const IMPERATIVE_VERB = /(?:^|[.!?…]\s+)([A-ZÄÖÜ][a-zäöüß]{2,}e?n)\s+$/;
+
+export interface RegisterHit {
+  readonly form: string;
+  /** `Tragt` … no: `Tragen Sie` — the imperative half of the row. */
+  readonly imperative: boolean;
+}
+
+export function registerHits(text: string): RegisterHit[] {
+  const hits: RegisterHit[] = [];
+  const scanner = new RegExp(FORMAL_FORM.source, "g");
+  let match: RegExpExecArray | null;
+  while ((match = scanner.exec(text)) !== null) {
+    const before = text.slice(0, match.index);
+    if (SENTENCE_START.test(before)) continue;
+    hits.push({ form: match[0], imperative: IMPERATIVE_VERB.test(before) });
+  }
+  return hits;
+}
+
+/**
+ * The one exemption of D12 row 14, keyed on the route (DEC-0066 amendment
+ * 2026-09-24, TS-WEB-0029 D6a/A15).
+ *
+ * The five legal texts are imported verbatim in the formal register
+ * (DEC-0012, DEC-0027), and the exemption is the **whole page**: a page whose
+ * headings say `du` over text that says `Sie` reproduces inside one page the
+ * seam DEC-0066 exists to prevent. It is a route list here and nowhere else —
+ * never a field name, never a flag in a content file — so it cannot spread.
+ */
+export const REGISTER_EXEMPT_ROUTES: readonly RouteId[] = ["legal"];
+
+/**
+ * Rows 11, 13 and 14 over one page artifact. Reports file, field and term
+ * (TS-WEB-0007-A13, TS-WEB-0006-A8).
+ */
+export function checkCopy(page: PageContent): Finding[] {
+  if (!page.ok) return [];
+
+  const findings: Finding[] = [];
+  const registerExempt = REGISTER_EXEMPT_ROUTES.includes(page.routeId);
+
+  for (const copy of copyOf(page)) {
+    const where =
+      copy.label === ""
+        ? `(${copy.kind})`
+        : `\`${copy.label}\`${copy.kind === "field" ? "" : ` (${copy.kind})`}`;
+
+    // Row 11 — the avoid list.
+    for (const term of AVOID_TERMS) {
+      if (term.exemptRoutes?.includes(page.routeId)) continue;
+      const hit = avoidHit(term, copy);
+      if (!hit) continue;
+      findings.push({
+        level: "error",
+        file: page.file,
+        slot: copy.slot,
+        check: "avoid-list",
+        message: `${where}: \`${hit}\` is on the avoid list (${term.rule})${
+          term.instead ? ` — use ${term.instead}` : " — the guide names no replacement"
+        }`,
+      });
+    }
+
+    // Row 13 — a section title is a statement (CG-005).
+    if (copy.role === "section-title" && copy.text.includes("?")) {
+      findings.push({
+        level: "error",
+        file: page.file,
+        slot: copy.slot,
+        check: "copy-structure",
+        message:
+          `${where}: a section title carries a question mark — a title is a statement, ` +
+          "and the question belongs in the kicker above it: author a `Kicker` field " +
+          "with the question and leave the statement as the title (CG-005 names that " +
+          "split itself). Where the page renders this field as prose rather than as a " +
+          "heading, the label is wrong, not the copy — relabel it (`Frage` / " +
+          "`Question`). Never drop the words to silence this row (CG-005, " +
+          "TS-WEB-0006-A8)",
+      });
+    }
+
+    // Row 14 — one register, `du` (CG-003).
+    if (!registerExempt) {
+      for (const hit of registerHits(copy.text)) {
+        findings.push({
+          level: "error",
+          file: page.file,
+          slot: copy.slot,
+          check: "register",
+          message: `${where}: \`${hit.form}\`${
+            hit.imperative ? " in an imperative `<Verb> Sie`" : " mid-sentence"
+          } — this site says \`du\`, and \`${ROUTES.legal.path.de}\` is the only exempt route (CG-003, DEC-0066, TS-WEB-0029-A15)`,
+        });
+      }
+    }
+  }
+
+  return findings;
+}
+
+/**
+ * The blocks the pages read, and the `<!-- note -->` marker must therefore
+ * never cover (DEC-0142 §6).
+ *
+ * The marker is an escape hatch: it takes everything below it out of the copy
+ * lint. Nothing in the markup says whether a page renders those blocks, so
+ * without this list the hatch could do exactly what the positional rule it
+ * replaced did — silence rows 11, 13 and 14 over copy a visitor reads.
+ * `index` counts the blocks of that kind inside the slot from zero, the way
+ * the pages count them (`blocks.flatMap(block => block.kind === "paragraph" ?
+ * … : [])`), and `"all"` says the page reads every block of that kind.
+ *
+ * **This list is not hand-kept any more.** Until QA round 4 it named seven
+ * blocks and `app/**` read twenty-six — two of them (`home-8-proof-stream`'s
+ * candidate list, `mitmachen-2-objections`' two lists) already carried a
+ * marker, so the hatch could still silence copy a visitor reads. The drift
+ * test in `validate.test.ts` now reads `app/**` itself and fails on three
+ * counts: a slot a page reads by index or by kind with no row here, a row
+ * whose `file:line` no longer reads blocks, and a block-kind read that
+ * neither a row nor a declared helper accounts for (DEC-0142 §10).
+ *
+ * A slot whose note stands *above* a rendered block cannot use the marker at
+ * all — it runs to the end of the slot — and its note is read as copy, which
+ * is the safe direction (`home-8-proof-stream`, DEC-0142 §6).
+ */
+export const RENDERED_BLOCKS: readonly {
+  readonly slot: string;
+  readonly kind: "paragraph" | "list" | "table";
+  /**
+   * The block's index among its kind inside the slot, or `"all"` where the
+   * page reads **every** block of that kind (`listItems(slot.blocks)`) — there
+   * no index is safe.
+   */
+  readonly index: number | "all";
+  /**
+   * `file:line` of the line that **reads** the block, and nothing else may
+   * come first: `validate.test.ts` opens that file and fails where the line no
+   * longer reads blocks, so a stale row cannot sit here unnoticed. What the
+   * page does with the block afterwards goes in the parenthesis.
+   */
+  readonly renderedBy: string;
+}[] = [
+  // — the four lists and tables the shape rule used to exempt
+  {
+    slot: "ueber-uns-3-proof-stream",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/ueber-uns/page.tsx:156",
+  },
+  {
+    slot: "deine-region-6-proof-demo",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/deine-region/page.tsx:196",
+  },
+  {
+    slot: "dein-kalender-5-proof-demo",
+    kind: "list",
+    index: "all",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:286 (listItems, every list)",
+  },
+  {
+    slot: "archiv-2-rows-demo",
+    kind: "table",
+    index: 0,
+    renderedBy: "app/[lang]/ueber-uns/archiv/page.tsx:95",
+  },
+  // — the three paragraphs `/dein-kalender` reads by index
+  {
+    slot: "dein-kalender-3-embed-demo",
+    kind: "paragraph",
+    index: 0,
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:194 (rendered at :402)",
+  },
+  {
+    slot: "dein-kalender-3b-embed-config",
+    kind: "paragraph",
+    index: 0,
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:198 (rendered at :437)",
+  },
+  {
+    slot: "dein-kalender-3b-embed-config",
+    kind: "paragraph",
+    index: 1,
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:198 (rendered at :460)",
+  },
+  // — the render sites QA round 4 found missing: every other slot a page
+  //   reads by index or by kind (`validate.test.ts` proves the list is
+  //   complete against `app/**`, DEC-0142 §10)
+  {
+    slot: "home-8-proof-stream",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/page.tsx:187",
+  },
+  {
+    slot: "home-4a-scene-whatsapp-steps-demo",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/page.tsx:782 (listAt, the three step lines)",
+  },
+  {
+    slot: "home-4a-scene-whatsapp-steps-demo",
+    kind: "list",
+    index: 1,
+    renderedBy: "app/[lang]/page.tsx:775 (listAt, the sample event rows)",
+  },
+  {
+    slot: "mitmachen-2-objections",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:228 (listAt)",
+  },
+  {
+    slot: "mitmachen-2-objections",
+    kind: "list",
+    index: 1,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:228 (listAt)",
+  },
+  {
+    slot: "mitmachen-3a-path-whatsapp-steps-demo",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:391 (listAt)",
+  },
+  {
+    slot: "mitmachen-3a-path-whatsapp-steps-demo",
+    kind: "list",
+    index: 1,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:384 (listAt)",
+  },
+  {
+    slot: "mitmachen-4a-path-calendar-steps-demo",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:427 (listAt)",
+  },
+  {
+    slot: "mitmachen-4a-path-calendar-steps-demo",
+    kind: "list",
+    index: 1,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:421 (listAt)",
+  },
+  {
+    slot: "mitmachen-5a-path-website-steps-demo",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:471 (listAt)",
+  },
+  {
+    slot: "mitmachen-5a-path-website-steps-demo",
+    kind: "list",
+    index: 1,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:465 (listAt)",
+  },
+  {
+    slot: "mitmachen-7-proof-demo",
+    kind: "list",
+    index: "all",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:192 (listItems, every list)",
+  },
+  {
+    slot: "dein-kalender-2-contrast",
+    kind: "table",
+    index: 0,
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:218 (rows; head at :219)",
+  },
+  {
+    slot: "dein-kalender-3b-embed-config",
+    kind: "table",
+    index: 0,
+    renderedBy: "app/[lang]/dein-kalender/content.ts:58 (settingRows, from page.tsx:204)",
+  },
+  {
+    slot: "dein-kalender-4-tiers-checks-demo",
+    kind: "table",
+    index: 0,
+    renderedBy: "app/[lang]/dein-kalender/content.ts:58 (tierChecks, from page.tsx:210)",
+  },
+  {
+    slot: "rechtliches-2-registry",
+    kind: "table",
+    index: 0,
+    renderedBy: "app/[lang]/rechtliches/page.tsx:91 (from page.tsx:123)",
+  },
+  {
+    slot: "registrieren-2-wer",
+    kind: "list",
+    index: "all",
+    renderedBy: "app/[lang]/mitmachen/registrieren/page.tsx:189 (listItems, every list)",
+  },
+  {
+    slot: "registrieren-3-weg",
+    kind: "list",
+    index: "all",
+    renderedBy: "app/[lang]/mitmachen/registrieren/page.tsx:193 (listItems, every list)",
+  },
+];
+
+/**
+ * The marker's own guard: a block a page renders is never authoring prose
+ * (DEC-0142 §6). Fails where a `<!-- note -->` marker stands above one of
+ * `RENDERED_BLOCKS`.
+ */
+export function checkNoteMarker(page: PageContent): Finding[] {
+  if (!page.ok) return [];
+
+  const findings: Finding[] = [];
+  for (const slot of page.slots) {
+    const rendered = RENDERED_BLOCKS.filter((entry) => entry.slot === slot.id);
+    if (rendered.length === 0) continue;
+
+    const counted = new Map<string, number>();
+    for (const block of slot.blocks) {
+      if (block.kind === "field") continue;
+      const index = counted.get(block.kind) ?? 0;
+      counted.set(block.kind, index + 1);
+      if (!("note" in block) || !block.note) continue;
+      const site = rendered.find(
+        (entry) =>
+          entry.kind === block.kind && (entry.index === "all" || entry.index === index),
+      );
+      if (!site) continue;
+      findings.push({
+        level: "error",
+        file: page.file,
+        slot: slot.id,
+        check: "note-marker",
+        message:
+          `the \`<!-- note -->\` marker covers ${block.kind} ${index} of this slot, and ` +
+          `\`${site.renderedBy}\` renders it — the marker takes a block out of the copy ` +
+          "lint, so it may only stand above authoring prose. Move the marker below the " +
+          "rendered blocks, or take the note out of this slot (DEC-0142 §6)",
+      });
+    }
+  }
+
+  return findings;
+}
+
+/** `CG-038` — the product name, and the one field that may carry it. */
+export const PRODUCT_NAME = "Portalize";
+
+/**
+ * Case-sensitive on purpose: `portalize-calendar` is an offering id in a data
+ * cell, not the product name in copy (DEC-0136).
+ */
+const PRODUCT_NAME_PATTERN = /\bPortalize\b/;
+
+/** The same pattern as a counter: `CG-038` is an occurrence count, not a flag. */
+const PRODUCT_NAME_COUNTER = /\bPortalize\b/g;
+
+/**
+ * The tier slot of `/dein-kalender` — the one place the name is introduced
+ * (DEC-0052 §1, FUN-WEB-0132, DEC-0131 §3), at the 480 € tier where the price
+ * is read.
+ */
+export const PRODUCT_NAME_FIELD = { routeId: "calendar", slot: "dein-kalender-4-tiers" } as const;
+
+/**
+ * `CG-038` — the name occurs in exactly one field, and that field is the
+ * `/dein-kalender` tier slot (TS-WEB-0018-A7).
+ *
+ * Counted **per locale** (DEC-0136): `copy-contract.md` says "exactly one
+ * content field across all locales", and the artifacts are one page in two
+ * languages — `CG-041` requires the `en` sibling to mirror the `de` one, so
+ * reading the sentence as one per tree would make the mirror the violation.
+ * One field per locale is one occurrence per reader, which is what DEC-0052 §1
+ * decides.
+ *
+ * Counted as **occurrences**, not as carrier fields: `Portalize bleibt
+ * Portalize` in the one allowed field is two occurrences for the reader, and
+ * the rendered half of A7 (`e2e/copy-structure.spec.ts`) counts it that way
+ * too. A lint that only counted fields would pass what the browser fails.
+ */
+export function checkProductName(pages: readonly PageContent[]): Finding[] {
+  const findings: Finding[] = [];
+  const carriers = new Map<
+    Locale,
+    Map<string, { file: string; slot: string; label: string; count: number }>
+  >();
+
+  for (const page of pages) {
+    for (const copy of copyOf(page)) {
+      if (!PRODUCT_NAME_PATTERN.test(copy.text)) continue;
+
+      if (page.routeId !== PRODUCT_NAME_FIELD.routeId || copy.slot !== PRODUCT_NAME_FIELD.slot) {
+        findings.push({
+          level: "error",
+          file: page.file,
+          slot: copy.slot,
+          check: "product-name",
+          message: `\`${copy.label}\`: \`${PRODUCT_NAME}\` outside the \`${PRODUCT_NAME_FIELD.slot}\` slot of \`${ROUTES.calendar.path.de}\` — the name is introduced once, at the tier where the price is read, and is never a heading, a label or a route (CG-038, DEC-0052 §1, FUN-WEB-0132)`,
+        });
+        continue;
+      }
+
+      const perLocale = carriers.get(page.locale) ?? new Map();
+      const key = `${page.file}|${copy.slot}|${copy.label}`;
+      const carried = perLocale.get(key);
+      const hits = copy.text.match(PRODUCT_NAME_COUNTER)?.length ?? 1;
+      perLocale.set(key, {
+        file: page.file,
+        slot: copy.slot,
+        label: copy.label,
+        count: (carried?.count ?? 0) + hits,
+      });
+      carriers.set(page.locale, perLocale);
+    }
+  }
+
+  for (const [locale, fields] of carriers) {
+    for (const field of fields.values()) {
+      if (field.count <= 1) continue;
+      findings.push({
+        level: "error",
+        file: field.file,
+        slot: field.slot,
+        check: "product-name",
+        message: `\`${field.label}\`: \`${PRODUCT_NAME}\` stands ${field.count} times in one field of the \`${locale}\` locale — the name is introduced once, at the tier where the price is read (CG-038, DEC-0052 §1, TS-WEB-0018-A7)`,
+      });
+    }
+
+    if (fields.size <= 1) continue;
+    const named = [...fields.values()].map((field) => `\`${field.label}\``).join(", ");
+    for (const field of fields.values()) {
+      findings.push({
+        level: "error",
+        file: field.file,
+        slot: field.slot,
+        check: "product-name",
+        message: `\`${PRODUCT_NAME}\` stands in ${fields.size} fields of the \`${locale}\` locale (${named}) — the name appears exactly once (CG-038, DEC-0052 §1)`,
+      });
+    }
+  }
+
+  return findings;
 }
 
 /** Validates one page artifact against TS-WEB-0007 D5/D6/D11 and TS-WEB-0017-A14. */
@@ -331,6 +1114,7 @@ export async function checkContentTree(
   const resolver = options.resolver ?? createHubResolver();
   const targetEnvironment = options.targetEnvironment ?? contentEnvironment();
   const findings: Finding[] = [];
+  const everyPage: PageContent[] = [];
 
   for (const routeId of ROUTE_IDS) {
     const pages: Partial<Record<Locale, PageContent>> = {};
@@ -341,11 +1125,17 @@ export async function checkContentTree(
         environment: "preview",
       });
       pages[locale] = page;
+      everyPage.push(page);
       findings.push(...checkPage(page, resolver));
       findings.push(...checkLifecycle(page, targetEnvironment));
+      findings.push(...checkCopy(page));
+      findings.push(...checkNoteMarker(page));
     }
     findings.push(...checkLocaleSet(routeId, pages, options));
   }
+
+  // Row 11's count half asks a question of the whole tree, not of one page.
+  findings.push(...checkProductName(everyPage));
 
   // Two routes share one artifact (TS-WEB-0026), so the same file is checked twice.
   const seen = new Set<string>();

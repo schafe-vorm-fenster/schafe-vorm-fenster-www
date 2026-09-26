@@ -124,7 +124,7 @@ Modul-, Filter- oder Ergebnisbeschriftung — nur als Frage der Besucherin
 
 **Zweit-CTA (leise):** Lieber erst sprechen? Kennenlerngespräch buchen
 
-**Abschluss-Überschrift:** Sollen wir euch ein Angebot rechnen?
+**Abschluss-Frage:** Sollen wir euch ein Angebot rechnen?
 
 Der Zweit-CTA steht leise unter dem primären, nie daneben und nie als
 zweite Schaltfläche: eine Seite trägt pro Bildschirm genau eine primäre
@@ -133,9 +133,14 @@ Kontakt-Abschnitt (`#kontakt`) und nicht mehr nach außen; der frühere
 „Hinweis zum Zweit-CTA" ist damit entfallen, denn die Kennzeichnung
 ausgehender Links (TS-WEB-0016 D16) gehört zur ersten Aktionszeile dieses
 Abschnitts — dem einzigen Element der Route, das die Seite verlässt. Die
-Abschluss-Überschrift wiederholt dieselbe Conversion wie oben — gleiches
-Ziel, gleiches Label (TS-WEB-0006 D6). Kein Zeitversprechen, solange C11
-offen ist.
+Abschluss-Frage wiederholt dieselbe Conversion wie oben — gleiches Ziel,
+gleiches Label (TS-WEB-0006 D6). Kein Zeitversprechen, solange C11 offen
+ist. Das Feld heißt `Abschluss-Frage`, nicht `Abschluss-Überschrift`: der
+Abschluss-CTA setzt es als Absatz über Schaltfläche und leisem Link
+(`<p className={styles.heading}>` in
+`src/components/closing-cta/closing-cta.tsx:155`), nie als Abschnittstitel
+— die Frage an die Leserin ist hier erlaubt (CG-006), und der Wortlaut ist
+der des Polish-Briefs (plan/polish-brief.md, Seite 8, Punkt 7).
 
 Quelle: `headline` von `counties--portalize-enterprise` — „The whole
 district on one map, without a portal project." Die Kartenhälfte der
@@ -148,13 +153,21 @@ vollständig übernommen, sobald die Bestätigung vorliegt.
 
 <!-- id: deine-region-2-territory; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: draft -->
 
-**Überschrift:** Was ist in meiner Nähe? Bei Landkreisgröße keine Frage für eine Liste
+**Überschrift:** Bei Landkreisgröße keine Frage für eine Liste
 
 **Text:** Vierzig oder achtzig Orte redaktionell abzudecken ist keine größere Version von einem Ort. Das ist schlicht nicht machbar. Und die Verwaltungsgrenze ist nicht die Grenze, an der Menschen ihr Leben ausrichten: Was dreißig Kilometer entfernt passiert, interessiert genauso wie das, was direkt nebenan läuft.
 
+**Kicker:** Was ist in meiner Nähe?
+
 Quelle: `pains[]` von `counties--portalize-enterprise`. „Dreißig
 Kilometer" bleibt hier Frage der Besucherin, nie Beschriftung eines
-Moduls (TS-WEB-0026 D3).
+Moduls (TS-WEB-0026 D3). Die Frage der Besucherin stand bis zum
+26.09.2026 in der Überschrift und damit in einem Feld, in dem CG-005 kein
+Fragezeichen erlaubt. Sie steht jetzt im Kicker über dem Titel — die
+Teilung, die CG-005 selbst vorschreibt (concept/website-copy-guide.md,
+CG-005: Kicker trägt die Frage, der Titel die Aussage). Kein Wort ist
+neu, und der Titel behält seinen Bezug: ohne die Frage darüber hätte
+„keine Frage" keinen.
 
 ## Slot 3 — Interims-Modul: Beispiele, Zähler, Suche
 

@@ -48,15 +48,33 @@ export type ContentGap =
 export type ContentBlock =
   /** `**Label:** value` — the shape almost all authored copy takes. */
   | { readonly kind: "field"; readonly label: string; readonly value: string }
-  /** A paragraph of prose: a note, a rationale, an intro line. */
-  | { readonly kind: "paragraph"; readonly text: string }
-  /** A `-` or `1.` list; `ordered` says which. */
-  | { readonly kind: "list"; readonly ordered: boolean; readonly items: readonly string[] }
-  /** A pipe table, header row separate. */
+  /**
+   * A paragraph of prose: a rendered intro line, or an authoring note.
+   *
+   * `note: true` where the slot marked it as authoring prose with an explicit
+   * `<!-- note -->` marker — the same marker a list or a table carries, and
+   * the only thing that keeps a paragraph out of the copy lint (DEC-0142 §1).
+   */
+  | { readonly kind: "paragraph"; readonly text: string; readonly note?: boolean }
+  /**
+   * A `-` or `1.` list; `ordered` says which.
+   *
+   * `note: true` where the slot marked it as authoring prose with an explicit
+   * `<!-- note -->` marker: the copy lint passes over such a block, and only
+   * over such a block (DEC-0142).
+   */
+  | {
+      readonly kind: "list";
+      readonly ordered: boolean;
+      readonly items: readonly string[];
+      readonly note?: boolean;
+    }
+  /** A pipe table, header row separate; `note` as on a list. */
   | {
       readonly kind: "table";
       readonly head: readonly string[];
       readonly rows: readonly (readonly string[])[];
+      readonly note?: boolean;
     };
 
 /** One content slot of a page — the unit a component renders. */

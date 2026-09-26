@@ -60,7 +60,7 @@ the primary CTA (TS-WEB-0025 D5).
 
 <!-- id: bestellen-3-invoice; content_type: form; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Heading:** Where should the invoice go?
+**Question:** Where should the invoice go?
 
 **Field labels:**
 

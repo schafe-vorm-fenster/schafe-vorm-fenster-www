@@ -143,13 +143,15 @@ Ortszahl (TS-WEB-0027 D4, DEC-0084 §3).
 
 **Dorfargument 1 (der Bedarf):** Ein Dorf braucht einen einfachen Weg, damit alle, die sich im Ehrenamt engagieren, ihre Termine schnell kommunizieren können — und damit alle mitbekommen, was läuft.
 
-**Dorfargument 2 (was der Markt anbietet):** Als Ort oder Gemeinde will man sich nicht damit beschäftigen, eine App anzuschaffen oder eine komplizierte Webseite zu bauen, die dann keiner anguckt. Man braucht etwas Fertiges, das die Leute gerne benutzen und mit dem man einfach starten kann.
+**Dorfargument 2 (was der Markt anbietet):** Als Ort oder Gemeinde will man sich nicht damit beschäftigen, eine App anzuschaffen oder eine komplizierte Webseite zu bauen, die dann keiner anguckt. Man braucht etwas Fertiges, das die Nachbarn gerne benutzen und mit dem man einfach starten kann.
 
 **Dorfargument 3 (was daraus folgt):** Deshalb ist der Dorfkalender kostenlos, und das bleibt so. Deshalb kostet die Lizenz für den eigenen Kalender 480 € im Jahr statt eines Projektbudgets.
 
 **Satz mit Beleg:** Der Gründer war selbst ehrenamtlicher Bürgermeister — das Amt, dem der Dienst hilft, kennt er von innen.
 
 **Quelle zum Beleg:** Nordkurier, 2019 und 2022
+
+<!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
 
 Die Reihenfolge ist DEC-0084 §2: der Bedarf → was der Markt darauf antwortet
 → was daraus folgt. Satz 1 und 2 sind die Sätze des Reviews vom 2026-09-22

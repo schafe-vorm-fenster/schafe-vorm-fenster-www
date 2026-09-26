@@ -172,6 +172,8 @@ Review nennt.
 
 **Abschlusssatz:** Im Ehrenamt bleibt keine Zeit, jeden Termin mehrfach einzutragen. Am liebsten schickt man ihn einmal per WhatsApp raus, und gut.
 
+<!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
+
 Quelle: `@schafe-vorm-fenster/audiences#actors` Feld „Problem" (Termine
 werden „by hand" in mehrere Kanäle getippt) und `pains[]` aus
 `actors--community-calendar` (5 Einträge). Keine Kanalzahl wird genannt —

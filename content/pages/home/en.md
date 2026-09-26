@@ -287,6 +287,8 @@ the candidate set it draws from — pool:
 4. "The project can make a valuable contribution … to visibility in rural areas." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
 5. Running since 2018, no pilot and no prototype. — Vorpommern-Greifswald
 
+<!-- note: authoring note from here on, not copy — the passage quotes forbidden terms in order to forbid them (DEC-0142 §1) -->
+
 Names, figures, titles, and years are taken from the records as they
 stand: the 17 places, the name "LeLender" and the foundation's ownership
 from `lehre-lelender`, the win and the Bitkom patronage from

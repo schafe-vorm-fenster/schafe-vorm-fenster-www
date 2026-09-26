@@ -93,7 +93,7 @@ const PAGE_COPY: Record<
 > = {
   de: {
     // Fallbacks only — `deine-region-1-focus` carries the real wording now,
-    // so the quiet briefing link and the closing heading are authored copy
+    // so the quiet briefing link and the closing question are authored copy
     // rather than strings typed into a page file.
     briefingLabel: "Lieber erst sprechen? Kennenlerngespräch buchen",
     proofHeading: "Was Landkreise und Institutionen sagen",
@@ -228,7 +228,10 @@ export default async function Page({
   const ctaLabel = ctaLabelOnly(fieldAt(focus.blocks, 2)) ?? copy.quoteFallback;
   const briefingLabel = fieldAt(focus.blocks, 3) ?? copy.briefingLabel;
   // Field 4 was the hero's own outbound note; it left the slot with the
-  // outbound navigation (DEC-0081 §3), so the closing heading is field 4 now.
+  // outbound navigation (DEC-0081 §3), so the closing question is field 4 now.
+  // The artifact labels that field `Abschluss-Frage` / `Closing question`, not
+  // `Überschrift`: `ClosingCta` renders it as a `<p>` above the button, never as
+  // an `h2`, so the owner's question stands (CG-006, DEC-0136 §2/§7).
   const closingHeading = fieldAt(focus.blocks, 4) ?? copy.closingHeading;
   /*
    * G-5: the same quiet line in the hero and in the closing block, so the
@@ -321,10 +324,16 @@ export default async function Page({
       </MotionReveal>
 
       {/* Block 2 — the territory question (colour, sober), opening with the
-          sentence that used to sit in the hero. */}
+          sentence that used to sit in the hero.
+
+          The kicker is the visitor's own question, authored in the slot
+          (`Kicker`, field 2): CG-005 puts the question in the kicker and the
+          statement in the title, so the h2 states what holds at county scale
+          and the question above it keeps that statement's referent. Where an
+          artifact authors no kicker, the dictionary word stands. */}
       <SectionShell
         dataBlock="gebietsfrage"
-        kicker={words.kickers.objection}
+        kicker={fieldAt(territory.blocks, 2) ?? words.kickers.objection}
         labelledBy="gebietsfrage"
         surface="paper"
       >

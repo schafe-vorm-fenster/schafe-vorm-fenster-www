@@ -1244,6 +1244,9 @@ export const GALLERY: readonly GalleryEntry[] = [
             gallery demo. The shape is what this entry shows; the sentence is
             the constant's once C11 is answered. */}
         <p>Sobald ein Prozess steht, zur Ansicht:</p>
+        {/* Not the promise itself: `check:terms` (TS-WEB-0026-A8) allows the
+            response-time wording in `response-promise/constant.ts` and
+            nowhere else, a gallery demo included. */}
         <ResponsePromise text="Beispielsatz" />
       </div>
     ),

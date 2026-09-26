@@ -1,9 +1,9 @@
 {
   "note": "The ratchet of `pnpm check:coverage` (DEC-0141). `max` is the worst tally this repository is allowed to have. A run worse than a number here fails; a run better than one fails too, asking for the number to be lowered in the same commit, so that a gain is recorded instead of left as budget to spend again. Raising a number is a governance change: it needs a decision record, and the record says which criteria were let go and why.",
   "measured_at": "2026-09-26",
-  "measured_on": "T-21 (DEC-0140) merged with next-2026. The branch closes exactly one MISSING criterion, TS-WEB-0010-A4, with a walk of its own in e2e/pages/home.spec.ts instead of a comment inside the A7 test, so MISSING falls 149 → 148. Round 2 had set 145: that run credited TS-WEB-0010-A6, TS-WEB-0010-A11 and TS-WEB-0010-A12 to two proxy unit-test titles that do not assert them at their declared levels (integration, static, e2e). The ids are out of those titles again and the three criteria are MISSING, where they were before this branch — see DEC-0140 §4 'What the coverage gate is and is not told'. TS-WEB-0019-A7/A8 and TS-WEB-0010-A3 were already VERIFIED at e619f54 and are not this branch's gain.",
+  "measured_on": "The merge of T-17 (DEC-0136/DEC-0142) into next-2026, which already carried T-21 (DEC-0140). Both sides moved the tally and the merge keeps both movements: T-21 closed TS-WEB-0010-A4 with a walk of its own instead of a comment (MISSING 149 → 148), and T-17's copy-lint tests closed two more by naming TS-WEB-0006-A8 and TS-WEB-0029-A15 in their titles. T-17's one raise stands and is the governance case DEC-0141 asks for: NAMED ONLY 31 → 32 lets TS-WEB-0018-A7 go, because the criterion is not met on the render — /rechtliches and /en/legal carry the product name seven times out of the verbatim legal import — and round 3's VERIFIED came only from a unit-test title. A7 is now NAMED ONLY, which is what it is. The criterion itself is the spec owner's: CONF-0027 (direct_contradiction, OPEN, NEW_VERSION) and state/open.md row 278. Recorded in DEC-0142 §9. The merge closes one MISSING more than either branch alone (146 and 148 → 145), because T-17 and T-21 each name a criterion the other does not; the gain is recorded here rather than left as budget.",
   "max": {
     "NAMED ONLY": 32,
-    "MISSING": 148
+    "MISSING": 145
   }
 }

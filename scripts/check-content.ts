@@ -15,9 +15,31 @@ import { checkContentTree } from "../src/lib/content/validate";
 
 import type { Finding } from "../src/lib/content/validate";
 
+/**
+ * Which acceptance criterion a row of D12 discharges — printed with the
+ * finding, because a meter has no test title to carry the id
+ * (`scripts/check-coverage.ts`: *"the id in its failure message is the link"*).
+ *
+ * `TS-WEB-0007-A13` declares its level as `tool`: an external tool is the
+ * verdict, and this command is that tool for glossary conformance — the avoid
+ * list and the product-name count (rows 11). The two other copy rows are
+ * verified by test titles in `src/lib/content/validate.test.ts` as well and are
+ * named here for the same reason: a reader of a failure should not have to look
+ * up which criterion just broke.
+ */
+const CRITERION: Partial<Record<Finding["check"], string>> = {
+  "avoid-list": "TS-WEB-0007-A13",
+  "product-name": "TS-WEB-0007-A13",
+  "copy-structure": "TS-WEB-0006-A8",
+  register: "TS-WEB-0029-A15",
+};
+
 function print(finding: Finding): void {
   const where = finding.slot ? `${finding.file} › ${finding.slot}` : finding.file;
-  const line = `  ${where}\n    [${finding.check}] ${finding.message}`;
+  const criterion = CRITERION[finding.check];
+  const line =
+    `  ${where}\n    [${finding.check}${criterion ? `, ${criterion}` : ""}] ` +
+    finding.message;
   if (finding.level === "error") console.error(line);
   else console.warn(line);
 }
@@ -43,7 +65,11 @@ async function main(): Promise<void> {
   }
 
   if (errors.length === 0) {
-    console.log("Content pipeline is valid (TS-WEB-0007 D12).");
+    console.log(
+      "Content pipeline is valid (TS-WEB-0007 D12) — rows 11, 13 and 14 measured: " +
+        "TS-WEB-0007-A13 (glossary conformance), TS-WEB-0006-A8 (copy structure), " +
+        "TS-WEB-0029-A15 (register).",
+    );
     return;
   }
 
