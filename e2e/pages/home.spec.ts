@@ -20,6 +20,16 @@ const PHONE = { width: 360, height: 640 };
 const DESKTOP = { width: 1280, height: 800 };
 
 /**
+ * The explain module's auto-advance, at the dwell floor of TS-WEB-0002 D4
+ * Motion — the same three numbers `e2e/motion-reveal.spec.ts` walks the
+ * component with, so the home instance is measured against the same clock.
+ */
+const DWELL_MS = 4_000;
+const TRANSITION_MS = 550;
+/** 4 000 + 550 + 4 000 + 550 — one whole pass, state 1 → state 3. */
+const PASS_MS = DWELL_MS + TRANSITION_MS + DWELL_MS + TRANSITION_MS;
+
+/**
  * Block 1 arrives behind a `<Suspense>` boundary whose fallback **is** S1
  * (TS-WEB-0019 D2: "S2 and S3 arrive by island"), so a cold cache serves the
  * fallback first and the resolved block a beat later. Between the two the
@@ -227,27 +237,189 @@ test.describe("TS-WEB-0019 — home", () => {
 
     // `/` itself renders no uncovered place as data.
     await page.goto("/?ort=99999");
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Was ist bei dir los?");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Was wann wo in deinem Ort los ist.",
+    );
     const main = await page.locator("main").innerText();
     expect(main).not.toContain("99999");
   });
 
-  test("TS-WEB-0019-A6: exactly three scenes, one mechanism each, every opener a question", async ({
+  test("TS-WEB-0019-A6: three scene blocks, one mechanism and one secondary CTA each, every opener a statement", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/");
 
-    const scenes = page.locator("[data-mechanism]");
+    // `[data-mechanism]` is no longer the scene count: the explain module
+    // inside the `whatsapp` scene declares one too (DEC-0110 §1). A6 counts
+    // the blocks, and all three of them declare `data-block="scene"`.
+    const scenes = page.locator('main [data-block="scene"]');
     await expect(scenes).toHaveCount(3);
-    expect(await scenes.evaluateAll((nodes) => nodes.map((n) => n.getAttribute("data-mechanism"))))
-      .toEqual(["whatsapp", "embed", "provenance"]);
+    expect(
+      await scenes.evaluateAll((nodes) =>
+        nodes.map((node) => node.querySelector("[data-mechanism]")?.getAttribute("data-mechanism")),
+      ),
+    ).toEqual(["whatsapp", "embed", "provenance"]);
 
+    /*
+     * "Every scene opener, this one included, is a statement: it carries no
+     * question mark unless the same block renders the answering sentence
+     * directly beneath it" (A6, TS-WEB-0006 D7, SRC-0017 CG-005/CG-006). The
+     * three on `/` are statements, so the check is the simple half — the
+     * walk asserted the opposite until the 2026-09-22 review.
+     */
     const openers = await scenes.evaluateAll((nodes) =>
       nodes.map((node) => node.querySelector("h2")?.textContent?.trim() ?? ""),
     );
     expect(openers).toHaveLength(3);
-    for (const opener of openers) expect(opener.endsWith("?")).toBe(true);
+    for (const opener of openers) expect(opener).not.toContain("?");
+
+    // Exactly one CTA per block, secondary, at the page that owns its job —
+    // and no `primary` anywhere inside block 2a (D3a, DEC-0082 §4).
+    const ctas = await scenes.evaluateAll((nodes) =>
+      nodes.map((node) =>
+        [...node.querySelectorAll('[data-cta="secondary"]')].map((cta) =>
+          cta.getAttribute("href"),
+        ),
+      ),
+    );
+    expect(ctas).toEqual([["/mitmachen"], ["/dein-kalender"], ["/ueber-uns"]]);
+    await expect(scenes.locator('[data-cta="primary"]')).toHaveCount(0);
+
+    // Exactly one of the three contains the module, and it is the WhatsApp
+    // one; the other two render no step line and no module.
+    await expect(page.locator('main [data-block="scene"] [data-explain-module]')).toHaveCount(1);
+    const whatsapp = scenes.filter({ has: page.locator('[data-mechanism="whatsapp"]') });
+    const explainModule = whatsapp.locator("[data-explain-module]");
+    await expect(explainModule).toHaveCount(1);
+    await expect(explainModule.locator("[data-explain-ordinal]")).toHaveCount(1);
+    const steps = explainModule.locator("[data-explain-step]");
+    await expect(steps).toHaveCount(3);
+    for (let index = 0; index < 3; index += 1) {
+      await expect(steps.nth(index)).toHaveJSProperty("tagName", "BUTTON");
+    }
+    await expect(explainModule.locator('[data-explain-step][aria-current="step"]')).toHaveCount(1);
+
+    // DOM order inside the scene: opener · module · the block's one concrete
+    // instance, a live event row (DEC-0110 §1's render order).
+    const order = await whatsapp.evaluate((node) =>
+      [...node.querySelectorAll("h2, [data-explain-module], article")].map((element) =>
+        element.tagName === "H2"
+          ? "opener"
+          : element.hasAttribute("data-explain-module")
+            ? "module"
+            : "instance",
+      ),
+    );
+    expect(order[0]).toBe("opener");
+    expect(order.indexOf("module")).toBeLessThan(order.lastIndexOf("instance"));
+
+    // The other two scenes carry neither.
+    await expect(
+      scenes.filter({ hasNot: page.locator('[data-mechanism="whatsapp"]') }).locator("[data-explain-step]"),
+    ).toHaveCount(0);
+  });
+
+  test("TS-WEB-0019-A6: the module and its three step lines fit one viewport at 360 × 800", async ({
+    page,
+  }) => {
+    // "the wrapping scene is not held to that budget" (A6, DEC-0110 §1) — so
+    // the measurement is the module element, opener and instance excluded.
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto("/");
+    const box = await page.locator("[data-explain-module]").first().boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.height).toBeLessThanOrEqual(800);
+  });
+
+  test("TS-WEB-0002-A13: the home instance runs one 9.1 s pass on three-quarter visibility and never restarts", async ({
+    page,
+  }) => {
+    // The component's own walk runs on `/mitmachen` (`e2e/motion-reveal.spec.ts`);
+    // this is the criterion's home instance — the module inside a scene, in
+    // the position TS-WEB-0019 D3a's `direct` order gives it (first of 2a).
+    // The substance of A13 is asserted here too, on this instance: the trigger
+    // is three-quarter visibility and not page load, the pass is single and
+    // ends at state 3, and nothing — not time, not scrolling out and back —
+    // starts a second one.
+    test.setTimeout(120_000);
+    await page.setViewportSize({ width: 360, height: 640 });
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    const explainModule = page.locator("[data-explain-module]").first();
+    await expect(explainModule).toHaveAttribute("data-state", "1");
+
+    // Block 2a begins below the fold in every state of D2, so page load
+    // starts nothing (D3a's trigger table, row "first").
+    await page.waitForTimeout(5_000);
+    await expect(explainModule).toHaveAttribute("data-state", "1");
+
+    // Three quarters of the module's own height inside the viewport — the
+    // fraction DEC-0105 §6 fixes, reachable at 360 × 640 in this position.
+    const bringIntoView = async () =>
+      explainModule.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        const top = rect.top + window.scrollY;
+        window.scrollTo({
+          top: top - (window.innerHeight - 0.75 * rect.height),
+          behavior: "instant",
+        });
+      });
+    await bringIntoView();
+
+    // 4 000 + 550 + 4 000 + 550 at the dwell floor (TS-WEB-0002 D4 Motion):
+    // state 3 arrives no earlier than 9.1 s after the trigger, and the pass
+    // then declares itself done.
+    await page.waitForTimeout(PASS_MS - 1_000);
+    expect(await explainModule.getAttribute("data-state")).not.toBe("1");
+    await expect(explainModule).toHaveAttribute("data-state", "3", { timeout: 5_000 });
+    await expect(explainModule).toHaveAttribute("data-advance", "done");
+
+    // Over the next 30 s nothing changes and the stage never returns to
+    // state 1 (WCAG 2.2.2 — the movement is bounded, not looping).
+    const states = new Set<string | null>();
+    for (let tick = 0; tick < 6; tick += 1) {
+      await page.waitForTimeout(5_000);
+      states.add(await explainModule.getAttribute("data-state"));
+    }
+    expect([...states]).toEqual(["3"]);
+
+    // Scrolling it out of view and back is a second intersection, and a
+    // second intersection is not a second pass.
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await page.waitForTimeout(1_000);
+    await bringIntoView();
+    await page.waitForTimeout(DWELL_MS + TRANSITION_MS + 500);
+    await expect(explainModule).toHaveAttribute("data-state", "3");
+    await expect(explainModule).toHaveAttribute("data-advance", "done");
+  });
+
+  test("TS-WEB-0002-A13: the home instance's step lines are the mechanism that stops it", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 640 });
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    const explainModule = page.locator("[data-explain-module]").first();
+    const steps = explainModule.locator("[data-explain-step]");
+    await expect(steps).toHaveCount(3);
+    await steps.nth(2).focus();
+    await page.keyboard.press("Enter");
+    await expect(explainModule).toHaveAttribute("data-state", "3");
+    await expect(explainModule).toHaveAttribute("data-advance", "stopped");
+
+    // The interaction ends the advance for good: bringing the module into
+    // three-quarter view afterwards resumes nothing.
+    await explainModule.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      window.scrollTo({ top: top - (window.innerHeight - 0.75 * rect.height), behavior: "instant" });
+    });
+    await page.waitForTimeout(DWELL_MS + TRANSITION_MS + 500);
+    await expect(explainModule).toHaveAttribute("data-state", "3");
+    await expect(explainModule).toHaveAttribute("data-advance", "stopped");
   });
 
   test.fixme(
@@ -278,7 +450,6 @@ test.describe("TS-WEB-0019 — home", () => {
             "scene-1",
             "scene-2",
             "scene-3",
-            "provenance-stamps",
             "live-counters",
             "proof-stream",
             "context-band",
@@ -288,16 +459,23 @@ test.describe("TS-WEB-0019 — home", () => {
     );
 
     /**
-     * **Changed by the polish pass** (brief, page 1, fixes 2 and 5).
+     * **Changed by the polish pass** (brief, page 1, fixes 2 and 5) and again
+     * by the 2026-09-22 review (DEC-0129).
      *
      * `nearby` is gone from this list because it is gone from every state
      * but S3: the page opened on two five-row lists with the same three
      * titles in both, which is 1.6 phone screens of rows before the first
      * argument. `live-counters` moved *into* `place-dates`, directly under
      * the rows it counts, and the violet band that used to carry it
-     * disappeared with the block; `provenance-stamps` is the origin
-     * sentence, now inside the scene that is about where this comes from —
-     * so both still appear here, in the order the reader meets them.
+     * disappeared with the block.
+     *
+     * `provenance-stamps` is gone too. Block 2b's content has been the
+     * provenance **scene** since the polish pass; the one element that still
+     * stood apart carried the sentence "Gebaut von jemandem … Seit 2018 in
+     * Betrieb.", and "gebaut"/"betrieben" about this product are on the copy
+     * guide's avoid list (CG-033, CG-040). The block is still in this
+     * position — it is `scene-3` — and the walk below asserts the surface
+     * that D3 gives it.
      */
     expect(ids).toEqual([
       "focus-block",
@@ -306,13 +484,17 @@ test.describe("TS-WEB-0019 — home", () => {
       "scene-1",
       "scene-2",
       "scene-3",
-      "provenance-stamps",
       "proof-stream",
       "context-band",
       "closing-cta",
     ]);
 
-    // Nothing after the closing CTA but the global footer (TS-WEB-0006 D2).
+    // Block 2b, where D3 puts it and on the ground D3 gives it.
+    await expect(page.locator("#scene-3")).toHaveAttribute("data-surface", "violet-500");
+
+    // Nothing after the closing CTA inside `main`; the contact section and
+    // the footer follow it as chrome (TS-WEB-0006 D2 as amended by DEC-0081
+    // §2, TS-WEB-0006-A17).
     const afterClosing = await page.evaluate(() => {
       const closing = document.querySelector("#closing-cta");
       const nodes: string[] = [];
@@ -324,6 +506,11 @@ test.describe("TS-WEB-0019 — home", () => {
       return nodes;
     });
     expect(afterClosing).toEqual([]);
+
+    const afterMain = await page.evaluate(
+      () => document.querySelector("main")?.nextElementSibling?.id ?? "",
+    );
+    expect(afterMain).toBe("kontakt");
   });
 
   test("TS-WEB-0019-A10 / TS-WEB-0006-A6: the context band names the three non-focus jobs, the closing block repeats block 1", async ({
@@ -375,7 +562,14 @@ test.describe("TS-WEB-0019 — home", () => {
         ).length,
     );
     expect(visibleSearchFields).toBe(2); // block 1 and the closing block
-    await expect(page.locator("[data-mechanism]")).toHaveCount(3);
+    await expect(page.locator('main [data-block="scene"]')).toHaveCount(3);
+    // The `whatsapp` scene's module is server-rendered at state 1 with all
+    // three step lines, so a JavaScript-less load is complete (A11,
+    // DEC-0105 §6's reduced-motion fallback already requires that state).
+    const explainModule = page.locator("[data-explain-module]");
+    await expect(explainModule).toHaveCount(1);
+    await expect(explainModule).toHaveAttribute("data-state", "1");
+    await expect(explainModule.locator("[data-explain-step]")).toHaveCount(3);
     await expect(page.locator("#proof-stream article")).toHaveCount(5);
     await expect(page.locator("#context-band nav")).toHaveCount(1);
     await expect(page.locator("#closing-cta")).toHaveCount(1);
@@ -491,6 +685,43 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(counters.locator("span[data-tone]")).toHaveCount(1);
   });
 
+  test("SRC-0014 §Shape and Space: every section's own lines keep the horizontal gutter", async ({
+    page,
+  }) => {
+    // "Horizontal padding: 16 px inside the viewport, on every section"
+    // (website-design-system.md:298). A section rendered `contained={false}`
+    // gives up the container for its *instance* — the embed scene's full-bleed
+    // photograph — and its kicker and transition line are text, so they keep
+    // the gutter (DEC-0129 §12). This is the regression that shipped once.
+    for (const width of [360, 1280]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/");
+      const lines = await page.evaluate(
+        () =>
+          [...document.querySelectorAll("main section[data-surface]")].flatMap((section) => {
+            const own = [...section.children].flatMap((child) =>
+              child.tagName === "P"
+                ? [child]
+                : [...child.children].filter((element) => element.tagName === "P"),
+            );
+            return own.map((paragraph) => {
+              const box = paragraph.getBoundingClientRect();
+              return {
+                where: `${section.id || section.getAttribute("data-block")}: ${(paragraph.textContent ?? "").slice(0, 32)}`,
+                left: box.left,
+                right: box.right,
+              };
+            });
+          }),
+      );
+      expect(lines.length).toBeGreaterThan(3);
+      for (const line of lines) {
+        expect(line.left, `${line.where} @ ${width}`).toBeGreaterThanOrEqual(15);
+        expect(line.right, `${line.where} @ ${width}`).toBeLessThanOrEqual(width - 15);
+      }
+    }
+  });
+
   test("SRC-0014 §Page Rhythm: photo/colour alternation holds on /", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/");
@@ -520,7 +751,9 @@ test.describe("TS-WEB-0019 — home", () => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/en");
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("What's on where you live?");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "What's on where you live, and when.",
+    );
     await expect(page.locator("#proof-stream article")).toHaveCount(5);
     await expect(page.locator('form[role="search"] [data-cta="primary"]')).toHaveCount(1);
   });

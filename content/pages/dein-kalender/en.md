@@ -5,7 +5,7 @@ route: "/dein-kalender"
 seo:
   "/dein-kalender":
     title: "A calendar for your website"
-    description: "Your calendar, your website, your name — and nobody in the office types in dates anymore. Configure the view, or book a briefing first."
+    description: "Your calendar on your website. Nobody types dates anymore. See the real calendar, configure your own view, or book a briefing appointment first."
     provenance: generated
 content_type: section
 status: draft
@@ -110,30 +110,43 @@ in the focus block (TS-WEB-0024 D3).
 
 <!-- id: dein-kalender-1-focus; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
 
-**Headline:** Your calendar, your website, your name. Nobody in the office types in dates anymore.
+**Headline:** Your calendar on your website. Nobody types dates anymore.
 
 **CTA label (primary, Pulse):** Order the calendar → `/dein-kalender/bestellen`
 
-**CTA label (equally weighted, secondary):** Book a briefing → configured Google Calendar URL
+**CTA label (equally weighted, secondary):** Book a briefing → `#kontakt`, this page's contact section
 
 Source: `headline` from `municipalities--portalize-calendar` — "Our
 calendar is current again — and nobody here maintains it."
 
-## Slot 2 — Contrast: today vs. with the product (4 rows)
+The headline is the one the 2026-09-22 review asks for (`/dein-kalender`
+→ hero). The old one broke CG-001 (three possessives for one thought;
+"your name" promises something nobody receives) and CG-036 ("in the
+office" as the only addressee).
+
+## Slot 2 — Contrast: today and with your calendar (4 rows)
 
 <!-- id: dein-kalender-2-contrast; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
 
-| Today | With the product |
+**Heading:** Who misses your event today
+
+| Today | With your calendar |
 | --- | --- |
 | A dates module in the CMS is a website project that ends up in an empty database. | The view is configured against a pool of data that's already filled and shared. |
 | Keeping it current needs someone the administration doesn't have. | Local groups maintain their own dates — your filtered view stays current as a side effect. |
 | Hardly any group takes on a second login and a second form. | Local groups publish the way they already do — flyer, own calendar, own website. |
-| Your calendar ends at your own jurisdiction; people's interest doesn't. | Place selection runs by place, postcode, or a whole county — you draw the boundary yourself. |
+| Your calendar ends at your own jurisdiction; people's interest doesn't. | Place selection runs by place or by a whole county — you draw the boundary yourself. |
 
 Four rows, derived from `portalize-calendar` (`summary`, category) and
 the `pains[]`/`gains[]`/`relievers[]` fields of
 `municipalities--portalize-calendar` — not copied verbatim, no fifth
 row for an extra feature (TS-WEB-0024 D4).
+
+Column labels "Today" / "With your calendar" per
+`plan/reviews/2026-09-23/decisions.md` line 18 (DEC-0106 §2): the
+comparison column names no product. The heading is the review's own, so
+that kicker and title form the CG-005 / CG-018 split. Row 4 no longer
+names a postcode — the copy guide's avoid list (DEC-0079).
 
 ## Slot 3 — Embedding demo
 
@@ -141,75 +154,144 @@ row for an extra feature (TS-WEB-0024 D4).
 
 **Heading:** A real calendar from three neighbouring villages
 
-It is the calendar of Schlatkow, Schmatzin and Wolfradshof, showing exactly
-what is on there over the next few weeks. On your website it would look the
-same — filled from the village calendar, with nobody at your end retyping
-anything.
+This is the calendar of Schlatkow, Schmatzin and Wolfradshof. It shows
+exactly what is on there over the next few weeks.
 
-**Settings heading:** What it holds is up to you
+Two sentences instead of five lines (2026-09-22 review, "How it works"):
+"This is the calendar of [place]. It shows exactly what is on there over
+the next few weeks." The place name comes from
+`src/lib/embed/portalize.ts` (`SHOWCASE_CALENDAR`), not from the dictation.
 
-Your settings decide which places or which club, which categories, and how
-far ahead. Type and colour come from your page, not from ours — the calendar
-takes what your site already sets. New dates show up within minutes; you
-never republish anything for them. This is how the calendar above is set:
+## Slot 3b — What it holds is up to you (configuration block)
 
-**Configuration:**
+<!-- id: dein-kalender-3b-embed-config; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", ia]; status: draft -->
 
-- Places: Schlatkow, Schmatzin, Wolfradshof — three neighbouring villages, no radius
-- Organizer: plus the operator's own calendar
-- Categories: all four — community life, everyday supply, culture & tourism, education & health
-- Window: the next 13 weeks
-- Presentation: a list with a filter row, 20 dates per page, no logo header
-- Updates: on every page view, cached for five minutes
+**Heading:** What it holds is up to you
+
+The dates arrive the way they arrive — and they all land on your website
+anyway.
+
+**Sources:** WhatsApp · Google Calendar · club website
+
+**Target:** your website
+
+Including dates from clubs that simply sent their flyer over WhatsApp.
+
+**Settings heading:** You decide:
+
+| Setting | Core | Example | Chips |
+| --- | --- | --- | --- |
+| Places | Single places or whole municipalities. | a town's cultural society takes the town area only — nothing from neighbouring places shows up. | Town area, Districts, ~~Neighbouring places~~ |
+| Organisers | Only the ones that belong to you — the others do not appear. | a foundation shows only its partners and the projects from its own funding programmes. | Partners, Grantees, ~~Everyone else~~ |
+| Categories | What kind of dates you carry. | a cultural calendar takes culture, tourism, education and health, but no everyday supply. A community calendar takes everything. | Culture, Tourism, Education, ~~Everyday supply~~ |
+| Window | How far ahead the calendar looks. | | |
+| Presentation | The calendar simply takes your design and adapts. No logo from us — your calendar on your website. Anyone who wants to can set the details; it works without that too. | | |
+| Updates | Current on every page view. To keep it fast we cache for a few minutes. | | |
+
+**Link label:** All settings in detail
+
+Kicker, headings, benefit sentence and the six setting sentences are the
+ones in `Design -. Portalize Einstellungen 1.png` /
+`Design -. Portalize Einstellungen 2.png` and the 2026-09-22 review
+("What it holds is up to you"). Three deviations, each with a source:
+
+- **No radius** under Places — `plan/reviews/2026-09-23/spec-impact.md`
+  line 315: "Umkreis" is in no offering record and collides with
+  `TS-WEB-0026-A2` and `TS-WEB-0005 D1`.
+- **No "in the office"** in the benefit band — CG-036, and the review says
+  so for this very sentence.
+- **Without the word "Example:"** in front of the example sentences. The
+  draft labels them that way; the page may not carry the word (Jan's
+  decision of 2026-09-18, `e2e/content-compliance.spec.ts`: no visible
+  marking of stand-in content). `setting-row` already sets the core
+  sentence and the example apart typographically, so the label says nothing
+  the row does not show.
+- **Window without example and chips**, carrying the "being checked"
+  marker instead (review: "we have to look at what Portalize actually
+  does"). The marker is the placeholder badge, not copy.
+
+The "All settings in detail" link points at the Portalize config repo. Its
+URL is in no record of this repository (`state/open.md`) — without a
+configured URL the link does not render.
 
 ## Slot 4 — Three tiers under one question
 
 <!-- id: dein-kalender-4-tiers; content_type: tier; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: draft -->
 
-**Question heading:** Where should the calendar live?
+**Heading:** Three ways to your calendar
+
+**Framing:** The price depends on one thing only: where the calendar is going to sit.
+
+Kicker ("What it costs", from the site vocabulary), heading and framing
+line are the ones in `Design - Preis Section 1.png` and the 2026-09-22
+review ("What it costs"). The earlier question heading falls under CG-005
+(a section title is a statement, not a question) and was never the spec's
+business anyway (TS-WEB-0024 D6, DEC-0083 §2).
 
 ### Tier 1 — in the village calendar
 
-**Title:** In the village calendar
+**Tier kicker:** In the village calendar
 
-**Price:** free, permanent — no introductory tier
+**Title:** The calendar for your place
 
-**Text:** Your club or municipality publishes directly into the village calendar, with no website and no system of your own.
+**CTA (quiet):** Publish dates → `/mitmachen`
 
-**CTA (quiet):** Open calendar · Publish dates
-
-Offering id: `community-calendar`.
+Offering id: `community-calendar`; the price "free, permanent" renders as
+the permanence statement from the package, never as a figure
+(TS-WEB-0006 D10). The two CTAs became one with DEC-0082 §4: "open
+calendar" was a link into the app, not a next step in this decision
+(TS-WEB-0024 D6).
 
 ### Tier 2 — on your own website
 
-**Title:** On your own website
+**Tier kicker:** On your website
 
-**Price:** €480 per year, net
+**Title:** Your own calendar
 
-**Text:** Your official calendar runs under your own name, in your own design, on your own website, configured by place, category, or local group. The product behind it is called Portalize.
+**CTA (primary on light):** Order the calendar
 
-**CTA (primary, Pulse):** Order the calendar
-
-**CTA (quiet):** Book a briefing
+**Product name:** The product behind this calendar is called Portalize.
 
 Offering id: `portalize-calendar`; price 480/EUR/year, `vat: excluded`
 — read from the package, never typed (TS-WEB-0024 D8). "Portalize" appears
-on this entire page exclusively in this paragraph.
+on this entire page in this one sentence only (D7). The tier's briefing
+link is gone: it is reachable on this very page through the contact
+section, and every tier carries exactly one CTA (TS-WEB-0024 D6,
+DEC-0082 §4).
 
 ### Tier 3 — for a whole region
 
-**Title:** For a whole region
+**Tier kicker:** For a whole region
 
-**Price:** on request
-
-**Text:** Counties, state authorities, and large cities additionally get a map view of the same dates and their own white-label-capable registration.
-
-**CTA (quiet):** For a whole region → `/deine-region`
+**Title:** A calendar for the county
 
 Offering id: `portalize-enterprise`, `price_status: on-request` — never
-a number, never "from", never an order of magnitude (TS-WEB-0024 D8). The
-internal €4,000 figure from the package must never appear anywhere on
-this page.
+a number, never "from", never an order of magnitude, and without the
+draft's size qualifier (TS-WEB-0024 D8,
+`plan/reviews/2026-09-23/decisions.md` line 19). The internal €4,000
+figure from the package must never appear anywhere on this page. The CTA
+label is `/deine-region`'s page title from the route facade — not a
+sentence of its own.
+
+## Slot 4b — Checks per tier (draft, unconfirmed)
+
+<!-- id: dein-kalender-4-tiers-checks-demo; content_type: tier; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Checks per tier (draft, not yet confirmed by the owner):**
+
+| Tier | Check 1 | Check 2 | Check 3 |
+| --- | --- | --- | --- |
+| community-calendar | The calendar for your place and around it | Publish dates, over WhatsApp too | For clubs, municipalities, traders, everyone |
+| portalize-calendar | Under your name, in your design | With your places, categories and organisers | Dates arrive by themselves |
+| portalize-enterprise | For counties, authorities, large cities | Map view from January 2027 | Your own registration under your name |
+
+The nine lines are the ones in `Design - Preis Section 1.png` and
+`Design - Preis Section 2.png`. The owner has not confirmed them, so the
+slot is `provenance: generated; demo: true` with a row in `state/open.md`
+(DEC-0068, DEC-0131). One deviation from the draft: "plus a map view"
+becomes "map view from January 2027" — the map view is announced with its
+date, never listed as a shipped feature (DEC-0061,
+`plan/reviews/2026-09-23/decisions.md` line 19).
 
 ## Slot 5 — Proof (3 elements, with images)
 
@@ -275,19 +357,19 @@ sentence has a source as of this pass and sits in the slot above.
 
 ## Slot 7 — Closing CTA
 
-<!-- source_note: The heading repeats what slot 3 already shows (the calendar runs as soon as the code sits on the page) and claims no lead time: nothing cleared backs "next week". The secondary link is the same briefing as the focus block, worded as the order flow words it (`bestellen-2-briefing-exit`). -->
+<!-- source_note: The heading repeats what slot 3 already shows (the calendar runs as soon as the code sits on the page) and claims no lead time: nothing cleared backs "next week". -->
 <!-- id: dein-kalender-7-closing; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
 
 **Closing heading:** Your calendar is running as soon as the code sits on your page.
 
 **CTA label (identical to the focus block, primary):** Order the calendar
 
-**Secondary link:** Rather talk first? Book a briefing
-
 The page used to end on a button with no sentence above it. Block 4
 repeats the same conversion as the focus block — same goal, same label —
-without Pulse, and the equal-weight second way stands under it as a quiet
-link rather than beside it as a second button.
+without Pulse. The quiet second way under it is gone: the appointment URL
+occurs exactly once on this page, in the first action row of the contact
+section directly below this block (DEC-0081 §3, TS-WEB-0016 D7,
+TS-WEB-0024-A15).
 
 ## Verification — local advertising
 

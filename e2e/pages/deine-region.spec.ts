@@ -458,6 +458,11 @@ test.describe("/deine-region/angebot", () => {
     page,
   }) => {
     /**
+     * `/dein-kalender` left this list with T-13: it carries **no** briefing link
+     * inside `main` any more, its hero CTA is an in-page link to `#kontakt`, and
+     * the one appointment URL on that route is the contact section's first action
+     * row, which stands outside `main` (DEC-0081 §3, TS-WEB-0024-A15).
+     *
      * `consult: false` on `/deine-region/angebot`: its consult line lives in
      * the lead fallback, which renders only in the widget's `empty`/`degraded`
      * state, and the route ships `mocked`. The markup half of that line is

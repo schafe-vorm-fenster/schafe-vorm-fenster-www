@@ -1,11 +1,47 @@
 /*
- * A flat brand-colour panel, not a hatch (Jan, 2026-09-18): the position a
- * cleared proof will take reads as part of the design, never as a marked
- * gap. Provenance stays in `data-empty-proof` and `state/open.md`.
+ * Two forms, one box. Silent: a flat brand-colour panel, where no
+ * determination asks for words (Jan, 2026-09-18) — the other four proof
+ * surfaces. Named: the placeholder hatch with a label badge and one sentence,
+ * which is what TS-WEB-0027 D5 fixes for the reserved seventh place of
+ * `/ueber-uns` (DEC-0132 §3).
  */
 .slot {
   aspect-ratio: var(--ratio-proof);
   background: var(--color-neutral-surface2);
   display: block;
   width: 100%;
+}
+
+.named {
+  align-items: flex-start;
+  aspect-ratio: auto;
+  background: var(--placeholder-hatch);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  justify-content: center;
+  min-height: var(--space-12);
+  padding: var(--space-4);
+}
+
+/* The label badge of the placeholder register (D-8) — one pair for "this is
+   not real", never a colour of its own. */
+.label {
+  background: var(--placeholder-ground);
+  color: var(--placeholder-text);
+  font-family: var(--font-mono);
+  font-size: var(--type-meta-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  margin: 0;
+  padding: var(--space-1) var(--space-2);
+  text-transform: uppercase;
+}
+
+.sentence {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-meta-size);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+  max-width: var(--measure-reading);
 }

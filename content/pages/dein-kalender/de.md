@@ -5,7 +5,7 @@ route: "/dein-kalender"
 seo:
   "/dein-kalender":
     title: "Kalender für eure Website"
-    description: "Euer Kalender, eure Website, euer Name — und niemand im Amt tippt mehr Termine ein. Ansicht konfigurieren oder erst einen Termin buchen."
+    description: "Euer Kalender auf eurer Webseite. Niemand tippt mehr Termine. Seht den echten Kalender, konfiguriert eure Ansicht oder bucht erst einen Beratungstermin."
     provenance: generated
 content_type: section
 status: draft
@@ -112,30 +112,46 @@ kommt nur im Fokusblock vor (TS-WEB-0024 D3).
 
 <!-- id: dein-kalender-1-focus; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
 
-**Headline:** Euer Kalender, eure Website, euer Name. Niemand im Amt tippt mehr Termine ein.
+**Headline:** Euer Kalender auf eurer Webseite. Niemand tippt mehr Termine.
 
 **CTA-Label (primär, Pulse):** Kalender bestellen → `/dein-kalender/bestellen`
 
-**CTA-Label (gleichwertig, sekundär):** Beratungstermin buchen → konfigurierte Google-Kalender-URL
+**CTA-Label (gleichwertig, sekundär):** Beratungstermin buchen → `#kontakt`, die Kontakt-Section dieser Seite
 
 Quelle: `headline` aus `municipalities--portalize-calendar` — „Our
 calendar is current again — and nobody here maintains it."
 
-## Slot 2 — Kontrast: heute vs. mit dem Produkt (4 Zeilen)
+Die Headline ist die des Reviews vom 2026-09-22 (Abschnitt
+`/dein-kalender` → Hero): „Euer Kalender auf eurer Webseite." und
+„Niemand tippt mehr Termine." Die alte Fassung verstieß gegen CG-001
+(drei Possessive für einen Gedanken, „euer Name" verspricht etwas, das
+niemand bekommt) und CG-036 („im Amt" als einzige Adressierung).
+
+## Slot 2 — Kontrast: heute und mit eurem Kalender (4 Zeilen)
 
 <!-- id: dein-kalender-2-contrast; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
 
-| Heute | Mit dem Produkt |
+**Überschrift:** Wer euren Termin heute nicht mitbekommt
+
+| Heute | Mit eurem Kalender |
 | --- | --- |
 | Ein Terminmodul im CMS ist ein Website-Projekt, das in einer leeren Datenbank endet. | Die Ansicht wird auf einen bereits gefüllten, geteilten Datenpool konfiguriert. |
 | Aktuell halten braucht eine Person, die es in der Verwaltung nicht gibt. | Akteure vor Ort pflegen ihre eigenen Termine — eure gefilterte Ansicht ist nebenbei aktuell. |
 | Ein zweites Login und ein zweites Formular nimmt kaum ein Akteur an. | Akteure veröffentlichen so, wie sie es schon tun — Flyer, eigener Kalender, eigene Website. |
-| Euer Kalender endet an der eigenen Zuständigkeit, das Interesse der Menschen nicht. | Die Ortsauswahl läuft über Orte, Postleitzahlen oder einen Landkreis — die Grenze zieht ihr selbst. |
+| Euer Kalender endet an der eigenen Zuständigkeit, das Interesse der Menschen nicht. | Die Ortsauswahl läuft über Orte oder einen Landkreis — die Grenze zieht ihr selbst. |
 
 Vier Zeilen, abgeleitet aus `portalize-calendar` (`summary`, Kategorie)
 und den Feldern `pains[]`/`gains[]`/`relievers[]` von
 `municipalities--portalize-calendar` — nicht wörtlich übernommen, keine
 fünfte Zeile für ein zusätzliches Feature (TS-WEB-0024 D4).
+
+Spaltenbeschriftung „Heute" / „Mit eurem Kalender" nach
+`plan/reviews/2026-09-23/decisions.md` Zeile 18 (DEC-0106 §2): die
+Vergleichsspalte nennt kein Produkt. Die Überschrift ist die des Reviews
+(Abschnitt „Warum es heute hakt"), damit Kicker und Titel den Split von
+CG-005/CG-018 bilden. In Zeile 4 stehen keine „Postleitzahlen" mehr —
+Vermeidungsliste des Copy-Guides (DEC-0079: ein Ortsname ist, wo man
+herkommt, eine Postleitzahl ist eine Abstraktion).
 
 ## Slot 3 — Einbindungs-Demo
 
@@ -143,76 +159,148 @@ fünfte Zeile für ein zusätzliches Feature (TS-WEB-0024 D4).
 
 **Überschrift:** Ein echter Kalender aus drei Nachbardörfern
 
-Es ist der Kalender von Schlatkow, Schmatzin und Wolfradshof, und er zeigt
-genau das, was dort in den nächsten Wochen ansteht. Auf eurer Website sähe er
-genauso aus — gefüllt aus dem Dorfkalender, ohne dass jemand bei euch etwas
-abtippt.
+Das ist der Kalender von Schlatkow, Schmatzin und Wolfradshof. Er zeigt genau
+das, was dort in den nächsten Wochen ansteht.
 
-**Einstellungs-Überschrift:** Was drinsteht, bestimmt ihr
+Zwei Sätze statt fünf Zeilen (Review 2026-09-22, Abschnitt „So funktioniert
+es"): „Das ist der Kalender von [Ort]. Er zeigt genau das, was dort in den
+nächsten Wochen ansteht." Der Ortsname kommt aus
+`src/lib/embed/portalize.ts` (`SHOWCASE_CALENDAR`), nicht aus dem Diktat.
 
-Über die Einstellungen legt ihr fest, welche Orte oder welcher Verein, welche
-Kategorien und wie weit nach vorn. Schrift und Farben kommen aus eurer Seite,
-nicht aus unserer — der Kalender übernimmt, was bei euch schon eingestellt
-ist. Neue Termine sind nach wenigen Minuten drin; ihr müsst dafür nichts neu
-veröffentlichen. So ist der Kalender oben eingestellt:
+## Slot 3b — Was drinsteht, bestimmt ihr (Konfigurationsblock)
 
-**Konfiguration:**
+<!-- id: dein-kalender-3b-embed-config; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", ia]; status: draft -->
 
-- Orte: Schlatkow, Schmatzin, Wolfradshof — drei Nachbardörfer, kein Radius
-- Veranstalter: zusätzlich der eigene Kalender des Betreibers
-- Kategorien: alle vier — Gemeindeleben, Versorgung, Kultur & Tourismus, Bildung & Gesundheit
-- Zeitraum: die nächsten 13 Wochen
-- Darstellung: Liste mit Filterzeile, 20 Termine je Seite, kein Logo-Kopf
-- Aktualisierung: bei jedem Seitenaufruf, fünf Minuten zwischengespeichert
+**Überschrift:** Was drinsteht, bestimmt ihr
+
+Die Termine kommen, wie sie reinkommen — und landen trotzdem alle auf eurer
+Website.
+
+**Quellen:** WhatsApp · Google Kalender · Vereinswebsite
+
+**Ziel:** eure Website
+
+Auch Termine von Vereinen, die ihren Flyer einfach per WhatsApp geschickt
+haben.
+
+**Einstellungs-Überschrift:** Ihr könnt selbst bestimmen:
+
+| Einstellung | Kernsatz | Beispiel | Chips |
+| --- | --- | --- | --- |
+| Orte | Einzelne Orte oder ganze Gemeinden. | Die Kulturgesellschaft einer Stadt nimmt nur das Stadtgebiet — aus Nachbarorten taucht nichts auf. | Stadtgebiet, Ortsteile, ~~Nachbarorte~~ |
+| Veranstalter | Nur die, die zu euch gehören — die anderen erscheinen nicht. | Eine Stiftung zeigt nur ihre Partner und die Projekte aus den eigenen Förderprogrammen. | Partner, Geförderte, ~~Alle anderen~~ |
+| Kategorien | Welche Art Termine bei euch steht. | Ein Kulturkalender nimmt Kultur, Tourismus, Bildung und Gesundheit, aber keine Versorgung. Ein Gemeindekalender nimmt alles. | Kultur, Tourismus, Bildung, ~~Versorgung~~ |
+| Zeitraum | Wie weit der Kalender nach vorn schaut. | | |
+| Darstellung | Der Kalender übernimmt einfach euer Design und passt sich an. Kein Logo von uns — euer Kalender auf eurer Webseite. Wer will, stellt Details selbst ein; es geht aber auch ohne. | | |
+| Aktualisierung | Bei jedem Seitenaufruf aktuell. Damit es schnell lädt, speichern wir wenige Minuten zwischen. | | |
+
+**Link-Label:** Alle Einstellungen im Detail
+
+Kicker, Überschriften, Benefit-Satz und die sechs Einstellungssätze sind die
+der Entwürfe `Design -. Portalize Einstellungen 1.png` /
+`Design -. Portalize Einstellungen 2.png` und des Reviews vom 2026-09-22
+(Abschnitt „Was drinsteht, bestimmt ihr"). Drei Abweichungen, alle aus einer
+Quelle:
+
+- **Kein „Umkreis"** bei den Orten — `plan/reviews/2026-09-23/spec-impact.md`
+  Zeile 315: „Umkreis" steht in keinem Offering-Datensatz und kollidiert mit
+  `TS-WEB-0026-A2` und `TS-WEB-0005 D1`.
+- **Kein „im Amt"** im Benefit-Band — CG-036, und das Review sagt es für
+  genau diesen Satz selbst („Beim Umsetzen anpassen").
+- **Ohne das Wort „Beispiel:"** vor den Beispielsätzen. Der Entwurf
+  beschriftet sie so; auf der Seite darf das Wort nicht stehen (Jans
+  Entscheidung vom 2026-09-18, `e2e/content-compliance.spec.ts`: keine
+  sichtbare Kennzeichnung von Stellvertreter-Inhalt). `setting-row` trennt
+  Kernsatz und Beispiel ohnehin typografisch, die Beschriftung sagt also
+  nichts, was die Zeile nicht schon zeigt.
+- **Zeitraum ohne Beispiel und ohne Chips**, dafür mit der Markierung
+  „wird geprüft" (Review: „Müssen wir bei Portalize nachsehen, was wirklich
+  geht"). Die Markierung ist der Platzhalter-Badge, nicht Copy.
+
+Der Link „Alle Einstellungen im Detail" zeigt auf das Portalize-Config-Repo.
+Die URL steht in keinem Datensatz dieses Repositories (`state/open.md`) —
+ohne konfigurierte URL rendert der Link nicht.
 
 ## Slot 4 — Drei Tarife unter einer Frage
 
 <!-- id: dein-kalender-4-tiers; content_type: tier; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: draft -->
 
-**Fragen-Überschrift:** Wo soll der Kalender stehen?
+**Überschrift:** Drei Wege zu eurem Kalender
+
+**Rahmensatz:** Der Preis hängt nur davon ab, wo der Kalender stehen soll.
+
+Kicker („Was es kostet", aus dem Site-Vokabular), Überschrift und
+Rahmensatz sind die des Entwurfs `Design - Preis Section 1.png` und des
+Reviews vom 2026-09-22 (Abschnitt „Was es kostet"). Die frühere
+Fragen-Überschrift „Wo soll der Kalender stehen?" fällt unter CG-005
+(ein Section-Titel ist eine Aussage, keine Frage) und war ohnehin nie
+Gegenstand der Spec (TS-WEB-0024 D6, DEC-0083 §2).
 
 ### Tarif 1 — im Dorfkalender
 
-**Titel:** Im Dorfkalender
+**Stufen-Kicker:** Im Dorfkalender
 
-**Preis:** kostenlos, dauerhaft — keine Einstiegsstufe
+**Titel:** Der Kalender für euren Ort
 
-**Text:** Euer Verein oder eure Gemeinde veröffentlicht direkt in den Dorfkalender, ohne eigene Website und ohne eigenes System.
+**CTA (Quiet):** Termine veröffentlichen → `/mitmachen`
 
-**CTA (Quiet):** Kalender öffnen · Termine veröffentlichen
-
-Offering-ID: `community-calendar`.
+Offering-ID: `community-calendar`; Preis „kostenlos, dauerhaft" — als
+Dauerhaftigkeits-Aussage aus dem Paket gerendert, nicht als Zahl
+(TS-WEB-0006 D10). Die beiden CTAs sind seit DEC-0082 §4 einer: „Kalender
+öffnen" war ein Link in die App, kein nächster Schritt in dieser
+Entscheidung (TS-WEB-0024 D6).
 
 ### Tarif 2 — auf eurer eigenen Website
 
-**Titel:** Auf eurer eigenen Website
+**Stufen-Kicker:** Auf eurer Website
 
-**Preis:** 480 € pro Jahr, netto
+**Titel:** Euer eigener Kalender
 
-**Text:** Euer offizieller Kalender läuft unter eurem Namen, im eigenen Design, auf eurer Website, konfiguriert über eure Orte, Kategorien oder Akteure. Das Produkt dahinter heißt Portalize.
+**CTA (primär auf hell):** Kalender bestellen
 
-**CTA (primär, Pulse):** Kalender bestellen
-
-**CTA (Quiet):** Beratungstermin buchen
+**Produktname:** Das Produkt hinter diesem Kalender heißt Portalize.
 
 Offering-ID: `portalize-calendar`; Preis 480/EUR/Jahr, `vat: excluded` —
 aus dem Paket gelesen, nicht getippt (TS-WEB-0024 D8). „Portalize" erscheint
-in der gesamten Seite ausschließlich in diesem Absatz.
+in der gesamten Seite ausschließlich in diesem einen Satz (D7). Der
+Beratungstermin-Link dieser Stufe ist weg: er ist auf derselben Seite über
+die Kontakt-Section erreichbar, und jede Stufe trägt genau einen CTA
+(TS-WEB-0024 D6, DEC-0082 §4).
 
 ### Tarif 3 — für eine ganze Region
 
-**Titel:** Für eine ganze Region
+**Stufen-Kicker:** Für eine ganze Region
 
-**Preis:** auf Anfrage
-
-**Text:** Landkreise, Landesbehörden und große Städte bekommen zusätzlich eine Kartenansicht derselben Termine und eine eigene, whitelabel-fähige Registrierung.
-
-**CTA (Quiet):** Für eine ganze Region → `/deine-region`
+**Titel:** Ein Kalender für den Landkreis
 
 Offering-ID: `portalize-enterprise`, `price_status: on-request` — nie
-eine Zahl, nie „ab", nie eine Größenordnung (TS-WEB-0024 D8). Die interne
+eine Zahl, nie „ab", nie eine Größenordnung und ohne den
+Größen-Zusatz des Entwurfs (TS-WEB-0024 D8,
+`plan/reviews/2026-09-23/decisions.md` Zeile 19). Die interne
 4.000-€-Marke aus dem Paket darf an keiner Stelle dieser Seite
-erscheinen.
+erscheinen. Das CTA-Label ist der Seitentitel von `/deine-region` aus dem
+Routen-Facade — kein eigener Satz.
+
+## Slot 4b — Häkchen je Stufe (Entwurf, nicht bestätigt)
+
+<!-- id: dein-kalender-4-tiers-checks-demo; content_type: tier; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Häkchen je Stufe (Entwurf, vom Eigentümer noch nicht bestätigt):**
+
+| Stufe | Häkchen 1 | Häkchen 2 | Häkchen 3 |
+| --- | --- | --- | --- |
+| community-calendar | Kalender eures Orts und der Umgebung | Termine veröffentlichen, auch per WhatsApp | Für Vereine, Gemeinden, Händler, alle |
+| portalize-calendar | Unter eurem Namen, in eurem Design | Mit euren Orten, Kategorien und Akteuren | Termine kommen von selbst rein |
+| portalize-enterprise | Für Landkreise, Behörden, große Städte | Kartenansicht ab Januar 2027 | Eigene Registrierung unter eurem Namen |
+
+Die neun Zeilen stehen so in den Entwürfen `Design - Preis Section 1.png`
+und `Design - Preis Section 2.png`. Sie sind vom Eigentümer nicht
+freigegeben und deshalb `provenance: generated; demo: true` mit einer
+Zeile in `state/open.md` (DEC-0068, DEC-0131). Eine Abweichung vom
+Entwurf: „Zusätzlich mit Kartenansicht" wird zu „Kartenansicht ab Januar
+2027" — die Kartenansicht wird mit ihrem Datum angekündigt, nie als
+ausgeliefertes Merkmal geführt (DEC-0061,
+`plan/reviews/2026-09-23/decisions.md` Zeile 19).
 
 ## Slot 5 — Beleg (3 Elemente, mit Bildern)
 
@@ -280,19 +368,19 @@ darüber.
 
 ## Slot 7 — Abschluss-CTA
 
-<!-- source_note: Die Überschrift wiederholt, was Slot 3 schon zeigt (der Kalender läuft, sobald der Code auf der Seite steht) und behauptet keine Vorlaufzeit: Für „nächste Woche" liegt kein freigegebener Beleg vor. Der sekundäre Link ist derselbe Beratungstermin wie im Fokusblock, in derselben Formulierung wie im Bestellablauf (`bestellen-2-briefing-exit`). -->
+<!-- source_note: Die Überschrift wiederholt, was Slot 3 schon zeigt (der Kalender läuft, sobald der Code auf der Seite steht) und behauptet keine Vorlaufzeit: Für „nächste Woche" liegt kein freigegebener Beleg vor. -->
 <!-- id: dein-kalender-7-closing; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
 
 **Abschluss-Überschrift:** Euer Kalender läuft, sobald der Code auf eurer Seite steht.
 
 **CTA-Label (identisch zum Fokusblock, primär):** Kalender bestellen
 
-**Sekundärer Link:** Lieber erst sprechen? Beratungstermin buchen
-
 Die Seite endete auf einem Knopf ohne Satz darüber. Block 4 wiederholt
 dieselbe Conversion wie der Fokusblock — gleiches Ziel, gleiches Label —,
-nur ohne Pulse, und der gleichwertige zweite Weg steht als ruhiger Link
-darunter statt als zweiter Knopf daneben.
+nur ohne Pulse. Der ruhige zweite Weg darunter ist weg: die
+Terminvereinbarungs-URL kommt auf dieser Seite genau einmal vor, in der
+ersten Aktionszeile der Kontakt-Section direkt unter diesem Block
+(DEC-0081 §3, TS-WEB-0016 D7, TS-WEB-0024-A15).
 
 ## Verifikation — lokale Werbung
 

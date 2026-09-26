@@ -49,7 +49,11 @@ export interface ExplainStep {
   readonly detail: string;
 }
 
-/** `ComparisonRow` — "Heute / Mit Portalize". */
+/**
+ * `ComparisonRow` — the two cells of a contrast row, "Heute" / "Mit eurem
+ * Kalender" (`plan/reviews/2026-09-23/decisions.md` row 18). The column
+ * labels are the caller's copy and name no product (DEC-0106 §2, CG-039).
+ */
 export interface ComparisonRow {
   readonly today: string;
   readonly withProduct: string;

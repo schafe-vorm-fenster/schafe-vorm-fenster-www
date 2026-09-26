@@ -58,6 +58,15 @@ export interface PriceTierRowProps {
   readonly price: OfferingPrice;
   /** The three ✓ lines; a short argument, not a feature matrix. */
   readonly checks: readonly CheckItem[];
+  /**
+   * `data-demo="true"` on the check list, for check lines that are still a
+   * placeholder — `DEC-0068`'s first guardrail wants the marking **in the
+   * markup**, so a build can enumerate what needs replacing, and the check
+   * list is the smallest element that holds exactly those lines. The caller
+   * derives it from the slot the lines come from (`isDemoSlot`) and never
+   * hard-codes it; a row whose checks are the owner's passes nothing.
+   */
+  readonly checksDemo?: boolean;
   /** Exactly one. There is no second slot. */
   readonly cta: PriceTierCta;
   readonly locale?: Locale;
@@ -92,6 +101,7 @@ export function PriceTierRow({
   title,
   price,
   checks,
+  checksDemo,
   cta,
   locale = "de",
   className,
@@ -112,7 +122,7 @@ export function PriceTierRow({
       </p>
       <h3 className={styles.title}>{title}</h3>
       <PriceLine locale={locale} price={price} />
-      <ul className={styles.checks}>
+      <ul className={styles.checks} data-demo={checksDemo ? "true" : undefined}>
         {checks.map((check) => (
           <li className={check.emphasis ? styles.checkEmphasis : styles.check} key={check.text}>
             <Icon name="check" />

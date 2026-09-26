@@ -6,8 +6,14 @@ export interface ComparisonTableProps {
   readonly headline?: string;
   /** Exactly four rows — enforced at the type level (TS-WEB-0024 D4). */
   readonly rows: FourComparisonRows;
-  readonly todayLabel?: string;
-  readonly withProductLabel?: string;
+  /**
+   * Both column labels are required and carry no default: TS-WEB-0024 D4's
+   * "the second column names no product" and SRC-0017 CG-039 cannot be held by
+   * a component that ships a product name as a fallback. The caller reads them
+   * off its own content.
+   */
+  readonly todayLabel: string;
+  readonly withProductLabel: string;
   readonly className?: string;
 }
 
@@ -21,7 +27,8 @@ export interface ComparisonTableProps {
  * columns creeping in.
  * States: static content; no data dependency, so no `state` prop.
  * Inherits: **no checkmark/cross column**, no feature matrix; a hairline
- * between rows, never a card.
+ * between rows, never a card, **and no product name** — both column labels are
+ * required props without a default (TS-WEB-0024 D4, SRC-0017 CG-039).
  * Space: rows are content-sized; nothing here is late content.
  * A11y: each row is one list item; both cells carry their column's label as
  * visible text, so the pairing survives outside the visual two-column layout
@@ -30,8 +37,8 @@ export interface ComparisonTableProps {
 export function ComparisonTable({
   headline,
   rows,
-  todayLabel = "Heute",
-  withProductLabel = "Mit Portalize",
+  todayLabel,
+  withProductLabel,
   className,
 }: ComparisonTableProps) {
   return (

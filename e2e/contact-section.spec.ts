@@ -57,25 +57,26 @@ const ENVOY_ROUTES: ReadonlySet<RouteId> = new Set<RouteId>(["regionQuote"]);
  * passes, so the entry has to be removed with the fix rather than lingering.
  */
 const BRIEFING_HREF_REPOINTED_BY: Readonly<Partial<Record<RouteId, string>>> = {
-  calendar: "T-13",
-  // `region` and `order` came off this list with T-15: `/deine-region`'s hero
-  // and closing consult action and all four steps of `/dein-kalender/bestellen`
-  // resolve to `#kontakt` now (DEC-0133).
+  // The list is empty, and it stays declared so the next route that regresses
+  // has a named home instead of a silent `test.fail`.
 };
+// `region` and `order` came off this list with T-15: `/deine-region`'s hero and
+// closing consult action and all four steps of `/dein-kalender/bestellen`
+// resolve to `#kontakt` now (DEC-0133).
+// `calendar` came off this list with T-13: `/dein-kalender`'s hero CTA is an
+// in-page link to `#kontakt` now, and the closing block's quiet briefing link
+// and tier 2's are gone, so the appointment URL occurs once on that route.
 // `/deine-region/angebot` is **not** on the list, measured: its lead fallback's
 // briefing link renders only in the widget's `empty`/`degraded` state, and the
 // mocked state the route ships carries none — so the uniqueness half already
 // holds there.
 
-/**
- * `/ueber-uns` renders the inline newsletter form until T-14 gates it behind
- * `NEWSLETTER_SENDING_SYSTEM` (TS-WEB-0016-A21, the T-14 half of DEC-0122);
- * its `form` carries no `method`, so the "no form" assertion fails there
- * until then.
+/*
+ * The `INLINE_NEWSLETTER_GATED_BY` exemption that stood here is gone:
+ * `/ueber-uns` reads `newsletterOffered()` on its own page since T-14, so no
+ * route renders a submitting form outside the two lead routes (DEC-0122 §5,
+ * DEC-0132 §5).
  */
-const INLINE_NEWSLETTER_GATED_BY: Readonly<Partial<Record<RouteId, string>>> = {
-  about: "T-14",
-};
 
 /**
  * The two mid-flow routes carry no closing block at all: TS-WEB-0023 D7 and
@@ -251,11 +252,6 @@ for (const { route, locale } of everyRoute()) {
     test("TS-WEB-0006-A17: no general contact form — no envoy mount, no submitting form, outside the two lead routes", async ({
       page,
     }) => {
-      const owner = INLINE_NEWSLETTER_GATED_BY[route];
-      test.fail(
-        owner !== undefined,
-        `${path} renders the inline newsletter form until ${owner} gates it (TS-WEB-0016-A21)`,
-      );
       await page.goto(path);
       if (ENVOY_ROUTES.has(route)) {
         // The quote form, and nothing but envoy forms.

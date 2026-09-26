@@ -49,13 +49,19 @@ describe("TS-WEB-0006-A1: every route carries a complete manifest", () => {
     expect(violations).toEqual({});
   });
 
-  it("keeps the live-module exception list to the four routes whose spec fixes it", () => {
+  it("keeps the live-module exception list to the five routes whose spec fixes it", () => {
     for (const route of Object.keys(NO_LIVE_MODULE) as RouteId[]) {
       expect(
         MANIFESTS[route].liveModules,
         `${route} declares live modules — take it off the exception list`,
       ).toEqual([]);
       expect(NO_LIVE_MODULE[route]).toMatch(/TS-[A-Z]{2,5}-\d{4}/);
+    }
+    // The three sender surfaces TS-WEB-0006 D1 and DEC-0084 §3 name by route are
+    // on the list by the spec's own exemption, not by a per-page deviation —
+    // `about` among them since TS-WEB-0027 D4 deleted the counter module.
+    for (const sender of ["about", "archive", "legal"] as const) {
+      expect(NO_LIVE_MODULE[sender], `${sender} is a sender surface`).toBeDefined();
     }
     for (const route of ROUTE_IDS) {
       if (route in NO_LIVE_MODULE) continue;

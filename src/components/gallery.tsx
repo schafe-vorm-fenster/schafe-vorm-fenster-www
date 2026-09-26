@@ -534,6 +534,8 @@ export const GALLERY: readonly GalleryEntry[] = [
             { today: "Zettel am Brett", withProduct: "Digital und dauerhaft" },
           ] as FourComparisonRows
         }
+        todayLabel="Heute"
+        withProductLabel="Mit eurem Kalender"
       />
     ),
   },
