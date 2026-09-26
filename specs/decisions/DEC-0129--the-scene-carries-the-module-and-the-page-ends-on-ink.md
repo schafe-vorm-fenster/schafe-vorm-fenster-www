@@ -1,6 +1,6 @@
 ---
 id: DEC-0129
-title: The scene carries the module, block 2b is the scene, and `/` ends on ink — the ten choices the home composition had to take
+title: The scene carries the module, block 2b is the scene, and `/` ends on ink — the twelve choices the home composition had to take
 status: DRAFT
 date: 2026-09-26
 decided_by: the engineering team
@@ -17,10 +17,16 @@ further `ink` section a page may carry (`SRC-0014 §Page Rhythm`, `DEC-0117`).
 The 2026-09-22 review supplies the wording for most of the page's copy and
 rejects a good deal of what shipped.
 
-Ten choices are left open by the determinations and the page cannot be composed
-without taking them. Two of them go **against** what the review asks for in as
-many words, and both say so below: the specification carries the truth
+Twelve choices are left open by the determinations and the page cannot be
+composed without taking them. Two of them go **against** what the review asks
+for in as many words, and both say so below: the specification carries the truth
 (`AGENTS.md` rule 8, `DEC-0104`), and `SRC-0017` is specification-side.
+
+§1–§10 were taken when the page was composed. **§11 and §12 are the QA round of
+2026-09-26**, which measured two defects in what §1 and §6 had left: the module
+stood on a ground its own state indicator cannot be seen on, and an uncontained
+section dropped the page gutter from its two own lines. §5 gained the spec
+amendment it had argued it did not need.
 
 ## Decision
 
@@ -96,8 +102,25 @@ The block keeps its position and its identity: the scene is `#scene-3`, it
 stands between block 2a and the proof stream, and it takes `D3`'s own rhythm
 value for block 2b — **COLOUR violet**. `A9`'s id list in the walk therefore
 reads `… scene-3 · proof-stream …`, and the walk asserts `#scene-3`'s surface so
-the block cannot quietly stop being 2b. No spec is amended: the criterion's
-sequence is unchanged, only which element carries the anchor.
+the block cannot quietly stop being 2b.
+
+**The spec is amended, on the QA round of 2026-09-26.** This record first said
+"no spec is amended: the criterion's sequence is unchanged, only which element
+carries the anchor". That was too fine a reading — `D3` row 2b named the
+content "the who-built-this stamps" and `A9` listed "provenance stamps" as a
+DOM position of its own, and neither is true of what ships. Both now say block
+2b is the provenance scene and cite this record; nothing is renumbered, no
+status is promoted, and the id list, the ground and the position are unchanged.
+
+No `DEM-####` accompanies it and none is owed (`AGENTS.md` rule 8,
+`check:specs` E27): a demand records a specification standing **against a
+source**, and no source says this. `SRC-0003#home`
+(`website-information-architecture.concept.md`) contains the word "stamp"
+nowhere — the stamps were the spec's own invention — and the two authorities
+behind the removal are the 2026-09-22 owner review and `SRC-0017`, which rule 8
+names as specification-side and therefore not a source. What is recorded is the
+amendment itself, on the artefact, in the spec's own idiom for the three
+amendments it already carries from 2026-09-25.
 
 ### 6. The embed photograph runs full-bleed, and its ground changes with it
 
@@ -110,10 +133,10 @@ that puts `.container` back around the text, the module slot and the CTA — the
 page-container idiom `price-section` already uses, with no viewport arithmetic
 and no negative margins. The photograph is `ratio-map` (16 : 9).
 
-The ground moves from `surface-2` to `paper` in the same breath: this is
-solution content, and "grey-green never carries positive content" (same
-section). The resulting rhythm is PHOTO · ink · lime-500 · paper · violet-500 ·
-lime-100 · surface · ink, which `checkRhythm` accepts.
+The ground moves off `surface-2` in the same breath: this is solution content,
+and "grey-green never carries positive content" (same section). It went to
+`paper` first and to `lime-100` on the QA round — §11 says why, and states the
+rhythm the page ships with.
 
 ### 7. The closing search block is `ink`, and both search fields take the dark treatment
 
@@ -159,6 +182,54 @@ los ist."** (34 characters, inside `CG-020`'s 42), and the English mirror is
 "What's on where you live, and when." This is the second place where the
 specification wins over the review's literal wording; the first is §5.
 
+### 11. The scene that carries the module stands on `paper`, and the embed scene moves to `lime-100`
+
+The `whatsapp` scene shipped on `lime-500`, and on that ground the module
+cannot be read. Its per-step state indicator is the numbered disc — "the active
+step's disc is `lime-500` with `ink`; the others are `surface` with `muted`"
+(`website-design-system.md:560`), and the stylesheet says why: *"a fill on a
+light ground means active"*. Measured at 390 × 844: the active disc was
+`rgb(164, 216, 34)` on a section of `rgb(164, 216, 34)` — **1.00:1**, invisible
+— while the two inactive discs were the only ones a reader could see. The state
+reading was inverted. The `line` hairline that divides the three step rows goes
+the same way: the brand tokens record it at 1.27:1 on lime and publish a
+separate `hairlineOnLime` for that case, which this component does not use.
+
+So the scene takes a light ground, and the light ground is **`paper`** — the one
+`/mitmachen` renders the same component on, the one the 2026-09-23 design draft
+shows, and the one `TS-WEB-0019 D3a` already assumed in as many words: "the
+active step is `lime-500` on a light ground". Not `lime-100`: the active disc is
+1.45:1 against it and the inactive ones 1.03:1, so the module's whole state
+vocabulary would fade at once.
+
+**The embed scene moves from `paper` to `lime-100` because of it.** Two `paper`
+scenes in a row are legal on their own, but in `D2`'s S3 the widening block
+(`surface-2`) stands above them, and three neutral grounds in a row is the one
+thing `checkRhythm`'s family rule forbids. The rhythm the page ships with is
+therefore PHOTO · ink · [surface-2] · paper · lime-100 · violet-500 · lime-100 ·
+paper · ink, which `checkRhythm` accepts in **both** states — not only in the
+one the walk loads.
+
+### 12. `section-shell` keeps its own two lines in the container, even uncontained
+
+`contained={false}` existed for an instance that runs edge to edge — a
+photograph, a full band. It also stripped the page container from the shell's
+**own** `kicker` and `transition`, because both are rendered in the same
+fragment as `children`. On `/` that put the embed scene's kicker and its
+hand-off line flush against the viewport edge (measured: left = 0 at 390 px and
+at 1280 px, against 16 px and 72 px on every other section), which
+`SRC-0014` §Shape and Space forbids outright: "16 px inside the viewport, on
+every section".
+
+The fix is in the shared component and not in the page, because the defect is
+the component's: an uncontained shell now wraps kicker and transition in their
+own `.container` and hands `children` out bare. The other caller,
+`price-section`, passes no kicker to the shell and containerises its own band,
+so nothing changes there. One CSS rule moved with it — the shell flattens the
+trailing margin of `.container:last-child` rather than of every container, so
+the new lede container keeps the space between the transition line and the block
+it hands off to.
+
 ## Consequences
 
 - `scene-block` gains two props (`module`, `bleed`) and its documented opener
@@ -174,5 +245,14 @@ specification wins over the review's literal wording; the first is §5.
   fallback rows, the missing state-1 photograph, the missing customer proof,
   and the scene CTA labels that are another page's label rather than this
   page's own sentence.
-- No acceptance criterion is added, removed or reworded, and no spec file is
-  edited by this record.
+- `src/components/section-shell/**` is edited for §12 — a shared component, and
+  the smallest edit that closes the defect: the uncontained branch gains one
+  wrapper, the prop gains its documentation, and the margin-flattening rule
+  gains `:last-child`. No prop is added or removed and no caller changes.
+- **No acceptance criterion is added, removed or reworded.** Two determinations
+  are amended in prose and both name this record: `TS-WEB-0019 D3` row 2b and
+  `A9`, which said block 2b is a stamp element (§5). No id is renumbered, no
+  status is promoted, and `DEC-0129` joins that spec's `decisions:` list.
+- `e2e/pages/home.spec.ts` gains the substance of `TS-WEB-0002-A13` on the home
+  instance — three-quarter trigger, one 9.1 s pass, 30 s of no further change,
+  scroll-out-and-back — and one gutter test that would have caught §12.

@@ -679,7 +679,18 @@ export default async function HomePage({
           dataBlock="scene"
           id="scene-1"
           kicker={fieldAt(sceneWhatsapp.blocks, 1)}
-          surface="lime-500"
+          /* A light ground, because the module inside it only reads on one.
+             The active step's disc is `lime-500` and the two inactive ones
+             are `surface` — "a fill on a light ground means active"
+             (design-system contract `active-step`,
+             website-design-system.md:560), and the step rows are divided by
+             the `line` hairline, which the brand tokens themselves note
+             disappears on a lime ground (1.27:1). On `lime-500` the active
+             disc was 1.00:1 against its own section and the *inactive* discs
+             were the only visible ones, which inverts the state reading.
+             TS-WEB-0019 D3a assumes exactly this: "the active step is
+             `lime-500` on a light ground" (DEC-0129 §11). */
+          surface="paper"
           transition={fieldAt(sceneWhatsapp.blocks, 2)}
         >
           {/* No body: the module's three step lines say what the paragraph
@@ -724,8 +735,10 @@ export default async function HomePage({
                   ordinal={1}
                   stage={[
                     // State 1 — the flyer on the kitchen table. No photograph
-                    // exists, so `media-frame` shows what belongs there
-                    // (DEC-0068 rule 2).
+                    // exists, so `media-frame` renders `placeholder-surface`
+                    // in its place: a flat brand-colour panel at
+                    // `ratio-square`, not a marked gap and not a captioned
+                    // hatch (Jan, 2026-09-18; DEC-0068 rule 2).
                     <StageImage alt="" key="1" locale={locale} />,
                     <StageChat
                       key="2"
@@ -769,14 +782,18 @@ export default async function HomePage({
           §"Section grounds carry rhythm, not meaning"). The ground moved with
           it — `surface-2` is one of the sober greys the design system keeps
           for the municipal argument and for inactive things, and this is
-          solution content, which takes a fresh ground. */}
+          solution content, which takes a fresh ground. `lime-100` and not
+          `paper`, because the scene before it is now `paper` for its module's
+          sake: with the S3 widening block (`surface-2`) above them, three
+          neutral grounds would stand in a row and `checkRhythm`'s family rule
+          allows two (DEC-0129 §11). */}
       <MotionReveal>
         <SectionShell
           contained={false}
           dataBlock="scene"
           id="scene-2"
           kicker={fieldAt(sceneEmbed.blocks, 2)}
-          surface="paper"
+          surface="lime-100"
           transition={fieldAt(sceneEmbed.blocks, 3)}
         >
           <SceneBlock

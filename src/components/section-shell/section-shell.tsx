@@ -45,7 +45,14 @@ export interface SectionShellProps {
   readonly labelledBy?: string;
   /** An accessible name where the section carries no heading of its own. */
   readonly label?: string;
-  /** `false` lets the child run edge to edge (a photo surface, a full band). */
+  /**
+   * `false` lets the child run edge to edge (a photo surface, a full band).
+   * The shell's **own** two lines — the kicker and the transition — keep the
+   * container either way: "16 px inside the viewport, on every section"
+   * (SRC-0014 §Shape and Space) is about text, and a caller that gives up the
+   * container does it for its instance, not for the section's label
+   * (DEC-0129 §12).
+   */
   readonly contained?: boolean;
   readonly as?: ElementType;
   readonly className?: string;
@@ -114,17 +121,21 @@ export function SectionShell({
     .filter(Boolean)
     .join(" ");
 
-  const body = (
-    <>
-      {kicker ? (
-        <p className={styles.kicker} data-demo={kickerDemo ? "true" : undefined}>
-          {kicker}
-        </p>
-      ) : null}
-      {transition ? <p className={styles.transition}>{transition}</p> : null}
-      {children}
-    </>
-  );
+  // The section's own two lines. They are text, so they keep the 16 px gutter
+  // even where the caller gives up the container for its instance: an
+  // uncontained section used to put them flush against the viewport edge,
+  // which SRC-0014 §Shape and Space forbids (DEC-0129 §12).
+  const lede =
+    kicker || transition ? (
+      <>
+        {kicker ? (
+          <p className={styles.kicker} data-demo={kickerDemo ? "true" : undefined}>
+            {kicker}
+          </p>
+        ) : null}
+        {transition ? <p className={styles.transition}>{transition}</p> : null}
+      </>
+    ) : null;
 
   return (
     <Element
@@ -135,7 +146,17 @@ export function SectionShell({
       data-surface={surface}
       id={id}
     >
-      {contained ? <div className="container">{body}</div> : body}
+      {contained ? (
+        <div className="container">
+          {lede}
+          {children}
+        </div>
+      ) : (
+        <>
+          {lede ? <div className="container">{lede}</div> : null}
+          {children}
+        </>
+      )}
     </Element>
   );
 }

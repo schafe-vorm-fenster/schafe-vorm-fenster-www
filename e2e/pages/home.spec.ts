@@ -20,6 +20,16 @@ const PHONE = { width: 360, height: 640 };
 const DESKTOP = { width: 1280, height: 800 };
 
 /**
+ * The explain module's auto-advance, at the dwell floor of TS-WEB-0002 D4
+ * Motion — the same three numbers `e2e/motion-reveal.spec.ts` walks the
+ * component with, so the home instance is measured against the same clock.
+ */
+const DWELL_MS = 4_000;
+const TRANSITION_MS = 550;
+/** 4 000 + 550 + 4 000 + 550 — one whole pass, state 1 → state 3. */
+const PASS_MS = DWELL_MS + TRANSITION_MS + DWELL_MS + TRANSITION_MS;
+
+/**
  * Block 1 arrives behind a `<Suspense>` boundary whose fallback **is** S1
  * (TS-WEB-0019 D2: "S2 and S3 arrive by island"), so a cold cache serves the
  * fallback first and the resolved block a beat later. Between the two the
@@ -322,12 +332,17 @@ test.describe("TS-WEB-0019 — home", () => {
     expect(box!.height).toBeLessThanOrEqual(800);
   });
 
-  test("TS-WEB-0002-A13: the home instance of the module advances once and its step lines stop it", async ({
+  test("TS-WEB-0002-A13: the home instance runs one 9.1 s pass on three-quarter visibility and never restarts", async ({
     page,
   }) => {
     // The component's own walk runs on `/mitmachen` (`e2e/motion-reveal.spec.ts`);
     // this is the criterion's home instance — the module inside a scene, in
     // the position TS-WEB-0019 D3a's `direct` order gives it (first of 2a).
+    // The substance of A13 is asserted here too, on this instance: the trigger
+    // is three-quarter visibility and not page load, the pass is single and
+    // ends at state 3, and nothing — not time, not scrolling out and back —
+    // starts a second one.
+    test.setTimeout(120_000);
     await page.setViewportSize({ width: 360, height: 640 });
     await page.goto("/");
     await page.waitForLoadState("networkidle");
@@ -340,10 +355,69 @@ test.describe("TS-WEB-0019 — home", () => {
     await page.waitForTimeout(5_000);
     await expect(explainModule).toHaveAttribute("data-state", "1");
 
+    // Three quarters of the module's own height inside the viewport — the
+    // fraction DEC-0105 §6 fixes, reachable at 360 × 640 in this position.
+    const bringIntoView = async () =>
+      explainModule.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        const top = rect.top + window.scrollY;
+        window.scrollTo({
+          top: top - (window.innerHeight - 0.75 * rect.height),
+          behavior: "instant",
+        });
+      });
+    await bringIntoView();
+
+    // 4 000 + 550 + 4 000 + 550 at the dwell floor (TS-WEB-0002 D4 Motion):
+    // state 3 arrives no earlier than 9.1 s after the trigger, and the pass
+    // then declares itself done.
+    await page.waitForTimeout(PASS_MS - 1_000);
+    expect(await explainModule.getAttribute("data-state")).not.toBe("1");
+    await expect(explainModule).toHaveAttribute("data-state", "3", { timeout: 5_000 });
+    await expect(explainModule).toHaveAttribute("data-advance", "done");
+
+    // Over the next 30 s nothing changes and the stage never returns to
+    // state 1 (WCAG 2.2.2 — the movement is bounded, not looping).
+    const states = new Set<string | null>();
+    for (let tick = 0; tick < 6; tick += 1) {
+      await page.waitForTimeout(5_000);
+      states.add(await explainModule.getAttribute("data-state"));
+    }
+    expect([...states]).toEqual(["3"]);
+
+    // Scrolling it out of view and back is a second intersection, and a
+    // second intersection is not a second pass.
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    await page.waitForTimeout(1_000);
+    await bringIntoView();
+    await page.waitForTimeout(DWELL_MS + TRANSITION_MS + 500);
+    await expect(explainModule).toHaveAttribute("data-state", "3");
+    await expect(explainModule).toHaveAttribute("data-advance", "done");
+  });
+
+  test("TS-WEB-0002-A13: the home instance's step lines are the mechanism that stops it", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 640 });
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    const explainModule = page.locator("[data-explain-module]").first();
     const steps = explainModule.locator("[data-explain-step]");
     await expect(steps).toHaveCount(3);
     await steps.nth(2).focus();
     await page.keyboard.press("Enter");
+    await expect(explainModule).toHaveAttribute("data-state", "3");
+    await expect(explainModule).toHaveAttribute("data-advance", "stopped");
+
+    // The interaction ends the advance for good: bringing the module into
+    // three-quarter view afterwards resumes nothing.
+    await explainModule.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      window.scrollTo({ top: top - (window.innerHeight - 0.75 * rect.height), behavior: "instant" });
+    });
+    await page.waitForTimeout(DWELL_MS + TRANSITION_MS + 500);
     await expect(explainModule).toHaveAttribute("data-state", "3");
     await expect(explainModule).toHaveAttribute("data-advance", "stopped");
   });
@@ -609,6 +683,43 @@ test.describe("TS-WEB-0019 — home", () => {
     // of 2026-09-18 — the module declares itself in `data-demo` instead, and
     // `e2e/content-compliance.spec.ts` asserts that half.
     await expect(counters.locator("span[data-tone]")).toHaveCount(1);
+  });
+
+  test("SRC-0014 §Shape and Space: every section's own lines keep the horizontal gutter", async ({
+    page,
+  }) => {
+    // "Horizontal padding: 16 px inside the viewport, on every section"
+    // (website-design-system.md:298). A section rendered `contained={false}`
+    // gives up the container for its *instance* — the embed scene's full-bleed
+    // photograph — and its kicker and transition line are text, so they keep
+    // the gutter (DEC-0129 §12). This is the regression that shipped once.
+    for (const width of [360, 1280]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/");
+      const lines = await page.evaluate(
+        () =>
+          [...document.querySelectorAll("main section[data-surface]")].flatMap((section) => {
+            const own = [...section.children].flatMap((child) =>
+              child.tagName === "P"
+                ? [child]
+                : [...child.children].filter((element) => element.tagName === "P"),
+            );
+            return own.map((paragraph) => {
+              const box = paragraph.getBoundingClientRect();
+              return {
+                where: `${section.id || section.getAttribute("data-block")}: ${(paragraph.textContent ?? "").slice(0, 32)}`,
+                left: box.left,
+                right: box.right,
+              };
+            });
+          }),
+      );
+      expect(lines.length).toBeGreaterThan(3);
+      for (const line of lines) {
+        expect(line.left, `${line.where} @ ${width}`).toBeGreaterThanOrEqual(15);
+        expect(line.right, `${line.where} @ ${width}`).toBeLessThanOrEqual(width - 15);
+      }
+    }
   });
 
   test("SRC-0014 §Page Rhythm: photo/colour alternation holds on /", async ({ page }) => {

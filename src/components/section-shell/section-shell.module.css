@@ -11,8 +11,13 @@
  * `base.css` gives `p` a `margin-bottom`, so a section ending on a paragraph
  * carried the shell's own padding plus that margin and read a step taller
  * than its neighbour. The shell owns the space at its own edges.
+ *
+ * Only the **last** container is flattened: an uncontained section carries its
+ * kicker and transition in a container of their own (DEC-0129 §12), and that
+ * one is not at the section's bottom edge — flattening it would eat the space
+ * between the transition line and the block it hands off to.
  */
-.section > .container > :last-child,
+.section > .container:last-child > :last-child,
 .section > :last-child {
   margin-bottom: 0;
 }
