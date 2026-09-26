@@ -172,6 +172,12 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
     // (DEC-0131 §3).
     const tiersText = await page.locator('[data-block="tiers"]').innerText();
     expect(tiersText).toContain("Portalize");
+    // "at the 480 € tier" is asserted structurally: the sentence is the
+    // paragraph immediately following the `portalize-calendar` row, so it
+    // cannot drift to the community or the region tier.
+    await expect(page.locator('[data-offering="portalize-calendar"] + p')).toContainText(
+      "Portalize",
+    );
     expect(await page.title()).not.toContain("Portalize");
     await expect(
       page.locator('h1:has-text("Portalize"), h2:has-text("Portalize"), h3:has-text("Portalize")'),

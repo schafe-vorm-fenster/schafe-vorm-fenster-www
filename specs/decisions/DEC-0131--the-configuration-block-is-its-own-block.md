@@ -16,7 +16,7 @@ Most of it was determined: the hero's equal-weight CTA becomes an in-page link
 region tier is "auf Anfrage" and its map view is announced with its date
 (`plan/reviews/2026-09-23/decisions.md` rows 9, 10, 11).
 
-Five things the specification leaves open had to be taken to build it, and
+Eight things the specification leaves open had to be taken to build it, and
 they are recorded here together because they are one composition.
 
 ## Decision
@@ -180,6 +180,27 @@ already sets the core sentence and the example apart typographically, so the
 label said nothing the row does not show. The SEO description avoids the word
 for the same reason.
 
+### 8. `comparison-table`'s column labels are required props, not defaults
+
+`TS-WEB-0024 D4` says *"The second column names no product"* and `SRC-0017
+CG-039` lists *"das Produkt"* and *"Portalize (outside the one sentence)"* among
+the words a page does not write. The component carried
+`withProductLabel = "Mit Portalize"` as a parameter default, so the rule held
+only for callers that remembered to pass a label: `/dein-kalender` passed both
+off its content table head and was safe, while the component gallery's entry 26
+passed neither and rendered *"Mit Portalize:"* four times.
+
+A default cannot hold a *"names no product"* rule, and choosing an empty string
+instead would render a bare colon. So **both labels are required props with no
+default** — `todayLabel` and `withProductLabel` — and the type checker, not a
+reviewer, is what stops the next caller from shipping a column with no label or
+a product name in one. The gallery passes the owner's two words
+(`plan/reviews/2026-09-23/decisions.md` row 18, *"Heute"* / *"Mit eurem
+Kalender"*), the same pair `/dein-kalender` reads off its content. The unit
+test no longer asserts a literal the component owns: it asserts that the labels
+the caller passed are the labels that render, and that no product name survives
+a render.
+
 ## Consequences
 
 - `TS-WEB-0024 D2` lists seven blocks and `A2` seven `data-block` ids. Nothing
@@ -195,3 +216,6 @@ for the same reason.
   component set for `/deine-region`; removing it is not this task's.
 - Two rows go to `state/open.md`: the nine unconfirmed check lines, and the
   config-repo URL.
+- `comparison-table` now takes both column labels as required props (§8), so
+  every caller names its own columns; `src/components/gallery.tsx`'s entry 26 is
+  the one caller outside `/dein-kalender` and passes the owner's pair.
