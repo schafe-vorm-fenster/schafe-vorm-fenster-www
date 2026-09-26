@@ -277,10 +277,14 @@ export const GALLERY: readonly GalleryEntry[] = [
     name: "site-footer",
     number: 9,
     section: "2.2",
+    /* No contact slot any more (DEC-0081, DEC-0122 §2): the contact section is
+       the site's one contact surface and stands above this footer. The
+       newsletter slot is shown filled here although no route passes it today
+       (TS-WEB-0016-A21) — the gallery is where the withheld shape stays
+       visible. */
     demo: (
       <SiteFooter
-        contact={<p>Kontaktfläche — der Slot für `envoy-form-mount` (M2, §2.5).</p>}
-        newsletter={<p>Newsletter-Slot — in M2 ein sichtbar markierter Mock.</p>}
+        newsletter={<p>Newsletter-Slot — nur solange ein Versandsystem existiert.</p>}
         route="home"
       />
     ),
@@ -1166,23 +1170,25 @@ export const GALLERY: readonly GalleryEntry[] = [
     name: "envoy-form-mount",
     number: 50,
     section: "2.5",
+    /* The `contact` kind is gone (DEC-0122 §2) — every demo here is one of the
+       two lead surfaces that remain (TS-WEB-0006-A17). */
     demo: (
-      <EnvoyFormMount fallbackEmail="kontakt@schafe-vorm-fenster.de" kind="contact" sourceRoute="home" />
+      <EnvoyFormMount fallbackEmail="kontakt@schafe-vorm-fenster.de" kind="quote" sourceRoute="region" />
     ),
     states: {
       loading: (
         <EnvoyFormMount
           fallbackEmail="kontakt@schafe-vorm-fenster.de"
-          kind="contact"
-          sourceRoute="home"
+          kind="quote"
+          sourceRoute="region"
           state="loading"
         />
       ),
       empty: (
         <EnvoyFormMount
           fallbackEmail="kontakt@schafe-vorm-fenster.de"
-          kind="contact"
-          sourceRoute="home"
+          kind="quote"
+          sourceRoute="region"
           state="empty"
         />
       ),

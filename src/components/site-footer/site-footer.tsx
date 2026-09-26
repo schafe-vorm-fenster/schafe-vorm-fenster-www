@@ -16,9 +16,11 @@ export interface SiteFooterProps {
   /** The page the footer stands on — the language switch needs it (A7). */
   readonly route: RouteId;
   readonly locale?: Locale;
-  /** The contact surface: `envoy-form-mount` with its `lead-fallback` (S1). */
-  readonly contact?: ReactNode;
-  /** The newsletter entry (S5) — in M2 a labelled mock (decision D-4). */
+  /**
+   * The newsletter entry (S5) — passed only while a sending system accepts a
+   * subscription (`newsletter-block/constant.ts`, TS-WEB-0016-A21). The footer
+   * holds the slot and never asks whether one exists.
+   */
   readonly newsletter?: ReactNode;
   readonly className?: string;
 }
@@ -26,47 +28,40 @@ export interface SiteFooterProps {
 /**
  * 9 `site-footer` [PROPOSED] — TS-WEB-0004 D4, TS-WEB-0016 D10.
  *
- * Structure: the wordmark · the newsletter block (S5) · contact (the
- * `envoy-form-mount` target, S1) behind its own disclosure · a base line
- * carrying the legal links Impressum / Datenschutz / Barrierefreiheit as
- * anchors on the one legal page and the `language-switch` beside them. The
- * link list and the anchors come from `src/lib/routes/` (DEC-0039: an anchor
- * is permanent), the labels from the dictionary. Nothing renders after the
- * closing CTA except this (TS-WEB-0006 D2).
- * States: the newsletter slot degrades on its own terms — in M2 it is a
- * visibly labelled mock, and this component only holds the slot, so the
- * footer never has to know whether a sending system exists. Everything else
- * here is static.
+ * Structure: the wordmark · the newsletter slot, while one is offered (S5) · a
+ * base line carrying the legal links Impressum / Datenschutz /
+ * Barrierefreiheit as anchors on the one legal page and the `language-switch`
+ * beside them. The link list and the anchors come from `src/lib/routes/`
+ * (DEC-0039: an anchor is permanent), the labels from the dictionary. **No
+ * contact entry** (TS-WEB-0004 D4): the contact section stands directly above
+ * this footer on every page and is the site's one contact surface.
+ * States: the newsletter slot degrades on its own terms — this component only
+ * holds it, so the footer never has to know whether a sending system exists.
+ * Everything else here is static.
  * Inherits: a flat surface, radius 0, hairline separators, Meta and
  * Label-mono type.
  * Space: no reserved-space problem — nothing here arrives late.
- * A11y: one `footer` landmark and two named link lists; the disclosure is a
- * native `<summary>`, 44 px, and works with no JavaScript at all.
+ * A11y: one `footer` landmark and one named link list; every control here is a
+ * plain link and works with no JavaScript at all.
  *
- * ### Why contact is a disclosure (polish brief, the shared-component pass)
+ * ### Why the contact disclosure is gone (DEC-0081, DEC-0122 §2)
  *
  * The footer stands under **every** one of the 24 routes, so its height is
- * subtracted from every page's own budget before the page has written a
- * word. It measured 1110 px at 390 × 844 — one and a third phone screens,
- * more than G-4 allows a whole *section*, and the reason no page reached the
- * brief's length target.
- *
- * 480 px of that was one thing: the contact form, rendered open, with three
- * fields and a textarea, on a page the visitor came to for something else.
- * The other surfaces here are one line each and cannot be cut further
- * without losing what TS-WEB-0004-A9 asks for — the newsletter has to be usable
- * where it stands (it is the conversion), and a legal link behind a
- * disclosure is not "footer-linked on every page" in the sense TS-WEB-0002-A8
- * means. A contact **form** is not what that criterion names either: it
- * names contact, and a `<details>` labelled "Kontakt" carries contact,
- * visibly, one tap away, in the DOM on every route, with the form's own
- * markup server-rendered inside it and the whole thing working with
- * scripting off. Nothing is removed; 480 px of unasked-for form is folded.
+ * subtracted from every page's own budget before the page has written a word.
+ * It measured 1110 px at 390 × 844, and 480 px of that was one thing: a
+ * general contact form with three fields and a textarea, on a page the visitor
+ * came to for something else. The polish pass folded it behind a `<details>`;
+ * DEC-0081 then **replaced** it. One contact surface exists for the whole
+ * site — the contact section, rendered by the chrome directly above this
+ * footer — and `TS-WEB-0006-A17` forbids a general contact form anywhere. So
+ * the slot, the disclosure and the envoy kind behind it are deleted rather
+ * than hidden, and TS-WEB-0004-A9's "no contact entry, no form" holds by
+ * construction. The `footer.contact` dictionary word stays where it is: the
+ * dictionary is a shared file, and an unused word costs nothing.
  */
 export function SiteFooter({
   route,
   locale = "de",
-  contact,
   newsletter,
   className,
 }: SiteFooterProps) {
@@ -84,12 +79,6 @@ export function SiteFooter({
               was the site naming one thing twice, 28 px apart. */}
           {newsletter ? <div className={styles.newsletter}>{newsletter}</div> : null}
         </div>
-        {contact ? (
-          <details className={styles.contact}>
-            <summary className={styles.summary}>{d.footer.contact}</summary>
-            <div className={styles.contactBody}>{contact}</div>
-          </details>
-        ) : null}
         {/* One base line: the three legal links and the two languages, wrapped
             rather than stacked in three labelled blocks of their own. */}
         <div className={styles.base}>

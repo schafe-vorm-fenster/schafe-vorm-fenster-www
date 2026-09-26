@@ -1,5 +1,6 @@
 import sheepMark from "@schafe-vorm-fenster/brand-design/logo.svg";
 
+import { newsletterOffered } from "@/src/components/newsletter-block/constant";
 import { NewsletterBlock } from "@/src/components/newsletter-block/newsletter-block";
 import { SkipLink } from "@/src/components/skip-link/skip-link";
 import { dictionary } from "@/src/lib/i18n/dictionary";
@@ -144,6 +145,18 @@ export default async function RootLayout({
   const locale = resolveLocale((await params).lang);
   const heroPhoto = await heroPhotoByRoute(locale);
 
+  /**
+   * The footer's newsletter slot — withheld while no sending system accepts a
+   * subscription (TS-WEB-0016-A21, DEC-0122 §3). The gate is the mount site,
+   * not the block: `NewsletterBlock` keeps its full shape, so it returns here
+   * with the benefit heading DEC-0120 put in the dictionary the moment
+   * `NEWSLETTER_SENDING_SYSTEM` names one. Removed, never softened — the
+   * construction `response-promise/constant.ts` uses.
+   */
+  const newsletter = newsletterOffered() ? (
+    <NewsletterBlock compact locale={locale} />
+  ) : undefined;
+
   return (
     <html lang={HTML_LANG[locale]}>
       <body>
@@ -171,7 +184,7 @@ export default async function RootLayout({
         <SiteChrome
           heroPhoto={heroPhoto}
           locale={locale}
-          newsletter={<NewsletterBlock compact locale={locale} />}
+          newsletter={newsletter}
         >
           {children}
         </SiteChrome>

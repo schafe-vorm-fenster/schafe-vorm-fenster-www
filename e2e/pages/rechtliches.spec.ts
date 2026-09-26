@@ -209,7 +209,10 @@ test.describe("/rechtliches", () => {
   test("TS-WEB-0029-A14: one h1, one h2 per rendered section", async ({ page }) => {
     await page.goto("/rechtliches");
     await expect(page.locator("h1")).toHaveCount(1);
-    const h2Count = await page.locator("h2").count();
+    // Inside `main`: the chrome contributes an `h2` of its own on every route
+    // since DEC-0081 — the contact section between the closing block and the
+    // footer (DEC-0122 §1) — and that one is not a section of *this page*.
+    const h2Count = await page.locator("main h2").count();
     expect(h2Count).toBe(SECTIONS_DE.length);
   });
 

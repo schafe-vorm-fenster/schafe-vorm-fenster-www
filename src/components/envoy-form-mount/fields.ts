@@ -20,7 +20,17 @@
 
 import type { Locale } from "@/src/lib/i18n/locales";
 
-export const ENVOY_FORM_KINDS = ["contact", "quote", "order-invoice"] as const;
+/**
+ * The two lead surfaces that exist — the quote request on `/deine-region/angebot`
+ * and the order flow's invoice step (TS-WEB-0006-A17, DEC-0081 §5).
+ *
+ * The `contact` kind is **gone** (DEC-0122 §2). There is no general contact
+ * form on this site any more: the footer's disclosure was replaced by the
+ * contact section, which loads nothing and submits nothing. Deleting the kind
+ * rather than leaving it unused makes a third mount point a type error first
+ * and a failing walk second.
+ */
+export const ENVOY_FORM_KINDS = ["quote", "order-invoice"] as const;
 
 export type EnvoyFormKind = (typeof ENVOY_FORM_KINDS)[number];
 
@@ -45,23 +55,6 @@ export interface EnvoyFormField {
   /** `autocomplete`, so a browser can fill what the visitor has typed before. */
   readonly autoComplete?: string;
 }
-
-const CONTACT_FIELDS: readonly EnvoyFormField[] = [
-  { id: "name", label: { de: "Name", en: "Name" }, type: "text", required: true },
-  {
-    id: "email",
-    label: { de: "E-Mail-Adresse", en: "Email address" },
-    type: "email",
-    required: true,
-  },
-  {
-    id: "message",
-    label: { de: "Nachricht", en: "Message" },
-    type: "text",
-    multiline: true,
-    required: true,
-  },
-];
 
 const QUOTE_FIELDS: readonly EnvoyFormField[] = [
   {
@@ -163,7 +156,6 @@ const ORDER_INVOICE_FIELDS: readonly EnvoyFormField[] = [
 ];
 
 export const ENVOY_FORM_FIELDS: Readonly<Record<EnvoyFormKind, readonly EnvoyFormField[]>> = {
-  contact: CONTACT_FIELDS,
   quote: QUOTE_FIELDS,
   "order-invoice": ORDER_INVOICE_FIELDS,
 };
