@@ -7,3 +7,9 @@
 .line {
   margin: 0;
 }
+
+/* The consult line is a link, never a pill: the fallback stands inside a
+   surface whose own primary CTA is the form's submit (TS-WEB-0016 D6). */
+.consult {
+  font-weight: 700;
+}

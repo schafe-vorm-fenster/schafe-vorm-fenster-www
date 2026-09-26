@@ -58,8 +58,9 @@ const ENVOY_ROUTES: ReadonlySet<RouteId> = new Set<RouteId>(["regionQuote"]);
  */
 const BRIEFING_HREF_REPOINTED_BY: Readonly<Partial<Record<RouteId, string>>> = {
   calendar: "T-13",
-  region: "T-15",
-  order: "T-15",
+  // `region` and `order` came off this list with T-15: `/deine-region`'s hero
+  // and closing consult action and all four steps of `/dein-kalender/bestellen`
+  // resolve to `#kontakt` now (DEC-0133).
 };
 // `/deine-region/angebot` is **not** on the list, measured: its lead fallback's
 // briefing link renders only in the widget's `empty`/`degraded` state, and the

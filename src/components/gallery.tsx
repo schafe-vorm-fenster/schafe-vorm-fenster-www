@@ -1216,7 +1216,9 @@ export const GALLERY: readonly GalleryEntry[] = [
     section: "2.5",
     demo: (
       <LeadFallback
-        briefingHref="https://calendar.google.com/calendar/appointments/example"
+        // T-15/DEC-0133: the third line is an in-page target now — the page's
+        // own contact section — not a second occurrence of the appointment URL.
+        briefingHref="/deine-region/angebot#kontakt"
         briefingLabel="Termin für ein Kennenlerngespräch buchen"
         email="kontakt@schafe-vorm-fenster.de"
       />
@@ -1230,8 +1232,13 @@ export const GALLERY: readonly GalleryEntry[] = [
       <div className={styles.stack}>
         <p>Ohne bestätigten Prozess (Q-0022 C11 offen) — nichts wird gerendert:</p>
         <ResponsePromise text={null} />
+        {/* TS-WEB-0026-A8 (`pnpm check:terms`, now in the `check` chain):
+            the response-time wording lives in `response-promise/constant.ts`
+            and nowhere else — not even in a gallery demo. The shape is what
+            this entry shows; the sentence is the constant's once C11 is
+            answered. */}
         <p>Sobald ein Prozess steht, zur Ansicht:</p>
-        <ResponsePromise text="Antwort innerhalb von zwei Werktagen" />
+        <ResponsePromise text="Beispielsatz" />
       </div>
     ),
   },

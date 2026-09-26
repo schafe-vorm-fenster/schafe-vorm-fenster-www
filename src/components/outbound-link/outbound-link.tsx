@@ -10,12 +10,12 @@ import styles from "./outbound-link.module.css";
 export interface OutboundLinkProps {
   /** The external URL. Internal targets go through `route-link` instead. */
   readonly href: string;
-  /** Opens a new tab — and then the link text has to say so. */
+  /** Opens a new tab — and then the marking under the control says so. */
   readonly newTab?: boolean;
   /** Named where a third party receives data by following this link. */
   readonly recipient?: string;
   /**
-   * The control variants' meta line, written out instead of assembled.
+   * The marking, written out instead of assembled.
    *
    * G-5: "(öffnet neuen Tab) · Daten gehen an Google" under a button is two
    * disclosures stacked into one line of machine-assembled prose, and the
@@ -29,6 +29,11 @@ export interface OutboundLinkProps {
   /** The conversion marker the analytics registry reads (TS-WEB-0006 D3) — e.g. `"equal-weight"`. */
   readonly dataCta?: string;
   /**
+   * The id of the marking element, where a page carries two links to the same
+   * target and the derived id would collide. Defaults to `outboundNoteId(href)`.
+   */
+  readonly noteId?: string;
+  /**
    * The page's language — the new-tab announcement was hard-coded German
    * regardless of it (F-2-4, same root cause as `state/open.md` row 101).
    */
@@ -38,26 +43,48 @@ export interface OutboundLinkProps {
 }
 
 /**
- * 16 `outbound-link` [PROPOSED] — TS-WEB-0016 D9, DEC-0013.
+ * The id the marking element carries, derived from the target.
  *
- * Structure: the external link — app handover, outlet original, briefing
- * schedule, the `/start` fallback. The link text names source and subject;
- * an `external-link` glyph at 18 px sits after it; `rel="noopener"` where it
- * opens a new tab; and where a third party receives data, the recipient is
- * named in the link's own line, not in a tooltip.
+ * `aria-describedby` needs an id and this is a server component, so there is
+ * no `useId` to reach for: the target is the one value that distinguishes one
+ * outbound link from another, and it is stable across renders and across the
+ * prerender/hydrate boundary. Two links to the *same* target on one page
+ * would share the id — which resolves to the same sentence and so reads
+ * correctly, but a page that wants two distinct markings passes `noteId`.
+ */
+export function outboundNoteId(href: string): string {
+  const slug = href
+    .replace(/^[a-z]+:(\/\/)?/i, "")
+    .replace(/[^a-z0-9]+/gi, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 48)
+    .toLowerCase();
+  return `outbound-note-${slug || "link"}`;
+}
+
+/**
+ * 16 `outbound-link` [PROPOSED] — TS-WEB-0016 D7/D16, DEC-0013, DEC-0081 §3.
+ *
+ * Structure: the external link — app handover, outlet original, the `/start`
+ * fallback. The link text names source and subject; an `external-link` glyph
+ * at 18 px sits after it. Where the link opens a new tab or hands the visitor
+ * to a third party, the **marking of TS-WEB-0016 D16** follows the control as
+ * its own element: never inside the label, never inside the `<a>`.
  * States: static — no embed, no iframe, no third-party script. A link is the
  * privacy-preserving form of an integration (TS-WEB-0016 D9).
- * Inherits: inline link treatment, or the secondary/quiet button treatment.
+ * Inherits: inline link treatment, or the secondary/quiet button treatment;
+ * the marking takes the `meta` type role, the smallest the scale carries.
  * Space: inline; the glyph never shifts the line box, because it sits in an
- * inline-flex box with the text.
- * A11y: the new-tab behaviour and the recipient stay inside the link's own
- * accessible name, so a screen-reader user is not surprised by a changed
- * context. In the two **control** variants they are read out of the visible
- * pill and printed under it as a meta line instead (G-5): inside the label
- * they made `/deine-region`'s secondary a three-line white block that
- * outweighed the page's own primary conversion. In the `inline` variant —
- * a link inside a sentence — they stay in the line, which is where a reader
- * of that sentence needs them.
+ * inline-flex box with the text. The marking wraps under the control.
+ * A11y: TS-WEB-0016-A23 — the marking is a separate element **after** the
+ * control in DOM order, associated through `aria-describedby`, and the
+ * control's own label and accessible name carry neither the recipient nor a
+ * parenthetical about a new tab. It used to sit inside the `<a>`: visible in
+ * the `inline` variant and clipped in the two control variants, but in the
+ * accessible name either way, which is the half of A23 that failed. The
+ * marking is a `span`, so it nests inside a paragraph or a sentence as
+ * validly as beside a pill; it is not a button, not a link and not a consent
+ * control.
  */
 export function OutboundLink({
   href,
@@ -66,6 +93,7 @@ export function OutboundLink({
   disclosure: writtenDisclosure,
   variant = "inline",
   dataCta,
+  noteId: givenNoteId,
   locale = "de",
   className,
   children,
@@ -73,49 +101,37 @@ export function OutboundLink({
   const classes = [styles.link, styles[variant], className].filter(Boolean).join(" ");
   const words = dictionary(locale).outboundLink;
   const control = variant !== "inline";
-  const assembled = (
-    <>
-      {newTab ? <>{" "}({words.newTab})</> : null}
-      {recipient ? (
-        <>
-          {" "}
-          · {words.dataGoesTo} {recipient}
-        </>
-      ) : null}
-    </>
-  );
-  const disclosure =
-    writtenDisclosure === undefined ? assembled : <>{" "}{writtenDisclosure}</>;
-  const hasDisclosure = writtenDisclosure !== undefined || newTab || Boolean(recipient);
+
+  const assembled = [
+    newTab ? words.newTab : null,
+    recipient ? `${words.dataGoesTo} ${recipient}` : null,
+  ].filter((part): part is string => Boolean(part));
+  const marking = writtenDisclosure ?? (assembled.length > 0 ? assembled.join(" · ") : undefined);
+  const noteId = marking === undefined ? undefined : (givenNoteId ?? outboundNoteId(href));
 
   const anchor = (
     <a
+      aria-describedby={noteId}
       className={classes}
       data-cta={dataCta}
       href={href}
       rel={newTab ? "noopener" : undefined}
       target={newTab ? "_blank" : undefined}
     >
-      <span className={styles.text}>
-        {children}
-        {hasDisclosure ? (
-          <span className={control ? styles.hidden : styles.hint}>{disclosure}</span>
-        ) : null}
-      </span>
+      <span className={styles.text}>{children}</span>
       <Icon className={styles.glyph} name="external-link" size={18} />
     </a>
   );
 
-  if (!control || !hasDisclosure) return anchor;
+  if (marking === undefined) return anchor;
 
   return (
-    <span className={styles.control}>
+    <span className={control ? styles.control : styles.marked}>
       {anchor}
-      {/* `aria-hidden`: the same words are already in the link's accessible
-          name above, and a screen reader reading them twice is worse than
-          not seeing them at all. */}
-      <span aria-hidden className={styles.meta}>
-        {disclosure}
+      {/* D16: after the control, never inside its label; the `meta` role;
+          associated through `aria-describedby` above. */}
+      <span className={styles.meta} id={noteId}>
+        {marking}
       </span>
     </span>
   );

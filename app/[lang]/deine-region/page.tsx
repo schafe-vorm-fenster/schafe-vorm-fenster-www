@@ -4,7 +4,7 @@ import { EmbedFrame } from "@/src/components/embed-frame/embed-frame";
 import { FeatureBenefit } from "@/src/components/feature-benefit/feature-benefit";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
-import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
+import { CONTACT_SECTION_ID } from "@/src/components/contact-section/contact-section";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { PriceTag } from "@/src/components/price-tag/price-tag";
 import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
@@ -22,9 +22,7 @@ import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
 import { pageTitle } from "@/src/lib/routes/metadata";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
 import { SHOWCASE_CALENDAR } from "@/src/lib/embed/portalize";
-import { BRIEFING_URL } from "@/src/lib/live/briefing";
 import { genericCountyLabel } from "@/src/lib/live/county-label";
-import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 
 import { CountersIsland, RegionExamplesIsland } from "../_islands";
@@ -229,26 +227,26 @@ export default async function Page({
 
   const ctaLabel = ctaLabelOnly(fieldAt(focus.blocks, 2)) ?? copy.quoteFallback;
   const briefingLabel = fieldAt(focus.blocks, 3) ?? copy.briefingLabel;
-  const briefingDisclosure = fieldAt(focus.blocks, 4);
-  const closingHeading = fieldAt(focus.blocks, 5) ?? copy.closingHeading;
-  // G-5: the same quiet line in the hero and in the closing block, so the
-  // second way forward is recognisably the same one both times.
+  // Field 4 was the hero's own outbound note; it left the slot with the
+  // outbound navigation (DEC-0081 §3), so the closing heading is field 4 now.
+  const closingHeading = fieldAt(focus.blocks, 4) ?? copy.closingHeading;
+  /*
+   * G-5: the same quiet line in the hero and in the closing block, so the
+   * second way forward is recognisably the same one both times.
+   *
+   * **It is an in-page link now** (DEC-0081 §3, TS-WEB-0026 D1's consult
+   * action, TS-WEB-0016-A5): it resolves to this page's own contact section
+   * through the route facade rather than navigating to Google. So it carries
+   * no `ConversionTracker` — "an in-page booking CTA emits nothing: it is
+   * navigation inside a document, and counting it would count one intent
+   * twice" (TS-WEB-0016 D7) — and no outbound marking, because nothing
+   * outbound happens: the marking belongs to the section's first action row,
+   * the one element on the route that leaves the site.
+   */
   const briefingLink = (
-    <ConversionTracker
-      attributes={{ route: ROUTE }}
-      goalId="request-product-briefing"
-      stage="handover"
-    >
-      <OutboundLink
-        disclosure={briefingDisclosure}
-        href={BRIEFING_URL}
-        locale={locale}
-        newTab
-        variant="quiet"
-      >
-        {briefingLabel}
-      </OutboundLink>
-    </ConversionTracker>
+    <Button dataCta="secondary" hash={CONTACT_SECTION_ID} locale={locale} to={ROUTE} variant="quiet">
+      {briefingLabel}
+    </Button>
   );
 
   return (

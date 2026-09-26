@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { BRIEFING_URL } from "../../src/lib/live/briefing";
+
 /**
  * TS-WEB-0025 — `/dein-kalender/bestellen`, walked through all four steps.
  *
@@ -14,7 +16,18 @@ import { expect, test } from "@playwright/test";
 const ROUTE = "/dein-kalender/bestellen";
 
 test.describe("TS-WEB-0025: the order flow", () => {
-  test("TS-WEB-0025-A2: the briefing link is visible on every step and never loads a Google script", async ({
+  /**
+   * TS-WEB-0025-A2 / D5 — and since T-15 the exit is what D5 always said it
+   * was: **"an in-page target, not an outbound link"**. It points at this
+   * route's contact section, which the chrome renders once below the flow, and
+   * the one outbound occurrence on the route is that section's first action
+   * row (DEC-0081 §3, TS-WEB-0016-A5).
+   *
+   * The scope and the step ride along in the exit's query, because the section
+   * is on this same document and a link that dropped them would take the
+   * visitor out of the flow she is in (D8).
+   */
+  test("TS-WEB-0025-A2: the consult exit is visible on every step, resolves in-page, and never loads a Google script", async ({
     page,
   }) => {
     for (const query of [
@@ -24,7 +37,21 @@ test.describe("TS-WEB-0025: the order flow", () => {
       "?orte=schlatkow&schritt=4",
     ]) {
       await page.goto(`${ROUTE}${query}`);
-      await expect(page.getByText("Beratungstermin buchen")).toBeVisible();
+      const exit = page.getByRole("link", { name: "Beratungstermin buchen" });
+      await expect(exit, query).toBeVisible();
+      const href = await exit.getAttribute("href");
+      expect(href, query).toMatch(/^\/dein-kalender\/bestellen(\?[^#]*)?#kontakt$/);
+      // It carries no outbound marking, because nothing outbound happens.
+      await expect(exit, query).not.toContainText(/Google|neuen Tab/);
+
+      // The section's first action row is the only element with the booking URL.
+      await expect(page.locator(`a[href="${BRIEFING_URL}"]`), query).toHaveCount(1);
+      await expect(
+        page.locator(
+          `section#kontakt[data-contact-section] a[data-channel="appointment"][href="${BRIEFING_URL}"]`,
+        ),
+        query,
+      ).toHaveCount(1);
     }
     await expect(page.locator('script[src*="google"], iframe[src*="google"]')).toHaveCount(0);
   });
