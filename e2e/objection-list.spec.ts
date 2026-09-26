@@ -11,6 +11,13 @@ import type { Page } from "@playwright/test";
  *
  * No colour is written here (TS-WEB-0017 D3): every expected value is the
  * token itself, resolved by the browser from the loaded stylesheet.
+ *
+ * CHANGED (T-12, DEC-0124) — selectors only, no assertion: the objection
+ * block's two halves are two sections on `/mitmachen` now, because together
+ * they measured 1627 px at 390 px and G-4 caps a section at 1270
+ * (`e2e/section-budget.spec.ts`). The archive half is `data-block="archiv"`;
+ * the archive block itself is unchanged and is still the only
+ * `[data-archive-block="own"]` on the page.
  */
 
 /** The computed colour a token resolves to in the running document. */
@@ -41,7 +48,7 @@ test.describe("DEC-0117: the objection block's lower half is an archive block", 
     ]);
     expect(new Set([ground, ink, line]).size).toBe(3);
 
-    const archive = page.locator('[data-block="objections"] [data-archive-block="own"]');
+    const archive = page.locator('[data-archive-block="own"]');
     await expect(archive).toHaveCount(1);
     await expect(archive).toHaveCSS("background-color", ground);
 
@@ -62,7 +69,7 @@ test.describe("DEC-0117: the objection block's lower half is an archive block", 
   test("carries the channel's neutral glyph at 24 px — never circle-x, never the error colour", async ({
     page,
   }) => {
-    const block = page.locator('[data-block="objections"]');
+    const block = page.locator('[data-block="archiv"]');
     await expect(block.locator("svg.lucide-circle-x")).toHaveCount(0);
     const glyphs = block.locator("[data-archive-block] li svg");
     await expect(glyphs).toHaveCount(3);
@@ -83,7 +90,7 @@ test.describe("DEC-0117: the objection block's lower half is an archive block", 
   });
 
   test("sets the closing sentence larger than the rows", async ({ page }) => {
-    const archive = page.locator('[data-block="objections"] [data-archive-block="own"]');
+    const archive = page.locator('[data-archive-block="own"]');
     const core = archive.locator("li p").first();
     const closing = archive.locator("ul + p");
     await expect(closing).toHaveCount(1);

@@ -39,15 +39,82 @@ const PATHS = [
  * The site's other piece of motion is the explain module's auto-advance — the
  * one exception to "one movement only" (DEC-0105 §6) and the only content WCAG
  * 2.2.2 (Pause, Stop, Hide) applies to here (TS-WEB-0002 D7). Its walk lives in
- * this file because this is where motion is asserted, and it is `fixme` rather
- * than missing: `explain-module` does not exist in any form yet (Q-0044), so the
- * assertion would fail on a component nobody has written. Listed and
- * red-flagged, the way the page walks list their M4 criteria.
+ * this file because this is where motion is asserted.
+ *
+ * UN-FIXMED (T-12, DEC-0124). It was `fixme` because `explain-module` did not
+ * exist (Q-0044); it does now, and `/mitmachen` is where three of them stand.
+ * The component's own timing and geometry are measured in isolation on the
+ * development fixture (`e2e/explain-module.spec.ts`); what is asserted here is
+ * the accessibility fact on the composed page: the movement is bounded — one
+ * pass, ending at state 3 — and the reader has a mechanism that stops it, which
+ * is what 2.2.2 requires. The step lines are that mechanism, and they are real
+ * buttons at every size.
  */
-test.fixme(
-  "TS-WEB-0002-A13: the auto-advance starts on intersection, runs one 9.1 s pass and stops for good [blocked — explain-module unbuilt, Q-0044]",
-  () => {},
-);
+const ADVANCE_ROUTE = "/mitmachen";
+const DWELL_MS = 4_000;
+const TRANSITION_MS = 550;
+/** 4 000 + 550 + 4 000 + 550 — the whole pass, at the dwell floor (D4 Motion). */
+const PASS_MS = DWELL_MS + TRANSITION_MS + DWELL_MS + TRANSITION_MS;
+
+test("TS-WEB-0002-A13: the auto-advance starts on intersection, runs one 9.1 s pass and stops for good", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 640 });
+  await page.goto(ADVANCE_ROUTE);
+  await page.waitForLoadState("networkidle");
+
+  const explainModule = page.locator("[data-explain-module]").first();
+  await expect(explainModule).toHaveAttribute("data-state", "1");
+
+  // Nothing moves while the module is below the viewport, however long the
+  // page sits there: the trigger is an intersection, never page load.
+  await page.waitForTimeout(PASS_MS / 2);
+  await expect(explainModule).toHaveAttribute("data-state", "1");
+
+  // Three quarters of the module's own height inside the viewport — the
+  // fraction DEC-0105 §6 fixes, and the one that is reachable at 360 × 640.
+  await explainModule.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    const top = rect.top + window.scrollY;
+    window.scrollTo({ top: top - (window.innerHeight - 0.75 * rect.height), behavior: "instant" });
+  });
+
+  await page.waitForTimeout(PASS_MS + 1_000);
+  await expect(explainModule).toHaveAttribute("data-state", "3");
+  await expect(explainModule).toHaveAttribute("data-advance", "done");
+
+  // One pass: it ends at state 3 and does not loop back.
+  await page.waitForTimeout(DWELL_MS + TRANSITION_MS + 500);
+  await expect(explainModule).toHaveAttribute("data-state", "3");
+});
+
+test("TS-WEB-0002-A13: the step lines are the WCAG 2.2.2 mechanism — operable, and activating one stops the advance", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 640 });
+  await page.goto(ADVANCE_ROUTE);
+  await page.waitForLoadState("networkidle");
+
+  const explainModule = page.locator("[data-explain-module]").first();
+  const steps = explainModule.locator("[data-explain-step]");
+  await expect(steps).toHaveCount(3);
+  for (let index = 0; index < 3; index += 1) {
+    await expect(steps.nth(index)).toHaveJSProperty("tagName", "BUTTON");
+  }
+
+  // Activating a step shows that state and stops the pass from that moment;
+  // it does not pause and resume (DEC-0105 §6).
+  await steps.nth(1).click();
+  await expect(explainModule).toHaveAttribute("data-state", "2");
+  await expect(explainModule).toHaveAttribute("data-advance", "stopped");
+  await page.waitForTimeout(DWELL_MS + TRANSITION_MS + 500);
+  await expect(explainModule).toHaveAttribute("data-state", "2");
+
+  // Keyboard reaches every one of them.
+  await steps.nth(2).focus();
+  await page.keyboard.press("Enter");
+  await expect(explainModule).toHaveAttribute("data-state", "3");
+});
 
 for (const path of PATHS) {
   for (const viewport of VIEWPORTS) {

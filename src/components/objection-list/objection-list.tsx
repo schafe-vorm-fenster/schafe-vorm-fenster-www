@@ -130,12 +130,23 @@ export function ObjectionList({
           ) : null}
         </div>
       ) : null}
-      <ArchiveBlock
-        closing={closing}
-        ground="own"
-        items={items.map((item) => ({ core: item.channel, detail: item.failure, icon: item.icon }))}
-        kicker={archiveKicker}
-      />
+      {/* A block with no rows is no block. `/mitmachen` puts the archive half
+          in its own section, because the two halves together measure 1627 px
+          at 390 px and G-4 caps a section at 1270 (T-12, DEC-0124); the upper
+          half then renders here with no `items`, and an empty archive ground
+          under it would be a second visible break for nothing. */}
+      {items.length > 0 ? (
+        <ArchiveBlock
+          closing={closing}
+          ground="own"
+          items={items.map((item) => ({
+            core: item.channel,
+            detail: item.failure,
+            icon: item.icon,
+          }))}
+          kicker={archiveKicker}
+        />
+      ) : null}
     </div>
   );
 }
