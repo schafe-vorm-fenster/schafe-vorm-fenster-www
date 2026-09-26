@@ -104,6 +104,83 @@ test.describe("/deine-region", () => {
     expect(bodyText).not.toContain("4000");
   });
 
+  /**
+   * A5's second clause, which the case above never measured: "its node is
+   * produced by the price component reading `portalize-calendar`". Block 5's
+   * sentence typed the figure — `der 480-€-Tarif` / `the €480 tier` — so the
+   * page carried a second source of truth for the one price TS-WEB-0006-A12
+   * allows, in a content file where TS-WEB-0026-A4 forbids any price string at
+   * all. The artifact writes a token now and the page puts a `price-tag` where
+   * the token stood (T-18, DEC-0143 §4).
+   */
+  for (const locale of [
+    { path: "/deine-region", name: "de", token: "{kalender-preis}", vat: "zzgl. USt." },
+    { path: "/en/your-region", name: "en", token: "{calendar-price}", vat: "excl. VAT" },
+  ]) {
+    test(`TS-WEB-0026-A5 / TS-WEB-0026-A4 (${locale.name}): the one 480 node is a price-tag, and the token is filled`, async ({
+      page,
+    }) => {
+      await page.goto(locale.path);
+      const block = page.locator('[data-block="was-dazukommt"]');
+
+      // The token is a content slot name, never a rendered string.
+      await expect(block.getByText(locale.token)).toHaveCount(0);
+
+      // Exactly one node carries the figure, it belongs to `price-tag`, and it
+      // stands inside block 5's sentence rather than beside it.
+      const priced = block.locator('[class*="price-tag"]', { hasText: "480" });
+      await expect(priced).toHaveCount(1);
+      // The figure and its net qualifier reach the reader as one string, in the
+      // locale's own currency order — "480 € / Jahr, zzgl. USt." and
+      // "€480 / year, excl. VAT" (TS-WEB-0006 D10 a11y).
+      await expect(priced).toHaveText(new RegExp(`480.*${locale.vat.replace(/\./g, "\\.")}`));
+      const sentence = await block.locator("p", { hasText: "480" }).first().innerText();
+      expect(sentence.length).toBeGreaterThan(40);
+
+      // And the enterprise tier still shows no figure of its own (A4).
+      const body = await page.locator("body").innerText();
+      expect(body).not.toContain("4000");
+      expect(body).not.toContain("4.000");
+    });
+  }
+
+  test("TS-WEB-0026-A4 (static): no price string exists in either content source file", async () => {
+    for (const file of ["de.md", "en.md"]) {
+      const source = readFileSync(join(REPO_ROOT, "content", "pages", "deine-region", file), "utf8");
+      // A currency amount, in either locale's shape, anywhere in the artifact —
+      // a field, a list item or an author's note. The only price this page may
+      // show is read from the offering package (TS-WEB-0026 D6).
+      expect(source, file).not.toMatch(/\d[\d.,\s]*\s*€/);
+      expect(source, file).not.toMatch(/€\s*\d/);
+    }
+  });
+
+  /**
+   * R-ueber-9's other-pages half: the proof section here showed customer proof
+   * under "Was Landkreise und Institutionen sagen" — a variant of the press
+   * heading the copy guide reserves for press only (`website-copy-guide.md:516`,
+   * CG-017). And two of its three elements stood verbatim on another page,
+   * which is not a second proof (T-18, DEC-0143 §2/§5/§6).
+   */
+  test("CG-017 / R-ueber-9: the customer pool carries the customer heading and the corrected attribution", async ({
+    page,
+  }) => {
+    await page.goto("/deine-region");
+    const block = page.locator('[data-block="beleg"]');
+
+    await expect(block.locator("h2")).toHaveText("Wo es wirklich benutzt wird");
+    await expect(block.getByText("Was andere sagen")).toHaveCount(0);
+    await expect(block.getByText("Was Landkreise und Institutionen sagen")).toHaveCount(0);
+
+    // The Stiftung runs the LeLender, not the Gemeinde (review line 103).
+    await expect(block.getByText("Stiftung Lebendiges Lehre")).toBeVisible();
+    await expect(block.getByText(/Eine Gemeinde betreibt/)).toHaveCount(0);
+
+    // Neither of the two elements that carry another page word for word.
+    await expect(block.getByText(/Impfangebote/)).toHaveCount(0);
+    await expect(block.getByText(/Flächenland/)).toHaveCount(0);
+  });
+
   test("TS-WEB-0026-A6 / TS-WEB-0006-A2: exactly one primary CTA, targets /deine-region/angebot, repeated at the close", async ({
     page,
   }) => {

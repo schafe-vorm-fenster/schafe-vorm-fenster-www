@@ -8,3 +8,12 @@
   min-height: calc(var(--type-card-size) * var(--leading-normal));
   margin: 0;
 }
+
+/* The one case that is a price inside a sentence (TS-WEB-0026 D6, DEC-0143 §4).
+   The mono type role stays — it is what marks the figure as read, not typed —
+   but the size follows the sentence it stands in, and a reserved line is not an
+   inline span's business. */
+.inline {
+  font-size: inherit;
+  min-height: 0;
+}

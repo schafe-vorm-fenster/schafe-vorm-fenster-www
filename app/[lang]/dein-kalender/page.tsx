@@ -13,6 +13,7 @@ import {
 } from "@/src/components/price-section/price-section";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
+import { QuoteCard } from "@/src/components/quote-card/quote-card";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { SettingRow, SettingRows } from "@/src/components/setting-row/setting-row";
 import { TrustBlock } from "@/src/components/trust-block/trust-block";
@@ -31,7 +32,7 @@ import { pageTitle } from "@/src/lib/routes/metadata";
 
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
-import { selectProof } from "../_proof";
+import { parseProofLine, proofHeading, selectProof } from "../_proof";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
@@ -152,7 +153,22 @@ const BRIEFING_LABEL: Record<Locale, string> = {
   en: "Book a briefing",
 };
 
-const PROOF_LABEL: Record<Locale, string> = { de: "Belege", en: "Proof" };
+/**
+ * The role and the organisation a `quote-card` needs under the name, read off
+ * the authored attribution — "Bürgermeister in Rubkow, Gemeinde Rubkow" splits
+ * at its last comma. `null` where it does not split, because the design system
+ * is explicit that both are required: "a name without a role and an
+ * organisation is not a proof" (SRC-0014 §Quote card). An element that cannot
+ * supply the pair stays a `proof-card`. DEC-0143 §3.
+ */
+function quoteAuthor(attribution: string): { role: string; organisation: string } | null {
+  const comma = attribution.lastIndexOf(", ");
+  if (comma === -1) return null;
+  const role = attribution.slice(0, comma).trim();
+  const organisation = attribution.slice(comma + 2).trim();
+  if (role === "" || organisation === "") return null;
+  return { role, organisation };
+}
 
 /** Fallback context line — used only where a quote's own attribution carries
  * no organisation name to show instead (`parseDemoProofElement`). */
@@ -284,8 +300,16 @@ export default async function Page({
     focusJob: "run-our-own-calendar",
     surface: "inline",
     candidates: listItems(proofDemo.blocks).map((line, index) => {
+      /**
+       * The citation comes off the line first, so a source's own ` — ` cannot
+       * be read as the attribution separator. Where the artifact names one,
+       * the element is somebody's words *with the proof that they said them*
+       * and renders as a `quote-card`; where it does not, the words render as
+       * the claim they are (SRC-0014 §Quote card, CG-028, DEC-0143 §3).
+       */
+      const { line: text, citation } = parseProofLine(withoutImageNote(line));
       const card = parseDemoProofElement(
-        withoutImageNote(line),
+        text,
         PROOF_FALLBACK_CONTEXT[proofIsDemo ? "demo" : "sourced"][locale],
       );
       const place = card.attribution.split(", ").slice(1).join(", ").trim();
@@ -299,6 +323,11 @@ export default async function Page({
           label: PROOF_GEO_LABEL[proofIsDemo ? "demo" : "sourced"][locale],
         },
         geoCommunity: place === "" ? null : place,
+        // Three mayors and an estate, all of them users of this tier: customer
+        // proof, never press (review line 458 — "hier gehören Belege von
+        // Kunden hin — der NØRD Award ist hier Quatsch"). DEC-0143 §1.
+        proofKind: "customer" as const,
+        ...(citation === undefined ? {} : { citation }),
         demo: proofIsDemo,
       };
     }),
@@ -551,10 +580,44 @@ export default async function Page({
         // composition can break (`rhythm.test.ts`).
         surface="lime-100"
       >
-        <h2 id="proof-heading">{PROOF_LABEL[locale]}</h2>
-        <ProofStream label={PROOF_LABEL[locale]} layout="rows">
-          {proofSelection.entries.map((entry, position) =>
-            entry.kind === "item" ? (
+        {/* "Belege" / "Proof" was a page-local constant and a label, not a
+            heading — CG-017 calls that flat. The heading comes from what the
+            section proves, out of the one place that decides it; the kicker
+            above it names the section's role, so the two do not repeat each
+            other (DEC-0143 §2). */}
+        <h2 id="proof-heading">{proofHeading("customer", locale)}</h2>
+        <ProofStream label={proofHeading("customer", locale)} layout="rows">
+          {proofSelection.entries.map((entry, position) => {
+            if (entry.kind === "empty") return <EmptyProofSlot key={`empty-${position}`} />;
+
+            /* Somebody's words become a `quote-card` only where the artifact
+               names the article they were said in **and** an author with a role
+               and an organisation: "a quote without a named source and a
+               working link does not ship", and "a name without a role and an
+               organisation is not a proof" (SRC-0014 §Quote card, CG-028).
+               None of the three records carries a source URL today — the hub's
+               proof schema has no field for one (spec-impact.md:99-102) — so
+               all three render as the `proof-card` their claim is, and the
+               first quote that gets a cleared article renders as a quote
+               without this page changing. DEC-0143 §3. */
+            const author = quoteAuthor(entry.candidate.attribution);
+            if (entry.candidate.citation && author) {
+              return (
+                <QuoteCard
+                  key={entry.candidate.id}
+                  locale={locale}
+                  name={entry.candidate.contextLine}
+                  newTab
+                  organisation={author.organisation}
+                  quote={entry.candidate.claim}
+                  role={author.role}
+                  sourceLabel={entry.candidate.citation.label}
+                  sourceUrl={entry.candidate.citation.url}
+                />
+              );
+            }
+
+            return (
               <ProofCard
                 attribution={entry.candidate.attribution}
                 claim={entry.candidate.claim}
@@ -564,10 +627,8 @@ export default async function Page({
                 locale={locale}
                 state={entry.state}
               />
-            ) : (
-              <EmptyProofSlot key={`empty-${position}`} />
-            ),
-          )}
+            );
+          })}
         </ProofStream>
       </SectionShell>
 

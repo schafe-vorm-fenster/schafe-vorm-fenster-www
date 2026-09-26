@@ -264,6 +264,41 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
   });
 
   /**
+   * R-kalender-19 — the two halves of this page's proof block that the review
+   * names (T-18, DEC-0143 §2/§3).
+   *
+   * The heading was "Belege": a label, not a heading, and CG-017 calls that
+   * flat. It now comes from what the section proves, out of the one place that
+   * decides it, while the kicker above it keeps naming the section's role.
+   *
+   * And the three mayors' words render as **quote cards only where a concrete
+   * source with a link exists**. None of the three records carries one — the
+   * hub's proof schema has no field for it (`spec-impact.md:99-102`) — and the
+   * design system is absolute that "a quote without a named source and a
+   * working link does not ship" (SRC-0014 §Quote card, CG-028). So the words
+   * stand as the claims they are, and not one `quote-card` is on the page.
+   */
+  test("R-kalender-19: the customer heading, and no quote card without a cited source", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    const block = page.locator('[data-block="proof"]');
+
+    await expect(block.locator("h2")).toHaveText("Wo es wirklich benutzt wird");
+    await expect(block.getByText("Was andere sagen")).toHaveCount(0);
+    // The kicker still names the role, and the two are different words.
+    await expect(block.locator("p[class*='kicker']")).toHaveText("Wer den Kalender nutzt");
+
+    await expect(block.locator("[data-quote-card]")).toHaveCount(0);
+    await expect(block.locator("article")).toHaveCount(3);
+    // The three voices are still there — as claims, with their sources named
+    // in their own context lines.
+    for (const name of ["Holger Wendt", "Dr. A. Zschiesche", "Uwe Eichler"]) {
+      await expect(block.getByText(name), name).toBeVisible();
+    }
+  });
+
+  /**
    * G-3 / brief page 6, item 7 — the page was four arguments standing next to
    * each other with nothing between them. Each of the three joints now
    * carries the sentence that names it, and every section after the hero

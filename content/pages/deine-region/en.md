@@ -204,9 +204,14 @@ The same component as on `/dein-kalender` slot 3 (TS-WEB-0008 position 1′).
 
 **Heading:** What the county tier adds on top
 
-**Text:** On top of everything the €480 tier offers: your own white-label-capable registration, embedded on your website.
+**Text:** On top of everything the calendar tier offers ({calendar-price}): your own white-label-capable registration, embedded on your website.
 
 **Mention (no CTA):** Anyone with their own date databases — a course programme, a church service schedule, the county administration's waste-collection calendar data — can have them connected once via the data integration.
+
+`{calendar-price}` is a placeholder, not a number: the page puts the price
+component there, and that component reads `portalize-calendar` from the
+offering package (TS-WEB-0026 D6, TS-WEB-0026-A4/A5). No price is written in
+this file, so no typo can invent one.
 
 The map view is not in this list. TS-WEB-0026-A17: until the offering owner
 confirms it is shippable to a buyer, the feature is removed rather than
@@ -224,26 +229,39 @@ Pool: `eichler-wasserschloss-quilow`, `partner-network` — both
 below instead shows three real, named proof elements from the full set,
 and says what they do and do not prove.
 
-<!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"]; status: draft -->
+<!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022", "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei", "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"]; status: draft -->
 
-**Proof cards (real, two of them clearance-pending):** Three elements
+**Proof cards (real, clearance pending):** Three elements
 from the proof set, in the wording of the records:
 
-1. During the pandemic, every vaccination slot and every testing-centre opening time in the county was published through the village calendars, day-current and place-precise. — Landkreis Vorpommern-Greifswald, 2022
-2. "The service helps make what's on offer more visible and easier to find across a thinly settled area." — Uwe Eichler, Wasserschloss Quilow
-3. One municipality runs the village calendar as a brand of its own for 17 places, and volunteers are being brought on board. — Stiftung Lebendiges Lehre, municipality of Lehre, 2026
+1. The foundation runs the village calendar as a brand of its own for 17 places, and volunteers are being brought on board. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony), 2026
+2. The undertaking is recognised by EU regional funding (LEADER) as worth funding for rural development. — LEADER / LAG Vorpommern-Greifswald, 2022
+3. "The dates list makes the routes of mobile traders transparent." — Elisabeth Kurzweg, Bäckerei Kurzweg
 
 None of the three is a delivered `portalize-enterprise` territory, and
-this page does not say otherwise. Card 1 is a county that published its
-own dates through the existing set (`impftermine-landkreis`, `cleared`;
-evidence: our own eu:react final report, July 2022). Card 3 is a
-municipality with 17 place calendars under its own brand
-(`lehre-lelender`, `unverified`). Card 2 comes from the pool
-`portalize-enterprise` names (`eichler-wasserschloss-quilow`,
-`unverified`). The two `unverified` elements stand in the protected
-preview; before go-live there is a written clearance per element, or the
-card goes. `partner-network` is not among them: that record names no
-partner and has no cleared logo rights.
+this page does not say otherwise.
+
+Card 1 names the **foundation**, not the municipality: "Die 'Stiftung
+Lebendiges Lehre' verantwortet das Lebender Kalenderprojekt. Nicht die
+Gemeinde … Es sind aber 17 Ort in und um die Gemeinde Lehre" (review of
+2026-09-22, line 103). The record's own `claim:` opens with "Eine
+Gemeinde betreibt …" and is wrong in exactly that place; the review's
+correction stands above the record (DEC-0104, DEC-0143 §5). Card 2 is the
+EU regional funding in the wording of its `claim:`
+(`leader-foerderung-2022`, `unverified`; `source:` LEADER / LAG
+Vorpommern-Greifswald, June 2022). Card 3 is a voice from the region in
+the wording of its `claim:` (`kurzweg-baeckerei`, `unverified`;
+`source:` Elisabeth Kurzweg, Bäckerei Kurzweg).
+
+The types are mixed on purpose — success on the ground, success in
+funding, a voice from the region (review, line 111). None of the three
+stands on **any other page**: `impftermine-landkreis` carries
+`/ueber-uns` and `eichler-wasserschloss-quilow` carries `/dein-kalender`,
+both there in the same wording, and two pages with the same sentence are
+not a second proof (DEC-0143 §6). All three are `unverified` and
+therefore stand in the protected preview; before go-live there is a
+written clearance per element, or the card goes. `partner-network` is not
+among them: that record names no partner and has no cleared logo rights.
 
 ## Slot 7 — Response promise
 
@@ -269,9 +287,10 @@ a promise (F-2-57). The area stays empty until C11 is answered.
 **Text:** Price on request.
 
 `price_status: on-request` — no number, no range, no "from", no
-comparison to an order of magnitude. The €480 comparison price from
+comparison to an order of magnitude. The comparison price from
 `portalize-calendar` may appear elsewhere, but always read from the
-price component, never typed.
+price component, never typed — not here either, which is why this line
+carries no figure any more (TS-WEB-0026-A4, DEC-0143 §4).
 
 ---
 

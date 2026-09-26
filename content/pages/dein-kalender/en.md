@@ -325,6 +325,16 @@ frontmatter and in `state/open.md`, not on the page.
 2. "For this project I see our rural population, and mobile traders too, as the winners." — Dr A. Zschiesche, mayor of Groß Kiesow
 3. "The service helps make what's on offer more visible and easier to find across a thinly settled area." — Uwe Eichler, Wasserschloss Quilow
 
+None of the three records names an article with a link — the hub's proof
+schema carries no such field
+(`plan/reviews/2026-09-23/spec-impact.md:99-102`). The three quotes
+therefore stand here as proof cards and not as quote cards: "a quote
+without a named source and a working link does not ship"
+(`concept/website-design-system.md` §Quote card, CG-028). Once a source
+exists it goes at the end of the line as a link — `… — Who, Where —
+[Publication, "Title"](https://…)` — and the line renders as a quote card
+by itself, with no change to the page (DEC-0143 §3, `state/open.md`).
+
 All three records carry `usage_rights: unverified` (Q-0014). The cards
 therefore stand in the protected preview, not on a public surface:
 before go-live there is a written clearance per quote, or the card

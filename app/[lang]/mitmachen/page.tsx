@@ -29,7 +29,7 @@ import { standardSources } from "@/src/lib/pricing/standard-sources";
 import { pageTitle } from "@/src/lib/routes/metadata";
 
 import { PlaceDatesIsland } from "../_islands";
-import { selectProof } from "../_proof";
+import { proofHeading, selectProof } from "../_proof";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { localeFrom, pageMetadataFor } from "../_locale";
@@ -205,6 +205,10 @@ export default async function Page({
           label: GEO_SNAPSHOT_LABEL[proofIsDemo ? "demo" : "sourced"][locale],
         },
         geoCommunity: place === "" ? null : place,
+        // All three publish for themselves — customer proof, not press
+        // (review line 462). The facet is what the section's heading reads
+        // (DEC-0143 §1).
+        proofKind: "customer" as const,
         demo: proofIsDemo,
       };
     }),
@@ -542,20 +546,22 @@ export default async function Page({
         // a row is the rule this page's own rhythm test checks (A16, D10).
         surface="lime-100"
       >
-        {/* The h2 is the dictionary's `othersSay` — "Was andere sagen" /
-            "What others say", the review's own line (R-mitmachen-16, copy
-            guide :516). It was a page-local constant with the same two
-            strings; reading the dictionary closes the T-12 half of
-            state/open.md row 234. The kicker above it is `customers`, which
-            is the marked placeholder and a different string. */}
-        <h2 id="beleg-heading">{dictionary(locale).kickers.othersSay}</h2>
+        {/* The h2 was `othersSay` — "Was andere sagen" / "What others say" —
+            over a pool of three customers who publish for themselves. The copy
+            guide reserves that heading for the other kind: "Wer das schon
+            macht → Was andere sagen *(for press proof only)*"
+            (`website-copy-guide.md:516`, and the review's own split at line
+            462: customer proof is one section, press and appearances are
+            another). The heading now comes from what the section proves, out
+            of the one place that decides it (DEC-0143 §2). */}
+        <h2 id="beleg-heading">{proofHeading("customer", locale)}</h2>
         {/* G-7: one emphasis per stream. The first card opens it at sub-head
             size, the rest are hairline rows — three identical filled cards
             read as one block rather than as three institutions. No `geo`
             badge either: every card here already names its source in its
             own context line, and `BELEG` beside `Stiftung Lebendiges Lehre`
             is the same word twice. */}
-        <ProofStream label={dictionary(locale).kickers.othersSay} layout="rows">
+        <ProofStream label={proofHeading("customer", locale)} layout="rows">
           {proofSelection.entries.map((entry, position) =>
             entry.kind === "item" ? (
               <ProofCard

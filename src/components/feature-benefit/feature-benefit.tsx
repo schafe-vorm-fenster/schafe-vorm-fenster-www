@@ -9,7 +9,16 @@ import styles from "./feature-benefit.module.css";
 
 export interface FeatureBenefitProps {
   readonly feature: string;
-  readonly benefit: string;
+  /**
+   * The benefit sentence. A `ReactNode` rather than a string since T-18: on
+   * `/deine-region` the sentence names the calendar tier's price, and TS-WEB-0026
+   * D6 permits that figure only "read from its package by the same component,
+   * never typed into copy" — so the artifact writes a token and the page hands
+   * the sentence in with a `price-tag` node standing where the token stood
+   * (TS-WEB-0026-A4/A5, DEC-0143 §4). The component still renders exactly one
+   * paragraph, and it still types no price of its own.
+   */
+  readonly benefit: ReactNode;
   /** An inline `proof-card` or similar, where the claim has one. */
   readonly proofRef?: ReactNode;
   readonly mediaSrc?: string;
