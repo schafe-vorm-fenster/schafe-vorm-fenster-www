@@ -56,9 +56,12 @@ images:
 Reached when the place search finds **no** place at all (TS-WEB-0021 D3) —
 the difference from `/dein-ort` state B is deliberate: there, dates are
 missing; here, the place itself is missing from the system. This page
-never addresses the visitor directly with "you could be the first"
-(TS-WEB-0021 D9, DEC-0071) — that sentence belongs exclusively to
-`/dein-ort`.
+addresses the reader directly, like every page of this website
+(TS-WEB-0021 D9 as amended 2026-09-24, review decision 15) — what differs
+is not the form of address but the ask: "you could be the first" belongs
+exclusively to `/dein-ort`, where a calendar is waiting. The earlier
+"never direct" is retired; anything still citing it cites a retired
+determination.
 
 ## Slot 1 — Acknowledgment with place name
 

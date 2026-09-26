@@ -55,9 +55,13 @@ images:
 
 Erreicht, wenn die Ortssuche **keinen** Ort findet (TS-WEB-0021 D3) — der
 Unterschied zu `/dein-ort` Zustand B ist bewusst: dort fehlen Termine,
-hier fehlt der Ort selbst im System. Diese Seite adressiert die
-Besucherin nie direkt mit „du könntest die Erste sein" (TS-WEB-0021 D9,
-DEC-0071) — dieser Satz gehört ausschließlich auf `/dein-ort`.
+hier fehlt der Ort selbst im System. Diese Seite spricht die Leserin
+direkt an, wie jede Seite dieser Website (TS-WEB-0021 D9 in der Fassung
+vom 2026-09-24, Review-Entscheidung 15) — unterschiedlich ist nicht die
+Anrede, sondern die Bitte: „du könntest die Erste sein" gehört
+ausschließlich auf `/dein-ort`, wo ein Kalender wartet. Das frühere
+„nie direkt" ist zurückgezogen; wer es noch zitiert, zitiert eine
+zurückgezogene Festlegung.
 
 ## Slot 1 — Bestätigung mit Ortsname
 

@@ -191,11 +191,11 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
     await page.goto("/dein-ort");
     const place = new Set(await ownCopy());
 
-    // The interim ZIP-only hint is the one string the search module carries
-    // wherever it stands (TS-WEB-0008 D7, one component everywhere).
-    const shared = start.filter(
-      (line) => place.has(line) && !line.startsWith("Suche nach Ortsnamen"),
-    );
+    // The search module's own helper line is the one string both surfaces may
+    // share — it is one component everywhere (TS-WEB-0008 D7), and since
+    // DEC-0079 §1 it speaks of a place name and names no interim (T-16).
+    const searchHint = "Tipp den Ortsnamen ein";
+    const shared = start.filter((line) => place.has(line) && !line.startsWith(searchHint));
     expect(shared).toEqual([]);
 
     // And the sentence SRC-0002 reserves for `/dein-ort` state B is not here.
