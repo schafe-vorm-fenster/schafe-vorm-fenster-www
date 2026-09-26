@@ -67,7 +67,7 @@ describe("TS-WEB-0017-A4: check-brand excludes build output from the scan", () =
       "@media (max-width: 600px) { .x { display: none; } }",
     );
     const result = checkBrand(root);
-    expect(result.errors.some((e) => e.startsWith("A4") && e.includes("max-width"))).toBe(
+    expect(result.errors.some((e) => e.startsWith("TS-WEB-0017-A4") && e.includes("max-width"))).toBe(
       true,
     );
   });
@@ -80,7 +80,7 @@ describe("TS-WEB-0017-A4: check-brand excludes build output from the scan", () =
     );
     const result = checkBrand(root);
     expect(
-      result.errors.some((e) => e.startsWith("A4") && e.includes("min-width")),
+      result.errors.some((e) => e.startsWith("TS-WEB-0017-A4") && e.includes("min-width")),
     ).toBe(true);
   });
 
@@ -119,7 +119,7 @@ describe("TS-WEB-0017-A4: check-brand excludes build output from the scan", () =
     // violation (this file is not the token file) — expected and ignored
     // here, which is exactly why this asserts on A4 specifically rather
     // than on an empty error list.
-    expect(result.errors.filter((e) => e.startsWith("A4"))).toEqual([]);
+    expect(result.errors.filter((e) => e.startsWith("TS-WEB-0017-A4"))).toEqual([]);
     expect(result.cssFileCount).toBe(1);
   });
 });
