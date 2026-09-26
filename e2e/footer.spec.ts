@@ -3,29 +3,33 @@ import { expect, test } from "@playwright/test";
 import { everyRoute, href } from "../src/lib/routes/routes";
 
 /**
- * The global footer's own budget — the polish brief's shared-component pass.
+ * The global footer's own budget — the polish brief's shared-component pass,
+ * re-based on the footer that remains after DEC-0081.
  *
  * The footer stands under **every** one of the 24 routes, so its height is
  * subtracted from every page's budget before the page has written a word. It
- * measured **1110 px at 390 × 844** (1.32 phone screens — more than G-4
- * allows a whole *section*) and 883 px at 1280 × 800, which is why no page
- * reached the brief's length target. 480 px of it was the contact form,
- * rendered open on a page the visitor came to for something else.
+ * measured **1110 px at 390 × 844** (1.32 phone screens — more than G-4 allows
+ * a whole *section*) and 883 px at 1280 × 800, which is why no page reached the
+ * brief's length target. 480 px of it was a general contact form, rendered open
+ * on a page the visitor came to for something else.
  *
- * This file is that measurement made repeatable, plus the four things the
- * shrink was not allowed to cost: TS-WEB-0004-A9's contact, newsletter and three
- * legal links, TS-WEB-0001-A7's language switch, the 44 px target of SRC-0014
- * §Touch targets, and the no-JavaScript behaviour of TS-WEB-0009.
+ * That form is not folded any more, it is **gone**: one contact surface exists
+ * for the whole site — the contact section, rendered by the chrome directly
+ * above this footer (`e2e/contact-section.spec.ts`) — and TS-WEB-0006-A17
+ * forbids a general contact form anywhere. The newsletter went with it for a
+ * different reason: TS-WEB-0016-A21 refuses a form that posts nowhere while no
+ * sending system accepts a subscription (DEC-0122 §2, §3).
  *
- * ### Why 0.6 screens
- *
- * The brief's own number: a visitor who has reached the end of the argument
- * should see the closing CTA and the footer's own offer together, not scroll
- * a screen and a third of chrome. 500 px at 844 is that, with the German
- * footer (the longer of the two locales) landing at 480.
+ * So what this file measures is the footer's floor: the wordmark, the three
+ * legal links of TS-WEB-0004-A9, TS-WEB-0001-A7's language switch, the 44 px
+ * target of SRC-0014 §Touch targets, and the no-JavaScript behaviour of
+ * TS-WEB-0009. "Contact and newsletter are still there" is now the opposite
+ * assertion, and it is made here as well, because the criterion it discharges
+ * (A9, as D4 amends it) reads "the footer carries no contact entry and no
+ * form".
  */
 
-/** ~0.6 phone screens at 844 px. */
+/** ~0.6 phone screens at 844 px — unchanged; the footer is well under it now. */
 const BUDGET_PX = 500;
 
 const PHONE = { width: 390, height: 844 };
@@ -59,23 +63,12 @@ test("the desktop footer is tidier than the phone one, not looser", async ({ pag
   expect(await footerHeight(page)).toBeLessThanOrEqual(400);
 });
 
-test("TS-WEB-0004-A9: contact, newsletter and the three legal links are all still there", async ({
+test("TS-WEB-0004-A9: the three legal links and the language switch — no contact entry, no form", async ({
   page,
 }) => {
   await page.setViewportSize(PHONE);
   await page.goto("/");
   const footer = page.getByRole("contentinfo");
-
-  // Contact: a native disclosure, labelled, and the form's own markup inside
-  // it — server-rendered, present in the DOM, one tap away.
-  const summary = footer.locator("details > summary");
-  await expect(summary).toHaveCount(1);
-  await expect(summary).toHaveText(/kontakt/i);
-  await expect(footer.locator('details input[type="email"]')).toHaveCount(1);
-
-  // Newsletter: usable where it stands. It is the conversion, not a link.
-  await expect(footer.locator("[data-newsletter] input")).toBeVisible();
-  await expect(footer.locator("[data-newsletter] button[type=submit]")).toBeVisible();
 
   // The three legal links, visible — TS-WEB-0002-A8 asks for footer-linked on
   // every page, which a link behind a disclosure would not be.
@@ -85,29 +78,31 @@ test("TS-WEB-0004-A9: contact, newsletter and the three legal links are all stil
 
   // TS-WEB-0001-A7's switch, on the same base line.
   await expect(footer.getByRole("navigation", { name: "Sprache" })).toBeVisible();
+
+  // No contact entry and no form of any kind: the disclosure, its summary and
+  // the envoy mount are deleted (DEC-0081, TS-WEB-0006-A17), and the newsletter
+  // is withheld (TS-WEB-0016-A21).
+  await expect(footer.locator("details, summary")).toHaveCount(0);
+  await expect(footer.locator("form, input, textarea")).toHaveCount(0);
+  await expect(footer.locator("[data-newsletter]")).toHaveCount(0);
+  await expect(footer.locator("[data-envoy-form-kind]")).toHaveCount(0);
+  // The contact surface it was replaced by stands directly above the footer.
+  await expect(page.locator("section#kontakt[data-contact-section]")).toHaveCount(1);
 });
 
 /**
  * SRC-0014 §Touch targets — 44 px, on the controls the rule is about.
  *
- * Two things in this footer are deliberately not on the list, named rather
- * than filtered out of a selector without a reason:
+ * The **logo** is deliberately not on the list, named rather than filtered out
+ * of a selector without a reason: SRC-0014 §Logo fixes it at "38–40 px, clipped
+ * to radius 999", which is a size the design system states, not a target that
+ * slipped. The consent sentence's inline privacy link used to be the second
+ * exemption; it went with the newsletter form.
  *
- *  - the **logo**, which SRC-0014 §Logo fixes at "38–40 px, clipped to radius
- *    999"; it is a size the design system states, not a target that slipped;
- *  - the **consent sentence's inline link** to the privacy policy, which is
- *    a link inside running text. WCAG 2.5.8 exempts inline links for the
- *    reason it does: making one 44 px tall breaks the paragraph around it.
- *
- * Everything else here is a standalone control, and the three legal links
- * were 24 px of inline text before this pass.
+ * Everything else here is a standalone control, and the three legal links were
+ * 24 px of inline text before the polish pass.
  */
-const FOOTER_TARGETS = [
-  "body > footer nav a",
-  "body > footer summary",
-  "body > footer [data-newsletter] input",
-  "body > footer [data-newsletter] button",
-].join(", ");
+const FOOTER_TARGETS = "body > footer nav a";
 
 test("SRC-0014 §Touch targets: every standalone footer control clears 44 px", async ({ page }) => {
   await page.setViewportSize(PHONE);
@@ -118,25 +113,28 @@ test("SRC-0014 §Touch targets: every standalone footer control clears 44 px", a
       height: element.getBoundingClientRect().height,
     })),
   );
-  // Three legal links, the one other language (DEC-0120: the current one is
-  // not a control), the summary, the field and its submit.
-  expect(heights.length).toBe(7);
+  // Three legal links and the one other language (DEC-0120: the current one is
+  // not a control). It was 7 while the footer carried the contact summary, the
+  // newsletter field and its submit (DEC-0122 §2).
+  expect(heights.length).toBe(4);
   const small = heights.filter((entry) => entry.height < 44);
   expect(small, `controls under 44 px: ${JSON.stringify(small)}`).toEqual([]);
 });
 
-test("the contact disclosure opens with no JavaScript at all", async ({ browser }) => {
+test("TS-WEB-0009: the whole footer works with no JavaScript at all", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: PHONE });
   const page = await context.newPage();
   await page.goto("/");
 
-  const closed = await footerHeight(page);
-  expect(closed).toBeLessThanOrEqual(BUDGET_PX);
-
-  await page.locator("body > footer summary").click();
-  await expect(page.locator("body > footer details")).toHaveAttribute("open", "");
-  await expect(page.locator('body > footer details input[type="email"]')).toBeVisible();
-  expect(await footerHeight(page)).toBeGreaterThan(closed);
+  // Nothing here needs scripting any more: there is no disclosure to open and
+  // no form to cancel, only links — so the served HTML *is* the footer.
+  expect(await footerHeight(page)).toBeLessThanOrEqual(BUDGET_PX);
+  const footer = page.locator("body > footer");
+  for (const hash of ["impressum", "datenschutz", "barrierefreiheit"]) {
+    await expect(footer.locator(`a[href="/rechtliches#${hash}"]`).first()).toBeVisible();
+  }
+  await expect(footer.locator("nav a")).toHaveCount(4);
+  await expect(footer.locator("details, summary, form, input")).toHaveCount(0);
 
   await context.close();
 });

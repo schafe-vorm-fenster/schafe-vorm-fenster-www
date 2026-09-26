@@ -71,6 +71,18 @@ export type ClosingBlock =
       readonly to: RouteId;
       readonly label: string;
       readonly query?: Readonly<Record<string, string | number | undefined>>;
+      /**
+       * The in-page target the goal resolves to, through the route facade —
+       * `#kontakt` for a booking, which DEC-0081 §3 turns from an outbound
+       * navigation into the page's own contact section.
+       */
+      readonly hash?: string;
+      /**
+       * `repeat` (the default) or, on `/ueber-uns` alone, `primary`: DEC-0082
+       * amendment C makes that page's closing CTA its one primary conversion
+       * and empties its repeat rung.
+       */
+      readonly marker?: "primary" | "repeat";
       /** The promise the page ends on, above the button (polish brief G-6). */
       readonly heading?: string;
       /** Only where a cleared backing exists — otherwise omitted, not softened. */
@@ -95,6 +107,16 @@ export type ClosingBlock =
   | {
       readonly variant: "module";
       readonly node: ReactNode;
+      /**
+       * The ground the closing section stands on, `paper` unless the page says
+       * otherwise. `ink` is the closing search block on `/`: the one further
+       * ink section a page may end on, and the only second `ink` section
+       * `checkRhythm` admits — as the **last** section (DEC-0117,
+       * SRC-0014 §"Second ink"). The shell takes it from the block rather than
+       * from a page-level override, so the exception stays where the rhythm
+       * rule can see it.
+       */
+      readonly surface?: "paper" | "ink";
       /** The promise the page ends on, above the control (polish brief G-6). */
       readonly heading?: string;
       /** Only where a cleared backing exists — otherwise omitted, not softened. */
@@ -201,10 +223,16 @@ export function PageFrame({
             </SectionShell>
           </MotionReveal>
 
-          {/* Block 4 — the focus job's conversion, repeated. Nothing but the
-              global footer renders after it (TS-WEB-0006 D2). */}
+          {/* Block 4 — the focus job's conversion, repeated. It stays the last
+              block *inside* `main`; after it stand exactly two things, both
+              chrome: the contact section and the global footer (TS-WEB-0006 D2
+              as amended by DEC-0081 §2, `_chrome.tsx`). */}
           <MotionReveal>
-            <SectionShell id="closing-cta" label={dictionary(locale).nav.home} surface="paper">
+            <SectionShell
+              id="closing-cta"
+              label={dictionary(locale).nav.home}
+              surface={closing.variant === "module" ? (closing.surface ?? "paper") : "paper"}
+            >
               {closing.variant === "module" ? (
                 /* The block-1 primary repeated as the module it is, with the
                    same heading and reassurance a `repeat` block carries — a
@@ -220,9 +248,11 @@ export function PageFrame({
               ) : (
                 <ClosingCta
                   footer={closing.footer}
+                  hash={closing.hash}
                   heading={closing.heading}
                   label={closing.label}
                   locale={locale}
+                  marker={closing.marker}
                   query={closing.query}
                   reassurance={closing.reassurance}
                   to={closing.to}

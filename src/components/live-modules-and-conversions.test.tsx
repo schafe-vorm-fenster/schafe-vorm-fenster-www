@@ -125,7 +125,7 @@ describe("D-9: the ten data-dependent §2.4/§2.5 components declare all four st
 describe("plan/guardrails.md mock rule: mocked modules are marked in `data-*`, never in the page, and no field value leaves the browser", () => {
   it("marks EnvoyFormMount's mocked field set with `data-mock`, not with a badge", () => {
     const html = renderToStaticMarkup(
-      <EnvoyFormMount fallbackEmail="kontakt@example.org" kind="contact" sourceRoute="home" state="mocked" />,
+      <EnvoyFormMount fallbackEmail="kontakt@example.org" kind="quote" sourceRoute="region" state="mocked" />,
     );
     expect(html).toContain('data-mock="true"');
     for (const word of FORBIDDEN_MARKINGS) expect(html, word).not.toContain(word);
@@ -137,7 +137,7 @@ describe("plan/guardrails.md mock rule: mocked modules are marked in `data-*`, n
 
   it("falls back to lead-fallback while the widget is empty/degraded, never an empty slot", () => {
     const empty = renderToStaticMarkup(
-      <EnvoyFormMount fallbackEmail="kontakt@example.org" kind="contact" sourceRoute="home" state="empty" />,
+      <EnvoyFormMount fallbackEmail="kontakt@example.org" kind="quote" sourceRoute="region" state="empty" />,
     );
     expect(empty).toContain("kontakt@example.org");
     expect(empty).toContain("/start");

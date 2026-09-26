@@ -18,6 +18,18 @@ export interface ClosingCtaRepeatProps extends LinkOptions {
   readonly label: string;
   readonly buttonVariant?: ClosingCtaButtonVariant;
   /**
+   * The `data-cta` value the button carries. `repeat` (the default) is the
+   * repeat rung, and the value is a **test hook** rather than a rung of the
+   * ladder — see the note at the render below (DEC-0122 §6).
+   *
+   * `primary` belongs to `/ueber-uns` and to no other route: DEC-0082
+   * amendment C makes that page's closing CTA its one primary conversion —
+   * "exactly one per page, or none where the primary is itself the closing
+   * CTA" — and empties its repeat rung. Every other page keeps its primary in
+   * block 1 (TS-WEB-0006 D3).
+   */
+  readonly marker?: "primary" | "repeat";
+  /**
    * The promise the page ends on, above the button. Without it the last
    * thing a visitor sees is a control with no sentence around it (polish
    * brief G-6); the sentence itself is the page's, written in Part B.
@@ -104,7 +116,8 @@ export function ClosingCtaModule({
  * exactly once, in the focus block). Reassurance in Meta, only where a
  * cleared backing exists — otherwise omitted, not softened.
  * Space: fixed height.
- * A11y: never `data-cta="primary"` — that marker belongs to block 1 alone.
+ * A11y: `data-cta="repeat"` — the `primary` marker belongs to block 1, with the
+ * single exception `/ueber-uns` takes through `marker` (DEC-0082 amendment C).
  */
 export function ClosingCta(props: ClosingCtaProps) {
   if (props.variant === "merged") {
@@ -127,6 +140,7 @@ export function ClosingCta(props: ClosingCtaProps) {
     to,
     label,
     buttonVariant = "primary-light",
+    marker = "repeat",
     heading,
     reassurance,
     footer,
@@ -139,13 +153,19 @@ export function ClosingCta(props: ClosingCtaProps) {
   return (
     <div className={[styles.repeat, className].filter(Boolean).join(" ")}>
       {heading ? <p className={styles.heading}>{heading}</p> : null}
-      {/* `data-cta="repeat"`, never `"primary"` — the marker block 1 keeps
-          (TS-WEB-0006 D6). It is here so the label is inside the contrast sweep
-          that walks `[data-cta]` on every route (`e2e/cta-contrast.spec.ts`);
-          this button computed ink on ink in the production build and nothing
-          measured it. */}
+      {/* `data-cta="repeat"` by default — the marker block 1 keeps is
+          `"primary"` (TS-WEB-0006 D6), and `/ueber-uns` is the one route that
+          passes it here instead, because there the closing CTA *is* the page's
+          primary (DEC-0082 amendment C).
+
+          `repeat` itself is a **test hook, not a rung**: DEC-0082 D3 lists the
+          repeat rung with "Marker: none", and the attribute is here anyway so
+          the label is inside the contrast sweep that walks `[data-cta]` on
+          every route (`e2e/cta-contrast.spec.ts`) — this button computed ink on
+          ink in a production build and nothing measured it. No criterion counts
+          `repeat` and no ladder rule reads it (DEC-0122 §6). */}
       <Button
-        dataCta="repeat"
+        dataCta={marker}
         hash={hash}
         locale={locale}
         query={query}

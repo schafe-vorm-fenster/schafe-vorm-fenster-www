@@ -1,67 +1,67 @@
 import { expect, test } from "@playwright/test";
 
+import { NEWSLETTER_SENDING_SYSTEM } from "../src/components/newsletter-block/constant";
+import { everyRoute, href } from "../src/lib/routes/routes";
+
+import type { RouteId } from "../src/lib/routes/routes";
+
 /**
- * F-3-11 — the footer newsletter mock must not throw the page away.
+ * TS-WEB-0016-A21 — the newsletter renders **nowhere** while no sending system
+ * accepts a subscription: "neither the footer newsletter entry nor the inline
+ * block on `/ueber-uns` renders … no form that posts nowhere, and no
+ * click-to-chat link whose arriving message nothing records" (D10, DEC-0052 §4
+ * as amended).
  *
- * The block stands in the footer of all 24 routes and was the only `<form>`
- * on the site with neither `action` nor `onSubmit`, so "Anmelden" performed a
- * real full-page GET navigation to the current path with the current query
- * **replaced** by the serialized form fields. Three manifestations, one
- * defect (C3-A-01/02/03): every other form on the page comes back empty, the
- * URL-is-the-state flows lose `?orte=` / `?ort=` / `?wer=` and fall back to
- * step 1, and the "submission" itself says nothing at all.
+ * The gate is one constant, `NEWSLETTER_SENDING_SYSTEM`
+ * (`src/components/newsletter-block/constant.ts`, `null` while Q-0020 is open,
+ * `state/open.md` row 22), read at the two mount sites — the footer slot in
+ * `app/[lang]/layout.tsx` and the inline block on `/ueber-uns` — the same shape
+ * `response-promise/constant.ts` uses for the two-working-day promise: removed,
+ * never softened (DEC-0122 §3). The 2026-09-22 review called the section good
+ * (R-home-35); the specification carries the truth (DEC-0104), and the block
+ * keeps its shape so it returns with the owner's benefit heading the day a
+ * system is named.
  *
- * The pattern to hold it to is `envoy-form-mount`'s, one directory away:
- * cancel the default and swap in a `role="status"` confirmation. The input
- * keeps its missing `name`, so no address leaves the browser in any branch —
- * Q-0020 (`state/open.md` row 22) stays open and untouched.
+ * ### What this file replaced, and where those cases went
+ *
+ * It held the four F-3-11 cases: the mock's submit must not perform a real GET
+ * navigation that throws the page's other forms and its query string away, it
+ * must confirm in a `role="status"` region, in the page's language, and its
+ * input must stay unnamed so no address can leave the browser. All four need a
+ * *rendered* block, so none of them can run while A21 holds. They are not kept
+ * as skipped tests: `newsletter-form.tsx` still cancels its submit and still
+ * carries no `name`, `src/components/live-modules-and-conversions.test.tsx`
+ * asserts the unnamed input off the static markup, and these four walks come
+ * back with the block.
  */
 
-const NEWSLETTER_SUBMIT = '[data-newsletter] button[type="submit"]';
+/**
+ * `/ueber-uns` renders the inline block until T-14 reads the same predicate on
+ * its page (the page is T-14's file). `test.fail` inverts the moment that
+ * lands, so the entry has to be removed with the fix rather than lingering as
+ * an exemption (DEC-0122 §5).
+ */
+const INLINE_BLOCK_GATED_BY: Readonly<Partial<Record<RouteId, string>>> = {
+  about: "T-14",
+};
 
-test.describe("F-3-11: the newsletter mock confirms, and keeps the page", () => {
-  test("keeps an unsent quote form and the URL, and confirms in a live region", async ({
-    page,
-  }) => {
-    await page.goto("/deine-region/angebot");
-    const urlBefore = page.url();
-
-    const firstQuoteField = page.locator('form[data-envoy-state] input[type="text"]').first();
-    await firstQuoteField.fill("Schlatkow");
-
-    await page.locator("#newsletter-email").fill("jemand@beispiel.de");
-    await page.locator(NEWSLETTER_SUBMIT).click();
-
-    // No navigation: the quote form still holds what was typed into it, and
-    // the address bar is untouched.
-    await expect(page.locator('[data-newsletter] [role="status"]')).toBeVisible();
-    expect(page.url()).toBe(urlBefore);
-    await expect(firstQuoteField).toHaveValue("Schlatkow");
-  });
-
-  test("does not reset a flow route's step", async ({ page }) => {
-    await page.goto("/mitmachen/registrieren?ort=quilow&wer=gemeinde");
-    const urlBefore = page.url();
-
-    await page.locator("#newsletter-email").fill("jemand@beispiel.de");
-    await page.locator(NEWSLETTER_SUBMIT).click();
-
-    await expect(page.locator('[data-newsletter] [role="status"]')).toBeVisible();
-    expect(page.url()).toBe(urlBefore);
-  });
-
-  test("confirms in English on the English pages", async ({ page }) => {
-    await page.goto("/en/take-part");
-    await page.locator("#newsletter-email").fill("someone@example.com");
-    await page.locator(NEWSLETTER_SUBMIT).click();
-
-    const status = page.locator('[data-newsletter] [role="status"]');
-    await expect(status).toBeVisible();
-    await expect(status).toContainText("Thank you");
-  });
-
-  test("no address can leave the browser: the input stays unnamed", async ({ page }) => {
-    await page.goto("/");
-    await expect(page.locator("#newsletter-email")).not.toHaveAttribute("name", /.*/);
-  });
+test("TS-WEB-0016-A21: no sending system is named, so the block is withheld", () => {
+  expect(NEWSLETTER_SENDING_SYSTEM).toBeNull();
 });
+
+for (const { route, locale } of everyRoute()) {
+  const path = href(route, locale);
+
+  test(`TS-WEB-0016-A21: no newsletter surface on ${path}`, async ({ page }) => {
+    const owner = INLINE_BLOCK_GATED_BY[route];
+    test.fail(
+      owner !== undefined,
+      `${path} still renders the inline newsletter block — ${owner} gates it behind newsletterOffered()`,
+    );
+    await page.goto(path);
+    await expect(page.locator("[data-newsletter]")).toHaveCount(0);
+    await expect(page.locator("#newsletter-email")).toHaveCount(0);
+    // And in particular not in the footer, which carried it on all 24 routes.
+    await expect(page.locator("body > footer form, body > footer input")).toHaveCount(0);
+  });
+}

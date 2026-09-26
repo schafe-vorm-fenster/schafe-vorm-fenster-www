@@ -25,16 +25,30 @@ import { everyRoute, href } from "../src/lib/routes/routes";
  * languages** and asserts, after each navigation and after the return, that
  * the document still has exactly one of each landmark. Nothing here would
  * fail on a page load.
+ *
+ * Since DEC-0081 the count includes the **contact section**, which the same
+ * layout renders between `</main>` and the footer on every route: it carries
+ * `id="kontakt"`, the target every in-page booking CTA resolves to, so a
+ * duplicate left behind by a preserved segment would make that anchor
+ * ambiguous exactly the way `#main` was (DEC-0122 §1).
  */
 
 interface Landmarks {
   header: number;
   main: number;
   idMain: number;
+  /**
+   * The contact section is chrome for the same reason (DEC-0081 §2,
+   * DEC-0122 §1): it stands on every page, it is rendered by the layout, and
+   * a page that rendered it would leave a second `id="kontakt"` behind after
+   * one click — an ambiguous target for every in-page booking CTA, which is
+   * what DEC-0081 §3 resolves a booking to.
+   */
+  contact: number;
   footer: number;
 }
 
-const ONE: Landmarks = { header: 1, main: 1, idMain: 1, footer: 1 };
+const ONE: Landmarks = { header: 1, main: 1, idMain: 1, contact: 1, footer: 1 };
 
 /**
  * This file is the slowest in the suite by construction: 26 walks, each one
@@ -84,6 +98,7 @@ async function landmarks(page: Page): Promise<Landmarks> {
         header: document.querySelectorAll("body > header").length,
         main: document.querySelectorAll("main").length,
         idMain: document.querySelectorAll("#main").length,
+        contact: document.querySelectorAll("section#kontakt[data-contact-section]").length,
         footer: document.querySelectorAll("body > footer").length,
       }));
     } catch (error) {

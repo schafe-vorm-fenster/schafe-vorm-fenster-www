@@ -5,7 +5,7 @@
  * footer — **once per document**, owned by `app/[lang]/layout.tsx`.
  *
  * ```
- * skip-link → site-header → (breadcrumb-trail) → main → site-footer
+ * skip-link → site-header → (breadcrumb-trail) → main → contact-section → site-footer
  * ```
  *
  * ### Why the chrome moved out of the page (state/open.md rows 97 and 204)
@@ -50,13 +50,23 @@
  *
  * What stays with the page: everything **inside** `main`, blocks 3 and 4
  * included (`_page-frame.tsx`).
+ *
+ * ### Why the contact section hangs here too (DEC-0081 §2, DEC-0122 §1)
+ *
+ * It is the site's one contact surface, it stands on **every** page between
+ * the closing block and the footer, and it is explicitly *not* a block of the
+ * TS-WEB-0006 D2 sequence — the construction DEC-0071 §2 used for the
+ * breadcrumb trail. Both reasons this chrome exists apply to it unchanged:
+ * one per document, and every `make-contact` event carries the route the
+ * section was rendered on (TS-WEB-0016 D12), which is exactly what the
+ * segments give us here.
  */
 
 import { useSelectedLayoutSegments } from "next/navigation";
 
 import { BackToTop } from "@/src/components/back-to-top/back-to-top";
 import { BreadcrumbTrail } from "@/src/components/breadcrumb-trail/breadcrumb-trail";
-import { EnvoyFormMount } from "@/src/components/envoy-form-mount/envoy-form-mount";
+import { ContactSection } from "@/src/components/contact-section/contact-section";
 import { SiteFooter } from "@/src/components/site-footer/site-footer";
 import { SiteHeader } from "@/src/components/site-header/site-header";
 import { dictionary } from "@/src/lib/i18n/dictionary";
@@ -66,13 +76,6 @@ import type { HeroPhotoByRoute } from "./_chrome-data";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { RouteId } from "@/src/lib/routes/routes";
 import type { ReactNode } from "react";
-
-/**
- * The imprint's own contact address (`content/legal/imprint.md`) — the
- * `lead-fallback` behind the mocked envoy widget must reach a real inbox, so
- * this is read from the legal text rather than invented (TS-WEB-0016 D6).
- */
-const CONTACT_EMAIL = "jan@schafe-vorm-fenster.de";
 
 /**
  * `/rechtliches` only (inventory §2.2 #18) — a fixed control, never elsewhere.
@@ -135,19 +138,12 @@ export function SiteChrome({
         </div>
       ) : null}
       <main id="main">{children}</main>
-      <SiteFooter
-        contact={
-          <EnvoyFormMount
-            fallbackEmail={CONTACT_EMAIL}
-            kind="contact"
-            locale={locale}
-            sourceRoute={route}
-          />
-        }
-        locale={locale}
-        newsletter={newsletter}
-        route={route}
-      />
+      {/* The one contact surface of the whole site, between `</main>` and the
+          footer, on every route (DEC-0081 §2, TS-WEB-0006-A17). The footer's
+          contact disclosure and its envoy mount are gone with it: there is no
+          general contact form anywhere any more (DEC-0122 §2). */}
+      <ContactSection locale={locale} route={route} />
+      <SiteFooter locale={locale} newsletter={newsletter} route={route} />
       {BACK_TO_TOP_ROUTES.has(route) ? <BackToTop /> : null}
     </>
   );

@@ -135,6 +135,17 @@ test("content compliance: the 404 body is copy, not a developer note", async ({ 
  * action in German. F-2-64 — the consent line's own legal link pointed at
  * `#datenschutz` in both languages, and the English legal page has no such
  * id, so it landed at the top of the page instead of at the privacy section.
+ *
+ * Both surfaces the two findings were measured on have since left the footer:
+ * the contact form was replaced by the contact section (DEC-0081) and the
+ * newsletter block is withheld while no sending system accepts a subscription
+ * (TS-WEB-0016-A21, DEC-0122). So the German-string sweep below is now a sweep
+ * over what the footer still says — the legal labels and the language switch —
+ * and the strings of the two departed blocks stay on the list, because they
+ * must not come back in German when the block does. The positive
+ * "New features and current offers" / "Sign up" assertions went with the block;
+ * `e2e/newsletter.spec.ts` asserts it renders nowhere at all, and its four
+ * F-3-11 cases come back with it.
  */
 const ENGLISH_ROUTES = ROUTES.filter((entry) => entry.locale === "en").map((entry) => entry.path);
 
@@ -157,8 +168,10 @@ for (const path of ENGLISH_ROUTES) {
     for (const german of GERMAN_UI_STRINGS) {
       expect(footer, `${path} renders "${german}"`).not.toContain(german);
     }
-    expect(footer).toContain("New features and current offers");
-    expect(footer).toContain("Sign up");
+    // What the footer still carries, in English: the three legal labels and
+    // the switch back to German (TS-WEB-0004-A9, TS-WEB-0001-A7).
+    expect(footer).toContain("Privacy");
+    expect(footer).toContain("Accessibility");
   });
 }
 
@@ -183,11 +196,14 @@ test("F-2-64 / TS-WEB-0004-A9: the consent line's legal link resolves to its own
     ["/en", "/en/legal#privacy", "privacy"],
   ] as const) {
     await page.goto(path);
-    // Two links carry this target: the footer's own "Datenschutz"/"Privacy"
-    // entry and the consent sentence's inline one. Before F-2-64 the second
-    // pointed at `#datenschutz` in both languages.
-    const consentLink = page.getByRole("contentinfo").locator(`a[href="${expected}"]`);
-    expect(await consentLink.count(), `${path} consent link`).toBeGreaterThanOrEqual(2);
+    // Two links carried this target while the newsletter stood here: the
+    // footer's own "Datenschutz"/"Privacy" entry and the consent sentence's
+    // inline one, which pointed at `#datenschutz` in both languages before
+    // F-2-64. The consent sentence went with the withheld block
+    // (TS-WEB-0016-A21), so one link is left — and the per-locale anchor is
+    // what this asserts, which is unchanged.
+    const privacyLink = page.getByRole("contentinfo").locator(`a[href="${expected}"]`);
+    expect(await privacyLink.count(), `${path} privacy link`).toBeGreaterThanOrEqual(1);
 
     // And the anchor it points at exists on the page it points to.
     await page.goto(expected);
@@ -332,9 +348,21 @@ test("provenance survives in `data-*`, on the pages that carry a mock", async ({
   }
 });
 
-test("the footer's mocked newsletter block declares itself in `data-mock`", async ({ page }) => {
+/**
+ * The standing surface that took the footer form's place carries the same
+ * marking regime: the contact section's head, its lead, row 1's sub-label and
+ * the D16 sentence are strings nobody has written yet, so the section declares
+ * itself `data-demo="true"` (DEC-0113). The footer's newsletter mock is the
+ * other half of the swap — it renders nowhere while no sending system accepts a
+ * subscription (TS-WEB-0016-A21, DEC-0122 §3), so there is no mock left to
+ * declare.
+ */
+test("the contact section declares its placeholder copy, and no newsletter mock renders", async ({
+  page,
+}) => {
   await page.goto("/");
-  await expect(page.locator('[data-newsletter][data-mock="true"]')).toHaveCount(1);
+  await expect(page.locator('section#kontakt[data-demo="true"]')).toHaveCount(1);
+  await expect(page.locator("[data-newsletter]")).toHaveCount(0);
 });
 
 /**
