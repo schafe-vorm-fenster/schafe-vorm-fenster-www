@@ -125,7 +125,11 @@ Both conditions now live in `app/[lang]/_proof.ts` (`parseProofLine`,
 `quoteAuthor`) rather than one of them in the page, so the pair is unit-tested
 in one place — including the negative for today's shape and the positive for the
 one that reaches a quote card. `state/open.md` row 280 states the two-part
-condition rather than a citation alone.
+condition rather than a citation alone, and so do **both locales' slot notes**
+on `/dein-kalender` — the place an editor adding a citation actually reads.
+Their first version promised that "the line renders as a quote card by itself",
+with the wrong line shape (`… — Wer, Wo — [Publikation, „Titel"]`) beside it;
+the promise and the shape are corrected there, not only in this record.
 
 ### §4 — The one price on `/deine-region` is a token in the artifact and a node on the page
 
@@ -144,6 +148,14 @@ dropping the qualifier to fit a sentence would break `TS-WEB-0006 D10` to satisf
 edit that drops it loses the price, never the sentence.
 
 ### §5 — A review correction outranks a record's wording, and is not a placeholder
+
+A line that carries such a correction is **authored**, and every place that
+describes it has to say so. `/deine-region`'s slot note called all three of its
+cards "im Wortlaut der Datensätze" while card 1 is the record's claim with the
+line-103 correction put in the place of its subject — the same untrue
+provenance statement this round corrected on `/mitmachen`. Both locales' notes
+now name card 1 as authored, and `state/open.md` row 281 covers all three
+authored proof lines rather than only `/mitmachen`'s two.
 
 `lehre-lelender`'s own `claim:` opens "Eine Gemeinde betreibt …", which the
 review corrects by name. The cards write **the Stiftung**, cite line 103 in the
@@ -209,11 +221,15 @@ duplicates.
   `e2e/pages/dein-kalender.spec.ts` gains the heading and the
   no-quote-card-without-a-source case; `e2e/pages/mitmachen.spec.ts` has its
   "Was andere sagen" assertion replaced and gains the attribution case.
-- `state/open.md` rows 279 to 282 carry what the owner decides: the customer
-  heading (279), the missing source URLs that keep three quotes out of quote
-  cards and the two-part condition a quote card needs (280), the two authored
-  proof lines on `/mitmachen` (281), and the `CG-027` claim budget the proof
-  pools stand over (282).
+- `state/open.md` rows 279 to 283 carry what the owner decides: the customer
+  heading, together with the verb stem it repeats from the kicker above it
+  (279), the missing source URLs that keep three quotes out of quote cards and
+  the two-part condition a quote card needs (280), the three authored proof
+  lines on `/mitmachen` and `/deine-region` (281), the `CG-027` claim budget the
+  proof pools stand over in both locales (282), and the typed `480 €` on
+  `/ueber-uns` that `TS-WEB-0006-A12` forbids site-wide while its only
+  instrument reads `/deine-region` (283). `proofHeading`'s doc comment no longer
+  claims the kicker/heading joint meets polish brief G-7; it does not.
 - **Provenance bookkeeping follows the pool, in four places.** Exchanging two
   elements on `/deine-region` (§6) is not finished when the cards change:
   `sources:`/`derived_from:` in both locales name the three records actually
@@ -226,13 +242,18 @@ duplicates.
   is recorded". A record that renders and appears in no register is a clearance
   that the go-live sweep cannot see.
 - **`CG-027`'s claim budget is exceeded by four of the six cards in the two
-  pools, and that is registered rather than hidden** (row 282: 121 · 112 · 67 on
-  `/deine-region`, 93 · 121 · 73 on `/mitmachen`, against a budget of 70). The
-  two long `/deine-region` claims are verbatim record `claim:` strings and
-  shortening them would be rewriting a record, which §6 forbids; `/mitmachen`'s
-  authored VHS line was cut from 147 to 121 characters, as far as it goes while
-  still carrying the benefit the review asks for. Nothing lints the budget, so
-  `pnpm check` says nothing about it either way.
+  pools, in both locales, and that is registered rather than hidden** (row 282,
+  against a budget of 70: `/deine-region` de 121 · 112 · 67 and en 120 · 101 ·
+  62; `/mitmachen` de 93 · 121 · 73 and en 96 · **129** · 73 — the English VHS
+  line is the worst in the tree). Exactly **one** of the four long lines is a
+  verbatim record `claim:` that §6 protects from paraphrase: `/deine-region`
+  card 2 (`leader-foerderung-2022`). The other three are authored —
+  `/deine-region` card 1 is the record's claim with §5's line-103 correction at
+  its subject, and `/mitmachen` cards 1 and 2 are written from their records'
+  `evidence:` — so they could be shortened without touching a record; that is a
+  copy decision and it stands on row 282 rather than being taken here.
+  `/mitmachen`'s VHS line was already cut from 147 to 121 (de). Nothing lints
+  the budget, so `pnpm check` says nothing about it either way.
 - **Not done here, and named rather than done:** `TS-WEB-0005 D7`'s cross-page
   rotation and `D5/D6`'s partition on a proof class are hub- and
   spec-owner-side (spec-impact.md, theme B "Change"). Nothing in `specs/` was

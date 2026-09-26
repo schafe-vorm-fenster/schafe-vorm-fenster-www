@@ -232,7 +232,8 @@ Gesamtbestand und sagt dazu, was sie belegen und was nicht.
 <!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022", "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei", "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"]; status: draft -->
 
 **Belegkarten (echt, teils mit offener Freigabe):** Drei Elemente aus
-dem Proof-Bestand, im Wortlaut der Datensätze:
+dem Proof-Bestand — Karte 2 und Karte 3 im Wortlaut ihrer Datensätze,
+Karte 1 formuliert:
 
 1. Die Stiftung betreibt den Dorfkalender als eigene Marke für 17 Orte, und Ehrenamtliche werden erfolgreich an Bord geholt. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen), 2026
 2. Das Vorhaben ist von der EU-Regionalförderung (LEADER) als förderwürdig für die ländliche Entwicklung anerkannt. — LEADER / LAG Vorpommern-Greifswald, 2022
@@ -248,7 +249,15 @@ Lebender Kalenderprojekt. Nicht die Gemeinde … Es sind aber 17 Ort in
 und um die Gemeinde Lehre" (Review vom 2026-09-22, Zeile 103). Der
 `claim:` des Datensatzes beginnt mit „Eine Gemeinde betreibt …" und ist
 damit an genau dieser Stelle falsch; die Korrektur des Reviews steht
-über dem Datensatz (DEC-0104, DEC-0143 §5). Karte 2 ist die
+über dem Datensatz (DEC-0104, DEC-0143 §5). Die Zeile ist damit
+**formuliert und nicht zitiert** — der `claim:` des Datensatzes mit der
+Korrektur aus Zeile 103 an der Stelle des Subjekts, genau wie Karte 1 auf
+`/mitmachen`. Sie liegt dem Owner deshalb als `state/open.md` Zeile 281
+zur Bestätigung vor, zusammen mit den beiden formulierten Zeilen dort.
+Mit 121 Zeichen (de; en 120) ist sie außerdem die längste der sechs
+Karten dieser Runde, und weil sie formuliert ist, ließe sie sich kürzen,
+ohne einen Datensatz anzufassen — das ist eine Copy-Entscheidung des
+Owners und steht als `state/open.md` Zeile 282 offen (`CG-027`). Karte 2 ist die
 EU-Regionalförderung im Wortlaut ihres `claim:`
 (`leader-foerderung-2022`, `unverified`; `source:` LEADER / LAG
 Vorpommern-Greifswald, Juni 2022). Karte 3 ist eine Stimme aus der

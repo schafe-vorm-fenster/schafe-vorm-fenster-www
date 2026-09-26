@@ -235,8 +235,13 @@ const CUSTOMER_PROOF_HEADING: Readonly<Record<Locale, string>> = {
  * from the kind here, in one place, rather than typed once per page.
  *
  * The kicker above it stays `kickers.customers`, which names the section's
- * *role*; this says what the section shows. No joint carries the same words
- * twice (polish brief G-7). DEC-0143 §2.
+ * *role*; this says what the section shows. The pair does **not** meet the
+ * polish brief's G-7 ("no joint carries the same words twice"): "Wer den
+ * Kalender nutzt" stands directly above "Wo es wirklich benutzt wird", the
+ * same verb stem twice. Both strings are the owner's, one as a dictionary
+ * kicker and one as a heading, so the repetition is his to settle — it is
+ * registered on `state/open.md` row 279 with row 234, not fixed here.
+ * DEC-0143 §2.
  */
 export function proofHeading(kind: ProofKind, locale: Locale): string {
   if (kind === "press") return dictionary(locale).kickers.othersSay;

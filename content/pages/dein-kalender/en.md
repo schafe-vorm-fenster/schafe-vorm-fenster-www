@@ -330,10 +330,17 @@ schema carries no such field
 (`plan/reviews/2026-09-23/spec-impact.md:99-102`). The three quotes
 therefore stand here as proof cards and not as quote cards: "a quote
 without a named source and a working link does not ship"
-(`concept/website-design-system.md` §Quote card, CG-028). Once a source
-exists it goes at the end of the line as a link — `… — Who, Where —
-[Publication, "Title"](https://…)` — and the line renders as a quote card
-by itself, with no change to the page (DEC-0143 §3, `state/open.md`).
+(`concept/website-design-system.md` §Quote card, CG-028). A source alone
+is not enough for that: the quote card needs two things — the source as a
+link at the end of the line **and** a three-part attribution. The shape
+that reaches a quote card is
+`"…" — <Name>, <Role>, <Organisation> — [<Publication>, "<Title>"](https://…)`.
+The three lines above carry only `Who, Where`, and
+`parseDemoProofElement` splits the attribution at the first `, ` — in
+"Holger Wendt, mayor of Rubkow" the role stands alone and `quoteAuthor`
+returns `null`. A link on its own therefore changes **nothing** on these
+three lines; whoever adds a source writes the attribution with it
+(DEC-0143 §3, `state/open.md` row 280).
 
 All three records carry `usage_rights: unverified` (Q-0014). The cards
 therefore stand in the protected preview, not on a public surface:

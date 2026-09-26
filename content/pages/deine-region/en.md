@@ -232,7 +232,8 @@ and says what they do and do not prove.
 <!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022", "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei", "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"]; status: draft -->
 
 **Proof cards (real, clearance pending):** Three elements
-from the proof set, in the wording of the records:
+from the proof set — cards 2 and 3 in the wording of their records,
+card 1 authored:
 
 1. The foundation runs the village calendar as a brand of its own for 17 places, and volunteers are being brought on board. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony), 2026
 2. The undertaking is recognised by EU regional funding (LEADER) as worth funding for rural development. — LEADER / LAG Vorpommern-Greifswald, 2022
@@ -246,7 +247,15 @@ Lebendiges Lehre' verantwortet das Lebender Kalenderprojekt. Nicht die
 Gemeinde … Es sind aber 17 Ort in und um die Gemeinde Lehre" (review of
 2026-09-22, line 103). The record's own `claim:` opens with "Eine
 Gemeinde betreibt …" and is wrong in exactly that place; the review's
-correction stands above the record (DEC-0104, DEC-0143 §5). Card 2 is the
+correction stands above the record (DEC-0104, DEC-0143 §5). The line is
+therefore **authored, not quoted** — the record's `claim:` with line 103's
+correction in the place of the subject, exactly like card 1 on
+`/mitmachen`. It is put to the owner as `state/open.md` row 281, together
+with the two authored lines there. At 120 characters (en; de 121) it is
+also the longest of the six cards in this round, and because it is
+authored it could be shortened without touching a record — that is the
+owner's copy call and stands open as `state/open.md` row 282 (`CG-027`).
+Card 2 is the
 EU regional funding in the wording of its `claim:`
 (`leader-foerderung-2022`, `unverified`; `source:` LEADER / LAG
 Vorpommern-Greifswald, June 2022). Card 3 is a voice from the region in

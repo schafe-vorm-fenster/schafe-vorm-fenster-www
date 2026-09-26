@@ -339,10 +339,17 @@ Proof-Schema des Hubs führt kein solches Feld
 (`plan/reviews/2026-09-23/spec-impact.md:99-102`). Deshalb stehen die drei
 Zitate hier als Belegkarten und nicht als Zitatkarten: „A quote without a
 named source and a working link does not ship" (`concept/website-design-system.md`
-§Quote card, CG-028). Sobald eine Quelle vorliegt, steht sie als Link am
-Ende der Zeile — `… — Wer, Wo — [Publikation, „Titel"](https://…)` — und
-die Zeile rendert von selbst als Zitatkarte, ohne Änderung an der Seite
-(DEC-0143 §3, `state/open.md`).
+§Quote card, CG-028). Eine Quelle allein genügt dafür nicht: Die
+Zitatkarte verlangt zwei Dinge — die Quelle als Link am Ende der Zeile
+**und** eine Zuschreibung aus drei Teilen. Die Form, die eine Zitatkarte
+auslöst, ist
+`„…" — <Name>, <Rolle>, <Organisation> — [<Publikation>, „<Titel>"](https://…)`.
+Die drei Zeilen oben tragen nur `Wer, Wo`, und `parseDemoProofElement`
+trennt die Zuschreibung am ersten `, ` — bei „Holger Wendt, Bürgermeister
+in Rubkow" bleibt die Rolle allein stehen, und `quoteAuthor` liefert
+`null`. Ein Link allein ändert an diesen drei Zeilen deshalb **nichts**;
+wer eine Quelle ergänzt, schreibt die Zuschreibung mit (DEC-0143 §3,
+`state/open.md` Zeile 280).
 
 Alle drei Datensätze tragen `usage_rights: unverified` (Q-0014). Die
 Karten stehen deshalb im geschützten Preview, nicht auf einer
