@@ -15,17 +15,6 @@
 }
 
 /*
- * The origin stamp under the provenance scene — the sentence that used to
- * carry a violet band of its own (polish brief, page 1, fix 5). Meta size, so
- * it reads as the page's own footnote about itself and not as a fourth scene.
- */
-.stamp {
-  color: var(--color-neutral-muted);
-  font-size: var(--type-meta-size);
-  margin: 0;
-}
-
-/*
  * The heading over a scene's single live row — the scene's own label for what
  * the row is, at card size, since the row beneath it is not a module with a
  * frame of its own.

@@ -102,7 +102,7 @@ states are layout logic, not part of this file. Placeholders in
 
 <!-- id: home-1-search-hero; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Headline:** What's on where you live?
+**Headline:** What's on where you live, and when.
 
 **Search input (placeholder):** Your place
 
@@ -119,6 +119,13 @@ states are layout logic, not part of this file. Placeholders in
 **Headline:** Here's what's on in {place}
 
 **CTA label (primary):** Open the {place} calendar
+
+**Hand-off line under the dates:** Your event missing? Add it yourself.
+
+The hand-off line is the review's own wording of 2026-09-22 and this
+block's hand-off to the next one (CG-008): the gap in the list is the way
+into publishing, not a flaw the page has to hide. It is a sentence, not a
+link — the page's one primary CTA stays the search (TS-WEB-0006 D3).
 
 Place name and dates are live data (TS-WEB-0008 position 1); the headline
 is a text template with a named placeholder, not a sentence generated
@@ -142,66 +149,118 @@ gap in the visitor's own place, not a gap in the system.
 
 <!-- id: home-4-scene-whatsapp; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
 
-**Aha question:** A photo of the flyer by WhatsApp, and the date is in the calendar?
-
-**Text:** Exactly that. You're printing the flyer anyway. Photograph it, send the picture to our WhatsApp number, done: the date appears in your place and in the neighbouring places, without you typing it in a second time.
+**Aha statement:** A photo of the flyer by WhatsApp, and the date is in the calendar.
 
 **Kicker:** How the dates get in
 
-**Transition:** Nobody here types those dates in. They come from the people in the place — usually like this:
+**Transition:** Nobody here types those dates in. They come from the clubs, the fire brigades and everyone who puts something on around here — usually like this:
+
+**Explain-module title:** Send a flyer by WhatsApp
+
+**CTA label (secondary):** Sign up for free now
 
 Source: `relievers[0]` of the "actors--community-calendar" value
 proposition — "send a photo of the printed flyer by WhatsApp and the
-date is created from it".
+date is created from it". The aha line is the same sentence as before
+without its question mark (CG-006, TS-WEB-0019-A6). This scene's body text
+is **gone**: the explain module beneath it says in three lines what the
+body said in two sentences, and a line that repeats the previous one is
+cut, not softened (CG-007, CG-016) — the review names that very
+replacement ("an animation that plays it would be better than a text like
+that"). Title and CTA label are `/mitmachen`'s
+own (`content/pages/mitmachen/en.md`, slot 3 and slot 1): the path is the
+same one, and this scene's target is the page that owns the job.
+
+### Slot 4a — Step lines and stage words of the WhatsApp scene (placeholder)
+
+<!-- id: home-4a-scene-whatsapp-steps-demo; content_type: value-story; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Steps:**
+
+1. Photograph the flyer — The one you printed anyway.
+2. Send it to us on WhatsApp — Straight into our chat via "share".
+3. The date is in the calendar — In your place and around it.
+
+**Chat reply (state 2):** Thanks! The date is in the calendar.
+
+**Chat time (state 2):** 14:06
+
+**Sample rows (state 3):**
+
+- Fire brigade fair | Sat · 15:00 · fire station | social | Community life
+- Lantern parade | Fri · 17:30 · church | culture | Culture
+- Village flea market | Sun · 11:00 · village square | social | Community life
+
+The same explain module as path 01 on `/mitmachen`, so the same
+placeholder set: the three step lines are the 2026-09-23 draft
+"3-Schritte-erklären" (11.20.03) and stay `provenance: generated`,
+`demo: true`, marked `data-demo="true"` in the markup until they are
+cleared (DEC-0068, DEC-0129, `state/open.md`). The sample rows are only the
+live panel's fallback in state 3, for when the upstream answers fewer than
+three rows; normally the panel shows the reference place's real dates.
 
 ## Scene 2 — Embedding (mechanism: embed)
 
 <!-- id: home-5-scene-embed; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
 
-**Aha question:** Your own calendar on your own website, with no system of your own behind it?
+**Aha statement:** Your dates on your own website.
 
-**Text:** Your municipality gets its own selection of dates, in its own design, under its own name, with nobody there maintaining a system. Local groups enter their own dates for their own purposes; your calendar stays current as a side effect.
+**Text:** The culture calendar for your municipality: dates from every local group in the area, on culture, tourism and community life. Two lines to embed, done.
 
-**Kicker:** And if you want to show them yourself
+**Kicker:** With no system of your own
 
-**Transition:** The same dates, on your own site:
+**Transition:** The dates from around here also stand where the municipality shows them:
+
+**CTA label (secondary):** Order the calendar
 
 Source: "municipalities--portalize-calendar" value proposition,
 `gains`/`relievers` fields — "our own design and our own selection,
-without our own system".
+without our own system". The aha line is the review's wording of
+2026-09-22 ("Deine Termine auf deiner Webseite"), as are the example
+("the culture calendar for your municipality … from every local group in
+the municipal area, on culture, tourism and community life") and "two
+lines to embed, done". The CTA label is the target page's own primary
+label (`content/pages/dein-kalender/en.md`, slot 1).
 
 ## Scene 3 — Provenance (mechanism: provenance)
 
 <!-- id: home-6-scene-provenance; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"]; status: draft -->
 
-**Aha question:** Who's actually behind this?
+**Aha statement:** Shaping our own villages ourselves.
 
-**Text:** Jan-Henrik Hempel was a volunteer mayor himself. The company's name comes from the municipality's sheep pasture in front of his own kitchen window. He knows the administration this service helps from the inside.
+**Text:** Jan-Henrik Hempel was a volunteer mayor, sits on the municipal council and co-founded the culture club. He knows the village from the inside — as someone who joins in. The name Schafe vorm Fenster comes from the sheep pasture outside his own kitchen window.
 
-**Kicker:** Where this comes from
-
-**Transition:** Both exist because somebody had the problem himself.
+**Transition:** The village calendar exists because somebody had the problem himself.
 
 Source: `founder-former-volunteer-mayor` (`usage_rights: cleared`) —
 documented via Nordkurier 2019/2022 and the Zukunftswege-Ost portrait
 2026.
+The breadth of the roles (municipal council, co-founder of the culture
+club) and the precedence of volunteering over administration are
+the review's wording of 2026-09-22, as are "shaping our own villages
+ourselves" and "the name Schafe vorm Fenster". This slot carries **no**
+kicker: "Wo das herkommt" is on the avoid list (CG-017, CG-040) and the
+review names no replacement — the heading carries the scene on its own
+(a deviation from polish brief G-3, as DEC-0120 §5 took for `/ueber-uns`).
 
 ## Block 2b — Provenance stamps
 
 <!-- id: home-7-provenance-stamps; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"]; status: draft -->
 
-**Text:** Built by someone who knows the office this service serves. Running since 2018.
-
 **Link:** More about us → `/ueber-uns`
 
-The second clause rests on `in-operation-since-2018` (`cleared`) —
-citable is "running since 2018", not "eight years at full operation".
+The stamp sentence "Built by someone who knows the office … Running since
+2018." is gone: "built" and "run" about this product are on the avoid list
+(CG-033, CG-040), and the review strikes the stamp. What stays is the way
+to the page that tells the origin in full — the label is this slot's own
+wording and the provenance scene's one secondary CTA (TS-WEB-0019 D3a,
+DEC-0082 §4).
 
 ## Block 2c — Proof stream (5 elements)
 
-<!-- clearance: pending — `lehre-lelender` and `volkshochschule-uecker-randow` are `usage_rights: unverified` (Q-0014), the three media-echo entries carry no `usage_rights` at all (Q-0045, state/open.md #1). The protected preview shows them; the pre-go-live hardening round clears them. `noerd-award-2026-smart-community` and `in-operation-since-2018` are `cleared`. -->
+<!-- clearance: pending — `lehre-lelender`, `volkshochschule-uecker-randow` and `kulturlandbuero-broellin` are `usage_rights: unverified` (Q-0014), the three media-echo entries carry no `usage_rights` at all (Q-0045, state/open.md #1). The protected preview shows them; the pre-go-live hardening round clears them. `noerd-award-2026-smart-community` and `in-operation-since-2018` are `cleared`. -->
 <!-- source_note: the stage-0 rule "widest spread, most recent first" comes from gtm:concept/website-relevance-model.concept.md (context matrix, row "Direct visit, unknown"); the proof rule from gtm:concept/website-communication-principles.concept.md §4. -->
-<!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2026-04-nord-award-nordkurier", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
+<!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
 
 **Kicker above the stream:** Awards, press, and places already using the village calendar
 
@@ -213,21 +272,36 @@ the candidate set it draws from — pool:
 
 **Candidates (stage 0: widest spread, most recent first):**
 
-1. The municipality of Lehre runs the calendar for its 17 places under its own name: LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony)
-2. NØRD Award 2026 in the Smart Community category, decided by public vote out of 80 entries. — NØRD digital convention, Rostock
-3. Village calendar nominated for a digital award, April 2026. — Nordkurier, Vorpommern-Greifswald
-4. The adult education centre publishes its entire course programme through the village calendar. — Volkshochschule Uecker-Randow, Pasewalk
-5. Running since 2018, no pilot and no prototype. — Press and appearance record 2018 to 2026, Vorpommern-Greifswald
+1. 17 places in and around Lehre, one calendar under its own name: LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony)
+2. Won the NØRD Award 2026, Smart Community category, under Bitkom patronage. — NØRD digital convention, Rostock
+3. The adult education centres bring their course programme out to the villages. — Adult education centres in Vorpommern-Greifswald, Pasewalk
+4. "The project can make a valuable contribution … to visibility in rural areas." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
+5. Running since 2018, no pilot and no prototype. — Vorpommern-Greifswald
 
 Names, figures, titles, and years are taken from the records as they
-stand: the 17 places and the name "LeLender" from `lehre-lelender`, the 80
-entries and the category from `noerd-award-2026-smart-community`, the
-headline from the Nordkurier entry of April 2026, the course programme
-from `volkshochschule-uecker-randow`, the operating year from
-`in-operation-since-2018`. Two of the five are cleared; three are waiting
-for clearance and therefore run with `clearance: pending`. Citable is
-"running since 2018", not "eight years at full operation" (the record's own
-wording limit).
+stand: the 17 places, the name "LeLender" and the foundation's ownership
+from `lehre-lelender`, the win and the Bitkom patronage from
+`noerd-award-2026-smart-community`, the course programme from
+`volkshochschule-uecker-randow`, the Kulturlandbüro's quotation from
+`kulturlandbuero-broellin`, the operating year from
+`in-operation-since-2018`. The quotation keeps the modality the record keeps —
+"can make", shortened by "to economic recovery and", wording from §Evidence and
+the same sentence the reserved place on `/ueber-uns` carries
+(`content/pages/ueber-uns/en.md`). It is not a claim of ours: the record's
+assertive `claim:` is our own summary, not the Kulturlandbüro's sentence, and
+"valuable" comes from the quotation alone (the record's wording boundary). Four corrections from the 2026-09-22 review are
+in there: the foundation runs the LeLender, not the municipality; the NØRD
+Award was won, not merely entered; the adult education centres are named
+after the district and the benefit (courses in the villages too) belongs in
+the sentence; the Nordkurier nomination entry goes, because the award says
+the same thing more strongly. The internal meta line "Press and appearance
+record 2018 to 2026" is struck with nothing in its place (CG-035), so the
+fifth element carries only its region and its context line comes from
+slot 12. No cleared record exists in the hub for "success with customers"
+(Wolgaster Kulturgesellschaft, named by the review) — `state/open.md`. Two
+of the five are cleared; three are waiting for clearance and run with
+`clearance: pending`. Citable is "running since 2018", not "eight years at
+full operation" (the record's own wording limit).
 
 ## Block 2d — Live counters
 
