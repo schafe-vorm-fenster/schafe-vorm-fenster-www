@@ -47,50 +47,111 @@
 }
 
 /*
- * The tier group of `/dein-kalender`. It was an inline `style` with a literal
- * gap; one class with the section's own spacing token keeps the three tiers
- * the same distance apart as everything else on the page.
+ * `/dein-kalender`'s three tiers no longer need a group class: they are rows
+ * inside one `price-section`, divided by its own hairline, and the section
+ * brings the spacing (DEC-0118, SRC-0014 §Page Rhythm). `.tierGroup` was the
+ * grid the three `offer-tier` panels stood in and is gone with them.
  */
-.tierGroup {
-  display: grid;
-  gap: var(--space-4);
+
+/*
+ * The one sentence that names the product, under the 480 € tier's row
+ * (TS-WEB-0024 D7). `price-tier-row` divides its rows with `.row + .row`, and
+ * a paragraph between two rows breaks that adjacency — so the note carries
+ * the hairline that would otherwise sit above the region tier, which keeps
+ * the section at three rows and one divider each.
+ */
+.tierNote {
+  border-bottom: 1px solid var(--color-neutral-line);
+  color: var(--color-neutral-text2);
+  font-size: var(--type-meta-size);
+  line-height: var(--leading-normal);
+  margin: 0;
+  max-width: var(--measure-reading);
+  padding-bottom: var(--section-padding-block);
 }
 
 /*
- * The embedded calendar's settings, as their own block on a light ground.
- * Inside the violet embed section the six rows read as fine print under the
- * picture; on their own they are the answer to "can we decide what is in
- * it?" — which is the question the 480 € tier turns on.
+ * The configuration block of `/dein-kalender` — kicker, title, the benefit
+ * band, and the six settings (TS-WEB-0024 D2 block `embed-config`).
  */
-.configList {
-  display: grid;
-  gap: var(--space-2) var(--space-4);
+.configLead {
+  font-size: var(--type-lead-size);
+  line-height: var(--leading-normal);
+  margin: var(--space-3) 0 0;
+  max-width: var(--measure-reading);
+}
+
+/*
+ * Where the dates come from, and the one place they land. A full-bleed band,
+ * not a box inside the section's padding: a panel framed by 16 px of paper is
+ * a picture in a mount, and the section stops being a surface (SRC-0014
+ * §Page Rhythm). It republishes the lime ground's own pairs, the way
+ * `price-band` does.
+ */
+.benefitBand {
+  --ground-kicker: var(--color-lime-900);
+  --ground-link: var(--color-lime-900);
+  --ground-link-hover: var(--color-neutral-ink);
+
+  background: var(--color-lime-500);
+  color: var(--color-lime-900);
+  margin-block: var(--section-padding-block);
+  padding-block: var(--section-padding-block);
+}
+
+.sourcePills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
   margin: 0;
+  padding: 0;
 }
 
-.configRow {
-  border-top: 1px solid var(--color-neutral-line);
-  display: grid;
-  gap: var(--space-1);
-  padding-top: var(--space-2);
-}
-
-@media (min-width: 40rem) {
-  .configRow {
-    grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
-    gap: var(--space-4);
-  }
-}
-
-.configKey {
-  font-size: var(--type-meta-size);
+.sourcePill {
+  align-items: center;
+  background: var(--color-neutral-paper);
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-ink);
+  display: inline-flex;
   font-weight: 700;
-  margin: 0;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
 }
 
-.configValue {
-  color: var(--color-neutral-text2);
+.benefitTarget {
+  align-items: center;
+  display: flex;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+}
+
+.targetPill {
+  align-items: center;
+  background: var(--color-neutral-ink);
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-paper);
+  display: inline-flex;
+  font-weight: 700;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+}
+
+.benefitLine {
   font-size: var(--type-body-size);
   line-height: var(--leading-normal);
-  margin: 0;
+  margin: var(--space-3) 0 0;
+  max-width: var(--measure-reading);
+}
+
+.settingsHeading {
+  font-size: var(--type-card-size);
+  font-weight: 800;
+  letter-spacing: var(--type-card-tracking);
+  line-height: var(--type-card-leading);
+  margin: 0 0 var(--space-3);
+}
+
+.configLink {
+  margin: var(--space-4) 0 0;
 }

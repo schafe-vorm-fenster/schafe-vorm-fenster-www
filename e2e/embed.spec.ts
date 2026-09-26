@@ -183,15 +183,28 @@ test.describe("the embed frame", () => {
     // to the widget that shows them.
     await expect(demo).toContainText("Schlatkow");
 
-    // And the configuration list names every setting the embed actually has.
-    // The keys are asserted by name rather than by count: the split added a
-    // `Veranstalter` row, and a list that grows a row is not a regression —
-    // one that loses one is.
-    for (const key of ["Orte", "Kategorien", "Zeitraum", "Darstellung", "Aktualisierung"]) {
-      await expect(config.locator("dt", { hasText: new RegExp(`^${key}$`, "u") })).toBeVisible();
+    // And the configuration block names every setting the embed actually
+    // has. The keys are asserted by name rather than by count: a list that
+    // grows a row is not a regression — one that loses one is.
+    //
+    // T-13 turned the `<dl>` into `setting-row`s (DEC-0118, DEC-0131 §1), so
+    // a key is an `h3` and its explanation is the row's own copy, not a
+    // `<dd>`. The `Zeitraum` row carries its placeholder badge inside the
+    // heading, so the match is a prefix rather than the whole string.
+    for (const key of [
+      "Orte",
+      "Veranstalter",
+      "Kategorien",
+      "Zeitraum",
+      "Darstellung",
+      "Aktualisierung",
+    ]) {
+      await expect(
+        config.locator("h3", { hasText: new RegExp(`^\\s*${key}`, "u") }),
+      ).toBeVisible();
     }
-    // And the values, not only the labels — a list of empty keys explains
-    // nothing.
-    await expect(config.locator("dd").first()).toContainText("Schmatzin");
+    // And the explanations, not only the labels — a list of bare keys
+    // explains nothing.
+    await expect(config.locator("li p").first()).not.toBeEmpty();
   });
 });

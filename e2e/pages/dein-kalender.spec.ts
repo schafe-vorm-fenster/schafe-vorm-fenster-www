@@ -18,20 +18,20 @@ const VIEWPORTS = [
 const ROUTE = "/dein-kalender";
 
 test.describe("TS-WEB-0024: /dein-kalender", () => {
-  test("TS-WEB-0024-A2: data-block order is focus, contrast, embed-demo, tiers, proof, trust", async ({
+  test("TS-WEB-0024-A2: data-block order is focus, contrast, embed-demo, embed-config, tiers, proof, trust", async ({
     page,
   }) => {
     await page.goto(ROUTE);
     const blocks = await page.locator("[data-block]").evaluateAll((elements) =>
       elements.map((element) => element.getAttribute("data-block")),
     );
-    // CHANGED (polish brief G-4 and page 6, item 2): `embed-config` is new.
-    // The embed section measured 1772 px at 390 px — a screen and a half over
-    // the budget — because the real calendar, a nine-line paragraph and a
-    // six-row settings list shared one violet ground, and the settings read
-    // as fine print under the picture rather than as the answer to "can we
-    // decide what is in it?". The calendar keeps the violet section to
-    // itself; the settings stand one section lower, on their own ground.
+    // `embed-config` is the seventh block TS-WEB-0024 D2 lists since
+    // DEC-0131 §1. The embed section measured 1772 px at 390 px — a screen
+    // and a half over G-4's budget — because the real calendar, a nine-line
+    // paragraph and a six-row settings list shared one violet ground, and
+    // the settings read as fine print under the picture rather than as the
+    // answer to "can we decide what is in it?". The calendar keeps the
+    // violet section to itself; the settings stand one section lower.
     expect(blocks).toEqual([
       "focus",
       "contrast",
@@ -57,6 +57,9 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
       .locator('[data-block="focus"] [data-cta="equal-weight"]')
       .count();
     expect(insideFocus).toBe(1);
+    // In-page, not outbound: the consult half resolves to this page's own
+    // contact section (TS-WEB-0024 D3, DEC-0081 §3).
+    await expect(equalWeight).toHaveAttribute("href", /\/dein-kalender#kontakt$/);
   });
 
   for (const viewport of VIEWPORTS) {
@@ -77,47 +80,126 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
     page,
   }) => {
     await page.goto(ROUTE);
-    // The heading read "Heute gegen mit dem Produkt" — not a sentence in any
-    // language, in 38 px, on the page that asks for 480 € (brief, finding 5).
-    await expect(
-      page.getByRole("heading", { name: "Heute — und mit dem Produkt" }),
-    ).toBeVisible();
-    const rows = page.locator('[data-block="contrast"] li');
+    const block = page.locator('[data-block="contrast"]');
+    // The block has a heading of its own, and it names no product. Its
+    // wording is copy (DEC-0083, DEC-0106 §2), so the assertion is the
+    // absence, never the sentence.
+    await expect(block.locator("h2")).toHaveCount(1);
+    const rows = block.locator("li");
     await expect(rows).toHaveCount(4);
     // `innerText` reflects the rendered (CSS-uppercased) text, so compare
     // case-insensitively rather than assuming sentence case survives.
     const first = (await rows.first().innerText()).toLowerCase();
     expect(first).toContain("heute:");
-    expect(first).toContain("mit dem produkt:");
+    expect(first).toContain("mit eurem kalender:");
+    // TS-WEB-0024-A5 / TS-WEB-0018-A7 — neither column label nor any cell
+    // carries a product name or the avoid list's words for one (CG-039).
+    const blockText = (await block.innerText()).toLowerCase();
+    for (const forbidden of ["mit dem produkt", "das produkt", "portalize"]) {
+      expect(blockText, forbidden).not.toContain(forbidden);
+    }
+    // No checkmark/cross column: every row is two cells and nothing else.
+    await expect(block.locator("li p")).toHaveCount(8);
   });
 
-  test("TS-WEB-0024-A8: the tiers block has one heading and exactly three tiers, in order, tier 3 links to /deine-region", async ({
+  test("TS-WEB-0024-A5: no row names a postcode — a place name is where you are from", async ({
     page,
   }) => {
     await page.goto(ROUTE);
-    const tiers = page.locator('[data-block="tiers"] [data-offering]');
+    const blockText = (await page.locator('[data-block="contrast"]').innerText()).toLowerCase();
+    for (const forbidden of ["postleitzahl", "plz"]) {
+      expect(blockText, forbidden).not.toContain(forbidden);
+    }
+  });
+
+  test("TS-WEB-0024-A8: the tiers block has one section heading and exactly three tiers, in order", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    const block = page.locator('[data-block="tiers"]');
+    // One heading names the section — the `lime-500` band's `h2`
+    // (`price-band`). Each tier's own title is an `h3` inside its row, which
+    // is the module shape D6 leaves free and T-06 built (DEC-0131 §2).
+    await expect(block.locator("h2")).toHaveCount(1);
+    const tiers = block.locator("[data-offering]");
     await expect(tiers).toHaveCount(3);
     const order = await tiers.evaluateAll((elements) =>
       elements.map((element) => element.getAttribute("data-offering")),
     );
     expect(order).toEqual(["community-calendar", "portalize-calendar", "portalize-enterprise"]);
+    await expect(block.locator("h3")).toHaveCount(3);
+    // Not an audience selector (TS-WEB-0018 D7): one question answered three
+    // times, nowhere on the page a control to classify yourself.
     await expect(page.locator('select, [role="tab"], input[type="radio"]')).toHaveCount(0);
-    await expect(
-      page.locator('[data-offering="portalize-enterprise"] a[href*="/deine-region"]'),
-    ).toHaveCount(1);
   });
 
-  test("TS-WEB-0024-A9: 'Portalize' occurs exactly once, inside the tiers block's portalize-calendar tier, never in a heading or the title", async ({
+  test("TS-WEB-0024-A8 / TS-WEB-0006-A18: each tier carries exactly one CTA, on the secondary rung, with the tier's weight", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    const expected = [
+      { offering: "community-calendar", href: "/mitmachen", variant: "quiet" },
+      { offering: "portalize-calendar", href: "/dein-kalender/bestellen", variant: "primary-light" },
+      { offering: "portalize-enterprise", href: "/deine-region", variant: "quiet" },
+    ] as const;
+
+    for (const tier of expected) {
+      const row = page.locator(`[data-block="tiers"] [data-offering="${tier.offering}"]`);
+      const ctas = row.locator("a[data-cta], button[data-cta]");
+      await expect(ctas, `${tier.offering}: exactly one CTA`).toHaveCount(1);
+      await expect(ctas).toHaveAttribute("href", new RegExp(`${tier.href}(\\?|$)`));
+      // The rung is secondary on every tier; none of them is the page's
+      // primary marker (DEC-0082 §1).
+      await expect(ctas).toHaveAttribute("data-cta", "secondary");
+      // The weight is derived from the offering id, never chosen per call
+      // site — `price-tier-row` publishes it on the row.
+      await expect(row).toHaveAttribute("data-cta-variant", tier.variant);
+    }
+
+    // Pulse occurs once, in `focus`, and never on a tier (A3).
+    await expect(page.locator('[data-block="tiers"] [data-cta="primary"]')).toHaveCount(0);
+  });
+
+  test("TS-WEB-0024-A9: 'Portalize' occurs exactly once, inside the tiers block at the 480 € tier, never in a heading or the title", async ({
     page,
   }) => {
     await page.goto(ROUTE);
     const bodyText = await page.locator("body").innerText();
     const hits = bodyText.match(/Portalize/gi) ?? [];
     expect(hits).toHaveLength(1);
-    const tierText = await page.locator('[data-offering="portalize-calendar"]').innerText();
-    expect(tierText).toContain("Portalize");
+    // `price-tier-row` has no body-copy slot, so D7's one sentence stands
+    // directly under the row it belongs to, inside the tiers block
+    // (DEC-0131 §3).
+    const tiersText = await page.locator('[data-block="tiers"]').innerText();
+    expect(tiersText).toContain("Portalize");
     expect(await page.title()).not.toContain("Portalize");
-    await expect(page.locator('h1:has-text("Portalize"), h2:has-text("Portalize")')).toHaveCount(0);
+    await expect(
+      page.locator('h1:has-text("Portalize"), h2:has-text("Portalize"), h3:has-text("Portalize")'),
+    ).toHaveCount(0);
+  });
+
+  test("TS-WEB-0024 D2 / DEC-0131: the configuration block carries the benefit band, six settings and no radius", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    const block = page.locator('[data-block="embed-config"]');
+    await expect(block).toHaveCount(1);
+    await expect(block.locator('[data-surface="lime-500"]')).toHaveCount(1);
+    // Six settings, each an `h3` inside its row.
+    await expect(block.locator("li h3")).toHaveCount(6);
+    // One setting is still unconfirmed upstream and says so as a badge, not
+    // as a softened sentence (DEC-0118).
+    await expect(block.getByText("wird geprüft")).toBeVisible();
+    // One struck chip per filter setting — the design system's one
+    // strikethrough, "this is what your calendar leaves out".
+    expect(await block.locator("[data-excluded]").count()).toBeGreaterThan(0);
+
+    const text = (await block.innerText()).toLowerCase();
+    // "Umkreis" is in no offering record (spec-impact.md:315) and "im Amt"
+    // is the copy guide's avoid list (CG-036).
+    for (const forbidden of ["umkreis", "im amt"]) {
+      expect(text, forbidden).not.toContain(forbidden);
+    }
   });
 
   test("TS-WEB-0024-A10/A11: exactly one price, 480, with currency, year, net, read from the offerings package", async ({
@@ -168,14 +250,19 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
     await page.goto(ROUTE);
     for (const line of [
       "So sieht das aus, wenn es bei euch steht:",
-      "Was das kostet, hängt nur davon ab, wo der Kalender stehen soll.",
       "Bleibt die Frage, wem ihr da eigentlich eure Daten gebt.",
     ]) {
       await expect(page.getByText(line)).toBeVisible();
     }
+    // The price section's framing line is the band's, not a transition above
+    // it — one sentence, in one place (DEC-0118, DEC-0131 §2).
+    await expect(
+      page.locator('[data-block="tiers"]').getByText("wo der Kalender stehen soll"),
+    ).toBeVisible();
     for (const kicker of [
       "Warum es heute hakt",
       "So funktioniert es",
+      "Was hilft euch das?",
       "Was es kostet",
       "Wer den Kalender nutzt",
       "Wie wir arbeiten",
@@ -185,40 +272,30 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
   });
 
   /**
-   * G-5 — the outbound disclosure leaves the control's label. "(öffnet neuen
-   * Tab) · Daten gehen an Google" inside the pill made the hero's secondary a
-   * three-line white block that outweighed the page's own primary, and made
-   * tier 2's briefing a two-line link. The new-tab half is one written
-   * sentence under the control; the data half belongs to the privacy
-   * statement the trust block links.
-   */
-  test("G-5: no briefing control carries its disclosure inside its own label", async ({ page }) => {
-    await page.goto(ROUTE);
-    const labels = await page
-      .locator('a[href*="calendar.app.google"]')
-      .evaluateAll((elements) => elements.map((element) => element.textContent ?? ""));
-    expect(labels.length).toBeGreaterThan(0);
-    for (const label of labels) {
-      expect(label).not.toContain("Daten gehen an");
-    }
-    await expect(page.getByText("Öffnet Google Kalender in einem neuen Tab.").first()).toBeVisible();
-  });
-
-  /**
    * G-6 / brief page 6, item 8 — the page ended on a button with no sentence
-   * above it, and the equal-weight briefing was nowhere near it.
+   * above it. The quiet second way under it is gone with DEC-0081 §3: it was
+   * a second carrier of the appointment URL.
    */
-  test("the closing block carries its heading and the briefing as a quiet second way", async ({
+  test("the closing block carries its heading and repeats the primary without Pulse", async ({
     page,
   }) => {
     await page.goto(ROUTE);
     const closing = page.locator("#closing-cta");
     await expect(closing).toContainText("Euer Kalender läuft, sobald der Code auf eurer Seite steht.");
     await expect(closing.locator('a[href*="/dein-kalender/bestellen"]')).toHaveCount(1);
-    await expect(closing.getByText("Lieber erst sprechen?")).toBeVisible();
     // Still exactly one primary treatment on this screenful: the repeat is
-    // `data-cta="repeat"`, and the briefing is a link.
+    // `data-cta="repeat"`.
     await expect(closing.locator('[data-cta="primary"]')).toHaveCount(0);
+    // TS-WEB-0024-A15 — the appointment URL occurs once on the page, and
+    // that occurrence is the contact section's first action row.
+    await expect(closing.locator('a[href*="calendar.app.google"]')).toHaveCount(0);
+
+    // TS-WEB-0024-A17 — same goal, same target, same label as the primary.
+    const primaryLabel = (await page.locator('[data-cta="primary"]').innerText()).trim();
+    const repeatLabel = (
+      await closing.locator('a[href*="/dein-kalender/bestellen"]').innerText()
+    ).trim();
+    expect(repeatLabel).toBe(primaryLabel);
   });
 
   test("TS-WEB-0024-A14: the trust block occurs exactly once, states the data-protection claim, links both legal anchors", async ({
@@ -232,28 +309,68 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
     await expect(page.locator('[data-block="trust"] a[href*="#auftragsverarbeitung"]')).toHaveCount(1);
   });
 
-  test("TS-WEB-0024-A15: the equal-weight CTA navigates to the configured briefing URL and fires request-product-briefing once, no Google script/iframe", async ({
+  test("TS-WEB-0024-A15: the equal-weight CTA moves to the contact section and emits nothing; the appointment URL occurs once", async ({
     page,
-    context,
   }) => {
     const consoleMessages: string[] = [];
     page.on("console", (message) => consoleMessages.push(message.text()));
     await page.goto(ROUTE);
     await page.waitForLoadState("networkidle");
-    const [popup] = await Promise.all([
-      context.waitForEvent("page"),
-      page.locator('[data-cta="equal-weight"]').click(),
-    ]);
-    await popup.waitForLoadState("domcontentloaded").catch(() => undefined);
-    expect(popup.url()).toContain("calendar.google.com");
-    await popup.close();
-    await page.waitForTimeout(500);
-    expect(
-      consoleMessages.some(
-        (text) => text.includes("request-product-briefing") && text.includes("handover"),
-      ),
-    ).toBe(true);
+
+    // The one element carrying the appointment URL is the section's first
+    // action row — not the hero, not a tier, not the closing block
+    // (DEC-0081 §3, TS-WEB-0016 D7).
+    const appointment = page.locator('a[href*="calendar.app.google"]');
+    await expect(appointment).toHaveCount(1);
+    await expect(
+      page.locator("section#kontakt a[data-channel='appointment']"),
+    ).toHaveAttribute("href", /calendar\.app\.google/);
+
+    // A click inside a document is navigation, and counting it would count
+    // one intent twice (DEC-0081 §4).
+    const before = consoleMessages.length;
+    await page.locator('[data-cta="equal-weight"]').click();
+    await expect(page).toHaveURL(/#kontakt$/);
+    await page.waitForTimeout(300);
+    const fired = consoleMessages.slice(before);
+    expect(fired.some((text) => text.includes("[analytics:mock] conversion"))).toBe(false);
+
+    // The section itself is in view after the jump.
+    await expect(page.locator("section#kontakt")).toBeInViewport();
+
+    // No Google script, iframe or font is loaded by the page (DEC-0013).
     await expect(page.locator('script[src*="google"], iframe[src*="google"]')).toHaveCount(0);
+  });
+
+  /**
+   * The section half of TS-WEB-0024-A15. `e2e/contact-section.spec.ts` walks
+   * every route for the four rows' events; this asserts the two goals of row
+   * 1 on *this* route, because the route is what distinguishes one booking
+   * intent from another (DEC-0081 §4, TS-WEB-0016 D12).
+   */
+  test("TS-WEB-0024-A15: the section's first action row emits request-product-briefing and make-contact, both on this route", async ({
+    page,
+  }) => {
+    const conversions: string[] = [];
+    page.on("console", (message) => {
+      if (message.text().includes("[analytics:mock] conversion")) conversions.push(message.text());
+    });
+    await page.goto(ROUTE);
+    const origin = new URL(page.url()).origin;
+    await page.route(
+      (url) => url.origin !== origin,
+      (route) => route.fulfill({ status: 204, body: "" }),
+    );
+    const row = page.locator("section#kontakt a[data-channel='appointment']");
+    await expect(row.locator("xpath=ancestor::*[@data-conversion-tracker][1]")).toHaveAttribute(
+      "data-hydrated",
+      "true",
+    );
+    await row.click({ noWaitAfter: true });
+    await expect.poll(() => conversions.length).toBeGreaterThanOrEqual(2);
+    await page.waitForTimeout(150);
+    expect(conversions.filter((text) => text.includes("request-product-briefing"))).toHaveLength(1);
+    expect(conversions.filter((text) => text.includes("make-contact"))).toHaveLength(1);
   });
 
   test("TS-WEB-0024-A16: the primary CTA lands on /dein-kalender/bestellen and fires no conversion event from this page", async ({
