@@ -171,5 +171,8 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0129 — The scene carries the module, block 2b is the scene, and `/` ends on ink — the twelve choices the home composition had to take](DEC-0129--the-scene-carries-the-module-and-the-page-ends-on-ink.md)
 - [DEC-0131 — The configuration block is its own block, the tiers are rows, and the product sentence moves under the row it belongs to — plus the two links `/dein-kalender` no longer carries](DEC-0131--the-configuration-block-is-its-own-block.md)
 - [DEC-0132 — The trust surface books — the closing block is its one primary, the reserved proof place speaks again, and the second proof section has no cleared record to stand on](DEC-0132--the-trust-surface-books.md)
+- [DEC-0133 — The booking CTA resolves in-page and the marking leaves the label — `<route>#kontakt` through the route facade, the scope rides along in the order flow, and the disclosure becomes a described `meta` span for every variant](DEC-0133--the-booking-cta-resolves-in-page.md)
+- [DEC-0134 — A comment is not a test — the coverage scan reads prose, so acceptance ids are spelled out, the gap gets a row, and the order flow's consult target is one builder two call sites share](DEC-0134--a-comment-is-not-a-test.md)
+- [DEC-0139 — The focal point is the crop — the motif rule picks four heroes, the declared pair cuts the file and positions the surface, and the flyer motif has no cleared photograph](DEC-0139--the-focal-point-is-the-crop.md)
 - [DEC-0140 — The entry trait arrives as one header — the proxy hands down a host and a medium, and block 2a reorders inside a boundary whose fallback is the direct order](DEC-0140--the-entry-trait-arrives-as-one-header.md)
-
+- [DEC-0141 — The instrument decides coverage, not the mention — and the backlog may only shrink](DEC-0141--the-instrument-decides-coverage-and-the-backlog-only-shrinks.md)

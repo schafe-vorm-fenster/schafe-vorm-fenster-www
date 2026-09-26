@@ -85,6 +85,76 @@ function admitsRequestTimeInlineScript(csp: string | undefined): boolean {
   return scriptSrc.includes("'unsafe-inline'") && !/'sha(?:256|384|512)-/.test(scriptSrc);
 }
 
+/**
+ * The hash asset `scripts/generate-csp-hashes.mjs` writes after `next build`
+ * and `src/lib/security/csp-hashes.ts` fetches — spelled out here rather than
+ * imported, so this spec keeps the one import surface Playwright resolves.
+ */
+const CSP_HASHES_ASSET_PATH = "/_next/static/security/csp-script-hashes.json";
+
+/**
+ * Whether a resolved `<Suspense>` boundary can reach the DOM in the
+ * configuration under test — asked of two independent reads, because either one
+ * alone can be absent. The policy this response carried is the direct read; the
+ * per-build hash asset is the indirect one, and it is the read that survives a
+ * response whose header never reached this runner: a build that ships the asset
+ * serves a hash-only `script-src` for *every* request (`csp.ts`'s `hasHashes`
+ * branch), which is what a `next build` + `next start` — CI's e2e job — does.
+ *
+ * So: a nonce is row 132's remedy and admits the script outright; otherwise the
+ * policy must admit a request-time inline script *and* the build must ship no
+ * hash set. `next dev` is the one configuration that passes both (no extraction
+ * step ever ran there, so `csp.ts` falls back to `'unsafe-inline'`).
+ */
+async function boundaryCompletionReachesTheDom(
+  page: Page,
+  csp: string | undefined,
+): Promise<boolean> {
+  if (csp !== undefined && csp.includes("'nonce-")) return true;
+  if (!admitsRequestTimeInlineScript(csp)) return false;
+  const hashAsset = await page.request.get(CSP_HASHES_ASSET_PATH);
+  return !hashAsset.ok();
+}
+
+/**
+ * Everything `TS-WEB-0010-A4` names, read inside `main` — the section ids, the
+ * headings, the CTAs and the navigation of one load. Block 2a's *internal*
+ * order is deliberately not part of it: that is the one thing `TS-WEB-0010 D7`
+ * lets a trait move (`state/open.md` row 273), and `TS-WEB-0019-A7` asserts it.
+ *
+ * Scoped to `main` for the same reason every other read here is: until a
+ * `<Suspense>` boundary reveals, its resolved branch stands parked after
+ * `</main>` (DEC-0140 §2).
+ */
+async function entryStageStructure(page: Page) {
+  return page.evaluate(() => {
+    const main = document.querySelector("main");
+    const scenes = [...(main?.querySelectorAll('[data-block="scene"]') ?? [])];
+    const sceneIds = new Set(scenes.map((scene) => scene.id));
+    return {
+      sectionIds: [...(main?.querySelectorAll("section[id]") ?? [])].map((section) => section.id),
+      /** Order, not just membership — for every section outside block 2a. */
+      outsideBlockTwoA: [...(main?.querySelectorAll("section[id]") ?? [])]
+        .map((section) => section.id)
+        .filter((id) => !sceneIds.has(id)),
+      headings: [...(main?.querySelectorAll("h1, h2") ?? [])].map((heading) =>
+        (heading.textContent ?? "").replace(/\s+/gu, " ").trim(),
+      ),
+      ctas: [...(main?.querySelectorAll("[data-cta]") ?? [])].map(
+        (cta) =>
+          `${cta.getAttribute("data-cta")} ${cta.getAttribute("href") ?? ""} ${(
+            cta.textContent ?? ""
+          )
+            .replace(/\s+/gu, " ")
+            .trim()}`,
+      ),
+      navigation: [...document.querySelectorAll("header a[href], footer a[href]")].map(
+        (link) => link.getAttribute("href") ?? "",
+      ),
+    };
+  });
+}
+
 /** Every fact TS-WEB-0019-A7 compares between its two loads, read in one pass. */
 async function sceneFacts(page: Page) {
   const facts = await page.evaluate(() => {
@@ -561,10 +631,11 @@ test.describe("TS-WEB-0019 — home", () => {
     // it holds in `next dev` and on a preview-CSP build, and closing the gap
     // is row 132's nonce decision (`DEC-0140` §4).
     test.skip(
-      !admitsRequestTimeInlineScript(
+      !(await boundaryCompletionReachesTheDom(
+        page,
         professionalResponse?.headers()["content-security-policy"],
-      ),
-      "The served script-src admits no request-time inline script, so no <Suspense> boundary completes and block 2a cannot be reordered in the DOM — state/open.md row 132, DEC-0140 §4.",
+      )),
+      "The served script-src admits no request-time inline script (or this build ships the hash set that produces such a policy), so no <Suspense> boundary completes and block 2a cannot be reordered in the DOM — state/open.md row 132, DEC-0140 §4. A7 is parked here, not failing; the shipped state is the direct order everywhere.",
     );
     await expect.poll(() => sceneMechanisms(page), { timeout: 20_000 }).toEqual([
       "embed",
@@ -615,6 +686,46 @@ test.describe("TS-WEB-0019 — home", () => {
     // TS-WEB-0019-A8 — "in every one of the loads of A7".
     expect(professional.proofElements).toBe(5);
     expect(direct.proofElements).toBe(5);
+  });
+
+  test("TS-WEB-0010-A4: the two entry stages differ in nothing but the order inside block 2a", async ({
+    page,
+  }) => {
+    /**
+     * A4 asks that "the section ids, order, headings, CTAs and navigation are
+     * identical across stage-0 … stage-3 requests". `TS-WEB-0019 D3a` orders
+     * block 2a by the entry trait and `TS-WEB-0010 D7` permits exactly that
+     * ("`trait` may reorder within a page, never redefine what the page is
+     * for"), so A4's word "order" cannot be the DOM order of block 2a's
+     * members. The reading this walk asserts is `state/open.md` row 273's: the
+     * set of sections, their headings, their CTAs and the navigation are
+     * invariant across the two entry stages, and so is the order of every
+     * section outside the trait-ordered block.
+     *
+     * Unlike `TS-WEB-0019-A7` this asserts nothing about a *resolved*
+     * boundary, so it holds under both policies of row 132 — where the
+     * boundary completes, block 2a is reordered and everything below is still
+     * identical; where it does not, nothing moved and everything below is
+     * identical too.
+     */
+    await page.setViewportSize(DESKTOP);
+
+    // Stage 2 (a `professional` trait, D3's LinkedIn row) and stage 0 (no
+    // referrer, no parameter — `direct`), the two loads A7 also uses.
+    await page.goto("/", { referer: "https://www.linkedin.com/" });
+    await page.waitForLoadState("networkidle");
+    const professional = await entryStageStructure(page);
+
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+    const direct = await entryStageStructure(page);
+
+    expect(professional.sectionIds.length).toBeGreaterThan(0);
+    expect(professional.sectionIds.toSorted()).toEqual(direct.sectionIds.toSorted());
+    expect(professional.outsideBlockTwoA).toEqual(direct.outsideBlockTwoA);
+    expect(professional.headings.toSorted()).toEqual(direct.headings.toSorted());
+    expect(professional.ctas.toSorted()).toEqual(direct.ctas.toSorted());
+    expect(professional.navigation).toEqual(direct.navigation);
   });
 
   test("TS-WEB-0019-A8: the proof stream renders exactly 5 elements", async ({ page }) => {

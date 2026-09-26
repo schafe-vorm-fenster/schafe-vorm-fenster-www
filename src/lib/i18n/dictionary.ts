@@ -320,10 +320,24 @@ export interface Dictionary {
    * `locale` before F-2-4, on every page that links off-site.
    */
   outboundLink: {
-    /** "(öffnet neuen Tab)" — announced in the link text itself (A11y). */
+    /** "öffnet neuen Tab" — the marking under the control, never in its name (A23). */
     newTab: string;
     /** "Daten gehen an <recipient>" — the recipient follows this phrase. */
     dataGoesTo: string;
+  };
+  /**
+   * `lead-fallback` — TS-WEB-0016 D6's static fallback. The three lines were
+   * German literals in the component, so the English quote route degraded
+   * into German (the same root cause as `outboundLink` above, F-2-4). They are
+   * UI strings, not page copy, so they are the dictionary's (working rule 4).
+   */
+  leadFallback: {
+    /** The link to `/start`, the contact route of last resort (D6). */
+    formLink: string;
+    /** "oder per E-Mail:" — the address follows as a `mailto:` link. */
+    byMail: string;
+    /** The consult line, where the surface offers one — an in-page link to the page's contact section. */
+    consult: string;
   };
   /**
    * `/rechtliches` (EN `/legal`) — the one string of this dictionary that
@@ -561,6 +575,12 @@ const de: Dictionary = {
     newTab: "öffnet neuen Tab",
     dataGoesTo: "Daten gehen an",
   },
+  leadFallback: {
+    // The string the component carried as a German literal.
+    formLink: "Formular öffnen",
+    byMail: "oder per E-Mail:",
+    consult: "Termin für ein Kennenlerngespräch buchen",
+  },
   legal: {
     sectionsLabel: "Abschnitte",
     // The German page carries no notice: its six sections are German (F-2-74).
@@ -738,6 +758,12 @@ const en: Dictionary = {
   outboundLink: {
     newTab: "opens new tab",
     dataGoesTo: "Data goes to",
+  },
+  leadFallback: {
+    formLink: "Open the form",
+    byMail: "or by e-mail:",
+    // content/pages/deine-region/en.md:127 — the owner's own English label.
+    consult: "Book an intro call",
   },
   legal: {
     sectionsLabel: "Sections",

@@ -102,7 +102,7 @@ determination — grants the exception in words. A4 is read as binding the
 page: the three scenes reorder, every other section keeps its place, the CTAs
 and the opener are identical between the two loads, and the module stays with
 the `whatsapp` scene. **No spec line was amended** — amending A4 is the spec
-owner's — and the reading is recorded as `state/open.md` row 266.
+owner's — and the reading is recorded as `state/open.md` row 273.
 
 Two smaller readings, both taken rather than left open:
 
@@ -151,11 +151,35 @@ script — no `'unsafe-inline'` standing alone and no `'nonce-…'` — with the
 reason naming `state/open.md` row 132. That is the configuration `pnpm e2e` with
 `CI=true` runs (`next build` + `next start`, the CI job *"E2E — Playwright
 against the local production build"*), and also a plain `next start` with
-`VERCEL_ENV` unset, because `pnpm build` always writes the hash asset. So the
-suite reports A7 as inactive on the production build and green in `next dev` and
-on a preview-CSP build, and it never reports it as passing where the order it
-asserts is not in the DOM. It is un-`fixme`d — the mechanism is built and
-measured — but the criterion does not close until row 132 does.
+`VERCEL_ENV` unset, because `pnpm build` always writes the hash asset.
+
+The QA round of 2026-09-26 asked for the gate to rest on something that cannot
+go missing, so it now asks **two** reads and parks A7 on either: the served
+`script-src`, and the presence of the per-build hash asset
+`/_next/static/security/csp-script-hashes.json`. The asset is the load-bearing
+one — a build that ships it serves a hash-only policy for *every* request, even
+if that response header never reaches the test runner — and a `'nonce-…'` in the
+policy (row 132's remedy, once taken) overrules both and activates the walk
+again.
+
+Measured on this branch after merging `next-2026`:
+`PORT=3251 pnpm e2e e2e/pages/home.spec.ts -g TS-WEB-0019-A7` reports
+`1 skipped` against `next start` on the production build and `1 passed` against
+`next dev`. **Said plainly, because a green suite must not be read as a met
+criterion: CI's production-build e2e job does not exercise `TS-WEB-0019-A7` at
+all.** The shipped state is the brief's fallback — the `direct` order for every
+trait — with A7 parked on the policy rather than on a bare `fixme`. So the suite
+reports A7 as inactive on the production build and green in `next dev` and on a
+preview-CSP build, and it never reports it as passing where the order it asserts
+is not in the DOM. It is un-`fixme`d — the mechanism is built and measured — but
+the criterion is **blocked** and does not close until row 132 does.
+
+What *is* asserted unconditionally is the half of the criterion set that holds
+under either policy: `TS-WEB-0010-A4`'s structure invariance across the two
+entry stages (`e2e/pages/home.spec.ts`, its own walk since the QA round) runs on
+the production build too, because the set of sections, the headings, the CTAs,
+the navigation and the order of every section *outside* block 2a are the same in
+both loads whether or not the boundary completes.
 
 ## Consequences
 
@@ -164,7 +188,7 @@ measured — but the criterion does not close until row 132 does.
   `GEO_STAGE1_SOURCE` is off in production (`TS-WEB-0010-A15`). The
   `Sec-GPC`/`DNT` read of `D6` is a proxy edit of exactly this shape and is
   still unwritten.
-- `state/open.md` row 266 is new: the `A4` ↔ `D3a` reading above.
+- `state/open.md` row 273 is new: the `A4` ↔ `D3a` reading above.
 - `PRESS_REFERRER_HOSTS` is still the seed list of `state/open.md` row 72, and
   it now has a consumer: a `press` entry reorders block 2a. Moving the list to
   content is unchanged in shape and one degree more visible in effect.

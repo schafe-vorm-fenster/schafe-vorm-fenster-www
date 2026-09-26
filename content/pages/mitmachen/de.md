@@ -53,13 +53,16 @@ images:
       und das Dorf.
     lcp: true
     licence: CC BY-SA 4.0
+    focal:
+      x: 42
+      "y": 62
     status: real
     file: /images/real/mitmachen-hero.webp
-    width: 800
-    height: 900
+    width: 680
+    height: 765
     wide_file: /images/real/mitmachen-hero-wide.webp
-    wide_width: 1400
-    wide_height: 600
+    wide_width: 1190
+    wide_height: 510
   - id: mitmachen-path-whatsapp
     slot: mitmachen-3-path-whatsapp
     ratio: feature
@@ -73,6 +76,9 @@ images:
       Bushaltestelle an einer Feldsteinmauer in Werbelow, an der Mauer hängen zwei Aushänge, davor
       eine Bank und Blumenkübel.
     licence: CC0 1.0
+    focal:
+      x: 45
+      "y": 55
     status: real
     file: /images/real/mitmachen-path-whatsapp.webp
     width: 1400
@@ -88,6 +94,9 @@ images:
       Nachweis: content/legal/image-credits.md.
     alt: "Dorftreffpunkt in Schmatzin am Abend: eine Wiese mit altem Baum, Feuerstelle und Sitzplatz."
     licence: CC BY-SA 4.0
+    focal:
+      x: 45
+      "y": 58
     status: real
     file: /images/real/mitmachen-path-calendar.webp
     width: 1400
@@ -102,6 +111,9 @@ images:
       im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
     alt: Schreibtisch mit Monitor, Laptop und Papieren in einem Dachbüro mit historischen Holzbalken.
     licence: Eigenaufnahme, unbeschränkte Nutzung
+    focal:
+      x: 40
+      "y": 55
     status: real
     file: /images/real/mitmachen-path-website.webp
     width: 1400

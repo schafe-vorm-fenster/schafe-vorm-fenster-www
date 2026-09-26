@@ -57,9 +57,12 @@ const ENVOY_ROUTES: ReadonlySet<RouteId> = new Set<RouteId>(["regionQuote"]);
  * passes, so the entry has to be removed with the fix rather than lingering.
  */
 const BRIEFING_HREF_REPOINTED_BY: Readonly<Partial<Record<RouteId, string>>> = {
-  region: "T-15",
-  order: "T-15",
+  // The list is empty, and it stays declared so the next route that regresses
+  // has a named home instead of a silent `test.fail`.
 };
+// `region` and `order` came off this list with T-15: `/deine-region`'s hero and
+// closing consult action and all four steps of `/dein-kalender/bestellen`
+// resolve to `#kontakt` now (DEC-0133).
 // `calendar` came off this list with T-13: `/dein-kalender`'s hero CTA is an
 // in-page link to `#kontakt` now, and the closing block's quiet briefing link
 // and tier 2's are gone, so the appointment URL occurs once on that route.

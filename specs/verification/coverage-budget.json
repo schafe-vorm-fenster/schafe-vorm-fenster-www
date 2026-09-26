@@ -1,0 +1,9 @@
+{
+  "note": "The ratchet of `pnpm check:coverage` (DEC-0141). `max` is the worst tally this repository is allowed to have. A run worse than a number here fails; a run better than one fails too, asking for the number to be lowered in the same commit, so that a gain is recorded instead of left as budget to spend again. Raising a number is a governance change: it needs a decision record, and the record says which criteria were let go and why.",
+  "measured_at": "2026-09-26",
+  "measured_on": "T-21 (DEC-0140) merged with next-2026: the entry-trait handover closes four MISSING criteria (TS-WEB-0019-A7/A8, TS-WEB-0010-A3/A4's instruments) and TS-WEB-0010-A4 moved from NAMED ONLY to a walk of its own instead of a comment inside the A7 test — the ratchet doing its work on real changes",
+  "max": {
+    "NAMED ONLY": 32,
+    "MISSING": 145
+  }
+}
