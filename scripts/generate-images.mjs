@@ -17,13 +17,21 @@
  * size, model, date and prompt hash back into **both** locale files, so the
  * frontmatter entry is the whole provenance record and no sidecar exists.
  *
+ * A `provenance: real` entry is **placed**, not rendered: the photograph comes
+ * from a hub package's workspace checkout or from the Wikimedia Commons file
+ * page its `source` cites, and it is cut to the ratio box at the motif's
+ * declared `focal` point (DEC-0105 §2, DEC-0139) — a `ratio: hero` entry to
+ * both the 8:9 phone frame and the 21:9 wide one. No model call, no cost.
+ *
  * Idempotent: an entry whose `status` is already `generated` or `real` is
- * skipped and the reason is printed. `--force <id>` re-renders exactly one.
+ * skipped and the reason is printed. `--force <id>[,<id>…]` re-renders or
+ * re-places exactly the entries it names, and nothing else.
  *
  * Usage
  *   pnpm images:generate --dry-run     print the prompts and the cost, call nothing
  *   pnpm images:generate               render every `status: needed` entry
  *   pnpm images:generate --force home-hero
+ *   pnpm images:generate --force home-hero --force home-scene-embed
  *   pnpm images:generate --only home   only the page directory `home`
  *
  * Auth: the Vercel AI Gateway with the project's OIDC token. The token is
@@ -39,6 +47,8 @@ import { execFileSync } from "node:child_process";
 import { config as loadEnv } from "dotenv";
 import yaml from "js-yaml";
 import sharp from "sharp";
+
+import { DEFAULT_FOCAL, cropWindow } from "./lib/focal-crop.mjs";
 
 const REPO = join(dirname(new URL(import.meta.url).pathname), "..");
 const CONTENT = join(REPO, "content/pages");
@@ -127,7 +137,20 @@ const flag = (name) => {
   return index === -1 ? undefined : (argv[index + 1] ?? true);
 };
 const DRY_RUN = argv.includes("--dry-run");
-const FORCE = typeof flag("force") === "string" ? flag("force") : undefined;
+/**
+ * `--force <id>[,<id>…]`, repeatable. It overrides both skips: a generated
+ * entry that is already rendered is rendered again, and a **placed** real
+ * entry is placed again — which is what a changed motif or a changed focal
+ * point needs (DEC-0139). With any `--force` given, nothing else is touched.
+ */
+const FORCE = new Set(
+  argv.flatMap((argument, index) =>
+    argument === "--force" && typeof argv[index + 1] === "string" && !argv[index + 1].startsWith("--")
+      ? argv[index + 1].split(",").map((id) => id.trim()).filter(Boolean)
+      : [],
+  ),
+);
+const forced = (id) => FORCE.has(id);
 const ONLY = typeof flag("only") === "string" ? flag("only") : undefined;
 
 // ── The content tree ─────────────────────────────────────────────────────────
@@ -439,32 +462,130 @@ function resolveRealSource(source) {
   return null;
 }
 
-/** Converts one owned photograph into the entry's ratio, inside the budget. */
-async function placeReal(entry, from) {
-  const spec = RATIOS[entry.ratio];
-  const out = spec.out;
-  const base = sharp(from).resize({
-    width: out.width,
-    height: out.height,
-    fit: "cover",
-    position: "attention",
+/**
+ * The other origin a `provenance: real` entry names: a file page on Wikimedia
+ * Commons, cited in `source` with its full URL. Nothing is guessed from the
+ * text — the title is read out of the `commons.wikimedia.org/wiki/File:…` URL
+ * the entry already carries, and the licence and the author stay where they
+ * belong, in `licence`, `source` and `content/legal/image-credits.md`.
+ */
+const COMMONS_FILE = /commons\.wikimedia\.org\/wiki\/(File:[^\s)—]+)/;
+const COMMONS_API = "https://commons.wikimedia.org/w/api.php";
+/**
+ * Wikimedia asks every client for an identifying User-Agent and refuses the
+ * generic ones; the address is the site's own.
+ */
+const COMMONS_UA =
+  "schafe-vorm-fenster-www/1.0 (https://schafe-vorm-fenster.de; jan@schafe-vorm-fenster.de)";
+/**
+ * The originals are cache, not repository content: multi-megabyte camera files
+ * whose committed form is the rendition under `public/images/real/`. They live
+ * outside the tree so no `.gitignore` rule has to hold them out of it.
+ */
+const COMMONS_CACHE = join(tmpdir(), "svf-commons-originals");
+
+/** The file title a `source` cites, or `null` — pure, so `--dry-run` can print it. */
+function commonsTitle(source) {
+  const match = source?.match(COMMONS_FILE);
+  if (!match) return null;
+  const title = decodeURIComponent(match[1]).replace(/_/g, " ");
+  // A title reaches the API and a file name; a separator in it would let a
+  // content file write outside the cache directory.
+  return /[/\\]|\.\./.test(title.slice("File:".length)) ? null : title;
+}
+
+/** Downloads the original behind a Commons file page once, and reuses it after. */
+async function fetchCommonsOriginal(title) {
+  const name = title.slice("File:".length).replace(/[^\p{L}\p{N}.,_ -]/gu, "_");
+  const cached = join(COMMONS_CACHE, name);
+  if (existsFile(cached)) return cached;
+
+  const query = new URLSearchParams({
+    action: "query",
+    titles: title,
+    prop: "imageinfo",
+    iiprop: "url|size",
+    format: "json",
   });
-  const file = join(REAL_DIR, `${entry.id}.webp`);
+  const meta = await fetch(`${COMMONS_API}?${query}`, { headers: { "User-Agent": COMMONS_UA } });
+  if (!meta.ok) throw new Error(`Commons API ${meta.status} for ${title}`);
+  const pages = Object.values((await meta.json())?.query?.pages ?? {});
+  const url = pages[0]?.imageinfo?.[0]?.url;
+  if (!url) throw new Error(`no file behind ${title} on Commons`);
+  if (new URL(url).hostname !== "upload.wikimedia.org") {
+    throw new Error(`${title}: unexpected download host ${new URL(url).hostname}`);
+  }
+
+  const download = await fetch(url, { headers: { "User-Agent": COMMONS_UA } });
+  if (!download.ok) throw new Error(`Commons download ${download.status} for ${title}`);
+  mkdirSync(COMMONS_CACHE, { recursive: true });
+  writeFileSync(cached, Buffer.from(await download.arrayBuffer()));
+  return cached;
+}
+
+/**
+ * One rendition of an owned photograph: cut to the ratio box at the motif's
+ * declared focal point (DEC-0105 §2, `scripts/lib/focal-crop.mjs`) and encoded
+ * down the quality ladder until it is inside the budget.
+ *
+ * The crop was `position: "attention"` until DEC-0139 — sharp's own saliency
+ * guess, which put the 8:9 phone hero wherever the contrast happened to be
+ * and could not be declared, reviewed or reproduced from the inventory. The
+ * focal point can: it is in the entry, it is what `photo-surface` positions
+ * the same photograph with, and the two now agree by construction.
+ */
+async function placeRendition(entry, from, out, file) {
+  const image = sharp(from, { autoOrient: true });
+  const { width, height } = await image.metadata();
+  const window = cropWindow({ width, height }, out, entry.focal ?? DEFAULT_FOCAL);
+  const base = image
+    .extract({ left: window.left, top: window.top, width: window.width, height: window.height })
+    .resize({ width: out.width, height: out.height, fit: "cover" });
+
   for (const quality of QUALITY_LADDER) {
     const buffer = await base.clone().webp({ quality, effort: 5 }).toBuffer();
     if (buffer.length <= MAX_BYTES || quality === QUALITY_LADDER.at(-1)) {
-      mkdirSync(REAL_DIR, { recursive: true });
+      mkdirSync(dirname(file), { recursive: true });
       writeFileSync(file, buffer);
-      return {
-        file: `${REAL_PREFIX}/${entry.id}.webp`,
-        width: out.width,
-        height: out.height,
-        bytes: buffer.length,
-        quality,
-      };
+      return { width: out.width, height: out.height, bytes: buffer.length, quality };
     }
   }
   throw new Error("unreachable");
+}
+
+/**
+ * Converts one owned photograph into the entry's ratio, inside the budget —
+ * **both** renditions for a `ratio: hero` entry, the way a generated hero gets
+ * both (DEC-0077 via review R-home-6): `<id>.webp` is the 8:9 phone frame and
+ * `<id>-wide.webp` the 21:9 one the media query swaps in from 48rem. One
+ * photograph, two crops, the same focal point.
+ */
+async function placeReal(entry, from) {
+  const spec = RATIOS[entry.ratio];
+  const placed = await placeRendition(entry, from, spec.out, join(REAL_DIR, `${entry.id}.webp`));
+  const written = {
+    file: `${REAL_PREFIX}/${entry.id}.webp`,
+    width: placed.width,
+    height: placed.height,
+    bytes: placed.bytes,
+    quality: placed.quality,
+  };
+  if (!spec.wide) return written;
+
+  const wide = await placeRendition(
+    entry,
+    from,
+    spec.wide.out,
+    join(REAL_DIR, `${entry.id}-wide.webp`),
+  );
+  return {
+    ...written,
+    wide_file: `${REAL_PREFIX}/${entry.id}-wide.webp`,
+    wide_width: wide.width,
+    wide_height: wide.height,
+    wide_bytes: wide.bytes,
+    wide_quality: wide.quality,
+  };
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────
@@ -487,7 +608,11 @@ async function main() {
     }
     for (const entry of images) {
       if (entry.provenance === "real") {
-        if (entry.file) {
+        if (FORCE.size > 0 && !forced(entry.id)) {
+          skipped.push(`${page}/${entry.id}: --force names another entry`);
+          continue;
+        }
+        if (entry.file && !forced(entry.id)) {
           skipped.push(`${page}/${entry.id}: real, already placed at ${entry.file}`);
           continue;
         }
@@ -503,24 +628,25 @@ async function main() {
           continue;
         }
         const from = resolveRealSource(entry.source);
-        if (!from) {
+        const commons = from ? null : commonsTitle(entry.source);
+        if (!from && !commons) {
           skipped.push(
             `${page}/${entry.id}: real, no cleared asset on disk — stays "Foto gesucht"`,
           );
           continue;
         }
-        real.push({ file, page, entry, from });
+        real.push({ file, page, entry, from, commons });
         continue;
       }
       if (entry.provenance !== "generated") {
         skipped.push(`${page}/${entry.id}: provenance ${entry.provenance} — not ours to render`);
         continue;
       }
-      if (entry.status !== "needed" && entry.id !== FORCE) {
+      if (entry.status !== "needed" && !forced(entry.id)) {
         skipped.push(`${page}/${entry.id}: status ${entry.status} — already rendered`);
         continue;
       }
-      if (FORCE && entry.id !== FORCE) {
+      if (FORCE.size > 0 && !forced(entry.id)) {
         skipped.push(`${page}/${entry.id}: --force names another entry`);
         continue;
       }
@@ -560,8 +686,10 @@ async function main() {
   }
 
   if (DRY_RUN) {
-    for (const { page, entry, from } of real) {
-      console.log(`── ${page}/${entry.id} · real · ${relative(REPO, from)}`);
+    for (const { page, entry, from, commons } of real) {
+      console.log(
+        `── ${page}/${entry.id} · real · ${from ? relative(REPO, from) : `${commons} (Wikimedia Commons)`}`,
+      );
     }
     for (const { page, entry } of work) {
       const prompt = buildPrompt(entry);
@@ -589,18 +717,44 @@ async function main() {
     }
   };
 
-  for (const { file, page, entry, from } of real) {
-    const placed = await placeReal(entry, from);
-    console.log(`── ${page}/${entry.id} · real · ${relative(REPO, from)}`);
+  for (const { file, page, entry, from, commons } of real) {
+    let source = from;
+    if (!source) {
+      try {
+        source = await fetchCommonsOriginal(commons);
+      } catch (error) {
+        failed.push(`${page}/${entry.id}: ${String(error?.message ?? error).split("\n")[0]}`);
+        console.log(`── ${page}/${entry.id} · real · ${commons} — ${String(error?.message ?? error)}`);
+        continue;
+      }
+    }
+    const placed = await placeReal(entry, source);
+    console.log(
+      `── ${page}/${entry.id} · real · ${commons ? `${commons} (Wikimedia Commons)` : relative(REPO, source)}`,
+    );
+    const focal = entry.focal ?? DEFAULT_FOCAL;
     console.log(
       `   ${placed.file} — ${placed.width}×${placed.height}, ` +
-        `${(placed.bytes / 1024).toFixed(0)} KB @ q${placed.quality}`,
+        `${(placed.bytes / 1024).toFixed(0)} KB @ q${placed.quality} · focal ${focal.x}% ${focal.y}%`,
     );
+    if (placed.wide_file) {
+      console.log(
+        `   ${placed.wide_file} — ${placed.wide_width}×${placed.wide_height}, ` +
+          `${(placed.wide_bytes / 1024).toFixed(0)} KB @ q${placed.wide_quality}`,
+      );
+    }
     record(file, entry.id, {
       status: "real",
       file: placed.file,
       width: placed.width,
       height: placed.height,
+      ...(placed.wide_file
+        ? {
+            wide_file: placed.wide_file,
+            wide_width: placed.wide_width,
+            wide_height: placed.wide_height,
+          }
+        : {}),
     });
   }
 
@@ -631,7 +785,7 @@ async function main() {
     const target = join(OUT_DIR, `${entry.id}.webp`);
     let base;
     try {
-      base = await renderWithRetry(ai, prompt, spec.request, spec.out, target, entry.id === FORCE);
+      base = await renderWithRetry(ai, prompt, spec.request, spec.out, target, forced(entry.id));
     } catch (error) {
       failed.push(`${page}/${entry.id}: ${String(error?.message ?? error).split("\n")[0]}`);
       console.log(`   failed — ${String(error?.message ?? error).split("\n")[0]}`);
@@ -658,7 +812,7 @@ async function main() {
           spec.wide.request,
           spec.wide.out,
           wideTarget,
-          entry.id === FORCE,
+          forced(entry.id),
         );
       } catch (error) {
         failed.push(`${page}/${entry.id} (wide): ${String(error?.message ?? error).split("\n")[0]}`);
