@@ -67,11 +67,27 @@ import type { Page } from "@playwright/test";
  * their title.** On them the criterion is measurably not met, so a title
  * carrying `TS-WEB-0006-A18` would report closed coverage for an open sentence —
  * the false green `DEC-0142` §9 took back for `TS-WEB-0018-A7` (DEC-0144 §10).
- * The ten other routes name it, because there the walk asserts exactly what A18
- * says. The criterion's ledger verdict comes from the tier tests that predate
+ * The other twenty-two name it, because there the walk asserts exactly what A18
+ * says — on six of them over the modules they compose, on sixteen over the
+ * empty set they are measured to compose (see below). The criterion's ledger verdict comes from the tier tests that predate
  * this file (`e2e/pages/dein-kalender.spec.ts`,
  * `src/components/price-section/price-tier-row.test.tsx`), and those assert the
  * tier half, which holds.
+ */
+
+/**
+ * ── Sixteen routes compose nothing, and say so ────────────────────────────
+ *
+ * Only eight of the twenty-four routes compose an explanatory module at all
+ * (`/`, `/mitmachen`, `/dein-kalender`, `/dein-ort/starten` and their English
+ * mirrors). On the other sixteen "every explanatory module carries one CTA" is
+ * true of an empty set, so each of those cases says *"composes no explanatory
+ * module"* in its own title and asserts the count — `MODULE_COUNTS` below. The
+ * count is the whole point: without it a renamed seam, or a page that lost its
+ * scenes, would turn every per-route case into a vacuous pass. With it, the
+ * emptiness of the sixteen is a measured fact and a change to any of the eight
+ * fails on the route it happened on. That assertion used to be one file-level
+ * case over four paths; it is now every route's own.
  */
 
 /** Scene blocks and publishing paths, price and offer tiers — A18's three kinds. */
@@ -85,6 +101,42 @@ const SECONDARY_RUNGS = ["secondary", "equal-weight"];
  * reason. Removing a row here is part of fixing the module, and the last case
  * in this file is what makes that mandatory.
  */
+/**
+ * How many outermost explanatory modules each route composes, measured on
+ * 2026-09-26. Every per-route case asserts its own number, and that is what
+ * keeps the sweep from passing vacuously: sixteen of the twenty-four routes
+ * compose none, so "every module carries one CTA" is true there with nothing
+ * measured, and a route that *lost* its modules would read exactly the same. A
+ * page that drops a scene, a path or a tier — or renames the seam the walk
+ * reads — now fails on the route it happened on, not nowhere.
+ */
+const MODULE_COUNTS: Readonly<Record<string, number>> = {
+  "/": 3,
+  "/en": 3,
+  "/dein-ort": 0,
+  "/en/your-place": 0,
+  "/dein-ort/starten": 1,
+  "/en/your-place/start": 1,
+  "/mitmachen": 4,
+  "/en/take-part": 4,
+  "/mitmachen/registrieren": 0,
+  "/en/take-part/register": 0,
+  "/dein-kalender": 3,
+  "/en/your-calendar": 3,
+  "/dein-kalender/bestellen": 0,
+  "/en/your-calendar/order": 0,
+  "/deine-region": 0,
+  "/en/your-region": 0,
+  "/deine-region/angebot": 0,
+  "/en/your-region/quote": 0,
+  "/ueber-uns": 0,
+  "/en/about": 0,
+  "/ueber-uns/archiv": 0,
+  "/en/about/archive": 0,
+  "/rechtliches": 0,
+  "/en/legal": 0,
+};
+
 const CTA_FREE_MODULES: Readonly<Record<string, string>> = {
   "/dein-ort/starten scene:whatsapp":
     "block 2.1 'what it takes' — TS-WEB-0021 composes it as a scene with no CTA and names none; TS-WEB-0006-A18 asks for exactly one (DEC-0144 §5, state/open.md row 280)",
@@ -161,18 +213,34 @@ for (const { route, locale } of everyRoute()) {
     entry.startsWith(`${path} `),
   );
 
+  const expectedModules = MODULE_COUNTS[path];
+
   // A route with a declared CTA-free module does not name the criterion in its
   // title: there "exactly one" is not what the page does, and a title carrying
   // the id would report the criterion closed (see the docblock, DEC-0144 §10).
+  // A route that composes no module says so in its own title instead of
+  // claiming a sweep it did not do — the assertion is still A18's, applied to
+  // the empty set, and the count below is what makes the emptiness a measured
+  // fact rather than an accident.
   const title = declaredHere.length
     ? `A18 of TS-WEB-0006 on ${path}: every explanatory module but the ${declaredHere.length} declared CTA-free carries one secondary CTA — "exactly one" is not met on this route (state/open.md row 280)`
-    : `TS-WEB-0006-A18: every explanatory module on ${path} carries one secondary CTA`;
+    : expectedModules === 0
+      ? `TS-WEB-0006-A18 on ${path}: this route composes no explanatory module, and its primary count stands alone`
+      : `TS-WEB-0006-A18: each of the ${expectedModules} explanatory modules on ${path} carries one secondary CTA`;
 
   test(title, async ({ page }) => {
     await page.goto(path);
     await page.waitForLoadState("networkidle");
 
     const reading = await readPage(page, MODULE_SELECTOR);
+
+    // What this route composes, so that an empty reading is a fact and not a
+    // silence: a renamed seam, or a page that lost a scene, fails here.
+    expect(expectedModules, `${path} has no row in MODULE_COUNTS`).toBeGreaterThanOrEqual(0);
+    expect(
+      reading.modules.map((found) => found.key),
+      `explanatory modules on ${path}`,
+    ).toHaveLength(expectedModules);
 
     // The page's own conversion is one marker, in block 1 (D3). The only module
     // allowed to hold it is a module of block 1 — so on a page whose primary
@@ -216,32 +284,11 @@ for (const { route, locale } of everyRoute()) {
   });
 }
 
-test("TS-WEB-0006-A18: the walk finds modules to measure on the pages that compose them", async ({
-  page,
-}) => {
-  // The guard against a silently empty sweep: if the module seam is renamed,
-  // every per-route case above passes on an empty list. These four pages are
-  // the ones that compose scenes, paths and tiers, and their counts are the
-  // ones measured on 2026-09-26.
-  const expected: Readonly<Record<string, number>> = {
-    "/": 3,
-    "/mitmachen": 4,
-    "/dein-kalender": 3,
-    "/dein-ort/starten": 1,
-  };
-
-  for (const [path, count] of Object.entries(expected)) {
-    await page.goto(path);
-    await page.waitForLoadState("networkidle");
-    const reading = await readPage(page, MODULE_SELECTOR);
-    expect(
-      reading.modules.map((found) => found.key),
-      `modules on ${path}`,
-    ).toHaveLength(count);
-  }
-});
-
-test("TS-WEB-0006-A18: a module that has gained its CTA has to lose its declared exemption", async ({
+// The id stands in prose, not as the leading token: this case asserts that a
+// **declared exception** is still an exception, which is the state of an unmet
+// half of A18 and not the criterion itself (DEC-0144 §10 — the same rule that
+// keeps the id out of the two declaring routes' titles above).
+test("A18 of TS-WEB-0006: a module that has gained its CTA has to lose its declared exemption", async ({
   page,
 }) => {
   const stale: string[] = [];

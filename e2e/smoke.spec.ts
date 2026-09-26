@@ -110,45 +110,74 @@ const WIDTHS = [
 const MEASURE_PAGE_PX = 1200;
 
 /**
- * One navigation per route, then a resize per width — and that is the point,
- * not a saving.
+ * Three navigations per route — one per width A8 names — plus a resize walk
+ * across all five for A9.
  *
- * D2(d)'s single-tree rule says the markup does not branch on width: the server
- * cannot know the viewport, so there is exactly one tree per route and the
- * widths only reflow it. Reloading per width would therefore compare five
- * *different* responses and pass a page that branched client-side at mount,
- * while resizing one live page compares one tree against itself — which is what
- * the criterion is about. It is also what the run can afford: reloading twelve
- * routes at five widths is sixty cold navigations, and against the development
- * server that produced dev-overlay 500s unrelated to either criterion (measured
- * 2026-09-26; `state/open.md` row 281).
+ * **A8 is a statement about loading at a width, so the test loads at each of
+ * them.** D2(d)'s single-tree rule says the markup does not branch on width,
+ * and it is true that the server cannot see the viewport: five responses for
+ * one route are therefore identical HTML. That is exactly why reloading is the
+ * sharper instrument rather than the wasteful one — the only way two loads of
+ * one route can differ is a client-side decision taken **at mount**, which is
+ * the defect class A8 exists to catch, and the site has one today:
+ * `src/components/explain-module/explain-module.tsx` reads
+ * `window.matchMedia(SIDE_BY_SIDE)` once in a mount effect and never listens
+ * for `change` (measured 2026-09-26 on `/mitmachen`: loaded at 360 and resized
+ * to 1280, `data-advance` is `1/armed`; loaded at 1280 it is `1/static`). A
+ * page resized from 360 keeps its 360 decision, so a resize walk is blind to
+ * that branch by construction. It happens not to move visible text order
+ * today; the instrument must not depend on that.
  *
- * The load happens at 360 so that any mount-time decision is taken in the
- * mobile-first base case, and the widths then go up from there.
+ * **The resize walk stays, and buys two other things.** A9 names five widths
+ * and only asks whether anything scrolls sideways, which a live reflow answers
+ * as well as a load; and the walk is a second, independent comparison — a tree
+ * that reorders *while* the window changes size is also a page that is not one
+ * tree, which no per-width reload can see. So the order captured by resizing to
+ * 428 and 1280 and the order of a fresh load at 428 and at 1280 are all
+ * compared against the 360 load: five readings, one expected value.
+ *
+ * What this costs is thirty-six cold navigations instead of twelve. That is the
+ * trade, and it is the honest way round: breadth and a development server that
+ * survives the run were what resizing bought (`state/open.md` row 281 — sixty
+ * navigations over five workers produced dev-overlay 500s), not a stronger
+ * detector. Sixty is what a full five-width matrix costs; A8 names three
+ * widths, so three loads per route is the criterion as written and no more.
+ *
+ * The first load happens at 360 so that the mobile-first base case is the
+ * reference the other readings are compared against.
  */
 for (const path of PATHS) {
   test(`TS-WEB-0017-A8 / TS-WEB-0017-A9: the layout law holds on ${path} at every sampled width`, async ({
     page,
   }) => {
     const [load] = WIDTHS;
+    const scrollsSideways = () =>
+      page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+
     await page.setViewportSize({ width: load.width, height: load.height });
     const response = await page.goto(path);
     expect(response?.status(), `status of ${path}`).toBe(200);
     await page.waitForLoadState("networkidle");
 
-    const orders: { width: string; order: string[] }[] = [];
+    /** Every visible-text-order reading, with where it was taken. */
+    const orders: { where: string; order: string[] }[] = [];
 
     for (const viewport of WIDTHS) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
 
       // A9: nothing scrolls sideways, at any of the five.
-      const overflows = await page.evaluate(
-        () => document.documentElement.scrollWidth > window.innerWidth + 1,
+      expect(await scrollsSideways(), `horizontal scroll on ${path} at ${viewport.name}`).toBe(
+        false,
       );
-      expect(overflows, `horizontal scroll on ${path} at ${viewport.name}`).toBe(false);
 
-      // A8: the visible text order, at the three widths D2(d) samples.
-      if (viewport.order) orders.push({ width: viewport.name, order: await visibleTextOrder(page) });
+      // A8, reflow half: the order the live tree has after resizing to one of
+      // the three widths D2(d) samples.
+      if (viewport.order) {
+        orders.push({
+          where: `${viewport.name}, resized from ${load.width}`,
+          order: await visibleTextOrder(page),
+        });
+      }
     }
 
     // A9's ceiling — the last width set. Every section brings its own
@@ -166,10 +195,31 @@ for (const path of PATHS) {
       MEASURE_PAGE_PX,
     );
 
-    // A8: identical, not merely non-empty.
+    // A8, mount half: a fresh load at each of the other two widths it names.
+    // This is the reading a resize cannot produce — the page decides at mount
+    // and a resized page has already decided.
+    for (const viewport of WIDTHS.filter(
+      (candidate) => candidate.order && candidate.width !== load.width,
+    )) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      const reloaded = await page.goto(path);
+      expect(reloaded?.status(), `status of ${path} loaded at ${viewport.name}`).toBe(200);
+      await page.waitForLoadState("networkidle");
+      expect(
+        await scrollsSideways(),
+        `horizontal scroll on ${path} loaded at ${viewport.name}`,
+      ).toBe(false);
+      orders.push({
+        where: `${viewport.name}, loaded at that width`,
+        order: await visibleTextOrder(page),
+      });
+    }
+
+    // A8: identical, not merely non-empty — every reading against the 360 load.
     expect(orders[0]?.order.length, `${path} rendered no visible text`).toBeGreaterThan(0);
+    expect(orders.length, `${path}: readings taken`).toBe(5);
     for (const later of orders.slice(1)) {
-      expect(later.order, `${path} at ${later.width} differs from ${orders[0]?.width}`).toEqual(
+      expect(later.order, `${path} at ${later.where} differs from ${orders[0]?.where}`).toEqual(
         orders[0]?.order,
       );
     }

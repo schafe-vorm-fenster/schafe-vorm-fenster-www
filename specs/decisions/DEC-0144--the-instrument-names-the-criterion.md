@@ -164,15 +164,25 @@ assert the half that holds.
 ### 6. Three site-wide sweeps leave `/`
 
 - **TS-WEB-0017-A8 and A9** now walk the twelve German paths of the D1
-  registry, in one test per route: load at 360 and **resize** through 320, 428,
-  1280 and 1920. Resizing rather than reloading is the point, not the saving:
-  D2(d)'s single-tree rule says the markup does not branch on width — the server
-  cannot know the viewport — so reloading per width would compare five
-  different responses and pass a page that branched client-side at mount, while
-  resizing one live page compares one tree against itself. The English mirrors
-  are left out for the reason `e2e/layout-stability.spec.ts` already records:
-  same components, same stylesheets, no different class of defect. At 1920 every
-  `main .container` is measured, not the first.
+  registry, in one test per route: a load at 360, a resize through 320, 428,
+  1280 and 1920 for A9, and then **a fresh load at 428 and at 1280** for A8 —
+  the three widths A8 names, each of them loaded at. (Corrected in QA round 2;
+  §11. The first version of this bullet claimed resizing was the sharper
+  instrument *because* the server cannot see the viewport. That is backwards:
+  precisely because the server cannot see the viewport, five responses for one
+  route are identical HTML, so two loads can differ only where the client
+  decided something **at mount** — and a page resized from 360 keeps its 360
+  decision. Reloading is the only reading that sees that class; resizing is
+  blind to it by construction.) The resize readings are kept beside the loaded
+  ones, because a tree that reorders while the window changes size is also not
+  one tree, and that is a reading no reload can produce. What resizing buys is
+  breadth and a development server that survives the run (`state/open.md`
+  row 281) — thirty-six cold navigations for A8's three widths instead of the
+  sixty a full five-width matrix costs — and that, not detection strength, is
+  what it is recorded as. The English mirrors are left out for the reason
+  `e2e/layout-stability.spec.ts` already records: same components, same
+  stylesheets, no different class of defect. At 1920 every `main .container` is
+  measured, not the first.
 - **TS-WEB-0017-A12** gets a walk of all 24 routes in `e2e/site-header.spec.ts`,
   reading the label and the target out of `src/lib/routes/navigation.ts` and
   `href()` rather than writing either down again — so the case stays true
@@ -271,6 +281,51 @@ at 360 and at 1280, one case each. And the level substitution the walk performs
 `scripts/check-coverage.ts` does not compare — is `state/open.md` row 282 rather
 than a silent bend of the ledger's own rule.
 
+### 11. An instrument may be broadened, never blunted (QA round 2)
+
+The second review round found that §6's three-sweep broadening had cost A8 of
+TS-WEB-0017 the one defect class it exists to catch, and that the record argued
+for the trade with the reasoning reversed. Both are corrected above and in
+`e2e/smoke.spec.ts`'s docblock. The measurement that settles it, taken on the
+worktree's own development server: `/mitmachen` loaded at 360 and resized to
+1280 renders `data-advance` `1/armed` on all three explain modules, and loaded
+at 1280 renders `1/static` — because
+`src/components/explain-module/explain-module.tsx` reads
+`window.matchMedia(SIDE_BY_SIDE)` once in a mount effect and never listens for
+`change`, unlike the header shell. Two different trees, and the resize-only
+sweep saw one of them. Visible text order is equal in both today, so no
+criterion was violated; the instrument was, and a weakened instrument does not
+show up in `state/coverage.md` — A8 was closed before this task, so the ledger
+could not have reported it. Hence the rule this round adds beside §10's:
+
+**A sweep that gains routes may not lose the reading the criterion asks for. The
+cost of keeping it is a number to report, not a reason to drop it.**
+
+Applied, in the same spirit, to three instruments that asserted less than their
+titles promised:
+
+- `e2e/cta-ladder.spec.ts` measured twenty-four routes of which sixteen compose
+  no module at all, so sixteen titles read *"every explanatory module … carries
+  one secondary CTA"* over an empty list. Each route now asserts **its own
+  measured module count** (`MODULE_COUNTS`, measured 2026-09-26), the sixteen
+  say *"composes no explanatory module"* in their titles, and the file-level
+  four-path guard is gone because every route is now its own guard: a page that
+  loses a scene, or a renamed seam, fails on the route it happened on.
+- The last case of that file asserts that a **declared exception** is still an
+  exception, so under §10's own rule its title now carries the id in prose
+  (*"A18 of TS-WEB-0006"*) rather than as the leading identifier. The rule holds
+  for the file that writes it down.
+- `scripts/check-csp-allowlist.test.ts` promised two facts in one title and
+  asserted one: the same-origin-path half of *"no first-party host and no
+  same-origin path leaks into the allowlist"* is now a second loop (probe: an
+  allowlist entry `https://code.etracker.com/_vercel/speed-insights/beacon`
+  fails that case and only that case). And `d2Hosts()` silently dropped any
+  token it could not classify — a future `*.example.com` row, or an uppercase
+  host, would have landed in no bucket while the comment claimed every row lands
+  in exactly one. It now expands the first row's `.pl`/`.at` shorthand into the
+  hosts it means and collects anything left over in `unaccounted`, which is
+  asserted empty (probe: breaking the shorthand pattern fails the parse case).
+
 ## Consequences
 
 - Eleven criteria closed: eight that were already being enforced can now be
@@ -295,12 +350,15 @@ than a silent bend of the ledger's own rule.
   and only TS-WEB-0018-A12 was treated as the stats-stub criterion. What is not
   done is putting A13's own identifier on the contact-row walk:
   `e2e/contact-section.spec.ts` is T-10's file.
-- `e2e/smoke.spec.ts` is measurably cheaper per criterion than a
-  route-times-width matrix would be, and that was not a preference: sixty cold
-  navigations against `next dev` produced dev-overlay 500s (a truncated-JSON
-  parse inside Next's own dev pipeline) that had nothing to do with either
-  criterion. The full suite is green; the flake and its shape are a
-  `state/open.md` row so the next author does not rediscover it.
+- `e2e/smoke.spec.ts` costs thirty-six cold navigations for the twelve routes —
+  one load per route per width A8 names, plus a resize walk across all five for
+  A9 — rather than the sixty a full route-times-width matrix costs. That is a
+  budget, not a claim about detection: sixty navigations against `next dev`
+  produced dev-overlay 500s (a truncated-JSON parse inside Next's own dev
+  pipeline) that had nothing to do with either criterion, and A8 names three
+  widths, not five, so three loads per route is the criterion as written. The
+  full suite is green; the flake and its shape are a `state/open.md` row so the
+  next author does not rediscover it.
 - The local e2e figure is **1040 passed · 7 skipped** of 1047 at this code state
   (`PORT=3261 pnpm e2e`, exit 0, 5.7 m, Playwright managing the server) and was
   1039 of 1046, measured twice, at the commit before this round — the walk at a

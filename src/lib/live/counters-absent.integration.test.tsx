@@ -1,11 +1,11 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { CountersIsland } from "@/app/[lang]/_islands";
+
 import { resetRateLimits } from "./bff";
 import { liveCounters } from "./counters";
 import { memoryStore } from "./last-good";
-
-import { CountersIsland } from "../../../app/[lang]/_islands";
 
 import type { ReactNode } from "react";
 

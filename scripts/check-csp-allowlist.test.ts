@@ -96,6 +96,13 @@ export function d2Rows(markdown: string): D2Row[] {
 /** A backticked token that is a hostname: dots, no slash, no wildcard. */
 const HOSTNAME = /^[a-z0-9][a-z0-9.-]*\.[a-z]{2,}$/;
 
+/**
+ * The table's shorthand for the same name under another top-level domain: the
+ * first row reads ``schafe-vorm-fenster.de` (and `.pl`, `.at`,
+ * `sheepoutside.com`)``, so `.pl` and `.at` are hosts, written short.
+ */
+const SIBLING_TLD = /^\.[a-z]{2,}$/;
+
 export interface D2HostSet {
   /** Hosts of rows that are not first party — what a CSP has to allowlist. */
   readonly external: string[];
@@ -105,13 +112,22 @@ export interface D2HostSet {
   readonly unnamed: number;
   /** Rows whose "host" is a same-origin path — no host to allowlist. */
   readonly sameOriginPaths: string[];
+  /**
+   * Backticked tokens this parser could not classify — neither a path, nor a
+   * hostname, nor a sibling-TLD shorthand. It has to stay empty: a D2 row
+   * written in a shape the parser does not know (a wildcard host, an uppercase
+   * one, a host outside backticks) would otherwise land in no bucket and this
+   * whole suite would compare the allowlist against a table with a hole in it.
+   */
+  readonly unaccounted: string[];
 }
 
-/** D2 read as three sets plus a count, so every row is accounted for. */
+/** D2 read as three sets plus a count, so every token is accounted for. */
 export function d2Hosts(markdown: string): D2HostSet {
   const external: string[] = [];
   const ownOrigin: string[] = [];
   const sameOriginPaths: string[] = [];
+  const unaccounted: string[] = [];
   let unnamed = 0;
 
   for (const row of d2Rows(markdown)) {
@@ -123,11 +139,24 @@ export function d2Hosts(markdown: string): D2HostSet {
     const paths = tokens.filter((token) => token.startsWith("/"));
     sameOriginPaths.push(...paths);
     const hosts = tokens.filter((token) => HOSTNAME.test(token));
-    if (row.party.toLowerCase().startsWith("first party")) ownOrigin.push(...hosts);
-    else external.push(...hosts);
+    // `.pl` written beside `schafe-vorm-fenster.de` means
+    // `schafe-vorm-fenster.pl`; expanded against the row's first full host so
+    // that the short form is measured as the host it is.
+    const shorthands = tokens.filter((token) => SIBLING_TLD.test(token));
+    const base = hosts[0];
+    const siblings =
+      base === undefined ? [] : shorthands.map((suffix) => base.replace(/\.[a-z]+$/, suffix));
+    const classified = new Set([
+      ...paths,
+      ...hosts,
+      ...(base === undefined ? [] : shorthands),
+    ]);
+    unaccounted.push(...tokens.filter((token) => !classified.has(token)));
+    if (row.party.toLowerCase().startsWith("first party")) ownOrigin.push(...hosts, ...siblings);
+    else external.push(...hosts, ...siblings);
   }
 
-  return { external, ownOrigin, unnamed, sameOriginPaths };
+  return { external, ownOrigin, unnamed, sameOriginPaths, unaccounted };
 }
 
 /**
@@ -165,8 +194,16 @@ describe("D2 against the deployed CSP allowlist: no wildcard, no missing host, t
     expect(d2.external).toContain("code.etracker.com");
     expect(d2.external).toContain("docs.google.com");
     expect(d2.ownOrigin).toContain("schafe-vorm-fenster.de");
+    expect(d2.ownOrigin).toContain("schafe-vorm-fenster.pl"); // the `.pl` shorthand, expanded
+    expect(d2.ownOrigin).toContain("sheepoutside.com");
     expect(d2.sameOriginPaths).toContain("/_vercel/speed-insights/*");
     expect(d2.unnamed).toBeGreaterThan(0);
+    // And every token is in one of them: a row in a shape this parser does not
+    // know would vanish silently and the comparison below would not see it.
+    expect(
+      d2.unaccounted,
+      `D2 tokens this test cannot classify — teach the parser: ${d2.unaccounted.join(", ")}`,
+    ).toEqual([]);
   });
 
   it("no wildcard: every allowlist entry is one absolute origin with a literal host", () => {
@@ -185,6 +222,17 @@ describe("D2 against the deployed CSP allowlist: no wildcard, no missing host, t
   it("no first-party host and no same-origin path leaks into the allowlist — those are `'self'`", () => {
     const d2 = d2Hosts(specMarkdown());
     for (const host of d2.ownOrigin) expect(cspHosts()).not.toContain(host);
+    // The second half of the sentence: a same-origin path is `'self'` too, so
+    // it may appear in the allowlist neither as a host nor as an entry's path.
+    for (const path of d2.sameOriginPaths) {
+      const prefix = path.replace(/\*$/, "");
+      const leaked = Object.values(ALLOWLIST).filter(
+        (origin) => hostOf(origin) === path || new URL(origin).pathname.startsWith(prefix),
+      );
+      expect(leaked, `same-origin path \`${path}\` in the allowlist: ${leaked.join(", ")}`).toEqual(
+        [],
+      );
+    }
   });
 
   it("no extra host beyond D2, except the three divergences D2's own rule declares wrong", () => {
