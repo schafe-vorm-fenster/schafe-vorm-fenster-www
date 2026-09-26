@@ -334,6 +334,23 @@ Pool von `portalize-calendar`, wörtlich aus den Proof-Datensätzen:
 2. „Für dieses Projekt sehe ich unsere Landbevölkerung, aber auch mobile Händler als Gewinner." — Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow
 3. „Der Dienst hilft dabei, Angebote in einem Flächenland besser sichtbar und auffindbar zu machen." — Uwe Eichler, Wasserschloss Quilow
 
+Keiner der drei Datensätze nennt einen Artikel mit Link — das
+Proof-Schema des Hubs führt kein solches Feld
+(`plan/reviews/2026-09-23/spec-impact.md:99-102`). Deshalb stehen die drei
+Zitate hier als Belegkarten und nicht als Zitatkarten: „A quote without a
+named source and a working link does not ship" (`concept/website-design-system.md`
+§Quote card, CG-028). Eine Quelle allein genügt dafür nicht: Die
+Zitatkarte verlangt zwei Dinge — die Quelle als Link am Ende der Zeile
+**und** eine Zuschreibung aus drei Teilen. Die Form, die eine Zitatkarte
+auslöst, ist
+`„…" — <Name>, <Rolle>, <Organisation> — [<Publikation>, „<Titel>"](https://…)`.
+Die drei Zeilen oben tragen nur `Wer, Wo`, und `parseDemoProofElement`
+trennt die Zuschreibung am ersten `, ` — bei „Holger Wendt, Bürgermeister
+in Rubkow" bleibt die Rolle allein stehen, und `quoteAuthor` liefert
+`null`. Ein Link allein ändert an diesen drei Zeilen deshalb **nichts**;
+wer eine Quelle ergänzt, schreibt die Zuschreibung mit (DEC-0143 §3,
+`state/open.md` Zeile 284).
+
 Alle drei Datensätze tragen `usage_rights: unverified` (Q-0014). Die
 Karten stehen deshalb im geschützten Preview, nicht auf einer
 öffentlichen Fläche: Vor dem Go-live liegt je Zitat eine schriftliche

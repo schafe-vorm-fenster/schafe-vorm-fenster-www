@@ -28,14 +28,16 @@ import { dictionary } from "@/src/lib/i18n/dictionary";
 import { CountersIsland, RegionExamplesIsland } from "../_islands";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
-import { selectProof } from "../_proof";
+import { proofHeading, selectProof, selectedProofKind } from "../_proof";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
 import { pageMeta } from "./page.meta";
 
 import type { Locale } from "@/src/lib/i18n/locales";
+import type { OfferingPrice } from "@/src/lib/pricing/offerings";
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
 /**
  * TS-WEB-0026 — `/deine-region` — the region page.
@@ -82,7 +84,6 @@ const PAGE_COPY: Record<
   Locale,
   {
     briefingLabel: string;
-    proofHeading: string;
     proofLabel: string;
     closingHeading: string;
     quoteFallback: string;
@@ -96,7 +97,6 @@ const PAGE_COPY: Record<
     // so the quiet briefing link and the closing question are authored copy
     // rather than strings typed into a page file.
     briefingLabel: "Lieber erst sprechen? Kennenlerngespräch buchen",
-    proofHeading: "Was Landkreise und Institutionen sagen",
     proofLabel: "Beleg",
     closingHeading: "Sollen wir euch ein Angebot rechnen?",
     quoteFallback: "Angebot anfragen",
@@ -106,7 +106,6 @@ const PAGE_COPY: Record<
   },
   en: {
     briefingLabel: "Rather talk first? Book an intro call",
-    proofHeading: "What counties and institutions say",
     proofLabel: "Proof",
     closingHeading: "Shall we put a quote together for you?",
     quoteFallback: "Request a quote",
@@ -115,6 +114,44 @@ const PAGE_COPY: Record<
     embedFallback: "This is what the embed looks like",
   },
 };
+
+/**
+ * The token block 5's sentence writes where the calendar tier's price belongs,
+ * per locale — the artifact's own slot name, not a runtime value, so it is read
+ * from one place rather than matched twice (TS-WEB-0026-A4, DEC-0143 §4).
+ */
+const PRICE_TOKEN: Readonly<Record<Locale, string>> = {
+  de: "{kalender-preis}",
+  en: "{calendar-price}",
+};
+
+/**
+ * Block 5's benefit sentence with the price token replaced by the price
+ * component's own node, so the figure on this page is read from
+ * `portalize-calendar` and exists nowhere else (TS-WEB-0026-A5: "its node is
+ * produced by the price component reading `portalize-calendar`").
+ *
+ * A sentence carrying no token comes back untouched: a content edit that drops
+ * it loses the price, never the sentence.
+ */
+function benefitWithPrice(text: string, price: OfferingPrice, locale: Locale): ReactNode {
+  const token = PRICE_TOKEN[locale];
+  const parts = text.split(token);
+  if (parts.length === 1) return text;
+
+  return (
+    <>
+      {parts[0]}
+      <PriceTag
+        display={price.display}
+        figure={price.figure}
+        inline
+        locale={locale}
+      />
+      {parts.slice(1).join(token)}
+    </>
+  );
+}
 
 /**
  * The proof stream's context line and geo badge, per `isDemoSlot` — never a
@@ -160,6 +197,18 @@ export default async function Page({
   const proofDemo = slot(page, "deine-region-6-proof-demo");
 
   const enterprise = offeringPrice("portalize-enterprise");
+  /**
+   * Block 5's own sentence names what the county tier adds *on top of the
+   * calendar tier*, and that comparison is the one figure this page may carry:
+   * "it is `portalize-calendar`'s published price, read from its package by the
+   * same component, never typed into copy" (TS-WEB-0026 D6). Until T-18 the
+   * artifact typed it — `der 480-€-Tarif` / `the €480 tier` — which is exactly
+   * the template mistake TS-WEB-0026-A4 asserts against and exactly the second
+   * source of truth TS-WEB-0006-A12 forbids. The artifact writes a token now,
+   * and the node that stands where the token stood is a `price-tag` reading the
+   * offering (DEC-0143 §4).
+   */
+  const calendar = offeringPrice("portalize-calendar", locale);
 
   // D4: stage 0 (no county anchor, Q-0032) — the honest render this work
   // package can ship without a geo/BFF integration: examples and search
@@ -221,6 +270,10 @@ export default async function Page({
       // context line, and the badge beside it read "BELEG" — the same word
       // the line under it already carried.
       geoCounty: quote.attribution.split(", ").slice(1).join(", ").trim() || null,
+      // Customer proof, all three: a reference case, a funding recognition and
+      // a voice from the region. No press element stands in this pool, which is
+      // what the heading above the section now says (DEC-0143 §1/§2).
+      proofKind: "customer" as const,
       demo: proofIsDemo,
     })),
   });
@@ -440,7 +493,7 @@ export default async function Page({
       >
         <MotionReveal>
           <FeatureBenefit
-            benefit={fieldAt(whatItAdds.blocks, 1) ?? ""}
+            benefit={benefitWithPrice(fieldAt(whatItAdds.blocks, 1) ?? "", calendar, locale)}
             feature={fieldAt(whatItAdds.blocks, 0) ?? ""}
             locale={locale}
             mediaAlt={territoryImage?.alt ?? copy.territorySketchAlt}
@@ -462,7 +515,12 @@ export default async function Page({
         surface="lime-100"
       >
         <MotionReveal>
-          <h2 id="beleg">{copy.proofHeading}</h2>
+          {/* The heading comes from what the section proves, not from this page:
+              "Was Landkreise und Institutionen sagen" was a variant of the
+              press heading over a pool of customer proof, and CG-017 reserves
+              that heading for press only (`website-copy-guide.md:516`,
+              review line 462). DEC-0143 §2. */}
+          <h2 id="beleg">{proofHeading(selectedProofKind(proofSelection), locale)}</h2>
           <ProofStream label={copy.proofLabel}>
             {proofSelection.entries.map((entry, position) =>
               entry.kind === "item" ? (

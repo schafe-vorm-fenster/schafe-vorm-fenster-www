@@ -442,7 +442,37 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     const proofKicker = page.locator("[data-block='beleg'] p[class*='kicker']");
     await expect(proofKicker).toHaveText("Wer den Kalender nutzt");
     await expect(proofKicker).toHaveAttribute("data-demo", "true");
-    await expect(page.locator("#beleg-heading")).toHaveText("Was andere sagen");
+    /* The h2 was "Was andere sagen" over a pool of three customers who
+       publish for themselves. The copy guide reserves that heading for press
+       proof only (`website-copy-guide.md:516`, CG-017) and the review splits
+       the two sections at line 462; the heading now comes from what the
+       section proves (T-18, DEC-0143 §2). */
+    await expect(page.locator("#beleg-heading")).toHaveText("Wo es wirklich benutzt wird");
+    await expect(page.locator("[data-block='beleg']").getByText("Was andere sagen")).toHaveCount(0);
+  });
+
+  /**
+   * R-mitmachen-16, the attribution half: the Stiftung runs the LeLender, not
+   * the Gemeinde, and the adult education centres are named after the county
+   * and carry the benefit the review names with them (review lines 103 and
+   * 109; T-18, DEC-0143 §5).
+   */
+  test("R-mitmachen-16: the proof block names the Stiftung and the county-wide Volkshochschulen", async ({
+    page,
+  }) => {
+    await page.goto("/mitmachen");
+    const block = page.locator("[data-block='beleg']");
+
+    await expect(block.getByText("Stiftung Lebendiges Lehre")).toBeVisible();
+    await expect(block.getByText(/Die Gemeinde Lehre betreibt/)).toHaveCount(0);
+
+    await expect(block.getByText("Volkshochschulen in Vorpommern-Greifswald")).toBeVisible();
+    await expect(block.getByText("Volkshochschule Uecker-Randow")).toHaveCount(0);
+    // The benefit, not just the name: courses are as relevant in the villages
+    // as in town (review line 109). The clause was shortened towards CG-027's
+    // claim budget in T-18's fix round (state/open.md row 282), which is why the
+    // regex reads "in der Stadt" rather than "in den Städten".
+    await expect(block.getByText(/in den Dörfern genauso relevant wie in der Stadt/)).toBeVisible();
   });
 
   /**

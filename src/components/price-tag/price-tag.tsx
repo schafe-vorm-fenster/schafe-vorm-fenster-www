@@ -15,6 +15,15 @@ export interface PriceTagProps {
   /** The free tier's permanence statement — not a price (TS-WEB-0006 D10). */
   readonly permanentLabel?: string;
   readonly onRequestLabel?: string;
+  /**
+   * Renders the tag as a `span` instead of a `p`, for the one case that is a
+   * price inside a sentence: TS-WEB-0026 D6's "The 480 € comparison — it is
+   * `portalize-calendar`'s published price, read from its package by the same
+   * component, never typed into copy". The string is unchanged, qualifier and
+   * all, so the figure still reaches a screen reader as one readable string
+   * (TS-WEB-0026-A5, DEC-0143 §4).
+   */
+  readonly inline?: boolean;
   readonly locale?: Locale;
   readonly className?: string;
 }
@@ -43,10 +52,14 @@ export function PriceTag({
   figure,
   permanentLabel,
   onRequestLabel,
+  inline = false,
   locale = "de",
   className,
 }: PriceTagProps) {
-  const classes = [styles.tag, className].filter(Boolean).join(" ");
+  const classes = [styles.tag, inline ? styles.inline : null, className]
+    .filter(Boolean)
+    .join(" ");
+  const Text = inline ? "span" : "p";
   // F-2-33: both labels were German literals in this component body, so the
   // free tier on `/en/your-calendar` read "Dauerhaft kostenfrei" and the
   // enterprise tier "Auf Anfrage". A page may still override them; the
@@ -58,14 +71,14 @@ export function PriceTag({
   if (display === "withheld") return <span className={classes} />;
 
   if (display === "permanent") {
-    return <p className={classes}>{permanent}</p>;
+    return <Text className={classes}>{permanent}</Text>;
   }
 
   if (display === "on-request") {
-    return <p className={classes}>{onRequest}</p>;
+    return <Text className={classes}>{onRequest}</Text>;
   }
 
-  if (!figure) return <p className={classes}>{onRequest}</p>;
+  if (!figure) return <Text className={classes}>{onRequest}</Text>;
 
-  return <p className={classes}>{formatPriceFigure(figure, locale)}</p>;
+  return <Text className={classes}>{formatPriceFigure(figure, locale)}</Text>;
 }
