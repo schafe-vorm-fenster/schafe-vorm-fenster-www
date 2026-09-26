@@ -33,9 +33,13 @@ const TABLE_DIVIDER = /^\|[\s:|-]+\|$/;
  * The explicit note marker — `<!-- note -->`, with an optional reason after
  * the word (`<!-- note: three deviations from the drafts -->`).
  *
- * It opens a note region that runs to the end of the slot: every list and
- * table below it is authoring prose and carries `note: true`, which is what
- * the copy lint passes over (`copyOf`, DEC-0142). It replaces the position
+ * It opens a note region that runs **to the next `**Label:**` field, or to the
+ * end of the slot**: every paragraph, list and table inside it is authoring
+ * prose and carries `note: true`, which is what the copy lint passes over
+ * (`copyOf`, DEC-0142). A field is where authored copy starts again, so the
+ * hatch closes there by itself — a slot that interleaves notes with copy
+ * (`dein-kalender-4-tiers`: a note per tier) can mark each note, and the
+ * marker can never reach a block a later field owns. It replaces the position
  * rule that used to decide this — *a list whose nearest preceding block is a
  * paragraph is a note* — because position also exempted eight **rendered**
  * blocks (the three proof lists and the archive table, both locales;
@@ -45,6 +49,19 @@ const TABLE_DIVIDER = /^\|[\s:|-]+\|$/;
  * index a page reads.
  */
 const NOTE_MARKER = /^<!--\s*note\b[\s\S]*?-->$/i;
+
+/**
+ * Any other HTML comment in a slot body — `<!-- source_note: … -->`,
+ * `<!-- clearance: … -->`: an annotation to the next author, never a block.
+ *
+ * It is not copy (the lint would read `Postleitzahl` out of a `source_note`
+ * that exists to say the word is gone) and it is not rendered, so emitting it
+ * as a paragraph would both mislead the lint and shift the paragraph index a
+ * page reads. `COMMENT_OPEN` opens a region that ends on the line carrying
+ * `-->`, because the artifacts wrap long annotations over several lines.
+ */
+const COMMENT_OPEN = /^<!--/;
+const COMMENT_CLOSE = /-->/;
 
 /** The field labels that carry a call to action, in both locales. */
 const CTA_LABEL = /^(cta|call to action|button|cta-label|cta label)/i;
@@ -78,12 +95,14 @@ export function parseBlocks(body: string): ContentBlock[] {
   let paragraph: string[] = [];
   let list: { ordered: boolean; items: string[] } | null = null;
   let table: string[][] | null = null;
-  /** Set by the explicit marker; runs to the end of this slot body. */
+  /** Set by the explicit marker; runs to the next field or the slot's end. */
   let inNote = false;
+  /** Inside a multi-line annotation comment. */
+  let inComment = false;
 
   const flushParagraph = () => {
     const text = plain(paragraph.join(" "));
-    if (text) blocks.push({ kind: "paragraph", text });
+    if (text) blocks.push({ kind: "paragraph", text, ...(inNote ? { note: true } : {}) });
     paragraph = [];
   };
   const flushList = () => {
@@ -118,10 +137,22 @@ export function parseBlocks(body: string): ContentBlock[] {
       continue;
     }
 
+    if (inComment) {
+      if (COMMENT_CLOSE.test(line)) inComment = false;
+      continue;
+    }
+
     if (NOTE_MARKER.test(line)) {
       // Close what stands above it first: the marker looks forward only.
       flushAll();
       inNote = true;
+      continue;
+    }
+
+    if (COMMENT_OPEN.test(line)) {
+      // An annotation, not a block: close what stands above it and skip it.
+      flushAll();
+      if (!COMMENT_CLOSE.test(line)) inComment = true;
       continue;
     }
 
@@ -139,6 +170,8 @@ export function parseBlocks(body: string): ContentBlock[] {
     const label = field?.[1].trim() ?? "";
     if (field && (label.endsWith(":") || field[2] === ":")) {
       flushAll();
+      // A field is authored copy, and it closes a note region above it.
+      inNote = false;
       blocks.push({
         kind: "field",
         label: label.replace(/:$/, "").trim(),

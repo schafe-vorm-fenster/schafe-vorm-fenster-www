@@ -121,6 +121,8 @@ kommt nur im Fokusblock vor (TS-WEB-0024 D3).
 
 **CTA-Label (gleichwertig, sekundär):** Beratungstermin buchen → `#kontakt`, die Kontakt-Section dieser Seite
 
+<!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
+
 Quelle: `headline` aus `municipalities--portalize-calendar` — „Our
 calendar is current again — and nobody here maintains it."
 
@@ -142,6 +144,8 @@ niemand bekommt) und CG-036 („im Amt" als einzige Adressierung).
 | Aktuell halten braucht eine Person, die es in der Verwaltung nicht gibt. | Akteure vor Ort pflegen ihre eigenen Termine — eure gefilterte Ansicht ist nebenbei aktuell. |
 | Ein zweites Login und ein zweites Formular nimmt kaum ein Akteur an. | Akteure veröffentlichen so, wie sie es schon tun — Flyer, eigener Kalender, eigene Website. |
 | Euer Kalender endet an der eigenen Zuständigkeit, das Interesse der Menschen nicht. | Die Ortsauswahl läuft über Orte oder einen Landkreis — die Grenze zieht ihr selbst. |
+
+<!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
 
 Vier Zeilen, abgeleitet aus `portalize-calendar` (`summary`, Kategorie)
 und den Feldern `pains[]`/`gains[]`/`relievers[]` von
@@ -199,7 +203,7 @@ haben.
 
 **Link-Label:** Alle Einstellungen im Detail
 
-<!-- note: alles ab hier ist Autorennotiz, keine Copy — die vier Abweichungslisten zitieren verbotene Begriffe, um sie zu verbieten (src/lib/content/blocks.ts, DEC-0142) -->
+<!-- note: ab hier bis zum nächsten Feld Autorennotiz, keine Copy — die vier Abweichungslisten zitieren verbotene Begriffe, um sie zu verbieten (src/lib/content/blocks.ts, DEC-0142) -->
 
 Kicker, Überschriften, Benefit-Satz und die sechs Einstellungssätze sind die
 der Entwürfe `Design -. Portalize Einstellungen 1.png` /
@@ -264,6 +268,8 @@ Entscheidung (TS-WEB-0024 D6).
 **CTA (primär auf hell):** Kalender bestellen
 
 **Produktname:** Der Kalender unter eurem Namen heißt Portalize.
+
+<!-- note: ab hier bis zum nächsten Feld Autorennotiz, keine Copy — der Absatz zitiert den Produktnamen, um seine eine Stelle zu belegen (DEC-0142 §1) -->
 
 Offering-ID: `portalize-calendar`; Preis 480/EUR/Jahr, `vat: excluded` —
 aus dem Paket gelesen, nicht getippt (TS-WEB-0024 D8). „Portalize" erscheint

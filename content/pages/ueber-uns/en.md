@@ -153,6 +153,8 @@ in slot 1. No operating counter, no year figure as a module, no place count
 
 **Source for the proof:** Nordkurier, 2019 and 2022
 
+<!-- note: authoring note from here on, not copy — the passage quotes forbidden terms in order to forbid them (DEC-0142 §1) -->
+
 The order is DEC-0084 §2: the need → what the market answers with → what
 follows. Sentences 1 and 2 are the owner's own sentences from the review of
 2026-09-22 (section "Seite `/ueber-uns`", "Section ‚Warum das zählt'"), in

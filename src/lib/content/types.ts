@@ -48,8 +48,14 @@ export type ContentGap =
 export type ContentBlock =
   /** `**Label:** value` — the shape almost all authored copy takes. */
   | { readonly kind: "field"; readonly label: string; readonly value: string }
-  /** A paragraph of prose: a note, a rationale, an intro line. */
-  | { readonly kind: "paragraph"; readonly text: string }
+  /**
+   * A paragraph of prose: a rendered intro line, or an authoring note.
+   *
+   * `note: true` where the slot marked it as authoring prose with an explicit
+   * `<!-- note -->` marker — the same marker a list or a table carries, and
+   * the only thing that keeps a paragraph out of the copy lint (DEC-0142 §1).
+   */
+  | { readonly kind: "paragraph"; readonly text: string; readonly note?: boolean }
   /**
    * A `-` or `1.` list; `ordered` says which.
    *

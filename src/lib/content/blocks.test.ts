@@ -93,6 +93,44 @@ describe("TS-WEB-0007-A1: a slot body parses into typed blocks, never into HTML"
     expect(fieldAt(en, 3)).toBeUndefined();
   });
 
+  it("reads an annotation comment as no block at all (DEC-0142 §1)", () => {
+    // `<!-- source_note: … -->` is a note to the next author: it is neither
+    // rendered nor copy, and emitting it as a paragraph would both feed the
+    // lint an annotation and shift the paragraph index a page reads.
+    const blocks = parseBlocks(`**Hinweistext unter dem Feld:** Tipp den Ortsnamen ein.
+
+<!-- source_note: die Postleitzahl-Formulierung ist mit DEC-0079 §1
+     entfallen -->
+
+Das ist der Kalender von Schlatkow.`);
+    expect(blocks.map((block) => block.kind)).toEqual(["field", "paragraph"]);
+    expect(blocks[1]).toEqual({ kind: "paragraph", text: "Das ist der Kalender von Schlatkow." });
+  });
+
+  it("marks a paragraph below the `<!-- note -->` marker, and closes the region at the next field (DEC-0142)", () => {
+    const blocks = parseBlocks(`**Produktname:** Der Kalender heißt Portalize.
+
+<!-- note: ab hier bis zum nächsten Feld Autorennotiz -->
+
+„Portalize" erscheint in der gesamten Seite nur in diesem Satz.
+
+- Kein „im Amt" im Benefit-Band — CG-036.
+
+**Stufen-Kicker:** Für eine ganze Region
+
+Offering-ID: portalize-enterprise.`);
+    expect(blocks.map((block) => block.kind)).toEqual([
+      "field",
+      "paragraph",
+      "list",
+      "field",
+      "paragraph",
+    ]);
+    expect(blocks[1]).toMatchObject({ note: true });
+    expect(blocks[2]).toMatchObject({ note: true });
+    expect(blocks[4]).not.toMatchObject({ note: true });
+  });
+
   it("returns no blocks for an empty body rather than throwing", () => {
     expect(parseBlocks("")).toEqual([]);
     expect(parseBlocks("   \n\n  ")).toEqual([]);

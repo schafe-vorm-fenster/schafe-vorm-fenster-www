@@ -173,6 +173,8 @@ CG-020, CG-021; TS-WEB-0022-A4).
 
 **Closing line:** Volunteering leaves no time to enter every date over and over. You'd rather send it once by WhatsApp and be done.
 
+<!-- note: authoring note from here on, not copy — the passage quotes forbidden terms in order to forbid them (DEC-0142 §1) -->
+
 Source: `@schafe-vorm-fenster/audiences#actors` field "Problem" (dates
 are typed "by hand" into several channels) and `pains[]` from
 `actors--community-calendar` (5 entries). No channel count is stated —

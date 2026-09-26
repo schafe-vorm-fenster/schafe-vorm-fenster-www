@@ -151,6 +151,8 @@ Ortszahl (TS-WEB-0027 D4, DEC-0084 §3).
 
 **Quelle zum Beleg:** Nordkurier, 2019 und 2022
 
+<!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
+
 Die Reihenfolge ist DEC-0084 §2: der Bedarf → was der Markt darauf antwortet
 → was daraus folgt. Satz 1 und 2 sind die Sätze des Reviews vom 2026-09-22
 (Abschnitt „Seite `/ueber-uns`", „Section ‚Warum das zählt'"), wörtlich

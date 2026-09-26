@@ -11,8 +11,10 @@ import {
   checkCopy,
   checkLifecycle,
   checkLocaleSet,
+  checkNoteMarker,
   checkPage,
   checkProductName,
+  RENDERED_BLOCKS,
   fieldRole,
   REGISTER_EXEMPT_ROUTES,
 } from "@/src/lib/content/validate";
@@ -537,6 +539,59 @@ Drei Abweichungen vom Entwurf, alle aus einer Quelle:
     expect(findings[0]?.message).toContain("Kandidaten");
   });
 
+  it("reads a paragraph the page renders, and the marker is the only way out (DEC-0142 §1)", () => {
+    // `dein-kalender-3b-embed-config`'s shape: the heading, then the lead
+    // paragraph `app/[lang]/dein-kalender/page.tsx:437` renders.
+    const rendered = checkCopy(
+      slotOf(`**Überschrift:** Was drinsteht, bestimmt ihr
+
+Die Leute kommen, wie sie reinkommen — und landen trotzdem alle auf eurer Vereinswebseite.`),
+    );
+    expect(checks(rendered)).toEqual(["avoid-list", "avoid-list"]);
+    expect(rendered[0]?.message).toContain("(paragraph)");
+    expect(rendered[0]?.message).toContain("Überschrift");
+
+    const marked = checkCopy(
+      slotOf(`**Überschrift:** Was drinsteht, bestimmt ihr
+
+<!-- note: ab hier bis zum nächsten Feld Autorennotiz -->
+
+Kein „die Leute" im Vorspann — CG-009, und das Review sagt es selbst.`),
+    );
+    expect(marked).toEqual([]);
+  });
+
+  it("reads a paragraph under no field at all, naming its shape instead of a label", () => {
+    const findings = checkCopy(slotOf("Die Leute kommen, wie sie reinkommen."));
+    expect(findings[0]?.check).toBe("avoid-list");
+    expect(findings[0]?.message.startsWith("(paragraph)")).toBe(true);
+  });
+
+  it("never reads a paragraph as a second section title — CG-005 stops at the field", () => {
+    // A question below `**Überschrift:**` is the lead, not a heading.
+    expect(
+      checkCopy(
+        slotOf(`**Überschrift:** Drei Wege zu eurem Kalender
+
+Wo soll der Kalender stehen? Das entscheidet den Preis.`),
+      ),
+    ).toEqual([]);
+  });
+
+  it("closes a note region at the next field, so a note cannot silence the copy after it (DEC-0142 §1)", () => {
+    const findings = checkCopy(
+      slotOf(`**Produktname:** Der Kalender heißt Portalize.
+
+<!-- note: ab hier bis zum nächsten Feld Autorennotiz -->
+
+Kein „die Leute" in diesem Absatz — CG-009.
+
+**Stufen-Kicker:** Was die Leute hier brauchen`),
+    );
+    expect(findings).toHaveLength(1);
+    expect(findings[0]?.message).toContain("Stufen-Kicker");
+  });
+
   it("never reads the field label itself — a slot may be labelled `Warum es zählt`", () => {
     expect(checkCopy(slotOf("**Warum es zählt:** Damit euer Termin ankommt"))).toEqual([]);
   });
@@ -788,6 +843,18 @@ ${value}`,
     expect(findings[0]?.message).toContain("2 fields");
   });
 
+  it("counts occurrences, not carrier fields — twice in the one allowed field fails", () => {
+    const findings = checkProductName([
+      tierSlot(
+        "de",
+        "**Produktname:** Der Kalender heißt Portalize, und Portalize bleibt Portalize.",
+      ),
+    ]);
+    expect(findings).toHaveLength(1);
+    expect(findings[0]?.check).toBe("product-name");
+    expect(findings[0]?.message).toContain("3 times in one field");
+  });
+
   it("fails the name outside the tier slot, naming the slot it belongs to", () => {
     const findings = checkProductName([
       pageAt("home", "de", "**Überschrift:** So funktioniert Portalize"),
@@ -824,5 +891,91 @@ describe("DEC-0136: the field-role map", () => {
     for (const label of ["Headline", "Aha-Frage", "Link-Label", "CTA-Label (primär)", "Text"]) {
       expect(fieldRole(label), label).toBe("other");
     }
+  });
+});
+
+
+describe("DEC-0142 §6: the `<!-- note -->` marker never covers a block a page renders", () => {
+  const withSlot = (slotId: string, body: string): PageContent =>
+    parsePage(
+      `---
+id: fixture
+page_id: ${ROUTES.home.spec}
+route: "/"
+seo:
+  "/":
+    title: "Fixture-Titel"
+    description: "Fixture-Beschreibung"
+    provenance: generated
+content_type: section
+status: draft
+locale: de
+derived_from:
+  - "ia"
+generated_by: "playbook-content-production@1.0.0"
+generated_at: "2026-09-11"
+provenance: "sourced"
+---
+
+# Fixture
+
+<!-- id: ${slotId}; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+
+${body}`,
+      { routeId: "home", locale: "de", file: "content/pages/fixture/de.md" },
+    );
+
+  const bodyFor = (kind: "paragraph" | "list" | "table") =>
+    kind === "list"
+      ? "- Die Nachbarn haben es zuerst gesehen."
+      : kind === "table"
+        ? `| Titel | Typ |
+| --- | --- |
+| Abend der Engagierten | Konferenz |`
+        : "Das ist der Kalender von Schlatkow.";
+
+  it("refuses the marker above every rendered block the README names", () => {
+    for (const site of RENDERED_BLOCKS) {
+      const filler = Array.from({ length: site.index }, () => bodyFor(site.kind)).join("\n\n");
+      const body = `**Überschrift:** Was drinsteht, bestimmt ihr
+
+${filler ? `${filler}
+
+` : ""}<!-- note: escape hatch probe -->
+
+${bodyFor(site.kind)}`;
+      const findings = checkNoteMarker(withSlot(site.slot, body));
+      expect(findings.map((finding) => finding.check)).toEqual(["note-marker"]);
+      expect(findings[0]?.message).toContain(site.renderedBy);
+      expect(findings[0]?.message).toContain(`${site.kind} ${site.index}`);
+    }
+  });
+
+  it("allows the marker below the rendered blocks — the shipped placement", () => {
+    const body = `**Überschrift:** Was drinsteht, bestimmt ihr
+
+Das ist der Kalender von Schlatkow.
+
+Er zeigt genau das, was dort ansteht.
+
+<!-- note: ab hier bis zum nächsten Feld Autorennotiz -->
+
+Zwei Sätze statt fünf Zeilen (Review 2026-09-22).`;
+    expect(checkNoteMarker(withSlot("dein-kalender-3b-embed-config", body))).toEqual([]);
+  });
+
+  it("says nothing about a slot no page reads by index", () => {
+    expect(
+      checkNoteMarker(
+        withSlot(
+          "fixture-1",
+          `**Überschrift:** Was drinsteht, bestimmt ihr
+
+<!-- note -->
+
+Kein „die Leute" hier — CG-009.`,
+        ),
+      ),
+    ).toEqual([]);
   });
 });

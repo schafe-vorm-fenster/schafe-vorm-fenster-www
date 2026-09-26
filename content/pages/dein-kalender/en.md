@@ -119,6 +119,8 @@ in the focus block (TS-WEB-0024 D3).
 
 **CTA label (equally weighted, secondary):** Book a briefing → `#kontakt`, this page's contact section
 
+<!-- note: authoring note from here on, not copy — the passage quotes forbidden terms in order to forbid them (DEC-0142 §1) -->
+
 Source: `headline` from `municipalities--portalize-calendar` — "Our
 calendar is current again — and nobody here maintains it."
 
@@ -139,6 +141,8 @@ office" as the only addressee).
 | Keeping it current needs someone the administration doesn't have. | Local groups maintain their own dates — your filtered view stays current as a side effect. |
 | Hardly any group takes on a second login and a second form. | Local groups publish the way they already do — flyer, own calendar, own website. |
 | Your calendar ends at your own jurisdiction; people's interest doesn't. | Place selection runs by place or by a whole county — you draw the boundary yourself. |
+
+<!-- note: authoring note from here on, not copy — the passage quotes forbidden terms in order to forbid them (DEC-0142 §1) -->
 
 Four rows, derived from `portalize-calendar` (`summary`, category) and
 the `pains[]`/`gains[]`/`relievers[]` fields of
@@ -193,7 +197,7 @@ Including dates from clubs that simply sent their flyer over WhatsApp.
 
 **Link label:** All settings in detail
 
-<!-- note: everything below is an authoring note, not copy — the four deviation lists quote forbidden terms in order to forbid them (src/lib/content/blocks.ts, DEC-0142) -->
+<!-- note: from here to the next field an authoring note, not copy — the four deviation lists quote forbidden terms in order to forbid them (src/lib/content/blocks.ts, DEC-0142) -->
 
 Kicker, headings, benefit sentence and the six setting sentences are the
 ones in `Design -. Portalize Einstellungen 1.png` /
@@ -256,6 +260,8 @@ calendar" was a link into the app, not a next step in this decision
 **CTA (primary on light):** Order the calendar
 
 **Product name:** The calendar under your own name is called Portalize.
+
+<!-- note: from here to the next field an authoring note, not copy — the passage quotes the product name in order to record its one place (DEC-0142 §1) -->
 
 Offering id: `portalize-calendar`; price 480/EUR/year, `vat: excluded`
 — read from the package, never typed (TS-WEB-0024 D8). "Portalize" appears

@@ -118,7 +118,7 @@ export function checkTerms(root: string = ROOT): TermsResult {
 function main(): void {
   const { errors, filesScanned } = checkTerms();
   console.log(`terms check: ${filesScanned} file(s) scanned for the response-time wording`);
-  for (const message of errors) console.error(`  ERROR TS-026-${message}`);
+  for (const message of errors) console.error(`  ERROR TS-WEB-0026-${message}`);
   console.log(errors.length ? `${errors.length} error(s)` : "no errors");
   process.exit(errors.length);
 }

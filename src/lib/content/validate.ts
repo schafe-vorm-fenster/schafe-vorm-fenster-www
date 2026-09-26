@@ -55,7 +55,8 @@ export interface Finding {
     | "avoid-list"
     | "copy-structure"
     | "register"
-    | "product-name";
+    | "product-name"
+    | "note-marker";
   readonly message: string;
 }
 
@@ -121,7 +122,7 @@ export interface CopyText {
   readonly slot: string;
   readonly label: string;
   readonly role: FieldRole;
-  readonly kind: "field" | "list item" | "table cell";
+  readonly kind: "field" | "paragraph" | "list item" | "table cell";
   readonly text: string;
 }
 
@@ -132,20 +133,29 @@ export interface CopyText {
  * What is deliberately not copy (DEC-0136): the `**Label:**` itself — a
  * slot-internal name, not a rendered string, which is why a field may be
  * labelled `Warum es zählt` while the avoid list forbids that wording on the
- * page — and every paragraph, because a paragraph below a slot is the
- * authoring note that says where the copy came from (`content/pages/**`
- * convention).
+ * page.
  *
- * **A list or table binds to the last field above it, across any paragraph
- * between them** (DEC-0142). A note quoting a forbidden term in order to
- * forbid it (`Kein „im Amt" im Benefit-Band`) must not fail the build that its
- * own slot passes — but it is excluded by the slot's own `<!-- note -->`
- * marker (`src/lib/content/blocks.ts`), never by its position. Position used
- * to decide it, and position exempted the eight rendered blocks that stand
- * under an intro paragraph: the proof lists of `dein-kalender-5-proof-demo`,
- * `deine-region-6-proof-demo` and `ueber-uns-3-proof-stream`, and the
- * `archiv-2-rows-demo` table, in both locales — all four rendered by their
- * pages (`app/[lang]/ueber-uns/page.tsx:156` and its three siblings).
+ * **Everything a slot authors is copy, whatever its shape, unless the slot
+ * says otherwise** (DEC-0142 §1): a field value, a paragraph, and the list
+ * items and table cells that belong to a field of the same slot. A list or
+ * table binds to the last field above it, across any paragraph between them;
+ * a paragraph carries that field's label too, and never its title role — a
+ * paragraph under `**Überschrift:**` is the lead below the heading, not a
+ * second heading.
+ *
+ * The one exclusion is the slot's own `<!-- note -->` marker
+ * (`src/lib/content/blocks.ts`), never a block's position or shape. A note
+ * quoting a forbidden term in order to forbid it (`Kein „im Amt" im
+ * Benefit-Band`) must not fail the build that its own slot passes, and it is
+ * the marker that says so. Position used to decide it, and position exempted
+ * fourteen blocks the pages **render**: the proof lists of
+ * `dein-kalender-5-proof-demo`, `deine-region-6-proof-demo` and
+ * `ueber-uns-3-proof-stream` and the `archiv-2-rows-demo` table (shape: a
+ * list or table under an intro paragraph), plus the three paragraphs of
+ * `/dein-kalender` that the page reads by index — `dein-kalender-3-embed-demo`
+ * paragraph 0 and `dein-kalender-3b-embed-config` paragraphs 0 and 1
+ * (`app/[lang]/dein-kalender/page.tsx:402`, `:437`, `:460`) — in both
+ * locales.
  */
 export function copyOf(page: PageContent): CopyText[] {
   const texts: CopyText[] = [];
@@ -161,11 +171,23 @@ export function copyOf(page: PageContent): CopyText[] {
         }
         continue;
       }
-      // A paragraph is an authoring note, and it is not a boundary: the list
-      // under `Pool: …` is the field's content, not a second note.
-      if (block.kind === "paragraph") continue;
       // The one exclusion, and it is explicit (DEC-0142).
       if (block.note) continue;
+      if (block.kind === "paragraph") {
+        // A paragraph is copy where the page renders one, and it is not a
+        // boundary: the list under `Pool: …` is still the field's content.
+        if (block.text) {
+          texts.push({
+            slot: slot.id,
+            label: field?.label ?? "",
+            // Prose below a title is the title's content, never a second title.
+            role: "other",
+            kind: "paragraph",
+            text: block.text,
+          });
+        }
+        continue;
+      }
       if (!field) continue;
       const cells =
         block.kind === "list" ? block.items : [...block.head, ...block.rows.flat()];
@@ -415,7 +437,10 @@ export function checkCopy(page: PageContent): Finding[] {
   const registerExempt = REGISTER_EXEMPT_ROUTES.includes(page.routeId);
 
   for (const copy of copyOf(page)) {
-    const where = `\`${copy.label}\`${copy.kind === "field" ? "" : ` (${copy.kind})`}`;
+    const where =
+      copy.label === ""
+        ? `(${copy.kind})`
+        : `\`${copy.label}\`${copy.kind === "field" ? "" : ` (${copy.kind})`}`;
 
     // Row 11 — the avoid list.
     for (const term of AVOID_TERMS) {
@@ -470,6 +495,110 @@ export function checkCopy(page: PageContent): Finding[] {
   return findings;
 }
 
+/**
+ * The blocks the pages read, and the `<!-- note -->` marker must therefore
+ * never cover (DEC-0142 §6).
+ *
+ * The marker is an escape hatch: it takes everything below it out of the copy
+ * lint. Nothing in the markup says whether a page renders those blocks, so
+ * without this list the hatch could do exactly what the positional rule it
+ * replaced did — silence rows 11, 13 and 14 over copy a visitor reads. The
+ * render sites are the ones `src/lib/content/README.md` names; `index` counts
+ * the blocks of that kind inside the slot from zero, the way the pages count
+ * them (`blocks.flatMap(block => block.kind === "paragraph" ? … : [])`).
+ *
+ * A slot whose note stands *above* a rendered block cannot use the marker at
+ * all — it runs to the end of the slot — and its note is read as copy, which
+ * is the safe direction (`home-8-proof-stream`, DEC-0142 §6).
+ */
+export const RENDERED_BLOCKS: readonly {
+  readonly slot: string;
+  readonly kind: "paragraph" | "list" | "table";
+  readonly index: number;
+  readonly renderedBy: string;
+}[] = [
+  {
+    slot: "ueber-uns-3-proof-stream",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/ueber-uns/page.tsx:156",
+  },
+  {
+    slot: "deine-region-6-proof-demo",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/deine-region/page.tsx:196",
+  },
+  {
+    slot: "dein-kalender-5-proof-demo",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:286",
+  },
+  {
+    slot: "archiv-2-rows-demo",
+    kind: "table",
+    index: 0,
+    renderedBy: "app/[lang]/ueber-uns/archiv/page.tsx:95",
+  },
+  {
+    slot: "dein-kalender-3-embed-demo",
+    kind: "paragraph",
+    index: 0,
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:402",
+  },
+  {
+    slot: "dein-kalender-3b-embed-config",
+    kind: "paragraph",
+    index: 0,
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:437",
+  },
+  {
+    slot: "dein-kalender-3b-embed-config",
+    kind: "paragraph",
+    index: 1,
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:460",
+  },
+];
+
+/**
+ * The marker's own guard: a block a page renders is never authoring prose
+ * (DEC-0142 §6). Fails where a `<!-- note -->` marker stands above one of
+ * `RENDERED_BLOCKS`.
+ */
+export function checkNoteMarker(page: PageContent): Finding[] {
+  if (!page.ok) return [];
+
+  const findings: Finding[] = [];
+  for (const slot of page.slots) {
+    const rendered = RENDERED_BLOCKS.filter((entry) => entry.slot === slot.id);
+    if (rendered.length === 0) continue;
+
+    const counted = new Map<string, number>();
+    for (const block of slot.blocks) {
+      if (block.kind === "field") continue;
+      const index = counted.get(block.kind) ?? 0;
+      counted.set(block.kind, index + 1);
+      if (!("note" in block) || !block.note) continue;
+      const site = rendered.find((entry) => entry.kind === block.kind && entry.index === index);
+      if (!site) continue;
+      findings.push({
+        level: "error",
+        file: page.file,
+        slot: slot.id,
+        check: "note-marker",
+        message:
+          `the \`<!-- note -->\` marker covers ${block.kind} ${index} of this slot, and ` +
+          `\`${site.renderedBy}\` renders it — the marker takes a block out of the copy ` +
+          "lint, so it may only stand above authoring prose. Move the marker below the " +
+          "rendered blocks, or take the note out of this slot (DEC-0142 §6)",
+      });
+    }
+  }
+
+  return findings;
+}
+
 /** `CG-038` — the product name, and the one field that may carry it. */
 export const PRODUCT_NAME = "Portalize";
 
@@ -478,6 +607,9 @@ export const PRODUCT_NAME = "Portalize";
  * cell, not the product name in copy (DEC-0136).
  */
 const PRODUCT_NAME_PATTERN = /\bPortalize\b/;
+
+/** The same pattern as a counter: `CG-038` is an occurrence count, not a flag. */
+const PRODUCT_NAME_COUNTER = /\bPortalize\b/g;
 
 /**
  * The tier slot of `/dein-kalender` — the one place the name is introduced
@@ -496,10 +628,18 @@ export const PRODUCT_NAME_FIELD = { routeId: "calendar", slot: "dein-kalender-4-
  * reading the sentence as one per tree would make the mirror the violation.
  * One field per locale is one occurrence per reader, which is what DEC-0052 §1
  * decides.
+ *
+ * Counted as **occurrences**, not as carrier fields: `Portalize bleibt
+ * Portalize` in the one allowed field is two occurrences for the reader, and
+ * the rendered half of A7 (`e2e/copy-structure.spec.ts`) counts it that way
+ * too. A lint that only counted fields would pass what the browser fails.
  */
 export function checkProductName(pages: readonly PageContent[]): Finding[] {
   const findings: Finding[] = [];
-  const carriers = new Map<Locale, Map<string, { file: string; slot: string; label: string }>>();
+  const carriers = new Map<
+    Locale,
+    Map<string, { file: string; slot: string; label: string; count: number }>
+  >();
 
   for (const page of pages) {
     for (const copy of copyOf(page)) {
@@ -517,16 +657,31 @@ export function checkProductName(pages: readonly PageContent[]): Finding[] {
       }
 
       const perLocale = carriers.get(page.locale) ?? new Map();
-      perLocale.set(`${page.file}|${copy.slot}|${copy.label}`, {
+      const key = `${page.file}|${copy.slot}|${copy.label}`;
+      const carried = perLocale.get(key);
+      const hits = copy.text.match(PRODUCT_NAME_COUNTER)?.length ?? 1;
+      perLocale.set(key, {
         file: page.file,
         slot: copy.slot,
         label: copy.label,
+        count: (carried?.count ?? 0) + hits,
       });
       carriers.set(page.locale, perLocale);
     }
   }
 
   for (const [locale, fields] of carriers) {
+    for (const field of fields.values()) {
+      if (field.count <= 1) continue;
+      findings.push({
+        level: "error",
+        file: field.file,
+        slot: field.slot,
+        check: "product-name",
+        message: `\`${field.label}\`: \`${PRODUCT_NAME}\` stands ${field.count} times in one field of the \`${locale}\` locale — the name is introduced once, at the tier where the price is read (CG-038, DEC-0052 §1, TS-WEB-0018-A7)`,
+      });
+    }
+
     if (fields.size <= 1) continue;
     const named = [...fields.values()].map((field) => `\`${field.label}\``).join(", ");
     for (const field of fields.values()) {
@@ -838,6 +993,7 @@ export async function checkContentTree(
       findings.push(...checkPage(page, resolver));
       findings.push(...checkLifecycle(page, targetEnvironment));
       findings.push(...checkCopy(page));
+      findings.push(...checkNoteMarker(page));
     }
     findings.push(...checkLocaleSet(routeId, pages, options));
   }

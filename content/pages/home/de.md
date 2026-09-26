@@ -288,6 +288,8 @@ Rahmensatz und den Kandidatensatz, aus dem gezogen wird — Pool:
 4. „Das Projekt kann einen wertvollen Beitrag … zur Sichtbarkeit im ländlichen Raum leisten." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
 5. Seit 2018 in Betrieb, kein Pilot und kein Prototyp. — Vorpommern-Greifswald
 
+<!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
+
 Namen, Zahlen, Titel und Jahre stehen so in den Belegen: die 17 Orte, der
 Name „LeLender" und die Trägerschaft der Stiftung aus `lehre-lelender`, der
 Gewinn und die Bitkom-Schirmherrschaft aus
