@@ -41,6 +41,25 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
       "proof",
       "trust",
     ]);
+
+    // And the order ends there: the contact section stands after the last
+    // block and before the footer, on this route as on every other
+    // (TS-WEB-0006-A17, DEC-0081 §2). The section carries no `data-block` of
+    // its own — it is chrome, not a block of the page's composition sheet — so
+    // the array above cannot show it and the DOM order is read instead.
+    const closing = await page.evaluate(() => {
+      const blocks_ = [...document.querySelectorAll("[data-block]")];
+      const last = blocks_.at(-1);
+      const contact = document.querySelector("section#kontakt");
+      const footer = document.querySelector("body > footer, footer[role='contentinfo']");
+      if (!last || !contact || !footer) return { found: false, afterLast: false, beforeFooter: false };
+      return {
+        found: true,
+        afterLast: last.compareDocumentPosition(contact) === Node.DOCUMENT_POSITION_FOLLOWING,
+        beforeFooter: contact.compareDocumentPosition(footer) === Node.DOCUMENT_POSITION_FOLLOWING,
+      };
+    });
+    expect(closing).toEqual({ found: true, afterLast: true, beforeFooter: true });
   });
 
   test("TS-WEB-0024-A3: exactly one Pulse primary CTA to /dein-kalender/bestellen, one equal-weight CTA inside focus", async ({

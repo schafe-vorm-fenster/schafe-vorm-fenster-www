@@ -1,5 +1,10 @@
 import { expect, test } from "@playwright/test";
 
+import { HEADER_CALENDAR_ENTRY } from "../src/lib/routes/navigation";
+import { everyRoute, href } from "../src/lib/routes/routes";
+
+import { dictionary } from "../src/lib/i18n/dictionary";
+
 /**
  * The header — TS-WEB-0004 D4, and Jan's round-3 points 2 and 3
  * (`state/open.md` rows 35, 200, 201).
@@ -95,8 +100,8 @@ test.describe("TS-WEB-0004-A8: the header inventory at both widths", () => {
     await page.setViewportSize(PHONE);
     await page.goto("/");
 
-    // The calendar entry never leaves the bar — TS-WEB-0004 D4's persistent entry,
-    // and TS-WEB-0017-A12's "on every page" (state/open.md row 30).
+    // The calendar entry never leaves the bar — TS-WEB-0004 D4's persistent
+    // entry. Its "on every page" half is the route walk further down.
     await expect(header(page).getByRole("link", { exact: true, name: CALENDAR })).toBeVisible();
     await expect(burger(page)).toBeVisible();
 
@@ -388,3 +393,55 @@ test.describe("TS-WEB-0004-A8: without JavaScript the header is solid, items inc
     await expectColor(page, cta, "color", PAPER);
   });
 });
+
+/**
+ * TS-WEB-0017-A12 — "the persistent calendar entry is present in the header on
+ * every page and resolves to the target TS-WEB-0004 D4 fixes."
+ *
+ * Until 2026-09-26 the identifier stood in a comment beside the phone case
+ * above and in no test title, so `check:coverage` graded it NAMED ONLY — which
+ * it was: the entry was asserted on `/`, at two widths, and "on every page" was
+ * the half nothing walked (`state/open.md` row 30). This is that half.
+ *
+ * The target is read from the navigation inventory, not written down again: D4
+ * puts the entry on `place` (the label says "Kalender", the destination is the
+ * dates page), `src/lib/routes/navigation.ts` is where the inventory lives, and
+ * `href()` is the facade every internal link goes through. So the assertion
+ * stays true through a path change and fails on a hard-coded one — the second
+ * clause of A12, which a literal string would have hidden.
+ *
+ * One case per width, twenty-four navigations each. The header is the same
+ * component on every route, so a case per route would multiply the page loads
+ * without multiplying what can be learned, and the development server pays for
+ * every one of them (`e2e/smoke.spec.ts`). The **widths** do multiply it: below
+ * `xl` the entry stands in the bar beside the burger and above it in the row,
+ * two different renderings of "present", so the walk runs at the phone
+ * reference width and at the desktop one rather than at whatever the Playwright
+ * project's default happens to be.
+ */
+for (const width of [360, 1280]) {
+  test(`TS-WEB-0017-A12: the persistent calendar entry is in the header of every page at ${width}px, at the D4 target`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 800, width });
+
+    for (const { route, locale } of everyRoute()) {
+      const path = href(route, locale);
+      const label = dictionary(locale).nav[HEADER_CALENDAR_ENTRY.label];
+      const target = href(HEADER_CALENDAR_ENTRY.route, locale);
+
+      await page.goto(path);
+
+      // Present: exactly one, in the banner, and reachable rather than merely
+      // in the markup — below `xl` it stands in the bar beside the burger, so
+      // the phone width is the one that could lose it.
+      const entry = header(page).getByRole("link", { exact: true, name: label });
+      await expect(entry, `calendar entry on ${path} at ${width}px`).toHaveCount(1);
+      await expect(entry, `calendar entry visible on ${path} at ${width}px`).toBeVisible();
+      await expect(entry, `calendar entry target on ${path} at ${width}px`).toHaveAttribute(
+        "href",
+        target,
+      );
+    }
+  });
+}

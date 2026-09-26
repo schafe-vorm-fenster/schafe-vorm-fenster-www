@@ -119,6 +119,18 @@ for (const routeId of ROUTE_IDS) {
  *
  *   TS-WEB-0009-A8  — "CLS < 0.1 on every content page … with all islands streaming"
  *   TS-WEB-0028-A13 — "CLS measured over load plus three filter interactions stays < 0.1"
+ *   TS-WEB-0003-A7  — "CLS < 0.1 with live modules streaming in (reserved space, no shift)"
+ *
+ * The third is the same number from the performance spec's side, and it is the
+ * same measurement: the observer is installed before the navigation and read
+ * after `networkidle` plus a settle pause, so every island that streamed into
+ * the page did so inside the window. Its level is `tool`, so the instrument
+ * that closes it is the CI job that runs this suite
+ * (`.github/workflows/check.yml`, the Playwright step) rather than the title
+ * below — a `tool` criterion is METERED, never VERIFIED
+ * (`scripts/check-coverage.ts`). Naming it here is the traceability half: until
+ * 2026-09-26 no file in the repository mentioned A7 of TS-WEB-0003 at all,
+ * although this block had been measuring it since it was written.
  *
  * Method, the same one the finding used so the numbers are comparable: a
  * `layout-shift` `PerformanceObserver` installed with `buffered: true` in an
@@ -192,7 +204,9 @@ async function settleAndReadCls(page: import("@playwright/test").Page): Promise<
 for (const routeId of ROUTE_IDS) {
   const path = href(routeId, "de");
 
-  test(`TS-WEB-0009-A8: CLS < ${CLS_BUDGET} — ${path} at 360×800`, async ({ page }) => {
+  test(`TS-WEB-0009-A8 / TS-WEB-0003-A7: CLS < ${CLS_BUDGET} — ${path} at 360×800`, async ({
+    page,
+  }) => {
     await page.setViewportSize({ ...CLS_VIEWPORT });
     await installClsObserver(page);
     await page.goto(path);

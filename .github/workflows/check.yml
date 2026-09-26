@@ -83,7 +83,12 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: pnpm exec playwright install-deps chromium
 
-      - name: E2E — Playwright against the local production build
+      # The CI job is the instrument for the `tool`-level criteria this suite
+      # measures with a real browser rather than with an external tool of its
+      # own: TS-WEB-0003-A7 (CLS < 0.1 with the live modules streaming in) is
+      # measured by the `layout-shift` PerformanceObserver in
+      # `e2e/layout-stability.spec.ts`, per route, against the production build.
+      - name: E2E — Playwright against the local production build (TS-WEB-0003-A7)
         run: pnpm e2e
         env:
           CI: true

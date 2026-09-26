@@ -6,15 +6,15 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**430 criteria · 253 closed · 177 open (59 % closed)**
+**430 criteria · 264 closed · 166 open (61 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 252 | a test title in a file a runner runs carries the id |
-| METERED | 1 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
+| VERIFIED | 259 | a test title in a file a runner runs carries the id |
+| METERED | 5 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
-| NAMED ONLY | 32 | the id is in a runner file but in no test title — **not coverage** |
-| MISSING | 145 | nothing names it |
+| NAMED ONLY | 30 | the id is in a runner file but in no test title — **not coverage** |
+| MISSING | 136 | nothing names it |
 
 Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
 
@@ -22,11 +22,11 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 
 | Level | Criteria | Closed | Open | Closed |
 | --- | --- | --- | --- | --- |
-| static | 86 | 49 | 37 | 57 % |
+| static | 86 | 56 | 30 | 65 % |
 | unit | 30 | 26 | 4 | 87 % |
-| integration | 73 | 47 | 26 | 64 % |
-| e2e | 171 | 130 | 41 | 76 % |
-| tool | 39 | 1 | 38 | 3 % |
+| integration | 73 | 49 | 24 | 67 % |
+| e2e | 171 | 131 | 40 | 77 % |
+| tool | 39 | 2 | 37 | 5 % |
 | manual | 31 | 0 | 31 | 0 % |
 
 ## By tactical specification
@@ -34,8 +34,8 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | Spec | Criteria | Closed | Open criteria |
 | --- | --- | --- | --- |
 | TS-WEB-0001 | 11 | 9 | A9 A11 |
-| TS-WEB-0002 | 13 | 2 | A1 A2 A4 A5 A6 A7 A8 A9 A10 A11 A12 |
-| TS-WEB-0003 | 8 | 1 | A1 A2 A3 A4 A5 A6 A7 |
+| TS-WEB-0002 | 13 | 3 | A1 A2 A4 A5 A6 A7 A8 A10 A11 A12 |
+| TS-WEB-0003 | 8 | 2 | A1 A2 A3 A4 A5 A6 |
 | TS-WEB-0004 | 11 | 8 | A6 A7 A11 |
 | TS-WEB-0005 | 16 | 13 | A9 A10 A15 |
 | TS-WEB-0006 | 18 | 14 | A4 A13 A14 A16 |
@@ -49,8 +49,8 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0014 | 13 | 2 | A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 |
 | TS-WEB-0015 | 12 | 1 | A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 |
 | TS-WEB-0016 | 23 | 11 | A1 A3 A4 A6 A7 A8 A9 A11 A18 A20 A13 A14 |
-| TS-WEB-0017 | 21 | 9 | A1 A2 A3 A5 A6 A7 A12 A13 A15 A17 A16 A19 |
-| TS-WEB-0018 | 16 | 1 | A1 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 A16 |
+| TS-WEB-0017 | 21 | 17 | A3 A13 A15 A16 |
+| TS-WEB-0018 | 16 | 2 | A1 A3 A4 A5 A6 A7 A8 A9 A10 A11 A13 A14 A15 A16 |
 | TS-WEB-0019 | 16 | 15 | A15 |
 | TS-WEB-0020 | 13 | 12 | A13 |
 | TS-WEB-0021 | 15 | 13 | A11 A15 |
@@ -76,7 +76,6 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0002-A6 | tool | MISSING | — | envoy widget passes A1/A4 inside the page context. |
 | TS-WEB-0002-A7 | e2e | MISSING | — | 320px viewport: no horizontal scroll on any page. |
 | TS-WEB-0002-A8 | integration | NAMED ONLY | e2e/footer.spec.ts — outside any test title | `/rechtliches#barrierefreiheit` resolves to the accessibility statement, is footer-linked under its conventional label, and its content is current. |
-| TS-WEB-0002-A9 | e2e | MISSING | — | With `prefers-reduced-motion`: no animation beyond opacity. |
 | TS-WEB-0002-A10 | static | MISSING | — | No font family, size or weight is declared outside the token import; the rendered type scale equals `font.*` from the brand package, and no size below 15 px app … |
 | TS-WEB-0002-A11 | tool | MISSING | — | axe-core reports no image without a text alternative; every image is either given a meaningful `alt` from content frontmatter or marked decorative with `alt=""` … |
 | TS-WEB-0002-A12 | manual | MISSING | — | The published accessibility statement names its method — self-assessment backed by the acceptance regime of this spec (A1–A5) — and claims no audit that did not … |
@@ -86,7 +85,6 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0003-A4 | e2e | NAMED ONLY | specs/verification/journeys/know-what-is-on.feature — outside any test title | With app APIs blocked (simulated outage): every page renders tier-2/3 content, freshness labels shown, counters hidden after stale window. |
 | TS-WEB-0003-A5 | tool | MISSING | — | eTracker and envoy absent from the critical request chain of the LCP element (verified in trace). |
 | TS-WEB-0003-A6 | e2e | MISSING | — | `Save-Data: on` responses are measurably lighter (≥ 30 % image bytes saved) [PROPOSED threshold]. |
-| TS-WEB-0003-A7 | tool | MISSING | — | CLS < 0.1 with live modules streaming in (reserved space, no shift). |
 | TS-WEB-0004-A6 | e2e | MISSING | — | No external API host appears in any client-initiated request except envoy and Portalize (verified via CSP report / network trace). |
 | TS-WEB-0004-A7 | integration | MISSING | — | BFF routes return 429 beyond the rate limit and reject foreign origins. |
 | TS-WEB-0004-A11 | integration | MISSING | — | Once the calendars have moved to `app.*`: a request to `/{community}` carrying `etcc_cmp`/`etcc_med` redirects to that place's calendar on `app.*` with both par … |
@@ -140,7 +138,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0012-A8 | tool | MISSING | — | Lighthouse/trace on the TS-WEB-0003 D7 routes: the eTracker script is deferred, is not a render-blocking resource, and does not appear in the LCP critical path. |
 | TS-WEB-0012-A10 | manual | MISSING | — | In the eTracker account: website and app events arrive in one property under one secure code; a `stage: handover` and a `stage: completed` event for the same go … |
 | TS-WEB-0013-A3 | static | NAMED ONLY | src/lib/live/boundary.test.ts — outside any test title | Built output and source contain no external asset URL: no `fonts.googleapis.com`, `fonts.gstatic.com`, or any CDN host; fonts, icons and libraries resolve to ow … |
-| TS-WEB-0013-A4 | static | MISSING | — | The deployed CSP allowlist equals the D2 host set exactly — no wildcard, no extra host, no missing host. |
+| TS-WEB-0013-A4 | static | NAMED ONLY | scripts/check-csp-allowlist.test.ts — outside any test title | The deployed CSP allowlist equals the D2 host set exactly — no wildcard, no extra host, no missing host. |
 | TS-WEB-0013-A6 | unit | MISSING | — | The geo resolver returns at most county-level, writes nothing, and no returned or cached key contains an IP address. |
 | TS-WEB-0013-A7 | manual | MISSING | — | Every host in D2 outside our own origin has a named section in the privacy policy on `/rechtliches#datenschutz`, and the `/dein-kalender` block claims nothing D … |
 | TS-WEB-0013-A8 | manual | MISSING | — | Review gate: a PR adding an outbound request carries the D5 rung-3 evidence (allowlist diff, privacy-policy section, D2 row, no-cookie evidence) or is rejected. |
@@ -178,18 +176,10 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0016-A20 | e2e | MISSING | — | Where a prefilled message is rendered: the WhatsApp row's URL is `https://wa.me/<number>?text=<urlencoded>` and the mail row's `mailto:` carries a subject and a … |
 | TS-WEB-0016-A13 | manual | MISSING | — | The two-working-day promise copy on `/deine-region` is present only when the lead-handling process behind it is named and signed off (C11); absent otherwise. |
 | TS-WEB-0016-A14 | e2e | MISSING | — | With the widget script blocked, S2 and S4 still render the static fallback (contact link plus the booking row of the page's contact section) and no empty or per … |
-| TS-WEB-0017-A1 | static | MISSING | — | `package.json`: `next` present; no dependency from the D1 deny-set; every `dependencies` entry has a reason line in `stack.allow.json`, and every register entry … |
-| TS-WEB-0017-A2 | static | MISSING | — | `pnpm-lock.yaml` is the only lockfile; `packageManager` pins pnpm; `.npmrc` maps the `@schafe-vorm-fenster` scope to the private registry and the `@leafcutter-s … |
 | TS-WEB-0017-A3 | static | MISSING | — | Root `tsconfig.json` exists with `strict: true`; `pnpm typecheck` is a script, is part of `pnpm check`, and exits 0. |
-| TS-WEB-0017-A5 | static | MISSING | — | No colour literal and no `font-family` literal outside the single brand-token import file (`app/`, `src/`, stylesheets). |
-| TS-WEB-0017-A6 | static | NAMED ONLY | e2e/routes.spec.ts — outside any test title | No logo, mark, or font file is committed in this repository; every logo reference is a brand-package subpath import. |
-| TS-WEB-0017-A7 | static | MISSING | — | The brand package is pinned to an exact version; the lockfile version matches the version recorded in D3. |
-| TS-WEB-0017-A12 | integration | NAMED ONLY | e2e/site-header.spec.ts — outside any test title | The persistent calendar entry is present in the header on every page and resolves to the target TS-WEB-0004 D4 fixes. |
 | TS-WEB-0017-A13 | tool | MISSING | — | `pnpm check` (frontmatter + `check:specs`) exits 0 — pre-commit hook and CI; zero E-class errors. |
 | TS-WEB-0017-A15 | manual | MISSING | — | Imagery review: every image shipped is checked against the imagery rules in the brand identity profile — per release, by the brand owner. |
-| TS-WEB-0017-A17 | static | MISSING | — | Exactly one icon dependency; every icon name used resolves to a Lucide export. |
 | TS-WEB-0017-A16 | manual | MISSING | — | Dependency review: any dependency adopted from a sibling repository is confirmed as framework-neutral intent, not a ported implementation — per PR that changes  … |
-| TS-WEB-0017-A19 | static | MISSING | — | Every `var(--x)` in a stylesheet under `app/`, `src/`, `e2e/` or `scripts/` names a custom property something declares — any stylesheet, the brand token sheet i … |
 | TS-WEB-0018-A1 | static | MISSING | — | Every id in a content file's `offerings: []` resolves in the pinned offering package, and its `promotion` permits the surface it is used on per D2; an unresolva … |
 | TS-WEB-0018-A3 | static | MISSING | — | Price guard: every currency token in the built HTML resolves to a `publishablePrice` amount or to a reasoned allow-list entry; `4000`/`4.000 €` and `5 €` in any … |
 | TS-WEB-0018-A4 | static | MISSING | — | No id from the D4 deny-list, and no hub id whose `brand` is not `schafe-vorm-fenster`, appears in any content frontmatter, the route table, the nav registry, or … |
@@ -200,7 +190,6 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0018-A9 | static | MISSING | — | No path segment, nav label, or content id equals an audience id; every page brief declares exactly one of the four focus jobs; no two briefs with the same focus … |
 | TS-WEB-0018-A10 | static | MISSING | — | **No** content file references `local-advertising` while the offering is withheld (DEC-0052 §3). Formerly a budget of one sentence; the budget is now zero. Lega … |
 | TS-WEB-0018-A11 | static | MISSING | — | Every `claims[]` entry names a resolvable `proof:` with `usage_rights: cleared` or a `live:` module id from the TS-WEB-0004 D5 inventory; anything else fails th … |
-| TS-WEB-0018-A12 | integration | NAMED ONLY | e2e/pages/ueber-uns.spec.ts — outside any test title | With the stats upstream stubbed empty, counter modules are absent from the rendered page and no figure stands in their place (FUN-WEB-0041, FUN-WEB-0196, FUN-WE … |
 | TS-WEB-0018-A13 | e2e | MISSING | — | Every internal link resolves inside the TS-WEB-0004 D1 inventory; every help or instruction affordance targets the app host, not a website route. |
 | TS-WEB-0018-A14 | manual | MISSING | — | Moment 1 (page-brief review): the SRC-0001 eight-point check plus the four boundary questions are answered and recorded on the brief before content generation s … |
 | TS-WEB-0018-A15 | manual | MISSING | — | Moment 2 (content PR review): the four boundary questions are answered for the diff; a "yes" to any of them blocks the merge. |

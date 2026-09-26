@@ -178,3 +178,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0140 — The entry trait arrives as one header — the proxy hands down a host and a medium, and block 2a reorders inside a boundary whose fallback is the direct order](DEC-0140--the-entry-trait-arrives-as-one-header.md)
 - [DEC-0141 — The instrument decides coverage, not the mention — and the backlog may only shrink](DEC-0141--the-instrument-decides-coverage-and-the-backlog-only-shrinks.md)
 - [DEC-0142 — A note says so, and position decides nothing — the copy lint binds a list to its field, the marker is the only exclusion, and the coverage gain is written down](DEC-0142--a-note-says-so-and-position-decides-nothing.md)
+- [DEC-0144 — The instrument names the criterion, and a site-wide sentence is walked site-wide — the meters cite whole identifiers, three sweeps leave the home page, and two divergences are declared instead of assumed](DEC-0144--the-instrument-names-the-criterion.md)

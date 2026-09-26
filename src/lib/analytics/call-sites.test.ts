@@ -6,10 +6,28 @@ import { describe, expect, it } from "vitest";
 import { CONVERSION_EVENTS, wiredConversionEvents } from "@/src/lib/analytics/event-registry";
 
 /**
- * TS-WEB-0012-A2 — "every conversion goal that the website can complete emits its
- * event, exactly once per completed trigger", read as the half a static check
- * can answer: **a wired goal has a call site, and no call site names a goal
- * the registry does not wire.**
+ * **A wired goal has a call site, and no call site names a goal the registry
+ * does not wire** — the source-level half of the D4 trigger inventory of
+ * TS-WEB-0012.
+ *
+ * ── Which criterion this is, and which it is not ──────────────────────────
+ *
+ * It is not A2 of TS-WEB-0012, although the `describe` below said so until
+ * 2026-09-26. That criterion is `e2e` and it is about the *visitor's* state
+ * after a journey — "`document.cookie` contains no analytics cookie, web
+ * storage contains no analytics identifier, and no request goes to a host
+ * outside the D7 collectors" — which a scan of source text cannot observe at
+ * all. Its instrument is `e2e/privacy.spec.ts`, whose test titles name it, and
+ * it was VERIFIED there independently; the title here claimed a second, false
+ * instrument for it, and claimed coverage at the wrong level.
+ *
+ * The criterion this *is* the static half of is A5 of TS-WEB-0012 — "each
+ * wired D4 trigger emits exactly one event with the correct goal ID and
+ * `stage`" — and A5 is `e2e`, because "emits" is a browser fact. A source scan
+ * cannot close it, so this file's titles carry no identifier: the ids are
+ * spelled out in prose here exactly as `scripts/check-coverage.ts` spells out
+ * its own, so that a docblock cannot be read as coverage (verdict NAMED ONLY,
+ * which is what a mention in a comment earns).
  *
  * The registry alone could not answer it: before M4 it claimed `wired: true`
  * for five goals while only three had a call site anywhere in `app/`
@@ -62,7 +80,7 @@ function surfaceLabel(surface: (typeof CONVERSION_EVENTS)[number]["surface"]): s
   return surface.join(", ");
 }
 
-describe("TS-WEB-0012-A2: every wired conversion goal has a call site", () => {
+describe("every wired conversion goal has a call site in the source trees", () => {
   const callSites = goalIdsInSourceTrees();
 
   for (const event of wiredConversionEvents()) {

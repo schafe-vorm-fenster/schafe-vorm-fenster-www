@@ -1,12 +1,14 @@
 /**
  * Brand and layout-law guard — the static half of TS-WEB-0017 D2 and D3.
  *
- *  A4  No `@media (max-width: …)` anywhere, and every `min-width` value is one
- *      of the six `breakpoint.*` token values of brand-design. A literal px
- *      breakpoint at a call site fails.
- *  A5  No colour literal and no `font-family` literal outside the single
- *      brand-token import file (app/styles/brand.css).
- *  A6  No logo, mark or font file is committed in this repository.
+ *  TS-WEB-0017-A4  No `@media (max-width: …)` anywhere, and every `min-width`
+ *      value is one of the six `breakpoint.*` token values of brand-design. A
+ *      literal px breakpoint at a call site fails.
+ *  TS-WEB-0017-A5  No colour literal and no `font-family` literal outside the
+ *      single brand-token import file (app/styles/brand.css).
+ *  TS-WEB-0017-A6  No logo, mark or font file is committed in this repository.
+ *  TS-WEB-0017-A19 Every `var(--x)` without a fallback names a custom property
+ *      something declares.
  *
  * Scans **authored** sources only — `app/**`, `src/**`, `e2e/**`,
  * `scripts/**` — never build output. `.next/`, `node_modules/` and
@@ -25,6 +27,18 @@
  * `max-width` half already used, so a `min-width` *property* (build output
  * or not) can never be mistaken for a media feature again.
  *
+ * ── Why the full identifiers ──────────────────────────────────────────────
+ *
+ * Every message carries the whole criterion id. Until 2026-09-26 the prefixes
+ * were bare (`A4`, `A19`) and the report line pasted `TS-017-` in front of
+ * them, which is not an identifier this repository defines — so
+ * `check:coverage` could attribute the meter to nothing and TS-WEB-0017-A19
+ * read as MISSING although this script has enforced it since it was written
+ * (`state/coverage.md`). A `static` criterion is closed by a
+ * `scripts/check-*.ts` in the `check` chain that **names it**: a meter has no
+ * test title to carry the link, so the identifier in its failure message *is*
+ * the link (`scripts/check-coverage.ts`, verdict METERED).
+ *
  * Exit code of `main()`: number of errors (0 = green).
  */
 
@@ -33,6 +47,12 @@ import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+/** The four criteria this meter is the instrument for, spelled out once. */
+const A4 = "TS-WEB-0017-A4";
+const A5 = "TS-WEB-0017-A5";
+const A6 = "TS-WEB-0017-A6";
+const A19 = "TS-WEB-0017-A19";
 
 /** The single file brand values are allowed to enter through (TS-WEB-0017 D3). */
 const TOKEN_FILE = "app/styles/brand.css";
@@ -110,10 +130,11 @@ export interface BrandCheckResult {
 }
 
 /**
- * Runs the A4/A5/A6 checks rooted at `root` (the repository root in
- * production; a fixture directory of the same shape in tests) and returns
- * every violation found, prefixed `A4`/`A5`/`A6`. Pure — no console output,
- * no `process.exit` — so a test can assert on the result directly.
+ * Runs the four checks rooted at `root` (the repository root in production; a
+ * fixture directory of the same shape in tests) and returns every violation
+ * found, each prefixed with the full identifier of the criterion it belongs
+ * to. Pure — no console output, no `process.exit` — so a test can assert on
+ * the result directly.
  */
 export function checkBrand(root: string): BrandCheckResult {
   const errors: string[] = [];
@@ -121,7 +142,7 @@ export function checkBrand(root: string): BrandCheckResult {
     errors.push(`${criterion} ${file}: ${message}`);
   const rel = (file: string) => relative(root, file);
 
-  // ── A4: the direction of the layout law ───────────────────────────────────
+  // ── TS-WEB-0017-A4: the direction of the layout law ───────────────────────────────────
 
   const cssFiles = SOURCE_DIRS.flatMap((dir) => walk(join(root, dir))).filter(
     (f) => f.endsWith(".css"),
@@ -134,7 +155,7 @@ export function checkBrand(root: string): BrandCheckResult {
       // `max-width` media feature reverses the direction of the law.
       const before = source.slice(Math.max(0, match.index - 40), match.index);
       if (inMediaQueryContext(before))
-        fail("A4", rel(file), `max-width media query: ${match[0]}`);
+        fail(A4, rel(file), `max-width media query: ${match[0]}`);
     }
     for (const match of source.matchAll(
       /min-width\s*:\s*([^)\s;}]+)\s*\)/g,
@@ -148,14 +169,14 @@ export function checkBrand(root: string): BrandCheckResult {
       const value = (match[1] ?? "").trim();
       if (!BREAKPOINTS.has(value))
         fail(
-          "A4",
+          A4,
           rel(file),
           `min-width ${value} is not a breakpoint token (${[...BREAKPOINTS.keys()].join(", ")})`,
         );
     }
   }
 
-  // ── A5: no literal outside the token file ─────────────────────────────────
+  // ── TS-WEB-0017-A5: no literal outside the token file ─────────────────────────────────
 
   const sourceFiles = SOURCE_DIRS.flatMap((dir) =>
     walk(join(root, dir)),
@@ -169,17 +190,17 @@ export function checkBrand(root: string): BrandCheckResult {
     lines.forEach((line, index) => {
       const at = `${relative_}:${index + 1}`;
       const colour = COLOUR_LITERAL.exec(line);
-      if (colour) fail("A5", at, `colour literal: ${colour[0]}`);
+      if (colour) fail(A5, at, `colour literal: ${colour[0]}`);
       const family = FONT_FAMILY_LITERAL.exec(line);
       if (family) {
         const value = (family[1] ?? "").trim();
         if (!FONT_FAMILY_ALLOWED.test(value))
-          fail("A5", at, `font-family literal: ${value}`);
+          fail(A5, at, `font-family literal: ${value}`);
       }
     });
   }
 
-  // ── A6: no brand asset committed here ─────────────────────────────────────
+  // ── TS-WEB-0017-A6: no brand asset committed here ─────────────────────────────────────
 
   for (const dir of ASSET_DIRS) {
     for (const file of walk(join(root, dir))) {
@@ -187,13 +208,13 @@ export function checkBrand(root: string): BrandCheckResult {
       if (ASSET_EXCEPTIONS.some((prefix) => relative_.startsWith(prefix)))
         continue;
       if (FONT_FILES.test(relative_))
-        fail("A6", relative_, "font file committed — fonts are package subpaths");
+        fail(A6, relative_, "font file committed — fonts are package subpaths");
       if (LOGO_FILES.test(relative_))
-        fail("A6", relative_, "logo file committed — logos are package subpaths");
+        fail(A6, relative_, "logo file committed — logos are package subpaths");
     }
   }
 
-  // --- A19: a `var()` whose custom property nothing declares -----------------
+  // --- TS-WEB-0017-A19: a `var()` whose custom property nothing declares -----------------
   //
   // An undeclared custom property does not fall back to something sensible: it
   // makes the whole declaration invalid, so the browser drops it. `--space-5`
@@ -235,7 +256,7 @@ export function checkBrand(root: string): BrandCheckResult {
       reported.add(name);
       const line = text.slice(0, match.index).split("\n").length;
       fail(
-        "A19",
+        A19,
         `${relative_}:${line}`,
         `\`var(${name})\` — nothing declares it, so the whole declaration is dropped`,
       );
@@ -250,7 +271,7 @@ function main() {
   console.log(
     `brand check: ${cssFileCount} stylesheet(s) · ${sourceFileCount} source file(s) · token file ${TOKEN_FILE}`,
   );
-  for (const message of errors) console.error(`  ERROR TS-017-${message}`);
+  for (const message of errors) console.error(`  ERROR ${message}`);
   console.log(errors.length ? `${errors.length} error(s)` : "no errors");
   process.exit(errors.length);
 }

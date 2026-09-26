@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { ROUTE_IDS, href } from "../src/lib/routes/routes";
+
 /**
  * The M1 smoke suite. It proves the delivery chain end to end: the shell
  * renders, the layout law holds at the three sampled widths, and the
@@ -8,13 +10,21 @@ import { expect, test } from "@playwright/test";
  * The three widths are DEC-0067's: 360 and 428 are where the breakpoint scale
  * is dense, 1280 is the desktop reference viewport. A suite that samples only
  * 360 and 1280 cannot see whether the small range does anything.
+ *
+ * ── Why the layout-law cases walk every route ─────────────────────────────
+ *
+ * Both criteria are site-wide sentences and both were asserted on `/` alone
+ * until 2026-09-26: TS-WEB-0017-A8 is *"identical … on **every page**"* and
+ * TS-WEB-0017-A9 is *"at 320 px **no page** scrolls horizontally"* plus the
+ * same at 360 and 428. `/` is the one page with no place data, no filter row,
+ * no embed and no form, so it is the least likely page to break either — which
+ * is what made the pair read as covered while the pages that actually compose
+ * something were never measured. They now loop over the twelve `TS-WEB-0004`
+ * D1 routes. The German paths only: the English mirrors share every component
+ * and every stylesheet, so a locale sweep would double the run without
+ * reaching a different class of defect — the same reasoning
+ * `e2e/layout-stability.spec.ts` records for its own walk.
  */
-
-const VIEWPORTS = [
-  { name: "360x640 (xs, reference)", width: 360, height: 640 },
-  { name: "428x926 (sm)", width: 428, height: 926 },
-  { name: "1280x800 (2xl, reference)", width: 1280, height: 800 },
-];
 
 /**
  * The visible text of the rendered DOM, in document order — **the page**, not
@@ -79,65 +89,142 @@ test("the shell renders and declares its language", async ({ page }) => {
   await expect(page.getByRole("contentinfo")).toBeVisible();
 });
 
-test("TS-WEB-0017-A8: the page's visible text order is identical at 360, 428 and 1280", async ({
-  page,
-}) => {
-  const orders: string[][] = [];
-  for (const viewport of VIEWPORTS) {
-    await page.setViewportSize({
-      width: viewport.width,
-      height: viewport.height,
-    });
-    await page.goto("/");
-    orders.push(await visibleTextOrder(page));
-  }
-  expect(orders[0]?.length).toBeGreaterThan(0);
-  expect(orders[1]).toEqual(orders[0]);
-  expect(orders[2]).toEqual(orders[0]);
-});
+/** The twelve German paths of the TS-WEB-0004 D1 registry. */
+const PATHS = ROUTE_IDS.map((routeId) => href(routeId, "de"));
 
-for (const viewport of VIEWPORTS) {
-  test(`TS-WEB-0017-A9: no horizontal scroll at ${viewport.name}`, async ({
+/**
+ * The widths the two criteria name between them, mobile-first: the load width
+ * (360, the reference viewport and the base case of TS-WEB-0017 D2), then A9's
+ * floor, the second sampled width, the desktop reference and A9's ceiling.
+ * `order: true` marks the three widths A8 compares the text order at.
+ */
+const WIDTHS = [
+  { name: "360x640 (xs, reference — the load width)", width: 360, height: 640, order: true },
+  { name: "320x640 (A9 floor)", width: 320, height: 640, order: false },
+  { name: "428x926 (sm)", width: 428, height: 926, order: true },
+  { name: "1280x800 (2xl, reference)", width: 1280, height: 800, order: true },
+  { name: "1920x1080 (A9 ceiling)", width: 1920, height: 1080, order: false },
+] as const;
+
+/** measure.page is 75rem = 1200px; only the outer margin grows beyond it. */
+const MEASURE_PAGE_PX = 1200;
+
+/**
+ * Three navigations per route — one per width A8 names — plus a resize walk
+ * across all five for A9.
+ *
+ * **A8 is a statement about loading at a width, so the test loads at each of
+ * them.** D2(d)'s single-tree rule says the markup does not branch on width,
+ * and it is true that the server cannot see the viewport: five responses for
+ * one route are therefore identical HTML. That is exactly why reloading is the
+ * sharper instrument rather than the wasteful one — the only way two loads of
+ * one route can differ is a client-side decision taken **at mount**, which is
+ * the defect class A8 exists to catch, and the site has one today:
+ * `src/components/explain-module/explain-module.tsx` reads
+ * `window.matchMedia(SIDE_BY_SIDE)` once in a mount effect and never listens
+ * for `change` (measured 2026-09-26 on `/mitmachen`: loaded at 360 and resized
+ * to 1280, `data-advance` is `1/armed`; loaded at 1280 it is `1/static`). A
+ * page resized from 360 keeps its 360 decision, so a resize walk is blind to
+ * that branch by construction. It happens not to move visible text order
+ * today; the instrument must not depend on that.
+ *
+ * **The resize walk stays, and buys two other things.** A9 names five widths
+ * and only asks whether anything scrolls sideways, which a live reflow answers
+ * as well as a load; and the walk is a second, independent comparison — a tree
+ * that reorders *while* the window changes size is also a page that is not one
+ * tree, which no per-width reload can see. So the order captured by resizing to
+ * 428 and 1280 and the order of a fresh load at 428 and at 1280 are all
+ * compared against the 360 load: five readings, one expected value.
+ *
+ * What this costs is thirty-six cold navigations instead of twelve. That is the
+ * trade, and it is the honest way round: breadth and a development server that
+ * survives the run were what resizing bought (`state/open.md` row 281 — sixty
+ * navigations over five workers produced dev-overlay 500s), not a stronger
+ * detector. Sixty is what a full five-width matrix costs; A8 names three
+ * widths, so three loads per route is the criterion as written and no more.
+ *
+ * The first load happens at 360 so that the mobile-first base case is the
+ * reference the other readings are compared against.
+ */
+for (const path of PATHS) {
+  test(`TS-WEB-0017-A8 / TS-WEB-0017-A9: the layout law holds on ${path} at every sampled width`, async ({
     page,
   }) => {
-    await page.setViewportSize({
-      width: viewport.width,
-      height: viewport.height,
-    });
-    await page.goto("/");
-    const overflows = await page.evaluate(
-      () => document.documentElement.scrollWidth > window.innerWidth + 1,
+    const [load] = WIDTHS;
+    const scrollsSideways = () =>
+      page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+
+    await page.setViewportSize({ width: load.width, height: load.height });
+    const response = await page.goto(path);
+    expect(response?.status(), `status of ${path}`).toBe(200);
+    await page.waitForLoadState("networkidle");
+
+    /** Every visible-text-order reading, with where it was taken. */
+    const orders: { where: string; order: string[] }[] = [];
+
+    for (const viewport of WIDTHS) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+
+      // A9: nothing scrolls sideways, at any of the five.
+      expect(await scrollsSideways(), `horizontal scroll on ${path} at ${viewport.name}`).toBe(
+        false,
+      );
+
+      // A8, reflow half: the order the live tree has after resizing to one of
+      // the three widths D2(d) samples.
+      if (viewport.order) {
+        orders.push({
+          where: `${viewport.name}, resized from ${load.width}`,
+          order: await visibleTextOrder(page),
+        });
+      }
+    }
+
+    // A9's ceiling — the last width set. Every section brings its own
+    // `.container` now that the pages are composed (`section-shell` is
+    // full-bleed and contains only its content), so every one is measured
+    // rather than the page's first. `evaluateAll` does not auto-wait, so the
+    // first container is awaited explicitly.
+    const containers = page.locator("main .container");
+    await containers.first().waitFor({ state: "attached" });
+    const widths = await containers.evaluateAll((elements) =>
+      elements.map((element) => element.getBoundingClientRect().width),
     );
-    expect(overflows).toBe(false);
+    expect(widths.length, `${path} has no container in main`).toBeGreaterThan(0);
+    expect(Math.max(...widths), `widest container on ${path} at 1920px`).toBeLessThanOrEqual(
+      MEASURE_PAGE_PX,
+    );
+
+    // A8, mount half: a fresh load at each of the other two widths it names.
+    // This is the reading a resize cannot produce — the page decides at mount
+    // and a resized page has already decided.
+    for (const viewport of WIDTHS.filter(
+      (candidate) => candidate.order && candidate.width !== load.width,
+    )) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      const reloaded = await page.goto(path);
+      expect(reloaded?.status(), `status of ${path} loaded at ${viewport.name}`).toBe(200);
+      await page.waitForLoadState("networkidle");
+      expect(
+        await scrollsSideways(),
+        `horizontal scroll on ${path} loaded at ${viewport.name}`,
+      ).toBe(false);
+      orders.push({
+        where: `${viewport.name}, loaded at that width`,
+        order: await visibleTextOrder(page),
+      });
+    }
+
+    // A8: identical, not merely non-empty — every reading against the 360 load.
+    expect(orders[0]?.order.length, `${path} rendered no visible text`).toBeGreaterThan(0);
+    expect(orders.length, `${path}: readings taken`).toBe(5);
+    for (const later of orders.slice(1)) {
+      expect(later.order, `${path} at ${later.where} differs from ${orders[0]?.where}`).toEqual(
+        orders[0]?.order,
+      );
+    }
   });
 }
-
-test("TS-WEB-0017-A9: at 320px no page scrolls horizontally (the floor)", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 320, height: 640 });
-  await page.goto("/");
-  const overflows = await page.evaluate(
-    () => document.documentElement.scrollWidth > window.innerWidth + 1,
-  );
-  expect(overflows).toBe(false);
-});
-
-test("TS-WEB-0017-A9: at 1920px the container stops at measure.page", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 1920, height: 1080 });
-  await page.goto("/");
-  // Every section brings its own `.container` now that the pages are
-  // composed (`section-shell` is full-bleed and contains only its content),
-  // so the assertion reads the first one rather than the page's only one.
-  const width = await page
-    .locator("main .container")
-    .first()
-    .evaluate((element) => element.getBoundingClientRect().width);
-  // measure.page is 75rem = 1200px; only the outer margin grows beyond it.
-  expect(width).toBeLessThanOrEqual(1200);
-});
 
 test("TS-WEB-0015-A1: a non-production deployment is noindex on all three surfaces", async ({
   page,
