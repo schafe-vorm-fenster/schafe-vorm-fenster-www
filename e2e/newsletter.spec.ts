@@ -3,7 +3,6 @@ import { expect, test } from "@playwright/test";
 import { NEWSLETTER_SENDING_SYSTEM } from "../src/components/newsletter-block/constant";
 import { everyRoute, href } from "../src/lib/routes/routes";
 
-import type { RouteId } from "../src/lib/routes/routes";
 
 /**
  * TS-WEB-0016-A21 — the newsletter renders **nowhere** while no sending system
@@ -35,15 +34,11 @@ import type { RouteId } from "../src/lib/routes/routes";
  * back with the block.
  */
 
-/**
- * `/ueber-uns` renders the inline block until T-14 reads the same predicate on
- * its page (the page is T-14's file). `test.fail` inverts the moment that
- * lands, so the entry has to be removed with the fix rather than lingering as
- * an exemption (DEC-0122 §5).
+/*
+ * The `INLINE_BLOCK_GATED_BY` exemption that stood here is gone: `/ueber-uns`
+ * reads `newsletterOffered()` on its own page since T-14 (DEC-0122 §5,
+ * DEC-0132 §5), so the walk below holds on all 24 routes without an entry.
  */
-const INLINE_BLOCK_GATED_BY: Readonly<Partial<Record<RouteId, string>>> = {
-  about: "T-14",
-};
 
 test("TS-WEB-0016-A21: no sending system is named, so the block is withheld", () => {
   expect(NEWSLETTER_SENDING_SYSTEM).toBeNull();
@@ -53,11 +48,6 @@ for (const { route, locale } of everyRoute()) {
   const path = href(route, locale);
 
   test(`TS-WEB-0016-A21: no newsletter surface on ${path}`, async ({ page }) => {
-    const owner = INLINE_BLOCK_GATED_BY[route];
-    test.fail(
-      owner !== undefined,
-      `${path} still renders the inline newsletter block — ${owner} gates it behind newsletterOffered()`,
-    );
     await page.goto(path);
     await expect(page.locator("[data-newsletter]")).toHaveCount(0);
     await expect(page.locator("#newsletter-email")).toHaveCount(0);
