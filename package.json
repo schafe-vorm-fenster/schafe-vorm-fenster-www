@@ -6,7 +6,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.26.0",
   "scripts": {
-    "dev": "PORT=3100 next dev",
+    "dev": "next dev --port ${PORT:-3100}",
     "build": "next build && node scripts/generate-csp-hashes.mjs",
     "start": "PORT=3100 next start",
     "stop": "lsof -ti:3100 | xargs kill -9 || true",

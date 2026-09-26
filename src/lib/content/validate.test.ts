@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { readFileSync, readdirSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
@@ -14,6 +14,7 @@ import {
   checkNoteMarker,
   checkPage,
   checkProductName,
+  copyOf,
   RENDERED_BLOCKS,
   fieldRole,
   REGISTER_EXEMPT_ROUTES,
@@ -790,7 +791,16 @@ describe("TS-WEB-0029-A15 / D12 row 14: one register, one exempt route (CG-003)"
   });
 });
 
-describe("TS-WEB-0018-A7 / D12 row 11: the product name appears once (CG-038)", () => {
+// The id `TS-WEB-0018-A7` is deliberately **not** in this title. The criterion
+// reads "`/dein-kalender` is the only route whose body may contain one, at most
+// once", and that is a statement about the rendered body: `/rechtliches` carries
+// the name seven times per locale out of the verbatim legal import (DEC-0012,
+// DEC-0027), so the criterion is not met and `e2e/copy-structure.spec.ts`
+// exempts the route to stay honest about it (CONF-0027, state/open.md row 277).
+// A title naming A7 made `pnpm check:coverage` count it VERIFIED — a false
+// green inside the repository's own instrument (DEC-0142 §9). What this suite
+// does prove is CG-038 over the content artifacts, and that is what it says.
+describe("D12 row 11: the product name appears once in the artifacts (CG-038)", () => {
   const tierSlot = (locale: Locale, value: string) =>
     parsePage(
       `---
@@ -934,9 +944,10 @@ ${body}`,
 | Abend der Engagierten | Konferenz |`
         : "Das ist der Kalender von Schlatkow.";
 
-  it("refuses the marker above every rendered block the README names", () => {
+  it("refuses the marker above every rendered block the registry names", () => {
     for (const site of RENDERED_BLOCKS) {
-      const filler = Array.from({ length: site.index }, () => bodyFor(site.kind)).join("\n\n");
+      const at = site.index === "all" ? 0 : site.index;
+      const filler = Array.from({ length: at }, () => bodyFor(site.kind)).join("\n\n");
       const body = `**Überschrift:** Was drinsteht, bestimmt ihr
 
 ${filler ? `${filler}
@@ -947,7 +958,7 @@ ${bodyFor(site.kind)}`;
       const findings = checkNoteMarker(withSlot(site.slot, body));
       expect(findings.map((finding) => finding.check)).toEqual(["note-marker"]);
       expect(findings[0]?.message).toContain(site.renderedBy);
-      expect(findings[0]?.message).toContain(`${site.kind} ${site.index}`);
+      expect(findings[0]?.message).toContain(`${site.kind} ${at}`);
     }
   });
 
@@ -977,5 +988,160 @@ Kein „die Leute" hier — CG-009.`,
         ),
       ),
     ).toEqual([]);
+  });
+});
+
+describe("the render-site registry is complete against `app/**` (DEC-0142 §10)", () => {
+  const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "../../..");
+
+  /**
+   * The helpers that take a slot's `blocks` and read them by kind or by index.
+   * A page that calls one of these renders copy the `<!-- note -->` marker must
+   * not cover, whether or not the call site names a block kind itself.
+   */
+  const INDEX_HELPERS = [
+    "listAt",
+    "listsOf",
+    "listItems",
+    "settingRows",
+    "comparisonLabels",
+    "tierChecks",
+    "titlesFromRegistryTable",
+    "firstTable",
+  ] as const;
+
+  /** A read of one block kind the marker can cover — `field` is not one: a
+   * field ends a note region, so no marker ever reaches it. */
+  const KIND_READ = /\bblock\.kind === "(list|table|paragraph)"/;
+  const READS_BLOCKS = /\.blocks\b|\bblocks\.(find|filter|flatMap)\(|\bblock\.kind === "/;
+  const SLOT_VAR = /const (\w+) = slot\([^,]+, "([^"]+)"\)/;
+
+  function sourcesUnder(dir: string): string[] {
+    return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) return sourcesUnder(full);
+      if (!/\.tsx?$/.test(entry.name) || entry.name.includes(".test.")) return [];
+      return [full];
+    });
+  }
+
+  const files = sourcesUnder(join(repoRoot, "app")).map((file) => ({
+    path: relative(repoRoot, file).split("\\").join("/"),
+    lines: readFileSync(file, "utf-8").split("\n"),
+  }));
+
+  const siteOf = (renderedBy: string) => renderedBy.split(" ")[0] ?? "";
+
+  it("reads `app/**` at all — the fixture would pass over an empty list", () => {
+    expect(files.length).toBeGreaterThan(10);
+    expect(files.some((file) => file.path === "app/[lang]/page.tsx")).toBe(true);
+  });
+
+  it("points every row at a line that still reads a slot's blocks", () => {
+    for (const site of RENDERED_BLOCKS) {
+      const [path, line] = siteOf(site.renderedBy).split(":");
+      const file = files.find((candidate) => candidate.path === path);
+      expect(file, `${site.slot}: \`${path}\` is not a source file under app/`).toBeDefined();
+      const text = file?.lines[Number(line) - 1] ?? "";
+      expect(text, `${site.renderedBy} (${site.slot}) no longer reads blocks`).toMatch(
+        READS_BLOCKS,
+      );
+    }
+  });
+
+  it("carries a row for every slot a page reads by index or by kind", () => {
+    const registered = new Set(RENDERED_BLOCKS.map((site) => site.slot));
+    const unregistered: string[] = [];
+
+    for (const file of files) {
+      const slots = new Map<string, string>();
+      for (const line of file.lines) {
+        const bound = SLOT_VAR.exec(line);
+        if (bound?.[1] !== undefined && bound[2] !== undefined) slots.set(bound[1], bound[2]);
+      }
+      file.lines.forEach((line, index) => {
+        const read = /\b(\w+)\.blocks\b/.exec(line);
+        const slotId = read?.[1] === undefined ? undefined : slots.get(read[1]);
+        if (slotId === undefined) return;
+        // The statement, not the line: `const x = slot.blocks.flatMap((block) =>`
+        // carries the kind on the next line.
+        const statement = file.lines.slice(index, index + 3).join("\n");
+        const reads =
+          KIND_READ.test(statement) ||
+          INDEX_HELPERS.some((helper) => statement.includes(`${helper}(`));
+        if (!reads) return;
+        if (registered.has(slotId)) return;
+        unregistered.push(`${slotId} — ${file.path}:${index + 1}`);
+      });
+    }
+
+    expect(
+      unregistered,
+      "RENDERED_BLOCKS needs a row per rendered block of these slots, or the " +
+        "`<!-- note -->` marker can silence copy a visitor reads (DEC-0142 §6)",
+    ).toEqual([]);
+  });
+
+  it("accounts for every block-kind read in `app/**` — a row or a declared helper", () => {
+    const rows = new Set(RENDERED_BLOCKS.map((site) => siteOf(site.renderedBy)));
+    const unaccounted: string[] = [];
+
+    for (const file of files) {
+      file.lines.forEach((line, index) => {
+        if (!KIND_READ.test(line)) return;
+        const at = `${file.path}:${index + 1}`;
+        if (rows.has(at)) return;
+        const head =
+          file.lines
+            .slice(0, index + 1)
+            .reverse()
+            .find((candidate) => /^(export )?(async )?(function|const) \w+/.test(candidate)) ?? "";
+        const name = /^(?:export )?(?:async )?(?:function|const) (\w+)/.exec(head)?.[1] ?? "";
+        if ((INDEX_HELPERS as readonly string[]).includes(name)) return;
+        unaccounted.push(`${at} (in \`${name || "?"}\`)`);
+      });
+    }
+
+    expect(
+      unaccounted,
+      "each of these reads a block kind: give RENDERED_BLOCKS a row naming the " +
+        "line, or name the helper it lives in in INDEX_HELPERS",
+    ).toEqual([]);
+  });
+});
+
+describe("the pre-slot preamble is authoring prose, and nothing reads it (DEC-0142 §11)", () => {
+  // The artifact's own header note — `content/pages/dein-kalender/de.md:3`
+  // says „Portalize" falls **exactly once** on that page, and
+  // `content/pages/mitmachen/de.md:3` says the name belongs nowhere on that
+  // one. Both quote a term in order to forbid it, which is what the
+  // `<!-- note -->` marker is for inside a slot; above the first slot no
+  // marker is needed, because `parsePage` binds copy to slots and carries no
+  // text outside them. This fixture is the proof, and `src/lib/content/README.md`
+  // names the region beside the two other exclusions (DEC-0142 §11).
+  const preamble = `Kein „die Leute" und keine „Postleitzahl" auf dieser Seite, und
+„Portalize" fällt hier nie.
+
+<!-- id: home-1-hero; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
+
+**Headline:** Da.`;
+
+  it("reaches neither `copyOf` nor a lint row", () => {
+    const parsed = page(preamble);
+    expect(parsed.slots.map((slot) => slot.id)).toEqual(["home-1-hero"]);
+    expect(copyOf(parsed).map((copy) => copy.text)).toEqual(["Da."]);
+    expect(checkCopy(parsed)).toEqual([]);
+    expect(checkProductName([parsed])).toEqual([]);
+  });
+
+  it("fails the same words inside the slot — the blind region ends at the first slot", () => {
+    const findings = checkCopy(
+      page(`<!-- id: home-1-hero; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
+
+**Headline:** Da.
+
+Kein „die Leute" und keine „Postleitzahl" hier.`),
+    );
+    expect(checks(findings)).toEqual(["avoid-list", "avoid-list"]);
   });
 });

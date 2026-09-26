@@ -216,15 +216,24 @@ They are on `state/open.md`, not silently absent.
 `checkCopy()` and `checkProductName()` are the machine half of
 `specs/contracts/copy-contract.md`. They read **copy**, and copy is everything
 a slot authors, whatever its shape: field values, paragraphs, and the list items
-and table cells that belong to a field of the same slot. Two things are not
-copy, and both are explicit rather than positional (DEC-0142 §1):
+and table cells that belong to a field of the same slot. Three things are not
+copy, and all three are explicit rather than positional (DEC-0142 §1, §11):
 
 - a field **label** — a slot-internal name, not a rendered string, which is why
   a field may be labelled `Warum es zählt` while the avoid list forbids that
   wording on the page (DEC-0136);
 - an **annotation comment** (`<!-- source_note: … -->`, `<!-- clearance: … -->`)
   — a note to the next author. `parseBlocks` emits no block for it at all, so it
-  is neither linted nor counted in the paragraph index a page reads.
+  is neither linted nor counted in the paragraph index a page reads;
+- the **pre-slot preamble** — the lines between the frontmatter and the first
+  `<!-- id: … -->` slot, where an artifact tells the next author what the page
+  may and may not say (`content/pages/dein-kalender/de.md:3`: „Portalize" falls
+  on this page *exactly once*; `content/pages/mitmachen/de.md:3`: the name
+  belongs nowhere on that one). It is the marker's case without the marker:
+  `parsePage` binds copy to slots and carries no text outside them, so nothing
+  renders it and nothing lints it. The fixture in `validate.test.ts` states the
+  region and the line where it ends (DEC-0142 §11) — scanning it would fail the
+  build over the two sentences that forbid the words they quote.
 
 **A list or table binds to the last field above it, across any paragraph
 between them, and a paragraph carries that field's label too** — never its title
@@ -238,34 +247,64 @@ each note without reaching the next tier's words.
 
 Until DEC-0142 the exclusion was positional — *a list whose nearest preceding
 block is a paragraph is a note*, and *a paragraph is always a note* — and
-position exempted fourteen blocks the pages **render**:
+position exempted fourteen blocks the pages **render**. They are scanned now,
+and the marker may not cover them: `RENDERED_BLOCKS` in `validate.ts` is the
+registry of what `app/**` reads off a slot, and `checkNoteMarker()` fails a
+`<!-- note -->` marker placed above any of it — the escape hatch cannot do what
+the positional rule did.
 
-| Slot | Block | Rendered by |
+| Slot | Blocks a page reads | Read at |
 | --- | --- | --- |
-| `ueber-uns-3-proof-stream` (de, en) | the five proof items under *Pool: …* | `app/[lang]/ueber-uns/page.tsx:156` |
-| `deine-region-6-proof-demo` (de, en) | the three quote items | `app/[lang]/deine-region/page.tsx:196` |
-| `dein-kalender-5-proof-demo` (de, en) | the three quote items | `app/[lang]/dein-kalender/page.tsx:286` |
-| `archiv-2-rows-demo` (de, en) | the 192-cell archive table | `app/[lang]/ueber-uns/archiv/page.tsx:95` |
-| `dein-kalender-3-embed-demo` (de, en) | paragraph 0 — the two embed sentences | `app/[lang]/dein-kalender/page.tsx:402` |
-| `dein-kalender-3b-embed-config` (de, en) | paragraph 0 — the configuration lead | `app/[lang]/dein-kalender/page.tsx:437` |
-| `dein-kalender-3b-embed-config` (de, en) | paragraph 1 — the benefit line | `app/[lang]/dein-kalender/page.tsx:460` |
+| `home-8-proof-stream` | the candidate list | `app/[lang]/page.tsx:186` |
+| `home-4a-scene-whatsapp-steps-demo` | lists 0 and 1 — step lines, sample rows | `app/[lang]/page.tsx:772`, `:765` |
+| `mitmachen-2-objections` | lists 0 and 1 — the two objection columns | `app/[lang]/mitmachen/page.tsx:228` |
+| `mitmachen-3a/4a/5a-path-*-steps-demo` | lists 0 and 1 each | `app/[lang]/mitmachen/page.tsx:391`/`:384`, `:427`/`:421`, `:471`/`:465` |
+| `mitmachen-7-proof-demo` | **every** list (`listItems`) | `app/[lang]/mitmachen/page.tsx:192` |
+| `ueber-uns-3-proof-stream` | the five proof items under *Pool: …* | `app/[lang]/ueber-uns/page.tsx:156` |
+| `deine-region-6-proof-demo` | the three quote items | `app/[lang]/deine-region/page.tsx:196` |
+| `dein-kalender-5-proof-demo` | **every** list (`listItems`) | `app/[lang]/dein-kalender/page.tsx:286` |
+| `archiv-2-rows-demo` | the 192-cell archive table | `app/[lang]/ueber-uns/archiv/page.tsx:95` |
+| `dein-kalender-2-contrast` | the four comparison rows and the head | `app/[lang]/dein-kalender/page.tsx:218`, `:219` |
+| `dein-kalender-3-embed-demo` | paragraph 0 — the two embed sentences | `app/[lang]/dein-kalender/page.tsx:194` |
+| `dein-kalender-3b-embed-config` | paragraphs 0 and 1, and the settings table | `app/[lang]/dein-kalender/page.tsx:198`, `content.ts:58` |
+| `dein-kalender-4-tiers-checks-demo` | the tier-checks table | `app/[lang]/dein-kalender/content.ts:58` |
+| `rechtliches-2-registry` | the section-title table | `app/[lang]/rechtliches/page.tsx:91` |
+| `registrieren-2-wer`, `registrieren-3-weg` | **every** list — the option labels | `app/[lang]/mitmachen/registrieren/page.tsx:189`, `:193` |
 
-All fourteen are scanned now, and that table is **in code**: `RENDERED_BLOCKS`
-in `validate.ts` carries it, and `checkNoteMarker()` fails a `<!-- note -->`
-marker placed above any of those blocks — the escape hatch cannot do what the
-positional rule did. The authoring notes the positional rule was written for
-carry the marker instead: the four deviation lists of
-`dein-kalender-3b-embed-config`, the two tier notes that quote `Portalize` in
-order to record its one place, and the eight trailing notes of `home-8`,
-`mitmachen-2-objections`, `dein-kalender-1-focus`, `dein-kalender-2-contrast` and
-`ueber-uns-1-origin` that quote an avoid-list term in order to forbid it — so
-they still pass (`pnpm check:content`: *Content pipeline is valid*).
+**The registry is no longer hand-kept against the pages.** QA round 4 measured
+what a hand-kept list costs: seven rows stood here while `app/**` read twelve
+slots, and two of the five missing ones (`home-8-proof-stream`,
+`mitmachen-2-objections`) already carried a marker — the hatch could still
+silence copy a visitor reads. Three drift tests in `validate.test.ts` now read
+`app/**` themselves and fail on
+
+1. a slot a page reads by index or by kind (`listAt`, `listItems`,
+   `settingRows`, `tierChecks`, `comparisonLabels`, …) with no row here,
+2. a row whose `file:line` no longer reads blocks — a stale row cannot sit in
+   the registry unnoticed,
+3. a `block.kind === "list" | "table" | "paragraph"` read that neither a row nor
+   a declared helper accounts for.
+
+`index: "all"` is the row for a page that reads *every* block of a kind
+(`listItems(slot.blocks)`): there no index is safe.
+
+The authoring notes the positional rule was written for carry the marker
+instead: the four deviation lists of `dein-kalender-3b-embed-config`, the two
+tier notes that quote `Portalize` in order to record its one place, and the
+eight trailing notes of `home-8`, `mitmachen-2-objections`,
+`dein-kalender-1-focus`, `dein-kalender-2-contrast` and `ueber-uns-1-origin`
+that quote an avoid-list term in order to forbid it — every one of them stands
+**below** the blocks its page reads, so they still pass (`pnpm check:content`:
+*Content pipeline is valid*). Moving one of them up now fails: the marker above
+`home-8-proof-stream`'s candidate list reports *[note-marker] … covers list 0 …
+`app/[lang]/page.tsx:186` renders it*.
 
 A note that stands **above** rendered copy in the same slot and before its next
 field cannot be marked, and is read as copy: `home-8-proof-stream`'s pool
 sentence is such a note, and it passes because it quotes no forbidden term. That
 is the safe direction — an unmarked note is linted, never a rendered sentence
 silenced.
+
 
 | Row | Runs | Left to review |
 | --- | --- | --- |

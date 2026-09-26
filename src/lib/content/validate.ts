@@ -502,10 +502,19 @@ export function checkCopy(page: PageContent): Finding[] {
  * The marker is an escape hatch: it takes everything below it out of the copy
  * lint. Nothing in the markup says whether a page renders those blocks, so
  * without this list the hatch could do exactly what the positional rule it
- * replaced did — silence rows 11, 13 and 14 over copy a visitor reads. The
- * render sites are the ones `src/lib/content/README.md` names; `index` counts
- * the blocks of that kind inside the slot from zero, the way the pages count
- * them (`blocks.flatMap(block => block.kind === "paragraph" ? … : [])`).
+ * replaced did — silence rows 11, 13 and 14 over copy a visitor reads.
+ * `index` counts the blocks of that kind inside the slot from zero, the way
+ * the pages count them (`blocks.flatMap(block => block.kind === "paragraph" ?
+ * … : [])`), and `"all"` says the page reads every block of that kind.
+ *
+ * **This list is not hand-kept any more.** Until QA round 4 it named seven
+ * blocks and `app/**` read twenty-six — two of them (`home-8-proof-stream`'s
+ * candidate list, `mitmachen-2-objections`' two lists) already carried a
+ * marker, so the hatch could still silence copy a visitor reads. The drift
+ * test in `validate.test.ts` now reads `app/**` itself and fails on three
+ * counts: a slot a page reads by index or by kind with no row here, a row
+ * whose `file:line` no longer reads blocks, and a block-kind read that
+ * neither a row nor a declared helper accounts for (DEC-0142 §10).
  *
  * A slot whose note stands *above* a rendered block cannot use the marker at
  * all — it runs to the end of the slot — and its note is read as copy, which
@@ -514,9 +523,21 @@ export function checkCopy(page: PageContent): Finding[] {
 export const RENDERED_BLOCKS: readonly {
   readonly slot: string;
   readonly kind: "paragraph" | "list" | "table";
-  readonly index: number;
+  /**
+   * The block's index among its kind inside the slot, or `"all"` where the
+   * page reads **every** block of that kind (`listItems(slot.blocks)`) — there
+   * no index is safe.
+   */
+  readonly index: number | "all";
+  /**
+   * `file:line` of the line that **reads** the block, and nothing else may
+   * come first: `validate.test.ts` opens that file and fails where the line no
+   * longer reads blocks, so a stale row cannot sit here unnoticed. What the
+   * page does with the block afterwards goes in the parenthesis.
+   */
   readonly renderedBy: string;
 }[] = [
+  // — the four lists and tables the shape rule used to exempt
   {
     slot: "ueber-uns-3-proof-stream",
     kind: "list",
@@ -532,8 +553,8 @@ export const RENDERED_BLOCKS: readonly {
   {
     slot: "dein-kalender-5-proof-demo",
     kind: "list",
-    index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:286",
+    index: "all",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:286 (listItems, every list)",
   },
   {
     slot: "archiv-2-rows-demo",
@@ -541,23 +562,135 @@ export const RENDERED_BLOCKS: readonly {
     index: 0,
     renderedBy: "app/[lang]/ueber-uns/archiv/page.tsx:95",
   },
+  // — the three paragraphs `/dein-kalender` reads by index
   {
     slot: "dein-kalender-3-embed-demo",
     kind: "paragraph",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:402",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:194 (rendered at :402)",
   },
   {
     slot: "dein-kalender-3b-embed-config",
     kind: "paragraph",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:437",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:198 (rendered at :437)",
   },
   {
     slot: "dein-kalender-3b-embed-config",
     kind: "paragraph",
     index: 1,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:460",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:198 (rendered at :460)",
+  },
+  // — the render sites QA round 4 found missing: every other slot a page
+  //   reads by index or by kind (`validate.test.ts` proves the list is
+  //   complete against `app/**`, DEC-0142 §10)
+  {
+    slot: "home-8-proof-stream",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/page.tsx:186",
+  },
+  {
+    slot: "home-4a-scene-whatsapp-steps-demo",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/page.tsx:772 (listAt, the three step lines)",
+  },
+  {
+    slot: "home-4a-scene-whatsapp-steps-demo",
+    kind: "list",
+    index: 1,
+    renderedBy: "app/[lang]/page.tsx:765 (listAt, the sample event rows)",
+  },
+  {
+    slot: "mitmachen-2-objections",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:228 (listAt)",
+  },
+  {
+    slot: "mitmachen-2-objections",
+    kind: "list",
+    index: 1,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:228 (listAt)",
+  },
+  {
+    slot: "mitmachen-3a-path-whatsapp-steps-demo",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:391 (listAt)",
+  },
+  {
+    slot: "mitmachen-3a-path-whatsapp-steps-demo",
+    kind: "list",
+    index: 1,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:384 (listAt)",
+  },
+  {
+    slot: "mitmachen-4a-path-calendar-steps-demo",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:427 (listAt)",
+  },
+  {
+    slot: "mitmachen-4a-path-calendar-steps-demo",
+    kind: "list",
+    index: 1,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:421 (listAt)",
+  },
+  {
+    slot: "mitmachen-5a-path-website-steps-demo",
+    kind: "list",
+    index: 0,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:471 (listAt)",
+  },
+  {
+    slot: "mitmachen-5a-path-website-steps-demo",
+    kind: "list",
+    index: 1,
+    renderedBy: "app/[lang]/mitmachen/page.tsx:465 (listAt)",
+  },
+  {
+    slot: "mitmachen-7-proof-demo",
+    kind: "list",
+    index: "all",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:192 (listItems, every list)",
+  },
+  {
+    slot: "dein-kalender-2-contrast",
+    kind: "table",
+    index: 0,
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:218 (rows; head at :219)",
+  },
+  {
+    slot: "dein-kalender-3b-embed-config",
+    kind: "table",
+    index: 0,
+    renderedBy: "app/[lang]/dein-kalender/content.ts:58 (settingRows, from page.tsx:204)",
+  },
+  {
+    slot: "dein-kalender-4-tiers-checks-demo",
+    kind: "table",
+    index: 0,
+    renderedBy: "app/[lang]/dein-kalender/content.ts:58 (tierChecks, from page.tsx:210)",
+  },
+  {
+    slot: "rechtliches-2-registry",
+    kind: "table",
+    index: 0,
+    renderedBy: "app/[lang]/rechtliches/page.tsx:91 (from page.tsx:123)",
+  },
+  {
+    slot: "registrieren-2-wer",
+    kind: "list",
+    index: "all",
+    renderedBy: "app/[lang]/mitmachen/registrieren/page.tsx:189 (listItems, every list)",
+  },
+  {
+    slot: "registrieren-3-weg",
+    kind: "list",
+    index: "all",
+    renderedBy: "app/[lang]/mitmachen/registrieren/page.tsx:193 (listItems, every list)",
   },
 ];
 
@@ -580,7 +713,10 @@ export function checkNoteMarker(page: PageContent): Finding[] {
       const index = counted.get(block.kind) ?? 0;
       counted.set(block.kind, index + 1);
       if (!("note" in block) || !block.note) continue;
-      const site = rendered.find((entry) => entry.kind === block.kind && entry.index === index);
+      const site = rendered.find(
+        (entry) =>
+          entry.kind === block.kind && (entry.index === "all" || entry.index === index),
+      );
       if (!site) continue;
       findings.push({
         level: "error",

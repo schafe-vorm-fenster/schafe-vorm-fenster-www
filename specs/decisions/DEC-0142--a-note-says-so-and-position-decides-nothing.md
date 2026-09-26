@@ -205,9 +205,11 @@ inserted above the rendered archive table of `archiv-2-rows-demo` → *"the
 insertion passed with EXIT=0 before. `validate.test.ts` runs the probe over all
 seven entries of `RENDERED_BLOCKS` and over the shipped placement.
 
-The guard is a list, and a list can fall behind the pages. It is checked where a
-render site is checkable — every entry names a file and a line — and a slot no
-page reads by index is outside it by construction.
+The guard is a list, and a list can fall behind the pages. **It had.** QA round 4
+measured seven rows against twelve slots `app/**` reads, two of the five missing
+ones already carrying a marker — §10 is the answer, and it removes the sentence
+that used to stand here (*"checked where a render site is checkable"*): the list
+is measured against the pages now, not read against them by hand.
 
 ### 7. The product name is counted as occurrences, not as carrier fields
 
@@ -237,6 +239,89 @@ loudly instead of falling back.
 **Measured**: `PORT=3250 pnpm e2e e2e/pages/deine-region.spec.ts
 e2e/copy-structure.spec.ts` — see the task report for the run.
 
+### 9. The false green goes, and the budget number that moves says which criterion was let go
+
+Round 3 left `TS-WEB-0018-A7` counted **VERIFIED** by `pnpm check:coverage`
+because a unit-test title named it, and reported in the same breath that the
+criterion is not met on the render. QA round 4 named that for what it is: a false
+green inside the repository's own verification instrument, in the one place a
+reader goes to ask what is covered. A note in `coverage-budget.json` does not
+undo a green line in the table.
+
+So the title goes. `src/lib/content/validate.test.ts` now reads *"D12 row 11: the
+product name appears once in the artifacts (CG-038)"* — `CG-038` over the content
+artifacts is what that suite proves, and a comment above it says why the
+criterion's id is deliberately absent. Nothing about A7 changed in fact: it is
+the spec owner's through `CONF-0027` (`direct_contradiction`, OPEN,
+`recommended_action: NEW_VERSION`) and `state/open.md` row 277, and `§4` stands.
+
+**Measured**: `pnpm check:coverage` → *430 criteria · 251 verified · 1 metered ·
+0 attested · 32 NAMED ONLY · 146 missing*, and the run **failed** first: *"ERROR
+NAMED ONLY rose from 31 to 32. The backlog may only shrink … or say in a decision
+record why the budget moves."* The number moved with this record, which is the
+governance `DEC-0141` asks for, and the criterion let go is named here and in
+`specs/verification/coverage-budget.json`: `TS-WEB-0018-A7`. A7 does not fall to
+MISSING — `e2e/copy-structure.spec.ts` names it in comments, which is NAMED ONLY,
+*"the id is in a runner file but in no test title — not coverage"*. That is an
+honest verdict: the e2e case does assert a body count, with `/rechtliches`
+exempted, and an exemption the criterion does not grant may not be titled with
+the criterion's id.
+
+### 10. The render-site registry is measured against `app/**`, not kept by hand
+
+`RENDERED_BLOCKS` (§6) is the list the `<!-- note -->` marker may not cover, and
+§6 admitted it could fall behind the pages. It had: seven rows, while `app/**`
+reads twelve slots off their blocks — and two of the five missing slots,
+`home-8-proof-stream`'s candidate list and `mitmachen-2-objections`' two
+columns, **already carry a marker**, so the escape hatch could still do what the
+positional rule did.
+
+Three things change:
+
+1. The registry carries every read site: 26 rows over twelve slots, each naming
+   the `file:line` that reads the block (`app/[lang]/page.tsx:186`,
+   `…/mitmachen/page.tsx:228`, `…/dein-kalender/content.ts:58`, …). What the page
+   does with the block afterwards goes in a parenthesis.
+2. `index: "all"` is a row for a page that reads *every* block of a kind
+   (`listItems(slot.blocks)` on the two proof slots and the two `registrieren`
+   option lists) — there no single index is safe.
+3. **The incompleteness fails.** Three drift tests in `validate.test.ts` read
+   `app/**` themselves: a slot a page reads by index or through one of the
+   declared helpers (`listAt`, `listsOf`, `listItems`, `settingRows`,
+   `tierChecks`, `comparisonLabels`, `titlesFromRegistryTable`, `firstTable`)
+   with no row fails; a row whose `file:line` no longer reads blocks fails, so a
+   stale row cannot sit in the registry unnoticed; and a
+   `block.kind === "list" | "table" | "paragraph"` read that neither a row nor a
+   declared helper accounts for fails. A `field` read is not one of them: a field
+   ends a note region, so no marker ever reaches it.
+
+**Measured**: QA's probe `M4` — the marker of `content/pages/home/de.md` moved
+above the candidate list and rendered item 5 poisoned with `die Leute` +
+`Postleitzahl` — now gives *"1 error(s) … [note-marker] the `<!-- note -->`
+marker covers list 0 of this slot, and `app/[lang]/page.tsx:186` renders it"*,
+where QA measured *0 error(s), EXIT=0* before. The shipped tree is unchanged:
+`pnpm check:content` → *0 error(s), 28 warning(s)*, every one of the fourteen
+markers standing below the blocks its page reads.
+
+### 11. The pre-slot preamble is authoring prose, and the lint says so in writing
+
+A page artifact opens with a header note between its frontmatter and its first
+`<!-- id: … -->` slot, and that note quotes forbidden terms in order to forbid
+them — `content/pages/dein-kalender/de.md:3` says „Portalize" falls on that page
+*exactly once*, `content/pages/mitmachen/de.md:3` says the name belongs nowhere on
+that one. QA round 4 found it unlinted and undocumented.
+
+It stays unlinted, and it is now documented as a region rather than an oversight.
+Scanning it as copy would fail the build over the two sentences that forbid the
+words they quote — the marker's own case, above the first slot, where no marker
+can be written. It is safe because it is unreachable: `parsePage` binds copy to
+slots and carries no text outside them, so no page can render the preamble.
+`src/lib/content/README.md` names it beside the field label and the annotation
+comment, and `validate.test.ts` carries the fixture: a preamble with `die Leute`,
+`Postleitzahl` and `Portalize` in it yields no finding and no `copyOf` entry,
+while the same words one line below the slot marker yield two `avoid-list`
+errors.
+
 ## Consequences
 
 - One convention is added to the content tree: `<!-- note -->` above authoring
@@ -254,10 +339,22 @@ e2e/copy-structure.spec.ts` — see the task report for the run.
   is the cost of it.
 - `state/open.md` rows 266–270 of this branch became **273–277** at the merge
   (T-15 took 266, T-20 267–270, the coverage gate 271–272).
+- The coverage table loses a green line: 252 verified → **251**, NAMED ONLY 31 →
+  **32**, and `specs/verification/coverage-budget.json` carries the raise with
+  the criterion it let go (§9). The tally is worse and the record is truer.
+- A page that starts reading a new slot's blocks by index now has to add a row to
+  `RENDERED_BLOCKS`, and the test says which line made it necessary (§10). That
+  is a cost on every future page, and it is the only thing that keeps the marker
+  from silencing rendered copy.
+- `package.json`'s `dev` script honours `PORT` again (`next dev --port
+  ${PORT:-3100}`): it hard-coded `PORT=3100`, so `PORT=3250 pnpm dev` bound the
+  one port a reviewer must not take. The default is unchanged.
 
 ## Open
 
-- `TS-WEB-0018-A7`: not met on the render, `CONF-0027`, owner row 277.
+- `TS-WEB-0018-A7`: not met on the render, `CONF-0027`, owner row 277. The
+  instrument no longer claims otherwise (§9); the criterion is still open, and
+  T-17 is *lint delivered, A7 with the spec owner*.
 - The lint's two deliberately unimplemented halves stay as they were: `CG-002`'s
   second half (one field mixing `du` and `ihr`) and the imported legal bodies
   under `content/legal/`, which no page scan reaches (row 276).

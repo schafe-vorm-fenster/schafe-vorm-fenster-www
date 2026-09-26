@@ -6,14 +6,14 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**430 criteria · 253 closed · 177 open (59 % closed)**
+**430 criteria · 252 closed · 178 open (59 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 252 | a test title in a file a runner runs carries the id |
+| VERIFIED | 251 | a test title in a file a runner runs carries the id |
 | METERED | 1 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
-| NAMED ONLY | 31 | the id is in a runner file but in no test title — **not coverage** |
+| NAMED ONLY | 32 | the id is in a runner file but in no test title — **not coverage** |
 | MISSING | 146 | nothing names it |
 
 Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
@@ -24,7 +24,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | --- | --- | --- | --- | --- |
 | static | 86 | 49 | 37 | 57 % |
 | unit | 30 | 26 | 4 | 87 % |
-| integration | 73 | 47 | 26 | 64 % |
+| integration | 73 | 46 | 27 | 63 % |
 | e2e | 171 | 130 | 41 | 76 % |
 | tool | 39 | 1 | 38 | 3 % |
 | manual | 31 | 0 | 31 | 0 % |
@@ -50,7 +50,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0015 | 12 | 1 | A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 |
 | TS-WEB-0016 | 23 | 11 | A1 A3 A4 A6 A7 A8 A9 A11 A18 A20 A13 A14 |
 | TS-WEB-0017 | 21 | 9 | A1 A2 A3 A5 A6 A7 A12 A13 A15 A17 A16 A19 |
-| TS-WEB-0018 | 16 | 2 | A1 A3 A4 A5 A6 A8 A9 A10 A11 A12 A13 A14 A15 A16 |
+| TS-WEB-0018 | 16 | 1 | A1 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 A16 |
 | TS-WEB-0019 | 16 | 15 | A15 |
 | TS-WEB-0020 | 13 | 12 | A13 |
 | TS-WEB-0021 | 15 | 13 | A11 A15 |
@@ -196,6 +196,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0018-A4 | static | MISSING | — | No id from the D4 deny-list, and no hub id whose `brand` is not `schafe-vorm-fenster`, appears in any content frontmatter, the route table, the nav registry, or … |
 | TS-WEB-0018-A5 | static | MISSING | — | Foreign-brand term guard over the built HTML finds no D4 term; every allow-list entry carries a reason. |
 | TS-WEB-0018-A6 | static | MISSING | — | No entry of the route translation map (any language) and no label in the header, footer, or context-band registry matches the D5 product-name list. |
+| TS-WEB-0018-A7 | integration | NAMED ONLY | src/lib/content/validate.test.ts — outside any test title | Header, footer, and context band of every TS-WEB-0004 D1 route render without a product name in `de` and `en`; `/dein-kalender` is the only route whose body may … |
 | TS-WEB-0018-A8 | static | MISSING | — | Content build input excludes `content/support/**` and `legacy-content/app/funktionen/**`; no content file's `derived_from` points into them; the content schema  … |
 | TS-WEB-0018-A9 | static | MISSING | — | No path segment, nav label, or content id equals an audience id; every page brief declares exactly one of the four focus jobs; no two briefs with the same focus … |
 | TS-WEB-0018-A10 | static | MISSING | — | **No** content file references `local-advertising` while the offering is withheld (DEC-0052 §3). Formerly a budget of one sentence; the budget is now zero. Lega … |
