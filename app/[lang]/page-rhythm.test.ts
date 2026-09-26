@@ -64,6 +64,42 @@ describe("TS-WEB-0019: / section rhythm", () => {
   });
 
   /*
+   * The two **reordered** runs of block 2a. Since DEC-0140 the entry trait
+   * permutes the three scenes (TS-WEB-0019 D3a), so two further sequences ship
+   * and DEC-0129 §11's ground argument — reasoned for the `direct` run alone —
+   * has to hold for them too. The grounds travel with their scenes: `whatsapp`
+   * is `paper`, `embed` is `lime-100`, `provenance` is `violet-500`.
+   *
+   * `professional` and `purchase-intent` share one order, so two cases cover
+   * all three. `press` puts the `embed` scene last, directly above the proof
+   * stream, which is `lime-100` as well: one `lime` family seam that
+   * `checkRhythm` permits (two of a family may stand together, never three) and
+   * that DEC-0140 §Consequences records as the accepted cost of D3a's order.
+   */
+  const REORDERED = {
+    // professional · purchase-intent
+    professional: ["lime-100", "violet-500", "paper"],
+    press: ["violet-500", "paper", "lime-100"],
+  } as const;
+
+  for (const [trait, scenes] of Object.entries(REORDERED)) {
+    it(`has no violations in S1/S2 with the ${trait} order of block 2a`, () => {
+      expect(
+        checkRhythm(["photo", "ink", ...scenes, "lime-100", "surface", "ink"], 0),
+      ).toEqual([]);
+    });
+
+    it(`has no violations in S3 with the ${trait} order of block 2a`, () => {
+      expect(
+        checkRhythm(
+          ["photo", "ink", "surface-2", ...scenes, "lime-100", "surface", "ink"],
+          0,
+        ),
+      ).toEqual([]);
+    });
+  }
+
+  /*
    * The ground the QA round removed, kept as the assertion that it may not come
    * back: with the module's scene on `lime-500` and the embed scene on `paper`,
    * S3 reads `surface-2` · `lime-500` · `paper` — legal to `checkRhythm`, which

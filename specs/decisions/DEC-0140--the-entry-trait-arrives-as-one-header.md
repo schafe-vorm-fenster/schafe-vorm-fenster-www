@@ -117,12 +117,29 @@ Two smaller readings, both taken rather than left open:
   reorder within a page, never redefine what the page is for. That is also why
   an organic-search referrer on `/` is `direct` and not `purchase-intent`.
 
-### 4. The fallback the brief allowed was not needed
+### 4. The fallback the brief allowed was not taken — and production reaches it anyway
 
 The task brief permitted shipping *"direct order everywhere, A7 fixme kept"* if
-the trait handover endangered the milestone. It did not: A7 is un-fixmed and
-walks both loads. This record states that so the next reader does not look for
-a withheld half.
+the trait handover endangered the milestone. It was not taken: A7 is un-fixmed
+and walks both loads, and `next dev` and every preview build order block 2a by
+the trait.
+
+**Under the production CSP the reorder does not reach the DOM.** The swap from
+a boundary's fallback to its resolved branch is done by an inline script React
+emits when the boundary completes, at request time. `DEC-0045` / `TS-WEB-0014
+D7` give production a hash-only `script-src`, and
+`scripts/generate-csp-hashes.mjs` can only hash what stands in the prerendered
+HTML — never a request-time script (`state/open.md` row 132). So in production
+the resolved run stays parked in its hidden div, `main` keeps the fallback, and
+the order a visitor sees is the `direct` order **for every trait**. The server
+half is not affected: the response body carries the correct resolved run, and
+the moment the CSP admits that script — a preview build, or row 132's nonce
+decision — the order appears with no further change here.
+
+So the brief's fallback is, as configured today, the shipped production
+behaviour, arrived at by the CSP rather than chosen. That is a `DEC-0045`
+amendment to close, not a page work package's call; this record only names the
+condition so nobody reads A7's green as a production claim.
 
 ## Consequences
 
@@ -135,6 +152,30 @@ a withheld half.
 - `PRESS_REFERRER_HOSTS` is still the seed list of `state/open.md` row 72, and
   it now has a consumer: a `press` entry reorders block 2a. Moving the list to
   content is unchanged in shape and one degree more visible in effect.
+- **The trait ordering is inert in production until row 132 is decided.** §4
+  above: the hash-only `script-src` refuses React's boundary-completion script,
+  so production ships the fallback (`direct`) order for every trait while the
+  server sends the right one. Measured on a local `next build` + `next start`
+  with the hash asset present: `main [data-block="scene"]` is
+  `whatsapp · embed · provenance` for a `linkedin.com` referrer, with the CSP
+  violation and `React error #412` row 132 describes, while
+  `curl -H 'Referer: https://www.linkedin.com/'` shows the resolved run
+  (`scene-2 · scene-3 · scene-1`) in the parked branch. Every e2e assertion of
+  A7 is therefore scoped to `next dev` or to a **preview**-CSP build: on the
+  same production build with the hash asset moved aside and `VERCEL_ENV=preview`
+  — `state/open.md` row 148's procedure — A7, A9 and A11 are green, the
+  `linkedin.com` load reorders to `scene-2 · scene-3 · scene-1`, and the
+  document holds three scenes and one module with no console error. This is the
+  first feature whose **content**, not only its interactivity, depends on that
+  row.
+- **The `press` order seats two `lime` grounds together.** The grounds travel
+  with their scenes (DEC-0129 §11), so `press` — `provenance · whatsapp ·
+  embed` — puts the `lime-100` embed scene directly above the `lime-100` proof
+  stream. `checkRhythm` permits two of one family in a row and forbids three,
+  so the rhythm holds in all three D3a orders; `app/[lang]/page-rhythm.test.ts`
+  now walks the two reordered runs in S1/S2 and S3 as well. The softened seam
+  between those two sections is the accepted cost of D3a's order; giving the
+  proof stream a different ground would be a DEC-0129 §11 amendment.
 - The boundary renders block 2a twice on the wire — once as the fallback, once
   as the resolved branch. That is the cost every boundary on this page already
   pays (`DEC-0078`), and it buys the prerendered shell.

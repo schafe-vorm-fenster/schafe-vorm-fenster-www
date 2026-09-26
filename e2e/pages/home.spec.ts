@@ -117,7 +117,10 @@ async function sceneFacts(page: Page) {
     };
   });
 
-  const box = await page.locator("[data-explain-module]").first().boundingBox();
+  // Every `/` read of the module is scoped to `main`: block 2a streams from a
+  // `<Suspense>` boundary (DEC-0140 §2), so until the boundary reveals, a second
+  // copy of the module stands in the parked branch after `</main>`.
+  const box = await page.locator("main [data-explain-module]").first().boundingBox();
   return { ...facts, moduleHeight: box?.height ?? 0 };
 }
 
@@ -406,7 +409,7 @@ test.describe("TS-WEB-0019 — home", () => {
     // the measurement is the module element, opener and instance excluded.
     await page.setViewportSize({ width: 360, height: 800 });
     await page.goto("/");
-    const box = await page.locator("[data-explain-module]").first().boundingBox();
+    const box = await page.locator("main [data-explain-module]").first().boundingBox();
     expect(box).not.toBeNull();
     expect(box!.height).toBeLessThanOrEqual(800);
   });
@@ -426,7 +429,7 @@ test.describe("TS-WEB-0019 — home", () => {
     await page.goto("/");
     await page.waitForLoadState("networkidle");
 
-    const explainModule = page.locator("[data-explain-module]").first();
+    const explainModule = page.locator("main [data-explain-module]").first();
     await expect(explainModule).toHaveAttribute("data-state", "1");
 
     // Block 2a begins below the fold in every state of D2, so page load
@@ -481,7 +484,7 @@ test.describe("TS-WEB-0019 — home", () => {
     await page.goto("/");
     await page.waitForLoadState("networkidle");
 
-    const explainModule = page.locator("[data-explain-module]").first();
+    const explainModule = page.locator("main [data-explain-module]").first();
     const steps = explainModule.locator("[data-explain-step]");
     await expect(steps).toHaveCount(3);
     await steps.nth(2).focus();
@@ -631,8 +634,13 @@ test.describe("TS-WEB-0019 — home", () => {
       "closing-cta",
     ]);
 
-    // Block 2b, where D3 puts it and on the ground D3 gives it.
-    await expect(page.locator("#scene-3")).toHaveAttribute("data-surface", "violet-500");
+    // Block 2b, where D3 puts it and on the ground D3 gives it. Scoped to
+    // `main` for the same reason the id walk above is: block 2a stands inside a
+    // `<Suspense>` boundary (DEC-0140 §2), so between the first paint and the
+    // boundary's reveal the fallback run is in `main` and the resolved run is
+    // parked in a hidden div after `</main>` — an unscoped `#scene-3` resolves
+    // to two elements and Playwright's strict mode throws.
+    await expect(page.locator("main #scene-3")).toHaveAttribute("data-surface", "violet-500");
 
     // Nothing after the closing CTA inside `main`; the contact section and
     // the footer follow it as chrome (TS-WEB-0006 D2 as amended by DEC-0081
