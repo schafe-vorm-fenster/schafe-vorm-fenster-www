@@ -60,6 +60,9 @@ images:
       Das Amtsgebäude der Gemeinde Uckerland in Lübbenow, ein langgestrecktes Haus an der
       Dorfstraße.
     licence: CC0 1.0
+    focal:
+      x: 45
+      "y": 55
     status: real
     file: /images/real/dein-kalender-hero.webp
     width: 800

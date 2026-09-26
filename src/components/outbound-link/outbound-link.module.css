@@ -8,11 +8,6 @@
   min-width: 0;
 }
 
-.hint {
-  color: var(--color-neutral-muted);
-  font-size: var(--type-meta-size);
-}
-
 .glyph {
   flex: none;
 }
@@ -70,20 +65,40 @@
 }
 
 /*
- * The control variants' disclosure, G-5: out of the pill, under it.
+ * The marking of TS-WEB-0016 D16, G-5: out of the control, after it.
  *
- * The same words stay in the link's accessible name (`.hidden` below, the
- * `clip-path` pattern `search-field` and `scope-picker` already use), so
- * TS-WEB-0016 D9's "the recipient is named in the link's own line" and the
- * new-tab announcement both hold — what changes is that they no longer set
- * the pill's width and height. On `/deine-region` they made the secondary
- * three lines tall and full width, directly above the page's own primary.
+ * Out of the pill (it made `/deine-region`'s secondary three lines tall and
+ * full width, directly above the page's own primary) **and** out of the
+ * accessible name: the words used to stay inside the `<a>` behind a
+ * `clip-path`, which is exactly what TS-WEB-0016-A23 forbids. The association
+ * is `aria-describedby` now, so a screen-reader user still hears the
+ * recipient with the link, once.
  */
 .control {
   align-items: flex-start;
   display: inline-flex;
   flex-direction: column;
   gap: var(--space-2);
+}
+
+/*
+ * The same stacked form for an `inline` control that D16's Position row reaches
+ * — the lead fallback's `/start` link (`markingOwnLine`). The class is its own
+ * name rather than `control`, because the link is not a control there: what the
+ * two share is only that the recipient stands on its own line.
+ */
+.stacked {
+  composes: control;
+}
+
+/* The `inline` variant everywhere D16 does not reach — a link inside a
+   sentence: the marking follows it in the line and wraps under it where the
+   line runs out. */
+.marked {
+  align-items: baseline;
+  column-gap: var(--space-2);
+  display: inline-flex;
+  flex-wrap: wrap;
 }
 
 .meta {
@@ -99,13 +114,4 @@
 [data-surface="violet-500"] .meta,
 [data-hero="true"] .meta {
   color: var(--color-lime-300);
-}
-
-.hidden {
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
 }

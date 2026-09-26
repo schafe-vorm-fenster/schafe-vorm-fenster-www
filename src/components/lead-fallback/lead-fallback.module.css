@@ -7,3 +7,18 @@
 .line {
   margin: 0;
 }
+
+/*
+ * The consult line is a link, never a pill: the fallback stands inside a
+ * surface whose own primary CTA is the form's submit (TS-WEB-0016 D6).
+ *
+ * It composes `outbound-link`'s `inline` treatment rather than restating it.
+ * The `/start` line above it *is* an `outbound-link` in that variant, so the
+ * two links in this component read as one family by construction — and a bare
+ * `font-weight: 700` here would be the repository's one un-tokenised weight
+ * literal, which `check:brand` does not yet catch (`state/open.md` row 144).
+ * Composing also carries `.inline:hover` along, which a copy did not.
+ */
+.consult {
+  composes: inline from "../outbound-link/outbound-link.module.css";
+}

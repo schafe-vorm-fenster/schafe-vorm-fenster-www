@@ -7,7 +7,8 @@ import { dictionary } from "@/src/lib/i18n/dictionary";
 import { slot } from "@/src/lib/content/loader";
 import { interpolate } from "@/src/lib/content/text";
 import { pageTitle } from "@/src/lib/routes/metadata";
-import { BRIEFING_URL } from "@/src/lib/live/briefing";
+import { CONTACT_SECTION_ID } from "@/src/components/contact-section/contact-section";
+import { linkHref } from "@/src/components/route-link/href";
 
 import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
@@ -142,7 +143,11 @@ export default async function Page({
         <MotionReveal>
           {intro ? <p>{intro}</p> : null}
           <EnvoyFormMount
-            briefingHref={BRIEFING_URL}
+            // TS-WEB-0016 D6/A14 + DEC-0081 §3: the fallback's third line is
+            // the booking row of *this page's* contact section, reached
+            // in-page through the route facade — never a second occurrence of
+            // the appointment URL (TS-WEB-0016-A5).
+            briefingHref={linkHref(ROUTE, { locale, hash: CONTACT_SECTION_ID })}
             briefingLabel={copy.briefingLabel}
             context={{ goal: "request-licence-quote" }}
             // TS-WEB-0012 D4 / TS-WEB-0026-A13: the page's own goal, at the stage the

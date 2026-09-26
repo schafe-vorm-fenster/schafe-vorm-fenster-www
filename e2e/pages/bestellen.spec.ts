@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { BRIEFING_URL } from "../../src/lib/live/briefing";
+
 /**
  * TS-WEB-0025 — `/dein-kalender/bestellen`, walked through all four steps.
  *
@@ -14,7 +16,18 @@ import { expect, test } from "@playwright/test";
 const ROUTE = "/dein-kalender/bestellen";
 
 test.describe("TS-WEB-0025: the order flow", () => {
-  test("TS-WEB-0025-A2: the briefing link is visible on every step and never loads a Google script", async ({
+  /**
+   * TS-WEB-0025-A2 / D5 — and since T-15 the exit is what D5 always said it
+   * was: **"an in-page target, not an outbound link"**. It points at this
+   * route's contact section, which the chrome renders once below the flow, and
+   * the one outbound occurrence on the route is that section's first action
+   * row (DEC-0081 §3, TS-WEB-0016-A5).
+   *
+   * The scope and the step ride along in the exit's query, because the section
+   * is on this same document and a link that dropped them would take the
+   * visitor out of the flow she is in (D8).
+   */
+  test("TS-WEB-0025-A2: the consult exit is visible on every step, resolves in-page, and never loads a Google script", async ({
     page,
   }) => {
     for (const query of [
@@ -24,9 +37,36 @@ test.describe("TS-WEB-0025: the order flow", () => {
       "?orte=schlatkow&schritt=4",
     ]) {
       await page.goto(`${ROUTE}${query}`);
-      await expect(page.getByText("Beratungstermin buchen")).toBeVisible();
+      const exit = page.getByRole("link", { name: "Beratungstermin buchen" });
+      await expect(exit, query).toBeVisible();
+      const href = await exit.getAttribute("href");
+      expect(href, query).toMatch(/^\/dein-kalender\/bestellen(\?[^#]*)?#kontakt$/);
+      // It carries no outbound marking, because nothing outbound happens.
+      await expect(exit, query).not.toContainText(/Google|neuen Tab/);
+      // D5's "an exit, never a button": the quiet control stands at the 44 px
+      // `--height-control`, not at the step's advance height. `Button`'s size
+      // defaults to the primary's 56 px, which is what made the way out look
+      // like the way on once (review round, T-15).
+      const exitBox = await exit.boundingBox();
+      expect(exitBox?.height, query).toBeLessThanOrEqual(48);
+
+      // The section's first action row is the only element with the booking URL.
+      await expect(page.locator(`a[href="${BRIEFING_URL}"]`), query).toHaveCount(1);
+      await expect(
+        page.locator(
+          `section#kontakt[data-contact-section] a[data-channel="appointment"][href="${BRIEFING_URL}"]`,
+        ),
+        query,
+      ).toHaveCount(1);
+
+      // A2's "no step loads a Google script, iframe or font": asked of **every**
+      // step, inside the loop. It stood after the loop closed once, which only
+      // ever measured the last query (review round, T-15).
+      await expect(
+        page.locator('script[src*="google"], iframe[src*="google"], link[href*="fonts.g"]'),
+        query,
+      ).toHaveCount(0);
     }
-    await expect(page.locator('script[src*="google"], iframe[src*="google"]')).toHaveCount(0);
   });
 
   test("TS-WEB-0025-A3: ticking places updates the visible chip list and its count each time", async ({
@@ -201,12 +241,25 @@ test.describe("TS-WEB-0025: the order flow", () => {
   test("TS-WEB-0025-A14: with the envoy script blocked, step 3 renders the static fallback, never a spinner", async ({
     page,
   }) => {
-    // The mocked `envoy-form-mount` never loads an external script, so the
-    // fallback path is exercised by forcing its `empty`/`degraded` branch is
-    // not reachable from the page today (no toggle) — this asserts the
-    // currently-shipped `mocked` branch renders the full form with no
-    // spinner and no empty slot, which is what the mock rule requires while
-    // the widget is undelivered.
+    /*
+     * Half of A14, and the half says which. The mocked `envoy-form-mount`
+     * loads no external script at all, so there is nothing for this test to
+     * block, and the `empty`/`degraded` branch that renders the fallback is
+     * not reachable from the page: `state` is hard-coded `mocked` until the
+     * envoy widget is delivered (Q-0022, `state/open.md` rows 7 and 266), and
+     * no toggle exists. Row 266 is the gap's home: it says which half of each
+     * A14 is discharged and what the browser half waits for. What is asserted here is the shipped branch — the full
+     * form, no spinner, no empty slot — which is what the mock rule requires
+     * meanwhile.
+     *
+     * The fallback's own markup, including the consult exit into this route's
+     * contact section that this spec's A14 and A14 of TS-WEB-0016 name (spelled
+     * out, because `check:specs` scans test files for bare ids and a comment
+     * would otherwise discharge a criterion no test asserts), is asserted in
+     * `src/components/lead-fallback/lead-fallback.test.tsx`; the page passes
+     * it `briefingHref`/`briefingLabel` at `page.tsx`'s step-3 mount. The
+     * browser walk of the degraded state arrives with the widget.
+     */
     await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);
     await expect(page.locator('[data-envoy-form-kind="order-invoice"]')).toBeVisible();
     await expect(page.locator(".skeleton, [aria-busy='true']")).toHaveCount(0);

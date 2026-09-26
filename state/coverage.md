@@ -6,17 +6,17 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**430 criteria · 248 closed · 182 open (58 % closed)**
+**430 criteria · 249 closed · 181 open (58 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 248 | a test title in a file a runner runs carries the id |
+| VERIFIED | 249 | a test title in a file a runner runs carries the id |
 | METERED | 0 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
-| NAMED ONLY | 33 | the id is in a runner file but in no test title — **not coverage** |
+| NAMED ONLY | 32 | the id is in a runner file but in no test title — **not coverage** |
 | MISSING | 149 | nothing names it |
 
-Rule 1 (a new criterion arrives with its instrument): 2 criterion(a) new in this commit, 0 without an instrument.
+Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
 
 ## By level
 
@@ -25,7 +25,7 @@ Rule 1 (a new criterion arrives with its instrument): 2 criterion(a) new in this
 | static | 86 | 47 | 39 | 55 % |
 | unit | 30 | 26 | 4 | 87 % |
 | integration | 73 | 46 | 27 | 63 % |
-| e2e | 171 | 129 | 42 | 75 % |
+| e2e | 171 | 130 | 41 | 76 % |
 | tool | 39 | 0 | 39 | 0 % |
 | manual | 31 | 0 | 31 | 0 % |
 
@@ -48,7 +48,7 @@ Rule 1 (a new criterion arrives with its instrument): 2 criterion(a) new in this
 | TS-WEB-0013 | 8 | 3 | A3 A4 A6 A7 A8 |
 | TS-WEB-0014 | 13 | 2 | A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 |
 | TS-WEB-0015 | 12 | 1 | A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 |
-| TS-WEB-0016 | 23 | 10 | A1 A3 A4 A5 A6 A7 A8 A9 A11 A18 A20 A13 A14 |
+| TS-WEB-0016 | 23 | 11 | A1 A3 A4 A6 A7 A8 A9 A11 A18 A20 A13 A14 |
 | TS-WEB-0017 | 21 | 9 | A1 A2 A3 A5 A6 A7 A12 A13 A15 A17 A16 A19 |
 | TS-WEB-0018 | 16 | 1 | A1 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 A14 A15 A16 |
 | TS-WEB-0019 | 16 | 15 | A15 |
@@ -172,7 +172,6 @@ Rule 1 (a new criterion arrives with its instrument): 2 criterion(a) new in this
 | TS-WEB-0016-A1 | static | MISSING | — | No submission endpoint exists in the website: no POST/PUT route or server action under `app/api/` or elsewhere accepts form data; the BFF inventory equals TS-WE … |
 | TS-WEB-0016-A3 | e2e | MISSING | — | Network trace of a full submission: form values leave the browser only to the envoy host; no website request, log line or analytics call contains a field value. |
 | TS-WEB-0016-A4 | static | MISSING | — | Every CSS variable published by the widget contract is mapped to a design token in the single mapping file, in all three themes; an unmapped published variable  … |
-| TS-WEB-0016-A5 | e2e | NAMED ONLY | e2e/contact-section.spec.ts — outside any test title | The briefing CTA on `/dein-kalender`, `/deine-region`, `/ueber-uns` and every step of `/dein-kalender/bestellen` resolves to the contact section of the same pag … |
 | TS-WEB-0016-A6 | e2e | MISSING | — | The order flow runs the four D8 steps with the briefing exit visible on each; step 4 shows a copyable embed code without any payment step, and no payment-provid … |
 | TS-WEB-0016-A7 | static | MISSING | — | No page contains an iframe, player script or social embed from a media host; every archive entry renders an own preview image served from our own origin plus on … |
 | TS-WEB-0016-A8 | tool | MISSING | — | axe-core: zero violations on every page with the widget mounted, including inside its shadow root, in light, dark and high-contrast. |
