@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { placeRowLabel, resolveRegisterPlace } from "./resolve-place";
+import { resolveRegisterPlace } from "./resolve-place";
 
 /**
  * TS-WEB-0023-A5/A6 and TS-WEB-0008-A16, unit level — step 1 resolves a **name**.
@@ -12,12 +12,16 @@ import { placeRowLabel, resolveRegisterPlace } from "./resolve-place";
  * place, a municipality name that matches several, and five digits — which
  * are now just a string that matches nothing.
  *
- * `Groß Polzin` is a municipality of the committed community index
- * (`src/generated/place-index.json`, the same store `/dein-ort` and the
- * typeahead search) with five covered villages behind it and no community of
- * its own slug, so A6 no longer needs a stub: the shared data carries the
- * case. A municipality that *is* also a community slug (`Schmatzin`) resolves
- * on the slug branch first, which is why the fixture is not one of those.
+ * The A6 fixture is `Lindetal`, measured against the committed community index
+ * (`src/generated/snapshots/communities.json`, the same store `/dein-ort` and
+ * the typeahead search): six covered communities carry it as their
+ * municipality (Alt Käbelich, Ballin, Dewitz, Leppin, Marienhof, Plath), no
+ * community is *named* `Lindetal` and no slug is `lindetal`. So neither the
+ * slug branch nor the exact-name branch can answer it and the chooser is
+ * reached for the reason A6 describes — a municipality with several
+ * communities — rather than by a spelling accident. A municipality that is
+ * also its seat's name (`Groß Polzin`, slug `gross-polzin`) would resolve
+ * instead, which is why the fixture is not one of those.
  */
 describe("TS-WEB-0023-A5: place resolution (real interface, committed index)", () => {
   it("resolves an already-known community slug", async () => {
@@ -44,38 +48,41 @@ describe("TS-WEB-0023-A5: place resolution (real interface, committed index)", (
     expect(await resolveRegisterPlace(undefined)).toEqual({ kind: "unresolved" });
     expect(await resolveRegisterPlace("not a slug or a name")).toEqual({ kind: "unresolved" });
   });
+
+  it("advances on a name typed in full even where another row contains it", async () => {
+    // `Bömitz` is a community of the index; `Labömitz` contains the string and
+    // ranks behind it (`place-index.ts` ranks an exact folded name match at 0).
+    // Asking "which one?" here would be a question with one right answer
+    // already on screen (DEC-0128 §3).
+    const result = await resolveRegisterPlace("Bömitz");
+    expect(result.kind).toBe("resolved");
+    if (result.kind === "resolved") expect(result.place.slug).toBe("boemitz");
+  });
 });
 
 describe("TS-WEB-0023-A6: a municipality hit with several communities does not advance", () => {
   it("reports every candidate rather than auto-selecting one", async () => {
-    // A municipality name that is no community's slug, with several covered
-    // villages behind it (D3: "the step asks which of them").
-    const result = await resolveRegisterPlace("Groß Polzin");
+    const result = await resolveRegisterPlace("Lindetal");
     expect(result.kind).toBe("ambiguous");
     if (result.kind !== "ambiguous") return;
 
     expect(result.candidates.length).toBeGreaterThan(1);
-    for (const candidate of result.candidates) expect(candidate.municipality).toBe("Groß Polzin");
+    for (const candidate of result.candidates) expect(candidate.municipality).toBe("Lindetal");
     // The value taken from a candidate is the community slug, never the
     // municipality's name (D3, "never a municipality, county or state id"),
     // and the list is capped at the overlay's four rows (DEC-0119).
-    expect(result.candidates.map((candidate) => candidate.slug)).toContain("klein-polzin");
+    expect(result.candidates.map((candidate) => candidate.slug)).toContain("alt-kaebelich");
     expect(result.candidates.length).toBeLessThanOrEqual(4);
   });
 
-  it("labels each candidate `Ort (Gemeinde)`", async () => {
-    const result = await resolveRegisterPlace("Groß Polzin");
+  it("keeps asking where two communities carry the very same name", async () => {
+    // The index holds two `Görke`, one in Dargen and one in Postlow — the case
+    // TS-WEB-0008 D7a prints the municipality in brackets for. The exact-name
+    // shortcut fires only when the exact match is unique, so this one asks.
+    const result = await resolveRegisterPlace("Görke");
     expect(result.kind).toBe("ambiguous");
     if (result.kind !== "ambiguous") return;
-
-    for (const candidate of result.candidates) {
-      expect(placeRowLabel(candidate)).toBe(`${candidate.name} (Groß Polzin)`);
-    }
-  });
-
-  it("prints the bare name where the index carries no municipality", () => {
-    expect(
-      placeRowLabel({ communityId: "geoname.1", name: "Beispielort", slug: "beispielort", lat: 0, lng: 0 }),
-    ).toBe("Beispielort");
+    expect(result.candidates.filter((candidate) => candidate.name === "Görke").length).toBeGreaterThan(1);
+    expect(result.candidates.map((candidate) => candidate.municipality)).toContain("Dargen");
   });
 });

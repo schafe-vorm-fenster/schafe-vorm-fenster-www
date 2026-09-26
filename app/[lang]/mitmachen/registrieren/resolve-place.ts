@@ -21,6 +21,7 @@
  */
 
 import { hasRealBackend } from "@/src/lib/live/config";
+import { fold } from "@/src/lib/live/place-index";
 import { resolvePlace, searchPlaces } from "@/src/lib/live/places";
 
 import type { Place } from "@/src/lib/live/types";
@@ -31,22 +32,21 @@ export type PlaceLookup =
   | { readonly kind: "unresolved" };
 
 /**
- * D3's row format, the same one the typeahead prints: the community carries
- * its municipality "only as context", so a candidate chip reads
- * `Ort (Gemeinde)` and the value taken from it is still the community slug
- * (TS-WEB-0008 D7a, TS-WEB-0008-A14). An index entry without a municipality
- * prints the bare name rather than empty brackets.
- */
-export function placeRowLabel(place: Place): string {
-  return place.municipality ? `${place.name} (${place.municipality})` : place.name;
-}
-
-/**
- * A municipality hit with several communities does not advance (D3): more than
- * one suggestion is read as "ask which one" rather than auto-selected, because
- * `searchPlaces` always resolves its `outcome.place` to the first match and
- * registering the wrong village is not a correctable mistake here — the slug
- * is what travels to the app.
+ * A municipality hit with several communities does not advance (D3): the step
+ * asks which of them rather than auto-selecting, because `searchPlaces` always
+ * resolves its `outcome.place` to the first match and registering the wrong
+ * village is not a correctable mistake here — the slug is what travels to the
+ * app.
+ *
+ * A name the visitor spelled out in full is not that case (DEC-0128 §3).
+ * `searchByName` ranks an exact folded name match ahead of every prefix,
+ * substring and municipality match (`src/lib/live/place-index.ts`), so the
+ * first suggestion for an exactly typed name is her place and not a guess,
+ * even where an unrelated row merely contains the string — `Bömitz` beside
+ * `Labömitz`, `Gülzow` beside `Gülzowshof`. What keeps the question open is a
+ * *second* row of that same name, which is the "two villages of one name" case
+ * `TS-WEB-0008 D7a` puts the municipality in brackets for. Exactness is
+ * decided with the index's own `fold`, never a second normaliser.
  */
 export async function resolveRegisterPlace(raw: string | undefined): Promise<PlaceLookup> {
   if (!raw) return { kind: "unresolved" };
@@ -58,6 +58,10 @@ export async function resolveRegisterPlace(raw: string | undefined): Promise<Pla
   if (result.data.outcome.kind !== "covered") return { kind: "unresolved" };
 
   const demo = result.demo;
+  const typed = fold(raw);
+  const [exact, ...furtherExact] = result.data.suggestions.filter((place) => fold(place.name) === typed);
+  if (exact && furtherExact.length === 0) return { kind: "resolved", place: exact, demo };
+
   if (result.data.suggestions.length > 1) {
     return { kind: "ambiguous", candidates: result.data.suggestions, demo };
   }

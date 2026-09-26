@@ -4,6 +4,7 @@ import { EmptyStateBlock } from "@/src/components/empty-state-block/empty-state-
 import { ContextBand } from "@/src/components/context-band/context-band";
 import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
+import { suggestionLabel } from "@/src/components/place-search/suggestion-row";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { StepIndicator } from "@/src/components/step-indicator/step-indicator";
 import { appendCampaignParams, extractCampaignParams } from "@/src/lib/analytics";
@@ -21,7 +22,7 @@ import { pageContent } from "../../_content";
 import { localeFrom, pageMetadataFor } from "../../_locale";
 
 import { pageMeta } from "./page.meta";
-import { placeRowLabel, resolveRegisterPlace } from "./resolve-place";
+import { resolveRegisterPlace } from "./resolve-place";
 import { resolveDisplayedStep, resolveEnum } from "./steps";
 
 import type { ContentBlock } from "@/src/lib/content/types";
@@ -292,9 +293,11 @@ export default async function Page({
                 lookup.kind === "ambiguous"
                   ? lookup.candidates.map((candidate) => ({
                       // D3: the community named, its municipality as context
-                      // only — the same `Ort (Gemeinde)` row the typeahead
-                      // prints, and the value taken is still the slug.
-                      label: placeRowLabel(candidate),
+                      // only. `suggestionLabel` is the function the typeahead's
+                      // own rows use (TS-WEB-0008 D7a, A14), so a chooser row
+                      // and a suggestion row cannot drift apart; the value
+                      // taken from either is still the community slug.
+                      label: suggestionLabel(candidate),
                       to: "register" as const,
                       query: { ...carried, ort: candidate.slug },
                     }))

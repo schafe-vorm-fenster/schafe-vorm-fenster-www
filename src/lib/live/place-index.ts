@@ -74,8 +74,13 @@ export const MAX_NAME_MATCHES = 4;
  * and `ß`, which people type as `ss` as often as not. Written as escapes
  * rather than as literal marks, so the range survives every editor and every
  * diff.
+ *
+ * Exported because a caller that wants to know whether a suggestion is the
+ * name the visitor typed has to compare the same way this index matched
+ * (`app/[lang]/mitmachen/registrieren/resolve-place.ts`, DEC-0128 §3) — a
+ * second normaliser would answer differently for `ß` and for every umlaut.
  */
-function fold(value: string): string {
+export function fold(value: string): string {
   return value
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/gu, "")

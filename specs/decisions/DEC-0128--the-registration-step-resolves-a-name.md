@@ -60,28 +60,64 @@ search surface uses.** The `isZip` gate is deleted, not widened.
    echoed only in the field (`A5`). `searchPlacesByZip` is no longer called
    from this page; it keeps its one caller, the order flow's scope step, which
    `DEC-0079 §7` leaves in postcode mode.
-3. **More than one suggestion asks which one.** `D3`'s "municipality hit" row
-   is implemented as "`suggestions.length > 1` → `ambiguous`", not as a test
-   for whether the typed string *was* a municipality name. `searchPlaces`
-   always resolves `outcome.place` to its first match, so anything narrower
-   would auto-select a village on the visitor's behalf, and the slug is what
-   travels to the app — a wrong village is not a correctable mistake here.
-4. **A candidate row reads `Ort (Gemeinde)`.** `placeRowLabel()` in
-   `resolve-place.ts` formats it, the same form the typeahead prints
-   (`TS-WEB-0008 D7a`, `A14`), and an index entry without a municipality prints
-   the bare name rather than empty brackets. The value taken from a row is the
-   community slug (`D3`).
+3. **More than one suggestion asks which one — unless one of them is the name
+   as typed.** `D3`'s "municipality hit" row is implemented as
+   "`suggestions.length > 1` → `ambiguous`", not as a test for whether the
+   typed string *was* a municipality name: `searchPlaces` resolves
+   `outcome.place` to its first match, and the slug is what travels to the app,
+   so a wrong village is not a correctable mistake here. The one exception is
+   an **exact name match that is unique**: `searchByName` ranks an exact folded
+   name ahead of every prefix, substring and municipality match
+   (`src/lib/live/place-index.ts:114-140`), so for a name the visitor spelled
+   out in full the first suggestion is not a guess. Measured over
+   `src/generated/snapshots/communities.json`: **62** covered names whose exact
+   match is unique and whose raw spelling misses the literal slug lookup were
+   sent to a chooser they do not need — 12 of them blocked only by an unrelated
+   row that contains the string (`Bömitz` behind `Labömitz`, `Gülzow` behind
+   `Gülzowshof`, `Knüppeldamm` behind `Knüppeldamm Ausbau`), the other 50 by
+   the villages of a municipality that carries the typed name as well, where
+   the exact row is that municipality's seat (`Groß Polzin` → `gross-polzin`,
+   `Groß Kiesow` → `gross-kiesow`). Neither group is the "search resolving to a
+   municipality with several communities" `A6` asks the question for: there the
+   typed string is no community's name at all. What keeps the question open is
+   a *second* row of the same
+   name (two `Görke`, in Dargen and in Postlow), which is the case
+   `TS-WEB-0008 D7a` prints the brackets for. Exactness is decided with the
+   index's own `fold`, exported for this caller, never with a second
+   normaliser.
+4. **A candidate row reads `Ort (Gemeinde)`.** The row is formatted by
+   `suggestionLabel()` in `src/components/place-search/suggestion-row.ts` — the
+   function the typeahead's own rows use (`TS-WEB-0008 D7a`, `A14`), so a
+   chooser row and a suggestion row cannot drift apart, and a blank
+   municipality prints the bare name rather than empty brackets. No page-local
+   copy of that format exists. The value taken from a row is the community slug
+   (`D3`).
 5. **The candidate chips are marked `demo` only when the data is demo.** The
    page passed `state="mocked"` for every `ambiguous` lookup while the branch
    was unreachable; now that it renders, the flag follows `lookup.demo`, which
    is `false` for the committed index (`config.ts`, `placeSearchByName` is a
    real backend). Marking real rows as demo would be a false provenance claim
    (`DEC-0068`).
-6. **`TS-WEB-0023-A6` becomes an e2e fact.** `Groß Polzin` is a municipality of
-   the committed index with five covered villages behind it and no community of
-   its own slug, so the criterion no longer needs a stub. The unit test keeps
-   the same case against the same data, and the "not e2e-walkable today" note
-   in `e2e/pages/registrieren.spec.ts` is withdrawn.
+6. **`TS-WEB-0023-A6` becomes an e2e fact, on `Lindetal`.** Measured against
+   `src/generated/snapshots/communities.json`: six communities carry `Lindetal`
+   as their municipality — `Alt Käbelich`, `Ballin`, `Dewitz`, `Leppin`,
+   `Marienhof`, `Plath` — while no community is *named* `Lindetal`, no slug is
+   `lindetal`, and no name contains the string. So the slug lookup misses, the
+   exact-name exception of §3 does not apply, and the chooser is reached for the
+   reason `A6` states, with the first four rows shown (`D7a`'s cap). The unit
+   test walks the same case against the same data, and the "not e2e-walkable
+   today" note in `e2e/pages/registrieren.spec.ts` is withdrawn.
+
+   The first draft of this record used `Groß Polzin` and claimed it had "five
+   covered villages behind it and no community of its own slug". Both halves
+   were wrong against the committed data: the five matching rows are the seat
+   community `Groß Polzin` (slug `gross-polzin`) plus four villages, and the
+   ambiguous branch was reached only because `resolvePlace()` matches slugs
+   **literally** (`src/lib/live/places.ts:197-213` → `place-index.ts`'s
+   `BY_SLUG`, `trim().toLowerCase()`), so the typed `Groß Polzin` missed
+   `gross-polzin` by spelling. A fixture that depends on that would flip to
+   `resolved` the day the slug lookup folds or slugifies its input. `Lindetal`
+   depends on nothing but the index's municipality column.
 7. **The step-1 submit carries `data-cta="primary"`.** Searching *is* the
    advance on this step — a resolved place moves the flow to step 2 by itself —
    so the one control on the screen is the one primary `A1` asks for. The
@@ -140,8 +176,22 @@ package does not own.
   spec owner rather than amended here: this task was not given `TS-WEB-0023` to
   edit, and no determination is contradicted, only under-described.
 - `A2`'s slug clause holds on the enhanced path and from step 2 onward, and not
-  on the first request of the no-JS path. The e2e test says so explicitly
-  rather than asserting a canonicalisation that does not happen.
+  on the first request of the no-JS path. `A2` is therefore reported as a
+  **deviation**, not as met: the two `ort=Wolfradshof` assertions pin the
+  interim shape and say so at the assertion, so the day the proxy hop lands
+  their failure is the expected signal.
+- **`state/open.md` row 126 / `F-2-5` is discharged.** It asks the live-data
+  owner for "one municipality fixture with several communities" because
+  `mockSearchByZip` answers at most one place per postcode and the ambiguous
+  branch was "not e2e-walkable today". The postcode path is gone from this page
+  and the committed index carries the case (§6), so nothing is owed by the
+  shared mock any more. The row is left to its owner rather than edited here;
+  `T-16`'s `files_shared` entry ("a same-name fixture for A6 — T-07 owns") is
+  likewise moot.
+- `src/lib/live/place-index.ts`'s `fold()` is exported (one word plus its
+  reason). §3's exactness test has to fold the way the index matched, and a
+  page-local normaliser would answer differently for `ß` and for every umlaut —
+  the same reuse rule that keeps the candidate row on `suggestionLabel()`.
 - Step 1 now contributes one `[data-cta="primary"]` to `e2e/cta-contrast.spec.ts`'s
   measurement on this route — the same 44 px search submit the home hero
   already carries.

@@ -8,10 +8,13 @@ import { expect, test } from "@playwright/test";
  * site resolves against, not a page-local fixture.
  *
  * Step 1 searches by **name** since T-16 (DEC-0079 §1, DEC-0128): the `isZip`
- * gate that dropped every typed name is gone, so "Groß Polzin" — a
- * municipality of the committed community index with five covered villages
- * behind it and no community of its own slug — finally gives TS-WEB-0023-A6 a
- * real fixture. It was unit-only against a stub until now.
+ * gate that dropped every typed name is gone, so TS-WEB-0023-A6 finally has a
+ * real fixture instead of a stub. It is "Lindetal", measured against
+ * `src/generated/snapshots/communities.json`: six covered communities carry it
+ * as their municipality (Alt Käbelich, Ballin, Dewitz, Leppin, Marienhof,
+ * Plath), no community is named `Lindetal` and no slug is `lindetal`, so the
+ * chooser is reached because the municipality has several communities and not
+ * because a slug happened to be spelled differently.
  */
 
 const ROUTE = "/mitmachen/registrieren";
@@ -135,6 +138,12 @@ test.describe("TS-WEB-0023: the register flow", () => {
     // The plain GET form submits what was typed — the slug is a lookup away
     // (DEC-0128). What the criterion is about is that a *name* is answered at
     // all: before T-16 this field only accepted five digits.
+    //
+    // A2's literal wording ("puts `ort=<slug>` in the URL") is NOT met on this
+    // first request, and the assertion below pins that interim rather than the
+    // criterion: canonicalising it needs a proxy hop (`src/lib/routes/place-hop.ts`,
+    // F-2-49), which this task does not own. When that hop lands, this line
+    // failing is the expected signal — replace it with `ort=wolfradshof`.
     await page.goto(ROUTE);
     await page.fill('input[name="ort"]', "Wolfradshof");
     await page.click('button[type="submit"]');
@@ -153,23 +162,27 @@ test.describe("TS-WEB-0023: the register flow", () => {
   test("TS-WEB-0023-A6: a municipality with several communities does not advance until one is chosen", async ({
     page,
   }) => {
-    // `Groß Polzin` is a municipality of the committed index, not a community
-    // slug, with several covered villages behind it (D3's "municipality hit").
-    await page.goto(`${ROUTE}?ort=${encodeURIComponent("Groß Polzin")}`);
+    // `Lindetal` is a municipality of the committed index with six covered
+    // communities behind it, and is itself no community's name and no slug
+    // (see the file header) — D3's "municipality hit", exactly.
+    await page.goto(`${ROUTE}?ort=Lindetal`);
 
     // Still step 1: the flow may not pick a village on the visitor's behalf.
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
     await expect(page.locator('[data-step-answered="ort"]')).toHaveCount(0);
 
-    // Each candidate is a tappable row reading `Ort (Gemeinde)` (D3, D8).
-    const candidates = page.getByRole("link", { name: /\(Groß Polzin\)$/u });
+    // Each candidate is a tappable row reading `Ort (Gemeinde)` (D3, D8),
+    // capped at the overlay's four rows (TS-WEB-0008 D7a).
+    const candidates = page.getByRole("link", { name: /\(Lindetal\)$/u });
     await expect(candidates.first()).toBeVisible();
     expect(await candidates.count()).toBeGreaterThan(1);
-    const chosen = candidates.first();
 
-    // And the value taken from it is the community slug, which advances.
+    // A6's second half: the `ort` that results is *that* community's slug. The
+    // rows are alphabetical, so the first is `Alt Käbelich` → `alt-kaebelich`.
+    const chosen = candidates.first();
+    await expect(chosen).toHaveAccessibleName("Alt Käbelich (Lindetal)");
     await chosen.click();
-    await expect(page).toHaveURL(/[?&]ort=[a-z0-9-]+(&|$)/);
+    await expect(page).toHaveURL(/[?&]ort=alt-kaebelich(&|$)/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
   });
 
@@ -332,6 +345,8 @@ test.describe("TS-WEB-0023: the register flow", () => {
     // it has to work (D8 "No-JS", DEC-0128).
     await page.fill('input[name="ort"]', "Wolfradshof");
     await page.click('button[type="submit"]');
+    // Interim, same as in the A2 test above: the typed string travels on this
+    // one request because the canonicalising hop is the proxy's (F-2-49).
     await expect(page).toHaveURL(/ort=Wolfradshof/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
     await page.click('input[name="wer"][value="opt-1"]');
