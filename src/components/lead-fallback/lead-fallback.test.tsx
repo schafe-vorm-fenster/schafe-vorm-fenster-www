@@ -9,6 +9,12 @@ import { LeadFallback } from "./lead-fallback";
  * TS-WEB-0016 D6 / A14 and A23, and DEC-0081 §3 — the static fallback of the
  * two remaining lead surfaces.
  *
+ * What these cases reach is the component, not a browser: the `empty`/`degraded`
+ * branch that mounts the fallback cannot be entered on either lead surface while
+ * `envoy-form-mount` receives a hard-coded `state="mocked"` (Q-0022). That is
+ * half of A14 in each of TS-WEB-0016 and TS-WEB-0025, and `state/open.md` row
+ * 266 carries the other half rather than a comment claiming it.
+ *
  * Two facts changed with T-15: the third line is the page's **own contact
  * section**, reached in-page, rather than a second occurrence of the
  * appointment URL (A5), and the three lines are dictionary strings rather than
@@ -63,13 +69,21 @@ describe("lead-fallback", () => {
   });
 
   /**
-   * `/dein-kalender/bestellen` step 3 passes the same pair (T-15 review
-   * round): TS-WEB-0016-A14 and TS-WEB-0025-A14 both name the booking line as
-   * part of the fallback, and on that route the in-page target has to carry
-   * the flow's own scope and step or it lands on a different screen
-   * (TS-WEB-0025 D8, DEC-0133 §2).
+   * `/dein-kalender/bestellen` step 3 passes the same pair (T-15 review round):
+   * A14 of TS-WEB-0016 and A14 of TS-WEB-0025 both name the booking line as
+   * part of the fallback, and on that route the in-page target has to carry the
+   * flow's own scope and step or it lands on a different screen (TS-WEB-0025
+   * D8, DEC-0133 §2). Both ids are spelled out rather than written bare,
+   * because `check:specs` (W3) scans test files for bare acceptance ids
+   * including their comments, so a prose mention would discharge a criterion
+   * this file does not assert — which is what the review round caught.
+   *
+   * What this case proves is the component's half only: the href it is handed
+   * reaches the anchor un-rewritten, `&` escaped as the attribute needs. That
+   * the **page** builds such an href is
+   * `app/[lang]/dein-kalender/bestellen/consult-exit.test.ts`.
    */
-  it("keeps the order flow's scope and step in the in-page target", () => {
+  it("passes an in-page target with a query through to the anchor, un-rewritten", () => {
     const ORDER_CONSULT = "/dein-kalender/bestellen?orte=schlatkow&schritt=3#kontakt";
     const html = renderToStaticMarkup(
       <LeadFallback

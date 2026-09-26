@@ -173,8 +173,10 @@ fixtures carry strings that make the same assertion without the promise.
 
 ## Consequences
 
-- `TS-WEB-0016-A5`, `A14`, `A23`, `TS-WEB-0025-A2`, `A11`, `TS-WEB-0026-A6`,
-  `A13` and `A8` hold on the three routes this task owns.
+- `TS-WEB-0016-A5` and `A23`, `TS-WEB-0025-A2` and `A11`, `TS-WEB-0026-A6`,
+  `A13` and `A8` hold on the three routes this task owns. **`A14` of
+  TS-WEB-0016 and of TS-WEB-0025 do not** — they are half discharged, and the
+  Open section below says which half and why (`state/open.md` row 266).
   `/dein-kalender` (T-13) and `/ueber-uns` (T-14) are the other two routes A5
   names; `e2e/contact-section.spec.ts`'s `BRIEFING_HREF_REPOINTED_BY` keeps a
   `test.fail` marker for `calendar` and lost the `region` and `order` entries
@@ -202,7 +204,23 @@ fixtures carry strings that make the same assertion without the promise.
   block a script the mock never loads or reach the `degraded` state a page
   cannot enter (`state` is hard-coded `mocked`, no toggle, and adding one to a
   shipping page to make a test pass is not a change this task takes).
-  `e2e/pages/bestellen.spec.ts`'s A14 case says so in its own comment.
+  `state/open.md` row 266 is that gap's durable home; `e2e/pages/bestellen.spec.ts`'s
+  A14 case and `lead-fallback.test.tsx` cite it.
+
+  **Amendment (2026-09-26, QA round 2).** The first version of this round
+  claimed `check:specs` W3 still listed `TS-WEB-0016-A14` as untested. It did
+  not, and the reason is this record's own defect: `scripts/check-specs.ts`
+  builds its `referencedIds` set by raw-scanning test files for acceptance ids,
+  **comments included**, so the two prose mentions the round added to
+  `e2e/pages/bestellen.spec.ts` and
+  `src/components/lead-fallback/lead-fallback.test.tsx` took the criterion off
+  the W3 list without a test being written. The single automated signal for an
+  untested criterion was silenced by a sentence. Both mentions are written as
+  prose now (`A14 of TS-WEB-0016`), the scan sees no bare id, and the criterion
+  is back on the list — measured after merging `next-2026`:
+  `pnpm check:specs` reports `W3 150/428` with `TS-WEB-0016-A14` in the list,
+  against `149/428` without it. The gap itself lives in `state/open.md` row 266,
+  where a reviewer and the owner can both find it.
 - The two-working-day promise stays withheld (`TS-WEB-0016-A13`,
   `TS-WEB-0026-A7`): `check:terms` in the chain is what keeps a softened
   variant out, and `RESPONSE_PROMISE_TEXT` stays `null` until `C11` is

@@ -107,4 +107,31 @@ describe("outboundNoteId", () => {
   it("never yields a bare prefix, even for a target with no word characters", () => {
     expect(outboundNoteId("https://")).toBe("outbound-note-link");
   });
+
+  /**
+   * The 48-character bound, asserted at the bound — every other case here is
+   * far under it, so the trim order and the collision it implies were both
+   * unasserted (review round, T-15).
+   */
+  it("leaves no trailing dash where the 48-character cut lands on a separator", () => {
+    // `calendar-app-google-beratung-vorpommern-vorland-` is exactly 48
+    // characters and its last one is the separator: trimming *before* the
+    // slice, which is how this read once, keeps that dash in the id.
+    const id = outboundNoteId("https://calendar.app.google/beratung-vorpommern-vorland/termin");
+    expect(id).toBe("outbound-note-calendar-app-google-beratung-vorpommern-vorland");
+    expect(id).not.toMatch(/-$/);
+  });
+
+  it("collides for two targets that agree on the first 48 characters — why `noteId` exists", () => {
+    const anfrage = outboundNoteId(
+      "https://calendar.app.google/beratung-vorpommern-greifswald/anfrage",
+    );
+    const termin = outboundNoteId(
+      "https://calendar.app.google/beratung-vorpommern-greifswald/termin",
+    );
+    expect(anfrage).toBe(termin);
+    // The documented escape hatch, and the reason a page with such a pair has
+    // to reach for it rather than trust the derivation (see `noteId`).
+    expect(anfrage).toBe("outbound-note-calendar-app-google-beratung-vorpommern-greifswa");
+  });
 });

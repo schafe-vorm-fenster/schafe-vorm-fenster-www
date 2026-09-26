@@ -58,8 +58,15 @@ test.describe("TS-WEB-0025: the order flow", () => {
         ),
         query,
       ).toHaveCount(1);
+
+      // A2's "no step loads a Google script, iframe or font": asked of **every**
+      // step, inside the loop. It stood after the loop closed once, which only
+      // ever measured the last query (review round, T-15).
+      await expect(
+        page.locator('script[src*="google"], iframe[src*="google"], link[href*="fonts.g"]'),
+        query,
+      ).toHaveCount(0);
     }
-    await expect(page.locator('script[src*="google"], iframe[src*="google"]')).toHaveCount(0);
   });
 
   test("TS-WEB-0025-A3: ticking places updates the visible chip list and its count each time", async ({
@@ -239,13 +246,16 @@ test.describe("TS-WEB-0025: the order flow", () => {
      * loads no external script at all, so there is nothing for this test to
      * block, and the `empty`/`degraded` branch that renders the fallback is
      * not reachable from the page: `state` is hard-coded `mocked` until the
-     * envoy widget is delivered (Q-0022, `state/open.md` row 7), and no
-     * toggle exists. What is asserted here is the shipped branch — the full
+     * envoy widget is delivered (Q-0022, `state/open.md` rows 7 and 266), and
+     * no toggle exists. Row 266 is the gap's home: it says which half of each
+     * A14 is discharged and what the browser half waits for. What is asserted here is the shipped branch — the full
      * form, no spinner, no empty slot — which is what the mock rule requires
      * meanwhile.
      *
      * The fallback's own markup, including the consult exit into this route's
-     * contact section that A14 and TS-WEB-0016-A14 name, is asserted in
+     * contact section that this spec's A14 and A14 of TS-WEB-0016 name (spelled
+     * out, because `check:specs` scans test files for bare ids and a comment
+     * would otherwise discharge a criterion no test asserts), is asserted in
      * `src/components/lead-fallback/lead-fallback.test.tsx`; the page passes
      * it `briefingHref`/`briefingLabel` at `page.tsx`'s step-3 mount. The
      * browser walk of the degraded state arrives with the widget.

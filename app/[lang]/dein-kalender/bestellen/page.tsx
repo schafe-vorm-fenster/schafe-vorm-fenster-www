@@ -23,6 +23,7 @@ import { pageContent } from "../../_content";
 import { localeFrom, pageMetadataFor } from "../../_locale";
 import { resolveRegisterPlace } from "../../mitmachen/registrieren/resolve-place";
 
+import { consultExitHref, consultExitQuery } from "./consult-exit";
 import { pageMeta } from "./page.meta";
 import { addPlace, parseOrte, removePlace, resolveOrderStep } from "./steps";
 
@@ -231,15 +232,14 @@ export default async function Page({
   const briefingLabel = fieldAt(briefingSlot.blocks, 0) ?? "";
   /**
    * This route's contact section as an in-page target, with the flow's own
-   * scope and step in the query (D8). The consult exit below and step 3's
-   * lead fallback both point at it, so the fallback stands on its own
-   * wherever it renders (TS-WEB-0016-A14, TS-WEB-0025-A14).
+   * scope and step in the query (D8). The consult exit below and step 3's lead
+   * fallback both read it from the same builder, so the fallback stands on its
+   * own wherever it renders (A14 of TS-WEB-0016, A14 of TS-WEB-0025) and the
+   * two cannot drift apart. `consult-exit.test.ts` holds the builder and
+   * asserts this page passes it to both.
    */
-  const briefingHref = linkHref(ROUTE, {
-    locale,
-    query: { orte: orteRaw, kreis: hasCounty ? KREIS_ID : undefined, schritt: step },
-    hash: CONTACT_SECTION_ID,
-  });
+  const consultScope = { orte: orteRaw, kreis: hasCounty ? KREIS_ID : undefined, step };
+  const briefingHref = consultExitHref(locale, consultScope);
   /*
    * TS-WEB-0025 D5 — the consult exit on all four steps, and **an in-page
    * target, not an outbound link**: it points at this route's contact section,
@@ -267,7 +267,7 @@ export default async function Page({
       dataCta="secondary"
       hash={CONTACT_SECTION_ID}
       locale={locale}
-      query={{ orte: orteRaw, kreis: hasCounty ? KREIS_ID : undefined, schritt: step }}
+      query={consultExitQuery(consultScope)}
       size="compact"
       to={ROUTE}
       variant="quiet"
@@ -400,7 +400,7 @@ export default async function Page({
                 control the visitor pressed (F-2-67). */}
             <EnvoyFormMount
               advanceHref={advanceHref}
-              // TS-WEB-0016-A14 / TS-WEB-0025-A14: the fallback's own third
+              // A14 of TS-WEB-0016 / A14 of TS-WEB-0025: the fallback's own third
               // line is the consult exit into this route's contact section,
               // so the degraded slot carries the booking way forward itself
               // rather than borrowing the step's exit below it. Same shape as
