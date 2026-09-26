@@ -204,6 +204,29 @@ change, and that is never an agent's.
 7. Never copy content or concept documents from `go-to-market-os` into this repository. Link to them.
 8. The specification carries the truth; a hub concept document is input and evidence (DEC-0104, `specs/README.md` rules 4–6). Where they disagree, the spec stands **and** the deviation is recorded — on the artefact and as a `DEM-####`. Never silently, and never by the source winning by default. The two local guides are specification-side and are the exception.
 
+## Working economically
+
+Re-reading the context is the dominant cost of agent work here, not searching and not generating.
+Measured over 69 sessions in September 2026: the context re-read cost about 4.5 times everything those
+sessions produced, because every turn re-reads the whole context
+(`leafcutter-os/spec/reports/token-cost-2026-09-25.md`, CORE-BUS-0038).
+
+Two habits follow, and they are the whole of it:
+
+1. **Issue independent tool calls together.** One request that reads four files costs one re-read of the
+   context; four requests cost four. In the measured sessions 88 % of tool requests carried exactly one
+   call, each paying an average of 329 k tokens to re-read what was already there. Batch whenever the
+   calls do not depend on each other's results — and do not batch when a later call needs an earlier
+   answer, because guessing costs more than the round trip saves.
+2. **Keep a session scoped, and delegate exploration.** Sessions that stayed below 500 k context
+   produced a written file for a median of 23 k fresh tokens; those above it needed 133 k. A subagent's
+   context dies with it, so a search that ends in one answer belongs in a subagent rather than in the
+   context of the session that has to keep working afterwards.
+
+What is *not* worth optimising, on the same measurement: a semantic index over the specification would
+address 0.005 % of the cost, de-duplicating repeated reads 1 to 11 reads per session, and capping tool
+output about 0.1 % of the bill. Do not spend effort there.
+
 ## Typical Tasks
 
 - write or refine a specification in `specs/` from a page brief

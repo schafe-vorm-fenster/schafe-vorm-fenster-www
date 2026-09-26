@@ -71,7 +71,7 @@ URL use 3100. `pnpm stop` frees it.
 
 | Command | What it does |
 | --- | --- |
-| `pnpm check` | the single gate: frontmatter · specs · stack · brand · typecheck · lint · tests |
+| `pnpm check` | the single gate: frontmatter · specs · locators · coverage · stack · brand · typecheck · lint · tests |
 | `pnpm test` | unit and integration tests (Vitest) |
 | `pnpm e2e` | end-to-end tests (Playwright), starting the dev server itself |
 | `pnpm build` | production build |
@@ -92,10 +92,19 @@ It currently runs, in order:
    status sets, the four tactical `kind` values and the source trust levels
    — are read out of `@leafcutter-strict/library-schemas` at startup rather
    than repeated in the script (DEC-0085 §4)
-3. `check:stack` — TS-WEB-0017-A1/A2/A7/A17: every runtime dependency registered
+3. `check:coverage` — TS-WEB-0017-A20/A21: every acceptance criterion against
+   the instrument its own level names. VERIFIED needs the id in a `describe`
+   or `test` **title**, not anywhere in the file: a mention in a comment is
+   `NAMED ONLY` and is not coverage. `tool` criteria are closed by a CI job,
+   `manual` ones by an unexpired row in
+   `specs/verification/manual-checks.md`. Two gates: a criterion new in the
+   commit must arrive with its instrument (no budget), and the open tally may
+   only fall — `specs/verification/coverage-budget.json` holds it, and a *fall*
+   fails too until the new number is written there (DEC-0141)
+4. `check:stack` — TS-WEB-0017-A1/A2/A7/A17: every runtime dependency registered
    in `stack.allow.json`, one lockfile, the brand package pinned exact, one
    icon set, and `.npmrc` mapping both the hub scope and the method scope
-4. `check:brand` — TS-WEB-0017-A4/A5/A6: no `max-width` media query, every
+5. `check:brand` — TS-WEB-0017-A4/A5/A6: no `max-width` media query, every
    `min-width` a breakpoint token, no colour or `font-family` literal
    outside `app/styles/brand.css`, no brand asset committed here
 5. `typecheck` · `lint` · `test`

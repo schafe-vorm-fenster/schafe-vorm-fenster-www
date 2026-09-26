@@ -53,13 +53,16 @@ images:
       village behind them.
     lcp: true
     licence: CC BY-SA 4.0
+    focal:
+      x: 42
+      "y": 62
     status: real
     file: /images/real/mitmachen-hero.webp
-    width: 800
-    height: 900
+    width: 680
+    height: 765
     wide_file: /images/real/mitmachen-hero-wide.webp
-    wide_width: 1400
-    wide_height: 600
+    wide_width: 1190
+    wide_height: 510
   - id: mitmachen-path-whatsapp
     slot: mitmachen-3-path-whatsapp
     ratio: feature
@@ -73,6 +76,9 @@ images:
       A bus stop against a fieldstone wall in Werbelow, two notices taped to the wall, a bench and
       flower pots in front.
     licence: CC0 1.0
+    focal:
+      x: 45
+      "y": 55
     status: real
     file: /images/real/mitmachen-path-whatsapp.webp
     width: 1400
@@ -90,6 +96,9 @@ images:
       The village meeting place in Schmatzin in the evening: a meadow with an old tree, a fire pit
       and a place to sit.
     licence: CC BY-SA 4.0
+    focal:
+      x: 45
+      "y": 58
     status: real
     file: /images/real/mitmachen-path-calendar.webp
     width: 1400
@@ -104,6 +113,9 @@ images:
       im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
     alt: A desk with a monitor, a laptop and papers in an attic office with historic timber beams.
     licence: Eigenaufnahme, unbeschränkte Nutzung
+    focal:
+      x: 40
+      "y": 55
     status: real
     file: /images/real/mitmachen-path-website.webp
     width: 1400

@@ -21,6 +21,7 @@ export interface EnvoyFormMountProps extends DataStateProps {
   /** The offering/goal context the real widget's attributes would carry (D2). */
   readonly context?: Readonly<Record<string, string>>;
   readonly fallbackEmail: string;
+  /** The page's contact section as an in-page target, `<route>#kontakt` (DEC-0081 §3). */
   readonly briefingHref?: string;
   readonly briefingLabel?: string;
   /**
@@ -114,6 +115,9 @@ export function EnvoyFormMount({
           briefingHref={briefingHref}
           briefingLabel={briefingLabel}
           email={fallbackEmail}
+          // F-2-4's root cause once more: the fallback's own three lines are
+          // dictionary strings now, and they need the page's language.
+          locale={locale}
         />
       </div>
     );

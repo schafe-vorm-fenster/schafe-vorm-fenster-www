@@ -2,19 +2,15 @@ import { Button } from "@/src/components/button/button";
 import { Chip } from "@/src/components/chip/chip";
 import { CodeSnippet } from "@/src/components/code-snippet/code-snippet";
 import { ContextBand } from "@/src/components/context-band/context-band";
-import {
-  ConversionTracker,
-  FireConversionOnMount,
-} from "@/src/components/conversion-tracker/conversion-tracker";
+import { CONTACT_SECTION_ID } from "@/src/components/contact-section/contact-section";
+import { FireConversionOnMount } from "@/src/components/conversion-tracker/conversion-tracker";
 import { EnvoyFormMount } from "@/src/components/envoy-form-mount/envoy-form-mount";
-import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { ScopePicker } from "@/src/components/scope-picker/scope-picker";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { StepIndicator } from "@/src/components/step-indicator/step-indicator";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
-import { BRIEFING_URL } from "@/src/lib/live/briefing";
 import { resolvePlace } from "@/src/lib/live/places";
 import { jobLabelKey } from "@/src/lib/pages/page-meta";
 import { readPlaceParameter } from "@/src/lib/pages/place-parameter";
@@ -27,6 +23,7 @@ import { pageContent } from "../../_content";
 import { localeFrom, pageMetadataFor } from "../../_locale";
 import { resolveRegisterPlace } from "../../mitmachen/registrieren/resolve-place";
 
+import { consultExitHref, consultExitQuery } from "./consult-exit";
 import { pageMeta } from "./page.meta";
 import { addPlace, parseOrte, removePlace, resolveOrderStep } from "./steps";
 
@@ -136,16 +133,6 @@ const PRICE_NOTE: Record<Locale, string> = {
   en: "The price does not change with your selection.",
 };
 
-/**
- * G-5 — the outbound disclosure leaves the control's label. The data half
- * belongs to the privacy statement `/dein-kalender` links, not to an exit in
- * a flow.
- */
-const BRIEFING_DISCLOSURE: Record<Locale, string> = {
-  de: "Öffnet Google Kalender in einem neuen Tab.",
-  en: "Opens Google Calendar in a new tab.",
-};
-
 /** The step-4 line that makes the flow read finished. */
 const DONE_NOTE: Record<Locale, string> = {
   de: "Die Bestellung ist aufgenommen.",
@@ -243,25 +230,50 @@ export default async function Page({
   });
 
   const briefingLabel = fieldAt(briefingSlot.blocks, 0) ?? "";
+  /**
+   * This route's contact section as an in-page target, with the flow's own
+   * scope and step in the query (D8). The consult exit below and step 3's lead
+   * fallback both read it from the same builder, so the fallback stands on its
+   * own wherever it renders (A14 of TS-WEB-0016, A14 of TS-WEB-0025) and the
+   * two cannot drift apart. `consult-exit.test.ts` holds the builder and
+   * asserts this page passes it to both.
+   */
+  const consultScope = { orte: orteRaw, kreis: hasCounty ? KREIS_ID : undefined, step };
+  const briefingHref = consultExitHref(locale, consultScope);
+  /*
+   * TS-WEB-0025 D5 — the consult exit on all four steps, and **an in-page
+   * target, not an outbound link**: it points at this route's contact section,
+   * which the chrome renders once below the flow (DEC-0081 §3,
+   * TS-WEB-0016-A5). The one outbound occurrence on the route is that
+   * section's first action row.
+   *
+   * It therefore carries no `ConversionTracker` — the exit emits nothing and
+   * `request-product-briefing` fires on the section's row with this route
+   * (TS-WEB-0025-A11, TS-WEB-0016 D12) — and no outbound marking, because
+   * nothing leaves the site.
+   *
+   * The scope and the step ride along in the query: the section stands on
+   * this same document, and a link that dropped them would take the visitor
+   * out of the flow she is in (D8, "the scope is in the URL").
+   *
+   * G-5 / D5: an exit, never a button. It was the only control on the screen
+   * that looked like an action, so the way out outranked the way on.
+   */
   const briefingExit = (
-    <ConversionTracker
-      attributes={{ route: ROUTE }}
-      goalId="request-product-briefing"
-      stage="handover"
+    // `size="compact"` — the 44 px control height (`--height-control`), not the
+    // primary's 56 px: the exit is the second rung, and at the default size it
+    // took the step's own advance button's box.
+    <Button
+      dataCta="secondary"
+      hash={CONTACT_SECTION_ID}
+      locale={locale}
+      query={consultExitQuery(consultScope)}
+      size="compact"
+      to={ROUTE}
+      variant="quiet"
     >
-      {/* G-5 / TS-WEB-0025 D5: an exit, never a button. It was the only
-          control on the screen that looked like an action, so the way out
-          outranked the way on. */}
-      <OutboundLink
-        disclosure={BRIEFING_DISCLOSURE[locale]}
-        href={BRIEFING_URL}
-        locale={locale}
-        newTab
-        variant="quiet"
-      >
-        {briefingLabel}
-      </OutboundLink>
-    </ConversionTracker>
+      {briefingLabel}
+    </Button>
   );
 
   // The id shape the CRM really issues, so the snippet a visitor copies in
@@ -388,6 +400,14 @@ export default async function Page({
                 control the visitor pressed (F-2-67). */}
             <EnvoyFormMount
               advanceHref={advanceHref}
+              // A14 of TS-WEB-0016 / A14 of TS-WEB-0025: the fallback's own third
+              // line is the consult exit into this route's contact section,
+              // so the degraded slot carries the booking way forward itself
+              // rather than borrowing the step's exit below it. Same shape as
+              // `/deine-region/angebot` — an in-page target, never a second
+              // occurrence of the appointment URL (A5).
+              briefingHref={briefingHref}
+              briefingLabel={briefingLabel}
               context={{ scope: orte.join(",") || KREIS_ID }}
               fallbackEmail={CONTACT_EMAIL}
               kind="order-invoice"

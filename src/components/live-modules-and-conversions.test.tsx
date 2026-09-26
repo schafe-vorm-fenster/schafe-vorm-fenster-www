@@ -263,10 +263,13 @@ describe("TS-WEB-0006 D11: response-promise renders nothing while the constant i
   });
 
   it("renders the given text once a process exists", () => {
-    // Not the promise itself — `check:terms` keeps that wording inside
-    // `response-promise/constant.ts` (TS-WEB-0026-A8).
-    const html = renderToStaticMarkup(<ResponsePromise text="Hier steht der Zusagesatz." />);
-    expect(html).toContain("Hier steht der Zusagesatz.");
+    // Not the real sentence: TS-WEB-0026-A8 keeps the response-time wording
+    // inside `src/components/response-promise/` and `pnpm check:terms` fails
+    // on it anywhere else — "whether it is a page, a demo surface or a test
+    // fixture" (`scripts/check-terms.ts`). What this asserts is that a given
+    // text renders, which any string proves.
+    const html = renderToStaticMarkup(<ResponsePromise text="Zugesagte Antwortzeit" />);
+    expect(html).toContain("Zugesagte Antwortzeit");
   });
 });
 

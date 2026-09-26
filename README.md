@@ -75,7 +75,7 @@ devDependencies and the register is for runtime dependencies.
 | --- | --- |
 | `pnpm dev` | development server on port 3100 |
 | `pnpm build` | production build |
-| `pnpm check` | **the single gate** — frontmatter · content · specs · stack · brand · csp · typecheck · lint · unit and integration tests. The pre-commit hook runs it on every commit, so it stays in the seconds (7.7 s measured at M3, `check:content` 0.3 s of it). A new check is added *to* it, never run beside it. |
+| `pnpm check` | **the single gate** — frontmatter · content · specs · locators · coverage · stack · brand · csp · typecheck · lint · unit and integration tests. The pre-commit hook runs it on every commit, so it stays in the seconds (7.7 s measured at M3, `check:content` 0.3 s of it). A new check is added *to* it, never run beside it. |
 | `pnpm test` | unit and integration tests (Vitest) |
 | `pnpm test:watch` | the same, watching |
 | `pnpm e2e` | end-to-end tests (Playwright); starts the dev server itself |
@@ -115,9 +115,14 @@ Protection with `VERCEL_AUTOMATION_BYPASS_SECRET` — the suite sends it as
 | `scripts/check-*.ts` | the static checks `pnpm check` runs |
 
 Unit tests sit beside the code as `*.test.ts`, integration tests as
-`*.integration.test.ts`. A test names the spec id it verifies in its
-`describe` title — `describe("TS-WEB-0015-A1: …")` — which is how
-`pnpm check:specs` reads coverage off the suite.
+`*.integration.test.ts`. A test names the spec id it verifies **in its
+`describe` or `test` title** — `describe("TS-WEB-0015-A1: …")`. The title is
+not a convention with a nice side effect: `pnpm check:coverage` reads coverage
+out of titles only, so an id in a comment is reported as `NAMED ONLY` and
+counts for nothing (DEC-0141, TS-WEB-0017 D6c). A criterion added in a commit
+must arrive with its instrument, and the count of open criteria may only fall —
+`specs/verification/coverage-budget.json` is the ratchet, `state/coverage.md`
+the report it writes.
 
 ### Rendering
 

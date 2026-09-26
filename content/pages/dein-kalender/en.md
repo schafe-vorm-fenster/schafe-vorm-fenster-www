@@ -58,6 +58,9 @@ images:
       3604×2229. Nachweis: content/legal/image-credits.md.
     alt: The municipal office of Uckerland in Lübbenow, a long building on the village street.
     licence: CC0 1.0
+    focal:
+      x: 45
+      "y": 55
     status: real
     file: /images/real/dein-kalender-hero.webp
     width: 800

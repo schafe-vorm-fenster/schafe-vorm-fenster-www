@@ -1,0 +1,9 @@
+{
+  "note": "The ratchet of `pnpm check:coverage` (DEC-0141). `max` is the worst tally this repository is allowed to have. A run worse than a number here fails; a run better than one fails too, asking for the number to be lowered in the same commit, so that a gain is recorded instead of left as budget to spend again. Raising a number is a governance change: it needs a decision record, and the record says which criteria were let go and why.",
+  "measured_at": "2026-09-26",
+  "measured_on": "the merge of next-2026 (the coverage gate DEC-0141, T-15, T-20) into the T-17 branch: MISSING fell 149 → 146 because T-17's copy-lint tests name TS-WEB-0006-A8, TS-WEB-0018-A7 and TS-WEB-0029-A15 in their titles. NAMED ONLY unchanged at 32",
+  "max": {
+    "NAMED ONLY": 32,
+    "MISSING": 146
+  }
+}

@@ -15,6 +15,7 @@ import { ChoiceGroup } from "./choice-group/choice-group";
 import { ClosingCta } from "./closing-cta/closing-cta";
 import { CodeSnippet } from "./code-snippet/code-snippet";
 import { ComparisonTable } from "./comparison-table/comparison-table";
+import { CONTACT_SECTION_ID } from "./contact-section/contact-section";
 import { ContextBand } from "./context-band/context-band";
 import { EmbedFrame } from "./embed-frame/embed-frame";
 import { EmptyProofSlot } from "./empty-proof-slot/empty-proof-slot";
@@ -53,6 +54,7 @@ import { ProofCard } from "./proof-card/proof-card";
 import { ProofStream } from "./proof-stream/proof-stream";
 import { PublishingPath } from "./publishing-path/publishing-path";
 import { ResponsePromise } from "./response-promise/response-promise";
+import { linkHref } from "./route-link/href";
 import { RouteLink } from "./route-link/route-link";
 import { SceneBlock } from "./scene-block/scene-block";
 import { ScopePicker } from "./scope-picker/scope-picker";
@@ -1218,7 +1220,11 @@ export const GALLERY: readonly GalleryEntry[] = [
     section: "2.5",
     demo: (
       <LeadFallback
-        briefingHref="https://calendar.google.com/calendar/appointments/example"
+        // T-15/DEC-0133: the third line is an in-page target now — the page's
+        // own contact section — not a second occurrence of the appointment URL.
+        // Built through the route facade, because `src/components/README.md`
+        // allows no path typed at a call site, not even in a demo.
+        briefingHref={linkHref("regionQuote", { hash: CONTACT_SECTION_ID })}
         briefingLabel="Termin für ein Kennenlerngespräch buchen"
         email="kontakt@schafe-vorm-fenster.de"
       />
@@ -1232,11 +1238,16 @@ export const GALLERY: readonly GalleryEntry[] = [
       <div className={styles.stack}>
         <p>Ohne bestätigten Prozess (Q-0022 C11 offen) — nichts wird gerendert:</p>
         <ResponsePromise text={null} />
+        {/* TS-WEB-0026-A8 (`pnpm check:terms`, green; T-17 wires it into the
+            `check` chain): the response-time wording lives in
+            `response-promise/constant.ts` and nowhere else — not even in a
+            gallery demo. The shape is what this entry shows; the sentence is
+            the constant's once C11 is answered. */}
         <p>Sobald ein Prozess steht, zur Ansicht:</p>
         {/* Not the promise itself: `check:terms` (TS-WEB-0026-A8) allows the
             response-time wording in `response-promise/constant.ts` and
             nowhere else, a gallery demo included. */}
-        <ResponsePromise text="Hier steht der bestätigte Zusagesatz." />
+        <ResponsePromise text="Beispielsatz" />
       </div>
     ),
   },
