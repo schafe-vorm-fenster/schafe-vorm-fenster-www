@@ -42,14 +42,17 @@ images:
     ratio: hero
     provenance: real
     source: >-
-      Wikimedia Commons, File:Rathebur, Dorfstraße.jpg —
-      https://commons.wikimedia.org/wiki/File:Rathebur,_Dorfstra%C3%9Fe.jpg — Eigenaufnahme von
-      Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Juni 2025, 4032×2585.
-      Nachweis: content/legal/image-credits.md.
+      Wikimedia Commons, File:Melkerschule Schlatkow.jpg —
+      https://commons.wikimedia.org/wiki/File:Melkerschule_Schlatkow.jpg — Eigenaufnahme (Jan-Henrik
+      Hempel, Commons-Konto „J2hcom", own work), September 2016, 5073×2817. Motivregel `/`: Dorf mit
+      Aktivität (SRC-0014 §Motiv pro Seite). Nachweis: content/legal/image-credits.md.
     alt: >-
-      A cobbled street through the village of Rathebur, houses to the left, a fieldstone wall and
-      old trees to the right.
-    licence: CC0 1.0
+      The half-timbered house of the Melkerschule in Schlatkow, with picnic benches, two parasols
+      and guests on the grass in front of it.
+    licence: CC BY-SA 4.0
+    focal:
+      x: 50
+      "y": 55
     status: real
     file: /images/real/home-hero.webp
     width: 800
@@ -70,6 +73,9 @@ images:
       The town hall of Gützkow in Western Pomerania, a white rendered building with a flight of
       steps onto the street.
     licence: CC BY-SA 2.5
+    focal:
+      x: 42
+      "y": 50
     status: real
     file: /images/real/home-scene-embed.webp
     width: 1400
@@ -86,6 +92,9 @@ images:
       Jan-Henrik Hempel standing in the open door of a brick building, the Schafe vorm Fenster
       roll-up banner beside him.
     licence: Eigenaufnahme, unbeschränkte Nutzung
+    focal:
+      x: 45
+      "y": 40
     status: real
     file: /images/real/home-scene-provenance.webp
     width: 1400

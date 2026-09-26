@@ -66,24 +66,34 @@ images:
       The sheep barn and the municipal yard in Schlatkow, a whitewashed shed at the edge of a
       meadow.
     licence: CC BY-SA 4.0
+    focal:
+      x: 38
+      "y": 58
     status: real
     file: /images/real/ueber-uns-hero.webp
-    width: 800
-    height: 900
+    width: 680
+    height: 765
     wide_file: /images/real/ueber-uns-hero-wide.webp
-    wide_width: 1400
-    wide_height: 600
+    wide_width: 980
+    wide_height: 420
   - id: ueber-uns-founder-portrait
     slot: ueber-uns-1-origin
     ratio: portrait
     provenance: real
     source: >-
-      @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2026-05-noerdaward2026-DSC09263-portrait.jpeg
-      — `license: free use, credit required`, `press_clearance: cleared`, 1826×1826. Binärdatei
-      liegt im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
-    alt: Jan-Henrik Hempel looking into the camera, the darkened hall behind him.
-    credit: "@rightvisionstudios & NØRD2026"
-    licence: "Freie Nutzung mit Namensnennung (Rechteinhaber: @rightvisionstudios & NØRD2026)"
+      @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2026-04-otcamp-neustrelitz-outdoor-session.jpeg
+      — `license: free use, credit advised`, `credit: openTransfer.de`, Fotograf: openTransfer.de
+      (Stiftung Bürgermut), openTransfer CAMP Zusammenhalt, Neustrelitz, April 2026, 1717×1717.
+      `press_clearance: cleared` steht im Personenprofil für alle vierzehn Assets. Binärdatei liegt
+      im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
+    alt: >-
+      Jan-Henrik Hempel sitting outdoors in a circle of chairs, a programme booklet in one hand, a
+      pen in the other, two vans parked behind him.
+    credit: openTransfer.de
+    licence: "Freie Nutzung, Namensnennung erbeten (Rechteinhaber: openTransfer.de / Stiftung Bürgermut)"
+    focal:
+      x: 48
+      "y": 45
     lcp: true
     status: real
     file: /images/real/ueber-uns-founder-portrait.webp
@@ -99,6 +109,9 @@ images:
       im Herkunftsblock, damit die Seite ein Porträt nicht zweimal zeigt.
     alt: Jan-Henrik Hempel explaining something with both hands raised, timber beams behind him.
     licence: Eigenaufnahme, unbeschränkte Nutzung
+    focal:
+      x: 55
+      "y": 38
     status: real
     file: /images/real/ueber-uns-team-jan-henrik-hempel.webp
     width: 1152
