@@ -71,7 +71,12 @@ export const CONVERSION_MAP: Readonly<
   "publish-first-event": ["register"],
   "buy-calendar-licence": ["calendar", "order"],
   "request-licence-quote": ["region"],
-  "request-product-briefing": ["calendar", "region", "order"],
+  // `/ueber-uns` joins the three the concept's map names: DEC-0081 §6 gave the
+  // trust surface a conversion of its own, and it is the briefing. The map in
+  // SRC-0003 predates that decision, so this entry is the decision's, recorded
+  // here rather than as a `MAP_DEVIATIONS` row — a deviation row says "the
+  // manifest and the map disagree", and they do not: the map is simply older.
+  "request-product-briefing": ["calendar", "region", "order", "about"],
 });
 
 /**
@@ -135,13 +140,25 @@ export const MAP_DEVIATIONS: Readonly<
 });
 
 /**
- * The four routes whose manifest declares no live module, each with the
+ * The five routes whose manifest declares no live module, each with the
  * determination that put it there. TS-WEB-0006 D1 sets a "≥ 1 live module" floor
- * that four per-page specs explicitly contradict for their own route
- * (state/open.md row 117); the contradiction is carried here as a named,
- * reasoned exception rather than resolved by weakening `checkPageMeta`.
+ * and names its own exemption for three **sender surfaces**; four per-page
+ * specs contradict the floor for their own route (state/open.md row 117). Both
+ * kinds are carried here as named, reasoned exceptions rather than resolved by
+ * weakening `checkPageMeta`.
+ *
+ * Two of the entries are of the second kind and **TS-WEB-0006-A1 does not admit
+ * them**: A1 permits the empty set "on exactly the three sender surfaces D1
+ * names (`/ueber-uns`, `/ueber-uns/archiv`, `/rechtliches`), and on no other
+ * route", while TS-WEB-0025 D1 (`order`) and TS-WEB-0026 D1/D2 (`regionQuote`)
+ * determine the empty set for their own routes. The conflict is recorded, not
+ * resolved: resolving it means amending A1 or amending two page specs, which is
+ * the spec owner's call (DEC-0132 §6, state/open.md).
  */
 export const NO_LIVE_MODULE: Readonly<Partial<Record<RouteId, string>>> = Object.freeze({
+  // The three sender surfaces of TS-WEB-0006 D1 / DEC-0084 §3.
+  about:
+    "TS-WEB-0027 D4 / DEC-0084 §3 — the counter module is deleted: the places figure has no upstream field (Q-0037) and the years figure is not live, so the only buildable module here is the static traction claim FUN-WEB-0041 forbids",
   order: "TS-WEB-0025 D1 — none in V1, the scope preview is deferred (D4)",
   regionQuote: "TS-WEB-0026 D1/D2 — the quote form only, no live-data module",
   archive: "TS-WEB-0028 D2/D8 — fully static from the build-time media-echo fetch",

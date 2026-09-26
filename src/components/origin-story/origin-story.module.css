@@ -1,7 +1,7 @@
 .story {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-4);
 }
 
 .headline {
@@ -36,6 +36,18 @@
   max-width: 320px;
 }
 
+/*
+ * The portrait shown at full width instead of packed into the text
+ * (review R-ueber-8). Below `lg` it runs out to the section's own gutter, so
+ * the photograph reaches the edge of the page without a second photo section
+ * being added (TS-WEB-0027-A2: exactly one photo section); from `lg` it simply
+ * fills its column.
+ */
+.bleed .portrait {
+  margin-inline: calc(-1 * var(--gutter));
+  max-width: none;
+}
+
 .proof {
   max-width: var(--measure-reading);
 }
@@ -44,5 +56,9 @@
 @media (min-width: 48rem) {
   .layout {
     grid-template-columns: 2fr 1fr;
+  }
+
+  .bleed .portrait {
+    margin-inline: 0;
   }
 }

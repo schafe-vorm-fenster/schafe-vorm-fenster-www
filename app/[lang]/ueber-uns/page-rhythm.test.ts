@@ -3,26 +3,37 @@ import { describe, expect, it } from "vitest";
 import { checkRhythm, type RhythmEntry } from "@/src/components/section-shell/rhythm";
 
 /**
- * TS-WEB-0027 / SRC-0014 §Page Rhythm. `PageFrame`'s `merged` closing mode
- * (`primaryConversion: null`, TS-WEB-0006 D6) appends a single `paper` section:
- * band and closing block are the same three jobs, so they render once, as
- * one block — the `aside#context-band` with block 4's `#closing-cta` anchor
- * inside it (`app/[lang]/_page-frame.tsx`, F-2-41). One section either way,
- * so the rhythm is unchanged by that fix.
+ * TS-WEB-0027-A2 / SRC-0014 §Page Rhythm — the page's full section sequence, own
+ * blocks plus the two `PageFrame` appends.
+ *
+ * Since DEC-0081 §6 the page has a conversion of its own, so `PageFrame` renders
+ * the band (`surface`) and the closing CTA (`paper`) as two sections instead of
+ * the merged three-job block. The counter section is gone (D4), and the archive
+ * link stands in a tight block of its own (D6, D2 block 3). The newsletter is
+ * not in the list because it does not render while no sending system is named
+ * (TS-WEB-0016-A21, DEC-0122 §3); the contact section is never a rhythm entry
+ * (SRC-0014, DEC-0117).
+ *
+ * The list is declared, not read off the render, so it can drift from
+ * `page.tsx`. Its counterpart in `e2e/pages/ueber-uns.spec.ts` (A2) reads the
+ * `data-surface` sequence off the served DOM, so a composition change this file
+ * did not follow fails there.
  */
-describe("TS-WEB-0027: /ueber-uns page rhythm", () => {
-  it("has no rhythm violation, exactly one photo section, one merged closing block", () => {
+describe("TS-WEB-0027-A2: /ueber-uns page rhythm", () => {
+  it("has no rhythm violation and exactly one photo section", () => {
     const sections: RhythmEntry[] = [
-      "photo", // 1 hero — the h1 on the photograph
-      "paper", // 2 the causal chain, portrait and honorary-mayor proof
-      "lime-100", // 3 where this comes from (the origin story, brief item 2)
-      "paper", // 4 operating counters
-      "surface", // 5 proof stream + the archive link (brief item 5)
-      "lime-100", // 6 team
-      "paper", // 7 newsletter
-      "paper", // PageFrame merged closing block
+      "photo", // 1a hero — the h1 on the photograph
+      "paper", // 1b the village argument, the portrait, the honorary-mayor proof
+      "lime-100", // 1c the story, the anecdotes, the founder quote
+      "surface", // 2 proof stream
+      "paper", // 3 the archive link, tight
+      "lime-100", // 4 team
+      "surface", // PageFrame: context band
+      "paper", // PageFrame: closing CTA — the page's one primary
     ];
     expect(checkRhythm(sections)).toEqual([]);
     expect(sections.filter((section) => section === "photo")).toHaveLength(1);
+    // D4: no dark ink section here either — this page carries no live module.
+    expect(sections.filter((section) => section === "ink")).toHaveLength(0);
   });
 });

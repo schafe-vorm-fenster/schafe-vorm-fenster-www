@@ -66,15 +66,12 @@ const BRIEFING_HREF_REPOINTED_BY: Readonly<Partial<Record<RouteId, string>>> = {
 // mocked state the route ships carries none — so the uniqueness half already
 // holds there.
 
-/**
- * `/ueber-uns` renders the inline newsletter form until T-14 gates it behind
- * `NEWSLETTER_SENDING_SYSTEM` (TS-WEB-0016-A21, the T-14 half of DEC-0122);
- * its `form` carries no `method`, so the "no form" assertion fails there
- * until then.
+/*
+ * The `INLINE_NEWSLETTER_GATED_BY` exemption that stood here is gone:
+ * `/ueber-uns` reads `newsletterOffered()` on its own page since T-14, so no
+ * route renders a submitting form outside the two lead routes (DEC-0122 §5,
+ * DEC-0132 §5).
  */
-const INLINE_NEWSLETTER_GATED_BY: Readonly<Partial<Record<RouteId, string>>> = {
-  about: "T-14",
-};
 
 /**
  * The two mid-flow routes carry no closing block at all: TS-WEB-0023 D7 and
@@ -250,11 +247,6 @@ for (const { route, locale } of everyRoute()) {
     test("TS-WEB-0006-A17: no general contact form — no envoy mount, no submitting form, outside the two lead routes", async ({
       page,
     }) => {
-      const owner = INLINE_NEWSLETTER_GATED_BY[route];
-      test.fail(
-        owner !== undefined,
-        `${path} renders the inline newsletter form until ${owner} gates it (TS-WEB-0016-A21)`,
-      );
       await page.goto(path);
       if (ENVOY_ROUTES.has(route)) {
         // The quote form, and nothing but envoy forms.
