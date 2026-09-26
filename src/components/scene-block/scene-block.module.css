@@ -20,10 +20,41 @@
   max-width: var(--measure-reading);
 }
 
+/* Opener and body are one reading unit; in `bleed` mode they share the
+   container the section gave up, which is why they need a wrapper at all. */
+.lede {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* D7 item 2, where a component renders the mechanism (DEC-0110 §1). It sits
+   between the opener and the instance and declares no ground of its own. */
+.module {
+  margin-top: var(--space-2);
+}
+
 .instance {
   margin-top: var(--space-2);
 }
 
 .cta {
   margin-top: var(--space-2);
+}
+
+/*
+ * The full-bleed instance — SRC-0014 §"Section grounds carry rhythm, not
+ * meaning": a photograph framed by the section's 16 px padding turns into a
+ * picture in a mount. The section is rendered `contained={false}` and the
+ * scene puts `.container` back around everything but the instance, so the
+ * image runs the section's whole width with no viewport arithmetic and no
+ * negative margins to undo.
+ */
+.bleeding {
+  gap: var(--space-4);
+}
+
+.bleed {
+  margin-top: var(--space-4);
+  width: 100%;
 }

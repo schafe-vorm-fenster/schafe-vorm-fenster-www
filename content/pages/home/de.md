@@ -102,7 +102,7 @@ und Zustände sind Layoutlogik, nicht Teil dieser Datei. Platzhalter in
 
 <!-- id: home-1-search-hero; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Headline:** Was ist bei dir los?
+**Headline:** Was wann wo in deinem Ort los ist.
 
 **Sucheingabe (Placeholder):** Dein Ort
 
@@ -119,6 +119,14 @@ und Zustände sind Layoutlogik, nicht Teil dieser Datei. Platzhalter in
 **Headline:** Das ist los in {place}
 
 **CTA-Label (primär):** Kalender von {place} öffnen
+
+**Überleitungszeile unter den Terminen:** Fehlt deine Veranstaltung, jetzt selbst eintragen.
+
+Die Überleitungszeile ist Wortlaut des Reviews vom 2026-09-22 und die
+Übergabe dieses Blocks an den nächsten (CG-008): die Lücke in der Liste ist
+der Weg ins Veröffentlichen, kein Mangel, den die Seite verstecken müsste.
+Sie ist ein Satz, kein Link — die eine primäre CTA der Seite bleibt die
+Suche (TS-WEB-0006 D3).
 
 Ortsname und Termine sind Live-Daten (TS-WEB-0008 Position 1); die Headline ist
 ein Textbaustein mit benanntem Platzhalter, kein pro Ort erzeugter Satz
@@ -142,65 +150,118 @@ Lücke im eigenen Ort an, nicht die Lücke im System.
 
 <!-- id: home-4-scene-whatsapp; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
 
-**Aha-Frage:** Ein Foto vom Flyer per WhatsApp, und der Termin steht im Kalender?
-
-**Text:** Genau so. Du druckst den Flyer sowieso aus. Fotografierst ihn, schickst das Bild per WhatsApp an unsere Nummer, fertig: Der Termin erscheint in deinem Ort und in den Nachbarorten, ohne dass du ihn ein zweites Mal tippst.
+**Aha-Satz:** Ein Foto vom Flyer per WhatsApp, und der Termin steht im Kalender.
 
 **Kicker:** So kommen die Termine rein
 
-**Überleitung:** Die Termine oben tippt niemand bei uns ein. Sie kommen von den Leuten im Ort — meistens so:
+**Überleitung:** Die Termine oben tippt niemand bei uns ein. Sie kommen von den Vereinen, den Feuerwehren und allen, die hier im Ehrenamt etwas auf die Beine stellen — meistens so:
+
+**Titel des Erklärmoduls:** Flyer per WhatsApp
+
+**CTA-Label (sekundär):** Jetzt kostenlos anmelden
 
 Quelle: `relievers[0]` der Value Proposition „actors--community-calendar" —
 „send a photo of the printed flyer by WhatsApp and the date is created
-from it".
+from it". Der Aha-Satz ist derselbe Satz wie bisher, ohne Fragezeichen
+(CG-006, TS-WEB-0019-A6). Der Fließtext dieser Szene ist **entfallen**: das
+Erklärmodul darunter sagt in drei Zeilen, was er in zwei Sätzen sagte, und
+eine Zeile, die die vorige wiederholt, wird gestrichen, nicht abgeschwächt
+(CG-007, CG-016) — das Review nennt genau diese Ersetzung („Besser als so
+ein Text wäre eine Animation, die das abspielt"). Titel und CTA-Label sind
+der Wortlaut von `/mitmachen`
+(`content/pages/mitmachen/de.md`, Slot 3 und Slot 1): der Weg ist derselbe,
+und das Ziel dieser Szene ist die Seite, die den Job besitzt.
+
+### Slot 4a — Schrittzeilen und Bühnentexte der WhatsApp-Szene (Platzhalter)
+
+<!-- id: home-4a-scene-whatsapp-steps-demo; content_type: value-story; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Schritte:**
+
+1. Flyer fotografieren — Den ihr sowieso gedruckt habt.
+2. Per WhatsApp an uns schicken — Über „Teilen" direkt in unseren Chat.
+3. Termin steht im Kalender — In eurem Ort und drumherum.
+
+**Chat-Antwort (Zustand 2):** Danke! Der Termin steht im Kalender.
+
+**Chat-Uhrzeit (Zustand 2):** 14:06
+
+**Beispielzeilen (Zustand 3):**
+
+- Feuerwehrfest | Sa · 15:00 · Gerätehaus | social | Vereinsleben
+- Laternenumzug | Fr · 17:30 · Kirche | culture | Kultur
+- Dorfflohmarkt | So · 11:00 · Dorfplatz | social | Vereinsleben
+
+Dasselbe Erklärmodul wie Weg 01 auf `/mitmachen`, deshalb derselbe
+Platzhaltersatz: die drei Schrittzeilen stehen so im Entwurf
+„3-Schritte-erklären" vom 2026-09-23 (11.20.03) und bleiben bis zur
+Freigabe `provenance: generated`, `demo: true`, im Markup `data-demo="true"`
+(DEC-0068, DEC-0129, `state/open.md`). Die Beispielzeilen sind nur der
+Rückfall des Live-Panels in Zustand 3, wenn der Abruf weniger als drei
+Zeilen liefert; im Normalfall zeigt das Panel die echten Termine des
+Referenzortes.
 
 ## Szene 2 — Einbindung (Mechanismus: embed)
 
 <!-- id: home-5-scene-embed; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
 
-**Aha-Frage:** Ein eigener Kalender auf der eigenen Website, ohne eigenes System dahinter?
+**Aha-Satz:** Deine Termine auf deiner Webseite.
 
-**Text:** Deine Gemeinde bekommt ihre eigene Auswahl an Terminen, im eigenen Design, unter eigenem Namen, ohne dass bei euch jemand ein System pflegt. Die Akteure vor Ort tragen ihre Termine für sich selbst ein; euer Kalender ist nebenbei aktuell.
+**Text:** Der Kulturkalender für deine Gemeinde: Termine von allen Akteuren im Amtsgebiet, zu Kultur, Tourismus und Gemeindeleben. Zwei Zeilen einbinden, fertig.
 
-**Kicker:** Und wenn ihr sie selbst zeigen wollt
+**Kicker:** Ohne eigenes System
 
-**Überleitung:** Dieselben Termine, nur auf eurer eigenen Seite:
+**Überleitung:** Die Termine aus dem Ort stehen auch da, wo die Gemeinde sie zeigt:
+
+**CTA-Label (sekundär):** Kalender bestellen
 
 Quelle: Value Proposition „municipalities--portalize-calendar", Felder
 `gains`/`relievers` — „our own design and our own selection, without our
-own system".
+own system". Der Aha-Satz ist Wortlaut des Reviews vom 2026-09-22
+(„Deine Termine auf deiner Webseite"), das Beispiel „Der Kulturkalender
+für deine Gemeinde … von allen Akteuren im Gemeinde-/Amtsgebiet, Kultur,
+Tourismus, Gemeindeleben" ebenfalls; „Zwei Zeilen einbinden, fertig"
+ebenfalls. Das CTA-Label ist das Primärlabel der Zielseite
+(`content/pages/dein-kalender/de.md`, Slot 1).
 
 ## Szene 3 — Herkunft (Mechanismus: provenance)
 
 <!-- id: home-6-scene-provenance; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"]; status: draft -->
 
-**Aha-Frage:** Wer steckt eigentlich dahinter?
+**Aha-Satz:** Unsere Orte selbst gestalten.
 
-**Text:** Jan-Henrik Hempel war selbst ehrenamtlicher Bürgermeister. Der Name der Firma kommt von der Schafweide der Gemeinde vor dem eigenen Küchenfenster. Er kennt die Verwaltung, der der Dienst hilft, von innen.
+**Text:** Jan-Henrik Hempel war ehrenamtlicher Bürgermeister, ist Gemeindevertreter und hat den Kulturverein mitbegründet. Er kennt das Dorf von innen — als einer, der selbst mitmacht. Der Name Schafe vorm Fenster kommt von der Schafweide vor dem eigenen Küchenfenster.
 
-**Kicker:** Wo das herkommt
-
-**Überleitung:** Beides gibt es, weil jemand das Problem selbst hatte.
+**Überleitung:** Den Dorfkalender gibt es, weil jemand das Problem selbst hatte.
 
 Quelle: `founder-former-volunteer-mayor` (`usage_rights: cleared`) — belegt
-über Nordkurier 2019/2022 und das Zukunftswege-Ost-Porträt 2026.
+über Nordkurier 2019/2022 und das Zukunftswege-Ost-Porträt 2026. Die Breite
+der Rollen (Gemeindevertreter, Mitbegründer des Kulturvereins) und der
+Vorrang des Ehrenamts vor der Verwaltung sind Wortlaut des Reviews vom
+2026-09-22; „Unsere Orte selbst gestalten" und „Der Name Schafe vorm
+Fenster" ebenfalls. Dieser Slot trägt **keinen** Kicker: „Wo das herkommt"
+steht auf der Vermeidungsliste (CG-017, CG-040) und das Review nennt keinen
+Ersatz — die Überschrift trägt die Szene allein (Abweichung von
+Politur-Brief G-3, wie DEC-0120 §5 für `/ueber-uns`).
 
 ## Block 2b — Herkunfts-Stempel
 
 <!-- id: home-7-provenance-stamps; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"]; status: draft -->
 
-**Text:** Gebaut von jemandem, der das Amt kennt, dem der Dienst dient. Seit 2018 in Betrieb.
-
 **Link:** Mehr über uns → `/ueber-uns`
 
-Zweiter Halbsatz stützt sich auf `in-operation-since-2018` (`cleared`) —
-zitierfähig ist „seit 2018 in Betrieb", nicht „acht Jahre Vollbetrieb".
+Der Stempelsatz „Gebaut von jemandem, der das Amt kennt … Seit 2018 in
+Betrieb." ist entfallen: „gebaut" und „betrieben" über dieses Produkt
+stehen auf der Vermeidungsliste (CG-033, CG-040), und das Review streicht
+den Stempel. Was bleibt, ist der Weg zur Seite, die die Herkunft ausführt —
+das Label ist der Wortlaut dieses Slots und die eine sekundäre CTA der
+Herkunfts-Szene (TS-WEB-0019 D3a, DEC-0082 §4).
 
 ## Block 2c — Belegstrom (5 Elemente)
 
-<!-- clearance: pending — `lehre-lelender` und `volkshochschule-uecker-randow` stehen auf `usage_rights: unverified` (Q-0014), die drei media-echo-Einträge tragen gar kein `usage_rights` (Q-0045, state/open.md #1). Die geschützte Vorschau zeigt sie, der Härtungslauf vor dem Go-live klärt sie. `noerd-award-2026-smart-community` und `in-operation-since-2018` sind `cleared`. -->
+<!-- clearance: pending — `lehre-lelender`, `volkshochschule-uecker-randow` und `kulturlandbuero-broellin` stehen auf `usage_rights: unverified` (Q-0014), die drei media-echo-Einträge tragen gar kein `usage_rights` (Q-0045, state/open.md #1). Die geschützte Vorschau zeigt sie, der Härtungslauf vor dem Go-live klärt sie. `noerd-award-2026-smart-community` und `in-operation-since-2018` sind `cleared`. -->
 <!-- source_note: Stufe-0-Regel „weiteste Streuung, jüngste zuerst" aus gtm:concept/website-relevance-model.concept.md (Kontextmatrix, Zeile „Direkter Besuch, unbekannt"); Belegregel aus gtm:concept/website-communication-principles.concept.md §4. -->
-<!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2026-04-nord-award-nordkurier", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
+<!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
 
 **Kicker über dem Strom:** Auszeichnungen, Presse und Orte, die den Dorfkalender schon nutzen
 
@@ -212,20 +273,30 @@ Rahmensatz und den Kandidatensatz, aus dem gezogen wird — Pool:
 
 **Kandidaten (Stufe 0: weiteste Streuung, jüngste zuerst):**
 
-1. Die Gemeinde Lehre betreibt den Kalender für ihre 17 Orte unter eigenem Namen: LeLender. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen)
-2. NØRD Award 2026 in der Kategorie Smart Community, vergeben per öffentlicher Abstimmung aus 80 Bewerbungen. — NØRD digital convention, Rostock
-3. Dorfkalender für Digitalpreis nominiert, April 2026. — Nordkurier, Vorpommern-Greifswald
-4. Die Volkshochschule veröffentlicht ihr komplettes Kursprogramm über den Dorfkalender. — Volkshochschule Uecker-Randow, Pasewalk
-5. Seit 2018 in Betrieb, kein Pilot und kein Prototyp. — Presse- und Auftrittshistorie 2018 bis 2026, Vorpommern-Greifswald
+1. 17 Orte in und um Lehre, ein Kalender unter eigenem Namen: LeLender. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen)
+2. NØRD Award 2026 gewonnen, Kategorie Smart Community, Schirmherr Bitkom. — NØRD digital convention, Rostock
+3. Die Volkshochschulen bringen ihr Kursprogramm bis in die Dörfer. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
+4. Ein wertvoller Beitrag zur Sichtbarkeit im ländlichen Raum. — Kulturlandbüro Uecker-Randow, Schloss Bröllin
+5. Seit 2018 in Betrieb, kein Pilot und kein Prototyp. — Vorpommern-Greifswald
 
-Namen, Zahlen, Titel und Jahre stehen so in den Belegen: 17 Orte und der
-Name „LeLender" aus `lehre-lelender`, die 80 Bewerbungen und die
-Kategorie aus `noerd-award-2026-smart-community`, die Schlagzeile aus dem
-Nordkurier-Eintrag vom April 2026, das Kursprogramm aus
-`volkshochschule-uecker-randow`, das Betriebsjahr aus
-`in-operation-since-2018`. Zwei der fünf sind freigegeben, drei warten auf
-ihre Freigabe und laufen deshalb mit `clearance: pending`. Zitierfähig ist
-„seit 2018 in Betrieb", nicht „acht Jahre Vollbetrieb"
+Namen, Zahlen, Titel und Jahre stehen so in den Belegen: die 17 Orte, der
+Name „LeLender" und die Trägerschaft der Stiftung aus `lehre-lelender`, der
+Gewinn und die Bitkom-Schirmherrschaft aus
+`noerd-award-2026-smart-community`, das Kursprogramm aus
+`volkshochschule-uecker-randow`, der Satz des Kulturlandbüros aus
+`kulturlandbuero-broellin`, das Betriebsjahr aus `in-operation-since-2018`.
+Vier Korrekturen des Reviews vom 2026-09-22 stecken darin: die Stiftung
+verantwortet den LeLender, nicht die Gemeinde; der NØRD Award ist gewonnen
+und nicht nur beschickt; die Volkshochschulen heißen nach dem Landkreis und
+der Nutzen (Kurse auch im Dorf) gehört in den Satz; der Nordkurier-Eintrag
+zur Nominierung fällt weg, weil der Award dieselbe Sache stärker sagt. Die
+interne Meta-Zeile „Presse- und Auftrittshistorie 2018 bis 2026" ist
+ersatzlos gestrichen (CG-035); der fünfte Beleg trägt deshalb nur seinen
+Ort, und die Kontextzeile kommt aus Slot 12. Ein freigegebener Beleg für
+„Erfolg für Kunden" (Wolgaster Kulturgesellschaft, vom Review genannt)
+existiert im Hub nicht — `state/open.md`. Zwei der fünf sind freigegeben,
+drei warten auf ihre Freigabe und laufen mit `clearance: pending`.
+Zitierfähig ist „seit 2018 in Betrieb", nicht „acht Jahre Vollbetrieb"
 (Formulierungsgrenze des Belegs).
 
 ## Block 2d — Live-Zähler

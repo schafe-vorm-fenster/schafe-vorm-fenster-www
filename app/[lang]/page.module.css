@@ -1,0 +1,19 @@
+/*
+ * `/` only — what no other page composes (TS-WEB-0019). Everything the pages
+ * share stays in `_pages.module.css`.
+ */
+
+/*
+ * The live block's hand-off line (SRC-0017 CG-008). It stands under the
+ * counter on the `ink` section, at meta size: the list above it is the
+ * argument, this line is what to do about its gaps. `--ground-kicker` is the
+ * ground's own quiet label colour, published beside `--ground-link`, so the
+ * line reads on ink without naming a colour of its own.
+ */
+.handoff {
+  color: var(--ground-kicker);
+  font-size: var(--type-meta-size);
+  line-height: var(--leading-relaxed);
+  margin: 0;
+  max-width: var(--measure-reading);
+}
