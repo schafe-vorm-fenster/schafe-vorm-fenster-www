@@ -154,7 +154,7 @@ export interface CopyText {
  * list or table under an intro paragraph), plus the three paragraphs of
  * `/dein-kalender` that the page reads by index — `dein-kalender-3-embed-demo`
  * paragraph 0 and `dein-kalender-3b-embed-config` paragraphs 0 and 1
- * (`app/[lang]/dein-kalender/page.tsx:431`, `:466`, `:489`) — in both
+ * (`app/[lang]/dein-kalender/page.tsx:414`, `:449`, `:472`) — in both
  * locales.
  */
 export function copyOf(page: PageContent): CopyText[] {
@@ -554,7 +554,7 @@ export const RENDERED_BLOCKS: readonly {
     slot: "dein-kalender-5-proof-demo",
     kind: "list",
     index: "all",
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:302 (listItems, every list)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:285 (listItems, every list)",
   },
   {
     slot: "archiv-2-rows-demo",
@@ -567,19 +567,19 @@ export const RENDERED_BLOCKS: readonly {
     slot: "dein-kalender-3-embed-demo",
     kind: "paragraph",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:210 (rendered at :431)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:193 (rendered at :414)",
   },
   {
     slot: "dein-kalender-3b-embed-config",
     kind: "paragraph",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:214 (rendered at :466)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:197 (rendered at :449)",
   },
   {
     slot: "dein-kalender-3b-embed-config",
     kind: "paragraph",
     index: 1,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:214 (rendered at :489)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:197 (rendered at :472)",
   },
   // — the render sites QA round 4 found missing: every other slot a page
   //   reads by index or by kind (`validate.test.ts` proves the list is
@@ -660,7 +660,7 @@ export const RENDERED_BLOCKS: readonly {
     slot: "dein-kalender-2-contrast",
     kind: "table",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:234 (rows; head at :235)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:217 (rows; head at :218)",
   },
   {
     slot: "dein-kalender-3b-embed-config",

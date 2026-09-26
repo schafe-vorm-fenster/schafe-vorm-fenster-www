@@ -414,7 +414,7 @@ weakens the claim, but is never replaced by invented text.
 **Candidates (three, all publishing for themselves):**
 
 1. The foundation runs the calendar for 17 places in and around Lehre under its own name: LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony)
-2. The adult education centres publish their course programme through the village calendar — the courses matter as much in the villages as in the towns. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
+2. The adult education centres publish their course programme in the village calendar — just as relevant in the villages as in town. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
 3. "The network's newsletter collects its dates through the village calendar." — Zukunftswege Ost-Vorpommern, Ost-Vorpommern
 
 Three real organizations publishing for themselves, which is exactly this
@@ -437,10 +437,19 @@ both stand above the wording of the records (DEC-0104, DEC-0143 §5):
 - Card 2 is called **"Volkshochschulen in Vorpommern-Greifswald"** and
   carries the benefit the review names with it: "Sie wollen ihre
   Kursangebote nicht nur in den Städten sondern auch in den Dörfern
-  kommunizieren und da sind die Angebote ja genauso relevant" (line 109).
-  The first half is the record's own `claim:`, the second is the review's
-  benefit statement; the record carries neither the county-wide name nor
-  the benefit. The same correction stands on `/` in a shorter form
+  kommunizieren und da sind die Angebote ja genauso relevant" (line
+  109). **Both halves are authored, neither is quoted:** the first
+  summarises the record's `evidence:` (the Pasewalk course programme
+  appearing in the village calendars), the second restates the review's
+  benefit. The record's `claim:` reads "Eine Bildungsinstitution nutzt den Dorfkalender
+  produktiv als Verbreitungskanal für ihr komplettes Kursprogramm." and
+  shares no sentence with the card; the record carries neither the
+  county-wide name nor the benefit either. Card 1 is authored for the same
+  reason and is not quoted — it stands on `lehre-lelender`'s `evidence:`
+  and on line 103. Neither line is marked `demo` (both institutions and
+  both records are real, and a `demo` flag would claim the opposite), so
+  both go to the owner as `state/open.md` row 281, in the shape row 279
+  takes for the heading. The same correction stands on `/` in a shorter form
   (`content/pages/home/en.md`, candidate 3), so that no two pages carry
   the same sentence (DEC-0143 §6). The other half of the benefit —
   "offer more courses in the villages on the ground" — is on no card: that

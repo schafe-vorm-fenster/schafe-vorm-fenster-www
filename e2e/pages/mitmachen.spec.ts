@@ -468,9 +468,11 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
 
     await expect(block.getByText("Volkshochschulen in Vorpommern-Greifswald")).toBeVisible();
     await expect(block.getByText("Volkshochschule Uecker-Randow")).toHaveCount(0);
-    // The benefit, not just the name: courses in the villages too, and more
-    // of them on the ground.
-    await expect(block.getByText(/in den Dörfern genauso relevant wie in den Städten/)).toBeVisible();
+    // The benefit, not just the name: courses are as relevant in the villages
+    // as in town (review line 109). The clause was shortened towards CG-027's
+    // claim budget in T-18's fix round (state/open.md row 282), which is why the
+    // regex reads "in der Stadt" rather than "in den Städten".
+    await expect(block.getByText(/in den Dörfern genauso relevant wie in der Stadt/)).toBeVisible();
   });
 
   /**

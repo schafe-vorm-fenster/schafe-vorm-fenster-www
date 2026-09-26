@@ -19,9 +19,9 @@ sources:
   - "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"
   - "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"
-  - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
-  - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
+  - "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022"
+  - "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"
   - "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"
   - "ia"
 derived_from:
@@ -29,21 +29,21 @@ derived_from:
   - "@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"
   - "@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"
-  - "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis"
-  - "@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
+  - "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022"
+  - "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"
   - "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"
   - "ia"
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "mixed — 6 sourced (slot 6 now carries three real proof elements, two of them clearance-pending), 1 withheld (slot 7 response-time promise, no named handling process, TS-WEB-0026 D5), 0 generated demo additions; EN translation of content/pages/deine-region/de.md, same source ids per slot"
+provenance: "mixed — 6 sourced (slot 6 now carries three real proof elements, all three clearance-pending), 1 withheld (slot 7 response-time promise, no named handling process, TS-WEB-0026 D5), 0 generated demo additions; EN translation of content/pages/deine-region/de.md, same source ids per slot"
 compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0026"
 schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
   - "state/open.md #20 — the two-working-day response promise is withheld entirely (constant null), no named process/owner yet (Q-0022/C11). Re-checked 2026-09-12 against go-to-market-os: no handling process with a named owner exists anywhere in the hub, so the slot stays withheld"
-  - "Clearance pending — slot 6 uses `eichler-wasserschloss-quilow` and `lehre-lelender`, both `usage_rights: unverified` (Q-0014). Protected preview only; go-live needs written clearance per element. `impftermine-landkreis` is `cleared`"
-  - "Pool extension — TS-WEB-0026 row 6 in state/content-map.md named only `portalize-enterprise.proof[]` (eichler-wasserschloss-quilow, partner-network). `partner-network` has no named partner list and no cleared logos, so it is replaced here by two real territory-scale cases (impftermine-landkreis, lehre-lelender). Neither is a delivered `portalize-enterprise` territory and the slot says so"
+  - "Clearance pending — slot 6 uses `lehre-lelender`, `leader-foerderung-2022` and `kurzweg-baeckerei`, all three `usage_rights: unverified` (Q-0014). Protected preview only; go-live needs written clearance per element. This page carries no `cleared` proof element any more: `impftermine-landkreis` (`cleared`) and `eichler-wasserschloss-quilow` left the pool on 2026-09-26 so that no two pages carry the same sentence (DEC-0143 §6). Registered in state/open.md rows 160 and 179"
+  - "Pool extension — TS-WEB-0026 row 6 in state/content-map.md named only `portalize-enterprise.proof[]` (eichler-wasserschloss-quilow, partner-network). `partner-network` has no named partner list and no cleared logos, so it is replaced here by three real elements from the full proof set (lehre-lelender, leader-foerderung-2022, kurzweg-baeckerei). None of them is a delivered `portalize-enterprise` territory and the slot says so"
 images:
   - id: deine-region-hero
     slot: deine-region-1-focus

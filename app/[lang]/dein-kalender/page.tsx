@@ -32,7 +32,7 @@ import { pageTitle } from "@/src/lib/routes/metadata";
 
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
-import { parseProofLine, proofHeading, selectProof } from "../_proof";
+import { parseProofLine, proofHeading, quoteAuthor, selectProof, selectedProofKind } from "../_proof";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
@@ -152,23 +152,6 @@ const BRIEFING_LABEL: Record<Locale, string> = {
   de: "Beratungstermin buchen",
   en: "Book a briefing",
 };
-
-/**
- * The role and the organisation a `quote-card` needs under the name, read off
- * the authored attribution — "Bürgermeister in Rubkow, Gemeinde Rubkow" splits
- * at its last comma. `null` where it does not split, because the design system
- * is explicit that both are required: "a name without a role and an
- * organisation is not a proof" (SRC-0014 §Quote card). An element that cannot
- * supply the pair stays a `proof-card`. DEC-0143 §3.
- */
-function quoteAuthor(attribution: string): { role: string; organisation: string } | null {
-  const comma = attribution.lastIndexOf(", ");
-  if (comma === -1) return null;
-  const role = attribution.slice(0, comma).trim();
-  const organisation = attribution.slice(comma + 2).trim();
-  if (role === "" || organisation === "") return null;
-  return { role, organisation };
-}
 
 /** Fallback context line — used only where a quote's own attribution carries
  * no organisation name to show instead (`parseDemoProofElement`). */
@@ -585,8 +568,8 @@ export default async function Page({
             section proves, out of the one place that decides it; the kicker
             above it names the section's role, so the two do not repeat each
             other (DEC-0143 §2). */}
-        <h2 id="proof-heading">{proofHeading("customer", locale)}</h2>
-        <ProofStream label={proofHeading("customer", locale)} layout="rows">
+        <h2 id="proof-heading">{proofHeading(selectedProofKind(proofSelection), locale)}</h2>
+        <ProofStream label={proofHeading(selectedProofKind(proofSelection), locale)} layout="rows">
           {proofSelection.entries.map((entry, position) => {
             if (entry.kind === "empty") return <EmptyProofSlot key={`empty-${position}`} />;
 

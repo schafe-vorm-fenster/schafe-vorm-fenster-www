@@ -68,8 +68,10 @@ export interface ProofCandidate {
   /**
    * Whose voice this is — `customer` or `press` (`ProofKind` below). Carried
    * through untouched: the engine does not score on it, and the page reads it
-   * back off the selected candidate to head its section and, where a citation
-   * exists, to decide whether the element is a quote or a claim. DEC-0143 §1.
+   * back off the selection through `selectedProofKind` to head its section.
+   * It decides nothing else — whether an element renders as a quote or as a
+   * claim is `citation` plus the attribution's shape, not the kind.
+   * DEC-0143 §1.
    */
   readonly proofKind?: ProofKind;
   /**
@@ -242,6 +244,27 @@ export function proofHeading(kind: ProofKind, locale: Locale): string {
 }
 
 /**
+ * The kind a proof section is headed by: the facet of the first element the
+ * engine selected, `customer` where the selection is empty or the artifact
+ * carries no facet.
+ *
+ * This is what makes `ProofCandidate.proofKind` a read field rather than a
+ * decorative one. The alternative — a literal typed at each `proofHeading`
+ * call — is exactly the duplication DEC-0143 §2 removes: the pool decides its
+ * own heading, so exchanging an element for a press one re-heads the section
+ * with no page edit. The first selected element decides, because the surface
+ * mixes kinds and the engine's order is the page's order; a fully empty slot
+ * keeps the customer heading, which is what the empty state is about
+ * (TS-WEB-0027 D5).
+ */
+export function selectedProofKind(selection: ProofSelection): ProofKind {
+  for (const entry of selection.entries) {
+    if (entry.kind === "item") return entry.candidate.proofKind ?? "customer";
+  }
+  return "customer";
+}
+
+/**
  * A proof element's source: the concrete publication or article, and the link
  * to it.
  *
@@ -286,4 +309,30 @@ export function parseProofLine(line: string): ProofLine {
     line: line.slice(0, match.index).trim(),
     citation: { label: match[1].trim(), url: match[2] },
   };
+}
+
+/**
+ * The role and the organisation a `quote-card` needs under the name, read off
+ * the authored attribution — "Bürgermeister in Rubkow, Gemeinde Rubkow" splits
+ * at its last comma. `null` where it does not split, because the design system
+ * is explicit that both are required: "a name without a role and an
+ * organisation is not a proof" (SRC-0014 §Quote card). An element that cannot
+ * supply the pair stays a `proof-card`.
+ *
+ * This is the **second** condition of the quote path, and it is why a citation
+ * on its own changes nothing: `parseDemoProofElement` splits the attribution
+ * part at its *first* `, `, so "Holger Wendt, Bürgermeister in Rubkow" leaves
+ * the role alone in `attribution` and this function returns `null`. A line
+ * reaches a quote card only written as
+ * `„…" — <Name>, <Rolle>, <Organisation> — [<Publikation>](https://…)`.
+ * Lives here rather than in the page so both conditions are testable in one
+ * place. DEC-0143 §3, `state/open.md` row 280.
+ */
+export function quoteAuthor(attribution: string): { role: string; organisation: string } | null {
+  const comma = attribution.lastIndexOf(", ");
+  if (comma === -1) return null;
+  const role = attribution.slice(0, comma).trim();
+  const organisation = attribution.slice(comma + 2).trim();
+  if (role === "" || organisation === "") return null;
+  return { role, organisation };
 }

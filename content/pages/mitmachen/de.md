@@ -417,7 +417,7 @@ schwächt den Anspruch, wird aber nie durch erfundenen Text ersetzt.
 **Kandidaten (drei, alle veröffentlichen selbst):**
 
 1. Die Stiftung betreibt den Kalender für 17 Orte in und um Lehre unter eigenem Namen: LeLender. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen)
-2. Die Volkshochschulen veröffentlichen ihr Kursprogramm über den Dorfkalender — die Angebote sind in den Dörfern genauso relevant wie in den Städten. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
+2. Die Volkshochschulen veröffentlichen ihr Kursprogramm im Dorfkalender — in den Dörfern genauso relevant wie in der Stadt. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
 3. „Der Newsletter des Netzwerks sammelt seine Termine über den Dorfkalender." — Zukunftswege Ost-Vorpommern, Ost-Vorpommern
 
 Drei reale Einrichtungen, die selbst veröffentlichen — das ist genau der
@@ -441,9 +441,20 @@ DEC-0143 §5):
   trägt den Nutzen, den das Review dazu nennt: „Sie wollen ihre
   Kursangebote nicht nur in den Städten sondern auch in den Dörfern
   kommunizieren und da sind die Angebote ja genauso relevant" (Zeile
-  109). Der erste Halbsatz ist der `claim:` des Datensatzes, der zweite
-  ist die Nutzenaussage des Reviews; der Datensatz führt weder den Namen
-  nach Landkreis noch den Nutzen. Auf `/` steht dieselbe Korrektur in
+  109). **Beide Halbsätze sind formuliert, keiner ist zitiert:** der erste
+  fasst das `evidence:` des Datensatzes zusammen (das Kursprogramm am
+  Standort Pasewalk erscheint in den Dorfkalendern), der zweite gibt die
+  Nutzenaussage des Reviews wieder. Der `claim:` des Datensatzes lautet
+  „Eine Bildungsinstitution nutzt den Dorfkalender produktiv als
+  Verbreitungskanal für ihr komplettes Kursprogramm." und teilt mit der
+  Karte keinen Satz; den Namen nach Landkreis und den Nutzen führt der
+  Datensatz ebenfalls nicht. Karte 1 ist aus demselben Grund formuliert
+  und nicht zitiert — sie steht auf dem `evidence:` von `lehre-lelender`
+  und auf Zeile 103. Keine der beiden Zeilen ist `demo`-markiert (beide
+  Einrichtungen und beide Belege sind echt, eine `demo`-Flagge würde das
+  Gegenteil behaupten); beide liegen dem Owner deshalb als
+  `state/open.md` Zeile 281 zur Bestätigung vor, in der Form, die Zeile
+  279 für die Überschrift hat. Auf `/` steht dieselbe Korrektur in
   kürzerer Fassung (`content/pages/home/de.md`, Kandidat 3), damit keine
   zwei Seiten denselben Satz tragen (DEC-0143 §6). Die zweite Hälfte des
   Nutzens — „mehr Kurse in den Dörfern vor Ort anbieten" — steht auf

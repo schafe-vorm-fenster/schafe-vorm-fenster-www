@@ -28,7 +28,7 @@ import { dictionary } from "@/src/lib/i18n/dictionary";
 import { CountersIsland, RegionExamplesIsland } from "../_islands";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
-import { proofHeading, selectProof } from "../_proof";
+import { proofHeading, selectProof, selectedProofKind } from "../_proof";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
@@ -520,7 +520,7 @@ export default async function Page({
               press heading over a pool of customer proof, and CG-017 reserves
               that heading for press only (`website-copy-guide.md:516`,
               review line 462). DEC-0143 §2. */}
-          <h2 id="beleg">{proofHeading("customer", locale)}</h2>
+          <h2 id="beleg">{proofHeading(selectedProofKind(proofSelection), locale)}</h2>
           <ProofStream label={copy.proofLabel}>
             {proofSelection.entries.map((entry, position) =>
               entry.kind === "item" ? (

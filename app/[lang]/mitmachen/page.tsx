@@ -29,7 +29,7 @@ import { standardSources } from "@/src/lib/pricing/standard-sources";
 import { pageTitle } from "@/src/lib/routes/metadata";
 
 import { PlaceDatesIsland } from "../_islands";
-import { proofHeading, selectProof } from "../_proof";
+import { proofHeading, selectProof, selectedProofKind } from "../_proof";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { localeFrom, pageMetadataFor } from "../_locale";
@@ -554,14 +554,14 @@ export default async function Page({
             462: customer proof is one section, press and appearances are
             another). The heading now comes from what the section proves, out
             of the one place that decides it (DEC-0143 §2). */}
-        <h2 id="beleg-heading">{proofHeading("customer", locale)}</h2>
+        <h2 id="beleg-heading">{proofHeading(selectedProofKind(proofSelection), locale)}</h2>
         {/* G-7: one emphasis per stream. The first card opens it at sub-head
             size, the rest are hairline rows — three identical filled cards
             read as one block rather than as three institutions. No `geo`
             badge either: every card here already names its source in its
             own context line, and `BELEG` beside `Stiftung Lebendiges Lehre`
             is the same word twice. */}
-        <ProofStream label={proofHeading("customer", locale)} layout="rows">
+        <ProofStream label={proofHeading(selectedProofKind(proofSelection), locale)} layout="rows">
           {proofSelection.entries.map((entry, position) =>
             entry.kind === "item" ? (
               <ProofCard

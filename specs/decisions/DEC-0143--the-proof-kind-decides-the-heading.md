@@ -67,7 +67,14 @@ the facet is written where the pages are and not in the engine's types.
 ### §2 — The heading is read from the kind, in one place
 
 `proofHeading(kind, locale)` is the only thing that decides a proof section's
-heading. `press` reads `dictionary(locale).kickers.othersSay` — the site's own
+heading, and `selectedProofKind(selection)` is the only thing that decides which
+kind it is asked about: the facet of the first element the engine actually
+selected, `customer` where the slot is empty or the artifact names no facet. The
+first version of this change typed `proofHeading("customer", locale)` at each of
+the three call sites, which left `ProofCandidate.proofKind` written by three
+pages and read by none — a heading decided by a literal per page is the
+duplication this section claims to remove. With the facet read, exchanging a
+pool's first element for a press one re-heads the section with no page edit. `press` reads `dictionary(locale).kickers.othersSay` — the site's own
 vocabulary, unchanged. `customer` reads **"Wo es wirklich benutzt wird"** /
 "Where it is really in use".
 
@@ -102,8 +109,23 @@ without a role and an organisation is not a proof".
 **Today that means all three mayors render as `proof-card`s**, because no record
 carries a source URL. That is the honest outcome, not a deferral: the
 alternative — a quote card with no link, or a fabricated one — is the thing both
-rules forbid. The first quote that gets a cleared article renders as a quote with
-no change to the page.
+rules forbid.
+
+A citation on its own is **not** enough, and the phrase "the first quote that
+gets a cleared article renders as a quote" was wrong about today's three lines.
+`parseDemoProofElement` splits the attribution part at its *first* `, `, so
+"Holger Wendt, Bürgermeister in Rubkow" leaves the role standing alone and
+`quoteAuthor` returns `null`; the other two lines carry no comma at all. Adding a
+citation to any of the three therefore changes nothing on the page. Both halves
+have to be authored:
+
+    „…" — <Name>, <Rolle>, <Organisation> — [<Publikation>, „<Titel>"](https://…)
+
+Both conditions now live in `app/[lang]/_proof.ts` (`parseProofLine`,
+`quoteAuthor`) rather than one of them in the page, so the pair is unit-tested
+in one place — including the negative for today's shape and the positive for the
+one that reaches a quote card. `state/open.md` row 280 states the two-part
+condition rather than a citation alone.
 
 ### §4 — The one price on `/deine-region` is a token in the artifact and a node on the page
 
@@ -128,9 +150,25 @@ review corrects by name. The cards write **the Stiftung**, cite line 103 in the
 slot note, and are not marked `demo`: this is the specification standing over a
 source (`DEC-0104`), and it is the precedent `/` already set in T-11, where the
 same correction ships unmarked with the same citation. The same holds for the
-county-wide Volkshochschulen name and its benefit clause (line 109), where the
-card's first half is the record's `claim:` and the second half is the review's
-own "da sind die Angebote ja genauso relevant".
+county-wide Volkshochschulen name and its benefit clause (line 109) — with one
+difference that has to be said plainly, because the first version of this record
+said the opposite: **that card is authored throughout, not quoted.** Its first
+half is written from the record's `evidence:` (the Pasewalk course programme
+appearing in the village calendars), not from its `claim:`, which shares no
+sentence with the card; its second half restates the review's own "da sind die
+Angebote ja genauso relevant". `/mitmachen`'s first card is authored the same
+way, out of `lehre-lelender`'s `evidence:` and line 103.
+
+Neither is marked `demo`, and the task's `copy` instruction ("write it as a demo
+slot line if it cannot be quoted") is not followed to the letter for one reason:
+both cards name a **real, clearance-pending institution** and stand on real
+evidence, and `demo: true` in this repository means labelled dummy content
+(`validate.ts:112-133`). Flagging them would make a true card read as an
+invented one, and it would mark the two sibling cards in the same slot too. The
+placeholder convention's purpose — nothing unowned reaches the owner unseen — is
+served instead by `state/open.md` **row 281**, which asks him to confirm both
+lines, in the shape row 279 takes for the heading. If he would rather see them
+flagged, the flag and the row are both one edit.
 
 Two things are deliberately **not** written: the second half of the VHS benefit
 ("mehr Kurse in den Dörfern vor Ort anbieten") is an intention of theirs rather
@@ -156,11 +194,13 @@ duplicates.
 
 ## Consequences
 
-- `app/[lang]/_proof.ts` carries the kind, the heading and the citation parser;
-  `app/[lang]/_proof.test.ts` holds six cases over them.
+- `app/[lang]/_proof.ts` carries the kind, the heading, the citation parser and
+  the quote-author rule; `app/[lang]/_proof.test.ts` holds twelve cases over
+  them, including both halves of the quote condition.
 - `/deine-region`, `/dein-kalender` and `/mitmachen` read their proof heading
-  from `proofHeading("customer", locale)`. `/deine-region`'s `PAGE_COPY` loses
-  `proofHeading`, `/dein-kalender` loses `PROOF_LABEL`.
+  from `proofHeading(selectedProofKind(proofSelection), locale)`.
+  `/deine-region`'s `PAGE_COPY` loses `proofHeading`, `/dein-kalender` loses
+  `PROOF_LABEL` and its page-local `quoteAuthor`.
 - `src/components/price-tag/**` gains `inline` (+ one CSS class);
   `src/components/feature-benefit/**` widens `benefit`. Neither is another
   task's file.
@@ -169,9 +209,30 @@ duplicates.
   `e2e/pages/dein-kalender.spec.ts` gains the heading and the
   no-quote-card-without-a-source case; `e2e/pages/mitmachen.spec.ts` has its
   "Was andere sagen" assertion replaced and gains the attribution case.
-- `state/open.md` rows 279 and 280 carry the two things the owner decides: the
-  customer heading, and the missing source URLs that keep three quotes out of
-  quote cards.
+- `state/open.md` rows 279 to 282 carry what the owner decides: the customer
+  heading (279), the missing source URLs that keep three quotes out of quote
+  cards and the two-part condition a quote card needs (280), the two authored
+  proof lines on `/mitmachen` (281), and the `CG-027` claim budget the proof
+  pools stand over (282).
+- **Provenance bookkeeping follows the pool, in four places.** Exchanging two
+  elements on `/deine-region` (§6) is not finished when the cards change:
+  `sources:`/`derived_from:` in both locales name the three records actually
+  rendered (`TS-WEB-0007 D6`, "one entry per record actually used"), the
+  `provenance:` string and the clearance `open_points` say *three*
+  clearance-pending elements and that the page no longer carries a `cleared`
+  one, and the two clearance registers — `state/open.md` rows 160 and 179, and
+  `state/content-map.md`'s follow-up table — name `leader-foerderung-2022` and
+  `kurzweg-baeckerei`, because row 160 calls itself "the single place that rule
+  is recorded". A record that renders and appears in no register is a clearance
+  that the go-live sweep cannot see.
+- **`CG-027`'s claim budget is exceeded by four of the six cards in the two
+  pools, and that is registered rather than hidden** (row 282: 121 · 112 · 67 on
+  `/deine-region`, 93 · 121 · 73 on `/mitmachen`, against a budget of 70). The
+  two long `/deine-region` claims are verbatim record `claim:` strings and
+  shortening them would be rewriting a record, which §6 forbids; `/mitmachen`'s
+  authored VHS line was cut from 147 to 121 characters, as far as it goes while
+  still carrying the benefit the review asks for. Nothing lints the budget, so
+  `pnpm check` says nothing about it either way.
 - **Not done here, and named rather than done:** `TS-WEB-0005 D7`'s cross-page
   rotation and `D5/D6`'s partition on a proof class are hub- and
   spec-owner-side (spec-impact.md, theme B "Change"). Nothing in `specs/` was

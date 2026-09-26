@@ -1,8 +1,31 @@
 import { describe, expect, it } from "vitest";
 
-import { parseProofLine, proofHeading } from "./_proof";
+import {
+  parseProofLine,
+  proofHeading,
+  quoteAuthor,
+  selectedProofKind,
+  type ProofCandidate,
+  type ProofSelection,
+} from "./_proof";
 
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
+
+/** A candidate with only the fields these cases read. */
+function candidate(over: Partial<ProofCandidate>): ProofCandidate {
+  return {
+    id: "c",
+    contextLine: "Wer",
+    claim: "Ein Satz.",
+    attribution: "Wo",
+    demo: false,
+    ...over,
+  };
+}
+
+function selection(entries: ProofSelection["entries"]): ProofSelection {
+  return { entries, stage: 0, seed: "2026-W39", filled: entries.length };
+}
 
 /**
  * The two things the cross-page proof pool decides outside the relevance
@@ -29,6 +52,73 @@ describe("proofHeading", () => {
   it("reads the press heading from the site's own vocabulary, not from a page", () => {
     expect(proofHeading("press", "de")).toBe("Was andere sagen");
     expect(proofHeading("press", "en")).toBe("What others say");
+  });
+});
+
+describe("selectedProofKind", () => {
+  it("reads the facet off the first selected element, so the pool heads its own section", () => {
+    const press = selection([
+      { kind: "item", candidate: candidate({ proofKind: "press" }), state: "ready" },
+      { kind: "item", candidate: candidate({ proofKind: "customer" }), state: "ready" },
+    ]);
+    expect(selectedProofKind(press)).toBe("press");
+    expect(proofHeading(selectedProofKind(press), "de")).toBe("Was andere sagen");
+  });
+
+  it("skips the empty positions ahead of the first element", () => {
+    const mixed = selection([
+      { kind: "empty" },
+      { kind: "item", candidate: candidate({ proofKind: "press" }), state: "ready" },
+    ]);
+    expect(selectedProofKind(mixed)).toBe("press");
+  });
+
+  it("falls back to the customer kind for an empty slot and for a candidate carrying no facet", () => {
+    expect(selectedProofKind(selection([]))).toBe("customer");
+    expect(selectedProofKind(selection([{ kind: "empty" }]))).toBe("customer");
+    expect(
+      selectedProofKind(
+        selection([{ kind: "item", candidate: candidate({}), state: "ready" }]),
+      ),
+    ).toBe("customer");
+  });
+});
+
+describe("quoteAuthor", () => {
+  it("reads the role and the organisation off the attribution's last comma", () => {
+    expect(quoteAuthor("Bürgermeister in Rubkow, Gemeinde Rubkow")).toEqual({
+      role: "Bürgermeister in Rubkow",
+      organisation: "Gemeinde Rubkow",
+    });
+  });
+
+  it("refuses a name without both halves — CG-028 requires role and organisation", () => {
+    expect(quoteAuthor("Bürgermeister in Rubkow")).toBeNull();
+    expect(quoteAuthor("Wasserschloss Quilow")).toBeNull();
+    expect(quoteAuthor("Rolle, ")).toBeNull();
+  });
+
+  it("needs a citation *and* a role+organisation attribution before an element is a quote", () => {
+    // Today's authored shape: the attribution part splits at its first comma,
+    // so the role stands alone and the element stays a `proof-card` even with a
+    // citation. state/open.md row 280 says so; this is the negative half.
+    const authored = parseProofLine(
+      `„Die Termindaten senken den Aufwand." — Holger Wendt, Bürgermeister in Rubkow — [Nordkurier](https://example.org/a)`,
+    );
+    expect(authored.citation).toBeDefined();
+    expect(quoteAuthor(parseDemoProofElement(authored.line, "Rückmeldung").attribution)).toBeNull();
+
+    // The shape that does reach a quote card: name, role, organisation.
+    const quotable = parseProofLine(
+      `„Die Termindaten senken den Aufwand." — Holger Wendt, Bürgermeister, Gemeinde Rubkow — [Nordkurier](https://example.org/a)`,
+    );
+    const card = parseDemoProofElement(quotable.line, "Rückmeldung");
+    expect(card.contextLine).toBe("Holger Wendt");
+    expect(quotable.citation).toEqual({ label: "Nordkurier", url: "https://example.org/a" });
+    expect(quoteAuthor(card.attribution)).toEqual({
+      role: "Bürgermeister",
+      organisation: "Gemeinde Rubkow",
+    });
   });
 });
 
