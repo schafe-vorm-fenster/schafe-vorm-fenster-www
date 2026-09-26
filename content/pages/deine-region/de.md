@@ -151,9 +151,17 @@ vollständig übernommen, sobald die Bestätigung vorliegt.
 
 **Text:** Vierzig oder achtzig Orte redaktionell abzudecken ist keine größere Version von einem Ort. Das ist schlicht nicht machbar. Und die Verwaltungsgrenze ist nicht die Grenze, an der Menschen ihr Leben ausrichten: Was dreißig Kilometer entfernt passiert, interessiert genauso wie das, was direkt nebenan läuft.
 
+**Kicker:** Was ist in meiner Nähe?
+
 Quelle: `pains[]` von `counties--portalize-enterprise`. „Dreißig
 Kilometer" bleibt hier Frage der Besucherin, nie Beschriftung eines
-Moduls (TS-WEB-0026 D3).
+Moduls (TS-WEB-0026 D3). Die Frage der Besucherin stand bis zum
+26.09.2026 in der Überschrift und damit in einem Feld, in dem CG-005 kein
+Fragezeichen erlaubt. Sie steht jetzt im Kicker über dem Titel — die
+Teilung, die CG-005 selbst vorschreibt (concept/website-copy-guide.md,
+CG-005: Kicker trägt die Frage, der Titel die Aussage). Kein Wort ist
+neu, und der Titel behält seinen Bezug: ohne die Frage darüber hätte
+„keine Frage" keinen.
 
 ## Slot 3 — Interims-Modul: Beispiele, Zähler, Suche
 

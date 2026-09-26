@@ -539,6 +539,43 @@ Drei Abweichungen vom Entwurf, alle aus einer Quelle:
       ).toBe(true);
     }
   });
+
+  it("carries every avoid term of the guide's own two CG-040 tables", () => {
+    // The goal binds the row to "de and en tables, plus the glossary avoid
+    // column". The glossary test above covers the third source; these are the
+    // two tables of `concept/website-copy-guide.md` §9, so a row added there
+    // fails here instead of passing unnoticed.
+    const guide = readFileSync(
+      join(dirname(fileURLToPath(import.meta.url)), "../../../concept/website-copy-guide.md"),
+      "utf-8",
+    );
+    const section = guide.slice(guide.indexOf("### CG-040"), guide.indexOf("### CG-041"));
+    expect(section).toContain("The avoid list fails the build");
+    // `Portalize` is a count, not a hit (CG-038, `checkProductName`).
+    const notInThisList = new Set(["Portalize"]);
+    const inGuide = new Set<string>();
+    for (const line of section.split("\n")) {
+      if (!line.startsWith("|")) continue;
+      const avoid = line.replace(/^\|/, "").split("|")[0]?.trim();
+      if (!avoid || avoid === "Avoid" || /^-+$/.test(avoid)) continue;
+      for (const raw of avoid.split("·")) {
+        // The row's own scope note (*(as a title)*, *(about this product)*) is
+        // the scope, not part of the term: `AvoidScope` carries it.
+        const term = raw
+          .replace(/\*([^*]*)\*/g, "$1")
+          .replace(/\([^)]*\)/g, "")
+          .trim();
+        if (term && !notInThisList.has(term)) inGuide.add(term);
+      }
+    }
+    expect(inGuide.size).toBeGreaterThan(24);
+    for (const term of inGuide) {
+      expect(
+        AVOID_TERMS.some((entry) => entry.pattern.test(term)),
+        `the avoid list does not carry the guide's term "${term}"`,
+      ).toBe(true);
+    }
+  });
 });
 
 describe("TS-WEB-0006-A8 / D12 row 13: a section title is a statement (CG-005)", () => {
@@ -580,6 +617,23 @@ describe("TS-WEB-0006-A8 / D12 row 13: a section title is a statement (CG-005)",
 
   it("passes a quote's source title, which carries a title word and is not one", () => {
     expect(checkCopy(slotOf("**Zitat — Quelle (Titel):** Wer baut hier eigentlich?"))).toEqual([]);
+  });
+
+  it("asks for the label or the kicker split, never for the words to be dropped", () => {
+    // The quiet line under `/dein-ort/starten`'s closing CTA is the polish
+    // brief's own wording (page 3, fix 3) and its page renders it as a `<p>`.
+    // Read as a title it fails; the repair is the label, and the finding says
+    // so, because the first repair taken here was to cut the question.
+    const [finding] = checkCopy(slotOf("**Überschrift:** Falsch getippt? Nochmal suchen"));
+    expect(finding?.check).toBe("copy-structure");
+    expect(finding?.message).toContain("`Kicker` field");
+    expect(finding?.message).toContain("relabel it");
+    expect(finding?.message).toContain("Never drop the words");
+  });
+
+  it("passes the same words under the label the page's own render asks for", () => {
+    expect(checkCopy(slotOf("**Frage:** Falsch getippt? Nochmal suchen"))).toEqual([]);
+    expect(checkCopy(slotOf("**Question:** Mistyped? Search again"))).toEqual([]);
   });
 
   it("fails `Warum es hakt` as a title and passes it as a kicker (CG-005)", () => {

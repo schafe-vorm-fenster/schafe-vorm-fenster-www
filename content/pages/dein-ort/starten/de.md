@@ -136,7 +136,7 @@ aus).
 
 <!-- id: dein-ort-starten-5-search; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Überschrift:** Nochmal suchen
+**Frage:** Falsch getippt? Nochmal suchen
 
 **Sucheingabe (Placeholder):** Dein Ort
 
@@ -145,7 +145,12 @@ aus).
 Dieselbe Komponente wie auf `/` und `/dein-ort` (TS-WEB-0008 D7) — kein
 eigenes Verhalten. Der Hinweistext steht jetzt hier statt nur im Code
 (state/open.md Zeile 94), damit die englische Seite nicht die deutsche
-Vorgabe der Komponente erbt.
+Vorgabe der Komponente erbt. Das erste Feld heißt `Frage`, nicht
+`Überschrift`: die Seite setzt es als leise Zeile unter den
+Abschluss-CTA (`<p>` in `app/[lang]/dein-ort/starten/page.tsx`), nie als
+Abschnittstitel — die Frage an die Leserin ist hier erlaubt (CG-006), und
+der Wortlaut ist der des Polish-Briefs (plan/polish-brief.md, Seite 3,
+Fix 3).
 
 ## Weiterleitung zur Registrierung
 

@@ -84,6 +84,19 @@ export interface Finding {
  * label carrying `Überschrift`, `heading`, `Titel` or `title` as a word is a
  * section title, unless its head names something else the artifacts label with
  * a title word — a quote's source title, a link label, a hero `Headline`.
+ *
+ * **The label is the contract, and the label can be wrong.** An artifact is a
+ * text file: this function cannot see whether the page sets the field as an
+ * `h2` or as a paragraph, so a field the page renders as prose while its label
+ * says `Überschrift` is typed here as a section title and reported. That
+ * report is about the **label**, never about the words:
+ * `dein-ort-starten-5-search` carried the polish brief's quiet line
+ * (*„Falsch getippt? Nochmal suchen"*, plan/polish-brief.md page 3 fix 3)
+ * under a `Überschrift` label, and the repair is the relabel (`Frage`) that
+ * `/dein-kalender/bestellen` step 3 already uses — not a shorter sentence.
+ * The finding says so in its own message, and the rendered half of `CG-005`
+ * (no `h2` of a rendered page carries a `?`) is checked where the render
+ * exists, in `e2e/copy-structure.spec.ts`.
  */
 export type FieldRole = "section-title" | "other";
 
@@ -417,7 +430,14 @@ export function checkCopy(page: PageContent): Finding[] {
         file: page.file,
         slot: copy.slot,
         check: "copy-structure",
-        message: `${where}: a section title carries a question mark — a title is a statement, and the question belongs in the kicker above it (CG-005, TS-WEB-0006-A8)`,
+        message:
+          `${where}: a section title carries a question mark — a title is a statement, ` +
+          "and the question belongs in the kicker above it: author a `Kicker` field " +
+          "with the question and leave the statement as the title (CG-005 names that " +
+          "split itself). Where the page renders this field as prose rather than as a " +
+          "heading, the label is wrong, not the copy — relabel it (`Frage` / " +
+          "`Question`). Never drop the words to silence this row (CG-005, " +
+          "TS-WEB-0006-A8)",
       });
     }
 

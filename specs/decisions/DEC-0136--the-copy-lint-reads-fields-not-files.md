@@ -76,6 +76,22 @@ labels and `Section title`. `CG-041` binds the `en` artifact to mirror the `de`
 one and `TS-WEB-0006-A8` qualifies no locale, so leaving `Heading` out would
 let every English page carry the question the German one may not.
 
+**The label is the contract, and a label can be wrong — the repair is then the
+label, never the words.** An artifact is a text file: `fieldRole()` cannot see
+whether the page sets a field as an `h2` or as a paragraph, so a field labelled
+`Überschrift` that the page renders as prose is typed here as a section title
+and reported. The first repair taken in this task got that backwards.
+`dein-ort-starten-5-search` field 0 carries the polish brief's own quiet line
+under the closing CTA — *„Falsch getippt? Nochmal suchen"* / *"Mistyped? Search
+again"*, `plan/polish-brief.md` page 3 fix 3, rendered as a `<p>` in
+`app/[lang]/dein-ort/starten/page.tsx` — and the first repair cut the owner's
+question to satisfy the row. The field is now labelled `Frage` / `Question`, the
+words are back, and three things keep the mistake from repeating: the finding's
+message names the two legal repairs (author a `Kicker`, or relabel the field)
+and says in so many words that the words are not to be dropped;
+`validate.test.ts` asserts that message; and the **rendered** half of `CG-005`
+is checked where the render exists (§10).
+
 ### 3. The avoid list is a table in `validate.ts`, bound to the glossary by a drift test
 
 `CG-040` sources the list from three places: the guide's German table, its
@@ -86,7 +102,12 @@ and is not: the column's terms carry exemptions and scopes in prose
 recovers, and the lint would silently drop them. `AVOID_TERMS` is therefore an
 explicit table with a `rule`, a `pattern`, the guide's *use instead* column and
 a scope, and `validate.test.ts` fails when the glossary grows an italicised
-avoid term the table does not match. `Portalize` is on both source lists and
+avoid term the table does not match. Since the `T-17` review it fails on all
+**three** sources, not one: a second test parses the two tables of the guide's
+§9 between the `### CG-040` and `### CG-041` headings, strips each row's own
+scope note (*(as a title)*, *(about this product)*) and asserts a pattern for
+every term — 39 terms today, all matched. A row added to either table now fails
+`pnpm test` instead of passing unnoticed. `Portalize` is on both source lists and
 deliberately not in the table — it is a count, not a hit (§6).
 
 ### 4. Four scopes, because four rows are qualified in the guide and not by a word
@@ -156,8 +177,8 @@ with the question turned into the statement `CG-005` asks for.
 
 | Where | Was | Is | Source |
 | --- | --- | --- | --- |
-| `dein-ort/starten` slot 5 `Überschrift` / `Heading` | *Falsch getippt? Nochmal suchen* | *Nochmal suchen* | the field's own statement half |
-| `deine-region` slot 2 `Überschrift` / `Heading` | *Was ist in meiner Nähe? Bei Landkreisgröße …* | *Bei Landkreisgröße keine Frage für eine Liste* | the field's own statement half |
+| `dein-ort/starten` slot 5 | labelled `Überschrift` / `Heading`, *Falsch getippt? Nochmal suchen* | labelled `Frage` / `Question`, **same words** | **no copy change** — the page renders the field as the quiet line under the closing CTA (`plan/polish-brief.md` page 3 fix 3), so the label was the defect (§2) |
+| `deine-region` slot 2 | `Überschrift`: *Was ist in meiner Nähe? Bei Landkreisgröße keine Frage für eine Liste* | `Kicker`: *Was ist in meiner Nähe?* · `Überschrift`: *Bei Landkreisgröße keine Frage für eine Liste* | **no word dropped** — `CG-005`'s own split: the kicker carries the question, the title the statement. `app/[lang]/deine-region/page.tsx` reads the authored kicker (`fieldAt(territory.blocks, 2)`) with the dictionary word as fallback, the way `/`, `/mitmachen` and `/dein-ort/starten` already read theirs |
 | `deine-region` slot 1 `Abschluss-Überschrift` / `Closing heading` | *Sollen wir euch ein Angebot rechnen?* | *Wir rechnen euch ein Angebot* | the same words, as a statement |
 | `dein-kalender/bestellen` step 3 | labelled `Überschrift` / `Heading` | labelled `Frage` / `Question` | **no copy change** — step 1 of the same file labels its reader-directed question that way (`CG-006`) |
 | `ueber-uns` `Dorfargument 2` | *das die Leute gerne benutzen* | *das die Nachbarn gerne benutzen* | `CG-040` replacement column (`CG-009`) |
@@ -165,13 +186,23 @@ with the question turned into the statement `CG-005` asks for.
 | `dein-kalender` `Quellen` / `Sources` | *Vereinswebsite* · *club website* | *eure eigene Website* · *your own website* | `CG-040` replacement column |
 | `dein-kalender` `Produktname` / `Product name` | *Das Produkt hinter diesem Kalender heißt Portalize.* | *Der Kalender unter eurem Namen heißt Portalize.* | `DEC-0052 §1`: *"one sentence saying the calendar under your name is called Portalize"* |
 
+Two of these were repaired twice. The first pass read the row as *"remove the
+question"* and deleted owner wording on `/dein-ort/starten` and `/deine-region`;
+the review caught both, and the repairs above are the second pass — a label on
+one, `CG-005`'s kicker split on the other. `/deine-region` slot 2 also keeps its
+English mirror whole (*"At county scale, **that's** not a question for a list"*),
+because with the question restored above it the deictic has its referent back:
+the truncated title read *"not a question"* with nothing to point at, while the
+sentence under it still answered a question the page no longer asked.
+
 The closing heading of `/deine-region` is authored copy the page reads
 (`fieldAt(focus.blocks, 5)`), so its typed fallback in
 `app/[lang]/deine-region/page.tsx` and the expectation in
 `e2e/pages/deine-region.spec.ts` were moved with it — three lines, so that the
-rendered page and the artifact do not disagree. All eight repairs carry a
-`state/open.md` row: none of them is a sentence the owner wrote, and a heading
-nobody confirmed is a placeholder even when every word in it is his.
+rendered page and the artifact do not disagree. It is the **one** statement in
+this table that nobody wrote as a statement, and it carries its `state/open.md`
+row for the owner: the slot has no kicker to move *Sollen wir euch ein Angebot
+rechnen?* into, and inventing one would be a sentence nobody wrote.
 
 ### 8. `check:terms` joins the chain, and the gallery stops writing the promise
 
@@ -188,11 +219,43 @@ the only place the promise may be written — which is the point of `D5`'s
 
 `T-17`'s brief asks for `DEC-0129`. That number was taken by `T-11` on
 2026-09-26 (*the scene carries the module …*), and no number is ever reused
-(`AGENTS.md`, the identifier rule). This record is `DEC-0136`, the number the
-round reserved for this task. The owner defaults this task inherits are the
+(`AGENTS.md`, the identifier rule). This record is `DEC-0136`, the number this round's task
+assignment reserves for `T-17` (the number is handed to the task with its
+worktree and its e2e port, the same way `T-14` was handed `DEC-0132`).
+The numbers between the last merged record and this one belong to the other
+tasks of this wave and are left untouched; `backlog.json` carries no allocation
+table, so the reservation lives in the task assignment and nowhere else, and the
+number is confirmed against the wave before the merge rather than claimed here. The owner defaults this task inherits are the
 placeholder convention of default 3 — a string nobody wrote is marked and gets
 a `state/open.md` row — and default 14's rule that every engineer records
 their own choices in one record with a README index line.
+
+### 10. The rendered halves live in `e2e/copy-structure.spec.ts`
+
+Two of the five criteria have a half no artifact can answer, and both are now
+checked against the rendered page — a new spec file, so that no other task's
+spec had to be edited for it:
+
+- **`CG-005` / `TS-WEB-0006-A8`** — no `h2` a visitor reads is a question, on
+  every `TS-WEB-0004` D1 route in `de` and `en`. This is the half the static
+  row cannot see, and it is the half that decides: a form step's question to
+  the reader is that step's `h1` (`/dein-kalender/bestellen`, `CG-006`) and the
+  hero headline is exempt (`CG-020`), so a question in an `h2` is the defect and
+  a question in a paragraph is not. Measured on the tree: 24 routes green.
+- **`TS-WEB-0018-A7`** — header, footer and context band of every D1 route
+  render without the product name in both locales, and only `/dein-kalender`
+  carries it in its body, at most once. `checkProductName` counts artifact
+  fields; the chrome is not in an artifact.
+
+`/rechtliches` is exempt from the body count, and that is a conflict, not a
+fix: `content/legal/{privacy-policy,terms-of-use,dpa}.md` name „Portalize"
+seven times as the contractual product (privacy-policy.md:91,
+terms-of-use.md:99, dpa.md:54). Those bodies are imported verbatim
+(`DEC-0012`, `DEC-0027`) — which is why the same route is the register row's
+one exemption (`TS-WEB-0029 D6a/A15`) — and `TS-WEB-0018-A7`'s wording carries
+no such exemption. The spec is not amended here and no legal text is edited:
+the exemption is named in the spec file with its reason and registered in
+`state/open.md` for the owner.
 
 ## Consequences
 
@@ -208,6 +271,14 @@ their own choices in one record with a README index line.
   an italicised term there fails `pnpm test` until `AVOID_TERMS` carries it.
   That is the enforcement `DEC-0080 §4` asks for ("every rule has an owning
   mechanism"), and the guide's §9 is no longer advice.
-- Four section titles and four copy fields changed in five page artifacts that
-  other tasks of this round own. Every one is on `state/open.md` and in the
-  task report, so an owner who disagrees has the list in one place.
+- One section title and four copy fields changed in five page artifacts that
+  other tasks of this round own; two further slots changed only their **label**
+  or gained a `Kicker` field, with no word removed. Every one is on
+  `state/open.md` and in the task report, so an owner who disagrees has the
+  list in one place. `content/pages/deine-region/**` and
+  `app/[lang]/deine-region/page.tsx` are owned by `T-18` and `T-15` of the same
+  round: `T-17` merges after `T-12`, `T-15` and `T-16`, and the `/deine-region`
+  hunks are coordinated with `T-18` before it.
+- A copy lint that reads labels can misread one, and the cost of misreading is
+  paid in the owner's words. The message now prescribes the two repairs, the
+  test pins the message, and `e2e/copy-structure.spec.ts` judges the render.

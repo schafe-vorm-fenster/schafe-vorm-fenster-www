@@ -148,13 +148,20 @@ confirmation exists.
 
 <!-- id: deine-region-2-territory; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: draft -->
 
-**Heading:** At county scale, not a question for a list
+**Heading:** At county scale, that's not a question for a list
 
 **Text:** Covering forty or eighty places editorially isn't a bigger version of covering one place. It simply isn't feasible. And the administrative boundary isn't the boundary people organize their lives around: what's happening thirty kilometres away matters just as much as what's happening right next door.
 
+**Kicker:** What's near me?
+
 Source: `pains[]` from `counties--portalize-enterprise`. "Thirty
 kilometres" stays the visitor's own question here, never a module's
-label (TS-WEB-0026 D3).
+label (TS-WEB-0026 D3). The visitor's question sat in the heading until
+2026-09-26, i.e. in a field where CG-005 allows no question mark. It now
+stands in the kicker above the title — the split CG-005 itself prescribes
+(concept/website-copy-guide.md, CG-005: the kicker carries the question,
+the title the statement). No word is new, and the title keeps its
+referent: without the question above it, "that's" had none.
 
 ## Slot 3 — Interim module: examples, counter, search
 

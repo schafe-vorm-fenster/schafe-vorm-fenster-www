@@ -135,7 +135,7 @@ outstanding).
 
 <!-- id: dein-ort-starten-5-search; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Heading:** Search again
+**Question:** Mistyped? Search again
 
 **Search input (placeholder):** Your place
 
@@ -144,7 +144,11 @@ outstanding).
 Same component as on `/` and `/dein-ort` (TS-WEB-0008 D7) — no behaviour of
 its own. The hint now lives here rather than only in code (state/open.md
 row 94), so the English page does not inherit the component's German
-default.
+default. The first field is a `Question`, not a `Heading`: the page sets
+it as the quiet line under the closing CTA (a `<p>` in
+`app/[lang]/dein-ort/starten/page.tsx`), never as a section title — a
+question to the reader is allowed there (CG-006), and the wording is the
+polish brief's own (plan/polish-brief.md, page 3, fix 3).
 
 ## Handover to registration
 

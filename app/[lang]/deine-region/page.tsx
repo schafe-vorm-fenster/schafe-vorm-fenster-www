@@ -311,10 +311,16 @@ export default async function Page({
       </MotionReveal>
 
       {/* Block 2 — the territory question (colour, sober), opening with the
-          sentence that used to sit in the hero. */}
+          sentence that used to sit in the hero.
+
+          The kicker is the visitor's own question, authored in the slot
+          (`Kicker`, field 2): CG-005 puts the question in the kicker and the
+          statement in the title, so the h2 states what holds at county scale
+          and the question above it keeps that statement's referent. Where an
+          artifact authors no kicker, the dictionary word stands. */}
       <SectionShell
         dataBlock="gebietsfrage"
-        kicker={words.kickers.objection}
+        kicker={fieldAt(territory.blocks, 2) ?? words.kickers.objection}
         labelledBy="gebietsfrage"
         surface="paper"
       >
