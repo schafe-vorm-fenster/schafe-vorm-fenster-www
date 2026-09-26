@@ -410,27 +410,38 @@ test.describe("TS-WEB-0004-A8: without JavaScript the header is solid, items inc
  * stays true through a path change and fails on a hard-coded one — the second
  * clause of A12, which a literal string would have hidden.
  *
- * One test, twenty-four navigations. The header is the same component on every
- * route, so a case per route would multiply the page loads without multiplying
- * what can be learned, and the development server pays for every one of them
- * (`e2e/smoke.spec.ts`).
+ * One case per width, twenty-four navigations each. The header is the same
+ * component on every route, so a case per route would multiply the page loads
+ * without multiplying what can be learned, and the development server pays for
+ * every one of them (`e2e/smoke.spec.ts`). The **widths** do multiply it: below
+ * `xl` the entry stands in the bar beside the burger and above it in the row,
+ * two different renderings of "present", so the walk runs at the phone
+ * reference width and at the desktop one rather than at whatever the Playwright
+ * project's default happens to be.
  */
-test("TS-WEB-0017-A12: the persistent calendar entry is in the header of every page, at the D4 target", async ({
-  page,
-}) => {
-  for (const { route, locale } of everyRoute()) {
-    const path = href(route, locale);
-    const label = dictionary(locale).nav[HEADER_CALENDAR_ENTRY.label];
-    const target = href(HEADER_CALENDAR_ENTRY.route, locale);
+for (const width of [360, 1280]) {
+  test(`TS-WEB-0017-A12: the persistent calendar entry is in the header of every page at ${width}px, at the D4 target`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 800, width });
 
-    await page.goto(path);
+    for (const { route, locale } of everyRoute()) {
+      const path = href(route, locale);
+      const label = dictionary(locale).nav[HEADER_CALENDAR_ENTRY.label];
+      const target = href(HEADER_CALENDAR_ENTRY.route, locale);
 
-    // Present: exactly one, in the banner, and reachable rather than merely in
-    // the markup — below `xl` it stands in the bar beside the burger, so the
-    // phone width is the one that could lose it.
-    const entry = header(page).getByRole("link", { exact: true, name: label });
-    await expect(entry, `calendar entry on ${path}`).toHaveCount(1);
-    await expect(entry, `calendar entry visible on ${path}`).toBeVisible();
-    await expect(entry, `calendar entry target on ${path}`).toHaveAttribute("href", target);
-  }
-});
+      await page.goto(path);
+
+      // Present: exactly one, in the banner, and reachable rather than merely
+      // in the markup — below `xl` it stands in the bar beside the burger, so
+      // the phone width is the one that could lose it.
+      const entry = header(page).getByRole("link", { exact: true, name: label });
+      await expect(entry, `calendar entry on ${path} at ${width}px`).toHaveCount(1);
+      await expect(entry, `calendar entry visible on ${path} at ${width}px`).toBeVisible();
+      await expect(entry, `calendar entry target on ${path} at ${width}px`).toHaveAttribute(
+        "href",
+        target,
+      );
+    }
+  });
+}

@@ -70,7 +70,9 @@ const FULL_PASS_MS = 4_000 + 550 + 4_000 + 550 + 1_000;
 
 /**
  * Keyframe entries carry bookkeeping keys beside the properties they animate;
- * only the rest is a property the browser is moving.
+ * only the rest is a property the browser is moving. The set is handed into the
+ * reader below rather than written a second time inside it, so there is one
+ * list and no chance of the two drifting.
  */
 const KEYFRAME_BOOKKEEPING = new Set(["offset", "computedOffset", "easing", "composite"]);
 
@@ -94,8 +96,8 @@ const DEV_CHROME =
  * spelling.
  */
 async function animatedProperties(page: Page): Promise<string[]> {
-  return page.evaluate((devChrome) => {
-    const bookkeeping = new Set(["offset", "computedOffset", "easing", "composite"]);
+  return page.evaluate(([devChrome, bookkeepingKeys]: [string, string[]]) => {
+    const bookkeeping = new Set(bookkeepingKeys);
     const dash = (name: string) => name.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
     const out = new Set<string>();
     for (const animation of document.getAnimations()) {
@@ -115,7 +117,7 @@ async function animatedProperties(page: Page): Promise<string[]> {
       }
     }
     return [...out];
-  }, DEV_CHROME);
+  }, [DEV_CHROME, [...KEYFRAME_BOOKKEEPING]] as [string, string[]]);
 }
 
 /** The gesture that arms and fires every reveal wrapper: to the end, and back. */
@@ -150,9 +152,6 @@ for (const route of ROUTES) {
         offending,
         `${route} animates more than opacity under prefers-reduced-motion: ${offending.join(", ")}`,
       ).toEqual([]);
-      // The allow-list is not vacuous by accident: the keys the reader above
-      // strips are named in one place and asserted here to be bookkeeping only.
-      expect([...KEYFRAME_BOOKKEEPING].every((key) => !ALLOWED.has(key))).toBe(true);
     });
 
     test(`TS-WEB-0002-A9: no transition on ${route} is long enough to be a movement`, async ({

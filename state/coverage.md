@@ -6,14 +6,14 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**430 criteria · 265 closed · 165 open (62 % closed)**
+**430 criteria · 264 closed · 166 open (61 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 260 | a test title in a file a runner runs carries the id |
+| VERIFIED | 259 | a test title in a file a runner runs carries the id |
 | METERED | 5 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
-| NAMED ONLY | 29 | the id is in a runner file but in no test title — **not coverage** |
+| NAMED ONLY | 30 | the id is in a runner file but in no test title — **not coverage** |
 | MISSING | 136 | nothing names it |
 
 Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
@@ -22,7 +22,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 
 | Level | Criteria | Closed | Open | Closed |
 | --- | --- | --- | --- | --- |
-| static | 86 | 57 | 29 | 66 % |
+| static | 86 | 56 | 30 | 65 % |
 | unit | 30 | 26 | 4 | 87 % |
 | integration | 73 | 49 | 24 | 67 % |
 | e2e | 171 | 131 | 40 | 77 % |
@@ -45,7 +45,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0010 | 15 | 6 | A5 A6 A7 A9 A11 A12 A13 A14 A15 |
 | TS-WEB-0011 | 14 | 6 | A3 A5 A6 A8 A9 A11 A12 A13 |
 | TS-WEB-0012 | 11 | 8 | A7 A8 A10 |
-| TS-WEB-0013 | 8 | 4 | A3 A6 A7 A8 |
+| TS-WEB-0013 | 8 | 3 | A3 A4 A6 A7 A8 |
 | TS-WEB-0014 | 13 | 2 | A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 |
 | TS-WEB-0015 | 12 | 1 | A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 |
 | TS-WEB-0016 | 23 | 11 | A1 A3 A4 A6 A7 A8 A9 A11 A18 A20 A13 A14 |
@@ -138,6 +138,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0012-A8 | tool | MISSING | — | Lighthouse/trace on the TS-WEB-0003 D7 routes: the eTracker script is deferred, is not a render-blocking resource, and does not appear in the LCP critical path. |
 | TS-WEB-0012-A10 | manual | MISSING | — | In the eTracker account: website and app events arrive in one property under one secure code; a `stage: handover` and a `stage: completed` event for the same go … |
 | TS-WEB-0013-A3 | static | NAMED ONLY | src/lib/live/boundary.test.ts — outside any test title | Built output and source contain no external asset URL: no `fonts.googleapis.com`, `fonts.gstatic.com`, or any CDN host; fonts, icons and libraries resolve to ow … |
+| TS-WEB-0013-A4 | static | NAMED ONLY | scripts/check-csp-allowlist.test.ts — outside any test title | The deployed CSP allowlist equals the D2 host set exactly — no wildcard, no extra host, no missing host. |
 | TS-WEB-0013-A6 | unit | MISSING | — | The geo resolver returns at most county-level, writes nothing, and no returned or cached key contains an IP address. |
 | TS-WEB-0013-A7 | manual | MISSING | — | Every host in D2 outside our own origin has a named section in the privacy policy on `/rechtliches#datenschutz`, and the `/dein-kalender` block claims nothing D … |
 | TS-WEB-0013-A8 | manual | MISSING | — | Review gate: a PR adding an outbound request carries the D5 rung-3 evidence (allowlist diff, privacy-policy section, D2 row, no-cookie evidence) or is rejected. |

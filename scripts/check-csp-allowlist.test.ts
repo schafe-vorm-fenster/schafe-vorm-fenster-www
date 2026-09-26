@@ -36,9 +36,23 @@ import { ALLOWLIST } from "../src/lib/security/csp";
  * are declared in `KNOWN_DIVERGENCES` with their reason, and the assertions
  * are written so that the list can only shrink: a fourth extra host fails, a
  * missing host fails, and a declared divergence that has been resolved fails
- * too, asking for its entry to be deleted. Nothing here weakens A4 — the
- * comparison is the criterion's own, and the exception is visible instead of
+ * too, asking for its entry to be deleted. The exception is visible instead of
  * absent (DEC-0144 §3, `state/open.md` row 279).
+ *
+ * ── Why no test title below carries the identifier ────────────────────────
+ *
+ * The criterion says *equals … exactly*, and the case at the end of this file
+ * asserts that the difference is exactly three hosts. That is a measurement of
+ * an **unmet** criterion, and a title carrying the id would make
+ * `pnpm check:coverage` count it VERIFIED — closed coverage for a sentence the
+ * repository does not fulfil. That is the false green `DEC-0142` §9 took back
+ * for `TS-WEB-0018-A7` and `src/lib/content/validate.test.ts` documents in the
+ * same words; the same rule applies here (DEC-0144 §10). So the id stands in
+ * this docblock and in no title: the verdict is NAMED ONLY, which is what the
+ * state is, and it turns into VERIFIED the day the spec owner either writes
+ * the three D2 rows or has the three hosts taken out of the policy — then
+ * `KNOWN_DIVERGENCES` goes empty, the last two cases become the equality A4
+ * asks for, and the id moves into the title in the same commit.
  */
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -136,7 +150,14 @@ const hostOf = (origin: string): string => new URL(origin).host;
 const specMarkdown = (): string => readFileSync(join(ROOT, SPEC), "utf8");
 const cspHosts = (): string[] => Object.values(ALLOWLIST).map(hostOf);
 
-describe("TS-WEB-0013-A4: the deployed CSP allowlist equals the D2 host set", () => {
+// The id `TS-WEB-0013-A4` is deliberately **not** in this title — see "Why no
+// test title below carries the identifier" above. A4 asks for exact equality;
+// the last two cases measure a difference of exactly three hosts, so the
+// criterion is not met, and a title naming it would make `pnpm check:coverage`
+// count closed coverage for it (DEC-0142 §9 took that green back for
+// `TS-WEB-0018-A7`; DEC-0144 §10 keeps the rule). What this suite does prove is
+// that D2 and the policy diverge by nothing more than the three declared hosts.
+describe("D2 against the deployed CSP allowlist: no wildcard, no missing host, three declared extras", () => {
   it("parses D2 into external hosts, own origins, same-origin paths and unnamed rows", () => {
     const d2 = d2Hosts(specMarkdown());
     // The table is read, not assumed: every row lands in exactly one bucket,

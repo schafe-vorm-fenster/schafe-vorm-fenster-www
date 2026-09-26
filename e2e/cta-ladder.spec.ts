@@ -39,10 +39,16 @@ import type { Page } from "@playwright/test";
  * conversion on the primary rung, not a module CTA that escaped the secondary
  * one. Reading A18 as "no scene may ever contain a primary" would contradict
  * TS-WEB-0022-A2, which requires that primary to be there. So the walk
- * identifies block 1 structurally — the module holding the page's one primary
- * marker — and measures every *other* module against A18. A second primary
- * inside any module still fails, and so does a primary in a module on a page
- * whose primary stands outside one.
+ * identifies block 1 **by position in the page's own block sequence** — the
+ * first `[data-block]` — and exempts a module from the A18 count only when it
+ * stands in that block. Every other module is measured, the module holding the
+ * page's primary included: a price tier that swallowed the page's only
+ * `data-cta="primary"` is then measured against "exactly one CTA, on a
+ * secondary rung" and fails on the rung, and the primary count inside modules
+ * is asserted to be exactly the block-1 one — zero on a page whose primary
+ * stands outside every module. Identifying block 1 as "any module that happens
+ * to contain a primary" would have exempted precisely the module that broke the
+ * ladder.
  *
  * ── The one declared divergence ───────────────────────────────────────────
  *
@@ -56,6 +62,16 @@ import type { Page } from "@playwright/test";
  * every other module is held to "exactly one", a second CTA-free module
  * anywhere fails, and the last case fails the moment the declared one gets its
  * CTA.
+ *
+ * **The two routes that carry that declaration do not name the identifier in
+ * their title.** On them the criterion is measurably not met, so a title
+ * carrying `TS-WEB-0006-A18` would report closed coverage for an open sentence —
+ * the false green `DEC-0142` §9 took back for `TS-WEB-0018-A7` (DEC-0144 §10).
+ * The ten other routes name it, because there the walk asserts exactly what A18
+ * says. The criterion's ledger verdict comes from the tier tests that predate
+ * this file (`e2e/pages/dein-kalender.spec.ts`,
+ * `src/components/price-section/price-tier-row.test.tsx`), and those assert the
+ * tier half, which holds.
  */
 
 /** Scene blocks and publishing paths, price and offer tiers — A18's three kinds. */
@@ -82,8 +98,10 @@ interface ModuleReading {
   readonly nested: string[];
   /** `data-cta` of every CTA in this module's subtree, nested modules included. */
   readonly rungs: string[];
-  /** Whether this module holds the page's one primary marker (block 1). */
+  /** Whether this module holds the page's one primary marker. */
   readonly holdsPagePrimary: boolean;
+  /** Whether this module stands in the page's first `[data-block]` — block 1. */
+  readonly inBlockOne: boolean;
 }
 
 interface PageReading {
@@ -116,6 +134,10 @@ async function readPage(page: Page, moduleSelector: string): Promise<PageReading
     const all = [...document.querySelectorAll(selector)];
     const outermost = all.filter((node) => node.parentElement?.closest(selector) == null);
     const primaries = [...document.querySelectorAll('[data-cta="primary"]')];
+    // Block 1 is the first block of the page's own sequence, read off the
+    // `data-block` seam every page composition carries — not "the module that
+    // holds a primary".
+    const blockOne = document.querySelector("[data-block]");
 
     return {
       modules: outermost.map((node) => ({
@@ -125,6 +147,7 @@ async function readPage(page: Page, moduleSelector: string): Promise<PageReading
           (cta) => cta.getAttribute("data-cta") ?? "",
         ),
         holdsPagePrimary: primaries.some((primary) => node.contains(primary)),
+        inBlockOne: blockOne !== null && (node === blockOne || blockOne.contains(node)),
       })),
       primaryCount: primaries.length,
       primaryInModules: primaries.filter((primary) => primary.closest(selector) !== null).length,
@@ -134,25 +157,41 @@ async function readPage(page: Page, moduleSelector: string): Promise<PageReading
 
 for (const { route, locale } of everyRoute()) {
   const path = href(route, locale);
+  const declaredHere = Object.keys(CTA_FREE_MODULES).filter((entry) =>
+    entry.startsWith(`${path} `),
+  );
 
-  test(`TS-WEB-0006-A18: every explanatory module on ${path} carries one secondary CTA`, async ({
-    page,
-  }) => {
+  // A route with a declared CTA-free module does not name the criterion in its
+  // title: there "exactly one" is not what the page does, and a title carrying
+  // the id would report the criterion closed (see the docblock, DEC-0144 §10).
+  const title = declaredHere.length
+    ? `A18 of TS-WEB-0006 on ${path}: every explanatory module but the ${declaredHere.length} declared CTA-free carries one secondary CTA — "exactly one" is not met on this route (state/open.md row 280)`
+    : `TS-WEB-0006-A18: every explanatory module on ${path} carries one secondary CTA`;
+
+  test(title, async ({ page }) => {
     await page.goto(path);
     await page.waitForLoadState("networkidle");
 
     const reading = await readPage(page, MODULE_SELECTOR);
 
-    // A module carrying the primary marker is block 1 — the page's own
-    // conversion, one per page (D3). More than one primary anywhere, or a
-    // primary inside a module on a page whose block 1 is not a module, means a
-    // module added one: exactly what A18's last clause forbids.
+    // The page's own conversion is one marker, in block 1 (D3). The only module
+    // allowed to hold it is a module of block 1 — so on a page whose primary
+    // stands outside every module this count is 0, and a module elsewhere that
+    // holds the primary makes it 1 against an expected 0: "the count of
+    // `data-cta="primary"` on the page is unchanged by their presence" read as
+    // the clause it is.
+    const blockOnePrimaries = reading.modules.filter(
+      (candidate) => candidate.holdsPagePrimary && candidate.inBlockOne,
+    ).length;
     expect(reading.primaryCount, `${path} primary markers`).toBeLessThanOrEqual(1);
-    expect(reading.primaryInModules, `${path} primary markers inside a module`).toBeLessThanOrEqual(
-      reading.primaryCount,
-    );
+    expect(
+      reading.primaryInModules,
+      `${path} primary markers inside a module, expected only block 1's`,
+    ).toBe(blockOnePrimaries);
 
-    const explanatory = reading.modules.filter((reading_) => !reading_.holdsPagePrimary);
+    const explanatory = reading.modules.filter(
+      (candidate) => !(candidate.holdsPagePrimary && candidate.inBlockOne),
+    );
     for (const explanatoryModule of explanatory) {
       const declared = `${path} ${explanatoryModule.key}` in CTA_FREE_MODULES;
       if (declared) {

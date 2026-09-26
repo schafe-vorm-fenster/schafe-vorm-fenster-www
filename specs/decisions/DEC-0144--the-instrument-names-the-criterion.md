@@ -98,6 +98,11 @@ The list can only shrink: a fourth extra host fails, a missing host fails, and a
 declared divergence that has stopped diverging fails too and asks for its entry
 to be deleted. `state/open.md` carries the row.
 
+**And no test title in that file names A4** (§10): a criterion that reads
+*"equals … exactly"* is not closed by a case asserting that the difference is
+exactly three hosts. The verdict is NAMED ONLY, the id stands in the docblock,
+and it moves into the title in the commit that resolves the divergence.
+
 ### 4. TS-WEB-0002-A9 is walked, on the two routes that carry every mover
 
 `e2e/reduced-motion.spec.ts` emulates `prefers-reduced-motion: reduce` on `/`
@@ -130,14 +135,20 @@ both are read off determinations rather than chosen:
   outermost modules, one CTA each, one of them a scene wrapping a publishing
   path. Counting the scene and the path separately would demand two CTAs where
   TS-WEB-0006 D3 asks for one.
-- **A module holding the page's one primary marker is block 1, not an
-  explanatory module.** D3 says an explanatory module's CTA points at *"the
-  deeper page's primary conversion"*, while the ladder's primary rung is *"the
-  page's own conversion"*. `/mitmachen` composes block 1 out of `scene-block`
-  and TS-WEB-0022-A2 requires the page's single primary to be there, so reading
-  A18 as "no scene may ever contain a primary" would contradict it. A second
-  primary inside any module still fails, and so does a primary inside a module
-  on a page whose block 1 is not one.
+- **Block 1 is identified by position, and only block 1's module may hold the
+  page's primary.** D3 says an explanatory module's CTA points at *"the deeper
+  page's primary conversion"*, while the ladder's primary rung is *"the page's
+  own conversion"*. `/mitmachen` composes block 1 out of `scene-block` and
+  TS-WEB-0022-A2 requires the page's single primary to be there, so reading A18
+  as "no scene may ever contain a primary" would contradict it. The exemption is
+  therefore given to the **first `[data-block]`** of the page's own block
+  sequence, not to "whatever module happens to contain a primary": the walk
+  asserts that the number of primary markers inside modules equals the number in
+  block 1 — zero on a page whose primary stands outside every module — and every
+  module outside block 1 is measured against A18 even when it holds a primary.
+  Exempting any module that contains one would have exempted precisely the
+  module that broke the ladder: a price tier swallowing the page's only primary
+  would have left the sweep green (QA round 1).
 
 **One divergence is declared.** `/dein-ort/starten` block 2.1 renders a scene
 with no CTA at all, and TS-WEB-0021 gives that block none anywhere in its own
@@ -145,6 +156,10 @@ determinations — while "exactly one" is not "at most one". The two
 specifications disagree about one module on one route; it is declared in
 `CTA_FREE_MODULES` with a `state/open.md` row, a second CTA-free module
 anywhere fails, and the declaration fails the moment that module gains its CTA.
+The two routes that carry the declaration **do not name A18 in their test
+title** (§10); the ten others do, because there the walk asserts what A18 says.
+A18's VERIFIED verdict predates this task and rests on the tier tests, which
+assert the half that holds.
 
 ### 6. Three site-wide sweeps leave `/`
 
@@ -194,20 +209,81 @@ read as coverage.
 
 ### 9. The coverage gain is written down
 
-`pnpm check:coverage`: MISSING 145 → 136, NAMED ONLY 32 → 29, with no raise.
-`specs/verification/coverage-budget.json` records both numbers and says which
-criteria moved and why, as DEC-0141 rule 2 requires.
+`pnpm check:coverage`: MISSING 145 → 136, NAMED ONLY 32 → 30 — eleven criteria
+closed (eight out of MISSING, three out of NAMED ONLY) and one, TS-WEB-0013-A4,
+moved from MISSING to NAMED ONLY, which is the single number this task raises
+(29 → 30, §10). `specs/verification/coverage-budget.json` records all of it and
+names every criterion that moved, in both directions, as DEC-0141 rule 2
+requires of a gain and its `note` requires of a raise.
+
+### 10. A verdict says what the state is, never what the test wishes (QA round 1)
+
+The review round found two criteria counted as **closed coverage while the
+criterion was measurably unmet** — the exact failure this repository had just
+spent a round taking back. `scripts/check-csp-allowlist.test.ts` asserted
+`expect(extra).toEqual(Object.keys(KNOWN_DIVERGENCES))`, i.e. that A4 of
+TS-WEB-0013 is violated by exactly three hosts, under a `describe` title
+carrying the identifier — so `pnpm check:coverage` graded A4 VERIFIED and the
+budget was lowered counting it. The same shape was reported for A18 of
+TS-WEB-0006 through `CTA_FREE_MODULES`.
+
+The rule this task adopts, from `DEC-0142` §9 and the comment
+`src/lib/content/validate.test.ts` carries beside it:
+
+**A test title names a criterion only where the test asserts what the criterion
+says. Where the test asserts a declared exception to it, the identifier stays in
+the file — docblock, comment, the exception's own reason — and the verdict is
+NAMED ONLY.** The id in prose (*"A18 of TS-WEB-0006"*) is how the file still
+says which criterion it is about without the scan reading it as coverage;
+`scripts/check-coverage.ts` writes its own docblock that way for the same
+reason.
+
+Applied: A4 lost its title and is NAMED ONLY, the budget carries the raise with
+its reason (29 → 30), and the two `/dein-ort/starten` cases of
+`e2e/cta-ladder.spec.ts` name A18 in prose while the ten routes where the
+criterion holds name it as an identifier. Nothing was weakened and no assertion
+was deleted: both files measure exactly what they measured before, and both fail
+on any change to either side. What changed is what the ledger claims.
+
+The round found two more instruments claiming more than they measured, and both
+are repaired rather than annotated:
+
+- `src/lib/live/counters-absent.integration.test.tsx` re-implemented
+  `CountersIsland`'s `undefined` branch inside the test file, one prop short of
+  production, so a regression in `app/[lang]/_islands.tsx` could not fail it. It
+  now awaits the island itself (`cacheLife`/`cacheTag` stubbed, nothing else),
+  and the case about an upstream answering 200 without `totalEvents` runs the
+  **real** events-api client over a stubbed transport, so the schema branch its
+  comment describes is the one that executes. Verified by mutation: turning the
+  island's `return null` into `return <span>0</span>` fails two of the five
+  cases.
+- Two assertions could not fail — `primaryInModules ≤ primaryCount` in
+  `e2e/cta-ladder.spec.ts` (a filtered length against its source length) and a
+  comparison of two module constants in `e2e/reduced-motion.spec.ts`. The first
+  is replaced by the fact it stood in for (§5); the second is gone, and the
+  bookkeeping-key set is handed into the reader instead of written twice, which
+  removes the duplication it was guarding.
+
+`TS-WEB-0017-A12`'s route walk also ran at whatever viewport the Playwright
+project defaults to while its own reasoning named the phone width; it now runs
+at 360 and at 1280, one case each. And the level substitution the walk performs
+— an `integration` criterion closed by an e2e title, which
+`scripts/check-coverage.ts` does not compare — is `state/open.md` row 282 rather
+than a silent bend of the ledger's own rule.
 
 ## Consequences
 
-- Nine criteria that were already being enforced can now be attributed to their
-  instrument, and three that were graded NAMED ONLY are graded on a test title
-  or a meter message instead. None of them was closed by weakening a sentence.
+- Eleven criteria closed: eight that were already being enforced can now be
+  attributed to their instrument, and three that were graded NAMED ONLY are
+  graded on a test title or a meter message instead. None of them was closed by
+  weakening a sentence — and the one criterion that gained a test without
+  gaining a verdict, TS-WEB-0013-A4, is counted as the raise it is (§10).
 - Two criteria are now known to disagree with what the site renders —
   TS-WEB-0013-A4 by three CSP hosts, TS-WEB-0006-A18 by one CTA-free scene.
   Both are visible in a declared list that can only shrink, both have a
   `state/open.md` row, and both are the spec owner's to resolve. The sweeps are
-  green because the divergences are named, not because they were assumed away.
+  green because the divergences are named, not because they were assumed away —
+  and neither divergence is reported as coverage (§10).
 - `TS-WEB-0019-A7` was to "stay `fixme` until T-21". It does not: T-21 landed
   with DEC-0140 and `e2e/pages/home.spec.ts` walks the criterion for real. The
   backlog line is satisfied by the dependency having shipped, and nothing was
@@ -225,3 +301,11 @@ criteria moved and why, as DEC-0141 rule 2 requires.
   parse inside Next's own dev pipeline) that had nothing to do with either
   criterion. The full suite is green; the flake and its shape are a
   `state/open.md` row so the next author does not rediscover it.
+- The local e2e figure is **1040 passed · 7 skipped** of 1047 at this code state
+  (`PORT=3261 pnpm e2e`, exit 0, 5.7 m, Playwright managing the server) and was
+  1039 of 1046, measured twice, at the commit before this round — the walk at a
+  second viewport is the one test added. The 1050 this record's first round
+  reported cannot have been either suite. The dev
+  server also died outright in one full run — 257 `ERR_CONNECTION_REFUSED` after
+  it — which `state/open.md` row 281 now names beside the dev-overlay 500s, so a
+  red first run is not read as a regression.
