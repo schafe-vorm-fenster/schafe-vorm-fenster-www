@@ -21,7 +21,7 @@ import { pageContent } from "../../_content";
 import { localeFrom, pageMetadataFor } from "../../_locale";
 
 import { pageMeta } from "./page.meta";
-import { resolveRegisterPlace } from "./resolve-place";
+import { placeRowLabel, resolveRegisterPlace } from "./resolve-place";
 import { resolveDisplayedStep, resolveEnum } from "./steps";
 
 import type { ContentBlock } from "@/src/lib/content/types";
@@ -210,6 +210,26 @@ export default async function Page({
   const handoverUrl = appendCampaignParams(new URL("/registrieren", APP_ORIGIN).toString(), campaign);
   const carried = campaign as Record<string, string | undefined>;
 
+  /**
+   * **Why the typed name stays in the URL for one render** (D4/A2, DEC-0128).
+   *
+   * The state D4 names is `?ort=<slug>`, and step 1's plain GET form can only
+   * submit what the visitor typed — the slug is known one lookup later. The
+   * obvious answer, `redirect()` to the canonical value, does not work on this
+   * route: measured against `next start`, `/mitmachen/registrieren?ort=<name>`
+   * answers **200 with `x-nextjs-postponed: 1`** and the redirect serialised
+   * into the flight payload, so a browser without JavaScript gets an empty
+   * document — the same failure `src/lib/routes/place-hop.ts` records for the
+   * two `?ort=` pages (F-2-49). Canonicalising here therefore needs the proxy,
+   * not the page, and that is a routing change outside this work package.
+   *
+   * What holds meanwhile: the typeahead's rows carry the slug, so the enhanced
+   * path puts `ort=<slug>` in the URL on the first navigation; the plain form's
+   * typed name resolves server-side to the same step 2 with the place answered,
+   * and every control from there on carries `resolvedOrt` — the slug — so the
+   * name survives exactly one request and never reaches the handover.
+   */
+
   return (
     <>
       {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
@@ -250,16 +270,31 @@ export default async function Page({
               defaultValue={rawOrt}
               label={fieldAt(ortSlot.blocks, 0) ?? ""}
               locale={locale}
+              // The artifact's own "Sucheingabe (Placeholder)" field, so the
+              // word in the field is the one the content artifact authors and
+              // not the module's dictionary default (DEC-0128; the same
+              // binding `/dein-ort/starten` already makes for its field).
+              placeholder={fieldAt(ortSlot.blocks, 1)}
               query={carried}
               required
-              state={lookup.kind === "ambiguous" ? "mocked" : "ready"}
+              // `mocked` marks *demo* data, and the candidate rows come from
+              // the committed community index, which is real (`config.ts`,
+              // `placeSearchByName`). Only a run without that store is labelled.
+              state={lookup.kind === "ambiguous" && lookup.demo ? "mocked" : "ready"}
+              // A1: exactly one `primary` per rendered state, and on step 1
+              // the search *is* the advance — a resolved place moves the flow
+              // to step 2 by itself (DEC-0082's ladder, DEC-0128).
+              submitDataCta="primary"
               submitLabel={CONTINUE_LABEL[locale]}
               submitOnward
               typeahead
               suggestions={
                 lookup.kind === "ambiguous"
                   ? lookup.candidates.map((candidate) => ({
-                      label: candidate.name,
+                      // D3: the community named, its municipality as context
+                      // only — the same `Ort (Gemeinde)` row the typeahead
+                      // prints, and the value taken is still the slug.
+                      label: placeRowLabel(candidate),
                       to: "register" as const,
                       query: { ...carried, ort: candidate.slug },
                     }))
@@ -291,7 +326,7 @@ export default async function Page({
         ) : null}
 
         {/* D5: an answered step stays on screen, named and changeable — a
-            visitor who mistyped her postcode on the previous page has to be
+            visitor who mistyped the place name on the previous page has to be
             able to see and correct which place she is registering (F-2-62).
             `schritt=1` is the backwards move D4 permits, and it carries the
             answer with it so the field arrives filled rather than blank. */}

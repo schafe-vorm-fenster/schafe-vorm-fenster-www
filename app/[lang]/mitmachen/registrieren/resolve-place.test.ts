@@ -1,83 +1,81 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import { resolveRegisterPlace } from "./resolve-place";
+import { placeRowLabel, resolveRegisterPlace } from "./resolve-place";
 
 /**
- * TS-WEB-0023-A5/A6, unit level — the parts of D3/D4 the shared live-data mock
- * (`src/lib/live/mocks/geo.ts`) can and cannot exercise on its own.
+ * TS-WEB-0023-A5/A6 and TS-WEB-0008-A16, unit level — step 1 resolves a **name**.
  *
- * `mockSearchByZip` answers at most one place per postcode (never several),
- * so D3's "a municipality hit with several communities does not advance"
- * has no naturally-occurring fixture today — a measured gap, not a defect
- * in this page (`state/open.md`). The ambiguous branch is unit-tested here
- * against a stubbed `searchPlaces` result instead, so the page's own
- * handling is verified independently of the fixture's current shape.
+ * Until T-16 this module gated on `isZip` and dropped every typed name
+ * unread, which left the registration flow as the one search surface of the
+ * site still running in postcode mode (DEC-0079 §1, DEC-0128). The gate is
+ * gone, so the cases below are the real ones: a slug, a name that matches one
+ * place, a municipality name that matches several, and five digits — which
+ * are now just a string that matches nothing.
+ *
+ * `Groß Polzin` is a municipality of the committed community index
+ * (`src/generated/place-index.json`, the same store `/dein-ort` and the
+ * typeahead search) with five covered villages behind it and no community of
+ * its own slug, so A6 no longer needs a stub: the shared data carries the
+ * case. A municipality that *is* also a community slug (`Schmatzin`) resolves
+ * on the slug branch first, which is why the fixture is not one of those.
  */
-describe("TS-WEB-0023-A5: place resolution (real interface, mocked backend)", () => {
+describe("TS-WEB-0023-A5: place resolution (real interface, committed index)", () => {
   it("resolves an already-known community slug", async () => {
     const result = await resolveRegisterPlace("schlatkow");
     expect(result.kind).toBe("resolved");
     if (result.kind === "resolved") expect(result.place.slug).toBe("schlatkow");
   });
 
-  it("resolves a postcode to its one covered place", async () => {
-    const result = await resolveRegisterPlace("17495");
+  it("resolves a typed place name that matches exactly one place", async () => {
+    const result = await resolveRegisterPlace("Wolfradshof");
     expect(result.kind).toBe("resolved");
+    if (result.kind === "resolved") expect(result.place.slug).toBe("wolfradshof");
+  });
+
+  it("treats five typed digits like any other string — no postcode branch", async () => {
+    // `17495` is the postcode the old `isZip` gate resolved to a place. The
+    // search takes a name (DEC-0079 §1), so it matches nothing and step 1
+    // stays unanswered rather than advancing on an abstraction.
+    expect(await resolveRegisterPlace("17495")).toEqual({ kind: "unresolved" });
   });
 
   it("does not resolve an unknown value — step 1 stays unanswered", async () => {
     expect(await resolveRegisterPlace("99999")).toEqual({ kind: "unresolved" });
     expect(await resolveRegisterPlace(undefined)).toEqual({ kind: "unresolved" });
-    expect(await resolveRegisterPlace("not a slug or a zip")).toEqual({ kind: "unresolved" });
+    expect(await resolveRegisterPlace("not a slug or a name")).toEqual({ kind: "unresolved" });
   });
 });
 
 describe("TS-WEB-0023-A6: a municipality hit with several communities does not advance", () => {
   it("reports every candidate rather than auto-selecting one", async () => {
-    vi.resetModules();
-    vi.doMock("@/src/lib/live/places", async () => {
-      const actual = await vi.importActual<typeof import("@/src/lib/live/places")>(
-        "@/src/lib/live/places",
-      );
-      return {
-        ...actual,
-        resolvePlace: async () => undefined,
-        // T-07 / DEC-0119: the postcode gate calls `searchPlacesByZip` now.
-        searchPlacesByZip: async () => ({
-          data: {
-            query: "17389",
-            outcome: {
-              kind: "covered",
-              place: { communityId: "geoname.1", name: "Anklam", slug: "anklam", lat: 0, lng: 0 },
-            },
-            suggestions: [
-              { communityId: "geoname.1", name: "Anklam", slug: "anklam", lat: 0, lng: 0 },
-              {
-                communityId: "geoname.2",
-                name: "Musterhagen",
-                slug: "musterhagen",
-                lat: 0,
-                lng: 0,
-              },
-            ],
-          },
-          tier: "live",
-          fetchedAt: new Date().toISOString(),
-          stale: false,
-          demo: true,
-          source: "mock",
-        }),
-      };
-    });
-
-    const { resolveRegisterPlace: resolveWithStub } = await import("./resolve-place");
-    const result = await resolveWithStub("17389");
+    // A municipality name that is no community's slug, with several covered
+    // villages behind it (D3: "the step asks which of them").
+    const result = await resolveRegisterPlace("Groß Polzin");
     expect(result.kind).toBe("ambiguous");
-    if (result.kind === "ambiguous") {
-      expect(result.candidates.map((c) => c.slug)).toEqual(["anklam", "musterhagen"]);
-    }
+    if (result.kind !== "ambiguous") return;
 
-    vi.doUnmock("@/src/lib/live/places");
-    vi.resetModules();
+    expect(result.candidates.length).toBeGreaterThan(1);
+    for (const candidate of result.candidates) expect(candidate.municipality).toBe("Groß Polzin");
+    // The value taken from a candidate is the community slug, never the
+    // municipality's name (D3, "never a municipality, county or state id"),
+    // and the list is capped at the overlay's four rows (DEC-0119).
+    expect(result.candidates.map((candidate) => candidate.slug)).toContain("klein-polzin");
+    expect(result.candidates.length).toBeLessThanOrEqual(4);
+  });
+
+  it("labels each candidate `Ort (Gemeinde)`", async () => {
+    const result = await resolveRegisterPlace("Groß Polzin");
+    expect(result.kind).toBe("ambiguous");
+    if (result.kind !== "ambiguous") return;
+
+    for (const candidate of result.candidates) {
+      expect(placeRowLabel(candidate)).toBe(`${candidate.name} (Groß Polzin)`);
+    }
+  });
+
+  it("prints the bare name where the index carries no municipality", () => {
+    expect(
+      placeRowLabel({ communityId: "geoname.1", name: "Beispielort", slug: "beispielort", lat: 0, lng: 0 }),
+    ).toBe("Beispielort");
   });
 });

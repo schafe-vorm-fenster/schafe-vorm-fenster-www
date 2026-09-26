@@ -7,12 +7,11 @@ import { expect, test } from "@playwright/test";
  * `DEMO_PLACES[0]` — the shared live-data mock every place lookup on the
  * site resolves against, not a page-local fixture.
  *
- * TS-WEB-0023-A6 (a municipality hit with several communities) has no
- * naturally-occurring fixture in the shared mock (`mockSearchByZip` answers
- * at most one place per postcode) — covered at unit level instead
- * (`resolve-place.test.ts`, against a stubbed multi-suggestion result); not
- * e2e-walkable today, recorded as not-yet (needs either a real geo-api
- * credential or an extended fixture, neither owned by this work package).
+ * Step 1 searches by **name** since T-16 (DEC-0079 §1, DEC-0128): the `isZip`
+ * gate that dropped every typed name is gone, so "Groß Polzin" — a
+ * municipality of the committed community index with five covered villages
+ * behind it and no community of its own slug — finally gives TS-WEB-0023-A6 a
+ * real fixture. It was unit-only against a stub until now.
  */
 
 const ROUTE = "/mitmachen/registrieren";
@@ -23,7 +22,12 @@ test.describe("TS-WEB-0023: the register flow", () => {
   }) => {
     await page.goto(ROUTE);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
-    await expect(page.locator('[data-cta="primary"]')).toHaveCount(0); // the step-1 submit is not the flow's primary CTA
+    // A1: "exactly one `data-cta=\"primary\"`" — and on step 1 that is the
+    // search submit, because searching *is* the advance here: a resolved
+    // place moves the flow to step 2 by itself (DEC-0128).
+    const primary = page.locator('[data-cta="primary"]');
+    await expect(primary).toHaveCount(1);
+    await expect(primary).toHaveAttribute("type", "submit");
     await expect(page.getByText("Belege", { exact: true })).toHaveCount(0);
   });
 
@@ -123,6 +127,50 @@ test.describe("TS-WEB-0023: the register flow", () => {
 
     await page.goBack();
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
+  });
+
+  test("TS-WEB-0023-A2: a typed place name advances the flow, and the slug is what travels on", async ({
+    page,
+  }) => {
+    // The plain GET form submits what was typed — the slug is a lookup away
+    // (DEC-0128). What the criterion is about is that a *name* is answered at
+    // all: before T-16 this field only accepted five digits.
+    await page.goto(ROUTE);
+    await page.fill('input[name="ort"]', "Wolfradshof");
+    await page.click('button[type="submit"]');
+    await expect(page).toHaveURL(/ort=Wolfradshof/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
+    await expect(page.locator('[data-step-answered="ort"]')).toContainText("Wolfradshof");
+
+    // And from here the URL carries the community slug, not the typed string:
+    // step 2's own form is built from the resolved place (D3, D4).
+    await page.click('input[name="wer"][value="opt-1"]');
+    await page.click('button:has-text("Weiter")');
+    await expect(page).toHaveURL(/ort=wolfradshof/);
+    await expect(page).not.toHaveURL(/ort=Wolfradshof/);
+  });
+
+  test("TS-WEB-0023-A6: a municipality with several communities does not advance until one is chosen", async ({
+    page,
+  }) => {
+    // `Groß Polzin` is a municipality of the committed index, not a community
+    // slug, with several covered villages behind it (D3's "municipality hit").
+    await page.goto(`${ROUTE}?ort=${encodeURIComponent("Groß Polzin")}`);
+
+    // Still step 1: the flow may not pick a village on the visitor's behalf.
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
+    await expect(page.locator('[data-step-answered="ort"]')).toHaveCount(0);
+
+    // Each candidate is a tappable row reading `Ort (Gemeinde)` (D3, D8).
+    const candidates = page.getByRole("link", { name: /\(Groß Polzin\)$/u });
+    await expect(candidates.first()).toBeVisible();
+    expect(await candidates.count()).toBeGreaterThan(1);
+    const chosen = candidates.first();
+
+    // And the value taken from it is the community slug, which advances.
+    await chosen.click();
+    await expect(page).toHaveURL(/[?&]ort=[a-z0-9-]+(&|$)/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
   });
 
   test("TS-WEB-0023-A7: step 1 arrives answered — the place is named and changeable, never skipped", async ({
@@ -279,12 +327,17 @@ test.describe("TS-WEB-0023: the register flow", () => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
     await page.goto(ROUTE);
-    await page.fill('input[name="ort"]', "schlatkow");
+    // A typed **name**, not a slug and not a postcode: without JavaScript the
+    // typeahead does not exist, so this is the only way through step 1 — and
+    // it has to work (D8 "No-JS", DEC-0128).
+    await page.fill('input[name="ort"]', "Wolfradshof");
     await page.click('button[type="submit"]');
-    await expect(page).toHaveURL(/ort=schlatkow/);
+    await expect(page).toHaveURL(/ort=Wolfradshof/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
     await page.click('input[name="wer"][value="opt-1"]');
     await page.click('button:has-text("Weiter")');
     await expect(page).toHaveURL(/wer=opt-1/);
+    await expect(page).toHaveURL(/ort=wolfradshof/);
     await page.click('input[name="weg"][value="whatsapp"]');
     await page.click('button:has-text("Weiter")');
     await expect(page.locator('[data-cta="primary"]')).toHaveAttribute("href", /^https:\/\/app\./);

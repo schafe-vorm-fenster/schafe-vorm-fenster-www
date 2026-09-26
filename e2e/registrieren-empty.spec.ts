@@ -15,6 +15,10 @@ import { expect, test } from "@playwright/test";
  * `/dein-ort/starten?ort=99999` gets a designed empty state — "99999 steht
  * noch nicht im Dorfkalender." plus a call to action. This wires that answer
  * in; it does not design a new one.
+ *
+ * `99999` is a *string that matches no place*, not a postcode lookup: since
+ * T-16 step 1 searches by name only (DEC-0079 §1, DEC-0128), five digits reach
+ * exactly this state instead of resolving.
  */
 
 test("F-3-14: an empty field does not submit at all", async ({ page }) => {
@@ -31,7 +35,7 @@ test("F-3-14: an empty field does not submit at all", async ({ page }) => {
   ).not.toBe("");
 });
 
-test("F-3-14: an uncovered postcode gets the founding page's empty state", async ({
+test("F-3-14: a value no place matches gets the founding page's empty state", async ({
   page,
 }) => {
   await page.goto("/mitmachen/registrieren?ort=99999");
