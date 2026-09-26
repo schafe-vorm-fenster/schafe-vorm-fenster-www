@@ -262,6 +262,39 @@ convenience: a `var()` **with a fallback** is a deliberate default and is not
 reported, and comments are blanked before the scan so a property named in prose
 is not a use.
 
+### D6c — A criterion is covered by the instrument its level names, and the backlog may only shrink [FIXED: DEC-0134]
+
+`specs/verification/verification-strategy.md` § *Linking tests to specs* says
+*"A test names the ID it verifies. That is the entire mechanism"*, and every
+example it gives puts the identifier in a `describe` or `test` **title**. W3 of
+`check:specs` does not read it that way: it scans each runner file whole, so a
+mention in a comment counts. On 2026-09-26 that cost a real criterion — two
+prose mentions of A14 of TS-WEB-0016, added to explain that the browser walk
+was *missing*, took it out of W3 and the count fell from 156 to 155.
+
+`pnpm check:coverage` (A20, A21) asks the question the strategy's § *Levels*
+table already answers — **which instrument, at the criterion's own level,
+names it?** — and gives one of five verdicts: VERIFIED (a test title),
+METERED (a `check` chain meter for `static`, a CI job for `tool`), ATTESTED (a
+current row in `specs/verification/manual-checks.md` for `manual`), NAMED ONLY
+(the identifier is in a runner file but in no title — **not** coverage, and its
+own verdict so that it cannot read as green), MISSING.
+
+Two rules gate, and they are deliberately unequal:
+
+- **A criterion born in a commit arrives with its instrument.** No budget, no
+  exception. Whoever writes a criterion is the person who knows how to check
+  it, so this costs nothing to obey and the backlog cannot grow.
+- **The backlog may only shrink.** `specs/verification/coverage-budget.json`
+  holds the worst tally allowed. Worse fails. *Better also fails*, asking for
+  the number to be lowered in the same commit — an unrecorded gain is budget
+  somebody can spend again without noticing. Raising a number is a governance
+  change and needs a decision record naming what was let go.
+
+An attestation expires after **90 days**, because a manual verdict is about one
+build. `manual` criteria can therefore never be closed permanently, which is
+the honest shape of a human check rather than a defect of the register.
+
 ### D6a — A locator is verified against its excerpt, and a broken one says where the statement went [FIXED: DEC-0111, Q-0082]
 
 `check:specs` counts a locator; it never reads one. So a source edit silently
@@ -345,6 +378,8 @@ for the spec side, and needs the content frontmatter schema
 | TS-WEB-0017-A17 | static | Exactly one icon dependency; every icon name used resolves to a Lucide export. |
 | TS-WEB-0017-A16 | manual | Dependency review: any dependency adopted from a sibling repository is confirmed as framework-neutral intent, not a ported implementation — per PR that changes `package.json`. |
 | TS-WEB-0017-A18 | static | Every `{source_id, loc, excerpt}` triple under `specs/` whose `loc` names a line resolves: the excerpt is an exact substring of that line in the file the locator names, resolved against the repository, the workspace parent and `node_modules`. A triple whose excerpt sits at another line of the same file fails as **moved** and the check names the line it moved to; one whose excerpt is absent from the file fails as **gone** and is reported as the different finding it is. A locator no root can read, and an anchor that is a page, paragraph or timestamp rather than a line, are reported as **not checked** — counted and printed as such, never as a pass — and gate nothing; `loc: UNKNOWN` is legitimate and is not a finding (D6a). |
+| TS-WEB-0017-A20 | static | `pnpm check:coverage` gives every acceptance criterion exactly one verdict against the instrument its own level names (`specs/verification/verification-strategy.md` § Levels): VERIFIED only from an identifier inside a `describe`/`test`/`Scenario` title in a file a runner actually runs; METERED only from a `scripts/check-*.ts` the `check` chain invokes (`static`) or a step in `.github/workflows/` (`tool`); ATTESTED only from an unexpired `pass` row in `specs/verification/manual-checks.md` whose criterion is declared `manual`. An identifier appearing in a runner file but in no title is **NAMED ONLY** and is not coverage; one appearing nowhere is MISSING. The run writes `state/coverage.md` naming every open criterion with its level, verdict and where its name appears (D6c). |
+| TS-WEB-0017-A21 | static | `pnpm check:coverage` fails when a criterion the working tree defines and `HEAD` does not is NAMED ONLY or MISSING — no budget and no exception — and fails when either open tally differs from `specs/verification/coverage-budget.json`, in **both** directions: a rise names how many criteria must be closed, a fall names the number to write into the budget. A tree with no git history reports rule 1 as **not checked** rather than as a pass (D6c). |
 | TS-WEB-0017-A19 | static | Every `var(--x)` in a stylesheet under `app/`, `src/`, `e2e/` or `scripts/` names a custom property something declares — any stylesheet, the brand token sheet in the package, or an inline style in a TS/TSX file. A `var()` **with** a fallback is exempt: there the undeclared property is a deliberate default, not a dropped declaration. Comments are blanked before the scan, so a property named in prose is not a use. An undeclared property invalidates the whole declaration, which is why this is an error and not a warning: the rule does not degrade, it disappears (D6b). |
 
 ### D7 — One icon set [FIXED: DEC-0056, SRC-0014#icons]

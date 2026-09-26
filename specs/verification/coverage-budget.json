@@ -1,0 +1,9 @@
+{
+  "note": "The ratchet of `pnpm check:coverage` (DEC-0134). `max` is the worst tally this repository is allowed to have. A run worse than a number here fails; a run better than one fails too, asking for the number to be lowered in the same commit, so that a gain is recorded instead of left as budget to spend again. Raising a number is a governance change: it needs a decision record, and the record says which criteria were let go and why.",
+  "measured_at": "2026-09-26",
+  "measured_on": "294e5a9 (Merge T-14: the trust surface books, DEC-0132)",
+  "max": {
+    "NAMED ONLY": 33,
+    "MISSING": 149
+  }
+}
