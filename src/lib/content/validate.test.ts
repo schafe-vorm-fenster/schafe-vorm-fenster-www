@@ -466,7 +466,7 @@ describe("TS-WEB-0007-A13 / D12 row 11: the avoid list fails the build (CG-040)"
     expect(checkCopy(slotOf("**Überschrift:** Was die Nachbarn hier brauchen"))).toEqual([]);
   });
 
-  it("reads a list item and a table cell under a field, but never an authoring note", () => {
+  it("reads a list item and a table cell under a field", () => {
     const inCopy = checkCopy(
       slotOf(`**Kandidaten:**
 
@@ -474,14 +474,67 @@ describe("TS-WEB-0007-A13 / D12 row 11: the avoid list fails the build (CG-040)"
     );
     expect(checks(inCopy)).toContain("avoid-list");
 
-    const inNote = checkCopy(
+    const inTable = checkCopy(
+      slotOf(`**Vergleich:**
+
+| Spalte | Wert |
+| --- | --- |
+| Heute | Die Leute rufen an |`),
+    );
+    expect(checks(inTable)).toContain("avoid-list");
+  });
+
+  it("binds a list to its field across the intro paragraph between them (DEC-0142)", () => {
+    // `ueber-uns-3-proof-stream`'s shape: the field, a paragraph naming the
+    // pool, then the five rendered items. Position used to exempt them.
+    const findings = checkCopy(
+      slotOf(`**Überschrift:** Was andere sagen
+
+Pool: der volle `+"`proof`"+`-Bestand (31 Einträge). Fünf Plätze sind besetzbar:
+
+1. Die Leute aus dem Nachbardorf haben es zuerst gesehen.`),
+    );
+    const error = findings.find((finding) => finding.check === "avoid-list");
+    expect(error?.slot).toBe("fixture-1");
+    expect(error?.message).toContain("Die Leute");
+  });
+
+  it("passes a list the slot marked `<!-- note -->`, and nothing else in the slot", () => {
+    // A note quoting a forbidden term in order to forbid it. The marker is the
+    // exclusion; a paragraph above the list is not (DEC-0142).
+    const marked = checkCopy(
+      slotOf(`**Überschrift:** Was die Nachbarn hier brauchen
+
+<!-- note: alles ab hier ist Autorennotiz -->
+
+Drei Abweichungen vom Entwurf, alle aus einer Quelle:
+
+- Kein „die Leute" in der Überschrift — CG-009, und das Review sagt es selbst.`),
+    );
+    expect(marked).toEqual([]);
+
+    const unmarked = checkCopy(
       slotOf(`**Überschrift:** Was die Nachbarn hier brauchen
 
 Drei Abweichungen vom Entwurf, alle aus einer Quelle:
 
 - Kein „die Leute" in der Überschrift — CG-009, und das Review sagt es selbst.`),
     );
-    expect(inNote).toEqual([]);
+    expect(checks(unmarked)).toContain("avoid-list");
+  });
+
+  it("marks only what stands below the marker — the copy above it stays copy (DEC-0142)", () => {
+    const findings = checkCopy(
+      slotOf(`**Kandidaten:**
+
+- Die Leute aus dem Nachbardorf
+
+<!-- note -->
+
+- Kein „die Leute" hier — CG-009.`),
+    );
+    expect(findings).toHaveLength(1);
+    expect(findings[0]?.message).toContain("Kandidaten");
   });
 
   it("never reads the field label itself — a slot may be labelled `Warum es zählt`", () => {

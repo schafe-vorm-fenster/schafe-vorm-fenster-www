@@ -176,3 +176,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0136 — The copy lint reads fields, not files — the field-role map, the scoped avoid list, and the eleven repairs the three new rows found](DEC-0136--the-copy-lint-reads-fields-not-files.md)
 - [DEC-0139 — The focal point is the crop — the motif rule picks four heroes, the declared pair cuts the file and positions the surface, and the flyer motif has no cleared photograph](DEC-0139--the-focal-point-is-the-crop.md)
 - [DEC-0141 — The instrument decides coverage, not the mention — and the backlog may only shrink](DEC-0141--the-instrument-decides-coverage-and-the-backlog-only-shrinks.md)
+- [DEC-0142 — A note says so, and position decides nothing — the copy lint binds a list to its field, the marker is the only exclusion, and the coverage gain is written down](DEC-0142--a-note-says-so-and-position-decides-nothing.md)

@@ -199,6 +199,8 @@ haben.
 
 **Link-Label:** Alle Einstellungen im Detail
 
+<!-- note: alles ab hier ist Autorennotiz, keine Copy — die vier Abweichungslisten zitieren verbotene Begriffe, um sie zu verbieten (src/lib/content/blocks.ts, DEC-0142) -->
+
 Kicker, Überschriften, Benefit-Satz und die sechs Einstellungssätze sind die
 der Entwürfe `Design -. Portalize Einstellungen 1.png` /
 `Design -. Portalize Einstellungen 2.png` und des Reviews vom 2026-09-22

@@ -32,8 +32,8 @@ quotes a forbidden term in order to forbid it.
 
 ### 1. Copy is a field value, a list item and a table cell — never a label, never a paragraph
 
-`copyOf()` yields field values plus the list items and table cells whose
-nearest preceding block is a field. Two exclusions carry the weight:
+`copyOf()` yields field values plus the list items and table cells that belong
+to a field of the same slot. Two exclusions carry the weight:
 
 - **The `**Label:**` is not copy.** It is a slot-internal name a component
   addresses by position (`fieldAt`, `blocks.ts`), and the labels are
@@ -41,15 +41,20 @@ nearest preceding block is a field. Two exclusions carry the weight:
   avoid list forbids on the page — without failing the build.
 - **A paragraph is not copy.** Below a slot it is the authoring note that says
   where the copy came from, which is a convention of every one of the eleven
-  artifacts. A list whose nearest preceding block is a paragraph is part of
-  that note, not copy: `content/pages/dein-kalender/de.md` carries
-  *"**Kein „im Amt"** im Benefit-Band — CG-036"* as a bulleted note, and a
-  gate that fails the slot for explaining itself would teach authors to stop
-  explaining.
+  artifacts.
 
-The cost is named: real copy that a future artifact writes as a bare paragraph
-is not linted. The convention, not the lint, is what keeps that from
-happening, and `blocks.ts` already depends on the same convention.
+**Amended by `DEC-0142` on the same day.** This section first drew the second
+exclusion wider: a list or table whose *nearest preceding block* was a
+paragraph counted as part of that note, so the bulleted note
+*"**Kein „im Amt"** im Benefit-Band — CG-036"* in
+`content/pages/dein-kalender/de.md` passed. It passed — and so did eight
+**rendered** blocks that happen to stand under an intro paragraph, which this
+section wrongly presented as a named cost ("real copy that a future artifact
+writes as a bare paragraph is not linted") when the hole was in the tree
+already. `DEC-0142 §1` replaces the position rule with the slot's own explicit
+`<!-- note -->` marker and binds a list or table to the last field above it
+across any paragraph between them. The note still passes, by saying so; the
+eight rendered blocks are linted.
 
 ### 2. The field-role map: a title word in the label, minus the labels that carry one and are not titles
 
@@ -298,7 +303,7 @@ demanding a question heading against `CG-005`. The contradiction is therefore
 raised as **`CONF-0027`** (`direct_contradiction`, `OPEN`, impact Medium,
 `involved: [TS-WEB-0018, DEC-0012]`, `decision_record: DEC-0136`), with the
 exemption and its reason in `e2e/copy-structure.spec.ts` and the owner row in
-`state/open.md` (row 270).
+`state/open.md` (row 277).
 
 **`TS-WEB-0018-A7` is therefore not met on the render, and this task does not
 report it as met.** Its content half holds (`checkProductName`, four unit

@@ -215,10 +215,30 @@ They are on `state/open.md`, not silently absent.
 
 `checkCopy()` and `checkProductName()` are the machine half of
 `specs/contracts/copy-contract.md`. They read **copy**: field values, and the
-list items and table cells standing directly under a field. They do not read a
-field label (a slot-internal name) and they do not read a paragraph (the
+list items and table cells that belong to a field of the same slot. They do not
+read a field label (a slot-internal name) and they do not read a paragraph (the
 authoring note that says where the copy came from) — DEC-0136 says why, and
 `validate.test.ts` fixes both with a fixture.
+
+**A list or table binds to the last field above it, across any paragraph
+between them** (DEC-0142). The one exclusion is explicit: a slot that writes
+`<!-- note -->` marks everything below that line as authoring prose, and the
+lists and tables there carry `note: true` and are not read. Until DEC-0142 the
+exclusion was positional — *a list whose nearest preceding block is a
+paragraph* — and position exempted eight blocks the pages **render**:
+
+| Slot | Block | Rendered by |
+| --- | --- | --- |
+| `ueber-uns-3-proof-stream` (de, en) | the five proof items under *Pool: …* | `app/[lang]/ueber-uns/page.tsx:156` |
+| `deine-region-6-proof-demo` (de, en) | the three quote items | `app/[lang]/deine-region/page.tsx:196` |
+| `dein-kalender-5-proof-demo` (de, en) | the three quote items | `app/[lang]/dein-kalender/page.tsx:286` |
+| `archiv-2-rows-demo` (de, en) | the 192-cell archive table | `app/[lang]/ueber-uns/archiv/page.tsx:95` |
+
+All eight are scanned now. The four authoring-note lists that the positional
+rule was written for — the deviation bullets of `dein-kalender-3b-embed-config`
+in both locales — carry the marker instead, so the note that quotes `im Amt` in
+order to forbid it still passes (`pnpm check:content`: *Content pipeline is
+valid*).
 
 | Row | Runs | Left to review |
 | --- | --- | --- |

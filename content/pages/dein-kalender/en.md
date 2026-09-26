@@ -193,6 +193,8 @@ Including dates from clubs that simply sent their flyer over WhatsApp.
 
 **Link label:** All settings in detail
 
+<!-- note: everything below is an authoring note, not copy — the four deviation lists quote forbidden terms in order to forbid them (src/lib/content/blocks.ts, DEC-0142) -->
+
 Kicker, headings, benefit sentence and the six setting sentences are the
 ones in `Design -. Portalize Einstellungen 1.png` /
 `Design -. Portalize Einstellungen 2.png` and the 2026-09-22 review

@@ -29,6 +29,23 @@ const BULLET = /^[-*]\s+(.+)$/;
 const ORDERED = /^\d+[.)]\s+(.+)$/;
 const TABLE_DIVIDER = /^\|[\s:|-]+\|$/;
 
+/**
+ * The explicit note marker — `<!-- note -->`, with an optional reason after
+ * the word (`<!-- note: three deviations from the drafts -->`).
+ *
+ * It opens a note region that runs to the end of the slot: every list and
+ * table below it is authoring prose and carries `note: true`, which is what
+ * the copy lint passes over (`copyOf`, DEC-0142). It replaces the position
+ * rule that used to decide this — *a list whose nearest preceding block is a
+ * paragraph is a note* — because position also exempted eight **rendered**
+ * blocks (the three proof lists and the archive table, both locales;
+ * `src/lib/content/README.md`). The marker is the `<!-- key: value -->`
+ * annotation the artifacts already use (`source_note:`, `clearance:`), and it
+ * is not a block: nothing renders it, and it does not shift the paragraph
+ * index a page reads.
+ */
+const NOTE_MARKER = /^<!--\s*note\b[\s\S]*?-->$/i;
+
 /** The field labels that carry a call to action, in both locales. */
 const CTA_LABEL = /^(cta|call to action|button|cta-label|cta label)/i;
 
@@ -61,6 +78,8 @@ export function parseBlocks(body: string): ContentBlock[] {
   let paragraph: string[] = [];
   let list: { ordered: boolean; items: string[] } | null = null;
   let table: string[][] | null = null;
+  /** Set by the explicit marker; runs to the end of this slot body. */
+  let inNote = false;
 
   const flushParagraph = () => {
     const text = plain(paragraph.join(" "));
@@ -69,14 +88,19 @@ export function parseBlocks(body: string): ContentBlock[] {
   };
   const flushList = () => {
     if (list && list.items.length > 0) {
-      blocks.push({ kind: "list", ordered: list.ordered, items: list.items });
+      blocks.push({
+        kind: "list",
+        ordered: list.ordered,
+        items: list.items,
+        ...(inNote ? { note: true } : {}),
+      });
     }
     list = null;
   };
   const flushTable = () => {
     if (table && table.length > 0) {
       const [head, ...rows] = table;
-      blocks.push({ kind: "table", head, rows });
+      blocks.push({ kind: "table", head, rows, ...(inNote ? { note: true } : {}) });
     }
     table = null;
   };
@@ -91,6 +115,13 @@ export function parseBlocks(body: string): ContentBlock[] {
 
     if (line === "") {
       flushAll();
+      continue;
+    }
+
+    if (NOTE_MARKER.test(line)) {
+      // Close what stands above it first: the marker looks forward only.
+      flushAll();
+      inNote = true;
       continue;
     }
 

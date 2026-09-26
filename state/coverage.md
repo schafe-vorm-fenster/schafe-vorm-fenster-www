@@ -6,17 +6,17 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**430 criteria · 252 closed · 178 open (59 % closed)**
+**430 criteria · 253 closed · 177 open (59 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
 | VERIFIED | 252 | a test title in a file a runner runs carries the id |
-| METERED | 0 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
+| METERED | 1 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
-| NAMED ONLY | 32 | the id is in a runner file but in no test title — **not coverage** |
+| NAMED ONLY | 31 | the id is in a runner file but in no test title — **not coverage** |
 | MISSING | 146 | nothing names it |
 
-Rule 1 (a new criterion arrives with its instrument): 2 criterion(a) new in this commit, 0 without an instrument.
+Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
 
 ## By level
 
@@ -26,7 +26,7 @@ Rule 1 (a new criterion arrives with its instrument): 2 criterion(a) new in this
 | unit | 30 | 26 | 4 | 87 % |
 | integration | 73 | 47 | 26 | 64 % |
 | e2e | 171 | 130 | 41 | 76 % |
-| tool | 39 | 0 | 39 | 0 % |
+| tool | 39 | 1 | 38 | 3 % |
 | manual | 31 | 0 | 31 | 0 % |
 
 ## By tactical specification
@@ -39,7 +39,7 @@ Rule 1 (a new criterion arrives with its instrument): 2 criterion(a) new in this
 | TS-WEB-0004 | 11 | 8 | A6 A7 A11 |
 | TS-WEB-0005 | 16 | 13 | A9 A10 A15 |
 | TS-WEB-0006 | 18 | 14 | A4 A13 A14 A16 |
-| TS-WEB-0007 | 16 | 5 | A2 A3 A4 A5 A6 A9 A10 A11 A13 A15 A16 |
+| TS-WEB-0007 | 16 | 6 | A2 A3 A4 A5 A6 A9 A10 A11 A15 A16 |
 | TS-WEB-0008 | 16 | 11 | A6 A7 A8 A12 A13 |
 | TS-WEB-0009 | 14 | 7 | A1 A2 A3 A8 A9 A12 A13 |
 | TS-WEB-0010 | 15 | 5 | A4 A5 A6 A7 A9 A11 A12 A13 A14 A15 |
@@ -105,7 +105,6 @@ Rule 1 (a new criterion arrives with its instrument): 2 criterion(a) new in this
 | TS-WEB-0007-A9 | unit | MISSING | — | Harmonisation: locale variants of one id agree on records, claims, proof bindings, CTA target and conversion goal, filled slots, numbers and `UNKNOWN` markers — … |
 | TS-WEB-0007-A10 | tool | MISSING | — | Every audience, conversion goal, offering and proof id used resolves in an installed package; no such id is defined locally. |
 | TS-WEB-0007-A11 | integration | NAMED ONLY | app/[lang]/rechtliches/german-only-notice.test.ts — outside any test title | `content/legal/<locale>/` renders as the anchored sections of the one legal page in registry order; anchors match TS-WEB-0004 D8; a legal file carrying generati … |
-| TS-WEB-0007-A13 | tool | NAMED ONLY | src/lib/content/validate.test.ts — outside any test title | Glossary conformance: a banned term in a field where it is banned is reported with file, field and term. |
 | TS-WEB-0007-A15 | manual | MISSING | — | P7 dry run on one bumped package version: the PR touches exactly the files whose `derived_from` names a changed record, resets them to `draft`, and carries `job … |
 | TS-WEB-0007-A16 | tool | MISSING | — | Segment independence: no generated string contains a resolved place name; place references occur only as named interpolation slots. |
 | TS-WEB-0008-A6 | e2e | NAMED ONLY | src/lib/live/mocks/geo.test.ts — outside any test title | `/dein-ort?ort=<covered place with no dates>`: focus job and primary CTA switch to publishing, the place name appears escaped in the copy, URL and canonical are … |

@@ -127,16 +127,25 @@ export interface CopyText {
 
 /**
  * The copy of a page artifact: field values, and the list items and table
- * cells that stand **directly** under a field.
+ * cells that belong to a field of the same slot.
  *
  * What is deliberately not copy (DEC-0136): the `**Label:**` itself — a
  * slot-internal name, not a rendered string, which is why a field may be
  * labelled `Warum es zählt` while the avoid list forbids that wording on the
  * page — and every paragraph, because a paragraph below a slot is the
  * authoring note that says where the copy came from (`content/pages/**`
- * convention). A note quoting a forbidden term to forbid it (`Kein „im Amt" im
- * Benefit-Band`) must not fail the build that its own slot passes, so a list
- * whose nearest preceding block is a paragraph is a note list, not copy.
+ * convention).
+ *
+ * **A list or table binds to the last field above it, across any paragraph
+ * between them** (DEC-0142). A note quoting a forbidden term in order to
+ * forbid it (`Kein „im Amt" im Benefit-Band`) must not fail the build that its
+ * own slot passes — but it is excluded by the slot's own `<!-- note -->`
+ * marker (`src/lib/content/blocks.ts`), never by its position. Position used
+ * to decide it, and position exempted the eight rendered blocks that stand
+ * under an intro paragraph: the proof lists of `dein-kalender-5-proof-demo`,
+ * `deine-region-6-proof-demo` and `ueber-uns-3-proof-stream`, and the
+ * `archiv-2-rows-demo` table, in both locales — all four rendered by their
+ * pages (`app/[lang]/ueber-uns/page.tsx:156` and its three siblings).
  */
 export function copyOf(page: PageContent): CopyText[] {
   const texts: CopyText[] = [];
@@ -152,10 +161,11 @@ export function copyOf(page: PageContent): CopyText[] {
         }
         continue;
       }
-      if (block.kind === "paragraph") {
-        field = null;
-        continue;
-      }
+      // A paragraph is an authoring note, and it is not a boundary: the list
+      // under `Pool: …` is the field's content, not a second note.
+      if (block.kind === "paragraph") continue;
+      // The one exclusion, and it is explicit (DEC-0142).
+      if (block.note) continue;
       if (!field) continue;
       const cells =
         block.kind === "list" ? block.items : [...block.head, ...block.rows.flat()];
