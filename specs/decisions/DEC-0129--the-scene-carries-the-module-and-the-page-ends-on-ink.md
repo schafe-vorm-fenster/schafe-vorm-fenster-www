@@ -28,6 +28,12 @@ stood on a ground its own state indicator cannot be seen on, and an uncontained
 section dropped the page gutter from its two own lines. §5 gained the spec
 amendment it had argued it did not need.
 
+A second review of that round corrected three of its own claims, each marked
+where it stands: §5 identified block 2b by a position `D3a` does not give it,
+§11 named the context band's ground wrong and left the shipped contrast ratio in
+a run report instead of here, and §12 credited the transition's space to a CSS
+rule that cannot match.
+
 ## Decision
 
 ### 1. The scene gains a `module` slot; the component is not forked
@@ -98,11 +104,19 @@ Betrieb."* `CG-033`/`CG-040` put "gebaut" and "betrieben" about this product on
 the avoid list and the review strikes the stamp, so the sentence goes and with
 it the `#provenance-stamps` element.
 
-The block keeps its position and its identity: the scene is `#scene-3`, it
-stands between block 2a and the proof stream, and it takes `D3`'s own rhythm
-value for block 2b — **COLOUR violet**. `A9`'s id list in the walk therefore
-reads `… scene-3 · proof-stream …`, and the walk asserts `#scene-3`'s surface so
-the block cannot quietly stop being 2b.
+The block keeps its identity, and the identification is the **mechanism and
+the ground**, not a position: the `provenance` scene *is* block 2b wherever
+`D3a` puts it, and it takes `D3`'s own rhythm value for block 2b — **COLOUR
+violet**. In the `direct` order the page ships today it is `#scene-3`, the third
+member of block 2a — inside 2a, not between 2a and the proof stream — so `A9`'s
+id list in that load reads `… scene-3 · proof-stream …` and the walk asserts
+`#scene-3`'s surface, which is what keeps the block from quietly stopping to be
+2b. The first wording of this amendment said block 2b is "the **last**" of the
+three scenes; that is true only of `direct`, while `D3a` puts the provenance
+scene middle for `professional`/`purchase-intent` and first for `press` and `A7`
+requires the module's scene to be last in the `professional` load. The positional
+claim is therefore withdrawn from `A9` and from this record on the same day it
+was written — it would have landed on T-21, which turns the trait ordering on.
 
 **The spec is amended, on the QA round of 2026-09-26.** This record first said
 "no spec is amended: the criterion's sequence is unchanged, only which element
@@ -206,9 +220,23 @@ vocabulary would fade at once.
 scenes in a row are legal on their own, but in `D2`'s S3 the widening block
 (`surface-2`) stands above them, and three neutral grounds in a row is the one
 thing `checkRhythm`'s family rule forbids. The rhythm the page ships with is
-therefore PHOTO · ink · [surface-2] · paper · lime-100 · violet-500 · lime-100 ·
-paper · ink, which `checkRhythm` accepts in **both** states — not only in the
-one the walk loads.
+therefore PHOTO · ink · [surface-2, S3 only] · paper · lime-100 · violet-500 ·
+lime-100 · surface · ink — the eighth entry is the context band, which `/`
+renders through `PageFrame`'s unmerged branch on `surface`, not on `paper` — and
+`checkRhythm` accepts it in **both** states, not only in the one the e2e walk
+loads. Because that walk loads one state and reads the DOM, the two sequences are
+also listed by hand in `app/[lang]/page-rhythm.test.ts`, the way four other
+routes pin theirs; the S3 sequence has no test that renders it.
+
+**What ships is still short of `NFR-WEB-0059`.** On `paper` the active disc
+measures **1.62:1** and the inactive ones **1.09:1** (recomputed from the sampled
+`rgb(164, 216, 34)` and `rgb(238, 242, 233)` against `rgb(249, 251, 247)`),
+against the >= 3:1 that requirement sets for non-text contrast. It is the visible
+state again, and byte-identical to the `/mitmachen` instance — but the pair is
+`SRC-0014`'s own (`website-design-system.md:560`), `pnpm check:contrast` judges
+the token set and never a composed pair, and no page work package may fork a
+design-system colour pair. `state/open.md` row 251 carries the shortfall against
+`SRC-0014`, for both instances.
 
 ### 12. `section-shell` keeps its own two lines in the container, even uncontained
 
@@ -225,10 +253,22 @@ The fix is in the shared component and not in the page, because the defect is
 the component's: an uncontained shell now wraps kicker and transition in their
 own `.container` and hands `children` out bare. The other caller,
 `price-section`, passes no kicker to the shell and containerises its own band,
-so nothing changes there. One CSS rule moved with it — the shell flattens the
-trailing margin of `.container:last-child` rather than of every container, so
-the new lede container keeps the space between the transition line and the block
-it hands off to.
+so nothing changes there. **That wrapper is the whole mechanism**: the lede
+container is not the section's last child, so `.section > :last-child` — the one
+rule that does any flattening — never touches it, and the transition keeps its
+space by construction rather than by a margin rule.
+
+The QA round first wrote that rule as the mechanism (`.section >
+.container:last-child > :last-child`) and that was wrong twice over. The
+selector is inside a CSS Module and `.container` is a **global** class from
+`app/styles/base.css`, so the compiled form
+(`…__container:last-child > :last-child`) matches no element on any page and
+never did — the branch was dead before this round and editing it changed
+nothing. It is removed rather than repaired: making it real (`:global(.container)
+> :last-child`) would flatten the last paragraph's margin inside *every*
+contained section on every page, which is a measured change to the shared
+vertical rhythm and `SRC-0014`'s call, not a page work package's. `state/open.md`
+row 252 records it.
 
 ## Consequences
 
@@ -247,8 +287,10 @@ it hands off to.
   page's own sentence.
 - `src/components/section-shell/**` is edited for §12 — a shared component, and
   the smallest edit that closes the defect: the uncontained branch gains one
-  wrapper, the prop gains its documentation, and the margin-flattening rule
-  gains `:last-child`. No prop is added or removed and no caller changes.
+  wrapper and the prop gains its documentation. No prop is added or removed and
+  no caller changes. The stylesheet **loses** one selector: the dead
+  `.container` branch of the margin-flattening rule, which CSS Modules localised
+  and which therefore never matched (§12, row 252).
 - **No acceptance criterion is added, removed or reworded.** Two determinations
   are amended in prose and both name this record: `TS-WEB-0019 D3` row 2b and
   `A9`, which said block 2b is a stamp element (§5). No id is renumbered, no
@@ -256,3 +298,12 @@ it hands off to.
 - `e2e/pages/home.spec.ts` gains the substance of `TS-WEB-0002-A13` on the home
   instance — three-quarter trigger, one 9.1 s pass, 30 s of no further change,
   scroll-out-and-back — and one gutter test that would have caught §12.
+- `app/[lang]/page-rhythm.test.ts` is new: the two `D2` section sequences by
+  hand, as `dein-kalender`, `ueber-uns` and two more routes already carry
+  theirs. The e2e walk reads one state's DOM; this pins the state no walk loads.
+- Three `state/open.md` rows join the seven: the state indicator's 1.62:1 (251),
+  the dead container rule the shared stylesheet lost (252) and `/`'s one
+  cross-route import, `./mitmachen/paths` (253) — argued in §2 and outside this
+  work package's `files_shared`.
+- `app/[lang]/_pages.module.css` loses `.stamp`, which nothing renders now that
+  the stamp element is gone (§5). No other route ever used it.

@@ -12,12 +12,14 @@
  * carried the shell's own padding plus that margin and read a step taller
  * than its neighbour. The shell owns the space at its own edges.
  *
- * Only the **last** container is flattened: an uncontained section carries its
- * kicker and transition in a container of their own (DEC-0129 §12), and that
- * one is not at the section's bottom edge — flattening it would eat the space
- * between the transition line and the block it hands off to.
+ * This reaches the section's own last child only. A second selector used to
+ * stand here for the last child *inside* `.container`, and it never matched:
+ * `.container` is the global class of `app/styles/base.css`, this file is a CSS
+ * Module, so the compiled selector asked for a hashed class no element carries
+ * (DEC-0129 §12, `state/open.md` row 252). Nothing depends on it — an
+ * uncontained section carries its kicker and transition in a container of
+ * their own, which is not the section's last child either way.
  */
-.section > .container:last-child > :last-child,
 .section > :last-child {
   margin-bottom: 0;
 }

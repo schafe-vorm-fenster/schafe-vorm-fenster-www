@@ -275,16 +275,21 @@ the candidate set it draws from — pool:
 1. 17 places in and around Lehre, one calendar under its own name: LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony)
 2. Won the NØRD Award 2026, Smart Community category, under Bitkom patronage. — NØRD digital convention, Rostock
 3. The adult education centres bring their course programme out to the villages. — Adult education centres in Vorpommern-Greifswald, Pasewalk
-4. A valuable contribution to visibility in rural areas. — Kulturlandbüro Uecker-Randow, Schloss Bröllin
+4. "The project can make a valuable contribution … to visibility in rural areas." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
 5. Running since 2018, no pilot and no prototype. — Vorpommern-Greifswald
 
 Names, figures, titles, and years are taken from the records as they
 stand: the 17 places, the name "LeLender" and the foundation's ownership
 from `lehre-lelender`, the win and the Bitkom patronage from
 `noerd-award-2026-smart-community`, the course programme from
-`volkshochschule-uecker-randow`, the Kulturlandbüro's sentence from
+`volkshochschule-uecker-randow`, the Kulturlandbüro's quotation from
 `kulturlandbuero-broellin`, the operating year from
-`in-operation-since-2018`. Four corrections from the 2026-09-22 review are
+`in-operation-since-2018`. The quotation keeps the modality the record keeps —
+"can make", shortened by "to economic recovery and", wording from §Evidence and
+the same sentence the reserved place on `/ueber-uns` carries
+(`content/pages/ueber-uns/en.md`). It is not a claim of ours: the record's
+assertive `claim:` is our own summary, not the Kulturlandbüro's sentence, and
+"valuable" comes from the quotation alone (the record's wording boundary). Four corrections from the 2026-09-22 review are
 in there: the foundation runs the LeLender, not the municipality; the NØRD
 Award was won, not merely entered; the adult education centres are named
 after the district and the benefit (courses in the villages too) belongs in

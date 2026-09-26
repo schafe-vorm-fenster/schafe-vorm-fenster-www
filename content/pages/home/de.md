@@ -276,15 +276,22 @@ Rahmensatz und den Kandidatensatz, aus dem gezogen wird — Pool:
 1. 17 Orte in und um Lehre, ein Kalender unter eigenem Namen: LeLender. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen)
 2. NØRD Award 2026 gewonnen, Kategorie Smart Community, Schirmherr Bitkom. — NØRD digital convention, Rostock
 3. Die Volkshochschulen bringen ihr Kursprogramm bis in die Dörfer. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
-4. Ein wertvoller Beitrag zur Sichtbarkeit im ländlichen Raum. — Kulturlandbüro Uecker-Randow, Schloss Bröllin
+4. „Das Projekt kann einen wertvollen Beitrag … zur Sichtbarkeit im ländlichen Raum leisten." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
 5. Seit 2018 in Betrieb, kein Pilot und kein Prototyp. — Vorpommern-Greifswald
 
 Namen, Zahlen, Titel und Jahre stehen so in den Belegen: die 17 Orte, der
 Name „LeLender" und die Trägerschaft der Stiftung aus `lehre-lelender`, der
 Gewinn und die Bitkom-Schirmherrschaft aus
 `noerd-award-2026-smart-community`, das Kursprogramm aus
-`volkshochschule-uecker-randow`, der Satz des Kulturlandbüros aus
+`volkshochschule-uecker-randow`, das Zitat des Kulturlandbüros aus
 `kulturlandbuero-broellin`, das Betriebsjahr aus `in-operation-since-2018`.
+Das Zitat steht in der Möglichkeitsform, in der der Beleg es führt — „kann …
+leisten", gekürzt um „zum wirtschaftlichen Wiederaufbau und", Wortlaut aus
+§Evidence und identisch mit dem reservierten Platz auf `/ueber-uns`
+(`content/pages/ueber-uns/de.md`). Es ist keine Behauptung des Hauses: der
+assertive `claim:` des Belegs ist unsere Zusammenfassung, nicht der Satz des
+Kulturlandbüros, und „wertvoll" kommt allein aus dem Zitat
+(Formulierungsgrenze des Belegs).
 Vier Korrekturen des Reviews vom 2026-09-22 stecken darin: die Stiftung
 verantwortet den LeLender, nicht die Gemeinde; der NØRD Award ist gewonnen
 und nicht nur beschickt; die Volkshochschulen heißen nach dem Landkreis und

@@ -90,9 +90,15 @@ import type { ReactNode } from "react";
  * the M4 render (TS-WEB-0006-A10); only the data source changes. Each has a
  * `Mock aktiv` row in `state/open.md`.
  *
- * **Page rhythm** (SRC-0014 §Page Rhythm, checked in the home walk's own
- * rhythm test): PHOTO hero · COLOUR ink (the live data anchor) · lime-500 ·
- * paper · violet-500 · lime-100 · surface · ink. The second `ink` is the
+ * **Page rhythm** (SRC-0014 §Page Rhythm, checked in `page-rhythm.test.ts` by
+ * hand and in the home walk's own rhythm test against the DOM): PHOTO hero ·
+ * COLOUR ink (the live data anchor) · [surface-2 — S3's widened radius, and
+ * only S3's] · paper · lime-100 · violet-500 · lime-100 · surface (the context
+ * band) · ink. The three scenes of 2a are the paper · lime-100 · violet-500
+ * run: the scene that carries the module is **light**, because the module's
+ * active step disc is `lime-500` and "a fill on a light ground means active"
+ * (DEC-0129 §11 — it stood on `lime-500` until 2026-09-26, where the disc
+ * measured 1.00:1). The second `ink` is the
  * closing search block — the one further ink section a page may carry, and
  * it is the last section (DEC-0117), because a search field has no other
  * legal ground (SRC-0014 §Search field).
