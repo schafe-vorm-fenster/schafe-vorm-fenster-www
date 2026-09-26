@@ -43,6 +43,85 @@ async function blockOneSettled(page: Page): Promise<void> {
 }
 
 /**
+ * Block 2a's mechanisms in DOM order — the one value TS-WEB-0019 D3a moves.
+ * Read as a plain array rather than asserted through a locator, because the
+ * trait-ordered branch arrives through a `<Suspense>` boundary whose fallback
+ * is the `direct` order (DEC-0140): the assertion has to be able to retry.
+ */
+async function sceneMechanisms(page: Page): Promise<readonly string[]> {
+  return page.locator('main [data-block="scene"]').evaluateAll((nodes) =>
+    nodes.map(
+      (node) => node.querySelector("[data-mechanism]")?.getAttribute("data-mechanism") ?? "",
+    ),
+  );
+}
+
+/** Every fact TS-WEB-0019-A7 compares between its two loads, read in one pass. */
+async function sceneFacts(page: Page) {
+  const facts = await page.evaluate(() => {
+    const scenes = [...document.querySelectorAll('main [data-block="scene"]')];
+    const mechanismOf = (scene: Element): string =>
+      scene.querySelector("[data-mechanism]")?.getAttribute("data-mechanism") ?? "";
+
+    const position = scenes.findIndex((scene) => scene.querySelector("[data-explain-module]"));
+    const carrier = scenes[position];
+
+    return {
+      moduleScene: { mechanism: carrier === undefined ? "" : mechanismOf(carrier), position },
+      /**
+       * DOM order inside the carrying scene — A6's render order. The module's
+       * own calendar stage renders event rows as `article`s too, so an
+       * `article` counts as the block's concrete instance only outside it.
+       */
+      triple: [...(carrier?.querySelectorAll("h2, [data-explain-module], article") ?? [])]
+        .filter(
+          (element) =>
+            element.hasAttribute("data-explain-module") ||
+            element.closest("[data-explain-module]") === null,
+        )
+        .map((element) =>
+          element.tagName === "H2"
+            ? "opener"
+            : element.hasAttribute("data-explain-module")
+              ? "module"
+              : "instance",
+        ),
+      opener: carrier?.querySelector("h2")?.textContent?.trim() ?? "",
+      steps: [...(carrier?.querySelectorAll("[data-explain-step]") ?? [])].map((step) =>
+        (step.textContent ?? "").replace(/\s+/gu, " ").trim(),
+      ),
+      /** One secondary CTA per mechanism, so the set is comparable across loads. */
+      ctas: Object.fromEntries(
+        scenes.map((scene) => [
+          mechanismOf(scene),
+          [...scene.querySelectorAll('[data-cta="secondary"]')].map((cta) =>
+            cta.getAttribute("href"),
+          ),
+        ]),
+      ),
+      sceneIds: scenes.map((scene) => scene.id),
+      /** Every other section of the page, in its own DOM order. */
+      otherIds: [...document.querySelectorAll("main [id]")]
+        .map((element) => element.id)
+        .filter((id) =>
+          [
+            "focus-block",
+            "place-dates",
+            "live-counters",
+            "proof-stream",
+            "context-band",
+            "closing-cta",
+          ].includes(id),
+        ),
+      proofElements: document.querySelectorAll("#proof-stream article").length,
+    };
+  });
+
+  const box = await page.locator("[data-explain-module]").first().boundingBox();
+  return { ...facts, moduleHeight: box?.height ?? 0 };
+}
+
+/**
  * A covered community whose window is empty — TS-WEB-0019 D2's S3, and the only
  * state in which the widening module still renders (polish brief, page 1,
  * fix 2). `EMPTY_DEMO_SLUG` no longer reaches it: the dates capability needs
@@ -422,10 +501,73 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(explainModule).toHaveAttribute("data-advance", "stopped");
   });
 
-  test.fixme(
-    "TS-WEB-0019-A7: the entry trait reorders the scenes and changes nothing else [M4 — TS-WEB-0010 stages]",
-    () => {},
-  );
+  test("TS-WEB-0019-A7: the entry trait reorders the scenes and changes nothing else", async ({
+    page,
+  }) => {
+    /**
+     * The two loads A7 names, in the order it names them: a LinkedIn
+     * `Referer` is D3's `professional` row, an absent one is `direct`. The
+     * proxy hands the referrer's host down as one request header and the page
+     * reads it inside a boundary whose fallback is the `direct` order, so the
+     * `professional` order arrives a beat after first paint — hence the
+     * polling read (DEC-0140, `app/[lang]/_scenes.tsx`).
+     */
+    test.setTimeout(90_000);
+    // 360 × 800 is the viewport A6's one-viewport clause is measured at, and
+    // A7 asks for that clause "in either position".
+    await page.setViewportSize({ width: 360, height: 800 });
+
+    await page.goto("/", { referer: "https://www.linkedin.com/" });
+    await expect.poll(() => sceneMechanisms(page), { timeout: 20_000 }).toEqual([
+      "embed",
+      "provenance",
+      "whatsapp",
+    ]);
+    const professional = await sceneFacts(page);
+
+    await page.goto("/");
+    await expect.poll(() => sceneMechanisms(page), { timeout: 20_000 }).toEqual([
+      "whatsapp",
+      "embed",
+      "provenance",
+    ]);
+    const direct = await sceneFacts(page);
+
+    // The scene containing the module is last in the first load and first in
+    // the second, and in both it is the `whatsapp` one: "no trait changes
+    // which mechanism carries the module" (D3a, DEC-0109 §2).
+    expect(professional.moduleScene).toEqual({ mechanism: "whatsapp", position: 2 });
+    expect(direct.moduleScene).toEqual({ mechanism: "whatsapp", position: 0 });
+
+    // The same opener · module · instance triple with the same three step
+    // lines — the module is not forked for a position (DEC-0110 §2).
+    expect(professional.triple).toEqual(["opener", "module", "instance"]);
+    expect(professional.triple).toEqual(direct.triple);
+    expect(professional.steps).toHaveLength(3);
+    expect(professional.steps).toEqual(direct.steps);
+    expect(professional.opener).toBe(direct.opener);
+
+    // All three blocks stay scenes in both, with the same one secondary CTA
+    // each — ordering only, no block added, removed or rewritten.
+    expect(professional.ctas).toEqual(direct.ctas);
+    expect(professional.sceneIds.toSorted()).toEqual(direct.sceneIds.toSorted());
+    expect(professional.sceneIds).toEqual(["scene-2", "scene-3", "scene-1"]);
+    expect(direct.sceneIds).toEqual(["scene-1", "scene-2", "scene-3"]);
+
+    // Block set and block order are otherwise identical: every section
+    // outside block 2a stands where it stood (TS-WEB-0010 D7, TS-WEB-0010-A4).
+    expect(professional.otherIds).toEqual(direct.otherIds);
+
+    // A6's one-viewport clause holds in either position.
+    for (const height of [professional.moduleHeight, direct.moduleHeight]) {
+      expect(height).toBeGreaterThan(0);
+      expect(height).toBeLessThanOrEqual(800);
+    }
+
+    // TS-WEB-0019-A8 — "in every one of the loads of A7".
+    expect(professional.proofElements).toBe(5);
+    expect(direct.proofElements).toBe(5);
+  });
 
   test("TS-WEB-0019-A8: the proof stream renders exactly 5 elements", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
@@ -566,7 +708,13 @@ test.describe("TS-WEB-0019 — home", () => {
     // The `whatsapp` scene's module is server-rendered at state 1 with all
     // three step lines, so a JavaScript-less load is complete (A11,
     // DEC-0105 §6's reduced-motion fallback already requires that state).
-    const explainModule = page.locator("[data-explain-module]");
+    //
+    // Scoped to `main` for the same reason as the fields above: since DEC-0140
+    // block 2a arrives through a boundary of its own, and with JavaScript off
+    // the branch React parks after `</main>` stays in the document as a second,
+    // unreachable copy of the three scenes. What A11 asserts is the page the
+    // visitor gets, and that is the one inside `main`.
+    const explainModule = page.locator("main [data-explain-module]");
     await expect(explainModule).toHaveCount(1);
     await expect(explainModule).toHaveAttribute("data-state", "1");
     await expect(explainModule.locator("[data-explain-step]")).toHaveCount(3);

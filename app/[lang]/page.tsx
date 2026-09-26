@@ -51,6 +51,7 @@ import { PageJsonLd } from "./_structured-data";
 import { pageContent } from "./_content";
 import { localeFrom, pageMetadataFor } from "./_locale";
 import { PageFrame } from "./_page-frame";
+import { HomeScenes } from "./_scenes";
 import { HOME_META } from "./page.meta";
 
 import type { HeroContentProps } from "@/src/components/hero-block/hero-block";
@@ -672,213 +673,232 @@ export default async function HomePage({
         <StatedFocusModules copy={focusCopy} searchParams={searchParams} />
       </Suspense>
       {/* Block 2a — three scenes, one mechanism each (TS-WEB-0006 D7), all
-          three declaring `data-block="scene"` (TS-WEB-0019-A6), in the
-          `direct`/stage-0 order of TS-WEB-0019 D3a. The trait-dependent order is
-          a runtime property of TS-WEB-0010 and lands with the stages at M4.
+          three declaring `data-block="scene"` (TS-WEB-0019-A6). The record
+          below is written in the `direct` order of TS-WEB-0019 D3a, and
+          `HomeScenes` is what re-orders it per entry trait: the read of the
+          proxy's handover sits inside a `<Suspense>` boundary whose fallback
+          **is** this order, so the shell stays prerendered and a visitor
+          without an entry context sees it unchanged (`_scenes.tsx`, DEC-0140).
+          The record's keys are the mechanisms, so no trait can reach inside a
+          scene, and none changes which one carries the module (D3a).
 
           Each block carries exactly one CTA at secondary treatment, pointing
           at the page that owns its job (D3a, DEC-0082 §4). In the `whatsapp`
           block that CTA is the **module's own** and the scene adds none —
           "wrapping does not double the CTA" (DEC-0110 §1). */}
-      <MotionReveal>
-        <SectionShell
-          dataBlock="scene"
-          id="scene-1"
-          kicker={fieldAt(sceneWhatsapp.blocks, 1)}
-          /* A light ground, because the module inside it only reads on one.
-             The active step's disc is `lime-500` and the two inactive ones
-             are `surface` — "a fill on a light ground means active"
-             (design-system contract `active-step`,
-             website-design-system.md:560), and the step rows are divided by
-             the `line` hairline, which the brand tokens themselves note
-             disappears on a lime ground (1.27:1). On `lime-500` the active
-             disc was 1.00:1 against its own section and the *inactive* discs
-             were the only visible ones, which inverts the state reading.
-             TS-WEB-0019 D3a assumes exactly this: "the active step is
-             `lime-500` on a light ground" (DEC-0129 §11). */
-          surface="paper"
-          transition={fieldAt(sceneWhatsapp.blocks, 2)}
-        >
-          {/* No body: the module's three step lines say what the paragraph
-              said, and a line that repeats the previous one is cut, not
-              softened (SRC-0017 CG-007/CG-016 — the review asks for exactly
-              this substitution). It is also what brings the section back
-              inside the 1270 px budget of polish brief G-4. */}
-          <SceneBlock
-            instance={
-              flyerRow === undefined ? null : (
-                <>
-                  {/* The outcome, not a list (polish brief, page 1, fix 3):
-                      one real date, under the line that says what it is. It
-                      is picked out of what position 1 has **not** already
-                      shown, and out of the categories a printed flyer is
-                      actually about — the module took the place's next date
-                      whatever it was, which put "Gelber Sack" under "made
-                      from the flyer", twice on one screen. */}
-                  <h3 className={styles.instanceHeading}>{demo.flyerExample}</h3>
-                  <EventRow {...flyerRow} locale={locale} state={rows.demo ? "mocked" : "ready"} />
-                </>
-              )
-            }
-            locale={locale}
-            mechanism="whatsapp"
-            /* D7 item 2 — the mechanism, rendered by the module of
-               TS-WEB-0022 D4, unchanged as a component (DEC-0110 §1). Its
-               `data-demo` wrapper marks the three step lines, which are the
-               2026-09-23 draft's and nobody's writing yet; the module title
-               and the CTA label are `/mitmachen`'s own wording and are
-               over-marked with them, the same trade the path modules take. */
-            module={
-              <div data-demo={isDemoSlot(whatsappSteps) ? "true" : undefined} data-scene-module="">
-                <ExplainModule
-                  cta={{
-                    label: ctaLabelOnly(sceneWhatsapp.cta ?? "") ?? "",
-                    locale,
-                    onward: true,
-                    to: "takePart",
-                  }}
-                  mechanism="whatsapp"
-                  ordinal={1}
-                  stage={[
-                    // State 1 — the flyer on the kitchen table. No photograph
-                    // exists, so `media-frame` renders `placeholder-surface`
-                    // in its place: a flat brand-colour panel at
-                    // `ratio-square`, not a marked gap and not a captioned
-                    // hatch (Jan, 2026-09-18; DEC-0068 rule 2).
-                    <StageImage alt="" key="1" locale={locale} />,
-                    <StageChat
-                      key="2"
-                      locale={locale}
-                      reply={fieldAt(whatsappSteps.blocks, 1) ?? ""}
-                      time={fieldAt(whatsappSteps.blocks, 2) ?? ""}
-                    />,
-                    // State 3 — "the date is in the calendar", and the
-                    // calendar it means is the one this page's live rows come
-                    // from: the same interface module through the same cache
-                    // profile, so the picture and the live block above it can
-                    // never disagree about a place's dates (DEC-0115).
-                    <LiveStageCalendar
-                      key="3"
-                      locale={locale}
-                      place={SHOWCASE_COMMUNITY.name}
-                      sample={threeSampleRows(
-                        listAt(whatsappSteps.blocks, 1),
-                        "home-4a-scene-whatsapp-steps-demo",
-                      )}
-                      slug={STAGE_ZERO_ANCHOR.slug}
-                    />,
-                  ]}
-                  steps={threeSteps(
-                    listAt(whatsappSteps.blocks, 0),
-                    "home-4a-scene-whatsapp-steps-demo",
-                  )}
-                  title={fieldAt(sceneWhatsapp.blocks, 3) ?? ""}
-                />
-              </div>
-            }
-            opener={fieldAt(sceneWhatsapp.blocks, 0) ?? ""}
-          />
-        </SectionShell>
-      </MotionReveal>
-
-      {/* The embed scene's photograph runs full-bleed: the section gives up
-          its container and the scene puts it back around everything but the
-          instance. A photograph framed by the section's 16 px padding is a
-          picture in a mount and the section stops being a surface (SRC-0014
-          §"Section grounds carry rhythm, not meaning"). The ground moved with
-          it — `surface-2` is one of the sober greys the design system keeps
-          for the municipal argument and for inactive things, and this is
-          solution content, which takes a fresh ground. `lime-100` and not
-          `paper`, because the scene before it is now `paper` for its module's
-          sake: with the S3 widening block (`surface-2`) above them, three
-          neutral grounds would stand in a row and `checkRhythm`'s family rule
-          allows two (DEC-0129 §11). */}
-      <MotionReveal>
-        <SectionShell
-          contained={false}
-          dataBlock="scene"
-          id="scene-2"
-          kicker={fieldAt(sceneEmbed.blocks, 2)}
-          surface="lime-100"
-          transition={fieldAt(sceneEmbed.blocks, 3)}
-        >
-          <SceneBlock
-            bleed
-            body={fieldAt(sceneEmbed.blocks, 1)}
-            cta={
-              <Button
-                dataCta="secondary"
-                locale={locale}
-                onward
-                to="calendar"
-                variant="secondary"
-              >
-                {ctaLabelOnly(sceneEmbed.cta ?? "") ?? ""}
-              </Button>
-            }
-            instance={
-              <MediaFrame
-                alt={sceneEmbedImage?.alt ?? ""}
-                locale={locale}
-                notDepicting={sceneEmbedImage?.notDepicting}
-                placeholderId={sceneEmbedImage?.placeholderId}
-                /* 16 : 9 across the section's whole width — the review's own
-                   shape for this photograph ("auf die volle Breite in 16:9
-                   oder 21:9 ziehen"); `map` is that ratio token. */
-                ratio="map"
-                src={sceneEmbedImage?.src}
-                state={sceneEmbedImage ? undefined : "empty"}
-              />
-            }
-            locale={locale}
-            mechanism="embed"
-            opener={fieldAt(sceneEmbed.blocks, 0) ?? ""}
-          />
-        </SectionShell>
-      </MotionReveal>
-
-      {/* Block 2b — where this comes from. The scene *is* the provenance
-          block since the polish pass (page 1, fix 5): the origin stamp that
-          used to stand under it as its own element is gone, because "gebaut"
-          and "betrieben" about this product are on the copy guide's avoid
-          list (CG-033, CG-040) and the 2026-09-22 review strikes the stamp.
-          What the slot still carries is the way to `/ueber-uns`, which is
-          this scene's one secondary CTA — a button, not a link, because the
-          review asked for one (DEC-0129). The scene carries no kicker: "Wo
-          das herkommt" is on the avoid list and the review names no
-          replacement, so the heading carries the scene alone. */}
-      <MotionReveal>
-        <SectionShell
-          dataBlock="scene"
-          id="scene-3"
-          /* TS-WEB-0019 D3's own rhythm column for block 2b: COLOUR violet. */
-          surface="violet-500"
-          transition={fieldAt(sceneProvenance.blocks, 2)}
-        >
-          <SceneBlock
-            body={fieldAt(sceneProvenance.blocks, 1)}
-            cta={
-              <Button dataCta="secondary" locale={locale} onward to="about" variant="secondary">
-                {ctaLabelOnly(fieldAt(stamps.blocks, 0) ?? "") ?? ""}
-              </Button>
-            }
-            instance={
-              <MediaFrame
-                alt={sceneProvenanceImage?.alt ?? fieldAt(sceneProvenance.blocks, 0) ?? ""}
-                className={styles.sceneMedia}
-                locale={locale}
-                notDepicting={sceneProvenanceImage?.notDepicting}
-                placeholderId={sceneProvenanceImage?.placeholderId}
-                ratio="feature"
-                src={sceneProvenanceImage?.src}
-              />
-            }
-            locale={locale}
-            mechanism="provenance"
-            opener={fieldAt(sceneProvenance.blocks, 0) ?? ""}
-          />
-        </SectionShell>
-      </MotionReveal>
+      <HomeScenes
+        scenes={{
+          whatsapp: (
+            <>
+              <MotionReveal>
+                <SectionShell
+                  dataBlock="scene"
+                  id="scene-1"
+                  kicker={fieldAt(sceneWhatsapp.blocks, 1)}
+                  /* A light ground, because the module inside it only reads on one.
+                     The active step's disc is `lime-500` and the two inactive ones
+                     are `surface` — "a fill on a light ground means active"
+                     (design-system contract `active-step`,
+                     website-design-system.md:560), and the step rows are divided by
+                     the `line` hairline, which the brand tokens themselves note
+                     disappears on a lime ground (1.27:1). On `lime-500` the active
+                     disc was 1.00:1 against its own section and the *inactive* discs
+                     were the only visible ones, which inverts the state reading.
+                     TS-WEB-0019 D3a assumes exactly this: "the active step is
+                     `lime-500` on a light ground" (DEC-0129 §11). */
+                  surface="paper"
+                  transition={fieldAt(sceneWhatsapp.blocks, 2)}
+                >
+                  {/* No body: the module's three step lines say what the paragraph
+                      said, and a line that repeats the previous one is cut, not
+                      softened (SRC-0017 CG-007/CG-016 — the review asks for exactly
+                      this substitution). It is also what brings the section back
+                      inside the 1270 px budget of polish brief G-4. */}
+                  <SceneBlock
+                    instance={
+                      flyerRow === undefined ? null : (
+                        <>
+                          {/* The outcome, not a list (polish brief, page 1, fix 3):
+                              one real date, under the line that says what it is. It
+                              is picked out of what position 1 has **not** already
+                              shown, and out of the categories a printed flyer is
+                              actually about — the module took the place's next date
+                              whatever it was, which put "Gelber Sack" under "made
+                              from the flyer", twice on one screen. */}
+                          <h3 className={styles.instanceHeading}>{demo.flyerExample}</h3>
+                          <EventRow {...flyerRow} locale={locale} state={rows.demo ? "mocked" : "ready"} />
+                        </>
+                      )
+                    }
+                    locale={locale}
+                    mechanism="whatsapp"
+                    /* D7 item 2 — the mechanism, rendered by the module of
+                       TS-WEB-0022 D4, unchanged as a component (DEC-0110 §1). Its
+                       `data-demo` wrapper marks the three step lines, which are the
+                       2026-09-23 draft's and nobody's writing yet; the module title
+                       and the CTA label are `/mitmachen`'s own wording and are
+                       over-marked with them, the same trade the path modules take. */
+                    module={
+                      <div data-demo={isDemoSlot(whatsappSteps) ? "true" : undefined} data-scene-module="">
+                        <ExplainModule
+                          cta={{
+                            label: ctaLabelOnly(sceneWhatsapp.cta ?? "") ?? "",
+                            locale,
+                            onward: true,
+                            to: "takePart",
+                          }}
+                          mechanism="whatsapp"
+                          ordinal={1}
+                          stage={[
+                            // State 1 — the flyer on the kitchen table. No photograph
+                            // exists, so `media-frame` renders `placeholder-surface`
+                            // in its place: a flat brand-colour panel at
+                            // `ratio-square`, not a marked gap and not a captioned
+                            // hatch (Jan, 2026-09-18; DEC-0068 rule 2).
+                            <StageImage alt="" key="1" locale={locale} />,
+                            <StageChat
+                              key="2"
+                              locale={locale}
+                              reply={fieldAt(whatsappSteps.blocks, 1) ?? ""}
+                              time={fieldAt(whatsappSteps.blocks, 2) ?? ""}
+                            />,
+                            // State 3 — "the date is in the calendar", and the
+                            // calendar it means is the one this page's live rows come
+                            // from: the same interface module through the same cache
+                            // profile, so the picture and the live block above it can
+                            // never disagree about a place's dates (DEC-0115).
+                            <LiveStageCalendar
+                              key="3"
+                              locale={locale}
+                              place={SHOWCASE_COMMUNITY.name}
+                              sample={threeSampleRows(
+                                listAt(whatsappSteps.blocks, 1),
+                                "home-4a-scene-whatsapp-steps-demo",
+                              )}
+                              slug={STAGE_ZERO_ANCHOR.slug}
+                            />,
+                          ]}
+                          steps={threeSteps(
+                            listAt(whatsappSteps.blocks, 0),
+                            "home-4a-scene-whatsapp-steps-demo",
+                          )}
+                          title={fieldAt(sceneWhatsapp.blocks, 3) ?? ""}
+                        />
+                      </div>
+                    }
+                    opener={fieldAt(sceneWhatsapp.blocks, 0) ?? ""}
+                  />
+                </SectionShell>
+              </MotionReveal>
+            </>
+          ),
+          embed: (
+            <>
+              {/* The embed scene's photograph runs full-bleed: the section gives up
+                  its container and the scene puts it back around everything but the
+                  instance. A photograph framed by the section's 16 px padding is a
+                  picture in a mount and the section stops being a surface (SRC-0014
+                  §"Section grounds carry rhythm, not meaning"). The ground moved with
+                  it — `surface-2` is one of the sober greys the design system keeps
+                  for the municipal argument and for inactive things, and this is
+                  solution content, which takes a fresh ground. `lime-100` and not
+                  `paper`, because the scene before it is now `paper` for its module's
+                  sake: with the S3 widening block (`surface-2`) above them, three
+                  neutral grounds would stand in a row and `checkRhythm`'s family rule
+                  allows two (DEC-0129 §11). */}
+              <MotionReveal>
+                <SectionShell
+                  contained={false}
+                  dataBlock="scene"
+                  id="scene-2"
+                  kicker={fieldAt(sceneEmbed.blocks, 2)}
+                  surface="lime-100"
+                  transition={fieldAt(sceneEmbed.blocks, 3)}
+                >
+                  <SceneBlock
+                    bleed
+                    body={fieldAt(sceneEmbed.blocks, 1)}
+                    cta={
+                      <Button
+                        dataCta="secondary"
+                        locale={locale}
+                        onward
+                        to="calendar"
+                        variant="secondary"
+                      >
+                        {ctaLabelOnly(sceneEmbed.cta ?? "") ?? ""}
+                      </Button>
+                    }
+                    instance={
+                      <MediaFrame
+                        alt={sceneEmbedImage?.alt ?? ""}
+                        locale={locale}
+                        notDepicting={sceneEmbedImage?.notDepicting}
+                        placeholderId={sceneEmbedImage?.placeholderId}
+                        /* 16 : 9 across the section's whole width — the review's own
+                           shape for this photograph ("auf die volle Breite in 16:9
+                           oder 21:9 ziehen"); `map` is that ratio token. */
+                        ratio="map"
+                        src={sceneEmbedImage?.src}
+                        state={sceneEmbedImage ? undefined : "empty"}
+                      />
+                    }
+                    locale={locale}
+                    mechanism="embed"
+                    opener={fieldAt(sceneEmbed.blocks, 0) ?? ""}
+                  />
+                </SectionShell>
+              </MotionReveal>
+            </>
+          ),
+          provenance: (
+            <>
+              {/* Block 2b — where this comes from. The scene *is* the provenance
+                  block since the polish pass (page 1, fix 5): the origin stamp that
+                  used to stand under it as its own element is gone, because "gebaut"
+                  and "betrieben" about this product are on the copy guide's avoid
+                  list (CG-033, CG-040) and the 2026-09-22 review strikes the stamp.
+                  What the slot still carries is the way to `/ueber-uns`, which is
+                  this scene's one secondary CTA — a button, not a link, because the
+                  review asked for one (DEC-0129). The scene carries no kicker: "Wo
+                  das herkommt" is on the avoid list and the review names no
+                  replacement, so the heading carries the scene alone. */}
+              <MotionReveal>
+                <SectionShell
+                  dataBlock="scene"
+                  id="scene-3"
+                  /* TS-WEB-0019 D3's own rhythm column for block 2b: COLOUR violet. */
+                  surface="violet-500"
+                  transition={fieldAt(sceneProvenance.blocks, 2)}
+                >
+                  <SceneBlock
+                    body={fieldAt(sceneProvenance.blocks, 1)}
+                    cta={
+                      <Button dataCta="secondary" locale={locale} onward to="about" variant="secondary">
+                        {ctaLabelOnly(fieldAt(stamps.blocks, 0) ?? "") ?? ""}
+                      </Button>
+                    }
+                    instance={
+                      <MediaFrame
+                        alt={sceneProvenanceImage?.alt ?? fieldAt(sceneProvenance.blocks, 0) ?? ""}
+                        className={styles.sceneMedia}
+                        locale={locale}
+                        notDepicting={sceneProvenanceImage?.notDepicting}
+                        placeholderId={sceneProvenanceImage?.placeholderId}
+                        ratio="feature"
+                        src={sceneProvenanceImage?.src}
+                      />
+                    }
+                    locale={locale}
+                    mechanism="provenance"
+                    opener={fieldAt(sceneProvenance.blocks, 0) ?? ""}
+                  />
+                </SectionShell>
+              </MotionReveal>
+            </>
+          ),
+        }}
+      />
 
       {/* Block 2c — the proof stream. Exactly five elements (DEC-0048); while
           no selection is cleared (Q-0014/Q-0045) the five demo cards the
