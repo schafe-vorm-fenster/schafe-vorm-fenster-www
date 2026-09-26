@@ -1,4 +1,37 @@
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { expect, test } from "@playwright/test";
+
+import { BRIEFING_URL } from "../../src/lib/live/briefing";
+
+const REPO_ROOT = join(__dirname, "..", "..");
+
+/** The one module allowed to write the appointment URL down (TS-WEB-0016 D7). */
+const BRIEFING_MODULE = join("src", "lib", "live", "briefing.ts");
+
+/**
+ * Every shipped `.ts`/`.tsx` file under `app/` and `src/`, minus the module
+ * that defines the URL and minus test files — the static half of F-2-32 below
+ * reads them to prove no second place knows the appointment target. Test
+ * fixtures are excluded because `outbound-link.test.tsx` fabricates targets on
+ * that host on purpose, to exercise the marking-id derivation.
+ */
+function shippedSourceFiles(): string[] {
+  const found: string[] = [];
+  const walk = (directory: string) => {
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      const path = join(directory, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name !== "node_modules" && !entry.name.startsWith(".")) walk(path);
+      } else if (/\.tsx?$/.test(entry.name) && !entry.name.includes(".test.")) {
+        if (!path.endsWith(BRIEFING_MODULE)) found.push(path);
+      }
+    }
+  };
+  for (const directory of ["app", "src"]) walk(join(REPO_ROOT, directory));
+  return found;
+}
 
 /**
  * TS-WEB-0026 — `/deine-region` and `/deine-region/angebot` — acceptance pass.
@@ -85,9 +118,40 @@ test.describe("/deine-region", () => {
     // Two of them since the polish brief: the quiet second way forward is
     // the same line in the hero and in the closing block (G-5), so a reader
     // who scrolls past the first meets it again where she decides.
+    //
+    // **Both are in-page now** (T-15, DEC-0081 §3): A6's "the consult action
+    // sits beside it with the secondary treatment and resolves to this page's
+    // contact section". They used to be the Google appointment URL itself,
+    // twice, above and below the page's own conversion.
     const briefing = page.getByRole("link", { name: /Kennenlerngespräch/ });
     await expect(briefing).toHaveCount(2);
     await expect(briefing.first()).toBeVisible();
+    for (const index of [0, 1]) {
+      await expect(briefing.nth(index)).toHaveAttribute("href", "/deine-region#kontakt");
+      await expect(briefing.nth(index)).toHaveAttribute("data-cta", "secondary");
+    }
+
+    /*
+     * A6's "secondary treatment" measured rather than asserted from a marker.
+     * The consult line is a `Button variant="quiet"`, whose size class decides
+     * its box — and the default size is the primary's 56 px, so the second rung
+     * silently took the first one's height once (review round, T-15). It stands
+     * at `--height-control` (44 px), strictly shorter than the primary.
+     */
+    const primaryHeight = (await primary.boundingBox())?.height ?? 0;
+    expect(primaryHeight).toBeGreaterThan(0);
+    for (const index of [0, 1]) {
+      const box = await briefing.nth(index).boundingBox();
+      expect(box?.height, `consult link ${index} height`).toBeLessThan(primaryHeight);
+      expect(box?.height, `consult link ${index} height`).toBeLessThanOrEqual(48);
+    }
+
+    // A6's last sentence: the section renders once below the closing block and
+    // its first action row is the only element carrying the appointment URL.
+    const section = page.locator("section#kontakt[data-contact-section]");
+    await expect(section).toHaveCount(1);
+    await expect(page.locator(`a[href="${BRIEFING_URL}"]`)).toHaveCount(1);
+    await expect(section.locator(`a[href="${BRIEFING_URL}"]`)).toHaveCount(1);
   });
 
   test("TS-WEB-0026-A7 / A8: no response-time wording while the promise constant is unset", async ({
@@ -164,9 +228,15 @@ test.describe("/deine-region", () => {
     expect(briefingBox!.y).toBeGreaterThan(primaryBox!.y);
     expect(primaryBox!.height).toBeLessThan(briefingBox!.height + primaryBox!.height);
 
-    // The disclosure left the button label (G-5) and is one written line.
+    // The disclosure left the button label (G-5) — and the hero altogether
+    // (T-15, DEC-0081 §3 / TS-WEB-0016 D16): nothing outbound happens here
+    // any more, so there is nothing to disclose. The marking stands under the
+    // contact section's first action row, the one element of the route that
+    // leaves the site.
     await expect(briefing).not.toContainText("Daten gehen an");
-    await expect(hero).toContainText("Öffnet Google Kalender in einem neuen Tab.");
+    await expect(hero).not.toContainText("Öffnet Google Kalender in einem neuen Tab.");
+    await expect(briefing).toHaveAttribute("href", "/deine-region#kontakt");
+    await expect(hero.locator(`a[href="${BRIEFING_URL}"]`)).toHaveCount(0);
 
     // No county is named while none is known.
     const examples = await page.locator("[data-block='bestand']").innerText();
@@ -394,30 +464,96 @@ test.describe("/deine-region/angebot", () => {
   });
 
   /**
-   * F-2-32 / TS-WEB-0016 D7 — one configured value, referenced by every S3
-   * placement, never pasted per page.
+   * F-2-32 / TS-WEB-0016-A5 / TS-WEB-0025-A2 / TS-WEB-0026-A6 — rewritten for
+   * T-15.
+   *
+   * The old form asked a weaker question: it swept `main a[href*='calendar']`
+   * and asserted that *every* such link equalled the one configured value,
+   * which passed while the appointment URL stood on a hero CTA, on a closing
+   * footer and on three order steps — six outbound placements of a link
+   * DEC-0081 §3 gives exactly one home. What A5 actually says is that the
+   * booking CTAs "resolve to the contact section of the same page, not to an
+   * external host", and that the section's first action row "is the only
+   * element on the page carrying that href".
+   *
+   * So the sweep counts occurrences instead of comparing them, and checks the
+   * one it finds is the section's row. `main` is asserted clean, because the
+   * chrome renders the section *outside* `main` (DEC-0081 §2) — which is also
+   * why the old locator would now find nothing at all on a correct page.
+   *
+   * `/dein-kalender` and `/ueber-uns` are A5's other two routes and belong to
+   * T-13 and T-14; `e2e/contact-section.spec.ts` carries the per-route walk
+   * and the `test.fail` markers that come off as those merge.
    */
-  test("F-2-32 / TS-WEB-0016 D7: every briefing link is the one configured booking URL", async ({
+  test("F-2-32 / TS-WEB-0016-A5: the contact section's first row is the only booking URL on the route", async ({
     page,
   }) => {
-    // `/dein-kalender` left this list with T-13: it carries **no** briefing
-    // link inside `main` any more. Its hero CTA is an in-page link to
-    // `#kontakt`, and the one appointment URL on that route is the contact
-    // section's first action row, which stands outside `main` (DEC-0081 §3,
-    // TS-WEB-0024-A15). `e2e/contact-section.spec.ts` asserts the "exactly
-    // one carrier" half for every route, this page's spec the rest.
-    for (const path of [
-      "/deine-region",
-      "/dein-kalender/bestellen",
-      "/dein-kalender/bestellen?orte=schlatkow&schritt=3",
-    ]) {
+    /**
+     * `/dein-kalender` left this list with T-13: it carries **no** briefing link
+     * inside `main` any more, its hero CTA is an in-page link to `#kontakt`, and
+     * the one appointment URL on that route is the contact section's first action
+     * row, which stands outside `main` (DEC-0081 §3, TS-WEB-0024-A15).
+     *
+     * `consult: false` on `/deine-region/angebot`: its consult line lives in
+     * the lead fallback, which renders only in the widget's `empty`/`degraded`
+     * state, and the route ships `mocked`. The markup half of that line is
+     * `src/components/lead-fallback/lead-fallback.test.tsx`.
+     */
+    const ROUTES = [
+      { path: "/deine-region", consult: true },
+      { path: "/deine-region/angebot", consult: false },
+      { path: "/dein-kalender/bestellen", consult: true },
+      { path: "/dein-kalender/bestellen?orte=schlatkow&schritt=3", consult: true },
+      { path: "/dein-kalender/bestellen?orte=schlatkow&schritt=4", consult: true },
+    ];
+
+    /*
+     * F-2-32's own question, which the count sweep below cannot ask: the
+     * appointment target is **one configured value** (`BRIEFING_URL` in
+     * `src/lib/live/briefing.ts`), not a literal pasted per page. So the
+     * assertion is that no page and no component knows the URL — a static
+     * sweep over everything shipped under `app/` and `src/` except that one
+     * module.
+     *
+     * The first version of this case compared `BRIEFING_URL` with the exact
+     * expression `briefing.ts` assigns it, which could only fail if someone
+     * changed that file and forgot this line — and it pasted the appointment
+     * URL into a second file, which is the duplication F-2-32 exists to
+     * prevent (review round, T-15). The env var read here is the Playwright
+     * process's anyway, not necessarily the server's.
+     */
+    const shipped = shippedSourceFiles();
+    expect(shipped.length).toBeGreaterThan(100);
+    for (const file of shipped) {
+      expect(readFileSync(file, "utf8"), file).not.toContain("calendar.app.google");
+    }
+
+    for (const { path, consult: hasConsult } of ROUTES) {
       await page.goto(path);
-      const hrefs = await page
+
+      // Exactly one, and it is the section's appointment row.
+      const all = page.locator(`a[href="${BRIEFING_URL}"]`);
+      await expect(all, path).toHaveCount(1);
+      await expect(
+        page.locator(
+          `section#kontakt[data-contact-section] a[data-channel="appointment"][href="${BRIEFING_URL}"]`,
+        ),
+        path,
+      ).toHaveCount(1);
+
+      // Nothing inside the page's own content leaves for a calendar host.
+      const inMain = await page
         .locator("main a[href*='calendar']")
         .evaluateAll((nodes) => nodes.map((node) => node.getAttribute("href") ?? ""));
-      expect(hrefs.length, path).toBeGreaterThan(0);
-      for (const href of hrefs) {
-        expect(href, path).toBe("https://calendar.app.google/VG9bZoYVnFcX1W6F8");
+      expect(inMain, path).toEqual([]);
+
+      // And the booking CTA the page does carry resolves in-page.
+      if (!hasConsult) continue;
+      const consult = page.getByRole("link", { name: /Kennenlerngespräch|Beratungstermin/ });
+      const count = await consult.count();
+      expect(count, path).toBeGreaterThan(0);
+      for (let index = 0; index < count; index += 1) {
+        expect(await consult.nth(index).getAttribute("href"), path).toMatch(/#kontakt$/);
       }
     }
   });

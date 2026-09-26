@@ -124,17 +124,18 @@ Modul-, Filter- oder Ergebnisbeschriftung — nur als Frage der Besucherin
 
 **Zweit-CTA (leise):** Lieber erst sprechen? Kennenlerngespräch buchen
 
-**Hinweis zum Zweit-CTA:** Öffnet Google Kalender in einem neuen Tab.
-
 **Abschluss-Überschrift:** Sollen wir euch ein Angebot rechnen?
 
 Der Zweit-CTA steht leise unter dem primären, nie daneben und nie als
 zweite Schaltfläche: eine Seite trägt pro Bildschirm genau eine primäre
-Handlung. Der Hinweis nennt, was das Antippen auslöst; wohin die Daten
-gehen, steht im Datenschutz-Abschnitt, auf den die Seite ohnehin
-verlinkt. Die Abschluss-Überschrift wiederholt dieselbe Conversion wie
-oben — gleiches Ziel, gleiches Label (TS-WEB-0006 D6). Kein
-Zeitversprechen, solange C11 offen ist.
+Handlung. Er führt seit DEC-0081 §3 **innerhalb der Seite** zum
+Kontakt-Abschnitt (`#kontakt`) und nicht mehr nach außen; der frühere
+„Hinweis zum Zweit-CTA" ist damit entfallen, denn die Kennzeichnung
+ausgehender Links (TS-WEB-0016 D16) gehört zur ersten Aktionszeile dieses
+Abschnitts — dem einzigen Element der Route, das die Seite verlässt. Die
+Abschluss-Überschrift wiederholt dieselbe Conversion wie oben — gleiches
+Ziel, gleiches Label (TS-WEB-0006 D6). Kein Zeitversprechen, solange C11
+offen ist.
 
 Quelle: `headline` von `counties--portalize-enterprise` — „The whole
 district on one map, without a portal project." Die Kartenhälfte der
