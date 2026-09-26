@@ -1,12 +1,21 @@
+import { ArchiveBlock } from "@/src/components/archive-block/archive-block";
 import { Button } from "@/src/components/button/button";
+import { ExplainModule } from "@/src/components/explain-module/explain-module";
+import {
+  StageChat,
+  StageImage,
+  StageRegistration,
+} from "@/src/components/explain-stage/explain-stage";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
+import { HintBanner } from "@/src/components/hint-banner/hint-banner";
 import { ObjectionList } from "@/src/components/objection-list/objection-list";
 import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
-import { PublishingPath } from "@/src/components/publishing-path/publishing-path";
 import { RouteLink } from "@/src/components/route-link/route-link";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
+import { StatusBadge } from "@/src/components/status-badge/status-badge";
+import { contactHref } from "@/src/lib/contact/contact-channels";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
@@ -15,6 +24,8 @@ import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
+import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
+import { standardSources } from "@/src/lib/pricing/standard-sources";
 import { pageTitle } from "@/src/lib/routes/metadata";
 
 import { PlaceDatesIsland } from "../_islands";
@@ -26,8 +37,10 @@ import { PageFrame } from "../_page-frame";
 
 import { REFERENCE_PLACE, selectExamplePlace } from "./example-place";
 import { pageMeta } from "./page.meta";
+import { listAt, splitCoreDetail, threeSampleRows, threeSteps } from "./paths";
+import { LiveStageCalendar, SampleStageCalendar } from "./stage-islands";
 
-import type { Step } from "@/src/components/content-fragments";
+import type { ExplainModuleProps } from "@/src/components/explain-module/explain-module";
 import type { ContentBlock } from "@/src/lib/content/types";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
@@ -35,11 +48,30 @@ import type { Metadata } from "next";
 /**
  * TS-WEB-0022 — `/mitmachen`, the publishing entry.
  *
- * Own blocks, in D2 order: hero (scene) → objections → three publishing
- * paths → live example (ink, the page's single dark section, D10) → proof.
- * The context band and the closing CTA are block 3/4 of TS-WEB-0006 D2 and are
- * rendered by `PageFrame` from `page.meta.ts` — this page never renders them
- * itself.
+ * Own blocks, in D2 order: hero (the page's one scene) → objections → the
+ * `wege` slot, which is the three **bare** explain modules plus the price
+ * boundary and the one cross-reference D9 allows → live example (ink, the
+ * page's single dark section, D10) → proof. The context band and the closing
+ * CTA are block 3/4 of TS-WEB-0006 D2 and are rendered by `PageFrame` from
+ * `page.meta.ts` — this page never renders them itself.
+ *
+ * Three things changed with DEC-0124 and are worth saying here, because each
+ * of them looks like a mistake from the outside:
+ *
+ *  - **The path blocks are `explain-module`s and carry no scene.** On `/` the
+ *    scene wraps the module because the module *is* the job introduction;
+ *    here the hero is, so wrapping them would mint three openers and three
+ *    instances (DEC-0110 §3, D4 "One appearance", A4).
+ *  - **One `wege` slot, three sections.** D2 counts one slot and A17 wants
+ *    the banner "inside the publishing-path slot"; G-4 caps a section at 1.5
+ *    phone screens and `e2e/section-budget.spec.ts` holds it. Three grounds
+ *    carry one slot: the kicker, the heading and the sub-line stand once, on
+ *    the first, and all three sections are `data-block="wege"`.
+ *  - **The step lines are marked `data-demo`.** They are the design drafts'
+ *    wording, not the owner's (`*-steps-demo` slots, DEC-0068, state/open.md).
+ *    The marking sits on a wrapper around the module rather than on its `ol`,
+ *    because the component exposes no hook for it and it is not this task's
+ *    file.
  */
 
 const ROUTE = "takePart" as const;
@@ -55,49 +87,6 @@ export async function generateMetadata({
 function listItems(blocks: readonly ContentBlock[]): string[] {
   return blocks.flatMap((block) => (block.kind === "list" ? block.items : []));
 }
-
-/** Ordered-list step items → the `Step` fragment `publishing-path` takes. */
-function stepsOf(items: readonly string[]): Step[] {
-  return items.map((body, index) => ({ index: index + 1, title: body, body: "" }));
-}
-
-/**
- * `<channel> — <the one concrete way it fails>` when the copy carries the
- * em-dash split (3 of 5 items); otherwise the whole sentence stands as the
- * failure and the channel names itself from context. Content is TS-WEB-0022 D3's;
- * this two-part rendering split is [PROPOSED], a UI decision only.
- */
-function splitObjection(text: string): { channel: string; failure: string } {
-  const dash = text.split(" — ");
-  if (dash.length >= 2) return { channel: dash[0], failure: dash.slice(1).join(" — ") };
-  return { channel: text, failure: "" };
-}
-
-/**
- * The section's name. It used to be "Drei Wege, die Termine zu uns zu
- * bringen", which now stutters against the transition line above it — that
- * sentence is the one that says "three", and it says it better.
- */
-const PATHS_LABEL: Record<Locale, string> = {
-  de: "So kommen eure Termine rein",
-  en: "How your dates get in",
-};
-
-/**
- * The hinge of the page, and the one line the brief found missing: the
- * objections end on "and you have no time for a new tool", and the three
- * paths only answer that if something says they are not a new tool. It adds
- * no claim — the three mechanisms below are the claim.
- */
-const PATHS_TRANSITION: Record<Locale, string> = {
-  de: "Deshalb gibt es drei Wege rein, und alle drei sind Wege, die ihr schon geht.",
-  en: "So there are three ways in, and all three are ways you already take.",
-};
-
-const PROOF_LABEL: Record<Locale, string> = {
-  de: "Was andere sagen",
-  en: "What others say",
-};
 
 /** The accessible name of the cross-reference aside, which carries no heading. */
 const CROSS_REFERENCE_LABEL: Record<Locale, string> = {
@@ -123,6 +112,23 @@ const GEO_SNAPSHOT_LABEL: Record<"demo" | "sourced", Record<Locale, string>> = {
   sourced: { de: "Beleg", en: "Reference" },
 };
 
+/**
+ * The module, with its step lines marked as what they are.
+ *
+ * `data-demo="true"` on the wrapper, not on a word: the title and the CTA
+ * label are the review's own wording, the three step lines are the drafts'
+ * (`state/open.md`). Marking the wrapper over-reaches by two strings and is
+ * the honest direction to over-reach in — a reviewer enumerating
+ * `[data-demo]` finds the module that holds the placeholder.
+ */
+function PathModule({ demo, ...module }: ExplainModuleProps & { readonly demo: boolean }) {
+  return (
+    <div data-demo={demo ? "true" : undefined} data-path-module="">
+      <ExplainModule {...module} />
+    </div>
+  );
+}
+
 export default async function Page({
   params,
 }: {
@@ -134,8 +140,17 @@ export default async function Page({
   const hero = slot(page, "mitmachen-1-hero");
   const objections = slot(page, "mitmachen-2-objections");
   const pathWhatsapp = slot(page, "mitmachen-3-path-whatsapp");
+  const whatsappSteps = slot(page, "mitmachen-3a-path-whatsapp-steps-demo");
   const pathCalendar = slot(page, "mitmachen-4-path-calendar");
+  const calendarSteps = slot(page, "mitmachen-4a-path-calendar-steps-demo");
   const pathWebsite = slot(page, "mitmachen-5-path-website");
+  const websiteSteps = slot(page, "mitmachen-5a-path-website-steps-demo");
+  // D11's own half of the banner: the boundary of BUS-WEB-0017. The owner's
+  // review sentence in slot 5 states the *reach* of path 3 ("geht bisher nur
+  // für einige Webseiten"), which is a different fact; FUN-WEB-0204 asks for
+  // the price boundary, and D11:210 forbids folding it into the alpha badge.
+  // Nobody wrote the German sentence, so it is a marked demo slot (DEC-0124).
+  const bannerBoundary = slot(page, "mitmachen-5b-path-website-banner-demo");
   const example = slot(page, "mitmachen-6-beispiel");
   const proofDemo = slot(page, "mitmachen-7-proof-demo");
   const closing = slot(page, "mitmachen-8-closing");
@@ -159,6 +174,8 @@ export default async function Page({
     "{place}",
   );
   const exampleSlug = selectExamplePlace(undefined).slug;
+  const liveSlug =
+    exampleSlug === REFERENCE_PLACE.slug ? STAGE_ZERO_ANCHOR.slug : exampleSlug;
 
   /**
    * TS-WEB-0005 through, not around: the inline surface is **3** positions
@@ -192,18 +209,23 @@ export default async function Page({
       };
     }),
   });
-  const heroCtaLabel = fieldAt(hero.blocks, 2) ?? "";
+
+  const heroCtaLabel = fieldAt(hero.blocks, 3) ?? "";
 
   // TS-WEB-0003 D2 declares this page's LCP element to be the WhatsApp scene
   // image, which is the hero itself (`data-block="scene"` below). The entry
   // carries `lcp: true`, and `photo-surface` turns that into the preload a
   // CSS background image can actually carry.
   const heroImage = pageImage(page, HERO_IMAGE_ID.takePart);
-  const whatsappImage = pageImage(page, "mitmachen-path-whatsapp");
-  // `mitmachen-path-calendar` and `mitmachen-path-website` stay declared in
-  // the artifact's `images:` block — they are real, credited photographs and
-  // the credits page cites them — but the page no longer renders them: one
-  // photograph across the three paths, not three (brief, page 4, item 4).
+  // `mitmachen-path-whatsapp`, `-calendar` and `-website` stay declared in the
+  // artifact's `images:` block — they are real, credited photographs and the
+  // credits page cites them — but no path renders one any more. The review is
+  // explicit about the WhatsApp one ("Das Foto ist Quatsch"): what belongs in
+  // state 1 is a hand holding a phone over a flyer, which nobody has shot, so
+  // the stage shows `media-frame`'s "Foto gesucht" hatch instead of a bus
+  // shelter (DEC-0068 rule 2, state/open.md).
+
+  const objectionLists = [listAt(objections.blocks, 0), listAt(objections.blocks, 1)];
 
   return (
     <>
@@ -242,18 +264,15 @@ export default async function Page({
           headline={fieldAt(hero.blocks, 0) ?? ""}
           id="hero"
           /*
-           * The hero is the question and the button, and nothing else
-           * (brief, page 4, item 1). With the lead inside it the primary
-           * conversion sat 777 px down a 640 px screen on the narrowest
-           * phone the suite measures — the page's one call to action, below
-           * the fold, on the page whose whole job is that call.
-           *
-           * The sentence is not cut: it stands one section lower as the
-           * hand-off into the objections (`transition` below), where G-3
-           * wants "one line tying this section to the one before it". It
-           * answers the hero's question there, and the objection heading
-           * under it then says why that is not enough today.
+           * The opener is two short statements, which is what the review
+           * asked for in place of the question ("Lieber zwei Sätze, und als
+           * Aussage statt mit Fragezeichen"): the `h1` carries the first, the
+           * lead the second. Both are inside CG-020's and CG-021's budgets —
+           * the question they replace was one 66-character line — so the
+           * primary conversion stays above the fold at 360 × 640 (A2), which
+           * is the constraint that removed the old lead in the first place.
            */
+          lead={fieldAt(hero.blocks, 1)}
           // F-2-33: the hero's `photo-surface` badges itself out of the
           // dictionary — without the page's language it marks an English
           // page in German.
@@ -273,91 +292,221 @@ export default async function Page({
         kicker={dictionary(locale).kickers.objection}
         label={fieldAt(objections.blocks, 0)}
         surface="paper"
-        transition={fieldAt(hero.blocks, 1)}
+        transition={fieldAt(hero.blocks, 2)}
       >
-        {/* Three channels and the sentence the block ends on — the two
-            objections about the organiser herself are one line now, not two
-            more 21 px rows with a `circle-x` beside them (brief, page 4,
-            item 2). `proofSlot={false}`: G-9 struck the reserved proof
-            position, which after the badge removal was a blank rectangle
-            under a list of bad news. The objections are the audience's own
-            words; they need no third-party evidence. */}
+        {/* The upper half of the 2026-09-23 draft: the three people who do not
+            hear about the date today, and the proof slot. The slot is back —
+            D3 requires one beside the block, "visibly empty if nothing
+            clears", and the specification carries the truth over the polish
+            brief's G-9 (DEC-0104, DEC-0124). */}
         <ObjectionList
-          closing={fieldAt(objections.blocks, 1)}
           headline={fieldAt(objections.blocks, 0) ?? ""}
-          items={listItems(objections.blocks).map(splitObjection)}
-          proofSlot={false}
+          items={[]}
+          reach={objectionLists[0].map((line) => {
+            const { core, detail } = splitCoreDetail(line);
+            return { title: core, detail };
+          })}
+        />
+      </SectionShell>
+
+      {/* The lower half, on the archive ground: *what does not work today*,
+          and nothing else (SRC-0014 §Archive block, DEC-0117). Its own
+          section, because the two halves together measure 1627 px at 390 px
+          and G-4 caps a section at 1270 — `e2e/section-budget.spec.ts` is
+          what measures it. One objection block, two sections; the rhythm test
+          counts both (DEC-0124). */}
+      <SectionShell dataBlock="archiv" label={fieldAt(objections.blocks, 1)} surface="archive">
+        <ArchiveBlock
+          closing={fieldAt(objections.blocks, 2)}
+          ground="own"
+          items={objectionLists[1].map((line) => {
+            const { core, detail } = splitCoreDetail(line);
+            return { core, detail };
+          })}
+          kicker={fieldAt(objections.blocks, 1)}
         />
       </SectionShell>
 
       {/*
-          One path per section, on its own ground — polish brief G-4.
+          The `wege` slot — one slot, three grounds.
 
-          The three of them stood in a single `surface-2` section that
-          measured 2035 px at 390 px, 2.4 phone screens, in which each path
-          opened with a sub-head flush against the step list of the path
-          above it. Nothing told the reader she had reached the next way in.
-          Three grounds, three ordinals and one kicker on the first do, and
-          no section is over the 1270 px budget any more.
-
-          `surface-2 → lime-100 → surface-2` rather than three neutrals: the
-          page's own rhythm test (TS-WEB-0022-A16) forbids three consecutive
-          sections of one colour family, and `objections` above is already
-          `paper`. */}
+          `paper → lime-100 → paper`: solution content takes a fresh ground,
+          and `surface-2` is one of the sober greys the design system keeps
+          for the municipal argument and for inactive things ("grey-green
+          never carries positive content", SRC-0014 §Section grounds). The
+          three of them used to stand in a single `surface-2` block of
+          2035 px, which is the violation `e2e/section-budget.spec.ts` was
+          written for. */}
       <SectionShell
         dataBlock="wege"
-        kicker={dictionary(locale).kickers.howItWorks}
+        kicker={fieldAt(pathWhatsapp.blocks, 0)}
         labelledBy="wege-heading"
-        surface="surface-2"
-        transition={PATHS_TRANSITION[locale]}
+        surface="paper"
       >
-        <h2 id="wege-heading">{PATHS_LABEL[locale]}</h2>
-        <PublishingPath
-          headline={fieldAt(pathWhatsapp.blocks, 0) ?? ""}
-          locale={locale}
+        <h2 id="wege-heading">{fieldAt(pathWhatsapp.blocks, 1)}</h2>
+        <p data-wege-subline>{fieldAt(pathWhatsapp.blocks, 2)}</p>
+        <PathModule
+          cta={{
+            // The number is the hub's, through the generated file — never a
+            // number typed on a page (TS-WEB-0016 D13, TS-WEB-0016-A16), and
+            // no `?text` prefill exists for it (D14 §6).
+            href: contactHref("whatsapp"),
+            icon: "smartphone",
+            label: fieldAt(pathWhatsapp.blocks, 4) ?? "",
+            newTab: true,
+          }}
+          demo={isDemoSlot(whatsappSteps)}
           mechanism="whatsapp"
-          mediaAlt={whatsappImage?.alt}
-          mediaNotDepicting={whatsappImage?.notDepicting}
-          mediaPlaceholderId={whatsappImage?.placeholderId}
-          mediaSrc={whatsappImage?.src}
           ordinal={1}
-          steps={stepsOf(listItems(pathWhatsapp.blocks))}
+          stage={[
+            <StageImage
+              alt=""
+              key="1"
+              locale={locale}
+            />,
+            <StageChat
+              key="2"
+              locale={locale}
+              reply={fieldAt(whatsappSteps.blocks, 1) ?? ""}
+              time={fieldAt(whatsappSteps.blocks, 2) ?? ""}
+            />,
+            // State 3 is "the date is in the calendar", and the calendar it
+            // means is the live example two sections down — the same
+            // interface module, the same cache profile (DEC-0115).
+            <LiveStageCalendar
+              key="3"
+              locale={locale}
+              place={SHOWCASE_COMMUNITY.name}
+              // The fallback is this path's own sample, not path 2's: those
+              // rows illustrate "neu, verschoben, abgesagt", and this path
+              // ends in "Termin steht im Kalender" (DEC-0124 §5).
+              sample={threeSampleRows(
+                listAt(whatsappSteps.blocks, 1),
+                "mitmachen-3a-path-whatsapp-steps-demo",
+              )}
+              slug={liveSlug}
+            />,
+          ]}
+          steps={threeSteps(
+            listAt(whatsappSteps.blocks, 0),
+            "mitmachen-3a-path-whatsapp-steps-demo",
+          )}
+          title={fieldAt(pathWhatsapp.blocks, 3) ?? ""}
         />
       </SectionShell>
 
-      <SectionShell
-        dataBlock="wege"
-        label={fieldAt(pathCalendar.blocks, 0)}
-        surface="lime-100"
-      >
-        {/* One photograph across all three paths, not three (brief, page 4,
-            item 4): a wall calendar and a desk say nothing the three steps
-            under them do not, and the two extra `ratio-feature` frames were
-            half a phone screen each. The WhatsApp path keeps its picture
-            because the flyer on the shelter wall *is* the mechanism. */}
-        <PublishingPath
-          headline={fieldAt(pathCalendar.blocks, 0) ?? ""}
-          locale={locale}
+      <SectionShell dataBlock="wege" label={fieldAt(pathCalendar.blocks, 0)} surface="lime-100">
+        <PathModule
+          cta={{
+            label: fieldAt(pathCalendar.blocks, 1) ?? "",
+            locale,
+            onward: true,
+            to: "register",
+          }}
+          demo={isDemoSlot(calendarSteps)}
           mechanism="calendar-connection"
           ordinal={2}
-          steps={stepsOf(listItems(pathCalendar.blocks))}
+          stage={[
+            <StageImage alt="" key="1" locale={locale} />,
+            <StageRegistration
+              address={fieldAt(calendarSteps.blocks, 1) ?? ""}
+              key="2"
+              locale={locale}
+            />,
+            <SampleStageCalendar
+              key="3"
+              locale={locale}
+              place={SHOWCASE_COMMUNITY.name}
+              sample={threeSampleRows(
+                listAt(calendarSteps.blocks, 1),
+                "mitmachen-4a-path-calendar-steps-demo",
+              )}
+            />,
+          ]}
+          steps={threeSteps(
+            listAt(calendarSteps.blocks, 0),
+            "mitmachen-4a-path-calendar-steps-demo",
+          )}
+          title={fieldAt(pathCalendar.blocks, 0) ?? ""}
         />
       </SectionShell>
 
-      <SectionShell
-        dataBlock="wege"
-        label={fieldAt(pathWebsite.blocks, 0)}
-        surface="surface-2"
-      >
-        <PublishingPath
-          availability="alpha"
-          availabilityLabel={fieldAt(pathWebsite.blocks, 1)}
-          headline={fieldAt(pathWebsite.blocks, 0) ?? ""}
-          locale={locale}
+      <SectionShell dataBlock="wege" label={fieldAt(pathWebsite.blocks, 0)} surface="paper">
+        {/* The availability badge is the hub record's, not a copy decision:
+            it goes when `community-calendar` stops saying alpha, and not
+            before (D4 "Honest availability"). It sits beside the module
+            rather than inside it — the component's shape is fixed by D4 and
+            carries no badge slot. */}
+        <p data-path-availability="alpha">
+          <StatusBadge availability="alpha" label={fieldAt(pathWebsite.blocks, 1)} />
+        </p>
+        <PathModule
+          cta={{
+            label: fieldAt(pathWebsite.blocks, 2) ?? "",
+            locale,
+            onward: true,
+            to: "register",
+          }}
+          demo={isDemoSlot(websiteSteps)}
           mechanism="website-import"
           ordinal={3}
-          steps={stepsOf(listItems(pathWebsite.blocks))}
+          stage={[
+            <StageImage alt="" key="1" locale={locale} />,
+            <StageRegistration
+              address={fieldAt(websiteSteps.blocks, 1) ?? ""}
+              key="2"
+              locale={locale}
+            />,
+            <SampleStageCalendar
+              key="3"
+              locale={locale}
+              place={SHOWCASE_COMMUNITY.name}
+              sample={threeSampleRows(
+                listAt(websiteSteps.blocks, 1),
+                "mitmachen-5a-path-website-steps-demo",
+              )}
+            />,
+          ]}
+          steps={threeSteps(
+            listAt(websiteSteps.blocks, 0),
+            "mitmachen-5a-path-website-steps-demo",
+          )}
+          title={fieldAt(pathWebsite.blocks, 0) ?? ""}
         />
+
+        {/* D11 / A17 — one banner, at the end of the slot, after the third
+            path. It states the boundary of BUS-WEB-0017 and enumerates the
+            offering record's standard sources; no figure, no `data-cta`, no
+            conversion (DEC-0107 §3). */}
+        <HintBanner locale={locale} sources={standardSources()}>
+          <p>{fieldAt(pathWebsite.blocks, 3)}</p>
+          {/* The boundary itself, as the second sentence: what a connection
+              costs, which the review's availability sentence above does not
+              say and which D11:210 keeps apart from path 3's alpha badge.
+              Its words are nobody's (slot 5b), so the paragraph is marked. */}
+          <p data-demo={isDemoSlot(bannerBoundary) ? "true" : undefined}>
+            {fieldAt(bannerBoundary.blocks, 0)}
+          </p>
+        </HintBanner>
+      </SectionShell>
+
+      {/* D9 — exactly one link to `/dein-kalender`, in an `aside`, at the end
+          of slot 3. Its own block rather than a fourth step of "your website
+          as the source" (polish brief, page 4, item 5), but inside the slot
+          the determination puts it in (DEC-0124). */}
+      <SectionShell
+        as="aside"
+        dataBlock="verweis"
+        density="tight"
+        label={CROSS_REFERENCE_LABEL[locale]}
+        surface="lime-100"
+      >
+        <p>
+          {(fieldAt(pathWebsite.blocks, 4) ?? "").split("→")[0].trim()}{" "}
+          <RouteLink locale={locale} to="calendar">
+            {pageTitle("calendar", locale)}
+          </RouteLink>
+        </p>
       </SectionShell>
 
       <SectionShell
@@ -366,24 +515,21 @@ export default async function Page({
         label={exampleTitle}
         surface="ink"
       >
-        {/* D5's live example, now off the shared live-data layer rather than
-            a page-local row list (`state/open.md` row 128): the same
+        {/* D5's live example, off the shared live-data layer rather than a
+            page-local row list (`state/open.md` row 128): the same
             `placeEvents()` interface `/dein-ort` and `/` use, so this module
-            degrades, caches and demo-labels exactly like every other one. */}
+            degrades, caches and demo-labels exactly like every other one —
+            and like path 1's third stage state, which reads it too. */}
         <PlaceDatesIsland
           announced
           locale={locale}
           rowCount={3}
-          slug={exampleSlug === REFERENCE_PLACE.slug ? STAGE_ZERO_ANCHOR.slug : exampleSlug}
+          slug={liveSlug}
           titleTemplate={exampleTitle}
           tone="dark"
         />
       </SectionShell>
 
-      {/* The lime ground moved one section down, to the cross-reference: the
-          rhythm rule this page's own test checks (TS-WEB-0022-A16, D10) forbids
-          three consecutive `neutral`-family sections, and `PageFrame` appends
-          `surface` (band) and `paper` (closing) after the aside. */}
       <SectionShell
         dataBlock="beleg"
         // Customer proof: `customers` is the placeholder kicker, marked on its
@@ -391,16 +537,25 @@ export default async function Page({
         kicker={dictionary(locale).kickers.customers}
         kickerDemo
         labelledBy="beleg-heading"
-        surface="surface-2"
+        // Lime rather than a grey: the frame appends `surface` (band) and
+        // `paper` (closing) after this section, and three neutral sections in
+        // a row is the rule this page's own rhythm test checks (A16, D10).
+        surface="lime-100"
       >
-        <h2 id="beleg-heading">{PROOF_LABEL[locale]}</h2>
+        {/* The h2 is the dictionary's `othersSay` — "Was andere sagen" /
+            "What others say", the review's own line (R-mitmachen-16, copy
+            guide :516). It was a page-local constant with the same two
+            strings; reading the dictionary closes the T-12 half of
+            state/open.md row 234. The kicker above it is `customers`, which
+            is the marked placeholder and a different string. */}
+        <h2 id="beleg-heading">{dictionary(locale).kickers.othersSay}</h2>
         {/* G-7: one emphasis per stream. The first card opens it at sub-head
             size, the rest are hairline rows — three identical filled cards
             read as one block rather than as three institutions. No `geo`
             badge either: every card here already names its source in its
             own context line, and `BELEG` beside `Stiftung Lebendiges Lehre`
             is the same word twice. */}
-        <ProofStream label={PROOF_LABEL[locale]} layout="rows">
+        <ProofStream label={dictionary(locale).kickers.othersSay} layout="rows">
           {proofSelection.entries.map((entry, position) =>
             entry.kind === "item" ? (
               <ProofCard
@@ -417,27 +572,6 @@ export default async function Page({
             ),
           )}
         </ProofStream>
-      </SectionShell>
-
-      {/* The one cross-reference this page may carry (TS-WEB-0022 D9), out of
-          path 3 and into a block of its own — inside the path it read as a
-          fourth step of "your website as the source" (brief, page 4, item
-          5). One sentence, a quiet link, unchanged wording, and it stands
-          where a reader who has seen the whole publishing argument may
-          legitimately discover that hers is a different job. */}
-      <SectionShell
-        as="aside"
-        dataBlock="verweis"
-        density="tight"
-        label={CROSS_REFERENCE_LABEL[locale]}
-        surface="lime-100"
-      >
-        <p>
-          {(fieldAt(pathWebsite.blocks, 3) ?? "").split("→")[0].trim()}{" "}
-          <RouteLink locale={locale} to="calendar">
-            {pageTitle("calendar", locale)}
-          </RouteLink>
-        </p>
       </SectionShell>
     </PageFrame>
     </>

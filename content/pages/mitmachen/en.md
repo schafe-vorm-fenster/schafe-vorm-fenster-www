@@ -33,7 +33,7 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — every slot. Slot 6a names Groß Kiesow against the real record anchored there, slot 7 carries three real publish-weighted reference cases instead of demo quotes, and slot 8 cites the offering record together with the 2022 Nordkurier entry behind the permanence commitment; all of those are clearance: pending (Q-0014, Q-0045)"
+provenance: "sourced — every slot except the three `*-steps-demo` siblings, which are `provenance: generated; demo: true`: the step lines of the three explain modules exist only in the 2026-09-23 design drafts (DEC-0124, state/open.md). Slot 6a names Groß Kiesow against the real record anchored there, slot 7 carries three real publish-weighted reference cases instead of demo quotes, and slot 8 cites the offering record together with the 2022 Nordkurier entry behind the permanence commitment; all of those are clearance: pending (Q-0014, Q-0045)"
 compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0022"
 schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
@@ -117,31 +117,49 @@ Focus job "publish our dates" throughout, no price, no "Portalize", no
 Order: hero → objections → three publishing paths → live example →
 proof (TS-WEB-0022 D2).
 
+Two separators appear in the lists and are part of the format: ` — `
+separates the core and the detail of a line (objection rows, step lines),
+` | ` separates the fields of a sample event row. No such line therefore
+carries an em dash inside its own sentence.
+
 ## Slot 1 — Hero (mechanism: whatsapp)
 
 <!-- id: mitmachen-1-hero; content_type: hero; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
 
-**Aha question:** A photo of the flyer by WhatsApp, and the date's in the calendar?
+**Statement 1 (heading):** A photo of the flyer by WhatsApp.
 
-**Text:** You've already printed the flyer anyway. Photograph it, send the picture by WhatsApp, done: the date is visible in your place, and in the places around it at the same time.
+**Statement 2 (lead):** And the date is in the calendar.
 
-**CTA label (primary):** Sign up for free
+**Hand-off into the objection block:** You've already printed the flyer anyway. Photograph it, send the picture by WhatsApp, done: the date is visible in your place, and in the places around it at the same time.
+
+**CTA label (primary):** Sign up for free now
 
 Source: `headline` and `relievers[0]` of `actors--community-calendar`.
 Only this block carries `data-block="scene"` and the mechanism
 attribute `whatsapp` (TS-WEB-0022 D4).
 
-## Slot 2 — Objection block: why the usual channels don't reach far enough
+Since the 2026-09-22 review ("two sentences, and as a statement rather than
+with a question mark") the opener is **two short statements** instead of one
+question: the heading carries the first, the lead the second (CG-005,
+CG-020, CG-021; TS-WEB-0022-A4).
+
+## Slot 2 — Objection block: who doesn't hear about your date today
 
 <!-- id: mitmachen-2-objections; content_type: objection-list; provenance: sourced; derived_from: ["@schafe-vorm-fenster/audiences@0.3.3#actors", "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
 
-**Heading:** Why what you already do doesn't reach everyone
+**Heading:** Who doesn't hear about your date today
 
-- Flyers in letterboxes stop at the village boundary — and often don't get delivered at all, because nobody has time for it.
-- The newspaper and the local gazette have deadlines — a rescheduled or cancelled date arrives too late, or not at all.
-- Your own club website and your own social media channels mainly reach people who already follow you.
+- The neighbours — Same village, but not in the club and not in the group.
+- The next village — Five kilometres away. They'd come if they knew.
+- The new arrivals — Just moved in, on no list and in no channel.
 
-**Closing line:** And whoever organises this as a volunteer has no time left for promoting it — let alone for learning a new tool.
+**Kicker of the lower half:** The usual channels
+
+- Flyers and notices stop at the village boundary. — And often they aren't even put up, because nobody has time to hand them out.
+- Newspaper and gazette have a deadline, and an editorial desk. — A rescheduled date arrives too late. And some of it never gets printed at all.
+- Your own website, Instagram, the WhatsApp group reach the people who already know you. — That's good, keep it up. Only whoever doesn't know you yet hears nothing of it.
+
+**Closing line:** Volunteering leaves no time to enter every date over and over. You'd rather send it once by WhatsApp and be done.
 
 Source: `@schafe-vorm-fenster/audiences#actors` field "Problem" (dates
 are typed "by hand" into several channels) and `pains[]` from
@@ -149,39 +167,114 @@ are typed "by hand" into several channels) and `pains[]` from
 "six" in the audience record is a figure of speech, not an enumeration
 (TS-WEB-0022 D3).
 
-Three channels as rows, and the two entries about the organiser herself
-as the sentence the block ends on: the objection block measured 1116 px
-on the phone, nearly a screen and a half of nothing but bad news. Both
-halves of the closing line are the same `pains[]` — nothing new is
-claimed, it simply no longer stands there as two more bullet points.
+Two halves, as in the 2026-09-23 draft "Design – wo es hakt" (variant 2b
+"Angestaubt · Sepia"): above, the three concrete people who don't hear
+about the date today (the review's own words, CG-009); below, the usual
+channels on the archive ground. The three additions the review asks for
+are in it — the editorial desk that doesn't print everything; "your own
+website" instead of "your club website"; the WhatsApp group beside
+Instagram; and "That's good, keep it up."
 
-## Slot 3 — Publishing path 1: WhatsApp
+The closing line is shortened: "organises"/"organisation" was a word
+doubling (CG-015), and "let alone a new tool" was dangerous, because we
+are a new tool ourselves. What is left is the point the review calls the
+more important one — nobody wants to enter the same date several times.
+
+## Slot 3 — Publishing path 1: flyer by WhatsApp
 
 <!-- id: mitmachen-3-path-whatsapp; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
+**Kicker of the paths slot:** There's an easier way
+
+**Heading of the paths slot:** How your dates get in
+
+**Sub-line of the paths slot:** Three ways. You use all of them anyway.
+
 **Title:** Flyer by WhatsApp
+
+**CTA label (secondary):** Send a flyer by WhatsApp
+
+Availability: `generally-available` (hub record `community-calendar`). The
+CTA opens the chat on the number from the hub record
+(`src/lib/contact/`), never a number typed here, and never carries
+`data-cta="primary"` (TS-WEB-0022 D4, DEC-0082 §4).
+
+Kicker, heading and sub-line belong to the whole paths slot and therefore
+stand at the first path. All three are the German review's wording, in
+English; the English sentences are an engineering translation and travel
+with the German ones.
+
+### Slot 3a — Step lines and stage words of path 1 (placeholder)
+
+<!-- id: mitmachen-3a-path-whatsapp-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: draft; demo: true -->
 
 **Steps:**
 
-1. Photograph the flyer you already have.
-2. Send the photo by WhatsApp.
-3. The date appears in your place's calendar and the surrounding area.
+1. Photograph the flyer — The one you printed anyway.
+2. Send it to us by WhatsApp — Straight into our chat via "share".
+3. The date is in the calendar — In your place and around it.
 
-Availability: `generally-available` (hub record `community-calendar`).
+**Chat reply (state 2):** Thanks! The date is in the calendar.
+
+**Chat time (state 2):** 14:06
+
+**Sample rows (state 3):**
+
+- Fire brigade fête | Sat · 15:00 · Fire station | social | Community
+- Lantern parade | Fri · 17:30 · Church | culture | Culture
+- Village flea market | Sun · 11:00 · Village square | social | Community
+
+The three lines are the 2026-09-23 "3-Schritte-erklären" draft (11.20.03)
+and are placeholders until they are signed off: `provenance: generated`,
+`demo: true`, `data-demo="true"` in the markup (DEC-0068, DEC-0124,
+`state/open.md`). The chat reply and the time label an illustration; they
+name no response time and no processing time (CG-031, CG-033) — which is
+why it reads "the date is in the calendar" and not "tomorrow": no cleared
+source states a turnaround.
+
+The three sample rows are the live panel's fallback in state 3, for when
+the live read returns fewer than three rows. They are ordinary upcoming
+dates with no "moved"/"cancelled", because this path ends in "the date is
+in the calendar" — path 2's samples illustrate "new, moved, cancelled" and
+do not fit here (DEC-0124 §5, `state/open.md`). Marked like path 2's:
+`data-placeholder="sample-events"`, every row `data-demo`.
 
 ## Slot 4 — Publishing path 2: connect your own calendar
 
 <!-- id: mitmachen-4-path-calendar; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
-**Title:** Connect your own calendar
+**Title:** Connect your calendar
+
+**CTA label (secondary):** Register your calendar
+
+Availability: `generally-available` (hub record `community-calendar`). The
+CTA points at `/mitmachen/registrieren` through the route facade.
+
+### Slot 4a — Step lines and stage words of path 2 (placeholder)
+
+<!-- id: mitmachen-4a-path-calendar-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: draft; demo: true -->
 
 **Steps:**
 
-1. Give us your existing Google Calendar.
-2. You keep entering dates there as usual.
-3. Changes, reschedules, and cancellations are picked up automatically by the village calendar.
+1. Enter the date as usual — In your own Google Calendar.
+2. Register the calendar once — Paste the link with us, done.
+3. The rest runs by itself — New, moved, cancelled: online at once.
 
-Availability: `generally-available` (hub record `community-calendar`).
+**Calendar address (state 2):** calendar.google.com/…/basic.ics
+
+**Sample rows (state 3):**
+
+- Choir practice | Thu · 20:00 instead of 19:30 | culture | Culture | verschoben | Moved
+- Children's gym | Sat · 10:00 · Hall | social | Community
+- Seniors' café | Tue · 15:00 | social | Community | abgesagt | Cancelled
+
+The step order is the swapped one the review asks for: enter first,
+register once, then it runs. It stands that way in the 2026-09-23
+"3-Schritte-erklären" draft (11.20.35 and 11.20.32). The three sample rows
+illustrate "new, moved, cancelled" and are marked as a sample
+(`data-placeholder="sample-events"`, every row `data-demo`); the place
+name comes from the configured reference community, never from an invented
+place (DEC-0068 rule 3, DEC-0115).
 
 ## Slot 5 — Publishing path 3: your website as the source
 
@@ -191,20 +284,75 @@ Availability: `generally-available` (hub record `community-calendar`).
 
 **Status badge:** In testing (Alpha)
 
-**Steps:**
+**CTA label (secondary):** Register my website
 
-1. You tell us the page where your dates are listed.
-2. We set up the import.
-3. New dates on your website appear in the village calendar automatically.
+**Hint banner:** Please ask us first — so far this works for some websites only.
+
+**Cross-reference (only here, one sentence, secondary):** If your club or municipality wants its own calendar on its own website instead of a source for the village calendar, that's a different offering: → `/dein-kalender`
 
 Availability: **Alpha** according to the hub record, not
 `generally-available` — the status badge must stay visible as long as
 that holds (TS-WEB-0022 D4).
 
-**Cross-reference (only here, one sentence, secondary):** If your club or municipality wants its own calendar on its own website instead of a source for the village calendar, that's a different offering: → `/dein-kalender`
+Source of the cross-reference: TS-WEB-0022 D9 — exactly one link to
+`/dein-kalender`, inside an `aside`, at the end of slot 3, with no price,
+no tier list, never `data-cta="primary"`.
 
-Source: TS-WEB-0022 D9 — exactly one link to `/dein-kalender`, inside an
-`aside`, with no price, no tier list, never `data-cta="primary"`.
+The hint sentence is the review's wording. The standard sources the banner
+enumerates come from the offering record
+(`src/lib/pricing/standard-sources.ts`), never from this file
+(TS-WEB-0022 D11, TS-WEB-0022-A17). No amount, no currency symbol, no
+"from".
+
+### Slot 5a — Step lines and stage words of path 3 (placeholder)
+
+<!-- id: mitmachen-5a-path-website-steps-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Steps:**
+
+1. Keep your dates where they are — On your website, as before.
+2. Tell us your website — We set up the import.
+3. The rest runs by itself — New dates land in the village calendar.
+
+**Website address (state 2):** your-website.org/events
+
+**Sample rows (state 3):**
+
+- Council meeting | Wed · 19:00 · Village hall | official | Official
+- The mayor's open hour | Thu · 16:00 | official | Official
+- Paper collection | Sat · 08:00 | merchants | Supply
+
+Here too the order is the swapped one: keep the dates on your own website
+first, then tell us the page, then it runs. No draft exists for path 3;
+the lines are built from the review's sentences and are therefore
+placeholders as well. The concrete sources are named in the banner, not in
+the steps — the WordPress plugin and the council information system live
+in the offering record, not here (`specs/README.md` rule 1).
+
+### Slot 5b — The price boundary in the hint banner (placeholder)
+
+<!-- id: mitmachen-5b-path-website-banner-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Price boundary:** A source we already support publishes free. Only an individual integration into a system we do not read yet is paid.
+
+The review's sentence in slot 5 ("Please ask us first — so far this works
+for some websites only") says how many websites the path reaches today, not
+what a connection costs. FUN-WEB-0204 and TS-WEB-0022 D11 ask for exactly
+the price boundary of BUS-WEB-0017, and D11 separates it from the alpha
+badge in as many words: "D4's status_badge says path 03's mechanism is
+alpha; this says what a connection costs. Two different facts, two
+elements" (TS-WEB-0022:205, :210; DEC-0107 §3). So it stands as the
+banner's second sentence.
+
+The facts are the offering record's (`community-calendar.offering.md`,
+lines 112–123: "A source the platform already supports publishes free" and
+"Only an individual integration into a system the platform does not already
+support is priced, and that is custom-data-integration"). The rendered
+wording is nobody's, hence `provenance: generated`, `demo: true` and
+`data-demo="true"` in the markup (DEC-0068, DEC-0124, `state/open.md`). No
+amount, no currency symbol, no "from": the add-on is `price_status:
+on-request` and is named on `/mitmachen` without a figure (TS-WEB-0022
+D1/D11, A12, A17).
 
 ## Slot 6 — Live example
 
@@ -230,6 +378,10 @@ really covered place with a record of its own in the hub
 clearance outstanding). No invented place, no invented dates: the module
 shows that place's real data. To be replaced as soon as content/editorial
 names a different or additional reference place (`state/open.md` #44).
+
+The same anchor carries path 1's third state: the explain module shows the
+live example's real rows there, not invented ones (DEC-0068 rule 3,
+DEC-0115).
 
 ## Slot 7 — Proof block (3 elements, publish-weighted)
 
@@ -267,7 +419,7 @@ Ost-Vorpommern portrait, January 2026).
 
 **Closing heading:** The next flyer can be the first date.
 
-**CTA label (identical to slot 1, primary):** Sign up for free
+**CTA label (identical to slot 1, primary):** Sign up for free now
 
 **Reassurance text:** Sign up free, stay free — that has been on the public record since 2022.
 

@@ -56,6 +56,12 @@ export interface ObjectionListProps {
    * organiser rather than about a channel, folded into one sentence instead
    * of two more rows (polish brief, page 4, item 2). Beat 2 should sting,
    * not grind. Set larger than the rows.
+   *
+   * It belongs to the **archive half** and renders only with it: with no
+   * `items` there is no archive block (see below), and a `closing` passed
+   * alongside an empty `items` is not rendered. A page that splits the two
+   * halves across sections passes `closing` to the half that carries the
+   * rows (`objection-list.test.tsx`, "an empty item list").
    */
   readonly closing?: string;
   /** A cleared `proof-card`. Omitted → `empty-proof-slot`, never backfilled. */
@@ -130,12 +136,23 @@ export function ObjectionList({
           ) : null}
         </div>
       ) : null}
-      <ArchiveBlock
-        closing={closing}
-        ground="own"
-        items={items.map((item) => ({ core: item.channel, detail: item.failure, icon: item.icon }))}
-        kicker={archiveKicker}
-      />
+      {/* A block with no rows is no block. `/mitmachen` puts the archive half
+          in its own section, because the two halves together measure 1627 px
+          at 390 px and G-4 caps a section at 1270 (T-12, DEC-0124); the upper
+          half then renders here with no `items`, and an empty archive ground
+          under it would be a second visible break for nothing. */}
+      {items.length > 0 ? (
+        <ArchiveBlock
+          closing={closing}
+          ground="own"
+          items={items.map((item) => ({
+            core: item.channel,
+            detail: item.failure,
+            icon: item.icon,
+          }))}
+          kicker={archiveKicker}
+        />
+      ) : null}
     </div>
   );
 }
