@@ -107,6 +107,24 @@ test.describe("/ueber-uns", () => {
       "team",
     ]);
 
+    // And the order ends there: the contact section stands after the last block
+    // and before the footer (TS-WEB-0006-A17, DEC-0081 §2). It carries no
+    // `data-block` — it is chrome, not a row of D2's composition sheet — so the
+    // array above cannot show it and the DOM order is read instead.
+    const closing = await page.evaluate(() => {
+      const blocks = [...document.querySelectorAll("#main [data-block]")];
+      const last = blocks.at(-1);
+      const contact = document.querySelector("section#kontakt");
+      const footer = document.querySelector("body > footer, footer[role='contentinfo']");
+      if (!last || !contact || !footer) return { found: false, afterLast: false, beforeFooter: false };
+      return {
+        found: true,
+        afterLast: last.compareDocumentPosition(contact) === Node.DOCUMENT_POSITION_FOLLOWING,
+        beforeFooter: contact.compareDocumentPosition(footer) === Node.DOCUMENT_POSITION_FOLLOWING,
+      };
+    });
+    expect(closing).toEqual({ found: true, afterLast: true, beforeFooter: true });
+
     // One `h1`, and it is the hero's.
     await expect(page.locator("h1")).toHaveCount(1);
     await expect(page.locator("#herkunft h1")).toHaveCount(1);
