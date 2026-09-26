@@ -62,6 +62,28 @@ describe("lead-fallback", () => {
     expect(html).toContain("Lieber erst sprechen? Kennenlerngespräch buchen");
   });
 
+  /**
+   * `/dein-kalender/bestellen` step 3 passes the same pair (T-15 review
+   * round): TS-WEB-0016-A14 and TS-WEB-0025-A14 both name the booking line as
+   * part of the fallback, and on that route the in-page target has to carry
+   * the flow's own scope and step or it lands on a different screen
+   * (TS-WEB-0025 D8, DEC-0133 §2).
+   */
+  it("keeps the order flow's scope and step in the in-page target", () => {
+    const ORDER_CONSULT = "/dein-kalender/bestellen?orte=schlatkow&schritt=3#kontakt";
+    const html = renderToStaticMarkup(
+      <LeadFallback
+        briefingHref={ORDER_CONSULT}
+        briefingLabel="Beratungstermin buchen"
+        email="jan@example.de"
+      />,
+    );
+    // `&` is escaped in the attribute, which is what the browser un-escapes.
+    expect(html).toContain(`href="${ORDER_CONSULT.replace("&", "&amp;")}"`);
+    expect(html).toContain("Beratungstermin buchen");
+    expect(html).not.toContain(BRIEFING_URL);
+  });
+
   it("degrades into the page's language, not always into German (F-2-4)", () => {
     const html = renderToStaticMarkup(
       <LeadFallback briefingHref={CONSULT} email="jan@example.de" locale="en" />,

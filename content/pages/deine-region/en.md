@@ -134,9 +134,9 @@ per screenful. Since DEC-0081 §3 it resolves **inside the page** to the
 contact section (`#kontakt`) rather than off-site, so the former "note on
 the secondary CTA" is gone: the outbound marking (TS-WEB-0016 D16)
 belongs to that section's first action row — the one element on the route
-that leaves the site. The closing
-heading repeats the same conversion as the hero — same goal, same label
-(TS-WEB-0006 D6). No time promise while C11 is open.
+that leaves the site. The closing heading repeats the same conversion as
+the hero — same goal, same label (TS-WEB-0006 D6). No time promise while
+C11 is open.
 
 Source: `headline` from `counties--portalize-enterprise` — "The whole
 district on one map, without a portal project." The map half of that

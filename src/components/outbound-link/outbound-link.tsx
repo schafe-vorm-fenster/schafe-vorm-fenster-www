@@ -51,13 +51,20 @@ export interface OutboundLinkProps {
  * prerender/hydrate boundary. Two links to the *same* target on one page
  * would share the id — which resolves to the same sentence and so reads
  * correctly, but a page that wants two distinct markings passes `noteId`.
+ *
+ * The bound the derivation carries: the slug is the first **48 characters**
+ * of the target, so two targets that agree on that prefix and differ only
+ * after it produce the same id. No such pair exists in the route table, and
+ * `noteId` is the escape hatch for the page that grows one. The dashes are
+ * trimmed *after* the slice, so a cut that lands on a separator does not
+ * leave a trailing dash in the id.
  */
 export function outboundNoteId(href: string): string {
   const slug = href
     .replace(/^[a-z]+:(\/\/)?/i, "")
     .replace(/[^a-z0-9]+/gi, "-")
-    .replace(/^-+|-+$/g, "")
     .slice(0, 48)
+    .replace(/^-+|-+$/g, "")
     .toLowerCase();
   return `outbound-note-${slug || "link"}`;
 }

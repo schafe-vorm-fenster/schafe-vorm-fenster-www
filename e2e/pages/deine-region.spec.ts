@@ -100,6 +100,21 @@ test.describe("/deine-region", () => {
       await expect(briefing.nth(index)).toHaveAttribute("data-cta", "secondary");
     }
 
+    /*
+     * A6's "secondary treatment" measured rather than asserted from a marker.
+     * The consult line is a `Button variant="quiet"`, whose size class decides
+     * its box — and the default size is the primary's 56 px, so the second rung
+     * silently took the first one's height once (review round, T-15). It stands
+     * at `--height-control` (44 px), strictly shorter than the primary.
+     */
+    const primaryHeight = (await primary.boundingBox())?.height ?? 0;
+    expect(primaryHeight).toBeGreaterThan(0);
+    for (const index of [0, 1]) {
+      const box = await briefing.nth(index).boundingBox();
+      expect(box?.height, `consult link ${index} height`).toBeLessThan(primaryHeight);
+      expect(box?.height, `consult link ${index} height`).toBeLessThanOrEqual(48);
+    }
+
     // A6's last sentence: the section renders once below the closing block and
     // its first action row is the only element carrying the appointment URL.
     const section = page.locator("section#kontakt[data-contact-section]");
@@ -455,6 +470,18 @@ test.describe("/deine-region/angebot", () => {
       { path: "/dein-kalender/bestellen?orte=schlatkow&schritt=3", consult: true },
       { path: "/dein-kalender/bestellen?orte=schlatkow&schritt=4", consult: true },
     ];
+
+    /*
+     * F-2-32's own question, which the count sweep below cannot ask: the
+     * appointment target is **one configured value**, not a literal pasted per
+     * page. `BRIEFING_URL` is that value (`src/lib/live/briefing.ts`), and the
+     * literal it falls back to is the owner's configured target — so a page
+     * that pasted its own URL, or a constant quietly rewritten, fails here
+     * before the per-route sweep runs.
+     */
+    expect(BRIEFING_URL).toBe(
+      process.env.NEXT_PUBLIC_BRIEFING_URL ?? "https://calendar.app.google/VG9bZoYVnFcX1W6F8",
+    );
 
     for (const { path, consult: hasConsult } of ROUTES) {
       await page.goto(path);

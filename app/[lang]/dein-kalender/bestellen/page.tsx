@@ -229,6 +229,17 @@ export default async function Page({
   });
 
   const briefingLabel = fieldAt(briefingSlot.blocks, 0) ?? "";
+  /**
+   * This route's contact section as an in-page target, with the flow's own
+   * scope and step in the query (D8). The consult exit below and step 3's
+   * lead fallback both point at it, so the fallback stands on its own
+   * wherever it renders (TS-WEB-0016-A14, TS-WEB-0025-A14).
+   */
+  const briefingHref = linkHref(ROUTE, {
+    locale,
+    query: { orte: orteRaw, kreis: hasCounty ? KREIS_ID : undefined, schritt: step },
+    hash: CONTACT_SECTION_ID,
+  });
   /*
    * TS-WEB-0025 D5 — the consult exit on all four steps, and **an in-page
    * target, not an outbound link**: it points at this route's contact section,
@@ -249,11 +260,15 @@ export default async function Page({
    * that looked like an action, so the way out outranked the way on.
    */
   const briefingExit = (
+    // `size="compact"` — the 44 px control height (`--height-control`), not the
+    // primary's 56 px: the exit is the second rung, and at the default size it
+    // took the step's own advance button's box.
     <Button
       dataCta="secondary"
       hash={CONTACT_SECTION_ID}
       locale={locale}
       query={{ orte: orteRaw, kreis: hasCounty ? KREIS_ID : undefined, schritt: step }}
+      size="compact"
       to={ROUTE}
       variant="quiet"
     >
@@ -385,6 +400,14 @@ export default async function Page({
                 control the visitor pressed (F-2-67). */}
             <EnvoyFormMount
               advanceHref={advanceHref}
+              // TS-WEB-0016-A14 / TS-WEB-0025-A14: the fallback's own third
+              // line is the consult exit into this route's contact section,
+              // so the degraded slot carries the booking way forward itself
+              // rather than borrowing the step's exit below it. Same shape as
+              // `/deine-region/angebot` — an in-page target, never a second
+              // occurrence of the appointment URL (A5).
+              briefingHref={briefingHref}
+              briefingLabel={briefingLabel}
               context={{ scope: orte.join(",") || KREIS_ID }}
               fallbackEmail={CONTACT_EMAIL}
               kind="order-invoice"

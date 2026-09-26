@@ -244,7 +244,19 @@ export default async function Page({
    * the one element on the route that leaves the site.
    */
   const briefingLink = (
-    <Button dataCta="secondary" hash={CONTACT_SECTION_ID} locale={locale} to={ROUTE} variant="quiet">
+    // `size="compact"`: the quiet variant carries no box of its own, so the
+    // size class decides the height — and the default is the primary's 56 px.
+    // The second rung of the ladder stands at the 44 px control height this
+    // line had as an `OutboundLink` (`--height-control`, TS-WEB-0002's target
+    // floor); at `size="primary"` it took the primary CTA's exact box.
+    <Button
+      dataCta="secondary"
+      hash={CONTACT_SECTION_ID}
+      locale={locale}
+      size="compact"
+      to={ROUTE}
+      variant="quiet"
+    >
       {briefingLabel}
     </Button>
   );

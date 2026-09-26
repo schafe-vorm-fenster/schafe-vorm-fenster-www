@@ -43,6 +43,12 @@ test.describe("TS-WEB-0025: the order flow", () => {
       expect(href, query).toMatch(/^\/dein-kalender\/bestellen(\?[^#]*)?#kontakt$/);
       // It carries no outbound marking, because nothing outbound happens.
       await expect(exit, query).not.toContainText(/Google|neuen Tab/);
+      // D5's "an exit, never a button": the quiet control stands at the 44 px
+      // `--height-control`, not at the step's advance height. `Button`'s size
+      // defaults to the primary's 56 px, which is what made the way out look
+      // like the way on once (review round, T-15).
+      const exitBox = await exit.boundingBox();
+      expect(exitBox?.height, query).toBeLessThanOrEqual(48);
 
       // The section's first action row is the only element with the booking URL.
       await expect(page.locator(`a[href="${BRIEFING_URL}"]`), query).toHaveCount(1);
@@ -228,12 +234,22 @@ test.describe("TS-WEB-0025: the order flow", () => {
   test("TS-WEB-0025-A14: with the envoy script blocked, step 3 renders the static fallback, never a spinner", async ({
     page,
   }) => {
-    // The mocked `envoy-form-mount` never loads an external script, so the
-    // fallback path is exercised by forcing its `empty`/`degraded` branch is
-    // not reachable from the page today (no toggle) — this asserts the
-    // currently-shipped `mocked` branch renders the full form with no
-    // spinner and no empty slot, which is what the mock rule requires while
-    // the widget is undelivered.
+    /*
+     * Half of A14, and the half says which. The mocked `envoy-form-mount`
+     * loads no external script at all, so there is nothing for this test to
+     * block, and the `empty`/`degraded` branch that renders the fallback is
+     * not reachable from the page: `state` is hard-coded `mocked` until the
+     * envoy widget is delivered (Q-0022, `state/open.md` row 7), and no
+     * toggle exists. What is asserted here is the shipped branch — the full
+     * form, no spinner, no empty slot — which is what the mock rule requires
+     * meanwhile.
+     *
+     * The fallback's own markup, including the consult exit into this route's
+     * contact section that A14 and TS-WEB-0016-A14 name, is asserted in
+     * `src/components/lead-fallback/lead-fallback.test.tsx`; the page passes
+     * it `briefingHref`/`briefingLabel` at `page.tsx`'s step-3 mount. The
+     * browser walk of the degraded state arrives with the widget.
+     */
     await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);
     await expect(page.locator('[data-envoy-form-kind="order-invoice"]')).toBeVisible();
     await expect(page.locator(".skeleton, [aria-busy='true']")).toHaveCount(0);

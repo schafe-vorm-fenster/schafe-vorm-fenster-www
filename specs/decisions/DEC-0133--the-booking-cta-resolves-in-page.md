@@ -53,6 +53,20 @@ A bare `href="#kontakt"` was the alternative and was rejected: it is
 invisible to the facade, so nothing would fail if the section's id moved, and
 `TS-WEB-0001 D5`'s rule is that no component holds a literal internal href.
 
+The control is `Button variant="quiet" size="compact"`, not a bare link and
+not the default size. `quiet` has no fill of its own, so the *size* class is
+what decides the box, and `size` defaults to `"primary"` — 56 px, the primary
+CTA's exact height. Measured on the running page, the default made the second
+rung indistinguishable from the first (`/deine-region`: both the primary and
+the consult link 56 px tall, weight 800). `compact` is the 44 px
+`--height-control` the design system reserves for "secondary, nested submit,
+well" (`app/styles/components.css`) — the same height this line had as an
+`OutboundLink variant="quiet"`, and the target floor `TS-WEB-0002` sets for a
+standalone control. The weight stays the `button` weight of 800 rather than
+the quiet text control's 700: that is the design system's own figure for a
+pill, and the rung is carried by height, ground and `data-cta="secondary"`
+(`TS-WEB-0006 D3`'s ladder), not by weight.
+
 ### 2. On `/dein-kalender/bestellen` the exit carries the flow's own query
 
 The facade form of an in-page link is a full path, and a full path without the
@@ -87,6 +101,10 @@ anchor, outside it, carrying the `meta` type role and an id, with
   share the id, which resolves to the same sentence and so reads correctly; a
   caller that wants two distinct markings passes `noteId`. `/dein-kalender`
   is the only page with two such links today, and T-13 repoints both.
+  The derivation's bound is written into its docblock: the slug is the first
+  48 characters of the target, so two targets agreeing on that prefix would
+  collide, and the dash trim runs *after* the slice so a cut on a separator
+  cannot leave a trailing dash. No such pair exists in the route table.
 
 The assembled line is also simplified from `"(öffnet neuen Tab) · Daten gehen
 an X"` to `"öffnet neuen Tab · Daten gehen an X"`: the parentheses existed to
@@ -110,6 +128,30 @@ the page's contact section as an in-page target, built by the page through
 `linkHref`. The component renders it as a plain link at
 `data-cta="secondary"`, with no `ConversionTracker` and no marking, because
 nothing outbound happens on it.
+
+**Why that one prop stays a pre-built path rather than a `RouteId`.**
+`src/components/README.md` rule 4 says targets are route ids, and every other
+internal link in this repository obeys it. Two things make the fallback the
+exception. The prop is not the component's own target: it is the *page's*
+contact section, and the page already resolves it through the facade
+(`linkHref(ROUTE, { locale, query, hash: CONTACT_SECTION_ID })`), so the
+facade is used — one call site up. And the prop does not arrive here from a
+page directly but through `envoy-form-mount`, whose four lead surfaces would
+each have to forward a route id, a locale, a query and a hash to say what one
+string already says; on `/dein-kalender/bestellen` that query *is* the step
+(§2), so the id form would have to carry it anyway. The link is a plain `<a>`
+for the same reason it carries no control height: the fallback is three
+sentences in three paragraphs, and its own docblock rules out a pill ("never
+a pill: the fallback stands inside a surface whose own primary CTA is the
+form's submit"). Should a second prop ever need the same treatment, the pair
+becomes `briefingTo` + `briefingQuery` and this paragraph is what to delete.
+
+`/dein-kalender/bestellen` step 3 passes the pair as well, not only
+`/deine-region/angebot`: `TS-WEB-0016-A14` and `TS-WEB-0025-A14` both name
+the booking line as part of *the fallback*, so the degraded slot carries the
+way forward itself instead of borrowing the step's exit standing below it.
+The two coincide only in the degraded state, which no page can reach while the
+widget is the mock (`state` is hard-coded `mocked`, `Q-0022`).
 
 ### 5. `/deine-region`'s hero note leaves the content file
 
@@ -153,7 +195,14 @@ fixtures carry strings that make the same assertion without the promise.
 
 - `Q-0022` / `C10` — the envoy widget is still undelivered, so the lead
   fallback's own markup is only reachable through the component test and the
-  gallery. Its browser walk arrives with the widget.
+  gallery. Its browser walk arrives with the widget. Concretely:
+  `TS-WEB-0016-A14` and `TS-WEB-0025-A14` are **half** discharged. Both pages
+  now pass the fallback everything the criteria name and
+  `lead-fallback.test.tsx` asserts the rendered result, but no browser test can
+  block a script the mock never loads or reach the `degraded` state a page
+  cannot enter (`state` is hard-coded `mocked`, no toggle, and adding one to a
+  shipping page to make a test pass is not a change this task takes).
+  `e2e/pages/bestellen.spec.ts`'s A14 case says so in its own comment.
 - The two-working-day promise stays withheld (`TS-WEB-0016-A13`,
   `TS-WEB-0026-A7`): `check:terms` in the chain is what keeps a softened
   variant out, and `RESPONSE_PROMISE_TEXT` stays `null` until `C11` is
