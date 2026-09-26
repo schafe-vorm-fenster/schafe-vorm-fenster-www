@@ -1,5 +1,5 @@
 ---
-id: DEC-0134
+id: DEC-0141
 title: The instrument decides coverage, not the mention — and the backlog may only shrink
 status: DRAFT
 date: 2026-09-26
@@ -129,7 +129,16 @@ coverage figure is not read as more than it is, and a later decision may add a
 recorded per-requirement judgement — one whose gate asks that the judgement
 **exists**, never that it says yes. A forced yes would be a forgery.
 
-### 7. W3 stays, for now, and says less than this check
+### 7. `DEC-0134` records the same defect from the other end, and is not duplicated here
+
+The T-15 round hit this defect from inside and recorded it the same day as
+`DEC-0134 — a comment is not a test`: its remedy was local (write "A14 of
+TS-WEB-0016" so the scan stops counting the sentence) and it kept the gap
+visible in `state/open.md` instead of in a metric. This record does not repeat
+that reasoning; it builds the instrument that makes the local remedy
+unnecessary. Both stand, and `DEC-0134` is the one that names the incident.
+
+### 8. W3 stays, for now, and says less than this check
 
 `check:specs` W3 is left in place and untouched. Two reasons: it also counts
 requirement identifiers, which this check does not, and removing a number that

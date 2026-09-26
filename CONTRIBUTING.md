@@ -100,7 +100,7 @@ It currently runs, in order:
    `specs/verification/manual-checks.md`. Two gates: a criterion new in the
    commit must arrive with its instrument (no budget), and the open tally may
    only fall — `specs/verification/coverage-budget.json` holds it, and a *fall*
-   fails too until the new number is written there (DEC-0134)
+   fails too until the new number is written there (DEC-0141)
 4. `check:stack` — TS-WEB-0017-A1/A2/A7/A17: every runtime dependency registered
    in `stack.allow.json`, one lockfile, the brand package pinned exact, one
    icon set, and `.npmrc` mapping both the hub scope and the method scope

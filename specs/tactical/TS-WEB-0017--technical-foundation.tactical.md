@@ -262,7 +262,7 @@ convenience: a `var()` **with a fallback** is a deliberate default and is not
 reported, and comments are blanked before the scan so a property named in prose
 is not a use.
 
-### D6c — A criterion is covered by the instrument its level names, and the backlog may only shrink [FIXED: DEC-0134]
+### D6c — A criterion is covered by the instrument its level names, and the backlog may only shrink [FIXED: DEC-0141]
 
 `specs/verification/verification-strategy.md` § *Linking tests to specs* says
 *"A test names the ID it verifies. That is the entire mechanism"*, and every

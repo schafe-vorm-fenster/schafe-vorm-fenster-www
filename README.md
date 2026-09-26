@@ -119,7 +119,7 @@ Unit tests sit beside the code as `*.test.ts`, integration tests as
 `describe` or `test` title** — `describe("TS-WEB-0015-A1: …")`. The title is
 not a convention with a nice side effect: `pnpm check:coverage` reads coverage
 out of titles only, so an id in a comment is reported as `NAMED ONLY` and
-counts for nothing (DEC-0134, TS-WEB-0017 D6c). A criterion added in a commit
+counts for nothing (DEC-0141, TS-WEB-0017 D6c). A criterion added in a commit
 must arrive with its instrument, and the count of open criteria may only fall —
 `specs/verification/coverage-budget.json` is the ratchet, `state/coverage.md`
 the report it writes.
