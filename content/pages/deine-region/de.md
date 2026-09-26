@@ -126,15 +126,21 @@ Modul-, Filter- oder Ergebnisbeschriftung — nur als Frage der Besucherin
 
 **Hinweis zum Zweit-CTA:** Öffnet Google Kalender in einem neuen Tab.
 
-**Abschluss-Überschrift:** Wir rechnen euch ein Angebot
+**Abschluss-Frage:** Sollen wir euch ein Angebot rechnen?
 
 Der Zweit-CTA steht leise unter dem primären, nie daneben und nie als
 zweite Schaltfläche: eine Seite trägt pro Bildschirm genau eine primäre
 Handlung. Der Hinweis nennt, was das Antippen auslöst; wohin die Daten
 gehen, steht im Datenschutz-Abschnitt, auf den die Seite ohnehin
-verlinkt. Die Abschluss-Überschrift wiederholt dieselbe Conversion wie
-oben — gleiches Ziel, gleiches Label (TS-WEB-0006 D6). Kein
-Zeitversprechen, solange C11 offen ist.
+verlinkt. Die Abschluss-Frage wiederholt dieselbe Conversion wie oben —
+gleiches Ziel, gleiches Label (TS-WEB-0006 D6). Kein Zeitversprechen,
+solange C11 offen ist. Das Feld heißt `Abschluss-Frage`, nicht
+`Abschluss-Überschrift`: der Abschluss-CTA setzt es als Absatz über
+Schaltfläche und leisem Link (`<p className={styles.heading}>` in
+`src/components/closing-cta/closing-cta.tsx:155`), nie als
+Abschnittstitel — die Frage an die Leserin ist hier erlaubt (CG-006), und
+der Wortlaut ist der des Polish-Briefs (plan/polish-brief.md, Seite 8,
+Punkt 7).
 
 Quelle: `headline` von `counties--portalize-enterprise` — „The whole
 district on one map, without a portal project." Die Kartenhälfte der

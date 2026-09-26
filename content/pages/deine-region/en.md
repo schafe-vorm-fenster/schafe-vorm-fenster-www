@@ -128,14 +128,21 @@ question (TS-WEB-0026 D3).
 
 **Note on the secondary CTA:** Opens Google Calendar in a new tab.
 
-**Closing heading:** We put a quote together for you
+**Closing question:** Shall we put a quote together for you?
 
 The secondary CTA stands quietly under the primary one, never beside it
 and never as a second button: a page carries exactly one primary action
 per screenful. The note says what tapping it does; where the data goes
 is in the privacy section the page already links to. The closing
-heading repeats the same conversion as the hero — same goal, same label
-(TS-WEB-0006 D6). No time promise while C11 is open.
+question repeats the same conversion as the hero — same goal, same label
+(TS-WEB-0006 D6). No time promise while C11 is open. The field is called
+`Closing question`, not `Closing heading`: the closing CTA sets it as a
+paragraph above the button and the quiet link
+(`<p className={styles.heading}>` in
+`src/components/closing-cta/closing-cta.tsx:155`), never as a section
+title — the question to the reader is allowed here (CG-006), and the
+wording is the polish brief's own (plan/polish-brief.md, page 8,
+item 7).
 
 Source: `headline` from `counties--portalize-enterprise` — "The whole
 district on one map, without a portal project." The map half of that

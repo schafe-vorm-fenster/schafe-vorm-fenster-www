@@ -224,7 +224,7 @@ authoring note that says where the copy came from) — DEC-0136 says why, and
 | --- | --- | --- |
 | 11 avoid list (CG-040, CG-009, CG-017, CG-018, CG-035, CG-036, CG-039) | every term of the guide's DE and EN tables and of the glossary's avoid column; `AVOID_TERMS` is the list and two drift tests bind it to all three sources — the glossary's avoid column and the two CG-040 tables of `concept/website-copy-guide.md` §9 (39 terms today) | the generic-claims row as an *adverb* (`einfach` inside a sentence): the row carries no replacement, so failing it would force an invention — TS-WEB-0006-A16 |
 | 11 product name (CG-038) | `Portalize` in exactly one field per locale, in the `/dein-kalender` tier slot; case-sensitive, so the offering id `portalize-calendar` in a data cell is not a hit | — |
-| 13 copy structure (CG-005, CG-004) | a question mark in a section-title-role field; the back-reference phrases; `im Amt` without a second addressee | CG-015 word-stem doubling and CG-034 volatile numerals stay review-level (`copy-contract.md`); "states what works" is meaning |
+| 13 copy structure (CG-005, CG-004) | a question mark in a section-title-role field (a field whose page renders it as a paragraph is relabelled, never reworded — DEC-0136 §2); the back-reference phrases; `im Amt` without a second addressee | CG-015 word-stem doubling and CG-034 volatile numerals stay review-level (`copy-contract.md`); "states what works" is meaning |
 | 14 register (CG-003) | a capitalised `Sie`/`Ihnen`/`Ihre*` mid-sentence and an imperative `<Verb> Sie`, with `/rechtliches` exempt whole and by route | CG-002's other half — one field mixing `du` and `ihr` — and the imported legal bodies under `content/legal/`, which the page scan does not reach |
 
 **A row-13 finding is about the label, not about the words.** The role of a
@@ -237,4 +237,16 @@ the sentence. The finding's own message says so, and the halves that need a
 render — no `h2` of a rendered page is a question (CG-005), and the product name
 in the header, footer and context band of every route (TS-WEB-0018-A7) — are in
 `e2e/copy-structure.spec.ts`, where `/rechtliches` is exempt from the body count
-because the imported legal bodies name the product contractually (DEC-0136 §10).
+because the imported legal bodies name the product contractually (DEC-0136 §10,
+CONF-0027 — the criterion is not met on the render, and the exemption says so
+rather than hiding it).
+
+**The row-14 route exemption is proven by fixture, and unexercised by the tree.**
+`REGISTER_EXEMPT_ROUTES = ["legal"]` is covered by `validate.test.ts`, which runs
+one formal sentence through a `legal` fixture (no finding) and an `about` one
+(a finding). It changes nothing about the shipped tree: emptying the list and
+running `pnpm check:content` still reports 0 errors, because the `/rechtliches`
+page artifacts carry no `Sie` form of their own, and the five imported bodies
+under `content/legal/` — which do carry the formal register — are not page
+artifacts and are never scanned. So a green run is **not** evidence that the
+legal bodies pass this row; it is evidence that they are out of its reach.

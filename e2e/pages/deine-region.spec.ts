@@ -203,7 +203,9 @@ test.describe("/deine-region", () => {
   }) => {
     await page.goto("/deine-region");
     const closing = page.locator("#closing-cta");
-    await expect(closing).toContainText("Wir rechnen euch ein Angebot");
+    await expect(closing).toContainText("Sollen wir euch ein Angebot rechnen?");
+    // A question in the closing block is a `<p>`, never an `h2` (CG-006/CG-005).
+    await expect(closing.locator("h2")).toHaveCount(0);
     await expect(closing.getByRole("link", { name: /Kennenlerngespräch/ })).toBeVisible();
     // No response-time promise is invented to fill the reassurance line.
     await expect(closing).not.toContainText(/Werktage/);

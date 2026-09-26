@@ -92,6 +92,22 @@ and says in so many words that the words are not to be dropped;
 `validate.test.ts` asserts that message; and the **rendered** half of `CG-005`
 is checked where the render exists (§10).
 
+The same mistake stood a second time in the same task and was caught by the
+second review, not by this record: `deine-region-1-focus`'s closing field was
+labelled `Abschluss-Überschrift` / `Closing heading` and the first two passes
+rewrote the owner's *„Sollen wir euch ein Angebot rechnen?"* into a statement
+nobody wrote. `ClosingCta` renders that field as a `<p>`
+(`src/components/closing-cta/closing-cta.tsx:155`), never as an `h2`, so it is
+the `dein-ort-starten-5-search` case exactly, and the repair is the same one:
+the field is labelled `Abschluss-Frage` / `Closing question` and carries the
+brief's question again (§7). The rule therefore has a stronger form than *"a
+label can be wrong"*: **where the render is a paragraph, a question in the field
+is not a defect at all, and rewriting the sentence is the defect.** Four fields
+of this tree are labelled `Abschluss-Überschrift` / `Closing heading` and every
+one of them reaches the same `<p>`; the label stays on the three that carry a
+statement because no rule is asking anything of them, and the one that carries a
+question says why it is labelled a question, in its own note line.
+
 ### 3. The avoid list is a table in `validate.ts`, bound to the glossary by a drift test
 
 `CG-040` sources the list from three places: the guide's German table, its
@@ -179,7 +195,7 @@ with the question turned into the statement `CG-005` asks for.
 | --- | --- | --- | --- |
 | `dein-ort/starten` slot 5 | labelled `Überschrift` / `Heading`, *Falsch getippt? Nochmal suchen* | labelled `Frage` / `Question`, **same words** | **no copy change** — the page renders the field as the quiet line under the closing CTA (`plan/polish-brief.md` page 3 fix 3), so the label was the defect (§2) |
 | `deine-region` slot 2 | `Überschrift`: *Was ist in meiner Nähe? Bei Landkreisgröße keine Frage für eine Liste* | `Kicker`: *Was ist in meiner Nähe?* · `Überschrift`: *Bei Landkreisgröße keine Frage für eine Liste* | **no word dropped** — `CG-005`'s own split: the kicker carries the question, the title the statement. `app/[lang]/deine-region/page.tsx` reads the authored kicker (`fieldAt(territory.blocks, 2)`) with the dictionary word as fallback, the way `/`, `/mitmachen` and `/dein-ort/starten` already read theirs |
-| `deine-region` slot 1 `Abschluss-Überschrift` / `Closing heading` | *Sollen wir euch ein Angebot rechnen?* | *Wir rechnen euch ein Angebot* | the same words, as a statement |
+| `deine-region` slot 1 | labelled `Abschluss-Überschrift` / `Closing heading`, *Sollen wir euch ein Angebot rechnen?* | labelled `Abschluss-Frage` / `Closing question`, **same words** | **no copy change** — `ClosingCta` renders the field as a `<p>` (`src/components/closing-cta/closing-cta.tsx:155`), so the label was the defect (§2); the wording is `plan/polish-brief.md` §8 item 7 |
 | `dein-kalender/bestellen` step 3 | labelled `Überschrift` / `Heading` | labelled `Frage` / `Question` | **no copy change** — step 1 of the same file labels its reader-directed question that way (`CG-006`) |
 | `ueber-uns` `Dorfargument 2` | *das die Leute gerne benutzen* | *das die Nachbarn gerne benutzen* | `CG-040` replacement column (`CG-009`) |
 | `mitmachen/en` objection 1 | *reach the people who already know you* | *reach whoever already knows you* | the German sibling, *"erreichen die, die euch schon kennen"* (`CG-041`) |
@@ -195,14 +211,24 @@ because with the question restored above it the deictic has its referent back:
 the truncated title read *"not a question"* with nothing to point at, while the
 sentence under it still answered a question the page no longer asked.
 
-The closing heading of `/deine-region` is authored copy the page reads
+The closing question of `/deine-region` is authored copy the page reads
 (`fieldAt(focus.blocks, 5)`), so its typed fallback in
 `app/[lang]/deine-region/page.tsx` and the expectation in
-`e2e/pages/deine-region.spec.ts` were moved with it — three lines, so that the
-rendered page and the artifact do not disagree. It is the **one** statement in
-this table that nobody wrote as a statement, and it carries its `state/open.md`
-row for the owner: the slot has no kicker to move *Sollen wir euch ein Angebot
-rechnen?* into, and inventing one would be a sentence nobody wrote.
+`e2e/pages/deine-region.spec.ts` move with it — three lines, so that the
+rendered page and the artifact do not disagree.
+
+That field took three passes, and the first two are the lesson. The first pass
+cut the question; the second pass (this record's earlier version) kept the cut,
+called the result *"the same words as a statement"*, and left the open question
+open on the grounds that the slot has no kicker to move the question into. Both
+are wrong for one reason: **the slot needs no kicker, because the field is not
+rendered as a title.** The second review measured it — `#closing-cta` on
+`/deine-region` renders `<p class="…closing-cta-module…heading">`, and the
+route's four `h2`s are elsewhere — and the relabel passes the lint exactly as it
+does on `/dein-ort/starten`. So **no statement in this table is one nobody
+wrote**: every repair is either the guide's *use instead* column, a `CG-005`
+split, or a label. No slot of this task carries `provenance: generated` +
+`demo: true`, because no sentence was written.
 
 ### 8. `check:terms` joins the chain, and the gallery stops writing the promise
 
@@ -253,16 +279,35 @@ seven times as the contractual product (privacy-policy.md:91,
 terms-of-use.md:99, dpa.md:54). Those bodies are imported verbatim
 (`DEC-0012`, `DEC-0027`) — which is why the same route is the register row's
 one exemption (`TS-WEB-0029 D6a/A15`) — and `TS-WEB-0018-A7`'s wording carries
-no such exemption. The spec is not amended here and no legal text is edited:
-the exemption is named in the spec file with its reason and registered in
-`state/open.md` for the owner.
+no such exemption. The spec is not amended here and no legal text is edited.
+
+**The channel for that is the conflict register, not this section.** A
+contradiction between two statements is a `CONF-####` record
+(`specs/conflicts/README.md`: *"a conflict is a contradiction between two
+statements"*), and `CONF-0018` is the near-identical precedent — a criterion
+demanding a question heading against `CG-005`. The contradiction is therefore
+raised as **`CONF-0027`** (`direct_contradiction`, `OPEN`, impact Medium,
+`involved: [TS-WEB-0018, DEC-0012]`, `decision_record: DEC-0136`), with the
+exemption and its reason in `e2e/copy-structure.spec.ts` and the owner row in
+`state/open.md` (row 270).
+
+**`TS-WEB-0018-A7` is therefore not met on the render, and this task does not
+report it as met.** Its content half holds (`checkProductName`, four unit
+tests) and its chrome half holds on all 24 route/locale pairs; its body clause
+is contradicted by two shipped routes, and closing it needs either an amended
+criterion or a legal text nobody here may edit. The test's exemption keeps the
+other twenty-two pairs under guard in the meantime; it does not make the
+criterion true.
 
 ## Consequences
 
 - `pnpm check:content` fails on eight `SRC-0017` rules it ignored yesterday.
-  `TS-WEB-0006-A8`, `TS-WEB-0007-A13`, `TS-WEB-0018-A7`, `TS-WEB-0029-A15` and
-  `TS-WEB-0026-A8` are met; `validate.test.ts` carries a passing **and** a
-  failing fixture per row, and the failing half is as important as the other.
+  `TS-WEB-0006-A8`, `TS-WEB-0007-A13`, `TS-WEB-0029-A15` and `TS-WEB-0026-A8`
+  are met; `validate.test.ts` carries a passing **and** a failing fixture per
+  row, and the failing half is as important as the other. `TS-WEB-0018-A7` is
+  **not** met: both halves are now under test, and the body clause fails on
+  `/rechtliches` and `/en/legal` for a reason no engineer may remove
+  (`CONF-0027`, §10).
 - The next artifact that writes a question into an `Überschrift` field, a
   `Sie` outside `/rechtliches`, or the product name in a second field cannot
   merge. The next one that writes real copy as a bare paragraph is not caught

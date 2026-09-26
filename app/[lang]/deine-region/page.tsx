@@ -95,12 +95,12 @@ const PAGE_COPY: Record<
 > = {
   de: {
     // Fallbacks only — `deine-region-1-focus` carries the real wording now,
-    // so the quiet briefing link and the closing heading are authored copy
+    // so the quiet briefing link and the closing question are authored copy
     // rather than strings typed into a page file.
     briefingLabel: "Lieber erst sprechen? Kennenlerngespräch buchen",
     proofHeading: "Was Landkreise und Institutionen sagen",
     proofLabel: "Beleg",
-    closingHeading: "Wir rechnen euch ein Angebot",
+    closingHeading: "Sollen wir euch ein Angebot rechnen?",
     quoteFallback: "Angebot anfragen",
     territorySketchAlt: "Gebietsschnitt eines Landkreises",
     interimFallback: "So sieht das heute schon aus: Orte, die schon dabei sind",
@@ -110,7 +110,7 @@ const PAGE_COPY: Record<
     briefingLabel: "Rather talk first? Book an intro call",
     proofHeading: "What counties and institutions say",
     proofLabel: "Proof",
-    closingHeading: "We put a quote together for you",
+    closingHeading: "Shall we put a quote together for you?",
     quoteFallback: "Request a quote",
     territorySketchAlt: "Outline of a county territory",
     interimFallback: "This is what it already looks like: places that are already on board",
@@ -230,6 +230,9 @@ export default async function Page({
   const ctaLabel = ctaLabelOnly(fieldAt(focus.blocks, 2)) ?? copy.quoteFallback;
   const briefingLabel = fieldAt(focus.blocks, 3) ?? copy.briefingLabel;
   const briefingDisclosure = fieldAt(focus.blocks, 4);
+  // The artifact labels this field `Abschluss-Frage` / `Closing question`, not
+  // `Überschrift`: `ClosingCta` renders it as a `<p>` above the button, never as
+  // an `h2`, so the owner's question stands (CG-006, DEC-0136 §2/§7).
   const closingHeading = fieldAt(focus.blocks, 5) ?? copy.closingHeading;
   // G-5: the same quiet line in the hero and in the closing block, so the
   // second way forward is recognisably the same one both times.

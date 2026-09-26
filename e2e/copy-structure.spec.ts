@@ -39,14 +39,28 @@ const PRODUCT_NAME_ROUTE = "calendar";
  * (DEC-0012, DEC-0027) and are not page artifacts, which is why the same route
  * is the one exemption of the register row (TS-WEB-0029 D6a/A15,
  * `REGISTER_EXEMPT_ROUTES`). TS-WEB-0018-A7's wording — "`/dein-kalender` is
- * the only route whose body may contain one" — does not carry that exemption;
- * the conflict is recorded in DEC-0136 and state/open.md, not resolved here,
- * because rewriting a contract to satisfy a naming row is not this task's call.
+ * the only route whose body may contain one" — does not carry that exemption,
+ * so **A7 is not met on the render** and this exemption does not make it met:
+ * the contradiction is registered as CONF-0027 (with DEC-0136 §10 as its
+ * decision record) for the spec owner, and the exemption keeps the other
+ * twenty-two route/locale pairs under guard in the meantime.
  */
 const PRODUCT_NAME_EXEMPT_ROUTES = ["legal"];
 
-/** The chrome of a page: what every route repeats around its own copy. */
+/**
+ * The chrome of a page: what every route repeats around its own copy. Each
+ * selector must resolve, or the assertion under it would pass by reading
+ * nothing — a renamed id has to fail this test, not silence it.
+ *
+ * The order flow is the one documented exception: `/dein-kalender/bestellen`
+ * and `/en/your-calendar/order` render no context band (TS-WEB-0025 D2 — the
+ * form is the page), measured as 0 occurrences of `#context-band` against 1 on
+ * every other route.
+ */
 const CHROME = ["header", "footer", "#context-band"];
+
+/** Routes that render no `#context-band`, with the reason above. */
+const NO_CONTEXT_BAND_ROUTES = ["order"];
 
 const ROUTES = everyRoute().map(({ route, locale }) => ({
   path: href(route, locale),
@@ -68,8 +82,20 @@ for (const { path, route, locale } of ROUTES) {
       ).toBe(false);
     }
 
-    // TS-WEB-0018-A7, first half: the chrome names no product.
+    // TS-WEB-0018-A7, first half: the chrome names no product. The selector is
+    // asserted before it is read, so a renamed id fails here instead of
+    // reading an empty list and passing.
     for (const selector of CHROME) {
+      const found = await page.locator(selector).count();
+      if (selector === "#context-band" && NO_CONTEXT_BAND_ROUTES.includes(route)) {
+        // The documented exception, asserted rather than skipped: if the order
+        // flow ever gains a context band, this list is what needs updating.
+        expect(found, `${path} renders a \`${selector}\` the exception list denies it`).toBe(0);
+      } else {
+        expect(found, `${path} resolves no \`${selector}\` — nothing would be read`).toBeGreaterThan(
+          0,
+        );
+      }
       for (const text of await page.locator(selector).allInnerTexts()) {
         expect(
           text.includes(PRODUCT_NAME),
