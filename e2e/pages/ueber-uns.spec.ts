@@ -142,6 +142,17 @@ test.describe("/ueber-uns", () => {
     }
   });
 
+  test("TS-WEB-0006-A3: the other fold viewport carries no data-cta either", async ({ page }) => {
+    // A3 names both reference viewports and exempts this route from the fold
+    // clause at both: "the first viewport carries no `data-cta` at all".
+    await page.setViewportSize({ width: 360, height: 640 });
+    await page.goto("/ueber-uns");
+    await expect(page.locator("h1")).toBeInViewport();
+    for (const cta of await page.locator("[data-cta]").all()) {
+      await expect(cta).not.toBeInViewport();
+    }
+  });
+
   test("TS-WEB-0027-A4: the origin block promises the free calendar, carries one price token, and argues the need", async ({
     page,
   }) => {
