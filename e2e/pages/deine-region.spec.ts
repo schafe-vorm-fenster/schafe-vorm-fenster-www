@@ -203,7 +203,7 @@ test.describe("/deine-region", () => {
   }) => {
     await page.goto("/deine-region");
     const closing = page.locator("#closing-cta");
-    await expect(closing).toContainText("Sollen wir euch ein Angebot rechnen?");
+    await expect(closing).toContainText("Wir rechnen euch ein Angebot");
     await expect(closing.getByRole("link", { name: /Kennenlerngespräch/ })).toBeVisible();
     // No response-time promise is invented to fill the reassurance line.
     await expect(closing).not.toContainText(/Werktage/);

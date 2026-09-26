@@ -128,7 +128,7 @@ question (TS-WEB-0026 D3).
 
 **Note on the secondary CTA:** Opens Google Calendar in a new tab.
 
-**Closing heading:** Shall we put a quote together for you?
+**Closing heading:** We put a quote together for you
 
 The secondary CTA stands quietly under the primary one, never beside it
 and never as a second button: a page carries exactly one primary action
@@ -148,7 +148,7 @@ confirmation exists.
 
 <!-- id: deine-region-2-territory; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: draft -->
 
-**Heading:** What's near me? At county scale, that's not a question for a list
+**Heading:** At county scale, not a question for a list
 
 **Text:** Covering forty or eighty places editorially isn't a bigger version of covering one place. It simply isn't feasible. And the administrative boundary isn't the boundary people organize their lives around: what's happening thirty kilometres away matters just as much as what's happening right next door.
 

@@ -136,7 +136,7 @@ aus).
 
 <!-- id: dein-ort-starten-5-search; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Überschrift:** Falsch getippt? Nochmal suchen
+**Überschrift:** Nochmal suchen
 
 **Sucheingabe (Placeholder):** Dein Ort
 

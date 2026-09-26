@@ -176,7 +176,7 @@ nächsten Wochen ansteht." Der Ortsname kommt aus
 Die Termine kommen, wie sie reinkommen — und landen trotzdem alle auf eurer
 Website.
 
-**Quellen:** WhatsApp · Google Kalender · Vereinswebsite
+**Quellen:** WhatsApp · Google Kalender · eure eigene Website
 
 **Ziel:** eure Website
 
@@ -258,7 +258,7 @@ Entscheidung (TS-WEB-0024 D6).
 
 **CTA (primär auf hell):** Kalender bestellen
 
-**Produktname:** Das Produkt hinter diesem Kalender heißt Portalize.
+**Produktname:** Der Kalender unter eurem Namen heißt Portalize.
 
 Offering-ID: `portalize-calendar`; Preis 480/EUR/Jahr, `vat: excluded` —
 aus dem Paket gelesen, nicht getippt (TS-WEB-0024 D8). „Portalize" erscheint

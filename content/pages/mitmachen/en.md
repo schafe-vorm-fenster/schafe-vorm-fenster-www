@@ -157,7 +157,7 @@ CG-020, CG-021; TS-WEB-0022-A4).
 
 - Flyers and notices stop at the village boundary. — And often they aren't even put up, because nobody has time to hand them out.
 - Newspaper and gazette have a deadline, and an editorial desk. — A rescheduled date arrives too late. And some of it never gets printed at all.
-- Your own website, Instagram, the WhatsApp group reach the people who already know you. — That's good, keep it up. Only whoever doesn't know you yet hears nothing of it.
+- Your own website, Instagram, the WhatsApp group reach whoever already knows you. — That's good, keep it up. Only whoever doesn't know you yet hears nothing of it.
 
 **Closing line:** Volunteering leaves no time to enter every date over and over. You'd rather send it once by WhatsApp and be done.
 

@@ -126,7 +126,7 @@ Modul-, Filter- oder Ergebnisbeschriftung — nur als Frage der Besucherin
 
 **Hinweis zum Zweit-CTA:** Öffnet Google Kalender in einem neuen Tab.
 
-**Abschluss-Überschrift:** Sollen wir euch ein Angebot rechnen?
+**Abschluss-Überschrift:** Wir rechnen euch ein Angebot
 
 Der Zweit-CTA steht leise unter dem primären, nie daneben und nie als
 zweite Schaltfläche: eine Seite trägt pro Bildschirm genau eine primäre
@@ -147,7 +147,7 @@ vollständig übernommen, sobald die Bestätigung vorliegt.
 
 <!-- id: deine-region-2-territory; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: draft -->
 
-**Überschrift:** Was ist in meiner Nähe? Bei Landkreisgröße keine Frage für eine Liste
+**Überschrift:** Bei Landkreisgröße keine Frage für eine Liste
 
 **Text:** Vierzig oder achtzig Orte redaktionell abzudecken ist keine größere Version von einem Ort. Das ist schlicht nicht machbar. Und die Verwaltungsgrenze ist nicht die Grenze, an der Menschen ihr Leben ausrichten: Was dreißig Kilometer entfernt passiert, interessiert genauso wie das, was direkt nebenan läuft.
 

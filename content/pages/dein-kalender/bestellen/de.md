@@ -60,7 +60,7 @@ primären CTA (TS-WEB-0025 D5).
 
 <!-- id: bestellen-3-invoice; content_type: form; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Überschrift:** Wohin geht die Rechnung?
+**Frage:** Wohin geht die Rechnung?
 
 **Feldlabels:**
 

@@ -135,7 +135,7 @@ outstanding).
 
 <!-- id: dein-ort-starten-5-search; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Heading:** Typed it wrong? Search again
+**Heading:** Search again
 
 **Search input (placeholder):** Your place
 

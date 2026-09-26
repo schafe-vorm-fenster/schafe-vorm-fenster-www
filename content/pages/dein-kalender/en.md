@@ -171,7 +171,7 @@ the next few weeks." The place name comes from
 The dates arrive the way they arrive — and they all land on your website
 anyway.
 
-**Sources:** WhatsApp · Google Calendar · club website
+**Sources:** WhatsApp · Google Calendar · your own website
 
 **Target:** your website
 
@@ -250,7 +250,7 @@ calendar" was a link into the app, not a next step in this decision
 
 **CTA (primary on light):** Order the calendar
 
-**Product name:** The product behind this calendar is called Portalize.
+**Product name:** The calendar under your own name is called Portalize.
 
 Offering id: `portalize-calendar`; price 480/EUR/year, `vat: excluded`
 — read from the package, never typed (TS-WEB-0024 D8). "Portalize" appears
