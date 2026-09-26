@@ -628,11 +628,13 @@ test.describe("TS-WEB-0019 — home", () => {
     // body still carries the resolved run. That is `state/open.md` row 132 —
     // production's shipped behaviour, and what `pnpm e2e` with `CI=true` (a
     // `next build` + `next start`) serves. A7 is inactive there, not failing;
-    // `next dev` is the one configuration measured to order by the trait;
-    // a Vercel preview built by `pnpm build` ships the hash set too
-    // (`src/lib/security/csp.ts` grants `'unsafe-inline'` only when no hash
-    // set exists), so it parks A7 here as well. Closing the gap is row 132's
-    // nonce decision (`DEC-0140` §4).
+    // `next dev` is the one configuration this walk has been run green in.
+    // A deployed preview is expected to activate it too — not because of
+    // `pnpm build`, which does write the hash asset, but because that asset
+    // never reaches the deployed Proxy function (`state/open.md` rows 21/31),
+    // so `csp.ts`'s preview fallback applies — but no preview deployment has
+    // been walked; `DEC-0140` §4's table says which row is measured and which
+    // is inferred. Closing the gap for production is row 132's nonce decision.
     test.skip(
       !(await boundaryCompletionReachesTheDom(
         page,

@@ -122,8 +122,9 @@ Two smaller readings, both taken rather than left open:
 The task brief permitted shipping *"direct order everywhere, A7 fixme kept"* if
 the trait handover endangered the milestone. The handover itself was built and
 is not a milestone risk: in `next dev` block 2a is ordered by the trait and A7
-walks both loads there. `next dev` is also the **only** configuration in which
-that has been measured — see the correction at the end of this section. **In production the shipped order is
+walks both loads there. `next dev` is the only configuration in which the walk
+itself has been run green; what is expected of a preview and what was measured
+there is set out under *Which configuration was measured* below. **In production the shipped order is
 the `direct` order for every trait anyway**, and not by choice — see below.
 
 **Under the production CSP the reorder does not reach the DOM.** The swap from
@@ -171,7 +172,35 @@ criterion: CI's production-build e2e job does not exercise `TS-WEB-0019-A7` at
 all.** The shipped state is the brief's fallback — the `direct` order for every
 trait — with A7 parked on the policy rather than on a bare `fixme`. So the suite
 reports A7 as inactive on the production build and green in `next dev`, and it
-never reports it as passing where the order it asserts is not in the DOM. It is un-`fixme`d — the mechanism is built and measured — but
+never reports it as passing where the order it asserts is not in the DOM.
+
+### Which configuration was measured
+
+The QA round of 2026-09-26 read this section as claiming a preview deployment,
+so the four configurations are separated here:
+
+| Configuration | A7 | How it is known |
+| --- | --- | --- |
+| `next dev` on port 3251 | green | walked: `PORT=3251 pnpm e2e e2e/pages/home.spec.ts` → `27 passed` |
+| `pnpm build` + `next start`, `VERCEL_ENV` unset, hash asset present | skipped | walked: `-g TS-WEB-0019-A7` → `1 skipped`; `TS-WEB-0010-A4` and `-A8` pass on the same build |
+| the same build with the hash asset moved aside and `VERCEL_ENV=preview` (`state/open.md` row 148's procedure) | green | walked once, with `TS-WEB-0019-A9`/`-A11` |
+| a Vercel **preview deployment** | expected green, **not walked** | nothing is deployed from this work package |
+
+The last row is an expectation with a measured basis, and the basis is not
+`pnpm build`: the build does write
+`/_next/static/security/csp-script-hashes.json`, but that file **does not reach
+the deployed Proxy function**. `state/open.md` rows 21 and 31 measured two
+delivery mechanisms failing and `src/lib/security/csp.ts` carries the reason
+above its preview fallback, so on a deployed preview `hasHashes` is `false`,
+`isPreview && !hasHashes` grants `'unsafe-inline'`, and no `'sha256-…'` source
+stands beside it — which is exactly the policy
+`boundaryCompletionReachesTheDom()` admits. Row 31 verified that policy on a
+real preview deploy on 2026-09-11. In production the same code grants nothing,
+hash set or not (`TS-WEB-0014 D7`), which is why the two cases differ at all.
+
+So: a preview is expected to order block 2a by the trait for the same reason it
+hydrates at all today, and no sentence here rests on a preview deployment of
+this branch having been walked, because none was. It is un-`fixme`d — the mechanism is built and measured — but
 the criterion is **blocked** and does not close until row 132 does.
 
 What *is* asserted unconditionally is the half of the criterion set that holds
@@ -232,19 +261,18 @@ in a title or in prose, because a bare mention in a scanned test file is what
   violation and `React error #412` row 132 describes, while
   `curl -H 'Referer: https://www.linkedin.com/'` shows the resolved run
   (`scene-2 · scene-3 · scene-1`) in the parked branch. Every e2e assertion of
-  A7 is therefore scoped to `next dev`. One further configuration was measured
-  and is **not** a Vercel preview: the same production build with the hash asset
+  A7 is therefore scoped to `next dev` or to a build whose policy admits a
+  request-time script. Two such runs exist and neither is a preview
+  **deployment**: `next dev`, and the same production build with the hash asset
   moved aside and `VERCEL_ENV=preview` — `state/open.md` row 148's procedure —
   where A7, A9 and A11 are green, the `linkedin.com` load reorders to
   `scene-2 · scene-3 · scene-1`, and the document holds three scenes and one
-  module with no console error. A preview **deployment** does not reach that
-  state on its own: `package.json`'s `build` is
-  `next build && node scripts/generate-csp-hashes.mjs`, so a preview ships the
-  hash asset, and `src/lib/security/csp.ts:152` grants `'unsafe-inline'` only
-  when `isPreview && !hasHashes`. Until one preview deployment is measured and
-  cited, the claim is `next dev` and the hash-asset-removed build, nothing
-  wider. This is the first feature whose **content**, not only its
-  interactivity, depends on row 132.
+  module with no console error. A deployed preview is *expected* to behave like
+  the second of those, because the hash asset never reaches the deployed Proxy
+  function (`state/open.md` rows 21/31, and `csp.ts`'s preview fallback above
+  `isPreview && !hasHashes`), but no preview deployment was walked from here —
+  §4's table says which row is measured and which is inferred. This is the first
+  feature whose **content**, not only its interactivity, depends on row 132.
 - **The `press` order seats two `lime` grounds together.** The grounds travel
   with their scenes (DEC-0129 §11), so `press` — `provenance · whatsapp ·
   embed` — puts the `lime-100` embed scene directly above the `lime-100` proof
