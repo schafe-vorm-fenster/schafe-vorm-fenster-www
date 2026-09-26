@@ -359,11 +359,17 @@ titles promised:
   widths, not five, so three loads per route is the criterion as written. The
   full suite is green; the flake and its shape are a `state/open.md` row so the
   next author does not rediscover it.
-- The local e2e figure is **1040 passed · 7 skipped** of 1047 at this code state
-  (`PORT=3261 pnpm e2e`, exit 0, 5.7 m, Playwright managing the server) and was
-  1039 of 1046, measured twice, at the commit before this round — the walk at a
-  second viewport is the one test added. The 1050 this record's first round
-  reported cannot have been either suite. The dev
-  server also died outright in one full run — 257 `ERR_CONNECTION_REFUSED` after
-  it — which `state/open.md` row 281 now names beside the dev-overlay 500s, so a
-  red first run is not read as a regression.
+- The local e2e figure is **1039 passed · 7 skipped** of 1046 after QA round 2
+  (`PORT=3261 pnpm e2e`, exit 0, 6.1 m, Playwright managing the server). It was
+  1040 of 1047 after round 1 and 1039 of 1046, measured twice, at the commit
+  before both rounds: round 1 added one test (the header walk at a second
+  viewport) and round 2 removed one (the file-level module-count guard, whose
+  job is now an assertion inside each of the twenty-four route cases). The 1050
+  this record's first round reported cannot have been any of those suites. Two
+  failure modes of `next dev` are not regressions and `state/open.md` row 281
+  names both: the server died outright in one full run (257
+  `ERR_CONNECTION_REFUSED` after it), and the run before the green one above
+  lost five `e2e/landmarks.spec.ts` cases to `locator.click` timing out on an
+  element detached mid-click — `e2e/landmarks.spec.ts` is in neither this task's
+  diff nor this branch's, and it loses four cases run entirely on its own, so
+  the flake is the development server's and not the sweep's.
