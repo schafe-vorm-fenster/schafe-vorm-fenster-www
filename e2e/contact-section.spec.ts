@@ -57,10 +57,12 @@ const ENVOY_ROUTES: ReadonlySet<RouteId> = new Set<RouteId>(["regionQuote"]);
  * passes, so the entry has to be removed with the fix rather than lingering.
  */
 const BRIEFING_HREF_REPOINTED_BY: Readonly<Partial<Record<RouteId, string>>> = {
-  calendar: "T-13",
   region: "T-15",
   order: "T-15",
 };
+// `calendar` came off this list with T-13: `/dein-kalender`'s hero CTA is an
+// in-page link to `#kontakt` now, and the closing block's quiet briefing link
+// and tier 2's are gone, so the appointment URL occurs once on that route.
 // `/deine-region/angebot` is **not** on the list, measured: its lead fallback's
 // briefing link renders only in the widget's `empty`/`degraded` state, and the
 // mocked state the route ships carries none — so the uniqueness half already

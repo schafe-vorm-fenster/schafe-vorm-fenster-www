@@ -1,22 +1,29 @@
 import { Button } from "@/src/components/button/button";
 import { ComparisonTable } from "@/src/components/comparison-table/comparison-table";
-import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
 import { EmbedFrame } from "@/src/components/embed-frame/embed-frame";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
-import { OfferTier, OFFER_TIER_CTA_VARIANT } from "@/src/components/offer-tier/offer-tier";
+import { Icon } from "@/src/components/icon/icon";
 import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
 import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
+import {
+  PRICE_TIERS,
+  PriceSection,
+  PriceTierRow,
+  type PriceTierId,
+} from "@/src/components/price-section/price-section";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
+import { SettingRow, SettingRows } from "@/src/components/setting-row/setting-row";
 import { TrustBlock } from "@/src/components/trust-block/trust-block";
+import { CONTACT_SECTION_ID } from "@/src/components/contact-section/contact-section";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
+import { CONFIG_REPO_URL } from "@/src/lib/embed/config-repo";
 import { DEFAULT_WEEKS_AHEAD, SHOWCASE_CALENDAR } from "@/src/lib/embed/portalize";
-import { BRIEFING_URL } from "@/src/lib/live/briefing";
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { offeringPrice } from "@/src/lib/pricing/offerings";
 import { dictionary } from "@/src/lib/i18n/dictionary";
@@ -28,10 +35,14 @@ import { selectProof } from "../_proof";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
+import { comparisonLabels, settingRows, tierChecks } from "./content";
 import { pageMeta } from "./page.meta";
+
+import { Fragment } from "react";
 
 import pageStyles from "../_pages.module.css";
 
+import type { IconName } from "@/src/components/icon/icon";
 import type { FourComparisonRows } from "@/src/components/content-fragments";
 import type { ContentBlock } from "@/src/lib/content/types";
 import type { Locale } from "@/src/lib/i18n/locales";
@@ -40,9 +51,11 @@ import type { Metadata } from "next";
 /**
  * TS-WEB-0024 — `/dein-kalender`, the 480 € page.
  *
- * Own blocks, D2 order: focus (Pulse + equal-weight briefing) → contrast →
- * embed demo → tiers → proof → trust. Context band and closing CTA are
- * `PageFrame`'s, from `page.meta.ts`.
+ * Own blocks, D2 order (seven since DEC-0131 §1): focus (Pulse + the
+ * equal-weight in-page link to the contact section) → contrast → embed demo →
+ * embed config → tiers → proof → trust. Context band and closing CTA are
+ * `PageFrame`'s, from `page.meta.ts`; the contact section is chrome
+ * (DEC-0122), and it carries the page's one appointment URL (DEC-0081 §3).
  */
 
 const ROUTE = "calendar" as const;
@@ -68,54 +81,56 @@ function withoutArrow(text: string | undefined): string {
 }
 
 /**
- * The German heading read "Heute gegen mit dem Produkt" — not a sentence in
- * any language, in 38 px, on the page that asks for 480 €. The dash joins
- * the two columns the four rows below compare; "gegen" was a literal
- * translation of "versus" that German does not take in front of a
- * preposition.
- */
-const CONTRAST_LABELS: Record<Locale, { today: string; withProduct: string; heading: string }> = {
-  de: { today: "Heute", withProduct: "Mit dem Produkt", heading: "Heute — und mit dem Produkt" },
-  en: { today: "Today", withProduct: "With the product", heading: "Today — and with the product" },
-};
-
-/**
  * The three joints of this page, as the brief writes them. Each ties the
  * section it opens to the one before it and adds no claim of its own: the
  * page was four arguments standing next to each other with nothing between
  * them.
  */
-const TRANSITIONS: Record<Locale, { embed: string; tiers: string; trust: string }> = {
+const TRANSITIONS: Record<Locale, { embed: string; trust: string }> = {
   de: {
     embed: "So sieht das aus, wenn es bei euch steht:",
-    tiers: "Was das kostet, hängt nur davon ab, wo der Kalender stehen soll.",
     trust: "Bleibt die Frage, wem ihr da eigentlich eure Daten gebt.",
   },
   en: {
     embed: "This is what it looks like once it sits on your site:",
-    tiers: "What it costs depends only on where the calendar is going to sit.",
     trust: "Which leaves the question of who you are actually giving your data to.",
   },
 };
 
 /**
- * G-5 — the outbound disclosure leaves the button's label.
- *
- * "(öffnet neuen Tab) · Daten gehen an Google" rendered inside the pill and
- * made the secondary a three-line block that outweighed the page's own
- * primary. The new-tab half stays, written out, under the control; the data
- * half belongs to the trust block further down, which links the privacy
- * statement that actually says it.
+ * The placeholder badge beside a setting the product holds but has not
+ * confirmed — `setting-row`'s `marker` slot (DEC-0118). The review asks for
+ * exactly this on the `Zeitraum` row ("Müssen wir bei Portalize nachsehen,
+ * was wirklich geht"), so it is the owner's word, not a softening of a claim.
+ * Driven from here rather than from the artifact, because which setting is
+ * unconfirmed is knowledge about the product, not copy taste.
  */
-const BRIEFING_DISCLOSURE: Record<Locale, string> = {
-  de: "Öffnet Google Kalender in einem neuen Tab.",
-  en: "Opens Google Calendar in a new tab.",
+const SETTING_CHECKED_MARKER: Record<Locale, string> = {
+  de: "wird geprüft",
+  en: "being checked",
 };
 
-const TIERS_QUESTION_FALLBACK: Record<Locale, string> = {
-  de: "Wo soll der Kalender stehen?",
-  en: "Where should the calendar live?",
-};
+/** The row index whose fact is still open upstream — `Zeitraum` / `Window`. */
+const SETTING_UNCONFIRMED_INDEX = 3;
+
+/**
+ * The six settings' glyphs, in the artifact's row order — the drafts'
+ * `Design -. Portalize Einstellungen 1/2.png`. A glyph is decorative
+ * (`setting-row` A11y), so the order is the only thing that binds it to a
+ * row; a seventh row would render without one rather than borrow a
+ * neighbour's.
+ */
+const SETTING_ICONS: readonly IconName[] = [
+  "map-pin",
+  "users",
+  "theater",
+  "clock",
+  "monitor",
+  "circle-check",
+];
+
+/** The benefit band's source pills, in the drafts' order — decorative glyphs beside the artifact's words. */
+const SOURCE_ICONS: readonly IconName[] = ["smartphone", "calendar-days", "globe"];
 
 const TRUST_HEADLINE: Record<Locale, string> = {
   de: "Wie eure Daten hier behandelt werden",
@@ -170,38 +185,38 @@ export default async function Page({
   const focus = slot(page, "dein-kalender-1-focus");
   const contrast = slot(page, "dein-kalender-2-contrast");
   const embedDemo = slot(page, "dein-kalender-3-embed-demo");
-  // Slot 3 carries three things beside its heading: the paragraph that
-  // explains the embedded calendar, the label of its settings list, and the
-  // settings themselves as `key: value` lines (`src/lib/content/README.md`'s
-  // block grammar — a field with an empty value is a heading for what
-  // follows).
-  // Two paragraphs now, not one: the first says the calendar below is real,
-  // the second says what the settings decide. They stand in two sections —
-  // the embed section measured 1772 px, a screen and a half over G-4's
-  // budget, with a nine-line paragraph above the box and a six-row settings
-  // list below it.
+  // The embed slot is two sentences and a heading now (review R-kalender-9):
+  // "Das ist der Kalender von [Ort]. Er zeigt genau das, was dort in den
+  // nächsten Wochen ansteht." Everything the settings decide moved into its
+  // own slot with its own block, which is what `embed-config` is
+  // (TS-WEB-0024 D2 as amended, DEC-0131 §1).
   const embedParagraphs = embedDemo.blocks.flatMap((block) =>
     block.kind === "paragraph" ? [block.text] : [],
   );
-  const embedConfigLabel =
-    embedDemo.blocks.flatMap((block) =>
-      block.kind === "field" && block.value === "" ? [block.label] : [],
-    )[0] ?? "";
-  const embedConfig = embedDemo.blocks
-    .flatMap((block) => (block.kind === "list" ? block.items : []))
-    .flatMap((item) => {
-      const separator = item.indexOf(":");
-      return separator === -1
-        ? []
-        : [{ key: item.slice(0, separator).trim(), value: item.slice(separator + 1).trim() }];
-    });
+  const embedConfig = slot(page, "dein-kalender-3b-embed-config");
+  const configParagraphs = embedConfig.blocks.flatMap((block) =>
+    block.kind === "paragraph" ? [block.text] : [],
+  );
+  const configSources = (fieldAt(embedConfig.blocks, 1) ?? "")
+    .split("·")
+    .map((value) => value.trim())
+    .filter((value) => value !== "");
+  const configSettings = settingRows(embedConfig.blocks);
   const tiers = slot(page, "dein-kalender-4-tiers");
+  // The three check lines per tier are the drafts', not the owner's: their
+  // own slot, `provenance: generated; demo: true`, one row in state/open.md
+  // (DEC-0068, DEC-0131 §3).
+  const tierCheckSlot = slot(page, "dein-kalender-4-tiers-checks-demo");
+  const checks = tierChecks(tierCheckSlot.blocks, PRICE_TIERS);
+  /** Read off the slot, never hard-coded: the marking goes when the slot does. */
+  const tierChecksAreDemo = isDemoSlot(tierCheckSlot);
   const proofDemo = slot(page, "dein-kalender-5-proof-demo");
   const trust = slot(page, "dein-kalender-6-trust");
   const closing = slot(page, "dein-kalender-7-closing");
   const contextBand = slot(home, "home-10-context-band");
 
   const table = contrast.blocks.find((block) => block.kind === "table");
+  const labels = comparisonLabels(contrast.blocks);
   const comparisonRows: FourComparisonRows =
     table && table.kind === "table" && table.rows.length === 4
       ? (table.rows.map((row) => ({ today: row[0] ?? "", withProduct: row[1] ?? "" })) as unknown as FourComparisonRows)
@@ -212,16 +227,43 @@ export default async function Page({
           { today: "", withProduct: "" },
         ];
 
-  const portalizePrice = offeringPrice("portalize-calendar", locale);
-  const tier1Ctas = fieldAt(tiers.blocks, 4)?.split("·").map((s) => s.trim()) ?? [];
   /**
-   * The link names where it goes, and nothing else. "Weiter zu Kalender für
-   * euer ganzes Gebiet" wrapped to two centred lines in a column of
-   * otherwise left-aligned controls (brief, page 6, item 3); the tier's own
-   * title above it already says "für eine ganze Region", so repeating that
-   * as the label would put the same four words twice in one card.
+   * The tiers, in the order `TS-WEB-0024 D6/D6a` fixes, each with the one CTA
+   * `DEC-0082 §4` allows it. Weight is not chosen here: `PriceTierRow`
+   * derives quiet · primary-light · quiet from the offering id, so a call
+   * site cannot put Pulse on a tier (A3, A8).
    */
-  const tier3Cta = pageTitle("region", locale);
+  const tierRows: readonly {
+    readonly offeringId: PriceTierId;
+    readonly kicker: string;
+    readonly title: string;
+    readonly cta: { readonly label: string; readonly to: "takePart" | "order" | "region" };
+  }[] = [
+    {
+      offeringId: "community-calendar",
+      kicker: fieldAt(tiers.blocks, 2) ?? "",
+      title: fieldAt(tiers.blocks, 3) ?? "",
+      cta: { label: withoutArrow(fieldAt(tiers.blocks, 4)), to: "takePart" },
+    },
+    {
+      offeringId: "portalize-calendar",
+      kicker: fieldAt(tiers.blocks, 5) ?? "",
+      title: fieldAt(tiers.blocks, 6) ?? "",
+      cta: { label: withoutArrow(fieldAt(tiers.blocks, 7)), to: "order" },
+    },
+    {
+      offeringId: "portalize-enterprise",
+      kicker: fieldAt(tiers.blocks, 9) ?? "",
+      title: fieldAt(tiers.blocks, 10) ?? "",
+      /**
+       * The link names where it goes, and nothing else. "Weiter zu Kalender
+       * für euer ganzes Gebiet" wrapped to two centred lines in a column of
+       * otherwise left-aligned controls (brief, page 6, item 3), and the
+       * tier's own title already says which territory this is.
+       */
+      cta: { label: pageTitle("region", locale), to: "region" },
+    },
+  ];
 
   /**
    * TS-WEB-0005 through, not around: DEC-0048's **3** inline positions beside the
@@ -275,26 +317,10 @@ export default async function Page({
         to: "order",
         label: orderLabel,
         heading: fieldAt(closing.blocks, 0),
-        /* The equal-weight second way, as a quiet link rather than a second
-           pill: G-5 allows one primary treatment per screenful, and this one
-           belongs to the order. */
-        footer: (
-          <ConversionTracker
-            attributes={{ route: ROUTE }}
-            goalId="request-product-briefing"
-            stage="handover"
-          >
-            <OutboundLink
-              disclosure={BRIEFING_DISCLOSURE[locale]}
-              href={BRIEFING_URL}
-              locale={locale}
-              newTab
-              variant="quiet"
-            >
-              {fieldAt(closing.blocks, 2)}
-            </OutboundLink>
-          </ConversionTracker>
-        ),
+        /* No quiet second way under the button any more. It was a second
+           carrier of the appointment URL, and DEC-0081 §3 gives that URL one
+           place on a page: the contact section's first action row, which
+           stands directly below this block (TS-WEB-0024-A15). */
       }}
       contextBandHeading={fieldAt(contextBand.blocks, 0)}
       locale={locale}
@@ -307,22 +333,23 @@ export default async function Page({
               <Button dataCta="primary" locale={locale} onward to="order" variant="pulse">
                 {orderLabel}
               </Button>
-              <ConversionTracker
-                attributes={{ route: ROUTE }}
-                goalId="request-product-briefing"
-                stage="handover"
+              {/* The consult half no longer leaves the site: it is an in-page
+                  link to this page's own contact section, where appointment,
+                  WhatsApp, phone and mail stand together and where the
+                  conversion is measured (TS-WEB-0024 D3, DEC-0081 §3). It
+                  carries no `ConversionTracker` — a click inside a document
+                  is navigation, and counting it would count one intent twice
+                  (DEC-0081 §4, TS-WEB-0024-A15) — and no outbound
+                  disclosure, because nothing outbound happens here. */}
+              <Button
+                dataCta="equal-weight"
+                hash={CONTACT_SECTION_ID}
+                locale={locale}
+                to={ROUTE}
+                variant="secondary"
               >
-                <OutboundLink
-                  dataCta="equal-weight"
-                  disclosure={BRIEFING_DISCLOSURE[locale]}
-                  href={BRIEFING_URL}
-                  locale={locale}
-                  newTab
-                  variant="secondary"
-                >
-                  {briefingLabel}
-                </OutboundLink>
-              </ConversionTracker>
+                {briefingLabel}
+              </Button>
             </>
           }
           headline={focusHeadline}
@@ -344,11 +371,13 @@ export default async function Page({
         kicker={dictionary(locale).kickers.objection}
         surface="paper"
       >
+        {/* Kicker "Warum es heute hakt" over a title that says what goes —
+            the CG-005 / CG-018 split, with the review's own headline. */}
         <ComparisonTable
-          headline={CONTRAST_LABELS[locale].heading}
+          headline={fieldAt(contrast.blocks, 0)}
           rows={comparisonRows}
-          todayLabel={CONTRAST_LABELS[locale].today}
-          withProductLabel={CONTRAST_LABELS[locale].withProduct}
+          todayLabel={labels.today}
+          withProductLabel={labels.withCalendar}
         />
       </SectionShell>
 
@@ -383,92 +412,124 @@ export default async function Page({
         />
       </SectionShell>
 
-      {/* `WARUM DAS ZÄHLT`, not a second `SO FUNKTIONIERT ES`: the calendar
-          above shows the mechanism, and this section answers the question a
-          municipality actually has about it — whether it decides what stands
-          in it. G-3's vocabulary is closed, and this is the entry that
-          names that role. */}
+      {/* `WAS HILFT EUCH DAS?` over a title that states what goes — the
+          calendar above shows the mechanism, and this block answers the
+          question a municipality, a Verein or a Stiftung actually has about
+          it: whether it decides what stands in it. Its own `data-block`
+          since DEC-0131 §1 — TS-WEB-0024 D2 lists seven blocks now, because
+          squeezing the settings back into `embed-demo` is what measured
+          1772 px at 390 px (G-4).
+
+          `paper`, not `surface-2`: the grey-greens are the old world's
+          ground and never carry positive content (SRC-0014 §Page Rhythm),
+          and the review says the settings looked "angestaubt" for exactly
+          that reason. The band inside runs edge to edge, so the section is
+          uncontained and each part brings its own container. */}
       <SectionShell
+        contained={false}
         dataBlock="embed-config"
         kicker={dictionary(locale).kickers.whyItMatters}
         labelledBy="embed-config-heading"
-        surface="surface-2"
+        surface="paper"
       >
-        <h2 id="embed-config-heading">{fieldAt(embedDemo.blocks, 1)}</h2>
-        <p>{embedParagraphs[1]}</p>
-        <dl aria-label={embedConfigLabel} className={pageStyles.configList}>
-          {embedConfig.map(({ key, value }) => (
-            <div className={pageStyles.configRow} key={key}>
-              <dt className={pageStyles.configKey}>{key}</dt>
-              <dd className={pageStyles.configValue}>{value}</dd>
-            </div>
-          ))}
-        </dl>
-      </SectionShell>
+        <div className="container">
+          <h2 id="embed-config-heading">{fieldAt(embedConfig.blocks, 0)}</h2>
+          <p className={pageStyles.configLead}>{configParagraphs[0]}</p>
+        </div>
 
-      <SectionShell
-        dataBlock="tiers"
-        kicker={dictionary(locale).kickers.price}
-        labelledBy="tiers-heading"
-        surface="lime-100"
-        transition={TRANSITIONS[locale].tiers}
-      >
-        <h2 id="tiers-heading">{fieldAt(tiers.blocks, 0) ?? TIERS_QUESTION_FALLBACK[locale]}</h2>
-        <div className={pageStyles.tierGroup}>
-          <OfferTier
-            audienceLine={fieldAt(tiers.blocks, 3) ?? ""}
-            checks={[]}
-            locale={locale}
-            name={fieldAt(tiers.blocks, 1) ?? ""}
-            offeringId="community-calendar"
-            primaryCta={
-              <Button locale={locale} to="place" variant={OFFER_TIER_CTA_VARIANT["community-calendar"]}>
-                {tier1Ctas[0] ?? ""}
-              </Button>
-            }
-            priceDisplay="permanent"
-          />
+        {/* The benefit band: where the dates come from, and the one place
+            they all land. `lime-500` — the fresh ground the review asks for,
+            and the pills are the sources in the visitor's own words. */}
+        <div className={pageStyles.benefitBand} data-surface="lime-500">
+          <div className="container">
+            <ul className={pageStyles.sourcePills}>
+              {configSources.map((source, index) => (
+                <li className={pageStyles.sourcePill} key={source}>
+                  {SOURCE_ICONS[index] ? <Icon name={SOURCE_ICONS[index]} size={18} /> : null}
+                  {source}
+                </li>
+              ))}
+            </ul>
+            <p className={pageStyles.benefitTarget}>
+              <Icon name="arrow-right" size={24} />
+              <span className={pageStyles.targetPill}>
+                <Icon name="monitor" size={18} />
+                {fieldAt(embedConfig.blocks, 2)}
+              </span>
+            </p>
+            <p className={pageStyles.benefitLine}>{configParagraphs[1]}</p>
+          </div>
+        </div>
 
-          <OfferTier
-            audienceLine={fieldAt(tiers.blocks, 7) ?? ""}
-            checks={[]}
-            locale={locale}
-            name={fieldAt(tiers.blocks, 5) ?? ""}
-            offeringId="portalize-calendar"
-            primaryCta={
-              <Button
-                locale={locale}
-                to="order"
-                variant={OFFER_TIER_CTA_VARIANT["portalize-calendar"]}
-              >
-                {fieldAt(tiers.blocks, 8)}
-              </Button>
-            }
-            priceDisplay={portalizePrice.display}
-            priceFigure={portalizePrice.figure}
-          />
-
-          <OfferTier
-            audienceLine={fieldAt(tiers.blocks, 12) ?? ""}
-            checks={[]}
-            locale={locale}
-            name={fieldAt(tiers.blocks, 10) ?? ""}
-            offeringId="portalize-enterprise"
-            primaryCta={
-              <Button
-                locale={locale}
-                onward
-                size="compact"
-                to="region"
-                variant={OFFER_TIER_CTA_VARIANT["portalize-enterprise"]}
-              >
-                {tier3Cta}
-              </Button>
-            }
-            priceDisplay="on-request"
-          />
+        <div className="container">
+          <h3 className={pageStyles.settingsHeading}>{fieldAt(embedConfig.blocks, 3)}</h3>
+          <SettingRows>
+            {configSettings.map((row, index) => (
+              <SettingRow
+                core={row.core}
+                example={row.example}
+                icon={SETTING_ICONS[index] ?? "info"}
+                key={row.title}
+                marker={
+                  index === SETTING_UNCONFIRMED_INDEX ? SETTING_CHECKED_MARKER[locale] : undefined
+                }
+                tags={row.tags}
+                title={row.title}
+              />
+            ))}
+          </SettingRows>
+          {/* The config repo the review points at. No record in this
+              repository names its URL, so the link is configured or it does
+              not render — never a dead link on the page that asks for 480 €
+              (DEC-0131 §4, state/open.md). */}
+          {CONFIG_REPO_URL ? (
+            <p className={pageStyles.configLink}>
+              <OutboundLink href={CONFIG_REPO_URL} locale={locale} newTab>
+                {fieldAt(embedConfig.blocks, 4)}
+              </OutboundLink>
+            </p>
+          ) : null}
         </div>
       </SectionShell>
+
+      {/* One `paper` section with the `lime-500` head band on top and the
+          three tiers as rows beneath it, divided by a hairline — never three
+          sections, never a 2 px lime rule (SRC-0014 §Page Rhythm, DEC-0118).
+          The framing line the band carries is the transition this section
+          used to render twice. */}
+      <PriceSection
+        dataBlock="tiers"
+        framing={fieldAt(tiers.blocks, 1) ?? ""}
+        headingId="tiers-heading"
+        headline={fieldAt(tiers.blocks, 0) ?? ""}
+        kicker={dictionary(locale).kickers.price}
+      >
+        {tierRows.map((tier) => (
+          <Fragment key={tier.offeringId}>
+            <PriceTierRow
+              checks={checks[tier.offeringId] ?? []}
+              // The nine check lines are the drafts', not the owner's, so the
+              // list they stand in says so in the markup — the marking the
+              // slot carries, published where a build can enumerate it
+              // (DEC-0068 guardrail 1, DEC-0131 §5, state/open.md row 254).
+              checksDemo={tierChecksAreDemo}
+              cta={{ label: tier.cta.label, to: tier.cta.to }}
+              kicker={tier.kicker}
+              locale={locale}
+              offeringId={tier.offeringId}
+              price={offeringPrice(tier.offeringId, locale)}
+              title={tier.title}
+            />
+            {/* D7 — the one sentence that names the product, at the tier
+                where the price is read. `price-tier-row` has no body-copy
+                slot (T-06), so it stands directly under the row it belongs
+                to, inside the tiers block (DEC-0131 §3). */}
+            {tier.offeringId === "portalize-calendar" ? (
+              <p className={pageStyles.tierNote}>{fieldAt(tiers.blocks, 8)}</p>
+            ) : null}
+          </Fragment>
+        ))}
+      </PriceSection>
 
       {/* G-9 and G-7 together. The three cards carried an image slot with no
           cleared image behind it: three identical 143 px bands in a row,
@@ -484,7 +545,11 @@ export default async function Page({
         kicker={dictionary(locale).kickers.customers}
         kickerDemo
         labelledBy="proof-heading"
-        surface="paper"
+        // `lime-100`, not `paper`: the price section above it is one paper
+        // section now (DEC-0118), and `embed-config` above that is a third —
+        // three neutral grounds in a row is the one rhythm rule this
+        // composition can break (`rhythm.test.ts`).
+        surface="lime-100"
       >
         <h2 id="proof-heading">{PROOF_LABEL[locale]}</h2>
         <ProofStream label={PROOF_LABEL[locale]} layout="rows">

@@ -47,6 +47,23 @@ const KNOWN_OVER: Record<string, Record<string, number>> = {
   // `/dein-ort`'s four value stories are off this list: they were one
   // undifferentiated block and are four sections now, each on its own
   // ground, each under the budget in both languages (brief, page 2, fix 3).
+  //
+  // The two `/dein-kalender` sections below are the one case where the
+  // budget loses to a rule that outranks it (T-13, DEC-0131, state/open.md
+  // row 257), so they are recorded here rather than cut:
+  //
+  //  - `tiers` — SRC-0014 §Page Rhythm: "The three price tiers are rows
+  //    inside one section, divided by a 1 px `line` hairline — never a 2 px
+  //    lime rule, never three sections." DEC-0118 built exactly that. Three
+  //    tiers with a kicker, a title, a price, three checks and a CTA each
+  //    cannot fit 1270 px, and splitting them is the thing the design
+  //    system forbids by name.
+  //  - `embed-config` — six settings, each with a core sentence, an example
+  //    and its chips, under one benefit band. The review and both drafts
+  //    give it as one section with one kicker, and G-3's kicker vocabulary
+  //    is closed, so the second half has no role name to open with.
+  "/dein-kalender": { "embed-config": 1786, tiers: 1632 },
+  "/en/your-calendar": { "embed-config": 1713, tiers: 1632 },
 };
 
 /**

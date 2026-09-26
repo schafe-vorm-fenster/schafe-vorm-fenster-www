@@ -183,15 +183,33 @@ test.describe("the embed frame", () => {
     // to the widget that shows them.
     await expect(demo).toContainText("Schlatkow");
 
-    // And the configuration list names every setting the embed actually has.
-    // The keys are asserted by name rather than by count: the split added a
-    // `Veranstalter` row, and a list that grows a row is not a regression —
-    // one that loses one is.
-    for (const key of ["Orte", "Kategorien", "Zeitraum", "Darstellung", "Aktualisierung"]) {
-      await expect(config.locator("dt", { hasText: new RegExp(`^${key}$`, "u") })).toBeVisible();
+    // And the configuration block names every setting the embed actually
+    // has. The keys are asserted by name rather than by count: a list that
+    // grows a row is not a regression — one that loses one is.
+    //
+    // T-13 turned the `<dl>` into `setting-row`s (DEC-0118, DEC-0131 §1), so
+    // a key is an `h3` and its explanation is the row's own copy, not a
+    // `<dd>`. The `Zeitraum` row carries its placeholder badge inside the
+    // heading, so the match is a prefix rather than the whole string.
+    for (const key of [
+      "Orte",
+      "Veranstalter",
+      "Kategorien",
+      "Zeitraum",
+      "Darstellung",
+      "Aktualisierung",
+    ]) {
+      const keyText = new RegExp(`^\\s*${key}`, "u");
+      await expect(config.locator("h3", { hasText: keyText })).toBeVisible();
+      // And the explanation, not only the label — a row that renders a bare
+      // key explains nothing, and a non-emptiness check passes on any stray
+      // paragraph. The wording is copy (DEC-0083), so the assertion is the
+      // sentence's presence rather than its text: 20 characters is well under
+      // the shortest of the six core sentences and well over a bare key or a
+      // chip.
+      const row = config.locator("li").filter({ has: page.locator("h3", { hasText: keyText }) });
+      const core = (await row.locator("p").first().innerText()).trim();
+      expect(core.length, `${key}: the row explains itself`).toBeGreaterThan(20);
     }
-    // And the values, not only the labels — a list of empty keys explains
-    // nothing.
-    await expect(config.locator("dd").first()).toContainText("Schmatzin");
   });
 });

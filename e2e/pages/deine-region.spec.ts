@@ -400,9 +400,14 @@ test.describe("/deine-region/angebot", () => {
   test("F-2-32 / TS-WEB-0016 D7: every briefing link is the one configured booking URL", async ({
     page,
   }) => {
+    // `/dein-kalender` left this list with T-13: it carries **no** briefing
+    // link inside `main` any more. Its hero CTA is an in-page link to
+    // `#kontakt`, and the one appointment URL on that route is the contact
+    // section's first action row, which stands outside `main` (DEC-0081 §3,
+    // TS-WEB-0024-A15). `e2e/contact-section.spec.ts` asserts the "exactly
+    // one carrier" half for every route, this page's spec the rest.
     for (const path of [
       "/deine-region",
-      "/dein-kalender",
       "/dein-kalender/bestellen",
       "/dein-kalender/bestellen?orte=schlatkow&schritt=3",
     ]) {
