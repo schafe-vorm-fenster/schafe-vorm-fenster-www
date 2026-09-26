@@ -62,6 +62,16 @@ const CHROME = ["header", "footer", "#context-band"];
 /** Routes that render no `#context-band`, with the reason above. */
 const NO_CONTEXT_BAND_ROUTES = ["order"];
 
+/**
+ * Routes that render no `h2` at all, listed for the same reason the context
+ * band has a list: the `CG-005` loop below reads the section titles of a page,
+ * and a route that renders none would satisfy it by reading an empty list. The
+ * list is asserted in both directions — a route named here must render zero
+ * `h2`, every other route at least one — so a page whose titles drift to `h3`
+ * fails this test instead of quietly leaving the rule unexercised.
+ */
+const NO_SECTION_TITLE_ROUTES: string[] = [];
+
 const ROUTES = everyRoute().map(({ route, locale }) => ({
   path: href(route, locale),
   route,
@@ -74,8 +84,22 @@ for (const { path, route, locale } of ROUTES) {
   }) => {
     await page.goto(path);
 
-    // CG-005's rendered half: a section title is a statement.
-    for (const heading of await page.locator("h2").allInnerTexts()) {
+    // CG-005's rendered half: a section title is a statement. The titles are
+    // counted before they are read, so a route that renders none — or one whose
+    // titles drift to `h3` — fails here instead of passing on an empty list.
+    const sectionTitles = await page.locator("h2").allInnerTexts();
+    if (NO_SECTION_TITLE_ROUTES.includes(route)) {
+      expect(
+        sectionTitles.length,
+        `${path} renders a section title the exception list denies it`,
+      ).toBe(0);
+    } else {
+      expect(
+        sectionTitles.length,
+        `${path} renders no \`h2\` — no section title would be read`,
+      ).toBeGreaterThan(0);
+    }
+    for (const heading of sectionTitles) {
       expect(
         heading.includes("?"),
         `${path} renders the section title "${heading.trim()}" as a question — CG-005 puts the question in the kicker above it`,

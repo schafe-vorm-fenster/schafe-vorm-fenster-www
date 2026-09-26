@@ -13,7 +13,7 @@ decision_record: DEC-0136
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
-  model: "Claude Fable 5.1"
+  model: "Claude Opus 5 (1M context)"
   generated_at: "2026-09-26T21:00:00+02:00"
 ---
 

@@ -268,6 +268,15 @@ spec had to be edited for it:
   the reader is that step's `h1` (`/dein-kalender/bestellen`, `CG-006`) and the
   hero headline is exempt (`CG-020`), so a question in an `h2` is the defect and
   a question in a paragraph is not. Measured on the tree: 24 routes green.
+  The titles are **counted before they are read** — a route that renders no
+  `h2`, or whose titles drift to `h3`, would otherwise satisfy the loop by
+  reading an empty list. `NO_SECTION_TITLE_ROUTES` is the same asserted-in-both-
+  directions pattern as `NO_CONTEXT_BAND_ROUTES`, and it is **empty**: all 24
+  pairs render at least one section title, so no route is excused. Both
+  directions are probed, not assumed — putting `home` in the list fails two
+  tests (*„/ renders a section title the exception list denies it"*), and
+  reading `h2.no-such-class` instead of `h2` fails them the other way (*„…
+  renders no `h2` — no section title would be read"*).
 - **`TS-WEB-0018-A7`** — header, footer and context band of every D1 route
   render without the product name in both locales, and only `/dein-kalender`
   carries it in its body, at most once. `checkProductName` counts artifact
@@ -324,6 +333,17 @@ criterion true.
   `app/[lang]/deine-region/page.tsx` are owned by `T-18` and `T-15` of the same
   round: `T-17` merges after `T-12`, `T-15` and `T-16`, and the `/deine-region`
   hunks are coordinated with `T-18` before it.
+- The full ownership of what this branch touches, each claim resting on the
+  backlog glob it comes from, so the merge coordinator needs no second source:
+  `content/pages/deine-region/**` → `T-18`; `content/pages/dein-ort/**`
+  (covering `dein-ort/starten/{de,en}.md`) → `T-16`;
+  `app/[lang]/deine-region/page.tsx`, `e2e/pages/deine-region.spec.ts` and
+  `src/components/live-modules-and-conversions.test.tsx` → `T-15`;
+  `src/components/gallery.tsx` → `T-10` (whose
+  `src/components/closing-cta/closing-cta.tsx` this task only cites, never
+  edits). An ownership claim that no glob backs is not made here: the earlier
+  report said those first two paths were unowned, which was wrong, and a
+  coordination note is only ever withdrawn against a quoted glob.
 - A copy lint that reads labels can misread one, and the cost of misreading is
   paid in the owner's words. The message now prescribes the two repairs, the
   test pins the message, and `e2e/copy-structure.spec.ts` judges the render.
