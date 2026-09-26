@@ -14,6 +14,10 @@ import { checkRhythm, type RhythmEntry } from "@/src/components/section-shell/rh
  * (TS-WEB-0016-A21, DEC-0122 §3); the contact section is never a rhythm entry
  * (SRC-0014, DEC-0117).
  *
+ * The story section stands after the stream, not before it: A3's second clause
+ * puts the first proof element inside the second viewport height, and 747 px of
+ * story between the argument and the stream put it in the third (DEC-0132 §8).
+ *
  * The list is declared, not read off the render, so it can drift from
  * `page.tsx`. Its counterpart in `e2e/pages/ueber-uns.spec.ts` (A2) reads the
  * `data-surface` sequence off the served DOM, so a composition change this file
@@ -24,8 +28,8 @@ describe("TS-WEB-0027-A2: /ueber-uns page rhythm", () => {
     const sections: RhythmEntry[] = [
       "photo", // 1a hero — the h1 on the photograph
       "paper", // 1b the village argument, the portrait, the honorary-mayor proof
-      "lime-100", // 1c the story, the anecdotes, the founder quote
       "surface", // 2 proof stream
+      "lime-100", // 2b the story, the anecdotes, the founder quote
       "paper", // 3 the archive link, tight
       "lime-100", // 4 team
       "surface", // PageFrame: context band

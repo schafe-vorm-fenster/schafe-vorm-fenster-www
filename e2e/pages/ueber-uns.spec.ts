@@ -2,6 +2,9 @@ import { expect, test } from "@playwright/test";
 
 import type { Page } from "@playwright/test";
 
+import { formatPriceParts } from "../../src/components/price-tag/format";
+import { publishedFigure } from "../../src/lib/pricing/offerings";
+
 /**
  * TS-WEB-0027 — `/ueber-uns` — acceptance pass, against the amended criteria.
  *
@@ -92,10 +95,14 @@ test.describe("/ueber-uns", () => {
     const blocks = await page
       .locator("#main [data-block]")
       .evaluateAll((nodes) => nodes.map((node) => node.getAttribute("data-block")));
+    // D2's beat order — origin, proof stream, archive, team. The story section
+    // D2 does not list stands after the stream rather than before it, because
+    // A3's second clause fixes the distance to the first proof element
+    // (DEC-0132 §8); the case below measures it.
     expect(blocks).toEqual([
       "dorfargument",
-      "herkunftsgeschichte",
       "belegstrom",
+      "herkunftsgeschichte",
       "archiv-verweis",
       "team",
     ]);
@@ -123,7 +130,15 @@ test.describe("/ueber-uns", () => {
     await expect(page.locator("[data-block='betrieb']")).toHaveCount(0);
     await expect(page.locator("[data-live-counter], [data-counter]")).toHaveCount(0);
     const main = await page.locator("#main").innerText();
+    // D4's "no 'seit …' claim anywhere on the page" is read as a claim about the
+    // **service** — a static traction claim, which is what D4's own rationale
+    // forbids (`FUN-WEB-0041`, TS-WEB-0008-A10). The founder's bio says
+    // "Beruflich mache ich seit 25 Jahren IT", which is a fact about a person and
+    // is the owner's own wording (R-ueber-10); widening the pattern to every
+    // "seit …" would fail on it, so the assertion holds the year form the
+    // deleted counter module would have produced (DEC-0132 §10).
     expect(main).not.toMatch(/\bseit\s+\d{4}/i);
+    expect(main).not.toMatch(/\bseit\s+\d+\s+Jahren\s+(in\s+Betrieb|online|am\s+Netz)/i);
   });
 
   test("TS-WEB-0027-A3: the first viewport carries the h1 and the honorary-mayor proof, and no data-cta", async ({
@@ -140,6 +155,21 @@ test.describe("/ueber-uns", () => {
     for (const cta of await page.locator("[data-cta]").all()) {
       await expect(cta).not.toBeInViewport();
     }
+
+    // A3's second clause, measured rather than assumed: "the first proof
+    // element of the stream is reached within the second viewport height (≤ 1
+    // further screen of scrolling)" — at 1280 × 800 the budget is 1600 px from
+    // the top of the document. It was 2087 px while the story section stood
+    // between the origin and the stream, and no assertion caught it, so the
+    // number is read off the document here and the case fails on the position
+    // alone (DEC-0132 §8).
+    const firstProofTop = await page
+      .locator("[data-block='belegstrom'] article")
+      .first()
+      .evaluate((node) => node.getBoundingClientRect().top + window.scrollY);
+    expect(firstProofTop, "first stream element within 2 × viewport height").toBeLessThanOrEqual(
+      2 * 800,
+    );
   });
 
   test("TS-WEB-0006-A3: the other fold viewport carries no data-cta either", async ({ page }) => {
@@ -158,10 +188,28 @@ test.describe("/ueber-uns", () => {
   }) => {
     await page.goto("/ueber-uns");
     const block = await page.locator("[data-block='dorfargument']").innerText();
-    // Exactly one price token on the whole page, and it is the licence's.
+    // Exactly one price token on the whole page, and it is the licence's — and
+    // the token is built from the offering package rather than typed here, so a
+    // figure that drifts from `portalize-calendar` fails this case instead of
+    // shipping. The sentence in the content artefact carries the figure (the
+    // slot's `price-tag` is `withheld` so the block shows it once); the chain to
+    // the package is `src/lib/pricing/offerings.ts`, which
+    // `src/lib/pricing/offerings.test.ts` holds against
+    // `node_modules/@schafe-vorm-fenster/offerings/*.offering.md` (A4's
+    // "value, currency and interval equal @schafe-vorm-fenster/offerings",
+    // TS-WEB-0006 D10, DEC-0132 §9).
+    const licence = publishedFigure("portalize-calendar", "de");
+    const parts = formatPriceParts(licence, "de");
+    const currencySymbol = parts.amount.replace(/[\d\s., ]/g, "");
+    expect(currencySymbol, "the package's currency has a symbol").not.toBe("");
+    const priceToken = new RegExp(`${licence.amount}\\s*${currencySymbol}`, "g");
     const body = await page.locator("body").innerText();
-    expect(body.match(/480\s*€/g) ?? []).toHaveLength(1);
-    expect(block).toMatch(/480\s*€/);
+    expect(body.match(priceToken) ?? []).toHaveLength(1);
+    expect(block).toMatch(priceToken);
+    // The interval word the package's `interval` resolves to, in this page's
+    // language — a figure without its interval is a different price.
+    expect(parts.interval, "the package's figure names an interval").toBeTruthy();
+    expect(block).toMatch(new RegExp(`\\b${parts.interval}\\b`));
     expect(block).toMatch(/kostenlos/i);
     // DEC-0084 §2: no clause about a salesperson, and none about affording it.
     expect(block).not.toMatch(/Vertrieb|Verkäufer|leisten/i);

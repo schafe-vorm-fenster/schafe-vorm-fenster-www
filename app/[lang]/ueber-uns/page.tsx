@@ -231,7 +231,12 @@ export default async function Page({
   // `origin-story`'s own `price-tag` is suppressed (`display: "withheld"`,
   // which renders nothing) rather than repeating the identical figure a second
   // time in the same block — content is never reworded to remove the number,
-  // so this is the one place left to avoid the duplicate.
+  // so this is the one place left to avoid the duplicate. The figure is not
+  // unbound for that: the A4 case in `e2e/pages/ueber-uns.spec.ts` builds the
+  // token it looks for from `publishedFigure("portalize-calendar")`, whose table
+  // `src/lib/pricing/offerings.test.ts` holds against the offering package's own
+  // frontmatter — so the sentence cannot drift from the package silently
+  // (TS-WEB-0027-A4, TS-WEB-0006 D10, DEC-0132 §9).
   const originPrice = { display: "withheld" as const, figure: undefined };
 
   // The page's images: the village behind the company name, the founder's
@@ -341,47 +346,6 @@ export default async function Page({
         </MotionReveal>
       </SectionShell>
 
-      {/* Block 1c — the story (kicker "Die Geschichte", R-ueber-3): the baker's
-          van, the move to Schlatkow and the municipal sheep pasture the company
-          is named after, then the anecdotes the review asked for, then the
-          cleared founder quote as a `quote-card` with the concrete article as
-          its source (R-ueber-6, CG-028). The anecdote paragraphs are a
-          `generated; demo: true` slot and mark themselves. */}
-      {storyHeading ? (
-        <SectionShell
-          dataBlock="herkunftsgeschichte"
-          kicker={words.kickers.origin}
-          labelledBy="herkunftsgeschichte-h2"
-          surface="lime-100"
-        >
-          <MotionReveal>
-            <h2 id="herkunftsgeschichte-h2">{storyHeading}</h2>
-            <p>{fieldAt(story.blocks, STORY.paragraph)}</p>
-            {anecdoteParagraphs.map((block) => (
-              <p
-                data-demo={isDemoSlot(anecdotes) ? "true" : undefined}
-                key={block.kind === "field" ? block.label : ""}
-              >
-                {block.kind === "field" ? block.value : null}
-              </p>
-            ))}
-            {quote && sourceUrl ? (
-              <QuoteCard
-                className={styles.founderQuote}
-                locale={locale}
-                name={fieldAt(story.blocks, STORY.quoteName) ?? ""}
-                newTab
-                organisation={fieldAt(story.blocks, STORY.quoteOrganisation) ?? ""}
-                quote={quote}
-                role={fieldAt(story.blocks, STORY.quoteRole) ?? ""}
-                sourceLabel={fieldAt(story.blocks, STORY.sourceLabel) ?? sourceUrl}
-                sourceUrl={sourceUrl}
-              />
-            ) : null}
-          </MotionReveal>
-        </SectionShell>
-      ) : null}
-
       {/* Block 2 — the proof stream (7 positions, DEC-0048): one feature card
           carrying the emphasis, the rest compact hairline rows, and the
           reserved, never-backfilled seventh position (D5, A6/A7). */}
@@ -422,6 +386,58 @@ export default async function Page({
           </ProofStream>
         </MotionReveal>
       </SectionShell>
+
+      {/* Block 2b — the story (kicker "Die Geschichte", R-ueber-3): the baker's
+          van, the move to Schlatkow and the municipal sheep pasture the company
+          is named after, then the anecdotes the review asked for, then the
+          cleared founder quote as a `quote-card` with the concrete article as
+          its source (R-ueber-6, CG-028). The anecdote paragraphs are a
+          `generated; demo: true` slot and mark themselves.
+
+          It stands **below** the stream, not between the origin and it: A3's
+          second clause fixes the distance to the evidence ("the first proof
+          element of the stream is reached within the second viewport height"),
+          and the story measured 747 px at 1280 px / 1076 px at 390 px, which
+          pushed the first proof card into the third screen (measured: first
+          `[data-block='belegstrom'] article` at y = 2087 px against a 1600 px
+          budget). D2 lists no story block at all — the beat order it does fix
+          (origin → proof → archive → team) is unchanged, and its own rationale
+          is exactly the clause: "a scanner gets … the first proof element in
+          the second [screen]". DEC-0132 §8. */}
+      {storyHeading ? (
+        <SectionShell
+          dataBlock="herkunftsgeschichte"
+          kicker={words.kickers.origin}
+          labelledBy="herkunftsgeschichte-h2"
+          surface="lime-100"
+        >
+          <MotionReveal>
+            <h2 id="herkunftsgeschichte-h2">{storyHeading}</h2>
+            <p>{fieldAt(story.blocks, STORY.paragraph)}</p>
+            {anecdoteParagraphs.map((block) => (
+              <p
+                data-demo={isDemoSlot(anecdotes) ? "true" : undefined}
+                key={block.kind === "field" ? block.label : ""}
+              >
+                {block.kind === "field" ? block.value : null}
+              </p>
+            ))}
+            {quote && sourceUrl ? (
+              <QuoteCard
+                className={styles.founderQuote}
+                locale={locale}
+                name={fieldAt(story.blocks, STORY.quoteName) ?? ""}
+                newTab
+                organisation={fieldAt(story.blocks, STORY.quoteOrganisation) ?? ""}
+                quote={quote}
+                role={fieldAt(story.blocks, STORY.quoteRole) ?? ""}
+                sourceLabel={fieldAt(story.blocks, STORY.sourceLabel) ?? sourceUrl}
+                sourceUrl={sourceUrl}
+              />
+            ) : null}
+          </MotionReveal>
+        </SectionShell>
+      ) : null}
 
       {/* Block 3 — the archive: exactly one link, no teasers, no count, no
           thumbnail, in a block of its own (D6, D2 block 3, A8). */}

@@ -52,17 +52,19 @@ on a promise; no sentence for one exists, the contact section's own head and
 lead stand immediately below it, and writing one would be page copy nobody
 ordered (working rule 4). The prop is omitted, not filled.
 
-### 2. `D2`'s "block" is a beat; block 1 is three sections, and the proof leads the argument
+### 2. `D2`'s "block" is a beat; block 1 is two sections, and the proof leads the argument
 
 `D2` lists seven blocks and `A2` asks for that order. Block 1 — "founder photo ·
 h1 · the village argument" — cannot be one `<section>`: at 390 px the hero
 photograph, three paragraphs of argument, a 4:5 portrait and the proof card
 measure well past the 1 270 px a section may be
 (`e2e/section-budget.spec.ts`, polish brief G-4, whose own remedy is "a section
-that wants to be longer is two sections"). So block 1 renders as three sections
-— `#herkunft` (the photo hero with the `h1`), `dorfargument`, `herkunftsgeschichte`
-— and `A2` is asserted over the `data-block` sequence, which is the beat order.
-`/mitmachen` took the same reading for its one `wege` slot (`DEC-0124 §1`).
+that wants to be longer is two sections"). So block 1 renders as two sections —
+`#herkunft` (the photo hero with the `h1`) and `dorfargument` — and `A2` is
+asserted over the `data-block` sequence, which is the beat order. `/mitmachen`
+took the same reading for its one `wege` slot (`DEC-0124 §1`). The story
+section that used to follow `dorfargument` now stands below the stream; §8 says
+why, and it is the same reading of `D2` from the other side.
 
 Two consequences measured rather than assumed:
 
@@ -120,6 +122,7 @@ row each in `state/open.md`:
 | --- | --- | --- |
 | three anecdote paragraphs | `ueber-uns-2a-anecdotes-demo` | review R-ueber-7 **names** the anecdotes (the lion dancers, the bee photographs, the pandemic home office) and asks for more paragraphs; it writes none |
 | the village's size, "rund 280" | the same slot | `DEC-0084 §1` fixes the figure and puts it in the content artefact, never in a spec or in source; the sentence carrying it is the engineer's |
+| | | **Where it stands:** the task brief puts the figure in the village argument. It ships in the anecdotes slot and therefore in the story section, because the sentence is a placeholder and a placeholder lives in a `provenance: generated; demo: true` slot of its own — moving it into `ueber-uns-1-origin` would mark a `sourced` slot as generated, and giving block 1 a third slot would add height to the one section the 1 270 px budget and `A3`'s first clause already hold at their limit. No criterion places the figure: `A4` only forbids it in page or component **source**, and `D3` says it "is content, in the artefact". When the owner writes the sentence it moves. |
 | the reserved place's label and sentence | `ueber-uns-3a-empty-slot-demo` | `D5` requires both and calls the sentence copy |
 
 Everything else on the page is the owner's or the hub's: the `h1` ("Vom Dorf
@@ -158,6 +161,83 @@ phrase for it; `TS-WEB-0006 D1` makes the four job ids a **closed set** with one
 registry, and the id for that job is `why-us` (`JOB_IDS`, `HEADER_JOBS[3]`).
 The manifest declares the id. Renaming the id would be a second job vocabulary,
 which `D5` forbids.
+
+### 8. The story stands below the stream, because `A3`'s second clause is a distance
+
+`A3` has two clauses and the second one is a measurement: "the first proof
+element of the stream is reached within the second viewport height (≤ 1 further
+screen of scrolling)". `D2`'s rationale states the same intent in words — "a
+scanner gets *who, where, why this shape* in the first screen and the first
+proof element in the second".
+
+The first shipped composition failed it and nothing caught the failure. Measured
+at 1280 × 800 against the dev server: `dorfargument` 549–1270,
+`herkunftsgeschichte` 1270–2017, `belegstrom` from 2017, and the first
+`[data-block='belegstrom'] article` at **y = 2087 px** against a budget of
+2 × 800 = 1 600 — 487 px into the third screen. The 747 px story section was the
+distance.
+
+So the story section moves **below** the stream. It costs nothing against `A2`:
+`D2` lists no story block anywhere, and the beat order it does fix — origin →
+proof stream → archive → team → newsletter → band → closing — is unchanged. It
+is the same reading of `D2` as §2, applied to the section that has no beat of its
+own: the block that is not in the list yields to the criterion that is. Narrative
+order was rejected by `D2` for exactly this reason ("it delays the evidence a
+due-diligence reader came for"), and the story is narrative.
+
+Measured after the move, same script, same server: first stream element at
+**1 341 px** at 1280 × 800, inside the 1 600 px budget. The `A3` case now reads
+that number off the document (`getBoundingClientRect().top + scrollY`) and fails
+on the position alone, so the clause cannot silently drop again.
+
+**The clause is read at the viewport `A3` names, and only there.** At 390 × 844
+the first stream element is at 1 874 px against a 1 688 px budget, and at
+360 × 640 at 1 747 px against 1 280 px. Neither is reachable by moving a
+section: at 360 px the hero ends at 405 px and `dorfargument` alone is 1 278 px,
+so the budget is spent before the stream can begin, and cutting into block 1
+would break `A3`'s *first* clause (the claim and its proof element inside the
+first viewport) and `D3`'s content. `A3`'s sentence opens "At 1280 × 800" and
+both clauses hang off it; a phone reading of the second clause is a different
+criterion, and writing it is the spec owner's. Filed as an open row.
+
+### 9. The licence figure stays in the sentence, and the test binds it to the package
+
+`D3` and `TS-WEB-0006 D10` say the price is "read from
+`@schafe-vorm-fenster/offerings`, never typed". The figure appears once on the
+page, in the argument's third step — the owner's sentence, which names it inside
+prose ("… kostet die Lizenz für den eigenen Kalender 480 € im Jahr statt eines
+Projektbudgets"); the slot's own `price-tag` is `display: "withheld"` so the
+figure is not rendered twice. Two ways to satisfy D10 from there: strip the
+figure out of the sentence and render a `price-tag` beside it, or bind the
+rendered token to the package in the test.
+
+The second is taken. Rewriting the sentence to remove the number is writing page
+copy (working rule 4), and the sentence is the review's; a `price-tag` under a
+sentence that no longer says what it costs reads worse and says the same thing.
+What `A4` asks for is that "that token's value, currency and interval equal
+`@schafe-vorm-fenster/offerings`", and the `A4` case now builds the token it
+looks for from `publishedFigure("portalize-calendar")` and asserts the interval
+word beside it, rather than from a `480 €` literal. The chain to the package is
+closed at the other end by `src/lib/pricing/offerings.test.ts`, which holds that
+table against `node_modules/@schafe-vorm-fenster/offerings/*.offering.md`. A
+figure that changes in the hub now fails this page's own acceptance case instead
+of drifting.
+
+### 10. `D4`'s "no 'seit …' claim" is read as a claim about the service
+
+`D4` forbids "no year figure rendered as a module, no place count, no badge, no
+'seit …' claim anywhere on the page", and its whole rationale is the **static
+traction claim** `FUN-WEB-0041` and `TS-WEB-0008-A10` forbid. The owner's bio
+says "Beruflich mache ich seit 25 Jahren IT" — a fact about a person, the
+owner's own wording (review R-ueber-10), and no claim about how long the service
+has run. Read literally, `D4` would delete it; read for what it protects, it
+does not reach it.
+
+The assertion holds both halves of that reading: no `seit <year>` anywhere in
+`#main` (the form the deleted counter module would have produced), and no
+`seit <n> Jahren in Betrieb / online / am Netz` either. The personal sentence
+stands. If `D4` is meant to reach a person's biography, that is an amendment to
+`D4`, not a test change.
 
 ## Where the task brief and the specification disagreed
 
@@ -217,7 +297,11 @@ each is reported rather than absorbed:
 - `src/lib/pages/manifests.ts` + test: `about` in `CONVERSION_MAP` and in
   `NO_LIVE_MODULE`.
 - `state/open.md` gains one row per placeholder, one for the hub's bio dates and
-  Christian Sauer's record, one for the `A1` live-module conflict, and one for the
-  customer-proof section the clearances gate.
+  Christian Sauer's record, one for the `A1` live-module conflict, one for the
+  customer-proof section the clearances gate, and row 251 for the phone reading
+  of `A3`'s position clause (§8).
+- The `data-block` sequence is `dorfargument · belegstrom · herkunftsgeschichte ·
+  archiv-verweis · team`, and both places that declare it — the `A2` e2e case and
+  `page-rhythm.test.ts` — say why the story sits where it does.
 - `TS-WEB-0027` itself is **not amended**: every determination this page now
   follows was already written. What the page did was catch up.
