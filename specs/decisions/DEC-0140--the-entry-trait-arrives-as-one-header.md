@@ -120,9 +120,10 @@ Two smaller readings, both taken rather than left open:
 ### 4. The fallback the brief allowed was not taken — and production reaches it anyway
 
 The task brief permitted shipping *"direct order everywhere, A7 fixme kept"* if
-the trait handover endangered the milestone. It was not taken: A7 is un-fixmed
-and walks both loads, and `next dev` and every preview build order block 2a by
-the trait.
+the trait handover endangered the milestone. The handover itself was built and
+is not a milestone risk: `next dev` and every preview build order block 2a by
+the trait, and A7 walks both loads there. **In production the shipped order is
+the `direct` order for every trait anyway**, and not by choice — see below.
 
 **Under the production CSP the reorder does not reach the DOM.** The swap from
 a boundary's fallback to its resolved branch is done by an inline script React
@@ -140,6 +141,21 @@ So the brief's fallback is, as configured today, the shipped production
 behaviour, arrived at by the CSP rather than chosen. That is a `DEC-0045`
 amendment to close, not a page work package's call; this record only names the
 condition so nobody reads A7's green as a production claim.
+
+**`TS-WEB-0019-A7`'s status is therefore *blocked*, not met.** The criterion
+holds wherever the mechanism it tests is switched on and cannot hold where the
+policy switches it off, so the test gates itself on the policy the server sends:
+`e2e/pages/home.spec.ts` reads the `Content-Security-Policy` of its first
+response and `test.skip`s A7 when `script-src` admits no request-time inline
+script — no `'unsafe-inline'` standing alone and no `'nonce-…'` — with the skip
+reason naming `state/open.md` row 132. That is the configuration `pnpm e2e` with
+`CI=true` runs (`next build` + `next start`, the CI job *"E2E — Playwright
+against the local production build"*), and also a plain `next start` with
+`VERCEL_ENV` unset, because `pnpm build` always writes the hash asset. So the
+suite reports A7 as inactive on the production build and green in `next dev` and
+on a preview-CSP build, and it never reports it as passing where the order it
+asserts is not in the DOM. It is un-`fixme`d — the mechanism is built and
+measured — but the criterion does not close until row 132 does.
 
 ## Consequences
 
@@ -173,12 +189,31 @@ condition so nobody reads A7's green as a production claim.
   embed` — puts the `lime-100` embed scene directly above the `lime-100` proof
   stream. `checkRhythm` permits two of one family in a row and forbids three,
   so the rhythm holds in all three D3a orders; `app/[lang]/page-rhythm.test.ts`
-  now walks the two reordered runs in S1/S2 and S3 as well. The softened seam
-  between those two sections is the accepted cost of D3a's order; giving the
-  proof stream a different ground would be a DEC-0129 §11 amendment.
+  now walks the two reordered runs in S1/S2 and S3 as well. The seam was looked
+  at rather than only reasoned about: a `nordkurier.de` referrer on a local
+  production build with the preview CSP, at 390 × 844, renders
+  `provenance (violet-500) · whatsapp (paper) · embed (lime-100)` followed by the
+  `lime-100` proof stream — one module in `main`, five proof elements, no console
+  error — and the section change reads through the eyebrow, the heading and the
+  paper cards rather than through the ground. The softened seam is the accepted
+  cost of D3a's order; giving the proof stream a different ground would be a
+  DEC-0129 §11 amendment.
 - The boundary renders block 2a twice on the wire — once as the fallback, once
   as the resolved branch. That is the cost every boundary on this page already
-  pays (`DEC-0078`), and it buys the prerendered shell.
+  pays (`DEC-0078`), and it buys the prerendered shell. **The two copies carry
+  the same ids**, so the shipped document holds six `[data-block="scene"]`
+  elements, two `#scene-1`/`#scene-2`/`#scene-3` each and two
+  `[data-explain-module]` — for as long as the parked branch stands, which under
+  §4's production CSP is forever. The parked copy sits in a `hidden` container
+  and is out of the accessibility tree, but a document-wide id or attribute read
+  now matches twice: that is why A9's `#scene-3` read and the four
+  `[data-explain-module]` reads on `/` are scoped to `main`
+  (`e2e/pages/home.spec.ts`). Dropping the ids instead was not taken: they are
+  what `A7` compares between its two loads (the same id **set** in a different
+  order — "no block added, removed or rewritten") and what `A9` walks the DOM
+  order with, so removing them would remove the evidence for the very criteria
+  this task closes. Scoping the reads to `main` is the smaller change and is
+  also the honest one — `main` is what a visitor has.
 - No cookie, no storage, no session, no geo value in any payload. The trait is
   derived per request and forgotten with it (`TS-WEB-0010 D3`,
   `TS-WEB-0010-A12`).

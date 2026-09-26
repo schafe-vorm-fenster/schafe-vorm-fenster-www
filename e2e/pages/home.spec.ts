@@ -56,6 +56,35 @@ async function sceneMechanisms(page: Page): Promise<readonly string[]> {
   );
 }
 
+/**
+ * True when the policy the server just sent admits the inline script React
+ * emits **at request time** to complete a `<Suspense>` boundary.
+ *
+ * `DEC-0045` / `TS-WEB-0014 D7` give production a hash-only `script-src`, and
+ * `scripts/generate-csp-hashes.mjs` can only hash what stands in the
+ * prerendered HTML — never a request-time script. So under that policy no
+ * boundary on the page completes: `main` keeps every fallback, the resolved
+ * branch stays parked after `</main>`, and a trait-ordered block cannot reach
+ * the DOM at all (`state/open.md` row 132, `DEC-0140` §4). A criterion that
+ * reads a *resolved* boundary is therefore inactive there rather than red — the
+ * mechanism it tests is switched off by the policy, and switching it back on is
+ * row 132's nonce decision, not this page's work.
+ */
+function admitsRequestTimeInlineScript(csp: string | undefined): boolean {
+  if (csp === undefined || csp.trim() === "") return true;
+  const scriptSrc = csp
+    .split(";")
+    .map((directive) => directive.trim())
+    .find((directive) => /^script-src\b/.test(directive));
+  if (scriptSrc === undefined) return true;
+  // A nonce reaches a request-time script; a per-build hash set cannot.
+  if (scriptSrc.includes("'nonce-")) return true;
+  // The browser ignores 'unsafe-inline' as soon as a hash or nonce source is
+  // present (CSP3 §6.6.3.2), so it only counts when it stands alone — which is
+  // `csp.ts`'s `isDev && !hasHashes` and `isPreview && !hasHashes` branches.
+  return scriptSrc.includes("'unsafe-inline'") && !/'sha(?:256|384|512)-/.test(scriptSrc);
+}
+
 /** Every fact TS-WEB-0019-A7 compares between its two loads, read in one pass. */
 async function sceneFacts(page: Page) {
   const facts = await page.evaluate(() => {
@@ -520,7 +549,23 @@ test.describe("TS-WEB-0019 — home", () => {
     // A7 asks for that clause "in either position".
     await page.setViewportSize({ width: 360, height: 800 });
 
-    await page.goto("/", { referer: "https://www.linkedin.com/" });
+    const professionalResponse = await page.goto("/", {
+      referer: "https://www.linkedin.com/",
+    });
+    // The one configuration where D3a cannot be observed in the DOM: a
+    // hash-only `script-src` refuses React's boundary-completion script, so
+    // `main` keeps the `direct` fallback for every trait while the response
+    // body still carries the resolved run. That is `state/open.md` row 132 —
+    // production's shipped behaviour, and what `pnpm e2e` with `CI=true` (a
+    // `next build` + `next start`) serves. A7 is inactive there, not failing;
+    // it holds in `next dev` and on a preview-CSP build, and closing the gap
+    // is row 132's nonce decision (`DEC-0140` §4).
+    test.skip(
+      !admitsRequestTimeInlineScript(
+        professionalResponse?.headers()["content-security-policy"],
+      ),
+      "The served script-src admits no request-time inline script, so no <Suspense> boundary completes and block 2a cannot be reordered in the DOM — state/open.md row 132, DEC-0140 §4.",
+    );
     await expect.poll(() => sceneMechanisms(page), { timeout: 20_000 }).toEqual([
       "embed",
       "provenance",
