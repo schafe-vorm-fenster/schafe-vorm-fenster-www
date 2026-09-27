@@ -40,6 +40,7 @@ import type { ContentSlot } from "@/src/lib/content/types";
 import type { EventListItem } from "@/src/components/event-list/event-list";
 import type { SectionSurface } from "@/src/components/section-shell/section-shell";
 import type { StoryCategoryPreference } from "@/src/lib/pages/story-examples";
+import type { DictionaryKeyOf } from "@/src/lib/i18n/dictionary";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
@@ -163,6 +164,11 @@ interface StorySection {
   readonly imageId?: string;
   /** Which categories this story's live example prefers, best first. */
   readonly categories?: StoryCategoryPreference;
+  /**
+   * The "benefit" kicker naming what this specific story is about (DEC-0148)
+   * — no longer one shared phrase across all three.
+   */
+  readonly kickerKey: DictionaryKeyOf<"kickers">;
 }
 
 const STORIES: readonly StorySection[] = [
@@ -172,6 +178,7 @@ const STORIES: readonly StorySection[] = [
     id: "story-baeckerwagen",
     surface: "paper",
     imageId: "dein-ort-story-baeckerwagen",
+    kickerKey: "everydaySupply",
   },
   {
     slotId: "dein-ort-4-story-ratssitzung",
@@ -182,6 +189,7 @@ const STORIES: readonly StorySection[] = [
     // then the institutional tone. A supply date under a story about being
     // heard before the vote would be an example of nothing.
     categories: ["social", "official"],
+    kickerKey: "communityLife",
   },
   {
     slotId: "dein-ort-5-story-kultur",
@@ -189,6 +197,7 @@ const STORIES: readonly StorySection[] = [
     id: "story-kultur",
     surface: "paper",
     imageId: "dein-ort-story-kultur",
+    kickerKey: "cultureAndTourism",
   },
 ];
 
@@ -590,7 +599,7 @@ export default async function PlacePage({
             <SectionShell
               dataBlock="value-story"
               id={story.id}
-              kicker={words.kickers.whyItMatters}
+              kicker={words.kickers[story.kickerKey]}
               surface={story.surface}
               transition={fieldAt(content.blocks, 2)}
             >
