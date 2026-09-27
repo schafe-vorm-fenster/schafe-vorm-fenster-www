@@ -16,6 +16,13 @@ describe("TS-WEB-0011-A1: the redirect map — no chains, no duplicates, valid t
     );
   });
 
+  it("/hilfe resolves to community-site, per article (DEC-0146), not app root", () => {
+    const row = LEGACY_REDIRECTS.find((r) => r.from === "/hilfe");
+    expect(row?.to).toBe("https://schafe-vorm-fenster.de/hilfe");
+    expect(row?.wildcard).toBe(true);
+    expect(row?.preservePath).toBe(true);
+  });
+
   it("/funktionen resolves to the calendar page, the only one still arguing features", () => {
     const row = LEGACY_REDIRECTS.find((r) => r.from === "/funktionen");
     expect(row?.to).toBe(href("calendar", "de"));

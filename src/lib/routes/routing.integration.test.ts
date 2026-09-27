@@ -431,21 +431,27 @@ describe("TS-WEB-0011-A1: the redirect map has one source per URL and no chains"
   });
 });
 
-describe("TS-WEB-0011-A2: the /hilfe family redirects in one hop to the app", () => {
+describe("TS-WEB-0011-A2: the /hilfe family redirects in one hop to community-site, path preserved", () => {
   // The legacy map is append-only (TS-WEB-0011 D1) and grew at M4 with the rest
   // of SRC-0010's inventory (`redirect-map.ts`) — this checks the /hilfe
   // family specifically, not the whole table's exact shape.
-  it("carries the path and its subtree, both 301", () => {
+  //
+  // DEC-0146: community-site (bare apex), not `app.schafe-vorm-fenster.de`
+  // (that hostname is the DEC-0029 calendar handover, a different move).
+  // community-site PR 204 publishes /hilfe/{slug} at the legacy site's own
+  // slugs, so the wildcard row carries the tail on instead of collapsing
+  // every article onto one URL.
+  it("carries the path and its subtree, both 301, tail preserved", () => {
     expect(legacyRedirects()).toEqual(
       expect.arrayContaining([
         {
           source: "/hilfe",
-          destination: "https://app.schafe-vorm-fenster.de",
+          destination: "https://schafe-vorm-fenster.de/hilfe",
           statusCode: 301,
         },
         {
           source: "/hilfe/:path*",
-          destination: "https://app.schafe-vorm-fenster.de",
+          destination: "https://schafe-vorm-fenster.de/hilfe/:path*",
           statusCode: 301,
         },
       ]),
