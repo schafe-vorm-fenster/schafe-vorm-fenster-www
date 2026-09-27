@@ -46,7 +46,20 @@
  */
 
 import { legalAnchor } from "./legal-anchors";
-import { APP_ORIGIN, href } from "./routes";
+import { href } from "./routes";
+
+/**
+ * community-site's own origin — **not** `APP_ORIGIN`. `APP_ORIGIN`
+ * (`src/lib/live/app-handover.ts`, DEC-0029/DEC-0035) is the per-village
+ * calendar handover's hostname (TS-WEB-0017-A11 keeps that literal to that
+ * one file — it is not repeated here), which does not serve traffic yet.
+ * community-site is "the app" that CON-WEB-0010 and DEC-0047 mean for help
+ * content (DEC-0146) and today it answers on the bare apex — confirmed
+ * against the Vercel project's domain list, not assumed. The two origins
+ * move on independent timelines; do not merge them.
+ */
+const COMMUNITY_SITE_ORIGIN =
+  process.env.NEXT_PUBLIC_COMMUNITY_SITE_ORIGIN ?? "https://schafe-vorm-fenster.de";
 
 export interface RedirectRow {
   /**
@@ -61,6 +74,12 @@ export interface RedirectRow {
   readonly to: string;
   /** `true` when the row covers `from` and every path below it. */
   readonly wildcard?: boolean;
+  /**
+   * With `wildcard`, carry the matched tail on to `to` (`${to}/:path*`)
+   * instead of collapsing every path under `from` onto `to` verbatim.
+   * Only meaningful together with `wildcard`.
+   */
+  readonly preservePath?: boolean;
   /** Why the row exists — a decision id, a question id, or a sentence. */
   readonly reason: string;
 }
@@ -72,11 +91,14 @@ export interface RedirectRow {
 export const LEGACY_REDIRECTS: readonly RedirectRow[] = [
   {
     from: "/hilfe",
-    to: APP_ORIGIN,
+    to: `${COMMUNITY_SITE_ORIGIN}/hilfe`,
     wildcard: true,
+    preservePath: true,
     reason:
-      "DEC-0047 — support articles moved to the app. Interim target is the app root " +
-      "until the app publishes a per-article URL contract (Q-0041, state/open.md row 8).",
+      "DEC-0047, DEC-0146 — support articles moved to community-site, which " +
+      "publishes /hilfe and /hilfe/{slug} at the identical slugs the legacy " +
+      "site used (community-site PR 204). Per-article, not app-root: Q-0041 and " +
+      "state/open.md row 8 are resolved.",
   },
   {
     from: "/funktionen",

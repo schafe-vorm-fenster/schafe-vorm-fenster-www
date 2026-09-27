@@ -69,14 +69,20 @@ export function localeRedirects(): NextRedirect[] {
 /** Rule 0 — the legacy map, as Next.js redirect rows (TS-WEB-0011 D1). */
 export function legacyRedirects(): NextRedirect[] {
   return LEGACY_REDIRECTS.flatMap((row) => {
-    const target = { destination: row.to, statusCode: 301 } as const;
-    // A wildcard row also catches the bare path itself (`/hilfe`).
-    return row.wildcard
-      ? [
-          { source: row.from, ...target },
-          { source: `${row.from}/:path*`, ...target },
-        ]
-      : [{ source: row.from, ...target }];
+    if (!row.wildcard) {
+      return [{ source: row.from, destination: row.to, statusCode: 301 }];
+    }
+    // A wildcard row also catches the bare path itself (`/hilfe`). With
+    // `preservePath`, the matched tail carries on to `to` instead of every
+    // path under `from` collapsing onto it verbatim.
+    return [
+      { source: row.from, destination: row.to, statusCode: 301 },
+      {
+        source: `${row.from}/:path*`,
+        destination: row.preservePath ? `${row.to}/:path*` : row.to,
+        statusCode: 301,
+      },
+    ];
   });
 }
 

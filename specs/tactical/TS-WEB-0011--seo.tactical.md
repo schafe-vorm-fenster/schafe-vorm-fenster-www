@@ -49,7 +49,7 @@ place only.
 | Hops | Exactly one. A target may never itself be a redirect source; chains are resolved at map-build time, not at request time. |
 | Query string | Preserved verbatim and appended to the target — `etcc_cmp`, `etcc_med` and every other campaign parameter survive every redirect (FUN-WEB-0048 contract). |
 | Fragment | Not touched; the browser carries it. Targets that need an anchor carry it in the map (e.g. `#impressum`, TS-WEB-0004 D8). |
-| Targets | Either a member of the TS-WEB-0004 D1 inventory or an absolute URL on an owned host (`app.schafe-vorm-fenster.de`). Nothing else. |
+| Targets | Either a member of the TS-WEB-0004 D1 inventory or an absolute URL on an owned host (`app.schafe-vorm-fenster.de`, the calendar handover; `schafe-vorm-fenster.de`, community-site — DEC-0146). Nothing else. |
 | Language | Legacy URLs are German-only; they target the **bare** path, never `/en/…`. |
 | No successor | A ranked URL never answers 404. Where no successor exists, it 301s to the nearest topically containing page — the home page only as the last resort. |
 | Normalisation | Uppercase paths and trailing slashes 301 to the lowercase, slash-free form before the map is consulted. |
@@ -70,8 +70,8 @@ does, the rows below are the confirmed floor.
 | `/funktionen` | feature list (10 markdown features) | `/dein-kalender` | the only page that still argues features |
 | `/presse` | press page | `/ueber-uns/archiv` | proof archive is its successor (FUN-WEB-0018) |
 | `/impressum` | imprint **and** privacy (one page, legacy footer linked both here) | `/rechtliches#impressum` | anchor per TS-WEB-0004 D8 |
-| `/hilfe` | help index | **open** — help lives in the app (FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061), which has no public help URL contract | see Open points |
-| `/hilfe/{slug}` | help articles | **open** — same, per article | slugs not archived (Q-0016) |
+| `/hilfe` | help index | `https://schafe-vorm-fenster.de/hilfe` | community-site (DEC-0146), CON-WEB-0010 |
+| `/hilfe/{slug}` | help articles | `https://schafe-vorm-fenster.de/hilfe/{slug}` | same slug, per article (community-site#204) |
 | apex `/:community` | village calendars | TS-WEB-0004 D3 rule 6 | not this spec's row |
 
 ### D3 — Semantic skeleton and the demotion registry [FIXED: SRC-0006 / FUN-WEB-0071, FUN-WEB-0077; ties TS-WEB-0002 D5]
@@ -329,11 +329,12 @@ Rule of thumb behind the table: a query parameter changes what a page
 - **Q-0009 — competitor-keyword pages (carried, not solved).** D8 holds
   the prohibition and names the questions the legal review must answer.
   Owner: legal. CON-WEB-0075 stays S1 until then.
-- **New question: where do `/hilfe` and `/hilfe/{slug}` redirect?** Help
-  lives in the app (FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061), and the app publishes no public help URL
-  contract. Without one, ranked help URLs have no successor and D1's
-  "no ranked URL answers 404" rule cannot be satisfied. Demand to the app
-  team; blocks two rows of D2.
+- ~~**Where do `/hilfe` and `/hilfe/{slug}` redirect?**~~ **Resolved
+  2026-09-27 by DEC-0146 and community-site#204.** Help lives in
+  community-site (CON-WEB-0010), which now publishes `/hilfe` and
+  `/hilfe/{slug}` at the legacy site's own slugs. `redirect-map.ts` carries
+  the per-article target; D1's "no ranked URL answers 404" rule holds for
+  both rows of D2.
 - **New question: does the IA get a visible breadcrumb on second-level
   pages?** D4 assigns `BreadcrumbList` there; a visible trail is a UI
   element the IA does not have, and the IA is authoritative (DEC-0022).
