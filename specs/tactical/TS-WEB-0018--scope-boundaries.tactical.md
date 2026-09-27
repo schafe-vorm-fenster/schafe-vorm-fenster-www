@@ -171,7 +171,17 @@ and `data-*` attributes. The boundary is about what a visitor reads as a
 name for a destination, not about hostnames.
 
 **Where the name may appear:** the body of `/dein-kalender`, at most
-once, at the 480 € tier — settled by Q-0012 / DEC-0052 §1. What is **not**
+once, at the 480 € tier — settled by Q-0012 / DEC-0052 §1 — **and in the five
+imported legal bodies on `/rechtliches`, without a count**, because there the
+name is not marketing: it is the contractual designation of the product the
+terms, the privacy policy and the data-processing agreement are about
+(`content/legal/privacy-policy.md:91`, `terms-of-use.md:99`, `dpa.md:54`;
+imported verbatim under DEC-0012 and DEC-0027). Rendered, that is seven
+occurrences per locale today. The exemption is the route's, not the page's:
+`/rechtliches` is the same single exemption the register rule already carries
+for the same reason (TS-WEB-0029 D6a), and the chrome of that route is
+**not** exempt — header, footer and context band are held to D5 there like
+everywhere (CONF-0027, DEC-0145 §1). What is **not**
 settled is whether the product keeps the name at all (Q-0077, DEC-0106), and
 that is what the floor below waits on. Until
 DEC-0052 §1 fixes it at **exactly one** occurrence on `/dein-kalender` at
@@ -336,7 +346,7 @@ The four boundary questions:
 | TS-WEB-0018-A4 | static | No id from the D4 deny-list, and no hub id whose `brand` is not `schafe-vorm-fenster`, appears in any content frontmatter, the route table, the nav registry, or a sitemap URL; the deny-list regenerated from the installed packages equals the committed constant. |
 | TS-WEB-0018-A5 | static | Foreign-brand term guard over the built HTML finds no D4 term; every allow-list entry carries a reason. |
 | TS-WEB-0018-A6 | static | No entry of the route translation map (any language) and no label in the header, footer, or context-band registry matches the D5 product-name list. |
-| TS-WEB-0018-A7 | integration | Header, footer, and context band of every TS-WEB-0004 D1 route render without a product name in `de` and `en`; `/dein-kalender` is the only route whose body may contain one, at most once. |
+| TS-WEB-0018-A7 | integration | Header, footer, and context band of every TS-WEB-0004 D1 route render without a product name in `de` and `en` — `/rechtliches` included, its chrome is not exempt. In the **body**, `/dein-kalender` may contain one at most once, `/rechtliches` may contain it without a count because the five imported legal bodies name it as the contractual product (D5, DEC-0012/DEC-0027), and every other route contains none. |
 | TS-WEB-0018-A8 | static | Content build input excludes `content/support/**` and `legacy-content/app/funktionen/**`; no content file's `derived_from` points into them; the content schema declares no help/FAQ/how-to type; the route inventory contains no help path. |
 | TS-WEB-0018-A9 | static | No path segment, nav label, or content id equals an audience id; every page brief declares exactly one of the four focus jobs; no two briefs with the same focus job split `municipalities` and `institutions`. |
 | TS-WEB-0018-A10 | static | **No** content file references `local-advertising` while the offering is withheld (DEC-0052 §3). Formerly a budget of one sentence; the budget is now zero. Legacy row retained for the `withheld_mention` of one sentence ≤ 160 characters containing no link, price token, or CTA; `request-ad-placement` appears in no CTA registry or form target. |

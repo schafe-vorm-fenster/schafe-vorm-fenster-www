@@ -147,7 +147,7 @@ in slot 1. No operating counter, no year figure as a module, no place count
 
 **Village argument 2 (what the market offers):** As a village or a municipality you do not want to shop for an app or build a complicated website nobody looks at. You need something finished, something people enjoy using, something you can start with.
 
-**Village argument 3 (what follows):** That is why the village calendar is free, and stays that way. That is why the licence for your own calendar costs €480 a year instead of a project budget.
+**Village argument 3 (what follows):** That is why the village calendar is free, and stays that way. That is why the licence for your own calendar costs {price:portalize-calendar} a year instead of a project budget.
 
 **Sentence with proof:** The founder was a volunteer mayor himself — he knows the office this service helps from the inside.
 

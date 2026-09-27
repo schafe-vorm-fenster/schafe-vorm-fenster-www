@@ -284,6 +284,8 @@ die Kontakt-Section erreichbar, und jede Stufe trägt genau einen CTA
 
 **Titel:** Ein Kalender für den Landkreis
 
+<!-- note: ab hier Autorennotiz, keine Copy — der Absatz nennt die interne 4.000-€-Marke, um sie zu verbieten (DEC-0142 §1, DEC-0145) -->
+
 Offering-ID: `portalize-enterprise`, `price_status: on-request` — nie
 eine Zahl, nie „ab", nie eine Größenordnung und ohne den
 Größen-Zusatz des Entwurfs (TS-WEB-0024 D8,

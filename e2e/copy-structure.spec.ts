@@ -38,12 +38,16 @@ const PRODUCT_NAME_ROUTE = "calendar";
  * dpa.md:54). Those five bodies are imported verbatim from the legal texts
  * (DEC-0012, DEC-0027) and are not page artifacts, which is why the same route
  * is the one exemption of the register row (TS-WEB-0029 D6a/A15,
- * `REGISTER_EXEMPT_ROUTES`). TS-WEB-0018-A7's wording — "`/dein-kalender` is
- * the only route whose body may contain one" — does not carry that exemption,
- * so **A7 is not met on the render** and this exemption does not make it met:
- * the contradiction is registered as CONF-0027 (with DEC-0136 §10 as its
- * decision record) for the spec owner, and the exemption keeps the other
- * twenty-two route/locale pairs under guard in the meantime.
+ * `REGISTER_EXEMPT_ROUTES`).
+ *
+ * Until 2026-09-27 this exemption was wider than the criterion, and the comment
+ * here said so: A7 read "`/dein-kalender` is the only route whose body may
+ * contain one", the render carried seven on `/rechtliches`, and CONF-0027 held
+ * the contradiction open. The owner resolved it as `NEW_VERSION` — the
+ * criterion took the exemption (DEC-0145 §1, TS-WEB-0018 D5/A7) — so the
+ * exemption below is now the rule rather than a way around it, and this walk
+ * measures A7 as written. **The chrome of `/rechtliches` is not exempt** and is
+ * asserted with every other route's, which is the half that never moved.
  */
 const PRODUCT_NAME_EXEMPT_ROUTES = ["legal"];
 
@@ -79,7 +83,7 @@ const ROUTES = everyRoute().map(({ route, locale }) => ({
 }));
 
 for (const { path, route, locale } of ROUTES) {
-  test(`copy structure: ${path} (${route}/${locale}) states its titles and keeps the product name out of the chrome`, async ({
+  test(`TS-WEB-0018-A7 / TS-WEB-0006-A8: ${path} (${route}/${locale}) states its titles and keeps the product name out of the chrome`, async ({
     page,
   }) => {
     await page.goto(path);

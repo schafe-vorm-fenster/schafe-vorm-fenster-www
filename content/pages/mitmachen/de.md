@@ -416,9 +416,9 @@ schwächt den Anspruch, wird aber nie durch erfundenen Text ersetzt.
 
 **Kandidaten (drei, alle veröffentlichen selbst):**
 
-1. Die Stiftung betreibt den Kalender für 17 Orte in und um Lehre unter eigenem Namen: LeLender. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen)
-2. Die Volkshochschulen veröffentlichen ihr Kursprogramm im Dorfkalender — in den Dörfern genauso relevant wie in der Stadt. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
-3. „Der Newsletter des Netzwerks sammelt seine Termine über den Dorfkalender." — Zukunftswege Ost-Vorpommern, Ost-Vorpommern
+1. Die Stiftung betreibt den Kalender für 17 Orte als LeLender. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen)
+2. Die Volkshochschulen veröffentlichen ihr Kursprogramm im Dorfkalender. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk; in den Dörfern genauso relevant wie in der Stadt
+3. „Der Newsletter des Netzwerks sammelt Termine über den Dorfkalender." — Zukunftswege Ost-Vorpommern, Ost-Vorpommern
 
 Drei reale Einrichtungen, die selbst veröffentlichen — das ist genau der
 Job dieser Seite. Namen, Orte und Zahlen stehen so in den Belegen: die 17

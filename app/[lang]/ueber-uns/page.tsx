@@ -13,6 +13,7 @@ import { QuoteCard } from "@/src/components/quote-card/quote-card";
 import { RouteLink } from "@/src/components/route-link/route-link";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
+import { resolvePriceTokens } from "@/src/lib/pricing/price-token";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
@@ -247,9 +248,16 @@ export default async function Page({
   const archiveLabel = ctaLabelOnly(fieldAt(archiveLink.blocks, 0)) ?? words.pages.archive;
 
   const headline = fieldAt(origin.blocks, ORIGIN.headline) ?? words.pages.about;
+  // The third argument names the licence price. It carries
+  // `{price:portalize-calendar}` rather than the figure, so the sentence and
+  // the price tier on `/dein-kalender` are formatted by one formatter from one
+  // package field (TS-WEB-0006-A12, DEC-0145, state/open.md row 287). Every
+  // argument runs through the resolver; one without a token comes back
+  // unchanged.
   const argument = ORIGIN.argument
     .map((index) => fieldAt(origin.blocks, index))
-    .filter((paragraph): paragraph is string => paragraph !== undefined);
+    .filter((paragraph): paragraph is string => paragraph !== undefined)
+    .map((paragraph) => resolvePriceTokens(paragraph, locale));
   const storyHeading = fieldAt(story.blocks, STORY.heading);
   const quote = fieldAt(story.blocks, STORY.quote);
   const sourceUrl = fieldAt(story.blocks, STORY.sourceUrl);

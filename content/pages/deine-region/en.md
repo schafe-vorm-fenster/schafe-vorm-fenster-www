@@ -235,7 +235,7 @@ and says what they do and do not prove.
 from the proof set — cards 2 and 3 in the wording of their records,
 card 1 authored:
 
-1. The foundation runs the village calendar as a brand of its own for 17 places, and volunteers are being brought on board. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony), 2026
+1. The foundation runs the village calendar as its own brand, 17 places. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony), 2026
 2. The undertaking is recognised by EU regional funding (LEADER) as worth funding for rural development. — LEADER / LAG Vorpommern-Greifswald, 2022
 3. "The dates list makes the routes of mobile traders transparent." — Elisabeth Kurzweg, Bäckerei Kurzweg
 

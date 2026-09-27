@@ -68,7 +68,7 @@ resolve, only an imprecise sentence" — and it is not in here.
 | [CONF-0024](CONF-0024--the-executor-mode-enum-two-contracts-disagree.md) | value_conflict | OPEN | Medium | UNKNOWN | The executor mode of a decision record: one contract knows four modes, the other two, and the policy in force uses one the narrower does not have |
 | [CONF-0025](CONF-0025--the-registration-embed-against-a-banner-free-site.md) | direct_contradiction | RESOLVED | High | DEC-0108 | The registration embed against a banner-free site: a third-party iframe on one route, and a requirement that the site needs no consent UI anywhere |
 | [CONF-0026](CONF-0026--the-explain-module-is-a-job-introduction-on.md) | direct_contradiction | RESOLVED | Medium | DEC-0110 | The explain module is a job introduction on `/`, and the composition rules say a job introduction is a scene block |
-| [CONF-0027](CONF-0027--the-product-name-may-stand-on-one-route-while.md) | direct_contradiction | OPEN | Medium | UNKNOWN | The product name may stand in the body of `/dein-kalender` only, while the imported legal texts name it as the contractual product on `/rechtliches` |
+| [CONF-0027](CONF-0027--the-product-name-may-stand-on-one-route-while.md) | direct_contradiction | RESOLVED | Medium | UNKNOWN | The product name may stand in the body of `/dein-kalender` only, while the imported legal texts name it as the contractual product on `/rechtliches` |
 
 ## How to read a record
 

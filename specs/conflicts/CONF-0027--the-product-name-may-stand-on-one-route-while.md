@@ -2,14 +2,16 @@
 artefact: conflict
 id: CONF-0027
 type: direct_contradiction
-status: OPEN
+status: RESOLVED
 impact: Medium
 involved: ["TS-WEB-0018", "DEC-0012"]
 decision_point: DP-04
 recommended_action: NEW_VERSION
 permitted_outcomes: [REJECT_NEW, NEW_VERSION, ISOLATE]
 blocking_demands: []
-decision_record: DEC-0136
+decision_record: DEC-0145
+outcome: NEW_VERSION
+resolved: "2026-09-27"
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -65,3 +67,20 @@ TS-WEB-0018
 
 `certain` — measured on the running app over all 24 D1 route/locale pairs, and
 the seven occurrences are greppable in the three imported files.
+
+## Resolution — 2026-09-27, `NEW_VERSION` (DEC-0145 §1)
+
+The owner chose the new version of the **criterion**, not of the legal texts.
+`TS-WEB-0018` `D5` and `A7` now name `/rechtliches` as a body-only exemption,
+without a count, because the five imported bodies name the product as the
+contractual designation and a contract has to be able to do that. The route's
+**chrome** stays under `D5` like every other route, and every other route still
+carries no product name in its body.
+
+The rejected alternative was to strike the name from `privacy-policy.md`,
+`terms-of-use.md` and `dpa.md`: it would have kept the criterion literal and
+made the contract vaguer, and it is a legal edit rather than an engineering one.
+
+`e2e/copy-structure.spec.ts` keeps its route exemption — what changed is that
+the exemption is now the criterion's, so the test measures the rule instead of
+absorbing a contradiction, and its title carries `TS-WEB-0018-A7`.

@@ -413,9 +413,9 @@ weakens the claim, but is never replaced by invented text.
 
 **Candidates (three, all publishing for themselves):**
 
-1. The foundation runs the calendar for 17 places in and around Lehre under its own name: LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony)
-2. The adult education centres publish their course programme in the village calendar — just as relevant in the villages as in town. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
-3. "The network's newsletter collects its dates through the village calendar." — Zukunftswege Ost-Vorpommern, Ost-Vorpommern
+1. The foundation runs the calendar for 17 places as LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony)
+2. The adult education centres publish their courses in the calendar. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk; just as relevant in the villages as in town
+3. "The network's newsletter collects dates through the village calendar." — Zukunftswege Ost-Vorpommern, Ost-Vorpommern
 
 Three real organizations publishing for themselves, which is exactly this
 page's job. Names, places, and figures are taken from the records as they

@@ -25,13 +25,22 @@
 import type { PriceDisplay, PriceFigure } from "@/src/components/price-tag/price-tag";
 import type { Locale } from "@/src/lib/i18n/locales";
 
-export type OfferingId =
-  | "community-calendar"
-  | "portalize-calendar"
-  | "portalize-enterprise"
-  | "custom-data-integration"
-  | "local-advertising"
-  | "portalize-website-widget";
+/**
+ * The six offerings of `@schafe-vorm-fenster/offerings`, as a value rather
+ * than only as a type, so a runtime check — `{price:…}` naming an id that does
+ * not exist (`price-token.ts`) — reads the same list the type is derived from.
+ * Same shape as `PRICE_DISPLAYS` beside it.
+ */
+export const OFFERING_IDS = [
+  "community-calendar",
+  "portalize-calendar",
+  "portalize-enterprise",
+  "custom-data-integration",
+  "local-advertising",
+  "portalize-website-widget",
+] as const;
+
+export type OfferingId = (typeof OFFERING_IDS)[number];
 
 export interface OfferingPrice {
   readonly display: PriceDisplay;

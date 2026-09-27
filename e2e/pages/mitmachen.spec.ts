@@ -469,9 +469,13 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     await expect(block.getByText("Volkshochschulen in Vorpommern-Greifswald")).toBeVisible();
     await expect(block.getByText("Volkshochschule Uecker-Randow")).toHaveCount(0);
     // The benefit, not just the name: courses are as relevant in the villages
-    // as in town (review line 109). The clause was shortened towards CG-027's
-    // claim budget in T-18's fix round (state/open.md row 282), which is why the
-    // regex reads "in der Stadt" rather than "in den Städten".
+    // as in town (review line 109). It now stands in the card's **context
+    // line**, after the attribution and separated by a semicolon rather than a
+    // second ` — `: CG-027 budgets the claim at 70 characters and the claim is
+    // the part before the *last* ` — `, so a benefit inside the claim cost the
+    // card its budget while a benefit beside the attribution does not
+    // (DEC-0145 §4, state/open.md row 286). The regex is unchanged, which is
+    // the point — the sentence a visitor reads did not move.
     await expect(block.getByText(/in den Dörfern genauso relevant wie in der Stadt/)).toBeVisible();
   });
 

@@ -235,7 +235,7 @@ Gesamtbestand und sagt dazu, was sie belegen und was nicht.
 dem Proof-Bestand — Karte 2 und Karte 3 im Wortlaut ihrer Datensätze,
 Karte 1 formuliert:
 
-1. Die Stiftung betreibt den Dorfkalender als eigene Marke für 17 Orte, und Ehrenamtliche werden erfolgreich an Bord geholt. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen), 2026
+1. Die Stiftung betreibt den Dorfkalender als eigene Marke für 17 Orte. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen), 2026
 2. Das Vorhaben ist von der EU-Regionalförderung (LEADER) als förderwürdig für die ländliche Entwicklung anerkannt. — LEADER / LAG Vorpommern-Greifswald, 2022
 3. „Die Terminliste macht die Fahrtrouten mobiler Anbieter transparent." — Elisabeth Kurzweg, Bäckerei Kurzweg
 

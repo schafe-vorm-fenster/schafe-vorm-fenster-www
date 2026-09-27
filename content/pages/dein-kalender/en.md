@@ -276,6 +276,8 @@ DEC-0082 §4).
 
 **Title:** A calendar for the county
 
+<!-- note: author note from here, not copy — the paragraph names the internal €4,000 figure in order to forbid it (DEC-0142 §1, DEC-0145) -->
+
 Offering id: `portalize-enterprise`, `price_status: on-request` — never
 a number, never "from", never an order of magnitude, and without the
 draft's size qualifier (TS-WEB-0024 D8,

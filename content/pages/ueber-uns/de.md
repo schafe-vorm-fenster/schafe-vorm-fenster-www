@@ -145,7 +145,7 @@ Ortszahl (TS-WEB-0027 D4, DEC-0084 §3).
 
 **Dorfargument 2 (was der Markt anbietet):** Als Ort oder Gemeinde will man sich nicht damit beschäftigen, eine App anzuschaffen oder eine komplizierte Webseite zu bauen, die dann keiner anguckt. Man braucht etwas Fertiges, das die Nachbarn gerne benutzen und mit dem man einfach starten kann.
 
-**Dorfargument 3 (was daraus folgt):** Deshalb ist der Dorfkalender kostenlos, und das bleibt so. Deshalb kostet die Lizenz für den eigenen Kalender 480 € im Jahr statt eines Projektbudgets.
+**Dorfargument 3 (was daraus folgt):** Deshalb ist der Dorfkalender kostenlos, und das bleibt so. Deshalb kostet die Lizenz für den eigenen Kalender {price:portalize-calendar} im Jahr statt eines Projektbudgets.
 
 **Satz mit Beleg:** Der Gründer war selbst ehrenamtlicher Bürgermeister — das Amt, dem der Dienst hilft, kennt er von innen.
 
