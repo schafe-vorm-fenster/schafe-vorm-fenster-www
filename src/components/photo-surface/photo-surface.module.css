@@ -72,10 +72,11 @@
   position: relative;
   /*
    * The soft text shadow is part of the treatment, not an extra: every piece
-   * of type on a photo surface carries it — display, lead, button label,
-   * search placeholder (SRC-0014 §The scrim). `text-shadow` inherits, so one
-   * declaration on the surface reaches all of them; type on a flat ground
-   * carries none, which is why it is declared here and nowhere else.
+   * of type on a photo surface with no fill of its own carries it — display,
+   * lead, the `quiet` button's label, search placeholder (SRC-0014 §The
+   * scrim). `text-shadow` inherits, so one declaration on the surface
+   * reaches all of them; type on a flat ground carries none, which is why it
+   * is declared here and nowhere else.
    */
   text-shadow: var(--shadow-text-on-photo);
   width: 100%;
@@ -83,10 +84,13 @@
 
 /*
  * Form controls do not inherit `text-shadow` — the user-agent sheet resets it
- * to `none` on `button`, `input`, `select` and `textarea` — so the button
- * label and the search placeholder the design system names are given the
- * surface's shadow back explicitly. `:where()` keeps the specificity at zero:
- * a control that declares its own shadow would win, and none does.
+ * to `none` on `button`, `input`, `select` and `textarea` — so the surface's
+ * shadow is given back explicitly. `:where()` keeps the specificity at zero:
+ * a control that declares its own shadow wins over it, which is exactly what
+ * `button.module.css`'s four filled variants do (DEC-0147) — their own
+ * opaque fill already gives the label its contrast, and the shadow would
+ * only blur it. Only `quiet` (no fill) and the placeholder rule below still
+ * read this.
  */
 .surface :where(button, input, select, textarea),
 .surface :where(input, textarea)::placeholder {

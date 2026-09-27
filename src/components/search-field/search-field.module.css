@@ -76,6 +76,10 @@
   gap: var(--space-2);
   min-height: var(--height-control);
   padding: 0 var(--space-4);
+  /* DEC-0147: an opaque fill already gives the label its contrast on a
+     photo surface — the shadow `photo-surface.module.css` hands down to
+     every `button` would only blur it. */
+  text-shadow: none;
 }
 
 .submit:hover {

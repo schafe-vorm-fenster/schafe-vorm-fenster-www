@@ -182,3 +182,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0144 — The instrument names the criterion, and a site-wide sentence is walked site-wide — the meters cite whole identifiers, three sweeps leave the home page, and two divergences are declared instead of assumed](DEC-0144--the-instrument-names-the-criterion.md)
 - [DEC-0145 — The four open points the owner answered — the legal route may name the product, a price is read, three authored proof lines are cleared, and the budget applies to what we wrote](DEC-0145--the-four-open-points-the-owner-answered.md)
 - [DEC-0146 — "The app" is community-site; community-calendar is being abandoned](DEC-0146--the-app-is-community-site.md)
+- [DEC-0147 — A control with its own opaque fill does not carry the photo-surface text shadow](DEC-0147--a-filled-control-does-not-carry-the-photo-shadow.md)
