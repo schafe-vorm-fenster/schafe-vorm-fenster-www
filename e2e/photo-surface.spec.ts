@@ -97,6 +97,18 @@ test.describe("SRC-0014 §The scrim, DEC-0147: the shadow is for type with no fi
     await expect(control).toBeAttached();
     expect(await shadowOf(control), "a filled button label on the photograph").toBe("none");
 
+    // The search input's own `background` is transparent, but it sits inside
+    // `.field`'s opaque paper pill — the same fill, one ancestor up. DEC-0147
+    // amended: the test is the rendered ground, not the element's own
+    // `background` declaration.
+    const input = hero(page).locator("input").first();
+    await expect(input).toBeAttached();
+    expect(await shadowOf(input), "typed text in the opaque search field").toBe("none");
+    const placeholderShadow = await input.evaluate(
+      (node) => getComputedStyle(node, "::placeholder").textShadow,
+    );
+    expect(placeholderShadow, "the placeholder in the same opaque field").toBe("none");
+
     // The geolocation control beside the search has no fill of its own — it
     // still needs the shadow the filled submit button opted out of.
     const unfilled = hero(page).getByRole("button", { name: /Standort/ });
