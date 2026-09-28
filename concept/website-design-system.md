@@ -738,7 +738,7 @@ background-image:
 
 - **The soft text shadow is part of the treatment**, not an extra. Every
   piece of type on a photo surface with **no fill of its own** — display,
-  lead, the `quiet` button's label, search placeholder — carries:
+  lead, the `quiet` button's label — carries:
 
 ```css
 text-shadow: 0 1px 2px var(--color-scrim-45), 0 2px 10px var(--color-scrim-30);
@@ -751,8 +751,11 @@ text-shadow: 0 1px 2px var(--color-scrim-45), 0 2px 10px var(--color-scrim-30);
   meant to be invisible until you cover it up. It exists **only** on a photo
   surface, and only on type with no fill of its own there — a filled button
   (`primary-light`, `primary-dark`, `pulse`, `secondary`) carries none,
-  because its own opaque background already gives the label its contrast
-  (DEC-0147). Type on any flat ground carries no shadow at all. PR **#464** gave
+  because its own opaque background already gives the label its contrast,
+  and neither does the search field's input text or placeholder: `.input`'s
+  own background is transparent, but it sits inside `.field`'s opaque paper
+  pill, which is the fill the design system means (DEC-0147). Type on any
+  flat ground carries no shadow at all. PR **#464** gave
   the whole declaration a name of its own, `shadow.textOnPhoto`, and **2.8.1**
   ships it, so the component may read one token instead of composing two scrim
   steps. Read in the production stylesheet on 2026-09-25:
