@@ -74,8 +74,8 @@ test.describe("DEC-0105 §1/§2: the scrim ladder and the focal crop, as compose
   });
 });
 
-test.describe("SRC-0014 §The scrim: the soft text shadow exists only on a photo surface", () => {
-  test("headline and CTA on the hero carry it; type on a flat ground carries none", async ({
+test.describe("SRC-0014 §The scrim, DEC-0147: the shadow is for type with no fill of its own", () => {
+  test("the headline carries it; a filled control and a flat ground carry none", async ({
     page,
   }) => {
     await page.setViewportSize(PHONE);
@@ -89,11 +89,31 @@ test.describe("SRC-0014 §The scrim: the soft text shadow exists only on a photo
     expect(headline, "display type on the photograph").not.toBe("none");
     expect(headline).toContain("px");
 
-    // The search's submit is a `button` — the form control the user-agent
-    // sheet resets — and the design system names the button label explicitly.
+    // The search's submit is a `button` with its own opaque ink fill — the
+    // user-agent sheet resets `text-shadow` on it, and DEC-0147 does not give
+    // it back: the fill already gives the label its contrast (schafe-vorm-
+    // fenster-www#8).
     const control = hero(page).locator("[data-cta]").first();
     await expect(control).toBeAttached();
-    expect(await shadowOf(control), "a button label on the photograph").not.toBe("none");
+    expect(await shadowOf(control), "a filled button label on the photograph").toBe("none");
+
+    // The search input's own `background` is transparent, but it sits inside
+    // `.field`'s opaque paper pill — the same fill, one ancestor up. DEC-0147
+    // amended: the test is the rendered ground, not the element's own
+    // `background` declaration.
+    const input = hero(page).locator("input").first();
+    await expect(input).toBeAttached();
+    expect(await shadowOf(input), "typed text in the opaque search field").toBe("none");
+    const placeholderShadow = await input.evaluate(
+      (node) => getComputedStyle(node, "::placeholder").textShadow,
+    );
+    expect(placeholderShadow, "the placeholder in the same opaque field").toBe("none");
+
+    // The geolocation control beside the search has no fill of its own — it
+    // still needs the shadow the filled submit button opted out of.
+    const unfilled = hero(page).getByRole("button", { name: /Standort/ });
+    await expect(unfilled).toBeAttached();
+    expect(await shadowOf(unfilled), "unfilled type on the photograph").not.toBe("none");
 
     // The first heading after the hero stands on a flat section ground.
     const flat = page.locator("#main h2").first();
