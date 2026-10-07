@@ -16,7 +16,7 @@ import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { ctaLabelOnly } from "@/src/lib/content/text";
 import { fillTemplate, parseDemoProofElement, splitSteps } from "@/src/lib/pages/demo-content";
-import { pickStoryExamples } from "@/src/lib/pages/story-examples";
+import { selectStoryExamples } from "@/src/lib/pages/story-examples";
 import { STAGE_ZERO_ANCHOR, resolvePlaceOutcome } from "@/src/lib/pages/live-anchor";
 import { cacheLife, cacheTag } from "next/cache";
 import { redirect } from "next/navigation";
@@ -28,7 +28,7 @@ import { placeEvents, resolvePlace } from "@/src/lib/live/places";
 import { href } from "@/src/lib/routes/routes";
 
 
-import { NearbyIsland, PlaceDatesIsland, exampleRows } from "../_islands";
+import { NearbyIsland, PlaceDatesIsland, exampleRows, storyExamplePool, toListItems } from "../_islands";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { localeFrom, pageMetadataFor } from "../_locale";
@@ -37,9 +37,8 @@ import { PLACE_META } from "./page.meta";
 
 import type { QuoteFragment } from "@/src/components/content-fragments";
 import type { ContentSlot } from "@/src/lib/content/types";
-import type { EventListItem } from "@/src/components/event-list/event-list";
 import type { SectionSurface } from "@/src/components/section-shell/section-shell";
-import type { StoryCategoryPreference } from "@/src/lib/pages/story-examples";
+import type { StoryExampleSpec } from "@/src/lib/pages/story-examples";
 import type { DictionaryKeyOf } from "@/src/lib/i18n/dictionary";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
@@ -162,8 +161,12 @@ interface StorySection {
    * two date-led, alternating, is the rhythm the brief asks for.
    */
   readonly imageId?: string;
-  /** Which categories this story's live example prefers, best first. */
-  readonly categories?: StoryCategoryPreference;
+  /**
+   * What this story's live example must be: TS-WEB-0020 D3's events-api
+   * category, strictly (A14), plus the words that make a date of that
+   * category this story's date (DEC-0152).
+   */
+  readonly example?: StoryExampleSpec;
   /**
    * The "benefit" kicker naming what this specific story is about (DEC-0148)
    * — no longer one shared phrase across all three.
@@ -185,10 +188,14 @@ const STORIES: readonly StorySection[] = [
     quoteSlotId: "dein-ort-4-story-ratssitzung-demo-testimonial",
     id: "story-ratssitzung",
     surface: "lime-100",
-    // "Gemeindeleben" first: the council meeting's own category upstream,
-    // then the institutional tone. A supply date under a story about being
-    // heard before the vote would be an example of nothing.
-    categories: ["social", "official"],
+    // `community-life` is where the council meeting lives upstream, and only
+    // there (D3, A14) — a supply date under a story about being heard before
+    // the vote would be an example of nothing. Within it, a sitting beats the
+    // women's sport that stood here in round 4 (F-4-2).
+    example: {
+      category: "community-life",
+      topic: /gemeindevertret|stadtvertret|gemeinderat|sitzung|ausschuss|einwohnerversammlung|bürgermeister|buergermeister|amt\b/i,
+    },
     kickerKey: "communityLife",
   },
   {
@@ -364,30 +371,30 @@ export default async function PlacePage({
    * `story-examples.ts` for why an example must not be a row the reader has
    * just scrolled past.
    */
-  const rows = await exampleRows(
-    STAGE_ZERO_ANCHOR.slug,
-    STAGE_ZERO_ANCHOR.lat,
-    STAGE_ZERO_ANCHOR.lng,
-    locale,
-  );
+  const rows = await exampleRows(anchor.slug, anchor.lat, anchor.lng, locale);
   /**
-   * The pool, in order of preference: what position 1 did not print, then
-   * what story 4 will not print, then — only if the window is thin — the
-   * rows those two modules do show, deduplicated. A page whose place has
-   * three dates in its window still gets an example; it just cannot get an
-   * unseen one.
+   * DEC-0152: the stories choose from the searched place's surroundings — the
+   * showcase village only where no place was searched — strictly by D3's
+   * category, then by topic, text, image, distance and date. A row position 1
+   * or story 4 already prints is never chosen again: a story that repeats a
+   * row the reader has just scrolled past is not an example (polish brief,
+   * page 2).
    */
-  const pool: EventListItem[] = [];
-  for (const row of [...rows.place.slice(3), ...rows.nearby.slice(5), ...rows.nearby, ...rows.place]) {
-    if (!pool.some((seen) => seen.id === row.id)) pool.push(row);
-  }
+  const examplePool = await storyExamplePool(anchor.slug);
+  const shown = new Set([...rows.place.slice(0, 3), ...rows.nearby.slice(0, 5)].flatMap((row) => row.id ?? []));
   /** Only the stories that show a row ask for one — a picture-led story must not eat one. */
-  const rowStories = STORIES.filter((story) => story.categories !== undefined);
-  const picked = pickStoryExamples(
-    pool,
-    rowStories.map((story) => story.categories ?? []),
+  const rowStories = STORIES.flatMap((story) => (story.example === undefined ? [] : [{ story, spec: story.example }]));
+  const picked = selectStoryExamples(
+    examplePool.events,
+    rowStories.map(({ spec }) => spec),
+    shown,
   );
-  const storyExamples = new Map(rowStories.map((story, index) => [story.id, picked[index]]));
+  const storyExamples = new Map(
+    rowStories.map(({ story }, index) => {
+      const event = picked[index];
+      return [story.id, event === undefined ? undefined : toListItems([event], locale)[0]] as const;
+    }),
+  );
 
   /**
    * TS-WEB-0008 D4's conversion moment, as block 1's own module slot (F-2-61).
@@ -610,7 +617,7 @@ export default async function PlacePage({
                     <EventRow
                       {...example}
                       locale={locale}
-                      state={rows.demo ? "mocked" : "ready"}
+                      state={examplePool.demo ? "mocked" : "ready"}
                     />
                   )
                 }

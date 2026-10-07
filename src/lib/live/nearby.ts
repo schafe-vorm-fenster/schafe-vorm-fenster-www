@@ -12,6 +12,7 @@ import { searchByPoint } from "@/src/clients/geo-api/client";
 import { searchEvents } from "@/src/clients/events-api/client";
 
 import { toLiveEvents, toPlace } from "./adapters";
+import { withDistance } from "./distance";
 import { cacheTags } from "./cache-profiles";
 import { eventsConfig, geoConfig, hasRealBackend } from "./config";
 import { mockEventsForPlaces } from "./mocks/events";
@@ -19,9 +20,9 @@ import { mockSearchByPoint } from "./mocks/geo";
 import { publicNearbyEvents } from "./public-source";
 import { resilient, type ResilientOptions } from "./resilient";
 import { nearbyFallback } from "./snapshots";
-import { byStart, EVENT_WINDOWS, NEARBY_RADIUS_KM, selectNearby } from "./widening";
+import { byStart, EVENT_WINDOWS, haversineKm, NEARBY_RADIUS_KM, selectNearby } from "./widening";
 
-import type { LiveEnvelope, NearbyEvents, Place } from "./types";
+import type { LiveEnvelope, LiveEvent, NearbyEvents, Place } from "./types";
 
 /** geo-api's own default for a proximity search; we ask for it explicitly so the cap is visible. */
 export const GEO_MAX_RESULTS = 10;
@@ -65,7 +66,10 @@ export async function nearbyEvents({
       const places = mockSearchByPoint(anchor, GEO_MAX_RESULTS);
       const selection = selectNearby(anchor, places, { radiusKm, maxResults: GEO_MAX_RESULTS });
       return {
-        events: selection.places.length === 0 ? [] : mockEventsForPlaces(selection.places, rowCount, clock()),
+        events:
+          selection.places.length === 0
+            ? []
+            : mockNearbyRows(selection.places, anchor, rowCount, clock()),
         radiusKm,
         truncated: selection.truncated,
       };
@@ -86,7 +90,11 @@ export async function nearbyEvents({
       limit: rowCount,
     });
 
-    return { events: byStart(toLiveEvents(events)).slice(0, rowCount), radiusKm, truncated };
+    return {
+      events: withDistance(byStart(toLiveEvents(events)).slice(0, rowCount), anchor),
+      radiusKm,
+      truncated,
+    };
   };
 
   return resilient(fetcher, {
@@ -99,5 +107,31 @@ export async function nearbyEvents({
     store,
     now,
     demo: (!realGeo || !realEvents) && !viaPublic,
+  });
+}
+
+/**
+ * The demo ring, shaped like the real one: the anchor's own village is not
+ * "nearby" (the public path drops the seed community too), and every row
+ * carries its distance, measured from the demo place's own coordinate because
+ * demo ids are not in the committed index (TS-WEB-0020-A15).
+ */
+function mockNearbyRows(
+  places: readonly Place[],
+  anchor: { readonly lat: number; readonly lng: number },
+  rowCount: number,
+  now: Date,
+): LiveEvent[] {
+  const ring = places
+    .map((place) => ({ place, km: haversineKm(anchor, place) }))
+    .filter(({ km }) => km >= 0.5);
+  const distance = new Map(ring.map(({ place, km }) => [place.communityId, km]));
+  return mockEventsForPlaces(
+    ring.map(({ place }) => place),
+    rowCount,
+    now,
+  ).map((event) => {
+    const km = event.communityId === undefined ? undefined : distance.get(event.communityId);
+    return km === undefined ? event : { ...event, distanceKm: km };
   });
 }

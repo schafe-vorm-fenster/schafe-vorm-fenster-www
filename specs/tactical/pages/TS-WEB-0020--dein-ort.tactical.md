@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0011]
 sources: [SRC-0001, SRC-0002, SRC-0003]
-decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083]
+decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -111,9 +111,9 @@ not a proof element that can lose a ranking.
 | # | Aspect (SRC-0003) | Live example asks for | Example category (events-api id) | Cleared backing | Testimonial candidate |
 | --- | --- | --- | --- | --- | --- |
 | 1 | the bakery van with its route | a recurring supply date in the place | `everyday-supply` | `google-baecker-schlatkow`, `homeoffice-mobile-anbieter` | `kurzweg-baeckerei` |
-| 2 | the council meeting, listed before it happens | an official/municipal date | `community-life` | `impftermine-landkreis` | `zschiesche-gross-kiesow` |
+| 2 | the council meeting, listed before it happens | an official/municipal date | `community-life` | `impftermine-landkreis` | `wendt-rubkow` (DEC-0152, was `zschiesche-gross-kiesow`) |
 | 3 | culture nobody would have searched for | a culture date | `culture-tourism` | **none** | `kulturlandbuero-broellin` / `eichler-wasserschloss-quilow` |
-| 4 | the fifteen-minute radius | position 2 rows, with their place names and each row's distance from the anchor | n/a — not a single-category story | `regional-footprint` | `wendt-rubkow` |
+| 4 | the fifteen-minute radius | position 2 rows, with their place names and each row's distance from the anchor | n/a — not a single-category story | `regional-footprint` | `zschiesche-gross-kiesow` (DEC-0152, was `wendt-rubkow`) |
 
 The category column is new (2026-10-07, editorial round 4, F-4-2): D3 always
 named what kind of date each story's example asks for in prose, but nothing
@@ -131,7 +131,10 @@ name → county → at stage 0 the build-time snapshot example, visibly labelled
 such (TS-WEB-0009 D4 tier 3) → nothing: the story renders as aspect + why it matters
 and the publish invitation takes the example box. Never invented, never from an
 uncovered place (FUN-WEB-0024), and never from a category foreign to the story's
-own aspect (the column above; A14).
+own aspect (the column above; A14). Since DEC-0152 the example is chosen
+strictly by that category from the searched place's surroundings, ranked by
+topic, text, image, distance and date; a story with no date of its category
+shows no example.
 
 **Testimonial — deviation from this determination, recorded (DEC-0104, DEC-0149).**
 This row originally read: removed by the clearance filter → the story renders

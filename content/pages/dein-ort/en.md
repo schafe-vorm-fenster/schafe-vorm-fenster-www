@@ -221,7 +221,7 @@ county's vaccination offers and test-centre opening hours ran
 day-current and place-accurate through the village calendars
 (`impftermine-landkreis`, `cleared`).
 
-**Testimonial:** Dr. A. Zschiesche, mayor of Groß Kiesow — wording on the proof card below.
+**Testimonial:** Holger Wendt, mayor of Rubkow — wording on the proof card below.
 
 <!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
@@ -229,9 +229,9 @@ day-current and place-accurate through the village calendars
 
 <!-- clearance: pending — `zschiesche-gross-kiesow` is `usage_rights: unverified` (Q-0014), same origin as the other four testimonials from the old website. -->
 <!-- source_note: the package stores the quote in ASCII transliteration ("Fuer dieses Projekt", "Landbevoelkerung", "Haendler"); set here with umlauts, wording unchanged. The quote is not translated. -->
-<!-- id: dein-ort-4-story-ratssitzung-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; status: draft -->
+<!-- id: dein-ort-4-story-ratssitzung-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; status: draft -->
 
-**Testimonial:** „Für dieses Projekt sehe ich unsere Landbevölkerung, aber auch mobile Händler als Gewinner." — Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow (2022)
+**Testimonial:** „Die selbstverwaltete und automatisierte Bereitstellung der Termindaten reduziert den Arbeitsaufwand unserer Gemeinde." — Holger Wendt, Bürgermeister in Rubkow (2022)
 
 ## Slot 5 — Value story 3: culture nobody would have searched for
 
@@ -284,7 +284,7 @@ time in Vorpommern-Greifswald to the county-level interface in
 Baden-Württemberg (`regional-footprint`, `cleared`, a qualitative
 statement, no reach figure).
 
-**Testimonial:** Holger Wendt, mayor of Rubkow — wording on the proof card below.
+**Testimonial:** Dr. A. Zschiesche, mayor of Groß Kiesow — wording on the proof card below.
 
 <!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
@@ -292,9 +292,9 @@ statement, no reach figure).
 
 <!-- clearance: pending — `wendt-rubkow` is `usage_rights: unverified` (Q-0014). -->
 <!-- source_note: wording unchanged from the record's evidence block. The quote is not translated. -->
-<!-- id: dein-ort-6-story-radius-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; status: draft -->
+<!-- id: dein-ort-6-story-radius-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; status: draft -->
 
-**Testimonial:** „Die selbstverwaltete und automatisierte Bereitstellung der Termindaten reduziert den Arbeitsaufwand unserer Gemeinde." — Holger Wendt, Bürgermeister in Rubkow (2022)
+**Testimonial:** „Für dieses Projekt sehe ich unsere Landbevölkerung, aber auch mobile Händler als Gewinner." — Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow (2022)
 
 ## Slot 7 — Home screen block
 

@@ -61,6 +61,10 @@ export const EventSchema = z
     "county.name": z.string().optional(),
     "organizer.id": z.string().optional(),
     "organizer.name": z.string().optional(),
+    /** The German text and the image — what makes an example worth opening (DEC-0152). */
+    "description.de": z.string().optional(),
+    image: z.string().optional(),
+    "image.exists": z.boolean().optional(),
   })
   .loose();
 

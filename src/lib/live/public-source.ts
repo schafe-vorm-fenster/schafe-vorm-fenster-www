@@ -33,6 +33,7 @@
 import { fetchCommunityPage } from "@/src/clients/community-site/client";
 
 import { toLiveEventsFromSite } from "./adapters";
+import { withDistance } from "./distance";
 import { communitySiteConfig } from "./config";
 import {
   communityRouteSlugFor,
@@ -115,11 +116,14 @@ export async function publicNearbyEvents(
   const { events } = await fetchCommunityPage(communitySiteConfig(), communityRouteSlugFor(seed));
   const ids = new Set(ring.map((place) => place.communityId));
 
-  const rows = toLiveEventsFromSite(
-    events.filter((event) => {
-      const id = event.community?._id;
-      return id === undefined ? false : ids.has(id);
-    }),
+  const rows = withDistance(
+    toLiveEventsFromSite(
+      events.filter((event) => {
+        const id = event.community?._id;
+        return id === undefined ? false : ids.has(id);
+      }),
+    ),
+    anchor,
   );
 
   return {

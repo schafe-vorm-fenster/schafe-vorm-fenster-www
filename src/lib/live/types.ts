@@ -57,6 +57,17 @@ export interface LiveEvent {
   readonly startsAt: string;
   readonly placeName?: string;
   readonly categoryId?: string;
+  /** `geoname.<id>` of the community the date happens in — what a distance is measured to. */
+  readonly communityId?: string;
+  /** The date's own text, trimmed; absent when the upstream carries none. */
+  readonly description?: string;
+  readonly tags?: readonly string[];
+  /** An image URL, where the upstream has one (the token path only). */
+  readonly imageUrl?: string;
+  /** `community` · `municipality` · `nearby` · `region` — how far the upstream widened to find it. */
+  readonly scope?: string;
+  /** Straight-line kilometres from the anchor place, where an anchor was given. */
+  readonly distanceKm?: number;
 }
 
 /** Position 1 and 1′ — the dates of one place, plus the empty-state verdict. */

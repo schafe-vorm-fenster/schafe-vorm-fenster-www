@@ -9,6 +9,8 @@ import type {
   CommunitySiteCommunity,
   CommunitySiteEvent,
 } from "@/src/clients/community-site/client";
+import { fitEvents } from "./quality";
+
 import type { LiveEvent, Place } from "./types";
 
 /** events-api carries `start` as a number; seconds and milliseconds both occur. */
@@ -54,14 +56,28 @@ export function toLiveEvent(event: UpstreamEvent): LiveEvent | undefined {
     startsAt,
     placeName: event["community.name"] ?? event["location.localname"] ?? event["location.name"],
     categoryId: event.categories[0],
+    ...optional({
+      communityId: event["community.id"],
+      description: event["description.de"]?.trim() || undefined,
+      tags: event.tags.length > 0 ? event.tags : undefined,
+      imageUrl: event["image.exists"] === false ? undefined : event.image || undefined,
+      scope: event.scope,
+    }),
   };
 }
 
 export function toLiveEvents(events: readonly UpstreamEvent[]): LiveEvent[] {
-  return events.flatMap((event) => {
-    const mapped = toLiveEvent(event);
-    return mapped ? [mapped] : [];
-  });
+  return fitEvents(
+    events.flatMap((event) => {
+      const mapped = toLiveEvent(event);
+      return mapped ? [mapped] : [];
+    }),
+  );
+}
+
+/** Only the keys that carry a value — `exactOptionalPropertyTypes` will not take `undefined`. */
+function optional<T extends Record<string, unknown>>(fields: T): Partial<T> {
+  return Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== undefined)) as Partial<T>;
 }
 
 /* ------------------------------------------------------------------ */
@@ -84,14 +100,22 @@ export function toLiveEventFromSite(event: CommunitySiteEvent): LiveEvent | unde
     startsAt: startsAt.toISOString(),
     placeName: event.community?.name ?? event.placeName ?? event.location,
     categoryId: event.categories[0],
+    ...optional({
+      communityId: event.community?._id,
+      description: event.description?.trim() || undefined,
+      tags: event.tags.length > 0 ? event.tags : undefined,
+      scope: event.scope,
+    }),
   };
 }
 
 export function toLiveEventsFromSite(events: readonly CommunitySiteEvent[]): LiveEvent[] {
-  return events.flatMap((event) => {
-    const mapped = toLiveEventFromSite(event);
-    return mapped ? [mapped] : [];
-  });
+  return fitEvents(
+    events.flatMap((event) => {
+      const mapped = toLiveEventFromSite(event);
+      return mapped ? [mapped] : [];
+    }),
+  );
 }
 
 /**

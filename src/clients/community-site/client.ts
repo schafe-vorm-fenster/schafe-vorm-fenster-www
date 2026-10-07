@@ -79,6 +79,9 @@ export const CommunitySiteEventSchema = z
     scope: z.string().optional(),
     placeName: z.string().optional(),
     location: z.string().optional(),
+    /** The date's own text — the site carries it; images it does not (DEC-0152). */
+    description: z.string().optional(),
+    tags: z.array(z.string()).default([]),
     community: z
       .object({ _id: z.string().optional(), name: z.string().optional() })
       .loose()
