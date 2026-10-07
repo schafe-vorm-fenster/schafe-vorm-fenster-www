@@ -79,8 +79,13 @@ export const CommunitySiteEventSchema = z
     scope: z.string().optional(),
     placeName: z.string().optional(),
     location: z.string().optional(),
-    /** The date's own text — the site carries it; images it does not (DEC-0152). */
+    /** The date's own text (DEC-0152). */
     description: z.string().optional(),
+    /**
+     * A public assets-api URL (`https://assets.api.schafe-vorm-fenster.de/api/image?…`,
+     * WebP, no token) — present only where the date has an image (DEC-0152).
+     */
+    imageUrl: z.string().optional(),
     tags: z.array(z.string()).default([]),
     community: z
       .object({ _id: z.string().optional(), name: z.string().optional() })
