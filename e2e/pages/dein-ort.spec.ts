@@ -227,15 +227,53 @@ test.describe("TS-WEB-0020 — your place", () => {
     () => {},
   );
 
-  test.fixme(
-    "TS-WEB-0020-A14: each story's example carries D3's category id for that story [round 4, F-4-2; open-list, state/open.md row 290 adjacent — the category column is written, the render is not yet made to match it]",
-    () => {},
-  );
+  /**
+   * D3's "Example category" column, read off the row: a story's example
+   * carries the tone of exactly that events-api id. Only the date-led stories
+   * render an example (the picture-led ones are photo + quote by design,
+   * A10), and a story with no date of its category shows no example rather
+   * than a foreign one (DEC-0152) — so a story without a row passes, a row of
+   * another category fails.
+   */
+  for (const path of ["/dein-ort", `/dein-ort?ort=${PLACE_WITH_DATES}`]) {
+    test(`TS-WEB-0020-A14: each story's example carries D3's category for that story — ${path}`, async ({
+      page,
+    }) => {
+      await page.goto(path);
+      const STORY_TONE: Readonly<Record<string, string>> = {
+        // D3 row 2: `community-life` → the `social` tone ("Gemeindeleben").
+        "story-ratssitzung": "social",
+      };
+      for (const [id, tone] of Object.entries(STORY_TONE)) {
+        const rows = page.locator(`#${id} article:has(> time)`);
+        const count = await rows.count();
+        for (let index = 0; index < count; index++) {
+          await expect(rows.nth(index).locator("[data-tone]"), `${id} example ${index}`).toHaveAttribute(
+            "data-tone",
+            tone,
+          );
+        }
+      }
+    });
+  }
 
-  test.fixme(
-    "TS-WEB-0020-A15: every nearby row states its distance from the anchor and no two rows are identical [round 4, F-4-6/F-4-7; open-list — the distance figure is not yet surfaced, and F-4-6's duplicate rows are upstream (DEM-0070), not a render bug this test can wait out]",
-    () => {},
-  );
+  test("TS-WEB-0020-A15: every nearby row states its distance from the anchor and no two rows are identical", async ({
+    page,
+  }) => {
+    await page.goto(`/dein-ort?ort=${PLACE_WITH_DATES}`);
+    const rows = page.locator("#nearby article:has(> time)");
+    await expect(rows.first()).toBeAttached();
+    const texts = await rows.evaluateAll((articles) =>
+      articles.map((article) => ({
+        meta: article.querySelector('[class*="meta"]')?.textContent ?? "",
+        key: [article.querySelector("time")?.getAttribute("datetime"), article.querySelector("h3")?.textContent]
+          .join("|"),
+      })),
+    );
+    for (const { meta } of texts) expect(meta, "a nearby row names its distance").toMatch(/\b\d+ km\b/);
+    const keys = texts.map(({ key }) => key);
+    expect(new Set(keys).size, "no two nearby rows are the same date").toBe(keys.length);
+  });
 
   /**
    * **Changed by the polish pass** (brief, page 2, "the testimonials are not

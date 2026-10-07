@@ -136,13 +136,48 @@ export function demoPlaceBySlug(slug: string): Place | undefined {
   return DEMO_PLACES.find((place) => place.slug === slug);
 }
 
-const DEMO_TITLES: readonly { readonly title: string; readonly categoryId: string }[] = [
-  { title: "Feuerwehrfest am Gerätehaus", categoryId: "fest" },
-  { title: "Bäckerwagen am Dorfplatz", categoryId: "merchants" },
-  { title: "Line-Dance-Gruppe im Gemeindehaus", categoryId: "culture" },
-  { title: "Gemeindevertretersitzung, öffentlich", categoryId: "official" },
-  { title: "Seniorenkaffee im Vereinsheim", categoryId: "social" },
-  { title: "Blutspende im Dorfgemeinschaftshaus", categoryId: "neighbouring" },
+/**
+ * The demo dates carry **events-api** category ids, the same vocabulary the
+ * live sources deliver — until 2026-10-07 they carried the design system's
+ * tone names (`fest`, `merchants`, …), which `categoryTone()` does not know,
+ * so every demo row read "Sonstiges" and no story could find its category
+ * under `LIVE_DATA=mock` (DEC-0152).
+ */
+const DEMO_TITLES: readonly {
+  readonly title: string;
+  readonly categoryId: string;
+  readonly description: string;
+}[] = [
+  {
+    title: "Feuerwehrfest am Gerätehaus",
+    categoryId: "community-life",
+    description: "Demo: Die Freiwillige Feuerwehr lädt zum Fest am Gerätehaus ein, mit Fahrzeugschau, Grill und Kinderprogramm.",
+  },
+  {
+    title: "Bäckerwagen am Dorfplatz",
+    categoryId: "everyday-supply",
+    description: "Demo: Der Bäckerwagen hält jeden Dienstag am Dorfplatz, mit Brot, Brötchen und Kuchen aus der eigenen Backstube.",
+  },
+  {
+    title: "Line-Dance-Gruppe im Gemeindehaus",
+    categoryId: "culture-tourism",
+    description: "Demo: Die Line-Dance-Gruppe probt im Gemeindehaus, Gäste sind willkommen, Vorkenntnisse braucht es keine.",
+  },
+  {
+    title: "Gemeindevertretersitzung, öffentlich",
+    categoryId: "community-life",
+    description: "Demo: Öffentliche Sitzung der Gemeindevertretung, auf der Tagesordnung stehen der Haushalt und die Straßenbeleuchtung.",
+  },
+  {
+    title: "Seniorenkaffee im Vereinsheim",
+    categoryId: "community-life",
+    description: "Demo: Kaffee, Kuchen und Gespräche im Vereinsheim, für alle, die einen Nachmittag in Gesellschaft verbringen wollen.",
+  },
+  {
+    title: "Blutspende im Dorfgemeinschaftshaus",
+    categoryId: "education-health",
+    description: "Demo: Der Blutspendedienst kommt ins Dorfgemeinschaftshaus, bitte den Personalausweis mitbringen.",
+  },
 ];
 
 /**
@@ -163,6 +198,8 @@ export function demoEvents(place: Place, count: number, from: Date): LiveEvent[]
       startsAt: startsAt.toISOString(),
       placeName: place.name,
       categoryId: entry.categoryId,
+      communityId: place.communityId,
+      description: entry.description,
     };
   });
 }

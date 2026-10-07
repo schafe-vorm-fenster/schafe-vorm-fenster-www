@@ -21,6 +21,8 @@
 
 import type { EventListItem } from "@/src/components/event-list/event-list";
 import type { EventCategory } from "@/src/components/event-row/event-row";
+import { hasText } from "@/src/lib/live/quality";
+import type { LiveEvent } from "@/src/lib/live/types";
 
 /** What one story would like: its categories, best first. */
 export type StoryCategoryPreference = readonly EventCategory[];
@@ -49,5 +51,75 @@ export function pickStoryExamples(
     const any = pool.find((row) => !used.has(row));
     if (any) used.add(any);
     return any;
+  });
+}
+
+/* ------------------------------------------------------------------ */
+/* DEC-0152 — the strict selector the value stories use                 */
+/* ------------------------------------------------------------------ */
+
+/**
+ * What one story asks of its example: the events-api category it must carry
+ * (TS-WEB-0020 D3's "Example category" column) and, optionally, the words
+ * that make a date of that category *this* story's date — a council meeting
+ * is `community-life`, but so is the women's sport that stood under the
+ * council story in round 4.
+ */
+export interface StoryExampleSpec {
+  readonly category: string;
+  readonly topic?: RegExp;
+}
+
+/** Within this, a date reads as "in your surroundings"; beyond it, as the county. */
+const NEAR_KM = 15;
+
+function topicMatches(event: LiveEvent, topic: RegExp | undefined): boolean {
+  if (topic === undefined) return false;
+  return [event.title, event.description ?? "", ...(event.tags ?? [])].some((text) => topic.test(text));
+}
+
+/**
+ * The ranking, most important first. Category is not in it: it is a filter.
+ * A story with no date of its category gets no example — the story then shows
+ * its invitation in the example's place (TS-WEB-0020-A4) rather than a date
+ * from another story's world (A14).
+ */
+function rank(event: LiveEvent, spec: StoryExampleSpec): readonly number[] {
+  const distance = event.distanceKm ?? 0;
+  return [
+    topicMatches(event, spec.topic) ? 0 : 1,
+    hasText(event) ? 0 : 1,
+    event.imageUrl === undefined ? 1 : 0,
+    distance <= NEAR_KM ? 0 : 1,
+    distance,
+    Date.parse(event.startsAt),
+  ];
+}
+
+function compare(a: readonly number[], b: readonly number[]): number {
+  for (let index = 0; index < a.length; index++) {
+    const difference = (a[index] ?? 0) - (b[index] ?? 0);
+    if (difference !== 0) return difference;
+  }
+  return 0;
+}
+
+/**
+ * One example per spec, each a date no other spec and no `shown` id took.
+ * Deterministic for one pool, so a cached page and its test agree.
+ */
+export function selectStoryExamples(
+  pool: readonly LiveEvent[],
+  specs: readonly StoryExampleSpec[],
+  shown: ReadonlySet<string> = new Set(),
+): readonly (LiveEvent | undefined)[] {
+  const used = new Set(shown);
+  return specs.map((spec) => {
+    const best = pool
+      .filter((event) => !used.has(event.id) && event.categoryId === spec.category)
+      .map((event) => ({ event, key: rank(event, spec) }))
+      .sort((a, b) => compare(a.key, b.key))[0]?.event;
+    if (best !== undefined) used.add(best.id);
+    return best;
   });
 }

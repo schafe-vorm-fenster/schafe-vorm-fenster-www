@@ -1,53 +1,46 @@
 import { describe, expect, it } from "vitest";
 
-import { pickStoryExamples } from "./story-examples";
+import { selectStoryExamples } from "./story-examples";
 
-import type { EventListItem } from "@/src/components/event-list/event-list";
+import type { LiveEvent } from "@/src/lib/live/types";
 
-const row = (id: string, category: EventListItem["category"]): EventListItem => ({
-  id,
-  date: "2026-09-21T10:00:00.000Z",
-  title: id,
-  category,
-  categoryLabel: category,
-});
+const at = (day: number) => `2026-10-${String(day).padStart(2, "0")}T17:00:00.000Z`;
 
-describe("pickStoryExamples", () => {
-  it("gives each story the first row of the category it is about", () => {
-    const pool = [row("a", "social"), row("b", "merchants"), row("c", "culture")];
+const POOL: LiveEvent[] = [
+  { id: "sport", title: "Frauensport", startsAt: at(8), categoryId: "community-life", distanceKm: 0 },
+  { id: "supply", title: "Bäckerwagen", startsAt: at(8), categoryId: "everyday-supply", distanceKm: 0 },
+  {
+    id: "council-far",
+    title: "Sitzung der Gemeindevertretung",
+    startsAt: at(9),
+    categoryId: "community-life",
+    distanceKm: 40,
+    description: "Öffentliche Sitzung, Tagesordnung: Haushalt, Straßenbeleuchtung, Anfragen der Einwohner.",
+  },
+  {
+    id: "council-near",
+    title: "Gemeindevertretung Schmatzin",
+    startsAt: at(20),
+    categoryId: "community-life",
+    distanceKm: 4,
+    description: "Öffentliche Sitzung der Gemeindevertretung mit Einwohnerfragestunde zu Beginn der Sitzung.",
+  },
+];
 
-    expect(
-      pickStoryExamples(pool, [["merchants"], ["social"], ["culture"]]).map(
-        (item) => item?.id,
-      ),
-    ).toEqual(["b", "a", "c"]);
+const COUNCIL = { category: "community-life", topic: /gemeindevertret|sitzung/i };
+
+describe("DEC-0152 / TS-WEB-0020-A14: a story's example is of its category, and the best of it", () => {
+  it("never falls back to another category — no date of it, no example", () => {
+    expect(selectStoryExamples(POOL, [{ category: "culture-tourism" }])).toEqual([undefined]);
   });
 
-  it("never hands the same row to two stories", () => {
-    const pool = [row("a", "culture"), row("b", "culture")];
-
-    expect(
-      pickStoryExamples(pool, [["culture"], ["culture"]]).map((item) => item?.id),
-    ).toEqual(["a", "b"]);
+  it("prefers the topic, then the text, then the nearer date over the sooner one", () => {
+    expect(selectStoryExamples(POOL, [COUNCIL])[0]?.id).toBe("council-near");
   });
 
-  it("falls back to any unused row rather than leaving a story without an example", () => {
-    const pool = [row("a", "neighbouring")];
-
-    expect(
-      pickStoryExamples(pool, [["merchants"], ["culture"]]).map((item) => item?.id),
-    ).toEqual(["a", undefined]);
-  });
-
-  it("walks the preference order before falling back", () => {
-    const pool = [row("a", "neighbouring"), row("b", "official")];
-
-    expect(
-      pickStoryExamples(pool, [["culture", "official"]]).map((item) => item?.id),
-    ).toEqual(["b"]);
-  });
-
-  it("answers an empty pool with one undefined per story", () => {
-    expect(pickStoryExamples([], [["culture"], ["social"]])).toEqual([undefined, undefined]);
+  it("does not choose a row the page already shows, nor one another story took", () => {
+    const [first, second] = selectStoryExamples(POOL, [COUNCIL, COUNCIL], new Set(["council-near"]));
+    expect(first?.id).toBe("council-far");
+    expect(second?.id).toBe("sport");
   });
 });

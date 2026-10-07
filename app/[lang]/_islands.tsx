@@ -27,6 +27,8 @@
  * below builds it, so the shell and the island cannot drift apart.
  */
 
+import { exampleEvents } from "@/src/lib/live/examples";
+import { formatDistance } from "@/src/lib/live/distance";
 import { cacheLife, cacheTag } from "next/cache";
 
 import { Button } from "@/src/components/button/button";
@@ -105,7 +107,15 @@ export function toListItems(
       // **first**: the meta line is one line of 76 px and ellipsises at its
       // end, and with the clock in front a row from the next village over
       // read "13:…" on a phone — the one word the rule is about, cut.
-      meta: [event.placeName, clock].filter(Boolean).join(" · "),
+      // A row from another village also says how far away it is (TS-WEB-0020-A15):
+      // "Rubkow · 6 km · 19:00". A row from the place itself carries no figure.
+      meta: [
+        event.placeName,
+        event.distanceKm === undefined ? undefined : formatDistance(event.distanceKm),
+        clock,
+      ]
+        .filter(Boolean)
+        .join(" · "),
       category,
       categoryLabel: categoryLabel(event.categoryId, locale),
     };
@@ -507,4 +517,22 @@ export async function exampleRows(
     nearby: toListItems(near.data.events, locale),
     demo: (dates?.demo ?? false) || near.demo,
   };
+}
+
+/**
+ * The pool a value story picks its example from (DEC-0152): the searched
+ * place's surroundings for the coming weeks, each date with its distance.
+ * Cached like `exampleRows`, for the same reason — the example stands inside
+ * prose, where a skeleton would read as a broken paragraph.
+ */
+export async function storyExamplePool(slug: string): Promise<{
+  readonly events: readonly LiveEvent[];
+  readonly demo: boolean;
+}> {
+  "use cache";
+  cacheLife(cacheLifeProfile("dates"));
+  cacheTag(cacheTags.dates(slug));
+
+  const pool = await exampleEvents({ slug });
+  return { events: pool?.data.events ?? [], demo: pool?.demo ?? false };
 }
