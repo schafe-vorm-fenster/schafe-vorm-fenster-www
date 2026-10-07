@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import { CommunitySiteEventSchema } from "@/src/clients/community-site/client";
+
 import { toLiveEventFromSite, toLiveEvent } from "./adapters";
 
 const IMAGE = "https://assets.api.schafe-vorm-fenster.de/api/image?googleDriveId=abc";
@@ -24,5 +26,12 @@ describe("DEC-0152: text and image travel with the date", () => {
     expect(toLiveEvent({ ...base, image: IMAGE, "image.exists": true })?.imageUrl).toBe(IMAGE);
     expect(toLiveEvent({ ...base, image: IMAGE, "image.exists": false })?.imageUrl).toBeUndefined();
     expect(toLiveEvent({ ...base, image: "" })?.imageUrl).toBeUndefined();
+  });
+
+  it("marks an all-day date, whether the site says `true` or `\"True\"`", () => {
+    const base = { _id: "4", summary: "Manufakturtag", start: "2026-10-10T03:00:00.000Z", categories: [], tags: [] };
+    expect(toLiveEventFromSite(CommunitySiteEventSchema.parse({ ...base, allday: "True" }))?.allDay).toBe(true);
+    expect(toLiveEventFromSite(CommunitySiteEventSchema.parse({ ...base, allday: true }))?.allDay).toBe(true);
+    expect(toLiveEventFromSite(CommunitySiteEventSchema.parse({ ...base, allday: "False" }))?.allDay).toBeUndefined();
   });
 });

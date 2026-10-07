@@ -62,6 +62,7 @@ export function toLiveEvent(event: UpstreamEvent): LiveEvent | undefined {
       tags: event.tags.length > 0 ? event.tags : undefined,
       imageUrl: event["image.exists"] === false ? undefined : event.image || undefined,
       scope: event.scope,
+      allDay: event.allday === true ? true : undefined,
     }),
   };
 }
@@ -106,6 +107,7 @@ export function toLiveEventFromSite(event: CommunitySiteEvent): LiveEvent | unde
       tags: event.tags.length > 0 ? event.tags : undefined,
       imageUrl: event.imageUrl?.trim() || undefined,
       scope: event.scope,
+      allDay: event.allday === true ? true : undefined,
     }),
   };
 }
