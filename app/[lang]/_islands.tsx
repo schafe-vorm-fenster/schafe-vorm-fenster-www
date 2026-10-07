@@ -97,7 +97,9 @@ export function toListItems(
   return events.map((event) => {
     const category = categoryTone(event.categoryId);
     const starts = new Date(event.startsAt);
-    const clock = Number.isNaN(starts.getTime()) ? undefined : time.format(starts);
+    // An all-day date has no hour: its stored start is midnight UTC, which would
+    // print as "02:00" or "01:00" — a time nobody set.
+    const clock = event.allDay || Number.isNaN(starts.getTime()) ? undefined : time.format(starts);
     return {
       id: event.id,
       date: event.startsAt,
