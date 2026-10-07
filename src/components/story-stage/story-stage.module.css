@@ -1,0 +1,332 @@
+/*
+ * story-stage — SRC-0014 §Story stage, DEC-0153.
+ *
+ * One ink section, one stage: the chosen story's media and text, picked by a
+ * native radio group and shown with `:has(:checked)`. All stories share one
+ * grid cell per column, so the stage is as tall as its tallest story and a
+ * pick moves nothing. Colours are tokens only (TS-WEB-0017 D3); the scrim is
+ * the neutral ladder (DEC-0151) and nothing else.
+ */
+.section {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+  padding-block: var(--space-12);
+  --link: var(--color-lime-400);
+  --link-hover: var(--color-lime-300);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.headline {
+  font-size: var(--type-section-size);
+  font-weight: 800;
+  letter-spacing: var(--type-section-tracking);
+  line-height: 1;
+  margin: var(--space-4) 0 var(--space-3);
+}
+
+.lead {
+  color: var(--color-lime-200);
+  font-size: var(--type-lead-size);
+  line-height: var(--leading-relaxed);
+  margin: 0 0 var(--space-8);
+  max-width: var(--measure-reading);
+}
+
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+}
+
+/* ── media: photograph with the neutral scrim, or the violet ground ─────── */
+
+.media,
+.texts {
+  display: grid;
+}
+
+.slide,
+.text {
+  grid-area: 1 / 1;
+  visibility: hidden;
+}
+
+.slide {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 25rem;
+  overflow: hidden;
+  padding: var(--space-6) var(--space-4);
+  position: relative;
+}
+
+.photo {
+  background-color: var(--color-neutral-ink);
+  background-image:
+    linear-gradient(180deg, var(--color-scrim-35) 0, var(--color-scrim-0) 16%),
+    linear-gradient(180deg, var(--color-scrim-0) 38%, var(--color-scrim-38) 58%, var(--color-scrim-72) 100%),
+    var(--stage-photo);
+  /*
+   * The stage cut has the focal point at the anchor already (DEC-0153);
+   * `background-position` at the same per cent puts that point at the same
+   * per cent of the box, whatever the box's ratio — above the reading band.
+   */
+  background-position: var(--stage-anchor, 50% 30%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-shadow: var(--shadow-text-on-photo);
+}
+
+.colour {
+  background: var(--color-violet-500);
+}
+
+.watermark {
+  color: var(--color-violet-600);
+  height: 58%;
+  pointer-events: none;
+  position: absolute;
+  right: -6%;
+  top: -4%;
+  aspect-ratio: 1;
+}
+
+.watermark :global(svg) {
+  height: 100%;
+  width: 100%;
+}
+
+.quote {
+  margin: 0;
+  max-width: 38rem;
+  position: relative;
+}
+
+.mark {
+  color: var(--color-lime-500);
+  display: block;
+  font-size: 4.5rem;
+  font-weight: 800;
+  height: 2rem;
+  line-height: 0.5;
+}
+
+.quoteText {
+  font-size: clamp(1.375rem, 2.4cqi, 2.125rem);
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  line-height: 1.22;
+  margin: 0 0 var(--space-4);
+}
+
+.caption {
+  align-items: center;
+  display: flex;
+  font-size: var(--type-meta-size);
+  gap: var(--space-3);
+  line-height: 1.35;
+}
+
+.avatar {
+  align-items: center;
+  background: var(--color-lime-500);
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-ink);
+  display: inline-flex;
+  flex: none;
+  font-weight: 800;
+  height: var(--height-control);
+  justify-content: center;
+  text-shadow: none;
+  width: var(--height-control);
+}
+
+/* ── panel: the hours, the story, the date ─────────────────────────────── */
+
+.panel {
+  background: var(--color-neutral-paper);
+  color: var(--color-neutral-ink);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6) var(--space-4);
+}
+
+.picker {
+  border: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-6);
+  min-width: 0;
+  padding: 0;
+}
+
+.srOnly,
+.radio {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.tab {
+  align-items: center;
+  background: var(--color-neutral-surface);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: var(--type-meta-size);
+  font-weight: 700;
+  gap: var(--space-2);
+  min-height: var(--height-control);
+  padding: 0 var(--space-4);
+}
+
+.tabTime {
+  font-family: var(--font-mono);
+}
+
+.hour {
+  align-items: center;
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.well {
+  align-items: center;
+  background: var(--color-lime-100);
+  border-radius: var(--radius-pill);
+  color: var(--color-lime-800);
+  display: inline-flex;
+  flex: none;
+  height: var(--height-control);
+  justify-content: center;
+  width: var(--height-control);
+}
+
+.time {
+  font-family: var(--font-mono);
+  font-size: clamp(2.25rem, 4cqi, 3.25rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.storyHeadline {
+  font-size: var(--type-subhead-size);
+  font-weight: 800;
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: 1.12;
+  margin: 0 0 var(--space-3);
+}
+
+.body {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-body-size);
+  line-height: var(--leading-relaxed);
+  margin: 0 0 var(--space-6);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+}
+
+.foot {
+  margin-top: auto;
+}
+
+.example {
+  margin-bottom: var(--space-4);
+}
+
+.exampleLabel {
+  color: var(--color-neutral-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  margin: 0 0 var(--space-2);
+  text-transform: uppercase;
+}
+
+.actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.next {
+  align-items: center;
+  background: var(--color-neutral-surface);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 700;
+  gap: var(--space-2);
+  min-height: var(--height-control);
+  padding: 0 var(--space-4);
+}
+
+/* ── the pick: one selector per position (MAX_STAGE_STORIES = 4) ───────── */
+
+.stage:has(.radio[data-index="0"]:checked) [data-index="0"]:is(.slide, .text),
+.stage:has(.radio[data-index="1"]:checked) [data-index="1"]:is(.slide, .text),
+.stage:has(.radio[data-index="2"]:checked) [data-index="2"]:is(.slide, .text),
+.stage:has(.radio[data-index="3"]:checked) [data-index="3"]:is(.slide, .text) {
+  visibility: visible;
+}
+
+.stage:has(.radio[data-index="0"]:checked) .tab[data-index="0"],
+.stage:has(.radio[data-index="1"]:checked) .tab[data-index="1"],
+.stage:has(.radio[data-index="2"]:checked) .tab[data-index="2"],
+.stage:has(.radio[data-index="3"]:checked) .tab[data-index="3"] {
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+}
+
+/* The radio is out of sight; its focus is shown on its own tab (SRC-0014 §Accessibility). */
+.stage:has(.radio[data-index="0"]:focus-visible) .tab[data-index="0"],
+.stage:has(.radio[data-index="1"]:focus-visible) .tab[data-index="1"],
+.stage:has(.radio[data-index="2"]:focus-visible) .tab[data-index="2"],
+.stage:has(.radio[data-index="3"]:focus-visible) .tab[data-index="3"] {
+  outline: 3px solid var(--color-violet-500);
+  outline-offset: 2px;
+}
+
+/* md — more air in both panels. */
+@media (min-width: 40rem) {
+  .slide {
+    padding: var(--space-8);
+  }
+
+  .panel {
+    padding: var(--space-8);
+  }
+}
+
+/* xl — media and panel side by side, 7 : 5 (SRC-0014 §Layout Grid). */
+@media (min-width: 64rem) {
+  .section {
+    padding-block: var(--space-16);
+  }
+
+  .stage {
+    grid-template-columns: var(--span-7) minmax(0, 1fr);
+  }
+
+  .slide {
+    min-height: clamp(25rem, 46cqi, 40rem);
+    padding: var(--space-12);
+  }
+}

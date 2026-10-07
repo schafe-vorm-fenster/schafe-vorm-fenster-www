@@ -108,6 +108,7 @@ added.
 | `contact-action-row` | 72 px, two lines, trailing arrow; **filled · outlined** — a visual weight, never a conversion rank. Every row is `data-cta="secondary"` |
 | `explain-module` | ordinal · title · three step lines · one **secondary** CTA. **Two layouts at one `min-width` switch (`lg` = 48rem)**: below it a three-state stage with the auto-advance; from it three steps side by side, no stage, no slide |
 | `place-search-overlay` | 3–4 rows `Ort (Gemeinde)`, out of flow, combobox keyboard; plus the **non-interactive no-match row** (`TS-WEB-0008 D7a` owns its behaviour and wording) |
+| `story-stage` | **One module for a set of single-category stories** (DEC-0153, board `concept/v2.0/Geschichten Modul.dc.html` variant 1a): ink section · kicker · headline · lead · a stage of media (photograph with the neutral scrim, or `violet-500` with the story's icon as a watermark) carrying the quote, beside a paper panel with the hour tabs, the hour, the story, one live date "im Kalender" and the onward actions. 2–4 stories. Picked by a **native radio group** with `:has(:checked)`, no JavaScript, no auto-advance; all stories share one grid cell, so a pick never changes the height. A photograph uses its `stage` cut, positioned at its `anchor` (§2). From `xl` media and panel stand 7 : 5 |
 | `quote-card` | quote · author with role and organisation · sourced outbound link |
 | `event-status-badge` | `neu` · `verschoben` · `abgesagt` |
 | `overlay-header` | transparent over a photo; mark, calendar pill, controls on the **blur primitive** (`backdrop-filter`) with the solid `ink` control well as the declared fallback |
@@ -164,6 +165,16 @@ Two of these carry a rule the manifest has to express, not only name:
   neither, so the ground is a property of the *section*, not of the field —
   which is why it belongs here and not in §1. This is what the closing
   block on `/` needs so it stops being white on white (C14).
+- **A set of single-category stories is one `story-stage`, never a run of
+  stacked story sections** (DEC-0153). At most one stage per page. It is a
+  **photo** section in the page rhythm, because it is photo-led; its ground
+  is ink, where the photograph's scrim runs out. It is placed so that it
+  never touches the page's live-data ink section.
+- **A photograph under a reading band lands its motif above the band**
+  (DEC-0153). Any picture with text in its lower part declares a `focal`
+  point and an `anchor` with `y ≤ 38` (the scrim's clear part). The build
+  cuts the picture so that the focal point sits exactly at the anchor, and the
+  component positions it at the same per cent (TS-WEB-0020-A17).
 - **`explain-module` switches layout at `lg` (48rem) and nowhere else.**
   A generator does not choose that breakpoint; it is the component's own
   and the only `min-width` it declares.

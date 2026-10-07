@@ -29,6 +29,8 @@ document is permitted.
 The companion file `Style Guide.dc.html` shows every rule rendered.
 `Desktop Raster.dc.html` shows the layout grid at 1440 px, with static
 renders in `v2.0/assets/desktop-raster/` (see *Layout Grid*).
+`Geschichten Modul.dc.html` shows the story stage, renders in
+`v2.0/assets/story-stage/` (see *Story stage*).
 
 ## The Direction in One Sentence
 
@@ -736,6 +738,37 @@ system, it is scoped, and the scope is part of the exception:
   changes colour, not position, and a colour change on an active state is
   what *active* has always meant in this system.
 
+### Story stage
+
+**One module for a set of stories, not one section per story** (owner's
+choice of 2026-10-07, `DEC-0153`). A page that argues with several
+single-category stories, like `/dein-ort`'s bakery van, council meeting and
+culture, tells them as **one day** on one stage. Readers pick the hours
+instead of scrolling past three full-weight sections. That answers round 4's
+F-4-5: the stacked stories read as repetition, not rhythm.
+
+The rendered reference is `v2.0/Geschichten Modul.dc.html`, variant **1a**
+(*Ein Tag — Geschichten zum Durchklicken*). Static renders are in
+`v2.0/assets/story-stage/`, at 1440, 820 and 390 px, plus the colour variant.
+Variant 1b, three cards side by side, is rejected: it is less communicative,
+and three cards with a quote each are three times the module.
+
+| Part | Rule |
+| --- | --- |
+| Ground | `ink`, padded `space-12`, `space-16` from `xl`. In the page rhythm the stage is a **photo** section (it is photo-led), so it never touches the page's live-data `ink` section |
+| Head | Kicker badge with `clock` (e.g. *Ein Tag im Dorf*) · section headline · lead in `lime-200` |
+| Media | One per story: the photograph with the neutral scrim (*Photo surface*, the same two gradients and text shadow), or, for a story without a photograph, a `violet-500` ground with the story's glyph as a large `violet-600` watermark. Never an empty frame. The quote sits at the bottom: a `lime-500` quotation mark, the quote in 22–34 px / 700, and the speaker with a 44 px `lime-500` initials disc |
+| Panel | `paper`. The hours as 44 px pills (`surface`, chosen one `ink`), the hour in mono 36–52 px beside a 44 px icon well, the story headline (sub head), the story (body), then **"Im Kalender"** with **one live date of the story's own category** (`TS-WEB-0020` D3, A14), the onward action and "Weiter um …" |
+| Layout | Below `xl` media above panel; from `xl` 7 : 5 side by side (*Layout Grid*). Media at least 400 px tall, from `xl` `clamp(400px, 46cqi, 640px)` |
+| Picking | A **native radio group**: the hours are the radios' labels, arrows move the pick, `:has(:checked)` shows it. It works **without JavaScript** and needs none. "Weiter um …" is a pointer shortcut to the next hour. Nothing advances by itself: the one auto-advance in the system is the explain module's |
+| Height | Every story's media and text share one grid cell, so the stage is as tall as its tallest story and a pick moves nothing. An unpicked story is `visibility: hidden`, out of the accessibility tree |
+| Count | 2–4 stories, **one stage per page**. A story that is its own argument with its own evidence module, like `/dein-ort`'s radius story, stays a section of its own |
+
+**The photograph keeps its motif above the quote.** The board's own render
+showed the problem at 390 px: the quote lay over the church's foot. Each
+photograph on the stage therefore uses its **stage cut**, positioned at its
+**anchor** (*Crop and focal point*, below).
+
 ### Transparent overlay header
 
 The header as built today: no ground of its own, sitting over the hero
@@ -926,6 +959,26 @@ never a darker scrim, because the ceiling does not move.
 > for colour world 3c are asked for. The static assertion of the `0.72`
 > ceiling is the hero row of `check:contrast`, and the ban on a tinted scrim
 > is `TS-WEB-0017-A22` in `check:brand`.
+
+**Focal point and the reading band** (`DEC-0153`). A centred focal point is
+right for a picture nobody writes on. It is wrong for a box with a reading band
+in its lower part, like the story stage or a hero: there the band covers
+whatever sits below 38 %, and a village motif under a big sky sits at 50–65 %.
+So a photograph used under text declares two points:
+
+- `focal`: where the motif is, in per cent of the photograph;
+- `anchor`: where that point has to land in the box, in per cent, with
+  `y ≤ 38`. The stage uses `{x: 50, y: 30}`.
+
+`pnpm images:generate` then cuts a **stage rendition** (5:4) from the
+original. It takes the largest window that puts the focal point exactly at
+the anchor, zooming in only as far as that takes and never below the box's
+pixel width. It reports where the point landed if the original is too small.
+The component sets `background-position` to the anchor, and because a
+`background-position` percentage aligns the same percentage of picture and
+box, the focal point lands there in any box ratio. `TS-WEB-0020-A17` holds the
+inventory to it. The motif rule below is unchanged: a photograph that only
+works when the scrim covers its subject is still the wrong photograph.
 
 **Crop and focal point.** The photo is `cover` with `object-position` taken
 from the motif's declared focal point, never `center` by default. Village
@@ -1257,6 +1310,7 @@ options:
 | 1 | Scrim ladder, and text shadow yes/no | **Decision 5**, as corrected by **DEC-0105 §1** — the draft is binding: neutral black, multi-stop, max 0.72, soft text shadow, and a **fixed** ladder. The "measured contrast floor instead of a fixed ladder" this row used to claim is withdrawn: nothing performed the per-photograph measurement, and the crop and focal-point rules carry the motif | *Colour* (the named exception), *Photo surface* |
 | 2 | Header contrast — solid wells or a blur primitive | **Decision 6** — the blur primitive, with a documented capability fallback to the solid ink well and a stated performance-budget interaction | *Transparent overlay header* |
 | 3 | Category taxonomy — five token keys or six guide rows | **Decision 7** — neither: the canonical list is `classification-api`'s four ids plus the `unknown` fallback, which is what the token package already carries. Event rows keep the category, as this guide always said | *Category colours* |
+| 5 | Stacked single-category stories — round 4's F-4-5 | **DEC-0153** (owner's choice of board variant 1a, 2026-10-07): one story stage instead of three sections; focal point anchored above the reading band | *Story stage*, *Photo surface* |
 | 4 | Content width on desktop — round 4's F-4-1, and `DEM-0042`'s container table | **DEC-0150** (owner's design input, 2026-10-07): three tiers on the six breakpoints, a 1200 px content box, full-bleed surfaces, column placements from `xl` | *Layout Grid* |
 
 What is still **outstanding** is not a decision but work owed elsewhere, and
