@@ -47,6 +47,10 @@ cropping, and invited a solution.
    - The stage stands after story 4, so the two dark grounds never touch.
    - Each hour shows one live date of its own category (DEC-0152's selector,
      now asked for all three categories).
+   - For the bread story the topic is a filter, not only a preference
+     (`topicRequired`). `everyday-supply` also holds the waste collection,
+     and the preview showed "Restmüll" under the bread story. With no market
+     or bakery date nearby, the hour shows no date at all.
    - The quotes follow DEC-0152 §6: Wendt closes the council story. The board
      showed Zschiesche there, but the board's copy is sample copy and the
      pairing was decided before.

@@ -188,7 +188,10 @@ const STORIES: readonly StorySection[] = [
     icon: "truck",
     example: {
       category: "everyday-supply",
-      topic: /bäcker|baecker|brot|backwaren|verkaufswagen|wagen|markt|lieferung/i,
+      topic: /bäcker|baecker|brot|backwaren|verkaufswagen|fleischer|fisch|wochenmarkt|markt|hofladen|lieferung/i,
+      // `everyday-supply` also holds the waste collection; under the bread
+      // story only a supply date that is about buying something counts.
+      topicRequired: true,
     },
   },
   {

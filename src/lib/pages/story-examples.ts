@@ -68,6 +68,14 @@ export function pickStoryExamples(
 export interface StoryExampleSpec {
   readonly category: string;
   readonly topic?: RegExp;
+  /**
+   * The topic is a filter, not a preference: a date of the category that
+   * does not match it is no example for this story. For a category that spans
+   * unrelated things, as `everyday-supply` spans the bakery van and the
+   * waste collection (measured on the preview, 2026-10-07: "Restmüll" under
+   * the bread story), an off-topic date argues nothing (DEC-0153).
+   */
+  readonly topicRequired?: boolean;
 }
 
 /** Within this, a date reads as "in your surroundings"; beyond it, as the county. */
@@ -117,6 +125,7 @@ export function selectStoryExamples(
   return specs.map((spec) => {
     const best = pool
       .filter((event) => !used.has(event.id) && event.categoryId === spec.category)
+      .filter((event) => !spec.topicRequired || topicMatches(event, spec.topic))
       .map((event) => ({ event, key: rank(event, spec) }))
       .sort((a, b) => compare(a.key, b.key))[0]?.event;
     if (best !== undefined) used.add(best.id);
