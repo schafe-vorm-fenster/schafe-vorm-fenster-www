@@ -717,13 +717,13 @@ export const RENDERED_BLOCKS: readonly {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/page.tsx:782 (listAt, the three step lines)",
+    renderedBy: "app/[lang]/page.tsx:784 (listAt, the three step lines)",
   },
   {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/page.tsx:775 (listAt, the sample event rows)",
+    renderedBy: "app/[lang]/page.tsx:777 (listAt, the sample event rows)",
   },
   {
     slot: "mitmachen-2-objections",

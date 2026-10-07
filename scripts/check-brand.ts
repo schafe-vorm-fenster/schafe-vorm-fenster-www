@@ -9,6 +9,11 @@
  *  TS-WEB-0017-A6  No logo, mark or font file is committed in this repository.
  *  TS-WEB-0017-A19 Every `var(--x)` without a fallback names a custom property
  *      something declares.
+ *  TS-WEB-0017-A22 No tinted scrim: no gradient carries `ink` or `violet`
+ *      (as the alpha form of `ink` 23·29·13 or `violet` 83·27·222, a `color-mix()` or a
+ *      `var(--color-neutral-ink|violet-*)`), in authored sources **and** in the
+ *      design boards `concept/v2.0/*.dc.html`. The scrim is neutral black and
+ *      nothing else (SRC-0014 §The scrim, DEC-0151).
  *
  * Scans **authored** sources only — `app/**`, `src/**`, `e2e/**`,
  * `scripts/**` — never build output. `.next/`, `node_modules/` and
@@ -48,11 +53,12 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-/** The four criteria this meter is the instrument for, spelled out once. */
+/** The five criteria this meter is the instrument for, spelled out once. */
 const A4 = "TS-WEB-0017-A4";
 const A5 = "TS-WEB-0017-A5";
 const A6 = "TS-WEB-0017-A6";
 const A19 = "TS-WEB-0017-A19";
+const A22 = "TS-WEB-0017-A22";
 
 /** The single file brand values are allowed to enter through (TS-WEB-0017 D3). */
 const TOKEN_FILE = "app/styles/brand.css";
@@ -121,6 +127,31 @@ function walk(dir: string): string[] {
     const full = join(dir, name);
     return statSync(full).isDirectory() ? walk(full) : [full];
   });
+}
+
+/** The design boards — a generator reads them, so they are held to the scrim rule too. */
+const BOARD_DIR = join("concept", "v2.0");
+
+/** `ink` and `violet`, as a board writes them and as a stylesheet names them. */
+const TINT =
+  /rgba\(\s*23\s*,\s*29\s*,\s*13\s*,|rgba\(\s*83\s*,\s*27\s*,\s*222\s*,|[#]171d0d[0-9a-f]{2}\b|color-mix\([^;]*(?:ink|violet)|var\(\s*--color-(?:neutral-ink|ink|violet-[0-9]+)\s*\)/i;
+
+/** Every `linear-gradient(…)` / `radial-gradient(…)` in `text`, balanced, with its line. */
+export function gradients(text: string): { body: string; line: number }[] {
+  const found: { body: string; line: number }[] = [];
+  for (const match of text.matchAll(/(?:repeating-)?(?:linear|radial)-gradient\(/g)) {
+    let depth = 0;
+    let end = match.index;
+    for (; end < text.length; end++) {
+      if (text[end] === "(") depth++;
+      else if (text[end] === ")" && --depth === 0) break;
+    }
+    found.push({
+      body: text.slice(match.index, end + 1),
+      line: text.slice(0, match.index).split("\n").length,
+    });
+  }
+  return found;
 }
 
 export interface BrandCheckResult {
@@ -260,6 +291,31 @@ export function checkBrand(root: string): BrandCheckResult {
         `${relative_}:${line}`,
         `\`var(${name})\` — nothing declares it, so the whole declaration is dropped`,
       );
+    }
+  }
+
+  // --- TS-WEB-0017-A22: the scrim is neutral black, everywhere -------------------------
+  //
+  // Decision 5 retired the dark-green, `ink`-tinted scrim on 2026-09-23 and the
+  // component followed with DEC-0116 — yet three boards a generator reads still
+  // drew it, and a design input arrived with it again on 2026-10-07. A tinted
+  // gradient over a photograph is never right, so any gradient naming `ink` or
+  // `violet` fails, in code and in the boards alike (DEC-0151).
+  const boardFiles = walk(join(root, BOARD_DIR)).filter((f) => f.endsWith(".dc.html"));
+  for (const file of [...sourceFiles, ...boardFiles]) {
+    const relative_ = rel(file);
+    if (isTestFile(relative_)) continue;
+    const text = readFileSync(file, "utf8").replace(/\/\*[\s\S]*?\*\//g, (block) =>
+      block.replace(/[^\n]/g, " "),
+    );
+    for (const { body, line } of gradients(text)) {
+      const tint = TINT.exec(body);
+      if (tint)
+        fail(
+          A22,
+          `${relative_}:${line}`,
+          `tinted scrim \`${tint[0]}\` — the scrim is neutral black (\`color.scrim.*\`), never \`ink\` or \`violet\``,
+        );
     }
   }
 

@@ -86,8 +86,10 @@
 }
 
 /* lg — 48rem / 768px: list and proof stand side by side. */
-@media (min-width: 48rem) {
+/* xl — 64rem: side by side only from the desktop tier (SRC-0014 §Layout Grid, DEC-0150). */
+@media (min-width: 64rem) {
   .layout {
-    grid-template-columns: 2fr 1fr;
+    column-gap: var(--grid-gap);
+    grid-template-columns: var(--span-8) minmax(0, 1fr);
   }
 }

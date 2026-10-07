@@ -126,7 +126,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding: var(--section-padding-block) var(--space-4);
+  /* Inline padding and width come from `.container` (DEC-0150): the stack
+     shares the header's and the sections' left edge at every width. */
+  padding-block: var(--section-padding-block);
   position: relative;
   width: 100%;
 }
@@ -207,6 +209,43 @@
   .surface[data-hero="true"]::before {
     aspect-ratio: var(--photo-headroom, 5 / 2);
     min-height: 0;
+  }
+}
+
+/*
+ * xl — the desktop hero (SRC-0014 §Layout Grid, DEC-0150). The height is a
+ * capped share of the viewport instead of the band-plus-ratio below:
+ * `min(80vh, 680px)` on `/`, `min(70vh, 560px)` on every other page. 21:9
+ * made a 1440px hero 617px and a 1920px one 823px — deeper than the screen.
+ * The band becomes the flexible part, so the text stack sits at the bottom of
+ * the box; it never shrinks below the header's height, and a stack taller
+ * than the box grows it rather than being clipped. Declared in CSS before
+ * paint, so the box is reserved exactly like a ratio.
+ */
+@media (min-width: 64rem) {
+  .surface[data-hero="true"] {
+    /* The capped height replaces `ratio-hero` here; with the ratio left on,
+       21:9 would still win at 1440px and above. */
+    aspect-ratio: auto;
+    min-height: min(70vh, 560px);
+  }
+
+  .surface[data-hero-size="home"] {
+    min-height: min(80vh, 680px);
+  }
+
+  .surface[data-hero="true"]::before {
+    aspect-ratio: auto;
+    flex: 1 1 auto;
+    min-height: var(--site-header-height);
+  }
+
+  .surface[data-hero="true"] .content {
+    padding-block-end: var(--space-12);
+  }
+
+  .surface[data-hero-size="home"] .content {
+    padding-block-end: var(--space-16);
   }
 }
 

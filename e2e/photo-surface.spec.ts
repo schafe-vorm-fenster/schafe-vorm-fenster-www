@@ -16,7 +16,8 @@ import { expect, test } from "@playwright/test";
  *     (the blur primitive, DEC-0105 §4; the solid `ink` fallback is what
  *     `e2e/site-header.spec.ts` sees in a browser without `backdrop-filter`);
  *  4. **the hero's CTA slot stacks two conversions with a gap** on the page
- *     that has two (TS-WEB-0024 D3).
+ *     that has two (TS-WEB-0024 D3) — below `xl`; from `xl` the two stand
+ *     side by side (DEC-0150, TS-WEB-0017-A26).
  */
 
 const PHONE = { width: 390, height: 844 };
@@ -137,8 +138,8 @@ test.describe("DEC-0105 §4: the header's wells blur over the photograph and not
   });
 });
 
-test.describe("TS-WEB-0024 D3: two conversions in one hero, stacked with a gap", () => {
-  for (const viewport of [FOLD, DESKTOP]) {
+test.describe("TS-WEB-0024 D3: two conversions in one hero, stacked with a gap below xl", () => {
+  for (const viewport of [FOLD]) {
     test(`at ${viewport.width}×${viewport.height} the equal-weight CTA sits under the primary, apart from it`, async ({
       page,
     }) => {
@@ -163,4 +164,26 @@ test.describe("TS-WEB-0024 D3: two conversions in one hero, stacked with a gap",
       );
     });
   }
+});
+
+test.describe("TS-WEB-0017-A26 / TS-WEB-0024 D3 from xl: the two conversions stand side by side", () => {
+  test(`at ${DESKTOP.width}×${DESKTOP.height} the equal-weight CTA sits beside the primary, 12px apart`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto("/dein-kalender");
+    await expect(hero(page)).toBeAttached();
+
+    const primary = hero(page).locator('[data-cta="primary"]').first();
+    const secondary = hero(page).locator('[data-cta="equal-weight"]').first();
+    await expect(primary).toBeVisible();
+    await expect(secondary).toBeVisible();
+
+    const [left, right] = await Promise.all([primary.boundingBox(), secondary.boundingBox()]);
+    expect(left && right).toBeTruthy();
+    expect(right!.y, "one row").toBeCloseTo(left!.y, 0);
+    expect(right!.x - (left!.x + left!.width), "space-3 between the two").toBeGreaterThanOrEqual(11);
+    // TS-WEB-0024-A4: both conversions on the first screen, without scrolling.
+    expect(right!.y + right!.height, "inside the viewport").toBeLessThanOrEqual(DESKTOP.height);
+  });
 });

@@ -52,7 +52,7 @@ a{color:#486202}a:hover{color:#531BDE}
               <span style="display:inline-flex;align-items:center;gap:8px;background:#A4D822;color:#171D0D;border-radius:999px;padding:7px 15px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px;font-weight:700;letter-spacing:.04em">
                 <span style="width:8px;height:8px;border-radius:50%;background:#2D3F01;display:inline-block"></span>5 TERMINE DIESE WOCHE
               </span>
-              <span style="display:inline-flex;align-items:center;background:rgba(23,29,13,.55);color:#F9FBF7;border-radius:999px;padding:7px 14px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.04em">OPEN AIR · SCHLATKOW</span>
+              <span style="display:inline-flex;align-items:center;background:rgba(0,0,0,.38);color:#F9FBF7;border-radius:999px;padding:7px 14px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.04em">OPEN AIR · SCHLATKOW</span>
             </div>
             <h2 style="margin:0 0 20px;font-size:54px;line-height:.9;letter-spacing:-.045em;font-weight:800;color:#F9FBF7">Für Schlatkow läuft es.</h2>
             <div style="background:#F9FBF7;border-radius:999px;display:flex;align-items:center;gap:10px;min-height:56px;padding:0 6px 0 18px">
@@ -483,7 +483,7 @@ a{color:#486202}a:hover{color:#531BDE}
         <span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px;font-weight:700;background:#171D0D;color:#F9FBF7;padding:4px 9px;border-radius:6px">4c</span>
         <span style="font-size:20px;font-weight:800;letter-spacing:-.015em">Foto führt</span>
       </div>
-      <p style="margin:0 0 16px;font-size:16px;line-height:1.5;color:#39412C;min-height:72px">Bild trägt jede Sektion, Text liegt mit Ink-Verlauf darauf, große Radien. Am emotionalsten — und ehrlich sichtbar, wie viel Fotomaterial fehlt: drei von vier Terminkarten sind markierte Lücken.</p>
+      <p style="margin:0 0 16px;font-size:16px;line-height:1.5;color:#39412C;min-height:72px">Bild trägt jede Sektion, Text liegt mit neutral-schwarzem Verlauf darauf, große Radien. Am emotionalsten — und ehrlich sichtbar, wie viel Fotomaterial fehlt: drei von vier Terminkarten sind markierte Lücken.</p>
       <div style="width:414px;height:844px;box-sizing:border-box;background:#171D0D;border-radius:46px;padding:12px">
         <div class="vp" style="width:390px;height:820px;background:#F9FBF7;border-radius:34px;overflow-y:auto;overflow-x:hidden;font-size:18px;line-height:1.55">
 
@@ -496,7 +496,7 @@ a{color:#486202}a:hover{color:#531BDE}
               <div style="min-height:44px;display:flex;align-items:center;padding:0 18px;background:#A4D822;border-radius:999px;font-weight:700;font-size:15px">Kalender</div>
             </div>
             <div style="position:absolute;left:0;right:0;bottom:0;padding:0 16px 24px;z-index:2">
-              <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(23,29,13,.55);backdrop-filter:blur(4px);border-radius:999px;padding:7px 14px;margin-bottom:14px">
+              <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,0,0,.38);backdrop-filter:blur(4px);border-radius:999px;padding:7px 14px;margin-bottom:14px">
                 <span style="width:9px;height:9px;border-radius:50%;background:#A4D822;display:inline-block"></span>
                 <span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px;font-weight:700;color:#F9FBF7;letter-spacing:.04em">5 TERMINE DIESE WOCHE</span>
               </div>
@@ -517,9 +517,9 @@ a{color:#486202}a:hover{color:#531BDE}
             <sc-for list="{{ events }}" as="e" hint-placeholder-count="3">
               <div style="border-radius:20px;overflow:hidden;position:relative;height:150px;background:#EEF2E9">
                 <div style="{{ e.cardPhoto }}"></div>
-                <sc-if value="{{ e.hasPhoto }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,29,13,0) 30%,rgba(23,29,13,.86) 100%)"></div></sc-if>
+                <sc-if value="{{ e.hasPhoto }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%)"></div></sc-if>
                 <sc-if value="{{ e.needsPhoto }}" hint-placeholder-val="{{ false }}">
-                  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(226,231,219,0) 24%,rgba(23,29,13,.82) 100%)"></div>
+                  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%)"></div>
                   <div style="position:absolute;top:12px;right:12px"><span style="{{ e.needStyle }}">{{ e.needLabel }}</span></div>
                 </sc-if>
                 <div style="position:absolute;top:12px;left:12px"><span style="{{ e.pillOverlay }}">{{ e.tag }}</span></div>
@@ -528,7 +528,7 @@ a{color:#486202}a:hover{color:#531BDE}
                     <div style="font-size:21px;font-weight:800;line-height:1.15;color:#F9FBF7;letter-spacing:-.015em">{{ e.title }}</div>
                     <div style="font-size:15px;color:#C6E593;margin-top:3px;line-height:1.3">{{ e.meta }}</div>
                   </div>
-                  <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:15px;font-weight:700;color:#F9FBF7;background:rgba(23,29,13,.6);border-radius:999px;padding:5px 11px;flex:none">{{ e.short }}</div>
+                  <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:15px;font-weight:700;color:#F9FBF7;background:rgba(0,0,0,.38);border-radius:999px;padding:5px 11px;flex:none">{{ e.short }}</div>
                 </div>
               </div>
             </sc-for>
@@ -541,7 +541,7 @@ a{color:#486202}a:hover{color:#531BDE}
           <div style="position:relative;border-radius:28px;overflow:hidden;margin:0 16px 16px">
             <div style="{{ scenePhotoA }}"></div>
             <div style="position:absolute;top:12px;right:12px;z-index:3;max-width:180px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A6300;background:#FBF1DC;border-radius:8px;padding:6px 10px;line-height:1.35">{{ sceneNote }}</div>
-            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,29,13,.15) 0%,rgba(23,29,13,.9) 62%)"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 16%),linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%)"></div>
             <div style="position:relative;padding:120px 20px 24px;color:#F9FBF7">
               <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#B6DE6D;margin-bottom:12px">Für Vereine</div>
               <div style="font-size:32px;font-weight:800;line-height:1.03;letter-spacing:-.03em;margin-bottom:12px">Flyer knipsen, abschicken — steht drin.</div>
@@ -553,7 +553,7 @@ a{color:#486202}a:hover{color:#531BDE}
           <div style="position:relative;border-radius:28px;overflow:hidden;margin:0 16px 26px">
             <div style="{{ scenePhotoB }}"></div>
             <div style="position:absolute;top:12px;right:12px;z-index:3;max-width:180px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A6300;background:#FBF1DC;border-radius:8px;padding:6px 10px;line-height:1.35">{{ sceneNote }}</div>
-            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(83,27,222,.20) 0%,rgba(83,27,222,.92) 62%)"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 16%),linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%)"></div>
             <div style="position:relative;padding:120px 20px 24px;color:#F9FBF7">
               <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#CFD1FC;margin-bottom:12px">Für Gemeinden &amp; Ämter</div>
               <div style="font-size:32px;font-weight:800;line-height:1.03;letter-spacing:-.03em;margin-bottom:12px">Ihr Kalender. Ihre Website. Ihr Name.</div>
@@ -669,15 +669,15 @@ class Component extends DCLogic {
       icGlobeSm: this.mask('globe', '#486202', 18),
       photoSoft: this.photo('../v1.0/assets/open-air-stage.jpeg', 190),
       photoFlat: this.photo('../v1.0/assets/open-air-stage.jpeg', 230),
-      heroOverlay: 'position:relative;width:100%;height:420px;background-image:linear-gradient(180deg,rgba(23,29,13,.55) 0%,rgba(23,29,13,.20) 26%,rgba(23,29,13,.86) 62%,rgba(23,29,13,.96) 100%),url(../v1.0/assets/open-air-stage.jpeg);background-size:cover,cover;background-position:center,center;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
+      heroOverlay: 'position:relative;width:100%;height:420px;background-image:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 16%),linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%),url(../v1.0/assets/open-air-stage.jpeg);background-size:cover,cover;background-position:center,center;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
       scenePhotoA: this.photo('../v1.0/assets/garden-workplace.jpeg', 300, 'position:absolute;inset:0;height:100%'),
       scenePhotoB: this.photo('../v1.0/assets/office-interior.jpg', 300, 'position:absolute;inset:0;height:100%'),
       sceneNote: 'Vorhandenes Foto, nicht motivgenau — Platzhalter für ein echtes Ortsbild',
       noteStyle: mono + 'font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A6300;background:#FBF1DC;border-radius:999px;padding:5px 12px;white-space:nowrap',
-      heroBleed: 'position:relative;width:100%;height:440px;background-image:linear-gradient(180deg,rgba(23,29,13,.55) 0%,rgba(23,29,13,.20) 26%,rgba(23,29,13,.86) 62%,rgba(23,29,13,.96) 100%),url(../v1.0/assets/open-air-stage.jpeg);background-size:cover,cover;background-position:center,center;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
-      weekBleed: 'position:relative;width:100%;height:280px;background-image:linear-gradient(180deg,rgba(23,29,13,0) 18%,rgba(23,29,13,.80) 55%,rgba(23,29,13,.96) 100%),url(../v1.0/assets/office-interior.jpg);background-size:cover,cover;background-position:center,center;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
-      sceneBleedA: 'position:relative;width:100%;background-image:linear-gradient(180deg,rgba(23,29,13,0) 12%,rgba(23,29,13,.82) 38%,rgba(23,29,13,.96) 62%),url(../v1.0/assets/garden-workplace.jpeg);background-size:cover,cover;background-position:center,center top;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
-      sceneBleedB: 'position:relative;width:100%;background-image:linear-gradient(180deg,rgba(83,27,222,.25) 10%,rgba(83,27,222,.88) 38%,rgba(83,27,222,.97) 62%),url(../v1.0/assets/proof/portrait-selfie-platform.jpg);background-size:cover,cover;background-position:center,center top;background-repeat:no-repeat,no-repeat;background-color:#531BDE',
+      heroBleed: 'position:relative;width:100%;height:440px;background-image:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 16%),linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%),url(../v1.0/assets/open-air-stage.jpeg);background-size:cover,cover;background-position:center,center;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
+      weekBleed: 'position:relative;width:100%;height:280px;background-image:linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%),url(../v1.0/assets/office-interior.jpg);background-size:cover,cover;background-position:center,center;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
+      sceneBleedA: 'position:relative;width:100%;background-image:linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%),url(../v1.0/assets/garden-workplace.jpeg);background-size:cover,cover;background-position:center,center top;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
+      sceneBleedB: 'position:relative;width:100%;background-image:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 16%),linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%),url(../v1.0/assets/proof/portrait-selfie-platform.jpg);background-size:cover,cover;background-position:center,center top;background-repeat:no-repeat,no-repeat;background-color:#531BDE',
       inviteBleed: 'position:relative;width:100%;background:repeating-linear-gradient(45deg,#E2E7DB,#E2E7DB 16px,#D1D6CB 16px,#D1D6CB 32px)',
       icPhoneInkSm: this.mask('smartphone', '#171D0D', 18),
       icGlobeVioletSm: this.mask('globe', '#531BDE', 18)

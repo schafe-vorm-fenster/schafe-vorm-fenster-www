@@ -91,7 +91,9 @@ real passing test locally.
 ### Phase 4 — Brand binding and shell
 
 - Create the single token-import file from `brand-package`, the
-  mobile-first layout shell with the two fixed breakpoints, and the
+  mobile-first layout shell on the six `breakpoint.*` tokens and the
+  layout grid of `concept/website-design-system.md` § *Layout Grid*
+  (DEC-0150), and the
   security-header/CSP scaffold.
 
 Quality gate: no colour or font-family literal outside the token

@@ -41,9 +41,10 @@
   text-transform: uppercase;
 }
 
-/* lg — 48rem / 768px: the two columns stand side by side. */
-@media (min-width: 48rem) {
+/* xl — 64rem: the comparison is 6 + 6 (SRC-0014 §Layout Grid, DEC-0150). */
+@media (min-width: 64rem) {
   .row {
+    column-gap: var(--grid-gap);
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

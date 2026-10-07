@@ -10,8 +10,13 @@ contract; the tactical specs are the generation prompts.
   additions [PROPOSED] in code comments only where a spec would
   expect a determination.
 - Mobile-first is law (TS-WEB-0017 D2): base styles are phone, every
-  media query `min-width`, breakpoints 768/1024 only, one component
-  tree for all viewports.
+  media query `min-width`, only the six `breakpoint.*` token values, one
+  component tree for all viewports.
+- Layout grid (DEC-0150): build every page on
+  `concept/website-design-system.md` § *Layout Grid*. Surfaces are
+  full-bleed, content sits in the 1200 px container, and the column spans
+  apply from `xl`. The board `concept/v2.0/Desktop Raster.dc.html` and its
+  renders in `concept/v2.0/assets/desktop-raster/` are the visual reference.
 - Brand discipline (TS-WEB-0017 D3): colours and fonts only through the
   one token-import file; assets via package subpaths.
 - Work in feature branches off `next-2026`, PR back, keep

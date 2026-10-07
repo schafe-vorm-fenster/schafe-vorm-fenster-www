@@ -58,3 +58,33 @@
   white-space: nowrap;
   width: 1px;
 }
+
+/*
+ * xl — head 1–4, list 5–12 (SRC-0014 §Layout Grid, DEC-0150). The heading and
+ * the CTA under it take the first four desktop columns, the body the other
+ * eight; below xl nothing stands side by side and the frame stacks.
+ */
+@media (min-width: 64rem) {
+  .split {
+    column-gap: var(--grid-gap);
+    display: grid;
+    grid-template-areas:
+      "head body"
+      "cta body";
+    grid-template-columns: var(--span-4) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    row-gap: var(--space-6);
+  }
+
+  .split .header {
+    grid-area: head;
+  }
+
+  .split .body {
+    grid-area: body;
+  }
+
+  .split .cta {
+    grid-area: cta;
+  }
+}
