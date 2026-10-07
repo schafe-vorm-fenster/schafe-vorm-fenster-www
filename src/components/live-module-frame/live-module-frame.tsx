@@ -37,6 +37,13 @@ export interface LiveModuleFrameProps extends DataStateProps {
   readonly headingLevel?: "h2" | "h3";
   /** The page's language — the freshness label reads it. */
   readonly locale?: Locale;
+  /**
+   * `split` puts the heading and the CTA in desktop columns 1–4 and the body
+   * in 5–12 from `xl` (SRC-0014 §Layout Grid, *Two-column*, DEC-0150). Below
+   * `xl`, and with the default `stack`, the three stack as before. One tree
+   * either way — only the column placement changes (TS-WEB-0017 D2d).
+   */
+  readonly layout?: "stack" | "split";
   readonly className?: string;
   readonly children: ReactNode;
 }
@@ -78,12 +85,13 @@ export function LiveModuleFrame({
   headingLevel: Heading = "h3",
   locale = "de",
   state = "ready",
+  layout = "stack",
   className,
   children,
 }: LiveModuleFrameProps) {
   return (
     <div
-      className={[styles.frame, className].filter(Boolean).join(" ")}
+      className={[styles.frame, layout === "split" ? styles.split : undefined, className].filter(Boolean).join(" ")}
       data-demo={isMocked(state) ? "true" : undefined}
       role={announced ? "status" : undefined}
     >

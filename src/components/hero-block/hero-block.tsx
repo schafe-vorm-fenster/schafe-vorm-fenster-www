@@ -56,12 +56,8 @@ export interface HeroBlockProps extends DataStateProps {
    * `state/open.md`). Pass `false` for a hero that must not compete.
    */
   readonly priority?: boolean;
-  /**
-   * **Accepted and ignored** — the tone variants are retired, one neutral
-   * scrim for every hero (DEC-0105 §1). Kept so call sites compile until
-   * their owners drop it (T-14, T-19).
-   */
-  readonly gradient?: "ink" | "violet";
+  /** The hero's height from `xl` — `home` on `/` only; forwarded to `photo-surface`. */
+  readonly heroSize?: "home" | "page";
   /** The motif's focal point from the inventory — forwarded to `photo-surface`. */
   readonly focal?: { readonly x: number; readonly y: number };
   readonly notDepicting?: boolean;
@@ -145,6 +141,7 @@ export function HeroBlock({
   src,
   wideSrc,
   priority = true,
+  heroSize = "page",
   focal,
   notDepicting = false,
   placeholderId,
@@ -162,6 +159,7 @@ export function HeroBlock({
       className={className}
       focal={focal}
       hero
+      heroSize={heroSize}
       id={id}
       locale={locale}
       notDepicting={notDepicting}

@@ -131,8 +131,18 @@ documentation:
 - Canonical definitions stay in `go-to-market-os` — the four jobs,
   audiences, offerings, conversion goals. The website does not redefine
   them.
-- `specs/glossary/glossary.md` holds the `GL-###`
-  register and points at the canonical source per term.
+- **The glossary itself becomes a hub package** (DEC-062):
+  `@schafe-vorm-fenster/glossary`, imported from its Google Doc the way
+  the legal texts are, so a production input is versioned and installable
+  rather than linked.
+- `specs/glossary/glossary.md` stays as the `GL-###` **pointer register**:
+  each entry names its canonical source and adds what this section asks
+  for and the source lacks — the word to use per locale, and the words
+  not to use.
+- One distinction the glossary owes both registers (DEC-062): **Akteur**
+  outward, in copy and in the `actors` audience id; **Organizer**
+  internal, in the data model and the APIs. Nothing user-facing says
+  Organizer.
 - The register needs two columns it does not have yet: **the word to use
   in copy**, per locale, and **the words not to use**. `Portalize` is the
   clearest case — a real product name that must never appear in a
@@ -569,6 +579,11 @@ addressing a Landrat informally is a stance rather than an oversight, and
 it belongs in a decision record and in the hub's communication principles
 rather than only here (see Open Points).
 
+Recorded as **DEC-066**. The hub's communication principles carry it as
+principle 1b, so it binds every surface that reads them, and the `Sie`
+copy of wireframe screens 05, 06 and 08 has been rewritten accordingly —
+"Dein Veranstaltungskalender. Deine Website. Dein Name."
+
 Consequence for generation: `tone-profile` is one interface value for
 every run, and a register switch is a validation failure rather than a
 stylistic finding.
@@ -577,6 +592,17 @@ stylistic finding.
 
 Between IA and components sits one artefact per route: the **page
 composition**. It is the machine-readable form of the page brief.
+
+**Since 2026-09-11 this layer is specified, and it is not called a
+composition.** TS-006 D1 fixes the artefact as a **page manifest** at
+`app/<route>/page.meta.ts`, and the per-page tactical specs TS-019 to
+TS-029 fix one manifest each — TS-024 for `/dein-kalender`, with its
+`focusJob`, `primaryConversion`, `equalWeightConversion`, audiences in
+order, block order and named proof slots. What this section describes as
+`PageComposition` is that manifest; the vocabulary below survives as the
+concept's, the binding form is TS-006 D1's. No separate `src/content-map/`
+tree and no separate spec: a manifest lives beside the route it belongs
+to.
 
 ### C.1 What a composition declares
 
@@ -653,9 +679,14 @@ Rules:
    receives resolved props.
 2. Every component declares four states: loaded, loading (skeleton,
    DEC-033), empty (a conversion occasion, never an error), error.
-3. Length budgets are a component property. When a component changes its
-   budget, the schema's `max()` changes with it and affected content is
-   flagged for regeneration.
+3. **Length budgets come from the design system, not from measurement.**
+   `concept/website-design-system.md` is binding (DEC-056) and
+   `@schafe-vorm-fenster/brand-design` carries `measure.text` at `68ch`;
+   that figure times the line count a role allows gives a defensible
+   `max()` per field. Derived, not estimated — which is why no
+   provisional-budget bookkeeping is needed. A component that later
+   contradicts its own type scale is a design-system defect, not a
+   content problem.
 4. Styling comes from `@schafe-vorm-fenster/brand` tokens only.
 5. A component without a content schema is a layout primitive and belongs
    in the design system, not in this inventory.
@@ -697,7 +728,7 @@ Interfaces:
 | `length-budget` | yes | per field, from the component |
 | `relation-job-guidance` | for selectable types | the relation → job correspondence and the assessment rules (B.5 §2) |
 | `proof-binding` | no | claim → proof ids, clearance filter applied first |
-| `variant-count` | no | how many alternatives to propose for review |
+| `variant-count` | no | two for conversion-bearing slots (hero, CTA, offer tiers), one everywhere else |
 
 Phases:
 
@@ -797,7 +828,7 @@ A new media echo entry lands: `2026-09-noerd-award.media-echo.md`, type
 | Concept documents | md | `go-to-market-os/concept/` | authored |
 | Glossary (`GL-###`) | md | `specs/glossary/` | authored |
 | Content schemas | Zod TS | `src/domain/content/` | authored |
-| Page compositions | TS or YAML | `src/content-map/` | authored |
+| Page manifests | TypeScript | `app/<route>/page.meta.ts` (TS-006 D1) | authored |
 | Content files | md + frontmatter | `content/<locale>/` | generated, then edited |
 | Components | TSX | `src/components/` | authored |
 | Playbooks and skills | `*.playbook.md`, `SKILL.md` | `.agents/` | authored |
@@ -808,7 +839,13 @@ A new media echo entry lands: `2026-09-noerd-award.media-echo.md`, type
 
 - Content id: `<route-segment>-<slot>-<type>` in kebab-case, locale-free.
 - File: `content/<locale>/<route>/<slot>.<type>.md`.
-- Source reference: `<package>@<version>#<record-id>`.
+- Source reference: `<package>@<version>#<record-id>`, where `<version>`
+  is always the **npm** version — the only one that resolves against an
+  installed package. Where a package also carries an internal version
+  (`brand-design` publishes as `0.1.3` while its token system declares
+  `2.6.0`), the two are being reconciled by raising the package to the
+  token version; until that lands, a document citing `2.6.0` is not a
+  provenance reference.
 - IDs from the hub — audiences, conversion goals, offerings, proof — are
   referenced, never redefined (WEB-F-085).
 - Interpolation slots are named, not positional: `{place}`, `{county}`.
@@ -817,34 +854,31 @@ A new media echo entry lands: `2026-09-noerd-award.media-echo.md`, type
 
 ## Order of Work
 
-Layer C comes first. It is the only layer with no specification at all,
-and it is what tells the schema work which types actually carry a page.
+Layer C is no longer the first step: TS-006 D1 and the per-page specs
+TS-019 to TS-029 settled it while this document was being written. What
+remains is the pipeline itself.
 
-1. **Composition spec** — a tactical spec of its own for Layer C: slot
-   grammar, binding kinds, cardinality, empty behaviour. It closes the
-   open point TS-007 names and gives `check:content` 7 and 9 something to
-   validate against.
-2. **One composition** — `/dein-kalender` in TypeScript, referencing the
-   Zod schemas by type. The commercially heaviest page: three offer tiers,
-   comparison, pricing rules, embed demo. If Layer C carries that, it
-   carries everything.
-3. **Schema catalogue** — all 26 types of B.3 as real Zod schemas in a new
-   `src/domain/content/` tree. `max()` budgets measured off the wireframes
-   at 390 px and marked provisional in `describe()`; the existing
-   `content-frontmatter.schema.ts` stays where it is as the archive
+1. **Schema catalogue** — all 26 types of B.3 as Zod schemas in a new
+   `src/domain/content/` tree, with `max()` derived from the design system
+   (`measure.text` 68ch times the line count of the role). The existing
+   `content-frontmatter.schema.ts` stays in place as the archive
    validator and is not carried forward.
-4. **Source adapter** — `resolve(sourceRef) → record`, reading
+2. **Source adapter** — `resolve(sourceRef) → record`, reading
    `index.json` only, the single module that knows package layout.
-5. **The core playbook** — E.2 with one interface set, run locally.
-6. **Pilot: one type, every page.** `proof-card` from media echo records,
+3. **The core playbook** — E.2 with one interface set, run locally.
+4. **Pilot: one type, every page.** `proof-card` from media echo records,
    `de` and `en`, as in E.4. Output goes to a pilot location as fixtures,
-   `status: draft`, never `approved` — so WEB-F-087 holds while the
+   `status: draft`, never `approved`, so WEB-F-087 holds while the
    pipeline is being proven. Measure the editorial rework; that number
    decides how much prompt work the playbook still owes.
-7. **Components with fixtures** — render the composition against fixed
+5. **One manifest, built** — `app/dein-kalender/page.meta.ts` against
+   TS-024, as the first real consumer of the schemas.
+6. **Components with fixtures** — render that manifest against fixed
    example data so the page can be judged whole before events-api and the
-   Portalize loader exist. The fixtures are temporary by design.
-8. **Scale** — remaining compositions, `check:content` in CI, then P7.
+   Portalize loader exist. Every fixture carries an expiry date in its
+   frontmatter and the check fails once it passes, so temporary data
+   cannot quietly become permanent.
+7. **Scale** — remaining manifests, `check:content` in CI, then P7.
 
 Page copy for a live page still waits for the end of the specification
 phase. The pilot is not that: it produces evidence about the pipeline, in
@@ -864,72 +898,42 @@ dispatch rule triggers the playbook through the hub's GTM pipeline, the
 same mechanism that already carries publishing (`cmd:` labels, dispatch
 YAML in `governance/dispatch/`); the result arrives as a pull request;
 `check:content` and the auto-merge rules decide whether it lands on its
-own or waits for manual release. That is also where P7 attaches once the
-Q-018 trigger is settled.
+own or waits for manual release. P7 attaches here: a package publish
+dispatches the update (DEC-050).
 
 ## Open Points
 
-- [ ] **`du` for the Verwaltung needs a decision record.** B.6 fixes one
-      register for the whole site and rewrites the `Sie` copy of wireframe
-      screens 05, 06 and 08. That is a brand stance, not a formatting
-      rule: it decides how a Landrat, an Amtsleiterin and a Stiftung are
-      addressed. It belongs in a `DEC-###` here and in the hub's
-      communication principles, and the wireframes should be corrected so
-      they stop teaching the opposite.
-- [ ] **Glossary columns — to be filled.** Decided: the `GL-###` register
-      stays in `specs/`, gains a use-this-word and an avoid-this-word
-      column per locale, and an agent pre-fills both from the IA, the
-      wireframes and the principles for review (A.3). Open is only the
-      doing of it; `check:content` 11 has nothing to check until then.
-- [ ] **Demands against TS-005 and DEC-041** — decided here, still to be
-      carried into the engine spec by the session that owns it:
-      DEC-041 §1 and TS-005 D1 (six tiers incl. state and different
-      country, plus TS-005-A1); DEC-041 §2 (relation, not audience, is the
-      job dimension); TS-005 D3 (rename `alien`); TS-005 D5 (one weight
-      profile per focus job); TS-005 D8 (segment at community, not
-      municipality). None of them touch geo-api#165 — neighbourhood tiers
-      stay out of scope.
-- [ ] **Cache cost of community segmentation.** Accepted in principle
-      (B.5 §1). Measure it before launch: how many segments does a full
-      German place list actually produce, and does `cacheLife` hold at
-      that cardinality?
-- [ ] **Assessment drift.** `job_relation` and `editorial_weight` are set
-      once and carried forward. Over a year of regenerations, nobody
-      re-reads them. Needs a review trigger — an age, a package major
-      version, or a periodic sweep — or the site quietly orders itself by
-      judgements nobody still holds.
-- [ ] **Length budgets are provisional by decision.** Measured off the
-      wireframes at 390 px and marked provisional in `describe()`, because
-      the schemas are built before the components. Open: what re-flags
-      existing content when a component later changes its budget — a
-      `budget_version` on the schema, or a sweep?
-- [ ] **Update trigger mechanics** — unresolved as Q-018 in the website
-      specs. Options: release webhook, scheduled dependency check, manual.
+Closed since the first draft, and recorded where they belong rather than
+here: the register (DEC-066), the five engine corrections (TS-005
+D1/D3/D5/D8 and DEC-041 §1/§2), assessment expiry (DEC-049), the update
+trigger (DEC-050), the cache-cost gate (DEC-055), the glossary's home
+(DEC-062), Layer C's artefact form (TS-006 D1), length budgets (DEC-056),
+and variant handling (E.2).
+
+- [ ] **Glossary columns are still empty.** DEC-062 settled where the
+      glossary lives and that the `GL-###` register gains a word-to-use
+      and a word-to-avoid column per locale. Nobody has filled them, and
+      `check:content` 11 has nothing to check until they exist. Decided:
+      complete before the pilot, agent pre-fills for review.
 - [ ] **`en` proof context.** Generating from the record rather than
       translating assumes the record carries enough for a second framing.
       Verify on the pilot — and measure how much the harmonisation step
       actually has to repair. If it repairs a lot, parallel generation is
-      the wrong trade and translation-plus-adaptation wins.
-- [ ] **Composition spec needs an id.** Decided: compositions are
-      TypeScript, and Layer C gets a tactical spec of its own rather than
-      being folded into TS-006. Open: its `TS-###` number, and who writes
-      it — it is the first artefact on the critical path.
-- [ ] **Variant handling.** Whether generation proposes alternatives per
-      slot by default, and who chooses.
-- [ ] **Missing source fields — both demands have shrunk.** `geo` on
-      proof no longer blocks: geo is a website-owned facet with the hub
-      value as a suggestion (B.5 §1). `audiences` on media echo no longer
-      blocks either, since job relation is assessed rather than derived
-      (B.5 §2). Neither is a prerequisite any more; both stay as hub
-      demands worth doing. Open is only where the demand register lives,
-      so the gaps stay countable.
-- [ ] **Fixture lifecycle.** Step 7 renders components against fixed
-      example data so a page can be judged before events-api and the
-      Portalize loader exist. Temporary data has a way of becoming
-      permanent: what removes the fixtures, and what fails if they are
-      still there at launch?
-- [ ] **Posts packaging.** `@schafe-vorm-fenster/posts` ships no
-      `index.json` despite exporting one (A.1). One line in the hub's
-      package `files` array. Until it lands, the adapter has no contract
-      for that entity — which costs little, since posts are a secondary
-      source.
+      the wrong trade and translation-plus-adaptation wins. This is the
+      one open point the pilot answers by itself.
+- [ ] **`brand-design` has two version numbers** — npm `0.1.3`, token
+      system `2.6.0`, and DEC-056 cites the latter. Decided: the package
+      rises to the token version. Hub issue #347; the website's dependency
+      range changes in the same step.
+- [ ] **Hub demands, filed and not blocking** — `geo` on proof (#345) and
+      `audiences` on media echo (#346) are worth doing and no longer
+      prerequisites, since geo is a website-owned facet and job relation
+      is an assessment. `posts` ships no `index.json` despite exporting
+      one (#344), which leaves that one entity without a contract.
+- [ ] **Number and gender of the informal address.** DEC-066 fixes the
+      register, not the number: the wireframes use `du` where this
+      document converted them and plural `ihr/euer` where a group was
+      already addressed ("Ihr pflegt weiter euren Kalender"). Both are
+      informal, so nothing contradicts the decision — but one paragraph on
+      `/dein-kalender` now runs "für euren Ort … unter deinem Namen".
+      A copy question, to settle when copy is written.

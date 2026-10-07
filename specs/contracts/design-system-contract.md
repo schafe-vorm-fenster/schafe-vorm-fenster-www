@@ -131,10 +131,20 @@ Two of these carry a rule the manifest has to express, not only name:
 
 ### 2. Composition rules
 
-- Container width and outer gutter **per breakpoint — all six**, not
-  only at the desktop end. The three switch points below 640 px are the
-  reason the scale exists (TS-WEB-0017 D2b), and they are the ones no
-  delivered artefact currently gives a container width for.
+- **The layout grid (DEC-0150, SRC-0014 § *Layout Grid*)** binds container
+  width, outer margin, gutter and column count per breakpoint, for all six:
+  one column and 16 px margin below `md`; eight columns, 32 px margin and
+  20 px gutter from `md`; twelve columns, 24 px gutter and at least 48 px
+  margin from `xl`. The content box is at most 1200 px (`measure.page`) and
+  the margins lie outside it. Photographs and colour sections stay
+  full-bleed. Header, hero content and sections share one left edge. From
+  `xl`: hero text in columns 1–7, bottom-left; search in 1–6; running text at
+  most 7 columns; headlines at most 8; two-column sections head 1–4 and list
+  5–12; comparisons 6 + 6; buttons side by side with `space-3`. Below `xl`
+  nothing stands side by side except `explain-module`. Hero height from
+  `xl` is `min(80vh, 680px)` on `/` and `min(70vh, 560px)` elsewhere. The
+  board `concept/v2.0/Desktop Raster.dc.html` renders these values, and it
+  binds position and width only.
 - Section rhythm: which `space` token separates blocks, and at which of
   the six breakpoints it steps.
 - The mobile-first rule stated normatively: `min-width` queries only, one

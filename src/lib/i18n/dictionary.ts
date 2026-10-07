@@ -157,14 +157,29 @@ export interface Dictionary {
    * That is why they live here and not in `content/pages/**` — they are not
    * the page's argument, they are the site's own signposting, and a page that
    * invented its own would put two names on the same joint.
+   *
+   * A role is not always one phrase, though (DEC-0148). "Benefit" (CG-019)
+   * used to be a single shared string, `whyItMatters`, on every section that
+   * played the role — five of them, across three pages, all asking the exact
+   * same question. `yourSettings`, `everydaySupply`, `communityLife`,
+   * `cultureAndTourism` and `whatAVillageNeeds` are that role's five
+   * instantiations, each naming what its own section is actually about.
    */
   kickers: {
     /** The live answer — this week's dates. */
     liveAnswer: string;
     /** The widened radius — one place over. */
     widerRadius: string;
-    /** What the reader gets out of it — "Was hilft euch das?" (CG-018; "Warum das zählt" is on the avoid list). */
-    whyItMatters: string;
+    /** Benefit (CG-019): control over what the embedded calendar shows. */
+    yourSettings: string;
+    /** Benefit (CG-019): the `/dein-ort` bread-van story — supply, not an event. */
+    everydaySupply: string;
+    /** Benefit (CG-019): the `/dein-ort` council-meeting story. */
+    communityLife: string;
+    /** Benefit (CG-019): the `/dein-ort` culture story. */
+    cultureAndTourism: string;
+    /** Benefit (CG-019): `/ueber-uns`'s village argument. */
+    whatAVillageNeeds: string;
     /** How the mechanism works. */
     howItWorks: string;
     /** The objection: why it snags today. */
@@ -512,7 +527,11 @@ const de: Dictionary = {
   kickers: {
     liveAnswer: "Was gerade ansteht",
     widerRadius: "Einen Ort weiter",
-    whyItMatters: "Was hilft euch das?",
+    yourSettings: "Eure Einstellungen",
+    everydaySupply: "Versorgung",
+    communityLife: "Gemeindeleben",
+    cultureAndTourism: "Kultur & Tourismus",
+    whatAVillageNeeds: "Was ein Dorf braucht",
     howItWorks: "So funktioniert es",
     objection: "Warum es heute hakt",
     othersSay: "Was andere sagen",
@@ -698,7 +717,11 @@ const en: Dictionary = {
   kickers: {
     liveAnswer: "What's on now",
     widerRadius: "One place over",
-    whyItMatters: "What's in it for you?",
+    yourSettings: "Your settings",
+    everydaySupply: "Everyday supply",
+    communityLife: "Community life",
+    cultureAndTourism: "Culture & tourism",
+    whatAVillageNeeds: "What a village needs",
     howItWorks: "How it works",
     objection: "Why it snags today",
     othersSay: "What others say",

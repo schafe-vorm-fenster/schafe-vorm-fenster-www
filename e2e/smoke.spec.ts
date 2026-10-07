@@ -187,8 +187,18 @@ for (const path of PATHS) {
     // first container is awaited explicitly.
     const containers = page.locator("main .container");
     await containers.first().waitFor({ state: "attached" });
+    // The content box, not the padded one: since DEC-0150 the outer margin is
+    // padding *outside* measure.page, so the padded box is 1200px plus two
+    // margins and only the content is held to measure.page.
     const widths = await containers.evaluateAll((elements) =>
-      elements.map((element) => element.getBoundingClientRect().width),
+      elements.map((element) => {
+        const style = getComputedStyle(element);
+        return (
+          element.getBoundingClientRect().width -
+          parseFloat(style.paddingLeft) -
+          parseFloat(style.paddingRight)
+        );
+      }),
     );
     expect(widths.length, `${path} has no container in main`).toBeGreaterThan(0);
     expect(Math.max(...widths), `widest container on ${path} at 1920px`).toBeLessThanOrEqual(

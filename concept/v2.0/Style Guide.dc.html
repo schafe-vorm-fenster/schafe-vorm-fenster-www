@@ -174,7 +174,7 @@ a{color:#486202}a:hover{color:#531BDE}
                 <div style="font-size:26px;font-weight:800;line-height:1.05;letter-spacing:-.025em;color:#F9FBF7">Verlauf über dem Bild, Text im dunklen Teil</div>
               </div>
             </div>
-            <div style="background:#E2E7DB;padding:14px 18px;font-size:15px;line-height:1.5;color:#39412C">Foto als erste Ebene, <span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px">linear-gradient</span> darüber: 0 bei 12–26 %, 0,86 bei 62 %, 0,96 unten.</div>
+            <div style="background:#E2E7DB;padding:14px 18px;font-size:15px;line-height:1.5;color:#39412C">Foto als erste Ebene, <span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px">linear-gradient</span> darüber, neutral schwarz (nie Ink-getönt): oben 0,35 → 0 bis 16 %, Leseband 0 bei 38 %, 0,38 bei 58 %, 0,72 unten. 0,72 ist die Obergrenze.</div>
           </div>
           <div style="flex:1;min-width:300px">
             <div style="{{ demoHatch }}">
@@ -313,7 +313,7 @@ a{color:#486202}a:hover{color:#531BDE}
             <div style="position:absolute;left:0;right:0;bottom:0;padding:0 16px 22px;z-index:2">
               <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
                 <span style="display:inline-flex;align-items:center;gap:8px;background:#A4D822;color:#171D0D;border-radius:999px;padding:7px 15px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px;font-weight:700;letter-spacing:.04em"><span style="width:8px;height:8px;border-radius:50%;background:#2D3F01;display:inline-block"></span>5 TERMINE DIESE WOCHE</span>
-                <span style="display:inline-flex;align-items:center;background:rgba(23,29,13,.55);color:#F9FBF7;border-radius:999px;padding:7px 14px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.04em">OPEN AIR · SCHLATKOW</span>
+                <span style="display:inline-flex;align-items:center;background:rgba(0,0,0,.38);color:#F9FBF7;border-radius:999px;padding:7px 14px;font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:12px;font-weight:700;letter-spacing:.04em">OPEN AIR · SCHLATKOW</span>
               </div>
               <h3 style="margin:0 0 20px;font-size:54px;line-height:.9;letter-spacing:-.045em;font-weight:800;color:#F9FBF7">Für Schlatkow läuft es.</h3>
               <div style="background:#F9FBF7;border-radius:999px;display:flex;align-items:center;gap:10px;min-height:56px;padding:0 6px 0 18px">
@@ -601,11 +601,11 @@ class Component extends DCLogic {
 
       noteStyle: mono + 'font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A6300;background:#FBF1DC;border-radius:999px;padding:5px 12px;white-space:nowrap',
 
-      heroBleed: 'position:relative;width:100%;height:440px;background-image:linear-gradient(180deg,rgba(23,29,13,.55) 0%,rgba(23,29,13,.20) 26%,rgba(23,29,13,.86) 62%,rgba(23,29,13,.96) 100%),url(../v1.0/assets/open-air-stage.jpeg);background-size:cover,cover;background-position:center,center;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
-      weekBleed: 'position:relative;width:100%;height:280px;background-image:linear-gradient(180deg,rgba(23,29,13,0) 18%,rgba(23,29,13,.80) 55%,rgba(23,29,13,.96) 100%),url(../v1.0/assets/office-interior.jpg);background-size:cover,cover;background-position:center,center;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
+      heroBleed: 'position:relative;width:100%;height:440px;background-image:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 16%),linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%),url(../v1.0/assets/open-air-stage.jpeg);background-size:cover,cover;background-position:center,center;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
+      weekBleed: 'position:relative;width:100%;height:280px;background-image:linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%),url(../v1.0/assets/office-interior.jpg);background-size:cover,cover;background-position:center,center;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
       inviteBleed: 'position:relative;width:100%;background:repeating-linear-gradient(45deg,#E2E7DB,#E2E7DB 16px,#D1D6CB 16px,#D1D6CB 32px)',
 
-      demoPhoto: 'position:relative;width:100%;background-image:linear-gradient(180deg,rgba(23,29,13,0) 14%,rgba(23,29,13,.84) 52%,rgba(23,29,13,.96) 100%),url(../v1.0/assets/garden-workplace.jpeg);background-size:cover,cover;background-position:center,center top;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
+      demoPhoto: 'position:relative;width:100%;background-image:linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%),url(../v1.0/assets/garden-workplace.jpeg);background-size:cover,cover;background-position:center,center top;background-repeat:no-repeat,no-repeat;background-color:#171D0D',
       demoHatch: 'position:relative;width:100%;background:repeating-linear-gradient(45deg,#E2E7DB,#E2E7DB 16px,#D1D6CB 16px,#D1D6CB 32px)'
     };
   }

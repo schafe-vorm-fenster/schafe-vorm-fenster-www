@@ -77,10 +77,11 @@ export interface Finding {
  * (DEC-0136).
  *
  * Only one distinction has a rule behind it today: `CG-005` forbids a question
- * mark in a **section title** and allows it in a kicker (*"Was hilft euch
- * das?"*), in a form step's question and in the hero headline, which is
- * `CG-020`'s own shape. A lint that cannot tell a title from a kicker either
- * fails the kickers or passes the titles, so the role is read off the label.
+ * mark in a **section title** and allows it in a kicker (*"Warum ist das
+ * wichtig?"*, CG-018), in a form step's question and in the hero headline,
+ * which is `CG-020`'s own shape. A lint that cannot tell a title from a
+ * kicker either fails the kickers or passes the titles, so the role is read
+ * off the label.
  *
  * The labels are authored German and English (`CG-041`: EN mirrors DE), so the
  * map is a pattern over both rather than a list of eleven pages' labels: a
@@ -324,11 +325,15 @@ export const AVOID_TERMS: readonly AvoidTerm[] = [
     exemptRoutes: ["order"],
   },
   { rule: "DEC-0062", pattern: /\bOrganizer[ns]?\b/i, instead: "Akteur · actor" },
-  { rule: "CG-018", pattern: /\bWarum das zählt\b/i, instead: "Was hilft euch das?" },
+  {
+    rule: "CG-018",
+    pattern: /\bWarum das zählt\b/i,
+    instead: "a section-specific kicker naming the benefit (CG-019, DEC-0148) — not one fixed phrase",
+  },
   {
     rule: "CG-018",
     pattern: /\bWhy this matters\b/i,
-    instead: "What does this do for you?",
+    instead: "a section-specific kicker naming the benefit (CG-019, DEC-0148) — not one fixed phrase",
   },
   { rule: "CG-017", pattern: /\bWarum wir\b/i, instead: "Über uns · Wer dahintersteckt" },
   { rule: "CG-017", pattern: /\bWhy us\b/i, instead: "About us · Who is behind it" },
@@ -717,13 +722,13 @@ export const RENDERED_BLOCKS: readonly {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/page.tsx:782 (listAt, the three step lines)",
+    renderedBy: "app/[lang]/page.tsx:784 (listAt, the three step lines)",
   },
   {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/page.tsx:775 (listAt, the sample event rows)",
+    renderedBy: "app/[lang]/page.tsx:777 (listAt, the sample event rows)",
   },
   {
     slot: "mitmachen-2-objections",
