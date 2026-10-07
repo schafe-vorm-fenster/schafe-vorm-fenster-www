@@ -1,6 +1,6 @@
 ---
 name: chaos-persona
-description: Website-run chaos persona — unstructured browser testing by one behaviour profile (hasty-clicker, form-abandoner, keyboard-only, boundary-tester) against the dev server. Spawn once per profile and round; records raw observations, never rates.
+description: Website-run chaos persona — unstructured browser testing by one behaviour profile (hasty-clicker, form-abandoner, keyboard-only, boundary-tester, editorial-reviewer) against the dev server. Spawn once per profile and round; records raw observations, never rates.
 model: haiku
 ---
 

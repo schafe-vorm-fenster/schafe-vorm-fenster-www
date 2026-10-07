@@ -137,6 +137,8 @@ export interface PlaceDatesIslandProps {
   readonly role?: EventListRole;
   readonly tone?: "light" | "dark";
   readonly headingLevel?: "h2" | "h3";
+  /** Forwarded to `live-module-frame`: `split` is head 1–4, list 5–12 from `xl`. */
+  readonly layout?: "stack" | "split";
   /** Read, not seen — where the block above already carries this sentence as the page's `h1`. */
   readonly titleHidden?: boolean;
   /**
@@ -189,6 +191,7 @@ export async function PlaceDatesIsland({
   tone,
   headingLevel = "h2",
   titleHidden = false,
+  layout = "stack",
   prefer,
   ctaTemplate,
   ctaDataCta,
@@ -224,6 +227,7 @@ export async function PlaceDatesIsland({
 
   return (
     <LiveModuleFrame
+      layout={layout}
       announced={announced || data.publishInvitation}
       cta={
         // State B suppresses the calendar handover: a covered place with no

@@ -41,8 +41,10 @@
 
 /* lg — 48rem / 768px: two columns, so one portrait is half a column wide
    rather than a 4:5 box across the whole measure. */
-@media (min-width: 48rem) {
+/* xl — 64rem: side by side only from the desktop tier (SRC-0014 §Layout Grid, DEC-0150). */
+@media (min-width: 64rem) {
   .team {
+    column-gap: var(--grid-gap);
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

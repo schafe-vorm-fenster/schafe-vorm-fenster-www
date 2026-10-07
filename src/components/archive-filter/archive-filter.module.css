@@ -11,6 +11,19 @@
 }
 
 /*
+ * A chip does not change width when it is pressed. A selected chip carries an
+ * 18 px check plus `space-2` before its label; an unselected one carries the
+ * same amount as extra inline padding, half on each side. Pressing a chip then
+ * only changes what is painted in its box, so the row cannot re-wrap on a click.
+ * At 1024 px the grid's 928 px content box (DEC-0150) left no slack for two
+ * checks, and the row broke (TS-WEB-0028-A13's after-input guard: 0.5040).
+ */
+.chips > button[aria-pressed="false"],
+.chips.reserved > span:not(.reset) {
+  padding-inline: calc(var(--space-4) + (18px + var(--space-2)) / 2);
+}
+
+/*
  * The *all* control is a text reset, not an eighth pill — no fill, no
  * border, the site's own quiet link colour, and the same 44 px target every
  * other control keeps.

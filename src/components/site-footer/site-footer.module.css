@@ -128,7 +128,7 @@
 }
 
 /* md — 48rem / 768px: the two top slots stand beside each other. */
-@media (min-width: 48rem) {
+@media (min-width: 64rem) {
   .top {
     align-items: start;
     display: grid;

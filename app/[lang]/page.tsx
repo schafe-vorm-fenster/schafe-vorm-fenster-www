@@ -427,6 +427,7 @@ function FocusModules({
             <PlaceDatesIsland
               conversion={SAVE_CALENDAR}
               ctaTemplate={place === undefined ? copy.datesCta : undefined}
+              layout="split"
               locale={locale}
               role="illustrative"
               rowCount={3}
@@ -659,6 +660,7 @@ export default async function HomePage({
           </Suspense>
         }
         focal={focusCopy.hero?.focal}
+        heroSize="home"
         id="focus-block"
         // F-2-33: the surface badges itself out of the dictionary, so it
         // needs the page's language or it badges an English page in German.

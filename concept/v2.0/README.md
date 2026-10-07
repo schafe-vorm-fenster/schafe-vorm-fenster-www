@@ -10,7 +10,8 @@ v1.0 bleibt als Beleg des Konzeptstands liegen.
 | `Style Guide.dc.html` | Der Styleguide als Canvas: Farbwelt, Typo, Komponenten, Zustände |
 | `UI Design Mobile v3.dc.html` | Ausgestaltete Screens, Smartphone-Breite |
 | `UI Varianten.dc.html` | Variantenvergleich zu einzelnen Flächen |
-| `assets/` | Bilder, auf die die Boards verweisen |
+| `Desktop Raster.dc.html` | Desktop-Raster (DEC-0150): Container 1200 px, 12 Spalten, Startseite und Inhaltsseite bei 1440 px. Verbindlich nur für Position und Breite, nicht für Scrim, Schriftgrößen oder Header-Navigation. Statische Renders in `assets/desktop-raster/` |
+| `assets/` | Bilder, auf die die Boards verweisen, und die Renders des Desktop-Rasters |
 | `support.js` | Runtime für die Canvas-Dateien |
 
 Das zugehörige Dokument ist

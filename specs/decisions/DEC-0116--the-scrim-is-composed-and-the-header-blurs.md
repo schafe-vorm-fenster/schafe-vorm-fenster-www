@@ -71,6 +71,10 @@ produces no placeholder (its copy is `none`), so it adds no row.
    CTA slot moves to its own `.search` class so the column rule cannot
    shrink-wrap it.
 
+   **Amended by DEC-0150 (2026-10-07):** this holds **below `xl`**. From `xl`
+   the owner's desktop grid sets the buttons side by side with a 12 px gap
+   (`space-3`), wrapping when they do not fit.
+
 5. **`gradient` stays in both interfaces as a documented no-op.** `/ueber-uns`
    still passes `gradient="ink"`; the prop selects nothing, and T-14 / T-19
    remove it. The `.ink` and `.violet` classes are gone.
