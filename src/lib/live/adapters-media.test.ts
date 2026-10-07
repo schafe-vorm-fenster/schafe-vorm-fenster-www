@@ -25,4 +25,10 @@ describe("DEC-0152: text and image travel with the date", () => {
     expect(toLiveEvent({ ...base, image: IMAGE, "image.exists": false })?.imageUrl).toBeUndefined();
     expect(toLiveEvent({ ...base, image: "" })?.imageUrl).toBeUndefined();
   });
+
+  it("reads the localized `description` a `language: \"de\"` search returns, and the dotted one otherwise", () => {
+    const base = { id: "3", summary: "Lesung", start: 1_791_000_000, categories: [], tags: [] };
+    expect(toLiveEvent({ ...base, description: " Text " })?.description).toBe("Text");
+    expect(toLiveEvent({ ...base, "description.de": "Text" })?.description).toBe("Text");
+  });
 });

@@ -58,7 +58,7 @@ export function toLiveEvent(event: UpstreamEvent): LiveEvent | undefined {
     categoryId: event.categories[0],
     ...optional({
       communityId: event["community.id"],
-      description: event["description.de"]?.trim() || undefined,
+      description: (event.description ?? event["description.de"])?.trim() || undefined,
       tags: event.tags.length > 0 ? event.tags : undefined,
       imageUrl: event["image.exists"] === false ? undefined : event.image || undefined,
       scope: event.scope,
