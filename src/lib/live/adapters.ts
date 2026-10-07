@@ -104,6 +104,7 @@ export function toLiveEventFromSite(event: CommunitySiteEvent): LiveEvent | unde
       communityId: event.community?._id,
       description: event.description?.trim() || undefined,
       tags: event.tags.length > 0 ? event.tags : undefined,
+      imageUrl: event.imageUrl?.trim() || undefined,
       scope: event.scope,
     }),
   };
