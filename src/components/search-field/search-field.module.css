@@ -43,6 +43,12 @@
   font-size: var(--type-body-size);
   min-width: 0;
   padding: 0;
+  /* DEC-0147: `.input`'s own background is transparent, but it sits inside
+     `.field`'s opaque paper pill — the same fill that already gives the
+     submit button its contrast gives the typed text and the placeholder
+     theirs too. The photo-surface shadow this would otherwise inherit
+     would only blur it (schafe-vorm-fenster-www#8). */
+  text-shadow: none;
   /* An `<input>` carries an intrinsic width from its default `size`, and that
      width is what a shrink-to-fit ancestor (the hero's CTA slot) measures —
      which pushed the whole pill ~32 px past the 360 px viewport. `flex: 1`
@@ -54,6 +60,7 @@
 .input::placeholder {
   color: var(--color-neutral-muted);
   opacity: 1;
+  text-shadow: none; /* DEC-0147 — same opaque field, same reason */
 }
 
 /* The field owns the focus ring; the input inside it must not draw a second. */
@@ -76,6 +83,10 @@
   gap: var(--space-2);
   min-height: var(--height-control);
   padding: 0 var(--space-4);
+  /* DEC-0147: an opaque fill already gives the label its contrast on a
+     photo surface — the shadow `photo-surface.module.css` hands down to
+     every `button` would only blur it. */
+  text-shadow: none;
 }
 
 .submit:hover {

@@ -66,6 +66,10 @@
 .button.primaryLight {
   background: var(--ground-primary-fill);
   color: var(--ground-primary-text);
+  /* DEC-0147: this fill already gives the label its contrast on a photo
+     surface — the shadow `photo-surface.module.css` hands down would only
+     blur it. */
+  text-shadow: none;
 }
 
 .button.primaryLight:hover {
@@ -75,6 +79,7 @@
 .button.primaryDark {
   background: var(--color-lime-500);
   color: var(--color-neutral-ink);
+  text-shadow: none; /* DEC-0147 */
 }
 
 .button.primaryDark:hover {
@@ -85,6 +90,7 @@
 .button.pulse {
   background: var(--color-himbeere-600);
   color: var(--color-neutral-paper);
+  text-shadow: none; /* DEC-0147 */
 }
 
 .button.pulse:hover {
@@ -94,6 +100,7 @@
 .button.secondary {
   background: var(--color-neutral-paper);
   color: var(--color-neutral-ink);
+  text-shadow: none; /* DEC-0147 */
 }
 
 .button.secondary:hover {

@@ -182,6 +182,7 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0144 — The instrument names the criterion, and a site-wide sentence is walked site-wide — the meters cite whole identifiers, three sweeps leave the home page, and two divergences are declared instead of assumed](DEC-0144--the-instrument-names-the-criterion.md)
 - [DEC-0145 — The four open points the owner answered — the legal route may name the product, a price is read, three authored proof lines are cleared, and the budget applies to what we wrote](DEC-0145--the-four-open-points-the-owner-answered.md)
 - [DEC-0146 — "The app" is community-site; community-calendar is being abandoned](DEC-0146--the-app-is-community-site.md)
+- [DEC-0147 — A control with its own opaque fill does not carry the photo-surface text shadow](DEC-0147--a-filled-control-does-not-carry-the-photo-shadow.md)
 - [DEC-0148 — The "benefit" kicker is not one phrase for every section](DEC-0148--the-benefit-kicker-is-not-one-phrase-for-every-section.md)
 - [DEC-0149 — Editorial review gets a chaos persona; its first round closes a recorded spec/test drift](DEC-0149--editorial-review-closes-the-customer-acceptance-gap.md)
 - [DEC-0150 — Surfaces run full-bleed, content stands in a 1200 px container — the desktop grid from the owner's design input](DEC-0150--surfaces-full-bleed-content-in-the-container.md)
