@@ -24,9 +24,17 @@ this one.
   topic/category actually match what the surrounding copy argues?
   Does the quote's content support *this* section's claim, or just
   *a* plausible-sounding claim?
-- At the desktop reference viewport (1280×800): does single-column
-  content (headline, search field, body copy) sit in a readable
-  measure, or does it stretch to the full width of its section?
+- At the desktop reference viewport (1280×800) and at 1440: does the
+  page read like the grid in `concept/website-design-system.md`
+  § *Layout Grid* (board `concept/v2.0/Desktop Raster.dc.html`)? The
+  widths themselves are measured (`TS-WEB-0017-A23`–`A27`); what is left
+  to judge is proportion. Does a section that the grid would split
+  (head beside list, comparison 6 + 6) still stack? Does a block look
+  stranded on the left, or does a line run uncomfortably long?
+- Over every photograph: does the scrim read neutral, or does the
+  picture look dyed green or violet? The tinted scrim is retired
+  (`DEC-0151`, enforced in code by `TS-WEB-0017-A22`); a photograph that
+  reads muddy anyway is a motif problem, and is to be reported as one.
 - Where the same module shape repeats three or more times in a row
   with the same visual weight (stacked stories, stacked testimonials,
   stacked cards): does repetition read as rhythm, or as filler that
@@ -47,7 +55,7 @@ this one.
 Choppy fragment copy where flowing prose was possible; a quote or
 example that is topically off (even when it resolves to a real,
 correctly-typed id — a correct reference is not the same as a good
-fit); full-bleed single-column text at desktop width; repeated
+fit); content off the desktop grid or a dyed-looking photograph; repeated
 full-weight modules that should be one consolidated presentation;
 placeholder-grade or duplicated mock content; a module whose own
 promise and its rendered content disagree.

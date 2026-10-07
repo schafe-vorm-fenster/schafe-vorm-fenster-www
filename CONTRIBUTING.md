@@ -104,9 +104,11 @@ It currently runs, in order:
 4. `check:stack` — TS-WEB-0017-A1/A2/A7/A17: every runtime dependency registered
    in `stack.allow.json`, one lockfile, the brand package pinned exact, one
    icon set, and `.npmrc` mapping both the hub scope and the method scope
-5. `check:brand` — TS-WEB-0017-A4/A5/A6: no `max-width` media query, every
+5. `check:brand` — TS-WEB-0017-A4/A5/A6/A22: no `max-width` media query, every
    `min-width` a breakpoint token, no colour or `font-family` literal
-   outside `app/styles/brand.css`, no brand asset committed here
+   outside `app/styles/brand.css`, no brand asset committed here, and no
+   `ink`- or `violet`-tinted gradient in code or in a `concept/v2.0` board —
+   the scrim is neutral black
 5. `typecheck` · `lint` · `test`
 
 ### Writing Tests

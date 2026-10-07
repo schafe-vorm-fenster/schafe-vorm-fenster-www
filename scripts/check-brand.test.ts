@@ -123,3 +123,40 @@ describe("TS-WEB-0017-A4: check-brand excludes build output from the scan", () =
     expect(result.cssFileCount).toBe(1);
   });
 });
+
+describe("TS-WEB-0017-A22: the scrim is neutral black, in code and in the boards", () => {
+  const a22 = (errors: readonly string[]) => errors.filter((e) => e.startsWith("TS-WEB-0017-A22"));
+
+  it("fails an ink-tinted gradient in a design board", () => {
+    const root = newRoot();
+    writeFileSync(
+      fixture("concept", "v2.0", "Board.dc.html"),
+      '<div style="background-image:linear-gradient(180deg,rgba(23,29,13,.45) 0%,rgba(23,29,13,0) 22%),url(x.jpg)"></div>',
+    );
+    expect(a22(checkBrand(root).errors)).toHaveLength(1);
+  });
+
+  it("fails a scrim mixed from the ink or violet token in a stylesheet", () => {
+    const root = newRoot();
+    writeFileSync(
+      fixture("src", "components", "x.module.css"),
+      ".s { background-image: linear-gradient(180deg, color-mix(in srgb, var(--color-neutral-ink) 82%, transparent) 0, transparent 50%); }\n" +
+        ".t { background-image: linear-gradient(0deg, var(--color-violet-500) 0, transparent 40%); }",
+    );
+    expect(a22(checkBrand(root).errors)).toHaveLength(2);
+  });
+
+  it("accepts the neutral-black ladder in a board and in a stylesheet", () => {
+    const root = newRoot();
+    writeFileSync(
+      fixture("concept", "v2.0", "Board.dc.html"),
+      '<div style="background-image:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 16%),linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%)"></div>' +
+        '<div style="box-shadow:0 4px 16px rgba(23,29,13,.08)"></div>',
+    );
+    writeFileSync(
+      fixture("src", "components", "y.module.css"),
+      ".s { background-image: linear-gradient(180deg, var(--color-scrim-35) 0, var(--color-scrim-0) 16%); }",
+    );
+    expect(a22(checkBrand(root).errors)).toEqual([]);
+  });
+});
