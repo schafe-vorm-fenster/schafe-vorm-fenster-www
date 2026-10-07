@@ -108,10 +108,11 @@ export function toListItems(
       // end, and with the clock in front a row from the next village over
       // read "13:…" on a phone — the one word the rule is about, cut.
       // A row from another village also says how far away it is (TS-WEB-0020-A15):
-      // "Rubkow · 6 km · 19:00". A row from the place itself carries no figure.
+      // "Rubkow · 6 km · 19:00".
       meta: [
         event.placeName,
-        event.distanceKm === undefined ? undefined : formatDistance(event.distanceKm),
+        // The place itself is no distance away: under half a kilometre, no figure.
+        event.distanceKm === undefined || event.distanceKm < 0.5 ? undefined : formatDistance(event.distanceKm),
         clock,
       ]
         .filter(Boolean)
