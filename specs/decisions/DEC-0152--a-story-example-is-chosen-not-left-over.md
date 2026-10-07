@@ -98,10 +98,24 @@ Measured before deciding, on the public village-calendar page for Schlatkow
 - `state/open.md`: row 290 (F-4-3) is resolved by item 6. F-4-6 and F-4-7
   are resolved in this repository. F-4-5 (consolidating the three stories)
   stays open, because it needs a design pattern.
-- Images: no source this site can reach without a token carries one. The
-  token path would rank image-bearing dates first, but the deployment has
-  no `EVENTSAPI_READ_TOKEN`. Until it has one, the ranking stops at text.
-- Observed while verifying: the public village-calendar page served a Vercel
+- **Images, corrected the same day.** This record first said that no
+  tokenless source carries an image. That was wrong. An event's `image` (in
+  events-api) and its `imageUrl` (on the public village-calendar page) are
+  full public assets-api URLs. They look like
+  `https://assets.api.schafe-vorm-fenster.de/api/image?googleDriveId=…`,
+  return WebP, and need no token (HEAD 200 `image/webp`, 30-day cache). The
+  community-site client simply dropped the field.
+  - It is now parsed in both clients, and the token path honours
+    `image.exists`.
+  - The selector's image rank applies to every source.
+  - Measured on Schlatkow's page: 5 of 88 dates carry an image, three of them
+    `culture-tourism`.
+  - Whether an example *shows* its image is a design question this record
+    does not settle. A date-led story is "a photograph **or** a live date,
+    never both" (`app/[lang]/dein-ort/page.tsx`, the story rhythm).
+- Observed while verifying: the public village-calendar page (production
+  HTML, scraped because this deployment has no `EVENTSAPI_READ_TOKEN` and so
+  falls back to the tokenless path) served a Vercel
   challenge (`x-vercel-mitigated: challenge`, HTTP 403) to Node's `fetch`
   from the development machine after the day's test traffic. `curl` from
   the same machine and the deployed preview's BFF were unaffected
