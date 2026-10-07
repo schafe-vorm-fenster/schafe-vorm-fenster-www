@@ -227,6 +227,16 @@ test.describe("TS-WEB-0020 — your place", () => {
     () => {},
   );
 
+  test.fixme(
+    "TS-WEB-0020-A14: each story's example carries D3's category id for that story [round 4, F-4-2; open-list, state/open.md row 290 adjacent — the category column is written, the render is not yet made to match it]",
+    () => {},
+  );
+
+  test.fixme(
+    "TS-WEB-0020-A15: every nearby row states its distance from the anchor and no two rows are identical [round 4, F-4-6/F-4-7; open-list — the distance figure is not yet surfaced, and F-4-6's duplicate rows are upstream (DEM-0070), not a render bug this test can wait out]",
+    () => {},
+  );
+
   /**
    * **Changed by the polish pass** (brief, page 2, "the testimonials are not
    * rendered at all, although four real quotes sit in

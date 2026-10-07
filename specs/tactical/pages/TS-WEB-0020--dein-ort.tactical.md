@@ -108,12 +108,19 @@ type 3). All four always render and TS-WEB-0005 D6/D7 order them among themselve
 relevance never reduces the count, because a story is a promise of the product,
 not a proof element that can lose a ranking.
 
-| # | Aspect (SRC-0003) | Live example asks for | Cleared backing | Testimonial candidate |
-| --- | --- | --- | --- | --- |
-| 1 | the bakery van with its route | a recurring supply date in the place | `google-baecker-schlatkow`, `homeoffice-mobile-anbieter` | `kurzweg-baeckerei` |
-| 2 | the council meeting, listed before it happens | an official/municipal date | `impftermine-landkreis` | `zschiesche-gross-kiesow` |
-| 3 | culture nobody would have searched for | a culture date | **none** | `kulturlandbuero-broellin` / `eichler-wasserschloss-quilow` |
-| 4 | the fifteen-minute radius | position 2 rows, with their place names | `regional-footprint` | `wendt-rubkow` |
+| # | Aspect (SRC-0003) | Live example asks for | Example category (events-api id) | Cleared backing | Testimonial candidate |
+| --- | --- | --- | --- | --- | --- |
+| 1 | the bakery van with its route | a recurring supply date in the place | `everyday-supply` | `google-baecker-schlatkow`, `homeoffice-mobile-anbieter` | `kurzweg-baeckerei` |
+| 2 | the council meeting, listed before it happens | an official/municipal date | `community-life` | `impftermine-landkreis` | `zschiesche-gross-kiesow` |
+| 3 | culture nobody would have searched for | a culture date | `culture-tourism` | **none** | `kulturlandbuero-broellin` / `eichler-wasserschloss-quilow` |
+| 4 | the fifteen-minute radius | position 2 rows, with their place names and each row's distance from the anchor | n/a — not a single-category story | `regional-footprint` | `wendt-rubkow` |
+
+The category column is new (2026-10-07, editorial round 4, F-4-2): D3 always
+named what kind of date each story's example asks for in prose, but nothing
+verified the rendered example actually matched — found on `/dein-ort`, story 2
+showing a `community-life` example tagged "Gemeindeleben" would have passed,
+but a `neighbouring`/"Sonstiges" women's-sport example under the council-
+meeting story did not, and nothing caught it. A4 is amended below to check it.
 
 All five candidates are `usage_rights: unverified` today (Q-0014); the clearance
 that decides is read from the installed `@schafe-vorm-fenster/proof` version at
@@ -123,15 +130,23 @@ build (TS-WEB-0005 D5). Two slots, two ladders, no substitutes:
 name → county → at stage 0 the build-time snapshot example, visibly labelled as
 such (TS-WEB-0009 D4 tier 3) → nothing: the story renders as aspect + why it matters
 and the publish invitation takes the example box. Never invented, never from an
-uncovered place (FUN-WEB-0024).
+uncovered place (FUN-WEB-0024), and never from a category foreign to the story's
+own aspect (the column above; A14).
 
-**Testimonial:** removed by the clearance filter → the story renders three-part and
-the claim stays weakened. Forbidden as replacements: a paraphrase, an anonymous
-quote, "our users say", a stock portrait, a logo wall, a figure. Clearance is known
-at build time, so the slot is absent from the DOM rather than reserved — no async
-box, no layout shift — and every empty slot is reported with its proof id.
-**Today's expected render is four three-part stories**: a design that only works
-with quotes is a defect of the design, not a reason to publish an unverified one.
+**Testimonial — deviation from this determination, recorded (DEC-0104, DEC-0149).**
+This row originally read: removed by the clearance filter → the story renders
+three-part, forbidden as replacements a paraphrase, an anonymous quote, "our
+users say", a stock portrait, a logo wall, a figure; today's expected render
+four three-part stories. That is no longer what ships. `e2e/pages/dein-ort.spec.ts`
+("TS-WEB-0020-A6: every story closes on a named, attributed quote") documents
+the actual decision: the four named, attributed, verbatim-quoted testimonials
+ship **pre-clearance**, each with a `clearance: pending` note naming the
+record and the reason, and the pre-go-live hardening round clears them before
+launch. What did not change is the other half of A6 — no anonymous quote, no
+paraphrase, no "users say" substitute, ever. See DEM-0069 and `state/open.md`
+for the clearance debt this still carries, and TS-WEB-0005 D5 for the
+mechanism that will remove an uncleared quote automatically if it is not
+cleared by launch.
 
 ### D4 — Homescreen block and the one primary marker [FIXED: SRC-0003, TS-WEB-0006 D3/D6; measurement TS-WEB-0012 D4/D5]
 
@@ -174,9 +189,11 @@ site is not a goal of its own.
 | TS-WEB-0020-A1 | static | `page.meta.ts` of `/dein-ort` declares exactly D1's values including `emptyState`; conversion ids resolve in `@schafe-vorm-fenster/goals`; both audiences resolve, in that order. |
 | TS-WEB-0020-A2 | e2e | Walk state A: `GET /api/places/search?q=<any covered place name>`, take a slug, confirm `GET /api/places/{slug}/events?window=now` is non-empty, open `/dein-ort?ort=<slug>` at 360 × 640. The `h1` is the place name; at most 3 date rows; exactly one element carries `data-cta="primary"`, it is the calendar handover, and it is fully visible without scrolling; the homescreen action and the closing CTA repeat the same goal id and target in the secondary treatment (D4). |
 | TS-WEB-0020-A3 | e2e | Walk state B: probe `GET /api/places/{slug}/events?window=now` over covered slugs until one answers 200 with an empty list, then open `/dein-ort?ort=<that slug>`. Position 1 carries the publish offer; the primary CTA resolves to `/mitmachen`; URL, canonical, robots meta, `<title>`, header, footer, block set and block order are identical to state A; the `h1` is the place name at the same DOM index and the focus-block container is `role="status"`; no element carries error styling, a warning icon, a retry control or a spinner; the nearby module renders, states its own radius, and every row names a place other than the searched one. |
+| TS-WEB-0020-A15 | e2e | Every row the nearby module (D3 row 4, position 2) renders states its distance from the anchor place alongside its own place name — a place name with no distance fails. No two rows in the same render are identical across id, title and `startsAt`. [F-4-6/F-4-7, round 4] |
 | TS-WEB-0020-A4 | e2e | Exactly four value stories render in both states; each shows a title, a story paragraph, and either an example box or the publish invitation in its place; no example names a place absent from geo-api. |
+| TS-WEB-0020-A14 | e2e | Each story's rendered example carries D3's category id for that story (the "Example category" column); a mismatch — any category other than the one the story names — fails. [F-4-2, round 4] |
 | TS-WEB-0020-A5 | static | The four stories' `proof_ref`s resolve to ids present in the installed `@schafe-vorm-fenster/proof` version; a missing id fails the build (a wrong id is a defect, an uncleared id is not). |
-| TS-WEB-0020-A6 | e2e | With every testimonial uncleared (today's state) the page renders four three-part stories: no quote component, no attributed sentence, no portrait, no paraphrase, no "users say" substitute anywhere in blocks 2a; the build report lists four empty slots with their proof ids. |
+| TS-WEB-0020-A6 | e2e | **Superseded, deviation recorded (D3, DEC-0149).** Written text: with every testimonial uncleared the page renders four three-part stories, no quote anywhere. Actual, shipped behaviour, per `e2e/pages/dein-ort.spec.ts`: four named, attributed, verbatim quotes render pre-clearance, each with a `clearance: pending` note; no anonymous quote, paraphrase, or "users say" substitute, ever — that half is unchanged and still the criterion. |
 | TS-WEB-0020-A7 | e2e | The homescreen block renders both the iOS and the Android instruction with an iPhone UA and with an Android UA, byte-identical DOM; its action resolves to `{APP_HOST}/{slug}`; a missing screenshot renders the hatched surface and a non-matching one the placeholder badge. |
 | TS-WEB-0020-A8 | integration | Clicking any of D4's three call sites emits `save-calendar-to-homescreen` with `stage=handover` exactly once and nothing else; in state B the page view carries the empty-state flag and the publish CTA emits no conversion event. |
 | TS-WEB-0020-A9 | e2e | `/dein-ort` with no parameter, with `?ort=` empty, and with `?ort=<garbage>` each answer 200 in the search state; the garbage value is HTML-escaped wherever echoed and appears nowhere as data; a name that matches no place lands on `/dein-ort/starten?ort=…`, and no surface of the search field offers a postcode as an alternative. |
