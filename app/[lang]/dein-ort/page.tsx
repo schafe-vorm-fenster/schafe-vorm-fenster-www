@@ -4,11 +4,12 @@ import { EmptyStateBlock } from "@/src/components/empty-state-block/empty-state-
 import { EventRow } from "@/src/components/event-row/event-row";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { HowtoBlock } from "@/src/components/howto-block/howto-block";
-import { MediaFrame } from "@/src/components/media-frame/media-frame";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
+import { StoryStage, type StageStory } from "@/src/components/story-stage/story-stage";
 import { ValueStory } from "@/src/components/value-story/value-story";
+import type { IconName } from "@/src/components/icon/icon";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
@@ -167,6 +168,8 @@ interface StorySection {
    * category this story's date (DEC-0152).
    */
   readonly example?: StoryExampleSpec;
+  /** The story's glyph — the hour's well, and the watermark where it has no photograph. */
+  readonly icon: IconName;
   /**
    * The "benefit" kicker naming what this specific story is about (DEC-0148)
    * — no longer one shared phrase across all three.
@@ -182,6 +185,14 @@ const STORIES: readonly StorySection[] = [
     surface: "paper",
     imageId: "dein-ort-story-baeckerwagen",
     kickerKey: "everydaySupply",
+    icon: "truck",
+    example: {
+      category: "everyday-supply",
+      topic: /bäcker|baecker|brot|backwaren|verkaufswagen|fleischer|fisch|wochenmarkt|markt|hofladen|lieferung/i,
+      // `everyday-supply` also holds the waste collection; under the bread
+      // story only a supply date that is about buying something counts.
+      topicRequired: true,
+    },
   },
   {
     slotId: "dein-ort-4-story-ratssitzung",
@@ -197,6 +208,7 @@ const STORIES: readonly StorySection[] = [
       topic: /gemeindevertret|stadtvertret|gemeinderat|sitzung|ausschuss|einwohnerversammlung|bürgermeister|buergermeister|amt\b/i,
     },
     kickerKey: "communityLife",
+    icon: "landmark",
   },
   {
     slotId: "dein-ort-5-story-kultur",
@@ -205,6 +217,11 @@ const STORIES: readonly StorySection[] = [
     surface: "paper",
     imageId: "dein-ort-story-kultur",
     kickerKey: "cultureAndTourism",
+    icon: "music",
+    example: {
+      category: "culture-tourism",
+      topic: /konzert|musik|ausstellung|lesung|theater|schloss|chor|kino|kultur/i,
+    },
   },
 ];
 
@@ -395,6 +412,34 @@ export default async function PlacePage({
       return [story.id, event === undefined ? undefined : toListItems([event], locale)[0]] as const;
     }),
   );
+  /** DEC-0153 — the stage's stories, read off the three story slots. */
+  const stage = slot(page, "dein-ort-2b-story-stage");
+  const stageStories: StageStory[] = STORIES.map((story) => {
+    const content = slot(page, story.slotId);
+    const image = story.imageId === undefined ? undefined : pageImage(page, story.imageId);
+    const example = storyExamples.get(story.id);
+    const quote = testimonialOf(slot(page, story.quoteSlotId));
+    return {
+      id: story.id,
+      time: fieldAt(content.blocks, 5) ?? "",
+      tab: fieldAt(content.blocks, 6) ?? "",
+      icon: story.icon,
+      headline: fieldAt(content.blocks, 7) ?? fieldAt(content.blocks, 0) ?? "",
+      body: fieldAt(content.blocks, 8) ?? fieldAt(content.blocks, 1) ?? "",
+      ...(quote ? { quote } : {}),
+      ...(image
+        ? { photo: { src: image.stageSrc ?? image.src, ...(image.anchor ? { anchor: image.anchor } : {}) } }
+        : {}),
+      ...(example
+        ? {
+            example: (
+              <EventRow {...example} locale={locale} state={examplePool.demo ? "mocked" : "ready"} />
+            ),
+          }
+        : {}),
+    };
+  });
+
 
   /**
    * TS-WEB-0008 D4's conversion moment, as block 1's own module slot (F-2-61).
@@ -593,57 +638,6 @@ export default async function PlacePage({
         </SectionShell>
       </MotionReveal>
 
-      {/* Block 2a — the four value stories, one section each. Each opens on
-          its role, hands over from the one before it in a single line, shows
-          one real date, and closes on the testimonial that belongs to it. */}
-      {STORIES.map((story) => {
-        const content = slot(page, story.slotId);
-        const image = story.imageId === undefined ? undefined : pageImage(page, story.imageId);
-        const example = storyExamples.get(story.id);
-
-        return (
-          <MotionReveal key={story.id}>
-            <SectionShell
-              dataBlock="value-story"
-              id={story.id}
-              kicker={words.kickers[story.kickerKey]}
-              surface={story.surface}
-              transition={fieldAt(content.blocks, 2)}
-            >
-              <ValueStory
-                aspect={fieldAt(content.blocks, 0) ?? ""}
-                example={
-                  example === undefined ? undefined : (
-                    <EventRow
-                      {...example}
-                      locale={locale}
-                      state={examplePool.demo ? "mocked" : "ready"}
-                    />
-                  )
-                }
-                exampleLevel="snapshot"
-                exampleVariant="row"
-                headingLevel="h2"
-                media={
-                  image === undefined ? undefined : (
-                    <MediaFrame
-                      alt={image.alt}
-                      locale={locale}
-                      notDepicting={image.notDepicting}
-                      placeholderId={image.placeholderId}
-                      ratio="feature"
-                      src={image.src}
-                    />
-                  )
-                }
-                testimonial={testimonialOf(slot(page, story.quoteSlotId))}
-                whyItMatters={fieldAt(content.blocks, 1) ?? ""}
-              />
-            </SectionShell>
-          </MotionReveal>
-        );
-      })}
-
       {/* Story 4 *is* TS-WEB-0008 position 2: the fifteen-minute radius, argued in
           prose and then shown as the five rows from around here, every row
           naming its own place (TS-WEB-0008 D1). Before the polish pass the module
@@ -677,6 +671,30 @@ export default async function PlacePage({
             whyItMatters={fieldAt(radiusStory.blocks, 1) ?? ""}
           />
         </SectionShell>
+      </MotionReveal>
+
+      {/* Block 2a — the story stage (DEC-0153): the three single-category
+          stories as one module, "ein Tag im Dorf", instead of three stacked
+          sections. Each hour carries its picture or colour, its quote and one
+          live date of its own category (TS-WEB-0020 D3, A14). It stands after
+          the radius story so the page's two dark grounds never touch. */}
+      <MotionReveal>
+        <StoryStage
+          action={
+            <Button href="#focus-block" onward variant="primary-light">
+              {fieldAt(stage.blocks, 3) ?? ""}
+            </Button>
+          }
+          calendarLabel={fieldAt(stage.blocks, 6) ?? ""}
+          headline={fieldAt(stage.blocks, 1) ?? ""}
+          id="story-stage"
+          kicker={fieldAt(stage.blocks, 0) ?? ""}
+          lead={fieldAt(stage.blocks, 2)}
+          nextTemplate={fieldAt(stage.blocks, 4) ?? "{time}"}
+          pickerLabel={fieldAt(stage.blocks, 7) ?? ""}
+          restartLabel={fieldAt(stage.blocks, 5) ?? ""}
+          stories={stageStories}
+        />
       </MotionReveal>
 
       {/* Block 2c — the homescreen block. Both instructions, always, for

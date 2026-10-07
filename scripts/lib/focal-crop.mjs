@@ -74,3 +74,67 @@ export function cropWindow(source, out, focal = DEFAULT_FOCAL) {
     height,
   };
 }
+
+/**
+ * The crop for a box whose lower part is covered — DEC-0153.
+ *
+ * `cropWindow` centres the focal point, which is right for a picture nobody
+ * writes on. A story stage or a hero lays a reading band over its lower half
+ * (SRC-0014 §The scrim: clear above 38 %, darkening to 0.72 at the bottom), so
+ * a focal point centred at 50 % — or a village motif sitting at 60 % under a
+ * sky — ends up under the quote. Here the caller names the **anchor**: where in
+ * the output box the focal point has to land (`{x: 50, y: 28}` puts it in the
+ * clear band). The window is the **largest** one of the target ratio that
+ * puts the focal point exactly there without leaving the frame; it zooms in
+ * only as far as that takes, and never below `minWidth` source pixels, the
+ * resolution floor for the box it fills. Where the floor or the frame stops it
+ * short, the focal point lands as close to the anchor as the frame allows, and
+ * `landed` says where — the build reports it instead of hiding it.
+ *
+ * @param {{ width: number, height: number }} source
+ * @param {{ width: number, height: number }} out
+ * @param {{ x: number, y: number } | undefined} focal  per cent of the frame
+ * @param {{ x: number, y: number }} anchor             per cent of the output box
+ * @param {{ minWidth?: number }} [options]             defaults to `out.width`
+ * @returns {{ left: number, top: number, width: number, height: number,
+ *             landed: { x: number, y: number }, anchored: boolean }}
+ */
+export function anchoredCropWindow(source, out, focal, anchor, { minWidth } = {}) {
+  const W = positive(source?.width, "source width");
+  const H = positive(source?.height, "source height");
+  const outWidth = positive(out?.width, "target width");
+  const outHeight = positive(out?.height, "target height");
+  const fx = percent(focal?.x ?? DEFAULT_FOCAL.x, "focal.x");
+  const fy = percent(focal?.y ?? DEFAULT_FOCAL.y, "focal.y");
+  const ax = percent(anchor?.x ?? 50, "anchor.x");
+  const ay = percent(anchor?.y ?? 50, "anchor.y");
+  const ratio = outWidth / outHeight;
+  const floor = Math.min(minWidth ?? outWidth, W, Math.round(H * ratio));
+
+  // Every bound on the window's width that keeps the focal point at the
+  // anchor inside the frame; a zero share means "no bound from that side".
+  const bounds = [W, H * ratio];
+  if (ax > 0) bounds.push((fx * W) / ax);
+  if (ax < 1) bounds.push(((1 - fx) * W) / (1 - ax));
+  if (ay > 0) bounds.push(((fy * H) / ay) * ratio);
+  if (ay < 1) bounds.push((((1 - fy) * H) / (1 - ay)) * ratio);
+  const exact = Math.min(...bounds);
+
+  const width = Math.round(Math.max(exact, floor));
+  const height = Math.round(width / ratio);
+  const clamp = (value, span, frame) => Math.round(Math.min(Math.max(value, 0), frame - span));
+  const left = clamp(fx * W - ax * width, width, W);
+  const top = clamp(fy * H - ay * height, height, H);
+  const landed = {
+    x: Math.round(((fx * W - left) / width) * 1000) / 10,
+    y: Math.round(((fy * H - top) / height) * 1000) / 10,
+  };
+  return {
+    left,
+    top,
+    width,
+    height,
+    landed,
+    anchored: Math.abs(landed.x - ax * 100) <= 1 && Math.abs(landed.y - ay * 100) <= 1,
+  };
+}

@@ -532,6 +532,19 @@ export const ImageEntrySchema = z
         y: z.number().min(0).max(100),
       })
       .optional(),
+    /**
+     * Where the focal point has to land in a box whose lower part carries the
+     * reading band (DEC-0153) — per cent of the output box, e.g. `{x: 50, y: 30}`.
+     * Declared, `pnpm images:generate` cuts a `stage` rendition (5:4) from the
+     * original with the focal point exactly there, zooming in as far as that
+     * takes, and the story stage positions it at the same anchor.
+     */
+    anchor: z
+      .strictObject({
+        x: z.number().min(0).max(100),
+        y: z.number().min(0).max(100),
+      })
+      .optional(),
 
     // ── Written back by `pnpm images:generate`, never by hand ──────────────
     /** Site-absolute path of the rendition, e.g. `/images/generated/home-hero.webp`. */
@@ -559,6 +572,13 @@ export const ImageEntrySchema = z
       .optional(),
     wide_width: z.number().int().positive().optional(),
     wide_height: z.number().int().positive().optional(),
+    /** The `stage` rendition an `anchor` asks for (DEC-0153). Written back, never by hand. */
+    stage_file: z
+      .string()
+      .startsWith("/images/", "must be a site-absolute path under /images/")
+      .optional(),
+    stage_width: z.number().int().positive().optional(),
+    stage_height: z.number().int().positive().optional(),
     /** SHA-256 of the exact prompt, truncated — a brief change is visible as a hash change. */
     prompt_hash: z
       .string()

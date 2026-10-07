@@ -38,6 +38,13 @@ export interface RenderableImage {
    */
   readonly focal?: ImageEntry["focal"];
   /**
+   * The story stage's 5:4 cut with the focal point already at `anchor`
+   * (DEC-0153), and the anchor itself — the stage positions the picture at the
+   * same per cent, so the focal point lands there in any box ratio.
+   */
+  readonly stageSrc?: string;
+  readonly anchor?: ImageEntry["anchor"];
+  /**
    * True for every generated rendition: it stands in for a photograph nobody
    * has taken, so it does not depict what the copy claims and the design
    * system's placeholder badge goes on it (SRC-0014 § Photo surface).
@@ -68,6 +75,8 @@ function renderable(entry: ImageEntry): RenderableImage | undefined {
     height: entry.height,
     ratio: entry.ratio,
     ...(entry.focal ? { focal: entry.focal } : {}),
+    ...(entry.stage_file ? { stageSrc: entry.stage_file } : {}),
+    ...(entry.anchor ? { anchor: entry.anchor } : {}),
     notDepicting: generated,
     priority: entry.lcp === true,
     ...(entry.caption ? { caption: entry.caption } : {}),

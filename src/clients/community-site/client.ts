@@ -73,7 +73,11 @@ export const CommunitySiteEventSchema = z
     summary: z.string(),
     start: z.string(),
     end: z.string().optional(),
-    allday: z.boolean().optional(),
+    // The site serialises it as a string ("True" / "False") as often as a boolean.
+    allday: z.preprocess(
+      (value) => (typeof value === "string" ? value.toLowerCase() === "true" : value),
+      z.boolean().optional(),
+    ),
     categories: z.array(z.string()).default([]),
     /** `community` · `municipality` · `nearby` · `region` — the widening the site already did. */
     scope: z.string().optional(),
