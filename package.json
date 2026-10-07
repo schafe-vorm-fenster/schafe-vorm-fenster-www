@@ -11,7 +11,7 @@
     "start": "PORT=3100 next start",
     "stop": "lsof -ti:3100 | xargs kill -9 || true",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:unit": "vitest run --exclude '**/*.integration.test.ts'",
     "test:integration": "vitest run '**/*.integration.test.ts'",
