@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0011]
 sources: [SRC-0001, SRC-0002, SRC-0003]
-decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152]
+decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152, DEC-0153]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -115,6 +115,17 @@ not a proof element that can lose a ranking.
 | 3 | culture nobody would have searched for | a culture date | `culture-tourism` | **none** | `kulturlandbuero-broellin` / `eichler-wasserschloss-quilow` |
 | 4 | the fifteen-minute radius | position 2 rows, with their place names and each row's distance from the anchor | n/a — not a single-category story | `regional-footprint` | `zschiesche-gross-kiesow` (DEC-0152, was `wendt-rubkow`) |
 
+**Rendered as one story stage plus one section (DEC-0153).** Stories 1–3 are
+single-category stories and render together as one `story-stage` (SRC-0014
+§Story stage), "ein Tag im Dorf": 08:30 the bakery van, 17:00 the council,
+20:00 culture. Each hour carries its photograph, or the violet ground for the
+council, its quote, its story and **one live date of its own category** in
+the "Im Kalender" row (A14). Story 4 is its own argument with its own
+evidence module and stays a section of its own, carrying position 2. The
+stage stands **after** story 4, so the page's live-data `ink` section and the
+stage's ink ground never touch. Picking works without JavaScript (A16), and
+each photograph keeps its motif above the quote (A17).
+
 The category column is new (2026-10-07, editorial round 4, F-4-2): D3 always
 named what kind of date each story's example asks for in prose, but nothing
 verified the rendered example actually matched — found on `/dein-ort`, story 2
@@ -193,14 +204,16 @@ site is not a goal of its own.
 | TS-WEB-0020-A2 | e2e | Walk state A: `GET /api/places/search?q=<any covered place name>`, take a slug, confirm `GET /api/places/{slug}/events?window=now` is non-empty, open `/dein-ort?ort=<slug>` at 360 × 640. The `h1` is the place name; at most 3 date rows; exactly one element carries `data-cta="primary"`, it is the calendar handover, and it is fully visible without scrolling; the homescreen action and the closing CTA repeat the same goal id and target in the secondary treatment (D4). |
 | TS-WEB-0020-A3 | e2e | Walk state B: probe `GET /api/places/{slug}/events?window=now` over covered slugs until one answers 200 with an empty list, then open `/dein-ort?ort=<that slug>`. Position 1 carries the publish offer; the primary CTA resolves to `/mitmachen`; URL, canonical, robots meta, `<title>`, header, footer, block set and block order are identical to state A; the `h1` is the place name at the same DOM index and the focus-block container is `role="status"`; no element carries error styling, a warning icon, a retry control or a spinner; the nearby module renders, states its own radius, and every row names a place other than the searched one. |
 | TS-WEB-0020-A15 | e2e | Every row the nearby module (D3 row 4, position 2) renders states its distance from the anchor place alongside its own place name — a place name with no distance fails. No two rows in the same render are identical across id, title and `startsAt`. [F-4-6/F-4-7, round 4] |
-| TS-WEB-0020-A4 | e2e | Exactly four value stories render in both states; each shows a title, a story paragraph, and either an example box or the publish invitation in its place; no example names a place absent from geo-api. |
+| TS-WEB-0020-A4 | e2e | Four value stories render in both states: stories 1–3 as one `story-stage` with three hours, each with its picture or colour, and story 4 as its own section with the nearby module as evidence. No example names a place absent from geo-api, and nothing marks an example as a stand-in. (Amended by DEC-0153; it was "exactly four value-story sections".) |
+| TS-WEB-0020-A16 | e2e | With JavaScript disabled, the story stage shows exactly one story. A click on another hour shows that story, and the stage's height does not change. The hours are one radio group, and an arrow key moves the pick (DEC-0153). |
+| TS-WEB-0020-A17 | unit | Every image entry with an `anchor` has `anchor.y ≤ 38` (the scrim's clear part), a declared `focal` point, and its `stage_file` on disk. Both locales of `/dein-ort` carry the stage's photographs this way (DEC-0153). |
 | TS-WEB-0020-A14 | e2e | Each story's rendered example carries D3's category id for that story (the "Example category" column); a mismatch — any category other than the one the story names — fails. [F-4-2, round 4] |
 | TS-WEB-0020-A5 | static | The four stories' `proof_ref`s resolve to ids present in the installed `@schafe-vorm-fenster/proof` version; a missing id fails the build (a wrong id is a defect, an uncleared id is not). |
 | TS-WEB-0020-A6 | e2e | **Superseded, deviation recorded (D3, DEC-0149).** Written text: with every testimonial uncleared the page renders four three-part stories, no quote anywhere. Actual, shipped behaviour, per `e2e/pages/dein-ort.spec.ts`: four named, attributed, verbatim quotes render pre-clearance, each with a `clearance: pending` note; no anonymous quote, paraphrase, or "users say" substitute, ever — that half is unchanged and still the criterion. |
 | TS-WEB-0020-A7 | e2e | The homescreen block renders both the iOS and the Android instruction with an iPhone UA and with an Android UA, byte-identical DOM; its action resolves to `{APP_HOST}/{slug}`; a missing screenshot renders the hatched surface and a non-matching one the placeholder badge. |
 | TS-WEB-0020-A8 | integration | Clicking any of D4's three call sites emits `save-calendar-to-homescreen` with `stage=handover` exactly once and nothing else; in state B the page view carries the empty-state flag and the publish CTA emits no conversion event. |
 | TS-WEB-0020-A9 | e2e | `/dein-ort` with no parameter, with `?ort=` empty, and with `?ort=<garbage>` each answer 200 in the search state; the garbage value is HTML-escaped wherever echoed and appears nowhere as data; a name that matches no place lands on `/dein-ort/starten?ort=…`, and no surface of the search field offers a postcode as an alternative. |
-| TS-WEB-0020-A10 | e2e | Stage 0 (no geo header, no referrer, no parameters, JavaScript disabled): search, four stories with snapshot examples visibly labelled as examples, context band and closing CTA all render; no empty-state markup, no unresolved skeleton. |
+| TS-WEB-0020-A10 | e2e | Stage 0 (no geo header, no referrer, no parameters, JavaScript disabled): search, the story stage, the radius story with its module, context band and closing CTA all render; no empty-state markup, no unresolved skeleton. (Amended by DEC-0153: the stage replaces three of the four story sections.) |
 | TS-WEB-0020-A11 | integration | For `/dein-ort`, `?ort=<A slug>` and `?ort=<B slug>` the canonical is the parameter-free path, the robots directive is identical, and the JSON-LD graph contains `WebPage` and no `Event` node. |
 | TS-WEB-0020-A12 | e2e | With the BFF route delayed beyond 2 s the date box keeps its final geometry, shows no spinner, and is replaced by the honest empty state rather than a persisting skeleton; CLS over the full load stays < 0.1. |
 | TS-WEB-0020-A13 | manual | Content review before shipping: each story reads aspect → why it matters → example → testimonial and names exactly one mechanism (TS-WEB-0006 D7); the state-B copy names the place, offers publishing, and reads nowhere as a failure or an apology. |

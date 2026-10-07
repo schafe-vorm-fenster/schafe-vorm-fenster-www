@@ -187,39 +187,70 @@ test.describe("TS-WEB-0020 — your place", () => {
    * picture, a live row *and* a quote is three pieces of evidence for one
    * argument, and four stories built that way were a 3 000 px wall).
    */
-  test("TS-WEB-0020-A4: exactly four value stories, each with a title, a story and its own evidence", async ({
+  test("TS-WEB-0020-A4: four value stories — three on the story stage, the radius as its own section, each with its own evidence", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/dein-ort");
 
-    const stories = page.locator('[data-block="value-story"]');
-    await expect(stories).toHaveCount(4);
+    // DEC-0153: stories 1–3 are one story stage, picked by the hour; story 4,
+    // the radius, keeps its own section with the nearby module as evidence.
+    const stage = page.locator('[data-block="story-stage"]');
+    await expect(stage).toHaveCount(1);
+    await expect(stage.locator('input[type="radio"]')).toHaveCount(3);
+    await expect(stage.locator("[class*='text'][data-index] > h3")).toHaveCount(3);
+    const radius = page.locator('[data-block="value-story"]');
+    await expect(radius).toHaveCount(1);
+    await expect(radius.locator("[data-example-level]")).toHaveCount(1);
 
-    for (let index = 0; index < 4; index += 1) {
-      const story = stories.nth(index);
-      await expect(story.locator("article h2")).toHaveCount(1);
-      await expect(story.locator("article p").first()).not.toBeEmpty();
-      // Evidence: a live row, a live module, or a photograph — never none.
-      const evidence = await story.locator("[data-example-level], img").count();
-      expect(evidence, `story ${index + 1} carries no evidence`).toBeGreaterThan(0);
-    }
-
-    // The grounds alternate, which is what stops four arguments in a row
-    // from reading as one long block.
-    const surfaces = await stories.evaluateAll((nodes) =>
-      nodes.map((node) => node.getAttribute("data-surface")),
+    // Every stage story has its picture or its colour — never an empty frame.
+    const media = await stage.evaluate((element) =>
+      [...element.querySelectorAll("[data-index][class*='slide']")].map((slide) => {
+        // A photograph (a `url(…)` layer) or the colour variant — never neither.
+        return getComputedStyle(slide).backgroundImage.includes("url(") || slide.className.includes("colour");
+      }),
     );
-    expect(new Set(surfaces).size).toBeGreaterThan(2);
+    expect(media).toEqual([true, true, true]);
 
-    // Every example names a real covered place, and nothing in the box says
-    // the box is a stand-in — Jan, 2026-09-18. The provenance is the module's
-    // own `data-demo`/`data-mock`, asserted in `e2e/content-compliance.spec.ts`.
-    const exampleText = (await stories.allTextContents()).join(" ");
-    expect(exampleText).toMatch(/Schlatkow|Schmatzin|Rubkow|Quilow|Groß Kiesow|Züssow|Lassan/);
+    // Every example names a real covered place, and nothing says it is a stand-in.
+    const exampleText = [await stage.textContent(), await radius.textContent()].join(" ");
+    expect(exampleText).toMatch(/Schlatkow|Schmatzin|Rubkow|Quilow|Groß Kiesow|Züssow|Lassan|Brietzig|Anklam|Wolgast/);
     for (const marking of ["Beispiel", "Demo", "Platzhalter"]) {
       expect(exampleText, marking).not.toContain(marking);
     }
+  });
+
+  test("TS-WEB-0020-A16: the story stage is picked without JavaScript, by pointer and by keyboard, and a pick moves nothing", async ({
+    browser,
+  }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.setViewportSize(DESKTOP);
+    await page.goto("/dein-ort");
+    const stage = page.locator('[data-block="story-stage"]');
+    const visibleHeadline = () =>
+      stage.evaluate((element) =>
+        [...element.querySelectorAll("[class*='text'][data-index]")]
+          .filter((text) => getComputedStyle(text).visibility === "visible")
+          .map((text) => text.querySelector("h3")?.textContent ?? ""),
+      );
+    const height = () => stage.evaluate((element) => element.getBoundingClientRect().height);
+
+    const first = await visibleHeadline();
+    expect(first).toHaveLength(1);
+    const before = await height();
+
+    await stage.locator("fieldset label").nth(1).click();
+    const second = await visibleHeadline();
+    expect(second).toHaveLength(1);
+    expect(second[0]).not.toBe(first[0]);
+    expect(await height(), "a pick does not change the stage's height").toBeCloseTo(before, 0);
+
+    // The keyboard path: the hours are one radio group, arrows move the pick.
+    await stage.locator('input[type="radio"]').nth(1).focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(stage.locator('input[type="radio"]').nth(2)).toBeChecked();
+    await context.close();
   });
 
   test.fixme(
@@ -294,14 +325,16 @@ test.describe("TS-WEB-0020 — your place", () => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/dein-ort");
 
-    const quotes = page.locator('[data-block="value-story"] blockquote');
+    const quotes = page.locator('[data-block="story-stage"] blockquote, [data-block="value-story"] blockquote');
     await expect(quotes).toHaveCount(4);
 
     for (let index = 0; index < 4; index += 1) {
       const quote = quotes.nth(index);
       // The sentence, and the person who said it — never one without the other.
       await expect(quote.locator("p")).not.toBeEmpty();
-      const attribution = (await quote.locator("footer").innerText()).trim();
+      // `textContent`: the stage's unpicked stories are `visibility: hidden`,
+      // which `innerText` reads as empty — the quote is in the page all the same.
+      const attribution = ((await quote.locator("footer").textContent()) ?? "").trim();
       expect(attribution.length, `quote ${index + 1} has no attribution`).toBeGreaterThan(6);
     }
 
@@ -466,11 +499,11 @@ test.describe("TS-WEB-0020 — your place", () => {
     await page.goto("/dein-ort");
 
     await expect(page.locator('input[type="search"]').first()).toBeVisible();
-    await expect(page.locator('[data-block="value-story"]')).toHaveCount(4);
-    // Two of the four stories are picture-led and carry no example box; the
-    // other two carry the live row and the live module (brief, page 2).
-    await expect(page.locator("[data-example-level]")).toHaveCount(2);
-    await expect(page.locator('[data-block="value-story"] img')).toHaveCount(2);
+    // DEC-0153: the three single-category stories are one stage, the radius
+    // story its own section carrying the live module.
+    await expect(page.locator('[data-block="story-stage"]')).toHaveCount(1);
+    await expect(page.locator('[data-block="value-story"]')).toHaveCount(1);
+    await expect(page.locator("[data-example-level]")).toHaveCount(1);
     await expect(page.locator("#context-band nav")).toHaveCount(1);
     await expect(page.locator("#closing-cta")).toHaveCount(1);
 
@@ -583,10 +616,8 @@ test.describe("TS-WEB-0020 — your place", () => {
         [
           "focus-block",
           "place-dates",
-          "story-baeckerwagen",
-          "story-ratssitzung",
-          "story-kultur",
           "nearby",
+          "story-stage",
           "homescreen",
           "context-band",
           "closing-cta",
@@ -599,10 +630,8 @@ test.describe("TS-WEB-0020 — your place", () => {
     expect(order).toEqual([
       "focus-block",
       "place-dates",
-      "story-baeckerwagen",
-      "story-ratssitzung",
-      "story-kultur",
       "nearby",
+      "story-stage",
       "homescreen",
       "context-band",
       "closing-cta",
@@ -656,7 +685,7 @@ test.describe("TS-WEB-0020 — your place", () => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/en/your-place");
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
-    await expect(page.locator('[data-block="value-story"]')).toHaveCount(4);
+    await expect(page.locator('[data-block="story-stage"]')).toHaveCount(1);
     await expect(page.locator("#homescreen")).toHaveCount(1);
     const hint = (await page.locator("main").textContent()) ?? "";
     // The English search hint (`dictionary.search.hint`, en) — the search takes a

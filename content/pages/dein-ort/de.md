@@ -65,6 +65,12 @@ images:
   - id: dein-ort-story-baeckerwagen
     slot: dein-ort-3-story-baeckerwagen
     ratio: feature
+    focal:
+      x: 55
+      "y": 40
+    anchor:
+      x: 50
+      "y": 30
     provenance: real
     source: >-
       Wikimedia Commons, File:Brietzig, Kirche und Café.jpg —
@@ -77,11 +83,20 @@ images:
     licence: CC0 1.0
     status: real
     file: /images/real/dein-ort-story-baeckerwagen.webp
-    width: 1400
-    height: 1000
+    width: 1190
+    height: 850
+    stage_file: /images/real/dein-ort-story-baeckerwagen-stage.webp
+    stage_width: 1200
+    stage_height: 960
   - id: dein-ort-story-kultur
     slot: dein-ort-5-story-kultur
     ratio: feature
+    focal:
+      x: 62
+      "y": 58
+    anchor:
+      x: 50
+      "y": 30
     provenance: real
     source: >-
       Wikimedia Commons, File:Schönwalde, Schloss.jpg —
@@ -96,6 +111,9 @@ images:
     file: /images/real/dein-ort-story-kultur.webp
     width: 1400
     height: 1000
+    stage_file: /images/real/dein-ort-story-kultur-stage.webp
+    stage_width: 1200
+    stage_height: 960
   - id: dein-ort-homescreen-ios
     slot: dein-ort-7-homescreen
     ratio: portrait
@@ -171,6 +189,27 @@ Wörtliches Zitat aus SRC-0002 (TS-WEB-0020 D2, DEC-0071): Dieser Satz gehört n
 hierher. Er unterstellt keinen Fehler und keine Entschuldigung — der
 Kalender für diesen Ort existiert bereits und wartet.
 
+## Slot 2b — Geschichten-Bühne: ein Tag im Dorf
+
+<!-- id: dein-ort-2b-story-stage; content_type: value-story; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- note: Texte aus dem Board concept/v2.0/Geschichten Modul.dc.html, Variante 1a (DEC-0153). -->
+
+**Kicker:** Ein Tag im Dorf
+
+**Überschrift:** An einem ganz normalen Dienstag passiert im Dorf mehr, als auf ein Plakat passt.
+
+**Einleitung:** Drei Menschen aus Vorpommern-Greifswald erzählen, warum das alles in einen Kalender gehört.
+
+**Aktion:** Was heute bei dir los ist
+
+**Weiter:** Weiter um {time}
+
+**Von vorn:** Von vorn
+
+**Im Kalender:** Im Kalender
+
+**Auswahl:** Uhrzeit wählen
+
 ## Slot 3 — Value Story 1: der Bäckerwagen
 
 <!-- id: dein-ort-3-story-baeckerwagen; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"]; status: draft -->
@@ -184,6 +223,14 @@ Kalender für diesen Ort existiert bereits und wartet.
 **Beispiel:** wiederkehrender Liefertermin in {place} oder in der Umgebung, live aus dem Kalender.
 
 **Testimonial:** Elisabeth Kurzweg, Bäckerei Kurzweg — Wortlaut in der Belegkarte unten.
+
+**Uhrzeit:** 08:30
+
+**Reiter:** Brot
+
+**Schlagzeile:** Um halb neun hält der Bäckerwagen. Jetzt weiß das auch das Homeoffice.
+
+**Erzählung:** Wann und wo der Wagen hält, entscheidet über frisches Brot. Steht es im Kalender, kommen nicht nur die, die ohnehin am Fenster sitzen.
 
 <!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
@@ -223,6 +270,14 @@ tagesaktuell und ortsgenau über die Dorfkalender (`impftermine-landkreis`,
 
 **Testimonial:** Holger Wendt, Bürgermeister in Rubkow — Wortlaut in der Belegkarte unten.
 
+**Uhrzeit:** 17:00
+
+**Reiter:** Rat
+
+**Schlagzeile:** Um fünf tagt die Gemeindevertretung. Wer mitreden will, erfährt es vorher.
+
+**Erzählung:** Nicht erst hinterher aus dem Protokoll. Amtliche Termine stehen im selben Kalender wie Fest und Bäckerwagen — da, wo man ohnehin nachschaut.
+
 <!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
 ### Belegkarte zur Story 2
@@ -246,6 +301,14 @@ tagesaktuell und ortsgenau über die Dorfkalender (`impftermine-landkreis`,
 **Beispiel:** ein Kulturtermin aus der Umgebung von {place}, live aus dem Kalender.
 
 **Testimonial:** Uwe Eichler, Wasserschloss Quilow — Wortlaut in der Belegkarte unten.
+
+**Uhrzeit:** 20:00
+
+**Reiter:** Kultur
+
+**Schlagzeile:** Um acht spielt im Schloss Musik. Auch für alle, die nicht zufällig davon hören.
+
+**Erzählung:** Das Konzert im Nachbardorf, die Ausstellung im Schloss: Im Kalender findet die Kultur dich, statt umgekehrt.
 
 <!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
