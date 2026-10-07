@@ -183,3 +183,5 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0145 — The four open points the owner answered — the legal route may name the product, a price is read, three authored proof lines are cleared, and the budget applies to what we wrote](DEC-0145--the-four-open-points-the-owner-answered.md)
 - [DEC-0146 — "The app" is community-site; community-calendar is being abandoned](DEC-0146--the-app-is-community-site.md)
 - [DEC-0149 — Editorial review gets a chaos persona; its first round closes a recorded spec/test drift](DEC-0149--editorial-review-closes-the-customer-acceptance-gap.md)
+- [DEC-0150 — Surfaces run full-bleed, content stands in a 1200 px container — the desktop grid from the owner's design input](DEC-0150--surfaces-full-bleed-content-in-the-container.md)
+- [DEC-0151 — The scrim is neutral black, finally and everywhere — the tinted scrim leaves the boards, the dead tone prop leaves the code, and `check:brand` keeps both out](DEC-0151--the-scrim-is-neutral-black-everywhere.md)

@@ -5,8 +5,10 @@
 }
 
 /* lg — 48rem / 768px: proof cards stand in a real grid. */
-@media (min-width: 48rem) {
+/* xl — 64rem: side by side only from the desktop tier (SRC-0014 §Layout Grid, DEC-0150). */
+@media (min-width: 64rem) {
   .grid {
+    column-gap: var(--grid-gap);
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

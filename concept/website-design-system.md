@@ -1,7 +1,7 @@
 ---
 title: "Website Design System — www.schafe-vorm-fenster.de"
 created_at: 2026-09-10
-updated_at: 2026-09-24
+updated_at: 2026-10-07
 status: draft
 source: workshop
 intent: inform
@@ -27,6 +27,8 @@ derives from the Brand & UI Kit; no colour, typeface, or radius outside this
 document is permitted.
 
 The companion file `Style Guide.dc.html` shows every rule rendered.
+`Desktop Raster.dc.html` shows the layout grid at 1440 px, with static
+renders in `v2.0/assets/desktop-raster/` (see *Layout Grid*).
 
 ## The Direction in One Sentence
 
@@ -295,7 +297,8 @@ from the package, with no override behind either.
 
 - **Radius:** `999px` for controls and the logo, `0` everywhere else.
   There is no third value.
-- **Horizontal padding:** 16 px inside the viewport, on every section.
+- **Horizontal padding:** 16 px inside the viewport below `md` (640 px);
+  from `md` up the outer margin steps with the grid — see *Layout Grid*.
 - **Vertical padding:** 26–30 px for standard sections, 20–24 px for tight
   ones. One value per section — never a padded card inside a padded section.
 - **Gap between controls:** 8–10 px. Between list rows: a `line` hairline,
@@ -325,6 +328,103 @@ on light means **active state** — the current step of an explain module, the
 selected chip — and nothing else. The control well is a target and keeps the
 44 px floor. An archive block has no wells at all; its icons sit bare in
 `archive ink`.
+
+## Layout Grid
+
+**Surfaces run edge to edge; content sits in one container.** Photographs and
+colour sections keep running across the full viewport width. Everything a
+reader reads or operates stands in a container of **at most 1200 px**, and
+that includes the hero. Header, hero text and every section start on the same
+left edge (owner's design input of 2026-10-07, `DEC-0150`; it answers
+round 4's F-4-1, where at 1280 × 800 the hero `h1` spanned 1214 px and the
+search field 1091 px).
+
+The rendered reference is `v2.0/Desktop Raster.dc.html`. It shows the home
+page and a content page (`/dein-kalender`) at 1440 px with the 12-column
+overlay switched on. Static renders, for readers who cannot run a board:
+
+| File | Shows |
+| --- | --- |
+| `v2.0/assets/desktop-raster/home-1440.jpg` | `/` — header, hero with search, ink section *head 1–4 · list 5–12* |
+| `v2.0/assets/desktop-raster/content-page-1440.jpg` | content page — hero with two CTAs side by side, text section, comparison *6 + 6* |
+| `v2.0/assets/desktop-raster/overview.jpg` | the whole board, including the rule list and the three breakpoint tiers |
+
+**The board is normative for position and width only.** Its display sizes
+(72, 64, 56 and 48 px), the navigation pill in its header and its event-row
+details are sketch, not specification. Where they differ from this document,
+this document stands: type sizes are the ones under *Typography*, and the
+header is the one under *Transparent overlay header*. The board arrived with
+a dark-green, `ink`-tinted scrim; that scrim was replaced on import by the
+neutral-black ladder under *Photo surface* (`DEC-0151`). Every grid value the board carries is written down below,
+because no rule may be read from a board alone.
+
+### Three tiers on six breakpoints
+
+The grid has three tiers. They sit on the six `breakpoint.*` tokens
+(`TS-WEB-0017 D2b`) and introduce no switch point of their own: 640 px is
+`md` and 1024 px is `xl`.
+
+| Breakpoint | From | Tier | Columns | Outer margin | Gutter | Content width |
+| --- | --- | --- | --- | --- | --- | --- |
+| base | 0 | Mobile | 1 | 16 px (`space-4`) | — | viewport − 32 px |
+| `xs` | 360 px | Mobile | 1 | 16 px (`space-4`) | — | viewport − 32 px |
+| `sm` | 428 px | Mobile | 1 | 16 px (`space-4`) | — | viewport − 32 px |
+| `md` | 640 px | Tablet | 8 | 32 px (`space-8`) | 20 px (no token yet, `DEM-0071`) | viewport − 64 px |
+| `lg` | 768 px | Tablet | 8 | 32 px (`space-8`) | 20 px (no token yet, `DEM-0071`) | viewport − 64 px |
+| `xl` | 1024 px | Desktop | 12 | at least 48 px (`space-12`) | 24 px (`space-6`) | min(1200 px, viewport − 96 px) |
+| `2xl` | 1280 px | Desktop | 12 | at least 48 px (`space-12`) | 24 px (`space-6`) | min(1200 px, viewport − 96 px) |
+
+This is the six-row table `DEM-0042` asked for. The density of the scale
+below 640 px stays (`DEC-0067`). The grid does not use those switch points,
+and a component may still tune type step or spacing at `xs` or `sm`.
+
+**1200 px is the content box, not the padded box.** The outer margin lies
+outside it. At 1440 px the margin is 120 px; at the 1280 px reference
+viewport it is 48 px and the content box is 1184 px; above about 1300 px only
+the margin grows (`TS-WEB-0017 D2c`). `measure.page` (75rem) names the
+1200 px, so the container is `measure.page` **plus** two outer margins and
+not `measure.page` including them.
+
+Column spans at the full 1200 px (column 78 px, gutter 24 px):
+
+| Span | Width | Used for |
+| --- | --- | --- |
+| 4 | ≈ 384 px | Section head beside a list |
+| 6 | ≈ 588 px | Search field; each half of a comparison |
+| 7 | ≈ 690 px | Hero text; running text (about 65 characters) |
+| 8 | ≈ 792 px | Section headline; the list beside a 4-column head |
+| 12 | 1200 px | Lists, rows, multi-column blocks |
+
+### Placement rules from `xl` (Desktop)
+
+| Element | Rule |
+| --- | --- |
+| Container | At most 1200 px, centred. The header, the hero's content and every section use it, so they share one left edge |
+| Surfaces | Photographs and colour sections stay full-bleed across the viewport. A photograph is never boxed into the container (see *Images inside a colour section run full-bleed*) |
+| Header | Logo on the container's left edge, the calendar pill on its right edge. Its composition stays the *Transparent overlay header* |
+| Hero text | Columns 1–7, anchored bottom-left in the container. **Never centred over the photograph** |
+| Search | Columns 1–6 (≈ 590 px). A place name does not need 1200 px |
+| Hero height | `/`: `min(80vh, 680px)`. Content pages: `min(70vh, 560px)`. This replaces `ratio-hero` from `xl` (see *Media ratios*) |
+| Running text | At most 7 columns (≈ 690 px, about 65 characters), and never wider than `measure.text` |
+| Headlines | At most 8 columns |
+| Two-column | Section head in columns 1–4, list in columns 5–12 |
+| Comparison | 6 + 6, for example *today* against *with your calendar* |
+| Buttons | Side by side with a 12 px gap (`space-3`), wrapping when they do not fit |
+
+**Below `xl` there are no columns side by side.** Head and list stack, both
+halves of a comparison stack, and the CTA slot stays the column of
+`DEC-0116 §4`. The tablet tier changes only margin, gutter and the column
+count it offers. The board draws no tablet screen, so where hero text,
+search and headlines sit within the eight tablet columns is open (`Q-0085`).
+Until that is answered they take the full content width, with running text
+capped by `measure.text`.
+
+The one-tree rule holds at every tier (`TS-WEB-0017 D2d`). A tier changes
+column span, margin and gutter. It never changes block order, block presence
+or wording, so a two-column section is the same tree as its stacked form.
+`explain-module` keeps its own switch at `lg` (*Explain module*). Three steps
+side by side is that component's rule and not this grid's two-column
+pattern.
 
 ## Components
 
@@ -714,10 +814,18 @@ old fixed ladder — transparent at 12–26 %, 0.82–0.86 at 38–62 %, 0.96 at
 bottom — and it replaces the ink-tinted and violet variants with one
 treatment for **every** hero on the site, not only the home page.
 
-- **Neutral black.** Not `ink`, not `violet-500`, not a tint of either. A
-  tinted scrim dyes the photograph, which is what made the old one read
-  "dreckig, schlammig". This is the one named exception to "never pure white
-  or black" (see *Colour*).
+- **Neutral black — final, and the only scrim there is.** Not `ink`, not
+  `violet-500`, not a tint of either. A tinted scrim dyes the photograph,
+  which is what made the old one read "dreckig, schlammig". This is the one
+  named exception to "never pure white or black" (see *Colour*).
+  **The dark-green, `ink`-tinted scrim (`rgba(23,29,13,α)`, or any
+  `color-mix()` from `ink` or `violet`) is wrong everywhere**: in code, in a
+  board, in a sketch, in a generated page. No artefact in this repository may
+  carry it, and none may be read as a precedent for it. A design input that
+  arrives with a tinted scrim is taken for its other content and its scrim is
+  replaced by this ladder on import (`DEC-0151`). `pnpm check:brand` fails a
+  tinted gradient in `app/`, `src/` and every board in `concept/v2.0/`
+  (`TS-WEB-0017-A22`).
 - **Maximum 0.72.** Nothing in a scrim is ever more opaque than that. The
   0.96 step is retired; at 0.96 the photograph is gone and the text is
   sitting on a black band, which is the thing the reader was told it was not
@@ -767,28 +875,14 @@ text-shadow: 0 1px 2px var(--color-scrim-45), 0 2px 10px var(--color-scrim-30);
   #000000b8`, which is `rgba(0,0,0,0.72)` — neutral, with the `.16` and `.96`
   stops retired.
 
-- **What the site renders today is none of the above, and the rewrite is
-  owed.** `app/styles/brand.css` declares **no scrim ladder** — the scrim
-  is built in the component —
-  `src/components/photo-surface/photo-surface.module.css` — the
-  pre-decision way:
-  `--photo-scrim: var(--color-neutral-ink)` with a
-  `var(--color-violet-500)` tone variant, composed with `color-mix()` to
-  82 %, 84 % and 96 %. That is the ink-tinted scrim with the violet variant
-  that decision 5 retired, and 0.96 runs above the 0.72 ceiling this
-  section sets. Because it is mixed from tokens rather than written as a
-  hex literal, `pnpm check:brand` cannot see it: the guard catches colour
-  literals, not a token used against its own rule. Since 2026-09-25 the
-  position is two things rather than three — **the ladder above is the rule**
-  and **the package carries it, installed** — and the one thing still owed is
-  that **the component does not implement it yet**. The pin move did not
-  perform the rewrite and was never going to: it makes the tokens reachable.
-  What the component rewrite involves, named so it is not mistaken for a
-  token swap: the surface's two gradients in `.surface` / `.ink` /
-  `.violet` (the variants collapse into one neutral treatment), the
-  content-anchored second scrim in `.content::before` (its 0.82 floor and
-  0.96 end are the same retired ladder), and the `check:contrast` hero row
-  owed below, which is what would have caught this.
+- **What the site renders: the ladder, and nothing else.** The
+  `photo-surface` rewrite is done (`DEC-0116`).
+  `src/components/photo-surface/photo-surface.module.css` composes the two
+  gradients above from `var(--color-scrim-*)`, the `ink` and `violet` tone
+  variants and the content-anchored 0.82 → 0.96 scrim are gone, and
+  `pnpm check:contrast` reads the stops and fails one above 0.72. The
+  `gradient` prop that once selected a tone was removed with `DEC-0151`, so no
+  call site can ask for a tinted scrim again.
 
 #### The ladder is fixed, and the motif carries the rest
 
@@ -823,10 +917,9 @@ never a darker scrim, because the ceiling does not move.
 > composes it; the fixed ladder is what puts the scrim half of the pair inside
 > that layer. It does not open an image. The motif half is a judgement at the
 > editorial gate, declared as one, and `DEM-0027` is where the measured ratios
-> for colour world 3c are asked for. A static assertion of the `0.72` ceiling
-> is the obvious next check and would **fail today** — the component still
-> composes `color-mix()` to 96 % from `ink` — so it goes in with the component
-> rewrite named above, not before it.
+> for colour world 3c are asked for. The static assertion of the `0.72`
+> ceiling is the hero row of `check:contrast`, and the ban on a tinted scrim
+> is `TS-WEB-0017-A22` in `check:brand`.
 
 **Crop and focal point.** The photo is `cover` with `object-position` taken
 from the motif's declared focal point, never `center` by default. Village
@@ -958,7 +1051,7 @@ calendars all load late, and the layout must already be their shape.
 
 | Token | Ratio | Used for |
 | --- | --- | --- |
-| `ratio-hero` | **8:9** mobile, **21:9** from 900 px | The hero photo surface |
+| `ratio-hero` | **8:9** mobile, **21:9** from 900 px, **none from `xl`**: there the hero takes the height under *Layout Grid* | The hero photo surface |
 | `ratio-feature` | **7:5** | Event of the week, path sections, any photo carrying a headline |
 | `ratio-proof` | **5:2** | Proof and press images inside a stream card |
 | `ratio-map` | **16:9** | County map, place map |
@@ -969,6 +1062,12 @@ Declared as `aspect-ratio` on the media element, never as a fixed pixel
 height — the ratio survives every viewport. The photograph is `cover` and
 centred on its focal point; the gradient scrim is part of the same box, so
 it scales with it.
+
+**One exception: the hero from `xl`.** At 21:9 a 1440 px hero would be
+617 px tall, and at 1920 px it would be 823 px, deeper than the viewport. From `xl` the
+hero therefore takes `min(80vh, 680px)` on `/` and `min(70vh, 560px)` on
+content pages (`DEC-0150`). Both are declared in CSS before paint, so the box
+is reserved exactly like a ratio, and nothing pushes the page down.
 
 ### Fixed heights
 
@@ -1137,6 +1236,9 @@ still forbidden.
 - No blur outside the header primitive, and no second animation beyond the
   explain module's auto-advance below `lg`.
 - No search field on a light ground.
+- No readable content outside the 1200 px container, and no photograph or
+  colour surface inside it. No hero text centred over the photograph.
+- No side-by-side columns below `xl`, outside `explain-module`.
 
 ## Open decisions
 
@@ -1149,6 +1251,7 @@ options:
 | 1 | Scrim ladder, and text shadow yes/no | **Decision 5**, as corrected by **DEC-0105 §1** — the draft is binding: neutral black, multi-stop, max 0.72, soft text shadow, and a **fixed** ladder. The "measured contrast floor instead of a fixed ladder" this row used to claim is withdrawn: nothing performed the per-photograph measurement, and the crop and focal-point rules carry the motif | *Colour* (the named exception), *Photo surface* |
 | 2 | Header contrast — solid wells or a blur primitive | **Decision 6** — the blur primitive, with a documented capability fallback to the solid ink well and a stated performance-budget interaction | *Transparent overlay header* |
 | 3 | Category taxonomy — five token keys or six guide rows | **Decision 7** — neither: the canonical list is `classification-api`'s four ids plus the `unknown` fallback, which is what the token package already carries. Event rows keep the category, as this guide always said | *Category colours* |
+| 4 | Content width on desktop — round 4's F-4-1, and `DEM-0042`'s container table | **DEC-0150** (owner's design input, 2026-10-07): three tiers on the six breakpoints, a 1200 px content box, full-bleed surfaces, column placements from `xl` | *Layout Grid* |
 
 What is still **outstanding** is not a decision but work owed elsewhere, and
 each one is named at the rule it belongs to:
@@ -1163,11 +1266,12 @@ each one is named at the rule it belongs to:
 - **The pin move: done, 2026-09-25.** `0.1.3 → 2.8.1`, exact as
   `stack.allow.json` requires (DEC-0044), with the two interim declarations in
   `app/styles/brand.css` deleted afterwards rather than before.
-- **Still owed in this repository.** The `photo-surface` component rewrite onto
-  the scrim ladder (*Photo surface*); the `check:contrast` hero row that would
-  assert it (*Photo surface*); and the archive-foreground re-measurement that
-  would move the kicker off `#9A6300` onto `archive.ink` (*Archive*). None of
-  the three is a token substitution, which is why the pin move did not bring
-  them.
+- **Done since:** the `photo-surface` rewrite onto the scrim ladder and the
+  `check:contrast` hero row (`DEC-0116`). **Still owed in this repository:**
+  the archive-foreground re-measurement that would move the kicker off
+  `#9A6300` onto `archive.ink` (*Archive*).
+- **The grid is built (`DEC-0150`)** and held by `TS-WEB-0017-A23`–`A27`.
+  Still owed upstream: a 20 px space token for the tablet gutter
+  (`DEM-0071`); until it ships, `app/styles/base.css` writes `1.25rem`.
 
 The full per-role list is `specs/contracts/design-system-contract.md` §5.

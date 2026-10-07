@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [CON-WEB-0046, CON-WEB-0047, CON-WEB-0048, CON-WEB-0049, CON-WEB-0050, CON-WEB-0051, CON-WEB-0003, CON-WEB-0052, FUN-WEB-0131, CON-WEB-0053, CON-WEB-0054, CON-WEB-0006, CON-WEB-0055, CON-WEB-0056, CON-WEB-0057]
 sources: [SRC-0006, SRC-0008, SRC-0011, SRC-0012]
-decisions: [DEC-0002, DEC-0020, DEC-0023, DEC-0029, DEC-0031, DEC-0035, DEC-0085]
+decisions: [DEC-0002, DEC-0020, DEC-0023, DEC-0029, DEC-0031, DEC-0035, DEC-0085, DEC-0150, DEC-0151]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -109,6 +109,17 @@ would leave a three-column row about 300 px per column where 1200 leaves
 about 380. Anything materially wider than 1200 stops being the same
 layout at a greater width and becomes a different layout, which D2(d)
 forbids.
+
+**Amended by DEC-0150 (2026-10-07): 1200 px is the content box.** The owner's
+desktop grid keeps the value and moves it. The 1200 px is the content, and
+the outer margin lies outside it: 16 px below `md`, 32 px from `md`, at least
+48 px from `xl`. So at 1280 the content box is 1184 px and at 1440 it is
+1200 px. The grid offers 1 / 8 / 12 columns at the three tiers. From `xl`,
+running text is capped at 7 of 12 columns, which is tighter than
+`measure.text` there. The placements are bound in
+`concept/website-design-system.md` § *Layout Grid*, not restated here. Its
+acceptance criteria are A23–A27, each with its test in
+`e2e/layout-grid.spec.ts` or `e2e/photo-surface.spec.ts`.
 
 **(d) Tablet and desktop stay close to the mobile layout.** Made
 operative as a single-tree rule:
@@ -368,7 +379,7 @@ for the spec side, and needs the content frontmatter schema
 | TS-WEB-0017-A6 | static | No logo, mark, or font file is committed in this repository; every logo reference is a brand-package subpath import. |
 | TS-WEB-0017-A7 | static | The brand package is pinned to an exact version; the lockfile version matches the version recorded in D3. |
 | TS-WEB-0017-A8 | e2e | Visible text order in the rendered DOM is identical at 360 × 640, 428 × 926 and 1280 × 800 on every page; no element is visible at one width and absent at another. This is the single-tree rule of D2(d) under test, and it samples the small range because that is where the switch points are dense. |
-| TS-WEB-0017-A9 | e2e | At 1920 px the content container does not exceed `measure.page` (only margins grow); at 320 px no page scrolls horizontally (TS-WEB-0002 A7 is the floor); at 360 px and at 428 px no page scrolls horizontally either. |
+| TS-WEB-0017-A9 | e2e | At 1920 px the content box of every container (its width less its inline padding) does not exceed `measure.page` (only margins grow; DEC-0150 put the margin outside the 1200 px); at 320 px no page scrolls horizontally (TS-WEB-0002 A7 is the floor); at 360 px and at 428 px no page scrolls horizontally either. |
 | TS-WEB-0017-A10 | static | Every website `/api/*` route handler exports `GET` only — no write handler anywhere in the route tree. |
 | TS-WEB-0017-A11 | static | The app hostname occurs in exactly one module (the DEC-0029 handover builder); no other file contains it, and no app link is assembled elsewhere. |
 | TS-WEB-0017-A12 | integration | The persistent calendar entry is present in the header on every page and resolves to the target TS-WEB-0004 D4 fixes. |
@@ -381,6 +392,12 @@ for the spec side, and needs the content frontmatter schema
 | TS-WEB-0017-A20 | static | `pnpm check:coverage` gives every acceptance criterion exactly one verdict against the instrument its own level names (`specs/verification/verification-strategy.md` § Levels): VERIFIED only from an identifier inside a `describe`/`test`/`Scenario` title in a file a runner actually runs; METERED only from a `scripts/check-*.ts` the `check` chain invokes (`static`) or a step in `.github/workflows/` (`tool`); ATTESTED only from an unexpired `pass` row in `specs/verification/manual-checks.md` whose criterion is declared `manual`. An identifier appearing in a runner file but in no title is **NAMED ONLY** and is not coverage; one appearing nowhere is MISSING. The run writes `state/coverage.md` naming every open criterion with its level, verdict and where its name appears (D6c). |
 | TS-WEB-0017-A21 | static | `pnpm check:coverage` fails when a criterion the working tree defines and `HEAD` does not is NAMED ONLY or MISSING — no budget and no exception — and fails when either open tally differs from `specs/verification/coverage-budget.json`, in **both** directions: a rise names how many criteria must be closed, a fall names the number to write into the budget. A tree with no git history reports rule 1 as **not checked** rather than as a pass (D6c). |
 | TS-WEB-0017-A19 | static | Every `var(--x)` in a stylesheet under `app/`, `src/`, `e2e/` or `scripts/` names a custom property something declares — any stylesheet, the brand token sheet in the package, or an inline style in a TS/TSX file. A `var()` **with** a fallback is exempt: there the undeclared property is a deliberate default, not a dropped declaration. Comments are blanked before the scan, so a property named in prose is not a use. An undeclared property invalidates the whole declaration, which is why this is an error and not a warning: the rule does not degrade, it disappears (D6b). |
+| TS-WEB-0017-A22 | static | No gradient in an authored source (`app/`, `src/`, `e2e/`, `scripts/`) or in a design board (`concept/v2.0/*.dc.html`) carries `ink` or `violet` — neither as an alpha colour, nor as a `color-mix()`, nor as a `var(--color-neutral-ink)` / `var(--color-violet-*)`. The scrim over a photograph is neutral black from `color.scrim.*` and nothing else (SRC-0014 §The scrim, DEC-0151). |
+| TS-WEB-0017-A23 | e2e | At 1280 × 800, 1440 × 900 and 1920 × 1080, on every page with a hero, the header logo, the hero's text stack, the hero `h1` and the first section's content start on one left edge; the content box is `min(1200 px, viewport − 96 px)` and the outer margin is at least 48 px (SRC-0014 §Layout Grid, DEC-0150). |
+| TS-WEB-0017-A24 | e2e | At the same widths the hero `h1` is no wider than 7 of 12 columns and the hero search no wider than 6. |
+| TS-WEB-0017-A25 | e2e | From `xl` the hero is at least `min(80vh, 680px)` tall on `/` and `min(70vh, 560px)` on every other page, and from 1280 px no taller than that cap. |
+| TS-WEB-0017-A26 | e2e | From `xl` two conversions in one hero stand in one row with at least `space-3` between them; below `xl` they stack (DEC-0116 §4 as amended by DEC-0150). |
+| TS-WEB-0017-A27 | e2e | At 1440 × 900 the live dates on `/` stand head in columns 1–4 and list in columns 5–12 (`live-module-frame` `layout="split"`). |
 
 ### D7 — One icon set [FIXED: DEC-0056, SRC-0014#icons]
 
@@ -407,10 +424,10 @@ name used resolves to an export of it.
 | CON-WEB-0046 (be built with Next.js at its current major version) | D1, D5 · A1, A2, A16 |
 | CON-WEB-0047 (be hosted on Vercel) | D1, D5 · A1, A2, A16 |
 | CON-WEB-0048 (never introduce a second framework) | D1, D5 · A1, A2, A16 |
-| CON-WEB-0049 (optimise its layout for the phone first) | D2 · A4, A8, A9 |
-| CON-WEB-0050 (keep the tablet and desktop layout close to the …) | D2 · A4, A8, A9 |
+| CON-WEB-0049 (optimise its layout for the phone first) | D2 · A4, A8, A9, A23, A24, A25, A26, A27 |
+| CON-WEB-0050 (keep the tablet and desktop layout close to the …) | D2 · A4, A8, A9, A23, A24, A25, A26, A27 |
 | CON-WEB-0051 (take its breakpoints from @schafe-vorm-fenster/brand-design (breakpoint.xs…2xl) | D2 · A4, A8, A9 |
-| CON-WEB-0003 (brand kit binding) | D3 (with TS-WEB-0002 D3, TS-WEB-0003 D3) · A5, A6, A7, A15 |
+| CON-WEB-0003 (brand kit binding) | D3 (with TS-WEB-0002 D3, TS-WEB-0003 D3) · A5, A6, A7, A15, A22 |
 | CON-WEB-0052 (never reimplement the village calendars) | D4 · A10, A11, A12 |
 | FUN-WEB-0131 (embed what app.schafe-vorm-fenster.de serves rather than hold its own) | D4 · A10, A11, A12 |
 | CON-WEB-0053 (be written in TypeScript throughout) | D5 · A2, A3, A13 |

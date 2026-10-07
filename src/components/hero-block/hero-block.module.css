@@ -92,3 +92,39 @@
     margin-top: var(--space-6);
   }
 }
+
+/*
+ * xl — the desktop grid (SRC-0014 §Layout Grid, DEC-0150). The text stands in
+ * columns 1–7 at the container's bottom-left, never centred over the
+ * photograph; the search takes columns 1–6, because a place name does not
+ * need 1200px. The CTA slot turns into a row with `space-3` between the
+ * buttons, wrapping when they do not fit — DEC-0116 §4's column now holds
+ * below xl only. A block handed in as the conversion (`/dein-ort` S0's search)
+ * still takes a line of its own.
+ */
+@media (min-width: 64rem) {
+  .headline,
+  .placeName {
+    max-width: var(--span-7);
+  }
+
+  .lead {
+    max-width: min(var(--measure-reading), var(--span-7));
+  }
+
+  .cta {
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .cta > :not(:where(a, button, span)) {
+    flex-basis: 100%;
+    max-width: var(--span-6);
+  }
+
+  .search {
+    max-width: var(--span-6);
+    width: 100%;
+  }
+}

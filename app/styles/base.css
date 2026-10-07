@@ -9,9 +9,16 @@
  *   2xl 80rem. No call site invents one. CSS media queries cannot read custom
  *   properties, so the literals appear here and are checked against the token
  *   set rather than being free.
- * D2(c) Width is not maximised: the container is `--measure-page` (75rem),
- *   the text measure `--measure-text` (68ch). Above 2xl only the outer margin
- *   grows.
+ * D2(c) Width is not maximised: the container's *content box* is
+ *   `--measure-page` (75rem = 1200px) and the outer margin lies outside it
+ *   (DEC-0150). The text measure is `--measure-text` (68ch). Above the point
+ *   where the content reaches 1200px only the margin grows.
+ * Layout grid (SRC-0014 §Layout Grid, DEC-0150): three tiers on the six
+ *   breakpoints — mobile below md (1 column, 16px margin), tablet from md
+ *   (8 columns, 32px margin, 20px gutter), desktop from xl (12 columns, 24px
+ *   gutter, 48px margin minimum). `--span-N` is N desktop columns of the
+ *   nearest `.container`, measured in `cqi`, so a span means the same width
+ *   however deep the element sits; below xl every span is the full width.
  * D2(d) One component tree. A breakpoint may change spacing, type step, image
  *   aspect and the column count of a block that declares `data-columns-*`.
  *   It may never change block order, block presence or wording.
@@ -32,10 +39,17 @@
 
 :root {
   color-scheme: light;
-  /* The outer gutter. The design system fixes 16px inside the viewport on
-     every section; the per-breakpoint gutter table is still owed (DEC-0067
-     consequences, state/open.md). */
+  /* The outer margin per tier — SRC-0014 §Layout Grid, the six-row table
+     DEM-0042 asked for. 16px on every phone width. */
   --gutter: var(--space-4);
+  /* The column gap between grid columns; no columns stand side by side below
+     xl, so on the phone and the tablet it only spaces stacked blocks. */
+  --grid-gap: var(--space-6);
+  /* Column spans: the full width until the desktop tier defines them. */
+  --span-4: 100%;
+  --span-6: 100%;
+  --span-7: 100%;
+  --span-8: 100%;
 }
 
 html {
@@ -148,9 +162,13 @@ textarea {
 }
 
 .container {
+  /* The spans below are measured against this box (`cqi`), never against
+     whichever parent an element happens to sit in. */
+  container-type: inline-size;
   margin-inline: auto;
-  /* D2(c): the content stops growing at measure.page; only the margin grows. */
-  max-width: var(--measure-page);
+  /* D2(c), DEC-0150: the *content* stops at measure.page (1200px); the margin
+     is added outside it, so the padded box is 1200px plus two margins. */
+  max-width: calc(var(--measure-page) + 2 * var(--gutter));
   padding-inline: var(--gutter);
   width: 100%;
 }
@@ -195,10 +213,13 @@ textarea {
  * are identical at every width (D2(d)); TS-WEB-0017-A8 tests exactly that.
  * ─────────────────────────────────────────────────────────────────────── */
 
-/* sm — 26.75rem / 428px: large phones, where the extra width is spent. */
-@media (min-width: 26.75rem) {
+/* md — 40rem / 640px: the tablet tier. 8 columns, 32px margin, 20px gutter.
+   The space scale has no 20px step yet (DEM-0071), so the gutter is the one
+   spacing literal in this file until brand-design ships it. */
+@media (min-width: 40rem) {
   :root {
-    --gutter: var(--space-6);
+    --gutter: var(--space-8);
+    --grid-gap: 1.25rem;
   }
 }
 
@@ -209,10 +230,27 @@ textarea {
   }
 }
 
-/* xl — 64rem / 1024px: small desktop. */
+/* xl — 64rem / 1024px: the desktop tier. 12 columns, 24px gutter, 48px
+   margin minimum; the spans take their desktop widths (SRC-0014 §Layout Grid). */
 @media (min-width: 64rem) {
   :root {
-    --gutter: var(--space-8);
+    --gutter: var(--space-12);
+    --grid-gap: var(--space-6);
+    --grid-col: calc((100cqi - 11 * var(--grid-gap)) / 12);
+    --span-4: calc(4 * var(--grid-col) + 3 * var(--grid-gap));
+    --span-6: calc(6 * var(--grid-col) + 5 * var(--grid-gap));
+    --span-7: calc(7 * var(--grid-col) + 6 * var(--grid-gap));
+    --span-8: calc(8 * var(--grid-col) + 7 * var(--grid-gap));
+  }
+
+  /* Headlines at most 8 columns, running text at most 7 and never wider than
+     the text measure. */
+  .container :where(h1, h2) {
+    max-width: var(--span-8);
+  }
+
+  .container :where(p) {
+    max-width: min(var(--measure-text), var(--span-7));
   }
 
   .site-main {

@@ -39,13 +39,11 @@ export interface PhotoSurfaceProps extends DataStateProps {
    */
   readonly hero?: boolean;
   /**
-   * **Accepted and ignored.** The ink and violet tone variants are retired —
-   * one neutral-black scrim for every surface (DEC-0105 §1, design-system
-   * contract `photo-surface`: one variant). The prop stays in the interface
-   * so the call sites that still pass it keep compiling until their owners
-   * remove it (T-14, T-19); it selects nothing.
+   * The hero's height from `xl` (SRC-0014 §Layout Grid, DEC-0150): `home`
+   * is `min(80vh, 680px)`, `page` — every other hero — `min(70vh, 560px)`.
+   * Below `xl` the hero keeps its reserved band and `ratio-hero`.
    */
-  readonly gradient?: "ink" | "violet";
+  readonly heroSize?: "home" | "page";
   /**
    * The motif's focal point, as percentages of the frame — the inventory's
    * `focal: {x, y}` (`ImageEntrySchema`), what `background-position` takes.
@@ -112,6 +110,7 @@ export function PhotoSurface({
   wideSrc,
   priority = false,
   hero = false,
+  heroSize = "page",
   focal,
   ratio = "hero",
   notDepicting = false,
@@ -190,6 +189,7 @@ export function PhotoSurface({
       /* The page's hero surface — what the header observes to know when it
          has scrolled off the photograph (Jan's round-3 point 2). */
       data-hero={hero && !missingPhoto ? "true" : undefined}
+      data-hero-size={hero && !missingPhoto ? heroSize : undefined}
       data-mock={isMocked(state) ? "true" : undefined}
       data-placeholder={missingPhoto ? "true" : placeholderId}
       data-provenance={notDepicting && !missingPhoto ? "generated" : undefined}
@@ -208,7 +208,9 @@ export function PhotoSurface({
           for is readable from `data-placeholder`, `data-provenance` and
           `data-mock` above, and from `state/open.md`; a visitor sees a
           finished picture or a finished flat ground, never a label. */}
-      <div className={styles.content}>{children}</div>
+      {/* The text stack stands in the page's container, so it starts on the
+          same left edge as the header and every section (DEC-0150, F-4-1). */}
+      <div className={`container ${styles.content}`}>{children}</div>
     </section>
     </>
   );
