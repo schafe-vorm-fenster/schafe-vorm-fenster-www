@@ -61,7 +61,12 @@ export const EventSchema = z
     "county.name": z.string().optional(),
     "organizer.id": z.string().optional(),
     "organizer.name": z.string().optional(),
-    /** The German text and the image — what makes an example worth opening (DEC-0152). */
+    /**
+     * The text and the image — what makes an example worth opening (DEC-0152).
+     * A search sent with `language: "de"` answers with the localized
+     * `description`; the dotted `description.de` is the unlocalized shape.
+     */
+    description: z.string().optional(),
     "description.de": z.string().optional(),
     image: z.string().optional(),
     "image.exists": z.boolean().optional(),
