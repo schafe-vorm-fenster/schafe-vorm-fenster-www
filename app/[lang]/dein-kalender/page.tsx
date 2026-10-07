@@ -424,8 +424,8 @@ export default async function Page({
         />
       </SectionShell>
 
-      {/* `WAS HILFT EUCH DAS?` over a title that states what goes — the
-          calendar above shows the mechanism, and this block answers the
+      {/* "Eure Einstellungen" (DEC-0148) over a title that states what goes —
+          the calendar above shows the mechanism, and this block answers the
           question a municipality, a Verein or a Stiftung actually has about
           it: whether it decides what stands in it. Its own `data-block`
           since DEC-0131 §1 — TS-WEB-0024 D2 lists seven blocks now, because
@@ -440,7 +440,7 @@ export default async function Page({
       <SectionShell
         contained={false}
         dataBlock="embed-config"
-        kicker={dictionary(locale).kickers.whyItMatters}
+        kicker={dictionary(locale).kickers.yourSettings}
         labelledBy="embed-config-heading"
         surface="paper"
       >

@@ -301,19 +301,25 @@ site is not a heading.
 Ask the reader's question instead.
 
 - Avoid: *"Warum das zählt"* · *"Neuigkeiten aus dem Projekt"*
-- Use **as a kicker**: *"Was hilft euch das?"* · *"Warum ist das wichtig?"* ·
-  *"Was sind die Vorteile?"*
+- Use **as a kicker**: *"Warum ist das wichtig?"* · *"Was sind die Vorteile?"*
 
-**All three of those are questions, and a question is not a section title.**
+**Both of those are questions, and a question is not a section title.**
 CG-005 makes a `?` in a section title a build failure, and these sit under a
 "Headings" chapter, which read as permission to write one. It is not.
 
 Read CG-018 as the two-part move CG-005 already describes: the reader's
 question goes in the **kicker**, and the **title** beneath it answers. The
 review accepts exactly that split — kicker *"Warum es heute hakt"*, title
-*"Wer euren Termin heute nicht mitbekommt"* — and CG-019 lists
-`WAS HILFT EUCH DAS?` as a kicker for the benefit role, which is where the
-first example above actually belongs.
+*"Wer euren Termin heute nicht mitbekommt"*.
+
+**One phrase for the whole "benefit" role, repeated on every section that
+plays it, is the same defect CG-018 forbids under a different name
+(DEC-0148).** `WAS HILFT EUCH DAS?` (CG-019) was one fixed string on five
+sections across three pages — asking the reader the exact same question
+five times reads as the internal analysis prompt it started as, not as
+signposting written for a reader. CG-019's benefit row is now per section:
+each instantiation names what its own section is actually about, still a
+declarative kicker, not a question.
 
 So: a question form is legal **only as a kicker**, and only where the
 section that follows answers it (CG-006). A section title is a statement,
@@ -329,7 +335,7 @@ The kicker names the role the section plays; the title says what goes
 | Section role | The kicker says | From the review |
 | --- | --- | --- |
 | how it works | that it gets easier | `SO GEHT'S EINFACHER` |
-| benefit | what it does for you | `WAS HILFT EUCH DAS?` |
+| benefit | what it does for you | per section, not fixed (DEC-0148) — e.g. `WAS EIN DORF BRAUCHT`, `VERSORGUNG`, `GEMEINDELEBEN` |
 | problem / old world | why it is being raised at all | `WARUM ES HEUTE HAKT` |
 | price | what it costs | `WAS ES KOSTET` |
 | contact | what may be asked here | `FRAGEN ZU DEN PREISEN` |

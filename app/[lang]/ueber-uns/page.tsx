@@ -322,7 +322,7 @@ export default async function Page({
         // at 390 px on the standard density and `e2e/section-budget.spec.ts`
         // caps a section at 1270 (polish brief G-4). One value per section.
         density="tight"
-        kicker={words.kickers.whyItMatters}
+        kicker={words.kickers.whatAVillageNeeds}
         label={headline}
         surface="paper"
       >

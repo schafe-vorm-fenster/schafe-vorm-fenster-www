@@ -339,7 +339,7 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
     for (const kicker of [
       "Warum es heute hakt",
       "So funktioniert es",
-      "Was hilft euch das?",
+      "Eure Einstellungen",
       "Was es kostet",
       "Wer den Kalender nutzt",
       "Wie wir arbeiten",
