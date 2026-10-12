@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0011]
 sources: [SRC-0001, SRC-0002, SRC-0003]
-decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152, DEC-0153]
+decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152, DEC-0153, DEC-0154]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -195,6 +195,17 @@ site is not a goal of its own.
   and whether 2a and 2b interleave visually, within D1's DOM order.
 - [FREE] Component and file naming (no manifest yet, Q-0044); all copy, the
   empty-state wording included, is the content phase's.
+
+## Owed by the owner's review of 2026-10-12 (DEC-0154)
+
+- **The stage shows the place's own photograph** (issue #18). `/dein-ort?ort=…`
+  today shows the same photograph (a bus stop near Pasewalk) for every place.
+  What a place without a photograph shows is `Q-0089`.
+- **The stage is less full** (issues #20, #23). The hint line and the
+  data-protection paragraph go, the placeholder carries "Tipp den Ortsnamen ein",
+  the location link sits directly under the field, and in state A the search for
+  another place stays in the stage.
+- **The stage's dates stand on a neutral black ground** (issue #19, `Q-0090`).
 
 ## Acceptance criteria
 

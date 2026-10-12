@@ -1,7 +1,7 @@
 ---
 title: "Website Copy Guide — www.schafe-vorm-fenster.de"
 created_at: 2026-09-23
-updated_at: 2026-09-24
+updated_at: 2026-10-12
 status: draft
 source: review
 intent: inform
@@ -150,10 +150,14 @@ Not a question, not a label, not a problem. A problem framing may live in the
 
 - Avoid: *"Warum es heute hakt"* · *"Warum es hakt"* · *"Warum das, was ihr
   heute macht, nicht überall ankommt"* · *"Warum wir"*
-- Use: kicker *"Warum es heute hakt"* with the title *"Wer euren Termin heute
-  nicht mitbekommt"* — the review accepts exactly this split. And
-  *"Was drinsteht, bestimmt ihr"* · *"So kommen eure Termine rein"* ·
+- Use: *"Was drinsteht, bestimmt ihr"* · *"So kommen eure Termine rein"* ·
   *"So sieht es aus, wenn es bei euch steht"*.
+- **A problem kicker is legal only after the solution has been said** (CG-042).
+  Until 2026-10-12 this rule offered kicker *"Warum es heute hakt"* over title
+  *"Wer euren Termin heute nicht mitbekommt"* as the model split. The owner's
+  review of 2026-10-12 rejects it on two pages: on `/mitmachen` it puts the
+  problem before the solution, and on `/dein-kalender` the title announces
+  people while the section shows a comparison. The pair is no longer a model.
 
 ### CG-006 — A question only to the reader, answered next
 
@@ -186,6 +190,29 @@ hide.
   date becomes the way into the publishing job.
 
 ---
+
+### CG-042 — The solution comes first, the problem second
+
+A section that names a problem ("Warum es heute hakt") must not also explain
+the solution, and a solution must not wait behind its own problem. Owner's
+review of 2026-10-12, `/mitmachen`: *"Wir können nicht die Problemfrage stellen
+und die Lösung erklären."*
+
+- Order: **the solution in one short sentence first** (*"Fotografier den
+  Flyer, schick das Bild per WhatsApp, fertig."*), then the problem section
+  that explains why the usual ways fall short.
+- The usual ways (what people do today) come **before** the people who miss the
+  date because of them. The problem section is self-contained and carries no
+  instruction on how to solve it.
+- A problem kicker (CG-005) opens a problem section and only that.
+
+### CG-043 — No invented limits, no stand-in sentences
+
+A limit that a section needs and the guide does not hold is written as
+`UNKNOWN` with a question, never filled with a plausible number (AGENTS.md,
+the rule that governs every requirement). A proof line is a sentence (CG-027),
+not a string of keywords; a label that stands in for a sentence is a defect,
+not a style.
 
 ## 3. Concreteness
 
@@ -309,8 +336,8 @@ CG-005 makes a `?` in a section title a build failure, and these sit under a
 
 Read CG-018 as the two-part move CG-005 already describes: the reader's
 question goes in the **kicker**, and the **title** beneath it answers. The
-review accepts exactly that split — kicker *"Warum es heute hakt"*, title
-*"Wer euren Termin heute nicht mitbekommt"*.
+kicker/title pair must still obey CG-042 (solution first) and CG-004 (the title
+has to announce what the section actually shows).
 
 **One phrase for the whole "benefit" role, repeated on every section that
 plays it, is the same defect CG-018 forbids under a different name
@@ -367,9 +394,9 @@ schema each one is a `max()` (TS-WEB-0007 D5).
 | CG-022 | section title | Section head 38/800 | ≤ 40 characters, ≤ 2 lines | Statement, positive, no question mark (CG-005). |
 | CG-023 | kicker | Kicker mono 15/700 | ≤ 28 characters, 1 line | Names the section's role (CG-019). |
 | CG-024 | lead paragraph | Lead 20/400 | ≤ 160 characters, ≤ 4 lines | One idea, one example. |
-| CG-025 | explain-module step line | core 18/700 · detail 15/400 | core ≤ 30, detail ≤ 40 characters, **each exactly one line** | Bold core = the step, normal detail = the addition. The module plus its three lines fit one phone screen; if they do not, the copy is too long — the module does not grow (SRC-0014 "Explain module"). |
-| CG-026 | CTA label | Button 18/800 + arrow | ≤ 28 characters, 1 line | Verb + object. What happens on tap, in the reader's words. |
-| CG-027 | proof card | Card title 21/700 + Meta | claim ≤ 70, context ≤ 140 characters | **State the win.** A proof card is a persuasion, not a report. |
+| CG-025 | explain-module step line | core 18/700 · detail 15/400 | core ≤ 30, detail ≤ 40 characters **as a target, not a clamp** | Bold core = the step, normal detail = the addition. **Never truncated:** a line that is longer wraps, and the module reserves the height of its longest step (DEC-0154, owner's review 2026-10-12: a module that explains cannot hide its explanation behind "…"). A line over the target is a lint finding, not a cut (SRC-0014 "Explain module"). |
+| CG-026 | CTA label | Button 18/800 + arrow | ≤ 28 characters, 1 line | Verb + object. What happens on tap, in the reader's words. A CTA that leads to a page with more to learn (filters, configuration, white-label design) may carry **one supporting line beneath the button**, never a longer label (DEC-0154). |
+| CG-027 | proof card | Card title 21/700 + Meta | claim **a full sentence with a verb** (the 70-character limit is withdrawn, DEC-0154), context ≤ 140 characters | **State the win** in a sentence, not in keywords: *"Wir sind stolz, dass wir den NØRD Award 2026 in der Kategorie Smart Community unter der Schirmherrschaft des Bitkom e.V. gewonnen haben."* — never *"NØRD Award 2026 gewonnen, Kategorie Smart Community, Schirmherr Bitkom."* The new length budget is `UNKNOWN` until the proof card is redesigned (`Q-0086`); no number is invented here (CG-043). |
 | CG-028 | quote card | Lead 20/400 + mono 15 | quote ≤ 200, name ≤ 40, role + organisation ≤ 60, source ≤ 60 characters | Verbatim, never shortened in a way that changes the sentence; the concrete publication and article as source, with a working link (SRC-0014 "Quote card"). |
 | CG-029 | newsletter block | Section head + Lead | title ≤ 40, benefit ≤ 120 characters | Name at least two concrete things that arrive: new functions, current offers, how other places do it. |
 | CG-030 | context-band entry | Card title + Meta | ≤ 80 characters **[PROPOSED — the field does not exist yet]** | One half-sentence naming **audience and content together**, then the link. |
@@ -442,12 +469,23 @@ into copy is stale the week after.
 - Avoid: *"Seit 2018 in Betrieb, 120 Orte"* · *"8.622 Termine"* ·
   *"Ein Dorf mit rund 400 Einwohnern …"* (Schlatkow has about 280).
 - Use: the live list itself, and the gap in it as a hand-off (CG-008).
+- **A live count is not automatically legal either.** *"Termine, die gerade im
+  Kalender stehen — 8.543 Termine"* is counted live, so it passes the first
+  sentence, and the owner's review of 2026-10-12 still removes it: the number
+  tells the reader nothing. A live figure appears only where it changes what
+  the reader does. The home page carries none (DEC-0154).
 
 ### CG-035 — No internal meta lines
 
 A label that explains the page to its own authors does not belong on the page.
 
-- Avoid: *"Presse- und Auftrittshistorie 2018 bis 2026"*
+- Avoid: *"Presse- und Auftrittshistorie 2018 bis 2026"* · *"Beleg aus der
+  Region"* (the **field name** of the geo label, printed on the page as if it
+  were its text — owner's review 2026-10-12, called a rule break) · anything
+  written as an instruction to the author or the generator (a field name, an
+  imperative label, "TODO", "Platzhalter").
+- A rendered field never takes its value from a label whose job is to tell
+  authors what goes there. If the field has no real value, it renders nothing.
 
 ### CG-036 — "im Amt" is never the only addressee
 
@@ -584,6 +622,10 @@ review at the editorial gate (TS-WEB-0007 D11), listed as such in the contract.
 - No word doubling, no padding line, no sentence that repeats the one above.
 - No typed traction figure, no internal meta line, no sentence that is
   literally untrue.
+- No problem section that also explains its solution, and no problem before the
+  solution (CG-042).
+- No proof line in keywords, no truncated explanation, no field name or
+  working label on the page (CG-027, CG-025, CG-035).
 - No `Sie`, on any page, in any field — except `/rechtliches`, which is
   exempt as a whole page and exempts nothing else (CG-003).
 - No "das Produkt", and no second occurrence of the product name.

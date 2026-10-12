@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0017]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0014]
-decisions: [DEC-0036, DEC-0042, DEC-0048, DEC-0051, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0084]
+decisions: [DEC-0036, DEC-0042, DEC-0048, DEC-0051, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0154]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -249,6 +249,17 @@ assigns types per page type and its A5 checks "no more".
   slot sits in the reading order the engine gives it. *(The second half of this
   bullet offered a choice between "origin and counters as one component or two"
   until 2026-09-25; D4 deleted the counters, so there was nothing to choose.)*
+
+## Owed by the owner's review of 2026-10-12 (DEC-0154)
+
+- **Proof teasers carry one core statement each and link to their proof here**
+  (issue #36): a stable anchor per proof record on `/ueber-uns` and in the
+  archive, so a teaser on `/` can deep-link to it.
+- **Proof lines are sentences** (issue #38, CG-027). The 70-character limit is
+  withdrawn, the new budget is `Q-0086`.
+- **The origin photograph runs to the edge on the phone** (issue #35).
+- **The text of the origin section is revised** ("mitgegründet", dashes,
+  `humanizer`, issue #34).
 
 ## Acceptance criteria
 
