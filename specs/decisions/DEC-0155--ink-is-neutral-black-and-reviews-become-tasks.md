@@ -35,7 +35,7 @@ the tests, not from assumption.
      (`lime-700` to `lime-950` as a background: hover states of chips, search
      submit, contact buttons and the primary button, the "Amtlich" badge, the
      accent kicker). The rule is stated: dark green is for text, links and icons,
-     not for a fill. The places are in the follow-up issue.
+     not for a fill. The places are in issue #57.
 2. **Readability goes before a fixed height** (the explain module, issue #47). The
    fixed height serves layout stability; it never justifies cutting text. Order of
    remedies: shorten the copy or make the three steps equally long; where every
@@ -80,7 +80,7 @@ Three patterns, and what each asks for:
   contact section's actions sit on `lime-100` too.
 - **`check:reviews`**: the review-to-task rule above, unit-tested.
 
-## Still to add (issue)
+## Still to add (issue #58)
 
 A sweep for text that is clipped (`text-overflow: ellipsis` that actually
 clips, line clamps) on every route; a check that no dark-green fill from
