@@ -188,6 +188,33 @@
  * `--tracking-label` was never overridden here and needed no deletion; 2.8.x
  * ships `0.08em` where `0.1.3` shipped `0.06em`.
  */
+/*
+ * Interim: `ink` is neutral black (DEC-0155, `TS-WEB-0017-A28`).
+ *
+ * `brand-design` 2.8.1 writes its old ink — the lime hue at 3 % chroma, dark green
+ * across a whole section — and the owner decided on 2026-10-12 that dark green
+ * as a surface leaves the design. The fix is in the package (`go-to-market-os`
+ * PR #620, `2.9.0`); the pin is exact (DEC-0044), so it cannot move before that
+ * is published. Until it does, these are the eight places the package writes the
+ * old value, set to the new one. Same pattern as the interim declarations this
+ * file carried until the 2.8.1 pin move: delete this block *after* the pin moves,
+ * never before, and `check:brand` (A28) fails if the value drifts either way.
+ */
+:root {
+  --color-neutral-ink: #000000;
+  --color-roles-fill-ink: #000000;
+  --color-status-event-neu-text: #000000;
+  --color-status-event-verschoben-text: #000000;
+  --color-category-education-health-glyph: #000000;
+  --color-category-everyday-supply-glyph: #000000;
+  --text: #000000;
+  --brand-fill-text: #000000;
+}
+
+[data-theme="dark"] {
+  --brand-fill-text: #000000;
+}
+
 :root {
   /*
    * F-2-68 — the metric-matched face above, inserted between the real font

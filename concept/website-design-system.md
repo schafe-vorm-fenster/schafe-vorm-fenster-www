@@ -77,7 +77,7 @@ text colour is ever `#000000` or `#FFFFFF`.
 
 | Token | Hex | Use |
 | --- | --- | --- |
-| `ink` | `#171D0D` | Primary text, dark sections, primary button fill, control wells. **Open: the owner reads this ground as dark green** (review 2026-10-12, the home stage's date section) **and wants it neutral black** — see *Open decisions* 6 |
+| `ink` | `#000000` | Primary text, dark sections, primary button fill, control wells. **Neutral black since 2026-10-12** (`DEC-0155`): it was `#171D0D`, which reads as dark green across a section, and dark green as a surface leaves the design. One value for the text and the dark ground; `brand-design` 2.9.0 carries it |
 | `text-2` | `#39412C` | Body copy on light surfaces |
 | `muted` | `#606657` | Labels, meta, placeholder text |
 | `border` | `#6F7467` | Input outlines where an outline is unavoidable |
@@ -159,7 +159,7 @@ stylesheet after the move: `--color-archive-ground: #fbf1dc`, and
 What each part of an archive block is set in:
 
 - The **ground** is `--color-archive-ground`, the token.
-- The **headline and the bold core line** are `ink` (15.37:1), the detail
+- The **headline and the bold core line** are `ink` (18.72:1), the detail
   line `text-2` (9.52:1).
 - The **kicker** is still set in `ink` rather than in `#9A6300`. Moving the
   archive foreground onto `archive.ink` (`#7A4F00`, 6.35:1) is available in
@@ -196,8 +196,8 @@ classification-api"*. Read in the installed package on 2026-09-25.
 | id | Label (`color.category.*.label`) | Icon | Coin fill (`dot`) | Glyph | Ratio | Bare icon (`bare`) on `paper` |
 | --- | --- | --- | --- | --- | --- | --- |
 | `community-life` | Gemeinschaft | `users` | `himbeere-600` `#BC1C5A` — see below | `paper` | 5.84:1 | `#BC1C5A`, 5.84:1 |
-| `education-health` | Bildung & Gesundheit | `graduation-cap` | `#1FB2A6` | `ink` | 6.55:1 | `#178E85`, 3.85:1 |
-| `everyday-supply` | Versorgung | `shopping-basket` | `#D4A017` | `ink` | 7.26:1 | `#B4830C`, 3.26:1 |
+| `education-health` | Bildung & Gesundheit | `graduation-cap` | `#1FB2A6` | `ink` | 7.98:1 | `#178E85`, 3.85:1 |
+| `everyday-supply` | Versorgung | `shopping-basket` | `#D4A017` | `ink` | 8.84:1 | `#B4830C`, 3.26:1 |
 | `culture-tourism` | Kultur & Ausflug | `landmark` | `violet-500` `#531BDE` | `paper` | 7.82:1 | `#531BDE`, 7.82:1 |
 | `unknown` | Ohne Kategorie | `circle-help` | `border` `#6F7467` | `paper` | 4.62:1 | `#6F7467`, 4.62:1 |
 
@@ -215,7 +215,7 @@ all five clear. The `dot` values are coins carrying a glyph, so the floor is
 
 1. `category.community-life.dot` and `.bare` shipped in **2.8.0** as
    `himbeere-500` `#E0286E`, and the package paired the coin with a `paper`
-   glyph at **4.29:1** — below the floor. `ink` on it is **3.86:1**, also
+   glyph at **4.29:1** — below the floor. `ink` on it was **3.86:1** (4.70:1 since `ink` became neutral black), also
    below. Neither glyph worked at badge size, so the fill had to move:
    `himbeere-600` `#BC1C5A` clears at 5.84:1 with `paper` and is one step
    down the same ramp. PR **#464** made that change upstream and **2.8.1**
@@ -245,7 +245,7 @@ a light ground use `archive ink` `#7A4F00` (6.85:1 on `paper`) or
 | `paper` on `lime-600` | 2.49:1 | Forbidden. `lime-600` takes `ink`. |
 | `paper` on `lime-500` | 1.62:1 | Forbidden. `lime-500` takes `ink` or `lime-900`. |
 | `himbeere-500` on `paper` | 4.29:1 | Display fills at 32 px and above only. `himbeere-600` (5.84:1) for anything smaller or anything carrying text. |
-| `paper` on `himbeere-500` | 4.29:1 | Forbidden at label size — the reason `category.community-life` moves to `himbeere-600`. `ink` on it is worse (3.86:1). |
+| `paper` on `himbeere-500` | 4.29:1 | Forbidden at label size — the reason `category.community-life` moves to `himbeere-600`. `ink` on it was worse (3.86:1; 4.70:1 since `ink` became neutral black). |
 | `line` on `lime-100` | 1.27:1 | Invisible. `border.hairlineOnLime` shipped in brand-design **2.8.0** as `lime-300` `#C6E593`, which measures **1.19:1** on `lime-100` — weaker than the `line` it replaces. PR **#464** corrected it to `lime-500` `#A4D822`, **1.45:1**, which matches the 1.42:1 weight `line` has on `paper` instead of undercutting it. Measured 2026-09-24, shipped in **2.8.1**, and read in the production stylesheet on 2026-09-25 as `--border-hairline-on-lime: 1px solid #a4d822`. The pin moved the same day, so the hairline on a lime ground is `border.hairlineOnLime` and the `lime-400` interim (1.31:1) is retired. |
 
 ## Typography
@@ -464,7 +464,7 @@ two variants and no third.
 | Variant | Where | Field | Submit pill | Edge |
 | --- | --- | --- | --- | --- |
 | on-photo | The hero, over the scrim | `paper` ground, `ink` text, `muted` placeholder | `ink` fill, `paper` label | none — the scrim is the contrast |
-| on-ink | Any other surface that carries the search, the closing block on `/` included | `paper` ground, `ink` text, `muted` placeholder | `lime-500` fill, `ink` label (10.20:1) | none — `paper` on `ink` is 16.56:1 |
+| on-ink | Any other surface that carries the search, the closing block on `/` included | `paper` ground, `ink` text, `muted` placeholder | `lime-500` fill, `ink` label (12.42:1) | none — `paper` on `ink` is 20.17:1 |
 
 **A section that carries a search field takes the `ink` ground.** That is a
 composition rule, not a field property: the closing block on `/` that binds
@@ -569,8 +569,8 @@ its category badge, never instead of it.
 
 | Status | Fill | Text | Ratio |
 | --- | --- | --- | --- |
-| `neu` | `lime-500` | `ink` | 10.20:1 |
-| `verschoben` | `paper` | `ink` | 16.56:1 |
+| `neu` | `lime-500` | `ink` | 12.42:1 |
+| `verschoben` | `paper` | `ink` | 20.17:1 |
 | `abgesagt` | `#B02A1C` (error) | `paper` | 6.31:1 |
 
 On a `paper` ground the `verschoben` badge takes a 1 px `line` hairline —
@@ -609,8 +609,8 @@ everywhere. There is no contact form.
 - **Action rows**, 72 px, radius 999, full width, in order: a leading 24 px
   icon, a bold title (18 px / 700), a sub-label beneath it (15 px / 400),
   and a trailing 24 px `arrow-right`. The first row takes the **filled**
-  treatment (`ink` ground, `paper` title at 16.56:1, `lime-400` sub-label at
-  11.21:1); every further row is **outlined** (`paper` ground, `ink` title,
+  treatment (`ink` ground, `paper` title at 20.17:1, `lime-400` sub-label at
+  13.66:1); every further row is **outlined** (`paper` ground, `ink` title,
   `muted` sub-label at 5.70:1). Each row carries its own ground, so nothing
   is ever read against `lime-100` directly.
 - **Filled is a weight, not a conversion rank.** The first row is
@@ -664,9 +664,12 @@ invented ones.
 - **Three step lines**, each a numbered disc plus two lines: the bold core
   (18 px / 700) and the normal detail (15 px / 400). **Each line is written
   to a single line at 390 px, and it is never cut off.** The length is a
-  target the copy is written to (CG-025), not a clamp: a longer line wraps,
-  and the module reserves the height of its longest step so a change of step
-  moves nothing. Until 2026-10-12 the lines were `text-overflow: ellipsis`;
+  target the copy is written to (CG-025), not a clamp. **Readability comes
+  before a fixed height** (owner, 2026-10-12): the copy is shortened or made
+  equally long first; where every step genuinely needs two lines, the fixed
+  height is two lines for all three. A line that is longer wraps, and the
+  module reserves the height of its longest step so a change of step moves
+  nothing. Until 2026-10-12 the lines were `text-overflow: ellipsis`;
   the owner's review rejects that, because a module that explains cannot hide
   its explanation behind "…" (`DEC-0154`). The active step's disc is `lime-500` with `ink`;
   the others are `surface` with `muted`.
@@ -689,7 +692,8 @@ something that continues. The box never changes size, so a state change
 cannot shift the page. The three step lines sit beneath it. **The module
 plus its three step lines fit one phone screen** — one viewport height at
 the phone breakpoint. If they do not, the copy is too long and the build
-reports it; the answer is shorter copy, never a truncated line. The module
+reports it; the answer is shorter copy, then a taller fixed height, never a
+truncated line. The module
 reserves the height of its tallest step and does not grow when the step
 changes.
 
@@ -787,7 +791,7 @@ photo.
 
 - Mark-only logo, 40 px, clipped to radius 999. No wordmark over a photo.
 - The calendar entry as a `lime-500` pill, 44 px, `calendar-days` 24 px plus
-  an `ink` label (10.20:1).
+  an `ink` label (12.42:1).
 - Every other control in a 44 px round well — see the blur rule below for
   what fills it.
 - Nothing else. The header carries no fill, no bar, no shadow.
@@ -813,7 +817,7 @@ place it is used. It is a primitive, so it is defined once:
 
 **The fallback is the solid ink well, and it is documented, not implied.**
 Where `backdrop-filter` is unavailable the control falls back to the
-44 px `ink` control well with a `paper` glyph (16.56:1) — the treatment the
+44 px `ink` control well with a `paper` glyph (20.17:1) — the treatment the
 site ships today, unchanged. It is selected by capability, never by user
 agent:
 
@@ -1388,7 +1392,7 @@ still forbidden.
 
 ## Open decisions
 
-**Two are open since 2026-10-12** (rows 6 and 7, from the owner's review); the others were taken and are written into the rules above. The three that stood here were taken on
+**One is open since 2026-10-12** (row 7, from the owner's review; row 6 was decided the same day); the others were taken and are written into the rules above. The three that stood here were taken on
 2026-09-23 and are written into the rules above rather than kept as
 options:
 
@@ -1398,7 +1402,7 @@ options:
 | 2 | Header contrast — solid wells or a blur primitive | **Decision 6** — the blur primitive, with a documented capability fallback to the solid ink well and a stated performance-budget interaction | *Transparent overlay header* |
 | 3 | Category taxonomy — five token keys or six guide rows | **Decision 7** — neither: the canonical list is `classification-api`'s four ids plus the `unknown` fallback, which is what the token package already carries. Event rows keep the category, as this guide always said | *Category colours* |
 | 5 | Stacked single-category stories — round 4's F-4-5 | **DEC-0153** (owner's choice of board variant 1a, 2026-10-07): one story stage instead of three sections; focal point anchored above the reading band | *Story stage*, *Photo surface* |
-| 6 | **Is the `ink` ground neutral black?** The owner reads `#171D0D` as dark green and decided against it (home stage's date section; the footer design is pure black) | **OPEN.** (a) `neutral.ink` becomes neutral black (a `brand-design` token change; every text pairing on it is re-measured); (b) two tokens, text `ink` stays and a new ground black is added | `ink` stays `#171D0D`. The scrim has been neutral black since decision 5 and `TS-WEB-0017-A22` keeps it so; the ground is not covered by it |
+| 6 | **Is the `ink` ground neutral black?** | **Decided 2026-10-12, `DEC-0155`: yes.** `neutral.ink` becomes `#000000` in `brand-design` 2.9.0 (`go-to-market-os` PR #620); one value for text and ground | Until the pin moves, `app/styles/brand.css` overrides the eight places the package writes the old value, and `TS-WEB-0017-A28` fails any other value
 | 7 | **The secondary action on a light ground** | **OPEN.** (a) the `quiet` text-plus-arrow variant; (b) a `surface`-filled secondary; (c) a named border exception | A button's fill is never its ground. Until decided, a secondary action is not placed on a `paper` or `lime` ground |
 | 4 | Content width on desktop — round 4's F-4-1, and `DEM-0042`'s container table | **DEC-0150** (owner's design input, 2026-10-07): three tiers on the six breakpoints, a 1200 px content box, full-bleed surfaces, column placements from `xl` | *Layout Grid* |
 

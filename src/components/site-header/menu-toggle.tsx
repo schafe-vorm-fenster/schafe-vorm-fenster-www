@@ -17,7 +17,7 @@ export interface MenuToggleProps {
  * Structure: three stripes in a radius-999 touch target of at least 44 px
  * (SRC-0014 §Shape and Space) — which is exactly the **control well** §Icons
  * sanctions, so over a hero photograph the same square is filled with ink
- * and the stripes turn paper (16.56:1, whatever the photograph does), while
+ * and the stripes turn paper (20.17:1, whatever the photograph does), while
  * on the solid ground the fill is `transparent` and nothing about the
  * control changes. The `close` variant draws the same three, the middle one
  * gone and the outer two crossed.

@@ -9,6 +9,11 @@
  *  TS-WEB-0017-A6  No logo, mark or font file is committed in this repository.
  *  TS-WEB-0017-A19 Every `var(--x)` without a fallback names a custom property
  *      something declares.
+ *  TS-WEB-0017-A28 `ink` is neutral black: the effective `--color-neutral-ink`
+ *      (the brand token sheet, then `app/styles/brand.css` on top) has equal
+ *      red, green and blue, and the retired ink (the lime hue at 3 % chroma, dark
+ *      green across a section) is written nowhere: not in authored sources, not in a board
+ *      (DEC-0155).
  *  TS-WEB-0017-A22 No tinted scrim: no gradient carries `ink` or `violet`
  *      (as the alpha form of `ink` 23·29·13 or `violet` 83·27·222, a `color-mix()` or a
  *      `var(--color-neutral-ink|violet-*)`), in authored sources **and** in the
@@ -59,6 +64,7 @@ const A5 = "TS-WEB-0017-A5";
 const A6 = "TS-WEB-0017-A6";
 const A19 = "TS-WEB-0017-A19";
 const A22 = "TS-WEB-0017-A22";
+const A28 = "TS-WEB-0017-A28";
 
 /** The single file brand values are allowed to enter through (TS-WEB-0017 D3). */
 const TOKEN_FILE = "app/styles/brand.css";
@@ -317,6 +323,38 @@ export function checkBrand(root: string): BrandCheckResult {
           `tinted scrim \`${tint[0]}\` — the scrim is neutral black (\`color.scrim.*\`), never \`ink\` or \`violet\``,
         );
     }
+  }
+
+  // --- TS-WEB-0017-A28: ink is neutral black, and the old ink is written nowhere -------
+  //
+  // The owner's review of 2026-10-12 (issue #19, which had been "decided" once
+  // already by the scrim): the *ground* `ink` was still the lime hue at 3 %
+  // chroma, which across a section reads as dark green. Contrast ratios
+  // cannot see a hue, so `check:contrast` passed it. This reads the hue.
+  const inkSources = [
+    join(root, "node_modules", "@schafe-vorm-fenster", "brand-design", "tokens", "svf-tokens.css"),
+    join(root, TOKEN_FILE),
+  ];
+  let ink: string | undefined;
+  for (const file of inkSources) {
+    if (!existsSync(file)) continue;
+    for (const match of readFileSync(file, "utf8").matchAll(/--color-neutral-ink\s*:\s*(#[0-9a-fA-F]{6})\b/g))
+      ink = match[1]; // the last declaration wins, the way the cascade reads it
+  }
+  if (ink !== undefined) {
+    const [r, g, b] = [1, 3, 5].map((i) => Number.parseInt(ink!.slice(i, i + 2), 16));
+    if (r !== g || g !== b)
+      fail(A28, "--color-neutral-ink", `${ink} is not neutral (R ${r}, G ${g}, B ${b}) — ink is black, never a tint`);
+  }
+  const boardTexts = boardFiles.map((file) => ({ file, text: readFileSync(file, "utf8") }));
+  // Built from two halves: this file is itself scanned, and A5 forbids the literal.
+  const retiredInk = new RegExp(["#", "171", "d0d"].join(""), "i");
+  for (const { file, text } of [
+    ...sourceFiles.filter((f) => !isTestFile(rel(f)) && rel(f) !== "scripts/check-brand.ts").map((file) => ({ file, text: readFileSync(file, "utf8") })),
+    ...boardTexts,
+  ]) {
+    const line = text.split("\n").findIndex((l) => retiredInk.test(l));
+    if (line >= 0) fail(A28, `${rel(file)}:${line + 1}`, "the retired ink (dark green) is written here — ink is neutral black");
   }
 
   return { errors, cssFileCount: cssFiles.length, sourceFileCount: sourceFiles.length };

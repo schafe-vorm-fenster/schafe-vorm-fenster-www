@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700;800&family=Atkinson+Hyperlegible+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>html,body{margin:0;padding:0;background:#E2E7DB}body{font-family:'Atkinson Hyperlegible Next',Helvetica,Arial,sans-serif;color:#171D0D;-webkit-font-smoothing:antialiased;text-wrap:pretty}a{color:#486202}a:hover{color:#531BDE}</style>
+<style>html,body{margin:0;padding:0;background:#E2E7DB}body{font-family:'Atkinson Hyperlegible Next',Helvetica,Arial,sans-serif;color:#000000;-webkit-font-smoothing:antialiased;text-wrap:pretty}a{color:#486202}a:hover{color:#531BDE}</style>
 </helmet>
 <section style="padding:48px 60px 100px;display:flex;flex-direction:column;gap:48px">
 
@@ -44,7 +44,7 @@
   </div>
 
   <div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px;font-weight:700;padding:5px 12px;border-radius:999px;background:#171D0D;color:#F9FBF7">1440 px</span><span style="font-size:20px;font-weight:800">Startseite</span></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px;font-weight:700;padding:5px 12px;border-radius:999px;background:#000000;color:#F9FBF7">1440 px</span><span style="font-size:20px;font-weight:800">Startseite</span></div>
     <div style="position:relative;width:1440px;background:#F9FBF7;overflow:hidden">
       <div style="{{ heroHome }}">
         <div style="position:absolute;top:0;left:0;right:0;z-index:2">
@@ -65,19 +65,19 @@
               <div style="background:#F9FBF7;border-radius:999px;display:flex;align-items:center;gap:10px;min-height:60px;padding:0 6px 0 20px">
                 <span style="{{ icPin }}"></span>
                 <span style="font-size:18px;color:#606657;font-weight:600;flex:1">Dein Ort</span>
-                <span style="min-height:48px;display:flex;align-items:center;padding:0 24px;background:#171D0D;color:#F9FBF7;border-radius:999px;font-weight:700;font-size:17px">Suchen</span>
+                <span style="min-height:48px;display:flex;align-items:center;padding:0 24px;background:#000000;color:#F9FBF7;border-radius:999px;font-weight:700;font-size:17px">Suchen</span>
               </div>
               <div style="display:flex;align-items:center;gap:8px;margin-top:14px;color:#F9FBF7;font-size:16px;font-weight:700"><span style="{{ icPinPaper }}"></span><span style="text-decoration:underline;text-underline-offset:3px">Meinen Standort verwenden</span><span style="font-weight:400;color:#E2E7DB">· gespeichert wird nichts</span></div>
             </div>
           </div>
         </div>
       </div>
-      <div style="background:#171D0D;color:#F9FBF7;padding:72px 0 80px">
+      <div style="background:#000000;color:#F9FBF7;padding:72px 0 80px">
         <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(12,1fr);column-gap:24px;align-items:start">
           <div style="grid-column:1 / span 4">
             <div style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#C6E593;margin-bottom:12px">Was gerade ansteht</div>
             <div style="font-size:56px;font-weight:800;line-height:.95;letter-spacing:-.04em">Das ist los in Schlatkow</div>
-            <span style="display:inline-flex;align-items:center;gap:9px;min-height:52px;padding:0 22px;margin-top:28px;border-radius:999px;background:#A4D822;color:#171D0D;font-weight:800;font-size:17px">Alle Termine<span style="{{ icArrowInk }}"></span></span>
+            <span style="display:inline-flex;align-items:center;gap:9px;min-height:52px;padding:0 22px;margin-top:28px;border-radius:999px;background:#A4D822;color:#000000;font-weight:800;font-size:17px">Alle Termine<span style="{{ icArrowInk }}"></span></span>
           </div>
           <div style="grid-column:5 / span 8">
             <sc-for list="{{ events }}" as="e" hint-placeholder-count="4">
@@ -95,7 +95,7 @@
   </div>
 
   <div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px;font-weight:700;padding:5px 12px;border-radius:999px;background:#171D0D;color:#F9FBF7">1440 px</span><span style="font-size:20px;font-weight:800">Inhaltsseite · Dein Kalender</span></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><span style="font-family:'Atkinson Hyperlegible Mono',ui-monospace,monospace;font-size:13px;font-weight:700;padding:5px 12px;border-radius:999px;background:#000000;color:#F9FBF7">1440 px</span><span style="font-size:20px;font-weight:800">Inhaltsseite · Dein Kalender</span></div>
     <div style="position:relative;width:1440px;background:#F9FBF7;overflow:hidden">
       <div style="{{ heroPage }}">
         <div style="position:absolute;left:0;right:0;bottom:56px;z-index:2">
@@ -139,7 +139,7 @@ class Component extends DCLogic {
     const scrim = (img, h) => 'position:relative;width:100%;height:' + h + 'px;background-image:' +
       'linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 16%),' +
       'linear-gradient(180deg,rgba(0,0,0,0) 38%,rgba(0,0,0,.38) 58%,rgba(0,0,0,.72) 100%),url(' + img + ');' +
-      'background-size:cover;background-position:center;background-repeat:no-repeat;background-color:#171D0D';
+      'background-size:cover;background-position:center;background-repeat:no-repeat;background-color:#000000';
     const bar = (n) => 'display:grid;grid-template-columns:repeat(' + n + ',1fr);gap:4px';
     return {
       showGrid: this.props.showGrid ?? true,
@@ -148,18 +148,18 @@ class Component extends DCLogic {
       colStyle: 'background:rgba(83,27,222,.10);box-shadow:inset 1px 0 0 rgba(83,27,222,.35),inset -1px 0 0 rgba(83,27,222,.35)',
       heroHome: scrim(((window.__resources && window.__resources['heroHome']) || '../v1.0/assets/open-air-stage.jpeg'), 680),
       heroPage: scrim(((window.__resources && window.__resources['heroPage']) || '../v1.0/assets/garden-workplace.jpeg'), 560),
-      icCal: this.mask('calendar-days', '#171D0D'),
+      icCal: this.mask('calendar-days', '#000000'),
       icPin: this.mask('map-pin', '#606657'),
       icPinPaper: this.mask('map-pin', '#F9FBF7', 20),
-      icArrowInk: this.mask('arrow-right', '#171D0D'),
+      icArrowInk: this.mask('arrow-right', '#000000'),
       icArrowPaper: this.mask('arrow-right', '#F9FBF7'),
       nav: ['Was ist los', 'Termine veröffentlichen', 'Dein Kalender', 'Über uns'].map((label, i) => ({
-        label, style: mono + 'font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:10px 16px;border-radius:999px;' + (i === 0 ? 'background:#F9FBF7;color:#171D0D' : 'color:#F9FBF7')
+        label, style: mono + 'font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:10px 16px;border-radius:999px;' + (i === 0 ? 'background:#F9FBF7;color:#000000' : 'color:#F9FBF7')
       })),
       events: [
         {d:'28', m:'SEP', t:'Gemeindevertretung Schmatzin', meta:'Schlatkow · 17:00', tag:'Amtlich', bg:'#486202', fg:'#F9FBF7'},
-        {d:'28', m:'SEP', t:'Volleyball', meta:'Schlatkow · 19:00 · Sportverein', tag:'Sport', bg:'#83AF09', fg:'#171D0D'},
-        {d:'02', m:'OKT', t:'Bäckerwagen Kurzweg', meta:'Schlatkow · 8:30 · Dorfplatz', tag:'Händler', bg:'#83AF09', fg:'#171D0D'},
+        {d:'28', m:'SEP', t:'Volleyball', meta:'Schlatkow · 19:00 · Sportverein', tag:'Sport', bg:'#83AF09', fg:'#000000'},
+        {d:'02', m:'OKT', t:'Bäckerwagen Kurzweg', meta:'Schlatkow · 8:30 · Dorfplatz', tag:'Händler', bg:'#83AF09', fg:'#000000'},
         {d:'04', m:'OKT', t:'Tanzabend im Schloss', meta:'Bröllin · 20:00 · Nachbarort', tag:'Kultur', bg:'#531BDE', fg:'#F9FBF7'}
       ].map(e => Object.assign(e, {pill: mono + 'font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 12px;border-radius:999px;white-space:nowrap;background:' + e.bg + ';color:' + e.fg})),
       bps: [
