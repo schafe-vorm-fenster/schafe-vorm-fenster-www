@@ -104,7 +104,9 @@ added.
 | `logo` | mark-only · mark + wordmark · mark + URL |
 | `icon-well` | 40 px, non-interactive — distinct from the 44 px control well |
 | `control-well` | 44 px, interactive |
-| `contact-section` | one component, one fixed `lime-100` ground, every page |
+| `contact-section` | one component, one fixed `lime-100` ground, every page. **Tidied 2026-10-12 (DEC-0154):** one row on desktop (avatar · title · name and one line · two pill buttons · phone and mail as a small row), stacked on the phone; no sub-labels, no footnote line (`Q-0088`), no hairlines between rows. Reference `plan/reviews/2026-10-12/Design - Kontakt Section - *.png` |
+| `context-band` | **Revised 2026-10-12 (DEC-0154):** heading · mono kicker "Auch interessant" · three link cards (40 px icon well, title and one line, 44 px `ink` disc with `lime-500` arrow). Not a plain list. Pill radius is `Q-0087`. Reference `Design - Kontextband Section - *.png` |
+| `site-footer` | **Revised 2026-10-12 (DEC-0154):** neutral black ground (`Q-0090`), logo left, language switch as a segmented control right, hairline, Impressum · Datenschutz · Barrierefreiheit and the copyright line. Reference `Design - Footer Section - *.png` |
 | `contact-action-row` | 72 px, two lines, trailing arrow; **filled · outlined** — a visual weight, never a conversion rank. Every row is `data-cta="secondary"` |
 | `explain-module` | ordinal · title · three step lines · one **secondary** CTA. **Two layouts at one `min-width` switch (`lg` = 48rem)**: below it a three-state stage with the auto-advance; from it three steps side by side, no stage, no slide |
 | `place-search-overlay` | 3–4 rows `Ort (Gemeinde)`, out of flow, combobox keyboard; plus the **non-interactive no-match row** (`TS-WEB-0008 D7a` owns its behaviour and wording) |
@@ -175,6 +177,11 @@ Two of these carry a rule the manifest has to express, not only name:
   point and an `anchor` with `y ≤ 38` (the scrim's clear part). The build
   cuts the picture so that the focal point sits exactly at the anchor, and the
   component positions it at the same per cent (TS-WEB-0020-A17).
+- **A button's fill is never its ground, and an explanation is never truncated**
+  (DEC-0154, owner's review 2026-10-12). `secondary` has the fill of `paper`: it
+  is not placed on a `paper` ground (`Q-0091`). A step line of `explain-module`
+  wraps and is never cut with an ellipsis; the module reserves the height of its
+  longest step.
 - **`explain-module` switches layout at `lg` (48rem) and nowhere else.**
   A generator does not choose that breakpoint; it is the component's own
   and the only `min-width` it declares.

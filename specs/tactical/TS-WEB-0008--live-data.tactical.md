@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0040, FUN-WEB-0041, FUN-WEB-0043, FUN-WEB-0153, FUN-WEB-0154, FUN-WEB-0045, FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072, FUN-WEB-0049]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0011]
-decisions: [DEC-0013, DEC-0019, DEC-0021, DEC-0024, DEC-0025, DEC-0029, DEC-0030, DEC-0034, DEC-0035, DEC-0037, DEC-0079]
+decisions: [DEC-0013, DEC-0019, DEC-0021, DEC-0024, DEC-0025, DEC-0029, DEC-0030, DEC-0034, DEC-0035, DEC-0037, DEC-0079, DEC-0154]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -332,6 +332,25 @@ Links from the website into the app are built from the geo-api community
   clients, provided D2 and D10 hold.
 - [FREE] Copy of the empty state and the counter labels — content phase,
   placeholders until then.
+
+## Owed by the owner's review of 2026-10-12 (DEC-0154)
+
+Two rules the live-data layer does not yet carry, each with its issue:
+
+- **The rows shown are chosen for variety, not only for time** (issue #22). Today
+  position 1 and position 2 sort by start time (`byStart`). The goal: thematically
+  diverse rows, culture (`culture-tourism`) taken in where there is any, a date
+  that happens once ahead of one that recurs every week. Only measurable features
+  rank (category, `occurrence`, a description, an image, distance); no invented
+  weights. DEC-0152 introduced this for the story examples; the lists follow.
+- **A test date is never shown** (issue #52). The calendar's own site filters
+  dates of test organisers by an id list (`MATEO_TEST_USER_IDS`,
+  `community-site/src/filter/filterTestEvents.ts`); this site shows
+  "Recurring TEST Event Schlatkow" because it reads the unfiltered data. The same
+  list applies here, in the adapters of both sources.
+
+Neither has an acceptance criterion yet. The criteria arrive with their tests
+(TS-WEB-0017 D6c), in the work packages for the two issues.
 
 ## Acceptance criteria
 

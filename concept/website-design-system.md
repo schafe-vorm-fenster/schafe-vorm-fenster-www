@@ -1,7 +1,7 @@
 ---
 title: "Website Design System — www.schafe-vorm-fenster.de"
 created_at: 2026-09-10
-updated_at: 2026-10-07
+updated_at: 2026-10-12
 status: draft
 source: workshop
 intent: inform
@@ -77,7 +77,7 @@ text colour is ever `#000000` or `#FFFFFF`.
 
 | Token | Hex | Use |
 | --- | --- | --- |
-| `ink` | `#171D0D` | Primary text, dark sections, primary button fill, control wells |
+| `ink` | `#171D0D` | Primary text, dark sections, primary button fill, control wells. **Open: the owner reads this ground as dark green** (review 2026-10-12, the home stage's date section) **and wants it neutral black** — see *Open decisions* 6 |
 | `text-2` | `#39412C` | Body copy on light surfaces |
 | `muted` | `#606657` | Labels, meta, placeholder text |
 | `border` | `#6F7467` | Input outlines where an outline is unavoidable |
@@ -437,11 +437,16 @@ pattern.
 | Primary on light | `ink` | `paper` | The one main action per section |
 | Primary on dark | `lime-500` | `ink` | Same, inside an ink or photo section |
 | Pulse | `himbeere-600` | `paper` | Paid conversion only |
-| Secondary | `paper` | `ink` | Alternative action on a dark or photo ground |
+| Secondary | `paper` | `ink` | Alternative action on a **dark or photo ground only**. On a `paper` ground it has the same fill as its ground and disappears (measured on the review preview: `/` "Jetzt kostenlos anmelden" and `/mitmachen` "Flyer per WhatsApp schicken", both `#F9FBF7` on `#F9FBF7`) |
 | Quiet | transparent | `lime-800` | Tertiary, text plus arrow |
 
 Height 56 px, padding 0 24 px, radius 999, weight 800, 18 px, with a 24 px
 `arrow-right` where the action leads onward.
+
+**A button's fill is never its ground** (`DEC-0154`, owner's review
+2026-10-12). Which variant a secondary action takes on a light ground is open
+(*Open decisions* 7): the guide has no light-ground secondary, and the only
+borders it allows are the three named exceptions.
 
 ### Search field
 
@@ -657,9 +662,13 @@ invented ones.
 - **Ordinal** at mono 48 px / 800 `ink`, with the module **title** at card
   title size beside it.
 - **Three step lines**, each a numbered disc plus two lines: the bold core
-  (18 px / 700) and the normal detail (15 px / 400). **Each line is a single
-  line at 390 px viewport width** — that is the length budget the copy is
-  written to, not a hope. The active step's disc is `lime-500` with `ink`;
+  (18 px / 700) and the normal detail (15 px / 400). **Each line is written
+  to a single line at 390 px, and it is never cut off.** The length is a
+  target the copy is written to (CG-025), not a clamp: a longer line wraps,
+  and the module reserves the height of its longest step so a change of step
+  moves nothing. Until 2026-10-12 the lines were `text-overflow: ellipsis`;
+  the owner's review rejects that, because a module that explains cannot hide
+  its explanation behind "…" (`DEC-0154`). The active step's disc is `lime-500` with `ink`;
   the others are `surface` with `muted`.
 - **One CTA** at the bottom, the module's own conversion, at **secondary**
   treatment and marked `data-cta="secondary"`. Never `primary`: `TS-WEB-0006 D3`
@@ -679,8 +688,10 @@ three states, the next cropped in at the trailing edge so the stage reads as
 something that continues. The box never changes size, so a state change
 cannot shift the page. The three step lines sit beneath it. **The module
 plus its three step lines fit one phone screen** — one viewport height at
-the phone breakpoint. If they do not, the copy is too long; the module does
-not grow.
+the phone breakpoint. If they do not, the copy is too long and the build
+reports it; the answer is shorter copy, never a truncated line. The module
+reserves the height of its tallest step and does not grow when the step
+changes.
 
 **From `lg` — tablet and up.** The three steps **stand side by side**, each
 with its own graphic above its own two lines. There is no stage, no crop and
@@ -989,6 +1000,14 @@ at or above 40 % so the sky crops away and the motif lands above the
 scrim's opaque band. A photograph that only works when the scrim covers its
 subject is the wrong photograph.
 
+**A place shows its own photograph** (owner's review 2026-10-12). The stage of
+a page with a chosen place (`/dein-ort?ort=…`, the home stage with a place)
+shows a photograph **of that place**, never one fixed photograph for every place
+(today `dein-ort-hero` shows a bus stop near Pasewalk for Schlatkow). Where a
+place has none the rule is open (`Q-0089`): a regional photograph
+with an honest label, or the hatched "Foto gesucht" surface, never the photograph
+of a different place presented as this one.
+
 **Motif per page.** `/` shows villages **with activity** — a street, a
 building in use, people. `/dein-kalender` shows venues — culture houses,
 Gemeindehäuser, halls, the places events happen in. `/mitmachen` shows the
@@ -1021,6 +1040,73 @@ The "old world" section type: *what does not work today*, and nothing else.
 The sheep mark, 38–40 px, clipped to radius 999 — the same radius as every
 control. Beside it the wordmark in two lines, 15 px / 800, or the URL in
 mono when the context is editorial.
+
+## Page chrome revised 2026-10-12
+
+Three elements the owner redesigned in the review of 2026-10-12. The images are
+the reference for **layout and hierarchy**; where they differ from this guide
+(radius, borders, icon sizes), this guide stands and the difference is an open
+point, as with the board of *Layout Grid*. The squares in the images are
+stand-ins for icons: the set is Lucide, 24 px, in a 40 px icon well (*Icons*).
+Reference files are in `plan/reviews/2026-10-12/`.
+
+### Context band
+
+The hand-off for readers who came for something else. It is quieter than the
+page's main content, and it must not look like a plain list.
+
+- Heading *"Heute mit einem anderen Anliegen hier?"*, a mono kicker *"Auch
+  interessant"* to its right on desktop and below it on the phone.
+- Three **cards**, one per other job. Each card: a 40 px icon well on the left,
+  a bold title and one line beneath, a 44 px `ink` disc with a `lime-500` arrow
+  on the right. Desktop and tablet: one row of three (desktop) or stacked cards
+  (tablet and phone); the whole band sits on a `surface` field with a large
+  radius on the phone.
+- The cards are links; the whole card is the target (44 px minimum).
+- Open: the cards are pills with a large radius, and the guide limits radius
+  999 to controls and `0` to everything else (*Shape and Space*). A card that is
+  a link counts as a control here, or the band takes a named exception
+  (`Q-0087`).
+
+Reference: `Design - Kontextband Section - Desktop/Tablet/Mobile.png`; as-is:
+`Ist - Kontextband.png`.
+
+### Contact section, tidied
+
+Same content and same priority (video appointment first, WhatsApp second), far
+less on the field.
+
+- Desktop: **one row** on `lime-100`. Avatar (96 px, radius 999), the title
+  *"Direkter Kontakt"*, the name in bold with one description line beside it;
+  then two pill buttons, *"Videotermin buchen"* (`ink` fill) and *"Per WhatsApp
+  schreiben"* (`paper` fill); then phone and mail as one small row of mono
+  text with their icons.
+- Phone: stacked in the same order, the two buttons full width.
+- Dropped from the as-is state: the sub-label under each action, the footnote
+  *"Öffnet den Buchungskalender bei Google."* and the hairlines between rows.
+  The footnote is a data-protection notice (TS-WEB-0014): it must survive
+  somewhere as a short note before it is dropped (`Q-0088`).
+- Both actions stay `data-cta="secondary"` (`TS-WEB-0006 D3`): the dark fill is a
+  visual weight, never a conversion rank.
+
+Reference: `Design - Kontakt Section - Desktop/Mobile.png`; as-is:
+`Ist - Kontakt Desktop/Smartphone.png`.
+
+### Site footer
+
+- Ground **neutral black** (see *Open decisions* 6).
+- Row one: the logo (mark with the two-line wordmark) on the left, the language
+  switch on the right as a **segmented control** (*Deutsch | English*, the
+  active language filled `lime-500` with `ink` text, the other `paper` on a
+  `ink`-lifted track). It replaces *"Read this page in English: ENGLISH"*.
+- A hairline, then **Impressum · Datenschutz · Barrierefreiheit** in `paper`,
+  no underline as the only cue, a visible focus ring; at the right (desktop) or
+  beneath (phone) *"© 2026 Schafe vorm Fenster UG (haftungsbeschränkt)"* in
+  `muted`.
+- Phone: the same pieces stacked, the switch under the logo.
+
+Reference: `Design - Footer Section - Desktop/Mobile.png`; as-is:
+`Ist - Footer Mobile.png`, `Ist - Kontakt und Footer Mobile.png`.
 
 ## Page Rhythm
 
@@ -1149,8 +1235,9 @@ Components whose content length varies but whose box must not move:
 
 Event titles are clamped to two lines and meta to one, so a long title
 never changes the row height. A place name is clamped to two lines at
-display size. An explain module's step lines are clamped to one line each
-at 390 px; the copy is written to that, so nothing clamps in practice.
+display size. An explain module's step lines are **not** clamped: they are
+written to one line each at 390 px (CG-025) and wrap if they are longer,
+inside the height the module reserves for its longest step.
 
 ### Reserved text space
 
@@ -1301,7 +1388,7 @@ still forbidden.
 
 ## Open decisions
 
-**None in this document.** The three that stood here were taken on
+**Two are open since 2026-10-12** (rows 6 and 7, from the owner's review); the others were taken and are written into the rules above. The three that stood here were taken on
 2026-09-23 and are written into the rules above rather than kept as
 options:
 
@@ -1311,6 +1398,8 @@ options:
 | 2 | Header contrast — solid wells or a blur primitive | **Decision 6** — the blur primitive, with a documented capability fallback to the solid ink well and a stated performance-budget interaction | *Transparent overlay header* |
 | 3 | Category taxonomy — five token keys or six guide rows | **Decision 7** — neither: the canonical list is `classification-api`'s four ids plus the `unknown` fallback, which is what the token package already carries. Event rows keep the category, as this guide always said | *Category colours* |
 | 5 | Stacked single-category stories — round 4's F-4-5 | **DEC-0153** (owner's choice of board variant 1a, 2026-10-07): one story stage instead of three sections; focal point anchored above the reading band | *Story stage*, *Photo surface* |
+| 6 | **Is the `ink` ground neutral black?** The owner reads `#171D0D` as dark green and decided against it (home stage's date section; the footer design is pure black) | **OPEN.** (a) `neutral.ink` becomes neutral black (a `brand-design` token change; every text pairing on it is re-measured); (b) two tokens, text `ink` stays and a new ground black is added | `ink` stays `#171D0D`. The scrim has been neutral black since decision 5 and `TS-WEB-0017-A22` keeps it so; the ground is not covered by it |
+| 7 | **The secondary action on a light ground** | **OPEN.** (a) the `quiet` text-plus-arrow variant; (b) a `surface`-filled secondary; (c) a named border exception | A button's fill is never its ground. Until decided, a secondary action is not placed on a `paper` or `lime` ground |
 | 4 | Content width on desktop — round 4's F-4-1, and `DEM-0042`'s container table | **DEC-0150** (owner's design input, 2026-10-07): three tiers on the six breakpoints, a 1200 px content box, full-bleed surfaces, column placements from `xl` | *Layout Grid* |
 
 What is still **outstanding** is not a decision but work owed elsewhere, and

@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0010]
 sources: [SRC-0001, SRC-0003, SRC-0014]
-decisions: [DEC-0048, DEC-0081, DEC-0082, DEC-0105, DEC-0109, DEC-0110, DEC-0129]
+decisions: [DEC-0048, DEC-0081, DEC-0082, DEC-0105, DEC-0109, DEC-0110, DEC-0129, DEC-0154]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -88,7 +88,7 @@ component, which is how the "identical reserved space" below is held.
 | 2a | mechanism blocks | exactly three, one per mechanism, order per D3a — **three scene blocks, one of which contains the explain module** (D3a, DEC-0109, DEC-0110) | content (TS-WEB-0007) + one live instance each, the module's standing below it (TS-WEB-0006 D7) | COLOUR / PHOTO, alternating per SRC-0014. Three scene blocks are three ordinary rhythm sections, so the alternation is exactly the constraint it was before DEC-0109 and is satisfiable in any D3a order |
 | 2b | provenance | the provenance **scene** — the third scene of 2a is this block. It was "the who-built-this stamps" until 2026-09-26: the origin sentence that stood apart as its own stamp element is struck by the 2026-09-22 owner review, and `SRC-0017` CG-033/CG-040 put "gebaut" and "betrieben" about this product on the avoid list, so there is nothing left for a second element to carry (DEC-0129 §5). Amended, not moved: the block keeps this position, this ground and its way to `/ueber-uns` | content | COLOUR violet |
 | 2c | proof stream | 5 elements | TS-WEB-0005 (D4 below) | COLOUR / PHOTO cards |
-| 2d | counters | position 4 | TS-WEB-0008 D8 | inline in 2b or 2c, no section of its own |
+| 2d | ~~counters~~ **removed (DEC-0154)** | ~~position 4~~ | ~~TS-WEB-0008 D8~~ | The owner's review of 2026-10-12: "Termine, die gerade im Kalender stehen — 8.543 Termine" says nothing to the reader. The home page carries no counter. The render and its test follow with issue #24 |
 | 3 | context band | the three non-focus jobs | TS-WEB-0006 D5, job registry | COLOUR paper |
 | 4 | closing CTA | identical to the block-1 primary (TS-WEB-0006 D6) | — | COLOUR paper |
 
@@ -212,7 +212,7 @@ inside the module is the component's and unchanged.
 | place search | `/api/places/search` | block 1, S1; shell + client, works without JS |
 | position 1 — dates in the place | `/api/places/{slug}/events` | block 1, S2; cached island |
 | position 2 — this week nearby | `/api/nearby` | block 1, S3; cached island |
-| position 4 — live counters | `/api/stats` | block 2d; today only the *dates* figure renders (TS-WEB-0008 D8, Q-0037) |
+| position 4 — live counters | `/api/stats` | **removed from the home page (DEC-0154).** Until issue #24 lands, block 2d still renders the dates figure |
 
 Emptiness, staleness and failure are three different things (TS-WEB-0008 D5);
 the tier chain, the "Stand: …" label and the skeleton geometry are
@@ -263,7 +263,7 @@ not conversion.
 | TS-WEB-0019-A11 | e2e | Disable JavaScript and load `/`. The page is complete: search present, all 3 blocks of 2a — three scenes, the `whatsapp` one showing its opener, its module at state 1 with all three step lines (the reduced-motion fallback already requires that state, DEC-0105 §6) and its live event row beneath — 5 proof elements, context band, closing CTA; no skeleton and no empty box remains. |
 | TS-WEB-0019-A12 | static | The JSON-LD graph of `/` contains one `WebSite` and one full `Organization` node and no `Event` node; no other page emits a second full `Organization`. |
 | TS-WEB-0019-A13 | e2e | With the analytics collector observed: the calendar-open click of A3 emits `save-calendar-to-homescreen` with `stage=handover` exactly once; the search submit of A2, a scene click and a context-band click emit no conversion event. |
-| TS-WEB-0019-A14 | e2e | The counter block on `/` renders only the dates figure; no places figure, no updates-today figure, and no static traction number anywhere on the page. |
+| TS-WEB-0019-A14 | e2e | **Superseded, DEC-0154.** Written text: the counter block renders only the dates figure. New rule: the home page carries **no counter figure at all**, no dates figure, no places figure, no updates-today figure, no static traction number. The test `e2e/pages/home.spec.ts` keeps asserting the old text until issue #24 changes it with the render. |
 | TS-WEB-0019-A15 | manual | The eight-point compliance check of SRC-0001 passes for the home brief, with point 8 (stage 0 complete on its own) evidenced by A2 and A11. |
 | TS-WEB-0019-A16 | e2e | Open `/` (and `/en`) over a throttled document so the streamed branch is still on the wire at first paint, and type a place name into the hero search with real key events as soon as the field exists. After the page settles the field still carries the typed value and its submit lands on the place route with it; across the load exactly **one** element ever carries the field's id. The same holds on every other route with a place search. |
 
