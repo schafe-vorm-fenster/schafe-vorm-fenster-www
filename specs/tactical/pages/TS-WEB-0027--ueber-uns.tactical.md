@@ -260,6 +260,17 @@ assigns types per page type and its A5 checks "no more".
 - **The origin photograph runs to the edge on the phone** (issue #35).
 - **The text of the origin section is revised** ("mitgegründet", dashes,
   `humanizer`, issue #34).
+- **The page is rebuilt on the owner's design of 2026-10-12** (issue #55,
+  `plan/reviews/2026-10-12/Design - Über uns Vorschau - *.jpg`). Structure, top to
+  bottom: stage "Vom Dorf fürs Dorf." · chapter 01 · photo band with quote ·
+  chapter 02 with a quote · chapter 03 with expandable stories (one featured, a
+  grid of tiles, "Die Geschichte +") · who is behind it · three principles ·
+  award block with the button "Presse und Auszeichnungen" · search band · context
+  band · contact · footer. The chapters replace the origin story, the proof
+  stream and the team block of today's D2 and D3. Several points of the design
+  conflict with the guide or ship a placeholder; they are listed in the issue.
+- **Press** (issue #56, `Q-0093`): the button targets the press page, which is the
+  archive grown into a destination.
 
 ## Acceptance criteria
 

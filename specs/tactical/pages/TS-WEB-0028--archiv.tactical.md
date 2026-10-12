@@ -40,6 +40,16 @@ structured data TS-WEB-0011 · events TS-WEB-0012 · components SRC-0014.
 | Forbidden here | own CTA, newsletter field, any form, hero photo surface, lead paragraph selling the record. A press contact, if wanted, is a plain `mailto` — a form would make this a funnel and pull it into TS-WEB-0016 scope |
 | Events | none. TS-WEB-0012 D4 ships one event per conversion goal and this page has no goal, so nothing is emitted — not on filter use, not on outbound clicks. TS-WEB-0012 D7 forbids adding one for curiosity |
 
+**Reopened by the owner's input of 2026-10-12 (issue #56, `Q-0093`).** The owner
+wants all press material on the website, not in the main menu. The new
+`/ueber-uns` design carries a button "Presse und Auszeichnungen", which this
+page's "never teased from another page" forbids. Proposed amendment, taken
+only when `Q-0093` is answered: the page is a destination of `/ueber-uns` and the
+footer, called *Presse und Auszeichnungen*, with the header navigation still
+free of it; the legacy `/presse` stays a 301 to it; a press contact stays a plain
+`mailto`; filters by kind and year-grouping are added. D1's other bans (no CTA,
+no form, no newsletter, no events) stay.
+
 ### D2 — Chronological, the one exception to FUN-WEB-0030 [FIXED: SRC-0003#archive; exception to TS-WEB-0005 D6]
 
 Every other list obeys FUN-WEB-0030, which orders for *breadth*. This page is
