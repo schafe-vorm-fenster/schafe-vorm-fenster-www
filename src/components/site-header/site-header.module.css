@@ -34,7 +34,7 @@
  * pixel-sampled against the generated renditions actually in use with the
  * header's own foreground hidden (`state/open.md` row 200 carries the
  * table): paper on an ink well and ink on a paper well are the same
- * 16.56:1, so the identifying contrast is a tie; the tie-break is the well's
+ * 20.17:1, so the identifying contrast is a tie; the tie-break is the well's
  * own edge against the photograph, and there ink clears 3:1 at the local
  * mean on 23 of 30 measured positions against paper's 11 of 30 (median 8.2:1
  * against 2.2:1). Hero photographs open on sky far more often than on
@@ -133,7 +133,7 @@
  * turning solid restores the block above without a second override.
  */
 .header[data-over-hero="true"][data-solid="false"] {
-  /* The floor: the solid ink well, paper glyph, 16.56:1 (DEC-0105 §4). */
+  /* The floor: the solid ink well, paper glyph, 20.17:1 (DEC-0105 §4). */
   --header-well: var(--color-neutral-ink);
   --header-blur: none;
   --header-label: var(--color-neutral-paper);
@@ -312,7 +312,7 @@
  * Current page: fill and ink weight, not colour alone — on the solid ground
  * `surface-2` behind ink, inside the well a paper chip behind ink. The chip
  * is the only mark a visitor needs to read at a glance, and paper on the ink
- * well is 16.56:1 either way round, so `aria-current` survives the state
+ * well is 20.17:1 either way round, so `aria-current` survives the state
  * change as a *fill*, not as a colour.
  */
 .header .job[data-current="true"] {
@@ -350,7 +350,7 @@
  * square at radius 999, so the well costs no geometry: on the solid ground
  * `--header-well` is `transparent` and the control is what it always was.
  *
- * Measured, stripes on the ink well are 16.56:1 against a 3:1 floor on every
+ * Measured, stripes on the ink well are 20.17:1 against a 3:1 floor on every
  * hero page at 360 — the number does not depend on the photograph at all,
  * which is the point of a well.
  */

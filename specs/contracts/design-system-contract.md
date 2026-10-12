@@ -180,8 +180,8 @@ Two of these carry a rule the manifest has to express, not only name:
 - **A button's fill is never its ground, and an explanation is never truncated**
   (DEC-0154, owner's review 2026-10-12). `secondary` has the fill of `paper`: it
   is not placed on a `paper` ground (`Q-0091`). A step line of `explain-module`
-  wraps and is never cut with an ellipsis; the module reserves the height of its
-  longest step.
+  wraps and is never cut with an ellipsis. Readability goes before a fixed
+  height: shorter copy first, then a two-line fixed height for all three steps.
 - **`explain-module` switches layout at `lg` (48rem) and nowhere else.**
   A generator does not choose that breakpoint; it is the component's own
   and the only `min-width` it declares.

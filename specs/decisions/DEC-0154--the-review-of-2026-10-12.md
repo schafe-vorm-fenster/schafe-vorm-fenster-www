@@ -44,7 +44,7 @@ left its per-page points in prose, so one of them — the didactics of the
      revised 2026-10-12, contract §1).
 3. **What the review opens**, each with a number and its issue: `Q-0086` proof
    line length, `Q-0087` pill cards, `Q-0088` the booking notice, `Q-0089` a place
-   without a photograph, `Q-0090` the `ink` ground as neutral black, `Q-0091`
+   without a photograph, `Q-0090` the `ink` ground as neutral black (answered the same day, DEC-0155), `Q-0091`
    secondary action on light, `Q-0092` provenance of the new `/mitmachen` hero.
 4. **The code is not changed by this record.** The criteria that change are
    marked superseded where a test still asserts the old text (TS-WEB-0019 A14,

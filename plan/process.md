@@ -82,6 +82,29 @@ that skipped its skills has not finished its step.
 | Gate — customer acceptance | Customer | none — the criteria and the preview are the instrument |
 | Gate — UAT | UAT persona | none — naive eyes are the instrument |
 
+## Review intake — a review is not closed until every point is a task
+
+An owner review (the files under `plan/reviews/<date>/`) enters the process the
+same day it is delivered, in this order:
+
+1. **Save it verbatim** as `plan/reviews/<date>/<date> Review ….md`, with the designs
+   and the as-is screenshots beside it.
+2. **Cut it into points** with `---` lines, and end every point with
+   `Issue: #n` (or `Issues: #a, #b`), or `Kein Task: <why>` for a remark that needs
+   no work. `pnpm check:reviews` fails a point that stays in prose (DEC-0155).
+3. **One GitHub issue per point**, labelled by category (Text/Didaktik, Design,
+   Funktion/Technik) and page; designs attached.
+4. **`spec-impact.md`** maps point → issue → the spec location that now carries it
+   → status. Rulings the owner has taken go into the specification and a decision
+   record the same day; open ones become a numbered question.
+5. **Check the guide before restating a rule.** A review point that criticises
+   something the guide calls a model (CG-005 did, for "Warum es heute hakt")
+   changes the guide first.
+
+The review of 2026-09-22 skipped steps 2 to 5: its per-page points stayed in the
+review text, and one of them was done for the owner only after they asked why
+nothing had changed.
+
 ## Round bookkeeping
 
 Each round appends to `state/findings/round-<n>.md` (findings, from

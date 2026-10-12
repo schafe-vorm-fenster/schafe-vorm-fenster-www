@@ -56,7 +56,7 @@ export function archiveGlyph(item: ArchiveItem, index: number): IconName {
  * ground.
  * States: none — nothing here is late data.
  * Inherits: ground `archive ground`; kicker and core in `archive ink`
- * (6.35:1), detail in `text-2` (9.52:1), closing in `ink` (15.37:1);
+ * (6.35:1), detail in `text-2` (9.52:1), closing in `ink` (18.72:1);
  * hairlines `archive line` (1.42:1 — `line` disappears on this ground). No
  * wells, no fills, no photos: a quiet block. Never `circle-x`, never a red
  * cross, never `status-error` — the content is already the failure; the icon
