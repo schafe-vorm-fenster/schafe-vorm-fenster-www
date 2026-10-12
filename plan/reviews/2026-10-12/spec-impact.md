@@ -1,7 +1,7 @@
 # Spec impact of the 2026-10-12 review
 
 Derived from `2026-10-12 Review SVF Preview Website.md`. Every point of the review
-is a GitHub issue (#18 to #52), labelled by category (**Text/Didaktik**, **Design**,
+is a GitHub issue (#18 to #52, and #55 and #56 for the Über-uns input of the same day), labelled by category (**Text/Didaktik**, **Design**,
 **Funktion/Technik**) and by page. The earlier review (`../2026-09-23/spec-impact.md`)
 left the per-page points in the review text and never tracked them; this table is
 what fixes that. Decisions are in `specs/decisions/DEC-0154--…`.
@@ -58,6 +58,17 @@ names it and the work package follows. *decision* = the owner has to decide firs
 | --- | --- | --- | --- | --- |
 | "Warum es heute hakt" unchanged | #51 | Text | CG-005 and CG-018 (model pair withdrawn), CG-042, TS-WEB-0024 D4 | spec changed |
 | Test dates shown | #52 | Funktion | TS-WEB-0008 owed list, `community-site/src/filter/filterTestEvents.ts` | owed |
+
+## Über uns (added the same day)
+
+The owner sent further input: the two `/dein-kalender` points again (they are
+#51 and #52, unchanged) and the redesign of `/ueber-uns` with a question about press
+material.
+
+| Review point | Issue | Category | Where the spec carries it | Status |
+| --- | --- | --- | --- | --- |
+| Über uns rebuilt on the new design (chapters, expandable stories, person, award block) | #55 | Design | TS-WEB-0027 owed list (chapter structure), `Q-0087`, SRC-0014 Open decisions | owed · decision |
+| All press material on the website: where and how | #56 | Design · Funktion | TS-WEB-0028 D1 and D3 (amendment proposed), `Q-0093` | decision |
 
 ## Why #51 did not change
 

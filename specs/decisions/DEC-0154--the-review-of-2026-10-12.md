@@ -51,6 +51,17 @@ left its per-page points in prose, so one of them — the didactics of the
    TS-WEB-0022 A18). Each is replaced in the work package of its issue, with its
    test (TS-WEB-0017 D6c).
 
+## Added the same day
+
+Further input: the `/dein-kalender` points again (#51, #52, already tracked), a
+new design for `/ueber-uns` with a revised structure (#55) and the question of
+where all the press material goes (#56). The press question needs a
+decision, `Q-0093`: TS-WEB-0028 D1 makes the archive "not a destination" and D3
+shows only cleared entries, while the owner wants every piece of press on the
+site, outside the main menu. The recommendation is in the issue: one page, the
+archive grown into *Presse und Auszeichnungen*, with a curated strip on
+`/ueber-uns`. D1 and D3 are amended when `Q-0093` is answered, not before.
+
 ## Why #51 stayed unchanged
 
 CG-005 and CG-018 wrote the kicker/title pair into the guide as "the split the
