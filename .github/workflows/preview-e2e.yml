@@ -33,7 +33,12 @@ permissions:
   packages: read
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # A read:packages-only token for the private `@schafe-vorm-fenster` scope.
+  # The built-in GITHUB_TOKEN gets 403 from npm.pkg.github.com: the packages
+  # are published from `go-to-market-os` and grant this repo no Actions access.
+  # The fallback keeps a fork or a fresh clone failing with the same 403 rather
+  # than with an empty token.
+  GITHUB_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN || secrets.GITHUB_TOKEN }}
   # The `@leafcutter-strict` scope is a private registry (DEC-0112). Without
   # this, pnpm discards the whole `.npmrc` and resolves every scope against
   # npmjs.org, so the failure is a 404 on a package that was never public.

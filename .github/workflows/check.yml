@@ -12,14 +12,11 @@ name: Check
 # promotion are stage-2 follow-up work, not part of this run.
 #
 # The `@schafe-vorm-fenster` scope on npm.pkg.github.com is private and
-# spread across several sibling repos in the org (brand-design and friends
-# are published from `go-to-market-os`, not from this repo). The built-in
-# `secrets.GITHUB_TOKEN` can only read packages by default when the
-# publishing repo has granted this repo's workflows "Manage Actions access"
-# to the package — an org/package dashboard setting, not something `gh`/the
-# Actions API can flip from here. If installs start failing with 401/403
-# from npm.pkg.github.com, that grant is what is missing; see the open row
-# this work package filed in `state/open.md`.
+# published from `go-to-market-os`. The built-in `secrets.GITHUB_TOKEN` gets
+# 403 there (the packages grant this repo no Actions access), so installs read
+# the repo secret `PACKAGES_READ_TOKEN` — a `read:packages`-only token, the
+# same kind the Vercel build uses — and `LEAFCUTTER_REGISTRY_TOKEN` for the
+# STRICT registry (DEC-0112). Without both secrets, install fails.
 
 on:
   push:
@@ -36,7 +33,12 @@ permissions:
   packages: read
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # A read:packages-only token for the private `@schafe-vorm-fenster` scope.
+  # The built-in GITHUB_TOKEN gets 403 from npm.pkg.github.com: the packages
+  # are published from `go-to-market-os` and grant this repo no Actions access.
+  # The fallback keeps a fork or a fresh clone failing with the same 403 rather
+  # than with an empty token.
+  GITHUB_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN || secrets.GITHUB_TOKEN }}
   # The `@leafcutter-strict` scope is a private registry (DEC-0112). Without
   # this, pnpm discards the whole `.npmrc` and resolves every scope against
   # npmjs.org, so the failure is a 404 on a package that was never public.
