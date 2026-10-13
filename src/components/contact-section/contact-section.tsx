@@ -41,22 +41,24 @@ export interface ContactSectionProps {
  * `contact-section` [PROPOSED] — SRC-0014 §Contact section, DEC-0081 (and its
  * amendments), TS-WEB-0016 D12/D13/D16, CG-031.
  *
- * Structure: one section for the whole site, rendered once by the layout
- * between the closing CTA and the footer (DEC-0081 §2 — T-10 mounts it). A
- * 96 px round portrait, the section head and the responder's name beside
- * it, one Lead line, then **four** action rows in D13 order: video
- * appointment (filled, outbound), WhatsApp (outlined), phone and mail (the
- * two hairline rows in mono). The D16 outbound marking stands as its own
- * `meta` line **after** row 1, associated by `aria-describedby`.
+ * Structure (tidied, review 2026-10-12, issue #41): one section for the
+ * whole site, rendered once by the layout between the closing CTA and the
+ * footer (DEC-0081 §2 — T-10 mounts it). A 96 px round portrait, the section
+ * head and one line beside it — the responder's name in bold, then the lead.
+ * Then **four** actions in D13 order: two pill buttons, video appointment
+ * (filled, outbound) and WhatsApp (outlined), and beneath them phone and mail
+ * as one small row of mono values with their icons. From `xl` the head and
+ * the actions share one row. The D16 outbound marking stands as its own
+ * `meta` line **after** the buttons, associated by `aria-describedby`.
  * States: none — the values resolved at build time (`contact-channels.json`)
  * and a missing one failed the build, not this render.
  * Inherits: ground `lime-100`, fixed, on every page; each row carries its own
  * ground. Every row is `data-cta="secondary"`; no `data-cta="primary"` exists
  * inside (TS-WEB-0006 D3, DEC-0082 amendment B).
- * Space: section padding block; rows 72 / 72 / 56 / 56 px.
+ * Space: section padding block; buttons 56 px; phone and mail 44 px.
  * A11y: a `section` named by its heading; real links; the title in each
- * link's name, the recipient out of it (TS-WEB-0016-A23). The head, the lead,
- * row 1's sub-label and the D16 sentence are placeholders until the owner
+ * link's name, the recipient out of it (TS-WEB-0016-A23). The head, the lead
+ * and the D16 sentence are placeholders until the owner
  * writes them, so the section carries `data-demo="true"` (DEC-0113).
  */
 export function ContactSection({ locale, route, className }: ContactSectionProps) {
@@ -86,59 +88,66 @@ export function ContactSection({ locale, route, className }: ContactSectionProps
             <h2 className={styles.heading} id={headingId}>
               {d.heading}
             </h2>
-            <p className={styles.name}>{contactResponder()}</p>
+            {/* Name and lead are one line now (review 2026-10-12, #41). */}
+            <p className={styles.byline}>
+              <span className={styles.name}>{contactResponder()}</span>
+              <span aria-hidden="true"> · </span>
+              <span className={styles.lead}>{d.lead}</span>
+            </p>
           </div>
         </div>
-        <p className={styles.lead}>{d.lead}</p>
-        <ul className={styles.rows}>
-          <li className={styles.item}>
-            <ContactActionRow
-              channel="appointment"
-              describedBy={noteId}
-              href={contactHref("appointment")}
-              route={route}
-              title={d.rows.appointment}
-              treatment="filled"
-              value={d.appointmentSub}
-            />
-            {/* D16: under the control, never inside its label; the `meta`
-                role; associated through `aria-describedby` above. Not a
-                button, not a link, not a consent control. */}
-            <p className={styles.note} id={noteId}>
-              {d.outboundNote}
-            </p>
-          </li>
-          <li className={styles.item}>
-            <ContactActionRow
-              channel="whatsapp"
-              href={contactHref("whatsapp")}
-              route={route}
-              title={d.rows.whatsapp}
-              treatment="outlined"
-              value={contactDisplayValue("whatsapp")}
-            />
-          </li>
-          <li className={styles.item}>
-            <ContactActionRow
-              channel="phone"
-              href={contactHref("phone")}
-              route={route}
-              title={d.rows.phone}
-              treatment="hairline"
-              value={contactDisplayValue("phone")}
-            />
-          </li>
-          <li className={styles.item}>
-            <ContactActionRow
-              channel="mail"
-              href={contactHref("mail")}
-              route={route}
-              title={d.rows.mail}
-              treatment="hairline"
-              value={contactDisplayValue("mail")}
-            />
-          </li>
-        </ul>
+        <div className={styles.actions}>
+          <ul className={styles.buttons}>
+            <li>
+              <ContactActionRow
+                channel="appointment"
+                describedBy={noteId}
+                href={contactHref("appointment")}
+                route={route}
+                title={d.rows.appointment}
+                treatment="filled"
+              />
+            </li>
+            <li>
+              <ContactActionRow
+                channel="whatsapp"
+                href={contactHref("whatsapp")}
+                route={route}
+                title={d.rows.whatsapp}
+                treatment="outlined"
+              />
+            </li>
+          </ul>
+          {/* D16: after the control, never inside its label; the `meta`
+              role; associated through `aria-describedby` on row 1. Not a
+              button, not a link, not a consent control. Kept although the
+              owner's design drops it: Q-0088 is open. */}
+          <p className={styles.note} id={noteId}>
+            {d.outboundNote}
+          </p>
+          <ul className={styles.direct}>
+            <li>
+              <ContactActionRow
+                channel="phone"
+                href={contactHref("phone")}
+                route={route}
+                title={d.rows.phone}
+                treatment="inline"
+                value={contactDisplayValue("phone")}
+              />
+            </li>
+            <li>
+              <ContactActionRow
+                channel="mail"
+                href={contactHref("mail")}
+                route={route}
+                title={d.rows.mail}
+                treatment="inline"
+                value={contactDisplayValue("mail")}
+              />
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
   );
