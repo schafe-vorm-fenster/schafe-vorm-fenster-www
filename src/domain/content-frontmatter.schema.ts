@@ -442,7 +442,13 @@ export type ImageRatio = z.infer<typeof ImageRatioSchema>;
  * model rendition standing in for a photograph nobody has taken yet; it is a
  * *placeholder* and the page marks it as one.
  */
-export const ImageProvenanceSchema = z.enum(["generated", "real"]);
+/**
+ * `real` — a photograph as taken; `generated` — a rendition standing in for
+ * one nobody took; `ai-edited` — a real photograph edited with an AI tool
+ * (DEC-0161, Q-0092): `source` names the original, `master` the edited file in
+ * this repository, and the credits page names the editing.
+ */
+export const ImageProvenanceSchema = z.enum(["generated", "real", "ai-edited"]);
 
 export type ImageProvenance = z.infer<typeof ImageProvenanceSchema>;
 
@@ -488,8 +494,14 @@ export const ImageEntrySchema = z
     slot: z.string().min(1),
     ratio: ImageRatioSchema,
     provenance: ImageProvenanceSchema,
-    /** Required for `provenance: real` — where the asset comes from and under whose rights. */
+    /** Required for `provenance: real` and `ai-edited` — where the asset (for `ai-edited`, the original) comes from and under whose rights. */
     source: z.string().min(1).optional(),
+    /**
+     * Required for `provenance: ai-edited` — the repository-relative path of the
+     * edited master the renditions are cut from (DEC-0161). Never outside the
+     * repository; `pnpm images:generate` refuses a `..` segment.
+     */
+    master: z.string().min(1).optional(),
     /** The motif, in German, as a person would brief a photographer. */
     brief: z.string().min(1).optional(),
     /** Look and treatment; appended to the brief when the prompt is built. */
@@ -586,6 +598,17 @@ export const ImageEntrySchema = z
       .optional(),
   })
   .superRefine((entry, ctx) => {
+    if (entry.provenance === "ai-edited") {
+      for (const key of ["source", "master", "licence"] as const) {
+        if (!entry[key]) {
+          ctx.addIssue({
+            code: "custom",
+            path: [key],
+            message: `\`provenance: ai-edited\` must name \`${key}\` — the original, the edited master and the licence (DEC-0161)`,
+          });
+        }
+      }
+    }
     if (entry.provenance === "real" && !entry.source) {
       ctx.addIssue({
         code: "custom",

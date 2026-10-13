@@ -466,6 +466,19 @@ function resolveRealSource(source) {
 }
 
 /**
+ * The edited master of a `provenance: ai-edited` entry (DEC-0161): a file in
+ * this repository, named by its repository-relative path in `master`. The
+ * original stays cited in `source`; the renditions are cut from the master.
+ * Never outside the repository — a `..` segment or an absolute path is refused.
+ */
+function resolveMaster(master) {
+  if (typeof master !== "string" || master.startsWith("/")) return null;
+  if (master.split("/").some((segment) => segment === "..")) return null;
+  const candidate = join(REPO, master);
+  return existsFile(candidate) ? candidate : null;
+}
+
+/**
  * The other origin a `provenance: real` entry names: a file page on Wikimedia
  * Commons, cited in `source` with its full URL. Nothing is guessed from the
  * text — the title is read out of the `commons.wikimedia.org/wiki/File:…` URL
@@ -633,7 +646,9 @@ async function main() {
       continue;
     }
     for (const entry of images) {
-      if (entry.provenance === "real") {
+      // An AI-edited photograph is placed exactly like a real one — same
+      // focal crop, same budget — from its edited master (DEC-0161).
+      if (entry.provenance === "real" || entry.provenance === "ai-edited") {
         if (FORCE.size > 0 && !forced(entry.id)) {
           skipped.push(`${page}/${entry.id}: --force names another entry`);
           continue;
@@ -653,8 +668,9 @@ async function main() {
           );
           continue;
         }
-        const from = resolveRealSource(entry.source);
-        const commons = from ? null : commonsTitle(entry.source);
+        const edited = entry.provenance === "ai-edited";
+        const from = edited ? resolveMaster(entry.master) : resolveRealSource(entry.source);
+        const commons = from || edited ? null : commonsTitle(entry.source);
         if (!from && !commons) {
           skipped.push(
             `${page}/${entry.id}: real, no cleared asset on disk — stays "Foto gesucht"`,

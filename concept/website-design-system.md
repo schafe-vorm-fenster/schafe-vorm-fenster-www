@@ -696,7 +696,9 @@ invented ones.
   module reserves the height of its longest step so a change of step moves
   nothing. Until 2026-10-12 the lines were `text-overflow: ellipsis`;
   the owner's review rejects that, because a module that explains cannot hide
-  its explanation behind "…" (`DEC-0154`). The active step's disc is `lime-500` with `ink`;
+  its explanation behind "…" (`DEC-0154`). The render followed on 2026-10-13
+  (`DEC-0161`), and `TS-WEB-0022-A20` now fails an ellipsis, a line clamp or
+  clipped text at 390 and 1280 px. The active step's disc is `lime-500` with `ink`;
   the others are `surface` with `muted`.
 - **One CTA** at the bottom, the module's own conversion, at **secondary**
   treatment and marked `data-cta="secondary"`. Never `primary`: `TS-WEB-0006 D3`
@@ -721,6 +723,25 @@ reports it; the answer is shorter copy, then a taller fixed height, never a
 truncated line. The module
 reserves the height of its tallest step and does not grow when the step
 changes.
+
+**The stage swipes, and it has two arrows** (owner's review 2026-10-12,
+`DEC-0161`). It is a horizontal scroll-snap container: the reader swipes from
+state to state, and a swipe that settles on a state selects that step, so the
+step lines and the stage always show the same one. Two arrow buttons sit over
+its edges — real buttons with a name, 44 px, paper with an `ink` glyph and a
+`border` ring so they read on every state's ground, `aria-disabled` at either
+end rather than vanishing under focus. A swipe or an arrow is handwork and
+stops the auto-advance for good. The advance and the step lines move the stage
+by the same scroll, smooth, and instant under `prefers-reduced-motion`. The
+scroll container takes keyboard focus below `lg`, so the arrow keys scroll it
+too. From `lg` there is no stage, so there are no arrows.
+
+**The graphics are drawn where no photograph exists.** A state that shows an
+act — the flyer photographed with the phone, the flyer arriving in the chat —
+is an inline-SVG illustration in brand tokens, not a grey panel and not a
+hatch: no lettering, no place, and **no messenger's logo or trademark** (the
+chat is ours, under our mark). An illustration is honest by its form: it does
+not pretend to be a photograph, so it carries no placeholder badge.
 
 **From `lg` — tablet and up.** The three steps **stand side by side**, each
 with its own graphic above its own two lines. There is no stage, no crop and
@@ -1043,6 +1064,15 @@ Gemeindehäuser, halls, the places events happen in. `/mitmachen` shows the
 act itself: a flyer, a phone, a hand. Never dark, never sad, never
 empty-at-dusk. The full imagery rules live in `brand-identity/imagery.md`
 in `go-to-market-os`; this is the website's cut of them.
+
+**An AI-edited photograph is a real photograph** (`Q-0092`, `DEC-0161`): a
+real shot whose light, colour, crop or details were edited with an AI tool,
+showing the same event at the same place. It takes `provenance: ai-edited`,
+names its original in `source` and its edited master in `master`, and carries
+**no** placeholder badge, because it depicts what the copy claims. The editing
+is named on `/rechtliches` (`content/legal/image-credits.md`) and in
+`data-provenance="ai-edited"` on the surface. An image a model made from a
+prompt is not this; it is `generated`.
 
 A photo that does not depict what the copy claims carries the placeholder
 badge (`#9A6300` on `archive ground`, radius 999, mono 15 px): *"Nicht

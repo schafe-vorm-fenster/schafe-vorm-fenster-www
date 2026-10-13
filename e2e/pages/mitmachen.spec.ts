@@ -14,8 +14,10 @@ import type { Locator, Page } from "@playwright/test";
  * exercised until personalization is built (no anchor ever reaches this
  * page today, per D8: "no place search on this route").
  *
- * The component half of A18/A19 is measured on the development fixture
- * (`e2e/explain-module.spec.ts`), where timing and geometry can be isolated.
+ * The component half of A19 is measured on the development fixture
+ * (`e2e/explain-module.spec.ts`), where timing and geometry can be isolated;
+ * the truncation criterion (A20, which supersedes A18) walks the fixture,
+ * `/` and this page in that file too.
  * What is asserted here is the same criteria **on the composed page**, which
  * is where three modules, a banner and a hero stand in one scroll.
  */
@@ -24,9 +26,6 @@ const VIEWPORTS = [
   { name: "360x640", width: 360, height: 640 },
   { name: "1280x800", width: 1280, height: 800 },
 ];
-
-/** The authoring width CG-025's one-line budget is written to (D4). */
-const AUTHORING_WIDTH = 390;
 
 const DWELL = 4000;
 const TRANSITION = 550;
@@ -328,23 +327,6 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     for (const cooperation of ["kirche-mv", "VEVG", "Volkshochschule"]) {
       expect(slotText, `the paths slot names ${cooperation}`).not.toContain(cooperation);
     }
-  });
-
-  test("TS-WEB-0022-A18: at 390 px every core and every detail of all three modules renders on one line", async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: AUTHORING_WIDTH, height: 844 });
-    await page.goto("/mitmachen");
-    const overflowing = await page.evaluate(() =>
-      [...document.querySelectorAll<HTMLElement>("[data-explain-step]")]
-        .flatMap((line) => [...line.querySelectorAll<HTMLElement>("span")].slice(1))
-        .filter((span) => {
-          const lineHeight = parseFloat(getComputedStyle(span).lineHeight);
-          return span.getBoundingClientRect().height > lineHeight + 1;
-        })
-        .map((span) => span.textContent ?? ""),
-    );
-    expect(overflowing, "step lines wrapping at the authoring width (CG-025)").toEqual([]);
   });
 
   test("TS-WEB-0022-A19: below lg each module fits one viewport and the stage box never changes height", async ({

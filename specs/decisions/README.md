@@ -195,3 +195,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0158 — The footer stands on ink, the language switch becomes a segmented control of two links, and the copyright line takes `line` and the imprint's legal name](DEC-0158--the-footer-on-ink-and-the-segmented-language-switch.md)
 - [DEC-0159 — The place stage is less full, keeps its search once a place is known, carries no counter, and hands off to publishing in a row of its own](DEC-0159--the-home-stage-is-less-full.md)
 - [DEC-0160 — The pin moves to brand-design 2.9.0, dark green leaves every fill, and a secondary action on a light ground is outlined in ink](DEC-0160--no-dark-green-fill-and-the-outlined-secondary.md)
+- [DEC-0161 — The explain module never truncates, swipes below lg, and draws the WhatsApp path; the /mitmachen hero is an AI-edited real photograph](DEC-0161--explain-module-never-truncates-swipes-and-draws.md)

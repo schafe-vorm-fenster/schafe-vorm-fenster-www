@@ -42,24 +42,28 @@ images:
   - id: mitmachen-hero
     slot: mitmachen-1-hero
     ratio: hero
-    provenance: real
+    provenance: ai-edited
     source: >-
-      Wikimedia Commons, File:Osterfeuer 2023 in Schmatzin.jpg —
+      Original: Wikimedia Commons, File:Osterfeuer 2023 in Schmatzin.jpg —
       https://commons.wikimedia.org/wiki/File:Osterfeuer_2023_in_Schmatzin.jpg — Eigenaufnahme
-      (Jan-Henrik Hempel), April 2023, 5526×2378. Öffentliche Dorfveranstaltung, Menschen nur klein
-      und aus der Entfernung. Nachweis: content/legal/image-credits.md.
+      (Jan-Henrik Hempel), April 2023, 5526×2378. Mit KI (Google Gemini) bearbeitet, Oktober 2026:
+      Bildausschnitt, Licht, Kontrast und Sättigung; Einzelheiten hat das Werkzeug dabei neu
+      gezeichnet (der Kinderwagen rechts fehlt). Öffentliche Dorfveranstaltung, Menschen nur klein
+      und aus der Entfernung. Entscheidung Q-0092 → DEC-0161. Nachweis:
+      content/legal/image-credits.md.
+    master: plan/reviews/2026-10-12/Design - Mitmachen Hero (Gemini).jpg
     alt: >-
-      The Easter bonfire in Schmatzin: people at trestle tables on the meadow, bare trees and the
-      village behind them.
+      The Easter bonfire in Schmatzin: children and families at trestle tables on the meadow, a
+      painted construction trailer, bare trees and the village behind them.
     lcp: true
     licence: CC BY-SA 4.0
     focal:
-      x: 42
+      x: 45
       "y": 62
     status: real
     file: /images/real/mitmachen-hero.webp
-    width: 680
-    height: 765
+    width: 800
+    height: 900
     wide_file: /images/real/mitmachen-hero-wide.webp
     wide_width: 1190
     wide_height: 510

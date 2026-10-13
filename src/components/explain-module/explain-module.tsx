@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
 
 import { Button } from "../button/button";
+import { Icon } from "../icon/icon";
 import {
   INITIAL_ADVANCE_STATE,
   INTERSECTION_THRESHOLD,
@@ -15,8 +16,11 @@ import {
 import type { ExplainStep, MechanismId } from "../content-fragments";
 import type { IconName } from "../icon/icon";
 import type { LinkOptions } from "../route-link/href";
+import type { Locale } from "@/src/lib/i18n/locales";
 import type { RouteId } from "@/src/lib/routes/routes";
 import type { ReactNode } from "react";
+
+import { dictionary } from "@/src/lib/i18n/dictionary";
 
 import styles from "./explain-module.module.css";
 
@@ -64,12 +68,41 @@ export interface ExplainModuleProps {
   readonly cta: ExplainModuleCta;
   /** `h3` under a scene opener or a section heading; `h2` where the module is the block. */
   readonly headingLevel?: 2 | 3;
+  /** The language of the two stage arrows' accessible names. */
+  readonly locale?: Locale;
   readonly id?: string;
   readonly className?: string;
 }
 
 function ordinalLabel(ordinal: number): string {
   return String(ordinal).padStart(2, "0");
+}
+
+/**
+ * The pane the stage is scrolled to, read off its geometry: the one whose
+ * scroll target (its start, clamped to the stage's scroll range — the last
+ * pane can only reach the end) lies nearest to the current offset.
+ */
+function nearestPane(stage: HTMLElement): StepIndex {
+  const panes = [...stage.querySelectorAll<HTMLElement>("[data-explain-pane]")];
+  const max = stage.scrollWidth - stage.clientWidth;
+  let best: StepIndex = 1;
+  let distance = Infinity;
+  panes.forEach((pane, index) => {
+    const target = Math.min(pane.offsetLeft, max);
+    const delta = Math.abs(stage.scrollLeft - target);
+    if (delta < distance) {
+      distance = delta;
+      best = STEP_INDICES[index] as StepIndex;
+    }
+  });
+  return best;
+}
+
+/** Where the stage has to scroll for `step` to be the pane in view. */
+function paneOffset(stage: HTMLElement, step: StepIndex): number {
+  const pane = stage.querySelector<HTMLElement>(`[data-explain-pane="${step}"]`);
+  return Math.min(pane?.offsetLeft ?? 0, stage.scrollWidth - stage.clientWidth);
 }
 
 /**
@@ -96,8 +129,14 @@ function ordinalLabel(ordinal: number): string {
  * one slide — the same 550 ms and easing as the section reveal; radius 0 for
  * the step lines, `pill` for the disc; the shell's focus ring.
  * Space: the stage declares its ratio before any graphic arrives; the two
- * lines of a step are clamped to one line each — the copy is written to the
- * 390 px budget (SRC-0017 CG-025), and nothing here grows.
+ * lines of a step are **never truncated** — the copy is written to the
+ * 390 px target (SRC-0017 CG-025), a longer line wraps, and since all three
+ * step lines are always rendered (and from `lg` share one grid row) a change
+ * of step moves nothing (DEC-0154, DEC-0161, TS-WEB-0022-A20).
+ * Swipe: below `lg` the stage is a horizontal scroll-snap container with two
+ * arrow buttons inside it (issue #27, DEC-0161). A swipe that settles on a
+ * pane selects that step; an arrow selects the neighbour. Both are handwork
+ * and stop the pass for good, like a step line.
  * A11y: the step lines are the WCAG 2.2.2 mechanism (TS-WEB-0002 D7) — real
  * buttons at every size, `Tab`, `Enter`/`Space`, `aria-current="step"` on
  * the active one. Focus anywhere in the module, or a click anywhere in it,
@@ -116,11 +155,23 @@ export function ExplainModule({
   stage,
   cta,
   headingLevel = 3,
+  locale = "de",
   id,
   className,
 }: ExplainModuleProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const [state, dispatch] = useReducer(nextAdvanceState, INITIAL_ADVANCE_STATE);
+  /**
+   * The pane a scroll this component started is heading for. While it is set,
+   * the scroll it causes is ours and is not read back as a swipe; a touch, a
+   * wheel or the pane arriving clears it.
+   */
+  const programmatic = useRef<StepIndex | null>(null);
+  const active = useRef<StepIndex>(state.active);
+  useEffect(() => {
+    active.current = state.active;
+  }, [state.active]);
 
   // The trigger — once, on mount. Reduced motion and the side-by-side layout
   // never arm; otherwise one observer at the specified threshold, dropped
@@ -160,7 +211,73 @@ export function ExplainModule({
     return () => window.clearTimeout(timer);
   }, [state]);
 
+  // The stage follows the machine: below `lg` the stage is a horizontal
+  // scroll-snap container (issue #27), so a state change is a scroll to the
+  // pane, smooth unless the reader asked for reduced motion. From `lg` the
+  // stage is `display: contents` and there is nothing to scroll.
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage || window.matchMedia(SIDE_BY_SIDE).matches) return;
+    const left = paneOffset(stage, state.heading);
+    if (Math.abs(stage.scrollLeft - left) < 2) return;
+    programmatic.current = state.heading;
+    const reduced = window.matchMedia(REDUCED_MOTION).matches;
+    if (typeof stage.scrollTo === "function") {
+      stage.scrollTo({ left, behavior: reduced ? "instant" : "smooth" });
+    } else {
+      stage.scrollLeft = left;
+    }
+  }, [state.heading]);
+
+  // The machine follows the stage: a swipe that settles on another pane is a
+  // selection of that step — handwork, so the pass stops for good (DEC-0105
+  // §6), and the step lines below always show the pane the stage shows.
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+    let timer: number | undefined;
+    const settle = () => {
+      if (window.matchMedia(SIDE_BY_SIDE).matches) return;
+      const step = nearestPane(stage);
+      // The scroll has been quiet for a moment, so whatever moved it is over.
+      // Ours, landed where it was sent: nothing to read back. Ours, landed
+      // elsewhere: something interrupted it, and where it stopped is the
+      // reader's choice like any swipe.
+      const target = programmatic.current;
+      programmatic.current = null;
+      if (step === target) return;
+      if (step !== active.current) dispatch({ type: "select", step });
+    };
+    const onScroll = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(settle, 120);
+    };
+    const onHand = () => {
+      programmatic.current = null;
+      dispatch({ type: "interact" });
+    };
+    // From `lg` there is nothing to scroll, so the stage leaves the tab order.
+    const sideBySide = window.matchMedia(SIDE_BY_SIDE);
+    const syncTabStop = () => {
+      stage.tabIndex = sideBySide.matches ? -1 : 0;
+    };
+    syncTabStop();
+    sideBySide.addEventListener?.("change", syncTabStop);
+    stage.addEventListener("scroll", onScroll, { passive: true });
+    stage.addEventListener("touchstart", onHand, { passive: true });
+    stage.addEventListener("wheel", onHand, { passive: true });
+    return () => {
+      window.clearTimeout(timer);
+      stage.removeEventListener("scroll", onScroll);
+      stage.removeEventListener("touchstart", onHand);
+      stage.removeEventListener("wheel", onHand);
+      sideBySide.removeEventListener?.("change", syncTabStop);
+    };
+  }, []);
+
   const stop = useCallback(() => dispatch({ type: "interact" }), []);
+  const words = dictionary(locale).explainStage;
+  const shown = state.heading;
 
   const Heading = headingLevel === 2 ? "h2" : "h3";
 
@@ -186,7 +303,19 @@ export function ExplainModule({
         <Heading className={styles.title}>{title}</Heading>
       </div>
 
-      <div className={styles.stage} data-explain-stage="">
+      <div className={styles.stageFrame} data-explain-frame="">
+      {/* A scroll container below `lg`, so it takes keyboard focus: the
+          arrow keys scroll it like a swipe (WCAG 2.1.1, axe
+          `scrollable-region-focusable`). From `lg` it is `display: contents`
+          and takes none. */}
+      <div
+        aria-label={words.stageLabel}
+        className={styles.stage}
+        data-explain-stage=""
+        ref={stageRef}
+        role="group"
+        tabIndex={0}
+      >
         <div className={styles.track}>
           {stage.map((graphic, index) => {
             const step = STEP_INDICES[index] as StepIndex;
@@ -202,6 +331,34 @@ export function ExplainModule({
             );
           })}
         </div>
+      </div>
+        {/* Below `lg` only: the two arrows inside the stage (issue #27). Real
+            buttons with a name; at either end the arrow stays focusable and
+            says so with `aria-disabled` rather than vanishing under focus. */}
+        <button
+          aria-disabled={shown === 1 ? "true" : undefined}
+          aria-label={words.previousStep}
+          className={[styles.arrow, styles.arrowPrevious].join(" ")}
+          data-explain-arrow="previous"
+          onClick={() => {
+            if (shown > 1) dispatch({ type: "select", step: (shown - 1) as StepIndex });
+          }}
+          type="button"
+        >
+          <Icon name="arrow-right" size={24} />
+        </button>
+        <button
+          aria-disabled={shown === 3 ? "true" : undefined}
+          aria-label={words.nextStep}
+          className={[styles.arrow, styles.arrowNext].join(" ")}
+          data-explain-arrow="next"
+          onClick={() => {
+            if (shown < 3) dispatch({ type: "select", step: (shown + 1) as StepIndex });
+          }}
+          type="button"
+        >
+          <Icon name="arrow-right" size={24} />
+        </button>
       </div>
 
       <ol className={styles.steps}>

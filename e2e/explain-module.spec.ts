@@ -9,7 +9,8 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
  * The page walks (`e2e/pages/mitmachen.spec.ts`, `e2e/pages/home.spec.ts`,
  * `e2e/motion-reveal.spec.ts`) assert the same criteria on the real pages
  * once the modules stand there; this file is the component half of
- * TS-WEB-0002-A13, TS-WEB-0022-A18 and TS-WEB-0022-A19.
+ * TS-WEB-0002-A13 and TS-WEB-0022-A19, and the whole of the truncation and
+ * swipe criteria A20 and A21 (issues #47 and #27, DEC-0161).
  *
  * Timing reads the settled state: `data-state` flips when a transition ends,
  * so state 2 settles at 4 550 ms and state 3 at 9 100 ms after the trigger.
@@ -209,18 +210,125 @@ test("TS-WEB-0022-A19: below lg the stage box keeps one height across all three 
   expect(new Set(heights).size).toBe(1);
 });
 
-test("TS-WEB-0022-A18: at 390 px every core and every detail renders on exactly one line", async ({ page }) => {
-  const explainModule = await open(page, { width: 390, height: 800 });
-  for (const step of [1, 2, 3]) {
-    const line = explainModule.locator(`[data-explain-step="${step}"]`);
-    for (const part of ["core", "detail"]) {
-      const element = line.locator(`span:not([aria-hidden])`).nth(part === "core" ? 0 : 1);
-      const { height, lineHeight } = await element.evaluate((node) => ({
-        height: node.getBoundingClientRect().height,
-        lineHeight: parseFloat(getComputedStyle(node).lineHeight),
-      }));
-      expect(Math.abs(height - lineHeight), `step ${step} ${part}`).toBeLessThan(1);
+/**
+ * The truncation instrument (issue #47, DEC-0154, DEC-0161). The old A18 test
+ * measured "one line" as "as tall as one line-height" — which an
+ * `ellipsis` clamp satisfies by construction, so the instrument passed on
+ * exactly the defect the owner's review found. This one fails it: a step
+ * line may wrap, it may never be cut.
+ */
+async function truncatedStepText(page: Page): Promise<string[]> {
+  return page.evaluate(() =>
+    [...document.querySelectorAll<HTMLElement>("[data-explain-step]")]
+      .flatMap((line) => [...line.querySelectorAll<HTMLElement>("span:not([aria-hidden])")])
+      .filter((span) => {
+        const style = getComputedStyle(span);
+        const clamp = style.getPropertyValue("-webkit-line-clamp");
+        return (
+          style.textOverflow === "ellipsis" ||
+          (clamp !== "" && clamp !== "none") ||
+          span.scrollHeight > span.clientHeight ||
+          span.scrollWidth > span.clientWidth
+        );
+      })
+      .map((span) => span.textContent ?? ""),
+  );
+}
+
+for (const width of [390, 1280]) {
+  test(`TS-WEB-0022-A20 (supersedes TS-WEB-0022-A18): at ${width} px no step line is truncated on the fixture, on / and on /mitmachen`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 844 });
+    for (const path of [FIXTURE, "/", "/mitmachen"]) {
+      await page.goto(path);
+      await page.waitForLoadState("networkidle");
+      const lines = await page.locator("[data-explain-step]").count();
+      expect(lines, `${path} renders step lines`).toBeGreaterThanOrEqual(3);
+      expect(await truncatedStepText(page), `${path}: truncated step text`).toEqual([]);
     }
+  });
+}
+
+test("TS-WEB-0022-A21: below lg the stage swipes and its two arrows step through the states", async ({
+  page,
+}) => {
+  const explainModule = await open(page, { width: 390, height: 844 });
+  await showFraction(page, explainModule, 1);
+  const stage = explainModule.locator("[data-explain-stage]");
+  const previous = explainModule.locator('[data-explain-arrow="previous"]');
+  const next = explainModule.locator('[data-explain-arrow="next"]');
+  const moduleHeight = (await explainModule.boundingBox())?.height;
+
+  // Real buttons with a name, inside the stage, at the 44 px floor.
+  for (const arrow of [previous, next]) {
+    await expect(arrow).toBeVisible();
+    expect(await arrow.evaluate((element) => element.tagName)).toBe("BUTTON");
+    expect((await arrow.getAttribute("aria-label"))?.length ?? 0).toBeGreaterThan(0);
+    const box = await arrow.boundingBox();
+    expect(box?.width ?? 0).toBeGreaterThanOrEqual(44);
+    expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
+  }
+  await expect(previous).toHaveAttribute("aria-disabled", "true");
+
+  // An arrow is handwork: it selects the neighbour and stops the pass.
+  await next.click();
+  await expect(explainModule).toHaveAttribute("data-state", "2");
+  expect(await advance(explainModule)).toBe("stopped");
+  await expect(explainModule.locator('[data-explain-step="2"]')).toHaveAttribute("aria-current", "step");
+  await expect
+    .poll(() =>
+      stage.evaluate((element) => {
+        const pane = element.querySelector<HTMLElement>('[data-explain-pane="2"]');
+        return Math.abs(element.scrollLeft - (pane?.offsetLeft ?? -999)) < 2;
+      }),
+    )
+    .toBe(true);
+
+  // The keyboard reaches it: Enter on the focused arrow.
+  await next.focus();
+  await page.keyboard.press("Enter");
+  await expect(explainModule).toHaveAttribute("data-state", "3");
+  await expect(next).toHaveAttribute("aria-disabled", "true");
+
+  // A swipe that settles on a pane selects that step — the step lines follow.
+  await stage.evaluate((element) => element.scrollTo({ left: 0, behavior: "instant" }));
+  await expect(explainModule).toHaveAttribute("data-state", "1");
+  await expect(explainModule.locator('[data-explain-step="1"]')).toHaveAttribute("aria-current", "step");
+
+  // Nothing moved around the stage, and the page never scrolls sideways.
+  expect((await explainModule.boundingBox())?.height).toBe(moduleHeight);
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+  ).toBe(true);
+});
+
+test("TS-WEB-0022-A21: under reduced motion an arrow changes the pane without a slide", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const explainModule = await open(page, { width: 390, height: 844 });
+  await showFraction(page, explainModule, 1);
+  expect(await advance(explainModule)).toBe("static");
+  const stage = explainModule.locator("[data-explain-stage]");
+
+  await explainModule.locator('[data-explain-arrow="next"]').click();
+  // Instant: the very next frame already shows pane 2, no smooth scroll in between.
+  const settled = await stage.evaluate(
+    (element) =>
+      new Promise<boolean>((resolve) =>
+        requestAnimationFrame(() => {
+          const pane = element.querySelector<HTMLElement>('[data-explain-pane="2"]');
+          resolve(Math.abs(element.scrollLeft - (pane?.offsetLeft ?? -999)) < 2);
+        }),
+      ),
+  );
+  expect(settled).toBe(true);
+  await expect(explainModule).toHaveAttribute("data-state", "2");
+});
+
+test("TS-WEB-0022-A21: from lg there are no arrows — everything is visible at once", async ({ page }) => {
+  const explainModule = await open(page, { width: 1024, height: 800 });
+  for (const which of ["previous", "next"]) {
+    await expect(explainModule.locator(`[data-explain-arrow="${which}"]`)).toBeHidden();
   }
 });
 

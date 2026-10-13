@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import { StageCalendar, StageChat, StageImage, StageRegistration } from "./explain-stage";
+import { StageCalendar, StageChat, StageFlyerPhoto, StageImage, StageRegistration } from "./explain-stage";
 
 import type { StageEventRow } from "./explain-stage";
 
@@ -67,6 +67,22 @@ describe("explain-stage: four graphics, no form element in any of them (TS-WEB-0
   });
 });
 
+describe("StageFlyerPhoto: state 1 of the WhatsApp path, drawn (issue #26)", () => {
+  it("is an inline SVG in the square box, hidden from assistive technology", () => {
+    const html = renderToStaticMarkup(<StageFlyerPhoto />);
+    expect(html).toContain('data-stage="flyer-photo"');
+    expect(html).toContain('aria-hidden="true"');
+    expect(html).toContain("<svg");
+    expect(html).not.toContain("<img");
+    expect(html).not.toContain("data-placeholder");
+  });
+
+  it("carries no colour literal — every fill comes from a token class", () => {
+    const html = renderToStaticMarkup(<StageFlyerPhoto />);
+    expect(html).not.toMatch(/fill="#|fill="rgb|stroke="#/);
+  });
+});
+
 describe("StageImage: media-frame at the square", () => {
   it("renders the image with its alt when an asset exists", () => {
     const html = renderToStaticMarkup(
@@ -91,10 +107,11 @@ describe("StageChat: the brand name, the flyer stand-in, the reply", () => {
     }
   });
 
-  it("shows the hatched flyer marked as a placeholder until a photo exists", () => {
+  it("draws the flyer until a photo exists — an illustration, never a grey hatch (issue #26)", () => {
     const withoutFlyer = renderToStaticMarkup(<StageChat reply="x" time="10:32" />);
-    expect(withoutFlyer).toContain('data-placeholder="flyer-photo"');
-    expect(withoutFlyer).toContain(dictionary("de").explainStage.flyerFile);
+    expect(withoutFlyer).toContain("data-flyer-art");
+    expect(withoutFlyer).toContain("<svg");
+    expect(withoutFlyer).not.toContain("data-placeholder");
 
     const withFlyer = renderToStaticMarkup(
       <StageChat flyerAlt="Flyer" flyerSrc="/images/real/flyer.jpg" reply="x" time="10:32" />,
