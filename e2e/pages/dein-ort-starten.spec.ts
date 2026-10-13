@@ -349,6 +349,8 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
     await page.goto(`/dein-ort/starten?ort=${PLACE}`);
 
     await expect(page.locator('[data-cta="primary"]')).toHaveCount(1);
+    // The place reaches both CTAs after hydration (DEC-0163); read them once it has.
+    await expect(page.locator('[data-cta="primary"]')).toHaveAttribute("href", new RegExp(`ort=${PLACE}`));
 
     const band = page.locator("#context-band nav");
     await expect(band).toHaveCount(1);
