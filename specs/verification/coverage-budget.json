@@ -1,9 +1,9 @@
 {
   "note": "The ratchet of `pnpm check:coverage` (DEC-0141). `max` is the worst tally this repository is allowed to have. A run worse than a number here fails; a run better than one fails too, asking for the number to be lowered in the same commit, so that a gain is recorded instead of left as budget to spend again. Raising a number is a governance change: it needs a decision record, and the record says which criteria were let go and why.",
-  "measured_at": "2026-09-27",
-  "measured_on": "DEC-0145, the owner's four answers. Two criteria gained an instrument: TS-WEB-0018-A7, because the criterion took the /rechtliches exemption the render always had (CONF-0027 resolved as NEW_VERSION) and the walk in e2e/copy-structure.spec.ts now carries it in its title; and TS-WEB-0006-A12, because a price is read through {price:<offering-id>} and src/lib/pricing/price-token.test.ts measures it. MISSING 136 -> 135 and VERIFIED up by two; NAMED ONLY unmoved at 30 — A7 left it for VERIFIED and nothing entered it, after the one sentence that would have (a comment in scripts/check-content.ts naming the manual criterion A16 of TS-WEB-0006) was spelled out per DEC-0134. The claim-budget lint of DEC-0145 section 4 names CG-027 and no criterion, because CG-027 has none and a meter cannot close a manual one.",
+  "measured_at": "2026-10-13",
+  "measured_on": "DEC-0159, issue #24. TS-WEB-0019-A14 (the home counter renders only the dates figure) is superseded by A18 (the home page renders no counter) since DEC-0154; the render it described is gone, so its test went with it and A14 has no instrument any more. MISSING 135 -> 136 for that one superseded criterion, which can never be verified again; A17, A18, A19 and TS-WEB-0020-A18 arrive with their tests. NAMED ONLY unmoved at 30: the two comments that named A14 were spelled out rather than left to count.",
   "max": {
     "NAMED ONLY": 30,
-    "MISSING": 135
+    "MISSING": 136
   }
 }

@@ -7,8 +7,9 @@ import { HOME_META } from "./page.meta";
 /**
  * TS-WEB-0019-A1 (static): "The manifest of `/` carries exactly the D1 values:
  * `focusJob` = `know-what-is-on`, `primaryConversion` =
- * `save-calendar-to-homescreen`, no `equalWeightConversion`, four live
- * modules, `proofSlots` = 5."
+ * `save-calendar-to-homescreen`, no `equalWeightConversion`, three live
+ * modules, `proofSlots` = 5." (Four until DEC-0154 took the counters off the
+ * page, issue #24.)
  *
  * The vocabulary itself (do these ids exist in the hub packages?) is checked
  * once, in `src/lib/pages/page-meta.test.ts`.
@@ -19,16 +20,15 @@ describe("TS-WEB-0019-A1: the page manifest of `/`", () => {
     expect(HOME_META.focusJob).toBe("know-what-is-on");
     expect(HOME_META.primaryConversion).toBe("save-calendar-to-homescreen");
     expect(HOME_META.equalWeightConversion).toBeUndefined();
-    expect(HOME_META.liveModules).toHaveLength(4);
+    expect(HOME_META.liveModules).toHaveLength(3);
     expect(HOME_META.proofSlots).toHaveLength(5);
   });
 
-  it("names the four live modules of TS-WEB-0019 D5, each with an empty state", () => {
+  it("names the three live modules of TS-WEB-0019 D5, each with an empty state", () => {
     expect(HOME_META.liveModules.map((module) => module.id)).toEqual([
       "place-search",
       "position-1-dates-in-the-place",
       "position-2-this-week-nearby",
-      "position-4-live-counters",
     ]);
     expect(checkPageMeta(HOME_META)).toEqual([]);
   });

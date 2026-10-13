@@ -49,6 +49,19 @@
   font-size: var(--type-meta-size);
 }
 
+/* The stage treatment (issue #20): read, not seen — the control's
+   `aria-describedby` still points here, so assistive technology hears what
+   the control will do; the sighted reader gets the same sentence as the
+   button's tooltip. Same clip as `search-field`'s label. */
+.explainsHidden {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
 /* On a photo surface or the ink section the light ground's colours do not
    clear 4.5:1 — the same paper the hero's headline and `place-search`'s own
    hint use there. */

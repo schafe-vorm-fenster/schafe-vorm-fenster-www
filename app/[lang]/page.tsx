@@ -45,7 +45,7 @@ import { LiveStageCalendar } from "./mitmachen/stage-islands";
 import styles from "./_pages.module.css";
 import pageStyles from "./page.module.css";
 
-import { CountersIsland, NearbyIsland, PlaceDatesIsland, exampleRows } from "./_islands";
+import { NearbyIsland, PlaceDatesIsland, exampleRows } from "./_islands";
 import { selectProof } from "./_proof";
 import { PageJsonLd } from "./_structured-data";
 import { pageContent } from "./_content";
@@ -84,8 +84,8 @@ import type { ReactNode } from "react";
  *
  * **What the mock rule adds.** The prototype must show every function
  * (plan/guardrails.md), so the three live modules that S1 alone would not
- * show — position 1 (dates in the place), position 2 (this week nearby) and
- * position 4 (counters) — render here in the `mocked` state with the
+ * show — position 1 (dates in the place) and position 2 (this week nearby) —
+ * render here in the `mocked` state with the
  * `Demo-Daten` badge their frames put on themselves, over the invented
  * `Schlatkow`. Block *structure* is therefore identical to
  * the M4 render (TS-WEB-0006-A10); only the data source changes. Each has a
@@ -134,7 +134,7 @@ export async function generateMetadata({
 }
 
 /**
- * Fallback only — `home-12-ui-strings` carries these three short strings
+ * Fallback only — `home-12-ui-strings` carries these two short strings
  * (state/open.md row 92, row 161), read below through `uiStringsFrom`. This
  * record stands in only where a locale's slot is unreadable (`slot()`'s own
  * typed-empty-with-`reason` contract, `src/lib/content/README.md`), never as
@@ -149,29 +149,25 @@ const UI_STRING_FALLBACKS: Record<
   {
     flyerExample: string;
     geo: string;
-    datesUnit: string;
   }
 > = {
   de: {
     flyerExample: "Aus dem Flyer geworden",
     geo: "Beleg aus der Region",
-    datesUnit: "Termine",
   },
   en: {
     flyerExample: "Made from the flyer",
     geo: "Proof from the region",
-    datesUnit: "dates",
   },
 };
 
-/** The three short UI strings, read off `home-12-ui-strings` where the slot
+/** The two short UI strings, read off `home-12-ui-strings` where the slot
  * has them, falling back to the stand-ins otherwise. */
 function uiStringsFrom(uiStrings: ContentSlot, locale: Locale) {
   const fallback = UI_STRING_FALLBACKS[locale];
   return {
     flyerExample: fieldAt(uiStrings.blocks, 0) ?? fallback.flyerExample,
     geo: fieldAt(uiStrings.blocks, 1) ?? fallback.geo,
-    datesUnit: fieldAt(uiStrings.blocks, 2) ?? fallback.datesUnit,
   };
 }
 
@@ -244,18 +240,19 @@ interface FocusCopy {
   readonly datesHeadline: string;
   readonly datesCta: string;
   /**
-   * The line the live block hands off to block 2a with — "Fehlt deine
-   * Veranstaltung, jetzt selbst eintragen." (review, SRC-0017 CG-008). It
-   * stands under the rows whose gaps it is about, and it is a sentence
-   * rather than a link: the page's one `data-cta="primary"` is the search.
+   * The live block's hand-off to block 2a — the review's "Fehlt deine
+   * Veranstaltung, jetzt selbst eintragen." (SRC-0017 CG-008), split into its
+   * question and its action. Since issue #25 it is a row of its own under the
+   * rows whose gaps it is about, with one secondary button into the publishing
+   * job; the page's one `data-cta="primary"` stays where D2 puts it
+   * (TS-WEB-0019-A19).
    */
-  readonly datesHandoff: string;
+  readonly handoffQuestion: string;
+  readonly handoffCta: string;
   /** S3 — `home-3-place-empty`: radius heading, invitation, publish label. */
   readonly nearbyHeading: string;
   readonly invitation: string;
   readonly publishCta: string;
-  /** `home-9-counters`: what the one figure under the rows is a figure of. */
-  readonly countersLabel: string;
 }
 
 /** The artifact writes the invitation as two sentences; the first is the headline. */
@@ -436,25 +433,25 @@ function FocusModules({
               tone="dark"
             />
           )}
-          {/* Block 2d — the counter, where it means something: directly under
-              the live rows it is the size of the thing those three dates came
-              out of. It stood on a violet band of its own between the scenes
-              and the proof, next to an origin sentence and a link, and the
-              one number on the page was the smallest thing in it (polish
-              brief, page 1, fix 5). TS-WEB-0019 D3 asks for it "inline in 2b or
-              2c, no section of its own" — this is that, one block earlier. */}
-          <div className={styles.counters} id="live-counters">
-            <p>{copy.countersLabel}</p>
-            {/* TS-WEB-0019-A14 / Q-0037: only the counted figure. `places` and
-                `updatesToday` have no `/api/stats` field, so the band shows
-                one slot rather than an estimate. */}
-            <CountersIsland locale={locale} show={["dates"]} />
-          </div>
+          {/* Block 2d — the counter — is gone (DEC-0154, issue #24): "8.543
+              Termine" told the reader nothing, and the home page carries no
+              live figure at all (TS-WEB-0019-A18, SRC-0017 CG-034). */}
           {/* The block's hand-off to block 2a (SRC-0017 CG-008): the gap in
               the list is the way into the publishing job, not a defect to
-              hide. Only where rows stand — S3 already *is* the invitation
-              and would say it twice. */}
-          {empty ? null : <p className={pageStyles.handoff}>{copy.datesHandoff}</p>}
+              hide. A row of its own since issue #25 — the question, and one
+              secondary button on the ink ground, where the guide's secondary
+              is legal (SRC-0014 §Button). Only where rows stand — S3 already
+              *is* the invitation and would say it twice. */}
+          {empty || copy.handoffQuestion === "" ? null : (
+            <div className={pageStyles.handoff} data-handoff="">
+              <p className={pageStyles.handoffQuestion}>{copy.handoffQuestion}</p>
+              {copy.handoffCta === "" ? null : (
+                <Button dataCta="secondary" locale={locale} onward to="takePart" variant="secondary">
+                  {copy.handoffCta}
+                </Button>
+              )}
+            </div>
+          )}
         </SectionShell>
       </MotionReveal>
 
@@ -518,7 +515,6 @@ export default async function HomePage({
   const sceneProvenance = slot(page, "home-6-scene-provenance");
   const stamps = slot(page, "home-7-provenance-stamps");
   const proof = slot(page, "home-8-proof-stream");
-  const counters = slot(page, "home-9-counters");
   const band = slot(page, "home-10-context-band");
   const closingCta = slot(page, "home-11-closing-cta");
   const uiStrings = slot(page, "home-12-ui-strings");
@@ -535,7 +531,6 @@ export default async function HomePage({
   const sceneProvenanceImage = pageImage(page, "home-scene-provenance");
 
   const searchPlaceholder = fieldAt(hero.blocks, 1);
-  const searchHint = fieldAt(hero.blocks, 3);
   const proofKicker = fieldAt(proof.blocks, 0);
 
   /**
@@ -581,10 +576,12 @@ export default async function HomePage({
 
   const search = (primary: boolean) => (
     <PlaceSearch
+      stage
       typeahead
-      hint={searchHint}
       id={primary ? "ort-suche-fokus" : "ort-suche-abschluss"}
-      label={searchPlaceholder ?? ""}
+      // Issue #20: the placeholder carries the instruction and the helper
+      // line is gone, so the field's name comes from the dictionary ("Dein
+      // Ort") — the visible hint goes, the field's label does not.
       locale={locale}
       placeholder={searchPlaceholder}
       // DEC-0078: the hero instance is the one whose `data-cta="primary"`
@@ -619,11 +616,11 @@ export default async function HomePage({
     submitLabel,
     datesHeadline: dates.fields["Headline"] ?? "",
     datesCta: dates.cta ?? "",
-    datesHandoff: fieldAt(dates.blocks, 2) ?? "",
+    handoffQuestion: fieldAt(dates.blocks, 2) ?? "",
+    handoffCta: fieldAt(dates.blocks, 3) ?? "",
     nearbyHeading: fieldAt(nearby.blocks, 0) ?? "",
     invitation: fieldAt(nearby.blocks, 1) ?? "",
     publishCta: ctaLabelOnly(nearby.cta ?? fieldAt(nearby.blocks, 2) ?? "") ?? "",
-    countersLabel: fieldAt(counters.blocks, 0) ?? "",
   };
 
   return (

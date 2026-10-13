@@ -486,6 +486,18 @@ on `paper`, `surface`, `surface-2` or `lime-100` — `paper` on `paper` has
 no edge and is not a search field, and giving it one would need a fourth
 border exception.
 
+**On a stage the field stands alone** (`DEC-0159`, owner's review 2026-10-12,
+issues #20 and #23). In the hero the placeholder carries the instruction
+("Tipp den Ortsnamen ein") and no helper line stands under the field; the
+"use my location" control sits directly beneath it, one `space-2` down, and
+its explanation is the control's accessible description and tooltip rather
+than a paragraph on the photograph. The field keeps its label for assistive
+technology. A placeholder cannot wrap, so it sits at the meta size and must fit
+the field at 360 px; typed text keeps the body size. Once a place is known the
+stage **keeps** the field, as the search for another place — same height, same
+placeholder style, same keyboard — so a place stage is never just a name on a
+photograph.
+
 ### Place-search result overlay
 
 The autosuggest list that belongs to the search field.

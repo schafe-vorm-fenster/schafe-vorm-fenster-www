@@ -193,4 +193,5 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0155 — Ink is neutral black, readability goes before a fixed height, a review is not closed until every point is a task — and why the tests let these through](DEC-0155--ink-is-neutral-black-and-reviews-become-tasks.md)
 - [DEC-0156 — A link card is a control: the context band as the owner drew it on 2026-10-12](DEC-0156--a-link-card-is-a-control.md)
 - [DEC-0158 — The footer stands on ink, the language switch becomes a segmented control of two links, and the copyright line takes `line` and the imprint's legal name](DEC-0158--the-footer-on-ink-and-the-segmented-language-switch.md)
+- [DEC-0159 — The place stage is less full, keeps its search once a place is known, carries no counter, and hands off to publishing in a row of its own](DEC-0159--the-home-stage-is-less-full.md)
 - [DEC-0160 — The pin moves to brand-design 2.9.0, dark green leaves every fill, and a secondary action on a light ground is outlined in ink](DEC-0160--no-dark-green-fill-and-the-outlined-secondary.md)

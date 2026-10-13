@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0011]
 sources: [SRC-0001, SRC-0002, SRC-0003]
-decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152, DEC-0153, DEC-0154]
+decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152, DEC-0153, DEC-0154, DEC-0159]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -201,10 +201,17 @@ site is not a goal of its own.
 - **The stage shows the place's own photograph** (issue #18). `/dein-ort?ort=…`
   today shows the same photograph (a bus stop near Pasewalk) for every place.
   What a place without a photograph shows is `Q-0089`.
-- **The stage is less full** (issues #20, #23). The hint line and the
-  data-protection paragraph go, the placeholder carries "Tipp den Ortsnamen ein",
-  the location link sits directly under the field, and in state A the search for
-  another place stays in the stage.
+- ~~**The stage is less full** (issues #20, #23).~~ **Done (DEC-0159).** The hint
+  line and the data-protection paragraph go, the placeholder carries "Tipp den
+  Ortsnamen ein", the location link sits directly under the field, and in state A
+  the search for another place stays in the stage, its placeholder "Anderen Ort
+  suchen" (the issue title's wording: the review's "Suche nach einem anderen Ort …"
+  is 270 px wide and a 360 px phone leaves the field 173 px). The location
+  control's explanation stays its accessible description and tooltip, so
+  TS-WEB-0010 D5's "states what will happen" still holds. The lower "search for
+  another place" section now stands in state B only — in state A the stage
+  already carries it, and two searches for one job would ask twice. Asserted by
+  A18.
 - **The stage's dates stand on a neutral black ground** (issue #19, `Q-0090`).
 
 ## Acceptance criteria
@@ -219,6 +226,7 @@ site is not a goal of its own.
 | TS-WEB-0020-A16 | e2e | With JavaScript disabled, the story stage shows exactly one story. A click on another hour shows that story, and the stage's height does not change. The hours are one radio group, and an arrow key moves the pick (DEC-0153). |
 | TS-WEB-0020-A17 | unit | Every image entry with an `anchor` has `anchor.y ≤ 38` (the scrim's clear part), a declared `focal` point, and its `stage_file` on disk. Both locales of `/dein-ort` carry the stage's photographs this way (DEC-0153). |
 | TS-WEB-0020-A14 | e2e | Each story's rendered example carries D3's category id for that story (the "Example category" column); a mismatch — any category other than the one the story names — fails. [F-4-2, round 4] |
+| TS-WEB-0020-A18 | e2e | At 360 × 800 the stage (`#focus-block`) carries exactly one place search in S0 and in state A, both `de` and `en`: the same 56 px field with the typeahead, the placeholder carrying the instruction in S0 ("Tipp den Ortsnamen ein") and the search for another place in state A ("Anderen Ort suchen" / "Search another place"), uncut; a bound label; no helper line; the "use my location" control at most 12 px under the field. The submit carries `data-cta="primary"` in S0 only; in state A the page still has exactly one primary (the handover) and exactly one place search (DEC-0159, issues #20, #23). |
 | TS-WEB-0020-A5 | static | The four stories' `proof_ref`s resolve to ids present in the installed `@schafe-vorm-fenster/proof` version; a missing id fails the build (a wrong id is a defect, an uncleared id is not). |
 | TS-WEB-0020-A6 | e2e | **Superseded, deviation recorded (D3, DEC-0149).** Written text: with every testimonial uncleared the page renders four three-part stories, no quote anywhere. Actual, shipped behaviour, per `e2e/pages/dein-ort.spec.ts`: four named, attributed, verbatim quotes render pre-clearance, each with a `clearance: pending` note; no anonymous quote, paraphrase, or "users say" substitute, ever — that half is unchanged and still the criterion. |
 | TS-WEB-0020-A7 | e2e | The homescreen block renders both the iOS and the Android instruction with an iPhone UA and with an Android UA, byte-identical DOM; its action resolves to `{APP_HOST}/{slug}`; a missing screenshot renders the hatched surface and a non-matching one the placeholder badge. |

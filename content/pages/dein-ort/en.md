@@ -156,7 +156,7 @@ block 1's offer text changes.
 
 **Geo badge on the module:** From the region
 
-**Hint below the search field:** Type the place name — suggestions start at the second letter.
+**Placeholder in the search field:** Type the place name
 
 **Transition into the module:** This is what it looks like once a place is in:
 
@@ -173,7 +173,13 @@ start once a place is settled.
 
 **CTA label (primary):** Add the {place} calendar to your home screen
 
-Place name and dates are live data from `/api/places/{slug}/events`.
+**Placeholder in the search field (another place):** Search another place
+
+Place name and dates are live data from `/api/places/{slug}/events`. The
+search stays on the stage in state A (review 2026-10-12, issue #23; the
+issue title's wording — the review's longer sentence is wider than the field
+on a phone and would be cut); slot 0's placeholder carries the instruction and no hint
+stands under the field (issue #20, DEC-0159).
 
 ## Slot 2 — Focus block, state B (place on file, no dates)
 

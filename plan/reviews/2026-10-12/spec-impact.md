@@ -7,7 +7,7 @@ left the per-page points in the review text and never tracked them; this table i
 what fixes that. Decisions are in `specs/decisions/DEC-0154--…`.
 
 **Status:** *spec changed* = the specification now says it. *owed* = the specification
-names it and the work package follows. *decision* = the owner has to decide first.
+names it and the work package follows. *done* = implemented with its test. *decision* = the owner has to decide first.
 
 ## Startseite
 
@@ -15,12 +15,12 @@ names it and the work package follows. *decision* = the owner has to decide firs
 | --- | --- | --- | --- | --- |
 | The place's own photo, not always the same | #18 | Funktion · Design | SRC-0014 §Photo surface ("A place shows its own photograph"), `Q-0089`, TS-WEB-0020 owed list | spec changed · decision |
 | Date section still dark green | #19 | Design | SRC-0014 §Neutrals, Open decisions 6, `Q-0090` | decision |
-| Stage too full: hint, location link, explanation | #20 | Design · Text | TS-WEB-0020 owed list, TS-WEB-0019 | owed |
+| Stage too full: hint, location link, explanation | #20 | Design · Text | TS-WEB-0019 D2/A17, TS-WEB-0020 A18, SRC-0014 §Search field, DEC-0159 | done |
 | Headline "Was ist los in deinem Dorf?" | #21 | Text | content `home/de.md`, `en.md` | owed |
 | Date selection: diverse, culture, rare before regular | #22 | Funktion | TS-WEB-0008 owed list | owed |
-| Keep the search for another place in the stage | #23 | Design | TS-WEB-0020 owed list | owed |
-| Remove the counter "8.543 Termine" | #24 | Funktion · Design | TS-WEB-0019 D3 block 2d, A14 (superseded), CG-034 | spec changed |
-| "Fehlt deine Veranstaltung?" more prominent | #25 | Design | TS-WEB-0019 | owed |
+| Keep the search for another place in the stage | #23 | Design | TS-WEB-0020 A18, DEC-0159 | done |
+| Remove the counter "8.543 Termine" | #24 | Funktion · Design | TS-WEB-0019 D3 block 2d, A14 (superseded by A18), CG-034, DEC-0159 | done |
+| "Fehlt deine Veranstaltung?" more prominent | #25 | Design | TS-WEB-0019 D3 row 1, A19, DEC-0159 | done |
 | WhatsApp module: real graphics | #26 | Design | SRC-0014 §Explain module | owed |
 | WhatsApp module on the phone: swipe and arrows | #27 | Funktion · Design | contract `explain-module` | owed |
 | CTAs white on white (`/` and `/mitmachen`) | #28 | Design | SRC-0014 §Button, contract §2, Open decisions 7, `Q-0091` | spec changed · decision |

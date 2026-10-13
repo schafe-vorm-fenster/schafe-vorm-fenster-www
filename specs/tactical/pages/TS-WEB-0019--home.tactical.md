@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0010]
 sources: [SRC-0001, SRC-0003, SRC-0014]
-decisions: [DEC-0048, DEC-0081, DEC-0082, DEC-0105, DEC-0109, DEC-0110, DEC-0129, DEC-0154]
+decisions: [DEC-0048, DEC-0081, DEC-0082, DEC-0105, DEC-0109, DEC-0110, DEC-0129, DEC-0154, DEC-0159]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -42,7 +42,7 @@ Representation per TS-WEB-0006 D1; this table fixes only the values.
 | `primaryConversion` | `save-calendar-to-homescreen` — the only goal the SRC-0003 conversion map assigns to home |
 | `equalWeightConversion` | none |
 | `audiences` | all, ordered by entry context — the order is a runtime property of the proof stream (D4), not a second list |
-| `liveModules` | place search · position 1 · position 2 · position 4 (TS-WEB-0008 D1) |
+| `liveModules` | place search · position 1 · position 2 (TS-WEB-0008 D1). Position 4, the live counters, left the page with DEC-0154 (issue #24) |
 | `proofSlots` | 5 (DEC-0048) |
 
 "No conversion of its own" (SRC-0003) is discharged by the fact that the
@@ -68,6 +68,18 @@ S1 is what is prerendered and what a crawler and a JS-less visitor get
 re-implementing the `/dein-ort` focus-job shift: on `/` the shift stays
 a link, on `/dein-ort` it is the page (TS-WEB-0008 D4) — Open point 2.
 
+**The stage search is compact** [FIXED: DEC-0159, owner's review 2026-10-12,
+issues #20 and #23]. The field's placeholder carries the instruction ("Tipp den
+Ortsnamen ein"); no helper line stands under it; the "use my location"
+control stands directly beneath the field, and the sentence saying what it
+does is its accessible description and tooltip, not standing text
+(TS-WEB-0010 D5 still holds: the control states what will happen). The field
+keeps its bound label. Because the search module is in the prerendered shell
+in every state, it stays on the stage when a place is known (S2, S3) — on `/`
+that is what issue #23 asks for, and its placeholder does not vary by state:
+a placeholder is an attribute of the input, which may not stream (below).
+Asserted by A17.
+
 **Where the boundary runs** (DEC-0078). The place is a request value, so the
 part of block 1 that varies with it arrives through `<Suspense>` — that is
 what keeps `/` a prerendered route. What may sit inside that boundary is
@@ -84,11 +96,11 @@ component, which is how the "identical reserved space" below is held.
 
 | # | Block | Content | Fed by | Rhythm section |
 | --- | --- | --- | --- | --- |
-| 1 | focus | D2 | TS-WEB-0008 D7 (search), D1 pos 1 | PHOTO hero, then COLOUR ink for the live dates |
+| 1 | focus | D2; the live dates end in the **hand-off row** to 2a — the review's "Fehlt deine Veranstaltung? Jetzt selbst eintragen" as a row of its own under the rows, with one `secondary` button to the publishing path (`/mitmachen`), never `primary` (DEC-0159, issue #25; SRC-0017 CG-008). Not in S3, which already is the invitation | TS-WEB-0008 D7 (search), D1 pos 1 | PHOTO hero, then COLOUR ink for the live dates |
 | 2a | mechanism blocks | exactly three, one per mechanism, order per D3a — **three scene blocks, one of which contains the explain module** (D3a, DEC-0109, DEC-0110) | content (TS-WEB-0007) + one live instance each, the module's standing below it (TS-WEB-0006 D7) | COLOUR / PHOTO, alternating per SRC-0014. Three scene blocks are three ordinary rhythm sections, so the alternation is exactly the constraint it was before DEC-0109 and is satisfiable in any D3a order |
 | 2b | provenance | the provenance **scene** — the third scene of 2a is this block. It was "the who-built-this stamps" until 2026-09-26: the origin sentence that stood apart as its own stamp element is struck by the 2026-09-22 owner review, and `SRC-0017` CG-033/CG-040 put "gebaut" and "betrieben" about this product on the avoid list, so there is nothing left for a second element to carry (DEC-0129 §5). Amended, not moved: the block keeps this position, this ground and its way to `/ueber-uns` | content | COLOUR violet |
 | 2c | proof stream | 5 elements | TS-WEB-0005 (D4 below) | COLOUR / PHOTO cards |
-| 2d | ~~counters~~ **removed (DEC-0154)** | ~~position 4~~ | ~~TS-WEB-0008 D8~~ | The owner's review of 2026-10-12: "Termine, die gerade im Kalender stehen — 8.543 Termine" says nothing to the reader. The home page carries no counter. The render and its test follow with issue #24 |
+| 2d | ~~counters~~ **removed (DEC-0154)** | ~~position 4~~ | ~~TS-WEB-0008 D8~~ | The owner's review of 2026-10-12: "Termine, die gerade im Kalender stehen — 8.543 Termine" says nothing to the reader. The home page carries no counter. Render and test removed with issue #24 (DEC-0159); A18 asserts the absence |
 | 3 | context band | the three non-focus jobs | TS-WEB-0006 D5, job registry | COLOUR paper |
 | 4 | closing CTA | identical to the block-1 primary (TS-WEB-0006 D6) | — | COLOUR paper |
 
@@ -212,7 +224,7 @@ inside the module is the component's and unchanged.
 | place search | `/api/places/search` | block 1, S1; shell + client, works without JS |
 | position 1 — dates in the place | `/api/places/{slug}/events` | block 1, S2; cached island |
 | position 2 — this week nearby | `/api/nearby` | block 1, S3; cached island |
-| position 4 — live counters | `/api/stats` | **removed from the home page (DEC-0154).** Until issue #24 lands, block 2d still renders the dates figure |
+| position 4 — live counters | `/api/stats` | **removed from the home page (DEC-0154).** Issue #24 removed the render; `/` no longer requests `/api/stats` (A18). `/deine-region` keeps its own counter (TS-WEB-0026) |
 
 Emptiness, staleness and failure are three different things (TS-WEB-0008 D5);
 the tier chain, the "Stand: …" label and the skeleton geometry are
@@ -242,15 +254,14 @@ not conversion.
   space is identical so no state swap shifts layout (SRC-0014) — and as
   long as the search field itself is in neither branch but in the
   prerendered shell (D2 above, TS-WEB-0009 D2, DEC-0078).
-- [FREE] Component and file naming; where block 2d's counters sit inside
-  2b or 2c.
+- [FREE] Component and file naming.
 - [FREE] All copy. The content phase writes it (repository working rule 4).
 
 ## Acceptance criteria
 
 | ID | Level | Check |
 | --- | --- | --- |
-| TS-WEB-0019-A1 | static | The manifest of `/` carries exactly the D1 values: `focusJob` = `know-what-is-on`, `primaryConversion` = `save-calendar-to-homescreen`, no `equalWeightConversion`, four live modules, `proofSlots` = 5. |
+| TS-WEB-0019-A1 | static | The manifest of `/` carries exactly the D1 values: `focusJob` = `know-what-is-on`, `primaryConversion` = `save-calendar-to-homescreen`, no `equalWeightConversion`, three live modules (four until DEC-0154 removed the counters, issue #24), `proofSlots` = 5. |
 | TS-WEB-0019-A2 | e2e | Open `/` in a fresh private window, deny the geolocation prompt, send no `?ort=` and no referrer. The first screen shows a search input; exactly one element on the page carries `data-cta="primary"` and it is that search's submit; no element in the first screen links to another page to "see what is on". |
 | TS-WEB-0019-A3 | e2e | Open `/?ort=<covered place with dates>`. Block 1 shows the place name and exactly 3 event rows; the primary CTA opens the place calendar on `app.*` and carries the place slug. |
 | TS-WEB-0019-A4 | e2e | Open `/?ort=<covered place with no dates>`. Block 1 shows the nearby module under a heading that names its radius (not the place), plus a publish-the-first-date CTA targeting the registration route. No text claims dates in that place. |
@@ -263,15 +274,18 @@ not conversion.
 | TS-WEB-0019-A11 | e2e | Disable JavaScript and load `/`. The page is complete: search present, all 3 blocks of 2a — three scenes, the `whatsapp` one showing its opener, its module at state 1 with all three step lines (the reduced-motion fallback already requires that state, DEC-0105 §6) and its live event row beneath — 5 proof elements, context band, closing CTA; no skeleton and no empty box remains. |
 | TS-WEB-0019-A12 | static | The JSON-LD graph of `/` contains one `WebSite` and one full `Organization` node and no `Event` node; no other page emits a second full `Organization`. |
 | TS-WEB-0019-A13 | e2e | With the analytics collector observed: the calendar-open click of A3 emits `save-calendar-to-homescreen` with `stage=handover` exactly once; the search submit of A2, a scene click and a context-band click emit no conversion event. |
-| TS-WEB-0019-A14 | e2e | **Superseded, DEC-0154.** Written text: the counter block renders only the dates figure. New rule: the home page carries **no counter figure at all**, no dates figure, no places figure, no updates-today figure, no static traction number. The test `e2e/pages/home.spec.ts` keeps asserting the old text until issue #24 changes it with the render. |
+| TS-WEB-0019-A14 | e2e | **Superseded by A18, DEC-0154.** Written text: the counter block renders only the dates figure. Its test was removed with the render (issue #24, DEC-0159). |
 | TS-WEB-0019-A15 | manual | The eight-point compliance check of SRC-0001 passes for the home brief, with point 8 (stage 0 complete on its own) evidenced by A2 and A11. |
 | TS-WEB-0019-A16 | e2e | Open `/` (and `/en`) over a throttled document so the streamed branch is still on the wire at first paint, and type a place name into the hero search with real key events as soon as the field exists. After the page settles the field still carries the typed value and its submit lands on the place route with it; across the load exactly **one** element ever carries the field's id. The same holds on every other route with a place search. |
+| TS-WEB-0019-A17 | e2e | At 360 × 800 on `/` and `/en`, the hero search's placeholder is the instruction ("Tipp den Ortsnamen ein" / "Type the place name") and fits the field uncut; its `label` still names the field ("Dein Ort" / "Your place"); the hero prints no helper line; the "use my location" control (≥ 44 px) stands at most 12 px below the field with nothing between them, and its explanation is its `aria-describedby` text and `title`, not visible text (D2, DEC-0159, issue #20). |
+| TS-WEB-0019-A18 | e2e | `/`, `/en` and `/?ort=<covered place>` render no counter: no `#live-counters`, no counter label, and no request to `/api/stats` during the load (D3 block 2d, DEC-0154, issue #24). Supersedes A14. |
+| TS-WEB-0019-A19 | e2e | On `/` (S1) and `/?ort=<covered place with dates>` (S2), the live-dates section ends in exactly one hand-off row (`data-handoff`) below its last event row: the question at more than body size and exactly one `data-cta="secondary"` control resolving to `/mitmachen`; the row carries no `primary`, and the page still has exactly one visible `data-cta="primary"` (D3 row 1, DEC-0159, issue #25). |
 
 ## Coverage
 
 | Requirement | Aspect discharged here | Discharged by | Owned elsewhere |
 | --- | --- | --- | --- |
-| FUN-WEB-0010 (`/` exists, focus job set by entry context with default "know what is on", primary conversion = the focus job's CTA, none of its own) | the **composition**: manifest values, above-the-fold states, block sequence, scene and proof counts, module set, page-level metadata and the single event | D1–D7 · A1–A16 | the **route** `/` itself — its place in the URL inventory, its rendering layer, navigation and the link facade: TS-WEB-0004 D1/D2/D4/D6. The generic composition rules it obeys: TS-WEB-0006 D2–D7. Module behaviour: TS-WEB-0008. Proof selection: TS-WEB-0005. Stage resolution: TS-WEB-0010. |
+| FUN-WEB-0010 (`/` exists, focus job set by entry context with default "know what is on", primary conversion = the focus job's CTA, none of its own) | the **composition**: manifest values, above-the-fold states, block sequence, scene and proof counts, module set, page-level metadata and the single event | D1–D7 · A1–A19 | the **route** `/` itself — its place in the URL inventory, its rendering layer, navigation and the link facade: TS-WEB-0004 D1/D2/D4/D6. The generic composition rules it obeys: TS-WEB-0006 D2–D7. Module behaviour: TS-WEB-0008. Proof selection: TS-WEB-0005. Stage resolution: TS-WEB-0010. |
 
 ## Open points
 

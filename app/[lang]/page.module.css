@@ -4,16 +4,45 @@
  */
 
 /*
- * The live block's hand-off line (SRC-0017 CG-008). It stands under the
- * counter on the `ink` section, at meta size: the list above it is the
- * argument, this line is what to do about its gaps. `--ground-kicker` is the
- * ground's own quiet label colour, published beside `--ground-link`, so the
- * line reads on ink without naming a colour of its own.
+ * The live block's hand-off to block 2a (SRC-0017 CG-008) — issue #25 of the
+ * owner's review of 2026-10-12: "super, könnte aber prominenter gestaltet
+ * sein". It was a meta-size line in the kicker colour under the counter; it
+ * is now a row of its own on the `ink` ground: a hairline above it (the same
+ * `text-2` divider the dark event rows use, so it reads as the list's last
+ * row rather than as a card), the question at card size in `paper`, and one
+ * secondary button — `paper` on `ink`, the one ground where the guide's
+ * secondary is legal (SRC-0014 §Button). It never takes the primary
+ * treatment: the page's one `data-cta="primary"` is block 1's (TS-WEB-0019 D2).
+ *
+ * Stacked on the phone; from `md` the question and the button share the row,
+ * the button keeping its own width and wrapping under the question where the
+ * two do not fit. Nothing is truncated (TS-WEB-0017 D2).
  */
 .handoff {
-  color: var(--ground-kicker);
-  font-size: var(--type-meta-size);
-  line-height: var(--leading-relaxed);
+  align-items: flex-start;
+  border-top: 1px solid var(--color-neutral-text2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+}
+
+.handoffQuestion {
+  color: var(--color-neutral-paper);
+  font-size: var(--type-card-size);
+  font-weight: 700;
+  letter-spacing: var(--type-card-tracking);
+  line-height: var(--type-card-leading);
   margin: 0;
   max-width: var(--measure-reading);
+}
+
+@media (min-width: 40rem) {
+  .handoff {
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
 }

@@ -638,6 +638,50 @@ test.describe("TS-WEB-0020 — your place", () => {
     ]);
   });
 
+  for (const [path, placeholder, primary] of [
+    ["/dein-ort", "Tipp den Ortsnamen ein", true],
+    [`/dein-ort?ort=${PLACE_WITH_DATES}`, "Anderen Ort suchen", false],
+    [`/en/your-place?ort=${PLACE_WITH_DATES}`, "Search another place", false],
+  ] as const) {
+    test(`TS-WEB-0020-A18: the stage keeps one compact search on ${path}`, async ({ page }) => {
+      await page.setViewportSize({ width: 360, height: 800 });
+      await page.goto(path);
+      const hero = page.locator("#focus-block");
+      const field = hero.locator("#ort-suche-fokus");
+      await expect(field).toHaveCount(1);
+      await expect(field).toHaveAttribute("placeholder", placeholder);
+      await expect(page.locator('label[for="ort-suche-fokus"]')).not.toBeEmpty();
+
+      // Same field in S0 and in state A: the 56 px pill, the typeahead.
+      const pill = await field.locator("xpath=ancestor::form").boundingBox();
+      expect(Math.round(pill!.height)).toBe(56);
+      await expect(field).toHaveAttribute("role", "combobox", { timeout: 15_000 });
+
+      // The primary marker sits on the submit only while no place is known.
+      await expect(hero.locator('[data-cta="primary"]')).toHaveCount(primary ? 1 : 0);
+      await expect(page.locator('main [data-cta="primary"]')).toHaveCount(1);
+
+      // No hint line; the location control directly under the field.
+      expect(await hero.innerText()).not.toMatch(/Vorschläge kommen|suggestions start/u);
+      const control = await hero.locator("[data-locate-control]").boundingBox();
+      const gap = control!.y - (pill!.y + pill!.height);
+      expect(gap).toBeGreaterThanOrEqual(0);
+      expect(gap).toBeLessThanOrEqual(12);
+
+      // A placeholder cannot wrap, so it has to fit at 360 px.
+      const fits = await field.evaluate((input: HTMLInputElement) => {
+        const style = getComputedStyle(input, "::placeholder");
+        const context = document.createElement("canvas").getContext("2d")!;
+        context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+        return context.measureText(input.placeholder).width <= input.clientWidth;
+      });
+      expect(fits, "the placeholder is not truncated at 360 px").toBe(true);
+
+      // Exactly one place search for "another place" on the page in state A.
+      if (!primary) await expect(page.locator('main input[name="ort"]')).toHaveCount(1);
+    });
+  }
+
   test("TS-WEB-0006-A15: `/dein-ort` is a first-level page and renders no breadcrumb", async ({
     page,
   }) => {
@@ -687,9 +731,9 @@ test.describe("TS-WEB-0020 — your place", () => {
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
     await expect(page.locator('[data-block="story-stage"]')).toHaveCount(1);
     await expect(page.locator("#homescreen")).toHaveCount(1);
-    const hint = (await page.locator("main").textContent()) ?? "";
-    // The English search hint (`dictionary.search.hint`, en) — the search takes a
-    // place name, and no surface says "postcode" any more (DEC-0079 §1).
-    expect(hint).toContain("place name");
+    // The English search instruction — since issue #20 it is the stage field's
+    // placeholder, not a hint line under it (TS-WEB-0020-A18). The search takes
+    // a place name, and no surface says "postcode" any more (DEC-0079 §1).
+    await expect(page.locator("#ort-suche-fokus")).toHaveAttribute("placeholder", /place name/u);
   });
 });
