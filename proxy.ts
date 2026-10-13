@@ -36,15 +36,16 @@ import {
 } from "@/src/lib/personalization/entry-handover";
 import { canonicalHostFor, domainConfigFor, normaliseHost } from "@/src/lib/routes/host-matrix";
 import { landingDomainBlocks } from "@/src/lib/routes/landing-domain";
-import {
-  isUnservablePath,
-  notFoundLocale,
-  NOT_FOUND_LOCALE_HEADER,
-  NOT_FOUND_PATH,
-} from "@/src/lib/routes/not-found-routing";
+import { isUnservablePath, notFoundPathFor } from "@/src/lib/routes/not-found-routing";
 import { placeHop } from "@/src/lib/routes/place-hop";
 import { suggestedLanguage, suggestionServerTiming } from "@/src/lib/routes/locale-suggestion";
-import { NOT_FOUND_ENTRY, scriptHashesFor } from "@/src/lib/security/csp-hashes";
+import {
+  llmsVariantFor,
+  llmsVariantPath,
+  robotsVariantFor,
+  robotsVariantPath,
+} from "@/src/lib/routes/static-variants";
+import { scriptHashesFor } from "@/src/lib/security/csp-hashes";
 import {
   contentSecurityPolicy,
   strictTransportSecurity,
@@ -123,15 +124,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   // those are and why the target has two segments.
   const unservable = !blocked && isUnservablePath(request.nextUrl.pathname);
 
-  // The 404's language, computed where the URL still exists (row 37): the
-  // surface itself sits above `[lang]` and has neither a language parameter
-  // nor a path. Set on every request, so the fall-through 404 of an unknown
-  // `/en/…` sub-path reads it too.
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set(
-    NOT_FOUND_LOCALE_HEADER,
-    notFoundLocale(request.nextUrl.pathname, domain.tldDefault),
-  );
   // TS-WEB-0010 D2 step 2 — the entry-context handover (DEC-0140). The `Referer`
   // header is a request value only this file sees before the render, and
   // TS-WEB-0019 D3a orders block 2a of `/` by the trait derived from it. What
@@ -154,27 +147,49 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
 
   const passthrough = { request: { headers: requestHeaders } };
 
+  // DEC-0164 — the build-time variants. Three surfaces depend on the host or on
+  // the URL's language, and each has a small, countable set of outputs, so
+  // every output is prerendered at its own path and this file only chooses
+  // which one answers (`static-variants.ts`). It renders nothing:
+  //
+  //  - an unservable URL takes the prerendered 404 of its language — the path
+  //    prefix first, the domain's TLD default second (TS-WEB-0001 D1/D4);
+  //  - `/robots.txt` takes `noindex` unless TS-WEB-0015 D3's predicate holds,
+  //    and then the variant naming its own canonical host — the same
+  //    predicate, evaluated here, that sets the `X-Robots-Tag` below;
+  //  - `/llms.txt` takes its domain's variant (TS-WEB-0004 D1/A5).
+  const pathname = request.nextUrl.pathname;
+  const vercelEnv = process.env.VERCEL_ENV;
+  const variant =
+    blocked || unservable
+      ? notFoundPathFor(pathname, domain.tldDefault)
+      : pathname === "/robots.txt"
+        ? robotsVariantPath(robotsVariantFor(vercelEnv, request.headers.get("host")))
+        : pathname === "/llms.txt"
+          ? llmsVariantPath(llmsVariantFor(host))
+          : undefined;
+
   // The blocked, the unknown and the redirected request all still get the full
   // header set: TS-WEB-0014 D4 makes the CSP one source for *every* route and
   // TS-WEB-0015 D3 runs the robots rule on "all routes incl. assets", so neither a
   // 404 nor a 307 is an exception to either.
   const response = hop
     ? NextResponse.redirect(new URL(hop, request.url), 307)
-    : blocked || unservable
-      ? NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url), passthrough)
+    : variant
+      ? NextResponse.rewrite(new URL(variant, request.url), passthrough)
       : NextResponse.next(passthrough);
-  const vercelEnv = process.env.VERCEL_ENV;
   const environment = environmentFrom(vercelEnv);
 
   // DEC-0045 as amended by DEC-0163: build-time hashes, no per-request
   // nonce, and **per page** — every page is static HTML, so its inline
   // scripts are fixed at build time and the header carries only its own
   // (`csp-hashes.ts`). The map is a file in this function's own bundle, read
-  // once per deployment: no network, no request-derived origin (F-2-36). The
-  // blocked and the unservable request are answered by the 404 surface, so
-  // they take its entry; `next dev` has no map, the set is `[]`, and
-  // `csp.ts` falls back to its dev-only `'unsafe-inline'`.
-  const hashes = scriptHashesFor(blocked || unservable ? NOT_FOUND_ENTRY : request.nextUrl.pathname);
+  // once per deployment: no network, no request-derived origin (F-2-36). A
+  // rewritten request is answered by the variant it was rewritten onto, so it
+  // takes that file's entry — the 404 of its language carries its own hashes
+  // (DEC-0164); `next dev` has no map, the set is `[]`, and `csp.ts` falls
+  // back to its dev-only `'unsafe-inline'`.
+  const hashes = scriptHashesFor(variant ?? pathname);
 
   response.headers.set(
     "Content-Security-Policy",

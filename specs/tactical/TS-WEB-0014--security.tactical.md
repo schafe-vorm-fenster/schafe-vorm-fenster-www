@@ -111,7 +111,8 @@ cost is why.
    browser from this site's own `/api/*` routes, query-dependent states are
    read in the browser, and the build **fails** for any page whose prerender
    revalidates (`scripts/csp-adapter.mjs`). The only `ƒ` routes left are the
-   API handlers, `robots.txt`, `llms.txt` and the 404 surface.
+   API handlers, `robots.txt`, `llms.txt` and the 404 surface. *(DEC-0164: those three are now prerendered variants, and the 404 in each
+   language carries its own hashes; only the API handlers remain `ƒ`.)*
 2. **Hashes are per page.** The extraction writes one map — internal page
    path → that page's hashes, plus the set every page shares — and the proxy
    sends a response only its own page's set (`csp-hashes.ts`), ~2.4 KB of

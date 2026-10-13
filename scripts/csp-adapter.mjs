@@ -53,6 +53,67 @@ function htmlPrerenders(outputs) {
 }
 
 /**
+ * The framework's own 404 document (`app/global-not-found.tsx`). Next emits it
+ * as a static `/404` file rather than a prerender once it is complete, so it
+ * is not among `htmlPrerenders`. Keyed `/_not-found` — the route it renders —
+ * because that is the entry `csp-hashes.ts` falls back to for a path no page
+ * claims: the only HTML such a path can produce is this document (DEC-0164).
+ */
+export const FRAMEWORK_NOT_FOUND_KEY = "/_not-found";
+
+function frameworkNotFound(outputs) {
+  const file = outputs.staticFiles?.find(
+    (output) => output.pathname === "/404" && output.filePath?.endsWith(".html"),
+  );
+  return file ? [{ pathname: FRAMEWORK_NOT_FOUND_KEY, filePath: file.filePath }] : [];
+}
+
+/**
+ * DEC-0164: the per-language 404 documents. `proxy.ts` rewrites every URL the
+ * site does not serve onto one of these; `notFoundVariantPath()` in
+ * `src/lib/routes/static-variants.ts` builds the same prefix, and its test
+ * holds the two equal.
+ */
+export const NOT_FOUND_VARIANT_PREFIX = "/variants/not-found/";
+
+/**
+ * Gives every per-language 404 prerender its status, 404.
+ *
+ * The page renders the complete document instead of calling `notFound()`,
+ * because a `notFound()` raised during the prerender is stored as Next's empty
+ * `__next_error__` shell (measured; `app/variants/not-found/[lang]/page.tsx`
+ * has the reason). The status is therefore set here, on the two records that
+ * carry it: the prerender's `.meta` file, which `next start` serves from, and
+ * `fallback.initialStatus` of the adapter output, which the platform adapter
+ * deploys (it runs after this one and reads the same `outputs`). Nothing is
+ * rendered or rewritten; one number changes.
+ *
+ * Throws when no such prerender exists: a 404 that silently answered 200 is
+ * the failure this exists to prevent.
+ */
+export async function markNotFoundVariants(prerenders) {
+  const variants = prerenders.filter((prerender) => prerender.pathname.startsWith(NOT_FOUND_VARIANT_PREFIX));
+  const documents = variants.filter((prerender) => !prerender.pathname.includes("["));
+  if (documents.length === 0) {
+    throw new Error(
+      `[csp-hashes] no prerendered 404 document under ${NOT_FOUND_VARIANT_PREFIX} — every unknown URL would answer without one (DEC-0164)`,
+    );
+  }
+  for (const prerender of variants) {
+    prerender.fallback.initialStatus = 404;
+    const metaFile = prerender.fallback.filePath.replace(/\.html$/, ".meta");
+    let meta = {};
+    try {
+      meta = JSON.parse(await readFile(metaFile, "utf8"));
+    } catch (error) {
+      if (error.code !== "ENOENT") throw error;
+    }
+    await writeFile(metaFile, JSON.stringify({ ...meta, status: 404 }), "utf8");
+  }
+  return documents.map((prerender) => prerender.pathname);
+}
+
+/**
  * DEC-0163 §2: a page whose HTML can regenerate after the build is a page
  * whose inline scripts can change after the build. Only real pages count —
  * the `[lang]` app shells are never served (an unknown first segment is a 404
@@ -86,10 +147,17 @@ const adapter = {
       );
     }
 
+    const notFoundVariants = await markNotFoundVariants(prerenders);
+    console.log(`[csp-hashes] 404 status set on ${notFoundVariants.join(", ")}`);
+
+    const documents = [
+      ...prerenders.map((prerender) => ({ pathname: prerender.pathname, filePath: prerender.fallback.filePath })),
+      ...frameworkNotFound(ctx.outputs),
+    ];
     const entries = await Promise.all(
-      prerenders.map(async (prerender) => ({
-        pathname: prerender.pathname,
-        html: await readFile(prerender.fallback.filePath, "utf8"),
+      documents.map(async ({ pathname, filePath }) => ({
+        pathname,
+        html: await readFile(filePath, "utf8"),
       })),
     );
     const { pages, common } = buildHashMap(entries);

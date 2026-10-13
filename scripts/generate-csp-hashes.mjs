@@ -22,8 +22,7 @@
  * it"):
  *
  *  - zero pages, or no page with an inline script at all, fails the build (a
- *    single page without one — `/_not-found`, which renders per request —
- *    simply has no entry and gets the common set);
+ *    single page without one simply has no entry and gets the fallback set);
  *  - a page with more distinct hashes than `MAX_PAGE_HASHES` fails the build —
  *    the cap exists so a wrong map cannot inflate a header, and until #59 a
  *    cap that the real set exceeded **silently truncated** it (128 of 429),

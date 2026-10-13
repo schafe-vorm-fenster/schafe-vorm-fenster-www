@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0002, CON-WEB-0062, FUN-WEB-0142, FUN-WEB-0146, CON-WEB-0067, FUN-WEB-0010, FUN-WEB-0011, FUN-WEB-0012, FUN-WEB-0013, FUN-WEB-0014, FUN-WEB-0015, FUN-WEB-0016, FUN-WEB-0017, FUN-WEB-0018, FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061, FUN-WEB-0145, FUN-WEB-0147, CON-WEB-0064, FUN-WEB-0027, FUN-WEB-0158, FUN-WEB-0159, FUN-WEB-0048, FUN-WEB-0067, FUN-WEB-0073, FUN-WEB-0169, FUN-WEB-0170, CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045]
 sources: [SRC-0003]
-decisions: [DEC-0002, DEC-0024, DEC-0025, DEC-0032, DEC-0035, DEC-0163]
+decisions: [DEC-0002, DEC-0024, DEC-0025, DEC-0032, DEC-0035, DEC-0163, DEC-0164]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -108,6 +108,14 @@ app/
 └── llms.txt/route.ts
 ```
 
+> **Amended by DEC-0164 (2026-10-13).** `robots.ts` and `llms.txt/route.ts`
+> are replaced by build-time variants: `app/variants/robots/[variant]/route.ts`,
+> `app/variants/llms/[variant]/route.ts`, and the per-language 404 document
+> `app/variants/not-found/[lang]/` with its own root layout. `proxy.ts`
+> rewrites `/robots.txt`, `/llms.txt` and every unservable URL onto the right
+> variant. `global-not-found.tsx` stays for what Next's router alone treats as
+> unknown, and it is static.
+
 `[lang]` is validated against the domain's language set
 (`generateStaticParams` + `dynamicParams = false`); an unsupported code
 404s (TS-WEB-0001 D4).
@@ -204,6 +212,8 @@ they are not proxied (their hosts are CSP-allowlisted, TS-WEB-0003 D4/CON-WEB-00
 ### D6 — Rendering per route [FIXED: DEC-0019; assignment PROPOSED]
 
 > **Amended by DEC-0163 (2026-10-13).** Every content page is fully static — no ISR, no streamed module: live modules render their frame and skeleton in the HTML and load their data in the browser from the D5 routes. No page reads a request value; the remaining dynamic routes are the BFF handlers, `robots.txt`, `llms.txt` and the 404 surface.
+>
+> **Amended by DEC-0164 (2026-10-13).** `robots.txt`, `llms.txt` and the 404 are static too. Each distinct output is prerendered at its own path: one `llms.txt` per domain, one robots body per canonical host plus `noindex`, and one 404 document per language with status 404 set at build time. The proxy only rewrites onto the right one. The BFF handlers are the only dynamic routes.
 
 | Routes | Mode |
 | --- | --- |
@@ -271,6 +281,7 @@ labels (D4).
 | TS-WEB-0004-A3 | integration | Landing-only domain: `/` and legal routes 200, `/mitmachen` 404. |
 | TS-WEB-0004-A4 | integration | 404 renders place search + jobs band with status 404 and `noindex`; 500 renders without any data dependency. |
 | TS-WEB-0004-A5 | integration | `sitemap.xml`, `robots.txt`, `llms.txt` respond per domain; sitemap lists only that domain's URLs in its languages. |
+| TS-WEB-0004-A12 | integration | `/llms.txt` and the 404 are build-time files. There is one prerendered `llms.txt` per D1 domain and one 404 document per served language, each at its own path, and neither reads the request. The proxy rewrites `/llms.txt` onto the request domain's variant (unknown hosts mirror `.de`) and every unservable URL onto the 404 of the URL's language (path prefix first, then the TLD default). The 404 document carries status 404 from the build. |
 | TS-WEB-0004-A6 | e2e | No external API host appears in any client-initiated request except envoy and Portalize (verified via CSP report / network trace). |
 | TS-WEB-0004-A7 | integration | BFF routes return 429 beyond the rate limit and reject foreign origins. |
 | TS-WEB-0004-A8 | e2e | Navigation labels match D4 exactly on every page; every internal link resolves within the D1 inventory. |
@@ -298,7 +309,7 @@ labels (D4).
 | CON-WEB-0061 (never place contact inside the footer) | D4 |
 | FUN-WEB-0146 (serve one route /rechtliches (EN /legal) as a) | D1, D4, D8 |
 | CON-WEB-0067 (never rename or remove a legal anchor) | D1, D4, D8 |
-| FUN-WEB-0145 (answer with status 404 and noindex) | D2, D6 · A4 |
+| FUN-WEB-0145 (answer with status 404 and noindex) | D2, D6 · A4, A12 |
 | FUN-WEB-0147 (render one sentence) | D2, D6 · A4 |
 | CON-WEB-0064 (never guess a place slug from an unknown path) | D2, D6 · A4 |
 | FUN-WEB-0027 (500) | D2, D6 · A4 |
@@ -310,7 +321,7 @@ labels (D4).
 | FUN-WEB-0067 (other domains navigable) | D1 landing set · A3 |
 | FUN-WEB-0073 (sitemaps + canonicals) | D1, sitemap.ts · A5 |
 | FUN-WEB-0169 (explicitly allow AI crawlers) | D1 · A5 |
-| FUN-WEB-0170 (maintain a short description and its core facts) | D1 · A5 |
+| FUN-WEB-0170 (maintain a short description and its core facts) | D1 · A5, A12 |
 | CON-WEB-0042 (never expose an external API token to the client) | D5 · A6 |
 | CON-WEB-0043 (call ecosystem APIs server-side only) | D5 · A6 |
 | CON-WEB-0044 (protect its client-facing endpoints with rate limiting and an …) | D5 · A7 |

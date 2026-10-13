@@ -12,6 +12,7 @@ import {
   redirectTable,
 } from "@/src/lib/routes/next-routing";
 import { redirectMapViolations } from "@/src/lib/routes/redirect-map";
+import { llmsVariantFor, llmsVariantPath } from "@/src/lib/routes/static-variants";
 import {
   d1Inventory,
   D1_NON_REGISTRY_ROWS,
@@ -133,12 +134,16 @@ describe("TS-WEB-0004-A1: every path of the D1 inventory exists in both language
         expect(existsSync(file), `${row.path} → ${file}`).toBe(true);
         continue;
       }
+      // DEC-0164: `/robots.txt` and `/llms.txt` are answered by the build-time
+      // variant the proxy rewrites them onto, one handler per surface.
       const file =
         row.path === "/sitemap.xml"
           ? join(ROOT, "app", "sitemap.ts")
           : row.path === "/robots.txt"
-            ? join(ROOT, "app", "robots.ts")
-            : join(ROOT, "app", row.path.slice(1), "route.ts");
+            ? join(ROOT, "app", "variants", "robots", "[variant]", "route.ts")
+            : row.path === "/llms.txt"
+              ? join(ROOT, "app", "variants", "llms", "[variant]", "route.ts")
+              : join(ROOT, "app", row.path.slice(1), "route.ts");
       expect(existsSync(file), `${row.path} → ${file}`).toBe(true);
     }
   });
@@ -176,10 +181,13 @@ describe("TS-WEB-0004-A1: every path of the D1 inventory exists in both language
   });
 
   it("answers every machine row through its real handler", async () => {
-    const llms = (await import("@/app/llms.txt/route")) as {
-      GET: () => Promise<Response>;
-    };
-    const llmsResponse = await llms.GET();
+    // Since DEC-0164 the handler is the build-time variant the proxy rewrites
+    // `/llms.txt` onto; `.de`'s variant is what `localhost` gets as well.
+    const llms = await import("@/app/variants/llms/[variant]/route");
+    const variant = llmsVariantFor("localhost:3100");
+    const llmsResponse = await llms.GET(new Request(`http://localhost${llmsVariantPath(variant)}`), {
+      params: Promise.resolve({ variant }),
+    });
     expect(llmsResponse.headers.get("content-type")).toContain("text/plain");
     const body = await llmsResponse.text();
     expect(body.startsWith("# ")).toBe(true);
@@ -288,45 +296,54 @@ describe("TS-WEB-0004-A4: an unknown path answers 404, noindex, inside the langu
     expect(textOf(tree).length).toBeGreaterThan(0);
   });
 
-  it("marks both 404 surfaces noindex, follow", async () => {
+  it("marks every 404 surface noindex, follow", async () => {
     const notFound = (await import("@/app/[lang]/not-found")) as {
       metadata: Metadata;
     };
     expect(notFound.metadata.robots).toBe("noindex, follow");
     const global = (await import("@/app/global-not-found")) as unknown as {
-      generateMetadata: () => Promise<Metadata>;
-      default: () => Promise<unknown>;
+      metadata: Metadata;
+      default: () => unknown;
     };
-    expect((await global.generateMetadata()).robots).toBe("noindex, follow");
-    expect(textOf(await global.default())).toContain("Seite nicht gefunden");
+    expect(global.metadata.robots).toBe("noindex, follow");
+    const document = global.default() as { props: { lang: string } };
+    expect(document.props.lang).toBe("de");
+    const variant = await import("@/app/variants/not-found/[lang]/layout");
+    for (const lang of LOCALES) {
+      const metadata = await variant.generateMetadata({ params: Promise.resolve({ lang }) });
+      expect(metadata.robots, lang).toBe("noindex, follow");
+    }
   });
 
   /**
-   * F-2-70: the global 404 sits above `[lang]` and has no language parameter,
-   * so `proxy.ts` resolves the language from the URL and hands it down on a
-   * request header. Both halves — the body and the `<title>` — read it.
+   * DEC-0164: the 404 every unknown URL is rewritten onto is prerendered once
+   * per language — its language is a path parameter, not a request header.
+   * Its status is set by the build adapter (`scripts/csp-adapter.test.ts`).
    */
-  it("renders the global 404 in the language the proxy resolved", async () => {
-    const global = (await import("@/app/global-not-found")) as unknown as {
-      generateMetadata: () => Promise<Metadata>;
-      default: () => Promise<unknown>;
-    };
-    const { NOT_FOUND_LOCALE_HEADER } = await import("./not-found-routing");
+  it("TS-WEB-0004-A12: prerenders the 404 once per language, in that language", async () => {
+    const layout = await import("@/app/variants/not-found/[lang]/layout");
+    const page = await import("@/app/variants/not-found/[lang]/page");
 
-    requestHeaders[NOT_FOUND_LOCALE_HEADER] = "en";
-    expect(textOf(await global.default())).toContain("Page not found");
-    expect(String((await global.generateMetadata()).title)).toContain(
-      "Page not found",
-    );
+    expect(layout.generateStaticParams()).toEqual(LOCALES.map((lang) => ({ lang })));
 
-    requestHeaders[NOT_FOUND_LOCALE_HEADER] = "de";
-    expect(textOf(await global.default())).toContain("Seite nicht gefunden");
-
-    // A header that is not a language this site serves falls back to the TLD
-    // default (TS-WEB-0001 D4), it never renders half a page.
-    requestHeaders[NOT_FOUND_LOCALE_HEADER] = "uk";
-    expect(textOf(await global.default())).toContain("Seite nicht gefunden");
-    delete requestHeaders[NOT_FOUND_LOCALE_HEADER];
+    for (const [lang, heading] of [
+      ["de", "Seite nicht gefunden"],
+      ["en", "Page not found"],
+    ] as const) {
+      const html = (await layout.default({
+        children: null,
+        params: Promise.resolve({ lang }),
+      })) as { props: { lang: string } };
+      expect(html.props.lang).toBe(lang);
+      const element = (await page.default({ params: Promise.resolve({ lang }) })) as {
+        type: (props: unknown) => unknown;
+        props: unknown;
+      };
+      expect(textOf(element.type(element.props))).toContain(heading);
+      const metadata = await layout.generateMetadata({ params: Promise.resolve({ lang }) });
+      expect(String(metadata.title)).toContain(heading);
+      expect(metadata.robots).toBe("noindex, follow");
+    }
   });
 
   it("renders the 404 in the language of the request", async () => {

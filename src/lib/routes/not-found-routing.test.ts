@@ -1,11 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import {
-  isUnservablePath,
-  notFoundLocale,
-  NOT_FOUND_PATH,
-} from "./not-found-routing";
-import { normalisePath } from "./routes";
+import { isUnservablePath, notFoundLocale, notFoundPathFor } from "./not-found-routing";
+import { internalPath, normalisePath, ROUTE_IDS } from "./routes";
+import { VARIANTS_PREFIX } from "./static-variants";
 import { everyD1Path } from "./url-inventory";
 import { LOCALES } from "../i18n/locales";
 
@@ -35,11 +32,16 @@ describe("isUnservablePath: every path the site really serves stays served", () 
     "/_vercel/insights/view",
     "/_vercel/speed-insights/vitals",
     "/_vercel/image",
-    "/en/anything",
-    "/en/does-not-exist",
     "/de/mitmachen",
-    NOT_FOUND_PATH,
   ])("%s is servable or answers for itself", (path) => {
+    expect(isUnservablePath(path)).toBe(false);
+  });
+});
+
+describe("isUnservablePath: every route's internal path still answers for itself", () => {
+  // `/en/dein-ort` renders the page `/en/your-place` is rewritten onto. It
+  // always did; DEC-0164 has no mandate to change that answer.
+  it.each(ROUTE_IDS.map((route) => internalPath(route, "en")))("%s is servable", (path) => {
     expect(isUnservablePath(path)).toBe(false);
   });
 });
@@ -61,20 +63,37 @@ describe("isUnservablePath: the URLs that produced the empty 404 document", () =
     "/nope.css",
     "/nope.png",
     "/robots.txt.map",
+    // DEC-0164: an unknown path under a served language prefix used to fall
+    // through to `global-not-found`, which read the language off a request
+    // header. It now takes the prerendered English 404 like any other.
+    "/en/anything",
+    "/en/does-not-exist",
+    "/en/mitmachen/nope",
+    // The build-time variants are reached only through the proxy's rewrite.
+    "/variants/robots/noindex",
+    "/variants/llms/www-schafe-vorm-fenster-de",
+    "/variants/not-found/de",
   ])("%s is routed to the 404 surface", (path) => {
     expect(isUnservablePath(path)).toBe(true);
   });
 });
 
-describe("NOT_FOUND_PATH matches nothing in the route tree", () => {
-  it("has two segments, which is what keeps it out of `app/[lang]`", () => {
-    expect(NOT_FOUND_PATH.split("/").filter(Boolean)).toHaveLength(2);
+describe("TS-WEB-0004-A12: the 404 target is the prerendered document of the URL's language", () => {
+  it.each([
+    ["/dies-gibt-es-nicht", undefined, "/de"],
+    ["/en/anything", undefined, "/en"],
+    ["/mitmachen", "en", "/en"],
+    ["/mitmachen", "pl", "/de"],
+    ["/en/mitmachen", "de", "/en"],
+  ] as const)("%s (TLD default %s) goes to …/not-found%s", (path, tld, suffix) => {
+    expect(notFoundPathFor(path, tld)).toBe(`${VARIANTS_PREFIX}/not-found${suffix}`);
   });
 
   it("is not a path the site serves", () => {
-    expect(everyD1Path().map(normalisePath)).not.toContain(
-      normalisePath(NOT_FOUND_PATH),
-    );
+    const served = everyD1Path().map(normalisePath);
+    for (const locale of LOCALES) {
+      expect(served).not.toContain(notFoundPathFor(`/${locale}/x`));
+    }
   });
 });
 

@@ -73,6 +73,8 @@ The owner's constraints (2026-10-13): no per-request rendering, no
    revalidates (`scripts/csp-adapter.mjs`). Build route table: every page `○`;
    the remaining `ƒ` are the API handlers, `robots.txt`, `llms.txt` and
    `/_not-found` (the 404 surface keeps its request-header language, row 149).
+   *Amended by DEC-0164:* these three are now prerendered variants the proxy
+   rewrites onto, and the only remaining `ƒ` are the API handlers.
 3. **Per-page hashes, delivered inside the build** (amends DEC-0045 and
    TS-WEB-0014 D3). A Next adapter (`adapterPath`) wraps whichever adapter the
    platform brings (Vercel sets `NEXT_ADAPTER_PATH`) and, in `onBuildComplete`,

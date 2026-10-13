@@ -67,6 +67,17 @@ describe("DEC-0163: one page's hashes, keyed by the path the build wrote", () =>
     expect(scriptHashesFor("/_next/static/chunks/x.js", directory)).toEqual([hash("C")]);
   });
 
+  it("TS-WEB-0014-A14: serves the framework 404's set for a path no page claims, when the build wrote one", () => {
+    // DEC-0164: an unknown path under a reserved prefix (`/api/nope`) is
+    // answered by `global-not-found`; its inline scripts must be covered.
+    writeMap({
+      common: [hash("C")],
+      pages: { "/de/ueber-uns": [hash("C"), hash("U")], "/_not-found": [hash("C"), hash("N")] },
+    });
+    expect(scriptHashesFor("/api/nope", directory)).toEqual([hash("C"), hash("N")]);
+    expect(scriptHashesFor("/ueber-uns", directory)).toEqual([hash("C"), hash("U")]);
+  });
+
   it("answers [] when no map exists — `next dev`", () => {
     expect(scriptHashesFor("/", directory)).toEqual([]);
   });
