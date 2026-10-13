@@ -377,7 +377,7 @@ for the spec side, and needs the content frontmatter schema
 | TS-WEB-0017-A1 | static | `package.json`: `next` present; no dependency from the D1 deny-set; every `dependencies` entry has a reason line in `stack.allow.json`, and every register entry exists as a dependency. |
 | TS-WEB-0017-A2 | static | `pnpm-lock.yaml` is the only lockfile; `packageManager` pins pnpm; `.npmrc` maps the `@schafe-vorm-fenster` scope to the private registry and the `@leafcutter-strict` scope to the method registry (DEC-0085). |
 | TS-WEB-0017-A3 | static | Root `tsconfig.json` exists with `strict: true`; `pnpm typecheck` is a script, is part of `pnpm check`, and exits 0. |
-| TS-WEB-0017-A4 | static | Generated CSS contains no `@media (max-width: …)`, and every `min-width` value in it is one of the six `breakpoint.*` token values — a literal px breakpoint at a call site fails. |
+| TS-WEB-0017-A4 | static | Generated CSS contains no `@media (max-width: …)`, and every `min-width` media feature in it is one of the six `breakpoint.*` token values — a literal px breakpoint at a call site fails. A `@container` `min-width` is not a viewport switch point: its value is one of the container thresholds SRC-0014 names (today `30rem`, §Event row), and `scripts/check-brand.ts` holds the list (DEC-0153 amendment, 2026-10-13). |
 | TS-WEB-0017-A5 | static | No colour literal and no `font-family` literal outside the single brand-token import file (`app/`, `src/`, stylesheets). |
 | TS-WEB-0017-A6 | static | No logo, mark, or font file is committed in this repository; every logo reference is a brand-package subpath import. |
 | TS-WEB-0017-A7 | static | The brand package is pinned to an exact version; the lockfile version matches the version recorded in D3. |
@@ -407,6 +407,7 @@ for the spec side, and needs the content frontmatter schema
 | TS-WEB-0017-A35 | e2e | The context band at 390, 820 and 1440 px, on `/`, `/en` and the merged `/ueber-uns`: exactly three link cards, 1, 2 and 3 of them in the first row; each card at least 44 px high with a radius of at least half its height, a fill that is not its ground, a 40 × 40 px icon well and a 44 × 44 px disc of neutral black; no label or blurb clipped or ellipsised; outside the merged block the mono kicker stands beside the heading from 820 px and below it at 390 px (DEC-0156, issue #39). `e2e/context-band.spec.ts`. |
 | TS-WEB-0017-A41 | e2e | The site footer of SRC-0014 §Site footer (DEC-0158), at 390 and 1280 px: its ground is `--color-neutral-ink`; the three legal links are `paper`, bold and not underlined at rest, and a keyboard-focused one shows a solid `focus-dark` outline; the active language segment is `lime-500` with `ink` text and the other `paper`, on a track that is neither the fill nor transparent; the phone stacks logo, switch, legal links and copyright, the desktop pairs logo and switch in row one and links and copyright on the base line. |
 | TS-WEB-0017-A42 | e2e | The footer carries one copyright line, `© <year> <legal name>`, in both languages, with the legal name read from `content/legal/imprint.md` (TS-WEB-0011 D4), never written into code (DEC-0158 §3). |
+| TS-WEB-0017-A43 | e2e | Every event row in a list or in the story stage, at 360, 390, 428, 640, 768, 1024, 1280 and 1920 px on `/` and `/dein-ort?ort=…`, shows its meta line whole (no ellipsis), with the longest category label the site carries and the meta "Wolgast · 19 km · 16:00" answered by the test itself; a row at least 30 rem wide shows the category as the SRC-0014 badge, a narrower one as the bare glyph, the label in the markup in both forms; in the story stage's 439 px panel at 1280 px the meta stays whole. The explain module's calendar picture (`StageCalendar`) is not a list and is out of scope (DEC-0153 amendment, 2026-10-13). `e2e/event-row.spec.ts`. |
 
 ### D7 — One icon set [FIXED: DEC-0056, SRC-0014#icons]
 
@@ -436,7 +437,7 @@ name used resolves to an export of it.
 | CON-WEB-0049 (optimise its layout for the phone first) | D2 · A4, A8, A9, A23, A24, A25, A26, A27 |
 | CON-WEB-0050 (keep the tablet and desktop layout close to the …) | D2 · A4, A8, A9, A23, A24, A25, A26, A27 |
 | CON-WEB-0051 (take its breakpoints from @schafe-vorm-fenster/brand-design (breakpoint.xs…2xl) | D2 · A4, A8, A9 |
-| CON-WEB-0003 (brand kit binding) | D3 (with TS-WEB-0002 D3, TS-WEB-0003 D3) · A5, A6, A7, A15, A22, A28, A29, A30, A35, A41, A42 |
+| CON-WEB-0003 (brand kit binding) | D3 (with TS-WEB-0002 D3, TS-WEB-0003 D3) · A5, A6, A7, A15, A22, A28, A29, A30, A35, A41, A42, A43 |
 | CON-WEB-0052 (never reimplement the village calendars) | D4 · A10, A11, A12 |
 | FUN-WEB-0131 (embed what app.schafe-vorm-fenster.de serves rather than hold its own) | D4 · A10, A11, A12 |
 | CON-WEB-0053 (be written in TypeScript throughout) | D5 · A2, A3, A13 |

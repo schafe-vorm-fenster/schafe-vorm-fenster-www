@@ -586,6 +586,19 @@ a list that looks like something else proves nothing. The three-step drafts
 drop the month and the category — they follow this rule, not the other way
 round.
 
+**The category's form follows the row, not the screen** (owner's decision of
+2026-10-13, `DEC-0153` amendment). A row at least **30 rem** wide shows the
+category as the badge; a narrower row shows the bare 24 px glyph in the
+category colour, with the label in the markup for anyone listening
+(`categoryDisplay.listRow`). The threshold is measured: date column 52 px, a
+16 px gap, the meta "Wolgast · 19 km · 16:00" (157 px), a 16 px gap and the
+longest category badge, "BILDUNG & GESUNDHEIT" (234 px), are 475 px. So the
+meta line — place, distance, time — is never cut off by its category, in a
+1184 px desktop list or in the story stage's 439 px panel. It is a container
+query on the row (`container: event-row`), not a viewport switch point, and
+`30rem` is the one container threshold this guide names
+(`TS-WEB-0017-A4`, `A43`).
+
 ### Event-status badge
 
 A status is not a category. A row may carry one status badge in addition to
@@ -824,7 +837,7 @@ and three cards with a quote each are three times the module.
 | Head | Kicker badge with `clock` (e.g. *Ein Tag im Dorf*) · section headline · lead in `lime-200` |
 | Media | One per story: the photograph with the neutral scrim (*Photo surface*, the same two gradients and text shadow), or, for a story without a photograph, a `violet-500` ground with the story's glyph as a large `violet-600` watermark. Never an empty frame. The quote sits at the bottom: a `lime-500` quotation mark, the quote in 22–34 px / 700, and the speaker with a 44 px `lime-500` initials disc |
 | Panel | `paper`. The hours as 44 px pills (`surface`, chosen one `ink`), the hour in mono 36–52 px beside a 44 px icon well, the story headline (sub head), the story (body), then **"Im Kalender"** with **one live date of the story's own category** (`TS-WEB-0020` D3, A14), the onward action and "Weiter um …" |
-| Layout | Below `xl` media above panel; from `xl` 7 : 5 side by side (*Layout Grid*). Media at least 400 px tall, from `xl` `clamp(400px, 46cqi, 640px)` |
+| Layout | Below `xl` media above panel; from `xl` 7 : 5 side by side (*Layout Grid*). Media **below `md` a flat band at least 220 px tall** — the quote on it sets the rest (274 px at 390, 301 px at 360, measured 2026-10-13) — **from `md` at least 400 px**, from `xl` `clamp(400px, 46cqi, 640px)`. The phone band is the owner's decision of 2026-10-13 (`DEC-0153` amendment); the desktop stays as the board draws it |
 | Picking | A **native radio group**: the hours are the radios' labels, arrows move the pick, `:has(:checked)` shows it. It works **without JavaScript** and needs none. "Weiter um …" is a pointer shortcut to the next hour. Nothing advances by itself: the one auto-advance in the system is the explain module's |
 | Height | Every story's media and text share one grid cell, so the stage is as tall as its tallest story and a pick moves nothing. An unpicked story is `visibility: hidden`, out of the accessibility tree |
 | Count | 2–4 stories, **one stage per page**. A story that is its own argument with its own evidence module, like `/dein-ort`'s radius story, stays a section of its own |

@@ -91,3 +91,43 @@ cropping, and invited a solution.
   Today `/dein-ort` is the only page with a set of single-category stories.
 - The hero and other photo surfaces can take an `anchor` the same way. They
   keep their centred cut until a page declares one.
+
+## Amendment — 2026-10-13: the phone stage, and the category form in its panel
+
+Decided by the owner on 2026-10-13, after the e2e pass (PR #70) left two
+items open: G-4's section budget on `/dein-ort` and the event row's meta in
+the stage's panel.
+
+1. **The phone media is a flat band.** Below `md` the media is at least
+   220 px tall instead of 400 px (`story-stage.module.css`), and the quote on
+   it sets the rest; from `md` the board's 400 px returns, and the desktop
+   stays as the board draws it. The crop needs no new rendition: the `stage`
+   cut is positioned at its anchor (§4), which lands the focal point at the
+   same per cent of the box in any ratio. Measured on the production build at
+   the G-4 widths, the stage went from 1528 to **1404 px at 390** (de and en)
+   and from 1557 to **1460 (de) / 1431 (en) at 360** — still over the
+   1270 px budget. The quote keeps the band at 274 px (390) and 301 px (360):
+   it is verbatim (CG-027) and stays on the photograph.
+2. **Shortening the story copy does not close the rest.** The owner's second
+   step was shorter story copy that keeps its meaning. Measured by setting the
+   shortest such variants in the rendered stage (headline without *ganz*,
+   lead without *alles*, each story's headline and narrative one clause
+   shorter): **1348 px at 390, 1404 px at 360** — 78 and 134 px over. The
+   budget would need the three stories and the head cut to about half their
+   words, which no longer keeps their meaning. The copy is therefore **not**
+   changed here, and the budget and its test stay unchanged: G-4 still fails
+   on `/dein-ort` and `/en/your-place`, and the remaining step is the
+   owner's.
+3. **The category's form follows the row's own width.** The stage's panel is
+   439 px wide at 1280 px, so a viewport switch gave its example row the
+   badge, and "Wolgast · 19 km · 16:00" lost 15 of its 157 px. The event row
+   is now a size container, and the badge shows from a row width of **30 rem**,
+   measured: 52 + 16 + 157 (the meta) + 16 + 234 (the longest label,
+   "BILDUNG & GESUNDHEIT") = 475 px. The owner named "KULTUR & FREIZEIT" as the
+   longest label; the category table (`src/lib/live/categories.ts`) carries no
+   such label, and "BILDUNG & GESUNDHEIT" is wider than every label it does
+   carry. SRC-0014 §Event row, the design-system contract and
+   `TS-WEB-0017-A4` (container thresholds) and `A43` (new, with
+   `e2e/event-row.spec.ts`) say so. Below `lg` a wide row may now carry the
+   26 px badge, so the reserve `--height-event-row-tall` takes the taller of
+   badge and glyph at every width.

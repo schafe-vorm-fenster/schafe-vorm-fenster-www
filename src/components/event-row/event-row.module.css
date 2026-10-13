@@ -19,6 +19,10 @@
   /* The hairline divides rows inside a surface — no gap, no card. */
   border-top: 1px solid var(--color-neutral-line);
   column-gap: var(--space-4);
+  /* The category's form follows this row's own width, not the viewport's
+     (SRC-0014 §Event row, DEC-0153 amendment 2026-10-13): the same row is
+     1184 px in a desktop list and 439 px in the story stage's panel. */
+  container: event-row / inline-size;
   display: grid;
   grid-template-areas:
     "date title status"
@@ -138,7 +142,7 @@
 /*
  * The category — two forms of one element, `min-width` queries only.
  *
- * Phone: the brand package's `categoryDisplay.listRow`, "bare 24px icon in
+ * Narrow row: the brand package's `categoryDisplay.listRow`, "bare 24px icon in
  * the category colour". The pill was `auto`-width in a 358 px grid and a
  * 244 px category name ("BILDUNG & GESUNDHEIT") left the meta 30 px — the
  * place and the time, the two facts a visitor scans a list for, ellipsised
@@ -221,12 +225,20 @@
 }
 
 /*
- * md — 48rem / 768px: the row is wide enough for the badge SRC-0014 §Event
- * row specifies, so the same element becomes it. The glyph steps aside: a
- * badge with an 18 px icon is a *kicker* in this design system, and a
- * category is not a kicker.
+ * A row at least 30 rem wide is wide enough for the badge SRC-0014 §Event row
+ * specifies **and** a complete meta line, so the same element becomes it.
+ * The glyph steps aside: a badge with an 18 px icon is a *kicker* in this
+ * design system, and a category is not a kicker.
+ *
+ * The threshold is measured, not chosen (2026-10-13, production build, the
+ * label font at 1280 px): date column 52 + gap 16 + the meta "Wolgast · 19 km
+ * · 16:00" 157.4 + gap 16 + the longest category pill, "BILDUNG & GESUNDHEIT",
+ * 234.0 = 475.4 px, rounded up to 30 rem (480 px). A narrower row — the phone,
+ * the story stage's 439 px panel — keeps the glyph and the meta stays whole.
+ * Until then this was `@media (min-width: 48rem)`, and the stage's panel at
+ * 1280 px clipped "Wolgast · 19 km · 16:00" to 142 of its 157 px.
  */
-@media (min-width: 48rem) {
+@container event-row (min-width: 30rem) {
   .category {
     background: var(--category-fill);
     border-radius: var(--radius-pill);
