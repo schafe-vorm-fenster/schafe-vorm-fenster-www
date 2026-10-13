@@ -90,5 +90,5 @@
 }
 
 .submit:hover {
-  background: var(--color-lime-900);
+  background: var(--color-neutral-text2); /* hover on ink, DEC-0160 */
 }

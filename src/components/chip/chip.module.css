@@ -46,7 +46,9 @@
 
 /* On an ink, lime-500 or photo ground. */
 .chip.dark {
-  background: var(--color-lime-900);
+  /* `text-2`, the darkest neutral above `ink` — never a dark green (DEC-0160):
+     `paper` on it 10.26:1. */
+  background: var(--color-neutral-text2);
   color: var(--color-neutral-paper);
 }
 
@@ -61,5 +63,5 @@
 }
 
 .chip.selected:hover {
-  background: var(--color-lime-900);
+  background: var(--color-neutral-text2); /* DEC-0160 */
 }

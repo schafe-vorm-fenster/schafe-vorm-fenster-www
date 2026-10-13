@@ -37,9 +37,11 @@
  * depend on it.
  */
 .link.secondary {
-  background: var(--color-neutral-paper);
+  /* The ground's secondary pair, as `button` reads it (DEC-0160). */
+  background: var(--ground-secondary-fill);
+  border: 2px solid var(--ground-secondary-border);
   border-radius: var(--radius-pill);
-  color: var(--color-neutral-ink);
+  color: var(--ground-secondary-text);
   font-weight: 700;
   min-height: var(--height-control);
   padding: 0 var(--space-6);
@@ -47,7 +49,8 @@
 }
 
 .link.secondary:hover {
-  background: var(--color-neutral-surface);
+  background: var(--ground-secondary-fill-hover);
+  color: var(--ground-secondary-text-hover);
 }
 
 .quiet {

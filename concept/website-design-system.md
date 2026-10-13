@@ -1,7 +1,7 @@
 ---
 title: "Website Design System — www.schafe-vorm-fenster.de"
 created_at: 2026-09-10
-updated_at: 2026-10-12
+updated_at: 2026-10-13
 status: draft
 source: workshop
 intent: inform
@@ -77,8 +77,8 @@ text colour is ever `#000000` or `#FFFFFF`.
 
 | Token | Hex | Use |
 | --- | --- | --- |
-| `ink` | `#000000` | Primary text, dark sections, primary button fill, control wells. **Neutral black since 2026-10-12** (`DEC-0155`): it was `#171D0D`, which reads as dark green across a section, and dark green as a surface leaves the design. One value for the text and the dark ground; `brand-design` 2.9.0 carries it |
-| `text-2` | `#39412C` | Body copy on light surfaces |
+| `ink` | `#000000` | Primary text, dark sections, primary button fill, control wells. **Neutral black since 2026-10-12** (`DEC-0155`): it was `#171D0D`, which reads as dark green across a section, and dark green as a surface leaves the design. One value for the text and the dark ground; `brand-design` 2.9.0 carries it, and the website is pinned to it (`DEC-0160`) |
+| `text-2` | `#39412C` | Body copy on light surfaces; **the hover of an `ink` fill** and the dark chip (`DEC-0160`): `paper` on it 10.26:1, `lime-500` 6.32:1. The darkest neutral above `ink`; the token sheet has no grey step between them |
 | `muted` | `#606657` | Labels, meta, placeholder text |
 | `border` | `#6F7467` | Input outlines where an outline is unavoidable |
 | `line` | `#D1D6CB` | Hairline dividers inside a surface |
@@ -100,8 +100,16 @@ the colour of a paragraph. `border` carries no type at any size.
 | `lime-400` | `#B6DE6D` | Icons and links on ink; hairline on a lime ground |
 | `lime-500` | `#A4D822` | Primary action, active state, headline accent, highlight band |
 | `lime-600` | `#83AF09` | Category: merchants (always with `ink` text — paper on it is 2.49:1) |
-| `lime-800` | `#486202` | Links and CTA text on light, category: official |
-| `lime-900` | `#2D3F01` | Text on a lime-500 surface, chips on lime |
+| `lime-800` | `#486202` | Links and CTA text on light |
+| `lime-900` | `#2D3F01` | Text on a lime-500 surface |
+
+**`lime-700` to `lime-950` are never a fill** (`DEC-0155`, `DEC-0160`). Dark
+green is for text, links and icons. A hover on `ink` is `text-2`, "Amtlich"
+and every kicker badge that was dark green is `ink` with `paper` (20.17:1),
+and a chip on a dark ground is `text-2` with `paper`. `TS-WEB-0017-A30`
+(`check:brand`) fails a `background`, `background-color` or `fill` that names
+one of the four, directly or through a custom property, and a board that
+paints one.
 
 ### Violet — the voice colour
 
@@ -147,8 +155,8 @@ margin and is therefore the one that carries type.
 
 **Version.** All three roles shipped in **2.8.0** (PR **#447**, merged
 2026-09-23, merge commit `a1201c4`), and **the pin moved on 2026-09-25**:
-`package.json` carries the exact version **`2.8.1`** where it carried
-`0.1.3`, so all three are consumable here now. The stand-in is gone with it:
+`package.json` carried the exact version **`2.8.1`** where it carried
+`0.1.3` (**`2.9.0`** since 2026-10-13, `DEC-0160`), so all three are consumable here now. The stand-in is gone with it:
 `--color-placeholder-ground` was deleted from `app/styles/brand.css`, its one
 call site (`app/styles/components.css` `--placeholder-ground`) reads
 `--color-archive-ground` directly, and `scripts/check-contrast.ts` measures
@@ -310,9 +318,10 @@ from the package, with no override behind either.
 - **Borders and shadows:** none. A hairline divides rows inside a surface;
   contrast between surfaces does the rest.
 
-**Three named exceptions to "no borders", and no more:** the search-result
-overlay's edge, the excluded tag's outline, and the `verschoben` badge when
-it sits on a `paper` ground. Each one is a case where an element has left
+**Four named exceptions to "no borders", and no more:** the search-result
+overlay's edge, the excluded tag's outline, the `verschoben` badge when
+it sits on a `paper` ground, and the 2 px `ink` border of the secondary
+action on a light ground (`DEC-0160`). Each one is a case where an element has left
 the flow or lost its fill and would otherwise have no boundary at all. A new
 exception needs a decision, not a stylesheet.
 
@@ -438,16 +447,18 @@ pattern.
 | Primary on light | `ink` | `paper` | The one main action per section |
 | Primary on dark | `lime-500` | `ink` | Same, inside an ink or photo section |
 | Pulse | `himbeere-600` | `paper` | Paid conversion only |
-| Secondary | `paper` | `ink` | Alternative action on a **dark or photo ground only**. On a `paper` ground it has the same fill as its ground and disappears (measured on the review preview: `/` "Jetzt kostenlos anmelden" and `/mitmachen` "Flyer per WhatsApp schicken", both `#F9FBF7` on `#F9FBF7`) |
+| Secondary on dark | `paper` | `ink` | Alternative action on an `ink`, `violet-500` or photo ground |
+| Secondary on light | transparent, **2 px `ink` border** | `ink` | Alternative action on `paper`, `surface`, `surface-2`, `lime-100` or `lime-500` (`DEC-0160`). Hover: `ink` fill, `paper` label. `ink` on `paper` 20.17:1, on `surface` 18.51:1, on `lime-100` 17.95:1, on `lime-500` 12.42:1. A `paper` pill on `paper` disappeared (review preview: `/` "Jetzt kostenlos anmelden", `/mitmachen` "Flyer per WhatsApp schicken", `#F9FBF7` on `#F9FBF7`) |
 | Quiet | transparent | `lime-800` | Tertiary, text plus arrow |
 
 Height 56 px, padding 0 24 px, radius 999, weight 800, 18 px, with a 24 px
 `arrow-right` where the action leads onward.
 
 **A button's fill is never its ground** (`DEC-0154`, owner's review
-2026-10-12). Which variant a secondary action takes on a light ground is open
-(*Open decisions* 7): the guide has no light-ground secondary, and the only
-borders it allows are the three named exceptions.
+2026-10-12). The ground decides the secondary pair, as it decides the primary
+one: it publishes `--ground-secondary-*`, and `button` and `outbound-link`
+read it (`DEC-0160`). Primary on light hovers to `text-2` (`paper` label
+10.26:1), never to a dark green.
 
 ### Search field
 
@@ -575,7 +586,7 @@ its category badge, never instead of it.
 | `abgesagt` | `#B02A1C` (error) | `paper` | 6.31:1 |
 
 On a `paper` ground the `verschoben` badge takes a 1 px `line` hairline —
-the only way a paper badge has an edge, and one of the three named border
+the only way a paper badge has an edge, and one of the four named border
 exceptions.
 
 ### Quote card
@@ -1386,7 +1397,7 @@ still forbidden.
 ## Do Not
 
 - No borders, no drop shadows, no cards floating on a surface, outside the
-  three named exceptions.
+  four named exceptions.
 - No radius between 0 and 999.
 - No third typeface, no weight below 400 or between 400 and 700.
 - No photo section adjacent to another photo section.
@@ -1407,7 +1418,7 @@ still forbidden.
 
 ## Open decisions
 
-**One is open since 2026-10-12** (row 7, from the owner's review; row 6 was decided the same day); the others were taken and are written into the rules above. The three that stood here were taken on
+**None is open.** Row 7 came from the owner's review of 2026-10-12 and was decided on 2026-10-13 (`DEC-0160`); row 6 was decided on 2026-10-12; the others were taken and are written into the rules above. The three that stood here were taken on
 2026-09-23 and are written into the rules above rather than kept as
 options:
 
@@ -1417,8 +1428,8 @@ options:
 | 2 | Header contrast — solid wells or a blur primitive | **Decision 6** — the blur primitive, with a documented capability fallback to the solid ink well and a stated performance-budget interaction | *Transparent overlay header* |
 | 3 | Category taxonomy — five token keys or six guide rows | **Decision 7** — neither: the canonical list is `classification-api`'s four ids plus the `unknown` fallback, which is what the token package already carries. Event rows keep the category, as this guide always said | *Category colours* |
 | 5 | Stacked single-category stories — round 4's F-4-5 | **DEC-0153** (owner's choice of board variant 1a, 2026-10-07): one story stage instead of three sections; focal point anchored above the reading band | *Story stage*, *Photo surface* |
-| 6 | **Is the `ink` ground neutral black?** | **Decided 2026-10-12, `DEC-0155`: yes.** `neutral.ink` becomes `#000000` in `brand-design` 2.9.0 (`go-to-market-os` PR #620); one value for text and ground | Until the pin moves, `app/styles/brand.css` overrides the eight places the package writes the old value, and `TS-WEB-0017-A28` fails any other value
-| 7 | **The secondary action on a light ground** | **OPEN.** (a) the `quiet` text-plus-arrow variant; (b) a `surface`-filled secondary; (c) a named border exception | A button's fill is never its ground. Until decided, a secondary action is not placed on a `paper` or `lime` ground |
+| 6 | **Is the `ink` ground neutral black?** | **Decided 2026-10-12, `DEC-0155`: yes.** `neutral.ink` becomes `#000000` in `brand-design` 2.9.0 (`go-to-market-os` PR #620); one value for text and ground | The pin moved to `2.9.0` on 2026-10-13 (`DEC-0160`) and the interim override in `app/styles/brand.css` is deleted; `TS-WEB-0017-A28` fails any other value |
+| 7 | **The secondary action on a light ground** | **Decided 2026-10-13, `DEC-0160`: (c)** — transparent, a 2 px `ink` border, an `ink` label; the fourth named border exception | *Button*, *Spacing* (the border exceptions) |
 | 4 | Content width on desktop — round 4's F-4-1, and `DEM-0042`'s container table | **DEC-0150** (owner's design input, 2026-10-07): three tiers on the six breakpoints, a 1200 px content box, full-bleed surfaces, column placements from `xl` | *Layout Grid* |
 
 What is still **outstanding** is not a decision but work owed elsewhere, and

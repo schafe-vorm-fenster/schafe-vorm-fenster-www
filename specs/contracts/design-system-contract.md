@@ -3,8 +3,8 @@ artefact: contract
 id: SRC-0013
 status: DRAFT
 date: 2026-09-10
-updated: 2026-09-25
-decisions: [DEC-0044, DEC-0054, DEC-0104]
+updated: 2026-10-13
+decisions: [DEC-0044, DEC-0054, DEC-0104, DEC-0155, DEC-0160]
 ---
 
 # Design System Contract
@@ -39,18 +39,18 @@ bump with a changelog.
 ## What already suffices
 
 **One version number, and it is the package version.** The package is
-published as `@schafe-vorm-fenster/brand-design`, and **`latest` is 2.8.1**
-(published 2026-09-24T10:39:38Z; the published set is `0.1.0`, `0.1.1`,
-`0.1.2`, `0.1.3`, `2.6.0`, `2.7.0`, `2.8.0`, `2.8.1`). **The website is pinned
-at the exact version `2.8.1` since 2026-09-25**, where it was pinned at
-`0.1.3`. That old pin is where the two-number confusion came from: the token
+published as `@schafe-vorm-fenster/brand-design`, and **`latest` is 2.9.0**
+(the published set is `0.1.0`, `0.1.1`, `0.1.2`, `0.1.3`, `2.6.0`, `2.7.0`,
+`2.8.0`, `2.8.1`, `2.9.0`). **The website is pinned at the exact version
+`2.9.0` since 2026-10-13** (DEC-0160); it was pinned at `2.8.1` from
+2026-09-25 and at `0.1.3` before that. That old pin is where the two-number confusion came from: the token
 sheet inside `0.1.3` declares its own `meta.version` `2.6.0`, an editorial kit
 number that was then read as a package version — and `2.6.0` also exists as a
 real package version, published 2026-09-15, which is what made the confusion
 survive being noticed. That kit number is not used in this contract any more.
 **Every version stated below is a package version.**
 
-Read from the pinned package `2.8.1` — the specs consume these and restate
+Read from the pinned package `2.9.0` — the specs consume these and restate
 none of them:
 
 `color` (incl. `dark`, `category`, semantic `roles`) · `font`
@@ -67,6 +67,14 @@ were wrong; PR **#464** corrected all four and **2.8.1** publishes them, so
 **All of it is consumable here since 2026-09-25**, because the pin moved to the
 exact string `2.8.1` — see *Consuming it* below. The two stand-ins that lived in
 `app/styles/brand.css` (TS-WEB-0017 D3) are deleted with it, in that order.
+
+**2.9.0 changes one value and nothing else** (DEC-0155, DEC-0160): the old
+dark-green `ink` becomes `#000000` in the nine declarations that carried it —
+`--color-neutral-ink`, `--color-roles-fill-ink`, `--text`, `--brand-fill-text`
+(light and dark theme), the two event-status text colours and the two category
+glyphs. Measured by diffing the two token sheets on 2026-10-13: no property
+added, none removed. The interim block in `app/styles/brand.css` set exactly
+these nine and was deleted after the pin moved.
 
 ## What is still missing
 
@@ -178,8 +186,12 @@ Two of these carry a rule the manifest has to express, not only name:
   cuts the picture so that the focal point sits exactly at the anchor, and the
   component positions it at the same per cent (TS-WEB-0020-A17).
 - **A button's fill is never its ground, and an explanation is never truncated**
-  (DEC-0154, owner's review 2026-10-12). `secondary` has the fill of `paper`: it
-  is not placed on a `paper` ground (`Q-0091`). A step line of `explain-module`
+  (DEC-0154, owner's review 2026-10-12). `secondary` reads its pair from the
+  ground (DEC-0160, `Q-0091` resolved): on a light ground it is transparent with
+  a 2 px `ink` border and an `ink` label, on a dark ground the `paper` pill.
+- **No dark-green fill** (DEC-0155, DEC-0160). `lime-700` to `lime-950` are
+  never a `background` or `fill`: hover on `ink` is `text-2`, "Amtlich" and the
+  kicker badges are `ink` with `paper`. `TS-WEB-0017-A30` enforces it. A step line of `explain-module`
   wraps and is never cut with an ellipsis. Readability goes before a fixed
   height: shorter copy first, then a two-line fixed height for all three steps.
 - **`explain-module` switches layout at `lg` (48rem) and nowhere else.**

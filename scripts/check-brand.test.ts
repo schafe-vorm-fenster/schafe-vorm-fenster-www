@@ -187,3 +187,59 @@ describe("TS-WEB-0017-A28: ink is neutral black, and the retired ink is written 
     expect(a28(checkBrand(root).errors)).toEqual([]);
   });
 });
+
+describe("TS-WEB-0017-A30: no dark-green fill, in a stylesheet or a board", () => {
+  const a30 = (errors: readonly string[]) => errors.filter((e) => e.startsWith("TS-WEB-0017-A30"));
+  const darkHex = ["#2D", "3F01"].join("");
+
+  it("fails a lime-700…950 token used as a background, background-color or fill", () => {
+    const root = newRoot();
+    writeFileSync(
+      fixture("src", "components", "x.module.css"),
+      ".a:hover { background: var(--color-lime-900); }\n" +
+        ".b { background-color: var(--color-lime-800); }\n" +
+        ".c { fill: var(--color-lime-700); }\n" +
+        ".d { background: var( --color-lime-950 ); }",
+    );
+    const errors = a30(checkBrand(root).errors);
+    expect(errors).toHaveLength(4);
+    expect(errors[0]).toContain("src/components/x.module.css:1");
+    expect(errors[3]).toContain("src/components/x.module.css:4");
+  });
+
+  it("fails a fill that reads a custom property carrying a dark lime, through an alias chain, in app/ too", () => {
+    const root = newRoot();
+    writeFileSync(
+      fixture("app", "styles", "components.css"),
+      ":root { --hover-fill: var(--color-lime-900); --alias: var(--hover-fill); }",
+    );
+    writeFileSync(fixture("src", "components", "y.module.css"), ".b:hover { background: var(--alias); }");
+    const errors = a30(checkBrand(root).errors);
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toContain("--alias");
+  });
+
+  it("fails the hex of a dark lime painted as a background in a design board", () => {
+    const root = newRoot();
+    writeFileSync(fixture("concept", "v2.0", "Board.dc.html"), `<span style="display:inline-flex;background:${darkHex};color:#F9FBF7">AMTLICH</span>`);
+    expect(a30(checkBrand(root).errors)).toHaveLength(1);
+  });
+
+  it("accepts a dark lime as text, link or icon colour, and the neutral fills that replace it", () => {
+    const root = newRoot();
+    writeFileSync(
+      fixture("app", "styles", "components.css"),
+      ":root { --ground-link: var(--color-lime-800); --ground-primary-fill-hover: var(--color-neutral-text2); }",
+    );
+    writeFileSync(
+      fixture("src", "components", "z.module.css"),
+      "/* background: var(--color-lime-900) in a comment is prose */\n" +
+        ".k { color: var(--color-lime-900); }\n" +
+        ".l { color: var(--ground-link); border-color: var(--color-lime-800); }\n" +
+        ".m:hover { background: var(--ground-primary-fill-hover); }\n" +
+        ".n { background: var(--color-neutral-ink); color: var(--color-lime-500); }",
+    );
+    writeFileSync(fixture("concept", "v2.0", "Board.dc.html"), `<span style="background:#000000;color:${darkHex}">x</span>`);
+    expect(a30(checkBrand(root).errors)).toEqual([]);
+  });
+});

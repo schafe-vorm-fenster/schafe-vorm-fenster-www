@@ -119,6 +119,11 @@
    */
   --ground-link: var(--color-lime-800);
   --ground-link-hover: var(--color-lime-900);
+  /* Meta and reassurance text: `muted` on a light ground (5.70:1 on paper); a
+     dark ground republishes `lime-300` (15.03:1 on ink). DEC-0160 — the closing
+     CTA's reassurance named `muted` itself and measured 3.53:1 on the ink
+     closing block of `/` (axe, production build). */
+  --ground-meta: var(--color-neutral-muted);
   /* The section kicker's label colour on a light ground (G-3). */
   --ground-kicker: var(--color-neutral-muted);
 
@@ -135,7 +140,24 @@
    */
   --ground-primary-fill: var(--color-neutral-ink);
   --ground-primary-text: var(--color-neutral-paper);
-  --ground-primary-fill-hover: var(--color-lime-900);
+  /* Hover on an ink fill is the darkest neutral step, `text-2`: `paper` on it
+     10.26:1. Never a dark green — no `lime-700`…`950` fill (DEC-0160,
+     `TS-WEB-0017-A30`). */
+  --ground-primary-fill-hover: var(--color-neutral-text2);
+
+  /* ── The ground's own secondary control — SRC-0014 §Button, DEC-0160 ──
+   * A button's fill is never its ground (DEC-0154). On a light ground —
+   * `paper`, `surface`, `surface-2`, `lime-100`, and `lime-500` too — the
+   * secondary is transparent with a 2 px `ink` border and an `ink` label (the
+   * fourth named border exception; `ink` on `lime-100` 17.95:1, on `paper`
+   * 20.17:1). Hover fills it `ink` with a `paper` label. A dark ground (`ink`,
+   * `violet-500`, a photograph) republishes the `paper` pill it always had.
+   */
+  --ground-secondary-fill: transparent;
+  --ground-secondary-text: var(--color-neutral-ink);
+  --ground-secondary-border: var(--color-neutral-ink);
+  --ground-secondary-fill-hover: var(--color-neutral-ink);
+  --ground-secondary-text-hover: var(--color-neutral-paper);
 
   /* ── Focus ring — SRC-0014 §Accessibility ────────────────────────────── */
   --focus-ring-width: 3px;
@@ -165,7 +187,9 @@
   --category-merchants-text: var(--color-neutral-ink);
   --category-culture-fill: var(--color-violet-500);
   --category-culture-text: var(--color-neutral-paper);
-  --category-official-fill: var(--color-lime-800);
+  /* "Amtlich": `ink` with `paper`, 20.17:1 — no dark-green fill (DEC-0160).
+     A dark ground republishes the `paper` pill (`section-shell`, `event-row`). */
+  --category-official-fill: var(--color-neutral-ink);
   --category-official-text: var(--color-neutral-paper);
   --category-social-fill: var(--color-status-error);
   --category-social-text: var(--color-neutral-paper);
