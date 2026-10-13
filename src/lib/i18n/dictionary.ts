@@ -387,8 +387,8 @@ export interface Dictionary {
    * `concept/website-copy-guide.md` CG-031 ("Videotermin buchen · per
    * WhatsApp schreiben · anrufen · Mail schreiben"); `portraitAlt` is the
    * cleared alt of `content/pages/ueber-uns/{de,en}.md` (image
-   * `ueber-uns-team-jan-henrik-hempel`). `heading`, `lead`, `appointmentSub`
-   * and `outboundNote` exist only as design-draft text and are placeholders:
+   * `ueber-uns-team-jan-henrik-hempel`). `heading`, `lead` and
+   * `outboundNote` exist only as design-draft text and are placeholders:
    * the section carries `data-demo="true"` and `state/open.md` carries one
    * row per string.
    */
@@ -403,8 +403,6 @@ export interface Dictionary {
       phone: string;
       mail: string;
     };
-    /** Row 1's sub-label: what a booking covers — never a response time (CG-031). */
-    appointmentSub: string;
     /**
      * The D16 outbound marking under row 1: what activating the control
      * does and who receives what follows. A separate `meta` line, never in
@@ -620,7 +618,6 @@ const de: Dictionary = {
       mail: "Mail schreiben",
     },
     // Placeholder — design draft, state/open.md.
-    appointmentSub: "Termin im Kalender aussuchen",
     // Placeholder — the D16 sentence is copy nobody wrote yet, state/open.md.
     outboundNote: "Öffnet den Buchungskalender bei Google.",
   },
@@ -809,7 +806,6 @@ const en: Dictionary = {
       mail: "Write an e-mail",
     },
     // Placeholder — design draft, state/open.md.
-    appointmentSub: "Pick a slot in the calendar",
     // Placeholder — the D16 sentence is copy nobody wrote yet, state/open.md.
     outboundNote: "Opens the booking calendar at Google.",
   },

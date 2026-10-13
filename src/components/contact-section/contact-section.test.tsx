@@ -111,7 +111,7 @@ describe("TS-WEB-0016-A23 / D16: the outbound marking on row 1", () => {
       expect(note![0]).not.toMatch(/<(a|button|input)\b/);
       expect(stripTags(note![1]!)).toBe(dictionary(locale).contactSection.outboundNote);
 
-      // The control's own label: the row title and its sub-label, no recipient, no tab talk.
+      // The control's own label: the row title, no recipient, no tab talk.
       const label = stripTags(row1!.inner);
       expect(label).toContain(dictionary(locale).contactSection.rows.appointment);
       expect(label).not.toContain(BRIEFING_RECIPIENT);
@@ -145,9 +145,10 @@ describe("SRC-0014 §Contact section and CG-031: what the section shows", () => 
     }
   });
 
-  it("rows 2–4 show the value itself as their line — never a response time", () => {
+  it("phone and mail show the value itself as their line — never a response time", () => {
+    // The two buttons carry their title only since the tidied design (#41);
+    // the WhatsApp number is the phone row's number.
     const rows = actionRows(render("de"));
-    expect(stripTags(rows[1]!.inner)).toContain(contactChannel("whatsapp").address);
     expect(stripTags(rows[2]!.inner)).toContain(contactChannel("phone").address);
     expect(stripTags(rows[3]!.inner)).toContain(contactChannel("mail").address);
     for (const row of rows) {
@@ -155,7 +156,7 @@ describe("SRC-0014 §Contact section and CG-031: what the section shows", () => 
     }
   });
 
-  it("keeps the owner's row titles inside each link's name, hairline rows included", () => {
+  it("keeps the owner's row titles inside each link's name, phone and mail included", () => {
     for (const locale of LOCALES) {
       const rows = actionRows(render(locale));
       const titles = dictionary(locale).contactSection.rows;
@@ -166,13 +167,12 @@ describe("SRC-0014 §Contact section and CG-031: what the section shows", () => 
     }
   });
 
-  it("CG-031 budgets: title ≤ 40, lead ≤ 100, row title ≤ 24, sub-label ≤ 32", () => {
+  it("CG-031 budgets: title ≤ 40, lead ≤ 100, row title ≤ 24", () => {
     for (const locale of LOCALES) {
       const d = dictionary(locale).contactSection;
       expect(d.heading.length).toBeLessThanOrEqual(40);
       expect(d.lead.length).toBeLessThanOrEqual(100);
       for (const title of Object.values(d.rows)) expect(title.length).toBeLessThanOrEqual(24);
-      expect(d.appointmentSub.length).toBeLessThanOrEqual(32);
     }
   });
 
@@ -180,7 +180,7 @@ describe("SRC-0014 §Contact section and CG-031: what the section shows", () => 
     const html = render("de");
     expect(html).toMatch(/<section\b[^>]*data-demo="true"/);
     const svgs = html.match(/<svg\b[^>]*>/g) ?? [];
-    expect(svgs.length).toBeGreaterThanOrEqual(6);
+    expect(svgs.length).toBeGreaterThanOrEqual(4);
     for (const svg of svgs) expect(svg).toContain('aria-hidden="true"');
   });
 });

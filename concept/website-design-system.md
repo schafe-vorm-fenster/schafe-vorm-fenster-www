@@ -604,15 +604,14 @@ everywhere. There is no contact form.
   an avatar at the logo's radius, not a photo surface — the
   `ratio-portrait` 4:5 rule governs the editorial portrait on `/ueber-uns`,
   not this one.
-- Beside it the section head and the person's name at card title size.
-  One `Lead` line names the channels.
-- **Action rows**, 72 px, radius 999, full width, in order: a leading 24 px
-  icon, a bold title (18 px / 700), a sub-label beneath it (15 px / 400),
-  and a trailing 24 px `arrow-right`. The first row takes the **filled**
-  treatment (`ink` ground, `paper` title at 20.17:1, `lime-400` sub-label at
-  13.66:1); every further row is **outlined** (`paper` ground, `ink` title,
-  `muted` sub-label at 5.70:1). Each row carries its own ground, so nothing
-  is ever read against `lime-100` directly.
+- Beside it the section head and one line: the person's name in bold, then
+  the `Lead` naming the channels in `muted`.
+- **Two buttons**, pills at `height-button` (56 px), a leading 24 px icon and
+  the bold title, nothing else — no sub-label, no trailing arrow. Video
+  appointment takes the **filled** treatment (`ink` ground, `paper` title,
+  `lime-500` icon); WhatsApp is **outlined** (`paper` ground, `ink` title, a
+  2 px `ink` border, because `paper` alone does not stand off `lime-100`,
+  TS-WEB-0017-A29). Side by side from `xl`, full width and stacked below.
 - **Filled is a weight, not a conversion rank.** The first row is
   `data-cta="secondary"` — on every page, including the one whose primary
   conversion is a booking. `TS-WEB-0006 D3` allows exactly one
@@ -622,9 +621,11 @@ everywhere. There is no contact form.
   channels", which is a reading order inside one component, and the earlier
   wording "the first row is the primary treatment" was read as the marker
   and is corrected.
-- **Phone and mail rows** below them: no fill, a `lime-400` hairline above
-  each, a 24 px `phone`/`mail` icon and the number or address set in mono
-  18 px `ink`. 56 px, the whole row is the target.
+- **Phone and mail** below the buttons as one small row: no fill, no
+  hairline, a 24 px `phone`/`mail` icon and the number or address in mono at
+  meta size, `ink`. 44 px, the whole item is the target; it wraps on the
+  phone.
+- From `xl` the head takes columns 1–5 and the actions 6–12, one row.
 - Audience addressing runs through the kicker and the copy. **Never through
   the ground** — that is what makes the section recognisable.
 
@@ -1078,7 +1079,8 @@ Reference: `Design - Kontextband Section - Desktop/Tablet/Mobile.png`; as-is:
 ### Contact section, tidied
 
 Same content and same priority (video appointment first, WhatsApp second), far
-less on the field.
+less on the field. **Built 2026-10-13 (issue #41)**; *Contact section* above
+describes the result.
 
 - Desktop: **one row** on `lime-100`. Avatar (96 px, radius 999), the title
   *"Direkter Kontakt"*, the name in bold with one description line beside it;
@@ -1086,10 +1088,12 @@ less on the field.
   schreiben"* (`paper` fill); then phone and mail as one small row of mono
   text with their icons.
 - Phone: stacked in the same order, the two buttons full width.
-- Dropped from the as-is state: the sub-label under each action, the footnote
-  *"Öffnet den Buchungskalender bei Google."* and the hairlines between rows.
-  The footnote is a data-protection notice (TS-WEB-0014): it must survive
-  somewhere as a short note before it is dropped (`Q-0088`).
+- Dropped from the as-is state: the sub-label under each action and the
+  hairlines between rows. The footnote *"Öffnet den Buchungskalender bei
+  Google."* is a data-protection notice (TS-WEB-0014) and **stays**, as one
+  centred `meta` line under the buttons, until `Q-0088` is decided.
+- Deviation from the image: the white WhatsApp pill takes a 2 px `ink` border
+  (a fill is never its ground, TS-WEB-0017-A29).
 - Both actions stay `data-cta="secondary"` (`TS-WEB-0006 D3`): the dark fill is a
   visual weight, never a conversion rank.
 

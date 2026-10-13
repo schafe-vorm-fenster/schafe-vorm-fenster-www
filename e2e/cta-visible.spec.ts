@@ -42,7 +42,6 @@ const ROUTES = everyRoute().map(({ route, locale }) => ({
  * fails the route, which is the point.
  *
  * - #28: `secondary` (`paper` fill) on a `paper` ground, and on `lime-100`.
- * - #41: the contact section's two actions on `lime-100`.
  */
 const KNOWN: ReadonlyArray<{ readonly label: RegExp; readonly issue: string }> = [
   { label: /Jetzt kostenlos anmelden|Sign up for free now/, issue: "#28" },
@@ -50,7 +49,6 @@ const KNOWN: ReadonlyArray<{ readonly label: RegExp; readonly issue: string }> =
   { label: /Jetzt Kalender anmelden|Register your calendar/, issue: "#28" },
   { label: /Jetzt meine Webseite anmelden|Register my website/, issue: "#28" },
   { label: /Kalender bestellen|Order the calendar/, issue: "#28" },
-  { label: /Per WhatsApp schreiben|Write on WhatsApp/, issue: "#41" },
 ];
 
 const VIEWPORTS = [
