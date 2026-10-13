@@ -14,6 +14,11 @@
  *      red, green and blue, and the retired ink (the lime hue at 3 % chroma, dark
  *      green across a section) is written nowhere: not in authored sources, not in a board
  *      (DEC-0155).
+ *  TS-WEB-0017-A30 No dark-green fill: no `background`, `background-color` or
+ *      `fill` in a stylesheet under `app/` or `src/` names `lime-700` to
+ *      `lime-950` — as the token, as a custom property that carries it, or as
+ *      its hex — and no design board paints one as a background. Dark green is
+ *      for text, links and icons, never a fill (DEC-0155, DEC-0160).
  *  TS-WEB-0017-A22 No tinted scrim: no gradient carries `ink` or `violet`
  *      (as the alpha form of `ink` 23·29·13 or `violet` 83·27·222, a `color-mix()` or a
  *      `var(--color-neutral-ink|violet-*)`), in authored sources **and** in the
@@ -65,6 +70,7 @@ const A6 = "TS-WEB-0017-A6";
 const A19 = "TS-WEB-0017-A19";
 const A22 = "TS-WEB-0017-A22";
 const A28 = "TS-WEB-0017-A28";
+const A30 = "TS-WEB-0017-A30";
 
 /** The single file brand values are allowed to enter through (TS-WEB-0017 D3). */
 const TOKEN_FILE = "app/styles/brand.css";
@@ -134,6 +140,12 @@ function walk(dir: string): string[] {
     return statSync(full).isDirectory() ? walk(full) : [full];
   });
 }
+
+/**
+ * `lime-700` … `lime-950` of brand-design 2.9.0, as a board writes them. Built
+ * from halves: this file is itself scanned, and A5 forbids a colour literal.
+ */
+const DARK_LIME_HEX = [["65", "8805"], ["48", "6202"], ["2D", "3F01"], ["14", "1F00"]].map((h) => h.join(""));
 
 /** The design boards — a generator reads them, so they are held to the scrim rule too. */
 const BOARD_DIR = join("concept", "v2.0");
@@ -355,6 +367,63 @@ export function checkBrand(root: string): BrandCheckResult {
   ]) {
     const line = text.split("\n").findIndex((l) => retiredInk.test(l));
     if (line >= 0) fail(A28, `${rel(file)}:${line + 1}`, "the retired ink (dark green) is written here — ink is neutral black");
+  }
+
+  // --- TS-WEB-0017-A30: no dark-green fill ------------------------------------------
+  //
+  // The owner's review of 2026-10-12 (issue #57): `lime-700` to `lime-950` as a
+  // background reads as the dark green that DEC-0155 took out of the design —
+  // hover states on `ink`, the "Amtlich" badge, a chip. A contrast ratio cannot
+  // see a hue, so this reads the declaration. A custom property that carries one
+  // of the four (`--x: var(--color-lime-900)`) counts as the token itself, so a
+  // ground that publishes a dark green for a component to fill with is caught
+  // where the fill is declared.
+  const darkLime = new RegExp(
+    String.raw`var\(\s*--color-lime-(?:700|800|900|950)\s*\)|#(?:${DARK_LIME_HEX.join("|")})\b`,
+    "i",
+  );
+  const stylesheets = cssFiles.filter((f) => /^(app|src)\//.test(rel(f).split("\\").join("/")));
+  const stripped = stylesheets.map((file) => ({
+    file,
+    text: readFileSync(file, "utf8").replace(/\/\*[\s\S]*?\*\//g, (block) => block.replace(/[^\n]/g, " ")),
+  }));
+  // Custom properties that resolve to a dark lime, to a fixed point (a chain of
+  // aliases is followed as far as it goes).
+  const carriers = new Set<string>();
+  for (let grew = true; grew; ) {
+    grew = false;
+    for (const { text } of stripped)
+      for (const match of text.matchAll(/(--[a-zA-Z0-9-]+)\s*:\s*([^;{}]+)/g)) {
+        const [, name, value] = match;
+        if (carriers.has(name)) continue;
+        const viaCarrier = [...value.matchAll(/var\(\s*(--[a-zA-Z0-9-]+)/g)].some((v) => carriers.has(v[1]));
+        if (darkLime.test(value) || viaCarrier) {
+          carriers.add(name);
+          grew = true;
+        }
+      }
+  }
+  for (const { file, text } of stripped) {
+    for (const match of text.matchAll(/(?:^|[;{\s])(background(?:-color)?|fill)\s*:\s*([^;{}]+)/g)) {
+      const [, property, value] = match;
+      const direct = darkLime.exec(value);
+      const carrier = [...value.matchAll(/var\(\s*(--[a-zA-Z0-9-]+)/g)].find((v) => carriers.has(v[1]));
+      if (!direct && !carrier) continue;
+      const line = text.slice(0, match.index).split("\n").length + (match[0].startsWith("\n") ? 1 : 0);
+      fail(
+        A30,
+        `${rel(file)}:${line}`,
+        `dark-green fill \`${property}: ${value.trim()}\`${carrier ? ` (\`${carrier[1]}\` carries \`lime-700\`…\`950\`)` : ""} — dark green is for text, links and icons, never a fill; hover on \`ink\` is \`text-2\``,
+      );
+    }
+  }
+  for (const { file, text } of boardTexts) {
+    for (const match of text.matchAll(/background(?:-color)?\s*:\s*([^;"'}]+)/gi)) {
+      const direct = darkLime.exec(match[1]);
+      if (!direct) continue;
+      const line = text.slice(0, match.index).split("\n").length;
+      fail(A30, `${rel(file)}:${line}`, `dark-green fill \`${direct[0]}\` in a design board — never a fill`);
+    }
   }
 
   return { errors, cssFileCount: cssFiles.length, sourceFileCount: sourceFiles.length };

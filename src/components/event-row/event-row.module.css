@@ -40,6 +40,9 @@
 }
 
 .dark {
+  /* "Amtlich" is `ink` on light; on this ink list it is the `paper` pill (DEC-0160). */
+  --category-official-fill: var(--color-neutral-paper);
+  --category-official-text: var(--color-neutral-ink);
   border-top-color: var(--color-neutral-text2);
   color: var(--color-neutral-paper);
 }

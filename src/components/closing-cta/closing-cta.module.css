@@ -6,7 +6,9 @@
 }
 
 .reassurance {
-  color: var(--color-neutral-muted);
+  /* The ground's meta colour, never `muted` by name: on the ink closing block
+     of `/` that was 3.53:1 (DEC-0160). */
+  color: var(--ground-meta);
   font-size: var(--type-meta-size);
   margin: 0;
 }

@@ -50,6 +50,7 @@
  * both builds, without `!important` and without a tone prop the caller would
  * have to remember.
  *
+ * `secondary` reads the ground's pair the same way (DEC-0160).
  * `quiet` is the one variant with no fill of its own, so it cannot name a
  * colour: it reads `--ground-link`, which every surface publishes for the
  * ground it paints (`app/styles/components.css`).
@@ -97,14 +98,20 @@
   background: var(--color-himbeere-700);
 }
 
+/* The ground's secondary pair (`app/styles/components.css`, DEC-0160): on a
+   light ground transparent with a 2 px `ink` border, on a dark one the `paper`
+   pill. The border is drawn on both, in the fill's colour on dark, so the
+   pill keeps one size whatever it stands on. */
 .button.secondary {
-  background: var(--color-neutral-paper);
-  color: var(--color-neutral-ink);
+  background: var(--ground-secondary-fill);
+  border: 2px solid var(--ground-secondary-border);
+  color: var(--ground-secondary-text);
   text-shadow: none; /* DEC-0147 */
 }
 
 .button.secondary:hover {
-  background: var(--color-neutral-surface);
+  background: var(--ground-secondary-fill-hover);
+  color: var(--ground-secondary-text-hover);
 }
 
 .button.quiet {

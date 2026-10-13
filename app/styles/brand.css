@@ -166,7 +166,7 @@
 /*
  * Both stand-ins this file used to carry are gone, and the pin is why.
  *
- * The package is `2.8.1` since 2026-09-25 (was the exact string `0.1.3`), so
+ * The package moved to `2.8.1` on 2026-09-25 (was the exact string `0.1.3`), so
  * two declarations that existed only because the pin was old are deleted
  * rather than kept:
  *
@@ -189,31 +189,12 @@
  * ships `0.08em` where `0.1.3` shipped `0.06em`.
  */
 /*
- * Interim: `ink` is neutral black (DEC-0155, `TS-WEB-0017-A28`).
- *
- * `brand-design` 2.8.1 writes its old ink — the lime hue at 3 % chroma, dark green
- * across a whole section — and the owner decided on 2026-10-12 that dark green
- * as a surface leaves the design. The fix is in the package (`go-to-market-os`
- * PR #620, `2.9.0`); the pin is exact (DEC-0044), so it cannot move before that
- * is published. Until it does, these are the eight places the package writes the
- * old value, set to the new one. Same pattern as the interim declarations this
- * file carried until the 2.8.1 pin move: delete this block *after* the pin moves,
- * never before, and `check:brand` (A28) fails if the value drifts either way.
+ * `ink` is neutral black (DEC-0155, `TS-WEB-0017-A28`) since the pin moved to
+ * `2.9.0` on 2026-10-13 (DEC-0160). Until then this file overrode the eight
+ * places `2.8.1` wrote the old, dark-green ink; that block was deleted *after*
+ * the pin moved, never before, and `check:brand` (A28) reads the package value
+ * now.
  */
-:root {
-  --color-neutral-ink: #000000;
-  --color-roles-fill-ink: #000000;
-  --color-status-event-neu-text: #000000;
-  --color-status-event-verschoben-text: #000000;
-  --color-category-education-health-glyph: #000000;
-  --color-category-everyday-supply-glyph: #000000;
-  --text: #000000;
-  --brand-fill-text: #000000;
-}
-
-[data-theme="dark"] {
-  --brand-fill-text: #000000;
-}
 
 :root {
   /*

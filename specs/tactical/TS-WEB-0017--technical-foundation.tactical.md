@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [CON-WEB-0046, CON-WEB-0047, CON-WEB-0048, CON-WEB-0049, CON-WEB-0050, CON-WEB-0051, CON-WEB-0003, CON-WEB-0052, FUN-WEB-0131, CON-WEB-0053, CON-WEB-0054, CON-WEB-0006, CON-WEB-0055, CON-WEB-0056, CON-WEB-0057]
 sources: [SRC-0006, SRC-0008, SRC-0011, SRC-0012]
-decisions: [DEC-0002, DEC-0020, DEC-0023, DEC-0029, DEC-0031, DEC-0035, DEC-0085, DEC-0150, DEC-0151, DEC-0155]
+decisions: [DEC-0002, DEC-0020, DEC-0023, DEC-0029, DEC-0031, DEC-0035, DEC-0085, DEC-0150, DEC-0151, DEC-0155, DEC-0160]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -168,7 +168,10 @@ paths in `go-to-market-os`:
    repository is a defect: it forks the source of truth.
 3. **The version is pinned and visible.** The brand package is an exact
    version in `package.json`; a brand change reaches the website as a
-   reviewable version bump, never as a silent drift.
+   reviewable version bump, never as a silent drift. **Pinned at `2.9.0`
+   since 2026-10-13** (DEC-0160; was `2.8.1` from 2026-09-25): the version
+   that ships `ink` as neutral black (DEC-0155), so `app/styles/brand.css`
+   carries no colour override any more.
 4. **Where brand and accessibility collide, accessibility is already
    settled.** TS-WEB-0002 D3 fixes the operative rules (the brand colour is
    not a text colour on light ground; the type-weight floor). TS-WEB-0003 D3
@@ -399,7 +402,8 @@ for the spec side, and needs the content frontmatter schema
 | TS-WEB-0017-A26 | e2e | From `xl` two conversions in one hero stand in one row with at least `space-3` between them; below `xl` they stack (DEC-0116 §4 as amended by DEC-0150). |
 | TS-WEB-0017-A27 | e2e | At 1440 × 900 the live dates on `/` stand head in columns 1–4 and list in columns 5–12 (`live-module-frame` `layout="split"`). |
 | TS-WEB-0017-A28 | static | `ink` is neutral black: the effective `--color-neutral-ink` (the brand token sheet, then `app/styles/brand.css`) has equal red, green and blue, and the retired ink (the lime hue at 3 % chroma, which reads as dark green across a section) is written nowhere, in authored sources or in a design board. `pnpm check:brand` (DEC-0155). |
-| TS-WEB-0017-A29 | e2e | On every route, in both languages, at 390 and 1280 px, every `[data-cta]` with an opaque fill has at least 3:1 against the ground behind it, unless it has its own border or outline. Controls known to fail are named with their issue (#28, #41) and every other control that disappears fails the route; photo grounds are skipped (WCAG 1.4.11, DEC-0155). |
+| TS-WEB-0017-A29 | e2e | On every route, in both languages, at 390 and 1280 px, every `[data-cta]` with an opaque fill has at least 3:1 against the ground behind it, unless it has its own border or outline. Controls known to fail are named with their issue (#41; the five of #28 were fixed by DEC-0160) and every other control that disappears fails the route; photo grounds are skipped (WCAG 1.4.11, DEC-0155). |
+| TS-WEB-0017-A30 | static | No dark-green fill: no `background`, `background-color` or `fill` in a stylesheet under `app/` or `src/` names `lime-700` to `lime-950` — as the token, as a custom property that carries one (followed through aliases), or as its hex — and no design board in `concept/v2.0/` paints one as a background. Hover on an `ink` fill is `text-2`; the "Amtlich" badge and the badge kickers are `ink` with `paper`. `pnpm check:brand` (DEC-0160, issue #57). |
 | TS-WEB-0017-A35 | e2e | The context band at 390, 820 and 1440 px, on `/`, `/en` and the merged `/ueber-uns`: exactly three link cards, 1, 2 and 3 of them in the first row; each card at least 44 px high with a radius of at least half its height, a fill that is not its ground, a 40 × 40 px icon well and a 44 × 44 px disc of neutral black; no label or blurb clipped or ellipsised; outside the merged block the mono kicker stands beside the heading from 820 px and below it at 390 px (DEC-0156, issue #39). `e2e/context-band.spec.ts`. |
 | TS-WEB-0017-A41 | e2e | The site footer of SRC-0014 §Site footer (DEC-0158), at 390 and 1280 px: its ground is `--color-neutral-ink`; the three legal links are `paper`, bold and not underlined at rest, and a keyboard-focused one shows a solid `focus-dark` outline; the active language segment is `lime-500` with `ink` text and the other `paper`, on a track that is neither the fill nor transparent; the phone stacks logo, switch, legal links and copyright, the desktop pairs logo and switch in row one and links and copyright on the base line. |
 | TS-WEB-0017-A42 | e2e | The footer carries one copyright line, `© <year> <legal name>`, in both languages, with the legal name read from `content/legal/imprint.md` (TS-WEB-0011 D4), never written into code (DEC-0158 §3). |
@@ -432,7 +436,7 @@ name used resolves to an export of it.
 | CON-WEB-0049 (optimise its layout for the phone first) | D2 · A4, A8, A9, A23, A24, A25, A26, A27 |
 | CON-WEB-0050 (keep the tablet and desktop layout close to the …) | D2 · A4, A8, A9, A23, A24, A25, A26, A27 |
 | CON-WEB-0051 (take its breakpoints from @schafe-vorm-fenster/brand-design (breakpoint.xs…2xl) | D2 · A4, A8, A9 |
-| CON-WEB-0003 (brand kit binding) | D3 (with TS-WEB-0002 D3, TS-WEB-0003 D3) · A5, A6, A7, A15, A22, A28, A29, A35, A41, A42 |
+| CON-WEB-0003 (brand kit binding) | D3 (with TS-WEB-0002 D3, TS-WEB-0003 D3) · A5, A6, A7, A15, A22, A28, A29, A30, A35, A41, A42 |
 | CON-WEB-0052 (never reimplement the village calendars) | D4 · A10, A11, A12 |
 | FUN-WEB-0131 (embed what app.schafe-vorm-fenster.de serves rather than hold its own) | D4 · A10, A11, A12 |
 | CON-WEB-0053 (be written in TypeScript throughout) | D5 · A2, A3, A13 |

@@ -22,9 +22,12 @@ import { everyRoute, href } from "../src/lib/routes/routes";
  * contrast), unless the control has its own border or outline. A transparent
  * fill is a text link and is not this file's business.
  *
- * Six controls fail today (`KNOWN`, with their issues). They are named, so CI
- * stays green while they are open, and **any other control that disappears
- * fails the route** — a new button cannot slip in the way these did.
+ * Six controls failed on the first run, named in `KNOWN` with their issues. All
+ * six are fixed: #41 by the contact section, the five of #28 by DEC-0160 (a
+ * secondary on a light ground is transparent with a 2 px `ink` border, an
+ * edged control rather than a fill on its ground). `KNOWN` stays as the place
+ * to name a new open defect, and **any control not listed there that
+ * disappears fails the route**.
  *
  * Photo grounds are skipped: a photograph has no single colour, and the scrim
  * plus the text shadow carry legibility there (`pnpm check:contrast`, hero row).
@@ -39,17 +42,9 @@ const ROUTES = everyRoute().map(({ route, locale }) => ({
  * Open defects, by the label of the control and the issue that owns it. A control
  * listed here is not failed on; every other control is. When one is fixed, delete
  * its entry — and a control that is *not* listed and disappears into its ground
- * fails the route, which is the point.
- *
- * - #28: `secondary` (`paper` fill) on a `paper` ground, and on `lime-100`.
+ * fails the route, which is the point. Empty since DEC-0160.
  */
-const KNOWN: ReadonlyArray<{ readonly label: RegExp; readonly issue: string }> = [
-  { label: /Jetzt kostenlos anmelden|Sign up for free now/, issue: "#28" },
-  { label: /Flyer per WhatsApp schicken|Send a flyer by WhatsApp/, issue: "#28" },
-  { label: /Jetzt Kalender anmelden|Register your calendar/, issue: "#28" },
-  { label: /Jetzt meine Webseite anmelden|Register my website/, issue: "#28" },
-  { label: /Kalender bestellen|Order the calendar/, issue: "#28" },
-];
+const KNOWN: ReadonlyArray<{ readonly label: RegExp; readonly issue: string }> = [];
 
 const VIEWPORTS = [
   { width: 390, height: 844 },
