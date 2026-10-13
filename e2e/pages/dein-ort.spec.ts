@@ -296,12 +296,22 @@ test.describe("TS-WEB-0020 — your place", () => {
     await page.goto(`/dein-ort?ort=${PLACE_WITH_DATES}`);
     const rows = page.locator("#nearby article:has(> time)");
     await expect(rows.first()).toBeAttached();
+    // The criterion's identity is id, title and `startsAt`. A row renders no
+    // id, and its `<time datetime>` carries the day only — the start time
+    // stands in the meta line ("Anklam · 10 km · 16:00"). So the key is the
+    // day, the title and the whole meta: two rows the reader cannot tell
+    // apart. Keyed on day and title alone, the test failed CI run 38377191314
+    // on two different dates — one vhs course at 16:00 and again at 18:00 the
+    // same day — which the criterion never called identical.
     const texts = await rows.evaluateAll((articles) =>
-      articles.map((article) => ({
-        meta: article.querySelector('[class*="meta"]')?.textContent ?? "",
-        key: [article.querySelector("time")?.getAttribute("datetime"), article.querySelector("h3")?.textContent]
-          .join("|"),
-      })),
+      articles.map((article) => {
+        const meta = article.querySelector('[class*="meta"]')?.textContent ?? "";
+        return {
+          meta,
+          key: [article.querySelector("time")?.getAttribute("datetime"), article.querySelector("h3")?.textContent, meta]
+            .join("|"),
+        };
+      }),
     );
     for (const { meta } of texts) expect(meta, "a nearby row names its distance").toMatch(/\b\d+ km\b/);
     const keys = texts.map(({ key }) => key);
@@ -449,6 +459,11 @@ test.describe("TS-WEB-0020 — your place", () => {
 
     await page.setViewportSize(DESKTOP);
     await page.goto(`/dein-ort?ort=${slug}`);
+    // The served HTML is S0 for every `?ort=` (DEC-0163), and S0's
+    // `data-cta="primary"` is the search's submit button. Wait for state B's
+    // own headline first: clicking before the place resolved submitted the
+    // search instead (CI run 38377191314, "flaky").
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(/noch nichts eingetragen/i);
     // Block 1 carries no calendar handover in state B: "an 'open the
     // calendar' link beside 'nothing is in it yet' is the one offer that
     // state must not carry" (TS-WEB-0008 D4). The homescreen block keeps its own —

@@ -539,12 +539,17 @@ test.describe("TS-WEB-0019 — home", () => {
 
     // Three quarters of the module's own height inside the viewport — the
     // fraction DEC-0105 §6 fixes, reachable at 360 × 640 in this position.
+    // The scroll offset is rounded *up* and one pixel added: a page scrolls in
+    // whole pixels, so aiming at exactly 75 % landed at 74.96 % on this page
+    // (module top at 1513.84 px, the offset truncated from 1366.24 to 1366)
+    // and the observer, correctly, never fired. One pixel past the threshold
+    // is still the threshold; aiming at it exactly measured the rounding.
     const bringIntoView = async () =>
       explainModule.evaluate((element) => {
         const rect = element.getBoundingClientRect();
         const top = rect.top + window.scrollY;
         window.scrollTo({
-          top: top - (window.innerHeight - 0.75 * rect.height),
+          top: Math.ceil(top - (window.innerHeight - 0.75 * rect.height)) + 1,
           behavior: "instant",
         });
       });
@@ -597,7 +602,8 @@ test.describe("TS-WEB-0019 — home", () => {
     await explainModule.evaluate((element) => {
       const rect = element.getBoundingClientRect();
       const top = rect.top + window.scrollY;
-      window.scrollTo({ top: top - (window.innerHeight - 0.75 * rect.height), behavior: "instant" });
+      // Rounded up past the threshold, as in the test above.
+      window.scrollTo({ top: Math.ceil(top - (window.innerHeight - 0.75 * rect.height)) + 1, behavior: "instant" });
     });
     await page.waitForTimeout(DWELL_MS + TRANSITION_MS + 500);
     await expect(explainModule).toHaveAttribute("data-state", "3");

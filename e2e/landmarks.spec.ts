@@ -154,8 +154,20 @@ for (const { route, locale } of everyRoute()) {
       expect(await landmarks(page), `${from} → ${target}`).toEqual(ONE);
 
       // A link that stays on this page (the logo, an in-page anchor) has no
-      // previous entry of its own to come back to.
-      if (new URL(page.url()).pathname === startPath) continue;
+      // previous entry of its own to come back to. One that only changes the
+      // query does move the page, though: on `/dein-kalender/bestellen` the
+      // county chip (`?kreis=…`) advances the flow, read in the browser since
+      // DEC-0163, and the step-1 link collected at load is gone — the walk then
+      // waited 120 s for it. So the start state is restored before the next
+      // link, the same reset the redirect case below takes.
+      if (new URL(page.url()).pathname === startPath) {
+        const { pathname, search } = new URL(page.url());
+        if (`${pathname}${search}` !== from) {
+          await page.goto(from);
+          await settle(page);
+        }
+        continue;
+      }
 
       // Back is the other half: the router *restores* a preserved segment
       // here rather than creating one, and that path duplicated too.

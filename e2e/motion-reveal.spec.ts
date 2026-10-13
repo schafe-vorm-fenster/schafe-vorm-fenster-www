@@ -73,10 +73,13 @@ test("TS-WEB-0002-A13: the auto-advance starts on intersection, runs one 9.1 s p
 
   // Three quarters of the module's own height inside the viewport — the
   // fraction DEC-0105 §6 fixes, and the one that is reachable at 360 × 640.
+  // Rounded up and one pixel past it: a page scrolls in whole pixels, and an
+  // offset truncated below the exact value leaves the module a fraction of a
+  // pixel short of 75 % (`e2e/pages/home.spec.ts` measured 74.96 %).
   await explainModule.evaluate((element) => {
     const rect = element.getBoundingClientRect();
     const top = rect.top + window.scrollY;
-    window.scrollTo({ top: top - (window.innerHeight - 0.75 * rect.height), behavior: "instant" });
+    window.scrollTo({ top: Math.ceil(top - (window.innerHeight - 0.75 * rect.height)) + 1, behavior: "instant" });
   });
 
   await page.waitForTimeout(PASS_MS + 1_000);
