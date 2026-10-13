@@ -285,7 +285,7 @@ export function NearbyIsland({
         headingLevel={headingLevel}
         locale={locale}
         skeleton={
-          <EventList capOnPhone items={[]} locale={locale} reserve role={role} rowCount={rowCount} state="loading" />
+          <EventList items={[]} locale={locale} reserve role={role} rowCount={rowCount} state="loading" />
         }
         state="loading"
         title={fillTemplate(titleTemplate, { radius: String(NEARBY_RADIUS_KM) })}
@@ -313,7 +313,6 @@ export function NearbyIsland({
       updatedAt={fetchedAt}
     >
       <EventList
-        capOnPhone
         items={toListItems(data.events, locale)}
         locale={locale}
         reserve

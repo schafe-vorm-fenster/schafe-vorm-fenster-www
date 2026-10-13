@@ -19,10 +19,7 @@
   /* The hairline divides rows inside a surface — no gap, no card. */
   border-top: 1px solid var(--color-neutral-line);
   column-gap: var(--space-4);
-  /* `event-list`'s phone cap hides a row through this property rather than
-     through `display: none` on the child, which would have to be undone with
-     `display: revert` at the switch point and would take the grid with it. */
-  display: var(--event-row-display, grid);
+  display: grid;
   grid-template-areas:
     "date title status"
     "date meta  badge";

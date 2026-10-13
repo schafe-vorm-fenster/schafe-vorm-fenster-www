@@ -3,40 +3,19 @@
   flex-direction: column;
 }
 
-/**
- * The illustrative cap — TS-WEB-0008: a live list on a marketing page is an
- * example, not the calendar. Three rows on a phone, five from the tablet
- * breakpoint up, and the rest of the dates behind the module's own
- * "Alle Termine im Kalender" link.
- *
- * Done in CSS rather than by rendering fewer items, for two reasons: the
- * page is prerendered and has no viewport at render time, and a JavaScript
- * cap would change the row count after paint, which is the layout shift the
- * whole module is built to avoid. Both the rows and their skeleton carry the
- * same rule, so the reserved height matches what finally renders.
- */
 /*
- * The hidden rows go through `--event-row-display`, the property `event-row`
- * and `skeleton` each read for their own `display`, rather than through
- * `display: none` here.
+ * No phone cap. A list prints the same rows at every width: the row count is
+ * the role's (`EVENT_LIST_CAPS`, G-2), and the rest of the dates stand behind
+ * the module's own calendar link at every width alike.
  *
- * `display: revert` at the switch point reverted the row to its UA default —
- * `block` for an `article` — and so undid the row's own grid: from 48 rem up,
- * every row past the third in a capped list rendered as a stacked block, 143
- * px tall instead of 76. A property each component resolves against its own
- * default keeps that decision where it belongs. `initial` on a custom
- * property is the guaranteed-invalid value, so `var(--event-row-display,
- * grid)` falls back to the component's own.
+ * Until 2026-10-13 a `capPhone` class hid rows 4 and 5 of the nearby list
+ * below 48 rem. That made a block present at 1280 px and absent at 360 px,
+ * which is exactly what TS-WEB-0017-A8 forbids ("no element is visible at one
+ * width and absent at another", D2(d)'s single-tree rule) and which no
+ * criterion of TS-WEB-0008 asked for — `e2e/smoke.spec.ts` caught it on
+ * `/dein-ort`, whose story 4 now always carries the anchor's nearby dates
+ * (DEC-0163).
  */
-.capPhone > *:nth-child(n + 4) {
-  --event-row-display: none;
-}
-
-@media (min-width: 48rem) {
-  .capPhone > *:nth-child(n + 4) {
-    --event-row-display: initial;
-  }
-}
 
 /* A capped list and the quiet affordance under it (G-2). */
 .withMore {
@@ -52,11 +31,7 @@
  * leaves room at the end rather than pulling everything below it up.
  */
 .reserve {
-  min-height: calc(var(--event-list-rows-phone) * var(--height-event-row-tall));
-}
-
-@media (min-width: 48rem) {
-  .reserve {
-    min-height: calc(var(--event-list-rows) * var(--height-event-row-tall));
-  }
+  /* `--height-event-row-tall` itself takes its tablet value at 48 rem
+     (`base.css`), so the reserve follows the row without a query here. */
+  min-height: calc(var(--event-list-rows) * var(--height-event-row-tall));
 }
