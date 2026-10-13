@@ -188,3 +188,6 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0150 — Surfaces run full-bleed, content stands in a 1200 px container — the desktop grid from the owner's design input](DEC-0150--surfaces-full-bleed-content-in-the-container.md)
 - [DEC-0151 — The scrim is neutral black, finally and everywhere — the tinted scrim leaves the boards, the dead tone prop leaves the code, and `check:brand` keeps both out](DEC-0151--the-scrim-is-neutral-black-everywhere.md)
 - [DEC-0152 — A story's example is chosen, not left over — strict category, the searched place's surroundings, no placeholders, distance on every nearby row, and the quotes where they argue](DEC-0152--a-story-example-is-chosen-not-left-over.md)
+- [DEC-0153 — One story stage instead of three story sections, and the focal point lands above the reading band](DEC-0153--one-story-stage-and-the-anchored-focal-point.md)
+- [DEC-0154 — The owner's review of 2026-10-12: what it settles, what it opens, and that every point is an issue](DEC-0154--the-review-of-2026-10-12.md)
+- [DEC-0155 — Ink is neutral black, readability goes before a fixed height, a review is not closed until every point is a task — and why the tests let these through](DEC-0155--ink-is-neutral-black-and-reviews-become-tasks.md)

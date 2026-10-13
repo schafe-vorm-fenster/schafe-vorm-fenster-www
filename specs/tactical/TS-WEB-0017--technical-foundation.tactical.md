@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [CON-WEB-0046, CON-WEB-0047, CON-WEB-0048, CON-WEB-0049, CON-WEB-0050, CON-WEB-0051, CON-WEB-0003, CON-WEB-0052, FUN-WEB-0131, CON-WEB-0053, CON-WEB-0054, CON-WEB-0006, CON-WEB-0055, CON-WEB-0056, CON-WEB-0057]
 sources: [SRC-0006, SRC-0008, SRC-0011, SRC-0012]
-decisions: [DEC-0002, DEC-0020, DEC-0023, DEC-0029, DEC-0031, DEC-0035, DEC-0085, DEC-0150, DEC-0151]
+decisions: [DEC-0002, DEC-0020, DEC-0023, DEC-0029, DEC-0031, DEC-0035, DEC-0085, DEC-0150, DEC-0151, DEC-0155]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -398,6 +398,8 @@ for the spec side, and needs the content frontmatter schema
 | TS-WEB-0017-A25 | e2e | From `xl` the hero is at least `min(80vh, 680px)` tall on `/` and `min(70vh, 560px)` on every other page, and from 1280 px no taller than that cap. |
 | TS-WEB-0017-A26 | e2e | From `xl` two conversions in one hero stand in one row with at least `space-3` between them; below `xl` they stack (DEC-0116 §4 as amended by DEC-0150). |
 | TS-WEB-0017-A27 | e2e | At 1440 × 900 the live dates on `/` stand head in columns 1–4 and list in columns 5–12 (`live-module-frame` `layout="split"`). |
+| TS-WEB-0017-A28 | static | `ink` is neutral black: the effective `--color-neutral-ink` (the brand token sheet, then `app/styles/brand.css`) has equal red, green and blue, and the retired ink (the lime hue at 3 % chroma, which reads as dark green across a section) is written nowhere, in authored sources or in a design board. `pnpm check:brand` (DEC-0155). |
+| TS-WEB-0017-A29 | e2e | On every route, in both languages, at 390 and 1280 px, every `[data-cta]` with an opaque fill has at least 3:1 against the ground behind it, unless it has its own border or outline. Controls known to fail are named with their issue (#28, #41) and every other control that disappears fails the route; photo grounds are skipped (WCAG 1.4.11, DEC-0155). |
 
 ### D7 — One icon set [FIXED: DEC-0056, SRC-0014#icons]
 
@@ -427,7 +429,7 @@ name used resolves to an export of it.
 | CON-WEB-0049 (optimise its layout for the phone first) | D2 · A4, A8, A9, A23, A24, A25, A26, A27 |
 | CON-WEB-0050 (keep the tablet and desktop layout close to the …) | D2 · A4, A8, A9, A23, A24, A25, A26, A27 |
 | CON-WEB-0051 (take its breakpoints from @schafe-vorm-fenster/brand-design (breakpoint.xs…2xl) | D2 · A4, A8, A9 |
-| CON-WEB-0003 (brand kit binding) | D3 (with TS-WEB-0002 D3, TS-WEB-0003 D3) · A5, A6, A7, A15, A22 |
+| CON-WEB-0003 (brand kit binding) | D3 (with TS-WEB-0002 D3, TS-WEB-0003 D3) · A5, A6, A7, A15, A22, A28, A29 |
 | CON-WEB-0052 (never reimplement the village calendars) | D4 · A10, A11, A12 |
 | FUN-WEB-0131 (embed what app.schafe-vorm-fenster.de serves rather than hold its own) | D4 · A10, A11, A12 |
 | CON-WEB-0053 (be written in TypeScript throughout) | D5 · A2, A3, A13 |

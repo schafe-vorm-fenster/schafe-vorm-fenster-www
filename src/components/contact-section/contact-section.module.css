@@ -134,7 +134,7 @@
   overflow-wrap: anywhere;
 }
 
-/* Row 1: ink ground, paper title (16.56:1), lime-400 sub-label (11.21:1). */
+/* Row 1: ink ground, paper title (20.17:1), lime-400 sub-label (13.66:1). */
 .row.filled {
   background: var(--color-neutral-ink);
   color: var(--color-neutral-paper);

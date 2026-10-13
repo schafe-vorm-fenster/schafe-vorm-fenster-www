@@ -48,7 +48,7 @@ import { config as loadEnv } from "dotenv";
 import yaml from "js-yaml";
 import sharp from "sharp";
 
-import { DEFAULT_FOCAL, cropWindow } from "./lib/focal-crop.mjs";
+import { DEFAULT_FOCAL, anchoredCropWindow, cropWindow } from "./lib/focal-crop.mjs";
 
 const REPO = join(dirname(new URL(import.meta.url).pathname), "..");
 const CONTENT = join(REPO, "content/pages");
@@ -79,6 +79,9 @@ const PRICE_PER_IMAGE_USD = 0.04;
  * the phone rendition — mobile-first, TS-WEB-0017 D2 — and `<id>-wide.webp` is the
  * landscape one the media query swaps in.
  */
+/** The story stage's media box (DEC-0153): 5:4, wide enough for 2× at 600 px. */
+const STAGE_OUT = { width: 1200, height: 960 };
+
 const RATIOS = {
   hero: {
     request: "800x896",
@@ -534,10 +537,18 @@ async function fetchCommonsOriginal(title) {
  * focal point can: it is in the entry, it is what `photo-surface` positions
  * the same photograph with, and the two now agree by construction.
  */
-async function placeRendition(entry, from, out, file) {
+async function placeRendition(entry, from, out, file, anchor) {
   const image = sharp(from, { autoOrient: true });
   const { width, height } = await image.metadata();
-  const window = cropWindow({ width, height }, out, entry.focal ?? DEFAULT_FOCAL);
+  const window = anchor
+    ? anchoredCropWindow({ width, height }, out, entry.focal ?? DEFAULT_FOCAL, anchor)
+    : cropWindow({ width, height }, out, entry.focal ?? DEFAULT_FOCAL);
+  if (anchor) {
+    console.log(
+      `   stage: focal lands at ${window.landed.x}% ${window.landed.y}% ` +
+        `(anchor ${anchor.x}% ${anchor.y}%)${window.anchored ? "" : " — NOT anchored, the original is too small"}`,
+    );
+  }
   const base = image
     .extract({ left: window.left, top: window.top, width: window.width, height: window.height })
     .resize({ width: out.width, height: out.height, fit: "cover" });
@@ -570,6 +581,21 @@ async function placeReal(entry, from) {
     bytes: placed.bytes,
     quality: placed.quality,
   };
+  /** DEC-0153: a declared anchor asks for the 5:4 stage cut, focal at the anchor. */
+  if (entry.anchor) {
+    const stage = await placeRendition(
+      entry,
+      from,
+      STAGE_OUT,
+      join(REAL_DIR, `${entry.id}-stage.webp`),
+      entry.anchor,
+    );
+    Object.assign(written, {
+      stage_file: `${REAL_PREFIX}/${entry.id}-stage.webp`,
+      stage_width: stage.width,
+      stage_height: stage.height,
+    });
+  }
   if (!spec.wide) return written;
 
   const wide = await placeRendition(
@@ -748,6 +774,9 @@ async function main() {
       file: placed.file,
       width: placed.width,
       height: placed.height,
+      ...(placed.stage_file
+        ? { stage_file: placed.stage_file, stage_width: placed.stage_width, stage_height: placed.stage_height }
+        : {}),
       ...(placed.wide_file
         ? {
             wide_file: placed.wide_file,

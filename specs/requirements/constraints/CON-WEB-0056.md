@@ -10,7 +10,7 @@ area: technical-constraints
 needs: [UNKNOWN]
 source:
   source_id: SRC-0014
-  loc: "concept/v2.0/README.md#L32"
+  loc: "concept/v2.0/README.md#L33"
   excerpt: "sich als Abhängigkeit in den eigenen Stack"
 evidence_sufficiency: S3
 fit_criterion: UNKNOWN

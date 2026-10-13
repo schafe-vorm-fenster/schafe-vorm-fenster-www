@@ -160,3 +160,30 @@ describe("TS-WEB-0017-A22: the scrim is neutral black, in code and in the boards
     expect(a22(checkBrand(root).errors)).toEqual([]);
   });
 });
+
+describe("TS-WEB-0017-A28: ink is neutral black, and the retired ink is written nowhere", () => {
+  const a28 = (errors: readonly string[]) => errors.filter((e) => e.startsWith("TS-WEB-0017-A28"));
+  const TOKENS = ["node_modules", "@schafe-vorm-fenster", "brand-design", "tokens", "svf-tokens.css"];
+  const tinted = ["#17", "1D0D"].join("");
+
+  it("fails a tinted ink in the token sheet that nothing overrides", () => {
+    const root = newRoot();
+    writeFileSync(fixture(...TOKENS), `:root { --color-neutral-ink: ${tinted}; }`);
+    expect(a28(checkBrand(root).errors)).toHaveLength(1);
+  });
+
+  it("passes when app/styles/brand.css sets a neutral ink on top of a tinted package", () => {
+    const root = newRoot();
+    writeFileSync(fixture(...TOKENS), `:root { --color-neutral-ink: ${tinted}; }`);
+    writeFileSync(fixture("app", "styles", "brand.css"), ":root { --color-neutral-ink: #000000; }");
+    expect(a28(checkBrand(root).errors)).toEqual([]);
+  });
+
+  it("fails the retired ink written in a design board, and passes a board without it", () => {
+    const root = newRoot();
+    writeFileSync(fixture("concept", "v2.0", "Board.dc.html"), `<div style="background:${tinted}"></div>`);
+    expect(a28(checkBrand(root).errors)).toHaveLength(1);
+    writeFileSync(fixture("concept", "v2.0", "Board.dc.html"), '<div style="background:#000000"></div>');
+    expect(a28(checkBrand(root).errors)).toEqual([]);
+  });
+});

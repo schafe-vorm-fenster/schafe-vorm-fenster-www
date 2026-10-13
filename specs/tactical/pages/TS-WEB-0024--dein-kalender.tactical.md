@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0014, BUS-WEB-0015, FUN-WEB-0202]
 sources: [SRC-0001, SRC-0003, SRC-0014]
-decisions: [DEC-0011, DEC-0030, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0131]
+decisions: [DEC-0011, DEC-0030, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0131, DEC-0154]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -115,6 +115,16 @@ a build on. It is not replaced by a name: `CG-038` allows the name once on this
 page, at the 480 € tier, and spending that occurrence on a table column takes
 it from where the price is read. So this determination stands whichever way the
 naming question (`Q-0077`) goes. What either cell *says* is copy (DEC-0083 §1).
+
+**Kicker and title, reopened by DEC-0154.** The review of 2026-09-22 asked
+whether this section comes too early ("Was hakt denn heute?") and whether it
+carries the USP (other actors take part). Only the column labels were acted on.
+The kicker *"Warum es heute hakt"* over the title *"Wer euren Termin heute nicht
+mitbekommt"* was then written into CG-005 as the model split, although that title
+announces people and this section shows a comparison. The owner's review of
+2026-10-12 reopens it. The rule that now decides it is CG-042 (solution first)
+and CG-004 (a title announces what the section shows); the new kicker and title
+are copy (issue #51).
 
 ### D5 — Embed demo [FIXED: DEC-0030, TS-WEB-0008 D6]
 

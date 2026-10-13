@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0012, BUS-WEB-0017, FUN-WEB-0204]
 sources: [SRC-0001, SRC-0003, SRC-0008, SRC-0014]
-decisions: [DEC-0029, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0080, DEC-0082, DEC-0083, DEC-0105, DEC-0107, DEC-0109, DEC-0110]
+decisions: [DEC-0029, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0080, DEC-0082, DEC-0083, DEC-0105, DEC-0107, DEC-0109, DEC-0110, DEC-0154]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -61,6 +61,14 @@ Block 2 of TS-WEB-0006 D2, in this order; types per TS-WEB-0007 B.3, fragments B
 
 Context band and closing CTA come from the layout, not from here. No
 other block type is permitted — no feature list, no tier table.
+
+**Order inside the problem block, amended by DEC-0154** (owner's review of
+2026-10-12; CG-042). The solution sentence ("Fotografier den Flyer, schick das
+Bild per WhatsApp, fertig") now stands **before** slot 2 (in the hero or as the
+block's opening line), not inside it. Slot 2 carries the problem only, and its
+halves swap: **"Die üblichen Wege" first, then "Wer euren Termin heute nicht
+mitbekommt"**. The wording of both halves is copy under CG-009, and the review
+asks for a more natural, less promotional register (issues #44 to #46).
 
 ### D3 — The objection block, and what it is made of [FIXED: SRC-0003 "why the six current channels fail"; item set PROPOSED]
 
@@ -234,7 +242,7 @@ One banner, at the end of slot 3, after the three path blocks.
 | TS-WEB-0022-A3 | e2e | DOM order of the page's own blocks is hero · objections · three paths · live example · proof, followed by the layout's context band and closing CTA. |
 | TS-WEB-0022-A4 | e2e | Exactly one block declares `data-block="scene"`; its mechanism is `whatsapp` and its opening line is a **statement** — no question mark unless the block answers it in the next sentence (TS-WEB-0006 D7, SRC-0017 CG-005/CG-006). No other block declares the same mechanism as a scene. |
 | TS-WEB-0022-A5 | e2e | Exactly three publishing-path blocks exist, mechanisms distinct and ordered `whatsapp`, `calendar-connection`, `website-import`; **each renders an ordinal, a title and exactly three step lines**, each step line carrying a bold core and a normal detail, and exactly one CTA carrying `data-cta="secondary"` resolving to that path's next step; the `website-import` block shows a visible status badge while its hub record is not `generally-available`. The count of `data-cta="primary"` on the page stays 1 (A2). |
-| TS-WEB-0022-A18 | e2e | At 390 px viewport width every step line of all three modules renders on exactly **one** line: the rendered height of each core element equals one line box of its own computed `line-height`, and the same for each detail element. Measured per element, not per block (SRC-0017 CG-025, SRC-0014 §"Explain module"). |
+| TS-WEB-0022-A18 | e2e | **Superseded, DEC-0154.** Written text: every step line renders on exactly one line at 390 px. New rule: **no step line is truncated** (no `text-overflow: ellipsis`, no clipped text), and the module reserves the height of its longest step so a change of step moves nothing. Readability goes before a fixed height: shorter copy first, then a two-line fixed height for all three steps (owner, 2026-10-12). Owner's review of 2026-10-12: "Wir können nicht ein Erklärmodul bauen und die Erklärung nicht lesbar anzeigen." The test keeps asserting the old text until issue #47 changes it with the render. |
 | TS-WEB-0022-A19 | e2e | Below `lg` (`48rem`): each module — ordinal, title, graphic stage and its three step lines — fits within **one viewport height** at the phone breakpoint, and the stage's box keeps the same height across all three states. **The advance is keyed to visibility, runs once and ends**: with the page loaded and the module still below the viewport, the stage is at state 1 and stays there however long the page sits; scrolled down until **three quarters of the module's own height** are inside the viewport — and no further, asserted at 360 × 640 as well as 360 × 800, where "the whole module" would not have fired — it holds state 1 for the full dwell, reaches state 3 no earlier than 9.1 s later and then changes no more — no fourth transition, no return to state 1, and no restart after scrolling it out of view and back. Activating a step line, or focusing the module, stops the advance from that moment and it never resumes (DEC-0105 §6 as amended, TS-WEB-0002-A13). From `lg` the three steps render side by side in one row, no stage element exists, and no element's position changes over 5 s without interaction. |
 | TS-WEB-0022-A6 | e2e | The objection block renders a headline and *n* items; no item contains a product name, a term from the generic-claims lint list, or a numeral asserting how many channels exist. A proof slot sits beside it or is visibly empty. |
 | TS-WEB-0022-A7 | unit | Example-place selection: with no anchor it returns the configured reference place; with an anchor the nearest active covered place with dates; a candidate with zero dates is skipped, never rendered. |

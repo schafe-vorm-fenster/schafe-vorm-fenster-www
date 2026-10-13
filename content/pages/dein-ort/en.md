@@ -65,6 +65,12 @@ images:
   - id: dein-ort-story-baeckerwagen
     slot: dein-ort-3-story-baeckerwagen
     ratio: feature
+    focal:
+      x: 55
+      "y": 40
+    anchor:
+      x: 50
+      "y": 30
     provenance: real
     source: >-
       Wikimedia Commons, File:Brietzig, Kirche und Café.jpg —
@@ -77,11 +83,20 @@ images:
     licence: CC0 1.0
     status: real
     file: /images/real/dein-ort-story-baeckerwagen.webp
-    width: 1400
-    height: 1000
+    width: 1190
+    height: 850
+    stage_file: /images/real/dein-ort-story-baeckerwagen-stage.webp
+    stage_width: 1200
+    stage_height: 960
   - id: dein-ort-story-kultur
     slot: dein-ort-5-story-kultur
     ratio: feature
+    focal:
+      x: 62
+      "y": 58
+    anchor:
+      x: 50
+      "y": 30
     provenance: real
     source: >-
       Wikimedia Commons, File:Schönwalde, Schloss.jpg —
@@ -96,6 +111,9 @@ images:
     file: /images/real/dein-ort-story-kultur.webp
     width: 1400
     height: 1000
+    stage_file: /images/real/dein-ort-story-kultur-stage.webp
+    stage_width: 1200
+    stage_height: 960
   - id: dein-ort-homescreen-ios
     slot: dein-ort-7-homescreen
     ratio: portrait
@@ -171,6 +189,27 @@ Literal quote from SRC-0002 (TS-WEB-0020 D2, DEC-0071): this sentence belongs
 only here. It implies no fault and no apology — the calendar for this
 place already exists and is waiting.
 
+## Slot 2b — Story stage: a day in the village
+
+<!-- id: dein-ort-2b-story-stage; content_type: value-story; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- note: Texte aus dem Board concept/v2.0/Geschichten Modul.dc.html, Variante 1a (DEC-0153). -->
+
+**Kicker:** A day in the village
+
+**Heading:** On a perfectly ordinary Tuesday, more happens in the village than fits on a poster.
+
+**Lead:** Three people from Vorpommern-Greifswald tell why all of it belongs in one calendar.
+
+**Action:** What is on near you today
+
+**Next:** Next at {time}
+
+**From the start:** From the start
+
+**In the calendar:** In the calendar
+
+**Picker:** Choose a time
+
 ## Slot 3 — Value story 1: the bakery van
 
 <!-- id: dein-ort-3-story-baeckerwagen; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"]; status: draft -->
@@ -184,6 +223,14 @@ place already exists and is waiting.
 **Example:** a recurring delivery date in {place} or nearby, live from the calendar.
 
 **Testimonial:** Elisabeth Kurzweg, Bäckerei Kurzweg — wording on the proof card below.
+
+**Time:** 08:30
+
+**Tab:** Bread
+
+**Headline:** At half past eight the bakery van stops. Now the home office knows it too.
+
+**Story:** When and where the van stops decides whether there is fresh bread. Once it is in the calendar, it is not only the neighbours at the window who come.
 
 <!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
@@ -223,6 +270,14 @@ day-current and place-accurate through the village calendars
 
 **Testimonial:** Holger Wendt, mayor of Rubkow — wording on the proof card below.
 
+**Time:** 17:00
+
+**Tab:** Council
+
+**Headline:** At five the council meets. Whoever wants a say hears about it beforehand.
+
+**Story:** Not afterwards, from the minutes. Official dates sit in the same calendar as the fair and the bakery van — where people look anyway.
+
 <!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
 ### Proof card for story 2
@@ -246,6 +301,14 @@ day-current and place-accurate through the village calendars
 **Example:** a culture date from around {place}, live from the calendar.
 
 **Testimonial:** Uwe Eichler, Wasserschloss Quilow — wording on the proof card below.
+
+**Time:** 20:00
+
+**Tab:** Culture
+
+**Headline:** At eight there is music in the manor. Also for everyone who would not have heard of it by chance.
+
+**Story:** The concert in the next village, the exhibition in the manor: in the calendar, culture finds you instead of the other way round.
 
 <!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; clearance: pending (usage_rights unverified, Q-0014) -->
 

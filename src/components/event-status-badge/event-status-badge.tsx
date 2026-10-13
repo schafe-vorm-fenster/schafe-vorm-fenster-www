@@ -38,7 +38,7 @@ export interface EventStatusBadgeProps {
  * `status` prop puts it there).
  * States: none of its own. The three statuses are the three fill/text pairs
  * the brand tokens ship (`--color-status-event-*`), measured there: neu
- * 10.20:1, verschoben 16.56:1, abgesagt 6.31:1.
+ * 12.42:1, verschoben 20.17:1, abgesagt 6.31:1.
  * Inherits: badge geometry; the `verschoben` hairline on a paper ground is
  * a `line` hairline, the one way a paper badge has an edge.
  * Space: badge height, fixed — a status appearing on a row does not move it.
