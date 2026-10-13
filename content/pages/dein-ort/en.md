@@ -202,9 +202,9 @@ place already exists and is waiting.
 
 **Kicker:** A day in the village
 
-**Heading:** On a perfectly ordinary Tuesday, more happens in the village than fits on a poster.
+**Heading:** A Tuesday in the village does not fit on a poster.
 
-**Lead:** Three people from Vorpommern-Greifswald tell why all of it belongs in one calendar.
+**Lead:** Three people tell why it belongs in one calendar.
 
 **Action:** What is on near you today
 
@@ -234,9 +234,9 @@ place already exists and is waiting.
 
 **Tab:** Bread
 
-**Headline:** At half past eight the bakery van stops. Now the home office knows it too.
+**Headline:** At half past eight the bakery van stops.
 
-**Story:** When and where the van stops decides whether there is fresh bread. Once it is in the calendar, it is not only the neighbours at the window who come.
+**Story:** In the calendar, more than the neighbours at the window come.
 
 <!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
@@ -280,9 +280,9 @@ day-current and place-accurate through the village calendars
 
 **Tab:** Council
 
-**Headline:** At five the council meets. Whoever wants a say hears about it beforehand.
+**Headline:** At five the council meets.
 
-**Story:** Not afterwards, from the minutes. Official dates sit in the same calendar as the fair and the bakery van — where people look anyway.
+**Story:** Whoever wants a say hears about it beforehand. Not afterwards, from the minutes.
 
 <!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
@@ -312,9 +312,9 @@ day-current and place-accurate through the village calendars
 
 **Tab:** Culture
 
-**Headline:** At eight there is music in the manor. Also for everyone who would not have heard of it by chance.
+**Headline:** At eight there is music in the manor.
 
-**Story:** The concert in the next village, the exhibition in the manor: in the calendar, culture finds you instead of the other way round.
+**Story:** In the calendar, culture finds you instead of the other way round.
 
 <!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; clearance: pending (usage_rights unverified, Q-0014) -->
 

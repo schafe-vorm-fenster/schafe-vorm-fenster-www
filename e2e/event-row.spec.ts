@@ -15,8 +15,10 @@ import { expect, test, type Page } from "@playwright/test";
  *
  * The form now follows the row's own width (a container query, 30 rem,
  * measured in `event-row.module.css`). What this file asserts is the
- * criterion, not the mechanism: at every width, in every list and in the
- * story stage's panel, the meta is whole; a row of at least 30 rem shows the badge,
+ * criterion, not the mechanism: at every width, in every list, in the
+ * story stage's panel and in the explain module's calendar picture — where
+ * the meta takes two lines, the place and then distance and time — the meta
+ * is whole; a row of at least 30 rem shows the badge,
  * a narrower one the glyph; and the label is always in the markup.
  *
  * **Deterministic by construction.** The rows come from `/api/*` in the
@@ -111,12 +113,6 @@ async function readRows(page: Page): Promise<RowFacts[]> {
         const box = row.getBoundingClientRect();
         // An unpicked story is `visibility: hidden` (DEC-0153 §3) — it is
         // laid out all the same, and its row is measured like any other.
-        // The explain module's calendar picture (`StageCalendar`, DEC-0115)
-        // is a fixed drawing of the app, three rows in a 192–352 px square.
-        // Even the glyph form does not fit "Wolgast · 19 km · 16:00" there
-        // (52 + 16 + 157 + 16 + 24 = 265 px); A43 names lists and the story
-        // stage, and the picture is an open point of its own.
-        if (row.closest('[data-stage="calendar"]')) return false;
         return box.height > 0 && box.width > 0;
       })
       .map((row) => {
@@ -180,3 +176,41 @@ test("TS-WEB-0017-A43: in the story stage's panel at 1280 px the row keeps its w
     expect(row.meta, "the meta carries place, distance and time").toMatch(/Wolgast · 19 km · \d\d:\d\d/);
   }
 });
+
+for (const width of WIDTHS) {
+  test(`TS-WEB-0017-A43: the explain module's calendar picture on / stacks its meta at ${width} px, nothing cut off`, async ({
+    page,
+  }) => {
+    await answerLiveRoutes(page);
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    const rows = page.locator('[data-stage="calendar"] article:has(> time)');
+    await expect(rows).toHaveCount(3);
+    await page.waitForLoadState("networkidle");
+
+    const facts = await rows.evaluateAll((articles) =>
+      articles.map((row) => {
+        const meta = row.querySelector("p")!;
+        const [place, , rest] = [...meta.children] as HTMLElement[];
+        const clipped = (element: Element) => element.scrollWidth > element.clientWidth + 1;
+        return {
+          text: (meta.textContent ?? "").trim(),
+          rowWidth: row.getBoundingClientRect().width,
+          metaClipped: clipped(meta) || meta.scrollHeight > meta.clientHeight + 1,
+          placeTop: place?.getBoundingClientRect().top ?? 0,
+          restTop: rest?.getBoundingClientRect().top ?? 0,
+          placeText: (place?.textContent ?? "").trim(),
+          restText: (rest?.textContent ?? "").trim(),
+        };
+      }),
+    );
+    for (const row of facts) {
+      const where = `"${row.text}" in a ${Math.round(row.rowWidth)} px row`;
+      expect(row.metaClipped, `meta clipped: ${where}`).toBe(false);
+      // The place on line 1, distance and time on line 2.
+      expect(row.placeText, where).toBe("Wolgast");
+      expect(row.restText, where).toMatch(/^19 km · \d\d:\d\d$/);
+      expect(row.restTop, `distance and time below the place: ${where}`).toBeGreaterThan(row.placeTop);
+    }
+  });
+}

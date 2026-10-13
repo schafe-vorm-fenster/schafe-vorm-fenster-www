@@ -203,9 +203,9 @@ Kalender für diesen Ort existiert bereits und wartet.
 
 **Kicker:** Ein Tag im Dorf
 
-**Überschrift:** An einem ganz normalen Dienstag passiert im Dorf mehr, als auf ein Plakat passt.
+**Überschrift:** Ein Dienstag im Dorf passt auf kein Plakat.
 
-**Einleitung:** Drei Menschen aus Vorpommern-Greifswald erzählen, warum das alles in einen Kalender gehört.
+**Einleitung:** Drei Menschen erzählen, warum das in einen Kalender gehört.
 
 **Aktion:** Was heute bei dir los ist
 
@@ -235,9 +235,9 @@ Kalender für diesen Ort existiert bereits und wartet.
 
 **Reiter:** Brot
 
-**Schlagzeile:** Um halb neun hält der Bäckerwagen. Jetzt weiß das auch das Homeoffice.
+**Schlagzeile:** Um halb neun hält der Bäckerwagen.
 
-**Erzählung:** Wann und wo der Wagen hält, entscheidet über frisches Brot. Steht es im Kalender, kommen nicht nur die, die ohnehin am Fenster sitzen.
+**Erzählung:** Steht er im Kalender, kommen nicht nur die am Fenster.
 
 <!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
@@ -281,9 +281,9 @@ tagesaktuell und ortsgenau über die Dorfkalender (`impftermine-landkreis`,
 
 **Reiter:** Rat
 
-**Schlagzeile:** Um fünf tagt die Gemeindevertretung. Wer mitreden will, erfährt es vorher.
+**Schlagzeile:** Um fünf tagt die Gemeindevertretung.
 
-**Erzählung:** Nicht erst hinterher aus dem Protokoll. Amtliche Termine stehen im selben Kalender wie Fest und Bäckerwagen — da, wo man ohnehin nachschaut.
+**Erzählung:** Wer mitreden will, erfährt es vorher. Nicht erst aus dem Protokoll.
 
 <!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; clearance: pending (usage_rights unverified, Q-0014) -->
 
@@ -313,9 +313,9 @@ tagesaktuell und ortsgenau über die Dorfkalender (`impftermine-landkreis`,
 
 **Reiter:** Kultur
 
-**Schlagzeile:** Um acht spielt im Schloss Musik. Auch für alle, die nicht zufällig davon hören.
+**Schlagzeile:** Um acht spielt im Schloss Musik.
 
-**Erzählung:** Das Konzert im Nachbardorf, die Ausstellung im Schloss: Im Kalender findet die Kultur dich, statt umgekehrt.
+**Erzählung:** Im Kalender findet die Kultur dich, statt umgekehrt.
 
 <!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#eichler-wasserschloss-quilow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; clearance: pending (usage_rights unverified, Q-0014) -->
 

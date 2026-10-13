@@ -249,6 +249,7 @@ export function StageCalendar({
             key={`${index}-${row.title}`}
             {...row}
             locale={locale}
+            metaLayout="stacked"
             state={sample ? "mocked" : "ready"}
             tone="dark"
           />

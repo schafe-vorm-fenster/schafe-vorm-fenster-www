@@ -599,6 +599,14 @@ query on the row (`container: event-row`), not a viewport switch point, and
 `30rem` is the one container threshold this guide names
 (`TS-WEB-0017-A4`, `A43`).
 
+**In the explain module's calendar picture the meta takes two lines** (owner's
+decision of 2026-10-13). That picture (`StageCalendar`, state 3 of the explain
+module) draws three rows in a 192–352 px square, where even the glyph form
+leaves "Wolgast · 19 km · 16:00" no room (52 + 16 + 157 + 16 + 24 = 265 px).
+There the place stands on the first meta line and distance and time on the
+second, and nothing is cut off. A list row keeps its one 76 px line
+(`TS-WEB-0017-A43`).
+
 ### Event-status badge
 
 A status is not a category. A row may carry one status badge in addition to
@@ -701,6 +709,9 @@ invented ones.
 - The block carries **one** CTA either way, and it is the module's own. Wrapping
   adds no second one.
 
+- **The calendar state** draws three live event rows in the square box. Their
+  meta takes two lines, the place and then distance and time, so a long place
+  is never cut off (*Event row*, owner's decision of 2026-10-13).
 - **Ordinal** at mono 48 px / 800 `ink`, with the module **title** at card
   title size beside it.
 - **Three step lines**, each a numbered disc plus two lines: the bold core
