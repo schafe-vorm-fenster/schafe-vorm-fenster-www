@@ -207,6 +207,7 @@ hand-written list, so it can never drift out of sync.
 | Position | after the last argument block, before the closing CTA (D2) |
 | Links | through the route facade (TS-WEB-0004 D3a/D5); targets from the job registry |
 | Treatment | secondary; never the primary treatment (D3) |
+| Form | a heading with a mono kicker, then one link card per job — icon well, label and blurb, arrow disc; the whole card is the link, a pill (SRC-0014 §Page chrome revised → Context band, DEC-0156; measured by TS-WEB-0017-A35) |
 
 Together with the header (TS-WEB-0004 D4) this makes every job reachable from
 every page in at most one click; the band is the in-content guarantee,

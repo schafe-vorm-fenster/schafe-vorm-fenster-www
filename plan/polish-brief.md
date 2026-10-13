@@ -359,9 +359,9 @@ throughout, per principle 1b.
    heading: „Auszeichnungen, Presse und Orte, die den Dorfkalender schon
    nutzen".
 7. **Give the closing block a heading and a reassurance.**
-   *de:* Heading „Dann schau nach, was bei dir los ist." — reassurance
+   *de:* Heading „Schau nach, was bei dir los ist." (without the „Dann", issue #40) — reassurance
    „Kostenlos, ohne Anmeldung, dauerhaft."
-   *en:* "Then go find out what's on where you live." — "Free, no
+   *en:* "See what's on where you live." — "Free, no
    account, permanently."
    Both sentences already exist in `content/pages/dein-ort/de.md` slot 8
    (sourced from `community-calendar`'s `price.note`); reuse, do not

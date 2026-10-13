@@ -175,9 +175,9 @@ promises none either (state/open.md row 94).
 
 **Kicker:** Here for something else today?
 
-- **See what's on:** Want to look at what's happening nearby first? → `/dein-ort`
-- **Run your own calendar:** Want a calendar under your own name, on your own website? → `/dein-kalender`
-- **Who is behind it:** Want to know who makes the village calendar? → `/ueber-uns`
+- **See what's on:** What's coming up next where you live → `/dein-ort`
+- **Run your own calendar:** Under your own name, on your own website → `/dein-kalender`
+- **Who is behind it:** Who makes the village calendar → `/ueber-uns`
 
 This page's focus job is "publish our dates". Whoever lands here came from
 a place search — the band keeps the other three concerns reachable without

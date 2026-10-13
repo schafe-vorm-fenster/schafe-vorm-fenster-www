@@ -395,9 +395,9 @@ seit 2022, kein Preismodell, das sich leise ändern lässt.
 
 **Kicker:** Heute mit einem anderen Anliegen hier?
 
-- **Termine veröffentlichen:** Du willst Termine für deinen Verein, deine Feuerwehr oder deine Gemeinde eintragen? → `/mitmachen`
-- **Eigenen Kalender betreiben:** Du willst einen Kalender unter eigenem Namen, auf eurer eigenen Website? → `/dein-kalender`
-- **Wer dahintersteckt:** Du willst wissen, wer den Dorfkalender macht? → `/ueber-uns`
+- **Termine veröffentlichen:** Wie du einfach Termine per WhatsApp oder Kalender veröffentlichen kannst → `/mitmachen`
+- **Eigenen Kalender betreiben:** Unter eigenem Namen, auf eurer Website → `/dein-kalender`
+- **Wer dahintersteckt:** Wer den Dorfkalender macht → `/ueber-uns`
 
 Fokusjob dieser Seite ist „know what is on". Das Band steht darunter und
 nennt die drei anderen Anliegen, jedes in der Sprache der Leserin.

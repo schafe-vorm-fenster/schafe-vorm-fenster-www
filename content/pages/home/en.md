@@ -332,15 +332,15 @@ replaces it (SRC-0001 §5, `reach-and-usage` is `expired`).
 
 **Kicker:** Here for something else today?
 
-- **Publish dates:** Want to add dates for your club, your fire brigade, or your municipality? → `/mitmachen`
-- **Run your own calendar:** Want a calendar under your own name, on your own website? → `/dein-kalender`
-- **Who's behind it:** Want to know who makes the village calendar? → `/ueber-uns`
+- **Publish dates:** How to publish dates the easy way, by WhatsApp or from a calendar → `/mitmachen`
+- **Run your own calendar:** Under your own name, on your own website → `/dein-kalender`
+- **Who's behind it:** Who makes the village calendar → `/ueber-uns`
 
 ## Closing CTA
 
 <!-- id: home-11-closing-cta; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Heading:** Then go find out what's on where you live.
+**Heading:** See what's on where you live.
 
 **Reassurance text:** Free, no account, permanently.
 

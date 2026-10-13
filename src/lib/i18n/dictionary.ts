@@ -227,6 +227,12 @@ export interface Dictionary {
    * `data-demo="true"` — see `src/lib/content/context-band.ts`.
    */
   contextBand: {
+    /**
+     * The band's mono kicker beside (desktop, tablet) or under (phone) its
+     * heading — "Auch interessant" in the owner's design of 2026-10-12
+     * (SRC-0014 §Page chrome revised → Context band, DEC-0156).
+     */
+    kicker: string;
     blurbs: {
       knowWhatIsOn: string;
       publishDates: string;
@@ -542,16 +548,15 @@ const de: Dictionary = {
     otherConcerns: "Anderes Anliegen?",
   },
   contextBand: {
+    kicker: "Auch interessant",
     blurbs: {
-      // The three questions are the wording of the pages' own band slots
-      // (content/pages/home/de.md:251-253, dein-ort/de.md, mitmachen/de.md);
-      // CG-030 wants statements, so they render demo-marked until the owner
-      // writes them. The publish blurb is the owner's (copy guide CG-030 example,
-      // review "Heute mit einem anderen Anliegen hier?").
-      knowWhatIsOn: "Du willst wissen, was in deinem Ort als Nächstes ansteht?",
+      // The owner's card lines from the design of 2026-10-12 (issue #39,
+      // DEC-0156) — statements, so CG-030 holds and no card is demo-marked.
+      // The publish blurb is the owner's (copy guide CG-030 example).
+      knowWhatIsOn: "Was in deinem Ort als Nächstes ansteht",
       publishDates: "Wie du einfach Termine per WhatsApp oder Kalender veröffentlichen kannst",
-      yourCalendar: "Du willst einen Kalender unter eigenem Namen, auf eurer eigenen Website?",
-      whyUs: "Du willst wissen, wer den Dorfkalender macht?",
+      yourCalendar: "Unter eigenem Namen, auf eurer Website",
+      whyUs: "Wer den Dorfkalender macht",
     },
   },
   languageSwitch: {
@@ -731,14 +736,13 @@ const en: Dictionary = {
     otherConcerns: "Something else today?",
   },
   contextBand: {
+    kicker: "Also of interest",
     blurbs: {
-      // The English band slots' own wording (content/pages/home/en.md,
-      // dein-ort/en.md, mitmachen/en.md); the publish line is the English
-      // twin of the owner's German sentence.
-      knowWhatIsOn: "Want to know what's coming up where you live?",
+      // The English twins of the owner's German card lines (DEC-0156).
+      knowWhatIsOn: "What's coming up next where you live",
       publishDates: "How to publish dates the easy way, by WhatsApp or from a calendar",
-      yourCalendar: "Want a calendar under your own name, on your own website?",
-      whyUs: "Want to know who makes the village calendar?",
+      yourCalendar: "Under your own name, on your own website",
+      whyUs: "Who makes the village calendar",
     },
   },
   languageSwitch: {

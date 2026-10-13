@@ -12,6 +12,9 @@
 }
 
 .merged {
+  /* The band's cards stand on `paper` here, so they take the `surface` fill —
+     a card's fill is never its ground's (TS-WEB-0017-A29, DEC-0156). */
+  --band-card-fill: var(--color-neutral-surface);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);

@@ -1,4 +1,4 @@
-import { Icon } from "../icon/icon";
+import { Icon, type IconName } from "../icon/icon";
 import { RouteLink } from "../route-link/route-link";
 
 import { bandEntries } from "@/src/lib/content/context-band";
@@ -19,6 +19,19 @@ export function otherJobs(currentJob: NavEntry["label"]): readonly NavEntry[] {
   return HEADER_JOBS.filter((entry) => entry.label !== currentJob);
 }
 
+/**
+ * The glyph in each card's icon well, one per job (SRC-0014 §Page chrome
+ * revised 2026-10-12 → Context band, issue #39: "Icons aus dem Lucide-Set,
+ * z. B. `map-pin`, `monitor`, `users`"). Keyed by the job, so a page's band
+ * shows the same glyph for the same job wherever it appears.
+ */
+export const JOB_ICONS: Readonly<Record<string, IconName>> = {
+  knowWhatIsOn: "map-pin",
+  publishDates: "megaphone",
+  yourCalendar: "monitor",
+  whyUs: "users",
+};
+
 export interface JobLinksProps {
   readonly jobs: readonly NavEntry[];
   readonly locale?: Locale;
@@ -34,11 +47,11 @@ export interface JobLinksProps {
  * The shared three-entry list markup — `context-band` and `closing-cta`'s
  * merged mode render the same jobs and must not disagree (TS-WEB-0006 D6).
  *
- * Each entry is a menu-like row (DEC-0120, review R-home-32): a framed
- * 44 px target with the job label, the blurb naming audience and content
- * together (CG-030) and an arrow — so the band reads as the navigation
- * element it is, not as half a line of links. A blurb that is not yet a
- * CG-030 statement puts `data-demo="true"` on its row.
+ * Each entry is a link card (DEC-0156, owner's design of 2026-10-12, issue
+ * #39): a pill with a 40 px icon well on the left, the job label in bold with
+ * the blurb beneath (CG-030), and a 44 px `ink` disc carrying a `lime-500`
+ * arrow on the right. The whole card is the link and the target. A blurb that
+ * is not yet a CG-030 statement puts `data-demo="true"` on its card.
  */
 export function JobLinks({ jobs, locale = "de", entries, className }: JobLinksProps) {
   const d = dictionary(locale);
@@ -49,17 +62,27 @@ export function JobLinks({ jobs, locale = "de", entries, className }: JobLinksPr
       {rows.map((entry) => (
         <li className={styles.item} key={entry.route}>
           <RouteLink
-            className={styles.row}
+            className={styles.card}
+            data-band-card=""
             data-demo={entry.demo ? "true" : undefined}
             locale={locale}
             styled={false}
             to={entry.route}
           >
-            <span className={styles.text}>
-              <span className={styles.label}>{d.nav[entry.label]}</span>
-              <span className={styles.blurb}>{entry.blurb}</span>
+            <span aria-hidden="true" className={styles.well} data-band-well="">
+              <Icon name={JOB_ICONS[entry.label] ?? "arrow-right"} size={24} />
             </span>
-            <Icon className={styles.arrow} name="arrow-right" size={24} />
+            <span className={styles.text}>
+              <span className={styles.label} data-band-label="">
+                {d.nav[entry.label]}
+              </span>
+              <span className={styles.blurb} data-band-blurb="">
+                {entry.blurb}
+              </span>
+            </span>
+            <span aria-hidden="true" className={styles.disc} data-band-disc="">
+              <Icon name="arrow-right" size={24} />
+            </span>
           </RouteLink>
         </li>
       ))}
