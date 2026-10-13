@@ -60,7 +60,13 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  min-height: 25rem;
+  /* Phone: a flat band (DEC-0153 amendment, 2026-10-13). The stage has to fit
+     G-4's 1.5-screen budget at 390 and 360 px; at 400 px it measured 1528 and
+     1557. The quote still sits on the photograph, so the band is as tall as
+     the quote needs and at least 220 px; the anchored crop keeps the focal
+     point above it in this ratio as in any other. From md the 400 px media
+     of the board returns. */
+  min-height: 13.75rem;
   overflow: hidden;
   padding: var(--space-6) var(--space-4);
   position: relative;
@@ -307,6 +313,7 @@
 /* md — more air in both panels. */
 @media (min-width: 40rem) {
   .slide {
+    min-height: 25rem;
     padding: var(--space-8);
   }
 
