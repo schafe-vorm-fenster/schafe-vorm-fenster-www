@@ -261,12 +261,22 @@ textarea {
   }
 
   /* Headlines at most 8 columns, running text at most 7 and never wider than
-     the text measure. */
-  .container :where(h1, h2) {
+     the text measure.
+
+     These are element defaults, so they carry an element's specificity
+     (0,0,1) and nothing more: `:where(.container)` adds none. A component
+     rule (a CSS-module class, 0,1,0) that narrows its own headline — the
+     hero's `h1` in 7 columns — then wins whatever order the stylesheets
+     arrive in. With `.container :where(h1, h2)` (0,1,0) the two tied, and the
+     production build ships this file after the component chunks, so the hero
+     `h1` took 8 columns there (792 px against 690 px at 1440) while the dev
+     server, loading it first, showed 7. Being later in this file than the
+     bare `p` rule is what still lets the paragraph cap replace it. */
+  :where(.container) :is(h1, h2) {
     max-width: var(--span-8);
   }
 
-  .container :where(p) {
+  :where(.container) p {
     max-width: min(var(--measure-text), var(--span-7));
   }
 
