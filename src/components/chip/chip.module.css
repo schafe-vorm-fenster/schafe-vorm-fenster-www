@@ -46,9 +46,9 @@
 
 /* On an ink, lime-500 or photo ground. */
 .chip.dark {
-  /* `text-2`, the darkest neutral above `ink` — never a dark green (DEC-0160):
-     `paper` on it 10.26:1. */
-  background: var(--color-neutral-text2);
+  /* A neutral dark grey (`ink` + 18 % `paper`) — never a dark green, and not
+     `text-2`, which reads as one (DEC-0160 amendment): `paper` on it 13.24:1. */
+  background: var(--fill-ink-hover);
   color: var(--color-neutral-paper);
 }
 
@@ -63,5 +63,5 @@
 }
 
 .chip.selected:hover {
-  background: var(--color-neutral-text2); /* DEC-0160 */
+  background: var(--fill-ink-hover); /* DEC-0160 */
 }

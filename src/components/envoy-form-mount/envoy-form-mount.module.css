@@ -91,7 +91,7 @@
 }
 
 .submit:hover {
-  background: var(--color-neutral-text2); /* hover on ink, DEC-0160 */
+  background: var(--fill-ink-hover); /* hover on ink, DEC-0160 */
 }
 
 .submit:disabled {

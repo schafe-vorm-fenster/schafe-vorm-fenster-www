@@ -87,3 +87,14 @@ open after the `ink` decision:
   `brand-design`, followed by a pin move. It is not fixed here with a literal.
 - The PNG renders of the boards in `concept/v2.0/assets` were not
   re-rendered.
+
+## Amendment 2026-10-13: the hover is neutral grey, not `text-2`
+
+`text-2` (`#39412C`, R 57 G 65 B 44) is the lime hue at low chroma. As a fill it
+reads as the dark green the owner removed (issues #19, #57), the defect this
+record exists to close. The hover of an `ink` fill and the dark chip therefore
+take `--fill-ink-hover` (`app/styles/components.css`): `ink` mixed with 18 %
+`paper`, ≈ `#2D2D2C`, a neutral grey built from tokens only. Contrast: `paper`
+13.24:1, `lime-500` 8.16:1. `text-2` stays a text colour. A neutral grey step in
+`@schafe-vorm-fenster/brand-design` would replace the mix; until one ships, the
+mix is the value.
