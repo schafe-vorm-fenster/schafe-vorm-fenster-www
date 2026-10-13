@@ -71,7 +71,7 @@ images:
       content/legal/image-credits.md.
     alt: >-
       The town hall of Gützkow in Western Pomerania, a white rendered building with a flight of
-      steps onto the street.
+      steps onto the street. Over it lies a drawing of an events calendar on a website.
     licence: CC BY-SA 2.5
     focal:
       x: 42

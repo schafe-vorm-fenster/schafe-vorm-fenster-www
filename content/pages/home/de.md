@@ -71,7 +71,7 @@ images:
       content/legal/image-credits.md.
     alt: >-
       Das Rathaus von Gützkow in Vorpommern, ein weiß verputzter Altbau mit Freitreppe an der
-      Straße.
+      Straße. Darüber liegt die gezeichnete Ansicht eines Terminkalenders auf einer Webseite.
     licence: CC BY-SA 2.5
     focal:
       x: 42

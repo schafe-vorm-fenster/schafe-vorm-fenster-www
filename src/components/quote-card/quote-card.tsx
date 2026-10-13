@@ -20,6 +20,13 @@ export interface QuoteCardProps {
   /** Opens the article in a new tab, which the link then says. */
   readonly newTab?: boolean;
   readonly locale?: Locale;
+  /**
+   * `photo` sets the quote on a photo surface (DEC-0162 §1): the story stage's
+   * quote treatment — a `lime-500` quotation mark, 22–34 px / 700 — no hairlines
+   * (they do not read on a photograph), and the ground's own secondary text
+   * colour for role and organisation. `ground` is the flat block on a section.
+   */
+  readonly tone?: "ground" | "photo";
   readonly className?: string;
 }
 
@@ -54,10 +61,16 @@ export function QuoteCard({
   sourceUrl,
   newTab = false,
   locale = "de",
+  tone = "ground",
   className,
 }: QuoteCardProps) {
   return (
-    <figure className={[styles.card, className].filter(Boolean).join(" ")} data-quote-card>
+    <figure
+      className={[styles.card, tone === "photo" ? styles.photo : undefined, className]
+        .filter(Boolean)
+        .join(" ")}
+      data-quote-card
+    >
       <blockquote className={styles.quote}>
         <p className={styles.text}>{quote}</p>
       </blockquote>

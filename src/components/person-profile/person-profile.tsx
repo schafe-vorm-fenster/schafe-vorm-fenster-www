@@ -40,6 +40,14 @@ export interface PersonProfileProps {
    * bio, and nothing else.
    */
   readonly textOnly?: boolean;
+  /**
+   * Where the profile **is** the section (`/ueber-uns`'s "Wer dahintersteckt",
+   * DEC-0162 §1), the name is the section's `h2` and carries this id, and the
+   * kicker stands above it. Without it the name is a plain line, as in a grid
+   * of profiles under a heading of their own.
+   */
+  readonly headingId?: string;
+  readonly kicker?: string;
   readonly className?: string;
 }
 
@@ -71,6 +79,8 @@ export function PersonProfile({
   portraitCredit,
   locale,
   textOnly = false,
+  headingId,
+  kicker,
   className,
 }: PersonProfileProps) {
   return (
@@ -87,9 +97,18 @@ export function PersonProfile({
         state={portraitState}
       />
       )}
-      <p className={styles.name}>{name}</p>
-      <p className={styles.role}>{role}</p>
-      {bio ? <p className={styles.bio}>{bio}</p> : null}
+      <div className={styles.text}>
+        {kicker ? <p className={styles.kicker}>{kicker}</p> : null}
+        {headingId ? (
+          <h2 className={styles.heading} id={headingId}>
+            {name}
+          </h2>
+        ) : (
+          <p className={styles.name}>{name}</p>
+        )}
+        <p className={styles.role}>{role}</p>
+        {bio ? <p className={styles.bio}>{bio}</p> : null}
+      </div>
     </article>
   );
 }

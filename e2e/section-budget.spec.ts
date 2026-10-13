@@ -63,6 +63,14 @@ const KNOWN_OVER: Record<string, Record<string, number>> = {
   //    give it as one section with one kicker, and G-3's kicker vocabulary
   //    is closed, so the second half has no role name to open with.
   "/dein-kalender": { "embed-config": 1786, tiers: 1632 },
+  // `/ueber-uns` chapter 03 (DEC-0162 §2): the proof stream as expandable
+  // stories, one module in the owner's design of 2026-10-12. Each title is the
+  // verbatim `claim:` of its record, which CG-027 §6 forbids shortening, and
+  // the reserved proof place (D5) stands in the same grid; one open story plus
+  // three closed tiles and the reserved place do not fit 1270 px at 390 px.
+  // Measured 2026-10-13. A fifth story or a longer claim fails here.
+  "/ueber-uns": { "kapitel-3": 1670 },
+  "/en/about": { "kapitel-3": 1537 },
   "/en/your-calendar": { "embed-config": 1713, tiers: 1632 },
 };
 

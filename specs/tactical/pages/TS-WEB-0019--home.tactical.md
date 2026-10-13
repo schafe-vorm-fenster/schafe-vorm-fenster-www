@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0010]
 sources: [SRC-0001, SRC-0003, SRC-0014]
-decisions: [DEC-0048, DEC-0081, DEC-0082, DEC-0105, DEC-0109, DEC-0110, DEC-0129, DEC-0154, DEC-0159]
+decisions: [DEC-0048, DEC-0081, DEC-0082, DEC-0105, DEC-0109, DEC-0110, DEC-0129, DEC-0154, DEC-0159, DEC-0162]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -280,12 +280,14 @@ not conversion.
 | TS-WEB-0019-A17 | e2e | At 360 × 800 on `/` and `/en`, the hero search's placeholder is the instruction ("Tipp den Ortsnamen ein" / "Type the place name") and fits the field uncut; its `label` still names the field ("Dein Ort" / "Your place"); the hero prints no helper line; the "use my location" control (≥ 44 px) stands at most 12 px below the field with nothing between them, and its explanation is its `aria-describedby` text and `title`, not visible text (D2, DEC-0159, issue #20). |
 | TS-WEB-0019-A18 | e2e | `/`, `/en` and `/?ort=<covered place>` render no counter: no `#live-counters`, no counter label, and no request to `/api/stats` during the load (D3 block 2d, DEC-0154, issue #24). Supersedes A14. |
 | TS-WEB-0019-A19 | e2e | On `/` (S1) and `/?ort=<covered place with dates>` (S2), the live-dates section ends in exactly one hand-off row (`data-handoff`) below its last event row: the question at more than body size and exactly one `data-cta="secondary"` control resolving to `/mitmachen`; the row carries no `primary`, and the page still has exactly one visible `data-cta="primary"` (D3 row 1, DEC-0159, issue #25). |
+| TS-WEB-0019-A20 | e2e | The `embed` scene's photograph carries the `web-calendar-overlay` drawing. At 360, 390, 640 and 1280 px the drawing overlaps the photograph, stays inside the viewport with the page gutter, and does not cover the photograph's declared focal point; the photograph's `alt` names both the photograph and the drawing; no horizontal scroll (issue #32, SRC-0014 §Web-calendar overlay, DEC-0162 §5). |
+| TS-WEB-0019-A21 | e2e | At 360, 390, 640 and 1280 px the photograph of the `provenance` scene runs from viewport edge to viewport edge, its box declares its ratio (16:9) before the image arrives, and the page does not scroll horizontally (issue #35, SRC-0014 §Section grounds "Images inside a colour section run full-bleed", DEC-0162 §6). |
 
 ## Coverage
 
 | Requirement | Aspect discharged here | Discharged by | Owned elsewhere |
 | --- | --- | --- | --- |
-| FUN-WEB-0010 (`/` exists, focus job set by entry context with default "know what is on", primary conversion = the focus job's CTA, none of its own) | the **composition**: manifest values, above-the-fold states, block sequence, scene and proof counts, module set, page-level metadata and the single event | D1–D7 · A1–A19 | the **route** `/` itself — its place in the URL inventory, its rendering layer, navigation and the link facade: TS-WEB-0004 D1/D2/D4/D6. The generic composition rules it obeys: TS-WEB-0006 D2–D7. Module behaviour: TS-WEB-0008. Proof selection: TS-WEB-0005. Stage resolution: TS-WEB-0010. |
+| FUN-WEB-0010 (`/` exists, focus job set by entry context with default "know what is on", primary conversion = the focus job's CTA, none of its own) | the **composition**: manifest values, above-the-fold states, block sequence, scene and proof counts, module set, page-level metadata and the single event | D1–D7 · A1–A21 | the **route** `/` itself — its place in the URL inventory, its rendering layer, navigation and the link facade: TS-WEB-0004 D1/D2/D4/D6. The generic composition rules it obeys: TS-WEB-0006 D2–D7. Module behaviour: TS-WEB-0008. Proof selection: TS-WEB-0005. Stage resolution: TS-WEB-0010. |
 
 ## Open points
 

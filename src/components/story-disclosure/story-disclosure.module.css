@@ -1,0 +1,167 @@
+/*
+ * `story-disclosure` — SRC-0014 §Story disclosure, DEC-0162 §2.
+ *
+ * Flat blocks on the section ground: radius 0, no border, no shadow. A closed
+ * story is a `lime-100` block with `ink` type, the open one a `violet-500`
+ * block with `paper` type spanning the whole row. The state is read off the
+ * native `<details>` with `:has()`; no script decides anything here.
+ */
+.grid {
+  display: grid;
+  gap: var(--space-2);
+  grid-auto-flow: row dense;
+  grid-template-columns: minmax(0, 1fr);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 40rem) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.item {
+  background: var(--color-lime-100);
+  color: var(--color-neutral-ink);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.item:has(.details[open]) {
+  background: var(--color-violet-500);
+  color: var(--color-neutral-paper);
+  grid-column: 1 / -1;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.kicker {
+  color: var(--color-lime-800);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  line-height: var(--leading-normal);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.item:has(.details[open]) .kicker {
+  color: var(--color-lime-300);
+}
+
+.title {
+  font-size: var(--type-card-size);
+  font-weight: 700;
+  letter-spacing: var(--type-card-tracking);
+  line-height: var(--type-card-leading);
+  margin: 0;
+  max-width: none;
+}
+
+/* From `md` the open story's title steps up to the sub head; on the phone it
+   keeps the card size, so one open story does not double the section. */
+@media (min-width: 40rem) {
+  .item:has(.details[open]) .title {
+    font-size: var(--type-subhead-size);
+    letter-spacing: var(--type-subhead-tracking);
+    line-height: var(--leading-tight);
+    max-width: var(--span-8);
+  }
+}
+
+.details {
+  margin-top: auto;
+}
+
+.summary {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: var(--type-meta-size);
+  font-weight: 700;
+  gap: var(--space-3);
+  list-style: none;
+  min-height: var(--height-control);
+  width: fit-content;
+}
+
+/* The engine's own marker: the control well replaces it. */
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:focus-visible {
+  outline: 3px solid var(--color-violet-500);
+  outline-offset: 2px;
+}
+
+.item:has(.details[open]) .summary:focus-visible {
+  outline-color: var(--color-neutral-paper);
+}
+
+.closeLabel {
+  display: none;
+}
+
+.details[open] .openLabel {
+  display: none;
+}
+
+.details[open] .closeLabel {
+  display: inline;
+}
+
+/* SRC-0014 §Wells: the 44 px control well, `ink` with a `paper` glyph on a
+   light block, `paper` with an `ink` glyph on the violet one. */
+.well {
+  align-items: center;
+  background: var(--color-neutral-ink);
+  border-radius: 999px;
+  color: var(--color-neutral-paper);
+  display: inline-flex;
+  flex: none;
+  height: var(--height-control);
+  justify-content: center;
+  width: var(--height-control);
+}
+
+.details[open] .well {
+  background: var(--color-neutral-paper);
+  color: var(--color-neutral-ink);
+}
+
+/* Open, the plus reads as a close mark. A state, not a movement: no
+   transition (SRC-0014 §Motion). */
+.details[open] .glyph {
+  transform: rotate(45deg);
+}
+
+.story {
+  font-size: var(--type-body-size);
+  line-height: var(--leading-relaxed);
+  margin: var(--space-3) 0 0;
+  max-width: min(var(--measure-text), var(--span-7));
+}
+
+.trailing {
+  display: flex;
+}
+
+.trailing > * {
+  flex: 1;
+}

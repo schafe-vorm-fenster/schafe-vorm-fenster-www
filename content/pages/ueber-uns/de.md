@@ -92,7 +92,6 @@ images:
     focal:
       x: 48
       "y": 45
-    lcp: true
     status: real
     file: /images/real/ueber-uns-founder-portrait.webp
     width: 1152
@@ -163,13 +162,64 @@ rund 280). Preisangaben aus `community-calendar` (kostenlos, „forever") und
 `portalize-calendar` (480/EUR/Jahr) — gelesen, nicht getippt. Beleg zum
 Bürgermeister-Satz: `founder-former-volunteer-mayor` (`cleared`).
 
+Seit dem Umbau nach dem Entwurf vom 2026-10-12 (#55, DEC-0162) stehen die drei
+Sätze des Dorfarguments als die drei Grundsätze unter „Was wir daraus
+mitgenommen haben", der Satz mit Beleg steht in Kapitel 02.
+
+## Slot 1a — Kapitel (Bühne, Kapitelzeilen, Grundsätze, Auszeichnung)
+
+<!-- id: ueber-uns-1a-chapters; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"]; status: draft -->
+
+**Bühne — Kicker:** Über uns · Schlatkow, Vorpommern
+
+**Kapitel 01 — Ort:** Schlatkow
+
+**Kapitel 02 — Überschrift:** Eine Schafweide vor dem Küchenfenster.
+
+**Kapitel 02 — Ort:** Schmatzin · Bürgermeisteramt
+
+**Kapitel 03 — Überschrift:** Dann wurde es mehr als Brötchen.
+
+**Kapitel 03 — Ort:** Vorpommern-Greifswald
+
+**Geschichte — öffnen:** Die Geschichte
+
+**Geschichte — schließen:** Schließen
+
+**Grundsätze — Überschrift:** Was wir daraus mitgenommen haben.
+
+**Grundsatz 01 — Titel:** Einfach muss es sein.
+
+**Grundsatz 02 — Titel:** Fertig statt Projekt.
+
+**Grundsatz 03 — Titel:** Für das Dorf kostenlos.
+
+<!-- note: ab hier Autorennotiz, keine Copy -->
+
+Die Zeilen sind die Überschriften, Kicker und Bedienwörter des Entwurfs des
+Owners vom 2026-10-12 (`plan/reviews/2026-10-12/Design - Über uns Vorschau -
+*.jpg`, Issue #55), wörtlich übernommen, wie die Review-Sätze in Slot 1. Die
+Ortszeilen tragen nur Orte und das Amt aus Slot 2 und dem Beleg
+`founder-former-volunteer-mayor`. Nicht übernommen ist, was im Entwurf als
+Fließtext oder Zahl ohne Quelle steht (DEC-0162 §3): der Lead der Bühne, der
+zweite Absatz von Kapitel 01, die Fortsetzung von Kapitel 02, die Einleitung
+von Kapitel 03, die drei Grundsatz-Texte (die Seite rendert dafür die drei
+Sätze des Dorfarguments aus Slot 1), die Schlagwörter der Person, „280
+Einwohner" (CG-034) und „Seit 2018" (TS-WEB-0027 D4). Die Geschichten in
+Kapitel 03 sind die belegten Elemente aus Slot 3 und 3b, nicht die
+Entwurfskacheln „Line Dancer" und „Bienenfotogalerie": für beide gibt es keinen
+belegten Einzelfall (`google-baecker-schlatkow` sagt das für die Line-Dance-
+Geschichte ausdrücklich).
+
 ## Slot 2 — Die Geschichte
 
 <!-- id: ueber-uns-2-story; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"]; status: draft -->
 
 **Überschrift:** Angefangen hat es mit Brötchen.
 
-**Absatz (Anfang und Name):** Angefangen hat es mit der Suche nach frischen Brötchen. Nach dem Umzug von Berlin nach Schlatkow fragte die Familie zwei Wochen lang nach einem Bäckerwagen, legte sich schließlich morgens auf die Lauer und fuhr dem Wagen ins Nachbardorf hinterher, um einen Halt in Schlatkow zu vereinbaren. Der Name stammt aus der Amtszeit als Bürgermeister von Schmatzin: Die Gemeinde unterhielt eine Schafweide, die vom Küchenfenster aus zu sehen war.
+**Absatz (Anfang):** Angefangen hat es mit der Suche nach frischen Brötchen. Nach dem Umzug von Berlin nach Schlatkow fragte die Familie zwei Wochen lang nach einem Bäckerwagen, legte sich schließlich morgens auf die Lauer und fuhr dem Wagen ins Nachbardorf hinterher, um einen Halt in Schlatkow zu vereinbaren.
+
+**Absatz (Name):** Der Name stammt aus der Amtszeit als Bürgermeister von Schmatzin: Die Gemeinde unterhielt eine Schafweide, die vom Küchenfenster aus zu sehen war.
 
 **Zitat (Gründer):** Wenn man alles sammelt, ist plötzlich in jedem Dorf jeden Tag irgendwas los. Wir müssen das nur sichtbar machen.
 
@@ -191,38 +241,31 @@ Titel und Link kommen aus dem `media-echo`-Eintrag
 und Bildung Mecklenburg-Vorpommern e. V.). Zitat und Beleg stehen als ein
 Element (`quote-card`, CG-028).
 
-<!-- id: ueber-uns-2a-anecdotes-demo; content_type: section; provenance: generated; derived_from: []; status: draft; demo: true -->
-
-**Absatz (Ortsgröße):** Schlatkow hat rund 280 Einwohner.
-
-**Absatz (Anekdote 1):** Im Nachbardorf treten Lion-Dancer auf. Im Kalender steht der Termin neben der Feuerwehrversammlung.
-
-**Absatz (Anekdote 2):** Eine Bienenfotogalerie ist im Dorfkalender ein Termin wie jeder andere.
-
-**Absatz (Anekdote 3):** In der Corona-Zeit, als alle im Homeoffice saßen, war der Halt des Bäckerautos der Termin, auf den man wartete.
-
-Die Zahl „rund 280" ist die des Owners (Review vom 2026-09-22, DEC-0084 §1);
-die vier Anekdoten hat das Review nur benannt, nicht geschrieben (R-ueber-7:
-Lion-Dancer, Bienenfotogalerie, Bäckerauto, Corona-Homeoffice). Die drei
-Absätze hier sind deshalb Platzhalter: `provenance: generated`, `demo: true`,
-im Markup `data-demo="true"`, mit Zeile in `state/open.md`. Der
-Bäckerauto-Weg selbst steht als belegter Absatz in Slot 2.
+Die Platzhalter-Anekdoten, die hier als `ueber-uns-2a-anecdotes-demo` standen
+(`provenance: generated`, `demo: true`), sind mit dem Umbau nach dem Entwurf vom
+2026-10-12 gestrichen (DEC-0162 §3): Kapitel 03 zeigt nur belegte Geschichten,
+und eine Kachel ohne Quelle liefert die Seite nicht aus (#55). Die Corona- und
+Bäckerauto-Anekdote hat dafür jetzt einen Beleg (`homeoffice-mobile-anbieter`,
+Slot 3 und 3b).
 
 ## Slot 3 — Belegstrom (7 Plätze, 1 typreserviert)
 
-<!-- id: ueber-uns-3-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/media-echo@0.3.3", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"]; status: draft -->
+<!-- id: ueber-uns-3-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter", "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"]; status: draft -->
 
 **Überschrift:** Was andere sagen
 
-Pool: der volle `proof`-Bestand plus `media-echo` (31 Einträge). Fünf der
-sieben Plätze sind heute mit freigegebenen Belegen besetzbar — alle fünf
-tragen `usage_rights: cleared`:
+Pool: der volle `proof`-Bestand plus `media-echo` (31 Einträge). Seit dem
+Umbau nach dem Entwurf vom 2026-10-12 ist der Strom das Kapitel 03, „Dann
+wurde es mehr als Brötchen." (DEC-0162 §2): vier Geschichten, alle
+`usage_rights: cleared`, jede Zeile der wörtliche `claim:` ihres Datensatzes.
+Die NØRD-Auszeichnung steht im eigenen Auszeichnungsblock (Slot 4), der
+Bürgermeister-Beleg in Kapitel 02 (Slot 1), deshalb stehen beide hier nicht
+mehr:
 
-1. NØRD AWARD 2026, Kategorie Smart Community, unter Bitkom-Schirmherrschaft, verliehen am 28. Mai 2026 auf der NØRD digital convention in Rostock. — NØRD digital convention / digitales MV, Mai 2026
-2. Der Gründer hat als ehrenamtlicher Bürgermeister das Amt gehalten, dem der Dienst dient. — Zukunftswege Ost-Vorpommern, Januar 2026
-3. In der Pandemie wurden sämtliche Impfangebote und Testzentren-Öffnungszeiten des Landkreises tagesaktuell und ortsgenau über die Dorfkalender veröffentlicht. — Landkreis Vorpommern-Greifswald, 2022
-4. Der Dorfkalender hat 2022 die Integration ukrainischer Geflüchteter ins Dorfleben unterstützt: Anschluss an Vereinstreffen, Veranstaltungen und mobile Händler. — eu:react-Abschlussbericht, Juli 2022
-5. Wer bei Google nach „Bäcker Schlatkow" sucht, findet das mobile Bäckerauto und seinen Tag — nicht Filialen in Anklam. — eu:react-Abschlussbericht, Juli 2022
+1. In der Pandemie wurden sämtliche Impfangebote und Testzentren-Öffnungszeiten des Landkreises tagesaktuell und ortsgenau über die Dorfkalender veröffentlicht. — Landkreis Vorpommern-Greifswald, 2022
+2. Der Dorfkalender hat 2022 die Integration ukrainischer Geflüchteter ins Dorfleben unterstützt: Anschluss an Vereinstreffen, Veranstaltungen und mobile Händler. — eu:react-Abschlussbericht, Juli 2022
+3. Wer bei Google nach „Bäcker Schlatkow" sucht, findet das mobile Bäckerauto und seinen Tag — nicht Filialen in Anklam. — eu:react-Abschlussbericht, Juli 2022
+4. In der Corona-Zeit wurden Home-Office-Nutzer über die Dorfkalender erstmals auf mobile Anbieter aufmerksam — und teils zu Stammkunden. — eu:react-Abschlussbericht, Juli 2022
 
 Die Reihenfolge hier ist chronologisch, neueste zuerst — nicht die
 Anzeigereihenfolge: Welches Element auf welchem Platz steht, entscheidet die
@@ -236,6 +279,23 @@ TS-WEB-0027 D4 verbietet sie auf dieser Seite ausdrücklich — „no year figur
 rendered as a module, no place count, no badge, no ‚seit …' claim anywhere on
 the page". Weitere Lücken verkürzen den Strom, sie fügen keinen zweiten
 leeren Platz hinzu (D5).
+
+<!-- id: ueber-uns-3b-stories; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"]; status: draft -->
+
+**Geschichte 1 (Impftermine):** Als es darauf ankam, trug der Dorfkalender die Daseinsvorsorge mit: Alle Impf- und Testangebote des Landkreises standen tagesaktuell und ortsgenau darin. Der Landkreis konnte die Daten nicht strukturiert übergeben, also wurden sie von Hand übernommen.
+
+**Geschichte 2 (Geflüchtete):** Mit Kriegsausbruch 2022 kamen Geflüchtete oft direkt in den Dörfern des Landkreises an. Der Kalender erleichterte ihnen den Zugang zum Dorfleben, zu Veranstaltungen, Vereinstreffen und mobilen Händlern. Daraus entstand eine mehrsprachige Ausgabe auf Deutsch, Polnisch, Ukrainisch und Russisch und Englisch.
+
+**Geschichte 3 (Bäcker Schlatkow):** Wer bei Google einen Bäcker im Dorf sucht, findet das Bäckerauto samt Wochentag statt der nächsten Filiale in der Stadt. So finden auch Ortsunkundige, Touristen und Zugezogene die Grundversorgung.
+
+**Geschichte 4 (Homeoffice):** Als in der Corona-Zeit mehr Menschen im Landkreis zu Hause arbeiteten, erreichten uns Erfahrungsberichte: Über die Kalender wurden sie zum ersten Mal auf mobile Dienste aufmerksam, und manche sind Stammkunden geworden.
+
+Je eine Geschichte zu jeder Zeile aus Slot 3, in derselben Reihenfolge (die
+Seite verbindet sie über die Position). Jeder Text erzählt den Fließtext des
+jeweiligen `proof`-Datensatzes nach und fügt keine Tatsache hinzu: keine Zahl,
+keine Person (`ukraine-integration-dorfleben`: „Keine Einzelpersonen benannt"),
+beim Homeoffice keine Umsatzangabe („ausdrücklich nicht quantifizierbar").
+Die Geschichten sind die aufklappbaren Texte von Kapitel 03 (DEC-0162 §2).
 
 <!-- id: ueber-uns-3-testimonial-slot-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; status: draft -->
 
@@ -261,14 +321,25 @@ Accessibility-Baum. Die beiden Strings hat niemand geschrieben: `provenance:
 generated`, `demo: true`, im Markup `data-demo="true"`, Zeile in
 `state/open.md`.
 
-## Slot 4 — Archiv-Verweis
+## Slot 4 — Auszeichnung und Archiv-Verweis
 
-<!-- id: ueber-uns-4-archive; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: ueber-uns-4-archive; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"]; status: draft -->
 
-**Link-Text:** Das vollständige Presse- und Auszeichnungs-Archiv → `/ueber-uns/archiv`
+**Überschrift:** Ein Dorfprojekt, ausgezeichnet in Rostock.
 
-Genau ein Link, keine Vorschau, keine Liste, kein Zähler (TS-WEB-0027 D6), als
-eigener knapper Block (D2 Block 3).
+**Auszeichnung:** NØRD AWARD 2026, Kategorie Smart Community, unter Bitkom-Schirmherrschaft, verliehen am 28. Mai 2026 auf der NØRD digital convention in Rostock.
+
+**Quelle:** NØRD digital convention / digitales MV, Mai 2026
+
+**Siegel:** NØRD Award 2026 · Smart Community
+
+**Link-Text:** Presse und Auszeichnungen → `/ueber-uns/archiv`
+
+Die Auszeichnung ist das frühere Element 1 des Belegstroms, wörtlich
+(`noerd-award-2026-smart-community`, `usage_rights: cleared`). Überschrift und
+Link-Text sind die des Entwurfs vom 2026-10-12 (#55). Der Block trägt genau
+einen Link ins Archiv, keine Vorschau, keine Liste, keinen Zähler (TS-WEB-0027
+D6); das Archiv wird mit #56 zur Presseseite (`Q-0093`), das Ziel bleibt.
 
 ## Slot 5 — Team
 

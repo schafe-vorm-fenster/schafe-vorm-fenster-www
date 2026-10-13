@@ -413,6 +413,9 @@ for (const [path, standIn] of [
  * the rendered body could ever have found it — which is why this assertion
  * reads the attribute rather than the page.
  *
+ * Since DEC-0162 the portrait read here is the team portrait (the founder
+ * portrait became the quote band's background and carries no `alt`).
+ *
  * Since the imagery workstream the `alt` is content, not a constant in the
  * page: it comes from the locale file's own `images:` entry, so the two
  * locales carry two different sentences and the component's `FOUNDER_ALT`
@@ -425,7 +428,7 @@ test("F-3-5: text alternatives follow the page language", async ({ page }) => {
   const altOfPortrait = () =>
     page.evaluate(
       () =>
-        document.querySelector<HTMLImageElement>('img[src*="founder-portrait"]')?.alt ?? "",
+        document.querySelector<HTMLImageElement>('img[src*="ueber-uns-team"]')?.alt ?? "",
     );
 
   await page.goto("/en/about");

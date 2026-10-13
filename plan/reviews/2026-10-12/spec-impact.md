@@ -27,10 +27,10 @@ names it and the work package follows. *done* = implemented with its test. *deci
 | "Jetzt kostenlos anmelden" should point at the other ways | #29 | Text · Funktion | TS-WEB-0019 / TS-WEB-0022 (CTA target) | owed |
 | Remove "Aus dem Flyer geworden" | #30 | Text | content `home/*.md`, TS-WEB-0019 | owed |
 | "Ohne eigenes System" wording | #31 | Text | content `home/*.md` | owed |
-| Town-hall photo with a web-calendar overlay | #32 | Design | SRC-0014 §Photo surface | owed |
+| Town-hall photo with a web-calendar overlay | #32 | Design | SRC-0014 §Web-calendar overlay, TS-WEB-0019-A20, DEC-0162 §5 | done |
 | "Kalender bestellen" needs a supporting line | #33 | Text | CG-026 (supporting line) | spec changed |
 | "Über uns" text: humanizer, "mitgegründet", dashes | #34 | Text | CG-040 avoid list (to add with the fix) | owed |
-| "Über uns" photo not full width on the phone | #35 | Design | SRC-0014 §Section grounds, TS-WEB-0027 owed list | owed |
+| "Über uns" photo not full width on the phone | #35 | Design | SRC-0014 §Section grounds, TS-WEB-0019-A21, DEC-0162 §6 | done |
 | "Was andere sagen": one statement, deep link | #36 | Text · Funktion | TS-WEB-0027 owed list, TS-WEB-0019 | owed |
 | "Beleg aus der Region" printed as text | #37 | Funktion · Text | CG-035 (extended) | spec changed |
 | Proof lines as sentences | #38 | Text | CG-027 (70 limit withdrawn), `Q-0086` | spec changed · decision |
@@ -67,7 +67,7 @@ material.
 
 | Review point | Issue | Category | Where the spec carries it | Status |
 | --- | --- | --- | --- | --- |
-| Über uns rebuilt on the new design (chapters, expandable stories, person, award block) | #55 | Design | TS-WEB-0027 owed list (chapter structure), `Q-0087`, SRC-0014 Open decisions | owed · decision |
+| Über uns rebuilt on the new design (chapters, expandable stories, person, award block) | #55 | Design | TS-WEB-0027 D2/D3/D6, A2/A3/A8/A17, SRC-0014 §Story disclosure, DEC-0162 §1–§4 | done |
 | All press material on the website: where and how | #56 | Design · Funktion | TS-WEB-0028 D1 and D3 (amendment proposed), `Q-0093` | decision |
 
 ## Why #51 did not change
