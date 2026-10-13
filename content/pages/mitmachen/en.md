@@ -483,9 +483,9 @@ own gets minted for this stays open (`state/open.md` #17).
 
 **Kicker:** Here for something else today?
 
-- **See what's on:** Want to know what's coming up where you live? → `/dein-ort`
-- **Run your own calendar:** Want a calendar under your own name, on your own website? → `/dein-kalender`
-- **Who is behind it:** Want to know who makes the village calendar? → `/ueber-uns`
+- **See what's on:** What's coming up next where you live → `/dein-ort`
+- **Run your own calendar:** Under your own name, on your own website → `/dein-kalender`
+- **Who is behind it:** Who makes the village calendar → `/ueber-uns`
 
 This page's focus job is "publish our dates". The band sits below the main
 argument and above the closing CTA (principle 2) and is phrased as a

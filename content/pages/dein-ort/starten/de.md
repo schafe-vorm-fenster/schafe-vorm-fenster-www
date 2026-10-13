@@ -177,9 +177,9 @@ verspricht dadurch auch keinen (state/open.md Zeile 94).
 
 **Kicker:** Heute mit einem anderen Anliegen hier?
 
-- **Sehen, was los ist:** Du willst erst mal schauen, was in der Umgebung stattfindet? → `/dein-ort`
-- **Eigenen Kalender betreiben:** Du willst einen Kalender unter eigenem Namen, auf eurer eigenen Website? → `/dein-kalender`
-- **Wer dahintersteckt:** Du willst wissen, wer den Dorfkalender macht? → `/ueber-uns`
+- **Sehen, was los ist:** Was in deinem Ort als Nächstes ansteht → `/dein-ort`
+- **Eigenen Kalender betreiben:** Unter eigenem Namen, auf eurer Website → `/dein-kalender`
+- **Wer dahintersteckt:** Wer den Dorfkalender macht → `/ueber-uns`
 
 Fokusjob dieser Seite ist „publish our dates". Wer hier landet, hat nach
 einem Ort gesucht — das Band hält die drei anderen Anliegen erreichbar,

@@ -395,9 +395,9 @@ promise since 2022, not a pricing model that can quietly change.
 
 **Kicker:** Here for something else today?
 
-- **Publish your dates:** Want to enter dates for your club, your fire brigade, or your municipality? → `/mitmachen`
-- **Run your own calendar:** Want a calendar under your own name, on your own website? → `/dein-kalender`
-- **Who is behind it:** Want to know who makes the village calendar? → `/ueber-uns`
+- **Publish your dates:** How to publish dates the easy way, by WhatsApp or from a calendar → `/mitmachen`
+- **Run your own calendar:** Under your own name, on your own website → `/dein-kalender`
+- **Who is behind it:** Who makes the village calendar → `/ueber-uns`
 
 This page's focus job is "know what is on". The band sits below it and
 names the other three concerns, each in the reader's own words.

@@ -120,9 +120,9 @@ this website — the app takes over completely.
 
 **Kicker:** Here for something else today?
 
-- **See what's on:** Want to know what's coming up where you live? → `/dein-ort`
-- **Run your own calendar:** Want a calendar under your own name, on your own website? → `/dein-kalender`
-- **Who is behind it:** Want to know who makes the village calendar? → `/ueber-uns`
+- **See what's on:** What's coming up next where you live → `/dein-ort`
+- **Run your own calendar:** Under your own name, on your own website → `/dein-kalender`
+- **Who is behind it:** Who makes the village calendar → `/ueber-uns`
 
 From step 2 the band disappears: someone inside the flow should be able to
 finish it without the page offering three other routes out of it

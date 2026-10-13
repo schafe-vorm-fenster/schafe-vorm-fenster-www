@@ -335,15 +335,15 @@ Reichweitenzahl ersetzt sie (SRC-0001 §5, `reach-and-usage` ist `expired`).
 
 **Kicker:** Heute mit einem anderen Anliegen hier?
 
-- **Termine veröffentlichen:** Du willst Termine für deinen Verein, deine Feuerwehr oder deine Gemeinde eintragen? → `/mitmachen`
-- **Eigenen Kalender betreiben:** Du willst einen Kalender unter eigenem Namen, auf eurer eigenen Website? → `/dein-kalender`
-- **Wer dahintersteckt:** Du willst wissen, wer den Dorfkalender macht? → `/ueber-uns`
+- **Termine veröffentlichen:** Wie du einfach Termine per WhatsApp oder Kalender veröffentlichen kannst → `/mitmachen`
+- **Eigenen Kalender betreiben:** Unter eigenem Namen, auf eurer Website → `/dein-kalender`
+- **Wer dahintersteckt:** Wer den Dorfkalender macht → `/ueber-uns`
 
 ## Abschluss-CTA
 
 <!-- id: home-11-closing-cta; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Überschrift:** Dann schau nach, was bei dir los ist.
+**Überschrift:** Schau nach, was bei dir los ist.
 
 **Zusicherungstext:** Kostenlos, ohne Anmeldung, dauerhaft.
 

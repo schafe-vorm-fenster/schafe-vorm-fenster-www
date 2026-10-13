@@ -1,60 +1,102 @@
 /*
- * The band as a menu (DEC-0120, review R-home-32): three framed rows under
- * each other, each a 44 px target with label, blurb and arrow. The half-line
- * of three inline links it replaced did not read as navigation.
+ * The band as link cards — the owner's design of 2026-10-12 (issue #39,
+ * DEC-0156; SRC-0014 §Page chrome revised → Context band). A heading with a
+ * mono kicker, then three pill cards: icon well, label and blurb, ink arrow
+ * disc. It replaced the hairline-framed rows of DEC-0120, which the review
+ * called "Wikipedia in den 90ern".
  */
 .band {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-6);
 }
 
-.heading {
-  color: var(--color-neutral-muted);
-  font-size: var(--type-meta-size);
-  margin: 0;
-}
-
-.list {
+/* Heading and kicker: stacked on the phone, one row from the tablet tier on,
+   the kicker pushed to the right edge. */
+.head {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+}
+
+.heading {
+  color: var(--color-neutral-ink);
+  font-size: var(--type-subhead-size);
+  font-weight: 800;
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: var(--leading-tight);
+  margin: 0;
+}
+
+.kicker {
+  color: var(--ground-kicker);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  line-height: 1.2;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.list {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: minmax(0, 1fr);
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .item {
+  display: flex;
   min-width: 0;
 }
 
 /*
- * The row is the link, edge to edge — the whole frame is the target, not the
- * label inside it (SRC-0014 §Touch targets). The hairline frame and the
- * arrow are what make it read as a menu row; the colour is the ground's,
- * so the same row stands on `surface` (the band) and on `paper` (the merged
- * closing block).
+ * The card is the link, edge to edge — the whole pill is the target, not the
+ * label inside it (SRC-0014 §Touch targets). A link card counts as a control,
+ * so it takes the controls' radius (DEC-0156, Q-0087). Its fill is never its
+ * ground's (TS-WEB-0017-A29): `paper` on the band's `surface`; the merged
+ * closing block on `paper` sets `--band-card-fill` to `surface`.
  */
-.row {
+.card {
   align-items: center;
-  border: 1px solid var(--color-neutral-line);
-  border-radius: var(--radius-md);
-  color: inherit;
+  background: var(--band-card-fill, var(--color-neutral-paper));
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-ink);
   display: flex;
+  flex: 1 1 auto;
   gap: var(--space-4);
   min-height: var(--target-min);
-  padding: var(--space-3) var(--space-4);
+  min-width: 0;
+  padding: var(--space-4);
   text-decoration: none;
+  transition: background-color var(--motion-control-duration);
 }
 
-.row:hover {
-  background: var(--color-neutral-surface2);
-  border-color: var(--color-neutral-border);
+.card:hover {
+  background: var(--band-card-fill-hover, var(--color-neutral-surface2));
+  color: var(--color-neutral-ink);
 }
 
-.row:focus-visible {
+.card:focus-visible {
   outline: var(--focus-ring-width) solid var(--focus);
   outline-offset: var(--focus-ring-offset);
+}
+
+/* The 40 px icon well — decoration (SRC-0014 §Wells): `lime-100` with a
+   `lime-800` glyph, the same pair `objection-list` uses. */
+.well {
+  align-items: center;
+  background: var(--color-lime-100);
+  border-radius: var(--radius-pill);
+  color: var(--color-lime-800);
+  display: inline-flex;
+  flex: none;
+  height: var(--height-icon-well);
+  justify-content: center;
+  width: var(--height-icon-well);
 }
 
 .text {
@@ -66,23 +108,57 @@
 }
 
 .label {
-  color: var(--ground-link);
+  color: var(--color-neutral-ink);
   font-size: var(--type-card-size);
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: var(--type-card-tracking);
   line-height: var(--type-card-leading);
 }
 
-.row:hover .label {
-  color: var(--ground-link-hover);
-}
-
 .blurb {
   color: var(--color-neutral-muted);
-  font-size: var(--type-meta-size);
+  font-size: var(--type-body-size);
+  line-height: var(--leading-snug);
 }
 
-.arrow {
-  color: var(--ground-link);
+/* The 44 px `ink` disc with the `lime-500` arrow: neutral black, never a
+   dark-green fill (SRC-0014 §Colour). */
+.disc {
+  align-items: center;
+  background: var(--color-neutral-ink);
+  border-radius: var(--radius-pill);
+  color: var(--color-lime-500);
+  display: inline-flex;
   flex: none;
+  height: var(--target-min);
+  justify-content: center;
+  width: var(--target-min);
+}
+
+/* md — the tablet tier: heading and kicker share one row. */
+@media (min-width: 40rem) {
+  .head {
+    align-items: baseline;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .card {
+    padding: var(--space-4) var(--space-6) var(--space-4) var(--space-4);
+  }
+}
+
+/* lg — two cards per row (the owner's tablet frame). */
+@media (min-width: 48rem) {
+  .list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* xl — the desktop tier: the three cards in one row. */
+@media (min-width: 64rem) {
+  .list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }

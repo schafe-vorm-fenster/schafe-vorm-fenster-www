@@ -122,9 +122,9 @@ dieser Website — das übernimmt vollständig die App.
 
 **Kicker:** Heute mit einem anderen Anliegen hier?
 
-- **Sehen, was los ist:** Du willst wissen, was in deinem Ort als Nächstes ansteht? → `/dein-ort`
-- **Eigenen Kalender betreiben:** Du willst einen Kalender unter eigenem Namen, auf eurer eigenen Website? → `/dein-kalender`
-- **Wer dahintersteckt:** Du willst wissen, wer den Dorfkalender macht? → `/ueber-uns`
+- **Sehen, was los ist:** Was in deinem Ort als Nächstes ansteht → `/dein-ort`
+- **Eigenen Kalender betreiben:** Unter eigenem Namen, auf eurer Website → `/dein-kalender`
+- **Wer dahintersteckt:** Wer den Dorfkalender macht → `/ueber-uns`
 
 Ab Schritt 2 verschwindet das Band: Wer im Ablauf steckt, soll ihn
 zu Ende gehen können, ohne dass die Seite ihm drei andere Wege anbietet

@@ -297,7 +297,8 @@ from the package, with no override behind either.
 
 ## Shape and Space
 
-- **Radius:** `999px` for controls and the logo, `0` everywhere else.
+- **Radius:** `999px` for controls and the logo, `0` everywhere else. A card
+  that is wholly one link counts as a control (`DEC-0156`).
   There is no third value.
 - **Horizontal padding:** 16 px inside the viewport below `md` (640 px);
   from `md` up the outer margin steps with the grid — see *Layout Grid*.
@@ -1062,16 +1063,19 @@ page's main content, and it must not look like a plain list.
 
 - Heading *"Heute mit einem anderen Anliegen hier?"*, a mono kicker *"Auch
   interessant"* to its right on desktop and below it on the phone.
-- Three **cards**, one per other job. Each card: a 40 px icon well on the left,
-  a bold title and one line beneath, a 44 px `ink` disc with a `lime-500` arrow
-  on the right. Desktop and tablet: one row of three (desktop) or stacked cards
-  (tablet and phone); the whole band sits on a `surface` field with a large
-  radius on the phone.
+- Three **cards**, one per other job. Each card: a 40 px `lime-100` icon well
+  with a `lime-800` Lucide glyph on the left, a bold title and one line
+  beneath, a 44 px `ink` disc with a `lime-500` arrow on the right. One card
+  per row on the phone, two per row from `lg`, three in one row from `xl`.
+  The card fill is never the ground: `paper` cards on the band's `surface`,
+  `surface` cards where the band is merged into a `paper` closing block.
 - The cards are links; the whole card is the target (44 px minimum).
-- Open: the cards are pills with a large radius, and the guide limits radius
-  999 to controls and `0` to everything else (*Shape and Space*). A card that is
-  a link counts as a control here, or the band takes a named exception
-  (`Q-0087`).
+- **A whole-card link is a control** and takes radius 999, so the cards are
+  pills (`DEC-0156`, answering `Q-0087`). A card that only contains a link
+  stays at radius 0.
+- On the phone the band is the full-width `surface` section; the rounded
+  field in the phone frame is not a panel inside it (no padded card inside a
+  padded section).
 
 Reference: `Design - Kontextband Section - Desktop/Tablet/Mobile.png`; as-is:
 `Ist - Kontextband.png`.

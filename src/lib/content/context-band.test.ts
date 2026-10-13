@@ -57,7 +57,7 @@ describe("bandBlurbsOf — the slot's list items, by route", () => {
 
   it("reads the German path in the English artifact (the artifacts write `/mitmachen` in both)", () => {
     const band = slot(homePage("en"), "home-10-context-band");
-    expect(bandBlurbsOf(band, "en").get("takePart")).toMatch(/^Want to add dates/);
+    expect(bandBlurbsOf(band, "en").get("takePart")).toMatch(/^How to publish dates/);
   });
 
   it("is empty for no slot and for an empty slot", () => {
@@ -67,13 +67,13 @@ describe("bandBlurbsOf — the slot's list items, by route", () => {
 });
 
 describe("bandEntries — slot first, registry second, CG-030 always", () => {
-  it("takes the slot's blurb where the slot has one, and marks a question as demo", () => {
+  it("takes the slot's blurb where the slot has one — the owner's statement, not demo-marked (DEC-0156)", () => {
     const band = slot(homePage("de"), "home-10-context-band");
     const entries = bandEntries(others, "de", band);
     expect(entries.map((entry) => entry.route)).toEqual(["takePart", "calendar", "about"]);
     const about = entries.find((entry) => entry.route === "about")!;
-    expect(about.blurb).toBe("Du willst wissen, wer den Dorfkalender macht?");
-    expect(about.demo).toBe(true);
+    expect(about.blurb).toBe("Wer den Dorfkalender macht");
+    expect(about.demo).toBe(false);
   });
 
   it("falls back to the registry where there is no slot", () => {
