@@ -241,17 +241,6 @@ export interface Dictionary {
     };
   };
   /**
-   * The language switch's invitation — the half-sentence that leads *into*
-   * this language, written in this language, so the German page shows the
-   * English one and the English page the German one (TS-WEB-0001 D5,
-   * DEC-0120; review R-home-39 "Read this page in English:").
-   */
-  languageSwitch: {
-    invitation: string;
-    /** True while the sentence is nobody's — the switch marks it `data-demo`. */
-    invitationIsPlaceholder: boolean;
-  };
-  /**
    * The form controls' own words — the strings a component renders when the
    * page supplied none. `choice-group`'s empty state was a German literal in
    * the component body and rendered on `/en` too (F-2-33).
@@ -559,10 +548,6 @@ const de: Dictionary = {
       whyUs: "Wer den Dorfkalender macht",
     },
   },
-  languageSwitch: {
-    invitation: "Diese Seite auf Deutsch lesen:",
-    invitationIsPlaceholder: true,
-  },
   forms: {
     noOptions: "Keine Auswahl verfügbar.",
   },
@@ -744,10 +729,6 @@ const en: Dictionary = {
       yourCalendar: "Under your own name, on your own website",
       whyUs: "Who makes the village calendar",
     },
-  },
-  languageSwitch: {
-    invitation: "Read this page in English:",
-    invitationIsPlaceholder: false,
   },
   forms: {
     noOptions: "Nothing to choose from yet.",

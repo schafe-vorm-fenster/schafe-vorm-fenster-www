@@ -1,102 +1,67 @@
 /*
- * The footer's vertical rhythm — the polish brief's shared-component pass.
+ * The footer of SRC-0014 §Site footer (review 2026-10-12, issue #42,
+ * DEC-0158): neutral-black `ink` ground, `paper` type, one hairline.
  *
- * Measured at 390 × 844 before: 1110 px, 1.32 phone screens, on all 24
- * routes. The three levers, in the order they paid: the contact form folded
- * into its own disclosure (−450), one label per thing instead of two (−56),
- * the legal links and the languages on one wrapped line instead of two
- * hairline-separated blocks (−70), and the block rhythm stepped from
- * `space-8`/`space-6` to `space-6`/`space-4` (−64).
+ * Mobile-first (TS-WEB-0017 D2(a)): the base rules are the phone's — logo,
+ * switch, hairline, links, copyright, all stacked. From `md` the logo and the
+ * switch share row one; from `xl` the links and the copyright share the base
+ * line. The container is the shared one (DEC-0150), so the footer starts on
+ * the same left edge as every section above it.
  */
 .footer {
-  background: var(--color-neutral-surface);
-  color: var(--color-neutral-ink);
+  background: var(--color-neutral-ink);
+  color: var(--color-neutral-paper);
+  /* Every focus ring in here is on `ink`: the light-ground ring (violet)
+     would measure under 3:1, so the footer's scope takes the dark one. */
+  --focus: var(--color-roles-focus-dark);
   width: 100%;
 }
 
 .inner {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-  padding-block: var(--space-6);
+  gap: var(--space-6);
+  padding-block: var(--space-8);
 }
 
-/* The wordmark and the newsletter: stacked on the phone, side by side from
-   `md`, where the newsletter takes the column the wordmark does not need. */
+/* Row one: the logo, then the switch under it on the phone. */
 .top {
+  align-items: flex-start;
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-6);
 }
 
 .brand {
   display: block;
 }
 
+/* The logo writes its own `ink` colour for light grounds; on this one the
+   wordmark is `paper`. Two classes, so the order of the module sheets cannot
+   decide it. */
+.brand :global(a),
+.brand > span {
+  color: var(--color-neutral-paper);
+}
+
 .newsletter {
   min-width: 0;
-}
-
-/* ── Contact, folded ──────────────────────────────────────────────────── */
-
-.contact {
-  border-top: 1px solid var(--color-neutral-line);
-}
-
-/*
- * A 44 px target (SRC-0014 §Touch targets) that reads as the control it is.
- *
- * `display: list-item` deliberately — it is `<summary>`'s own display type
- * and the one that keeps the native disclosure triangle, which turns with
- * the element and needs no glyph, no class and no script. A `display: flex`
- * summary drops the marker in every engine, and a label with no affordance
- * reads as a dead heading. `inside` keeps the marker in the element's own
- * box rather than in the gutter, where the container would clip it.
- */
-.summary {
-  color: var(--color-lime-800);
-  cursor: pointer;
-  display: list-item;
-  font-family: var(--font-mono);
-  font-size: var(--type-label-size);
-  font-weight: 700;
-  letter-spacing: var(--type-label-tracking);
-  list-style-position: inside;
-  min-height: var(--target-min);
-  padding-block: var(--space-3);
-  text-transform: uppercase;
-}
-
-.summary:focus-visible {
-  outline: var(--focus-ring-width) solid var(--focus);
-  outline-offset: var(--focus-ring-offset);
-}
-
-.contactBody {
-  padding-bottom: var(--space-4);
 }
 
 /* ── The base line ────────────────────────────────────────────────────── */
 
 /*
- * Visually set off (DEC-0120, review "Den Impressums-Footer optisch
- * abheben"): the legal links and the language switch stand on their own
- * ground — `surface2` under a hairline, padded on all sides — rather than
- * as one more wrapped line under the newsletter. The block reaches the
- * container's edges through the negative inline margin so the ground reads
- * as a band of the footer, not as a card inside it.
+ * A hairline, then the legal links and the copyright. The hairline is
+ * `paper` at a low share over `ink` — the same construction the header's
+ * dark menu uses — because `line` is a light-ground divider and
+ * reads as a rule of its own on black.
  */
 .base {
-  align-items: center;
-  background: var(--color-neutral-surface2);
-  border-top: 1px solid var(--color-neutral-line);
-  column-gap: var(--space-4);
+  border-top: 1px solid color-mix(in srgb, var(--color-neutral-paper) 22%, transparent);
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-inline: calc(-1 * var(--gutter));
-  padding: var(--space-3) var(--gutter);
-  row-gap: var(--space-2);
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-4);
 }
 
 .legal {
@@ -113,26 +78,64 @@
   row-gap: 0;
 }
 
-/* The three legal links are the footer's own targets and were 24 px tall
-   inline text. `min-height` on the anchor itself makes each one a 44 px
-   target (SRC-0014 §Touch targets) without a gap between the rows — the line
-   box grows, the words stay where they are. */
-.list a {
+/* The legal links: `paper`, bold — a link here is told by weight and by
+   standing in the link row, not by an underline alone, and it gains the
+   underline on hover. `min-height` makes each a 44 px target
+   (SRC-0014 §Touch targets) without spreading the words. */
+.list .link {
   align-items: center;
+  color: var(--color-neutral-paper);
   display: inline-flex;
+  font-size: var(--type-meta-size);
+  font-weight: 700;
   min-height: var(--target-min);
+  text-decoration: none;
 }
 
-.language {
-  flex: none;
+.list .link:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
 }
 
-/* md — 48rem / 768px: the two top slots stand beside each other. */
-@media (min-width: 64rem) {
+.list .link:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-roles-focus-dark);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* The copyright: Meta size, `line` on `ink` — `muted` measures 3.54:1 here
+   and is no option (DEC-0158 §2). It wraps rather than truncates. */
+.copyright {
+  color: var(--color-neutral-line);
+  font-size: var(--type-meta-size);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* md — 40rem / 640 px: the logo and the switch share row one. */
+@media (min-width: 40rem) {
+  .list {
+    column-gap: var(--space-8);
+  }
+
+  .list .link {
+    font-size: var(--type-body-size);
+  }
+
   .top {
-    align-items: start;
-    display: grid;
-    gap: var(--space-8);
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+/* xl — 64rem / 1024 px: links left, copyright right, on one base line. */
+@media (min-width: 64rem) {
+  .base {
+    align-items: center;
+    column-gap: var(--space-8);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
 }

@@ -73,6 +73,7 @@ import { dictionary } from "@/src/lib/i18n/dictionary";
 import { ROUTES, routeFromSegments, trail } from "@/src/lib/routes/routes";
 
 import type { HeroPhotoByRoute } from "./_chrome-data";
+import type { Copyright } from "./_footer-data";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { RouteId } from "@/src/lib/routes/routes";
 import type { ReactNode } from "react";
@@ -96,12 +97,15 @@ export interface SiteChromeProps {
   readonly locale: Locale;
   /** Resolved on the server for every route at once — see `_chrome-data.ts`. */
   readonly heroPhoto: HeroPhotoByRoute;
+  /** The footer's copyright line — resolved on the server (`_footer-data.ts`). */
+  readonly copyright: Copyright;
   /** The newsletter entry (S5) — server-rendered, handed straight through. */
   readonly newsletter: ReactNode;
   readonly children: ReactNode;
 }
 
 export function SiteChrome({
+  copyright,
   locale,
   heroPhoto,
   newsletter,
@@ -143,7 +147,12 @@ export function SiteChrome({
           contact disclosure and its envoy mount are gone with it: there is no
           general contact form anywhere any more (DEC-0122 §2). */}
       <ContactSection locale={locale} route={route} />
-      <SiteFooter locale={locale} newsletter={newsletter} route={route} />
+      <SiteFooter
+        copyright={copyright}
+        locale={locale}
+        newsletter={newsletter}
+        route={route}
+      />
       {BACK_TO_TOP_ROUTES.has(route) ? <BackToTop /> : null}
     </>
   );

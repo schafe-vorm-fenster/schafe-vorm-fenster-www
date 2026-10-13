@@ -113,10 +113,11 @@ test("SRC-0014 §Touch targets: every standalone footer control clears 44 px", a
       height: element.getBoundingClientRect().height,
     })),
   );
-  // Three legal links and the one other language (DEC-0120: the current one is
-  // not a control). It was 7 while the footer carried the contact summary, the
-  // newsletter field and its submit (DEC-0122 §2).
-  expect(heights.length).toBe(4);
+  // Three legal links and the two language segments (DEC-0158: the current
+  // language is a link marked `aria-current`). It was 7 while the footer
+  // carried the contact summary, the newsletter field and its submit
+  // (DEC-0122 §2), and 4 while only the other language was a control.
+  expect(heights.length).toBe(5);
   const small = heights.filter((entry) => entry.height < 44);
   expect(small, `controls under 44 px: ${JSON.stringify(small)}`).toEqual([]);
 });
@@ -133,8 +134,111 @@ test("TS-WEB-0009: the whole footer works with no JavaScript at all", async ({ b
   for (const hash of ["impressum", "datenschutz", "barrierefreiheit"]) {
     await expect(footer.locator(`a[href="/rechtliches#${hash}"]`).first()).toBeVisible();
   }
-  await expect(footer.locator("nav a")).toHaveCount(4);
+  await expect(footer.locator("nav a")).toHaveCount(5);
   await expect(footer.locator("details, summary, form, input")).toHaveCount(0);
 
   await context.close();
 });
+
+/**
+ * TS-WEB-0017-A41 — the footer of SRC-0014 §Site footer (DEC-0158): `ink`
+ * ground, `paper` links told by weight rather than by an underline alone, a
+ * focus ring that is visible on `ink`, at 390 and 1280 px.
+ */
+for (const viewport of [PHONE, DESKTOP]) {
+  test(`TS-WEB-0017-A41: the footer stands on ink with paper links and a visible focus ring at ${viewport.width} px`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const footer = page.locator("body > footer");
+    const tokens = await page.evaluate(() => {
+      const probe = document.createElement("i");
+      document.body.append(probe);
+      const read = (name: string) => {
+        probe.style.color = `var(${name})`;
+        return getComputedStyle(probe).color;
+      };
+      const values = {
+        ink: read("--color-neutral-ink"),
+        paper: read("--color-neutral-paper"),
+        focusDark: read("--color-roles-focus-dark"),
+      };
+      probe.remove();
+      return values;
+    });
+    await expect(footer).toHaveCSS("background-color", tokens.ink);
+
+    const legal = footer.getByRole("navigation", { name: "Impressum" }).getByRole("link");
+    await expect(legal).toHaveCount(3);
+    for (const link of await legal.all()) {
+      await expect(link).toBeVisible();
+      await expect(link).toHaveCSS("color", tokens.paper);
+      // Told by weight, not by an underline alone: no underline at rest, bold.
+      await expect(link).toHaveCSS("text-decoration-line", "none");
+      const weight = Number(await link.evaluate((el) => getComputedStyle(el).fontWeight));
+      expect(weight).toBeGreaterThanOrEqual(700);
+    }
+
+    // Keyboard focus on a legal link shows the dark-ground ring.
+    const first = legal.first();
+    await first.focus();
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+    await expect(first).toBeFocused();
+    await expect(first).toHaveCSS("outline-style", "solid");
+    await expect(first).toHaveCSS("outline-color", tokens.focusDark);
+    const width = parseFloat(await first.evaluate((el) => getComputedStyle(el).outlineWidth));
+    expect(width).toBeGreaterThanOrEqual(2);
+  });
+}
+
+test("TS-WEB-0017-A41: phone stacks logo, switch, links, copyright; desktop pairs them in two rows", async ({
+  page,
+}) => {
+  const parts = async () => {
+    const footer = page.locator("body > footer");
+    const box = async (locator: import("@playwright/test").Locator) => (await locator.boundingBox())!;
+    return {
+      logo: await box(footer.locator("a").first()),
+      lang: await box(footer.getByRole("navigation", { name: "Sprache" })),
+      legal: await box(footer.getByRole("navigation", { name: "Impressum" })),
+      copy: await box(footer.locator("p").filter({ hasText: "©" })),
+    };
+  };
+
+  await page.setViewportSize(PHONE);
+  await page.goto("/");
+  let p = await parts();
+  expect(p.lang.y).toBeGreaterThanOrEqual(p.logo.y + p.logo.height - 1);
+  expect(p.legal.y).toBeGreaterThan(p.lang.y + p.lang.height - 1);
+  expect(p.copy.y).toBeGreaterThanOrEqual(p.legal.y + p.legal.height - 1);
+
+  await page.setViewportSize(DESKTOP);
+  await page.goto("/");
+  p = await parts();
+  // Row one: logo left, switch right, vertically overlapping.
+  expect(p.lang.x).toBeGreaterThan(p.logo.x + p.logo.width);
+  expect(p.lang.y).toBeLessThan(p.logo.y + p.logo.height);
+  // Base line: links left, copyright right, on one line.
+  expect(p.copy.x).toBeGreaterThan(p.legal.x + p.legal.width - 1);
+  expect(Math.abs(p.copy.y + p.copy.height / 2 - (p.legal.y + p.legal.height / 2))).toBeLessThan(12);
+});
+
+/**
+ * TS-WEB-0017-A42 — the copyright line names the imprint's legal holder and
+ * the year, in both languages, read from `content/legal/imprint.md` rather
+ * than written into code (TS-WEB-0011 D4).
+ */
+for (const path of ["/", "/en"]) {
+  test(`TS-WEB-0017-A42: ${path} carries the copyright line with the imprint's legal name`, async ({
+    page,
+  }) => {
+    await page.goto(path);
+    const line = page.locator("body > footer p").filter({ hasText: "©" });
+    await expect(line).toHaveCount(1);
+    await expect(line).toHaveText(
+      new RegExp(`^© ${new Date().getFullYear()} Schafe vorm Fenster UG \\(haftungsbeschränkt\\)$`),
+    );
+  });
+}

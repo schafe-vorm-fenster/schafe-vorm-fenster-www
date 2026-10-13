@@ -75,15 +75,17 @@ prefix iff `lang !== tldDefault`. No hard-coded hrefs in components; all
 internal links go through the link facade. Language/country switching is
 plain `<a>` navigation (no JS requirement).
 
-The language switch's form (DEC-0120; review R-home-39): it renders **only
-the other language(s)** as controls — the current language is the page the
-visitor is reading and is not rendered as a control at all. Each control is
-an invitation written in the target language ("Read this page in
-English:") followed by the language's own name as the link, with `hreflang`
-and `lang` on the link and `lang` on the invitation. The link targets the
-equivalent page (A7), never the home page. The invitation's wording is copy
-under SRC-0017; where nobody has written it yet the control carries
-`data-demo="true"`.
+The language switch's form (DEC-0158, which replaces the invitation form of
+DEC-0120 after the owner's review of 2026-10-12, issue #42): a **segmented
+control** with one segment per language in the order of the language table,
+each segment a plain `<a>` to the **equivalent** page (A7), never the home
+page, with `hreflang` and `lang` on every link because each language names
+itself. The segment of the language being read carries
+`aria-current="page"` — the current page is told by markup, not by the fill
+alone — and the other segment is the control that switches (A12). It is
+navigation, not a radio group: choosing a language loads a page. The
+segment labels are the endonyms *Deutsch* and *English*; there is no
+invitation sentence any more.
 
 ### D6 — hreflang and canonical (phase 1) [FIXED: DEC-0005; matrix PROPOSED]
 
@@ -109,7 +111,7 @@ language must not require code changes [PROPOSED].
 ## Free for the generator
 
 - [FREE] The language switcher's exact footer placement (IA fixes: footer).
-  Its form is D5's since DEC-0120.
+  Its form is D5's since DEC-0120, as DEC-0158 amends it.
 - [FREE] Internal organisation of the locale module (file layout, helper
   naming), provided D5's single-facade rule holds.
 
@@ -128,6 +130,7 @@ language must not require code changes [PROPOSED].
 | TS-WEB-0001-A9 | integration | Each domain of D1 resolves over HTTPS and renders in its TLD default language; the international domain is reachable once its DNS is wired (Q-0001 residual). |
 | TS-WEB-0001-A10 | integration | `.de` serves German bare and English under `/en/`; no third language is reachable on any domain. |
 | TS-WEB-0001-A11 | static | The language table is the single place a language is declared: the set that ships equals phase 1 exactly (de + en on `.de`, the national language elsewhere). **Limitation:** the target picture beyond phase 1 (FUN-WEB-0068) is deliberately not verified — it becomes checkable when a second country gains content. |
+| TS-WEB-0001-A12 | unit | The language switch renders one link per language, each to the equivalent page with `hreflang` and `lang`, and exactly one of them — the current language — carries `aria-current="page"` (D5, DEC-0158). |
 
 ## Coverage
 
@@ -137,7 +140,7 @@ language must not require code changes [PROPOSED].
 | FUN-WEB-0163 (take it from the country TLD) | D3, D4 · A1, A2 |
 | FUN-WEB-0164 (let it override the TLD default) | D3, D4 · A1, A2 |
 | FUN-WEB-0062 (server-side only, URL is preference) | D3 · A8 |
-| FUN-WEB-0063 (switching = link navigation) | D5 · A7 |
+| FUN-WEB-0063 (switching = link navigation) | D5 · A7, A12 |
 | FUN-WEB-0165 (preserve the current language context) | D5 · A1, A2, A7 |
 | FUN-WEB-0166 (emit the path prefix) | D5 · A1, A2, A7 |
 | FUN-WEB-0065 (hreflang matrix) | D6 · A5 |

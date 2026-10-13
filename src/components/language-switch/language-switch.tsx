@@ -11,75 +11,52 @@ export interface LanguageSwitchProps {
   /** The page the visitor is on — switching keeps them on it (TS-WEB-0001-A7). */
   readonly route: RouteId;
   readonly current: Locale;
-  /**
-   * The ground it stands on. `light` is the footer's paper; `dark` is the
-   * phone menu's ink overlay, where the light-ground link colour would be
-   * invisible. Same failure class as state/open.md row 133 — a component
-   * that does not re-assert its own colour against an ambient dark ground.
-   */
-  readonly tone?: "light" | "dark";
   readonly label?: string;
   readonly className?: string;
 }
 
 /**
- * 10 `language-switch` [PROPOSED] — TS-WEB-0001 D5 (DEC-0120).
+ * 10 `language-switch` [PROPOSED] — TS-WEB-0001 D5 (DEC-0158, replacing the
+ * invitation form of DEC-0120).
  *
- * Structure: one control per **other** language, never one for the current
- * — the current language is the page the visitor is reading, and a button
- * for it does nothing (review R-home-39). Each control is an invitation in
- * the target language plus a plain `<a>` to the **equivalent** page,
- * resolved through `href()` — so `de` stays bare, `/en/…` carries the
- * prefix, and the English page keeps its own path segments. Never the home
- * page.
+ * Structure: a **segmented control** — one segment per language, in the
+ * order of the language table, each segment a plain `<a>` to the
+ * **equivalent** page resolved through `href()` (so `de` stays bare and
+ * `/en/…` carries the prefix), never the home page. The segment of the
+ * language the visitor is reading carries `aria-current="page"` and the
+ * filled look; the other is the control that switches. Navigation, not a
+ * radio group: choosing a language loads a page, and a link says so.
  * States: none. No JavaScript, no dropdown, no detection UI — the language
  * is a choice the visitor makes, not something the site guesses from an IP.
- * Inherits: Meta for the invitation, the link treatment for the control.
+ * Inherits: Label-mono type; `lime-500` fill with `ink` text for the active
+ * segment, `paper` on an `ink`-lifted track for the other (SRC-0014
+ * §Site footer). It always stands on `ink` — the footer and the phone menu
+ * overlay are both that ground, so there is no tone to choose.
  * Space: fixed; the language set is known at build time.
- * A11y: a `nav` named after the footer's "Sprache"; `hreflang` and `lang`
- * on the link and `lang` on the invitation, because both are in the other
- * language; targets ≥ 44 px. An invitation nobody has written yet carries
- * `data-demo="true"` — the marking lives in the markup, never in a word.
+ * A11y: a `nav` named after the footer's "Sprache"; `hreflang` and `lang` on
+ * every link, because each name is in its own language; the current page is
+ * told by `aria-current`, not by colour alone; targets ≥ 44 px; the focus
+ * ring is the dark-ground one.
  */
-export function LanguageSwitch({
-  route,
-  current,
-  tone = "light",
-  label,
-  className,
-}: LanguageSwitchProps) {
+export function LanguageSwitch({ route, current, label, className }: LanguageSwitchProps) {
   const name = label ?? dictionary(current).footer.language;
-  const others = LOCALES.filter((locale) => locale !== current);
 
   return (
-    <nav
-      aria-label={name}
-      className={[styles.nav, tone === "dark" ? styles.dark : "", className]
-        .filter(Boolean)
-        .join(" ")}
-    >
-      <ul className={styles.list}>
-        {others.map((locale) => {
-          const words = dictionary(locale).languageSwitch;
-          return (
-            <li className={styles.item} key={locale} lang={locale}>
-              <span
-                className={styles.invitation}
-                data-demo={words.invitationIsPlaceholder ? "true" : undefined}
-              >
-                {words.invitation}
-              </span>{" "}
-              <a
-                className={styles.link}
-                href={href(route, locale)}
-                hrefLang={HREFLANG[locale]}
-                lang={locale}
-              >
-                {LANGUAGE_LABELS[locale]}
-              </a>
-            </li>
-          );
-        })}
+    <nav aria-label={name} className={[styles.nav, className].filter(Boolean).join(" ")}>
+      <ul className={styles.track}>
+        {LOCALES.map((locale) => (
+          <li className={styles.item} key={locale}>
+            <a
+              aria-current={locale === current ? "page" : undefined}
+              className={styles.segment}
+              href={href(route, locale)}
+              hrefLang={HREFLANG[locale]}
+              lang={locale}
+            >
+              {LANGUAGE_LABELS[locale]}
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
   );

@@ -68,7 +68,6 @@ export function HeaderMenu({ current, locale }: HeaderMenuProps) {
         className={styles.menuLanguage}
         current={locale}
         route={current}
-        tone="dark"
       />
     </>
   );
