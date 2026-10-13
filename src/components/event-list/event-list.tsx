@@ -55,14 +55,6 @@ export interface EventListProps extends DataStateProps {
    * on to.
    */
   readonly more?: ReactNode;
-  /**
-   * `true` caps the list at three rows on a phone and lets all `rowCount`
-   * rows show from the tablet breakpoint up — the illustrative cap a live
-   * list on a marketing page carries, with the rest behind the module's own
-   * calendar link. CSS-only, so it holds in a prerendered page and costs no
-   * layout shift.
-   */
-  readonly capOnPhone?: boolean;
   /** The conversion state for zero results — never an empty list (TS-WEB-0008 D4). */
   readonly emptyState?: ReactNode;
   /** `dark` inside the ink section that carries the live data — forwarded to every row. */
@@ -103,7 +95,6 @@ export function EventList({
   rowCount,
   role,
   more,
-  capOnPhone = false,
   emptyState,
   tone,
   locale,
@@ -112,8 +103,7 @@ export function EventList({
   reserve = false,
 }: EventListProps) {
   const limit = role ? Math.min(rowCount, EVENT_LIST_CAPS[role]) : rowCount;
-  const capped = capOnPhone && limit > 3;
-  const classes = [styles.list, capped ? styles.capPhone : undefined, className]
+  const classes = [styles.list, className]
     .filter(Boolean)
     .join(" ");
   const reserved = (node: ReactNode) =>
@@ -123,7 +113,6 @@ export function EventList({
         style={
           {
             "--event-list-rows": limit,
-            "--event-list-rows-phone": capped ? 3 : limit,
           } as CSSProperties
         }
       >
