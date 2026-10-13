@@ -123,21 +123,21 @@ describe("TS-WEB-0014-A1: checkPolicyDirectives — fixture policies", () => {
   });
 });
 
-describe("F-2-27: the preview-only 'unsafe-inline' fence, asserted exactly", () => {
+describe("F-2-27 / DEC-0163: no 'unsafe-inline' in any deployed script policy", () => {
   it("holds for the real csp.ts today", () => {
     expect(checkPreviewUnsafeInlineFence()).toEqual([]);
   });
 
-  it("flags a fence that never grants preview's documented fallback", () => {
-    const noFallback = () => ({ "script-src": ["'self'"] });
-    const errors = checkPreviewUnsafeInlineFence(noFallback);
-    expect(errors.some((e) => e.includes("expected the documented"))).toBe(true);
-  });
-
-  it("flags a fence that leaves 'unsafe-inline' in preview even once hashes exist", () => {
-    const stuckOpen = () => ({ "script-src": ["'self'", "'unsafe-inline'"] });
-    const errors = checkPreviewUnsafeInlineFence(stuckOpen);
-    expect(errors.some((e) => e.includes("must disappear once a hash set exists"))).toBe(true);
+  it("flags preview's old hashless fallback", () => {
+    const oldFallback = (input: { environment: string; scriptHashes?: readonly string[] }) => ({
+      "script-src":
+        input.environment === "preview" && !(input.scriptHashes ?? []).length
+          ? ["'self'", "'unsafe-inline'"]
+          : ["'self'"],
+    });
+    const errors = checkPreviewUnsafeInlineFence(oldFallback);
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toContain("preview/script-src (no hashes)");
   });
 
   it("flags a fence that leaks 'unsafe-inline' into production, with or without hashes", () => {
@@ -145,20 +145,10 @@ describe("F-2-27: the preview-only 'unsafe-inline' fence, asserted exactly", () 
     const errors = checkPreviewUnsafeInlineFence(leaky);
     expect(errors.filter((e) => e.startsWith("F-2-27 production")).length).toBe(2);
   });
-
-  it("is exact: a correct fence (present only for hashless preview) reports nothing", () => {
-    const correct = (input: { environment: string; scriptHashes?: readonly string[] }) => ({
-      "script-src":
-        input.environment === "preview" && !(input.scriptHashes ?? []).length
-          ? ["'self'", "'unsafe-inline'"]
-          : ["'self'"],
-    });
-    expect(checkPreviewUnsafeInlineFence(correct)).toEqual([]);
-  });
 });
 
 describe("TS-WEB-0014-A1: checkCsp — the real module, all four cases", () => {
-  it("is green: no wildcard, every host in D1, no unsafe-inline/unsafe-eval in production, the preview fence exact", () => {
+  it("is green: no wildcard, every host in D1, no unsafe-inline/unsafe-eval in production, no unsafe-inline in a deployed policy", () => {
     const { errors, casesChecked } = checkCsp();
     expect(errors).toEqual([]);
     expect(casesChecked).toBe(4);

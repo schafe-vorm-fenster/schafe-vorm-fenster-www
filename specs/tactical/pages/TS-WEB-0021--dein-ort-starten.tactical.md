@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0158, FUN-WEB-0159]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0014]
-decisions: [DEC-0013, DEC-0024, DEC-0029, DEC-0034, DEC-0036, DEC-0037, DEC-0066, DEC-0071, DEC-0083]
+decisions: [DEC-0013, DEC-0024, DEC-0029, DEC-0034, DEC-0036, DEC-0037, DEC-0066, DEC-0071, DEC-0083, DEC-0163]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -83,6 +83,8 @@ retry prompt (FUN-WEB-0158, FUN-WEB-0159, DEC-0079 §4).
 
 ### D4 — The place is a query parameter, and the URL is the whole payload [FIXED: DEC-0037, CON-WEB-0062, FUN-WEB-0142; validation PROPOSED]
 
+> **Amended by DEC-0163 (2026-10-13).** The page is static; the validated value is echoed in the browser (`start-islands.tsx`) into exactly the places D6 allows. Without JavaScript the page is the placeless variant.
+
 | Rule | Determination |
 | --- | --- |
 | Name | `ort`, exactly one value; a repeated parameter takes the first and ignores the rest |
@@ -94,6 +96,8 @@ retry prompt (FUN-WEB-0158, FUN-WEB-0159, DEC-0079 §4).
 | Absent or invalid | the placeless variant: the same blocks, the same CTA, the acknowledgment phrased without a place name, registration without prefill (A3) |
 
 ### D5 — Re-resolution, for the link that arrives late [FIXED: DEC-0070]
+
+> **Amended by DEC-0163 (2026-10-13).** The proxy's 307 hop stands (TS-WEB-0021-A7); a client navigation that bypasses it is forwarded in the browser after `/api/places/resolve` answers `covered`.
 
 The link is shared and may be opened weeks later, when the place may be
 covered. The route resolves `?ort=` once per request (TS-WEB-0008 D7): still
@@ -171,6 +175,8 @@ the voice where only the ask should change.
 
 ### D10 — Rendering and indexing [FIXED: TS-WEB-0009 D1/D8, TS-WEB-0010 D8, TS-WEB-0011 D4/D9]
 
+> **Amended by DEC-0163 (2026-10-13).** Static shell, and the parameter is read in the browser — the route is never a per-request function. Supersedes this section's "resolves outside the cache boundary" and A2's/A9's JavaScript-less echo of the place.
+
 Static shell; `?ort=` resolves outside the cache boundary (TS-WEB-0009 D2) and
 the route never becomes a per-request function (TS-WEB-0010 D8). The placeless
 variant **is** the prerendered page, complete on its own — that is what
@@ -193,14 +199,14 @@ and a skeleton older than 2 s resolves to the example-less state (SRC-0014
 | ID | Level | Check |
 | --- | --- | --- |
 | TS-WEB-0021-A1 | static | `page.meta.ts` matches D1 exactly: focus job "publish our dates", `primaryConversion` `register-as-publisher`, audiences in the order `actors`, `municipalities`, `rural-residents`, both live modules declared, no proof slot, no `equalWeightConversion`. |
-| TS-WEB-0021-A2 | e2e | Open `/dein-ort/starten?ort=Testdorf` in a fresh profile — no cookies, no referrer, no prior search, JavaScript disabled. The full page renders, the `h1` contains `Testdorf`, and the primary CTA is fully visible without scrolling at 360 × 640 and 1280 × 800. |
+| TS-WEB-0021-A2 | e2e | Open `/dein-ort/starten?ort=Testdorf` in a fresh profile — no cookies, no referrer, no prior search. The full page renders, the `h1` contains `Testdorf`, and the primary CTA is fully visible without scrolling at 360 × 640 and 1280 × 800; with JavaScript disabled the complete placeless variant renders with its CTA. (Amended by DEC-0163: the written text required the place in the `h1` with JavaScript disabled.) |
 | TS-WEB-0021-A3 | e2e | Open `/dein-ort/starten` with no parameter, and with `?ort=` empty, and with `?ort=` 200 characters long. All three render the placeless variant: same blocks, no empty slot, no visible `undefined`/`null`/`{place}` token, CTA present without a prefill value. |
 | TS-WEB-0021-A4 | e2e | On `/dein-ort/starten?ort=Testdorf`: every place name inside the live-example module resolves via `/api/places/{slug}/events` to a covered place with ≥ 1 date, and the string `Testdorf` occurs **only** in the `h1`/body copy, the CTA labels, and the registration `href` — not in any module heading or row, counter, proof element, `app.*` link, `<title>`, meta description, `og:*`, `link[rel=canonical]`, or JSON-LD. |
 | TS-WEB-0021-A5 | e2e | `?ort=<script>alert(1)</script>` and `?ort="><img src=x onerror=alert(1)>`: no dialog, no script execution, no attribute injection; the value appears only as escaped text or as an encoded query value, and the page renders normally. |
 | TS-WEB-0021-A6 | integration | Searching an uncovered place from `/` or `/dein-ort` lands on `/dein-ort/starten?ort=…`; searching a covered place without dates lands on `/dein-ort?ort=<slug>` in the empty state. The visible sentence sets of the two surfaces are disjoint (no shared copy string). |
 | TS-WEB-0021-A7 | integration | `?ort=<value that now resolves>` produces exactly one 302 to `/dein-ort?ort=<slug>` with `etcc_cmp`/`etcc_med` and the language prefix preserved; following redirects terminates in ≤ 1 hop. |
 | TS-WEB-0021-A8 | integration | With the place-search upstream returning 500 or timing out, the page renders as uncovered: no redirect, no error styling, no warning icon, no retry control (TS-WEB-0008 D5). |
-| TS-WEB-0021-A9 | e2e | The primary CTA is an `<a href="/mitmachen/registrieren?ort=…">` carrying `data-cta="primary"`, with the received value URL-encoded and unchanged; it navigates with JavaScript disabled; no `href` anywhere on the page points at an `app.*` host. |
+| TS-WEB-0021-A9 | e2e | The primary CTA is an `<a href="/mitmachen/registrieren?ort=…">` carrying `data-cta="primary"`, with the received value URL-encoded and unchanged (echoed after hydration, DEC-0163 — the written text required it with JavaScript disabled); no `href` anywhere on the page points at an `app.*` host. |
 | TS-WEB-0021-A10 | e2e | Exactly one `data-cta="primary"`; the context band names the three non-focus jobs; the last block repeats `register-as-publisher` with the same target as block 1 (TS-WEB-0006 A6/A7). |
 | TS-WEB-0021-A11 | static | Canonical is the parameter-free path; title and description come from the page's content frontmatter and contain no runtime value; the JSON-LD graph is `WebPage` + `BreadcrumbList` and contains no `Event` and no place-specific node. |
 | TS-WEB-0021-A12 | e2e | With the network log recorded for a full visit including the CTA click, no tracker request carries a conversion-goal name — the goal is emitted on `/mitmachen/registrieren`, not here. |

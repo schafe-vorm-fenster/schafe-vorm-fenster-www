@@ -1,133 +1,88 @@
+"use client";
+
 /**
- * The live-data islands — TS-WEB-0009 D1/D2/D3, one module per file section.
+ * The live-data islands — TS-WEB-0009 D1/D2/D3 as amended by DEC-0163.
  *
- * TS-WEB-0009 D1 splits every page into a **prerendered shell** and a set of
- * **cached islands**. This file is the islands: each one is a `use cache`
- * component that calls exactly one interface module of `src/lib/live/`,
- * reads its envelope, and renders the module's shell in the state the
- * envelope dictates (`src/lib/live/README.md` → "The three tiers, and the
- * state each shell receives").
+ * Until DEC-0163 each island was a `use cache` server component with a
+ * five-minute `cacheLife`: the page's HTML regenerated with every new date,
+ * the inline RSC flight payload changed with it, and its hash was in no
+ * build-time CSP set — `/mitmachen` stopped hydrating 5½ minutes after a
+ * deploy (#59). Now every island is a **client** component:
  *
- * Three rules the shapes below enforce rather than document:
+ *  - in the prerendered HTML it is its frame at the final geometry — the
+ *    title where it is known without data, the skeleton rows at the count the
+ *    module's role allows, the onward link where its target is known — so
+ *    the static document is the same on every request and nothing moves when
+ *    the data lands (TS-WEB-0009 D7, `e2e/layout-stability.spec.ts`);
+ *  - after hydration it asks this site's own BFF route (`src/lib/live/browser.ts`),
+ *    which still does the upstream call, the three tiers and the CDN
+ *    `Cache-Control` of TS-WEB-0003 D5;
+ *  - an answer renders exactly what the server island rendered: the same
+ *    shell, the same `state`/`tier`/`updatedAt`, the same conversion
+ *    binding. No answer removes the module (TS-WEB-0009 D6), never an error.
  *
- *  - **A request value never enters an island.** `?ort=` and every header
- *    are read in the page, outside the cache boundary, and handed down as a
- *    prop (TS-WEB-0009 D2). An island takes strings and numbers, which is also
- *    what makes the prop set the cache key.
- *  - **`cacheLife` and `cacheTag` come from one table.** The numbers are
- *    TS-WEB-0003 D5's, in `src/lib/live/cache-profiles.ts`, and the BFF routes
- *    send the same two numbers as `Cache-Control` — an island and its route
- *    cannot disagree about what "5 minutes" means.
- *  - **A module that has nothing is removed, never zeroed** (TS-WEB-0009 D6).
- *    Counters answer `undefined` when both fallback tiers are exhausted, and
- *    `null` is what this file returns for that.
- *
- * Every island is rendered inside a `<Suspense>` whose fallback is the
- * module's own skeleton at its final geometry (TS-WEB-0009 D7) — `moduleSkeleton`
- * below builds it, so the shell and the island cannot drift apart.
+ * Live dates are not indexed content (owner, 2026-10-13); every other part of
+ * a page stays in its static HTML.
  */
 
-import { exampleEvents } from "@/src/lib/live/examples";
-import { formatDistance } from "@/src/lib/live/distance";
-import { cacheLife, cacheTag } from "next/cache";
-
-import { Button } from "@/src/components/button/button";
-import {
-  ConversionTracker,
-  type ConversionBinding,
-} from "@/src/components/conversion-tracker/conversion-tracker";
-import { EmptyStateBlock } from "@/src/components/empty-state-block/empty-state-block";
+import { ConversionTracker, type ConversionBinding } from "@/src/components/conversion-tracker/conversion-tracker";
 import { EventList } from "@/src/components/event-list/event-list";
 import { LiveCounters } from "@/src/components/live-counters/live-counters";
 import { LiveModuleFrame } from "@/src/components/live-module-frame/live-module-frame";
 import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
 import { PlaceExampleSet } from "@/src/components/place-example-set/place-example-set";
 import { Skeleton } from "@/src/components/skeleton/skeleton";
-import { OG_LOCALE } from "@/src/lib/i18n/locales";
+import { dictionary } from "@/src/lib/i18n/dictionary";
+import { calendarUrlForSlug } from "@/src/lib/live/app-handover";
+import { liveRoutes, useLive, type LiveLoad } from "@/src/lib/live/browser";
+import { countyLabel } from "@/src/lib/live/county-label";
+import { NEARBY_RADIUS_KM } from "@/src/lib/live/widening";
 import { fillTemplate } from "@/src/lib/pages/demo-content";
 import { pickStoryExamples } from "@/src/lib/pages/story-examples";
-import { calendarUrl } from "@/src/lib/live/app-handover";
-import { cacheLifeProfile, cacheTags } from "@/src/lib/live/cache-profiles";
-import { categoryLabel, categoryTone } from "@/src/lib/live/categories";
-import { nearestPlace } from "@/src/lib/live/place-index";
-import { dictionary } from "@/src/lib/i18n/dictionary";
-import { liveCounters } from "@/src/lib/live/counters";
-import { nearbyEvents } from "@/src/lib/live/nearby";
-import { placeEvents } from "@/src/lib/live/places";
-import { countyLabel } from "@/src/lib/live/county-label";
-import { regionExamples } from "@/src/lib/live/region";
+
+import { stateOf, tierOf, toListItems } from "./_live-items";
 
 import type { EventCategory } from "@/src/components/event-row/event-row";
 import type { EventListItem, EventListRole } from "@/src/components/event-list/event-list";
-import type { DataState } from "@/src/components/data-state";
 import type { Locale } from "@/src/lib/i18n/locales";
-import type { LiveEnvelope, LiveEvent } from "@/src/lib/live/types";
+import type { LiveCounters as LiveCountersData, NearbyEvents, PlaceEvents, RegionExamples } from "@/src/lib/live/types";
 import type { RouteId } from "@/src/lib/routes/routes";
 import type { ReactNode } from "react";
 
-/**
- * Envelope → the `state` a shell takes. One function, so no page re-derives
- * the badge or the freshness rule (`src/lib/live/README.md`'s table).
- */
-export function stateOf(envelope: {
-  readonly stale: boolean;
-  readonly demo: boolean;
-}, empty = false): DataState {
-  if (empty) return "empty";
-  if (envelope.stale) return "degraded";
-  if (envelope.demo) return "mocked";
-  return "ready";
-}
-
-/** Tier 2 and tier 3 render different words; tier 1 renders none. */
-function tierOf(envelope: LiveEnvelope<unknown>): "stale" | "snapshot" {
-  return envelope.tier === "snapshot" ? "snapshot" : "stale";
-}
-
-/** `LiveEvent` → the row shape `event-list` takes. The one mapping (TS-WEB-0005 owns the vocabulary). */
-export function toListItems(
-  events: readonly LiveEvent[],
-  locale: Locale,
-): EventListItem[] {
-  const time = new Intl.DateTimeFormat(OG_LOCALE[locale].replace("_", "-"), {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Europe/Berlin",
-  });
-  return events.map((event) => {
-    const category = categoryTone(event.categoryId);
-    const starts = new Date(event.startsAt);
-    // An all-day date has no hour: its stored start is midnight UTC, which would
-    // print as "02:00" or "01:00" — a time nobody set.
-    const clock = event.allDay || Number.isNaN(starts.getTime()) ? undefined : time.format(starts);
-    return {
-      id: event.id,
-      date: event.startsAt,
-      title: event.title,
-      // Every row names its own place — the rule that lets a widened module
-      // stand beside a narrow one without lying (TS-WEB-0008 D1). The place comes
-      // **first**: the meta line is one line of 76 px and ellipsises at its
-      // end, and with the clock in front a row from the next village over
-      // read "13:…" on a phone — the one word the rule is about, cut.
-      // A row from another village also says how far away it is (TS-WEB-0020-A15):
-      // "Rubkow · 6 km · 19:00".
-      meta: [
-        event.placeName,
-        // The place itself is no distance away: under half a kilometre, no figure.
-        event.distanceKm === undefined || event.distanceKm < 0.5 ? undefined : formatDistance(event.distanceKm),
-        clock,
-      ]
-        .filter(Boolean)
-        .join(" · "),
-      category,
-      categoryLabel: categoryLabel(event.categoryId, locale),
-    };
-  });
-}
-
-/** The `<Suspense>` fallback of an event module: the frame's geometry, no spinner. */
+/** The loading body of an event module: the frame's geometry, no spinner. */
 export function moduleSkeleton(rowCount: number): ReactNode {
   return <Skeleton rows={rowCount} variant="row" />;
+}
+
+/** A handover link, armed with the module's goal when it has one (TS-WEB-0012 D4). */
+function CalendarLink({
+  slug,
+  label,
+  dataCta,
+  conversion,
+}: {
+  readonly slug: string;
+  readonly label: string;
+  readonly dataCta?: string;
+  readonly conversion?: ConversionBinding;
+}) {
+  const href = calendarUrlForSlug(slug, { resolved: true });
+  if (href === undefined) return null;
+  const link = (
+    <OutboundLink dataCta={dataCta} href={href} variant="secondary">
+      {label}
+    </OutboundLink>
+  );
+  if (conversion === undefined) return link;
+  return (
+    <ConversionTracker
+      attributes={{ ...conversion.attributes, place: slug }}
+      goalId={conversion.goalId}
+      stage={conversion.stage}
+    >
+      {link}
+    </ConversionTracker>
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -135,17 +90,25 @@ export function moduleSkeleton(rowCount: number): ReactNode {
 /* ------------------------------------------------------------------ */
 
 export interface PlaceDatesIslandProps {
-  /** A geo-api slug, resolved outside the cache boundary (TS-WEB-0009 D2). */
-  readonly slug: string;
+  /**
+   * A geo-api slug. `undefined` while the page does not know the place yet —
+   * the module then stays in its loading frame and asks nothing.
+   */
+  readonly slug: string | undefined;
+  /**
+   * The place's name where the page knows it without asking — the showcase
+   * community, or a place the page already resolved. It fills the title and
+   * lets the onward link stand in the loading frame, so the frame does not
+   * grow when the rows land.
+   */
+  readonly placeName?: string;
   readonly locale: Locale;
   /** The module's own heading, already naming its radius. `{place}` is filled in. */
   readonly titleTemplate: string;
   readonly rowCount?: number;
   /**
    * The list's role, which caps its rows (polish brief G-2): `illustrative`
-   * three, `answering` five, `story` one. The module may ask its source for
-   * more dates than it is allowed to print; the rest stay behind the
-   * calendar link.
+   * three, `answering` five, `story` one.
    */
   readonly role?: EventListRole;
   readonly tone?: "light" | "dark";
@@ -156,47 +119,23 @@ export interface PlaceDatesIslandProps {
   readonly titleHidden?: boolean;
   /**
    * Which categories a **story-capped** module would rather show, best
-   * first. A list of one row is an illustration, and the next date in the
-   * window is not always one: "a place like yours has something in it"
-   * illustrated by a bin collection is an argument against itself. Ignored
-   * unless the list is capped to one row, where order is not the module's
-   * promise; position 1 stays chronological, always.
+   * first. Ignored unless the list is capped to one row; position 1 stays
+   * chronological, always.
    */
   readonly prefer?: readonly EventCategory[];
   /** The app handover's label. `{place}` is filled in; omitted means no CTA. */
   readonly ctaTemplate?: string;
-  /**
-   * The conversion marker for the module's own handover, where the page's
-   * primary conversion *is* this link — on `/dein-ort` in state A the hero
-   * above carries the place name and the offer sits under the three rows, so
-   * the marker travels with it (G-5). A string, never a node: an island's
-   * props are its cache key.
-   */
+  /** The conversion marker for the module's own handover (G-5). */
   readonly ctaDataCta?: string;
   /** `true` where arriving content changes the page's meaning (`/dein-ort`). */
   readonly announced?: boolean;
-  /**
-   * The goal this module's app handover completes (TS-WEB-0012 D4). The island
-   * arms the link itself and adds the resolved place slug as the one
-   * attribute — a slug is fine, a form value is not (D4 rule 3).
-   */
+  /** The goal this module's app handover completes (TS-WEB-0012 D4). */
   readonly conversion?: ConversionBinding;
-  /**
-   * The publish invitation of TS-WEB-0008 D4, as the page's own copy — **strings
-   * only**. A cached component's props are its cache key, so a `ReactNode`
-   * here would be a non-serializable argument ("Unexpected cache miss after
-   * cache warming phase"); the island builds the button itself.
-   */
-  readonly invitation?: {
-    readonly headline: string;
-    readonly lead?: string;
-    readonly ctaLabel: string;
-    readonly ctaTo: RouteId;
-  };
 }
 
-export async function PlaceDatesIsland({
+export function PlaceDatesIsland({
   slug,
+  placeName,
   locale,
   titleTemplate,
   rowCount = 3,
@@ -210,24 +149,46 @@ export async function PlaceDatesIsland({
   ctaDataCta,
   announced = false,
   conversion,
-  invitation,
 }: PlaceDatesIslandProps) {
-  "use cache";
-  cacheLife(cacheLifeProfile("dates"));
-  cacheTag(cacheTags.dates(slug));
-
   // A module that gets to choose its row has to be given more than one to
-  // choose from: `prefer` picks out of the window, so it asks for the window
-  // rather than for the single row it prints.
-  const envelope = await placeEvents({
-    slug,
-    window: "upcoming",
-    rowCount: prefer === undefined ? rowCount : Math.max(rowCount, 12),
-  });
+  // choose from: `prefer` picks out of the window, so it asks for the window.
+  const asked = prefer === undefined ? rowCount : Math.max(rowCount, 12);
+  const load = useLive<PlaceEvents>(slug === undefined ? undefined : liveRoutes.placeEvents(slug, asked));
+
   // An unresolved place is a different page state entirely, never an empty
   // module (`src/lib/live/README.md`). The page's own shell already stands.
-  if (envelope === undefined) return null;
+  if (load.status === "absent") return null;
 
+  if (load.status === "loading") {
+    const name = placeName ?? "";
+    return (
+      <LiveModuleFrame
+      reserveMarks
+        announced={announced}
+        cta={
+          ctaTemplate !== undefined && slug !== undefined && placeName !== undefined ? (
+            <CalendarLink
+              conversion={conversion}
+              dataCta={ctaDataCta}
+              label={fillTemplate(ctaTemplate, { place: name })}
+              slug={slug}
+            />
+          ) : undefined
+        }
+        headingLevel={headingLevel}
+        layout={layout}
+        locale={locale}
+        skeleton={<EventList items={[]} locale={locale} reserve role={role} rowCount={rowCount} state="loading" />}
+        state="loading"
+        title={fillTemplate(titleTemplate, { place: name })}
+        titleHidden={titleHidden}
+      >
+        {null}
+      </LiveModuleFrame>
+    );
+  }
+
+  const { envelope } = load;
   const { data, fetchedAt } = envelope;
   const empty = data.events.length === 0;
   const title = fillTemplate(titleTemplate, { place: data.place.name });
@@ -240,27 +201,17 @@ export async function PlaceDatesIsland({
 
   return (
     <LiveModuleFrame
+      reserveMarks
       layout={layout}
       announced={announced || data.publishInvitation}
       cta={
-        // State B suppresses the calendar handover: a covered place with no
-        // dates shifts the focus job to publishing (TS-WEB-0008 D4, TS-WEB-0020 D2),
-        // and an "open the calendar" link beside "nothing is in it yet" is
-        // the one offer that state must not carry.
-        ctaTemplate === undefined || (empty && invitation !== undefined) ? undefined : conversion === undefined ? (
-          <OutboundLink dataCta={ctaDataCta} href={calendarUrl(data.place)} variant="secondary">
-            {fillTemplate(ctaTemplate, { place: data.place.name })}
-          </OutboundLink>
-        ) : (
-          <ConversionTracker
-            attributes={{ ...conversion.attributes, place: data.place.slug }}
-            goalId={conversion.goalId}
-            stage={conversion.stage}
-          >
-            <OutboundLink dataCta={ctaDataCta} href={calendarUrl(data.place)} variant="secondary">
-              {fillTemplate(ctaTemplate, { place: data.place.name })}
-            </OutboundLink>
-          </ConversionTracker>
+        ctaTemplate === undefined ? undefined : (
+          <CalendarLink
+            conversion={conversion}
+            dataCta={ctaDataCta}
+            label={fillTemplate(ctaTemplate, { place: data.place.name })}
+            slug={data.place.slug}
+          />
         )
       }
       headingLevel={headingLevel}
@@ -272,25 +223,9 @@ export async function PlaceDatesIsland({
       updatedAt={fetchedAt}
     >
       <EventList
-        emptyState={
-          invitation === undefined ? undefined : (
-            <EmptyStateBlock
-              // The frame already carries `role="status"` (`announced`), and
-              // the shift is announced **once** — `empty-state-block`'s own
-              // contract for exactly this case.
-              announced={false}
-              cta={
-                <Button locale={locale} onward to={invitation.ctaTo} variant="primary-light">
-                  {invitation.ctaLabel}
-                </Button>
-              }
-              headline={fillTemplate(invitation.headline, { place: data.place.name })}
-              lead={invitation.lead}
-            />
-          )
-        }
         items={items}
         locale={locale}
+        reserve
         role={role}
         rowCount={rowCount}
         state={empty ? "empty" : stateOf(envelope)}
@@ -305,8 +240,14 @@ export async function PlaceDatesIsland({
 /* ------------------------------------------------------------------ */
 
 export interface NearbyIslandProps {
-  readonly lat: number;
-  readonly lng: number;
+  /** The coordinate the radius is drawn around; `undefined` while the page does not know it. */
+  readonly point: { readonly lat: number; readonly lng: number } | undefined;
+  /**
+   * The covered community the coordinate belongs to — the calendar link's
+   * target. A slug out of a resolved place, never one assembled from a
+   * request value (TS-WEB-0008 D9).
+   */
+  readonly anchorSlug?: string;
   readonly locale: Locale;
   /** Names its own radius — never the place name (TS-WEB-0008 D1). `{radius}` is the km figure. */
   readonly titleTemplate: string;
@@ -314,18 +255,13 @@ export interface NearbyIslandProps {
   /** The list's role, which caps its rows (G-2) — position 2 is the `answering` five. */
   readonly role?: EventListRole;
   readonly headingLevel?: "h2" | "h3";
-  /**
-   * The goal this module's calendar link completes (TS-WEB-0012 D4: *every* click
-   * that opens a place calendar on `app.*`). Position 2's own link went
-   * unarmed, so one of the four handovers on `/dein-ort` fired nothing —
-   * measured, not reviewed.
-   */
+  /** The goal this module's calendar link completes (TS-WEB-0012 D4). */
   readonly conversion?: ConversionBinding;
 }
 
-export async function NearbyIsland({
-  lat,
-  lng,
+export function NearbyIsland({
+  point,
+  anchorSlug,
   locale,
   titleTemplate,
   rowCount = 5,
@@ -333,41 +269,42 @@ export async function NearbyIsland({
   headingLevel = "h2",
   conversion,
 }: NearbyIslandProps) {
-  "use cache";
-  cacheLife(cacheLifeProfile("dates"));
-  cacheTag(cacheTags.places());
+  const load = useLive<NearbyEvents>(point === undefined ? undefined : liveRoutes.nearby(point.lat, point.lng));
+  if (load.status === "absent") return null;
 
-  const envelope = await nearbyEvents({ lat, lng, rowCount });
+  const cta =
+    anchorSlug === undefined ? undefined : (
+      <CalendarLink conversion={conversion} label={dictionary(locale).live.allDates} slug={anchorSlug} />
+    );
+
+  if (load.status === "loading") {
+    return (
+      <LiveModuleFrame
+      reserveMarks
+        cta={cta}
+        headingLevel={headingLevel}
+        locale={locale}
+        skeleton={
+          <EventList capOnPhone items={[]} locale={locale} reserve role={role} rowCount={rowCount} state="loading" />
+        }
+        state="loading"
+        title={fillTemplate(titleTemplate, { radius: String(NEARBY_RADIUS_KM) })}
+      >
+        {null}
+      </LiveModuleFrame>
+    );
+  }
+
+  const { envelope } = load;
   const { data, fetchedAt } = envelope;
   // TS-WEB-0008 D1: zero rows nearby removes the module rather than showing an
   // empty list — the page's other blocks carry the screen.
   if (data.events.length === 0) return null;
 
-  // The list is an example, not the calendar: three rows on a phone, five on
-  // a desktop, and the rest behind one handover. The link is built from the
-  // covered community the coordinate sits in — a `Place` out of the community
-  // index, never a slug assembled from a request value (TS-WEB-0008 D9).
-  const anchor = nearestPlace({ lat, lng });
-
   return (
     <LiveModuleFrame
-      cta={
-        anchor === undefined ? undefined : conversion === undefined ? (
-          <OutboundLink href={calendarUrl(anchor)} variant="secondary">
-            {dictionary(locale).live.allDates}
-          </OutboundLink>
-        ) : (
-          <ConversionTracker
-            attributes={{ ...conversion.attributes, place: anchor.slug }}
-            goalId={conversion.goalId}
-            stage={conversion.stage}
-          >
-            <OutboundLink href={calendarUrl(anchor)} variant="secondary">
-              {dictionary(locale).live.allDates}
-            </OutboundLink>
-          </ConversionTracker>
-        )
-      }
+      reserveMarks
+      cta={cta}
       headingLevel={headingLevel}
       locale={locale}
       state={stateOf(envelope)}
@@ -379,6 +316,7 @@ export async function NearbyIsland({
         capOnPhone
         items={toListItems(data.events, locale)}
         locale={locale}
+        reserve
         role={role}
         rowCount={rowCount}
         state={stateOf(envelope)}
@@ -400,43 +338,57 @@ export interface RegionExamplesIslandProps {
   readonly headingLevel?: "h2" | "h3";
 }
 
-export async function RegionExamplesIsland({
+export function RegionExamplesIsland({
   county,
   locale,
   titleTemplate,
   max = 6,
   headingLevel = "h2",
 }: RegionExamplesIslandProps) {
-  "use cache";
-  cacheLife(cacheLifeProfile("activePlaces"));
-  cacheTag(cacheTags.placesInCounty(county));
+  const load = useLive<RegionExamples>(liveRoutes.regionExamples(county, max));
+  if (load.status === "absent") return null;
 
-  const envelope = await regionExamples({ county, max });
+  if (load.status === "loading") {
+    return (
+      <LiveModuleFrame
+      reserveMarks
+        headingLevel={headingLevel}
+        locale={locale}
+        skeleton={<PlaceExampleSet examples={[]} locale={locale} max={max} reserve state="loading" />}
+        state="loading"
+        title={fillTemplate(titleTemplate, { county: countyLabel(county, locale) })}
+      >
+        {null}
+      </LiveModuleFrame>
+    );
+  }
+
+  const { envelope } = load;
   const { data, fetchedAt } = envelope;
   // DEC-0034: a designed set, never a place list — and absent, never empty.
   if (data.examples.length === 0) return null;
 
   return (
     <LiveModuleFrame
+      reserveMarks
       headingLevel={headingLevel}
       locale={locale}
       state={stateOf(envelope)}
       tier={tierOf(envelope)}
-      // F-2-73: `data.county` is geo-api's identifier, not a name. Filling
-      // the slot with it put "examples from geoname.900001" in block 3's
-      // heading on `/en/your-region`. `countyLabel` answers a label or the
-      // language's generic phrase — an id can no longer reach a heading.
+      // F-2-73: `data.county` is geo-api's identifier, not a name —
+      // `countyLabel` answers a label or the language's generic phrase.
       title={fillTemplate(titleTemplate, { county: countyLabel(data.county, locale) })}
       updatedAt={fetchedAt}
     >
       <PlaceExampleSet
         examples={data.examples.map((example) => ({
           label: example.name,
-          to: "place" as const,
+          to: "place" as RouteId,
           query: { ort: example.slug },
         }))}
         locale={locale}
         max={max}
+        reserve
         state={stateOf(envelope)}
       />
     </LiveModuleFrame>
@@ -454,88 +406,39 @@ export interface CountersIslandProps {
   readonly className?: string;
 }
 
-export async function CountersIsland({
+export function CountersIsland({ locale, show = ["dates", "places", "updatesToday"], className }: CountersIslandProps) {
+  return <CountersView className={className} load={useLive<LiveCountersData>(liveRoutes.stats())} locale={locale} show={show} />;
+}
+
+/**
+ * What the counters band renders for one load state — the island's whole
+ * branch, separate from the fetch so the chain from `/api/stats` to the page
+ * can be rendered in a test (TS-WEB-0018-A12).
+ */
+export function CountersView({
+  load,
   locale,
   show = ["dates", "places", "updatesToday"],
   className,
-}: CountersIslandProps) {
-  "use cache";
-  cacheLife(cacheLifeProfile("counters"));
-  cacheTag(cacheTags.stats());
+}: CountersIslandProps & { readonly load: LiveLoad<LiveCountersData> }) {
+  // TS-WEB-0009 D6: both fallback tiers exhausted removes the band (`/api/stats`
+  // answers 204). Never a zero, never an estimate.
+  if (load.status === "absent") return null;
+  if (load.status === "loading") {
+    return <LiveCounters className={className} loadingSlots={show.length} locale={locale} state="loading" />;
+  }
 
-  const envelope = await liveCounters();
-  // TS-WEB-0009 D6: both fallback tiers exhausted removes the band. Never a zero,
-  // never an estimate.
-  if (envelope === undefined) return null;
-
-  const { data } = envelope;
+  const { envelope } = load;
   const wanted = new Set(show);
 
   return (
     <LiveCounters
       className={className}
-      dates={wanted.has("dates") ? data.dates : undefined}
+      dates={wanted.has("dates") ? envelope.data.dates : undefined}
       locale={locale}
-      places={wanted.has("places") ? data.places : undefined}
+      places={wanted.has("places") ? envelope.data.places : undefined}
       state={stateOf(envelope)}
-      updatesToday={wanted.has("updatesToday") ? data.updatesToday : undefined}
+      updatesToday={wanted.has("updatesToday") ? envelope.data.updatesToday : undefined}
     />
   );
-}
-
-/**
- * The example rows a static block borrows from the live modules — the
- * "snapshot rung of the example ladder" of TS-WEB-0020 D3, where a value story
- * shows one real row instead of an invented one.
- *
- * Cached, not suspended: the rows stand *inside* prose, so a skeleton there
- * would read as a broken paragraph rather than as arriving data.
- */
-export async function exampleRows(
-  slug: string,
-  lat: number,
-  lng: number,
-  locale: Locale,
-): Promise<{
-  readonly place: readonly EventListItem[];
-  readonly nearby: readonly EventListItem[];
-  readonly demo: boolean;
-}> {
-  "use cache";
-  cacheLife(cacheLifeProfile("dates"));
-  cacheTag(cacheTags.dates(slug));
-
-  // More rows than any one module prints: `/dein-ort` shows three of the
-  // place's dates at position 1 and five nearby in story 4, and the value
-  // stories pick their own example out of what is left — a story that
-  // repeats a row the reader has just scrolled past is not an example, it
-  // is the same list again (polish brief, page 2).
-  const [dates, near] = await Promise.all([
-    placeEvents({ slug, window: "upcoming", rowCount: 12 }),
-    nearbyEvents({ lat, lng, rowCount: 12 }),
-  ]);
-
-  return {
-    place: dates === undefined ? [] : toListItems(dates.data.events, locale),
-    nearby: toListItems(near.data.events, locale),
-    demo: (dates?.demo ?? false) || near.demo,
-  };
-}
-
-/**
- * The pool a value story picks its example from (DEC-0152): the searched
- * place's surroundings for the coming weeks, each date with its distance.
- * Cached like `exampleRows`, for the same reason — the example stands inside
- * prose, where a skeleton would read as a broken paragraph.
- */
-export async function storyExamplePool(slug: string): Promise<{
-  readonly events: readonly LiveEvent[];
-  readonly demo: boolean;
-}> {
-  "use cache";
-  cacheLife(cacheLifeProfile("dates"));
-  cacheTag(cacheTags.dates(slug));
-
-  const pool = await exampleEvents({ slug });
-  return { events: pool?.data.events ?? [], demo: pool?.demo ?? false };
 }

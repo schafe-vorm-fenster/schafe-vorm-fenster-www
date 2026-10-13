@@ -61,6 +61,9 @@ for (const width of PHONE_WIDTHS) {
       await page.setViewportSize({ width, height: 844 });
       await page.goto(path);
       await expect(page.locator(ROW).first()).toBeVisible();
+      // The live rows replace their sample and skeleton after hydration
+      // (DEC-0163); measure the rows the visitor ends up with.
+      await page.waitForLoadState("networkidle");
 
       const rows = await readRows(page);
       expect(rows.length, "rows to measure").toBeGreaterThan(0);

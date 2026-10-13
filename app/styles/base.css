@@ -45,6 +45,15 @@
   /* The column gap between grid columns; no columns stand side by side below
      xl, so on the phone and the tablet it only spaces stacked blocks. */
   --grid-gap: var(--space-6);
+  /* The height of an event row whose title runs to its second line — the
+     reserve a live list holds while its rows load in the browser (DEC-0163):
+     hairline · padding · two title lines · the meta line, which the 24 px
+     category glyph sets on the phone. A one-line row is 76 px
+     (`--height-event-row`); reserving the taller one is what keeps a list
+     from growing after paint whichever titles arrive. */
+  --height-event-row-tall: calc(
+    1px + 2 * var(--space-2) + 2 * var(--type-card-size) * var(--type-card-leading) + 1.5rem
+  );
   /* Column spans: the full width until the desktop tier defines them. */
   --span-4: 100%;
   --span-6: 100%;
@@ -225,6 +234,14 @@ textarea {
 
 /* lg — 48rem / 768px: tablet portrait. */
 @media (min-width: 48rem) {
+  :root {
+    /* From here the category is the badge (`event-row.module.css`), and the
+       badge — with its icon, the taller of its two heights — sets the meta line. */
+    --height-event-row-tall: calc(
+      1px + 2 * var(--space-2) + 2 * var(--type-card-size) * var(--type-card-leading) + var(--height-badge-icon)
+    );
+  }
+
   .site-main {
     padding-block: var(--space-12);
   }

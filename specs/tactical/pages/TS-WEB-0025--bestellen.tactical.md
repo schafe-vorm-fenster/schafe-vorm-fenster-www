@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0015]
 sources: [SRC-0001, SRC-0003, SRC-0008, SRC-0011, SRC-0014]
-decisions: [DEC-0010, DEC-0011, DEC-0013, DEC-0024, DEC-0025, DEC-0030, DEC-0034, DEC-0036, DEC-0051, DEC-0056, DEC-0081]
+decisions: [DEC-0010, DEC-0011, DEC-0013, DEC-0024, DEC-0025, DEC-0030, DEC-0034, DEC-0036, DEC-0051, DEC-0056, DEC-0081, DEC-0163]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -129,6 +129,8 @@ Forbidden: any payment field (DEC-0011), any private address, any field the invo
 does not need. Price per BUS-WEB-0015, FUN-WEB-0202 / TS-WEB-0006 D10. Tone: an office doing its job.
 
 ### D7 — What "embed code out immediately" is [FIXED that it is immediate: DEC-0011; artefact UNKNOWN]
+
+> **Amended by DEC-0163 (2026-10-13).** The route is one static document and the step is chosen in the browser from the URL (`order-flow.tsx`); step 4's code is rendered there, not server-side.
 
 The artefact is the DEC-0030 loader snippet — the two lines `/dein-kalender`
 promises: `<script src=".../api/{organizerId}/load.js">` plus its mount element,

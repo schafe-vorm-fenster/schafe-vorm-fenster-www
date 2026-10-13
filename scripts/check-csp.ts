@@ -23,10 +23,11 @@
  *    `csp.ts` — the same table D1 names, TS-WEB-0014 D7's "one typed structure");
  *  - **`'unsafe-inline'`/`'unsafe-eval'` never appear in `script-src` for
  *    `production`**, with or without a build hash set;
- *  - **the preview-only `'unsafe-inline'` fence (F-2-27, DEC-0045)** holds
- *    exactly: present in `preview`'s `script-src` when no hash set exists,
- *    absent the moment one does, and never present for `production` either
- *    way — the branch `state/findings/round-2.md` F-1-2 exists to fence.
+ *  - **no `'unsafe-inline'` in a deployed script policy (F-2-27, DEC-0163)**:
+ *    absent from `preview` and `production`, with or without a hash set. Until
+ *    DEC-0163 preview carried it as a fallback while the hash map could not
+ *    reach the deployed proxy; the build adapter delivers it now, so the
+ *    fence that F-1-2 put around that fallback closes it entirely.
  *
  * `checkPolicyDirectives` takes a plain directive record so a test can feed
  * it a fixture policy directly — real *and* deliberately-broken ones —
@@ -93,41 +94,26 @@ export function checkPolicyDirectives(
 }
 
 /**
- * The preview-only `'unsafe-inline'` fence (F-2-27, DEC-0045): present iff
- * `preview` and no hash set, absent the moment a hash set exists, and never
- * present for `production` regardless. Checked against a directive
- * builder — the real `policyDirectives()` by default, or a fixture builder
- * a test hands in — because this is the one assertion that needs to
- * compare *two or more* built policies against each other rather than
- * judge one in isolation, so it lives beside `checkPolicyDirectives` rather
- * than inside it.
+ * The `'unsafe-inline'` fence (F-2-27, as closed by DEC-0163): no deployed
+ * environment's `script-src` carries it — `preview` and `production`, with an
+ * empty hash set and with one. Checked against a directive builder — the real
+ * `policyDirectives()` by default, or a fixture builder a test hands in.
  */
 export function checkPreviewUnsafeInlineFence(
   buildDirectives: (input: PolicyInput) => Record<string, readonly string[]> = policyDirectives,
 ): string[] {
   const errors: string[] = [];
+  const hashed = ["sha256-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC="];
 
-  const previewNoHashes = buildDirectives({ environment: "preview", scriptHashes: [] })["script-src"] ?? [];
-  const previewWithHashes =
-    buildDirectives({ environment: "preview", scriptHashes: ["sha256-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC="] })["script-src"] ?? [];
-  const productionNoHashes = buildDirectives({ environment: "production", scriptHashes: [] })["script-src"] ?? [];
-  const productionWithHashes =
-    buildDirectives({ environment: "production", scriptHashes: ["sha256-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC="] })["script-src"] ?? [];
-
-  if (!previewNoHashes.includes(UNSAFE_INLINE))
-    errors.push(
-      "F-2-27 preview/script-src (no hashes): expected the documented 'unsafe-inline' fallback, found none",
-    );
-  if (previewWithHashes.includes(UNSAFE_INLINE))
-    errors.push(
-      "F-2-27 preview/script-src (with hashes): 'unsafe-inline' must disappear once a hash set exists",
-    );
-  if (productionNoHashes.includes(UNSAFE_INLINE))
-    errors.push("F-2-27 production/script-src (no hashes): 'unsafe-inline' must never appear in production");
-  if (productionWithHashes.includes(UNSAFE_INLINE))
-    errors.push(
-      "F-2-27 production/script-src (with hashes): 'unsafe-inline' must never appear in production",
-    );
+  for (const environment of ["preview", "production"] as const) {
+    for (const scriptHashes of [[], hashed]) {
+      const scriptSrc = buildDirectives({ environment, scriptHashes })["script-src"] ?? [];
+      if (scriptSrc.includes(UNSAFE_INLINE))
+        errors.push(
+          `F-2-27 ${environment}/script-src (${scriptHashes.length ? "with" : "no"} hashes): 'unsafe-inline' must never appear in a deployed script policy`,
+        );
+    }
+  }
 
   return errors;
 }

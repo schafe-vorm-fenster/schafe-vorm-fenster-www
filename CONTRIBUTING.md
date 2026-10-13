@@ -171,23 +171,23 @@ cannot see whether the small range does anything.
   what makes an untokened preview show real dates.
   `GEOAPI_READ_TOKEN` and `EVENTSAPI_READ_TOKEN` move each module up to the
   authoritative source with no code change.
-- **A request value is read outside every cache boundary.** Cache Components
-  is on (`cacheComponents: true`), so a page is a prerendered shell plus
-  cached islands: `use cache` with a `cacheLife` from
-  `src/lib/live/cache-profiles.ts` and a `cacheTag`, and `?ort=`, `cookies()`
-  or `headers()` read in the page — never inside a cached scope — and handed
-  down as a plain string prop, which is also what makes the prop the cache
-  key. `dynamic`, `dynamicParams`, `revalidate` and `fetchCache` are build
-  errors; so is a bare `new Date()` or `Math.random()` in a prerendered path.
-  A route that cannot be split says so with `export const instant = false`
-  and a reason, and gets a `state/open.md` row. `next build
-  --debug-prerender` is the check that catches what a normal build tolerates.
-- **A `<Suspense>` fallback may not suspend.** It is the static shell's
-  content, so it has to be synchronous — a skeleton, or nothing. An async
-  component in a fallback leaves *both* trees in the DOM (measured), and a
-  skeleton a JS-less visitor never gets past is what TS-WEB-0020-A10 forbids by
-  name. Where a page must be complete without JavaScript, read the request
-  value in the page and let the route block.
+- **Every page is static, and a request value is read in the browser**
+  (DEC-0163). The CSP carries build-time hashes of each page's inline scripts
+  (`scripts/csp-adapter.mjs` builds the map inside `next build`), so a page's
+  HTML may never change after the build: no page reads `searchParams`,
+  `cookies()` or `headers()`, no page uses a `cacheLife` other than the
+  never-revalidating `max`, and the build fails for a page that revalidates.
+  Live data loads after hydration from `/api/*` through
+  `src/lib/live/browser.ts`; `?ort=` and flow steps come from
+  `src/lib/pages/query-store.tsx`. `dynamic`, `dynamicParams`, `revalidate`
+  and `fetchCache` are build errors; so is a bare `new Date()` or
+  `Math.random()` in a prerendered path.
+- **A live frame reserves its final geometry.** Its prerendered skeleton holds
+  the rows it may print at the two-line row height (`--height-event-row-tall`),
+  the "Stand: …" line and the counter pills, so nothing below it moves when
+  the answer lands (`e2e/layout-stability.spec.ts`). Without JavaScript a page
+  is its stage-0 state with those skeletons in place — the owner dropped the
+  no-JavaScript rule for the place and flow states (DEC-0163).
 - **A new dependency needs an ADR.** Look sideways at the sibling repos
   first (`../classification-api`, `../events-api`, `../geo-api`,
   `../community-calendar`, `../envoy-api`), decide, write the decision into

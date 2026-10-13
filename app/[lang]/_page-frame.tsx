@@ -123,6 +123,13 @@ export type ClosingBlock =
       readonly reassurance?: string;
       /** A quiet line under the block — "Anderer Ort?", "Falsch getippt?". */
       readonly footer?: ReactNode;
+      /**
+       * The node *is* the whole closing block — heading, control and
+       * reassurance — because which of TS-WEB-0006 D6's shapes it takes is
+       * only known in the browser (`/dein-ort`'s state, DEC-0163). The frame
+       * then adds the section and nothing inside it.
+       */
+      readonly bare?: boolean;
     };
 
 export interface PageFrameProps {
@@ -233,7 +240,9 @@ export function PageFrame({
               label={dictionary(locale).nav.home}
               surface={closing.variant === "module" ? (closing.surface ?? "paper") : "paper"}
             >
-              {closing.variant === "module" ? (
+              {closing.variant === "module" && closing.bare ? (
+                closing.node
+              ) : closing.variant === "module" ? (
                 /* The block-1 primary repeated as the module it is, with the
                    same heading and reassurance a `repeat` block carries — a
                    page that ends on a control and nothing else ends on no

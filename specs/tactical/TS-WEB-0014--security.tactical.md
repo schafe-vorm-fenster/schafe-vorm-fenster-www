@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [CON-WEB-0030, CON-WEB-0031, CON-WEB-0032, FUN-WEB-0127, CON-WEB-0038, CON-WEB-0034, CON-WEB-0039, NFR-WEB-0065, CON-WEB-0040, CON-WEB-0041]
 sources: [SRC-0006, SRC-0010, SRC-0011, SRC-0012]
-decisions: [DEC-0009, DEC-0013, DEC-0014, DEC-0015, DEC-0017, DEC-0025, DEC-0030, DEC-0031, DEC-0035]
+decisions: [DEC-0009, DEC-0013, DEC-0014, DEC-0015, DEC-0017, DEC-0025, DEC-0030, DEC-0031, DEC-0035, DEC-0163]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -99,6 +99,34 @@ inline script — a new inline block that skips that step breaks the policy
 loudly instead of silently weakening it. `'strict-dynamic'` still applies.
 The nonce variant below is recorded as the rejected alternative and its
 cost is why.
+
+**Amended by DEC-0163 (2026-10-13, #59).** Three corrections, all measured:
+
+1. **Every page is static, and stays byte-identical for the life of a
+   deployment.** A hash covers exactly one script, and Next's flight payload
+   (`self.__next_f.push(…)`) is page content: a page whose HTML regenerated
+   (live data under a five-minute `cacheLife`) or was rendered per request
+   (`?ort=`, a flow step, a request header) carried a payload no build-time
+   hash could know, and did not hydrate. Live data therefore loads in the
+   browser from this site's own `/api/*` routes, query-dependent states are
+   read in the browser, and the build **fails** for any page whose prerender
+   revalidates (`scripts/csp-adapter.mjs`). The only `ƒ` routes left are the
+   API handlers, `robots.txt`, `llms.txt` and the 404 surface.
+2. **Hashes are per page.** The extraction writes one map — internal page
+   path → that page's hashes, plus the set every page shares — and the proxy
+   sends a response only its own page's set (`csp-hashes.ts`), ~2.4 KB of
+   header instead of the ~24 KB a site-wide set measured. A page over the cap
+   (`MAX_PAGE_HASHES`, 128) **fails the build**; nothing is truncated any
+   more (a silent cap of 128 against ~430 site-wide hashes was #59's first
+   cause).
+3. **The map reaches the proxy inside the build.** The extraction runs in a
+   Next adapter's `onBuildComplete` (`adapterPath` in `next.config.ts`) that
+   wraps the platform's own adapter and adds the map to the proxy function's
+   assets; the proxy reads it from disk. No network fetch, no bypass secret,
+   no request-derived origin (state/open.md rows 31/173).
+
+`'strict-dynamic'` does **not** apply (correction recorded in state/open.md
+row 31).
 
 #### The conflict, for the record [superseded by DEC-0045]
 
@@ -363,12 +391,13 @@ Rules:
 | TS-WEB-0014-A11 | tool | CI: a dependency with a known HIGH CVE, injected into the lockfile, fails the `Quality` job, and the production promotion does not start. An expired `.trivyignore` entry fails the job too. |
 | TS-WEB-0014-A12 | manual | Release check: Vercel Runtime Errors, the Observability 5xx panel and the uptime monitor all show the current deployment; no third-party error SDK appears in the bundle or in A3's network trace. |
 | TS-WEB-0014-A13 | static | No call site emits a request body, query string, IP address or e-mail through the logging facade (lint rule over the facade's typed signature). |
+| TS-WEB-0014-A14 | e2e | Against the production build, every route of the TS-WEB-0004 D1 registry in both languages loads with **zero** CSP violations (`securitypolicyviolation` events and console reports) and hydrates: the site header's and every other `[data-hydrated]` reaches `"true"`; a flow route reached with a query hydrates the same way (DEC-0163). |
 
 ## Coverage
 
 | Requirement | Discharged by |
 | --- | --- |
-| CON-WEB-0030 (serve an enforced Content-Security-Policy with an explicit allowlist from …) | D1, D2, D3, D5 · A1, A2, A3, A5 |
+| CON-WEB-0030 (serve an enforced Content-Security-Policy with an explicit allowlist from …) | D1, D2, D3, D5 · A1, A2, A3, A5, A14 |
 | CON-WEB-0031 (admit a Content-Security-Policy allowlist entry only as an explicit …) | D1, D7 · A1 |
 | CON-WEB-0032 (set the security headers of TS-WEB-0014 D4 on every …) | D4, D5 · A2, A5 |
 | FUN-WEB-0127 (run a dependency scan) | D12 · A11 |
@@ -381,11 +410,8 @@ Rules:
 
 ## Open points
 
-- **D3 — nonce or hashes?** Does the HTML shell leave the full-route
-  cache so a per-request nonce can be issued (Variant A, proposed), or
-  does the site keep static ISR and carry per-build script hashes
-  (Variant B)? The answer changes `script-src`, TS-WEB-0004 D6 and the TS-WEB-0003
-  D1 budget. This is the one determination that blocks generation.
+- ~~**D3 — nonce or hashes?**~~ Settled by DEC-0045 (hashes) and DEC-0163
+  (per page, every page static, delivered through the build adapter).
 - **D1 — the envoy widget host (Q-0022).** The widget is not built.
   Unconfirmed: its script origin (`envoy-api.api.schafe-vorm-fenster.de`
   is read from the repository, not stated by its owner), what it calls at

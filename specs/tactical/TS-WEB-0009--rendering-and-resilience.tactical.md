@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0192, CON-WEB-0088, FUN-WEB-0193, FUN-WEB-0194, FUN-WEB-0195, FUN-WEB-0102, FUN-WEB-0103, FUN-WEB-0196, FUN-WEB-0197, FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090]
 sources: [SRC-0002, SRC-0011]
-decisions: [DEC-0002, DEC-0019, DEC-0021, DEC-0032, DEC-0033, DEC-0041]
+decisions: [DEC-0002, DEC-0019, DEC-0021, DEC-0032, DEC-0033, DEC-0041, DEC-0163]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -30,6 +30,8 @@ cached is TS-WEB-0003 D5. This spec fixes the mechanism both of them assume.
 ## Determinations
 
 ### D1 — Three rendering layers [FIXED: DEC-0019, DEC-0041 §8; realisation PROPOSED]
+
+> **Amended by DEC-0163 (2026-10-13).** The cached-island layer is replaced: islands are client components that render their frame at final geometry in the prerendered HTML and fill it from the BFF after hydration (`app/[lang]/_islands.tsx`). The dynamic layer is empty — no page reads `headers()`, `cookies()` or `searchParams`; request values (`?ort=`, a flow step, the entry trait) are read in the browser (`src/lib/pages/query-store.tsx`). The build fails for a page whose prerender revalidates. D2's resolver map, D3's `cacheLife`/`cacheTag` columns and A5 describe the superseded layer; the skeleton and geometry rules (D7, A8) hold unchanged and are now met by reserved heights.
 
 Next.js 16 Cache Components (`cacheComponents: true` in `next.config`)
 is the mechanism. It admits exactly three kinds of content, and every

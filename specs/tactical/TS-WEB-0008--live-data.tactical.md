@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0040, FUN-WEB-0041, FUN-WEB-0043, FUN-WEB-0153, FUN-WEB-0154, FUN-WEB-0045, FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072, FUN-WEB-0049]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0011]
-decisions: [DEC-0013, DEC-0019, DEC-0021, DEC-0024, DEC-0025, DEC-0029, DEC-0030, DEC-0034, DEC-0035, DEC-0037, DEC-0079, DEC-0154]
+decisions: [DEC-0013, DEC-0019, DEC-0021, DEC-0024, DEC-0025, DEC-0029, DEC-0030, DEC-0034, DEC-0035, DEC-0037, DEC-0079, DEC-0154, DEC-0163]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -308,6 +308,8 @@ Links from the website into the app are built from the geo-api community
 | Never | a slug is never guessed, never string-built from user input, never used before geo-api confirmed it. An unresolvable slug leads to `/dein-ort/starten`, not to a broken app link. |
 
 ### D10 — Client contract for live modules [FIXED: DEC-0025, CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045, DEC-0021]
+
+> **Amended by DEC-0163 (2026-10-13).** The browser is now the live modules' only caller of the BFF: each module renders its frame in the static HTML and fetches its envelope after hydration (`src/lib/live/browser.ts`), one request per URL per page view, `no-store` towards the browser cache while the CDN keeps D5's `Cache-Control`. No answer (204, 404, network failure) removes the module; it never shows an error sentence.
 
 | Rule | Consequence |
 | --- | --- |

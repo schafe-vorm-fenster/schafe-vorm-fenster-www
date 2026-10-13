@@ -1,175 +1,82 @@
 /**
- * Reads the per-build inline-script hash set that
- * `scripts/generate-csp-hashes.mjs` writes after `next build` — TS-WEB-0014 D3 /
- * DEC-0045, state/open.md rows 21 and 31.
+ * The per-page inline-script hashes `proxy.ts` puts into `script-src` —
+ * TS-WEB-0014 D3, DEC-0045 as amended by DEC-0163.
  *
- * First attempt (superseded): a synchronous `fs` read of a hand-written file
- * under `.next/security/`. Verified working for a self-hosted
- * `next build && next start`, but measured to fail on an actual Vercel
- * preview — the deployed Proxy function's traced filesystem never included
- * that file (or `.next/server/app` itself), and Proxy's file-convention
- * `config` export has no option to force-include extra files.
+ * ## Where the hashes come from
  *
- * Current mechanism: the extraction script writes the hash set into
- * `.next/static/security/csp-script-hashes.json`, which Vercel uploads and
- * serves like any other `_next/static` asset — no function file-tracing
- * involved. This module fetches it **from the deployment's own origin**,
- * once per deployment. `proxy.ts` stays a pure function of hostname + path
- * (TS-WEB-0004 D3): the fetch reads a build artifact, not per-request state, and
- * its result never varies with *this* request's path.
+ * `scripts/csp-adapter.mjs` runs inside `next build` (Next's adapter API — the
+ * one Vercel builds through) and writes one map: every prerendered page's
+ * internal path → the sha256 sources of that page's inline scripts, plus the
+ * set every page shares. It adds the file to the **proxy function's own
+ * assets**, so this module reads it from disk:
  *
- * Preview deployments sit behind Vercel Deployment Protection, so the
- * self-fetch carries `x-vercel-protection-bypass` — the same
- * `VERCEL_AUTOMATION_BYPASS_SECRET` Vercel injects into a protected
- * deployment's own functions (state/open.md row 14), not a secret this
- * module invents or reads from a file.
+ *  - on Vercel, from the function bundle the platform adapter assembled;
+ *  - under `next start`, from `.next/server/` where the build left it;
+ *  - under `next dev`, nowhere — there is no build, `csp.ts` falls back to its
+ *    dev-only `'unsafe-inline'`.
  *
- * ## The three guards (F-2-36)
+ * Two earlier mechanisms are gone and why (state/open.md rows 31/173): a file
+ * under `.next/security/` was outside the proxy's traced files, and a JSON
+ * under `.next/static/security/` fetched over HTTP 404'd on Vercel because it
+ * was written after the adapter had already chosen the deployment's files.
  *
- * A secret-bearing fetch whose target used to be `request.nextUrl.origin` —
- * i.e. the `Host` header — is an SSRF with a credential attached. The
- * module now holds three independent defences, each unit-tested in
- * `csp-hashes.test.ts`:
+ * ## Why per page
  *
- *  1. **The origin is the deployment's, never the request's.** On Vercel it
- *     is `VERCEL_URL` (this deployment's own hostname), else
- *     `VERCEL_PROJECT_PRODUCTION_URL`, and only a bare hostname passes the
- *     shape check. Off Vercel — a self-hosted `next start`, `next dev`, the
- *     e2e run — there is no such variable, so the request origin is used,
- *     but only when its host is one this site actually answers on (TS-WEB-0001
- *     D1's matrix plus loopback) and then **without** the bypass secret,
- *     which no non-Vercel deployment needs. The secret therefore only ever
- *     travels to an origin the environment named.
- *  2. **The cache is keyed by deployment**, not by nothing. `cached ??=`
- *     froze the first answer for the life of the server instance; the map
- *     below is keyed by `VERCEL_DEPLOYMENT_ID` (or the resolved origin) and
- *     bounded, so a stale entry cannot outlive its build and the map cannot
- *     grow without bound.
- *  3. **Every returned string is validated** against `sha256-<44 base64>`
- *     before it can reach `script-src`, de-duplicated, and capped at
- *     `MAX_SCRIPT_HASHES`. `csp.ts` interpolates each entry as `'<hash>'`;
- *     without the check, a string containing `'` or `;` writes arbitrary
- *     tokens into the policy. `csp.ts` re-applies the same predicate at the
- *     interpolation point, so the guard holds for every caller, not only
- *     this one.
+ * Every page is static HTML now (DEC-0163), so each page's inline scripts are
+ * fixed at build time and known exactly. A site-wide set was ~430 hashes —
+ * a ~24 KB header on every response, and a page's flight payload authorising
+ * scripts on every other page. Per page it is the page's own set (measured in DEC-0163).
  *
- * `next dev` never runs the extraction step, so the asset 404s there by
- * design; `csp.ts` treats an empty result as "no hashes yet" and falls back
- * to a dev/preview-only `'unsafe-inline'` rather than pairing
- * `'strict-dynamic'` with nothing to trust.
+ * ## The guards (F-2-36), as they stand now
+ *
+ *  1. **No request-derived origin, and no network at all.** The old module
+ *     fetched the asset from an origin that had to be defended against the
+ *     `Host` header and carried the Deployment Protection bypass secret. This
+ *     one reads one file from its own bundle: no request value selects what is
+ *     read beyond the *path* lookup, and that lookup can only answer an entry
+ *     the build wrote, or the common set.
+ *  2. **The cache is keyed by deployment.** One entry per
+ *     `VERCEL_DEPLOYMENT_ID` (or `local`), bounded, so a long-lived process can
+ *     never serve one build's map for another.
+ *  3. **Every string is validated** against `sha256-<44 base64>` before it can
+ *     reach `script-src`, de-duplicated, and capped at `MAX_SCRIPT_HASHES` —
+ *     the same number the build enforces per page (`MAX_PAGE_HASHES`), so the
+ *     cap can never truncate a real set: a page over it fails the build first.
+ *     `csp.ts` re-applies the shape check at the interpolation point.
  */
 
-import { DOMAIN_MATRIX } from "@/src/lib/routes/host-matrix";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { DEFAULT_LOCALE, LOCALES } from "@/src/lib/i18n/locales";
+import { href, internalPath, normalisePath, ROUTE_IDS } from "@/src/lib/routes/routes";
 import { isScriptHash } from "@/src/lib/security/csp";
 
-const ASSET_PATH = "/_next/static/security/csp-script-hashes.json";
-
-/** The path this module fetches — also the one path `proxy.ts` must not
- * recurse into when computing a hash-dependent CSP for it. */
-export const CSP_HASHES_ASSET_PATH = ASSET_PATH;
-
 /**
- * The upper bound on the hash set. A real build produces ~28; the cap exists
- * so a wrong or hostile asset cannot inflate every response header on the
- * site. Generous enough that a legitimate growth in inline scripts does not
- * silently truncate the policy — and if it ever does, `check:csp` and the
- * browser both say so loudly.
+ * The upper bound per response. Equal to `MAX_PAGE_HASHES` in
+ * `scripts/generate-csp-hashes.mjs`, which fails the build for a page above it
+ * — so this cap guards against a wrong map, never against a real page.
  */
 export const MAX_SCRIPT_HASHES = 128;
 
-/** How many deployments' hash sets are remembered at once. */
-const MAX_CACHED_DEPLOYMENTS = 8;
+/** The map's path relative to the project directory — `HASH_MAP_RELATIVE_PATH` in the script. */
+export const CSP_HASH_MAP_PATH = join(".next", "server", "csp-hash-map.json");
 
-/** A bare hostname, optionally with a port: no scheme, no path, no userinfo. */
-const HOSTNAME = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*(:\d{1,5})?$/;
+/** The 404 surface's own entry: `proxy.ts` rewrites every unservable path onto it. */
+export const NOT_FOUND_ENTRY = "/_not-found";
 
-/**
- * The public hosts this site answers on — the only request-derived origins
- * the fallback branch may fetch, and only on their default port. Derived
- * from TS-WEB-0001 D1's matrix so a new domain is one row there, not a second
- * list here.
- */
-const PUBLIC_SELF_HOSTS: ReadonlySet<string> = new Set(
-  DOMAIN_MATRIX.flatMap((domain) => [domain.host, domain.bareHost]),
-);
+/** How many deployments' maps are remembered at once. */
+const MAX_CACHED_DEPLOYMENTS = 4;
 
-/** Loopback, for `next dev` / `next start` / the e2e run. */
-const LOOPBACK_HOSTS: ReadonlySet<string> = new Set(["localhost", "127.0.0.1", "::1"]);
-
-export interface HashSource {
-  /** The origin the asset is fetched from. */
-  readonly origin: string;
-  /** Whether the Deployment Protection bypass secret may be sent there. */
-  readonly sendBypass: boolean;
-  /** What the answer is cached under — one entry per deployment. */
-  readonly cacheKey: string;
+export interface HashMap {
+  readonly common: readonly string[];
+  readonly pages: Readonly<Record<string, readonly string[]>>;
 }
 
-interface GeneratedHashes {
-  readonly hashes?: readonly unknown[];
-}
-
-/**
- * Guard 1, as a pure function so a test can state it directly: which origin
- * this deployment fetches its own build artifact from, and whether the
- * bypass secret may travel there. `undefined` means "do not fetch at all".
- */
-export function hashSourceFor(
-  requestOrigin: string,
-  env: Record<string, string | undefined> = process.env,
-): HashSource | undefined {
-  const own = env.VERCEL_URL || env.VERCEL_PROJECT_PRODUCTION_URL;
-  if (own) {
-    const host = own.toLowerCase();
-    if (!HOSTNAME.test(host)) {
-      console.error(
-        "[csp-hashes] the deployment's own URL is not a bare hostname; not fetching:",
-        own,
-      );
-      return undefined;
-    }
-    return {
-      origin: `https://${host}`,
-      sendBypass: true,
-      cacheKey: env.VERCEL_DEPLOYMENT_ID || host,
-    };
-  }
-
-  // Off Vercel: no deployment URL exists, so the request origin is the only
-  // candidate — admitted only when it is a host this site actually answers
-  // on, and never with the secret attached.
-  let parsed: URL;
-  try {
-    parsed = new URL(requestOrigin);
-  } catch {
-    return undefined;
-  }
-  if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return undefined;
-
-  // `URL.hostname` never carries the port, and keeps IPv6 in brackets.
-  const hostname = parsed.hostname.toLowerCase().replace(/^\[|\]$/g, "");
-  if (LOOPBACK_HOSTS.has(hostname)) {
-    // A loopback host with an arbitrary port would turn a `Host` header into
-    // a port scanner of the machine the server runs on. Only the port this
-    // process was told to listen on is admitted.
-    if (parsed.port && parsed.port !== (env.PORT || "3000")) return undefined;
-  } else if (!PUBLIC_SELF_HOSTS.has(hostname)) {
-    return undefined;
-  } else if (parsed.port) {
-    // A public host is served on its default port; a port here means the
-    // header chose it.
-    return undefined;
-  }
-
-  return {
-    origin: parsed.origin,
-    sendBypass: false,
-    cacheKey: parsed.origin,
-  };
-}
+const EMPTY: HashMap = { common: [], pages: {} };
 
 /** Guard 3: validate, de-duplicate, cap. */
-function acceptableHashes(values: readonly unknown[]): readonly string[] {
+export function acceptableHashes(values: readonly unknown[]): readonly string[] {
   const accepted: string[] = [];
   const seen = new Set<string>();
   let rejected = 0;
@@ -192,53 +99,90 @@ function acceptableHashes(values: readonly unknown[]): readonly string[] {
   return accepted;
 }
 
-async function fetchGeneratedHashes(source: HashSource): Promise<readonly string[]> {
+/** The parsed file, every list through guard 3. Anything malformed is the empty map. */
+export function parseHashMap(raw: unknown): HashMap {
+  if (typeof raw !== "object" || raw === null) return EMPTY;
+  const { common, pages } = raw as { common?: unknown; pages?: unknown };
+  const parsedPages: Record<string, readonly string[]> = {};
+  if (typeof pages === "object" && pages !== null) {
+    for (const [path, hashes] of Object.entries(pages)) {
+      if (Array.isArray(hashes)) parsedPages[path] = acceptableHashes(hashes);
+    }
+  }
+  return {
+    common: Array.isArray(common) ? acceptableHashes(common) : [],
+    pages: parsedPages,
+  };
+}
+
+function readHashMap(directory: string): HashMap {
   try {
-    const url = new URL(ASSET_PATH, source.origin);
-    const bypass = source.sendBypass
-      ? process.env.VERCEL_AUTOMATION_BYPASS_SECRET
-      : undefined;
-
-    const response = await fetch(url, {
-      headers: bypass ? { "x-vercel-protection-bypass": bypass } : {},
-      signal: AbortSignal.timeout(3000),
-      cache: "no-store",
-    });
-    if (!response.ok) return [];
-
-    const parsed = (await response.json()) as GeneratedHashes;
-    return Array.isArray(parsed.hashes) ? acceptableHashes(parsed.hashes) : [];
+    return parseHashMap(JSON.parse(readFileSync(join(directory, CSP_HASH_MAP_PATH), "utf8")));
   } catch (error) {
-    // Loud in the server log, not fatal for the request. `csp.ts` treats an
-    // empty result the same as "next dev, no build has run" — the policy
-    // degrades to the host allowlist rather than shipping 'strict-dynamic'
-    // with nothing to trust.
-    console.error("[csp-hashes] failed to fetch the generated hash asset:", error);
-    return [];
+    // `next dev` has no build, so no map — expected and quiet. Anywhere else
+    // this is a broken deployment: loud in the log, and `csp.ts` refuses to
+    // relax production either way.
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT" || process.env.VERCEL_ENV) {
+      console.error("[csp-hashes] cannot read the per-page hash map:", error);
+    }
+    return EMPTY;
   }
 }
 
-/** Guard 2: one in-flight promise per deployment, bounded. */
-const cache = new Map<string, Promise<readonly string[]>>();
+/** Guard 2: one map per deployment, bounded. */
+const cache = new Map<string, HashMap>();
 
 /** Test seam — the module cache is process state and a test must not inherit it. */
 export function resetScriptHashCache(): void {
   cache.clear();
 }
 
-/** The distinct `sha256-…` sources for this build, or `[]` if none exist yet. */
-export function scriptHashes(requestOrigin: string): Promise<readonly string[]> {
-  const source = hashSourceFor(requestOrigin);
-  if (!source) return Promise.resolve([]);
+function cacheKey(directory: string): string {
+  return `${process.env.VERCEL_DEPLOYMENT_ID || "local"}:${directory}`;
+}
 
-  const hit = cache.get(source.cacheKey);
+/** Test seam — stands a map in for the file, for the current deployment and directory. */
+export function primeScriptHashCache(raw: unknown, directory: string = process.cwd()): void {
+  cache.set(cacheKey(directory), parseHashMap(raw));
+}
+
+function currentMap(directory: string): HashMap {
+  const key = cacheKey(directory);
+  const hit = cache.get(key);
   if (hit) return hit;
 
-  const pending = fetchGeneratedHashes(source);
+  const map = readHashMap(directory);
   if (cache.size >= MAX_CACHED_DEPLOYMENTS) {
     const oldest = cache.keys().next();
     if (!oldest.done) cache.delete(oldest.value);
   }
-  cache.set(source.cacheKey, pending);
-  return pending;
+  cache.set(key, map);
+  return map;
+}
+
+/** Public path → the internal `app/[lang]/…` path the build keyed the page under. */
+const INTERNAL_BY_PUBLIC: ReadonlyMap<string, string> = new Map(
+  ROUTE_IDS.flatMap((route) =>
+    LOCALES.map((locale) => [normalisePath(href(route, locale)), internalPath(route, locale)] as const),
+  ),
+);
+
+/**
+ * The map key for a public request path. A route of the registry maps through
+ * the locale rewrite (`/en/about` → `/en/ueber-uns`, `/` → `/de`); every other
+ * path is its own key (`/start`, `/dev/components`, the 404 entry).
+ */
+export function hashMapKey(pathname: string): string {
+  const path = normalisePath(pathname);
+  return INTERNAL_BY_PUBLIC.get(path) ?? (path === "/" ? `/${DEFAULT_LOCALE}` : path);
+}
+
+/**
+ * The hashes for one response: the page's own set where the build wrote one,
+ * the common set (the bootstrap every page shares) where it did not — an asset,
+ * an API response, a path no page claims. `[]` when no map exists (`next dev`).
+ */
+export function scriptHashesFor(pathname: string, directory: string = process.cwd()): readonly string[] {
+  const map = currentMap(directory);
+  return map.pages[hashMapKey(pathname)] ?? map.common;
 }

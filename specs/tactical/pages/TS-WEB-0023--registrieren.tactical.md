@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0013]
 sources: [SRC-0001, SRC-0003, SRC-0008, SRC-0011, SRC-0014]
-decisions: [DEC-0009, DEC-0025, DEC-0029, DEC-0035, DEC-0037]
+decisions: [DEC-0009, DEC-0025, DEC-0029, DEC-0035, DEC-0037, DEC-0163]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -66,6 +66,8 @@ app's (D6, D9).
 | Echo | the place name comes from the geo-api response, never from raw input (TS-WEB-0008 D4) |
 
 ### D4 — Step state without any store [FIXED: DEC-0009 boundary, DEC-0037, NFR-WEB-0061, NFR-WEB-0062; parameter names PROPOSED]
+
+> **Amended by DEC-0163 (2026-10-13).** The route is one static document; the step and every parameter are re-validated in the browser on every load (`register-flow.tsx`), the place through `/api/places/resolve` — the same resolver the server ran. Each step still advances by a plain GET form.
 
 The website has no session, cookie or client store, so the state travels
 in the URL — and only values that may be public go in.
@@ -174,7 +176,7 @@ page on the right side of it.
 | TS-WEB-0023-A10 | e2e | The handover click fires exactly one `register-as-publisher` event with `stage=handover`; no `publish-first-event` event is fired anywhere on the website. |
 | TS-WEB-0023-A11 | e2e | No step and no post-handover state of this page contains a confirmation message, instructions, help content, or a field for an event — walkable by clicking through all three steps. |
 | TS-WEB-0023-A12 | static | The route ships no envoy element, no POST route and no server action; every request it makes is a TS-WEB-0004 D5 read route. |
-| TS-WEB-0023-A13 | e2e | With JavaScript disabled all three steps can be completed by form submission and the handover link is reachable. |
+| TS-WEB-0023-A13 | e2e | All three steps can be completed by form submission and the handover link is reachable; without JavaScript step 1 renders. (Amended by DEC-0163: the written text required the whole walk with JavaScript disabled.) |
 | TS-WEB-0023-A14 | e2e | Every step URL carries a canonical pointing at the parameter-free `/mitmachen/registrieren`, and the page is indexable. |
 | TS-WEB-0023-A15 | e2e | The context band renders on step 1 and is absent on steps 2, 3 and the handover state (records D7 for review). |
 | TS-WEB-0023-A16 | tool | axe-core: zero violations on all three steps in all three themes; after each advance focus sits on the new step's heading. |

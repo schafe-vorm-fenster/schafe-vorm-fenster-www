@@ -52,7 +52,15 @@ export interface RateLimitState {
 }
 
 const WINDOW_MS = 60_000;
-const MAX_REQUESTS_PER_WINDOW = 60;
+/**
+ * 600 per minute per bucket. It was 60 while only the typeahead called these
+ * routes; since DEC-0163 every page view loads its live modules from here
+ * (2–5 calls), and a region bucket of one warm instance is shared by every
+ * visitor of that region whose request misses the CDN. The limit is still
+ * what it was for — a bound on one client hammering a warm instance — not a
+ * quota on ordinary page views.
+ */
+export const MAX_REQUESTS_PER_WINDOW = 600;
 
 const buckets = new Map<string, RateLimitState>();
 
@@ -89,12 +97,25 @@ export interface GuardResult {
   readonly rejected?: Response;
 }
 
+/**
+ * Whether the rate limit applies: on every Vercel deployment, and wherever
+ * `BFF_RATE_LIMIT=on` asks for it. Off a platform there is no region header,
+ * so every caller shares the one `local` bucket — and since DEC-0163 every
+ * page view calls the BFF, so a local production build under the e2e suite
+ * (one machine, ~1 200 page loads) trips it and removes live modules
+ * mid-test (measured: 20 × 429 in 650 calls). The limit is a property of a
+ * deployed instance, not of a developer's `next start`.
+ */
+export function rateLimitActive(env: Record<string, string | undefined> = process.env): boolean {
+  return Boolean(env.VERCEL) || env.BFF_RATE_LIMIT === "on";
+}
+
 /** Runs both gates. A handler calls this first and returns `rejected` if set. */
 export function guard(request: Request, route: string): GuardResult {
   if (!isAllowedOrigin(request.headers.get("origin"), request.url)) {
     return { rejected: problem(403, "cross-origin request refused") };
   }
-  if (!checkRateLimit(rateLimitKey(request, route))) {
+  if (rateLimitActive() && !checkRateLimit(rateLimitKey(request, route))) {
     return { rejected: problem(429, "too many requests") };
   }
   return {};

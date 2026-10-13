@@ -18,7 +18,9 @@ import { consultExitHref, consultExitQuery } from "./consult-exit";
  * that the page's step-3 fallback mount and its per-step exit both take it.
  */
 
-const PAGE = readFileSync(join(__dirname, "page.tsx"), "utf8");
+// The flow's client half builds both since DEC-0163 (the page itself is a
+// static shell that hands the flow its copy).
+const PAGE = readFileSync(join(__dirname, "order-flow.tsx"), "utf8");
 
 describe("TS-WEB-0025 D8: the order flow's in-page consult target", () => {
   it("carries the scope and the step, and lands on the contact section", () => {

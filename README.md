@@ -93,16 +93,17 @@ Protection with `VERCEL_AUTOMATION_BYPASS_SECRET` — the suite sends it as
 | Path | What |
 | --- | --- |
 | `app/` | routes, layouts and the app-router tree |
-| `app/[lang]/_islands.tsx` | **the cached islands** (TS-WEB-0009 D1): one `use cache` component per TS-WEB-0008 live-module position, `cacheLife`/`cacheTag` from `src/lib/live/cache-profiles.ts`. A page renders them; it never fetches |
+| `app/[lang]/_islands.tsx` | **the live islands** (TS-WEB-0009 D1 as amended by DEC-0163): one client component per TS-WEB-0008 live-module position. Each renders its frame at final geometry in the static HTML and loads its envelope from the BFF after hydration (`src/lib/live/browser.ts`). A page renders them; the server never fetches live data for a page |
 | `app/[lang]/_content.ts` | the content pipeline on the cache side — `loadPage`/`loadLegalDocument` at `cacheLife("max")`, which is what keeps a page's copy inside the prerendered shell |
-| `app/[lang]/_proof.ts` | the relevance engine's one seam into the pages: candidates in, DEC-0048's positions out, cached per viewer segment and ISO week |
+| `app/[lang]/_proof.ts` | the relevance engine's one seam into the pages: candidates in, DEC-0048's positions out, computed once per build (the build's ISO week, DEC-0163) |
 | `app/[lang]/_structured-data.tsx` | TS-WEB-0011 D4's table as one function — which JSON-LD node sits on which page, in the one graph per page |
 | `app/styles/brand.css` | **the single token-import file** — the only place a brand value enters. No colour literal and no `font-family` literal exists anywhere else, and `pnpm check:brand` fails one that does. |
 | `app/styles/base.css` | the mobile-first shell: phone base, `min-width` queries only, the six `breakpoint.*` token values |
-| `proxy.ts` | the CSP, the HSTS variance and the `X-Robots-Tag`, on every response |
+| `proxy.ts` | the CSP (with the requested page's own script hashes), the HSTS variance and the `X-Robots-Tag`, on every response |
+| `scripts/csp-adapter.mjs` | the Next adapter (`adapterPath`) that builds the per-page CSP hash map inside `next build` and ships it in the proxy function's assets, wrapping the platform's own adapter (DEC-0163) |
 | `src/lib/security/` | the policy as one typed structure, in one module |
 | `src/lib/seo/` | the indexability predicate and the robots surface |
-| `app/api/` | **the BFF** (TS-WEB-0004 D5): five GET-only route handlers, the browser's only data surface. No ecosystem host, token or visitor IP ever appears in a client request |
+| `app/api/` | **the BFF** (TS-WEB-0004 D5): eight GET-only route handlers, the browser's only data surface. No ecosystem host, token or visitor IP ever appears in a client request |
 | `src/lib/live/` | **the live-data layer** (TS-WEB-0008/TS-WEB-0009): one interface module per live module, the real/mock switch, the three-tier fallback, and the one module that knows the app's hostname. `src/lib/live/README.md` has the module map and the page-wiring example |
 | `src/clients/` | the pinned OpenAPI specs and the service clients built on them — one closed header set, one place a host or read token is read. Three clients: the two token-scoped APIs, and `community-site/`, which reads the **public** village calendar and is what puts real dates on a deployment with no credential at all |
 | `src/generated/snapshots/` | tier 3: the committed build-time payloads a live module renders when the upstream is down and the cache is cold (TS-WEB-0009 D8) — plus `communities.json`, the 1760 covered communities the place search's name lookup reads (`pnpm build:place-index`) |
@@ -126,22 +127,22 @@ the report it writes.
 
 ### Rendering
 
-**Cache Components is on** (`cacheComponents: true`, Next.js 16). Every page is
-a prerendered shell plus cached islands (TS-WEB-0009 D1): page copy and every live
-module carry `use cache` with the TS-WEB-0003 D5 lifetimes, and a request value —
-`?ort=`, a header — is read outside every cache boundary and handed down as a
-prop.
-
-Eight of the twelve routes prerender. Four read a request value that *is* the
-page (`/dein-ort`'s five place states, and the three flow routes' step) and
-carry `export const instant = false`, the framework's marker for "allowed to
-block"; they still compose from cached pieces, so their per-request work is a
-cache read rather than an upstream call. `state/open.md` row 131.
+**Cache Components is on** (`cacheComponents: true`, Next.js 16), and **every
+page is static** (DEC-0163): prerendered once, byte-identical for the life of a
+deployment, because the CSP carries build-time hashes of each page's inline
+scripts (TS-WEB-0014 D3). Page copy reads `use cache` with `cacheLife("max")`,
+which `next.config.ts` redefines to never revalidate. Live data and every
+request value (`?ort=`, a flow step, the entry trait) are read **in the
+browser** after hydration — the islands fetch the BFF, the query comes from
+`src/lib/pages/query-store.tsx`. The build fails for a page whose prerender
+revalidates or whose inline scripts exceed the per-page cap.
 
 Two consequences worth knowing before editing a page:
 
 - `dynamic`, `dynamicParams`, `revalidate` and `fetchCache` are **build
-  errors**. Use `use cache` + `cacheLife`, or `<Suspense>`, or `instant`.
+  errors**, and so (since DEC-0163) is a page that revalidates. A page reads
+  no `searchParams`, `headers()` or `cookies()`; data that changes loads in
+  the browser from `/api/*`.
 - `new Date()`, `Math.random()` and `crypto.randomUUID()` fail the prerender
   unless they sit inside a `use cache` scope or behind `await connection()`.
 - A `<Suspense>` boundary must not contain an `<input>`, `<textarea>` or

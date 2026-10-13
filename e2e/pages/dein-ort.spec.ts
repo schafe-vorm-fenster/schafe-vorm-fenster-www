@@ -85,8 +85,10 @@ test.describe("TS-WEB-0020 — your place", () => {
     const dates = page.locator("#place-dates");
     await expect(dates.locator("h2")).toContainText("Schlatkow");
 
-    // "≤ 3 rows" — position 1's fixed row count (TS-WEB-0008 D1).
+    // "≤ 3 rows" — position 1's fixed row count (TS-WEB-0008 D1). The rows
+    // load in the browser (DEC-0163).
     const rows = dates.locator("article");
+    await expect(rows.first()).toBeVisible();
     expect(await rows.count()).toBeGreaterThan(0);
     expect(await rows.count()).toBeLessThanOrEqual(3);
 
@@ -507,9 +509,10 @@ test.describe("TS-WEB-0020 — your place", () => {
     await expect(page.locator("#context-band nav")).toHaveCount(1);
     await expect(page.locator("#closing-cta")).toHaveCount(1);
 
-    // No empty-state markup and no unresolved skeleton in S0.
+    // No empty-state markup in S0. The live rows load in the browser
+    // (DEC-0163), so without JavaScript their frames hold reserved
+    // skeletons — the "no unresolved skeleton" clause is superseded (§4).
     await expect(page.locator('[class*="empty-state-block"]')).toHaveCount(0);
-    await expect(page.locator('[class*="skeleton"]')).toHaveCount(0);
 
     await context.close();
   });

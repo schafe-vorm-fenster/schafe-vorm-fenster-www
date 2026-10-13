@@ -10,6 +10,7 @@ import {
   OG_LOCALE,
   resolveLocale,
 } from "@/src/lib/i18n/locales";
+import { QuerySync } from "@/src/lib/pages/query-store";
 import { SITE_ORIGIN } from "@/src/lib/routes/routes";
 import { NOINDEX } from "@/src/lib/seo/indexable";
 
@@ -165,6 +166,10 @@ export default async function RootLayout({
         {/* The first focusable element of the document; it jumps to `#main`,
             which `_chrome.tsx` renders (TS-WEB-0002 D5). */}
         <SkipLink locale={locale} />
+        {/* DEC-0163: the one place the query string is read. It renders
+            nothing; the islands that depend on `?ort=` or a flow step read
+            it from `query-store.tsx` after hydration. */}
+        <QuerySync />
         {/* The rest of the chrome — header, breadcrumb trail, the `main`
             landmark, footer — is **one per document**, and that is why it
             hangs here rather than off each page (state/open.md rows 97 and

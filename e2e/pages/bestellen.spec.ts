@@ -373,10 +373,12 @@ test.describe("TS-WEB-0025: the order flow", () => {
    * no visible field has a `name`. The browser's own `required` handling is
    * what refuses an empty invoice there.
    */
-  test("step 3 advances, and refuses an empty invoice, with JavaScript disabled", async ({
+  // DEC-0163 §4: the step is read in the browser, so this walk runs with
+  // JavaScript; the advance is still the form's own submission.
+  test("step 3 advances, and refuses an empty invoice", async ({
     browser,
   }) => {
-    const context = await browser.newContext({ javaScriptEnabled: false });
+    const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto(`${ROUTE}?orte=schlatkow&schritt=3`);
 

@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [NFR-WEB-0039, NFR-WEB-0040, NFR-WEB-0041, NFR-WEB-0042, NFR-WEB-0043, NFR-WEB-0044, NFR-WEB-0045, NFR-WEB-0046, NFR-WEB-0047, NFR-WEB-0048, NFR-WEB-0049, NFR-WEB-0050, NFR-WEB-0051, NFR-WEB-0052, NFR-WEB-0053, NFR-WEB-0054, NFR-WEB-0055, NFR-WEB-0056, FUN-WEB-0107, FUN-WEB-0108, FUN-WEB-0109, FUN-WEB-0110, FUN-WEB-0111, FUN-WEB-0112, FUN-WEB-0113, FUN-WEB-0114, FUN-WEB-0115, NFR-WEB-0008, FUN-WEB-0116, FUN-WEB-0117, FUN-WEB-0105]
 sources: [SRC-0006, SRC-0007]
-decisions: [DEC-0007, DEC-0019, DEC-0162]
+decisions: [DEC-0007, DEC-0019, DEC-0162, DEC-0163]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -79,6 +79,8 @@ abandoned: a route that exceeds them *and* drops Lighthouse below the
 floor fails on the Lighthouse check, which is the one that matters.
 
 ### D5 — Cache lifetimes (fills FUN-WEB-0105) [FIXED: DEC-0019, DEC-0069]
+
+> **Amended by DEC-0163 (2026-10-13).** Pages are static and never revalidate: their HTML is fixed for the life of a deployment (its inline scripts are hashed at build time, TS-WEB-0014 D3), so the "pages (HTML, ISR) · 1 h" row reads "until the next deploy". The live data rows below apply to the BFF routes' `Cache-Control` only — no page carries a `cacheLife` from this table any more; the browser loads live data from the routes after hydration. The proof stream rotates with the build's ISO week (TS-WEB-0005 D7).
 
 Vercel SWR semantics per DEC-0019 (serve cached, revalidate behind):
 

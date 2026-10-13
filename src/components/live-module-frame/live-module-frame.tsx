@@ -45,6 +45,12 @@ export interface LiveModuleFrameProps extends DataStateProps {
    */
   readonly layout?: "stack" | "split";
   readonly className?: string;
+  /**
+   * Hold the freshness label's line in every state — for a frame whose data
+   * loads after paint (DEC-0163), so a degraded answer does not push the
+   * page down when it lands.
+   */
+  readonly reserveMarks?: boolean;
   readonly children: ReactNode;
 }
 
@@ -87,11 +93,19 @@ export function LiveModuleFrame({
   state = "ready",
   layout = "stack",
   className,
+  reserveMarks = false,
   children,
 }: LiveModuleFrameProps) {
   return (
     <div
-      className={[styles.frame, layout === "split" ? styles.split : undefined, className].filter(Boolean).join(" ")}
+      className={[
+        styles.frame,
+        layout === "split" ? styles.split : undefined,
+        reserveMarks ? styles.reserveMarks : undefined,
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-demo={isMocked(state) ? "true" : undefined}
       role={announced ? "status" : undefined}
     >

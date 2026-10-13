@@ -4,7 +4,7 @@ import { Skeleton } from "../skeleton/skeleton";
 
 import type { RouteId } from "@/src/lib/routes/routes";
 import type { Locale } from "@/src/lib/i18n/locales";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import styles from "./event-list.module.css";
 
@@ -69,6 +69,12 @@ export interface EventListProps extends DataStateProps {
   readonly tone?: "light" | "dark";
   readonly locale?: Locale;
   readonly className?: string;
+  /**
+   * Reserve the printed rows at the height of a two-line row, in every state
+   * (DEC-0163): the list's rows load in the browser, and its prerendered
+   * skeleton has to hold the space whatever titles arrive.
+   */
+  readonly reserve?: boolean;
 }
 
 /**
@@ -103,15 +109,32 @@ export function EventList({
   locale,
   state = "ready",
   className,
+  reserve = false,
 }: EventListProps) {
   const limit = role ? Math.min(rowCount, EVENT_LIST_CAPS[role]) : rowCount;
   const capped = capOnPhone && limit > 3;
   const classes = [styles.list, capped ? styles.capPhone : undefined, className]
     .filter(Boolean)
     .join(" ");
+  const reserved = (node: ReactNode) =>
+    reserve ? (
+      <div
+        className={styles.reserve}
+        style={
+          {
+            "--event-list-rows": limit,
+            "--event-list-rows-phone": capped ? 3 : limit,
+          } as CSSProperties
+        }
+      >
+        {node}
+      </div>
+    ) : (
+      node
+    );
 
   if (isPending(state)) {
-    return <Skeleton className={classes} rows={limit} variant="row" />;
+    return reserved(<Skeleton className={classes} rows={limit} variant="row" />);
   }
 
   if (state === "empty" || items.length === 0) {
@@ -133,7 +156,7 @@ export function EventList({
     </div>
   );
 
-  if (!more || items.length <= shown.length) return rows;
+  if (!more || items.length <= shown.length) return reserved(rows);
 
   return (
     <div className={styles.withMore}>

@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0002, CON-WEB-0062, FUN-WEB-0142, FUN-WEB-0146, CON-WEB-0067, FUN-WEB-0010, FUN-WEB-0011, FUN-WEB-0012, FUN-WEB-0013, FUN-WEB-0014, FUN-WEB-0015, FUN-WEB-0016, FUN-WEB-0017, FUN-WEB-0018, FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061, FUN-WEB-0145, FUN-WEB-0147, CON-WEB-0064, FUN-WEB-0027, FUN-WEB-0158, FUN-WEB-0159, FUN-WEB-0048, FUN-WEB-0067, FUN-WEB-0073, FUN-WEB-0169, FUN-WEB-0170, CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045]
 sources: [SRC-0003]
-decisions: [DEC-0002, DEC-0024, DEC-0025, DEC-0032, DEC-0035]
+decisions: [DEC-0002, DEC-0024, DEC-0025, DEC-0032, DEC-0035, DEC-0163]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -183,6 +183,8 @@ Proposed EN segments (de → en):
 
 ### D5 — BFF route inventory [FIXED: DEC-0025; shapes PROPOSED]
 
+> **Amended by DEC-0163 (2026-10-13).** Three routes join the inventory: `GET /api/places/nearest?lat=&lng=` (DEC-0119, already built), `GET /api/places/resolve?ort=` (TS-WEB-0008 D7's outcome and TS-WEB-0023's step-1 lookup, for the pages that read `?ort=` in the browser) and `GET /api/places/{slug}/examples` (the story pool, DEC-0152). `GET /api/places/{slug}/events` takes `rows` (1–12).
+
 Client-facing, use-case-cut, rate-limited + origin-checked (CON-WEB-0044, CON-WEB-0045);
 each proxies exactly one upstream need, server-side tokens only, cache
 TTLs from TS-WEB-0003 D5:
@@ -200,6 +202,8 @@ envoy widget and Portalize loader talk to their own backends directly —
 they are not proxied (their hosts are CSP-allowlisted, TS-WEB-0003 D4/CON-WEB-0030).
 
 ### D6 — Rendering per route [FIXED: DEC-0019; assignment PROPOSED]
+
+> **Amended by DEC-0163 (2026-10-13).** Every content page is fully static — no ISR, no streamed module: live modules render their frame and skeleton in the HTML and load their data in the browser from the D5 routes. No page reads a request value; the remaining dynamic routes are the BFF handlers, `robots.txt`, `llms.txt` and the 404 surface.
 
 | Routes | Mode |
 | --- | --- |

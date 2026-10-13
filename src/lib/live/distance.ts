@@ -27,7 +27,4 @@ export function withDistance<T extends LiveEvent>(
   });
 }
 
-/** "6 km", never "0 km": a date in the next village is at least a kilometre away. */
-export function formatDistance(km: number): string {
-  return `${Math.max(1, Math.round(km))} km`;
-}
+export { formatDistance } from "./format-distance";

@@ -29,6 +29,7 @@ import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
 import { standardSources } from "@/src/lib/pricing/standard-sources";
 import { pageTitle } from "@/src/lib/routes/metadata";
 
+import { buildDay } from "../_build-day";
 import { PlaceDatesIsland } from "../_islands";
 import { proofHeading, selectProof, selectedProofKind } from "../_proof";
 import { PageJsonLd } from "../_structured-data";
@@ -175,6 +176,8 @@ export default async function Page({
     "{place}",
   );
   const exampleSlug = selectExamplePlace(undefined).slug;
+  /** The build's day — what the sample panels are dated from in the static HTML (DEC-0163). */
+  const referenceDate = await buildDay();
   const liveSlug =
     exampleSlug === REFERENCE_PLACE.slug ? STAGE_ZERO_ANCHOR.slug : exampleSlug;
 
@@ -381,6 +384,7 @@ export default async function Page({
               key="3"
               locale={locale}
               place={SHOWCASE_COMMUNITY.name}
+              referenceDate={referenceDate}
               // The fallback is this path's own sample, not path 2's: those
               // rows illustrate "neu, verschoben, abgesagt", and this path
               // ends in "Termin steht im Kalender" (DEC-0124 §5).
@@ -422,6 +426,7 @@ export default async function Page({
               key="3"
               locale={locale}
               place={SHOWCASE_COMMUNITY.name}
+              referenceDate={referenceDate}
               sample={threeSampleRows(
                 listAt(calendarSteps.blocks, 1),
                 "mitmachen-4a-path-calendar-steps-demo",
@@ -467,6 +472,7 @@ export default async function Page({
               key="3"
               locale={locale}
               place={SHOWCASE_COMMUNITY.name}
+              referenceDate={referenceDate}
               sample={threeSampleRows(
                 listAt(websiteSteps.blocks, 1),
                 "mitmachen-5a-path-website-steps-demo",
@@ -529,6 +535,7 @@ export default async function Page({
         <PlaceDatesIsland
           announced
           locale={locale}
+          placeName={liveSlug === SHOWCASE_COMMUNITY.slug ? SHOWCASE_COMMUNITY.name : undefined}
           rowCount={3}
           slug={liveSlug}
           titleTemplate={exampleTitle}
