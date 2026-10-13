@@ -58,6 +58,13 @@ export interface PhotoSurfaceProps extends DataStateProps {
    * `data-provenance="generated"` and nothing else — Jan, 2026-09-18.
    */
   readonly notDepicting?: boolean;
+  /**
+   * A real photograph edited with an AI tool (DEC-0161, Q-0092). It depicts
+   * what the copy claims, so it carries no "Nicht motivgenau" badge; the
+   * editing is named in `content/legal/image-credits.md` and reaches the
+   * markup as `data-provenance="ai-edited"`.
+   */
+  readonly aiEdited?: boolean;
   readonly id?: string;
   /** The manifest slot id when this surface shows a generated image (DEC-0068). */
   readonly placeholderId?: string;
@@ -114,6 +121,7 @@ export function PhotoSurface({
   focal,
   ratio = "hero",
   notDepicting = false,
+  aiEdited = false,
   state = "ready",
   id,
   placeholderId,
@@ -192,7 +200,9 @@ export function PhotoSurface({
       data-hero-size={hero && !missingPhoto ? heroSize : undefined}
       data-mock={isMocked(state) ? "true" : undefined}
       data-placeholder={missingPhoto ? "true" : placeholderId}
-      data-provenance={notDepicting && !missingPhoto ? "generated" : undefined}
+      data-provenance={
+        missingPhoto ? undefined : notDepicting ? "generated" : aiEdited ? "ai-edited" : undefined
+      }
       id={id}
       style={
         {

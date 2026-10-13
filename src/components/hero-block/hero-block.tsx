@@ -61,6 +61,8 @@ export interface HeroBlockProps extends DataStateProps {
   /** The motif's focal point from the inventory — forwarded to `photo-surface`. */
   readonly focal?: { readonly x: number; readonly y: number };
   readonly notDepicting?: boolean;
+  /** A real photograph edited with an AI tool — `photo-surface`'s `aiEdited` (DEC-0161). */
+  readonly aiEdited?: boolean;
   readonly placeholderId?: string;
   /** The page's language — forwarded to `photo-surface`'s own badges (F-2-4). */
   readonly locale?: Locale;
@@ -144,6 +146,7 @@ export function HeroBlock({
   heroSize = "page",
   focal,
   notDepicting = false,
+  aiEdited = false,
   placeholderId,
   locale = "de",
   state = "ready",
@@ -162,6 +165,7 @@ export function HeroBlock({
       heroSize={heroSize}
       id={id}
       locale={locale}
+      aiEdited={aiEdited}
       notDepicting={notDepicting}
       placeholderId={placeholderId}
       priority={priority}

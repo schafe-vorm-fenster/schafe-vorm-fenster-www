@@ -83,14 +83,11 @@
   padding: var(--space-3);
 }
 
-/* The flyer stand-in: the placeholder hatch at the photo ratio, labelled. */
+/* The flyer in the bubble: the drawn flyer at the photo ratio (issue #26). */
 .flyer {
-  align-items: center;
   aspect-ratio: var(--ratio-feature);
-  background-image: var(--placeholder-hatch);
   border-radius: var(--radius-md);
-  display: flex;
-  justify-content: center;
+  display: block;
   overflow: hidden;
   width: 100%;
 }
@@ -98,16 +95,6 @@
 .flyerFrame {
   border-radius: var(--radius-md);
   overflow: hidden;
-}
-
-.flyerLabel {
-  background: var(--color-neutral-surface2);
-  color: var(--color-neutral-text2);
-  font-family: var(--font-mono);
-  font-size: var(--type-label-size);
-  font-weight: 700;
-  letter-spacing: var(--type-label-tracking);
-  padding: var(--space-1) var(--space-2);
 }
 
 .time {
@@ -119,6 +106,87 @@
   font-size: var(--type-label-size);
   gap: var(--space-1);
   letter-spacing: var(--tracking-mono);
+}
+
+/* ── Illustrations (issue #26, DEC-0161) ─────────────────────────────────
+   Inline SVG, coloured by class from the brand tokens — never a literal, and
+   never a dark-green (`lime-700`…`950`) fill. `ink` is neutral black. */
+
+.illustration {
+  background: var(--color-lime-100);
+}
+
+.art {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.artGround {
+  fill: var(--color-lime-100);
+}
+
+.artTable {
+  fill: var(--color-neutral-surface2);
+}
+
+.artPaper {
+  fill: var(--color-neutral-paper);
+  stroke: var(--color-neutral-line);
+  stroke-width: 1;
+}
+
+.artHead {
+  fill: var(--color-himbeere-500);
+}
+
+.artSun {
+  fill: var(--color-lime-500);
+}
+
+.artInk {
+  fill: var(--color-neutral-ink);
+}
+
+.artLine {
+  fill: var(--color-neutral-line);
+}
+
+.artDate {
+  fill: var(--color-violet-500);
+}
+
+.artPaperBar {
+  fill: var(--color-neutral-paper);
+}
+
+.artPin {
+  fill: var(--color-violet-500);
+}
+
+.artPhone {
+  fill: var(--color-neutral-ink);
+}
+
+.artScreen {
+  fill: var(--color-neutral-surface2);
+}
+
+.artFinder {
+  fill: none;
+  stroke: var(--color-lime-500);
+  stroke-linecap: round;
+  stroke-width: 3;
+}
+
+.artShutterRing {
+  fill: none;
+  stroke: var(--color-neutral-paper);
+  stroke-width: 2;
+}
+
+.artShutter {
+  fill: var(--color-neutral-paper);
 }
 
 /* ── 3 · calendar ───────────────────────────────────────────────────────── */

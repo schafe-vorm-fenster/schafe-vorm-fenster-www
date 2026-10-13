@@ -42,7 +42,7 @@ Unter **CC BY-SA 4.0** auf Wikimedia Commons veröffentlicht:
 
 - [Melkerschule Schlatkow](https://commons.wikimedia.org/wiki/File:Melkerschule_Schlatkow.jpg) — Startseite, Hero. Jan-Henrik Hempel, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
 - [Bauhof und Schafstall in Schlatkow](https://commons.wikimedia.org/wiki/File:Bauhof_und_Schafstall_in_Schlatkow.jpeg) — Über uns, Hero. Schafe vorm Fenster, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
-- [Osterfeuer 2023 in Schmatzin](https://commons.wikimedia.org/wiki/File:Osterfeuer_2023_in_Schmatzin.jpg) — Mitmachen, Hero. Jan-Henrik Hempel, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
+- [Osterfeuer 2023 in Schmatzin](https://commons.wikimedia.org/wiki/File:Osterfeuer_2023_in_Schmatzin.jpg) — Mitmachen, Hero. Jan-Henrik Hempel, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de), **mit KI bearbeitet** (siehe „Zuschnitt und Bearbeitung“). Die bearbeitete Fassung steht ebenfalls unter CC BY-SA 4.0
 - [Dorftreffpunkt, Schmatzin](https://commons.wikimedia.org/wiki/File:Dorftreffpunkt,_Schmatzin,_Deutschland.jpeg) — Mitmachen, Publizierweg eigener Kalender. Jan-Henrik Hempel, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de)
 
 Nicht veröffentlichte Eigenaufnahmen, unbeschränkte Nutzung, kein Credit
@@ -60,7 +60,14 @@ nötig:
 ## Zuschnitt und Bearbeitung
 
 Alle Fotos sind für die Bildflächen dieser Website zugeschnitten und als
-WebP neu komprimiert. Inhaltlich verändert wurde keines: nichts
-hineinretuschiert, nichts herausretuschiert, keine Montage. Wo eine
-Lizenz die Nennung von Bearbeitungen verlangt, ist der Zuschnitt die
-einzige.
+WebP neu komprimiert. Inhaltlich verändert wurde keines, mit einer
+Ausnahme: nichts hineinretuschiert, nichts herausretuschiert, keine
+Montage. Wo eine Lizenz die Nennung von Bearbeitungen verlangt, ist der
+Zuschnitt die einzige.
+
+Die Ausnahme ist das Foto oben auf der Seite „Mitmachen“, das Osterfeuer
+2023 in Schmatzin. Es ist mit einem KI-Werkzeug (Google Gemini)
+bearbeitet: Bildausschnitt, Licht, Kontrast und Sättigung. Dabei hat das
+Werkzeug Einzelheiten neu gezeichnet, zum Beispiel fehlt der Kinderwagen
+am rechten Rand. Gezeigt ist dasselbe Fest am selben Ort, nichts
+Erfundenes. Das unbearbeitete Original ist oben verlinkt.

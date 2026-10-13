@@ -50,6 +50,14 @@ export interface RenderableImage {
    * system's placeholder badge goes on it (SRC-0014 § Photo surface).
    */
   readonly notDepicting: boolean;
+  /**
+   * A real photograph edited with an AI tool (`provenance: ai-edited`,
+   * DEC-0161). It **does** depict what the copy claims — the edit changed
+   * light, colour and crowding, not the event — so `notDepicting` stays
+   * false and no placeholder badge goes on it; the surface marks it
+   * `data-provenance="ai-edited"` and the credits page names the editing.
+   */
+  readonly aiEdited: boolean;
   /** The page's one declared LCP image (TS-WEB-0003 D2) — nothing else is eager. */
   readonly priority: boolean;
   readonly caption?: string;
@@ -78,6 +86,7 @@ function renderable(entry: ImageEntry): RenderableImage | undefined {
     ...(entry.stage_file ? { stageSrc: entry.stage_file } : {}),
     ...(entry.anchor ? { anchor: entry.anchor } : {}),
     notDepicting: generated,
+    aiEdited: entry.provenance === "ai-edited",
     priority: entry.lcp === true,
     ...(entry.caption ? { caption: entry.caption } : {}),
     ...(entry.credit ? { credit: entry.credit } : {}),

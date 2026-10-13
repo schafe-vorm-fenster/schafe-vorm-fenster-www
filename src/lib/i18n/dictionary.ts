@@ -425,13 +425,16 @@ export interface Dictionary {
    * the English translation is nobody's wording yet (`generated: true`).
    */
   explainStage: {
-    /** The label on the hatched flyer stand-in in the chat bubble. */
-    flyerFile: string;
     /** The registration card's field label. */
     addressLabel: string;
     /** The registration card's lime pill — an illustration, never a control. */
     submit: string;
     generated: boolean;
+    /** The explain module's stage arrows below `lg` — accessible names (issue #27). */
+    previousStep: string;
+    nextStep: string;
+    /** The stage's accessible name — the scroll container is focusable below `lg`. */
+    stageLabel: string;
   };
   /**
    * Page titles, keyed by route id — the fallback for a route whose artifact
@@ -618,10 +621,12 @@ const de: Dictionary = {
     generated: false,
   },
   explainStage: {
-    flyerFile: "FLYER.JPG",
     addressLabel: "Kalender-Adresse",
     submit: "Anmelden",
     generated: false,
+    previousStep: "Vorheriger Schritt",
+    nextStep: "Nächster Schritt",
+    stageLabel: "Die drei Schritte als Bilder",
   },
   pages: {
     home: "Schafe vorm Fenster",
@@ -804,10 +809,12 @@ const en: Dictionary = {
   // The file name stays; the two labels are a translation nobody wrote —
   // state/open.md row 220.
   explainStage: {
-    flyerFile: "FLYER.JPG",
     addressLabel: "Calendar address",
     submit: "Register",
     generated: true,
+    previousStep: "Previous step",
+    nextStep: "Next step",
+    stageLabel: "The three steps as pictures",
   },
   pages: {
     home: "Schafe vorm Fenster",

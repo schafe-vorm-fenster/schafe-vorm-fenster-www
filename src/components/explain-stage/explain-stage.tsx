@@ -52,6 +52,74 @@ export function StageImage({ locale, className, ...frame }: StageImageProps) {
   );
 }
 
+/* ── Drawn flyer — the shared illustration ─────────────────────────────── */
+
+/**
+ * A flyer, drawn: a paper sheet with a coloured head, a headline in two
+ * heavy bars, three body lines and a date block. An **illustration**, never
+ * a stand-in for a photograph — it carries no lettering and names no place,
+ * so it claims nothing a real flyer would have to back up (issue #26,
+ * DEC-0161). Local coordinates 0–100 × 0–140; colours from the brand tokens
+ * only, set in `explain-stage.module.css` by class, never as a literal.
+ */
+function FlyerArt({ transform }: { readonly transform?: string }) {
+  return (
+    <g transform={transform}>
+      <rect className={styles.artPaper} height="140" width="100" />
+      <rect className={styles.artHead} height="34" width="100" />
+      <circle className={styles.artSun} cx="76" cy="17" r="9" />
+      <rect className={styles.artInk} height="8" rx="2" width="64" x="10" y="46" />
+      <rect className={styles.artInk} height="8" rx="2" width="44" x="10" y="60" />
+      <rect className={styles.artLine} height="4" rx="2" width="80" x="10" y="80" />
+      <rect className={styles.artLine} height="4" rx="2" width="72" x="10" y="90" />
+      <rect className={styles.artLine} height="4" rx="2" width="58" x="10" y="100" />
+      <rect className={styles.artDate} height="18" rx="3" width="34" x="10" y="114" />
+      <rect className={styles.artPaperBar} height="4" rx="2" width="20" x="17" y="121" />
+      <rect className={styles.artLine} height="4" rx="2" width="34" x="56" y="121" />
+    </g>
+  );
+}
+
+/* ── 1b · StageFlyerPhoto ───────────────────────────────────────────────── */
+
+export interface StageFlyerPhotoProps {
+  readonly className?: string;
+}
+
+/**
+ * Structure: state 1 of the WhatsApp path, drawn — a flyer pinned to a
+ * board, and a phone held up in front of it with the same flyer in its
+ * viewfinder and a shutter button. Replaces the grey `StageImage` panel
+ * there (issue #26): an honest illustration of the step, not a photograph
+ * that would have to be of a real flyer.
+ * States: none.
+ * Inherits: the square box; colours from the brand tokens by class — `ink`
+ * for the phone (neutral black), `lime-100` for the ground, `himbeere-500`,
+ * `violet-500` and `lime-500` as accents; no dark-green fill.
+ * Space: the square box, declared before anything paints; inline SVG, no
+ * request, no file under `public/`.
+ * A11y: `aria-hidden` — the step line beside it says what it shows.
+ */
+export function StageFlyerPhoto({ className }: StageFlyerPhotoProps) {
+  return (
+    <div aria-hidden="true" className={stageClass(styles.illustration, className)} data-stage="flyer-photo">
+      <svg className={styles.art} focusable="false" preserveAspectRatio="xMidYMid slice" viewBox="0 0 240 240">
+        <rect className={styles.artGround} height="240" width="240" />
+        <FlyerArt transform="translate(22 30) rotate(-5) scale(1.12)" />
+        <circle className={styles.artPin} cx="78" cy="28" r="5" />
+        <g transform="translate(116 84)">
+          <rect className={styles.artPhone} height="190" rx="18" width="108" />
+          <rect className={styles.artScreen} height="150" rx="8" width="94" x="7" y="16" />
+          <FlyerArt transform="translate(24 30) scale(0.6)" />
+          <path className={styles.artFinder} d="M17 26 v-6 h10 M81 20 h10 v6 M91 120 v6 h-10 M27 126 h-10 v-6" />
+          <circle className={styles.artShutterRing} cx="54" cy="148" r="11" />
+          <circle className={styles.artShutter} cx="54" cy="148" r="7" />
+        </g>
+      </svg>
+    </div>
+  );
+}
+
 /* ── 2 · StageChat ──────────────────────────────────────────────────────── */
 
 export interface StageChatProps {
@@ -69,11 +137,12 @@ export interface StageChatProps {
 /**
  * Structure: a paper chat header — the 40 px mark beside the brand name from
  * the dictionary, never a person — over a `lime-100` chat ground with two
- * bubbles: the outgoing `lime-200` one carrying the flyer (a hatched
- * "FLYER.JPG" stand-in until a photographed flyer exists) and its mono
+ * bubbles: the outgoing `lime-200` one carrying the flyer (a photographed
+ * one where the page passes it, otherwise the drawn flyer — the hatched
+ * "FLYER.JPG" stand-in is retired, issue #26, DEC-0161) and its mono
  * timestamp, and the incoming paper one carrying the reply the page passes.
- * States: none of its own; the hatch is the illustration's own state and
- * carries `data-placeholder="flyer-photo"` (DEC-0068 rule 1).
+ * No messenger's logo or trademark: the chat is ours, under our mark.
+ * States: none of its own.
  * Inherits: bubble radius 8 px is illustration inside the graphic, not a
  * surface radius; colours from the lime scale only.
  * Space: the square box; the bubbles are laid out from the bottom.
@@ -101,8 +170,13 @@ export function StageChat({
           {flyerSrc ? (
             <MediaFrame alt={flyerAlt} className={styles.flyerFrame} ratio="feature" src={flyerSrc} />
           ) : (
-            <div className={styles.flyer} data-placeholder="flyer-photo">
-              <span className={styles.flyerLabel}>{words.explainStage.flyerFile}</span>
+            // The photographed flyer, drawn: a flyer on the kitchen table as
+            // the chat shows it, not a hatch (issue #26, DEC-0161).
+            <div className={styles.flyer} data-flyer-art="">
+              <svg className={styles.art} focusable="false" preserveAspectRatio="xMidYMid slice" viewBox="0 0 140 100">
+                <rect className={styles.artTable} height="100" width="140" />
+                <FlyerArt transform="translate(44 6) rotate(4) scale(0.62)" />
+              </svg>
             </div>
           )}
           <span className={styles.time}>

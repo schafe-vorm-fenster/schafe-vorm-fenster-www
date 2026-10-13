@@ -49,36 +49,91 @@
 
 /* ── The stage, below lg ───────────────────────────────────────────────── */
 
-/* One box at ratio-square. It clips, and its size is a function of its width
-   alone, so no state change can move anything beneath it. */
+/* The frame holds the stage and its two arrows; the arrows sit over the
+   stage without being inside the scroll container, so they stay put while
+   the panes move beneath them. */
+.stageFrame {
+  position: relative;
+}
+
+/* One box at ratio-square. Its size is a function of its width alone, so no
+   state change can move anything beneath it. It is a horizontal scroll-snap
+   container (issue #27, DEC-0161): the reader swipes from pane to pane, and
+   the machine scrolls it the same way. `position: relative` makes it the
+   panes' offset parent, which is what the component measures. */
 .stage {
   aspect-ratio: var(--ratio-square);
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  position: relative;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
   width: 100%;
+}
+
+.stage::-webkit-scrollbar {
+  display: none;
 }
 
 .track {
   display: flex;
   gap: var(--explain-pane-gap);
   height: 100%;
-  transition: transform var(--motion-reveal-duration) var(--motion-reveal-easing);
-  will-change: transform;
 }
 
 .pane {
   flex: none;
   height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
   width: var(--explain-pane-width);
 }
 
-/* The slide is keyed to the state the stage is heading for, so it starts the
-   moment the move begins and settles when `data-state` catches up. */
-.module[data-target="2"] .track {
-  transform: translateX(calc(-1 * (var(--explain-pane-width) + var(--explain-pane-gap))));
+/* The last pane can only reach the end of the range; it snaps there, with
+   the previous pane cropped in at the leading edge. */
+.pane:last-child {
+  scroll-snap-align: end;
 }
 
-.module[data-target="3"] .track {
-  transform: translateX(calc(-2 * (var(--explain-pane-width) + var(--explain-pane-gap))));
+/* The two arrows: 44 px wells over the stage's edges. Paper with an `ink`
+   glyph and a `border` ring, so the well reads on every pane ground — the
+   lime chat, the `ink` calendar, the paper card — and is never its own
+   ground. Not a fill that means *active*: it is a control. */
+.arrow {
+  align-items: center;
+  appearance: none;
+  background: var(--color-neutral-paper);
+  border: 1px solid var(--color-neutral-border);
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-ink);
+  cursor: pointer;
+  display: inline-flex;
+  height: var(--target-min);
+  justify-content: center;
+  padding: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--target-min);
+}
+
+.arrowPrevious {
+  left: var(--space-2);
+}
+
+/* One glyph for both directions: the permitted icon set has `arrow-right`. */
+.arrowPrevious svg {
+  transform: scaleX(-1);
+}
+
+.arrowNext {
+  right: var(--space-2);
+}
+
+.arrow[aria-disabled="true"] {
+  cursor: default;
+  opacity: 0.4;
 }
 
 /* ── The three step lines ──────────────────────────────────────────────── */
@@ -144,16 +199,15 @@
   color: var(--color-neutral-ink);
 }
 
-/* Each of the two lines is one line: the copy is written to the 390 px budget
-   (SRC-0017 CG-025), and the clamp is what makes a longer line a finding
-   rather than a taller module. */
+/* Never truncated (DEC-0154, DEC-0161, TS-WEB-0022-A20): the copy is written
+   to one line at 390 px (SRC-0017 CG-025), and a longer line wraps. All three
+   step lines are always rendered, so a change of step moves nothing; from
+   `lg` they share one grid row, so the row is as tall as its longest step. */
 .core,
 .detail {
   display: block;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: break-word;
 }
 
 .core {
@@ -191,9 +245,15 @@
 
   /* The stage and its track stop being boxes: the three graphics become grid
      items of the module itself, one per column, above their own step line. */
+  .stageFrame,
   .stage,
   .track {
     display: contents;
+  }
+
+  /* Everything is visible at once from `lg`: no arrows to swipe with. */
+  .arrow {
+    display: none;
   }
 
   .pane {

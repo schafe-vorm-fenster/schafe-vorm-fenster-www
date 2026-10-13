@@ -3,7 +3,7 @@ import { Suspense, cache } from "react";
 import { Button } from "@/src/components/button/button";
 import { EmptyStateBlock } from "@/src/components/empty-state-block/empty-state-block";
 import { ExplainModule } from "@/src/components/explain-module/explain-module";
-import { StageChat, StageImage } from "@/src/components/explain-stage/explain-stage";
+import { StageChat, StageFlyerPhoto } from "@/src/components/explain-stage/explain-stage";
 import { HeroBlock, HeroContent } from "@/src/components/hero-block/hero-block";
 import { MediaFrame } from "@/src/components/media-frame/media-frame";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
@@ -746,15 +746,15 @@ export default async function HomePage({
                             onward: true,
                             to: "takePart",
                           }}
+                          locale={locale}
                           mechanism="whatsapp"
                           ordinal={1}
                           stage={[
-                            // State 1 — the flyer on the kitchen table. No photograph
-                            // exists, so `media-frame` renders `placeholder-surface`
-                            // in its place: a flat brand-colour panel at
-                            // `ratio-square`, not a marked gap and not a captioned
-                            // hatch (Jan, 2026-09-18; DEC-0068 rule 2).
-                            <StageImage alt="" key="1" locale={locale} />,
+                            // State 1 — the flyer photographed with the phone, drawn:
+                            // an illustration of the step rather than the grey panel
+                            // that stood in for a photograph nobody took (issue #26,
+                            // DEC-0161).
+                            <StageFlyerPhoto key="1" />,
                             <StageChat
                               key="2"
                               locale={locale}

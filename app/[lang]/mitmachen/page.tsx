@@ -3,6 +3,7 @@ import { Button } from "@/src/components/button/button";
 import { ExplainModule } from "@/src/components/explain-module/explain-module";
 import {
   StageChat,
+  StageFlyerPhoto,
   StageImage,
   StageRegistration,
 } from "@/src/components/explain-stage/explain-stage";
@@ -281,6 +282,7 @@ export default async function Page({
           // dictionary — without the page's language it marks an English
           // page in German.
           locale={locale}
+          aiEdited={heroImage?.aiEdited}
           focal={heroImage?.focal}
           notDepicting={heroImage?.notDepicting}
           placeholderId={heroImage?.placeholderId}
@@ -360,14 +362,12 @@ export default async function Page({
             newTab: true,
           }}
           demo={isDemoSlot(whatsappSteps)}
+          locale={locale}
           mechanism="whatsapp"
           ordinal={1}
           stage={[
-            <StageImage
-              alt=""
-              key="1"
-              locale={locale}
-            />,
+            // State 1, drawn (issue #26, DEC-0161) — as on `/`.
+            <StageFlyerPhoto key="1" />,
             <StageChat
               key="2"
               locale={locale}
@@ -408,6 +408,7 @@ export default async function Page({
             to: "register",
           }}
           demo={isDemoSlot(calendarSteps)}
+          locale={locale}
           mechanism="calendar-connection"
           ordinal={2}
           stage={[
@@ -452,6 +453,7 @@ export default async function Page({
             to: "register",
           }}
           demo={isDemoSlot(websiteSteps)}
+          locale={locale}
           mechanism="website-import"
           ordinal={3}
           stage={[
