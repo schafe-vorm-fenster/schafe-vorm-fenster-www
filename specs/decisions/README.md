@@ -192,3 +192,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0154 — The owner's review of 2026-10-12: what it settles, what it opens, and that every point is an issue](DEC-0154--the-review-of-2026-10-12.md)
 - [DEC-0155 — Ink is neutral black, readability goes before a fixed height, a review is not closed until every point is a task — and why the tests let these through](DEC-0155--ink-is-neutral-black-and-reviews-become-tasks.md)
 - [DEC-0156 — A link card is a control: the context band as the owner drew it on 2026-10-12](DEC-0156--a-link-card-is-a-control.md)
+- [DEC-0158 — The footer stands on ink, the language switch becomes a segmented control of two links, and the copyright line takes `line` and the imprint's legal name](DEC-0158--the-footer-on-ink-and-the-segmented-language-switch.md)

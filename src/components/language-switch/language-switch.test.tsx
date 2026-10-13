@@ -1,56 +1,53 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import { dictionary } from "@/src/lib/i18n/dictionary";
-import { LOCALES } from "@/src/lib/i18n/locales";
+import { HREFLANG, LOCALES } from "@/src/lib/i18n/locales";
 import { href } from "@/src/lib/routes/routes";
 
 import { LanguageSwitch } from "./language-switch";
 
 /**
- * TS-WEB-0001 D5 as amended by DEC-0120: the switch renders only the other
- * language as a control, framed as an invitation, and keeps the visitor on
- * the equivalent page (TS-WEB-0001-A7).
+ * TS-WEB-0001 D5 as amended by DEC-0158: the switch is a segmented control —
+ * one link per language, each to the equivalent page (TS-WEB-0001-A7), the
+ * current one marked by `aria-current="page"` (TS-WEB-0001-A12).
  */
-describe("language-switch — one control, the other language, the same page", () => {
+describe("language-switch — one link per language, the same page, the current one marked", () => {
   for (const current of LOCALES) {
-    const other = LOCALES.find((locale) => locale !== current)!;
     const html = renderToStaticMarkup(<LanguageSwitch current={current} route="takePart" />);
+    const links = html.match(/<a\b[^>]*>/g) ?? [];
 
-    it(`on a ${current} page renders exactly one link, to the ${other} twin of the page`, () => {
-      const links = html.match(/<a\b[^>]*>/g) ?? [];
-      expect(links).toHaveLength(1);
-      expect(links[0]).toContain(`href="${href("takePart", other)}"`);
-      expect(links[0]).toMatch(new RegExp(`hreflang="${other}"`, "i"));
-      expect(links[0]).toContain(`lang="${other}"`);
+    it(`TS-WEB-0001-A12: on a ${current} page renders one link per language, in the table's order`, () => {
+      expect(links).toHaveLength(LOCALES.length);
+      LOCALES.forEach((locale, index) => {
+        const link = links[index]!;
+        expect(link).toContain(`href="${href("takePart", locale)}"`);
+        expect(link).toMatch(new RegExp(`hreflang="${HREFLANG[locale]}"`, "i"));
+        expect(link).toContain(`lang="${locale}"`);
+      });
     });
 
-    it(`on a ${current} page renders no control for ${current} and no aria-current`, () => {
-      expect(html).not.toContain(`href="${href("takePart", current)}"`);
-      expect(html).not.toContain("aria-current");
-    });
-
-    it(`on a ${current} page frames the control with the ${other} invitation, in ${other}`, () => {
-      const words = dictionary(other).languageSwitch;
-      expect(html).toContain(words.invitation);
-      expect(html).toMatch(new RegExp(`<li[^>]*lang="${other}"`));
-      if (words.invitationIsPlaceholder) {
-        expect(html).toMatch(/<span[^>]*data-demo="true"[^>]*>/);
-      } else {
-        expect(html).not.toContain('data-demo="true"');
-      }
+    it(`TS-WEB-0001-A12: on a ${current} page exactly the ${current} link carries aria-current="page"`, () => {
+      const marked = links.filter((link) => link.includes('aria-current="page"'));
+      expect(marked).toHaveLength(1);
+      expect(marked[0]).toContain(`lang="${current}"`);
+      expect(marked[0]).toContain(`href="${href("takePart", current)}"`);
     });
   }
+
+  it("names each language in itself", () => {
+    const html = renderToStaticMarkup(<LanguageSwitch current="de" route="home" />);
+    expect(html).toContain(">Deutsch</a>");
+    expect(html).toContain(">English</a>");
+  });
 
   it("is a nav named after the footer's language label", () => {
     const html = renderToStaticMarkup(<LanguageSwitch current="de" route="home" />);
     expect(html).toMatch(/<nav[^>]*aria-label="Sprache"/);
   });
 
-  it("the German page's invitation is the owner's sentence, not a placeholder", () => {
-    // Review R-home-39, spelling corrected — the one invitation somebody wrote.
-    const words = dictionary("en").languageSwitch;
-    expect(words.invitation).toBe("Read this page in English:");
-    expect(words.invitationIsPlaceholder).toBe(false);
+  it("carries no invitation sentence and no placeholder marking any more", () => {
+    const html = renderToStaticMarkup(<LanguageSwitch current="de" route="home" />);
+    expect(html).not.toContain("Read this page in English");
+    expect(html).not.toContain("data-demo");
   });
 });

@@ -1106,16 +1106,23 @@ Reference: `Design - Kontakt Section - Desktop/Mobile.png`; as-is:
 
 ### Site footer
 
-- Ground **neutral black** (see *Open decisions* 6).
-- Row one: the logo (mark with the two-line wordmark) on the left, the language
-  switch on the right as a **segmented control** (*Deutsch | English*, the
-  active language filled `lime-500` with `ink` text, the other `paper` on a
-  `ink`-lifted track). It replaces *"Read this page in English: ENGLISH"*.
-- A hairline, then **Impressum · Datenschutz · Barrierefreiheit** in `paper`,
-  no underline as the only cue, a visible focus ring; at the right (desktop) or
-  beneath (phone) *"© 2026 Schafe vorm Fenster UG (haftungsbeschränkt)"* in
-  `muted`.
-- Phone: the same pieces stacked, the switch under the logo.
+- Ground **neutral black** (`ink`, see *Open decisions* 6).
+- Row one: the logo (mark with the two-line wordmark, in `paper`) on the left,
+  the language switch on the right as a **segmented control** (*Deutsch |
+  English*, the active language filled `lime-500` with `ink` text, the other
+  `paper` on an `ink`-lifted track — `ink` with 13 % `paper`, 15.52:1 for the
+  `paper` label). It replaces *"Read this page in English: ENGLISH"*. Both
+  segments are links to the same page in their language; the current one
+  carries `aria-current="page"` (`TS-WEB-0001 D5`, `DEC-0158`).
+- A hairline (`paper` at 22 % over `ink`), then **Impressum · Datenschutz ·
+  Barrierefreiheit** in `paper`, bold, no underline at rest (the weight and the
+  link row are the cue; hover adds the underline), a visible focus ring in
+  `focus-dark` (`lime-400`, 13.66:1 on `ink`); at the right (desktop, from
+  `xl`) or beneath (phone) *"© {year} {legal name}"* in `line` (14.19:1). Not
+  `muted`: on `ink` it measures 3.54:1 (`DEC-0158` §2). The legal name is the
+  imprint's, never written into code (`TS-WEB-0011 D4`).
+- Phone: the same pieces stacked, the switch under the logo; from `md` logo
+  and switch share row one.
 
 Reference: `Design - Footer Section - Desktop/Mobile.png`; as-is:
 `Ist - Footer Mobile.png`, `Ist - Kontakt und Footer Mobile.png`.

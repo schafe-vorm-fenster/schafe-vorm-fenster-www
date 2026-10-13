@@ -286,6 +286,7 @@ export const GALLERY: readonly GalleryEntry[] = [
        visible. */
     demo: (
       <SiteFooter
+        copyright={{ year: 2026, holder: "Beispiel UG" }}
         newsletter={<p>Newsletter-Slot — nur solange ein Versandsystem existiert.</p>}
         route="home"
       />

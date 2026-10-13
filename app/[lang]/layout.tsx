@@ -14,6 +14,7 @@ import { SITE_ORIGIN } from "@/src/lib/routes/routes";
 import { NOINDEX } from "@/src/lib/seo/indexable";
 
 import { heroPhotoByRoute } from "./_chrome-data";
+import { footerCopyright } from "./_footer-data";
 import { SiteChrome } from "./_chrome";
 
 import "../styles/brand.css";
@@ -144,6 +145,7 @@ export default async function RootLayout({
   // than throws; the 404 body is then the TLD default's.
   const locale = resolveLocale((await params).lang);
   const heroPhoto = await heroPhotoByRoute(locale);
+  const copyright = await footerCopyright();
 
   /**
    * The footer's newsletter slot — withheld while no sending system accepts a
@@ -182,6 +184,7 @@ export default async function RootLayout({
             inside `main`, built from the page's own `page.meta.ts`
             (`_page-frame.tsx`). */}
         <SiteChrome
+          copyright={copyright}
           heroPhoto={heroPhoto}
           locale={locale}
           newsletter={newsletter}

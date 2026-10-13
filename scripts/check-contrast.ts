@@ -99,6 +99,34 @@ const PAIRS: readonly Pair[] = [
     minimum: 4.5,
     why: "the placeholder pair SRC-0014 fixes at 6.0:1 and measures at 4.50:1",
   },
+  // The footer on `ink` (SRC-0014 §Site footer, DEC-0158, TS-WEB-0017-A41).
+  // Palette-level on purpose: the footer composes these tokens directly, and
+  // the semantic layer has no "text on ink" role to pair instead. `muted` on
+  // `ink` is 3.54:1 — the reason the copyright line takes `line`.
+  {
+    foreground: "--color-neutral-paper",
+    background: "--color-neutral-ink",
+    minimum: 4.5,
+    why: "the footer's legal links and the inactive language segment on ink",
+  },
+  {
+    foreground: "--color-neutral-line",
+    background: "--color-neutral-ink",
+    minimum: 4.5,
+    why: "the footer's copyright line on ink",
+  },
+  {
+    foreground: "--color-neutral-ink",
+    background: "--color-lime-500",
+    minimum: 4.5,
+    why: "the active language segment's label on its lime-500 fill",
+  },
+  {
+    foreground: "--color-roles-focus-dark",
+    background: "--color-neutral-ink",
+    minimum: 3,
+    why: "non-text contrast: the focus ring on the ink footer (1.4.11, 2.4.13)",
+  },
   // `--color-status-error` / `--color-status-success` are palette-level and
   // the sheet declares no dark variant of either, so on a dark ground they
   // measure 2.8:1 and 2.7:1. The site is light-only by declaration

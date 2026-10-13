@@ -1,69 +1,62 @@
 /*
- * One control per other language, framed as an invitation (DEC-0120): the
- * half-sentence in Meta, then the language's own name as the link. The
- * current language is not rendered at all — there is nothing to switch to.
+ * The segmented control of SRC-0014 §Site footer (DEC-0158): a pill track
+ * lifted off `ink`, one segment per language, the current one filled
+ * `lime-500` with `ink` text. The fill (`lime-500`) is never the ground it
+ * stands on (the lifted track), TS-WEB-0017-A29's rule.
  */
 .nav {
   display: block;
 }
 
-.list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
+.track {
+  /* `ink` lifted by a share of `paper` — tokens only, no hex of its own. */
+  background: color-mix(in srgb, var(--color-neutral-paper) 13%, var(--color-neutral-ink));
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  gap: var(--space-1);
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: var(--space-1);
 }
 
 .item {
-  align-items: baseline;
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: var(--space-1);
-  min-height: var(--target-min);
+  display: flex;
 }
 
-.invitation {
-  color: var(--color-neutral-muted);
-  font-size: var(--type-meta-size);
-}
-
-/* The control keeps the link treatment (`lime-800` on light) and a 44 px
-   box of its own, so the invitation can wrap beside it without shrinking
-   the target. */
-.link {
+.segment {
   align-items: center;
-  color: var(--color-lime-800);
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-paper);
   display: inline-flex;
   font-family: var(--font-mono);
   font-size: var(--type-label-size);
   font-weight: 700;
+  justify-content: center;
   letter-spacing: var(--type-label-tracking);
   min-height: var(--target-min);
+  min-width: var(--target-min);
+  padding-inline: var(--space-6);
+  text-decoration: none;
+}
+
+.segment:hover {
   text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-transform: uppercase;
-  text-underline-offset: 0.15em;
-}
-
-.link:hover {
   text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
 }
 
-.link:focus-visible {
-  outline: var(--focus-ring-width) solid var(--focus);
+.segment[aria-current="page"] {
+  background: var(--color-lime-500);
+  color: var(--color-neutral-ink);
+}
+
+.segment[aria-current="page"]:hover {
+  text-decoration: none;
+}
+
+/* On `ink` the light-ground ring (violet) would all but vanish; the dark
+   ground takes `focus-dark` (`lime-400`). */
+.segment:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-roles-focus-dark);
   outline-offset: var(--focus-ring-offset);
-}
-
-/*
- * On an ink ground (the phone menu overlay) the pair inverts: the
- * invitation reads in `paper`, the link in `lime-300`.
- */
-.dark .invitation {
-  color: var(--color-neutral-paper);
-}
-
-.dark .link {
-  color: var(--color-lime-300);
 }
