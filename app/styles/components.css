@@ -138,12 +138,13 @@
    * so the ground states it and the variant reads it — the same mechanism as
    * `--ground-link` above.
    */
+  --fill-ink-hover: color-mix(in srgb, var(--color-neutral-ink) 82%, var(--color-neutral-paper));
   --ground-primary-fill: var(--color-neutral-ink);
   --ground-primary-text: var(--color-neutral-paper);
-  /* Hover on an ink fill is the darkest neutral step, `text-2`: `paper` on it
-     10.26:1. Never a dark green — no `lime-700`…`950` fill (DEC-0160,
-     `TS-WEB-0017-A30`). */
-  --ground-primary-fill-hover: var(--color-neutral-text2);
+  /* Hover on an ink fill is a neutral dark grey: `ink` mixed with 18 %
+     `paper` (a neutral grey, `paper` on it 13.24:1). Not `text-2`, which reads as
+     dark green, and dark green is no fill (DEC-0160 amendment, `TS-WEB-0017-A30`). */
+  --ground-primary-fill-hover: var(--fill-ink-hover);
 
   /* ── The ground's own secondary control — SRC-0014 §Button, DEC-0160 ──
    * A button's fill is never its ground (DEC-0154). On a light ground —

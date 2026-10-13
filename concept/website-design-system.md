@@ -78,7 +78,7 @@ text colour is ever `#000000` or `#FFFFFF`.
 | Token | Hex | Use |
 | --- | --- | --- |
 | `ink` | `#000000` | Primary text, dark sections, primary button fill, control wells. **Neutral black since 2026-10-12** (`DEC-0155`): it was `#171D0D`, which reads as dark green across a section, and dark green as a surface leaves the design. One value for the text and the dark ground; `brand-design` 2.9.0 carries it, and the website is pinned to it (`DEC-0160`) |
-| `text-2` | `#39412C` | Body copy on light surfaces; **the hover of an `ink` fill** and the dark chip (`DEC-0160`): `paper` on it 10.26:1, `lime-500` 6.32:1. The darkest neutral above `ink`; the token sheet has no grey step between them |
+| `text-2` | `#39412C` | Body copy on light surfaces. **Not a fill**: it carries the lime hue and reads as dark green (`DEC-0160` amendment, 2026-10-13). The hover of an `ink` fill is the neutral `ink-hover` mix instead (`ink` + 18 % `paper`). |
 | `muted` | `#606657` | Labels, meta, placeholder text |
 | `border` | `#6F7467` | Input outlines where an outline is unavoidable |
 | `line` | `#D1D6CB` | Hairline dividers inside a surface |
@@ -104,9 +104,9 @@ the colour of a paragraph. `border` carries no type at any size.
 | `lime-900` | `#2D3F01` | Text on a lime-500 surface |
 
 **`lime-700` to `lime-950` are never a fill** (`DEC-0155`, `DEC-0160`). Dark
-green is for text, links and icons. A hover on `ink` is `text-2`, "Amtlich"
+green is for text, links and icons. A hover on `ink` is `ink-hover`, a neutral grey (`ink` mixed with 18 % `paper`, ≈ `#2D2D2C`; `paper` on it 13.24:1, `lime-500` 8.16:1), "Amtlich"
 and every kicker badge that was dark green is `ink` with `paper` (20.17:1),
-and a chip on a dark ground is `text-2` with `paper`. `TS-WEB-0017-A30`
+and a chip on a dark ground is `ink-hover` with `paper`. `TS-WEB-0017-A30`
 (`check:brand`) fails a `background`, `background-color` or `fill` that names
 one of the four, directly or through a custom property, and a board that
 paints one.
@@ -457,8 +457,8 @@ Height 56 px, padding 0 24 px, radius 999, weight 800, 18 px, with a 24 px
 **A button's fill is never its ground** (`DEC-0154`, owner's review
 2026-10-12). The ground decides the secondary pair, as it decides the primary
 one: it publishes `--ground-secondary-*`, and `button` and `outbound-link`
-read it (`DEC-0160`). Primary on light hovers to `text-2` (`paper` label
-10.26:1), never to a dark green.
+read it (`DEC-0160`). Primary on light hovers to `ink-hover` (`paper` label
+13.24:1), never to a dark green.
 
 ### Search field
 

@@ -86,7 +86,7 @@
   --header-current-ink: var(--color-neutral-ink);
   --header-cta-fill: var(--color-neutral-ink);
   --header-cta-ink: var(--color-neutral-paper);
-  --header-cta-hover: var(--color-neutral-text2); /* hover on ink, DEC-0160 */
+  --header-cta-hover: var(--fill-ink-hover); /* hover on ink, DEC-0160 */
   --header-wordmark: visible;
 }
 
@@ -213,7 +213,7 @@
     --header-current-ink: var(--color-neutral-ink);
     --header-cta-fill: var(--color-neutral-ink);
     --header-cta-ink: var(--color-neutral-paper);
-    --header-cta-hover: var(--color-neutral-text2); /* hover on ink, DEC-0160 */
+    --header-cta-hover: var(--fill-ink-hover); /* hover on ink, DEC-0160 */
     --header-wordmark: visible;
   }
 }
