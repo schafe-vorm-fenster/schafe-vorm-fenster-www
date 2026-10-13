@@ -113,13 +113,11 @@ states are layout logic, not part of this file. Placeholders in
 
 **Headline:** What's on where you live, and when.
 
-**Search input (placeholder):** Your place
+**Search input (placeholder):** Type the place name
 
 **Button:** Search
 
-**Helper text under the field:** Type the place name — suggestions start at the second letter.
-
-<!-- source_note: the placeholder "Your place" is the owner's wording for this field (content/pages/deine-region/en.md, slot 3); the helper text is the existing dictionary string (src/lib/i18n/dictionary.ts, search.hint). The postcode wording and the interim rationale went with DEC-0079 §1 (T-07, DEC-0119). -->
+<!-- source_note: the placeholder "Type the place name" follows the owner's German wording (review 2026-10-12, issue #20, DEC-0159): the helper text under the field goes and the placeholder carries the instruction. The field's name for screen readers stays "Your place" (src/lib/i18n/dictionary.ts, search.label). The postcode wording and the interim rationale went with DEC-0079 §1 (T-07, DEC-0119). -->
 
 ## Slot 2 — Place known, dates exist (Block 1 / State S2)
 
@@ -129,12 +127,16 @@ states are layout logic, not part of this file. Placeholders in
 
 **CTA label (primary):** Open the {place} calendar
 
-**Hand-off line under the dates:** Your event missing? Add it yourself.
+**Hand-off under the dates (question):** Your event missing?
 
-The hand-off line is the review's own wording of 2026-09-22 and this
-block's hand-off to the next one (CG-008): the gap in the list is the way
-into publishing, not a flaw the page has to hide. It is a sentence, not a
-link — the page's one primary CTA stays the search (TS-WEB-0006 D3).
+**Hand-off under the dates (button):** Add it yourself
+
+The hand-off is the review's own wording of 2026-09-22 and this block's
+hand-off to the next one (CG-008): the gap in the list is the way into
+publishing, not a flaw the page has to hide. Since the review of 2026-10-12
+(issue #25, DEC-0159) it stands as a row of its own: the question and one
+secondary button to `/mitmachen`. The page's one primary CTA stays block 1's
+(TS-WEB-0006 D3).
 
 Place name and dates are live data (TS-WEB-0008 position 1); the headline
 is a text template with a named placeholder, not a sentence generated
@@ -314,18 +316,6 @@ of the five are cleared; three are waiting for clearance and run with
 `clearance: pending`. Citable is "running since 2018", not "eight years at
 full operation" (the record's own wording limit).
 
-## Block 2d — Live counters
-
-<!-- id: home-9-counters; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
-
-**Label:** Dates currently in the calendar
-
-**Number:** {dates_count} (live, `/api/stats`)
-
-Only the date count is verifiable today (Q-0037: "places" and "updates
-today" fields are missing from `/api/stats`); no static reach figure
-replaces it (SRC-0001 §5, `reach-and-usage` is `expired`).
-
 ## Context band (3 non-focus jobs)
 
 <!-- id: home-10-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
@@ -363,9 +353,6 @@ S2 open calendar, S3 publish first date) — no new text, same target id
 
 **Geo label on the proof cards:** Proof from the region
 
-**Unit in the counter badge:** dates
-
-Three short strings the page currently keeps in code. They name what the
-surface is showing without labelling the surface as unfinished. The unit
-word stays short in the badge because the full label (slot 9) sits beside
-it as text.
+Two short strings the page currently keeps in code. They name what the
+surface is showing without labelling the surface as unfinished. The counter
+badge's unit word went with the counter (DEC-0154, issue #24).

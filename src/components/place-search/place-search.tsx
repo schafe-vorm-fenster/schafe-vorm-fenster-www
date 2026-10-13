@@ -58,13 +58,23 @@ export interface PlaceSearchProps extends DataStateProps, Omit<LinkOptions, "has
    * decline it stay the plain form.
    */
   readonly geolocation?: boolean;
+  /**
+   * The stage treatment — issue #20 of the owner's review of 2026-10-12,
+   * TS-WEB-0019-A17, TS-WEB-0020-A18. The placeholder carries the instruction,
+   * so no helper line is printed under the field; the "use my location"
+   * control stands directly beneath it, and its explanation is the control's
+   * accessible description rather than standing text. The field keeps its
+   * bound label. Off by default: the other surfaces keep their helper line.
+   */
+  readonly stage?: boolean;
   readonly className?: string;
 }
 
 /**
  * 41 `place-search` [PROPOSED] — TS-WEB-0008 D7.
  *
- * Structure: `search-field`, the helper line beneath it with the geolocation
+ * Structure: `search-field`, the helper line beneath it (none in the `stage`
+ * treatment, where the location control stands directly under the field) with the geolocation
  * control beside the hint, the suggestion overlay drawn over the page
  * (`typeahead`), and optionally server-resolved candidates as `chip`s — the
  * same component and behaviour everywhere it stands (`/`, `/dein-ort`,
@@ -101,6 +111,7 @@ export function PlaceSearch({
   submit,
   typeahead = false,
   geolocation = typeahead,
+  stage = false,
   state = "ready",
   className,
 }: PlaceSearchProps) {
@@ -113,7 +124,12 @@ export function PlaceSearch({
   const resolvedHint = hint ?? words.hint;
   const resolvedPlaceholder = placeholder ?? words.placeholder;
 
-  const classes = [styles.module, tone === "dark" ? styles.dark : undefined, className]
+  const classes = [
+    styles.module,
+    tone === "dark" ? styles.dark : undefined,
+    stage ? styles.stage : undefined,
+    className,
+  ]
     .filter(Boolean)
     .join(" ");
 
@@ -148,10 +164,18 @@ export function PlaceSearch({
         />
         {typeahead ? <PlaceTypeahead inputId={inputId} locale={locale} query={query} to={to} /> : null}
       </div>
-      <div className={styles.meta}>
-        <p className={styles.hint}>{resolvedHint}</p>
-        {geolocation ? <LocateControl locale={locale} query={query} to={to} tone={tone} /> : null}
-      </div>
+      {stage ? (
+        geolocation ? (
+          <div className={styles.meta}>
+            <LocateControl quiet locale={locale} query={query} to={to} tone={tone} />
+          </div>
+        ) : null
+      ) : (
+        <div className={styles.meta}>
+          <p className={styles.hint}>{resolvedHint}</p>
+          {geolocation ? <LocateControl locale={locale} query={query} to={to} tone={tone} /> : null}
+        </div>
+      )}
       {suggestions && suggestions.length > 0 ? (
         <div className={styles.suggestions} data-demo={state === "mocked" ? "true" : undefined}>
           {suggestions.map((suggestion) => (

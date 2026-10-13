@@ -26,6 +26,14 @@ export interface LocateControlProps extends Omit<LinkOptions, "hash"> {
   readonly locale?: Locale;
   /** `dark` where the module stands on a photo surface or the ink section. */
   readonly tone?: "light" | "dark";
+  /**
+   * The stage treatment (issue #20, TS-WEB-0019-A17, TS-WEB-0020-A18): the
+   * sentence that states what will happen is not printed beside the control.
+   * It stays the control's accessible description and its tooltip, so the
+   * control still "states what will happen" (TS-WEB-0010 D5) — the stage just
+   * does not carry it as standing text.
+   */
+  readonly quiet?: boolean;
 }
 
 /** How long the browser may take to answer; a slow fix is not worth a stuck page. */
@@ -58,7 +66,14 @@ const noopSubscribe = () => () => {};
  * A11y: a real `<button type="button">`, described by the sentence beside it
  * through `aria-describedby`; the glyph is decorative.
  */
-export function LocateControl({ to, locale = "de", query, name = "ort", tone = "light" }: LocateControlProps) {
+export function LocateControl({
+  to,
+  locale = "de",
+  query,
+  name = "ort",
+  tone = "light",
+  quiet = false,
+}: LocateControlProps) {
   const words = dictionary(locale).search;
   const describedBy = useId();
   const refused = useRef(false);
@@ -113,12 +128,13 @@ export function LocateControl({ to, locale = "de", query, name = "ort", tone = "
         data-locate-control
         disabled={!hydrated}
         onClick={locate}
+        title={quiet ? words.locateExplains : undefined}
         type="button"
       >
         <Icon name="locate" size={18} />
         {words.locate}
       </button>
-      <span className={styles.explains} data-demo="true" id={describedBy}>
+      <span className={quiet ? styles.explainsHidden : styles.explains} data-demo="true" id={describedBy}>
         {words.locateExplains}
       </span>
     </div>

@@ -37,7 +37,7 @@ export function demoAppHref(slug: string = DEMO_PLACE.slug): string {
  * The counter figure of TS-WEB-0008 position 4. A figure is a claim, so this one
  * is only ever rendered inside a module carrying `data-demo="true"`;
  * `/api/stats` replaces it at M4, and Q-0037 keeps the other two figures
- * absent rather than estimated (TS-WEB-0019-A14).
+ * absent rather than estimated (TS-WEB-0008 D8).
  */
 export const DEMO_DATE_COUNT = 1234;
 

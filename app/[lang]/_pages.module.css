@@ -27,14 +27,6 @@
   margin: 0 0 var(--space-2);
 }
 
-/* The counters stand inline in the provenance band (TS-WEB-0019 D3, block 2d). */
-.counters {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  margin-block: var(--space-4);
-}
-
 /*
  * `/dein-kalender`'s three tiers no longer need a group class: they are rows
  * inside one `price-section`, divided by its own hairline, and the section

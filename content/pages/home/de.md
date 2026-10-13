@@ -113,13 +113,11 @@ und Zustände sind Layoutlogik, nicht Teil dieser Datei. Platzhalter in
 
 **Headline:** Was wann wo in deinem Ort los ist.
 
-**Sucheingabe (Placeholder):** Dein Ort
+**Sucheingabe (Placeholder):** Tipp den Ortsnamen ein
 
 **Button:** Suchen
 
-**Hinweistext unter dem Feld:** Tipp den Ortsnamen ein — Vorschläge kommen ab dem zweiten Buchstaben.
-
-<!-- source_note: Placeholder „Dein Ort" ist die Formulierung des Owners für dieses Feld (content/pages/deine-region/de.md, Slot 3); der Hinweistext ist der bestehende Dictionary-String (src/lib/i18n/dictionary.ts, search.hint). Die Postleitzahl-Formulierung und die Begründung des Interims sind mit DEC-0079 §1 entfallen (T-07, DEC-0119). -->
+<!-- source_note: Placeholder „Tipp den Ortsnamen ein" ist der Wortlaut des Owners (Review 2026-10-12, Issue #20, DEC-0159): Der Hinweistext unter dem Feld entfällt, der Placeholder trägt die Anleitung. Der Feldname für Screenreader bleibt „Dein Ort" (src/lib/i18n/dictionary.ts, search.label). Die Postleitzahl-Formulierung und die Begründung des Interims sind mit DEC-0079 §1 entfallen (T-07, DEC-0119). -->
 
 ## Slot 2 — Ort bekannt, Termine vorhanden (Block 1 / Zustand S2)
 
@@ -129,13 +127,17 @@ und Zustände sind Layoutlogik, nicht Teil dieser Datei. Platzhalter in
 
 **CTA-Label (primär):** Kalender von {place} öffnen
 
-**Überleitungszeile unter den Terminen:** Fehlt deine Veranstaltung, jetzt selbst eintragen.
+**Überleitung unter den Terminen (Frage):** Fehlt deine Veranstaltung?
 
-Die Überleitungszeile ist Wortlaut des Reviews vom 2026-09-22 und die
-Übergabe dieses Blocks an den nächsten (CG-008): die Lücke in der Liste ist
-der Weg ins Veröffentlichen, kein Mangel, den die Seite verstecken müsste.
-Sie ist ein Satz, kein Link — die eine primäre CTA der Seite bleibt die
-Suche (TS-WEB-0006 D3).
+**Überleitung unter den Terminen (Button):** Jetzt selbst eintragen
+
+Die Überleitung ist Wortlaut des Reviews vom 2026-09-22 („Fehlt deine
+Veranstaltung, jetzt selbst eintragen.") und die Übergabe dieses Blocks an
+den nächsten (CG-008): die Lücke in der Liste ist der Weg ins
+Veröffentlichen, kein Mangel, den die Seite verstecken müsste. Seit dem
+Review vom 2026-10-12 (Issue #25, DEC-0159) steht sie als eigene Zeile:
+die Frage und ein sekundärer Button nach `/mitmachen`. Die eine primäre CTA
+der Seite bleibt die aus Block 1 (TS-WEB-0006 D3).
 
 Ortsname und Termine sind Live-Daten (TS-WEB-0008 Position 1); die Headline ist
 ein Textbaustein mit benanntem Platzhalter, kein pro Ort erzeugter Satz
@@ -317,18 +319,6 @@ drei warten auf ihre Freigabe und laufen mit `clearance: pending`.
 Zitierfähig ist „seit 2018 in Betrieb", nicht „acht Jahre Vollbetrieb"
 (Formulierungsgrenze des Belegs).
 
-## Block 2d — Live-Zähler
-
-<!-- id: home-9-counters; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
-
-**Label:** Termine, die gerade im Kalender stehen
-
-**Zahl:** {dates_count} (live, `/api/stats`)
-
-Nur die Terminzahl ist heute belegbar (Q-0037: „Orte"- und
-„Aktualisierungen heute"-Felder fehlen in `/api/stats`); keine statische
-Reichweitenzahl ersetzt sie (SRC-0001 §5, `reach-and-usage` ist `expired`).
-
 ## Kontextband (3 Nicht-Fokus-Jobs)
 
 <!-- id: home-10-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
@@ -366,9 +356,7 @@ Text, gleiche Ziel-ID (TS-WEB-0006 D6).
 
 **Geo-Label auf den Belegkarten:** Beleg aus der Region
 
-**Einheit im Zähler-Badge:** Termine
-
-Drei kurze Strings, die die Seite heute im Code führt. Sie benennen, was
+Zwei kurze Strings, die die Seite heute im Code führt. Sie benennen, was
 die Fläche zeigt, ohne die Fläche als unfertig zu beschriften. Das
-Einheitenwort steht kurz im Badge, weil die vollständige Beschriftung
-(Slot 9) als Text daneben steht.
+Einheitenwort des Zähler-Badges ist mit dem Zähler entfallen (DEC-0154,
+Issue #24).

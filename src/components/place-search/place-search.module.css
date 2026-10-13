@@ -45,6 +45,27 @@
   color: var(--color-neutral-paper);
 }
 
+/* The stage treatment (issue #20): no helper line, so the location control
+   stands directly under the field, one `space-2` below it. The
+   overlay still floats over it and moves nothing (D7a "Layout"). */
+.stage {
+  gap: var(--space-2);
+}
+
+.stage .meta {
+  justify-content: flex-start;
+}
+
+/* The placeholder carries the instruction now, and a placeholder cannot
+   wrap: at the body size "Tipp den Ortsnamen ein" (191 px) does not fit the
+   171 px a 360 px phone leaves beside the pin and the submit. At the meta
+   size (159 px) it does, and so does state A's "Anderen Ort suchen" (133 px).
+   Measured, not guessed: TS-WEB-0019-A17 and TS-WEB-0020-A18 assert it at
+   360 px. Typed text keeps the body size. */
+.stage input::placeholder {
+  font-size: var(--type-meta-size);
+}
+
 .suggestions {
   align-items: center;
   display: flex;

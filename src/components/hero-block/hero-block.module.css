@@ -64,15 +64,23 @@
   flex-direction: column;
   gap: var(--space-3);
   margin-top: var(--space-4);
+  /* The photo surface's content stack aligns its children to the start, so
+     a slot is only as wide as what is in it. The search module's helper line
+     used to stretch it; since issue #20 the stage search has none, and the
+     slot takes the row itself — or the pill collapses around its submit and
+     cuts its own placeholder. A button inside still keeps its own width. */
+  width: 100%;
 }
 
 .cta > :where(a, button, span) {
   align-self: flex-start;
 }
 
-/* The search module keeps its block width — it is a form, not a button. */
+/* The search module keeps its block width — it is a form, not a button —
+   and takes the row (see `.cta` above for why it has to say so). */
 .search {
   margin-top: var(--space-4);
+  width: 100%;
 }
 
 /*

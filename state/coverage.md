@@ -6,17 +6,17 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**447 criteria · 282 closed · 165 open (63 % closed)**
+**451 criteria · 285 closed · 166 open (63 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 277 | a test title in a file a runner runs carries the id |
+| VERIFIED | 280 | a test title in a file a runner runs carries the id |
 | METERED | 5 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
 | NAMED ONLY | 30 | the id is in a runner file but in no test title — **not coverage** |
-| MISSING | 135 | nothing names it |
+| MISSING | 136 | nothing names it |
 
-Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
+Rule 1 (a new criterion arrives with its instrument): 4 criterion(a) new in this commit, 0 without an instrument.
 
 ## By level
 
@@ -25,7 +25,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | static | 89 | 59 | 30 | 66 % |
 | unit | 32 | 28 | 4 | 88 % |
 | integration | 73 | 50 | 23 | 68 % |
-| e2e | 183 | 143 | 40 | 78 % |
+| e2e | 187 | 146 | 41 | 78 % |
 | tool | 39 | 2 | 37 | 5 % |
 | manual | 31 | 0 | 31 | 0 % |
 
@@ -51,8 +51,8 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0016 | 23 | 11 | A1 A3 A4 A6 A7 A8 A9 A11 A18 A20 A13 A14 |
 | TS-WEB-0017 | 33 | 29 | A3 A13 A15 A16 |
 | TS-WEB-0018 | 16 | 3 | A1 A3 A4 A5 A6 A8 A9 A10 A11 A13 A14 A15 A16 |
-| TS-WEB-0019 | 16 | 15 | A15 |
-| TS-WEB-0020 | 17 | 16 | A13 |
+| TS-WEB-0019 | 19 | 17 | A14 A15 |
+| TS-WEB-0020 | 18 | 17 | A13 |
 | TS-WEB-0021 | 15 | 13 | A11 A15 |
 | TS-WEB-0022 | 19 | 14 | A8 A10 A11 A14 A15 |
 | TS-WEB-0023 | 16 | 13 | A3 A10 A16 |
@@ -193,6 +193,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0018-A14 | manual | MISSING | — | Moment 1 (page-brief review): the SRC-0001 eight-point check plus the four boundary questions are answered and recorded on the brief before content generation s … |
 | TS-WEB-0018-A15 | manual | MISSING | — | Moment 2 (content PR review): the four boundary questions are answered for the diff; a "yes" to any of them blocks the merge. |
 | TS-WEB-0018-A16 | manual | MISSING | — | Moment 3 (release checklist): rendered `de` and `en` spot check for label and foreign-brand leakage, and a re-read of every guard allow-list entry for a reason  … |
+| TS-WEB-0019-A14 | e2e | MISSING | — | **Superseded by A18, DEC-0154.** Written text: the counter block renders only the dates figure. Its test was removed with the render (issue #24, DEC-0159). |
 | TS-WEB-0019-A15 | manual | MISSING | — | The eight-point compliance check of SRC-0001 passes for the home brief, with point 8 (stage 0 complete on its own) evidenced by A2 and A11. |
 | TS-WEB-0020-A13 | manual | MISSING | — | Content review before shipping: each story reads aspect → why it matters → example → testimonial and names exactly one mechanism (TS-WEB-0006 D7); the state-B c … |
 | TS-WEB-0021-A11 | static | NAMED ONLY | src/lib/routes/metadata.test.ts — outside any test title | Canonical is the parameter-free path; title and description come from the page's content frontmatter and contain no runtime value; the JSON-LD graph is `WebPage … |

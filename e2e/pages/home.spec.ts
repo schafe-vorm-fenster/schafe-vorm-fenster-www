@@ -18,6 +18,8 @@ import type { APIRequestContext, Page } from "@playwright/test";
 
 const PHONE = { width: 360, height: 640 };
 const DESKTOP = { width: 1280, height: 800 };
+/** The phone the stage's placeholder is held to (TS-WEB-0019-A17). */
+const PHONE_WIDE = { width: 360, height: 800 };
 
 /**
  * The explain module's auto-advance, at the dwell floor of TS-WEB-0002 D4
@@ -206,7 +208,6 @@ async function sceneFacts(page: Page) {
           [
             "focus-block",
             "place-dates",
-            "live-counters",
             "proof-stream",
             "context-band",
             "closing-cta",
@@ -756,7 +757,6 @@ test.describe("TS-WEB-0019 — home", () => {
             "scene-1",
             "scene-2",
             "scene-3",
-            "live-counters",
             "proof-stream",
             "context-band",
             "closing-cta",
@@ -772,8 +772,8 @@ test.describe("TS-WEB-0019 — home", () => {
      * but S3: the page opened on two five-row lists with the same three
      * titles in both, which is 1.6 phone screens of rows before the first
      * argument. `live-counters` moved *into* `place-dates`, directly under
-     * the rows it counts, and the violet band that used to carry it
-     * disappeared with the block.
+     * the rows it counts, and then left the page altogether (DEC-0154,
+     * issue #24, TS-WEB-0019-A18).
      *
      * `provenance-stamps` is gone too. Block 2b's content has been the
      * provenance **scene** since the polish pass; the one element that still
@@ -786,7 +786,6 @@ test.describe("TS-WEB-0019 — home", () => {
     expect(ids).toEqual([
       "focus-block",
       "place-dates",
-      "live-counters",
       "scene-1",
       "scene-2",
       "scene-3",
@@ -984,22 +983,101 @@ test.describe("TS-WEB-0019 — home", () => {
     expect(saves).toHaveLength(1);
   });
 
-  test("TS-WEB-0019-A14: the counter block renders the dates figure and nothing else", async ({
+  /*
+   * The old counter criterion (A14: the counter renders the dates figure and
+   * nothing else) is superseded by A18 below (DEC-0154, issue #24): its test went with the
+   * counter, because the block it asserted no longer exists.
+   */
+  for (const path of ["/", "/en", "/?ort=schlatkow"] as const) {
+    test(`TS-WEB-0019-A18: ${path} carries no counter figure and never asks /api/stats`, async ({ page }) => {
+      const stats: string[] = [];
+      page.on("request", (request) => {
+        if (request.url().includes("/api/stats")) stats.push(request.url());
+      });
+      await page.setViewportSize(DESKTOP);
+      await page.goto(path);
+      await page.waitForLoadState("networkidle");
+
+      await expect(page.locator("#live-counters")).toHaveCount(0);
+      const text = (await page.locator("main").textContent()) ?? "";
+      expect(text).not.toMatch(/Termine, die gerade im Kalender stehen|Dates currently in the calendar/u);
+      expect(stats, "the home page fetches no live counter").toEqual([]);
+    });
+  }
+
+  for (const [path, label, placeholder] of [
+    ["/", "Dein Ort", "Tipp den Ortsnamen ein"],
+    ["/en", "Your place", "Type the place name"],
+  ] as const) {
+    test(`TS-WEB-0019-A17: the stage search on ${path} carries its instruction in the placeholder`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(PHONE_WIDE);
+      await page.goto(path);
+      const field = page.locator("#ort-suche-fokus");
+      await expect(field).toHaveAttribute("placeholder", placeholder);
+      // The visible hint goes, the field's name does not.
+      await expect(page.locator('label[for="ort-suche-fokus"]')).toHaveText(label);
+
+      const hero = page.locator("#focus-block");
+      const heroText = (await hero.innerText()).replace(/\s+/gu, " ");
+      expect(heroText).not.toMatch(/Vorschläge kommen|suggestions start/u);
+
+      // The location control stands directly under the field: nothing between
+      // them, at most one `space-3` of air.
+      const pill = await field.locator("xpath=ancestor::form").boundingBox();
+      const control = hero.locator("[data-locate-control]");
+      await expect(control).toBeVisible();
+      const button = await control.boundingBox();
+      expect(button!.y - (pill!.y + pill!.height)).toBeGreaterThanOrEqual(0);
+      expect(button!.y - (pill!.y + pill!.height)).toBeLessThanOrEqual(12);
+      expect(button!.height).toBeGreaterThanOrEqual(44);
+      // Its explanation is still its description, and still findable.
+      const describedBy = await control.getAttribute("aria-describedby");
+      const explains = page.locator(`[id="${describedBy}"]`);
+      await expect(explains).not.toBeEmpty();
+      await expect(control).toHaveAttribute("title", /.+/u);
+      // …but not as standing text on the stage: read, not seen.
+      const explainsBox = await explains.boundingBox();
+      expect(explainsBox?.width ?? 0, "the explanation is not printed on the stage").toBeLessThanOrEqual(1);
+
+      // A placeholder cannot wrap, so it must fit: at 360 px it is not cut.
+      const fits = await field.evaluate((input: HTMLInputElement) => {
+        const style = getComputedStyle(input, "::placeholder");
+        const context = document.createElement("canvas").getContext("2d")!;
+        context.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+        return context.measureText(input.placeholder).width <= input.clientWidth;
+      });
+      expect(fits, "the placeholder is not truncated at 360 px").toBe(true);
+    });
+  }
+
+  test("TS-WEB-0019-A19: the hand-off under the rows is a row of its own with one secondary button", async ({
     page,
   }) => {
-    await page.setViewportSize(DESKTOP);
-    await page.goto("/");
-
-    const counters = page.locator("#live-counters");
-    await expect(counters).toHaveCount(1);
-    const text = (await counters.textContent()) ?? "";
-    expect(text).not.toMatch(/\bOrte\b|\bplaces\b/i);
-    expect(text).not.toMatch(/Aktualisierungen|updates today/i);
-    // Exactly one figure badge inside the counter module.
-    // One badge: the figure. Its `Demo-Daten` twin went with Jan's decision
-    // of 2026-09-18 — the module declares itself in `data-demo` instead, and
-    // `e2e/content-compliance.spec.ts` asserts that half.
-    await expect(counters.locator("span[data-tone]")).toHaveCount(1);
+    for (const path of ["/", "/?ort=schlatkow"]) {
+      await page.goto(path);
+      const dates = page.locator("#place-dates").filter({ visible: true });
+      const handoff = dates.locator("[data-handoff]");
+      await expect(handoff).toHaveCount(1);
+      await expect(handoff).toContainText("Fehlt deine Veranstaltung?");
+      const action = handoff.locator('[data-cta="secondary"]');
+      await expect(action).toHaveCount(1);
+      await expect(action).toHaveAttribute("href", "/mitmachen");
+      await expect(handoff.locator('[data-cta="primary"]')).toHaveCount(0);
+      // It is the block's last row, below the dates it is about.
+      const lastRow = await dates.locator("article").last().boundingBox();
+      const row = await handoff.boundingBox();
+      expect(row!.y).toBeGreaterThan(lastRow!.y + lastRow!.height);
+      // Its question reads above body size — no longer a meta-size footnote.
+      const size = await handoff
+        .locator("p")
+        .first()
+        .evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+      expect(size).toBeGreaterThan(18);
+      // The page keeps exactly one primary.
+      await expect(page.locator('main [data-cta="primary"]').filter({ visible: true })).toHaveCount(1);
+    }
   });
 
   test("SRC-0014 §Shape and Space: every section's own lines keep the horizontal gutter", async ({

@@ -156,7 +156,7 @@ nur der Angebotstext in Block 1 wechselt.
 
 **Geo-Badge am Modul:** Aus der Region
 
-**Hinweistext unter dem Suchfeld:** Tipp den Ortsnamen ein — Vorschläge kommen ab dem zweiten Buchstaben.
+**Platzhalter im Suchfeld:** Tipp den Ortsnamen ein
 
 **Überleitung zum Modul:** So sieht das aus, wenn ein Ort schon dabei ist:
 
@@ -173,7 +173,14 @@ und 2) setzen erst ein, wenn ein Ort feststeht.
 
 **CTA-Label (primär):** Kalender von {place} auf den Homescreen legen
 
-Ortsname und Termine sind Live-Daten aus `/api/places/{slug}/events`.
+**Platzhalter im Suchfeld (anderer Ort):** Anderen Ort suchen
+
+Ortsname und Termine sind Live-Daten aus `/api/places/{slug}/events`. Das
+Suchfeld bleibt in Zustand A auf der Bühne (Review 2026-10-12, Issue #23;
+„Anderen Ort suchen" ist der Wortlaut des Issue-Titels — „Suche nach einem
+anderen Ort …" aus dem Review ist mit 270 px breiter als das Feld auf dem
+Telefon und würde abgeschnitten); der Platzhalter von Slot 0 trägt die Anleitung, ein
+Hinweistext unter dem Feld entfällt (Issue #20, DEC-0159).
 
 ## Slot 2 — Fokusblock, Zustand B (Ort erfasst, keine Termine)
 

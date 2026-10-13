@@ -126,7 +126,8 @@ export async function generateMetadata({
 
 /**
  * Fallback only. `dein-ort-0-state-s0` carries S0's own headline, the nearby
- * module's place-agnostic heading, the search hint and the line that hands
+ * module's place-agnostic heading, the search placeholder (the hint until
+ * issue #20 moved its instruction into the field) and the line that hands
  * the reader over to the live module (state/open.md row 93, row 161);
  * `genericPlace` has no field in that slot and stays generated
  * (Dummy-Content, `state/open.md`) — it fills state A/B's own `{place}`
@@ -322,8 +323,12 @@ export default async function PlacePage({
   const copy = {
     ...fallbackCopy,
     nearby: fieldAt(stateS0.blocks, 1) ?? fallbackCopy.nearby,
-    /** The hint from the slot; `undefined` lets the module use the dictionary's. */
-    searchHint: fieldAt(stateS0.blocks, 3),
+    /**
+     * S0's placeholder — "Tipp den Ortsnamen ein" (issue #20): the instruction
+     * the helper line used to carry; `undefined` lets the module use the
+     * dictionary's.
+     */
+    searchPlaceholder: fieldAt(stateS0.blocks, 3),
     /** S0's hand-off from the search field into the module below it. */
     s0Transition: fieldAt(stateS0.blocks, 4),
   };
@@ -477,15 +482,25 @@ export default async function PlacePage({
     genericPlace: copy.genericPlace,
   } as const;
 
-  const search = (primary: boolean) => (
+  /**
+   * The place search, in the stage treatment of issue #20 (TS-WEB-0020-A18):
+   * the placeholder carries the instruction, no helper line, the location
+   * control directly under the field. `hero` is the instance in block 1 —
+   * S0's conversion and state A's "Suche nach einem anderen Ort …" (issue
+   * #23) — and `primary` says whether it carries the page's one
+   * `data-cta="primary"`, which it does only in S0: once a place is known the
+   * calendar handover under the rows is the conversion (G-5).
+   */
+  const search = ({ hero, primary }: { readonly hero: boolean; readonly primary: boolean }) => (
     <PlaceSearch
+      stage
       typeahead
-      hint={copy.searchHint}
-      id={primary ? "ort-suche-fokus" : "ort-suche-abschluss"}
+      id={hero ? "ort-suche-fokus" : "ort-suche-abschluss"}
       locale={locale}
+      placeholder={stated === undefined ? copy.searchPlaceholder : (fieldAt(stateA.blocks, 2) ?? copy.searchPlaceholder)}
       submitDataCta={primary ? "primary" : undefined}
       to="place"
-      tone={primary ? "dark" : "light"}
+      tone={hero ? "dark" : "light"}
     />
   );
 
@@ -533,7 +548,7 @@ export default async function PlacePage({
         } as const)
       : ({
           variant: "module",
-          node: handover ?? search(false),
+          node: handover ?? search({ hero: false, primary: false }),
           heading: fieldAt(permanence.blocks, 1),
           reassurance: fieldAt(permanence.blocks, 0),
         } as const);
@@ -555,7 +570,7 @@ export default async function PlacePage({
           place is known — once one is, the calendar handover under the rows
           is (G-5), and in state B the publishing offer. */}
       <HeroBlock
-        cta={stated === undefined ? search(true) : undefined}
+        cta={stated === undefined ? search({ hero: true, primary: true }) : undefined}
         headline={
           publishOffer?.headline ??
           (stated === undefined
@@ -573,6 +588,15 @@ export default async function PlacePage({
         focal={heroImage?.focal}
         notDepicting={heroImage?.notDepicting}
         placeholderId={heroImage?.placeholderId}
+        // Issue #23 (TS-WEB-0020-A18): in state A the stage keeps the search
+        // for another place — the same module as S0's, with the same height,
+        // placeholder style and keyboard, and without the primary marker,
+        // which the calendar handover under the rows carries.
+        search={
+          stated !== undefined && publishOffer === undefined
+            ? search({ hero: true, primary: false })
+            : undefined
+        }
         src={heroImage?.src}
         wideSrc={heroImage?.wideSrc}
         // `place-name` is the 50 px display role of SRC-0014 §Typography,
@@ -710,8 +734,11 @@ export default async function PlacePage({
       {/* The search, once a place is known: not the page's conversion any
           more, so it is a quiet line above the band rather than the block
           the page ends on. In S0 it is the conversion, and the closing block
-          carries it instead. */}
-      {stated === undefined ? null : (
+          carries it instead. In state A the stage itself keeps the search for
+          another place since issue #23, so this line would ask the same thing
+          twice; it stands in state B only, whose stage carries the publishing
+          offer and no search. */}
+      {stated === undefined || publishOffer === undefined ? null : (
         <MotionReveal>
           <SectionShell
             density="tight"
@@ -720,7 +747,7 @@ export default async function PlacePage({
             surface="lime-100"
           >
             <h2 id="other-place-heading">{fieldAt(permanence.blocks, 2)}</h2>
-            {search(false)}
+            {search({ hero: false, primary: false })}
           </SectionShell>
         </MotionReveal>
       )}

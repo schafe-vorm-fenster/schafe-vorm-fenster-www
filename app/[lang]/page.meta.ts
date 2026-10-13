@@ -40,10 +40,8 @@ export const HOME_META: PageMeta = {
       id: "position-2-this-week-nearby",
       emptyState: "the publisher invitation of `empty-state-block`; never an empty list (TS-WEB-0008 D4)",
     },
-    {
-      id: "position-4-live-counters",
-      emptyState: "the module is absent — a missing figure is never estimated (TS-WEB-0008 D8, FUN-WEB-0041)",
-    },
+    // Position 4 — the live counters — left the home page with DEC-0154
+    // (issue #24): the page carries no counter figure (TS-WEB-0019 D3, A18).
   ],
   // Exactly 5, never fewer by design (DEC-0048): an unfilled slot weakens the
   // claim, it does not shorten the stream (SRC-0001 §4).
