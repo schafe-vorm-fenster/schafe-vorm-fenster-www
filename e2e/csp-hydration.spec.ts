@@ -89,3 +89,33 @@ test("TS-WEB-0014-A14: a page reached with a query is the same static page, and 
   }
   expect(violations).toEqual([]);
 });
+
+/**
+ * The 404 in each language (DEC-0164). It used to be rendered per request and
+ * was sent only the hash set common to every page, so its flight payload was
+ * refused and it never hydrated. It is now a prerendered document per
+ * language with its own entry in the hash map. It has no site header by
+ * design, so its hydration signal is the `[data-hydrated]` wrapper around its
+ * body (`app/_not-found/hydration-mark.tsx`).
+ */
+for (const { path, lang } of [
+  { path: "/gibt-es-nicht-a14", lang: "de" },
+  { path: "/en/does-not-exist-a14", lang: "en" },
+]) {
+  test(`TS-WEB-0014-A14: the ${lang} 404 (${path}) loads with zero CSP violations and hydrates`, async ({ page }) => {
+    const violations = await collectViolations(page);
+
+    const response = await page.goto(path);
+    expect(response?.status(), path).toBe(404);
+    await expect(page.locator("html")).toHaveAttribute("lang", lang);
+
+    const markers = page.locator("[data-hydrated]");
+    await expect(markers.first()).toHaveAttribute("data-hydrated", "true");
+    for (const marker of await markers.all()) {
+      await expect(marker).toHaveAttribute("data-hydrated", "true");
+    }
+    await page.waitForLoadState("networkidle");
+
+    expect(violations, `${path}: CSP violations`).toEqual([]);
+  });
+}

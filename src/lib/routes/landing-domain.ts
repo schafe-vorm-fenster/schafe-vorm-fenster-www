@@ -116,7 +116,7 @@ export function isAssetPath(pathname: string): boolean {
  * `isAssetPath` answers "servable, leave it alone" for **anything** ending in
  * an asset extension, whether or not a file exists. `isUnservablePath()` used
  * it, so `/favicon.ico`, `/nope.css`, `/does-not-exist.js` and
- * `/robots.txt.map` never reached the `NOT_FOUND_PATH` rewrite: they fell
+ * `/robots.txt.map` never reached the 404 rewrite: they fell
  * through to `app/[lang]` with a non-language `lang`, which is exactly the
  * empty `<html id="__next_error__">` 404 F-2-70 removed — reopened through a
  * door nobody checked, and opened by **every page view**, because every
@@ -145,13 +145,12 @@ export function landingDomainBlocks(
 }
 
 /*
- * Where a blocked request is sent is `NOT_FOUND_PATH`
+ * Where a blocked request is sent is `notFoundPathFor()`
  * (`not-found-routing.ts`), which every unknown URL now shares.
  *
  * This module used to name its own target, `/__landing-only`. That was one
  * segment, so it matched `app/[lang]` — the very shape that produces a 404
  * with an empty body (F-2-70, measured: 11 584 bytes of `__next_error__`
- * shell, zero rendered characters). The replacement has two segments and
- * matches nothing, so Next falls through to its own 404 handling and
- * `global-not-found` renders in full.
+ * shell, zero rendered characters). The target is now the prerendered 404
+ * of the URL's language (DEC-0164), which renders in full.
  */

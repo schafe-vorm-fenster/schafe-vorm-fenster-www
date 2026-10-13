@@ -3,13 +3,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { proxy } from "@/proxy";
 import { ENTRY_CONTEXT_HEADER } from "@/src/lib/personalization/entry-handover";
-import {
-  NOT_FOUND_LOCALE_HEADER,
-  NOT_FOUND_PATH,
-} from "@/src/lib/routes/not-found-routing";
+import { notFoundVariantPath } from "@/src/lib/routes/static-variants";
 import { primeScriptHashCache, resetScriptHashCache } from "@/src/lib/security/csp-hashes";
 
 import type { NextResponse } from "next/server";
+
+/** Every per-language 404 lives under this prefix (DEC-0164). */
+const NOT_FOUND_PATH = "/variants/not-found/";
 
 // F-3-9 needs `placeHop` to throw, which nothing in the tree could make it do
 // — `resolvePlace` swallows its own errors and `searchPlaces` has a tier-3
@@ -116,7 +116,7 @@ describe("TS-WEB-0014 D3 / DEC-0163: the policy carries the requested page's own
       pages: {
         "/en/ueber-uns": [COMMON_HASH, PAGE_HASH],
         "/de": [COMMON_HASH, HOME_HASH],
-        "/_not-found": [COMMON_HASH, NOT_FOUND_HASH],
+        [notFoundVariantPath("de")]: [COMMON_HASH, NOT_FOUND_HASH],
       },
     });
   });
@@ -139,9 +139,15 @@ describe("TS-WEB-0014 D3 / DEC-0163: the policy carries the requested page's own
     expect(asset).not.toContain(HOME_HASH);
   });
 
-  it("gives the 404 surface its own entry", async () => {
+  it("TS-WEB-0014-A14: gives the 404 surface the hashes of the language variant it is rewritten onto", async () => {
     const missing = scriptSrc(await proxy(request("http://localhost:3100/gibt-es-nicht")));
     expect(missing).toContain(`'${NOT_FOUND_HASH}'`);
+    // The English 404 is a different prerendered file; it has no entry in
+    // this map, so it falls back to the common set and never borrows the
+    // German page's hashes.
+    const english = scriptSrc(await proxy(request("http://localhost:3100/en/gibt-es-nicht")));
+    expect(english).toContain(`'${COMMON_HASH}'`);
+    expect(english).not.toContain(NOT_FOUND_HASH);
   });
 });
 
@@ -209,9 +215,8 @@ describe("TS-WEB-0004-A3 (F-2-45): the landing-only domain rule", () => {
     ]) {
       for (const path of ["/mitmachen", "/en/take-part", "/dein-ort", "/start"]) {
         const response = await proxy(request(`https://${host}${path}`));
-        // The proxy rewrites onto a path that matches nothing, so Next's own
-        // 404 handling renders `global-not-found` with a real 404 — see
-        // `landing-domain.ts` for why this is not `/_not-found`.
+        // The proxy rewrites onto the prerendered 404 of the language
+        // (DEC-0164); the variant's own `notFound()` makes the status 404.
         expect(
           response.headers.get("x-middleware-rewrite"),
           `${host}${path}`,
@@ -221,10 +226,18 @@ describe("TS-WEB-0004-A3 (F-2-45): the landing-only domain rule", () => {
   });
 
   it("serves `/`, the legal route and the machine surfaces there", async () => {
-    for (const path of ["/", "/en", "/rechtliches", "/en/legal", "/robots.txt", "/llms.txt", "/sitemap.xml"]) {
+    for (const path of ["/", "/en", "/rechtliches", "/en/legal", "/sitemap.xml"]) {
       const response = await proxy(request(`https://www.schafvormfenster.at${path}`));
       expect(response.headers.get("x-middleware-rewrite"), path).toBeNull();
       expect(response.headers.get("Content-Security-Policy"), path).toBeTruthy();
+    }
+    // The two host-dependent machine surfaces are served too — from their
+    // build-time variant, never from the 404 (DEC-0164).
+    for (const path of ["/robots.txt", "/llms.txt"]) {
+      const response = await proxy(request(`https://www.schafvormfenster.at${path}`));
+      const rewrite = response.headers.get("x-middleware-rewrite") ?? "";
+      expect(rewrite, path).toContain("/variants/");
+      expect(rewrite, path).not.toContain(NOT_FOUND_PATH);
     }
   });
 
@@ -298,7 +311,7 @@ describe("TS-WEB-0004-A4 (F-2-70): an unknown URL reaches a 404 that renders", (
     },
   );
 
-  it.each(["/", "/dein-ort", "/en/your-place", "/robots.txt", "/start", "/dev/components", "/api/stats"])(
+  it.each(["/", "/dein-ort", "/en/your-place", "/en/dein-ort", "/start", "/dev/components", "/api/stats"])(
     "leaves %s alone",
     async (path) => {
       const response = await proxy(
@@ -308,24 +321,28 @@ describe("TS-WEB-0004-A4 (F-2-70): an unknown URL reaches a 404 that renders", (
     },
   );
 
-  it("hands the 404 its language, because the surface above `[lang]` has none", async () => {
-    const german = await proxy(
-      request("https://www.schafe-vorm-fenster.de/dies-gibt-es-nicht"),
-    );
-    expect(
-      german.headers.get("x-middleware-override-headers"),
-    ).toContain(NOT_FOUND_LOCALE_HEADER);
-    expect(
-      german.headers.get(`x-middleware-request-${NOT_FOUND_LOCALE_HEADER}`),
-    ).toBe("de");
-
-    const english = await proxy(
-      request("https://www.schafe-vorm-fenster.de/en/anything"),
-    );
-    expect(
-      english.headers.get(`x-middleware-request-${NOT_FOUND_LOCALE_HEADER}`),
-    ).toBe("en");
-  });
+  it.each([
+    ["www.schafe-vorm-fenster.de", "/dies-gibt-es-nicht", "de"],
+    ["www.schafe-vorm-fenster.de", "/en/anything", "en"],
+    ["www.schafe-vorm-fenster.de", "/en/does-not-exist", "en"],
+    ["www.schafe-vorm-fenster.de", "/variants/robots/noindex", "de"],
+    ["www.sheepoutside.com", "/mitmachen", "en"],
+    ["www.owcezaoknem.pl", "/mitmachen", "de"],
+    ["localhost:3100", "/uk/mitmachen", "de"],
+  ])(
+    "TS-WEB-0004-A4: %s%s is rewritten onto the prerendered 404 in %s (DEC-0164)",
+    async (host, path, locale) => {
+      const response = await proxy(request(`https://${host}${path}`));
+      expect(new URL(response.headers.get("x-middleware-rewrite") ?? "").pathname).toBe(
+        notFoundVariantPath(locale as "de" | "en"),
+      );
+      // The language travels in the path now, never on a request header the
+      // 404 would have to read per request.
+      expect(response.headers.get("x-middleware-override-headers") ?? "").not.toContain(
+        "not-found-locale",
+      );
+    },
+  );
 
   it("still carries the full header set on an unknown URL", async () => {
     const response = await proxy(
@@ -334,6 +351,39 @@ describe("TS-WEB-0004-A4 (F-2-70): an unknown URL reaches a 404 that renders", (
     expect(response.headers.get("Content-Security-Policy")).toContain(
       "default-src 'self'",
     );
+  });
+});
+
+describe("TS-WEB-0004-A12 (DEC-0164): the proxy picks a prerendered variant and renders nothing", () => {
+  function rewriteOf(response: NextResponse): string {
+    return new URL(response.headers.get("x-middleware-rewrite") ?? "http://x/").pathname;
+  }
+
+  it.each([
+    ["www.schafe-vorm-fenster.de", "www-schafe-vorm-fenster-de"],
+    ["www.schafvormfenster.at", "www-schafvormfenster-at"],
+    ["www.owcezaoknem.pl", "www-owcezaoknem-pl"],
+    ["www.sheepoutside.com", "www-sheepoutside-com"],
+    ["localhost:3100", "www-schafe-vorm-fenster-de"],
+    ["sheep-abc123.vercel.app", "www-schafe-vorm-fenster-de"],
+  ])("TS-WEB-0004-A5: /llms.txt on %s is the %s variant", async (host, variant) => {
+    const response = await proxy(request(`https://${host}/llms.txt`));
+    expect(rewriteOf(response)).toBe(`/variants/llms/${variant}`);
+  });
+
+  it.each([
+    ["production", "www.schafe-vorm-fenster.de", "www-schafe-vorm-fenster-de"],
+    ["production", "www.sheepoutside.com", "www-sheepoutside-com"],
+    ["production", "sheep-abc123.vercel.app", "noindex"],
+    ["preview", "www.schafe-vorm-fenster.de", "noindex"],
+    ["preview", "next.schafe-vorm-fenster.de", "noindex"],
+    ["", "localhost:3100", "noindex"],
+  ])("TS-WEB-0015-A13: /robots.txt on %s %s is the %s variant", async (env, host, variant) => {
+    vi.stubEnv("VERCEL_ENV", env);
+    const response = await proxy(request(`https://${host}/robots.txt`));
+    expect(rewriteOf(response)).toBe(`/variants/robots/${variant}`);
+    // The header half of the same predicate stays on the same response.
+    expect(response.headers.get("X-Robots-Tag")).toBe(variant === "noindex" ? "noindex, nofollow" : null);
   });
 });
 

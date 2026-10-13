@@ -173,11 +173,11 @@ for (const { path, route } of ROUTES) {
  * TS-WEB-0004-A4 / TS-WEB-0004 D6 — the 404 that renders, in the language of the URL
  * that was asked for (F-2-70).
  *
- * `app/global-not-found.tsx` is still the only 404 surface Next.js 16.3
- * server-renders, but every unknown URL now reaches it: `proxy.ts` keeps a
- * non-language first segment out of `app/[lang]`, where the page's own
- * `notFound()` arrived one render too late and produced a 404 with an empty
- * body. The language comes down the same way, on a request header.
+ * Every unknown URL is rewritten by `proxy.ts` onto the prerendered 404 of
+ * its language (DEC-0164), before it can reach `app/[lang]`, where the page's
+ * own `notFound()` arrives one render too late and produces a 404 with an
+ * empty body. The language is chosen by the path the proxy rewrites onto; the
+ * document is static and its status 404 is set at build time.
  */
 const NOT_FOUND_CASES = [
   { path: "/gibt-es-nicht", heading: "Seite nicht gefunden", lang: "de" },
@@ -187,7 +187,7 @@ const NOT_FOUND_CASES = [
   { path: "/en/anything", heading: "Page not found", lang: "en" },
   // F-3-13 — the door F-2-70's fix was left open on. `isUnservablePath()`
   // exempted **anything** ending in an asset extension, whether or not a file
-  // existed, so these never reached the `NOT_FOUND_PATH` rewrite and rendered
+  // existed, so these never reached the 404 rewrite and rendered
   // the empty `<html id="__next_error__">` shell instead. `/favicon.ico` is
   // the one every browser asks for by itself, on every page load.
   { path: "/favicon.ico", heading: "Seite nicht gefunden", lang: "de" },
@@ -270,8 +270,8 @@ test("F-3-13: every page links the brand icon, and it resolves", async ({ page, 
 /**
  * F-3-16 — the true 404 opens with the skip link, like every routed page.
  *
- * `app/global-not-found.tsx` renders its own `<html><body>` and bypasses
- * `SiteChrome` on purpose, so it inherited none of the layout's chrome:
+ * The 404 document (`app/_not-found/body.tsx`) renders its own `<html><body>`
+ * and bypasses `SiteChrome` on purpose, so it inherited none of the layout's chrome:
  * pressing Tab landed straight on the postcode input (C3-K-2). The link is
  * the only piece taken — the surface still has no header and no navigation,
  * which is what keeps it a complete document.

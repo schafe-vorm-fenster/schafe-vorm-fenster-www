@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [CON-WEB-0020, CON-WEB-0021, CON-WEB-0022, CON-WEB-0023]
 sources: [SRC-0012]
-decisions: [DEC-0002, DEC-0031, DEC-0035, DEC-0040]
+decisions: [DEC-0002, DEC-0031, DEC-0035, DEC-0040, DEC-0164]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -93,6 +93,15 @@ Anything else is non-production and emits, in all three places:
 The host test is part of the predicate on purpose: a production-target
 deployment reachable under a non-canonical hostname is still not
 indexable.
+
+> **Amended by DEC-0164 (2026-10-13).** `robots.txt` is no longer rendered
+> per request. Each distinct body is prerendered at its own path
+> (`/variants/robots/noindex` and one `/variants/robots/www-<host>` per
+> canonical host, naming that host's sitemap). `proxy.ts` evaluates the
+> predicate above and rewrites `/robots.txt` onto `noindex` when it is false,
+> and onto the request host's own variant when it is true. The predicate and
+> the non-production output are unchanged. Only where the body is computed
+> moves to build time.
 
 ### D4 — Merge-gate job graph, feature branches [FIXED: SRC-0012, CON-WEB-0021; names and layout PROPOSED]
 
@@ -283,6 +292,7 @@ installed with `--with-deps` and cached by version.
 | ID | Level | Check |
 | --- | --- | --- |
 | TS-WEB-0015-A1 | integration | With `VERCEL_ENV != "production"` or a non-canonical host: every response carries `X-Robots-Tag: noindex, nofollow`, `/robots.txt` disallows all, and the page emits the noindex meta tag. With production + canonical host: none of the three. |
+| TS-WEB-0015-A13 | integration | `/robots.txt` is a build-time file. There is one prerendered variant per distinct body: `noindex`, plus one per canonical host naming `https://<host>/sitemap.xml`. The proxy rewrites onto `noindex` whenever the D3 predicate is false and onto the request host's own variant when it is true, so no host is answered with another host's body. The variant handler reads nothing from the request. |
 | TS-WEB-0015-A2 | tool | The migration preview host answers unauthenticated requests with Vercel's protection challenge, and 200 only with a valid `x-vercel-protection-bypass` header. |
 | TS-WEB-0015-A3 | static | `preview.yml` and `deploy.yml` declare the D4 / D7 jobs with exactly the specified `needs` edges, and neither carries a `paths-ignore` for `**/*.md`. |
 | TS-WEB-0015-A4 | tool | A branch introducing a type error, a lint error, a failing test, an unused export, or a duplicated block above threshold turns the corresponding job red and leaves the PR unmergeable. |
@@ -302,7 +312,7 @@ installed with `--with-deps` and cached by version.
 | CON-WEB-0020 (deploy the next-2026 branch to next.schafe-vorm-fenster.de) | D1, D2, D3 · A1, A2, A11 |
 | CON-WEB-0021 (gate every merge with a GitHub Actions pipeline modelled …) | D4, D5, D6, D9, D10, D11 · A3, A4, A5, A6, A9, A10, A12 |
 | CON-WEB-0022 (promote to production as a rolling deployment gated by …) | D7, D8 · A7, A8 |
-| CON-WEB-0023 (carry deployment protection and noindex on every non-production deployment) | D2, D3 · A1, A2, A11 |
+| CON-WEB-0023 (carry deployment protection and noindex on every non-production deployment) | D2, D3 · A1, A2, A11, A13 |
 
 ## Open points
 

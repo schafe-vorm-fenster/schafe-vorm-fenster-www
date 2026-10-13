@@ -23,6 +23,28 @@ export function robotsFor(
   };
 }
 
+/**
+ * The `robots.txt` text of a `Robots` object, in the exact form Next's own
+ * `app/robots.ts` metadata route writes it (`resolveRobots` in
+ * `next/dist/build/webpack/loaders/metadata/resolve-route-data.js`) for the
+ * fields this site uses. The robots surface is now a prerendered route
+ * handler per variant (DEC-0164), so the serialisation that metadata route did
+ * for us is done here — byte-for-byte the same body.
+ */
+export function robotsTxt(robots: MetadataRoute.Robots): string {
+  const list = (value: string | string[] | undefined): string[] =>
+    value === undefined ? [] : Array.isArray(value) ? value : [value];
+  let content = "";
+  for (const rule of Array.isArray(robots.rules) ? robots.rules : [robots.rules]) {
+    for (const agent of list(rule.userAgent ?? "*")) content += `User-Agent: ${agent}\n`;
+    for (const item of list(rule.allow)) content += `Allow: ${item}\n`;
+    for (const item of list(rule.disallow)) content += `Disallow: ${item}\n`;
+    content += "\n";
+  }
+  for (const item of list(robots.sitemap)) content += `Sitemap: ${item}\n`;
+  return content;
+}
+
 function normalise(host: string | null | undefined): string {
   return (host ?? "").toLowerCase().split(":")[0] ?? "";
 }

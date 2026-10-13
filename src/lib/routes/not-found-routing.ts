@@ -22,44 +22,29 @@
  * render process, use `next.config.js` or Proxy"). This module is the
  * predicate and the two constants that decision needs.
  *
- * ### Why the target is two segments
+ * ### Where the target is (DEC-0164)
  *
- * `NOT_FOUND_PATH` must match **nothing** in the App Router tree, because a
- * rewrite onto Next's own `/_not-found` is served with status 200 on Vercel
- * (`next.config.ts` records that trap). A *one*-segment path is not enough:
- * it matches `app/[lang]` and produces exactly the empty document described
- * above — which is why `landing-domain.ts`'s one-segment
- * `/__landing-only` answered 404 with a blank body until this round
- * (measured: 11 584 bytes of error shell, zero rendered characters). Two
- * segments match no `[lang]` page and no nested route, so Next falls through
- * to its own 404 handling and `global-not-found` renders in full.
+ * Until DEC-0164 the target was one path that matched nothing in the tree,
+ * so Next fell through to `app/global-not-found.tsx`, and that file read the
+ * language off a request header this module named — which made the 404 the
+ * one HTML surface still rendered per request. The target is now
+ * **per language**: `notFoundVariantPath(locale)` in `static-variants.ts`, a
+ * page prerendered as a 404 at build time. The proxy computes the language
+ * here and only picks the file.
  */
 
 import { isServableAssetPath } from "./landing-domain";
-import { normalisePath } from "./routes";
+import { internalPath, normalisePath, ROUTE_IDS } from "./routes";
+import { notFoundVariantPath } from "./static-variants";
 import { everyD1Path } from "./url-inventory";
-import { DEFAULT_LOCALE, isLocale } from "../i18n/locales";
+import { DEFAULT_LOCALE, isLocale, PREFIXED_LOCALES } from "../i18n/locales";
 
 import type { Locale } from "../i18n/locales";
 
-/**
- * The rewrite target for a URL this site does not serve. Two segments, and
- * no route in the tree has this shape — see the module note.
- */
-export const NOT_FOUND_PATH = "/__not-found/404";
-
-/**
- * The request header `proxy.ts` puts the 404's language on, and
- * `app/global-not-found.tsx` reads.
- *
- * The 404 surface sits above `[lang]`, so it has no language parameter and no
- * request path of its own (`state/open.md` row 37). The language is a pure
- * function of the URL the visitor asked for — the path prefix first, the
- * domain's TLD default second (TS-WEB-0001 D1/D4) — so the proxy, which is the
- * only place that still has the URL, computes it and hands it down. Nothing
- * client-side is involved, which is what DEC-0038 requires.
- */
-export const NOT_FOUND_LOCALE_HEADER = "x-svf-not-found-locale";
+/** The rewrite target for an unservable URL: the prerendered 404 of its language. */
+export function notFoundPathFor(pathname: string, tldDefault?: string): string {
+  return notFoundVariantPath(notFoundLocale(pathname, tldDefault));
+}
 
 /**
  * App paths that are not D1 rows and must never be mistaken for unknown
@@ -87,9 +72,20 @@ const DEV_PREFIX = "/dev/";
 
 let servedPaths: Set<string> | undefined;
 
-/** Every public path of TS-WEB-0004 D1, normalised. Computed once per process. */
+/**
+ * Every public path of TS-WEB-0004 D1, normalised, plus the internal
+ * `app/[lang]` path of every route in a prefixed language
+ * (`/en/dein-ort` beside `/en/your-place`). Those internal paths render a
+ * page today and always did; classifying them as unknown would change an
+ * answer this module has no mandate to change. Computed once per process.
+ */
 function served(): Set<string> {
-  servedPaths ??= new Set(everyD1Path().map(normalisePath));
+  servedPaths ??= new Set(
+    [
+      ...everyD1Path(),
+      ...ROUTE_IDS.flatMap((route) => PREFIXED_LOCALES.map((locale) => internalPath(route, locale))),
+    ].map(normalisePath),
+  );
   return servedPaths;
 }
 
@@ -108,29 +104,30 @@ export function notFoundLocale(pathname: string, tldDefault?: string): Locale {
 /**
  * Would this path land on `app/[lang]` with a `lang` that is not a language?
  *
- * True for exactly the URLs that produce the empty 404 document, and for
- * nothing else:
+ * True for every URL the site does not serve, and for nothing else:
  *
- *  - a **served language prefix** (`/en/anything`) already falls through to
- *    Next's own 404 handling, because `app/[lang]/anything` matches no route
- *    — that surface is complete today and is left alone here;
  *  - every **D1 path**, every asset that is really on disk and the reserved
  *    prefixes are served and answer for themselves; `/dev/**` answers for
- *    itself too,
- *    except in a production build, where it is the one URL that would
- *    otherwise reproduce the very defect this module removes;
- *  - `/de/…` carries a language prefix too, so the redundant-prefix redirect
- *    of `next.config.ts` (which runs *before* the proxy) keeps its turn.
+ *    itself too, except in a production build, where it `notFound()`s itself
+ *    inside the tree — the one shape that renders an empty 404 (F-2-70);
+ *  - a **prefixed language** (`/en/anything`) is unservable unless it is a
+ *    D1 path or the internal path of a route. Until DEC-0164 these fell
+ *    through to `global-not-found`, which read the language off a request
+ *    header; now they take the prerendered English 404 like any other
+ *    unknown URL, so the 404 never renders per request;
+ *  - `/de/…` is left alone: the redundant-prefix redirect of `next.config.ts`
+ *    (which runs *before* the proxy) has its turn.
+ *
+ * A `/variants/…` path is in no D1 row, so a direct request for a build-time
+ * variant is unservable too: only the proxy's own rewrite reaches one.
  */
 export function isUnservablePath(pathname: string): boolean {
   const path = normalisePath(pathname);
-  if (path === normalisePath(NOT_FOUND_PATH)) return false;
   if (RESERVED_PREFIXES.some((prefix) => path.startsWith(prefix))) return false;
   if (isServableAssetPath(path)) return false;
   if (path.startsWith(DEV_PREFIX)) return process.env.VERCEL_ENV === "production";
 
-  const first = path.split("/")[1] ?? "";
-  if (isLocale(first)) return false;
+  if (path === `/${DEFAULT_LOCALE}` || path.startsWith(`/${DEFAULT_LOCALE}/`)) return false;
 
   return !served().has(path);
 }

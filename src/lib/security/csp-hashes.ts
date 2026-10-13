@@ -62,8 +62,14 @@ export const MAX_SCRIPT_HASHES = 128;
 /** The map's path relative to the project directory — `HASH_MAP_RELATIVE_PATH` in the script. */
 export const CSP_HASH_MAP_PATH = join(".next", "server", "csp-hash-map.json");
 
-/** The 404 surface's own entry: `proxy.ts` rewrites every unservable path onto it. */
-export const NOT_FOUND_ENTRY = "/_not-found";
+/**
+ * The framework's own 404 document (`app/global-not-found.tsx`), as
+ * `scripts/csp-adapter.mjs` keys it. Since DEC-0164 every URL the proxy can
+ * classify is rewritten onto a per-language 404 variant with its own entry;
+ * this one answers what Next's router alone decides is unknown (an unknown
+ * path under a reserved prefix such as `/api/…`).
+ */
+export const FRAMEWORK_NOT_FOUND_ENTRY = "/_not-found";
 
 /** How many deployments' maps are remembered at once. */
 const MAX_CACHED_DEPLOYMENTS = 4;
@@ -178,11 +184,15 @@ export function hashMapKey(pathname: string): string {
 }
 
 /**
- * The hashes for one response: the page's own set where the build wrote one,
- * the common set (the bootstrap every page shares) where it did not — an asset,
- * an API response, a path no page claims. `[]` when no map exists (`next dev`).
+ * The hashes for one response: the page's own set where the build wrote one.
+ * A path no page claims — an asset, an API response, an unknown path under a
+ * reserved prefix — gets the framework 404's set (DEC-0164): of those
+ * responses, that document is the only one a browser renders as HTML, so it
+ * is the only one whose inline scripts the policy has to cover, and it is a
+ * superset of the common bootstrap. Without a framework 404 entry, the common
+ * set. `[]` when no map exists (`next dev`).
  */
 export function scriptHashesFor(pathname: string, directory: string = process.cwd()): readonly string[] {
   const map = currentMap(directory);
-  return map.pages[hashMapKey(pathname)] ?? map.common;
+  return map.pages[hashMapKey(pathname)] ?? map.pages[FRAMEWORK_NOT_FOUND_ENTRY] ?? map.common;
 }
