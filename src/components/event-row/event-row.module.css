@@ -135,6 +135,28 @@
   white-space: nowrap;
 }
 
+/*
+ * The stacked meta (`metaLayout="stacked"`): two lines instead of one
+ * clipped line — the place, then distance and time. Only the explain
+ * module's calendar picture asks for it (192–352 px rows), where even the
+ * glyph form leaves "Wolgast · 19 km · 16:00" no room (owner's decision of
+ * 2026-10-13). A list keeps its one 76 px line.
+ */
+.metaStacked {
+  overflow: visible;
+  white-space: normal;
+}
+
+.metaStacked .metaPlace,
+.metaStacked .metaRest {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.metaStacked .metaSeparator {
+  display: none;
+}
+
 .dark .meta {
   color: var(--color-lime-300);
 }

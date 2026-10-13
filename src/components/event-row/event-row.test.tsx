@@ -67,9 +67,12 @@ describe("event-row: the category is words, never colour alone", () => {
 
   it("keeps the meta its own element, outside the category", () => {
     const html = markup("official", "Bildung und Gesundheit");
-    expect(html).toContain("Rubkow · 08:00");
+    // The meta's parts are spans (place · rest, so a picture can stack them);
+    // its text reads the same once the tags are gone.
+    const text = html.replace(/<[^>]+>/g, "");
+    expect(text).toContain("Rubkow · 08:00");
     // The meta must not sit inside the category element: it was the badge's
     // `auto` column that starved it, and nesting would hide a regression.
-    expect(/Rubkow · 08:00[^]*Bildung und Gesundheit/.test(html)).toBe(true);
+    expect(/<p[^>]*>(?:(?!<\/p>)[^])*Rubkow(?:(?!<\/p>)[^])*08:00(?:(?!<\/p>)[^])*<\/p>[^]*Bildung und Gesundheit/.test(html)).toBe(true);
   });
 });

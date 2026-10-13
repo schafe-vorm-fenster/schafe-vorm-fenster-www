@@ -45,7 +45,31 @@ export interface EventRowProps extends DataStateProps, LinkOptions {
   readonly to?: RouteId;
   /** `dark` is the ink section that carries the live data once per page. */
   readonly tone?: "light" | "dark";
+  /**
+   * `stacked` lets the meta take two lines: the place on the first, distance
+   * and time on the second, so nothing is cut off in a row too narrow for the
+   * whole line (the explain module's calendar picture, 192–352 px; SRC-0014
+   * §Event row). The default is the one 76 px line every list row keeps.
+   */
+  readonly metaLayout?: "line" | "stacked";
   readonly className?: string;
+}
+
+/**
+ * The meta split at its first " · ": the place, then the rest (distance,
+ * time). The separator stays in the DOM, so the text reads the same in both
+ * layouts; the stacked layout only hides it and breaks the line.
+ */
+function MetaParts({ meta }: { readonly meta: string }) {
+  const at = meta.indexOf(" · ");
+  if (at < 0) return <span className={styles.metaPlace}>{meta}</span>;
+  return (
+    <>
+      <span className={styles.metaPlace}>{meta.slice(0, at)}</span>
+      <span className={styles.metaSeparator}> · </span>
+      <span className={styles.metaRest}>{meta.slice(at + 3)}</span>
+    </>
+  );
 }
 
 const CATEGORY_TONE: Record<EventCategory, BadgeTone> = {
@@ -132,6 +156,7 @@ export function EventRow({
   statusLabel,
   to,
   tone = "light",
+  metaLayout = "line",
   state = "ready",
   locale,
   query,
@@ -190,7 +215,11 @@ export function EventRow({
           status={status}
         />
       ) : null}
-      {meta ? <p className={styles.meta}>{meta}</p> : null}
+      {meta ? (
+        <p className={metaLayout === "stacked" ? `${styles.meta} ${styles.metaStacked}` : styles.meta}>
+          <MetaParts meta={meta} />
+        </p>
+      ) : null}
       {/* One element, two widths (SRC-0014's mobile-first rule: `min-width`
           queries only, one component tree). On the phone it is the bare
           24 px glyph of `categoryDisplay.listRow` and the label is read but

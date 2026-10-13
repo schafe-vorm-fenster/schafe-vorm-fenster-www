@@ -131,3 +131,30 @@ the stage's panel.
    `e2e/event-row.spec.ts`) say so. Below `lg` a wide row may now carry the
    26 px badge, so the reserve `--height-event-row-tall` takes the taller of
    badge and glyph at every width.
+
+## Amendment — 2026-10-13 (2): halved stage copy, and the stacked meta
+
+Decided by the owner on 2026-10-13, after the first amendment left G-4 open.
+
+1. **The stage's copy is cut to its core statement.** The heading, the lead
+   and each story's headline and narrative are shortened in
+   `content/pages/dein-ort/{de,en}.md`. Nothing is added, the quotes stay
+   verbatim, and the dash in the council story is gone (copy guide CG-014,
+   CG-016). Measured on the production build, the stage is now **1205 px at
+   390 and 1232 px at 360 (de), 1207 and 1234 px (en)**, inside G-4's
+   1270 px. The test is unchanged.
+2. **Correction to amendment (1), item 2.** Its copy measurement set the
+   variants into the wrong elements: the probe counted the stories' wrapper as
+   the first story. Measured again, the light variants give 1348 px at 390
+   (unchanged) and **1431 px at 360**, not 1404.
+3. **The explain module's calendar picture stacks the meta.** In its
+   192–352 px rows the meta takes two lines: the place, then distance and
+   time (`event-row` `metaLayout="stacked"`). `TS-WEB-0017-A43` covers the
+   picture now; its exception is gone.
+4. **Open, measured, not decided:** the picture's square box is smaller than
+   its three rows. With the long fixture (two-line titles, stacked meta) the
+   third row ends 371 px below the box top in a 269 px square at 360 px, and
+   439 px in a 224 px square at 768 px. Before the stacked meta it was 322 px
+   against 269. `overflow: hidden` on the stage cuts the third row off. SRC-0014
+   §Explain module fixes the square, so a larger box or fewer rows is the
+   owner's decision.
