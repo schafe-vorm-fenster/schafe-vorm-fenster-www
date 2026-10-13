@@ -94,6 +94,28 @@ describe("TS-WEB-0017-A4: check-brand excludes build output from the scan", () =
     expect(result.errors).toEqual([]);
   });
 
+  it("accepts a container query on a named container threshold", () => {
+    const root = newRoot();
+    writeFileSync(
+      fixture("src", "components", "row.module.css"),
+      "@container event-row (min-width: 30rem) { .x { display: block; } }",
+    );
+    const result = checkBrand(root);
+    expect(result.errors).toEqual([]);
+  });
+
+  it("catches a container query on a threshold the design system does not name", () => {
+    const root = newRoot();
+    writeFileSync(
+      fixture("src", "components", "row.module.css"),
+      "@container event-row (min-width: 31rem) { .x { display: block; } }",
+    );
+    const result = checkBrand(root);
+    expect(
+      result.errors.some((e) => e.startsWith("TS-WEB-0017-A4") && e.includes("@container")),
+    ).toBe(true);
+  });
+
   it("does not mistake a min-width property for a media feature", () => {
     const root = newRoot();
     writeFileSync(

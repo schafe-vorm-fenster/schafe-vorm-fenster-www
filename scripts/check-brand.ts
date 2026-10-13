@@ -85,6 +85,16 @@ const BREAKPOINTS = new Map<string, string>([
   ["80rem", "2xl"],
 ]);
 
+/**
+ * The only legal `@container` `min-width` values. A container threshold is not
+ * a viewport switch point, so it is not a breakpoint token — it is a width a
+ * component measured for itself and the design system names (TS-WEB-0017-A4).
+ * Each entry says where the guide writes it down.
+ */
+const CONTAINER_THRESHOLDS = new Map<string, string>([
+  ["30rem", "event-row: badge plus a complete meta line (SRC-0014 §Event row)"],
+]);
+
 /** The authored-source universe. Nothing outside these is ever scanned. */
 const SOURCE_DIRS = ["app", "src", "e2e", "scripts"];
 const SOURCE_EXTENSIONS = /\.(css|ts|tsx)$/;
@@ -124,6 +134,12 @@ const FONT_FAMILY_ALLOWED =
 function inMediaQueryContext(before: string): boolean {
   return (
     /@media[^{]*\(\s*$/.test(before) || /@media[^{]*and\s*\(\s*$/.test(before)
+  );
+}
+
+function inContainerQueryContext(before: string): boolean {
+  return (
+    /@container[^{]*\(\s*$/.test(before) || /@container[^{]*and\s*\(\s*$/.test(before)
   );
 }
 
@@ -214,8 +230,17 @@ export function checkBrand(root: string): BrandCheckResult {
       // of A4's business — only a value inside `@media (...)` is checked
       // against the breakpoint token set.
       const before = source.slice(Math.max(0, match.index - 40), match.index);
-      if (!inMediaQueryContext(before)) continue;
       const value = (match[1] ?? "").trim();
+      if (inContainerQueryContext(before)) {
+        if (!CONTAINER_THRESHOLDS.has(value))
+          fail(
+            A4,
+            rel(file),
+            `@container min-width ${value} is not a named container threshold (${[...CONTAINER_THRESHOLDS.keys()].join(", ")})`,
+          );
+        continue;
+      }
+      if (!inMediaQueryContext(before)) continue;
       if (!BREAKPOINTS.has(value))
         fail(
           A4,

@@ -48,11 +48,15 @@
   /* The height of an event row whose title runs to its second line — the
      reserve a live list holds while its rows load in the browser (DEC-0163):
      hairline · padding · two title lines · the meta line, which the 24 px
-     category glyph sets on the phone. A one-line row is 76 px
+     category sets on the phone. A one-line row is 76 px
      (`--height-event-row`); reserving the taller one is what keeps a list
-     from growing after paint whichever titles arrive. */
+     from growing after paint whichever titles arrive. The category's form
+     follows the row's own width (`event-row.module.css`), so below `lg` a
+     wide row may carry the 26 px pill rather than the 24 px glyph: the
+     reserve takes the taller of the two. */
   --height-event-row-tall: calc(
-    1px + 2 * var(--space-2) + 2 * var(--type-card-size) * var(--type-card-leading) + 1.5rem
+    1px + 2 * var(--space-2) + 2 * var(--type-card-size) * var(--type-card-leading) +
+      max(1.5rem, var(--height-badge))
   );
   /* Column spans: the full width until the desktop tier defines them. */
   --span-4: 100%;
@@ -235,8 +239,9 @@ textarea {
 /* lg — 48rem / 768px: tablet portrait. */
 @media (min-width: 48rem) {
   :root {
-    /* From here the category is the badge (`event-row.module.css`), and the
-       badge — with its icon, the taller of its two heights — sets the meta line. */
+    /* From here a list row is wide enough for the badge (`event-row.module.css`),
+       and the badge — with its icon, the taller of its two heights — sets the
+       meta line. */
     --height-event-row-tall: calc(
       1px + 2 * var(--space-2) + 2 * var(--type-card-size) * var(--type-card-leading) + var(--height-badge-icon)
     );
