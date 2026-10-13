@@ -1,12 +1,15 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { CountersIsland } from "@/app/[lang]/_islands";
+import { CountersView } from "@/app/[lang]/_islands";
+import { loadOf, settleResponse } from "@/src/lib/live/browser";
 
 import { resetRateLimits } from "./bff";
 import { liveCounters } from "./counters";
 import { memoryStore } from "./last-good";
 
+import type { BffResponse } from "./bff";
+import type { LiveCounters as LiveCountersData } from "./types";
 import type { ReactNode } from "react";
 
 /**
@@ -28,8 +31,10 @@ import type { ReactNode } from "react";
  *
  * ── The island itself is the third link, not a copy of it ─────────────────
  *
- * That third link is `CountersIsland` of `app/[lang]/_islands.tsx`, and this
- * file **calls it**: `renderIsland()` below awaits the real component and
+ * That third link is the island of `app/[lang]/_islands.tsx` (a client
+ * component since DEC-0163, so its view, `CountersView`, fed by the real
+ * route's response through the browser's own mapping), and this file
+ * **calls it**: `renderIsland()` below awaits the real component and
  * renders what it returns. An earlier version of this test re-implemented the
  * island's `undefined` branch (`if (envelope === undefined) return null`) and
  * rendered `LiveCounters` itself, one prop short of what production passes —
@@ -67,9 +72,14 @@ const callStatsRoute = async (): Promise<Response> => {
   return GET(new Request("http://localhost:3100/api/stats"));
 };
 
-/** The production island, rendered — the branch, the props and the band it mounts. */
+/**
+ * The production chain, rendered: the real `/api/stats` handler, its response
+ * through the same mapping the browser applies (`settleResponse`, `loadOf` —
+ * DEC-0163 moved the island to the client), and the island's own view.
+ */
 const renderIsland = async (): Promise<string> => {
-  const node: ReactNode = await CountersIsland({ locale: "de" });
+  const load = loadOf(await settleResponse<BffResponse<LiveCountersData>>(await callStatsRoute()));
+  const node: ReactNode = <CountersView load={load} locale="de" />;
   return renderToStaticMarkup(<>{node}</>);
 };
 

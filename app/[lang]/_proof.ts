@@ -25,6 +25,12 @@
  * candidates, the viewer segment and the ISO week, which is exactly the cache
  * key TS-WEB-0005 D8 / TS-WEB-0009 D3 describe. `?ort=` reaches it as a **slug prop**,
  * resolved by the page outside the cache boundary.
+ *
+ * **The week is the build's week** (DEC-0163). The selection stands in the
+ * static HTML of every page that shows proof, and that HTML must not change
+ * after the build — its inline scripts are hashed then. So the rotation seed
+ * is read once, at build time, under the never-revalidating `max` profile, and
+ * the stream rotates with each deployment rather than with the calendar week.
  */
 
 import { cacheLife, cacheTag } from "next/cache";
@@ -124,9 +130,9 @@ export async function selectProof({
   placeSlug,
 }: ProofRequest): Promise<ProofSelection> {
   "use cache";
-  // The proof pool changes when the content artifacts change and the ranking
-  // rotates on the ISO week; neither is a per-minute event.
-  cacheLife("hours");
+  // The proof pool changes when the content artifacts change, which is a
+  // deploy; the ranking rotates with the build's ISO week (DEC-0163).
+  cacheLife("max");
 
   const now = new Date();
   const seed = isoWeekSeed(now);

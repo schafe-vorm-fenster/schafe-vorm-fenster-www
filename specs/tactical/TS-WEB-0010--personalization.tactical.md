@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0050, FUN-WEB-0051, FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073, FUN-WEB-0054, FUN-WEB-0056, FUN-WEB-0168, CON-WEB-0074, CON-WEB-0076]
 sources: [SRC-0001, SRC-0002, SRC-0006, SRC-0007]
-decisions: [DEC-0004, DEC-0019, DEC-0038, DEC-0041]
+decisions: [DEC-0004, DEC-0019, DEC-0038, DEC-0041, DEC-0163]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -203,6 +203,8 @@ events), not by a stage — a stage-3 visitor whose place is well filled
 sees no shift.
 
 ### D8 — Stage 0 is what is rendered [FIXED: FUN-WEB-0051, DEC-0041 §8]
+
+> **Amended by DEC-0163 (2026-10-13).** Stage 0 is what the static HTML carries for every page and every visitor; a stated place, a flow step and the entry trait are applied in the browser after hydration. A visitor without JavaScript gets the complete stage-0 page; its live frames hold their reserved skeletons (the owner dropped the no-JavaScript rule for the place and flow states).
 
 - The prerendered shell **is** the stage-0 result: place search present,
   proof stream widely spread, most recent first, all slots filled, no

@@ -7,7 +7,7 @@ import {
   NOT_FOUND_LOCALE_HEADER,
   NOT_FOUND_PATH,
 } from "@/src/lib/routes/not-found-routing";
-import { CSP_HASHES_ASSET_PATH, resetScriptHashCache } from "@/src/lib/security/csp-hashes";
+import { primeScriptHashCache, resetScriptHashCache } from "@/src/lib/security/csp-hashes";
 
 import type { NextResponse } from "next/server";
 
@@ -77,21 +77,18 @@ afterEach(() => {
   resetScriptHashCache();
 });
 
-describe("F-2-36: a spoofed Host cannot aim the self-fetch", () => {
-  it("fetches the hash asset from the deployment's own origin, not the request's", async () => {
-    vi.stubEnv("VERCEL_ENV", "preview");
-    vi.stubEnv("VERCEL_URL", "sheep-abc123.vercel.app");
+const PAGE_HASH = `sha256-${"P".repeat(43)}=`;
+const HOME_HASH = `sha256-${"H".repeat(43)}=`;
+const COMMON_HASH = `sha256-${"C".repeat(43)}=`;
+const NOT_FOUND_HASH = `sha256-${"N".repeat(43)}=`;
 
-    await proxy(request("https://attacker.example/mitmachen"));
+function scriptSrc(response: NextResponse): string {
+  const csp = response.headers.get("Content-Security-Policy") ?? "";
+  return csp.split("; ").find((directive) => directive.startsWith("script-src ")) ?? "";
+}
 
-    expect(calls).toHaveLength(1);
-    expect(calls[0]!.url).toBe(
-      `https://sheep-abc123.vercel.app${CSP_HASHES_ASSET_PATH}`,
-    );
-    expect(calls[0]!.bypass).toBe("s3cret");
-  });
-
-  it("sends the bypass secret to no host the request named — the Host-spoof case", async () => {
+describe("F-2-36: no request value selects where the hashes come from", () => {
+  it("makes no network call at all — for any Host, on Vercel or off it", async () => {
     vi.stubEnv("VERCEL_ENV", "preview");
     vi.stubEnv("VERCEL_URL", "sheep-abc123.vercel.app");
 
@@ -100,28 +97,51 @@ describe("F-2-36: a spoofed Host cannot aim the self-fetch", () => {
       "169.254.169.254",
       "internal.corp",
       "www.schafe-vorm-fenster.de.attacker.example",
+      "sheep-abc123.vercel.app",
     ]) {
-      await proxy(request(`https://${host}/`));
+      await proxy(request(`https://${host}/mitmachen`));
     }
+    vi.stubEnv("VERCEL_ENV", "");
+    vi.stubEnv("VERCEL_URL", "");
+    await proxy(request("http://localhost:3100/mitmachen"));
 
-    for (const call of calls) {
-      expect(new URL(call.url).host).toBe("sheep-abc123.vercel.app");
-    }
-    expect(calls.some((call) => call.url.includes("attacker.example"))).toBe(false);
-  });
-
-  it("off Vercel, does not fetch at all for an unknown host", async () => {
-    await proxy(request("https://attacker.example/"));
     expect(calls).toHaveLength(0);
   });
+});
 
-  it("does not recurse into the hash asset's own request", async () => {
-    vi.stubEnv("VERCEL_ENV", "preview");
-    vi.stubEnv("VERCEL_URL", "sheep-abc123.vercel.app");
+describe("TS-WEB-0014 D3 / DEC-0163: the policy carries the requested page's own hashes", () => {
+  beforeEach(() => {
+    primeScriptHashCache({
+      common: [COMMON_HASH],
+      pages: {
+        "/en/ueber-uns": [COMMON_HASH, PAGE_HASH],
+        "/de": [COMMON_HASH, HOME_HASH],
+        "/_not-found": [COMMON_HASH, NOT_FOUND_HASH],
+      },
+    });
+  });
 
-    await proxy(request(`https://sheep-abc123.vercel.app${CSP_HASHES_ASSET_PATH}`));
+  it("maps the public path through the locale rewrite onto the page's build key", async () => {
+    const about = scriptSrc(await proxy(request("http://localhost:3100/en/about")));
+    expect(about).toContain(`'${PAGE_HASH}'`);
+    expect(about).toContain(`'${COMMON_HASH}'`);
+    expect(about).not.toContain(HOME_HASH);
 
-    expect(calls).toHaveLength(0);
+    const home = scriptSrc(await proxy(request("http://localhost:3100/")));
+    expect(home).toContain(`'${HOME_HASH}'`);
+    expect(home).not.toContain(PAGE_HASH);
+  });
+
+  it("answers a path no page claims with the common set only", async () => {
+    const asset = scriptSrc(await proxy(request("http://localhost:3100/_next/static/chunks/app.js")));
+    expect(asset).toContain(`'${COMMON_HASH}'`);
+    expect(asset).not.toContain(PAGE_HASH);
+    expect(asset).not.toContain(HOME_HASH);
+  });
+
+  it("gives the 404 surface its own entry", async () => {
+    const missing = scriptSrc(await proxy(request("http://localhost:3100/gibt-es-nicht")));
+    expect(missing).toContain(`'${NOT_FOUND_HASH}'`);
   });
 });
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 import { MenuToggle } from "./menu-toggle";
 import { headerIsSolid, nextMenuState } from "./menu-state";
@@ -9,6 +9,10 @@ import type { MenuState } from "./menu-state";
 import type { MouseEvent, ReactNode } from "react";
 
 import styles from "./site-header.module.css";
+
+const subscribeNever = () => () => {};
+const hydratedSnapshot = () => true;
+const serverSnapshot = () => false;
 
 /**
  * `xl` — 64rem, the switch point the burger lives below (TS-WEB-0017 D2(b)).
@@ -167,9 +171,18 @@ export function HeaderShell({
     }
   }, []);
 
+  /**
+   * `true` once this shell has hydrated — the site-wide signal TS-WEB-0014's
+   * hydration criterion waits for (DEC-0163, `e2e/csp-hydration.spec.ts`).
+   * The header is the one client component on every page, so a page whose
+   * inline scripts the CSP refused is visible here as `"false"` forever.
+   */
+  const hydrated = useSyncExternalStore(subscribeNever, hydratedSnapshot, serverSnapshot);
+
   return (
     <header
       className={[styles.header, className].filter(Boolean).join(" ")}
+      data-hydrated={hydrated ? "true" : "false"}
       data-over-hero={overHero ? "true" : undefined}
       data-solid={solid ? "true" : "false"}
       ref={headerRef}

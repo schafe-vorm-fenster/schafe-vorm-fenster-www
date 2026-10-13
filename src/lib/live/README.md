@@ -9,6 +9,12 @@ Specs: **TS-WEB-0008** (live modules, place search, widening chain, handover),
 (the closed client-request set), **TS-WEB-0017 D4** (the app boundary),
 **TS-WEB-0003 D5** (cache lifetimes), **TS-WEB-0004 D5** (the BFF route inventory).
 
+> **DEC-0163 (2026-10-13):** pages no longer call this layer. Every page is
+> static; the islands in `app/[lang]/_islands.tsx` are client components that
+> render their frame in the HTML and fetch their envelope from the BFF after
+> hydration through `browser.ts`. Where this README shows a `use cache` island
+> or a page reading `searchParams`, that is the superseded wiring.
+
 ## The one rule everything else follows
 
 A page never calls an ecosystem service, and the browser never calls
@@ -30,7 +36,9 @@ A page sees one thing: an **envelope**.
 | `GET /api/places/search?q=` | `places.ts` → `searchPlaces()` | **real** — a name against the committed index (DEC-0079: the search takes a name and nothing else) | the place search and its suggestion overlay, position 0 |
 | `GET /api/places/search?zip=` | `places.ts` → `searchPlacesByZip()` | **mock** without `GEOAPI_READ_TOKEN` | the order flow's scope step only (TS-WEB-0025 D3, DEC-0079 §7) — not a search surface |
 | `GET /api/places/nearest?lat=&lng=` | `places.ts` → `nearestCoveredPlace()` | **real** — the committed index (geo-api's proximity search with a token) | the "use my location" control beside the search (TS-WEB-0010 D5, DEC-0119); `no-store`, never cached by coordinates |
-| `GET /api/places/{slug}/events?window=` | `places.ts` → `placeEvents()` | **real** — the public village calendar | position 1, dates in the place, and the empty-state verdict |
+| `GET /api/places/resolve?ort=` | `pages/live-anchor.ts` → `resolvePlaceOutcome()` + `resolveRegisterPlace()` | **real** — the committed index and the public calendar | the browser's answer to `?ort=` on `/`, `/dein-ort`, `/dein-ort/starten` and the two flows (DEC-0163) |
+| `GET /api/places/{slug}/examples` | `examples.ts` → `exampleEvents()` | **real** — the public village calendar | the pool `/dein-ort`'s story examples pick from (DEC-0152, DEC-0163) |
+| `GET /api/places/{slug}/events?window=&rows=` | `places.ts` → `placeEvents()` | **real** — the public village calendar | position 1, dates in the place, and the empty-state verdict |
 | `GET /api/nearby?lat=&lng=&radius=` | `nearby.ts` → `nearbyEvents()` | **real** — the index cuts the radius, the public calendar carries the dates | position 2, this week within ~15 km |
 | `GET /api/region/{county}/examples` | `region.ts` → `regionExamples()` | **real, approximated** — no activity ranking exists upstream (DEC-0034) | position 3, active example places |
 | `GET /api/stats` | `counters.ts` → `liveCounters()` | **real** for `dates`, **mock** for `places` / `updates today` | position 4, the live counters |

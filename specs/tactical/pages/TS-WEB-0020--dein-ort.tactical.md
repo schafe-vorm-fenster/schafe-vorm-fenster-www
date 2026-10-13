@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0011]
 sources: [SRC-0001, SRC-0002, SRC-0003]
-decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152, DEC-0153, DEC-0154, DEC-0159]
+decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152, DEC-0153, DEC-0154, DEC-0159, DEC-0163]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -56,6 +56,8 @@ Blocks 2a–2c are this page's argument sequence, the rest is shared layout; the
 single ink section of Page Rhythm is block 1, where the live data sits.
 
 ### D2 — Two states, one route [FIXED: FUN-WEB-0153, FUN-WEB-0154, TS-WEB-0008 D3/D4, TS-WEB-0010 D7]
+
+> **Amended by DEC-0163 (2026-10-13).** The page is prerendered once and its HTML is S0. States A and B are applied in the browser (`dein-ort/place-islands.tsx`) once `?ort=` resolves through `/api/places/resolve`; an uncovered value is still answered by the proxy's 307 before any HTML (`place-hop.ts`). Without JavaScript the page is S0 for every `?ort=` (the owner dropped the no-JavaScript rule for the place states).
 
 Five resolutions of the place parameter, three of them states of this page. In
 all of them the visitor is asked for a place, never for a role (TS-WEB-0006 D8):
@@ -232,7 +234,7 @@ site is not a goal of its own.
 | TS-WEB-0020-A7 | e2e | The homescreen block renders both the iOS and the Android instruction with an iPhone UA and with an Android UA, byte-identical DOM; its action resolves to `{APP_HOST}/{slug}`; a missing screenshot renders the hatched surface and a non-matching one the placeholder badge. |
 | TS-WEB-0020-A8 | integration | Clicking any of D4's three call sites emits `save-calendar-to-homescreen` with `stage=handover` exactly once and nothing else; in state B the page view carries the empty-state flag and the publish CTA emits no conversion event. |
 | TS-WEB-0020-A9 | e2e | `/dein-ort` with no parameter, with `?ort=` empty, and with `?ort=<garbage>` each answer 200 in the search state; the garbage value is HTML-escaped wherever echoed and appears nowhere as data; a name that matches no place lands on `/dein-ort/starten?ort=…`, and no surface of the search field offers a postcode as an alternative. |
-| TS-WEB-0020-A10 | e2e | Stage 0 (no geo header, no referrer, no parameters, JavaScript disabled): search, the story stage, the radius story with its module, context band and closing CTA all render; no empty-state markup, no unresolved skeleton. (Amended by DEC-0153: the stage replaces three of the four story sections.) |
+| TS-WEB-0020-A10 | e2e | Stage 0 (no geo header, no referrer, no parameters, JavaScript disabled): search, the story stage, the radius story with its module, context band and closing CTA all render; no empty-state markup. (Amended by DEC-0153: the stage replaces three of the four story sections. Amended by DEC-0163: the "no unresolved skeleton" clause is withdrawn — live rows load in the browser and hold reserved skeletons without JavaScript.) |
 | TS-WEB-0020-A11 | integration | For `/dein-ort`, `?ort=<A slug>` and `?ort=<B slug>` the canonical is the parameter-free path, the robots directive is identical, and the JSON-LD graph contains `WebPage` and no `Event` node. |
 | TS-WEB-0020-A12 | e2e | With the BFF route delayed beyond 2 s the date box keeps its final geometry, shows no spinner, and is replaced by the honest empty state rather than a persisting skeleton; CLS over the full load stays < 0.1. |
 | TS-WEB-0020-A13 | manual | Content review before shipping: each story reads aspect → why it matters → example → testimonial and names exactly one mechanism (TS-WEB-0006 D7); the state-B copy names the place, offers publishing, and reads nowhere as a failure or an apology. |

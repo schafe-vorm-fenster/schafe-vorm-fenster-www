@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0024, FUN-WEB-0030, FUN-WEB-0031, FUN-WEB-0149, CON-WEB-0068, FUN-WEB-0033, FUN-WEB-0034, FUN-WEB-0035, FUN-WEB-0150, FUN-WEB-0151, CON-WEB-0069, FUN-WEB-0038, FUN-WEB-0042, FUN-WEB-0052, FUN-WEB-0055]
 sources: [SRC-0002]
-decisions: [DEC-0019, DEC-0025, DEC-0041]
+decisions: [DEC-0019, DEC-0025, DEC-0041, DEC-0163]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -209,6 +209,8 @@ The shape wanted is *near · near · far · near · very far · middle · far*
 4. Stop at the element count for the surface (DEC-0048): 3 inline beside a claim · 5 on the home page · 7 in the `/ueber-uns` stream.
 
 ### D7 — Determinism and rotation [FIXED: DEC-0041]
+
+> **Amended by DEC-0163 (2026-10-13).** The seed is the ISO week **of the build**: the selection stands in static HTML that may not change after the build (its inline scripts are hashed then), so it is computed once under the never-revalidating `max` profile and the stream rotates with each deployment.
 
 Same trait, same place, same result — always. No `Math.random()`, no
 request-time entropy, no LLM.

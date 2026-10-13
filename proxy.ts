@@ -44,7 +44,7 @@ import {
 } from "@/src/lib/routes/not-found-routing";
 import { placeHop } from "@/src/lib/routes/place-hop";
 import { suggestedLanguage, suggestionServerTiming } from "@/src/lib/routes/locale-suggestion";
-import { CSP_HASHES_ASSET_PATH, scriptHashes } from "@/src/lib/security/csp-hashes";
+import { NOT_FOUND_ENTRY, scriptHashesFor } from "@/src/lib/security/csp-hashes";
 import {
   contentSecurityPolicy,
   strictTransportSecurity,
@@ -166,30 +166,15 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   const vercelEnv = process.env.VERCEL_ENV;
   const environment = environmentFrom(vercelEnv);
 
-  // DEC-0045: per-build hashes, no per-request nonce — the shell stays static.
-  // `scriptHashes()` fetches a build artifact from this deployment's own
-  // static assets once per deployment (`csp-hashes.ts` caches the in-flight
-  // promise per deployment id), not per request, so this stays a pure
-  // function of hostname + path (TS-WEB-0004 D3).
-  //
-  // F-2-36: the origin below is a *hint*, not the target. `csp-hashes.ts`
-  // resolves the fetch origin from the deployment's own environment
-  // (`VERCEL_URL`), and only falls back to this request-derived origin off
-  // Vercel and only for a host this site actually answers on — without the
-  // Deployment Protection bypass secret. A spoofed `Host` therefore neither
-  // receives the secret nor selects the asset. The one exception: the hash asset's own
-  // request must not try to compute a hash-dependent policy for itself —
-  // that would recurse into the same fetch this proxy has no matcher to
-  // skip (TS-WEB-0015 D3 runs it on "all routes incl. assets" on purpose).
-  // `next dev` never produces the asset, so the set is `[]` there and
-  // `csp.ts` falls back to `'unsafe-inline'` (dev only) instead of leaving
-  // the inline scripts with nothing to trust — see `csp.ts` for why
-  // `'strict-dynamic'` is not part of the policy at all (state/open.md rows
-  // 21, 31).
-  const hashes =
-    request.nextUrl.pathname === CSP_HASHES_ASSET_PATH
-      ? []
-      : await scriptHashes(request.nextUrl.origin);
+  // DEC-0045 as amended by DEC-0163: build-time hashes, no per-request
+  // nonce, and **per page** — every page is static HTML, so its inline
+  // scripts are fixed at build time and the header carries only its own
+  // (`csp-hashes.ts`). The map is a file in this function's own bundle, read
+  // once per deployment: no network, no request-derived origin (F-2-36). The
+  // blocked and the unservable request are answered by the 404 surface, so
+  // they take its entry; `next dev` has no map, the set is `[]`, and
+  // `csp.ts` falls back to its dev-only `'unsafe-inline'`.
+  const hashes = scriptHashesFor(blocked || unservable ? NOT_FOUND_ENTRY : request.nextUrl.pathname);
 
   response.headers.set(
     "Content-Security-Policy",

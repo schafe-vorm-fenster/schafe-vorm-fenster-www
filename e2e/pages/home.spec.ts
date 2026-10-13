@@ -889,8 +889,9 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(page.locator("#proof-stream article")).toHaveCount(5);
     await expect(page.locator("#context-band nav")).toHaveCount(1);
     await expect(page.locator("#closing-cta")).toHaveCount(1);
-    // No skeleton and no empty box remains.
-    await expect(page.locator('[aria-hidden="true"][class*="skeleton"]')).toHaveCount(0);
+    // The live rows (block 1′, the WhatsApp scene's example) load in the
+    // browser since DEC-0163, so without JavaScript their frames hold their
+    // reserved skeletons — the "no skeleton remains" clause is superseded (§4).
 
     await context.close();
   });

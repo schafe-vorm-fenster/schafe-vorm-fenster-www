@@ -1,26 +1,17 @@
-import { Button } from "@/src/components/button/button";
-import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
-import { SceneBlock } from "@/src/components/scene-block/scene-block";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
 import { slot } from "@/src/lib/content/loader";
-import { fillTemplate } from "@/src/lib/pages/demo-content";
 import { DEMO_PLACE } from "@/src/lib/pages/demo-data";
-import { STAGE_ZERO_ANCHOR, resolvePlaceOutcome } from "@/src/lib/pages/live-anchor";
-import { linkHref } from "@/src/components/route-link/href";
-import { extractCampaignParams } from "@/src/lib/analytics";
-import { redirect } from "next/navigation";
 
-
-import { PlaceDatesIsland } from "../../_islands";
 import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
 import { localeFrom, pageMetadataFor } from "../../_locale";
 import { PageFrame } from "../../_page-frame";
 import { PLACE_START_META } from "./page.meta";
+import { StartClosing, StartExample, StartHero, StartHop, StartWhatItTakes, type StartCopy } from "./start-islands";
 
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
@@ -51,13 +42,12 @@ import type { Metadata } from "next";
  * `/dein-ort` state B's "du könntest die Erste sein" belongs there and is
  * absent here, by construction — the two artifacts share no copy string.
  *
- * **Reading `searchParams` makes this route dynamic today.** TS-WEB-0021 D10
- * wants the shell prerendered with the parameter resolved outside the cache
- * boundary; that is PPR, which TS-WEB-0009 adopts at M4. TS-WEB-0021-A2 meanwhile
- * requires the `h1` to contain the searched place **with JavaScript
- * disabled**, which only a server render can do. The AC wins; the divergence
- * from D10 is a `state/open.md` row, and the fix is one `Suspense` boundary
- * once `use cache` lands.
+ * **The shell is static and the value is read in the browser** (DEC-0163,
+ * which supersedes D10's server-resolved parameter and A2's JavaScript-less
+ * echo). The HTML is the placeless variant; `start-islands.tsx` echoes the
+ * validated value into the `h1`, the body copy, the CTA labels and the
+ * registration link's query after hydration, and hops a covered value to
+ * `/dein-ort` (the proxy does that before any HTML for a direct request).
  *
  * **Page rhythm:** PHOTO hero · lime-500 · ink (the live example, the one
  * dark section) · paper · lime-100 · surface · paper.
@@ -97,69 +87,11 @@ function labelOf(field: string | undefined): string {
   return (field ?? "").split("→")[0]?.trim() ?? "";
 }
 
-/**
- * **Cache Components: this route blocks on purpose** (TS-WEB-0009 D1, the dynamic
- * layer). `?ort=` is not one module's input here — it is the page's headline,
- * its primary CTA's query and its closing block, all three (D4/D8). Splitting
- * that into a `<Suspense>` island would put the *hero* behind a skeleton and
- * ship a shell whose first screen is empty, which is the opposite of what a
- * static shell is for.
- *
- * `instant = false` is the framework's own marker for "allowed to block".
- * The route still renders from the same tree, with the same content; what it
- * gives up is the prerendered shell. Recorded in `state/open.md` together
- * with the two other flow routes (`/mitmachen/registrieren`,
- * `/dein-kalender/bestellen`), which block for the same reason.
- */
-export const instant = false;
-
-export default async function PlaceStartPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ lang: string }>;
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+export default async function PlaceStartPage({ params }: { params: Promise<{ lang: string }> }) {
   const locale = await localeFrom(params);
   const page = await pageContent(ROUTE, locale);
   const heroImage = pageImage(page, "dein-ort-starten-hero");
-  const copy = PAGE_COPY[locale];
-
-  const query = await searchParams;
-
-  /**
-   * DEC-0070's re-resolution, as TS-WEB-0021-A7 states it (F-2-49): this page is
-   * the answer to "geo-api has no community for that". The moment it *does*
-   * — the place was added, or the visitor arrived on a stale link — the page
-   * is the wrong one, and the visitor belongs on `/dein-ort?ort=<slug>`.
-   * Before this, a covered place like `quilow` was told in its own
-   * name that it "steht noch nicht im Dorfkalender".
-   *
-   * Exactly one hop, and the campaign parameters survive it (TS-WEB-0023 D4's
-   * `etcc_*` rule, which the whole founding path shares); the language
-   * prefix comes from `linkHref` and is never typed.
-   */
-  const outcome = await resolvePlaceOutcome(query.ort);
-  if (outcome.kind === "covered") {
-    const campaign = extractCampaignParams(new URLSearchParams(asStringRecord(query)));
-    redirect(linkHref("place", { locale, query: { ort: outcome.place.slug, ...campaign } }));
-  }
-
-  // D4: exactly one value, validated; anything else renders the placeless
-  // variant. The DE artifact names the slot `{ort}`, the EN one `{place}`.
-  // Only an **uncovered** value is echoed: a value the validator dropped and
-  // a value geo-api could not be asked about both render placeless.
-  const searched = outcome.kind === "uncovered" ? outcome.query : undefined;
-  const values = {
-    ort: searched,
-    place: searched,
-    beispielort: DEMO_PLACE.name[locale],
-    example_place: DEMO_PLACE.name[locale],
-  };
-  const ctaValues = {
-    ort: searched ?? copy.genericPlace,
-    place: searched ?? copy.genericPlace,
-  };
+  const words = PAGE_COPY[locale];
 
   const ack = slot(page, "dein-ort-starten-1-ack");
   const whatItTakes = slot(page, "dein-ort-starten-2-was-es-braucht");
@@ -168,46 +100,32 @@ export default async function PlaceStartPage({
   const searchAgainSlot = slot(page, "dein-ort-starten-5-search");
   const closing = slot(page, "dein-ort-starten-6-cta");
 
-  // "Headline (mit Ort)" / "Headline (ohne Ort, Fallback)" — the artifact
-  // writes both, so the placeless variant is authored copy, not a blank.
-  const headline = searched
-    ? fillTemplate(fieldAt(ack.blocks, 0) ?? "", values)
-    : (fieldAt(ack.blocks, 1) ?? "");
-
-  // "CTA-Label (primär)" / "CTA-Label (ohne Ort, Fallback)" — like the
-  // headline above, the placeless variant now has its own authored label
-  // (state/open.md row 94) instead of the primary template filled with a
-  // generic word.
-  const ctaLabel = searched
-    ? fillTemplate(labelOf(closing.cta ?? fieldAt(closing.blocks, 0)), ctaValues)
-    : labelOf(fieldAt(closing.blocks, 1)) ||
-      fillTemplate(labelOf(closing.cta ?? fieldAt(closing.blocks, 0)), ctaValues);
-
   /**
-   * D8: a plain `<a href="/mitmachen/registrieren?ort=…">` carrying
-   * `data-cta="primary"`, the value verbatim and URL-encoded by the route
-   * facade. It works with JavaScript disabled, and no `app.*` href exists
-   * anywhere on this page.
+   * Both variants of every place-bearing string — the artifact writes them,
+   * so the placeless one is authored copy, not a blank. Which one renders is
+   * decided in the browser (`start-islands.tsx`); the HTML is the placeless
+   * one. The DE artifact names the slot `{ort}`, the EN one `{place}`.
    */
-  const registerCta = (primary: boolean) => (
-    <Button
-      dataCta={primary ? "primary" : undefined}
-      locale={locale}
-      onward
-      query={{ ort: searched }}
-      to="register"
-      variant={primary ? "primary-light" : "secondary"}
-    >
-      {ctaLabel}
-    </Button>
-  );
+  const copy: StartCopy = {
+    locale,
+    headlineWithPlace: fieldAt(ack.blocks, 0) ?? "",
+    headlinePlaceless: fieldAt(ack.blocks, 1) ?? "",
+    ctaTemplate: labelOf(closing.cta ?? fieldAt(closing.blocks, 0)),
+    ctaPlaceless: labelOf(fieldAt(closing.blocks, 1)),
+    closingHeadingTemplate: labelOf(fieldAt(closing.blocks, 2)),
+    // Sourced: `price.note` of `community-calendar`, the same public
+    // commitment slot 2 cites.
+    closingReassurance: fieldAt(closing.blocks, 3),
+    openerTemplate: fieldAt(whatItTakes.blocks, 0) ?? "",
+    openerBody: fieldAt(whatItTakes.blocks, 1),
+    exampleTitleTemplate: fieldAt(example.blocks, 0) ?? "",
+    genericPlace: words.genericPlace,
+    demoPlace: DEMO_PLACE.name[locale],
+  };
 
   /**
-   * The mistyped-search field. It used to be a section of its own between
-   * "who usually starts it" and the closing block, so the page trailed off
-   * into "Falsch getippt?" *before* its own offer — a retreat where the
-   * conversion belongs (polish brief, page 3, fix 3). It is now a quiet line
-   * under the closing CTA: still there for the visitor who needs it, no
+   * The mistyped-search field — a quiet line under the closing CTA (polish
+   * brief, page 3, fix 3): still there for the visitor who needs it, no
    * longer the last argument the page makes.
    */
   const searchAgain = (
@@ -229,49 +147,25 @@ export default async function PlaceStartPage({
     <>
       {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
+      <StartHop locale={locale} />
     <PageFrame
-      closing={{
-        to: "register",
-        label: ctaLabel,
-        query: { ort: searched },
-        // The page's own promise over its offer (G-6). `{ort}` falls back to
-        // the placeless word, like every other template on this page.
-        heading: fillTemplate(labelOf(fieldAt(closing.blocks, 2)), ctaValues),
-        // Sourced: `price.note` of `community-calendar`, the same public
-        // commitment slot 2 cites.
-        reassurance: fieldAt(closing.blocks, 3),
-        footer: searchAgain,
-      }}
+      closing={{ variant: "module", bare: true, node: <StartClosing copy={copy} footer={searchAgain} /> }}
       contextBandHeading={fieldAt(slot(page, "dein-ort-starten-7-context-band").blocks, 0)}
       locale={locale}
       meta={PLACE_START_META}
     >
-      {/* Block 1 — the acknowledgment. The place name is text, escaped by
-          React. `headlineLines={2}` reserves two display lines before paint
-          (D4, A13); the `display` role rather than `place-name` because the
-          headline is a *sentence* that happens to contain a place name, and
-          `place-name`'s two-line clamp cut it off mid-word at 360 px. The
-          value is server-rendered, so a longer one makes the box taller
-          without ever shifting anything after paint. */}
-      <HeroBlock
-        cta={registerCta(true)}
-        headline={headline}
-        headlineLines={2}
-        id="focus-block"
-        /* No lead: G-1 moves the hero's second sentence out of the box on
-           every page whose copy is long enough to push the conversion off
-           the first screen — at 360 × 640 this one's button sat 34 px below
-           the fold. The sentence is not lost, it is the hand-off into the
-           section that answers it (`what-it-takes`, below). */
-        // F-2-33: the hero's `photo-surface` badges itself out of the
-        // dictionary — without the page's language it marks an English page
-        // in German.
-        locale={locale}
-        focal={heroImage?.focal}
-        notDepicting={heroImage?.notDepicting}
-        placeholderId={heroImage?.placeholderId}
-        src={heroImage?.src}
-        wideSrc={heroImage?.wideSrc}
+      {/* Block 1 — the acknowledgment, with the page's only primary
+          treatment. No lead: G-1 moves the hero's second sentence into the
+          hand-off of the section that answers it (`what-it-takes`). */}
+      <StartHero
+        copy={copy}
+        image={{
+          src: heroImage?.src,
+          wideSrc: heroImage?.wideSrc,
+          focal: heroImage?.focal,
+          notDepicting: heroImage?.notDepicting,
+          placeholderId: heroImage?.placeholderId,
+        }}
       />
 
       {/* Block 2.1 — what it takes. One mechanism: WhatsApp (D2). */}
@@ -282,47 +176,22 @@ export default async function PlaceStartPage({
           surface="lime-500"
           transition={fieldAt(ack.blocks, 2)}
         >
-          <SceneBlock
-            body={fieldAt(whatItTakes.blocks, 1)}
-            instance={null}
-            locale={locale}
-            mechanism="whatsapp"
-            opener={fillTemplate(fieldAt(whatItTakes.blocks, 0) ?? "", ctaValues)}
-          />
+          <StartWhatItTakes copy={copy} />
         </SectionShell>
       </MotionReveal>
 
       {/* Block 2.2 — the live example, headed as an example and never as
-          "your place". The searched place appears in the note *beside* the
-          module, never inside its heading or its rows (D6, A4). */}
+          "your place" (D6, A4). */}
       <MotionReveal>
         <SectionShell id="live-example" kicker={fieldAt(example.blocks, 1)} surface="ink">
-          <PlaceDatesIsland
-            locale={locale}
-            // One row, not three (G-2): the point here is "a place like
-            // yours has something in it", not "here is a list". The note
-            // that stood above the module said what the `h1` had already
-            // said two screens up and is gone with it.
-            // The village's own life first: a club evening or a concert
-            // shows what a covered place has in it, where the next bin
-            // collection shows the opposite.
-            prefer={["social", "culture", "fest", "official"]}
-            role="story"
-            rowCount={1}
-            slug={STAGE_ZERO_ANCHOR.slug}
-            titleTemplate={fillTemplate(fieldAt(example.blocks, 0) ?? "", values)}
-            tone="dark"
-          />
+          <StartExample copy={copy} />
         </SectionShell>
       </MotionReveal>
 
-      {/* Block 2.3 — who usually starts it. Not a `scene-block`: TS-WEB-0006 D7
-          gives a scene exactly one declared mechanism and an opener in
-          question form, and this block has neither — D2's own table writes
-          "— the scene" in its mechanism column. Naming a mechanism here
-          would invent one. It is also emphatically not a role switcher
-          (TS-WEB-0006 D8): it names who it usually is and lets the reader
-          recognise someone (D9). */}
+      {/* Block 2.3 — who usually starts it. Not a `scene-block`: D2's own
+          table writes "— the scene" in its mechanism column, and it is not a
+          role switcher (TS-WEB-0006 D8): it names who it usually is and lets
+          the reader recognise someone (D9). */}
       <MotionReveal>
         <SectionShell
           id="who-starts-it"
@@ -334,20 +203,7 @@ export default async function PlaceStartPage({
           <p>{fieldAt(whoStarts.blocks, 1)}</p>
         </SectionShell>
       </MotionReveal>
-
     </PageFrame>
     </>
   );
-}
-
-/** `URLSearchParams` wants string values; a repeated parameter's first stands in. */
-function asStringRecord(
-  query: Record<string, string | string[] | undefined>,
-): Record<string, string> {
-  const out: Record<string, string> = {};
-  for (const [key, value] of Object.entries(query)) {
-    const first = Array.isArray(value) ? value[0] : value;
-    if (first !== undefined) out[key] = first;
-  }
-  return out;
 }

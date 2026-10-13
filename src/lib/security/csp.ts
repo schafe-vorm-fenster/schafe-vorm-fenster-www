@@ -86,9 +86,8 @@ export interface PolicyInput {
    * DEC-0045: the per-build `'sha256-…'` hashes of every inline script, from
    * `src/lib/security/csp-hashes.ts`. When empty, the inline scripts have
    * nothing to run on except the `'unsafe-inline'` concession below — which
-   * applies in `next dev` (no build has run the extraction step) and, for
-   * now, in preview too (state/open.md rows 21/31: the hash asset does not
-   * yet reach the deployed Proxy function). Never in production.
+   * applies in `next dev` (no build has run the extraction step) and nowhere
+   * else — not in preview since DEC-0163, never in production.
    */
   readonly scriptHashes?: readonly string[];
 }
@@ -99,7 +98,6 @@ export function policyDirectives({
   scriptHashes = [],
 }: PolicyInput): Record<string, readonly string[]> {
   const isDev = environment === "development";
-  const isPreview = environment === "preview";
   const { etracker, portalize, envoy, assets, googleForms } = ALLOWLIST;
   // F-2-36: only a well-formed hash source is interpolated. A rejected entry
   // is dropped rather than escaped — there is no legitimate `script-src`
@@ -136,20 +134,13 @@ export function policyDirectives({
     // script directive" — this is the same kind of dev-only concession as
     // 'unsafe-eval' just above, not a production relaxation.
     ...(isDev && !hasHashes ? ["'unsafe-inline'"] : []),
-    // Preview-only fallback, state/open.md rows 21/31: the hash asset
-    // scripts/generate-csp-hashes.mjs writes does not reach the deployed
-    // Proxy function today. Two mechanisms were tried and measured to fail —
-    // a hand-written file under `.next/security/` (excluded from the
-    // function's traced filesystem) and the same file republished under
-    // `.next/static/security/` for the proxy to fetch at runtime (Vercel's
-    // static-asset upload is itself manifest-driven and does not pick up a
-    // file no Next manifest references, so the fetch 404s) — and a
-    // build-time Vercel Edge Config write was ruled out by a permission
-    // denial before a token could be created. The preview is the surface
-    // reviews and user tests run on, so it ships with 'unsafe-inline' rather
-    // than staying inert; production never does, hash set or not — D7's ban
-    // holds there unconditionally.
-    ...(isPreview && !hasHashes ? ["'unsafe-inline'"] : []),
+    // No preview fallback any more (DEC-0163): the per-page hash map reaches
+    // the deployed proxy through the build adapter (`scripts/csp-adapter.mjs`),
+    // measured on a Vercel preview — so preview carries exactly production's
+    // script policy. Until then preview added `'unsafe-inline'` whenever its
+    // hash set was empty (state/open.md rows 31/173). An empty set on a
+    // deployment now means a broken build, and the page refuses to hydrate
+    // rather than quietly running every inline script.
   ];
 
   const connectSrc = [

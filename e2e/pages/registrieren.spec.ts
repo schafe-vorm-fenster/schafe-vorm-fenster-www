@@ -81,7 +81,9 @@ test.describe("TS-WEB-0023: the register flow", () => {
       ["?ort=schlatkow&wer=opt-1", "weg"],
     ] as const) {
       await page.goto(`${ROUTE}${query}`);
+      // The step is chosen in the browser (DEC-0163).
       const options = page.locator(`input[name="${name}"]`);
+      await expect(options.first()).toBeVisible();
       expect(await options.count()).toBeGreaterThan(0);
       await expect(options.first()).toHaveAttribute("required", "");
       await expect(page.getByRole("button", { name: /Weiter/ })).toHaveCount(1);
@@ -336,13 +338,22 @@ test.describe("TS-WEB-0023: the register flow", () => {
     await expect(page.locator("main [data-envoy-form-kind]")).toHaveCount(0);
   });
 
-  test("TS-WEB-0023-A13: every step is completable with JavaScript disabled", async ({ browser }) => {
-    const context = await browser.newContext({ javaScriptEnabled: false });
+  // DEC-0163 §4: the step is chosen in the browser, so the walk needs
+  // JavaScript; what A13 still holds is that every step advances by a plain
+  // form submission, a typed name included, and that the route renders step 1
+  // without JavaScript.
+  test("TS-WEB-0023-A13: every step is completable by form submission, and step 1 renders without JavaScript", async ({ browser }) => {
+    const noJs = await browser.newContext({ javaScriptEnabled: false });
+    const stepOne = await noJs.newPage();
+    await stepOne.goto(`${ROUTE}?ort=schlatkow`);
+    await expect(stepOne.locator('input[name="ort"]')).toBeVisible();
+    await noJs.close();
+
+    const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto(ROUTE);
-    // A typed **name**, not a slug and not a postcode: without JavaScript the
-    // typeahead does not exist, so this is the only way through step 1 — and
-    // it has to work (D8 "No-JS", DEC-0128).
+    // A typed **name**, not a slug and not a postcode, submitted by the plain
+    // form rather than picked from the typeahead (D8, DEC-0128).
     await page.fill('input[name="ort"]', "Wolfradshof");
     await page.click('button[type="submit"]');
     // Interim, same as in the A2 test above: the typed string travels on this

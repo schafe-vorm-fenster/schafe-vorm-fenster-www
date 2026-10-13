@@ -138,16 +138,16 @@ describe("state/open.md rows 21 & 31: the CSP that actually hydrates", () => {
     expect(scriptSrc).toContain("'sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='");
   });
 
-  it("lets the deployed preview hydrate too, for the same reason as dev: the hash asset doesn't reach it yet", () => {
+  it("gives a preview no 'unsafe-inline' fallback — the hash map reaches it (DEC-0163)", () => {
     const { "script-src": scriptSrc } = policyDirectives({
       environment: "preview",
       scriptHashes: [],
     });
-    expect(scriptSrc).toContain("'unsafe-inline'");
+    expect(scriptSrc).not.toContain("'unsafe-inline'");
     expect(scriptSrc).not.toContain("'strict-dynamic'");
   });
 
-  it("prefers hashes over 'unsafe-inline' in preview too, once the asset reaches it", () => {
+  it("carries the hashes in preview exactly as in production", () => {
     const { "script-src": scriptSrc } = policyDirectives({
       environment: "preview",
       scriptHashes: ["sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="],
@@ -249,10 +249,10 @@ describe("F-2-36: script-src accepts nothing but a real sha256 source", () => {
   });
 
   it("treats a hash set that is entirely malformed as no hash set at all", () => {
-    // …so preview still gets its documented 'unsafe-inline' fallback rather
-    // than a policy that trusts nothing and blocks everything.
+    // …so `next dev` still gets its documented 'unsafe-inline' fallback
+    // rather than a policy that trusts nothing and blocks everything.
     const { "script-src": scriptSrc } = policyDirectives({
-      environment: "preview",
+      environment: "development",
       scriptHashes: ["sha256-abc", "nonsense"],
     });
     expect(scriptSrc).toContain("'unsafe-inline'");

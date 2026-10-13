@@ -34,10 +34,22 @@ const COVERED_SLUG = "rubkow";
 
 test.describe("TS-WEB-0021 — start the calendar in your place", () => {
   for (const viewport of [PHONE, DESKTOP]) {
-    test(`TS-WEB-0021-A2: with JavaScript disabled the page renders and the CTA is above the fold at ${viewport.width}×${viewport.height}`, async ({
+    // DEC-0163 §4: the page is one static document and the searched place is
+    // echoed in the browser. Without JavaScript it is the placeless variant —
+    // complete, with its CTA above the fold; with JavaScript the `h1` names
+    // the place.
+    test(`TS-WEB-0021-A2: the page renders with the place in the h1 and the CTA above the fold at ${viewport.width}×${viewport.height}; without JavaScript it is the complete placeless variant`, async ({
       browser,
     }) => {
-      const context = await browser.newContext({ javaScriptEnabled: false });
+      const noJs = await browser.newContext({ javaScriptEnabled: false });
+      const placeless = await noJs.newPage();
+      await placeless.setViewportSize(viewport);
+      await placeless.goto(`/dein-ort/starten?ort=${PLACE}`);
+      await expect(placeless.getByRole("heading", { level: 1 })).not.toContainText(PLACE);
+      await expect(placeless.locator('[data-cta="primary"]')).toHaveCount(1);
+      await noJs.close();
+
+      const context = await browser.newContext();
       const page = await context.newPage();
       await page.setViewportSize(viewport);
       await page.goto(`/dein-ort/starten?ort=${PLACE}`);
@@ -104,7 +116,10 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
     await page.setViewportSize(DESKTOP);
     await page.goto(`/dein-ort/starten?ort=${PLACE}`);
 
-    // Not in the live-example module's heading, and not in any of its rows.
+    // Not in the live-example module's heading, and not in any of its rows —
+    // which load in the browser (DEC-0163), so wait for them.
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(PLACE);
+    await expect(page.locator("#live-example article").first()).toBeVisible();
     const headings = await page.locator("#live-example h3").allInnerTexts();
     expect(headings.length).toBeGreaterThan(0);
     for (const heading of headings) expect(heading).not.toContain(PLACE);
@@ -290,10 +305,12 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
     () => {},
   );
 
-  test("TS-WEB-0021-A9: the primary CTA is a plain link to the registration route, JavaScript or not", async ({
+  // DEC-0163 §4: the place is echoed in the browser, so the link carries it
+  // once the page has hydrated; it stays a plain `<a href>`.
+  test("TS-WEB-0021-A9: the primary CTA is a plain link to the registration route", async ({
     browser,
   }) => {
-    const context = await browser.newContext({ javaScriptEnabled: false });
+    const context = await browser.newContext();
     const page = await context.newPage();
     await page.goto(`/dein-ort/starten?ort=${PLACE}`);
 
@@ -318,8 +335,10 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
     // searches now, so Groß Kiesow resolves, and the visitor is forwarded to
     // `/dein-ort` — which is DEC-0070 working, not this criterion failing.
     await page.goto("/dein-ort/starten?ort=Gro%C3%9F%20Testdorf");
-    const href = await page.locator('[data-cta="primary"]').getAttribute("href");
-    expect(href).toBe("/mitmachen/registrieren?ort=Gro%C3%9F+Testdorf");
+    await expect(page.locator('[data-cta="primary"]')).toHaveAttribute(
+      "href",
+      "/mitmachen/registrieren?ort=Gro%C3%9F+Testdorf",
+    );
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Groß Testdorf");
   });
 
@@ -330,6 +349,8 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
     await page.goto(`/dein-ort/starten?ort=${PLACE}`);
 
     await expect(page.locator('[data-cta="primary"]')).toHaveCount(1);
+    // The place reaches both CTAs after hydration (DEC-0163); read them once it has.
+    await expect(page.locator('[data-cta="primary"]')).toHaveAttribute("href", new RegExp(`ort=${PLACE}`));
 
     const band = page.locator("#context-band nav");
     await expect(band).toHaveCount(1);

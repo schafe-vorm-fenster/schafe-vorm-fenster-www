@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { resetRateLimits } from "./bff";
+import { MAX_REQUESTS_PER_WINDOW, resetRateLimits } from "./bff";
 import { MAX_SUGGESTIONS } from "./places";
 
 import { GET } from "@/app/api/places/search/route";
@@ -134,8 +134,10 @@ describe("TS-WEB-0008-A1 / TS-WEB-0013-A5: the route is the browser's only reach
   });
 
   it("rate-limits a caller that hammers the route", async () => {
+    // The limit is on wherever a deployment runs (`rateLimitActive`).
+    vi.stubEnv("BFF_RATE_LIMIT", "on");
     let last = 200;
-    for (let attempt = 0; attempt < 70; attempt += 1) {
+    for (let attempt = 0; attempt < MAX_REQUESTS_PER_WINDOW + 10; attempt += 1) {
       last = (await search("Schlat")).status;
     }
     expect(last).toBe(429);

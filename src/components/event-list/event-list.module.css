@@ -44,3 +44,19 @@
   flex-direction: column;
   gap: var(--space-4);
 }
+
+/*
+ * A list whose rows load in the browser reserves the rows it may print at the
+ * height of a two-line row (DEC-0163) — in its skeleton and in its answer
+ * alike, so the module does not grow when the rows land, and a shorter answer
+ * leaves room at the end rather than pulling everything below it up.
+ */
+.reserve {
+  min-height: calc(var(--event-list-rows-phone) * var(--height-event-row-tall));
+}
+
+@media (min-width: 48rem) {
+  .reserve {
+    min-height: calc(var(--event-list-rows) * var(--height-event-row-tall));
+  }
+}

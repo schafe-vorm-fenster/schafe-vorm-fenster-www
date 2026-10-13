@@ -1,6 +1,5 @@
 import { Badge } from "../badge/badge";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
-import { Skeleton } from "../skeleton/skeleton";
 
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { OG_LOCALE } from "@/src/lib/i18n/locales";
@@ -21,6 +20,12 @@ export interface LiveCountersProps extends DataStateProps {
   /** The page's language — the unit labels read it. */
   readonly locale?: Locale;
   readonly className?: string;
+  /**
+   * How many pills the loading state reserves — the number of figures the
+   * surface may show (DEC-0163: the band loads after paint, and a band that
+   * will hold one figure must not reserve three).
+   */
+  readonly loadingSlots?: number;
 }
 
 /**
@@ -53,6 +58,7 @@ export function LiveCounters({
   locale = "de",
   state = "ready",
   className,
+  loadingSlots = 3,
 }: LiveCountersProps) {
   const classes = [styles.band, className].filter(Boolean).join(" ");
   // The three units are UI strings, so they come from the dictionary unless
@@ -65,9 +71,15 @@ export function LiveCounters({
   if (isPending(state)) {
     return (
       <div className={classes}>
-        <Skeleton variant="control" />
-        <Skeleton variant="control" />
-        <Skeleton variant="control" />
+        {/* Pills at the badge's own height — a figure arriving must not
+            change the band's height (DEC-0163). */}
+        {Array.from({ length: loadingSlots }, (_, index) => (
+          <span aria-hidden="true" className={styles.pending} key={index}>
+            <Badge icon="calendar-days" tone="neutral">
+              {"\u00a0".repeat(12)}
+            </Badge>
+          </span>
+        ))}
       </div>
     );
   }

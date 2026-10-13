@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0010]
 sources: [SRC-0001, SRC-0003, SRC-0014]
-decisions: [DEC-0048, DEC-0081, DEC-0082, DEC-0105, DEC-0109, DEC-0110, DEC-0129, DEC-0154, DEC-0159, DEC-0162]
+decisions: [DEC-0048, DEC-0081, DEC-0082, DEC-0105, DEC-0109, DEC-0110, DEC-0129, DEC-0154, DEC-0159, DEC-0162, DEC-0163]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -50,6 +50,8 @@ declared goal belongs to the focus job, not to the page: home borrows
 `/dein-ort`'s goal because it fulfils that job in place (TS-WEB-0006 D4).
 
 ### D2 — Above-the-fold states [PROPOSED — see Open point 1]
+
+> **Amended by DEC-0163 (2026-10-13).** The page is prerendered once and its HTML is S1. S2 and S3 are applied in the browser by `app/[lang]/_home-focus.tsx` once `?ort=` resolves through `/api/places/resolve`; the form, its label and the input stay in the static shell (DEC-0078 holds), only the trio, the submit and the module slot change.
 
 Block 1 varies by **what is known about the place**, never by entry
 trait. The trait orders blocks 2 (D3, D4); it does not redefine block 1,
@@ -107,6 +109,8 @@ component, which is how the "identical reserved space" below is held.
 Blocks 3 and 4 are rendered by the layout, not by this page.
 
 ### D3a — Three mechanism blocks, their order by entry trait, and which one contains the explain module [order PROPOSED — from the SRC-0002 context matrix via TS-WEB-0010 D3; the block types FIXED: DEC-0109, DEC-0110]
+
+> **Amended by DEC-0163 (2026-10-13).** The entry trait is resolved in the browser from `document.referrer` and the URL's medium parameters, through the same `encodeEntryHandover` → `decodeEntryHandover` pair the proxy used (DEC-0140's host and medium rules unchanged); the HTML carries the `direct` order.
 
 Three blocks, one mechanism each: `whatsapp` → flyer to calendar ·
 `embed` → own event calendar on your website · `provenance` → who built this.
@@ -271,7 +275,7 @@ not conversion.
 | TS-WEB-0019-A8 | e2e | The proof stream on `/` renders exactly 5 elements in every one of the loads of A7 and A2. |
 | TS-WEB-0019-A9 | e2e | DOM order on `/` is: block 1 · block 2a (the three scenes, one of them wrapping the explain module, in the D3a order for the load's trait — the `provenance` scene among them **is** block 2b, recognised by its mechanism and by D3's `violet-500` ground rather than by a position, because D3a moves it: last for `direct`, middle for `professional`/`purchase-intent`, first for `press`) · proof stream · context band · closing CTA · contact section, with nothing but the global footer after the contact section (TS-WEB-0006-A17). This list named "provenance stamps" as a DOM position of its own until 2026-09-26; the stamp element is gone with the sentence it carried and block 2b is the scene (D3 row 2b as amended, DEC-0129 §5). The replacement wording of that same day called block 2b "the **last** of them", which contradicted D3a and A7 in this spec; it is withdrawn and the ground carries the identification instead (DEC-0129 §5). |
 | TS-WEB-0019-A10 | e2e | The context band on `/` names exactly the three jobs that are not `know-what-is-on`; the closing CTA carries the same conversion goal ID, target and label as the block-1 primary of the current state. |
-| TS-WEB-0019-A11 | e2e | Disable JavaScript and load `/`. The page is complete: search present, all 3 blocks of 2a — three scenes, the `whatsapp` one showing its opener, its module at state 1 with all three step lines (the reduced-motion fallback already requires that state, DEC-0105 §6) and its live event row beneath — 5 proof elements, context band, closing CTA; no skeleton and no empty box remains. |
+| TS-WEB-0019-A11 | e2e | Disable JavaScript and load `/`. The page is complete: search present, all 3 blocks of 2a — three scenes, the `whatsapp` one showing its opener, its module at state 1 with all three step lines (the reduced-motion fallback already requires that state, DEC-0105 §6) and its live event row's reserved frame beneath — 5 proof elements, context band, closing CTA; no empty box remains. (Amended by DEC-0163: live rows load in the browser, so without JavaScript their frames hold reserved skeletons.) |
 | TS-WEB-0019-A12 | static | The JSON-LD graph of `/` contains one `WebSite` and one full `Organization` node and no `Event` node; no other page emits a second full `Organization`. |
 | TS-WEB-0019-A13 | e2e | With the analytics collector observed: the calendar-open click of A3 emits `save-calendar-to-homescreen` with `stage=handover` exactly once; the search submit of A2, a scene click and a context-band click emit no conversion event. |
 | TS-WEB-0019-A14 | e2e | **Superseded by A18, DEC-0154.** Written text: the counter block renders only the dates figure. Its test was removed with the render (issue #24, DEC-0159). |

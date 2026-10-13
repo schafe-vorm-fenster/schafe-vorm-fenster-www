@@ -41,6 +41,24 @@
   min-width: 0;
 }
 
+/*
+ * A frame whose data loads in the browser (DEC-0163) cannot know before the
+ * answer whether it will carry the "Stand: …" label. Below `lg` the label
+ * wraps onto a line of its own under the title, so the frame keeps that line
+ * in every state; from `lg` up it sits beside the title and needs nothing.
+ */
+.reserveMarks .marks {
+  flex-basis: 100%;
+  min-height: var(--height-badge-icon);
+}
+
+@media (min-width: 48rem) {
+  .reserveMarks .marks {
+    flex-basis: auto;
+    min-height: 0;
+  }
+}
+
 .cta {
   align-self: flex-start;
 }

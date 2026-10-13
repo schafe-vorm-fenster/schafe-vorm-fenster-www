@@ -4,3 +4,18 @@
   flex-wrap: wrap;
   gap: var(--control-gap);
 }
+
+/*
+ * A set whose places load in the browser (DEC-0163) reserves the rows six
+ * chips take — three on the phone, one from `lg` — in both states, so the
+ * section does not change height when the answer lands.
+ */
+.reserve {
+  min-height: calc(3 * var(--height-chip) + 2 * var(--control-gap));
+}
+
+@media (min-width: 48rem) {
+  .reserve {
+    min-height: var(--height-chip);
+  }
+}

@@ -214,6 +214,10 @@
 .rows {
   display: flex;
   flex-direction: column;
+  /* Three rows at the two-line height (DEC-0163): the live panel's rows load
+     in the browser over the sample, and the picture must not grow when a
+     real title runs to its second line. */
+  min-height: calc(3 * var(--height-event-row-tall));
 }
 
 /* ── 4 · registration ───────────────────────────────────────────────────── */

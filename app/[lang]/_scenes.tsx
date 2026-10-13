@@ -1,6 +1,9 @@
+"use client";
+
 /**
  * Block 2a of `/` — the three scenes, in the order the entry trait asks for
- * (TS-WEB-0019 D3a, DEC-0109 §2, DEC-0140).
+ * (TS-WEB-0019 D3a, DEC-0109 §2, DEC-0140), resolved in the browser since
+ * DEC-0163.
  *
  * D3a is ordering and nothing else: *"No trait adds, removes or rewrites a
  * block, and no trait changes which mechanism carries the module."* That is
@@ -8,35 +11,31 @@
  * `EmphasisTable`, and `orderByTrait()` refuses a variant that is not a
  * permutation of the default order and falls back to that order
  * (`src/lib/personalization/emphasis.ts`). The three scene nodes are built once
- * by the page and only re-ordered here, so a trait cannot reach inside one.
+ * by the page (server-rendered) and only re-ordered here, so a trait cannot
+ * reach inside one.
  *
- * **Why there is a boundary.** The trait is a request value: it comes from the
- * `Referer` header, which the proxy hands down as one request header
- * (`entry-handover.ts`). Reading a header makes the reader dynamic, and `/`
- * must stay a prerendered route (TS-WEB-0010 D8: *"No route becomes a
- * per-request function because of personalization"*, DEC-0045). So the read
- * sits inside a `<Suspense>` boundary whose **fallback is the `direct` order** —
- * which is the stage-0 result and what a crawler, a JS-less visitor and a
- * visitor with no referrer get (TS-WEB-0019-A7's second load). The boundary
- * renders its fallback and its resolved branch through the same component, the
- * way block 1's three boundaries do.
+ * **Where the trait is read.** Until DEC-0163 the proxy handed the `Referer`
+ * down as a request header and the page read it inside a `<Suspense>`
+ * boundary — a per-request render whose streamed swap no build-time CSP hash
+ * could admit (state/open.md row 132: in production the `direct` order was
+ * all anyone ever saw). The page is static now and the order is the
+ * browser's: `document.referrer` and the URL's medium parameters go through
+ * the same `encodeEntryHandover` → `decodeEntryHandover` pair the proxy used,
+ * so the host and medium rules (no path, three media) are unchanged, and then
+ * through `resolveEntryTrait`. The prerendered HTML — what a crawler, a
+ * JS-less visitor and a visitor with no referrer get — is the `direct` order
+ * (TS-WEB-0019-A7's second load).
  *
- * `TS-WEB-0009-A14` holds here by construction: the scenes hold no `<input>`,
- * `<textarea>` or `<select>` — the page's two search fields stand in the
- * prerendered shell (DEC-0078) — so nothing a boundary reveal replaces can
- * carry a value a visitor typed. The three step lines inside the `whatsapp`
- * scene's module are `<button>`s, which hold no value.
+ * `TS-WEB-0009-A14` holds by construction: the scenes hold no `<input>`,
+ * `<textarea>` or `<select>`, so a re-order can carry away nothing a visitor
+ * typed.
  */
 
-import { Fragment, Suspense } from "react";
-import { headers } from "next/headers";
+import { Fragment, useSyncExternalStore } from "react";
 
 import { orderByTrait } from "@/src/lib/personalization/emphasis";
 import { resolveEntryTrait } from "@/src/lib/personalization/entry-context";
-import {
-  ENTRY_CONTEXT_HEADER,
-  decodeEntryHandover,
-} from "@/src/lib/personalization/entry-handover";
+import { decodeEntryHandover, encodeEntryHandover } from "@/src/lib/personalization/entry-handover";
 
 import type { EmphasisTable } from "@/src/lib/personalization/emphasis";
 import type { EntryTrait } from "@/src/lib/relevance/types";
@@ -64,22 +63,29 @@ export function homeSceneOrder(trait: EntryTrait): readonly HomeScene[] {
 }
 
 /**
- * The trait of the current request, from the proxy's handover. `direct` when
- * the header is absent — which is every request that arrived without an entry
- * context, and also `next dev`'s and a test's, so the default never depends on
- * the proxy having run.
+ * The trait of this visit, from the browser's own referrer and URL. `direct`
+ * without either — and on the server, which never calls this.
  */
-async function requestTrait(): Promise<EntryTrait> {
-  const handover = decodeEntryHandover((await headers()).get(ENTRY_CONTEXT_HEADER));
+function browserTrait(): EntryTrait {
+  const handover = decodeEntryHandover(
+    encodeEntryHandover({
+      referrer: document.referrer || null,
+      searchParams: new URLSearchParams(window.location.search),
+    }),
+  );
   return resolveEntryTrait({
     // The landing route and its focus job are the page's own, not the
-    // request's — TS-WEB-0010 D7: a trait may reorder within a page, it may
+    // visit's — TS-WEB-0010 D7: a trait may reorder within a page, it may
     // never redefine what the page is for.
     focusJob: "know-what-is-on",
     params: handover.medium === null ? {} : { etcc_med: handover.medium },
     referrerHost: handover.referrerHost,
     routeId: "home",
   });
+}
+
+function noSubscription(): () => void {
+  return () => undefined;
 }
 
 export interface HomeScenesProps {
@@ -100,16 +106,11 @@ function SceneRun({
   );
 }
 
-/** The resolved branch: the same run, in the trait's order. */
-async function OrderedScenes({ scenes }: HomeScenesProps) {
-  return <SceneRun order={homeSceneOrder(await requestTrait())} scenes={scenes} />;
-}
-
-/** Block 2a. The fallback is the `direct` order, and it is a complete block. */
+/**
+ * Block 2a. The server snapshot is `direct`, so the prerendered HTML and the
+ * hydrating client agree; the browser's snapshot is the visit's own trait.
+ */
 export function HomeScenes({ scenes }: HomeScenesProps) {
-  return (
-    <Suspense fallback={<SceneRun order={HOME_SCENES} scenes={scenes} />}>
-      <OrderedScenes scenes={scenes} />
-    </Suspense>
-  );
+  const trait = useSyncExternalStore(noSubscription, browserTrait, () => "direct" as EntryTrait);
+  return <SceneRun order={homeSceneOrder(trait)} scenes={scenes} />;
 }

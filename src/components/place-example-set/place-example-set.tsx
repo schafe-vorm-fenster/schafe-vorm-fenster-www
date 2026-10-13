@@ -14,6 +14,8 @@ export interface PlaceExample {
 }
 
 export interface PlaceExampleSetProps extends DataStateProps {
+  /** Hold the chips' rows in every state — the set loads after paint (DEC-0163). */
+  readonly reserve?: boolean;
   readonly examples: readonly PlaceExample[];
   /** Capped at 6 on `/deine-region`; 1 (the nearest active place) on `/dein-ort/starten`. */
   readonly max?: number;
@@ -45,11 +47,12 @@ export function PlaceExampleSet({
   locale,
   state = "ready",
   className,
+  reserve = false,
 }: PlaceExampleSetProps) {
-  const classes = [styles.set, className].filter(Boolean).join(" ");
+  const classes = [styles.set, reserve ? styles.reserve : undefined, className].filter(Boolean).join(" ");
 
   if (isPending(state)) {
-    return <Skeleton className={classes} rows={1} variant="row" />;
+    return reserve ? <div aria-hidden="true" className={classes} /> : <Skeleton className={classes} rows={1} variant="row" />;
   }
 
   if (state === "empty" || examples.length === 0) return null;

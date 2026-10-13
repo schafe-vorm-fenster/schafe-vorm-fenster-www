@@ -1,14 +1,10 @@
-import { Suspense, cache } from "react";
-
 import { Button } from "@/src/components/button/button";
-import { EmptyStateBlock } from "@/src/components/empty-state-block/empty-state-block";
 import { ExplainModule } from "@/src/components/explain-module/explain-module";
 import { StageChat, StageFlyerPhoto } from "@/src/components/explain-stage/explain-stage";
-import { HeroBlock, HeroContent } from "@/src/components/hero-block/hero-block";
+import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { MediaFrame } from "@/src/components/media-frame/media-frame";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
-import { SearchSubmit } from "@/src/components/search-field/search-field";
 import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
@@ -22,15 +18,8 @@ import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
 import { ctaLabelOnly } from "@/src/lib/content/text";
-import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
-import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
-import { EventRow } from "@/src/components/event-row/event-row";
-import { fillTemplate, parseDemoProofElement } from "@/src/lib/pages/demo-content";
-import { pickStoryExamples } from "@/src/lib/pages/story-examples";
-import { calendarUrl } from "@/src/lib/live/app-handover";
-import { placeEvents } from "@/src/lib/live/places";
 import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
-import { STAGE_ZERO_ANCHOR, resolvePlaceOutcome } from "@/src/lib/pages/live-anchor";
+import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 
 /*
  * The WhatsApp scene's mechanism is the same explain module as path 01 of
@@ -43,10 +32,9 @@ import { STAGE_ZERO_ANCHOR, resolvePlaceOutcome } from "@/src/lib/pages/live-anc
 import { listAt, threeSampleRows, threeSteps } from "./mitmachen/paths";
 import { LiveStageCalendar } from "./mitmachen/stage-islands";
 
-import styles from "./_pages.module.css";
-import pageStyles from "./page.module.css";
 
-import { NearbyIsland, PlaceDatesIsland, exampleRows } from "./_islands";
+import { buildDay } from "./_build-day";
+import { FlyerExample, HomeFocusModules, HomeHeroContent, HomeSubmit, type HomeFocusCopy } from "./_home-focus";
 import { selectProof } from "./_proof";
 import { PageJsonLd } from "./_structured-data";
 import { pageContent } from "./_content";
@@ -55,14 +43,10 @@ import { PageFrame } from "./_page-frame";
 import { HomeScenes } from "./_scenes";
 import { HOME_META } from "./page.meta";
 
-import type { HeroContentProps } from "@/src/components/hero-block/hero-block";
 import type { ProofCandidate } from "./_proof";
-import type { Place } from "@/src/lib/live/types";
-import type { RenderableImage } from "@/src/lib/content/images";
 import type { ContentSlot } from "@/src/lib/content/types";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 
 /**
  * TS-WEB-0019 — `/` — home.
@@ -107,21 +91,6 @@ import type { ReactNode } from "react";
  */
 
 const ROUTE = "home" as const;
-
-/**
- * TS-WEB-0012 D4 — `save-calendar-to-homescreen`, `stage: handover`: the click
- * that opens a place calendar on `app.*`. The page's own primary conversion
- * (`page.meta.ts`), and the only outbound handover this page has. The place
- * search submit is **not** a conversion (TS-WEB-0019 D2: "a search is not a
- * conversion"), so it stays unarmed.
- */
-const SAVE_CALENDAR = {
-  goalId: "save-calendar-to-homescreen",
-  stage: "handover",
-} as const;
-
-/** The attributes S2's own handover adds beside the resolved place slug. */
-const SAVE_CALENDAR_ATTRIBUTES = { route: ROUTE } as const;
 
 export async function generateMetadata({
   params,
@@ -199,310 +168,14 @@ function proofCandidates(proof: ContentSlot, geoLabel: string): ProofCandidate[]
 }
 
 /**
- * Block 1 in TS-WEB-0019 D2's four states (F-2-30), split along DEC-0078's line.
- *
- * D2 keys block 1 on **what is known about the place**, and the place is a
- * request value, so part of block 1 has to arrive through a `<Suspense>`
- * boundary — that is what keeps `/` a prerendered route (`state/open.md`
- * row 131) while still answering a stated place.
- *
- * What DEC-0078 changed is **where the line runs**. Until this round the
- * boundary's fallback was the whole of block 1, search field included, so on
- * every load of `/` — `?ort=` or not — React removed the fallback's DOM and
- * inserted the resolved branch's, and a postcode typed into the hero search
- * in the first ~350 ms went with it (row 213: present at 96 ms, gone at
- * 349 ms, 3/3 on the production build). Now the boundary carries only what
- * genuinely varies and holds no visitor input:
- *
- *  - `StatedHeroContent` — the headline · lead · CTA trio (`HeroContent`);
- *  - `StatedSubmit` — the submit button, because `data-cta="primary"` moves
- *    from the submit (S1) to the hero's CTA (S2/S3) and an attribute cannot
- *    be streamed on its own;
- *  - `StatedFocusModules` — the ink module slot and S3's widened radius.
- *
- * The `<form>`, its label and the **input** stand in the prerendered shell,
- * under `hero-block`'s own `search` slot. The input the visitor first sees
- * is the input that stays.
+ * Block 1 in TS-WEB-0019 D2's four states (F-2-30), split along DEC-0078's
+ * line — and since DEC-0163 resolved in the browser (`_home-focus.tsx`). The
+ * page is prerendered once: its HTML is S1, and the hero's trio, the submit
+ * and the module slot move to S2/S3 after hydration when `?ort=` names a
+ * covered place. The `<form>`, its label and the input stand in this shell,
+ * so the input a visitor first sees is the input that stays (row 213).
  */
-interface FocusCopy {
-  readonly locale: Locale;
-  /**
-   * The hero photograph from the page's image inventory, or `undefined` while
-   * none exists — in which case `photo-surface` renders the "Foto gesucht"
-   * hatch, which is a conversion rather than a gap (DEC-0068, SRC-0014).
-   */
-  readonly hero?: RenderableImage;
-  /** S1's hero headline and the search module in both treatments. */
-  readonly s1Headline: string;
-  readonly search: (primary: boolean) => ReactNode;
-  /** The submit control's label, already resolved — `StatedSubmit` renders it. */
-  readonly submitLabel: string;
-  /** S2 — `home-2-place-dates`: `{place}` headline and app-handover label. */
-  readonly datesHeadline: string;
-  readonly datesCta: string;
-  /**
-   * The live block's hand-off to block 2a — the review's "Fehlt deine
-   * Veranstaltung, jetzt selbst eintragen." (SRC-0017 CG-008), split into its
-   * question and its action. Since issue #25 it is a row of its own under the
-   * rows whose gaps it is about, with one secondary button into the publishing
-   * job; the page's one `data-cta="primary"` stays where D2 puts it
-   * (TS-WEB-0019-A19).
-   */
-  readonly handoffQuestion: string;
-  readonly handoffCta: string;
-  /** S3 — `home-3-place-empty`: radius heading, invitation, publish label. */
-  readonly nearbyHeading: string;
-  readonly invitation: string;
-  readonly publishCta: string;
-}
-
-/** The artifact writes the invitation as two sentences; the first is the headline. */
-function splitInvitation(text: string): { headline: string; lead?: string } {
-  const cut = text.indexOf(". ");
-  if (cut === -1) return { headline: text };
-  return { headline: text.slice(0, cut + 1).trim(), lead: text.slice(cut + 1).trim() };
-}
-
-/**
- * What `?ort=` resolves to, for block 1 — read once per request.
- *
- * DEC-0078 splits block 1 across three boundaries, and all three need the same
- * answer. `cache()` is what keeps that one geo lookup and one dates read:
- * the three components below call this with the same `searchParams` promise,
- * so React returns the same in-flight promise to each.
- *
- * S4 — "a search resolved to an uncovered place" — carries *nothing* on `/`
- * per D2: the search navigates away instead (`/dein-ort` classifies and
- * forwards, TS-WEB-0008 D7). So an uncovered value answers the S1 shape here, and
- * TS-WEB-0019-A5's "`/` itself renders no uncovered place as data" holds by
- * construction.
- */
-const focusState = cache(
-  async (
-    searchParams: Promise<Record<string, string | string[] | undefined>>,
-  ): Promise<{ readonly place?: Place; readonly hasDates?: boolean }> => {
-    const outcome = await resolvePlaceOutcome((await searchParams)["ort"]);
-    if (outcome.kind !== "covered") return {};
-    const envelope = await placeEvents({ slug: outcome.place.slug, rowCount: 3 });
-    return { place: outcome.place, hasDates: (envelope?.data.events.length ?? 0) > 0 };
-  },
-);
-
-/**
- * The hero's headline · lead · CTA trio in whichever of TS-WEB-0019 D2's states
- * the place resolves to — the one function both branches of the hero's
- * boundary call, so the reserved space cannot drift between them.
- */
-function heroContentFor(copy: FocusCopy, place?: Place, hasDates?: boolean): HeroContentProps {
-  // S1 — nothing known. No CTA node: the search below the trio carries the
-  // page's primary, and an empty `cta` slot renders no box at all.
-  if (place === undefined) return { headline: copy.s1Headline };
-
-  const values = { place: place.name };
-
-  // S3 — covered, no dates. The primary conversion is publishing, and it is
-  // a link: "on `/` the shift stays a link" (TS-WEB-0019 D2, open point 2).
-  if (hasDates === false) {
-    const invitation = splitInvitation(fillTemplate(copy.invitation, values));
-    return {
-      headline: invitation.headline,
-      lead: invitation.lead,
-      cta: (
-        <Button
-          dataCta="primary"
-          locale={copy.locale}
-          onward
-          query={{ ort: place.slug }}
-          to="register"
-          variant="primary-light"
-        >
-          {copy.publishCta}
-        </Button>
-      ),
-    };
-  }
-
-  // S2 — the app handover, carrying the place slug as its one attribute
-  // (TS-WEB-0012 D4 rule 3).
-  return {
-    headline: fillTemplate(copy.datesHeadline, values),
-    cta: (
-      <ConversionTracker
-        attributes={{ ...SAVE_CALENDAR_ATTRIBUTES, place: place.slug }}
-        goalId={SAVE_CALENDAR.goalId}
-        stage={SAVE_CALENDAR.stage}
-      >
-        <OutboundLink
-          dataCta="primary"
-          href={calendarUrl(place)}
-          locale={copy.locale}
-          variant="secondary"
-        >
-          {fillTemplate(copy.datesCta, values)}
-        </OutboundLink>
-      </ConversionTracker>
-    ),
-  };
-}
-
-/** The hero trio for a stated place — the resolved branch of boundary 1. */
-async function StatedHeroContent({
-  copy,
-  searchParams,
-}: {
-  readonly copy: FocusCopy;
-  readonly searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const { place, hasDates } = await focusState(searchParams);
-  return <HeroContent {...heroContentFor(copy, place, hasDates)} />;
-}
-
-/**
- * The hero search's submit — boundary 2, and the reason it exists.
- *
- * TS-WEB-0006 D3 allows exactly one `data-cta="primary"` per page and TS-WEB-0019 D2
- * moves it: in S1 it is this submit, in S2/S3 it is the hero's own CTA. An
- * attribute cannot be streamed on its own, so the *button* is what varies,
- * and the `<form>`, the label and the input around it stay in the shell
- * (DEC-0078). `SearchSubmit` renders both branches, so they are the same
- * 44 px pill in the same place and the swap moves nothing.
- */
-async function StatedSubmit({
-  copy,
-  searchParams,
-}: {
-  readonly copy: FocusCopy;
-  readonly searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const { place } = await focusState(searchParams);
-  return <SearchSubmit dataCta={place === undefined ? "primary" : undefined} label={copy.submitLabel} />;
-}
-
-/**
- * Block 1's module slot — boundary 3. The ink section is the same section in
- * every state (the page rhythm and TS-WEB-0019-A9's DOM order do not move when
- * the state does); S3 adds the widened radius under it.
- */
-function FocusModules({
-  copy,
-  place,
-  hasDates,
-}: {
-  readonly copy: FocusCopy;
-  /** The resolved community, or `undefined` for S1 — never the raw parameter. */
-  readonly place?: Place;
-  readonly hasDates?: boolean;
-}) {
-  const { locale } = copy;
-  const words = dictionary(locale);
-  // S3, with the place carried through the narrowing so the widened module
-  // below can take its coordinate.
-  const emptyPlace = place !== undefined && hasDates === false ? place : undefined;
-  const empty = emptyPlace !== undefined;
-  const values = { place: place?.name ?? "" };
-
-  return (
-    <>
-      {/* Block 1′ — the live dates of a known place. The one `ink` section of
-          the page rhythm, and the anchor the live data sits on. In S3 the
-          slot carries the publish invitation instead of an empty date box
-          ("Position 1 is not left blank", TS-WEB-0008 D4). */}
-      <MotionReveal>
-        <SectionShell
-          id="place-dates"
-          kicker={empty ? undefined : words.kickers.liveAnswer}
-          surface="ink"
-        >
-          {empty ? (
-            <EmptyStateBlock
-              announced
-              cta={copy.search(false)}
-              headline={splitInvitation(fillTemplate(copy.invitation, values)).headline}
-              lead={splitInvitation(fillTemplate(copy.invitation, values)).lead}
-              pulse={false}
-            />
-          ) : (
-            <PlaceDatesIsland
-              conversion={SAVE_CALENDAR}
-              ctaTemplate={place === undefined ? copy.datesCta : undefined}
-              layout="split"
-              locale={locale}
-              role="illustrative"
-              rowCount={3}
-              slug={place?.slug ?? STAGE_ZERO_ANCHOR.slug}
-              titleTemplate={copy.datesHeadline}
-              tone="dark"
-            />
-          )}
-          {/* Block 2d — the counter — is gone (DEC-0154, issue #24): "8.543
-              Termine" told the reader nothing, and the home page carries no
-              live figure at all (TS-WEB-0019-A18, SRC-0017 CG-034). */}
-          {/* The block's hand-off to block 2a (SRC-0017 CG-008): the gap in
-              the list is the way into the publishing job, not a defect to
-              hide. A row of its own since issue #25 — the question, and one
-              secondary button on the ink ground, where the guide's secondary
-              is legal (SRC-0014 §Button). Only where rows stand — S3 already
-              *is* the invitation and would say it twice. */}
-          {empty || copy.handoffQuestion === "" ? null : (
-            <div className={pageStyles.handoff} data-handoff="">
-              <p className={pageStyles.handoffQuestion}>{copy.handoffQuestion}</p>
-              {copy.handoffCta === "" ? null : (
-                <Button dataCta="secondary" locale={locale} onward to="takePart" variant="secondary">
-                  {copy.handoffCta}
-                </Button>
-              )}
-            </div>
-          )}
-        </SectionShell>
-      </MotionReveal>
-
-      {/* TS-WEB-0019 D5, position 2: "this week nearby" is block 1's **S3**
-          module, and only S3's. Round 3 rendered it in every state, so the
-          page opened on two five-row lists with the same titles in both —
-          1.6 phone screens of near-identical rows before a single argument
-          was made (polish brief, page 1, fix 2). Where dates exist, widening
-          the radius answers nothing the list above has not; where they do
-          not, it is the whole answer, and `/dein-ort` carries the radius
-          argument for everyone else. Its shell names its own radius — never
-          the place name (TS-WEB-0008 D1). */}
-      {emptyPlace ? (
-        <MotionReveal>
-          <SectionShell id="nearby" kicker={words.kickers.widerRadius} surface="surface-2">
-            <NearbyIsland
-              lat={emptyPlace.lat}
-              lng={emptyPlace.lng}
-              locale={locale}
-              role="answering"
-              rowCount={5}
-              titleTemplate={copy.nearbyHeading}
-            />
-          </SectionShell>
-        </MotionReveal>
-      ) : null}
-    </>
-  );
-}
-
-/** The module slot for a stated place — the resolved branch of boundary 3. */
-async function StatedFocusModules({
-  copy,
-  searchParams,
-}: {
-  readonly copy: FocusCopy;
-  readonly searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const { place, hasDates } = await focusState(searchParams);
-  return <FocusModules copy={copy} hasDates={hasDates} place={place} />;
-}
-
-export default async function HomePage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ lang: string }>;
-  /** Read only inside the `<Suspense>` boundary below — never awaited here. */
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+export default async function HomePage({ params }: { params: Promise<{ lang: string }> }) {
   const locale = await localeFrom(params);
   const words = dictionary(locale);
   const page = await pageContent(ROUTE, locale);
@@ -534,23 +207,8 @@ export default async function HomePage({
   const searchPlaceholder = fieldAt(hero.blocks, 1);
   const proofKicker = fieldAt(proof.blocks, 0);
 
-  /**
-   * The one live row the WhatsApp scene shows as its outcome — cached rather
-   * than suspended, because it stands inside prose (TS-WEB-0020 D3's snapshot
-   * rung, the same shape `/dein-ort`'s stories use).
-   */
-  const rows = await exampleRows(
-    STAGE_ZERO_ANCHOR.slug,
-    STAGE_ZERO_ANCHOR.lat,
-    STAGE_ZERO_ANCHOR.lng,
-    locale,
-  );
-  const [flyerRow] = pickStoryExamples(
-    // Position 1 prints the first three; the scene takes one the reader has
-    // not just scrolled past.
-    [...rows.place.slice(3), ...rows.nearby],
-    [["social", "culture", "fest"]],
-  );
+  /** The build's day — what the sample panel is dated from in the static HTML (DEC-0163). */
+  const referenceDate = await buildDay();
 
   /**
    * TS-WEB-0005 through, not around: gate · score · rotate · order · count, at
@@ -588,13 +246,7 @@ export default async function HomePage({
       // DEC-0078: the hero instance is the one whose `data-cta="primary"`
       // moves with the place, so only that instance hands its submit to a
       // boundary. The closing block's copy keeps the plain default.
-      submit={
-        primary ? (
-          <Suspense fallback={<SearchSubmit dataCta="primary" label={submitLabel} />}>
-            <StatedSubmit copy={focusCopy} searchParams={searchParams} />
-          </Suspense>
-        ) : undefined
-      }
+      submit={primary ? <HomeSubmit copy={focusCopy} /> : undefined}
       submitLabel={submitLabel}
       to="place"
       /*
@@ -609,11 +261,10 @@ export default async function HomePage({
     />
   );
 
-  const focusCopy: FocusCopy = {
+  const heroImage = pageImage(page, HERO_IMAGE_ID.home);
+  const focusCopy: HomeFocusCopy = {
     locale,
-    hero: pageImage(page, HERO_IMAGE_ID.home),
     s1Headline: hero.fields["Headline"] ?? "",
-    search,
     submitLabel,
     datesHeadline: dates.fields["Headline"] ?? "",
     datesCta: dates.cta ?? "",
@@ -652,26 +303,20 @@ export default async function HomePage({
           arrives through a boundary. The input a visitor sees at first paint
           is therefore the input she keeps typing into (row 213). */}
       <HeroBlock
-        content={
-          <Suspense fallback={<HeroContent {...heroContentFor(focusCopy)} />}>
-            <StatedHeroContent copy={focusCopy} searchParams={searchParams} />
-          </Suspense>
-        }
-        focal={focusCopy.hero?.focal}
+        content={<HomeHeroContent copy={focusCopy} />}
+        focal={heroImage?.focal}
         heroSize="home"
         id="focus-block"
         // F-2-33: the surface badges itself out of the dictionary, so it
         // needs the page's language or it badges an English page in German.
         locale={locale}
-        notDepicting={focusCopy.hero?.notDepicting}
-        placeholderId={focusCopy.hero?.placeholderId}
-        search={focusCopy.search(true)}
-        src={focusCopy.hero?.src}
-        wideSrc={focusCopy.hero?.wideSrc}
+        notDepicting={heroImage?.notDepicting}
+        placeholderId={heroImage?.placeholderId}
+        search={search(true)}
+        src={heroImage?.src}
+        wideSrc={heroImage?.wideSrc}
       />
-      <Suspense fallback={<FocusModules copy={focusCopy} />}>
-        <StatedFocusModules copy={focusCopy} searchParams={searchParams} />
-      </Suspense>
+      <HomeFocusModules copy={focusCopy} search={search(false)} />
       {/* Block 2a — three scenes, one mechanism each (TS-WEB-0006 D7), all
           three declaring `data-block="scene"` (TS-WEB-0019-A6). The record
           below is written in the `direct` order of TS-WEB-0019 D3a, and
@@ -716,19 +361,10 @@ export default async function HomePage({
                       inside the 1270 px budget of polish brief G-4. */}
                   <SceneBlock
                     instance={
-                      flyerRow === undefined ? null : (
-                        <>
-                          {/* The outcome, not a list (polish brief, page 1, fix 3):
-                              one real date, under the line that says what it is. It
-                              is picked out of what position 1 has **not** already
-                              shown, and out of the categories a printed flyer is
-                              actually about — the module took the place's next date
-                              whatever it was, which put "Gelber Sack" under "made
-                              from the flyer", twice on one screen. */}
-                          <h3 className={styles.instanceHeading}>{demo.flyerExample}</h3>
-                          <EventRow {...flyerRow} locale={locale} state={rows.demo ? "mocked" : "ready"} />
-                        </>
-                      )
+                      /* The outcome, not a list (polish brief, page 1, fix 3):
+                         one real date, under the line that says what it is,
+                         loaded in the browser (DEC-0163, `_home-focus.tsx`). */
+                      <FlyerExample heading={demo.flyerExample} locale={locale} />
                     }
                     locale={locale}
                     mechanism="whatsapp"
@@ -771,11 +407,12 @@ export default async function HomePage({
                               key="3"
                               locale={locale}
                               place={SHOWCASE_COMMUNITY.name}
+                              referenceDate={referenceDate}
                               sample={threeSampleRows(
                                 listAt(whatsappSteps.blocks, 1),
                                 "home-4a-scene-whatsapp-steps-demo",
                               )}
-                              slug={STAGE_ZERO_ANCHOR.slug}
+                              slug={SHOWCASE_COMMUNITY.slug}
                             />,
                           ]}
                           steps={threeSteps(

@@ -1,46 +1,37 @@
 import { Button } from "@/src/components/button/button";
-import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
-import { EmptyStateBlock } from "@/src/components/empty-state-block/empty-state-block";
-import { EventRow } from "@/src/components/event-row/event-row";
-import { HeroBlock } from "@/src/components/hero-block/hero-block";
-import { HowtoBlock } from "@/src/components/howto-block/howto-block";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { StoryStage, type StageStory } from "@/src/components/story-stage/story-stage";
 import { ValueStory } from "@/src/components/value-story/value-story";
-import type { IconName } from "@/src/components/icon/icon";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { ctaLabelOnly } from "@/src/lib/content/text";
-import { fillTemplate, parseDemoProofElement, splitSteps } from "@/src/lib/pages/demo-content";
-import { selectStoryExamples } from "@/src/lib/pages/story-examples";
-import { STAGE_ZERO_ANCHOR, resolvePlaceOutcome } from "@/src/lib/pages/live-anchor";
-import { cacheLife, cacheTag } from "next/cache";
-import { redirect } from "next/navigation";
+import { fillTemplate, parseDemoProofElement } from "@/src/lib/pages/demo-content";
 
-import { linkHref } from "@/src/components/route-link/href";
-import { calendarUrl } from "@/src/lib/live/app-handover";
-import { cacheLifeProfile, cacheTags } from "@/src/lib/live/cache-profiles";
-import { placeEvents, resolvePlace } from "@/src/lib/live/places";
-import { href } from "@/src/lib/routes/routes";
-
-
-import { NearbyIsland, PlaceDatesIsland, exampleRows, storyExamplePool, toListItems } from "../_islands";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 import { PLACE_META } from "./page.meta";
+import {
+  OnlyInStateB,
+  PlaceClosing,
+  PlaceHero,
+  PlaceHomescreen,
+  PlaceHop,
+  PlaceModuleSlot,
+  PlaceNearby,
+  StoryExample,
+  type PlaceCopy,
+} from "./place-islands";
+import { RADIUS_STORY, STORIES } from "./stories";
 
 import type { QuoteFragment } from "@/src/components/content-fragments";
 import type { ContentSlot } from "@/src/lib/content/types";
-import type { SectionSurface } from "@/src/components/section-shell/section-shell";
-import type { StoryExampleSpec } from "@/src/lib/pages/story-examples";
-import type { DictionaryKeyOf } from "@/src/lib/i18n/dictionary";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
 
@@ -72,49 +63,28 @@ import type { Metadata } from "next";
  * them.
  *
  * **Which state renders.** TS-WEB-0020 D2 resolves the place parameter five ways,
- * three of which are states of this page. Without `?ort=` and without a known
- * community the page is **S0** — "the prerendered shell, complete on its own:
- * place search dominant, stories on snapshot examples, counters may render;
- * **no empty-state markup**, no unresolved skeleton, no 'we could not find
- * you'" (D2, TS-WEB-0020-A10). In S0 the live module is one row under its own
- * heading: the hero asks the visitor to search, so the module shows what an
- * answer looks like rather than answering a question nobody asked.
+ * three of which are states of this page. The page is prerendered once
+ * (DEC-0163), so its HTML is **S0** — "the prerendered shell, complete on its
+ * own: place search dominant, stories on snapshot examples, counters may
+ * render; no empty-state markup, no unresolved skeleton, no 'we could not
+ * find you'" (D2, TS-WEB-0020-A10). `?ort=` is read in the browser
+ * (`place-islands.tsx`): a covered place moves the page to **state A** (the
+ * hero says "Das ist los in {ort}", the module's own heading is read and not
+ * seen, the calendar handover under the rows is the conversion) or to
+ * **state B** (the publish offer occupies the module slot, TS-WEB-0008 D4, and
+ * the primary conversion moves to `register-as-publisher`). An uncovered
+ * value never reaches the page: the proxy answers it with a 307 to the
+ * founding page (`place-hop.ts`). The live rows themselves load from the BFF
+ * in every state.
  *
- * In **state A** the hero already says "Das ist los in {ort}", so the
- * module's own heading is read and not seen (`titleHidden`) and the
- * conversion — the calendar handover — sits directly under the three rows.
- * In **state B** the publish offer occupies the module slot (TS-WEB-0008 D4) and
- * the page's primary conversion moves to `register-as-publisher`.
+ * Without JavaScript the page is S0 for every `?ort=` — the owner dropped the
+ * no-JS requirement for the place states on 2026-10-13 (DEC-0163 §4).
  *
  * **Page rhythm:** PHOTO hero · ink (the live-data anchor, once) · paper ·
  * lime-100 · paper · surface · lime-500 · (lime-100) · surface · paper.
  */
 
 const ROUTE = "place" as const;
-
-/**
- * **Cache Components: this route blocks on purpose** (TS-WEB-0009 D1, the dynamic
- * layer). TS-WEB-0020 D2 keys five page states on `?ort=`, and TS-WEB-0020-A10 requires
- * stage 0 to render with JavaScript disabled and with **no unresolved
- * skeleton** — so the request value is read in the page rather than behind a
- * `<Suspense>` boundary whose fallback a JS-less visitor would never get
- * past. `instant = false` is the framework's own marker for "allowed to
- * block". Content and every live module below stay cached, so the
- * per-request work is a cache read and a slug lookup. `state/open.md`.
- */
-export const instant = false;
-
-/**
- * TS-WEB-0012 D4 — `save-calendar-to-homescreen`, `stage: handover`: every click
- * that opens this place's calendar on `app.*`. Three of them in state A (the
- * module's onward link, the homescreen block's action, the closing block),
- * all the same goal at the same stage, each fired by its own click — never
- * on render.
- */
-const SAVE_CALENDAR = {
-  goalId: "save-calendar-to-homescreen",
-  stage: "handover",
-} as const;
 
 export async function generateMetadata({
   params,
@@ -143,96 +113,6 @@ const PAGE_COPY: Record<Locale, { genericPlace: string; nearby: string }> = {
 };
 
 /**
- * The four stories, in the order the artifact writes them and the page reads
- * them — the ground each stands on, the photograph it is led by where one
- * exists, and the categories its live example prefers.
- *
- * The grounds alternate by construction (`paper → lime-100 → paper →
- * surface`), which is what stops four arguments in a row from reading as one
- * long block; `rhythm.ts` checks the whole sequence in the page's own test.
- */
-interface StorySection {
-  readonly slotId: string;
-  readonly quoteSlotId: string;
-  readonly id: string;
-  readonly surface: SectionSurface;
-  /**
-   * A story is led by a photograph **or** by a live date, never by both: a
-   * picture, a row and a quote is three pieces of evidence for one argument,
-   * and four stories built that way are a 3 000 px wall. Two picture-led and
-   * two date-led, alternating, is the rhythm the brief asks for.
-   */
-  readonly imageId?: string;
-  /**
-   * What this story's live example must be: TS-WEB-0020 D3's events-api
-   * category, strictly (A14), plus the words that make a date of that
-   * category this story's date (DEC-0152).
-   */
-  readonly example?: StoryExampleSpec;
-  /** The story's glyph — the hour's well, and the watermark where it has no photograph. */
-  readonly icon: IconName;
-  /**
-   * The "benefit" kicker naming what this specific story is about (DEC-0148)
-   * — no longer one shared phrase across all three.
-   */
-  readonly kickerKey: DictionaryKeyOf<"kickers">;
-}
-
-const STORIES: readonly StorySection[] = [
-  {
-    slotId: "dein-ort-3-story-baeckerwagen",
-    quoteSlotId: "dein-ort-3-story-baeckerwagen-demo-testimonial",
-    id: "story-baeckerwagen",
-    surface: "paper",
-    imageId: "dein-ort-story-baeckerwagen",
-    kickerKey: "everydaySupply",
-    icon: "truck",
-    example: {
-      category: "everyday-supply",
-      topic: /bäcker|baecker|brot|backwaren|verkaufswagen|fleischer|fisch|wochenmarkt|markt|hofladen|lieferung/i,
-      // `everyday-supply` also holds the waste collection; under the bread
-      // story only a supply date that is about buying something counts.
-      topicRequired: true,
-    },
-  },
-  {
-    slotId: "dein-ort-4-story-ratssitzung",
-    quoteSlotId: "dein-ort-4-story-ratssitzung-demo-testimonial",
-    id: "story-ratssitzung",
-    surface: "lime-100",
-    // `community-life` is where the council meeting lives upstream, and only
-    // there (D3, A14) — a supply date under a story about being heard before
-    // the vote would be an example of nothing. Within it, a sitting beats the
-    // women's sport that stood here in round 4 (F-4-2).
-    example: {
-      category: "community-life",
-      topic: /gemeindevertret|stadtvertret|gemeinderat|sitzung|ausschuss|einwohnerversammlung|bürgermeister|buergermeister|amt\b/i,
-    },
-    kickerKey: "communityLife",
-    icon: "landmark",
-  },
-  {
-    slotId: "dein-ort-5-story-kultur",
-    quoteSlotId: "dein-ort-5-story-kultur-demo",
-    id: "story-kultur",
-    surface: "paper",
-    imageId: "dein-ort-story-kultur",
-    kickerKey: "cultureAndTourism",
-    icon: "music",
-    example: {
-      category: "culture-tourism",
-      topic: /konzert|musik|ausstellung|lesung|theater|schloss|chor|kino|kultur/i,
-    },
-  },
-];
-
-/** Story 4 — the radius, which carries position 2 as its own example. */
-const RADIUS_STORY = {
-  slotId: "dein-ort-6-story-radius",
-  quoteSlotId: "dein-ort-6-story-radius-demo-testimonial",
-} as const;
-
-/**
  * The testimonial a story closes on, read off its own proof-card slot.
  *
  * The artifacts write one line — `„…" — Elisabeth Kurzweg, Bäckerei Kurzweg
@@ -256,61 +136,7 @@ function testimonialOf(source: ContentSlot): QuoteFragment | undefined {
   };
 }
 
-/**
- * TS-WEB-0020 D4 — the homescreen block, which names a place and links the app.
- *
- * Cached per slug: everything it renders is a function of the resolved place
- * and the artifact's own instructions, so it belongs on the cache side of
- * TS-WEB-0009 D1 rather than in the request-bound half.
- */
-interface HomescreenCopy {
-  readonly locale: Locale;
-  readonly headline: string;
-  readonly ios: string;
-  readonly android: string;
-  readonly ctaTemplate: string;
-  readonly genericPlace: string;
-}
-
-async function Homescreen({ slug, locale, headline, ios, android, ctaTemplate, genericPlace }: HomescreenCopy & { readonly slug: string }) {
-  "use cache";
-  cacheLife(cacheLifeProfile("activePlaces"));
-  cacheTag(cacheTags.places());
-
-  const place = await resolvePlace(slug);
-  const name = place?.name ?? genericPlace;
-
-  return (
-    <HowtoBlock
-      android={{ steps: splitSteps(fillTemplate(android, { place: name })) }}
-      // No resolved place, no app link: an unresolved place has no handover
-      // (TS-WEB-0008 D9) and the founding route carries it instead.
-      appHref={place ? calendarUrl(place) : href("placeStart", locale)}
-      // Only a resolved place is a calendar handover; the founding route is
-      // a different goal and is not armed here.
-      conversion={
-        place ? { ...SAVE_CALENDAR, attributes: { place: place.slug } } : undefined
-      }
-      appLinkLabel={fillTemplate(ctaTemplate, { place: name })}
-      // The iPhone steps stand open and Android is one tap away: both
-      // instructions are in the DOM for every visitor, under every user
-      // agent, and the block is ~280 px shorter on a phone for it.
-      collapsed={["android"]}
-      headline={headline}
-      ios={{ steps: splitSteps(fillTemplate(ios, { place: name })) }}
-      // F-2-33: the screenshot frames badge themselves out of the dictionary.
-      locale={locale}
-    />
-  );
-}
-
-export default async function PlacePage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ lang: string }>;
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+export default async function PlacePage({ params }: { params: Promise<{ lang: string }> }) {
   const locale = await localeFrom(params);
   const words = dictionary(locale);
   const page = await pageContent(ROUTE, locale);
@@ -319,110 +145,76 @@ export default async function PlacePage({
   const heroImage = pageImage(page, HERO_IMAGE_ID.place);
   const fallbackCopy = PAGE_COPY[locale];
   const stateS0 = slot(page, "dein-ort-0-state-s0");
-  const s0Headline = fieldAt(stateS0.blocks, 0);
-  const copy = {
-    ...fallbackCopy,
-    nearby: fieldAt(stateS0.blocks, 1) ?? fallbackCopy.nearby,
-    /**
-     * S0's placeholder — "Tipp den Ortsnamen ein" (issue #20): the instruction
-     * the helper line used to carry; `undefined` lets the module use the
-     * dictionary's.
-     */
-    searchPlaceholder: fieldAt(stateS0.blocks, 3),
-    /** S0's hand-off from the search field into the module below it. */
-    s0Transition: fieldAt(stateS0.blocks, 4),
-  };
-
-  /**
-   * The one request value this page has, resolved once, outside every cache
-   * boundary (TS-WEB-0009 D2) — and read in the **page**, not behind a
-   * `<Suspense>`.
-   *
-   * That makes `/dein-ort` a dynamic route rather than a prerendered shell,
-   * and it is the honest shape for this page: TS-WEB-0020 D2 keys *five* states on
-   * the place parameter, and TS-WEB-0020-A10 requires stage 0 to render with
-   * JavaScript disabled and with **no unresolved skeleton**. A `<Suspense>`
-   * boundary buys the shell back only by paying with a skeleton a JS-less
-   * visitor never gets past — which is precisely what A10 forbids. The
-   * shell/island split still holds underneath: content and every live module
-   * are cached (`_content.ts`, `_islands.tsx`), so the per-request work is a
-   * cache read and a slug lookup, not an upstream call.
-   */
-  const outcome = await resolvePlaceOutcome((await searchParams)["ort"]);
-
-  /**
-   * TS-WEB-0020 D2 row 5 and TS-WEB-0008 D7 row 3: a place geo-api has no community for
-   * is **not this page**. One hop, the query carried verbatim (TS-WEB-0021 D4
-   * re-validates it on arrival), and the founding path finally has its entry.
-   *
-   * A value the validator *dropped* takes the other row — S0 at 200, no
-   * redirect (TS-WEB-0020-A9) — because nothing has been established about it.
-   */
-  if (outcome.kind === "uncovered") {
-    redirect(linkHref("placeStart", { locale, query: { ort: outcome.query } }));
-  }
-
-  const stated = outcome.kind === "covered" ? outcome.place : undefined;
-  const anchor = stated ?? STAGE_ZERO_ANCHOR;
-
-  /**
-   * Which of TS-WEB-0020 D2's three states renders. The empty state is TS-WEB-0008 D4's
-   * trigger — a **covered** place whose window is empty — so the page has to
-   * know the answer before block 1 is composed: state B moves the primary
-   * conversion to publishing (D4), which is a decision about the page, not
-   * about one module (F-2-61). The lookup is the same cached call the island
-   * makes, so the second read costs a cache hit.
-   */
-  const statedDates = stated === undefined ? undefined : await placeEvents({ slug: stated.slug, rowCount: 3 });
-  const emptyState = statedDates?.data.publishInvitation === true;
-
   const stateA = slot(page, "dein-ort-1-state-a");
   const stateB = slot(page, "dein-ort-2-state-b");
   const homescreen = slot(page, "dein-ort-7-homescreen");
   const permanence = slot(page, "dein-ort-8-permanence");
   const radiusStory = slot(page, RADIUS_STORY.slotId);
 
+  /** S0's placeholder — "Tipp den Ortsnamen ein" (issue #20); `undefined` lets the module use the dictionary's. */
+  const s0Placeholder = fieldAt(stateS0.blocks, 3);
+  /** State A's "Suche nach einem anderen Ort …" (issue #23). */
+  const aPlaceholder = fieldAt(stateA.blocks, 2) ?? s0Placeholder;
+
   /**
-   * The example rows the stories borrow from the live modules — the
-   * "snapshot rung of the example ladder" of TS-WEB-0020 D3, cached rather than
-   * suspended: the rows stand *inside* prose, where a skeleton would read as
-   * a broken paragraph rather than as arriving data.
-   *
-   * Position 1 prints the first three of `rows.place` and story 4 the first
-   * five of `rows.nearby`, so the stories pick out of what is left — see
-   * `story-examples.ts` for why an example must not be a row the reader has
-   * just scrolled past.
+   * Every state's copy, read once here — strings only, because the state is
+   * chosen in the browser (`place-islands.tsx`). TS-WEB-0020 D2 / state/open.md
+   * row 93: S0 names no place at all, so it gets its own authored sentence
+   * rather than state A's "Das ist los in …" filled with a generic word.
    */
-  const rows = await exampleRows(anchor.slug, anchor.lat, anchor.lng, locale);
+  const copy: PlaceCopy = {
+    locale,
+    s0Headline:
+      fieldAt(stateS0.blocks, 0) ??
+      fillTemplate(stateA.fields["Headline"] ?? "", { place: fallbackCopy.genericPlace }),
+    aHeadline: stateA.fields["Headline"] ?? "",
+    aCta: stateA.cta ?? "",
+    /** The `h1` of state B: SRC-0002's own sentence. */
+    bHeadline: stateB.fields["Headline"] ?? "",
+    bCtaLabel: ctaLabelOnly(stateB.cta ?? "") ?? "",
+    /**
+     * The offer's own line, over the button — in the module slot and again
+     * in the closing block, which is what "the closing block repeats the
+     * primary conversion" means (TS-WEB-0006 D6).
+     */
+    bOffer: fieldAt(stateB.blocks, 2) ?? "",
+    s0Transition: fieldAt(stateS0.blocks, 4),
+  };
+
   /**
-   * DEC-0152: the stories choose from the searched place's surroundings — the
-   * showcase village only where no place was searched — strictly by D3's
-   * category, then by topic, text, image, distance and date. A row position 1
-   * or story 4 already prints is never chosen again: a story that repeats a
-   * row the reader has just scrolled past is not an example (polish brief,
-   * page 2).
+   * The place search, in the stage treatment of issue #20 (TS-WEB-0020-A18).
+   * `hero` is the instance in block 1 — S0's conversion and state A's
+   * "Suche nach einem anderen Ort …" (issue #23) — and `primary` says whether
+   * it carries the page's one `data-cta="primary"`, which it does only in S0:
+   * once a place is known the calendar handover under the rows is the
+   * conversion (G-5).
    */
-  const examplePool = await storyExamplePool(anchor.slug);
-  const shown = new Set([...rows.place.slice(0, 3), ...rows.nearby.slice(0, 5)].flatMap((row) => row.id ?? []));
-  /** Only the stories that show a row ask for one — a picture-led story must not eat one. */
-  const rowStories = STORIES.flatMap((story) => (story.example === undefined ? [] : [{ story, spec: story.example }]));
-  const picked = selectStoryExamples(
-    examplePool.events,
-    rowStories.map(({ spec }) => spec),
-    shown,
+  const search = ({
+    hero,
+    primary,
+    placeholder,
+  }: {
+    readonly hero: boolean;
+    readonly primary: boolean;
+    readonly placeholder?: string;
+  }) => (
+    <PlaceSearch
+      stage
+      typeahead
+      id={hero ? "ort-suche-fokus" : "ort-suche-abschluss"}
+      locale={locale}
+      placeholder={placeholder}
+      submitDataCta={primary ? "primary" : undefined}
+      to="place"
+      tone={hero ? "dark" : "light"}
+    />
   );
-  const storyExamples = new Map(
-    rowStories.map(({ story }, index) => {
-      const event = picked[index];
-      return [story.id, event === undefined ? undefined : toListItems([event], locale)[0]] as const;
-    }),
-  );
+
   /** DEC-0153 — the stage's stories, read off the three story slots. */
   const stage = slot(page, "dein-ort-2b-story-stage");
   const stageStories: StageStory[] = STORIES.map((story) => {
     const content = slot(page, story.slotId);
     const image = story.imageId === undefined ? undefined : pageImage(page, story.imageId);
-    const example = storyExamples.get(story.id);
     const quote = testimonialOf(slot(page, story.quoteSlotId));
     return {
       id: story.id,
@@ -435,237 +227,59 @@ export default async function PlacePage({
       ...(image
         ? { photo: { src: image.stageSrc ?? image.src, ...(image.anchor ? { anchor: image.anchor } : {}) } }
         : {}),
-      ...(example
-        ? {
-            example: (
-              <EventRow {...example} locale={locale} state={examplePool.demo ? "mocked" : "ready"} />
-            ),
-          }
-        : {}),
+      // A date-led story's live example (TS-WEB-0020 D3, A14, DEC-0152),
+      // picked in the browser from the anchor's surroundings (DEC-0163).
+      ...(story.example ? { example: <StoryExample locale={locale} storyId={story.id} /> } : {}),
     };
   });
-
-
-  /**
-   * TS-WEB-0008 D4's conversion moment, as block 1's own module slot (F-2-61).
-   *
-   * The offer is the page's **primary** conversion in state B, so the marker
-   * sits here and the search below is demoted (TS-WEB-0008 D4, TS-WEB-0008-A6); its
-   * target is `register-as-publisher`'s own route, carrying the resolved slug
-   * (TS-WEB-0023 D5); and the place name comes from the resolved geo-api
-   * community, never from the raw parameter.
-   */
-  const publishOffer =
-    emptyState && stated !== undefined
-      ? {
-          /** The `h1`: SRC-0002's own sentence, which belongs to this page and to no other. */
-          headline: fillTemplate(stateB.fields["Headline"] ?? "", { place: stated.name }),
-          ctaLabel: ctaLabelOnly(stateB.cta ?? "") ?? "",
-          /**
-           * The offer's own line, over the button — in the module slot and
-           * again in the closing block, which is what "the closing block
-           * repeats the primary conversion" means (TS-WEB-0006 D6). The `h1` says
-           * what is true about the place; this says what one date would do,
-           * and the two are not the same sentence twice.
-           */
-          offer: fillTemplate(fieldAt(stateB.blocks, 2) ?? "", { place: stated.name }),
-          slug: stated.slug,
-        }
-      : undefined;
-
-  const homescreenCopy = {
-    locale,
-    headline: fieldAt(homescreen.blocks, 0) ?? "",
-    ios: fieldAt(homescreen.blocks, 1) ?? "",
-    android: fieldAt(homescreen.blocks, 2) ?? "",
-    ctaTemplate: stateA.cta ?? "",
-    genericPlace: copy.genericPlace,
-  } as const;
-
-  /**
-   * The place search, in the stage treatment of issue #20 (TS-WEB-0020-A18):
-   * the placeholder carries the instruction, no helper line, the location
-   * control directly under the field. `hero` is the instance in block 1 —
-   * S0's conversion and state A's "Suche nach einem anderen Ort …" (issue
-   * #23) — and `primary` says whether it carries the page's one
-   * `data-cta="primary"`, which it does only in S0: once a place is known the
-   * calendar handover under the rows is the conversion (G-5).
-   */
-  const search = ({ hero, primary }: { readonly hero: boolean; readonly primary: boolean }) => (
-    <PlaceSearch
-      stage
-      typeahead
-      id={hero ? "ort-suche-fokus" : "ort-suche-abschluss"}
-      locale={locale}
-      placeholder={stated === undefined ? copy.searchPlaceholder : (fieldAt(stateA.blocks, 2) ?? copy.searchPlaceholder)}
-      submitDataCta={primary ? "primary" : undefined}
-      to="place"
-      tone={hero ? "dark" : "light"}
-    />
-  );
-
-  /**
-   * The page's conversion once a place is known: the calendar handover,
-   * repeated verbatim in the closing block (TS-WEB-0006 D6). It is a link off
-   * this origin, so the closing block takes it as a module rather than as a
-   * route id — and it takes the **primary treatment** there, like every
-   * other page's closing button: as `outbound-link`'s secondary pill it was
-   * white on the closing block's own paper and read as indented body text
-   * rather than as the thing the page ends on. `data-cta="repeat"` keeps it
-   * inside the contrast sweep and out of the one-primary-per-page count
-   * (TS-WEB-0006 D6).
-   */
-  const handover =
-    stated === undefined || publishOffer !== undefined ? undefined : (
-      <ConversionTracker
-        attributes={{ ...SAVE_CALENDAR, place: stated.slug }}
-        goalId={SAVE_CALENDAR.goalId}
-        stage={SAVE_CALENDAR.stage}
-      >
-        <Button
-          dataCta="repeat"
-          href={calendarUrl(stated)}
-          locale={locale}
-          onward
-          variant="primary-light"
-        >
-          {fillTemplate(stateA.cta ?? "", { place: stated.name })}
-        </Button>
-      </ConversionTracker>
-    );
-
-  /** The closing block, in whichever state the page is in (G-6, TS-WEB-0006 D6). */
-  const closing =
-    publishOffer !== undefined
-      ? ({
-          to: "register",
-          label: publishOffer.ctaLabel,
-          query: { ort: publishOffer.slug },
-          heading: publishOffer.offer || undefined,
-          // The permanence promise is cleared content (`community-calendar`
-          // `price.note`, publicly committed since 2022), so it may stand.
-          reassurance: fieldAt(permanence.blocks, 0),
-        } as const)
-      : ({
-          variant: "module",
-          node: handover ?? search({ hero: false, primary: false }),
-          heading: fieldAt(permanence.blocks, 1),
-          reassurance: fieldAt(permanence.blocks, 0),
-        } as const);
 
   return (
     <>
       {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
+      <PlaceHop locale={locale} />
     <PageFrame
-      closing={closing}
+      closing={{
+        variant: "module",
+        bare: true,
+        node: (
+          <PlaceClosing
+            copy={copy}
+            moduleHeading={fieldAt(permanence.blocks, 1)}
+            // The permanence promise is cleared content (`community-calendar`
+            // `price.note`, publicly committed since 2022), so it may stand.
+            reassurance={fieldAt(permanence.blocks, 0)}
+            s0Search={search({ hero: false, primary: false, placeholder: s0Placeholder })}
+          />
+        ),
+      }}
       contextBandHeading={fieldAt(slot(page, "dein-ort-9-context-band").blocks, 0)}
       locale={locale}
       meta={PLACE_META}
     >
-      {/* Block 1 — the focus block. The `h1` names the place in every state
-          and at the same DOM position (TS-WEB-0020 D5); S0 has no resolved place,
-          so the artifact's own sentence carries a generic one instead of
-          claiming a village. The search is the conversion only while no
-          place is known — once one is, the calendar handover under the rows
-          is (G-5), and in state B the publishing offer. */}
-      <HeroBlock
-        cta={stated === undefined ? search({ hero: true, primary: true }) : undefined}
-        headline={
-          publishOffer?.headline ??
-          (stated === undefined
-            ? // TS-WEB-0020 D2 / state/open.md row 93: S0 names no place at all, so
-              // it gets its own authored sentence rather than state A's
-              // "Das ist los in …" template filled with a generic word.
-              (s0Headline ?? fillTemplate(stateA.fields["Headline"] ?? "", { place: copy.genericPlace }))
-            : fillTemplate(stateA.fields["Headline"] ?? "", { place: stated.name }))
-        }
-        id="focus-block"
-        // F-2-33: the hero's `photo-surface` badges itself out of the
-        // dictionary — without the page's language it marks an English page
-        // in German.
-        locale={locale}
-        focal={heroImage?.focal}
-        notDepicting={heroImage?.notDepicting}
-        placeholderId={heroImage?.placeholderId}
-        // Issue #23 (TS-WEB-0020-A18): in state A the stage keeps the search
-        // for another place — the same module as S0's, with the same height,
-        // placeholder style and keyboard, and without the primary marker,
-        // which the calendar handover under the rows carries.
-        search={
-          stated !== undefined && publishOffer === undefined
-            ? search({ hero: true, primary: false })
-            : undefined
-        }
-        src={heroImage?.src}
-        wideSrc={heroImage?.wideSrc}
-        // `place-name` is the 50 px display role of SRC-0014 §Typography,
-        // right for "Das ist los in X"; S0's and state B's full sentences
-        // take the Display role instead. Neither is clamped any more (G-8).
-        variant={publishOffer === undefined && stated !== undefined ? "place-name" : undefined}
+      {/* Block 1 — the focus block, in whichever state the place resolves to. */}
+      <PlaceHero
+        aSearch={search({ hero: true, primary: false, placeholder: aPlaceholder })}
+        copy={copy}
+        image={{
+          src: heroImage?.src,
+          wideSrc: heroImage?.wideSrc,
+          focal: heroImage?.focal,
+          notDepicting: heroImage?.notDepicting,
+          placeholderId: heroImage?.placeholderId,
+        }}
+        s0Search={search({ hero: true, primary: true, placeholder: s0Placeholder })}
       />
 
       {/* Block 1, the module slot: TS-WEB-0008 position 1. `role="status"` is the
-          region TS-WEB-0009 D7 announces the focus-job shift in — it is the frame,
-          not the rows, that carries it. In state B the slot carries the
-          publish offer instead of an empty date box ("Position 1 is not left
-          blank", TS-WEB-0008 D4) — rendered here rather than inside the cached
-          island, because its target carries the resolved slug and its marker
-          is the page's primary conversion. */}
+          region TS-WEB-0009 D7 announces the focus-job shift in. */}
       <MotionReveal>
-        <SectionShell
-          id="place-dates"
-          kicker={publishOffer === undefined ? words.kickers.liveAnswer : undefined}
-          surface="ink"
-          transition={stated === undefined ? copy.s0Transition : undefined}
-        >
-          {publishOffer === undefined ? (
-            <PlaceDatesIsland
-              announced
-              conversion={SAVE_CALENDAR}
-              // S0 shows what an answer looks like — one row, no handover to
-              // a place the visitor never asked about. State A answers, and
-              // its handover is the page's conversion.
-              ctaDataCta={stated === undefined ? undefined : "primary"}
-              ctaTemplate={stated === undefined ? undefined : (stateA.cta ?? "")}
-              locale={locale}
-              // S0's single row is an illustration of "what's on", so it
-              // shows the village's own life where the window has some:
-              // "so sieht das aus, wenn ein Ort dabei ist" answered by the
-              // next bin collection illustrates the wrong thing.
-              prefer={stated === undefined ? ["social", "culture", "fest", "official"] : undefined}
-              role={stated === undefined ? "story" : "illustrative"}
-              rowCount={stated === undefined ? 1 : 3}
-              slug={anchor.slug}
-              titleHidden={stated !== undefined}
-              titleTemplate={stateA.fields["Headline"] ?? ""}
-              tone="dark"
-            />
-          ) : (
-            <EmptyStateBlock
-              announced
-              cta={
-                <Button
-                  dataCta="primary"
-                  locale={locale}
-                  onward
-                  query={{ ort: publishOffer.slug }}
-                  to="register"
-                  variant="primary-light"
-                >
-                  {publishOffer.ctaLabel}
-                </Button>
-              }
-              headline={publishOffer.offer || publishOffer.headline}
-            />
-          )}
-        </SectionShell>
+        <PlaceModuleSlot copy={copy} />
       </MotionReveal>
 
       {/* Story 4 *is* TS-WEB-0008 position 2: the fifteen-minute radius, argued in
           prose and then shown as the five rows from around here, every row
-          naming its own place (TS-WEB-0008 D1). Before the polish pass the module
-          stood on its own after the stories, which made it a fifth list. */}
+          naming its own place (TS-WEB-0008 D1). */}
       <MotionReveal>
         <SectionShell
           dataBlock="value-story"
@@ -676,18 +290,7 @@ export default async function PlacePage({
         >
           <ValueStory
             aspect={fieldAt(radiusStory.blocks, 0) ?? ""}
-            example={
-              <NearbyIsland
-                conversion={SAVE_CALENDAR}
-                headingLevel="h3"
-                lat={anchor.lat}
-                lng={anchor.lng}
-                locale={locale}
-                role="answering"
-                rowCount={5}
-                titleTemplate={copy.nearby}
-              />
-            }
+            example={<PlaceNearby locale={locale} titleTemplate={fieldAt(stateS0.blocks, 1) ?? fallbackCopy.nearby} />}
             exampleLevel="surrounding"
             exampleVariant="module"
             headingLevel="h2"
@@ -698,10 +301,9 @@ export default async function PlacePage({
       </MotionReveal>
 
       {/* Block 2a — the story stage (DEC-0153): the three single-category
-          stories as one module, "ein Tag im Dorf", instead of three stacked
-          sections. Each hour carries its picture or colour, its quote and one
-          live date of its own category (TS-WEB-0020 D3, A14). It stands after
-          the radius story so the page's two dark grounds never touch. */}
+          stories as one module, "ein Tag im Dorf". Each hour carries its
+          picture or colour, its quote and one live date of its own category
+          (TS-WEB-0020 D3, A14). */}
       <MotionReveal>
         <StoryStage
           action={
@@ -722,35 +324,32 @@ export default async function PlacePage({
       </MotionReveal>
 
       {/* Block 2c — the homescreen block. Both instructions, always, for
-          every visitor: no user-agent sniffing, no install probe (TS-WEB-0020 D4).
-          Its action repeats the goal and the target of block 1 in the
-          secondary treatment. */}
+          every visitor: no user-agent sniffing, no install probe (TS-WEB-0020 D4). */}
       <MotionReveal>
         <SectionShell id="homescreen" kicker={words.kickers.howItWorks} surface="lime-500">
-          <Homescreen slug={anchor.slug} {...homescreenCopy} />
+          <PlaceHomescreen
+            android={fieldAt(homescreen.blocks, 2) ?? ""}
+            ctaTemplate={stateA.cta ?? ""}
+            headline={fieldAt(homescreen.blocks, 0) ?? ""}
+            ios={fieldAt(homescreen.blocks, 1) ?? ""}
+            locale={locale}
+          />
         </SectionShell>
       </MotionReveal>
 
-      {/* The search, once a place is known: not the page's conversion any
-          more, so it is a quiet line above the band rather than the block
-          the page ends on. In S0 it is the conversion, and the closing block
-          carries it instead. In state A the stage itself keeps the search for
-          another place since issue #23, so this line would ask the same thing
-          twice; it stands in state B only, whose stage carries the publishing
-          offer and no search. */}
-      {stated === undefined || publishOffer === undefined ? null : (
+      {/* The search, once a place is known and has no dates: state B's stage
+          carries the publishing offer and no search, so this quiet line above
+          the band is where "a different place?" lives. State A keeps the
+          search in the stage itself (issue #23); S0's closing block is the
+          search. */}
+      <OnlyInStateB>
         <MotionReveal>
-          <SectionShell
-            density="tight"
-            id="other-place"
-            labelledBy="other-place-heading"
-            surface="lime-100"
-          >
+          <SectionShell density="tight" id="other-place" labelledBy="other-place-heading" surface="lime-100">
             <h2 id="other-place-heading">{fieldAt(permanence.blocks, 2)}</h2>
-            {search({ hero: false, primary: false })}
+            {search({ hero: false, primary: false, placeholder: aPlaceholder })}
           </SectionShell>
         </MotionReveal>
-      )}
+      </OnlyInStateB>
     </PageFrame>
     </>
   );
