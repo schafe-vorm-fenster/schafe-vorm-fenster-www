@@ -5,16 +5,6 @@
  */
 
 /*
- * A scene's instance is an illustration, not a section background: without a
- * cap it fills the full section width and a `ratio-portrait` box becomes a
- * 1400 px tall wall on a desktop viewport. The reading measure is the same
- * cap the hero's lead uses.
- */
-.sceneMedia {
-  max-width: var(--measure-reading);
-}
-
-/*
  * The heading over a scene's single live row — the scene's own label for what
  * the row is, at card size, since the row beneath it is not a module with a
  * frame of its own.

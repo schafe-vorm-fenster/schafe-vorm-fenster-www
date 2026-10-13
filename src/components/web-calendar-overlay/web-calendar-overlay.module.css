@@ -1,0 +1,141 @@
+/*
+ * `web-calendar-overlay` — SRC-0014 §Web-calendar overlay, DEC-0162 §5.
+ * Tokens only. A flat `paper` block: radius 0, no border, no shadow.
+ */
+.stage {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+}
+
+.media {
+  width: 100%;
+}
+
+/* Below `xl`: under the photograph's lower edge, overlapping it by one
+   step, right-aligned on the page gutter. */
+.drawing {
+  align-self: flex-end;
+  background: var(--color-neutral-paper);
+  color: var(--color-neutral-ink);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-inline-end: var(--gutter);
+  margin-top: calc(-1 * var(--space-12));
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  position: relative;
+  width: min(20rem, calc(100% - 2 * var(--gutter)));
+  z-index: 1;
+}
+
+/* From `xl`: inside the photograph's lower right, on the container's right
+   edge. The photograph is 16:9 across the viewport, so the drawing covers
+   its lower right quarter and leaves the motif (focal `x` 42 %) clear. */
+@media (min-width: 64rem) {
+  .drawing {
+    bottom: var(--space-8);
+    margin: 0;
+    position: absolute;
+    right: max(var(--gutter), calc((100% - var(--measure-page)) / 2));
+    width: 22rem;
+  }
+}
+
+.chrome {
+  align-items: center;
+  background: var(--color-neutral-surface2);
+  color: var(--color-neutral-muted);
+  display: flex;
+  gap: var(--space-2);
+  margin: calc(-1 * var(--space-3)) calc(-1 * var(--space-4)) 0;
+  padding: var(--space-2) var(--space-4);
+}
+
+.address {
+  background: var(--color-neutral-paper);
+  border-radius: 999px;
+  flex: 1;
+  height: var(--space-4);
+}
+
+.head {
+  align-items: center;
+  color: var(--color-lime-800);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.headBar {
+  background: var(--color-neutral-ink);
+  height: var(--space-3);
+  width: 45%;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  align-items: center;
+  border-top: 1px solid var(--color-neutral-line);
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: auto auto minmax(0, 1fr);
+  padding-block: var(--space-2);
+}
+
+.day {
+  font-family: var(--font-mono);
+  font-size: var(--type-figure-size);
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* The category coin of SRC-0014 §Category colours: fill and glyph tokens. */
+.coin {
+  align-items: center;
+  border-radius: 999px;
+  display: inline-flex;
+  height: var(--space-8);
+  justify-content: center;
+  width: var(--space-8);
+}
+
+.coin[data-category="culture-tourism"] {
+  background: var(--color-category-culture-tourism);
+  color: var(--color-category-culture-tourism-glyph);
+}
+
+.coin[data-category="community-life"] {
+  background: var(--color-category-community-life);
+  color: var(--color-category-community-life-glyph);
+}
+
+.coin[data-category="everyday-supply"] {
+  background: var(--color-category-everyday-supply);
+  color: var(--color-category-everyday-supply-glyph);
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.titleBar {
+  background: var(--color-neutral-text2);
+  height: var(--space-3);
+  width: 85%;
+}
+
+.metaBar {
+  background: var(--color-neutral-line);
+  height: var(--space-2);
+  width: 55%;
+}

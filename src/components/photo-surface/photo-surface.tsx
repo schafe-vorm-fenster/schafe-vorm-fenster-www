@@ -66,6 +66,14 @@ export interface PhotoSurfaceProps extends DataStateProps {
    */
   readonly aiEdited?: boolean;
   readonly id?: string;
+  /**
+   * The block name a page's composition sheet uses (`data-block`), as
+   * `section-shell` carries it — for a photo section that is a block of its
+   * own rather than the hero (`/ueber-uns`'s quote band, DEC-0162 §1).
+   */
+  readonly dataBlock?: string;
+  /** The section's accessible name, where it carries no heading of its own. */
+  readonly label?: string;
   /** The manifest slot id when this surface shows a generated image (DEC-0068). */
   readonly placeholderId?: string;
   /**
@@ -124,6 +132,8 @@ export function PhotoSurface({
   aiEdited = false,
   state = "ready",
   id,
+  dataBlock,
+  label,
   placeholderId,
   className,
   children,
@@ -193,7 +203,9 @@ export function PhotoSurface({
         </>
       ) : null}
     <section
+      aria-label={label}
       className={classes}
+      data-block={dataBlock}
       /* The page's hero surface — what the header observes to know when it
          has scrolled off the photograph (Jan's round-3 point 2). */
       data-hero={hero && !missingPhoto ? "true" : undefined}

@@ -14,9 +14,9 @@ import { checkRhythm, type RhythmEntry } from "@/src/components/section-shell/rh
  * (TS-WEB-0016-A21, DEC-0122 §3); the contact section is never a rhythm entry
  * (SRC-0014, DEC-0117).
  *
- * The story section stands after the stream, not before it: A3's second clause
- * puts the first proof element inside the second viewport height, and 747 px of
- * story between the argument and the stream put it in the third (DEC-0132 §8).
+ * Since DEC-0162 the page follows the owner's design of 2026-10-12: three
+ * chapters, a quote band as the second photo section, the person, the
+ * principles and the award block.
  *
  * The list is declared, not read off the render, so it can drift from
  * `page.tsx`. Its counterpart in `e2e/pages/ueber-uns.spec.ts` (A2) reads the
@@ -24,19 +24,22 @@ import { checkRhythm, type RhythmEntry } from "@/src/components/section-shell/rh
  * did not follow fails there.
  */
 describe("TS-WEB-0027-A2: /ueber-uns page rhythm", () => {
-  it("has no rhythm violation and exactly one photo section", () => {
+  it("has no rhythm violation, two photo sections and none adjacent", () => {
+    // DEC-0162: the owner's design of 2026-10-12, chapter by chapter.
     const sections: RhythmEntry[] = [
-      "photo", // 1a hero — the h1 on the photograph
-      "paper", // 1b the village argument, the portrait, the honorary-mayor proof
-      "surface", // 2 proof stream
-      "lime-100", // 2b the story, the anecdotes, the founder quote
-      "paper", // 3 the archive link, tight
-      "lime-100", // 4 team
+      "photo", // 1 stage — kicker and the h1 on the photograph
+      "paper", // 2 chapter 01
+      "photo", // 3 the quote band, the founder portrait
+      "lime-100", // 4 chapter 02, the honorary-mayor proof
+      "paper", // 5 chapter 03, the stories
+      "lime-100", // 6 who is behind it
+      "paper", // 7 the principles
+      "violet-500", // 8 the award
       "surface", // PageFrame: context band
       "paper", // PageFrame: closing CTA — the page's one primary
     ];
     expect(checkRhythm(sections)).toEqual([]);
-    expect(sections.filter((section) => section === "photo")).toHaveLength(1);
+    expect(sections.filter((section) => section === "photo")).toHaveLength(2);
     // D4: no dark ink section here either — this page carries no live module.
     expect(sections.filter((section) => section === "ink")).toHaveLength(0);
   });

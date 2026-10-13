@@ -88,29 +88,28 @@ test.describe("/ueber-uns", () => {
     await expect(page.locator('section#kontakt [data-cta="primary"]')).toHaveCount(0);
   });
 
-  test("TS-WEB-0027-A2: the D2 block order, exactly one photo section, no counter", async ({
+  test("TS-WEB-0027-A2: the D2 chapter order, two photo sections never adjacent, no counter", async ({
     page,
   }) => {
     await page.goto("/ueber-uns");
     const blocks = await page
       .locator("#main [data-block]")
       .evaluateAll((nodes) => nodes.map((node) => node.getAttribute("data-block")));
-    // D2's beat order — origin, proof stream, archive, team. The story section
-    // D2 does not list stands after the stream rather than before it, because
-    // A3's second clause fixes the distance to the first proof element
-    // (DEC-0132 §8); the case below measures it.
+    // D2 as amended by DEC-0162: the owner's design of 2026-10-12, top to
+    // bottom — chapter 01, the quote band, chapter 02, chapter 03 (the
+    // stream as stories), the person, the principles, the award.
     expect(blocks).toEqual([
-      "dorfargument",
-      "belegstrom",
-      "herkunftsgeschichte",
-      "archiv-verweis",
+      "kapitel-1",
+      "zitat",
+      "kapitel-2",
+      "kapitel-3",
       "team",
+      "grundsaetze",
+      "auszeichnung",
     ]);
 
     // And the order ends there: the contact section stands after the last block
-    // and before the footer (TS-WEB-0006-A17, DEC-0081 §2). It carries no
-    // `data-block` — it is chrome, not a row of D2's composition sheet — so the
-    // array above cannot show it and the DOM order is read instead.
+    // and before the footer (TS-WEB-0006-A17, DEC-0081 §2).
     const closing = await page.evaluate(() => {
       const blocks = [...document.querySelectorAll("#main [data-block]")];
       const last = blocks.at(-1);
@@ -125,69 +124,55 @@ test.describe("/ueber-uns", () => {
     });
     expect(closing).toEqual({ found: true, afterLast: true, beforeFooter: true });
 
-    // One `h1`, and it is the hero's.
+    // One `h1`, and it is the stage's.
     await expect(page.locator("h1")).toHaveCount(1);
     await expect(page.locator("#herkunft h1")).toHaveCount(1);
 
-    // Exactly one photo section, so no two can be adjacent — the founder
-    // portrait runs full width inside a `paper` section, it is not a second
-    // photo surface. A photo section is a `section` carrying `--photo-image`.
-    await expect(page.locator("#main section[style*='--photo-image']")).toHaveCount(1);
+    // Two photo sections — the stage and the quote band — and never two in a
+    // row: the direct sibling after each one is not a photo section.
+    const photos = page.locator("#main section[style*='--photo-image']");
+    await expect(photos).toHaveCount(2);
+    const adjacent = await photos.evaluateAll((nodes) =>
+      nodes.some((node) => {
+        const next = node.nextElementSibling;
+        return next instanceof HTMLElement && (next.getAttribute("style") ?? "").includes("--photo-image");
+      }),
+    );
+    expect(adjacent).toBe(false);
 
-    // The band and the closing block are two sections now, not the merged
-    // three-job offer: the page has a conversion of its own.
     await expect(page.locator("aside#context-band")).toHaveCount(1);
     await expect(page.locator("#closing-cta")).toHaveCount(1);
     await expect(page.locator("aside#context-band #closing-cta")).toHaveCount(0);
 
-    // D4: no counter module, no year figure, no place count, no "seit …" claim.
-    // This is also TS-WEB-0018-A12 on this route, in its strongest form: the
-    // criterion asks that a counter module be absent when the stats upstream is
-    // stubbed empty, and here the module is deleted outright, so there is no
-    // upstream state in which one renders.
+    // D4: no counter module, no year figure, no place count, no "seit …" claim
+    // about the service (DEC-0132 §10).
     await expect(page.locator("[data-block='betrieb']")).toHaveCount(0);
     await expect(page.locator("[data-live-counter], [data-counter]")).toHaveCount(0);
     const main = await page.locator("#main").innerText();
-    // D4's "no 'seit …' claim anywhere on the page" is read as a claim about the
-    // **service** — a static traction claim, which is what D4's own rationale
-    // forbids (`FUN-WEB-0041`, TS-WEB-0008-A10). The founder's bio says
-    // "Beruflich mache ich seit 25 Jahren IT", which is a fact about a person and
-    // is the owner's own wording (R-ueber-10); widening the pattern to every
-    // "seit …" would fail on it, so the assertion holds the year form the
-    // deleted counter module would have produced (DEC-0132 §10).
     expect(main).not.toMatch(/\bseit\s+\d{4}/i);
     expect(main).not.toMatch(/\bseit\s+\d+\s+Jahren\s+(in\s+Betrieb|online|am\s+Netz)/i);
+    // No figure for the village's size (CG-034, DEC-0162 §3).
+    expect(main).not.toMatch(/\d+\s+Einwohner/);
   });
 
-  test("TS-WEB-0027-A3: the first viewport carries the h1 and the honorary-mayor proof, and no data-cta", async ({
+  test("TS-WEB-0027-A3: the first viewport carries the h1 and chapter 01, and no data-cta", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("/ueber-uns");
     await expect(page.locator("h1")).toBeInViewport();
-    // The claim and its proof element are the origin block's one inline proof.
-    const proof = page.locator("[data-block='dorfargument'] article");
-    await expect(proof).toHaveCount(1);
-    await expect(proof).toBeInViewport();
+    // The story starts on the first screen: chapter 01's heading is in it
+    // (DEC-0162 §1 — the narrative order of the owner's design).
+    await expect(page.locator("#kapitel-1-h2")).toBeInViewport();
     // DEC-0082 amendment C: the first viewport carries no CTA at all.
     for (const cta of await page.locator("[data-cta]").all()) {
       await expect(cta).not.toBeInViewport();
     }
-
-    // A3's second clause, measured rather than assumed: "the first proof
-    // element of the stream is reached within the second viewport height (≤ 1
-    // further screen of scrolling)" — at 1280 × 800 the budget is 1600 px from
-    // the top of the document. It was 2087 px while the story section stood
-    // between the origin and the stream, and no assertion caught it, so the
-    // number is read off the document here and the case fails on the position
-    // alone (DEC-0132 §8).
-    const firstProofTop = await page
-      .locator("[data-block='belegstrom'] article")
-      .first()
-      .evaluate((node) => node.getBoundingClientRect().top + window.scrollY);
-    expect(firstProofTop, "first stream element within 2 × viewport height").toBeLessThanOrEqual(
-      2 * 800,
-    );
+    // The honorary-mayor claim is the page's one inline proof, with its source,
+    // in chapter 02 (D3).
+    const proof = page.locator("[data-block='kapitel-2'] [data-inline-proof]");
+    await expect(proof).toHaveCount(1);
+    await expect(proof.locator("p")).toHaveCount(2);
   });
 
   test("TS-WEB-0006-A3: the other fold viewport carries no data-cta either", async ({ page }) => {
@@ -201,11 +186,11 @@ test.describe("/ueber-uns", () => {
     }
   });
 
-  test("TS-WEB-0027-A4: the origin block promises the free calendar, carries one price token, and argues the need", async ({
+  test("TS-WEB-0027-A4: the principles promise the free calendar, carry one price token, and argue the need", async ({
     page,
   }) => {
     await page.goto("/ueber-uns");
-    const block = await page.locator("[data-block='dorfargument']").innerText();
+    const block = await page.locator("[data-block='grundsaetze']").innerText();
     // Exactly one price token on the whole page, and it is the licence's — and
     // the token is built from the offering package rather than typed here, so a
     // figure that drifts from `portalize-calendar` fails this case instead of
@@ -240,30 +225,79 @@ test.describe("/ueber-uns", () => {
     page,
   }) => {
     await page.goto("/ueber-uns");
-    const stream = page.locator("[data-block='belegstrom']");
-    // Scoped to the stream container: only `article` is unique to one card each.
-    const cards = stream.locator("article");
+    const stream = page.locator("[data-block='kapitel-3']");
+    const stories = stream.locator("[data-story]");
     const emptySlot = stream.locator("[data-empty-proof]");
-    expect(await cards.count()).toBeLessThanOrEqual(6);
+    expect(await stories.count()).toBeGreaterThan(0);
+    expect(await stories.count()).toBeLessThanOrEqual(6);
     await expect(emptySlot).toHaveCount(1);
-    // D5: the reserved place shows its label and its sentence, and is in the
-    // accessibility tree rather than `aria-hidden`.
     await expect(emptySlot).not.toHaveAttribute("aria-hidden", "true");
     expect((await emptySlot.innerText()).trim().length).toBeGreaterThan(0);
     await expect(emptySlot.locator("img")).toHaveCount(0);
-    // It does not animate and does not change: identical text after 5 s.
     const before = await emptySlot.innerText();
     await page.waitForTimeout(5000);
     expect(await emptySlot.innerText()).toBe(before);
-    // No `unverified` element reaches the HTML (A5) — the pending testimonial
-    // in the artifact is not rendered.
     const html = await page.content();
     expect(html).not.toContain("Kulturlandbüro Uecker-Randow");
   });
 
-  test("TS-WEB-0027-A8: the archive is its own block with exactly one link", async ({ page }) => {
+  test("TS-WEB-0027-A17: every story opens and closes by mouse and keyboard, one at a time, with no layout shift on load", async ({
+    page,
+  }) => {
     await page.goto("/ueber-uns");
-    const block = page.locator("[data-block='archiv-verweis']");
+    const stories = page.locator("[data-block='kapitel-3'] [data-story]");
+    const count = await stories.count();
+    expect(count).toBeGreaterThan(1);
+    const details = stories.locator("details");
+    const openStates = () => details.evaluateAll((nodes) => nodes.map((node) => (node as HTMLDetailsElement).open));
+
+    // Server HTML: the first story is open, the rest are closed.
+    expect(await openStates()).toEqual([true, ...Array(count - 1).fill(false)]);
+    // Every story carries its text and its title as a heading.
+    for (let index = 0; index < count; index += 1) {
+      await expect(stories.nth(index).locator("h3")).toHaveCount(1);
+      expect((await stories.nth(index).locator("details p").textContent())?.trim().length).toBeGreaterThan(40);
+    }
+
+    // Mouse: opening the second closes the first (one exclusive group).
+    await stories.nth(1).locator("summary").click();
+    expect(await openStates()).toEqual([false, true, ...Array(count - 2).fill(false)]);
+    await expect(stories.nth(1).locator("details p")).toBeVisible();
+    await expect(stories.nth(0).locator("details p")).toBeHidden();
+
+    // Keyboard: focus the third toggle and press Enter, then Space closes it.
+    const third = stories.nth(2).locator("summary");
+    await third.focus();
+    await page.keyboard.press("Enter");
+    expect((await openStates())[2]).toBe(true);
+    await page.keyboard.press("Space");
+    expect((await openStates())[2]).toBe(false);
+
+    // The toggle is a 44 px target.
+    const box = await third.boundingBox();
+    expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
+  });
+
+  test("TS-WEB-0027-A17: without JavaScript every story is reachable", async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto("/ueber-uns");
+    const stories = page.locator("[data-block='kapitel-3'] [data-story]");
+    const count = await stories.count();
+    expect(count).toBeGreaterThan(1);
+    // Native `<details>`: a click opens a closed story with no script at all.
+    await stories.nth(count - 1).locator("summary").click();
+    await expect(stories.nth(count - 1).locator("details p")).toBeVisible();
+    // No placeholder mark ships (#55): no demo-marked story and no draft label.
+    await expect(page.locator("[data-block='kapitel-3'] [data-story][data-demo]")).toHaveCount(0);
+    const text = await page.locator("#main").innerText();
+    expect(text).not.toMatch(/PLATZHALTER|ENTWURF/);
+    await context.close();
+  });
+
+  test("TS-WEB-0027-A8: the award block carries exactly one link, to the archive", async ({ page }) => {
+    await page.goto("/ueber-uns");
+    const block = page.locator("[data-block='auszeichnung']");
     await expect(block).toHaveCount(1);
     await expect(block.getByRole("link")).toHaveCount(1);
     await expect(page.locator('a[href="/ueber-uns/archiv"]')).toHaveCount(1);
@@ -293,20 +327,14 @@ test.describe("/ueber-uns", () => {
     expect(box!.width / box!.height).toBeCloseTo(0.8, 1);
   });
 
-  test("brief page 10, item 2: the story, the anecdotes and the founder quote as a quote card", async ({
+  test("DEC-0162 §1: the chapters carry the sourced story, and the founder quote is a quote card on the photo band", async ({
     page,
   }) => {
     await page.goto("/ueber-uns");
-    const section = page.locator("[data-block='herkunftsgeschichte']");
-    await expect(section).toHaveCount(1);
-    const text = await section.innerText();
-    expect(text).toContain("Bäckerwagen");
-    expect(text).toContain("Schafweide");
-    // Several paragraphs, not one (review R-ueber-7).
-    expect(await section.locator("p").count()).toBeGreaterThanOrEqual(4);
-    // The quote and its source are one designed element with the concrete
-    // article as an outbound link (R-ueber-6, CG-028).
-    const quote = section.locator("[data-quote-card]");
+    await expect(page.locator("[data-block='kapitel-1']")).toContainText("Bäckerwagen");
+    await expect(page.locator("[data-block='kapitel-2']")).toContainText("Schafweide");
+    const band = page.locator("[data-block='zitat']");
+    const quote = band.locator("[data-quote-card]");
     await expect(quote).toHaveCount(1);
     await expect(quote.locator("blockquote")).toContainText(
       "Wenn man alles sammelt, ist plötzlich in jedem Dorf jeden Tag irgendwas los.",
@@ -315,8 +343,14 @@ test.describe("/ueber-uns", () => {
       "href",
       "https://www.zukunftswege-ost-vorpommern.de/vollblutdigitalisierer-von-schlatkow",
     );
-    // The anecdote paragraphs are marked: nobody wrote them (DEC-0132 §4).
-    expect(await section.locator('[data-demo="true"]').count()).toBeGreaterThanOrEqual(3);
+    // The rights holder's credit is printed on the band.
+    await expect(band).toContainText("openTransfer.de");
+    // The placeholder anecdotes are gone (#55): nothing in the page's own blocks
+    // is demo-marked but the reserved proof place (D5).
+    const demo = await page
+      .locator('#main [data-block] [data-demo="true"]')
+      .evaluateAll((nodes) => nodes.filter((node) => !node.closest("[data-empty-proof]")).length);
+    expect(demo).toBe(0);
   });
 
   test("G-7: no raw proof id, no badge repeating the source label", async ({ page }) => {
@@ -326,28 +360,19 @@ test.describe("/ueber-uns", () => {
     expect(main).not.toMatch(/\(cleared\)/);
     expect(main).not.toMatch(/^\s*Beleg\s*$/m);
 
-    // One emphasis per stream: the first card is the feature, the rest are
-    // compact hairline rows (never seven identical cards).
-    const stream = page.locator("[data-block='belegstrom']");
-    const emphases = await stream
-      .locator("article")
-      .evaluateAll((nodes) => nodes.map((node) => node.className));
-    expect(emphases.length).toBeGreaterThan(1);
-    expect(emphases.filter((name) => /feature/.test(name))).toHaveLength(1);
-    expect(emphases.filter((name) => /compact/.test(name))).toHaveLength(emphases.length - 1);
   });
 
-  test("brief page 10, item 1: the hero is the h1 and the photograph, nothing else", async ({
+  test("DEC-0162 §1: the stage is the kicker, the h1 and the photograph, nothing else", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/ueber-uns");
     const hero = page.locator("#herkunft");
     const text = (await hero.innerText()).trim();
-    expect(text.split("\n")).toHaveLength(1);
+    expect(text.split("\n").filter(Boolean)).toHaveLength(2);
     await expect(hero.locator("[data-cta]")).toHaveCount(0);
-    // The village argument stands in the section below it.
-    await expect(page.locator("[data-block='dorfargument']")).toContainText("Ehrenamt");
+    // The village argument stands in the principles.
+    await expect(page.locator("[data-block='grundsaetze']")).toContainText("Ehrenamt");
   });
 
   test("TS-WEB-0027-A13: the page's own controls emit no conversion event", async ({ page }) => {
@@ -382,8 +407,10 @@ test.describe("/ueber-uns", () => {
 
   test("F-2-33: the English page renders its own language", async ({ page }) => {
     await page.goto("/en/about");
-    await expect(page.locator("[data-block='team'] h2")).toHaveText("Team");
-    await expect(page.locator("[data-block='belegstrom'] h2")).toHaveText("What others say");
+    await expect(page.locator("[data-block='team'] h2")).toHaveText("Jan-Henrik Hempel");
+    await expect(page.locator("[data-block='kapitel-3'] h2")).toHaveText(
+      "Then it became more than bread rolls.",
+    );
     await expect(page.locator('[data-cta="primary"]')).toHaveAttribute(
       "href",
       "/en/about#kontakt",

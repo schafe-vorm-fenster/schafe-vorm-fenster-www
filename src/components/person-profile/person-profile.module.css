@@ -8,6 +8,32 @@
   margin: 0 0 var(--space-2);
 }
 
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* The bare kicker (SRC-0014 §Kicker): mono, uppercase, `lime-800` on light. */
+.kicker {
+  color: var(--color-lime-800);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* The name as the section head (Sub head, SRC-0014 §Typography). */
+.heading {
+  font-size: var(--type-subhead-size);
+  font-weight: 800;
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: var(--leading-tight);
+  margin: 0;
+}
+
 .name {
   font-size: var(--type-card-size);
   font-weight: 700;

@@ -1,17 +1,15 @@
-
+import { Button } from "@/src/components/button/button";
 import { CONTACT_SECTION_ID } from "@/src/components/contact-section/contact-section";
 import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
+import { Icon } from "@/src/components/icon/icon";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { NewsletterBlock } from "@/src/components/newsletter-block/newsletter-block";
 import { newsletterOffered } from "@/src/components/newsletter-block/constant";
-import { OriginStory } from "@/src/components/origin-story/origin-story";
 import { PersonProfile } from "@/src/components/person-profile/person-profile";
 import { PhotoSurface } from "@/src/components/photo-surface/photo-surface";
-import { ProofCard } from "@/src/components/proof-card/proof-card";
-import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { QuoteCard } from "@/src/components/quote-card/quote-card";
-import { RouteLink } from "@/src/components/route-link/route-link";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
+import { StoryDisclosure } from "@/src/components/story-disclosure/story-disclosure";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { resolvePriceTokens } from "@/src/lib/pricing/price-token";
 import { dictionary } from "@/src/lib/i18n/dictionary";
@@ -33,57 +31,52 @@ import styles from "./page.module.css";
 import { pageMeta } from "./page.meta";
 
 import type { ProofCandidate } from "../_proof";
+import type { DisclosureStory } from "@/src/components/story-disclosure/story-disclosure";
 import type { ContentSlot } from "@/src/lib/content/types";
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
 /**
- * TS-WEB-0027 — `/ueber-uns` — the trust surface.
+ * TS-WEB-0027 — `/ueber-uns` — the trust surface, rebuilt on the owner's design
+ * of 2026-10-12 (issue #55, DEC-0162).
  *
- * Composition, D2's scanning order:
+ * Composition, D2 as amended — three chapters told top to bottom:
  *
- *  1. **Origin** — the photo hero carrying the page's one `h1`, read from the
- *     content artifact (D3 releases the headline, DEC-0083 §5) · the village
- *     argument in DEC-0084 §2 order with the founder portrait full-bleed beside
- *     it and the honorary-mayor claim with its proof card · the origin story
- *     under the kicker "Die Geschichte", closed by the cleared founder quote as
- *     a `quote-card` pointing at the article it was said in. Three sections for
- *     one block: the argument and the story do not fit in a section a phone can
- *     read (`e2e/section-budget.spec.ts`, 1.5 screens), and D2's "block" is the
- *     beat, not the `<section>` (DEC-0132 §2). **No CTA anywhere in it** (D1,
- *     A3).
- *  2. **Proof stream** — five cleared elements and the one reserved, never
- *     backfilled place, which now carries its label and its sentence and stands
- *     in the accessibility tree (D5, A6; DEC-0132 §3).
- *  3. **Archive** — one link, its own tight block (D6).
- *  4. **Team** — Jan-Henrik Hempel, with the cleared 4:5 portrait and the
- *     owner's own bio (D7). Christian Sauer is off the block (review R-ueber-10).
- *  5. **Newsletter** — nothing renders while no sending system is named
- *     (`NEWSLETTER_SENDING_SYSTEM`, TS-WEB-0016-A21, DEC-0122 §3, A16).
- *  6/7. **Context band and closing CTA**, from `PageFrame`. The closing block is
- *     the page's one `data-cta="primary"` — `marker: "primary"`, resolving to
- *     this page's own contact section at `#kontakt`, with no repeat rung below
- *     it (DEC-0082 amendment C, A10).
+ *  1. **Stage** — the photograph of the village the company is named after, a
+ *     kicker and the page's one `h1`. No CTA (D1, A3).
+ *  2. **Chapter 01** — how it started: the baker's van (`kapitel-1`).
+ *  3. **Quote band** — the founder's cleared quote on his cleared portrait, a
+ *     photo section of its own, with the article it was said in (`zitat`).
+ *  4. **Chapter 02** — the name, and the honorary-mayor claim with its source:
+ *     the page's one inline proof (`kapitel-2`, D3).
+ *  5. **Chapter 03** — the proof stream as expandable stories: the cleared
+ *     records the relevance engine selects, each a native `<details>`, and the
+ *     one reserved, never backfilled place (`kapitel-3`, D5).
+ *  6. **Who is behind it** — the person, with the cleared 4:5 portrait (D7).
+ *  7. **Principles** — the village argument of DEC-0084 §2 as three numbered
+ *     principles, carrying the one price token (`grundsaetze`, A4).
+ *  8. **Award** — the NØRD award and the one link to the archive (D6).
+ *  9. **Newsletter** — nothing renders while no sending system is named.
+ * 10/11. **Context band and closing CTA**, from `PageFrame` — the closing
+ *     block is the page's one `data-cta="primary"`, into `#kontakt`.
  *
- * What is gone: the counter section and every "seit …" claim (D4, A2,
- * TS-WEB-0018-A12) — including the stream's sixth element, whose claim was
- * exactly that sentence.
+ * No counter, no year figure, no "seit …" claim (D4).
  */
 
 const ROUTE = "about" as const;
 
 /**
  * The founder portrait's text alternative, per locale (F-3-5) — the fallback
- * for a portrait the image inventory does not describe. A name is a name in
- * both languages; only the role is translated.
+ * for a portrait the image inventory does not describe.
  */
 const FOUNDER_ALT: Record<Locale, string> = {
   de: "Jan-Henrik Hempel, Gründer",
   en: "Jan-Henrik Hempel, founder",
 };
 
-/** The team block's own heading — the same word in both languages. */
-const TEAM_HEADING = "Team";
+/** The photographer's credit line on the quote band, per locale. */
+const PHOTO_CREDIT: Record<Locale, string> = { de: "Foto", en: "Photo" };
 
 /** `ueber-uns-1-origin`'s fields, in the order both locales carry them. */
 const ORIGIN = {
@@ -94,16 +87,40 @@ const ORIGIN = {
   proofSource: 5,
 } as const;
 
+/** `ueber-uns-1a-chapters`'s fields — the owner's design labels (DEC-0162 §3). */
+const CHAPTERS = {
+  stageKicker: 0,
+  chapter1Place: 1,
+  chapter2Heading: 2,
+  chapter2Place: 3,
+  chapter3Heading: 4,
+  chapter3Place: 5,
+  storyOpen: 6,
+  storyClose: 7,
+  principlesHeading: 8,
+  principleTitles: [9, 10, 11],
+} as const;
+
 /** `ueber-uns-2-story`'s fields. */
 const STORY = {
   heading: 0,
-  paragraph: 1,
-  quote: 2,
-  quoteName: 3,
-  quoteRole: 4,
-  quoteOrganisation: 5,
-  sourceLabel: 6,
-  sourceUrl: 7,
+  start: 1,
+  name: 2,
+  quote: 3,
+  quoteName: 4,
+  quoteRole: 5,
+  quoteOrganisation: 6,
+  sourceLabel: 7,
+  sourceUrl: 8,
+} as const;
+
+/** `ueber-uns-4-archive`'s fields — the award block and its one link. */
+const AWARD = {
+  heading: 0,
+  claim: 1,
+  source: 2,
+  seal: 3,
+  link: 4,
 } as const;
 
 interface Person {
@@ -113,10 +130,8 @@ interface Person {
 }
 
 /**
- * A team member's portrait id in the page's image inventory. The people come
- * out of the artifact as prose (`parsePerson`), and the inventory keys its
- * portraits by the same person slug the hub package uses, so the name is the
- * join between the two.
+ * A team member's portrait id in the page's image inventory, joined on the
+ * person slug the hub package uses.
  */
 function portraitId(name: string): string {
   const slug = name
@@ -143,15 +158,15 @@ function parsePerson(paragraph: string): Person {
   };
 }
 
+/** The candidate id of the `index`-th line of the stream slot. */
+function candidateId(index: number): string {
+  return `ueber-uns-3-proof-stream-${index + 1}`;
+}
+
 /**
  * The cleared proof elements `ueber-uns-3-proof-stream` names, as relevance
- * candidates (TS-WEB-0005). Read off the slot, never re-typed.
- *
- * Each authored line is `claim — source, date`, so the source becomes the
- * card's context line and the date its attribution. No geo badge: G-7 drops
- * the badge where the card already names its source. The date is also the
- * engine's freshness facet, which is what makes the stream read newest-first,
- * like a track record.
+ * candidates (TS-WEB-0005). Read off the slot, never re-typed. Each authored
+ * line is `claim — source, date`.
  */
 function proofCandidates(proofStream: ContentSlot, fallbackContext: string): ProofCandidate[] {
   const list = proofStream.blocks.find((block) => block.kind === "list");
@@ -160,7 +175,7 @@ function proofCandidates(proofStream: ContentSlot, fallbackContext: string): Pro
   return items.map((item, index) => {
     const card = parseDemoProofElement(item, fallbackContext);
     return {
-      id: `ueber-uns-3-proof-stream-${index + 1}`,
+      id: candidateId(index),
       contextLine: card.contextLine,
       claim: card.claim,
       attribution: card.attribution,
@@ -174,6 +189,18 @@ function proofCandidates(proofStream: ContentSlot, fallbackContext: string): Pro
 function proofYear(attribution: string): string | null {
   const match = /\b(19|20)\d{2}\b/.exec(attribution);
   return match === null ? null : match[0];
+}
+
+/** One chapter's head: the mono ordinal and its place line (SRC-0014 §Typography, "Ordinal"). */
+function ChapterHead({ ordinal, place }: { ordinal: string; place?: string }): ReactNode {
+  return (
+    <div className={styles.chapterHead}>
+      <p aria-hidden="true" className={styles.ordinal}>
+        {ordinal}
+      </p>
+      {place ? <p className={styles.place}>{place}</p> : null}
+    </div>
+  );
 }
 
 export async function generateMetadata({
@@ -194,19 +221,22 @@ export default async function Page({
   const page = await pageContent(ROUTE, locale);
 
   const origin = slot(page, "ueber-uns-1-origin");
+  const chapters = slot(page, "ueber-uns-1a-chapters");
   const story = slot(page, "ueber-uns-2-story");
-  const anecdotes = slot(page, "ueber-uns-2a-anecdotes-demo");
   const proofStream = slot(page, "ueber-uns-3-proof-stream");
+  const stories = slot(page, "ueber-uns-3b-stories");
   const reservedPlace = slot(page, "ueber-uns-3a-empty-slot-demo");
-  const archiveLink = slot(page, "ueber-uns-4-archive");
+  const award = slot(page, "ueber-uns-4-archive");
   const team = slot(page, "ueber-uns-5-team");
   const newsletter = slot(page, "ueber-uns-6-newsletter");
 
+  const chapter = (index: number) => fieldAt(chapters.blocks, index);
+
   /**
-   * TS-WEB-0005 through, not around: DEC-0048's `/ueber-uns` **stream** count is 7
-   * and the slot names five cleared elements, so the engine itself leaves the
-   * remaining positions empty rather than the page hard-coding the gap. D5
-   * caps what is *rendered* at one empty slot (`oneEmptySlot`).
+   * Chapter 03 is the stream, through TS-WEB-0005 rather than around it:
+   * DEC-0048's `/ueber-uns` count is 7, the slot names four cleared records,
+   * and the engine leaves the remaining positions empty. D5 caps what is
+   * rendered at one empty place (`oneEmptySlot`).
    */
   const proofSelection = await selectProof({
     routeId: ROUTE,
@@ -216,53 +246,44 @@ export default async function Page({
     candidates: proofCandidates(proofStream, words.kickers.othersSay),
   });
   const streamEntries = oneEmptySlot(proofSelection.entries);
+  const storyTexts = stories.blocks.filter((block) => block.kind === "field");
+  const storyItems: DisclosureStory[] = streamEntries.flatMap((entry) => {
+    if (entry.kind !== "item") return [];
+    const index = Number(entry.candidate.id.slice(entry.candidate.id.lastIndexOf("-") + 1)) - 1;
+    const text = storyTexts[index];
+    return [
+      {
+        id: entry.candidate.id,
+        kicker: [entry.candidate.contextLine, proofYear(entry.candidate.attribution)]
+          .filter(Boolean)
+          .join(" · "),
+        title: entry.candidate.claim,
+        story: text?.kind === "field" ? text.value : undefined,
+      },
+    ];
+  });
+  const hasEmptyPlace = streamEntries.some((entry) => entry.kind === "empty");
 
-  /**
-   * The people the artifact names, one labelled field each (`**Person n:**
-   * Name — role sentence. Bio.`). They used to be bare paragraphs, which read
-   * the slot's own editorial note as a second person the moment the slot gained
-   * one — a field cannot be mistaken for prose.
-   */
   const people = team.blocks
     .filter((block) => block.kind === "field")
     .map((block) => parsePerson(block.value));
+  const founder = people[0];
 
-  // The argument's third step already states "480 € im Jahr" verbatim, the
-  // figure `@schafe-vorm-fenster/offerings` carries (TS-WEB-0027-A4).
-  // `origin-story`'s own `price-tag` is suppressed (`display: "withheld"`,
-  // which renders nothing) rather than repeating the identical figure a second
-  // time in the same block — content is never reworded to remove the number,
-  // so this is the one place left to avoid the duplicate. The figure is not
-  // unbound for that: the A4 case in `e2e/pages/ueber-uns.spec.ts` builds the
-  // token it looks for from `publishedFigure("portalize-calendar")`, whose table
-  // `src/lib/pricing/offerings.test.ts` holds against the offering package's own
-  // frontmatter — so the sentence cannot drift from the package silently
-  // (TS-WEB-0027-A4, TS-WEB-0006 D10, DEC-0132 §9).
-  const originPrice = { display: "withheld" as const, figure: undefined };
-
-  // The page's images: the village behind the company name, the founder's
-  // cleared portrait with the rights holder's credit line verbatim, and the
-  // team portrait (own work, unrestricted).
-  const heroImage = pageImage(page, HERO_IMAGE_ID.about);
-  const founderImage = pageImage(page, "ueber-uns-founder-portrait");
-  const archiveLabel = ctaLabelOnly(fieldAt(archiveLink.blocks, 0)) ?? words.pages.archive;
-
-  const headline = fieldAt(origin.blocks, ORIGIN.headline) ?? words.pages.about;
-  // The third argument names the licence price. It carries
-  // `{price:portalize-calendar}` rather than the figure, so the sentence and
-  // the price tier on `/dein-kalender` are formatted by one formatter from one
-  // package field (TS-WEB-0006-A12, DEC-0145, state/open.md row 287). Every
-  // argument runs through the resolver; one without a token comes back
-  // unchanged.
+  // The three principles are the village argument in DEC-0084 §2 order. The
+  // third carries `{price:portalize-calendar}`, so the figure is formatted from
+  // the offering package and never typed (A4, TS-WEB-0006 D10, DEC-0145).
   const argument = ORIGIN.argument
     .map((index) => fieldAt(origin.blocks, index))
     .filter((paragraph): paragraph is string => paragraph !== undefined)
     .map((paragraph) => resolvePriceTokens(paragraph, locale));
-  const storyHeading = fieldAt(story.blocks, STORY.heading);
+
+  const heroImage = pageImage(page, HERO_IMAGE_ID.about);
+  const founderImage = pageImage(page, "ueber-uns-founder-portrait");
+
+  const headline = fieldAt(origin.blocks, ORIGIN.headline) ?? words.pages.about;
   const quote = fieldAt(story.blocks, STORY.quote);
   const sourceUrl = fieldAt(story.blocks, STORY.sourceUrl);
-  const anecdoteParagraphs = anecdotes.blocks.filter((block) => block.kind === "field");
-  const proofHeading = fieldAt(proofStream.blocks, 0) ?? words.kickers.othersSay;
+  const archiveLabel = ctaLabelOnly(fieldAt(award.blocks, AWARD.link)) ?? words.pages.archive;
   const reservedLabel = fieldAt(reservedPlace.blocks, 0);
   const reservedSentence = fieldAt(reservedPlace.blocks, 1);
 
@@ -270,248 +291,237 @@ export default async function Page({
     <>
       {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
-    <PageFrame
-      closing={{
-        // D1/A10: the page's one `data-cta="primary"`, in the closing block
-        // only, resolving to this page's own contact section — same goal, same
-        // target and the same label as the section's first action row
-        // (TS-WEB-0006 D6). DEC-0082 amendment C empties the repeat rung here.
-        hash: CONTACT_SECTION_ID,
-        label: words.contactSection.rows.appointment,
-        marker: "primary",
-        to: ROUTE,
-      }}
-      locale={locale}
-      meta={pageMeta}
-    >
-      {/* Block 1a — the hero: the photograph of the village the company is
-          named after, and the one `h1`. The headline is the artifact's
-          (DEC-0083 §5 released the fixed one); nothing here is a CTA (A3). */}
-      <PhotoSurface
-        // The page's hero, composed out of a bare surface rather than
-        // `hero-block` — the header lies on it (Jan's round-3 point 2).
-        hero
-        id="herkunft"
-        // F-2-33: the surface badges itself out of the dictionary — without
-        // the page's language `/en/about` read "Nicht motivgenau ·
-        // Platzhalter".
+      <PageFrame
+        closing={{
+          // D1/A10: the page's one `data-cta="primary"`, in the closing block
+          // only, resolving to this page's own contact section.
+          hash: CONTACT_SECTION_ID,
+          label: words.contactSection.rows.appointment,
+          marker: "primary",
+          to: ROUTE,
+        }}
         locale={locale}
-        focal={heroImage?.focal}
-        notDepicting={heroImage?.notDepicting}
-        placeholderId={heroImage?.placeholderId}
-        priority
-        ratio="hero"
-        src={heroImage?.src}
-        wideSrc={heroImage?.wideSrc}
+        meta={pageMeta}
       >
-        <MotionReveal>
-          <h1 className={styles.heroHeadline}>{headline}</h1>
-        </MotionReveal>
-      </PhotoSurface>
-
-      {/* Block 1b — the village argument, in DEC-0084 §2 order: the need every
-          volunteer has → what the market answers with → why the community
-          calendar is free and the licence is a licence. The founder portrait
-          runs full width beside it (R-ueber-8) and the honorary-mayor claim
-          stands under it with its proof card — the one inline proof outside
-          the stream (D3). No clause derives the price from what a village can
-          afford, and none mentions a salesperson (A4). */}
-      <SectionShell
-        dataBlock="dorfargument"
-        // Tight, measured: with the full-width portrait the section is 1278 px
-        // at 390 px on the standard density and `e2e/section-budget.spec.ts`
-        // caps a section at 1270 (polish brief G-4). One value per section.
-        density="tight"
-        kicker={words.kickers.whatAVillageNeeds}
-        label={headline}
-        surface="paper"
-      >
-        <MotionReveal>
-          <OriginStory
-            body={argument}
-            locale={locale}
-            portraitAlt={founderImage?.alt ?? FOUNDER_ALT[locale]}
-            portraitBleed
-            portraitCredit={founderImage?.credit}
-            portraitNotDepicting={founderImage?.notDepicting}
-            portraitSrc={founderImage?.src}
-            priceDisplay={originPrice.display}
-            priceFigure={originPrice.figure}
-            proof={
-              <ProofCard
-                attribution={FOUNDER_ALT[locale]}
-                claim={fieldAt(origin.blocks, ORIGIN.proofClaim) ?? ""}
-                contextLine={fieldAt(origin.blocks, ORIGIN.proofSource) ?? words.pages.about}
-                locale={locale}
-              />
-            }
-            // A3 fixes the position: the claim and its proof element are in the
-            // first viewport at 1280 × 800, which three paragraphs of argument
-            // below a `ratio-hero` photograph cannot be (DEC-0132 §2).
-            proofPosition="before"
-            showHeadline={false}
-          />
-        </MotionReveal>
-      </SectionShell>
-
-      {/* Block 2 — the proof stream (7 positions, DEC-0048): one feature card
-          carrying the emphasis, the rest compact hairline rows, and the
-          reserved, never-backfilled seventh position (D5, A6/A7). */}
-      <SectionShell
-        dataBlock="belegstrom"
-        density="tight"
-        // No kicker: press proof would take `kickers.othersSay`, and the
-        // content heading (slot 3) already reads those three words — a kicker
-        // here doubles the h2 (DEC-0120 §5).
-        labelledBy="belegstrom-h2"
-        surface="surface"
-      >
-        <MotionReveal>
-          <h2 id="belegstrom-h2">{proofHeading}</h2>
-          <ProofStream label={proofHeading} layout="rows">
-            {streamEntries.map((entry, position) =>
-              entry.kind === "item" ? (
-                <ProofCard
-                  attribution={entry.candidate.attribution}
-                  claim={entry.candidate.claim}
-                  contextLine={entry.candidate.contextLine}
-                  emphasis={position === 0 ? "feature" : "compact"}
-                  key={entry.candidate.id}
-                  locale={locale}
-                  state={entry.state}
-                />
-              ) : (
-                // D5: the reserved place, with the label and the sentence the
-                // determination asks for, in the accessibility tree.
-                <EmptyProofSlot
-                  demo={isDemoSlot(reservedPlace)}
-                  key={`empty-${position}`}
-                  label={reservedLabel}
-                  sentence={reservedSentence}
-                />
-              ),
-            )}
-          </ProofStream>
-        </MotionReveal>
-      </SectionShell>
-
-      {/* Block 2b — the story (kicker "Die Geschichte", R-ueber-3): the baker's
-          van, the move to Schlatkow and the municipal sheep pasture the company
-          is named after, then the anecdotes the review asked for, then the
-          cleared founder quote as a `quote-card` with the concrete article as
-          its source (R-ueber-6, CG-028). The anecdote paragraphs are a
-          `generated; demo: true` slot and mark themselves.
-
-          It stands **below** the stream, not between the origin and it: A3's
-          second clause fixes the distance to the evidence ("the first proof
-          element of the stream is reached within the second viewport height"),
-          and the story measured 747 px at 1280 px / 1076 px at 390 px, which
-          pushed the first proof card into the third screen (measured: first
-          `[data-block='belegstrom'] article` at y = 2087 px against a 1600 px
-          budget). D2 lists no story block at all — the beat order it does fix
-          (origin → proof → archive → team) is unchanged, and its own rationale
-          is exactly the clause: "a scanner gets … the first proof element in
-          the second [screen]". DEC-0132 §8. */}
-      {storyHeading ? (
-        <SectionShell
-          dataBlock="herkunftsgeschichte"
-          kicker={words.kickers.origin}
-          labelledBy="herkunftsgeschichte-h2"
-          surface="lime-100"
+        {/* 1 — the stage: the photograph of the village behind the name, the
+            kicker and the one `h1`. Nothing here is a CTA (A3). */}
+        <PhotoSurface
+          focal={heroImage?.focal}
+          hero
+          id="herkunft"
+          locale={locale}
+          notDepicting={heroImage?.notDepicting}
+          placeholderId={heroImage?.placeholderId}
+          priority
+          ratio="hero"
+          src={heroImage?.src}
+          wideSrc={heroImage?.wideSrc}
         >
           <MotionReveal>
-            <h2 id="herkunftsgeschichte-h2">{storyHeading}</h2>
-            <p>{fieldAt(story.blocks, STORY.paragraph)}</p>
-            {anecdoteParagraphs.map((block) => (
-              <p
-                data-demo={isDemoSlot(anecdotes) ? "true" : undefined}
-                key={block.kind === "field" ? block.label : ""}
-              >
-                {block.kind === "field" ? block.value : null}
-              </p>
-            ))}
-            {quote && sourceUrl ? (
-              <QuoteCard
-                className={styles.founderQuote}
-                locale={locale}
-                name={fieldAt(story.blocks, STORY.quoteName) ?? ""}
-                newTab
-                organisation={fieldAt(story.blocks, STORY.quoteOrganisation) ?? ""}
-                quote={quote}
-                role={fieldAt(story.blocks, STORY.quoteRole) ?? ""}
-                sourceLabel={fieldAt(story.blocks, STORY.sourceLabel) ?? sourceUrl}
-                sourceUrl={sourceUrl}
-              />
-            ) : null}
+            <div className={styles.heroStack}>
+              {chapter(CHAPTERS.stageKicker) ? (
+                <p className={styles.heroKicker}>{chapter(CHAPTERS.stageKicker)}</p>
+              ) : null}
+              <h1 className={styles.heroHeadline}>{headline}</h1>
+            </div>
+          </MotionReveal>
+        </PhotoSurface>
+
+        {/* 2 — chapter 01: how it started. */}
+        <SectionShell dataBlock="kapitel-1" labelledBy="kapitel-1-h2" surface="paper">
+          <MotionReveal>
+            <div className={styles.chapter}>
+              <ChapterHead ordinal="01" place={chapter(CHAPTERS.chapter1Place)} />
+              <div className={styles.chapterBody}>
+                <h2 id="kapitel-1-h2">{fieldAt(story.blocks, STORY.heading)}</h2>
+                <p>{fieldAt(story.blocks, STORY.start)}</p>
+              </div>
+            </div>
           </MotionReveal>
         </SectionShell>
-      ) : null}
 
-      {/* Block 3 — the archive: exactly one link, no teasers, no count, no
-          thumbnail, in a block of its own (D6, D2 block 3, A8). */}
-      <SectionShell dataBlock="archiv-verweis" density="tight" label={archiveLabel} surface="paper">
-        <MotionReveal>
-          <RouteLink className={styles.archiveLink} locale={locale} to="archive">
-            {archiveLabel}
-          </RouteLink>
-        </MotionReveal>
-      </SectionShell>
-
-      {/* Block 4 — team (D7): every person the artifact names, once, in a 4:5
-          media box, from `@schafe-vorm-fenster/people` through the content
-          pipeline (A9). */}
-      <SectionShell
-        dataBlock="team"
-        kicker={words.kickers.team}
-        labelledBy="team-h2"
-        surface="lime-100"
-      >
-        <MotionReveal>
-          <h2 id="team-h2">{TEAM_HEADING}</h2>
-          <div className={styles.team}>
-            {people.map((person) => {
-              const portrait = pageImage(page, portraitId(person.name));
-              return (
-                <PersonProfile
-                  bio={person.bio}
-                  key={person.name}
-                  locale={locale}
-                  name={person.name}
-                  portraitAlt={portrait?.alt ?? person.name}
-                  portraitCredit={portrait?.credit}
-                  portraitNotDepicting={portrait?.notDepicting}
-                  portraitSrc={portrait?.src}
-                  role={person.role}
-                />
-              );
-            })}
-          </div>
-        </MotionReveal>
-      </SectionShell>
-
-      {/* Block 5 — the newsletter, inline, permitted only here (D8). It renders
-          **nowhere** while no sending system is named: A21 forbids a form that
-          posts nowhere, and A16 asks for exactly this — "where no sending
-          system exists, the block does not render at all and emits nothing".
-          The slot and the block keep their shape for the day it returns. */}
-      {newsletterOffered() ? (
-        <SectionShell
-          dataBlock="newsletter"
-          kicker={words.kickers.newsletter}
-          label={fieldAt(newsletter.blocks, 0) ?? words.kickers.newsletter}
-          surface="paper"
-        >
-          <MotionReveal>
-            <NewsletterBlock
-              heading={fieldAt(newsletter.blocks, 0)}
-              lead={fieldAt(newsletter.blocks, 1)}
+        {/* 3 — the quote band: the founder's cleared words on his cleared
+            portrait, with the article they were said in (CG-028). A photo
+            section of its own; the photograph is a background, so the
+            surface reserves its upper part for the face and the quote sits
+            on the reading band below it (DEC-0162 §1). */}
+        {quote && sourceUrl ? (
+          <PhotoSurface
+            className={styles.quoteBand}
+            dataBlock="zitat"
+            focal={founderImage?.focal}
+            id="zitat"
+            label={fieldAt(story.blocks, STORY.quoteName) ?? FOUNDER_ALT[locale]}
+            locale={locale}
+            notDepicting={founderImage?.notDepicting}
+            ratio="feature"
+            src={founderImage?.src}
+          >
+            <QuoteCard
               locale={locale}
+              name={fieldAt(story.blocks, STORY.quoteName) ?? ""}
+              newTab
+              organisation={fieldAt(story.blocks, STORY.quoteOrganisation) ?? ""}
+              quote={quote}
+              role={fieldAt(story.blocks, STORY.quoteRole) ?? ""}
+              sourceLabel={fieldAt(story.blocks, STORY.sourceLabel) ?? sourceUrl}
+              sourceUrl={sourceUrl}
+              tone="photo"
+            />
+            {founderImage?.credit ? (
+              <p className={styles.credit}>
+                {PHOTO_CREDIT[locale]}: {founderImage.credit}
+              </p>
+            ) : null}
+          </PhotoSurface>
+        ) : null}
+
+        {/* 4 — chapter 02: the name, and the honorary-mayor claim with its
+            source — the page's one inline proof outside the stream (D3). */}
+        <SectionShell dataBlock="kapitel-2" labelledBy="kapitel-2-h2" surface="lime-100">
+          <MotionReveal>
+            <div className={styles.chapter}>
+              <ChapterHead ordinal="02" place={chapter(CHAPTERS.chapter2Place)} />
+              <div className={styles.chapterBody}>
+                <h2 id="kapitel-2-h2">{chapter(CHAPTERS.chapter2Heading)}</h2>
+                <p>{fieldAt(story.blocks, STORY.name)}</p>
+                <article className={styles.inlineProof} data-inline-proof>
+                  <p className={styles.inlineClaim}>{fieldAt(origin.blocks, ORIGIN.proofClaim)}</p>
+                  <p className={styles.inlineSource}>{fieldAt(origin.blocks, ORIGIN.proofSource)}</p>
+                </article>
+              </div>
+            </div>
+          </MotionReveal>
+        </SectionShell>
+
+        {/* 5 — chapter 03: the stream as stories (D5, DEC-0162 §2). The
+            relevance engine picks and orders them; each opens in place. */}
+        <SectionShell dataBlock="kapitel-3" labelledBy="kapitel-3-h2" surface="paper">
+          <MotionReveal>
+            <div className={styles.chapter}>
+              <ChapterHead ordinal="03" place={chapter(CHAPTERS.chapter3Place)} />
+              <div className={styles.chapterBody}>
+                <h2 id="kapitel-3-h2">{chapter(CHAPTERS.chapter3Heading)}</h2>
+              </div>
+            </div>
+            <StoryDisclosure
+              className={styles.stories}
+              closeLabel={chapter(CHAPTERS.storyClose) ?? ""}
+              group="kapitel-3"
+              openLabel={chapter(CHAPTERS.storyOpen) ?? ""}
+              stories={storyItems}
+              trailing={
+                hasEmptyPlace ? (
+                  // D5: the reserved place, with its label and sentence, in
+                  // the accessibility tree, never backfilled.
+                  <EmptyProofSlot
+                    demo={isDemoSlot(reservedPlace)}
+                    label={reservedLabel}
+                    sentence={reservedSentence}
+                  />
+                ) : undefined
+              }
             />
           </MotionReveal>
         </SectionShell>
-      ) : null}
 
-    </PageFrame>
+        {/* 6 — who is behind it (D7): the person the artifact names, with the
+            cleared 4:5 portrait. The portrait runs to the viewport edge. */}
+        {founder ? (
+          <SectionShell
+            className={styles.personSection}
+            contained={false}
+            dataBlock="team"
+            labelledBy="team-h2"
+            surface="lime-100"
+          >
+            <MotionReveal>
+              <div className={styles.person}>
+                {(() => {
+                  const portrait = pageImage(page, portraitId(founder.name));
+                  return (
+                    <PersonProfile
+                      bio={founder.bio}
+                      className={styles.profile}
+                      headingId="team-h2"
+                      kicker={words.kickers.team}
+                      locale={locale}
+                      name={founder.name}
+                      portraitAlt={portrait?.alt ?? founder.name}
+                      portraitCredit={portrait?.credit}
+                      portraitNotDepicting={portrait?.notDepicting}
+                      portraitSrc={portrait?.src}
+                      role={founder.role}
+                    />
+                  );
+                })()}
+              </div>
+            </MotionReveal>
+          </SectionShell>
+        ) : null}
+
+        {/* 7 — the principles: the village argument in DEC-0084 §2 order,
+            numbered, with the owner's titles. The third carries the one price
+            token (A4). */}
+        <SectionShell dataBlock="grundsaetze" labelledBy="grundsaetze-h2" surface="paper">
+          <MotionReveal>
+            <h2 id="grundsaetze-h2">{chapter(CHAPTERS.principlesHeading)}</h2>
+            <ol className={styles.principles}>
+              {argument.map((paragraph, index) => (
+                <li className={styles.principle} key={paragraph}>
+                  <p aria-hidden="true" className={styles.principleNumber}>
+                    {String(index + 1).padStart(2, "0")}
+                  </p>
+                  <h3 className={styles.principleTitle}>
+                    {chapter(CHAPTERS.principleTitles[index])}
+                  </h3>
+                  <p className={styles.principleText}>{paragraph}</p>
+                </li>
+              ))}
+            </ol>
+          </MotionReveal>
+        </SectionShell>
+
+        {/* 8 — the award, and exactly one link to the archive (D6): no
+            teaser, no count, no thumbnail. */}
+        <SectionShell dataBlock="auszeichnung" labelledBy="auszeichnung-h2" surface="violet-500">
+          <MotionReveal>
+            <div className={styles.award}>
+              {fieldAt(award.blocks, AWARD.seal) ? (
+                <p className={styles.seal}>
+                  <Icon name="trophy" size={18} />
+                  <span>{fieldAt(award.blocks, AWARD.seal)}</span>
+                </p>
+              ) : null}
+              <h2 id="auszeichnung-h2">{fieldAt(award.blocks, AWARD.heading)}</h2>
+              <p>{fieldAt(award.blocks, AWARD.claim)}</p>
+              <p className={styles.awardSource}>{fieldAt(award.blocks, AWARD.source)}</p>
+              <Button locale={locale} onward to="archive" variant="secondary">
+                {archiveLabel}
+              </Button>
+            </div>
+          </MotionReveal>
+        </SectionShell>
+
+        {/* 9 — the newsletter renders nowhere while no sending system is
+            named (TS-WEB-0016-A21, A16). */}
+        {newsletterOffered() ? (
+          <SectionShell
+            dataBlock="newsletter"
+            kicker={words.kickers.newsletter}
+            label={fieldAt(newsletter.blocks, 0) ?? words.kickers.newsletter}
+            surface="paper"
+          >
+            <MotionReveal>
+              <NewsletterBlock
+                heading={fieldAt(newsletter.blocks, 0)}
+                lead={fieldAt(newsletter.blocks, 1)}
+                locale={locale}
+              />
+            </MotionReveal>
+          </SectionShell>
+        ) : null}
+      </PageFrame>
     </>
   );
 }

@@ -94,7 +94,6 @@ images:
     focal:
       x: 48
       "y": 45
-    lcp: true
     status: real
     file: /images/real/ueber-uns-founder-portrait.webp
     width: 1152
@@ -165,13 +164,56 @@ about 280). Price figures from `community-calendar` (free, "forever") and
 `portalize-calendar` (480/EUR/year) — read, not typed. Proof for the mayor
 sentence: `founder-former-volunteer-mayor` (`cleared`).
 
+Since the rebuild on the owner's design of 2026-10-12 (#55, DEC-0162) the three
+sentences of the village argument stand as the three principles under "What we
+took from it", and the sentence with proof stands in chapter 02.
+
+## Slot 1a — Chapters (stage, chapter lines, principles, award)
+
+<!-- id: ueber-uns-1a-chapters; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"]; status: draft -->
+
+**Stage — kicker:** About us · Schlatkow, Western Pomerania
+
+**Chapter 01 — place:** Schlatkow
+
+**Chapter 02 — heading:** A sheep pasture outside the kitchen window.
+
+**Chapter 02 — place:** Schmatzin · Mayor's office
+
+**Chapter 03 — heading:** Then it became more than bread rolls.
+
+**Chapter 03 — place:** Vorpommern-Greifswald
+
+**Story — open:** The story
+
+**Story — close:** Close
+
+**Principles — heading:** What we took from it.
+
+**Principle 01 — title:** It has to be simple.
+
+**Principle 02 — title:** Finished, not a project.
+
+**Principle 03 — title:** Free for the village.
+
+<!-- note: authoring note from here on, not copy -->
+
+The headings, kickers and control words of the owner's design of 2026-10-12
+(`plan/reviews/2026-10-12/Design - Über uns Vorschau - *.jpg`, issue #55), in
+English. The place lines carry only the places and the office from slot 2 and
+`founder-former-volunteer-mayor`. What the design shows as running text or a
+figure without a source is not taken over (DEC-0162 §3); see the German file for
+the list.
+
 ## Slot 2 — The story
 
 <!-- id: ueber-uns-2-story; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/brand-identity@0.1.4#schafe-vorm-fenster", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/media-echo@0.3.3#2026-01-zukunftswege-ost-vollblutdigitalisierer"]; status: draft -->
 
 **Heading:** It started with bread rolls.
 
-**Paragraph (how it started, and the name):** It began with the search for fresh bread rolls. After the family moved from Berlin to Schlatkow, they asked about a baker's van for two weeks, finally lay in wait one morning, and chased the van to the next village to arrange a stop in Schlatkow. The name comes from the years as mayor of Schmatzin: the municipal sheep pasture was visible from the kitchen window.
+**Paragraph (how it started):** It began with the search for fresh bread rolls. After the family moved from Berlin to Schlatkow, they asked about a baker's van for two weeks, finally lay in wait one morning, and chased the van to the next village to arrange a stop in Schlatkow.
+
+**Paragraph (the name):** The name comes from the years as mayor of Schmatzin: the municipal sheep pasture was visible from the kitchen window.
 
 **Quote (founder):** Collect all of it, and suddenly every village has something on every day. All we have to do is make it visible.
 
@@ -194,39 +236,27 @@ by RAA — Demokratie und Bildung Mecklenburg-Vorpommern e. V.); the title is
 the publication's own, so it is not translated. Quote and proof stand as one
 element (`quote-card`, CG-028).
 
-<!-- id: ueber-uns-2a-anecdotes-demo; content_type: section; provenance: generated; derived_from: []; status: draft; demo: true -->
-
-**Paragraph (village size):** Schlatkow has about 280 inhabitants.
-
-**Paragraph (anecdote 1):** Lion dancers perform in the next village. In the calendar their date stands next to the fire brigade's meeting.
-
-**Paragraph (anecdote 2):** A gallery of bee photographs is a date like any other in the village calendar.
-
-**Paragraph (anecdote 3):** During the pandemic, when everybody sat in a home office, the baker's van stopping was the date people waited for.
-
-The "about 280" figure is the owner's (review of 2026-09-22, DEC-0084 §1); the
-four anecdotes the review only named, it did not write them (R-ueber-7: lion
-dancers, the bee photographs, the baker's van, the pandemic home office). The
-three paragraphs here are therefore placeholders: `provenance: generated`,
-`demo: true`, `data-demo="true"` in the markup, with a row in
-`state/open.md`. The baker's-van story itself stands as a sourced paragraph in
-slot 2.
+The placeholder anecdotes that stood here as `ueber-uns-2a-anecdotes-demo`
+(`provenance: generated`, `demo: true`) are gone with the rebuild on the design
+of 2026-10-12 (DEC-0162 §3): chapter 03 shows sourced stories only (#55). The
+pandemic and baker's-van anecdote has a source now (`homeoffice-mobile-anbieter`,
+slots 3 and 3b).
 
 ## Slot 3 — Proof stream (7 places, 1 type-reserved)
 
-<!-- id: ueber-uns-3-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/media-echo@0.3.3", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"]; status: draft -->
+<!-- id: ueber-uns-3-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter", "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"]; status: draft -->
 
 **Heading:** What others say
 
-Pool: the full `proof` set plus `media-echo` (31 entries). Five of the seven
-places can be filled today with cleared proof — all five carry
-`usage_rights: cleared`:
+Pool: the full `proof` set plus `media-echo` (31 entries). Since the rebuild on
+the design of 2026-10-12 the stream is chapter 03 (DEC-0162 §2): four stories,
+all `usage_rights: cleared`. The NØRD award stands in its own award block
+(slot 4) and the mayor proof in chapter 02 (slot 1):
 
-1. NØRD AWARD 2026, Smart Community category, under Bitkom patronage, awarded on 28 May 2026 at the NØRD digital convention in Rostock. — NØRD digital convention / digitales MV, May 2026
-2. The founder held, as a volunteer mayor, the office this service serves. — Zukunftswege Ost-Vorpommern, January 2026
-3. During the pandemic, every vaccination slot and every testing-centre opening time in the county was published through the village calendars, day-current and place-precise. — Landkreis Vorpommern-Greifswald, 2022
-4. In 2022 the village calendar helped Ukrainian refugees join village life: club meetings, events, and mobile traders. — eu:react final report, July 2022
-5. Search Google for "Bäcker Schlatkow" and you find the mobile bakery van and its day — not branches in Anklam. — eu:react final report, July 2022
+1. During the pandemic, every vaccination slot and every testing-centre opening time in the county was published through the village calendars, day-current and place-precise. — Landkreis Vorpommern-Greifswald, 2022
+2. In 2022 the village calendar helped Ukrainian refugees join village life: club meetings, events, and mobile traders. — eu:react final report, July 2022
+3. Search Google for "Bäcker Schlatkow" and you find the mobile bakery van and its day — not branches in Anklam. — eu:react final report, July 2022
+4. During the pandemic, people working from home first noticed mobile traders through the village calendars — and some became regular customers. — eu:react final report, July 2022
 
 The order here is chronological, newest first — not the display order: which
 element sits in which place is decided by the relevance engine (TS-WEB-0005)
@@ -238,6 +268,20 @@ since 2018" (`in-operation-since-2018`) is a "since …" claim, and TS-WEB-0027 
 forbids it on this page in so many words — "no year figure rendered as a
 module, no place count, no badge, no 'seit …' claim anywhere on the page".
 Further gaps shorten the stream; they never add a second empty place (D5).
+
+<!-- id: ueber-uns-3b-stories; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"]; status: draft -->
+
+**Story 1 (vaccination dates):** When it mattered, the village calendar carried part of the public service: every vaccination and testing offer in the county stood in it, day-current and place-precise. The county could not hand the data over in a structured form, so it was copied in by hand.
+
+**Story 2 (refugees):** When the war began in 2022, refugees often arrived directly in the county's villages. The calendar made it easier for them to find village life, events, club meetings and mobile traders. It led to an edition in several languages: German, Polish, Ukrainian and Russian, and English.
+
+**Story 3 (Bäcker Schlatkow):** Search Google for a baker in the village and you find the bakery van with its weekday instead of the nearest branch in town. That way people who do not know the area, tourists and newcomers, find everyday supplies too.
+
+**Story 4 (working from home):** When more people in the county worked from home during the pandemic, we heard from them: through the calendars they noticed mobile traders for the first time, and some became regular customers.
+
+One story per line of slot 3, in the same order (the page joins them by
+position). Each retells the body of its `proof` record and adds no fact: no
+figure, no person, no turnover claim (DEC-0162 §2).
 
 <!-- id: ueber-uns-3-testimonial-slot-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin"]; status: draft -->
 
@@ -260,14 +304,23 @@ naming what is missing" and puts it explicitly into the accessibility tree.
 Nobody wrote the two strings: `provenance: generated`, `demo: true`,
 `data-demo="true"` in the markup, a row in `state/open.md`.
 
-## Slot 4 — Archive link
+## Slot 4 — Award and archive link
 
-<!-- id: ueber-uns-4-archive; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: ueber-uns-4-archive; content_type: section; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community"]; status: draft -->
 
-**Link text:** The full press and awards archive → `/ueber-uns/archiv`
+**Heading:** A village project, awarded in Rostock.
 
-Exactly one link, no preview, no list, no counter (TS-WEB-0027 D6), as its own
-tight block (D2 block 3).
+**Award:** NØRD AWARD 2026, Smart Community category, under Bitkom patronage, awarded on 28 May 2026 at the NØRD digital convention in Rostock.
+
+**Source:** NØRD digital convention / digitales MV, May 2026
+
+**Seal:** NØRD Award 2026 · Smart Community
+
+**Link text:** Press and awards → `/ueber-uns/archiv`
+
+The award is the stream's former element 1, verbatim
+(`noerd-award-2026-smart-community`, `usage_rights: cleared`). Exactly one link
+to the archive, no preview, no list, no count (TS-WEB-0027 D6).
 
 ## Slot 5 — Team
 

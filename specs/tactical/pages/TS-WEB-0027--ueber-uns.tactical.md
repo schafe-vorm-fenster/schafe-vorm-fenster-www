@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0017]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0014]
-decisions: [DEC-0036, DEC-0042, DEC-0048, DEC-0051, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0154]
+decisions: [DEC-0036, DEC-0042, DEC-0048, DEC-0051, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0154, DEC-0162]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -51,30 +51,29 @@ components, photo surface, badges, ratios, page rhythm →
 | `liveModules` | `[]` — the sender-surface exemption of TS-WEB-0006 D1 (DEC-0084 §3). The operating-counter module is deleted; see D4 |
 | `proofSlots` | one stream of 7, one of them type-reserved (D5) |
 
-### D2 — Module order is a scanning order [FIXED: SRC-0003 structure; sequence within block 2 PROPOSED]
+### D2 — Module order is the owner's chapter order [FIXED: owner's design of 2026-10-12, DEC-0162 §1; was SRC-0003's scanning order]
 
-| # | Block | Type | Carries |
-| --- | --- | --- | --- |
-| 1 | Origin | photo surface, `ratio-hero`, the one neutral scrim (DEC-0105 §1 — the ink and violet variants are retired) | founder photo · h1 · the village argument (D3). **No CTA** — the ask is the closing block's (D1) |
-| 2 | Proof stream | colour, cards at `ratio-proof` | 7 elements incl. the one empty slot (D5) |
-| 3 | Archive | colour, tight | exactly one link to `/ueber-uns/archiv` (D6) |
-| 4 | Team | colour, portraits at `ratio-portrait` | profiles from `@schafe-vorm-fenster/people` (D7) |
-| 5 | Newsletter | colour, secondary treatment | inline signup (D8) |
-| 6 | Context band | colour `paper` | the three non-focus jobs (TS-WEB-0006 D5) |
-| 7 | Closing CTA | colour `paper` | the booking again — same goal, target and label as block 1 (TS-WEB-0006 D6) |
-| — | Contact section | fixed ground, standing surface | rendered by the layout below block 7; the booking's outbound row lives here (TS-WEB-0006 D2, DEC-0081) |
+| # | Block | `data-block` | Type | Carries |
+| --- | --- | --- | --- | --- |
+| 1 | Stage | — (`#herkunft`) | photo surface, `ratio-hero`, the one neutral scrim | kicker · h1. **No CTA** — the ask is the closing block's (D1) |
+| 2 | Chapter 01 | `kapitel-1` | colour `paper` | ordinal · place line · how it started (D3) |
+| 3 | Quote band | `zitat` | photo surface | the founder's cleared quote as a `quote-card` with its article, on his cleared portrait, with the rights holder's credit |
+| 4 | Chapter 02 | `kapitel-2` | colour `lime-100` | the name · the honorary-mayor claim with its source, the one inline proof (D3) |
+| 5 | Chapter 03 | `kapitel-3` | colour `paper` | the proof stream as expandable stories (`story-disclosure`), 7 positions incl. the one reserved place (D5) |
+| 6 | Who is behind it | `team` | colour `lime-100`, portrait full-bleed at `ratio-portrait` | the person from `@schafe-vorm-fenster/people` (D7) |
+| 7 | Principles | `grundsaetze` | colour `paper` | the village argument as three numbered principles, with the one price token (D3, A4) |
+| 8 | Award | `auszeichnung` | colour `violet-500` | the NØRD award and exactly one link to `/ueber-uns/archiv` (D6) |
+| 9 | Newsletter | `newsletter` | colour, secondary treatment | inline signup (D8) — withheld while no sending system exists |
+| 10 | Context band | — | colour | the three non-focus jobs (TS-WEB-0006 D5) |
+| 11 | Closing CTA | — | colour `paper` | the booking (TS-WEB-0006 D6) |
+| — | Contact section | — | fixed ground, standing surface | rendered by the layout below block 11 (TS-WEB-0006 D2, DEC-0081) |
 
-Rationale: identity, then evidence, then people — a scanner gets *who,
-where, why this shape* in the first screen and the first proof element in
-the second. The counter block that used to stand between them is gone
-(D4), which shortens the distance to the evidence rather than lengthening
-it. The merged band-and-closing-block shape of TS-WEB-0006 D6 no longer applies
-here: the page has a conversion, so it repeats it.
-
-Narrative order (founder → team → proof) is rejected: it
-delays the evidence a due-diligence reader came for. Page rhythm: block 1
-is the only photo section; the stream's images are cards **inside** a
-colour section, so no two photo sections stand in a row.
+Rationale: the owner's design of 2026-10-12 tells the page as a story in three
+chapters and puts the evidence inside the chapters: the honorary-mayor proof in
+chapter 02, the stream in chapter 03. The scanning order this determination
+carried until DEC-0162 ("narrative order is rejected") is overruled by that
+design. Page rhythm: two photo sections (stage, quote band), never adjacent; the
+stream's stories are blocks **inside** a colour section.
 
 ### D3 — The origin is the argument [FIXED: SRC-0003, DEC-0084; wording is copy, DEC-0083]
 
@@ -87,6 +86,9 @@ colour section, so no two photo sections stand in a row.
   budget, CG-033's truth rule). No spec states it, and the earlier fixed
   headline is released (DEC-0083 §5) — it was rejected as literally untrue,
   the service running in a data centre.
+- Since DEC-0162 the parts of this block stand in the chapters of D2: the
+  `h1` on the stage, the origin in chapter 01, the honorary-mayor proof in
+  chapter 02 and the village argument as the three principles (block 7).
 - The body states the **village argument**, in this order (DEC-0084 §2):
   a village needs a simple way for everyone who volunteers — Feuerwehr,
   Kirchgemeinde, Verein, the neighbour organising a Dorffest — to get a
@@ -150,7 +152,8 @@ The sharpest element of this page. A claim without cleared proof is
 
 ### D6 — The archive is a link, not a preview [FIXED: SRC-0003 §"Archive", TS-WEB-0011 D3]
 
-The archive block contains exactly **one** link to `/ueber-uns/archiv`
+Since DEC-0162 the link stands in the award block (D2 block 8), as the button
+"Presse und Auszeichnungen". The block contains exactly **one** link to `/ueber-uns/archiv`
 through the route facade and **zero** entry teasers, counts or thumbnails.
 The archive exists once, for people who look for it; previewing it here
 would turn the stream back into the list the IA rejects.
@@ -257,39 +260,40 @@ assigns types per page type and its A5 checks "no more".
   archive, so a teaser on `/` can deep-link to it.
 - **Proof lines are sentences** (issue #38, CG-027). The 70-character limit is
   withdrawn, the new budget is `Q-0086`.
-- **The origin photograph runs to the edge on the phone** (issue #35).
 - **The text of the origin section is revised** ("mitgegründet", dashes,
   `humanizer`, issue #34).
-- **The page is rebuilt on the owner's design of 2026-10-12** (issue #55,
-  `plan/reviews/2026-10-12/Design - Über uns Vorschau - *.jpg`). Structure, top to
-  bottom: stage "Vom Dorf fürs Dorf." · chapter 01 · photo band with quote ·
-  chapter 02 with a quote · chapter 03 with expandable stories (one featured, a
-  grid of tiles, "Die Geschichte +") · who is behind it · three principles ·
-  award block with the button "Presse und Auszeichnungen" · search band · context
-  band · contact · footer. The chapters replace the origin story, the proof
-  stream and the team block of today's D2 and D3. Several points of the design
-  conflict with the guide or ship a placeholder; they are listed in the issue.
 - **Press** (issue #56, `Q-0093`): the button targets the press page, which is the
   archive grown into a destination.
+
+**Done (DEC-0162, 2026-10-13):**
+
+- ~~The page is rebuilt on the owner's design of 2026-10-12~~ (issue #55): D2, D3
+  and D6 as amended, A2, A3 and A8 rewritten, A17 new. What the design shows
+  without a source is not rendered (DEC-0162 §3); the search band is not built
+  (no search field on a light ground, `CG-005`).
+- ~~The origin photograph runs to the edge on the phone~~ (issue #35): the issue is
+  about the "Über uns" photograph on `/`, and it is `TS-WEB-0019-A21`. On this page
+  the portraits of the quote band and of block 6 run full-bleed.
 
 ## Acceptance criteria
 
 | ID | Level | Check |
 | --- | --- | --- |
 | TS-WEB-0027-A1 | static | `page.meta.ts` of `/ueber-uns` matches D1: `focusJob` `understand-who-is-behind-it`, `primaryConversion` `request-product-briefing`, audiences non-empty and ordered, `liveModules` **empty** (the route is one of the three the TS-WEB-0006 D1 exemption names), 7 proof slots. |
-| TS-WEB-0027-A2 | e2e | DOM order of the blocks is exactly D2, with the contact section after the closing CTA and the global footer last; exactly one photo section exists; no two photo sections are adjacent. No counter, no year figure and no place count renders anywhere on the page (D4). |
-| TS-WEB-0027-A3 | e2e | At 1280 × 800 the first viewport contains exactly one `h1` and the honorary-mayor claim with its proof element, and **no element carrying any `data-cta` value**; the first proof element of the stream is reached within the second viewport height (≤ 1 further screen of scrolling). The criterion asserts the elements, their position and the CTA's absence, never their wording (DEC-0083). It required the primary CTA in the first viewport until 2026-09-25, against DEC-0081 §6's own reasoning (DEC-0082 amendment C). |
+| TS-WEB-0027-A2 | e2e | DOM order of the `data-block` sections is exactly D2 (`kapitel-1`, `zitat`, `kapitel-2`, `kapitel-3`, `team`, `grundsaetze`, `auszeichnung`), with the contact section after the closing CTA and the global footer last; exactly one `h1`, on the stage; exactly two photo sections and no two adjacent. No counter, no year figure, no place count and no village-size figure renders anywhere on the page (D4, CG-034). *(Until DEC-0162 the order was origin · stream · story · archive · team, with one photo section.)* |
+| TS-WEB-0027-A3 | e2e | At 1280 × 800 the first viewport contains exactly one `h1` and chapter 01's heading, and **no element carrying any `data-cta` value**; the honorary-mayor claim and its source stand together as the one inline proof element in chapter 02. The criterion asserts the elements, their position and the CTA's absence, never their wording (DEC-0083). *(It required the honorary-mayor proof in the first viewport and the first stream element within the second until DEC-0162, whose chapter order the owner's design fixes.)* |
 | TS-WEB-0027-A4 | e2e | The origin block contains the free-calendar promise and exactly one price token, and that token's value, currency and interval equal `@schafe-vorm-fenster/offerings`. No sentence in the block derives the price from affordability and none mentions a salesperson (DEC-0084 §2); no figure for the village's size is hard-coded in page or component source. |
 | TS-WEB-0027-A5 | e2e | The stream renders at most 7 elements; every rendered proof id resolves to an element with `usage_rights: cleared`; no `unverified` id appears anywhere in the served HTML. |
 | TS-WEB-0027-A6 | e2e | Exactly one empty slot is visible. It shows the hatch, a label and one sentence; it contains no image; it is unchanged 5 s after load; it is present in the accessibility tree with its text; it carries no animation. |
 | TS-WEB-0027-A7 | integration | Fixture with one cleared `type: testimonial` element: the reserved slot is filled and **no** empty slot renders. Fixture with none: 6 filled + 1 empty, and the 7th position is not backfilled by another type. |
-| TS-WEB-0027-A8 | e2e | The archive block has exactly one outgoing link, target `/ueber-uns/archiv`, and zero list entries, thumbnails or counts. |
+| TS-WEB-0027-A8 | e2e | The award block has exactly one outgoing link, target `/ueber-uns/archiv`, and zero list entries, thumbnails or counts; the page links `/ueber-uns/archiv` exactly once. |
 | TS-WEB-0027-A9 | e2e | Every person in `@schafe-vorm-fenster/people` appears once, in a 4:5 media box; a person without a portrait shows the "Foto gesucht" surface — never an empty box, never omitted. |
 | TS-WEB-0027-A10 | e2e | The newsletter block stands after the team block and before the context band, and carries no `data-cta="primary"`; the page contains exactly one `data-cta="primary"` and it is **the closing CTA**, resolving to this page's contact section, with no CTA in block 1 and no second repeat below it; the contact section follows it (TS-WEB-0006-A17). |
 | TS-WEB-0027-A11 | e2e | Stage 0 and stage 1 (geo set) renders have identical block order and both contain the empty slot; only the selection and order of the six filled elements differ. |
 | TS-WEB-0027-A12 | static | Structured data on the page: exactly one `Organization` reference by `@id`, zero `Person` nodes, zero `ItemList`. |
 | TS-WEB-0027-A13 | integration | Loading the page, clicking the archive link, and clicking the primary or the closing CTA emit no conversion event. On the contact section's first action row, exactly one `request-product-briefing` **and** exactly one `make-contact` are emitted, both carrying `/ueber-uns` as the route; on rows 2–4, exactly one `make-contact` with the row's channel and no `request-product-briefing`. No goal id is emitted twice for one click. |
 | TS-WEB-0027-A16 | integration | Where the newsletter block renders, its signup handover emits exactly one `subscribe-to-newsletter` with `/ueber-uns` as the route, and the block offers both the WhatsApp and the e-mail route (TS-WEB-0016-A11). Where no sending system exists, the block does not render at all and emits nothing (TS-WEB-0016-A21). |
+| TS-WEB-0027-A17 | e2e | Chapter 03 renders every story as a native `<details>` in one exclusive group: in the served HTML the first is open and the rest closed; each has its title as an `h3` and a story text; a click on a closed story opens it and closes the open one; on its focused toggle Enter opens and Space closes it; the toggle is at least 44 px tall. With JavaScript disabled a click still opens a story. No story carries a demo mark and the page shows no draft or placeholder label (#55, DEC-0162 §2). |
 | TS-WEB-0027-A14 | e2e | No layout shift from late content: hero, proof cards and portraits declare `ratio-hero`, `ratio-proof`, `ratio-portrait` before data arrives; measured CLS on this page is ≤ 0.02. |
 | TS-WEB-0027-A15 | manual | Photo honesty: every photograph either depicts what its copy claims, or carries the badge "Nicht motivgenau · Platzhalter"; every missing photo is the "Foto gesucht" surface. |
 
@@ -297,7 +301,7 @@ assigns types per page type and its A5 checks "no more".
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0017 (`/ueber-uns`: focus job "understand who is behind it", booking as its primary conversion, repeated in the closing block) | D1 (manifest, `primaryConversion: request-product-briefing`) · D2 (module order) · D3 (origin argument and the primary CTA) · D4 (no live module) · D5 (empty proof slot) · D6 (archive link) · D7 (team) · D8 (newsletter) · D9, D10 · A1–A15 |
+| FUN-WEB-0017 (`/ueber-uns`: focus job "understand who is behind it", booking as its primary conversion, repeated in the closing block) | D1 (manifest, `primaryConversion: request-product-briefing`) · D2 (module order) · D3 (origin argument and the primary CTA) · D4 (no live module) · D5 (empty proof slot) · D6 (archive link) · D7 (team) · D8 (newsletter) · D9, D10 · A1–A17 |
 
 ## Open points
 

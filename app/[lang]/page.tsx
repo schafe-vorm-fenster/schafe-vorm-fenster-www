@@ -13,6 +13,7 @@ import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-sl
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SceneBlock } from "@/src/components/scene-block/scene-block";
+import { WebCalendarOverlay } from "@/src/components/web-calendar-overlay/web-calendar-overlay";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { fieldAt } from "@/src/lib/content/blocks";
@@ -829,18 +830,25 @@ export default async function HomePage({
                       </Button>
                     }
                     instance={
-                      <MediaFrame
-                        alt={sceneEmbedImage?.alt ?? ""}
-                        locale={locale}
-                        notDepicting={sceneEmbedImage?.notDepicting}
-                        placeholderId={sceneEmbedImage?.placeholderId}
-                        /* 16 : 9 across the section's whole width — the review's own
-                           shape for this photograph ("auf die volle Breite in 16:9
-                           oder 21:9 ziehen"); `map` is that ratio token. */
-                        ratio="map"
-                        src={sceneEmbedImage?.src}
-                        state={sceneEmbedImage ? undefined : "empty"}
-                      />
+                      /* #32, DEC-0162 §5: a drawing of the website calendar lies
+                         over the town-hall photograph, so the scene says "a
+                         calendar on your website" at a glance. The drawing is
+                         decorative; the photograph's `alt` names both. */
+                      <WebCalendarOverlay>
+                        <MediaFrame
+                          alt={sceneEmbedImage?.alt ?? ""}
+                          locale={locale}
+                          notDepicting={sceneEmbedImage?.notDepicting}
+                          placeholderId={sceneEmbedImage?.placeholderId}
+                          /* 16 : 9 across the section's whole width — the review's own
+                             shape for this photograph ("auf die volle Breite in 16:9
+                             oder 21:9 ziehen"); `map` is that ratio token. */
+                          ratio="map"
+                          sizes="100vw"
+                          src={sceneEmbedImage?.src}
+                          state={sceneEmbedImage ? undefined : "empty"}
+                        />
+                      </WebCalendarOverlay>
                     }
                     locale={locale}
                     mechanism="embed"
@@ -864,6 +872,11 @@ export default async function HomePage({
                   replacement, so the heading carries the scene alone. */}
               <MotionReveal>
                 <SectionShell
+                  /* #35, DEC-0162 §6: the photograph runs to the edge like the
+                     embed scene's — "Images inside a colour section run
+                     full-bleed" (SRC-0014 §Section grounds). The section gives
+                     up its container and the scene puts it back around the text. */
+                  contained={false}
                   dataBlock="scene"
                   id="scene-3"
                   /* TS-WEB-0019 D3's own rhythm column for block 2b: COLOUR violet. */
@@ -871,6 +884,7 @@ export default async function HomePage({
                   transition={fieldAt(sceneProvenance.blocks, 2)}
                 >
                   <SceneBlock
+                    bleed
                     body={fieldAt(sceneProvenance.blocks, 1)}
                     cta={
                       <Button dataCta="secondary" locale={locale} onward to="about" variant="secondary">
@@ -880,11 +894,14 @@ export default async function HomePage({
                     instance={
                       <MediaFrame
                         alt={sceneProvenanceImage?.alt ?? fieldAt(sceneProvenance.blocks, 0) ?? ""}
-                        className={styles.sceneMedia}
                         locale={locale}
                         notDepicting={sceneProvenanceImage?.notDepicting}
                         placeholderId={sceneProvenanceImage?.placeholderId}
-                        ratio="feature"
+                        /* Full width at every tier, 16 : 9 like the embed scene's
+                           photograph: 7 : 5 across a desktop viewport would be
+                           taller than the screen. */
+                        ratio="map"
+                        sizes="100vw"
                         src={sceneProvenanceImage?.src}
                       />
                     }

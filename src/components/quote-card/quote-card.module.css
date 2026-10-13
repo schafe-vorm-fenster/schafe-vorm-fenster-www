@@ -66,3 +66,36 @@
   font-size: var(--type-label-size);
   margin-top: var(--space-1);
 }
+
+/*
+ * On a photo surface (DEC-0162 §1): the story stage's quote treatment
+ * (SRC-0014 §Story stage, "a `lime-500` quotation mark, the quote in 22–34 px /
+ * 700"). The mark is decoration and carries no text for assistive technology.
+ * No hairlines: a `line` rule on a photograph is not a boundary, and the
+ * reading band is the quote's one ground.
+ */
+.photo {
+  border-block: 0;
+  padding-block: 0;
+}
+
+.photo .text {
+  font-size: var(--type-subhead-size);
+  font-weight: 700;
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: var(--leading-tight);
+  max-width: var(--span-7);
+}
+
+.photo .quote::before {
+  color: var(--color-lime-500);
+  content: "\201C" / "";
+  display: block;
+  font-size: var(--type-display-size);
+  font-weight: 800;
+  line-height: 0.8;
+}
+
+.photo .role {
+  color: var(--color-lime-300);
+}

@@ -616,6 +616,10 @@ Somebody else's words plus the proof that they said them. One element.
 - Visually one element: one ground, one padding box, 8 px between the three
   parts and a `line` hairline above and below the whole. It is a flat block
   on the section ground, not a card floating on a surface.
+- **On a photo surface** (`/ueber-uns`'s quote band, `DEC-0162` §1) the quote
+  takes the story stage's treatment — a `lime-500` quotation mark, the quote at
+  sub-head size / 700 — role and organisation in `lime-300`, and no hairlines:
+  the reading band is its ground.
 
 ### Contact section
 
@@ -829,6 +833,37 @@ and three cards with a quote each are three times the module.
 showed the problem at 390 px: the quote lay over the church's foot. Each
 photograph on the stage therefore uses its **stage cut**, positioned at its
 **anchor** (*Crop and focal point*, below).
+
+### Story disclosure
+
+**A set of stories a reader opens one at a time** (`/ueber-uns` chapter 03,
+`DEC-0162`). It is the proof stream told as stories, not a second stream.
+
+| Part | Rule |
+| --- | --- |
+| Item | A flat block on the section ground, radius 0, no border, no shadow. Closed: `lime-100`, `ink` type. Open: `violet-500`, `paper` type, and it spans the grid's whole row |
+| Head | Mono kicker (the record's source and year) and the title as an `h3`, outside the toggle, so the outline holds every title whether open or not. The title is the record's verbatim claim and is never truncated |
+| Toggle | A native `<details>`/`<summary>`; all items share one `name`, so at most one is open. The summary names the action ("Die Geschichte" / "Schließen") beside a 44 px control well with `plus`, turned to a close mark when open — a state, no transition |
+| Load | The first item is open in the server HTML; nothing changes after hydration and nothing needs JavaScript |
+| Grid | One column on the phone, two from `md`, three from `xl` |
+| Colour | No `himbeere` tile: `himbeere` is the pulse (the owner's design showed one, `DEC-0162` §2) |
+
+### Web-calendar overlay
+
+**A drawing of the website calendar on a photograph** (`/`'s embed scene,
+issue #32, `DEC-0162` §5), so the scene says "a calendar on your website" at a
+glance.
+
+- A flat `paper` block, radius 0, no border, no shadow: a `surface-2` browser
+  strip, the calendar head with `calendar-days`, three rows of a mono day
+  numeral, a category coin (fill and glyph tokens) and title bars.
+- It names no event, no month and no place, so it claims no date. It is
+  decorative; the photograph's `alt` names the photograph and the drawing.
+- Below `xl` it hangs over the photograph's lower edge, right-aligned on the
+  gutter; from `xl` it lies in the photograph's lower right on the container's
+  edge. It never covers the photograph's focal point.
+- It lies on a `media-frame`, never on a photo surface, so no reading band or
+  scrim is involved.
 
 ### Transparent overlay header
 

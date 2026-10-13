@@ -196,3 +196,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0159 — The place stage is less full, keeps its search once a place is known, carries no counter, and hands off to publishing in a row of its own](DEC-0159--the-home-stage-is-less-full.md)
 - [DEC-0160 — The pin moves to brand-design 2.9.0, dark green leaves every fill, and a secondary action on a light ground is outlined in ink](DEC-0160--no-dark-green-fill-and-the-outlined-secondary.md)
 - [DEC-0161 — The explain module never truncates, swipes below lg, and draws the WhatsApp path; the /mitmachen hero is an AI-edited real photograph](DEC-0161--explain-module-never-truncates-swipes-and-draws.md)
+- [DEC-0162 — `/ueber-uns` in three chapters with expandable stories after the owner's design, a web-calendar drawing on the town-hall photograph, and the provenance photograph to the edge](DEC-0162--ueber-uns-in-chapters-and-the-two-home-photographs.md)

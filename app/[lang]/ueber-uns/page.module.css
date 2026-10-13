@@ -1,14 +1,28 @@
 /*
- * `/ueber-uns`'s own layout values. Tokens only (TS-WEB-0017 D2/D3,
- * `pnpm check:brand`): no colour literal, no font family, no raw length that
- * the design system does not already name.
+ * `/ueber-uns`'s own layout values, rebuilt on the owner's design of
+ * 2026-10-12 (DEC-0162). Tokens only (TS-WEB-0017 D2/D3, `pnpm check:brand`):
+ * no colour literal, no font family, no raw length the design system does not
+ * already name.
  */
 
-/*
- * The hero is the headline plus the photograph, and nothing else (polish
- * brief page 10, item 1). The headline therefore carries `origin-story`'s
- * own display treatment here instead of inside that block.
- */
+/* ── The stage ─────────────────────────────────────────────────────────── */
+
+.heroStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* The bare kicker on a photo: `paper`, mono, uppercase (SRC-0014 §Kicker). */
+.heroKicker {
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  margin: 0;
+  text-transform: uppercase;
+}
+
 .heroHeadline {
   font-size: var(--type-display-size);
   font-weight: 800;
@@ -17,34 +31,263 @@
   margin: 0;
 }
 
-/*
- * The founder quote, as the `quote-card` of SRC-0014 §Quote card: quote, author
- * with role and organisation, and the concrete article as an outbound link
- * (R-ueber-6, CG-028). It closes the story section, so it keeps the section's
- * own rhythm above it and nothing below.
- */
-.founderQuote {
+/* ── Chapters ──────────────────────────────────────────────────────────── */
+
+/* Below `xl` the head stacks over the text; from `xl` the head takes
+   columns 1–4 and the text columns 5–12 (SRC-0014 §Layout Grid, two-column). */
+.chapter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.chapterHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Ordinal (mono) — SRC-0014 §Typography. `lime-800`, not the design's
+   `lime-500`: `lime-500` on a light ground is 1.62:1 and fails even the
+   display floor (DEC-0162 §4). */
+.ordinal {
+  color: var(--color-lime-800);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-display-mono);
+  font-weight: 800;
+  letter-spacing: var(--tracking-mono);
+  line-height: 1;
+  margin: 0;
+}
+
+.place {
+  color: var(--color-neutral-text2);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.chapterBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.chapterBody > h2,
+.chapterBody > p {
+  margin: 0;
+}
+
+@media (min-width: 64rem) {
+  .chapter {
+    column-gap: var(--grid-gap);
+    display: grid;
+    grid-template-columns: var(--span-4) minmax(0, 1fr);
+  }
+}
+
+/* Chapter 02's proof: the claim and its source as one flat element on the
+   section ground, a hairline above it (SRC-0014 §Shape and Space). */
+.inlineProof {
+  border-top: var(--border-hairline-on-lime);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding-top: var(--space-4);
+}
+
+.inlineClaim {
+  font-size: var(--type-card-size);
+  font-weight: 700;
+  letter-spacing: var(--type-card-tracking);
+  line-height: var(--type-card-leading);
+  margin: 0;
+}
+
+.inlineSource {
+  color: var(--color-lime-800);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.stories {
   margin-top: var(--space-6);
 }
 
-/* The archive block is one link and nothing else (D6) — no list, no count. */
-.archiveLink {
-  display: block;
+/* ── The quote band ────────────────────────────────────────────────────── */
+
+/*
+ * A photo section of its own. The portrait is the background with the fixed
+ * scrim ladder; the box reserves its upper part as a spacer the quote cannot
+ * enter, so the face (focal `y` 45 %) stays above the reading band. The
+ * spacer is sized so the focal point lands inside it at every tier
+ * (DEC-0162 §1). `section` raises the specificity over `.surface`.
+ */
+section.quoteBand {
+  align-items: stretch;
+  aspect-ratio: auto;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
-/* The people of `@schafe-vorm-fenster/people`, one column on a phone. */
-.team {
+section.quoteBand::before {
+  content: "";
+  flex: none;
+  height: 110vw;
+}
+
+@media (min-width: 40rem) {
+  section.quoteBand::before {
+    height: 60vw;
+  }
+}
+
+@media (min-width: 64rem) {
+  /* Width-bound from here: the portrait is far taller than the band, and its
+     inventory focal point (`y` 45 %) is the 4:5 box's. The face sits at the
+     upper fifth of the original, so the band's window is set there. */
+  section.quoteBand {
+    background-position: 48% 15%;
+    min-height: min(85vh, 680px);
+  }
+
+  section.quoteBand::before {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: var(--space-16);
+  }
+}
+
+.credit {
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  margin: 0;
+}
+
+/* ── Who is behind it ──────────────────────────────────────────────────── */
+
+/*
+ * The portrait runs to the viewport edge (SRC-0014 §Section grounds, "Images
+ * inside a colour section run full-bleed"); the text keeps the page gutter.
+ * From `xl` the portrait takes the left half and the text the right.
+ */
+.person {
+  width: 100%;
+}
+
+.profile {
+  gap: var(--space-6);
+}
+
+.profile > div {
+  margin-inline: auto;
+  max-width: calc(var(--measure-page) + 2 * var(--gutter));
+  padding-inline: var(--gutter);
+  width: 100%;
+}
+
+@media (min-width: 64rem) {
+  .profile {
+    align-items: center;
+    column-gap: var(--space-12);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .profile > div {
+    margin-inline: 0;
+    padding-inline: 0 max(var(--gutter), calc((100vw - var(--measure-page)) / 2));
+  }
+}
+
+/* ── Principles ────────────────────────────────────────────────────────── */
+
+.principles {
   display: grid;
   gap: var(--space-6);
   grid-template-columns: minmax(0, 1fr);
+  list-style: none;
+  margin: var(--space-6) 0 0;
+  padding: 0;
 }
 
-/* lg — 48rem / 768px: two columns, so one portrait is half a column wide
-   rather than a 4:5 box across the whole measure. */
-/* xl — 64rem: side by side only from the desktop tier (SRC-0014 §Layout Grid, DEC-0150). */
 @media (min-width: 64rem) {
-  .team {
+  .principles {
     column-gap: var(--grid-gap);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+.principle {
+  border-top: 1px solid var(--color-neutral-line);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-4);
+}
+
+.principleNumber {
+  color: var(--color-lime-800);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  margin: 0;
+}
+
+.principleTitle {
+  font-size: var(--type-card-size);
+  font-weight: 700;
+  letter-spacing: var(--type-card-tracking);
+  line-height: var(--type-card-leading);
+  margin: 0;
+}
+
+.principleText {
+  margin: 0;
+}
+
+/* ── The award ─────────────────────────────────────────────────────────── */
+
+.award {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.award > h2,
+.award > p {
+  margin: 0;
+}
+
+/* The badge kicker of SRC-0014 §Kicker ("where the kicker carries a mark: …
+   an award"): `violet-600` inside a violet section, 18 px `trophy`. */
+.seal {
+  align-items: center;
+  background: var(--color-violet-600);
+  border-radius: 999px;
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  gap: var(--space-2);
+  letter-spacing: var(--type-label-tracking);
+  min-height: var(--height-badge-icon);
+  padding-inline: var(--space-3);
+  text-transform: uppercase;
+}
+
+.awardSource {
+  color: var(--color-violet-100);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
 }

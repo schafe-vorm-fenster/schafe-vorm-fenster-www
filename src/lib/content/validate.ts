@@ -493,16 +493,16 @@ const CLAIM_BUDGET_EXCEPTIONS: readonly {
   { slot: "home-8-proof-stream", starts: "Won the NØRD Award 2026, Smart Community ", reason: "pre-existing, 74 characters, unread — state/open.md row 286" },
   { slot: "home-8-proof-stream", starts: "The adult education centres bring their c", reason: "pre-existing, 77 characters, unread — state/open.md row 286" },
   { slot: "home-8-proof-stream", starts: "The project can make a valuable contribut", reason: "pre-existing, 76 characters, unread — state/open.md row 286" },
-  { slot: "ueber-uns-3-proof-stream", starts: "NØRD AWARD 2026, Kategorie Smart Communit", reason: "pre-existing, 144 characters, unread — state/open.md row 286" },
-  { slot: "ueber-uns-3-proof-stream", starts: "Der Gründer hat als ehrenamtlicher Bürger", reason: "pre-existing, 88 characters, unread — state/open.md row 286" },
   { slot: "ueber-uns-3-proof-stream", starts: "In der Pandemie wurden sämtliche Impfange", reason: "pre-existing, 157 characters, unread — state/open.md row 286" },
   { slot: "ueber-uns-3-proof-stream", starts: "Der Dorfkalender hat 2022 die Integration", reason: "pre-existing, 159 characters, unread — state/open.md row 286" },
   { slot: "ueber-uns-3-proof-stream", starts: "Wer bei Google nach „Bäcker Schlatkow\" su", reason: "pre-existing, 117 characters, unread — state/open.md row 286" },
-  { slot: "ueber-uns-3-proof-stream", starts: "NØRD AWARD 2026, Smart Community category", reason: "pre-existing, 132 characters, unread — state/open.md row 286" },
-  { slot: "ueber-uns-3-proof-stream", starts: "The founder held, as a volunteer mayor, t", reason: "pre-existing, 71 characters, unread — state/open.md row 286" },
   { slot: "ueber-uns-3-proof-stream", starts: "During the pandemic, every vaccination sl", reason: "pre-existing, 171 characters, unread — state/open.md row 286" },
   { slot: "ueber-uns-3-proof-stream", starts: "In 2022 the village calendar helped Ukrai", reason: "pre-existing, 116 characters, unread — state/open.md row 286" },
   { slot: "ueber-uns-3-proof-stream", starts: "Search Google for \"Bäcker Schlatkow\" and ", reason: "pre-existing, 109 characters, unread — state/open.md row 286" },
+  // DEC-0162 §2: the fourth story of chapter 03 is the verbatim `claim:` of
+  // `homeoffice-mobile-anbieter`; CG-027 §6 forbids paraphrasing a record.
+  { slot: "ueber-uns-3-proof-stream", starts: "In der Corona-Zeit wurden Home-Office-Nut", reason: "verbatim `claim:` of `homeoffice-mobile-anbieter` — DEC-0162 §2" },
+  { slot: "ueber-uns-3-proof-stream", starts: "During the pandemic, people working from ", reason: "translation of the verbatim `claim:` of `homeoffice-mobile-anbieter` — DEC-0162 §2" },
 ];
 
 /** The claim part of a proof line, by the parser's own rule. */
@@ -670,7 +670,7 @@ export const RENDERED_BLOCKS: readonly {
     slot: "ueber-uns-3-proof-stream",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/ueber-uns/page.tsx:157",
+    renderedBy: "app/[lang]/ueber-uns/page.tsx:172",
   },
   {
     slot: "deine-region-6-proof-demo",
@@ -716,19 +716,19 @@ export const RENDERED_BLOCKS: readonly {
     slot: "home-8-proof-stream",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/page.tsx:183",
+    renderedBy: "app/[lang]/page.tsx:184",
   },
   {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/page.tsx:781 (listAt, the three step lines)",
+    renderedBy: "app/[lang]/page.tsx:782 (listAt, the three step lines)",
   },
   {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/page.tsx:774 (listAt, the sample event rows)",
+    renderedBy: "app/[lang]/page.tsx:775 (listAt, the sample event rows)",
   },
   {
     slot: "mitmachen-2-objections",
