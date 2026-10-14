@@ -27,46 +27,47 @@ import type { Metadata } from "next";
  * year, `archive-row` ×n, `date` descending → band + closing, merged
  * (`primaryConversion: null`, TS-WEB-0006 D6).
  *
- * [ASSUMPTION, per plan/guardrails.md] `Q-0045`: 0 of 31 media-echo entries
- * carry `usage_rights` today, so the real list (`archiv-2-rows`) renders
- * zero rows (D3, FUN-WEB-0033 — exactly the honest behaviour the mock rule
- * exists for). The content follow-up's second pass (2026-09-12, state/open.md
- * row 52) replaced the six invented demo rows with all 31 real media-echo
- * entries, verbatim from the package frontmatter — `archiv-2-rows-demo`
- * carries `provenance: sourced`, not `generated`, and no `demo: true`. Every
- * row's `demo` prop and the page-level `demo-data-badge` are therefore
- * derived from `isDemoSlot(rowsDemo)`, not hard-coded (state/open.md row 109,
- * row 162): they render only if a future pass ever puts genuinely generated
- * rows back in this slot. Clearance itself stays open — 0 of the 31 entries
- * carry `usage_rights`, recorded as `open_points[]` in the page frontmatter,
- * not as a badge (guardrails: the badge marks *generated* content, not
- * *clearance-pending* content). TS-WEB-0028-A14/R-2: each row's own `url` field
- * is now wired to `ArchiveRow`'s outbound link, since the meta description
- * already promises "jede Zeile verlinkt auf die Originalquelle".
+ * **The press page (DEC-0166, Q-0093).** Every media-echo entry is shown as a
+ * citation — outlet, date, title, link to the original and, where the entry
+ * has one, a quotation marked with its source — because a citation needs no
+ * clearance (TS-WEB-0028 D3 as amended). No article photo and no third-party
+ * logo: no row gets a preview. The rows are the content artifact's table
+ * (`archiv-2-rows-demo`, the name is historical — `provenance: sourced`),
+ * which `src/lib/content/media-echo-citations.test.ts` holds against the
+ * installed package. Each row carries the entry's id as its anchor, its hub
+ * type ids for the filter and localized labels for the badges.
+ * `demo` stays derived from `isDemoSlot(rowsDemo)` (state/open.md rows 109,
+ * 162).
  */
 
 const ROUTE = "archive" as const;
 
-/** The table's six columns, in the content artifact's own order. */
+/** The table's eight columns, in the content artifact's own order. */
 interface ArchiveTableRow {
+  /** The entry's file stem — its stable id and the row's anchor. */
+  readonly id: string;
   readonly title: string;
-  readonly type: string;
+  /** The hub's type ids, never a label (TS-WEB-0028 D4). */
+  readonly types: readonly string[];
   readonly date: string;
   readonly source: string;
   readonly place: string;
   readonly url: string;
+  /** A verbatim excerpt from the coverage, or empty. */
+  readonly quote: string;
+}
+
+/** "—" is the table's spelling of "none". */
+function cell(value: string | undefined): string {
+  const text = value?.trim() ?? "";
+  return text === "—" ? "" : text;
 }
 
 /**
  * D4's hub vocabulary is localized labels over stable ids (e.g. "Presse" /
- * `press`), but `archive-row` takes one `types` prop for both the visible
- * badge text and the `data-archive-type` filter attribute
- * (`src/components/archive-row/archive-row.tsx`) — there is no separate id
- * slot. A chip's id therefore has to be the same label string the row
- * carries (below), or `archive-filter`'s `matchesSelection` never matches
- * anything. Separating "id" from "label" would need another additive prop
- * on `archive-row`, which this page does not decide alone; `state/open.md`
- * carries the finding.
+ * `press`). The table carries the ids; the labels come from the dictionary.
+ * The chips and the rows' `data-archive-type` both use the ids, so a label
+ * with a space ("Social Media") no longer splits into two filter tokens.
  */
 
 export async function generateMetadata({
@@ -95,15 +96,22 @@ export default async function Page({
   const table = rowsDemo.blocks.find((block) => block.kind === "table");
   const rows: ArchiveTableRow[] =
     table?.kind === "table"
-      ? table.rows.map(([title, type, date, source, place, url]) => ({
-          title: title ?? "",
-          type: type ?? "",
-          date: date ?? "",
-          source: source ?? "",
-          place: place ?? "",
-          url: url ?? "",
+      ? table.rows.map(([id, title, types, date, source, place, url, quote]) => ({
+          id: cell(id),
+          title: cell(title),
+          types: cell(types)
+            .split(",")
+            .map((type) => type.trim())
+            .filter(Boolean),
+          date: cell(date),
+          source: cell(source),
+          place: cell(place),
+          url: cell(url),
+          quote: cell(quote),
         }))
       : [];
+  const typeLabels = dictionary(locale).archiveRow.types;
+  const labelOf = (type: string) => typeLabels[type] ?? type;
 
   // D2: `date` descending, already the content artifact's own order; ties
   // break by id ascending — irrelevant here, every demo row has a distinct
@@ -114,10 +122,10 @@ export default async function Page({
     byYear.set(year, [...(byYear.get(year) ?? []), row]);
   }
 
-  // D4: only types with ≥ 1 row get a chip. `id` equals `label`: see the
-  // note on `TYPE_IDS` above for why.
-  const typesPresent = [...new Set(rows.map((row) => row.type))];
-  const filterTypes = typesPresent.map((label) => ({ id: label, label }));
+  // D4: only types with ≥ 1 row get a chip; an entry with two types counts
+  // under both.
+  const typesPresent = [...new Set(rows.flatMap((row) => row.types))];
+  const filterTypes = typesPresent.map((id) => ({ id, label: labelOf(id) }));
 
   /**
    * One `ItemList`, byte-identical before and after filtering — the filter is
@@ -137,7 +145,7 @@ export default async function Page({
         publisher: { "@type": "Organization", name: row.source },
         // D9: the original, verbatim from the entry's own `url` field —
         // falling back to the site itself only where the entry carries none.
-        url: row.url && row.url !== "—" ? row.url : SITE_ORIGIN,
+        url: row.url || SITE_ORIGIN,
       },
     })),
   };
@@ -161,14 +169,15 @@ export default async function Page({
                     // prop, and passing it here too printed the name twice
                     // in two adjacent lines ("Nordkurier" / "Nordkurier ·
                     // Mecklenburg-Vorpommern") on all 31 rows.
-                    contextLine={row.place === "—" ? "" : row.place}
+                    contextLine={row.place}
                     date={row.date}
                     demo={demo}
                     // TS-WEB-0028-A14/R-2: the outlet's own `url`, verbatim — a
                     // missing one ("—") leaves the row without a link rather
                     // than pointing at nothing.
-                    href={row.url && row.url !== "—" ? row.url : undefined}
-                    key={`${row.title}-${row.date}`}
+                    href={row.url || undefined}
+                    id={row.id || undefined}
+                    key={row.id || `${row.title}-${row.date}`}
                     locale={locale}
                     outlet={row.source}
                     // The entries carry `YYYY`, `YYYY-MM` and `YYYY-MM-DD`
@@ -176,8 +185,10 @@ export default async function Page({
                     // month-precision entry dated itself "01. August 2026" —
                     // a day no source states, on two thirds of the list.
                     precision={archivePrecision(row.date)}
+                    quote={row.quote || undefined}
                     title={row.title}
-                    types={[row.type]}
+                    typeIds={row.types}
+                    types={row.types.map(labelOf)}
                   />
                 ))}
               </div>

@@ -30,13 +30,15 @@ ai_provenance:
 
 | Route | Focus job | Primary conversion |
 | --- | --- | --- |
-| `/ueber-uns/archiv` | understand who is behind it | none; only list-shaped page, not a destination |
+| `/ueber-uns/archiv` | understand who is behind it | none; only list-shaped page; a destination of `/ueber-uns` and the footer, never of the header (DEC-0166) |
 
 ## Source
 
 SRC-0003#archive
 
 Finding: "Primary conversion: none." is line 250; "deliberately not a destination" continues on line 254. Re-resolved 2026-09-25 — shifted by 31 lines; the excerpt is unchanged.
+
+Deviation: `go-to-market-os/concept/website-information-architecture.concept.md#L254` says the page "is deliberately not a destination". The owner answered `Q-0093` on 2026-10-14 (DEC-0166): the page is the press page, reached from `/ueber-uns` and the footer, still never from the header and still without a conversion. The specification carries the truth (DEC-0104 §1); DEM-0072 asks the source to follow.
 
 ## Notes
 

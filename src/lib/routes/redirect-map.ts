@@ -116,6 +116,14 @@ export const LEGACY_REDIRECTS: readonly RedirectRow[] = [
       "(FUN-WEB-0018).",
   },
   {
+    from: "/en/press",
+    to: href("archive", "en"),
+    reason:
+      "DEC-0166 — the English twin of /presse: one press address per language " +
+      "to hand to journalists, both landing on the press page " +
+      "(TS-WEB-0028 D1 as amended).",
+  },
+  {
     from: "/impressum",
     to: `${href("legal", "de")}#${legalAnchor("imprint", "de")}`,
     reason:

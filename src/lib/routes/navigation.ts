@@ -54,6 +54,19 @@ export interface FooterLegalEntry {
  * The three conventional legal links of the footer (TS-WEB-0004 D4 / A9). They
  * point at their anchors on the one legal page (DEC-0039).
  */
+export interface FooterPageEntry {
+  readonly route: RouteId;
+  readonly label: DictionaryKeyOf<"footer">;
+}
+
+/**
+ * The footer's one page link beside the legal links: the press page
+ * (`/ueber-uns/archiv`, DEC-0166). It stands first in the same link row, so the
+ * footer gains a link, not a row — and it is never in the header (TS-WEB-0004 D4,
+ * the owner's ruling that "Presse" is not a main-menu item).
+ */
+export const FOOTER_PRESS_LINK: FooterPageEntry = { route: "archive", label: "press" };
+
 export const FOOTER_LEGAL_LINKS: readonly FooterLegalEntry[] = [
   { route: "legal", section: "imprint", label: "imprint" },
   { route: "legal", section: "privacy", label: "privacy" },

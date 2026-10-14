@@ -688,7 +688,7 @@ export const RENDERED_BLOCKS: readonly {
     slot: "archiv-2-rows-demo",
     kind: "table",
     index: 0,
-    renderedBy: "app/[lang]/ueber-uns/archiv/page.tsx:95",
+    renderedBy: "app/[lang]/ueber-uns/archiv/page.tsx:96",
   },
   // — the three paragraphs `/dein-kalender` reads by index
   {

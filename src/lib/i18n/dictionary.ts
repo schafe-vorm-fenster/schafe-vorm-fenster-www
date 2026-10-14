@@ -75,6 +75,8 @@ export interface Dictionary {
     imprint: string;
     privacy: string;
     accessibility: string;
+    /** The footer's one link to the press page, `/ueber-uns/archiv` (DEC-0166). */
+    press: string;
     language: string;
   };
   /**
@@ -301,6 +303,12 @@ export interface Dictionary {
   archiveRow: {
     /** The outbound link to the outlet's own page. */
     original: string;
+    /**
+     * The hub's media-echo type ids, localized (TS-WEB-0028 D4: labels are
+     * localized, identifiers are not). The words are content slot
+     * `archiv-4-type-filter`'s; an id missing here renders as the id.
+     */
+    types: Readonly<Record<string, string>>;
   };
   /**
    * `place-search`'s own words (TS-WEB-0008 D7). A page usually supplies its
@@ -495,6 +503,7 @@ const de: Dictionary = {
     imprint: "Impressum",
     privacy: "Datenschutz",
     accessibility: "Barrierefreiheit",
+    press: "Presse",
     language: "Sprache",
   },
   newsletter: {
@@ -576,6 +585,15 @@ const de: Dictionary = {
   },
   archiveRow: {
     original: "Original ansehen",
+    types: {
+      press: "Presse",
+      award: "Auszeichnung",
+      conference: "Konferenz",
+      podcast: "Podcast",
+      portrait: "Porträt",
+      recognition: "Anerkennung",
+      "social-media": "Social Media",
+    },
   },
   search: {
     // "Dein Ort": the owner's own label for this field (content/pages/deine-region/de.md:166);
@@ -647,7 +665,7 @@ const de: Dictionary = {
     region: "Deine Region",
     regionQuote: "Angebot anfordern",
     about: "Über uns",
-    archive: "Archiv",
+    archive: "Presse und Auszeichnungen",
     legal: "Rechtliches",
   },
   start: {
@@ -682,6 +700,7 @@ const en: Dictionary = {
     imprint: "Imprint",
     privacy: "Privacy",
     accessibility: "Accessibility",
+    press: "Press",
     language: "Language",
   },
   newsletter: {
@@ -761,6 +780,15 @@ const en: Dictionary = {
   },
   archiveRow: {
     original: "View the original",
+    types: {
+      press: "Press",
+      award: "Award",
+      conference: "Conference",
+      podcast: "Podcast",
+      portrait: "Portrait",
+      recognition: "Recognition",
+      "social-media": "Social media",
+    },
   },
   search: {
     // "Your place": the owner's own label for this field (content/pages/deine-region/en.md:167);
@@ -836,7 +864,7 @@ const en: Dictionary = {
     region: "Your region",
     regionQuote: "Request a quote",
     about: "About us",
-    archive: "Archive",
+    archive: "Press and awards",
     legal: "Legal",
   },
   start: {

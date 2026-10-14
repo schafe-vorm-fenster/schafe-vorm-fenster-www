@@ -1256,8 +1256,8 @@ Reference: `Design - Kontakt Section - Desktop/Mobile.png`; as-is:
   `paper` label). It replaces *"Read this page in English: ENGLISH"*. Both
   segments are links to the same page in their language; the current one
   carries `aria-current="page"` (`TS-WEB-0001 D5`, `DEC-0158`).
-- A hairline (`paper` at 22 % over `ink`), then **Impressum · Datenschutz ·
-  Barrierefreiheit** in `paper`, bold, no underline at rest (the weight and the
+- A hairline (`paper` at 22 % over `ink`), then **Presse · Impressum · Datenschutz ·
+  Barrierefreiheit** in `paper`, bold (the press link first, to `/ueber-uns/archiv`, `DEC-0166`; never in the header), no underline at rest (the weight and the
   link row are the cue; hover adds the underline), a visible focus ring in
   `focus-dark` (`lime-400`, 13.66:1 on `ink`); at the right (desktop, from
   `xl`) or beneath (phone) *"© {year} {legal name}"* in `line` (14.19:1). Not

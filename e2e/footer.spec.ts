@@ -113,11 +113,12 @@ test("SRC-0014 §Touch targets: every standalone footer control clears 44 px", a
       height: element.getBoundingClientRect().height,
     })),
   );
-  // Three legal links and the two language segments (DEC-0158: the current
-  // language is a link marked `aria-current`). It was 7 while the footer
-  // carried the contact summary, the newsletter field and its submit
-  // (DEC-0122 §2), and 4 while only the other language was a control.
-  expect(heights.length).toBe(5);
+  // The press link (DEC-0166), three legal links and the two language
+  // segments (DEC-0158: the current language is a link marked
+  // `aria-current`). It was 7 while the footer carried the contact summary,
+  // the newsletter field and its submit (DEC-0122 §2), and 4 while only the
+  // other language was a control.
+  expect(heights.length).toBe(6);
   const small = heights.filter((entry) => entry.height < 44);
   expect(small, `controls under 44 px: ${JSON.stringify(small)}`).toEqual([]);
 });
@@ -134,7 +135,7 @@ test("TS-WEB-0009: the whole footer works with no JavaScript at all", async ({ b
   for (const hash of ["impressum", "datenschutz", "barrierefreiheit"]) {
     await expect(footer.locator(`a[href="/rechtliches#${hash}"]`).first()).toBeVisible();
   }
-  await expect(footer.locator("nav a")).toHaveCount(5);
+  await expect(footer.locator("nav a")).toHaveCount(6);
   await expect(footer.locator("details, summary, form, input")).toHaveCount(0);
 
   await context.close();
@@ -169,8 +170,9 @@ for (const viewport of [PHONE, DESKTOP]) {
     });
     await expect(footer).toHaveCSS("background-color", tokens.ink);
 
+    // The press link (DEC-0166) stands in the same row and is styled alike.
     const legal = footer.getByRole("navigation", { name: "Impressum" }).getByRole("link");
-    await expect(legal).toHaveCount(3);
+    await expect(legal).toHaveCount(4);
     for (const link of await legal.all()) {
       await expect(link).toBeVisible();
       await expect(link).toHaveCSS("color", tokens.paper);
