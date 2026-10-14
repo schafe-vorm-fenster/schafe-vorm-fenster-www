@@ -1,6 +1,6 @@
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { legalAnchor } from "@/src/lib/routes/legal-anchors";
-import { FOOTER_LEGAL_LINKS } from "@/src/lib/routes/navigation";
+import { FOOTER_LEGAL_LINKS, FOOTER_PRESS_LINK } from "@/src/lib/routes/navigation";
 
 import { LanguageSwitch } from "../language-switch/language-switch";
 import { Logo } from "../logo/logo";
@@ -41,8 +41,9 @@ export interface SiteFooterProps {
  * two-line wordmark) and the `language-switch` as a segmented control —
  * beside each other from `md`, stacked on the phone with the switch under
  * the logo; then the newsletter slot, while one is offered (S5); then, under
- * a hairline, the legal links Impressum / Datenschutz / Barrierefreiheit as
- * anchors on the one legal page and the copyright line — beside each other
+ * a hairline, the press link (DEC-0166) and the legal links Impressum /
+ * Datenschutz / Barrierefreiheit as anchors on the one legal page and the
+ * copyright line — beside each other
  * from `xl`, stacked below it. The link list and the anchors come from
  * `src/lib/routes/` (DEC-0039: an anchor is permanent), the labels from the
  * dictionary. **No contact entry** (TS-WEB-0004 D4): the contact section
@@ -83,6 +84,18 @@ export function SiteFooter({
         <div className={styles.base}>
           <nav aria-label={d.footer.imprint} className={styles.legal}>
             <ul className={styles.list}>
+              {/* The press page (DEC-0166): first in the link row, so the
+                  footer gains a link and not a row. */}
+              <li>
+                <RouteLink
+                  className={styles.link}
+                  locale={locale}
+                  styled={false}
+                  to={FOOTER_PRESS_LINK.route}
+                >
+                  {d.footer[FOOTER_PRESS_LINK.label]}
+                </RouteLink>
+              </li>
               {FOOTER_LEGAL_LINKS.map((entry) => (
                 <li key={entry.section}>
                   <RouteLink

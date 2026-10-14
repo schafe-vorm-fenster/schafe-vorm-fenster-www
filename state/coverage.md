@@ -6,17 +6,17 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**462 criteria · 296 closed · 166 open (64 % closed)**
+**466 criteria · 300 closed · 166 open (64 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 291 | a test title in a file a runner runs carries the id |
+| VERIFIED | 295 | a test title in a file a runner runs carries the id |
 | METERED | 5 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
 | NAMED ONLY | 30 | the id is in a runner file but in no test title — **not coverage** |
 | MISSING | 136 | nothing names it |
 
-Rule 1 (a new criterion arrives with its instrument): 1 criterion(a) new in this commit, 0 without an instrument.
+Rule 1 (a new criterion arrives with its instrument): 4 criterion(a) new in this commit, 0 without an instrument.
 
 ## By level
 
@@ -24,8 +24,8 @@ Rule 1 (a new criterion arrives with its instrument): 1 criterion(a) new in this
 | --- | --- | --- | --- | --- |
 | static | 89 | 59 | 30 | 66 % |
 | unit | 32 | 28 | 4 | 88 % |
-| integration | 75 | 52 | 23 | 69 % |
-| e2e | 196 | 155 | 41 | 79 % |
+| integration | 76 | 52 | 24 | 68 % |
+| e2e | 199 | 159 | 40 | 80 % |
 | tool | 39 | 2 | 37 | 5 % |
 | manual | 31 | 0 | 31 | 0 % |
 
@@ -60,7 +60,7 @@ Rule 1 (a new criterion arrives with its instrument): 1 criterion(a) new in this
 | TS-WEB-0025 | 14 | 10 | A5 A9 A12 A13 |
 | TS-WEB-0026 | 17 | 12 | A9 A11 A12 A16 A17 |
 | TS-WEB-0027 | 17 | 12 | A7 A10 A11 A14 A15 |
-| TS-WEB-0028 | 14 | 8 | A6 A8 A9 A10 A13 A14 |
+| TS-WEB-0028 | 18 | 12 | A7 A8 A9 A10 A13 A14 |
 | TS-WEB-0029 | 15 | 13 | A4 A12 |
 
 ## Every open criterion
@@ -225,7 +225,7 @@ Rule 1 (a new criterion arrives with its instrument): 1 criterion(a) new in this
 | TS-WEB-0027-A11 | e2e | MISSING | — | Stage 0 and stage 1 (geo set) renders have identical block order and both contain the empty slot; only the selection and order of the six filled elements differ … |
 | TS-WEB-0027-A14 | e2e | MISSING | — | No layout shift from late content: hero, proof cards and portraits declare `ratio-hero`, `ratio-proof`, `ratio-portrait` before data arrives; measured CLS on th … |
 | TS-WEB-0027-A15 | manual | MISSING | — | Photo honesty: every photograph either depicts what its copy claims, or carries the badge "Nicht motivgenau · Platzhalter"; every missing photo is the "Foto ges … |
-| TS-WEB-0028-A6 | e2e | MISSING | — | Filtering reorders nothing: the relative order of rows surviving a filter equals their order in the unfiltered list. |
+| TS-WEB-0028-A7 | integration | MISSING | — | **Superseded by A15 (DEC-0166).** Was: an entry whose `usage_rights` is absent or not `cleared` appears in neither the HTML, nor any chip count, nor the row tot … |
 | TS-WEB-0028-A8 | tool | NAMED ONLY | e2e/pages/archiv.spec.ts — outside any test title | Page weight: document ≤ 50 KB compressed; every image response ≤ 100 KB; at most one image request before scroll; no request to any media host; no `<video>`, `< … |
 | TS-WEB-0028-A9 | e2e | NAMED ONLY | src/components/archive-filter/archive-filter.test.tsx — outside any test title | With JavaScript disabled every cleared row renders and the chip row is not visible. |
 | TS-WEB-0028-A10 | tool | NAMED ONLY | e2e/pages/archiv.spec.ts — outside any test title | JSON-LD parses as one `ItemList`; `itemListElement` count equals the unfiltered visible row count; each item's `publisher` is the outlet and `url` the original. … |

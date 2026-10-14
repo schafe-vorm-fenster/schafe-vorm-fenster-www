@@ -178,7 +178,9 @@ Proposed EN segments (de → en):
   (R-home-33, R-ueber-1), and the sender surface is the one label that
   names the page rather than a job — the FUN-WEB-0002 carve-out the review
   asked for. English: "About us".
-- Footer: Newsletter, the legal links "Impressum" / "Datenschutz" /
+- Footer: Newsletter, the press link "Presse" / "Press" → `/ueber-uns/archiv`
+  (DEC-0166 — the press page is reached from the footer and `/ueber-uns`,
+  never from the header), the legal links "Impressum" / "Datenschutz" /
   "Barrierefreiheit" pointing at their anchors on `/rechtliches`, and the
   language switcher (plain links, TS-WEB-0001 D5). **No contact entry**: the
   contact section stands immediately above the footer on every page and is

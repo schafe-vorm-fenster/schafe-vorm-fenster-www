@@ -68,7 +68,8 @@ does, the rows below are the confirmed floor.
 | `/` | project home | `/` | unchanged |
 | `/start` | "Anmelden" — publisher signup | `/mitmachen` | entry intent, not the form; `/mitmachen/registrieren` is one click on |
 | `/funktionen` | feature list (10 markdown features) | `/dein-kalender` | the only page that still argues features |
-| `/presse` | press page | `/ueber-uns/archiv` | proof archive is its successor (FUN-WEB-0018) |
+| `/presse` | press page | `/ueber-uns/archiv` | proof archive is its successor (FUN-WEB-0018); the press page since DEC-0166 |
+| `/en/press` | — (not a legacy URL) | `/en/about/archive` | DEC-0166 — the English press address, so each language has one to hand to journalists |
 | `/impressum` | imprint **and** privacy (one page, legacy footer linked both here) | `/rechtliches#impressum` | anchor per TS-WEB-0004 D8 |
 | `/hilfe` | help index | `https://schafe-vorm-fenster.de/hilfe` | community-site (DEC-0146), CON-WEB-0010 |
 | `/hilfe/{slug}` | help articles | `https://schafe-vorm-fenster.de/hilfe/{slug}` | same slug, per article (community-site#204) |

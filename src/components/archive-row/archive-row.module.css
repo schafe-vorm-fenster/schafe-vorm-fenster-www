@@ -85,3 +85,21 @@
 .link {
   margin-top: var(--space-1);
 }
+
+/* DEC-0166 — a quotation from the coverage: indented behind a hairline so it
+   reads as someone else's words, with the outlet as its source line. */
+.quote {
+  border-inline-start: 2px solid var(--color-neutral-line);
+  margin: var(--space-1) 0 0;
+  padding-inline-start: var(--space-3);
+}
+
+.quote blockquote {
+  font-size: var(--type-meta-size);
+  margin: 0;
+}
+
+.quote figcaption {
+  color: var(--color-neutral-text2);
+  font-size: var(--type-meta-size);
+}

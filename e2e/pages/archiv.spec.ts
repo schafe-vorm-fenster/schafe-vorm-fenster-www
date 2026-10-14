@@ -1,13 +1,53 @@
 import { expect, test } from "@playwright/test";
 
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { everyRoute, href } from "../../src/lib/routes/routes";
+
 import type { Page } from "@playwright/test";
 
 /**
- * TS-WEB-0028 — `/ueber-uns/archiv` — acceptance pass.
+ * The installed media-echo package — what the press page cites (DEC-0166).
+ * Read straight off `index.json`, so the rendered page is checked against the
+ * package and not against the content artifact it is built from (A15 holds
+ * that one).
+ */
+interface MediaEchoEntry {
+  readonly id: string;
+  readonly title: string;
+  readonly source: string;
+  readonly url: string | null;
+}
+
+function mediaEchoEntries(): MediaEchoEntry[] {
+  const index = JSON.parse(
+    readFileSync(
+      join(process.cwd(), "node_modules/@schafe-vorm-fenster/media-echo/index.json"),
+      "utf8",
+    ),
+  ) as {
+    files: {
+      path: string;
+      frontmatter?: { title: string; source: string; url?: string | null };
+    }[];
+  };
+  return index.files
+    .filter((file) => file.path.endsWith(".media-echo.md") && file.frontmatter)
+    .map((file) => ({
+      id: file.path.split("/").pop()!.replace(/\.media-echo\.md$/, ""),
+      title: file.frontmatter!.title,
+      source: file.frontmatter!.source,
+      url: file.frontmatter!.url ?? null,
+    }));
+}
+
+/**
+ * TS-WEB-0028 — `/ueber-uns/archiv`, the press page *Presse und
+ * Auszeichnungen* (DEC-0166) — acceptance pass.
  *
- * The real list is empty today (Q-0045, `state/open.md` #1) — the 31 rows are
- * the content artifact's own real, cited media-echo entries with clearance
- * pending, so nothing on the page badges itself.
+ * Every media-echo entry is on the page as a citation (Q-0093 answered); the
+ * rows are real, so nothing on the page badges itself.
  *
  * **Changed for the polish brief (page 11).** The *all* chip is gone: it was
  * pressed by default, did nothing when pressed again, and cost a whole pill
@@ -113,10 +153,15 @@ test.describe("/ueber-uns/archiv", () => {
     const rowCount = await rows.count();
     expect(rowCount).toBeGreaterThan(0);
 
+    // The filter matches on the hub's type ids (DEC-0166); what a visitor
+    // reads is the badge, so a row of the chip's type is one whose badges
+    // carry the chip's label.
     let visibleCount = 0;
     for (let index = 0; index < rowCount; index += 1) {
       const row = rows.nth(index);
-      const rowTypes = (await row.getAttribute("data-archive-type"))?.split(" ") ?? [];
+      const rowTypes = (await row.locator("[class*='badges'] > *").allTextContents()).map((text) =>
+        text.trim(),
+      );
       if (rowTypes.includes(typeLabel!)) {
         // The accessible result (`hidden` attribute) and the visual result
         // must agree — this is the half a `[hidden]`-attribute-only
@@ -143,6 +188,25 @@ test.describe("/ueber-uns/archiv", () => {
     const chip = page.getByRole("group").locator("button:not([data-archive-reset])").nth(0);
     await chip.click();
     expect(page.url()).toBe(before);
+  });
+
+  test("TS-WEB-0028-A6: filtering reorders nothing", async ({ page }) => {
+    await page.goto("/ueber-uns/archiv");
+    await waitForFilterHydration(page);
+    const ids = () =>
+      page
+        .locator("[data-archive-type]:not([hidden])")
+        .evaluateAll((rows) => rows.map((row) => row.id));
+    const all = await ids();
+    const chips = page.getByRole("group").locator("button:not([data-archive-reset])");
+    for (const index of [0, 1]) {
+      await chips.nth(index).click();
+    }
+    const filtered = await ids();
+    expect(filtered.length).toBeGreaterThan(0);
+    expect(filtered.length).toBeLessThan(all.length);
+    // The surviving rows keep the relative order they had in the full list.
+    expect(filtered).toEqual(all.filter((id) => filtered.includes(id)));
   });
 
   test("TS-WEB-0028-A8: no video, audio or iframe on the page", async ({ page }) => {
@@ -261,8 +325,114 @@ test.describe("/ueber-uns/archiv", () => {
     expect(text).toContain("View the original");
   });
 
-  test.skip(
-    "TS-WEB-0028-A7: an entry with usage_rights absent appears nowhere — not-yet: the real media-echo pipeline (Q-0045) has zero cleared entries so this page renders only the content artifact's own demo rows in this run",
-    () => {},
-  );
+  test("TS-WEB-0028-A4: every chip, Social Media included, selects the rows it names", async ({
+    page,
+  }) => {
+    // The chips used to filter on their label, and the row attribute was
+    // split on spaces — "Social Media" matched nothing. Ids carry no space.
+    await page.goto("/ueber-uns/archiv");
+    await waitForFilterHydration(page);
+    const chips = page.getByRole("group").locator("button:not([data-archive-reset])");
+    const count = await chips.count();
+    for (let index = 0; index < count; index += 1) {
+      await chips.nth(index).click();
+      await expect(page.locator("[data-archive-type]:not([hidden])").first()).toBeVisible();
+      await chips.nth(index).click();
+    }
+  });
+
+  const entries = mediaEchoEntries();
+
+  for (const [path, locale] of [
+    ["/ueber-uns/archiv", "de"],
+    ["/en/about/archive", "en"],
+  ] as const) {
+    test(`TS-WEB-0028-A16: ${locale} — every media-echo entry is a row with anchor, date, title, outlet and its link`, async ({
+      page,
+    }) => {
+      expect(entries.length).toBeGreaterThan(0);
+      await page.goto(path);
+      const rows = page.locator("[data-archive-type]");
+      await expect(rows).toHaveCount(entries.length);
+
+      for (const entry of entries) {
+        const row = page.locator(`[data-archive-type][id="${entry.id}"]`);
+        await expect(row, entry.id).toHaveCount(1);
+        await expect(row.locator("h3")).toHaveText(entry.title);
+        await expect(row.locator("time")).toHaveCount(1);
+        await expect(row.locator("p").first()).toContainText(entry.source);
+        if (entry.url) {
+          await expect(row.locator(`a[href="${entry.url}"]`), entry.id).toHaveCount(1);
+        } else {
+          await expect(row.locator("a"), entry.id).toHaveCount(0);
+        }
+      }
+
+      // No third-party image: article photos and logos are not citations.
+      await expect(page.locator("[data-archive-filter] img, [data-archive-filter] picture")).toHaveCount(0);
+
+      // Every quotation is marked as one, with its source.
+      const quotes = page.locator("[data-archive-quote]");
+      expect(await quotes.count()).toBeGreaterThan(0);
+      for (const quote of await quotes.all()) {
+        await expect(quote.locator("blockquote")).toHaveCount(1);
+        const row = quote.locator("xpath=ancestor::*[@data-archive-type][1]");
+        const outlet = (await row.locator("p").first().textContent())?.split(" · ")[0]?.trim();
+        expect(outlet).toBeTruthy();
+        await expect(quote.locator("figcaption")).toContainText(outlet!);
+      }
+    });
+  }
+
+  for (const [from, to] of [
+    ["/presse", "/ueber-uns/archiv"],
+    ["/en/press", "/en/about/archive"],
+  ] as const) {
+    test(`TS-WEB-0028-A17: ${from} answers a permanent redirect to ${to}`, async ({ request }) => {
+      const response = await request.get(from, { maxRedirects: 0 });
+      expect(response.status()).toBe(301);
+      expect(new URL(response.headers()["location"]!, "http://x").pathname).toBe(to);
+    });
+  }
+
+  test("TS-WEB-0028-A18: reached from /ueber-uns and the footer, never from the header", async ({
+    page,
+  }) => {
+    await page.goto("/ueber-uns");
+    const link = 'a[href="/ueber-uns/archiv"]';
+    await expect(page.locator(`main ${link}`).first()).toBeVisible();
+    await expect(page.locator(`main ${link}`).first()).toContainText("Presse und Auszeichnungen");
+    await expect(page.getByRole("contentinfo").locator(link)).toHaveText("Presse");
+    await expect(page.getByRole("banner").locator(link)).toHaveCount(0);
+
+    await page.goto("/ueber-uns/archiv");
+    await expect(page.locator("h1")).toHaveText("Presse und Auszeichnungen");
+    await page.goto("/en/about/archive");
+    await expect(page.locator("h1")).toHaveText("Press and awards");
+    // The language switch links here too (the current page); the press link
+    // is the one that says so.
+    await expect(
+      page.getByRole("contentinfo").getByRole("link", { name: "Press", exact: true }),
+    ).toHaveAttribute("href", "/en/about/archive");
+  });
+
+  test("TS-WEB-0028-A18: every route's footer links to the press page, no header does", async ({
+    request,
+  }) => {
+    for (const { route, locale } of everyRoute()) {
+      const path = href(route, locale);
+      const html = await (await request.get(path)).text();
+      const target = href("archive", locale);
+      // The site footer is the page's last `<footer>` (a quote card carries
+      // one of its own); the site header and its menu stand before `<main`.
+      const footer = html.slice(html.lastIndexOf("<footer"));
+      expect(footer, path).toContain(`href="${target}"`);
+      // On the press page itself the header menu's language switch links to
+      // the page it stands on; that is the switch, not a navigation entry.
+      if (route === "archive") continue;
+      const beforeMain = html.slice(0, html.indexOf("<main"));
+      expect(beforeMain, path).toContain("<header");
+      expect(beforeMain, path).not.toContain(`href="${target}"`);
+    }
+  });
 });

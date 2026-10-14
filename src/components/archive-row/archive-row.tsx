@@ -22,6 +22,24 @@ export interface ArchiveRowProps {
   readonly outlet: string;
   /** One or more type badges, e.g. "Presse", "Radio". */
   readonly types: readonly string[];
+  /**
+   * Additive (DEC-0166): the hub's type ids behind `types`, in the same
+   * order — what `archive-filter` matches on. Labels are localized and may
+   * hold a space ("Social Media"), ids are neither (TS-WEB-0028 D4). Absent,
+   * the labels stand in, as before.
+   */
+  readonly typeIds?: readonly string[];
+  /**
+   * Additive (DEC-0166): the row's anchor, the entry's stable id — so a
+   * deeplink `#<id>` lands on exactly this row.
+   */
+  readonly id?: string;
+  /**
+   * Additive (DEC-0166): a short excerpt from the coverage, verbatim. It
+   * renders as a quotation — a `blockquote` in quotation marks with the
+   * outlet as its source line — never as the row's own words.
+   */
+  readonly quote?: string;
   /** One localized sentence of context — the only translated text in the row. */
   readonly contextLine: string;
   /** Absent where the entry carries no outlet URL — then the row has no link. */
@@ -77,6 +95,9 @@ export function ArchiveRow({
   precision = "day",
   outlet,
   types,
+  typeIds,
+  id,
+  quote,
   contextLine,
   href,
   previewSrc,
@@ -86,13 +107,15 @@ export function ArchiveRow({
   className,
 }: ArchiveRowProps) {
   const { iso, label } = formatArchiveDate(date, precision, locale);
+  const [open, close] = locale === "de" ? ["„", "“"] : ["“", "”"];
 
   return (
     <article
       className={[styles.row, previewSrc ? styles.withPreview : styles.plain, className]
         .filter(Boolean)
         .join(" ")}
-      data-archive-type={types.join(" ")}
+      data-archive-type={(typeIds ?? types).join(" ")}
+      id={id}
       data-demo={demo ? "true" : undefined}
     >
       {previewSrc ? (
@@ -123,6 +146,16 @@ export function ArchiveRow({
         <p className={styles.context}>
           {contextLine ? `${outlet} · ${contextLine}` : outlet}
         </p>
+        {quote ? (
+          <figure className={styles.quote} data-archive-quote>
+            <blockquote cite={href}>
+              {open}
+              {quote}
+              {close}
+            </blockquote>
+            <figcaption>— {outlet}</figcaption>
+          </figure>
+        ) : null}
         {href ? (
           <OutboundLink className={styles.link} href={href} locale={locale} newTab>
             {dictionary(locale).archiveRow.original}

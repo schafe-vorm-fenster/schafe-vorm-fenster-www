@@ -300,7 +300,8 @@ test.describe("/ueber-uns", () => {
     const block = page.locator("[data-block='auszeichnung']");
     await expect(block).toHaveCount(1);
     await expect(block.getByRole("link")).toHaveCount(1);
-    await expect(page.locator('a[href="/ueber-uns/archiv"]')).toHaveCount(1);
+    // In the page itself — the footer links there as well since DEC-0166.
+    await expect(page.locator('main a[href="/ueber-uns/archiv"]')).toHaveCount(1);
     // No teasers, no counts, no thumbnails (D6).
     await expect(block.locator("img, li")).toHaveCount(0);
   });
@@ -389,7 +390,7 @@ test.describe("/ueber-uns", () => {
 
     // The archive link is a page change, so the capture is read before it.
     await page.goto("/ueber-uns");
-    await page.locator('a[href="/ueber-uns/archiv"]').click();
+    await page.locator('main a[href="/ueber-uns/archiv"]').click();
     await expect(page).toHaveURL(/\/ueber-uns\/archiv$/);
     expect(await conversions(page)).toEqual([]);
   });
