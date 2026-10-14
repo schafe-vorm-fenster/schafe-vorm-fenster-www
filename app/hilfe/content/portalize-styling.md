@@ -122,6 +122,84 @@ Füge CSS-Regeln auf deiner Seite hinzu, die den Selektor `[data-portalize-widge
 }
 ```
 
+**Eigene Termine (Schaufenster, Markierung und Stern-Filter):**
+
+Eigene Termine werden über der Liste in einem Schaufenster gezeigt und in der Liste mit einem Stern-Badge markiert. Die Akzentfarbe gilt für Badge, Stern-Chip und die Veranstalterzeile.
+
+```css
+[data-portalize-widget] {
+  --portalize-own-events-accent-color: #d23800;
+  --portalize-own-events-accent-contrast-color: #ffffff;
+
+  /* Breite, ab der lange Veranstalternamen im Chip gekürzt werden */
+  --portalize-own-events-chip-label-max-width: 16rem;
+
+  /* Zeile zum Zurücksetzen des Filters */
+  --portalize-own-events-reset-text-color: #c23400;
+  --portalize-own-events-reset-border-color: #e5e7eb;
+}
+```
+
+**Schaufenster über der Liste:**
+
+```css
+[data-portalize-widget] {
+  /* Überschrift und "Alle anzeigen"-Link */
+  --portalize-showcase-heading-color: inherit;
+  --portalize-showcase-heading-font-family: inherit;
+  --portalize-showcase-link-color: #d23800;
+
+  /* Karten */
+  --portalize-showcase-card-bg-color: #fff1eb;
+  --portalize-showcase-card-border-radius: 8px;
+  --portalize-showcase-card-padding: 16px;
+  --portalize-showcase-title-color: inherit;
+  --portalize-showcase-title-font-family: inherit;
+  --portalize-showcase-title-font-size: 1rem;
+  --portalize-showcase-date-color: #c23400;
+  --portalize-showcase-location-color: #374151;
+
+  /* Rahmen um die Karte, deren Termin gerade geöffnet ist */
+  --portalize-showcase-active-ring: 0 0 0 3px #d23800;
+
+  /* "+N"-Karte, wenn es mehr eigene Termine gibt als Platz */
+  --portalize-showcase-more-color: #c23400;
+  --portalize-showcase-more-border-color: #e8a88c;
+
+  /* Anzahl der Karten nebeneinander und Abstände */
+  --portalize-showcase-max-cards: 3;
+  --portalize-showcase-gap: 12px;
+  --portalize-showcase-gap-desktop: 16px;
+}
+```
+
+**Schrift und Bilder (Grundeinstellungen):**
+
+```css
+[data-portalize-widget] {
+  --portalize-font-family-base: "Georgia", serif;
+  --portalize-font-size-base: 16px;
+  --portalize-font-size-large: 1.5rem;
+
+  /* Veranstaltungsbilder */
+  --portalize-image-max-width: 500px;
+
+  /* Maximale Höhe. Standardmäßig das 4/3-fache der Breite, also ein
+     Hochformat 3:4. Bilder laufen in ihren eigenen Proportionen; erst
+     höhere Motive werden mittig beschnitten. */
+  --portalize-image-max-height: 667px;
+}
+```
+
+**Ausgewählte Filter-Buttons:**
+
+```css
+[data-portalize-widget] {
+  --portalize-button-border-color-selected: #d23800;
+  --portalize-button-font-weight-selected: 600;
+}
+```
+
 **Filter-Leisten-Layout (Scrollen vs. Umbruch):**
 
 Standardmäßig werden die Filter-Buttons auf Mobilgeräten in mehreren Zeilen angezeigt, damit alle Kategorien auf einmal sichtbar sind. Du kannst dies ändern, sodass die Leiste scrollbar wird (ähnlich wie bei Instagram-Stories).

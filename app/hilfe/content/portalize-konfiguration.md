@@ -50,6 +50,25 @@ Standardmäßig werden alle zukünftigen Termine angezeigt. Du kannst den angeze
 ></div>
 ```
 
+**Eigene Termine hervorheben:**
+
+Termine, die du selbst veröffentlichst, werden standardmäßig hervorgehoben. Sie erscheinen in einer kleinen Übersicht über der Liste und sind in der Liste selbst mit deinem Namen markiert. Dazu gehört ein Filter, der nur deine Termine zeigt.
+
+Beides lässt sich einzeln abschalten:
+
+```html
+<div
+  data-portalize-widget
+  data-own-events-showcase="false"
+  data-own-events-highlight="false"
+></div>
+```
+
+- `data-own-events-showcase="false"` blendet die Übersicht über der Liste aus. Die Markierung in der Liste bleibt.
+- `data-own-events-highlight="false"` entfernt die Markierung in der Liste und den Filter. Die Übersicht bleibt.
+
+*Hinweis:* Damit das sichtbar wird, müssen Termine unter deinem eigenen Veranstalter-Eintrag veröffentlicht sein. Zeigt dein Kalender nur Termine anderer Veranstalter, erscheint weder die Übersicht noch der Filter.
+
 **Kombiniertes Beispiel:**
 
 Du kannst natürlich mehrere Einstellungen kombinieren:
@@ -61,6 +80,7 @@ Du kannst natürlich mehrere Einstellungen kombinieren:
   data-weeks-ahead="52"
   data-show-branding="true"
   data-show-filter="false"
+  data-own-events-showcase="false"
 ></div>
 ```
 
