@@ -1,0 +1,22 @@
+/*
+ * The AI-edited mark (DEC-0165). Tokens only: the well is the 40 px icon-well
+ * size, its fill the scrim ladder's `0.45` step — translucent, so the
+ * photograph shows through it — and the glyph is `paper`. The corner is the
+ * photograph's top right; the box that holds the mark is the positioned
+ * ancestor (`photo-surface`'s section, `media-frame`'s ratio box), and a hero
+ * moves it below the transparent header with `--ai-edited-mark-top`.
+ */
+.mark {
+  align-items: center;
+  background: var(--color-scrim-45);
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-paper);
+  display: inline-flex;
+  height: var(--height-icon-well);
+  justify-content: center;
+  position: absolute;
+  right: var(--space-4);
+  top: var(--ai-edited-mark-top, var(--space-4));
+  width: var(--height-icon-well);
+  z-index: 1;
+}

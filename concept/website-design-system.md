@@ -1143,6 +1143,26 @@ is named on `/rechtliches` (`content/legal/image-credits.md`) and in
 `data-provenance="ai-edited"` on the surface. An image a model made from a
 prompt is not this; it is `generated`.
 
+**An AI-edited photograph carries the sparkles mark** (`DEC-0165`, the owner's
+decision of 2026-10-14, superseding `DEC-0161`'s "no visible badge"). Every
+image with `provenance: ai-edited`, on a photo surface or in a media frame,
+shows `ai-edited-mark` and no other image does:
+
+- **Form.** A 40 px round well (the icon-well size) filled with the
+  translucent `scrim-45`, carrying Lucide `sparkles` at 24 px in `paper`.
+  Tokens only; the photograph shows through the well.
+- **Place.** The photograph's **top-right** corner, `space-4` in from the
+  edge; on a hero it sits below the transparent header
+  (`--site-header-height` + `space-3`). Chosen by measurement: it is the one
+  corner clear of the header and of the text stack at 390 and 1280 px by the
+  widest margin, and the hero's reserved band keeps the stack out of it.
+- **Contrast.** `paper` over the 0.45 well over a white pixel is 3.2 : 1, so
+  the glyph clears the 3 : 1 non-text floor on any photograph;
+  `TS-WEB-0007-A17` measures it on the rendered pixels.
+- **Text alternative.** The mark is a non-interactive `role="img"` named
+  "Mit KI bearbeitet" / "Edited with AI" (`aria-label` and `title`), and the
+  image's `alt` ends with the same sentence in the page's language.
+
 A photo that does not depict what the copy claims carries the placeholder
 badge (`#9A6300` on `archive ground`, radius 999, mono 15 px): *"Nicht
 motivgenau · Platzhalter"*. A missing photo becomes a diagonal hatch of
@@ -1445,6 +1465,7 @@ The icons in use, by role:
 | Add a date | `plus` |
 | Food, catering | `utensils` |
 | Music, choir | `music` |
+| Edited with an AI tool (`ai-edited-mark`) | `sparkles` |
 
 `circle-x` marks an exclusion in a feature comparison — a thing the reader
 does *not* get. It never appears in an archive block, where the icons are

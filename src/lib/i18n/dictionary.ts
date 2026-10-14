@@ -28,6 +28,13 @@ export interface Dictionary {
   /** The site name, as it appears in the title template and `og:site_name`. */
   siteName: string;
   skipToContent: string;
+  /**
+   * The text alternative of the mark on a photograph edited with an AI tool
+   * (DEC-0165, SRC-0014 §Photo surface) — the mark's `aria-label` and
+   * `title`, and the sentence an `ai-edited` image's `alt` ends with
+   * (`check:frontmatter` holds the content to it).
+   */
+  aiEditedMark: string;
   /** Header and context-band labels — the four jobs (TS-WEB-0004 D4). */
   nav: {
     home: string;
@@ -468,6 +475,7 @@ export interface Dictionary {
 const de: Dictionary = {
   siteName: "Schafe vorm Fenster",
   skipToContent: "Zum Inhalt springen",
+  aiEditedMark: "Mit KI bearbeitet",
   nav: {
     home: "Startseite",
     knowWhatIsOn: "Was ist los",
@@ -654,6 +662,7 @@ const de: Dictionary = {
 const en: Dictionary = {
   siteName: "Schafe vorm Fenster",
   skipToContent: "Skip to content",
+  aiEditedMark: "Edited with AI",
   nav: {
     home: "Home",
     knowWhatIsOn: "What is on",

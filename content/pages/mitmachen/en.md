@@ -54,7 +54,7 @@ images:
     master: plan/reviews/2026-10-12/Design - Mitmachen Hero (Gemini).jpg
     alt: >-
       The Easter bonfire in Schmatzin: children and families at trestle tables on the meadow, a
-      painted construction trailer, bare trees and the village behind them.
+      painted construction trailer, bare trees and the village behind them. Edited with AI.
     lcp: true
     licence: CC BY-SA 4.0
     focal:

@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { AiEditedMark } from "../ai-edited-mark/ai-edited-mark";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { PlaceholderSurface } from "../placeholder-surface/placeholder-surface";
 import { Skeleton } from "../skeleton/skeleton";
@@ -29,6 +30,8 @@ export interface MediaFrameProps extends DataStateProps {
   readonly ratio?: MediaRatio;
   /** The asset does not depict what the copy claims. */
   readonly notDepicting?: boolean;
+  /** A real photograph edited with an AI tool — carries `ai-edited-mark` (DEC-0165). */
+  readonly aiEdited?: boolean;
   /**
    * The page's **declared** LCP element (TS-WEB-0003 D2) — everything else loads
    * lazily. Exactly one frame per page may set it (TS-WEB-0003-A8: "No image
@@ -75,14 +78,18 @@ export function MediaFrame({
   alt,
   ratio = "feature",
   notDepicting = false,
+  aiEdited = false,
   priority = false,
   sizes = "(min-width: 64rem) 33vw, 100vw",
   unoptimized,
   caption,
   placeholderId,
+  locale,
   state = "ready",
   className,
 }: MediaFrameProps) {
+  const markAiEdited = aiEdited && !notDepicting;
+
   if (isPending(state)) {
     return <Skeleton className={className} ratio={ratio} variant="box" />;
   }
@@ -98,7 +105,7 @@ export function MediaFrame({
       className={[styles.frame, className].filter(Boolean).join(" ")}
       data-mock={isMocked(state) ? "true" : undefined}
       data-placeholder={placeholderId}
-      data-provenance={notDepicting ? "generated" : undefined}
+      data-provenance={notDepicting ? "generated" : markAiEdited ? "ai-edited" : undefined}
     >
       <div
         className={styles.box}
@@ -124,6 +131,7 @@ export function MediaFrame({
           src={src}
           unoptimized={unoptimized}
         />
+        {markAiEdited ? <AiEditedMark locale={locale} /> : null}
       </div>
       {caption ? <figcaption className={styles.caption}>{caption}</figcaption> : null}
     </figure>

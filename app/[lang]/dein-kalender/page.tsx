@@ -371,7 +371,7 @@ export default async function Page({
           // page in German.
           locale={locale}
           focal={heroImage?.focal}
-          notDepicting={heroImage?.notDepicting}
+          aiEdited={heroImage?.aiEdited} notDepicting={heroImage?.notDepicting}
           placeholderId={heroImage?.placeholderId}
           src={heroImage?.src}
           wideSrc={heroImage?.wideSrc}

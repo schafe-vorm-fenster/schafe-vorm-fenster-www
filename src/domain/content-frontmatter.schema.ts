@@ -25,6 +25,7 @@
 
 import { z } from "zod";
 
+import { dictionary } from "../lib/i18n/dictionary";
 import { LOCALES } from "../lib/i18n/locales";
 
 // ── Shared primitives ────────────────────────────────────────────────────────
@@ -708,6 +709,25 @@ export const PageFrontmatterSchema = BaseFrontmatterSchema.extend({
   // `reviewed_at` would pass `check:frontmatter` and be invisible to the
   // editorial gate of D11. Adding a field here is deliberate; acquiring one
   // by typo is not.
-}).strict();
+})
+  .strict()
+  /*
+   * DEC-0165: a photograph edited with an AI tool says so in its text
+   * alternative as well as on the picture. Its `alt` ends with the page
+   * language's `aiEditedMark` sentence, so a screen reader hears the same
+   * note a sighted visitor sees as the sparkles mark.
+   */
+  .superRefine((page, ctx) => {
+    const note = `${dictionary(page.locale).aiEditedMark}.`;
+    page.images?.forEach((image, index) => {
+      if (image.provenance === "ai-edited" && !image.alt.trimEnd().endsWith(note)) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["images", index, "alt"],
+          message: `\`provenance: ai-edited\` — the alt text must end with "${note}" (DEC-0165)`,
+        });
+      }
+    });
+  });
 
 export type PageFrontmatter = z.infer<typeof PageFrontmatterSchema>;

@@ -30,6 +30,7 @@ import {
   Share2,
   ShoppingBasket,
   Smartphone,
+  Sparkles,
   Sprout,
   Store,
   Theater,
@@ -90,6 +91,8 @@ const GLYPHS = {
   plus: Plus,
   utensils: Utensils,
   music: Music,
+  /* DEC-0165: the mark on a photograph edited with an AI tool. */
+  sparkles: Sparkles,
 } as const satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof GLYPHS;

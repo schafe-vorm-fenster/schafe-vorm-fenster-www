@@ -310,7 +310,7 @@ export default async function Page({
           hero
           id="herkunft"
           locale={locale}
-          notDepicting={heroImage?.notDepicting}
+          aiEdited={heroImage?.aiEdited} notDepicting={heroImage?.notDepicting}
           placeholderId={heroImage?.placeholderId}
           priority
           ratio="hero"
@@ -353,7 +353,7 @@ export default async function Page({
             id="zitat"
             label={fieldAt(story.blocks, STORY.quoteName) ?? FOUNDER_ALT[locale]}
             locale={locale}
-            notDepicting={founderImage?.notDepicting}
+            aiEdited={founderImage?.aiEdited} notDepicting={founderImage?.notDepicting}
             ratio="feature"
             src={founderImage?.src}
           >
