@@ -181,8 +181,13 @@ Eigene Termine werden über der Liste in einem Schaufenster gezeigt und in der L
   --portalize-font-size-base: 16px;
   --portalize-font-size-large: 1.5rem;
 
-  /* Maximale Breite der Veranstaltungsbilder */
+  /* Veranstaltungsbilder */
   --portalize-image-max-width: 500px;
+
+  /* Maximale Höhe. Standardmäßig das 4/3-fache der Breite, also ein
+     Hochformat 3:4. Bilder laufen in ihren eigenen Proportionen; erst
+     höhere Motive werden mittig beschnitten. */
+  --portalize-image-max-height: 667px;
 }
 ```
 
