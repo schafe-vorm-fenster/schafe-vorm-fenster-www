@@ -7,6 +7,9 @@
 .stage {
   aspect-ratio: var(--ratio-square);
   display: block;
+  /* The ratio transfers a content-grown height to the width otherwise; the
+     width is always the pane's (owner's decision of 2026-10-13). */
+  min-width: 0;
   overflow: hidden;
   position: relative;
   width: 100%;
@@ -194,6 +197,11 @@
 .calendar {
   background: var(--color-neutral-ink);
   color: var(--color-neutral-paper);
+  /* The square is a minimum here (owner's decision of 2026-10-13): with
+     overflow visible, the box's automatic minimum height is its content, so
+     three rows with two-line titles and a stacked meta grow it instead of
+     being cut off. Every other graphic keeps the clipped square. */
+  overflow: visible;
   padding: var(--space-4);
 }
 
@@ -214,10 +222,37 @@
 .rows {
   display: flex;
   flex-direction: column;
-  /* Three rows at the two-line height (DEC-0163): the live panel's rows load
-     in the browser over the sample, and the picture must not grow when a
-     real title runs to its second line. */
-  min-height: calc(3 * var(--height-event-row-tall));
+  /* Three rows at the two-line height plus the stacked meta's further lines
+     (DEC-0163, 2026-10-13): the live panel's rows load in the browser over
+     the sample, and the picture must not grow when a real title runs to its
+     second line. The stacked meta is the place, then distance and time: one
+     line more than `--height-event-row-tall` counts. Where the picture is
+     narrowest — three columns from `lg`, a 192 px row at 768 px — "19 km ·
+     16:00" itself wraps, so the reserve takes a second extra line there
+     until `xl` widens the columns again (measured 2026-10-13). The reserve is
+     what fixes the grown box before paint; a shorter answer leaves room at
+     the end. */
+  --calendar-meta-extra-lines: 1;
+
+  min-height: calc(
+    3 *
+      (
+        var(--height-event-row-tall) + var(--calendar-meta-extra-lines) * var(--type-meta-size) *
+          var(--leading-normal)
+      )
+  );
+}
+
+@media (min-width: 48rem) {
+  .rows {
+    --calendar-meta-extra-lines: 2;
+  }
+}
+
+@media (min-width: 64rem) {
+  .rows {
+    --calendar-meta-extra-lines: 1;
+  }
 }
 
 /* ── 4 · registration ───────────────────────────────────────────────────── */
