@@ -36,7 +36,11 @@ async function showFraction(page: Page, pathModule: Locator, fraction: number): 
   await pathModule.evaluate((element, share) => {
     const rect = element.getBoundingClientRect();
     const top = rect.top + window.scrollY;
-    window.scrollTo({ top: top - (window.innerHeight - share * rect.height), behavior: "instant" });
+    // Rounded up and one pixel past it: a page scrolls in whole pixels, and an
+    // offset truncated below the exact value leaves the module a fraction of
+    // a pixel short of the share (the same correction `e2e/pages/home.spec.ts`
+    // and `e2e/motion-reveal.spec.ts` carry since PR #70).
+    window.scrollTo({ top: Math.ceil(top - (window.innerHeight - share * rect.height)) + 1, behavior: "instant" });
   }, fraction);
 }
 

@@ -709,9 +709,11 @@ invented ones.
 - The block carries **one** CTA either way, and it is the module's own. Wrapping
   adds no second one.
 
-- **The calendar state** draws three live event rows in the square box. Their
+- **The calendar state** draws three live event rows in a box that is at
+  least square and grows where the rows need it, so no row is cut off. Their
   meta takes two lines, the place and then distance and time, so a long place
-  is never cut off (*Event row*, owner's decision of 2026-10-13).
+  is never cut off either (*Event row*, owner's decisions of 2026-10-13,
+  `TS-WEB-0017-A43`, `A44`).
 - **Ordinal** at mono 48 px / 800 `ink`, with the module **title** at card
   title size beside it.
 - **Three step lines**, each a numbered disc plus two lines: the bold core
@@ -741,10 +743,18 @@ switch, at **`lg` = `48rem` (768 px)** from the brand-design `breakpoint`
 scale — the tablet step, and the only breakpoint this component uses.
 
 **Below `lg` — the phone.** There is no room for three graphics side by
-side, so there is a **graphic stage**: one box at `ratio-square`, holding
-three states, the next cropped in at the trailing edge so the stage reads as
-something that continues. The box never changes size, so a state change
-cannot shift the page. The three step lines sit beneath it. **The module
+side, so there is a **graphic stage**: one box at **at least**
+`ratio-square`, holding three states, the next cropped in at the trailing
+edge so the stage reads as something that continues. **The square is a
+minimum** (owner's decision of 2026-10-13, `DEC-0153` amendment 3): a state
+whose content needs more height — the calendar state's three rows with
+two-line titles and the stacked meta — grows the box, and the other states
+stretch to it, so the tallest state sets the height for all three. That
+height is reserved before paint (the calendar reserves its three rows), so
+the box never changes size after it, and a state change cannot shift the
+page. No row of the calendar is ever cut off, and it always shows three
+(`TS-WEB-0017-A44`). From `lg` the same holds per column: each graphic is at
+least square and the tallest sets the row. The three step lines sit beneath it. **The module
 plus its three step lines fit one phone screen** — one viewport height at
 the phone breakpoint. If they do not, the copy is too long and the build
 reports it; the answer is shorter copy, then a taller fixed height, never a

@@ -408,6 +408,7 @@ for the spec side, and needs the content frontmatter schema
 | TS-WEB-0017-A41 | e2e | The site footer of SRC-0014 §Site footer (DEC-0158), at 390 and 1280 px: its ground is `--color-neutral-ink`; the three legal links are `paper`, bold and not underlined at rest, and a keyboard-focused one shows a solid `focus-dark` outline; the active language segment is `lime-500` with `ink` text and the other `paper`, on a track that is neither the fill nor transparent; the phone stacks logo, switch, legal links and copyright, the desktop pairs logo and switch in row one and links and copyright on the base line. |
 | TS-WEB-0017-A42 | e2e | The footer carries one copyright line, `© <year> <legal name>`, in both languages, with the legal name read from `content/legal/imprint.md` (TS-WEB-0011 D4), never written into code (DEC-0158 §3). |
 | TS-WEB-0017-A43 | e2e | Every event row in a list, in the story stage or in the explain module's calendar picture, at 360, 390, 428, 640, 768, 1024, 1280 and 1920 px on `/` and `/dein-ort?ort=…`, shows its meta line whole (no ellipsis), with the longest category label the site carries and the meta "Wolgast · 19 km · 16:00" answered by the test itself; a row at least 30 rem wide shows the category as the SRC-0014 badge, a narrower one as the bare glyph, the label in the markup in both forms; in the story stage's 439 px panel at 1280 px the meta stays whole; and in the explain module's calendar picture on `/` (`StageCalendar`, 192–352 px rows) at the same widths the meta takes two lines — the place on the first, distance and time on the second — with nothing clipped (owner's decision of 2026-10-13, DEC-0153 amendment). `e2e/event-row.spec.ts`. |
+| TS-WEB-0017-A44 | e2e | The explain module's calendar picture on `/` (`StageCalendar`), at 360, 390, 428, 640, 768, 800, 900, 1024, 1100, 1200, 1280 and 1920 px, with three dates the test answers itself — each title longer than the two-line clamp, each meta "Wolgast · 19 km · 16:00" stacked: shows three rows, is at least as tall as it is wide, and every row ends inside it; the module's three panes share one height; the picture's and the module's heights are the same before and after the dates land; nothing scrolls sideways (owner's decision of 2026-10-13: the square is a minimum, DEC-0153 amendment 3). `e2e/explain-calendar.spec.ts`. |
 
 ### D7 — One icon set [FIXED: DEC-0056, SRC-0014#icons]
 
@@ -437,7 +438,7 @@ name used resolves to an export of it.
 | CON-WEB-0049 (optimise its layout for the phone first) | D2 · A4, A8, A9, A23, A24, A25, A26, A27 |
 | CON-WEB-0050 (keep the tablet and desktop layout close to the …) | D2 · A4, A8, A9, A23, A24, A25, A26, A27 |
 | CON-WEB-0051 (take its breakpoints from @schafe-vorm-fenster/brand-design (breakpoint.xs…2xl) | D2 · A4, A8, A9 |
-| CON-WEB-0003 (brand kit binding) | D3 (with TS-WEB-0002 D3, TS-WEB-0003 D3) · A5, A6, A7, A15, A22, A28, A29, A30, A35, A41, A42, A43 |
+| CON-WEB-0003 (brand kit binding) | D3 (with TS-WEB-0002 D3, TS-WEB-0003 D3) · A5, A6, A7, A15, A22, A28, A29, A30, A35, A41, A42, A43, A44 |
 | CON-WEB-0052 (never reimplement the village calendars) | D4 · A10, A11, A12 |
 | FUN-WEB-0131 (embed what app.schafe-vorm-fenster.de serves rather than hold its own) | D4 · A10, A11, A12 |
 | CON-WEB-0053 (be written in TypeScript throughout) | D5 · A2, A3, A13 |

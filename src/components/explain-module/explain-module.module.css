@@ -53,16 +53,21 @@
    stage without being inside the scroll container, so they stay put while
    the panes move beneath them. */
 .stageFrame {
+  /* Its width is the stage's, and the track's minimum height is read off it
+     (`100cqi`), so the square stays the stage's floor. */
+  container-type: inline-size;
   position: relative;
 }
 
-/* One box at ratio-square. Its size is a function of its width alone, so no
-   state change can move anything beneath it. It is a horizontal scroll-snap
-   container (issue #27, DEC-0161): the reader swipes from pane to pane, and
-   the machine scrolls it the same way. `position: relative` makes it the
-   panes' offset parent, which is what the component measures. */
+/* At least a square box (owner's decision of 2026-10-13: the square is a
+   minimum). Its height is the larger of its width and its tallest pane, and
+   both are known before paint — every graphic reserves its own content
+   (the calendar its three rows) — so no state change can move anything
+   beneath it. It is a horizontal scroll-snap container (issue #27,
+   DEC-0161): the reader swipes from pane to pane, and the machine scrolls it
+   the same way. `position: relative` makes it the panes' offset parent,
+   which is what the component measures. */
 .stage {
-  aspect-ratio: var(--ratio-square);
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-x: contain;
@@ -79,12 +84,13 @@
 .track {
   display: flex;
   gap: var(--explain-pane-gap);
-  height: 100%;
+  /* The square as the floor; a taller pane raises the whole track, and the
+     panes stretch to it, so the tallest one sets the height for all three. */
+  min-height: 100cqi;
 }
 
 .pane {
   flex: none;
-  height: 100%;
   scroll-snap-align: start;
   scroll-snap-stop: always;
   width: var(--explain-pane-width);
@@ -256,9 +262,19 @@
     display: none;
   }
 
+  /* At least square; the tallest graphic sets the row, and the other two
+     stretch to it, so step n still stands under graphic n. */
   .pane {
+    /* Stretched in both axes: the column sets the width, the row (the
+       tallest pane) the height, and the ratio only sets the floor through
+       each pane's contribution to the row. Stretched in one axis only, the
+       ratio carried the row's height across into the width and widened the
+       pane past its column. */
+    align-self: stretch;
     aspect-ratio: var(--ratio-square);
     height: auto;
+    justify-self: stretch;
+    min-width: 0;
     width: auto;
   }
 

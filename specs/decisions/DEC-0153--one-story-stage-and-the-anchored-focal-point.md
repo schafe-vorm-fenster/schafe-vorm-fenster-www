@@ -158,3 +158,31 @@ Decided by the owner on 2026-10-13, after the first amendment left G-4 open.
    against 269. `overflow: hidden` on the stage cuts the third row off. SRC-0014
    §Explain module fixes the square, so a larger box or fewer rows is the
    owner's decision.
+
+## Amendment — 2026-10-13 (3): the explain module's square is a minimum
+
+Decided by the owner on 2026-10-13, closing amendment (2)'s open point 4. A
+first proposal — two rows below 1024 px, three above — was measured and
+dropped: two rows overflow the 224–275 px squares from 768 to about 915 px,
+three overflow from 1024 to about 1260 px, and a width-dependent row count
+would have broken `TS-WEB-0017-A8`.
+
+1. **Three rows at every width; the square is the floor.** The calendar
+   graphic keeps `aspect-ratio: 1` but no longer clips (`overflow: visible`),
+   so its automatic minimum height is its content. Below `lg` the module's
+   stage is no longer a fixed square: its track has the stage's width as its
+   minimum height (`min-height: 100cqi` against the frame), and the panes
+   stretch to the tallest. From `lg` each pane is stretched in both axes, so
+   the tallest graphic sets the row and no ratio carries a height into a
+   width (measured: unstretched, the panes grew to 424 px in 224 px columns
+   and the page scrolled sideways at 768 px).
+2. **Reserved before paint.** The calendar's rows reserve three two-line rows
+   plus the stacked meta: one extra meta line, two from `lg` to `xl`, where a
+   192–203 px row wraps "19 km · 16:00" itself. Measured on the production
+   build with the longest title, the picture's and the module's heights are
+   the same before and after the dates land at all twelve widths of
+   `TS-WEB-0017-A44`.
+3. **Measured result** (picture height · last row's bottom): 405 · 371 at
+   360–428, 472 · 373 at 640, 485 · 439 at 768, 486 · 380 at 800–1023,
+   425 · 380 from 1024. At 360 px the stage's panes grow from 328 to 405 px,
+   so the phone module is 77 px taller (733 px).
