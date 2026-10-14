@@ -151,3 +151,50 @@ export async function callUpstreamText({
   }
   return body;
 }
+
+/**
+ * One upstream image `GET` whose answer is its **response headers** —
+ * assets-api's attribution of a Wikimedia Commons image (DEC-0167).
+ *
+ * A `GET`, not a `HEAD`: measured on 2026-10-14, assets-api's CDN answered a
+ * `HEAD` 200 with full attribution from its cache while the `GET` of the same
+ * URL failed with a 500 — the browser would then have been handed an image
+ * that never loads. The `GET` is the request the browser will make, so it is
+ * the one that is checked, and its success leaves the image warm in the
+ * service's CDN for the browser. The body is cancelled unread.
+ *
+ * Same three properties as `callUpstream`: the closed header set (`accept`
+ * only, here `image/*`), one bounded attempt, `UpstreamError` for every
+ * non-answer — a non-image content type included.
+ */
+export async function callUpstreamImageHeaders({
+  service,
+  url,
+  timeoutMs,
+}: {
+  readonly service: string;
+  readonly url: string;
+  readonly timeoutMs: number;
+}): Promise<Readonly<Record<string, string>>> {
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      method: "GET",
+      headers: { accept: "image/*" },
+      signal: AbortSignal.timeout(timeoutMs),
+      cache: "no-store",
+    });
+  } catch (cause) {
+    const reason = cause instanceof Error ? cause.name : "network error";
+    throw new UpstreamError(service, reason === "TimeoutError" ? `timeout after ${timeoutMs} ms` : reason);
+  }
+  // The *response's* headers, as a plain record with lower-case names — never
+  // a request's (TS-WEB-0013-A5 holds the clients to that).
+  const headers = Object.fromEntries(response.headers.entries());
+  await response.body?.cancel().catch(() => undefined);
+  if (!response.ok) throw new UpstreamError(service, `HTTP ${response.status}`, response.status);
+  if (!(headers["content-type"] ?? "").startsWith("image/")) {
+    throw new UpstreamError(service, `not an image: ${headers["content-type"] ?? "no content type"}`, response.status);
+  }
+  return headers;
+}

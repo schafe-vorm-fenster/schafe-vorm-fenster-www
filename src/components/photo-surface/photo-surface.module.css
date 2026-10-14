@@ -286,3 +286,66 @@
 .surface[data-hero="true"] .marks {
   top: calc(var(--site-header-height) + var(--space-3));
 }
+
+/*
+ * The swap layer — DEC-0167 (`photo-layer.tsx`). A place's own photograph,
+ * known only after hydration, laid over the surface's prerendered one: the
+ * same two gradients (inherited from `.surface`), `cover`, out of flow, so
+ * nothing moves when it lands. The crop is the surface's default `50% 40%`
+ * written out rather than read from `--photo-focal`, because that variable
+ * belongs to the photograph underneath and would crop this one by another
+ * picture's motif.
+ */
+.layer {
+  background-image: var(--photo-gradient-top), var(--photo-gradient-reading), var(--layer-image);
+  background-position: 50% 40%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .layer {
+    animation: layer-in var(--motion-reveal-duration) var(--motion-reveal-easing) both;
+  }
+}
+
+@keyframes layer-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/*
+ * The photograph's credit line, or the fallback's honest label (DEC-0167,
+ * Q-0089). It sits in the picture's top corner, below the header's height,
+ * in the band the text stack may not enter (`data-hero`'s reserved band), so
+ * it can wrap without touching the copy. Out of flow: it shifts nothing.
+ */
+.note {
+  font-size: var(--type-meta-size);
+  line-height: var(--leading-normal);
+  margin: 0;
+  max-width: min(32rem, calc(100% - 2 * var(--space-4)));
+  position: absolute;
+  right: var(--space-4);
+  text-align: right;
+  top: var(--space-3);
+  z-index: 1;
+}
+
+.surface[data-hero="true"] .note {
+  top: calc(var(--site-header-height) + var(--space-2));
+}
+
+.note a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.note a:hover {
+  color: var(--ground-link-hover);
+}

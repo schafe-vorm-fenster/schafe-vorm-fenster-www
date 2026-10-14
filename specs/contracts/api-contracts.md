@@ -14,10 +14,10 @@ values the product (`community-calendar`) already consumes.
 | Service | Host | Needed by | Relevant operations |
 | --- | --- | --- | --- |
 | events-api | `https://events.api.schafe-vorm-fenster.de` | live modules (dates per place/scope/category), counters | `/api/{token}/events/search/{community}[/{scope}[/{category}]]`, `/api/stats` (public, totalEvents u.a.), `/api/{token}/communities` |
-| geo-api | `https://geo.api-v2.schafe-vorm-fenster.de` | place search, geo hierarchy, geolocation resolution | `/api/{token}/community/search`, `/api/{token}/community/slug/{slug}`, `/api/{token}/findbyaddress` |
+| geo-api | `https://geo.api-v2.schafe-vorm-fenster.de` | place search, geo hierarchy, geolocation resolution, the place's photograph (`image`, DEC-0167) | `/api/{token}/community/search`, `/api/{token}/community/slug/{slug}`, `/api/{token}/community/{geonameId}`, `/api/{token}/findbyaddress` |
 | calendar-api | `https://calendar.api.schafe-vorm-fenster.de` | organizer/calendar metadata (embed demo, reference embed) | per OpenAPI spec |
 | classification-api | `https://classify.api.schafe-vorm-fenster.de` | category/scope definitions (build-time) | per OpenAPI spec |
-| assets-api | `https://assets.api.schafe-vorm-fenster.de` | images/media delivery | per OpenAPI spec |
+| assets-api | `https://assets.api.schafe-vorm-fenster.de` | images/media delivery; a Commons file's licence and author as response headers (`License`, `Copyright`, DEC-0167) | `/api/image?wikimediaCommonsId=<file>` (per OpenAPI spec) |
 | envoy-api | `https://envoy.api.schafe-vorm-fenster.de` | registration, order handover | `POST /api/registration` (organizer into the CRM), `POST /api/conversation` (AI chat, unused). Auth: `SheepToken`, global. |
 
 ## Pinned locally

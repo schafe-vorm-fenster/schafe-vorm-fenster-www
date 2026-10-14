@@ -84,6 +84,11 @@ export interface PhotoSurfaceProps extends DataStateProps {
    */
   readonly locale?: Locale;
   readonly className?: string;
+  /**
+   * A photograph that replaces the surface's own after hydration, with its
+   * credit line — `photo-layer.tsx` (DEC-0167). Rendered under the text stack.
+   */
+  readonly photoLayer?: ReactNode;
   readonly children?: ReactNode;
 }
 
@@ -139,6 +144,7 @@ export function PhotoSurface({
   label,
   placeholderId,
   className,
+  photoLayer,
   children,
 }: PhotoSurfaceProps) {
   const classes = [styles.surface, className].filter(Boolean).join(" ");
@@ -235,6 +241,7 @@ export function PhotoSurface({
           finished picture or a finished flat ground, never a label. */}
       {/* The text stack stands in the page's container, so it starts on the
           same left edge as the header and every section (DEC-0150, F-4-1). */}
+      {photoLayer}
       <div className={`container ${styles.content}`}>{children}</div>
       {/* DEC-0165: every photograph edited with an AI tool carries the mark. */}
       {aiEdited && !notDepicting && !missingPhoto ? <AiEditedMark locale={locale} /> : null}

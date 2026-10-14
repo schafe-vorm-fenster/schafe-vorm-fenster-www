@@ -2,7 +2,9 @@
  * geo-api client — places, the hierarchy, and the app-handover slug.
  *
  * Operations the website is allowed to reach (README of this folder,
- * TS-WEB-0008 D2): `community/search` and `community/slug/{slug}`.
+ * TS-WEB-0008 D2): `community/search`, `community/slug/{slug}`, and since
+ * DEC-0167 `community/{geonameId}` — the one that carries the place's
+ * photograph (`image`, Wikidata P18 as a Commons `Special:FilePath` URL).
  * The address-lookup operation geo-api also publishes is **forbidden**
  * (DEC-0024, TS-WEB-0013 D3): it triggers a paid external Google lookup and would
  * carry the visitor's search term to a third party through our server. It is
@@ -49,6 +51,12 @@ export const GeoCommunitySchema = z
       })
       .loose()
       .optional(),
+    /**
+     * The place's photograph — Wikidata P18 as a Commons `Special:FilePath`
+     * URL, `null` where Wikidata has none (DEC-0167). Only
+     * `community/{geonameId}` fills it; the slug lookup never carries it.
+     */
+    image: z.string().nullable().optional(),
   })
   .loose();
 
@@ -118,6 +126,20 @@ export async function communityBySlug(config: GeoApiConfig, slug: string): Promi
   const payload = await callUpstream({
     service: "geo-api",
     url: `${config.host}/api/${config.token}/community/slug/${encodeURIComponent(slug)}`,
+    timeoutMs: config.timeoutMs,
+  });
+  const { data } = parse(GeoSingleEnvelopeSchema, payload);
+  return Array.isArray(data) ? data[0] : data;
+}
+
+/**
+ * One community by its geonameId — the full record, including `image`
+ * (DEC-0167). `undefined` when geo-api answers no community.
+ */
+export async function communityById(config: GeoApiConfig, geonameId: number): Promise<GeoCommunity | undefined> {
+  const payload = await callUpstream({
+    service: "geo-api",
+    url: `${config.host}/api/${config.token}/community/${encodeURIComponent(String(geonameId))}`,
     timeoutMs: config.timeoutMs,
   });
   const { data } = parse(GeoSingleEnvelopeSchema, payload);

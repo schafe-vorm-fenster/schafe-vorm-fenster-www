@@ -129,3 +129,23 @@ export interface PlaceSearchResult {
 export interface NearestPlace {
   readonly place: Place;
 }
+
+/**
+ * A place's own photograph on the stage — DEC-0167. Only a photograph with a
+ * stated licence (and, unless the licence is public domain, a stated author)
+ * exists in this shape; one without is never handed to a page.
+ */
+export interface PlacePhoto {
+  /** The image the browser loads — an assets-api URL, WebP, no token. */
+  readonly src: string;
+  /** The Commons file name, for the credit line's title. */
+  readonly fileName: string;
+  /** The Commons file page — where the full attribution and licence text live. */
+  readonly sourceUrl: string;
+  /** The Commons licence short name, verbatim (`CC BY-SA 4.0`). */
+  readonly licence: string;
+  readonly author?: string;
+  readonly year?: string;
+  readonly width?: number;
+  readonly height?: number;
+}

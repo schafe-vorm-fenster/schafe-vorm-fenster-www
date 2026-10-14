@@ -16,7 +16,8 @@ Urheber, Lizenz und Quelle. Die Angaben stehen hier und nicht als
 Bildunterschrift am Foto: Wo eine Lizenz die Namensnennung verlangt, ist
 sie an dieser Stelle erfüllt — außer beim Porträt vom openTransfer CAMP
 in Neustrelitz, dessen Rechteinhaber die Nennung erbittet und bei dem sie
-deshalb zusätzlich direkt am Bild steht.
+deshalb zusätzlich direkt am Bild steht, und bei den Fotos der Orte
+(siehe unten), deren Nachweis immer direkt am Foto steht.
 
 Die maßgebliche Liste ist das Bildverzeichnis der Seiten selbst
 (`images:` im Frontmatter unter `content/pages/`). Kommt ein Foto dazu,
@@ -56,6 +57,20 @@ nötig:
 
 - [Rathaus Gützkow](https://commons.wikimedia.org/wiki/File:Guetzkow_Ostvorpommern_Rathaus.jpg) — Startseite, Szene Einbindung. Foto: Erell, [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5/deed.de), über Wikimedia Commons, unverändert bis auf den Bildausschnitt
 - Außensession beim openTransfer CAMP Zusammenhalt in Neustrelitz, April 2026 — Über uns, Herkunftsblock. Foto: [openTransfer.de](https://opentransfer.de/dokumentation-camp-neustrelitz/) (Stiftung Bürgermut), freie Nutzung, Namensnennung erbeten. Die Nennung steht zusätzlich am Bild selbst
+
+## Fotos der Orte
+
+Wer auf der Startseite oder unter „Dein Ort“ einen Ort wählt, sieht oben
+ein Foto dieses Ortes, wenn es eines gibt. Diese Fotos stammen von
+Wikimedia Commons: Es ist das Bild, das bei Wikidata für den Ort
+hinterlegt ist. Gezeigt wird ein solches Foto nur, wenn Commons eine
+Lizenz dafür nennt und, wo die Lizenz eine Namensnennung verlangt, auch
+den Urheber. Urheber, Lizenz und ein Link zur Bildseite auf Commons
+stehen direkt am Foto; die Liste auf dieser Seite kann nicht jeden der
+rund 1.760 Orte aufführen.
+
+Hat ein Ort kein solches Foto, bleibt das Foto der Seite stehen und ist
+am Bild als Beispielfoto gekennzeichnet, das nicht diesen Ort zeigt.
 
 ## Zuschnitt und Bearbeitung
 

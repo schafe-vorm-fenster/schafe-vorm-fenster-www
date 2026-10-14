@@ -77,3 +77,17 @@ export const PORTALIZE_HOST_FALLBACK = "https://portalize.schafe-vorm-fenster.de
 export function portalizeHost(): string {
   return process.env.PORTALIZE_HOST ?? PORTALIZE_HOST_FALLBACK;
 }
+
+/**
+ * The assets service — images from outside the repository, re-encoded as
+ * WebP, no token (`src/clients/assets-api/README.md`). Its image URLs are the
+ * one ecosystem URL the browser loads itself, as an `<img>`/background
+ * resource under the CSP's `img-src` (event images since DEC-0152, place
+ * photographs since DEC-0167); the attribution lookup behind a place
+ * photograph is server-side, through this host.
+ */
+export const ASSETS_API_HOST_FALLBACK = "https://assets.api.schafe-vorm-fenster.de";
+
+export function assetsApiHost(): string {
+  return process.env.ASSETSAPI_HOST ?? ASSETS_API_HOST_FALLBACK;
+}

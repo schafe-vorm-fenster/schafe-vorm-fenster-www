@@ -26,6 +26,7 @@
  */
 
 import {
+  assetsApiHost,
   communitySiteHost,
   eventsApiHost,
   eventsApiToken,
@@ -77,6 +78,10 @@ export const CAPABILITIES = {
   communityBySlug: { service: "geo", credential: "token", upstream: true, openRow: undefined },
   /** The same lookup out of the committed index — no network, no credential. */
   communityBySlugIndex: { service: "index", credential: "none", upstream: true, openRow: undefined },
+  /** geo-api's full community record — exists, token-scoped; carries the place photograph (DEC-0167). */
+  communityPhoto: { service: "geo", credential: "token", upstream: true, openRow: undefined },
+  /** The same photograph off the community's public page on the village calendar (DEC-0167). */
+  communityPhotoPublic: { service: "communitySite", credential: "none", upstream: true, openRow: undefined },
   /** events-api search — exists, token-scoped. */
   eventsSearch: { service: "events", credential: "token", upstream: true, openRow: undefined },
   /** One community's dates off its public page on the village calendar. */
@@ -165,4 +170,21 @@ export function htmlTimeoutMs(): number {
 
 export function communitySiteConfig(): { host: string; timeoutMs: number } {
   return { host: communitySiteHost(), timeoutMs: htmlTimeoutMs() };
+}
+
+/**
+ * assets-api — the image check behind a place photograph (DEC-0167). No
+ * token. assets-api processes a Commons original on its first request, which
+ * measured 8.3–11.2 s cold against 0.6–2.5 s warm on 2026-10-14, and a call
+ * aborted before it finishes leaves nothing in its CDN — so with the 2.5 s
+ * HTML budget a cold image would fail on every view and never warm up. The
+ * budget is therefore its own: 15 s, above the measured cold maximum. Nobody
+ * waits on it: the stage shows its own photograph until the answer lands, the
+ * answer is CDN-cached (`activePlaces`), and a call that still runs out is a
+ * fallback for this view, never a cached verdict.
+ */
+export const ASSETS_IMAGE_TIMEOUT_MS = 15_000;
+
+export function assetsConfig(): { host: string; timeoutMs: number } {
+  return { host: assetsApiHost(), timeoutMs: ASSETS_IMAGE_TIMEOUT_MS };
 }

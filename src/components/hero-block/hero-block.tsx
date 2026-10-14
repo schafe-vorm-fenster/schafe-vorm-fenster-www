@@ -64,6 +64,8 @@ export interface HeroBlockProps extends DataStateProps {
   /** A real photograph edited with an AI tool — `photo-surface`'s `aiEdited` (DEC-0161). */
   readonly aiEdited?: boolean;
   readonly placeholderId?: string;
+  /** A place's photograph and its credit, swapped in after hydration — `photo-surface`'s `photoLayer` (DEC-0167). */
+  readonly photoLayer?: ReactNode;
   /** The page's language — forwarded to `photo-surface`'s own badges (F-2-4). */
   readonly locale?: Locale;
   readonly id?: string;
@@ -148,6 +150,7 @@ export function HeroBlock({
   notDepicting = false,
   aiEdited = false,
   placeholderId,
+  photoLayer,
   locale = "de",
   state = "ready",
   id,
@@ -167,6 +170,7 @@ export function HeroBlock({
       locale={locale}
       aiEdited={aiEdited}
       notDepicting={notDepicting}
+      photoLayer={photoLayer}
       placeholderId={placeholderId}
       priority={priority}
       ratio="hero"
