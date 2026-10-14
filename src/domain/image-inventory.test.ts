@@ -145,4 +145,36 @@ describe("PageFrontmatterSchema carries the inventory", () => {
       }).success,
     ).toBe(false);
   });
+
+  describe("DEC-0165: an AI-edited photograph's alt ends with the page language's note", () => {
+    const edited = {
+      id: "mitmachen-hero",
+      slot: "mitmachen-1-hero",
+      ratio: "hero",
+      provenance: "ai-edited",
+      source: "Original: a photograph of a village festival.",
+      master: "plan/reviews/edited.jpg",
+      licence: "CC0 1.0",
+      status: "real",
+    } as const;
+    const withAlt = (locale: "de" | "en", alt: string) =>
+      PageFrontmatterSchema.safeParse({ ...frontmatter, locale, images: [{ ...edited, alt }] }).success;
+
+    it("accepts the note in the page's language and nothing else", () => {
+      expect(withAlt("de", "Ein Dorffest auf der Wiese. Mit KI bearbeitet.")).toBe(true);
+      expect(withAlt("en", "A village festival on the meadow. Edited with AI.")).toBe(true);
+      expect(withAlt("de", "Ein Dorffest auf der Wiese.")).toBe(false);
+      expect(withAlt("de", "A village festival on the meadow. Edited with AI.")).toBe(false);
+      expect(withAlt("en", "Ein Dorffest auf der Wiese. Mit KI bearbeitet.")).toBe(false);
+    });
+
+    it("asks nothing of a real or a generated image", () => {
+      expect(
+        PageFrontmatterSchema.safeParse({
+          ...frontmatter,
+          images: [{ ...needed, alt: "Feldlandschaft" }],
+        }).success,
+      ).toBe(true);
+    });
+  });
 });

@@ -1,3 +1,4 @@
+import { AiEditedMark } from "../ai-edited-mark/ai-edited-mark";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { PlaceholderSurface } from "../placeholder-surface/placeholder-surface";
 import { Skeleton } from "../skeleton/skeleton";
@@ -61,8 +62,9 @@ export interface PhotoSurfaceProps extends DataStateProps {
   /**
    * A real photograph edited with an AI tool (DEC-0161, Q-0092). It depicts
    * what the copy claims, so it carries no "Nicht motivgenau" badge; the
-   * editing is named in `content/legal/image-credits.md` and reaches the
-   * markup as `data-provenance="ai-edited"`.
+   * editing is named in `content/legal/image-credits.md`, reaches the markup
+   * as `data-provenance="ai-edited"`, and is marked on the picture by
+   * `ai-edited-mark` in its top-right corner (DEC-0165).
    */
   readonly aiEdited?: boolean;
   readonly id?: string;
@@ -130,6 +132,7 @@ export function PhotoSurface({
   ratio = "hero",
   notDepicting = false,
   aiEdited = false,
+  locale,
   state = "ready",
   id,
   dataBlock,
@@ -233,6 +236,8 @@ export function PhotoSurface({
       {/* The text stack stands in the page's container, so it starts on the
           same left edge as the header and every section (DEC-0150, F-4-1). */}
       <div className={`container ${styles.content}`}>{children}</div>
+      {/* DEC-0165: every photograph edited with an AI tool carries the mark. */}
+      {aiEdited && !notDepicting && !missingPhoto ? <AiEditedMark locale={locale} /> : null}
     </section>
     </>
   );

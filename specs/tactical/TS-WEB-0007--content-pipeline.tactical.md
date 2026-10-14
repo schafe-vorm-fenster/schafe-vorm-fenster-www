@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0143, FUN-WEB-0144, CON-WEB-0063, FUN-WEB-0039, FUN-WEB-0171, CON-WEB-0077, FUN-WEB-0172, FUN-WEB-0173, FUN-WEB-0174, CON-WEB-0078, FUN-WEB-0083, FUN-WEB-0175, FUN-WEB-0176, FUN-WEB-0177, FUN-WEB-0178, CON-WEB-0079, FUN-WEB-0179, CON-WEB-0080, CON-WEB-0087, FUN-WEB-0180, FUN-WEB-0181, FUN-WEB-0182, FUN-WEB-0089]
 sources: [SRC-0006, SRC-0008, SRC-0009, SRC-0017, SRC-0018]
-decisions: [DEC-0012, DEC-0020, DEC-0022, DEC-0026, DEC-0027, DEC-0039, DEC-0041, DEC-0080]
+decisions: [DEC-0012, DEC-0020, DEC-0022, DEC-0026, DEC-0027, DEC-0039, DEC-0041, DEC-0080, DEC-0161, DEC-0165]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -183,6 +183,17 @@ shells (types 19–25) that legitimately have no source record declare
 
 `derived_from` is the only key P7 (D13) runs on. Everything else in the
 update workflow follows from it.
+
+**An image's provenance reaches the page** (DEC-0161, DEC-0165). The image
+inventory's `provenance` (`real` · `generated` · `ai-edited`) is the same kind
+of record for pixels. A photograph edited with an AI tool
+(`provenance: ai-edited`) is marked twice, and both are derived from that one
+field, never set by hand at a call site:
+
+| Where | Rule |
+| --- | --- |
+| On the picture | `photo-surface` and `media-frame` render `ai-edited-mark` — Lucide `sparkles` in a translucent 40 px well, top-right corner, `role="img"` named by the dictionary's `aiEditedMark` (SRC-0014 §Photo surface) — exactly when the image is `ai-edited`, and on no other image |
+| In the text alternative | the entry's `alt` ends with the page language's `aiEditedMark` sentence ("Mit KI bearbeitet." / "Edited with AI."); `check:frontmatter` fails an entry that does not |
 
 ### D7 — The relevance facets the pipeline owes TS-WEB-0005 [FIXED: TS-WEB-0005, DEC-0041, concept B.5]
 
@@ -400,6 +411,7 @@ first playbook is written. [PROPOSED]
 | TS-WEB-0007-A14 | integration | A production build contains only `status: approved` content; a `draft` file renders in preview and reaches no production page. |
 | TS-WEB-0007-A15 | manual | P7 dry run on one bumped package version: the PR touches exactly the files whose `derived_from` names a changed record, resets them to `draft`, and carries `job_relation` and `editorial_weight` plus their reasons forward unchanged. |
 | TS-WEB-0007-A16 | tool | Segment independence: no generated string contains a resolved place name; place references occur only as named interpolation slots. |
+| TS-WEB-0007-A17 | e2e | **AI-edited images are marked, and only they are** (D6, DEC-0165). On every route in both languages: each `[data-provenance="ai-edited"]` frame carries exactly one `ai-edited-mark` with `role="img"` and the dictionary's `aiEditedMark` as accessible name and `title`, not focusable; no mark exists outside such a frame; a page whose inventory holds a placed `ai-edited` image renders at least that many marked frames; every such inventory `alt`, and every `<img>` alt inside a marked frame, ends with the note. On each page carrying one, at 390 and 1280 px: the mark is 40 × 40, intersects neither the header nor any text or control of its surface, and `paper` over the 0.45 well clears **3 : 1** against every pixel of the photograph under it. |
 
 ## Coverage
 
@@ -427,7 +439,7 @@ first playbook is written. [PROPOSED]
 | FUN-WEB-0180 (import them through the Google Workspace pipeline in German …) | D10 · A11 |
 | FUN-WEB-0181 (render it as a section of the single legal …) | D10 · A11 |
 | FUN-WEB-0182 (add the legal text in Google Docs through the …) | D10 · A11 |
-| FUN-WEB-0089 (Zod schemas are the generation contract) | D5, D6, D7, D12 · A1, A6 |
+| FUN-WEB-0089 (Zod schemas are the generation contract) | D5, D6, D7, D12 · A1, A6, A17 |
 
 ## Open points
 

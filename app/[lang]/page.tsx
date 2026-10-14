@@ -310,7 +310,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
         // F-2-33: the surface badges itself out of the dictionary, so it
         // needs the page's language or it badges an English page in German.
         locale={locale}
-        notDepicting={heroImage?.notDepicting}
+        aiEdited={heroImage?.aiEdited} notDepicting={heroImage?.notDepicting}
         placeholderId={heroImage?.placeholderId}
         search={search(true)}
         src={heroImage?.src}
@@ -475,7 +475,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                         <MediaFrame
                           alt={sceneEmbedImage?.alt ?? ""}
                           locale={locale}
-                          notDepicting={sceneEmbedImage?.notDepicting}
+                          aiEdited={sceneEmbedImage?.aiEdited} notDepicting={sceneEmbedImage?.notDepicting}
                           placeholderId={sceneEmbedImage?.placeholderId}
                           /* 16 : 9 across the section's whole width — the review's own
                              shape for this photograph ("auf die volle Breite in 16:9
@@ -532,7 +532,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                       <MediaFrame
                         alt={sceneProvenanceImage?.alt ?? fieldAt(sceneProvenance.blocks, 0) ?? ""}
                         locale={locale}
-                        notDepicting={sceneProvenanceImage?.notDepicting}
+                        aiEdited={sceneProvenanceImage?.aiEdited} notDepicting={sceneProvenanceImage?.notDepicting}
                         placeholderId={sceneProvenanceImage?.placeholderId}
                         /* Full width at every tier, 16 : 9 like the embed scene's
                            photograph: 7 : 5 across a desktop viewport would be

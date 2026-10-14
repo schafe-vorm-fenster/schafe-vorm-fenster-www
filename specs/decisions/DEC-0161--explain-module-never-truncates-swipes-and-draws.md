@@ -73,7 +73,9 @@ this work package (2026-10-13): **an AI-edited real photograph**.
      `licence`. `pnpm images:generate` places it like a real photograph, from the
      master, at the declared focal point (`{x: 45, y: 62}`), both renditions
      inside the 100 KB budget.
-   - **No visible badge.** SRC-0014 §Photo surface puts the "Nicht motivgenau"
+   - **No visible badge** — *superseded by DEC-0165 (2026-10-14): every
+     AI-edited photograph now carries the visible sparkles mark and ends its
+     alt text with the note; the rest of this point stands.* SRC-0014 §Photo surface puts the "Nicht motivgenau"
      badge on a photo that does not depict what the copy claims; this one does.
      Provenance travels the way every other provenance does since 2026-09-18:
      `data-provenance="ai-edited"` on the surface. The editing is named on
@@ -93,4 +95,5 @@ this work package (2026-10-13): **an AI-edited real photograph**.
 - Open for the owner: whether an AI-edited photograph should carry a visible
   note at the image as well (e.g. for EU AI Act Art. 50(4), should the edit be
   judged a manipulation of a real event); today the note is on `/rechtliches`
-  only.
+  only. **Answered by DEC-0165** (2026-10-14): it does — the sparkles mark on the
+  picture and the note at the end of its alt text.

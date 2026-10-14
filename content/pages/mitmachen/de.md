@@ -54,7 +54,7 @@ images:
     master: plan/reviews/2026-10-12/Design - Mitmachen Hero (Gemini).jpg
     alt: >-
       Osterfeuer in Schmatzin: Kinder und Familien an Biertischgarnituren auf der Wiese, ein
-      bemalter Bauwagen, dahinter kahle Bäume und das Dorf.
+      bemalter Bauwagen, dahinter kahle Bäume und das Dorf. Mit KI bearbeitet.
     lcp: true
     licence: CC BY-SA 4.0
     focal:
