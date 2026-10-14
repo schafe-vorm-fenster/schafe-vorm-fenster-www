@@ -12,7 +12,7 @@ Places, the administrative hierarchy and place search.
 | --- | --- |
 | `GET|POST /api/{token}/community/search` | the place search, and the nearest active place |
 | `GET /api/{token}/community/slug/{slug}` | resolving a slug to a community — the app handover (DEC-0029) |
-| `GET /api/{token}/community/{id}` | the hierarchy behind the geo tiers (TS-WEB-0005 D1) |
+| `GET /api/{token}/community/{id}` | the hierarchy behind the geo tiers (TS-WEB-0005 D1), and the place's photograph — `image`, Wikidata P18 as a Commons `Special:FilePath` URL (DEC-0167, `communityById()`) |
 
 The hierarchy is `place? > community > municipality > county > state >
 country`, with `state` required — the five levels TS-WEB-0005 D1 uses.

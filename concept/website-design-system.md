@@ -1119,13 +1119,24 @@ at or above 40 % so the sky crops away and the motif lands above the
 scrim's opaque band. A photograph that only works when the scrim covers its
 subject is the wrong photograph.
 
-**A place shows its own photograph** (owner's review 2026-10-12). The stage of
-a page with a chosen place (`/dein-ort?ort=…`, the home stage with a place)
-shows a photograph **of that place**, never one fixed photograph for every place
-(today `dein-ort-hero` shows a bus stop near Pasewalk for Schlatkow). Where a
-place has none the rule is open (`Q-0089`): a regional photograph
-with an honest label, or the hatched "Foto gesucht" surface, never the photograph
-of a different place presented as this one.
+**A place shows its own photograph** (owner's review 2026-10-12, `DEC-0167`).
+The stage of a page with a chosen place (`/dein-ort?ort=…`, the home stage with
+a place) shows a photograph **of that place**, never one fixed photograph for
+every place. The photograph is the place's Wikidata image, read through geo-api
+and delivered by assets-api, and it is shown only with a stated licence (and an
+author, where the licence asks for attribution). It arrives after the page has
+painted, as a layer over the stage's own photograph with the same scrim, so the
+stage's geometry never changes; the page's own photograph stays the LCP. Its
+**credit stands at the photograph**, in the stage's top corner: title linked to
+the source, author, licence, source. No focal point exists for these
+photographs, so they take the surface's default `50% 40%`; the anchored crop
+below needs a declared focal point and does not apply.
+
+**A place without a usable photograph** (`Q-0089`, resolved by `DEC-0167`)
+keeps the page's own photograph, and the same corner says honestly that it is
+an example and not this place ("Beispielfoto · von {Ort} haben wir noch kein
+Foto"). Never the photograph of a different place presented as this one, and
+never a blank stage.
 
 **Motif per page.** `/` shows villages **with activity** — a street, a
 building in use, people. `/dein-kalender` shows venues — culture houses,

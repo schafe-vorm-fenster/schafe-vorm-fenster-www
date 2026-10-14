@@ -42,6 +42,7 @@ import { usePlaceState, type PlaceState } from "@/src/lib/pages/place-state";
 import { selectStoryExamples } from "@/src/lib/pages/story-examples";
 
 import { NearbyIsland, PlaceDatesIsland } from "../_islands";
+import { PlacePhotoLayer } from "../_place-photo";
 import { toListItems } from "../_live-items";
 
 import { STORIES } from "./stories";
@@ -160,6 +161,8 @@ export function PlaceHero({ copy, s0Search, aSearch, image }: PlaceHeroProps) {
       id="focus-block"
       locale={copy.locale}
       notDepicting={image.notDepicting}
+      // DEC-0167 — with a place, the stage shows that place's photograph.
+      photoLayer={<PlacePhotoLayer locale={copy.locale} />}
       placeholderId={image.placeholderId}
       search={state.kind === "a" ? aSearch : undefined}
       src={image.src}

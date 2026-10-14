@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0011]
 sources: [SRC-0001, SRC-0002, SRC-0003]
-decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152, DEC-0153, DEC-0154, DEC-0159, DEC-0163]
+decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152, DEC-0153, DEC-0154, DEC-0159, DEC-0163, DEC-0167]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -200,9 +200,15 @@ site is not a goal of its own.
 
 ## Owed by the owner's review of 2026-10-12 (DEC-0154)
 
-- **The stage shows the place's own photograph** (issue #18). `/dein-ort?ort=…`
-  today shows the same photograph (a bus stop near Pasewalk) for every place.
-  What a place without a photograph shows is `Q-0089`.
+- ~~**The stage shows the place's own photograph** (issue #18).~~ **Done
+  (DEC-0167).** With a covered place the stage loads that place's photograph from
+  `GET /api/places/{slug}/photo` — Wikidata's image through geo-api, delivered and
+  attributed by assets-api — and lays it over the stage's own photograph after
+  hydration, with its credit line (title linked to the source, author, licence)
+  in the top corner. No licence, no photograph. A place without a usable one keeps
+  the page's own photograph, labelled as an example that is not this place
+  (`Q-0089`, resolved). The swap shifts nothing, and a visit without a place never
+  asks. Asserted by A19–A22.
 - ~~**The stage is less full** (issues #20, #23).~~ **Done (DEC-0159).** The hint
   line and the data-protection paragraph go, the placeholder carries "Tipp den
   Ortsnamen ein", the location link sits directly under the field, and in state A
@@ -228,6 +234,10 @@ site is not a goal of its own.
 | TS-WEB-0020-A16 | e2e | With JavaScript disabled, the story stage shows exactly one story. A click on another hour shows that story, and the stage's height does not change. The hours are one radio group, and an arrow key moves the pick (DEC-0153). |
 | TS-WEB-0020-A17 | unit | Every image entry with an `anchor` has `anchor.y ≤ 38` (the scrim's clear part), a declared `focal` point, and its `stage_file` on disk. Both locales of `/dein-ort` carry the stage's photographs this way (DEC-0153). |
 | TS-WEB-0020-A14 | e2e | Each story's rendered example carries D3's category id for that story (the "Example category" column); a mismatch — any category other than the one the story names — fails. [F-4-2, round 4] |
+| TS-WEB-0020-A19 | integration | `GET /api/places/{slug}/photo` answers 200 with the place's photograph — an assets-api `src`, the Commons file page, licence and author — only when assets-api states a licence for it and, unless the licence is public domain or CC0, an author; it answers a cacheable 204 for a place without an image, an image that is not on Commons, or one without a stated licence; a 204 `no-store` when an upstream or the image itself does not deliver; 404 for an uncovered slug. It reads geo-api with a token and the public village calendar without one, and its answer carries no token (DEC-0167). |
+| TS-WEB-0020-A20 | e2e | With the photo route answering a photograph, `/dein-ort?ort=<slug>` at 360 and 1280 px shows that photograph on the stage (`[data-place-photo=<slug>]`, its background the answered `src`) and a credit line inside the stage, above the `h1`, naming author and licence and linking the Commons file page; zero CSP violations (DEC-0167). |
+| TS-WEB-0020-A21 | e2e | With the photo route answering 204, `/dein-ort?ort=<slug>` keeps the stage's own photograph, renders no place-photo layer, and shows the fallback label naming the place; zero CSP violations (DEC-0167, `Q-0089`). |
+| TS-WEB-0020-A22 | e2e | `/dein-ort` without `?ort=` never calls the photo route and renders no layer or label. With a place, the stage's box and the `h1`'s box are identical before and after the photograph lands, and the layout shift over the swap stays below 0.1 (DEC-0167, TS-WEB-0009-A8). |
 | TS-WEB-0020-A18 | e2e | At 360 × 800 the stage (`#focus-block`) carries exactly one place search in S0 and in state A, both `de` and `en`: the same 56 px field with the typeahead, the placeholder carrying the instruction in S0 ("Tipp den Ortsnamen ein") and the search for another place in state A ("Anderen Ort suchen" / "Search another place"), uncut; a bound label; no helper line; the "use my location" control at most 12 px under the field. The submit carries `data-cta="primary"` in S0 only; in state A the page still has exactly one primary (the handover) and exactly one place search (DEC-0159, issues #20, #23). |
 | TS-WEB-0020-A5 | static | The four stories' `proof_ref`s resolve to ids present in the installed `@schafe-vorm-fenster/proof` version; a missing id fails the build (a wrong id is a defect, an uncleared id is not). |
 | TS-WEB-0020-A6 | e2e | **Superseded, deviation recorded (D3, DEC-0149).** Written text: with every testimonial uncleared the page renders four three-part stories, no quote anywhere. Actual, shipped behaviour, per `e2e/pages/dein-ort.spec.ts`: four named, attributed, verbatim quotes render pre-clearance, each with a `clearance: pending` note; no anonymous quote, paraphrase, or "users say" substitute, ever — that half is unchanged and still the criterion. |

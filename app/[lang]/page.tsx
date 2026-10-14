@@ -35,6 +35,7 @@ import { LiveStageCalendar } from "./mitmachen/stage-islands";
 
 import { buildDay } from "./_build-day";
 import { FlyerExample, HomeFocusModules, HomeHeroContent, HomeSubmit, type HomeFocusCopy } from "./_home-focus";
+import { PlacePhotoLayer } from "./_place-photo";
 import { selectProof } from "./_proof";
 import { PageJsonLd } from "./_structured-data";
 import { pageContent } from "./_content";
@@ -311,6 +312,8 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
         // needs the page's language or it badges an English page in German.
         locale={locale}
         aiEdited={heroImage?.aiEdited} notDepicting={heroImage?.notDepicting}
+        // DEC-0167 — with a place, the stage shows that place's photograph.
+        photoLayer={<PlacePhotoLayer locale={locale} />}
         placeholderId={heroImage?.placeholderId}
         search={search(true)}
         src={heroImage?.src}

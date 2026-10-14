@@ -158,6 +158,20 @@ export interface Dictionary {
     allDates: string;
   };
   /**
+   * The stage's place photograph (DEC-0167): the credit line over a place's
+   * own photograph, and the honest label over the page's own photograph when
+   * the place has none (Q-0089). System strings, not page copy; the wording
+   * is a placeholder for the content phase.
+   */
+  placePhoto: {
+    /** The credit's lead word — "Foto". */
+    photo: string;
+    /** "via Wikimedia Commons" — the source the credit names. */
+    via: string;
+    /** `{place}` — the fallback's label: this is not a photograph of the place. */
+    fallback: string;
+  };
+  /**
    * The section kickers — polish brief G-3's fixed vocabulary.
    *
    * "No section may begin with only a heading on a new colour." Each section
@@ -537,6 +551,11 @@ const de: Dictionary = {
     updatesToday: "Aktualisierungen heute",
     allDates: "Alle Termine im Kalender",
   },
+  placePhoto: {
+    photo: "Foto",
+    via: "über Wikimedia Commons",
+    fallback: "Beispielfoto · von {place} haben wir noch kein Foto",
+  },
   kickers: {
     liveAnswer: "Was gerade ansteht",
     widerRadius: "Einen Ort weiter",
@@ -733,6 +752,11 @@ const en: Dictionary = {
     places: "places",
     updatesToday: "updates today",
     allDates: "All dates in the calendar",
+  },
+  placePhoto: {
+    photo: "Photo",
+    via: "via Wikimedia Commons",
+    fallback: "Example photo · we have no photo of {place} yet",
   },
   kickers: {
     liveAnswer: "What's on now",

@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0040, FUN-WEB-0041, FUN-WEB-0043, FUN-WEB-0153, FUN-WEB-0154, FUN-WEB-0045, FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072, FUN-WEB-0049]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0011]
-decisions: [DEC-0013, DEC-0019, DEC-0021, DEC-0024, DEC-0025, DEC-0029, DEC-0030, DEC-0034, DEC-0035, DEC-0037, DEC-0079, DEC-0154, DEC-0163]
+decisions: [DEC-0013, DEC-0019, DEC-0021, DEC-0024, DEC-0025, DEC-0029, DEC-0030, DEC-0034, DEC-0035, DEC-0037, DEC-0079, DEC-0154, DEC-0163, DEC-0167]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -79,6 +79,7 @@ Responses are validated against Zod schemas derived from the pinned
 | place search | `GET /api/places/search?q=` | the committed covered-community index — `src/generated/snapshots/communities.json`, built by `scripts/build-place-index.ts` from the public calendar site, ~1,760 entries of name · slug · position · municipality. Not an ecosystem call and needs no token | `q` — the typed name |
 | scope postcode (order flow only, TS-WEB-0025 D3) | `GET /api/places/search?zip=` | geo-api `community/search` (zips) | `countryCode=DE`, `zips` |
 | handover | — (link built server-side) | geo-api `GET /api/{token}/community/slug/{slug}` | `slug` |
+| stage photograph (DEC-0167) | `GET /api/places/{slug}/photo` | geo-api `GET /api/{token}/community/{geonameId}` → `image` (Wikidata P18), else the public calendar's community page; then assets-api `GET /api/image?wikimediaCommonsId=<file>`, headers only (`License`, `Copyright`) | `geonameId`; the Commons file name |
 
 Verified in the service repositories on 2026-09-10, because three of
 these shapes constrain what the modules can promise:

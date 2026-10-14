@@ -57,6 +57,12 @@ export const CommunitySiteCommunitySchema = z
       .object({ _id: z.string().optional(), name: z.string().optional() })
       .loose()
       .optional(),
+    /**
+     * The place's photograph, as the site serves it: assets-api URLs of the
+     * form `…/api/image?wikimediaCommonsId=<file>` — geo-api's Wikidata P18,
+     * rewritten (DEC-0167). Empty where the place has none.
+     */
+    wikimediaCommonsImages: z.array(z.string()).optional(),
   })
   .loose();
 

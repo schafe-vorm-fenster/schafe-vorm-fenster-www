@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0002, CON-WEB-0062, FUN-WEB-0142, FUN-WEB-0146, CON-WEB-0067, FUN-WEB-0010, FUN-WEB-0011, FUN-WEB-0012, FUN-WEB-0013, FUN-WEB-0014, FUN-WEB-0015, FUN-WEB-0016, FUN-WEB-0017, FUN-WEB-0018, FUN-WEB-0140, FUN-WEB-0141, FUN-WEB-0137, CON-WEB-0061, FUN-WEB-0145, FUN-WEB-0147, CON-WEB-0064, FUN-WEB-0027, FUN-WEB-0158, FUN-WEB-0159, FUN-WEB-0048, FUN-WEB-0067, FUN-WEB-0073, FUN-WEB-0169, FUN-WEB-0170, CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0045]
 sources: [SRC-0003]
-decisions: [DEC-0002, DEC-0024, DEC-0025, DEC-0032, DEC-0035, DEC-0163, DEC-0164]
+decisions: [DEC-0002, DEC-0024, DEC-0025, DEC-0032, DEC-0035, DEC-0163, DEC-0164, DEC-0167]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -204,6 +204,7 @@ TTLs from TS-WEB-0003 D5:
 | `GET /api/places/search?q=` | place search by name (all pages) | the committed covered-community index (TS-WEB-0008 D2/D7) |
 | `GET /api/places/search?zip=` | postcode → places, order flow scope step only (TS-WEB-0025 D3) | geo-api `community/search` (zips) |
 | `GET /api/places/{slug}/events?window=` | dein-ort live dates, empty-state detection | events-api search |
+| `GET /api/places/{slug}/photo` | the stage's place photograph and its credit on `/` and `/dein-ort` (DEC-0167) | geo-api `community/{geonameId}` (else the public calendar) + assets-api image headers |
 | `GET /api/nearby?lat=&lng=&radius=` | "this week nearby" | events-api + geo-api |
 | `GET /api/region/{county}/examples` | active example places (DEC-0034) | events-api (activity signal, Q-0015/Q-0025) |
 | `GET /api/stats` | live counters | events-api `/api/stats` (public) |

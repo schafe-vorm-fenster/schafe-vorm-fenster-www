@@ -117,6 +117,7 @@ export const liveRoutes = {
   placeEvents: (slug: string, rows: number) =>
     `/api/places/${encodeURIComponent(slug)}/events?window=upcoming&rows=${rows}`,
   placeExamples: (slug: string) => `/api/places/${encodeURIComponent(slug)}/examples`,
+  placePhoto: (slug: string) => `/api/places/${encodeURIComponent(slug)}/photo`,
   nearby: (lat: number, lng: number) => `/api/nearby?lat=${lat}&lng=${lng}`,
   regionExamples: (county: string, max: number) =>
     `/api/region/${encodeURIComponent(county)}/examples?max=${max}`,
