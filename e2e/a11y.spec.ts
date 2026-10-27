@@ -2,6 +2,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 import { everyRoute, href } from "../src/lib/routes/routes";
+import { ALLOWLIST } from "../src/lib/security/csp";
 
 /**
  * The a11y instrument — TS-WEB-0002-A1 and TS-WEB-0029-A12 (F-2-6, round 2).
@@ -111,6 +112,15 @@ for (const { path, locale, route } of ROUTES) {
       page,
     }) => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      if (route === "register") {
+        // The frame is Google's and excluded from the sweep below (DEC-0176);
+        // a blank stand-in keeps its network traffic out of `networkidle`,
+        // which the live form held for seconds and, under load, past the
+        // test's timeout.
+        await page.route(`${ALLOWLIST.googleForms}/**`, (request) =>
+          request.fulfill({ contentType: "text/html", body: "<!doctype html><title>Formular</title>" }),
+        );
+      }
       const response = await page.goto(path);
       expect(response?.status(), `status of ${path}`).toBe(200);
       // Settle hydration and any load-time transition before the sweep —
@@ -120,6 +130,11 @@ for (const { path, locale, route } of ROUTES) {
       await page.waitForLoadState("networkidle");
 
       const results = await new AxeBuilder({ page })
+        // The registration route's frame is Google's document (DEC-0176,
+        // TS-WEB-0023 D10): axe descends into it and finds Google's own
+        // "Weiter" label under contrast, which this site cannot change. The
+        // sweep is of our document; the frame's `title` is A17's.
+        .exclude("iframe[data-register-form]")
         .withTags(WCAG_TAGS)
         .options({
           rules: Object.fromEntries(

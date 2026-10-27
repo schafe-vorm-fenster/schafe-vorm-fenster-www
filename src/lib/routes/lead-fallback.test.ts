@@ -4,6 +4,7 @@ import {
   LEAD_FORM_ORIGIN,
   leadFallbackUrl,
   leadFormEmbedUrl,
+  leadFormOpenUrl,
 } from "@/src/lib/routes/lead-fallback";
 import { ALLOWLIST } from "@/src/lib/security/csp";
 
@@ -72,6 +73,25 @@ describe("TS-WEB-0016 D15 / DEC-0121 §2: the `iframe` source of `/start`", () =
       const src = new URL(leadFormEmbedUrl({ LEAD_FALLBACK_URL: configured }));
       expect(src.origin, configured).toBe(LEAD_FORM_ORIGIN);
       expect(src.pathname, configured).toMatch(/^\/forms\/d\/e\/1FAIpQLSd/);
+    }
+  });
+});
+
+describe("DEC-0176 §3: the fallback link of `/mitmachen/registrieren` opens the framed form on its own", () => {
+  it("is the embed's form without `embedded`", () => {
+    const open = new URL(leadFormOpenUrl({}));
+    const embed = new URL(leadFormEmbedUrl({}));
+    expect(open.origin).toBe(embed.origin);
+    expect(open.pathname).toBe(embed.pathname);
+    expect(open.searchParams.has("embedded")).toBe(false);
+  });
+
+  it("names the same form as the frame, also when the configured target is refused", () => {
+    for (const configured of [undefined, "https://envoy.example/lead", "https://docs.google.com/forms/d/e/other/viewform"]) {
+      const env = configured ? { LEAD_FALLBACK_URL: configured } : {};
+      expect(new URL(leadFormOpenUrl(env)).pathname, String(configured)).toBe(
+        new URL(leadFormEmbedUrl(env)).pathname,
+      );
     }
   });
 });

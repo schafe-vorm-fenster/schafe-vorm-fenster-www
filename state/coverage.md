@@ -6,15 +6,15 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**492 criteria · 326 closed · 166 open (66 % closed)**
+**498 criteria · 324 closed · 174 open (65 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 321 | a test title in a file a runner runs carries the id |
+| VERIFIED | 319 | a test title in a file a runner runs carries the id |
 | METERED | 5 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
 | NAMED ONLY | 30 | the id is in a runner file but in no test title — **not coverage** |
-| MISSING | 136 | nothing names it |
+| MISSING | 144 | nothing names it |
 
 Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
 
@@ -25,7 +25,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | static | 91 | 61 | 30 | 67 % |
 | unit | 33 | 29 | 4 | 88 % |
 | integration | 78 | 54 | 24 | 69 % |
-| e2e | 220 | 180 | 40 | 82 % |
+| e2e | 226 | 178 | 48 | 79 % |
 | tool | 39 | 2 | 37 | 5 % |
 | manual | 31 | 0 | 31 | 0 % |
 
@@ -55,7 +55,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0020 | 28 | 27 | A13 |
 | TS-WEB-0021 | 15 | 13 | A11 A15 |
 | TS-WEB-0022 | 21 | 16 | A8 A10 A11 A14 A15 |
-| TS-WEB-0023 | 16 | 13 | A3 A10 A16 |
+| TS-WEB-0023 | 22 | 11 | A1 A2 A3 A7 A8 A9 A10 A11 A13 A15 A16 |
 | TS-WEB-0024 | 22 | 17 | A6 A7 A12 A17 A19 |
 | TS-WEB-0025 | 14 | 10 | A5 A9 A12 A13 |
 | TS-WEB-0026 | 17 | 12 | A9 A11 A12 A16 A17 |
@@ -203,8 +203,16 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0022-A11 | e2e | MISSING | — | The closing CTA carries the same conversion goal ID, target and label as the primary CTA, and its reassurance contains the permanence promise. With the backing  … |
 | TS-WEB-0022-A14 | e2e | NAMED ONLY | e2e/pages/mitmachen.spec.ts — outside any test title | With a resolved place the primary CTA's href carries `?ort=<slug>`; with an unresolvable or free-text place it carries no `ort` parameter. |
 | TS-WEB-0022-A15 | integration | MISSING | — | Navigating from the primary CTA fires no analytics event on `/mitmachen`; `register-as-publisher` with stage `handover` is emitted on `/mitmachen/registrieren`  … |
+| TS-WEB-0023-A1 | e2e | MISSING | — | `/mitmachen/registrieren` with no parameters shows step 1 with the place search as the first interactive element, no proof block and no other live module, and e … |
+| TS-WEB-0023-A2 | e2e | MISSING | — | Answering step 1 with a typed place name that matches puts `ort=<slug>` in the URL and shows step 2; reload keeps step 2 with the place answered and named; brow … |
 | TS-WEB-0023-A3 | e2e | MISSING | — | The URL after step 2, opened in a fresh private window, shows the same step with the same answers; the devtools Application panel shows no cookie and no `localS … |
+| TS-WEB-0023-A7 | e2e | MISSING | — | Following the CTA on `/dein-ort/starten?ort=X` lands on this page with step 1 answered as X, the place visible and changeable, and step 1 not skipped. |
+| TS-WEB-0023-A8 | e2e | MISSING | — | Step 3 offers exactly three publishing paths — WhatsApp, connected calendar, own website as source — and no further option. |
+| TS-WEB-0023-A9 | e2e | MISSING | — | With all three steps answered the page offers exactly one action: an external link to the configured app registration URL, with entry `etcc_*` preserved and no  … |
 | TS-WEB-0023-A10 | e2e | MISSING | — | The handover click fires exactly one `register-as-publisher` event with `stage=handover`; no `publish-first-event` event is fired anywhere on the website. |
+| TS-WEB-0023-A11 | e2e | MISSING | — | No step and no post-handover state of this page contains a confirmation message, instructions, help content, or a field for an event — walkable by clicking thro … |
+| TS-WEB-0023-A13 | e2e | MISSING | — | All three steps can be completed by form submission and the handover link is reachable; without JavaScript step 1 renders. (Amended by DEC-0163: the written tex … |
+| TS-WEB-0023-A15 | e2e | MISSING | — | The context band renders on step 1 and is absent on steps 2, 3 and the handover state (records D7 for review). |
 | TS-WEB-0023-A16 | tool | MISSING | — | axe-core: zero violations on all three steps in all three themes; after each advance focus sits on the new step's heading. |
 | TS-WEB-0024-A6 | e2e | NAMED ONLY | e2e/pages/dein-kalender.spec.ts — outside any test title | With the loader host blocked, `data-block="embed-demo"` still renders its copy and a working CTA, shows no empty frame and no error text, and the page height ab … |
 | TS-WEB-0024-A7 | e2e | MISSING | — | With the loader allowed, the only third-party script request from this block goes to the allowlisted Portalize host; after full load `document.cookie` is empty  … |

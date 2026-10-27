@@ -2,6 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 import { LOCALES } from "../src/lib/i18n/locales";
 import { everyRoute, href } from "../src/lib/routes/routes";
+import { ALLOWLIST } from "../src/lib/security/csp";
 
 /**
  * TS-WEB-0014-A14 — every page loads under its CSP with **zero** violations
@@ -46,6 +47,10 @@ async function collectViolations(page: Page): Promise<string[]> {
   await page.addInitScript(() => {
     document.addEventListener("securitypolicyviolation", (event) => {
       if (event.blockedURI.startsWith("https://vercel.live/")) return;
+      // `addInitScript` runs in every frame. A framed third-party document
+      // (the registration form, DEC-0176) reports against its own policy,
+      // which is not this site's; those are not counted.
+      if (window !== window.top) return;
       (window as unknown as { __reportCspViolation: (line: string) => void }).__reportCspViolation(
         `${event.effectiveDirective} ${event.blockedURI || "inline"} ${event.sourceFile ?? ""}:${event.lineNumber}`,
       );
@@ -53,6 +58,14 @@ async function collectViolations(page: Page): Promise<string[]> {
   });
   page.on("console", (message) => {
     const text = message.text();
+    // The same rule on the console channel: a line logged by a framed
+    // third-party document is that document's (DEC-0176).
+    const source = message.location().url;
+    if (source && new URL(source).origin === ALLOWLIST.googleForms) return;
+    // `frame-ancestors` is the *framed* document's policy about who may frame
+    // it — Google's (report-only) header on the form, reported in our console.
+    // Our document is the top level and is framed by nobody here.
+    if (text.includes("frame-ancestors") && text.includes(`Framing '${ALLOWLIST.googleForms}`)) return;
     if (text.includes("Content Security Policy") && !text.includes(PLATFORM_TOOLBAR)) violations.push(text);
   });
   return violations;
@@ -76,6 +89,32 @@ for (const { route, locale } of everyRoute()) {
     await page.waitForLoadState("networkidle");
 
     expect(violations, `${path}: CSP violations`).toEqual([]);
+  });
+}
+
+/**
+ * TS-WEB-0023-A21 (DEC-0176) — the registration route frames the Google Form.
+ * `frame-src` admits the form host (TS-WEB-0014 D1, DEC-0121), and this is the
+ * page where that row is exercised inside the site chrome: the route loads
+ * with zero violations of **our** policy, and the frame's navigation is not
+ * refused — it reaches the form host and the form renders. What Google's own
+ * document reports against Google's own policy is not ours, so only
+ * violations raised in our document count.
+ */
+for (const locale of LOCALES) {
+  test(`TS-WEB-0023-A21: ${href("register", locale)} frames the form under the CSP with zero violations`, async ({ page }) => {
+    const violations = await collectViolations(page);
+    const framed: string[] = [];
+    page.on("framenavigated", (frame) => {
+      if (frame !== page.mainFrame()) framed.push(new URL(frame.url()).origin);
+    });
+
+    await page.goto(href("register", locale));
+    await expect(page.locator("iframe[data-register-form]")).toHaveAttribute("data-hydrated", "true");
+    await expect(page.frameLocator("iframe[data-register-form]").locator("form")).toBeVisible({ timeout: 20_000 });
+
+    expect(framed).toContain(ALLOWLIST.googleForms);
+    expect(violations, "CSP violations").toEqual([]);
   });
 }
 

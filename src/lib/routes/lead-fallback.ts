@@ -70,3 +70,20 @@ export function leadFormEmbedUrl(
   form.searchParams.set("embedded", "true");
   return form.toString();
 }
+
+/**
+ * The same form, opened on its own — the embed's source without
+ * `?embedded=true`, so Google shows its full page in the new tab
+ * (`/mitmachen/registrieren`'s fallback link, DEC-0176 §3).
+ *
+ * Derived from `leadFormEmbedUrl()` rather than from the configured value, so
+ * the link and the frame can never name two different forms: a configured
+ * URL on a host the frame refuses falls back to the built-in form in both.
+ */
+export function leadFormOpenUrl(
+  env: Record<string, string | undefined> = process.env,
+): string {
+  const form = new URL(leadFormEmbedUrl(env));
+  form.searchParams.delete("embedded");
+  return form.toString();
+}

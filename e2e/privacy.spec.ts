@@ -22,6 +22,12 @@ import type { Page, Request } from "@playwright/test";
  * route: there "no request goes to a host outside the D7 collectors". So the
  * host is taken **out** of the set the 24 page rows are walked against, and
  * asserted **in** — as the only extra origin — on `/start` (DEC-0108 §3).
+ *
+ * Since DEC-0176 `/mitmachen/registrieren` frames the same form for the
+ * launch (TS-WEB-0023 D10). On its two paths the trace is counted the way
+ * DEC-0121 §6 counts `/start`: every request our document issues, and the
+ * navigation of the one frame — the form host is admitted there, what the
+ * framed document loads on its own is Google's.
  */
 
 const FORM_HOST = new URL(ALLOWLIST.googleForms).host;
@@ -77,12 +83,18 @@ test.describe("TS-WEB-0013-A1: the client-request inventory is closed (D2)", () 
       const isVercelPreview = VERCEL_PREVIEW_HOST.test(ownHost);
       const offenders = new Set<string>();
 
+      const framesTheForm = route === "register";
       page.on("request", (request) => {
         const url = httpUrl(request);
         if (!url) return;
         if (url.host === ownHost) return; // own origin — D2's first row, and the
         // `/_vercel/speed-insights/*` path lives on it.
         if (isVercelPreview && url.host === VERCEL_TOOLBAR_HOST) return;
+        if (framesTheForm && request.frame() !== page.mainFrame()) {
+          // DEC-0121 §6: the frame's own navigation is ours, its subresources are Google's.
+          if (request.isNavigationRequest() && url.host !== FORM_HOST) offenders.add(`${url.host} (${request.url()})`);
+          return;
+        }
         if (!ALLOWED_HOSTS.has(url.host)) offenders.add(`${url.host} (${request.url()})`);
       });
 

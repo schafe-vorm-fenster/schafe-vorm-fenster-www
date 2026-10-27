@@ -812,13 +812,13 @@ export const RENDERED_BLOCKS: readonly {
     slot: "registrieren-2-wer",
     kind: "list",
     index: "all",
-    renderedBy: "app/[lang]/mitmachen/registrieren/page.tsx:132 (listItems, every list)",
+    renderedBy: "app/[lang]/mitmachen/registrieren/flow-page.tsx:133 (listItems, every list; the flow is not rendered since DEC-0176)",
   },
   {
     slot: "registrieren-3-weg",
     kind: "list",
     index: "all",
-    renderedBy: "app/[lang]/mitmachen/registrieren/page.tsx:134 (listItems, every list)",
+    renderedBy: "app/[lang]/mitmachen/registrieren/flow-page.tsx:135 (listItems, every list; the flow is not rendered since DEC-0176)",
   },
 ];
 

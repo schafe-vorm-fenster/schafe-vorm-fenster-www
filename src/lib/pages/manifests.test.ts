@@ -49,7 +49,7 @@ describe("TS-WEB-0006-A1: every route carries a complete manifest", () => {
     expect(violations).toEqual({});
   });
 
-  it("keeps the live-module exception list to the five routes whose spec fixes it", () => {
+  it("keeps the live-module exception list to the routes whose spec fixes it", () => {
     for (const route of Object.keys(NO_LIVE_MODULE) as RouteId[]) {
       expect(
         MANIFESTS[route].liveModules,

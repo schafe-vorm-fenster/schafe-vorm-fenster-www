@@ -72,6 +72,13 @@ const KNOWN_OVER: Record<string, Record<string, number>> = {
   "/ueber-uns": { "kapitel-3": 1670 },
   "/en/about": { "kapitel-3": 1537 },
   "/en/your-calendar": { "embed-config": 1713, tiers: 1632 },
+  // `/mitmachen/registrieren` for the launch (DEC-0176, TS-WEB-0023 D10): the
+  // embedded Google Form is one third-party document in one frame of a
+  // reserved 2300 px — sized so that no page of the form scrolls inside the
+  // page. It cannot be cut into sections; it goes when the flow returns.
+  // Measured 2026-10-27.
+  "/mitmachen/registrieren": { "register-form": 2605 },
+  "/en/take-part/register": { "register-form": 2576 },
 };
 
 /**

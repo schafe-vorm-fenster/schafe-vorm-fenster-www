@@ -463,7 +463,12 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
     await field.press("Enter");
     await expect(page).toHaveURL(new RegExp(`/dein-ort/starten\\?ort=${UNCOVERED_ZIP}$`));
 
-    await page.locator('[data-cta="primary"]').first().click();
+    // DEC-0163 §4: the place is echoed into the CTA once the page has
+    // hydrated; clicking before that follows the placeless href (a race the
+    // trace of 2026-10-27 caught: the request went to `/mitmachen/registrieren`).
+    const primary = page.locator('[data-cta="primary"]').first();
+    await expect(primary).toHaveAttribute("href", new RegExp(`ort=${UNCOVERED_ZIP}$`));
+    await primary.click();
     await expect(page).toHaveURL(new RegExp(`/mitmachen/registrieren\\?ort=${UNCOVERED_ZIP}$`));
 
     // Every URL visited is in the D1 inventory, and no path segment ever

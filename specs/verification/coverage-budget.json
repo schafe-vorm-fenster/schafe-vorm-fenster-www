@@ -1,9 +1,9 @@
 {
   "note": "The ratchet of `pnpm check:coverage` (DEC-0141). `max` is the worst tally this repository is allowed to have. A run worse than a number here fails; a run better than one fails too, asking for the number to be lowered in the same commit, so that a gain is recorded instead of left as budget to spend again. Raising a number is a governance change: it needs a decision record, and the record says which criteria were let go and why.",
-  "measured_at": "2026-10-13",
-  "measured_on": "DEC-0159, issue #24. TS-WEB-0019-A14 (the home counter renders only the dates figure) is superseded by A18 (the home page renders no counter) since DEC-0154; the render it described is gone, so its test went with it and A14 has no instrument any more. MISSING 135 -> 136 for that one superseded criterion, which can never be verified again; A17, A18, A19 and TS-WEB-0020-A18 arrive with their tests. NAMED ONLY unmoved at 30: the two comments that named A14 were spelled out rather than left to count.",
+  "measured_at": "2026-10-27",
+  "measured_on": "DEC-0176, issue #109. /mitmachen/registrieren embeds the Google Form for the launch and the TS-WEB-0023 flow is not rendered; the eight e2e criteria whose only instrument was the flow's walk (TS-WEB-0023-A1, A2, A7, A8, A9, A11, A13, A15) are suspended with it and their tests went with the walk. MISSING 136 -> 144 for those eight; the six new criteria TS-WEB-0023-A17 to A22 arrive with their tests. NAMED ONLY unmoved at 30: the one comment that still named A9 was spelled out.",
   "max": {
     "NAMED ONLY": 30,
-    "MISSING": 136
+    "MISSING": 144
   }
 }
