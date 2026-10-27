@@ -161,36 +161,44 @@ export default async function Page({
 
           <ArchiveFilter locale={locale} types={filterTypes}>
             {[...byYear.entries()].map(([year, yearRows]) => (
-              <div key={year}>
+              // One year is one block of the list's stack, and a stack of its
+              // own: the heading, then its rows as one block — rows are divided
+              // by their hairline, never by a gap (SRC-0014 §Shape and Space).
+              // The heading stands `--block-gap` above its rows and the year
+              // before it ends a row's padding plus `--block-gap` higher, so it
+              // reads with the entries it names (issue 108, DEC-0171).
+              <div data-stack="" key={year}>
                 <h2>{year}</h2>
-                {yearRows.map((row) => (
-                  <ArchiveRow
-                    // The place only. The outlet is the row's own `outlet`
-                    // prop, and passing it here too printed the name twice
-                    // in two adjacent lines ("Nordkurier" / "Nordkurier ·
-                    // Mecklenburg-Vorpommern") on all 31 rows.
-                    contextLine={row.place}
-                    date={row.date}
-                    demo={demo}
-                    // TS-WEB-0028-A14/R-2: the outlet's own `url`, verbatim — a
-                    // missing one ("—") leaves the row without a link rather
-                    // than pointing at nothing.
-                    href={row.url || undefined}
-                    id={row.id || undefined}
-                    key={row.id || `${row.title}-${row.date}`}
-                    locale={locale}
-                    outlet={row.source}
-                    // The entries carry `YYYY`, `YYYY-MM` and `YYYY-MM-DD`
-                    // alike. Rendered at the component's `day` default, a
-                    // month-precision entry dated itself "01. August 2026" —
-                    // a day no source states, on two thirds of the list.
-                    precision={archivePrecision(row.date)}
-                    quote={row.quote || undefined}
-                    title={row.title}
-                    typeIds={row.types}
-                    types={row.types.map(labelOf)}
-                  />
-                ))}
+                <div>
+                  {yearRows.map((row) => (
+                    <ArchiveRow
+                      // The place only. The outlet is the row's own `outlet`
+                      // prop, and passing it here too printed the name twice
+                      // in two adjacent lines ("Nordkurier" / "Nordkurier ·
+                      // Mecklenburg-Vorpommern") on all 31 rows.
+                      contextLine={row.place}
+                      date={row.date}
+                      demo={demo}
+                      // TS-WEB-0028-A14/R-2: the outlet's own `url`, verbatim — a
+                      // missing one ("—") leaves the row without a link rather
+                      // than pointing at nothing.
+                      href={row.url || undefined}
+                      id={row.id || undefined}
+                      key={row.id || `${row.title}-${row.date}`}
+                      locale={locale}
+                      outlet={row.source}
+                      // The entries carry `YYYY`, `YYYY-MM` and `YYYY-MM-DD`
+                      // alike. Rendered at the component's `day` default, a
+                      // month-precision entry dated itself "01. August 2026" —
+                      // a day no source states, on two thirds of the list.
+                      precision={archivePrecision(row.date)}
+                      quote={row.quote || undefined}
+                      title={row.title}
+                      typeIds={row.types}
+                      types={row.types.map(labelOf)}
+                    />
+                  ))}
+                </div>
               </div>
             ))}
           </ArchiveFilter>

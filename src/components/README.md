@@ -50,7 +50,10 @@ src/components/<inventory-name>/
 A page is a list of sections. Each section is a `section-shell` with a
 surface and a density; the blocks stand inside it. The shell owns the
 padding, so nothing inside adds its own — never a padded card inside a
-padded section.
+padded section. Its container is a content stack (`data-stack`, DEC-0171):
+the stack owns the gap between the blocks, so a block — any component —
+carries no outer margin, and a wrapper that groups several blocks is marked
+`data-stack` itself (`motion-reveal` is).
 
 ```tsx
 import { SectionShell } from "@/src/components/section-shell/section-shell";

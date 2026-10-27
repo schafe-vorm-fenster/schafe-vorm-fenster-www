@@ -36,7 +36,7 @@
   font-weight: 700;
   letter-spacing: var(--type-label-tracking);
   line-height: 1.2;
-  margin: 0 0 var(--space-2);
+  margin: 0;
   text-transform: uppercase;
 }
 
@@ -45,8 +45,26 @@
 .transition {
   font-size: var(--type-lead-size);
   line-height: var(--leading-relaxed);
-  margin: 0 0 var(--space-4);
+  margin: 0;
   max-width: var(--measure-reading);
+}
+
+/* The content stack itself — the space between the blocks — is the global
+   layout primitive `[data-stack]` in `app/styles/base.css` (DEC-0171). */
+
+/*
+ * An uncontained section (`contained={false}`) stacks only its own two lines;
+ * the caller's full-bleed children follow outside the stack. The space between
+ * the two is still the shell's, so it is the lede's own padding — the same
+ * step the stack would have put there: `--block-gap` after a transition line,
+ * `--block-gap-bound` after a kicker that stands alone.
+ */
+.lede {
+  padding-block-end: var(--block-gap);
+}
+
+.lede:has(> [data-kicker]:last-child) {
+  padding-block-end: var(--block-gap-bound);
 }
 
 .standard {

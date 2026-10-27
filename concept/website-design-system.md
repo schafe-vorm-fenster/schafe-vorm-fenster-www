@@ -312,6 +312,9 @@ from the package, with no override behind either.
   from `md` up the outer margin steps with the grid — see *Layout Grid*.
 - **Vertical padding:** 26–30 px for standard sections, 20–24 px for tight
   ones. One value per section — never a padded card inside a padded section.
+- **Between blocks:** `space-4` (16 px, `--block-gap`) at every breakpoint,
+  and `space-2` (8 px, `--block-gap-bound`) between a section's kicker and the
+  block it names. Nothing else — see *Who owns which space* below.
 - **Gap between controls:** 8–10 px. Between list rows: a `line` hairline,
   no gap.
 - **Touch targets:** 44 px minimum, 56 px for primary actions.
@@ -324,6 +327,39 @@ it sits on a `paper` ground, and the 2 px `ink` border of the secondary
 action on a light ground (`DEC-0160`). Each one is a case where an element has left
 the flow or lost its fill and would otherwise have no boundary at all. A new
 exception needs a decision, not a stylesheet.
+
+### Who owns which space
+
+Vertical space has exactly one owner per level (`DEC-0171`, issues #90 and
+#108). The layers, from the outside in:
+
+| Layer | What it is | Owns |
+| --- | --- | --- |
+| Page | the list of sections, then context band and closing block (`page-frame`) | nothing — sections butt against each other |
+| Section | `section-shell`: a ground, full bleed | its `padding-block` (*Vertical padding* above), and nothing between its blocks |
+| Container | `.container`: the 1200 px content box and the outer margin (*Layout Grid*) | width and inline margin, never vertical space |
+| Content stack | the container's content, marked `data-stack` | the space **between** its direct children: `--block-gap`, `--block-gap-bound` after the kicker |
+| Block | a direct child of a stack: a heading, a paragraph, a module, a component | nothing outside its own box — **no outer margin** |
+| Inside a block | the component's own layout | its own internal gaps, from the space scale |
+
+Rules that follow:
+
+- **A block brings no outer margin.** Not a `margin-top` for "a bit more air",
+  and not through a `className` a page hands to a component either: two
+  single-class rules on one element are decided by the order the build ships
+  the stylesheets in, which is how the stories on `/ueber-uns` lost their gap
+  (#108). The paragraph's and the heading's element defaults are cleared by
+  the stack as well, so a section that ends on a paragraph ends on its padding.
+- **A wrapper that groups blocks is a stack itself.** `motion-reveal`, a
+  chapter, a year of the archive: a box that holds several blocks either is a
+  stack or is one block whose inside is a component's own business. An
+  unruled wrapper is a hole in the system — nothing owns the space inside it.
+- **Rows are one block.** Rows divided by a hairline (the price tiers, the
+  archive entries, event rows) stand in one wrapper, so the stack never puts
+  a gap between them.
+- **A heading reads with what it names.** A year heading or a chapter heading
+  stands nearer to the block below it than to the one above — the stack gap
+  above it adds to the padding the previous block ends on.
 
 ### Wells
 
@@ -422,6 +458,11 @@ Column spans at the full 1200 px (column 78 px, gutter 24 px):
 | Two-column | Section head in columns 1–4, list in columns 5–12 |
 | Comparison | 6 + 6, for example *today* against *with your calendar* |
 | Buttons | Side by side with a 12 px gap (`space-3`), wrapping when they do not fit |
+
+**The grid is horizontal only.** Container, columns and spans fix width and
+left edge; the space between blocks is the content stack's, at every tier
+(*Who owns which space*). A two-column section is two blocks side by side in
+one stack, and the stack does not space them against each other.
 
 **Below `xl` there are no columns side by side.** Head and list stack, both
 halves of a comparison stack, and the CTA slot stays the column of

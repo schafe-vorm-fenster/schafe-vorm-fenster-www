@@ -46,7 +46,9 @@ const OBSERVER_ROOT_MARGIN = "100000px 0px -10% 0px";
  * Inherits: it *is* the motion rule. Nothing else on this site moves, which
  * is also why skeletons do not animate.
  * Space: transform and opacity only — never height, so it cannot shift the
- * layout, and the compositor can do it without a repaint.
+ * layout, and the compositor can do it without a repaint. It is a content
+ * stack (`data-stack`, DEC-0171), so the blocks it wraps keep `--block-gap`
+ * between them exactly as they would without it.
  * A11y: the content is present and readable **before** the animation runs.
  * The element is only armed (made transparent) once it is known to be off
  * screen *below*, and it is un-armed the moment it has entered the viewport
@@ -84,7 +86,9 @@ export function MotionReveal({ className, children }: MotionRevealProps) {
   }, []);
 
   return (
-    <div className={[styles.reveal, className].filter(Boolean).join(" ")} ref={ref}>
+    // A wrapper that groups blocks is a content stack itself (DEC-0171): the
+    // reveal must not become the box that swallows the gap between them.
+    <div className={[styles.reveal, className].filter(Boolean).join(" ")} data-stack="" ref={ref}>
       {children}
     </div>
   );

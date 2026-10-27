@@ -19,6 +19,14 @@
  *      `lime-950` — as the token, as a custom property that carries it, or as
  *      its hex — and no design board paints one as a background. Dark green is
  *      for text, links and icons, never a fill (DEC-0155, DEC-0160).
+ *  TS-WEB-0017-A32 No outer margin handed in through `className` (DEC-0171): a
+ *      class a `.tsx` under `app/` or `src/` passes as `className` to a
+ *      component (a capitalised JSX tag) declares no vertical margin in its
+ *      CSS module. The space between blocks is the content stack's; a margin
+ *      handed to another component's root competes with that component's own
+ *      root rule at equal weight, and the production build's stylesheet order
+ *      decides — which is how the story cards on `/ueber-uns` lost their gap
+ *      (issue 108).
  *  TS-WEB-0017-A22 No tinted scrim: no gradient carries `ink` or `violet`
  *      (as the alpha form of `ink` 23·29·13 or `violet` 83·27·222, a `color-mix()` or a
  *      `var(--color-neutral-ink|violet-*)`), in authored sources **and** in the
@@ -71,6 +79,7 @@ const A19 = "TS-WEB-0017-A19";
 const A22 = "TS-WEB-0017-A22";
 const A28 = "TS-WEB-0017-A28";
 const A30 = "TS-WEB-0017-A30";
+const A32 = "TS-WEB-0017-A32";
 
 /** The single file brand values are allowed to enter through (TS-WEB-0017 D3). */
 const TOKEN_FILE = "app/styles/brand.css";
@@ -450,6 +459,80 @@ export function checkBrand(root: string): BrandCheckResult {
       fail(A30, `${rel(file)}:${line}`, `dark-green fill \`${direct[0]}\` in a design board — never a fill`);
     }
   }
+
+  // --- TS-WEB-0017-A32: no outer margin through `className` ---------------------------
+  //
+  // DEC-0171: the content stack owns the space between blocks, a block owns
+  // nothing outside its own box. A page that wants space above a component and
+  // writes `<StoryDisclosure className={styles.stories} />` with
+  // `.stories { margin-top: … }` puts two single-class rules on one element —
+  // its own and the component's root rule — and whichever stylesheet the build
+  // ships later wins. In production that was the component's `margin: 0` (issue 108).
+  const VERTICAL_MARGIN =
+    /(?:^|[;{\s])(margin-(?:top|bottom|block(?:-start|-end)?)|margin)\s*:\s*([^;{}]+)/g;
+  const nonZero = (value: string) => value.trim().split(/\s+/).some((part) => !/^(0|0px|auto|0rem)$/.test(part));
+  const verticalOf = (property: string, value: string): string[] => {
+    const parts = value.trim().split(/\s+/);
+    if (property !== "margin") return [value];
+    // margin: a | a b | a b c | a b c d → top and bottom
+    return [parts[0], parts[2] ?? parts[0]];
+  };
+  // The seven hand-ins A32 found when it was written (2026-10-27), each inside
+  // one component and none of them a block of a section stack, so none of
+  // them is a gap the owner can see today. Named rather than silently
+  // skipped, and the list may only shrink: an entry that no longer matches is
+  // an error too, so a fixed one has to leave the list (DEC-0171 §4).
+  const KNOWN_A32 = new Set([
+    "src/components/archive-row/archive-row.tsx OutboundLink styles.link",
+    "src/components/feature-benefit/feature-benefit.tsx MediaFrame styles.media",
+    "src/components/hero-block/hero-block.tsx Badge styles.kicker",
+    "src/components/person-profile/person-profile.tsx MediaFrame styles.portrait",
+    "src/components/quote-card/quote-card.tsx OutboundLink styles.link",
+    "src/components/site-header/header-menu.tsx LanguageSwitch styles.menuLanguage",
+    "src/components/value-story/value-story.tsx Badge styles.exampleBadge",
+  ]);
+  const seenA32 = new Set<string>();
+  const tsxFiles = sourceFiles.filter((f) => /^(app|src)\//.test(rel(f).split("\\").join("/")) && f.endsWith(".tsx"));
+  for (const file of tsxFiles) {
+    const relative_ = rel(file);
+    if (isTestFile(relative_)) continue;
+    const source = readFileSync(file, "utf8");
+    const imports = new Map<string, string>();
+    for (const match of source.matchAll(/import\s+(\w+)\s+from\s+["'](\.{1,2}\/[^"']+\.module\.css)["']/g))
+      imports.set(match[1], join(dirname(file), match[2]));
+    if (imports.size === 0) continue;
+    for (const tag of source.matchAll(/<([A-Z][\w.]*)\b([^>]*?)className=\{([^}]*)\}/g)) {
+      for (const ref of tag[3].matchAll(/\b(\w+)\.(\w+)\b/g)) {
+        const sheet = imports.get(ref[1]);
+        if (!sheet || !existsSync(sheet)) continue;
+        const css = readFileSync(sheet, "utf8").replace(/\/\*[\s\S]*?\*\//g, (block) => block.replace(/[^\n]/g, " "));
+        const rule = new RegExp(String.raw`(?:^|[}\s,])\.${ref[2]}\s*\{([^}]*)\}`, "g");
+        for (const body of css.matchAll(rule)) {
+          for (const declaration of body[1].matchAll(VERTICAL_MARGIN)) {
+            const [, property, value] = declaration;
+            if (!verticalOf(property, value).some((part) => part && nonZero(part))) continue;
+            const key = `${relative_.split("\\").join("/")} ${tag[1]} ${ref[1]}.${ref[2]}`;
+            if (KNOWN_A32.has(key)) {
+              seenA32.add(key);
+              continue;
+            }
+            const line = source.slice(0, tag.index).split("\n").length;
+            fail(
+              A32,
+              `${relative_}:${line}`,
+              `<${tag[1]} className={${ref[1]}.${ref[2]}}> hands the component an outer margin (\`${property}: ${value.trim()}\` in ${rel(sheet)}) — the space between blocks is the content stack's (\`data-stack\`, DEC-0171)`,
+            );
+          }
+        }
+      }
+    }
+  }
+
+  // Only against the real tree: a fixture root carries none of the listed files.
+  if (existsSync(join(root, "src", "components", "section-shell")))
+    for (const key of KNOWN_A32)
+      if (!seenA32.has(key))
+        fail(A32, "scripts/check-brand.ts", `known hand-in \`${key}\` no longer occurs — take it off KNOWN_A32`);
 
   return { errors, cssFileCount: cssFiles.length, sourceFileCount: sourceFiles.length };
 }

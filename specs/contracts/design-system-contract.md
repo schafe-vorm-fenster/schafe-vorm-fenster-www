@@ -4,7 +4,7 @@ id: SRC-0013
 status: DRAFT
 date: 2026-09-10
 updated: 2026-10-27
-decisions: [DEC-0044, DEC-0054, DEC-0104, DEC-0155, DEC-0160, DEC-0169]
+decisions: [DEC-0044, DEC-0054, DEC-0104, DEC-0155, DEC-0160, DEC-0169, DEC-0171]
 ---
 
 # Design System Contract
@@ -160,8 +160,16 @@ Two of these carry a rule the manifest has to express, not only name:
   `xl` is `min(80vh, 680px)` on `/` and `min(70vh, 560px)` elsewhere. The
   board `concept/v2.0/Desktop Raster.dc.html` renders these values, and it
   binds position and width only.
-- Section rhythm: which `space` token separates blocks, and at which of
-  the six breakpoints it steps.
+- **Section rhythm and the owner of each space (DEC-0171, SRC-0014 §*Who owns
+  which space*).** The section owns `padding-block`; its content stack
+  (`[data-stack]`) owns the space between its direct children — `space-4`
+  (`--block-gap`) at all six breakpoints, it does not step, and `space-2`
+  (`--block-gap-bound`) after a section kicker; a block owns nothing outside
+  its own box. A generator therefore never emits a vertical margin on a
+  block, and never hands one to a component through `className`. A wrapper
+  that groups blocks is a stack; rows divided by a hairline are one block.
+  `TS-WEB-0017-A31` measures it on every route, `TS-WEB-0017-A32` reads it in
+  the source.
 - The mobile-first rule stated normatively: `min-width` queries only, one
   component tree, no separate desktop layout.
 - How the block order every page carries — focus · argument · context

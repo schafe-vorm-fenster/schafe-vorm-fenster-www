@@ -88,6 +88,13 @@
   --section-padding-block: 28px; /* 26–30 standard */
   --section-padding-block-tight: 22px; /* 20–24 tight */
   --control-gap: 10px; /* 8–10 between controls */
+  /* The one space between two blocks of a section's content stack (DEC-0171,
+     SRC-0014 §Shape and Space): the stack owns it, a component never brings
+     its own. `space-4`, the step a paragraph and a heading already keep, at
+     every breakpoint. */
+  --block-gap: var(--space-4);
+  /* A kicker binds to the block it names — the one closer step in a stack. */
+  --block-gap-bound: var(--space-2);
 
   /* ── The one motion — SRC-0014 §Motion ───────────────────────────────── */
   --motion-reveal-distance: 22px;

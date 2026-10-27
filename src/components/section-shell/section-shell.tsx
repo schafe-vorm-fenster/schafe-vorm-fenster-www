@@ -84,7 +84,9 @@ const SURFACE_CLASS: Record<SectionSurface, string> = {
  * Inherits: radius 0, no border, no shadow; 16 px horizontal padding;
  * 26–30 px vertical standard, 20–24 px tight — **one value per section,
  * never a padded card inside a padded section**.
- * Space: the vertical rhythm is this component's whole job.
+ * Space: the vertical rhythm is this component's whole job — padding-block
+ * at its edges, and between its blocks the content stack's `--block-gap`
+ * (DEC-0171). A block inside it carries no outer margin of its own.
  * A11y: renders a `section` with an accessible name wherever it carries a
  * heading; contrast pairs come from the colour tables only.
  *
@@ -129,7 +131,7 @@ export function SectionShell({
     kicker || transition ? (
       <>
         {kicker ? (
-          <p className={styles.kicker} data-demo={kickerDemo ? "true" : undefined}>
+          <p className={styles.kicker} data-demo={kickerDemo ? "true" : undefined} data-kicker="">
             {kicker}
           </p>
         ) : null}
@@ -146,14 +148,20 @@ export function SectionShell({
       data-surface={surface}
       id={id}
     >
+      {/* The content stack (DEC-0171): the one owner of the space between
+          the section's blocks. `data-stack` is what TS-WEB-0017-A31 walks. */}
       {contained ? (
-        <div className="container">
+        <div className="container" data-stack="">
           {lede}
           {children}
         </div>
       ) : (
         <>
-          {lede ? <div className="container">{lede}</div> : null}
+          {lede ? (
+            <div className={`container ${styles.lede}`} data-stack="">
+              {lede}
+            </div>
+          ) : null}
           {children}
         </>
       )}

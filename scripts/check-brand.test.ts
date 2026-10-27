@@ -265,3 +265,43 @@ describe("TS-WEB-0017-A30: no dark-green fill, in a stylesheet or a board", () =
     expect(a30(checkBrand(root).errors)).toEqual([]);
   });
 });
+
+describe("TS-WEB-0017-A32: no outer margin handed to a component through className", () => {
+  const a32 = (errors: readonly string[]) => errors.filter((e) => e.startsWith("TS-WEB-0017-A32"));
+
+  it("fails a page class with a vertical margin passed as className to a component", () => {
+    const root = newRoot();
+    writeFileSync(
+      fixture("app", "x", "page.module.css"),
+      ".stories { margin-top: var(--space-6); }\n.band { margin: var(--space-4) 0; }",
+    );
+    writeFileSync(
+      fixture("app", "x", "page.tsx"),
+      'import styles from "./page.module.css";\n' +
+        "export default function P() {\n" +
+        "  return (<>\n" +
+        "    <StoryDisclosure className={styles.stories} stories={[]} />\n" +
+        "    <PriceBand className={[styles.band, \"x\"].join(\" \")} />\n" +
+        "  </>);\n}\n",
+    );
+    const errors = a32(checkBrand(root).errors);
+    expect(errors).toHaveLength(2);
+    expect(errors[0]).toContain("app/x/page.tsx:4");
+    expect(errors[0]).toContain("StoryDisclosure");
+  });
+
+  it("accepts horizontal margins, zero margins, and a margin on a plain element", () => {
+    const root = newRoot();
+    writeFileSync(
+      fixture("src", "components", "y", "y.module.css"),
+      ".a { margin-inline: auto; }\n.b { margin: 0 auto; }\n.c { margin-top: var(--space-2); }",
+    );
+    writeFileSync(
+      fixture("src", "components", "y", "y.tsx"),
+      'import styles from "./y.module.css";\n' +
+        "export function Y() {\n" +
+        "  return (<div><Badge className={styles.a} /><Badge className={styles.b} /><p className={styles.c}>x</p></div>);\n}\n",
+    );
+    expect(a32(checkBrand(root).errors)).toEqual([]);
+  });
+});
