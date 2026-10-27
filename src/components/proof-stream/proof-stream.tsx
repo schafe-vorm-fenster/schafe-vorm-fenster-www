@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 import styles from "./proof-stream.module.css";
 
 export interface ProofStreamProps {
-  /** Already-composed `proof-card` / `empty-proof-slot` elements, in the
-   * relevance engine's order (TS-WEB-0005 D5–D8) — this container never reorders. */
+  /** Already-composed `proof-card` elements, in the relevance engine's order
+   * (TS-WEB-0005 D5–D8) — this container never reorders. */
   readonly children: ReactNode;
   /**
    * `grid` — the default card grid. `scroller` — a horizontal set.
@@ -24,16 +24,16 @@ export interface ProofStreamProps {
  * Structure: the container around a page's proof cards; the count per page
  * (19 → 5, 22/24/26 → 3, 27 → 7) and the order are the caller's, from the
  * relevance engine — grid or scroller is free here.
- * States: none of its own. An unfilled slot weakens the claim rather than
- * shortening the stream — the caller passes an `empty-proof-slot` in place
- * of a card rather than fewer children, so this container never counts.
+ * States: none of its own. An unfilled position renders nothing — the claim
+ * stands weakened and the stream is shorter; no placeholder takes the place
+ * (DEC-0175 §3). This container never counts.
  * Inherits: card height fixed per surface (each child's own contract); "no
  * two photo sections in a row" is unaffected because stream images are cards
  * inside one colour section, not sections of their own.
  * Space: the element count is a property of the surface the caller composed,
  * not of this component.
  * A11y: reading order equals DOM order, which equals the engine's order —
- * this container never reorders its children, including an empty slot.
+ * this container never reorders its children.
  */
 export function ProofStream({ children, layout = "grid", label = "Belege", className }: ProofStreamProps) {
   const layoutClass =

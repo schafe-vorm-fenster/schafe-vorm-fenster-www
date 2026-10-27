@@ -209,6 +209,56 @@ test.describe("/ueber-uns/archiv", () => {
     expect(filtered).toEqual(all.filter((id) => filtered.includes(id)));
   });
 
+  test("TS-WEB-0028-A19: every chip leaves no year heading without a visible row, and the reset brings all years back", async ({
+    page,
+  }) => {
+    await page.goto("/ueber-uns/archiv");
+    await waitForFilterHydration(page);
+    const years = page.locator("[data-archive-year]");
+    const allYears = await years.count();
+    expect(allYears).toBeGreaterThan(1);
+
+    /** Per year block: is it visible, and how many rows inside are visible. */
+    const blocks = () =>
+      years.evaluateAll((nodes) =>
+        nodes.map((node) => ({
+          year: node.getAttribute("data-archive-year"),
+          hidden: (node as HTMLElement).hidden,
+          headingVisible: (node.querySelector("h2") as HTMLElement | null)?.checkVisibility() ?? false,
+          visibleRows: Array.from(node.querySelectorAll<HTMLElement>("[data-archive-type]")).filter(
+            (row) => !row.hidden,
+          ).length,
+        })),
+      );
+
+    const chips = page.getByRole("group").locator("button:not([data-archive-reset])");
+    const chipCount = await chips.count();
+    let someYearHidden = false;
+    for (let index = 0; index < chipCount; index += 1) {
+      await chips.nth(index).click();
+      for (const block of await blocks()) {
+        // A visible year heading always has a visible row under it, and a
+        // year with no visible row is out of the page heading and all.
+        expect(block.headingVisible, `year ${block.year}`).toBe(block.visibleRows > 0);
+        expect(block.hidden, `year ${block.year}`).toBe(block.visibleRows === 0);
+        if (block.hidden) someYearHidden = true;
+      }
+      // The outline the visitor hears: no `h2` without an entry after it.
+      await expect(page.locator("[data-archive-filter] h2:visible")).toHaveCount(
+        (await blocks()).filter((block) => block.visibleRows > 0).length,
+      );
+      // D4's defensive line stays unreachable: every chip has a row.
+      await expect(page.locator("[data-archive-empty]")).toHaveCount(0);
+      await chips.nth(index).click();
+    }
+    // The stock is uneven enough that at least one chip empties a year — the
+    // case of the owner's review of 2026-10-27 (issue 107).
+    expect(someYearHidden).toBe(true);
+
+    // Nothing selected again: every year is back.
+    await expect(page.locator("[data-archive-year]:not([hidden])")).toHaveCount(allYears);
+  });
+
   test("TS-WEB-0028-A8: no video, audio or iframe on the page", async ({ page }) => {
     await page.goto("/ueber-uns/archiv");
     await expect(page.locator("video, audio, iframe")).toHaveCount(0);

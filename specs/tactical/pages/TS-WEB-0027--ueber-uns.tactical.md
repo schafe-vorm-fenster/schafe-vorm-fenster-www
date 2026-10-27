@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0017]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0014]
-decisions: [DEC-0036, DEC-0042, DEC-0048, DEC-0051, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0154, DEC-0162]
+decisions: [DEC-0036, DEC-0042, DEC-0048, DEC-0051, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0154, DEC-0162, DEC-0175]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -58,8 +58,8 @@ components, photo surface, badges, ratios, page rhythm →
 | 1 | Stage | — (`#herkunft`) | photo surface, `ratio-hero`, the one neutral scrim | kicker · h1. **No CTA** — the ask is the closing block's (D1) |
 | 2 | Chapter 01 | `kapitel-1` | colour `paper` | ordinal · place line · how it started (D3) |
 | 3 | Quote band | `zitat` | photo surface | the founder's cleared quote as a `quote-card` with its article, on his cleared portrait, with the rights holder's credit |
-| 4 | Chapter 02 | `kapitel-2` | colour `lime-100` | the name · the honorary-mayor claim with its source, the one inline proof (D3) |
-| 5 | Chapter 03 | `kapitel-3` | colour `paper` | the proof stream as expandable stories (`story-disclosure`), 7 positions incl. the one reserved place (D5) |
+| 4 | Chapter 02 | `kapitel-2` | colour `lime-100` | the honorary mayoralty with its period and the name it gave the company, as one text — no second proof line (D3, DEC-0175 §2) |
+| 5 | Chapter 03 | `kapitel-3` | colour `paper` | the proof stream as an accordion of stories (`story-disclosure`), at most 7; a position without cleared proof renders nothing (D5, DEC-0175 §1/§3) |
 | 6 | Who is behind it | `team` | colour `lime-100`, portrait full-bleed at `ratio-portrait` | the person from `@schafe-vorm-fenster/people` (D7) |
 | 7 | Principles | `grundsaetze` | colour `paper` | the village argument as three numbered principles, with the one price token (D3, A4) |
 | 8 | Award | `auszeichnung` | colour `violet-500` | the NØRD award and exactly one link to `/ueber-uns/archiv` (D6) |
@@ -69,8 +69,8 @@ components, photo surface, badges, ratios, page rhythm →
 | — | Contact section | — | fixed ground, standing surface | rendered by the layout below block 11 (TS-WEB-0006 D2, DEC-0081) |
 
 Rationale: the owner's design of 2026-10-12 tells the page as a story in three
-chapters and puts the evidence inside the chapters: the honorary-mayor proof in
-chapter 02, the stream in chapter 03. The scanning order this determination
+chapters and puts the evidence inside the chapters: the honorary mayoralty in
+chapter 02 (told in the text since DEC-0175 §2), the stream in chapter 03. The scanning order this determination
 carried until DEC-0162 ("narrative order is rejected") is overruled by that
 design. Page rhythm: two photo sections (stage, quote band), never adjacent; the
 stream's stories are blocks **inside** a colour section.
@@ -87,7 +87,7 @@ stream's stories are blocks **inside** a colour section.
   headline is released (DEC-0083 §5) — it was rejected as literally untrue,
   the service running in a data centre.
 - Since DEC-0162 the parts of this block stand in the chapters of D2: the
-  `h1` on the stage, the origin in chapter 01, the honorary-mayor proof in
+  `h1` on the stage, the origin in chapter 01, the honorary mayoralty in
   chapter 02 and the village argument as the three principles (block 7).
 - The body states the **village argument**, in this order (DEC-0084 §2):
   a village needs a simple way for everyone who volunteers — Feuerwehr,
@@ -108,9 +108,15 @@ stream's stories are blocks **inside** a colour section.
   ask: DEC-0081 §6 argued the conversion from *"a Landrat, a journalist or a
   funder who **finishes reading** about the sender"*, and a CTA above the fold
   is addressed to a reader who has not (audit A3, 2026-09-25).
-- The honorary-mayor sentence is a **claim with a proof slot**, backed by
-  `founder-former-volunteer-mayor` (`usage_rights: cleared`). It is the
-  one inline proof outside the stream.
+- **The honorary mayoralty is said once, in chapter 02's text, with its
+  period** (DEC-0175 §2, owner's review 2026-10-27, #103/#104). It is backed by
+  `founder-former-volunteer-mayor` (`usage_rights: cleared`) in the content
+  artefact's `derived_from`, and it carries **no second proof line and no
+  source line**: the record's evidence is two Nordkurier years without an
+  article, and a source that names no article is omitted (CG-045); a second
+  line repeating the fact is a duplicate claim (CG-044). *(Until DEC-0175 the
+  sentence was "a claim with a proof slot", the page's one inline proof
+  element, sourced "Nordkurier, 2019 und 2022".)*
 - The founder photo comes from `@schafe-vorm-fenster/people`; a photo not
   depicting what the copy claims carries *"Nicht motivgenau · Platzhalter"*.
 
@@ -133,22 +139,26 @@ no badge, no "seit …" claim anywhere on the page. If a places-per-scope
 count arrives upstream (Q-0037), whether the trust surface wants a counter
 is reopened as a question about evidence, not about compliance.
 
-### D5 — The visible empty slot [FIXED: SRC-0001 §4, SRC-0003; mechanics PROPOSED]
+### D5 — A missing proof renders nothing [FIXED: SRC-0001 §4, DEC-0175 §3; deviates from SRC-0003 L236]
 
-The sharpest element of this page. A claim without cleared proof is
-**weakened, never propped up** — so the gap is rendered, not hidden.
+A claim without cleared proof is **weakened, never propped up** (SRC-0001 §4,
+FUN-WEB-0151: the slot "stays empty") — and the page **shows nothing** in the
+place of the missing proof. Until DEC-0175 this determination rendered the gap
+as a hatched card with a label badge and a sentence ("Beleg fehlt — Hier steht
+die Stimme …"); the owner's review of 2026-10-27 ruled that such a placeholder
+never reaches the website (#105).
 
 | Question | Determination |
 | --- | --- |
-| What is reserved | one slot of the seven is type-reserved for `type: testimonial` — the voices of publishers and mayors |
-| When it appears | whenever the pool holds no `usage_rights: cleared` element of the reserved type after TS-WEB-0005's clearance hard filter. **Today it always appears**: all five testimonials in `@schafe-vorm-fenster/proof` are `unverified` |
-| Backfill | never. The slot is not handed to the next-highest scorer of another type; the stream renders 6 filled + 1 empty |
-| Count | at most **one** empty slot is ever visible (SRC-0003). Further gaps shorten the stream below seven instead of adding a second empty slot |
-| Look | the placeholder hatch of the design system (`repeating-linear-gradient` of `surface-2`/`line`) at `ratio-proof`, with a label badge and one sentence naming what is missing |
-| Not a skeleton | a skeleton is transitional and is replaced; this is terminal. It **does not animate** and is identical before and after hydration |
-| Copy | names the gap in the visitor's own terms — the type gap at stage 0, the regional gap at stage ≥ 1 where the visitor's state has no cleared proof. Which of the two framings is spoken at which stage is [PROPOSED]; the sentence itself is copy, written under SRC-0017 (DEC-0083), and the v2.0 board carries the shape it should take |
-| Accessibility | real content, not decoration: it is in the accessibility tree with its label and sentence, never `aria-hidden` |
-| Stage invariance | present at every stage; rotation (TS-WEB-0005 D7) never removes it |
+| What is reserved | one position of the seven is type-reserved for `type: testimonial` — the voices of publishers and mayors |
+| While nothing clears | the position renders **nothing**: no card, no hatch, no badge, no sentence about the gap, no `data-empty-proof` element. **Today that is always so**: all five testimonials in `@schafe-vorm-fenster/proof` are `unverified`. The stream is shorter by that position |
+| Backfill | never. The position is not handed to the next-highest scorer of another type; every further gap shortens the stream too |
+| Count | at most seven stories; the relevance engine keeps the gaps countable (`filled`, TS-WEB-0005 D5), the page renders the filled ones only |
+| Stage invariance | the same rule at every stage; rotation (TS-WEB-0005 D7) changes the selection and order of the filled stories, never adds a placeholder |
+
+Deviation: SRC-0003 line 236 asks for "one visible empty slot where no cleared
+proof exists". The specification stands (DEC-0104 §1); FUN-WEB-0017 records
+the deviation and DEM-0075 asks the source to follow.
 
 ### D6 — The archive is a link, not a preview [FIXED: SRC-0003 §"Archive", TS-WEB-0011 D3]
 
@@ -248,10 +258,23 @@ assigns types per page type and its A5 checks "no more".
   which had not been true since DEC-0083.)*
 - [FREE] Visual design inside every block, within the design system and
   TS-WEB-0002.
-- [FREE] Whether the stream is a grid or a scroller, as long as the empty
-  slot sits in the reading order the engine gives it. *(The second half of this
-  bullet offered a choice between "origin and counters as one component or two"
-  until 2026-09-25; D4 deleted the counters, so there was nothing to choose.)*
+- ~~[FREE] Whether the stream is a grid or a scroller.~~ **Not free since
+  DEC-0175 §1:** the stream is an accordion in one column — a grid reflowed on
+  every click (#102). *(Until 2026-09-25 this bullet also offered a choice
+  between "origin and counters as one component or two"; D4 deleted the
+  counters, so there was nothing to choose.)*
+
+## Done by the owner's review of 2026-10-27 (DEC-0175)
+
+- ~~The stories jump when one opens~~ (#102): chapter 03 is an accordion, D2 row 5
+  and A17.
+- ~~"Schmatzin · Bürgermeisteramt" is clipped~~ and ~~the mayor proof is said
+  twice, with a vague source~~ (#103, #104): chapter 02 tells it once with its
+  period, D3 and A3.
+- ~~"Beleg fehlt" on the page~~ (#105): D5, A6, and TS-WEB-0007-A19 over every
+  route.
+- ~~Two sentences on "Deshalb"~~ (#106): copy, content slot 1; the price is
+  still the offering token (A4).
 
 ## Owed by the owner's review of 2026-10-12 (DEC-0154)
 
@@ -281,19 +304,19 @@ assigns types per page type and its A5 checks "no more".
 | --- | --- | --- |
 | TS-WEB-0027-A1 | static | `page.meta.ts` of `/ueber-uns` matches D1: `focusJob` `understand-who-is-behind-it`, `primaryConversion` `request-product-briefing`, audiences non-empty and ordered, `liveModules` **empty** (the route is one of the three the TS-WEB-0006 D1 exemption names), 7 proof slots. |
 | TS-WEB-0027-A2 | e2e | DOM order of the `data-block` sections is exactly D2 (`kapitel-1`, `zitat`, `kapitel-2`, `kapitel-3`, `team`, `grundsaetze`, `auszeichnung`), with the contact section after the closing CTA and the global footer last; exactly one `h1`, on the stage; exactly two photo sections and no two adjacent. No counter, no year figure, no place count and no village-size figure renders anywhere on the page (D4, CG-034). *(Until DEC-0162 the order was origin · stream · story · archive · team, with one photo section.)* |
-| TS-WEB-0027-A3 | e2e | At 1280 × 800 the first viewport contains exactly one `h1` and chapter 01's heading, and **no element carrying any `data-cta` value**; the honorary-mayor claim and its source stand together as the one inline proof element in chapter 02. The criterion asserts the elements, their position and the CTA's absence, never their wording (DEC-0083). *(It required the honorary-mayor proof in the first viewport and the first stream element within the second until DEC-0162, whose chapter order the owner's design fixes.)* |
+| TS-WEB-0027-A3 | e2e | At 1280 × 800 the first viewport contains exactly one `h1` and chapter 01's heading, and **no element carrying any `data-cta` value**; chapter 02 is its heading and one text, with no inline proof element and no source line (D3, DEC-0175 §2). The criterion asserts the elements, their position and the CTA's absence, never their wording (DEC-0083). *(It required the honorary-mayor proof in the first viewport and the first stream element within the second until DEC-0162, and the claim and its source as one inline proof element in chapter 02 until DEC-0175.)* |
 | TS-WEB-0027-A4 | e2e | The origin block contains the free-calendar promise and exactly one price token, and that token's value, currency and interval equal `@schafe-vorm-fenster/offerings`. No sentence in the block derives the price from affordability and none mentions a salesperson (DEC-0084 §2); no figure for the village's size is hard-coded in page or component source. |
-| TS-WEB-0027-A5 | e2e | The stream renders at most 7 elements; every rendered proof id resolves to an element with `usage_rights: cleared`; no `unverified` id appears anywhere in the served HTML. |
-| TS-WEB-0027-A6 | e2e | Exactly one empty slot is visible. It shows the hatch, a label and one sentence; it contains no image; it is unchanged 5 s after load; it is present in the accessibility tree with its text; it carries no animation. |
-| TS-WEB-0027-A7 | integration | Fixture with one cleared `type: testimonial` element: the reserved slot is filled and **no** empty slot renders. Fixture with none: 6 filled + 1 empty, and the 7th position is not backfilled by another type. |
+| TS-WEB-0027-A5 | e2e | The stream renders at most 7 elements, and every item of its list is a story; every rendered proof id resolves to an element with `usage_rights: cleared`; no `unverified` id appears anywhere in the served HTML. |
+| TS-WEB-0027-A6 | e2e | **No empty slot renders** (D5, DEC-0175 §3): the page carries no `data-empty-proof` element and no text naming a missing proof or a pending clearance; the stream's gaps are dropped in the engine's order, never backfilled. *(Until DEC-0175: exactly one empty slot, hatched, with a label and one sentence.)* |
+| TS-WEB-0027-A7 | integration | Fixture with one cleared `type: testimonial` element: the reserved position is filled. Fixture with none: the reserved position renders nothing and is not backfilled by another type; in neither case does an empty slot render. |
 | TS-WEB-0027-A8 | e2e | The award block has exactly one outgoing link, target `/ueber-uns/archiv`, and zero list entries, thumbnails or counts; the page links `/ueber-uns/archiv` exactly once. |
 | TS-WEB-0027-A9 | e2e | Every person in `@schafe-vorm-fenster/people` appears once, in a 4:5 media box; a person without a portrait shows the "Foto gesucht" surface — never an empty box, never omitted. |
 | TS-WEB-0027-A10 | e2e | The newsletter block stands after the team block and before the context band, and carries no `data-cta="primary"`; the page contains exactly one `data-cta="primary"` and it is **the closing CTA**, resolving to this page's contact section, with no CTA in block 1 and no second repeat below it; the contact section follows it (TS-WEB-0006-A17). |
-| TS-WEB-0027-A11 | e2e | Stage 0 and stage 1 (geo set) renders have identical block order and both contain the empty slot; only the selection and order of the six filled elements differ. |
+| TS-WEB-0027-A11 | e2e | Stage 0 and stage 1 (geo set) renders have identical block order and neither contains an empty slot; only the selection and order of the filled elements differ. |
 | TS-WEB-0027-A12 | static | Structured data on the page: exactly one `Organization` reference by `@id`, zero `Person` nodes, zero `ItemList`. |
 | TS-WEB-0027-A13 | integration | Loading the page, clicking the archive link, and clicking the primary or the closing CTA emit no conversion event. On the contact section's first action row, exactly one `request-product-briefing` **and** exactly one `make-contact` are emitted, both carrying `/ueber-uns` as the route; on rows 2–4, exactly one `make-contact` with the row's channel and no `request-product-briefing`. No goal id is emitted twice for one click. |
 | TS-WEB-0027-A16 | integration | Where the newsletter block renders, its signup handover emits exactly one `subscribe-to-newsletter` with `/ueber-uns` as the route, and the block offers both the WhatsApp and the e-mail route (TS-WEB-0016-A11). Where no sending system exists, the block does not render at all and emits nothing (TS-WEB-0016-A21). |
-| TS-WEB-0027-A17 | e2e | Chapter 03 renders every story as a native `<details>` in one exclusive group: in the served HTML the first is open and the rest closed; each has its title as an `h3` and a story text; a click on a closed story opens it and closes the open one; on its focused toggle Enter opens and Space closes it; the toggle is at least 44 px tall. With JavaScript disabled a click still opens a story. No story carries a demo mark and the page shows no draft or placeholder label (#55, DEC-0162 §2). |
+| TS-WEB-0027-A17 | e2e | Chapter 03 is an **accordion** (DEC-0175 §1): every story is a native `<details>` in one column at 390 and 1280 px — every item at the same x and width; in the served HTML the first is open and the rest closed; each has its title as an `h3` and a story text. A click on a closed story opens it in place and leaves an open one open; after it **no item has moved horizontally or changed its width, no item above the clicked one has moved at all**, and only items below it have moved, downward; a second click closes it. On its focused toggle Enter opens and Space closes it; the toggle is at least 44 px tall. With JavaScript disabled a click still opens a story. No story carries a demo mark and the page shows no draft or placeholder label (#55, DEC-0162 §2). *(Until DEC-0175 the stories were one exclusive group in a reflowing grid.)* |
 | TS-WEB-0027-A14 | e2e | No layout shift from late content: hero, proof cards and portraits declare `ratio-hero`, `ratio-proof`, `ratio-portrait` before data arrives; measured CLS on this page is ≤ 0.02. |
 | TS-WEB-0027-A15 | manual | Photo honesty: every photograph either depicts what its copy claims, or carries the badge "Nicht motivgenau · Platzhalter"; every missing photo is the "Foto gesucht" surface. |
 
@@ -301,13 +324,13 @@ assigns types per page type and its A5 checks "no more".
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0017 (`/ueber-uns`: focus job "understand who is behind it", booking as its primary conversion, repeated in the closing block) | D1 (manifest, `primaryConversion: request-product-briefing`) · D2 (module order) · D3 (origin argument and the primary CTA) · D4 (no live module) · D5 (empty proof slot) · D6 (archive link) · D7 (team) · D8 (newsletter) · D9, D10 · A1–A17 |
+| FUN-WEB-0017 (`/ueber-uns`: focus job "understand who is behind it", booking as its primary conversion, repeated in the closing block) | D1 (manifest, `primaryConversion: request-product-briefing`) · D2 (module order) · D3 (origin argument and the primary CTA) · D4 (no live module) · D5 (a missing proof renders nothing) · D6 (archive link) · D7 (team) · D8 (newsletter) · D9, D10 · A1–A17 |
 
 ## Open points
 
-- **The five testimonials are unverified**, so the empty slot is permanent
-  until clearance is on record. Intended behaviour, not a defect — but it
-  should be a conscious launch decision. Addressee: jan-henrik (owner of
+- **The five testimonials are unverified**, so the reserved position stays
+  empty — and, since DEC-0175, invisible — until clearance is on record. The
+  stream is shorter by one story; it should be a conscious launch decision. Addressee: jan-henrik (owner of
   `@schafe-vorm-fenster/proof`).
 - ~~**SRC-0003 names no live module here**, while TS-WEB-0006 D1 requires one.~~
   **Closed by DEC-0084 §3.** The counter module is deleted and the sender
@@ -328,9 +351,9 @@ assigns types per page type and its A5 checks "no more".
   two readiness levels — ready to talk books, still looking subscribes —
   which is DEC-0082's ladder. Placement and treatment are unchanged, the
   primary stays the booking, and D8 now carries the new reason.
-- **Empty-slot framing has two variants** (missing type vs. missing
-  region); which is spoken at which stage is [PROPOSED] in D5. The
-  sentences themselves are copy. Addressee: content.
+- ~~**Empty-slot framing has two variants** (missing type vs. missing
+  region).~~ **Void since DEC-0175 §3:** a missing proof renders nothing, so
+  there is no sentence to frame.
 - **Q-0020 gates the newsletter block — and it is not a question any
   more, it is a delivery.** DEC-0051 decided *which* system (envoy);
   **no sending system is in operation**, and the widget's date is

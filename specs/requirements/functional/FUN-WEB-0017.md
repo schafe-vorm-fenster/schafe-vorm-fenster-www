@@ -40,6 +40,8 @@ Finding: Re-resolved 2026-09-25. SRC-0003 line 221 now gives `/ueber-uns` the co
 
 Amendment 2026-09-25: the recorded deviation against old line 205 is withdrawn. Hub PR #510 replaced "Primary conversion: none of its own; the closing CTA offers all three jobs" and added the missing conversion-map row, which is the edit DEM-0001 required; DEM-0001 is ANSWERED and CONF-0014 records the amendment as the NEW_VERSION it asked for. The locator is a position instead of UNKNOWN.
 
+Deviation: `go-to-market-os/concept/website-information-architecture.concept.md#L236` asks the page for "one visible empty slot where no cleared proof exists". The owner's review of 2026-10-27 ruled that such a placeholder never reaches the website (#105): a position without cleared proof renders nothing (DEC-0175 §3, TS-WEB-0027 D5 as amended). The specification carries the truth (DEC-0104 §1); DEM-0075 asks the source to follow.
+
 ## Notes
 
 Left outside the slot form by DEC-0093, and it is not a grammar failure. The body is a three-column tuple — route, focus job, primary conversion — and `@leafcutter-strict/method-statement-grammar` defines seven forms, all of them sentences: goal, need, functional, quality, constraint, business rule, fit criterion. **None of them has a slot for a tuple.** The method's own instruction for this case is "a candidate that fits no form is returned for classification rather than forced into the nearest one", and the classification is right: this is a functional requirement. What is missing is upstream, a mapping form, and flattening the tuple into three sentences per page would produce 27 artefacts that say together exactly what one row says. `form: F0` records the mismatch rather than hiding it.

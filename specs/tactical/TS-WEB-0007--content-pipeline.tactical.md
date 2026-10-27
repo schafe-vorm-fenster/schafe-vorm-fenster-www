@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0143, FUN-WEB-0144, CON-WEB-0063, FUN-WEB-0039, FUN-WEB-0171, CON-WEB-0077, FUN-WEB-0172, FUN-WEB-0173, FUN-WEB-0174, CON-WEB-0078, FUN-WEB-0083, FUN-WEB-0175, FUN-WEB-0176, FUN-WEB-0177, FUN-WEB-0178, CON-WEB-0079, FUN-WEB-0179, CON-WEB-0080, CON-WEB-0087, FUN-WEB-0180, FUN-WEB-0181, FUN-WEB-0182, FUN-WEB-0089]
 sources: [SRC-0006, SRC-0008, SRC-0009, SRC-0017, SRC-0018]
-decisions: [DEC-0012, DEC-0020, DEC-0022, DEC-0026, DEC-0027, DEC-0039, DEC-0041, DEC-0080, DEC-0161, DEC-0165, DEC-0168]
+decisions: [DEC-0012, DEC-0020, DEC-0022, DEC-0026, DEC-0027, DEC-0039, DEC-0041, DEC-0080, DEC-0161, DEC-0165, DEC-0168, DEC-0175]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -299,6 +299,14 @@ production, not a silently empty section. During the specification phase
 no page copy is produced at all (CON-WEB-0087); specs and fixtures use
 marked placeholders, and a placeholder never carries `approved`.
 
+**A placeholder for missing proof never reaches a rendered page — in any
+build** (DEC-0175 §3, owner's review 2026-10-27, #105). Where no cleared proof
+exists, the page renders nothing in its place: no slot of stand-in words
+("Beleg fehlt", a sentence naming the gap), no hatched or flat panel, no
+`data-empty-proof` element. That holds in preview too, because a preview is
+where the owner reviews the page; the gap stays countable in the relevance
+selection (TS-WEB-0005 D5), not on the page. A19 walks every route for it.
+
 ### D12 — `pnpm check:content` — the validation gate [FIXED: FUN-WEB-0089, concept C.3/E.1 P5]
 
 One command, run on every commit in CI and as a build step. Compliance
@@ -413,6 +421,7 @@ first playbook is written. [PROPOSED]
 | TS-WEB-0007-A16 | tool | Segment independence: no generated string contains a resolved place name; place references occur only as named interpolation slots. |
 | TS-WEB-0007-A17 | e2e | **AI-edited images are marked, and only they are** (D6, DEC-0165). On every route in both languages: each `[data-provenance="ai-edited"]` frame carries exactly one `ai-edited-mark` with `role="img"` and the dictionary's `aiEditedMark` as accessible name and `title`, not focusable; no mark exists outside such a frame; a page whose inventory holds a placed `ai-edited` image renders at least that many marked frames; every such inventory `alt`, and every `<img>` alt inside a marked frame, ends with the note. On each page carrying one, at 390 and 1280 px: the mark is 40 × 40, intersects neither the header nor any text or control of its surface, and `paper` over the 0.45 well clears **3 : 1** against every pixel of the photograph under it. |
 | TS-WEB-0007-A18 | e2e | **A photo credit is a © control, never running text** (DEC-0168, SRC-0014 §Photo surface, issues #78, #101). On every route in both languages no visible element reads "Foto: …" / "Photo: …"; a page whose inventory holds a placed image with a `credit` shows at least that many `photo-credit` controls, each a closed `button` named "Bildnachweis" / "Photo credit"; on `/ueber-uns` the quote band's control opens the photographer's credit. |
+| TS-WEB-0007-A19 | e2e | **No missing-proof placeholder on any route** (D11, DEC-0175 §3). On every route of the registry in both languages: no element carries `data-empty-proof`; the served HTML contains neither the stand-in's label nor its sentence in either language ("Beleg fehlt", "Proof missing", "Hier steht die Stimme einer …", "… own voice stands here as soon as …", "noch kein freigegebener Beleg"); no element in `#main` carries a proof-placeholder class (`empty-proof`, `proof-slot`, `missing-proof`). |
 
 ## Coverage
 
@@ -436,7 +445,7 @@ first playbook is written. [PROPOSED]
 | CON-WEB-0079 (never define a conversion goal) | D9 · A10 |
 | FUN-WEB-0179 (fetch it at build time rather than version it …) | D1, D3 · A2, A12 |
 | CON-WEB-0080 (never carry a news section) | D1, D3 · A2, A12 |
-| CON-WEB-0087 (never produce page copy before its specification phase has …) | D11 · A14 |
+| CON-WEB-0087 (never produce page copy before its specification phase has …) | D11 · A14, A19 |
 | FUN-WEB-0180 (import them through the Google Workspace pipeline in German …) | D10 · A11 |
 | FUN-WEB-0181 (render it as a section of the single legal …) | D10 · A11 |
 | FUN-WEB-0182 (add the legal text in Google Docs through the …) | D10 · A11 |

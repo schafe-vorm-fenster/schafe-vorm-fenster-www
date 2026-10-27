@@ -45,7 +45,7 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — 3 generated slots: `ueber-uns-2a-anecdotes-demo` and `ueber-uns-3a-empty-slot-demo` are `provenance: generated; demo: true` (the three anecdotes the review names but did not write, and the reserved slot's label and sentence, TS-WEB-0027 D5). Slot 1 carries the released h1 and the village argument in DEC-0084 §2 order, slot 2 the origin story with the cleared founder quote and its article, slot 3 five cleared proof elements, slot 5 the owner's own bio"
+provenance: "sourced — no generated slot left: `ueber-uns-2a-anecdotes-demo` went with DEC-0162 §3 and `ueber-uns-3a-empty-slot-demo` (the reserved place's label and sentence) with DEC-0175 §3, because a placeholder never reaches the website. Slot 1 carries the released h1 and the village argument in DEC-0084 §2 order, slot 2 the origin story with the cleared founder quote and its article, slot 3 five cleared proof elements, slot 5 the owner's own bio"
 compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0027"
 open_points:
   - "Clearance pending — the testimonial in slot 3 (`kulturlandbuero-broellin`) carries `usage_rights: unverified` (Q-0014) and its own record says 'nicht für neue öffentliche Flächen verwenden'. It is not rendered at all (TS-WEB-0027-A5); with a written clearance it takes the reserved seventh place"
@@ -144,11 +144,7 @@ Ortszahl (TS-WEB-0027 D4, DEC-0084 §3).
 
 **Dorfargument 2 (was der Markt anbietet):** Als Ort oder Gemeinde will man sich nicht damit beschäftigen, eine App anzuschaffen oder eine komplizierte Webseite zu bauen, die dann keiner anguckt. Man braucht etwas Fertiges, das die Nachbarn gerne benutzen und mit dem man einfach starten kann.
 
-**Dorfargument 3 (was daraus folgt):** Deshalb ist der Dorfkalender kostenlos, und das bleibt so. Deshalb kostet die Lizenz für den eigenen Kalender {price:portalize-calendar} im Jahr statt eines Projektbudgets.
-
-**Satz mit Beleg:** Der Gründer war selbst ehrenamtlicher Bürgermeister — das Amt, dem der Dienst hilft, kennt er von innen.
-
-**Quelle zum Beleg:** Nordkurier, 2019 und 2022
+**Dorfargument 3 (was daraus folgt):** Deshalb ist der Dorfkalender kostenlos, und das bleibt so. Die Lizenz für den eigenen Kalender kostet {price:portalize-calendar} im Jahr statt eines Projektbudgets.
 
 <!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
 
@@ -159,12 +155,17 @@ Die Reihenfolge ist DEC-0084 §2: der Bedarf → was der Markt darauf antwortet
 eines Dorfes und aus einem fehlenden Vertrieb herleitete — und mit ihr die
 Zahl „rund 400 Einwohner" aus dem Markenprofil, die falsch ist (DEC-0084 §1:
 rund 280). Preisangaben aus `community-calendar` (kostenlos, „forever") und
-`portalize-calendar` (480/EUR/Jahr) — gelesen, nicht getippt. Beleg zum
-Bürgermeister-Satz: `founder-former-volunteer-mayor` (`cleared`).
+`portalize-calendar` (480/EUR/Jahr) — gelesen, nicht getippt. Satz 3 trägt
+seit dem Review vom 2026-10-27 nur noch ein „Deshalb" (#106); die beiden
+Aussagen sind dieselben.
 
 Seit dem Umbau nach dem Entwurf vom 2026-10-12 (#55, DEC-0162) stehen die drei
 Sätze des Dorfarguments als die drei Grundsätze unter „Was wir daraus
-mitgenommen haben", der Satz mit Beleg steht in Kapitel 02.
+mitgenommen haben". Der frühere „Satz mit Beleg" („Der Gründer war selbst
+ehrenamtlicher Bürgermeister …", Quelle „Nordkurier, 2019 und 2022") ist
+gestrichen: Er wiederholte den Bürgermeister-Satz aus Kapitel 02, und die
+Quelle nannte zwei Jahre statt eines Artikels. Die Tatsache steht jetzt mit
+ihrem Zeitraum im Text von Kapitel 02 (Review 2026-10-27, #104, DEC-0175 §2).
 
 ## Slot 1a — Kapitel (Bühne, Kapitelzeilen, Grundsätze, Auszeichnung)
 
@@ -176,7 +177,7 @@ mitgenommen haben", der Satz mit Beleg steht in Kapitel 02.
 
 **Kapitel 02 — Überschrift:** Eine Schafweide vor dem Küchenfenster.
 
-**Kapitel 02 — Ort:** Schmatzin · Bürgermeisteramt
+**Kapitel 02 — Ort:** Gemeinde Schmatzin
 
 **Kapitel 03 — Überschrift:** Dann wurde es mehr als Brötchen.
 
@@ -199,8 +200,10 @@ mitgenommen haben", der Satz mit Beleg steht in Kapitel 02.
 Die Zeilen sind die Überschriften, Kicker und Bedienwörter des Entwurfs des
 Owners vom 2026-10-12 (`plan/reviews/2026-10-12/Design - Über uns Vorschau -
 *.jpg`, Issue #55), wörtlich übernommen, wie die Review-Sätze in Slot 1. Die
-Ortszeilen tragen nur Orte und das Amt aus Slot 2 und dem Beleg
-`founder-former-volunteer-mayor`. Nicht übernommen ist, was im Entwurf als
+Ortszeilen tragen nur Orte: Schlatkow, die Gemeinde Schmatzin, der Landkreis —
+vom Dorf über die Gemeinde zum Kreis. „Schmatzin · Bürgermeisteramt" hat das
+Review vom 2026-10-27 als abgehackt verworfen (#103); das Amt steht seitdem
+ausformuliert im Text von Kapitel 02 (Slot 2). Nicht übernommen ist, was im Entwurf als
 Fließtext oder Zahl ohne Quelle steht (DEC-0162 §3): der Lead der Bühne, der
 zweite Absatz von Kapitel 01, die Fortsetzung von Kapitel 02, die Einleitung
 von Kapitel 03, die drei Grundsatz-Texte (die Seite rendert dafür die drei
@@ -219,7 +222,7 @@ Geschichte ausdrücklich).
 
 **Absatz (Anfang):** Angefangen hat es mit der Suche nach frischen Brötchen. Nach dem Umzug von Berlin nach Schlatkow fragte die Familie zwei Wochen lang nach einem Bäckerwagen, legte sich schließlich morgens auf die Lauer und fuhr dem Wagen ins Nachbardorf hinterher, um einen Halt in Schlatkow zu vereinbaren.
 
-**Absatz (Name):** Der Name stammt aus der Amtszeit als Bürgermeister von Schmatzin: Die Gemeinde unterhielt eine Schafweide, die vom Küchenfenster aus zu sehen war.
+**Absatz (Name):** Von 2019 bis 2024 war Jan-Henrik Hempel ehrenamtlicher Bürgermeister von Schmatzin, zu dem auch Schlatkow gehört. An diese Zeit erinnert der Name Schafe vorm Fenster: Vom Küchenfenster aus sah man auf die Schafweide der Gemeinde.
 
 **Zitat (Gründer):** Wenn man alles sammelt, ist plötzlich in jedem Dorf jeden Tag irgendwas los. Wir müssen das nur sichtbar machen.
 
@@ -234,7 +237,13 @@ Geschichte ausdrücklich).
 **Zitat — Quelle (Link):** https://www.zukunftswege-ost-vorpommern.de/vollblutdigitalisierer-von-schlatkow
 
 Herkunftsabsatz: Abschnitt „Origin story" des Markenprofils, dazu das
-Porträt von Zukunftswege Ost-Vorpommern (Januar 2026). Das Zitat steht
+Porträt von Zukunftswege Ost-Vorpommern (Januar 2026). Namensabsatz (Kapitel
+02): Markenprofil „The name honours the founder's time as volunteer mayor of
+Schmatzin: the municipal sheep pasture was visible from the kitchen window"
+(daher „erinnert an", nicht „stammt aus"), `founder-former-volunteer-mayor`
+für Amt und Amtsbeginn 2019 und Schlatkow als Ortsteil der Gemeinde. Das
+Amtsende 2024 ist die Angabe des Owners im Review vom 2026-10-27; der
+Hub-Datensatz lässt es offen („Offen bleibt: das Amtsende"), DEM-0074. Das Zitat steht
 wörtlich im Personenprofil (`press_clearance: cleared`) und im Porträt;
 Titel und Link kommen aus dem `media-echo`-Eintrag
 `2026-01-zukunftswege-ost-vollblutdigitalisierer` (Träger: RAA — Demokratie
@@ -259,7 +268,7 @@ Umbau nach dem Entwurf vom 2026-10-12 ist der Strom das Kapitel 03, „Dann
 wurde es mehr als Brötchen." (DEC-0162 §2): vier Geschichten, alle
 `usage_rights: cleared`, jede Zeile der wörtliche `claim:` ihres Datensatzes.
 Die NØRD-Auszeichnung steht im eigenen Auszeichnungsblock (Slot 4), der
-Bürgermeister-Beleg in Kapitel 02 (Slot 1), deshalb stehen beide hier nicht
+Bürgermeister in Kapitel 02 (Slot 2), deshalb stehen beide hier nicht
 mehr:
 
 1. In der Pandemie wurden sämtliche Impfangebote und Testzentren-Öffnungszeiten des Landkreises tagesaktuell und ortsgenau über die Dorfkalender veröffentlicht. — Landkreis Vorpommern-Greifswald, 2022
@@ -271,14 +280,15 @@ Die Reihenfolge hier ist chronologisch, neueste zuerst — nicht die
 Anzeigereihenfolge: Welches Element auf welchem Platz steht, entscheidet die
 Relevanz-Maschine (TS-WEB-0005) aus demselben Pool. Der siebte Platz ist für
 den Typ `testimonial` reserviert und wird nie mit einem Element eines
-anderen Typs aufgefüllt (TS-WEB-0027 D5).
+anderen Typs aufgefüllt (TS-WEB-0027 D5). Solange er leer ist, rendert er
+nichts — keine Karte, kein Platzhalter (DEC-0175 §3).
 
 Das sechste Element des Stroms ist gestrichen: „Der Dorfkalender ist seit
 2018 in Betrieb" (`in-operation-since-2018`) ist eine „seit …"-Aussage, und
 TS-WEB-0027 D4 verbietet sie auf dieser Seite ausdrücklich — „no year figure
 rendered as a module, no place count, no badge, no ‚seit …' claim anywhere on
-the page". Weitere Lücken verkürzen den Strom, sie fügen keinen zweiten
-leeren Platz hinzu (D5).
+the page". Lücken verkürzen den Strom; ein leerer Platz wird nie gezeigt
+(D5, DEC-0175 §3).
 
 <!-- id: ueber-uns-3b-stories; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"]; status: draft -->
 
@@ -309,17 +319,10 @@ Karte wird nicht gerendert (TS-WEB-0027-A5 — kein `unverified` im
 ausgelieferten HTML). Liegt eine schriftliche Freigabe vor, nimmt sie den
 reservierten Platz ein.
 
-<!-- id: ueber-uns-3a-empty-slot-demo; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
-
-**Beschriftung (reservierter Platz):** Beleg fehlt
-
-**Satz (reservierter Platz):** Hier steht die Stimme einer Veröffentlichenden oder eines Bürgermeisters, sobald eine Freigabe dafür vorliegt.
-
-TS-WEB-0027 D5 verlangt am reservierten Platz „a label badge and one sentence
-naming what is missing" und stellt ihn ausdrücklich in den
-Accessibility-Baum. Die beiden Strings hat niemand geschrieben: `provenance:
-generated`, `demo: true`, im Markup `data-demo="true"`, Zeile in
-`state/open.md`.
+Der frühere Slot `ueber-uns-3a-empty-slot-demo` („Beleg fehlt" und ein Satz,
+der den fehlenden Beleg benennt, `provenance: generated; demo: true`) ist
+gestrichen: Ein fehlender Beleg rendert nichts, und ein Platzhalter erreicht
+die Webseite nie (Review 2026-10-27, #105, DEC-0175 §3).
 
 ## Slot 4 — Auszeichnung und Archiv-Verweis
 

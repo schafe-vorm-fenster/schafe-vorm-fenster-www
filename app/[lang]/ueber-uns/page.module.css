@@ -89,33 +89,13 @@
   }
 }
 
-/* Chapter 02's proof: the claim and its source as one flat element on the
-   section ground, a hairline above it (SRC-0014 §Shape and Space). */
-.inlineProof {
-  border-top: var(--border-hairline-on-lime);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  margin-top: var(--space-2);
-  padding-top: var(--space-4);
-}
-
-.inlineClaim {
-  font-size: var(--type-card-size);
-  font-weight: 700;
-  letter-spacing: var(--type-card-tracking);
-  line-height: var(--type-card-leading);
-  margin: 0;
-}
-
-.inlineSource {
-  color: var(--color-lime-800);
-  font-family: var(--font-mono);
-  font-size: var(--type-label-size);
-  font-weight: 700;
-  letter-spacing: var(--type-label-tracking);
-  margin: 0;
-  text-transform: uppercase;
+/* Chapter 02's text at lead size: one short, complete text that tells the
+   mayoralty and the name together, instead of a body line plus a separate
+   proof line under a hairline (DEC-0175 §2, issue 103). */
+.chapterBody > p.chapterLead {
+  font-size: var(--type-lead-size);
+  line-height: var(--leading-relaxed);
+  max-width: var(--measure-reading);
 }
 
 /* ── The quote band ────────────────────────────────────────────────────── */

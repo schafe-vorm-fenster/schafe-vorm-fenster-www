@@ -18,7 +18,6 @@ import { ComparisonTable } from "./comparison-table/comparison-table";
 import { CONTACT_SECTION_ID } from "./contact-section/contact-section";
 import { ContextBand } from "./context-band/context-band";
 import { EmbedFrame } from "./embed-frame/embed-frame";
-import { EmptyProofSlot } from "./empty-proof-slot/empty-proof-slot";
 import { EmptyStateBlock } from "./empty-state-block/empty-state-block";
 import { EnvoyFormMount } from "./envoy-form-mount/envoy-form-mount";
 import { ErrorPage } from "./error-page/error-page";
@@ -791,7 +790,6 @@ export const GALLERY: readonly GalleryEntry[] = [
           contextLine="Presse"
           geo={{ label: "Schlatkow", level: "place" }}
         />
-        <EmptyProofSlot />
         <ProofCard
           attribution="Anklamer Zeitung"
           claim="„Auch bei uns im Einsatz.“"
@@ -800,12 +798,6 @@ export const GALLERY: readonly GalleryEntry[] = [
         />
       </ProofStream>
     ),
-  },
-  {
-    name: "empty-proof-slot",
-    number: 32,
-    section: "2.3",
-    demo: <EmptyProofSlot />,
   },
   {
     name: "archive-row",

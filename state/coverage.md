@@ -6,17 +6,17 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**504 criteria · 330 closed · 174 open (65 % closed)**
+**506 criteria · 332 closed · 174 open (66 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 325 | a test title in a file a runner runs carries the id |
+| VERIFIED | 327 | a test title in a file a runner runs carries the id |
 | METERED | 5 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
 | NAMED ONLY | 30 | the id is in a runner file but in no test title — **not coverage** |
 | MISSING | 144 | nothing names it |
 
-Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
+Rule 1 (a new criterion arrives with its instrument): 2 criterion(a) new in this commit, 0 without an instrument.
 
 ## By level
 
@@ -25,7 +25,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | static | 91 | 61 | 30 | 67 % |
 | unit | 33 | 29 | 4 | 88 % |
 | integration | 78 | 54 | 24 | 69 % |
-| e2e | 232 | 184 | 48 | 79 % |
+| e2e | 234 | 186 | 48 | 79 % |
 | tool | 39 | 2 | 37 | 5 % |
 | manual | 31 | 0 | 31 | 0 % |
 
@@ -39,7 +39,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0004 | 12 | 9 | A6 A7 A11 |
 | TS-WEB-0005 | 16 | 13 | A9 A10 A15 |
 | TS-WEB-0006 | 19 | 15 | A4 A13 A14 A16 |
-| TS-WEB-0007 | 18 | 8 | A2 A3 A4 A5 A6 A9 A10 A11 A15 A16 |
+| TS-WEB-0007 | 19 | 9 | A2 A3 A4 A5 A6 A9 A10 A11 A15 A16 |
 | TS-WEB-0008 | 21 | 16 | A6 A7 A8 A12 A13 |
 | TS-WEB-0009 | 14 | 7 | A1 A2 A3 A8 A9 A12 A13 |
 | TS-WEB-0010 | 15 | 6 | A5 A6 A7 A9 A11 A12 A13 A14 A15 |
@@ -60,7 +60,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0025 | 14 | 10 | A5 A9 A12 A13 |
 | TS-WEB-0026 | 17 | 12 | A9 A11 A12 A16 A17 |
 | TS-WEB-0027 | 17 | 12 | A7 A10 A11 A14 A15 |
-| TS-WEB-0028 | 18 | 12 | A7 A8 A9 A10 A13 A14 |
+| TS-WEB-0028 | 19 | 13 | A7 A8 A9 A10 A13 A14 |
 | TS-WEB-0029 | 15 | 13 | A4 A12 |
 
 ## Every open criterion
@@ -228,9 +228,9 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0026-A12 | e2e | MISSING | — | The embed demo loads from the allowlisted Portalize host, is labelled as an example and sets no cookie; with the loader blocked the block's copy and CTA stay in … |
 | TS-WEB-0026-A16 | static | MISSING | — | Map-readiness: blocks 2 and 3 contain no copy describing the examples as a permanent state, and the interim module is imported in exactly one place, so swapping … |
 | TS-WEB-0026-A17 | manual | MISSING | — | Before the page claims the map view as part of the package, the offering owner confirms it is shippable to a buyer. Unconfirmed → the claim is removed, not qual … |
-| TS-WEB-0027-A7 | integration | MISSING | — | Fixture with one cleared `type: testimonial` element: the reserved slot is filled and **no** empty slot renders. Fixture with none: 6 filled + 1 empty, and the  … |
+| TS-WEB-0027-A7 | integration | MISSING | — | Fixture with one cleared `type: testimonial` element: the reserved position is filled. Fixture with none: the reserved position renders nothing and is not backf … |
 | TS-WEB-0027-A10 | e2e | NAMED ONLY | e2e/routes.spec.ts — outside any test title | The newsletter block stands after the team block and before the context band, and carries no `data-cta="primary"`; the page contains exactly one `data-cta="prim … |
-| TS-WEB-0027-A11 | e2e | MISSING | — | Stage 0 and stage 1 (geo set) renders have identical block order and both contain the empty slot; only the selection and order of the six filled elements differ … |
+| TS-WEB-0027-A11 | e2e | MISSING | — | Stage 0 and stage 1 (geo set) renders have identical block order and neither contains an empty slot; only the selection and order of the filled elements differ. |
 | TS-WEB-0027-A14 | e2e | MISSING | — | No layout shift from late content: hero, proof cards and portraits declare `ratio-hero`, `ratio-proof`, `ratio-portrait` before data arrives; measured CLS on th … |
 | TS-WEB-0027-A15 | manual | MISSING | — | Photo honesty: every photograph either depicts what its copy claims, or carries the badge "Nicht motivgenau · Platzhalter"; every missing photo is the "Foto ges … |
 | TS-WEB-0028-A7 | integration | MISSING | — | **Superseded by A15 (DEC-0166).** Was: an entry whose `usage_rights` is absent or not `cleared` appears in neither the HTML, nor any chip count, nor the row tot … |

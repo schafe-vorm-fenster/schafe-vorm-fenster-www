@@ -4,7 +4,7 @@ id: SRC-0013
 status: DRAFT
 date: 2026-09-10
 updated: 2026-10-27
-decisions: [DEC-0044, DEC-0054, DEC-0104, DEC-0155, DEC-0160, DEC-0169, DEC-0171, DEC-0173]
+decisions: [DEC-0044, DEC-0054, DEC-0104, DEC-0155, DEC-0160, DEC-0169, DEC-0171, DEC-0173, DEC-0175]
 ---
 
 # Design System Contract
@@ -127,7 +127,7 @@ added.
 | `comparison-table` | **One pair per row** (DEC-0172 §2, SRC-0014 §Comparison): *today* on `archive ground` (`text-2`, label `archive ink`), *with your calendar* on `lime-100` (`ink`, label `lime-800`), two flat butting fields, the mono label above its sentence; stacked below `xl`, 6 + 6 from it; four rows, no checkmark column, no product name. `TS-WEB-0024-A5`, `A23` |
 | `source-flow` | **Sources → target** (DEC-0172 §3, SRC-0014 §Source-to-target flow): on the `lime-500` band, a captioned plain list of sources with 24 px glyphs, a decorative 32 px arrow (down while stacked), one square `paper` target field at sub-head size; no pill and no control anywhere in it. `TS-WEB-0024-A24` |
 | `trust-block` | data protection · operations (· AI, unsourced, does not ship). On `violet-500` on `/dein-kalender` (DEC-0172 §4); mono subject labels in the ground's label colour under a hairline of the same, side by side from `xl`; no icons. `TS-WEB-0024-A14`, `A26` |
-| `story-disclosure` | **Stories opened one at a time** (DEC-0162 §2): flat blocks, closed `lime-100`, open `violet-500` across the row; kicker and `h3` title outside a native `<details>` toggle; one `name` per group, the first open in the server HTML; no JavaScript |
+| `story-disclosure` | **An accordion of stories** (DEC-0162 §2, DEC-0175 §1): one column at every width, an item never changes column, width or place, and opening one moves no sibling sideways and nothing above it; flat blocks, closed `lime-100`, open `violet-500`, the title the same size in both states; kicker and `h3` title outside a native `<details>` toggle; **no shared `name`** — several may be open; the first open in the server HTML; no JavaScript, no transition (TS-WEB-0027-A17) |
 | `web-calendar-overlay` | **A drawing of the website calendar on a `media-frame` photograph** (DEC-0162 §5): `paper` block with browser strip, head and three rows of day numeral, category coin and title bars; decorative, names no event and no date; never on the focal point |
 | `event-status-badge` | `neu` · `verschoben` · `abgesagt` |
 | `overlay-header` | transparent over a photo; mark, calendar pill, controls on the **blur primitive** (`backdrop-filter`) with the solid `ink` control well as the declared fallback |
@@ -220,6 +220,10 @@ Two of these carry a rule the manifest has to express, not only name:
   kicker badges are `ink` with `paper`. `TS-WEB-0017-A30` enforces it. A step line of `explain-module`
   wraps and is never cut with an ellipsis. Readability goes before a fixed
   height: shorter copy first, then a two-line fixed height for all three steps.
+- **A missing proof renders nothing** (DEC-0175 §3, SRC-0014 *Do Not*). No
+  component renders the gap of a proof position — no hatch, no flat panel, no
+  badge, no "Beleg fehlt" — and the `empty-proof-slot` component is gone. The
+  hatch is for a missing photograph only. `TS-WEB-0007-A19` walks every route.
 - **`explain-module` switches layout at `lg` (48rem) and nowhere else.**
   A generator does not choose that breakpoint; it is the component's own
   and the only `min-width` it declares.
