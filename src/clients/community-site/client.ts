@@ -101,6 +101,17 @@ export const CommunitySiteEventSchema = z
       .object({ _id: z.string().optional(), name: z.string().optional() })
       .loose()
       .optional(),
+    /**
+     * Whose calendar the date comes from. Read for one thing only: the
+     * organizer id the test-organizer rule matches (DEC-0173 §3,
+     * `src/lib/live/test-organizers.ts`).
+     */
+    calendar: z
+      .object({
+        organizer: z.object({ _id: z.string().optional() }).loose().optional(),
+      })
+      .loose()
+      .optional(),
   })
   .loose();
 

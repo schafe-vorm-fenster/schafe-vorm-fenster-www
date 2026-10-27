@@ -59,8 +59,18 @@
  * type and colour, it does not bring its own. Without this the widget falls
  * back to its own greys, and on the violet surface the category filter was
  * grey-on-grey.
+ *
+ * DEC-0173 §1 (issue #95): **every** colour the widget exposes is set, and the
+ * base `color` too. A property left out falls back to `inherit`, and what the
+ * mount inherits is the `violet-500` section's paper-white — which is how the
+ * own-events heading and card titles came out white on `violet-100` and on
+ * the widget's own pale-pink cards (measured 2026-10-27: 1.42:1 and 1.06:1;
+ * its orange link 3.29:1). The ground every value is measured against is this
+ * box's `violet-100`; `e2e/embed.spec.ts` reads each rendered text inside the
+ * shadow root and holds it to 4.5:1 (after: 100 texts, lowest 7.21:1).
  */
 .mount[data-portalize-widget] {
+  color: var(--color-neutral-ink);
   --portalize-title-color: var(--color-neutral-ink);
   --portalize-title-font-family: var(--font-sans);
   --portalize-title-font-weight: 800;
@@ -85,6 +95,23 @@
   --portalize-image-shadow: none;
   --portalize-badge-bg-color: var(--color-neutral-surface);
   --portalize-badge-border-radius: 999px;
+  /* The own-events showcase and highlight (portalize PR 140). Switched off on
+     this site (DEC-0173 §2), and themed anyway: a switch flipped later must
+     not bring the widget's own pale-pink cards and white titles back. */
+  --portalize-showcase-heading-color: var(--color-neutral-ink);
+  --portalize-showcase-title-color: var(--color-neutral-ink);
+  --portalize-showcase-date-color: var(--color-neutral-text2);
+  --portalize-showcase-location-color: var(--color-neutral-text2);
+  --portalize-showcase-link-color: var(--color-violet-500);
+  --portalize-showcase-more-color: var(--color-violet-500);
+  --portalize-showcase-more-border-color: var(--color-neutral-border);
+  --portalize-showcase-card-bg-color: var(--color-neutral-paper);
+  --portalize-showcase-card-border-radius: 0;
+  --portalize-showcase-active-ring: 0 0 0 3px var(--color-violet-500);
+  --portalize-own-events-accent-color: var(--color-violet-500);
+  --portalize-own-events-accent-contrast-color: var(--color-neutral-paper);
+  --portalize-own-events-reset-text-color: var(--color-neutral-ink);
+  --portalize-own-events-reset-border-color: var(--color-neutral-border);
   /* Mobile first: on a phone the four category buttons wrap to four lines
      and eat most of the reserved box, so they become one scrolling row and
      the box stays for dates. The widget's own filter properties do it. */

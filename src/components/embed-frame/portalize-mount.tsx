@@ -12,6 +12,11 @@ export interface PortalizeMountProps {
   readonly showFilter?: boolean;
   readonly showBranding?: boolean;
   readonly weeksAhead?: number;
+  /**
+   * The widget's own-events showcase ("Termine von {organizer}") and the star
+   * highlight in the list. Off unless a page asks for it (DEC-0173 §2).
+   */
+  readonly showOwnEvents?: boolean;
   readonly className?: string;
 }
 
@@ -41,6 +46,7 @@ export function PortalizeMount({
   showFilter = true,
   showBranding = false,
   weeksAhead,
+  showOwnEvents = false,
   className,
 }: PortalizeMountProps) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -89,6 +95,8 @@ export function PortalizeMount({
       data-portalize-failed={failed ? "true" : undefined}
       data-portalize-widget
       data-show-branding={showBranding ? "true" : undefined}
+      data-own-events-highlight={showOwnEvents ? undefined : "false"}
+      data-own-events-showcase={showOwnEvents ? undefined : "false"}
       data-show-filter={showFilter ? undefined : "false"}
       data-weeks-ahead={weeksAhead === undefined ? undefined : String(weeksAhead)}
       id={id}

@@ -1,3 +1,4 @@
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 import { ALLOWLIST } from "../src/lib/security/csp";
@@ -211,5 +212,179 @@ test.describe("the embed frame", () => {
       const core = (await row.locator("p").first().innerText()).trim();
       expect(core.length, `${key}: the row explains itself`).toBeGreaterThan(20);
     }
+  });
+});
+
+/**
+ * DEC-0173 — what the embedded calendar shows, and that it can be read.
+ *
+ * The 2026-10-27 review found three faults in the real widget (issues #95, #97,
+ * #98): white titles on its own pale-pink cards and a white heading on the
+ * box's `violet-100`; a showcase headed "Termine von {Verein}" over a calendar
+ * the copy introduces as three villages'; and test dates. The first two are
+ * settled on this site's side of the embed and checked here; the third is a
+ * Portalize fix (its events route reads events-api unfiltered) and its check
+ * waits for that deployment.
+ */
+test.describe("DEC-0173: the embedded calendar", () => {
+  test.use({ extraHTTPHeaders: {} });
+
+  test.beforeEach(async ({ page, baseURL }) => {
+    if (BYPASS === undefined || baseURL === undefined) return;
+    if (!VERCEL_PREVIEW_HOST.test(new URL(baseURL).host)) return;
+    await page.goto(
+      `/?x-vercel-protection-bypass=${encodeURIComponent(BYPASS)}&x-vercel-set-bypass-cookie=true`,
+    );
+  });
+
+  /** Scroll to the widget and wait until its shadow root carries the list. */
+  async function mountWidget(page: import("@playwright/test").Page): Promise<void> {
+    await page.goto(CALENDAR);
+    await page.locator("[data-block='embed-demo'] [data-portalize-widget]").scrollIntoViewIfNeeded();
+    await page.waitForFunction(
+      () => {
+        const widget = document.querySelector("[data-block='embed-demo'] portalize-widget");
+        return (widget?.shadowRoot?.textContent ?? "").trim().length > 200;
+      },
+      null,
+      { timeout: 30_000 },
+    );
+    await page.waitForLoadState("networkidle");
+  }
+
+  test("TS-WEB-0024-A21: the mount switches the own-events showcase and highlight off", async ({ page }) => {
+    await page.goto(CALENDAR);
+    const mount = page.locator("[data-block='embed-demo'] [data-portalize-widget]");
+    await expect(mount).toHaveAttribute("data-own-events-showcase", "false");
+    await expect(mount).toHaveAttribute("data-own-events-highlight", "false");
+  });
+
+  test("TS-WEB-0024-A21: the widget carries no organizer's showcase heading", async ({ page }) => {
+    test.skip(!(await widgetHostReachable()), "the Portalize host does not answer");
+    await mountWidget(page);
+    const text = await page.evaluate(
+      () => document.querySelector("[data-block='embed-demo'] portalize-widget")?.shadowRoot?.textContent ?? "",
+    );
+    expect(text).not.toMatch(/Termine von/u);
+  });
+
+  test("TS-WEB-0024-A20: every text in the widget clears WCAG AA on its own ground", async ({ page }) => {
+    test.skip(!(await widgetHostReachable()), "the Portalize host does not answer");
+    await mountWidget(page);
+
+    // Read inside the open shadow root: each element with its own text, its
+    // computed colour, and the first opaque background on the way up —
+    // crossing the shadow boundary to the host page, whose `violet-100` box
+    // is the ground the widget's transparent root stands on.
+    const measured = await page.evaluate(() => {
+      type Rgba = { r: number; g: number; b: number; a: number };
+      const parse = (value: string): Rgba | undefined => {
+        const match = /rgba?\(([^)]+)\)/u.exec(value);
+        if (match === null) return undefined;
+        const [r = 0, g = 0, b = 0, a = 1] = match[1]!.split(/[\s,/]+/u).filter(Boolean).map(Number);
+        return { r, g, b, a };
+      };
+      const channel = (v: number) => {
+        const c = v / 255;
+        return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+      };
+      const luminance = (c: Rgba) => 0.2126 * channel(c.r) + 0.7152 * channel(c.g) + 0.0722 * channel(c.b);
+      const ratio = (x: Rgba, y: Rgba) => {
+        const [hi, lo] = [luminance(x), luminance(y)].sort((a, b) => b - a) as [number, number];
+        return (hi + 0.05) / (lo + 0.05);
+      };
+      const up = (el: Element): Element | null => {
+        if (el.parentElement !== null) return el.parentElement;
+        const root = el.getRootNode();
+        return root instanceof ShadowRoot ? root.host : null;
+      };
+      const ground = (el: Element | null): Rgba => {
+        const layers: Rgba[] = [];
+        for (let node = el; node !== null; node = up(node)) {
+          const colour = parse(getComputedStyle(node).backgroundColor);
+          if (colour !== undefined && colour.a > 0) {
+            layers.push(colour);
+            if (colour.a >= 1) break;
+          }
+        }
+        return layers.reverse().reduce<Rgba>(
+          (below, c) => ({
+            r: c.r * c.a + below.r * (1 - c.a),
+            g: c.g * c.a + below.g * (1 - c.a),
+            b: c.b * c.a + below.b * (1 - c.a),
+            a: 1,
+          }),
+          { r: 255, g: 255, b: 255, a: 1 },
+        );
+      };
+
+      const widget = document.querySelector("[data-block='embed-demo'] portalize-widget");
+      const texts: { text: string; ratio: number; need: number }[] = [];
+      const controls: { text: string; ratio: number }[] = [];
+      const walk = (root: ShadowRoot | Element) => {
+        for (const el of root.querySelectorAll("*")) {
+          if (el.shadowRoot) walk(el.shadowRoot);
+          const style = getComputedStyle(el);
+          if (style.display === "none" || style.visibility === "hidden" || el.getClientRects().length === 0) continue;
+          const own = [...el.childNodes]
+            .filter((node) => node.nodeType === Node.TEXT_NODE)
+            .map((node) => (node.textContent ?? "").trim())
+            .join(" ")
+            .trim();
+          if (own !== "") {
+            const size = Number.parseFloat(style.fontSize);
+            const large = size >= 24 || (Number(style.fontWeight) >= 700 && size >= 18.66);
+            texts.push({ text: own.slice(0, 60), ratio: ratio(parse(style.color)!, ground(el)), need: large ? 3 : 4.5 });
+          }
+          // A control's boundary: its border against the ground around it
+          // (WCAG 1.4.11). Borderless controls are judged by their text above.
+          if (el.tagName === "BUTTON" && Number.parseFloat(style.borderTopWidth) > 0) {
+            controls.push({
+              text: (el.textContent ?? "").trim().slice(0, 40),
+              ratio: ratio(parse(style.borderTopColor)!, ground(up(el))),
+            });
+          }
+        }
+      };
+      if (widget?.shadowRoot) walk(widget.shadowRoot);
+      return { texts, controls };
+    });
+
+    expect(measured.texts.length, "the widget rendered text to measure").toBeGreaterThan(10);
+    const low = measured.texts.filter((t) => t.ratio < t.need).map((t) => `${t.text}: ${t.ratio.toFixed(2)}:1`);
+    expect(low, "texts under 4.5:1 (3:1 for large text)").toEqual([]);
+    const faint = measured.controls.filter((c) => c.ratio < 3).map((c) => `${c.text}: ${c.ratio.toFixed(2)}:1`);
+    expect(faint, "control boundaries under 3:1").toEqual([]);
+
+    // And axe's own reading of the same block — it pierces open shadow roots.
+    const axe = await new AxeBuilder({ page })
+      .include("[data-block='embed-demo']")
+      .withRules(["color-contrast"])
+      .analyze();
+    expect(axe.violations.flatMap((v) => v.nodes.map((n) => n.target.join(" ")))).toEqual([]);
+  });
+
+  test("TS-WEB-0008-A21: the page's own text carries no test date", async ({ page }) => {
+    await page.goto(CALENDAR);
+    // `innerText` stops at the widget's shadow root, so this reads exactly
+    // what this site renders; the widget's half is the next case.
+    expect(await page.locator("main").innerText()).not.toMatch(/\bTEST\b/u);
+  });
+
+  /**
+   * The widget's half of the rule. Portalize's events route
+   * (`apps/widget-host/src/app/api/[organizerId]/events/route.ts`) passes
+   * events-api's answer through unfiltered, so the test organizer's dates
+   * reach every embed, this one included. The fix is in that repository
+   * (schafe-vorm-fenster/portalize PR 144); this case runs once it is deployed.
+   */
+  test("TS-WEB-0024-A22: the widget shows no test organizer's date", async ({ page }) => {
+    test.fixme(true, "waits for schafe-vorm-fenster/portalize PR 144 to be deployed (DEC-0173 §3)");
+    test.skip(!(await widgetHostReachable()), "the Portalize host does not answer");
+    await mountWidget(page);
+    const text = await page.evaluate(
+      () => document.querySelector("[data-block='embed-demo'] portalize-widget")?.shadowRoot?.textContent ?? "",
+    );
+    expect(text).not.toMatch(/\bTEST\b/u);
   });
 });

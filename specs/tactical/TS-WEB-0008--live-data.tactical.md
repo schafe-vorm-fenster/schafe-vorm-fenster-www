@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0040, FUN-WEB-0041, FUN-WEB-0043, FUN-WEB-0153, FUN-WEB-0154, FUN-WEB-0045, FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072, FUN-WEB-0049]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0011]
-decisions: [DEC-0013, DEC-0019, DEC-0021, DEC-0024, DEC-0025, DEC-0029, DEC-0030, DEC-0034, DEC-0035, DEC-0037, DEC-0079, DEC-0154, DEC-0163, DEC-0167]
+decisions: [DEC-0013, DEC-0019, DEC-0021, DEC-0024, DEC-0025, DEC-0029, DEC-0030, DEC-0034, DEC-0035, DEC-0037, DEC-0079, DEC-0154, DEC-0163, DEC-0167, DEC-0173]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -107,6 +107,16 @@ these shapes constrain what the modules can promise:
 
 `findbyaddress` is **forbidden** (DEC-0024): it triggers a paid, slow
 external Google lookup. Enforced statically (A1).
+
+**Test organizers (DEC-0173 §3).** Every source turns into `LiveEvent` in
+`src/lib/live/adapters.ts`, and both adapters first drop events whose organizer id
+appears in `MATEO_TEST_USER_IDS`: `organizer.id` from events-api, and
+`calendar.organizer._id` from the public calendar site. This is the village
+calendar's rule (`community-site/src/filter/filterTestEvents.ts`) with the same
+variable. The list is configuration and never code, and an empty list filters
+nothing. The Portalize widget (D6) reads events-api through its own backend, so
+this site cannot filter it. The same rule goes into that backend
+(portalize#144). Tested by A20 and A21, plus TS-WEB-0024-A22 for the widget.
 
 ### D3 — Widening chain as a resolution procedure [FIXED: SRC-0002 §Live Content; ~15 km realisation PROPOSED]
 
@@ -215,6 +225,9 @@ web-component mode (the default; iframe mode exists and is not used).
 | Loading | lazy, when the container approaches the viewport (TS-WEB-0003 D4); the demo is never on the LCP path. |
 | Failure | the loader failing to load leaves the section's static copy and the CTA — the page never shows an empty frame. |
 | Not a third-party embed exception | DEC-0013 bans third-party embeds; this is our own product, which is why it is decided separately (DEC-0030). |
+| Theming | the widget is styled only through its `--portalize-*` properties. Every colour property and the mount's base `color` are site tokens on the box's light ground, and contrast is measured in the rendered shadow root (DEC-0173 §1, TS-WEB-0024-A20). |
+| Own events | the showcase and highlight are off, because the embedded licence is one organizer's while the page presents a place's calendar (DEC-0173 §2, TS-WEB-0024-A21). |
+| Test dates | none. The filter lives in the widget's backend (D2 "Test organizers", TS-WEB-0024-A22). |
 
 ### D7 — Place search: the visitor types a name [FIXED: DEC-0079, DEC-0024, FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072, CON-WEB-0062, FUN-WEB-0142/DEC-0037]
 
@@ -369,14 +382,15 @@ Two rules the live-data layer does not yet carry, each with its issue:
   that happens once ahead of one that recurs every week. Only measurable features
   rank (category, `occurrence`, a description, an image, distance); no invented
   weights. DEC-0152 introduced this for the story examples; the lists follow.
-- **A test date is never shown** (issue #52). The calendar's own site filters
-  dates of test organisers by an id list (`MATEO_TEST_USER_IDS`,
-  `community-site/src/filter/filterTestEvents.ts`); this site shows
-  "Recurring TEST Event Schlatkow" because it reads the unfiltered data. The same
-  list applies here, in the adapters of both sources.
+- ~~**A test date is never shown** (issue #52).~~ **Done by DEC-0173 §3.**
+  The date the review saw came from the Portalize widget, which reads
+  events-api unfiltered (portalize#144). This site's own tokenless source was
+  already clean because the village calendar filters before it renders. The
+  token-scoped source was not. Both adapters now drop a test organizer's
+  dates (D2, row "Test organizers"; A20, A21).
 
-Neither has an acceptance criterion yet. The criteria arrive with their tests
-(TS-WEB-0017 D6c), in the work packages for the two issues.
+The variety rule has no acceptance criterion yet. It arrives with its tests
+(TS-WEB-0017 D6c) in the work package for #22.
 
 ## Acceptance criteria
 
@@ -401,12 +415,14 @@ Neither has an acceptance criterion yet. The criteria arrive with their tests
 | TS-WEB-0008-A18 | integration | Position 2 on the public source: a ring whose week holds two dates and whose next weeks hold more answers five rows, chronological, the week's first, with `window` `upcoming`; a week holding five or more answers five rows inside it with `window` `week`; no row starts before now (D3 "Position 2 fills its rows"). |
 | TS-WEB-0008-A19 | e2e | `/dein-ort?ort=…` with `/api/nearby` answering two rows past the week, then five inside it: the space between the last row and the module's calendar link is the same within 2 px for both (no reserved row stays behind); the two-row answer carries the "coming up" heading and not "Diese Woche", the five-row answer the page's "this week" heading; at 360×800 the loading list stands below the viewport and the page's CLS stays < 0.1 (D3 "The list ends with its rows"). |
 | TS-WEB-0008-A16 | static | No visitor-facing string of a place-search surface contains "Postleitzahl", "PLZ" or "postcode" — checked over the search module's label, placeholder, hint and submit in both locale dictionaries and over the search blocks of the page content artifacts for `/`, `/dein-ort`, `/dein-ort/starten`, `/deine-region` and `/mitmachen/registrieren` (FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072). The order flow's scope step (TS-WEB-0025 D3) is out of scope: its postcode entry is a purchase configuration, not the place search. |
+| TS-WEB-0008-A20 | unit | With `MATEO_TEST_USER_IDS` naming an organizer, `toLiveEvents` drops every event whose `organizer.id` is that organizer, and `toLiveEventsFromSite` drops every event whose `calendar.organizer._id` is. Both keep the order of the rest, keep an event with no organizer id, and keep a real organizer's event whose title says "TEST". With the variable empty, nothing is dropped. Position 1 and the nearby list built from a public page whose dates all belong to the listed organizer are empty, and they are not empty when the variable is unset (DEC-0173 §3). |
+| TS-WEB-0008-A21 | e2e | The rendered text of `/dein-kalender` outside the widget's shadow root contains no word "TEST" (DEC-0173 §3; the widget's half is TS-WEB-0024-A22). |
 
 ## Coverage
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0040 (live data wherever it proves something) | D1, D2, D3, D7, D8 · A2, A4, A9, A14, A18, A19 |
+| FUN-WEB-0040 (live data wherever it proves something) | D1, D2, D3, D7, D8 · A2, A4, A9, A14, A18, A19, A20, A21 |
 | FUN-WEB-0041 (count it live or not show it at all) | D8, D5 counters row · A9, A10 |
 | FUN-WEB-0043 (embed demo via Portalize loader) | D6 · A8, A12 |
 | FUN-WEB-0153 (start the widening chain at radius 2) | D4, D3 step 2 · A6 |

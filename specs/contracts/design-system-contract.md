@@ -4,7 +4,7 @@ id: SRC-0013
 status: DRAFT
 date: 2026-09-10
 updated: 2026-10-27
-decisions: [DEC-0044, DEC-0054, DEC-0104, DEC-0155, DEC-0160, DEC-0169, DEC-0171]
+decisions: [DEC-0044, DEC-0054, DEC-0104, DEC-0155, DEC-0160, DEC-0169, DEC-0171, DEC-0173]
 ---
 
 # Design System Contract
@@ -218,6 +218,15 @@ Two of these carry a rule the manifest has to express, not only name:
 - **`explain-module` switches layout at `lg` (48rem) and nowhere else.**
   A generator does not choose that breakpoint; it is the component's own
   and the only `min-width` it declares.
+- **An embedded widget stands on a light ground and is themed only through
+  its own properties** (DEC-0173, SRC-0014 § *Embedded calendar*). The
+  Portalize widget's box is `violet-100`, never the `violet-500` section
+  itself. The mount sets its base `color` and every `--portalize-*` colour
+  property to a token, because anything left unset inherits the section's
+  `paper`. Its own-events showcase stays off. The contrast floor is the guide's
+  (4.5:1 for text, 3:1 for large text and control borders) and it is measured
+  in the rendered shadow root (TS-WEB-0024-A20), because `check:contrast`
+  cannot reach it.
 
 ### 3. States, named and specified
 

@@ -1282,6 +1282,32 @@ The sheep mark, 38–40 px, clipped to radius 999 — the same radius as every
 control. Beside it the wordmark in two lines, 15 px / 800, or the URL in
 mono when the context is editorial.
 
+### Embedded calendar
+
+The real Portalize widget on `/dein-kalender` and `/deine-region`
+(`embed-frame`, `DEC-0173`). It renders into an open shadow root that the
+page never styles directly. The only way in is the widget's own
+`--portalize-*` custom properties on the mount.
+
+- **Light ground.** The widget stands in a `violet-100` box inside the
+  `violet-500` section and never on `violet-500` itself. The box is its
+  ground for every pair below.
+- **Every exposed colour is a token, and so is the mount's `color`.** Any
+  property the page leaves unset falls back to `inherit`, and what the
+  mount inherits from the section is `paper`. That is how the 2026-10-27
+  review found the widget's titles at `paper` on `violet-100` (1.42:1) and
+  on its own pale-pink cards (1.06:1), with its orange link at 3.29:1.
+  Text takes `ink` (14.18:1) or `text-2` (7.21:1). Links and accents take
+  `violet-500` (5.50:1). Control borders take `ink`. A card inside the
+  widget takes `paper`, never the widget's own tint.
+- **No organizer's showcase.** The own-events row and highlight stay off.
+  The embedded licence belongs to one organizer, and the section introduces
+  a place's calendar (`DEC-0173` §2).
+- **Measured where it renders.** `check:contrast` sees tokens but not the
+  widget. TS-WEB-0024-A20 reads every text in the rendered shadow root
+  against its composited ground and holds it to 4.5:1, or 3:1 for large
+  text and control borders.
+
 ## Page chrome revised 2026-10-12
 
 Three elements the owner redesigned in the review of 2026-10-12. The images are

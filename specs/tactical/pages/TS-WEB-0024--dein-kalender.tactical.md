@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0014, BUS-WEB-0015, FUN-WEB-0202]
 sources: [SRC-0001, SRC-0003, SRC-0014]
-decisions: [DEC-0011, DEC-0030, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0131, DEC-0154]
+decisions: [DEC-0011, DEC-0030, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0131, DEC-0154, DEC-0173]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -137,6 +137,9 @@ TS-WEB-0008 D6 governs loader, host, lazy loading, cookies, failure. Page-local:
 | Label while Q-0026 is open | the demo renders the reference organizer and is labelled an example; it must not say "your place" |
 | Reserved space | the container declares its height before the loader runs; the page never reflows |
 | Failure | static copy and the block's CTA remain; no empty frame, no error sentence |
+| Theming and contrast | the widget stands on the box's `violet-100`, never on `violet-500`; its base `color` and every `--portalize-*` colour property are site tokens, and every text in its shadow root clears 4.5:1 (3:1 large text, control borders) against its composited ground (DEC-0173 §1, SRC-0014 § *Embedded calendar*) |
+| Whose calendar | the configured three-village calendar, with the own-events showcase and highlight **off** (`data-own-events-showcase="false"`, `data-own-events-highlight="false"`); no title in the widget names an organizer (DEC-0173 §2) |
+| Test dates | none, by the village calendar's rule: no event whose organizer id is in `MATEO_TEST_USER_IDS` (DEC-0173 §3, TS-WEB-0008 D2). The widget fetches its events itself, so the filter is in Portalize's events route (portalize#144) |
 
 ### D6 — Three tiers under one heading [FIXED: SRC-0003, DEC-0083; amended by DEC-0060, see D6a; module shape PROPOSED]
 
@@ -286,12 +289,15 @@ TS-WEB-0018 D8's budget constant is 0 for this route.
 | TS-WEB-0024-A17 | e2e | The closing CTA carries the same conversion goal id, target and label as the primary CTA and does not use the Pulse fill; the context band names exactly the three non-focus jobs. |
 | TS-WEB-0024-A18 | static | No content file bound to this route references `local-advertising`, none carries a `withheld_mention` field, and the rendered page contains no advertising CTA or `request-ad-placement` call site. |
 | TS-WEB-0024-A19 | manual | Every sentence in `data-block="trust"` about operations and AI names a hub record in its `derived_from`. A sentence without one blocks the block from shipping; the data-protection sentences alone may ship. |
+| TS-WEB-0024-A20 | e2e | With the Portalize host reachable, once the widget has rendered on `/dein-kalender`: every element inside its shadow root that carries its own text has a contrast of at least 4.5:1 (3:1 for large text) against its composited background, read across the shadow boundary; every bordered button's border clears 3:1 against the ground around it; axe's `color-contrast` rule reports nothing inside `data-block="embed-demo"` (DEC-0173 §1). |
+| TS-WEB-0024-A21 | e2e | The mount in `data-block="embed-demo"` carries `data-own-events-showcase="false"` and `data-own-events-highlight="false"`; with the host reachable, the rendered widget contains no "Termine von" heading (DEC-0173 §2). |
+| TS-WEB-0024-A22 | e2e | With the host reachable, the rendered widget contains no word "TEST" (DEC-0173 §3). Pending: the case is `fixme` until portalize#144 is deployed with `MATEO_TEST_USER_IDS` set. Until then the rule is evidenced by that repository's route tests. |
 
 ## Coverage
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0014 (`/dein-kalender`, focus job *run our own calendar*, primary `buy-calendar-licence`, equal `request-product-briefing`) | D1, D2, D3, D4, D5, D6, D9, D10 · A1–A9, A12–A17, A19 |
+| FUN-WEB-0014 (`/dein-kalender`, focus job *run our own calendar*, primary `buy-calendar-licence`, equal `request-product-briefing`) | D1, D2, D3, D4, D5, D6, D9, D10 · A1–A9, A12–A17, A19–A22 |
 | BUS-WEB-0015 (the billable unit is the organisation and not the place, …) | D6, D8, D11 · A8, A10, A11, A18 |
 | FUN-WEB-0202 (publish the licence price of 480 €/year for a …) | D6, D8, D11 · A8, A10, A11, A18 |
 
