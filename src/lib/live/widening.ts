@@ -220,6 +220,27 @@ export function withinWindow<T extends { readonly startsAt: string }>(
   });
 }
 
+/**
+ * Which window a nearby list actually spans (TS-WEB-0008 D3, amended
+ * 2026-10-27, issue #83). Position 2 asks for the next dates within ~15 km
+ * from now, **this week first**: chronological order puts the week's dates at
+ * the top, and only where the week holds fewer than the list's rows do the
+ * dates after it fill the rest. Lehre, measured on 2026-10-27 against the
+ * public village calendar: 2 dates within 7 days, 8 within 14, 24 upcoming —
+ * the week alone left three of five rows empty.
+ *
+ * `week` while every row starts inside the seven days, `upcoming` otherwise,
+ * so the module's heading never claims a week its rows leave (D1).
+ */
+export function nearbyWindow(
+  events: readonly { readonly startsAt: string }[],
+  now: Date = new Date(),
+): "week" | "upcoming" {
+  const { to } = windowBounds("week", now);
+  const end = to?.getTime() ?? Number.POSITIVE_INFINITY;
+  return events.every((event) => new Date(event.startsAt).getTime() < end) ? "week" : "upcoming";
+}
+
 /** Chronological, so a list the source returned in its own order still reads. */
 export function byStart<T extends { readonly startsAt: string }>(events: readonly T[]): T[] {
   return [...events].sort((a, b) => a.startsAt.localeCompare(b.startsAt));

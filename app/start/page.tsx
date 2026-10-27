@@ -1,3 +1,4 @@
+import { Anchor } from "@/src/components/anchor/anchor";
 import { linkHref } from "@/src/components/route-link/href";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { leadFormEmbedUrl } from "@/src/lib/routes/lead-fallback";
@@ -78,7 +79,7 @@ export default function StartPage() {
           region. A paragraph and a link: no button, no checkbox, no dismiss,
           no `role`, nothing that could be read as a control. */}
       <p className={styles.notice} data-block="embed-notice" data-demo="true">
-        {d.start.notice} <a href={privacyHref}>{d.start.noticeLink}</a>
+        {d.start.notice} <Anchor href={privacyHref}>{d.start.noticeLink}</Anchor>
       </p>
       {/* D15 — exactly one frame, of the configured form host, `?embedded=true`
           (`lead-fallback.ts`). Eager: the visitor came for the form. */}

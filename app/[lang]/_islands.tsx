@@ -60,16 +60,19 @@ function CalendarLink({
   label,
   dataCta,
   conversion,
+  locale,
 }: {
   readonly slug: string;
   readonly label: string;
   readonly dataCta?: string;
   readonly conversion?: ConversionBinding;
+  /** The language of the new-tab note the calendar link carries (DEC-0169). */
+  readonly locale?: Locale;
 }) {
   const href = calendarUrlForSlug(slug, { resolved: true });
   if (href === undefined) return null;
   const link = (
-    <OutboundLink dataCta={dataCta} href={href} variant="secondary">
+    <OutboundLink dataCta={dataCta} href={href} locale={locale} variant="secondary">
       {label}
     </OutboundLink>
   );
@@ -171,6 +174,7 @@ export function PlaceDatesIsland({
               conversion={conversion}
               dataCta={ctaDataCta}
               label={fillTemplate(ctaTemplate, { place: name })}
+              locale={locale}
               slug={slug}
             />
           ) : undefined
@@ -210,6 +214,7 @@ export function PlaceDatesIsland({
             conversion={conversion}
             dataCta={ctaDataCta}
             label={fillTemplate(ctaTemplate, { place: data.place.name })}
+            locale={locale}
             slug={data.place.slug}
           />
         )
@@ -274,7 +279,12 @@ export function NearbyIsland({
 
   const cta =
     anchorSlug === undefined ? undefined : (
-      <CalendarLink conversion={conversion} label={dictionary(locale).live.allDates} slug={anchorSlug} />
+      <CalendarLink
+        conversion={conversion}
+        label={dictionary(locale).live.allDates}
+        locale={locale}
+        slug={anchorSlug}
+      />
     );
 
   if (load.status === "loading") {
@@ -285,7 +295,7 @@ export function NearbyIsland({
         headingLevel={headingLevel}
         locale={locale}
         skeleton={
-          <EventList items={[]} locale={locale} reserve role={role} rowCount={rowCount} state="loading" />
+          <EventList items={[]} locale={locale} reserve="loading" role={role} rowCount={rowCount} state="loading" />
         }
         state="loading"
         title={fillTemplate(titleTemplate, { radius: String(NEARBY_RADIUS_KM) })}
@@ -309,13 +319,23 @@ export function NearbyIsland({
       locale={locale}
       state={stateOf(envelope)}
       tier={tierOf(envelope)}
-      title={fillTemplate(titleTemplate, { radius: String(data.radiusKm) })}
+      title={
+        // TS-WEB-0008 D3 as amended 2026-10-27 (issue #83): the list is filled
+        // with the dates after this week where the week is thin, and then its
+        // heading says so instead of claiming a week its rows leave.
+        data.window === "upcoming"
+          ? dictionary(locale).live.nearbyUpcoming
+          : fillTemplate(titleTemplate, { radius: String(data.radiusKm) })
+      }
       updatedAt={fetchedAt}
     >
       <EventList
         items={toListItems(data.events, locale)}
         locale={locale}
-        reserve
+        // The skeleton reserves the five rows; the answer takes the height of
+        // the rows it has. This list stands below the fold, so the collapse is
+        // no visible shift — and a kept reserve was empty space (issue #83).
+        reserve="loading"
         role={role}
         rowCount={rowCount}
         state={stateOf(envelope)}

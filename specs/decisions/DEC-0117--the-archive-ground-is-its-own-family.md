@@ -99,7 +99,9 @@ executor's choice inside that.
    and source fields (spec-impact B). The card is a `figure` with the quote in
    a `blockquote` and the author in a `figcaption`; the source is an
    `outbound-link` (inline variant, 18 px `external-link`, `newTab` off by
-   default and announced in the link's own text when on); the hairlines are
+   default and announced in the link's own text when on — *superseded by
+   DEC-0169: every outbound link opens a new tab, and `newTab` is no prop any
+   more*); the hairlines are
    the tokens `--border-hairline` and, on `lime-100`, `--border-hairline-on-lime`.
 
 8. **`proofSlot` stays a prop** (`TS-WEB-0022 D3` still requires the slot; the

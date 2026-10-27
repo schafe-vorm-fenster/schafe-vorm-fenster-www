@@ -142,7 +142,7 @@ export function ProofCard({
                 {link.label}
               </RouteLink>
             ) : link.href ? (
-              <OutboundLink href={link.href} locale={locale} newTab>
+              <OutboundLink href={link.href} locale={locale}>
                 {link.label}
               </OutboundLink>
             ) : null}

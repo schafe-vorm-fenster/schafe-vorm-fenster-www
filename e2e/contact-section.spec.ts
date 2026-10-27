@@ -286,8 +286,13 @@ for (const { route, locale } of everyRoute()) {
     }) => {
       await page.goto(path);
       const first = row(page, 1);
-      const noteId = await first.getAttribute("aria-describedby");
+      // The D16 marking first, then the new-tab note every link to another
+      // origin carries (DEC-0169): two descriptions in one list.
+      const [noteId, newTabId] = ((await first.getAttribute("aria-describedby")) ?? "").split(" ");
       expect(noteId, "row 1 is described by the marking").toBeTruthy();
+      expect(newTabId, "and by the new-tab note").toMatch(/^new-tab-/);
+      await expect(page.locator(`[id="${newTabId}"]`)).toHaveText(/neuen Tab|new tab/);
+      await expect(first).toHaveAttribute("target", "_blank");
       const note = page.locator(`#${noteId}`);
       await expect(note).toHaveCount(1);
       await expect(note).toBeVisible();

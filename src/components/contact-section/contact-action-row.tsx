@@ -1,9 +1,11 @@
+import { Anchor } from "../anchor/anchor";
 import { ConversionTracker } from "../conversion-tracker/conversion-tracker";
 import { Icon, type IconName } from "../icon/icon";
 
 import { contactRowConversions } from "./conversions";
 
 import type { ContactChannelId } from "@/src/lib/contact/contact-channels";
+import type { Locale } from "@/src/lib/i18n/locales";
 import type { RouteId } from "@/src/lib/routes/routes";
 import type { ReactNode } from "react";
 
@@ -38,6 +40,8 @@ export interface ContactActionRowProps {
   /** The id of the D16 marking element that follows the control (row 1 only). */
   readonly describedBy?: string;
   readonly id?: string;
+  /** The language of the new-tab note the booking and WhatsApp rows carry (DEC-0169). */
+  readonly locale?: Locale;
 }
 
 /**
@@ -55,8 +59,10 @@ export interface ContactActionRowProps {
  * rank — every row is `data-cta="secondary"` (DEC-0082 amendment B) and the
  * component cannot take `primary` at all.
  * Space: buttons `height-button` (56 px), radius 999; inline rows 44 px.
- * A11y: a real link; the title is in the accessible name, the D16 marking
- * is not (it is `aria-describedby`, rendered by the section *after* the
+ * A11y: a real link; the booking and WhatsApp rows leave the site and open a
+ * new tab, said through `anchor`'s hidden note (DEC-0169); the phone and mail
+ * rows do not navigate and stay in the tab. The title is in the accessible
+ * name, the D16 marking is not (it is `aria-describedby`, rendered by the section *after* the
  * control). Every click emits its goals through `conversion-tracker`, one
  * wrapper per goal id so no goal fires twice for one click (`conversions.ts`).
  */
@@ -69,17 +75,19 @@ export function ContactActionRow({
   route,
   describedBy,
   id,
+  locale,
 }: ContactActionRowProps) {
   const inline = treatment === "inline";
 
   const anchor = (
-    <a
+    <Anchor
       aria-describedby={describedBy}
       className={[styles.row, TREATMENT_CLASS[treatment]].join(" ")}
       data-channel={channel}
       data-cta="secondary"
       href={href}
       id={id}
+      locale={locale}
     >
       <Icon className={styles.glyph} name={ICON[channel]} size={24} />
       {inline ? (
@@ -90,7 +98,7 @@ export function ContactActionRow({
       ) : (
         <span className={styles.title}>{title}</span>
       )}
-    </a>
+    </Anchor>
   );
 
   // One `ConversionTracker` per goal id, nested: the click bubbles through

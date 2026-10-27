@@ -6,26 +6,26 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**477 criteria · 311 closed · 166 open (65 % closed)**
+**482 criteria · 316 closed · 166 open (66 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 306 | a test title in a file a runner runs carries the id |
+| VERIFIED | 311 | a test title in a file a runner runs carries the id |
 | METERED | 5 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
 | NAMED ONLY | 30 | the id is in a runner file but in no test title — **not coverage** |
 | MISSING | 136 | nothing names it |
 
-Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
+Rule 1 (a new criterion arrives with its instrument): 5 criterion(a) new in this commit, 0 without an instrument.
 
 ## By level
 
 | Level | Criteria | Closed | Open | Closed |
 | --- | --- | --- | --- | --- |
-| static | 89 | 59 | 30 | 66 % |
+| static | 90 | 60 | 30 | 67 % |
 | unit | 32 | 28 | 4 | 88 % |
-| integration | 77 | 53 | 24 | 69 % |
-| e2e | 209 | 169 | 40 | 81 % |
+| integration | 78 | 54 | 24 | 69 % |
+| e2e | 212 | 172 | 40 | 81 % |
 | tool | 39 | 2 | 37 | 5 % |
 | manual | 31 | 0 | 31 | 0 % |
 
@@ -40,7 +40,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0005 | 16 | 13 | A9 A10 A15 |
 | TS-WEB-0006 | 19 | 15 | A4 A13 A14 A16 |
 | TS-WEB-0007 | 17 | 7 | A2 A3 A4 A5 A6 A9 A10 A11 A15 A16 |
-| TS-WEB-0008 | 16 | 11 | A6 A7 A8 A12 A13 |
+| TS-WEB-0008 | 19 | 14 | A6 A7 A8 A12 A13 |
 | TS-WEB-0009 | 14 | 7 | A1 A2 A3 A8 A9 A12 A13 |
 | TS-WEB-0010 | 15 | 6 | A5 A6 A7 A9 A11 A12 A13 A14 A15 |
 | TS-WEB-0011 | 14 | 6 | A3 A5 A6 A8 A9 A11 A12 A13 |
@@ -48,7 +48,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0013 | 8 | 3 | A3 A4 A6 A7 A8 |
 | TS-WEB-0014 | 14 | 3 | A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 A13 |
 | TS-WEB-0015 | 13 | 2 | A2 A3 A4 A5 A6 A7 A8 A9 A10 A11 A12 |
-| TS-WEB-0016 | 23 | 11 | A1 A3 A4 A6 A7 A8 A9 A11 A18 A20 A13 A14 |
+| TS-WEB-0016 | 25 | 13 | A1 A3 A4 A6 A7 A8 A9 A11 A18 A20 A13 A14 |
 | TS-WEB-0017 | 35 | 31 | A3 A13 A15 A16 |
 | TS-WEB-0018 | 16 | 3 | A1 A3 A4 A5 A6 A8 A9 A10 A11 A13 A14 A15 A16 |
 | TS-WEB-0019 | 23 | 21 | A14 A15 |
@@ -230,6 +230,6 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0028-A9 | e2e | NAMED ONLY | src/components/archive-filter/archive-filter.test.tsx — outside any test title | With JavaScript disabled every cleared row renders and the chip row is not visible. |
 | TS-WEB-0028-A10 | tool | NAMED ONLY | e2e/pages/archiv.spec.ts — outside any test title | JSON-LD parses as one `ItemList`; `itemListElement` count equals the unfiltered visible row count; each item's `publisher` is the outlet and `url` the original. … |
 | TS-WEB-0028-A13 | tool | NAMED ONLY | src/components/archive-filter/archive-filter.test.tsx — outside any test title | No layout shift from media: both row variants occupy their final height before images load; CLS measured over load plus three filter interactions stays < 0.1. |
-| TS-WEB-0028-A14 | manual | MISSING | — | Three sampled rows: the outbound link opens the original at the outlet, its link text names source and subject, and it carries `rel="noopener"` where it opens i … |
+| TS-WEB-0028-A14 | manual | MISSING | — | Three sampled rows: the outbound link opens the original at the outlet, its link text names source and subject, and it opens in a new tab with `rel="noopener no … |
 | TS-WEB-0029-A4 | static | MISSING | — | Reordering the registry fixture changes section order but no `id`; renaming a section heading in a fixture changes no `id`. |
 | TS-WEB-0029-A12 | tool | NAMED ONLY | e2e/a11y.spec.ts — outside any test title | axe-core: zero violations on the page in all three themes, including nav landmark naming and heading order. |

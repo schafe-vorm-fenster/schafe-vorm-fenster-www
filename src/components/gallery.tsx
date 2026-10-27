@@ -363,7 +363,7 @@ export const GALLERY: readonly GalleryEntry[] = [
     section: "2.2",
     demo: (
       <p>
-        <OutboundLink href="https://example.org/termin" newTab recipient="example.org">
+        <OutboundLink href="https://example.org/termin" recipient="example.org">
           Original beim Veranstalter
         </OutboundLink>
       </p>

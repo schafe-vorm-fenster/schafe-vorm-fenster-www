@@ -121,6 +121,35 @@ const PAIRS: readonly Pair[] = [
     minimum: 4.5,
     why: "the active language segment's label on its lime-500 fill",
   },
+  // The place-search overlay (SRC-0014 §Place-search result overlay, review
+  // 2026-10-27, issue #79). Palette-level for the footer's reason: the
+  // overlay composes these tokens itself (`typeahead.module.css`), on every
+  // ground the search stands on — the photo hero included, whose link hover
+  // (`lime-300`) put the hovered place name at 1.2:1 on `surface`.
+  {
+    foreground: "--color-neutral-ink",
+    background: "--color-neutral-paper",
+    minimum: 4.5,
+    why: "a place-search suggestion at rest",
+  },
+  {
+    foreground: "--color-neutral-muted",
+    background: "--color-neutral-paper",
+    minimum: 4.5,
+    why: "a suggestion's municipality at rest",
+  },
+  {
+    foreground: "--color-neutral-ink",
+    background: "--color-neutral-surface",
+    minimum: 4.5,
+    why: "the hovered or active suggestion's place name",
+  },
+  {
+    foreground: "--color-neutral-muted",
+    background: "--color-neutral-surface",
+    minimum: 4.5,
+    why: "the hovered or active suggestion's municipality",
+  },
   {
     foreground: "--color-roles-focus-dark",
     background: "--color-neutral-ink",

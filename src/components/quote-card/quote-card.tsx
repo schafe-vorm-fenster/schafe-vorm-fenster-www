@@ -17,8 +17,6 @@ export interface QuoteCardProps {
   readonly sourceLabel: string;
   /** The article itself. A quote without a working link does not ship. */
   readonly sourceUrl: string;
-  /** Opens the article in a new tab, which the link then says. */
-  readonly newTab?: boolean;
   readonly locale?: Locale;
   /**
    * `photo` sets the quote on a photo surface (DEC-0162 §1): the story stage's
@@ -59,7 +57,6 @@ export function QuoteCard({
   organisation,
   sourceLabel,
   sourceUrl,
-  newTab = false,
   locale = "de",
   tone = "ground",
   className,
@@ -79,7 +76,7 @@ export function QuoteCard({
         <span className={styles.role}>
           {role}, {organisation}
         </span>
-        <OutboundLink className={styles.link} href={sourceUrl} locale={locale} newTab={newTab}>
+        <OutboundLink className={styles.link} href={sourceUrl} locale={locale}>
           {sourceLabel}
         </OutboundLink>
       </figcaption>

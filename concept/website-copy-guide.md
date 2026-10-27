@@ -1,7 +1,7 @@
 ---
 title: "Website Copy Guide — www.schafe-vorm-fenster.de"
 created_at: 2026-09-23
-updated_at: 2026-10-12
+updated_at: 2026-10-27
 status: draft
 source: review
 intent: inform
@@ -477,6 +477,12 @@ notices, and the page loses the credibility it was buying.
 - Avoid: *"Gebaut in einem Dorf. Betrieben aus einem Dorf."* — it runs in a
   data centre; the person sits in a village.
 - Use: the direction the review names instead — *"Vom Dorf fürs Dorf"*.
+- **A live heading names the window its rows actually span.** *"Diese Woche in
+  der Nähe"* over a list that runs into next month is untrue the moment the
+  list is filled past the week (issue #83). The nearby module carries the
+  page's "this week" heading while every row is inside the seven days, and
+  *"Demnächst in der Nähe"* / *"Coming up nearby"* (dictionary
+  `live.nearbyUpcoming`) once it is not (`TS-WEB-0008 D3`).
 
 ### CG-034 — No volatile numbers
 
@@ -646,6 +652,10 @@ review at the editorial gate (TS-WEB-0007 D11), listed as such in the contract.
 - No `Sie`, on any page, in any field — except `/rechtliches`, which is
   exempt as a whole page and exempts nothing else (CG-003).
 - No "das Produkt", and no second occurrence of the product name.
+- No "(öffnet neuen Tab)" in a link's label or a CTA label. A link to another
+  origin always opens a tab (`DEC-0169`); the dictionary's `outboundLink.newTab`
+  is read to a screen reader through `aria-describedby`, and the eye gets the
+  `external-link` glyph. The label states the action only (CG-026).
 
 ## Open decisions
 

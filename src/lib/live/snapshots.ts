@@ -24,6 +24,8 @@ import nearbySnapshot from "@/src/generated/snapshots/nearby.json";
 import placeEventsSnapshot from "@/src/generated/snapshots/place-events.json";
 import regionExamplesSnapshot from "@/src/generated/snapshots/region-examples.json";
 
+import { nearbyWindow } from "./widening";
+
 import type { LiveEvent, NearbyEvents, PlaceEvents, Place, RegionExamples } from "./types";
 
 /** The snapshot list, re-anchored on the place actually asked for. */
@@ -35,8 +37,9 @@ export function placeEventsFallback(place: Place): PlaceEvents {
   return { place, events, publishInvitation: false };
 }
 
-export function nearbyFallback(radiusKm: number): NearbyEvents {
-  return { events: nearbySnapshot.events as LiveEvent[], radiusKm, truncated: false };
+export function nearbyFallback(radiusKm: number, now: Date = new Date()): NearbyEvents {
+  const events = nearbySnapshot.events as LiveEvent[];
+  return { events, radiusKm, truncated: false, window: nearbyWindow(events, now) };
 }
 
 export function regionExamplesFallback(county: string): RegionExamples {

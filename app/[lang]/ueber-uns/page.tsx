@@ -360,7 +360,6 @@ export default async function Page({
             <QuoteCard
               locale={locale}
               name={fieldAt(story.blocks, STORY.quoteName) ?? ""}
-              newTab
               organisation={fieldAt(story.blocks, STORY.quoteOrganisation) ?? ""}
               quote={quote}
               role={fieldAt(story.blocks, STORY.quoteRole) ?? ""}

@@ -9,6 +9,8 @@
  * accidentally render an invalid tag.
  */
 
+import { Anchor } from "../anchor/anchor";
+
 import type { LegalBlock, LegalInline } from "@/src/lib/content/legal-markdown";
 import type { Fragment, ReactNode } from "react";
 
@@ -24,9 +26,11 @@ function renderInline(inline: readonly LegalInline[], keyPrefix: string): ReactN
         return <strong key={key}>{node.value}</strong>;
       case "link":
         return (
-          <a href={node.href} key={key} rel="noopener" target="_blank">
+          // DEC-0169: another origin opens a new tab and says so; a `mailto:`
+          // or a link into this site stays in the tab.
+          <Anchor href={node.href} key={key}>
             {node.text}
-          </a>
+          </Anchor>
         );
       case "break":
         return <br key={key} />;

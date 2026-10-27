@@ -103,6 +103,7 @@ export function ContactSection({ locale, route, className }: ContactSectionProps
                 channel="appointment"
                 describedBy={noteId}
                 href={contactHref("appointment")}
+                locale={locale}
                 route={route}
                 title={d.rows.appointment}
                 treatment="filled"
@@ -112,6 +113,7 @@ export function ContactSection({ locale, route, className }: ContactSectionProps
               <ContactActionRow
                 channel="whatsapp"
                 href={contactHref("whatsapp")}
+                locale={locale}
                 route={route}
                 title={d.rows.whatsapp}
                 treatment="outlined"
@@ -130,6 +132,7 @@ export function ContactSection({ locale, route, className }: ContactSectionProps
               <ContactActionRow
                 channel="phone"
                 href={contactHref("phone")}
+                locale={locale}
                 route={route}
                 title={d.rows.phone}
                 treatment="inline"
@@ -140,6 +143,7 @@ export function ContactSection({ locale, route, className }: ContactSectionProps
               <ContactActionRow
                 channel="mail"
                 href={contactHref("mail")}
+                locale={locale}
                 route={route}
                 title={d.rows.mail}
                 treatment="inline"

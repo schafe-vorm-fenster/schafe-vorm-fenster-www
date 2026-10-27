@@ -62,11 +62,19 @@ export interface EventListProps extends DataStateProps {
   readonly locale?: Locale;
   readonly className?: string;
   /**
-   * Reserve the printed rows at the height of a two-line row, in every state
-   * (DEC-0163): the list's rows load in the browser, and its prerendered
-   * skeleton has to hold the space whatever titles arrive.
+   * Reserve the printed rows at the height of a two-line row (DEC-0163): the
+   * list's rows load in the browser, and its prerendered skeleton has to hold
+   * the space whatever titles arrive.
+   *
+   * `true` keeps the reserve in every state, so a shorter answer leaves room
+   * at the end rather than pulling up what stands below — the rule for a list
+   * above the fold, where that pull would be a visible shift. `"loading"`
+   * reserves for the skeleton only and lets the answer take the height of the
+   * rows it has: the rule for the nearby list, which stands below the fold
+   * and whose kept reserve left up to three empty rows above its own calendar
+   * link (review 2026-10-27, issue #83; `TS-WEB-0008-A18`).
    */
-  readonly reserve?: boolean;
+  readonly reserve?: boolean | "loading";
 }
 
 /**
@@ -106,10 +114,14 @@ export function EventList({
   const classes = [styles.list, className]
     .filter(Boolean)
     .join(" ");
-  const reserved = (node: ReactNode) =>
-    reserve ? (
+  const reserved = (node: ReactNode, pending = false) =>
+    reserve === true || (reserve === "loading" && pending) ? (
       <div
         className={styles.reserve}
+        // The one list that gives its reserve back once it answers marks
+        // itself, so the layout sweep can tell its collapse below the fold
+        // from a shift (`e2e/layout-stability.spec.ts`, TS-WEB-0008-A19).
+        data-reserve={reserve === "loading" ? "loading" : undefined}
         style={
           {
             "--event-list-rows": limit,
@@ -123,7 +135,7 @@ export function EventList({
     );
 
   if (isPending(state)) {
-    return reserved(<Skeleton className={classes} rows={limit} variant="row" />);
+    return reserved(<Skeleton className={classes} rows={limit} variant="row" />, true);
   }
 
   if (state === "empty" || items.length === 0) {

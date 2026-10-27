@@ -118,7 +118,7 @@ describe("one CTA, secondary by construction", () => {
 
   it("goes through the route facade for a route id and renders a plain link for a handover", () => {
     expect(render({ cta: { label: "Onward", to: "register", locale: "en" } })).toMatch(/href="\/en\/[^"]+"/);
-    expect(render({ cta: { href: "https://wa.me/491234567890", label: "Chat", newTab: true } })).toContain(
+    expect(render({ cta: { href: "https://wa.me/491234567890", label: "Chat" } })).toContain(
       'href="https://wa.me/491234567890"',
     );
   });

@@ -496,7 +496,7 @@ export default async function Page({
               (DEC-0131 §4, state/open.md). */}
           {CONFIG_REPO_URL ? (
             <p className={pageStyles.configLink}>
-              <OutboundLink href={CONFIG_REPO_URL} locale={locale} newTab>
+              <OutboundLink href={CONFIG_REPO_URL} locale={locale}>
                 {fieldAt(embedConfig.blocks, 4)}
               </OutboundLink>
             </p>
@@ -590,7 +590,6 @@ export default async function Page({
                   key={entry.candidate.id}
                   locale={locale}
                   name={entry.candidate.contextLine}
-                  newTab
                   organisation={author.organisation}
                   quote={entry.candidate.claim}
                   role={author.role}

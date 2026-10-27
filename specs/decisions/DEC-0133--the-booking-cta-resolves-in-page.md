@@ -109,7 +109,9 @@ anchor, outside it, carrying the `meta` type role and an id, with
 The assembled line is also simplified from `"(öffnet neuen Tab) · Daten gehen
 an X"` to `"öffnet neuen Tab · Daten gehen an X"`: the parentheses existed to
 keep the fragment readable *inside* a label, and there is no label around it
-any more.
+any more. *(Superseded in part by DEC-0169 / issue #100 on 2026-10-27: the new
+tab is never visible text; the line reads "Daten gehen an X", and the tab is
+said by a hidden note joined by `aria-describedby`.)*
 
 ### 4. The lead fallback's three lines are dictionary strings, and its third line is the section
 

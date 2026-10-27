@@ -113,7 +113,7 @@ export function HowtoBlock({ headline, ios, android, appHref, appLinkLabel = "Ka
       {action !== undefined ? (
         <div data-howto-action="">{action}</div>
       ) : appHref === undefined ? null : conversion === undefined ? (
-        <OutboundLink className={styles.cta} href={appHref} variant="secondary">
+        <OutboundLink className={styles.cta} href={appHref} locale={locale} variant="secondary">
           {appLinkLabel}
         </OutboundLink>
       ) : (
@@ -122,7 +122,7 @@ export function HowtoBlock({ headline, ios, android, appHref, appLinkLabel = "Ka
           goalId={conversion.goalId}
           stage={conversion.stage}
         >
-          <OutboundLink className={styles.cta} href={appHref} variant="secondary">
+          <OutboundLink className={styles.cta} href={appHref} locale={locale} variant="secondary">
             {appLinkLabel}
           </OutboundLink>
         </ConversionTracker>

@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import page from "@/src/clients/community-site/fixtures/community-page.json";
 
 import { publicNearbyEvents, publicPlaceEvents, publicRegionRanking } from "./public-source";
+import { nearbyWindow } from "./widening";
 import { SHOWCASE_COMMUNITY } from "./showcase";
 
 /**
@@ -24,10 +25,14 @@ const PLACE = {
   lng: SHOWCASE_COMMUNITY.lng,
 };
 
-function servePage(): ReturnType<typeof vi.fn> {
+function servePage(events?: readonly unknown[]): ReturnType<typeof vi.fn> {
+  const served =
+    events === undefined
+      ? page
+      : { ...page, props: { ...page.props, pageProps: { ...page.props.pageProps, events } } };
   const body = [
     "<!doctype html><html><body>",
-    `<script id="__NEXT_DATA__" type="application/json">${JSON.stringify(page)}</script>`,
+    `<script id="__NEXT_DATA__" type="application/json">${JSON.stringify(served)}</script>`,
     "</body></html>",
   ].join("");
   const fetchMock = vi.fn(async () => new Response(body, { status: 200 }));
@@ -105,6 +110,52 @@ describe("position 2 — this week nearby", () => {
     const fetchMock = servePage();
     await publicNearbyEvents(PLACE, { radiusKm: 15, rowCount: 5, now: NOW });
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("TS-WEB-0008-A18: position 2 fills its rows — this week first, then the dates after it", () => {
+  const DAY = 24 * 60 * 60 * 1000;
+  /** A neighbour's date `days` after NOW, cloned from the fixture's own widened rows. */
+  async function neighbourTemplate() {
+    servePage();
+    const { events } = await publicNearbyEvents(PLACE, { radiusKm: 15, rowCount: 5, now: NOW });
+    const id = events[0]?.communityId;
+    const template = page.props.pageProps.events.find((event) => event.community?._id === id);
+    if (template === undefined) throw new Error("the fixture carries no neighbour within 15 km");
+    vi.unstubAllGlobals();
+    return (days: number, index: number) => ({
+      ...template,
+      _id: `${template._id}-${index}`,
+      summary: `Termin ${index}`,
+      start: new Date(NOW.getTime() + days * DAY).toISOString(),
+      end: new Date(NOW.getTime() + days * DAY + 3_600_000).toISOString(),
+    });
+  }
+
+  it("fills a thin week with the next dates and says the list reaches past it", async () => {
+    const at = await neighbourTemplate();
+    // Lehre's shape on 2026-10-27: two dates in the week, more after it.
+    servePage([at(30, 6), at(2, 1), at(12, 4), at(5, 2), at(9, 3), at(20, 5)]);
+    const { events } = await publicNearbyEvents(PLACE, { radiusKm: 15, rowCount: 5, now: NOW });
+
+    expect(events.map((event) => event.title)).toEqual(["Termin 1", "Termin 2", "Termin 3", "Termin 4", "Termin 5"]);
+    expect(nearbyWindow(events, NOW)).toBe("upcoming");
+  });
+
+  it("stays inside the week where the week alone fills the rows", async () => {
+    const at = await neighbourTemplate();
+    servePage([1, 2, 3, 4, 5, 6, 9].map((days, index) => at(days, index)));
+    const { events } = await publicNearbyEvents(PLACE, { radiusKm: 15, rowCount: 5, now: NOW });
+
+    expect(events).toHaveLength(5);
+    expect(nearbyWindow(events, NOW)).toBe("week");
+  });
+
+  it("never reaches back before now", async () => {
+    const at = await neighbourTemplate();
+    servePage([at(-1, 0), at(3, 1)]);
+    const { events } = await publicNearbyEvents(PLACE, { radiusKm: 15, rowCount: 5, now: NOW });
+    expect(events.map((event) => event.title)).toEqual(["Termin 1"]);
   });
 });
 

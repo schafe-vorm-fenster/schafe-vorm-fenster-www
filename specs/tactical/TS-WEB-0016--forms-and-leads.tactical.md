@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0183, CON-WEB-0081, CON-WEB-0082, FUN-WEB-0091, FUN-WEB-0092, FUN-WEB-0184, FUN-WEB-0185, FUN-WEB-0187, FUN-WEB-0152, CON-WEB-0083, FUN-WEB-0188, FUN-WEB-0189, CON-WEB-0084, FUN-WEB-0095, FUN-WEB-0186, FUN-WEB-0190, FUN-WEB-0191, CON-WEB-0085, CON-WEB-0086, FUN-WEB-0205, FUN-WEB-0206]
 sources: [SRC-0003, SRC-0008, SRC-0011]
-decisions: [DEC-0004, DEC-0009, DEC-0010, DEC-0011, DEC-0013, DEC-0014, DEC-0015, DEC-0025, DEC-0026, DEC-0030, DEC-0051, DEC-0052, DEC-0081, DEC-0082, DEC-0083, DEC-0104, DEC-0108]
+decisions: [DEC-0004, DEC-0009, DEC-0010, DEC-0011, DEC-0013, DEC-0014, DEC-0015, DEC-0025, DEC-0026, DEC-0030, DEC-0051, DEC-0052, DEC-0081, DEC-0082, DEC-0083, DEC-0104, DEC-0108, DEC-0169]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -212,7 +212,7 @@ withdrawn: it would have removed the only working registration the site has.
 | Where it lives | **the first action row of the contact section (S1)**, whose four rows and their order are D13 — one placement for the whole site. A booking CTA in any block on any page targets that section on its own page, in-page; it does not navigate off-site and it is not a second occurrence of the URL |
 | Why it stays off the CSP | An outbound navigation loads nothing into the page, so the allowlist is untouched (DEC-0015). Anything that would need a CSP entry is by definition not this |
 | URL source | One configured value (environment/config), referenced by every S3 placement — never pasted per page |
-| Link attributes | Opens in the same tab by default; if a new tab is used it carries `rel="noopener"` and the link text says so (TS-WEB-0002 D2, 2.4.9 link purpose) |
+| Link attributes | **D18** — another origin, so a new tab with `rel="noopener noreferrer"`, said in a note joined by `aria-describedby` and never in the label (DEC-0169). Until 2026-10-27 this row read "opens in the same tab by default"; the owner's review of that day reversed it |
 | Outbound marking | D16 — a small note **under** the row, never inside its label |
 | Link text | Names the action and its destination, not "hier klicken"; the label is content (CON-WEB-0087 placeholder rules apply) |
 | Localization | The link *text* is localized; the appointment page itself is an original artifact under Google's terms and is not localized by us (DEC-0026) |
@@ -262,7 +262,7 @@ on `/ueber-uns/archiv` and to inline proof anywhere.
 | No third-party embed | No iframe, no player script, no social embed, no click-to-load consent layer. There is nothing to consent to, which is the point (DEC-0013) |
 | Preview composition | Own preview image plus an own short quote/summary, both sourced from the media-echo entry (FUN-WEB-0179, CON-WEB-0080, build-time fetch) |
 | Image origin | Preview images are served from our own origin or assets-api — never hotlinked from the media host, which would leak the visitor's request |
-| Outbound link | One link per entry to the original, link text naming source and subject (2.4.9, TS-WEB-0002 D2); `rel="noopener"` when opened in a new tab |
+| Outbound link | One link per entry to the original, link text naming source and subject (2.4.9, TS-WEB-0002 D2); it opens a new tab with `rel="noopener noreferrer"`, always (D18, DEC-0169) |
 | Original artifacts stay original | A quoted headline or clipping remains in its source language even on EN pages (DEC-0026); surrounding context is localized |
 | Static | The archive is fully static from the build-time fetch (TS-WEB-0004 D6); no client request ever goes to a media host |
 
@@ -647,6 +647,26 @@ breath as the request going out. This determination is what "told" means here.
 the embed are the two halves of one determination and A22 is already the walk
 over this route.
 
+### D18 — Every link to another origin opens a new tab, and says so [FIXED: DEC-0169, owner review 2026-10-27, issue #82]
+
+> "Externe Links, bspw. zum Dorfkalender, müssen immer in target=_blank
+> geöffnet werden! Aktuell verschwindet sonst die Webseite." — the owner,
+> 2026-10-27.
+
+| Aspect | Determination |
+| --- | --- |
+| Which links | every `<a>` whose target is `http:`/`https:` (or protocol-relative) on an origin other than `SITE_ORIGIN`: the village calendar, the app handover, the booking calendar, WhatsApp (`wa.me`), an outlet's article, Wikimedia Commons, a partner site, a link inside an imported legal text. No call site chooses — the target is read off the href (`linkTarget()`) |
+| Attributes | `target="_blank"` and `rel="noopener noreferrer"`. `noreferrer` because the site hands a visitor to a third party without its address (TS-WEB-0013); campaign parameters travel in the URL (TS-WEB-0008 D9), so no `rel` value is owed to tracking |
+| Not a navigation | `tel:` and `mailto:` carry no target and no note — they open an app, not a document |
+| This site | a path, a hash, a query or an absolute URL on `SITE_ORIGIN` stays in the tab |
+| Seen | the `external-link` glyph after the label (SRC-0014 §Links) — 18 px on an inline link and a pill, 24 px in a button, where it takes the onward arrow's place |
+| Heard, never read | a visually hidden "öffnet neuen Tab" / "opens new tab" (dictionary `outboundLink.newTab`) **after** the control, joined by `aria-describedby`: the description, never the accessible name, so A23 and WCAG 2.5.3 hold. **The new tab is never visible text** — not under the link, not in D16's visible marking, not in a label (owner, 2026-10-27, issue #100: "muss nirgends stehen, es gibt ja das Icon"). Where D16's visible marking stands, it names the recipient only, and both ids are listed |
+| One place | `anchor` (`src/components/anchor/`) is the only raw `<a>` that may carry such a target; `outbound-link`, `button`'s href form, `contact-action-row` and the legal texts render through it |
+| Measurement | unchanged — the click is counted in this document (D12, TS-WEB-0012 D9), which a new tab keeps alive |
+
+`A24` walks it in the browser on every route, after the live modules landed;
+`A25` keeps the decision in `anchor` statically, in `pnpm check`.
+
 ## Free for the generator
 
 - [FREE] Visual design of the widget wrapper, the static fallback
@@ -685,6 +705,8 @@ over this route.
 | TS-WEB-0016-A22 | e2e | `/start` renders the registration form as a visible embed: exactly one `iframe` whose source is the configured form host, rendered without a click-to-load control, without a `details`/`summary` wrapper and without a `hidden` or zero-size ancestor, together with the e-mail address as a link. **Above that iframe, earlier in DOM order and present in the document served before any frame paints, stands a notice that names the form's third-party host and links to `/rechtliches#datenschutz`** (D17); it is not a button, not a checkbox, not dismissible, and no element on the route waits for it. No other route of the TS-WEB-0004 D1 inventory contains an `iframe` to any host but the Portalize demo's (DEC-0030). No conversion event fires on the route, and no consent-banner component renders (NFR-WEB-0062). |
 | TS-WEB-0016-A23 | e2e | The contact section's first action row and the lead fallback's `/start` link each carry their outbound marking as a separate element **after** the control in DOM order, at the `meta` type role, programmatically associated with it; the control's own label and accessible name contain neither the recipient nor a parenthetical about a new tab. The marking is not a button, not a link and not a consent control. |
 | TS-WEB-0016-A15 | e2e | The contact section renders exactly four action rows, in the D13 order: row 1's href is the configured appointment URL, row 2's is a WhatsApp click-to-chat URL, row 3's scheme is `tel:` and row 4's is `mailto:`. No row is omitted or merged, including when rows 2 and 3 resolve to the same number. **Every row emits** — the events are A17's; this criterion asserts the rows, their order and their schemes. (It ended "Only row 1 emits an event" until 2026-09-25, which was the reading D13 itself supersedes; DEC-0081 amendment §5.) |
+| TS-WEB-0016-A24 | e2e | On every route of the TS-WEB-0004 D1 inventory in both locales, and on `/dein-ort` with a chosen place, after the live modules answered: every `a[href]` whose origin is neither the page's nor `SITE_ORIGIN` carries `target="_blank"`, a `rel` containing `noopener` and `noreferrer`, and an `aria-describedby` resolving to text that names the new tab (D18). `tel:` and `mailto:` links carry no `target`. No text naming the new tab ("neuen Tab", "new tab") is visible anywhere on those pages — every such text node sits in a visually hidden box (issue #100). |
+| TS-WEB-0016-A25 | static | In every component and page file, a raw `<a>` carries only a target that provably stays on the site (`href()`, `linkHref()`, or a literal starting with `/`, `#`, `?`, `mailto:`, `tel:`); every other link renders through `anchor`. No file but `anchor.tsx` writes `target` or `rel` on a link, and no `next/link` takes an `http(s):` literal (D18). |
 | TS-WEB-0016-A16 | static | Every value rendered in a contact row resolves from the hub record or the configured appointment URL — no phone number, WhatsApp number or contact e-mail address is hard-coded in a page, a component or a spec file. A row whose value does not resolve fails the build rather than rendering empty. |
 
 ## Coverage
@@ -699,7 +721,7 @@ over this route.
 | FUN-WEB-0184 (resolve it to that page's contact section) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
 | FUN-WEB-0205 (render the registration form as a visible embed) | D15, D6 · A22 |
 | FUN-WEB-0206 (render a notice of what loading the embedded form does, above the embed) | D15, D17 · A22 |
-| FUN-WEB-0185 (carry the Google Calendar appointment link as outbound navigation) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
+| FUN-WEB-0185 (carry the Google Calendar appointment link as outbound navigation) | D7, D12, D13, D14, D18 · A5, A12, A15, A16, A17, A18, A19, A20, A24, A25 |
 | FUN-WEB-0187 (complete request-product-briefing) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
 | FUN-WEB-0152 (carry make-contact as an intent) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
 | CON-WEB-0083 (never emit an event for an in-page action of …) | D7, D12, D13, D14 · A5, A12, A15, A16, A17, A18, A19, A20 |
