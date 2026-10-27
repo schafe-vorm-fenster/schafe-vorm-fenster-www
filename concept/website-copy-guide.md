@@ -214,6 +214,23 @@ the rule that governs every requirement). A proof line is a sentence (CG-027),
 not a string of keywords; a label that stands in for a sentence is a defect,
 not a style.
 
+### CG-044 — One job, one module, one heading
+
+A page says each job once. A module and the closing block never carry two
+headings for the same job, and a closing block that repeats a module's action
+is that module, not a second one beside it. Owner's review of 2026-10-27,
+`/dein-ort` (issue #86): *"Das erste und dritte Modul gehören zusammen und sind
+inhaltlich dasselbe."* — "So landet der Kalender auf deinem Homescreen", the
+context band, then "Einmal antippen, und er ist da, wo deine Apps sind." with
+the same handover.
+
+- Where a module's heading and a closing heading name the same job, the module
+  keeps the heading that names what it contains; the other is removed, not
+  reworded into a third (`DEC-0170` §4).
+- A proof quote is the end of a story, not a caption: it never stands as text
+  under a list of dates, and two quotes do not follow each other across a
+  section boundary (SRC-0014 §Page Rhythm, `DEC-0170`).
+
 ## 3. Concreteness
 
 ### CG-009 — Real people with roles, never "die Leute"

@@ -36,8 +36,11 @@ export interface StoryStageProps {
   readonly stories: readonly StageStory[];
   /** "Im Kalender" — the label over the live date. */
   readonly calendarLabel: string;
-  /** The module's onward action — a link, at secondary weight (one primary per page). */
-  readonly action?: ReactNode;
+  /*
+   * No onward action (DEC-0170, issue #85): the stage carried a link back up to
+   * the page's own dates ("Was heute bei dir los ist"), which the owner's
+   * review of 2026-10-27 found unneeded. Its one control is "Weiter um …".
+   */
   /** "Weiter um {time}" — `{time}` is the next story's hour. */
   readonly nextTemplate: string;
   /** "Von vorn" — the last story's way back to the first. */
@@ -70,7 +73,7 @@ function initials(name: string): string {
  * large media panel (photograph with the neutral scrim, or the violet ground
  * with the story's icon as a watermark) carrying the quote, beside a paper
  * panel with the hour tabs, the hour, the story, the live date "im Kalender"
- * and the onward actions. From `xl` media and panel stand 7 : 5 side by side;
+ * and "Weiter um …" — no onward action (DEC-0170). From `xl` media and panel stand 7 : 5 side by side;
  * below, they stack.
  *
  * Interaction without JavaScript: the hours are a native radio group. CSS
@@ -92,7 +95,6 @@ export function StoryStage({
   lead,
   stories: given,
   calendarLabel,
-  action,
   nextTemplate,
   restartLabel,
   pickerLabel,
@@ -214,7 +216,6 @@ export function StoryStage({
                         </div>
                       ) : null}
                       <div className={styles.actions}>
-                        {action}
                         {stories.length > 1 ? (
                           <label aria-hidden="true" className={styles.next} htmlFor={`${group}-${next}`}>
                             {next === 0 ? restartLabel : nextTemplate.replace("{time}", nextStory.time)}

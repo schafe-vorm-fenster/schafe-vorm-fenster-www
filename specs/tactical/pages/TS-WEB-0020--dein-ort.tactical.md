@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0011]
 sources: [SRC-0001, SRC-0002, SRC-0003]
-decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152, DEC-0153, DEC-0154, DEC-0159, DEC-0163, DEC-0167]
+decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152, DEC-0153, DEC-0154, DEC-0159, DEC-0163, DEC-0167, DEC-0170]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -36,7 +36,7 @@ types · `concept/website-design-system.md`.
 | `primaryConversion` | `save-calendar-to-homescreen`; no equal-weight second goal |
 | `audiences` | `rural-residents`, then `actors` (SRC-0003: "actors who do not yet know they are actors") |
 | `liveModules` | TS-WEB-0008 position 1 (dates in the place), position 2 (this week nearby), place search |
-| `proofSlots` | four `value-story` testimonial slots (D3), one per story |
+| `proofSlots` | three `value-story` testimonial slots (D3), one per story on the stage; story 4 has none, its example being a live list (DEC-0170) |
 | `emptyState` | `{ focusJob: publish-our-dates, primaryConversion: register-as-publisher }` |
 
 `emptyState` is a field only this page fills: TS-WEB-0006 A10 and TS-WEB-0010 D7 call the
@@ -48,12 +48,18 @@ TS-WEB-0006 D2, content types per TS-WEB-0007 D5:
 | 1 | focus block — place name, next dates, calendar handover | `hero` + `live-module-frame` | TS-WEB-0008 position 1 |
 | 2a | four value stories | `value-story` ×4 | D3 |
 | 2b | this week nearby | `live-module-frame` | TS-WEB-0008 position 2 |
-| 2c | homescreen block | `howto-block` | D4 |
+| 4 | closing block = the homescreen module | `howto-block` in `closing-cta` | D4, the primary conversion |
 | 3 | context band | `context-band` | layout, TS-WEB-0006 D5 |
-| 4 | closing CTA | `closing-cta` | the primary conversion |
 
-Blocks 2a–2c are this page's argument sequence, the rest is shared layout; the
+Blocks 2a–2b are this page's argument sequence, the rest is shared layout; the
 single ink section of Page Rhythm is block 1, where the live data sits.
+
+**Amended by DEC-0170 (owner's review 2026-10-27, issue #86).** The homescreen
+block (2c) and the closing CTA (4) were one job in two modules with the context
+band between them. They are one module now, the closing block, rendered by the
+layout **before** the band — the one page where block 4 precedes block 3
+(TS-WEB-0006 D2). Its heading is `dein-ort-7-homescreen`'s; the closing heading
+of `dein-ort-8-permanence` is removed.
 
 ### D2 — Two states, one route [FIXED: FUN-WEB-0153, FUN-WEB-0154, TS-WEB-0008 D3/D4, TS-WEB-0010 D7]
 
@@ -95,8 +101,7 @@ everything absent from it being identical in both states:
 | 1 CTA | `save-calendar-to-homescreen` → `{APP_HOST}/{slug}` | `register-as-publisher` → `/mitmachen` |
 | 2a examples | from the place (step 1) | from step 2 outwards, each labelled with its own place name (D3) |
 | 2b nearby | second evidence | **first** evidence — the chain starts here |
-| 2c homescreen | full block, secondary treatment | kept, demoted below 2b [PROPOSED] |
-| 4 closing CTA | the calendar handover | the publishing CTA, per TS-WEB-0006 D6 |
+| 4 closing block | the homescreen module: instructions for the place and the calendar handover as the repeat | the publishing CTA, per TS-WEB-0006 D6 — no homescreen instructions for an empty calendar (DEC-0170 §3, to be confirmed by the owner) |
 
 Unchanged in B: route, URL, canonical, `hreflang`, `<title>`, header, footer,
 context band, block order and every block's DOM position — the shift changes the
@@ -115,14 +120,16 @@ not a proof element that can lose a ranking.
 | 1 | the bakery van with its route | a recurring supply date in the place | `everyday-supply` | `google-baecker-schlatkow`, `homeoffice-mobile-anbieter` | `kurzweg-baeckerei` |
 | 2 | the council meeting, listed before it happens | an official/municipal date | `community-life` | `impftermine-landkreis` | `wendt-rubkow` (DEC-0152, was `zschiesche-gross-kiesow`) |
 | 3 | culture nobody would have searched for | a culture date | `culture-tourism` | **none** | `kulturlandbuero-broellin` / `eichler-wasserschloss-quilow` |
-| 4 | the fifteen-minute radius | position 2 rows, with their place names and each row's distance from the anchor | n/a — not a single-category story | `regional-footprint` | `zschiesche-gross-kiesow` (DEC-0152, was `wendt-rubkow`) |
+| 4 | the fifteen-minute radius | position 2 rows, with their place names and each row's distance from the anchor | n/a — not a single-category story | `regional-footprint` | **none** — its example is a live list, and no proof quote stands under a live list (DEC-0170, issue #84; was `zschiesche-gross-kiesow`, DEC-0152) |
 
 **Rendered as one story stage plus one section (DEC-0153).** Stories 1–3 are
 single-category stories and render together as one `story-stage` (SRC-0014
 §Story stage), "ein Tag im Dorf": 08:30 the bakery van, 17:00 the council,
 20:00 culture. Each hour carries its photograph, or the violet ground for the
 council, its quote, its story and **one live date of its own category** in
-the "Im Kalender" row (A14). Story 4 is its own argument with its own
+the "Im Kalender" row (A14). The stage carries **no onward action**: its link
+back up to the page's own dates ("Was heute bei dir los ist") is removed by
+DEC-0170 (issue #85), and its one control is "Weiter um …" (A25). Story 4 is its own argument with its own
 evidence module and stays a section of its own, carrying position 2. The
 stage stands **after** story 4, so the page's live-data `ink` section and the
 stage's ink ground never touch. Picking works without JavaScript (A16), and
@@ -174,11 +181,20 @@ cleared by launch.
 | Screenshots | design-system rules unchanged: a missing asset becomes the hatched surface, a non-matching one carries the placeholder badge. No mock screenshot is drawn |
 | Measurement | the click emits `save-calendar-to-homescreen` at stage `handover`. The install is off-web and cookielessly unobservable (TS-WEB-0012 D5) — the website counts the handover and claims nothing about completion |
 
-The goal has three call sites — block 1 (primary treatment, `data-cta="primary"`,
-above the fold), 2c and 4. Only block 1 carries the marker; 2c and 4 repeat the
-same goal id and target in the secondary treatment, and state B applies the same
-rule to `register-as-publisher`. Each click emits once (TS-WEB-0012 D4 rule 2); a call
-site is not a goal of its own.
+The goal has two call sites — block 1 (primary treatment, `data-cta="primary"`,
+above the fold) and block 4, the homescreen module, whose one control is the
+repeat (`data-cta="repeat"`). The nearby module's own "all dates" link fires the
+same goal and is part of that live module, not a call site of this page. Only
+block 1 carries the marker; block 4 repeats the same goal id, target and label,
+and state B applies the same rule to `register-as-publisher`. Each click emits
+once (TS-WEB-0012 D4 rule 2); a call site is not a goal of its own. Until
+DEC-0170 the homescreen block 2c was a third call site with its own app link.
+
+**One pattern for both platforms (DEC-0170 §5).** A mono platform label over an
+open numbered list, iPhone then Android, side by side from `xl`. Neither
+instruction stands behind a `details` disclosure (A24). In S0 the instructions
+name the showcase community, as the rest of S0 does, and the module's control is
+the place search (S0's primary repeated).
 
 ### D5 — Rendering, announcement, metadata [FIXED: TS-WEB-0009 D3/D7, TS-WEB-0011 D4/D9, TS-WEB-0002]
 
@@ -227,7 +243,7 @@ site is not a goal of its own.
 | ID | Level | Check |
 | --- | --- | --- |
 | TS-WEB-0020-A1 | static | `page.meta.ts` of `/dein-ort` declares exactly D1's values including `emptyState`; conversion ids resolve in `@schafe-vorm-fenster/goals`; both audiences resolve, in that order. |
-| TS-WEB-0020-A2 | e2e | Walk state A: `GET /api/places/search?q=<any covered place name>`, take a slug, confirm `GET /api/places/{slug}/events?window=now` is non-empty, open `/dein-ort?ort=<slug>` at 360 × 640. The `h1` is the place name; at most 3 date rows; exactly one element carries `data-cta="primary"`, it is the calendar handover, and it is fully visible without scrolling; the homescreen action and the closing CTA repeat the same goal id and target in the secondary treatment (D4). |
+| TS-WEB-0020-A2 | e2e | Walk state A: `GET /api/places/search?q=<any covered place name>`, take a slug, confirm `GET /api/places/{slug}/events?window=now` is non-empty, open `/dein-ort?ort=<slug>` at 360 × 640. The `h1` is the place name; at most 3 date rows; exactly one element carries `data-cta="primary"`, it is the calendar handover, and it is fully visible without scrolling; the closing block — the homescreen module — repeats the same goal id and target as `data-cta="repeat"` (D4, DEC-0170). |
 | TS-WEB-0020-A3 | e2e | Walk state B: probe `GET /api/places/{slug}/events?window=now` over covered slugs until one answers 200 with an empty list, then open `/dein-ort?ort=<that slug>`. Position 1 carries the publish offer; the primary CTA resolves to `/mitmachen`; URL, canonical, robots meta, `<title>`, header, footer, block set and block order are identical to state A; the `h1` is the place name at the same DOM index and the focus-block container is `role="status"`; no element carries error styling, a warning icon, a retry control or a spinner; the nearby module renders, states its own radius, and every row names a place other than the searched one. |
 | TS-WEB-0020-A15 | e2e | Every row the nearby module (D3 row 4, position 2) renders states its distance from the anchor place alongside its own place name — a place name with no distance fails. No two rows in the same render are identical across id, title and `startsAt`. [F-4-6/F-4-7, round 4] |
 | TS-WEB-0020-A4 | e2e | Four value stories render in both states: stories 1–3 as one `story-stage` with three hours, each with its picture or colour, and story 4 as its own section with the nearby module as evidence. No example names a place absent from geo-api, and nothing marks an example as a stand-in. (Amended by DEC-0153; it was "exactly four value-story sections".) |
@@ -240,11 +256,15 @@ site is not a goal of its own.
 | TS-WEB-0020-A22 | e2e | `/dein-ort` without `?ort=` never calls the photo route and renders no layer or label. With a place, the stage's box and the `h1`'s box are identical before and after the photograph lands, and the layout shift over the swap stays below 0.1 (DEC-0167, TS-WEB-0009-A8). |
 | TS-WEB-0020-A18 | e2e | At 360 × 800 the stage (`#focus-block`) carries exactly one place search in S0 and in state A, both `de` and `en`: the same 56 px field with the typeahead, the placeholder carrying the instruction in S0 ("Tipp den Ortsnamen ein") and the search for another place in state A ("Anderen Ort suchen" / "Search another place"), uncut; a bound label; no helper line; the "use my location" control at most 12 px under the field. The submit carries `data-cta="primary"` in S0 only; in state A the page still has exactly one primary (the handover) and exactly one place search (DEC-0159, issues #20, #23). |
 | TS-WEB-0020-A5 | static | The four stories' `proof_ref`s resolve to ids present in the installed `@schafe-vorm-fenster/proof` version; a missing id fails the build (a wrong id is a defect, an uncleared id is not). |
-| TS-WEB-0020-A6 | e2e | **Superseded, deviation recorded (D3, DEC-0149).** Written text: with every testimonial uncleared the page renders four three-part stories, no quote anywhere. Actual, shipped behaviour, per `e2e/pages/dein-ort.spec.ts`: four named, attributed, verbatim quotes render pre-clearance, each with a `clearance: pending` note; no anonymous quote, paraphrase, or "users say" substitute, ever — that half is unchanged and still the criterion. |
-| TS-WEB-0020-A7 | e2e | The homescreen block renders both the iOS and the Android instruction with an iPhone UA and with an Android UA, byte-identical DOM; its action resolves to `{APP_HOST}/{slug}`; a missing screenshot renders the hatched surface and a non-matching one the placeholder badge. |
-| TS-WEB-0020-A8 | integration | Clicking any of D4's three call sites emits `save-calendar-to-homescreen` with `stage=handover` exactly once and nothing else; in state B the page view carries the empty-state flag and the publish CTA emits no conversion event. |
+| TS-WEB-0020-A6 | e2e | **Superseded, deviation recorded (D3, DEC-0149).** Written text: with every testimonial uncleared the page renders four three-part stories, no quote anywhere. Actual, shipped behaviour, per `e2e/pages/dein-ort.spec.ts`: three named, attributed, verbatim quotes render pre-clearance on the stage, each with a `clearance: pending` note, and the radius story carries none (DEC-0170); no anonymous quote, paraphrase, or "users say" substitute, ever — that half is unchanged and still the criterion. |
+| TS-WEB-0020-A7 | e2e | The homescreen module renders both the iOS and the Android instruction with an iPhone UA and with an Android UA, byte-identical DOM; in state A its one action resolves to `{APP_HOST}/{slug}` and carries `data-cta="repeat"`; a missing screenshot renders the hatched surface and a non-matching one the placeholder badge. |
+| TS-WEB-0020-A23 | e2e | On `/dein-ort` and `/en/your-place`, in S0 and in state A (and on every other route, `e2e/module-rules.spec.ts`): no visible `blockquote` follows the last live row of its section; no section whose last visible text is a quote is followed by a section carrying a visible quote; the homescreen instructions render at most once (DEC-0170, issue #84). |
+| TS-WEB-0020-A24 | e2e | The homescreen module contains no `details` or `summary`; the iOS and the Android column each hold one platform label and an open numbered list (DEC-0170 §5, issue #86). |
+| TS-WEB-0020-A25 | e2e | In S0, in state A and on `/en/your-place` the story stage contains no in-page link (`a[href^="#"]`) and no "Was heute bei dir los ist" / "What is on near you today"; "Weiter um …" stands (DEC-0170, issue #85). |
+| TS-WEB-0020-A26 | e2e | In S0, in state A and on `/en/your-place` the page carries exactly one `#homescreen`, inside `#closing-cta`, and `#closing-cta` precedes `#context-band` in DOM order; the module holds exactly one control (the calendar handover in state A, the place search in S0); neither "Einmal antippen" nor "One tap, and it sits" renders (DEC-0170, issue #86). |
+| TS-WEB-0020-A8 | integration | Clicking any of D4's two call sites emits `save-calendar-to-homescreen` with `stage=handover` exactly once and nothing else; in state B the page view carries the empty-state flag and the publish CTA emits no conversion event. |
 | TS-WEB-0020-A9 | e2e | `/dein-ort` with no parameter, with `?ort=` empty, and with `?ort=<garbage>` each answer 200 in the search state; the garbage value is HTML-escaped wherever echoed and appears nowhere as data; a name that matches no place lands on `/dein-ort/starten?ort=…`, and no surface of the search field offers a postcode as an alternative. |
-| TS-WEB-0020-A10 | e2e | Stage 0 (no geo header, no referrer, no parameters, JavaScript disabled): search, the story stage, the radius story with its module, context band and closing CTA all render; no empty-state markup. (Amended by DEC-0153: the stage replaces three of the four story sections. Amended by DEC-0163: the "no unresolved skeleton" clause is withdrawn — live rows load in the browser and hold reserved skeletons without JavaScript.) |
+| TS-WEB-0020-A10 | e2e | Stage 0 (no geo header, no referrer, no parameters, JavaScript disabled): search, the story stage, the radius story with its module, the closing block (the homescreen module with the search) and the context band all render; no empty-state markup. (Amended by DEC-0153: the stage replaces three of the four story sections. Amended by DEC-0163: the "no unresolved skeleton" clause is withdrawn — live rows load in the browser and hold reserved skeletons without JavaScript.) |
 | TS-WEB-0020-A11 | integration | For `/dein-ort`, `?ort=<A slug>` and `?ort=<B slug>` the canonical is the parameter-free path, the robots directive is identical, and the JSON-LD graph contains `WebPage` and no `Event` node. |
 | TS-WEB-0020-A12 | e2e | With the BFF route delayed beyond 2 s the date box keeps its final geometry, shows no spinner, and is replaced by the honest empty state rather than a persisting skeleton; CLS over the full load stays < 0.1. |
 | TS-WEB-0020-A13 | manual | Content review before shipping: each story reads aspect → why it matters → example → testimonial and names exactly one mechanism (TS-WEB-0006 D7); the state-B copy names the place, offers publishing, and reads nowhere as a failure or an apology. |
@@ -274,7 +294,9 @@ TS-WEB-0004 D1a · FUN-WEB-0033, FUN-WEB-0150, FUN-WEB-0151, CON-WEB-0069 TS-WEB
   are `unverified`, so the launch render is four three-part stories — and story 3
   (culture) has **no cleared backing anecdote**, so in a place without a culture
   date it carries no evidence at all. → jan-henrik, content.
-- **The homescreen block in state B is [PROPOSED]**: keeping it offers a reader
+- ~~**The homescreen block in state B is [PROPOSED]**~~ **Settled by DEC-0170
+  §3, owner to confirm:** the homescreen module is the closing block, and in
+  state B the closing block is the publishing offer. Original point: keeping it offers a reader
   an empty calendar, dropping it leaves the page without a conversion of its own
   while B holds. D2 keeps it, demoted. → IA / jan-henrik.
 - **Window semantics decide who sees state B** (TS-WEB-0008 D3, [PROPOSED]): D2 reads

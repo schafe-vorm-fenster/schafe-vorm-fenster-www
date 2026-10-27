@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0001, FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136, FUN-WEB-0004, FUN-WEB-0005, FUN-WEB-0006, FUN-WEB-0007, FUN-WEB-0138, CON-WEB-0059, FUN-WEB-0009, FUN-WEB-0139, CON-WEB-0060, BUS-WEB-0015, FUN-WEB-0202, BUS-WEB-0016, FUN-WEB-0203]
 sources: [SRC-0001, SRC-0003, SRC-0017, SRC-0018]
-decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0110]
+decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0110, DEC-0170]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -66,6 +66,25 @@ Blocks 3 and 4 are rendered by the shared layout from `page.meta.ts`, not
 hand-placed per page — that is what makes "every page" enforceable rather
 than aspirational. After block 4 stand exactly two things: the contact
 section, then the global footer (TS-WEB-0004 D4).
+
+**One named exception to the order of 3 and 4: `/dein-ort`** [FIXED: DEC-0170,
+owner's review 2026-10-27, issue #86]. Where the page's conversion has a
+**module** of its own — the homescreen instructions with their handover — that
+module *is* the closing block, and a second module for the same job is
+forbidden (SRC-0014 §Module rules, "one module per job"). The closing block then
+ends the page's argument and the context band follows it:
+
+```text
+1  focus block · 2 argument blocks · 4 closing block (the module) · 3 context band
+```
+
+The layout still renders both (`PageFrame`, `closing.beforeBand`), so "every
+page" stays enforceable; after the band stand the contact section and the
+footer as everywhere. Every other page keeps 3 → 4: a closing block that only
+repeats a link or the search is not a module of its own, and `/`'s ink search
+block stays the last section (SRC-0014 §Page Rhythm). The exception deviates
+from SRC-0001 §2/§7 and is recorded on `FUN-WEB-0005` and `FUN-WEB-0006`
+(`DEM-0073`).
 
 **The contact section is not a block** [FIXED: DEC-0081]. One contact
 surface exists for the whole site — video appointment, WhatsApp, phone,
@@ -154,6 +173,11 @@ explicitly).
   repeat, an element this very table gives the primary treatment, on the
   secondary rung.
 
+  **A page whose conversion has a module of its own repeats it in that
+  module, never in a second one** [FIXED: DEC-0170]. The repeat rung is then
+  the module's one control — `/dein-ort`'s homescreen module carries the
+  calendar handover as `data-cta="repeat"` and is the closing block (D2).
+
   **Every explanatory module carries exactly one CTA, at secondary
   treatment, pointing at the deeper page's primary conversion.** That is
   the review's per-module rule and the one-primary rule in one sentence;
@@ -204,7 +228,7 @@ hand-written list, so it can never drift out of sync.
 | --- | --- |
 | Contents | exactly the three non-focus jobs, one entry each |
 | Phrasing | an offer in the visitor's own voice, not a menu: each entry names an audience and a content together, so a reader recognises whether it is meant for her. Wording is copy and is written in the content phase under SRC-0017 CG-030 — this spec states no example sentence and no grammatical form (DEC-0083) |
-| Position | after the last argument block, before the closing CTA (D2) |
+| Position | after the last argument block, before the closing CTA (D2) — on `/dein-ort` after the closing block, which is the page's own last module (D2's named exception, DEC-0170) |
 | Links | through the route facade (TS-WEB-0004 D3a/D5); targets from the job registry |
 | Treatment | secondary; never the primary treatment (D3) |
 | Form | a heading with a mono kicker, then one link card per job — icon well, label and blurb, arrow disc; the whole card is the link, a pill (SRC-0014 §Page chrome revised → Context band, DEC-0156; measured by TS-WEB-0017-A35) |
@@ -372,8 +396,8 @@ the promise is removed rather than softened.
 | TS-WEB-0006-A3 | e2e | At 360 × 640 and 1280 × 800 the primary conversion is fully visible without scrolling on every page that declares one, **except `/ueber-uns`**, where D3's named exception puts it in the closing block and the first viewport carries no `data-cta` at all (DEC-0082 amendment C). |
 | TS-WEB-0006-A4 | e2e | On every page whose focus job is "know what is on", the first screen contains the place-search or live-dates module and its primary conversion is not a link to another page. |
 | TS-WEB-0006-A5 | e2e | From every page, each of the four jobs is reachable in ≤ 1 click (header and context band targets resolve inside the TS-WEB-0004 D1 inventory). |
-| TS-WEB-0006-A6 | e2e | Every page renders exactly one context band, naming exactly the three non-focus jobs, in DOM order after the last argument block and before the closing block. |
-| TS-WEB-0006-A7 | e2e | The last block of every page is the closing CTA with the same conversion goal ID and target as the primary conversion — or, where `primaryConversion` is `null`, the merged three-job block. |
+| TS-WEB-0006-A6 | e2e | Every page renders exactly one context band, naming exactly the three non-focus jobs, in DOM order after the last argument block and before the closing block — **on `/dein-ort` after the closing block** (D2's named exception, DEC-0170). |
+| TS-WEB-0006-A7 | e2e | The last block of every page is the closing CTA with the same conversion goal ID and target as the primary conversion — or, where `primaryConversion` is `null`, the merged three-job block; on `/dein-ort` the closing block (the homescreen module) is the last block before the context band (DEC-0170). |
 | TS-WEB-0006-A8 | static | Content lint (SRC-0018): zero hits of the avoid list — SRC-0017 §9 plus the glossary's avoid column — in page copy; no section-title field contains a question mark (CG-005); every scene block declares exactly one `mechanism`. |
 | TS-WEB-0006-A9 | static | No role switcher, audience selector, or self-classification control exists in the component inventory or in any rendered page. |
 | TS-WEB-0006-A10 | e2e | Stage-0 render (no geo, no referrer, no UTM, no params) and stage-3 render of the same page have identical block structure and identical `focusJob`; only module selection and order differ. The `/dein-ort` empty state is the one registered exception. |
@@ -385,6 +409,7 @@ the promise is removed rather than softened.
 | TS-WEB-0006-A16 | manual | The copy rules SRC-0018 assigns to `review` pass for every slot before it is approved: a reader-directed question is answered in its block (CG-006), each section hands off to the next (CG-008), the benefit stands before the concept (CG-010), every claim carries an example (CG-011), no heading is flat or abstract (CG-017/CG-018), a proof card states a win (CG-027), and nothing on the page is literally untrue (CG-033). |
 | TS-WEB-0006-A17 | e2e | Every page renders exactly one contact section, in DOM order after the closing block and before the global footer. It contains no `data-cta="primary"`; its first action row is the only element on the site whose href is the configured appointment URL. No page anywhere renders a general contact form: no `form` element and no envoy mount point exists outside `/deine-region/angebot` and the order flow's invoice step. |
 | TS-WEB-0006-A18 | e2e | Every explanatory module (scene block, publishing path, price tier) contains exactly one CTA, and it carries `data-cta="secondary"` or `="equal-weight"`; the count of `data-cta="primary"` on the page is unchanged by their presence. |
+| TS-WEB-0006-A19 | e2e | On every route in both languages, and on `/dein-ort` in state A: no module repeats another's job — the homescreen instructions render at most once; no visible proof quote follows the last live row of its section; no section whose last visible text is a quote is followed by a section carrying a visible quote (SRC-0014 §Module rules, DEC-0170, `e2e/module-rules.spec.ts`). |
 
 ## Coverage
 

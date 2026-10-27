@@ -31,6 +31,22 @@ describe("TS-WEB-0020 D3: the testimonial is absent, not empty, when uncleared",
     expect(html).toContain("Vereinsvorsitzende");
   });
 
+  it("TS-WEB-0020-A23: renders no testimonial under a live-module example (DEC-0170, issue #84)", () => {
+    const html = renderToStaticMarkup(
+      <ValueStory
+        aspect="Was in fünfzehn Minuten Entfernung passiert"
+        example={<ol><li>Sommerfest, 12. September</li></ol>}
+        exampleLevel="surrounding"
+        exampleVariant="module"
+        testimonial={{ attribution: "Vereinsvorsitzende", text: "Endlich sehen alle unsere Termine." }}
+        whyItMatters="Was zwei Dörfer weiter läuft, gehört genauso in deinen Kalender."
+      />,
+    );
+    expect(html).toContain("Sommerfest");
+    expect(html).not.toContain("<blockquote");
+    expect(html).not.toContain("Endlich sehen alle unsere Termine.");
+  });
+
   it("labels the example with the place or county name from the ladder", () => {
     const html = renderToStaticMarkup(
       <ValueStory

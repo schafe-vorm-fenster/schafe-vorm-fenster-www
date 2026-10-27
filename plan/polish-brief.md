@@ -437,6 +437,12 @@ on the page may be a primary button.
    Story 4 *is* the radius argument; let it carry the five nearby rows
    as its own example, with the kicker `EINEN ORT WEITER`. One list,
    placed where it argues. Saves ~650 px.
+> **Items 6 and 7 are superseded by DEC-0170** (owner's review 2026-10-27,
+> issue #86): the homescreen block and the closing block are one module, the
+> closing block, with both platforms open in one pattern (no `details`), the
+> heading „So landet der Kalender auf deinem Homescreen" and the context band
+> after it. „Einmal antippen …" is removed.
+
 6. **Homescreen block:** keep both platforms, but collapse them into one
    two-column row at 390 px is not possible — instead set the iOS steps
    open and Android behind a `details` summary „Android" so the block

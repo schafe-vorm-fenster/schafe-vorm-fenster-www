@@ -207,8 +207,6 @@ Kalender für diesen Ort existiert bereits und wartet.
 
 **Einleitung:** Drei Menschen erzählen, warum das in einen Kalender gehört.
 
-**Aktion:** Was heute bei dir los ist
-
 **Weiter:** Weiter um {time}
 
 **Von vorn:** Von vorn
@@ -216,6 +214,8 @@ Kalender für diesen Ort existiert bereits und wartet.
 **Im Kalender:** Im Kalender
 
 **Auswahl:** Uhrzeit wählen
+
+<!-- note: Kein Link „Was heute bei dir los ist" zurück nach oben (DEC-0170, Review 2026-10-27, Issue #85). Die Bühne hat genau eine Bedienung, „Weiter um …". -->
 
 ## Slot 3 — Value Story 1: der Bäckerwagen
 
@@ -354,17 +354,7 @@ Vorpommern-Greifswald bis zur Landkreis-Schnittstelle in
 Baden-Württemberg (`regional-footprint`, `cleared`, qualitative Aussage,
 keine Reichweitenzahl).
 
-**Testimonial:** Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow — Wortlaut in der Belegkarte unten.
-
-<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; clearance: pending (usage_rights unverified, Q-0014) -->
-
-### Belegkarte zur Story 4
-
-<!-- clearance: pending — `wendt-rubkow` steht auf `usage_rights: unverified` (Q-0014). -->
-<!-- source_note: Wortlaut unverändert aus dem Evidence-Block des Belegs. -->
-<!-- id: dein-ort-6-story-radius-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; status: draft -->
-
-**Testimonial:** „Für dieses Projekt sehe ich unsere Landbevölkerung, aber auch mobile Händler als Gewinner." — Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow (2022)
+<!-- note: Kein Testimonial (DEC-0170, Review 2026-10-27, Issue #84). Das Beispiel dieser Story ist eine Live-Liste („diese Woche in der Nähe"), und unter einer Live-Liste steht kein Belegzitat: Das Zitat von Dr. A. Zschiesche (`zschiesche-gross-kiesow`) stand als Text unter den Terminen, und der nächste Block, die Geschichten-Bühne, beginnt selbst mit einem Zitat. Die Belegkarte zur Story 4 ist entfallen. -->
 
 ## Slot 7 — Homescreen-Block
 
@@ -377,16 +367,24 @@ keine Reichweitenzahl).
 **Android:** Öffne den Kalender von {place} in Chrome. Tipp auf das Menü (drei Punkte), dann auf „Zum Startbildschirm hinzufügen". Fertig.
 
 Beide Anleitungen stehen immer nebeneinander, unabhängig vom Gerät der
-Besucherin (kein User-Agent-Sniffing, TS-WEB-0020 D4). In Zustand B rückt
-dieser Block hinter das Nachbarschafts-Modul.
+Besucherin (kein User-Agent-Sniffing, TS-WEB-0020 D4), beide im selben
+Muster: Plattform-Label über einer offenen nummerierten Liste.
+
+Seit DEC-0170 (Review 2026-10-27, Issue #86) ist dieser Block der
+Abschlussblock der Seite: Überschrift, die zwei Anleitungen und genau
+eine Aktion — in Zustand A „Kalender von {place} auf den Homescreen
+legen" (Slot 1), in S0 die Ortssuche —, darunter die Zusicherung aus
+Slot 8; das Kontextband folgt danach. Die Überschrift ist die dieses
+Slots; die frühere Abschluss-Überschrift „Einmal antippen, und er ist
+da, wo deine Apps sind." aus Slot 8 ist entfallen, weil zwei
+Überschriften für denselben Job zwei Module behaupten. In Zustand B
+steht hier das Angebot zum Veröffentlichen, keine Homescreen-Anleitung.
 
 ## Slot 8 — CTA-Zusicherung (Permanenz-Versprechen)
 
 <!-- id: dein-ort-8-permanence; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
 **Zusicherungstext:** Kostenlos, ohne Anmeldung, dauerhaft: keine Einführungsstufe, die später wieder verschwindet.
-
-**Abschluss-Überschrift:** Einmal antippen, und er ist da, wo deine Apps sind.
 
 **Anderer Ort:** Anderer Ort?
 

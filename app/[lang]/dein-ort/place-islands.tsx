@@ -286,54 +286,49 @@ export function StoryExample({ storyId, locale }: { readonly storyId: string; re
   return <EventList items={[item]} locale={locale} reserve rowCount={1} state={pool.envelope.demo ? "mocked" : "ready"} />;
 }
 
-export interface HomescreenCopy {
-  readonly locale: Locale;
-  readonly headline: string;
-  readonly ios: string;
-  readonly android: string;
-  readonly ctaTemplate: string;
-}
-
-/**
- * TS-WEB-0020 D4 — the homescreen block, which names a place and links the
- * app: the stated place, or the showcase community in S0.
- */
-export function PlaceHomescreen({ locale, headline, ios, android, ctaTemplate }: HomescreenCopy) {
-  const anchor = anchorOf(usePageState());
-  const appHref = calendarUrlForSlug(anchor.slug, { resolved: true }) ?? "";
-
-  return (
-    <HowtoBlock
-      android={{ steps: splitSteps(fillTemplate(android, { place: anchor.name })) }}
-      appHref={appHref}
-      appLinkLabel={fillTemplate(ctaTemplate, { place: anchor.name })}
-      // The iPhone steps stand open and Android is one tap away: both
-      // instructions are in the DOM for every visitor, under every user agent.
-      collapsed={["android"]}
-      conversion={{ ...SAVE_CALENDAR, attributes: { place: anchor.slug } }}
-      headline={headline}
-      ios={{ steps: splitSteps(fillTemplate(ios, { place: anchor.name })) }}
-      locale={locale}
-    />
-  );
-}
-
 /** Children that stand in state B only — the quiet "different place?" line. */
 export function OnlyInStateB({ children }: { readonly children: ReactNode }) {
   return usePageState().kind === "b" ? <>{children}</> : null;
 }
 
+/** The homescreen module's copy — `dein-ort-7-homescreen`, read on the server. */
+export interface HomescreenCopy {
+  readonly headline: string;
+  readonly ios: string;
+  readonly android: string;
+}
+
 export interface PlaceClosingProps {
   readonly copy: PlaceCopy;
-  /** The permanence promise (cleared content) and the module heading. */
+  readonly homescreen: HomescreenCopy;
+  /** The permanence promise (cleared content, `community-calendar` `price.note`). */
   readonly reassurance?: string;
-  readonly moduleHeading?: string;
   /** S0's closing search — the module repeated (TS-WEB-0006 D6). */
   readonly s0Search: ReactNode;
 }
 
-/** The closing block, in whichever state the page is in (G-6, TS-WEB-0006 D6). */
-export function PlaceClosing({ copy, reassurance, moduleHeading, s0Search }: PlaceClosingProps) {
+/**
+ * The closing block, in whichever state the page is in (G-6, TS-WEB-0006 D6) —
+ * and since DEC-0170 the page's **one** homescreen module (issue #86).
+ *
+ * Before, the page carried the homescreen instructions as block 2c with an app
+ * link of their own, then the context band, then a closing block whose
+ * heading ("Einmal antippen …") and button repeated the same handover: one job,
+ * two modules, the band between them. Now the instructions and the one control
+ * are one module, it closes the page's argument, and the band follows it
+ * (`beforeBand` in `PageFrame`).
+ *
+ * - **State A:** the instructions for the stated place, and the calendar
+ *   handover as the closing repeat (`data-cta="repeat"`), with the permanence
+ *   promise under it.
+ * - **S0:** the same instructions on the showcase community's examples, as the
+ *   rest of S0 is, and the place search as the control — S0's primary is the
+ *   search, so its repeat is the search (TS-WEB-0006 D6).
+ * - **State B:** the conversion shifts to `register-as-publisher`; the block is
+ *   the publishing offer and carries no homescreen instructions for a calendar
+ *   that is still empty (DEC-0170 §3).
+ */
+export function PlaceClosing({ copy, homescreen, reassurance, s0Search }: PlaceClosingProps) {
   const state = usePageState();
 
   if (state.kind === "b") {
@@ -350,7 +345,8 @@ export function PlaceClosing({ copy, reassurance, moduleHeading, s0Search }: Pla
     );
   }
 
-  const node =
+  const anchor = anchorOf(state);
+  const action =
     state.kind === "a" ? (
       <ConversionTracker
         attributes={{ ...SAVE_CALENDAR, place: state.place.slug }}
@@ -371,9 +367,18 @@ export function PlaceClosing({ copy, reassurance, moduleHeading, s0Search }: Pla
       s0Search
     );
 
+  // Both instructions, always, for every visitor: no user-agent sniffing, no
+  // install probe (TS-WEB-0020 D4), and both in the same open pattern.
   return (
-    <ClosingCtaModule heading={moduleHeading} reassurance={reassurance}>
-      {node}
+    <ClosingCtaModule reassurance={reassurance}>
+      <HowtoBlock
+        action={action}
+        android={{ steps: splitSteps(fillTemplate(homescreen.android, { place: anchor.name })) }}
+        headline={homescreen.headline}
+        id="homescreen"
+        ios={{ steps: splitSteps(fillTemplate(homescreen.ios, { place: anchor.name })) }}
+        locale={copy.locale}
+      />
     </ClosingCtaModule>
   );
 }

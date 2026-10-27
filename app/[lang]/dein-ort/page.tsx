@@ -1,4 +1,3 @@
-import { Button } from "@/src/components/button/button";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
@@ -21,7 +20,6 @@ import {
   OnlyInStateB,
   PlaceClosing,
   PlaceHero,
-  PlaceHomescreen,
   PlaceHop,
   PlaceModuleSlot,
   PlaceNearby,
@@ -44,10 +42,12 @@ import type { Metadata } from "next";
  * put it where your apps are. Every section names its role in a kicker, and
  * the three lines between the stories are hand-offs, not claims.
  *
- * Blocks in DOM order: focus block · the live dates · four value stories, one
- * section each on alternating grounds · homescreen block · (a place is known:
- * the quiet "different place?" search) · context band · closing CTA. The last
- * two come from `page.meta.ts` through `PageFrame`.
+ * Blocks in DOM order: focus block · the live dates · the radius story with
+ * the nearby rows · the story stage · (state B: the quiet "different place?"
+ * search) · the closing block, which **is** the homescreen module · context
+ * band. The last two come from `page.meta.ts` through `PageFrame`; since
+ * DEC-0170 the closing block stands before the band (owner's review
+ * 2026-10-27, issue #86).
  *
  * **What the polish pass changed, and why.** Round 3 rendered the four
  * stories as one 1320 px `paper` block — heading, paragraph, row, heading,
@@ -56,8 +56,10 @@ import type { Metadata } from "next";
  * ended in a row. The four quotes the artifact carries (Kurzweg, Zschiesche,
  * Eichler, Wendt) rendered nowhere at all. Now each story is its own
  * section with its own ground, two of the four are picture-led, story 4
- * *is* position 2 rather than being followed by it, and every story closes
- * on the testimonial that belongs to it. The quotes are `clearance: pending`
+ * *is* position 2 rather than being followed by it, and every stage story
+ * closes on the testimonial that belongs to it. Story 4 carries none: its
+ * example is a live list, and a quote under a list of dates is no
+ * testimonial of the story (DEC-0170, issue #84). The quotes are `clearance: pending`
  * (Q-0014) and the brief decides to render them: they are real, attributed
  * sentences from the hub, and the hardening round before go-live clears
  * them.
@@ -81,7 +83,7 @@ import type { Metadata } from "next";
  * no-JS requirement for the place states on 2026-10-13 (DEC-0163 §4).
  *
  * **Page rhythm:** PHOTO hero · ink (the live-data anchor, once) · paper ·
- * lime-100 · paper · surface · lime-500 · (lime-100) · surface · paper.
+ * lime-100 · paper · surface · (lime-100) · paper · surface.
  */
 
 const ROUTE = "place" as const;
@@ -147,7 +149,7 @@ export default async function PlacePage({ params }: { params: Promise<{ lang: st
   const stateS0 = slot(page, "dein-ort-0-state-s0");
   const stateA = slot(page, "dein-ort-1-state-a");
   const stateB = slot(page, "dein-ort-2-state-b");
-  const homescreen = slot(page, "dein-ort-7-homescreen");
+  const homescreenSlot = slot(page, "dein-ort-7-homescreen");
   const permanence = slot(page, "dein-ort-8-permanence");
   const radiusStory = slot(page, RADIUS_STORY.slotId);
 
@@ -242,10 +244,17 @@ export default async function PlacePage({ params }: { params: Promise<{ lang: st
       closing={{
         variant: "module",
         bare: true,
+        // DEC-0170: the closing block is the homescreen module, and the band
+        // of the other three jobs follows it (issue #86).
+        beforeBand: true,
         node: (
           <PlaceClosing
             copy={copy}
-            moduleHeading={fieldAt(permanence.blocks, 1)}
+            homescreen={{
+              headline: fieldAt(homescreenSlot.blocks, 0) ?? "",
+              ios: fieldAt(homescreenSlot.blocks, 1) ?? "",
+              android: fieldAt(homescreenSlot.blocks, 2) ?? "",
+            }}
             // The permanence promise is cleared content (`community-calendar`
             // `price.note`, publicly committed since 2022), so it may stand.
             reassurance={fieldAt(permanence.blocks, 0)}
@@ -294,7 +303,6 @@ export default async function PlacePage({ params }: { params: Promise<{ lang: st
             exampleLevel="surrounding"
             exampleVariant="module"
             headingLevel="h2"
-            testimonial={testimonialOf(slot(page, RADIUS_STORY.quoteSlotId))}
             whyItMatters={fieldAt(radiusStory.blocks, 1) ?? ""}
           />
         </SectionShell>
@@ -303,49 +311,34 @@ export default async function PlacePage({ params }: { params: Promise<{ lang: st
       {/* Block 2a — the story stage (DEC-0153): the three single-category
           stories as one module, "ein Tag im Dorf". Each hour carries its
           picture or colour, its quote and one live date of its own category
-          (TS-WEB-0020 D3, A14). */}
+          (TS-WEB-0020 D3, A14). No onward link back up to the dates: its one
+          control is "Weiter um …" (DEC-0170, issue #85). */}
       <MotionReveal>
         <StoryStage
-          action={
-            <Button href="#focus-block" onward variant="primary-light">
-              {fieldAt(stage.blocks, 3) ?? ""}
-            </Button>
-          }
-          calendarLabel={fieldAt(stage.blocks, 6) ?? ""}
+          calendarLabel={fieldAt(stage.blocks, 5) ?? ""}
           headline={fieldAt(stage.blocks, 1) ?? ""}
           id="story-stage"
           kicker={fieldAt(stage.blocks, 0) ?? ""}
           lead={fieldAt(stage.blocks, 2)}
-          nextTemplate={fieldAt(stage.blocks, 4) ?? "{time}"}
-          pickerLabel={fieldAt(stage.blocks, 7) ?? ""}
-          restartLabel={fieldAt(stage.blocks, 5) ?? ""}
+          nextTemplate={fieldAt(stage.blocks, 3) ?? "{time}"}
+          pickerLabel={fieldAt(stage.blocks, 6) ?? ""}
+          restartLabel={fieldAt(stage.blocks, 4) ?? ""}
           stories={stageStories}
         />
       </MotionReveal>
 
-      {/* Block 2c — the homescreen block. Both instructions, always, for
-          every visitor: no user-agent sniffing, no install probe (TS-WEB-0020 D4). */}
-      <MotionReveal>
-        <SectionShell id="homescreen" kicker={words.kickers.howItWorks} surface="lime-500">
-          <PlaceHomescreen
-            android={fieldAt(homescreen.blocks, 2) ?? ""}
-            ctaTemplate={stateA.cta ?? ""}
-            headline={fieldAt(homescreen.blocks, 0) ?? ""}
-            ios={fieldAt(homescreen.blocks, 1) ?? ""}
-            locale={locale}
-          />
-        </SectionShell>
-      </MotionReveal>
+      {/* The homescreen module is the closing block now (DEC-0170, issue
+          #86): `PlaceClosing`, rendered by `PageFrame` before the band. */}
 
       {/* The search, once a place is known and has no dates: state B's stage
           carries the publishing offer and no search, so this quiet line above
-          the band is where "a different place?" lives. State A keeps the
-          search in the stage itself (issue #23); S0's closing block is the
-          search. */}
+          the closing block is where "a different place?" lives. State A keeps
+          the search in the stage itself (issue #23); S0's closing block
+          carries the search. */}
       <OnlyInStateB>
         <MotionReveal>
           <SectionShell density="tight" id="other-place" labelledBy="other-place-heading" surface="lime-100">
-            <h2 id="other-place-heading">{fieldAt(permanence.blocks, 2)}</h2>
+            <h2 id="other-place-heading">{fieldAt(permanence.blocks, 1)}</h2>
             {search({ hero: false, primary: false, placeholder: aPlaceholder })}
           </SectionShell>
         </MotionReveal>

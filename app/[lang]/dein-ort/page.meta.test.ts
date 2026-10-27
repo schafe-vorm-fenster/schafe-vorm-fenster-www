@@ -19,7 +19,13 @@ describe("TS-WEB-0020-A1: the page manifest of `/dein-ort`", () => {
     expect(PLACE_META.primaryConversion).toBe("save-calendar-to-homescreen");
     expect(PLACE_META.equalWeightConversion).toBeUndefined();
     expect(PLACE_META.audiences).toEqual(["rural-residents", "actors"]);
-    expect(PLACE_META.proofSlots).toHaveLength(4);
+    // Three: one per stage story. The radius story's example is a live list
+    // and carries no quote (DEC-0170, issue #84).
+    expect(PLACE_META.proofSlots).toEqual([
+      "dein-ort-3-story-baeckerwagen",
+      "dein-ort-4-story-ratssitzung",
+      "dein-ort-5-story-kultur",
+    ]);
     expect(checkPageMeta(PLACE_META)).toEqual([]);
   });
 

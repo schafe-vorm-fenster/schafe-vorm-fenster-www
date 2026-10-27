@@ -206,8 +206,6 @@ place already exists and is waiting.
 
 **Lead:** Three people tell why it belongs in one calendar.
 
-**Action:** What is on near you today
-
 **Next:** Next at {time}
 
 **From the start:** From the start
@@ -215,6 +213,8 @@ place already exists and is waiting.
 **In the calendar:** In the calendar
 
 **Picker:** Choose a time
+
+<!-- note: No "What is on near you today" link back up the page (DEC-0170, review 2026-10-27, issue #85). The stage has one control, "Next at …". -->
 
 ## Slot 3 — Value story 1: the bakery van
 
@@ -353,17 +353,7 @@ time in Vorpommern-Greifswald to the county-level interface in
 Baden-Württemberg (`regional-footprint`, `cleared`, a qualitative
 statement, no reach figure).
 
-**Testimonial:** Dr. A. Zschiesche, mayor of Groß Kiesow — wording on the proof card below.
-
-<!-- testimonial_pool: ["@schafe-vorm-fenster/proof@0.3.5#wendt-rubkow"]; clearance: pending (usage_rights unverified, Q-0014) -->
-
-### Proof card for story 4
-
-<!-- clearance: pending — `wendt-rubkow` is `usage_rights: unverified` (Q-0014). -->
-<!-- source_note: wording unchanged from the record's evidence block. The quote is not translated. -->
-<!-- id: dein-ort-6-story-radius-demo-testimonial; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; status: draft -->
-
-**Testimonial:** „Für dieses Projekt sehe ich unsere Landbevölkerung, aber auch mobile Händler als Gewinner." — Dr. A. Zschiesche, Bürgermeisterin Groß Kiesow (2022)
+<!-- note: No testimonial (DEC-0170, review 2026-10-27, issue #84). This story's example is a live list ("this week nearby"), and no proof quote stands under a live list: Dr. A. Zschiesche's quote (`zschiesche-gross-kiesow`) stood as text under the dates, and the next block, the story stage, opens on a quote of its own. The proof card for story 4 is gone. -->
 
 ## Slot 7 — Home screen block
 
@@ -376,16 +366,23 @@ statement, no reach figure).
 **Android:** Open the {place} calendar in Chrome. Tap the menu (three dots), then "Add to Home screen". Done.
 
 Both instructions always sit side by side, regardless of the visitor's
-device (no user-agent sniffing, TS-WEB-0020 D4). In state B, this block
-moves behind the neighbourhood module.
+device (no user-agent sniffing, TS-WEB-0020 D4), both in the same pattern:
+a platform label over an open numbered list.
+
+Since DEC-0170 (review 2026-10-27, issue #86) this block is the page's
+closing block: the heading, the two instructions and exactly one action —
+in state A "Add the {place} calendar to your home screen" (slot 1), in S0
+the place search — with slot 8's reassurance under it; the context band
+follows. The heading is this slot's; the former closing heading "One tap,
+and it sits where your apps sit." from slot 8 is gone, because two
+headings for one job claim two modules. In state B the block is the
+publishing offer, not a home-screen instruction.
 
 ## Slot 8 — CTA reassurance (permanence promise)
 
 <!-- id: dein-ort-8-permanence; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
 **Reassurance text:** Free, no sign-up, permanent: no introductory tier that quietly disappears later.
-
-**Closing heading:** One tap, and it sits where your apps sit.
 
 **Different place:** Different place?
 
