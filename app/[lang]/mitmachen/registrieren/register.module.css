@@ -4,15 +4,14 @@
  * media query (TS-WEB-0017 D2/D3, `pnpm check:brand`).
  */
 
-/* The notice (TS-WEB-0016 D17): one block above the frame, read at body size. */
+/*
+ * The notice (TS-WEB-0016 D17): one block above the frame, read at body size.
+ * The space between the heading, the notice, the fallback link and the frame
+ * is the section's content stack's (DEC-0171) — no block here carries an
+ * outer margin of its own.
+ */
 .notice {
-  margin: 0 0 var(--space-3);
   max-width: var(--measure-text);
-}
-
-/* The fallback link and its marking, between the notice and the frame. */
-.fallback {
-  margin: 0 0 var(--space-4);
 }
 
 /*

@@ -77,7 +77,7 @@ export default async function Page({ params }: { params: Promise<{ lang: string 
         <p className={styles.notice} data-block="embed-notice" data-demo="true">
           {words.start.notice} <a href={linkHref("legal", { locale, hash: "datenschutz" })}>{words.start.noticeLink}</a>
         </p>
-        <p className={styles.fallback} data-block="register-form-fallback" data-demo="true">
+        <p data-block="register-form-fallback" data-demo="true">
           <ConversionTracker attributes={{ via: "new-tab" }} goalId="register-as-publisher" stage="handover">
             <OutboundLink
               dataCta="secondary"
