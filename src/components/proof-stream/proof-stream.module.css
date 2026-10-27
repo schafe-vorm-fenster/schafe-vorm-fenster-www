@@ -31,15 +31,25 @@
 }
 
 /*
- * G-7 — one emphasis per stream. A single column at every width: the first
- * child is the feature card, the rest are `compact` rows whose own hairline
- * separates them, so the gap between children is zero.
+ * G-7, DEC-0172 §1 — one emphasis per stream. Below `xl` one column: the
+ * feature item, then the compact ones, each flat on the section ground with
+ * its own hairline above it, so the gap between children is zero. From `xl`
+ * the feature item keeps the whole row and the others stand side by side,
+ * 6 + 6 — a stream of three no longer leaves the right half of the
+ * container empty (review 2026-10-27, #91).
  */
 .rows {
   gap: 0;
   grid-template-columns: minmax(0, 1fr);
 }
 
-.rows > :first-child {
-  margin-bottom: var(--space-4);
+@media (min-width: 64rem) {
+  .rows {
+    column-gap: var(--grid-gap);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .rows > :first-child {
+    grid-column: 1 / -1;
+  }
 }

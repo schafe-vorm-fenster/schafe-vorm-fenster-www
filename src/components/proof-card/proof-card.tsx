@@ -36,10 +36,12 @@ export interface ProofCardProps extends DataStateProps {
    */
   readonly geo?: GeoBadgeFragment;
   /**
-   * How much of the stream's emphasis this card carries (G-7). `feature` is
-   * the one card that opens a stream — its claim is set at sub-head size and
-   * it keeps its surface; `compact` is a hairline-separated row with no fill
-   * and no badge. One emphasis per stream, not seven.
+   * How much of the stream's emphasis this card carries (G-7, DEC-0172 §1).
+   * Either value switches the card to the stream form: a flat item on the
+   * section ground — no fill, a hairline above — with the claim first and a
+   * byline (initials well · name · role) under it. `feature` is the one item
+   * that opens a stream, its claim at sub-head size; `compact` carries the
+   * claim at card size. One emphasis per stream, not seven.
    */
   readonly emphasis?: "feature" | "compact";
   /** Present only where the content type expects an image at all. */
@@ -71,6 +73,22 @@ export interface ProofCardProps extends DataStateProps {
  * it); the ratio is declared before the image loads.
  * A11y: the quote's attribution is text, not baked into an image.
  */
+/**
+ * The byline's monogram: the first letter of the first and of the last word
+ * that starts with a capital, skipping academic titles ("Dr. A. Zschiesche" →
+ * "AZ", "Stiftung Lebendiges Lehre" → "SL"). Decoration only — the name is
+ * text beside it, and the well is hidden from assistive technology.
+ */
+export function initialsOf(name: string): string {
+  const words = name
+    .split(/[\s·]+/)
+    .filter((word) => /^\p{Lu}/u.test(word) && !/^(Dr|Prof)\.?$/.test(word));
+  if (words.length === 0) return name.trim().charAt(0).toUpperCase();
+  const first = words[0]?.charAt(0) ?? "";
+  const last = words.length > 1 ? (words.at(-1)?.charAt(0) ?? "") : "";
+  return `${first}${last}`.toUpperCase();
+}
+
 export function ProofCard({
   contextLine,
   claim,
@@ -116,25 +134,38 @@ export function ProofCard({
         />
       ) : null}
       <div className={styles.body}>
-        {/*
-          A compact row carries its provenance on **one** line — "Nordkurier ·
-          Juni 2018" — rather than a source line above the claim and a date
-          line under it. Six rows of three lines each is 1401 px of section
-          at 390 px, past G-4's own budget; six rows of two is not, and the
-          source and its date were always one fact anyway.
-        */}
-        {emphasis === "compact" ? (
-          <p className={styles.context}>
-            {[contextLine, attribution].filter(Boolean).join(" · ")}
-          </p>
+        {emphasis ? (
+          /*
+           * The stream forms (DEC-0172 §1, SRC-0014 §Proof stream): the words
+           * first, then who said or did it — the order of a quote card, so a
+           * claim and a quote read alike on every page. The byline is a 40 px
+           * initials well (decoration, the icon well's size and fill, never a
+           * control) beside the name in mono and the role under it. No record
+           * carries a cleared portrait or logo for a voice today; when one
+           * does, it takes the well's place.
+           */
+          <>
+            <p className={styles.claim}>{claim}</p>
+            <div className={styles.byline}>
+              <span aria-hidden="true" className={styles.initials} data-initials>
+                {initialsOf(contextLine)}
+              </span>
+              <p className={styles.who}>
+                <span className={styles.name}>{contextLine}</span>
+                {attribution ? <span className={styles.role}>{attribution}</span> : null}
+              </p>
+            </div>
+          </>
         ) : (
-          <div className={styles.meta}>
-            <p className={styles.context}>{contextLine}</p>
-            {geo ? <Badge tone="neutral">{geo.label}</Badge> : null}
-          </div>
+          <>
+            <div className={styles.meta}>
+              <p className={styles.context}>{contextLine}</p>
+              {geo ? <Badge tone="neutral">{geo.label}</Badge> : null}
+            </div>
+            <p className={styles.claim}>{claim}</p>
+            <p className={styles.attribution}>{attribution}</p>
+          </>
         )}
-        <p className={styles.claim}>{claim}</p>
-        {emphasis === "compact" ? null : <p className={styles.attribution}>{attribution}</p>}
         {link ? (
           <div className={styles.link}>
             {link.to ? (

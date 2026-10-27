@@ -178,7 +178,7 @@ the next few weeks." The place name comes from
 The dates arrive the way they arrive — and they all land on your website
 anyway.
 
-**Sources:** WhatsApp · Google Calendar · your own website
+**Sources:** WhatsApp · Google Calendar · local groups' websites
 
 **Target:** your website
 
@@ -202,7 +202,7 @@ Including dates from clubs that simply sent their flyer over WhatsApp.
 Kicker, headings, benefit sentence and the six setting sentences are the
 ones in `Design -. Portalize Einstellungen 1.png` /
 `Design -. Portalize Einstellungen 2.png` and the 2026-09-22 review
-("What it holds is up to you"). Three deviations, each with a source:
+("What it holds is up to you"). The deviations, each with a source:
 
 - **No radius** under Places — `plan/reviews/2026-09-23/spec-impact.md`
   line 315: "Umkreis" is in no offering record and collides with
@@ -215,6 +215,12 @@ ones in `Design -. Portalize Einstellungen 1.png` /
   marking of stand-in content). `setting-row` already sets the core
   sentence and the example apart typographically, so the label says nothing
   the row does not show.
+- **"local groups' websites" instead of "club website" and instead of "your
+  own website"** (DEC-0172 §3). The sources are the local groups' channels;
+  the target is your website. CG-040 replaces "club website" with "your own
+  website", which put nearly the same words beside the target "your website"
+  for two different places (review 2026-10-27, #96). "Local groups" is what
+  row 3 of the comparison already calls the same people.
 - **Window without example and chips**, carrying the "being checked"
   marker instead (review: "we have to look at what Portalize actually
   does"). The marker is the placeholder badge, not copy.

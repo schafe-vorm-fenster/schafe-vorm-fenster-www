@@ -456,7 +456,8 @@ Column spans at the full 1200 px (column 78 px, gutter 24 px):
 | Running text | At most 7 columns (≈ 690 px, about 65 characters), and never wider than `measure.text` |
 | Headlines | At most 8 columns |
 | Two-column | Section head in columns 1–4, list in columns 5–12 |
-| Comparison | 6 + 6, for example *today* against *with your calendar* |
+| Comparison | 6 + 6, for example *today* against *with your calendar* (*Comparison*) |
+| Flow | Sources · arrow · target in one row (*Source-to-target flow*) |
 | Buttons | Side by side with a 12 px gap (`space-3`), wrapping when they do not fit |
 
 **The grid is horizontal only.** Container, columns and spans fix width and
@@ -1330,6 +1331,61 @@ page never styles directly. The only way in is the widget's own
   widget. TS-WEB-0024-A20 reads every text in the rendered shadow root
   against its composited ground and holds it to 4.5:1, or 3:1 for large
   text and control borders.
+### Proof stream
+
+**A page's customer proof, as voices** (owner's review of 2026-10-27, #91,
+`DEC-0172` §1). It replaces the grey feature card over hairline rows that the
+polish brief's G-7 had left: a card floating on a `lime-100` ground, in
+grey-green, over rows set in a hierarchy of their own. The language is
+`/ueber-uns`'s (`DEC-0162`): chapter 02's inline proof and the quote card.
+
+| Part | Rule |
+| --- | --- |
+| Item | A flat element **on the section's own ground**: no fill, radius 0, no shadow, a hairline above it (`line`, or `border.hairlineOnLime` on `lime-100`). Every item of a stream has the same structure |
+| Order | The claim first, then the byline — the quote card's order, so a claim and a cited quote read alike |
+| Claim | The record's claim verbatim. The first item (`feature`) at sub-head size / 700, at most 8 columns; the others (`compact`) at card size / 700. No quotation marks: a claim without a cited source is not a quote (*Quote card*, `DEC-0143` §3) |
+| Byline | A 40 px **initials well** — the icon well's size and fill (`surface` on `lime-100`, `lime-100` on `paper`), mono 15 / 700 `ink`, hidden from assistive technology — beside the name in mono 15 / 700 and the role or place in 15 / 400 in the ground's meta colour on the next line. A cleared portrait or logo takes the well's place; no proof record carries one for a voice today |
+| Layout | One column below `xl`. From `xl` the feature item keeps the whole row and the others stand side by side, 6 + 6 |
+| Not | A filled card, a badge repeating the source, an image slot without a cleared image (G-9), a control-sized pill |
+
+### Comparison
+
+**Today against with your calendar, one pair per row** (#94, `DEC-0172` §2).
+The two halves are two flat fields that butt against each other; a gap of
+`space-2` separates the pairs on the section's ground.
+
+| Part | Rule |
+| --- | --- |
+| Today | `archive ground`, the sentence in `text-2`, the label in `archive ink` — the old world (*Archive*); nothing positive on it |
+| With your calendar | `lime-100`, the sentence in `ink`, the label in `lime-800` — the fresh ground for solution content (*Section grounds*) |
+| Label | Mono 15 / 700, uppercase, **above** its sentence (the *Desktop Raster* board), with a colon for assistive technology only, so the pair reads aloud as one statement |
+| Layout | Below `xl` the halves of a pair stack, today on top; from `xl` 6 + 6 in one row (*Placement rules*) |
+| Not | A hairline text table, a checkmark or cross column, a radius, a product name in a label (`TS-WEB-0024` D4) |
+
+### Source-to-target flow
+
+**Where something comes from, and the one place it lands** — `/dein-kalender`'s
+benefit band (#96, `DEC-0172` §3). Nothing in it is a control, so nothing in it
+is drawn as one.
+
+| Part | Rule |
+| --- | --- |
+| Ground | The `lime-500` highlight band, full-bleed (*Section grounds*) |
+| Captions | One mono label over each side, in the ground's text colour (`lime-900`; `muted` inside the target field), saying which side is the way in and which the landing place |
+| Sources | A plain list: a 24 px glyph and the source's name in body 18 / 700 `ink`, a wrapping row below `xl` and a column from it. No fill, no pill, no border |
+| Arrow | `arrow-right` 32 px in `ink`, decorative (`aria-hidden`). Turned to point down while the parts stack |
+| Target | One flat **square** `paper` field (radius 0 — a place, not a button; a fill that is not its ground), a 32 px glyph and the target's name at sub-head size / 800 |
+| Layout | Below `xl` sources, arrow and target stack; from `xl` one row, sources · arrow · target. The benefit sentence closes the figure as its caption |
+| Copy | The sources are other people's channels and never addressed to the reader; the reader's own website is the target and appears once (`SRC-0017` CG-040, `DEC-0172` §3) |
+
+### Trust block
+
+**What happens to the data, and who runs the service** (`TS-WEB-0024` D10,
+`DEC-0172` §4). On `/dein-kalender` it stands on `violet-500`, the provenance
+ground, so it never runs on from the proof section before it as one ground.
+Each subject is a mono label in the ground's label colour over its paragraph,
+under a hairline in the same colour; one column below `xl`, side by side from
+it. No icons and no check marks (polish brief page 6, item 5).
 
 ## Page chrome revised 2026-10-12
 
@@ -1699,6 +1755,8 @@ still forbidden.
 - A link to another origin opens a new tab and says so — the `external-link`
   glyph for the eye, a hidden note joined by `aria-describedby` for the ear,
   never inside the label (see *Links*, `DEC-0169`).
+- What looks like a control is one (*Do Not*, `TS-WEB-0002-A14`): a reader
+  who taps a pill and nothing happens has been misled.
 - 15 px is the type floor everywhere, with no exception for a badge, a chip
   or a tag (`TS-WEB-0002 D3`, `TS-WEB-0002-A10`).
 - A blur is a transparency effect: `prefers-reduced-transparency` takes the
@@ -1730,6 +1788,11 @@ still forbidden.
 - No readable content outside the 1200 px container, and no photograph or
   colour surface inside it. No hero text centred over the photograph.
 - No side-by-side columns below `xl`, outside `explain-module`.
+- No element shaped and sized like a button that is not a control: a pill
+  36 px or taller with a fill or a 2 px border is a link, a button or a form
+  control, or it is a picture of one inside an `aria-hidden` illustration
+  (`DEC-0172` §5, `TS-WEB-0002-A14`). A value the reader cannot act on is a
+  30 px tag; a group of sources is a list.
 
 ## Open decisions
 

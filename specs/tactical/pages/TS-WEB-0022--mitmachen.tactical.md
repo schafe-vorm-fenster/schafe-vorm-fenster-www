@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0012, BUS-WEB-0017, FUN-WEB-0204]
 sources: [SRC-0001, SRC-0003, SRC-0008, SRC-0014]
-decisions: [DEC-0029, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0080, DEC-0082, DEC-0083, DEC-0105, DEC-0107, DEC-0109, DEC-0110, DEC-0154, DEC-0161]
+decisions: [DEC-0029, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0080, DEC-0082, DEC-0083, DEC-0105, DEC-0107, DEC-0109, DEC-0110, DEC-0154, DEC-0161, DEC-0172]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -164,6 +164,13 @@ The page passes `job: publish-our-dates` to the engine, which applies
 that focus job's weight profile — unlike the sell pages, fixed in TS-WEB-0005
 D5, not restated. Three elements (TS-WEB-0005 D6 / DEC-0048).
 
+They render as SRC-0014 §Proof stream (DEC-0172 §1), the same form as on
+`/dein-kalender`: flat items on the `lime-100` ground with a hairline above,
+the claim first and a byline of initials well, name and place under it, the
+first item at sub-head size across the row and the other two side by side from
+`xl` (A23). The grey feature card over hairline rows it replaces read as the
+old state in the owner's review of 2026-10-27 (#91).
+
 ### D7 — The CTA and the permanence promise [FIXED: SRC-0003; binding PROPOSED]
 
 | Property | Rule |
@@ -257,13 +264,14 @@ One banner, at the end of slot 3, after the three path blocks.
 | TS-WEB-0022-A14 | e2e | With a resolved place the primary CTA's href carries `?ort=<slug>`; with an unresolvable or free-text place it carries no `ort` parameter. |
 | TS-WEB-0022-A15 | integration | Navigating from the primary CTA fires no analytics event on `/mitmachen`; `register-as-publisher` with stage `handover` is emitted on `/mitmachen/registrieren` (TS-WEB-0012 D4). |
 | TS-WEB-0022-A17 | e2e | Exactly one hint banner exists, inside the publishing-path slot and after the third path block. It carries no `data-cta` attribute and declares no conversion goal. It contains no numeric amount, no currency symbol and no "ab"; the page-wide price assertion of A12 is unchanged by its presence. Every standard source it names is one `@schafe-vorm-fenster/offerings#community-calendar` lists, and neither the banner nor any of the three path blocks names `kirche-mv.de`, VEVG Karlsburg or a Volkshochschule — the proof slot is out of scope here, because a publisher testimonial is not a statement about price. |
+| TS-WEB-0022-A23 | e2e | At 390 and 1280 px, each of the three items of `data-block="beleg"` has no fill and a `hairlineOnLime` top border, carries an `aria-hidden` 40 × 40 initials well under its claim, exactly one is `data-emphasis="feature"`, and from `xl` the other two share one row (D6, DEC-0172 §1). `e2e/module-designs.spec.ts`. |
 | TS-WEB-0022-A16 | e2e | Rhythm: no two adjacent sections are photo sections, exactly one is the dark live-data section, and every asynchronous box has a declared ratio or height before its content arrives (no layout shift on the live module). |
 
 ## Coverage
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0012 (`/mitmachen`, focus job publish our dates, `register-as-publisher`, one CTA per publishing path) | D1–D10 · A1–A16, A18 (superseded), A19–A21 |
+| FUN-WEB-0012 (`/mitmachen`, focus job publish our dates, `register-as-publisher`, one CTA per publishing path) | D1–D10 · A1–A16, A18 (superseded), A19–A21, A23 |
 | BUS-WEB-0017 (a publishing path whose source the platform already supports publishes free) | D11 · A17 — the rule is the business's; D11 is where the website states it |
 | FUN-WEB-0204 (state the price boundary of BUS-WEB-0017 at the publishing paths) | D11 · A17 |
 

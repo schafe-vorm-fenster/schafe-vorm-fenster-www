@@ -573,7 +573,7 @@ TS-WEB-0007 D12).
 | die Firma | Schafe vorm Fenster | CG-004 |
 | im Amt (as the only addressee) | bei euch | CG-036 |
 | das Produkt | euer Kalender · der Dorfkalender | CG-039 |
-| Vereinswebseite | eure eigene Website | not only Vereine |
+| Vereinswebseite | eure eigene Website · *Websites der Akteure* where *eure Website* is the target beside it (DEC-0172 §3) | not only Vereine — and a source is never addressed to the reader whose website is the target |
 | Postleitzahl · PLZ | Ortsname | DEC-0079 — a place name is where you are from, a postcode is an abstraction |
 | Organizer | Akteur | DEC-0062 — nothing user-facing says Organizer |
 | Portalize (outside the one sentence) | Kalender | CON-WEB-0058, DEC-0052 §1 |
@@ -596,7 +596,7 @@ TS-WEB-0007 D12).
 | the company | Schafe vorm Fenster |
 | at the council (as the only addressee) | at your end |
 | the product | your calendar · the community calendar |
-| club website | your own website |
+| club website | your own website · *local groups' websites* where *your website* is the target beside it |
 | ZIP code · postcode | place name |
 | Organizer | actor |
 | Portalize (outside the one sentence) | calendar |

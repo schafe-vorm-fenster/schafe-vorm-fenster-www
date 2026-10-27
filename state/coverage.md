@@ -6,11 +6,11 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**498 criteria · 324 closed · 174 open (65 % closed)**
+**504 criteria · 330 closed · 174 open (65 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 319 | a test title in a file a runner runs carries the id |
+| VERIFIED | 325 | a test title in a file a runner runs carries the id |
 | METERED | 5 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
 | NAMED ONLY | 30 | the id is in a runner file but in no test title — **not coverage** |
@@ -25,7 +25,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | static | 91 | 61 | 30 | 67 % |
 | unit | 33 | 29 | 4 | 88 % |
 | integration | 78 | 54 | 24 | 69 % |
-| e2e | 226 | 178 | 48 | 79 % |
+| e2e | 232 | 184 | 48 | 79 % |
 | tool | 39 | 2 | 37 | 5 % |
 | manual | 31 | 0 | 31 | 0 % |
 
@@ -34,7 +34,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | Spec | Criteria | Closed | Open criteria |
 | --- | --- | --- | --- |
 | TS-WEB-0001 | 12 | 10 | A9 A11 |
-| TS-WEB-0002 | 13 | 3 | A1 A2 A4 A5 A6 A7 A8 A10 A11 A12 |
+| TS-WEB-0002 | 14 | 4 | A1 A2 A4 A5 A6 A7 A8 A10 A11 A12 |
 | TS-WEB-0003 | 8 | 2 | A1 A2 A3 A4 A5 A6 |
 | TS-WEB-0004 | 12 | 9 | A6 A7 A11 |
 | TS-WEB-0005 | 16 | 13 | A9 A10 A15 |
@@ -54,9 +54,9 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0019 | 23 | 21 | A14 A15 |
 | TS-WEB-0020 | 28 | 27 | A13 |
 | TS-WEB-0021 | 15 | 13 | A11 A15 |
-| TS-WEB-0022 | 21 | 16 | A8 A10 A11 A14 A15 |
+| TS-WEB-0022 | 22 | 17 | A8 A10 A11 A14 A15 |
 | TS-WEB-0023 | 22 | 11 | A1 A2 A3 A7 A8 A9 A10 A11 A13 A15 A16 |
-| TS-WEB-0024 | 22 | 17 | A6 A7 A12 A17 A19 |
+| TS-WEB-0024 | 26 | 21 | A6 A7 A12 A17 A19 |
 | TS-WEB-0025 | 14 | 10 | A5 A9 A12 A13 |
 | TS-WEB-0026 | 17 | 12 | A9 A11 A12 A16 A17 |
 | TS-WEB-0027 | 17 | 12 | A7 A10 A11 A14 A15 |

@@ -130,7 +130,7 @@ const SETTING_ICONS: readonly IconName[] = [
   "circle-check",
 ];
 
-/** The benefit band's source pills, in the drafts' order — decorative glyphs beside the artifact's words. */
+/** The flow's sources, in the drafts' order — decorative glyphs beside the artifact's words. */
 const SOURCE_ICONS: readonly IconName[] = ["smartphone", "calendar-days", "globe"];
 
 const TRUST_HEADLINE: Record<Locale, string> = {
@@ -449,27 +449,42 @@ export default async function Page({
           <p className={pageStyles.configLead}>{configParagraphs[0]}</p>
         </div>
 
-        {/* The benefit band: where the dates come from, and the one place
-            they all land. `lime-500` — the fresh ground the review asks for,
-            and the pills are the sources in the visitor's own words. */}
+        {/* The benefit band, drawn as the flow it describes (DEC-0172 §3,
+            SRC-0014 §Source-to-target flow). It was three white pills, an
+            arrow on a line of its own and one black pill: four things that
+            looked like buttons and were not, in two fills whose meaning
+            nothing said (review 2026-10-27, #96). Now the sources are a
+            plain list with their glyphs, the arrow points from them to the
+            target, and the target is a flat square field — a place, not a
+            control. `lime-500`, the fresh ground the review asked for. */}
         <div className={pageStyles.benefitBand} data-surface="lime-500">
           <div className="container">
-            <ul className={pageStyles.sourcePills}>
-              {configSources.map((source, index) => (
-                <li className={pageStyles.sourcePill} key={source}>
-                  {SOURCE_ICONS[index] ? <Icon name={SOURCE_ICONS[index]} size={18} /> : null}
-                  {source}
-                </li>
-              ))}
-            </ul>
-            <p className={pageStyles.benefitTarget}>
-              <Icon name="arrow-right" size={24} />
-              <span className={pageStyles.targetPill}>
-                <Icon name="monitor" size={18} />
-                {fieldAt(embedConfig.blocks, 2)}
+            <figure className={pageStyles.flow} data-flow>
+              <div className={pageStyles.flowSources}>
+                <p className={pageStyles.flowCaption} id="flow-sources-caption">
+                  {FLOW_CAPTION[locale].sources}
+                </p>
+                <ul aria-labelledby="flow-sources-caption" className={pageStyles.flowSourceList}>
+                  {configSources.map((source, index) => (
+                    <li className={pageStyles.flowSource} data-flow-source key={source}>
+                      {SOURCE_ICONS[index] ? <Icon name={SOURCE_ICONS[index]} size={24} /> : null}
+                      {source}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <span aria-hidden="true" className={pageStyles.flowArrow}>
+                <Icon name="arrow-right" size={32} />
               </span>
-            </p>
-            <p className={pageStyles.benefitLine}>{configParagraphs[1]}</p>
+              <div className={pageStyles.flowTarget} data-flow-target>
+                <p className={pageStyles.flowCaption}>{FLOW_CAPTION[locale].target}</p>
+                <p className={pageStyles.flowTargetName}>
+                  <Icon name="monitor" size={32} />
+                  {fieldAt(embedConfig.blocks, 2)}
+                </p>
+              </div>
+              <figcaption className={pageStyles.benefitLine}>{configParagraphs[1]}</figcaption>
+            </figure>
           </div>
         </div>
 
@@ -614,10 +629,15 @@ export default async function Page({
         </ProofStream>
       </SectionShell>
 
+      {/* `violet-500`, the provenance ground (SRC-0014 §Violet): who runs the
+          service and what happens to the data is this page's provenance. On
+          `lime-100` it ran straight on from the proof above it, one ground
+          for two sections, and read as the old state (review 2026-10-27,
+          #91; DEC-0172 §4). */}
       <SectionShell
         dataBlock="trust"
         kicker={dictionary(locale).kickers.trust}
-        surface="lime-100"
+        surface="violet-500"
         transition={TRANSITIONS[locale].trust}
       >
         <TrustBlock
@@ -651,3 +671,15 @@ export default async function Page({
     </>
   );
 }
+
+/**
+ * The two captions of the benefit band's flow (DEC-0172 §3): which side is
+ * the way in and which the one place everything lands. Both are the lead
+ * sentence's own two verbs ("Die Termine kommen, wie sie reinkommen — und
+ * landen trotzdem alle auf eurer Website"), so the figure says what the
+ * sentence above it says, in its two halves.
+ */
+const FLOW_CAPTION: Record<Locale, { sources: string; target: string }> = {
+  de: { sources: "So kommen sie rein", target: "Hier landen sie" },
+  en: { sources: "How they arrive", target: "Where they land" },
+};

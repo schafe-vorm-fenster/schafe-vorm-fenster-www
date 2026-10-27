@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [NFR-WEB-0057, CON-WEB-0024, NFR-WEB-0058, NFR-WEB-0059, CON-WEB-0025, FUN-WEB-0128, FUN-WEB-0118, FUN-WEB-0119, FUN-WEB-0120, FUN-WEB-0129, FUN-WEB-0130, NFR-WEB-0016, NFR-WEB-0060, FUN-WEB-0121, NFR-WEB-0018, FUN-WEB-0122, FUN-WEB-0123, CON-WEB-0026, CON-WEB-0027]
 sources: [SRC-0006]
-decisions: [DEC-0012, DEC-0069, DEC-0105]
+decisions: [DEC-0012, DEC-0069, DEC-0105, DEC-0172]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -97,6 +97,12 @@ Also honoured: `prefers-reduced-transparency: reduce` — it selects the solid `
   their roles (ties FUN-WEB-0071); heading levels never skip.
 - Skip link as first focusable element [PROPOSED].
 - Full keyboard operability; visible focus (2.4.7 + 2.4.11); no traps.
+- **What looks like a control is one** [FIXED: DEC-0172 §5, SRC-0014 §Do Not].
+  A pill styled 36 px or taller for one line, at least 1.5 times as wide as tall, with a fill or a
+  2 px border, is a link, a button, a summary, a form control or a label, sits
+  inside one or holds one. The one exemption is a picture of a control inside
+  an `aria-hidden` illustration. A value the reader cannot act on is a 30 px
+  tag; a set of sources is a list (A14).
 - Touch targets ≥ 44×44 CSS px everywhere — D2 adopts 2.5.5 (AAA), which supersedes the 2.5.8 AA floor of 24×24 [FIXED: DEC-0069].
 - Zoom: usable at 200 %; reflow at 320px width without 2D scrolling.
 - Images: informative → meaningful `alt` from content frontmatter
@@ -180,6 +186,7 @@ Not*). So this determination is the whole of 2.2.2's surface here.
 | TS-WEB-0002-A11 | tool | axe-core reports no image without a text alternative; every image is either given a meaningful `alt` from content frontmatter or marked decorative with `alt=""`. |
 | TS-WEB-0002-A12 | manual | The published accessibility statement names its method — self-assessment backed by the acceptance regime of this spec (A1–A5) — and claims no audit that did not happen. **Limitation:** automated checks cover only part of the BITV test steps; the statement must not imply more coverage than was performed. |
 | TS-WEB-0002-A13 | e2e | **WCAG 2.2.2 on the one auto-advance (D7).** Below `lg`, with `prefers-reduced-motion` off, scroll the explain module until three quarters of its own height are inside the viewport — asserted at 360 × 640 as well as 360 × 800 — and touch nothing: state 1 is shown for the full dwell before the first advance, the stage reaches state 3 no earlier than 9.1 s after the module first reached three-quarter visibility, and it then **stops** — over the next 30 s no state changes, the stage never returns to state 1, and scrolling the module out of view and back does not restart it. Repeat and activate any step line during the pass, and again with `Tab` into the module: the advance stops on that interaction and never resumes, the activated step's state is shown, the step line carries `aria-current`, and every step stays reachable by keyboard afterwards. An advance that began before three quarters of the module were in the viewport, a second pass, or a resumed one each fail this criterion (D7, DEC-0105 §6 as amended twice on 2026-09-25). |
+| TS-WEB-0002-A14 | e2e | **Nothing looks like a button that is not a control** (D5, DEC-0172 §5). On every route in both languages at 390 px, no element in `#main` that is pill-shaped (corner radius at least half its height), at least 1.5 × as wide as tall, styled at least 36 px tall for one line (line height, padding and border, or its `min-height` — not a box a flex row stretched) and drawn (a non-transparent fill or a border of 2 px or more) is outside a control: it is a link, button, summary, form field, label or element with an interactive role, sits inside one or holds one — or it sits inside an `aria-hidden` illustration. `e2e/control-styling.spec.ts`. |
 
 ## Coverage
 
@@ -196,7 +203,7 @@ claim:
 | NFR-WEB-0059 (Contrast ratio of display type and of non-text contrast against its ground) | D3 · A3 |
 | CON-WEB-0025 (use the accessible colour variant wherever a brand colour …) | D3 · A3 |
 | FUN-WEB-0128 (render semantic markup — landmarks) | D5 · A1 |
-| FUN-WEB-0118 (be operable by keyboard alone) | D5 · A4, A5 |
+| FUN-WEB-0118 (be operable by keyboard alone) | D5 · A4, A5, A14 |
 | FUN-WEB-0119 (present its content to a screen reader in the …) | D5 · A4, A5 |
 | FUN-WEB-0120 (render a focus ring of 3 px violet-500 at …) | D5 · A4, A5 |
 | FUN-WEB-0129 (render accordingly) | D4 · A9 |
