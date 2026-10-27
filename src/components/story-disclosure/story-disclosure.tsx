@@ -1,7 +1,5 @@
 import { Icon } from "../icon/icon";
 
-import type { ReactNode } from "react";
-
 import styles from "./story-disclosure.module.css";
 
 export interface DisclosureStory {
@@ -17,54 +15,51 @@ export interface DisclosureStory {
 
 export interface StoryDisclosureProps {
   readonly stories: readonly DisclosureStory[];
-  /**
-   * The `name` that makes the native `<details>` elements one exclusive group:
-   * opening a story closes the one that was open, with no script.
-   */
-  readonly group: string;
   /** The toggle's label while the story is closed ("Die Geschichte"). */
   readonly openLabel: string;
   /** The toggle's label while the story is open ("Schließen"). */
   readonly closeLabel: string;
-  /**
-   * Rendered after the stories, inside the same grid — the reserved, never
-   * backfilled proof place of TS-WEB-0027 D5, where the page has one.
-   */
-  readonly trailing?: ReactNode;
   readonly className?: string;
 }
 
 /**
- * `story-disclosure` [PROPOSED] — SRC-0014 §Story disclosure, DEC-0162 §2.
+ * `story-disclosure` [PROPOSED] — SRC-0014 §Story disclosure, DEC-0162 §2,
+ * rebuilt as an accordion by DEC-0175 §1 (issue 102).
  *
- * Structure: a grid of stories, each one a title that is always visible and a
- * native `<details>` whose `<summary>` is the toggle ("Die Geschichte +") and
- * whose body is the story. All `<details>` share one `name`, so the browser
- * keeps at most one open — the owner's design shows exactly one card open.
- * The first story is open in the server HTML, so nothing moves after load.
- * States: closed · open. An open story spans the grid's full row and takes the
- * `violet-500` ground with `paper` type; a closed one stands on `lime-100`
- * with `ink` type. Both are flat blocks, radius 0, no border, no shadow.
+ * Structure: one column of stories, in the relevance engine's order, at every
+ * width. Each story is a title that is always visible and a native
+ * `<details>` whose `<summary>` is the toggle ("Die Geschichte +") and whose
+ * body is the story. The first story is open in the server HTML, so nothing
+ * moves after load.
+ *
+ * **An accordion, not a grid.** Until DEC-0175 the stories stood in a two- or
+ * three-column grid and the open one spanned the whole row, so a click
+ * reflowed every card behind it — the owner's review of 2026-10-27: "hüpft und
+ * springt". Now every item keeps its column and its place; opening one only
+ * grows that item downward.
+ *
+ * **Several may be open.** The `<details>` share no `name`: an exclusive group
+ * closes the open item when another opens, and when the open one stands above
+ * the clicked one the clicked one jumps up under the pointer by the height of
+ * the story that closed — the same jump in a different direction. Independent
+ * items move nothing above the one the reader touched.
+ *
+ * States: closed · open. An open story takes the `violet-500` ground with
+ * `paper` type; a closed one stands on `lime-100` with `ink` type. Both are
+ * flat blocks, radius 0, no border, no shadow. The title keeps its size in
+ * both states, so the colour is the only change the item itself shows.
  * No JavaScript: `<details>`/`<summary>` is operable by mouse, touch and
  * keyboard (Enter, Space) in every engine, and exposes its expanded state to
- * assistive technology natively. Opening a story moves the content below it,
- * which is user-initiated and therefore not a layout shift (CLS excludes
- * shifts within 500 ms of input).
+ * assistive technology natively. No transition anywhere, so reduced motion
+ * has nothing to reduce.
  * Space: the toggle is a 44 px control row; type never below 15 px.
  * A11y: the title is an `h3` outside the toggle, so it is a heading in the
  * outline whether the story is open or not; the summary names the action and
  * is described by the title it opens.
  */
-export function StoryDisclosure({
-  stories,
-  group,
-  openLabel,
-  closeLabel,
-  trailing,
-  className,
-}: StoryDisclosureProps) {
+export function StoryDisclosure({ stories, openLabel, closeLabel, className }: StoryDisclosureProps) {
   return (
-    <ul className={[styles.grid, className].filter(Boolean).join(" ")} role="list">
+    <ul className={[styles.list, className].filter(Boolean).join(" ")} role="list">
       {stories.map((story, index) => {
         const headingId = `${story.id}-title`;
         return (
@@ -78,7 +73,7 @@ export function StoryDisclosure({
                 {story.title}
               </h3>
             </div>
-            <details className={styles.details} name={group} open={index === 0}>
+            <details className={styles.details} open={index === 0}>
               <summary aria-describedby={headingId} className={styles.summary}>
                 <span className={styles.label}>
                   <span className={styles.openLabel}>{openLabel}</span>
@@ -93,7 +88,6 @@ export function StoryDisclosure({
           </li>
         );
       })}
-      {trailing ? <li className={styles.trailing}>{trailing}</li> : null}
     </ul>
   );
 }

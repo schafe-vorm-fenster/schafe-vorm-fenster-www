@@ -14,9 +14,10 @@ import { publishedFigure } from "../../src/lib/pricing/offerings";
  *  - **A1/A10** — the page has a conversion of its own (DEC-0081 §6) and
  *    exactly **one** `data-cta="primary"`, the closing CTA, resolving to this
  *    page's contact section. It used to assert zero.
- *  - **A3** — the first viewport carries the `h1` and the honorary-mayor claim
- *    with its proof element and **no `data-cta` at all** (DEC-0082 amendment C:
- *    a provenance page's visitor arrived to judge, not to convert).
+ *  - **A3** — the first viewport carries the `h1` and chapter 01 and **no
+ *    `data-cta` at all** (DEC-0082 amendment C: a provenance page's visitor
+ *    arrived to judge, not to convert); chapter 02 tells the mayoralty in its
+ *    own text, with no second proof line (DEC-0175 §2).
  *  - **A2/A4** — no counter, no year figure, no place count and no "seit …"
  *    claim anywhere (D4); the origin block derives the price from neither
  *    affordability nor a missing salesperson (DEC-0084 §2).
@@ -168,11 +169,13 @@ test.describe("/ueber-uns", () => {
     for (const cta of await page.locator("[data-cta]").all()) {
       await expect(cta).not.toBeInViewport();
     }
-    // The honorary-mayor claim is the page's one inline proof, with its source,
-    // in chapter 02 (D3).
-    const proof = page.locator("[data-block='kapitel-2'] [data-inline-proof]");
-    await expect(proof).toHaveCount(1);
-    await expect(proof.locator("p")).toHaveCount(2);
+    // Chapter 02 is its heading and one text: the mayoralty is said there
+    // once, with no second proof element repeating it and no source line that
+    // names no article (D3 as amended, DEC-0175 §2, CG-044, CG-045).
+    const chapter2 = page.locator("[data-block='kapitel-2']");
+    await expect(chapter2.locator("[data-inline-proof]")).toHaveCount(0);
+    await expect(chapter2.locator("h2")).toHaveCount(1);
+    await expect(chapter2.locator("[class*='chapterBody'] > p")).toHaveCount(1);
   });
 
   test("TS-WEB-0006-A3: the other fold viewport carries no data-cta either", async ({ page }) => {
@@ -221,33 +224,69 @@ test.describe("/ueber-uns", () => {
     expect(block).not.toMatch(/rund 400/);
   });
 
-  test("TS-WEB-0027-A5 / A6: at most 7 elements, exactly one empty slot, named and never backfilled", async ({
+  test("TS-WEB-0027-A5 / A6: at most 7 elements, no empty slot and no placeholder, never backfilled", async ({
     page,
   }) => {
     await page.goto("/ueber-uns");
     const stream = page.locator("[data-block='kapitel-3']");
     const stories = stream.locator("[data-story]");
-    const emptySlot = stream.locator("[data-empty-proof]");
     expect(await stories.count()).toBeGreaterThan(0);
-    expect(await stories.count()).toBeLessThanOrEqual(6);
-    await expect(emptySlot).toHaveCount(1);
-    await expect(emptySlot).not.toHaveAttribute("aria-hidden", "true");
-    expect((await emptySlot.innerText()).trim().length).toBeGreaterThan(0);
-    await expect(emptySlot.locator("img")).toHaveCount(0);
-    const before = await emptySlot.innerText();
-    await page.waitForTimeout(5000);
-    expect(await emptySlot.innerText()).toBe(before);
+    expect(await stories.count()).toBeLessThanOrEqual(7);
+    // A6 as amended (DEC-0175 §3): the uncleared testimonial position renders
+    // nothing — no hatched card, no "Beleg fehlt", no sentence about a gap.
+    await expect(page.locator("[data-empty-proof]")).toHaveCount(0);
+    const text = await stream.innerText();
+    expect(text).not.toMatch(/Beleg fehlt|Freigabe/);
+    // Every item is a story: nothing else sits in the list.
+    await expect(stream.locator("ul > li")).toHaveCount(await stories.count());
     const html = await page.content();
     expect(html).not.toContain("Kulturlandbüro Uecker-Randow");
   });
 
-  test("TS-WEB-0027-A17: every story opens and closes by mouse and keyboard, one at a time, with no layout shift on load", async ({
+  test("TS-WEB-0027-A17: every story opens and closes in place by mouse and keyboard, and no sibling moves sideways", async ({
     page,
   }) => {
+    for (const width of [390, 1280]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/ueber-uns");
+      const stories = page.locator("[data-block='kapitel-3'] [data-story]");
+      const count = await stories.count();
+      expect(count).toBeGreaterThan(1);
+      // Measure the resting layout: the section's one-shot reveal rise has to
+      // be over before a box is read, or the rise is mistaken for a jump.
+      await stories.first().scrollIntoViewIfNeeded();
+      await page.waitForFunction(() =>
+        document.getAnimations().every((animation) => animation.playState !== "running"),
+      );
+      // One column at every width: every item starts at the same x and has
+      // the same width (DEC-0175 §1 — an accordion, not a reflowing grid).
+      const boxes = () =>
+        stories.evaluateAll((nodes) =>
+          nodes.map((node) => {
+            const rect = node.getBoundingClientRect();
+            return { x: rect.x, y: rect.y + window.scrollY, width: rect.width };
+          }),
+        );
+      const before = await boxes();
+      expect(new Set(before.map((box) => Math.round(box.x))).size, `${width}px: one column`).toBe(1);
+      expect(new Set(before.map((box) => Math.round(box.width))).size, `${width}px: one width`).toBe(1);
+
+      // Open the second story: no item moves horizontally or changes its
+      // width, nothing above it moves at all, and only items below it move
+      // down.
+      await stories.nth(1).locator("summary").click();
+      const after = await boxes();
+      for (let index = 0; index < count; index += 1) {
+        expect(after[index]!.x, `${width}px item ${index} x`).toBeCloseTo(before[index]!.x, 0);
+        expect(after[index]!.width, `${width}px item ${index} width`).toBeCloseTo(before[index]!.width, 0);
+        if (index <= 1) expect(after[index]!.y, `${width}px item ${index} y`).toBeCloseTo(before[index]!.y, 0);
+        else expect(after[index]!.y, `${width}px item ${index} y`).toBeGreaterThanOrEqual(before[index]!.y);
+      }
+    }
+
     await page.goto("/ueber-uns");
     const stories = page.locator("[data-block='kapitel-3'] [data-story]");
     const count = await stories.count();
-    expect(count).toBeGreaterThan(1);
     const details = stories.locator("details");
     const openStates = () => details.evaluateAll((nodes) => nodes.map((node) => (node as HTMLDetailsElement).open));
 
@@ -259,11 +298,15 @@ test.describe("/ueber-uns", () => {
       expect((await stories.nth(index).locator("details p").textContent())?.trim().length).toBeGreaterThan(40);
     }
 
-    // Mouse: opening the second closes the first (one exclusive group).
+    // Mouse: opening the second leaves the first open — the items are
+    // independent, so opening one never closes (and moves) another.
     await stories.nth(1).locator("summary").click();
-    expect(await openStates()).toEqual([false, true, ...Array(count - 2).fill(false)]);
+    expect(await openStates()).toEqual([true, true, ...Array(count - 2).fill(false)]);
     await expect(stories.nth(1).locator("details p")).toBeVisible();
-    await expect(stories.nth(0).locator("details p")).toBeHidden();
+    await expect(stories.nth(0).locator("details p")).toBeVisible();
+    // …and a second click closes it in place.
+    await stories.nth(1).locator("summary").click();
+    expect((await openStates())[1]).toBe(false);
 
     // Keyboard: focus the third toggle and press Enter, then Space closes it.
     const third = stories.nth(2).locator("summary");
@@ -346,12 +389,10 @@ test.describe("/ueber-uns", () => {
     );
     // The rights holder's credit is printed on the band.
     await expect(band).toContainText("openTransfer.de");
-    // The placeholder anecdotes are gone (#55): nothing in the page's own blocks
-    // is demo-marked but the reserved proof place (D5).
-    const demo = await page
-      .locator('#main [data-block] [data-demo="true"]')
-      .evaluateAll((nodes) => nodes.filter((node) => !node.closest("[data-empty-proof]")).length);
-    expect(demo).toBe(0);
+    // The placeholder anecdotes are gone (#55), and so is the reserved proof
+    // place's stand-in (issue 105, DEC-0175 §3): nothing in the page's own blocks
+    // is demo-marked.
+    await expect(page.locator('#main [data-block] [data-demo="true"]')).toHaveCount(0);
   });
 
   test("G-7: no raw proof id, no badge repeating the source label", async ({ page }) => {

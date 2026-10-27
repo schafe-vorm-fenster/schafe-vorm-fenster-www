@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0024, FUN-WEB-0030, FUN-WEB-0031, FUN-WEB-0149, CON-WEB-0068, FUN-WEB-0033, FUN-WEB-0034, FUN-WEB-0035, FUN-WEB-0150, FUN-WEB-0151, CON-WEB-0069, FUN-WEB-0038, FUN-WEB-0042, FUN-WEB-0052, FUN-WEB-0055]
 sources: [SRC-0002]
-decisions: [DEC-0019, DEC-0025, DEC-0041, DEC-0163]
+decisions: [DEC-0019, DEC-0025, DEC-0041, DEC-0163, DEC-0175]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -179,6 +179,14 @@ to `w_time` and `w_job` — **0.20 and 0.15** (DEC-0048), giving `w_time 0.35 ·
 **Clearance is a hard filter applied before scoring** — elements without
 cleared usage rights never enter the pool, they are not down-weighted
 (FUN-WEB-0033).
+
+**An unfilled position is counted here and rendered nowhere** (DEC-0175 §3).
+The engine returns exactly as many entries as the surface has positions, the
+unfilled ones as `empty`, so the gap stays measurable (`filled`). A page renders
+**nothing** for an `empty` entry — no panel, no hatch, no sentence about the
+gap — and nothing backfills it: the claim stands weakened (FUN-WEB-0151, "stays
+empty"), and a placeholder is not a weakened claim but a visible defect
+(owner's review of 2026-10-27, #105; TS-WEB-0007 D11, A19).
 
 **Place-bound elements come only from covered places** (FUN-WEB-0024):
 selectable types carry `place_bound` and the place reference, so the

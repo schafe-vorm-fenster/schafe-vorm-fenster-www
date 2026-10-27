@@ -178,7 +178,7 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     await expect(page.locator('[data-cta="primary"]')).toHaveCount(1);
   });
 
-  test("TS-WEB-0022-A6: the objection block is a headline, n items and a proof slot that is visibly empty", async ({
+  test("TS-WEB-0022-A6: the objection block is a headline, n items, and a cleared proof or nothing", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
@@ -186,11 +186,11 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     const archive = page.locator('[data-block="archiv"]');
     await expect(page.getByText("Wer euren Termin heute nicht mitbekommt")).toBeVisible();
 
-    // CHANGED (DEC-0124, and the spec over polish brief G-9): the reserved
-    // proof position is back. D3 requires one beside the block, "visibly
-    // empty if nothing clears", and DEC-0104 makes the determination win
-    // over the brief that struck it.
-    await expect(upper.locator("[data-empty-proof]")).toHaveCount(1);
+    // CHANGED again (DEC-0175 §3): the proof position beside the block shows
+    // a cleared proof or nothing. The flat "visibly empty" panel DEC-0124 had
+    // brought back is a placeholder, and a placeholder never reaches the
+    // website (owner's review of 2026-10-27, issue 105).
+    await expect(upper.locator("[data-empty-proof]")).toHaveCount(0);
 
     // Two halves, as the 2026-09-23 draft has them: three people who do not
     // hear about the date today, then the usual channels on the archive

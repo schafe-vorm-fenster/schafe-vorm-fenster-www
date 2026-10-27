@@ -3,8 +3,8 @@ artefact: contract
 id: SRC-0018
 status: DRAFT
 date: 2026-09-23
-updated: 2026-09-24
-decisions: [DEC-0066, DEC-0080, DEC-0104]
+updated: 2026-10-27
+decisions: [DEC-0066, DEC-0080, DEC-0104, DEC-0175]
 ---
 
 # Copy Contract
@@ -122,6 +122,8 @@ five and every rule appears exactly once.)
 | CG-035 no internal meta lines | `lint` | Avoid-list row. |
 | CG-036 "im Amt" is never the only addressee | `lint` | A field containing `im Amt` must also name one of `Verein`, `Stiftung`, `Kulturgesellschaft`, `Volkshochschule`, `Akteur` — otherwise it fails (BUS-WEB-0012). |
 | CG-037 no promise without a process | `lint` | `pnpm check:terms` already is this row for the two-working-day wording (TS-WEB-0026-A8, TS-WEB-0006 D11); a further promise extends the same list. |
+| CG-044 a claim appears once per page | `review` | No lint can tell a fact from its paraphrase. The editorial gate reads each page for a fact said twice — in a text and again as a proof line, a pull quote or a teaser (DEC-0175 §6, owner's review 2026-10-27). `/ueber-uns` chapter 02 carries the one structural assertion: no inline proof element beside its text (TS-WEB-0027-A3). |
+| CG-045 a source names outlet, date and link, or is omitted | `review` | Review for source lines in general; for quotes the link half is CG-028's. A source line made of an outlet and years ("Nordkurier, 2019 und 2022") is removed, not completed by guessing the article (DEC-0175 §6). |
 
 ### Naming
 
@@ -143,6 +145,8 @@ five and every rule appears exactly once.)
 41 rules, counted from the tables above rather than estimated: **17** carry a
 `lint` row, **17** a `schema` obligation, **3** an `e2e` assertion, and **19**
 name `review` as an owning or co-owning mechanism. Most rules carry two.
+CG-044 and CG-045 (DEC-0175, 2026-10-27) come on top, both review-only, and
+are not in the counts of this paragraph.
 
 **Eight are review-only** — no machine sees them at all: CG-006, CG-008,
 CG-010, CG-012, CG-013, CG-016, CG-019, CG-033. Three more are half-manual,

@@ -219,7 +219,7 @@ fragments, and declares which source entities it may derive from.
 | 8 | `feature-benefit` | feature ↔ what it does for you | feature, benefit, `proof_ref?` | offerings | tiers, `/deine-region` |
 | 9 | `form-step` | copy shell of one step in a flow | `Step`, field labels, handover note | offerings | `/mitmachen/registrieren` (3), `/dein-kalender/bestellen` (4) |
 | 10 | `proof-card` | one proof element as the website renders it | context line, claim, attribution, `GeoBadge`, `ImageRef?`, link | proof, media echo | every page |
-| 11 | `empty-proof-slot` | the visible gap where no cleared proof exists | copy, target proof id | — | `/ueber-uns`, any stream |
+| 11 | `empty-proof-slot` | the gap where no cleared proof exists — **it renders nothing** (DEC-0175 §3: a placeholder never reaches the website); the type keeps the target proof id so the gap stays countable | target proof id | — | `/ueber-uns`, any stream |
 | 12 | `archive-entry` | one chronological row | title, type, date, source, link | media echo | `/ueber-uns/archiv` |
 | 13 | `origin-story` | founder and origin narrative | headline, body, `ImageRef` | brand-identity (`## Origin story`), people | `/ueber-uns` |
 | 14 | `anecdote` | short reusable narrative snippet | title, body, `proof_ref?` | proof (`reference-case`, `metric`) | inline anywhere |

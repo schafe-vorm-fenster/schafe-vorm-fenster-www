@@ -157,7 +157,7 @@ export interface CopyText {
  * list or table under an intro paragraph), plus the three paragraphs of
  * `/dein-kalender` that the page reads by index — `dein-kalender-3-embed-demo`
  * paragraph 0 and `dein-kalender-3b-embed-config` paragraphs 0 and 1
- * (`app/[lang]/dein-kalender/page.tsx:414`, `:449`, `:472`) — in both
+ * (`app/[lang]/dein-kalender/page.tsx:413`, `:448`, `:471`) — in both
  * locales.
  */
 export function copyOf(page: PageContent): CopyText[] {
@@ -670,19 +670,19 @@ export const RENDERED_BLOCKS: readonly {
     slot: "ueber-uns-3-proof-stream",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/ueber-uns/page.tsx:172",
+    renderedBy: "app/[lang]/ueber-uns/page.tsx:169",
   },
   {
     slot: "deine-region-6-proof-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/deine-region/page.tsx:245",
+    renderedBy: "app/[lang]/deine-region/page.tsx:244",
   },
   {
     slot: "dein-kalender-5-proof-demo",
     kind: "list",
     index: "all",
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:285 (listItems, every list)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:284 (listItems, every list)",
   },
   {
     slot: "archiv-2-rows-demo",
@@ -695,19 +695,19 @@ export const RENDERED_BLOCKS: readonly {
     slot: "dein-kalender-3-embed-demo",
     kind: "paragraph",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:193 (rendered at :414)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:192 (rendered at :413)",
   },
   {
     slot: "dein-kalender-3b-embed-config",
     kind: "paragraph",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:197 (rendered at :449)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:196 (rendered at :448)",
   },
   {
     slot: "dein-kalender-3b-embed-config",
     kind: "paragraph",
     index: 1,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:197 (rendered at :472)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:196 (rendered at :471)",
   },
   // — the render sites QA round 4 found missing: every other slot a page
   //   reads by index or by kind (`validate.test.ts` proves the list is
@@ -716,79 +716,79 @@ export const RENDERED_BLOCKS: readonly {
     slot: "home-8-proof-stream",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/page.tsx:154",
+    renderedBy: "app/[lang]/page.tsx:153",
   },
   {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/page.tsx:422 (listAt, the three step lines)",
+    renderedBy: "app/[lang]/page.tsx:421 (listAt, the three step lines)",
   },
   {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/page.tsx:415 (listAt, the sample event rows)",
+    renderedBy: "app/[lang]/page.tsx:414 (listAt, the sample event rows)",
   },
   {
     slot: "mitmachen-2-objections",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:236 (listAt)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:235 (listAt)",
   },
   {
     slot: "mitmachen-2-objections",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:236 (listAt)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:235 (listAt)",
   },
   {
     slot: "mitmachen-3a-path-whatsapp-steps-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:399 (listAt)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:398 (listAt)",
   },
   {
     slot: "mitmachen-3a-path-whatsapp-steps-demo",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:392 (listAt)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:391 (listAt)",
   },
   {
     slot: "mitmachen-4a-path-calendar-steps-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:437 (listAt)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:436 (listAt)",
   },
   {
     slot: "mitmachen-4a-path-calendar-steps-demo",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:431 (listAt)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:430 (listAt)",
   },
   {
     slot: "mitmachen-5a-path-website-steps-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:483 (listAt)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:482 (listAt)",
   },
   {
     slot: "mitmachen-5a-path-website-steps-demo",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:477 (listAt)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:476 (listAt)",
   },
   {
     slot: "mitmachen-7-proof-demo",
     kind: "list",
     index: "all",
-    renderedBy: "app/[lang]/mitmachen/page.tsx:196 (listItems, every list)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:195 (listItems, every list)",
   },
   {
     slot: "dein-kalender-2-contrast",
     kind: "table",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:217 (rows; head at :218)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:216 (rows; head at :217)",
   },
   {
     slot: "dein-kalender-3b-embed-config",

@@ -906,9 +906,9 @@ test.describe("TS-WEB-0019 — home", () => {
   test("TS-WEB-0005-A13: the selection is the engine's, and reproducible across reloads", async ({
     page,
   }) => {
-    // DEC-0048's count for this surface is 5, and it holds while the pool is
-    // smaller than the surface: "an unfilled position weakens the claim, it
-    // does not shorten the stream" (SRC-0001 §4).
+    // DEC-0048's count for this surface is 5. An unfilled position weakens
+    // the claim and renders nothing (SRC-0001 §4, DEC-0175 §3): the stream
+    // shows at most five cards and never a placeholder.
     //
     // The `/ueber-uns` half of this walk moved to that page's own spec. A
     // home-page acceptance test asserting another page's card count was a
@@ -922,9 +922,11 @@ test.describe("TS-WEB-0019 — home", () => {
       );
     };
 
-    const selector = "#proof-stream article, #proof-stream [data-empty-proof]";
+    const selector = "#proof-stream article";
     const home = await positionsOf("/", selector);
-    expect(home).toHaveLength(5);
+    expect(home.length).toBeGreaterThan(0);
+    expect(home.length).toBeLessThanOrEqual(5);
+    await expect(page.locator("#proof-stream [data-empty-proof]")).toHaveCount(0);
 
     // TS-WEB-0005-A4: same trait, same place, same result. The page is stage 0
     // here and the ISO-week seed is the only variety input, so a reload

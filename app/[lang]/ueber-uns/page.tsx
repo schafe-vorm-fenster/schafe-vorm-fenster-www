@@ -1,6 +1,5 @@
 import { Button } from "@/src/components/button/button";
 import { CONTACT_SECTION_ID } from "@/src/components/contact-section/contact-section";
-import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import { Icon } from "@/src/components/icon/icon";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { NewsletterBlock } from "@/src/components/newsletter-block/newsletter-block";
@@ -25,7 +24,7 @@ import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
-import { oneEmptySlot } from "./stream";
+import { filledOnly } from "./stream";
 
 import styles from "./page.module.css";
 import { pageMeta } from "./page.meta";
@@ -48,11 +47,11 @@ import type { ReactNode } from "react";
  *  2. **Chapter 01** — how it started: the baker's van (`kapitel-1`).
  *  3. **Quote band** — the founder's cleared quote on his cleared portrait, a
  *     photo section of its own, with the article it was said in (`zitat`).
- *  4. **Chapter 02** — the name, and the honorary-mayor claim with its source:
- *     the page's one inline proof (`kapitel-2`, D3).
- *  5. **Chapter 03** — the proof stream as expandable stories: the cleared
- *     records the relevance engine selects, each a native `<details>`, and the
- *     one reserved, never backfilled place (`kapitel-3`, D5).
+ *  4. **Chapter 02** — the honorary mayoralty 2019–2024 and the name it gave
+ *     the company, told as one short text (`kapitel-2`, D3, DEC-0175 §2).
+ *  5. **Chapter 03** — the proof stream as an accordion of stories: the cleared
+ *     records the relevance engine selects, each a native `<details>`. A gap
+ *     renders nothing and is never backfilled (`kapitel-3`, D5, DEC-0175 §3).
  *  6. **Who is behind it** — the person, with the cleared 4:5 portrait (D7).
  *  7. **Principles** — the village argument of DEC-0084 §2 as three numbered
  *     principles, carrying the one price token (`grundsaetze`, A4).
@@ -83,8 +82,6 @@ const ORIGIN = {
   headline: 0,
   /** The three steps of DEC-0084 §2: the need · what the market offers · what follows. */
   argument: [1, 2, 3],
-  proofClaim: 4,
-  proofSource: 5,
 } as const;
 
 /** `ueber-uns-1a-chapters`'s fields — the owner's design labels (DEC-0162 §3). */
@@ -225,7 +222,6 @@ export default async function Page({
   const story = slot(page, "ueber-uns-2-story");
   const proofStream = slot(page, "ueber-uns-3-proof-stream");
   const stories = slot(page, "ueber-uns-3b-stories");
-  const reservedPlace = slot(page, "ueber-uns-3a-empty-slot-demo");
   const award = slot(page, "ueber-uns-4-archive");
   const team = slot(page, "ueber-uns-5-team");
   const newsletter = slot(page, "ueber-uns-6-newsletter");
@@ -235,8 +231,9 @@ export default async function Page({
   /**
    * Chapter 03 is the stream, through TS-WEB-0005 rather than around it:
    * DEC-0048's `/ueber-uns` count is 7, the slot names four cleared records,
-   * and the engine leaves the remaining positions empty. D5 caps what is
-   * rendered at one empty place (`oneEmptySlot`).
+   * and the engine leaves the remaining positions empty. An empty position
+   * renders nothing (D5 as amended, DEC-0175 §3), so the stories are the
+   * filled entries only (`filledOnly`).
    */
   const proofSelection = await selectProof({
     routeId: ROUTE,
@@ -245,24 +242,19 @@ export default async function Page({
     surface: "stream",
     candidates: proofCandidates(proofStream, words.kickers.othersSay),
   });
-  const streamEntries = oneEmptySlot(proofSelection.entries);
   const storyTexts = stories.blocks.filter((block) => block.kind === "field");
-  const storyItems: DisclosureStory[] = streamEntries.flatMap((entry) => {
-    if (entry.kind !== "item") return [];
+  const storyItems: DisclosureStory[] = filledOnly(proofSelection.entries).map((entry) => {
     const index = Number(entry.candidate.id.slice(entry.candidate.id.lastIndexOf("-") + 1)) - 1;
     const text = storyTexts[index];
-    return [
-      {
-        id: entry.candidate.id,
-        kicker: [entry.candidate.contextLine, proofYear(entry.candidate.attribution)]
-          .filter(Boolean)
-          .join(" · "),
-        title: entry.candidate.claim,
-        story: text?.kind === "field" ? text.value : undefined,
-      },
-    ];
+    return {
+      id: entry.candidate.id,
+      kicker: [entry.candidate.contextLine, proofYear(entry.candidate.attribution)]
+        .filter(Boolean)
+        .join(" · "),
+      title: entry.candidate.claim,
+      story: text?.kind === "field" ? text.value : undefined,
+    };
   });
-  const hasEmptyPlace = streamEntries.some((entry) => entry.kind === "empty");
 
   const people = team.blocks
     .filter((block) => block.kind === "field")
@@ -284,8 +276,6 @@ export default async function Page({
   const quote = fieldAt(story.blocks, STORY.quote);
   const sourceUrl = fieldAt(story.blocks, STORY.sourceUrl);
   const archiveLabel = ctaLabelOnly(fieldAt(award.blocks, AWARD.link)) ?? words.pages.archive;
-  const reservedLabel = fieldAt(reservedPlace.blocks, 0);
-  const reservedSentence = fieldAt(reservedPlace.blocks, 1);
 
   return (
     <>
@@ -373,26 +363,26 @@ export default async function Page({
           </PhotoSurface>
         ) : null}
 
-        {/* 4 — chapter 02: the name, and the honorary-mayor claim with its
-            source — the page's one inline proof outside the stream (D3). */}
+        {/* 4 — chapter 02: the honorary mayoralty with its period, and the
+            name it gave the company, as one short text at lead size. The
+            mayor fact is said here once; the page carries no second proof
+            line for it and no source line without a linkable article
+            (D3 as amended, DEC-0175 §2, CG-044, CG-045). */}
         <SectionShell dataBlock="kapitel-2" labelledBy="kapitel-2-h2" surface="lime-100">
           <MotionReveal>
             <div className={styles.chapter}>
               <ChapterHead ordinal="02" place={chapter(CHAPTERS.chapter2Place)} />
               <div className={styles.chapterBody}>
                 <h2 id="kapitel-2-h2">{chapter(CHAPTERS.chapter2Heading)}</h2>
-                <p>{fieldAt(story.blocks, STORY.name)}</p>
-                <article className={styles.inlineProof} data-inline-proof>
-                  <p className={styles.inlineClaim}>{fieldAt(origin.blocks, ORIGIN.proofClaim)}</p>
-                  <p className={styles.inlineSource}>{fieldAt(origin.blocks, ORIGIN.proofSource)}</p>
-                </article>
+                <p className={styles.chapterLead}>{fieldAt(story.blocks, STORY.name)}</p>
               </div>
             </div>
           </MotionReveal>
         </SectionShell>
 
-        {/* 5 — chapter 03: the stream as stories (D5, DEC-0162 §2). The
-            relevance engine picks and orders them; each opens in place. */}
+        {/* 5 — chapter 03: the stream as an accordion of stories (D5,
+            DEC-0162 §2, DEC-0175 §1). The relevance engine picks and orders
+            them; each opens in place and moves nothing above it. */}
         <SectionShell dataBlock="kapitel-3" labelledBy="kapitel-3-h2" surface="paper">
           <MotionReveal>
             <div className={styles.chapter}>
@@ -406,20 +396,8 @@ export default async function Page({
                 the cascade to the list's own `margin: 0` (issue 108). */}
             <StoryDisclosure
               closeLabel={chapter(CHAPTERS.storyClose) ?? ""}
-              group="kapitel-3"
               openLabel={chapter(CHAPTERS.storyOpen) ?? ""}
               stories={storyItems}
-              trailing={
-                hasEmptyPlace ? (
-                  // D5: the reserved place, with its label and sentence, in
-                  // the accessibility tree, never backfilled.
-                  <EmptyProofSlot
-                    demo={isDemoSlot(reservedPlace)}
-                    label={reservedLabel}
-                    sentence={reservedSentence}
-                  />
-                ) : undefined
-              }
             />
           </MotionReveal>
         </SectionShell>

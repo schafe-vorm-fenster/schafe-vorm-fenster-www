@@ -1,5 +1,4 @@
 import { ArchiveBlock } from "../archive-block/archive-block";
-import { EmptyProofSlot } from "../empty-proof-slot/empty-proof-slot";
 import { Icon } from "../icon/icon";
 
 import type { IconName } from "../icon/icon";
@@ -64,12 +63,13 @@ export interface ObjectionListProps {
    * rows (`objection-list.test.tsx`, "an empty item list").
    */
   readonly closing?: string;
-  /** A cleared `proof-card`. Omitted → `empty-proof-slot`, never backfilled. */
+  /** A cleared `proof-card`. Omitted → nothing renders, never backfilled (DEC-0175 §3). */
   readonly proof?: ReactNode;
   /**
-   * Whether the block reserves a proof position at all. TS-WEB-0022 D3
-   * requires the slot ("visibly empty if nothing clears"); the page decides
-   * (T-12, DEC-0104: the spec wins over polish brief G-9).
+   * Whether the block has a proof position at all. TS-WEB-0022 D3 gives it one
+   * beside the reach rows; it shows a cleared `proof` and **nothing** while
+   * none clears — a missing proof is never a visible placeholder (DEC-0175 §3,
+   * which replaced D3's "visibly empty if nothing clears").
    */
   readonly proofSlot?: boolean;
   readonly className?: string;
@@ -88,8 +88,8 @@ export interface ObjectionListProps {
  * (`megaphone` · `clock` · `users`), bold core in archive ink, detail in
  * `text-2`, and the closing sentence set larger than the rows. No numeral
  * asserts how many channels exist.
- * States: the proof slot holds its position as a flat panel when nothing
- * clears (`empty-proof-slot`), never backfilled with a substitute claim.
+ * States: the proof position shows a cleared proof, or nothing at all — never
+ * a placeholder panel and never a substitute claim (DEC-0175 §3).
  * Inherits: not a Q&A block and not `FAQPage` markup. Never `circle-x`,
  * never `status-error`: the content is already the failure (DEC-0117). The
  * icon well is never `lime-500` on a light ground — that fill means *active*
@@ -114,7 +114,7 @@ export function ObjectionList({
   return (
     <div className={[styles.block, className].filter(Boolean).join(" ")}>
       <h2 className={styles.headline}>{headline}</h2>
-      {hasReach || proofSlot ? (
+      {hasReach || (proofSlot && proof) ? (
         <div className={styles.layout}>
           {hasReach ? (
             <ul className={styles.reach} data-objection-reach>
@@ -131,9 +131,7 @@ export function ObjectionList({
               ))}
             </ul>
           ) : null}
-          {proofSlot ? (
-            <div className={styles.proof}>{proof ?? <EmptyProofSlot />}</div>
-          ) : null}
+          {proofSlot && proof ? <div className={styles.proof}>{proof}</div> : null}
         </div>
       ) : null}
       {/* A block with no rows is no block. `/mitmachen` puts the archive half

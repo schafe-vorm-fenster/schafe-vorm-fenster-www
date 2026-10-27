@@ -34,8 +34,8 @@ export type Surface = keyof typeof SURFACE_COUNTS;
 
 /**
  * A filled position, or an honest gap. An unfilled position **weakens the
- * claim** rather than shortening the stream (SRC-0001 §4, TS-WEB-0019 D4): the page
- * renders an `empty-proof-slot` in its place, never one child fewer.
+ * claim** (SRC-0001 §4) and stays countable here; the page renders nothing in
+ * its place — no placeholder ever reaches the website (DEC-0175 §3).
  */
 export type SelectionEntry<Payload = unknown> =
   | {

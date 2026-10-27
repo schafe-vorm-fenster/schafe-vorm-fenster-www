@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0018, FUN-WEB-0037]
 sources: [SRC-0001, SRC-0003, SRC-0008, SRC-0014]
-decisions: [DEC-0013, DEC-0019, DEC-0022, DEC-0026, DEC-0056, DEC-0166]
+decisions: [DEC-0013, DEC-0019, DEC-0022, DEC-0026, DEC-0056, DEC-0166, DEC-0175]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -93,7 +93,8 @@ citation needs no clearance.
 | Multi-type entries | `type` is a list in the hub schema; an entry appears under every type it carries. Chip counts therefore sum above the row total, and the page never renders that sum |
 | Mechanics | client-side over rows already present in the static HTML. No navigation, no refetch, no request of any kind |
 | Ordering | filtering removes rows and never reorders them (D2) |
-| Empty result | unreachable by construction — every chip has entries (row 2) and no filter can arrive from outside (D5). Implemented as a defensive render (an honest line naming the active filter plus *all*), never a zero-results error screen |
+| Empty result | unreachable by construction — every chip has entries (row 2) and no filter can arrive from outside (D5). Implemented as a defensive render: one honest line pointing at the reset (*all*), never a zero-results error screen (DEC-0175 §5) |
+| Emptied year | a year block with no visible row is hidden **with its `h2`**, by the same `hidden` mechanism as a row, so the outline never holds a year heading without an entry and the page no gap for it; *all* brings every year back. The only movement is the filter's own row removal (DEC-0175 §5, owner's review 2026-10-27, #107) |
 | Announcement | the visible row count sits in an `aria-live="polite"` region; focus stays on the pressed chip (TS-WEB-0002 D5) |
 
 Measured stock (2026-10-14, `media-echo@0.3.3`, 31 entries): `press` 14 ·
@@ -146,7 +147,9 @@ The row's `id` is the entry's file stem, so `#<id>` is a stable deeplink
 declare their height, so neither varies with content (title clamps to two
 lines, meta to one) nor shifts on image load. `h1` is the page, each **year**
 an `h2`, a row title no heading: the outline is the year spine, which is what
-a journalist scrolls. Container per TS-WEB-0011 D3 (`main > article` — the list
+a journalist scrolls. A year is a block of its `h2` and its rows
+(`data-archive-year`), and it is shown only while one of its rows is (D4,
+A19). Container per TS-WEB-0011 D3 (`main > article` — the list
 *is* the page). A build-time count of cleared rows is the record's length,
 not a traction figure (Open points).
 
@@ -194,12 +197,13 @@ list, so they cannot disagree; and filtering never touches it.
 | TS-WEB-0028-A16 | e2e | The rendered page carries one row per entry, each with the entry's id as its anchor, a date, a title and the outlet, and an outbound link wherever the entry has a `url`; the rows contain no `<img>`; every quotation is a `blockquote` inside a `figure` whose `figcaption` names the row's outlet. |
 | TS-WEB-0028-A17 | e2e | `/presse` and `/en/press` answer a permanent redirect (301) to `/ueber-uns/archiv` and `/en/about/archive`. |
 | TS-WEB-0028-A18 | e2e | The page is reached: the footer carries a link to it on every page, the award block on `/ueber-uns` links to it, and the header navigation has no link to it. The `h1` is *Presse und Auszeichnungen* / *Press and awards*. |
+| TS-WEB-0028-A19 | e2e | **No orphan year** (DEC-0175 §5): for every chip, each year block is hidden exactly when none of its rows is visible, and a visible year `h2` always has a visible row under it; the number of visible year headings equals the number of years with a visible row; the defensive empty line does not render; at least one chip empties a year; with nothing selected every year is visible again. |
 
 ## Coverage
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0018 (no conversion, list-shaped; a destination since DEC-0166) | D1, D7, D8 · A2, A9, A11, A12, A18 |
+| FUN-WEB-0018 (no conversion, list-shaped; a destination since DEC-0166) | D1, D7, D8 · A2, A9, A11, A12, A18, A19 |
 | FUN-WEB-0037 (exists once, filterable by type, chronological) | D2–D6, D9 · A1, A3–A6, A8, A10, A13–A17 |
 
 ## Open points

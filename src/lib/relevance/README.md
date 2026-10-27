@@ -17,7 +17,6 @@ and returns exactly as many entries as the surface has positions — filled or
 honestly empty.
 
 ```tsx
-import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
@@ -70,7 +69,7 @@ export default async function HomePage({
     <SectionShell surface="ink" labelledBy="belege">
       <h2 id="belege">Was andere sagen</h2>
       <ProofStream>
-        {proof.entries.map((entry, position) =>
+        {proof.entries.map((entry) =>
           entry.kind === "item" ? (
             <ProofCard
               key={entry.id}
@@ -81,12 +80,7 @@ export default async function HomePage({
               geo={{ level: "county", label: entry.item.geo.county ?? "" }}
               locale={locale}
             />
-          ) : (
-            <EmptyProofSlot
-              key={`empty-${position}`}
-              sentence="Für diese Aussage ist noch kein freigegebener Beleg hinterlegt."
-            />
-          ),
+          ) : null, // an unfilled position renders nothing (DEC-0175 §3)
         )}
       </ProofStream>
     </SectionShell>
@@ -102,8 +96,11 @@ Three things that example does on purpose:
 - **`now` and `seed` are arguments.** The page reads the clock; the engine
   never does (D7). That is what lets a test pin a week and a cached segment
   carry one.
-- **An unfilled position renders an `empty-proof-slot`**, never one child
-  fewer. An uncleared proof weakens the claim; it does not shorten the stream.
+- **An unfilled position renders nothing.** The engine still returns it as an
+  `empty` entry, so the gap stays countable (`filled`), but the page shows no
+  placeholder in its place: an uncleared proof weakens the claim, and a
+  "Beleg fehlt" card never reaches the website (DEC-0175 §3, owner's review of
+  2026-10-27). Until then this line read "never one child fewer".
 
 ## The formula, as implemented
 

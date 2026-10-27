@@ -323,6 +323,8 @@ export interface Dictionary {
     label: string;
     /** `{visible}` of `{total}` entries — both slots are filled by the component. */
     count: string;
+    /** TS-WEB-0028 D4's defensive line, shown only if a selection matches no row; `{all}` is the reset's label. */
+    empty: string;
   };
   /**
    * `archive-row`'s own link label. It was a German literal in the component
@@ -627,6 +629,7 @@ const de: Dictionary = {
     all: "Alle",
     label: "Nach Typ filtern",
     count: "{visible} von {total} Einträgen",
+    empty: "Zu dieser Auswahl gibt es keinen Eintrag. „{all}“ zeigt wieder alles.",
   },
   archiveRow: {
     original: "Original ansehen",
@@ -833,6 +836,7 @@ const en: Dictionary = {
     all: "All",
     label: "Filter by type",
     count: "{visible} of {total} entries",
+    empty: "No entry matches this selection. “{all}” shows everything again.",
   },
   archiveRow: {
     original: "View the original",

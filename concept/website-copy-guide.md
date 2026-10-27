@@ -526,6 +526,37 @@ A response time, an availability, a permanence promise appears only where an
 operational commitment backs it (TS-WEB-0006 D11). Where the process is unconfirmed
 the promise is removed, not softened.
 
+### CG-044 — A claim appears once per page
+
+A fact the page has said is not said again on the same page — not as a proof
+line under the text, not as a pull quote, not as a teaser. The second time
+tells the reader nothing and reads as padding (CG-016) with a source attached.
+Owner's review of 2026-10-27, `/ueber-uns` (#104): the chapter text said the
+name comes from the time as mayor, and the line under it said again that the
+founder had been mayor.
+
+- Avoid: text *"Der Name stammt aus der Amtszeit als Bürgermeister von
+  Schmatzin …"*, and right under it *"Der Gründer war selbst ehrenamtlicher
+  Bürgermeister — das Amt, dem der Dienst hilft, kennt er von innen."*
+- Use: one text that says it once, with what makes it worth saying — the
+  period and what followed from it: *"Von 2019 bis 2024 war Jan-Henrik Hempel
+  ehrenamtlicher Bürgermeister von Schmatzin … An diese Zeit erinnert der Name
+  Schafe vorm Fenster …"* (DEC-0175 §2).
+
+### CG-045 — A source names outlet, date and a working link, or it is omitted
+
+A source line exists so a reader can check the claim. It names the outlet, the
+date of the piece and links to it — the article, the portrait, the episode. A
+source that cannot be named that precisely is **left out**, and the fact stands
+in the text on its own, backed by the hub record in the artefact's
+`derived_from`. It is never padded into a vague one. CG-028 already asks this
+of a quote card; this rule asks it of every source line.
+
+- Avoid: *"Nordkurier, 2019 und 2022"* — a newspaper and two years, no article
+  (owner's review 2026-10-27, #104: *"ohne eine genaue Quelle zu haben"*).
+- Use: *"Zukunftswege Ost-Vorpommern: Der Vollblutdigitalisierer von
+  Schlatkow"*, linked, with its date — or no source line at all.
+
 ---
 
 ## 8. Product naming
@@ -651,6 +682,10 @@ review at the editorial gate (TS-WEB-0007 D11), listed as such in the contract.
   working label on the page (CG-027, CG-025, CG-035).
 - No `Sie`, on any page, in any field — except `/rechtliches`, which is
   exempt as a whole page and exempts nothing else (CG-003).
+- No claim twice on one page (CG-044), and no source line that names no
+  article — outlet, date and link, or nothing (CG-045).
+- No placeholder for a missing proof: no "Beleg fehlt", no sentence naming
+  the gap. A missing proof renders nothing (DEC-0175 §3, TS-WEB-0007 D11).
 - No "das Produkt", and no second occurrence of the product name.
 - No "(öffnet neuen Tab)" in a link's label or a CTA label. A link to another
   origin always opens a tab (`DEC-0169`); the dictionary's `outboundLink.newTab`

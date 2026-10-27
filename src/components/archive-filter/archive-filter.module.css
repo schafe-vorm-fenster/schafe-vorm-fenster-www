@@ -63,3 +63,25 @@
 .reserved {
   visibility: hidden;
 }
+
+/* TS-WEB-0028 D4: the defensive empty result — one line in body type, no
+   error colour, no icon (it is an empty result, not a fault). It brings no
+   outer margin; the wrapper's gap places it (DEC-0171). */
+.empty {
+  margin: 0;
+}
+
+/*
+ * The year stack (DEC-0171) while the filter hides whole years (D7, A19): the
+ * stack's own rule spaces every block after the first, and a hidden first
+ * year would leave its gap above the first year still shown. So here the gap
+ * goes to a shown year that follows another shown year, and only to it — the
+ * same `--block-gap`, counted over the visible blocks.
+ */
+.years.years > :nth-child(n) {
+  margin-block-start: 0;
+}
+
+.years > :not([hidden]) ~ :not([hidden]) {
+  margin-block-start: var(--block-gap);
+}

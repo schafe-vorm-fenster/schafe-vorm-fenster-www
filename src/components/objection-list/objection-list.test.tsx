@@ -44,9 +44,9 @@ describe("TS-WEB-0022 D3 / A6: one headline, n items, no numeral, a proof slot w
     expect(html.indexOf("Die üblichen Wege")).toBeGreaterThan(reachAt);
   });
 
-  it("keeps the proof slot: visibly empty by default, a cleared proof where given, none where the page says so", () => {
+  it("shows a cleared proof where given and nothing where none clears — never a placeholder (DEC-0175 §3)", () => {
     const empty = renderToStaticMarkup(<ObjectionList headline="H" items={ITEMS} />);
-    expect(empty).toContain("data-empty-proof");
+    expect(empty).not.toContain("data-empty-proof");
     const cleared = renderToStaticMarkup(<ObjectionList headline="H" items={ITEMS} proof={<p>Beleg</p>} />);
     expect(cleared).not.toContain("data-empty-proof");
     expect(cleared).toContain("<p>Beleg</p>");
@@ -54,7 +54,7 @@ describe("TS-WEB-0022 D3 / A6: one headline, n items, no numeral, a proof slot w
     expect(none).not.toContain("data-empty-proof");
   });
 
-  it("renders the upper half alone with an empty item list — headline, reach rows, proof slot, no archive block, and `closing` is not rendered", () => {
+  it("renders the upper half alone with an empty item list — headline, reach rows, no placeholder, no archive block, and `closing` is not rendered", () => {
     // `/mitmachen` splits the two halves across two sections, because
     // together they measure 1627 px at 390 px and G-4 caps a section at 1270
     // (DEC-0124 §1). The upper half then renders with no `items`. `closing`
@@ -72,7 +72,7 @@ describe("TS-WEB-0022 D3 / A6: one headline, n items, no numeral, a proof slot w
     expect(html).toContain("Warum es hakt");
     expect(html).toContain("data-objection-reach");
     expect(html.match(/<li/g)).toHaveLength(3);
-    expect(html).toContain("data-empty-proof");
+    expect(html).not.toContain("data-empty-proof");
     expect(html).not.toContain("data-archive-block");
     expect(html).not.toContain("Und keine Zeit fürs Bewerben.");
   });

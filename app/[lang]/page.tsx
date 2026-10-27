@@ -5,7 +5,6 @@ import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { MediaFrame } from "@/src/components/media-frame/media-frame";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
-import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SceneBlock } from "@/src/components/scene-block/scene-block";
@@ -585,11 +584,10 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                   locale={locale}
                   state={entry.state}
                 />
-              ) : (
-                // An unfilled position weakens the claim; it never shortens
-                // the stream (SRC-0001 §4, DEC-0048).
-                <EmptyProofSlot key={`empty-${position}`} />
-              ),
+              ) : // An unfilled position renders nothing: the claim stands
+              // weakened, and no placeholder reaches the page (SRC-0001 §4,
+              // DEC-0175 §3).
+              null,
             )}
           </ProofStream>
         </SectionShell>

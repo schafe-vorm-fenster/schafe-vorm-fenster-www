@@ -10,7 +10,6 @@ import {
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { HintBanner } from "@/src/components/hint-banner/hint-banner";
 import { ObjectionList } from "@/src/components/objection-list/objection-list";
-import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { RouteLink } from "@/src/components/route-link/route-link";
@@ -582,9 +581,8 @@ export default async function Page({
                 locale={locale}
                 state={entry.state}
               />
-            ) : (
-              <EmptyProofSlot key={`empty-${position}`} />
-            ),
+            ) : // A missing proof renders nothing (DEC-0175 §3).
+            null,
           )}
         </ProofStream>
       </SectionShell>

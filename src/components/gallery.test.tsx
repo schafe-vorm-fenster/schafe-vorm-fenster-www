@@ -47,7 +47,6 @@ const INVENTORY = [
   "price-tag",
   "proof-card",
   "proof-stream",
-  "empty-proof-slot",
   "archive-row",
   "archive-filter",
   "origin-story",

@@ -145,7 +145,8 @@ export interface ArchiveFilterProps {
  * `motion-reveal` and `back-to-top` where the inventory's server-first rule
  * yields to interactivity the determination itself requires (component
  * README updated to name it).
- * States: zero selected = all; an empty result is unreachable by
+ * States: zero selected = all; a year block with no visible row is hidden
+ * with its heading (TS-WEB-0028-A19); an empty result is unreachable by
  * construction (every visible type has ≥ 1 row), implemented as a defensive
  * honest line rather than assumed.
  * **Without JavaScript the chip row is not visible** — until mount the row is
@@ -200,6 +201,15 @@ export function ArchiveFilter({
       const show = matchesSelection(rowTypes, selected);
       row.hidden = !show;
       if (show) shown += 1;
+    }
+    // A year block whose rows are all filtered out goes with them, heading
+    // included: an `h2` with nothing under it is an orphan in the outline and
+    // a gap on the page (TS-WEB-0028 D7, A19 — owner's review 2026-10-27,
+    // issue 107). Same mechanism as the rows: `hidden`, so it is out of the layout
+    // and the accessibility tree together.
+    for (const group of root.querySelectorAll<HTMLElement>("[data-archive-year]")) {
+      const groupRows = Array.from(group.querySelectorAll<HTMLElement>("[data-archive-type]"));
+      group.hidden = groupRows.length > 0 && groupRows.every((row) => row.hidden);
     }
     setVisible(shown);
     setTotal(rows.length);
@@ -261,8 +271,15 @@ export function ArchiveFilter({
       ) : (
         <ReservedChipRow allText={allText} types={types} />
       )}
+      {/* D4's defensive empty result: unreachable while every chip has a row,
+          rendered rather than assumed — one honest line, never an error. */}
+      {mounted && visible === 0 && total > 0 ? (
+        <p className={styles.empty} data-archive-empty>
+          {d.empty.replace("{all}", allText)}
+        </p>
+      ) : null}
       {/* The groups the page hands in are blocks of one stack (DEC-0171). */}
-      <div data-stack="" ref={listRef}>
+      <div className={styles.years} data-stack="" ref={listRef}>
         {children}
       </div>
     </div>

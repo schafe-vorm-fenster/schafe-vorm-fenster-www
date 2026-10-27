@@ -45,7 +45,7 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — 3 generated slots: `ueber-uns-2a-anecdotes-demo` and `ueber-uns-3a-empty-slot-demo` are `provenance: generated; demo: true` (the three anecdotes the review names but did not write, and the reserved slot's label and sentence, TS-WEB-0027 D5). Slot 1 carries the released h1 and the village argument in DEC-0084 §2 order, slot 2 the origin story with the cleared founder quote and its article, slot 3 five cleared proof elements, slot 5 the owner's own bio; EN translation of content/pages/ueber-uns/de.md, same source ids per slot"
+provenance: "sourced — no generated slot left: `ueber-uns-2a-anecdotes-demo` went with DEC-0162 §3 and `ueber-uns-3a-empty-slot-demo` (the reserved place's label and sentence) with DEC-0175 §3, because a placeholder never reaches the website. Slot 1 carries the released h1 and the village argument in DEC-0084 §2 order, slot 2 the origin story with the cleared founder quote and its article, slot 3 five cleared proof elements, slot 5 the owner's own bio; EN translation of content/pages/ueber-uns/de.md, same source ids per slot"
 compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0027"
 open_points:
   - "Clearance pending — the testimonial in slot 3 (`kulturlandbuero-broellin`) carries `usage_rights: unverified` (Q-0014) and its own record says 'nicht für neue öffentliche Flächen verwenden'. It is not rendered at all (TS-WEB-0027-A5); with a written clearance it takes the reserved seventh place"
@@ -146,11 +146,7 @@ in slot 1. No operating counter, no year figure as a module, no place count
 
 **Village argument 2 (what the market offers):** As a village or a municipality you do not want to shop for an app or build a complicated website nobody looks at. You need something finished, something people enjoy using, something you can start with.
 
-**Village argument 3 (what follows):** That is why the village calendar is free, and stays that way. That is why the licence for your own calendar costs {price:portalize-calendar} a year instead of a project budget.
-
-**Sentence with proof:** The founder was a volunteer mayor himself — he knows the office this service helps from the inside.
-
-**Source for the proof:** Nordkurier, 2019 and 2022
+**Village argument 3 (what follows):** That is why the village calendar is free, and stays that way. The licence for your own calendar costs {price:portalize-calendar} a year instead of a project budget.
 
 <!-- note: authoring note from here on, not copy — the passage quotes forbidden terms in order to forbid them (DEC-0142 §1) -->
 
@@ -161,12 +157,17 @@ English. What is gone is the clause deriving the price from what a village can
 afford and from the absence of a salesperson — and with it the "around 400
 inhabitants" figure from the brand profile, which is wrong (DEC-0084 §1:
 about 280). Price figures from `community-calendar` (free, "forever") and
-`portalize-calendar` (480/EUR/year) — read, not typed. Proof for the mayor
-sentence: `founder-former-volunteer-mayor` (`cleared`).
+`portalize-calendar` (480/EUR/year) — read, not typed. Since the review of
+2026-10-27 sentence 3 says "that is why" once (#106); the two statements are
+the same.
 
 Since the rebuild on the owner's design of 2026-10-12 (#55, DEC-0162) the three
 sentences of the village argument stand as the three principles under "What we
-took from it", and the sentence with proof stands in chapter 02.
+took from it". The former "sentence with proof" ("The founder was a volunteer
+mayor himself …", source "Nordkurier, 2019 and 2022") is gone: it repeated the
+mayor sentence of chapter 02, and its source named two years instead of an
+article. The fact now stands with its period in chapter 02's text (review of
+2026-10-27, #104, DEC-0175 §2).
 
 ## Slot 1a — Chapters (stage, chapter lines, principles, award)
 
@@ -178,7 +179,7 @@ took from it", and the sentence with proof stands in chapter 02.
 
 **Chapter 02 — heading:** A sheep pasture outside the kitchen window.
 
-**Chapter 02 — place:** Schmatzin · Mayor's office
+**Chapter 02 — place:** Municipality of Schmatzin
 
 **Chapter 03 — heading:** Then it became more than bread rolls.
 
@@ -200,9 +201,11 @@ took from it", and the sentence with proof stands in chapter 02.
 
 The headings, kickers and control words of the owner's design of 2026-10-12
 (`plan/reviews/2026-10-12/Design - Über uns Vorschau - *.jpg`, issue #55), in
-English. The place lines carry only the places and the office from slot 2 and
-`founder-former-volunteer-mayor`. What the design shows as running text or a
-figure without a source is not taken over (DEC-0162 §3); see the German file for
+English. The place lines carry places only: Schlatkow, the municipality of
+Schmatzin, the county — from the village to the municipality to the county.
+"Schmatzin · Mayor's office" was rejected as clipped in the review of
+2026-10-27 (#103); the office is now written out in chapter 02's text (slot 2).
+What the design shows as running text or a figure without a source is not taken over (DEC-0162 §3); see the German file for
 the list.
 
 ## Slot 2 — The story
@@ -213,7 +216,7 @@ the list.
 
 **Paragraph (how it started):** It began with the search for fresh bread rolls. After the family moved from Berlin to Schlatkow, they asked about a baker's van for two weeks, finally lay in wait one morning, and chased the van to the next village to arrange a stop in Schlatkow.
 
-**Paragraph (the name):** The name comes from the years as mayor of Schmatzin: the municipal sheep pasture was visible from the kitchen window.
+**Paragraph (the name):** From 2019 to 2024 Jan-Henrik Hempel was the volunteer mayor of Schmatzin, which Schlatkow is part of. The name Schafe vorm Fenster recalls that time: from the kitchen window you looked out on the municipality's sheep pasture.
 
 **Quote (founder):** Collect all of it, and suddenly every village has something on every day. All we have to do is make it visible.
 
@@ -228,7 +231,13 @@ the list.
 **Quote — source (link):** https://www.zukunftswege-ost-vorpommern.de/vollblutdigitalisierer-von-schlatkow
 
 Origin paragraph: the "Origin story" section of the brand profile, plus the
-Zukunftswege Ost-Vorpommern portrait (January 2026). The quote is verbatim in
+Zukunftswege Ost-Vorpommern portrait (January 2026). Name paragraph (chapter
+02): the brand profile's "The name honours the founder's time as volunteer
+mayor of Schmatzin" (hence "recalls", not "comes from"), and
+`founder-former-volunteer-mayor` for the office, its start in 2019 and
+Schlatkow as part of the municipality. The end of the term, 2024, is the
+owner's statement in the review of 2026-10-27; the hub record leaves it open,
+DEM-0074. The quote is verbatim in
 the person profile (`press_clearance: cleared`) and in the portrait; the
 German file carries the German original. Title and link come from the
 `media-echo` entry `2026-01-zukunftswege-ost-vollblutdigitalisierer` (carried
@@ -251,7 +260,7 @@ slots 3 and 3b).
 Pool: the full `proof` set plus `media-echo` (31 entries). Since the rebuild on
 the design of 2026-10-12 the stream is chapter 03 (DEC-0162 §2): four stories,
 all `usage_rights: cleared`. The NØRD award stands in its own award block
-(slot 4) and the mayor proof in chapter 02 (slot 1):
+(slot 4) and the mayor in chapter 02 (slot 2):
 
 1. During the pandemic, every vaccination slot and every testing-centre opening time in the county was published through the village calendars, day-current and place-precise. — Landkreis Vorpommern-Greifswald, 2022
 2. In 2022 the village calendar helped Ukrainian refugees join village life: club meetings, events, and mobile traders. — eu:react final report, July 2022
@@ -262,12 +271,13 @@ The order here is chronological, newest first — not the display order: which
 element sits in which place is decided by the relevance engine (TS-WEB-0005)
 out of the same pool. The seventh place is reserved for the `testimonial` type
 and is never backfilled with an element of another type (TS-WEB-0027 D5).
+While it is empty it renders nothing — no card, no placeholder (DEC-0175 §3).
 
 The stream's sixth element is gone: "the village calendar has been running
 since 2018" (`in-operation-since-2018`) is a "since …" claim, and TS-WEB-0027 D4
 forbids it on this page in so many words — "no year figure rendered as a
 module, no place count, no badge, no 'seit …' claim anywhere on the page".
-Further gaps shorten the stream; they never add a second empty place (D5).
+Gaps shorten the stream; an empty place is never shown (D5, DEC-0175 §3).
 
 <!-- id: ueber-uns-3b-stories; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter"]; status: draft -->
 
@@ -293,16 +303,10 @@ explicit note not to use it on new public surfaces (Q-0014), so the card is
 not rendered (TS-WEB-0027-A5 — no `unverified` id in the served HTML). With a
 written clearance it takes the reserved place.
 
-<!-- id: ueber-uns-3a-empty-slot-demo; content_type: proof-card; provenance: generated; derived_from: []; status: draft; demo: true -->
-
-**Label (reserved place):** Proof missing
-
-**Sentence (reserved place):** A publisher's or a mayor's own voice stands here as soon as one is cleared.
-
-TS-WEB-0027 D5 asks the reserved place for "a label badge and one sentence
-naming what is missing" and puts it explicitly into the accessibility tree.
-Nobody wrote the two strings: `provenance: generated`, `demo: true`,
-`data-demo="true"` in the markup, a row in `state/open.md`.
+The former slot `ueber-uns-3a-empty-slot-demo` ("Proof missing" and a sentence
+naming the missing proof, `provenance: generated; demo: true`) is gone: a
+missing proof renders nothing, and a placeholder never reaches the website
+(review of 2026-10-27, #105, DEC-0175 §3).
 
 ## Slot 4 — Award and archive link
 

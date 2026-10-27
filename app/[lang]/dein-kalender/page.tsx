@@ -4,7 +4,6 @@ import { EmbedFrame } from "@/src/components/embed-frame/embed-frame";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { Icon } from "@/src/components/icon/icon";
 import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
-import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import {
   PRICE_TIERS,
   PriceSection,
@@ -586,7 +585,8 @@ export default async function Page({
         <h2 id="proof-heading">{proofHeading(selectedProofKind(proofSelection), locale)}</h2>
         <ProofStream label={proofHeading(selectedProofKind(proofSelection), locale)} layout="rows">
           {proofSelection.entries.map((entry, position) => {
-            if (entry.kind === "empty") return <EmptyProofSlot key={`empty-${position}`} />;
+            // A missing proof renders nothing (DEC-0175 §3).
+            if (entry.kind === "empty") return null;
 
             /* Somebody's words become a `quote-card` only where the artifact
                names the article they were said in **and** an author with a role

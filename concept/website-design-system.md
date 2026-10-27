@@ -953,17 +953,22 @@ photograph on the stage therefore uses its **stage cut**, positioned at its
 
 ### Story disclosure
 
-**A set of stories a reader opens one at a time** (`/ueber-uns` chapter 03,
-`DEC-0162`). It is the proof stream told as stories, not a second stream.
+**An accordion of stories** (`/ueber-uns` chapter 03, `DEC-0162`, rebuilt as an
+accordion by `DEC-0175` §1). It is the proof stream told as stories, not a
+second stream. **Nothing reorders and nothing reflows:** the owner's review of
+2026-10-27 rejected the grid in which an opened card spanned the row and moved
+the others ("hüpft und springt").
 
 | Part | Rule |
 | --- | --- |
-| Item | A flat block on the section ground, radius 0, no border, no shadow. Closed: `lime-100`, `ink` type. Open: `violet-500`, `paper` type, and it spans the grid's whole row |
-| Head | Mono kicker (the record's source and year) and the title as an `h3`, outside the toggle, so the outline holds every title whether open or not. The title is the record's verbatim claim and is never truncated |
-| Toggle | A native `<details>`/`<summary>`; all items share one `name`, so at most one is open. The summary names the action ("Die Geschichte" / "Schließen") beside a 44 px control well with `plus`, turned to a close mark when open — a state, no transition |
-| Load | The first item is open in the server HTML; nothing changes after hydration and nothing needs JavaScript |
-| Grid | One column on the phone, two from `md`, three from `xl` |
+| List | **One column at every width.** Items stack with `space-2` between them; an item never changes its column, its width or its place. Opening one grows only that item, downward — no sibling moves sideways, nothing above it moves at all |
+| Item | A flat block on the section ground, radius 0, no border, no shadow. Closed: `lime-100`, `ink` type. Open: `violet-500`, `paper` type. The title keeps its size in both states, so the colour is the only change |
+| Head | Mono kicker (the record's source and year) and the title as an `h3`, outside the toggle, so the outline holds every title whether open or not. The title is the record's verbatim claim, never truncated, at most 8 columns wide |
+| Toggle | A native `<details>`/`<summary>` per item, **no shared `name`: several may be open**. An exclusive group would close the open item above the clicked one and pull the clicked one up under the pointer. The summary names the action ("Die Geschichte" / "Schließen") beside a 44 px control well with `plus`, turned to a close mark when open — a state, no transition |
+| Load | The first item is open in the server HTML; nothing changes after hydration and nothing needs JavaScript. No layout shift on load |
+| Motion | None. Opening and closing are state changes, so `prefers-reduced-motion` has nothing to reduce |
 | Colour | No `himbeere` tile: `himbeere` is the pulse (the owner's design showed one, `DEC-0162` §2) |
+| Gaps | A position without a cleared story renders nothing — no placeholder item (`DEC-0175` §3, *Do Not*) |
 
 ### Web-calendar overlay
 
@@ -1776,6 +1781,11 @@ still forbidden.
 - No photo section adjacent to another photo section.
 - No stock photography. An honest hatched placeholder is better and doubles
   as a conversion.
+- **No placeholder for a missing proof.** The hatch is for a missing
+  *photograph* only. A proof position without a cleared proof renders nothing —
+  no hatch, no flat panel, no badge, no sentence naming the gap ("Beleg
+  fehlt"), and nothing backfills it (`DEC-0175` §3, owner's review 2026-10-27;
+  `TS-WEB-0007-A19` walks every route for it).
 - No colour outside the scales above; no colour literal at a call site, a
   scrim included — the ladder is a token like everything else.
 - No grey-green ground under positive content.

@@ -7,7 +7,6 @@ import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { CONTACT_SECTION_ID } from "@/src/components/contact-section/contact-section";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { PriceTag } from "@/src/components/price-tag/price-tag";
-import { EmptyProofSlot } from "@/src/components/empty-proof-slot/empty-proof-slot";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
@@ -522,7 +521,7 @@ export default async function Page({
               review line 462). DEC-0143 §2. */}
           <h2 id="beleg">{proofHeading(selectedProofKind(proofSelection), locale)}</h2>
           <ProofStream label={copy.proofLabel}>
-            {proofSelection.entries.map((entry, position) =>
+            {proofSelection.entries.map((entry) =>
               entry.kind === "item" ? (
                 <ProofCard
                   attribution={entry.candidate.attribution}
@@ -533,9 +532,8 @@ export default async function Page({
                   locale={locale}
                   state={entry.state}
                 />
-              ) : (
-                <EmptyProofSlot key={`empty-${position}`} />
-              ),
+              ) : // A missing proof renders nothing (DEC-0175 §3).
+              null,
             )}
           </ProofStream>
         </MotionReveal>

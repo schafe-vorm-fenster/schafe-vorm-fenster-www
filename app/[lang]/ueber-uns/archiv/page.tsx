@@ -166,8 +166,10 @@ export default async function Page({
               // by their hairline, never by a gap (SRC-0014 §Shape and Space).
               // The heading stands `--block-gap` above its rows and the year
               // before it ends a row's padding plus `--block-gap` higher, so it
-              // reads with the entries it names (issue 108, DEC-0171).
-              <div data-stack="" key={year}>
+              // reads with the entries it names (issue 108, DEC-0171). The
+              // filter hides a year block with no visible row, heading
+              // included (D7, A19, issue 107).
+              <div data-archive-year={year} data-stack="" key={year}>
                 <h2>{year}</h2>
                 <div>
                   {yearRows.map((row) => (

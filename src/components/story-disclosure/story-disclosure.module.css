@@ -1,31 +1,21 @@
 /*
- * `story-disclosure` — SRC-0014 §Story disclosure, DEC-0162 §2.
+ * `story-disclosure` — SRC-0014 §Story disclosure, DEC-0162 §2, an accordion
+ * since DEC-0175 §1.
  *
- * Flat blocks on the section ground: radius 0, no border, no shadow. A closed
- * story is a `lime-100` block with `ink` type, the open one a `violet-500`
- * block with `paper` type spanning the whole row. The state is read off the
- * native `<details>` with `:has()`; no script decides anything here.
+ * One column at every width: an item never changes its column or its place,
+ * so opening one moves no sibling sideways and nothing above it at all. Flat
+ * blocks on the section ground: radius 0, no border, no shadow. A closed
+ * story is a `lime-100` block with `ink` type, an open one a `violet-500`
+ * block with `paper` type. The state is read off the native `<details>` with
+ * `:has()`; no script decides anything here, and nothing transitions.
  */
-.grid {
-  display: grid;
+.list {
+  display: flex;
+  flex-direction: column;
   gap: var(--space-2);
-  grid-auto-flow: row dense;
-  grid-template-columns: minmax(0, 1fr);
   list-style: none;
   margin: 0;
   padding: 0;
-}
-
-@media (min-width: 40rem) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 64rem) {
-  .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
 
 .item {
@@ -40,7 +30,6 @@
 .item:has(.details[open]) {
   background: var(--color-violet-500);
   color: var(--color-neutral-paper);
-  grid-column: 1 / -1;
 }
 
 .head {
@@ -70,22 +59,11 @@
   letter-spacing: var(--type-card-tracking);
   line-height: var(--type-card-leading);
   margin: 0;
-  max-width: none;
-}
-
-/* From `md` the open story's title steps up to the sub head; on the phone it
-   keeps the card size, so one open story does not double the section. */
-@media (min-width: 40rem) {
-  .item:has(.details[open]) .title {
-    font-size: var(--type-subhead-size);
-    letter-spacing: var(--type-subhead-tracking);
-    line-height: var(--leading-tight);
-    max-width: var(--span-8);
-  }
+  max-width: var(--span-8);
 }
 
 .details {
-  margin-top: auto;
+  margin: 0;
 }
 
 .summary {
@@ -156,12 +134,4 @@
   line-height: var(--leading-relaxed);
   margin: var(--space-3) 0 0;
   max-width: min(var(--measure-text), var(--span-7));
-}
-
-.trailing {
-  display: flex;
-}
-
-.trailing > * {
-  flex: 1;
 }
