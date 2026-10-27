@@ -107,8 +107,15 @@ test.describe("DEC-0168: one active place", () => {
     await expect(page.locator('#focus-block [data-photo-note="pending"]')).toHaveCount(0);
     expect(asked).toEqual(["schlatkow"]);
 
-    // The calendar link the example offers is the example's own calendar.
-    await expect(page.locator(`#homescreen a[href="https://schafe-vorm-fenster.de/schlatkow.${PLACES.schlatkow.id}"]`)).toHaveCount(1);
+    // Every calendar link the page offers is the example's own calendar.
+    await expect(page.locator('#nearby a[href^="https://schafe-vorm-fenster.de/"]').first()).toBeAttached();
+    const calendars = await page.evaluate(() =>
+      [...document.querySelectorAll("a[href]")]
+        .map((link) => link.getAttribute("href") ?? "")
+        .filter((href) => /^https:\/\/schafe-vorm-fenster\.de\/[a-z0-9-]+\.\d+/u.test(href)),
+    );
+    expect(calendars.length).toBeGreaterThan(0);
+    expect(new Set(calendars)).toEqual(new Set([`https://schafe-vorm-fenster.de/schlatkow.${PLACES.schlatkow.id}`]));
   });
 
   test("TS-WEB-0020-A27: while ?ort= resolves, the example is neither fetched nor shown", async ({ page }) => {
@@ -179,6 +186,49 @@ test.describe("DEC-0168: one active place", () => {
     await page.waitForTimeout(2500); // Quilow's answer lands now — and must change nothing
     await expect(page.locator("#focus-block [data-place-photo]")).toHaveAttribute("data-place-photo", "anklam");
     expect(disagreements(await frames(page), "Anklam", "anklam")).toEqual([]);
+  });
+
+  test("TS-WEB-0020-A27: the story stage's live date is the active place's — and with none, no empty \"Im Kalender\"", async ({
+    page,
+  }) => {
+    await mockPhotos(page);
+    const pools: string[] = [];
+    const event = (slug: string, name: string, id: string) => ({
+      id: `e2e-${slug}-bread`,
+      title: `Bäckerwagen in ${name}`,
+      startsAt: new Date(Date.now() + 2 * 86_400_000).toISOString(),
+      placeName: name,
+      categoryId: "everyday-supply",
+      communityId: `geoname.${id}`,
+      tags: ["Bäcker"],
+      distanceKm: 0,
+    });
+    await page.route(/\/api\/places\/[^/]+\/examples/u, async (route) => {
+      const slug = new URL(route.request().url()).pathname.split("/")[3]!;
+      pools.push(slug);
+      // Quilow has a bakery van; Anklam's pool has nothing of the bread story's kind.
+      const events = slug === "quilow" ? [event("quilow", "Quilow", PLACES.quilow.id)] : [];
+      await route.fulfill({
+        json: { data: { place: { slug, name: slug, communityId: "geoname.1", lat: 0, lng: 0 }, events }, tier: "live", fetchedAt: new Date().toISOString(), stale: false, demo: false },
+      });
+    });
+
+    const stage = page.locator('[data-block="story-stage"]');
+    const breadLabel = stage.getByText(/^Im Kalender$/u).first();
+
+    await page.goto("/dein-ort?ort=quilow");
+    await expect(page.locator("h1")).toContainText("Quilow");
+    await expect(stage).toContainText("Bäckerwagen in Quilow");
+    await expect(breadLabel).toBeVisible();
+    expect(pools).toEqual(["quilow"]);
+
+    pools.length = 0;
+    await page.goto("/dein-ort?ort=anklam");
+    await expect(page.locator("h1")).toContainText("Anklam");
+    await expect.poll(() => pools).toEqual(["anklam"]);
+    // The pool answered and holds no date for this story: the label goes with the row.
+    await expect(breadLabel).toBeHidden();
+    await expect(stage).not.toContainText("Bäckerwagen in");
   });
 
   test("TS-WEB-0020-A27: a position that resolves late never overrides the place picked meanwhile", async ({

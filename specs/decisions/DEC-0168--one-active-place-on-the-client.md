@@ -138,7 +138,18 @@ the change — **five of six red**:
 7. **A late position never overrides a later choice.** The "use my location"
    control abandons its attempt the moment the page starts to leave
    (`beforeunload`, `pagehide`) or its URL changes.
-8. **The query is published before paint** (`useLayoutEffect` in
+8. **The story stage's live date belongs to the active place, and an empty
+   one says nothing** (coordinator's follow-up of 2026-10-27, the owner's
+   screenshot `Ist - Zitat unter Terminen.png`). Measured: it did not hang on
+   the place — `StoryExample` read the same anchor — but its pool
+   (`/api/places/{slug}/examples`) is either empty (without a token
+   community-site's page read is challenged, so the pool falls to its empty
+   snapshot) or holds no date of the story's kind (no bakery van in Lehre or
+   Anklam, DEC-0153 §2), and then the island rendered nothing while the stage
+   still printed "Im Kalender" over it. The pool is now read only for an
+   established place (never while `?ort=` resolves), and the label stands only
+   with a row (`story-stage.module.css`).
+9. **The query is published before paint** (`useLayoutEffect` in
    `<QuerySync />`), so a client navigation's next page never paints with the
    previous page's `?ort=`.
 
