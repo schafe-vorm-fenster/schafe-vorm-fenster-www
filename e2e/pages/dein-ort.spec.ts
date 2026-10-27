@@ -545,7 +545,8 @@ test.describe("TS-WEB-0020 — your place", () => {
     // publishing offer: no handover to an empty calendar anywhere.
     await expect(page.locator('#place-dates a[href^="https://app."]')).toHaveCount(0);
     await expect(page.locator("#homescreen")).toHaveCount(0);
-    await expect(page.locator('main a[href^="https://app."]')).toHaveCount(0);
+    // The nearby module's own "all dates" link is part of that live module and stays.
+    await expect(page.locator('#closing-cta a[href^="https://app."]')).toHaveCount(0);
 
     await page.locator('[data-cta="primary"]').click();
     await expect(page).toHaveURL(new RegExp(`/mitmachen/registrieren\\?ort=${slug}$`));
