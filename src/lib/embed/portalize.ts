@@ -17,8 +17,11 @@
  *  3. **what the embed may be told.** Everything else — which places, which
  *     categories, the typography, the branding — is **server-side organizer
  *     configuration**, fetched by the loader itself. The page can only set
- *     three `data-*` attributes: branding on/off, the category filter on/off,
- *     and how many weeks ahead to show.
+ *     five `data-*` attributes: branding on/off, the category filter on/off,
+ *     how many weeks ahead to show, and the two own-events switches
+ *     (`data-own-events-showcase`, `data-own-events-highlight`, portalize
+ *     PR 140) — and the colours, through the widget's `--portalize-*` custom
+ *     properties (`embed-frame.module.css`, DEC-0173).
  *
  * The calendar embedded on `/dein-kalender` is a **real, live one**
  * (`SHOWCASE_CALENDAR` below). Its configuration was read from the service's
@@ -50,6 +53,21 @@ export const SHOWCASE_CALENDAR = {
   categoriesFiltered: false,
   /** `style.brand.logourl: null` upstream — no branding header. */
   branding: false,
+  /**
+   * The own-events showcase and highlight stay **off** (DEC-0173 §2, issue #98).
+   *
+   * The organizer id is the licence of the *Verein zur Förderung von Kultur in
+   * den Orten Schlatkow, Schmatzin und Wolfradshof e.V.*; its filter is the
+   * three villages. Portalize treats every date whose `organizer.id` equals
+   * the embedding id as an "own event" and puts them in a row above the list
+   * headed "Termine von {organizer}" — which on this page named the Verein
+   * over a calendar the copy introduces as the three villages' own. The
+   * municipality has no active Portalize licence (`/api/{id}/config` answers
+   * 403, 2026-10-27), so the honest calendar is this one **without** the
+   * Verein's showcase: the list of the three villages, nobody's dates singled
+   * out.
+   */
+  ownEvents: false,
 } as const;
 
 /** The loader's default, restated so the page copy and the embed agree. */

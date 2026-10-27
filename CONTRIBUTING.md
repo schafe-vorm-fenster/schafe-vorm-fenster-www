@@ -178,6 +178,13 @@ cannot see whether the small range does anything.
   what makes an untokened preview show real dates.
   `GEOAPI_READ_TOKEN` and `EVENTSAPI_READ_TOKEN` move each module up to the
   authoritative source with no code change.
+- **A test organizer's dates are never shown** (DEC-0173 §3). Set
+  `MATEO_TEST_USER_IDS` (comma-separated organizer ids) to the same value
+  the village calendar (`community-site`) uses. Both adapters drop those
+  organizers' events (`src/lib/live/test-organizers.ts`). If the variable is
+  unset, nothing is filtered. The ids belong in the environment, never in
+  code. The Portalize widget filters in its own backend with the same
+  variable.
 - **Every page is static, and a request value is read in the browser**
   (DEC-0163). The CSP carries build-time hashes of each page's inline scripts
   (`scripts/csp-adapter.mjs` builds the map inside `next build`), so a page's

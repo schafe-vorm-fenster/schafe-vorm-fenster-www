@@ -10,6 +10,7 @@ import type {
   CommunitySiteEvent,
 } from "@/src/clients/community-site/client";
 import { fitEvents } from "./quality";
+import { withoutTestOrganizers } from "./test-organizers";
 
 import type { LiveEvent, Place } from "./types";
 
@@ -67,9 +68,14 @@ export function toLiveEvent(event: UpstreamEvent): LiveEvent | undefined {
   };
 }
 
+/**
+ * A test organizer's date is dropped before it is mapped (DEC-0173 §3): the
+ * organizer is not part of `LiveEvent`, so this is the last place it can be
+ * read.
+ */
 export function toLiveEvents(events: readonly UpstreamEvent[]): LiveEvent[] {
   return fitEvents(
-    events.flatMap((event) => {
+    withoutTestOrganizers(events, (event) => event["organizer.id"]).flatMap((event) => {
       const mapped = toLiveEvent(event);
       return mapped ? [mapped] : [];
     }),
@@ -112,9 +118,15 @@ export function toLiveEventFromSite(event: CommunitySiteEvent): LiveEvent | unde
   };
 }
 
+/**
+ * The site already drops test organizers before it renders (its
+ * `filterTestEvents`, applied in `getStaticProps`); this repeats the same rule
+ * on the field it reads, `calendar.organizer._id`, so the website does not
+ * depend on another application remembering to (DEC-0173 §3).
+ */
 export function toLiveEventsFromSite(events: readonly CommunitySiteEvent[]): LiveEvent[] {
   return fitEvents(
-    events.flatMap((event) => {
+    withoutTestOrganizers(events, (event) => event.calendar?.organizer?._id).flatMap((event) => {
       const mapped = toLiveEventFromSite(event);
       return mapped ? [mapped] : [];
     }),

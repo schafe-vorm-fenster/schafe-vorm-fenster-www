@@ -3,7 +3,7 @@ import { Skeleton } from "../skeleton/skeleton";
 
 import { PortalizeMount } from "./portalize-mount";
 
-import { DEFAULT_WEEKS_AHEAD } from "@/src/lib/embed/portalize";
+import { DEFAULT_WEEKS_AHEAD, SHOWCASE_CALENDAR } from "@/src/lib/embed/portalize";
 
 import type { MediaRatio } from "../media-frame/media-frame";
 import type { CSSProperties, ReactNode } from "react";
@@ -32,6 +32,12 @@ export interface EmbedFrameProps extends DataStateProps {
   readonly showBranding?: boolean;
   /** How far ahead the widget looks; the loader's own default is 13 weeks. */
   readonly weeksAhead?: number;
+  /**
+   * The widget's own-events showcase and highlight. Off by default: the
+   * embedded licence belongs to one organizer, and its showcase would title a
+   * calendar of three villages with that organizer's name (DEC-0173 §2).
+   */
+  readonly showOwnEvents?: boolean;
   /**
    * What the embed is actually set to, as key and value — authored beside
    * the copy, so a visitor reads the settings rather than guessing at them
@@ -67,9 +73,11 @@ export interface EmbedFrameProps extends DataStateProps {
  * Space: the box declares a fixed height before the loader runs and the
  * widget scrolls inside it, so neither the config fetch nor the events fetch
  * moves anything below — the page never reflows.
- * A11y: the copy and CTA stay reachable regardless of the widget's state; the
- * widget itself may use a shadow root the page does not reach into (checked
- * where it is actually mounted, M4).
+ * A11y: the copy and CTA stay reachable regardless of the widget's state. The
+ * widget renders into an open shadow root the page never reaches into; it is
+ * themed only through its `--portalize-*` custom properties, every one a
+ * site token on the box's light ground, so each text in it clears 4.5:1 and
+ * each control 3:1 (DEC-0173 §1, measured in `e2e/embed.spec.ts`).
  */
 export function EmbedFrame({
   heading,
@@ -80,6 +88,7 @@ export function EmbedFrame({
   showFilter = true,
   showBranding = false,
   weeksAhead = DEFAULT_WEEKS_AHEAD,
+  showOwnEvents = SHOWCASE_CALENDAR.ownEvents,
   config,
   configLabel,
   ratio = "map",
@@ -111,6 +120,7 @@ export function EmbedFrame({
               organizerId={organizerId}
               showBranding={showBranding}
               showFilter={showFilter}
+              showOwnEvents={showOwnEvents}
               weeksAhead={weeksAhead}
             />
           )}

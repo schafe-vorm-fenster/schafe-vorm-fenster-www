@@ -50,7 +50,9 @@ Supporting modules: `types.ts` (the envelope and the domain shapes),
 `resilient.ts` (the three tiers), `last-good.ts` (the tier-2 store),
 `cache-profiles.ts` (TS-WEB-0003 D5's numbers), `snapshots.ts` (tier 3),
 `bff.ts` (origin check, rate limit, the response shape), `adapters.ts`
-(upstream shape → ours), `categories.ts` (events-api's five category ids →
+(upstream shape → ours; placeholders, duplicates and test organizers
+out), `test-organizers.ts` (`MATEO_TEST_USER_IDS`, the village calendar's
+test-account rule, DEC-0173 §3), `categories.ts` (events-api's five category ids →
 the design system's six tones), `place-index.ts` (the committed
 covered-community index: name search, id → slug, the radius cut),
 `public-source.ts` (the tokenless source in this layer's vocabulary),

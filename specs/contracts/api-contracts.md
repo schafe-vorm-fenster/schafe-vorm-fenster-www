@@ -38,5 +38,13 @@ assumed.
 - Data endpoints are token-scoped (`/api/{token}/…`); the website needs
   read tokens per service as environment variables — same pattern as the
   product (`EVENTSAPI_HOST`/`…_READ_TOKEN`).
+- **A test organizer's events are dropped wherever events enter the site**
+  (DEC-0173 §3). The rule is the village calendar's own
+  (`community-site/src/filter/filterTestEvents.ts`): an event whose
+  organizer id (`organizer.id` from events-api, `calendar.organizer._id` from
+  the public site) is in `MATEO_TEST_USER_IDS` is a test event. Both adapters
+  apply it (`src/lib/live/test-organizers.ts`). The Portalize widget reads
+  events-api directly, so it needs the same rule in its own events route
+  (schafe-vorm-fenster/portalize#144).
 - Specs are fetched and pinned per the adopted convention (DEC-0021);
   the stored `openapi.json` files are the review anchor for API changes.
