@@ -1209,10 +1209,33 @@ and delivered by assets-api, and it is shown only with a stated licence (and an
 author, where the licence asks for attribution). It arrives after the page has
 painted, as a layer over the stage's own photograph with the same scrim, so the
 stage's geometry never changes; the page's own photograph stays the LCP. Its
-**credit stands at the photograph**, in the stage's top corner: title linked to
-the source, author, licence, source. No focal point exists for these
-photographs, so they take the surface's default `50% 40%`; the anchored crop
-below needs a declared focal point and does not apply.
+**credit stands at the photograph** as a © control (`photo-credit`, issue #78,
+`DEC-0168`): a 40 px round well with Lucide `copyright` in `paper` on
+`scrim-45`, in the photograph's top-right corner — the corner, well and scrim
+of the AI-edited mark, which stands down while a place photograph covers the
+stage. Hover, keyboard focus and a tap open a `paper` card holding the full
+credit — title linked to the source, author, licence, source — Escape closes
+it; never a `title` tooltip, never standing text on the photograph.
+
+**Every photo credit is that © control** (issue #101, `DEC-0168`). Wherever a
+photograph carries a credit at the image — a place photograph, an inventory
+image whose rights holder asks for one (`credit`), on a `photo-surface` or in
+a `media-frame` — the credit is the `photo-credit` control in the picture's
+top-right corner, its panel holding the full text ("Foto: openTransfer.de").
+No credit is ever visible running text on or under a photograph, and never a
+caption; where the AI-edited mark holds the corner, the control stands left of
+it in the same row. No focal
+point exists for these photographs, so they take the surface's default
+`50% 40%`; the anchored crop below needs a declared focal point and does not
+apply.
+
+**The stage and the page name one place** (`DEC-0168`, issue #80). Without a
+chosen place, a page whose modules speak about the configured example place
+(Schlatkow) shows the example's photograph on its stage, unless its own
+photograph depicts that place (the inventory's `place`). While a place's
+photograph loads, the stage's own photograph is labelled "Beispielfoto": a
+headline naming one place never stands over an unlabelled photograph of
+another, for any length of time.
 
 **A place without a usable photograph** (`Q-0089`, resolved by `DEC-0167`)
 keeps the page's own photograph, and the same corner says honestly that it is
@@ -1622,6 +1645,7 @@ The icons in use, by role:
 | Food, catering | `utensils` |
 | Music, choir | `music` |
 | Edited with an AI tool (`ai-edited-mark`) | `sparkles` |
+| Photo credit (`photo-credit`, every credited photograph) | `copyright` |
 
 `circle-x` marks an exclusion in a feature comparison — a thing the reader
 does *not* get. It never appears in an archive block, where the icons are

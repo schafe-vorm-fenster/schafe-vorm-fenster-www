@@ -50,6 +50,7 @@ images:
       The half-timbered house of the Melkerschule in Schlatkow, with picnic benches, two parasols
       and guests on the grass in front of it.
     licence: CC BY-SA 4.0
+    place: schlatkow
     focal:
       x: 50
       "y": 55

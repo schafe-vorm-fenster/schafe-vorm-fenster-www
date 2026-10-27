@@ -319,6 +319,15 @@
 }
 
 /*
+ * DEC-0167/DEC-0168: the AI-edited mark marks the surface's **own** picture.
+ * While a place photograph covers it, the mark would mark a picture that is
+ * not shown, and the place photograph's © control takes that corner.
+ */
+.surface:has([data-place-photo]) [data-ai-edited-mark] {
+  display: none;
+}
+
+/*
  * The photograph's credit line, or the fallback's honest label (DEC-0167,
  * Q-0089). It sits in the picture's top corner, below the header's height,
  * in the band the text stack may not enter (`data-hero`'s reserved band), so

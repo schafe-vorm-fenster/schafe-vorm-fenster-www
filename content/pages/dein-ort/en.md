@@ -55,6 +55,7 @@ images:
       A bus stop with a planted shelter on the village street in Dargitz, the church tower behind
       it.
     licence: CC0 1.0
+    place: dargitz
     status: real
     file: /images/real/dein-ort-hero.webp
     width: 800

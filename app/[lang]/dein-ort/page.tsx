@@ -276,6 +276,7 @@ export default async function PlacePage({ params }: { params: Promise<{ lang: st
           focal: heroImage?.focal,
           notDepicting: heroImage?.notDepicting,
           placeholderId: heroImage?.placeholderId,
+          place: heroImage?.place,
         }}
         s0Search={search({ hero: true, primary: true, placeholder: s0Placeholder })}
       />

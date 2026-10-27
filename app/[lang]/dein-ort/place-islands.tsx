@@ -34,11 +34,10 @@ import { HowtoBlock } from "@/src/components/howto-block/howto-block";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { linkHref } from "@/src/components/route-link/href";
 import { dictionary } from "@/src/lib/i18n/dictionary";
-import { calendarUrlForSlug } from "@/src/lib/live/app-handover";
+import { calendarUrl } from "@/src/lib/live/app-handover";
 import { liveRoutes, useLive } from "@/src/lib/live/browser";
-import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
+import { EXAMPLE_PLACE, useActivePlace, type ActivePlace } from "@/src/lib/pages/active-place";
 import { fillTemplate, splitSteps } from "@/src/lib/pages/demo-content";
-import { usePlaceState, type PlaceState } from "@/src/lib/pages/place-state";
 import { selectStoryExamples } from "@/src/lib/pages/story-examples";
 
 import { NearbyIsland, PlaceDatesIsland } from "../_islands";
@@ -57,39 +56,32 @@ import type { ReactNode } from "react";
  */
 const SAVE_CALENDAR = { goalId: "save-calendar-to-homescreen", stage: "handover" } as const;
 
-/** The anchor every live module speaks about: the stated place, else the showcase community. */
-interface Anchor {
-  readonly slug: string;
-  readonly name: string;
-  readonly lat: number;
-  readonly lng: number;
-}
-
-const SHOWCASE_ANCHOR: Anchor = {
-  slug: SHOWCASE_COMMUNITY.slug,
-  name: SHOWCASE_COMMUNITY.name,
-  lat: SHOWCASE_COMMUNITY.lat,
-  lng: SHOWCASE_COMMUNITY.lng,
-};
-
-/** Which of D2's three states renders: S0, A or B. */
+/**
+ * Which of D2's three states renders: S0, A or B — off the page's one active
+ * place (`active-place.ts`, DEC-0168), never off a second read of the URL.
+ *
+ * `anchor` is the place every live module speaks about: the chosen place in
+ * A and B, the configured example in S0 — **explicitly** the example, the same
+ * place the stage photograph shows. `held` is S0 before the page knows whether
+ * a place was asked for: the prerendered frame (which names the example)
+ * stands, and nothing is fetched, so a visitor who asked for Lehre is never
+ * shown Schlatkow's rows while Lehre resolves.
+ */
 type PageState =
-  | { readonly kind: "s0" }
-  | { readonly kind: "a"; readonly place: Place }
-  | { readonly kind: "b"; readonly place: Place };
+  | { readonly kind: "s0"; readonly anchor: Place; readonly held: boolean }
+  | { readonly kind: "a"; readonly anchor: Place; readonly place: Place; readonly held: false }
+  | { readonly kind: "b"; readonly anchor: Place; readonly place: Place; readonly held: false };
 
-function pageStateOf(state: PlaceState): PageState {
-  if (state.kind !== "covered") return { kind: "s0" };
+function pageStateOf(active: ActivePlace): PageState {
+  if (active.kind === "example") return { kind: "s0", anchor: active.place, held: false };
+  if (active.kind !== "chosen") return { kind: "s0", anchor: EXAMPLE_PLACE, held: true };
   // State B is TS-WEB-0008 D4's trigger — a covered place whose window is empty.
-  return state.publishInvitation ? { kind: "b", place: state.place } : { kind: "a", place: state.place };
+  const b = active.dates.status === "known" && active.dates.publishInvitation;
+  return { kind: b ? "b" : "a", anchor: active.place, place: active.place, held: false };
 }
 
 function usePageState(): PageState {
-  return pageStateOf(usePlaceState());
-}
-
-function anchorOf(state: PageState): Anchor {
-  return state.kind === "s0" ? SHOWCASE_ANCHOR : state.place;
+  return pageStateOf(useActivePlace());
 }
 
 /**
@@ -98,7 +90,7 @@ function anchorOf(state: PageState): Anchor {
  * second line for a client navigation that never passed through it.
  */
 export function PlaceHop({ locale }: { readonly locale: Locale }) {
-  const state = usePlaceState();
+  const state = useActivePlace();
   const router = useRouter();
   const target = state.kind === "uncovered" ? linkHref("placeStart", { locale, query: { ort: state.query } }) : undefined;
   useEffect(() => {
@@ -137,6 +129,8 @@ export interface PlaceHeroProps {
     readonly focal?: { readonly x: number; readonly y: number };
     readonly notDepicting?: boolean;
     readonly placeholderId?: string;
+    /** The covered place the photograph depicts — the inventory's `place` (DEC-0168). */
+    readonly place?: string;
   };
 }
 
@@ -162,7 +156,7 @@ export function PlaceHero({ copy, s0Search, aSearch, image }: PlaceHeroProps) {
       locale={copy.locale}
       notDepicting={image.notDepicting}
       // DEC-0167 — with a place, the stage shows that place's photograph.
-      photoLayer={<PlacePhotoLayer locale={copy.locale} />}
+      photoLayer={<PlacePhotoLayer locale={copy.locale} ownPhotoPlace={image.place} />}
       placeholderId={image.placeholderId}
       search={state.kind === "a" ? aSearch : undefined}
       src={image.src}
@@ -182,7 +176,7 @@ export function PlaceHero({ copy, s0Search, aSearch, image }: PlaceHeroProps) {
 export function PlaceModuleSlot({ copy }: { readonly copy: PlaceCopy }) {
   const state = usePageState();
   const words = dictionary(copy.locale);
-  const anchor = anchorOf(state);
+  const { anchor } = state;
 
   return (
     <SectionShell
@@ -216,7 +210,9 @@ export function PlaceModuleSlot({ copy }: { readonly copy: PlaceCopy }) {
           // place the visitor never asked about. State A answers, and its
           // handover is the page's conversion (G-5).
           ctaDataCta={state.kind === "s0" ? undefined : "primary"}
+          communityId={anchor.communityId}
           ctaTemplate={state.kind === "s0" ? undefined : copy.aCta}
+          held={state.held}
           locale={copy.locale}
           placeName={anchor.name}
           prefer={state.kind === "s0" ? ["social", "culture", "fest", "official"] : undefined}
@@ -234,14 +230,14 @@ export function PlaceModuleSlot({ copy }: { readonly copy: PlaceCopy }) {
 
 /** Story 4's example — TS-WEB-0008 position 2 around the page's anchor. */
 export function PlaceNearby({ locale, titleTemplate }: { readonly locale: Locale; readonly titleTemplate: string }) {
-  const anchor = anchorOf(usePageState());
+  const { anchor, held } = usePageState();
   return (
     <NearbyIsland
-      anchorSlug={anchor.slug}
+      anchor={anchor}
       conversion={SAVE_CALENDAR}
       headingLevel="h3"
       locale={locale}
-      point={{ lat: anchor.lat, lng: anchor.lng }}
+      point={held ? undefined : { lat: anchor.lat, lng: anchor.lng }}
       role="answering"
       rowCount={5}
       titleTemplate={titleTemplate}
@@ -256,10 +252,10 @@ export function PlaceNearby({ locale, titleTemplate }: { readonly locale: Locale
  * three answers (fetched once, `browser.ts`) and shows its own slot of it.
  */
 export function StoryExample({ storyId, locale }: { readonly storyId: string; readonly locale: Locale }) {
-  const anchor = anchorOf(usePageState());
-  const dates = useLive<PlaceEvents>(liveRoutes.placeEvents(anchor.slug, 12));
-  const near = useLive<NearbyEvents>(liveRoutes.nearby(anchor.lat, anchor.lng));
-  const pool = useLive<{ readonly events: readonly LiveEvent[] }>(liveRoutes.placeExamples(anchor.slug));
+  const { anchor, held } = usePageState();
+  const dates = useLive<PlaceEvents>(held ? undefined : liveRoutes.placeEvents(anchor.slug, 12));
+  const near = useLive<NearbyEvents>(held ? undefined : liveRoutes.nearby(anchor.lat, anchor.lng));
+  const pool = useLive<{ readonly events: readonly LiveEvent[] }>(held ? undefined : liveRoutes.placeExamples(anchor.slug));
 
   if (dates.status === "loading" || near.status === "loading" || pool.status === "loading") {
     return <EventList items={[]} locale={locale} reserve rowCount={1} state="loading" />;
@@ -345,7 +341,7 @@ export function PlaceClosing({ copy, homescreen, reassurance, s0Search }: PlaceC
     );
   }
 
-  const anchor = anchorOf(state);
+  const { anchor } = state;
   const action =
     state.kind === "a" ? (
       <ConversionTracker
@@ -355,7 +351,7 @@ export function PlaceClosing({ copy, homescreen, reassurance, s0Search }: PlaceC
       >
         <Button
           dataCta="repeat"
-          href={calendarUrlForSlug(state.place.slug, { resolved: true })}
+          href={calendarUrl(state.place)}
           locale={copy.locale}
           onward
           variant="primary-light"

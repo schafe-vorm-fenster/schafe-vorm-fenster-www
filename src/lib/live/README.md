@@ -38,12 +38,12 @@ A page sees one thing: an **envelope**.
 | `GET /api/places/nearest?lat=&lng=` | `places.ts` → `nearestCoveredPlace()` | **real** — the committed index (geo-api's proximity search with a token) | the "use my location" control beside the search (TS-WEB-0010 D5, DEC-0119); `no-store`, never cached by coordinates |
 | `GET /api/places/resolve?ort=` | `pages/live-anchor.ts` → `resolvePlaceOutcome()` + `resolveRegisterPlace()` | **real** — the committed index and the public calendar | the browser's answer to `?ort=` on `/`, `/dein-ort`, `/dein-ort/starten` and the two flows (DEC-0163) |
 | `GET /api/places/{slug}/examples` | `examples.ts` → `exampleEvents()` | **real** — the public village calendar | the pool `/dein-ort`'s story examples pick from (DEC-0152, DEC-0163) |
-| `GET /api/places/{slug}/photo` | `place-photo.ts` → `placePhoto()` | **real** — geo-api's `image` with a token, the public calendar's without; licence and author from assets-api's image headers | the stage photograph of `/` and `/dein-ort` with a place, and its credit line (DEC-0167); 204 for none |
+| `GET /api/places/{slug}/photo` | `place-photo.ts` → `placePhoto()` | **real** — geo-api's `image` with a token, the public calendar's without; licence and author from assets-api's image headers | the stage photograph of `/` and `/dein-ort` for the active place — chosen or example — and its © credit (DEC-0167, DEC-0168); 204 for none |
 | `GET /api/places/{slug}/events?window=&rows=` | `places.ts` → `placeEvents()` | **real** — the public village calendar | position 1, dates in the place, and the empty-state verdict |
 | `GET /api/nearby?lat=&lng=&radius=` | `nearby.ts` → `nearbyEvents()` | **real** — the index cuts the radius, the public calendar carries the dates | position 2, this week within ~15 km |
 | `GET /api/region/{county}/examples` | `region.ts` → `regionExamples()` | **real, approximated** — no activity ranking exists upstream (DEC-0034) | position 3, active example places |
 | `GET /api/stats` | `counters.ts` → `liveCounters()` | **real** for `dates`, **mock** for `places` / `updates today` | position 4, the live counters |
-| — (built server-side, never fetched) | `app-handover.ts` | — | every link into the app (DEC-0029) |
+| — (built, never fetched) | `app-handover.ts` | — | every link into a village calendar: `{CALENDAR_ORIGIN}/{slug}.{geonameId}` (DEC-0029, DEC-0168) |
 
 Supporting modules: `types.ts` (the envelope and the domain shapes),
 `widening.ts` (the chain, the ~15 km cut and the `Europe/Berlin` windows),
@@ -262,17 +262,44 @@ if (counters === undefined) return null;   // TS-WEB-0009 D6: removed, never zer
 A figure with no upstream field is simply absent from `counters.data`, so the
 band renders one slot fewer. Never a zero, never an estimate.
 
-### A link into the app
+### A link into a village calendar
 
 ```tsx
 import { calendarUrl } from "@/src/lib/live/app-handover";
 
-const href = calendarUrl(place, { campaign: await searchParams });
+const href = calendarUrl(place, { campaign: query }); // https://schafe-vorm-fenster.de/lehre.2879378
 ```
 
-`calendarUrl` takes a **`Place`**, not a string, so a slug can only come out
-of a geo-api response. An unresolved place has no app link — it goes to
-`/dein-ort/starten`.
+`calendarUrl` takes a place's **slug and geoname id**, not a string, so the
+address can only come out of a geo-api response (or the configured showcase).
+It is the village calendar's own scheme, `<slug>.<geonameId>`, on
+`CALENDAR_ORIGIN` — community-site's origin, the apex, for every domain this
+site serves (DEC-0168, issue #81). A malformed place yields `undefined`; an
+unresolved place has no calendar link — it goes to `/dein-ort/starten`.
+
+### The active place (`/` and `/dein-ort`)
+
+Which place a stage page speaks about is **one store**,
+`src/lib/pages/active-place.ts` (DEC-0168). Never read `?ort=` a second time
+in an island, never fall back to the showcase community on your own, and
+never fetch a place's photograph beside the store:
+
+```tsx
+const active = useActivePlace();
+// unknown | resolving → render the prerendered frame, ask nothing
+// example            → active.place is the showcase, explicitly
+// chosen             → active.place, active.dates, active.photo
+// uncovered          → not this page
+```
+
+Every answer the store applies belongs to a **generation**; a new query
+starts a new one, aborts the previous photograph's preload, and an answer for
+a superseded place is dropped whatever order it arrives in. The photograph is
+loaded only when a stage asks (`requestPlacePhoto(slug)`) and only reported
+`ready` once the browser holds it. A page photograph that already depicts the
+active place (inventory `place`) is kept. The flows
+(`/dein-ort/starten`, `/mitmachen/registrieren`, `/dein-kalender/bestellen`)
+read `usePlaceResolution()` for their register lookup and show no photograph.
 
 ### Client-side (typeahead, browser geolocation)
 
@@ -288,7 +315,8 @@ overlay is an enhancement on top of it (TS-WEB-0008 D7a). The "use my location"
 control beside it (`locate-control.tsx`) asks the browser only on a click,
 sends the coordinates once to `/api/places/nearest`, and navigates to the
 answered `?ort=<slug>` — nothing about the position is stored on either side
-(TS-WEB-0010 D5, DEC-0119).
+(TS-WEB-0010 D5, DEC-0119). A position that answers after the visitor chose a
+place another way is dropped (DEC-0168).
 
 ## Caching
 

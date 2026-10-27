@@ -527,6 +527,16 @@ export const ImageEntrySchema = z
      */
     licence: z.string().min(1).optional(),
     /**
+     * The covered place the photograph depicts, as its geo-api slug
+     * (`schlatkow`) — only where it depicts one. A stage that shows a place's
+     * photograph (DEC-0167) keeps this one when its active place is that place
+     * instead of loading a second picture of it (DEC-0168).
+     */
+    place: z
+      .string()
+      .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "a geo-api slug")
+      .optional(),
+    /**
      * Set on the one image per route that TS-WEB-0003 D2 declares the LCP element.
      * It is the only image that may be `priority`.
      */

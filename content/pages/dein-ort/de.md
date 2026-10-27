@@ -55,6 +55,7 @@ images:
       Bushaltestelle mit bepflanztem Wartehäuschen an der Dorfstraße in Dargitz, dahinter der
       Kirchturm.
     licence: CC0 1.0
+    place: dargitz
     status: real
     file: /images/real/dein-ort-hero.webp
     width: 800

@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0011]
 sources: [SRC-0001, SRC-0002, SRC-0003]
-decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152, DEC-0153, DEC-0154, DEC-0159, DEC-0163, DEC-0167, DEC-0170]
+decisions: [DEC-0029, DEC-0036, DEC-0037, DEC-0046, DEC-0048, DEC-0056, DEC-0066, DEC-0071, DEC-0083, DEC-0152, DEC-0153, DEC-0154, DEC-0159, DEC-0163, DEC-0167, DEC-0168, DEC-0170]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -64,6 +64,8 @@ of `dein-ort-8-permanence` is removed.
 ### D2 — Two states, one route [FIXED: FUN-WEB-0153, FUN-WEB-0154, TS-WEB-0008 D3/D4, TS-WEB-0010 D7]
 
 > **Amended by DEC-0163 (2026-10-13).** The page is prerendered once and its HTML is S0. States A and B are applied in the browser (`dein-ort/place-islands.tsx`) once `?ort=` resolves through `/api/places/resolve`; an uncovered value is still answered by the proxy's 307 before any HTML (`place-hop.ts`). Without JavaScript the page is S0 for every `?ort=` (the owner dropped the no-JavaScript rule for the place states).
+>
+> **Amended by DEC-0168 (2026-10-27).** The state is read off **one** active place (`src/lib/pages/active-place.ts`), never off a second read of the URL: `unknown` and `resolving` render the prerendered S0 frame and ask nothing; `example` is S0 with the example place (Schlatkow) as explicit state — the module rows, the calendar links **and the stage photograph** name it; `chosen` is A or B. Every answer belongs to a generation, and one for a superseded place is dropped. Calendar links are `{CALENDAR_ORIGIN}/{slug}.{geonameId}` (TS-WEB-0008 D9).
 
 Five resolutions of the place parameter, three of them states of this page. In
 all of them the visitor is asked for a place, never for a role (TS-WEB-0006 D8):
@@ -224,7 +226,10 @@ the place search (S0's primary repeated).
   in the top corner. No licence, no photograph. A place without a usable one keeps
   the page's own photograph, labelled as an example that is not this place
   (`Q-0089`, resolved). The swap shifts nothing, and a visit without a place never
-  asks. Asserted by A19–A22.
+  asks. Asserted by A19–A22. *Amended by DEC-0168 (review of 2026-10-27, issues
+  #78, #80):* the credit is a © control, S0 shows the example place's
+  photograph, and the loading window is labelled "Beispielfoto"; asserted by
+  A20, A22, A27 and A28.
 - ~~**The stage is less full** (issues #20, #23).~~ **Done (DEC-0159).** The hint
   line and the data-protection paragraph go, the placeholder carries "Tipp den
   Ortsnamen ein", the location link sits directly under the field, and in state A
@@ -251,13 +256,15 @@ the place search (S0's primary repeated).
 | TS-WEB-0020-A17 | unit | Every image entry with an `anchor` has `anchor.y ≤ 38` (the scrim's clear part), a declared `focal` point, and its `stage_file` on disk. Both locales of `/dein-ort` carry the stage's photographs this way (DEC-0153). |
 | TS-WEB-0020-A14 | e2e | Each story's rendered example carries D3's category id for that story (the "Example category" column); a mismatch — any category other than the one the story names — fails. [F-4-2, round 4] |
 | TS-WEB-0020-A19 | integration | `GET /api/places/{slug}/photo` answers 200 with the place's photograph — an assets-api `src`, the Commons file page, licence and author — only when assets-api states a licence for it and, unless the licence is public domain or CC0, an author; it answers a cacheable 204 for a place without an image, an image that is not on Commons, or one without a stated licence; a 204 `no-store` when an upstream or the image itself does not deliver; 404 for an uncovered slug. It reads geo-api with a token and the public village calendar without one, and its answer carries no token (DEC-0167). |
-| TS-WEB-0020-A20 | e2e | With the photo route answering a photograph, `/dein-ort?ort=<slug>` at 360 and 1280 px shows that photograph on the stage (`[data-place-photo=<slug>]`, its background the answered `src`) and a credit line inside the stage, above the `h1`, naming author and licence and linking the Commons file page; zero CSP violations (DEC-0167). |
+| TS-WEB-0020-A20 | e2e | With the photo route answering a photograph, `/dein-ort?ort=<slug>` at 360 and 1280 px shows that photograph on the stage (`[data-place-photo=<slug>]`, its background the answered `src`) and a © credit control inside the stage, above the `h1`, whose panel names author and licence and links the Commons file page; zero CSP violations (DEC-0167, amended by DEC-0168). |
 | TS-WEB-0020-A21 | e2e | With the photo route answering 204, `/dein-ort?ort=<slug>` keeps the stage's own photograph, renders no place-photo layer, and shows the fallback label naming the place; zero CSP violations (DEC-0167, `Q-0089`). |
-| TS-WEB-0020-A22 | e2e | `/dein-ort` without `?ort=` never calls the photo route and renders no layer or label. With a place, the stage's box and the `h1`'s box are identical before and after the photograph lands, and the layout shift over the swap stays below 0.1 (DEC-0167, TS-WEB-0009-A8). |
+| TS-WEB-0020-A22 | e2e | `/dein-ort` without `?ort=` calls the photo route once, for the example place, and shows its photograph (DEC-0168). With a place, the stage's box and the `h1`'s box are identical before and after the photograph lands, and the layout shift over the swap stays below 0.1 (DEC-0167, TS-WEB-0009-A8). |
+| TS-WEB-0020-A27 | e2e | One active place (DEC-0168, issue #80), with every latency set by the test: without `?ort=` the stage shows the example's photograph — the place the module names — and is labelled "Beispielfoto" while it loads; while `?ort=` resolves, no request names the example place; no frame shows a place's headline over another place's unlabelled photograph; a photograph for a place that was superseded inside the document never lands; a position that resolves after the visitor picked another place does not navigate. The store's own interleavings — late resolver, late photograph, late dates verdict, aborted preload — are unit-tested. |
+| TS-WEB-0020-A28 | e2e | The place photograph's credit is a © control (DEC-0168, issue #78): a 40 px `button` named "Bildnachweis" in the stage's top-right corner, `aria-expanded` false and no standing credit text; keyboard focus opens its panel, the Commons link is the next tab stop, Escape closes it and returns focus; a click pins it, a second click closes it; at 390 px a tap opens it inside the viewport and a tap outside closes it. The panel names author and licence and links the Commons file page. |
 | TS-WEB-0020-A18 | e2e | At 360 × 800 the stage (`#focus-block`) carries exactly one place search in S0 and in state A, both `de` and `en`: the same 56 px field with the typeahead, the placeholder carrying the instruction in S0 ("Tipp den Ortsnamen ein") and the search for another place in state A ("Anderen Ort suchen" / "Search another place"), uncut; a bound label; no helper line; the "use my location" control at most 12 px under the field. The submit carries `data-cta="primary"` in S0 only; in state A the page still has exactly one primary (the handover) and exactly one place search (DEC-0159, issues #20, #23). |
 | TS-WEB-0020-A5 | static | The four stories' `proof_ref`s resolve to ids present in the installed `@schafe-vorm-fenster/proof` version; a missing id fails the build (a wrong id is a defect, an uncleared id is not). |
 | TS-WEB-0020-A6 | e2e | **Superseded, deviation recorded (D3, DEC-0149).** Written text: with every testimonial uncleared the page renders four three-part stories, no quote anywhere. Actual, shipped behaviour, per `e2e/pages/dein-ort.spec.ts`: three named, attributed, verbatim quotes render pre-clearance on the stage, each with a `clearance: pending` note, and the radius story carries none (DEC-0170); no anonymous quote, paraphrase, or "users say" substitute, ever — that half is unchanged and still the criterion. |
-| TS-WEB-0020-A7 | e2e | The homescreen module renders both the iOS and the Android instruction with an iPhone UA and with an Android UA, byte-identical DOM; in state A its one action resolves to `{APP_HOST}/{slug}` and carries `data-cta="repeat"`; a missing screenshot renders the hatched surface and a non-matching one the placeholder badge. |
+| TS-WEB-0020-A7 | e2e | The homescreen module renders both the iOS and the Android instruction with an iPhone UA and with an Android UA, byte-identical DOM; in state A its one action resolves to `{CALENDAR_ORIGIN}/{slug}.{geonameId}` (DEC-0168) and carries `data-cta="repeat"`; a missing screenshot renders the hatched surface and a non-matching one the placeholder badge. |
 | TS-WEB-0020-A23 | e2e | On `/dein-ort` and `/en/your-place`, in S0 and in state A (and on every other route, `e2e/module-rules.spec.ts`): no visible `blockquote` follows the last live row of its section; no section whose last visible text is a quote is followed by a section carrying a visible quote; the homescreen instructions render at most once (DEC-0170, issue #84). |
 | TS-WEB-0020-A24 | e2e | The homescreen module contains no `details` or `summary`; the iOS and the Android column each hold one platform label and an open numbered list (DEC-0170 §5, issue #86). |
 | TS-WEB-0020-A25 | e2e | In S0, in state A and on `/en/your-place` the story stage contains no in-page link (`a[href^="#"]`) and no "Was heute bei dir los ist" / "What is on near you today"; "Weiter um …" stands (DEC-0170, issue #85). |

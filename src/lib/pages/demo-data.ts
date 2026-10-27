@@ -16,8 +16,6 @@
  * Rows in `state/open.md`: `Mock aktiv` per module.
  */
 
-import { APP_ORIGIN } from "@/src/lib/routes/routes";
-
 import type { EventListItem } from "@/src/components/event-list/event-list";
 import type { Locale } from "@/src/lib/i18n/locales";
 
@@ -27,11 +25,6 @@ export const DEMO_PLACE = {
   name: { de: "Schlatkow", en: "Schlatkow" },
   county: { de: "Vorpommern-Greifswald", en: "Vorpommern-Greifswald" },
 } as const;
-
-/** Where a stand-in calendar handover points — the app host. */
-export function demoAppHref(slug: string = DEMO_PLACE.slug): string {
-  return `${APP_ORIGIN}/${slug}`;
-}
 
 /**
  * The counter figure of TS-WEB-0008 position 4. A figure is a claim, so this one

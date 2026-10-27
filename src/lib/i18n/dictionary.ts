@@ -172,12 +172,19 @@ export interface Dictionary {
    * is a placeholder for the content phase.
    */
   placePhoto: {
-    /** The credit's lead word — "Foto". */
-    photo: string;
     /** "via Wikimedia Commons" — the source the credit names. */
     via: string;
     /** `{place}` — the fallback's label: this is not a photograph of the place. */
     fallback: string;
+    /** The label over the page's own photograph while the place's is still loading (DEC-0168). */
+    pending: string;
+  };
+  /** Every photograph's credit, behind the © control (`photo-credit`, DEC-0168, issues #78, 101). */
+  photoCredit: {
+    /** The control's accessible name — "Bildnachweis". */
+    label: string;
+    /** The credit's lead word — "Foto". */
+    lead: string;
   };
   /**
    * The section kickers — polish brief G-3's fixed vocabulary.
@@ -561,9 +568,13 @@ const de: Dictionary = {
     allDates: "Alle Termine im Kalender",
   },
   placePhoto: {
-    photo: "Foto",
     via: "über Wikimedia Commons",
     fallback: "Beispielfoto · von {place} haben wir noch kein Foto",
+    pending: "Beispielfoto",
+  },
+  photoCredit: {
+    label: "Bildnachweis",
+    lead: "Foto",
   },
   kickers: {
     liveAnswer: "Was gerade ansteht",
@@ -764,9 +775,13 @@ const en: Dictionary = {
     allDates: "All dates in the calendar",
   },
   placePhoto: {
-    photo: "Photo",
     via: "via Wikimedia Commons",
     fallback: "Example photo · we have no photo of {place} yet",
+    pending: "Example photo",
+  },
+  photoCredit: {
+    label: "Photo credit",
+    lead: "Photo",
   },
   kickers: {
     liveAnswer: "What's on now",

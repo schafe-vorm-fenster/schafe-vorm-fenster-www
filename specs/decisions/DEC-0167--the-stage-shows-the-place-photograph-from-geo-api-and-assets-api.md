@@ -119,3 +119,25 @@ would once assets-api serves every Wikidata image.
   church portal or an aerial view rather than a village street (SRC-0014
   §Motif per page); `TS-WEB-0017-A15`'s imagery review cannot reach photographs
   that are chosen at runtime.
+
+## Amendment — 2026-10-27: the credit is a © control, the example has its photograph, the loading window is labelled (DEC-0168)
+
+The owner's review of 2026-10-27 (issues #78, #80):
+
+1. **§3, the credit.** The credit no longer stands as a text line in the
+   corner. It is a © control (`photo-credit`) in the photograph's top-right
+   corner — the AI mark's corner, well and scrim — that opens a card with the
+   same credit (title linked to the Commons file page, author, licence, "über
+   Wikimedia Commons") on hover, keyboard focus and tap, and closes on Escape.
+   The licence obligations are met at the photograph, one interaction away.
+2. **§5, "visits without `?ort=` never call the route".** Superseded for
+   `/dein-ort`: without a place the page speaks about its example place, and
+   its stage now shows the example's photograph, because `dein-ort-hero`
+   depicts Dargitz. `/` keeps the rule — its own photograph depicts the
+   example (`home-hero`, `place: schlatkow`).
+3. **§4 holds for the loading window too.** While the place's photograph
+   loads, the stage's own photograph is labelled "Beispielfoto".
+4. **Consequences, the AI mark.** The mark now stands down by rule while a
+   place photograph covers the surface (`photo-surface.module.css`), so the
+   © control can take its corner.
+

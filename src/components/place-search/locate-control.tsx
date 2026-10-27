@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useSyncExternalStore } from "react";
+import { useEffect, useId, useRef, useSyncExternalStore } from "react";
 
 import { Icon } from "../icon/icon";
 import { linkHref } from "../route-link/href";
@@ -61,7 +61,12 @@ const noopSubscribe = () => () => {};
  *     the form's hidden query (`etcc_*`) carried along;
  *   - a denial, an unavailable position, a lookup that fails or answers no
  *     place leaves the page exactly as it was — no message, no retry, and no
- *     second ask: after a refusal the control stops asking.
+ *     second ask: after a refusal the control stops asking;
+ *   - **a late answer never overrides a later choice** (DEC-0168): a position
+ *     can take up to ten seconds, and a visitor who meanwhile picked a place in
+ *     the search has started a navigation of her own. The attempt is abandoned
+ *     the moment the page starts to leave (`beforeunload`, `pagehide`) or its
+ *     URL changes, so the earlier intent cannot cancel the later one.
  * Inherits: the 44 px touch target; ink on paper, paper on a dark ground.
  * A11y: a real `<button type="button">`, described by the sentence beside it
  * through `aria-describedby`; the glyph is decorative.
@@ -78,6 +83,21 @@ export function LocateControl({
   const describedBy = useId();
   const refused = useRef(false);
   const inFlight = useRef(false);
+  /** The current attempt; anything that supersedes it bumps the number. */
+  const attempt = useRef(0);
+
+  useEffect(() => {
+    const supersede = () => {
+      attempt.current += 1;
+      inFlight.current = false;
+    };
+    window.addEventListener("beforeunload", supersede);
+    window.addEventListener("pagehide", supersede);
+    return () => {
+      window.removeEventListener("beforeunload", supersede);
+      window.removeEventListener("pagehide", supersede);
+    };
+  }, []);
   const hydrated = useSyncExternalStore(
     noopSubscribe,
     () => true,
@@ -88,9 +108,13 @@ export function LocateControl({
     if (refused.current || inFlight.current) return;
     if (typeof navigator === "undefined" || !("geolocation" in navigator)) return;
     inFlight.current = true;
+    const mine = ++attempt.current;
+    const from = window.location.href;
+    const current = () => attempt.current === mine && window.location.href === from;
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
+        if (!current()) return;
         void (async () => {
           try {
             const { latitude, longitude } = position.coords;
@@ -101,11 +125,12 @@ export function LocateControl({
             const body = (await response.json()) as NearestResponse;
             const slug = body.data?.place?.slug;
             if (typeof slug !== "string" || slug.length === 0) return;
+            if (!current()) return;
             window.location.assign(linkHref(to, { locale, query: { ...query, [name]: slug } }));
           } catch {
             // A lookup that fails changes nothing — the page stays as it was.
           } finally {
-            inFlight.current = false;
+            if (attempt.current === mine) inFlight.current = false;
           }
         })();
       },
@@ -113,7 +138,7 @@ export function LocateControl({
         // Denied, unavailable or timed out: the page stays exactly as it was,
         // and the control does not ask a second time (D5).
         refused.current = true;
-        inFlight.current = false;
+        if (attempt.current === mine) inFlight.current = false;
       },
       { timeout: POSITION_TIMEOUT_MS, maximumAge: 0 },
     );

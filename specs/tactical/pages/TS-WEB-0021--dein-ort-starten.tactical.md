@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0158, FUN-WEB-0159]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0014]
-decisions: [DEC-0013, DEC-0024, DEC-0029, DEC-0034, DEC-0036, DEC-0037, DEC-0066, DEC-0071, DEC-0083, DEC-0163]
+decisions: [DEC-0013, DEC-0024, DEC-0029, DEC-0034, DEC-0036, DEC-0037, DEC-0066, DEC-0071, DEC-0083, DEC-0163, DEC-0168]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -84,6 +84,8 @@ retry prompt (FUN-WEB-0158, FUN-WEB-0159, DEC-0079 §4).
 ### D4 — The place is a query parameter, and the URL is the whole payload [FIXED: DEC-0037, CON-WEB-0062, FUN-WEB-0142; validation PROPOSED]
 
 > **Amended by DEC-0163 (2026-10-13).** The page is static; the validated value is echoed in the browser (`start-islands.tsx`) into exactly the places D6 allows. Without JavaScript the page is the placeless variant.
+>
+> **DEC-0168 (2026-10-27).** This page is not a stage page: it keeps its own resolver read (`usePlaceResolution`, for the register lookup) and shows no place photograph. `/` and `/dein-ort` read one active place instead. Its example module speaks about the configured example place, and it carries no calendar link at all (D8) — neither `app.*` nor a village calendar address `{slug}.{geonameId}`.
 
 | Rule | Determination |
 | --- | --- |

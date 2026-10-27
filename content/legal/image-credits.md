@@ -17,7 +17,9 @@ Bildunterschrift am Foto: Wo eine Lizenz die Namensnennung verlangt, ist
 sie an dieser Stelle erfüllt — außer beim Porträt vom openTransfer CAMP
 in Neustrelitz, dessen Rechteinhaber die Nennung erbittet und bei dem sie
 deshalb zusätzlich direkt am Bild steht, und bei den Fotos der Orte
-(siehe unten), deren Nachweis immer direkt am Foto steht.
+(siehe unten), deren Nachweis immer direkt am Foto steht. Direkt am Foto
+heißt: hinter dem ©-Zeichen in der Bildecke, das den Nachweis per
+Mausberührung, Tastatur oder Antippen öffnet.
 
 Die maßgebliche Liste ist das Bildverzeichnis der Seiten selbst
 (`images:` im Frontmatter unter `content/pages/`). Kommt ein Foto dazu,
@@ -66,8 +68,12 @@ Wikimedia Commons: Es ist das Bild, das bei Wikidata für den Ort
 hinterlegt ist. Gezeigt wird ein solches Foto nur, wenn Commons eine
 Lizenz dafür nennt und, wo die Lizenz eine Namensnennung verlangt, auch
 den Urheber. Urheber, Lizenz und ein Link zur Bildseite auf Commons
-stehen direkt am Foto; die Liste auf dieser Seite kann nicht jeden der
-rund 1.760 Orte aufführen.
+stehen direkt am Foto: hinter dem ©-Zeichen in der oberen rechten Ecke,
+das den Nachweis per Mausberührung, Tastatur oder Antippen öffnet. Die
+Liste auf dieser Seite kann nicht jeden der rund 1.760 Orte aufführen.
+
+Ist noch kein Ort gewählt, zeigt „Dein Ort“ das Foto des Beispielorts
+Schlatkow, über den die Seite dann spricht, mit demselben Nachweis.
 
 Hat ein Ort kein solches Foto, bleibt das Foto der Seite stehen und ist
 am Bild als Beispielfoto gekennzeichnet, das nicht diesen Ort zeigt.

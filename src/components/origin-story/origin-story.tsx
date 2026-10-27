@@ -1,4 +1,5 @@
 import { MediaFrame } from "../media-frame/media-frame";
+import { dictionary } from "@/src/lib/i18n/dictionary";
 import { PriceTag, type PriceDisplay, type PriceFigure } from "../price-tag/price-tag";
 
 import type { DataState } from "../data-state";
@@ -131,7 +132,7 @@ export function OriginStory({
         </div>
         <MediaFrame
           alt={portraitAlt}
-          caption={portraitCredit}
+          credit={portraitCredit ? `${dictionary(locale ?? "de").photoCredit.lead}: ${portraitCredit}` : undefined}
           className={styles.portrait}
           locale={locale}
           notDepicting={portraitNotDepicting}

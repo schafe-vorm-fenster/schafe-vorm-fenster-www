@@ -8,6 +8,7 @@ import {
   CircleX,
   Clock,
   Copy,
+  Copyright,
   Download,
   ExternalLink,
   Globe,
@@ -93,6 +94,7 @@ const GLYPHS = {
   music: Music,
   /* DEC-0165: the mark on a photograph edited with an AI tool. */
   sparkles: Sparkles,
+  copyright: Copyright,
 } as const satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof GLYPHS;

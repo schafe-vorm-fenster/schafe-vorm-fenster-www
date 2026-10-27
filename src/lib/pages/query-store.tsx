@@ -22,7 +22,7 @@
  */
 
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useMemo, useSyncExternalStore } from "react";
+import { Suspense, useLayoutEffect, useMemo, useSyncExternalStore } from "react";
 
 let current: string | null = null;
 const listeners = new Set<() => void>();
@@ -31,6 +31,15 @@ function subscribe(listener: () => void): () => void {
   listeners.add(listener);
   return () => listeners.delete(listener);
 }
+
+/**
+ * The store's two halves for another store that derives from the query —
+ * `active-place.ts` (DEC-0168). `null` while the query is not known yet.
+ */
+export const queryStore = {
+  subscribe,
+  current: (): string | null => current,
+} as const;
 
 function publish(search: string): void {
   if (current === search) return;
@@ -62,7 +71,10 @@ export function useQuery(): URLSearchParams | null {
 function Sync() {
   const params = useSearchParams();
   const search = params.toString();
-  useEffect(() => publish(search), [search]);
+  // Before paint, not after (DEC-0168): on a client navigation the next page's
+  // islands mount in the same commit, and a passive effect would let them paint
+  // one frame with the previous page's `?ort=`.
+  useLayoutEffect(() => publish(search), [search]);
   return null;
 }
 
