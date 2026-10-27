@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0014, BUS-WEB-0015, FUN-WEB-0202]
 sources: [SRC-0001, SRC-0003, SRC-0014]
-decisions: [DEC-0011, DEC-0030, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0131, DEC-0154, DEC-0173]
+decisions: [DEC-0011, DEC-0030, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0131, DEC-0154, DEC-0172, DEC-0173]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -55,8 +55,8 @@ TS-WEB-0006 D2 block 2, expanded. Each block carries a stable `data-block` id.
 | 3 | `embed-demo` | the real widget, position 1′ (D5) | |
 | 4 | `embed-config` | what the visitor decides about the widget above: the sources it draws from, and the settings that cut the view (D5's "Heading"/"Label" rules apply) | added 2026-09-26, DEC-0131 §1 |
 | 5 | `tiers` | three tiers under one heading (D6) | carries the one product name (D7) |
-| 6 | `proof` | proof, sell-weighted, with images (D9) | |
-| 7 | `trust` | data protection, operations, AI — one block (D10) | |
+| 6 | `proof` | proof, sell-weighted, as a proof stream of voices (D9) | `lime-100` |
+| 7 | `trust` | data protection, operations, AI — one block (D10) | `violet-500`, never the proof's ground (DEC-0172 §4) |
 | — | — | context band, closing CTA, then the contact section | rendered by the layout (TS-WEB-0006 D2/D5/D6, DEC-0081) |
 
 Section rhythm is [FREE], with one binding consequence: `tiers` sits between
@@ -102,7 +102,7 @@ longer leaves the site from here: it hands the visitor to the contact
 section, where appointment, WhatsApp, phone and mail stand together and
 where the conversion is measured (TS-WEB-0016 D12).
 
-### D4 — Today versus with your calendar: four rows [FIXED: SRC-0003, DEC-0106 §2; shape PROPOSED]
+### D4 — Today versus with your calendar: four rows [FIXED: SRC-0003, DEC-0106 §2; shape DEC-0172 §2]
 
 Exactly four rows, two columns — **today** and **with your calendar** —
 derived from `portalize-calendar`'s problem and benefit sections; never copied,
@@ -125,6 +125,16 @@ announces people and this section shows a comparison. The owner's review of
 2026-10-12 reopens it. The rule that now decides it is CG-042 (solution first)
 and CG-004 (a title announces what the section shows); the new kicker and title
 are copy (issue #51).
+
+**Shape (DEC-0172 §2).** Each row is one pair of two flat fields that butt
+against each other — *today* on the `archive ground`, *with your calendar* on
+`lime-100` — with the mono label above its sentence, stacked below `xl` and
+6 + 6 from it (SRC-0014 §Comparison, A23). The hairline text table that stood
+here was the 2026-09-23 draft *Heute — und mit dem Produkt*; the owner's
+review of 2026-10-27 read it as ugly (#94). The review of 2026-09-22 had
+already pointed at the sepia design of `/mitmachen` for this section; the
+archive ground carries that design's old world into the pair, and the
+solution keeps a fresh ground, because the archive ground never carries it.
 
 ### D5 — Embed demo [FIXED: DEC-0030, TS-WEB-0008 D6]
 
@@ -228,9 +238,13 @@ deliberate, and not to be "fixed" by raising `w_geo` here.
 
 - 3 elements per inline slot (DEC-0048), ordered per TS-WEB-0005 D6, from a pool
   biased to the proof ids `portalize-calendar` references.
-- **With images**: a card whose image has no cleared usage right renders the
-  placeholder treatment (hatch + "Foto gesucht") — never a borrowed photo,
-  never a text-only card without the badge.
+- **As voices, without image slots** (polish brief G-9, DEC-0172 §1): the
+  stream is SRC-0014 §Proof stream — flat items on the section's ground, the
+  claim first, a byline of initials well, name and role under it; the first
+  item at sub-head size across the row, the others at card size, 6 + 6 from
+  `xl` (A13, A25). A cleared portrait or logo would take the initials well's
+  place; no record carries one, so no image renders and no placeholder
+  stands in for one.
 - An empty slot weakens the claim; it is never filled by invention (SRC-0001 §4).
 
 ### D10 — Data protection, operations and AI: one block that must stay true [FIXED: FUN-WEB-0125, CON-WEB-0033, TS-WEB-0013 D1; the operations and AI sentences PROPOSED]
@@ -249,6 +263,23 @@ before buying.
 
 No wording may claim more than TS-WEB-0013 D2 supports: "no third-party services at
 all" is false, and a defect rather than a variant.
+
+**Ground and shape (DEC-0172 §4).** The block stands on `violet-500`, the
+provenance ground (SRC-0014 §Trust block): on `lime-100` it ran on from the
+proof section before it as one ground, and the owner read it as the old state
+(#91). The subjects stand side by side from `xl`, each a mono label over its
+paragraph under a hairline in the ground's label colour (A26).
+
+### D12 — The benefit band is a flow, not a row of pills [FIXED: DEC-0172 §3]
+
+`embed-config`'s `lime-500` band shows where the dates come from and the one
+place they land, as SRC-0014 §Source-to-target flow: a captioned plain list of
+the sources, a decorative arrow, one square `paper` target field, and the
+benefit sentence as the figure's caption. It was three white pills, an arrow on
+a line of its own and one black pill — four things drawn as buttons that were
+not controls, in two fills whose meaning nothing stated (#96). The sources are
+the actors' channels and never addressed to the reader, the target is the
+reader's website and appears once (SRC-0017 CG-040 as amended by DEC-0172 §3).
 
 ### D11 — Local advertising appears nowhere [FIXED: DEC-0052 §3, resolves Q-0006]
 
@@ -282,12 +313,16 @@ TS-WEB-0018 D8's budget constant is 0 for this route.
 | TS-WEB-0024-A10 | e2e | Exactly one numeric price token renders: 480, with currency, the annual interval and the net qualifier. The strings "4.000", "4000", "ab " and any second price figure do not occur in the DOM, in JSON-LD, in HTML comments or in `data-*` attributes. |
 | TS-WEB-0024-A11 | static | The rendered 480 value, its currency, interval and VAT flag come from the offering package import; no literal `480` appears in page or component source. The JSON-LD `Offer` reads from the same import. |
 | TS-WEB-0024-A12 | unit | With the `run our own calendar` weight profile and a stage-2 trait outside the covered region, a high job-fit proof element outranks a geographically nearer element with low job fit; the page's profile equals TS-WEB-0005 D5's row for this focus job. |
-| TS-WEB-0024-A13 | e2e | `data-block="proof"` renders three proof cards; each card shows either a cleared image or the placeholder treatment with its badge; no card is text-only without the badge. An unfilled slot renders nothing rather than a substitute. |
+| TS-WEB-0024-A13 | e2e | `data-block="proof"` renders three proof items, exactly one of them `data-emphasis="feature"` and two `compact`, with no image, no placeholder slot and no `Beleg` badge (D9 as amended by polish brief G-9 and DEC-0172 §1). An unfilled slot renders nothing rather than a substitute. |
 | TS-WEB-0024-A14 | e2e | `data-block="trust"` occurs exactly once, contains the data-protection claim, and links to both `/rechtliches#datenschutz` and `/rechtliches#auftragsverarbeitung`; both anchors exist on the target page. No stronger claim than TS-WEB-0013 D1 permits ("keine Drittanbieter" without qualification fails). |
 | TS-WEB-0024-A15 | e2e | Clicking the equal-weight CTA moves to this page's contact section and emits no event. The section's first action row navigates to the configured Google Calendar URL and emits exactly one `request-product-briefing` with `stage: handover` **and** exactly one `make-contact`, both carrying `/dein-kalender` as the route; rows 2–4 each emit exactly one `make-contact` with the row's channel and no `request-product-briefing` (TS-WEB-0016 D12/D13, DEC-0081 amendment 2026-09-25). No goal id is emitted twice for one click. That row is the only element on the page carrying the appointment URL. No Google script, iframe or font is loaded by the page. |
 | TS-WEB-0024-A16 | e2e | Clicking the primary CTA lands on `/dein-kalender/bestellen` and emits no conversion event from this page. |
 | TS-WEB-0024-A17 | e2e | The closing CTA carries the same conversion goal id, target and label as the primary CTA and does not use the Pulse fill; the context band names exactly the three non-focus jobs. |
 | TS-WEB-0024-A18 | static | No content file bound to this route references `local-advertising`, none carries a `withheld_mention` field, and the rendered page contains no advertising CTA or `request-ad-placement` call site. |
+| TS-WEB-0024-A23 | e2e | At 390 and 1280 px, `data-block="contrast"` holds four `[data-half="today"]` on `archive ground` and four `[data-half="with"]` on `lime-100`, none with a radius or a shadow; each label is a block above its sentence; the two halves of a pair butt — stacked below `xl`, side by side from it (D4, DEC-0172 §2). `e2e/module-designs.spec.ts`. |
+| TS-WEB-0024-A24 | e2e | At 390 and 1280 px, the `lime-500` band of `data-block="embed-config"` holds one `figure[data-flow]` with a `figcaption`, three `li[data-flow-source]` in a list with no fill and no radius, one `[data-flow-target]` on `paper` with radius 0, a decorative arrow, and no link or button; no source text addresses the reader ("eure", "your"); the target follows the sources below `xl` and stands to their right from it (D12, DEC-0172 §3). `e2e/module-designs.spec.ts`. |
+| TS-WEB-0024-A25 | e2e | At 390 and 1280 px, each of the three items of `data-block="proof"` has no fill and a `hairlineOnLime` top border, carries an `aria-hidden` 40 × 40 initials well under its claim, and from `xl` the two compact items share one row (D9, DEC-0172 §1). `e2e/module-designs.spec.ts`. |
+| TS-WEB-0024-A26 | e2e | At 390 and 1280 px, `data-block="trust"` stands on `violet-500`, not on the ground of `data-block="proof"`, and its two subjects stand side by side from `xl` (D10, DEC-0172 §4). `e2e/module-designs.spec.ts`. |
 | TS-WEB-0024-A19 | manual | Every sentence in `data-block="trust"` about operations and AI names a hub record in its `derived_from`. A sentence without one blocks the block from shipping; the data-protection sentences alone may ship. |
 | TS-WEB-0024-A20 | e2e | With the Portalize host reachable, once the widget has rendered on `/dein-kalender`: every element inside its shadow root that carries its own text has a contrast of at least 4.5:1 (3:1 for large text) against its composited background, read across the shadow boundary; every bordered button's border clears 3:1 against the ground around it; axe's `color-contrast` rule reports nothing inside `data-block="embed-demo"` (DEC-0173 §1). |
 | TS-WEB-0024-A21 | e2e | The mount in `data-block="embed-demo"` carries `data-own-events-showcase="false"` and `data-own-events-highlight="false"`; with the host reachable, the rendered widget contains no "Termine von" heading (DEC-0173 §2). |
@@ -297,7 +332,7 @@ TS-WEB-0018 D8's budget constant is 0 for this route.
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0014 (`/dein-kalender`, focus job *run our own calendar*, primary `buy-calendar-licence`, equal `request-product-briefing`) | D1, D2, D3, D4, D5, D6, D9, D10 · A1–A9, A12–A17, A19–A22 |
+| FUN-WEB-0014 (`/dein-kalender`, focus job *run our own calendar*, primary `buy-calendar-licence`, equal `request-product-briefing`) | D1, D2, D3, D4, D5, D6, D9, D10, D12 · A1–A9, A12–A17, A19–A26 |
 | BUS-WEB-0015 (the billable unit is the organisation and not the place, …) | D6, D8, D11 · A8, A10, A11, A18 |
 | FUN-WEB-0202 (publish the licence price of 480 €/year for a …) | D6, D8, D11 · A8, A10, A11, A18 |
 

@@ -11,40 +11,87 @@
   margin: 0;
 }
 
+/*
+ * SRC-0014 §Comparison, DEC-0172 §2. The rows were four hairline-separated
+ * lines of running text with an inline grey label in front of each half —
+ * on the phone eight paragraphs that read alike (review 2026-09-22, "die
+ * Gegenüberstellung … funktioniert optisch nicht. Vielleicht was mit
+ * Farben?"), on the desktop a text table (review 2026-10-27, #94). Each pair
+ * is now one row of two flat fields on the section's ground, a gap between
+ * the pairs and none between the halves.
+ */
 .list {
   display: flex;
   flex-direction: column;
+  gap: var(--space-2);
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .row {
-  border-top: 1px solid var(--color-neutral-line);
   display: grid;
-  gap: var(--space-2) var(--space-6);
   grid-template-columns: minmax(0, 1fr);
-  padding-block: var(--space-3);
 }
 
 .cell {
   font-size: var(--type-body-size);
   line-height: var(--leading-relaxed);
   margin: 0;
+  padding: var(--space-4);
+}
+
+/* The old world: `archive ground`, the detail line in `text-2` (9.52:1),
+   the label in `archive ink` (6.35:1) — SRC-0014 §Archive. */
+.today {
+  background: var(--color-archive-ground);
+  color: var(--color-neutral-text2);
+}
+
+.today .label {
+  color: var(--color-archive-ink);
+}
+
+/* What goes: the fresh ground, `ink` text, the label in `lime-800`. */
+.with {
+  background: var(--color-lime-100);
+  color: var(--color-neutral-ink);
+}
+
+.with .label {
+  color: var(--color-lime-800);
 }
 
 .label {
-  color: var(--color-neutral-muted);
+  display: block;
   font-family: var(--font-mono);
   font-size: var(--type-label-size);
+  font-weight: 700;
   letter-spacing: var(--type-label-tracking);
+  line-height: var(--leading-normal);
+  margin-bottom: var(--space-1);
   text-transform: uppercase;
 }
 
-/* xl — 64rem: the comparison is 6 + 6 (SRC-0014 §Layout Grid, DEC-0150). */
+/* The colon is for assistive technology only: read aloud, the label and its
+   sentence stay one statement; on screen the label stands above it. */
+.hidden {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* xl — 64rem: the comparison is 6 + 6 (SRC-0014 §Layout Grid, DEC-0150), and
+   the two halves of a row butt against each other. */
 @media (min-width: 64rem) {
   .row {
-    column-gap: var(--grid-gap);
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cell {
+    padding: var(--space-6);
   }
 }

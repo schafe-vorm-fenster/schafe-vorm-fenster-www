@@ -183,7 +183,7 @@ nächsten Wochen ansteht." Der Ortsname kommt aus
 Die Termine kommen, wie sie reinkommen — und landen trotzdem alle auf eurer
 Website.
 
-**Quellen:** WhatsApp · Google Kalender · eure eigene Website
+**Quellen:** WhatsApp · Google Kalender · Websites der Akteure
 
 **Ziel:** eure Website
 
@@ -208,7 +208,7 @@ haben.
 Kicker, Überschriften, Benefit-Satz und die sechs Einstellungssätze sind die
 der Entwürfe `Design -. Portalize Einstellungen 1.png` /
 `Design -. Portalize Einstellungen 2.png` und des Reviews vom 2026-09-22
-(Abschnitt „Was drinsteht, bestimmt ihr"). Drei Abweichungen, alle aus einer
+(Abschnitt „Was drinsteht, bestimmt ihr"). Die Abweichungen, jede mit ihrer
 Quelle:
 
 - **Kein „Umkreis"** bei den Orten — `plan/reviews/2026-09-23/spec-impact.md`
@@ -222,6 +222,12 @@ Quelle:
   sichtbare Kennzeichnung von Stellvertreter-Inhalt). `setting-row` trennt
   Kernsatz und Beispiel ohnehin typografisch, die Beschriftung sagt also
   nichts, was die Zeile nicht schon zeigt.
+- **„Websites der Akteure" statt „Vereinswebsite" und statt „eure eigene
+  Website"** (DEC-0172 §3). Die Quellen sind die Wege der Akteure, das Ziel
+  ist eure Website. CG-040 ersetzt „Vereinswebseite" durch „eure eigene
+  Website"; neben dem Ziel „eure Website" stand damit zweimal fast dasselbe
+  Wort für zwei verschiedene Orte (Review 2026-10-27, #96). „Akteure" ist das
+  Wort, das Zeile 3 des Vergleichs für dieselben Leute schon benutzt.
 - **Zeitraum ohne Beispiel und ohne Chips**, dafür mit der Markierung
   „wird geprüft" (Review: „Müssen wir bei Portalize nachsehen, was wirklich
   geht"). Die Markierung ist der Platzhalter-Badge, nicht Copy.

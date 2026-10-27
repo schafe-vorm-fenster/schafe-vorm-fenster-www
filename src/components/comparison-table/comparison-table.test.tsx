@@ -39,14 +39,14 @@ describe("TS-WEB-0024 D4: exactly four rows, machine-countable, no checkmark col
 
   it("labels both cells of every row with the labels the caller passed", () => {
     const html = render();
-    expect(html.match(new RegExp(`${TODAY_LABEL}:`, "g"))).toHaveLength(4);
-    expect(html.match(new RegExp(`${WITH_CALENDAR_LABEL}:`, "g"))).toHaveLength(4);
+    expect(html.match(new RegExp(`>${TODAY_LABEL}<`, "g"))).toHaveLength(4);
+    expect(html.match(new RegExp(`>${WITH_CALENDAR_LABEL}<`, "g"))).toHaveLength(4);
   });
 
   it("carries no label of its own — a second caller's wording is the one that renders", () => {
     const html = render({ today: "HEUTE", withProduct: "MIT EUREM KALENDER" });
-    expect(html.match(/HEUTE:/g)).toHaveLength(4);
-    expect(html.match(/MIT EUREM KALENDER:/g)).toHaveLength(4);
+    expect(html.match(/>HEUTE</g)).toHaveLength(4);
+    expect(html.match(/>MIT EUREM KALENDER</g)).toHaveLength(4);
     // TS-WEB-0024 D4 / SRC-0017 CG-039: no fallback label leaks a product name.
     expect(html).not.toContain("Portalize");
     expect(html).not.toContain("Produkt");
@@ -58,3 +58,18 @@ describe("TS-WEB-0024 D4: exactly four rows, machine-countable, no checkmark col
     expect(html).not.toContain("circle-x");
   });
 });
+
+describe("TS-WEB-0024-A23 / DEC-0172 §2: today on the archive ground, the solution on a fresh one", () => {
+  it("marks each half of every row, today first", () => {
+    const html = render();
+    expect(html.match(/data-half="today"/g)).toHaveLength(4);
+    expect(html.match(/data-half="with"/g)).toHaveLength(4);
+    expect(html.indexOf('data-half="today"')).toBeLessThan(html.indexOf('data-half="with"'));
+  });
+
+  it("keeps the pairing readable aloud: label, a hidden colon, then the sentence", () => {
+    const html = render();
+    expect(html).toMatch(/>Heute<span[^>]*>: <\/span><\/span>Sechs Kanäle/);
+  });
+});
+

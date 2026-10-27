@@ -1,7 +1,7 @@
 .block {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-6);
 }
 
 .headline {
@@ -12,28 +12,46 @@
   gap: var(--space-2);
   letter-spacing: var(--type-section-tracking);
   margin: 0;
+  max-width: var(--span-8);
 }
 
+/*
+ * SRC-0014 §Trust block, DEC-0172 §4. The subjects are flat items on the
+ * section's ground, each under a hairline in the ground's own label colour;
+ * one column below `xl`, side by side from it (6 + 6), so the block reads as
+ * two statements and not as a run of prose.
+ */
 .list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+@media (min-width: 64rem) {
+  .list {
+    column-gap: var(--grid-gap);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 .item {
+  border-top: 1px solid var(--ground-kicker);
   display: flex;
   flex-direction: column;
+  padding-top: var(--space-3);
 }
 
 /*
  * A mono label, not a bold sentence with a check mark in front of it — the
- * two subjects are headings over paragraphs (brief, page 6, item 5).
+ * two subjects are headings over paragraphs (brief, page 6, item 5). The
+ * colour is the ground's own label colour: `muted` on light, `lime-300` on
+ * `violet-500`.
  */
 .subjectLabel {
-  color: var(--color-neutral-muted);
+  color: var(--ground-kicker);
   font-family: var(--font-mono);
   font-size: var(--type-label-size);
   font-weight: 700;
@@ -47,6 +65,13 @@
   font-size: var(--type-body-size);
   line-height: var(--leading-relaxed);
   margin: var(--space-1) 0 0;
+  max-width: var(--measure-reading);
+}
+
+/* On a dark ground the body is the ground's own text colour (`paper`). */
+[data-surface="violet-500"] .body,
+[data-surface="ink"] .body {
+  color: inherit;
 }
 
 .links {

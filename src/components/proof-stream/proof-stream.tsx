@@ -8,8 +8,9 @@ export interface ProofStreamProps {
   readonly children: ReactNode;
   /**
    * `grid` — the default card grid. `scroller` — a horizontal set.
-   * `rows` — polish brief G-7: one column, the first child a feature card
-   * and the rest hairline-separated compact rows, so a stream reads as a
+   * `rows` — polish brief G-7, DEC-0172 §1: the first child a feature item
+   * across the row, the rest flat compact items (one column below `xl`, two
+   * from it), each with a hairline above, so a stream reads as a
    * track record rather than as one grey block of identical cards.
    */
   readonly layout?: "grid" | "scroller" | "rows";

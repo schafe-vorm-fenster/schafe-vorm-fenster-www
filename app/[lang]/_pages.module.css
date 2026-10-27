@@ -70,42 +70,112 @@
   padding-block: var(--section-padding-block);
 }
 
-.sourcePills {
+/*
+ * The flow — SRC-0014 §Source-to-target flow, DEC-0172 §3. Where the dates
+ * come from, an arrow, and the one place they land. Nothing in it is a
+ * control, so nothing in it is a pill: the sources are a plain list with
+ * their glyphs, the target a flat square `paper` field (radius 0 — a place,
+ * not a button). Below `xl` the three parts stack and the arrow points down;
+ * from `xl` they stand in one row, sources · arrow · target.
+ */
+.flow {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+}
+
+.flowCaption {
+  color: var(--color-lime-900);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
+  line-height: var(--leading-normal);
+  margin: 0 0 var(--space-1);
+  text-transform: uppercase;
+}
+
+/* A wrapping row of plain items below `xl` — the section budget (G-4) holds
+   `embed-config` at its recorded height — and one column beside the arrow
+   from `xl`. */
+.flowSourceList {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--space-1) var(--space-4);
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.sourcePill {
+.flowSource {
   align-items: center;
-  background: var(--color-neutral-paper);
-  border-radius: var(--radius-pill);
   color: var(--color-neutral-ink);
-  display: inline-flex;
+  display: flex;
+  font-size: var(--type-body-size);
   font-weight: 700;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
+  gap: var(--space-3);
+  line-height: var(--leading-normal);
 }
 
-.benefitTarget {
+/* Decorative: it carries no text, and the order of the markup already reads
+   sources → target. Turned to point down while the parts stack. */
+.flowArrow {
+  color: var(--color-neutral-ink);
+  display: flex;
+  transform: rotate(90deg);
+  width: fit-content;
+}
+
+.flowTarget {
+  background: var(--color-neutral-paper);
+  border-radius: 0;
+  color: var(--color-neutral-ink);
+  padding: var(--space-3) var(--space-4);
+}
+
+.flowTarget .flowCaption {
+  color: var(--color-neutral-muted);
+}
+
+.flowTargetName {
   align-items: center;
   display: flex;
-  gap: var(--space-2);
-  margin: var(--space-3) 0 0;
+  font-size: var(--type-subhead-size);
+  font-weight: 800;
+  gap: var(--space-3);
+  letter-spacing: var(--type-subhead-tracking);
+  line-height: var(--leading-tight);
+  margin: 0;
 }
 
-.targetPill {
-  align-items: center;
-  background: var(--color-neutral-ink);
-  border-radius: var(--radius-pill);
-  color: var(--color-neutral-paper);
-  display: inline-flex;
-  font-weight: 700;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
+.flow .benefitLine {
+  margin: 0;
+}
+
+@media (min-width: 64rem) {
+  .flow {
+    align-items: center;
+    column-gap: var(--space-6);
+    grid-template-columns: minmax(0, 5fr) auto minmax(0, 6fr);
+  }
+
+  .flowSourceList {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .flowArrow {
+    transform: none;
+  }
+
+  .flowTarget {
+    padding: var(--space-6);
+  }
+
+  .flow .benefitLine {
+    grid-column: 1 / -1;
+  }
 }
 
 .benefitLine {

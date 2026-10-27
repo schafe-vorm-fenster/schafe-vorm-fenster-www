@@ -26,9 +26,14 @@ export interface ComparisonTableProps {
  * inventory — so the four rows stay machine-countable without checkmark
  * columns creeping in.
  * States: static content; no data dependency, so no `state` prop.
- * Inherits: **no checkmark/cross column**, no feature matrix; a hairline
- * between rows, never a card, **and no product name** — both column labels are
- * required props without a default (TS-WEB-0024 D4, SRC-0017 CG-039).
+ * Inherits: **no checkmark/cross column**, no feature matrix, **and no product
+ * name** — both column labels are required props without a default
+ * (TS-WEB-0024 D4, SRC-0017 CG-039). The two halves of a row are two flat
+ * fields that butt against each other (SRC-0014 §Comparison, DEC-0172 §2):
+ * *today* on the `archive ground` — the old world, and nothing positive on
+ * it — and *with your calendar* on `lime-100`, the fresh ground. The label
+ * stands above its sentence in mono; the pairs stack below `xl` and stand
+ * 6 + 6 from it.
  * Space: rows are content-sized; nothing here is late content.
  * A11y: each row is one list item; both cells carry their column's label as
  * visible text, so the pairing survives outside the visual two-column layout
@@ -47,12 +52,18 @@ export function ComparisonTable({
       <ul className={styles.list}>
         {rows.map((row) => (
           <li className={styles.row} key={`${row.today}-${row.withProduct}`}>
-            <p className={styles.cell}>
-              <span className={styles.label}>{todayLabel}: </span>
+            <p className={`${styles.cell} ${styles.today}`} data-half="today">
+              <span className={styles.label}>
+                {todayLabel}
+                <span className={styles.hidden}>: </span>
+              </span>
               {row.today}
             </p>
-            <p className={styles.cell}>
-              <span className={styles.label}>{withProductLabel}: </span>
+            <p className={`${styles.cell} ${styles.with}`} data-half="with">
+              <span className={styles.label}>
+                {withProductLabel}
+                <span className={styles.hidden}>: </span>
+              </span>
               {row.withProduct}
             </p>
           </li>

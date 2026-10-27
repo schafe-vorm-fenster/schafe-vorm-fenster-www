@@ -36,8 +36,10 @@ export interface TrustBlockProps {
  * States: a subject without a hub record behind it does not ship — the
  * caller omits its `body`, and this component skips it rather than
  * rendering a heading over nothing. Today only `data-protection` renders.
- * Inherits: a sober `surface` section (composed by the caller's
- * `section-shell`); **no icons** — the polish brief (page 6, item 5) struck
+ * Inherits: the `violet-500` provenance section on `/dein-kalender`
+ * (DEC-0172 §4), composed by the caller's `section-shell`; the subjects side
+ * by side from `xl`, each under a hairline in the ground's label colour;
+ * **no icons** — the polish brief (page 6, item 5) struck
  * the green `circle-check` beside each subject: a check mark affirms a
  * feature, and "who runs this and where he lives" is a biography, not a
  * feature. Each subject is a mono label over its paragraph instead. No badge

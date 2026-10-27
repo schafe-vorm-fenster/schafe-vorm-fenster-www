@@ -22,7 +22,9 @@ describe("TS-WEB-0024: /dein-kalender section rhythm", () => {
       // Proof moves off `paper`: `embed-config` and `tiers` are two neutral
       // grounds already, and a third in a row is the family rule.
       "lime-100", // proof
-      "lime-100", // trust
+      // Trust on the provenance ground: on `lime-100` it merged with the
+      // proof above it into one section (DEC-0172 §4).
+      "violet-500", // trust
       "surface", // PageFrame: context band
       "paper", // PageFrame: closing CTA
     ] as const;
