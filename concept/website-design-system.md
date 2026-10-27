@@ -857,7 +857,7 @@ and three cards with a quote each are three times the module.
 | Ground | `ink`, padded `space-12`, `space-16` from `xl`. In the page rhythm the stage is a **photo** section (it is photo-led), so it never touches the page's live-data `ink` section |
 | Head | Kicker badge with `clock` (e.g. *Ein Tag im Dorf*) · section headline · lead in `lime-200` |
 | Media | One per story: the photograph with the neutral scrim (*Photo surface*, the same two gradients and text shadow), or, for a story without a photograph, a `violet-500` ground with the story's glyph as a large `violet-600` watermark. Never an empty frame. The quote sits at the bottom: a `lime-500` quotation mark, the quote in 22–34 px / 700, and the speaker with a 44 px `lime-500` initials disc |
-| Panel | `paper`. The hours as 44 px pills (`surface`, chosen one `ink`), the hour in mono 36–52 px beside a 44 px icon well, the story headline (sub head), the story (body), then **"Im Kalender"** with **one live date of the story's own category** (`TS-WEB-0020` D3, A14), the onward action and "Weiter um …" |
+| Panel | `paper`. The hours as 44 px pills (`surface`, chosen one `ink`), the hour in mono 36–52 px beside a 44 px icon well, the story headline (sub head), the story (body), then **"Im Kalender"** with **one live date of the story's own category** (`TS-WEB-0020` D3, A14), and "Weiter um …". **No onward action**: the link back up to the page's own dates ("Was heute bei dir los ist") is gone (owner's review 2026-10-27, issue #85, `DEC-0170`) — the stage's one control is "Weiter um …" |
 | Layout | Below `xl` media above panel; from `xl` 7 : 5 side by side (*Layout Grid*). Media **below `md` a flat band at least 220 px tall** — the quote on it sets the rest (274 px at 390, 301 px at 360, measured 2026-10-13) — **from `md` at least 400 px**, from `xl` `clamp(400px, 46cqi, 640px)`. The phone band is the owner's decision of 2026-10-13 (`DEC-0153` amendment); the desktop stays as the board draws it |
 | Picking | A **native radio group**: the hours are the radios' labels, arrows move the pick, `:has(:checked)` shows it. It works **without JavaScript** and needs none. "Weiter um …" is a pointer shortcut to the next hour. Nothing advances by itself: the one auto-advance in the system is the explain module's |
 | Height | Every story's media and text share one grid cell, so the stage is as tall as its tallest story and a pick moves nothing. An unpicked story is `visibility: hidden`, out of the accessibility tree |
@@ -1310,6 +1310,34 @@ Rules:
   ground (see *Search field*). It sits last, after the context band, and the
   two ink sections are never adjacent — on `/` the whole middle of the page
   lies between them.
+
+### Module rules
+
+The owner's review of 2026-10-27 (`DEC-0170`, issues #84 and #86). They hold on
+every page and are checked on every route (`e2e/module-rules.spec.ts`).
+
+- **No proof quote under a live list.** A quote set as text under a list of
+  dates reads as a caption of the dates. A story whose example *is* a live list
+  (`value-story` with a live module as its example) carries no testimonial;
+  the component does not render one there.
+- **No two quotes in a row.** A section that ends on a quote is not followed by
+  a section that carries one. The story stage opens on a quote, so whatever
+  stands right before it does not end on one.
+- **One module per job.** A job is said once on a page: no second module, and no
+  closing block, repeats a module's instructions or its action. Where the
+  page's conversion has a module of its own — `/dein-ort`'s homescreen
+  instructions — that module **is** the closing block: heading, content, one
+  control, the reassurance under it.
+- **The context band comes after the page's own closing module.** Where the
+  closing block is such a module, the band of the other three jobs follows it
+  and is the last block in `main` (`/dein-ort`, `TS-WEB-0006` D2). A closing
+  block that only repeats a link or the search keeps its place after the band;
+  on `/` the ink search block stays last.
+- **The homescreen instructions take one pattern for both platforms.** A mono
+  platform label over an open numbered list, iPhone then Android, side by side
+  from `xl`. Neither platform hides behind a `details` disclosure: a bare
+  native `summary` beside an open list reads as a different control and shows
+  the browser's focus box.
 
 ### "Per screen"
 

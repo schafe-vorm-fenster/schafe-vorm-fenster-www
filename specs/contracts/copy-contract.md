@@ -136,6 +136,7 @@ five and every rule appears exactly once.)
 | --- | --- | --- |
 | CG-040 the avoid list fails the build | `lint` | The list is `specs/glossary/glossary.md`'s **avoid** column plus SRC-0017 §9; a hit reports file, field and term. This is TS-WEB-0007 D12 row 11 widened from one term to a register. |
 | CG-041 EN mirrors DE | `lint` | TS-WEB-0007 D12 rows 7 and 8 already carry it — locale completeness and harmonisation (TS-WEB-0007-A9). Nothing new is needed; it is listed so the guide's §9 has an owner. |
+| CG-044 one job, one module, one heading | `e2e` | `e2e/module-rules.spec.ts` on every route in both languages: the homescreen instructions render at most once, no proof quote stands after the last live row of a section, and no section that ends on a quote is followed by one with a quote (TS-WEB-0006-A19, TS-WEB-0019-A23, TS-WEB-0020-A23); `/dein-ort`'s one homescreen module is asserted by TS-WEB-0020-A26 (DEC-0170). Which of two headings stays is review. |
 
 ## Counts
 

@@ -41,6 +41,12 @@ export interface ValueStoryProps {
   /**
    * Absent, not empty: an uncleared testimonial is not in the DOM at all —
    * clearance is known at build time, so there is no async box to reserve.
+   *
+   * **Never under a live list** (DEC-0170, issue #84): where the example is a
+   * live module (`exampleVariant="module"`), the story renders no testimonial
+   * even if one is handed over. A quote standing as text under a list of
+   * dates reads as a caption of the dates, and on `/dein-ort` the next block
+   * (the story stage) opens on a quote of its own — two quotes in a row.
    */
   readonly testimonial?: QuoteFragment;
   readonly headingLevel?: "h2" | "h3";
@@ -101,7 +107,7 @@ export function ValueStory({
           {example}
         </div>
       )}
-      {testimonial ? (
+      {testimonial && exampleVariant !== "module" ? (
         <blockquote className={styles.quote}>
           <p className={styles.quoteText}>{testimonial.text}</p>
           <footer className={styles.attribution}>

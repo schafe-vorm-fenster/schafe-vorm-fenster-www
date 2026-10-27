@@ -30,14 +30,15 @@ export const PLACE_META: PageMeta = {
       emptyState: "the field alone — an upstream failure is never shown as an error (TS-WEB-0008 D7)",
     },
   ],
-  // Four `value-story` testimonial slots, one per story (TS-WEB-0020 D3). Every
-  // one of them is empty today: all five candidates are `usage_rights:
-  // unverified` (Q-0014), and an uncleared quote is never substituted.
+  // Three `value-story` testimonial slots, one per story on the stage
+  // (TS-WEB-0020 D3). The candidates are `usage_rights: unverified` (Q-0014)
+  // and ship pre-clearance (DEC-0149); an uncleared quote is never
+  // substituted. Story 4, the radius, has no slot: its example is a live
+  // list, and no proof quote stands under a live list (DEC-0170, issue #84).
   proofSlots: [
     "dein-ort-3-story-baeckerwagen",
     "dein-ort-4-story-ratssitzung",
     "dein-ort-5-story-kultur",
-    "dein-ort-6-story-radius",
   ],
   emptyState: {
     focusJob: "publish-our-dates",

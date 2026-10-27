@@ -222,6 +222,44 @@ test.describe("TS-WEB-0020 — your place", () => {
     }
   });
 
+  for (const path of ["/dein-ort", `/dein-ort?ort=${PLACE_WITH_DATES}`, "/en/your-place"]) {
+    test(`TS-WEB-0020-A25: the story stage carries no link back up the page — ${path}`, async ({ page }) => {
+      await page.setViewportSize(DESKTOP);
+      await page.goto(path);
+      const stage = page.locator('[data-block="story-stage"]');
+      await expect(stage).toHaveCount(1);
+      // Issue #85: "Was heute bei dir los ist" pointed at `#focus-block`. The
+      // stage's one control is "Weiter um …" (DEC-0170).
+      await expect(stage.locator('a[href^="#"]')).toHaveCount(0);
+      await expect(stage).not.toContainText(/Was heute bei dir los ist|What is on near you today/u);
+      await expect(stage.locator("label").filter({ hasText: /Weiter um|Next at/u }).first()).toBeAttached();
+    });
+  }
+
+  for (const path of ["/dein-ort", `/dein-ort?ort=${PLACE_WITH_DATES}`, "/en/your-place"]) {
+    test(`TS-WEB-0020-A26: one homescreen module, and it is the closing block before the band — ${path}`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(DESKTOP);
+      await page.goto(path);
+      // Issue #86: the instructions, the band, then the same job again under
+      // "Einmal antippen …". One module now, then the band (DEC-0170).
+      await expect(page.locator("#homescreen")).toHaveCount(1);
+      await expect(page.locator("#closing-cta #homescreen")).toHaveCount(1);
+      await expect(page.locator('main [data-platform="ios"]')).toHaveCount(1);
+      await expect(page.locator("main")).not.toContainText(/Einmal antippen|One tap, and it sits/u);
+      const closingBeforeBand = await page.evaluate(() => {
+        const closing = document.querySelector("#closing-cta")!;
+        const band = document.querySelector("#context-band")!;
+        return Boolean(closing.compareDocumentPosition(band) & Node.DOCUMENT_POSITION_FOLLOWING);
+      });
+      expect(closingBeforeBand).toBe(true);
+      // One control in the module: the handover in state A, the search in S0.
+      const controls = page.locator('#homescreen a[href^="https://app."], #homescreen form[role="search"]');
+      await expect(controls).toHaveCount(1);
+    });
+  }
+
   test("TS-WEB-0020-A16: the story stage is picked without JavaScript, by pointer and by keyboard, and a pick moves nothing", async ({
     browser,
   }) => {
@@ -333,14 +371,17 @@ test.describe("TS-WEB-0020 — your place", () => {
    * the page ships with them; this test holds the half that did not change —
    * that no quote is anonymous, invented, or a stock sentence about "users".
    */
-  test("TS-WEB-0020-A6: every story closes on a named, attributed quote", async ({ page }) => {
+  test("TS-WEB-0020-A6: every stage story closes on a named, attributed quote", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/dein-ort");
 
+    // Three, on the stage. The radius story's example is a live list and
+    // carries no quote (DEC-0170, issue #84; TS-WEB-0020-A23).
     const quotes = page.locator('[data-block="story-stage"] blockquote, [data-block="value-story"] blockquote');
-    await expect(quotes).toHaveCount(4);
+    await expect(quotes).toHaveCount(3);
+    await expect(page.locator('[data-block="value-story"] blockquote')).toHaveCount(0);
 
-    for (let index = 0; index < 4; index += 1) {
+    for (let index = 0; index < 3; index += 1) {
       const quote = quotes.nth(index);
       // The sentence, and the person who said it — never one without the other.
       await expect(quote.locator("p")).not.toBeEmpty();
@@ -352,26 +393,49 @@ test.describe("TS-WEB-0020 — your place", () => {
 
     const text = (await page.locator("#main").textContent()) ?? "";
     expect(text).not.toMatch(/Nutzer sagen|users say|unsere Kundinnen|our customers/i);
-    // The four people the artifact names, and nobody else.
-    for (const name of ["Kurzweg", "Zschiesche", "Eichler", "Wendt"]) {
+    // The three people the stage names. Zschiesche's quote stood under the
+    // nearby rows and is gone with DEC-0170.
+    for (const name of ["Kurzweg", "Eichler", "Wendt"]) {
       expect(text, name).toContain(name);
     }
+    expect(text).not.toContain("Zschiesche");
   });
 
-  test("TS-WEB-0020-A7: the homescreen block renders iOS and Android, always, with the app handover", async ({
+  test("TS-WEB-0020-A7: the homescreen module renders iOS and Android, always, with the app handover", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
-    await page.goto("/dein-ort");
+    await page.goto(`/dein-ort?ort=${PLACE_WITH_DATES}`);
 
-    const block = page.locator("#homescreen");
+    // DEC-0170: the module is the closing block.
+    const block = page.locator("#closing-cta #homescreen");
+    await expect(block).toHaveCount(1);
     await expect(block.locator('[data-platform="ios"]')).toHaveCount(1);
     await expect(block.locator('[data-platform="android"]')).toHaveCount(1);
     await expect(block.locator('[data-platform="ios"] li').first()).not.toBeEmpty();
     await expect(block.locator('[data-platform="android"] li').first()).not.toBeEmpty();
 
-    const href = await block.locator("a").last().getAttribute("href");
-    expect(href).toMatch(/^https:\/\/app\.schafe-vorm-fenster\.de\//);
+    // One handover, and it is the closing repeat (TS-WEB-0006 D3/D6).
+    const handover = block.locator('a[href^="https://app."]');
+    await expect(handover).toHaveCount(1);
+    await expect(handover).toHaveAttribute("href", new RegExp(`^https://app\\.schafe-vorm-fenster\\.de/.*${PLACE_WITH_DATES}`));
+    await expect(handover).toHaveAttribute("data-cta", "repeat");
+  });
+
+  test("TS-WEB-0020-A24: both platforms in one pattern — a label over an open list, no disclosure", async ({
+    page,
+  }) => {
+    await page.setViewportSize(DESKTOP);
+    await page.goto("/dein-ort");
+    const block = page.locator("#homescreen");
+    // Issue #86: iPhone stood as an open list, Android behind a bare native
+    // `details` with the browser's focus box. Both stand the same way now.
+    await expect(block.locator("details, summary")).toHaveCount(0);
+    for (const platform of ["ios", "android"]) {
+      const column = block.locator(`[data-platform="${platform}"]`);
+      await expect(column.locator(":scope > p")).toHaveCount(1);
+      await expect(column.locator(":scope > ol li").first()).toBeVisible();
+    }
   });
 
   test("TS-WEB-0020-A7: the DOM is identical under an iPhone and an Android user agent", async ({
@@ -388,9 +452,11 @@ test.describe("TS-WEB-0020 — your place", () => {
       // Both snapshots have to be taken in the same lifecycle phase, or the
       // comparison reports the hydration signal instead of a user-agent
       // difference (F-2-71).
-      await expect(
-        page.locator("#homescreen [data-conversion-tracker]"),
-      ).toHaveAttribute("data-hydrated", "true");
+      // S0's module carries the closing search (DEC-0170); its typeahead
+      // turns the field into a combobox once it has mounted.
+      await expect(page.locator('#homescreen input[type="search"]')).toHaveAttribute("role", "combobox", {
+        timeout: 15_000,
+      });
       markup.push((await page.locator("#homescreen").innerHTML()) ?? "");
       await context.close();
     }
@@ -422,6 +488,14 @@ test.describe("TS-WEB-0020 — your place", () => {
     await page.goto(`/dein-ort?ort=${PLACE_WITH_DATES}`);
     const count = await page.locator('a[href^="https://app."]').count();
     expect(count).toBeGreaterThan(0);
+    // DEC-0170: outside the live modules (the dates' handover, the nearby
+    // rows' "all dates" link) exactly one handover to this goal — the
+    // homescreen module's, which is the closing block. It used to be two.
+    await expect(page.locator('#closing-cta a[href^="https://app."]')).toHaveCount(1);
+    const outsideModules = await page
+      .locator('[data-conversion-tracker="save-calendar-to-homescreen"]')
+      .evaluateAll((elements) => elements.filter((element) => !element.closest("#place-dates, #nearby")).length);
+    expect(outsideModules).toBe(1);
 
     // One fresh page view per call site: an aborted handover leaves the
     // document in a state no visitor would ever click a second control from.
@@ -430,9 +504,9 @@ test.describe("TS-WEB-0020 — your place", () => {
       // The listener lives in a client component, so a click before
       // hydration is a navigation and nothing else. Wait for the tracker's
       // own signal rather than for a timeout (F-2-71) — the page carries
-      // three call sites for this goal now (the module's handover, the
-      // homescreen block and the closing block), and the ones further down
-      // the document hydrate last.
+      // three call sites for this goal (the module's handover, the nearby
+      // rows' link and the closing block, which is the homescreen module
+      // since DEC-0170), and the ones further down the document hydrate last.
       const trackers = page.locator('[data-conversion-tracker="save-calendar-to-homescreen"]');
       for (let tracker = 0; tracker < (await trackers.count()); tracker += 1) {
         await expect(trackers.nth(tracker)).toHaveAttribute("data-hydrated", "true");
@@ -466,10 +540,12 @@ test.describe("TS-WEB-0020 — your place", () => {
     await expect(page.getByRole("heading", { level: 1 })).toContainText(/noch nichts eingetragen/i);
     // Block 1 carries no calendar handover in state B: "an 'open the
     // calendar' link beside 'nothing is in it yet' is the one offer that
-    // state must not carry" (TS-WEB-0008 D4). The homescreen block keeps its own —
-    // TS-WEB-0020 D2 demotes it below position 2, it does not remove it.
+    // state must not carry" (TS-WEB-0008 D4). Since DEC-0170 §3 the homescreen
+    // module is the closing block, and in state B the closing block is the
+    // publishing offer: no handover to an empty calendar anywhere.
     await expect(page.locator('#place-dates a[href^="https://app."]')).toHaveCount(0);
-    await expect(page.locator('#homescreen a[href^="https://app."]')).toHaveCount(1);
+    await expect(page.locator("#homescreen")).toHaveCount(0);
+    await expect(page.locator('main a[href^="https://app."]')).toHaveCount(0);
 
     await page.locator('[data-cta="primary"]').click();
     await expect(page).toHaveURL(new RegExp(`/mitmachen/registrieren\\?ort=${slug}$`));
@@ -615,7 +691,7 @@ test.describe("TS-WEB-0020 — your place", () => {
     });
   }
 
-  test("TS-WEB-0006-A6 / A7: one context band with the three non-focus jobs, then the closing block", async ({
+  test("TS-WEB-0006-A6 / A7 (DEC-0170): the closing block, then one context band with the three non-focus jobs", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -645,14 +721,16 @@ test.describe("TS-WEB-0020 — your place", () => {
     // The four stories are four sections now, and the fourth **is** position
     // 2: the radius argument carries the nearby rows as its own evidence
     // instead of being followed by a fifth list (brief, page 2, fix 5).
+    // DEC-0170 (issue #86): the homescreen module **is** the closing block,
+    // and the context band follows it.
     expect(order).toEqual([
       "focus-block",
       "place-dates",
       "nearby",
       "story-stage",
+      "closing-cta",
       "homescreen",
       "context-band",
-      "closing-cta",
     ]);
   });
 

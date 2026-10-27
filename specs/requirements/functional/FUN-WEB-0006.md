@@ -36,6 +36,8 @@ SRC-0001#7, SRC-0014#page-rhythm
 
 Finding: "identical to the primary conversion" is not on this line; it is line 326 ("A closing CTA identical to the primary conversion.").
 
+Deviation: `go-to-market-os/concept/website-communication-principles.concept.md#L299` says "The last block of every page is the CTA of its focus job, with the context band in front of it." On `/dein-ort` the closing block is the page's own homescreen module — the instructions and their one handover — and the context band follows it, on DEC-0170 (owner's review 2026-10-27, issue #86): the homescreen block and the closing CTA were one job in two modules with the band between them. Every other page keeps the band before the closing block (TS-WEB-0006 D2's named exception). The specification carries the truth (DEC-0104 §1); DEM-0073 asks the source to follow.
+
 ## Notes
 
 Section order and colour rhythm follow SRC-0014 "Page Rhythm".
