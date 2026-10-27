@@ -33,23 +33,9 @@
   flex-direction: column;
 }
 
-/* The paper header: the 40 px mark and the brand name. */
-.chatHeader {
-  align-items: center;
-  background: var(--color-neutral-paper);
-  display: flex;
-  flex: none;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-}
-
-.chatName {
-  color: var(--color-neutral-ink);
-  font-size: var(--type-body-size);
-  font-weight: 700;
-}
-
-/* The chat ground; the bubbles stack from the bottom of the box. */
+/* The chat ground; the bubbles stack from the bottom of the box. No header
+   above it since 2026-10-27 (issue #89, DEC-0174 §2): the paper bar stood
+   white on the module's light ground and read as a stray strip. */
 .chatGround {
   display: flex;
   flex: 1;
@@ -192,6 +178,48 @@
   fill: var(--color-neutral-paper);
 }
 
+/* The calendar and the website of paths 2 and 3 (issue #88, DEC-0174 §1).
+   No product's colours: a date is `violet-500` or `lime-200`, the one being
+   entered `lime-500` with an `ink` edge. */
+.artSoft {
+  fill: var(--color-lime-200);
+}
+
+.artNew {
+  fill: var(--color-lime-500);
+  stroke: var(--color-neutral-ink);
+  stroke-width: 1.5;
+}
+
+.artCard {
+  fill: var(--color-neutral-paper);
+  stroke: var(--color-neutral-line);
+  stroke-width: 1;
+}
+
+.artSave {
+  fill: var(--color-lime-500);
+}
+
+.artCursor {
+  fill: var(--color-neutral-ink);
+  stroke: var(--color-neutral-paper);
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.artWell {
+  fill: var(--color-neutral-surface2);
+}
+
+.artSiteHead {
+  fill: var(--color-violet-500);
+}
+
+.artPaperFill {
+  fill: var(--color-neutral-paper);
+}
+
 /* ── 3 · calendar ───────────────────────────────────────────────────────── */
 
 .calendar {
@@ -261,9 +289,10 @@
   background: var(--color-neutral-paper);
 }
 
-/* The screenshot slot, cut on the diagonal so the card reads as "after". */
+/* The source slot, cut on the diagonal so the card reads as "after": the
+   drawn calendar or website of state 1, never a hatch (DEC-0174 §1). */
 .screenshot {
-  background-image: var(--placeholder-hatch);
+  background: var(--color-lime-100);
   clip-path: polygon(0 0, 68% 0, 32% 100%, 0 100%);
   inset: 0;
   position: absolute;

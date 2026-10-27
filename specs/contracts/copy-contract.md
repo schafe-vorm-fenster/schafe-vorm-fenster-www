@@ -68,6 +68,7 @@ content `describe()` names the rule rather than restating it.
 | CG-006 a question only to the reader, answered next | `review` | Reader-directedness and the answering sentence are meaning, not pattern. |
 | CG-007 one idea per section | `schema` · `review` | Schema: a scene block declares exactly one `mechanism` (TS-WEB-0006 D7, A8). A second argument in one section is review. |
 | CG-008 every section hands off | `review` | — |
+| CG-045 the context band is the only hand-off to another job | `e2e` · `review` | E2e: `TS-WEB-0006-A20` — no block in `main` outside the band, without a heading of its own, whose links all point at a job the band offers. Whether a CTA is a step of the page's own argument is review (DEC-0174 §3). |
 
 ### Concreteness
 
@@ -142,8 +143,8 @@ five and every rule appears exactly once.)
 
 ## Counts
 
-41 rules, counted from the tables above rather than estimated: **17** carry a
-`lint` row, **17** a `schema` obligation, **3** an `e2e` assertion, and **19**
+43 rules, counted from the tables above rather than estimated: **17** carry a
+`lint` row, **17** a `schema` obligation, **5** an `e2e` assertion, and **20**
 name `review` as an owning or co-owning mechanism. Most rules carry two.
 CG-044 and CG-045 (DEC-0175, 2026-10-27) come on top, both review-only, and
 are not in the counts of this paragraph.

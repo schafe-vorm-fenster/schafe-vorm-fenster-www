@@ -231,6 +231,23 @@ the same handover.
   under a list of dates, and two quotes do not follow each other across a
   section boundary (SRC-0014 §Page Rhythm, `DEC-0170`).
 
+### CG-045 — The context band is the only hand-off to another job
+
+A page hands a reader who came for something else to the other jobs **once**,
+in the context band (`TS-WEB-0006` D5). A sentence in the page's own blocks
+that does the same — *"wenn euch X vorschwebt statt Y, ist das ein anderes
+Angebot: →"* — repeats the band a few sections early, explains the offering
+structure instead of the reader's gain, and stands alone as a stray line.
+Owner's review of 2026-10-27, `/mitmachen` (issue #92): *"an dieser Stelle
+irgendwie Quatsch und optisch nicht hübsch. Die Weiterleitung kommt ja auch
+kurz danach eh."*
+
+- Avoid: a one-sentence cross-reference block pointing at a page the band
+  already offers; *"ist das ein anderes Angebot"*.
+- Allowed: a CTA that is a **step of this page's own argument** — a scene's or
+  a tier's link onward — because it is not a hand-off out of the job.
+- Checked by `TS-WEB-0006-A20`; `DEC-0174` §3.
+
 ## 3. Concreteness
 
 ### CG-009 — Real people with roles, never "die Leute"

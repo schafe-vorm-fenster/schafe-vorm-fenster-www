@@ -312,7 +312,7 @@ export interface PlaceClosingProps {
  * heading ("Einmal antippen …") and button repeated the same handover: one job,
  * two modules, the band between them. Now the instructions and the one control
  * are one module, it closes the page's argument, and the band follows it
- * (`beforeBand` in `PageFrame`).
+ * (`PageFrame`'s order on every page since DEC-0174 §4).
  *
  * - **State A:** the instructions for the stated place, and the calendar
  *   handover as the closing repeat (`data-cta="repeat"`), with the permanence

@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0001, FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136, FUN-WEB-0004, FUN-WEB-0005, FUN-WEB-0006, FUN-WEB-0007, FUN-WEB-0138, CON-WEB-0059, FUN-WEB-0009, FUN-WEB-0139, CON-WEB-0060, BUS-WEB-0015, FUN-WEB-0202, BUS-WEB-0016, FUN-WEB-0203]
 sources: [SRC-0001, SRC-0003, SRC-0017, SRC-0018]
-decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0110, DEC-0170]
+decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0110, DEC-0170, DEC-0174]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -53,38 +53,40 @@ page hard-codes a job label, target or ordering.
 The manifest makes points 1, 2, 3, 5 and 6 of the SRC-0001 compliance
 check machine-checkable; points 4, 7 and 8 are checked by D5–D8 and A14.
 
-### D2 — One block order, every page [FIXED: SRC-0001 §2 and §7]
+### D2 — One block order, every page [FIXED: SRC-0001 §2 and §7; order of blocks 3 and 4 FIXED: DEC-0174 §4]
 
 ```text
 1  focus block      — the focus job's argument + the primary conversion (D3/D4)
 2  argument blocks  — scenes, live modules, proof, page-specific (SRC-0003)
-3  context band     — the other three jobs (D5)
 4  closing CTA      — the focus job's conversion again (D6)
+3  context band     — the other three jobs (D5), the last block in `main`
 ```
+
+The numbers are the blocks' **names** — code, tests and records cite "block 3"
+for the band and "block 4" for the closing CTA — and the **order is the order
+of the lines**. Until 2026-10-27 the band stood before the closing CTA, as
+SRC-0001 §2 and §7 have it; the owner's review of that day moved the closing
+block in front of it on `/dein-kalender` (issue #93), because a conversion that
+follows the hand-off to other jobs loses its context, and DEC-0174 §4 makes it
+the rule for every page. **One exception:** where the closing block is the
+closing **search** on `ink` (`/`, TS-WEB-0019), it stays the last section — a
+search is not a conversion, and the second `ink` section is legal only as the
+page's last (SRC-0014 §Page Rhythm, DEC-0117). FUN-WEB-0005 and FUN-WEB-0006
+record the deviation from SRC-0001; DEM-0073 asks the source to follow.
 
 Blocks 3 and 4 are rendered by the shared layout from `page.meta.ts`, not
 hand-placed per page — that is what makes "every page" enforceable rather
-than aspirational. After block 4 stand exactly two things: the contact
-section, then the global footer (TS-WEB-0004 D4).
+than aspirational. After the last of them stand exactly two things: the
+contact section, then the global footer (TS-WEB-0004 D4).
 
-**One named exception to the order of 3 and 4: `/dein-ort`** [FIXED: DEC-0170,
-owner's review 2026-10-27, issue #86]. Where the page's conversion has a
-**module** of its own — the homescreen instructions with their handover — that
-module *is* the closing block, and a second module for the same job is
-forbidden (SRC-0014 §Module rules, "one module per job"). The closing block then
-ends the page's argument and the context band follows it:
-
-```text
-1  focus block · 2 argument blocks · 4 closing block (the module) · 3 context band
-```
-
-The layout still renders both (`PageFrame`, `closing.beforeBand`), so "every
-page" stays enforceable; after the band stand the contact section and the
-footer as everywhere. Every other page keeps 3 → 4: a closing block that only
-repeats a link or the search is not a module of its own, and `/`'s ink search
-block stays the last section (SRC-0014 §Page Rhythm). The exception deviates
-from SRC-0001 §2/§7 and is recorded on `FUN-WEB-0005` and `FUN-WEB-0006`
-(`DEM-0073`).
+**`/dein-ort` came first** [FIXED: DEC-0170, owner's review 2026-10-27, issue
+#86]. Where the page's conversion has a **module** of its own — the homescreen
+instructions with their handover — that module *is* the closing block, and a
+second module for the same job is forbidden (SRC-0014 §Module rules, "one module
+per job"). DEC-0170 made it the one page with the closing block before the band;
+issue #93 asked the same of `/dein-kalender`, and DEC-0174 §4 made the order
+above the rule for every page, so the layout needs no per-page flag
+(`PageFrame`'s former `closing.beforeBand` is gone).
 
 **The contact section is not a block** [FIXED: DEC-0081]. One contact
 surface exists for the whole site — video appointment, WhatsApp, phone,
@@ -228,7 +230,8 @@ hand-written list, so it can never drift out of sync.
 | --- | --- |
 | Contents | exactly the three non-focus jobs, one entry each |
 | Phrasing | an offer in the visitor's own voice, not a menu: each entry names an audience and a content together, so a reader recognises whether it is meant for her. Wording is copy and is written in the content phase under SRC-0017 CG-030 — this spec states no example sentence and no grammatical form (DEC-0083) |
-| Position | after the last argument block, before the closing CTA (D2) — on `/dein-ort` after the closing block, which is the page's own last module (D2's named exception, DEC-0170) |
+| Position | after the closing CTA, the last block in `main` (D2, DEC-0174 §4; on `/dein-ort` first, DEC-0170); before it only where the closing block is the closing search on `ink` (`/`) |
+| Only hand-off | the band is the page's one hand-off to another job: no block of the page's own carries a sentence that sends the reader to a job the band offers (SRC-0017 CG-045, DEC-0174 §3). A CTA that is a step of the page's own argument — a scene's, a tier's — is not a hand-off |
 | Links | through the route facade (TS-WEB-0004 D3a/D5); targets from the job registry |
 | Treatment | secondary; never the primary treatment (D3) |
 | Form | a heading with a mono kicker, then one link card per job — icon well, label and blurb, arrow disc; the whole card is the link, a pill (SRC-0014 §Page chrome revised → Context band, DEC-0156; measured by TS-WEB-0017-A35) |
@@ -238,10 +241,12 @@ every page in at most one click; the band is the in-content guarantee,
 the header the persistent one. Both are required — the header alone
 would leave the promise dependent on a visitor noticing chrome.
 
-### D6 — Every page ends in its conversion [FIXED: SRC-0001 §7, SRC-0003]
+### D6 — Every page's argument ends in its conversion [FIXED: SRC-0001 §7, SRC-0003; position DEC-0174 §4]
 
-The last block is the CTA of the focus job and is **identical** to the
-primary conversion: same conversion goal ID, same target, same label.
+The closing block is the CTA of the focus job and is **identical** to the
+primary conversion: same conversion goal ID, same target, same label. It
+closes the page's own blocks; the context band follows it as the last block in
+`main` (D2, D5).
 Two shapes, chosen by the manifest:
 
 | `primaryConversion` | Closing block |
@@ -396,8 +401,8 @@ the promise is removed rather than softened.
 | TS-WEB-0006-A3 | e2e | At 360 × 640 and 1280 × 800 the primary conversion is fully visible without scrolling on every page that declares one, **except `/ueber-uns`**, where D3's named exception puts it in the closing block and the first viewport carries no `data-cta` at all (DEC-0082 amendment C). |
 | TS-WEB-0006-A4 | e2e | On every page whose focus job is "know what is on", the first screen contains the place-search or live-dates module and its primary conversion is not a link to another page. |
 | TS-WEB-0006-A5 | e2e | From every page, each of the four jobs is reachable in ≤ 1 click (header and context band targets resolve inside the TS-WEB-0004 D1 inventory). |
-| TS-WEB-0006-A6 | e2e | Every page renders exactly one context band, naming exactly the three non-focus jobs, in DOM order after the last argument block and before the closing block — **on `/dein-ort` after the closing block** (D2's named exception, DEC-0170). |
-| TS-WEB-0006-A7 | e2e | The last block of every page is the closing CTA with the same conversion goal ID and target as the primary conversion — or, where `primaryConversion` is `null`, the merged three-job block; on `/dein-ort` the closing block (the homescreen module) is the last block before the context band (DEC-0170). |
+| TS-WEB-0006-A6 | e2e | Every page renders exactly one context band, naming exactly the three non-focus jobs, in DOM order after the closing block, as the **last block in `main`** — except `/`, whose closing search block on `ink` follows it (DEC-0174 §4). |
+| TS-WEB-0006-A7 | e2e | The closing block carries the same conversion goal ID and target as the primary conversion and directly precedes the context band — or, where `primaryConversion` is `null`, is the merged three-job block, the last block. |
 | TS-WEB-0006-A8 | static | Content lint (SRC-0018): zero hits of the avoid list — SRC-0017 §9 plus the glossary's avoid column — in page copy; no section-title field contains a question mark (CG-005); every scene block declares exactly one `mechanism`. |
 | TS-WEB-0006-A9 | static | No role switcher, audience selector, or self-classification control exists in the component inventory or in any rendered page. |
 | TS-WEB-0006-A10 | e2e | Stage-0 render (no geo, no referrer, no UTM, no params) and stage-3 render of the same page have identical block structure and identical `focusJob`; only module selection and order differ. The `/dein-ort` empty state is the one registered exception. |
@@ -410,6 +415,7 @@ the promise is removed rather than softened.
 | TS-WEB-0006-A17 | e2e | Every page renders exactly one contact section, in DOM order after the closing block and before the global footer. It contains no `data-cta="primary"`; its first action row is the only element on the site whose href is the configured appointment URL. No page anywhere renders a general contact form: no `form` element and no envoy mount point exists outside `/deine-region/angebot` and the order flow's invoice step. |
 | TS-WEB-0006-A18 | e2e | Every explanatory module (scene block, publishing path, price tier) contains exactly one CTA, and it carries `data-cta="secondary"` or `="equal-weight"`; the count of `data-cta="primary"` on the page is unchanged by their presence. |
 | TS-WEB-0006-A19 | e2e | On every route in both languages, and on `/dein-ort` in state A: no module repeats another's job — the homescreen instructions render at most once; no visible proof quote follows the last live row of its section; no section whose last visible text is a quote is followed by a section carrying a visible quote (SRC-0014 §Module rules, DEC-0170, `e2e/module-rules.spec.ts`). |
+| TS-WEB-0006-A20 | e2e | On every page, no top-level block of `main` other than the context band and the closing block lacks a heading of its own while every link in it points at a job the band offers: a one-sentence hand-off to another job duplicates the band (SRC-0017 CG-045, DEC-0174 §3). |
 
 ## Coverage
 
@@ -421,8 +427,8 @@ the promise is removed rather than softened.
 | FUN-WEB-0135 (render it at secondary treatment) | D3 · A2, A3, A15, A18 |
 | FUN-WEB-0136 (carry a second) | D3 · A2, A3, A15, A18 |
 | FUN-WEB-0004 (four jobs, one click from anywhere) | D5 (with TS-WEB-0004 D4) · A5 |
-| FUN-WEB-0005 (context band, position and contents) | D2, D5 · A6 |
-| FUN-WEB-0006 (page ends in its focus job's CTA) | D2, D6 · A7, A17 |
+| FUN-WEB-0005 (context band, position and contents) | D2, D5 · A6, A20 |
+| FUN-WEB-0006 (the page's own blocks end in its focus job's CTA) | D2, D6 · A7, A17 |
 | FUN-WEB-0007 ("know what is on" fulfilled in place) | D4 · A4 |
 | FUN-WEB-0138 (introduce it through a concrete scene) | D7 · A8, A16 |
 | CON-WEB-0059 (never use a generic claim as copy) | D7 · A8, A16 |
@@ -451,7 +457,8 @@ the promise is removed rather than softened.
   for itself.
 - **Merged band and closing block on conversion-less pages.** D6 merges
   them; since DEC-0081 §6 the case is `/ueber-uns/archiv` alone. SRC-0001 §7
-  requires band *then* CTA, SRC-0003 makes them the same three jobs.
+  requires band *then* CTA — which every other page no longer follows since
+  DEC-0174 §4 (DEM-0073) — and SRC-0003 makes them the same three jobs.
   Confirm the merge, or accept the same three jobs twice in a row.
 - **Does SRC-0001's compliance check mandate a live element on every
   page?** D1 permits `liveModules: []` on the three sender surfaces

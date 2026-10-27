@@ -6,8 +6,8 @@ import { checkRhythm, type RhythmEntry } from "@/src/components/section-shell/rh
  * TS-WEB-0026 / SRC-0014 §Page Rhythm — the section surface sequence of both
  * routes, checked the way `src/components/README.md` prescribes: "no two
  * photo sections adjacent, at most two consecutive sections of one colour
- * family, one `ink` section per page". `PageFrame` always appends `surface`
- * (the context band) then `paper` (the closing block) after a page's own
+ * family, one `ink` section per page". `PageFrame` always appends `paper`
+ * (the closing block) then `surface` (the context band, DEC-0174 §4) after a page's own
  * blocks (`app/[lang]/_page-frame.tsx`), so both lists include that tail.
  */
 
@@ -25,8 +25,8 @@ describe("TS-WEB-0026: /deine-region page rhythm", () => {
       // argument, and the two of them showed "Absenden" and "Angebot
       // anfragen" one under the other for a single action. Removing it also
       // removes the two adjacent `lime-100` sections the brief measured.
-      "surface", // PageFrame block 3 — context band
       "paper", // PageFrame block 4 — closing CTA
+      "surface", // PageFrame block 3 — context band, last (DEC-0174 §4)
     ];
     expect(checkRhythm(sections)).toEqual([]);
     expect(sections.filter((section) => section === "photo")).toHaveLength(1);
@@ -41,8 +41,8 @@ describe("TS-WEB-0026: /deine-region/angebot page rhythm", () => {
       // rather than as art direction (brief page 9, item 1).
       "violet-500", // the headline
       "lime-100", // the quote form
-      "surface", // PageFrame block 3 — context band
       "paper", // PageFrame block 4 — closing CTA
+      "surface", // PageFrame block 3 — context band, last (DEC-0174 §4)
     ];
     expect(checkRhythm(sections)).toEqual([]);
   });

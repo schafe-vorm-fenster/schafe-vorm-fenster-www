@@ -7,7 +7,8 @@ import { checkRhythm, type RhythmEntry } from "@/src/components/section-shell/rh
  * blocks plus the two `PageFrame` appends.
  *
  * Since DEC-0081 §6 the page has a conversion of its own, so `PageFrame` renders
- * the band (`surface`) and the closing CTA (`paper`) as two sections instead of
+ * the closing CTA (`paper`) and the band (`surface`) — in that order since
+ * DEC-0174 §4 — as two sections instead of
  * the merged three-job block. The counter section is gone (D4), and the archive
  * link stands in a tight block of its own (D6, D2 block 3). The newsletter is
  * not in the list because it does not render while no sending system is named
@@ -35,8 +36,8 @@ describe("TS-WEB-0027-A2: /ueber-uns page rhythm", () => {
       "lime-100", // 6 who is behind it
       "paper", // 7 the principles
       "violet-500", // 8 the award
-      "surface", // PageFrame: context band
       "paper", // PageFrame: closing CTA — the page's one primary
+      "surface", // PageFrame: context band, last (DEC-0174 §4)
     ];
     expect(checkRhythm(sections)).toEqual([]);
     expect(sections.filter((section) => section === "photo")).toHaveLength(2);

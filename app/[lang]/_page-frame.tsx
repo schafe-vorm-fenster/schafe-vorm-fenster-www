@@ -3,8 +3,16 @@
  * from the page's `page.meta.ts`, for every page, in one place.
  *
  * ```
- * (chrome: header · trail · main) → page blocks → context-band → closing-cta → (footer)
+ * (chrome: header · trail · main) → page blocks → closing-cta → context-band → (contact · footer)
  * ```
+ *
+ * The closing block stands **before** the band since 2026-10-27 (owner's
+ * review, issue #93, DEC-0174 §4): the page's conversion belongs to the
+ * page's argument, and the band — the hand-off for a reader who came for
+ * something else — is the last block in `main`. The one exception is the
+ * closing **search** block on `ink` (`/`): a search is not a conversion
+ * (TS-WEB-0019 D2), and the second `ink` section a page may carry is only
+ * legal as its last section (SRC-0014 §Page Rhythm, DEC-0117).
  * (`plan/component-inventory.md` §4, "Every page is wrapped by the shared
  * layout".)
  *
@@ -130,17 +138,6 @@ export type ClosingBlock =
        * then adds the section and nothing inside it.
        */
       readonly bare?: boolean;
-      /**
-       * The closing block stands **before** the context band [DEC-0170].
-       *
-       * Only where the closing block is the page's own last module rather
-       * than a repeat of a link: on `/dein-ort` it *is* the homescreen
-       * module — instructions and the one handover — so the page's argument
-       * ends in its conversion and the band of the other three jobs follows
-       * it (owner's review 2026-10-27, issue #86). Every other page keeps
-       * TS-WEB-0006 D2's band → closing order.
-       */
-      readonly beforeBand?: boolean;
     };
 
 export interface PageFrameProps {
@@ -183,52 +180,51 @@ export function PageFrame({
     (contextBand ? fieldAt(contextBand.blocks, 0) : undefined) ??
     BAND_HEADING[locale];
   const merged = closing.variant === "merged";
-  const closingBeforeBand = closing.variant === "module" && closing.beforeBand === true;
+  // DEC-0174 §4: the closing block precedes the band — except the closing
+  // search block on `ink`, which stays the page's last section.
+  const closingBeforeBand = !(closing.variant === "module" && closing.surface === "ink");
 
   const closingBlock =
     closing.variant === "merged" ? null : (
-      <>
-        {/* Block 4 — the focus job's conversion, repeated. It is the last
-            block *inside* `main` — on `/dein-ort` the band follows it
-            (DEC-0170) — and after `main` stand exactly two things, both
-            chrome: the contact section and the global footer (TS-WEB-0006 D2
-            as amended by DEC-0081 §2, `_chrome.tsx`). */}
-        <MotionReveal>
-          <SectionShell
-            id="closing-cta"
-            label={dictionary(locale).nav.home}
-            surface={closing.variant === "module" ? (closing.surface ?? "paper") : "paper"}
-          >
-            {closing.variant === "module" && closing.bare ? (
-              closing.node
-            ) : closing.variant === "module" ? (
-              /* The block-1 primary repeated as the module it is, with the
-                 same heading and reassurance a `repeat` block carries — a
-                 page that ends on a control and nothing else ends on no
-                 promise at all (polish brief G-6). */
-              <ClosingCtaModule
-                footer={closing.footer}
-                heading={closing.heading}
-                reassurance={closing.reassurance}
-              >
-                {closing.node}
-              </ClosingCtaModule>
-            ) : (
-              <ClosingCta
-                footer={closing.footer}
-                hash={closing.hash}
-                heading={closing.heading}
-                label={closing.label}
-                locale={locale}
-                marker={closing.marker}
-                query={closing.query}
-                reassurance={closing.reassurance}
-                to={closing.to}
-              />
-            )}
-          </SectionShell>
-        </MotionReveal>
-      </>
+      /* Block 4 — the focus job's conversion, repeated. Inside `main` it is
+         followed only by the band (DEC-0174 §4), and after `main` stand
+         exactly two things, both chrome: the contact section and the global
+         footer (TS-WEB-0006 D2 as amended by DEC-0081 §2, `_chrome.tsx`). */
+      <MotionReveal>
+        <SectionShell
+          id="closing-cta"
+          label={dictionary(locale).nav.home}
+          surface={closing.variant === "module" ? (closing.surface ?? "paper") : "paper"}
+        >
+          {closing.variant === "module" && closing.bare ? (
+            closing.node
+          ) : closing.variant === "module" ? (
+            /* The block-1 primary repeated as the module it is, with the
+               same heading and reassurance a `repeat` block carries — a
+               page that ends on a control and nothing else ends on no
+               promise at all (polish brief G-6). */
+            <ClosingCtaModule
+              footer={closing.footer}
+              heading={closing.heading}
+              reassurance={closing.reassurance}
+            >
+              {closing.node}
+            </ClosingCtaModule>
+          ) : (
+            <ClosingCta
+              footer={closing.footer}
+              hash={closing.hash}
+              heading={closing.heading}
+              label={closing.label}
+              locale={locale}
+              marker={closing.marker}
+              query={closing.query}
+              reassurance={closing.reassurance}
+              to={closing.to}
+            />
+          )}
+        </SectionShell>
+      </MotionReveal>
     );
 
   return (
@@ -274,8 +270,6 @@ export function PageFrame({
         </MotionReveal>
       ) : (
         <>
-          {/* DEC-0170: on `/dein-ort` the closing block is the page's own last
-              module and the band follows it. */}
           {closingBeforeBand ? closingBlock : null}
 
           {/* Block 3 — the three non-focus jobs. `as="aside"` — TS-WEB-0011-A4:

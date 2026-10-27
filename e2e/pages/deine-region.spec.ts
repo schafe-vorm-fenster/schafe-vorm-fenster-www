@@ -245,12 +245,19 @@ test.describe("/deine-region", () => {
     await expect(page.getByRole("dialog")).toHaveCount(0);
   });
 
-  test("TS-WEB-0006-A6: exactly one context band, after the last argument block, before the closing block", async ({
+  test("TS-WEB-0006-A6: exactly one context band, after the closing block, the last block in main", async ({
     page,
   }) => {
     await page.goto("/deine-region");
     const bands = page.locator("#context-band");
     await expect(bands).toHaveCount(1);
+    // DEC-0174 §4: the closing block closes the argument, the band follows.
+    const follows = await page.evaluate(() => {
+      const closing = document.querySelector("#closing-cta");
+      const band = document.querySelector("#context-band");
+      return Boolean(closing && band && closing.compareDocumentPosition(band) & Node.DOCUMENT_POSITION_FOLLOWING);
+    });
+    expect(follows).toBe(true);
   });
 
   test("TS-WEB-0006-A7: the closing block repeats the primary conversion's goal and target", async ({

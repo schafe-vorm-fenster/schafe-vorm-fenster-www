@@ -56,7 +56,7 @@ TS-WEB-0011 · boundaries and price TS-WEB-0018.
 | 4 | the product: embed demo, position 1′ (TS-WEB-0008 D6) | colour |
 | 5 | what it adds over the 480 € tier: territory cut, map view, `custom-data-integration` as the add-on (D6) | photo, `ratio-feature` |
 | 6–7 | proof at this level (D7), then the quote CTA + response promise (D5) | colour |
-| 8–9 | context band, closing CTA (TS-WEB-0006 D5/D6) | paper |
+| 8–9 | closing CTA, context band (TS-WEB-0006 D6/D5, DEC-0174 §4) | paper |
 | — | contact section, rendered by the layout below the closing CTA (TS-WEB-0006 D2, DEC-0081) | its own fixed ground |
 
 ### D3 — The map story, told without a map [until January 2027, DEC-0061] [FIXED: DEC-0034; copy contract PROPOSED]

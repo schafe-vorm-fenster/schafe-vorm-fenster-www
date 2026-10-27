@@ -22,8 +22,8 @@ import type { Metadata } from "next";
  * The page a visitor reaches when the place search finds **no place at all**.
  * Blocks per TS-WEB-0021 D2: the acknowledgment with the place's name and the
  * page's only primary treatment · what it takes (WhatsApp) · the live
- * example · who usually starts it · search again · context band · closing
- * CTA, the last two from `page.meta.ts` through `PageFrame`. The breadcrumb
+ * example · who usually starts it · search again · closing CTA · context
+ * band, the last two from `page.meta.ts` through `PageFrame`. The breadcrumb
  * trail above block 1 is DEC-0071's, and the frame renders it because
  * `placeStart` has a parent in the route table.
  *

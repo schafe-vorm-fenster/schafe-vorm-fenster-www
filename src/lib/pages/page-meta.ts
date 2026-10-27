@@ -9,7 +9,8 @@
  * route's own `page.meta.ts`. Three consumers read it:
  *
  *   1. the page frame (`app/[lang]/_page-frame.tsx`), which renders blocks 3
- *      and 4 — context band and closing CTA — from `focusJob`, so neither is
+ *      and 4 — context band and closing CTA, the closing CTA first and the
+ *      band last since DEC-0174 §4 — from `focusJob`, so neither is
  *      hand-placed per page (TS-WEB-0006 D2/D5/D6);
  *   2. `page-meta.test.ts`, which resolves every declared id against the
  *      installed hub packages — the static half of TS-WEB-0006-A1 and A11;

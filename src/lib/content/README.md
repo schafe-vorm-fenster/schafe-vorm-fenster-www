@@ -257,9 +257,9 @@ the positional rule did.
 | --- | --- | --- |
 | `home-8-proof-stream` | the candidate list | `app/[lang]/page.tsx:186` |
 | `home-4a-scene-whatsapp-steps-demo` | lists 0 and 1 — step lines, sample rows | `app/[lang]/page.tsx:772`, `:765` |
-| `mitmachen-2-objections` | lists 0 and 1 — the two objection columns | `app/[lang]/mitmachen/page.tsx:228` |
-| `mitmachen-3a/4a/5a-path-*-steps-demo` | lists 0 and 1 each | `app/[lang]/mitmachen/page.tsx:391`/`:384`, `:427`/`:421`, `:471`/`:465` |
-| `mitmachen-7-proof-demo` | **every** list (`listItems`) | `app/[lang]/mitmachen/page.tsx:192` |
+| `mitmachen-2-objections` | lists 0 and 1 — the two objection columns | `app/[lang]/mitmachen/page.tsx:229` |
+| `mitmachen-3a/4a/5a-path-*-steps-demo` | lists 0 and 1 each | `app/[lang]/mitmachen/page.tsx:392`/`:385`, `:433`/`:427`, `:482`/`:476` |
+| `mitmachen-7-proof-demo` | **every** list (`listItems`) | `app/[lang]/mitmachen/page.tsx:189` |
 | `ueber-uns-3-proof-stream` | the five proof items under *Pool: …* | `app/[lang]/ueber-uns/page.tsx:156` |
 | `deine-region-6-proof-demo` | the three quote items | `app/[lang]/deine-region/page.tsx:196` |
 | `dein-kalender-5-proof-demo` | **every** list (`listItems`) | `app/[lang]/dein-kalender/page.tsx:286` |

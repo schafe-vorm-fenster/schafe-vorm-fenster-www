@@ -306,15 +306,13 @@ place (DEC-0068 rule 3, DEC-0115).
 
 **Hint banner:** Please ask us first — so far this works for some websites only.
 
-**Cross-reference (only here, one sentence, secondary):** If your club or municipality wants its own calendar on its own website instead of a source for the village calendar, that's a different offering: → `/dein-kalender`
-
 Availability: **Alpha** according to the hub record, not
 `generally-available` — the status badge must stay visible as long as
 that holds (TS-WEB-0022 D4).
 
-Source of the cross-reference: TS-WEB-0022 D9 — exactly one link to
-`/dein-kalender`, inside an `aside`, at the end of slot 3, with no price,
-no tier list, never `data-cta="primary"`.
+No cross-reference to `/dein-kalender` in this slot (review of
+2026-10-27, issue #92, DEC-0174 §3): the context band hands off to the
+other three jobs, "Your calendar" included.
 
 The hint sentence is the review's wording. The standard sources the banner
 enumerates come from the offering record

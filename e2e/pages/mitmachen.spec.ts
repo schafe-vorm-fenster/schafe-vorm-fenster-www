@@ -74,13 +74,13 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     // hero (scene) → objections → the `wege` slot → beispiel (live example)
     // → beleg (proof), which is D2's order.
     //
-    // Three things in this list are not D2 slots and are explained by D9 and
-    // G-4 (DEC-0124). The objection block is two sections — `objections` and
+    // Two things in this list are not D2 slots and are explained by G-4
+    // (DEC-0124). The objection block is two sections — `objections` and
     // `archiv` — because together they measure 1627 px at 390 px and
     // `e2e/section-budget.spec.ts` caps a section at 1270. The `wege` slot is
-    // three sections for the same reason. And `verweis` is the one
-    // `/dein-kalender` cross-reference D9 puts **at the end of slot 3**, in a
-    // quiet aside of its own rather than as a fourth step inside path 3.
+    // three sections for the same reason. The `verweis` aside that stood after
+    // slot 3 is gone: the context band is the page's one hand-off (D9 as
+    // amended by DEC-0174 §3, issue #92).
     expect(blocks).toEqual([
       "scene",
       "objections",
@@ -88,7 +88,6 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
       "wege",
       "wege",
       "wege",
-      "verweis",
       "beispiel",
       "beleg",
     ]);
@@ -243,32 +242,22 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     // JSON-LD is TS-WEB-0011 territory (not yet wired) — recorded as not-yet-M4.
   });
 
-  test("TS-WEB-0022-A13: exactly one link to /dein-kalender in the page's own body, inside an aside, without primary treatment", async ({
+  test("TS-WEB-0022-A13: no link to /dein-kalender in the page's own body, and no aside but the context band", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
-    // Excludes `#context-band`: TS-WEB-0011-A4 makes it an `aside` too (F-2-41),
-    // and its "other jobs" list links `/dein-kalender` on every page — not
-    // this page's own D9 rule, which is about its own blocks 1–2.
-    const ownAsideLinks = await page
-      .locator('aside a[href*="/dein-kalender"]')
-      .evaluateAll((elements) =>
-        elements
-          .filter((element) => !element.closest("#context-band"))
-          .map((element) => element.getAttribute("data-cta")),
-      );
-    expect(ownAsideLinks).toHaveLength(1);
-    expect(ownAsideLinks[0]).not.toBe("primary");
-    // Scoped to `main`, excluding the context band: the header's persistent
-    // job nav (chrome, TS-WEB-0004 D4) and TS-WEB-0006 D5's context band both link to
-    // /dein-kalender as "the other jobs" on every page — neither is this
-    // page's own D9 rule, which is about its own blocks 1–2.
+    // D9 as amended by DEC-0174 §3 (issue #92): the context band hands off to
+    // `/dein-kalender` like to every other job, and nothing in the page's own
+    // blocks repeats it. The header's job nav is chrome, outside `main`.
     const ownBodyLinks = await page
-      .locator('main a[href="/dein-kalender"]')
-      .evaluateAll((elements) =>
-        elements.filter((element) => !element.closest("#context-band, #closing-cta")).length,
-      );
-    expect(ownBodyLinks).toBe(1);
+      .locator('main a[href*="/dein-kalender"]')
+      .evaluateAll((elements) => elements.filter((element) => !element.closest("#context-band")).length);
+    expect(ownBodyLinks).toBe(0);
+    const ownAsides = await page
+      .locator("main aside")
+      .evaluateAll((elements) => elements.filter((element) => element.id !== "context-band").length);
+    expect(ownAsides).toBe(0);
+    await expect(page.locator("main")).not.toContainText("ist das ein anderes Angebot");
   });
 
   test("TS-WEB-0022-A17: one hint banner, inside the paths slot after the third path, no CTA, no figure, the offering's sources only", async ({

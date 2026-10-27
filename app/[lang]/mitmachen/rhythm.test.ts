@@ -4,7 +4,8 @@ import { checkRhythm } from "@/src/components/section-shell/rhythm";
 
 /**
  * TS-WEB-0022 D10 — the page's full section sequence, own blocks plus the two
- * `PageFrame` always appends (context band `surface`, closing `paper`), run
+ * `PageFrame` always appends (closing `paper`, then the context band `surface`,
+ * DEC-0174 §4), run
  * through the shared rhythm predicate: no two photo sections adjacent, at
  * most two consecutive of one colour family, the dark `ink` section exactly
  * once (the live example, D10's anchor).
@@ -36,16 +37,14 @@ describe("TS-WEB-0022-A16: /mitmachen section rhythm", () => {
       "paper", // wege · path 1 — WhatsApp, and the slot's kicker and heading
       "lime-100", // wege · path 2 — calendar connection
       "paper", // wege · path 3 — website import, and the hint banner (D11)
-      // The `/dein-kalender` cross-reference, at the end of slot 3 where D9
-      // puts it, in a quiet `aside` of its own rather than as a fourth step
-      // of "your website as the source" (polish brief, page 4, item 5).
-      "lime-100", // verweis
+      // No `/dein-kalender` cross-reference after it any more: the context
+      // band is the page's one hand-off (D9 as amended by DEC-0174 §3).
       "ink", // live example — the page's single dark section
-      // Lime, not a grey: `PageFrame` appends `surface` and `paper` after
+      // Lime, not a grey: `PageFrame` appends `paper` and `surface` after
       // this, and three neutral sections in a row is the violation.
       "lime-100", // beleg
-      "surface", // PageFrame: context band
       "paper", // PageFrame: closing CTA
+      "surface", // PageFrame: context band, last (DEC-0174 §4)
     ] as const;
     expect(checkRhythm(sections, 0)).toEqual([]);
   });
