@@ -171,7 +171,7 @@ test.describe("/ueber-uns", () => {
     }
     // Chapter 02 is its heading and one text: the mayoralty is said there
     // once, with no second proof element repeating it and no source line that
-    // names no article (D3 as amended, DEC-0175 §2, CG-044, CG-045).
+    // names no article (D3 as amended, DEC-0175 §2, CG-046, CG-047).
     const chapter2 = page.locator("[data-block='kapitel-2']");
     await expect(chapter2.locator("[data-inline-proof]")).toHaveCount(0);
     await expect(chapter2.locator("h2")).toHaveCount(1);

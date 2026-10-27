@@ -101,14 +101,14 @@ press page. Each carries an issue:
    es keinen Eintrag. „Alle" zeigt wieder alles."), still unreachable while
    every chip has a row. TS-WEB-0028 D7 and the new **TS-WEB-0028-A19** say so.
 6. **Two copy rules** (SRC-0017):
-   - **CG-044 — A claim appears once per page.** A fact the page has said is
+   - **CG-046 — A claim appears once per page.** A fact the page has said is
      not said again as a proof line, a pull quote or a teaser on the same page.
-   - **CG-045 — A source names outlet, date and a working link, or it is
+   - **CG-047 — A source names outlet, date and a working link, or it is
      omitted.** "Zeitung, Jahr und Jahr" is not a source; a fact without a
      linkable article stands in the text without a source line, backed by the
      hub record in the content artefact's `derived_from`.
    Both are `review` rows in the copy contract: no lint can tell one fact
-   from its paraphrase, and CG-045's link half is already held for quotes by
+   from its paraphrase, and CG-047's link half is already held for quotes by
    CG-028.
 
 ## Consequences
@@ -117,7 +117,7 @@ press page. Each carries an issue:
   rewritten. `TS-WEB-0028` D4 and D7 are amended, A19 is new. `TS-WEB-0007` D11
   is amended, A19 is new. `TS-WEB-0005` D5 and `TS-WEB-0022` D3 and A6 are
   amended. SRC-0014 §Story disclosure and §Do Not, the contract's
-  `story-disclosure` row and composition rules, SRC-0017 (CG-044, CG-045, Do
+  `story-disclosure` row and composition rules, SRC-0017 (CG-046, CG-047, Do
   Not) and the copy contract carry the rules.
 - `state/open.md` row 260 (the stand-in's words) is closed: there are no words
   left to write.
@@ -133,3 +133,10 @@ press page. Each carries an issue:
   therefore not be true as written; the text now says the name *recalls* that
   time, the brand profile's "honours". If the name came earlier, chapter 02
   should say what it actually recalls.
+
+## Amendment 2026-10-27: rule numbers
+
+The two copy rules were merged as CG-044 and CG-045, numbers DEC-0170 and
+DEC-0174 had taken minutes earlier for other rules. They are renumbered
+**CG-046** (a claim appears once per page) and **CG-047** (a source names
+outlet, date and a working link, or it is omitted); their wording is unchanged.

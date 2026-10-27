@@ -543,7 +543,7 @@ A response time, an availability, a permanence promise appears only where an
 operational commitment backs it (TS-WEB-0006 D11). Where the process is unconfirmed
 the promise is removed, not softened.
 
-### CG-044 — A claim appears once per page
+### CG-046 — A claim appears once per page
 
 A fact the page has said is not said again on the same page — not as a proof
 line under the text, not as a pull quote, not as a teaser. The second time
@@ -560,7 +560,7 @@ founder had been mayor.
   ehrenamtlicher Bürgermeister von Schmatzin … An diese Zeit erinnert der Name
   Schafe vorm Fenster …"* (DEC-0175 §2).
 
-### CG-045 — A source names outlet, date and a working link, or it is omitted
+### CG-047 — A source names outlet, date and a working link, or it is omitted
 
 A source line exists so a reader can check the claim. It names the outlet, the
 date of the piece and links to it — the article, the portrait, the episode. A
@@ -699,8 +699,8 @@ review at the editorial gate (TS-WEB-0007 D11), listed as such in the contract.
   working label on the page (CG-027, CG-025, CG-035).
 - No `Sie`, on any page, in any field — except `/rechtliches`, which is
   exempt as a whole page and exempts nothing else (CG-003).
-- No claim twice on one page (CG-044), and no source line that names no
-  article — outlet, date and link, or nothing (CG-045).
+- No claim twice on one page (CG-046), and no source line that names no
+  article — outlet, date and link, or nothing (CG-047).
 - No placeholder for a missing proof: no "Beleg fehlt", no sentence naming
   the gap. A missing proof renders nothing (DEC-0175 §3, TS-WEB-0007 D11).
 - No "das Produkt", and no second occurrence of the product name.

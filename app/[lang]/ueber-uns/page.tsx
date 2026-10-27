@@ -367,7 +367,7 @@ export default async function Page({
             name it gave the company, as one short text at lead size. The
             mayor fact is said here once; the page carries no second proof
             line for it and no source line without a linkable article
-            (D3 as amended, DEC-0175 §2, CG-044, CG-045). */}
+            (D3 as amended, DEC-0175 §2, CG-046, CG-047). */}
         <SectionShell dataBlock="kapitel-2" labelledBy="kapitel-2-h2" surface="lime-100">
           <MotionReveal>
             <div className={styles.chapter}>
