@@ -102,8 +102,12 @@ describe("TS-WEB-0016-A23 / D16: the outbound marking on row 1", () => {
     it(`stands as a separate element after the control, associated, and out of the label (${locale})`, () => {
       const html = render(locale);
       const [row1] = actionRows(html);
-      const noteId = attr(row1!.attrs, "aria-describedby");
+      // The D16 marking first, then the new-tab note every link to another
+      // origin carries (DEC-0169) — two descriptions, one list.
+      const [noteId, newTabId] = (attr(row1!.attrs, "aria-describedby") ?? "").split(" ");
       expect(noteId).toBeTruthy();
+      expect(newTabId).toMatch(/^new-tab-/);
+      expect(new RegExp(`<span\\b[^>]*\\bid="${newTabId}"[^>]*>${dictionary(locale).outboundLink.newTab}</span>`).test(html)).toBe(true);
 
       const note = new RegExp(`<p\\b[^>]*\\bid="${noteId}"[^>]*>([\\s\\S]*?)</p>`).exec(html);
       expect(note, "the marking element exists").not.toBeNull();
@@ -120,9 +124,17 @@ describe("TS-WEB-0016-A23 / D16: the outbound marking on row 1", () => {
     });
   }
 
-  it("rows 2–4 carry no marking: they do not leave the site for a third party", () => {
+  it("rows 2–4 carry no D16 marking: they do not hand a third party the visitor's data", () => {
     const rows = actionRows(render("de"));
-    for (const row of rows.slice(1)) expect(attr(row.attrs, "aria-describedby")).toBeUndefined();
+    // WhatsApp opens a new tab like every link to another origin, and says so
+    // in its hidden note (DEC-0169); phone and mail do not navigate at all.
+    const [whatsapp, phone, mail] = rows.slice(1);
+    expect(attr(whatsapp!.attrs, "aria-describedby")).toMatch(/^new-tab-[^ ]+$/);
+    expect(whatsapp!.attrs).toContain('target="_blank"');
+    for (const row of [phone!, mail!]) {
+      expect(attr(row.attrs, "aria-describedby")).toBeUndefined();
+      expect(row.attrs).not.toContain("target=");
+    }
   });
 });
 

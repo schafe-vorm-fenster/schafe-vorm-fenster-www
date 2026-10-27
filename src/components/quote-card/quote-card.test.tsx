@@ -39,11 +39,11 @@ describe("SRC-0014 §Quote card / CG-028: the quote verbatim, the author with ro
     expect(html.indexOf(QUOTE.organisation)).toBeLessThan(html.indexOf(`href="${QUOTE.sourceUrl}"`));
   });
 
-  it("opens the article in the same tab unless asked, and then says so in the link's own text", () => {
-    expect(html).not.toContain('target="_blank"');
-    const newTab = renderToStaticMarkup(<QuoteCard {...QUOTE} locale="en" newTab />);
-    expect(newTab).toContain('target="_blank"');
-    expect(newTab).toContain('rel="noopener"');
-    expect(newTab).toContain("opens new tab");
+  it("opens the article in a new tab, always, and says so outside the link's name (DEC-0169)", () => {
+    const english = renderToStaticMarkup(<QuoteCard {...QUOTE} locale="en" />);
+    expect(english).toContain('target="_blank"');
+    expect(english).toContain('rel="noopener noreferrer"');
+    expect(english).toContain("opens new tab");
+    expect(/<a\b[^>]*>.*?<\/a>/s.exec(english)?.[0]).not.toContain("opens new tab");
   });
 });

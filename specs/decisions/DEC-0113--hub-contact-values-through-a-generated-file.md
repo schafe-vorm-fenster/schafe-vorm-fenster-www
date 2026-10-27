@@ -106,7 +106,9 @@ with that surface, its trigger names the number as an intent (A18), and
 
 ### 6. The marking, the label and the hairline rows
 
-- Row 1 navigates in the same tab. D16 wants the marking to say what
+- Row 1 navigates in the same tab. *(Superseded by DEC-0169 on 2026-10-27:
+  every link to another origin opens a new tab, row 1 included, and says so
+  through a hidden note joined by `aria-describedby`.)* D16 wants the marking to say what
   activating the control does and who receives what follows; nothing in D13,
   D16 or DEC-0081 asks for a new tab, and a same-tab link needs no second
   disclosure. The marking is its own `<p>` at the `meta` role **after** the

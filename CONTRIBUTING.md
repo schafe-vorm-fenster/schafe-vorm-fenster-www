@@ -187,7 +187,18 @@ cannot see whether the small range does anything.
   the "Stand: …" line and the counter pills, so nothing below it moves when
   the answer lands (`e2e/layout-stability.spec.ts`). Without JavaScript a page
   is its stage-0 state with those skeletons in place — the owner dropped the
-  no-JavaScript rule for the place and flow states (DEC-0163).
+  no-JavaScript rule for the place and flow states (DEC-0163). One list gives
+  its reserve back once it answers: the nearby list, below the fold, reserves
+  for its skeleton only (`reserve="loading"`, `TS-WEB-0008-A19`) — a kept
+  reserve was three empty rows under two dates (issue #83).
+- **A link to another origin opens a new tab, and one component decides
+  it** (DEC-0169). `src/components/anchor/` reads the target off the href:
+  another origin gets `target="_blank"`, `rel="noopener noreferrer"` and a
+  hidden "öffnet neuen Tab" joined by `aria-describedby`; `tel:`, `mailto:`
+  and site links stay. A raw `<a>` may carry only a target that provably stays
+  on the site, and no other file writes `target` or `rel`
+  (`scripts/external-links.test.ts`, TS-WEB-0016-A25, in `pnpm check`);
+  `e2e/external-links.spec.ts` sweeps every route in the browser (A24).
 - **A new dependency needs an ADR.** Look sideways at the sibling repos
   first (`../classification-api`, `../events-api`, `../geo-api`,
   `../community-calendar`, `../envoy-api`), decide, write the decision into

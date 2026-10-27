@@ -127,7 +127,9 @@ export async function publicNearbyEvents(
   );
 
   return {
-    events: byStart(withinWindow(rows, "week", now)).slice(0, rowCount),
+    // This week first, then the dates after it, until the list's rows are
+    // full (TS-WEB-0008 D3 as amended 2026-10-27, issue #83).
+    events: byStart(withinWindow(rows, "upcoming", now)).slice(0, rowCount),
     places: ring,
     truncated: events.length >= PUBLIC_PAGE_ROW_CAP,
   };

@@ -20,7 +20,7 @@ import { mockSearchByPoint } from "./mocks/geo";
 import { publicNearbyEvents } from "./public-source";
 import { resilient, type ResilientOptions } from "./resilient";
 import { nearbyFallback } from "./snapshots";
-import { byStart, EVENT_WINDOWS, haversineKm, NEARBY_RADIUS_KM, selectNearby } from "./widening";
+import { byStart, EVENT_WINDOWS, haversineKm, NEARBY_RADIUS_KM, nearbyWindow, selectNearby } from "./widening";
 
 import type { LiveEnvelope, LiveEvent, NearbyEvents, Place } from "./types";
 
@@ -61,17 +61,17 @@ export async function nearbyEvents({
           rowCount,
           now: clock(),
         });
-        return { events, radiusKm, truncated };
+        return { events, radiusKm, truncated, window: nearbyWindow(events, clock()) };
       }
       const places = mockSearchByPoint(anchor, GEO_MAX_RESULTS);
       const selection = selectNearby(anchor, places, { radiusKm, maxResults: GEO_MAX_RESULTS });
+      const events =
+        selection.places.length === 0 ? [] : mockNearbyRows(selection.places, anchor, rowCount, clock());
       return {
-        events:
-          selection.places.length === 0
-            ? []
-            : mockNearbyRows(selection.places, anchor, rowCount, clock()),
+        events,
         radiusKm,
         truncated: selection.truncated,
+        window: nearbyWindow(events, clock()),
       };
     }
 
@@ -81,20 +81,20 @@ export async function nearbyEvents({
       maxResults: GEO_MAX_RESULTS,
     });
 
-    if (places.length === 0) return { events: [], radiusKm, truncated };
+    if (places.length === 0) return { events: [], radiusKm, truncated, window: "week" };
 
+    // The next dates from now, this week first: `after=now` with no `before`,
+    // so a thin week is filled with the dates after it rather than leaving
+    // the list's rows empty (TS-WEB-0008 D3 as amended 2026-10-27, issue #83).
     const { events } = await searchEvents(eventsConfig(), {
       communities: places.map((place) => place.communityId),
-      after: EVENT_WINDOWS.week.after,
-      before: EVENT_WINDOWS.week.before,
+      after: EVENT_WINDOWS.upcoming.after,
+      before: EVENT_WINDOWS.upcoming.before,
       limit: rowCount,
     });
 
-    return {
-      events: withDistance(byStart(toLiveEvents(events)).slice(0, rowCount), anchor),
-      radiusKm,
-      truncated,
-    };
+    const rows = withDistance(byStart(toLiveEvents(events)).slice(0, rowCount), anchor);
+    return { events: rows, radiusKm, truncated, window: nearbyWindow(rows, clock()) };
   };
 
   return resilient(fetcher, {
@@ -103,7 +103,7 @@ export async function nearbyEvents({
     key: `nearby:${lat.toFixed(2)}:${lng.toFixed(2)}:${radiusKm}`,
     kind: "dates",
     tags: [cacheTags.places()],
-    snapshot: () => nearbyFallback(radiusKm),
+    snapshot: () => nearbyFallback(radiusKm, clock()),
     store,
     now,
     demo: (!realGeo || !realEvents) && !viaPublic,

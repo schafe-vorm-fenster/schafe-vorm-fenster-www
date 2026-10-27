@@ -272,8 +272,8 @@ describe("TS-WEB-0001 D5: no component holds a literal internal href", () => {
     }
   });
 
-  it("opens an external link with rel=noopener and says so in the text", () => {
-    expect(html).toContain('rel="noopener"');
+  it("opens an external link with rel=noopener noreferrer and says so in the text", () => {
+    expect(html).toContain('rel="noopener noreferrer"');
     expect(html).toContain("öffnet neuen Tab");
   });
 });

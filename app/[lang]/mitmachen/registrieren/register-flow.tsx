@@ -216,7 +216,7 @@ export function RegisterFlow({
         <>
           <h1>{copy.handoverHeading}</h1>
           <ConversionTracker goalId="register-as-publisher" stage="handover">
-            <Button dataCta="primary" href={handoverUrl} onward>
+            <Button dataCta="primary" href={handoverUrl} locale={locale} onward>
               {copy.handoverCta}
             </Button>
           </ConversionTracker>

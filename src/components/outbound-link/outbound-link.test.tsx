@@ -32,7 +32,7 @@ function accessibleName(html: string): string {
 describe("TS-WEB-0016 D16 / A23: the marking is a separate element after the control", () => {
   const rendered = (props: Partial<Parameters<typeof OutboundLink>[0]> = {}) =>
     renderToStaticMarkup(
-      <OutboundLink href="https://calendar.app.google/abc" newTab recipient="Google" {...props}>
+      <OutboundLink href="https://calendar.app.google/abc" recipient="Google" {...props}>
         Termin buchen
       </OutboundLink>,
     );
@@ -49,7 +49,8 @@ describe("TS-WEB-0016 D16 / A23: the marking is a separate element after the con
   it("renders the marking after the anchor, outside it, and associates it", () => {
     for (const variant of ["inline", "secondary", "quiet"] as const) {
       const html = rendered({ variant });
-      const id = /aria-describedby="([^"]+)"/.exec(html)?.[1];
+      // The D16 marking first; the hidden new-tab note follows it (DEC-0169).
+      const id = /aria-describedby="([^"]+)"/.exec(html)?.[1]?.split(" ")[0];
       expect(id, variant).toBe(outboundNoteId("https://calendar.app.google/abc"));
       const anchorEnd = html.indexOf("</a>");
       const notePosition = html.indexOf(`id="${id}"`);
@@ -67,24 +68,26 @@ describe("TS-WEB-0016 D16 / A23: the marking is a separate element after the con
   });
 
   it("prefers the written sentence over the assembled line", () => {
-    const html = rendered({ disclosure: "Öffnet Google Kalender in einem neuen Tab." });
-    expect(html).toContain("Öffnet Google Kalender in einem neuen Tab.");
+    const html = rendered({ disclosure: "Termine bucht Google Kalender." });
+    expect(html).toContain("Termine bucht Google Kalender.");
     expect(html).not.toContain("Daten gehen an");
     expect(accessibleName(html)).toBe("Termin buchen");
   });
 
   it("announces in the page's language, not always in German (F-2-4)", () => {
-    expect(rendered({ locale: "en" })).toContain("opens new tab · Data goes to Google");
-    expect(rendered({ locale: "de" })).toContain("öffnet neuen Tab · Daten gehen an Google");
+    expect(rendered({ locale: "en" })).toContain("Data goes to Google");
+    expect(rendered({ locale: "en" })).toContain("opens new tab");
+    expect(rendered({ locale: "de" })).toContain("Daten gehen an Google");
   });
 
   it("renders no marking, and no wrapper, where nothing leaves and no tab opens", () => {
     const html = renderToStaticMarkup(
-      <OutboundLink href="https://example.org/x" variant="secondary">
-        Zur Quelle
+      <OutboundLink href="/start" variant="secondary">
+        Zum Formular
       </OutboundLink>,
     );
     expect(html).not.toContain("aria-describedby");
+    expect(html).not.toContain("target=");
     expect(html.startsWith("<a")).toBe(true);
   });
 
@@ -104,7 +107,7 @@ describe("TS-WEB-0016 D16 / A23: the marking is a separate element after the con
     expect(wrapperOf(stacked)).toContain("stacked");
     expect(wrapperOf(beside)).not.toContain("stacked");
     // The marking is still after the anchor, associated, and out of the name.
-    const id = /aria-describedby="([^"]+)"/.exec(stacked)?.[1] ?? "";
+    const id = /aria-describedby="([^"]+)"/.exec(stacked)?.[1]?.split(" ")[0] ?? "";
     expect(id).not.toBe("");
     expect(stacked.indexOf(`id="${id}"`)).toBeGreaterThan(stacked.indexOf("</a>"));
     expect(accessibleName(stacked)).toBe("Termin buchen");
@@ -112,7 +115,7 @@ describe("TS-WEB-0016 D16 / A23: the marking is a separate element after the con
 
   it("takes a caller's id where one page carries two markings for one target", () => {
     const html = rendered({ noteId: "hero-outbound-note" });
-    expect(html).toContain('aria-describedby="hero-outbound-note"');
+    expect(html).toMatch(/aria-describedby="hero-outbound-note new-tab-[^"]+"/);
     expect(html).toContain('id="hero-outbound-note"');
   });
 });
@@ -170,5 +173,43 @@ describe("outboundNoteId", () => {
     expect(termin.startsWith("outbound-note-calendar-app-google-beratung-vorpommern-greifswa-")).toBe(
       true,
     );
+  });
+});
+
+describe("DEC-0169: every link to another origin opens a new tab and says so", () => {
+  const rendered = (href: string, locale: "de" | "en" = "de") =>
+    renderToStaticMarkup(
+      <OutboundLink href={href} locale={locale}>
+        Zur Quelle
+      </OutboundLink>,
+    );
+
+  it("opens the tab with noopener noreferrer, whatever the caller asked", () => {
+    const anchor = anchorOf(rendered("https://example.org/x"));
+    expect(anchor).toContain('target="_blank"');
+    expect(anchor).toContain('rel="noopener noreferrer"');
+  });
+
+  it("says the new tab in a visually hidden note joined by aria-describedby, out of the name", () => {
+    const html = rendered("https://example.org/x");
+    const id = /aria-describedby="([^"]+)"/.exec(html)?.[1] ?? "";
+    expect(id).not.toBe("");
+    const note = new RegExp(`<span[^>]*id="${id}"[^>]*>(.*?)</span>`, "s").exec(html)?.[1] ?? "";
+    expect(note).toBe("öffnet neuen Tab");
+    expect(accessibleName(html)).toBe("Zur Quelle");
+    expect(rendered("https://example.org/x", "en")).toContain("opens new tab");
+  });
+
+  it("never puts the new tab into the visible D16 line — the hidden note says it, once (issue 100)", () => {
+    const html = renderToStaticMarkup(
+      <OutboundLink href="https://calendar.app.google/abc" recipient="Google">
+        Termin buchen
+      </OutboundLink>,
+    );
+    expect(html.match(/öffnet neuen Tab/g)).toHaveLength(1);
+    const visible = /<span class="[^"]*meta[^"]*"[^>]*>(.*?)<\/span>/s.exec(html)?.[1] ?? "";
+    expect(visible).toBe("Daten gehen an Google");
+    const ids = /aria-describedby="([^"]+)"/.exec(html)?.[1]?.split(" ") ?? [];
+    expect(ids).toHaveLength(2);
   });
 });

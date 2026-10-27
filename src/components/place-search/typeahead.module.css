@@ -32,10 +32,22 @@
   border-top: 1px solid var(--color-neutral-line);
 }
 
-/* Row 56 px — the same height as the field it hangs from. */
+/* Row 56 px — the same height as the field it hangs from.
+
+   Its text pair is the overlay's own, set on the row in every state (review
+   2026-10-27, issue #79): `ink` on `paper` at rest, `ink` on `surface` while
+   hovered or active. The row is an `<a>`, and `base.css`'s `a:hover
+   { color: var(--link-hover) }` (0,1,1) out-specified `.option` (0,1,0) — on
+   the photo hero, whose ground publishes `lime-300` as its link hover, the
+   hovered place name turned `lime-300` on `surface`, 1.2:1. The two-class
+   selectors below outrank it, and the pair is measured by
+   `pnpm check:contrast` and in the browser by `TS-WEB-0008-A17`. */
 .option {
+  --typeahead-text: var(--color-neutral-ink);
+  --typeahead-secondary: var(--color-neutral-muted);
+  --typeahead-active-ground: var(--color-neutral-surface);
   align-items: baseline;
-  color: var(--color-neutral-ink);
+  color: var(--typeahead-text);
   display: flex;
   flex-wrap: wrap;
   gap: 0 var(--space-2);
@@ -54,18 +66,20 @@
   font-weight: 700;
 }
 
-/* The municipality in brackets, 15 px / 400 `muted`. */
+/* The municipality in brackets, 15 px / 400 `muted` — 5.24:1 on `surface`, 5.70:1 on `paper`. */
 .municipality {
-  color: var(--color-neutral-muted);
+  color: var(--typeahead-secondary);
   font-size: var(--font-size-body-sm);
   font-weight: 400;
 }
 
 /* The active row is marked by a `surface` ground; the focus ring stays on
    the field (SRC-0014: the ring rule applies to the field, not the row). */
+.option.active,
 .option:hover,
-.active {
-  background: var(--color-neutral-surface);
+.option:focus-visible {
+  background: var(--typeahead-active-ground);
+  color: var(--typeahead-text);
 }
 
 /* No match: one designed row, the same 56 px and hairline as the others,

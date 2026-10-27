@@ -147,6 +147,14 @@ export interface Dictionary {
      */
     genericCounty: string;
     /** The counter band's three units (TS-WEB-0008 D8). */
+    /**
+     * The nearby module's heading once its list reaches past this week
+     * (TS-WEB-0008 D3 as amended 2026-10-27, issue #83): the page's own
+     * "this week" heading stands while every row is inside the week, and this
+     * one replaces it when the list is filled up with the dates after it — a
+     * heading never claims a week its rows leave.
+     */
+    nearbyUpcoming: string;
     dates: string;
     places: string;
     updatesToday: string;
@@ -546,6 +554,7 @@ const de: Dictionary = {
   live: {
     stale: "Stand",
     genericCounty: "deiner Region",
+    nearbyUpcoming: "Demnächst in der Nähe",
     dates: "Termine",
     places: "Orte",
     updatesToday: "Aktualisierungen heute",
@@ -748,6 +757,7 @@ const en: Dictionary = {
   live: {
     stale: "As of",
     genericCounty: "your region",
+    nearbyUpcoming: "Coming up nearby",
     dates: "dates",
     places: "places",
     updatesToday: "updates today",

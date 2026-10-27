@@ -362,7 +362,7 @@ export default async function Page({
             href: contactHref("whatsapp"),
             icon: "smartphone",
             label: fieldAt(pathWhatsapp.blocks, 4) ?? "",
-            newTab: true,
+            // `wa.me` is another origin, so the chat opens a new tab (DEC-0169).
           }}
           demo={isDemoSlot(whatsappSteps)}
           locale={locale}

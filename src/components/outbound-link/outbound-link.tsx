@@ -1,3 +1,4 @@
+import { Anchor } from "../anchor/anchor";
 import { Icon } from "../icon/icon";
 
 import { dictionary } from "@/src/lib/i18n/dictionary";
@@ -8,21 +9,22 @@ import type { ReactNode } from "react";
 import styles from "./outbound-link.module.css";
 
 export interface OutboundLinkProps {
-  /** The external URL. Internal targets go through `route-link` instead. */
+  /**
+   * The external URL. Internal targets go through `route-link` instead.
+   * Whether it opens a new tab is not a prop: a target on another origin
+   * always does (DEC-0169), decided by `anchor` from the href alone.
+   */
   readonly href: string;
-  /** Opens a new tab — and then the marking under the control says so. */
-  readonly newTab?: boolean;
   /** Named where a third party receives data by following this link. */
   readonly recipient?: string;
   /**
    * The marking, written out instead of assembled.
    *
-   * G-5: "(öffnet neuen Tab) · Daten gehen an Google" under a button is two
-   * disclosures stacked into one line of machine-assembled prose, and the
+   * G-5: a recipient line under a button is machine-assembled prose, and the
    * data note belongs in the privacy section the page already links to. A
    * page that has such a section passes one finished sentence here — e.g.
-   * „Öffnet Google Kalender in einem neuen Tab." — and the assembled line
-   * stands down.
+   * „Termine bucht Google Kalender." — and the assembled line stands down.
+   * It never mentions the new tab: that is the hidden note's (issue 100).
    */
   readonly disclosure?: string;
   readonly variant?: "inline" | "secondary" | "quiet";
@@ -111,9 +113,12 @@ function hrefFingerprint(href: string): string {
  *
  * Structure: the external link — app handover, outlet original, the `/start`
  * fallback. The link text names source and subject; an `external-link` glyph
- * at 18 px sits after it. Where the link opens a new tab or hands the visitor
- * to a third party, the **marking of TS-WEB-0016 D16** follows the control as
- * its own element: never inside the label, never inside the `<a>`.
+ * at 18 px sits after it, and that glyph is the visible sign of the new tab
+ * every link to another origin opens (DEC-0169). Where the link hands the
+ * visitor to a named third party, the **marking of TS-WEB-0016 D16** follows
+ * the control as its own element: never inside the label, never inside the
+ * `<a>`. The new tab is never visible text (issue 100): `anchor`'s visually
+ * hidden note says it, joined by `aria-describedby`, and the glyph shows it.
  * States: static — no embed, no iframe, no third-party script. A link is the
  * privacy-preserving form of an integration (TS-WEB-0016 D9).
  * Inherits: inline link treatment, or the secondary/quiet button treatment;
@@ -135,7 +140,6 @@ function hrefFingerprint(href: string): string {
  */
 export function OutboundLink({
   href,
-  newTab = false,
   recipient,
   disclosure: writtenDisclosure,
   variant = "inline",
@@ -149,26 +153,23 @@ export function OutboundLink({
   const classes = [styles.link, styles[variant], className].filter(Boolean).join(" ");
   const words = dictionary(locale).outboundLink;
   const control = variant !== "inline";
-
-  const assembled = [
-    newTab ? words.newTab : null,
-    recipient ? `${words.dataGoesTo} ${recipient}` : null,
-  ].filter((part): part is string => Boolean(part));
-  const marking = writtenDisclosure ?? (assembled.length > 0 ? assembled.join(" · ") : undefined);
+  // The visible D16 line names the recipient and nothing else. The new tab is
+  // never visible text (owner, 2026-10-27, issue 100): the `external-link`
+  // glyph says it to the eye, and `anchor`'s hidden note says it to the ear.
+  const marking = writtenDisclosure ?? (recipient ? `${words.dataGoesTo} ${recipient}` : undefined);
   const noteId = marking === undefined ? undefined : (givenNoteId ?? outboundNoteId(href));
 
   const anchor = (
-    <a
+    <Anchor
       aria-describedby={noteId}
       className={classes}
       data-cta={dataCta}
       href={href}
-      rel={newTab ? "noopener" : undefined}
-      target={newTab ? "_blank" : undefined}
+      locale={locale}
     >
       <span className={styles.text}>{children}</span>
       <Icon className={styles.glyph} name="external-link" size={18} />
-    </a>
+    </Anchor>
   );
 
   if (marking === undefined) return anchor;

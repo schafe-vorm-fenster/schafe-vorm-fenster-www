@@ -27,6 +27,19 @@ import { ROUTE_IDS, href } from "../src/lib/routes/routes";
  * more directly checkable without a CLS harness — ≤ 8px of cumulative
  * movement (the sum of every matched anchor's own displacement) per route
  * per viewport.
+ *
+ * **One movement is exempt, and only below the fold** (review 2026-10-27,
+ * issue #83, TS-WEB-0008-A19). The nearby list reserves five two-line rows
+ * while it loads and gives back what its answer does not fill
+ * (`event-list` `reserve="loading"`, marked `data-reserve="loading"`): kept,
+ * that reserve was the empty space under two rows the owner found. Its
+ * collapse moves what stands below it — and nothing else. So an anchor whose
+ * early position lies at or below the top of such a list is not counted,
+ * **on the condition that the list itself stood below the viewport** at the
+ * early read: there the collapse is invisible, and CLS, the metric the
+ * criterion names, does not count it either (`layout-shift` scores the
+ * viewport only). A collapsing list inside the viewport gets no exemption and
+ * fails here like any other shift.
  */
 
 const VIEWPORTS = [
@@ -80,6 +93,13 @@ for (const routeId of ROUTE_IDS) {
         await page.waitForTimeout(50);
         const early = await readAnchors(page);
 
+        // The top of the first list that collapses to its answer (issue #83),
+        // read with the anchors. Inside the viewport it exempts nothing.
+        const collapsingTop = await page.$$eval('[data-reserve="loading"]', (lists) =>
+          Math.min(...lists.map((list) => list.getBoundingClientRect().top)),
+        );
+        const exemptFrom = collapsingTop >= viewport.height ? collapsingTop : Number.POSITIVE_INFINITY;
+
         await page.waitForLoadState("networkidle");
         await page.waitForTimeout(1000);
         const settled = await readAnchors(page);
@@ -90,6 +110,7 @@ for (const routeId of ROUTE_IDS) {
         for (const anchor of early) {
           const after = settledByKey.get(anchor.key);
           if (after === undefined) continue; // Removed between reads — not a shift to measure.
+          if (anchor.y >= exemptFrom) continue; // Below a list that gave its reserve back, below the fold.
           const dx = Math.abs(after.x - anchor.x);
           const dy = Math.abs(after.y - anchor.y);
           const shift = dx + dy;

@@ -87,9 +87,17 @@ export interface PlaceEvents {
 export interface NearbyEvents {
   readonly events: readonly LiveEvent[];
   readonly radiusKm: number;
+  /**
+   * The time the rows span (TS-WEB-0008 D3, amended 2026-10-27): `week` while
+   * every row starts within seven days, `upcoming` once the list was filled
+   * with the next dates after the week. The heading follows it.
+   */
+  readonly window: NearbyWindow;
   /** The upstream result cap hit before the radius did — the module claims no completeness. */
   readonly truncated: boolean;
 }
+
+export type NearbyWindow = "week" | "upcoming";
 
 /** Position 3 — a designed set of active example places, never a place list (DEC-0034). */
 export interface RegionExamples {

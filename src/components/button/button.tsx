@@ -1,7 +1,10 @@
+import { Anchor } from "../anchor/anchor";
 import { Icon, type IconName } from "../icon/icon";
 import { RouteLink } from "../route-link/route-link";
 
 import type { LinkOptions } from "../route-link/href";
+import { isExternalHref } from "@/src/lib/routes/link-target";
+
 import type { RouteId } from "@/src/lib/routes/routes";
 import type { ReactNode } from "react";
 
@@ -42,11 +45,13 @@ export interface ButtonProps extends LinkOptions {
    * Renders a link to an external URL — the app handover
    * (`/mitmachen/registrieren`, TS-WEB-0023 D6), an outbound target that still
    * needs the primary treatment. Ignored when `to` is set; mutually
-   * exclusive with the plain-`<button>` form.
+   * exclusive with the plain-`<button>` form. A target on another origin
+   * opens a new tab, always, with `rel="noopener noreferrer"` and the new tab
+   * said to a screen reader (DEC-0169, through `anchor`); it then carries the
+   * 24 px `external-link` glyph in place of the onward arrow, because it does
+   * not lead onward on this site.
    */
   readonly href?: string;
-  /** `rel="noopener"` and a new tab, for the `href` form only. */
-  readonly newTab?: boolean;
   readonly type?: "button" | "submit" | "reset";
   readonly name?: string;
   readonly value?: string;
@@ -87,7 +92,6 @@ export function Button({
   icon,
   to,
   href,
-  newTab = false,
   locale,
   query,
   hash,
@@ -105,11 +109,16 @@ export function Button({
     .filter(Boolean)
     .join(" ");
 
+  const leaves = to === undefined && isExternalHref(href);
   const content = (
     <>
       {icon ? <Icon name={icon} size={24} /> : null}
       <span className={styles.label}>{children}</span>
-      {onward ? <Icon name="arrow-right" size={24} /> : null}
+      {leaves ? (
+        <Icon name="external-link" size={24} />
+      ) : onward ? (
+        <Icon name="arrow-right" size={24} />
+      ) : null}
     </>
   );
 
@@ -132,16 +141,9 @@ export function Button({
 
   if (href) {
     return (
-      <a
-        className={classes}
-        data-cta={dataCta}
-        href={href}
-        id={id}
-        rel={newTab ? "noopener" : undefined}
-        target={newTab ? "_blank" : undefined}
-      >
+      <Anchor className={classes} data-cta={dataCta} href={href} id={id} locale={locale}>
         {content}
-      </a>
+      </Anchor>
     );
   }
 

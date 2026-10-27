@@ -157,7 +157,7 @@ export function ArchiveRow({
           </figure>
         ) : null}
         {href ? (
-          <OutboundLink className={styles.link} href={href} locale={locale} newTab>
+          <OutboundLink className={styles.link} href={href} locale={locale}>
             {dictionary(locale).archiveRow.original}
           </OutboundLink>
         ) : null}

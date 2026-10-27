@@ -377,3 +377,82 @@ test.describe("TS-WEB-0010-A8: browser geolocation only after an interaction", (
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   });
 });
+
+/**
+ * TS-WEB-0008-A17 — the suggestion a visitor points at stays readable (owner
+ * review 2026-10-27, issue #79, `plan/reviews/2026-10-27/Ist - Ortssuche
+ * Hover.png`: the hovered "Lehre" in `lime-300` on `surface`, 1.2:1).
+ *
+ * The row is an `<a>`, and the photo hero publishes `lime-300` as its link
+ * hover colour; `base.css`'s `a:hover` out-specified the row's own `ink`. So
+ * the measurement is taken where the bug lived — on the hero field of `/` and
+ * `/dein-ort` — with the pointer on the row and with the keyboard's active
+ * row, for the place name and for the municipality, against the ground the
+ * row actually paints. WCAG 2.2 AA body text, 4.5:1 (TS-WEB-0002 D1).
+ */
+async function rowContrast(page: Page, rowId: string): Promise<{ name: number; municipality: number }> {
+  return page.evaluate((id) => {
+    const parse = (value: string) => (value.match(/[\d.]+/g) ?? []).map(Number);
+    const channel = (value: number) => {
+      const scaled = value / 255;
+      return scaled <= 0.03928 ? scaled / 12.92 : ((scaled + 0.055) / 1.055) ** 2.4;
+    };
+    const luminance = ([r, g, b]: number[]) => 0.2126 * channel(r!) + 0.7152 * channel(g!) + 0.0722 * channel(b!);
+    const ratio = (a: number[], b: number[]) => {
+      const [light, dark] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+      return (light! + 0.05) / (dark! + 0.05);
+    };
+    /** The first ancestor-or-self that paints an opaque ground. */
+    const ground = (element: Element): number[] => {
+      for (let node: Element | null = element; node; node = node.parentElement) {
+        const parts = parse(getComputedStyle(node).backgroundColor);
+        if (parts.length === 3 || (parts.length === 4 && parts[3]! > 0.99)) return parts.slice(0, 3);
+      }
+      return [255, 255, 255];
+    };
+    const row = document.getElementById(id)!;
+    const name = row.querySelector("strong") ?? row.firstElementChild!;
+    const municipality = row.lastElementChild!;
+    const back = ground(row);
+    return {
+      name: ratio(parse(getComputedStyle(name).color).slice(0, 3), back),
+      municipality: ratio(parse(getComputedStyle(municipality).color).slice(0, 3), back),
+    };
+  }, rowId);
+}
+
+test.describe("TS-WEB-0008-A17: the hovered and the active suggestion keep 4.5:1", () => {
+  for (const route of ["home", "place"] as const) {
+    test(`${href(route, "de")} — pointer and keyboard`, async ({ page }) => {
+      await page.goto(href(route, "de"));
+      await hydrated(page, FIELD);
+      const field = page.locator(FIELD);
+      await field.fill(SEARCH);
+      const first = page.getByRole("option").first();
+      await expect(first).toBeVisible({ timeout: 10_000 });
+
+      // Pointer on the first row: the state of the owner's screenshot.
+      await first.hover();
+      const firstId = (await first.getAttribute("id"))!;
+      const hovered = await rowContrast(page, firstId);
+      expect(hovered.name, "hovered place name").toBeGreaterThanOrEqual(4.5);
+      expect(hovered.municipality, "hovered municipality").toBeGreaterThanOrEqual(4.5);
+
+      // The keyboard's active row, with the pointer moved off the list.
+      await page.mouse.move(0, 0);
+      await field.press("ArrowDown");
+      const activeId = (await field.getAttribute("aria-activedescendant"))!;
+      const active = await rowContrast(page, activeId);
+      expect(active.name, "active place name").toBeGreaterThanOrEqual(4.5);
+      expect(active.municipality, "active municipality").toBeGreaterThanOrEqual(4.5);
+
+      // A row at rest, for completeness: the pair the guide states.
+      const rest = page.getByRole("option").nth(1);
+      if ((await rest.count()) > 0 && (await rest.getAttribute("id")) !== activeId) {
+        const resting = await rowContrast(page, (await rest.getAttribute("id"))!);
+        expect(resting.name).toBeGreaterThanOrEqual(4.5);
+        expect(resting.municipality).toBeGreaterThanOrEqual(4.5);
+      }
+    });
+  }
+});

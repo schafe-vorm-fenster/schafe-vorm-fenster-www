@@ -48,7 +48,6 @@ export interface ExplainModuleCta extends LinkOptions {
   readonly to?: RouteId;
   /** An external handover — the WhatsApp path's chat. Ignored when `to` is set. */
   readonly href?: string;
-  readonly newTab?: boolean;
   readonly icon?: IconName;
   readonly onward?: boolean;
   /** The only value the type admits. Present so the constraint is visible at the call site. */
@@ -392,7 +391,6 @@ export function ExplainModule({
           href={cta.href}
           icon={cta.icon}
           locale={cta.locale}
-          newTab={cta.newTab}
           onward={cta.onward}
           query={cta.query}
           to={cta.to}

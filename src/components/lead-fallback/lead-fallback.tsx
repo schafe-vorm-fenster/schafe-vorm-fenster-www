@@ -1,3 +1,4 @@
+import { Anchor } from "../anchor/anchor";
 import { OutboundLink } from "../outbound-link/outbound-link";
 
 import { dictionary } from "@/src/lib/i18n/dictionary";
@@ -73,9 +74,9 @@ export function LeadFallback({
         <p className={styles.line}>
           {/* No `ConversionTracker` and no marking: an in-page target emits
               nothing and leaves nothing (TS-WEB-0016 D7 Measurement). */}
-          <a className={styles.consult} data-cta="secondary" href={briefingHref}>
+          <Anchor className={styles.consult} data-cta="secondary" href={briefingHref} locale={locale}>
             {briefingLabel ?? words.consult}
-          </a>
+          </Anchor>
         </p>
       ) : null}
     </div>

@@ -1,7 +1,7 @@
 ---
 title: "Website Design System — www.schafe-vorm-fenster.de"
 created_at: 2026-09-10
-updated_at: 2026-10-13
+updated_at: 2026-10-27
 status: draft
 source: workshop
 intent: inform
@@ -460,6 +460,39 @@ one: it publishes `--ground-secondary-*`, and `button` and `outbound-link`
 read it (`DEC-0160`). Primary on light hovers to `ink-hover` (`paper` label
 13.24:1), never to a dark green.
 
+A button that leaves the site (its `href` on another origin — the app
+handover, WhatsApp) carries the 24 px `external-link` glyph **in place of** the
+onward arrow: it does not lead onward on this site, it opens a new tab (see
+*Links*, `DEC-0169`).
+
+### Links
+
+**A link to another origin opens a new tab, always** (owner's review
+2026-10-27, issue #82, `DEC-0169`): the village calendar, the app, the booking
+calendar, WhatsApp, an outlet's article, Wikimedia Commons, a partner. The
+website stays where the visitor left it — before, following the calendar link
+made it disappear.
+
+- `target="_blank"` with `rel="noopener noreferrer"`. No component and no page
+  chooses: the target is read off the href, in one place
+  (`src/lib/routes/link-target.ts`, applied by `anchor`).
+- **`tel:` and `mailto:` stay** — they open an app, not a document, and a new
+  tab would only leave an empty one behind. A link into this site stays too.
+- **Seen:** the `external-link` glyph after the label — 18 px on an inline
+  link and on a secondary pill, 24 px in a button. **"öffnet neuen Tab" /
+  "opens new tab" is never visible text, anywhere** (owner's review
+  2026-10-27, issue #100: it stood beside "Original ansehen" on the press page
+  and beside the quote link on `/ueber-uns`; "es gibt ja das Icon"). A visible
+  marking stands only where `TS-WEB-0016 D16` asks for one, because a third
+  party receives the visitor's data, and it names that recipient only.
+- **Heard:** a visually hidden "öffnet neuen Tab" / "opens new tab" after the
+  link, joined by `aria-describedby` — in the description, never in the
+  accessible name or the label. Screen readers keep the hint; eyes get the
+  glyph.
+- Guarded twice: statically in `pnpm check` (`TS-WEB-0016-A25`) and in the
+  browser on every route (`TS-WEB-0016-A24`, which also fails any visible
+  "neuen Tab" / "new tab" text).
+
 ### Search field
 
 One pill: `map-pin` icon, placeholder in `muted`, and the submit button as a
@@ -517,6 +550,14 @@ The autosuggest list that belongs to the search field.
   `aria-expanded` and `aria-activedescendant` on the field, rows as options.
   The focus ring rule applies to the field, not to the active row, which is
   marked by a `surface` ground.
+- **The hovered and the active row keep the overlay's own text pair**: place
+  name `ink` on `surface` (18.51:1), municipality `muted` on `surface`
+  (5.24:1); at rest `ink` on `paper` (20.17:1) and `muted` on `paper`
+  (5.70:1). Never the ground's link colour: the row is a link, and on the
+  photo hero the ground's link hover is `lime-300`, which put the hovered
+  place name at **1.23:1** on `surface` (owner's review 2026-10-27, issue #79).
+  `check:contrast` measures the four pairs, `TS-WEB-0008-A17` the rendered
+  rows on `/` and `/dein-ort`.
 - **No match is a designed row, never an empty panel.** One row, 56 px, the
   same ground and hairline as the others, stating plainly that this place is
   not there yet. It shows a `map-pin` glyph in `muted`, the line in `ink`
@@ -1441,6 +1482,15 @@ inside the height the module reserves for its longest step.
 
 ### Reserved text space
 
+A live list reserves its rows at the two-line row height while it loads
+(`DEC-0163`). Above the fold it keeps that reserve when its answer is shorter,
+so nothing below moves. **The nearby list gives it back** (owner's review
+2026-10-27, issue #83): it stands below the fold, and a kept reserve under two
+rows read as a gap of three empty rows before its calendar link. It reserves
+for the skeleton only, and it first fills its five rows with the dates after
+this week where the week has fewer (`TS-WEB-0008 D3`); its heading then names
+the window its rows span.
+
 Text that arrives with data reserves its height in line units:
 `min-height: calc(<lines> * <line-height> * 1em)`. Live counts ("5 Termine
 diese Woche") sit inside a fixed-height badge, so a change from one to two
@@ -1555,6 +1605,9 @@ still forbidden.
   reaches the token layer; the ceiling assertion is **owed** with the
   component rewrite, and is named there.
 - Focus ring: 3 px `violet-500`, 2 px offset, on every interactive element.
+- A link to another origin opens a new tab and says so — the `external-link`
+  glyph for the eye, a hidden note joined by `aria-describedby` for the ear,
+  never inside the label (see *Links*, `DEC-0169`).
 - 15 px is the type floor everywhere, with no exception for a badge, a chip
   or a tag (`TS-WEB-0002 D3`, `TS-WEB-0002-A10`).
 - A blur is a transparency effect: `prefers-reduced-transparency` takes the
