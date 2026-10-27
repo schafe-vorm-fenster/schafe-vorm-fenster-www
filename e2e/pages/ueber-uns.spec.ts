@@ -252,12 +252,18 @@ test.describe("/ueber-uns", () => {
       const stories = page.locator("[data-block='kapitel-3'] [data-story]");
       const count = await stories.count();
       expect(count).toBeGreaterThan(1);
-      // Measure the resting layout: the section's one-shot reveal rise has to
-      // be over before a box is read, or the rise is mistaken for a jump.
+      // Measure the resting layout: the section's one-shot reveal rise (22 px)
+      // has to be over before a box is read, or the rise is mistaken for a
+      // jump. Scroll it in, wait for the reveal, then for every animation.
       await stories.first().scrollIntoViewIfNeeded();
-      await page.waitForFunction(() =>
-        document.getAnimations().every((animation) => animation.playState !== "running"),
-      );
+      await expect(
+        page.locator("[data-block='kapitel-3'] [data-armed='true']:not([data-revealed='true'])"),
+      ).toHaveCount(0);
+      await page.evaluate(async () => {
+        // Two frames, so a reveal that has just been flagged has its animation.
+        await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+        await Promise.all(document.getAnimations().map((animation) => animation.finished));
+      });
       // One column at every width: every item starts at the same x and has
       // the same width (DEC-0175 §1 — an accordion, not a reflowing grid).
       const boxes = () =>
