@@ -1,7 +1,15 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import { StageCalendar, StageChat, StageFlyerPhoto, StageImage, StageRegistration } from "./explain-stage";
+import {
+  StageCalendar,
+  StageCalendarEntry,
+  StageChat,
+  StageFlyerPhoto,
+  StageImage,
+  StageRegistration,
+  StageWebsiteDates,
+} from "./explain-stage";
 
 import type { StageEventRow } from "./explain-stage";
 
@@ -83,6 +91,37 @@ describe("StageFlyerPhoto: state 1 of the WhatsApp path, drawn (issue #26)", () 
   });
 });
 
+describe("StageCalendarEntry and StageWebsiteDates: state 1 of paths 2 and 3, drawn (issue #88, DEC-0174)", () => {
+  const drawings = [
+    ["calendar-entry", renderToStaticMarkup(<StageCalendarEntry />)],
+    ["website-dates", renderToStaticMarkup(<StageWebsiteDates />)],
+  ] as const;
+
+  it("is an inline SVG in the box, named by its state, hidden from assistive technology", () => {
+    for (const [stage, html] of drawings) {
+      expect(html).toContain(`data-stage="${stage}"`);
+      expect(html).toContain('aria-hidden="true"');
+      expect(html).toContain("<svg");
+      expect(html).not.toContain("<img");
+    }
+  });
+
+  it("is no placeholder: no `data-placeholder`, no hatch, no grey media frame", () => {
+    for (const [, html] of drawings) {
+      expect(html).not.toContain("data-placeholder");
+      expect(html).not.toContain('data-stage="image"');
+    }
+  });
+
+  it("carries no lettering and no colour literal — no product, no logo", () => {
+    for (const [, html] of drawings) {
+      expect(html).not.toMatch(/<text\b/);
+      expect(html).not.toMatch(/fill="#|fill="rgb|stroke="#/);
+      expect(html).not.toMatch(/google/i);
+    }
+  });
+});
+
 describe("StageImage: media-frame at the square", () => {
   it("renders the image with its alt when an asset exists", () => {
     const html = renderToStaticMarkup(
@@ -99,11 +138,12 @@ describe("StageImage: media-frame at the square", () => {
   });
 });
 
-describe("StageChat: the brand name, the flyer stand-in, the reply", () => {
-  it("names the brand from the dictionary, never a person", () => {
+describe("StageChat: no header, the drawn flyer, the reply", () => {
+  it("carries no chat header — no mark, no brand name over the bubbles (issue #89, DEC-0174 §2)", () => {
     for (const locale of ["de", "en"] as const) {
       const html = renderToStaticMarkup(<StageChat locale={locale} reply="x" time="10:32" />);
-      expect(html).toContain(dictionary(locale).siteName);
+      expect(html).not.toContain(dictionary(locale).siteName);
+      expect(html).not.toContain("chatHeader");
     }
   });
 
@@ -175,9 +215,17 @@ describe("StageRegistration: an illustration of a registration, not a form", () 
     expect(html).toContain(words.addressLabel);
     expect(html).toContain(words.submit);
     expect(html).toContain("calendar.google.com/calendar/ical/…");
-    expect(html).toContain('data-placeholder="calendar-settings-screenshot"');
     expect(html).toContain('<div aria-hidden="true"');
     expect(html).not.toContain("data-demo");
+  });
+
+  it("draws the source behind the card — the calendar or the website, never a hatch (issue #88, DEC-0174 §1)", () => {
+    for (const source of ["calendar", "website"] as const) {
+      const html = renderToStaticMarkup(<StageRegistration address="x" locale="de" source={source} />);
+      expect(html).toContain(`data-source="${source}"`);
+      expect(html).toContain("<svg");
+      expect(html).not.toContain("data-placeholder");
+    }
   });
 
   it("marks the English card as generated wording", () => {
@@ -186,7 +234,7 @@ describe("StageRegistration: an illustration of a registration, not a form", () 
     expect(html).toContain(dictionary("en").explainStage.submit);
   });
 
-  it("drops the placeholder marking once a screenshot exists", () => {
+  it("shows a real screenshot instead of the drawing where the page passes one", () => {
     const html = renderToStaticMarkup(
       <StageRegistration address="x" screenshotSrc="/images/real/settings.png" />,
     );

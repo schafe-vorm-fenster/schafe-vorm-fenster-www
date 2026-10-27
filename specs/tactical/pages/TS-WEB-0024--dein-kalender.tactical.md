@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0014, BUS-WEB-0015, FUN-WEB-0202]
 sources: [SRC-0001, SRC-0003, SRC-0014]
-decisions: [DEC-0011, DEC-0030, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0131, DEC-0154, DEC-0172, DEC-0173]
+decisions: [DEC-0011, DEC-0030, DEC-0036, DEC-0048, DEC-0052, DEC-0056, DEC-0081, DEC-0082, DEC-0083, DEC-0131, DEC-0154, DEC-0172, DEC-0173, DEC-0174]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -57,7 +57,7 @@ TS-WEB-0006 D2 block 2, expanded. Each block carries a stable `data-block` id.
 | 5 | `tiers` | three tiers under one heading (D6) | carries the one product name (D7) |
 | 6 | `proof` | proof, sell-weighted, as a proof stream of voices (D9) | `lime-100` |
 | 7 | `trust` | data protection, operations, AI — one block (D10) | `violet-500`, never the proof's ground (DEC-0172 §4) |
-| — | — | context band, closing CTA, then the contact section | rendered by the layout (TS-WEB-0006 D2/D5/D6, DEC-0081) |
+| — | — | closing CTA, context band, then the contact section | rendered by the layout (TS-WEB-0006 D2/D5/D6, DEC-0081). The closing CTA — *"Euer Kalender läuft, sobald der Code auf eurer Seite steht."* — stands **before** the band, so the conversion stays with the argument it closes (owner's review 2026-10-27, issue #93, DEC-0174 §4) |
 
 Section rhythm is [FREE], with one binding consequence: `tiers` sits between
 the two photo-wanting blocks, so "never two photo sections in a row" holds.
@@ -302,7 +302,7 @@ TS-WEB-0018 D8's budget constant is 0 for this route.
 | ID | Level | Check |
 | --- | --- | --- |
 | TS-WEB-0024-A1 | static | `page.meta.ts` for `/dein-kalender` matches D1 exactly: `focusJob`, `primaryConversion`, `equalWeightConversion`, the four audiences in order, position 1′ as live module, three proof slots. `request-licence-quote` is absent. |
-| TS-WEB-0024-A2 | e2e | Load `/dein-kalender`. The elements carrying `data-block` appear in DOM order `focus`, `contrast`, `embed-demo`, `embed-config`, `tiers`, `proof`, `trust`, then the context band, then the closing CTA, then the contact section. Nothing but the global footer follows it. |
+| TS-WEB-0024-A2 | e2e | Load `/dein-kalender`. The elements carrying `data-block` appear in DOM order `focus`, `contrast`, `embed-demo`, `embed-config`, `tiers`, `proof`, `trust`, then the closing CTA, then the context band — the last block in `main` (DEC-0174 §4) — then the contact section. Nothing but the global footer follows it. |
 | TS-WEB-0024-A3 | e2e | Exactly one element has `data-cta="primary"`; it links to `/dein-kalender/bestellen` and is the only element on the page using the Pulse fill. Exactly one `data-cta="equal-weight"` exists, inside `data-block="focus"`, in secondary treatment. |
 | TS-WEB-0024-A4 | e2e | At 360 × 640 and at 1280 × 800 both the primary and the equal-weight CTA are fully visible without scrolling. |
 | TS-WEB-0024-A5 | e2e | `data-block="contrast"` contains exactly four rows, each with a today cell and a with-your-calendar cell; no checkmark/cross column and no row beyond four. Neither column label nor any cell contains a product name or the words the avoid list carries for it ("das Produkt", "mit dem Produkt" — SRC-0017 CG-039). The criterion asserts the two cells and the absence, never their wording (DEC-0083, DEC-0106 §2). |

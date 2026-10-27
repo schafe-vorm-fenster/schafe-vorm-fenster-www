@@ -245,8 +245,8 @@ export default async function PlacePage({ params }: { params: Promise<{ lang: st
         variant: "module",
         bare: true,
         // DEC-0170: the closing block is the homescreen module, and the band
-        // of the other three jobs follows it (issue #86).
-        beforeBand: true,
+        // of the other three jobs follows it (issue #86) — on every page since
+        // DEC-0174 §4, so `PageFrame` needs no flag for it.
         node: (
           <PlaceClosing
             copy={copy}

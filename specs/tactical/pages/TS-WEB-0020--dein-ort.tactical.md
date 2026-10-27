@@ -49,7 +49,7 @@ TS-WEB-0006 D2, content types per TS-WEB-0007 D5:
 | 2a | four value stories | `value-story` ×4 | D3 |
 | 2b | this week nearby | `live-module-frame` | TS-WEB-0008 position 2 |
 | 4 | closing block = the homescreen module | `howto-block` in `closing-cta` | D4, the primary conversion |
-| 3 | context band | `context-band` | layout, TS-WEB-0006 D5 |
+| 3 | context band | `context-band` | layout, TS-WEB-0006 D5 — the last block (DEC-0170, DEC-0174 §4) |
 
 Blocks 2a–2b are this page's argument sequence, the rest is shared layout; the
 single ink section of Page Rhythm is block 1, where the live data sits.

@@ -60,6 +60,20 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
       };
     });
     expect(closing).toEqual({ found: true, afterLast: true, beforeFooter: true });
+
+    // After `trust`: the closing CTA, then the context band as the last block
+    // in `main` — the conversion stays with the argument it closes (owner's
+    // review 2026-10-27, issue #93, DEC-0174 §4).
+    const tail = await page.evaluate(() =>
+      [...document.querySelectorAll("main > *")]
+        .filter((element) => element.matches("section, aside, div") && element.textContent?.trim())
+        .map((element) => element.querySelector("#closing-cta, #context-band")?.id ?? element.id)
+        .filter((id) => id === "closing-cta" || id === "context-band"),
+    );
+    expect(tail).toEqual(["closing-cta", "context-band"]);
+    await expect(page.locator("#closing-cta")).toContainText(
+      "Euer Kalender läuft, sobald der Code auf eurer Seite steht.",
+    );
   });
 
   test("TS-WEB-0024-A3: exactly one Pulse primary CTA to /dein-kalender/bestellen, one equal-weight CTA inside focus", async ({

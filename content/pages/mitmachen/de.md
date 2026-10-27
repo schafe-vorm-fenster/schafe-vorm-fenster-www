@@ -308,14 +308,12 @@ nie aus einem erfundenen Ort (DEC-0068 Regel 3, DEC-0115).
 
 **Hinweis-Banner:** Bitte nachfragen, geht bisher nur für einige Webseiten.
 
-**Querverweis (ausschließlich hier, ein Satz, sekundär):** Wenn eurem Verein oder eurer Gemeinde ein eigener Kalender auf der eigenen Website vorschwebt statt einer Quelle für den Dorfkalender, ist das ein anderes Angebot: → `/dein-kalender`
-
 Verfügbarkeit: laut Hub-Datensatz **Alpha**, nicht `generally-available`
 — der Status-Badge muss sichtbar bleiben, solange das gilt (TS-WEB-0022 D4).
 
-Quelle des Querverweises: TS-WEB-0022 D9 — genau ein Link zu
-`/dein-kalender`, in einem `aside`, am Ende von Slot 3, ohne Preis, ohne
-Tarifliste, nie `data-cta="primary"`.
+Kein Querverweis auf `/dein-kalender` in diesem Slot (Review vom
+27.10.2026, Issue #92, DEC-0174 §3): das Kontextband übergibt an die drei
+anderen Aufgaben, „Dein Kalender" eingeschlossen.
 
 Der Hinweis-Satz ist der Wortlaut des Reviews („Bitte nachfragen, geht
 bisher nur für einige Webseiten"). Die Standardquellen, die das Banner

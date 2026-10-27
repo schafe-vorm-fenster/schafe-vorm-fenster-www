@@ -864,6 +864,22 @@ hatch: no lettering, no place, and **no messenger's logo or trademark** (the
 chat is ours, under our mark). An illustration is honest by its form: it does
 not pretend to be a photograph, so it carries no placeholder badge.
 
+**Every state of every path has its graphic, and no explain stage ships a
+placeholder panel** (owner's review 2026-10-27, issue #88, `DEC-0174`). A grey
+`media-frame`, a hatch or an empty box in a stage is a defect in production,
+not a state: the reader sees a step without its picture. The calendar path's
+first state is a date entered in your own calendar, as usual — a window with a
+week grid, a few dates in it and the new one being entered; the website path's
+first state is the dates kept on your own website, as usual — a browser window
+with the site's list of dates and the next one being typed. The registration
+state shows the same drawing in its diagonal slot, so the reader sees *that*
+source being registered. A drawn calendar or website is **nobody's product**:
+no logo (no Google mark), no product colours, no lettering. The chat state
+carries **no header** — the paper bar with the mark and the brand name stood
+white on the module's light ground and read as a stray strip (issue #89); the
+bubbles alone say "a chat". `TS-WEB-0022-A22` fails a stage graphic that is
+empty or marked as a placeholder, on every route that renders the module.
+
 **From `lg` — tablet and up.** The three steps **stand side by side**, each
 with its own graphic above its own two lines. There is no stage, no crop and
 **no slide**: everything is visible at once, which is the whole reason the
@@ -1415,6 +1431,9 @@ page's main content, and it must not look like a plain list.
   The card fill is never the ground: `paper` cards on the band's `surface`,
   `surface` cards where the band is merged into a `paper` closing block.
 - The cards are links; the whole card is the target (44 px minimum).
+- The band is the **last block in `main`**, after the page's own closing
+  block, except where that block is the closing search on `ink` (*Page
+  Rhythm*, `DEC-0174`).
 - **A whole-card link is a control** and takes radius 999, so the cards are
   pills (`DEC-0156`, answering `Q-0087`). A card that only contains a link
   stays at radius 0.
@@ -1502,6 +1521,19 @@ Rules:
   ground (see *Search field*). It sits last, after the context band, and the
   two ink sections are never adjacent — on `/` the whole middle of the page
   lies between them.
+- **The page's own closing block comes before the context band, and the band
+  is the last block in `main`** (owner's review 2026-10-27, issue #93,
+  `DEC-0174`). The closing block is the page's conversion, so it belongs to
+  the page's argument; the band is the hand-off for a reader who came for
+  something else, and a conversion standing after it loses its context. Only
+  the contact section and the footer follow the band. **The one exception is
+  the closing search block on `ink`** (`/`): a search is not a conversion
+  (`TS-WEB-0019` D2), and the rule above keeps the second `ink` section last.
+  `TS-WEB-0006-A6` checks the order on every route.
+- **The band is the page's only hand-off to another job.** No sentence in the
+  page's own blocks repeats it — no *"if you want X instead, that is another
+  offering: →"* line pointing at a page the band already offers (issue #92,
+  `CG-045`, `TS-WEB-0006-A20`).
 
 ### Module rules
 
@@ -1522,9 +1554,10 @@ every page and are checked on every route (`e2e/module-rules.spec.ts`).
   control, the reassurance under it.
 - **The context band comes after the page's own closing module.** Where the
   closing block is such a module, the band of the other three jobs follows it
-  and is the last block in `main` (`/dein-ort`, `TS-WEB-0006` D2). A closing
-  block that only repeats a link or the search keeps its place after the band;
-  on `/` the ink search block stays last.
+  and is the last block in `main` (`/dein-ort`, `TS-WEB-0006` D2). Since
+  `DEC-0174` §4 that holds for **every** closing block, a repeated link
+  included (*Rules* above, issue #93); only the closing search on `ink` on `/`
+  stays last.
 - **The homescreen instructions take one pattern for both platforms.** A mono
   platform label over an open numbered list, iPhone then Android, side by side
   from `xl`. Neither platform hides behind a `details` disclosure: a bare

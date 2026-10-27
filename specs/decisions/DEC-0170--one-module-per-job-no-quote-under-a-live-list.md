@@ -64,7 +64,8 @@ Nothing on `/` changes.
    The homescreen instructions and the closing block become one module: the
    heading, the iPhone and the Android instructions, exactly **one** control and
    the permanence promise under it. It is rendered by the shared layout as
-   block 4 (`PageFrame`, `closing.beforeBand`) and **the context band follows
+   block 4 (`PageFrame`, `closing.beforeBand` — *removed by DEC-0174 §4, which
+   makes closing → band the order on every page*) and **the context band follows
    it** — the band is then the last block in `main`, still before the contact
    section and the footer. Per state:
    - **State A:** the instructions name the place; the control is the calendar

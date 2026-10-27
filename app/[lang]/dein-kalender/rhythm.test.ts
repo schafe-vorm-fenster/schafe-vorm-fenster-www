@@ -4,8 +4,8 @@ import { checkRhythm } from "@/src/components/section-shell/rhythm";
 
 /**
  * TS-WEB-0024 — the page's full section sequence: own blocks (D2 as amended by
- * DEC-0131 §1 — seven blocks) plus the two `PageFrame` always appends (context
- * band `surface`, closing `paper`). `himbeereCount = 1`: the one Pulse button,
+ * DEC-0131 §1 — seven blocks) plus the two `PageFrame` always appends (closing
+ * `paper`, then the context band `surface`, DEC-0174 §4). `himbeereCount = 1`: the one Pulse button,
  * in `focus` (D3). The contact section is not a rhythm entry (DEC-0117).
  */
 describe("TS-WEB-0024: /dein-kalender section rhythm", () => {
@@ -25,8 +25,8 @@ describe("TS-WEB-0024: /dein-kalender section rhythm", () => {
       // Trust on the provenance ground: on `lime-100` it merged with the
       // proof above it into one section (DEC-0172 §4).
       "violet-500", // trust
-      "surface", // PageFrame: context band
       "paper", // PageFrame: closing CTA
+      "surface", // PageFrame: context band, last (DEC-0174 §4)
     ] as const;
     expect(checkRhythm(sections, 1)).toEqual([]);
   });

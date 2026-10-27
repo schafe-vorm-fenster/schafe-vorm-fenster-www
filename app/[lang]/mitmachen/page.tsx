@@ -2,17 +2,17 @@ import { ArchiveBlock } from "@/src/components/archive-block/archive-block";
 import { Button } from "@/src/components/button/button";
 import { ExplainModule } from "@/src/components/explain-module/explain-module";
 import {
+  StageCalendarEntry,
   StageChat,
   StageFlyerPhoto,
-  StageImage,
   StageRegistration,
+  StageWebsiteDates,
 } from "@/src/components/explain-stage/explain-stage";
 import { HeroBlock } from "@/src/components/hero-block/hero-block";
 import { HintBanner } from "@/src/components/hint-banner/hint-banner";
 import { ObjectionList } from "@/src/components/objection-list/objection-list";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
-import { RouteLink } from "@/src/components/route-link/route-link";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { StatusBadge } from "@/src/components/status-badge/status-badge";
 import { contactHref } from "@/src/lib/contact/contact-channels";
@@ -26,7 +26,6 @@ import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 import { STAGE_ZERO_ANCHOR } from "@/src/lib/pages/live-anchor";
 import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
 import { standardSources } from "@/src/lib/pricing/standard-sources";
-import { pageTitle } from "@/src/lib/routes/metadata";
 
 import { buildDay } from "../_build-day";
 import { PlaceDatesIsland } from "../_islands";
@@ -51,7 +50,7 @@ import type { Metadata } from "next";
  *
  * Own blocks, in D2 order: hero (the page's one scene) → objections → the
  * `wege` slot, which is the three **bare** explain modules plus the price
- * boundary and the one cross-reference D9 allows → live example (ink, the
+ * boundary → live example (ink, the
  * page's single dark section, D10) → proof. The context band and the closing
  * CTA are block 3/4 of TS-WEB-0006 D2 and are rendered by `PageFrame` from
  * `page.meta.ts` — this page never renders them itself.
@@ -88,12 +87,6 @@ export async function generateMetadata({
 function listItems(blocks: readonly ContentBlock[]): string[] {
   return blocks.flatMap((block) => (block.kind === "list" ? block.items : []));
 }
-
-/** The accessible name of the cross-reference aside, which carries no heading. */
-const CROSS_REFERENCE_LABEL: Record<Locale, string> = {
-  de: "Anderes Angebot",
-  en: "A different offering",
-};
 
 /**
  * `mitmachen-7-proof-demo` is `provenance: sourced` (state/open.md row 49,
@@ -415,11 +408,14 @@ export default async function Page({
           mechanism="calendar-connection"
           ordinal={2}
           stage={[
-            <StageImage alt="" key="1" locale={locale} />,
+            // State 1, drawn: a date entered in your own calendar, as usual
+            // (issue #88, DEC-0174 §1). No grey panel in production.
+            <StageCalendarEntry key="1" />,
             <StageRegistration
               address={fieldAt(calendarSteps.blocks, 1) ?? ""}
               key="2"
               locale={locale}
+              source="calendar"
             />,
             <SampleStageCalendar
               key="3"
@@ -461,11 +457,14 @@ export default async function Page({
           mechanism="website-import"
           ordinal={3}
           stage={[
-            <StageImage alt="" key="1" locale={locale} />,
+            // State 1, drawn: the dates kept on your own website, as usual
+            // (issue #88, DEC-0174 §1).
+            <StageWebsiteDates key="1" />,
             <StageRegistration
               address={fieldAt(websiteSteps.blocks, 1) ?? ""}
               key="2"
               locale={locale}
+              source="website"
             />,
             <SampleStageCalendar
               key="3"
@@ -501,25 +500,10 @@ export default async function Page({
         </HintBanner>
       </SectionShell>
 
-      {/* D9 — exactly one link to `/dein-kalender`, in an `aside`, at the end
-          of slot 3. Its own block rather than a fourth step of "your website
-          as the source" (polish brief, page 4, item 5), but inside the slot
-          the determination puts it in (DEC-0124). */}
-      <SectionShell
-        as="aside"
-        dataBlock="verweis"
-        density="tight"
-        label={CROSS_REFERENCE_LABEL[locale]}
-        surface="lime-100"
-      >
-        <p>
-          {(fieldAt(pathWebsite.blocks, 4) ?? "").split("→")[0].trim()}{" "}
-          <RouteLink locale={locale} to="calendar">
-            {pageTitle("calendar", locale)}
-          </RouteLink>
-        </p>
-      </SectionShell>
-
+      {/* No cross-reference to `/dein-kalender` here (owner's review
+          2026-10-27, issue #92, DEC-0174 §3): the context band hands off to
+          every other job, `Dein Kalender` included, and a sentence that says
+          the same a few sections earlier only repeats it. */}
       <SectionShell
         dataBlock="beispiel"
         kicker={dictionary(locale).kickers.liveAnswer}
