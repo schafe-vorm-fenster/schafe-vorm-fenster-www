@@ -113,8 +113,8 @@ stream's stories are blocks **inside** a colour section.
   `founder-former-volunteer-mayor` (`usage_rights: cleared`) in the content
   artefact's `derived_from`, and it carries **no second proof line and no
   source line**: the record's evidence is two Nordkurier years without an
-  article, and a source that names no article is omitted (CG-045); a second
-  line repeating the fact is a duplicate claim (CG-044). *(Until DEC-0175 the
+  article, and a source that names no article is omitted (CG-047); a second
+  line repeating the fact is a duplicate claim (CG-046). *(Until DEC-0175 the
   sentence was "a claim with a proof slot", the page's one inline proof
   element, sourced "Nordkurier, 2019 und 2022".)*
 - The founder photo comes from `@schafe-vorm-fenster/people`; a photo not
