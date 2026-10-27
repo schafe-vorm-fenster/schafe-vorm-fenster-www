@@ -65,7 +65,6 @@ export default async function Page({ params }: { params: Promise<{ lang: string 
   // The band's own kicker (state/open.md row 95, row 161).
   const contextBandHeading = fieldAt(slot(page, "registrieren-6-context-band").blocks, 0);
   const words = dictionary(locale);
-  const privacyHref = linkHref("legal", { locale, hash: "datenschutz" });
 
   return (
     <>
@@ -76,7 +75,7 @@ export default async function Page({ params }: { params: Promise<{ lang: string 
         {/* TS-WEB-0016 D17 — above the frame, in DOM order and visually. A
             paragraph and a link: nothing on the page waits for it. */}
         <p className={styles.notice} data-block="embed-notice" data-demo="true">
-          {words.start.notice} <a href={privacyHref}>{words.start.noticeLink}</a>
+          {words.start.notice} <a href={linkHref("legal", { locale, hash: "datenschutz" })}>{words.start.noticeLink}</a>
         </p>
         <p className={styles.fallback} data-block="register-form-fallback" data-demo="true">
           <ConversionTracker attributes={{ via: "new-tab" }} goalId="register-as-publisher" stage="handover">

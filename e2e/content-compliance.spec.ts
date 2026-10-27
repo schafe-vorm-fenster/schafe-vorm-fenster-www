@@ -221,7 +221,7 @@ test("F-2-33: the English register page's own words around the form are English"
   await expect(main.locator('[data-block="embed-notice"]')).toContainText("provided by Google");
   await expect(main.locator("iframe[data-register-form]")).toHaveAttribute("title", "Registration form at Google Forms");
   await expect(main.locator('[data-block="register-form-fallback"]')).toContainText("Open the form directly at Google");
-  await expect(main.locator('[data-block="register-form-fallback"]')).toContainText("opens new tab");
+  await expect(main.locator('[data-block="register-form-fallback"]')).toContainText("Data goes to Google");
 });
 
 

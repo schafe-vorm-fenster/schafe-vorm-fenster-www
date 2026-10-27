@@ -60,8 +60,9 @@ that module and no second URL exists anywhere.
    itself to a cross-origin document: Google Forms posts no height message.
 
 3. **The fallback link.** `OutboundLink` (the site's one outbound-link
-   component, `TS-WEB-0016` D16) with `newTab`, recipient Google, so its
-   marking stands under it; target `leadFormOpenUrl()` — the framed form
+   component, `TS-WEB-0016` D16), recipient Google, so its marking stands
+   under it; it opens a new tab because its target is another origin
+   (DEC-0169, `TS-WEB-0016` D18); target `leadFormOpenUrl()` — the framed form
    without `embedded`, derived from the same value so the link and the frame
    cannot name two forms. It stands **above** the frame: a visitor whose
    browser refuses the frame meets it before the empty box.

@@ -143,10 +143,12 @@ test.describe("TS-WEB-0023 D10: the registration route embeds the live site's Go
     await expect(link).toHaveAttribute("href", leadFormOpenUrl());
     await expect(link).toHaveAttribute("target", "_blank");
     await expect(link).toHaveAttribute("rel", /noopener/);
-    // The marking (TS-WEB-0016 D16): its own element after the link, named by it.
-    const noteId = await link.getAttribute("aria-describedby");
-    expect(noteId).toBeTruthy();
-    await expect(page.locator(`[id="${noteId}"]`)).toContainText("Google");
+    // The marking (TS-WEB-0016 D16) and the hidden new-tab note (DEC-0169),
+    // both joined to the link by `aria-describedby`.
+    const described = ((await link.getAttribute("aria-describedby")) ?? "").split(/\s+/).filter(Boolean);
+    expect(described.length).toBeGreaterThan(0);
+    const notes = await Promise.all(described.map((id) => page.locator(`[id="${id}"]`).textContent()));
+    expect(notes.join(" ")).toContain("Google");
     // Above the frame: a visitor whose browser refuses the frame meets it first.
     expect((await link.boundingBox())?.y ?? 0).toBeLessThan((await page.locator(FRAME).boundingBox())?.y ?? 0);
 
