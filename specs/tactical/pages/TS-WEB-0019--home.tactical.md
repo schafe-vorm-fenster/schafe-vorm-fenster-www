@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0010]
 sources: [SRC-0001, SRC-0003, SRC-0014]
-decisions: [DEC-0048, DEC-0081, DEC-0082, DEC-0105, DEC-0109, DEC-0110, DEC-0129, DEC-0154, DEC-0159, DEC-0162, DEC-0163, DEC-0167, DEC-0170]
+decisions: [DEC-0048, DEC-0081, DEC-0082, DEC-0105, DEC-0109, DEC-0110, DEC-0129, DEC-0154, DEC-0159, DEC-0162, DEC-0163, DEC-0167, DEC-0168, DEC-0170]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -52,6 +52,8 @@ declared goal belongs to the focus job, not to the page: home borrows
 ### D2 — Above-the-fold states [PROPOSED — see Open point 1]
 
 > **Amended by DEC-0163 (2026-10-13).** The page is prerendered once and its HTML is S1. S2 and S3 are applied in the browser by `app/[lang]/_home-focus.tsx` once `?ort=` resolves through `/api/places/resolve`; the form, its label and the input stay in the static shell (DEC-0078 holds), only the trio, the submit and the module slot change.
+>
+> **Amended by DEC-0168 (2026-10-27).** S1/S2/S3 are read off the page's **one** active place (`src/lib/pages/active-place.ts`), the same snapshot the module slot, the stage photograph and the calendar link read: S1 is the `example` state (Schlatkow, explicitly — `/`'s own photograph depicts it, inventory `place: schlatkow`, so the stage keeps it), and nothing about the example is fetched while `?ort=` resolves. The S2 handover is `{CALENDAR_ORIGIN}/{slug}.{geonameId}` (TS-WEB-0008 D9).
 
 Block 1 varies by **what is known about the place**, never by entry
 trait. The trait orders blocks 2 (D3, D4); it does not redefine block 1,
@@ -286,7 +288,7 @@ not conversion.
 | TS-WEB-0019-A19 | e2e | On `/` (S1) and `/?ort=<covered place with dates>` (S2), the live-dates section ends in exactly one hand-off row (`data-handoff`) below its last event row: the question at more than body size and exactly one `data-cta="secondary"` control resolving to `/mitmachen`; the row carries no `primary`, and the page still has exactly one visible `data-cta="primary"` (D3 row 1, DEC-0159, issue #25). |
 | TS-WEB-0019-A20 | e2e | The `embed` scene's photograph carries the `web-calendar-overlay` drawing. At 360, 390, 640 and 1280 px the drawing overlaps the photograph, stays inside the viewport with the page gutter, and does not cover the photograph's declared focal point; the photograph's `alt` names both the photograph and the drawing; no horizontal scroll (issue #32, SRC-0014 §Web-calendar overlay, DEC-0162 §5). |
 | TS-WEB-0019-A21 | e2e | At 360, 390, 640 and 1280 px the photograph of the `provenance` scene runs from viewport edge to viewport edge, its box declares its ratio (16:9) before the image arrives, and the page does not scroll horizontally (issue #35, SRC-0014 §Section grounds "Images inside a colour section run full-bleed", DEC-0162 §6). |
-| TS-WEB-0019-A22 | e2e | With the photo route answering a photograph, `/?ort=<slug>` at 360 and 1280 px shows that place's photograph on the stage (`[data-place-photo=<slug>]`) with its credit line naming the author; zero CSP violations. Without a place nothing changes and the stage's own photograph stays the LCP (DEC-0167, issue #18; the fallback and the no-shift rule are `TS-WEB-0020-A21`/`A22`, same component). |
+| TS-WEB-0019-A22 | e2e | With the photo route answering a photograph, `/?ort=<slug>` at 360 and 1280 px shows that place's photograph on the stage (`[data-place-photo=<slug>]`) with its © credit control whose panel names the author; while it loads, the stage's own photograph is labelled "Beispielfoto" and no frame shows the place's headline over it unlabelled; zero CSP violations. Without a place nothing changes, nothing is asked and the stage's own photograph — it depicts the example place — stays the LCP (DEC-0167, DEC-0168, issues #18, #80; the fallback and the no-shift rule are `TS-WEB-0020-A21`/`A22`, same component). |
 | TS-WEB-0019-A23 | e2e | The module rules of SRC-0014 §Page Rhythm hold on `/` and `/en`: no visible `blockquote` follows the last live row of its section, no section ending on a quote is followed by one carrying a quote, no module repeats another's job. `/` was checked against the owner's review of 2026-10-27 and needed no change — its proof stream is cards, it has no story stage and no homescreen block, and its ink closing search stays last after the band (DEC-0170, `e2e/module-rules.spec.ts`). |
 
 ## Coverage

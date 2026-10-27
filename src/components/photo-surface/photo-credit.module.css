@@ -1,0 +1,75 @@
+/*
+ * The © control on a place photograph (issue #78, DEC-0167 amendment). Tokens
+ * only. The control is `ai-edited-mark`'s well — 40 px, `scrim-45`, a `paper`
+ * glyph — in the same corner, the photograph's top right, below the
+ * transparent header on a hero (`--ai-edited-mark-top`). The two never stand
+ * together: a place photograph covers the surface's own picture, and
+ * `photo-surface` takes the AI mark down while it does.
+ *
+ * The panel opens under the control, right-aligned, on `paper` with `ink`
+ * text — a card, not text on the photograph, so its contrast does not depend
+ * on the picture. Out of flow: neither state moves anything.
+ */
+.credit {
+  position: absolute;
+  right: var(--space-4);
+  top: var(--ai-edited-mark-top, var(--space-4));
+  z-index: 2;
+}
+
+/* Beside the AI-edited mark: one row, the mark keeps the corner. */
+.besideMark {
+  right: calc(var(--space-4) + var(--height-icon-well) + var(--space-2));
+}
+
+.control {
+  align-items: center;
+  background: var(--color-scrim-45);
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: var(--color-neutral-paper);
+  cursor: pointer;
+  display: inline-flex;
+  height: var(--height-icon-well);
+  justify-content: center;
+  padding: 0;
+  width: var(--height-icon-well);
+}
+
+.control:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.panel {
+  background: var(--color-neutral-paper);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  color: var(--color-neutral-ink);
+  font-size: var(--type-meta-size);
+  line-height: var(--leading-normal);
+  margin-top: var(--space-2);
+  max-width: min(20rem, calc(100vw - 2 * var(--space-4)));
+  padding: var(--space-3) var(--space-4);
+  position: absolute;
+  right: 0;
+  text-align: left;
+  /* A card, not text on the photograph: the surface's text shadow stops here. */
+  text-shadow: none;
+  top: 100%;
+  width: max-content;
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.panel p {
+  margin: 0;
+}
+
+.panel a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}

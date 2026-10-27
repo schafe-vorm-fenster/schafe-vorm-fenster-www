@@ -58,6 +58,12 @@ export interface RenderableImage {
    * `data-provenance="ai-edited"` and the credits page names the editing.
    */
   readonly aiEdited: boolean;
+  /**
+   * The covered place the photograph depicts (geo-api slug), where it depicts
+   * one — the inventory's `place`. A stage whose active place is this one
+   * keeps it instead of loading the place's photograph (DEC-0168).
+   */
+  readonly place?: string;
   /** The page's one declared LCP image (TS-WEB-0003 D2) — nothing else is eager. */
   readonly priority: boolean;
   readonly caption?: string;
@@ -87,6 +93,7 @@ function renderable(entry: ImageEntry): RenderableImage | undefined {
     ...(entry.anchor ? { anchor: entry.anchor } : {}),
     notDepicting: generated,
     aiEdited: entry.provenance === "ai-edited",
+    ...(entry.place ? { place: entry.place } : {}),
     priority: entry.lcp === true,
     ...(entry.caption ? { caption: entry.caption } : {}),
     ...(entry.credit ? { credit: entry.credit } : {}),

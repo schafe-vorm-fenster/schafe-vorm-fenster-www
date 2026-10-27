@@ -33,7 +33,7 @@ import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
 import { PlaceExampleSet } from "@/src/components/place-example-set/place-example-set";
 import { Skeleton } from "@/src/components/skeleton/skeleton";
 import { dictionary } from "@/src/lib/i18n/dictionary";
-import { calendarUrlForSlug } from "@/src/lib/live/app-handover";
+import { calendarUrl, type CalendarPlace } from "@/src/lib/live/app-handover";
 import { liveRoutes, useLive, type LiveLoad } from "@/src/lib/live/browser";
 import { countyLabel } from "@/src/lib/live/county-label";
 import { NEARBY_RADIUS_KM } from "@/src/lib/live/widening";
@@ -56,20 +56,22 @@ export function moduleSkeleton(rowCount: number): ReactNode {
 
 /** A handover link, armed with the module's goal when it has one (TS-WEB-0012 D4). */
 function CalendarLink({
-  slug,
+  place,
   label,
   dataCta,
   conversion,
   locale,
 }: {
-  readonly slug: string;
+  /** The resolved place — its slug and geoname id make the address (DEC-0168 §5). */
+  readonly place: CalendarPlace;
   readonly label: string;
   readonly dataCta?: string;
   readonly conversion?: ConversionBinding;
   /** The language of the new-tab note the calendar link carries (DEC-0169). */
   readonly locale?: Locale;
 }) {
-  const href = calendarUrlForSlug(slug, { resolved: true });
+  const slug = place.slug;
+  const href = calendarUrl(place);
   if (href === undefined) return null;
   const link = (
     <OutboundLink dataCta={dataCta} href={href} locale={locale} variant="secondary">
@@ -98,6 +100,18 @@ export interface PlaceDatesIslandProps {
    * the module then stays in its loading frame and asks nothing.
    */
   readonly slug: string | undefined;
+  /**
+   * The place's geoname id where the page knows it without asking — with
+   * `slug`, the calendar link of the loading frame (DEC-0168 §5). The
+   * answered frame takes both from the envelope's own place.
+   */
+  readonly communityId?: string;
+  /**
+   * `true` while the page's place is not established (DEC-0168): the frame
+   * stands exactly as prerendered and nothing is asked, so no other place's
+   * rows fill it in the meantime.
+   */
+  readonly held?: boolean;
   /**
    * The place's name where the page knows it without asking — the showcase
    * community, or a place the page already resolved. It fills the title and
@@ -138,6 +152,8 @@ export interface PlaceDatesIslandProps {
 
 export function PlaceDatesIsland({
   slug,
+  communityId,
+  held = false,
   placeName,
   locale,
   titleTemplate,
@@ -156,7 +172,7 @@ export function PlaceDatesIsland({
   // A module that gets to choose its row has to be given more than one to
   // choose from: `prefer` picks out of the window, so it asks for the window.
   const asked = prefer === undefined ? rowCount : Math.max(rowCount, 12);
-  const load = useLive<PlaceEvents>(slug === undefined ? undefined : liveRoutes.placeEvents(slug, asked));
+  const load = useLive<PlaceEvents>(slug === undefined || held ? undefined : liveRoutes.placeEvents(slug, asked));
 
   // An unresolved place is a different page state entirely, never an empty
   // module (`src/lib/live/README.md`). The page's own shell already stands.
@@ -169,13 +185,13 @@ export function PlaceDatesIsland({
       reserveMarks
         announced={announced}
         cta={
-          ctaTemplate !== undefined && slug !== undefined && placeName !== undefined ? (
+          ctaTemplate !== undefined && slug !== undefined && communityId !== undefined && placeName !== undefined ? (
             <CalendarLink
               conversion={conversion}
               dataCta={ctaDataCta}
               label={fillTemplate(ctaTemplate, { place: name })}
               locale={locale}
-              slug={slug}
+              place={{ slug, communityId }}
             />
           ) : undefined
         }
@@ -215,7 +231,7 @@ export function PlaceDatesIsland({
             dataCta={ctaDataCta}
             label={fillTemplate(ctaTemplate, { place: data.place.name })}
             locale={locale}
-            slug={data.place.slug}
+            place={data.place}
           />
         )
       }
@@ -249,10 +265,10 @@ export interface NearbyIslandProps {
   readonly point: { readonly lat: number; readonly lng: number } | undefined;
   /**
    * The covered community the coordinate belongs to — the calendar link's
-   * target. A slug out of a resolved place, never one assembled from a
-   * request value (TS-WEB-0008 D9).
+   * target. A resolved place, never one assembled from a request value
+   * (TS-WEB-0008 D9).
    */
-  readonly anchorSlug?: string;
+  readonly anchor?: CalendarPlace;
   readonly locale: Locale;
   /** Names its own radius — never the place name (TS-WEB-0008 D1). `{radius}` is the km figure. */
   readonly titleTemplate: string;
@@ -266,7 +282,7 @@ export interface NearbyIslandProps {
 
 export function NearbyIsland({
   point,
-  anchorSlug,
+  anchor,
   locale,
   titleTemplate,
   rowCount = 5,
@@ -278,12 +294,12 @@ export function NearbyIsland({
   if (load.status === "absent") return null;
 
   const cta =
-    anchorSlug === undefined ? undefined : (
+    anchor === undefined ? undefined : (
       <CalendarLink
         conversion={conversion}
         label={dictionary(locale).live.allDates}
         locale={locale}
-        slug={anchorSlug}
+        place={anchor}
       />
     );
 

@@ -50,6 +50,7 @@ images:
       Das Fachwerkhaus der Melkerschule in Schlatkow, davor Biertischgarnituren, zwei Sonnenschirme
       und Gäste auf der Wiese.
     licence: CC BY-SA 4.0
+    place: schlatkow
     focal:
       x: 50
       "y": 55

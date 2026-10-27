@@ -3,6 +3,8 @@ import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { PlaceholderSurface } from "../placeholder-surface/placeholder-surface";
 import { Skeleton } from "../skeleton/skeleton";
 
+import { PhotoCredit } from "./photo-credit";
+
 import { focalPosition, photoUrl } from "./url";
 
 import type { ReactNode } from "react";
@@ -89,6 +91,12 @@ export interface PhotoSurfaceProps extends DataStateProps {
    * credit line — `photo-layer.tsx` (DEC-0167). Rendered under the text stack.
    */
   readonly photoLayer?: ReactNode;
+  /**
+   * The photograph's credit, where its rights holder asks for one (the
+   * inventory's `credit`, lead word included). Rendered as the © control in
+   * the picture's corner, never as text on it (DEC-0168, issue 101).
+   */
+  readonly credit?: ReactNode;
   readonly children?: ReactNode;
 }
 
@@ -145,6 +153,7 @@ export function PhotoSurface({
   placeholderId,
   className,
   photoLayer,
+  credit,
   children,
 }: PhotoSurfaceProps) {
   const classes = [styles.surface, className].filter(Boolean).join(" ");
@@ -245,6 +254,11 @@ export function PhotoSurface({
       <div className={`container ${styles.content}`}>{children}</div>
       {/* DEC-0165: every photograph edited with an AI tool carries the mark. */}
       {aiEdited && !notDepicting && !missingPhoto ? <AiEditedMark locale={locale} /> : null}
+      {credit && !missingPhoto ? (
+        <PhotoCredit besideMark={aiEdited && !notDepicting} locale={locale}>
+          {credit}
+        </PhotoCredit>
+      ) : null}
     </section>
     </>
   );

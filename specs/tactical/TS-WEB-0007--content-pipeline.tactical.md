@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0143, FUN-WEB-0144, CON-WEB-0063, FUN-WEB-0039, FUN-WEB-0171, CON-WEB-0077, FUN-WEB-0172, FUN-WEB-0173, FUN-WEB-0174, CON-WEB-0078, FUN-WEB-0083, FUN-WEB-0175, FUN-WEB-0176, FUN-WEB-0177, FUN-WEB-0178, CON-WEB-0079, FUN-WEB-0179, CON-WEB-0080, CON-WEB-0087, FUN-WEB-0180, FUN-WEB-0181, FUN-WEB-0182, FUN-WEB-0089]
 sources: [SRC-0006, SRC-0008, SRC-0009, SRC-0017, SRC-0018]
-decisions: [DEC-0012, DEC-0020, DEC-0022, DEC-0026, DEC-0027, DEC-0039, DEC-0041, DEC-0080, DEC-0161, DEC-0165]
+decisions: [DEC-0012, DEC-0020, DEC-0022, DEC-0026, DEC-0027, DEC-0039, DEC-0041, DEC-0080, DEC-0161, DEC-0165, DEC-0168]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -412,6 +412,7 @@ first playbook is written. [PROPOSED]
 | TS-WEB-0007-A15 | manual | P7 dry run on one bumped package version: the PR touches exactly the files whose `derived_from` names a changed record, resets them to `draft`, and carries `job_relation` and `editorial_weight` plus their reasons forward unchanged. |
 | TS-WEB-0007-A16 | tool | Segment independence: no generated string contains a resolved place name; place references occur only as named interpolation slots. |
 | TS-WEB-0007-A17 | e2e | **AI-edited images are marked, and only they are** (D6, DEC-0165). On every route in both languages: each `[data-provenance="ai-edited"]` frame carries exactly one `ai-edited-mark` with `role="img"` and the dictionary's `aiEditedMark` as accessible name and `title`, not focusable; no mark exists outside such a frame; a page whose inventory holds a placed `ai-edited` image renders at least that many marked frames; every such inventory `alt`, and every `<img>` alt inside a marked frame, ends with the note. On each page carrying one, at 390 and 1280 px: the mark is 40 × 40, intersects neither the header nor any text or control of its surface, and `paper` over the 0.45 well clears **3 : 1** against every pixel of the photograph under it. |
+| TS-WEB-0007-A18 | e2e | **A photo credit is a © control, never running text** (DEC-0168, SRC-0014 §Photo surface, issues #78, #101). On every route in both languages no visible element reads "Foto: …" / "Photo: …"; a page whose inventory holds a placed image with a `credit` shows at least that many `photo-credit` controls, each a closed `button` named "Bildnachweis" / "Photo credit"; on `/ueber-uns` the quote band's control opens the photographer's credit. |
 
 ## Coverage
 

@@ -939,7 +939,7 @@ and three cards with a quote each are three times the module.
 | Ground | `ink`, padded `space-12`, `space-16` from `xl`. In the page rhythm the stage is a **photo** section (it is photo-led), so it never touches the page's live-data `ink` section |
 | Head | Kicker badge with `clock` (e.g. *Ein Tag im Dorf*) · section headline · lead in `lime-200` |
 | Media | One per story: the photograph with the neutral scrim (*Photo surface*, the same two gradients and text shadow), or, for a story without a photograph, a `violet-500` ground with the story's glyph as a large `violet-600` watermark. Never an empty frame. The quote sits at the bottom: a `lime-500` quotation mark, the quote in 22–34 px / 700, and the speaker with a 44 px `lime-500` initials disc |
-| Panel | `paper`. The hours as 44 px pills (`surface`, chosen one `ink`), the hour in mono 36–52 px beside a 44 px icon well, the story headline (sub head), the story (body), then **"Im Kalender"** with **one live date of the story's own category** (`TS-WEB-0020` D3, A14), and "Weiter um …". **No onward action**: the link back up to the page's own dates ("Was heute bei dir los ist") is gone (owner's review 2026-10-27, issue #85, `DEC-0170`) — the stage's one control is "Weiter um …" |
+| Panel | `paper`. The hours as 44 px pills (`surface`, chosen one `ink`), the hour in mono 36–52 px beside a 44 px icon well, the story headline (sub head), the story (body), then **"Im Kalender"** with **one live date of the story's own category** (`TS-WEB-0020` D3, A14) — the label stands only with a date of the active place's surroundings, never over an empty slot (`DEC-0168`) — and "Weiter um …". **No onward action**: the link back up to the page's own dates ("Was heute bei dir los ist") is gone (owner's review 2026-10-27, issue #85, `DEC-0170`) — the stage's one control is "Weiter um …" |
 | Layout | Below `xl` media above panel; from `xl` 7 : 5 side by side (*Layout Grid*). Media **below `md` a flat band at least 220 px tall** — the quote on it sets the rest (274 px at 390, 301 px at 360, measured 2026-10-13) — **from `md` at least 400 px**, from `xl` `clamp(400px, 46cqi, 640px)`. The phone band is the owner's decision of 2026-10-13 (`DEC-0153` amendment); the desktop stays as the board draws it |
 | Picking | A **native radio group**: the hours are the radios' labels, arrows move the pick, `:has(:checked)` shows it. It works **without JavaScript** and needs none. "Weiter um …" is a pointer shortcut to the next hour. Nothing advances by itself: the one auto-advance in the system is the explain module's |
 | Height | Every story's media and text share one grid cell, so the stage is as tall as its tallest story and a pick moves nothing. An unpicked story is `visibility: hidden`, out of the accessibility tree |
@@ -1209,10 +1209,33 @@ and delivered by assets-api, and it is shown only with a stated licence (and an
 author, where the licence asks for attribution). It arrives after the page has
 painted, as a layer over the stage's own photograph with the same scrim, so the
 stage's geometry never changes; the page's own photograph stays the LCP. Its
-**credit stands at the photograph**, in the stage's top corner: title linked to
-the source, author, licence, source. No focal point exists for these
-photographs, so they take the surface's default `50% 40%`; the anchored crop
-below needs a declared focal point and does not apply.
+**credit stands at the photograph** as a © control (`photo-credit`, issue #78,
+`DEC-0168`): a 40 px round well with Lucide `copyright` in `paper` on
+`scrim-45`, in the photograph's top-right corner — the corner, well and scrim
+of the AI-edited mark, which stands down while a place photograph covers the
+stage. Hover, keyboard focus and a tap open a `paper` card holding the full
+credit — title linked to the source, author, licence, source — Escape closes
+it; never a `title` tooltip, never standing text on the photograph.
+
+**Every photo credit is that © control** (issue #101, `DEC-0168`). Wherever a
+photograph carries a credit at the image — a place photograph, an inventory
+image whose rights holder asks for one (`credit`), on a `photo-surface` or in
+a `media-frame` — the credit is the `photo-credit` control in the picture's
+top-right corner, its panel holding the full text ("Foto: openTransfer.de").
+No credit is ever visible running text on or under a photograph, and never a
+caption; where the AI-edited mark holds the corner, the control stands left of
+it in the same row. No focal
+point exists for these photographs, so they take the surface's default
+`50% 40%`; the anchored crop below needs a declared focal point and does not
+apply.
+
+**The stage and the page name one place** (`DEC-0168`, issue #80). Without a
+chosen place, a page whose modules speak about the configured example place
+(Schlatkow) shows the example's photograph on its stage, unless its own
+photograph depicts that place (the inventory's `place`). While a place's
+photograph loads, the stage's own photograph is labelled "Beispielfoto": a
+headline naming one place never stands over an unlabelled photograph of
+another, for any length of time.
 
 **A place without a usable photograph** (`Q-0089`, resolved by `DEC-0167`)
 keeps the page's own photograph, and the same corner says honestly that it is
@@ -1622,6 +1645,7 @@ The icons in use, by role:
 | Food, catering | `utensils` |
 | Music, choir | `music` |
 | Edited with an AI tool (`ai-edited-mark`) | `sparkles` |
+| Photo credit (`photo-credit`, every credited photograph) | `copyright` |
 
 `circle-x` marks an exclusion in a feature comparison — a thing the reader
 does *not* get. It never appears in an archive block, where the icons are

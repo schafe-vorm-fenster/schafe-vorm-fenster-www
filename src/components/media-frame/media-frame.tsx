@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { AiEditedMark } from "../ai-edited-mark/ai-edited-mark";
+import { PhotoCredit } from "../photo-surface/photo-credit";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { PlaceholderSurface } from "../placeholder-surface/placeholder-surface";
 import { Skeleton } from "../skeleton/skeleton";
@@ -42,6 +43,11 @@ export interface MediaFrameProps extends DataStateProps {
   /** Skips the image optimizer, for SVG and for hosts without a remote pattern. */
   readonly unoptimized?: boolean;
   readonly caption?: ReactNode;
+  /**
+   * The photograph's credit, where its rights holder asks for one — the ©
+   * control in the picture's corner, never a caption line (DEC-0168, issue 101).
+   */
+  readonly credit?: ReactNode;
   /** The manifest slot id when this frame shows a generated image (DEC-0068). */
   readonly placeholderId?: string;
   /**
@@ -83,6 +89,7 @@ export function MediaFrame({
   sizes = "(min-width: 64rem) 33vw, 100vw",
   unoptimized,
   caption,
+  credit,
   placeholderId,
   locale,
   state = "ready",
@@ -132,6 +139,11 @@ export function MediaFrame({
           unoptimized={unoptimized}
         />
         {markAiEdited ? <AiEditedMark locale={locale} /> : null}
+        {credit ? (
+          <PhotoCredit besideMark={markAiEdited} locale={locale}>
+            {credit}
+          </PhotoCredit>
+        ) : null}
       </div>
       {caption ? <figcaption className={styles.caption}>{caption}</figcaption> : null}
     </figure>

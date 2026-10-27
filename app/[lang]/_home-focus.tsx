@@ -30,8 +30,8 @@ import { dictionary } from "@/src/lib/i18n/dictionary";
 import { calendarUrl } from "@/src/lib/live/app-handover";
 import { liveRoutes, useLive } from "@/src/lib/live/browser";
 import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
+import { EXAMPLE_PLACE, useActivePlace } from "@/src/lib/pages/active-place";
 import { fillTemplate } from "@/src/lib/pages/demo-content";
-import { usePlaceState } from "@/src/lib/pages/place-state";
 import { pickStoryExamples } from "@/src/lib/pages/story-examples";
 
 import { NearbyIsland, PlaceDatesIsland } from "./_islands";
@@ -74,13 +74,26 @@ function splitInvitation(text: string): { headline: string; lead?: string } {
   return { headline: text.slice(0, cut + 1).trim(), lead: text.slice(cut + 1).trim() };
 }
 
-/** The state block 1 is in: S1 until a covered place is established. */
-function useFocus(): { readonly place?: Place; readonly hasDates?: boolean } {
-  const state = usePlaceState();
-  if (state.kind !== "covered") return {};
-  // Dates still loading reads as S2 — the place is known, and the module
-  // below fills in; an empty answer moves on to S3.
-  return { place: state.place, hasDates: state.hasDates ?? true };
+/**
+ * The state block 1 is in, off the page's one active place (DEC-0168): S1
+ * until a place is **chosen**. `example` is the showcase community the module
+ * speaks about while nobody has chosen one; `held` is everything before the
+ * page knows which of the two it is — the prerendered frame, asking nothing.
+ */
+function useFocus(): {
+  readonly place?: Place;
+  readonly hasDates?: boolean;
+  readonly example?: Place;
+  readonly held: boolean;
+} {
+  const active = useActivePlace();
+  if (active.kind === "chosen") {
+    // Dates still loading reads as S2 — the place is known, and the module
+    // below fills in; an empty answer moves on to S3.
+    return { place: active.place, hasDates: active.dates.status === "known" ? active.dates.hasDates : true, held: false };
+  }
+  if (active.kind === "example") return { example: active.place, held: false };
+  return { held: true };
 }
 
 function heroContentFor(copy: HomeFocusCopy, place?: Place, hasDates?: boolean): HeroContentProps {
@@ -121,7 +134,7 @@ function heroContentFor(copy: HomeFocusCopy, place?: Place, hasDates?: boolean):
         goalId={SAVE_CALENDAR.goalId}
         stage={SAVE_CALENDAR.stage}
       >
-        <OutboundLink dataCta="primary" href={calendarUrl(place)} locale={copy.locale} variant="secondary">
+        <OutboundLink dataCta="primary" href={calendarUrl(place) ?? ""} locale={copy.locale} variant="secondary">
           {fillTemplate(copy.datesCta, values)}
         </OutboundLink>
       </ConversionTracker>
@@ -159,7 +172,10 @@ export function HomeFocusModules({
   /** S3's own search, server-rendered — the invitation's call to action. */
   readonly search: ReactNode;
 }) {
-  const { place, hasDates } = useFocus();
+  const { place, hasDates, example, held } = useFocus();
+  // The place the module speaks about: the chosen one, else the example —
+  // the prerendered frame names the example too, so the HTML is unchanged.
+  const shown = place ?? example ?? EXAMPLE_PLACE;
   const { locale } = copy;
   const words = dictionary(locale);
   const emptyPlace = place !== undefined && hasDates === false ? place : undefined;
@@ -178,13 +194,15 @@ export function HomeFocusModules({
           ) : (
             <PlaceDatesIsland
               conversion={SAVE_CALENDAR}
+              communityId={shown.communityId}
               ctaTemplate={place === undefined ? copy.datesCta : undefined}
+              held={held}
               layout="split"
               locale={locale}
-              placeName={place?.name ?? SHOWCASE_COMMUNITY.name}
+              placeName={shown.name}
               role="illustrative"
               rowCount={3}
-              slug={place?.slug ?? SHOWCASE_COMMUNITY.slug}
+              slug={shown.slug}
               titleTemplate={copy.datesHeadline}
               tone="dark"
             />
@@ -210,7 +228,7 @@ export function HomeFocusModules({
         <MotionReveal>
           <SectionShell id="nearby" kicker={words.kickers.widerRadius} surface="surface-2">
             <NearbyIsland
-              anchorSlug={emptyPlace.slug}
+              anchor={emptyPlace}
               locale={locale}
               point={{ lat: emptyPlace.lat, lng: emptyPlace.lng }}
               role="answering"

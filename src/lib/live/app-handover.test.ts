@@ -2,8 +2,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   APP_ORIGIN,
+  CALENDAR_ORIGIN,
+  calendarSlug,
   calendarUrl,
-  calendarUrlForSlug,
   helpUrl,
   isSlugShaped,
   registrationQuery,
@@ -23,18 +24,25 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe("TS-WEB-0008-A11: the handover URL is {APP_ORIGIN}/{slug}, built from a geo-api slug", () => {
-  it("builds the calendar URL from a resolved place", () => {
-    expect(calendarUrl(resolved)).toBe(`${APP_ORIGIN}/schlatkow`);
+describe("TS-WEB-0008-A11: the calendar URL is {CALENDAR_ORIGIN}/{slug}.{geonameId}, both from one geo-api place", () => {
+  it("builds the village calendar's own address from a resolved place (issue #81)", () => {
+    expect(CALENDAR_ORIGIN).toBe("https://schafe-vorm-fenster.de");
+    expect(calendarUrl(resolved)).toBe("https://schafe-vorm-fenster.de/schlatkow.900101");
+    expect(
+      calendarUrl({ slug: "lehre", communityId: "geoname.2879378" }),
+    ).toBe("https://schafe-vorm-fenster.de/lehre.2879378");
   });
 
-  it("refuses a slug that geo-api has not confirmed", () => {
-    expect(calendarUrlForSlug("schlatkow", { resolved: false })).toBeUndefined();
+  it("never points at the app host, which serves no calendar yet (DEC-0035, measured 2026-10-27)", () => {
+    expect(calendarUrl(resolved)).not.toContain("app.");
   });
 
-  it("refuses a slug that is not slug-shaped, even when the caller says it resolved", () => {
-    expect(calendarUrlForSlug("../../admin", { resolved: true })).toBeUndefined();
-    expect(calendarUrlForSlug("Groß Kiesow", { resolved: true })).toBeUndefined();
+  it("refuses a place whose slug or geoname id is not what geo-api answers", () => {
+    expect(calendarUrl({ slug: "../../admin", communityId: "geoname.1" })).toBeUndefined();
+    expect(calendarUrl({ slug: "Groß Kiesow", communityId: "geoname.1" })).toBeUndefined();
+    expect(calendarUrl({ slug: "schlatkow", communityId: "" })).toBeUndefined();
+    expect(calendarUrl({ slug: "schlatkow", communityId: "geoname.abc" })).toBeUndefined();
+    expect(calendarSlug({ slug: "gross-kiesow", communityId: "geoname.2916593" })).toBe("gross-kiesow.2916593");
     expect(isSlugShaped("gross-kiesow")).toBe(true);
   });
 
@@ -53,11 +61,11 @@ describe("TS-WEB-0008-A11: the handover URL is {APP_ORIGIN}/{slug}, built from a
     expect(registrationQuery(undefined)).toEqual({});
   });
 
-  it("follows the environment when the calendars move off the apex (DEC-0035)", async () => {
-    vi.stubEnv("NEXT_PUBLIC_APP_ORIGIN", "https://schafe-vorm-fenster.de");
+  it("follows the environment when the calendars move (DEC-0035)", async () => {
+    vi.stubEnv("NEXT_PUBLIC_COMMUNITY_SITE_ORIGIN", "https://kalender.example.org");
     vi.resetModules();
     const fresh = await import("./app-handover");
-    expect(fresh.calendarUrl(resolved)).toBe("https://schafe-vorm-fenster.de/schlatkow");
+    expect(fresh.calendarUrl(resolved)).toBe("https://kalender.example.org/schlatkow.900101");
     vi.resetModules();
   });
 });

@@ -103,9 +103,10 @@ test.describe("TS-WEB-0020 — your place", () => {
     // repeating the offer above the rows it is about would be the third of
     // three (TS-WEB-0006 D4 keeps the search as the primary only while no place
     // is known, which is state S0 and state B's publish offer).
-    const handover = dates.locator('a[href^="https://app."]');
+    const handover = dates.locator('a[href^="https://schafe-vorm-fenster.de/"]');
     await expect(handover).toHaveCount(1);
-    await expect(handover).toHaveAttribute("href", new RegExp(PLACE_WITH_DATES));
+    // The village calendar's own address — slug and geoname id (issue #81).
+    await expect(handover).toHaveAttribute("href", `https://schafe-vorm-fenster.de/${PLACE_WITH_DATES}.2838887`);
     await expect(handover).toHaveAttribute("data-cta", "primary");
     await expect(page.locator('[data-cta="primary"]')).toHaveCount(1);
 
@@ -156,7 +157,7 @@ test.describe("TS-WEB-0020 — your place", () => {
     await expect(offer).toHaveCount(1);
     await expect(offer).toHaveAttribute("data-cta", "primary");
     await expect(offer).toHaveAttribute("href", `/mitmachen/registrieren?ort=${slug}`);
-    await expect(dates.locator('a[href^="https://app."]')).toHaveCount(0);
+    await expect(dates.locator('a[href^="https://schafe-vorm-fenster.de/"]')).toHaveCount(0);
 
     // TS-WEB-0008-A6: position 2 renders, labelled as surroundings — in state B it
     // is the *first* evidence, so an empty module is the defect, not a state.
@@ -255,7 +256,7 @@ test.describe("TS-WEB-0020 — your place", () => {
       });
       expect(closingBeforeBand).toBe(true);
       // One control in the module: the handover in state A, the search in S0.
-      const controls = page.locator('#homescreen a[href^="https://app."], #homescreen form[role="search"]');
+      const controls = page.locator('#homescreen a[href^="https://schafe-vorm-fenster.de/"], #homescreen form[role="search"]');
       await expect(controls).toHaveCount(1);
     });
   }
@@ -416,9 +417,10 @@ test.describe("TS-WEB-0020 — your place", () => {
     await expect(block.locator('[data-platform="android"] li').first()).not.toBeEmpty();
 
     // One handover, and it is the closing repeat (TS-WEB-0006 D3/D6).
-    const handover = block.locator('a[href^="https://app."]');
+    const handover = block.locator('a[href^="https://schafe-vorm-fenster.de/"]');
     await expect(handover).toHaveCount(1);
-    await expect(handover).toHaveAttribute("href", new RegExp(`^https://app\\.schafe-vorm-fenster\\.de/.*${PLACE_WITH_DATES}`));
+    // The village calendar's own address: `<slug>.<geonameId>` (DEC-0168, issue #81).
+    await expect(handover).toHaveAttribute("href", `https://schafe-vorm-fenster.de/${PLACE_WITH_DATES}.2838887`);
     await expect(handover).toHaveAttribute("data-cta", "repeat");
   });
 
@@ -481,17 +483,19 @@ test.describe("TS-WEB-0020 — your place", () => {
       if (message.text().includes("conversion")) fires.push(message.text());
     });
     // The handover leaves this origin; the assertion is about the event, not
-    // about what `app.*` answers.
-    await page.route("https://app.schafe-vorm-fenster.de/**", (route) => route.abort());
+    // about what the village calendar answers.
+    await page.route("https://schafe-vorm-fenster.de/**", (route) => route.abort());
+    const HANDOVER = `a[href^="https://schafe-vorm-fenster.de/${PLACE_WITH_DATES}."]`;
 
     await page.setViewportSize(DESKTOP);
     await page.goto(`/dein-ort?ort=${PLACE_WITH_DATES}`);
-    const count = await page.locator('a[href^="https://app."]').count();
+    await expect(page.locator(HANDOVER).first()).toBeVisible();
+    const count = await page.locator(HANDOVER).count();
     expect(count).toBeGreaterThan(0);
     // DEC-0170: outside the live modules (the dates' handover, the nearby
     // rows' "all dates" link) exactly one handover to this goal — the
     // homescreen module's, which is the closing block. It used to be two.
-    await expect(page.locator('#closing-cta a[href^="https://app."]')).toHaveCount(1);
+    await expect(page.locator('#closing-cta a[href^="https://schafe-vorm-fenster.de/"]')).toHaveCount(1);
     const outsideModules = await page
       .locator('[data-conversion-tracker="save-calendar-to-homescreen"]')
       .evaluateAll((elements) => elements.filter((element) => !element.closest("#place-dates, #nearby")).length);
@@ -512,7 +516,7 @@ test.describe("TS-WEB-0020 — your place", () => {
         await expect(trackers.nth(tracker)).toHaveAttribute("data-hydrated", "true");
       }
       fires.length = 0;
-      await page.locator('a[href^="https://app."]').nth(index).click({ noWaitAfter: true });
+      await page.locator(HANDOVER).nth(index).click({ noWaitAfter: true });
       await page.waitForTimeout(250);
       expect(fires, `call site ${index}`).toHaveLength(1);
       expect(fires[0]).toContain("save-calendar-to-homescreen");
@@ -543,10 +547,10 @@ test.describe("TS-WEB-0020 — your place", () => {
     // state must not carry" (TS-WEB-0008 D4). Since DEC-0170 §3 the homescreen
     // module is the closing block, and in state B the closing block is the
     // publishing offer: no handover to an empty calendar anywhere.
-    await expect(page.locator('#place-dates a[href^="https://app."]')).toHaveCount(0);
+    await expect(page.locator('#place-dates a[href^="https://schafe-vorm-fenster.de/"]')).toHaveCount(0);
     await expect(page.locator("#homescreen")).toHaveCount(0);
     // The nearby module's own "all dates" link is part of that live module and stays.
-    await expect(page.locator('#closing-cta a[href^="https://app."]')).toHaveCount(0);
+    await expect(page.locator('#closing-cta a[href^="https://schafe-vorm-fenster.de/"]')).toHaveCount(0);
 
     await page.locator('[data-cta="primary"]').click();
     await expect(page).toHaveURL(new RegExp(`/mitmachen/registrieren\\?ort=${slug}$`));

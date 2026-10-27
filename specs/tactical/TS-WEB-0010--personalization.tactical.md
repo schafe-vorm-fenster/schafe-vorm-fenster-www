@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0050, FUN-WEB-0051, FUN-WEB-0160, FUN-WEB-0161, FUN-WEB-0162, CON-WEB-0073, FUN-WEB-0054, FUN-WEB-0056, FUN-WEB-0168, CON-WEB-0074, CON-WEB-0076]
 sources: [SRC-0001, SRC-0002, SRC-0006, SRC-0007]
-decisions: [DEC-0004, DEC-0019, DEC-0038, DEC-0041, DEC-0163]
+decisions: [DEC-0004, DEC-0019, DEC-0038, DEC-0041, DEC-0163, DEC-0168]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -154,6 +154,10 @@ Rules:
   our server as coordinates and never stored.
 - A denied or unavailable permission leaves the page exactly as it was;
   no message, no second ask.
+- *Amended by DEC-0168 (2026-10-27):* a position that answers after the
+  visitor chose a place another way (the search, a link) is dropped — the
+  attempt ends the moment the page starts to leave or its URL changes, so a
+  late position never cancels a later choice (TS-WEB-0020-A27).
 
 ### D6 — Privacy: process, do not store [FIXED: FUN-WEB-0054, NFR-WEB-0024, DEC-0004; GPC row PROPOSED]
 

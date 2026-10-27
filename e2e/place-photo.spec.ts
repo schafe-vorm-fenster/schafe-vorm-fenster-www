@@ -18,7 +18,12 @@ import { expect, test, type Page } from "@playwright/test";
  * `csp-hydration.spec.ts` does. It is meaningful against a production build.
  */
 
-const PLACE = { slug: "schlatkow", name: "Schlatkow" };
+/*
+ * Not the example place: `/dein-ort` without `?ort=` shows Schlatkow's
+ * photograph since DEC-0168, and `/`'s own photograph depicts Schlatkow, so a
+ * chosen place has to be another one for the swap to be visible on both.
+ */
+const PLACE = { slug: "quilow", name: "Quilow" };
 const IMAGE_URL = "https://assets.api.schafe-vorm-fenster.de/api/image?wikimediaCommonsId=E2E%20Testdorf%20Kirche.jpg";
 const IMAGE_BYTES = readFileSync(join(process.cwd(), "public/images/real/dein-ort-story-kultur.webp"));
 
@@ -92,14 +97,19 @@ for (const viewport of VIEWPORTS) {
       await expect(layer).toBeVisible();
       expect(await layer.evaluate((element) => getComputedStyle(element).backgroundImage)).toContain(IMAGE_URL);
 
+      // The credit is a © control in the picture's corner (issue #78); its
+      // panel carries author, licence and the link to the source.
+      const control = stage.getByRole("button", { name: "Bildnachweis" });
+      await expect(control).toBeVisible();
+      await control.click();
       const credit = stage.locator('[data-photo-note="credit"]');
       await expect(credit).toBeVisible();
       await expect(credit).toContainText("Erika Musterfrau");
       await expect(credit).toContainText("CC BY-SA 4.0");
       await expect(credit.locator("a")).toHaveAttribute("href", PHOTO.data.sourceUrl);
-      // The credit sits inside the stage, clear of the page's one h1.
-      const [creditBox, headingBox] = await Promise.all([credit.boundingBox(), page.locator("h1").boundingBox()]);
-      expect(creditBox!.y + creditBox!.height).toBeLessThanOrEqual(headingBox!.y);
+      // The control sits inside the stage, clear of the page's one h1.
+      const [controlBox, headingBox] = await Promise.all([control.boundingBox(), page.locator("h1").boundingBox()]);
+      expect(controlBox!.y + controlBox!.height).toBeLessThanOrEqual(headingBox!.y);
 
       await page.waitForLoadState("networkidle");
       expect(violations).toEqual([]);
@@ -123,15 +133,16 @@ for (const viewport of VIEWPORTS) {
       expect(violations).toEqual([]);
     });
 
-    test(`TS-WEB-0020-A22: the swap moves nothing, and without a place nothing is asked`, async ({ page }) => {
+    test(`TS-WEB-0020-A22: the swap moves nothing, and without a place only the example's photograph is asked`, async ({ page }) => {
       const { calls } = await mockPhoto(page, "photo", 600);
 
-      // No place: the prerendered stage stands, its photograph stays the LCP
-      // candidate, and the photo route is never called.
+      // No place: the stage shows the example the module speaks about
+      // (DEC-0168) — one call, for Schlatkow — and its own photograph stays
+      // the LCP candidate underneath.
       await page.goto("/dein-ort");
+      await expect(page.locator('[data-place-photo="schlatkow"]')).toBeVisible();
       await page.waitForLoadState("networkidle");
-      expect(calls()).toBe(0);
-      await expect(page.locator("[data-place-photo], [data-photo-note]")).toHaveCount(0);
+      expect(calls()).toBe(1);
 
       await page.addInitScript(() => {
         const store = window as unknown as { __shift: number };
@@ -167,10 +178,79 @@ for (const viewport of VIEWPORTS) {
 
       const stage = page.locator("#focus-block");
       await expect(stage.locator(`[data-place-photo="${PLACE.slug}"]`)).toBeVisible();
+      await stage.getByRole("button", { name: "Bildnachweis" }).click();
       await expect(stage.locator('[data-photo-note="credit"]')).toContainText("Erika Musterfrau");
 
       await page.waitForLoadState("networkidle");
       expect(violations).toEqual([]);
     });
+
+    test(`TS-WEB-0020-A28: the credit is a © control — hover, keyboard focus and touch open it, Escape closes it`, async ({
+      page,
+    }) => {
+      await mockPhoto(page, "photo");
+      await page.goto(`/dein-ort?ort=${PLACE.slug}`);
+      const stage = page.locator("#focus-block");
+      const control = stage.getByRole("button", { name: "Bildnachweis" });
+      const panel = stage.locator('[data-photo-note="credit"]');
+      await expect(control).toBeVisible();
+      await expect(control).toHaveAttribute("aria-expanded", "false");
+      await expect(panel).toBeHidden();
+      // No standing credit line on the photograph any more — only the control.
+      await expect(stage.locator("p[data-photo-note]")).toHaveCount(0);
+
+      // The corner and the well are the AI mark's (DEC-0165): top right, 40 px.
+      const box = (await control.boundingBox())!;
+      const stageBox = (await stage.boundingBox())!;
+      expect(Math.round(box.width)).toBe(40);
+      expect(box.x + box.width).toBeGreaterThan(stageBox.x + stageBox.width - 40);
+
+      // Keyboard: focus opens it, the link inside is the next stop, Escape closes.
+      await control.focus();
+      await page.keyboard.press("Shift+Tab");
+      await page.keyboard.press("Tab");
+      await expect(control).toBeFocused();
+      await expect(panel).toBeVisible();
+      await expect(control).toHaveAttribute("aria-expanded", "true");
+      await page.keyboard.press("Tab");
+      await expect(panel.locator("a")).toBeFocused();
+      await page.keyboard.press("Escape");
+      await expect(panel).toBeHidden();
+      await expect(control).toBeFocused();
+
+      // Pointer: a click (a tap) pins it open, a second click closes it.
+      await page.mouse.move(0, 0);
+      await control.click();
+      await expect(panel).toBeVisible();
+      await expect(panel).toContainText("Erika Musterfrau");
+      await expect(panel).toContainText("CC BY-SA 4.0");
+      await expect(panel.locator("a")).toHaveAttribute("href", PHOTO.data.sourceUrl);
+      await control.click();
+      await expect(panel).toBeHidden();
+    });
   });
 }
+
+test.describe("on a touch screen", () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+
+  test("TS-WEB-0020-A28: a tap opens the credit, a tap outside closes it", async ({ page }) => {
+    await mockPhoto(page, "photo");
+    await page.goto(`/dein-ort?ort=${PLACE.slug}`);
+    const stage = page.locator("#focus-block");
+    const control = stage.getByRole("button", { name: "Bildnachweis" });
+    const panel = stage.locator('[data-photo-note="credit"]');
+    await expect(control).toBeVisible();
+
+    await control.tap();
+    await expect(panel).toBeVisible();
+    await expect(panel).toContainText("Erika Musterfrau");
+    // The panel stays inside the viewport at phone width.
+    const box = (await panel.boundingBox())!;
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(390);
+
+    await page.locator("h1").tap();
+    await expect(panel).toBeHidden();
+  });
+});

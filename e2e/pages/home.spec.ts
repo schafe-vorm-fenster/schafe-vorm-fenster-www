@@ -376,7 +376,8 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(primary).toHaveCount(1);
     await expect(primary).toHaveAttribute(
       "href",
-      "https://app.schafe-vorm-fenster.de/quilow",
+      // The village calendar's own address: slug + geoname id (issue #81).
+      "https://schafe-vorm-fenster.de/quilow.2851333",
     );
   });
 
@@ -969,7 +970,7 @@ test.describe("TS-WEB-0019 — home", () => {
     });
 
     await page.goto("/");
-    const handover = page.locator('#place-dates a[rel~="external"], #place-dates a[target="_blank"], #place-dates a[href^="https://app."]').first();
+    const handover = page.locator('#place-dates a[rel~="external"], #place-dates a[target="_blank"], #place-dates a[href^="https://schafe-vorm-fenster.de/"]').first();
     await expect(handover).toBeVisible();
     // The listener lives in a client component, so the click has to land
     // after hydration or nothing is logged. Wait for the tracker's own

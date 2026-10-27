@@ -348,6 +348,9 @@ export default async function Page({
         {quote && sourceUrl ? (
           <PhotoSurface
             className={styles.quoteBand}
+            // The photographer's credit (`credit: openTransfer.de`) — the ©
+            // control in the picture's corner, not text on it (issue 101).
+            credit={founderImage?.credit ? `${PHOTO_CREDIT[locale]}: ${founderImage.credit}` : undefined}
             dataBlock="zitat"
             focal={founderImage?.focal}
             id="zitat"
@@ -367,11 +370,6 @@ export default async function Page({
               sourceUrl={sourceUrl}
               tone="photo"
             />
-            {founderImage?.credit ? (
-              <p className={styles.credit}>
-                {PHOTO_CREDIT[locale]}: {founderImage.credit}
-              </p>
-            ) : null}
           </PhotoSurface>
         ) : null}
 

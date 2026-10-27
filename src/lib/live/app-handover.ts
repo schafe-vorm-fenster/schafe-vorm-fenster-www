@@ -1,16 +1,19 @@
 /**
- * The app handover — TS-WEB-0008 D9, TS-WEB-0017 D4, DEC-0029/DEC-0035.
+ * The app handover — TS-WEB-0008 D9, TS-WEB-0017 D4, DEC-0029/DEC-0035, DEC-0168.
  *
- * **The one module that knows where the app is.** Every link from the website
- * into the village calendars is built here, from a geo-api community slug,
- * and the app hostname appears in this file and nowhere else in the tree —
- * `scripts/check-api-routes.ts` (TS-WEB-0017-A11) fails a second occurrence.
- * `src/lib/routes/routes.ts` re-exports `APP_ORIGIN` from here so the
- * `/hilfe` redirect keeps its import and the constant keeps one home.
+ * **The one module that knows where the village calendars are.** Every link
+ * from the website into a village calendar is built here, from a resolved
+ * place, and the app hostname appears in this file and nowhere else in the
+ * tree — `scripts/check-api-routes.ts` (TS-WEB-0017-A11) fails a second
+ * occurrence. `src/lib/routes/routes.ts` re-exports `APP_ORIGIN` from here so
+ * the `/hilfe` redirect keeps its import and the constant keeps one home.
  *
  * The rules D9 fixes, each one a line below:
  *
- *  - a calendar URL is `{APP_ORIGIN}/{slug}` — nothing else, no path guessing;
+ *  - a calendar URL is `{CALENDAR_ORIGIN}/{slug}.{geonameId}` — the village
+ *    calendar's own address scheme (community-site: "a village page is
+ *    addressed as `<name>.<geonameId>`"), both parts out of one geo-api place,
+ *    nothing guessed (issue #81, DEC-0168 §5);
  *  - a slug is **never** string-built from user input and never used before
  *    geo-api confirmed it. An unresolved slug leads to `/dein-ort/starten`,
  *    never to a broken app link;
@@ -31,6 +34,18 @@ import type { Place } from "./types";
  */
 export const APP_ORIGIN =
   process.env.NEXT_PUBLIC_APP_ORIGIN ?? "https://app.schafe-vorm-fenster.de";
+
+/**
+ * Where a village calendar is **today**: community-site on the bare apex, for
+ * every domain this website answers on (`.de`, `sheepoutside.com`, `.pl`,
+ * `.at` — one calendar deployment, German only). DEC-0035's move to `app.*`
+ * has not happened: measured 2026-10-27, `app.schafe-vorm-fenster.de` has no
+ * DNS record, while `https://schafe-vorm-fenster.de/lehre.2879378` answers
+ * 200. The same origin `redirect-map.ts` uses for help; the same environment
+ * value moves both when the calendars move (DEC-0168 §5).
+ */
+export const CALENDAR_ORIGIN =
+  process.env.NEXT_PUBLIC_COMMUNITY_SITE_ORIGIN ?? "https://schafe-vorm-fenster.de";
 
 /** The campaign parameters that survive a handover (FUN-WEB-0048). */
 export const CAMPAIGN_PARAMETERS = ["etcc_cmp", "etcc_med", "etcc_par", "etcc_ctv", "etcc_bky", "etcc_bof"] as const;
@@ -57,28 +72,31 @@ function campaignPairs(campaign: HandoverOptions["campaign"]): [string, string][
   });
 }
 
+/** The two parts of a place a calendar address needs — both from one geo-api answer. */
+export type CalendarPlace = Pick<Place, "slug" | "communityId">;
+
 /**
- * The calendar URL of a **resolved** place. The argument is a `Place`, not a
- * string, precisely so a caller cannot pass raw user input: a `Place` only
- * ever comes out of a geo-api response (or its mock).
+ * The village calendar's path segment: `<slug>.<geonameId>` — `lehre.2879378`.
+ * `undefined` when either part is not what geo-api answers (a slug shape, a
+ * positive integer id), so a malformed place yields no link rather than a
+ * broken one. `place-index.ts` reads community-site's pages by the same key.
  */
-export function calendarUrl(place: Place, options: HandoverOptions = {}): string {
-  const url = new URL(`/${place.slug}`, APP_ORIGIN);
-  for (const [name, value] of campaignPairs(options.campaign)) url.searchParams.set(name, value);
-  return url.toString();
+export function calendarSlug(place: CalendarPlace): string | undefined {
+  const id = place.communityId.replace(/^geoname\./u, "");
+  if (!isSlugShaped(place.slug) || !/^[1-9]\d*$/u.test(id)) return undefined;
+  return `${place.slug}.${id}`;
 }
 
 /**
- * The same, from a slug that arrived from outside (a link, a QR code). It is
- * accepted only after the caller has had geo-api confirm it — hence the
- * `resolved` flag rather than a bare string.
+ * The calendar URL of a **resolved** place. The argument is a place, not a
+ * string, precisely so a caller cannot pass raw user input: its slug and its
+ * geoname id only ever come out of a geo-api response (or its mock), or out of
+ * the configured showcase community.
  */
-export function calendarUrlForSlug(
-  slug: string,
-  { resolved, ...options }: HandoverOptions & { readonly resolved: boolean },
-): string | undefined {
-  if (!resolved || !isSlugShaped(slug)) return undefined;
-  const url = new URL(`/${slug}`, APP_ORIGIN);
+export function calendarUrl(place: CalendarPlace, options: HandoverOptions = {}): string | undefined {
+  const segment = calendarSlug(place);
+  if (segment === undefined) return undefined;
+  const url = new URL(`/${segment}`, CALENDAR_ORIGIN);
   for (const [name, value] of campaignPairs(options.campaign)) url.searchParams.set(name, value);
   return url.toString();
 }

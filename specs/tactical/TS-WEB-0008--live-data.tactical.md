@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0040, FUN-WEB-0041, FUN-WEB-0043, FUN-WEB-0153, FUN-WEB-0154, FUN-WEB-0045, FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072, FUN-WEB-0049]
 sources: [SRC-0001, SRC-0002, SRC-0003, SRC-0011]
-decisions: [DEC-0013, DEC-0019, DEC-0021, DEC-0024, DEC-0025, DEC-0029, DEC-0030, DEC-0034, DEC-0035, DEC-0037, DEC-0079, DEC-0154, DEC-0163, DEC-0167, DEC-0173]
+decisions: [DEC-0013, DEC-0019, DEC-0021, DEC-0024, DEC-0025, DEC-0029, DEC-0030, DEC-0034, DEC-0035, DEC-0037, DEC-0079, DEC-0154, DEC-0163, DEC-0167, DEC-0168, DEC-0173]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -338,7 +338,7 @@ Links from the website into the app are built from the geo-api community
 | Step | Determination |
 | --- | --- |
 | Resolve | the searched place resolves to a community via `community/search`; `slug` and `geonameId` come from that response. `community/slug/{slug}` validates a slug that arrives from outside (a link, a QR code). |
-| Build | calendar URL = `{APP_HOST}/{slug}`. `APP_HOST` is an environment value: the apex today, `app.schafe-vorm-fenster.de` after the calendars move (DEC-0035). One place in the code knows this. |
+| Build | calendar URL = `{CALENDAR_ORIGIN}/{slug}.{geonameId}` — the village calendar's own address scheme, both parts from the same geo-api place (DEC-0168, issue #81). `CALENDAR_ORIGIN` is an environment value (`NEXT_PUBLIC_COMMUNITY_SITE_ORIGIN`): community-site on the apex, `https://schafe-vorm-fenster.de`, for every domain the website serves; `app.schafe-vorm-fenster.de` has no DNS record yet (DEC-0035's target, measured 2026-10-27). One place in the code knows this (`app-handover.ts`). |
 | Mark | outbound app links are external links, not route-facade links (TS-WEB-0001 D5 covers website routes only). Campaign parameters present on the inbound request are preserved (FUN-WEB-0048, TS-WEB-0004 D3 rule 6). |
 | Registration prefill | **no contract exists** (DEC-0029). `/mitmachen/registrieren` receives `?ort=<slug>` on our own route and prefills its own place step; nothing is appended to the app URL until the app defines it. |
 | Never | a slug is never guessed, never string-built from user input, never used before geo-api confirmed it. An unresolvable slug leads to `/dein-ort/starten`, not to a broken app link. |
@@ -406,7 +406,7 @@ The variety rule has no acceptance criterion yet. It arrives with its tests
 | TS-WEB-0008-A8 | e2e | On `/dein-kalender` the Portalize loader is requested from the allowlisted host, position 1 is absent, and the page sets no cookie from the embed; blocking the loader leaves the section's copy and CTA intact. |
 | TS-WEB-0008-A9 | integration | Counters render only figures present in the `/api/stats` response; a stub omitting a field omits that figure and never substitutes a number. |
 | TS-WEB-0008-A10 | static | No numeric traction figure (places, dates, updates) exists in content sources, snapshots or fallback fixtures (FUN-WEB-0041). |
-| TS-WEB-0008-A11 | unit | Handover URL is `{APP_HOST}/{slug}` with the slug taken from a geo-api response; an unresolved slug yields the founding route, never an app link; inbound `etcc_*` parameters survive. |
+| TS-WEB-0008-A11 | unit | Calendar URL is `{CALENDAR_ORIGIN}/{slug}.{geonameId}` — `https://schafe-vorm-fenster.de/lehre.2879378` — with slug and geoname id taken from one geo-api place; a place whose slug or id is not geo-api-shaped yields no link; an unresolved slug yields the founding route, never an app link; inbound `etcc_*` parameters survive. (DEC-0168, issue #81; the rendered handovers on `/` and `/dein-ort` are asserted against the same address in `e2e/active-place.spec.ts`, `e2e/pages/home.spec.ts` and `e2e/pages/dein-ort.spec.ts`). |
 | TS-WEB-0008-A12 | manual | Q-0026 verification: the Portalize embed sets no cookie and introduces no consent duty, and the place-filter parameter behaves as documented — recorded before the module ships. |
 | TS-WEB-0008-A13 | tool | Build fetches each service's `openapi.json`, compares it with the pinned copy, and fails on drift affecting the operations in D2 (DEC-0021). |
 | TS-WEB-0008-A14 | integration | Place search by name: a typed place name and a typed municipality name each answer with at least one suggestion carrying that place, each rendered "Ort (Gemeinde)"; a name that matches nothing answers with the classified "not covered" outcome whose destination is `/dein-ort/starten?ort=…` — never an empty answer, never a hint to type something else, and never a postcode fallback. |
@@ -480,9 +480,10 @@ skeletons) TS-WEB-0003 D5 · CON-WEB-0042, CON-WEB-0043, CON-WEB-0044, CON-WEB-0
   fixed to `Europe/Berlin` calendar days here; confirm against how the
   app's calendars cut their days, so website and app do not disagree on
   what "today" contains.
-- **`APP_HOST` switch (D9).** The handover host changes when the
+- **`CALENDAR_ORIGIN` switch (D9).** The calendar host changes when the
   calendars move to `app.*` (DEC-0035). Open: who flips the environment
-  value, and whether both hosts must work during the transition.
+  value, and whether both hosts must work during the transition. Until then
+  it is community-site's own origin (DEC-0168).
 - **Timeout budget (D5)** is set, not measured. The `?ort=` indexing rule
   is settled by DEC-0057. (D7
   are [PROPOSED]** — they need TS-WEB-0003 and the SEO area to confirm rather

@@ -162,12 +162,6 @@ section.quoteBand::before {
   }
 }
 
-.credit {
-  font-family: var(--font-mono);
-  font-size: var(--type-label-size);
-  margin: 0;
-}
-
 /* ── Who is behind it ──────────────────────────────────────────────────── */
 
 /*

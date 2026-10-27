@@ -14,13 +14,19 @@ export interface PhotoLayerProps {
   /** What the layer depicts — the place's slug, for `data-place-photo`. */
   readonly depicts?: string;
   /**
-   * The line in the picture's top corner: the photograph's credit (author,
-   * licence, link to the source) or, over the surface's own picture, the
-   * honest label that it is not the place named (DEC-0167, Q-0089).
+   * The swapped-in photograph's credit — the © control and its panel
+   * (`photo-credit.tsx`, issue #78), positioned by itself in the corner.
+   */
+  readonly credit?: ReactNode;
+  /**
+   * The line in the picture's top corner over the surface's **own** picture:
+   * the honest label that it is not the place named (DEC-0167, Q-0089), or,
+   * while the place's photograph is still loading, that it is an example
+   * (DEC-0168).
    */
   readonly note?: ReactNode;
-  /** `credit` over a swapped-in photograph, `fallback` over the surface's own. */
-  readonly noteKind?: "credit" | "fallback";
+  /** `fallback` — the place has no photograph; `pending` — it is on its way. */
+  readonly noteKind?: "fallback" | "pending";
 }
 
 /**
@@ -38,7 +44,7 @@ export interface PhotoLayerProps {
  * (DEC-0105 §2); the DEC-0153 anchor rule needs a declared focal point and
  * does not apply.
  */
-export function PhotoLayer({ src, depicts, note, noteKind = "credit" }: PhotoLayerProps) {
+export function PhotoLayer({ src, depicts, credit, note, noteKind = "fallback" }: PhotoLayerProps) {
   return (
     <>
       {src ? (
@@ -49,6 +55,7 @@ export function PhotoLayer({ src, depicts, note, noteKind = "credit" }: PhotoLay
           style={{ "--layer-image": photoUrl(src) } as CSSProperties}
         />
       ) : null}
+      {src ? credit : null}
       {note ? (
         <p className={styles.note} data-photo-note={noteKind}>
           {note}

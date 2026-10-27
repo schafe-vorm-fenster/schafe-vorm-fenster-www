@@ -1,4 +1,5 @@
 import { MediaFrame } from "../media-frame/media-frame";
+import { dictionary } from "@/src/lib/i18n/dictionary";
 
 import type { DataState } from "../data-state";
 
@@ -88,7 +89,7 @@ export function PersonProfile({
       {textOnly ? null : (
       <MediaFrame
         alt={portraitAlt}
-        caption={portraitCredit}
+        credit={portraitCredit ? `${dictionary(locale ?? "de").photoCredit.lead}: ${portraitCredit}` : undefined}
         className={styles.portrait}
         locale={locale}
         notDepicting={portraitNotDepicting}

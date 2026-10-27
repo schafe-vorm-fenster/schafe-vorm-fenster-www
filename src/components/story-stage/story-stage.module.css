@@ -255,6 +255,18 @@
   margin-bottom: var(--space-4);
 }
 
+/*
+ * A story whose live date found nothing (no date of its category nearby, an
+ * empty pool, DEC-0153 §2) shows no date at all — and then no "Im Kalender"
+ * over nothing either. The live row arrives after hydration, so the block
+ * reads its own content: the label alone is not shown (issue #80 follow-up).
+ * Hidden, not removed — the label's line stays reserved, so the stage keeps
+ * the geometry it was prerendered with (TS-WEB-0009-A8).
+ */
+.example:not(:has(> :nth-child(2))) .exampleLabel {
+  visibility: hidden;
+}
+
 .exampleLabel {
   color: var(--color-neutral-muted);
   font-family: var(--font-mono);

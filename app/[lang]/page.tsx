@@ -313,7 +313,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
         locale={locale}
         aiEdited={heroImage?.aiEdited} notDepicting={heroImage?.notDepicting}
         // DEC-0167 — with a place, the stage shows that place's photograph.
-        photoLayer={<PlacePhotoLayer locale={locale} />}
+        photoLayer={<PlacePhotoLayer locale={locale} ownPhotoPlace={heroImage?.place} />}
         placeholderId={heroImage?.placeholderId}
         search={search(true)}
         src={heroImage?.src}
