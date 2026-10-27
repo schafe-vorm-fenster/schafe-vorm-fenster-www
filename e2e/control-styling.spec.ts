@@ -15,9 +15,13 @@ import { everyRoute, href } from "../src/lib/routes/routes";
  * - **pill-shaped** — its corner radius is at least half its height,
  * - **wider than round** — at least 1.5 × as wide as tall, so a 40 px icon
  *   well or an initials disc (decoration by SRC-0014 §Wells) is not a pill,
- * - **control-sized** — at least 36 px tall, the floor between the 28–32 px
- *   badge and tag (non-interactive by definition, SRC-0014 §Badge and chip)
- *   and the 40 px chip, 44 px control well and 56 px button,
+ * - **control-sized** — styled at least 36 px tall, the floor between the
+ *   28–32 px badge and tag (non-interactive by definition, SRC-0014 §Badge
+ *   and chip) and the 40 px chip, 44 px control well and 56 px button. The
+ *   height is the one the element's own styles give a single line — line
+ *   height, padding, border, or its `min-height` — not the rendered box, so a
+ *   30 px tag a flex row stretches is still a tag (CI measured one at 42 px
+ *   on `/en/take-part`),
  * - and **drawn** — a fill, or a border of 2 px or more (the outlined
  *   secondary of DEC-0160),
  *
@@ -56,6 +60,17 @@ for (const { path, name } of ROUTES) {
         if (box.height < 36 || box.width < box.height * 1.5) continue;
         if (!element.checkVisibility({ visibilityProperty: true, opacityProperty: true })) continue;
         const style = getComputedStyle(element);
+        const fontSize = parseFloat(style.fontSize);
+        const lineHeight = parseFloat(style.lineHeight) || fontSize * 1.2;
+        const designed = Math.max(
+          parseFloat(style.minHeight) || 0,
+          lineHeight +
+            parseFloat(style.paddingTop) +
+            parseFloat(style.paddingBottom) +
+            parseFloat(style.borderTopWidth) +
+            parseFloat(style.borderBottomWidth),
+        );
+        if (designed < 36) continue;
         const radius = Math.min(
           parseFloat(style.borderTopLeftRadius),
           parseFloat(style.borderBottomRightRadius),
