@@ -261,7 +261,10 @@ export function ArchiveFilter({
       ) : (
         <ReservedChipRow allText={allText} types={types} />
       )}
-      <div ref={listRef}>{children}</div>
+      {/* The groups the page hands in are blocks of one stack (DEC-0171). */}
+      <div data-stack="" ref={listRef}>
+        {children}
+      </div>
     </div>
   );
 }

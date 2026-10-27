@@ -52,9 +52,10 @@
   margin: 0;
 }
 
-/* The briefing exit: below the step's own control, never beside it. */
+/* The briefing exit: below the step's own control, never beside it. The
+   space above it is the section stack's `--block-gap` (DEC-0171). */
 .exit {
-  margin-top: var(--space-4);
+  display: block;
 }
 
 .reloadNote {

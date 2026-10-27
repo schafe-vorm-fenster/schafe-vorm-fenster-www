@@ -221,6 +221,50 @@ textarea {
   font-size: var(--font-size-meta);
 }
 
+/* ── The content stack — DEC-0171 ─────────────────────────────────────────
+ * One owner per level of vertical space (SRC-0014 §Shape and Space):
+ *
+ *   section  owns its padding-block                 (`section-shell`)
+ *   stack    owns the space between its blocks      (this rule)
+ *   block    owns nothing outside its own box       (no outer margin)
+ *
+ * A *block* is a direct child of an element marked `data-stack`. Its own
+ * `margin-block` is cleared — a paragraph's or a heading's element default
+ * above as much as any component's — and every block after the first stands
+ * `--block-gap` below the one before it. Two blocks can therefore no longer
+ * touch because neither happened to carry a margin (#90: the path module and
+ * the hint banner on `/mitmachen`), and they no longer stand 24 px apart in
+ * one section and 16 px in the next because one component brought its own.
+ *
+ * A wrapper that groups several blocks inside a stack is a stack itself —
+ * `section-shell`'s container, `motion-reveal`, a page's own group (a chapter,
+ * a year of the archive). An unruled wrapper is how issue 108 happened: the space
+ * a page asked for through a `className` margin lost the cascade to the
+ * component's own `margin: 0`, and nothing else stood between the blocks.
+ *
+ * The one closer step is the kicker's: it names the block that follows it.
+ * `e2e/block-gaps.spec.ts` (TS-WEB-0017-A31) measures every stack on every
+ * route at 390 and 1280 px.
+ * ─────────────────────────────────────────────────────────────────────── */
+
+/* `:nth-child()` lifts these to (0,2,0). A component's own root rule is one
+   class, and the production build ships the component chunks after this file
+   — at equal weight a `margin: 0` reset on a component root (a list's, a
+   paragraph's) would take the gap away again, the very cascade accident of
+   issue 108. Two-class rules still win, which is why the guard reads the computed
+   margin rather than trusting this file. */
+[data-stack] > :nth-child(n) {
+  margin-block: 0;
+}
+
+[data-stack] > :nth-child(n + 2) {
+  margin-block-start: var(--block-gap);
+}
+
+[data-stack] > [data-kicker] + :nth-child(n) {
+  margin-block-start: var(--block-gap-bound);
+}
+
 /* ── Switch points ─────────────────────────────────────────────────────────
  * Only spacing and type steps change. The tree, the order and the wording
  * are identical at every width (D2(d)); TS-WEB-0017-A8 tests exactly that.

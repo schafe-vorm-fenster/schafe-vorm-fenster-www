@@ -146,6 +146,13 @@ cannot see whether the small range does anything.
 - **One component tree.** A breakpoint may change spacing, type step, image
   aspect and column count. It may never change the order of blocks, the
   presence of a block, or its wording.
+- **One owner per level of vertical space** (DEC-0171). A section owns its
+  padding; its content stack (`[data-stack]`, `app/styles/base.css`) owns
+  the gap between its blocks (`--block-gap`, `--block-gap-bound` after a
+  kicker); a block brings no outer margin — not in its own stylesheet and
+  not through a `className` handed to a component. A wrapper that groups
+  blocks is a stack. `e2e/block-gaps.spec.ts` measures it on every route,
+  `pnpm check:brand` (A32) reads the `className` half.
 - **Brand values enter through one file.** `app/styles/brand.css` imports
   the token sheet and the font faces; everything else consumes CSS custom
   properties. No logo and no font file is committed here — they are package

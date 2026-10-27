@@ -403,8 +403,10 @@ export default async function Page({
                 <h2 id="kapitel-3-h2">{chapter(CHAPTERS.chapter3Heading)}</h2>
               </div>
             </div>
+            {/* The space above the stories is the reveal's stack gap
+                (DEC-0171). A `className` margin used to ask for it and lost
+                the cascade to the list's own `margin: 0` (issue 108). */}
             <StoryDisclosure
-              className={styles.stories}
               closeLabel={chapter(CHAPTERS.storyClose) ?? ""}
               group="kapitel-3"
               openLabel={chapter(CHAPTERS.storyOpen) ?? ""}
