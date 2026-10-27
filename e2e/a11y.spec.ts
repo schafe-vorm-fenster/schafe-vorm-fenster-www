@@ -120,6 +120,11 @@ for (const { path, locale, route } of ROUTES) {
       await page.waitForLoadState("networkidle");
 
       const results = await new AxeBuilder({ page })
+        // The registration route's frame is Google's document (DEC-0176,
+        // TS-WEB-0023 D10): axe descends into it and finds Google's own
+        // "Weiter" label under contrast, which this site cannot change. The
+        // sweep is of our document; the frame's `title` is A17's.
+        .exclude("iframe[data-register-form]")
         .withTags(WCAG_TAGS)
         .options({
           rules: Object.fromEntries(
