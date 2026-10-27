@@ -62,6 +62,10 @@ async function collectViolations(page: Page): Promise<string[]> {
     // third-party document is that document's (DEC-0176).
     const source = message.location().url;
     if (source && new URL(source).origin === ALLOWLIST.googleForms) return;
+    // `frame-ancestors` is the *framed* document's policy about who may frame
+    // it — Google's (report-only) header on the form, reported in our console.
+    // Our document is the top level and is framed by nobody here.
+    if (text.includes("frame-ancestors") && text.includes(`Framing '${ALLOWLIST.googleForms}`)) return;
     if (text.includes("Content Security Policy") && !text.includes(PLATFORM_TOOLBAR)) violations.push(text);
   });
   return violations;
