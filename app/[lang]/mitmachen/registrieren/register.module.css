@@ -1,0 +1,52 @@
+/*
+ * `/mitmachen/registrieren` — the embedded registration form (DEC-0176,
+ * TS-WEB-0023 D10). Tokens only — no colour, no font-family, no `max-width`
+ * media query (TS-WEB-0017 D2/D3, `pnpm check:brand`).
+ */
+
+/* The notice (TS-WEB-0016 D17): one block above the frame, read at body size. */
+.notice {
+  margin: 0 0 var(--space-3);
+  max-width: var(--measure-text);
+}
+
+/* The fallback link and its marking, between the notice and the frame. */
+.fallback {
+  margin: 0 0 var(--space-4);
+}
+
+/*
+ * The frame. Google's form is a 640 px card, so the frame stops at that width
+ * and is the container's full width below it. Its height is **reserved** —
+ * a fixed value in the stylesheet, set before the third party's document
+ * arrives — so nothing below it moves when the form paints (no layout shift),
+ * and it is tall enough for the tallest of the form's four pages, so the
+ * frame shows no scrollbar of its own inside the page's (DEC-0176 §2).
+ *
+ * The two heights were measured on 2026-10-27 against the live form, page 2
+ * ("Deine Daten", eight questions) with its required-field errors showing:
+ * 2289 px at a 288 px wide frame (a 320 px phone), 2159 px at 358 px, and
+ * 1851 px at 600 px, 1819 px at 640 px. Below the 40rem breakpoint the frame
+ * is at most 608 px wide and 2300 px holds every width down to 320; from it
+ * on the frame is 640 px and 1900 px holds it — the height the live site's
+ * own embed uses. The price is white space under the short pages (the first
+ * one is about 1000 px on a phone); an inner scrollbar inside a scrolling page
+ * is the worse of the two on a phone.
+ *
+ * The subtle ground is what shows while the form is still loading — a
+ * visible box, never a zero-size one.
+ */
+.frame {
+  background: var(--bg-subtle);
+  border: 0;
+  display: block;
+  height: 2300px;
+  max-width: 40rem;
+  width: 100%;
+}
+
+@media (min-width: 40rem) {
+  .frame {
+    height: 1900px;
+  }
+}

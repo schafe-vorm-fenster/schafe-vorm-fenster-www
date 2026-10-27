@@ -46,7 +46,8 @@ export const CONVERSION_EVENTS: readonly ConversionEventDefinition[] = [
   {
     goalId: "register-as-publisher",
     stage: "handover",
-    trigger: "click of the registration CTA that navigates to app.*",
+    trigger:
+      "since DEC-0176 (the launch embeds the Google Form): the visitor's first navigation inside the embedded form (`via: embedded-form`), or a click of the link that opens the form in a new tab (`via: new-tab`) — an intent, the submission is Google's and not observable; while the TS-WEB-0023 flow stands, the click of the registration CTA that navigates to app.*",
     surface: ["register"],
     wired: true,
   },

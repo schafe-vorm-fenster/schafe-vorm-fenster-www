@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0013]
 sources: [SRC-0001, SRC-0003, SRC-0008, SRC-0011, SRC-0014]
-decisions: [DEC-0009, DEC-0025, DEC-0029, DEC-0035, DEC-0037, DEC-0163]
+decisions: [DEC-0009, DEC-0025, DEC-0029, DEC-0035, DEC-0037, DEC-0163, DEC-0176]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -24,6 +24,13 @@ handover. Confirmation, instructions and the first date happen in the
 app (SRC-0003 §Register); this page's whole job is to arrive at a correct
 place and hand over cleanly.
 
+> **Amended by DEC-0176 (2026-10-27, issue #109).** For the launch the route
+> embeds the Google Form the live site uses (**D10**). The three steps and the
+> handover (D2–D8) are **suspended, not deleted**: their code stays in the
+> repository unrendered, and they return when the app's registration entry has
+> a contract (D6, DEC-0029). Read D1–D9 as the flow's specification and D10 as
+> what the route renders while it lapses.
+
 Referenced, never restated: composition TS-WEB-0006 · components SRC-0014 ·
 routes TS-WEB-0004 · place search and handover TS-WEB-0008 · rendering TS-WEB-0009 ·
 the envoy boundary TS-WEB-0016 · events TS-WEB-0012 · SEO TS-WEB-0011 · stages TS-WEB-0010.
@@ -38,7 +45,7 @@ the envoy boundary TS-WEB-0016 · events TS-WEB-0012 · SEO TS-WEB-0011 · stage
 | `primaryConversion` | `publish-first-event` (SRC-0008) — completed in the app, never fired here (D6) |
 | `equalWeightConversion` | none |
 | `audiences` | actors (single audience, SRC-0003) |
-| `liveModules` | the place search of step 1, and nothing else |
+| `liveModules` | the place search of step 1, and nothing else — **none while D10 stands** (DEC-0176): the step is not rendered, and the route is on `TS-WEB-0006` D1's live-module exception list |
 | `proofSlots` | none — the argument was made on `/mitmachen` (TS-WEB-0022) |
 
 Arriving here is already a decision. The page does not re-argue it.
@@ -150,6 +157,24 @@ stays the app's entry, still `UNKNOWN` (D6, DEC-0029). Conflating the two is the
 finding A1 of the 2026-09-25 audit corrects, and `A12` below is what keeps this
 page on the right side of it.
 
+> **Amended by DEC-0176.** D10 makes this route embed that same form for the
+> launch. The rest of D9 holds: no envoy instance, no POST route, no server
+> action — the form is Google's, and its submission never touches this site.
+
+### D10 — For the launch, the route embeds the live site's Google Form [FIXED: DEC-0176, the owner's review of 2026-10-27 (#109)]
+
+| Aspect | Determination |
+| --- | --- |
+| Why | the flow's handover target has no contract (D6, DEC-0029), so the flow registers nobody; the Google Form does, and is what the live site embeds today |
+| Which form | the one `src/lib/routes/lead-fallback.ts` holds, measured against the live site's `/start` on 2026-10-27 (DEC-0176 "Which form"); the frame's `src` is `leadFormEmbedUrl()`, with Google's own `?embedded=true` |
+| Structure, in DOM order | the heading; the notice of `TS-WEB-0016` D17, `/start`'s words; a link that opens the same form in a new tab; the frame; then the context band, as on step 1 (D7) |
+| The frame | exactly one `iframe`, with a `title`; the container's full width up to Google's 640 px card; a **reserved fixed height** set before the form arrives — 2300 px below the 40rem breakpoint, 1900 px from it on — tall enough that no page of the form scrolls inside the frame (measurements: DEC-0176 §2) |
+| Fallback link | `OutboundLink` with a new tab and its `TS-WEB-0016` D16 marking, to `leadFormOpenUrl()` — the same form without `embedded`; above the frame |
+| Privacy | `TS-WEB-0016` D15's consent treatment and residual risk, unchanged and now on this route too: isolation plus the D17 notice, no consent UI, `DEM-0066` open |
+| Measurement | `register-as-publisher`, `stage: handover`, once per page view on the visitor's first navigation inside the form (a frame `load` while the frame holds the focus, `via: embedded-form`), and on a click of the fallback link (`via: new-tab`). The submission is **not** observable and nothing fires for it (DEC-0176 §4) |
+| Parameters | `?ort=` and the flow's parameters are ignored; the canonical is the parameter-free path (A14); nothing is prefilled into the form |
+| It lapses | with `TS-WEB-0016` D15: when the app's registration entry gains a contract, the flow returns (one import in `page.tsx`) and the embed goes |
+
 ## Free for the generator
 
 - [FREE] Visual layout of a step and of the step indicator, within D8.
@@ -161,6 +186,11 @@ page on the right side of it.
   and what the page says about what the app will ask next (CON-WEB-0087).
 
 ## Acceptance criteria
+
+> **DEC-0176:** while D10 stands, A1–A11, A13 and A15 are **suspended** with the
+> flow — left as written, untested, because no rendered page has steps to test
+> them against. A12, A14 and A16 apply to the route as it renders; A17–A22 are
+> D10's.
 
 | ID | Level | Check |
 | --- | --- | --- |
@@ -175,17 +205,23 @@ page on the right side of it.
 | TS-WEB-0023-A9 | e2e | With all three steps answered the page offers exactly one action: an external link to the configured app registration URL, with entry `etcc_*` preserved and no unconfirmed slug appended. |
 | TS-WEB-0023-A10 | e2e | The handover click fires exactly one `register-as-publisher` event with `stage=handover`; no `publish-first-event` event is fired anywhere on the website. |
 | TS-WEB-0023-A11 | e2e | No step and no post-handover state of this page contains a confirmation message, instructions, help content, or a field for an event — walkable by clicking through all three steps. |
-| TS-WEB-0023-A12 | static | The route ships no envoy element, no POST route and no server action; every request it makes is a TS-WEB-0004 D5 read route. |
+| TS-WEB-0023-A12 | static | The route ships no envoy element, no POST route and no server action; every request it makes is a TS-WEB-0004 D5 read route, or — while D10 stands — the navigation of the one embedded form frame (DEC-0176). |
 | TS-WEB-0023-A13 | e2e | All three steps can be completed by form submission and the handover link is reachable; without JavaScript step 1 renders. (Amended by DEC-0163: the written text required the whole walk with JavaScript disabled.) |
 | TS-WEB-0023-A14 | e2e | Every step URL carries a canonical pointing at the parameter-free `/mitmachen/registrieren`, and the page is indexable. |
 | TS-WEB-0023-A15 | e2e | The context band renders on step 1 and is absent on steps 2, 3 and the handover state (records D7 for review). |
 | TS-WEB-0023-A16 | tool | axe-core: zero violations on all three steps in all three themes; after each advance focus sits on the new step's heading. |
+| TS-WEB-0023-A17 | e2e | In both languages the route renders exactly one `iframe`: its `src` is `leadFormEmbedUrl()` on the form host with `embedded=true`, it carries a non-empty `title`, it is visible with no `details`, `hidden` or click-to-load control around it, and its width stays inside the viewport (D10). |
+| TS-WEB-0023-A18 | e2e | At 390 px and 1280 px the frame's height is the reserved value (2300 px, 1900 px) before the form host answers and after the form has loaded, the block below it does not move, and the form's first page fits inside the frame without scrolling (D10). |
+| TS-WEB-0023-A19 | e2e | The `TS-WEB-0016` D17 notice stands above the frame — earlier in the served HTML and visually above it — names Google and links `/rechtliches#datenschutz`, and is not a control (D10). |
+| TS-WEB-0023-A20 | e2e | Above the frame one link opens `leadFormOpenUrl()` with `target="_blank"` and `rel="noopener"`, carries its D16 marking through `aria-describedby`, and its click fires one `register-as-publisher` at `stage: handover` (D10). |
+| TS-WEB-0023-A21 | e2e | In both languages the route loads with zero violations of the site's CSP while the frame's navigation reaches the form host and the form renders (D10, `TS-WEB-0014` D1). |
+| TS-WEB-0023-A22 | e2e | Loading the route fires no conversion event; the visitor's first navigation inside the frame fires exactly one `register-as-publisher` at `stage: handover`, a second fires nothing more, and `publish-first-event` never fires (D10, DEC-0176 §4). |
 
 ## Coverage
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0013 (`/mitmachen/registrieren`: publish our dates, handover to the app) | D1–D9 · A1–A16 |
+| FUN-WEB-0013 (`/mitmachen/registrieren`: publish our dates, handover to the app) | D1–D9 · A1–A16; for the launch D10 · A12, A14, A17–A22 (DEC-0176) |
 
 Consumed, discharged elsewhere: CON-WEB-0062, FUN-WEB-0142 / FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072 / FUN-WEB-0049
 (TS-WEB-0008) · NFR-WEB-0061, NFR-WEB-0062 (TS-WEB-0012 D1) · CON-WEB-0035, CON-WEB-0036, CON-WEB-0037, NFR-WEB-0064 (TS-WEB-0012 D4/D5) ·

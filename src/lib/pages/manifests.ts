@@ -163,6 +163,8 @@ export const NO_LIVE_MODULE: Readonly<Partial<Record<RouteId, string>>> = Object
   regionQuote: "TS-WEB-0026 D1/D2 — the quote form only, no live-data module",
   archive: "TS-WEB-0028 D2/D8 — fully static from the build-time media-echo fetch",
   legal: "TS-WEB-0029 D7 — fully static, no live data, no client dependencies",
+  register:
+    "TS-WEB-0023 D10 / DEC-0176 — the launch embeds the Google Form; the flow's step-1 place search is not rendered while the embed stands",
 });
 
 /** Every goal a manifest declares, primary or equal weight, empty state included. */

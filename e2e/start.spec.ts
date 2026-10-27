@@ -161,28 +161,32 @@ test.describe("TS-WEB-0016-A22: /start renders the registration form as a visibl
 });
 
 /**
- * The criterion's other half: `/start` is **the** route that frames a third
- * party. Every page row of the D1 inventory is walked and may frame nothing
- * but the Portalize demo's host — and the demo runs in web-component mode
- * (DEC-0030), so today that is no frame at all.
+ * The criterion's other half: `/start` is the route that frames a third
+ * party, and since DEC-0176 `/mitmachen/registrieren` is the second — the same
+ * form, for the launch (TS-WEB-0023 D10). Every other page row of the D1
+ * inventory is walked and may frame nothing but the Portalize demo's host —
+ * and the demo runs in web-component mode (DEC-0030), so today that is no
+ * frame at all. The registration route may frame the form host and nothing
+ * else.
  */
 test.describe("TS-WEB-0016-A22: no other D1 route frames any host but the Portalize demo's", () => {
   for (const { route, locale } of everyRoute()) {
     const path = href(route, locale);
     test(`${path} (${route}/${locale}) frames nothing foreign`, async ({ page }) => {
       await page.goto(path);
+      const allowed: string[] = route === "register" ? [PORTALIZE_ORIGIN, FORM_ORIGIN] : [PORTALIZE_ORIGIN];
       const foreignFrames = await page.evaluate(
-        (portalize) =>
+        (origins) =>
           [...document.querySelectorAll("iframe")]
             .map((frame) => frame.getAttribute("src") ?? "")
             .filter((src) => {
               try {
-                return new URL(src, location.href).origin !== portalize;
+                return !origins.includes(new URL(src, location.href).origin);
               } catch {
                 return true;
               }
             }),
-        PORTALIZE_ORIGIN,
+        allowed,
       );
       expect(foreignFrames, `iframes on ${path}`).toEqual([]);
     });

@@ -496,6 +496,10 @@ export interface Dictionary {
    * placeholders in the repository's convention: rendered with
    * `data-demo="true"` on the element and listed in `state/open.md`
    * (rows 223 and 224), for the owner to replace.
+   *
+   * Since DEC-0176 `/mitmachen/registrieren` embeds the same form in both
+   * languages and reads the same keys, so `en` renders there; `openForm` is
+   * that page's fallback link, a placeholder of the same kind.
    */
   start: {
     /** The two facts before the link: whose form it is, and that loading it contacts them. */
@@ -506,6 +510,8 @@ export interface Dictionary {
     frameTitle: string;
     /** Before the e-mail address — `lead-fallback.tsx`'s own line, verbatim. */
     emailLead: string;
+    /** The link that opens the framed form on its own, in a new tab (DEC-0176 §3). */
+    openForm: string;
   };
 }
 
@@ -713,6 +719,7 @@ const de: Dictionary = {
     noticeLink: "Mehr dazu in den Datenschutzhinweisen.",
     frameTitle: "Anmeldeformular bei Google Forms",
     emailLead: "oder per E-Mail:",
+    openForm: "Formular direkt bei Google öffnen",
   },
 };
 
@@ -922,6 +929,7 @@ const en: Dictionary = {
     noticeLink: "More in the privacy notice.",
     frameTitle: "Registration form at Google Forms",
     emailLead: "or by e-mail:",
+    openForm: "Open the form directly at Google",
   },
 };
 

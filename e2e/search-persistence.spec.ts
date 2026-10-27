@@ -75,11 +75,6 @@ const SEARCH_ROUTES: readonly SearchRoute[] = [
   { path: "/dein-ort", inputId: "ort-suche-fokus", submitsTo: `/dein-ort?ort=${TYPED}` },
   { path: "/deine-region", inputId: "ort-suche", submitsTo: `/dein-ort?ort=${TYPED}` },
   { path: "/dein-ort/starten", inputId: "ort-suche-nochmal", submitsTo: `/dein-ort?ort=${TYPED}` },
-  {
-    path: "/mitmachen/registrieren",
-    inputId: "ort-suche",
-    submitsTo: `/mitmachen/registrieren?ort=${TYPED}`,
-  },
 ];
 
 /**

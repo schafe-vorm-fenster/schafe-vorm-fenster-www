@@ -19,8 +19,10 @@ import type { Page } from "@playwright/test";
  *  2. TS-WEB-0010-A8 — browser geolocation: no permission prompt on load or
  *     scroll; the prompt appears only after the explicit control is
  *     activated; a denial leaves the page unchanged and is not re-asked.
- *  3. TS-WEB-0023-A9's half that lives here — a pick from the overlay carries
- *     the field's `etcc_*` parameters into the place URL.
+ *
+ * The register flow's half of its handover criterion — a pick from the
+ * overlay carrying the field's `etcc_*` parameters — stood here until
+ * DEC-0176; the flow is not rendered while the Google Form is embedded.
  *
  * Runs in both `LIVE_DATA` modes: the mock and the committed index both
  * carry `Schlatkow (Schmatzin)`.
@@ -234,29 +236,14 @@ test.describe("TS-WEB-0008-A15: the suggestion overlay", () => {
   });
 });
 
-test.describe("TS-WEB-0023-A9: a pick from the overlay keeps the entry parameters", () => {
-  test("etcc_* the field carries travel into the picked place's URL", async ({ page }) => {
-    // The registration step is the surface whose field carries the entry
-    // parameters as hidden inputs (TS-WEB-0023 D4); a pick has to carry the
-    // same query the submit would.
-    await page.goto(`${href("register", "de")}?etcc_cmp=herbst&etcc_med=mail`);
-    await hydrated(page, "#ort-suche");
-    await page.locator("#ort-suche").fill(SEARCH);
-    const suggestion = page.getByRole("option", { name: PLACE });
-    await expect(suggestion).toBeVisible({ timeout: 10_000 });
-    const target = await suggestion.getAttribute("href");
-    expect(target).toContain("ort=schlatkow");
-    expect(target).toContain("etcc_cmp=herbst");
-    expect(target).toContain("etcc_med=mail");
-  });
-});
-
-test.describe("TS-WEB-0008-A16: what the visitor reads on the five surfaces names no postcode", () => {
+// `register` left this list with DEC-0176: the route embeds the Google Form for
+// the launch and renders no place search while the embed stands.
+test.describe("TS-WEB-0008-A16: what the visitor reads on the place-search surfaces names no postcode", () => {
   // The static check scans the dictionary, the content slots and the page
   // modules; this is the composed result — label, placeholder and the block
   // around the field, on every instance, in both locales.
   for (const locale of ["de", "en"] as const) {
-    for (const route of ["home", "place", "placeStart", "region", "register"] as const) {
+    for (const route of ["home", "place", "placeStart", "region"] as const) {
       test(`${route} (${locale})`, async ({ page }) => {
         await page.goto(href(route, locale));
         const fields = page.locator('input[name="ort"]');

@@ -1,398 +1,214 @@
 import { expect, test } from "@playwright/test";
 
+import { leadFormEmbedUrl, leadFormOpenUrl } from "../../src/lib/routes/lead-fallback";
+import { href } from "../../src/lib/routes/routes";
+import { ALLOWLIST } from "../../src/lib/security/csp";
+
+import type { Page } from "@playwright/test";
+
 /**
- * TS-WEB-0023 — `/mitmachen/registrieren`, walked step by step to its handover.
+ * TS-WEB-0023 D10 (DEC-0176, issue 109) — `/mitmachen/registrieren` embeds the
+ * Google Form the live site uses, for the launch.
  *
- * "schlatkow" is `src/lib/live/mocks/fixtures.ts`'s
- * `DEMO_PLACES[0]` — the shared live-data mock every place lookup on the
- * site resolves against, not a page-local fixture.
+ * The three-step flow this file walked until DEC-0176 is not rendered; its
+ * criteria A1–A11, A13 and A15 are suspended with it (D10), and its walk is in
+ * git history at the commit DEC-0176 names. A12 and A14 still hold and are
+ * asserted below, A16 is `e2e/a11y.spec.ts`'s.
  *
- * Step 1 searches by **name** since T-16 (DEC-0079 §1, DEC-0128): the `isZip`
- * gate that dropped every typed name is gone, so TS-WEB-0023-A6 finally has a
- * real fixture instead of a stub. It is "Lindetal", measured against
- * `src/generated/snapshots/communities.json`: six covered communities carry it
- * as their municipality (Alt Käbelich, Ballin, Dewitz, Leppin, Marienhof,
- * Plath), no community is named `Lindetal` and no slug is `lindetal`, so the
- * chooser is reached because the municipality has several communities and not
- * because a slug happened to be spelled differently.
+ * Two of the tests stub the form host (`page.route`): what they assert is our
+ * page's behaviour around the frame — its box before the third party answers,
+ * and what a navigation inside it fires — and neither should depend on
+ * Google's servers. The test that measures the real form's page 1 against the
+ * reserved height does load Google.
  */
 
 const ROUTE = "/mitmachen/registrieren";
+const FORM_ORIGIN = ALLOWLIST.googleForms;
+const FRAME = "iframe[data-register-form]";
 
-test.describe("TS-WEB-0023: the register flow", () => {
-  test("TS-WEB-0023-A1: step 1 shows the place search first, no proof block, exactly one primary CTA", async ({
-    page,
-  }) => {
-    await page.goto(ROUTE);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
-    // A1: "exactly one `data-cta=\"primary\"`" — and on step 1 that is the
-    // search submit, because searching *is* the advance here: a resolved
-    // place moves the flow to step 2 by itself (DEC-0128).
-    const primary = page.locator('[data-cta="primary"]');
-    await expect(primary).toHaveCount(1);
-    await expect(primary).toHaveAttribute("type", "submit");
-    await expect(page.getByText("Belege", { exact: true })).toHaveCount(0);
+/** A stand-in for the form: one page whose button navigates the frame. */
+async function stubForm(page: Page): Promise<void> {
+  await page.route(`${FORM_ORIGIN}/**`, (route) =>
+    route.fulfill({
+      contentType: "text/html",
+      body: `<!doctype html><title>Formular</title><body style="margin:0;height:600px">
+        <form method="get" action=""><input name="p" value="2"><button type="submit">Weiter</button></form>
+      </body>`,
+    }),
+  );
+}
+
+function conversions(page: Page): string[] {
+  const seen: string[] = [];
+  page.on("console", (message) => {
+    const text = message.text();
+    if (text.includes("[analytics:mock] conversion")) seen.push(text);
   });
+  return seen;
+}
 
-  /**
-   * Polish brief, page 5 — the brief's reviewer called step 1 a dead end.
-   * The screen was a breadcrumb, a badge, a question, a field and a helper
-   * line, and the only control on it said "Suchen", which reads as something
-   * a page does rather than as the way through a flow.
-   *
-   * CHANGED: the step-1 submit label. It was "Suchen" / "Search" and is
-   * "Weiter" / "Continue" now, with the arrow every other step's advance
-   * carries. Searching *is* the advance on this step — a resolved place moves
-   * the flow to step 2 by itself — so one label for one action beats two
-   * words for the same press.
-   */
-  test("step 1 has an unmistakable way forward, a progress row and its reassurance", async ({
-    page,
-  }) => {
-    await page.goto(ROUTE);
-    const submit = page.locator('main button[type="submit"]');
-    await expect(submit).toHaveCount(1);
-    await expect(submit).toContainText("Weiter");
+test.describe("TS-WEB-0023 D10: the registration route embeds the live site's Google Form", () => {
+  for (const locale of ["de", "en"] as const) {
+    test(`TS-WEB-0023-A17: exactly one frame, of the configured form, titled and visible (${locale})`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      const response = await page.goto(href("register", locale));
+      expect(response?.status()).toBe(200);
 
-    await expect(page.getByRole("group", { name: "Schritt 1 von 3" })).toBeVisible();
-    await expect(
-      page.getByText("Drei Fragen, dann bist du drin. Keine E-Mail-Adresse nötig, solange du hier bist."),
-    ).toBeVisible();
+      const frames = page.locator("iframe");
+      await expect(frames).toHaveCount(1);
+      const frame = page.locator(FRAME);
+      await expect(frame).toHaveAttribute("src", leadFormEmbedUrl());
+      const src = new URL((await frame.getAttribute("src")) ?? "");
+      expect(src.origin).toBe(FORM_ORIGIN);
+      expect(src.searchParams.get("embedded")).toBe("true");
+      await expect(frame).toHaveAttribute("title", /\S/);
+      await expect(frame).toBeVisible();
 
-    // The band moved below the step and went tight: on step 1 it was the
-    // largest thing on the screen after the question, offering three ways
-    // out at the moment the visitor was about to start.
-    const stepBottom = await page.locator("main section").first().evaluate((element) =>
-      element.getBoundingClientRect().bottom,
-    );
-    const bandTop = await page.locator("#context-band").evaluate((element) =>
-      element.getBoundingClientRect().top,
-    );
-    expect(bandTop).toBeGreaterThanOrEqual(stepBottom - 1);
-  });
-
-  /**
-   * One action per step, and a step cannot be answered by pressing past it:
-   * the radio group insists, in the browser, with no JavaScript.
-   */
-  test("steps 2 and 3 refuse an unanswered advance", async ({ page }) => {
-    for (const [query, name] of [
-      ["?ort=schlatkow", "wer"],
-      ["?ort=schlatkow&wer=opt-1", "weg"],
-    ] as const) {
-      await page.goto(`${ROUTE}${query}`);
-      // The step is chosen in the browser (DEC-0163).
-      const options = page.locator(`input[name="${name}"]`);
-      await expect(options.first()).toBeVisible();
-      expect(await options.count()).toBeGreaterThan(0);
-      await expect(options.first()).toHaveAttribute("required", "");
-      await expect(page.getByRole("button", { name: /Weiter/ })).toHaveCount(1);
-    }
-  });
-
-  /**
-   * The last screen reads finished — the website's part is over — without
-   * claiming a registration it cannot confirm (D6, and TS-WEB-0023-A11 below).
-   */
-  test("the handover reads as the end of the flow, with every step marked done", async ({
-    page,
-  }) => {
-    await page.goto(`${ROUTE}?ort=schlatkow&wer=opt-1&weg=whatsapp`);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Geschafft");
-    await expect(page.getByRole("group", { name: "Schritt 3 von 3" })).toBeVisible();
-  });
-
-  test("TS-WEB-0023-A2/A3/A7: walking the flow keeps state in the URL, survives reload and a fresh window, never in storage", async ({
-    page,
-    context,
-  }) => {
-    // A real history entry for step 1 first, so `goBack()` below has
-    // somewhere to return to.
-    await page.goto(ROUTE);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
-
-    // Arrives pre-answered, as if from /dein-ort/starten or /mitmachen (D5, A7).
-    await page.goto(`${ROUTE}?ort=schlatkow`);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
-    expect(page.url()).toContain("ort=schlatkow");
-
-    await page.reload();
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
-
-    const fresh = await context.newPage();
-    await fresh.goto(page.url());
-    await expect(fresh.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
-    const storage = await fresh.evaluate(() => ({
-      cookie: document.cookie,
-      local: window.localStorage.length,
-      session: window.sessionStorage.length,
-    }));
-    expect(storage).toEqual({ cookie: "", local: 0, session: 0 });
-    await fresh.close();
-
-    await page.goBack();
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
-  });
-
-  test("TS-WEB-0023-A2: a typed place name advances the flow, and the slug is what travels on", async ({
-    page,
-  }) => {
-    // The plain GET form submits what was typed — the slug is a lookup away
-    // (DEC-0128). What the criterion is about is that a *name* is answered at
-    // all: before T-16 this field only accepted five digits.
-    //
-    // A2's literal wording ("puts `ort=<slug>` in the URL") is NOT met on this
-    // first request, and the assertion below pins that interim rather than the
-    // criterion: canonicalising it needs a proxy hop (`src/lib/routes/place-hop.ts`,
-    // F-2-49), which this task does not own. When that hop lands, this line
-    // failing is the expected signal — replace it with `ort=wolfradshof`.
-    await page.goto(ROUTE);
-    await page.fill('input[name="ort"]', "Wolfradshof");
-    await page.click('button[type="submit"]');
-    await expect(page).toHaveURL(/ort=Wolfradshof/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
-    await expect(page.locator('[data-step-answered="ort"]')).toContainText("Wolfradshof");
-
-    // And from here the URL carries the community slug, not the typed string:
-    // step 2's own form is built from the resolved place (D3, D4).
-    await page.click('input[name="wer"][value="opt-1"]');
-    await page.click('button:has-text("Weiter")');
-    await expect(page).toHaveURL(/ort=wolfradshof/);
-    await expect(page).not.toHaveURL(/ort=Wolfradshof/);
-  });
-
-  test("TS-WEB-0023-A6: a municipality with several communities does not advance until one is chosen", async ({
-    page,
-  }) => {
-    // `Lindetal` is a municipality of the committed index with six covered
-    // communities behind it, and is itself no community's name and no slug
-    // (see the file header) — D3's "municipality hit", exactly.
-    await page.goto(`${ROUTE}?ort=Lindetal`);
-
-    // Still step 1: the flow may not pick a village on the visitor's behalf.
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
-    await expect(page.locator('[data-step-answered="ort"]')).toHaveCount(0);
-
-    // Each candidate is a tappable row reading `Ort (Gemeinde)` (D3, D8),
-    // capped at the overlay's four rows (TS-WEB-0008 D7a).
-    const candidates = page.getByRole("link", { name: /\(Lindetal\)$/u });
-    await expect(candidates.first()).toBeVisible();
-    expect(await candidates.count()).toBeGreaterThan(1);
-
-    // A6's second half: the `ort` that results is *that* community's slug. The
-    // rows are alphabetical, so the first is `Alt Käbelich` → `alt-kaebelich`.
-    const chosen = candidates.first();
-    await expect(chosen).toHaveAccessibleName("Alt Käbelich (Lindetal)");
-    await chosen.click();
-    await expect(page).toHaveURL(/[?&]ort=alt-kaebelich(&|$)/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
-  });
-
-  test("TS-WEB-0023-A7: step 1 arrives answered — the place is named and changeable, never skipped", async ({
-    page,
-  }) => {
-    // The hand-over the founding path makes: `/dein-ort/starten?ort=X` → this.
-    await page.goto("/dein-ort/starten?ort=99999");
-    await page.locator('[data-cta="primary"]').first().click();
-    await expect(page).toHaveURL(/\/mitmachen\/registrieren\?ort=99999$/);
-
-    // `99999` is uncovered, so step 1 is genuinely unanswered and asked.
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
-
-    // And with a value that resolves: the step advances, and the answered
-    // step 1 stays on screen — the place named, with a control to change it
-    // (D5: "answered, visible and changeable, never skipped").
-    await page.goto(`${ROUTE}?ort=schlatkow`);
-    const answered = page.locator('[data-step-answered="ort"]');
-    await expect(answered).toHaveCount(1);
-    await expect(answered).toContainText("Schlatkow");
-
-    const change = answered.locator("a");
-    await expect(change).toHaveCount(1);
-    await change.click();
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
-    // The answer travels back with it, so the visitor can correct rather than
-    // retype (D4: `schritt` may move backwards to an answered step).
-    await expect(page.locator('input[name="ort"]')).toHaveValue("schlatkow");
-
-    // It stays visible through step 3 and the handover.
-    for (const query of [
-      "?ort=schlatkow&wer=opt-1",
-      "?ort=schlatkow&wer=opt-1&weg=whatsapp",
-    ]) {
-      await page.goto(`${ROUTE}${query}`);
-      await expect(page.locator('[data-step-answered="ort"]')).toContainText(
-        "Schlatkow",
-      );
-    }
-  });
-
-  test("TS-WEB-0023-A4: an invalid `schritt` and an invalid enum are dropped, re-asking the step", async ({
-    page,
-  }) => {
-    await page.goto(`${ROUTE}?ort=schlatkow&schritt=3`);
-    // step 2 (who publishes) is unanswered, so schritt=3 must not be honoured.
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
-
-    await page.goto(`${ROUTE}?ort=schlatkow&wer=not-a-real-option`);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
-  });
-
-  test("TS-WEB-0023-A5: an unresolvable value leaves step 1 unanswered, echoed only in the search field", async ({
-    page,
-  }) => {
-    await page.goto(`${ROUTE}?ort=not-a-real-place-at-all`);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Ort");
-    // Escaped inside the search field's `value` attribute (React escapes by
-    // construction) — and nowhere else: the visible body text carries no
-    // trace of it, since an `<input>`'s value is not rendered text content.
-    await expect(page.locator('input[name="ort"]')).toHaveValue("not-a-real-place-at-all");
-    const bodyText = await page.locator("body").innerText();
-    expect(bodyText).not.toContain("not-a-real-place-at-all");
-  });
-
-  test("TS-WEB-0023-A8: step 3 offers exactly three publishing paths", async ({ page }) => {
-    await page.goto(`${ROUTE}?ort=schlatkow&wer=opt-1`);
-    const options = page.locator('input[name="weg"]');
-    await expect(options).toHaveCount(3);
-  });
-
-  test("TS-WEB-0023-A9/A10: completing all three steps offers exactly one external app action, firing register-as-publisher once", async ({
-    page,
-  }) => {
-    // `mock-tracker.ts` logs `console.info("[analytics:mock] conversion",
-    // { goalId, stage, … })`; `ConsoleMessage.text()` stringifies every
-    // argument (Chromium's own `%o`-style formatting), so the goal id and
-    // stage are findable as substrings. `publish-first-event` never fires
-    // from this website (D6) — nothing to wait for, so it is checked from
-    // the same buffer the wait below already filled.
-    const consoleMessages: string[] = [];
-    page.on("console", (message) => consoleMessages.push(message.text()));
-
-    await page.goto(ROUTE);
-    await page.fill('input[name="ort"]', "schlatkow");
-    await page.click('button[type="submit"]');
-    await expect(page).toHaveURL(/ort=schlatkow/);
-
-    await page.click('input[name="wer"][value="opt-1"]');
-    await page.click('button:has-text("Weiter")');
-    await expect(page).toHaveURL(/wer=opt-1/);
-
-    await page.click('input[name="weg"][value="whatsapp"]');
-    await page.click('button:has-text("Weiter")');
-    await expect(page).toHaveURL(/weg=whatsapp/);
-
-    // Hydration, not just the URL, has to be done before this click: it is
-    // a client component's `onClick` (`ConversionTracker`) that fires the
-    // event. Wait for the tracker's own signal, not for the network
-    // (F-2-71): `networkidle` never settles on a streamed production route,
-    // and a timeout would only move the race.
-    await expect(
-      page.locator('[data-conversion-tracker="register-as-publisher"]'),
-    ).toHaveAttribute("data-hydrated", "true");
-    const handoverLink = page.locator('[data-cta="primary"]');
-    await expect(handoverLink).toHaveCount(1);
-    await expect(handoverLink).toHaveAttribute("href", /^https:\/\/app\./);
-
-    // The handover is a same-tab navigation to an external, unreachable-in-
-    // this-suite host; block it so the click's `onClick` (which fires the
-    // conversion event synchronously, before the browser navigates) still
-    // runs against a live page instead of racing a torn-down document.
-    await page.route("https://app.schafe-vorm-fenster.de/**", (route) => route.abort());
-    const fired = page.waitForEvent("console", {
-      predicate: (message) =>
-        message.text().includes("register-as-publisher") && message.text().includes("handover"),
-      timeout: 15_000,
+      // Visible and immediate (TS-WEB-0016 D15 "Shape"): no `details`, no
+      // `hidden` ancestor, no click-to-load control in front of it.
+      const wrapped = await frame.evaluate((element) => element.closest("details, [hidden], [aria-hidden='true']") !== null);
+      expect(wrapped).toBe(false);
+      await expect(page.locator("#register-form").locator("button, summary, dialog, [role='dialog']")).toHaveCount(0);
+      // Responsive width: the container's width on a phone, never wider than the viewport.
+      const box = await frame.boundingBox();
+      expect(box?.width ?? 0).toBeGreaterThan(300);
+      expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(390);
     });
-    await handoverLink.click();
-    await expect(fired).resolves.toBeTruthy();
-    expect(consoleMessages.some((text) => text.includes("publish-first-event"))).toBe(false);
+  }
+
+  for (const viewport of [
+    { width: 390, height: 844, reserved: 2300 },
+    { width: 1280, height: 800, reserved: 1900 },
+  ]) {
+    test(`TS-WEB-0023-A18: the frame's height is reserved before the form answers, and holds the form without an inner scrollbar (${viewport.width})`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(viewport);
+      // Before: the form host never answers, so the box is what the page reserved.
+      await page.route(`${FORM_ORIGIN}/**`, () => {});
+      await page.goto(ROUTE, { waitUntil: "domcontentloaded" });
+      const frame = page.locator(FRAME);
+      const reserved = await frame.boundingBox();
+      expect(reserved?.height).toBe(viewport.reserved);
+      const bandBefore = await page.locator("#context-band").boundingBox();
+      await page.unroute(`${FORM_ORIGIN}/**`);
+
+      // After: the real form, loaded — the same box, nothing below it moved,
+      // and the form's first page fits inside it.
+      await page.goto(ROUTE);
+      const formFrame = page.frameLocator(FRAME);
+      await expect(formFrame.locator("body")).toBeVisible({ timeout: 20_000 });
+      const loaded = await frame.boundingBox();
+      expect(loaded?.height).toBe(viewport.reserved);
+      expect((await page.locator("#context-band").boundingBox())?.y).toBe(bandBefore?.y);
+      const inner = page.frames().find((candidate) => candidate.url().startsWith(FORM_ORIGIN));
+      expect(inner, "the framed form").toBeDefined();
+      const scrollHeight = await inner!.evaluate(() => document.documentElement.scrollHeight);
+      expect(scrollHeight, "the form's page 1 fits the reserved height").toBeLessThanOrEqual(viewport.reserved);
+    });
+  }
+
+  test("TS-WEB-0023-A19: the notice stands above the frame, names Google and links the privacy section", async ({
+    page,
+    request,
+  }) => {
+    const html = await (await request.get(ROUTE)).text();
+    const noticeAt = html.indexOf('data-block="embed-notice"');
+    const frameAt = html.indexOf("<iframe");
+    expect(noticeAt, "the notice is in the served HTML").toBeGreaterThan(-1);
+    expect(noticeAt).toBeLessThan(frameAt);
+
+    await page.goto(ROUTE);
+    const notice = page.locator('[data-block="embed-notice"]');
+    await expect(notice).toHaveCount(1);
+    await expect(notice).toContainText("Google");
+    await expect(notice.locator(`a[href="${href("legal", "de")}#datenschutz"]`)).toHaveCount(1);
+    await expect(notice.locator("button, input, [role], h1, h2, h3, ul, ol")).toHaveCount(0);
+    const noticeBox = await notice.boundingBox();
+    const frameBox = await page.locator(FRAME).boundingBox();
+    expect((noticeBox?.y ?? 0) + (noticeBox?.height ?? 0)).toBeLessThanOrEqual(frameBox?.y ?? 0);
   });
 
-  test("TS-WEB-0023-A11: no step or the handover state shows a confirmation, instructions or an event field", async ({
+  test("TS-WEB-0023-A20: a link opens the same form in a new tab, marked, and its click is the handover", async ({
     page,
   }) => {
-    await page.goto(`${ROUTE}?ort=schlatkow&wer=opt-1&weg=whatsapp`);
-    const bodyText = (await page.locator("body").innerText()).toLowerCase();
-    expect(bodyText).not.toMatch(/bestätigung|erfolgreich registriert/);
-    await expect(page.locator('input[type="date"], input[name="event"]')).toHaveCount(0);
+    const fired = conversions(page);
+    await stubForm(page);
+    await page.goto(ROUTE);
+
+    const link = page.locator('[data-block="register-form-fallback"] a');
+    await expect(link).toHaveCount(1);
+    await expect(link).toHaveAttribute("href", leadFormOpenUrl());
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", /noopener/);
+    // The marking (TS-WEB-0016 D16): its own element after the link, named by it.
+    const noteId = await link.getAttribute("aria-describedby");
+    expect(noteId).toBeTruthy();
+    await expect(page.locator(`[id="${noteId}"]`)).toContainText("Google");
+    // Above the frame: a visitor whose browser refuses the frame meets it first.
+    expect((await link.boundingBox())?.y ?? 0).toBeLessThan((await page.locator(FRAME).boundingBox())?.y ?? 0);
+
+    await expect(page.locator('[data-conversion-tracker="register-as-publisher"]')).toHaveAttribute(
+      "data-hydrated",
+      "true",
+    );
+    const popup = page.waitForEvent("popup");
+    await link.click();
+    await (await popup).close();
+    await expect.poll(() => fired.length).toBe(1);
+    expect(fired[0]).toContain("register-as-publisher");
+    expect(fired[0]).toContain("handover");
   });
 
-  test("TS-WEB-0023-A12: no envoy element, no POST route, no server action on this route", async ({
+  test("TS-WEB-0023-A22: moving on inside the form fires register-as-publisher once; loading the page fires nothing", async ({
     page,
   }) => {
+    const fired = conversions(page);
+    await stubForm(page);
+    await page.goto(ROUTE);
+    const frame = page.locator(FRAME);
+    await expect(frame).toHaveAttribute("data-hydrated", "true");
+    const form = page.frameLocator(FRAME);
+    await expect(form.getByRole("button", { name: "Weiter" })).toBeVisible();
+    // The initial load is nobody's action.
+    await page.waitForTimeout(500);
+    expect(fired).toEqual([]);
+
+    // Two navigations inside the frame: the first is the handover, the second is not counted again.
+    for (let step = 0; step < 2; step += 1) {
+      const navigated = page.waitForEvent("framenavigated", (navigatedFrame) => navigatedFrame !== page.mainFrame());
+      await form.getByRole("button", { name: "Weiter" }).click();
+      await navigated;
+      await expect(form.getByRole("button", { name: "Weiter" })).toBeVisible();
+    }
+    await expect.poll(() => fired.length).toBe(1);
+    expect(fired[0]).toContain("register-as-publisher");
+    expect(fired[0]).toContain("handover");
+    expect(fired.some((text) => text.includes("publish-first-event"))).toBe(false);
+  });
+
+  test("TS-WEB-0023-A12: no envoy element, no POST route, no server action on this route", async ({ page }) => {
+    // Our document's own requests: the framed form's are Google's (DEC-0121 §6).
     const requests: string[] = [];
     page.on("request", (request) => {
-      if (request.method() !== "GET") requests.push(`${request.method()} ${request.url()}`);
+      if (request.frame() === page.mainFrame() && request.method() !== "GET") {
+        requests.push(`${request.method()} ${request.url()}`);
+      }
     });
+    await stubForm(page);
     await page.goto(ROUTE);
-    await page.fill('input[name="ort"]', "schlatkow");
-    await page.click('button[type="submit"]');
-    // The step advanced — that is the whole settle this assertion needs
-    // (F-2-71: `networkidle` never settles on a streamed production route).
-    await expect(page).toHaveURL(/ort=schlatkow/);
-    await expect(page.locator("main")).toBeVisible();
+    await expect(page.locator(FRAME)).toHaveAttribute("data-hydrated", "true");
     expect(requests).toEqual([]);
-    // Scoped to `main`: the footer's own contact widget (`kind="contact"`)
-    // is site-wide chrome present on every page, not this route's content.
+    // Scoped to `main`: the footer's contact widget is site-wide chrome.
     await expect(page.locator("main [data-envoy-form-kind]")).toHaveCount(0);
   });
 
-  // DEC-0163 §4: the step is chosen in the browser, so the walk needs
-  // JavaScript; what A13 still holds is that every step advances by a plain
-  // form submission, a typed name included, and that the route renders step 1
-  // without JavaScript.
-  test("TS-WEB-0023-A13: every step is completable by form submission, and step 1 renders without JavaScript", async ({ browser }) => {
-    const noJs = await browser.newContext({ javaScriptEnabled: false });
-    const stepOne = await noJs.newPage();
-    await stepOne.goto(`${ROUTE}?ort=schlatkow`);
-    await expect(stepOne.locator('input[name="ort"]')).toBeVisible();
-    await noJs.close();
-
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    await page.goto(ROUTE);
-    // A typed **name**, not a slug and not a postcode, submitted by the plain
-    // form rather than picked from the typeahead (D8, DEC-0128).
-    await page.fill('input[name="ort"]', "Wolfradshof");
-    await page.click('button[type="submit"]');
-    // Interim, same as in the A2 test above: the typed string travels on this
-    // one request because the canonicalising hop is the proxy's (F-2-49).
-    await expect(page).toHaveURL(/ort=Wolfradshof/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("veröffentlicht");
-    await page.click('input[name="wer"][value="opt-1"]');
-    await page.click('button:has-text("Weiter")');
-    await expect(page).toHaveURL(/wer=opt-1/);
-    await expect(page).toHaveURL(/ort=wolfradshof/);
-    await page.click('input[name="weg"][value="whatsapp"]');
-    await page.click('button:has-text("Weiter")');
-    await expect(page.locator('[data-cta="primary"]')).toHaveAttribute("href", /^https:\/\/app\./);
-    await context.close();
-  });
-
-  test("TS-WEB-0023-A14: every step URL canonicalises to the parameter-free path", async ({ page }) => {
-    // The route's own indexability is not the environment-wide noindex
-    // regime (TS-WEB-0015 D3 puts every non-production build behind `noindex`,
-    // which this suite always runs under) — only the canonical claim is
-    // testable outside production.
+  test("TS-WEB-0023-A14: the route canonicalises to the parameter-free path", async ({ page }) => {
+    await stubForm(page);
     await page.goto(`${ROUTE}?ort=schlatkow`);
     const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
     expect(canonical).toMatch(new RegExp(`${ROUTE}$`));
-  });
-
-  test("TS-WEB-0023-A15: the context band renders on step 1 and is absent on steps 2, 3 and the handover", async ({
-    page,
-  }) => {
-    await page.goto(ROUTE);
-    await expect(page.locator("#context-band")).toHaveCount(1);
-
-    await page.goto(`${ROUTE}?ort=schlatkow`);
-    await expect(page.locator("#context-band")).toHaveCount(0);
-
-    await page.goto(`${ROUTE}?ort=schlatkow&wer=opt-1`);
-    await expect(page.locator("#context-band")).toHaveCount(0);
-
-    await page.goto(`${ROUTE}?ort=schlatkow&wer=opt-1&weg=whatsapp`);
-    await expect(page.locator("#context-band")).toHaveCount(0);
   });
 });
