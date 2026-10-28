@@ -15,7 +15,7 @@
  * referrer host (the browser told us where she came from).
  */
 
-import { APP_ORIGIN } from "../live/app-handover";
+import { APP_HOST } from "../live/app-handover";
 
 import type { EntryTrait, FocusJob } from "../relevance/types";
 import type { RouteId } from "../routes/routes";
@@ -33,10 +33,12 @@ const SOCIAL_HOSTS = ["instagram.com", "facebook.com", "whatsapp.com", "fb.me", 
 const PROFESSIONAL_HOSTS = ["linkedin.com", "lnkd.in"];
 /**
  * Derived from the one module that knows where the app is (TS-WEB-0017 D4): the
- * hostname may not be typed a second time, and this way the classification
- * follows the DEC-0035 move off the apex automatically.
+ * hostname may not be typed a second time. Empty while the app has no domain of
+ * its own (DEC-0177) — `APP_URL` sits on our own apex, and a referrer from there
+ * is internal navigation — so `activated` comes from the newsletter medium
+ * alone until `APP_HOST` names the app's host.
  */
-const ACTIVATED_HOSTS = [new URL(APP_ORIGIN).hostname];
+const ACTIVATED_HOSTS: readonly string[] = APP_HOST === undefined ? [] : [APP_HOST];
 const SEARCH_HOSTS = [
   "google.com",
   "google.de",

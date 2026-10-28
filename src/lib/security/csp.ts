@@ -46,8 +46,12 @@ export const ALLOWLIST = {
   envoy: "https://envoy-api.api.schafe-vorm-fenster.de",
   /** The ecosystem's image proxy — the embedded calendar's event images. */
   assets: "https://assets.api.schafe-vorm-fenster.de",
-  /** TS-WEB-0014 D1: named by CON-WEB-0030, but active in no directive today. */
-  app: "https://app.schafe-vorm-fenster.de",
+  /*
+   * No `app` entry since DEC-0177. It was a reserved row (CON-WEB-0030) active
+   * in no directive: the handover is a navigation, which CSP does not govern,
+   * and the host it named has no DNS record. Every link "to the app" goes to
+   * `APP_URL` on our own apex now (`src/lib/live/app-handover.ts`).
+   */
   /**
    * The registration form's host — the fifth external origin, and the one
    * third party besides eTracker (TS-WEB-0014 D1 row of 2026-09-25, DEC-0121).

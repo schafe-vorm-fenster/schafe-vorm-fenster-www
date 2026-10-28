@@ -36,4 +36,4 @@ DEC-0015
 
 ## Notes
 
-Reclassified from the quality class by DEC-0092: imposed by DEC-0015, a decision already taken. The initial allowlist — envoy, eTracker and `app.schafe-vorm-fenster.de` — is TS-WEB-0014 D1's typed structure and is not restated here. `scripts/check-csp.ts` is the running guard (TS-WEB-0014-A1). The number was free in the constraint class and is kept.
+Reclassified from the quality class by DEC-0092: imposed by DEC-0015, a decision already taken. The initial allowlist — envoy, eTracker and `app.schafe-vorm-fenster.de` — is TS-WEB-0014 D1's typed structure and is not restated here; the `app` row left it with DEC-0177 (the host has no DNS record and was active in no directive). `scripts/check-csp.ts` is the running guard (TS-WEB-0014-A1). The number was free in the constraint class and is kept.

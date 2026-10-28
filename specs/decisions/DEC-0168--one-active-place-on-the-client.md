@@ -113,7 +113,9 @@ the change — **five of six red**:
    record, `sheepoutside.com` neither; `/lehre.2879378` on the apex answers
    200. `calendarUrlForSlug()` is gone — a slug alone cannot make the address.
    `APP_ORIGIN` stays for the registration and help handovers, which are not
-   calendar links. No CSP change: a navigation is not governed by CSP.
+   calendar links. *(Superseded 2026-10-28 by DEC-0177: `APP_ORIGIN` is gone;
+   the registration and help handovers are `APP_URL`, the Schlatkow village
+   calendar, until the app has its own domain.)* No CSP change: a navigation is not governed by CSP.
 6. **The credit is a © control** (issue #78). `photo-credit` is a 40 px round
    well with Lucide `copyright` in `paper` on `scrim-45`, in the photograph's
    top-right corner — the corner, well and scrim step of `ai-edited-mark`

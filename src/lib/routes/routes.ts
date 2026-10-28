@@ -39,16 +39,13 @@ import type { Locale } from "../i18n/locales";
 export const SITE_ORIGIN = "https://www.schafe-vorm-fenster.de";
 
 /**
- * Where the village calendars live after the move off the apex (DEC-0035).
- * Used by the interim `/hilfe/*` redirect (DEC-0047) and by the app handovers.
- *
- * The constant itself now lives in the **one handover module** TS-WEB-0017 D4
- * demands (`src/lib/live/app-handover.ts`), which is the only file in the
- * tree where the app hostname occurs — `pnpm check:api-routes` (TS-WEB-0017-A11)
- * fails a second occurrence. Re-exported here so this module's existing
- * consumers keep their import.
+ * Where every link "to the app" goes (DEC-0177): today the Schlatkow village
+ * calendar, because the app has no domain of its own. The constant lives in the
+ * **one handover module** TS-WEB-0017 D4 demands (`src/lib/live/app-handover.ts`)
+ * — `pnpm check:api-routes` (TS-WEB-0017-A11) fails its literal anywhere else.
+ * Re-exported here so a route-level caller has one import for site and app.
  */
-export { APP_ORIGIN } from "../live/app-handover";
+export { APP_URL } from "../live/app-handover";
 
 /** Every page of the TS-WEB-0004 D1 inventory, in inventory order. */
 export const ROUTE_IDS = [

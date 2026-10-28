@@ -49,7 +49,7 @@ place only.
 | Hops | Exactly one. A target may never itself be a redirect source; chains are resolved at map-build time, not at request time. |
 | Query string | Preserved verbatim and appended to the target — `etcc_cmp`, `etcc_med` and every other campaign parameter survive every redirect (FUN-WEB-0048 contract). |
 | Fragment | Not touched; the browser carries it. Targets that need an anchor carry it in the map (e.g. `#impressum`, TS-WEB-0004 D8). |
-| Targets | Either a member of the TS-WEB-0004 D1 inventory or an absolute URL on an owned host (`app.schafe-vorm-fenster.de`, the calendar handover; `schafe-vorm-fenster.de`, community-site — DEC-0146). Nothing else. |
+| Targets | Either a member of the TS-WEB-0004 D1 inventory or an absolute URL on an owned host (`schafe-vorm-fenster.de`, community-site and the village calendars — DEC-0146, DEC-0168 §5; the planned `app.schafe-vorm-fenster.de` has no DNS record and is no target, DEC-0177). Nothing else. |
 | Language | Legacy URLs are German-only; they target the **bare** path, never `/en/…`. |
 | No successor | A ranked URL never answers 404. Where no successor exists, it 301s to the nearest topically containing page — the home page only as the last resort. |
 | Normalisation | Uppercase paths and trailing slashes 301 to the lowercase, slash-free form before the map is consulted. |

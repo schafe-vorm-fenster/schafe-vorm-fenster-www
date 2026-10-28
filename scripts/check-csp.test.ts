@@ -70,7 +70,6 @@ describe("TS-WEB-0014-A1: checkPolicyDirectives — fixture policies", () => {
         "https://code.etracker.com",
         "https://portalize.schafe-vorm-fenster.de",
         "https://envoy-api.api.schafe-vorm-fenster.de",
-        "https://app.schafe-vorm-fenster.de",
       ],
       // The fifth row (DEC-0121): the registration form's host, `frame-src`.
       "frame-src": ["https://docs.google.com"],

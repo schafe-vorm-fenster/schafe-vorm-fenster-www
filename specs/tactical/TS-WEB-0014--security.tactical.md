@@ -31,7 +31,11 @@ belong to TS-WEB-0004; this spec only adds the rules that constrain them.
 
 The complete set. Four external origins and, since 2026-09-25, a fifth —
 the registration form's host, admitted for one directive on one route
-(TS-WEB-0016 D15, DEC-0121) — and no sixth. Hosts marked [PROPOSED] are read
+(TS-WEB-0016 D15, DEC-0121) — and no sixth. **Four again since 2026-10-28:**
+DEC-0177 removed the reserved `https://app.schafe-vorm-fenster.de` row. It
+was active in no directive, the host has no DNS record, and every link "to
+the app" now goes to `APP_URL` on our own apex (`src/lib/live/app-handover.ts`)
+— a navigation, which CSP does not govern. Hosts marked [PROPOSED] are read
 off the sibling repositories, not confirmed by their owners.
 
 | Origin | Why it exists | Active directives | Provenance |
@@ -40,7 +44,6 @@ off the sibling repositories, not confirmed by their owners.
 | `https://code.etracker.com` | eTracker loader `e.js` and its beacon; legacy config `data-secure-code="i9strK"`, `data-block-cookies="true"` | `script-src`, `connect-src`, `img-src` | SRC-0010 `legacy-content/app/layout.tsx`, DEC-0004/DEC-0028 |
 | `https://portalize.schafe-vorm-fenster.de` | Portalize loader `/api/{organizerId}/load.js`, web-component mode — the embed demo (FUN-WEB-0043) | `script-src`, `connect-src` | DEC-0030, `portalize/DEPLOYMENT.md` |
 | `https://envoy-api.api.schafe-vorm-fenster.de` [PROPOSED] | envoy lead widget: its web-component script and its own submission endpoint | `script-src`, `connect-src` | DEC-0009; host read from `envoy-api`, widget host unconfirmed (Q-0022) |
-| `https://app.schafe-vorm-fenster.de` | named by CON-WEB-0030; the handover (FUN-WEB-0013, DEC-0029) is a plain `GET` navigation, which CSP does not govern | **none today** — reserved slots: `frame-ancestors` (D4) and `form-action` (if the handover ever becomes a POST) | DEC-0035, CON-WEB-0030 |
 | `https://docs.google.com` | the registration form `/start` embeds visibly (TS-WEB-0016 D15, FUN-WEB-0205, DEC-0108), and since DEC-0176 `/mitmachen/registrieren` too (`TS-WEB-0023` D10) — the one framed document on the site; the origin, not the form's path, because this is a table of origins and the form URL is `src/lib/routes/lead-fallback.ts`'s | `frame-src` — and no other: no script, no connection, no image of it is loaded by our document | DEC-0121 (row written 2026-09-25); lapses with the embed (D15 "It lapses") |
 
 **Deliberate non-entries.** Each is an origin someone will otherwise add
@@ -172,8 +175,9 @@ the `portalize` prior art), `Expect-CT` (deprecated),
 `require-trusted-types-for` (Next.js does not survive it today).
 
 `frame-ancestors` exception: `'none'` until a concrete app-embed need is
-named. If one appears, the value becomes
-`frame-ancestors 'self' https://app.schafe-vorm-fenster.de` and
+named. If one appears, the value becomes `frame-ancestors 'self'` plus the
+app's own origin — which does not exist yet (DEC-0177: the app has no domain
+of its own; `app.schafe-vorm-fenster.de` has no DNS record) — and
 `X-Frame-Options` is dropped — a reviewed change under D7, not a config
 tweak.
 
@@ -444,8 +448,8 @@ Rules:
   acceptable for launch, or does CON-WEB-0040, CON-WEB-0041 need a log drain — and would a
   drain target itself be the additional service DEC-0017 refuses?
 - **D4 — the `frame-ancestors` app-embed exception.** CON-WEB-0032
-  anticipates "app-embed needs"; none is known today. Does
-  `app.schafe-vorm-fenster.de` ever embed a website page in an iframe?
+  anticipates "app-embed needs"; none is known today. Does the app, once it
+  has a domain of its own (DEC-0177), ever embed a website page in an iframe?
   Question to the product side; until answered, `'none'`.
 - **D10 — the `429` surface.** DEC-0032 defines 404 and 500; a
   rate-limited place search has no defined state. Does the place-search

@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [CON-WEB-0046, CON-WEB-0047, CON-WEB-0048, CON-WEB-0049, CON-WEB-0050, CON-WEB-0051, CON-WEB-0003, CON-WEB-0052, FUN-WEB-0131, CON-WEB-0053, CON-WEB-0054, CON-WEB-0006, CON-WEB-0055, CON-WEB-0056, CON-WEB-0057]
 sources: [SRC-0006, SRC-0008, SRC-0011, SRC-0012]
-decisions: [DEC-0002, DEC-0020, DEC-0023, DEC-0029, DEC-0031, DEC-0035, DEC-0085, DEC-0150, DEC-0151, DEC-0155, DEC-0160, DEC-0171]
+decisions: [DEC-0002, DEC-0020, DEC-0023, DEC-0029, DEC-0031, DEC-0035, DEC-0085, DEC-0150, DEC-0151, DEC-0155, DEC-0160, DEC-0171, DEC-0177]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -201,8 +201,11 @@ the authored design system under a different package name.
 
 ### D4 — The app owns the calendars; the website borrows their data [FIXED: CON-WEB-0052, FUN-WEB-0131, DEC-0035, DEC-0029]
 
-The village calendars are a product surface at
-`app.schafe-vorm-fenster.de` (DEC-0035). The website links to them and
+The village calendars are a product surface of their own — community-site,
+on the apex today (`https://schafe-vorm-fenster.de/<slug>.<geonameId>`,
+DEC-0168 §5). DEC-0035 planned them on `app.schafe-vorm-fenster.de`; that host
+has no DNS record, and until the app has a domain of its own every link "to
+the app" is `APP_URL`, the Schlatkow village calendar (DEC-0177). The website links to them and
 renders read-only excerpts of their data; it does not reimplement them.
 The boundary, per concern:
 
@@ -223,8 +226,11 @@ Three rules make the boundary testable:
   (Lead capture is the envoy widget's own backend, TS-WEB-0004 D5 — not a
   website route.)
 - **One handover module.** Links into the app are built from geo-api
-  community slugs (DEC-0029) in exactly one module. The app hostname
-  appears in that module and nowhere else — no hard-coded app URL.
+  community slugs (DEC-0029) in exactly one module,
+  `src/lib/live/app-handover.ts`. `APP_URL`'s literal appears in that module
+  and nowhere else, and the retired `app.schafe-vorm-fenster.de` appears in
+  the code of no module at all (DEC-0177) — no hard-coded app URL, and no
+  rendered page links that host.
 - **The persistent entry point.** A calendar entry sits in the header on
   every page; its label and target are fixed by TS-WEB-0004 D4. CON-WEB-0052, FUN-WEB-0131
   names a different label — see Open points; this spec does not resolve
@@ -396,7 +402,8 @@ for the spec side, and needs the content frontmatter schema
 | TS-WEB-0017-A8 | e2e | Visible text order in the rendered DOM is identical at 360 × 640, 428 × 926 and 1280 × 800 on every page; no element is visible at one width and absent at another. This is the single-tree rule of D2(d) under test, and it samples the small range because that is where the switch points are dense. |
 | TS-WEB-0017-A9 | e2e | At 1920 px the content box of every container (its width less its inline padding) does not exceed `measure.page` (only margins grow; DEC-0150 put the margin outside the 1200 px); at 320 px no page scrolls horizontally (TS-WEB-0002 A7 is the floor); at 360 px and at 428 px no page scrolls horizontally either. |
 | TS-WEB-0017-A10 | static | Every website `/api/*` route handler exports `GET` only — no write handler anywhere in the route tree. |
-| TS-WEB-0017-A11 | static | The app hostname occurs in exactly one module (the DEC-0029 handover builder); no other file contains it, and no app link is assembled elsewhere. |
+| TS-WEB-0017-A11 | static | No app link is assembled outside the handover module: `APP_URL`'s literal occurs in `src/lib/live/app-handover.ts` and in no other authored module, and the retired app hostname `app.schafe-vorm-fenster.de` occurs in the code (comments aside) of no authored module (DEC-0177; amended 2026-10-28 from "the app hostname occurs in exactly one module"). `pnpm check:api-routes`. |
+| TS-WEB-0017-A33 | e2e | On every route of the TS-WEB-0004 D1 inventory in both languages, and on `/dein-ort` with a chosen place, after the live modules answered: no `a[href]`, `area[href]`, `link[href]`, `form[action]` or `iframe[src]` names `app.schafe-vorm-fenster.de` (DEC-0177). `e2e/app-links.spec.ts`. |
 | TS-WEB-0017-A12 | integration | The persistent calendar entry is present in the header on every page and resolves to the target TS-WEB-0004 D4 fixes. |
 | TS-WEB-0017-A13 | tool | `pnpm check` (frontmatter + `check:specs`) exits 0 — pre-commit hook and CI; zero E-class errors. |
 | TS-WEB-0017-A14 | static | Every file under `content/` names the tactical spec it realises, and that spec exists; a content file naming no spec, or an unknown one, fails. |
@@ -454,7 +461,7 @@ name used resolves to an export of it.
 | CON-WEB-0051 (take its breakpoints from @schafe-vorm-fenster/brand-design (breakpoint.xs…2xl) | D2 · A4, A8, A9 |
 | CON-WEB-0003 (brand kit binding) | D3 (with TS-WEB-0002 D3, TS-WEB-0003 D3) · A5, A6, A7, A15, A22, A28, A29, A30, A35, A41, A42, A43, A44 |
 | CON-WEB-0052 (never reimplement the village calendars) | D4 · A10, A11, A12 |
-| FUN-WEB-0131 (embed what app.schafe-vorm-fenster.de serves rather than hold its own) | D4 · A10, A11, A12 |
+| FUN-WEB-0131 (embed what the village calendars serve rather than hold its own) | D4 · A10, A11, A12, A33 |
 | CON-WEB-0053 (be written in TypeScript throughout) | D5 · A2, A3, A13 |
 | CON-WEB-0054 (use pnpm as its package manager) | D5 · A2, A3, A13 |
 | CON-WEB-0055 (take every icon from exactly one set) | D7 · A17 |

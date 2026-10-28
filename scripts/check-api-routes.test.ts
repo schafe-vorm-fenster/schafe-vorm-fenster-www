@@ -121,24 +121,25 @@ describe("TS-WEB-0017-A10: every app/**/route.ts exports GET and nothing else", 
   });
 });
 
-describe("TS-WEB-0017-A11: the app hostname occurs in at most one module", () => {
-  it("passes when the hostname sits in exactly one file", () => {
+describe("TS-WEB-0017-A11: no code names the retired app host, and APP_URL lives in one module (DEC-0177)", () => {
+  const HOME = join("src", "lib", "live", "app-handover.ts");
+  const homeSource = [
+    "/** `app.schafe-vorm-fenster.de` has no DNS record (DEC-0177). */",
+    'export const APP_URL = "https://schafe-vorm-fenster.de/schlatkow.2838887";',
+  ].join("\n");
+
+  it("passes when APP_URL's literal sits in the handover module and the old host only in a comment", () => {
     const root = newRoot();
-    writeFileSync(
-      fixture("src", "lib", "routes", "routes.ts"),
-      'export const APP_ORIGIN = "https://app.schafe-vorm-fenster.de";',
-    );
+    writeFileSync(fixture("src", "lib", "live", "app-handover.ts"), homeSource);
     const result = checkAppHostname(root);
     expect(result.errors).toEqual([]);
-    expect(result.occurrences).toEqual([join("src", "lib", "routes", "routes.ts")]);
+    expect(result.occurrences).toEqual([]);
+    expect(result.appUrlModules).toEqual([HOME]);
   });
 
-  it("fails when a second module hard-codes the app hostname", () => {
+  it("fails a module whose code still links the retired app host", () => {
     const root = newRoot();
-    writeFileSync(
-      fixture("src", "lib", "routes", "routes.ts"),
-      'export const APP_ORIGIN = "https://app.schafe-vorm-fenster.de";',
-    );
+    writeFileSync(fixture("src", "lib", "live", "app-handover.ts"), homeSource);
     writeFileSync(
       fixture("app", "[lang]", "dein-ort", "some-card.tsx"),
       'export const link = "https://app.schafe-vorm-fenster.de/beispieldorf";',
@@ -146,78 +147,58 @@ describe("TS-WEB-0017-A11: the app hostname occurs in at most one module", () =>
     const result = checkAppHostname(root);
     expect(result.errors).toHaveLength(1);
     expect(result.errors[0]).toContain("A11");
-    expect(result.occurrences).toHaveLength(2);
+    expect(result.occurrences).toEqual([join("app", "[lang]", "dein-ort", "some-card.tsx")]);
   });
 
-  it("does not count a module that only imports the APP_ORIGIN identifier", () => {
+  it("fails a second copy of APP_URL's literal", () => {
     const root = newRoot();
-    writeFileSync(
-      fixture("src", "lib", "routes", "routes.ts"),
-      'export const APP_ORIGIN = "https://app.schafe-vorm-fenster.de";',
-    );
+    writeFileSync(fixture("src", "lib", "live", "app-handover.ts"), homeSource);
     writeFileSync(
       fixture("src", "lib", "routes", "redirect-map.ts"),
-      [
-        'import { APP_ORIGIN } from "./routes";',
-        "export const redirects = [{ to: APP_ORIGIN }];",
-      ].join("\n"),
+      'export const to = "https://schafe-vorm-fenster.de/schlatkow.2838887";',
+    );
+    const result = checkAppHostname(root);
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors[0]).toContain("outside");
+  });
+
+  it("does not count a module that only imports the APP_URL identifier", () => {
+    const root = newRoot();
+    writeFileSync(fixture("src", "lib", "live", "app-handover.ts"), homeSource);
+    writeFileSync(
+      fixture("src", "components", "gallery.tsx"),
+      ['import { APP_URL } from "@/src/lib/live/app-handover";', "const demo = <HowtoBlock appHref={APP_URL} />;"].join("\n"),
     );
     const result = checkAppHostname(root);
     expect(result.errors).toEqual([]);
   });
 
-  it("ignores the app/dev component gallery and its non-production demo props", () => {
+  it("ignores the app/dev gallery page and test files", () => {
     const root = newRoot();
-    writeFileSync(
-      fixture("src", "lib", "routes", "routes.ts"),
-      'export const APP_ORIGIN = "https://app.schafe-vorm-fenster.de";',
-    );
-    writeFileSync(
-      fixture("src", "components", "gallery.tsx"),
-      'const demo = <HowtoBlock appHref="https://app.schafe-vorm-fenster.de/beispieldorf" />;',
-    );
+    writeFileSync(fixture("src", "lib", "live", "app-handover.ts"), homeSource);
     writeFileSync(
       fixture("app", "dev", "components", "page.tsx"),
       'export default function Page() { return "https://app.schafe-vorm-fenster.de"; }',
     );
-    const result = checkAppHostname(root);
-    expect(result.errors).toEqual([]);
-    expect(result.occurrences).toEqual([join("src", "lib", "routes", "routes.ts")]);
-  });
-
-  it("ignores the CSP allowlist module (TS-WEB-0014 D1's own, separately justified entry)", () => {
-    const root = newRoot();
-    writeFileSync(
-      fixture("src", "lib", "routes", "routes.ts"),
-      'export const APP_ORIGIN = "https://app.schafe-vorm-fenster.de";',
-    );
-    writeFileSync(
-      fixture("src", "lib", "security", "csp.ts"),
-      'export const ALLOWLIST = { app: "https://app.schafe-vorm-fenster.de" };',
-    );
-    const result = checkAppHostname(root);
-    expect(result.errors).toEqual([]);
-  });
-
-  it("ignores test files asserting against the literal", () => {
-    const root = newRoot();
-    writeFileSync(
-      fixture("src", "lib", "routes", "routes.ts"),
-      'export const APP_ORIGIN = "https://app.schafe-vorm-fenster.de";',
-    );
     writeFileSync(
       fixture("src", "lib", "routes", "routing.integration.test.ts"),
-      'expect(destination).toBe("https://app.schafe-vorm-fenster.de");',
+      'expect(destination).not.toContain("app.schafe-vorm-fenster.de");',
     );
     const result = checkAppHostname(root);
     expect(result.errors).toEqual([]);
   });
 
-  it("passes when nobody mentions the hostname at all", () => {
+  it("keeps a `//` inside a string as code", () => {
+    const root = newRoot();
+    writeFileSync(fixture("src", "lib", "live", "app-handover.ts"), homeSource);
+    writeFileSync(fixture("src", "lib", "x.ts"), 'const a = 1; const u = "https://app.schafe-vorm-fenster.de";');
+    expect(checkAppHostname(root).errors).toHaveLength(1);
+  });
+
+  it("passes when nobody mentions either literal at all", () => {
     const root = newRoot();
     mkdirSync(join(root, "src"), { recursive: true });
     const result = checkAppHostname(root);
     expect(result.errors).toEqual([]);
-    expect(result.occurrences).toEqual([]);
   });
 });

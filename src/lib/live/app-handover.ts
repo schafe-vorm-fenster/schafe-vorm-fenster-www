@@ -1,12 +1,14 @@
 /**
- * The app handover — TS-WEB-0008 D9, TS-WEB-0017 D4, DEC-0029/DEC-0035, DEC-0168.
+ * The app handover — TS-WEB-0008 D9, TS-WEB-0017 D4, DEC-0029/DEC-0035, DEC-0168,
+ * DEC-0177.
  *
- * **The one module that knows where the village calendars are.** Every link
- * from the website into a village calendar is built here, from a resolved
- * place, and the app hostname appears in this file and nowhere else in the
- * tree — `scripts/check-api-routes.ts` (TS-WEB-0017-A11) fails a second
- * occurrence. `src/lib/routes/routes.ts` re-exports `APP_ORIGIN` from here so
- * the `/hilfe` redirect keeps its import and the constant keeps one home.
+ * **The one module that knows where the app and the village calendars are.**
+ * Every link from the website into a village calendar is built here, from a
+ * resolved place, and every link "to the app" — the registration handover, a
+ * help link — is `APP_URL` from here. The app has **no host of its own** today
+ * (DEC-0177): `app.schafe-vorm-fenster.de` has no DNS record, so that hostname
+ * occurs in no authored module at all, and `APP_URL`'s literal occurs in this
+ * file only — `scripts/check-api-routes.ts` (TS-WEB-0017-A11) fails either.
  *
  * The rules D9 fixes, each one a line below:
  *
@@ -28,12 +30,28 @@
 import type { Place } from "./types";
 
 /**
- * Where the village calendars live after the move off the apex (DEC-0035).
- * An environment value, because both hosts must work during the transition —
- * who flips it is `state/open.md`'s question, not this module's.
+ * Where every link "to the app" goes — DEC-0177, the owner's answer of
+ * 2026-10-28. The app has no domain of its own: `app.schafe-vorm-fenster.de`
+ * (DEC-0035's planned host) has no DNS record, measured 2026-10-27 and again
+ * 2026-10-28. Until the app has its own domain, the registration handover and
+ * every help link point at the Schlatkow village calendar, which answers 200.
+ *
+ * One literal, deliberately not an environment value: a second source for the
+ * same link is how `app.*` survived in four modules after the host was
+ * dropped. It **lapses** when the app moves to its own domain — then this
+ * constant takes that origin, `APP_HOST` below takes its hostname, and
+ * DEC-0177 is superseded.
  */
-export const APP_ORIGIN =
-  process.env.NEXT_PUBLIC_APP_ORIGIN ?? "https://app.schafe-vorm-fenster.de";
+export const APP_URL = "https://schafe-vorm-fenster.de/schlatkow.2838887";
+
+/**
+ * The app's own hostname, for the one place that reads a referrer rather than
+ * building a link (`entry-context.ts`, TS-WEB-0010 D3's `activated` row).
+ * `undefined` while the app has no domain of its own (DEC-0177): `APP_URL`'s
+ * host is the apex, which is ours, and a referrer from our own host is
+ * internal navigation, never an entry from the app.
+ */
+export const APP_HOST: string | undefined = undefined;
 
 /**
  * Where a village calendar is **today**: community-site on the bare apex, for
@@ -72,6 +90,13 @@ function campaignPairs(campaign: HandoverOptions["campaign"]): [string, string][
   });
 }
 
+/** A URL with the inbound request's campaign parameters carried over. */
+function withCampaign(target: string, options: HandoverOptions): string {
+  const url = new URL(target);
+  for (const [name, value] of campaignPairs(options.campaign)) url.searchParams.set(name, value);
+  return url.toString();
+}
+
 /** The two parts of a place a calendar address needs — both from one geo-api answer. */
 export type CalendarPlace = Pick<Place, "slug" | "communityId">;
 
@@ -96,33 +121,31 @@ export function calendarSlug(place: CalendarPlace): string | undefined {
 export function calendarUrl(place: CalendarPlace, options: HandoverOptions = {}): string | undefined {
   const segment = calendarSlug(place);
   if (segment === undefined) return undefined;
-  const url = new URL(`/${segment}`, CALENDAR_ORIGIN);
-  for (const [name, value] of campaignPairs(options.campaign)) url.searchParams.set(name, value);
-  return url.toString();
+  return withCampaign(new URL(`/${segment}`, CALENDAR_ORIGIN).toString(), options);
 }
 
 /**
- * The help surface (DEC-0047). Per-article mapping is a demand on the app team
- * (Q-0041, `state/open.md` row 8) — until it lands every article redirects to
- * the app root, which is the honest behaviour rather than a guessed path.
+ * A link "to the app" — `APP_URL` with the inbound request's campaign
+ * parameters (FUN-WEB-0048). The registration handover of the three-step flow
+ * (`register-flow.tsx`, kept but not rendered, DEC-0176 §5) reads this; no
+ * path is appended, because the app's registration entry has no contract
+ * (DEC-0029) and `/registrieren` on the apex answers 404 (DEC-0177).
  */
-export const HELP_ARTICLE_MAP: Readonly<Record<string, string>> = {
-  // `Mock aktiv` — a dummy table, deliberately tiny, so the mechanism is
-  // visible and the missing contract is not mistaken for a finished one.
-  kalender: "/hilfe/kalender",
-  einrichten: "/hilfe/einrichten",
-};
-
-export function helpUrl(article?: string): string {
-  if (article && Object.hasOwn(HELP_ARTICLE_MAP, article)) {
-    return new URL(HELP_ARTICLE_MAP[article]!, APP_ORIGIN).toString();
-  }
-  return APP_ORIGIN;
+export function appUrl(options: HandoverOptions = {}): string {
+  return withCampaign(APP_URL, options);
 }
 
-/** `true` when the help URL is the mocked per-article one (`Demo-Daten` marking). */
-export function helpUrlIsMocked(article?: string): boolean {
-  return article !== undefined && Object.hasOwn(HELP_ARTICLE_MAP, article);
+/**
+ * The help surface (DEC-0047). Every article answers `APP_URL` (DEC-0177): the
+ * two per-article paths this function used to build (`/hilfe/kalender`,
+ * `/hilfe/einrichten`) answer 404 on the apex, measured 2026-10-28, and the app
+ * has no host to carry them. The legacy `/hilfe` redirect is a different thing —
+ * `redirect-map.ts` sends it to community-site's own help, which answers 200.
+ * It takes no article: there is no address an article could change today.
+ * Help deep links come back with the app's own domain (DEC-0177 §7).
+ */
+export function helpUrl(): string {
+  return APP_URL;
 }
 
 /**

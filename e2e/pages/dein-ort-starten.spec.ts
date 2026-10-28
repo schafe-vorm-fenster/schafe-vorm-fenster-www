@@ -145,14 +145,15 @@ test.describe("TS-WEB-0021 — start the calendar in your place", () => {
       .allTextContents();
     expect(jsonLd.join("")).not.toContain(PLACE);
 
-    // And no calendar handover exists on this page at all (D8) — neither the
-    // `app.*` host nor a village calendar address `<slug>.<geonameId>` (#81).
+    // And no calendar handover exists on this page at all (D8): no village
+    // calendar address `<slug>.<geonameId>` (#81). The retired app host is
+    // swept on every route by `e2e/app-links.spec.ts` (DEC-0177).
     const hrefs = await page.evaluate(() =>
       [...document.querySelectorAll("a[href]")].map((link) => link.getAttribute("href") ?? ""),
     );
     expect(
       hrefs.some(
-        (href) => href.includes("app.schafe-vorm-fenster.de") || /^https:\/\/schafe-vorm-fenster\.de\/[a-z0-9-]+\.\d+/u.test(href),
+        (href) => /^https:\/\/schafe-vorm-fenster\.de\/[a-z0-9-]+\.\d+/u.test(href),
       ),
     ).toBe(false);
   });

@@ -28,8 +28,8 @@ import { suggestionLabel } from "@/src/components/place-search/suggestion-row";
 import { RouteLink } from "@/src/components/route-link/route-link";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { StepIndicator } from "@/src/components/step-indicator/step-indicator";
-import { appendCampaignParams, extractCampaignParams } from "@/src/lib/analytics/attribution";
-import { APP_ORIGIN } from "@/src/lib/live/app-handover";
+import { extractCampaignParams } from "@/src/lib/analytics/attribution";
+import { appUrl } from "@/src/lib/live/app-handover";
 import { readPlaceParameter } from "@/src/lib/pages/place-parameter";
 import { usePlaceResolution } from "@/src/lib/pages/place-state";
 import { useQuery } from "@/src/lib/pages/query-store";
@@ -107,7 +107,8 @@ export function RegisterFlow({
   const step = resolveDisplayedStep(answers, first(query, "schritt"));
 
   const campaign = query === null ? {} : extractCampaignParams(query);
-  const handoverUrl = appendCampaignParams(new URL("/registrieren", APP_ORIGIN).toString(), campaign);
+  // DEC-0177: the app has no domain of its own, so the handover is `APP_URL`.
+  const handoverUrl = appUrl({ campaign });
   const carried = campaign as Record<string, string | undefined>;
 
   return (

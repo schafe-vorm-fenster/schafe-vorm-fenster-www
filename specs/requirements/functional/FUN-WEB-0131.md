@@ -28,13 +28,15 @@ ai_provenance:
 
 # FUN-WEB-0131
 
-For calendar data, the website SHALL embed what `app.schafe-vorm-fenster.de` serves rather than hold its own.
+For calendar data, the website SHALL embed what the village calendars serve rather than hold its own.
 
 ## Source
 
 SRC-0001#purpose, SRC-0003
 
 Finding: "rather than hold its own" is not on this line; the nearest support is line 25 ("a separate product surface").
+
+Deviation: `go-to-market-os/concept/website-communication-principles.concept.md#L25` places the village calendars on `app.schafe-vorm-fenster.de`, which has no DNS record; they run on the apex (DEC-0168 §5), and every link to the app goes to the Schlatkow village calendar until the app has its own domain (DEC-0177). The statement no longer names a host. The specification carries the truth (DEC-0104 §1); DEM-0076 asks the source to follow.
 
 ## Notes
 

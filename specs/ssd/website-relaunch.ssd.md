@@ -27,8 +27,9 @@ primary action. It argues with live data and proof instead of claims
 
 - In scope: `www.schafe-vorm-fenster.de` and its country/language variants
   (DEC-0003: `.de`, `.pl`, `.at`, one international domain — TLD open, Q-0001).
-- Out of scope: the product itself (village calendars on
-  `app.schafe-vorm-fenster.de`), help and instructions (live in the app),
+- Out of scope: the product itself (the village calendars — community-site,
+  on the apex today, DEC-0168 §5; the planned `app.schafe-vorm-fenster.de` has
+  no DNS record, DEC-0177), help and instructions (live in the app),
   the AI-coaching track (different brand; SRC-0001 "Boundaries").
 
 ## Goals

@@ -108,7 +108,7 @@ skipped: the visitor sees which place she is registering before handover.
 | Aspect | Determination |
 | --- | --- |
 | Trigger | all three steps answered; the page offers exactly one action |
-| Target | the app's registration entry, built from one configured value (`APP_HOST` per TS-WEB-0008 D9 plus a registration path). The path is **UNKNOWN** — no contract exists (DEC-0029) |
+| Target | the app's registration entry, built from one configured value (`APP_HOST` per TS-WEB-0008 D9 plus a registration path). The path is **UNKNOWN** — no contract exists (DEC-0029). **Since DEC-0177 (2026-10-28):** the app has no domain of its own, so the target is `APP_URL` (`appUrl()`, `src/lib/live/app-handover.ts`), the Schlatkow village calendar, with campaign parameters and no path; it lapses when the app moves to its own domain. The flow is not rendered while D10 stands (DEC-0176) |
 | Prefill across the boundary | none. DEC-0029: place and publishing path have no prefill contract; nothing is appended to the app URL until the app defines it |
 | Honesty rule | because nothing crosses, the page may not claim anything has. No copy may suggest the place is already registered or the account already prepared |
 | Link kind | an external link, not a route-facade link (TS-WEB-0008 D9); no slug is ever appended that geo-api did not confirm |

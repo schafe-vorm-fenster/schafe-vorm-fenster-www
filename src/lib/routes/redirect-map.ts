@@ -49,10 +49,11 @@ import { legalAnchor } from "./legal-anchors";
 import { href } from "./routes";
 
 /**
- * community-site's own origin — **not** `APP_ORIGIN`. `APP_ORIGIN`
- * (`src/lib/live/app-handover.ts`, DEC-0029/DEC-0035) is the per-village
- * calendar handover's hostname (TS-WEB-0017-A11 keeps that literal to that
- * one file — it is not repeated here), which does not serve traffic yet.
+ * community-site's own origin — **not** `APP_URL`. `APP_URL`
+ * (`src/lib/live/app-handover.ts`, DEC-0177) is where every link "to the app"
+ * goes while the app has no domain of its own (TS-WEB-0017-A11 keeps that
+ * literal to that one file — it is not repeated here). The legacy `/hilfe`
+ * redirect is a different job: community-site's own help, which answers 200.
  * community-site is "the app" that CON-WEB-0010 and DEC-0047 mean for help
  * content (DEC-0146) and today it answers on the bare apex — confirmed
  * against the Vercel project's domain list, not assumed. The two origins

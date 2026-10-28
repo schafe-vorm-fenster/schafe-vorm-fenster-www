@@ -28,10 +28,12 @@ ai_provenance:
 
 # CON-WEB-0052
 
-The solution SHALL NOT reimplement the village calendars, which run on `app.schafe-vorm-fenster.de`, imposed by SRC-0001 "Purpose".
+The solution SHALL NOT reimplement the village calendars, which run on the village calendar's own host (community-site on the apex today), imposed by SRC-0001 "Purpose".
 
 ## Source
 
 SRC-0001#purpose, SRC-0003
 
 Finding: Source states the calendars are a separate product surface (line 24 adds "The village calendars run on"); the prohibition on reimplementing them is an inference, not stated.
+
+Deviation: `go-to-market-os/concept/website-communication-principles.concept.md#L25` says the village calendars run on `app.schafe-vorm-fenster.de`. That host has no DNS record (measured 2026-10-27 and 2026-10-28); the calendars answer on the apex as `<slug>.<geonameId>` (DEC-0168 §5), and the owner set every link to the app to the Schlatkow village calendar until the app has its own domain (DEC-0177). The statement names the host the calendars actually run on. The specification carries the truth (DEC-0104 §1); DEM-0076 asks the source to follow.

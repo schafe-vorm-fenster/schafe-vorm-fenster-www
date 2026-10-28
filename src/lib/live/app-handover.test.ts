@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
-  APP_ORIGIN,
+  APP_HOST,
+  APP_URL,
+  appUrl,
   CALENDAR_ORIGIN,
   calendarSlug,
   calendarUrl,
@@ -70,13 +72,22 @@ describe("TS-WEB-0008-A11: the calendar URL is {CALENDAR_ORIGIN}/{slug}.{geoname
   });
 });
 
-describe("TS-WEB-0017-A11: help URLs come out of the same one module", () => {
-  it("answers the app root for an article the mocked table does not know (Q-0041)", () => {
-    expect(helpUrl("gibt-es-nicht")).toBe(APP_ORIGIN);
-    expect(helpUrl()).toBe(APP_ORIGIN);
+describe("TS-WEB-0017-A11: every link to the app is APP_URL from the one module (DEC-0177)", () => {
+  it("is the Schlatkow village calendar while the app has no domain of its own", () => {
+    expect(APP_URL).toBe("https://schafe-vorm-fenster.de/schlatkow.2838887");
+    expect(APP_HOST).toBeUndefined();
+    expect(APP_URL).not.toContain("app.schafe-vorm-fenster.de");
   });
 
-  it("answers the mocked per-article path for a known article", () => {
-    expect(helpUrl("kalender")).toBe(`${APP_ORIGIN}/hilfe/kalender`);
+  it("answers APP_URL for help — the per-article paths answered 404 (DEC-0177)", () => {
+    expect(helpUrl()).toBe(APP_URL);
+  });
+
+  it("hands over to APP_URL with the campaign parameters and nothing else (FUN-WEB-0048)", () => {
+    expect(appUrl()).toBe(APP_URL);
+    const url = new URL(appUrl({ campaign: { etcc_cmp: "frühjahr", ort: "lehre" } }));
+    expect(`${url.origin}${url.pathname}`).toBe(APP_URL);
+    expect(url.searchParams.get("etcc_cmp")).toBe("frühjahr");
+    expect(url.searchParams.has("ort")).toBe(false);
   });
 });

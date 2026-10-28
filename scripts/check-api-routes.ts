@@ -6,10 +6,13 @@
  *      route tree. "Read-only by construction": a write handler in the
  *      website's route tree means the website took over a write the app
  *      owns (TS-WEB-0017 D4).
- *  A11 The app hostname (`app.schafe-vorm-fenster.de`) occurs in at most one
- *      authored module — the DEC-0029 handover builder, or, until that is
- *      built, `src/lib/routes/routes.ts`'s `APP_ORIGIN` constant — and
- *      nowhere else: "no hard-coded app URL" (TS-WEB-0017 D4).
+ *  A11 No hard-coded app URL (TS-WEB-0017 D4), in the form DEC-0177 gives it:
+ *      the app has no domain of its own, so the retired app hostname
+ *      (`app.schafe-vorm-fenster.de`) occurs in the **code** of no authored
+ *      module — a comment may still name it as history — and the literal every
+ *      link "to the app" uses (`APP_URL`) occurs in exactly one module, the
+ *      handover module `src/lib/live/app-handover.ts`. A second copy of the
+ *      URL is how a link drifts from the decision.
  *
  * Both rules hold today only because the features that would violate them
  * don't exist yet (no `app/api/*` route, no handover module) — F-1-3 is
@@ -17,18 +20,11 @@
  * is watching.
  *
  * A11 exclusions, narrow and documented rather than a general carve-out:
- *   - `app/dev/**` and `src/components/gallery.tsx` — the component gallery
- *     is explicitly a non-production tool (`app/dev/components/page.tsx`:
- *     "This is not a production route... no page of the site links to it")
- *     and its demo props are not "a link assembled" in the D4 sense. The
- *     gallery's source lives in `src/components/` (only ever imported by
- *     the `app/dev/**` page), so both paths are named.
- *   - `src/lib/security/csp.ts` — TS-WEB-0014 D1 independently and deliberately
- *     names `app.schafe-vorm-fenster.de` in the CSP allowlist's single typed
- *     structure (TS-WEB-0014 D7), a different determination for a different
- *     reason (a reserved policy slot, not a navigable link). That file is
- *     owned by the developer currently working TS-WEB-0014 in this round; TS-WEB-0017
- *     D4 governs link construction, not CSP directives.
+ *   - `app/dev/**` — the component gallery's page is explicitly a
+ *     non-production tool (`app/dev/components/page.tsx`: "This is not a
+ *     production route... no page of the site links to it"). The gallery's
+ *     own source (`src/components/gallery.tsx`) is no longer excepted: it
+ *     imports `APP_URL` like everybody else.
  *   - test files — asserting an expected literal is not assembling a link.
  *
  * Exit code of `main()`: number of errors (0 = green).
@@ -42,15 +38,17 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const EXCLUDED_DIR_NAMES = new Set(["node_modules", ".next", ".vercel", ".git"]);
 
-/** The four-segment public-facing app subdomain named in TS-WEB-0014 D1 / TS-WEB-0017 D4. */
+/** The app subdomain DEC-0035 planned and DEC-0177 retired: it has no DNS record. */
 const APP_HOSTNAME = "app.schafe-vorm-fenster.de";
 
-/** A11: files a hard-coded app-hostname literal is not held against. */
-const APP_HOSTNAME_EXCEPTIONS = [
-  join("app", "dev"),
-  join("src", "components", "gallery.tsx"),
-  join("src", "lib", "security", "csp.ts"),
-];
+/** The literal of `APP_URL` (DEC-0177) — the one link "to the app". */
+const APP_URL_LITERAL = "schafe-vorm-fenster.de/schlatkow.2838887";
+
+/** The one module `APP_URL_LITERAL` may occur in. */
+const APP_URL_HOME = join("src", "lib", "live", "app-handover.ts");
+
+/** A11: files a hard-coded app literal is not held against. */
+const APP_HOSTNAME_EXCEPTIONS = [join("app", "dev")];
 
 const HTTP_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"] as const;
 type HttpMethod = (typeof HTTP_METHODS)[number];
@@ -129,32 +127,49 @@ export function checkApiRoutes(root: string): ApiRoutesCheckResult {
 
 export interface AppHostnameCheckResult {
   readonly errors: string[];
+  /** Modules whose code (comments removed) names the retired app hostname. */
   readonly occurrences: string[];
+  /** Modules that carry `APP_URL`'s literal. */
+  readonly appUrlModules: string[];
 }
 
-/** A11: the app hostname occurs in at most one authored module. */
+/**
+ * The source with its comments blanked: block comments, and line comments that
+ * open a line. A `//` inside a string (`"https://…"`) is code and stays.
+ */
+function codeOf(source: string): string {
+  return source
+    .replace(/\/\*[\s\S]*?\*\//g, (block) => block.replace(/[^\n]/g, " "))
+    .replace(/^\s*\/\/.*$/gm, "");
+}
+
+/** A11: no code names the retired app hostname; `APP_URL`'s literal lives in one module. */
 export function checkAppHostname(root: string): AppHostnameCheckResult {
   const sourceFiles = [...walk(join(root, "app")), ...walk(join(root, "src"))].filter(
     (f) => /\.(ts|tsx)$/.test(f),
   );
 
   const occurrences: string[] = [];
+  const appUrlModules: string[] = [];
   for (const file of sourceFiles) {
     const rel = relative(root, file);
     if (isTestFile(rel)) continue;
     if (APP_HOSTNAME_EXCEPTIONS.some((prefix) => rel.startsWith(prefix))) continue;
-    const source = readFileSync(file, "utf8");
-    if (source.includes(APP_HOSTNAME)) occurrences.push(rel);
+    const code = codeOf(readFileSync(file, "utf8"));
+    if (code.includes(APP_HOSTNAME)) occurrences.push(rel);
+    if (code.includes(APP_URL_LITERAL)) appUrlModules.push(rel);
   }
 
-  const errors =
-    occurrences.length > 1
-      ? [
-          `A11 the app hostname occurs in ${occurrences.length} modules, not one: ${occurrences.join(", ")}`,
-        ]
-      : [];
+  const errors: string[] = [];
+  if (occurrences.length > 0)
+    errors.push(
+      `A11 the retired app hostname ${APP_HOSTNAME} has no DNS record and occurs in code (DEC-0177): ${occurrences.join(", ")} — link to APP_URL from src/lib/live/app-handover.ts`,
+    );
+  const strays = appUrlModules.filter((rel) => rel !== APP_URL_HOME);
+  if (strays.length > 0)
+    errors.push(`A11 APP_URL's literal occurs outside ${APP_URL_HOME}: ${strays.join(", ")} — import APP_URL instead`);
 
-  return { errors, occurrences };
+  return { errors, occurrences, appUrlModules };
 }
 
 function main() {
@@ -163,7 +178,7 @@ function main() {
   const errors = [...routes.errors, ...hostname.errors];
 
   console.log(
-    `api-routes check: ${routes.routeFileCount} route.ts handler(s) · app hostname in ${hostname.occurrences.length} module(s)`,
+    `api-routes check: ${routes.routeFileCount} route.ts handler(s) · retired app hostname in ${hostname.occurrences.length} module(s) · APP_URL in ${hostname.appUrlModules.join(", ") || "none"}`,
   );
   for (const message of errors) console.error(`  ERROR TS-017-${message}`);
   console.log(errors.length ? `${errors.length} error(s)` : "no errors");

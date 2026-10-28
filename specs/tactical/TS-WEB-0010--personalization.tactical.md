@@ -101,7 +101,7 @@ vocabularies would silently produce two segmentations.
 | `reader-search` | organic search referrer + landing on `/dein-ort` | Google search "what is on in <place>" |
 | `print-qr` | campaign parameter of the print family (`etcc_med=print`) | Print QR |
 | `press` | referrer host in the press/podcast allowlist (built from `media-echo`) | Press article or podcast link |
-| `activated` | `etcc_med=newsletter`, or referrer host `app.schafe-vorm-fenster.de` | Newsletter, app redirect |
+| `activated` | `etcc_med=newsletter`, or a referrer from the app's own host — **none today**: the app has no domain of its own (DEC-0177), its stand-in `APP_URL` sits on our apex, and a referrer from there is `direct`. `APP_HOST` in `src/lib/live/app-handover.ts` names the host when the app gets one | Newsletter, app redirect |
 | `direct` | everything else, including an unrecognised referrer and an empty one | Direct visit, unknown |
 
 - Campaign parameters follow the existing `etcc_*` convention
