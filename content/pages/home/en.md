@@ -268,15 +268,15 @@ to the page that tells the origin in full — the label is this slot's own
 wording and the provenance scene's one secondary CTA (TS-WEB-0019 D3a,
 DEC-0082 §4).
 
-## Block 2c — Proof stream (5 elements)
+## Block 2c — Proof stream (4 elements)
 
-<!-- clearance: pending — `lehre-lelender`, `volkshochschule-uecker-randow` and `kulturlandbuero-broellin` are `usage_rights: unverified` (Q-0014), the three media-echo entries carry no `usage_rights` at all (Q-0045, state/open.md #1). The protected preview shows them; the pre-go-live hardening round clears them. `noerd-award-2026-smart-community` and `in-operation-since-2018` are `cleared`. -->
+<!-- clearance: pending — `lehre-lelender`, `volkshochschule-uecker-randow` and `kulturlandbuero-broellin` are `usage_rights: unverified` (Q-0014), the three media-echo entries carry no `usage_rights` at all (Q-0045, state/open.md #1). The protected preview shows them; the pre-go-live hardening round clears them. `noerd-award-2026-smart-community` is `cleared`. -->
 <!-- source_note: the stage-0 rule "widest spread, most recent first" comes from gtm:concept/website-relevance-model.concept.md (context matrix, row "Direct visit, unknown"); the proof rule from gtm:concept/website-communication-principles.concept.md §4. -->
-<!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
+<!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
 
 **Kicker above the stream:** Awards, press, and places already using the village calendar
 
-Selection and order of the five elements stay the relevance engine's job
+Selection and order of the four elements stay the relevance engine's job
 at runtime (TS-WEB-0005 D5, DEC-0048). This slot supplies the frame sentence and
 the candidate set it draws from — pool:
 `@schafe-vorm-fenster/proof@0.3.5` and
@@ -288,7 +288,6 @@ the candidate set it draws from — pool:
 2. Won the NØRD Award 2026, Smart Community category, under Bitkom patronage. — NØRD digital convention, Rostock
 3. The adult education centres bring their course programme out to the villages. — Adult education centres in Vorpommern-Greifswald, Pasewalk
 4. "The project can make a valuable contribution … to visibility in rural areas." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
-5. Running since 2018, no pilot and no prototype. — Vorpommern-Greifswald
 
 <!-- note: authoring note from here on, not copy — the passage quotes forbidden terms in order to forbid them (DEC-0142 §1) -->
 
@@ -297,8 +296,7 @@ stand: the 17 places, the name "LeLender" and the foundation's ownership
 from `lehre-lelender`, the win and the Bitkom patronage from
 `noerd-award-2026-smart-community`, the course programme from
 `volkshochschule-uecker-randow`, the Kulturlandbüro's quotation from
-`kulturlandbuero-broellin`, the operating year from
-`in-operation-since-2018`. The quotation keeps the modality the record keeps —
+`kulturlandbuero-broellin`. The quotation keeps the modality the record keeps —
 "can make", shortened by "to economic recovery and", wording from §Evidence and
 the same sentence the reserved place on `/ueber-uns` carries
 (`content/pages/ueber-uns/en.md`). It is not a claim of ours: the record's
@@ -309,13 +307,13 @@ Award was won, not merely entered; the adult education centres are named
 after the district and the benefit (courses in the villages too) belongs in
 the sentence; the Nordkurier nomination entry goes, because the award says
 the same thing more strongly. The internal meta line "Press and appearance
-record 2018 to 2026" is struck with nothing in its place (CG-035), so the
-fifth element carries only its region and its context line comes from
-slot 12. No cleared record exists in the hub for "success with customers"
-(Wolgaster Kulturgesellschaft, named by the review) — `state/open.md`. Two
-of the five are cleared; three are waiting for clearance and run with
-`clearance: pending`. Citable is "running since 2018", not "eight years at
-full operation" (the record's own wording limit).
+record 2018 to 2026" is struck with nothing in its place (CG-035). The
+fifth element ("Running since 2018", `in-operation-since-2018`) was dropped
+on 2026-10-28 at the owner's request: with no sender and no logo it added
+nothing to the stream. No cleared record exists in the hub for "success with customers"
+(Wolgaster Kulturgesellschaft, named by the review) — `state/open.md`. One
+of the four is cleared; three are waiting for clearance and run with
+`clearance: pending`.
 
 ## Context band (3 non-focus jobs)
 

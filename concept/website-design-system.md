@@ -1418,7 +1418,7 @@ grey-green, over rows set in a hierarchy of their own. The language is
 | Item | A flat element **on the section's own ground**: no fill, radius 0, no shadow, a hairline above it (`line`, or `border.hairlineOnLime` on `lime-100`). Every item of a stream has the same structure |
 | Order | The claim first, then the byline — the quote card's order, so a claim and a cited quote read alike |
 | Claim | The record's claim verbatim. The first item (`feature`) at sub-head size / 700, at most 8 columns; the others (`compact`) at card size / 700. No quotation marks: a claim without a cited source is not a quote (*Quote card*, `DEC-0143` §3) |
-| Byline | A 40 px **initials well** — the icon well's size and fill (`surface` on `lime-100`, `lime-100` on `paper`), mono 15 / 700 `ink`, hidden from assistive technology — beside the name in mono 15 / 700 and the role or place in 15 / 400 in the ground's meta colour on the next line. A cleared portrait or logo takes the well's place; no proof record carries one for a voice today |
+| Byline | A 40 px **initials well** — the icon well's size and fill (`surface` on `lime-100`, `lime-100` on `paper`), mono 15 / 700 `ink`, hidden from assistive technology — beside the name in mono 15 / 700 and the role or place in 15 / 400 in the ground's meta colour on the next line. A portrait or logo takes the well's place — a voice's logo from `@schafe-vorm-fenster/partners` on a `paper` plate at the well's height and its own width, never cropped or recoloured (`DEC-0183`) |
 | Layout | One column below `xl`. From `xl` the feature item keeps the whole row and the others stand side by side, 6 + 6 |
 | Not | A filled card, a badge repeating the source, an image slot without a cleared image (G-9), a control-sized pill |
 

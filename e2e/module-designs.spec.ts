@@ -160,11 +160,14 @@ test.describe("DEC-0172: the comparison, the flow, the proof stream and the trus
           expect(await css(item, "background-color")).toBe(await token(page, TRANSPARENT));
           expect(parseFloat(await css(item, "border-top-width"))).toBeGreaterThanOrEqual(1);
           expect(await css(item, "border-top-color")).toBe(await token(page, LIME_500)); // hairline-on-lime
-          // The byline: a decorative initials well, the name, the role.
-          const well = item.locator("[data-initials]");
+          // The byline: a decorative initials well — or the voice's logo in
+          // its place, at the well's height and its own width (DEC-0183) —
+          // the name, the role.
+          const well = item.locator("[data-initials], [data-logo]");
           await expect(well).toHaveAttribute("aria-hidden", "true");
           const disc = await box(well);
-          expect(Math.round(disc.width)).toBe(40);
+          if ((await well.getAttribute("data-initials")) !== null) expect(Math.round(disc.width)).toBe(40);
+          else expect(disc.width).toBeGreaterThan(0);
           expect(Math.round(disc.height)).toBe(40);
           // The claim comes before the byline.
           const claim = await box(item.locator("p").first());

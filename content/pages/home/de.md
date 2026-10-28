@@ -269,15 +269,15 @@ den Stempel. Was bleibt, ist der Weg zur Seite, die die Herkunft ausführt —
 das Label ist der Wortlaut dieses Slots und die eine sekundäre CTA der
 Herkunfts-Szene (TS-WEB-0019 D3a, DEC-0082 §4).
 
-## Block 2c — Belegstrom (5 Elemente)
+## Block 2c — Belegstrom (4 Elemente)
 
-<!-- clearance: pending — `lehre-lelender`, `volkshochschule-uecker-randow` und `kulturlandbuero-broellin` stehen auf `usage_rights: unverified` (Q-0014), die drei media-echo-Einträge tragen gar kein `usage_rights` (Q-0045, state/open.md #1). Die geschützte Vorschau zeigt sie, der Härtungslauf vor dem Go-live klärt sie. `noerd-award-2026-smart-community` und `in-operation-since-2018` sind `cleared`. -->
+<!-- clearance: pending — `lehre-lelender`, `volkshochschule-uecker-randow` und `kulturlandbuero-broellin` stehen auf `usage_rights: unverified` (Q-0014), die drei media-echo-Einträge tragen gar kein `usage_rights` (Q-0045, state/open.md #1). Die geschützte Vorschau zeigt sie, der Härtungslauf vor dem Go-live klärt sie. `noerd-award-2026-smart-community` ist `cleared`. -->
 <!-- source_note: Stufe-0-Regel „weiteste Streuung, jüngste zuerst" aus gtm:concept/website-relevance-model.concept.md (Kontextmatrix, Zeile „Direkter Besuch, unbekannt"); Belegregel aus gtm:concept/website-communication-principles.concept.md §4. -->
-<!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
+<!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
 
 **Kicker über dem Strom:** Auszeichnungen, Presse und Orte, die den Dorfkalender schon nutzen
 
-Auswahl und Reihenfolge der fünf Elemente bleiben Aufgabe der
+Auswahl und Reihenfolge der vier Elemente bleiben Aufgabe der
 Relevanz-Engine zur Laufzeit (TS-WEB-0005 D5, DEC-0048). Dieser Slot liefert den
 Rahmensatz und den Kandidatensatz, aus dem gezogen wird — Pool:
 `@schafe-vorm-fenster/proof@0.3.5` und
@@ -289,7 +289,6 @@ Rahmensatz und den Kandidatensatz, aus dem gezogen wird — Pool:
 2. NØRD Award 2026 gewonnen, Kategorie Smart Community, Schirmherr Bitkom. — NØRD digital convention, Rostock
 3. Die Volkshochschulen bringen ihr Kursprogramm bis in die Dörfer. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
 4. „Das Projekt kann einen wertvollen Beitrag … zur Sichtbarkeit im ländlichen Raum leisten." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
-5. Seit 2018 in Betrieb, kein Pilot und kein Prototyp. — Vorpommern-Greifswald
 
 <!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
 
@@ -298,7 +297,7 @@ Name „LeLender" und die Trägerschaft der Stiftung aus `lehre-lelender`, der
 Gewinn und die Bitkom-Schirmherrschaft aus
 `noerd-award-2026-smart-community`, das Kursprogramm aus
 `volkshochschule-uecker-randow`, das Zitat des Kulturlandbüros aus
-`kulturlandbuero-broellin`, das Betriebsjahr aus `in-operation-since-2018`.
+`kulturlandbuero-broellin`.
 Das Zitat steht in der Möglichkeitsform, in der der Beleg es führt — „kann …
 leisten", gekürzt um „zum wirtschaftlichen Wiederaufbau und", Wortlaut aus
 §Evidence und identisch mit dem reservierten Platz auf `/ueber-uns`
@@ -312,13 +311,12 @@ und nicht nur beschickt; die Volkshochschulen heißen nach dem Landkreis und
 der Nutzen (Kurse auch im Dorf) gehört in den Satz; der Nordkurier-Eintrag
 zur Nominierung fällt weg, weil der Award dieselbe Sache stärker sagt. Die
 interne Meta-Zeile „Presse- und Auftrittshistorie 2018 bis 2026" ist
-ersatzlos gestrichen (CG-035); der fünfte Beleg trägt deshalb nur seinen
-Ort, und die Kontextzeile kommt aus Slot 12. Ein freigegebener Beleg für
+ersatzlos gestrichen (CG-035). Der fünfte Beleg („Seit 2018 in Betrieb",
+`in-operation-since-2018`) ist am 2026-10-28 auf Wunsch des Owners
+entfallen: ohne Absender und ohne Logo trug er im Strom nichts. Ein freigegebener Beleg für
 „Erfolg für Kunden" (Wolgaster Kulturgesellschaft, vom Review genannt)
-existiert im Hub nicht — `state/open.md`. Zwei der fünf sind freigegeben,
+existiert im Hub nicht — `state/open.md`. Einer der vier ist freigegeben,
 drei warten auf ihre Freigabe und laufen mit `clearance: pending`.
-Zitierfähig ist „seit 2018 in Betrieb", nicht „acht Jahre Vollbetrieb"
-(Formulierungsgrenze des Belegs).
 
 ## Kontextband (3 Nicht-Fokus-Jobs)
 

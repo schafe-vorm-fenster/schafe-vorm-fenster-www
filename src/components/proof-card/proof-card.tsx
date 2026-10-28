@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { Badge } from "../badge/badge";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { MediaFrame } from "../media-frame/media-frame";
@@ -16,6 +18,17 @@ export interface ProofCardImage {
   readonly alt: string;
   readonly notDepicting?: boolean;
   readonly placeholderId?: string;
+}
+
+/**
+ * A voice's logo for the byline — the partner's own mark, from
+ * `@schafe-vorm-fenster/partners` (DEC-0183). Never recoloured or cropped:
+ * the box takes the mark's own ratio.
+ */
+export interface ProofCardLogo {
+  readonly src: string;
+  readonly width: number;
+  readonly height: number;
 }
 
 export interface ProofCardLink {
@@ -46,6 +59,8 @@ export interface ProofCardProps extends DataStateProps {
   readonly emphasis?: "feature" | "compact";
   /** Present only where the content type expects an image at all. */
   readonly image?: ProofCardImage;
+  /** The voice's logo; it takes the initials well's place in the stream forms. */
+  readonly logo?: ProofCardLogo;
   readonly link?: ProofCardLink;
   readonly locale?: Locale;
   readonly className?: string;
@@ -96,6 +111,7 @@ export function ProofCard({
   geo,
   emphasis,
   image,
+  logo,
   link,
   state = "ready",
   locale,
@@ -140,16 +156,23 @@ export function ProofCard({
            * first, then who said or did it — the order of a quote card, so a
            * claim and a quote read alike on every page. The byline is a 40 px
            * initials well (decoration, the icon well's size and fill, never a
-           * control) beside the name in mono and the role under it. No record
-           * carries a cleared portrait or logo for a voice today; when one
-           * does, it takes the well's place.
+           * control) beside the name in mono and the role under it. Where the
+           * voice has a logo, the logo takes the well's place at the well's
+           * height and its own width (DEC-0183) — decoration as well, because
+           * the name stands beside it as text.
            */
           <>
             <p className={styles.claim}>{claim}</p>
             <div className={styles.byline}>
-              <span aria-hidden="true" className={styles.initials} data-initials>
-                {initialsOf(contextLine)}
-              </span>
+              {logo ? (
+                <span aria-hidden="true" className={styles.logo} data-logo>
+                  <Image alt="" height={logo.height} src={logo.src} width={logo.width} />
+                </span>
+              ) : (
+                <span aria-hidden="true" className={styles.initials} data-initials>
+                  {initialsOf(contextLine)}
+                </span>
+              )}
               <p className={styles.who}>
                 <span className={styles.name}>{contextLine}</span>
                 {attribution ? <span className={styles.role}>{attribution}</span> : null}

@@ -19,6 +19,7 @@ import { contactHref } from "@/src/lib/contact/contact-channels";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
+import { partnerLogo } from "@/src/lib/content/partner-logos";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot, slotState } from "@/src/lib/content/provenance";
@@ -562,6 +563,7 @@ export default async function Page({
                 claim={entry.candidate.claim}
                 contextLine={entry.candidate.contextLine}
                 emphasis={position === 0 ? "feature" : "compact"}
+                logo={partnerLogo(entry.candidate.contextLine)}
                 key={entry.candidate.id}
                 locale={locale}
                 state={entry.state}
