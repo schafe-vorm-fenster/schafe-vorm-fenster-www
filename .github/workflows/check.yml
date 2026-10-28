@@ -90,8 +90,12 @@ jobs:
       # own: TS-WEB-0003-A7 (CLS < 0.1 with the live modules streaming in) is
       # measured by the `layout-shift` PerformanceObserver in
       # `e2e/layout-stability.spec.ts`, per route, against the production build.
-      - name: E2E — Playwright against the local production build (TS-WEB-0003-A7)
-        run: pnpm e2e
+      # DEC-0180: per push and PR only the technical selection (`pnpm
+      # e2e:technical` — smoke, CSP + hydration, routes, external links, layout
+      # stability, axe, third-party requests). The full suite (page journeys and
+      # the design/rule guards) runs on demand: `.github/workflows/full-e2e.yml`.
+      - name: E2E — technical selection against the local production build (TS-WEB-0003-A7, DEC-0180)
+        run: pnpm e2e:technical
         env:
           CI: true
 
