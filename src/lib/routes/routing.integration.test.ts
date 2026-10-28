@@ -203,7 +203,9 @@ describe("TS-WEB-0004-A1: every path of the D1 inventory exists in both language
       expect(metadata.description, `${route}/${locale}`).toBeTruthy();
       expect(metadata.title, `${route}/${locale}`).toBeTruthy();
     }
-  });
+    // It imports every page module once; on a loaded machine that alone took
+    // 5–10 s and broke the pre-commit hook for unrelated changes (2026-10-27).
+  }, 30_000);
 });
 
 describe("TS-WEB-0001-A1: the German page declares German", () => {
