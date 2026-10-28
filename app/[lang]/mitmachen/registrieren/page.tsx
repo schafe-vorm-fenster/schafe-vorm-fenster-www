@@ -44,9 +44,9 @@ import styles from "./register.module.css";
  * (`register-form-frame.tsx`) and on a click of the new-tab link. The
  * submission is Google's and is not observable from this page.
  *
- * `data-demo="true"` on the notice, the link's paragraph and the frame: the
- * notice and the frame title are `/start`'s placeholders (`state/open.md` rows
- * 223, 224), the link label is this page's (row 292).
+ * The notice, the frame title and the link label are final wording since
+ * 2026-10-28 (DEC-0176 amendment; `state/open.md` rows 223, 224 and 292
+ * closed), so none of them carries `data-demo` any more.
  */
 
 const ROUTE = "register" as const;
@@ -74,10 +74,10 @@ export default async function Page({ params }: { params: Promise<{ lang: string 
         <h1>{words.pages.register}</h1>
         {/* TS-WEB-0016 D17 — above the frame, in DOM order and visually. A
             paragraph and a link: nothing on the page waits for it. */}
-        <p className={styles.notice} data-block="embed-notice" data-demo="true">
+        <p className={styles.notice} data-block="embed-notice">
           {words.start.notice} <a href={linkHref("legal", { locale, hash: "datenschutz" })}>{words.start.noticeLink}</a>
         </p>
-        <p data-block="register-form-fallback" data-demo="true">
+        <p data-block="register-form-fallback">
           <ConversionTracker attributes={{ via: "new-tab" }} goalId="register-as-publisher" stage="handover">
             <OutboundLink
               dataCta="secondary"

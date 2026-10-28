@@ -79,7 +79,6 @@ export function RegisterFormFrame({ src, title, className }: RegisterFormFramePr
   return (
     <iframe
       className={className}
-      data-demo="true"
       data-hydrated={hydrated ? "true" : "false"}
       data-register-form=""
       loading="eager"

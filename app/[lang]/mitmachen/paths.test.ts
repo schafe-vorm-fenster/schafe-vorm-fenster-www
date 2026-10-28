@@ -177,9 +177,8 @@ describe("the shipped artifacts", () => {
 
     it(`${locale}: the banner slot states the price boundary, with no figure`, () => {
       const boundary = fieldAt(parseBlocks(slots.get(BANNER_SLOT) ?? ""), 0) ?? "";
-      // FUN-WEB-0204 asks the page to state the boundary; the words are a
-      // placeholder, so what is pinned here is that the sentence exists and
-      // carries no figure — not its wording.
+      // FUN-WEB-0204 asks the page to state the boundary. What is pinned here
+      // is that the sentence exists and carries no figure — not its wording.
       expect(boundary.length, `${BANNER_SLOT} carries the boundary sentence`).toBeGreaterThan(20);
       expect(boundary, "TS-WEB-0022-A12/A17: no figure in the banner").not.toMatch(
         /\d+\s*€|€|480|\bab\b|\bfrom €/,

@@ -57,9 +57,10 @@ export interface ContactSectionProps {
  * inside (TS-WEB-0006 D3, DEC-0082 amendment B).
  * Space: section padding block; buttons 56 px; phone and mail 44 px.
  * A11y: a `section` named by its heading; real links; the title in each
- * link's name, the recipient out of it (TS-WEB-0016-A23). The head, the lead
- * and the D16 sentence are placeholders until the owner
- * writes them, so the section carries `data-demo="true"` (DEC-0113).
+ * link's name, the recipient out of it (TS-WEB-0016-A23). The lead and the D16
+ * sentence are final since 2026-10-28 (`state/open.md` rows 216, 218); the
+ * head is still a placeholder until the owner writes it (row 215), so the
+ * section keeps `data-demo="true"` (DEC-0113).
  */
 export function ContactSection({ locale, route, className }: ContactSectionProps) {
   const d = dictionary(locale).contactSection;

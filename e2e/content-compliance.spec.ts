@@ -218,9 +218,9 @@ test("F-2-33: the English register page's own words around the form are English"
   // language. (Until then this asserted the flow's step-1 submit, "Continue".)
   await page.goto("/en/take-part/register");
   const main = page.getByRole("main");
-  await expect(main.locator('[data-block="embed-notice"]')).toContainText("provided by Google");
-  await expect(main.locator("iframe[data-register-form]")).toHaveAttribute("title", "Registration form at Google Forms");
-  await expect(main.locator('[data-block="register-form-fallback"]')).toContainText("Open the form directly at Google");
+  await expect(main.locator('[data-block="embed-notice"]')).toContainText("Google provides the form");
+  await expect(main.locator("iframe[data-register-form]")).toHaveAttribute("title", "Registration form on Google Forms");
+  await expect(main.locator('[data-block="register-form-fallback"]')).toContainText("Open the form directly");
   await expect(main.locator('[data-block="register-form-fallback"]')).toContainText("Data goes to Google");
 });
 
