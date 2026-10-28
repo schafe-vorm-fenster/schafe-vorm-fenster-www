@@ -68,6 +68,9 @@ async function readPicture(page: Page) {
       rowBottoms: [...picture.querySelectorAll("article")].map((row) => row.getBoundingClientRect().bottom - box.top),
       rowTitles: [...picture.querySelectorAll("article h3")].map((title) => (title.textContent ?? "").trim()),
       paneHeights: [...explainModule.querySelectorAll("[data-explain-pane]")].map((pane) => pane.getBoundingClientRect().height),
+      graphicHeights: [...explainModule.querySelectorAll("[data-explain-pane]")].map(
+        (pane) => pane.firstElementChild!.getBoundingClientRect().height,
+      ),
       moduleHeight: explainModule.getBoundingClientRect().height,
       sidewaysScroll: document.documentElement.scrollWidth > window.innerWidth + 1,
     };
@@ -97,6 +100,9 @@ for (const width of WIDTHS) {
       expect(bottom, `row ${index + 1} ends inside the picture`).toBeLessThanOrEqual(after.height + 0.5);
     // The tallest pane sets the height of all three.
     expect(new Set(after.paneHeights.map(Math.round)).size, "the panes share one height").toBe(1);
+    // Every graphic fills its pane: no square ends short of the calendar (DEC-0182).
+    for (const [index, height] of after.graphicHeights.entries())
+      expect(height, `graphic ${index + 1} fills its pane`).toBeCloseTo(after.paneHeights[index] ?? 0, 0);
     // Reserved before paint: nothing moves when the rows land.
     expect(after.height, "the picture's height is reserved").toBeCloseTo(before.height, 0);
     expect(after.moduleHeight, "the module's height is reserved").toBeCloseTo(before.moduleHeight, 0);
