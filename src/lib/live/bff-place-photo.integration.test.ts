@@ -4,6 +4,8 @@ import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { resetRateLimits } from "./bff";
+import { setGeoLookupStore } from "./geo-lookup";
+import { memoryStore } from "./last-good";
 
 import { GET } from "@/app/api/places/[slug]/photo/route";
 
@@ -67,6 +69,9 @@ const ATTRIBUTED = { "content-type": "image/webp", license: "CC BY-SA 4.0", copy
 
 beforeEach(() => {
   resetRateLimits();
+  // Each scenario stubs geo-api afresh; a community cached by the one before
+  // (DEC-0181) must not answer it.
+  setGeoLookupStore(memoryStore());
   scenario = {};
   vi.stubEnv("LIVE_DATA", "auto");
   vi.stubEnv("GEOAPI_READ_TOKEN", "test-token");
@@ -74,6 +79,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  setGeoLookupStore(undefined);
   vi.unstubAllEnvs();
   vi.unstubAllGlobals();
 });

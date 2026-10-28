@@ -154,6 +154,31 @@ export function eventsConfig(): { host: string; token: string; timeoutMs: number
 }
 
 /**
+ * The budget for geo-api's **point search** (`community/search?lat=&lng=`),
+ * and for it only — DEC-0181, amending TS-WEB-0009 D4.
+ *
+ * Measured on 2026-10-28 from Germany against 70 distinct coordinates: median
+ * ~0.5 s, p95 0.79 s, max 0.92 s on a first ask (3 of 70 above 800 ms); the
+ * same coordinate asked again answers in ~0.09 s. The 800 ms JSON budget sits
+ * on that tail, and the preview's runtime log shows `/api/nearby` degrading on
+ * `geo-api: timeout after 800 ms` in fra1 although nothing was down. The answer — which communities lie around a point — practically
+ * never changes, so it is cached for `geoLookup`'s 7 days (`geo-lookup.ts`)
+ * and the one ask that fills the cache may take 3 s: above the measured
+ * maximum by a factor of three. Nobody watches it run: position 2 sits below
+ * the fold and loads in the browser behind a skeleton at its final geometry.
+ * The events half of the same module keeps the 800 ms.
+ *
+ * `/api/places/nearest` does **not** get it: that call carries a visitor's own
+ * position, is never cached (TS-WEB-0010 D5, DEC-0119) and has the committed
+ * index behind it, so it keeps the 800 ms.
+ */
+export const GEO_POINT_TIMEOUT_MS = 3000;
+
+export function geoPointConfig(): { host: string; token: string; timeoutMs: number } {
+  return { ...geoConfig(), timeoutMs: GEO_POINT_TIMEOUT_MS };
+}
+
+/**
  * The budget for the **public village-calendar page**, which is a document
  * rather than an API call: ~80 KB gzipped, measured at 100–200 ms TTFB on
  * 2026-09-18. It gets its own number because 800 ms is the budget for a JSON

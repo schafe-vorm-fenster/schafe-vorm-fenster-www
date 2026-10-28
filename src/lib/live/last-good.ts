@@ -56,11 +56,11 @@ function isEntry(value: unknown): value is LastGoodEntry<unknown> {
  * that cannot answer must degrade the module to tier 3, never throw into the
  * render (TS-WEB-0009 D9).
  */
-export function runtimeCacheStore(): LastGoodStore {
+export function runtimeCacheStore(namespace: string = LAST_GOOD_NAMESPACE): LastGoodStore {
   return {
     async read<T>(key: string) {
       try {
-        const value = await getCache({ namespace: LAST_GOOD_NAMESPACE }).get(key);
+        const value = await getCache({ namespace }).get(key);
         return isEntry(value) ? (value as LastGoodEntry<T>) : undefined;
       } catch {
         return undefined;
@@ -72,7 +72,7 @@ export function runtimeCacheStore(): LastGoodStore {
       { ttlSeconds, tags }: { readonly ttlSeconds: number; readonly tags?: readonly string[] },
     ) {
       try {
-        await getCache({ namespace: LAST_GOOD_NAMESPACE }).set(key, entry, {
+        await getCache({ namespace }).set(key, entry, {
           ttl: ttlSeconds,
           tags: tags ? [...tags] : undefined,
           name: key,

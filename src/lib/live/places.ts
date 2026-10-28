@@ -25,16 +25,13 @@
  * step, which is a purchase configuration and not the place search.
  */
 
-import {
-  searchByPoint as realSearchByPoint,
-  searchByZip as realSearchByZip,
-  communityBySlug as realCommunityBySlug,
-} from "@/src/clients/geo-api/client";
+import { searchByPoint as realSearchByPoint, searchByZip as realSearchByZip } from "@/src/clients/geo-api/client";
 import { searchEvents } from "@/src/clients/events-api/client";
 
 import { toLiveEvents, toPlace } from "./adapters";
 import { cacheTags } from "./cache-profiles";
 import { eventsConfig, geoConfig, hasRealBackend } from "./config";
+import { cachedCommunityBySlug } from "./geo-lookup";
 import { mockEventsForPlace } from "./mocks/events";
 import { mockCommunityBySlug, mockSearchByName, mockSearchByPoint, mockSearchByZip } from "./mocks/geo";
 import { hasPlaceIndex, MAX_NAME_MATCHES, nearestPlace, placeBySlug, searchByName } from "./place-index";
@@ -191,13 +188,14 @@ export async function nearestCoveredPlace(point: {
  * (TS-WEB-0008 D9).
  *
  * geo-api first, because it is the authority and carries the hierarchy the
- * index does not. The committed index second, because it holds the same
- * slugs and needs no credential. The mock last.
+ * index does not — and cached for days, because a slug names the same
+ * community tomorrow (DEC-0181). The committed index second, because it holds
+ * the same slugs and needs no credential. The mock last.
  */
 export async function resolvePlace(slug: string): Promise<Place | undefined> {
   if (hasRealBackend("communityBySlug")) {
     try {
-      const community = await realCommunityBySlug(geoConfig(), slug);
+      const community = await cachedCommunityBySlug(slug);
       if (community) return toPlace(community);
     } catch {
       // Fall through: an unreachable geo-api is not an unresolvable slug.

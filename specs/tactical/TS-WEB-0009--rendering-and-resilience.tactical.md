@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0192, CON-WEB-0088, FUN-WEB-0193, FUN-WEB-0194, FUN-WEB-0195, FUN-WEB-0102, FUN-WEB-0103, FUN-WEB-0196, FUN-WEB-0197, FUN-WEB-0198, FUN-WEB-0199, FUN-WEB-0200, CON-WEB-0089, CON-WEB-0090]
 sources: [SRC-0002, SRC-0011]
-decisions: [DEC-0002, DEC-0019, DEC-0021, DEC-0032, DEC-0033, DEC-0041, DEC-0163]
+decisions: [DEC-0002, DEC-0019, DEC-0021, DEC-0032, DEC-0033, DEC-0041, DEC-0163, DEC-0181]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -139,6 +139,12 @@ Rules:
   next revalidation retries.
 - **Timeout: 800 ms** [PROPOSED]. It bounds how long an island's
   skeleton can stand; it never bounds the shell.
+  > **Amended by DEC-0181 (2026-10-28).** One call has its own budget:
+  > geo-api's point search, **3 s** (`GEO_POINT_TIMEOUT_MS`). Measured from
+  > Germany on 70 first asks: median ~0.5 s, p95 0.79 s, max 0.92 s, 3 above
+  > 800 ms. Its answer is cached for 7 days on the two-decimal point
+  > (TS-WEB-0003 D5 `geoLookup`), so the longer budget is paid once per cell;
+  > the events half of the same module, and every other JSON call, keep 800 ms.
 - **An empty result is tier 1, not a failure** (FUN-WEB-0045). Zero dates in
   a place is an answer, and the page converts on it — the widening chain
   and the focus-job shift of FUN-WEB-0153, FUN-WEB-0154 handle it, not this cascade.
@@ -361,6 +367,8 @@ a `<Suspense>`; a resolver stays as small as the props it produces.
 - **Upstream timeout of 800 ms is set, not measured** (D4). It needs the
   p95 latency of events-api and geo-api before launch; too low turns
   healthy responses into tier 2 and hides live data behind labels.
+  Answered for geo-api's point search by DEC-0181 (p95 0.79 s, own 3 s
+  budget); open for every other call.
 - **Q-0015** (do `events-api /api/stats` fields cover places · dates ·
   updates today) decides what the counter module can show at all, and
   therefore what D6 hides.
