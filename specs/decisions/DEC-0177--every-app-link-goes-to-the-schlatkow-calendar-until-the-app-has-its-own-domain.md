@@ -70,7 +70,8 @@ domain.
    **`TS-WEB-0017-A33`** is new (`e2e/app-links.spec.ts`): on every route in
    both languages, and on `/dein-ort` with a chosen place, no `href`,
    `action` or `src` names `app.schafe-vorm-fenster.de` after the live modules
-   answered.
+   answered. It runs in the full suite (`pnpm e2e`), which DEC-0180 runs on
+   demand; it is not added to `e2e:technical`, whose selection is DEC-0180's.
 7. **It lapses** when the app moves to its own domain. Then `APP_URL` takes
    that origin (and a registration path, once DEC-0029 has a contract),
    `APP_HOST` takes its hostname, the CSP gets a row only if a directive needs
