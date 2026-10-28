@@ -19,8 +19,12 @@ import type { Place } from "./types";
 export const CHAIN_STEPS = [1, 2, 3, 4] as const;
 export type ChainStep = (typeof CHAIN_STEPS)[number];
 
-/** SRC-0002's "~15 km" for step 2, approximated on our side (TS-WEB-0008 D3). */
-export const NEARBY_RADIUS_KM = 15;
+/**
+ * Step 2's radius: the events-api's own `region` scope, 20 km (DEC-0185; SRC-0002's
+ * "~15 km" was never a number the service had). Used for the committed ring and
+ * the cache key; the token path leaves the cut to the service.
+ */
+export const NEARBY_RADIUS_KM = 20;
 
 /** What the resolver handed the chain (TS-WEB-0009 D2 reads it; this file only uses it). */
 export type ChainAnchor =

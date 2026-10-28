@@ -64,6 +64,8 @@ export function toLiveEvent(event: UpstreamEvent): LiveEvent | undefined {
       imageUrl: event["image.exists"] === false ? undefined : event.image || undefined,
       scope: event.scope,
       allDay: event.allday === true ? true : undefined,
+      organizerId: event["organizer.id"] || undefined,
+      occurrence: event.occurrence,
     }),
   };
 }
@@ -114,6 +116,7 @@ export function toLiveEventFromSite(event: CommunitySiteEvent): LiveEvent | unde
       imageUrl: event.imageUrl?.trim() || undefined,
       scope: event.scope,
       allDay: event.allday === true ? true : undefined,
+      organizerId: event.calendar?.organizer?._id || undefined,
     }),
   };
 }
