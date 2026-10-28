@@ -21,11 +21,12 @@ import { readBlockGaps, type BlockGap, type BlockGapScope } from "../e2e/support
 import { everyRoute, href } from "../src/lib/routes/routes";
 
 const BASE = process.env.E2E_BASE_URL ?? "http://localhost:3100";
-const WIDTHS = [390, 1280];
-/** `--block-gap` (`space-4`), DEC-0171. */
-const BLOCK_GAP = 16;
-/** `--block-gap-bound` (`space-2`): a kicker binds to the block it names. */
-const BLOCK_GAP_BOUND = 8;
+const WIDTHS = [390, 800, 1280];
+/**
+ * `--block-gap` and `--block-gap-bound` per tier (DEC-0178): 16/8 below xl,
+ * 24/12 from xl (64rem = 1024 px). A kicker binds to the block it names.
+ */
+const gapsAt = (width: number) => (width >= 1024 ? { gap: 24, bound: 12 } : { gap: 16, bound: 8 });
 
 const argument = (name: string) => {
   const index = process.argv.indexOf(name);
@@ -67,7 +68,7 @@ async function main() {
 
   const under = results.flatMap(({ path, width, gaps }) =>
     gaps
-      .filter((gap) => gap.gap < (gap.afterKicker ? BLOCK_GAP_BOUND : BLOCK_GAP) - 0.5)
+      .filter((gap) => gap.gap < (gap.afterKicker ? gapsAt(width).bound : gapsAt(width).gap) - 0.5)
       .map((gap) => ({ path, width, ...gap })),
   );
   const histogram = new Map<number, number>();
@@ -76,7 +77,7 @@ async function main() {
 
   for (const row of under)
     console.log(`${row.path} @${row.width}  ${row.section}  ${row.gap}px  ${row.from}  →  ${row.to}`);
-  console.log(`\n${under.length} pairs under ${BLOCK_GAP}px across ${results.length} route × width runs`);
+  console.log(`\n${under.length} pairs under their tier's block gap across ${results.length} route × width runs`);
   console.log(
     "gap histogram (px: count):",
     [...histogram.entries()]

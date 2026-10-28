@@ -42,3 +42,9 @@ a different hostname on a different timeline than community-site's). Both
 functions have no caller anywhere in this tree, so leaving them stale costs
 nothing today; `state/open.md` row 8 carries it as a follow-up rather than
 silently fixing an unused module as a side effect of the redirect work.
+
+**Amendment 2026-10-28 (DEC-0177).** The follow-up is done: `HELP_ARTICLE_MAP`
+is deleted and `helpUrl()` answers `APP_URL` (the Schlatkow village calendar)
+for every article, because its two per-article paths answer 404 on the apex
+and the app has no host of its own. The legacy `/hilfe` redirect is untouched:
+community-site's `/hilfe` answers 200 (measured 2026-10-28).

@@ -51,10 +51,12 @@ describe("TS-WEB-0010-A3: every row of the D3 table is recognised from its fixtu
     ).toBe("press");
   });
 
-  it("activated — the newsletter medium or the app", () => {
+  it("activated — the newsletter medium; no app referrer host while the app has none (DEC-0177)", () => {
     expect(resolveEntryTrait({ params: { etcc_med: "newsletter" } })).toBe("activated");
-    expect(resolveEntryTrait({ referrer: "https://app.schafe-vorm-fenster.de/lehre" })).toBe(
-      "activated",
+    // The app has no domain of its own, so a village calendar on our apex is
+    // our own host — internal navigation, not an entry from the app.
+    expect(resolveEntryTrait({ referrer: "https://schafe-vorm-fenster.de/schlatkow.2838887" })).toBe(
+      "direct",
     );
   });
 

@@ -37,12 +37,16 @@ import { ALLOWLIST } from "../src/lib/security/csp";
  * are written so that the list can only shrink: a fourth extra host fails, a
  * missing host fails, and a declared divergence that has been resolved fails
  * too, asking for its entry to be deleted. The exception is visible instead of
- * absent (DEC-0144 §3, `state/open.md` row 279).
+ * absent (DEC-0144 §3, `state/open.md` row 279). **Two since 2026-10-28:**
+ * DEC-0177 corrected D2's Portalize row from `app.schafe-vorm-fenster.de`
+ * (no DNS record) to the loader's real host, `portalize.schafe-vorm-fenster.de`,
+ * and took the unused `app` entry out of the policy, so that divergence is
+ * resolved and its entry is gone.
  *
  * ── Why no test title below carries the identifier ────────────────────────
  *
  * The criterion says *equals … exactly*, and the case at the end of this file
- * asserts that the difference is exactly three hosts. That is a measurement of
+ * asserts that the difference is exactly the declared hosts (two since DEC-0177). That is a measurement of
  * an **unmet** criterion, and a title carrying the id would make
  * `pnpm check:coverage` count it VERIFIED — closed coverage for a sentence the
  * repository does not fulfil. That is the false green `DEC-0142` §9 took back
@@ -50,7 +54,7 @@ import { ALLOWLIST } from "../src/lib/security/csp";
  * same words; the same rule applies here (DEC-0144 §10). So the id stands in
  * this docblock and in no title: the verdict is NAMED ONLY, which is what the
  * state is, and it turns into VERIFIED the day the spec owner either writes
- * the three D2 rows or has the three hosts taken out of the policy — then
+ * the remaining D2 rows or has the remaining hosts taken out of the policy — then
  * `KNOWN_DIVERGENCES` goes empty, the last two cases become the equality A4
  * asks for, and the id moves into the title in the same commit.
  */
@@ -166,8 +170,6 @@ export function d2Hosts(markdown: string): D2HostSet {
  * enforces that.
  */
 const KNOWN_DIVERGENCES: Readonly<Record<string, string>> = {
-  "portalize.schafe-vorm-fenster.de":
-    "the Portalize widget's own loader host; D2 names `app.schafe-vorm-fenster.de` for that loader and no second row for this one (DEC-0030)",
   "envoy-api.api.schafe-vorm-fenster.de":
     "D2's envoy row is still UNKNOWN (Q-0022) while the CSP already carries a host for it",
   "assets.api.schafe-vorm-fenster.de":
@@ -181,12 +183,12 @@ const cspHosts = (): string[] => Object.values(ALLOWLIST).map(hostOf);
 
 // The id `TS-WEB-0013-A4` is deliberately **not** in this title — see "Why no
 // test title below carries the identifier" above. A4 asks for exact equality;
-// the last two cases measure a difference of exactly three hosts, so the
+// the last two cases measure a difference of exactly two hosts, so the
 // criterion is not met, and a title naming it would make `pnpm check:coverage`
 // count closed coverage for it (DEC-0142 §9 took that green back for
 // `TS-WEB-0018-A7`; DEC-0144 §10 keeps the rule). What this suite does prove is
-// that D2 and the policy diverge by nothing more than the three declared hosts.
-describe("D2 against the deployed CSP allowlist: no wildcard, no missing host, three declared extras", () => {
+// that D2 and the policy diverge by nothing more than the two declared hosts.
+describe("D2 against the deployed CSP allowlist: no wildcard, no missing host, two declared extras", () => {
   it("parses D2 into external hosts, own origins, same-origin paths and unnamed rows", () => {
     const d2 = d2Hosts(specMarkdown());
     // The table is read, not assumed: every row lands in exactly one bucket,
@@ -235,7 +237,7 @@ describe("D2 against the deployed CSP allowlist: no wildcard, no missing host, t
     }
   });
 
-  it("no extra host beyond D2, except the three divergences D2's own rule declares wrong", () => {
+  it("no extra host beyond D2, except the two divergences D2's own rule declares wrong", () => {
     const d2 = d2Hosts(specMarkdown());
     const extra = cspHosts().filter((host) => !d2.external.includes(host));
     expect(extra.toSorted()).toEqual(Object.keys(KNOWN_DIVERGENCES).toSorted());

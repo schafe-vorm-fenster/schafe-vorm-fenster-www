@@ -43,7 +43,10 @@ the cascade to that component's own `margin: 0` in the production build.
    heading already kept, so running text reads as before and only the
    accidental gaps change. `--block-gap-bound` is `space-2` (8 px), the
    kicker's distance to the block it names. A larger or stepping value is a
-   later owner decision, not an implementer's.
+   later owner decision, not an implementer's. *(Amended 2026-10-28 by
+   DEC-0178, the owner's decision: from `xl` the gap is `space-6` and the
+   bound gap `space-3`; every level's value per tier is set in
+   `app/styles/components.css`.)*
 3. **The primitive is one global rule** in `app/styles/base.css`:
    `[data-stack] > *` clears `margin-block`, every child after the first gets
    `--block-gap`, a child after `[data-kicker]` gets `--block-gap-bound`. It
@@ -79,3 +82,4 @@ the cascade to that component's own `margin: 0` in the production build.
   that re-implement section padding inside a section (`price-band`,
   `price-tier-row`, `publishing-path`, `_pages.module.css .benefitBand`,
   `archive-block`'s own padding) and the seven `className` margins A32 lists.
+  *(The seven are resolved by DEC-0178 §4; the five stay open.)*

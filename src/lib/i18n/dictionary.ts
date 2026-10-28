@@ -673,7 +673,8 @@ const de: Dictionary = {
   contactSection: {
     // Placeholder — design draft (plan/reviews/2026-09-23/Design - Kontakt Section.png), state/open.md.
     heading: "Direkter Kontakt",
-    // Placeholder — design draft, state/open.md.
+    // Final 2026-10-28 (state/open.md row 216): the four channels of
+    // @schafe-vorm-fenster/goals contact-channels.md, in their order.
     lead: "Per Video, WhatsApp, Telefon oder Mail.",
     // content/pages/ueber-uns/de.md, image `ueber-uns-team-jan-henrik-hempel`.
     portraitAlt: "Jan-Henrik Hempel erklärt etwas mit beiden Händen, hinter ihm Holzbalken.",
@@ -684,8 +685,9 @@ const de: Dictionary = {
       phone: "Anrufen",
       mail: "Mail schreiben",
     },
-    // Placeholder — design draft, state/open.md.
-    // Placeholder — the D16 sentence is copy nobody wrote yet, state/open.md.
+    // Final 2026-10-28 (state/open.md row 218): row 1's address is a Google
+    // appointment calendar (goals contact-channels.md row 1), and the line says
+    // what the control opens and whose it is.
     outboundNote: "Öffnet den Buchungskalender bei Google.",
   },
   eventStatus: {
@@ -717,12 +719,13 @@ const de: Dictionary = {
     legal: "Rechtliches",
   },
   start: {
+    // DEC-0176 amendment 2026-10-28: final wording, no longer a placeholder.
     notice:
-      "Dieses Anmeldeformular stellt Google bereit. Beim Laden dieser Seite werden Daten an Google übertragen.",
-    noticeLink: "Mehr dazu in den Datenschutzhinweisen.",
+      "Google stellt das Formular bereit und bekommt beim Laden der Seite deine IP-Adresse und Angaben zu deinem Browser.",
+    noticeLink: "Zur Datenschutzerklärung.",
     frameTitle: "Anmeldeformular bei Google Forms",
     emailLead: "oder per E-Mail:",
-    openForm: "Formular direkt bei Google öffnen",
+    openForm: "Formular direkt öffnen",
   },
 };
 
@@ -929,11 +932,11 @@ const en: Dictionary = {
   },
   start: {
     notice:
-      "This registration form is provided by Google. Loading this page sends data to Google.",
-    noticeLink: "More in the privacy notice.",
-    frameTitle: "Registration form at Google Forms",
+      "Google provides the form and receives your IP address and details about your browser when the page loads.",
+    noticeLink: "Read the privacy policy.",
+    frameTitle: "Registration form on Google Forms",
     emailLead: "or by e-mail:",
-    openForm: "Open the form directly at Google",
+    openForm: "Open the form directly",
   },
 };
 

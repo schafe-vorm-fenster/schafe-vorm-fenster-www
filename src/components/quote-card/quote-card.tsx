@@ -76,9 +76,11 @@ export function QuoteCard({
         <span className={styles.role}>
           {role}, {organisation}
         </span>
-        <OutboundLink className={styles.link} href={sourceUrl} locale={locale}>
-          {sourceLabel}
-        </OutboundLink>
+        <span className={styles.linkRow}>
+          <OutboundLink className={styles.link} href={sourceUrl} locale={locale}>
+            {sourceLabel}
+          </OutboundLink>
+        </span>
       </figcaption>
     </figure>
   );

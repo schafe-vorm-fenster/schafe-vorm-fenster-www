@@ -178,12 +178,19 @@ both aliases of the brand space scale.
 ## 6. Follow-up (not in this change)
 
 1. The seven `className` margins in A32's list — each wants the parent's
-   `gap` instead.
+   `gap` instead. **Done 2026-10-28 (DEC-0178 §4):** each component pads a
+   wrapper it owns; A32's list is empty.
 2. The five sections in disguise (§1) — `price-band`, `price-tier-row`,
    `publishing-path`, `.benefitBand`, `archive-block` — should either be a
    `section-shell` or drop the section padding.
 3. `story-stage`, `photo-surface`, `contact-section`, `legal-section` render
    their own `section`; their content could use `data-stack` too, which
-   would bring them under A31.
+   would bring them under A31. **Classified 2026-10-28, not converted
+   (DEC-0178 §5):** none is mechanical. The first three are one block whose
+   inside is the component's own layout (`gap` on their own flex boxes);
+   `legal-section` is long-form typography whose heading levels carry their
+   own air above them, and a uniform stack gap would flatten that hierarchy.
+   Converting any of them is a design change for the owner. Still open.
 4. Whether `--block-gap` should step up from `xl` (e.g. `space-6`) is an
-   owner decision (DEC-0171 §2).
+   owner decision (DEC-0171 §2). **Decided 2026-10-28 (DEC-0178):** `space-6`
+   from `xl`, bound gap `space-3`, tight section edge `space-6`.

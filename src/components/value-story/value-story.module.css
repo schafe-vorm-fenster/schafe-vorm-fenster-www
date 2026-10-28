@@ -30,8 +30,10 @@
   width: 100%;
 }
 
-.exampleBadge {
-  margin-bottom: var(--space-2);
+/* The space is this component's own (DEC-0178 §4): a wrapper it owns pads it,
+   so no margin rides on another component's root through `className` (A32). */
+.exampleBadgeRow {
+  padding-bottom: var(--space-2);
 }
 
 .exampleRow {

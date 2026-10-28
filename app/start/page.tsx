@@ -62,9 +62,9 @@ export const metadata: Metadata = {
  * scripts, its own origin's storage and form submission to work at all, and a
  * sandbox that grants all three fences nothing (DEC-0121 §5).
  *
- * `data-demo="true"` on the notice and on the frame's title: the three facts
- * and the link target are the determination's, the **words** are not
- * (DEC-0108 §2 "The words"; `state/open.md` rows 223 and 224). The heading
+ * The notice's and the frame title's words are final since 2026-10-28
+ * (DEC-0176 amendment; `state/open.md` rows 223 and 224 closed): the three
+ * facts are the determination's, the owner had the words written. The heading
  * and the e-mail line reuse wording that already exists — `pages.register`
  * and `lead-fallback.tsx`'s "oder per E-Mail:".
  */
@@ -78,14 +78,13 @@ export default function StartPage() {
       {/* D17 — above the embed, in DOM order and visually, inside the same
           region. A paragraph and a link: no button, no checkbox, no dismiss,
           no `role`, nothing that could be read as a control. */}
-      <p className={styles.notice} data-block="embed-notice" data-demo="true">
+      <p className={styles.notice} data-block="embed-notice">
         {d.start.notice} <Anchor href={privacyHref}>{d.start.noticeLink}</Anchor>
       </p>
       {/* D15 — exactly one frame, of the configured form host, `?embedded=true`
           (`lead-fallback.ts`). Eager: the visitor came for the form. */}
       <iframe
         className={styles.frame}
-        data-demo="true"
         loading="eager"
         src={leadFormEmbedUrl()}
         title={d.start.frameTitle}

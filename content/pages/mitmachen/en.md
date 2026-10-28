@@ -345,11 +345,15 @@ placeholders as well. The concrete sources are named in the banner, not in
 the steps — the WordPress plugin and the council information system live
 in the offering record, not here (`specs/README.md` rule 1).
 
-### Slot 5b — The price boundary in the hint banner (placeholder)
+### Slot 5b — The price boundary in the hint banner
 
-<!-- id: mitmachen-5b-path-website-banner-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: mitmachen-5b-path-website-banner-demo; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
-**Price boundary:** A source we already support publishes free. Only an individual integration into a system we do not read yet is paid.
+**Price boundary:** Sources we can already read cost you nothing. Only a custom integration for a system we do not support yet is paid.
+
+Final wording since 2026-10-28 (DEC-0176 amendment): the fact is the offering
+record's (`community-calendar.offering.md`), and the sentence is no longer a
+placeholder.
 
 The review's sentence in slot 5 ("Please ask us first — so far this works
 for some websites only") says how many websites the path reaches today, not

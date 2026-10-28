@@ -6,7 +6,7 @@ import { SITE_ORIGIN } from "./routes";
 describe("TS-WEB-0016-A24 (unit half): a link to another origin opens a new tab, nothing else does", () => {
   it.each([
     "https://schafe-vorm-fenster.de/lehre.2879378",
-    "https://app.schafe-vorm-fenster.de/schlatkow",
+    "https://schafe-vorm-fenster.de/schlatkow.2838887",
     "https://calendar.app.google/abc",
     "https://wa.me/491234567890",
     "https://commons.wikimedia.org/wiki/File:X.jpg",

@@ -302,11 +302,12 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     // FUN-WEB-0204 / D11: the banner carries the price boundary, and it is a
     // second element from the availability sentence the owner wrote and from
     // path 3's alpha badge ("Two different facts, two elements", D11:210).
-    // The boundary's words are a placeholder slot, so what is asserted is the
-    // structure: two statements, the boundary one marked `data-demo`.
+    // What is asserted is the structure: two statements, the boundary the
+    // second. Its words are final since 2026-10-28 (slot 5b sourced from the
+    // offering record, `state/open.md` row 243), so neither is marked.
     await expect(banner.locator("p")).toHaveCount(2);
-    await expect(banner.locator('p[data-demo="true"]')).toHaveCount(1);
-    const boundary = (await banner.locator('p[data-demo="true"]').innerText()).trim();
+    await expect(banner.locator('p[data-demo="true"]')).toHaveCount(0);
+    const boundary = (await banner.locator("p").nth(1).innerText()).trim();
     expect(boundary.length).toBeGreaterThan(20);
     // The badge says the mechanism is alpha; the banner says what a
     // connection costs. Two elements, and the alpha words are not in here.

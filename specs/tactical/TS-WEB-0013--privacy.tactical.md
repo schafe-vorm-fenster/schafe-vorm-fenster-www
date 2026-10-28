@@ -60,13 +60,14 @@ host is a defect, not a configuration detail.
 | `schafe-vorm-fenster.de` (and `.pl`, `.at`, `sheepoutside.com`) | document, CSS, JS, fonts, images, `/api/*` BFF calls | own origin | first party | everything self-hosted per D4 |
 | `/_vercel/speed-insights/*` | RUM script + beacon | TS-WEB-0003 D7 | Vercel (host, processor) | same-origin path, no separate host, cookieless |
 | `code.etracker.com` | deferred analytics script and its beacon | DEC-0004 | eTracker GmbH, Hamburg — **the only external company in this table** until 2026-09-25, and still the only one whose script runs on a page; the form host below is the second | `data-block-cookies="true"`, config extracted from SRC-0010 |
-| `app.schafe-vorm-fenster.de` | Portalize loader `…/api/{organizerId}/load.js` and the widget's own calls | DEC-0030 | own ecosystem | cookie-freedom is a demand, not yet verified (Q-0026) |
+| `portalize.schafe-vorm-fenster.de` | Portalize loader `…/api/{organizerId}/load.js` and the widget's own calls | DEC-0030; host corrected by DEC-0177 (the row named `app.schafe-vorm-fenster.de`, which serves nothing and has no DNS record; the loader has always come from this host, `src/lib/security/csp.ts`) | own ecosystem | cookie-freedom is a demand, not yet verified (Q-0026) |
 | envoy widget host — **UNKNOWN** | web-component script, form submission | DEC-0009 | own ecosystem | cannot be allowlisted before the host is named (Q-0022) |
 | `docs.google.com` | the registration form, framed on `/start` and — since DEC-0176, for the launch — on `/mitmachen/registrieren` (`TS-WEB-0023` D10), and nowhere else — the navigation of the one `iframe` each of them renders | TS-WEB-0016 D15 (FUN-WEB-0205, DEC-0013 amendment 2026-09-25, DEC-0108); row written 2026-09-25 by DEC-0121 | Google LLC — the second external company in this table, and the one no script of ours loads | `frame-src` only (TS-WEB-0014 D1, the fifth row); one route, in no page's flow, `noindex`; what the framed document then loads from other Google hosts is that document's, outside the CSP's reach and outside A1's trace of *our* requests (DEC-0121 §6); its cookie behaviour is the residual risk DEC-0108 §4 accepts, unverified (DEM-0066). The row lapses with the embed (D15 "It lapses") |
 
 **Navigations, not subresource requests** — these load no code into the
-page and are not part of the allowlist: handover links to
-`app.schafe-vorm-fenster.de` (DEC-0029), and outbound links to external
+page and are not part of the allowlist: handover links to the app — today
+`APP_URL`, the Schlatkow village calendar on our own apex, because the app has
+no domain of its own (DEC-0029, DEC-0177) — and outbound links to external
 media. Under DEC-0013 external media are represented by our own preview
 (screenshot, quote from `media-echo/`) plus a link; there is no embedded
 player and no click-to-load layer, so no third-party host is contacted

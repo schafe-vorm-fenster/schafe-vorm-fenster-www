@@ -1,5 +1,9 @@
-.kicker {
-  margin-bottom: var(--space-4);
+/* The space is this component's own (DEC-0178 §4): a wrapper it owns pads it,
+   so no margin rides on another component's root through `className` (A32). */
+.kickerRow {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--space-4);
 }
 
 .headline {

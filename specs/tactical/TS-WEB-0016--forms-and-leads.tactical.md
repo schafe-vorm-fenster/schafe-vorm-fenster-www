@@ -641,7 +641,7 @@ breath as the request going out. This determination is what "told" means here.
 | Length and shape | short — one block, no heading of its own, no list |
 | Not a control | no button, no checkbox, no dismiss, no "load the form". Nothing on the page waits for it and nothing is stored by it. A notice that can be clicked is a consent gate with a different label, and `A23`'s last sentence already forbids a marking that is one |
 | Not a claim | `/start` makes no data-protection claim (`TS-WEB-0013 D1` as narrowed by DEC-0108 §3). It carries this notice instead, and a notice states what happens rather than what does not |
-| The wording | **not here.** The sentence is copy, written in the content phase (`DEC-0083 §1`, repository working rule 4). This determination fixes the position, the three facts and the link target |
+| The wording | **not here.** The sentence is copy, written in the content phase (`DEC-0083 §1`, repository working rule 4). This determination fixes the position, the three facts and the link target. The words were written on the owner's instruction of 2026-10-28 and live in the dictionary (`start.notice`, `start.noticeLink`; DEC-0176 amendment) — fact 2 names what loading sends (the IP address and the browser's request details), fact 3 links the privacy policy without promising a Google section it does not yet have |
 
 `A22` asserts it, extended rather than joined by a new criterion: the notice and
 the embed are the two halves of one determination and A22 is already the walk

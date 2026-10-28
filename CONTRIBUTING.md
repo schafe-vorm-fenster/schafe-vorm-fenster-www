@@ -152,8 +152,11 @@ cannot see whether the small range does anything.
   the gap between its blocks (`--block-gap`, `--block-gap-bound` after a
   kicker); a block brings no outer margin — not in its own stylesheet and
   not through a `className` handed to a component. A wrapper that groups
-  blocks is a stack. `e2e/block-gaps.spec.ts` measures it on every route,
-  `pnpm check:brand` (A32) reads the `className` half.
+  blocks is a stack. Every level's value per tier (16/8 px below `xl`,
+  24/12 px from `xl`, DEC-0178) is set in `app/styles/components.css` and
+  nowhere else. `e2e/block-gaps.spec.ts` measures it on every route per tier,
+  `pnpm check:brand` reads the `className` half (A32) and the one home of
+  the tokens (A34).
 - **Brand values enter through one file.** `app/styles/brand.css` imports
   the token sheet and the font faces; everything else consumes CSS custom
   properties. No logo and no font file is committed here — they are package

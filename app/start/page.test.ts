@@ -62,8 +62,9 @@ describe("TS-WEB-0016 D17: the notice stands above the embed", () => {
     expect(notice![0]).not.toMatch(/\brole=/);
   });
 
-  it("carries the placeholder marking — the words are nobody's yet (DEC-0108 §2)", () => {
-    expect(notice![0]).toContain('data-demo="true"');
+  it("carries no placeholder marking — the words are final (DEC-0176 amendment 2026-10-28)", () => {
+    expect(notice![0]).not.toContain("data-demo");
+    expect(html).not.toContain('data-demo="true"');
   });
 });
 

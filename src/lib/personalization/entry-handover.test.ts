@@ -48,7 +48,8 @@ describe("TS-WEB-0010-A3 across the handover: every D3 row survives the header",
       ["https://www.linkedin.com/feed/", "professional"],
       ["https://l.instagram.com/", "social"],
       ["https://www.nordkurier.de/artikel/x", "press"],
-      ["https://app.schafe-vorm-fenster.de/", "activated"],
+      // No app referrer row while the app has no host of its own (DEC-0177).
+      ["https://schafe-vorm-fenster.de/schlatkow.2838887", "direct"],
       ["https://www.schafe-vorm-fenster.de/mitmachen", "direct"],
     ];
     for (const [referrer, trait] of rows) {

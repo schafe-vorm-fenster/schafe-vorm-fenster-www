@@ -64,11 +64,9 @@ export function HeaderMenu({ current, locale }: HeaderMenuProps) {
         {d.nav[HEADER_CALENDAR_ENTRY.label]}
       </Button>
 
-      <LanguageSwitch
-        className={styles.menuLanguage}
-        current={locale}
-        route={current}
-      />
+      <div className={styles.menuLanguageRow}>
+        <LanguageSwitch current={locale} route={current} />
+      </div>
     </>
   );
 }

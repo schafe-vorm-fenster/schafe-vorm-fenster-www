@@ -179,9 +179,11 @@ export function HeroBlock({
       wideSrc={wideSrc}
     >
       {kicker ? (
-        <Badge className={styles.kicker} icon={kickerIcon} tone="accent">
-          {kicker}
-        </Badge>
+        <div className={styles.kickerRow}>
+          <Badge icon={kickerIcon} tone="accent">
+            {kicker}
+          </Badge>
+        </div>
       ) : null}
       {content ?? (
         <HeroContent

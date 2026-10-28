@@ -72,6 +72,7 @@ import { TrustBlock } from "./trust-block/trust-block";
 import { ValueStory } from "./value-story/value-story";
 
 import { dictionary } from "@/src/lib/i18n/dictionary";
+import { APP_URL } from "@/src/lib/live/app-handover";
 import { offeringPrice, publishedFigure } from "@/src/lib/pricing/offerings";
 import { standardSources } from "@/src/lib/pricing/standard-sources";
 
@@ -912,7 +913,7 @@ export const GALLERY: readonly GalleryEntry[] = [
     demo: (
       <HowtoBlock
         android={{ steps: ["Website öffnen", "Menü ⋮ antippen", "„Zum Startbildschirm hinzufügen“ wählen"] }}
-        appHref="https://app.schafe-vorm-fenster.de/beispieldorf"
+        appHref={APP_URL}
         headline="Auf dem Homescreen"
         ios={{ steps: ["Website öffnen", "Teilen-Symbol antippen", "„Zum Home-Bildschirm“ wählen"] }}
       />

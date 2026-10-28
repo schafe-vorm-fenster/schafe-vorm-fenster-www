@@ -62,14 +62,9 @@ export function FeatureBenefit({
   return (
     <div className={[styles.pair, className].filter(Boolean).join(" ")}>
       {mediaSrc !== undefined || mediaState ? (
-        <MediaFrame
-          alt={mediaAlt}
-          className={styles.media}
-          locale={locale}
-          ratio="feature"
-          src={mediaSrc}
-          state={mediaState}
-        />
+        <div className={styles.mediaRow}>
+          <MediaFrame alt={mediaAlt} locale={locale} ratio="feature" src={mediaSrc} state={mediaState} />
+        </div>
       ) : null}
       <h3 className={styles.feature}>{feature}</h3>
       <p className={styles.benefit}>{benefit}</p>

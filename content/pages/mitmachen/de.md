@@ -347,11 +347,16 @@ ebenfalls Platzhalter. Konkret werden die Quellen im Banner, nicht in den
 Schritten — WordPress-Plugin und Ratsinformationssystem stehen im
 Angebots-Datensatz, nicht hier (`specs/README.md` Regel 1).
 
-### Slot 5b — Die Preisgrenze im Hinweis-Banner (Platzhalter)
+### Slot 5b — Die Preisgrenze im Hinweis-Banner
 
-<!-- id: mitmachen-5b-path-website-banner-demo; content_type: publishing-path; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: mitmachen-5b-path-website-banner-demo; content_type: publishing-path; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
-**Preisgrenze:** Quellen, die wir schon unterstützen, veröffentlichen kostenlos. Nur die einzelne Anbindung an ein System, das wir noch nicht lesen, ist kostenpflichtig.
+**Preisgrenze:** Quellen, die wir schon lesen können, kosten euch nichts. Kostenpflichtig ist nur eine eigene Anbindung für ein System, das bei uns noch fehlt.
+
+Endgültige Fassung seit 2026-10-28 (DEC-0176, Nachtrag): die Tatsache steht im
+Angebots-Datensatz (`community-calendar.offering.md`, „A source the platform
+already supports publishes free … Only an individual integration … is
+priced“), der Satz ist kein Platzhalter mehr.
 
 Der Satz des Reviews in Slot 5 („Bitte nachfragen, geht bisher nur für
 einige Webseiten") sagt, für wie viele Webseiten der Weg heute reicht —

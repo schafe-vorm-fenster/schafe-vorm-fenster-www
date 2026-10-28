@@ -4,8 +4,12 @@
   gap: var(--space-3);
 }
 
-.media {
-  margin: 0 0 var(--space-2);
+/* The space is this component's own (DEC-0178 §4): a wrapper it owns pads it,
+   so no margin rides on another component's root through `className` (A32). */
+.mediaRow {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--space-2);
 }
 
 .feature {

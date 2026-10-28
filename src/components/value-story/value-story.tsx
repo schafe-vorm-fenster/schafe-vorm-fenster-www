@@ -100,9 +100,9 @@ export function ValueStory({
       {example === undefined || example === null ? null : (
         <div className={EXAMPLE_CLASS[exampleVariant]} data-example-level={exampleLevel}>
           {exampleLabel ? (
-            <Badge className={styles.exampleBadge} tone="neutral">
-              {exampleLabel}
-            </Badge>
+            <div className={styles.exampleBadgeRow}>
+              <Badge tone="neutral">{exampleLabel}</Badge>
+            </div>
           ) : null}
           {example}
         </div>

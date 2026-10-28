@@ -132,3 +132,43 @@ that module and no second URL exists anywhere.
   `/dein-kalender/bestellen` (`src/lib/pages/manifests.ts`).
 - Placeholder: the fallback link's label (`start.openForm`) is engineer's
   wording, marked `data-demo="true"`, `state/open.md` row 292.
+
+## Amendment 2026-10-28 — the three placeholder strings are written
+
+The owner, asked whether the route's three stand-in strings were his to
+write: „musst du das nicht umsetzen?" — yes. They are written from facts
+that already exist, against the copy guide (`du`, short words, one fact per
+sentence, CG-026 for the label, no dash joins, no AI tells), in German and
+its English mirror (CG-041), and the `data-demo` marking leaves the three
+elements on `/mitmachen/registrieren`, `/en/take-part/register` and `/start`.
+
+| Key | Before | After |
+| --- | --- | --- |
+| `start.notice` (de) | „Dieses Anmeldeformular stellt Google bereit. Beim Laden dieser Seite werden Daten an Google übertragen." | „Google stellt das Formular bereit und bekommt beim Laden der Seite deine IP-Adresse und Angaben zu deinem Browser." |
+| `start.noticeLink` (de) | „Mehr dazu in den Datenschutzhinweisen." | „Zur Datenschutzerklärung." |
+| `start.frameTitle` (de) | „Anmeldeformular bei Google Forms" | unchanged, now final |
+| `start.openForm` (de) | „Formular direkt bei Google öffnen" | „Formular direkt öffnen" |
+| `start.notice` (en) | "This registration form is provided by Google. Loading this page sends data to Google." | "Google provides the form and receives your IP address and details about your browser when the page loads." |
+| `start.noticeLink` (en) | "More in the privacy notice." | "Read the privacy policy." |
+| `start.frameTitle` (en) | "Registration form at Google Forms" | "Registration form on Google Forms" |
+| `start.openForm` (en) | "Open the form directly at Google" | "Open the form directly" |
+
+**Why these facts and no more.** `TS-WEB-0016` D17 asks for three facts:
+whose form it is, that loading contacts that party, where the detail is.
+What a cross-origin frame request carries is the visitor's IP address and the
+browser's request headers (user agent, language); the frame loads eagerly
+with the page (`loading="eager"`). That is what the notice says. It claims
+nothing about cookies or about what Google does with the request: that is
+unverified (DEM-0066 is open) and a notice states what happens, not a guess.
+`content/legal/privacy-policy.md` (imported from the owner's Google Doc) has
+**no section on Google Forms**, so the link names the privacy policy and
+promises no "more on this"; the missing section is `TS-WEB-0013-A7`'s and
+the owner's, recorded in `state/open.md` row 223.
+
+The label drops "bei Google" because the marking under the link already
+says „Daten gehen an Google" (`TS-WEB-0016` D16): the recipient once, in
+its own line (CG-015, CG-026; 22 characters).
+
+`state/open.md` rows 223, 224 and 292 are closed. The same pass closed
+rows 216, 218 and 243, whose content a sourced fact already determined.
+

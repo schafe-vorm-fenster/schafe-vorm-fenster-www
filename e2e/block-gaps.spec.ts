@@ -12,10 +12,14 @@ import { readBlockGaps } from "./support/block-gaps";
  * "Block" and "gap" are defined once, in `e2e/support/block-gaps.ts`; the
  * audit script `scripts/measure-block-gaps.ts` reads the same function.
  *
- * On every route, in both languages, at 390 and 1280 px, for every stack:
+ * On every route, in both languages, at one width per breakpoint tier of
+ * SRC-0014 §Layout Grid — 390 (mobile), 800 (tablet, from md) and 1280
+ * (desktop, from xl) — for every stack, against that tier's value of the
+ * spacing scale (DEC-0178, `app/styles/components.css`):
  *
- *  1. two adjacent blocks stand at least `--block-gap` (16 px) apart, or
- *     `--block-gap-bound` (8 px) where the first is the section's kicker;
+ *  1. two adjacent blocks stand at least `--block-gap` (16 / 16 / 24 px) apart,
+ *     or `--block-gap-bound` (8 / 8 / 12 px) where the first is the section's
+ *     kicker;
  *  2. the space comes from the stack — the second block's computed
  *     `margin-top` is exactly that value and the first block's
  *     `margin-bottom` is 0, so no component brings an outer margin of its own
@@ -24,9 +28,16 @@ import { readBlockGaps } from "./support/block-gaps";
  *     the section's padding is the only space at its edges.
  */
 
-const WIDTHS = [390, 1280];
-const BLOCK_GAP = 16;
-const BLOCK_GAP_BOUND = 8;
+/**
+ * The spacing scale per tier, written out here rather than read from the
+ * page: the test asserts the decision (DEC-0178), not whatever the stylesheet
+ * happens to say.
+ */
+const TIERS = [
+  { tier: "mobile", width: 390, blockGap: 16, bound: 8 },
+  { tier: "tablet", width: 800, blockGap: 16, bound: 8 },
+  { tier: "desktop", width: 1280, blockGap: 24, bound: 12 },
+] as const;
 
 const ROUTES = everyRoute().map(({ route, locale }) => ({
   path: href(route, locale),
@@ -34,8 +45,8 @@ const ROUTES = everyRoute().map(({ route, locale }) => ({
 }));
 
 for (const route of ROUTES) {
-  for (const width of WIDTHS) {
-    test(`TS-WEB-0017-A31: every block in a section stack keeps the block gap on ${route.name} at ${width} px`, async ({
+  for (const { tier, width, blockGap: BLOCK_GAP, bound: BLOCK_GAP_BOUND } of TIERS) {
+    test(`TS-WEB-0017-A31: every block in a section stack keeps the ${tier} block gap on ${route.name} at ${width} px`, async ({
       page,
     }) => {
       await page.setViewportSize({ width, height: 900 });

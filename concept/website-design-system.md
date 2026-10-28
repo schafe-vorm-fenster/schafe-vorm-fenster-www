@@ -312,9 +312,12 @@ from the package, with no override behind either.
   from `md` up the outer margin steps with the grid — see *Layout Grid*.
 - **Vertical padding:** 26–30 px for standard sections, 20–24 px for tight
   ones. One value per section — never a padded card inside a padded section.
-- **Between blocks:** `space-4` (16 px, `--block-gap`) at every breakpoint,
-  and `space-2` (8 px, `--block-gap-bound`) between a section's kicker and the
-  block it names. Nothing else — see *Who owns which space* below.
+  Standard is 28 px in every tier; tight is 22 px, and 24 px from `xl`
+  (`DEC-0178`).
+- **Between blocks:** `space-4` (16 px, `--block-gap`) on the phone and the
+  tablet, `space-6` (24 px) from `xl`; `space-2` (8 px, `--block-gap-bound`)
+  between a section's kicker and the block it names, `space-3` (12 px) from
+  `xl` (`DEC-0178`). Nothing else — see *Who owns which space* below.
 - **Gap between controls:** 8–10 px. Between list rows: a `line` hairline,
   no gap.
 - **Touch targets:** 44 px minimum, 56 px for primary actions.
@@ -341,6 +344,56 @@ Vertical space has exactly one owner per level (`DEC-0171`, issues #90 and
 | Content stack | the container's content, marked `data-stack` | the space **between** its direct children: `--block-gap`, `--block-gap-bound` after the kicker |
 | Block | a direct child of a stack: a heading, a paragraph, a module, a component | nothing outside its own box — **no outer margin** |
 | Inside a block | the component's own layout | its own internal gaps, from the space scale |
+
+**The spacing scale per level and tier** (`DEC-0178`). One token per level,
+every value set in `app/styles/components.css` and nowhere else
+(`TS-WEB-0017-A34`); the tiers are *Layout Grid*'s three, stepping at the
+breakpoint tokens `md` (40rem) and `xl` (64rem):
+
+| Level | Owner | Token | Mobile (< `md`) | Tablet (`md`–`xl`) | Desktop (≥ `xl`) |
+| --- | --- | --- | --- | --- | --- |
+| Section edge, standard | `section-shell` | `--section-padding-block` | 28 px | 28 px | 28 px |
+| Section edge, tight | `section-shell` `density="tight"` | `--section-padding-block-tight` | 22 px | 22 px | 24 px (`space-6`) |
+| Between blocks | the content stack `[data-stack]` | `--block-gap` | 16 px (`space-4`) | 16 px | 24 px (`space-6`) |
+| Kicker → the block it names | the content stack | `--block-gap-bound` | 8 px (`space-2`) | 8 px | 12 px (`space-3`) |
+| Between controls | the control group | `--control-gap` | 10 px | 10 px | 10 px |
+| Inside a block | the component | the space scale, no level token | — | — | — |
+
+Two invariants hold in every tier: the bound gap is half the block gap, and
+no block gap is wider than the tightest section edge. The tablet keeps the
+phone's values because the scale has no step between 16 and 24 px
+(`DEM-0071`); the desktop's 24 px is the next step and the desktop gutter, so
+blocks stand as far apart down the page as columns stand across it.
+
+**The HTML contract.** A section is one `section-shell`; its container (or,
+uncontained, its lede) carries `data-stack`; the stack's **direct children**
+are the blocks; a kicker carries `data-kicker`, and the bound gap follows from
+that alone. There is one attribute and no variant — no
+`data-stack="bound"` or `"loose"`: the only closer step is the kicker's, and a
+looser one would be a second section.
+
+```html
+<section class="section-shell standard paper">     <!-- owns padding-block -->
+  <div class="container" data-stack>               <!-- owns the gaps -->
+    <p data-kicker>Was andere sagen</p>            <!-- block -->
+    <h2>…</h2>                                     <!-- block: --block-gap-bound above -->
+    <p>…</p>                                       <!-- block: --block-gap above -->
+    <div data-stack>                               <!-- a group of blocks is a stack -->
+      <h3>…</h3><ul class="rows">…</ul>            <!-- rows: one block -->
+    </div>
+    <ProofCard />                                  <!-- block: no outer margin -->
+  </div>
+</section>
+```
+
+A component never sets its own outer margin and is never handed one through
+`className` (`TS-WEB-0017-A32`, whose list of known hand-ins is empty since
+`DEC-0178`); space it needs inside itself is padding or `gap` on an element
+it owns. Four components render a `section` whose inside is their own layout
+and **not** a stack: `story-stage` and `photo-surface` (the hero's and the
+story's text stack, `DEC-0171`), `contact-section` (portrait, head, four
+rows), and `legal-section` (long-form typography whose heading levels carry
+their own air).
 
 Rules that follow:
 

@@ -493,7 +493,8 @@ export default async function Page({
           {/* The boundary itself, as the second sentence: what a connection
               costs, which the review's availability sentence above does not
               say and which D11:210 keeps apart from path 3's alpha badge.
-              Its words are nobody's (slot 5b), so the paragraph is marked. */}
+              Final wording since 2026-10-28 (slot 5b, DEC-0176 amendment):
+              the slot is sourced, so `isDemoSlot` no longer marks it. */}
           <p data-demo={isDemoSlot(bannerBoundary) ? "true" : undefined}>
             {fieldAt(bannerBoundary.blocks, 0)}
           </p>
