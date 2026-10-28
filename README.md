@@ -173,16 +173,21 @@ subset of DEC-0031's stage 2, not the full merge-gating job graph:
 - **`check.yml`** — every push to `next-2026` and every pull request
   targeting it: install (the `@schafe-vorm-fenster` scope resolves from
   `npm.pkg.github.com` using `secrets.GITHUB_TOKEN` with `packages: read`)
-  · `pnpm check` · `pnpm build` · `pnpm e2e` against the production build
-  (`next start`, not `next dev` — see `playwright.config.ts`), with
-  Playwright's Chromium browser cached between runs.
+  · `pnpm check` · `pnpm build` · `pnpm e2e:technical` (smoke, CSP and
+  hydration, routes, external links, layout stability, axe, third-party
+  requests) against the production build (`next start`, not `next dev` — see
+  `playwright.config.ts`), with Playwright's Chromium browser cached between
+  runs (DEC-0180).
 - **`preview-e2e.yml`** — the TS-WEB-0015 preview smoke. Vercel's Git
   integration deploys every push to `next-2026` automatically (confirmed via
   `vercel ls` / the deployments API: `source: git`, matching commit SHAs);
   this workflow reacts to the resulting `deployment_status` event and runs
-  the same Playwright suite against `environment_url`, authenticating past
+  `pnpm e2e:smoke` (smoke, CSP and hydration, routes) against `environment_url`, authenticating past
   Vercel Deployment Protection with the `VERCEL_AUTOMATION_BYPASS_SECRET`
   repository secret (`x-vercel-protection-bypass`, TS-WEB-0015 D3/D10).
+- **`full-e2e.yml`** — the complete Playwright suite (`pnpm e2e`, incl.
+  `e2e/pages/*` and the design and rule guards) against the production build,
+  on demand only (`workflow_dispatch`; DEC-0180).
 
 See a run: the repository's **Actions** tab, or `gh run list` /
 `gh run watch <id>` (`gh auth switch --user schafevormfenster` first — a

@@ -73,7 +73,8 @@ URL use 3100. `pnpm stop` frees it.
 | --- | --- |
 | `pnpm check` | the single gate: frontmatter · specs · locators · coverage · stack · brand · typecheck · lint · tests |
 | `pnpm test` | unit and integration tests (Vitest) |
-| `pnpm e2e` | end-to-end tests (Playwright), starting the dev server itself |
+| `pnpm e2e` | end-to-end tests (Playwright), the full suite, starting the dev server itself |
+| `pnpm e2e:technical` · `pnpm e2e:smoke` | the two CI selections (DEC-0180) |
 | `pnpm build` | production build |
 | `vercel deploy` | a protected, `noindex` preview deployment |
 
@@ -230,14 +231,20 @@ repository right now.
 
 ### Continuous Integration
 
-`.github/workflows/check.yml` runs `pnpm check` · `pnpm build` · `pnpm e2e`
-(against the production build) on every push to `next-2026` and every pull
-request targeting it. `.github/workflows/preview-e2e.yml` runs the same
-e2e suite again against the Vercel preview that Vercel's Git integration
+`.github/workflows/check.yml` runs `pnpm check` · `pnpm build` ·
+`pnpm e2e:technical` (smoke, CSP and hydration, routes, external links, layout
+stability, axe, third-party requests — against the production build) on every
+push to `next-2026` and every pull request targeting it.
+`.github/workflows/preview-e2e.yml` runs `pnpm e2e:smoke` (smoke, CSP and
+hydration, routes) against the Vercel preview that Vercel's Git integration
 deploys for that push, once GitHub's `deployment_status` event reports it
 ready, past Vercel Deployment Protection via the
-`VERCEL_AUTOMATION_BYPASS_SECRET` repository secret. Both are the M4
-prototype subset of TS-WEB-0015 (`specs/tactical/TS-WEB-0015--delivery-pipeline.tactical.md`)
+`VERCEL_AUTOMATION_BYPASS_SECRET` repository secret. The **full suite**
+(`pnpm e2e`, incl. `e2e/pages/*` and the design and rule guards) runs on demand
+only: `.github/workflows/full-e2e.yml` (Actions tab, or
+`gh workflow run "Full E2E" --ref next-2026`) and locally — run the specs your
+change touches before you push (DEC-0180). All of this is the M4 prototype
+subset of TS-WEB-0015 (`specs/tactical/TS-WEB-0015--delivery-pipeline.tactical.md`)
 — see `README.md`'s Continuous Integration section for what is and is not
 in this slice, and each workflow file's header comment for the detail.
 

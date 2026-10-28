@@ -137,7 +137,9 @@ jobs:
           E2E_BASE_URL: ${{ github.event.deployment_status.environment_url }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
           CI: true
-        run: pnpm e2e
+        # DEC-0180: a real smoke — every route loads, hydrates and has no CSP
+        # violation (smoke, csp-hydration, routes). Not the full suite again.
+        run: pnpm e2e:smoke
 
       - name: Upload Playwright report
         if: always()

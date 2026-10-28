@@ -1,0 +1,70 @@
+name: Full E2E
+
+# DEC-0180: the complete Playwright suite (all specs, incl. e2e/pages and the
+# design/rule guards) against the local production build — on demand only.
+# Per push and PR, `check.yml` runs `pnpm e2e:technical`; the preview gets
+# `pnpm e2e:smoke` (`preview-e2e.yml`). Start it from the Actions tab or with
+# `gh workflow run "Full E2E" --ref next-2026`.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+
+env:
+  GITHUB_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN || secrets.GITHUB_TOKEN }}
+  LEAFCUTTER_REGISTRY_TOKEN: ${{ secrets.LEAFCUTTER_REGISTRY_TOKEN }}
+
+jobs:
+  full-e2e:
+    name: Full E2E
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: ".nvmrc"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright Chromium (with OS deps)
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Install Playwright OS deps only (browser cache hit)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
+
+      - name: E2E — the full suite against the local production build
+        run: pnpm e2e
+        env:
+          CI: true
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-full
+          path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
