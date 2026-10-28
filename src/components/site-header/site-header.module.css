@@ -528,8 +528,12 @@
   align-self: flex-start;
 }
 
-.menuLanguage {
-  margin-top: var(--space-2);
+/* The space is this component's own (DEC-0178 §4): a wrapper it owns pads it,
+   so no margin rides on another component's root through `className` (A32). */
+.menuLanguageRow {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--space-2);
 }
 
 /* ── md — 40rem / 428–640 px up: the wordmark comes back beside the mark. ─ */

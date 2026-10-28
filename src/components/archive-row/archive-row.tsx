@@ -157,9 +157,11 @@ export function ArchiveRow({
           </figure>
         ) : null}
         {href ? (
-          <OutboundLink className={styles.link} href={href} locale={locale}>
-            {dictionary(locale).archiveRow.original}
-          </OutboundLink>
+          <div className={styles.linkRow}>
+            <OutboundLink href={href} locale={locale}>
+              {dictionary(locale).archiveRow.original}
+            </OutboundLink>
+          </div>
         ) : null}
       </div>
     </article>

@@ -80,6 +80,7 @@ const A22 = "TS-WEB-0017-A22";
 const A28 = "TS-WEB-0017-A28";
 const A30 = "TS-WEB-0017-A30";
 const A32 = "TS-WEB-0017-A32";
+const A34 = "TS-WEB-0017-A34";
 
 /** The single file brand values are allowed to enter through (TS-WEB-0017 D3). */
 const TOKEN_FILE = "app/styles/brand.css";
@@ -477,20 +478,11 @@ export function checkBrand(root: string): BrandCheckResult {
     // margin: a | a b | a b c | a b c d → top and bottom
     return [parts[0], parts[2] ?? parts[0]];
   };
-  // The seven hand-ins A32 found when it was written (2026-10-27), each inside
-  // one component and none of them a block of a section stack, so none of
-  // them is a gap the owner can see today. Named rather than silently
-  // skipped, and the list may only shrink: an entry that no longer matches is
-  // an error too, so a fixed one has to leave the list (DEC-0171 §4).
-  const KNOWN_A32 = new Set([
-    "src/components/archive-row/archive-row.tsx OutboundLink styles.link",
-    "src/components/feature-benefit/feature-benefit.tsx MediaFrame styles.media",
-    "src/components/hero-block/hero-block.tsx Badge styles.kicker",
-    "src/components/person-profile/person-profile.tsx MediaFrame styles.portrait",
-    "src/components/quote-card/quote-card.tsx OutboundLink styles.link",
-    "src/components/site-header/header-menu.tsx LanguageSwitch styles.menuLanguage",
-    "src/components/value-story/value-story.tsx Badge styles.exampleBadge",
-  ]);
+  // The seven hand-ins A32 found when it was written (2026-10-27) were each
+  // inside one component; DEC-0178 §4 resolved all seven (2026-10-28) with a
+  // wrapper the component owns, so the list is empty. It stays as the
+  // mechanism: an entry may only be removed, never added (DEC-0171 §4).
+  const KNOWN_A32 = new Set<string>([]);
   const seenA32 = new Set<string>();
   const tsxFiles = sourceFiles.filter((f) => /^(app|src)\//.test(rel(f).split("\\").join("/")) && f.endsWith(".tsx"));
   for (const file of tsxFiles) {
@@ -525,6 +517,23 @@ export function checkBrand(root: string): BrandCheckResult {
           }
         }
       }
+    }
+  }
+
+  // --- TS-WEB-0017-A34: the spacing scale per level is set in one file ------------------
+  //
+  // DEC-0178: every level of vertical space has one token, and every value per
+  // breakpoint tier is assigned in `app/styles/components.css`. A second
+  // stylesheet assigning `--block-gap` (a component, a page, a media query in
+  // `base.css`) would be a second owner of the same space.
+  const SPACING_HOME = join("app", "styles", "components.css");
+  const SPACING_TOKEN = /(?:^|[;{\s])(--(?:block-gap|block-gap-bound|section-padding-block|section-padding-block-tight|control-gap))\s*:/g;
+  for (const file of stylesheets) {
+    if (rel(file) === SPACING_HOME) continue;
+    const text = readFileSync(file, "utf8").replace(/\/\*[\s\S]*?\*\//g, (block) => block.replace(/[^\n]/g, " "));
+    for (const match of text.matchAll(SPACING_TOKEN)) {
+      const line = text.slice(0, match.index).split("\n").length;
+      fail(A34, `${rel(file)}:${line}`, `assigns ${match[1]} — the spacing scale per level is set in ${SPACING_HOME} only (DEC-0178)`);
     }
   }
 

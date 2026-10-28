@@ -64,7 +64,14 @@
   align-self: flex-start;
   font-family: var(--font-mono);
   font-size: var(--type-label-size);
-  margin-top: var(--space-1);
+}
+
+/* The space is this component's own (DEC-0178 §4): a wrapper it owns pads it,
+   so no margin rides on another component's root through `className` (A32). */
+.linkRow {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--space-1);
 }
 
 /*

@@ -305,3 +305,33 @@ describe("TS-WEB-0017-A32: no outer margin handed to a component through classNa
     expect(a32(checkBrand(root).errors)).toEqual([]);
   });
 });
+
+describe("TS-WEB-0017-A34: the spacing scale per level is assigned in components.css only", () => {
+  const a34 = (errors: readonly string[]) => errors.filter((e) => e.startsWith("TS-WEB-0017-A34"));
+
+  it("accepts the tokens in app/styles/components.css, in its base and its xl block", () => {
+    const root = newRoot();
+    writeFileSync(
+      fixture("app", "styles", "components.css"),
+      ":root { --block-gap: var(--space-4); --block-gap-bound: var(--space-2); }\n" +
+        "@media (min-width: 64rem) { :root { --block-gap: var(--space-6); } }",
+    );
+    writeFileSync(fixture("src", "components", "a", "a.module.css"), ".a { margin-top: var(--block-gap); }");
+    expect(a34(checkBrand(root).errors)).toEqual([]);
+  });
+
+  it("fails a second stylesheet that assigns a level token, and ignores one in a comment", () => {
+    const root = newRoot();
+    writeFileSync(fixture("app", "styles", "components.css"), ":root { --block-gap: var(--space-4); }");
+    writeFileSync(
+      fixture("app", "styles", "base.css"),
+      "/* --block-gap: 99px in prose */\n@media (min-width: 80rem) { :root { --block-gap: var(--space-8); } }",
+    );
+    writeFileSync(fixture("src", "components", "b", "b.module.css"), ".b { --section-padding-block-tight: 4px; }");
+    const errors = a34(checkBrand(root).errors);
+    expect(errors).toHaveLength(2);
+    expect(errors.join("\n")).toContain("app/styles/base.css:2");
+    expect(errors.join("\n")).toContain("--section-padding-block-tight");
+  });
+});
+

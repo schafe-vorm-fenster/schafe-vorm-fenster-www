@@ -84,14 +84,31 @@
   --ratio-portrait: 4 / 5;
   --ratio-square: 1 / 1;
 
-  /* ── Section rhythm — SRC-0014 §Shape and Space ──────────────────────── */
+  /* ── The spacing scale per level — SRC-0014 §Shape and Space, DEC-0178 ──
+   *
+   * One token per level of vertical space, each with one owner (DEC-0171),
+   * and every value per breakpoint tier is set in this file and nowhere else:
+   * the base below is the phone and the tablet, the `xl` block at the end of
+   * this file is the desktop. No other stylesheet assigns these properties.
+   *
+   *   level            token                          mobile  tablet md  desktop xl
+   *   section edge     --section-padding-block          28      28         28
+   *   section edge     --section-padding-block-tight    22      22         24 space-6
+   *   between blocks   --block-gap                       16      16         24 space-6
+   *   kicker → block   --block-gap-bound                  8       8         12 space-3
+   *   between controls --control-gap                     10      10         10
+   *   inside a block   the component's own, from the space scale (no token)
+   *
+   * Two invariants hold in every tier, and the values were chosen for them:
+   * the bound gap is half the block gap (a kicker reads with what it names),
+   * and no block gap is wider than the tightest section edge (a section's
+   * blocks never stand further apart than the section stands from the next).
+   */
   --section-padding-block: 28px; /* 26–30 standard */
   --section-padding-block-tight: 22px; /* 20–24 tight */
   --control-gap: 10px; /* 8–10 between controls */
-  /* The one space between two blocks of a section's content stack (DEC-0171,
-     SRC-0014 §Shape and Space): the stack owns it, a component never brings
-     its own. `space-4`, the step a paragraph and a heading already keep, at
-     every breakpoint. */
+  /* The one space between two blocks of a section's content stack (DEC-0171):
+     the stack owns it, a component never brings its own. */
   --block-gap: var(--space-4);
   /* A kicker binds to the block it names — the one closer step in a stack. */
   --block-gap-bound: var(--space-2);
@@ -251,3 +268,20 @@
     --site-header-height: 72px;
   }
 }
+
+/* ── xl — 64rem / 1024px: the desktop tier of the spacing scale (DEC-0178) ─
+ * The section head steps from 24 to 30 px and the measure triples, so a 16 px
+ * gap that reads as about 0.6 of a heading line on the phone reads as 0.5 on
+ * the desktop. `space-6` (24 px) is the next step of the scale — it has no
+ * 20 — and it is the desktop grid gutter, so blocks stand as far apart down
+ * the page as columns do across it. The bound gap keeps half of it, and the
+ * tight section edge rises to `space-6` so no block gap exceeds a section edge.
+ */
+@media (min-width: 64rem) {
+  :root {
+    --section-padding-block-tight: var(--space-6);
+    --block-gap: var(--space-6);
+    --block-gap-bound: var(--space-3);
+  }
+}
+

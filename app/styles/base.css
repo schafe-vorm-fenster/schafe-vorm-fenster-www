@@ -243,8 +243,10 @@ textarea {
  * component's own `margin: 0`, and nothing else stood between the blocks.
  *
  * The one closer step is the kicker's: it names the block that follows it.
+ * The values step per tier (16/8 px, from xl 24/12 px) and are set in
+ * `components.css` only (DEC-0178, TS-WEB-0017-A34); this rule only reads them.
  * `e2e/block-gaps.spec.ts` (TS-WEB-0017-A31) measures every stack on every
- * route at 390 and 1280 px.
+ * route at 390, 800 and 1280 px.
  * ─────────────────────────────────────────────────────────────────────── */
 
 /* `:nth-child()` lifts these to (0,2,0). A component's own root rule is one

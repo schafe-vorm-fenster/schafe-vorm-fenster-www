@@ -90,7 +90,6 @@ export function PersonProfile({
       <MediaFrame
         alt={portraitAlt}
         credit={portraitCredit ? `${dictionary(locale ?? "de").photoCredit.lead}: ${portraitCredit}` : undefined}
-        className={styles.portrait}
         locale={locale}
         notDepicting={portraitNotDepicting}
         ratio="portrait"

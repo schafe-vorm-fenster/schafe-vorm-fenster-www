@@ -3,8 +3,8 @@ artefact: contract
 id: SRC-0013
 status: DRAFT
 date: 2026-09-10
-updated: 2026-10-27
-decisions: [DEC-0044, DEC-0054, DEC-0104, DEC-0155, DEC-0160, DEC-0169, DEC-0171, DEC-0173, DEC-0175]
+updated: 2026-10-28
+decisions: [DEC-0044, DEC-0054, DEC-0104, DEC-0155, DEC-0160, DEC-0169, DEC-0171, DEC-0173, DEC-0175, DEC-0178]
 ---
 
 # Design System Contract
@@ -167,14 +167,17 @@ Two of these carry a rule the manifest has to express, not only name:
   binds position and width only.
 - **Section rhythm and the owner of each space (DEC-0171, SRC-0014 §*Who owns
   which space*).** The section owns `padding-block`; its content stack
-  (`[data-stack]`) owns the space between its direct children — `space-4`
-  (`--block-gap`) at all six breakpoints, it does not step, and `space-2`
-  (`--block-gap-bound`) after a section kicker; a block owns nothing outside
-  its own box. A generator therefore never emits a vertical margin on a
+  (`[data-stack]`) owns the space between its direct children —
+  `--block-gap`, `space-4` (16 px) below `xl` and `space-6` (24 px) from
+  `xl`, and `--block-gap-bound` after a section kicker, `space-2` (8 px) below
+  `xl` and `space-3` (12 px) from `xl` (DEC-0178; SRC-0014's table names
+  every level per tier, all set in `app/styles/components.css`); a block owns
+  nothing outside its own box. A generator therefore never emits a vertical margin on a
   block, and never hands one to a component through `className`. A wrapper
   that groups blocks is a stack; rows divided by a hairline are one block.
-  `TS-WEB-0017-A31` measures it on every route, `TS-WEB-0017-A32` reads it in
-  the source.
+  `data-stack` takes no value. `TS-WEB-0017-A31` measures it on every route
+  per tier, `TS-WEB-0017-A32` reads it in the source, `TS-WEB-0017-A34` keeps
+  the per-level tokens in one stylesheet.
 - The mobile-first rule stated normatively: `min-width` queries only, one
   component tree, no separate desktop layout.
 - How the block order every page carries — focus · argument · context

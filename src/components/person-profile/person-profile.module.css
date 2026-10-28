@@ -4,14 +4,17 @@
   gap: var(--space-2);
 }
 
-.portrait {
-  margin: 0 0 var(--space-2);
-}
-
 .text {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+}
+
+/* The space under the portrait is this component's own (DEC-0178 §4): the
+   text it owns is padded, so no margin rides on MediaFrame's root through
+   `className` (A32). Only when a portrait stands before it. */
+.text:not(:first-child) {
+  padding-top: var(--space-2);
 }
 
 /* The bare kicker (SRC-0014 §Kicker): mono, uppercase, `lime-800` on light. */
