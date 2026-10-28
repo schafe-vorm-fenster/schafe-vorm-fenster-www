@@ -25,9 +25,9 @@
 
 import { commonsAttribution, commonsFileName, commonsFilePage, commonsImageUrl } from "@/src/clients/assets-api/client";
 import { fetchCommunityPage } from "@/src/clients/community-site/client";
-import { communityById } from "@/src/clients/geo-api/client";
 
-import { assetsConfig, communitySiteConfig, geoConfig, hasRealBackend } from "./config";
+import { assetsConfig, communitySiteConfig, hasRealBackend } from "./config";
+import { cachedCommunityById } from "./geo-lookup";
 import { communityRouteSlugFor } from "./place-index";
 import { resolvePlace } from "./places";
 
@@ -83,7 +83,9 @@ async function imageReference(place: Place): Promise<string | null | "failed"> {
   const geonameId = geonameIdOf(place);
   if (geonameId !== undefined && hasRealBackend("communityPhoto")) {
     try {
-      const community = await communityById(geoConfig(), geonameId);
+      // id → community is cached for days (DEC-0181); the photograph a
+      // Wikidata edit changes reaches the page within that week.
+      const community = await cachedCommunityById(geonameId);
       if (community !== undefined) return community.image ?? null;
     } catch {
       failed = true; // an unreachable geo-api is not a place without a photograph

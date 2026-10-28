@@ -18,8 +18,15 @@
  *     what "5 minutes" means.
  */
 
-/** The data kinds TS-WEB-0003 D5 distinguishes. Modules map onto these, not the reverse. */
-export const CACHE_KINDS = ["dates", "activePlaces", "counters"] as const;
+/**
+ * The data kinds TS-WEB-0003 D5 distinguishes. Modules map onto these, not the reverse.
+ *
+ * `geoLookup` is the row DEC-0181 added: geo-api's answers to *which
+ * communities lie around this point*, *which community is this slug*, and
+ * *which community is this id*. None of them changes with the dates, so they
+ * are cached apart from the dates and far longer (`geo-lookup.ts`).
+ */
+export const CACHE_KINDS = ["dates", "activePlaces", "counters", "geoLookup"] as const;
 export type CacheKind = (typeof CACHE_KINDS)[number];
 
 export interface CacheProfile {
@@ -33,11 +40,18 @@ const MINUTE = 60;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
 
-/** TS-WEB-0003 D5, verbatim. Counters' window is also the cut-off after which D6 hides them. */
+/**
+ * TS-WEB-0003 D5, verbatim. Counters' window is also the cut-off after which D6 hides them.
+ *
+ * `geoLookup` (DEC-0181): one number, 7 days, used as both. It is the longest
+ * lifetime D5 already holds for place data (`activePlaces`' window), not a
+ * new figure; the entry simply lives that long and is then fetched again.
+ */
 export const CACHE_PROFILES: Readonly<Record<CacheKind, CacheProfile>> = {
   dates: { freshTtlSeconds: 5 * MINUTE, staleWindowSeconds: 3 * DAY },
   activePlaces: { freshTtlSeconds: 1 * HOUR, staleWindowSeconds: 7 * DAY },
   counters: { freshTtlSeconds: 15 * MINUTE, staleWindowSeconds: 3 * DAY },
+  geoLookup: { freshTtlSeconds: 7 * DAY, staleWindowSeconds: 7 * DAY },
 };
 
 export function cacheProfile(kind: CacheKind): CacheProfile {
@@ -75,4 +89,6 @@ export const cacheTags = {
   places: () => "places",
   placesInCounty: (county: string) => `places:${county}`,
   stats: () => "stats",
+  /** Every cached geo-api lookup (DEC-0181) — one tag, so one purge reaches all of them. */
+  geo: () => "geo",
 } as const;

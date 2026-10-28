@@ -48,6 +48,7 @@ A page sees one thing: an **envelope**.
 Supporting modules: `types.ts` (the envelope and the domain shapes),
 `widening.ts` (the chain, the ~15 km cut and the `Europe/Berlin` windows),
 `resilient.ts` (the three tiers), `last-good.ts` (the tier-2 store),
+`geo-lookup.ts` (geo-api's point, slug and id lookups, cached for days, DEC-0181),
 `cache-profiles.ts` (TS-WEB-0003 D5's numbers), `snapshots.ts` (tier 3),
 `bff.ts` (origin check, rate limit, the response shape), `adapters.ts`
 (upstream shape → ours; placeholders, duplicates and test organizers
@@ -170,7 +171,8 @@ module — tier 1, 2 and 3 modules may stand side by side on a page.
 Rules the layer enforces rather than documents:
 
 - **Failure is anything that is not a valid answer** — network error, non-2xx,
-  timeout (800 ms), or a payload the Zod schema rejects. A malformed 200
+  timeout (800 ms; geo-api's point search 3 s, DEC-0181), or a payload the
+  Zod schema rejects. A malformed 200
   never reaches a page.
 - **One attempt per render.** No in-request retry.
 - **An empty result is tier 1**, not a failure. Zero dates in a covered place
@@ -328,11 +330,19 @@ else in the tree types them:
 | `dates` | 5 min | 3 d |
 | `activePlaces` | 1 h | 7 d |
 | `counters` | 15 min | 3 d — beyond: hide |
+| `geoLookup` | 7 d | 7 d (DEC-0181) |
 
 - The **BFF routes** send them as `Cache-Control: public, s-maxage=…,
   stale-while-revalidate=…` (`cacheControlFor()`), the Vercel SWR semantics
   DEC-0019 fixes.
 - The **`last-good` store** uses the stale window as its TTL.
+- The **geo lookups** (`geo-lookup.ts`, DEC-0181) — point → communities,
+  slug → community, id → community — are read through the Runtime Cache
+  (namespace `geo`, tag `geo`) for `geoLookup`'s 7 days, apart from the
+  dates. The point is quantised to the nearby key's two decimals, and the
+  point search alone runs on its own 3 s budget (`GEO_POINT_TIMEOUT_MS`).
+  Only a validated, found answer is written. `/api/places/nearest` stays
+  uncached: its point is the visitor's.
 - The **islands** use `cacheLifeProfile()` with `cacheLife()` and the
   `cacheTags` of `cacheTags.*`. Cache Components (`cacheComponents: true`) is
   on since M4 (`state/open.md` row 76), and the islands live in

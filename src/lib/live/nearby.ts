@@ -8,13 +8,13 @@
  * is reported as `truncated` so the module claims no completeness.
  */
 
-import { searchByPoint } from "@/src/clients/geo-api/client";
 import { searchEvents } from "@/src/clients/events-api/client";
 
 import { toLiveEvents, toPlace } from "./adapters";
 import { withDistance } from "./distance";
 import { cacheTags } from "./cache-profiles";
-import { eventsConfig, geoConfig, hasRealBackend } from "./config";
+import { eventsConfig, hasRealBackend } from "./config";
+import { communitiesNearPoint, pointSegment, quantisePoint, type GeoLookupOptions } from "./geo-lookup";
 import { mockEventsForPlaces } from "./mocks/events";
 import { mockSearchByPoint } from "./mocks/geo";
 import { publicNearbyEvents } from "./public-source";
@@ -33,6 +33,8 @@ export interface NearbyInput {
   readonly radiusKm?: number;
   readonly rowCount?: number;
   readonly store?: ResilientOptions<NearbyEvents>["store"];
+  /** The geo lookup's own cache (DEC-0181) — tests hand in `memoryStore()`. */
+  readonly geoStore?: GeoLookupOptions["store"];
   readonly now?: () => Date;
 }
 
@@ -42,6 +44,7 @@ export async function nearbyEvents({
   radiusKm = NEARBY_RADIUS_KM,
   rowCount = 5,
   store,
+  geoStore,
   now,
 }: NearbyInput): Promise<LiveEnvelope<NearbyEvents>> {
   const realGeo = hasRealBackend("placesNearPoint");
@@ -75,7 +78,12 @@ export async function nearbyEvents({
       };
     }
 
-    const candidates: Place[] = (await searchByPoint(geoConfig(), anchor, GEO_MAX_RESULTS)).map(toPlace);
+    // Which communities lie around the point is cached for days on the
+    // quantised point and may take the point search's own 3 s to fill
+    // (DEC-0181); the dates below keep their 5 minutes and their 800 ms.
+    const candidates: Place[] = (
+      await communitiesNearPoint(anchor, GEO_MAX_RESULTS, { store: geoStore, now })
+    ).map(toPlace);
     const { places, truncated } = selectNearby(anchor, candidates, {
       radiusKm,
       maxResults: GEO_MAX_RESULTS,
@@ -100,7 +108,7 @@ export async function nearbyEvents({
   return resilient(fetcher, {
     // The key is the rounded anchor, not the exact coordinate: a cache key
     // carries a segment, never something traceable to a visitor (TS-WEB-0013 D6).
-    key: `nearby:${lat.toFixed(2)}:${lng.toFixed(2)}:${radiusKm}`,
+    key: `nearby:${pointSegment(quantisePoint(anchor))}:${radiusKm}`,
     kind: "dates",
     tags: [cacheTags.places()],
     snapshot: () => nearbyFallback(radiusKm, clock()),
