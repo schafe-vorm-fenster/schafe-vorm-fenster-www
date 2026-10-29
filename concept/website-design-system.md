@@ -884,8 +884,8 @@ side, so there is a **graphic stage**: one box at **at least**
 edge so the stage reads as something that continues. **The square is a
 minimum** (owner's decision of 2026-10-13, `DEC-0153` amendment 3): a state
 whose content needs more height — the calendar state's three rows with
-two-line titles and the stacked meta — grows the box, and the other states
-stretch to it, so the tallest state sets the height for all three. That
+two-line titles and the stacked meta — grows the box, and the other states'
+graphics stretch to it (`DEC-0182`: the square is a state's, not the stage's), so the tallest state sets the height for all three. That
 height is reserved before paint (the calendar reserves its three rows), so
 the box never changes size after it, and a state change cannot shift the
 page. No row of the calendar is ever cut off, and it always shows three

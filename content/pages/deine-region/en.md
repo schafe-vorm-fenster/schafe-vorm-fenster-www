@@ -22,7 +22,7 @@ sources:
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
   - "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022"
   - "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"
-  - "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"
+  - "@schafe-vorm-fenster/partners@0.2.7#stiftung-lebendiges-lehre"
   - "ia"
 derived_from:
   - "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"
@@ -32,7 +32,7 @@ derived_from:
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
   - "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022"
   - "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei"
-  - "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"
+  - "@schafe-vorm-fenster/partners@0.2.7#stiftung-lebendiges-lehre"
   - "ia"
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
@@ -229,7 +229,7 @@ Pool: `eichler-wasserschloss-quilow`, `partner-network` — both
 below instead shows three real, named proof elements from the full set,
 and says what they do and do not prove.
 
-<!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022", "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei", "@schafe-vorm-fenster/partners@0.2.4#stiftung-lebendiges-lehre"]; status: draft -->
+<!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022", "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei", "@schafe-vorm-fenster/partners@0.2.7#stiftung-lebendiges-lehre"]; status: draft -->
 
 **Proof cards (real, clearance pending):** Three elements
 from the proof set — cards 2 and 3 in the wording of their records,

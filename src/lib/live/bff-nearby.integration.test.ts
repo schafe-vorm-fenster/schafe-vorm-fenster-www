@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { resetRateLimits } from "./bff";
 import { DEMO_PLACES } from "./mocks/fixtures";
-import { haversineKm } from "./widening";
+import { haversineKm, NEARBY_RADIUS_KM } from "./widening";
 
 import { GET } from "@/app/api/nearby/route";
 
@@ -19,12 +19,12 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe("TS-WEB-0008-A3: the ~15 km cut happens in the BFF, on geo positions", () => {
+describe("TS-WEB-0008-A3: the radius cut happens in the BFF on the committed ring, the token path leaves it to the service", () => {
   it("returns only dates from places inside the radius, and states the radius it used", async () => {
     const body = await (await call(`?lat=${anchor.lat}&lng=${anchor.lng}`)).json();
 
-    expect(body.data.radiusKm).toBe(15);
-    const admitted = DEMO_PLACES.filter((place) => haversineKm(anchor, place) <= 15).map((place) => place.name);
+    expect(body.data.radiusKm).toBe(NEARBY_RADIUS_KM);
+    const admitted = DEMO_PLACES.filter((place) => haversineKm(anchor, place) <= NEARBY_RADIUS_KM).map((place) => place.name);
     for (const event of body.data.events) expect(admitted).toContain(event.placeName);
   });
 
@@ -43,9 +43,9 @@ describe("TS-WEB-0008-A3: the ~15 km cut happens in the BFF, on geo positions", 
     expect(narrow.data.events.length).toBeLessThanOrEqual(wide.data.events.length);
   });
 
-  it("falls back to the specified ~15 km for a nonsense radius rather than failing", async () => {
+  it("falls back to the specified radius (20 km, DEC-0185) for a nonsense radius rather than failing", async () => {
     const body = await (await call(`?lat=${anchor.lat}&lng=${anchor.lng}&radius=-3`)).json();
-    expect(body.data.radiusKm).toBe(15);
+    expect(body.data.radiusKm).toBe(NEARBY_RADIUS_KM);
   });
 
   it("rejects a missing or impossible coordinate with 400", async () => {

@@ -321,7 +321,7 @@ of the four is cleared; three are waiting for clearance and run with
 
 **Kicker:** Here for something else today?
 
-- **Publish dates:** How to publish dates the easy way, by WhatsApp or from a calendar → `/mitmachen`
+- **Publish dates:** By WhatsApp or from your calendar → `/mitmachen`
 - **Run your own calendar:** Under your own name, on your own website → `/dein-kalender`
 - **Who's behind it:** Who makes the village calendar → `/ueber-uns`
 
