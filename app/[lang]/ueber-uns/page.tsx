@@ -1,3 +1,4 @@
+import { imageCredit } from "@/src/components/photo-surface/image-credit";
 import { Button } from "@/src/components/button/button";
 import { CONTACT_SECTION_ID } from "@/src/components/contact-section/contact-section";
 import { Icon } from "@/src/components/icon/icon";
@@ -73,9 +74,6 @@ const FOUNDER_ALT: Record<Locale, string> = {
   de: "Jan-Henrik Hempel, Gründer",
   en: "Jan-Henrik Hempel, founder",
 };
-
-/** The photographer's credit line on the quote band, per locale. */
-const PHOTO_CREDIT: Record<Locale, string> = { de: "Foto", en: "Photo" };
 
 /** `ueber-uns-1-origin`'s fields, in the order both locales carry them. */
 const ORIGIN = {
@@ -301,6 +299,7 @@ export default async function Page({
           id="herkunft"
           locale={locale}
           aiEdited={heroImage?.aiEdited} notDepicting={heroImage?.notDepicting}
+          credit={imageCredit(heroImage, locale)}
           placeholderId={heroImage?.placeholderId}
           priority
           ratio="hero"
@@ -338,9 +337,7 @@ export default async function Page({
         {quote && sourceUrl ? (
           <PhotoSurface
             className={styles.quoteBand}
-            // The photographer's credit (`credit: openTransfer.de`) — the ©
-            // control in the picture's corner, not text on it (issue 101).
-            credit={founderImage?.credit ? `${PHOTO_CREDIT[locale]}: ${founderImage.credit}` : undefined}
+            credit={imageCredit(founderImage, locale)}
             dataBlock="zitat"
             focal={founderImage?.focal}
             id="zitat"
@@ -425,7 +422,7 @@ export default async function Page({
                       locale={locale}
                       name={founder.name}
                       portraitAlt={portrait?.alt ?? founder.name}
-                      portraitCredit={portrait?.credit}
+                      portraitCredit={imageCredit(portrait, locale)}
                       portraitNotDepicting={portrait?.notDepicting}
                       portraitSrc={portrait?.src}
                       role={founder.role}

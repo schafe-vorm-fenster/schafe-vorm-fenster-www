@@ -57,7 +57,7 @@ translation.
 | `#community-guidelines` | Community guidelines | `content/legal/community-guidelines.md` (imported, German text) |
 | `#data-processing` | Data processing agreement (DPA) | `content/legal/dpa.md` (imported, public, no access gate, German text) |
 | `#accessibility` | Accessibility | `content/legal/accessibility.md` (generated, see below, German text) |
-| `#image-credits` | Image credits | `content/legal/image-credits.md` (maintained in this repository, mirrors the `images:` blocks, German text) |
+| `#image-credits` | Image credits | `content/legal/image-credits.md` (maintained in this repository, points to the credits at each photo, German text) |
 
 ## Footer link text
 

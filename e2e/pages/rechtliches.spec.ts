@@ -152,7 +152,7 @@ test.describe("/rechtliches", () => {
     const credits = page.locator("#bildnachweise");
     await expect(credits).toHaveCount(1);
     await expect(credits).toContainText("Wikimedia Commons");
-    await expect(credits).toContainText("CC BY-SA 4.0");
+    await expect(credits).toContainText("©-Zeichen");
     // It is the last registry section on the page.
     const last = await page.evaluate(() => {
       const sections = [...document.querySelectorAll("article section[id]")];

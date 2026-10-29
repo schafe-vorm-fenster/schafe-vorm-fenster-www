@@ -220,3 +220,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0183 — A voice's logo takes the initials well's place, and the home proof stream drops its fifth element](DEC-0183--a-voices-logo-takes-the-initials-well-and-the-home-stream-drops-its-fifth-element.md)
 - [DEC-0184 — The publish line of the context band names the two ways only](DEC-0184--the-publish-line-of-the-context-band-names-the-two-ways-only.md)
 - [DEC-0185 — The nearby module picks a varied week from the events-api instead of the first five by start time](DEC-0185--the-nearby-module-picks-a-varied-week-from-the-events-api.md)
+- [DEC-0187 — Every photograph shows its credit behind the © control, always in the same form; the credits section only points there](DEC-0187--every-photograph-shows-its-credit-behind-the-copyright-control.md)

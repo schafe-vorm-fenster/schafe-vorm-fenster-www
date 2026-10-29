@@ -1,4 +1,5 @@
 
+import { imageCredit } from "@/src/components/photo-surface/image-credit";
 import { Button } from "@/src/components/button/button";
 import { EmbedFrame } from "@/src/components/embed-frame/embed-frame";
 import { FeatureBenefit } from "@/src/components/feature-benefit/feature-benefit";
@@ -352,6 +353,7 @@ export default async function Page({
           locale={locale}
           focal={heroImage?.focal}
           aiEdited={heroImage?.aiEdited} notDepicting={heroImage?.notDepicting}
+          credit={imageCredit(heroImage, locale)}
           placeholderId={heroImage?.placeholderId}
           src={heroImage?.src}
           wideSrc={heroImage?.wideSrc}
@@ -496,6 +498,7 @@ export default async function Page({
             feature={fieldAt(whatItAdds.blocks, 0) ?? ""}
             locale={locale}
             mediaAlt={territoryImage?.alt ?? copy.territorySketchAlt}
+            mediaCredit={imageCredit(territoryImage, locale)}
             mediaSrc={territoryImage?.src}
           />
           <p>{fieldAt(whatItAdds.blocks, 2)}</p>

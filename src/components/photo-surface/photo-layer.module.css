@@ -1,0 +1,7 @@
+
+/* A place photograph covers the stage's own: its credit stands alone, so the
+   stage's own © control (DEC-0187) gives way. The layer precedes both in the
+   DOM. */
+.layer ~ [data-credit-own] {
+  display: none;
+}

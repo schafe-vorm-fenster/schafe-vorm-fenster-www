@@ -134,6 +134,8 @@ export interface StartHeroProps {
     readonly focal?: { readonly x: number; readonly y: number };
     readonly notDepicting?: boolean;
     readonly placeholderId?: string;
+    /** The photograph's credit behind the © control (DEC-0187). */
+    readonly credit?: ReactNode;
   };
 }
 
@@ -156,6 +158,7 @@ export function StartHero({ copy, image }: StartHeroProps) {
       id="focus-block"
       locale={copy.locale}
       notDepicting={image.notDepicting}
+      credit={image.credit}
       placeholderId={image.placeholderId}
       src={image.src}
       wideSrc={image.wideSrc}

@@ -53,9 +53,12 @@ images:
       Wikimedia Commons, File:Güterberg, Ausblick.jpg —
       https://commons.wikimedia.org/wiki/File:G%C3%BCterberg,_Ausblick.jpg — Eigenaufnahme von
       Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3563×2231.
-      Nachweis: content/legal/image-credits.md.
+      Nachweis hinter dem ©-Zeichen am Bild.
     alt: Blick über Felder bei Güterberg bis zum Horizont, dort Baumreihen, Dächer und Windräder.
     licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, über Wikimedia Commons"
+    credit_title: "Güterberg, Ausblick"
+    credit_url: "https://commons.wikimedia.org/wiki/File:G%C3%BCterberg,_Ausblick.jpg"
     status: real
     file: /images/real/deine-region-hero.webp
     width: 800
@@ -71,11 +74,14 @@ images:
       Wikimedia Commons, File:Carolinenthal, Ortseingang.jpg —
       https://commons.wikimedia.org/wiki/File:Carolinenthal,_Ortseingang.jpg — Eigenaufnahme von
       Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 4032×3024.
-      Nachweis: content/legal/image-credits.md.
+      Nachweis hinter dem ©-Zeichen am Bild.
     alt: >-
       Kopfsteinpflasterstraße am Ortseingang von Carolinenthal, daneben das gelbe Ortsschild unter
       einer Baumreihe.
     licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, über Wikimedia Commons"
+    credit_title: "Carolinenthal, Ortseingang"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Carolinenthal,_Ortseingang.jpg"
     status: real
     file: /images/real/deine-region-gebietsschnitt.webp
     width: 1400
@@ -92,6 +98,7 @@ images:
       Zwei Schreibtische in einem Dachbüro mit historischen Holzbalken, heller Dielenboden, Fenster
       zur Seite.
     licence: Eigenaufnahme, unbeschränkte Nutzung
+    credit: "Jan-Henrik Hempel"
     status: real
     file: /images/real/deine-region-angebot-hero.webp
     width: 800

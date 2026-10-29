@@ -55,7 +55,7 @@ Rolle Content & Translation, „Must not: touch code outside content files
 | `#community-richtlinien` | Community-Richtlinien | `content/legal/community-guidelines.md` (importiert) |
 | `#auftragsverarbeitung` | Auftragsverarbeitung (AVV) | `content/legal/dpa.md` (importiert, öffentlich, ohne Zugangssperre) |
 | `#barrierefreiheit` | Barrierefreiheit | `content/legal/accessibility.md` (generiert, siehe unten) |
-| `#bildnachweise` | Bildnachweise | `content/legal/image-credits.md` (in diesem Repository gepflegt, Spiegel der `images:`-Blöcke) |
+| `#bildnachweise` | Bildnachweise | `content/legal/image-credits.md` (in diesem Repository gepflegt, Verweis auf die Nachweise am Bild) |
 
 ## Fußzeilen-Linktexte
 

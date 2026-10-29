@@ -24,6 +24,8 @@ export interface FeatureBenefitProps {
   readonly mediaSrc?: string;
   readonly mediaAlt?: string;
   readonly mediaState?: DataState;
+  /** The photograph's credit behind the © control (DEC-0187). */
+  readonly mediaCredit?: ReactNode;
   /**
    * The page's language — `media-frame` badges itself and reads it. Without
    * it block 5 of `/en/your-region` hatched "Foto gesucht" (F-2-33).
@@ -56,6 +58,7 @@ export function FeatureBenefit({
   mediaSrc,
   mediaAlt = "",
   mediaState,
+  mediaCredit,
   locale,
   className,
 }: FeatureBenefitProps) {
@@ -63,7 +66,7 @@ export function FeatureBenefit({
     <div className={[styles.pair, className].filter(Boolean).join(" ")}>
       {mediaSrc !== undefined || mediaState ? (
         <div className={styles.mediaRow}>
-          <MediaFrame alt={mediaAlt} locale={locale} ratio="feature" src={mediaSrc} state={mediaState} />
+          <MediaFrame alt={mediaAlt} credit={mediaCredit} locale={locale} ratio="feature" src={mediaSrc} state={mediaState} />
         </div>
       ) : null}
       <h3 className={styles.feature}>{feature}</h3>

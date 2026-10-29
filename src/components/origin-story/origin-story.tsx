@@ -1,5 +1,4 @@
 import { MediaFrame } from "../media-frame/media-frame";
-import { dictionary } from "@/src/lib/i18n/dictionary";
 import { PriceTag, type PriceDisplay, type PriceFigure } from "../price-tag/price-tag";
 
 import type { DataState } from "../data-state";
@@ -43,7 +42,7 @@ export interface OriginStoryProps {
   readonly portraitState?: DataState;
   readonly portraitNotDepicting?: boolean;
   /** The rights holder's attribution string, verbatim, where one is required. */
-  readonly portraitCredit?: string;
+  readonly portraitCredit?: ReactNode;
   /**
    * `true` lets the portrait run to the section's gutter below `lg` and fill
    * its column above it, instead of sitting in a 320 px box inside the text
@@ -132,7 +131,7 @@ export function OriginStory({
         </div>
         <MediaFrame
           alt={portraitAlt}
-          credit={portraitCredit ? `${dictionary(locale ?? "de").photoCredit.lead}: ${portraitCredit}` : undefined}
+          credit={portraitCredit}
           className={styles.portrait}
           locale={locale}
           notDepicting={portraitNotDepicting}

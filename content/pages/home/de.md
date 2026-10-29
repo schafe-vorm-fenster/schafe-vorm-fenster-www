@@ -45,11 +45,14 @@ images:
       Wikimedia Commons, File:Melkerschule Schlatkow.jpg —
       https://commons.wikimedia.org/wiki/File:Melkerschule_Schlatkow.jpg — Eigenaufnahme (Jan-Henrik
       Hempel, Commons-Konto „J2hcom", own work), September 2016, 5073×2817. Motivregel `/`: Dorf mit
-      Aktivität (SRC-0014 §Motiv pro Seite). Nachweis: content/legal/image-credits.md.
+      Aktivität (SRC-0014 §Motiv pro Seite). Nachweis hinter dem ©-Zeichen am Bild.
     alt: >-
       Das Fachwerkhaus der Melkerschule in Schlatkow, davor Biertischgarnituren, zwei Sonnenschirme
       und Gäste auf der Wiese.
     licence: CC BY-SA 4.0
+    credit: "Jan-Henrik Hempel, CC BY-SA 4.0, über Wikimedia Commons"
+    credit_title: "Melkerschule Schlatkow"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Melkerschule_Schlatkow.jpg"
     place: schlatkow
     focal:
       x: 50
@@ -68,12 +71,14 @@ images:
     source: >-
       Wikimedia Commons, File:Guetzkow Ostvorpommern Rathaus.jpg —
       https://commons.wikimedia.org/wiki/File:Guetzkow_Ostvorpommern_Rathaus.jpg — Foto: Erell, Mai
-      2007, 3008×2000. Fremdaufnahme: CC BY-SA verlangt Namensnennung, sie steht in
-      content/legal/image-credits.md.
+      2007, 3008×2000. Fremdaufnahme: CC BY-SA verlangt Namensnennung, sie steht hinter dem ©-Zeichen am Bild.
     alt: >-
       Das Rathaus von Gützkow in Vorpommern, ein weiß verputzter Altbau mit Freitreppe an der
       Straße. Darüber liegt die gezeichnete Ansicht eines Terminkalenders auf einer Webseite.
     licence: CC BY-SA 2.5
+    credit: "Erell, CC BY-SA 2.5, über Wikimedia Commons, Bildausschnitt angepasst"
+    credit_title: "Rathaus Gützkow"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Guetzkow_Ostvorpommern_Rathaus.jpg"
     focal:
       x: 42
       "y": 50
@@ -93,6 +98,7 @@ images:
       Jan-Henrik Hempel steht in der offenen Tür eines Backsteinhauses, daneben der Roll-up von
       Schafe vorm Fenster.
     licence: Eigenaufnahme, unbeschränkte Nutzung
+    credit: "Jan-Henrik Hempel"
     focal:
       x: 45
       "y": 40

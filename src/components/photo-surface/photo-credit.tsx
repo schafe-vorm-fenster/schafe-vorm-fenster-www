@@ -25,6 +25,12 @@ export interface PhotoCreditProps {
    * stands left of it in the same row instead of on top of it (DEC-0165).
    */
   readonly besideMark?: boolean;
+  /**
+   * The photograph's own credit, as against a swapped-in place photograph's:
+   * where a place photograph covers the stage, its credit stands alone
+   * (`photo-layer.module.css`).
+   */
+  readonly own?: boolean;
 }
 
 /**
@@ -48,7 +54,7 @@ export interface PhotoCreditProps {
  * licence, a reachable link to the source — are inside the panel, one tab
  * stop past the control.
  */
-export function PhotoCredit({ locale = "de", children, besideMark = false }: PhotoCreditProps) {
+export function PhotoCredit({ locale = "de", children, besideMark = false, own = false }: PhotoCreditProps) {
   const label = dictionary(locale).photoCredit.label;
   const panelId = useId();
   const box = useRef<HTMLDivElement>(null);
@@ -86,6 +92,7 @@ export function PhotoCredit({ locale = "de", children, besideMark = false }: Pho
     <div
       className={[styles.credit, besideMark ? styles.besideMark : undefined].filter(Boolean).join(" ")}
       data-open={open ? "true" : "false"}
+      data-credit-own={own ? "" : undefined}
       data-photo-credit=""
       onBlur={(event) => {
         if (box.current?.contains(event.relatedTarget as Node | null)) return;

@@ -129,6 +129,8 @@ export interface PlaceHeroProps {
     readonly focal?: { readonly x: number; readonly y: number };
     readonly notDepicting?: boolean;
     readonly placeholderId?: string;
+    /** The photograph's credit behind the © control (DEC-0187). */
+    readonly credit?: ReactNode;
     /** The covered place the photograph depicts — the inventory's `place` (DEC-0168). */
     readonly place?: string;
   };
@@ -157,6 +159,7 @@ export function PlaceHero({ copy, s0Search, aSearch, image }: PlaceHeroProps) {
       notDepicting={image.notDepicting}
       // DEC-0167 — with a place, the stage shows that place's photograph.
       photoLayer={<PlacePhotoLayer locale={copy.locale} ownPhotoPlace={image.place} />}
+      credit={image.credit}
       placeholderId={image.placeholderId}
       search={state.kind === "a" ? aSearch : undefined}
       src={image.src}

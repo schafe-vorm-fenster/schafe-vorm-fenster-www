@@ -47,6 +47,7 @@ describe("ImageEntrySchema", () => {
       status: "real",
       source: "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel",
       licence: "Eigenaufnahme, unbeschränkte Nutzung",
+      credit: "Jan-Henrik Hempel",
     });
     expect(withSource.success).toBe(true);
   });
@@ -59,8 +60,12 @@ describe("ImageEntrySchema", () => {
       source: "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel",
     };
     expect(ImageEntrySchema.safeParse(placed).success).toBe(false);
+    // DEC-0187: a licence alone is not enough, the credit is shown behind the © control.
     expect(
       ImageEntrySchema.safeParse({ ...placed, licence: "CC BY-SA 4.0" }).success,
+    ).toBe(false);
+    expect(
+      ImageEntrySchema.safeParse({ ...placed, licence: "CC BY-SA 4.0", credit: "Jan-Henrik Hempel, CC BY-SA 4.0" }).success,
     ).toBe(true);
     // A slot still waiting for its photograph has no rights to state yet.
     expect(
@@ -155,6 +160,7 @@ describe("PageFrontmatterSchema carries the inventory", () => {
       source: "Original: a photograph of a village festival.",
       master: "plan/reviews/edited.jpg",
       licence: "CC0 1.0",
+      credit: "Jan-Henrik Hempel, CC0 1.0, über Wikimedia Commons, mit KI bearbeitet",
       status: "real",
     } as const;
     const withAlt = (locale: "de" | "en", alt: string) =>

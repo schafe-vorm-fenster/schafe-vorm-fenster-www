@@ -37,11 +37,14 @@ images:
       Wikimedia Commons, File:Groß Luckow, Feuerwehr und Gemeindezentrum.jpg —
       https://commons.wikimedia.org/wiki/File:Gro%C3%9F_Luckow,_Feuerwehr_und_Gemeindezentrum.jpg —
       Eigenaufnahme von Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025,
-      3914×2281. Nachweis: content/legal/image-credits.md.
+      3914×2281. Nachweis hinter dem ©-Zeichen am Bild.
     alt: >-
       The volunteer fire station and the community centre of Groß Luckow, the church tower behind
       them.
     licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, via Wikimedia Commons"
+    credit_title: "Groß Luckow, Feuerwehr und Gemeindezentrum"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Gro%C3%9F_Luckow,_Feuerwehr_und_Gemeindezentrum.jpg"
     status: real
     file: /images/real/dein-ort-starten-hero.webp
     width: 800

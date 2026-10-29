@@ -255,7 +255,7 @@ export function PhotoSurface({
       {/* DEC-0165: every photograph edited with an AI tool carries the mark. */}
       {aiEdited && !notDepicting && !missingPhoto ? <AiEditedMark locale={locale} /> : null}
       {credit && !missingPhoto ? (
-        <PhotoCredit besideMark={aiEdited && !notDepicting} locale={locale}>
+        <PhotoCredit besideMark={aiEdited && !notDepicting} locale={locale} own>
           {credit}
         </PhotoCredit>
       ) : null}

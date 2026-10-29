@@ -49,14 +49,16 @@ images:
       (Jan-Henrik Hempel), April 2023, 5526×2378. Mit KI (Google Gemini) bearbeitet, Oktober 2026:
       Bildausschnitt, Licht, Kontrast und Sättigung; Einzelheiten hat das Werkzeug dabei neu
       gezeichnet (der Kinderwagen rechts fehlt). Öffentliche Dorfveranstaltung, Menschen nur klein
-      und aus der Entfernung. Entscheidung Q-0092 → DEC-0161. Nachweis:
-      content/legal/image-credits.md.
+      und aus der Entfernung. Entscheidung Q-0092 → DEC-0161. Nachweis hinter dem ©-Zeichen am Bild.
     master: plan/reviews/2026-10-12/Design - Mitmachen Hero (Gemini).jpg
     alt: >-
       The Easter bonfire in Schmatzin: children and families at trestle tables on the meadow, a
       painted construction trailer, bare trees and the village behind them. Edited with AI.
     lcp: true
     licence: CC BY-SA 4.0
+    credit: "Jan-Henrik Hempel, CC BY-SA 4.0, via Wikimedia Commons, mit KI bearbeitet"
+    credit_title: "Osterfeuer 2023 in Schmatzin"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Osterfeuer_2023_in_Schmatzin.jpg"
     focal:
       x: 45
       "y": 62
@@ -75,11 +77,14 @@ images:
       Wikimedia Commons, File:Werbelow, Bushaltestelle.jpg —
       https://commons.wikimedia.org/wiki/File:Werbelow,_Bushaltestelle.jpg — Eigenaufnahme von
       Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3561×2409.
-      Nachweis: content/legal/image-credits.md.
+      Nachweis hinter dem ©-Zeichen am Bild.
     alt: >-
       A bus stop against a fieldstone wall in Werbelow, two notices taped to the wall, a bench and
       flower pots in front.
     licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, via Wikimedia Commons"
+    credit_title: "Werbelow, Bushaltestelle"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Werbelow,_Bushaltestelle.jpg"
     focal:
       x: 45
       "y": 55
@@ -95,11 +100,14 @@ images:
       Wikimedia Commons, File:Dorftreffpunkt, Schmatzin, Deutschland.jpeg —
       https://commons.wikimedia.org/wiki/File:Dorftreffpunkt,_Schmatzin,_Deutschland.jpeg —
       Eigenaufnahme (Jan-Henrik Hempel, Commons-Konto „J2hcom", own work), Mai 2020, 4032×3024.
-      Nachweis: content/legal/image-credits.md.
+      Nachweis hinter dem ©-Zeichen am Bild.
     alt: >-
       The village meeting place in Schmatzin in the evening: a meadow with an old tree, a fire pit
       and a place to sit.
     licence: CC BY-SA 4.0
+    credit: "Jan-Henrik Hempel, CC BY-SA 4.0, via Wikimedia Commons"
+    credit_title: "Dorftreffpunkt, Schmatzin, Deutschland"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Dorftreffpunkt,_Schmatzin,_Deutschland.jpeg"
     focal:
       x: 45
       "y": 58
@@ -117,6 +125,7 @@ images:
       im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
     alt: A desk with a monitor, a laptop and papers in an attic office with historic timber beams.
     licence: Eigenaufnahme, unbeschränkte Nutzung
+    credit: "Jan-Henrik Hempel"
     focal:
       x: 40
       "y": 55
