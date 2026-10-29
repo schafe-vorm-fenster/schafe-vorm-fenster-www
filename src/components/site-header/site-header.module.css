@@ -571,8 +571,12 @@
   text-transform: uppercase;
 }
 
+/* The colour is restated: the global `a:hover` (`--link-hover`, violet on
+   paper) outranks a single class and turned the hovered row violet on the
+   dark glass. */
 .menuLink:hover {
   background: var(--menu-hover);
+  color: var(--color-neutral-paper);
 }
 
 /* Current page: a fill, never colour alone (`aria-current` rides with it). */
