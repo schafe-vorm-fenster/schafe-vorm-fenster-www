@@ -10,8 +10,10 @@
 .module {
   /* The share of the box one state takes; what is left is the next state
      cropped in at the trailing edge, so the stage reads as something that
-     continues. A layout fraction, not a brand value. */
-  --explain-pane-width: 82%;
+     continues. A layout fraction, not a brand value. Unitless, because the
+     track's floor reads it off the stage's width in `cqi` as well. */
+  --explain-pane-share: 0.82;
+  --explain-pane-width: calc(var(--explain-pane-share) * 100%);
   --explain-pane-gap: var(--space-2);
   --explain-disc-size: var(--space-8);
 
@@ -54,7 +56,7 @@
    the panes move beneath them. */
 .stageFrame {
   /* Its width is the stage's, and the track's minimum height is read off it
-     (`100cqi`), so the square stays the stage's floor. */
+     (`cqi`), so a pane's square stays the stage's floor. */
   container-type: inline-size;
   position: relative;
 }
@@ -84,16 +86,28 @@
 .track {
   display: flex;
   gap: var(--explain-pane-gap);
-  /* The square as the floor; a taller pane raises the whole track, and the
+  /* The pane's square as the floor — not the stage's: the pane is narrower
+     than the stage, and a stage-wide square left an empty band under every
+     square graphic (DEC-0182). A taller pane raises the whole track, and the
      panes stretch to it, so the tallest one sets the height for all three. */
-  min-height: 100cqi;
+  min-height: calc(var(--explain-pane-share) * 100cqi);
 }
 
+/* A column, so the graphic inside fills the height the row gives the pane:
+   a square graphic in a pane the calendar has grown would otherwise end
+   short of its neighbours (DEC-0182). */
 .pane {
+  display: flex;
   flex: none;
+  flex-direction: column;
   scroll-snap-align: start;
   scroll-snap-stop: always;
   width: var(--explain-pane-width);
+}
+
+/* The graphic's own ratio is its floor; the pane's height is its size. */
+.pane > * {
+  flex: 1 0 auto;
 }
 
 /* The last pane can only reach the end of the range; it snaps there, with

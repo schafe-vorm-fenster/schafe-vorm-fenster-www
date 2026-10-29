@@ -401,7 +401,7 @@ seit 2022, kein Preismodell, das sich leise ändern lässt.
 
 **Kicker:** Heute mit einem anderen Anliegen hier?
 
-- **Termine veröffentlichen:** Wie du einfach Termine per WhatsApp oder Kalender veröffentlichen kannst → `/mitmachen`
+- **Termine veröffentlichen:** Per WhatsApp oder über deinen Kalender → `/mitmachen`
 - **Eigenen Kalender betreiben:** Unter eigenem Namen, auf eurer Website → `/dein-kalender`
 - **Wer dahintersteckt:** Wer den Dorfkalender macht → `/ueber-uns`
 

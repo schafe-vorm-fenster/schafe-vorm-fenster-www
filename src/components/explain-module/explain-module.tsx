@@ -114,8 +114,9 @@ function paneOffset(stage: HTMLElement, step: StepIndex): number {
  * `<button>` with a numbered disc, the bold core (18/700) and the normal
  * detail (15/400); one CTA, `data-cta="secondary"` and never anything else.
  * Two layouts, one content tree, one `min-width` switch at `lg` (48rem):
- * below it the stage is one box at `ratio-square` holding the three states
- * with the next cropped in at the trailing edge — the box never changes
+ * below it the stage is one box holding the three states, each at least
+ * square and each graphic filling its pane (DEC-0182), with the next
+ * cropped in at the trailing edge — the box never changes
  * size, so a state change shifts nothing; from `lg` the stage wrapper is
  * `display: contents`, the three graphics stand in a row above their own
  * step lines, and no stage box exists — no crop, no slide.

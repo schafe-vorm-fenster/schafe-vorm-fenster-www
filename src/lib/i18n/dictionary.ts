@@ -608,9 +608,9 @@ const de: Dictionary = {
     blurbs: {
       // The owner's card lines from the design of 2026-10-12 (issue #39,
       // DEC-0156) — statements, so CG-030 holds and no card is demo-marked.
-      // The publish blurb is the owner's (copy guide CG-030 example).
+      // The publish blurb is the owner's, shortened by the owner (DEC-0184).
       knowWhatIsOn: "Was in deinem Ort als Nächstes ansteht",
-      publishDates: "Wie du einfach Termine per WhatsApp oder Kalender veröffentlichen kannst",
+      publishDates: "Per WhatsApp oder über deinen Kalender",
       yourCalendar: "Unter eigenem Namen, auf eurer Website",
       whyUs: "Wer den Dorfkalender macht",
     },
@@ -820,7 +820,7 @@ const en: Dictionary = {
     blurbs: {
       // The English twins of the owner's German card lines (DEC-0156).
       knowWhatIsOn: "What's coming up next where you live",
-      publishDates: "How to publish dates the easy way, by WhatsApp or from a calendar",
+      publishDates: "By WhatsApp or from your calendar",
       yourCalendar: "Under your own name, on your own website",
       whyUs: "Who makes the village calendar",
     },

@@ -197,8 +197,21 @@ test("TS-WEB-0022-A19: below lg the stage box keeps one height across all three 
 
   const stageBox = await stage.boundingBox();
   expect(stageBox).not.toBeNull();
-  // ratio-square: as tall as it is wide.
-  expect(Math.abs((stageBox?.height ?? 0) - (stageBox?.width ?? 1))).toBeLessThan(1);
+  // As tall as its panes, and at least as tall as a pane is wide: the floor is
+  // the pane's square, not the stage's, so no band is left under the graphics
+  // (DEC-0182). Every graphic fills its pane.
+  const panes = await stage.locator("[data-explain-pane]").evaluateAll((elements) =>
+    elements.map((pane) => {
+      const box = pane.getBoundingClientRect();
+      const graphic = (pane.firstElementChild as HTMLElement).getBoundingClientRect();
+      return { width: box.width, height: box.height, graphicHeight: graphic.height };
+    }),
+  );
+  for (const pane of panes) {
+    expect(Math.abs((stageBox?.height ?? 0) - pane.height)).toBeLessThan(1);
+    expect(pane.height).toBeGreaterThanOrEqual(pane.width - 0.5);
+    expect(Math.abs(pane.graphicHeight - pane.height)).toBeLessThan(1);
+  }
 
   const heights = [stageBox?.height];
   for (const step of [2, 3]) {
