@@ -129,6 +129,9 @@ for (const { path, locale, route } of ROUTES) {
  */
 const FLOW_ROUTES_WITHOUT_BAND: readonly string[] = ["register", "order"];
 
+/** `/ueber-uns` has no closing CTA: the contact section follows the band (DEC-0186). */
+const ROUTES_WITHOUT_CLOSING_CTA: readonly string[] = ["about"];
+
 for (const { path, route } of ROUTES) {
   const midFlow = FLOW_ROUTES_WITHOUT_BAND.includes(route);
 
@@ -159,7 +162,9 @@ for (const { path, route } of ROUTES) {
     // The closing block stands on every `PageFrame` page (TS-WEB-0006 D2/A7); on
     // the merged pages it is the anchor **inside** the band, so it is
     // counted on its own rather than as one element with it.
-    await expect(page.locator("#closing-cta"), `#closing-cta on ${path}`).toHaveCount(1);
+    await expect(page.locator("#closing-cta"), `#closing-cta on ${path}`).toHaveCount(
+      ROUTES_WITHOUT_CLOSING_CTA.includes(route) ? 0 : 1,
+    );
     // TS-WEB-0011 D3: "every `nav` and every `aside` carries an accessible name."
     expect(await band.evaluate((element) => element.tagName)).toBe("ASIDE");
     await expect(band).toHaveAttribute("aria-label", /\S/);

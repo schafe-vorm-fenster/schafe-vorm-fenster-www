@@ -87,7 +87,7 @@ const BRIEFING_HREF_REPOINTED_BY: Readonly<Partial<Record<RouteId, string>>> = {
  * footer) hold on them like everywhere else, which is what this walk asserts
  * instead of narrowing the criterion.
  */
-const NO_CLOSING_BLOCK: ReadonlySet<RouteId> = new Set<RouteId>(["register", "order"]);
+const NO_CLOSING_BLOCK: ReadonlySet<RouteId> = new Set<RouteId>(["about", "register", "order"]);
 
 const CHANNELS_IN_ORDER = ["appointment", "whatsapp", "phone", "mail"] as const;
 

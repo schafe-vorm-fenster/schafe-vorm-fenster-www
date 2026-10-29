@@ -27,6 +27,8 @@ import type { RouteId } from "../src/lib/routes/routes";
 const FLOW_ROUTES: ReadonlySet<RouteId> = new Set<RouteId>(["register", "order"]);
 /** The closing search on `ink` stays last (SRC-0014 §Page Rhythm, DEC-0117). */
 const SEARCH_CLOSING_LAST: ReadonlySet<RouteId> = new Set<RouteId>(["home"]);
+/** `/ueber-uns` has no closing CTA; the band is last in main (DEC-0186). */
+const NO_CLOSING_CTA: ReadonlySet<RouteId> = new Set<RouteId>(["about"]);
 
 for (const { route, locale } of everyRoute()) {
   if (FLOW_ROUTES.has(route)) continue;
@@ -37,7 +39,7 @@ for (const { route, locale } of everyRoute()) {
   }`, async ({ page }) => {
     await page.goto(path);
     await expect(page.locator("#context-band")).toHaveCount(1);
-    await expect(page.locator("#closing-cta")).toHaveCount(1);
+    await expect(page.locator("#closing-cta")).toHaveCount(NO_CLOSING_CTA.has(route) ? 0 : 1);
 
     const tail = await page.evaluate(() => {
       const main = document.querySelector("main");
@@ -60,7 +62,7 @@ for (const { route, locale } of everyRoute()) {
     expect(tail, `main on ${path}`).not.toBeNull();
     const last = tail!.slice(-2);
     const merged = tail!.at(-1) === "context-band" && (await page.locator("#context-band #closing-cta").count()) === 1;
-    if (merged) {
+    if (merged || NO_CLOSING_CTA.has(route)) {
       expect(tail!.at(-1)).toBe("context-band");
     } else if (SEARCH_CLOSING_LAST.has(route)) {
       expect(last, `the end of main on ${path}`).toEqual(["context-band", "closing-cta"]);
