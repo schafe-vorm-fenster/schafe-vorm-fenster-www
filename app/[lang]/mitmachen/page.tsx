@@ -1,3 +1,4 @@
+import { imageCredit } from "@/src/components/photo-surface/image-credit";
 import { ArchiveBlock } from "@/src/components/archive-block/archive-block";
 import { Button } from "@/src/components/button/button";
 import { ExplainModule } from "@/src/components/explain-module/explain-module";
@@ -281,6 +282,7 @@ export default async function Page({
           aiEdited={heroImage?.aiEdited}
           focal={heroImage?.focal}
           notDepicting={heroImage?.notDepicting}
+          credit={imageCredit(heroImage, locale)}
           placeholderId={heroImage?.placeholderId}
           priority={heroImage?.priority}
           src={heroImage?.src}

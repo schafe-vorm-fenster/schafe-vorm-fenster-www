@@ -49,12 +49,14 @@ images:
     source: >-
       Wikimedia Commons, File:Dargitz, Bushaltestelle.jpg —
       https://commons.wikimedia.org/wiki/File:Dargitz,_Bushaltestelle.jpg — Eigenaufnahme von Schafe
-      vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3272×2286. Nachweis:
-      content/legal/image-credits.md.
+      vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3272×2286. Nachweis hinter dem ©-Zeichen am Bild.
     alt: >-
       Bushaltestelle mit bepflanztem Wartehäuschen an der Dorfstraße in Dargitz, dahinter der
       Kirchturm.
     licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, über Wikimedia Commons"
+    credit_title: "Dargitz, Bushaltestelle"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Dargitz,_Bushaltestelle.jpg"
     place: dargitz
     status: real
     file: /images/real/dein-ort-hero.webp
@@ -77,11 +79,14 @@ images:
       Wikimedia Commons, File:Brietzig, Kirche und Café.jpg —
       https://commons.wikimedia.org/wiki/File:Brietzig,_Kirche_und_Caf%C3%A9.jpg — Eigenaufnahme von
       Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 2889×1929.
-      Nachweis: content/legal/image-credits.md.
+      Nachweis hinter dem ©-Zeichen am Bild.
     alt: >-
       Dorfmitte von Brietzig: die Backsteinkirche, ein Wohnhaus und die Terrasse des Dorfcafés, an
       der Gäste sitzen.
     licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, über Wikimedia Commons"
+    credit_title: "Brietzig, Kirche und Café"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Brietzig,_Kirche_und_Caf%C3%A9.jpg"
     status: real
     file: /images/real/dein-ort-story-baeckerwagen.webp
     width: 1190
@@ -103,11 +108,14 @@ images:
       Wikimedia Commons, File:Schönwalde, Schloss.jpg —
       https://commons.wikimedia.org/wiki/File:Sch%C3%B6nwalde,_Schloss.jpg — Eigenaufnahme von
       Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3908×2421.
-      Nachweis: content/legal/image-credits.md.
+      Nachweis hinter dem ©-Zeichen am Bild.
     alt: >-
       Gutshaus in Schönwalde mit Freitreppe und rotem Ziegeldach, davor eine Wiese mit jungen
       Bäumen.
     licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, über Wikimedia Commons"
+    credit_title: "Schönwalde, Schloss"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Sch%C3%B6nwalde,_Schloss.jpg"
     status: real
     file: /images/real/dein-ort-story-kultur.webp
     width: 1400

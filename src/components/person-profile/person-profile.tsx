@@ -1,7 +1,7 @@
 import { MediaFrame } from "../media-frame/media-frame";
-import { dictionary } from "@/src/lib/i18n/dictionary";
 
 import type { DataState } from "../data-state";
+import type { ReactNode } from "react";
 
 import type { Locale } from "@/src/lib/i18n/locales";
 
@@ -21,7 +21,7 @@ export interface PersonProfileProps {
    * licence requires one to be printed. Rendered as the portrait's caption —
    * real text under the picture, never a `title` attribute.
    */
-  readonly portraitCredit?: string;
+  readonly portraitCredit?: ReactNode;
   /**
    * The page's language — the portrait hatch badges itself and reads it.
    * Without it the team block on `/en/about` said "Foto gesucht" (F-2-33).
@@ -89,7 +89,7 @@ export function PersonProfile({
       {textOnly ? null : (
       <MediaFrame
         alt={portraitAlt}
-        credit={portraitCredit ? `${dictionary(locale ?? "de").photoCredit.lead}: ${portraitCredit}` : undefined}
+        credit={portraitCredit}
         locale={locale}
         notDepicting={portraitNotDepicting}
         ratio="portrait"

@@ -53,11 +53,14 @@ images:
       Wikimedia Commons, File:Güterberg, Ausblick.jpg —
       https://commons.wikimedia.org/wiki/File:G%C3%BCterberg,_Ausblick.jpg — Eigenaufnahme von
       Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 3563×2231.
-      Nachweis: content/legal/image-credits.md.
+      Nachweis hinter dem ©-Zeichen am Bild.
     alt: >-
       A view across fields near Güterberg to the horizon, with lines of trees, rooftops and wind
       turbines.
     licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, via Wikimedia Commons"
+    credit_title: "Güterberg, Ausblick"
+    credit_url: "https://commons.wikimedia.org/wiki/File:G%C3%BCterberg,_Ausblick.jpg"
     status: real
     file: /images/real/deine-region-hero.webp
     width: 800
@@ -73,11 +76,14 @@ images:
       Wikimedia Commons, File:Carolinenthal, Ortseingang.jpg —
       https://commons.wikimedia.org/wiki/File:Carolinenthal,_Ortseingang.jpg — Eigenaufnahme von
       Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025, 4032×3024.
-      Nachweis: content/legal/image-credits.md.
+      Nachweis hinter dem ©-Zeichen am Bild.
     alt: >-
       A cobbled road at the entrance to the village of Carolinenthal, the yellow place-name sign
       beneath a row of trees.
     licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, via Wikimedia Commons"
+    credit_title: "Carolinenthal, Ortseingang"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Carolinenthal,_Ortseingang.jpg"
     status: real
     file: /images/real/deine-region-gebietsschnitt.webp
     width: 1400
@@ -94,6 +100,7 @@ images:
       Two desks in an attic office with historic timber beams, a pale plank floor and windows along
       the side.
     licence: Eigenaufnahme, unbeschränkte Nutzung
+    credit: "Jan-Henrik Hempel"
     status: real
     file: /images/real/deine-region-angebot-hero.webp
     width: 800

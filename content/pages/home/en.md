@@ -45,11 +45,14 @@ images:
       Wikimedia Commons, File:Melkerschule Schlatkow.jpg —
       https://commons.wikimedia.org/wiki/File:Melkerschule_Schlatkow.jpg — Eigenaufnahme (Jan-Henrik
       Hempel, Commons-Konto „J2hcom", own work), September 2016, 5073×2817. Motivregel `/`: Dorf mit
-      Aktivität (SRC-0014 §Motiv pro Seite). Nachweis: content/legal/image-credits.md.
+      Aktivität (SRC-0014 §Motiv pro Seite). Nachweis hinter dem ©-Zeichen am Bild.
     alt: >-
       The half-timbered house of the Melkerschule in Schlatkow, with picnic benches, two parasols
       and guests on the grass in front of it.
     licence: CC BY-SA 4.0
+    credit: "Jan-Henrik Hempel, CC BY-SA 4.0, via Wikimedia Commons"
+    credit_title: "Melkerschule Schlatkow"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Melkerschule_Schlatkow.jpg"
     place: schlatkow
     focal:
       x: 50
@@ -68,12 +71,14 @@ images:
     source: >-
       Wikimedia Commons, File:Guetzkow Ostvorpommern Rathaus.jpg —
       https://commons.wikimedia.org/wiki/File:Guetzkow_Ostvorpommern_Rathaus.jpg — Foto: Erell, Mai
-      2007, 3008×2000. Fremdaufnahme: CC BY-SA verlangt Namensnennung, sie steht in
-      content/legal/image-credits.md.
+      2007, 3008×2000. Fremdaufnahme: CC BY-SA verlangt Namensnennung, sie steht hinter dem ©-Zeichen am Bild.
     alt: >-
       The town hall of Gützkow in Western Pomerania, a white rendered building with a flight of
       steps onto the street. Over it lies a drawing of an events calendar on a website.
     licence: CC BY-SA 2.5
+    credit: "Erell, CC BY-SA 2.5, via Wikimedia Commons, Bildausschnitt angepasst"
+    credit_title: "Rathaus Gützkow"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Guetzkow_Ostvorpommern_Rathaus.jpg"
     focal:
       x: 42
       "y": 50
@@ -93,6 +98,7 @@ images:
       Jan-Henrik Hempel standing in the open door of a brick building, the Schafe vorm Fenster
       roll-up banner beside him.
     licence: Eigenaufnahme, unbeschränkte Nutzung
+    credit: "Jan-Henrik Hempel"
     focal:
       x: 45
       "y": 40
