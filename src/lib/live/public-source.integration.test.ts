@@ -132,13 +132,14 @@ describe("TS-WEB-0008-A18: position 2 fills its rows — this week first, then t
     });
   }
 
-  it("fills a thin week with the next dates and says the list reaches past it", async () => {
+  it("fills a thin week from the fortnight and says the list reaches past it", async () => {
     const at = await neighbourTemplate();
     // Lehre's shape on 2026-10-27: two dates in the week, more after it.
     servePage([at(30, 6), at(2, 1), at(12, 4), at(5, 2), at(9, 3), at(20, 5)]);
     const { events } = await publicNearbyEvents(PLACE, { radiusKm: 15, rowCount: 5, now: NOW });
 
-    expect(events.map((event) => event.title)).toEqual(["Termin 1", "Termin 2", "Termin 3", "Termin 4", "Termin 5"]);
+    // DEC-0185: the fortnight is the widening; the dates of day 20 and 30 are past it.
+    expect(events.map((event) => event.title)).toEqual(["Termin 1", "Termin 2", "Termin 3", "Termin 4"]);
     expect(nearbyWindow(events, NOW)).toBe("upcoming");
   });
 

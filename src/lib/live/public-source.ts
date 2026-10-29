@@ -41,6 +41,7 @@ import {
   placeByCommunityId,
   placesWithin,
 } from "./place-index";
+import { pickVariedWeek } from "./varied-week";
 import { byStart, withinWindow, type EventWindow } from "./widening";
 
 import type { LiveEvent, Place } from "./types";
@@ -126,10 +127,13 @@ export async function publicNearbyEvents(
     anchor,
   );
 
+  // The same selection as the token path (DEC-0185): a varied week, the
+  // fortnight where the week is thin. This source knows the organiser and the
+  // category but not `occurrence`, so the recurring-date limit has nothing to
+  // act on here.
+  const picked = pickVariedWeek(withinWindow(rows, "upcoming", now), now, rowCount);
   return {
-    // This week first, then the dates after it, until the list's rows are
-    // full (TS-WEB-0008 D3 as amended 2026-10-27, issue #83).
-    events: byStart(withinWindow(rows, "upcoming", now)).slice(0, rowCount),
+    events: picked.events,
     places: ring,
     truncated: events.length >= PUBLIC_PAGE_ROW_CAP,
   };

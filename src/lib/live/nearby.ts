@@ -8,19 +8,21 @@
  * is reported as `truncated` so the module claims no completeness.
  */
 
-import { searchEvents } from "@/src/clients/events-api/client";
+import { searchEventsByScope } from "@/src/clients/events-api/client";
 
 import { toLiveEvents, toPlace } from "./adapters";
 import { withDistance } from "./distance";
 import { cacheTags } from "./cache-profiles";
 import { eventsConfig, hasRealBackend } from "./config";
-import { communitiesNearPoint, pointSegment, quantisePoint, type GeoLookupOptions } from "./geo-lookup";
+import { pointSegment, quantisePoint, type GeoLookupOptions } from "./geo-lookup";
 import { mockEventsForPlaces } from "./mocks/events";
 import { mockSearchByPoint } from "./mocks/geo";
+import { nearestPlace } from "./place-index";
 import { publicNearbyEvents } from "./public-source";
 import { resilient, type ResilientOptions } from "./resilient";
 import { nearbyFallback } from "./snapshots";
-import { byStart, EVENT_WINDOWS, haversineKm, NEARBY_RADIUS_KM, nearbyWindow, selectNearby } from "./widening";
+import { pickVariedWeek, WIDENED_DAYS } from "./varied-week";
+import { haversineKm, NEARBY_RADIUS_KM, nearbyWindow, selectNearby } from "./widening";
 
 import type { LiveEnvelope, LiveEvent, NearbyEvents, Place } from "./types";
 
@@ -78,31 +80,30 @@ export async function nearbyEvents({
       };
     }
 
-    // Which communities lie around the point is cached for days on the
-    // quantised point and may take the point search's own 3 s to fill
-    // (DEC-0181); the dates below keep their 5 minutes and their 800 ms.
-    const candidates: Place[] = (
-      await communitiesNearPoint(anchor, GEO_MAX_RESULTS, { store: geoStore, now })
-    ).map(toPlace);
-    const { places, truncated } = selectNearby(anchor, candidates, {
-      radiusKm,
-      maxResults: GEO_MAX_RESULTS,
+    // The place's neighbours are the events-api's business now: its `region`
+    // scope is 20 km around the community (DEC-0185), so no ring is computed
+    // here and geo-api is not asked. The committed place index only names the
+    // community the anchor sits in.
+    const seed = nearestPlace(anchor);
+    if (seed === undefined) return { events: [], radiusKm, truncated: false, window: "week" };
+
+    // The fortnight in one call; the selection takes the week out of it and
+    // widens only where the week does not make five rows (DEC-0185 §2).
+    const now = clock();
+    const { events, total } = await searchEventsByScope(eventsConfig(), {
+      community: seed.communityId,
+      scope: "region",
+      after: now.toISOString(),
+      before: new Date(now.getTime() + WIDENED_DAYS * 24 * 60 * 60 * 1000).toISOString(),
     });
 
-    if (places.length === 0) return { events: [], radiusKm, truncated, window: "week" };
-
-    // The next dates from now, this week first: `after=now` with no `before`,
-    // so a thin week is filled with the dates after it rather than leaving
-    // the list's rows empty (TS-WEB-0008 D3 as amended 2026-10-27, issue #83).
-    const { events } = await searchEvents(eventsConfig(), {
-      communities: places.map((place) => place.communityId),
-      after: EVENT_WINDOWS.upcoming.after,
-      before: EVENT_WINDOWS.upcoming.before,
-      limit: rowCount,
-    });
-
-    const rows = withDistance(byStart(toLiveEvents(events)).slice(0, rowCount), anchor);
-    return { events: rows, radiusKm, truncated, window: nearbyWindow(rows, clock()) };
+    // The anchor's own community is position 1's, not a widening of it.
+    const candidates = withDistance(
+      toLiveEvents(events).filter((event) => event.communityId !== seed.communityId),
+      anchor,
+    );
+    const picked = pickVariedWeek(candidates, now, rowCount);
+    return { events: picked.events, radiusKm, truncated: total > events.length, window: picked.window };
   };
 
   return resilient(fetcher, {

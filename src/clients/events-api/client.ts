@@ -61,6 +61,8 @@ export const EventSchema = z
     "county.name": z.string().optional(),
     "organizer.id": z.string().optional(),
     "organizer.name": z.string().optional(),
+    /** `once` · `recurring` · `series` · `openinghours` · `schedule` (events-api `occurrence.types.ts`). */
+    occurrence: z.string().optional(),
     /**
      * The text and the image — what makes an example worth opening (DEC-0152).
      * A search sent with `language: "de"` answers with the localized
@@ -195,6 +197,34 @@ export async function searchEvents(
     page: envelope.pagination?.page ?? 1,
     totalPages: envelope.pagination?.totalPages ?? 1,
   };
+}
+
+/** The scopes of `GET /api/{token}/events/search/{community}/{scope}` the website asks for. */
+export type EventsScope = "nearby" | "region";
+
+/**
+ * The dates around one community, cut by the **service's own scope**: `region`
+ * is 20 km, `nearby` 2.5 km (events-api `scope-distances.ts`) — the website
+ * computes no radius for it (DEC-0185). The window takes ISO instants only;
+ * the relative words of the id search (`now`, `7d`) are a 400 here. At most
+ * 100 dates come back, in start order.
+ */
+export async function searchEventsByScope(
+  config: EventsApiConfig,
+  query: { readonly community: string; readonly scope: EventsScope; readonly after?: string; readonly before?: string },
+): Promise<EventsSearchResult> {
+  const params = new URLSearchParams({ language: "de", country: "DE" });
+  if (query.after) params.set("after", query.after);
+  if (query.before) params.set("before", query.before);
+
+  const payload = await callUpstream({
+    service: "events-api",
+    url: `${config.host}/api/${config.token}/events/search/${encodeURIComponent(query.community)}/${query.scope}?${params}`,
+    timeoutMs: config.timeoutMs,
+  });
+
+  const envelope = parse(EventsEnvelopeSchema, payload);
+  return { events: envelope.data, total: envelope.results ?? envelope.data.length, page: 1, totalPages: 1 };
 }
 
 /** `/api/stats` needs no token — the only ecosystem operation that does not. */

@@ -43,7 +43,7 @@ source).
 | --- | --- | --- | --- | --- |
 | 1 | dates in the place | place (community) | the next 3 dates of the searched/known place | `/`, `/dein-ort` |
 | 1′ | embed demo (replaces 1) | place | the real Portalize widget, filtered to the searched place (D6) | `/dein-kalender`, `/deine-region` (focus job "run our own calendar") |
-| 2 | this week nearby | ~15 km | 5 dates, each with its place name — this week's first, filled with the next dates after the week where the week holds fewer (D3, amended 2026-10-27) | `/`, `/dein-ort`, empty state (D4) |
+| 2 | this week nearby | ~20 km (the events-api's `region` scope) | up to 5 dates, each with its place name — a varied selection of the week (different categories and organisers, at most two recurring dates), taken from the fortnight where the week passes fewer than five (D3, DEC-0185) | `/`, `/dein-ort`, empty state (D4) |
 | 3 | active places in the county | county | a small set of active example places — **never a place list** (DEC-0034) | `/deine-region`, `/dein-ort/starten` (nearest active place) |
 | 4 | live counters | all regions | places · dates · updates today, subject to D8 | `/`, `/deine-region`, `/ueber-uns` |
 
@@ -127,7 +127,7 @@ and ordering inside the set are TS-WEB-0005.
 | Step | Radius | Resolution | Stop condition |
 | --- | --- | --- | --- |
 | 1 | place | events search with `communities: [anchor]` | ≥ 1 date in the window → position 1 filled |
-| 2 | ~15 km | geo-api geoPoint search from the anchor's `geo` → filter results to ≤ 15 km by haversine over their `geo` → events search with those `communities` | ≥ 1 date → position 2 filled |
+| 2 | ~20 km | the community the anchor sits in (committed place index) → events-api `GET …/events/search/{community}/region` for the next 14 days; the radius is the service's own scope (DEC-0185) — geo-api is not asked | ≥ 1 date → position 2 filled |
 | 3 | county | events search with `counties: [anchor.hierarchy.county]` | active example places found → position 3 filled |
 | 4 | all regions | `/api/stats` | D8 |
 
@@ -148,18 +148,20 @@ Rules:
 - **The window** for positions 1 and 2: position 1 asks
   `after=now`, position 2 `after=now&before=7d`, in `Europe/Berlin`.
   "Today" is the local calendar day, not a rolling 24 h. [PROPOSED]
-- **Position 2 fills its rows** [FIXED: owner review 2026-10-27, issue #83 —
-  "Fehlen Termine? Dann mehr laden."]. It asks `after=now` with no `before`
-  and keeps the first five by start time, so the week's dates stand first
-  and a thin week is filled with the dates after it. Measured that day for
-  Lehre on the public village calendar: 2 dates within 7 days and ~15 km, 8
-  within 14 days, 24 upcoming — the week alone left three of five rows
-  empty. The answer carries `window`: `week` while every row starts inside
-  the seven days, `upcoming` once one does not, and the heading follows it —
-  the page's "this week" heading for `week`, the dictionary's
-  `live.nearbyUpcoming` ("Demnächst in der Nähe") for `upcoming`, because a
-  heading may not claim a week its rows leave (CG-033). The radius stays
-  ~15 km: widening it is the chain's next step, not a fill (D1). `A18`.
+- **Position 2 picks a varied week** [FIXED: owner review 2026-10-28,
+  DEC-0185, supersedes "fills its rows" of 2026-10-27]. One call asks the
+  events-api's `region` scope for the next 14 days (ISO instants; the relative
+  words of the id search are a 400 on this route). `pickVariedWeek`
+  (`src/lib/live/varied-week.ts`) takes five dates from the **next 7 days**:
+  different organisers (one date per organiser), the least-represented
+  category first, at most two recurring dates (`occurrence` ≠ `once`), one-offs
+  before recurring ones, start order. Where the week passes fewer than five,
+  the same rules run over the 14 days. Where fewer than five pass, the list is
+  shorter — it is never refilled with a second date of an organiser. The
+  answer carries `window`: `week` while every row starts inside the seven
+  days, `upcoming` otherwise, and the heading follows it (the page's "this
+  week" heading for `week`, `live.nearbyUpcoming` for `upcoming`, CG-033).
+  The anchor's own community is left out: position 1 shows it. `A18`.
 - **The list ends with its rows** [FIXED: issue #83]. Position 2 reserves its
   five two-line rows for the skeleton only (`event-list` `reserve="loading"`);
   the answer takes the height of the rows it has. The kept reserve was the
@@ -413,7 +415,7 @@ The variety rule has no acceptance criterion yet. It arrives with its tests
 | TS-WEB-0008-A14 | integration | Place search by name: a typed place name and a typed municipality name each answer with at least one suggestion carrying that place, each rendered "Ort (Gemeinde)"; a name that matches nothing answers with the classified "not covered" outcome whose destination is `/dein-ort/starten?ort=…` — never an empty answer, never a hint to type something else, and never a postcode fallback. |
 | TS-WEB-0008-A15 | e2e | The suggestion overlay (D7a): typing two characters opens a list of at most 4 rows, each matching `Ort (Gemeinde)`; the bounding box of the element directly below the field is byte-identical between closed and open state and the interaction contributes 0 to CLS; typing a name with no match shows the single no-match row and submitting still lands on `/dein-ort/starten?ort=…`; with JavaScript disabled no list exists and the form still submits. |
 | TS-WEB-0008-A17 | e2e | On the hero field of `/` and `/dein-ort`, with the pointer on the first suggestion and with the keyboard's active row: the place name and the municipality each measure ≥ 4.5:1 against the ground the row paints; a row at rest as well (D7a "Hovered and active row"). |
-| TS-WEB-0008-A18 | integration | Position 2 on the public source: a ring whose week holds two dates and whose next weeks hold more answers five rows, chronological, the week's first, with `window` `upcoming`; a week holding five or more answers five rows inside it with `window` `week`; no row starts before now (D3 "Position 2 fills its rows"). |
+| TS-WEB-0008-A18 | integration | Position 2, both sources (D3 "Position 2 picks a varied week", DEC-0185): a week that passes five varied dates answers them inside the week with `window` `week`; a week that passes fewer answers the fortnight's varied five with `window` `upcoming`; no row starts before now or after 14 days; never two dates of one organiser, never more than two recurring; fewer than five passing rules answers fewer. On the token path the request is one `region`-scope call for the fortnight and geo-api is not asked. `varied-week.test.ts`, `nearby-selection.integration.test.ts`, `public-source.integration.test.ts`. |
 | TS-WEB-0008-A19 | e2e | `/dein-ort?ort=…` with `/api/nearby` answering two rows past the week, then five inside it: the space between the last row and the module's calendar link is the same within 2 px for both (no reserved row stays behind); the two-row answer carries the "coming up" heading and not "Diese Woche", the five-row answer the page's "this week" heading; at 360×800 the loading list stands below the viewport and the page's CLS stays < 0.1 (D3 "The list ends with its rows"). |
 | TS-WEB-0008-A16 | static | No visitor-facing string of a place-search surface contains "Postleitzahl", "PLZ" or "postcode" — checked over the search module's label, placeholder, hint and submit in both locale dictionaries and over the search blocks of the page content artifacts for `/`, `/dein-ort`, `/dein-ort/starten`, `/deine-region` and `/mitmachen/registrieren` (FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072). The order flow's scope step (TS-WEB-0025 D3) is out of scope: its postcode entry is a purchase configuration, not the place search. |
 | TS-WEB-0008-A20 | unit | With `MATEO_TEST_USER_IDS` naming an organizer, `toLiveEvents` drops every event whose `organizer.id` is that organizer, and `toLiveEventsFromSite` drops every event whose `calendar.organizer._id` is. Both keep the order of the rest, keep an event with no organizer id, and keep a real organizer's event whose title says "TEST". With the variable empty, nothing is dropped. Position 1 and the nearby list built from a public page whose dates all belong to the listed organizer are empty, and they are not empty when the variable is unset (DEC-0173 §3). |

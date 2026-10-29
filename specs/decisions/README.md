@@ -218,3 +218,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0181 — geo-api's place lookups are cached for seven days apart from the dates, and the point search gets its own 3 s budget](DEC-0181--the-geo-lookups-are-cached-for-days-and-the-point-search-has-its-own-budget.md)
 - [DEC-0182 — Every explain graphic fills its pane, and the square floor below lg is the pane's, not the stage's](DEC-0182--every-explain-graphic-fills-its-pane-and-the-square-floor-is-the-panes.md)
 - [DEC-0184 — The publish line of the context band names the two ways only](DEC-0184--the-publish-line-of-the-context-band-names-the-two-ways-only.md)
+- [DEC-0185 — The nearby module picks a varied week from the events-api instead of the first five by start time](DEC-0185--the-nearby-module-picks-a-varied-week-from-the-events-api.md)

@@ -68,6 +68,10 @@ export interface LiveEvent {
   readonly scope?: string;
   /** A date without a time of day — the row prints no clock for it. */
   readonly allDay?: boolean;
+  /** The upstream's organiser id — what the nearby selection keeps apart (DEC-0185). */
+  readonly organizerId?: string;
+  /** `once` · `recurring` · `series` · `openinghours` · `schedule` — the token path only. */
+  readonly occurrence?: string;
   /** Straight-line kilometres from the anchor place, where an anchor was given. */
   readonly distanceKm?: number;
 }
