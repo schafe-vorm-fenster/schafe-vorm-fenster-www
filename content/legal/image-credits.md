@@ -11,7 +11,7 @@ anchor: bildnachweise
 
 # Fotos auf dieser Website
 
-Der Nachweis steht direkt am Foto: hinter dem ©-Zeichen in der oberen rechten Ecke, das sich per Mausberührung, Tastatur oder Antippen öffnet. Er hat immer dieselbe Form: Titel, Urheber, Lizenz, Quelle. Eine Liste einzelner Fotos gibt es hier nicht.
+Der Nachweis steht direkt am Foto: hinter dem ©-Zeichen in der unteren rechten Ecke, das sich per Mausberührung, Tastatur oder Antippen öffnet. Er hat immer dieselbe Form: Titel, Urheber, Lizenz, Quelle. Eine Liste einzelner Fotos gibt es hier nicht.
 
 Eigene Fotos stammen von Jan-Henrik Hempel beziehungsweise Schafe vorm Fenster UG (haftungsbeschränkt); Rechteinhaber und Betreiber dieser Website sind dieselbe Partei.
 

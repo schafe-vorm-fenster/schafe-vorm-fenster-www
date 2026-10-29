@@ -39,7 +39,7 @@ export interface PhotoCreditProps {
  * stage, an inventory image with a `credit` on a `photo-surface` or in a
  * `media-frame`. A credit is never standing text on or under a photograph.
  *
- * Structure: a 40 px round well in the photograph's top-right corner — the
+ * Structure: a 40 px round well in the photograph's bottom-right corner — the
  * corner, the well and the scrim step of `ai-edited-mark` (DEC-0165), so the
  * two marks speak one language — carrying Lucide `copyright` in `paper`; under
  * it, the credit panel.

@@ -37,3 +37,7 @@ A photograph without a `credit` fails `check:content`. The legal text no
 longer mirrors the `images:` blocks. Supersedes the "credit rendered once on
 `/rechtliches`" rule of the `licence` field comment and DEC-0168's "only where
 the rights holder asks for one".
+
+**Amendment 2026-10-29 (same day):** the © control stands in the photograph's
+bottom right corner, its panel opening upward; the top right stays with the
+AI-edited mark.
