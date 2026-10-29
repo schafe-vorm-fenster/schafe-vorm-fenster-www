@@ -1,3 +1,4 @@
+import { imageCredit } from "@/src/components/photo-surface/image-credit";
 import { Button } from "@/src/components/button/button";
 import { ComparisonTable } from "@/src/components/comparison-table/comparison-table";
 import { EmbedFrame } from "@/src/components/embed-frame/embed-frame";
@@ -372,6 +373,7 @@ export default async function Page({
           locale={locale}
           focal={heroImage?.focal}
           aiEdited={heroImage?.aiEdited} notDepicting={heroImage?.notDepicting}
+          credit={imageCredit(heroImage, locale)}
           placeholderId={heroImage?.placeholderId}
           src={heroImage?.src}
           wideSrc={heroImage?.wideSrc}

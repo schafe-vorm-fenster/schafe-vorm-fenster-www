@@ -1,3 +1,4 @@
+import { imageCredit } from "@/src/components/photo-surface/image-credit";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
@@ -165,6 +166,7 @@ export default async function PlaceStartPage({ params }: { params: Promise<{ lan
           focal: heroImage?.focal,
           notDepicting: heroImage?.notDepicting,
           placeholderId: heroImage?.placeholderId,
+          credit: imageCredit(heroImage, locale),
         }}
       />
 

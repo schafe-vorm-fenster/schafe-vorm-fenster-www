@@ -511,8 +511,18 @@ export const ImageEntrySchema = z
     alt: z.string().min(1),
     caption: z.string().min(1).optional(),
     status: ImageStatusSchema,
-    /** Credit line, where the asset's rights require one to be rendered. */
+    /**
+     * The credit shown behind the © control on every placed photograph
+     * (owner, 2026-10-29, DEC-0187): the part after the work's title —
+     * `Jan-Henrik Hempel, CC BY-SA 4.0, über Wikimedia Commons`. The control
+     * renders `Foto: <credit_title linked to credit_url> – <credit>`, or
+     * `Foto: <credit>` where there is no title.
+     */
     credit: z.string().min(1).optional(),
+    /** The work's title in the credit, e.g. `Melkerschule Schlatkow`. */
+    credit_title: z.string().min(1).optional(),
+    /** The source page the title links to, e.g. the Wikimedia Commons file page. */
+    credit_url: z.string().url().optional(),
     /**
      * The licence the asset is used under, as its rights holder spells it —
      * `CC0`, `CC BY-SA 4.0`, `Eigenaufnahme` for own material.
@@ -521,9 +531,8 @@ export const ImageEntrySchema = z
      * is somebody's work and the terms are what make it usable: CC BY and
      * CC BY-SA oblige the site to attribute, and the obligation has to be
      * readable off the inventory rather than looked up per file. The
-     * attribution itself is rendered once, on `/rechtliches`
-     * (`content/legal/image-credits.md`), never as a caption on the
-     * photograph — except where `credit` says the rights holder demands one.
+     * attribution itself is shown behind the © control on the
+     * photograph (`credit`, DEC-0187); `/rechtliches` only points there.
      */
     licence: z.string().min(1).optional(),
     /**
@@ -636,6 +645,25 @@ export const ImageEntrySchema = z
         path: ["licence"],
         message:
           "a placed real photograph must name its `licence` — CC BY/BY-SA oblige the site to attribute (content/legal/image-credits.md)",
+      });
+    }
+    // DEC-0187: every placed photograph carries its credit behind the © control.
+    if (
+      (entry.provenance === "real" || entry.provenance === "ai-edited") &&
+      entry.status === "real" &&
+      !entry.credit
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["credit"],
+        message: "a placed photograph must carry its `credit` — shown behind the © control (DEC-0187)",
+      });
+    }
+    if (entry.credit_url && !entry.credit_title) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["credit_title"],
+        message: "`credit_url` needs a `credit_title` to link",
       });
     }
     if (entry.provenance === "generated" && !entry.brief) {

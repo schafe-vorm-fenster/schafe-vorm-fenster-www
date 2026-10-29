@@ -67,8 +67,11 @@ export interface RenderableImage {
   /** The page's one declared LCP image (TS-WEB-0003 D2) — nothing else is eager. */
   readonly priority: boolean;
   readonly caption?: string;
-  /** The rights holder's attribution string, verbatim, where one is required. */
+  /** The credit behind the © control: what follows the work's title (DEC-0187). */
   readonly credit?: string;
+  /** The work's title and the source page it links to, where the credit has them. */
+  readonly creditTitle?: string;
+  readonly creditUrl?: string;
   /**
    * What `data-placeholder` carries, so a build can enumerate every image that
    * still has to be replaced (DEC-0068 guardrail 1). `undefined` for a real
@@ -97,6 +100,8 @@ function renderable(entry: ImageEntry): RenderableImage | undefined {
     priority: entry.lcp === true,
     ...(entry.caption ? { caption: entry.caption } : {}),
     ...(entry.credit ? { credit: entry.credit } : {}),
+    ...(entry.credit_title ? { creditTitle: entry.credit_title } : {}),
+    ...(entry.credit_url ? { creditUrl: entry.credit_url } : {}),
     ...(generated ? { placeholderId: `generated:${entry.model ?? "image"}` } : {}),
   };
 }

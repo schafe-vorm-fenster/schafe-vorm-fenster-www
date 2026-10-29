@@ -1,3 +1,4 @@
+import { imageCredit } from "@/src/components/photo-surface/image-credit";
 import { Button } from "@/src/components/button/button";
 import { ExplainModule } from "@/src/components/explain-module/explain-module";
 import { StageChat, StageFlyerPhoto } from "@/src/components/explain-stage/explain-stage";
@@ -314,7 +315,8 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
         aiEdited={heroImage?.aiEdited} notDepicting={heroImage?.notDepicting}
         // DEC-0167 — with a place, the stage shows that place's photograph.
         photoLayer={<PlacePhotoLayer locale={locale} ownPhotoPlace={heroImage?.place} />}
-        placeholderId={heroImage?.placeholderId}
+        credit={imageCredit(heroImage, locale)}
+          placeholderId={heroImage?.placeholderId}
         search={search(true)}
         src={heroImage?.src}
         wideSrc={heroImage?.wideSrc}
@@ -479,6 +481,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                           alt={sceneEmbedImage?.alt ?? ""}
                           locale={locale}
                           aiEdited={sceneEmbedImage?.aiEdited} notDepicting={sceneEmbedImage?.notDepicting}
+                          credit={imageCredit(sceneEmbedImage, locale)}
                           placeholderId={sceneEmbedImage?.placeholderId}
                           /* 16 : 9 across the section's whole width — the review's own
                              shape for this photograph ("auf die volle Breite in 16:9
@@ -536,6 +539,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                         alt={sceneProvenanceImage?.alt ?? fieldAt(sceneProvenance.blocks, 0) ?? ""}
                         locale={locale}
                         aiEdited={sceneProvenanceImage?.aiEdited} notDepicting={sceneProvenanceImage?.notDepicting}
+                        credit={imageCredit(sceneProvenanceImage, locale)}
                         placeholderId={sceneProvenanceImage?.placeholderId}
                         /* Full width at every tier, 16 : 9 like the embed scene's
                            photograph: 7 : 5 across a desktop viewport would be

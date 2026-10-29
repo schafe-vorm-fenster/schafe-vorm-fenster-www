@@ -1,3 +1,4 @@
+import { imageCredit } from "@/src/components/photo-surface/image-credit";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
@@ -227,7 +228,7 @@ export default async function PlacePage({ params }: { params: Promise<{ lang: st
       body: fieldAt(content.blocks, 8) ?? fieldAt(content.blocks, 1) ?? "",
       ...(quote ? { quote } : {}),
       ...(image
-        ? { photo: { src: image.stageSrc ?? image.src, ...(image.anchor ? { anchor: image.anchor } : {}) } }
+        ? { photo: { src: image.stageSrc ?? image.src, ...(image.anchor ? { anchor: image.anchor } : {}), credit: imageCredit(image, locale) } }
         : {}),
       // A date-led story's live example (TS-WEB-0020 D3, A14, DEC-0152),
       // picked in the browser from the anchor's surroundings (DEC-0163).
@@ -276,6 +277,7 @@ export default async function PlacePage({ params }: { params: Promise<{ lang: st
           focal: heroImage?.focal,
           notDepicting: heroImage?.notDepicting,
           placeholderId: heroImage?.placeholderId,
+          credit: imageCredit(heroImage, locale),
           place: heroImage?.place,
         }}
         s0Search={search({ hero: true, primary: true, placeholder: s0Placeholder })}

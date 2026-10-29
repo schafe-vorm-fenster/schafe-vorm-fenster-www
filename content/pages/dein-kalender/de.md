@@ -55,11 +55,14 @@ images:
       Wikimedia Commons, File:Lübbenow, Amt Gemeinde Uckerland.jpg —
       https://commons.wikimedia.org/wiki/File:L%C3%BCbbenow,_Amt_Gemeinde_Uckerland.jpg —
       Eigenaufnahme von Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Mai 2025,
-      3604×2229. Nachweis: content/legal/image-credits.md.
+      3604×2229. Nachweis hinter dem ©-Zeichen am Bild.
     alt: >-
       Das Amtsgebäude der Gemeinde Uckerland in Lübbenow, ein langgestrecktes Haus an der
       Dorfstraße.
     licence: CC0 1.0
+    credit: "Schafe vorm Fenster, CC0 1.0, über Wikimedia Commons"
+    credit_title: "Lübbenow, Amt Gemeinde Uckerland"
+    credit_url: "https://commons.wikimedia.org/wiki/File:L%C3%BCbbenow,_Amt_Gemeinde_Uckerland.jpg"
     focal:
       x: 45
       "y": 55

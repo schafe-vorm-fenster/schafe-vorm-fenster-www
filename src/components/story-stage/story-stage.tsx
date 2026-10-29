@@ -3,6 +3,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { Badge } from "../badge/badge";
 import type { QuoteFragment } from "../content-fragments";
 import { Icon, type IconName } from "../icon/icon";
+import { PhotoCredit } from "../photo-surface/photo-credit";
 import { photoUrl } from "../photo-surface/url";
 
 import styles from "./story-stage.module.css";
@@ -23,7 +24,12 @@ export interface StageStory {
    * (DEC-0153). Without one the stage shows the violet ground with the
    * story's icon as a watermark — never an empty frame.
    */
-  readonly photo?: { readonly src: string; readonly anchor?: { readonly x: number; readonly y: number } };
+  readonly photo?: {
+    readonly src: string;
+    readonly anchor?: { readonly x: number; readonly y: number };
+    /** The photograph's credit behind the © control (DEC-0187). */
+    readonly credit?: ReactNode;
+  };
   /** The live date from the story's own category (TS-WEB-0020 D3, A14), already a row. */
   readonly example?: ReactNode;
 }
@@ -144,6 +150,7 @@ export function StoryStage({
                       <Icon name={story.icon} size={32} />
                     </span>
                   )}
+                  {photo?.credit ? <PhotoCredit own>{photo.credit}</PhotoCredit> : null}
                   {story.quote ? (
                     <blockquote className={styles.quote}>
                       <span aria-hidden="true" className={styles.mark}>

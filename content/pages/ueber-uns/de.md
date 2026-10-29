@@ -60,10 +60,12 @@ images:
       Wikimedia Commons, File:Bauhof und Schafstall in Schlatkow.jpeg —
       https://commons.wikimedia.org/wiki/File:Bauhof_und_Schafstall_in_Schlatkow.jpeg —
       Eigenaufnahme von Schafe vorm Fenster (Commons-Konto „Schafevormfenster", own work), Juni
-      2021, 4032×2268. Der Ort, auf den der Firmenname zeigt. Nachweis:
-      content/legal/image-credits.md.
+      2021, 4032×2268. Der Ort, auf den der Firmenname zeigt. Nachweis hinter dem ©-Zeichen am Bild.
     alt: Schafstall und Bauhof der Gemeinde in Schlatkow, ein weiß gekalkter Stall am Rand einer Wiese.
     licence: CC BY-SA 4.0
+    credit: "Schafe vorm Fenster, CC BY-SA 4.0, über Wikimedia Commons"
+    credit_title: "Bauhof und Schafstall in Schlatkow"
+    credit_url: "https://commons.wikimedia.org/wiki/File:Bauhof_und_Schafstall_in_Schlatkow.jpeg"
     focal:
       x: 38
       "y": 58
@@ -88,6 +90,8 @@ images:
       Jan-Henrik Hempel sitzt im Freien in einem Stuhlkreis, Programmheft und Stift in den Händen,
       hinter ihm zwei Transporter.
     credit: openTransfer.de
+    credit_title: "openTransfer CAMP Zusammenhalt, Neustrelitz"
+    credit_url: "https://opentransfer.de/dokumentation-camp-neustrelitz/"
     licence: "Freie Nutzung, Namensnennung erbeten (Rechteinhaber: openTransfer.de / Stiftung Bürgermut)"
     focal:
       x: 48
@@ -106,6 +110,7 @@ images:
       im Herkunftsblock, damit die Seite ein Porträt nicht zweimal zeigt.
     alt: Jan-Henrik Hempel erklärt etwas mit beiden Händen, hinter ihm Holzbalken.
     licence: Eigenaufnahme, unbeschränkte Nutzung
+    credit: "Jan-Henrik Hempel"
     focal:
       x: 55
       "y": 38
