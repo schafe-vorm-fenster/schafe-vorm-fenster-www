@@ -72,21 +72,16 @@ async function conversions(page: Page): Promise<LoggedConversion[]> {
 }
 
 test.describe("/ueber-uns", () => {
-  test("TS-WEB-0027-A1 / A10: exactly one data-cta=\"primary\", and it is the closing CTA into #kontakt", async ({
+  test("TS-WEB-0027-A1 / A10: no data-cta=\"primary\" and no closing CTA; the contact section follows the band", async ({
     page,
   }) => {
     await page.goto("/ueber-uns");
-    const primaries = page.locator('[data-cta="primary"]');
-    await expect(primaries).toHaveCount(1);
-    // It stands inside the closing block and resolves to this page's own
-    // contact section through the route facade.
-    await expect(page.locator('#closing-cta [data-cta="primary"]')).toHaveCount(1);
-    await expect(primaries).toHaveAttribute("href", "/ueber-uns#kontakt");
-    // No repeat rung below it (DEC-0082 amendment C) — the primary is last.
+    // Owner, 2026-10-29 (DEC-0186): the button before the contact section only repeated it.
+    await expect(page.locator('[data-cta="primary"]')).toHaveCount(0);
+    await expect(page.locator("#closing-cta")).toHaveCount(0);
     await expect(page.locator('[data-cta="repeat"]')).toHaveCount(0);
-    // The section it points at follows the closing block (TS-WEB-0006-A17).
+    await expect(page.locator("aside#context-band")).toHaveCount(1);
     await expect(page.locator("section#kontakt")).toHaveCount(1);
-    await expect(page.locator('section#kontakt [data-cta="primary"]')).toHaveCount(0);
   });
 
   test("TS-WEB-0027-A2: the D2 chapter order, two photo sections never adjacent, no counter", async ({
@@ -142,8 +137,7 @@ test.describe("/ueber-uns", () => {
     expect(adjacent).toBe(false);
 
     await expect(page.locator("aside#context-band")).toHaveCount(1);
-    await expect(page.locator("#closing-cta")).toHaveCount(1);
-    await expect(page.locator("aside#context-band #closing-cta")).toHaveCount(0);
+    await expect(page.locator("#closing-cta")).toHaveCount(0);
 
     // D4: no counter module, no year figure, no place count, no "seit …" claim
     // about the service (DEC-0132 §10).
@@ -243,105 +237,39 @@ test.describe("/ueber-uns", () => {
     expect(html).not.toContain("Kulturlandbüro Uecker-Randow");
   });
 
-  test("TS-WEB-0027-A17: every story opens and closes in place by mouse and keyboard, and no sibling moves sideways", async ({
-    page,
+  test("TS-WEB-0027-A17: every story stands open — one column, no toggle, claim and text visible", async ({
+    browser,
   }) => {
     for (const width of [390, 1280]) {
-      await page.setViewportSize({ width, height: 900 });
+      const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width, height: 900 } });
+      const page = await context.newPage();
       await page.goto("/ueber-uns");
       const stories = page.locator("[data-block='kapitel-3'] [data-story]");
       const count = await stories.count();
       expect(count).toBeGreaterThan(1);
-      // Measure the resting layout: the section's one-shot reveal rise (22 px)
-      // has to be over before a box is read, or the rise is mistaken for a
-      // jump. Scroll it in, wait for the reveal, then for every animation.
-      await stories.first().scrollIntoViewIfNeeded();
-      await expect(
-        page.locator("[data-block='kapitel-3'] [data-armed='true']:not([data-revealed='true'])"),
-      ).toHaveCount(0);
-      await page.evaluate(async () => {
-        // Two frames, so a reveal that has just been flagged has its animation.
-        await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-        await Promise.all(document.getAnimations().map((animation) => animation.finished));
-      });
-      // One column at every width: every item starts at the same x and has
-      // the same width (DEC-0175 §1 — an accordion, not a reflowing grid).
-      const boxes = () =>
-        stories.evaluateAll((nodes) =>
-          nodes.map((node) => {
-            const rect = node.getBoundingClientRect();
-            return { x: rect.x, y: rect.y + window.scrollY, width: rect.width };
-          }),
-        );
-      const before = await boxes();
-      expect(new Set(before.map((box) => Math.round(box.x))).size, `${width}px: one column`).toBe(1);
-      expect(new Set(before.map((box) => Math.round(box.width))).size, `${width}px: one width`).toBe(1);
-
-      // Open the second story: no item moves horizontally or changes its
-      // width, nothing above it moves at all, and only items below it move
-      // down.
-      await stories.nth(1).locator("summary").click();
-      const after = await boxes();
+      // Nothing collapses and nothing toggles (owner, 2026-10-29).
+      await expect(stories.locator("details, summary")).toHaveCount(0);
       for (let index = 0; index < count; index += 1) {
-        expect(after[index]!.x, `${width}px item ${index} x`).toBeCloseTo(before[index]!.x, 0);
-        expect(after[index]!.width, `${width}px item ${index} width`).toBeCloseTo(before[index]!.width, 0);
-        if (index <= 1) expect(after[index]!.y, `${width}px item ${index} y`).toBeCloseTo(before[index]!.y, 0);
-        else expect(after[index]!.y, `${width}px item ${index} y`).toBeGreaterThanOrEqual(before[index]!.y);
+        await expect(stories.nth(index).locator("h3")).toHaveCount(1);
+        await expect(stories.nth(index).locator("h3")).toBeVisible();
+        const text = stories.nth(index).locator("p").last();
+        await expect(text).toBeVisible();
+        expect((await text.textContent())?.trim().length).toBeGreaterThan(40);
       }
+      // One column at every width: every item starts at the same x and has the same width.
+      const boxes = await stories.evaluateAll((nodes) =>
+        nodes.map((node) => {
+          const rect = node.getBoundingClientRect();
+          return { x: rect.x, width: rect.width };
+        }),
+      );
+      expect(new Set(boxes.map((box) => Math.round(box.x))).size, `${width}px: one column`).toBe(1);
+      expect(new Set(boxes.map((box) => Math.round(box.width))).size, `${width}px: one width`).toBe(1);
+      // No placeholder mark ships (#55): no demo-marked story and no draft label.
+      await expect(page.locator("[data-block='kapitel-3'] [data-story][data-demo]")).toHaveCount(0);
+      expect(await page.locator("#main").innerText()).not.toMatch(/PLATZHALTER|ENTWURF/);
+      await context.close();
     }
-
-    await page.goto("/ueber-uns");
-    const stories = page.locator("[data-block='kapitel-3'] [data-story]");
-    const count = await stories.count();
-    const details = stories.locator("details");
-    const openStates = () => details.evaluateAll((nodes) => nodes.map((node) => (node as HTMLDetailsElement).open));
-
-    // Server HTML: the first story is open, the rest are closed.
-    expect(await openStates()).toEqual([true, ...Array(count - 1).fill(false)]);
-    // Every story carries its text and its title as a heading.
-    for (let index = 0; index < count; index += 1) {
-      await expect(stories.nth(index).locator("h3")).toHaveCount(1);
-      expect((await stories.nth(index).locator("details p").textContent())?.trim().length).toBeGreaterThan(40);
-    }
-
-    // Mouse: opening the second leaves the first open — the items are
-    // independent, so opening one never closes (and moves) another.
-    await stories.nth(1).locator("summary").click();
-    expect(await openStates()).toEqual([true, true, ...Array(count - 2).fill(false)]);
-    await expect(stories.nth(1).locator("details p")).toBeVisible();
-    await expect(stories.nth(0).locator("details p")).toBeVisible();
-    // …and a second click closes it in place.
-    await stories.nth(1).locator("summary").click();
-    expect((await openStates())[1]).toBe(false);
-
-    // Keyboard: focus the third toggle and press Enter, then Space closes it.
-    const third = stories.nth(2).locator("summary");
-    await third.focus();
-    await page.keyboard.press("Enter");
-    expect((await openStates())[2]).toBe(true);
-    await page.keyboard.press("Space");
-    expect((await openStates())[2]).toBe(false);
-
-    // The toggle is a 44 px target.
-    const box = await third.boundingBox();
-    expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
-  });
-
-  test("TS-WEB-0027-A17: without JavaScript every story is reachable", async ({ browser }) => {
-    const context = await browser.newContext({ javaScriptEnabled: false });
-    const page = await context.newPage();
-    await page.goto("/ueber-uns");
-    const stories = page.locator("[data-block='kapitel-3'] [data-story]");
-    const count = await stories.count();
-    expect(count).toBeGreaterThan(1);
-    // Native `<details>`: a click opens a closed story with no script at all.
-    await stories.nth(count - 1).locator("summary").click();
-    await expect(stories.nth(count - 1).locator("details p")).toBeVisible();
-    // No placeholder mark ships (#55): no demo-marked story and no draft label.
-    await expect(page.locator("[data-block='kapitel-3'] [data-story][data-demo]")).toHaveCount(0);
-    const text = await page.locator("#main").innerText();
-    expect(text).not.toMatch(/PLATZHALTER|ENTWURF/);
-    await context.close();
   });
 
   test("TS-WEB-0027-A8: the award block carries exactly one link, to the archive", async ({ page }) => {
@@ -427,12 +355,6 @@ test.describe("/ueber-uns", () => {
     await captureConversions(page);
     await page.goto("/ueber-uns");
     // Loading the page emits nothing.
-    expect(await conversions(page)).toEqual([]);
-
-    // The closing CTA is in-page navigation into the contact section: counting
-    // it would count one intent twice (D9).
-    await page.locator('#closing-cta [data-cta="primary"]').click();
-    await expect(page).toHaveURL(/#kontakt$/);
     expect(await conversions(page)).toEqual([]);
 
     // The archive link is a page change, so the capture is read before it.

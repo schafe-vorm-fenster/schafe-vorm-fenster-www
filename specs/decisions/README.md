@@ -220,3 +220,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0183 — A voice's logo takes the initials well's place, and the home proof stream drops its fifth element](DEC-0183--a-voices-logo-takes-the-initials-well-and-the-home-stream-drops-its-fifth-element.md)
 - [DEC-0184 — The publish line of the context band names the two ways only](DEC-0184--the-publish-line-of-the-context-band-names-the-two-ways-only.md)
 - [DEC-0185 — The nearby module picks a varied week from the events-api instead of the first five by start time](DEC-0185--the-nearby-module-picks-a-varied-week-from-the-events-api.md)
+- [DEC-0186 — Three cuts from the owner's preview review — no Google notices on the register route, open stories on /ueber-uns, no closing CTA on /ueber-uns](DEC-0186--three-preview-review-cuts-register-notices-open-stories-no-about-cta.md)
