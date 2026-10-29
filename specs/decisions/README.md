@@ -217,3 +217,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0180 — CI runs the technical tests and a preview smoke; the full Playwright suite runs on demand only](DEC-0180--ci-runs-technical-tests-and-a-smoke-the-full-suite-on-demand.md)
 - [DEC-0181 — geo-api's place lookups are cached for seven days apart from the dates, and the point search gets its own 3 s budget](DEC-0181--the-geo-lookups-are-cached-for-days-and-the-point-search-has-its-own-budget.md)
 - [DEC-0182 — Every explain graphic fills its pane, and the square floor below lg is the pane's, not the stage's](DEC-0182--every-explain-graphic-fills-its-pane-and-the-square-floor-is-the-panes.md)
+- [DEC-0184 — The publish line of the context band names the two ways only](DEC-0184--the-publish-line-of-the-context-band-names-the-two-ways-only.md)

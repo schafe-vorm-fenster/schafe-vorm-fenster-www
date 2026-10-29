@@ -27,10 +27,8 @@ function homePage(locale: Locale) {
 const others = HEADER_JOBS.filter((job) => job.label !== "knowWhatIsOn");
 
 describe("isBandStatement — CG-030 as a predicate", () => {
-  it("accepts the owner's publish sentence (68 characters, a statement)", () => {
-    expect(
-      isBandStatement("Wie du einfach Termine per WhatsApp oder Kalender veröffentlichen kannst"),
-    ).toBe(true);
+  it("accepts the owner's publish line (38 characters, a statement, DEC-0184)", () => {
+    expect(isBandStatement("Per WhatsApp oder über deinen Kalender")).toBe(true);
   });
 
   it("rejects a question (CG-005), an empty line and anything over the budget", () => {
@@ -57,7 +55,7 @@ describe("bandBlurbsOf — the slot's list items, by route", () => {
 
   it("reads the German path in the English artifact (the artifacts write `/mitmachen` in both)", () => {
     const band = slot(homePage("en"), "home-10-context-band");
-    expect(bandBlurbsOf(band, "en").get("takePart")).toMatch(/^How to publish dates/);
+    expect(bandBlurbsOf(band, "en").get("takePart")).toBe("By WhatsApp or from your calendar");
   });
 
   it("is empty for no slot and for an empty slot", () => {
