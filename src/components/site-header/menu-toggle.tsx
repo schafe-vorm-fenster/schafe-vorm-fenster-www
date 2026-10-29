@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 import styles from "./site-header.module.css";
 
 export interface MenuToggleProps {
@@ -9,6 +11,12 @@ export interface MenuToggleProps {
   readonly className?: string;
   readonly "aria-expanded"?: boolean;
   readonly "aria-controls"?: string;
+  /**
+   * The phone bar's track (DEC-0190): the job the visitor is in, shown as a
+   * pill inside the toggle and stepped along it by its position in the menu.
+   * Only the bar's own burger carries it, and only below `md` does it show.
+   */
+  readonly track?: { readonly label: string; readonly index: number };
 }
 
 /**
@@ -39,17 +47,30 @@ export function MenuToggle({
   className,
   "aria-expanded": expanded,
   "aria-controls": controls,
+  track,
 }: MenuToggleProps) {
   return (
     <button
       aria-controls={controls}
       aria-expanded={expanded}
-      aria-label={label}
+      // The visible pill text leads the name, so the label is in the name
+      // (WCAG 2.5.3) wherever the pill shows.
+      aria-label={track ? `${track.label} – ${label}` : label}
       className={[styles.toggle, className].filter(Boolean).join(" ")}
       data-shape={variant}
+      data-track={track ? "true" : undefined}
       onClick={onClick}
       type="button"
     >
+      {track ? (
+        <span
+          aria-hidden="true"
+          className={styles.trackLabel}
+          style={{ "--track-index": track.index } as CSSProperties}
+        >
+          {track.label}
+        </span>
+      ) : null}
       <span aria-hidden="true" className={styles.stripes}>
         <span className={styles.stripe} />
         <span className={styles.stripe} />

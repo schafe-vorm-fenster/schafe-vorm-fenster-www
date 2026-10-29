@@ -224,3 +224,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0187 — Every photograph shows its credit behind the © control, always in the same form; the credits section only points there](DEC-0187--every-photograph-shows-its-credit-behind-the-copyright-control.md)
 - [DEC-0188 — The homescreen headline on /dein-ort carries no icon](DEC-0188--the-homescreen-headline-carries-no-icon.md)
 - [DEC-0189 — The phone header drops the calendar pill, and the menu overlay is the blurred page](DEC-0189--the-phone-header-drops-the-calendar-pill-and-the-menu-overlay-is-glass.md)
+- [DEC-0190 — On the phone the burger is a track that carries the page's job](DEC-0190--the-phone-burger-is-a-track-carrying-the-pages-job.md)

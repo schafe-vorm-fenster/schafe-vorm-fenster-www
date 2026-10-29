@@ -218,7 +218,10 @@ describe("TS-WEB-0017 D3: no brand value enters through a component", () => {
         style.includes("var(--ratio-") ||
         // `hero-block`'s reserved-line-count var — a line count, not a brand
         // value, and read back only through `calc()` in its own stylesheet.
-        style.includes("--hero-headline-lines");
+        style.includes("--hero-headline-lines") ||
+        // The phone track's step count (DEC-0190) — a menu position, read
+        // back only through `calc()` in `site-header.module.css`.
+        style.includes("--track-index");
       const layout = /object-fit|position:|inset:|color:transparent/.test(style);
       expect(custom || layout, style).toBe(true);
     }
