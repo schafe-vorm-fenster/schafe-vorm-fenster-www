@@ -97,9 +97,11 @@ export function SiteHeader({
   const d = dictionary(locale);
   const route: RouteId = current ?? "home";
   // The job this page belongs to — itself or an ancestor in the trail — for
-  // the phone bar's track (DEC-0190). None on `/`, the region pages and the
-  // legal page: the bar then shows the plain burger.
-  const path = trail(route);
+  // the phone bar's track (DEC-0190). `/` shows "Was ist los", its focus job
+  // (owner, 2026-10-29); the region pages and the legal page have none, and
+  // the bar then shows the plain burger. Only the track reads this: the
+  // desktop row still marks nothing on `/`.
+  const path = route === "home" ? (["place"] as RouteId[]) : trail(route);
   const trackIndex = HEADER_JOBS.findIndex((entry) => path.includes(entry.route));
   const track =
     trackIndex < 0 ? undefined : { label: d.nav[HEADER_JOBS[trackIndex]!.label], index: trackIndex };

@@ -34,6 +34,10 @@ overlay of DEC-0189.
    15 px on a 360 px screen (measured with the real face). Below about 340 px
    the longest label is cut with an ellipsis.
 
+**Amendment 2026-10-29 (owner):** `/` carries "Was ist los" (its focus job,
+first step) in the track. The desktop row still marks no job on `/`. Item 3
+now covers the region pages, `/rechtliches` and 404 only.
+
 ## Consequences
 
 `e2e/site-header.spec.ts` asserts the four states, the stepping, that the pill
