@@ -386,6 +386,60 @@
   background: color-mix(in srgb, currentcolor 12%, var(--header-well));
 }
 
+/*
+ * The phone bar's track (owner, 2026-10-29, DEC-0190). Below `md` the burger
+ * of a page that belongs to a job grows into a track that fills the bar
+ * beside the mark: the header's well (blurred `scrim-38` over a photograph,
+ * nothing on paper), the job as a pill in the desktop row's current-page pair
+ * on its left, the stripes on its right. The pill steps along the track by
+ * the job's position in the menu, as the current chip sits at its own place
+ * in the desktop row. The whole track is the one control that opens the
+ * menu. From `md` the track is the round burger again.
+ */
+.header .toggle[data-track="true"] {
+  flex: 1;
+  height: var(--space-12);
+  justify-content: space-between;
+  min-width: 0;
+  padding-inline-end: var(--space-3);
+  width: auto;
+}
+
+.trackLabel {
+  align-items: center;
+  background: var(--header-current-fill);
+  border-radius: var(--radius-pill);
+  color: var(--header-current-ink);
+  display: inline-flex;
+  font-family: var(--font-mono);
+  /* Fluid down from the label size: "TERMINE VERÖFFENTLICHEN" has to fit the
+     track at 360 px, which it does at ~12 px and not at 15 (measured with the real face). The
+     owner's reference draws the pill at ~12 px; this deviation from the
+     15 px label floor is recorded in DEC-0190. */
+  font-size: clamp(0.75rem, 3.4vw, var(--type-label-size));
+  font-weight: 700;
+  height: 100%;
+  letter-spacing: 0.04em;
+  margin-inline-start: calc(var(--track-index, 0) * var(--space-2));
+  min-width: 0;
+  overflow: hidden;
+  padding-inline: var(--space-3);
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.toggle[data-track="true"] .stripes {
+  flex: none;
+  margin-inline-start: var(--space-2);
+}
+
+/* The mark matches the track's height on the phone. */
+.inner .logo img {
+  height: var(--space-12);
+  width: var(--space-12);
+}
+
 .stripes {
   display: block;
   height: 16px;
@@ -608,6 +662,28 @@
 
   .header .cta {
     display: inline-flex;
+  }
+
+  /* The round burger again (DEC-0190). */
+  .header .toggle[data-track="true"] {
+    flex: none;
+    height: var(--target-min);
+    justify-content: center;
+    padding-inline-end: 0;
+    width: var(--target-min);
+  }
+
+  .trackLabel {
+    display: none;
+  }
+
+  .toggle[data-track="true"] .stripes {
+    margin-inline-start: 0;
+  }
+
+  .inner .logo img {
+    height: 40px;
+    width: 40px;
   }
 }
 

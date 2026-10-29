@@ -1,5 +1,6 @@
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { HEADER_CALENDAR_ENTRY, HEADER_JOBS } from "@/src/lib/routes/navigation";
+import { trail } from "@/src/lib/routes/routes";
 
 import { Button } from "../button/button";
 import { Logo } from "../logo/logo";
@@ -95,6 +96,13 @@ export function SiteHeader({
 }: SiteHeaderProps) {
   const d = dictionary(locale);
   const route: RouteId = current ?? "home";
+  // The job this page belongs to — itself or an ancestor in the trail — for
+  // the phone bar's track (DEC-0190). None on `/`, the region pages and the
+  // legal page: the bar then shows the plain burger.
+  const path = trail(route);
+  const trackIndex = HEADER_JOBS.findIndex((entry) => path.includes(entry.route));
+  const track =
+    trackIndex < 0 ? undefined : { label: d.nav[HEADER_JOBS[trackIndex]!.label], index: trackIndex };
 
   return (
     <HeaderShell
@@ -103,6 +111,7 @@ export function SiteHeader({
       menu={<HeaderMenu current={route} locale={locale} />}
       overHero={overHero}
       overlayBrand={<Logo className={styles.logo} compact locale={locale} />}
+      track={track}
     >
       <Logo className={styles.logo} compact locale={locale} />
       <nav aria-label={d.nav.home} className={styles.nav}>

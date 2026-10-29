@@ -115,6 +115,38 @@ test.describe("TS-WEB-0004-A8: the header inventory at both widths", () => {
     await expect(menu.getByRole("navigation", { name: "Sprache" })).toBeVisible();
   });
 
+  test("DEC-0190: on the phone the burger is a track carrying the page's job, stepped by its place", async ({
+    page,
+  }) => {
+    await page.setViewportSize(PHONE);
+    const starts: number[] = [];
+    for (const [index, path] of ["/dein-ort", "/mitmachen", "/dein-kalender", "/ueber-uns"].entries()) {
+      await page.goto(path);
+      await expect(burger(page)).toHaveAccessibleName(new RegExp(`^${JOBS[index]} – `));
+      const pill = burger(page).locator("span[style*='--track-index']");
+      await expect(pill).toHaveText(JOBS[index]!);
+      await expect(pill).toBeVisible();
+      // Not cut off: the longest label fits the track at 360 px.
+      const fit = await pill.evaluate((node) => `${node.scrollWidth}/${node.clientWidth}`);
+      expect(Number(fit.split("/")[0]), `${path}: ${fit}`).toBeLessThanOrEqual(Number(fit.split("/")[1]));
+      starts.push((await pill.boundingBox())!.x);
+    }
+    // The pill wanders along the track, one step per menu position.
+    for (let index = 1; index < starts.length; index += 1) {
+      expect(starts[index]!).toBeGreaterThan(starts[index - 1]!);
+    }
+    // The whole track opens the menu, the pill included.
+    await page.goto("/mitmachen");
+    await burger(page).locator("span[style*='--track-index']").click();
+    await expect(dialog(page)).toBeVisible();
+
+    // A page outside the four jobs keeps the round burger.
+    await page.goto("/rechtliches");
+    await expect(burger(page)).toHaveAccessibleName("Menü öffnen");
+    const box = await burger(page).boundingBox();
+    expect(Math.round(box?.width ?? 0)).toBe(44);
+  });
+
   test("the header row never scrolls sideways, at any width", async ({ page }) => {
     // Row 35's anti-pattern, under test: the bar must fit, not scroll.
     for (const width of [320, 360, 428, 640, 768, 900, 1024, 1280, 1920]) {

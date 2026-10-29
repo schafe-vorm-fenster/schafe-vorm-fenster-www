@@ -40,8 +40,10 @@ export interface HeaderShellProps {
   readonly children: ReactNode;
   /** The overlay's own top-bar brand: the mark, without the wordmark. */
   readonly overlayBrand: ReactNode;
-  /** The overlay's content: the four jobs, the calendar entry, the language switch. */
+  /** The overlay's content: the four jobs and the language switch. */
   readonly menu: ReactNode;
+  /** The job the page belongs to, for the phone bar's track (DEC-0190). */
+  readonly track?: { readonly label: string; readonly index: number };
   readonly className?: string;
 }
 
@@ -76,6 +78,7 @@ export function HeaderShell({
   children,
   overlayBrand,
   menu,
+  track,
   className,
 }: HeaderShellProps) {
   const headerRef = useRef<HTMLElement>(null);
@@ -195,6 +198,7 @@ export function HeaderShell({
           className={styles.burger}
           label={open ? labels.close : labels.open}
           onClick={toggle}
+          track={track}
           variant="burger"
         />
       </div>
