@@ -70,8 +70,8 @@ importers:
         specifier: ^0.3.5
         version: 0.3.5(zod@4.4.3)
       '@schafe-vorm-fenster/partners':
-        specifier: ^0.2.4
-        version: 0.2.4(zod@4.4.3)
+        specifier: ^0.2.7
+        version: 0.2.7(zod@4.4.3)
       '@schafe-vorm-fenster/people':
         specifier: ^0.3.6
         version: 0.3.6(zod@4.4.3)
@@ -1470,13 +1470,10 @@ packages:
       zod:
         optional: true
 
-  '@schafe-vorm-fenster/partners@0.2.4':
-    resolution: {integrity: sha512-tDlyBAxA/Pm2j8kUzO7ZgDwzSOoZApDI5XXwXCXN2ExLH6FVJdKdN7T1YJZbAw83zks56hqzdaGxqIRwmnmMQw==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/partners/0.2.4/d3f272dbfeee1817fea7c3fde3e666527cd940e8}
+  '@schafe-vorm-fenster/partners@0.2.7':
+    resolution: {integrity: sha512-0zaEOPdB1VwEJXJsppSQ6kEbr+0SL/5cUgDxlgjU4e4QyxRCN9p1HFvMP+feSvG2u3Veg/0X8pOyIFUqUJPbeA==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/partners/0.2.7/497b7514ff52fe5ad5f7e03e351ff85b5f3b3d8b}
     peerDependencies:
       zod: ^4.0.0
-    peerDependenciesMeta:
-      zod:
-        optional: true
 
   '@schafe-vorm-fenster/people@0.3.6':
     resolution: {integrity: sha512-NPq4lSr/P0qTI+QSkr4tB44MV1M3Lm9ggko35hgXUtl1XjwHDz84W965kOOuC+UChnbuR0JrZBd0waPyP+KKpg==, tarball: https://npm.pkg.github.com/download/@schafe-vorm-fenster/people/0.3.6/4222bf8b80f5360281c86675e7143a8bc0f0bb05}
@@ -5472,8 +5469,8 @@ snapshots:
     optionalDependencies:
       zod: 4.4.3
 
-  '@schafe-vorm-fenster/partners@0.2.4(zod@4.4.3)':
-    optionalDependencies:
+  '@schafe-vorm-fenster/partners@0.2.7(zod@4.4.3)':
+    dependencies:
       zod: 4.4.3
 
   '@schafe-vorm-fenster/people@0.3.6(zod@4.4.3)':

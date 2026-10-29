@@ -741,10 +741,10 @@ test.describe("TS-WEB-0019 — home", () => {
     expect(professional.navigation).toEqual(direct.navigation);
   });
 
-  test("TS-WEB-0019-A8: the proof stream renders exactly 5 elements", async ({ page }) => {
+  test("TS-WEB-0019-A8: the proof stream renders its 4 candidates of 5 positions (DEC-0183)", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/");
-    await expect(page.locator("#proof-stream article")).toHaveCount(5);
+    await expect(page.locator("#proof-stream article")).toHaveCount(4);
   });
 
   test("TS-WEB-0019-A9: DOM order is block 1 · scenes · provenance · proof · band · closing", async ({
@@ -893,7 +893,7 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(explainModule).toHaveCount(1);
     await expect(explainModule).toHaveAttribute("data-state", "1");
     await expect(explainModule.locator("[data-explain-step]")).toHaveCount(3);
-    await expect(page.locator("#proof-stream article")).toHaveCount(5);
+    await expect(page.locator("#proof-stream article")).toHaveCount(4);
     await expect(page.locator("#context-band nav")).toHaveCount(1);
     await expect(page.locator("#closing-cta")).toHaveCount(1);
     // The live rows (block 1′, the WhatsApp scene's example) load in the
@@ -1159,7 +1159,7 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "What's on where you live, and when.",
     );
-    await expect(page.locator("#proof-stream article")).toHaveCount(5);
+    await expect(page.locator("#proof-stream article")).toHaveCount(4);
     await expect(page.locator('form[role="search"] [data-cta="primary"]')).toHaveCount(1);
   });
 });

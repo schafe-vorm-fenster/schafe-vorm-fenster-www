@@ -13,6 +13,7 @@ import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
+import { partnerLogo } from "@/src/lib/content/partner-logos";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
@@ -580,6 +581,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                      already names its own source in the line above it, so
                      the badge was the same word five times. */
                   emphasis={position === 0 ? "feature" : "compact"}
+                  logo={partnerLogo(entry.candidate.contextLine)}
                   key={entry.candidate.id}
                   locale={locale}
                   state={entry.state}

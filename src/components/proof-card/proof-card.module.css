@@ -136,6 +136,33 @@
   background: var(--color-neutral-surface);
 }
 
+/*
+ * The logo in the well's place (DEC-0183): a `paper` plate at the well's
+ * 40 px height, the mark inside at its own ratio — never cropped to a
+ * circle, never recoloured (`@schafe-vorm-fenster/partners` rule 3). A wide
+ * wordmark is capped — at 12rem, and at half the byline on a phone, where
+ * the name's longest word ("Vorpommern-Greifswald") needs the other half —
+ * so the name beside it keeps its room.
+ */
+.logo {
+  align-items: center;
+  background: var(--color-neutral-paper);
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  flex: none;
+  height: 40px;
+  max-width: min(12rem, 50%);
+  padding: var(--space-1) var(--space-2);
+}
+
+.logo img {
+  display: block;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  width: auto;
+}
+
 .who {
   display: flex;
   flex-direction: column;

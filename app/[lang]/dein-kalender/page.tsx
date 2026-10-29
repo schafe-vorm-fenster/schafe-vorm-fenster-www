@@ -19,6 +19,7 @@ import { TrustBlock } from "@/src/components/trust-block/trust-block";
 import { CONTACT_SECTION_ID } from "@/src/components/contact-section/contact-section";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { pageImage } from "@/src/lib/content/images";
+import { partnerLogo } from "@/src/lib/content/partner-logos";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
 import { slot } from "@/src/lib/content/loader";
 import { isDemoSlot } from "@/src/lib/content/provenance";
@@ -620,6 +621,7 @@ export default async function Page({
                 claim={entry.candidate.claim}
                 contextLine={entry.candidate.contextLine}
                 emphasis={position === 0 ? "feature" : "compact"}
+                logo={partnerLogo(entry.candidate.contextLine)}
                 key={entry.candidate.id}
                 locale={locale}
                 state={entry.state}

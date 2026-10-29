@@ -542,7 +542,7 @@ Drei Abweichungen vom Entwurf, alle aus einer Quelle:
 
   it("reads a paragraph the page renders, and the marker is the only way out (DEC-0142 §1)", () => {
     // `dein-kalender-3b-embed-config`'s shape: the heading, then the lead
-    // paragraph `app/[lang]/dein-kalender/page.tsx:437` renders.
+    // paragraph `app/[lang]/dein-kalender/page.tsx:438` renders.
     const rendered = checkCopy(
       slotOf(`**Überschrift:** Was drinsteht, bestimmt ihr
 
