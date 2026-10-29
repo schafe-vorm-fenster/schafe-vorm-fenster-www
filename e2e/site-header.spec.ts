@@ -140,6 +140,10 @@ test.describe("TS-WEB-0004-A8: the header inventory at both widths", () => {
     await burger(page).locator("span[style*='--track-index']").click();
     await expect(dialog(page)).toBeVisible();
 
+    // The home page carries its focus job, "Was ist los", at the first step.
+    await page.goto("/");
+    await expect(burger(page).locator("span[style*='--track-index']")).toHaveText(JOBS[0]!);
+
     // A page outside the four jobs keeps the round burger.
     await page.goto("/rechtliches");
     await expect(burger(page)).toHaveAccessibleName("Menü öffnen");
