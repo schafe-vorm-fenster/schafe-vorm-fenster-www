@@ -4,18 +4,14 @@
   gap: var(--space-6);
 }
 
+/* No icon beside the headline (owner, 2026-10-29): a 24 px glyph next to a
+   two-line display headline never sat right; the platform labels below
+   carry the device. */
 .headline {
-  align-items: center;
-  display: flex;
   font-size: var(--type-section-size);
   font-weight: 800;
-  gap: var(--space-2);
   letter-spacing: var(--type-section-tracking);
   margin: 0;
-}
-
-.icon {
-  flex: none;
 }
 
 .platforms {
