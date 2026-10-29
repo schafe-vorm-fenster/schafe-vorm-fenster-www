@@ -6,15 +6,15 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**510 criteria · 336 closed · 174 open (66 % closed)**
+**510 criteria · 334 closed · 176 open (65 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 331 | a test title in a file a runner runs carries the id |
+| VERIFIED | 329 | a test title in a file a runner runs carries the id |
 | METERED | 5 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
 | NAMED ONLY | 30 | the id is in a runner file but in no test title — **not coverage** |
-| MISSING | 144 | nothing names it |
+| MISSING | 146 | nothing names it |
 
 Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
 
@@ -25,7 +25,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | static | 92 | 62 | 30 | 67 % |
 | unit | 33 | 29 | 4 | 88 % |
 | integration | 78 | 54 | 24 | 69 % |
-| e2e | 237 | 189 | 48 | 80 % |
+| e2e | 237 | 187 | 50 | 79 % |
 | tool | 39 | 2 | 37 | 5 % |
 | manual | 31 | 0 | 31 | 0 % |
 
@@ -55,7 +55,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0020 | 28 | 27 | A13 |
 | TS-WEB-0021 | 15 | 13 | A11 A15 |
 | TS-WEB-0022 | 23 | 18 | A8 A10 A11 A14 A15 |
-| TS-WEB-0023 | 22 | 11 | A1 A2 A3 A7 A8 A9 A10 A11 A13 A15 A16 |
+| TS-WEB-0023 | 22 | 9 | A1 A2 A3 A7 A8 A9 A10 A11 A13 A15 A16 A19 A20 |
 | TS-WEB-0024 | 26 | 21 | A6 A7 A12 A17 A19 |
 | TS-WEB-0025 | 14 | 10 | A5 A9 A12 A13 |
 | TS-WEB-0026 | 17 | 12 | A9 A11 A12 A16 A17 |
@@ -214,6 +214,8 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0023-A13 | e2e | MISSING | — | All three steps can be completed by form submission and the handover link is reachable; without JavaScript step 1 renders. (Amended by DEC-0163: the written tex … |
 | TS-WEB-0023-A15 | e2e | MISSING | — | The context band renders on step 1 and is absent on steps 2, 3 and the handover state (records D7 for review). |
 | TS-WEB-0023-A16 | tool | MISSING | — | axe-core: zero violations on all three steps in all three themes; after each advance focus sits on the new step's heading. |
+| TS-WEB-0023-A19 | e2e | MISSING | — | The `TS-WEB-0016` D17 notice stands above the frame — earlier in the served HTML and visually above it — names Google and links `/rechtliches#datenschutz`, and  … |
+| TS-WEB-0023-A20 | e2e | MISSING | — | Above the frame one link opens `leadFormOpenUrl()` with `target="_blank"` and `rel="noopener"`, carries its D16 marking through `aria-describedby`, and its clic … |
 | TS-WEB-0024-A6 | e2e | NAMED ONLY | e2e/pages/dein-kalender.spec.ts — outside any test title | With the loader host blocked, `data-block="embed-demo"` still renders its copy and a working CTA, shows no empty frame and no error text, and the page height ab … |
 | TS-WEB-0024-A7 | e2e | MISSING | — | With the loader allowed, the only third-party script request from this block goes to the allowlisted Portalize host; after full load `document.cookie` is empty  … |
 | TS-WEB-0024-A12 | unit | NAMED ONLY | e2e/pages/dein-kalender.spec.ts — outside any test title | With the `run our own calendar` weight profile and a stage-2 trait outside the covered region, a high job-fit proof element outranks a geographically nearer ele … |

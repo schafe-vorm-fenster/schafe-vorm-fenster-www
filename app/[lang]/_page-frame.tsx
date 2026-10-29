@@ -100,6 +100,12 @@ export type ClosingBlock =
     }
   | { readonly variant: "merged" }
   /**
+   * No closing block at all: the page's own contact section follows the band
+   * closely enough that a button in front of it only repeats it (owner,
+   * 2026-10-29, `/ueber-uns`).
+   */
+  | { readonly variant: "none" }
+  /**
    * The block-1 primary repeated as the **module** it is [PROPOSED].
    *
    * TS-WEB-0006 D6 names two shapes, a goal CTA and the merged three-job offer.
@@ -185,7 +191,7 @@ export function PageFrame({
   const closingBeforeBand = !(closing.variant === "module" && closing.surface === "ink");
 
   const closingBlock =
-    closing.variant === "merged" ? null : (
+    closing.variant === "merged" || closing.variant === "none" ? null : (
       /* Block 4 — the focus job's conversion, repeated. Inside `main` it is
          followed only by the band (DEC-0174 §4), and after `main` stand
          exactly two things, both chrome: the contact section and the global

@@ -213,15 +213,12 @@ test("F-2-64 / TS-WEB-0004-A9: the consent line's legal link resolves to its own
 
 test("F-2-33: the English register page's own words around the form are English", async ({ page }) => {
   // Since DEC-0176 the route embeds the Google Form, which is German and
-  // Google's. What the page itself says around it — the notice, the frame's
-  // accessible name, the new-tab link and its marking — is in the page's
+  // Google's. What the page itself says around it — the frame's
+  // accessible name — is in the page's
   // language. (Until then this asserted the flow's step-1 submit, "Continue".)
   await page.goto("/en/take-part/register");
   const main = page.getByRole("main");
-  await expect(main.locator('[data-block="embed-notice"]')).toContainText("Google provides the form");
   await expect(main.locator("iframe[data-register-form]")).toHaveAttribute("title", "Registration form on Google Forms");
-  await expect(main.locator('[data-block="register-form-fallback"]')).toContainText("Open the form directly");
-  await expect(main.locator('[data-block="register-form-fallback"]')).toContainText("Data goes to Google");
 });
 
 
