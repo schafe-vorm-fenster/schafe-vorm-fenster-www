@@ -1,4 +1,3 @@
-import { Icon } from "../icon/icon";
 import { MediaFrame } from "../media-frame/media-frame";
 import { ConversionTracker, type ConversionBinding } from "../conversion-tracker/conversion-tracker";
 import { OutboundLink } from "../outbound-link/outbound-link";
@@ -58,7 +57,7 @@ export interface HowtoBlockProps {
  * States: a missing screenshot becomes `placeholder-surface` and a
  * non-matching one carries `placeholder-badge`, both through `media-frame`'s
  * own contract. No mock screenshot is ever drawn by this component.
- * Inherits: `smartphone` icon; secondary CTA treatment (the page's primary
+ * Inherits: no icon beside the headline (DEC-0188); secondary CTA treatment (the page's primary
  * marker sits in block 1, never here); `ratio-portrait` for the screenshots.
  * Space: the DOM is byte-identical under every user agent, so the box never
  * varies with the visitor's device.
@@ -78,7 +77,6 @@ export function HowtoBlock({ headline, ios, android, appHref, appLinkLabel = "Ka
   return (
     <div className={[styles.block, className].filter(Boolean).join(" ")} id={id}>
       <h2 className={styles.headline}>
-        <Icon className={styles.icon} name="smartphone" />
         {headline}
       </h2>
       <div className={styles.platforms}>
