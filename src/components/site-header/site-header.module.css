@@ -216,6 +216,13 @@
     --header-cta-hover: var(--fill-ink-hover); /* hover on ink, DEC-0160 */
     --header-wordmark: visible;
   }
+
+  /* The burger needs JavaScript to open, so without it the phone keeps the
+     calendar pill as its one way into the dates (DEC-0189). Three classes, so
+     it outranks the phone's `.header .cta` further down. */
+  .header .inner .cta {
+    display: inline-flex;
+  }
 }
 
 .inner {
@@ -330,6 +337,10 @@
 .header .cta {
   background: var(--header-cta-fill);
   color: var(--header-cta-ink);
+  /* Not on the phone (owner, 2026-10-29, DEC-0189): the bar is the mark and
+     the burger, and the entry's destination is the menu's first item. It
+     comes back at `md` (below). */
+  display: none;
   flex: none;
 }
 
@@ -443,12 +454,22 @@
 
 /* ── The overlay ───────────────────────────────────────────────────────── */
 
+/*
+ * The phone menu (owner, 2026-10-29, DEC-0189): the page itself, blurred and
+ * darkened under `scrim-72` — the blur primitive's tint ceiling — rather than
+ * a flat ink sheet. The page underneath stays recognisable; the paper type
+ * on it reads against the scrim, not against whatever the page was showing
+ * (paper over `scrim-72` on a paper page is at least 8:1). Where the blur is
+ * not available, or the visitor asked for reduced transparency, the overlay
+ * is the solid ink sheet it was.
+ */
 .dialog {
-  /* The overlay is its own ink surface, so the close control needs no well
-     of its own — and the brand inside it keeps its wordmark. */
-  --header-well: transparent;
   --header-blur: none;
   --header-wordmark: visible;
+  /* The close control's well: a translucent paper lift, as the menu rows. */
+  --header-well: color-mix(in srgb, var(--color-neutral-paper) 14%, transparent);
+  --menu-fill: color-mix(in srgb, var(--color-neutral-paper) 14%, transparent);
+  --menu-hover: color-mix(in srgb, var(--color-neutral-paper) 8%, transparent);
   background: var(--color-neutral-ink);
   /* The overlay scrolls on its own; a scroll that reaches its end must not
      continue in the page behind it. */
@@ -465,8 +486,36 @@
   width: 100%;
 }
 
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
 .dialog::backdrop {
   background: var(--color-neutral-ink);
+}
+
+@supports (backdrop-filter: blur(24px)) {
+  .dialog {
+    backdrop-filter: blur(24px) saturate(120%);
+    background: var(--color-scrim-72);
+  }
+
+  /* The blur must see the page, so nothing may be painted between them. */
+  .dialog::backdrop {
+    background: transparent;
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .dialog {
+      backdrop-filter: none;
+      background: var(--color-neutral-ink);
+    }
+
+    .dialog::backdrop {
+      background: var(--color-neutral-ink);
+    }
+  }
 }
 
 .dialogClose {
@@ -483,11 +532,12 @@
 
 .dialogBody {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: var(--space-8);
   margin-inline: auto;
   max-width: var(--measure-page);
-  padding: var(--space-6) var(--gutter) var(--space-12);
+  padding: var(--space-6) var(--gutter) var(--space-8);
   width: 100%;
 }
 
@@ -498,41 +548,50 @@
 .menuList {
   display: flex;
   flex-direction: column;
+  gap: var(--space-1);
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+/* The rows speak the desktop label row's language — Label-mono, upper case,
+   tracked — one size up, each a full-width pill target. */
 .menuLink {
   align-items: center;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-neutral-paper) 22%, transparent);
+  border-radius: var(--radius-pill);
   color: var(--color-neutral-paper);
   display: flex;
-  font-size: var(--type-subhead-size);
-  font-weight: 800;
-  letter-spacing: var(--type-subhead-tracking);
+  font-family: var(--font-mono);
+  font-size: calc(var(--type-label-size) * 1.2);
+  font-weight: 700;
+  letter-spacing: var(--type-label-tracking);
   min-height: var(--target-comfortable);
-  padding-block: var(--space-3);
+  padding: var(--space-2) calc(var(--space-4) + var(--space-1));
   text-decoration: none;
+  text-transform: uppercase;
 }
 
 .menuLink:hover {
-  color: var(--color-lime-300);
+  background: var(--menu-hover);
 }
 
+/* Current page: a fill, never colour alone (`aria-current` rides with it). */
 .menuLink[data-current="true"] {
-  color: var(--color-lime-300);
+  background: var(--menu-fill);
 }
 
-.menuCta {
-  align-self: flex-start;
+.menuLink:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-roles-focus-dark);
+  outline-offset: var(--focus-ring-offset);
 }
 
 /* The space is this component's own (DEC-0178 §4): a wrapper it owns pads it,
-   so no margin rides on another component's root through `className` (A32). */
+   so no margin rides on another component's root through `className` (A32).
+   The switch stands at the foot of the overlay, centred. */
 .menuLanguageRow {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  margin-top: auto;
   padding-top: var(--space-2);
 }
 
@@ -541,6 +600,10 @@
 @media (min-width: 40rem) {
   .logo {
     margin-inline-end: var(--space-2);
+  }
+
+  .header .cta {
+    display: inline-flex;
   }
 }
 
