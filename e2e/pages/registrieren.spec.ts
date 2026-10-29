@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { leadFormEmbedUrl, leadFormOpenUrl } from "../../src/lib/routes/lead-fallback";
+import { leadFormEmbedUrl } from "../../src/lib/routes/lead-fallback";
 import { href } from "../../src/lib/routes/routes";
 import { ALLOWLIST } from "../../src/lib/security/csp";
 
@@ -109,60 +109,6 @@ test.describe("TS-WEB-0023 D10: the registration route embeds the live site's Go
       expect(scrollHeight, "the form's page 1 fits the reserved height").toBeLessThanOrEqual(viewport.reserved);
     });
   }
-
-  test("TS-WEB-0023-A19: the notice stands above the frame, names Google and links the privacy section", async ({
-    page,
-    request,
-  }) => {
-    const html = await (await request.get(ROUTE)).text();
-    const noticeAt = html.indexOf('data-block="embed-notice"');
-    const frameAt = html.indexOf("<iframe");
-    expect(noticeAt, "the notice is in the served HTML").toBeGreaterThan(-1);
-    expect(noticeAt).toBeLessThan(frameAt);
-
-    await page.goto(ROUTE);
-    const notice = page.locator('[data-block="embed-notice"]');
-    await expect(notice).toHaveCount(1);
-    await expect(notice).toContainText("Google");
-    await expect(notice.locator(`a[href="${href("legal", "de")}#datenschutz"]`)).toHaveCount(1);
-    await expect(notice.locator("button, input, [role], h1, h2, h3, ul, ol")).toHaveCount(0);
-    const noticeBox = await notice.boundingBox();
-    const frameBox = await page.locator(FRAME).boundingBox();
-    expect((noticeBox?.y ?? 0) + (noticeBox?.height ?? 0)).toBeLessThanOrEqual(frameBox?.y ?? 0);
-  });
-
-  test("TS-WEB-0023-A20: a link opens the same form in a new tab, marked, and its click is the handover", async ({
-    page,
-  }) => {
-    const fired = conversions(page);
-    await stubForm(page);
-    await page.goto(ROUTE);
-
-    const link = page.locator('[data-block="register-form-fallback"] a');
-    await expect(link).toHaveCount(1);
-    await expect(link).toHaveAttribute("href", leadFormOpenUrl());
-    await expect(link).toHaveAttribute("target", "_blank");
-    await expect(link).toHaveAttribute("rel", /noopener/);
-    // The marking (TS-WEB-0016 D16) and the hidden new-tab note (DEC-0169),
-    // both joined to the link by `aria-describedby`.
-    const described = ((await link.getAttribute("aria-describedby")) ?? "").split(/\s+/).filter(Boolean);
-    expect(described.length).toBeGreaterThan(0);
-    const notes = await Promise.all(described.map((id) => page.locator(`[id="${id}"]`).textContent()));
-    expect(notes.join(" ")).toContain("Google");
-    // Above the frame: a visitor whose browser refuses the frame meets it first.
-    expect((await link.boundingBox())?.y ?? 0).toBeLessThan((await page.locator(FRAME).boundingBox())?.y ?? 0);
-
-    await expect(page.locator('[data-conversion-tracker="register-as-publisher"]')).toHaveAttribute(
-      "data-hydrated",
-      "true",
-    );
-    const popup = page.waitForEvent("popup");
-    await link.click();
-    await (await popup).close();
-    await expect.poll(() => fired.length).toBe(1);
-    expect(fired[0]).toContain("register-as-publisher");
-    expect(fired[0]).toContain("handover");
-  });
 
   test("TS-WEB-0023-A22: moving on inside the form fires register-as-publisher once; loading the page fires nothing", async ({
     page,

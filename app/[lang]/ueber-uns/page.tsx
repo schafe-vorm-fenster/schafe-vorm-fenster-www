@@ -1,6 +1,5 @@
 import { imageCredit } from "@/src/components/photo-surface/image-credit";
 import { Button } from "@/src/components/button/button";
-import { CONTACT_SECTION_ID } from "@/src/components/contact-section/contact-section";
 import { Icon } from "@/src/components/icon/icon";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { NewsletterBlock } from "@/src/components/newsletter-block/newsletter-block";
@@ -51,15 +50,16 @@ import type { ReactNode } from "react";
  *  4. **Chapter 02** — the honorary mayoralty 2019–2024 and the name it gave
  *     the company, told as one short text (`kapitel-2`, D3, DEC-0175 §2).
  *  5. **Chapter 03** — the proof stream as an accordion of stories: the cleared
- *     records the relevance engine selects, each a native `<details>`. A gap
+ *     records the relevance engine selects, each standing open. A gap
  *     renders nothing and is never backfilled (`kapitel-3`, D5, DEC-0175 §3).
  *  6. **Who is behind it** — the person, with the cleared 4:5 portrait (D7).
  *  7. **Principles** — the village argument of DEC-0084 §2 as three numbered
  *     principles, carrying the one price token (`grundsaetze`, A4).
  *  8. **Award** — the NØRD award and the one link to the archive (D6).
  *  9. **Newsletter** — nothing renders while no sending system is named.
- * 10/11. **Context band and closing CTA**, from `PageFrame` — the closing
- *     block is the page's one `data-cta="primary"`, into `#kontakt`.
+ * 10/11. **Context band**, from `PageFrame`. The page has no closing CTA
+ *     and no `data-cta="primary"`: the contact section follows the band
+ *     (DEC-0186).
  *
  * No counter, no year figure, no "seit …" claim (D4).
  */
@@ -280,14 +280,9 @@ export default async function Page({
       {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
       <PageFrame
-        closing={{
-          // D1/A10: the page's one `data-cta="primary"`, in the closing block
-          // only, resolving to this page's own contact section.
-          hash: CONTACT_SECTION_ID,
-          label: words.contactSection.rows.appointment,
-          marker: "primary",
-          to: ROUTE,
-        }}
+        // No closing CTA: the contact section follows the band (owner,
+        // 2026-10-29, DEC-0186), so a button before it only repeats it.
+        closing={{ variant: "none" }}
         locale={locale}
         meta={pageMeta}
       >
@@ -377,9 +372,9 @@ export default async function Page({
           </MotionReveal>
         </SectionShell>
 
-        {/* 5 — chapter 03: the stream as an accordion of stories (D5,
-            DEC-0162 §2, DEC-0175 §1). The relevance engine picks and orders
-            them; each opens in place and moves nothing above it. */}
+        {/* 5 — chapter 03: the stream as open stories, pull quote and indented
+            text (D5, DEC-0162 §2; owner, 2026-10-29: no accordion). The
+            relevance engine picks and orders them. */}
         <SectionShell dataBlock="kapitel-3" labelledBy="kapitel-3-h2" surface="paper">
           <MotionReveal>
             <div className={styles.chapter}>
@@ -391,11 +386,7 @@ export default async function Page({
             {/* The space above the stories is the reveal's stack gap
                 (DEC-0171). A `className` margin used to ask for it and lost
                 the cascade to the list's own `margin: 0` (issue 108). */}
-            <StoryDisclosure
-              closeLabel={chapter(CHAPTERS.storyClose) ?? ""}
-              openLabel={chapter(CHAPTERS.storyOpen) ?? ""}
-              stories={storyItems}
-            />
+            <StoryDisclosure stories={storyItems} />
           </MotionReveal>
         </SectionShell>
 

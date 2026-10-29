@@ -1,41 +1,24 @@
 /*
- * `story-disclosure` — SRC-0014 §Story disclosure, DEC-0162 §2, an accordion
- * since DEC-0175 §1.
- *
- * One column at every width: an item never changes its column or its place,
- * so opening one moves no sibling sideways and nothing above it at all. Flat
- * blocks on the section ground: radius 0, no border, no shadow. A closed
- * story is a `lime-100` block with `ink` type, an open one a `violet-500`
- * block with `paper` type. The state is read off the native `<details>` with
- * `:has()`; no script decides anything here, and nothing transitions.
+ * `story-disclosure` — SRC-0014 §Story disclosure, DEC-0162 §2. Since the
+ * owner's review of 2026-10-29 the stories are not an accordion any more: every
+ * story stands open, read as a magazine column. The record's claim is the pull
+ * quote — set large, with a violet opening quote mark hanging in the margin —
+ * and the story below it is indented under a violet rule. Flat, radius 0, no
+ * border box, no shadow; tokens only; nothing moves and nothing transitions.
  */
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: calc(var(--space-4) * 2);
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .item {
-  background: var(--color-lime-100);
-  color: var(--color-neutral-ink);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding: var(--space-4);
-}
-
-.item:has(.details[open]) {
-  background: var(--color-violet-500);
-  color: var(--color-neutral-paper);
-}
-
-.head {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
 }
 
 .kicker {
@@ -49,89 +32,32 @@
   text-transform: uppercase;
 }
 
-.item:has(.details[open]) .kicker {
-  color: var(--color-lime-300);
-}
-
+/* The pull quote: the claim, large, behind a hanging opening quote mark. */
 .title {
-  font-size: var(--type-card-size);
+  font-size: var(--type-subhead-size);
   font-weight: 700;
   letter-spacing: var(--type-card-tracking);
   line-height: var(--type-card-leading);
   margin: 0;
   max-width: var(--span-8);
+  position: relative;
 }
 
-.details {
-  margin: 0;
+.title::before {
+  color: var(--color-violet-500);
+  content: open-quote;
+  display: block;
+  font-size: var(--type-display-size);
+  line-height: 0.8;
+  margin-bottom: var(--space-2);
 }
 
-.summary {
-  align-items: center;
-  cursor: pointer;
-  display: inline-flex;
-  font-size: var(--type-meta-size);
-  font-weight: 700;
-  gap: var(--space-3);
-  list-style: none;
-  min-height: var(--height-control);
-  width: fit-content;
-}
-
-/* The engine's own marker: the control well replaces it. */
-.summary::-webkit-details-marker {
-  display: none;
-}
-
-.summary:focus-visible {
-  outline: 3px solid var(--color-violet-500);
-  outline-offset: 2px;
-}
-
-.item:has(.details[open]) .summary:focus-visible {
-  outline-color: var(--color-neutral-paper);
-}
-
-.closeLabel {
-  display: none;
-}
-
-.details[open] .openLabel {
-  display: none;
-}
-
-.details[open] .closeLabel {
-  display: inline;
-}
-
-/* SRC-0014 §Wells: the 44 px control well, `ink` with a `paper` glyph on a
-   light block, `paper` with an `ink` glyph on the violet one. */
-.well {
-  align-items: center;
-  background: var(--color-neutral-ink);
-  border-radius: 999px;
-  color: var(--color-neutral-paper);
-  display: inline-flex;
-  flex: none;
-  height: var(--height-control);
-  justify-content: center;
-  width: var(--height-control);
-}
-
-.details[open] .well {
-  background: var(--color-neutral-paper);
-  color: var(--color-neutral-ink);
-}
-
-/* Open, the plus reads as a close mark. A state, not a movement: no
-   transition (SRC-0014 §Motion). */
-.details[open] .glyph {
-  transform: rotate(45deg);
-}
-
+/* The story, indented under a rule, in the reading measure. */
 .story {
+  border-left: 4px solid var(--color-violet-500);
   font-size: var(--type-body-size);
   line-height: var(--leading-relaxed);
-  margin: var(--space-3) 0 0;
+  margin: 0;
   max-width: min(var(--measure-text), var(--span-7));
+  padding-left: var(--space-4);
 }

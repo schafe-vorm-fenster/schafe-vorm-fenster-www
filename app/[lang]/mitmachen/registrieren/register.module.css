@@ -5,16 +5,6 @@
  */
 
 /*
- * The notice (TS-WEB-0016 D17): one block above the frame, read at body size.
- * The space between the heading, the notice, the fallback link and the frame
- * is the section's content stack's (DEC-0171) — no block here carries an
- * outer margin of its own.
- */
-.notice {
-  max-width: var(--measure-text);
-}
-
-/*
  * The frame. Google's form is a 640 px card, so the frame stops at that width
  * and is the container's full width below it. Its height is **reserved** —
  * a fixed value in the stylesheet, set before the third party's document

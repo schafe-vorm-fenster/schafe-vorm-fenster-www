@@ -1,13 +1,10 @@
 import { ContextBand } from "@/src/components/context-band/context-band";
-import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
-import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
-import { linkHref } from "@/src/components/route-link/href";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { slot } from "@/src/lib/content/loader";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { jobLabelKey } from "@/src/lib/pages/page-meta";
-import { leadFormEmbedUrl, leadFormOpenUrl } from "@/src/lib/routes/lead-fallback";
+import { leadFormEmbedUrl } from "@/src/lib/routes/lead-fallback";
 
 import { PageJsonLd } from "../../_structured-data";
 import { pageContent } from "../../_content";
@@ -32,21 +29,14 @@ import styles from "./register.module.css";
  * The flow is not deleted: `flow-page.tsx` is its page composition as it
  * stood, and bringing it back is swapping one import here.
  *
- * Structure, in DOM order: the heading; the notice (TS-WEB-0016 D17 — the form
- * is Google's, loading the page contacts Google, the detail is on
- * `/rechtliches#datenschutz`), the same words `/start` uses; the link that
- * opens the same form in a new tab, for a visitor whose browser refuses the
- * frame or who wants the whole window; the frame. Then the context band, as on
- * the flow's step 1 (D7).
+ * Structure, in DOM order: the heading; the frame. Then the context band, as on
+ * the flow's step 1 (D7). The form says itself that Google provides it, so the
+ * page carries no notice and no new-tab link of its own (owner, 2026-10-29).
  *
  * Measurement (DEC-0176 §4): `register-as-publisher` at `stage: handover`,
  * once when the visitor first moves on inside the form
- * (`register-form-frame.tsx`) and on a click of the new-tab link. The
- * submission is Google's and is not observable from this page.
- *
- * The notice, the frame title and the link label are final wording since
- * 2026-10-28 (DEC-0176 amendment; `state/open.md` rows 223, 224 and 292
- * closed), so none of them carries `data-demo` any more.
+ * (`register-form-frame.tsx`). The submission is Google's and is not
+ * observable from this page.
  */
 
 const ROUTE = "register" as const;
@@ -72,24 +62,6 @@ export default async function Page({ params }: { params: Promise<{ lang: string 
       <PageJsonLd locale={locale} route={ROUTE} />
       <SectionShell dataBlock="register-form" id="register-form" surface="paper">
         <h1>{words.pages.register}</h1>
-        {/* TS-WEB-0016 D17 — above the frame, in DOM order and visually. A
-            paragraph and a link: nothing on the page waits for it. */}
-        <p className={styles.notice} data-block="embed-notice">
-          {words.start.notice} <a href={linkHref("legal", { locale, hash: "datenschutz" })}>{words.start.noticeLink}</a>
-        </p>
-        <p data-block="register-form-fallback">
-          <ConversionTracker attributes={{ via: "new-tab" }} goalId="register-as-publisher" stage="handover">
-            <OutboundLink
-              dataCta="secondary"
-              href={leadFormOpenUrl()}
-              locale={locale}
-              markingOwnLine
-              recipient="Google"
-            >
-              {words.start.openForm}
-            </OutboundLink>
-          </ConversionTracker>
-        </p>
         <RegisterFormFrame className={styles.frame} src={leadFormEmbedUrl()} title={words.start.frameTitle} />
       </SectionShell>
       {/* TS-WEB-0011-A4 (F-2-41): the band is an `aside`. */}
