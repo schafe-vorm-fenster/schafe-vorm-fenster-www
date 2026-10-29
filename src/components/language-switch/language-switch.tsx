@@ -12,6 +12,14 @@ export interface LanguageSwitchProps {
   readonly route: RouteId;
   readonly current: Locale;
   readonly label?: string;
+  /**
+   * `solid` (the default) is the footer's: a lifted `ink` track, the current
+   * segment `lime-500`. `glass` is the phone menu overlay's (owner,
+   * 2026-10-29, DEC-0189): a translucent `paper` track on the blurred page,
+   * the current segment a lighter translucent fill — never colour alone, the
+   * fill and `aria-current` carry it.
+   */
+  readonly tone?: "solid" | "glass";
   readonly className?: string;
 }
 
@@ -30,19 +38,19 @@ export interface LanguageSwitchProps {
  * is a choice the visitor makes, not something the site guesses from an IP.
  * Inherits: Label-mono type; `lime-500` fill with `ink` text for the active
  * segment, `paper` on an `ink`-lifted track for the other (SRC-0014
- * §Site footer). It always stands on `ink` — the footer and the phone menu
- * overlay are both that ground, so there is no tone to choose.
+ * §Site footer) on the footer; the phone menu overlay takes the `glass`
+ * tone (DEC-0189).
  * Space: fixed; the language set is known at build time.
  * A11y: a `nav` named after the footer's "Sprache"; `hreflang` and `lang` on
  * every link, because each name is in its own language; the current page is
  * told by `aria-current`, not by colour alone; targets ≥ 44 px; the focus
  * ring is the dark-ground one.
  */
-export function LanguageSwitch({ route, current, label, className }: LanguageSwitchProps) {
+export function LanguageSwitch({ route, current, label, tone = "solid", className }: LanguageSwitchProps) {
   const name = label ?? dictionary(current).footer.language;
 
   return (
-    <nav aria-label={name} className={[styles.nav, className].filter(Boolean).join(" ")}>
+    <nav aria-label={name} className={[styles.nav, className].filter(Boolean).join(" ")} data-tone={tone}>
       <ul className={styles.track}>
         {LOCALES.map((locale) => (
           <li className={styles.item} key={locale}>

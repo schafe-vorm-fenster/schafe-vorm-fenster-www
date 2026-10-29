@@ -94,24 +94,24 @@ test.describe("TS-WEB-0004-A8: the header inventory at both widths", () => {
     await expect(burger(page)).toBeHidden();
   });
 
-  test("below `xl` the same five destinations are reachable behind the burger", async ({
+  test("on the phone the bar is mark and burger, and the overlay reaches every destination", async ({
     page,
   }) => {
     await page.setViewportSize(PHONE);
     await page.goto("/");
 
-    // The calendar entry never leaves the bar — TS-WEB-0004 D4's persistent
-    // entry. Its "on every page" half is the route walk further down.
-    await expect(header(page).getByRole("link", { exact: true, name: CALENDAR })).toBeVisible();
+    // DEC-0189: no calendar pill below `md`. Its destination is the menu's
+    // first job, so nothing becomes unreachable.
+    await expect(header(page).getByRole("link", { exact: true, name: CALENDAR })).toBeHidden();
     await expect(burger(page)).toBeVisible();
 
     await burger(page).click();
     const menu = dialog(page);
     await expect(menu).toBeVisible();
-    await expect(menu.getByRole("navigation", { name: "Menü" }).getByRole("link")).toHaveText(
-      JOBS,
-    );
-    await expect(menu.getByRole("link", { exact: true, name: CALENDAR })).toBeVisible();
+    const jobs = menu.getByRole("navigation", { name: "Menü" }).getByRole("link");
+    await expect(jobs).toHaveText(JOBS);
+    await expect(jobs.first()).toHaveAttribute("href", href(HEADER_CALENDAR_ENTRY.route, "de"));
+    await expect(menu.getByRole("link", { exact: true, name: CALENDAR })).toHaveCount(0);
     await expect(menu.getByRole("navigation", { name: "Sprache" })).toBeVisible();
   });
 
@@ -419,7 +419,9 @@ test.describe("TS-WEB-0004-A8: without JavaScript the header is solid, items inc
  * reference width and at the desktop one rather than at whatever the Playwright
  * project's default happens to be.
  */
-for (const width of [360, 1280]) {
+// From `md` up (DEC-0189): below it the bar carries no pill, and the entry's
+// destination is the phone menu's first job, asserted in the phone test above.
+for (const width of [640, 1280]) {
   test(`TS-WEB-0017-A12: the persistent calendar entry is in the header of every page at ${width}px, at the D4 target`, async ({
     page,
   }) => {

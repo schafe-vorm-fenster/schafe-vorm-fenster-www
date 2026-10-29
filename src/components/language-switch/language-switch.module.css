@@ -60,3 +60,21 @@
   outline: var(--focus-ring-width) solid var(--color-roles-focus-dark);
   outline-offset: var(--focus-ring-offset);
 }
+
+/*
+ * `glass` — the phone menu overlay (DEC-0189). The overlay is the page itself,
+ * blurred under `scrim-72`, so the track is a translucent `paper` lift and the
+ * current segment a stronger one, both with `paper` text.
+ */
+.nav[data-tone="glass"] .track {
+  background: color-mix(in srgb, var(--color-neutral-paper) 12%, transparent);
+}
+
+.nav[data-tone="glass"] .segment {
+  color: color-mix(in srgb, var(--color-neutral-paper) 78%, transparent);
+}
+
+.nav[data-tone="glass"] .segment[aria-current="page"] {
+  background: color-mix(in srgb, var(--color-neutral-paper) 22%, transparent);
+  color: var(--color-neutral-paper);
+}

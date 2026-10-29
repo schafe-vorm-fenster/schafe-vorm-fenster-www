@@ -80,6 +80,12 @@ export interface SiteHeaderProps {
  * which of them is disclosed — but it *is* a change of visible presence, which
  * TS-WEB-0017 D2(d) as written does not allow and TS-WEB-0004 D4 does not describe.
  * Jan's wording is the decision; the deviation is recorded, not silent.
+ *
+ * **The phone, since DEC-0189 (owner, 2026-10-29).** Below `md` the bar is
+ * the mark and the burger only — the calendar pill comes back at `md`, and
+ * its destination is the overlay's first job. The overlay is the page itself,
+ * blurred under `scrim-72`, with the jobs as Label-mono pill rows and the
+ * language switch centred at its foot.
  */
 export function SiteHeader({
   current,
