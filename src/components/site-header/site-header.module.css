@@ -573,3 +573,32 @@
     margin-inline-end: 0;
   }
 }
+
+/* ── 80rem / 1280px up — owner's review 2026-10-29: the row sat hard against the
+ * wordmark, so it is centred between the mark and the pill, and
+ * the wordmark hangs beside the mark out of flow — the bar's geometry is the
+ * same with and without it, and the free space either side of the row is wider
+ * than the wordmark (measured at 1280: 172 px against 102 px). ──────────── */
+
+@media (min-width: 80rem) {
+  .nav {
+    padding-inline-start: 0;
+  }
+
+  .inner .logo {
+    position: relative;
+    width: 40px;
+  }
+
+  .inner .logo [data-wordmark] {
+    inset-block-start: 50%;
+    inset-inline-start: calc(40px + var(--space-3));
+    position: absolute;
+    transform: translateY(-50%);
+    white-space: nowrap;
+  }
+
+  .header .list {
+    margin-inline: auto;
+  }
+}
