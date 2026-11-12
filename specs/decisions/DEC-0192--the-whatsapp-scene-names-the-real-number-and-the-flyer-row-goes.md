@@ -62,3 +62,21 @@ veröffentlichen"; "Aus dem Flyer geworden" is crossed out.
   `explain-module.test.tsx` and `contact-channels.test.ts` cover the teaser and
   the token.
 - `state/open.md` rows 92, 244, 245 and 247 are updated.
+
+**Amendment 2026-11-12 (owner, third review of #142):**
+
+- **Transition (home):** "Die Termine tippt niemand bei uns ein. Sie kommen
+  von den Vereinen und den Veranstaltern, die hier im Ehrenamt etwas auf die
+  Beine stellen. Meistens so:" (EN: "Nobody types these dates in. They come
+  from the clubs and the organisers who put something on around here as
+  volunteers. Usually like this:").
+- **Address on `/`:** the whole WhatsApp scene addresses `du`, the page's
+  default (CG-001: the person who photographs a flyer is `du`; CG-002: a
+  block departs whole or not at all), no longer `ihr`. Steps, chat reply and
+  teaser read: "Den du sowieso gedruckt hast." · "Im Chat prüfst und
+  bestätigst du den Termin." · "In deinem Ort und drumherum." · "Danke! Bitte
+  prüf den Termin und bestätige ihn hier." · "Du kannst deine Termine auch …
+  Oder du hast eine Webseite …". The quotations in items 3 and 4 above are the
+  earlier version. `/mitmachen` path 01 keeps `ihr`, which is the address
+  CG-002 gives its publishing paths, so the two slots now differ in address
+  only.

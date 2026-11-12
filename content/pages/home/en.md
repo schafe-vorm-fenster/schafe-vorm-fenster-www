@@ -171,7 +171,7 @@ gap in the visitor's own place, not a gap in the system.
 
 **Kicker:** How the dates get in
 
-**Transition:** Nobody here types those dates in. They come from the clubs, the fire brigades and everyone who puts something on around here — usually like this:
+**Transition:** Nobody types these dates in. They come from the clubs and the organisers who put something on around here as volunteers. Usually like this:
 
 **Explain-module title:** Send a flyer by WhatsApp
 

@@ -172,11 +172,11 @@ Lücke im eigenen Ort an, nicht die Lücke im System.
 
 **Kicker:** So kommen die Termine rein
 
-**Überleitung:** Die Termine oben tippt niemand bei uns ein. Sie kommen von den Vereinen, den Feuerwehren und allen, die hier im Ehrenamt etwas auf die Beine stellen — meistens so:
+**Überleitung:** Die Termine tippt niemand bei uns ein. Sie kommen von den Vereinen und den Veranstaltern, die hier im Ehrenamt etwas auf die Beine stellen. Meistens so:
 
 **Titel des Erklärmoduls:** Flyer per WhatsApp
 
-**Hinweis über dem Button:** Ihr könnt eure Termine auch in einem eigenen Kalender pflegen, zum Beispiel in einem Google Kalender, und wir importieren sie. Oder ihr habt eine Webseite, auf der schon alles steht? Dann holen wir die Termine von dort.
+**Hinweis über dem Button:** Du kannst deine Termine auch in einem eigenen Kalender pflegen, zum Beispiel in einem Google Kalender, und wir importieren sie. Oder du hast eine Webseite, auf der schon alles steht? Dann holen wir die Termine von dort.
 
 **CTA-Label (sekundär):** Mehr zum Veröffentlichen von Terminen
 
@@ -184,7 +184,9 @@ Hinweis und Button-Label sind Wortlaut des Owners (DEC-0192, 2026-11-12,
 Issue #141, zweite Fassung): der Hinweis beschreibt die zwei anderen Wege,
 Weg 02 und Weg 03 auf `/mitmachen` (eigener Kalender, Webseite als Quelle),
 das Label führt auf `takePart`. Die Szene trägt weiter genau ein CTA (D3a,
-DEC-0110 §1).
+DEC-0110 §1). Überleitung und Anrede ebenfalls Owner (dritte Fassung,
+2026-11-12): die ganze Szene spricht `du`, den Default der Seite (CG-001,
+CG-002), nicht mehr `ihr`.
 
 Quelle: `relievers[0]` der Value Proposition „actors--community-calendar" —
 „send a photo of the printed flyer by WhatsApp and the date is created
@@ -204,11 +206,11 @@ und das Ziel dieser Szene ist die Seite, die den Job besitzt.
 
 **Schritte:**
 
-1. Flyer fotografieren — Den ihr sowieso gedruckt habt.
-2. Per WhatsApp an uns schicken — An {whatsapp}. Im Chat prüft und bestätigt ihr den Termin.
-3. Termin wird automatisch online gestellt — In eurem Ort und drumherum.
+1. Flyer fotografieren — Den du sowieso gedruckt hast.
+2. Per WhatsApp an uns schicken — An {whatsapp}. Im Chat prüfst und bestätigst du den Termin.
+3. Termin wird automatisch online gestellt — In deinem Ort und drumherum.
 
-**Chat-Antwort (Zustand 2):** Danke! Bitte prüft den Termin und bestätigt ihn hier.
+**Chat-Antwort (Zustand 2):** Danke! Bitte prüf den Termin und bestätige ihn hier.
 
 **Chat-Uhrzeit (Zustand 2):** 14:06
 
