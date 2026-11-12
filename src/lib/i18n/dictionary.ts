@@ -154,6 +154,8 @@ export interface Dictionary {
      * heading never claims a week its rows leave.
      */
     nearbyUpcoming: string;
+    /** The one sentence under the nearby module's heading (issue 152) — the same on every page that carries it. */
+    nearbyLead: string;
     dates: string;
     places: string;
     updatesToday: string;
@@ -205,8 +207,6 @@ export interface Dictionary {
   kickers: {
     /** The live answer — this week's dates. */
     liveAnswer: string;
-    /** The widened radius — one place over. */
-    widerRadius: string;
     /** Benefit (CG-019): control over what the embedded calendar shows. */
     yourSettings: string;
     /** Benefit (CG-019): the `/dein-ort` bread-van story — supply, not an event. */
@@ -299,6 +299,12 @@ export interface Dictionary {
     permanent: string;
     /** No figure, no range, no "from". */
     onRequest: string;
+    /** The line under the free tier's "0 €" (DEC-0205). */
+    permanentNote: string;
+    /** The line under the on-request tier's statement (DEC-0205). */
+    onRequestNote: string;
+    /** The interval phrase under a priced tier's figure, before the net qualifier. */
+    perYear: string;
   };
   /**
    * The flow progress row's sentence — the accessible name of the dot row
@@ -599,6 +605,7 @@ const de: Dictionary = {
     stale: "Stand",
     genericCounty: "deiner Region",
     nearbyUpcoming: "Demnächst in der Nähe",
+    nearbyLead: "Was zwei Dörfer weiter läuft, gehört genauso in deinen Kalender.",
     dates: "Termine",
     places: "Orte",
     updatesToday: "Aktualisierungen heute",
@@ -615,8 +622,7 @@ const de: Dictionary = {
   },
   kickers: {
     liveAnswer: "Was gerade ansteht",
-    widerRadius: "Einen Ort weiter",
-    yourSettings: "Eure Einstellungen",
+    yourSettings: "Euer Kalender auf eurer Website",
     everydaySupply: "Versorgung",
     communityLife: "Gemeindeleben",
     cultureAndTourism: "Kultur & Tourismus",
@@ -650,6 +656,9 @@ const de: Dictionary = {
   price: {
     permanent: "Dauerhaft kostenfrei",
     onRequest: "Auf Anfrage",
+    permanentNote: "dauerhaft kostenfrei",
+    onRequestNote: "je nach Gebiet und Umfang",
+    perYear: "pro Jahr",
   },
   steps: {
     of: (step, total) => `Schritt ${step} von ${total}`,
@@ -832,6 +841,7 @@ const en: Dictionary = {
     stale: "As of",
     genericCounty: "your region",
     nearbyUpcoming: "Coming up nearby",
+    nearbyLead: "What's on two villages over belongs in your calendar just as much.",
     dates: "dates",
     places: "places",
     updatesToday: "updates today",
@@ -848,8 +858,7 @@ const en: Dictionary = {
   },
   kickers: {
     liveAnswer: "What's on now",
-    widerRadius: "One place over",
-    yourSettings: "Your settings",
+    yourSettings: "Your calendar on your website",
     everydaySupply: "Everyday supply",
     communityLife: "Community life",
     cultureAndTourism: "Culture & tourism",
@@ -881,6 +890,9 @@ const en: Dictionary = {
   price: {
     permanent: "Free, permanently",
     onRequest: "On request",
+    permanentNote: "free, permanently",
+    onRequestNote: "depending on area and scope",
+    perYear: "per year",
   },
   steps: {
     of: (step, total) => `Step ${step} of ${total}`,

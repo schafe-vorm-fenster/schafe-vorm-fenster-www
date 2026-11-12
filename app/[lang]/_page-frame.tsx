@@ -73,8 +73,8 @@ import type { ReactNode } from "react";
  * rather than the component's German default.
  */
 const BAND_HEADING: Record<Locale, string> = {
-  de: "Heute mit einem anderen Anliegen hier?",
-  en: "Here for something else today?",
+  de: "Erfahre mehr über unsere Kalenderplattform",
+  en: "Learn more about our calendar platform",
 };
 
 /** The closing block of TS-WEB-0006 D6, as the page hands it over. */

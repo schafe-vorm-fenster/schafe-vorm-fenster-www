@@ -145,6 +145,7 @@ export function DorfkalenderIntro({ locale }: DorfkalenderIntroProps) {
               <p className={styles.sentence}>{text.sentence}</p>
               <form
                 className={styles.pill}
+                method="get"
                 onSubmit={(event) => {
                   event.preventDefault();
                   load(input.current?.value ?? "");

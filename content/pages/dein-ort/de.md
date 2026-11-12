@@ -349,12 +349,6 @@ Kalender.
 
 <!-- id: dein-ort-6-story-radius; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#regional-footprint"]; status: draft -->
 
-**Titel:** Was in fünfzehn Minuten Entfernung passiert
-
-**Warum es zählt:** Was zwei Dörfer weiter läuft, gehört genauso in deinen Kalender wie das, was direkt vor deiner Tür passiert.
-
-**Überleitung:** Und es hört an der Gemeindegrenze nicht auf.
-
 **Beispiel:** Termine aus der Umgebung von {place}, live aus dem Kalender (Position 2, „diese Woche in der Nähe").
 
 Der Dorfkalender läuft heute in vier Bundesländern, und jede Region belegt
@@ -371,7 +365,7 @@ keine Reichweitenzahl).
 
 **Überschrift:** So landet der Kalender auf deinem Homescreen
 
-**iOS:** Öffne den Kalender von {place} in Safari. Tipp auf „Teilen", dann auf „Zum Home-Bildschirm". Fertig — er startet ab jetzt wie eine App.
+**iOS:** Öffne den Kalender von {place} in Safari. Tipp auf „Teilen", dann auf „Zum Home-Bildschirm". Fertig - er startet ab jetzt wie eine App.
 
 **Android:** Öffne den Kalender von {place} in Chrome. Tipp auf das Menü (drei Punkte), dann auf „Zum Startbildschirm hinzufügen". Fertig.
 
@@ -393,7 +387,7 @@ steht hier das Angebot zum Veröffentlichen, keine Homescreen-Anleitung.
 
 <!-- id: dein-ort-8-permanence; content_type: closing-cta; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#community-calendar"]; status: draft -->
 
-**Zusicherungstext:** Kostenlos, ohne Anmeldung, dauerhaft: keine Einführungsstufe, die später wieder verschwindet.
+**Zusicherungstext:** Dauerhaft kostenlos und ohne Anmeldung.
 
 **Anderer Ort:** Anderer Ort?
 
@@ -407,7 +401,7 @@ seit 2022, kein Preismodell, das sich leise ändern lässt.
 <!-- source_note: Angebotsformulierung statt Menü aus gtm:concept/website-communication-principles.concept.md Prinzip 2 („ordnen, nicht ausschließen"); die drei Jobs und ihre Formulierung aus der Job-Tabelle in Prinzip 1. Beantwortet state/open.md Zeile 95 für diese Seite: eigener Bandtext statt des geteilten Home-Satzes. -->
 <!-- id: dein-ort-9-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Kicker:** Heute mit einem anderen Anliegen hier?
+**Kicker:** Erfahre mehr über unsere Kalenderplattform
 
 - **Termine veröffentlichen:** Per WhatsApp oder über deinen Kalender → `/mitmachen`
 - **Eigenen Kalender betreiben:** Unter eigenem Namen, auf eurer Website → `/dein-kalender`

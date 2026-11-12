@@ -47,7 +47,7 @@ export interface ContextBandProps {
 export function ContextBand({
   currentJob,
   locale = "de",
-  heading = "Heute mit einem anderen Anliegen hier?",
+  heading = "Erfahre mehr über unsere Kalenderplattform",
   slot,
   className,
 }: ContextBandProps) {

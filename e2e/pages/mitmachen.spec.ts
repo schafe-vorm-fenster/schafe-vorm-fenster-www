@@ -187,7 +187,7 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A12/A13/A16/A17/A18/A19: /mitmachen", 
     }
 
     // The alpha mechanism keeps its badge while the hub record says so (D4).
-    await expect(page.getByText("In Erprobung (Alpha)")).toBeVisible();
+    await expect(page.getByText("In Erprobung", { exact: true })).toBeVisible();
 
     // A2 is unchanged by three module CTAs: a CTA in a module is a link.
     await expect(page.locator('[data-cta="primary"]')).toHaveCount(1);
