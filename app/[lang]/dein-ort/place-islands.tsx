@@ -257,7 +257,10 @@ export function PlaceNearby({ locale, titleTemplate }: { readonly locale: Locale
  */
 export function StoryExample({ storyId, locale }: { readonly storyId: string; readonly locale: Locale }) {
   const { anchor, held } = usePageState();
-  const dates = useLive<PlaceEvents>(held ? undefined : liveRoutes.placeEvents(anchor.slug, 12));
+  // Exactly position 1's own request (3 rows, DEC-0210): the rows it prints are
+  // chosen server-side by the shared preference, so "never a row position 1
+  // already prints" holds only if this asks for the same pick.
+  const dates = useLive<PlaceEvents>(held ? undefined : liveRoutes.placeEvents(anchor.slug, 3));
   const near = useLive<NearbyEvents>(held ? undefined : liveRoutes.nearby(anchor.lat, anchor.lng));
   const pool = useLive<{ readonly events: readonly LiveEvent[] }>(held ? undefined : liveRoutes.placeExamples(anchor.slug));
 
