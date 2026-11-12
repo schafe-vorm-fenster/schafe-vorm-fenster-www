@@ -616,7 +616,7 @@ const de: Dictionary = {
   kickers: {
     liveAnswer: "Was gerade ansteht",
     widerRadius: "Einen Ort weiter",
-    yourSettings: "Eure Einstellungen",
+    yourSettings: "Euer Kalender auf eurer Website",
     everydaySupply: "Versorgung",
     communityLife: "Gemeindeleben",
     cultureAndTourism: "Kultur & Tourismus",
@@ -849,7 +849,7 @@ const en: Dictionary = {
   kickers: {
     liveAnswer: "What's on now",
     widerRadius: "One place over",
-    yourSettings: "Your settings",
+    yourSettings: "Your calendar on your website",
     everydaySupply: "Everyday supply",
     communityLife: "Community life",
     cultureAndTourism: "Culture & tourism",

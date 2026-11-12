@@ -266,7 +266,7 @@ the positional rule did.
 | `archiv-2-rows-demo` | the 192-cell archive table | `app/[lang]/ueber-uns/archiv/page.tsx:95` |
 | `dein-kalender-2-contrast` | the four comparison rows and the head | `app/[lang]/dein-kalender/page.tsx:218`, `:219` |
 | `dein-kalender-3-embed-demo` | paragraph 0 — the two embed sentences | `app/[lang]/dein-kalender/page.tsx:194` |
-| `dein-kalender-3b-embed-config` | paragraphs 0 and 1, and the settings table | `app/[lang]/dein-kalender/page.tsx:198`, `content.ts:58` |
+| `dein-kalender-3b-embed-config` | paragraph 0, and the settings table | `app/[lang]/dein-kalender/page.tsx:198`, `content.ts:58` |
 | `dein-kalender-4-tiers-checks-demo` | the tier-checks table | `app/[lang]/dein-kalender/content.ts:58` |
 | `rechtliches-2-registry` | the section-title table | `app/[lang]/rechtliches/page.tsx:91` |
 | `registrieren-2-wer`, `registrieren-3-weg` | **every** list — the option labels | `app/[lang]/mitmachen/registrieren/page.tsx:189`, `:193` |

@@ -58,6 +58,9 @@ const ROUTES = everyRoute().map(({ route, locale }) => ({
 const visibleText = `(() => {
   const body = document.body.cloneNode(true);
   for (const drop of body.querySelectorAll("script, style, template, noscript")) drop.remove();
+  // DEC-0204: the bold "Beispiel:" before a real use case on /dein-kalender
+  // is the one label the sweep lets through, and only on that element.
+  for (const label of body.querySelectorAll("[data-example-label]")) label.remove();
   return body.innerText ?? body.textContent ?? "";
 })()`;
 

@@ -234,15 +234,21 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
     ).toHaveCount(0);
   });
 
-  test("TS-WEB-0024 D2 / DEC-0131: the configuration block carries the benefit band, six settings and no radius", async ({
+  test("TS-WEB-0024 D2 / DEC-0131: the configuration block carries six settings, bold example labels and no radius", async ({
     page,
   }) => {
     await page.goto(ROUTE);
     const block = page.locator('[data-block="embed-config"]');
     await expect(block).toHaveCount(1);
-    await expect(block.locator('[data-surface="lime-500"]')).toHaveCount(1);
+    // issue 162 / DEC-0204: no lime band any more, the section stays on paper.
+    await expect(block.locator('[data-surface="lime-500"]')).toHaveCount(0);
     // Six settings, each an `h3` inside its row.
     await expect(block.locator("li h3")).toHaveCount(6);
+    // Each example opens with a bold "Beispiel:" of at least 15 px (issue 162).
+    const labels = block.locator("[data-example-label]");
+    await expect(labels).toHaveCount(3);
+    await expect(labels.first()).toHaveText("Beispiel:");
+    expect(parseFloat(await labels.first().evaluate((el) => getComputedStyle(el.parentElement!).fontSize))).toBeGreaterThanOrEqual(15);
     // One setting is still unconfirmed upstream and says so as a badge, not
     // as a softened sentence (DEC-0118).
     await expect(block.getByText("wird geprüft")).toBeVisible();
@@ -353,7 +359,7 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
     for (const kicker of [
       "Warum es heute hakt",
       "So funktioniert es",
-      "Eure Einstellungen",
+      "Euer Kalender auf eurer Website",
       "Was es kostet",
       "Wer den Kalender nutzt",
       "Wie wir arbeiten",

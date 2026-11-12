@@ -230,3 +230,4 @@ amended. That difference is the difference between the two artefacts.
 - [DEC-0193 — The embed scene is redesigned around an interactive calendar graphic](DEC-0193--the-embed-scene-is-redesigned-around-an-interactive-calendar-graphic.md)
 - [DEC-0194 — The home intro is a drawn phone with a legend, and the place search moves into it](DEC-0194--the-home-intro-is-a-drawn-phone-with-a-legend-and-the-search-moves-into-it.md)
 - [DEC-0195 — The home page has no closing block, and its context band is headed "Erfahre mehr über unsere Kalenderplattform"](DEC-0195--the-home-page-has-no-closing-block-and-the-band-is-headed-learn-more.md)
+- [DEC-0204 — The settings section explains the embedding in its head, drops the source-to-target band and labels its examples "Beispiel:"](DEC-0204--the-settings-section-explains-the-embedding-in-its-head-and-labels-its-examples.md)

@@ -15,7 +15,6 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 const ARCHIVE_GROUND = "--color-archive-ground";
 const LIME_100 = "--color-lime-100";
 const LIME_500 = "--color-lime-500";
-const PAPER = "--color-neutral-paper";
 const VIOLET_500 = "--color-violet-500";
 const TRANSPARENT = "transparent";
 
@@ -95,50 +94,16 @@ test.describe("DEC-0172: the comparison, the flow, the proof stream and the trus
       }
     });
 
-    test(`TS-WEB-0024-A24: the benefit band is a flow from the sources to one target, with no pill in it — ${viewport.width}px`, async ({
+    test(`TS-WEB-0024-A24: the settings section has no lime band and no flow — ${viewport.width}px`, async ({
       page,
     }) => {
       await open(page, "/dein-kalender", viewport);
-      const band = page.locator('[data-block="embed-config"] [data-surface="lime-500"]');
-      expect(await css(band, "background-color")).toBe(await token(page, LIME_500));
-
-      const flow = band.locator("figure[data-flow]");
-      await expect(flow).toHaveCount(1);
-      await expect(flow.locator("figcaption")).toHaveCount(1);
-      const sources = flow.locator("ul > li[data-flow-source]");
-      await expect(sources).toHaveCount(3);
-      const target = flow.locator("[data-flow-target]");
-      await expect(target).toHaveCount(1);
-      // The arrow is decoration; the order of the markup says the direction.
-      await expect(flow.locator('[aria-hidden="true"] svg')).not.toHaveCount(0);
-
-      // Nothing in the flow is a control, so nothing in it is drawn as one: a
-      // source has no fill and no radius, the target is a flat square field
-      // whose fill is not its ground (DEC-0154: a fill never equals its ground).
-      await expect(flow.locator("a, button")).toHaveCount(0);
-      for (let index = 0; index < 3; index += 1) {
-        const source = sources.nth(index);
-        expect(await css(source, "background-color")).toBe(await token(page, TRANSPARENT));
-        expect(await css(source, "border-top-left-radius")).toBe("0px");
-      }
-      expect(await css(target, "background-color")).toBe(await token(page, PAPER));
-      expect(await css(target, "border-top-left-radius")).toBe("0px");
-
-      // The sources are the actors' ways in; the reader's own website is the
-      // target and appears once. No source is addressed to the reader — that
-      // was "eure eigene Website" beside "eure Website" (#96).
-      const sourceText = (await sources.allInnerTexts()).join(" ").toLowerCase();
-      expect(sourceText).not.toMatch(/\beure\b|\byour\b/);
-
-      // Below `xl` the target follows the sources; from `xl` it stands to
-      // their right in the same row.
-      const last = await box(sources.nth(2));
-      const goal = await box(target);
-      if (viewport.width < 1024) {
-        expect(goal.y).toBeGreaterThan(last.y + last.height);
-      } else {
-        expect(goal.x).toBeGreaterThan(last.x + last.width);
-      }
+      const block = page.locator('[data-block="embed-config"]');
+      await expect(block.locator('[data-surface="lime-500"]')).toHaveCount(0);
+      await expect(block.locator("figure[data-flow]")).toHaveCount(0);
+      await expect(block.getByText("So kommen sie rein")).toHaveCount(0);
+      await expect(block.getByText("Hier landen sie")).toHaveCount(0);
+      await expect(block.getByText("Das könnt ihr einstellen")).toBeVisible();
     });
 
     for (const [path, blockId] of [

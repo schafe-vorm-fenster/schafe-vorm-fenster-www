@@ -156,8 +156,8 @@ export interface CopyText {
  * `ueber-uns-3-proof-stream` and the `archiv-2-rows-demo` table (shape: a
  * list or table under an intro paragraph), plus the three paragraphs of
  * `/dein-kalender` that the page reads by index — `dein-kalender-3-embed-demo`
- * paragraph 0 and `dein-kalender-3b-embed-config` paragraphs 0 and 1
- * (`app/[lang]/dein-kalender/page.tsx:414`, `:449`, `:472`) — in both
+ * paragraph 0 and `dein-kalender-3b-embed-config` paragraph 0
+ * (`app/[lang]/dein-kalender/page.tsx:412`, `:445`) — in both
  * locales.
  */
 export function copyOf(page: PageContent): CopyText[] {
@@ -682,7 +682,7 @@ export const RENDERED_BLOCKS: readonly {
     slot: "dein-kalender-5-proof-demo",
     kind: "list",
     index: "all",
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:286 (listItems, every list)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:281 (listItems, every list)",
   },
   {
     slot: "archiv-2-rows-demo",
@@ -695,19 +695,13 @@ export const RENDERED_BLOCKS: readonly {
     slot: "dein-kalender-3-embed-demo",
     kind: "paragraph",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:194 (rendered at :415)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:193 (rendered at :412)",
   },
   {
     slot: "dein-kalender-3b-embed-config",
     kind: "paragraph",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:198 (rendered at :450)",
-  },
-  {
-    slot: "dein-kalender-3b-embed-config",
-    kind: "paragraph",
-    index: 1,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:198 (rendered at :473)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:197 (rendered at :445)",
   },
   // — the render sites QA round 4 found missing: every other slot a page
   //   reads by index or by kind (`validate.test.ts` proves the list is
@@ -788,19 +782,19 @@ export const RENDERED_BLOCKS: readonly {
     slot: "dein-kalender-2-contrast",
     kind: "table",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:218 (rows; head at :219)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:213 (rows; head at :214)",
   },
   {
     slot: "dein-kalender-3b-embed-config",
     kind: "table",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/content.ts:58 (settingRows, from page.tsx:221)",
+    renderedBy: "app/[lang]/dein-kalender/content.ts:58 (settingRows, from page.tsx:199)",
   },
   {
     slot: "dein-kalender-4-tiers-checks-demo",
     kind: "table",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/content.ts:58 (tierChecks, from page.tsx:227)",
+    renderedBy: "app/[lang]/dein-kalender/content.ts:58 (tierChecks, from page.tsx:205)",
   },
   {
     slot: "rechtliches-2-registry",
