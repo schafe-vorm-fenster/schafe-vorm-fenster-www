@@ -41,7 +41,7 @@ source).
 
 | Pos | Module | Radius | Shows | Carried by |
 | --- | --- | --- | --- | --- |
-| 1 | dates in the place | place (community) | the next 3 dates of the searched/known place | `/`, `/dein-ort` |
+| 1 | dates in the place | place (community) | 3 dates of the searched/known place, chosen from its next 30 by the shared preference (D3, DEC-0210) | `/`, `/dein-ort` |
 | 1′ | embed demo (replaces 1) | place | the real Portalize widget, filtered to the searched place (D6) | `/dein-kalender`, `/deine-region` (focus job "run our own calendar") |
 | 2 | this week nearby | ~20 km (the events-api's `region` scope) | up to 5 dates, each with its place name — a varied selection of the week (different categories and organisers, at most two recurring dates), taken from the fortnight where the week passes fewer than five (D3, DEC-0185) | `/`, `/dein-ort`, empty state (D4) |
 | 3 | active places in the county | county | a small set of active example places — **never a place list** (DEC-0034) | `/deine-region`, `/dein-ort/starten` (nearest active place) |
@@ -148,6 +148,15 @@ Rules:
 - **The window** for positions 1 and 2: position 1 asks
   `after=now`, position 2 `after=now&before=7d`, in `Europe/Berlin`.
   "Today" is the local calendar day, not a rolling 24 h. [PROPOSED]
+- **Position 1 chooses, it does not take the first three** [FIXED: owner
+  decision 2026-11-12, DEC-0210, issue #22]. Position 1 is no longer strictly
+  chronological: out of the next 30 dates of its window it shows three by the
+  one preference every date selection shares (`src/lib/live/event-preference.ts`):
+  a one-off before a recurring date, the least-represented category first,
+  culture (`culture-tourism`) on a tie, then the earlier start; the three are
+  displayed in start order. Past dates and dates outside the window never enter
+  the pool. The nearby module (below) and the home intro's phone use the same
+  function. `A22`.
 - **Position 2 picks a varied week** [FIXED: owner review 2026-10-28,
   DEC-0185, supersedes "fills its rows" of 2026-10-27]. One call asks the
   events-api's `region` scope for the next 14 days (ISO instants; the relative
@@ -155,7 +164,8 @@ Rules:
   (`src/lib/live/varied-week.ts`) takes five dates from the **next 7 days**:
   different organisers (one date per organiser), the least-represented
   category first, at most two recurring dates (`occurrence` ≠ `once`), one-offs
-  before recurring ones, start order. Where the week passes fewer than five,
+  before recurring ones, start order (the shared preference of DEC-0210: a
+  one-off outranks category spread, culture wins a tie). Where the week passes fewer than five,
   the same rules run over the 14 days. Where fewer than five pass, the list is
   shorter — it is never refilled with a second date of an organiser. The
   answer carries `window`: `week` while every row starts inside the seven
@@ -377,23 +387,19 @@ Links from the website into the app are built from the geo-api community
 
 ## Owed by the owner's review of 2026-10-12 (DEC-0154)
 
-Two rules the live-data layer does not yet carry, each with its issue:
+Two rules the live-data layer did not yet carry, each with its issue:
 
-- **The rows shown are chosen for variety, not only for time** (issue #22). Today
-  position 1 and position 2 sort by start time (`byStart`). The goal: thematically
-  diverse rows, culture (`culture-tourism`) taken in where there is any, a date
-  that happens once ahead of one that recurs every week. Only measurable features
-  rank (category, `occurrence`, a description, an image, distance); no invented
-  weights. DEC-0152 introduced this for the story examples; the lists follow.
+- ~~**The rows shown are chosen for variety, not only for time** (issue #22).~~
+  **Done by DEC-0210.** Every date selection (home intro, nearby module,
+  position 1 including `/dein-ort`) prefers one-offs, mixes the themes and takes
+  culture on a tie; only measurable features rank (category, `occurrence`), no
+  invented weights (D3, A22).
 - ~~**A test date is never shown** (issue #52).~~ **Done by DEC-0173 §3.**
   The date the review saw came from the Portalize widget, which reads
   events-api unfiltered (portalize#144). This site's own tokenless source was
   already clean because the village calendar filters before it renders. The
   token-scoped source was not. Both adapters now drop a test organizer's
   dates (D2, row "Test organizers"; A20, A21).
-
-The variety rule has no acceptance criterion yet. It arrives with its tests
-(TS-WEB-0017 D6c) in the work package for #22.
 
 ## Acceptance criteria
 
@@ -420,12 +426,13 @@ The variety rule has no acceptance criterion yet. It arrives with its tests
 | TS-WEB-0008-A16 | static | No visitor-facing string of a place-search surface contains "Postleitzahl", "PLZ" or "postcode" — checked over the search module's label, placeholder, hint and submit in both locale dictionaries and over the search blocks of the page content artifacts for `/`, `/dein-ort`, `/dein-ort/starten`, `/deine-region` and `/mitmachen/registrieren` (FUN-WEB-0155, FUN-WEB-0156, FUN-WEB-0157, CON-WEB-0070, CON-WEB-0071, CON-WEB-0072). The order flow's scope step (TS-WEB-0025 D3) is out of scope: its postcode entry is a purchase configuration, not the place search. |
 | TS-WEB-0008-A20 | unit | With `MATEO_TEST_USER_IDS` naming an organizer, `toLiveEvents` drops every event whose `organizer.id` is that organizer, and `toLiveEventsFromSite` drops every event whose `calendar.organizer._id` is. Both keep the order of the rest, keep an event with no organizer id, and keep a real organizer's event whose title says "TEST". With the variable empty, nothing is dropped. Position 1 and the nearby list built from a public page whose dates all belong to the listed organizer are empty, and they are not empty when the variable is unset (DEC-0173 §3). |
 | TS-WEB-0008-A21 | e2e | The rendered text of `/dein-kalender` outside the widget's shadow root contains no word "TEST" (DEC-0173 §3; the widget's half is TS-WEB-0024-A22). |
+| TS-WEB-0008-A22 | unit | The shared date preference (D3 "Position 1 chooses", DEC-0210): a one-off outranks a recurring date however late it starts; categories are mixed before one repeats; `culture-tourism` wins a tie; the chosen dates are shown in start order; the result is a subset of the candidate list, so nothing past or outside the caller's window enters. The same function serves position 1 (`placeEvents`, `publicPlaceEvents`), the nearby module (`pickVaried`) and the home intro's slots (`pickRows`). `event-preference.test.ts`, `dorfkalender.test.ts`, `varied-week.test.ts`, `public-source.integration.test.ts`. |
 
 ## Coverage
 
 | Requirement | Discharged by |
 | --- | --- |
-| FUN-WEB-0040 (live data wherever it proves something) | D1, D2, D3, D7, D8 · A2, A4, A9, A14, A18, A19, A20, A21 |
+| FUN-WEB-0040 (live data wherever it proves something) | D1, D2, D3, D7, D8 · A2, A4, A9, A14, A18, A19, A20, A21, A22 |
 | FUN-WEB-0041 (count it live or not show it at all) | D8, D5 counters row · A9, A10 |
 | FUN-WEB-0043 (embed demo via Portalize loader) | D6 · A8, A12 |
 | FUN-WEB-0153 (start the widening chain at radius 2) | D4, D3 step 2 · A6 |

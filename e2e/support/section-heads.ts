@@ -36,6 +36,10 @@
  * finds "Wer den Kalender **nutzt**" over "Wo es wirklich **benutzt** wird"
  * (the owner's own example). A repeated **statement** in different words is
  * beyond a stem and stays a review item (SRC-0017 CG-019, `review`).
+ *
+ * **What is no repetition.** A proper name from `PROPER_NAMES` (a village, a
+ * city, an organisation) may stand in two levels: naming the same place twice
+ * is not saying the same thing twice. Only the listed names are excused.
  */
 
 /** One text line before the section's content, as the reader meets it. */
@@ -176,6 +180,21 @@ const FUNCTION_WORDS = new Set([
   "very", "were", "what", "when", "where", "which", "while", "will", "with", "your", "yours",
 ]);
 
+/**
+ * Proper names (places, organisations, the award) that a head may repeat: a
+ * place label over an intro that names the same village is the same place,
+ * not the same statement. Lower case, matched on the whole word before
+ * stemming; a hyphenated name counts per part ("Vorpommern-Greifswald").
+ *
+ * A list and not "capitalised mid-sentence": every German noun is capitalised,
+ * so that test would also excuse "Küchenfenster". Add a name here when a page
+ * needs it; a common noun never belongs in this list.
+ */
+export const PROPER_NAMES: ReadonlySet<string> = new Set([
+  "schlatkow", "schmatzin", "rostock", "berlin", "anklam", "vorpommern", "greifswald",
+  "mecklenburg", "pomerania", "nørd", "bitkom",
+]);
+
 /** A crude stem: enough to catch "nutzt" and "benutzt", not a linguistic claim. */
 export function stem(word: string): string {
   let s = word
@@ -203,7 +222,8 @@ export function stem(word: string): string {
 export function stemsOf(line: string): Map<string, string> {
   const stems = new Map<string, string>();
   for (const word of line.split(/[^\p{L}]+/u)) {
-    if (word.length < 4 || FUNCTION_WORDS.has(word.toLowerCase())) continue;
+    const lower = word.toLowerCase();
+    if (word.length < 4 || FUNCTION_WORDS.has(lower) || PROPER_NAMES.has(lower)) continue;
     const s = stem(word);
     if (!stems.has(s)) stems.set(s, word);
   }

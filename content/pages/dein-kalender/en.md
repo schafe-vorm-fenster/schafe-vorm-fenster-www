@@ -169,12 +169,13 @@ names a postcode — the copy guide's avoid list (DEC-0079).
 
 **Heading:** A real calendar from three neighbouring villages
 
-This is the calendar of Schlatkow, Schmatzin and Wolfradshof. It shows
-exactly what is on there over the next few weeks.
+Here is what is coming up in Schlatkow, Schmatzin and Wolfradshof over the
+next few weeks.
 
-Two sentences instead of five lines (2026-09-22 review, "How it works"):
-"This is the calendar of [place]. It shows exactly what is on there over
-the next few weeks." The place name comes from
+One sentence instead of two (2026-09-22 review, "How it works"; issue #163,
+DEC-0206, DEC-0213): the intro shares no word stem with the heading, and the
+transition "This is what it looks like once it sits on your site:" is gone, as
+it is no text level of its own. The place names come from
 `src/lib/embed/portalize.ts` (`SHOWCASE_CALENDAR`), not from the dictation.
 
 ## Slot 3b — What it holds is up to you (configuration block)
@@ -359,6 +360,8 @@ never a borrowed photo.
 <!-- id: dein-kalender-6-trust; content_type: section; provenance: mixed; derived_from: [ia, "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel", "@schafe-vorm-fenster/proof@0.3.5#in-operation-since-2018"]; status: draft -->
 
 **Heading:** How your data is handled here
+
+<!-- note: author note, not copy — the transition "Which leaves the question of who you are actually giving your data to." is gone (DEC-0206, DEC-0213): no text level of its own, and it repeats "data" from the heading. -->
 
 **Data protection:** No tracking cookies, no persistent user identifier, no consent banner, no third parties beyond those named in our privacy policy. → [`/rechtliches#datenschutz`](/rechtliches#datenschutz), [`/rechtliches#auftragsverarbeitung`](/rechtliches#auftragsverarbeitung)
 

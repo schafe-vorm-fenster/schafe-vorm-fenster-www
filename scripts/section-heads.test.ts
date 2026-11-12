@@ -28,6 +28,28 @@ describe("stemsOf", () => {
   });
 });
 
+describe("proper names", () => {
+  it("leaves a listed place or organisation out of the stems", () => {
+    expect([...stemsOf("Schlatkow bei Rostock, NØRD und Bitkom").values()]).toEqual([]);
+    expect([...stemsOf("Vorpommern-Greifswald").values()]).toEqual([]);
+  });
+
+  it("does not excuse a repeated name alone, and not a repeated common noun", () => {
+    expect(
+      sectionHeadFindings({
+        section: "kapitel",
+        levels: [
+          { kind: "line", text: "Schlatkow" },
+          { kind: "heading", text: "Eine Schafweide vor dem Küchenfenster." },
+          { kind: "intro", text: "Seit dem Umzug nach Schlatkow lag die Schafweide vor dem Haus." },
+        ],
+      }),
+    ).toEqual([
+      'heading "Eine Schafweide vor dem Küchenfenster." and intro "Seit dem Umzug nach Schlatkow lag die Schafweide vor dem Haus." share a stem (Schafweide/Schafweide)',
+    ]);
+  });
+});
+
 describe("sectionHeadFindings", () => {
   it("passes a kicker, a heading and an intro that say three different things", () => {
     expect(

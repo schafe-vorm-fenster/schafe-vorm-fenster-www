@@ -235,9 +235,7 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A12/A13/A16/A17/A18/A19: /mitmachen", 
       const text = item.toLowerCase();
       // A6: no product name, no generic claim, no numeral asserting how many
       // channels exist. The check is scoped to the *today* halves, the
-      // problem items the criterion is about — the paths slot's kicker is the
-      // review's own "So geht's einfacher" and is not an item (DEC-0124). The
-      // product name is checked over the whole module below.
+      // problem items the criterion is about. The product name is checked over the whole module below.
       for (const banned of ["einfach", "digital", "für alle", "modern", "innovativ", "portalize"]) {
         expect(text, `objection item names "${banned}"`).not.toContain(banned);
       }
@@ -417,20 +415,22 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A12/A13/A16/A17/A18/A19: /mitmachen", 
   /**
    * DEC-0206 (TS-WEB-0006 D12) — a section's kicker is optional, so this test
    * no longer asks every section for one (polish brief G-3's withdrawn duty).
-   * What it keeps: the paths slot's head is the review's own three lines
-   * ("SO GEHT'S EINFACHER · So kommen eure Termine rein · Drei Wege. Alle
-   * nutzt ihr eh schon."), exactly the three levels DEC-0206 allows, and they
-   * stand once, on the first of the slot's three sections (DEC-0124). The
+   * What it keeps: the paths slot's head is two of the review's lines
+   * ("So kommen eure Termine rein · Drei Wege. Alle nutzt ihr eh schon."),
+   * heading and intro; the kicker "So geht's einfacher" went with DEC-0206
+   * because it said what the heading says. The lines stand once, on the first
+   * of the slot's three sections (DEC-0124). The
    * level count and the repeated stems of every section are
    * `e2e/section-heads.spec.ts`'s (TS-WEB-0006-A21).
    */
-  test("DEC-0206: the paths slot's head is its three lines, and a proof kicker that stays is marked", async ({
+  test("DEC-0206: the paths slot's head is heading and intro, and a proof kicker that stays is marked", async ({
     page,
   }) => {
     await page.goto("/mitmachen");
     // "Was gerade ansteht" was the live example's kicker; the block left the
     // page with DEC-0196.
-    await expect(page.getByText("So geht's einfacher", { exact: true })).toBeVisible();
+    await expect(page.getByText("So geht's einfacher", { exact: true })).toHaveCount(0);
+    await expect(page.locator("[data-block='wege'] [data-kicker]")).toHaveCount(0);
     await expect(page.locator("#wege-heading")).toHaveText("So kommen eure Termine rein");
     await expect(page.locator("[data-wege-subline]")).toHaveText(
       "Drei Wege. Alle nutzt ihr eh schon.",
