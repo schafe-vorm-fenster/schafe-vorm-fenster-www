@@ -8,7 +8,9 @@ seo:
     description: "Was über den Kalender berichtet wurde, chronologisch und zum Nachprüfen — jede Zeile verlinkt auf die Originalquelle beim Medium selbst."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: de
 sources:
   - "@schafe-vorm-fenster/media-echo@0.3.3"
@@ -38,7 +40,7 @@ Relevanz-Sortierung auf dieser Website, weil diese Seite der
 
 ## Slot 1 — Seitenüberschrift
 
-<!-- id: archiv-1-heading; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: archiv-1-heading; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **h1:** Presse und Auszeichnungen
 
@@ -47,14 +49,14 @@ Liste ist die Seite.
 
 ## Slot 2 — Archiv-Zeilen
 
-<!-- id: archiv-2-rows; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft -->
+<!-- id: archiv-2-rows; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: approved -->
 
 Eine Zeile pro media-echo-Eintrag, als Beleg: Medium, Datum in der
 belegten Genauigkeit, Titel, Link zum Original und, wo der Eintrag eines
 hat, ein als Zitat gekennzeichneter Auszug mit Quelle (TS-WEB-0028 D3,
 DEC-0166). Die Zeilen stehen im Slot darunter; sein Name ist historisch.
 
-<!-- id: archiv-2-rows-demo; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft -->
+<!-- id: archiv-2-rows-demo; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: approved -->
 
 **Archiv-Zeilen:** Alle 31 Einträge aus `media-echo@0.3.3`,
 chronologisch, neueste zuerst. ID (Dateiname, zugleich Anker), Titel, Typ,
@@ -104,7 +106,7 @@ liegt dann als Scan oder Foto im Paket. Ein Eintrag mit mehreren Typen
 
 ## Slot 3 — Kontextzeile je Eintrag
 
-<!-- id: archiv-3-context-line; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft -->
+<!-- id: archiv-3-context-line; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: approved -->
 
 Mechanische Übersetzung der Metadaten je freigegebenem Eintrag zur
 Build-Zeit (TS-WEB-0007 D3) — kein redaktioneller Fließtext pro Eintrag, kein
@@ -112,7 +114,7 @@ Erfindungsspielraum.
 
 ## Slot 4 — Typ-Filter (Chips)
 
-<!-- id: archiv-4-type-filter; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft -->
+<!-- id: archiv-4-type-filter; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: approved -->
 
 **Labels (aus dem Hub-Vokabular, lokalisiert):**
 

@@ -172,8 +172,10 @@ variables.
 subset of DEC-0031's stage 2, not the full merge-gating job graph:
 
 - **`check.yml`** — every push to `next-2026` and every pull request
-  targeting it: install (the `@schafe-vorm-fenster` scope resolves from
+  targeting `next-2026` or `main`: install (the `@schafe-vorm-fenster` scope resolves from
   `npm.pkg.github.com` using `secrets.GITHUB_TOKEN` with `packages: read`)
+  · *Production renders what preview renders* (`pnpm check:content:production`:
+  no page or slot a production build would drop, DEC-0222)
   · `pnpm check` · `pnpm build` · `pnpm e2e:technical` (smoke, CSP and
   hydration, routes, external links, layout stability, axe, third-party
   requests) against the production build (`next start`, not `next dev` — see

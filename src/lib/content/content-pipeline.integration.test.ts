@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { readFileSync } from "node:fs";
+import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import { checkContentTree } from "@/src/lib/content/validate";
@@ -33,7 +34,8 @@ describe("TS-WEB-0007-A5: every route of the inventory loads its German page art
         expect(contentSlot.provenance, `${routeId}/${contentSlot.id}`).not.toBe(
           "unavailable",
         );
-        expect(contentSlot.status).toBe("draft");
+        // DEC-0222: the owner approved everything the preview renders (issue 206).
+        expect(contentSlot.status).toBe("approved");
         expect(contentSlot.empty).toBe(false);
       }
     }
@@ -128,6 +130,61 @@ describe("TS-WEB-0007-A5: `pnpm check:content` is green on the shipped tree", ()
     expect(
       errors.map((e) => `${e.file}${e.slot ? `#${e.slot}` : ""} [${e.check}] ${e.message}`),
     ).toEqual([]);
+  });
+});
+
+/*
+ * Issue 206, DEC-0222: production renders what preview renders. The owner
+ * approved every page and slot the preview shows (2026-11-12), and the gate
+ * `pnpm check:content:production` keeps it so: a slot the production build
+ * would drop fails the check on every PR to `next-2026` and `main`.
+ */
+describe("TS-WEB-0007-A14 / DEC-0222: production renders every slot preview renders", () => {
+  it("loads the same slots per route and language in a production and a preview build", async () => {
+    const lost: string[] = [];
+    for (const locale of LOCALES) {
+      for (const routeId of ROUTE_LIST) {
+        const preview = await loadPage(routeId, locale, { environment: "preview" });
+        const production = await loadPage(routeId, locale, { environment: "production" });
+        const kept = new Set(production.slots.map((s) => s.id));
+        if (!production.ok) lost.push(`${routeId}/${locale}: page (${production.reason})`);
+        for (const contentSlot of preview.slots) {
+          if (!kept.has(contentSlot.id)) lost.push(`${routeId}/${locale}: ${contentSlot.id}`);
+        }
+      }
+    }
+    expect(lost).toEqual([]);
+  });
+
+  it("reports no lifecycle finding when the tree is checked for production", async () => {
+    const findings = await checkContentTree({ targetEnvironment: "production" });
+    expect(findings.filter((finding) => finding.check === "lifecycle")).toEqual([]);
+  });
+
+  it("fails the production check the moment one slot of the shipped tree is `draft`", async () => {
+    const root = mkdtempSync(join(tmpdir(), "svf-206-"));
+    try {
+      cpSync(join(process.cwd(), "content/pages"), root, { recursive: true });
+      const file = join(root, CONTENT_PAGE_DIRS.home, "de.md");
+      const raw = readFileSync(file, "utf-8");
+      const flipped = raw.replace(
+        /(<!-- id: home-1-search-hero;[^>]*?status: )approved/,
+        "$1draft",
+      );
+      expect(flipped, "fixture: the home hero slot is approved in the shipped tree").not.toBe(raw);
+      writeFileSync(file, flipped);
+
+      const findings = await checkContentTree({ contentRoot: root, targetEnvironment: "production" });
+      const gate = findings.filter((finding) => finding.check === "lifecycle");
+      expect(gate).toHaveLength(1);
+      expect(gate[0]).toMatchObject({
+        level: "error",
+        file: "content/pages/home/de.md",
+        slot: "home-1-search-hero",
+      });
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 });
 

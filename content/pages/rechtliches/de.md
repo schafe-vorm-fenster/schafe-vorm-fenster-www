@@ -8,7 +8,9 @@ seo:
     description: "Impressum, Datenschutz, Nutzungsbedingungen, Community-Richtlinien, Auftragsverarbeitung und Barrierefreiheit — alles auf einer Seite."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: de
 sources:
   - "ia"
@@ -37,7 +39,7 @@ Rolle Content & Translation, „Must not: touch code outside content files
 
 ## Seitenkopf
 
-<!-- id: rechtliches-1-header; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: rechtliches-1-header; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **h1:** Rechtliches
 
@@ -45,7 +47,7 @@ Rolle Content & Translation, „Must not: touch code outside content files
 
 ## Abschnittsregister (Reihenfolge = TS-WEB-0004 D8)
 
-<!-- id: rechtliches-2-registry; content_type: legal-section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: rechtliches-2-registry; content_type: legal-section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 | Anker | Abschnittsname | Quelle |
 | --- | --- | --- |
@@ -59,7 +61,7 @@ Rolle Content & Translation, „Must not: touch code outside content files
 
 ## Fußzeilen-Linktexte
 
-<!-- id: rechtliches-3-footer-labels; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: rechtliches-3-footer-labels; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 - Impressum → `#impressum`
 - Datenschutz → `#datenschutz`
@@ -67,7 +69,7 @@ Rolle Content & Translation, „Must not: touch code outside content files
 
 ## Barrierefreiheitserklärung — Herkunft
 
-<!-- id: rechtliches-4-accessibility-note; content_type: section; provenance: generated; derived_from: []; status: draft -->
+<!-- id: rechtliches-4-accessibility-note; content_type: section; provenance: generated; derived_from: []; status: approved -->
 
 Für `#barrierefreiheit` existiert bislang kein Google-Doc und keine
 Quelle (TS-WEB-0029 D8, TS-WEB-0004 D8: „to be written"). Am 2026-09-12 erneut
@@ -85,7 +87,7 @@ Prüfung durch Rechtsberatung markiert, bevor er produktiv geht
 
 ## Englische Geschwisterdokumente
 
-<!-- id: rechtliches-5-en-gap; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: rechtliches-5-en-gap; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 Für die fünf importierten Dokumente existiert heute keine englische
 Fassung; `import.yaml` kennt nur `locale: de` (TS-WEB-0029 Open Point #2).

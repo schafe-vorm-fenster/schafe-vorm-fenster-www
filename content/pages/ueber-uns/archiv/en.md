@@ -8,7 +8,9 @@ seo:
     description: "What has been written about the calendar, in chronological order and open to scrutiny — every row links to the original at the outlet."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: en
 sources:
   - "@schafe-vorm-fenster/media-echo@0.3.3"
@@ -38,7 +40,7 @@ not reach (TS-WEB-0028 D2).
 
 ## Slot 1 — Page heading
 
-<!-- id: archiv-1-heading; content_type: section; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: archiv-1-heading; content_type: section; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **h1:** Press and awards
 
@@ -47,14 +49,14 @@ the list is the page.
 
 ## Slot 2 — Archive rows
 
-<!-- id: archiv-2-rows; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft -->
+<!-- id: archiv-2-rows; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: approved -->
 
 One row per media-echo entry, as a citation: outlet, date at its stated
 precision, title, link to the original and, where the entry has one, an
 excerpt marked as a quotation with its source (TS-WEB-0028 D3, DEC-0166).
 The rows stand in the slot below; its name is historical.
 
-<!-- id: archiv-2-rows-demo; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft -->
+<!-- id: archiv-2-rows-demo; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: approved -->
 
 **Archive rows:** All 31 entries from `media-echo@0.3.3`, chronological,
 newest first. ID (file name, also the anchor), title, type, date, source
@@ -106,7 +108,7 @@ each of them.
 
 ## Slot 3 — Context line per entry
 
-<!-- id: archiv-3-context-line; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft -->
+<!-- id: archiv-3-context-line; content_type: archive-entry; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: approved -->
 
 Mechanical translation of the metadata for each cleared entry at build
 time (TS-WEB-0007 D3) — no editorial running text per entry, no room for
@@ -114,7 +116,7 @@ invention.
 
 ## Slot 4 — Type filter (chips)
 
-<!-- id: archiv-4-type-filter; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: draft -->
+<!-- id: archiv-4-type-filter; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/media-echo@0.3.3"]; status: approved -->
 
 **Labels (from the hub vocabulary, localized):**
 

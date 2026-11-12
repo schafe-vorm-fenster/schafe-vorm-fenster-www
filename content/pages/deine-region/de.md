@@ -12,7 +12,9 @@ seo:
     description: "Sagt uns, für welches Gebiet der Kalender gelten soll und wer bei euch zuständig ist — wir melden uns mit einem passenden Angebot."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: de
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"
@@ -121,7 +123,7 @@ Modul-, Filter- oder Ergebnisbeschriftung — nur als Frage der Besucherin
 
 ## Slot 1 — Fokusblock (Mechanismus: embed)
 
-<!-- id: deine-region-1-focus; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: draft -->
+<!-- id: deine-region-1-focus; content_type: hero; provenance: sourced; derived_from: [ia, "@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: approved -->
 
 **Aha-Frage:** Das ganze Kreisgebiet in einem Kalender, ohne eigenes Portalprojekt?
 
@@ -158,7 +160,7 @@ vollständig übernommen, sobald die Bestätigung vorliegt.
 
 ## Slot 2 — Die Gebietsfrage
 
-<!-- id: deine-region-2-territory; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: draft -->
+<!-- id: deine-region-2-territory; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#counties--portalize-enterprise"]; status: approved -->
 
 **Überschrift:** Bei Landkreisgröße keine Frage für eine Liste
 
@@ -178,7 +180,7 @@ neu, und der Titel behält seinen Bezug: ohne die Frage darüber hätte
 
 ## Slot 3 — Interims-Modul: Beispiele, Zähler, Suche
 
-<!-- id: deine-region-3-interim; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: deine-region-3-interim; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Überschrift:** So sieht das heute schon aus: Orte im Landkreis {landkreis}
 
@@ -201,7 +203,7 @@ Zähler rendert nur, wenn `/api/stats` den Wert tatsächlich liefert
 
 ## Slot 4 — Einbindungs-Demo
 
-<!-- id: deine-region-4-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: deine-region-4-embed-demo; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Überschrift:** So sieht die Einbindung aus
 
@@ -209,7 +211,7 @@ Dieselbe Komponente wie auf `/dein-kalender` Slot 3 (TS-WEB-0008 Position 1′).
 
 ## Slot 5 — Was dazukommt
 
-<!-- id: deine-region-5-was-dazukommt; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise", "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"]; status: draft -->
+<!-- id: deine-region-5-was-dazukommt; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise", "@schafe-vorm-fenster/offerings@0.3.5#custom-data-integration"]; status: approved -->
 
 **Überschrift:** Was der Landkreis-Tarif zusätzlich bringt
 
@@ -230,7 +232,7 @@ erwähnt, nie bepreist, ohne eigenen CTA (`promotion: on-request-only`).
 
 ## Slot 6 — Beleg (3 Elemente)
 
-<!-- id: deine-region-6-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: draft -->
+<!-- id: deine-region-6-proof; content_type: proof-card; provenance: sourced-empty-by-design; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: approved -->
 
 Pool: `eichler-wasserschloss-quilow`, `partner-network` — beide heute
 `unverified` (Q-0014). Kein Referenzfall für ein bereits ausgeliefertes
@@ -238,7 +240,7 @@ Pool: `eichler-wasserschloss-quilow`, `partner-network` — beide heute
 darunter zeigt stattdessen drei echte, benannte Belege aus dem
 Gesamtbestand und sagt dazu, was sie belegen und was nicht.
 
-<!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022", "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei", "@schafe-vorm-fenster/partners@0.2.7#stiftung-lebendiges-lehre"]; status: draft -->
+<!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022", "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei", "@schafe-vorm-fenster/partners@0.2.7#stiftung-lebendiges-lehre"]; status: approved -->
 
 **Belegkarten (echt, teils mit offener Freigabe):** Drei Elemente aus
 dem Proof-Bestand — Karte 2 und Karte 3 im Wortlaut ihrer Datensätze
@@ -283,7 +285,7 @@ Partner namentlich und hat keine geklärten Logorechte.
 
 ## Slot 7 — Antwortversprechen
 
-<!-- id: deine-region-7-response-promise; content_type: closing-cta; provenance: withheld; derived_from: []; status: draft -->
+<!-- id: deine-region-7-response-promise; content_type: closing-cta; provenance: withheld; derived_from: []; status: approved -->
 
 *Kein Text — der Konstante bleibt `null`, solange kein benannter
 Bearbeitungsprozess mit benannter Zuständigkeit vorliegt (Q-0022/C11,
@@ -300,7 +302,7 @@ eine Zusage (F-2-57). Die Fläche bleibt leer, bis C11 beantwortet ist.
 
 ## Slot 8 — Preisanzeige
 
-<!-- id: deine-region-8-price; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: draft -->
+<!-- id: deine-region-8-price; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-enterprise"]; status: approved -->
 
 **Text:** Preis auf Anfrage.
 
@@ -314,7 +316,7 @@ Zeile keine Zahl mehr steht (TS-WEB-0026-A4, DEC-0143 §4).
 
 ## `/deine-region/angebot` — Angebotsformular
 
-<!-- id: deine-region-angebot-1-form; content_type: form; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: deine-region-angebot-1-form; content_type: form; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Überschrift:** Angebot für {landkreis-oder-organisation} anfragen
 

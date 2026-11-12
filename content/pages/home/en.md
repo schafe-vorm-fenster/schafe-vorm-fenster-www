@@ -8,7 +8,9 @@ seo:
     description: "What is coming up where you live and in the villages next door: enter your place name and open the calendar for your own area."
     provenance: generated
 content_type: section
-status: draft
+status: approved
+reviewed_by: "Owner (Jan-Henrik Hempel), DEC-0222"
+reviewed_at: "2026-11-12"
 locale: en
 sources:
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
@@ -116,7 +118,7 @@ states are layout logic, not part of this file. Placeholders in
 
 ## Slot 1 — Search field, no place known (Block 1 / State S1)
 
-<!-- id: home-1-search-hero; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: home-1-search-hero; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Headline:** What's up in your village?
 
@@ -128,7 +130,7 @@ states are layout logic, not part of this file. Placeholders in
 
 ## Slot 2 — Place known, dates exist (Block 1 / State S2)
 
-<!-- id: home-2-place-dates; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: home-2-place-dates; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Headline:** Here's what's on in {place}
 
@@ -151,7 +153,7 @@ per place (segment independence, TS-WEB-0007 D7).
 
 ## Slot 3 — Place known, no dates (Block 1 / State S3)
 
-<!-- id: home-3-place-empty; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: home-3-place-empty; content_type: hero; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Module heading (own radius, not the place name):** This week nearby
 
@@ -165,7 +167,7 @@ gap in the visitor's own place, not a gap in the system.
 
 ## Scene 1 — WhatsApp (mechanism: whatsapp)
 
-<!-- id: home-4-scene-whatsapp; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: draft -->
+<!-- id: home-4-scene-whatsapp; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"]; status: approved -->
 
 **Aha statement:** A photo of the flyer by WhatsApp, and the date is in the calendar.
 
@@ -201,7 +203,7 @@ same one, and this scene's target is the page that owns the job.
 
 ### Slot 4a — Step lines and stage words of the WhatsApp scene (placeholder)
 
-<!-- id: home-4a-scene-whatsapp-steps-demo; content_type: value-story; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: home-4a-scene-whatsapp-steps-demo; content_type: value-story; provenance: generated; derived_from: []; status: approved; demo: true -->
 
 **Steps:**
 
@@ -231,7 +233,7 @@ three rows; normally the panel shows the reference place's real dates.
 
 ## Scene 2 — Embedding (mechanism: embed)
 
-<!-- id: home-5-scene-embed; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
+<!-- id: home-5-scene-embed; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: approved -->
 
 **Aha statement:** A calendar for your municipality.
 
@@ -257,7 +259,7 @@ slot 1).
 
 ### Slot 5a — The calendar graphic of the embed scene (placeholder)
 
-<!-- id: home-5a-scene-embed-calendar-demo; content_type: value-story; provenance: generated; derived_from: []; status: draft; demo: true -->
+<!-- id: home-5a-scene-embed-calendar-demo; content_type: value-story; provenance: generated; derived_from: []; status: approved; demo: true -->
 
 **Label address bar:** municipality-example.com/events
 
@@ -306,7 +308,7 @@ exactly three per category.
 
 ## Scene 3 — Provenance (mechanism: provenance)
 
-<!-- id: home-6-scene-provenance; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"]; status: draft -->
+<!-- id: home-6-scene-provenance; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor", "@schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel"]; status: approved -->
 
 **Aha statement:** Shaping our own villages ourselves.
 
@@ -328,7 +330,7 @@ from within", and shared a word stem with heading and intro (issue #163).
 
 ## Block 2b — Provenance stamps
 
-<!-- id: home-7-provenance-stamps; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"]; status: draft -->
+<!-- id: home-7-provenance-stamps; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#founder-former-volunteer-mayor"]; status: approved -->
 
 **Link:** More about us → `/ueber-uns`
 
@@ -343,7 +345,7 @@ DEC-0082 §4).
 
 <!-- clearance: pending — `lehre-lelender`, `volkshochschule-uecker-randow` and `kulturlandbuero-broellin` are `usage_rights: unverified` (Q-0014), the three media-echo entries carry no `usage_rights` at all (Q-0045, state/open.md #1). The protected preview shows them; the pre-go-live hardening round clears them. `noerd-award-2026-smart-community` is `cleared`. -->
 <!-- source_note: the stage-0 rule "widest spread, most recent first" comes from gtm:concept/website-relevance-model.concept.md (context matrix, row "Direct visit, unknown"); the proof rule from gtm:concept/website-communication-principles.concept.md §4. -->
-<!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
+<!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: approved -->
 
 Selection and order of the four elements stay the relevance engine's job
 at runtime (TS-WEB-0005 D5, DEC-0048). This slot supplies the candidate set
@@ -398,7 +400,7 @@ of the four is cleared; three are waiting for clearance and run with
 
 ## Context band (3 non-focus jobs)
 
-<!-- id: home-10-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
+<!-- id: home-10-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: approved -->
 
 **Kicker:** Learn more about our calendar platform
 
