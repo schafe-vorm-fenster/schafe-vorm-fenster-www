@@ -6,15 +6,15 @@ What verifies each acceptance criterion, at the level the criterion itself
 declares. `pnpm check:coverage` writes this file; `scripts/check-coverage.ts`
 says what the five verdicts mean and what gates.
 
-**511 criteria · 334 closed · 177 open (65 % closed)**
+**511 criteria · 332 closed · 179 open (65 % closed)**
 
 | Verdict | Count | What it means |
 | --- | --- | --- |
-| VERIFIED | 329 | a test title in a file a runner runs carries the id |
+| VERIFIED | 327 | a test title in a file a runner runs carries the id |
 | METERED | 5 | a `check:` meter in the chain, or a CI job, names it (`static` and `tool`) |
 | ATTESTED | 0 | a current row in `specs/verification/manual-checks.md` (`manual` only) |
 | NAMED ONLY | 30 | the id is in a runner file but in no test title — **not coverage** |
-| MISSING | 147 | nothing names it |
+| MISSING | 149 | nothing names it |
 
 Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this commit, 0 without an instrument.
 
@@ -23,9 +23,9 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | Level | Criteria | Closed | Open | Closed |
 | --- | --- | --- | --- | --- |
 | static | 92 | 62 | 30 | 67 % |
-| unit | 33 | 29 | 4 | 88 % |
+| unit | 33 | 28 | 5 | 85 % |
 | integration | 78 | 53 | 25 | 68 % |
-| e2e | 238 | 188 | 50 | 79 % |
+| e2e | 238 | 187 | 51 | 79 % |
 | tool | 39 | 2 | 37 | 5 % |
 | manual | 31 | 0 | 31 | 0 % |
 
@@ -54,7 +54,7 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0019 | 24 | 22 | A14 A15 |
 | TS-WEB-0020 | 28 | 27 | A13 |
 | TS-WEB-0021 | 15 | 13 | A11 A15 |
-| TS-WEB-0022 | 23 | 18 | A8 A10 A11 A14 A15 |
+| TS-WEB-0022 | 23 | 16 | A7 A8 A9 A10 A11 A14 A15 |
 | TS-WEB-0023 | 22 | 9 | A1 A2 A3 A7 A8 A9 A10 A11 A13 A15 A16 A19 A20 |
 | TS-WEB-0024 | 26 | 21 | A6 A7 A12 A17 A19 |
 | TS-WEB-0025 | 14 | 10 | A5 A9 A12 A13 |
@@ -199,7 +199,9 @@ Rule 1 (a new criterion arrives with its instrument): 0 criterion(a) new in this
 | TS-WEB-0020-A13 | manual | MISSING | — | Content review before shipping: each story reads aspect → why it matters → example → testimonial and names exactly one mechanism (TS-WEB-0006 D7); the state-B c … |
 | TS-WEB-0021-A11 | static | NAMED ONLY | src/lib/routes/metadata.test.ts — outside any test title | Canonical is the parameter-free path; title and description come from the page's content frontmatter and contain no runtime value; the JSON-LD graph is `WebPage … |
 | TS-WEB-0021-A15 | manual | MISSING | — | Tone review against D9 for audience 3: the reader is addressed directly, a resident who cannot publish is not instructed to, the absence of the place is framed  … |
-| TS-WEB-0022-A8 | integration | MISSING | — | Events upstream answering zero dates for the first candidate → the next candidate renders; upstream failing → TS-WEB-0008 D5 tier 2/3 with its freshness label.  … |
+| TS-WEB-0022-A7 | unit | MISSING | — | **Retired with D5 (DEC-0196).** Example-place selection: with no anchor it returns the configured reference place; with an anchor the nearest active covered pla … |
+| TS-WEB-0022-A8 | integration | MISSING | — | **Retired with D5 (DEC-0196).** Events upstream answering zero dates for the first candidate → the next candidate renders; upstream failing → TS-WEB-0008 D5 tie … |
+| TS-WEB-0022-A9 | e2e | MISSING | — | **Retired with D5 (DEC-0196).** The live example states its radius as "in `<place>`" for a covered place; its outbound calendar link points at `{APP_HOST}/{slug … |
 | TS-WEB-0022-A10 | e2e | NAMED ONLY | e2e/pages/mitmachen.spec.ts — outside any test title | Stage-0 request (no geo, no referrer, no UTM, no query) and a stage-3 request yield identical block structure, identical block count and identical `focusJob`; o … |
 | TS-WEB-0022-A11 | e2e | MISSING | — | The closing CTA carries the same conversion goal ID, target and label as the primary CTA, and its reassurance contains the permanence promise. With the backing  … |
 | TS-WEB-0022-A14 | e2e | NAMED ONLY | e2e/pages/mitmachen.spec.ts — outside any test title | With a resolved place the primary CTA's href carries `?ort=<slug>`; with an unresolvable or free-text place it carries no `ort` parameter. |

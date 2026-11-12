@@ -14,7 +14,6 @@ sources:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
-  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
   - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
   - "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"
@@ -24,7 +23,6 @@ derived_from:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
-  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
   - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
   - "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"
@@ -33,7 +31,7 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — every slot except the three `*-steps-demo` siblings, which are `provenance: generated; demo: true`: the step lines of the three explain modules exist only in the 2026-09-23 design drafts (DEC-0124, state/open.md). Slot 6a names Groß Kiesow against the real record anchored there, slot 7 carries three real publish-weighted reference cases instead of demo quotes, and slot 8 cites the offering record together with the 2022 Nordkurier entry behind the permanence commitment; all of those are clearance: pending (Q-0014, Q-0045)"
+provenance: "sourced — every slot except the three `*-steps-demo` siblings, which are `provenance: generated; demo: true`: the step lines of the three explain modules exist only in the 2026-09-23 design drafts (DEC-0124, state/open.md). Slot 7 carries three real publish-weighted reference cases instead of demo quotes, and slot 8 cites the offering record together with the 2022 Nordkurier entry behind the permanence commitment; all of those are clearance: pending (Q-0014, Q-0045)"
 compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0022"
 schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
@@ -137,8 +135,10 @@ images:
 
 Fokusjob „publish our dates" durchgängig, kein Preis, kein „Portalize",
 kein `local-advertising` auf dieser Seite (TS-WEB-0022 D1, D7, D11; DEC-0052
-§1/§3). Reihenfolge: Hero → Einwände → drei Publizierwege → Live-Beispiel
-→ Beleg (TS-WEB-0022 D2).
+§1/§3). Reihenfolge: Hero → Einwände → drei Publizierwege → Abschluss-CTA
+(Slot 8, auf `ink`) → Beleg (TS-WEB-0022 D2, geändert durch DEC-0196). Das
+Live-Beispiel (früher Slot 6 und 6a) steht seit DEC-0196 nicht mehr auf der
+Seite; die Slot-Nummern 7 bis 9 bleiben, weil Code und Register sie zitieren.
 
 Zwei Trennzeichen kommen in den Listen vor und sind Teil des Formats:
 ` — ` trennt Kern und Ergänzung einer Zeile (Einwandzeilen, Schrittzeilen),
@@ -387,36 +387,6 @@ geschrieben, deshalb `provenance: generated`, `demo: true` und im Markup
 `data-demo="true"` (DEC-0068, DEC-0124, `state/open.md`). Kein Betrag, kein
 Währungszeichen, kein „ab": der Zusatz hat `price_status: on-request` und
 ist auf `/mitmachen` ohne Zahl zu nennen (TS-WEB-0022 D1/D11, A12, A17).
-
-## Slot 6 — Live-Beispiel
-
-<!-- id: mitmachen-6-beispiel; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
-
-**Modul-Überschrift:** So sieht das in {ort} aus
-
-Bei bekanntem Ort: der nächste aktive Ort mit Terminen (TS-WEB-0008 Position
-3 → 1). Nie der gesuchte Ort der Besucherin selbst und nie ein nicht
-abgedeckter Ort als Daten (FUN-WEB-0024).
-
-### Slot 6a — Referenzort für Stufe 0 (kein Kontext bekannt)
-
-<!-- clearance: pending — `zschiesche-gross-kiesow` steht auf `usage_rights: unverified` (Q-0014). Der Ort selbst ist eine Konfiguration, kein Zitat; zitiert wird hier nichts. -->
-<!-- source_note: Ehrlichkeitsregel „das Live-Beispiel ist immer ein real abgedeckter Ort" aus gtm:concept/website-information-architecture.concept.md, Seitenbrief `/dein-ort/starten` („Empty-state rule"). -->
-<!-- id: mitmachen-6a-reference-place; content_type: configuration; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; status: draft -->
-
-**Referenzort (Stufe 0):** Groß Kiesow
-
-Solange kein Kontext bekannt ist, zeigt das Live-Beispiel Groß Kiesow —
-einen real abgedeckten Ort, für den ein eigener Beleg im Hub liegt
-(`zschiesche-gross-kiesow`, Zitat der Bürgermeisterin Dr. A. Zschiesche
-von 2022, Freigabe steht aus). Kein erfundener Ort, keine erfundenen
-Termine: Das Modul zeigt die echten Daten dieses Orts. Zu ersetzen,
-sobald Content/Editorial einen anderen oder zusätzlichen Referenzort
-benennt (`state/open.md` #44).
-
-Derselbe Anker trägt den dritten Zustand von Weg 1: Das Erklärmodul zeigt
-dort die echten Zeilen des Live-Beispiels, nicht erfundene (DEC-0068
-Regel 3, DEC-0115).
 
 ## Slot 7 — Belegblock (3 Elemente, publish-gewichtet)
 

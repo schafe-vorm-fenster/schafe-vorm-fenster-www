@@ -13,6 +13,12 @@
  * closing **search** block on `ink` (`/`): a search is not a conversion
  * (TS-WEB-0019 D2), and the second `ink` section a page may carry is only
  * legal as its last section (SRC-0014 §Page Rhythm, DEC-0117).
+ *
+ * One page puts blocks of its own **between** the closing block and the band:
+ * on `/mitmachen` the call to act follows the three publishing paths directly,
+ * on `ink`, and the proof block comes after it (owner, issue 154, DEC-0196).
+ * The page hands those blocks over as `closing.followedBy`, so the closing
+ * block is still placed here and nowhere else.
  * (`plan/component-inventory.md` §4, "Every page is wrapped by the shared
  * layout".)
  *
@@ -97,6 +103,23 @@ export type ClosingBlock =
       readonly reassurance?: string;
       /** A quiet second way forward under the button — never a second pill (G-5). */
       readonly footer?: ReactNode;
+      /**
+       * The ground the closing section stands on, `paper` unless the page
+       * says otherwise. `ink` is `/mitmachen`'s: there the closing block is
+       * the page's one dark section (DEC-0196, TS-WEB-0022 D10). Unlike the
+       * `module` variant's `ink`, it does **not** move the block behind the
+       * band — a conversion stays before the hand-off (DEC-0174 §4).
+       */
+      readonly surface?: "paper" | "ink";
+      /**
+       * Page blocks that stand **between** the closing block and the band
+       * (DEC-0196). `/mitmachen` alone: the call to act follows the three
+       * publishing paths directly, and the proof block comes after it. The
+       * frame renders them in this position so the page never places the
+       * closing block itself; without it the closing block directly precedes
+       * the band, as on every other page (TS-WEB-0006 D2).
+       */
+      readonly followedBy?: ReactNode;
     }
   | { readonly variant: "merged" }
   /**
@@ -189,18 +212,22 @@ export function PageFrame({
   // DEC-0174 §4: the closing block precedes the band — except the closing
   // search block on `ink`, which stays the page's last section.
   const closingBeforeBand = !(closing.variant === "module" && closing.surface === "ink");
+  // DEC-0196: the page's own blocks that follow the closing block (`/mitmachen`).
+  const followedBy =
+    closing.variant === undefined || closing.variant === "repeat" ? closing.followedBy : undefined;
 
   const closingBlock =
     closing.variant === "merged" || closing.variant === "none" ? null : (
       /* Block 4 — the focus job's conversion, repeated. Inside `main` it is
-         followed only by the band (DEC-0174 §4), and after `main` stand
-         exactly two things, both chrome: the contact section and the global
-         footer (TS-WEB-0006 D2 as amended by DEC-0081 §2, `_chrome.tsx`). */
+         followed by the band (DEC-0174 §4) — on `/mitmachen` first by the
+         page's proof block (DEC-0196) — and after `main` stand exactly two
+         things, both chrome: the contact section and the global footer
+         (TS-WEB-0006 D2 as amended by DEC-0081 §2, `_chrome.tsx`). */
       <MotionReveal>
         <SectionShell
           id="closing-cta"
           label={dictionary(locale).nav.home}
-          surface={closing.variant === "module" ? (closing.surface ?? "paper") : "paper"}
+          surface={closing.surface ?? "paper"}
         >
           {closing.variant === "module" && closing.bare ? (
             closing.node
@@ -277,6 +304,8 @@ export function PageFrame({
       ) : (
         <>
           {closingBeforeBand ? closingBlock : null}
+
+          {followedBy}
 
           {/* Block 3 — the three non-focus jobs. `as="aside"` — TS-WEB-0011-A4:
               "the context band is an `aside` on every page." It rendered as
