@@ -162,10 +162,15 @@ test.describe("DEC-0168: one active place", () => {
   }) => {
     const asked = await mockPhotos(page);
     await page.goto("/");
-    await expect(page.locator("#place-dates")).toContainText("Schlatkow");
+    await expect(page.locator("#dorfkalender")).toContainText("Schlatkow");
     await page.waitForLoadState("networkidle");
-    expect(asked).toEqual([]);
-    await expect(page.locator("#focus-block [data-place-photo], #focus-block [data-photo-note]")).toHaveCount(0);
+    // The stage asks nothing. The phone of "Dein digitaler Dorfkalender."
+    // (DEC-0192) loads the example's photograph for its own header — once.
+    expect(asked).toEqual(["schlatkow"]);
+    // (The page's own photograph's © panel is no swapped-in photograph or label.)
+    await expect(
+      page.locator("#focus-block [data-place-photo], #focus-block [data-photo-note]:not([data-photo-credit] *)"),
+    ).toHaveCount(0);
   });
 
   test("TS-WEB-0020-A27: a place switch inside the document drops the earlier place's late photograph", async ({

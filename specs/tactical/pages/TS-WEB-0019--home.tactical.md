@@ -53,6 +53,8 @@ declared goal belongs to the focus job, not to the page: home borrows
 
 > **Amended by DEC-0163 (2026-10-13).** The page is prerendered once and its HTML is S1. S2 and S3 are applied in the browser by `app/[lang]/_home-focus.tsx` once `?ort=` resolves through `/api/places/resolve`; the form, its label and the input stay in the static shell (DEC-0078 holds), only the trio, the submit and the module slot change.
 >
+> **Amended by DEC-0192 (issue 143).** The stage carries **no place search and no location control**: both moved into the black section "Dein digitaler Dorfkalender." (`DorfkalenderIntro`, `id="dorfkalender"`), which replaces the former "Das ist los in …" section in every state. The search there loads a place into the drawn phone **in place** — the page does not navigate and the stage stays as it is. The `data-cta="primary"` rule of D2 moves with it: in S1 it is that search's submit, in S2/S3 the hero's own CTA. The hand-off row of D3 block 1 goes with the section it stood in. S3's widened radius (`#nearby`) still follows the ink section. Everything below that names "the stage search" or "the hero search" is read as the search of that section; A2, A5, A16 and A17 are amended accordingly.
+>
 > **Amended by DEC-0168 (2026-10-27).** S1/S2/S3 are read off the page's **one** active place (`src/lib/pages/active-place.ts`), the same snapshot the module slot, the stage photograph and the calendar link read: S1 is the `example` state (Schlatkow, explicitly — `/`'s own photograph depicts it, inventory `place: schlatkow`, so the stage keeps it), and nothing about the example is fetched while `?ort=` resolves. The S2 handover is `{CALENDAR_ORIGIN}/{slug}.{geonameId}` (TS-WEB-0008 D9).
 
 Block 1 varies by **what is known about the place**, never by entry
@@ -62,7 +64,7 @@ TS-WEB-0010 D7 hold on `/` like everywhere else.
 
 | State | Precondition | Block 1 carries | Primary CTA | Goal |
 | --- | --- | --- | --- | --- |
-| S1 | no place known (stage 0 or stage 1 above community level, TS-WEB-0010 D4) | place search as the dominant element | search submit | none — a search is not a conversion |
+| S1 | no place known (stage 0 or stage 1 above community level, TS-WEB-0010 D4) | the headline; the place search stands in the section directly below (DEC-0192) | that search's submit | none — a search is not a conversion |
 | S2 | place known and covered, ≥ 1 date in the window | place name + position 1 (3 dates) | open the calendar of `<place>` → app handover (TS-WEB-0008 D9) | `save-calendar-to-homescreen` |
 | S3 | place known and covered, 0 dates | position 2 under its own radius label + the publisher invitation | publish the first date | `register-as-publisher` |
 | S4 | a search resolved to an uncovered place | nothing — the search navigates away (TS-WEB-0008 D7) | `/dein-ort/starten?ort=` | carried by that page |
@@ -72,25 +74,26 @@ S1 is what is prerendered and what a crawler and a JS-less visitor get
 re-implementing the `/dein-ort` focus-job shift: on `/` the shift stays
 a link, on `/dein-ort` it is the page (TS-WEB-0008 D4) — Open point 2.
 
-**The stage search is compact** [FIXED: DEC-0159, owner's review 2026-10-12,
+**The place search is compact** [FIXED: DEC-0159, owner's review 2026-10-12,
 issues #20 and #23]. The field's placeholder carries the instruction ("Tipp den
 Ortsnamen ein"); no helper line stands under it; the "use my location"
 control stands directly beneath the field, and the sentence saying what it
 does is its accessible description and tooltip, not standing text
 (TS-WEB-0010 D5 still holds: the control states what will happen). The field
-keeps its bound label. Because the search module is in the prerendered shell
-in every state, it stays on the stage when a place is known (S2, S3) — on `/`
-that is what issue #23 asks for, and its placeholder does not vary by state:
-a placeholder is an attribute of the input, which may not stream (below).
+keeps its bound label. Since DEC-0192 this search is the one in the "Dein
+digitaler Dorfkalender." section, not on the stage: its locate control is the
+44 px icon button inside the pill, named by `aria-label` and tooltip, and
+neither the placeholder ("Dein Ort") nor the section varies by state.
 Asserted by A17.
 
 **Where the boundary runs** (DEC-0078). The place is a request value, so the
 part of block 1 that varies with it arrives through `<Suspense>` — that is
 what keeps `/` a prerendered route. What may sit inside that boundary is
 bounded by TS-WEB-0009 D2's last rule: never a control that holds what a visitor
-types. So the hero's photograph, its kicker and the **whole search module**
-are the prerendered shell, and three small boundaries carry the rest — the
-headline · lead · CTA trio, the search's submit button (because
+types. So the hero's photograph and its kicker are the prerendered shell
+(the search module stands in the section below it since DEC-0192), and three
+small boundaries carry the rest — the headline · lead · CTA trio, the search's
+submit button (because
 `data-cta="primary"` moves from it to the hero CTA between S1 and S2/S3,
 and an attribute cannot be streamed on its own), and the module slot. Each
 boundary renders its fallback and its resolved branch through the same
@@ -100,7 +103,7 @@ component, which is how the "identical reserved space" below is held.
 
 | # | Block | Content | Fed by | Rhythm section |
 | --- | --- | --- | --- | --- |
-| 1 | focus | D2; the live dates end in the **hand-off row** to 2a — the review's "Fehlt deine Veranstaltung? Jetzt selbst eintragen" as a row of its own under the rows, with one `secondary` button to the publishing path (`/mitmachen`), never `primary` (DEC-0159, issue #25; SRC-0017 CG-008). Not in S3, which already is the invitation | TS-WEB-0008 D7 (search), D1 pos 1 | PHOTO hero, then COLOUR ink for the live dates |
+| 1 | focus | D2; the stage, then the explanation section "Dein digitaler Dorfkalender." — a phone drawn with five fixed event places and a legend, the place search, one link to the place's calendar in a new tab, **no button** (DEC-0192, issue 143). The hand-off row of DEC-0159 is struck with the section it stood in | TS-WEB-0008 D7 (search), D1 pos 1 | PHOTO hero, then COLOUR ink for the live dates |
 | 2a | mechanism blocks | exactly three, one per mechanism, order per D3a — **three scene blocks, one of which contains the explain module** (D3a, DEC-0109, DEC-0110) | content (TS-WEB-0007) + one live instance each, the module's standing below it (TS-WEB-0006 D7) | COLOUR / PHOTO, alternating per SRC-0014. Three scene blocks are three ordinary rhythm sections, so the alternation is exactly the constraint it was before DEC-0109 and is satisfiable in any D3a order |
 | 2b | provenance | the provenance **scene** — the third scene of 2a is this block. It was "the who-built-this stamps" until 2026-09-26: the origin sentence that stood apart as its own stamp element is struck by the 2026-09-22 owner review, and `SRC-0017` CG-033/CG-040 put "gebaut" and "betrieben" about this product on the avoid list, so there is nothing left for a second element to carry (DEC-0129 §5). Amended, not moved: the block keeps this position, this ground and its way to `/ueber-uns` | content | COLOUR violet |
 | 2c | proof stream | 5 elements | TS-WEB-0005 (D4 below) | COLOUR / PHOTO cards |
@@ -268,10 +271,10 @@ not conversion.
 | ID | Level | Check |
 | --- | --- | --- |
 | TS-WEB-0019-A1 | static | The manifest of `/` carries exactly the D1 values: `focusJob` = `know-what-is-on`, `primaryConversion` = `save-calendar-to-homescreen`, no `equalWeightConversion`, three live modules (four until DEC-0154 removed the counters, issue #24), `proofSlots` = 5. |
-| TS-WEB-0019-A2 | e2e | Open `/` in a fresh private window, deny the geolocation prompt, send no `?ort=` and no referrer. The first screen shows a search input; exactly one element on the page carries `data-cta="primary"` and it is that search's submit; no element in the first screen links to another page to "see what is on". |
+| TS-WEB-0019-A2 | e2e | Open `/` in a fresh private window, deny the geolocation prompt, send no `?ort=` and no referrer. The section "Dein digitaler Dorfkalender." (directly under the stage) shows a search input; exactly one element on the page carries `data-cta="primary"` and it is that search's submit; no element in the first screen links to another page to "see what is on". |
 | TS-WEB-0019-A3 | e2e | Open `/?ort=<covered place with dates>`. Block 1 shows the place name and exactly 3 event rows; the primary CTA opens the place calendar on `app.*` and carries the place slug. |
 | TS-WEB-0019-A4 | e2e | Open `/?ort=<covered place with no dates>`. Block 1 shows the nearby module under a heading that names its radius (not the place), plus a publish-the-first-date CTA targeting the registration route. No text claims dates in that place. |
-| TS-WEB-0019-A5 | e2e | Type an uncovered place into the search on `/` and submit. The browser navigates to `/dein-ort/starten?ort=…`; `/` itself renders no uncovered place as data. |
+| TS-WEB-0019-A5 | e2e | Type an uncovered place into the **closing** search on `/` and submit. The browser navigates to `/dein-ort/starten?ort=…`; `/` itself renders no uncovered place as data. The search in "Dein digitaler Dorfkalender." does not navigate at all: an uncovered or unknown place leaves the phone as it was. |
 | TS-WEB-0019-A6 | e2e | Block 2a of `/` holds exactly 3 blocks, one `mechanism` each of `whatsapp` · `embed` · `provenance`, and each with exactly one CTA carrying `data-cta="secondary"` that resolves to the page owning its job (D3a). **All 3 declare `data-block="scene"`**, and **exactly 1 of them contains the explain module** — the `whatsapp` one: inside that scene, and in this DOM order, stand the scene opener, one `explain-module` with one ordinal and exactly three step lines (each step line a real button carrying `aria-current` on the active one), and the block's one concrete instance, a live event row. At 360 × 800 the module and its three step lines fit one viewport height; the wrapping scene is not held to that budget (TS-WEB-0022 D4, DEC-0110 §1). The other two scenes render no step lines and no module, and the `whatsapp` block's single `data-cta="secondary"` is the module's own — wrapping adds no second CTA. Every scene opener, this one included, is a statement: it carries no question mark unless the same block renders the answering sentence directly beneath it (TS-WEB-0006 D7, SRC-0017 CG-005/CG-006). The count of scenes was 3, was stated as 2 by DEC-0109 on 2026-09-25, and is 3 again under DEC-0110 — the module is inside a scene, not instead of one. |
 | TS-WEB-0019-A7 | e2e | Load `/` once with `Referer: https://www.linkedin.com/` and once with no referrer. Block-2a DOM order matches the D3a table for `professional` and for `direct` respectively — so the scene containing the explain module is **last** in the first load and **first** in the second — and in both it is the `whatsapp` scene, renders the same opener · module · instance triple with the same three step lines, and satisfies A6's one-viewport assertion in either position (DEC-0109 §2, DEC-0110 §2). Block set and block order are otherwise identical between the two loads, all three blocks stay scenes in both, and no trait changes which mechanism carries the module. |
 | TS-WEB-0019-A8 | e2e | The proof stream on `/` renders exactly as many elements as its candidate set fills of DEC-0048's 5 positions — **4** since DEC-0183 dropped the fifth candidate — in every one of the loads of A7 and A2, and an unfilled position renders nothing (SRC-0001 §4). |
@@ -282,8 +285,8 @@ not conversion.
 | TS-WEB-0019-A13 | e2e | With the analytics collector observed: the calendar-open click of A3 emits `save-calendar-to-homescreen` with `stage=handover` exactly once; the search submit of A2, a scene click and a context-band click emit no conversion event. |
 | TS-WEB-0019-A14 | e2e | **Superseded by A18, DEC-0154.** Written text: the counter block renders only the dates figure. Its test was removed with the render (issue #24, DEC-0159). |
 | TS-WEB-0019-A15 | manual | The eight-point compliance check of SRC-0001 passes for the home brief, with point 8 (stage 0 complete on its own) evidenced by A2 and A11. |
-| TS-WEB-0019-A16 | e2e | Open `/` (and `/en`) over a throttled document so the streamed branch is still on the wire at first paint, and type a place name into the hero search with real key events as soon as the field exists. After the page settles the field still carries the typed value and its submit lands on the place route with it; across the load exactly **one** element ever carries the field's id. The same holds on every other route with a place search. |
-| TS-WEB-0019-A17 | e2e | At 360 × 800 on `/` and `/en`, the hero search's placeholder is the instruction ("Tipp den Ortsnamen ein" / "Type the place name") and fits the field uncut; its `label` still names the field ("Dein Ort" / "Your place"); the hero prints no helper line; the "use my location" control (≥ 44 px) stands at most 12 px below the field with nothing between them, and its explanation is its `aria-describedby` text and `title`, not visible text (D2, DEC-0159, issue #20). |
+| TS-WEB-0019-A16 | e2e | Open `/` (and `/en`) over a throttled document so the streamed branch is still on the wire at first paint, and type a place name into the closing search with real key events as soon as the field exists. After the page settles the field still carries the typed value and its submit lands on the place route with it; across the load exactly **one** element ever carries the field's id. The same holds on every other route with a place search. |
+| TS-WEB-0019-A17 | e2e | At 360 × 800 on `/` and `/en`, the stage carries no search field and no location control, and the search of "Dein digitaler Dorfkalender." has the placeholder "Dein Ort" / "Your place", fitting the pill uncut, a label naming it ("Ort suchen" / "Search for a place"), and a location button of at least 44 × 44 px inside the pill, named by `aria-label` (D2, DEC-0192, issue 143; before it: DEC-0159, issue #20). |
 | TS-WEB-0019-A18 | e2e | `/`, `/en` and `/?ort=<covered place>` render no counter: no `#live-counters`, no counter label, and no request to `/api/stats` during the load (D3 block 2d, DEC-0154, issue #24). Supersedes A14. |
 | TS-WEB-0019-A19 | e2e | On `/` (S1) and `/?ort=<covered place with dates>` (S2), the live-dates section ends in exactly one hand-off row (`data-handoff`) below its last event row: the question at more than body size and exactly one `data-cta="secondary"` control resolving to `/mitmachen`; the row carries no `primary`, and the page still has exactly one visible `data-cta="primary"` (D3 row 1, DEC-0159, issue #25). |
 | TS-WEB-0019-A20 | e2e | The `embed` scene's photograph carries the `web-calendar-overlay` drawing. At 360, 390, 640 and 1280 px the drawing overlaps the photograph, stays inside the viewport with the page gutter, and does not cover the photograph's declared focal point; the photograph's `alt` names both the photograph and the drawing; no horizontal scroll (issue #32, SRC-0014 §Web-calendar overlay, DEC-0162 §5). |

@@ -206,4 +206,25 @@
    * it is not.
    */
   --font-sans: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible Next Fallback", "Atkinson Hyperlegible", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  /*
+   * The drawn phone's light-blue metal frame — issue #143, DEC-0192. The blue
+   * lies deliberately outside the palette: it draws a device, it is no surface
+   * of the website, and it is used nowhere else. The five stops are the
+   * design's diagonal sheen, light to dark and back. Colour literals may stand
+   * in this file only (TS-WEB-0017-A5).
+   */
+  --device-frame-1: #E1EAF5;
+  --device-frame-2: #9EB3CD;
+  --device-frame-3: #CEDBEA;
+  --device-frame-4: #7C92AF;
+  --device-frame-5: #C2D0E2;
+  --device-frame-sheen: linear-gradient(
+    135deg,
+    var(--device-frame-1),
+    var(--device-frame-2) 28%,
+    var(--device-frame-3) 52%,
+    var(--device-frame-4) 76%,
+    var(--device-frame-5)
+  );
 }

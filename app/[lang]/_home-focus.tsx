@@ -11,38 +11,35 @@
  * **S1** — "what is prerendered and what a crawler and a JS-less visitor get"
  * (D2, TS-WEB-0010 D8) — and these three components move it to S2/S3 once
  * `place-state.ts` has an answer. They render through the same functions in
- * every state, so the reserved space cannot drift between them, and they sit
- * exactly where DEC-0078 drew the line: the `<form>`, its label and the input
- * stay in the server-rendered shell, only the trio, the submit and the module
- * slot vary — no input a visitor is typing into is ever replaced.
+ * every state, so the reserved space cannot drift between them.
+ *
+ * Since issue 143 (DEC-0192) the stage carries no place search of its own: the
+ * search moved into "Dein digitaler Dorfkalender." (`DorfkalenderIntro`), and
+ * what is left here is the hero's trio and S3's module.
  */
 
 import { Button } from "@/src/components/button/button";
 import { ConversionTracker } from "@/src/components/conversion-tracker/conversion-tracker";
-import { EmptyStateBlock } from "@/src/components/empty-state-block/empty-state-block";
 import { EventList } from "@/src/components/event-list/event-list";
 import { HeroContent, type HeroContentProps } from "@/src/components/hero-block/hero-block";
 import { MotionReveal } from "@/src/components/motion-reveal/motion-reveal";
 import { OutboundLink } from "@/src/components/outbound-link/outbound-link";
-import { SearchSubmit } from "@/src/components/search-field/search-field";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { calendarUrl } from "@/src/lib/live/app-handover";
 import { liveRoutes, useLive } from "@/src/lib/live/browser";
 import { SHOWCASE_COMMUNITY } from "@/src/lib/live/showcase";
-import { EXAMPLE_PLACE, useActivePlace } from "@/src/lib/pages/active-place";
+import { useActivePlace } from "@/src/lib/pages/active-place";
 import { fillTemplate } from "@/src/lib/pages/demo-content";
 import { pickStoryExamples } from "@/src/lib/pages/story-examples";
 
-import { NearbyIsland, PlaceDatesIsland } from "./_islands";
+import { NearbyIsland } from "./_islands";
 import { toListItems } from "./_live-items";
 
-import pageStyles from "./page.module.css";
 import styles from "./_pages.module.css";
 
 import type { Locale } from "@/src/lib/i18n/locales";
 import type { NearbyEvents, Place, PlaceEvents } from "@/src/lib/live/types";
-import type { ReactNode } from "react";
 
 /**
  * TS-WEB-0012 D4 — `save-calendar-to-homescreen`, `stage: handover`: the click
@@ -54,13 +51,9 @@ const SAVE_CALENDAR = { goalId: "save-calendar-to-homescreen", stage: "handover"
 export interface HomeFocusCopy {
   readonly locale: Locale;
   readonly s1Headline: string;
-  readonly submitLabel: string;
   /** S2 — `home-2-place-dates`: `{place}` headline and app-handover label. */
   readonly datesHeadline: string;
   readonly datesCta: string;
-  /** The live block's hand-off to block 2a (SRC-0017 CG-008, issue #25). */
-  readonly handoffQuestion: string;
-  readonly handoffCta: string;
   /** S3 — `home-3-place-empty`: radius heading, invitation, publish label. */
   readonly nearbyHeading: string;
   readonly invitation: string;
@@ -149,97 +142,33 @@ export function HomeHeroContent({ copy }: { readonly copy: HomeFocusCopy }) {
 }
 
 /**
- * The hero search's submit. TS-WEB-0006 D3 allows exactly one
- * `data-cta="primary"` per page and TS-WEB-0019 D2 moves it: in S1 it is this
- * submit, in S2/S3 the hero's own CTA. The button is what varies; the form,
- * its label and its input stay in the static shell (DEC-0078).
+ * Block 1's S3 module: "this week nearby" under a covered place that has no
+ * dates of its own (TS-WEB-0019 D5, position 2 — block 1's **S3** module, and
+ * only S3's). The ink section above it is no longer this file's: since issue 143 it
+ * is "Dein digitaler Dorfkalender." (`DorfkalenderIntro`), the same section in
+ * every state, so the page rhythm and TS-WEB-0019-A9's DOM order do not move
+ * when the state does.
  */
-export function HomeSubmit({ copy }: { readonly copy: HomeFocusCopy }) {
-  const { place } = useFocus();
-  return <SearchSubmit dataCta={place === undefined ? "primary" : undefined} label={copy.submitLabel} />;
-}
-
-/**
- * Block 1's module slot. The ink section is the same section in every state
- * (the page rhythm and TS-WEB-0019-A9's DOM order do not move when the state
- * does); S3 adds the widened radius under it.
- */
-export function HomeFocusModules({
-  copy,
-  search,
-}: {
-  readonly copy: HomeFocusCopy;
-  /** S3's own search, server-rendered — the invitation's call to action. */
-  readonly search: ReactNode;
-}) {
-  const { place, hasDates, example, held } = useFocus();
-  // The place the module speaks about: the chosen one, else the example —
-  // the prerendered frame names the example too, so the HTML is unchanged.
-  const shown = place ?? example ?? EXAMPLE_PLACE;
+export function HomeNearby({ copy }: { readonly copy: HomeFocusCopy }) {
+  const { place, hasDates } = useFocus();
   const { locale } = copy;
   const words = dictionary(locale);
   const emptyPlace = place !== undefined && hasDates === false ? place : undefined;
-  const empty = emptyPlace !== undefined;
-  const invitation = splitInvitation(fillTemplate(copy.invitation, { place: place?.name ?? "" }));
 
-  return (
-    <>
-      {/* Block 1′ — the live dates of a known place. The one `ink` section of
-          the page rhythm. In S3 the slot carries the publish invitation
-          instead of an empty date box (TS-WEB-0008 D4). */}
-      <MotionReveal>
-        <SectionShell id="place-dates" kicker={empty ? undefined : words.kickers.liveAnswer} surface="ink">
-          {empty ? (
-            <EmptyStateBlock announced cta={search} headline={invitation.headline} lead={invitation.lead} pulse={false} />
-          ) : (
-            <PlaceDatesIsland
-              conversion={SAVE_CALENDAR}
-              communityId={shown.communityId}
-              ctaTemplate={place === undefined ? copy.datesCta : undefined}
-              held={held}
-              layout="split"
-              locale={locale}
-              placeName={shown.name}
-              role="illustrative"
-              rowCount={3}
-              slug={shown.slug}
-              titleTemplate={copy.datesHeadline}
-              tone="dark"
-            />
-          )}
-          {/* The block's hand-off to block 2a (SRC-0017 CG-008, issue #25) —
-              only where rows stand; S3 already *is* the invitation. */}
-          {empty || copy.handoffQuestion === "" ? null : (
-            <div className={pageStyles.handoff} data-handoff="">
-              <p className={pageStyles.handoffQuestion}>{copy.handoffQuestion}</p>
-              {copy.handoffCta === "" ? null : (
-                <Button dataCta="secondary" locale={locale} onward to="takePart" variant="secondary">
-                  {copy.handoffCta}
-                </Button>
-              )}
-            </div>
-          )}
-        </SectionShell>
-      </MotionReveal>
-
-      {/* TS-WEB-0019 D5, position 2: "this week nearby" is block 1's **S3**
-          module, and only S3's (polish brief, page 1, fix 2). */}
-      {emptyPlace ? (
-        <MotionReveal>
-          <SectionShell id="nearby" kicker={words.kickers.widerRadius} surface="surface-2">
-            <NearbyIsland
-              anchor={emptyPlace}
-              locale={locale}
-              point={{ lat: emptyPlace.lat, lng: emptyPlace.lng }}
-              role="answering"
-              rowCount={5}
-              titleTemplate={copy.nearbyHeading}
-            />
-          </SectionShell>
-        </MotionReveal>
-      ) : null}
-    </>
-  );
+  return emptyPlace ? (
+    <MotionReveal>
+      <SectionShell id="nearby" kicker={words.kickers.widerRadius} surface="surface-2">
+        <NearbyIsland
+          anchor={emptyPlace}
+          locale={locale}
+          point={{ lat: emptyPlace.lat, lng: emptyPlace.lng }}
+          role="answering"
+          rowCount={5}
+          titleTemplate={copy.nearbyHeading}
+        />
+      </SectionShell>
+    </MotionReveal>
+  ) : null;
 }
 
 /**

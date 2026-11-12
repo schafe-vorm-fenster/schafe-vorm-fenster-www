@@ -34,6 +34,17 @@ export interface LocateControlProps extends Omit<LinkOptions, "hash"> {
    * does not carry it as standing text.
    */
   readonly quiet?: boolean;
+  /**
+   * In-place mode (issue issue 143, DEC-0192): the resolved slug goes to this
+   * callback and the page does not navigate. Everything else — the click as
+   * the only trigger, the refusal, the late-answer rule — is unchanged.
+   */
+  readonly onPlace?: (slug: string) => void;
+  /**
+   * The round 44 px icon button that stands inside a field: the glyph alone,
+   * named by `aria-label` and the tooltip, no sentence beside it.
+   */
+  readonly iconOnly?: boolean;
 }
 
 /** How long the browser may take to answer; a slow fix is not worth a stuck page. */
@@ -78,6 +89,8 @@ export function LocateControl({
   name = "ort",
   tone = "light",
   quiet = false,
+  onPlace,
+  iconOnly = false,
 }: LocateControlProps) {
   const words = dictionary(locale).search;
   const describedBy = useId();
@@ -126,7 +139,11 @@ export function LocateControl({
             const slug = body.data?.place?.slug;
             if (typeof slug !== "string" || slug.length === 0) return;
             if (!current()) return;
-            window.location.assign(linkHref(to, { locale, query: { ...query, [name]: slug } }));
+            if (onPlace !== undefined) {
+              onPlace(slug);
+            } else {
+              window.location.assign(linkHref(to, { locale, query: { ...query, [name]: slug } }));
+            }
           } catch {
             // A lookup that fails changes nothing — the page stays as it was.
           } finally {
@@ -143,6 +160,22 @@ export function LocateControl({
       { timeout: POSITION_TIMEOUT_MS, maximumAge: 0 },
     );
   };
+
+  if (iconOnly) {
+    return (
+      <button
+        aria-label={words.locate}
+        className={styles.iconButton}
+        data-locate-control
+        disabled={!hydrated}
+        onClick={locate}
+        title={words.locate}
+        type="button"
+      >
+        <Icon name="locate" size={24} />
+      </button>
+    );
+  }
 
   return (
     <div className={[styles.control, tone === "dark" ? styles.dark : undefined].filter(Boolean).join(" ")}>

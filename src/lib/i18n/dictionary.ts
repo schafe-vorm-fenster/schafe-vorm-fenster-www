@@ -372,6 +372,37 @@ export interface Dictionary {
     locateExplains: string;
   };
   /**
+   * The home page's "Dein digitaler Dorfkalender." module (issue issue 143,
+   * DEC-0192): the explanation, the controls and the drawn phone's fixed
+   * fall-back rows. The German text is the owner's, verbatim; the English is a
+   * translation that waits for the owner's review.
+   */
+  dorfkalender: {
+    titleLead: string;
+    titleAccent: string;
+    sentence: string;
+    placeholder: string;
+    searchLabel: string;
+    locate: string;
+    submit: string;
+    /** `{place}` — the link to the place's own calendar, opened in a new tab. */
+    linkTemplate: string;
+    /** `{place}` — the text alternative of the whole drawing. */
+    imageLabelTemplate: string;
+    /** `{name}` — the phone's second header line, where the municipality is known. */
+    municipalityTemplate: string;
+    legendPlace: string;
+    legendNeighbours: string;
+    /** The five fixed rows a slot falls back to, in legend order (neutral on purpose: no firm, no place). */
+    defaults: readonly {
+      readonly weekday: string;
+      readonly day: number;
+      readonly time: string;
+      readonly place: string;
+      readonly title: string;
+    }[];
+  };
+  /**
    * `outbound-link`'s own announcements — hard-coded German regardless of
    * `locale` before F-2-4, on every page that links off-site.
    */
@@ -655,6 +686,28 @@ const de: Dictionary = {
     locate: "Meinen Standort verwenden",
     locateExplains: "Fragt den Browser einmal nach deinem Standort und öffnet den nächsten Ort. Gespeichert wird nichts.",
   },
+  dorfkalender: {
+    titleLead: "Dein digitaler",
+    titleAccent: "Dorfkalender.",
+    sentence:
+      "Erfahre, was in deinem Ort los ist: vom Bäckerauto bis zum Vereinsabend. Und trag deine eigenen Termine ein, damit alle davon wissen.",
+    placeholder: "Dein Ort",
+    searchLabel: "Ort suchen",
+    locate: "Meinen Standort verwenden",
+    submit: "Suchen",
+    linkTemplate: "Kalender von {place} öffnen",
+    imageLabelTemplate: "Smartphone mit den aktuellen Terminen von {place}, daneben eine Legende der Termin-Arten",
+    municipalityTemplate: "Gemeinde {name}",
+    legendPlace: "Dein Ort",
+    legendNeighbours: "In den Nachbarorten",
+    defaults: [
+      { weekday: "Fr", day: 13, time: "07:30", place: "Dorfstraße", title: "Bäckerauto" },
+      { weekday: "Sa", day: 14, time: "10:00", place: "Feuerwehrhaus", title: "Übung der Feuerwehr" },
+      { weekday: "Di", day: 17, time: "14:00", place: "Dorfplatz", title: "Bücherbus des Landkreises" },
+      { weekday: "Fr", day: 20, time: "19:00", place: "Festscheune", title: "Filmabend im Dorf" },
+      { weekday: "Sa", day: 21, time: "19:30", place: "Gutshaus", title: "Lesung im Kaminzimmer" },
+    ],
+  },
   outboundLink: {
     newTab: "öffnet neuen Tab",
     dataGoesTo: "Daten gehen an",
@@ -864,6 +917,28 @@ const en: Dictionary = {
     noSuggestions: "No place found.",
     locate: "Use my location",
     locateExplains: "Asks your browser once for your location and opens the nearest place. Nothing is stored.",
+  },
+  dorfkalender: {
+    titleLead: "Your digital",
+    titleAccent: "village calendar.",
+    sentence:
+      "Find out what is on in your place: from the bakery van to the club evening. And add your own dates so everyone knows about them.",
+    placeholder: "Your place",
+    searchLabel: "Search for a place",
+    locate: "Use my location",
+    submit: "Search",
+    linkTemplate: "Open the calendar of {place}",
+    imageLabelTemplate: "Smartphone with the current dates of {place}, beside it a legend of the kinds of date",
+    municipalityTemplate: "Municipality of {name}",
+    legendPlace: "Your place",
+    legendNeighbours: "In neighbouring places",
+    defaults: [
+      { weekday: "Fr", day: 13, time: "07:30", place: "Village street", title: "Bakery van" },
+      { weekday: "Sa", day: 14, time: "10:00", place: "Fire station", title: "Fire brigade drill" },
+      { weekday: "Tu", day: 17, time: "14:00", place: "Village square", title: "District library bus" },
+      { weekday: "Fr", day: 20, time: "19:00", place: "Festival barn", title: "Film night in the village" },
+      { weekday: "Sa", day: 21, time: "19:30", place: "Manor house", title: "Reading in the fireplace room" },
+    ],
   },
   outboundLink: {
     newTab: "opens new tab",

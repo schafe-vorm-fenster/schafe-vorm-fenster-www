@@ -99,9 +99,12 @@ for (const path of HERO_PAGES) {
   }
 }
 
-test("TS-WEB-0017-A27: on / the live dates stand head 1–4, list 5–12 at 1440×900", async ({ page }) => {
+// Skipped: the head-and-list split was only ever used by the home page's live
+// dates, and that section is gone (DEC-0192). A27 stays open until a section
+// uses the split layout again.
+test.skip("TS-WEB-0017-A27: the live dates stand head 1–4, list 5–12 at 1440×900", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/");
+  await page.goto("/dein-ort");
   await page.waitForLoadState("networkidle");
   const section = page.locator("#place-dates");
   await expect(section).toBeAttached();
