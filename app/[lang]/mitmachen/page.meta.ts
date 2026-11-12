@@ -16,11 +16,13 @@ export const pageMeta: PageMeta = {
   audiences: ["actors", "municipalities"],
   liveModules: [
     {
-      // TS-WEB-0022 D5 ties the live example to TS-WEB-0008 position 1 — no row of its
-      // own exists in TS-WEB-0008 D1's table (open point, TS-WEB-0022 Open points).
+      // Path 1's third stage state reads TS-WEB-0008 position 1 for the
+      // stage-0 anchor (TS-WEB-0022 D1 as amended by DEC-0196: the page's own
+      // live example is gone, this panel is the one live module left). No row
+      // of its own exists in TS-WEB-0008 D1's table (TS-WEB-0022 Open points).
       id: "position-1-dates-in-the-place",
       emptyState:
-        "never empty — a zero-date candidate is skipped and the next active covered place is taken instead (D5); the /dein-ort focus-job switch never fires on this route",
+        "never empty — fewer than three rows, a failing upstream or a mocked envelope shows the slot's marked sample rows instead (DEC-0115); the /dein-ort focus-job switch never fires on this route",
     },
   ],
   proofSlots: ["mitmachen-2-objections", "mitmachen-7-proof", "mitmachen-8-closing"],

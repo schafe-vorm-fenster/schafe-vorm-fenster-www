@@ -6,7 +6,7 @@ status: DRAFT
 version: 0.1.0
 implements: [FUN-WEB-0001, FUN-WEB-0133, FUN-WEB-0134, FUN-WEB-0135, FUN-WEB-0136, FUN-WEB-0004, FUN-WEB-0005, FUN-WEB-0006, FUN-WEB-0007, FUN-WEB-0138, CON-WEB-0059, FUN-WEB-0009, FUN-WEB-0139, CON-WEB-0060, BUS-WEB-0015, FUN-WEB-0202, BUS-WEB-0016, FUN-WEB-0203]
 sources: [SRC-0001, SRC-0003, SRC-0017, SRC-0018]
-decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0110, DEC-0170, DEC-0174]
+decisions: [DEC-0036, DEC-0039, DEC-0080, DEC-0081, DEC-0082, DEC-0083, DEC-0084, DEC-0110, DEC-0170, DEC-0174, DEC-0196]
 ai_provenance:
   prompt_id: UNKNOWN
   prompt_version: UNKNOWN
@@ -73,6 +73,14 @@ closing **search** on `ink` (`/`, TS-WEB-0019), it stays the last section — a
 search is not a conversion, and the second `ink` section is legal only as the
 page's last (SRC-0014 §Page Rhythm, DEC-0117). FUN-WEB-0005 and FUN-WEB-0006
 record the deviation from SRC-0001; DEM-0073 asks the source to follow.
+
+**`/mitmachen`: own blocks between block 4 and block 3** [FIXED: DEC-0196,
+owner, issue #154]. There the closing CTA follows the three publishing paths
+directly, on `ink`, and the page's proof block stands between it and the band.
+The band is still the last block in `main`, and the closing block still comes
+before it; the layout still renders the closing block and takes the blocks that
+follow it from the page (`PageFrame`'s `closing.followedBy`). Every other page
+keeps the order above.
 
 Blocks 3 and 4 are rendered by the shared layout from `page.meta.ts`, not
 hand-placed per page — that is what makes "every page" enforceable rather
@@ -268,6 +276,12 @@ context band: the band's content and the closing block are the same
 three jobs, so they render once, as the last block, rather than twice in
 sequence [PROPOSED].
 
+**Exception: the closing block does not directly precede the band on
+`/mitmachen`** (DEC-0196). It stands after the page's three publishing paths,
+on `ink` — the page's one dark section — and the proof block follows it before
+the band. It is still identical to the primary conversion: same goal ID,
+target and label.
+
 ### D7 — Scenes, not labels [FIXED: SRC-0001 §1a as applied by SRC-0017; DEC-0080]
 
 Every job introduction on every page is a scene block with a fixed shape:
@@ -409,7 +423,7 @@ the promise is removed rather than softened.
 | TS-WEB-0006-A4 | e2e | On every page whose focus job is "know what is on", the first screen contains the place-search or live-dates module and its primary conversion is not a link to another page. |
 | TS-WEB-0006-A5 | e2e | From every page, each of the four jobs is reachable in ≤ 1 click (header and context band targets resolve inside the TS-WEB-0004 D1 inventory). |
 | TS-WEB-0006-A6 | e2e | Every page renders exactly one context band, naming exactly the three non-focus jobs, in DOM order after the closing block, as the **last block in `main`** — except `/`, whose closing search block on `ink` follows it (DEC-0174 §4). |
-| TS-WEB-0006-A7 | e2e | The closing block carries the same conversion goal ID and target as the primary conversion and directly precedes the context band — or, where `primaryConversion` is `null`, is the merged three-job block, the last block. |
+| TS-WEB-0006-A7 | e2e | The closing block carries the same conversion goal ID and target as the primary conversion and directly precedes the context band — on `/mitmachen` with exactly the page's proof block between them (DEC-0196) — or, where `primaryConversion` is `null`, is the merged three-job block, the last block. |
 | TS-WEB-0006-A8 | static | Content lint (SRC-0018): zero hits of the avoid list — SRC-0017 §9 plus the glossary's avoid column — in page copy; no section-title field contains a question mark (CG-005); every scene block declares exactly one `mechanism`. |
 | TS-WEB-0006-A9 | static | No role switcher, audience selector, or self-classification control exists in the component inventory or in any rendered page. |
 | TS-WEB-0006-A10 | e2e | Stage-0 render (no geo, no referrer, no UTM, no params) and stage-3 render of the same page have identical block structure and identical `focusJob`; only module selection and order differ. The `/dein-ort` empty state is the one registered exception. |

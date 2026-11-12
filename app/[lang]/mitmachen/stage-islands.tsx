@@ -19,11 +19,11 @@ import type { PlaceEvents } from "@/src/lib/live/types";
  * `explain-stage` carries no sample of its own: "the page passes real rows or
  * a marked sample" (DEC-0115). This module is that page-side half:
  *
- *  - **Path 1** ends in "the date is in the calendar", and the calendar it
- *    means is the one the live example shows two sections further down. It
- *    reads the *same* BFF route position 1 reads (`/api/places/{slug}/events`),
- *    so the picture and the live module can never disagree about a place's
- *    dates.
+ *  - **Path 1** ends in "the date is in the calendar", and it shows three
+ *    real rows of the stage-0 anchor. It reads the *same* BFF route position 1
+ *    reads (`/api/places/{slug}/events`), so the picture and every live module
+ *    on the site can never disagree about a place's dates. (The page's own
+ *    live example, which this panel used to mirror, left with DEC-0196.)
  *  - **Paths 2 and 3** take the artifact's marked sample — three rows the
  *    content authored, on the **configured reference community**, never an
  *    invented place (DEC-0068 rule 3).
@@ -82,13 +82,13 @@ export function SampleStageCalendar({ locale, place, sample, referenceDate }: Sa
 }
 
 export interface LiveStageCalendarProps extends SampleStageCalendarProps {
-  /** The live example's own slug — the showcase community, configuration. */
+  /** The stage-0 anchor's slug — the showcase community, configuration. */
   readonly slug: string;
 }
 
 /**
- * The live panel: three real rows of the covered place the live example
- * anchors on, and the artifact's marked sample wherever that is not
+ * The live panel: three real rows of the covered place the stage-0 anchor
+ * names, and the artifact's marked sample wherever that is not
  * available — still loading, an unresolvable slug, an upstream that answers
  * fewer than the three rows the square panel shows, or a mocked envelope,
  * which is a sample by definition and says so through `provenance`.

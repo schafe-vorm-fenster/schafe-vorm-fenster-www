@@ -7,12 +7,12 @@ import type { Locator, Page } from "@playwright/test";
 /**
  * TS-WEB-0022 — `/mitmachen`, the publishing entry.
  *
- * ACs requiring real personalization/geo-ranking (stage 1–3, TS-WEB-0008 D1 has
- * no row for this route) are not-yet-M4: TS-WEB-0022-A7/A8 are covered at unit
- * level instead (`app/[lang]/mitmachen/example-place.test.ts`); TS-WEB-0022-A10's
- * stage-3 branch and TS-WEB-0022-A14's "resolved place" branch cannot be
- * exercised until personalization is built (no anchor ever reaches this
- * page today, per D8: "no place search on this route").
+ * ACs requiring real personalization (stage 1–3) are not-yet-M4:
+ * TS-WEB-0022-A10's stage-3 branch and TS-WEB-0022-A14's "resolved place"
+ * branch cannot be exercised until personalization is built (no anchor ever
+ * reaches this page today, per D8: "no place search on this route").
+ * The spec's criteria A7, A8 and A9 are retired with the live example and
+ * have no instrument any more (DEC-0196, issue 154).
  *
  * The component half of A19 is measured on the development fixture
  * (`e2e/explain-module.spec.ts`), where timing and geometry can be isolated;
@@ -44,7 +44,7 @@ async function showFraction(page: Page, pathModule: Locator, fraction: number): 
   }, fraction);
 }
 
-test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen", () => {
+test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A12/A13/A16/A17/A18/A19: /mitmachen", () => {
   for (const viewport of VIEWPORTS) {
     test(`TS-WEB-0022-A2: exactly one data-cta="primary", visible without scrolling, resolves to /mitmachen/registrieren at ${viewport.name}`, async ({
       page,
@@ -64,15 +64,24 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     });
   }
 
-  test("TS-WEB-0022-A3: DOM order is hero, objections, three paths, live example, proof", async ({
+  for (const path of ["/mitmachen", "/en/take-part"]) {
+  test(`TS-WEB-0022-A3: ${path} — DOM order is hero, objections, three paths, closing CTA on ink, proof, context band`, async ({
     page,
   }) => {
-    await page.goto("/mitmachen");
+    await page.goto(path);
     const blocks = await page
-      .locator("main [data-block]")
-      .evaluateAll((elements) => elements.map((element) => element.getAttribute("data-block")));
-    // hero (scene) → objections → the `wege` slot → beispiel (live example)
-    // → beleg (proof), which is D2's order.
+      .locator("main [data-block], main #closing-cta, main #context-band")
+      .evaluateAll((elements) =>
+        elements.map((element) =>
+          element.id === "closing-cta" || element.id === "context-band"
+            ? `#${element.id}`
+            : element.getAttribute("data-block"),
+        ),
+      );
+    // hero (scene) → objections → the `wege` slot → the frame's closing CTA
+    // → beleg (proof) → the band, which is D2's order as amended by DEC-0196
+    // (issue 154): the live example is gone, and the call to act follows the
+    // third path directly.
     //
     // Two things in this list are not D2 slots and are explained by G-4
     // (DEC-0124). The objection block is two sections — `objections` and
@@ -88,10 +97,17 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
       "wege",
       "wege",
       "wege",
-      "beispiel",
+      "#closing-cta",
       "beleg",
+      "#context-band",
     ]);
+    // The live example is gone in both languages; the closing CTA stands on
+    // the page's one dark ground.
+    await expect(page.locator('[data-block="beispiel"]')).toHaveCount(0);
+    await expect(page.getByText(/So sieht das in .+ aus|what that looks like in/i)).toHaveCount(0);
+    await expect(page.locator("#closing-cta")).toHaveAttribute("data-surface", "ink");
   });
+  }
 
   test('TS-WEB-0022-A4: exactly one data-block="scene", mechanism whatsapp, opener is two statements', async ({
     page,
@@ -215,14 +231,6 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
         /\b(zwei|drei|vier|fünf|sechs|sieben)\s+(Kanäle|Wege)\b/i,
       );
     }
-  });
-
-  test('TS-WEB-0022-A9: the live example names its radius "in <place>" and no page URL carries a place slug as a path segment', async ({
-    page,
-  }) => {
-    await page.goto("/mitmachen");
-    await expect(page.getByText(/^So sieht das in .+ aus$/)).toBeVisible();
-    expect(page.url()).not.toMatch(/gross-kiesow|musterdorf/);
   });
 
   test("TS-WEB-0022-A12: no numeric price, no currency symbol, no 'ab', no 'Portalize', no 'local-advertising'", async ({
@@ -401,11 +409,9 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     page,
   }) => {
     await page.goto("/mitmachen");
-    for (const kicker of [
-      "Warum es heute hakt",
-      "So geht's einfacher",
-      "Was gerade ansteht",
-    ]) {
+    // "Was gerade ansteht" was the live example's kicker; the block left the
+    // page with DEC-0196.
+    for (const kicker of ["Warum es heute hakt", "So geht's einfacher"]) {
       await expect(page.getByText(kicker, { exact: true })).toBeVisible();
     }
     await expect(page.locator("#wege-heading")).toHaveText("So kommen eure Termine rein");
@@ -488,7 +494,7 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     }
   });
 
-  test("TS-WEB-0022-A16: no two adjacent photo sections, exactly one dark live-data section, and the live module's box does not move once its rows arrive", async ({
+  test("TS-WEB-0022-A16: no two adjacent photo sections, exactly one dark section (the closing CTA), and the live stage boxes do not move once their rows arrive", async ({
     page,
   }) => {
     // Read off the render, not off a hand-kept list: `section-shell` writes
@@ -509,23 +515,24 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
       ).not.toEqual(["photo", "photo"]);
     }
 
-    // Exactly one dark section, and it is the live-data one (D10's anchor).
+    // Exactly one dark section, and since DEC-0196 it is the closing CTA
+    // (D10's anchor, issue 154): `paper` (path 3) → `ink` (closing) →
+    // `lime-100` (proof) → `surface` (band).
     expect(surfaces.filter((surface) => surface === "ink")).toHaveLength(1);
-    await expect(page.locator('main [data-surface="ink"]')).toHaveAttribute(
-      "data-block",
-      "beispiel",
-    );
+    await expect(page.locator('main [data-surface="ink"]')).toHaveAttribute("id", "closing-cta");
+    const tail = surfaces.slice(-4);
+    expect(tail, "the grounds from path 3 to the band").toEqual(["paper", "ink", "lime-100", "surface"]);
 
     // The asynchronous boxes keep their height from first paint to settle:
-    // the live module (D5) and the three stage panels this page added with
-    // DEC-0124. Measured at `domcontentloaded` and again after the network
+    // the three stage panels this page added with DEC-0124, path 1's reading
+    // live rows. Measured at `domcontentloaded` and again after the network
     // has gone quiet, which is the window `e2e/layout-stability.spec.ts`
     // measures site-wide and which this route is not in.
     const heightsOf = () =>
       page.evaluate(() =>
-        [
-          ...document.querySelectorAll('[data-block="beispiel"], [data-block="wege"]'),
-        ].map((element) => Math.round(element.getBoundingClientRect().height)),
+        [...document.querySelectorAll('[data-block="wege"]')].map((element) =>
+          Math.round(element.getBoundingClientRect().height),
+        ),
       );
 
     // Every stage box already has a height at `domcontentloaded` — nothing
@@ -539,7 +546,7 @@ test.describe("TS-WEB-0022-A2/A3/A4/A5/A6/A9/A12/A13/A16/A17/A18/A19: /mitmachen
     for (const height of stageHeights) expect(height).toBeGreaterThan(0);
 
     const early = await heightsOf();
-    expect(early.length).toBe(4); // three `wege` sections plus the live one
+    expect(early.length).toBe(3); // the three `wege` sections
     await page.waitForLoadState("networkidle");
     const late = await heightsOf();
     for (const [index, height] of late.entries()) {
