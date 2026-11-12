@@ -5,8 +5,9 @@ import { alternateUrls, canonicalUrl, everyRoute, href } from "../src/lib/routes
 import { shareImageUrl } from "../src/lib/seo/share-image";
 
 /**
- * The required head tags of every page, in both languages — TS-WEB-0011 D5/D6,
- * issue 195 (the image check is TS-WEB-0011-A9).
+ * The required head tags of every page, in both languages — TS-WEB-0011 D5/D6/D10,
+ * issue 195: TS-WEB-0011-A15 (head tags), A9 (the image), A16 (icons and
+ * manifest). The requirements behind them are listed in TS-WEB-0011 D11.
  *
  * `metadata-compliance.spec.ts` checks that title and description carry no
  * internal identifier; this file checks that the whole social and canonical
@@ -27,7 +28,7 @@ const ROUTES = everyRoute().map(({ route, locale }) => ({
 }));
 
 for (const { route, locale, path } of ROUTES) {
-  test(`issue 195: ${path} (${route}/${locale}) carries the required head tags`, async ({
+  test(`TS-WEB-0011-A15: ${path} (${route}/${locale}) carries the required head tags`, async ({
     page,
   }) => {
     await page.goto(path);
@@ -74,6 +75,7 @@ for (const { route, locale, path } of ROUTES) {
     expect(await meta('meta[name="twitter:title"]')).toBeTruthy();
     expect(await meta('meta[name="twitter:description"]')).toBe(description);
     expect(await meta('meta[name="twitter:image"]')).toBe(image);
+    expect(await meta('meta[name="twitter:image:alt"]')).toBeTruthy();
 
   });
 
@@ -92,7 +94,7 @@ for (const { route, locale, path } of ROUTES) {
   });
 }
 
-test("issue 195: favicon, touch icon and manifest are linked and answer", async ({
+test("TS-WEB-0011-A16: favicon, touch icon and manifest are linked and answer", async ({
   page,
   request,
 }) => {

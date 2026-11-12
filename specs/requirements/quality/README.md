@@ -84,3 +84,13 @@ the tactical spec per page type.
 | ID | Source | Suff. |
 | --- | --- | --- |
 | [NFR-WEB-0065](NFR-WEB-0065.md) | DEC-0014 | S3 |
+
+### Sharing
+
+The share image's measures (issue #195). The image itself and the tags that
+carry it are functional: `FUN-WEB-0078`, `FUN-WEB-0207`, `FUN-WEB-0208`.
+
+| ID | Source | Suff. |
+| --- | --- | --- |
+| [NFR-WEB-0066](NFR-WEB-0066.md) | SRC-0019 (issue #195), TS-WEB-0011 D6 | S2 |
+| [NFR-WEB-0067](NFR-WEB-0067.md) | SRC-0019, TS-WEB-0011 D6 | S2 |

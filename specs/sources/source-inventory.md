@@ -26,6 +26,7 @@ date: 2026-09-09
 | SRC-0012 | `classification-api/.github/workflows/` — reference CI/CD setup (typecheck · lint · coverage · knip · jscpd · preview · auto-merge · deploy) | external reference setup | medium | running production pipeline of a sibling service; adopted as the model by DEC-0031 | read |
 | SRC-0017 | `concept/website-copy-guide.md` — the website's wording specification | copy specification, governed | high | derived rule by rule from the owner's review of 2026-09-22 (`plan/reviews/2026-09-23/`), binding per DEC-0080; inherits from SRC-0001 and the hub's `brand-identity/tone-of-voice.md` | read |
 | SRC-0018 | `specs/contracts/copy-contract.md` — which copy rule is enforced by which mechanism | contract | high | states what schema, lint, e2e and the editorial gate owe SRC-0017; the copy counterpart of SRC-0013 | registered |
+| SRC-0019 | `plan/reviews/<date>/<date> Review ….md` — the owner's reviews, saved verbatim and cut into points (`plan/process.md` → Review intake) | owner statement, verbatim | medium | the owner's own words, dated, one point per issue (`pnpm check:reviews`); first cited by a requirement for SEO and sharing (2026-11-12, issue #195) | read |
 
 ## Quality vectors
 
@@ -64,6 +65,7 @@ C = currency, Cp = completeness, Sp = specificity, IC = internal consistency.
 | SRC-0016 | none | 1 | 3 | 2 | 2 | 2 | 2 | 1 | low | high | locatability: unlocatable |
 | SRC-0017 | line | 3 | 3 | 3 | 3 | 3 | 3 | 3 | high | high | — |
 | SRC-0018 | line | 3 | 3 | 3 | 3 | 3 | 3 | 3 | high | high | — |
+| SRC-0019 | line | 3 | 3 | 3 | 2 | 2 | 3 | 2 | medium | medium | — |
 
 ### What each score rests on
 
@@ -136,6 +138,15 @@ C = currency, Cp = completeness, Sp = specificity, IC = internal consistency.
 - **SRC-0017**, **SRC-0018** — 3 across the board, and they are the two
   sources written in this repository under a contract that says which rule is
   enforced by which mechanism. That is what a 3 on specificity looks like.
+- **SRC-0019** — L 3 and A 3: the owner's words, saved verbatim in this
+  repository, one point per block. Cp 2: a review names what the owner saw or
+  wants, not a full specification of it. Sp 2: it names the surfaces (title,
+  canonical, share image, icons) but no measures — the 2026-11-12 review asks
+  for an SEO and sharing requirement set and gives no image size, no length and
+  no icon size, so a value a requirement takes from it is `UNKNOWN` unless
+  another source carries it. The `Issue #195` blocks in that review are the
+  issue's text, written from the owner's account; they are quoted so that a
+  requirement can cite a line instead of a URL.
 
 ### What the rating changes, and what it does not
 
