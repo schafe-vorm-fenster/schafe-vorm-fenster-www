@@ -314,13 +314,13 @@ Termine sind vom Owner ausgedachte, neutrale Beispiele und bleiben
 
 **Aha-Satz:** Unsere Orte selbst gestalten.
 
-**Text:** Jan-Henrik Hempel war ehrenamtlicher Bürgermeister, ist Gemeindevertreter und hat den Kulturverein mitbegründet. Er kennt das Dorf von innen — als einer, der selbst mitmacht. Der Name Schafe vorm Fenster kommt von der Schafweide vor dem eigenen Küchenfenster.
+**Text:** Jan-Henrik Hempel war ehrenamtlicher Bürgermeister, ist Gemeindevertreter und hat den Kulturverein mitgegründet. Er kennt das Dorf von innen, als einer, der selbst mitmacht. Der Name Schafe vorm Fenster kommt von der Schafweide vor dem eigenen Küchenfenster.
 
 **Überleitung:** Den Dorfkalender gibt es, weil jemand das Problem selbst hatte.
 
 Quelle: `founder-former-volunteer-mayor` (`usage_rights: cleared`) — belegt
 über Nordkurier 2019/2022 und das Zukunftswege-Ost-Porträt 2026. Die Breite
-der Rollen (Gemeindevertreter, Mitbegründer des Kulturvereins) und der
+der Rollen (Gemeindevertreter, Mitgründer des Kulturvereins) und der
 Vorrang des Ehrenamts vor der Verwaltung sind Wortlaut des Reviews vom
 2026-09-22; „Unsere Orte selbst gestalten" und „Der Name Schafe vorm
 Fenster" ebenfalls. Dieser Slot trägt **keinen** Kicker: „Wo das herkommt"
