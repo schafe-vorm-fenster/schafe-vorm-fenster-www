@@ -99,6 +99,14 @@ family (DEC-0072) is on 10.
 | `typescript` | 5.9.3 | 6.0.3 | major: no deprecated option is set, and the changed defaults are all stated explicitly in `tsconfig.json`; type-check passes unchanged |
 | `@types/node` | 25.9.6 | 26.6.6 | follows Node |
 
+One Next 16.4 change reaches the tests: a production build now names a
+CSS-module class `<hash>_<local>` (vercel/next.js pull 97944, no opt-out),
+so the module's file name is no longer in the class attribute. `PriceTag`
+carries a `data-price-tag` hook and `deine-region.spec.ts` locates it there.
+Five more locators match a file name and are listed in `state/open.md`
+row 299, together with three `deine-region` tests that fail only under
+`next dev` on 16.4.
+
 The GitHub Actions move with them: `checkout` v7, `pnpm/action-setup` v6,
 `setup-node` v7, `cache` v6, `upload-artifact` v7 — all on the Node 24 action
 runtime, none with an input this repository uses changed.
