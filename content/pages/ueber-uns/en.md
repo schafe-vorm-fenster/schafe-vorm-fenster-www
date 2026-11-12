@@ -187,8 +187,6 @@ article. The fact now stands with its period in chapter 02's text (review of
 
 **Chapter 02 — place:** Municipality of Schmatzin
 
-**Chapter 03 — heading:** Then it became more than bread rolls.
-
 **Chapter 03 — place:** Vorpommern-Greifswald
 
 **Story — open:** The story
@@ -261,14 +259,17 @@ slots 3 and 3b).
 
 <!-- id: ueber-uns-3-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter", "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"]; status: draft -->
 
-**Heading:** What others say
-
 Pool: the full `proof` set plus `media-echo` (31 entries). Since the rebuild on
 the design of 2026-10-12 the stream is chapter 03 (DEC-0162 §2): four stories,
-all `usage_rights: cleared`. The NØRD award stands in its own award block
+all `usage_rights: cleared`. All four come from Schafe vorm Fenster's own eu:react
+final report to the funder (the four records' `source:`); the chapter still
+carries the same head as every proof section, kicker "What others say about us"
+over "Voices from the field" (`proofIntro`, DEC-0209 §4, owner 2026-11-12), and
+the lines keep the report as their source. The slot has no chapter heading
+field any more. The NØRD award stands in its own award block
 (slot 4) and the mayor in chapter 02 (slot 2):
 
-1. During the pandemic, every vaccination slot and every testing-centre opening time in the county was published through the village calendars, day-current and place-precise. — Landkreis Vorpommern-Greifswald, 2022
+1. During the pandemic, every vaccination slot and every testing-centre opening time in the county was published through the village calendars, day-current and place-precise. — eu:react final report, July 2022
 2. In 2022 the village calendar helped Ukrainian refugees join village life: club meetings, events, and mobile traders. — eu:react final report, July 2022
 3. Search Google for "Bäcker Schlatkow" and you find the mobile bakery van and its day — not branches in Anklam. — eu:react final report, July 2022
 4. During the pandemic, people working from home first noticed mobile traders through the village calendars — and some became regular customers. — eu:react final report, July 2022
@@ -278,6 +279,11 @@ element sits in which place is decided by the relevance engine (TS-WEB-0005)
 out of the same pool. The seventh place is reserved for the `testimonial` type
 and is never backfilled with an element of another type (TS-WEB-0027 D5).
 While it is empty it renders nothing — no card, no placeholder (DEC-0175 §3).
+
+Until #160 line 1 named "Landkreis Vorpommern-Greifswald" as its sender. The
+record `impftermine-landkreis` names Schafe vorm Fenster's own eu:react final report
+(July 2022) as its source and the county only as the partner of the work, so
+the line names the report (DEC-0209 §4).
 
 The stream's sixth element is gone: "the village calendar has been running
 since 2018" (`in-operation-since-2018`) is a "since …" claim, and TS-WEB-0027 D4

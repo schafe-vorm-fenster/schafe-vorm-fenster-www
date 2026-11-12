@@ -72,12 +72,12 @@ export interface ProofCandidate {
   readonly demo: boolean;
   readonly type?: ItemType;
   /**
-   * Whose voice this is — `customer` or `press` (`ProofKind` below). Carried
-   * through untouched: the engine does not score on it, and the page reads it
-   * back off the selection through `selectedProofKind` to head its section.
-   * It decides nothing else — whether an element renders as a quote or as a
-   * claim is `citation` plus the attribution's shape, not the kind.
-   * DEC-0143 §1.
+   * Whose voice this is — `customer` or `press` (`ProofKind` below). A
+   * selection facet only: it says which pool an element belongs to and never
+   * what the section is headed — every proof section carries the same head,
+   * `proofIntro` (DEC-0209, superseding DEC-0143 §2). Whether an element
+   * renders as a quote or as a claim is `citation` plus the attribution's
+   * shape, not the kind. DEC-0143 §1.
    */
   readonly proofKind?: ProofKind;
   /**
@@ -213,66 +213,32 @@ export async function selectProof({
  * score on it, and `ProofCandidate.type` above is not it: `ItemType` is the
  * relevance taxonomy (`src/lib/relevance/types.ts`), which answers "what kind
  * of element is this", not "whose voice is it". DEC-0143 §1.
+ *
+ * It steers the selection, never the heading (DEC-0209): a page builds its
+ * pool from the kinds it wants, and the section above it reads `proofIntro`
+ * whatever the pool holds.
  */
 export type ProofKind = "customer" | "press";
 
-/**
- * The customer heading, in the owner's own words for what belongs in that
- * section — "Sachen, wo es wirklich benutzt wird" (review, line 458), with the
- * leading noun dropped; the English is its mirror. The press heading is not
- * here: it is the site's own fixed vocabulary and is read from the one place
- * that holds it.
- */
-const CUSTOMER_PROOF_HEADING: Readonly<Record<Locale, string>> = {
-  de: "Wo es wirklich benutzt wird",
-  en: "Where it is really in use",
-};
-
-/**
- * The heading a proof section carries, decided by what the section proves and
- * by nothing else.
- *
- * Three pages headed a **customer** pool with the **press** heading — its own
- * words on `/mitmachen` ("Was andere sagen"), a variant of them on
- * `/deine-region` ("Was Landkreise und Institutionen sagen"), and the flat
- * "Belege" on `/dein-kalender` — while the copy guide reserves that heading for
- * the other kind: "Wer das schon macht → Was andere sagen *(for press proof
- * only)*" (`concept/website-copy-guide.md:516`, CG-017). The heading is read
- * from the kind here, in one place, rather than typed once per page.
- *
- * The kicker above it stays `kickers.customers`, which names the section's
- * *role*; this says what the section shows. The pair does **not** meet the
- * polish brief's G-7 ("no joint carries the same words twice"): "Wer den
- * Kalender nutzt" stands directly above "Wo es wirklich benutzt wird", the
- * same verb stem twice. Both strings are the owner's, one as a dictionary
- * kicker and one as a heading, so the repetition is his to settle — it is
- * registered on `state/open.md` row 283 with row 234, not fixed here.
- * DEC-0143 §2.
- */
-export function proofHeading(kind: ProofKind, locale: Locale): string {
-  if (kind === "press") return dictionary(locale).kickers.othersSay;
-  return CUSTOMER_PROOF_HEADING[locale];
+/** The head of a proof section: kicker and heading, no intro sentence. */
+export interface ProofIntro {
+  readonly kicker: string;
+  readonly heading: string;
 }
 
 /**
- * The kind a proof section is headed by: the facet of the first element the
- * engine selected, `customer` where the selection is empty or the artifact
- * carries no facet.
+ * The one head every proof section carries — "Was andere über uns sagen" over
+ * "Stimmen aus der Praxis" (owner, issue 160, 2026-11-12; DEC-0209).
  *
- * This is what makes `ProofCandidate.proofKind` a read field rather than a
- * decorative one. The alternative — a literal typed at each `proofHeading`
- * call — is exactly the duplication DEC-0143 §2 removes: the pool decides its
- * own heading, so exchanging an element for a press one re-heads the section
- * with no page edit. The first selected element decides, because the surface
- * mixes kinds and the engine's order is the page's order; a fully empty slot
- * keeps the customer heading, which is what the empty state is about
- * (TS-WEB-0027 D5).
+ * It used to depend on the kind of the first element the engine selected
+ * (DEC-0143 §2): a customer kicker and heading that repeated one verb stem
+ * ("Wer den Kalender nutzt" over "Wo es wirklich benutzt wird"), and the press
+ * heading on `/`. One section, one head: customers, press and the award stand
+ * under the same words, and no sentence follows, because a sentence naming the
+ * kinds would be untrue for some selection the engine makes.
  */
-export function selectedProofKind(selection: ProofSelection): ProofKind {
-  for (const entry of selection.entries) {
-    if (entry.kind === "item") return entry.candidate.proofKind ?? "customer";
-  }
-  return "customer";
+export function proofIntro(locale: Locale): ProofIntro {
+  return dictionary(locale).proofSection;
 }
 
 /**
