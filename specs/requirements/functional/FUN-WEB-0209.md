@@ -28,13 +28,13 @@ ai_provenance:
 
 # FUN-WEB-0209
 
-On every page, the website SHALL link a favicon, a touch icon and app icons, each drawn from the brand mark of the brand package.
+On every page, the website SHALL link a favicon, a touch icon and app icons, each drawn from the brand mark of the brand package, as a full circle.
 
 ## Source
 
 SRC-0019 — issue #195 asks for favicon and app icons; the owner's statement of 2026-11-12 (line 10) names the logo among what must not get lost.
 
-Further: the owner's review of 2026-09-22 (`plan/reviews/2026-09-23/2026-09-22 Review SVF Preview Website.md`, line 6) asks for the favicon with a larger border radius, "like a deliberately rounded app icon". The brand package's rule is `logo.radius` = `radius.pill`, a full circle on every surface including the favicon (`specs/contracts/design-system-contract.md`, the `logo.*` row; `state/open.md` row 214). The two disagree on the shape, so the shape is not part of this requirement: `Q-0095`.
+Further: the owner's review of 2026-09-22 (`plan/reviews/2026-09-23/2026-09-22 Review SVF Preview Website.md`, line 6) asks for the favicon with a larger border radius, "like a deliberately rounded app icon". The brand package's rule is `logo.radius` = `radius.pill`, a full circle on every surface including the favicon (`specs/contracts/design-system-contract.md`, the `logo.*` row; `state/open.md` row 214). The owner decided on 2026-11-12 that the favicon is a full circle, the brand rule (`Q-0095`). **Open:** the round artwork is new in the brand package; until it ships, the shipped square plate stays and the circle is not yet met. Brand-package issue: to be entered here once the orchestrator has opened it.
 
 ## Notes
 

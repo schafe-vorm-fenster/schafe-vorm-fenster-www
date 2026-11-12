@@ -38,4 +38,4 @@ Until 2026-11-12 this requirement's source was "convention", which names no docu
 
 ## Notes
 
-The complete set is the table in `TS-WEB-0011 D6`: `og:type`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:locale` and its alternates, `og:image` with width, height, type and alt, `twitter:card` = `summary_large_image`, and `twitter:title`, `twitter:description`, `twitter:image` emitted explicitly. The image itself is `FUN-WEB-0207`, its format `NFR-WEB-0066`, its text alternative `FUN-WEB-0208`. `twitter:site` waits for an account (`Q-0097`).
+The complete set is the table in `TS-WEB-0011 D6`: `og:type`, `og:site_name`, `og:title`, `og:description`, `og:url`, `og:locale` and its alternates, `og:image` with width, height, type and alt, `twitter:card` = `summary_large_image`, and `twitter:title`, `twitter:description`, `twitter:image` emitted explicitly. The image itself is `FUN-WEB-0207`, its format `NFR-WEB-0066`, its text alternative `FUN-WEB-0208`. `twitter:site` is not emitted, by the owner's decision of 2026-11-12: there is no account (`Q-0097`).

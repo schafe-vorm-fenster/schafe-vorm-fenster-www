@@ -185,10 +185,12 @@ runtime from body copy or from the `h1`.
 | Landing pages | Same contract, no exception (D7). |
 | Error pages | Title required, description not (they are `noindex`, D9). |
 
-Open, and not changed in code until answered: the separator — this table
-writes a middle dot, the layout template (`app/[lang]/layout.tsx`) builds
-`%s — Schafe vorm Fenster` (`Q-0094`); and keywords — no page emits
-`<meta name="keywords">` and no requirement asks for it (`Q-0096`).
+Decided by the owner on 2026-11-12: the separator before the brand is the
+middle dot (`Q-0094`), built in the layout template
+(`app/[lang]/layout.tsx`: `%s · Schafe vorm Fenster`); the home title keeps
+its brand-first form with the em dash, as the row above writes it. And no
+page emits `<meta name="keywords">`, on purpose (`Q-0096`): search engines
+ignore the tag, and none is wanted.
 
 ### D6 — Social sharing metadata [FIXED: SRC-0019 / FUN-WEB-0078, FUN-WEB-0207, FUN-WEB-0208, NFR-WEB-0066, NFR-WEB-0067; image system PROPOSED]
 
@@ -209,7 +211,7 @@ from TS-WEB-0001 D6, so title, canonical and `og:url` cannot drift apart.
 | `og:image:alt` | localized, from frontmatter |
 | `twitter:card` | `summary_large_image` |
 | `twitter:title` / `:description` / `:image` | emitted explicitly, same values — never left to parser fallback |
-| `twitter:site` | only if an account exists (`Q-0097`) |
+| `twitter:site` | never emitted: there is no account (`Q-0097`, owner 2026-11-12) |
 
 Per-page image: generated at build time with `next/og` from the page
 frontmatter (title line, brand mark, theme tokens) and stored per
@@ -313,11 +315,11 @@ The four sizes and the manifest fields beyond name and icons are what the
 build chose (issue #195); no source names them. They stay [PROPOSED] until a
 decision point takes them.
 
-Shape: the brand rule is a full circle on every surface, favicon included
-(`logo.radius` = `radius.pill`); the owner's review of 2026-09-22 asked for a
-deliberately rounded app icon; the shipped plate is a barely rounded square
-(`state/open.md` row 214). Which shape the favicon takes is `Q-0095`, and the
-answer is artwork in the brand package, not CSS here.
+Shape: a full circle on every surface, favicon included (`logo.radius` =
+`radius.pill`); the owner decided so on 2026-11-12 (`Q-0095`). The round
+artwork is new in the brand package, not CSS here; until it ships, the barely
+rounded square of today stays (`state/open.md` row 214). Open until then:
+the brand-package issue the orchestrator opens (number to be entered here).
 
 Not emitted: `Organization.logo` in the JSON-LD (D4) — `Q-0098`.
 
@@ -329,9 +331,9 @@ restate it.
 
 | Surface | Requirement | Specified in | Verified by |
 | --- | --- | --- | --- |
-| `<title>` | FUN-WEB-0076 | D5 (separator `Q-0094`) | TS-WEB-0011-A7, A15 |
+| `<title>` | FUN-WEB-0076 | D5 (separator ` · `, `Q-0094`) | TS-WEB-0011-A7, A15 |
 | `<meta name="description">` | FUN-WEB-0076 | D5 | TS-WEB-0011-A7, A15 |
-| `<meta name="keywords">` | none (`Q-0096`) | D5 | — |
+| `<meta name="keywords">` | none, by decision (`Q-0096`) | D5 | — |
 | `rel="canonical"` | FUN-WEB-0073 | TS-WEB-0001 D6; parameters D9 | TS-WEB-0011-A10, A15 |
 | `hreflang` incl. `x-default` | FUN-WEB-0065, FUN-WEB-0073 | TS-WEB-0001 D6 | TS-WEB-0011-A15 |
 | `robots` meta and `X-Robots-Tag` | CON-WEB-0023, FUN-WEB-0145 | D9 | TS-WEB-0011-A10 |
@@ -341,7 +343,7 @@ restate it.
 | `og:image` with `:width`, `:height`, `:type` | FUN-WEB-0078, FUN-WEB-0207, NFR-WEB-0066 | D6 | TS-WEB-0011-A8, A9, A15 |
 | `og:image:alt`, `twitter:image:alt` | FUN-WEB-0208 | D6 | TS-WEB-0011-A15 |
 | `twitter:card` = `summary_large_image`, `twitter:title`, `twitter:description`, `twitter:image` | FUN-WEB-0078 | D6 | TS-WEB-0011-A8, A15 |
-| `twitter:site` | none until an account exists (`Q-0097`) | D6 | — |
+| `twitter:site` | none, by decision: there is no account (`Q-0097`) | D6 | — |
 | Share image (per page and language, title and brand mark) | FUN-WEB-0207, NFR-WEB-0066, NFR-WEB-0067 | D6 | TS-WEB-0011-A9 |
 | Favicon, touch icon, app icons | FUN-WEB-0209 (shape `Q-0095`) | D10 | TS-WEB-0011-A16 |
 | Web app manifest | FUN-WEB-0210 | D10 | TS-WEB-0011-A16 |
@@ -424,15 +426,11 @@ restate it.
 - **New question: do the three D7 landing-page candidates enter the IA?**
   They are buildable only after the IA amendment (DEC-0022) and the
   content phase (CON-WEB-0087).
-- **Q-0097 — which social profiles exist?** Needed for
-  `Organization.sameAs` (D4) and `twitter:site` (D6). Both are omitted
-  rather than guessed until answered.
-- **Q-0094 — title separator.** D5 writes a middle dot, the build an em dash.
-  Owner: brand. Code unchanged until answered.
-- **Q-0095 — favicon shape.** Full circle (brand rule) or a deliberately
-  rounded square (owner review 2026-09-22). Owner: brand; artwork in the
-  brand package.
-- **Q-0096 — keywords.** Not emitted, not required, until answered.
+- **Answered 2026-11-12 by the owner:** `Q-0094` the title separator is ` · `;
+  `Q-0095` the favicon is a full circle (round artwork pending in the brand
+  package); `Q-0096` no meta keywords, on purpose; `Q-0097` no `twitter:site`,
+  there is no account (`Organization.sameAs` lists only profiles that exist,
+  none now).
 - **Q-0098 — `Organization.logo`.** Whether the JSON-LD node carries the brand
   mark, and which rendition.
 - **Amendment owed to TS-WEB-0004 D3:** the legacy redirect map is a new

@@ -83,7 +83,7 @@ export async function generateMetadata({
     metadataBase: new URL(SITE_ORIGIN),
     title: {
       default: d.siteName,
-      template: `%s — ${d.siteName}`,
+      template: `%s · ${d.siteName}`,
     },
     openGraph: { siteName: d.siteName, locale: OG_LOCALE[locale] },
     /**

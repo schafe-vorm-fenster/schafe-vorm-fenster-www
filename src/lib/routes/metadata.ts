@@ -82,7 +82,7 @@ export function pageMetadata(route: RouteId, locale: Locale): Metadata {
   return {
     metadataBase: new URL(SITE_ORIGIN),
     // The home page carries the brand itself, so the layout's
-    // `%s — Schafe vorm Fenster` template would say it twice (TS-WEB-0011 D5).
+    // `%s · Schafe vorm Fenster` template would say it twice (TS-WEB-0011 D5).
     title: route === "home" ? { absolute: title } : title,
     description,
     alternates: {

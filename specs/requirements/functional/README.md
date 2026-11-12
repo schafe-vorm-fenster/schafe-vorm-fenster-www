@@ -194,9 +194,9 @@ Where each search and sharing surface is specified — title, description,
 canonical, hreflang, robots, sitemap, Open Graph, Twitter card, share image,
 icons, manifest, structured data — is the inventory table in `TS-WEB-0011 D11`.
 Its measures (share-image size and budget) are `NFR-WEB-0066` and
-`NFR-WEB-0067`. Open: the title separator (`Q-0094`), the favicon's shape
-(`Q-0095`), keywords (`Q-0096`), `twitter:site` (`Q-0097`) and the logo in the
-`Organization` node (`Q-0098`).
+`NFR-WEB-0067`. Answered by the owner on 2026-11-12: the title separator (`Q-0094`), the
+favicon's shape (`Q-0095`, artwork still pending), keywords (`Q-0096`) and
+`twitter:site` (`Q-0097`). Open: the logo in the `Organization` node (`Q-0098`).
 
 ### Content Pipeline
 
