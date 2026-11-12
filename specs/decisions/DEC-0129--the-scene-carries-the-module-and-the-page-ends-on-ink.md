@@ -185,16 +185,16 @@ heading without a kicker above it, which deviates from polish brief G-3
 `/ueber-uns`. Writing a kicker nobody wrote is the alternative, and working
 rule 4 forbids it.
 
-### 10. The hero claim keeps the review's sentence and drops two of its words
+### 10. The hero claim asks the visitor's question and avoids generic claims
 
-The review's direction is *"Deine digitale Terminliste. Erfahre was wann wo in
-deinem Ort los ist. Einfach per Smartphone."* Two of those words — `digital`
-and `einfach` — are on `CG-040`'s avoid list as generic claims, and
-`TS-WEB-0006-A8` makes a hit an error rather than a finding. The middle clause
-is the one that survives both, so the claim reads **"Was wann wo in deinem Ort
-los ist."** (34 characters, inside `CG-020`'s 42), and the English mirror is
-"What's on where you live, and when." This is the second place where the
-specification wins over the review's literal wording; the first is §5.
+The review finds the opening too cryptic and asks for a more concrete entry.
+Two of the words in its direction are on `CG-040`'s avoid list as generic
+claims, and `TS-WEB-0006-A8` makes a hit an error rather than a finding. The
+claim therefore takes the review's later, simpler direction: a plain question
+about what is going on in the visitor's own village, in at most `CG-020`'s 42
+characters. The wording lives in `content/pages/home/{de,en}.md`, not here. This
+is the second place where the specification wins over the review's literal
+wording; the first is §5.
 
 ### 11. The scene that carries the module stands on `paper`, and the embed scene moves to `lime-100`
 

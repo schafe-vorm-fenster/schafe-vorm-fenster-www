@@ -118,7 +118,7 @@ states are layout logic, not part of this file. Placeholders in
 
 <!-- id: home-1-search-hero; content_type: hero; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Headline:** What's on where you live, and when.
+**Headline:** What's up in your village?
 
 **Search input (placeholder):** Type the place name
 
