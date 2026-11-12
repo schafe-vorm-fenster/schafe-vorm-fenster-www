@@ -597,6 +597,21 @@ Kein „die Leute" in diesem Absatz — CG-009.
     expect(checkCopy(slotOf("**Warum es zählt:** Damit euer Termin ankommt"))).toEqual([]);
   });
 
+  it("fails an instruction or field name printed as a value (CG-035, issue #37)", () => {
+    for (const value of [
+      "Beleg aus der Region",
+      "Proof from the region",
+      "Geo-Label auf den Belegkarten",
+      "TODO",
+      "Platzhalter",
+      "placeholder",
+    ]) {
+      expect(checks(checkCopy(slotOf(`**Text:** ${value}`))), value).toContain("avoid-list");
+    }
+    // The field's own label is not copy, only its value is.
+    expect(checkCopy(slotOf("**Geo-Label auf den Belegkarten:** Aus Lehre"))).toEqual([]);
+  });
+
   it("fails `im Amt` as the only addressee and passes it beside a second one (CG-036)", () => {
     expect(checks(checkCopy(slotOf("**Text:** Bei euch im Amt liegt der Kalender.")))).toContain(
       "avoid-list",

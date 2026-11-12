@@ -146,7 +146,9 @@ not.
 ### CG-005 — A section title is a statement, and it states what works
 
 Not a question, not a label, not a problem. A problem framing may live in the
-**kicker** above the title; the title says what goes.
+**kicker** above the title; the title says what goes. The kicker is optional
+(DEC-0206): a problem framing is one of the few reasons to set one, and the
+kicker then shares no word stem with the title.
 
 - Avoid: *"Warum es heute hakt"* · *"Warum es hakt"* · *"Warum das, was ihr
   heute macht, nicht überall ankommt"* · *"Warum wir"*
@@ -388,10 +390,22 @@ always, and CG-018 removes the abstraction from it without turning it into
 a question. What CG-018 forbids is the *flat abstraction*; what it does not
 grant is a question mark one line lower.
 
+The kicker stays the one place for the reader's question, and it is still
+optional (DEC-0206): a section whose title already answers plainly needs no
+question above it.
+
 ### CG-019 — Kicker vocabulary per section role
 
 The kicker names the role the section plays; the title says what goes
-(CG-005). One kicker per section, mono uppercase (SRC-0014 "Kicker").
+(CG-005). **At most one kicker per section, and none is required**
+(DEC-0206, owner 2026-11-12): before the content stand at most three text
+levels — kicker, title, intro — and a kicker stands only where it says what
+the title does not (a question, a problem framing, a role). A transition
+sentence is no level of its own; it becomes the intro or goes. Kicker, title
+and intro repeat neither a word stem nor a statement: not *"Wer den Kalender
+nutzt"* over *"Wo es wirklich benutzt wird"*. Mono uppercase (SRC-0014
+"Kicker"). The table is the pool a kicker is drawn from where one earns its
+place, not a list every section draws from.
 
 | Section role | The kicker says | From the review |
 | --- | --- | --- |
@@ -426,8 +440,8 @@ schema each one is a `max()` (TS-WEB-0007 D5).
 | CG-020 | hero claim | Display 54/800 | ≤ 42 characters, ≤ 3 lines | Concrete, not cryptic. It has to work for someone who arrived from a search result with no flyer in hand. |
 | CG-021 | hero lead | Lead 20/600 | ≤ 120 characters, ≤ 3 lines | One sentence that says what the reader gets, not what the product is. |
 | CG-022 | section title | Section head 38/800 | ≤ 40 characters, ≤ 2 lines | Statement, positive, no question mark (CG-005). |
-| CG-023 | kicker | Kicker mono 15/700 | ≤ 28 characters, 1 line | Names the section's role (CG-019). |
-| CG-024 | lead paragraph | Lead 20/400 | ≤ 160 characters, ≤ 4 lines | One idea, one example. |
+| CG-023 | kicker | Kicker mono 15/700 | ≤ 28 characters, 1 line | Optional. Names a question, a problem framing or a role the title leaves unsaid (CG-019); shares no word stem with title or intro (DEC-0206). |
+| CG-024 | lead paragraph | Lead 20/400 | ≤ 160 characters, ≤ 4 lines | One idea, one example. The intro is the third and last text level before the content (DEC-0206); a transition sentence that wants to stand becomes this lead. |
 | CG-025 | explain-module step line | core 18/700 · detail 15/400 | core ≤ 30, detail ≤ 40 characters **as a target, not a clamp** | Bold core = the step, normal detail = the addition. **Never truncated:** a line that is longer wraps, and the module reserves the height of its longest step (DEC-0154, owner's review 2026-10-12: a module that explains cannot hide its explanation behind "…"). A line over the target is a lint finding, not a cut. **Readability goes before a fixed height:** shorten the copy or make the three steps equally long first, and where every step needs two lines the module's fixed height is two lines (SRC-0014 "Explain module"). |
 | CG-026 | CTA label | Button 18/800 + arrow | ≤ 28 characters, 1 line | Verb + object. What happens on tap, in the reader's words. A CTA that leads to a page with more to learn (filters, configuration, white-label design) may carry **one supporting line beneath the button**, never a longer label (DEC-0154). |
 | CG-027 | proof card | Card title 21/700 + Meta | claim **a full sentence with a verb** (the 70-character limit is withdrawn, DEC-0154), context ≤ 140 characters | **State the win** in a sentence, not in keywords: *"Wir sind stolz, dass wir den NØRD Award 2026 in der Kategorie Smart Community unter der Schirmherrschaft des Bitkom e.V. gewonnen haben."* — never *"NØRD Award 2026 gewonnen, Kategorie Smart Community, Schirmherr Bitkom."* The new length budget is `UNKNOWN` until the proof card is redesigned (`Q-0086`); no number is invented here (CG-043). |
@@ -632,7 +646,7 @@ TS-WEB-0007 D12).
 | Warum es hakt · Warum es heute hakt *(as a title)* | | CG-005 — allowed as a kicker |
 | gebaut · betrieben *(about this product)* | | CG-033 |
 | einfach · digital · für alle · modern · innovativ | | generic claims are not copy (TS-WEB-0006 D7, CON-WEB-0059) |
-| Presse- und Auftrittshistorie | | CG-035 |
+| Presse- und Auftrittshistorie · Beleg aus der Region · Geo-Label · TODO *(as a whole value)* · Platzhalter *(as a whole value)* | | CG-035 — an instruction to the author, or a field name, printed as page text (issue #37) |
 | Beides gibt es · Dieselben Termine · Der Name der Firma | write the thing out | CG-004 |
 | Genau so. | | CG-016 |
 
@@ -651,6 +665,7 @@ TS-WEB-0007 D12).
 | Why this matters | What does this do for you? |
 | simple · digital · for everyone · modern · innovative | |
 | built in a village · operated from a village | |
+| Proof from the region · TODO *(as a whole value)* · placeholder *(as a whole value)* | |
 
 ### CG-041 — EN mirrors DE, and is not a translation of the page
 

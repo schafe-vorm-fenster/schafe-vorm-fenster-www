@@ -14,7 +14,6 @@ sources:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
-  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
   - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
   - "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"
@@ -24,7 +23,6 @@ derived_from:
   - "@schafe-vorm-fenster/audiences@0.3.3#actors"
   - "@schafe-vorm-fenster/messaging@0.1.0#actors--community-calendar"
   - "@schafe-vorm-fenster/offerings@0.3.5#community-calendar"
-  - "@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"
   - "@schafe-vorm-fenster/proof@0.3.5#lehre-lelender"
   - "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow"
   - "@schafe-vorm-fenster/proof@0.3.5#zukunftswege-ost-newsletter"
@@ -33,7 +31,7 @@ derived_from:
 generated_by: "playbook-content-production@1.0.0"
 generated_at: "2026-09-11"
 tone_profile: "du-everywhere"
-provenance: "sourced — every slot except the three `*-steps-demo` siblings, which are `provenance: generated; demo: true`: the step lines of the three explain modules exist only in the 2026-09-23 design drafts (DEC-0124, state/open.md). Slot 6a names Groß Kiesow against the real record anchored there, slot 7 carries three real publish-weighted reference cases instead of demo quotes, and slot 8 cites the offering record together with the 2022 Nordkurier entry behind the permanence commitment; all of those are clearance: pending (Q-0014, Q-0045)"
+provenance: "sourced — every slot except the three `*-steps-demo` siblings, which are `provenance: generated; demo: true`: the step lines of the three explain modules exist only in the 2026-09-23 design drafts (DEC-0124, state/open.md). Slot 7 carries three real publish-weighted reference cases instead of demo quotes, and slot 8 cites the offering record together with the 2022 Nordkurier entry behind the permanence commitment; all of those are clearance: pending (Q-0014, Q-0045)"
 compliance_check: "state/content-map.md#compliance-checks — TS-WEB-0022"
 schema_note: "see content/pages/home/de.md — same TS-WEB-0007/schema gap, state/open.md #37"
 open_points:
@@ -139,8 +137,10 @@ images:
 
 Focus job "publish our dates" throughout, no price, no "Portalize", no
 `local-advertising` on this page (TS-WEB-0022 D1, D7, D11; DEC-0052 §1/§3).
-Order: hero → objections → three publishing paths → live example →
-proof (TS-WEB-0022 D2).
+Order: hero → objections → three publishing paths → closing CTA (slot 8,
+on `ink`) → proof (TS-WEB-0022 D2 as amended by DEC-0196). The live example
+(formerly slots 6 and 6a) left the page with DEC-0196; slots 7 to 9 keep
+their numbers because code and registers cite them.
 
 Two separators appear in the lists and are part of the format: ` — `
 separates the core and the detail of a line (objection rows, step lines),
@@ -195,7 +195,7 @@ are typed "by hand" into several channels) and `pains[]` from
 section is the comparison module "Today → With your calendar", the same
 component as on `/dein-kalender`: three pairs, each problem beside its
 solution. The six sentences translate the owner's German wording from the
-issue and wait for the owner's review (`state/open.md` row 294). Gone are the
+issue and wait for the owner's review (`state/open.md` row 295). Gone are the
 block "The neighbours / The next village / The new arrivals" (the three now
 stand in pair 3's solution), the detail lines of the usual channels and the
 closing line. The page sets the glyph per pair (megaphone, clock, users).
@@ -319,7 +319,7 @@ place (DEC-0068 rule 3, DEC-0115).
 
 **Title:** Your website as the source
 
-**Status badge:** In testing (Alpha)
+**Status badge:** In testing
 
 **CTA label (secondary):** Register my website
 
@@ -392,35 +392,6 @@ wording is nobody's, hence `provenance: generated`, `demo: true` and
 amount, no currency symbol, no "from": the add-on is `price_status:
 on-request` and is named on `/mitmachen` without a figure (TS-WEB-0022
 D1/D11, A12, A17).
-
-## Slot 6 — Live example
-
-<!-- id: mitmachen-6-beispiel; content_type: live-module-frame; provenance: sourced; derived_from: [ia]; status: draft -->
-
-**Module heading:** Here's what that looks like in {place}
-
-When the place is known: the nearest active place with dates (TS-WEB-0008
-position 3 → 1). Never the visitor's own searched-for place, and never
-a place with no coverage as the data (FUN-WEB-0024).
-
-### Slot 6a — Reference place for stage 0 (no context known)
-
-<!-- clearance: pending — `zschiesche-gross-kiesow` is `usage_rights: unverified` (Q-0014). The place itself is a configuration, not a quote; nothing is quoted here. -->
-<!-- source_note: the honesty rule "the live example is always a real covered place" comes from gtm:concept/website-information-architecture.concept.md, page brief `/dein-ort/starten` ("empty-state rule"). -->
-<!-- id: mitmachen-6a-reference-place; content_type: configuration; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#zschiesche-gross-kiesow"]; status: draft -->
-
-**Reference place (stage 0):** Groß Kiesow
-
-As long as no context is known, the live example shows Groß Kiesow — a
-really covered place with a record of its own in the hub
-(`zschiesche-gross-kiesow`, a 2022 quote from mayor Dr. A. Zschiesche,
-clearance outstanding). No invented place, no invented dates: the module
-shows that place's real data. To be replaced as soon as content/editorial
-names a different or additional reference place (`state/open.md` #44).
-
-The same anchor carries path 1's third state: the explain module shows the
-live example's real rows there, not invented ones (DEC-0068 rule 3,
-DEC-0115).
 
 ## Slot 7 — Proof block (3 elements, publish-weighted)
 
@@ -506,7 +477,7 @@ own gets minted for this stays open (`state/open.md` #17).
 <!-- source_note: the offer phrasing instead of a menu comes from gtm:concept/website-communication-principles.concept.md principle 2; the three jobs and their wording from the job table in principle 1. Answers state/open.md row 95 for this page: its own band text rather than the shared home sentence. -->
 <!-- id: mitmachen-9-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Kicker:** Here for something else today?
+**Kicker:** Learn more about our calendar platform
 
 - **See what's on:** What's coming up next where you live → `/dein-ort`
 - **Run your own calendar:** Under your own name, on your own website → `/dein-kalender`

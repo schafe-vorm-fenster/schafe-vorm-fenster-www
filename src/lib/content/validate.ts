@@ -156,8 +156,8 @@ export interface CopyText {
  * `ueber-uns-3-proof-stream` and the `archiv-2-rows-demo` table (shape: a
  * list or table under an intro paragraph), plus the three paragraphs of
  * `/dein-kalender` that the page reads by index — `dein-kalender-3-embed-demo`
- * paragraph 0 and `dein-kalender-3b-embed-config` paragraphs 0 and 1
- * (`app/[lang]/dein-kalender/page.tsx:414`, `:449`, `:472`) — in both
+ * paragraph 0 and `dein-kalender-3b-embed-config` paragraph 0
+ * (`app/[lang]/dein-kalender/page.tsx:410`, `:445`) — in both
  * locales.
  */
 export function copyOf(page: PageContent): CopyText[] {
@@ -345,6 +345,16 @@ export const AVOID_TERMS: readonly AvoidTerm[] = [
   },
   { rule: "CG-005", pattern: /\bWarum es (heute )?hakt\b/i, scope: "section-title" },
   { rule: "CG-035", pattern: /\bPresse- und Auftrittshistorie\b/i },
+  // — CG-035, issue #37: an instruction to the author or the generator, or a
+  //   field name, printed as page text. `Beleg aus der Region` was the value of
+  //   the field `Geo-Label auf den Belegkarten` and reached the page as a badge.
+  //   The field's `**Label:**` itself is not copy (`copyOf`); a value is.
+  { rule: "CG-035", pattern: /\bBeleg aus der Region\b/i },
+  { rule: "CG-035", pattern: /\bProof from the region\b/i },
+  { rule: "CG-035", pattern: /\bGeo-?Label\b/i },
+  { rule: "CG-035", pattern: /\bTODO\b/, scope: "standalone-claim" },
+  { rule: "CG-035", pattern: /\bPlatzhalter\b/i, scope: "standalone-claim" },
+  { rule: "CG-035", pattern: /\bplaceholder\b/i, scope: "standalone-claim" },
   { rule: "CG-004", pattern: /\bBeides gibt es\b/i, instead: "write the thing out" },
   { rule: "CG-004", pattern: /\bDieselben Termine\b/i, instead: "write the thing out" },
   { rule: "CG-004", pattern: /\bDer Name der Firma\b/i, instead: "write the thing out" },
@@ -682,7 +692,7 @@ export const RENDERED_BLOCKS: readonly {
     slot: "dein-kalender-5-proof-demo",
     kind: "list",
     index: "all",
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:289 (listItems, every list)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:276 (listItems, every list)",
   },
   {
     slot: "archiv-2-rows-demo",
@@ -695,19 +705,14 @@ export const RENDERED_BLOCKS: readonly {
     slot: "dein-kalender-3-embed-demo",
     kind: "paragraph",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:204 (rendered at :423)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:201 (rendered at :410)",
   },
   {
     slot: "dein-kalender-3b-embed-config",
     kind: "paragraph",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:208 (rendered at :458)",
-  },
-  {
-    slot: "dein-kalender-3b-embed-config",
-    kind: "paragraph",
-    index: 1,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:208 (rendered at :495)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:205 (rendered at :445)",
+
   },
   // — the render sites QA round 4 found missing: every other slot a page
   //   reads by index or by kind (`validate.test.ts` proves the list is
@@ -716,85 +721,85 @@ export const RENDERED_BLOCKS: readonly {
     slot: "home-8-proof-stream",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/page.tsx:153",
+    renderedBy: "app/[lang]/page.tsx:119",
   },
   {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/page.tsx:387 (listAt, the three step lines)",
+    renderedBy: "app/[lang]/page.tsx:350 (listAt, the three step lines)",
   },
   {
     slot: "home-4a-scene-whatsapp-steps-demo",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/page.tsx:380 (listAt, the sample event rows)",
+    renderedBy: "app/[lang]/page.tsx:343 (listAt, the sample event rows)",
   },
   {
     slot: "mitmachen-2-objections",
     kind: "table",
     index: 0,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:245 (comparisonPairs, head and rows)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:237 (comparisonPairs, head and rows)",
   },
   {
     slot: "mitmachen-3a-path-whatsapp-steps-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:393 (listAt)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:390 (listAt)",
   },
   {
     slot: "mitmachen-3a-path-whatsapp-steps-demo",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:386 (listAt)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:383 (listAt)",
   },
   {
     slot: "mitmachen-4a-path-calendar-steps-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:434 (listAt)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:431 (listAt)",
   },
   {
     slot: "mitmachen-4a-path-calendar-steps-demo",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:428 (listAt)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:425 (listAt)",
   },
   {
     slot: "mitmachen-5a-path-website-steps-demo",
     kind: "list",
     index: 0,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:483 (listAt)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:480 (listAt)",
   },
   {
     slot: "mitmachen-5a-path-website-steps-demo",
     kind: "list",
     index: 1,
-    renderedBy: "app/[lang]/mitmachen/page.tsx:477 (listAt)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:474 (listAt)",
   },
   {
     slot: "mitmachen-7-proof-demo",
     kind: "list",
     index: "all",
-    renderedBy: "app/[lang]/mitmachen/page.tsx:202 (listItems, every list)",
+    renderedBy: "app/[lang]/mitmachen/page.tsx:194 (listItems, every list)",
   },
   {
     slot: "dein-kalender-2-contrast",
     kind: "table",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/page.tsx:231 (comparisonPairs, head and rows)",
+    renderedBy: "app/[lang]/dein-kalender/page.tsx:224 (comparisonPairs, head and rows)",
   },
   {
     slot: "dein-kalender-3b-embed-config",
     kind: "table",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/content.ts:57 (settingRows, from page.tsx:214)",
+    renderedBy: "app/[lang]/dein-kalender/content.ts:57 (settingRows, from page.tsx:207)",
   },
   {
     slot: "dein-kalender-4-tiers-checks-demo",
     kind: "table",
     index: 0,
-    renderedBy: "app/[lang]/dein-kalender/content.ts:57 (tierChecks, from page.tsx:220)",
+    renderedBy: "app/[lang]/dein-kalender/content.ts:57 (tierChecks, from page.tsx:213)",
   },
   {
     slot: "rechtliches-2-registry",

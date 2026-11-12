@@ -73,7 +73,7 @@ import { ValueStory } from "./value-story/value-story";
 
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { APP_URL } from "@/src/lib/live/app-handover";
-import { offeringPrice, publishedFigure } from "@/src/lib/pricing/offerings";
+import { offeringPrice, publishedFigure, tierPrice } from "@/src/lib/pricing/offerings";
 import { standardSources } from "@/src/lib/pricing/standard-sources";
 
 import type { DataState } from "./data-state";
@@ -598,7 +598,7 @@ export const GALLERY: readonly GalleryEntry[] = [
   {
     // The composition that replaces `offer-tier` (TS-WEB-0024 D6, DEC-0118):
     // one paper section, the lime-500 band, three rows on hairlines, one CTA
-    // each at quiet · primary-light · quiet. Row wording is the 2026-09-23
+    // each at secondary · primary-light · secondary. Row wording is the 2026-09-23
     // drafts' (plan/reviews/2026-09-23/Design - Preis Section 1–2.png); the
     // band's kicker is the dictionary's.
     name: "price-section",
@@ -617,11 +617,11 @@ export const GALLERY: readonly GalleryEntry[] = [
             { text: "Termine veröffentlichen, auch per WhatsApp" },
             { text: "Für Vereine, Gemeinden, Händler, alle" },
           ]}
-          cta={{ label: "Termine veröffentlichen", to: "takePart" }}
+          cta={{ label: "Jetzt anmelden", to: "register" }}
           kicker="Im Dorfkalender"
           offeringId="community-calendar"
-          price={offeringPrice("community-calendar")}
-          title="Der Kalender für euren Ort"
+          price={tierPrice("community-calendar")}
+          title="Der Dorfkalender / für euren Ort"
         />
         <PriceTierRow
           checks={[
@@ -633,19 +633,19 @@ export const GALLERY: readonly GalleryEntry[] = [
           kicker="Auf eurer Website"
           offeringId="portalize-calendar"
           price={offeringPrice("portalize-calendar")}
-          title="Euer eigener Kalender"
+          title="Euer eigener / Kalender"
         />
         <PriceTierRow
           checks={[
-            { text: "Für Landkreise, Behörden, große Städte" },
-            { text: "Zusätzlich mit Kartenansicht" },
-            { text: "Eigene Registrierung unter eurem Namen" },
+            { text: "Für Regionen, Stiftungen oder Landkreise" },
+            { text: "Auch als Themenkalender, etwa für Kultur" },
+            { text: "Kartenansicht ab Januar 2027" },
           ]}
-          cta={{ label: "Beratungstermin buchen", to: "region" }}
-          kicker="Für eine Region"
+          cta={{ label: "Kalender anfragen", to: "region" }}
+          kicker="Als Regionalkalender"
           offeringId="portalize-enterprise"
           price={offeringPrice("portalize-enterprise")}
-          title="Ein Kalender für den Landkreis"
+          title="Ein Kalender für / eure Region"
         />
       </PriceSection>
     ),

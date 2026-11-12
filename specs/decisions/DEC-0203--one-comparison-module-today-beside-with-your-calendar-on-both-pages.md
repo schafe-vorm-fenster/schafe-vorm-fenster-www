@@ -78,4 +78,4 @@ desktop and on the phone.
   `/dein-kalender` didactics) are answered or overtaken by this design; the PR
   for #159 records which.
 - The English heading and sentences are a draft translation, waiting for the
-  owner (`state/open.md` row 294).
+  owner (`state/open.md` row 295).

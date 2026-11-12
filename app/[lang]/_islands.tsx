@@ -276,6 +276,10 @@ export interface NearbyIslandProps {
   /** The list's role, which caps its rows (G-2) — position 2 is the `answering` five. */
   readonly role?: EventListRole;
   readonly headingLevel?: "h2" | "h3";
+  /** The sentence under the heading; shown in every state the module shows a heading in. */
+  readonly lead?: string;
+  /** Extra class on the frame — the section that owns the module styles it. */
+  readonly className?: string;
   /** The goal this module's calendar link completes (TS-WEB-0012 D4). */
   readonly conversion?: ConversionBinding;
 }
@@ -288,6 +292,8 @@ export function NearbyIsland({
   rowCount = 5,
   role,
   headingLevel = "h2",
+  lead,
+  className,
   conversion,
 }: NearbyIslandProps) {
   const load = useLive<NearbyEvents>(point === undefined ? undefined : liveRoutes.nearby(point.lat, point.lng));
@@ -308,10 +314,12 @@ export function NearbyIsland({
       <LiveModuleFrame
       reserveMarks
         cta={cta}
+        className={className}
         headingLevel={headingLevel}
+        lead={lead}
         locale={locale}
         skeleton={
-          <EventList items={[]} locale={locale} reserve="loading" role={role} rowCount={rowCount} state="loading" />
+          <EventList categoryPlacement="below" items={[]} locale={locale} reserve="loading" role={role} rowCount={rowCount} state="loading" />
         }
         state="loading"
         title={fillTemplate(titleTemplate, { radius: String(NEARBY_RADIUS_KM) })}
@@ -331,7 +339,9 @@ export function NearbyIsland({
     <LiveModuleFrame
       reserveMarks
       cta={cta}
+      className={className}
       headingLevel={headingLevel}
+      lead={lead}
       locale={locale}
       state={stateOf(envelope)}
       tier={tierOf(envelope)}
@@ -351,6 +361,7 @@ export function NearbyIsland({
         // The skeleton reserves the five rows; the answer takes the height of
         // the rows it has. This list stands below the fold, so the collapse is
         // no visible shift — and a kept reserve was empty space (issue #83).
+        categoryPlacement="below"
         reserve="loading"
         role={role}
         rowCount={rowCount}

@@ -106,8 +106,7 @@ images:
 
 # Your calendar (`/dein-kalender`)
 
-"Portalize" appears on this page **exactly once** (slot 4, tier 2;
-TS-WEB-0024 D7). No local `local-advertising` anywhere on the page
+"Portalize" appears on this page **never** (TS-WEB-0024 D7, DEC-0205). No local `local-advertising` anywhere on the page
 (TS-WEB-0024 D11). Two equally weighted conversions: order (Pulse, primary)
 and book a briefing (secondary, same visibility) — Pulse appears only
 in the focus block (TS-WEB-0024 D3).
@@ -150,7 +149,7 @@ office" as the only addressee).
 **Version of issue #159 (2026-11-12, DEC-0203), a draft translation.** The
 heading and the four right-hand sentences translate the owner's German
 wording from the issue and wait for the owner's review (`state/open.md`
-row 294). The German heading is itself marked "suggestion, still open" there.
+row 295). The German heading is itself marked "suggestion, still open" there.
 
 Four rows, derived from `portalize-calendar` (`summary`, category) and
 the `pains[]`/`gains[]`/`relievers[]` fields of
@@ -182,27 +181,20 @@ the next few weeks." The place name comes from
 
 <!-- id: dein-kalender-3b-embed-config; content_type: section; provenance: sourced; derived_from: ["@schafe-vorm-fenster/offerings@0.3.5#portalize-calendar", ia]; status: draft -->
 
-**Heading:** What it holds is up to you
+**Heading:** What it holds is up to you.
 
-The dates arrive the way they arrive — and they all land on your website
-anyway.
+You embed the calendar on your website and it appears in your design: without a Schafe vorm Fenster logo, matching the fonts and colours of your site. You decide which dates appear, whether they arrive by WhatsApp, from a Google Calendar or from a club's website.
 
-**Sources:** WhatsApp · Google Calendar · local groups' websites
-
-**Target:** your website
-
-Including dates from clubs that simply sent their flyer over WhatsApp.
-
-**Settings heading:** You decide:
+**Settings heading:** What you can set
 
 | Setting | Core | Example | Chips |
 | --- | --- | --- | --- |
-| Places | Single places or whole municipalities. | a town's cultural society takes the town area only — nothing from neighbouring places shows up. | Town area, Districts, ~~Neighbouring places~~ |
-| Organisers | Only the ones that belong to you — the others do not appear. | a foundation shows only its partners and the projects from its own funding programmes. | Partners, Grantees, ~~Everyone else~~ |
-| Categories | What kind of dates you carry. | a cultural calendar takes culture, tourism, education and health, but no everyday supply. A community calendar takes everything. | Culture, Tourism, Education, ~~Everyday supply~~ |
-| Window | How far ahead the calendar looks. | | |
-| Presentation | The calendar simply takes your design and adapts. No logo from us — your calendar on your website. Anyone who wants to can set the details; it works without that too. | | |
-| Updates | Current on every page view. To keep it fast we cache for a few minutes. | | |
+| Places | You choose single places or whole municipalities. | A town's cultural society shows only the town area. Dates from neighbouring places do not appear. | Town area, Districts, ~~Neighbouring places~~ |
+| Organisers | You show only the organisers that belong to you. | A foundation shows only its partners and the projects from its own funding programmes. | Partners, Grantees, ~~Everyone else~~ |
+| Categories | You choose which kind of dates you carry. | A cultural calendar shows culture, tourism, education and health, but no everyday supply. A community calendar shows everything. | Culture, Tourism, Education, ~~Everyday supply~~ |
+| Window | You decide how far ahead the calendar looks. | | |
+| Presentation | The calendar takes your design and adapts to your site. Anyone who wants to can set the details. It also works without that. | | |
+| Updates | The calendar is current on every page view. To keep it fast we cache the dates for a few minutes. | | |
 
 **Link label:** All settings in detail
 
@@ -216,20 +208,10 @@ ones in `Design -. Portalize Einstellungen 1.png` /
 - **No radius** under Places — `plan/reviews/2026-09-23/spec-impact.md`
   line 315: "Umkreis" is in no offering record and collides with
   `TS-WEB-0026-A2` and `TS-WEB-0005 D1`.
-- **No "in the office"** in the benefit band — CG-036, and the review says
-  so for this very sentence.
-- **Without the word "Example:"** in front of the example sentences. The
-  draft labels them that way; the page may not carry the word (Jan's
-  decision of 2026-09-18, `e2e/content-compliance.spec.ts`: no visible
-  marking of stand-in content). `setting-row` already sets the core
-  sentence and the example apart typographically, so the label says nothing
-  the row does not show.
-- **"local groups' websites" instead of "club website" and instead of "your
-  own website"** (DEC-0172 §3). The sources are the local groups' channels;
-  the target is your website. CG-040 replaces "club website" with "your own
-  website", which put nearly the same words beside the target "your website"
-  for two different places (review 2026-10-27, #96). "Local groups" is what
-  row 3 of the comparison already calls the same people.
+- **Bold "Example:"** in front of the example sentences (#162, DEC-0204).
+  `setting-row` renders it; the artifact does not carry the word.
+- **Source-to-target flow removed** (#162, DEC-0204): the channels are in the
+  lead; the lime band is gone.
 - **Window without example and chips**, carrying the "being checked"
   marker instead (review: "we have to look at what Portalize actually
   does"). The marker is the placeholder badge, not copy.
@@ -256,50 +238,47 @@ business anyway (TS-WEB-0024 D6, DEC-0083 §2).
 
 **Tier kicker:** In the village calendar
 
-**Title:** The calendar for your place
+**Title:** The village calendar / for your place
 
-**CTA (quiet):** Publish dates → `/mitmachen`
+**CTA (secondary):** Sign up now → `/take-part/register`
 
-Offering id: `community-calendar`; the price "free, permanent" renders as
-the permanence statement from the package, never as a figure
-(TS-WEB-0006 D10). The two CTAs became one with DEC-0082 §4: "open
-calendar" was a link into the app, not a next step in this decision
-(TS-WEB-0024 D6).
+Offering id: `community-calendar`; price from the package (`interval: forever`,
+`price_status: fixed`) — rendered as a figure with the explanation "free,
+permanently", the number read from the package (DEC-0205).
+The two CTAs became one with DEC-0082 §4 (TS-WEB-0024 D6). The title's line
+break is the ` / ` in the copy and is fixed (DEC-0205).
 
 ### Tier 2 — on your own website
 
 **Tier kicker:** On your website
 
-**Title:** Your own calendar
+**Title:** Your own / calendar
 
-**CTA (primary on light):** Order the calendar
+**CTA (primary on light):** Order the calendar → `/your-calendar/order`
 
-**Product name:** The calendar under your own name is called Portalize.
+<!-- note: from here an authoring note, not copy — it records the removal of the product-name sentence (DEC-0142 §1) -->
 
-<!-- note: from here to the next field an authoring note, not copy — the passage quotes the product name in order to record its one place (DEC-0142 §1) -->
+Offering id: `portalize-calendar`; price 480/EUR/year, `vat: excluded` —
+read from the package, never typed (TS-WEB-0024 D8), explained as "per year,
+excl. VAT". The sentence that named the product is gone (DEC-0205). The
+tier's briefing link is gone: it is reachable through the contact section,
+and every tier carries exactly one CTA (TS-WEB-0024 D6, DEC-0082 §4).
 
-Offering id: `portalize-calendar`; price 480/EUR/year, `vat: excluded`
-— read from the package, never typed (TS-WEB-0024 D8). "Portalize" appears
-on this entire page in this one sentence only (D7). The tier's briefing
-link is gone: it is reachable on this very page through the contact
-section, and every tier carries exactly one CTA (TS-WEB-0024 D6,
-DEC-0082 §4).
+### Tier 3 — as a regional calendar
 
-### Tier 3 — for a whole region
+**Tier kicker:** As a regional calendar
 
-**Tier kicker:** For a whole region
+**Title:** A calendar for / your region
 
-**Title:** A calendar for the county
+**CTA (secondary):** Request a calendar → `/your-region`
 
 <!-- note: author note from here, not copy — the paragraph names the internal €4,000 figure in order to forbid it (DEC-0142 §1, DEC-0145) -->
 
 Offering id: `portalize-enterprise`, `price_status: on-request` — never
-a number, never "from", never an order of magnitude, and without the
-draft's size qualifier (TS-WEB-0024 D8,
-`plan/reviews/2026-09-23/decisions.md` line 19). The internal €4,000
-figure from the package must never appear anywhere on this page. The CTA
-label is `/deine-region`'s page title from the route facade — not a
-sentence of its own.
+a number, never "from", never an order of magnitude (TS-WEB-0024 D8). The
+internal €4,000 figure from the package must never appear anywhere on this
+page. "On request" is as large as the other prices, explained as "depending
+on area and scope" (DEC-0205). The CTA target is unchanged, `/deine-region`.
 
 ## Slot 4b — Checks per tier (draft, unconfirmed)
 
@@ -311,7 +290,7 @@ sentence of its own.
 | --- | --- | --- | --- |
 | community-calendar | The calendar for your place and around it | Publish dates, over WhatsApp too | For clubs, municipalities, traders, everyone |
 | portalize-calendar | Under your name, in your design | With your places, categories and organisers | Dates arrive by themselves |
-| portalize-enterprise | For counties, authorities, large cities | Map view from January 2027 | Your own registration under your name |
+| portalize-enterprise | For regions, foundations or counties | Also as a topic calendar, for culture for example | Map view from January 2027 |
 
 The nine lines are the ones in `Design - Preis Section 1.png` and
 `Design - Preis Section 2.png`. The owner has not confirmed them, so the
@@ -320,6 +299,14 @@ slot is `provenance: generated; demo: true` with a row in `state/open.md`
 becomes "map view from January 2027" — the map view is announced with its
 date, never listed as a shipped feature (DEC-0061,
 `plan/reviews/2026-09-23/decisions.md` line 19).
+
+Tier 3 follows the wording of owner issue #165 since DEC-0205. Checked against
+the hub (`@schafe-vorm-fenster/offerings@0.3.5`): "foundations" is carried by
+`portalize-enterprise` (audience "Landesbehörde, Stiftung, or network"), "map
+view from January 2027" by DEC-0061. Deviation: "Also as a topic calendar, for
+culture for example" — the hub lists no topic calendar as a feature of
+`portalize-enterprise` (only "cultural categories" as a filter); the claim
+stands on the owner's instruction, DEM-0078 against the source.
 
 ## Slot 5 — Proof (3 elements, with images)
 

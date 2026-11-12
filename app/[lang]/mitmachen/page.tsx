@@ -33,14 +33,12 @@ import { standardSources } from "@/src/lib/pricing/standard-sources";
 
 import { buildDay } from "../_build-day";
 import { comparisonPairs } from "../_comparison";
-import { PlaceDatesIsland } from "../_islands";
 import { proofHeading, selectProof, selectedProofKind } from "../_proof";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
-import { REFERENCE_PLACE, selectExamplePlace } from "./example-place";
 import { pageMeta } from "./page.meta";
 import { listAt, threeSampleRows, threeSteps, withStepLinks } from "./paths";
 import { LiveStageCalendar, SampleStageCalendar } from "./stage-islands";
@@ -54,12 +52,18 @@ import type { Metadata } from "next";
 /**
  * TS-WEB-0022 — `/mitmachen`, the publishing entry.
  *
- * Own blocks, in D2 order: hero (the page's one scene) → objections (the
- * comparison module of issue 159, DEC-0203) → the `wege` slot, which is the three **bare** explain modules plus the price
- * boundary → live example (ink, the
- * page's single dark section, D10) → proof. The context band and the closing
- * CTA are block 3/4 of TS-WEB-0006 D2 and are rendered by `PageFrame` from
- * `page.meta.ts` — this page never renders them itself.
+ * Own blocks, in D2 order: hero (the page's one scene) → objections (the comparison module of issue 159, DEC-0203) → the
+ * `wege` slot, which is the three **bare** explain modules plus the price
+ * boundary → proof. The context band and the closing CTA are block 3/4 of
+ * TS-WEB-0006 D2 and are rendered by `PageFrame` from `page.meta.ts` — this
+ * page never renders them itself.
+ *
+ * Since DEC-0196 (owner, issue 154) the closing CTA stands **directly after
+ * the third path**, on `ink` — the page's single dark section (D10) — and the
+ * proof block follows it, handed to the frame as `closing.followedBy`. The
+ * live example "So sieht das in {Ort} aus" is gone: after three paths that
+ * each end in the calendar, the reader is to act, not to look at another
+ * calendar.
  *
  * Three things changed with DEC-0124 and are worth saying here, because each
  * of them looks like a mistake from the outside:
@@ -159,33 +163,21 @@ export default async function Page({
   // the price boundary, and D11:210 forbids folding it into the alpha badge.
   // Nobody wrote the German sentence, so it is a marked demo slot (DEC-0124).
   const bannerBoundary = slot(page, "mitmachen-5b-path-website-banner-demo");
-  const example = slot(page, "mitmachen-6-beispiel");
   const proofDemo = slot(page, "mitmachen-7-proof-demo");
   const closing = slot(page, "mitmachen-8-closing");
   // The band's own kicker (state/open.md row 95, row 161), not home's.
   const contextBand = slot(page, "mitmachen-9-context-band");
 
-  /**
-   * The heading keeps its `{…}` slot: the island fills it with the place the
-   * envelope actually resolved, which is the only name this page may claim.
-   *
-   * `selectExamplePlace()` (D5's own decision function, unit-tested) still
-   * owns *which* place — its stage-0 answer is the configured reference
-   * community `gross-kiesow`. That slug resolves only against the **real**
-   * geo-api, and this environment has no read token, so the module would
-   * render nothing at all. The stage-0 anchor stands in until the token
-   * exists; both slugs go through the same `resolvePlace()` call, so the
-   * swap is one constant. `state/open.md`.
-   */
-  const exampleTitle = (fieldAt(example.blocks, 0) ?? "").replace(
-    /\{[^}]+\}/,
-    "{place}",
-  );
-  const exampleSlug = selectExamplePlace(undefined).slug;
   /** The build's day — what the sample panels are dated from in the static HTML (DEC-0163). */
   const referenceDate = await buildDay();
-  const liveSlug =
-    exampleSlug === REFERENCE_PLACE.slug ? STAGE_ZERO_ANCHOR.slug : exampleSlug;
+  /**
+   * The place path 1's third stage state reads its three live rows from: the
+   * stage-0 anchor, configuration. It was the live example's slug until that
+   * module left the page (DEC-0196); the stage still reads the same
+   * `placeEvents()` interface, so the swap to a real reference place stays
+   * one constant (`state/open.md`).
+   */
+  const liveSlug = STAGE_ZERO_ANCHOR.slug;
 
   /**
    * TS-WEB-0005 through, not around: the inline surface is **3** positions
@@ -243,6 +235,7 @@ export default async function Page({
   // three rows fails the build rather than rendering a pair without a
   // sentence or a glyph (DEC-0203 §3).
   const comparison = comparisonPairs(objections.blocks, OBJECTION_ICONS, "mitmachen-2-objections");
+  const proofBlock = <ProofBlock locale={locale} proofSelection={proofSelection} />;
 
   return (
     <>
@@ -266,6 +259,10 @@ export default async function Page({
          * bookkeeping question, not a clearance one.
          */
         reassurance: fieldAt(closing.blocks, 2),
+        // DEC-0196 (issue 154): the call to act follows the third path
+        // directly, on the page's one dark ground, and the proof comes after.
+        surface: "ink",
+        followedBy: proofBlock,
       }}
       contextBandHeading={fieldAt(contextBand.blocks, 0)}
       locale={locale}
@@ -371,9 +368,9 @@ export default async function Page({
               reply={withChannelTokens(fieldAt(whatsappSteps.blocks, 1) ?? "")}
               time={fieldAt(whatsappSteps.blocks, 2) ?? ""}
             />,
-            // State 3 is "the date is in the calendar", and the calendar it
-            // means is the live example two sections down — the same
-            // interface module, the same cache profile (DEC-0115).
+            // State 3 is "the date is in the calendar": three live rows of
+            // the stage-0 anchor, off the same `placeEvents()` interface
+            // module and cache profile every live module uses (DEC-0115).
             <LiveStageCalendar
               key="3"
               locale={locale}
@@ -506,29 +503,24 @@ export default async function Page({
       {/* No cross-reference to `/dein-kalender` here (owner's review
           2026-10-27, issue #92, DEC-0174 §3): the context band hands off to
           every other job, `Dein Kalender` included, and a sentence that says
-          the same a few sections earlier only repeats it. */}
-      <SectionShell
-        dataBlock="beispiel"
-        kicker={dictionary(locale).kickers.liveAnswer}
-        label={exampleTitle}
-        surface="ink"
-      >
-        {/* D5's live example, off the shared live-data layer rather than a
-            page-local row list (`state/open.md` row 128): the same
-            `placeEvents()` interface `/dein-ort` and `/` use, so this module
-            degrades, caches and demo-labels exactly like every other one —
-            and like path 1's third stage state, which reads it too. */}
-        <PlaceDatesIsland
-          announced
-          locale={locale}
-          placeName={liveSlug === SHOWCASE_COMMUNITY.slug ? SHOWCASE_COMMUNITY.name : undefined}
-          rowCount={3}
-          slug={liveSlug}
-          titleTemplate={exampleTitle}
-          tone="dark"
-        />
-      </SectionShell>
+          the same a few sections earlier only repeats it.
 
+          What follows the third path is the frame's closing CTA, on `ink`,
+          and then `proofBlock` (DEC-0196). */}
+    </PageFrame>
+    </>
+  );
+}
+
+/** The proof block, which `PageFrame` renders after the closing CTA (DEC-0196). */
+function ProofBlock({
+  locale,
+  proofSelection,
+}: {
+  readonly locale: Locale;
+  readonly proofSelection: Awaited<ReturnType<typeof selectProof>>;
+}) {
+  return (
       <SectionShell
         dataBlock="beleg"
         // Customer proof: `customers` is the placeholder kicker, marked on its
@@ -536,9 +528,9 @@ export default async function Page({
         kicker={dictionary(locale).kickers.customers}
         kickerDemo
         labelledBy="beleg-heading"
-        // Lime rather than a grey: the frame appends `surface` (band) and
-        // `paper` (closing) after this section, and three neutral sections in
-        // a row is the rule this page's own rhythm test checks (A16, D10).
+        // Lime between the closing CTA's `ink` and the band's `surface`
+        // (DEC-0196): `paper → ink → lime-100 → surface`, no run of one
+        // colour family, which this page's own rhythm test checks (A16, D10).
         surface="lime-100"
       >
         {/* The h2 was `othersSay` — "Was andere sagen" / "What others say" —
@@ -574,7 +566,5 @@ export default async function Page({
           )}
         </ProofStream>
       </SectionShell>
-    </PageFrame>
-    </>
   );
 }

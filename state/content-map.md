@@ -612,7 +612,7 @@ driver), with the governing principle named in a `source_note:` comment.
 
 | Open row | New slot | What it carries |
 | --- | --- | --- |
-| 92 | `home-12-ui-strings` | the four UI strings of `DEMO_LABELS`; the geo label becomes `Beleg aus der Region` / `Proof from the region` now that the cards are real |
+| 92 | `home-12-ui-strings` | the four UI strings of `DEMO_LABELS`; the geo label became `Beleg aus der Region` / `Proof from the region`; **slot removed again (issue #37, CG-035)** — an author-side label printed as a badge; the proof cards carry no geo badge on `/` and the lint (`AVOID_TERMS`) now fails the phrase |
 | 93 | `dein-ort-0-state-s0` | the S0 headline, radius module heading, example badge, search hint |
 | 94 | `dein-ort-starten-5-search` (hint field), `dein-ort-starten-6-cta` (fallback CTA label) | the placeless CTA label and the EN search hint |
 | 95 | `dein-ort-9-context-band`, `dein-ort-starten-7-context-band`, `mitmachen-9-context-band` (text added), `registrieren-6-context-band` | one band per page, naming that page's own three non-focus jobs |

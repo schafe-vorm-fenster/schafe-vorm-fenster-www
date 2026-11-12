@@ -20,6 +20,8 @@ export interface SettingRowProps {
   readonly core: string;
   /** The example paragraph beneath it — meta type, `text2`. */
   readonly example?: string;
+  /** The bold label before the example ("Beispiel:"), passed in per locale. */
+  readonly exampleLabel?: string;
   /** The tag row: included values as tags, excluded ones struck (`tag`). */
   readonly tags?: readonly SettingTag[];
   /**
@@ -53,7 +55,7 @@ export interface SettingRowsProps {
  * A11y: the title is an `h3` inside a list item; the glyph is decorative;
  * the marker is text, read after the title.
  */
-export function SettingRow({ icon, title, core, example, tags, marker, className }: SettingRowProps) {
+export function SettingRow({ icon, title, core, example, exampleLabel, tags, marker, className }: SettingRowProps) {
   return (
     <li className={[styles.row, className].filter(Boolean).join(" ")}>
       <span className={styles.well}>
@@ -69,7 +71,17 @@ export function SettingRow({ icon, title, core, example, tags, marker, className
           ) : null}
         </h3>
         <p className={styles.core}>{core}</p>
-        {example ? <p className={styles.example}>{example}</p> : null}
+        {example ? (
+          <p className={styles.example}>
+            {exampleLabel ? (
+              <strong className={styles.exampleLabel} data-example-label>
+                {exampleLabel}
+              </strong>
+            ) : null}
+            {exampleLabel ? " " : null}
+            {example}
+          </p>
+        ) : null}
         {tags && tags.length > 0 ? (
           <ul className={styles.tags}>
             {tags.map((tag) => (
