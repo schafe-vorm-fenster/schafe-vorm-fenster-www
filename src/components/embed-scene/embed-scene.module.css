@@ -1,0 +1,154 @@
+/*
+ * `embed-scene` — issue 145, DEC-0193. Phone first (SRC-0014 §Layout Grid):
+ * the graphic stands under the photograph and overlaps it; from `lg` it sits on
+ * the photograph's lower edge and reaches into the ground below.
+ */
+.scene {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.opener {
+  font-size: 2.125rem;
+  font-weight: 800;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  margin: 0;
+  max-width: 43rem;
+}
+
+.lead {
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: var(--leading-relaxed);
+  margin: 0;
+  max-width: 43rem;
+}
+
+.points {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  list-style: none;
+  margin: 0;
+  max-width: 43rem;
+  padding: 0;
+}
+
+.point {
+  align-items: flex-start;
+  display: flex;
+  font-size: 1.0625rem;
+  gap: var(--space-4);
+  line-height: var(--leading-relaxed);
+}
+
+.tick {
+  color: var(--color-lime-800);
+  display: inline-flex;
+  flex: none;
+  padding-top: var(--space-1);
+}
+
+.stage {
+  position: relative;
+}
+
+/* The photograph: a fixed band, not a ratio — 240 px on the phone — with the
+   crop anchored high so the town hall's gable stays in (issue 145). The frame
+   itself stays a `media-frame`; only its box and its object position change. */
+.photo > figure > div {
+  aspect-ratio: auto;
+  height: 15rem;
+}
+
+.photo img {
+  object-position: center 30%;
+}
+
+/* The © control stands top right on this photograph (issue 145): the graphic
+   covers the lower edge, where the control sits on every other photograph, and
+   its panel opens downwards. */
+.photo [data-photo-credit] {
+  bottom: auto;
+  top: var(--space-4);
+}
+
+.photo [data-photo-credit] [data-photo-note] {
+  bottom: auto;
+  margin-bottom: 0;
+  margin-top: var(--space-2);
+  top: 100%;
+}
+
+/* Phone: under the photograph, 72 px over it, 40 px from the left edge and one
+   gutter from the right. */
+.stage .graphicRow {
+  margin-top: -4.5rem;
+  padding-inline-end: var(--gutter);
+  padding-inline-start: 2.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.graphic {
+  width: 100%;
+}
+
+/* `flex-start`, not the default stretch: from `lg` the row takes a min-height
+   for the graphic's overhang, and a stretched button would grow with it. */
+.cta {
+  align-items: flex-start;
+  display: flex;
+}
+
+/* lg — 48rem: 500 px photograph; the 460 px graphic on its lower edge at the
+   container's right, 96 px of it below the photograph; the button on the left,
+   with the room the overhang takes. */
+@media (min-width: 48rem) {
+  .scene {
+    gap: var(--space-12);
+  }
+
+  .opener {
+    font-size: 3rem;
+  }
+
+  .lead {
+    font-size: 1.25rem;
+  }
+
+  .point {
+    font-size: 1.125rem;
+  }
+
+  .photo > figure > div {
+    height: 31.25rem;
+  }
+
+  .stage .graphicRow {
+    bottom: -6rem;
+    display: flex;
+    justify-content: flex-end;
+    left: 0;
+    margin: 0;
+    padding-inline: var(--gutter);
+    position: absolute;
+    right: 0;
+  }
+
+  .graphic {
+    width: 28.75rem;
+  }
+
+  .cta {
+    min-height: calc(6rem + var(--space-6));
+  }
+}

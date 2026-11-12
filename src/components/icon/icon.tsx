@@ -11,6 +11,7 @@ import {
   Copyright,
   Download,
   ExternalLink,
+  Funnel,
   Globe,
   HeartPulse,
   House,
@@ -95,6 +96,8 @@ const GLYPHS = {
   /* DEC-0165: the mark on a photograph edited with an AI tool. */
   sparkles: Sparkles,
   copyright: Copyright,
+  /* Issue issue 145: the filter row of the embed scene's calendar graphic. */
+  funnel: Funnel,
 } as const satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof GLYPHS;
