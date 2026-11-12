@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Icon, type IconName } from "../icon/icon";
 
@@ -36,7 +36,8 @@ export interface WebCalendarOverlayProps {
  * It is a client island and only this graphic is: the rest of the scene is
  * server markup. The prerender — what a crawler and a visitor without
  * JavaScript get — is the first category ("Gemeindeleben") with its three rows.
- * Behaviour: every 3.5 s the next category shows, then it starts over; a click
+ * Behaviour: while at least half the graphic is on screen, every 3.5 s the
+ * next category shows, then it starts over; a click
  * on a filter button (or focus entering the graphic) shows that category and
  * stops the advance for good; under `prefers-reduced-motion` nothing advances.
  * States: none late — all twelve rows are authored copy, so the graphic reserves
@@ -60,8 +61,24 @@ export function WebCalendarOverlay({ copy, className }: WebCalendarOverlayProps)
     return () => query.removeEventListener("change", sync);
   }, []);
 
+  // The advance runs only while the graphic is on screen: a visitor who
+  // scrolls to it sees the sequence from its first category, and a page read
+  // below the fold does not change its own text behind the reader's back.
+  const root = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const element = root.current;
+    if (!element || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(([entry]) => setInView(entry?.isIntersecting ?? false), {
+      threshold: 0.5,
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
   const count = copy.categories.length;
-  const running = !stopped && !reduced;
+  const running = !stopped && !reduced && inView;
 
   useEffect(() => {
     if (!running) return;
@@ -79,6 +96,7 @@ export function WebCalendarOverlay({ copy, className }: WebCalendarOverlayProps)
       data-demo="true"
       data-web-calendar-overlay=""
       onFocus={() => setStopped(true)}
+      ref={root}
       role="group"
     >
       <div aria-hidden="true" className={styles.chrome}>

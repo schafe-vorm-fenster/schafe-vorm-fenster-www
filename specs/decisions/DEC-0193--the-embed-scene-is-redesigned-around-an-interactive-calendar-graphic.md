@@ -68,6 +68,14 @@ categories while the dates below change with it.
   DEC-0155), not the design's dark green `#171D0D`.
 - **Focus entering the graphic also stops the advance**, so a keyboard user is not
   moved under while tabbing; the design names the click only.
+- **The advance runs only while half the graphic is on screen**; the design does not
+  say when it starts. A visitor who scrolls to it sees the sequence from
+  "Gemeindeleben", and the page's text does not change below the fold.
+- **The icon-only filter on the phone hides its labels by clipping, not by
+  `display: none`**, and the phone's caption under the buttons is clipped the same
+  way from `lg`. The drawing is the design's; the text stays in the tree at every
+  width, so TS-WEB-0017 D2(d)'s single tree holds (`e2e/smoke.spec.ts` caught the
+  first version, whose 1280 reading had three labels the 360 reading lacked).
 - The screen-reader label "Beispiel: Kalender auf der Website einer Gemeinde" is the
   owner's wording and stands although the mock rule keeps "Beispiel" out of rendered
   copy; it describes the graphic truthfully as an example.
