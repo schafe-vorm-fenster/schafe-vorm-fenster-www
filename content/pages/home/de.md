@@ -74,14 +74,14 @@ images:
       2007, 3008×2000. Fremdaufnahme: CC BY-SA verlangt Namensnennung, sie steht hinter dem ©-Zeichen am Bild.
     alt: >-
       Das Rathaus von Gützkow in Vorpommern, ein weiß verputzter Altbau mit Freitreppe an der
-      Straße. Darüber liegt die gezeichnete Ansicht eines Terminkalenders auf einer Webseite.
+      Straße.
     licence: CC BY-SA 2.5
     credit: "Erell, CC BY-SA 2.5, über Wikimedia Commons, Bildausschnitt angepasst"
     credit_title: "Rathaus Gützkow"
     credit_url: "https://commons.wikimedia.org/wiki/File:Guetzkow_Ostvorpommern_Rathaus.jpg"
     focal:
       x: 42
-      "y": 50
+      "y": 30
     status: real
     file: /images/real/home-scene-embed.webp
     width: 1400
@@ -223,24 +223,78 @@ Referenzortes.
 
 <!-- id: home-5-scene-embed; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
 
-**Aha-Satz:** Deine Termine auf deiner Webseite.
+**Aha-Satz:** Ein Kalender für deine Gemeinde.
 
-**Text:** Der Kulturkalender für deine Gemeinde: Termine von allen Akteuren im Amtsgebiet, zu Kultur, Tourismus und Gemeindeleben. Zwei Zeilen einbinden, fertig.
+**Text:** Ihr bindet ihn mit zwei Zeilen auf eurer Website ein und müsst danach nichts mehr pflegen.
 
-**Kicker:** Ohne eigenes System
+**Kicker:** Onlinekalender ohne eigenes System
 
-**Überleitung:** Die Termine aus dem Ort stehen auch da, wo die Gemeinde sie zeigt:
+**Haken 1:** Eure Website zeigt die Termine aus allen Orten der Gemeinde und aus der Umgebung.
+
+**Haken 2:** Vereine und Veranstalter tragen ihre Termine selbst ein.
+
+**Haken 3:** Ihr legt fest, welche Termine erscheinen, zum Beispiel nur Kultur und Tourismus ohne die Müllabfuhr.
 
 **CTA-Label (sekundär):** Kalender bestellen
 
-Quelle: Value Proposition „municipalities--portalize-calendar", Felder
-`gains`/`relievers` — „our own design and our own selection, without our
-own system". Der Aha-Satz ist Wortlaut des Reviews vom 2026-09-22
-(„Deine Termine auf deiner Webseite"), das Beispiel „Der Kulturkalender
-für deine Gemeinde … von allen Akteuren im Gemeinde-/Amtsgebiet, Kultur,
-Tourismus, Gemeindeleben" ebenfalls; „Zwei Zeilen einbinden, fertig"
-ebenfalls. Das CTA-Label ist das Primärlabel der Zielseite
+Quelle: Wortlaut des Owners aus Issue #145 (Stand 2026-11-12), Value Proposition
+„municipalities--portalize-calendar", Felder `gains`/`relievers`. Die Überleitung
+„Die Termine aus dem Ort stehen auch da …" und die Aha-Zeile „Deine Termine auf
+deiner Webseite" des Reviews vom 2026-09-22 entfallen mit der Neugestaltung. Die
+Ansprache ist **offen**: die Überschrift sagt „deine Gemeinde", der Text „ihr/eure"
+(Issue #145, „Offen"; DEC-0191). Das CTA-Label ist das Primärlabel der Zielseite
 (`content/pages/dein-kalender/de.md`, Slot 1).
+
+### Slot 5a — Die Kalendergrafik der Einbindungs-Szene (Platzhalter)
+
+<!-- id: home-5a-scene-embed-calendar-demo; content_type: value-story; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Label Adresszeile:** gemeinde-musterdorf.de/termine
+
+**Label Titel der Grafik:** Termine in der Gemeinde
+
+**Label Filterleiste (Screenreader):** Nach Kategorie filtern
+
+**Label Grafik (Screenreader):** Beispiel: Kalender auf der Website einer Gemeinde
+
+**Label Gemeindeleben:** Gemeindeleben
+
+**Label Bildung und Gesundheit:** Bildung & Gesundheit
+
+**Label Versorgung:** Versorgung
+
+**Label Kultur und Tourismus:** Kultur & Tourismus
+
+**Termin Gemeindeleben 1:** 04 | Mi | Sitzung der Gemeindevertretung | Gemeindehaus · 19:00
+
+**Termin Gemeindeleben 2:** 11 | Mi | Laternenumzug der Feuerwehr | Feuerwehrhaus · 17:30
+
+**Termin Gemeindeleben 3:** 18 | Mi | Jahresversammlung Sportverein | Sportlerheim · 19:00
+
+**Termin Bildung und Gesundheit 1:** 05 | Do | Bücherbus des Landkreises | Dorfplatz · 14:00
+
+**Termin Bildung und Gesundheit 2:** 12 | Do | Erste-Hilfe-Kurs | Gemeindehaus · 10:00
+
+**Termin Bildung und Gesundheit 3:** 19 | Do | Blutspende | Feuerwehrhaus · 15:00
+
+**Termin Versorgung 1:** 06 | Fr | Bäckerauto | Dorfstraße · 07:30
+
+**Termin Versorgung 2:** 13 | Fr | Wochenmarkt | Marktplatz · 08:00
+
+**Termin Versorgung 3:** 20 | Fr | Hofladen geöffnet | Gutshof · 10:00
+
+**Termin Kultur und Tourismus 1:** 07 | Sa | Konzert in der Dorfkirche | Dorfkirche · 17:00
+
+**Termin Kultur und Tourismus 2:** 14 | Sa | Lesung im Kaminzimmer | Gutshaus · 19:30
+
+**Termin Kultur und Tourismus 3:** 21 | Sa | Führung durch den Schlosspark | Schloss · 11:00
+
+Die Grafik zeigt eine Gemeinde-Website mit dem eingebundenen Kalender und
+wechselt durch die vier Kategorien (Issue #145, DEC-0191). Adresse, Orte und
+Termine sind vom Owner ausgedachte, neutrale Beispiele und bleiben
+`provenance: generated`, `demo: true`, im Markup `data-demo="true"`
+(DEC-0068, `state/open.md`). Das Format eines Termins ist
+`Tag | Wochentag | Titel | Ort · Uhrzeit`, je Kategorie genau drei.
 
 ## Szene 3 — Herkunft (Mechanismus: provenance)
 

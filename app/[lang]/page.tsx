@@ -9,10 +9,12 @@ import { PlaceSearch } from "@/src/components/place-search/place-search";
 import { ProofCard } from "@/src/components/proof-card/proof-card";
 import { ProofStream } from "@/src/components/proof-stream/proof-stream";
 import { SceneBlock } from "@/src/components/scene-block/scene-block";
+import { EmbedScene } from "@/src/components/embed-scene/embed-scene";
 import { WebCalendarOverlay } from "@/src/components/web-calendar-overlay/web-calendar-overlay";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
 import { dictionary } from "@/src/lib/i18n/dictionary";
 import { fieldAt } from "@/src/lib/content/blocks";
+import { embedCalendarFrom } from "@/src/lib/content/embed-calendar";
 import { pageImage } from "@/src/lib/content/images";
 import { partnerLogo } from "@/src/lib/content/partner-logos";
 import { HERO_IMAGE_ID } from "@/src/lib/pages/hero-images";
@@ -188,6 +190,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
   const sceneWhatsapp = slot(page, "home-4-scene-whatsapp");
   const whatsappSteps = slot(page, "home-4a-scene-whatsapp-steps-demo");
   const sceneEmbed = slot(page, "home-5-scene-embed");
+  const embedCalendar = embedCalendarFrom(slot(page, "home-5a-scene-embed-calendar-demo").blocks);
   const sceneProvenance = slot(page, "home-6-scene-provenance");
   const stamps = slot(page, "home-7-provenance-stamps");
   const proof = slot(page, "home-8-proof-stream");
@@ -436,18 +439,18 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
           ),
           embed: (
             <>
-              {/* The embed scene's photograph runs full-bleed: the section gives up
+              {/* The embed scene is the one with the calendar graphic (issue 145,
+                  DEC-0191): a kicker, then heading · lead · three ticked points in
+                  the container, the town-hall photograph full-bleed and the
+                  graphic on its lower edge, the button below. The section gives up
                   its container and the scene puts it back around everything but the
-                  instance. A photograph framed by the section's 16 px padding is a
-                  picture in a mount and the section stops being a surface (SRC-0014
-                  §"Section grounds carry rhythm, not meaning"). The ground moved with
-                  it — `surface-2` is one of the sober greys the design system keeps
-                  for the municipal argument and for inactive things, and this is
-                  solution content, which takes a fresh ground. `lime-100` and not
-                  `paper`, because the scene before it is now `paper` for its module's
-                  sake: with the S3 widening block (`surface-2`) above them, three
-                  neutral grounds would stand in a row and `checkRhythm`'s family rule
-                  allows two (DEC-0129 §11). */}
+                  photograph (SRC-0014 §"Section grounds carry rhythm, not meaning").
+                  The ground stays `lime-100`, and not `paper`, because the scene
+                  before it is `paper` for its module's sake: with the S3 widening
+                  block (`surface-2`) above them, three neutral grounds would stand
+                  in a row and `checkRhythm`'s family rule allows two (DEC-0129
+                  §11). The scene has no transition line any more: the owner's
+                  design opens on the kicker and the heading. */}
               <MotionReveal>
                 <SectionShell
                   contained={false}
@@ -455,11 +458,8 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                   id="scene-2"
                   kicker={fieldAt(sceneEmbed.blocks, 2)}
                   surface="lime-100"
-                  transition={fieldAt(sceneEmbed.blocks, 3)}
                 >
-                  <SceneBlock
-                    bleed
-                    body={fieldAt(sceneEmbed.blocks, 1)}
+                  <EmbedScene
                     cta={
                       <Button
                         dataCta="secondary"
@@ -471,31 +471,28 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                         {ctaLabelOnly(sceneEmbed.cta ?? "") ?? ""}
                       </Button>
                     }
-                    instance={
-                      /* #32, DEC-0162 §5: a drawing of the website calendar lies
-                         over the town-hall photograph, so the scene says "a
-                         calendar on your website" at a glance. The drawing is
-                         decorative; the photograph's `alt` names both. */
-                      <WebCalendarOverlay>
-                        <MediaFrame
-                          alt={sceneEmbedImage?.alt ?? ""}
-                          locale={locale}
-                          aiEdited={sceneEmbedImage?.aiEdited} notDepicting={sceneEmbedImage?.notDepicting}
-                          credit={imageCredit(sceneEmbedImage, locale)}
-                          placeholderId={sceneEmbedImage?.placeholderId}
-                          /* 16 : 9 across the section's whole width — the review's own
-                             shape for this photograph ("auf die volle Breite in 16:9
-                             oder 21:9 ziehen"); `map` is that ratio token. */
-                          ratio="map"
-                          sizes="100vw"
-                          src={sceneEmbedImage?.src}
-                          state={sceneEmbedImage ? undefined : "empty"}
-                        />
-                      </WebCalendarOverlay>
-                    }
-                    locale={locale}
-                    mechanism="embed"
+                    /* The calendar graphic is its own element with its own label
+                       (a client island; its prerender is the first category). */
+                    graphic={<WebCalendarOverlay copy={embedCalendar} />}
+                    lead={fieldAt(sceneEmbed.blocks, 1) ?? ""}
                     opener={fieldAt(sceneEmbed.blocks, 0) ?? ""}
+                    /* The photograph keeps its credit; it is a fixed band (500 px,
+                       240 px on the phone) cropped from the top, so `ratio` only
+                       reserves the box until the stylesheet narrows it. */
+                    photo={
+                      <MediaFrame
+                        alt={sceneEmbedImage?.alt ?? ""}
+                        locale={locale}
+                        aiEdited={sceneEmbedImage?.aiEdited} notDepicting={sceneEmbedImage?.notDepicting}
+                        credit={imageCredit(sceneEmbedImage, locale)}
+                        placeholderId={sceneEmbedImage?.placeholderId}
+                        ratio="map"
+                        sizes="100vw"
+                        src={sceneEmbedImage?.src}
+                        state={sceneEmbedImage ? undefined : "empty"}
+                      />
+                    }
+                    points={[3, 4, 5].map((index) => fieldAt(sceneEmbed.blocks, index) ?? "")}
                   />
                 </SectionShell>
               </MotionReveal>
