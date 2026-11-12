@@ -308,7 +308,7 @@ exactly three per category.
 
 **Aha statement:** Shaping our own villages ourselves.
 
-**Text:** Jan-Henrik Hempel was a volunteer mayor, sits on the municipal council and co-founded the culture club. He knows the village from the inside — as someone who joins in. The name Schafe vorm Fenster comes from the sheep pasture outside his own kitchen window.
+**Text:** Jan-Henrik Hempel was a volunteer mayor, sits on the municipal council and co-founded the culture club. He knows the village from the inside, as someone who joins in. The name Schafe vorm Fenster comes from the sheep pasture outside his own kitchen window.
 
 **Transition:** The village calendar exists because somebody had the problem himself.
 
