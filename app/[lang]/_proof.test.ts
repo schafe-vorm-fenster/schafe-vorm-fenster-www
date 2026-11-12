@@ -1,36 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  parseProofLine,
-  proofHeading,
-  quoteAuthor,
-  selectedProofKind,
-  type ProofCandidate,
-  type ProofSelection,
-} from "./_proof";
+import { parseProofLine, proofIntro, quoteAuthor } from "./_proof";
 
 import { parseDemoProofElement } from "@/src/lib/pages/demo-content";
 
-/** A candidate with only the fields these cases read. */
-function candidate(over: Partial<ProofCandidate>): ProofCandidate {
-  return {
-    id: "c",
-    contextLine: "Wer",
-    claim: "Ein Satz.",
-    attribution: "Wo",
-    demo: false,
-    ...over,
-  };
-}
-
-function selection(entries: ProofSelection["entries"]): ProofSelection {
-  return { entries, stage: 0, seed: "2026-W39", filled: entries.length };
-}
-
 /**
  * The two things the cross-page proof pool decides outside the relevance
- * engine — the copy guide's CG-017 (which heading a section may carry) and
- * CG-028 (when somebody's words are a quote card), DEC-0143.
+ * engine — the copy guide's CG-017 (the one head every proof section carries,
+ * DEC-0209) and CG-028 (when somebody's words are a quote card), DEC-0143.
  *
  * The engine's own behaviour is `src/lib/relevance/`'s business and is tested
  * there; these are the facets the artifacts carry and the pages read back. The
@@ -38,49 +15,25 @@ function selection(entries: ProofSelection["entries"]): ProofSelection {
  * here: a unit test is not an attestation (`scripts/check-coverage.ts`,
  * state/open.md row 272).
  */
-describe("proofHeading", () => {
-  it("heads a customer pool with the customer heading, never the press one (CG-017)", () => {
-    expect(proofHeading("customer", "de")).toBe("Wo es wirklich benutzt wird");
-    expect(proofHeading("customer", "en")).toBe("Where it is really in use");
-
-    // The copy guide reserves "Was andere sagen" for press proof only
-    // (website-copy-guide.md:516) — a customer section must not carry it.
-    expect(proofHeading("customer", "de")).not.toBe(proofHeading("press", "de"));
-    expect(proofHeading("customer", "en")).not.toBe(proofHeading("press", "en"));
+describe("proofIntro", () => {
+  it("is the owner's one head for every proof section, in both locales (DEC-0209)", () => {
+    expect(proofIntro("de")).toEqual({
+      kicker: "Was andere über uns sagen",
+      heading: "Stimmen aus der Praxis",
+    });
+    expect(proofIntro("en")).toEqual({
+      kicker: "What others say about us",
+      heading: "Voices from the field",
+    });
   });
 
-  it("reads the press heading from the site's own vocabulary, not from a page", () => {
-    expect(proofHeading("press", "de")).toBe("Was andere sagen");
-    expect(proofHeading("press", "en")).toBe("What others say");
-  });
-});
-
-describe("selectedProofKind", () => {
-  it("reads the facet off the first selected element, so the pool heads its own section", () => {
-    const press = selection([
-      { kind: "item", candidate: candidate({ proofKind: "press" }), state: "ready" },
-      { kind: "item", candidate: candidate({ proofKind: "customer" }), state: "ready" },
-    ]);
-    expect(selectedProofKind(press)).toBe("press");
-    expect(proofHeading(selectedProofKind(press), "de")).toBe("Was andere sagen");
-  });
-
-  it("skips the empty positions ahead of the first element", () => {
-    const mixed = selection([
-      { kind: "empty" },
-      { kind: "item", candidate: candidate({ proofKind: "press" }), state: "ready" },
-    ]);
-    expect(selectedProofKind(mixed)).toBe("press");
-  });
-
-  it("falls back to the customer kind for an empty slot and for a candidate carrying no facet", () => {
-    expect(selectedProofKind(selection([]))).toBe("customer");
-    expect(selectedProofKind(selection([{ kind: "empty" }]))).toBe("customer");
-    expect(
-      selectedProofKind(
-        selection([{ kind: "item", candidate: candidate({}), state: "ready" }]),
-      ),
-    ).toBe("customer");
+  it("does not repeat a word between kicker and heading (DEC-0206 §3)", () => {
+    for (const locale of ["de", "en"] as const) {
+      const { kicker, heading } = proofIntro(locale);
+      const words = (text: string) => new Set(text.toLocaleLowerCase(locale).split(/\s+/));
+      const shared = [...words(kicker)].filter((word) => words(heading).has(word));
+      expect(shared).toEqual([]);
+    }
   });
 });
 

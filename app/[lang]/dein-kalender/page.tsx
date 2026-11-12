@@ -35,7 +35,7 @@ import { dictionary } from "@/src/lib/i18n/dictionary";
 import { comparisonPairs } from "../_comparison";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
-import { parseProofLine, proofHeading, quoteAuthor, selectProof, selectedProofKind } from "../_proof";
+import { parseProofLine, proofIntro, quoteAuthor, selectProof } from "../_proof";
 import { localeFrom, pageMetadataFor } from "../_locale";
 import { PageFrame } from "../_page-frame";
 
@@ -299,7 +299,8 @@ export default async function Page({
         geoCommunity: place === "" ? null : place,
         // Three mayors and an estate, all of them users of this tier: customer
         // proof, never press (review line 458 — "hier gehören Belege von
-        // Kunden hin — der NØRD Award ist hier Quatsch"). DEC-0143 §1.
+        // Kunden hin — der NØRD Award ist hier Quatsch"). A selection facet;
+        // the heading is the same on every page (DEC-0143 §1, DEC-0209).
         proofKind: "customer" as const,
         ...(citation === undefined ? {} : { citation }),
         demo: proofIsDemo,
@@ -518,9 +519,8 @@ export default async function Page({
           that. */}
       <SectionShell
         dataBlock="proof"
-        // Customer proof: the placeholder kicker, marked (DEC-0120 §5).
-        kicker={dictionary(locale).kickers.customers}
-        kickerDemo
+        // The one head every proof section carries (DEC-0209).
+        kicker={proofIntro(locale).kicker}
         labelledBy="proof-heading"
         // `lime-100`, not `paper`: the price section above it is one paper
         // section now (DEC-0118), and `embed-config` above that is a third —
@@ -528,13 +528,8 @@ export default async function Page({
         // composition can break (`rhythm.test.ts`).
         surface="lime-100"
       >
-        {/* "Belege" / "Proof" was a page-local constant and a label, not a
-            heading — CG-017 calls that flat. The heading comes from what the
-            section proves, out of the one place that decides it; the kicker
-            above it names the section's role, so the two do not repeat each
-            other (DEC-0143 §2). */}
-        <h2 id="proof-heading">{proofHeading(selectedProofKind(proofSelection), locale)}</h2>
-        <ProofStream label={proofHeading(selectedProofKind(proofSelection), locale)} layout="rows">
+        <h2 id="proof-heading">{proofIntro(locale).heading}</h2>
+        <ProofStream label={proofIntro(locale).heading} layout="rows">
           {proofSelection.entries.map((entry, position) => {
             // A missing proof renders nothing (DEC-0175 §3).
             if (entry.kind === "empty") return null;

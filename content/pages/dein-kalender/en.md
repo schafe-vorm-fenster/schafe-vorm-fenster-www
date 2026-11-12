@@ -325,7 +325,7 @@ frontmatter and in `state/open.md`, not on the page.
 **Proof cards (real quotes, clearance pending):** Three voices from
 `portalize-calendar`'s pool, verbatim from the proof records:
 
-1. "Managing and automating the dates ourselves has cut the workload of our municipality." — Holger Wendt, mayor of Rubkow
+1. "The self-managed and automated provision of the date data reduces our municipality's workload." — Holger Wendt, mayor of Rubkow
 2. "For this project I see our rural population, and mobile traders too, as the winners." — Dr A. Zschiesche, mayor of Groß Kiesow
 3. "The service helps make what's on offer more visible and easier to find across a thinly settled area." — Uwe Eichler, Wasserschloss Quilow
 
@@ -350,7 +350,9 @@ All three records carry `usage_rights: unverified` (Q-0014). The cards
 therefore stand in the protected preview, not on a public surface:
 before go-live there is a written clearance per quote, or the card
 goes (`state/open.md`). The quotes are German originals, translated
-here; the German file carries the source wording. With no cleared
+here; the German file carries the source wording. Since #160 (DEC-0209)
+the translation of Holger Wendt's quote keeps his sentence as it stands
+(subject, tense, no added "ourselves"). With no cleared
 image right, every card shows a calm brand-colour surface,
 never a borrowed photo.
 

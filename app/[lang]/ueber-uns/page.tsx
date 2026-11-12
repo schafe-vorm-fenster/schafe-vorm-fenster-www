@@ -238,7 +238,11 @@ export default async function Page({
     locale,
     focusJob: "understand-who-is-behind-it",
     surface: "stream",
-    candidates: proofCandidates(proofStream, words.kickers.othersSay),
+    // Every line names its source after the dash, so no fallback context is
+    // needed. Chapter 03 is the company's own story, told from its own report
+    // to the funder; it does not carry the shared proof head, which says
+    // "what others say about us" (DEC-0209 §4).
+    candidates: proofCandidates(proofStream, ""),
   });
   const storyTexts = stories.blocks.filter((block) => block.kind === "field");
   const storyItems: DisclosureStory[] = filledOnly(proofSelection.entries).map((entry) => {

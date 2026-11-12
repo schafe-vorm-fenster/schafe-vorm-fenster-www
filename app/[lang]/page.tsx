@@ -12,7 +12,6 @@ import { SceneBlock } from "@/src/components/scene-block/scene-block";
 import { EmbedScene } from "@/src/components/embed-scene/embed-scene";
 import { WebCalendarOverlay } from "@/src/components/web-calendar-overlay/web-calendar-overlay";
 import { SectionShell } from "@/src/components/section-shell/section-shell";
-import { dictionary } from "@/src/lib/i18n/dictionary";
 import { fieldAt } from "@/src/lib/content/blocks";
 import { embedCalendarFrom } from "@/src/lib/content/embed-calendar";
 import { pageImage } from "@/src/lib/content/images";
@@ -41,7 +40,7 @@ import styles from "./_pages.module.css";
 import { buildDay } from "./_build-day";
 import { HomeHeroContent, HomeNearby, type HomeFocusCopy } from "./_home-focus";
 import { PlacePhotoLayer } from "./_place-photo";
-import { selectProof } from "./_proof";
+import { proofIntro, selectProof } from "./_proof";
 import { PageJsonLd } from "./_structured-data";
 import { pageContent } from "./_content";
 import { localeFrom, pageMetadataFor } from "./_locale";
@@ -142,7 +141,7 @@ function proofCandidates(proof: ContentSlot): ProofCandidate[] {
  */
 export default async function HomePage({ params }: { params: Promise<{ lang: string }> }) {
   const locale = await localeFrom(params);
-  const words = dictionary(locale);
+  const proofHead = proofIntro(locale);
   const page = await pageContent(ROUTE, locale);
 
   const hero = slot(page, "home-1-search-hero");
@@ -166,8 +165,6 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
   // honest "Foto gesucht" state (DEC-0068).
   const sceneEmbedImage = pageImage(page, "home-scene-embed");
   const sceneProvenanceImage = pageImage(page, "home-scene-provenance");
-
-  const proofKicker = fieldAt(proof.blocks, 0);
 
   /** The build's day — what the sample panel is dated from in the static HTML (DEC-0163). */
   const referenceDate = await buildDay();
@@ -486,12 +483,12 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       <MotionReveal>
         <SectionShell
           id="proof-stream"
-          kicker={words.kickers.othersSay}
+          kicker={proofHead.kicker}
           labelledBy="proof-stream-heading"
           surface="lime-100"
         >
-          <h2 id="proof-stream-heading">{proofKicker}</h2>
-          <ProofStream label={proofKicker}>
+          <h2 id="proof-stream-heading">{proofHead.heading}</h2>
+          <ProofStream label={proofHead.heading}>
             {proofSelection.entries.map((entry, position) =>
               entry.kind === "item" ? (
                 <ProofCard

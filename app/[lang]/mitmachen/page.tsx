@@ -33,7 +33,7 @@ import { standardSources } from "@/src/lib/pricing/standard-sources";
 
 import { buildDay } from "../_build-day";
 import { comparisonPairs } from "../_comparison";
-import { proofHeading, selectProof, selectedProofKind } from "../_proof";
+import { proofIntro, selectProof } from "../_proof";
 import { PageJsonLd } from "../_structured-data";
 import { pageContent } from "../_content";
 import { localeFrom, pageMetadataFor } from "../_locale";
@@ -208,8 +208,8 @@ export default async function Page({
         },
         geoCommunity: place === "" ? null : place,
         // All three publish for themselves — customer proof, not press
-        // (review line 462). The facet is what the section's heading reads
-        // (DEC-0143 §1).
+        // (review line 462). A selection facet; the heading is the same on
+        // every page (DEC-0143 §1, DEC-0209).
         proofKind: "customer" as const,
         demo: proofIsDemo,
       };
@@ -520,35 +520,26 @@ function ProofBlock({
   readonly locale: Locale;
   readonly proofSelection: Awaited<ReturnType<typeof selectProof>>;
 }) {
+  // The one head every proof section carries (DEC-0209).
+  const head = proofIntro(locale);
   return (
       <SectionShell
         dataBlock="beleg"
-        // Customer proof: `customers` is the placeholder kicker, marked on its
-        // element (DEC-0120 §5, state/open.md row 234).
-        kicker={dictionary(locale).kickers.customers}
-        kickerDemo
+        kicker={head.kicker}
         labelledBy="beleg-heading"
         // Lime between the closing CTA's `ink` and the band's `surface`
         // (DEC-0196): `paper → ink → lime-100 → surface`, no run of one
         // colour family, which this page's own rhythm test checks (A16, D10).
         surface="lime-100"
       >
-        {/* The h2 was `othersSay` — "Was andere sagen" / "What others say" —
-            over a pool of three customers who publish for themselves. The copy
-            guide reserves that heading for the other kind: "Wer das schon
-            macht → Was andere sagen *(for press proof only)*"
-            (`website-copy-guide.md:516`, and the review's own split at line
-            462: customer proof is one section, press and appearances are
-            another). The heading now comes from what the section proves, out
-            of the one place that decides it (DEC-0143 §2). */}
-        <h2 id="beleg-heading">{proofHeading(selectedProofKind(proofSelection), locale)}</h2>
+        <h2 id="beleg-heading">{head.heading}</h2>
         {/* G-7: one emphasis per stream. The first card opens it at sub-head
             size, the rest are hairline rows — three identical filled cards
             read as one block rather than as three institutions. No `geo`
             badge either: every card here already names its source in its
             own context line, and `BELEG` beside `Stiftung Lebendiges Lehre`
             is the same word twice. */}
-        <ProofStream label={proofHeading(selectedProofKind(proofSelection), locale)} layout="rows">
+        <ProofStream label={head.heading} layout="rows">
           {proofSelection.entries.map((entry, position) =>
             entry.kind === "item" ? (
               <ProofCard

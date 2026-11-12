@@ -840,6 +840,21 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(page.locator("#proof-stream article")).toHaveCount(4);
   });
 
+  test("DEC-0209: the proof stream carries the shared proof head and whole-sentence lines (issue 160)", async ({ page }) => {
+    await page.goto("/");
+    const stream = page.locator("#proof-stream");
+    await expect(stream.locator("[data-kicker]")).toHaveText("Was andere über uns sagen");
+    await expect(stream.locator("#proof-stream-heading")).toHaveText("Stimmen aus der Praxis");
+    // The keyword line and the elided quotation are gone (#38).
+    await expect(stream.getByText(/Kategorie Smart Community, Schirmherr Bitkom/)).toHaveCount(0);
+    await expect(stream.getByText("…", { exact: false })).toHaveCount(0);
+
+    await page.goto("/en");
+    const streamEn = page.locator("#proof-stream");
+    await expect(streamEn.locator("[data-kicker]")).toHaveText("What others say about us");
+    await expect(streamEn.locator("#proof-stream-heading")).toHaveText("Voices from the field");
+  });
+
   test("TS-WEB-0019-A9: DOM order is block 1 · scenes · provenance · proof · band, no closing block (DEC-0195)", async ({
     page,
   }) => {

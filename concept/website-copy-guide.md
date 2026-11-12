@@ -356,7 +356,17 @@ Colloquial is right. Banal is not. A heading that would fit any product on any
 site is not a heading.
 
 - Avoid: *"Wo das herkommt"* · *"Wer das schon macht"* · *"Warum wir"*
-- Use: *"Wer dahintersteckt"* · *"Was andere sagen"* · *"Vom Dorf fürs Dorf"*
+- Use: *"Wer dahintersteckt"* · *"Was andere über uns sagen"* · *"Vom Dorf fürs Dorf"*
+
+**The proof section has one head on every page** (DEC-0209, owner
+2026-11-12, issue #160): the kicker *"Was andere über uns sagen"* / *"What
+others say about us"* over the heading *"Stimmen aus der Praxis"* / *"Voices
+from the field"*, and no intro sentence. It holds for every kind of proof —
+customers, partners, press, the award — because the relevance engine mixes
+them per page, and a sentence naming the kinds would be untrue for some
+selection. *"Was andere sagen"* is no longer reserved for press proof. A
+section built from the company's own reports (the eu:react final report on
+`/ueber-uns`) is not "what others say" and does not take this head.
 
 ### CG-018 — No abstraction heading
 
@@ -414,13 +424,14 @@ place, not a list every section draws from.
 | problem / old world | why it is being raised at all | `WARUM ES HEUTE HAKT` |
 | price | what it costs | `WAS ES KOSTET` |
 | contact | what may be asked here | `FRAGEN ZU DEN PREISEN` |
-| proof — customers | — | — |
-| proof — press and appearances | — | — |
+| proof — customers, partners, press, award | who is speaking | `WAS ANDERE ÜBER UNS SAGEN` (owner, issue #160, DEC-0209) |
 | provenance | — | — |
 
-The three empty rows are empty on purpose: the review rejects
-*"Wer das schon macht"* and *"Presse- und Auftrittshistorie 2018 bis 2026"*
-without naming a replacement. Writing one here would be invention.
+The provenance row is empty on purpose: the review rejects *"Wo das
+herkommt"* without naming a replacement. Writing one here would be
+invention. The proof row was empty until the owner named its kicker
+(DEC-0209); it replaces the review's split into a customer and a press
+section, and *"Presse- und Auftrittshistorie 2018 bis 2026"* stays rejected.
 
 ---
 
@@ -642,7 +653,7 @@ TS-WEB-0007 D12).
 | Warum das zählt | Was hilft euch das? | CG-018 |
 | Warum wir | Über uns · Wer dahintersteckt | CG-017 |
 | Wo das herkommt *(as a heading)* | | CG-017 — the review names no replacement |
-| Wer das schon macht | Was andere sagen *(for press proof only)* | CG-017 |
+| Wer das schon macht | Was andere über uns sagen *(the proof kicker, every kind of proof, DEC-0209)* | CG-017 |
 | Warum es hakt · Warum es heute hakt *(as a title)* | | CG-005 — allowed as a kicker |
 | gebaut · betrieben *(about this product)* | | CG-033 |
 | einfach · digital · für alle · modern · innovativ | | generic claims are not copy (TS-WEB-0006 D7, CON-WEB-0059) |

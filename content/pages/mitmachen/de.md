@@ -412,9 +412,9 @@ schwächt den Anspruch, wird aber nie durch erfundenen Text ersetzt.
 
 **Kandidaten (drei, alle veröffentlichen selbst):**
 
-1. Die Stiftung betreibt den Kalender für 17 Orte als LeLender. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen)
-2. Die Volkshochschulen veröffentlichen ihr Kursprogramm im Dorfkalender. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk; in den Dörfern genauso relevant wie in der Stadt
-3. „Der Newsletter des Netzwerks sammelt Termine über den Dorfkalender." — Zukunftswege Ost-Vorpommern, Ost-Vorpommern
+1. Die Stiftung führt den Dorfkalender für 17 Orte unter eigenem Namen: LeLender. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen)
+2. Die Volkshochschule veröffentlicht ihr komplettes Kursprogramm im Dorfkalender. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
+3. Das Netzwerk sammelt die Termine für seinen Newsletter über den Dorfkalender. — Zukunftswege Ost-Vorpommern, RAA Mecklenburg-Vorpommern
 
 Drei reale Einrichtungen, die selbst veröffentlichen — das ist genau der
 Job dieser Seite. Namen, Orte und Zahlen stehen so in den Belegen: die 17
@@ -424,38 +424,31 @@ Kulturlandbüro Uecker-Randow, Maria Elsner, September 2024), die
 Newsletter-Termine aus `zukunftswege-ost-newsletter` (dokumentiert im
 Porträt von Zukunftswege Ost-Vorpommern, Januar 2026).
 
-Zwei Korrekturen des Reviews vom 2026-09-22 stecken in Karte 1 und Karte
-2, und beide stehen über dem Wortlaut der Datensätze (DEC-0104,
-DEC-0143 §5):
+Seit #160 (DEC-0209) ist jede Zeile ein ganzer Satz (CG-027) und je
+Beleg dieselbe wie auf den anderen Seiten; Kicker und Überschrift der
+Section kommen aus `dictionary.ts` (`proofSection`), nicht aus diesem
+Slot.
 
 - Karte 1 nennt die **Stiftung**, nicht die Gemeinde: „Die ‚Stiftung
   Lebendiges Lehre' verantwortet das Lebender Kalenderprojekt. Nicht die
-  Gemeinde … Es sind aber 17 Ort in und um die Gemeinde Lehre" (Zeile
-  103). Die Anführungszeichen sind weg: die Zeile ist eine Belegaussage,
-  kein Zitat, und `lehre-lelender` führt keinen Satz dieses Wortlauts.
-- Karte 2 heißt **„Volkshochschulen in Vorpommern-Greifswald"** und
-  trägt den Nutzen, den das Review dazu nennt: „Sie wollen ihre
-  Kursangebote nicht nur in den Städten sondern auch in den Dörfern
-  kommunizieren und da sind die Angebote ja genauso relevant" (Zeile
-  109). **Beide Halbsätze sind formuliert, keiner ist zitiert:** der erste
-  fasst das `evidence:` des Datensatzes zusammen (das Kursprogramm am
-  Standort Pasewalk erscheint in den Dorfkalendern), der zweite gibt die
-  Nutzenaussage des Reviews wieder. Der `claim:` des Datensatzes lautet
-  „Eine Bildungsinstitution nutzt den Dorfkalender produktiv als
-  Verbreitungskanal für ihr komplettes Kursprogramm." und teilt mit der
-  Karte keinen Satz; den Namen nach Landkreis und den Nutzen führt der
-  Datensatz ebenfalls nicht. Karte 1 ist aus demselben Grund formuliert
-  und nicht zitiert — sie steht auf dem `evidence:` von `lehre-lelender`
-  und auf Zeile 103. Keine der beiden Zeilen ist `demo`-markiert (beide
-  Einrichtungen und beide Belege sind echt, eine `demo`-Flagge würde das
-  Gegenteil behaupten); beide liegen dem Owner deshalb als
-  `state/open.md` Zeile 281 zur Bestätigung vor, in der Form, die Zeile
-  279 für die Überschrift hat. Auf `/` steht dieselbe Korrektur in
-  kürzerer Fassung (`content/pages/home/de.md`, Kandidat 3), damit keine
-  zwei Seiten denselben Satz tragen (DEC-0143 §6). Die zweite Hälfte des
-  Nutzens — „mehr Kurse in den Dörfern vor Ort anbieten" — steht auf
-  keiner Karte: das ist eine Absicht der Volkshochschulen, kein Beleg
-  über den Dienst (`state/open.md`).
+  Gemeinde … Es sind aber 17 Ort in und um die Gemeinde Lehre" (Review vom
+  2026-09-22, Zeile 103). Das Verb ist „führt", weil CG-033 dieses Verb
+  über den Dorfkalender meidet. Deviation:
+  `@schafe-vorm-fenster/proof/lehre-lelender.proof.md#L8` nennt eine
+  Gemeinde als Trägerin. DEM-0080.
+- Karte 2 folgt dem Datensatz `volkshochschule-uecker-randow`: Das
+  Kursprogramm am Standort Pasewalk erscheint im Dorfkalender (`claim:`
+  und `evidence:`). Der Zusatz „in den Dörfern genauso relevant wie in der
+  Stadt" ist gestrichen, weil ihn kein Beleg trägt. Den Namen
+  „Volkshochschulen in Vorpommern-Greifswald" führt der Partner-Datensatz
+  (`@schafe-vorm-fenster/partners#volkshochschule-vorpommern-greifswald`).
+- Karte 3 steht ohne Anführungszeichen: `zukunftswege-ost-newsletter`
+  enthält kein Zitat, nur den Befund, dass der Newsletter seine Termine über
+  den Dorfkalender sammelt (`evidence:`). Die Zuschreibung nennt den Träger
+  aus `source:` („Zukunftswege Ost-Vorpommern / RAA MV").
+
+Keine Zeile ist `demo`-markiert: Alle drei Einrichtungen und Belege sind
+echt.
 
 ## Slot 8 — Abschluss-CTA mit Permanenz-Zusicherung
 

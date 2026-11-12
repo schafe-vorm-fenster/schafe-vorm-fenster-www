@@ -160,17 +160,20 @@ test.describe("/deine-region", () => {
    * under "Was Landkreise und Institutionen sagen" — a variant of the press
    * heading the copy guide reserves for press only (`website-copy-guide.md:516`,
    * CG-017). And two of its three elements stood verbatim on another page,
-   * which is not a second proof (T-18, DEC-0143 §2/§5/§6).
+   * which is not a second proof (T-18, DEC-0143 §5/§6). Since DEC-0209 the
+   * section carries the one proof head every page shares (issue 160), and Elisabeth
+   * Kurzweg's card quotes her own sentence instead of the record's summary.
    */
-  test("CG-017 / R-ueber-9: the customer pool carries the customer heading and the corrected attribution", async ({
+  test("CG-017 / R-ueber-9: the shared proof head, the corrected attribution and the real quotation", async ({
     page,
   }) => {
     await page.goto("/deine-region");
     const block = page.locator('[data-block="beleg"]');
 
-    await expect(block.locator("h2")).toHaveText("Wo es wirklich benutzt wird");
-    await expect(block.getByText("Was andere sagen")).toHaveCount(0);
+    await expect(block.locator("h2")).toHaveText("Stimmen aus der Praxis");
+    await expect(block.locator("p[class*='kicker']")).toHaveText("Was andere über uns sagen");
     await expect(block.getByText("Was Landkreise und Institutionen sagen")).toHaveCount(0);
+    await expect(block.getByText(/Fahrtrouten anderer Unternehmen transparenter/)).toBeVisible();
 
     // The Stiftung runs the LeLender, not the Gemeinde (review line 103).
     await expect(block.getByText("Stiftung Lebendiges Lehre")).toBeVisible();

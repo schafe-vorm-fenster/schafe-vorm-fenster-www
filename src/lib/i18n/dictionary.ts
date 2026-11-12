@@ -223,21 +223,6 @@ export interface Dictionary {
     howItWorks: string;
     /** The objection: why it snags today. */
     objection: string;
-    /**
-     * Press and appearance proof — "Was andere sagen" (CG-017; the review's
-     * own split: press is what others say, customers are who already works
-     * with it).
-     */
-    othersSay: string;
-    /**
-     * Customer proof. **Placeholder**: the review rejects "Wer das schon
-     * macht" and names no replacement (copy guide, open decision 2), so this
-     * is a stand-in until the hub carries the wording (DEC-0120,
-     * state/open.md row 234). `/mitmachen`, `/dein-kalender` and
-     * `/deine-region` render it through `SectionShell`'s `kickerDemo`, which
-     * marks the kicker element `data-demo="true"`.
-     */
-    customers: string;
     /** Price and scope. */
     price: string;
     /** Trust: how we work. */
@@ -256,6 +241,17 @@ export interface Dictionary {
     newsletter: string;
     /** The context band's other concerns. */
     otherConcerns: string;
+  };
+  /**
+   * The head of the proof section, one for every page that shows proof —
+   * customers, press and the award alike (owner, issue 160, DEC-0209). Kicker
+   * and heading, no intro sentence: the relevance engine mixes the elements per
+   * page and build, so a sentence naming what they are would be untrue for some
+   * selection. Pages read it through `proofIntro` in `app/[lang]/_proof.ts`.
+   */
+  proofSection: {
+    kicker: string;
+    heading: string;
   };
   /**
    * The context band's registry fallback — one blurb per job, the sentence
@@ -631,14 +627,16 @@ const de: Dictionary = {
     whatAVillageNeeds: "Was ein Dorf braucht",
     howItWorks: "So funktioniert es",
     objection: "Warum es heute hakt",
-    othersSay: "Was andere sagen",
-    customers: "Wer den Kalender nutzt",
     price: "Was es kostet",
     trust: "Wie wir arbeiten",
     origin: "Die Geschichte",
     team: "Wer dahintersteckt",
     newsletter: "Newsletter",
     otherConcerns: "Anderes Anliegen?",
+  },
+  proofSection: {
+    kicker: "Was andere über uns sagen",
+    heading: "Stimmen aus der Praxis",
   },
   contextBand: {
     kicker: "Auch interessant",
@@ -867,14 +865,16 @@ const en: Dictionary = {
     whatAVillageNeeds: "What a village needs",
     howItWorks: "How it works",
     objection: "Why it snags today",
-    othersSay: "What others say",
-    customers: "Who uses the calendar",
     price: "What it costs",
     trust: "How we work",
     origin: "The story",
     team: "Who is behind it",
     newsletter: "Newsletter",
     otherConcerns: "Something else today?",
+  },
+  proofSection: {
+    kicker: "What others say about us",
+    heading: "Voices from the field",
   },
   contextBand: {
     kicker: "Also of interest",

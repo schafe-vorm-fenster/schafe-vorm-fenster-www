@@ -239,12 +239,12 @@ and says what they do and do not prove.
 <!-- id: deine-region-6-proof-demo; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#leader-foerderung-2022", "@schafe-vorm-fenster/proof@0.3.5#kurzweg-baeckerei", "@schafe-vorm-fenster/partners@0.2.7#stiftung-lebendiges-lehre"]; status: draft -->
 
 **Proof cards (real, clearance pending):** Three elements
-from the proof set — cards 2 and 3 in the wording of their records,
-card 1 authored:
+from the proof set — cards 2 and 3 in the wording of their records
+(card 3 the quotation the record holds), card 1 authored:
 
-1. The foundation runs the village calendar as its own brand, 17 places. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony), 2026
+1. The foundation runs the village calendar for 17 places under its own name: LeLender. — Stiftung Lebendiges Lehre, Lehre (Lower Saxony), 2026
 2. The undertaking is recognised by EU regional funding (LEADER) as worth funding for rural development. — LEADER / LAG Vorpommern-Greifswald, 2022
-3. "The dates list makes the routes of mobile traders transparent." — Elisabeth Kurzweg, Bäckerei Kurzweg
+3. "With the digital dates list for the villages in Vorpommern-Greifswald, the routes of other businesses become more transparent." — Elisabeth Kurzweg, Bäckerei Kurzweg
 
 None of the three is a delivered `portalize-enterprise` territory, and
 this page does not say otherwise.
@@ -252,22 +252,18 @@ this page does not say otherwise.
 Card 1 names the **foundation**, not the municipality: "Die 'Stiftung
 Lebendiges Lehre' verantwortet das Lebender Kalenderprojekt. Nicht die
 Gemeinde … Es sind aber 17 Ort in und um die Gemeinde Lehre" (review of
-2026-09-22, line 103). The record's own `claim:` opens with "Eine
-Gemeinde betreibt …" and is wrong in exactly that place; the review's
-correction stands above the record (DEC-0104, DEC-0143 §5). The line is
-therefore **authored, not quoted** — the record's `claim:` with line 103's
-correction in the place of the subject, exactly like card 1 on
-`/mitmachen`. It is put to the owner as `state/open.md` row 285, together
-with the two authored lines there. At 120 characters (en; de 121) it is
-also the longest of the six cards in this round, and because it is
-authored it could be shortened without touching a record — that is the
-owner's copy call and stands open as `state/open.md` row 286 (`CG-027`).
-Card 2 is the
+2026-09-22, line 103). The line is **authored, not quoted**, and since
+#160 (DEC-0209) it is the same sentence as on `/` and `/mitmachen`: one
+line per record, not per page. Deviation:
+`@schafe-vorm-fenster/proof/lehre-lelender.proof.md#L8` names a
+municipality as the operator. DEM-0080. Card 2 is the
 EU regional funding in the wording of its `claim:`
 (`leader-foerderung-2022`, `unverified`; `source:` LEADER / LAG
-Vorpommern-Greifswald, June 2022). Card 3 is a voice from the region in
-the wording of its `claim:` (`kurzweg-baeckerei`, `unverified`;
-`source:` Elisabeth Kurzweg, Bäckerei Kurzweg).
+Vorpommern-Greifswald, June 2022). Card 3 is Elisabeth Kurzweg's
+quotation from the `## Evidence` section of `kurzweg-baeckerei`
+(`unverified`), translated. Until #160 the card put the record's `claim:`
+in quotation marks, a summary passed off as a quote; the real quotation
+needs no deviation.
 
 The types are mixed on purpose — success on the ground, success in
 funding, a voice from the region (review, line 111). None of the three

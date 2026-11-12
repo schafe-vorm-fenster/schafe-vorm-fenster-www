@@ -292,8 +292,9 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
    * names (T-18, DEC-0143 §2/§3).
    *
    * The heading was "Belege": a label, not a heading, and CG-017 calls that
-   * flat. It now comes from what the section proves, out of the one place that
-   * decides it, while the kicker above it keeps naming the section's role.
+   * flat. Since DEC-0209 every proof section carries the owner's one head —
+   * "Was andere über uns sagen" over "Stimmen aus der Praxis" — and the
+   * kicker no longer repeats the heading's verb ("nutzt"/"benutzt", issue 160).
    *
    * And the three mayors' words render as **quote cards only where a concrete
    * source with a link exists**. None of the three records carries one — the
@@ -302,16 +303,16 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
    * working link does not ship" (SRC-0014 §Quote card, CG-028). So the words
    * stand as the claims they are, and not one `quote-card` is on the page.
    */
-  test("R-kalender-19: the customer heading, and no quote card without a cited source", async ({
+  test("R-kalender-19: the shared proof head, and no quote card without a cited source", async ({
     page,
   }) => {
     await page.goto(ROUTE);
     const block = page.locator('[data-block="proof"]');
 
-    await expect(block.locator("h2")).toHaveText("Wo es wirklich benutzt wird");
-    await expect(block.getByText("Was andere sagen")).toHaveCount(0);
-    // The kicker still names the role, and the two are different words.
-    await expect(block.locator("p[class*='kicker']")).toHaveText("Wer den Kalender nutzt");
+    await expect(block.locator("h2")).toHaveText("Stimmen aus der Praxis");
+    await expect(block.locator("p[class*='kicker']")).toHaveText("Was andere über uns sagen");
+    // The owner named the kicker (issue 160): it is no placeholder any more.
+    await expect(block.locator("[data-demo='true'][class*='kicker']")).toHaveCount(0);
 
     await expect(block.locator("[data-quote-card]")).toHaveCount(0);
     await expect(block.locator("article")).toHaveCount(3);
@@ -346,7 +347,7 @@ test.describe("TS-WEB-0024: /dein-kalender", () => {
       "So funktioniert es",
       "Euer Kalender auf eurer Website",
       "Was es kostet",
-      "Wer den Kalender nutzt",
+      "Was andere über uns sagen",
       "Wie wir arbeiten",
     ]) {
       await expect(page.getByText(kicker, { exact: true })).toBeVisible();

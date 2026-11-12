@@ -347,40 +347,52 @@ Herkunfts-Szene (TS-WEB-0019 D3a, DEC-0082 §4).
 <!-- source_note: Stufe-0-Regel „weiteste Streuung, jüngste zuerst" aus gtm:concept/website-relevance-model.concept.md (Kontextmatrix, Zeile „Direkter Besuch, unbekannt"); Belegregel aus gtm:concept/website-communication-principles.concept.md §4. -->
 <!-- id: home-8-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5#lehre-lelender", "@schafe-vorm-fenster/proof@0.3.5#noerd-award-2026-smart-community", "@schafe-vorm-fenster/proof@0.3.5#volkshochschule-uecker-randow", "@schafe-vorm-fenster/proof@0.3.5#kulturlandbuero-broellin", "@schafe-vorm-fenster/media-echo@0.3.3#2026-08-abend-der-engagierten-lehre", "@schafe-vorm-fenster/media-echo@0.3.3#2026-05-noerd-2026-rostock", "@schafe-vorm-fenster/media-echo@0.3.3#2024-09-kulturlandbuero-volkshochschule"]; status: draft -->
 
-**Kicker über dem Strom:** Auszeichnungen, Presse und Orte, die den Dorfkalender schon nutzen
-
 Auswahl und Reihenfolge der vier Elemente bleiben Aufgabe der
-Relevanz-Engine zur Laufzeit (TS-WEB-0005 D5, DEC-0048). Dieser Slot liefert den
-Rahmensatz und den Kandidatensatz, aus dem gezogen wird — Pool:
+Relevanz-Engine zur Laufzeit (TS-WEB-0005 D5, DEC-0048). Dieser Slot liefert
+den Kandidatensatz, aus dem gezogen wird — Pool:
 `@schafe-vorm-fenster/proof@0.3.5` und
-`@schafe-vorm-fenster/media-echo@0.3.3`.
+`@schafe-vorm-fenster/media-echo@0.3.3`. Kicker und Überschrift der Section
+stehen nicht hier: Jede Beleg-Section trägt denselben Kopf aus
+`dictionary.ts` (`proofSection`, DEC-0209).
 
 **Kandidaten (Stufe 0: weiteste Streuung, jüngste zuerst):**
 
-1. 17 Orte in und um Lehre, ein Kalender unter eigenem Namen: LeLender. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen)
-2. NØRD Award 2026 gewonnen, Kategorie Smart Community, Schirmherr Bitkom. — NØRD digital convention, Rostock
-3. Die Volkshochschulen bringen ihr Kursprogramm bis in die Dörfer. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
-4. „Das Projekt kann einen wertvollen Beitrag … zur Sichtbarkeit im ländlichen Raum leisten." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
+1. Die Stiftung führt den Dorfkalender für 17 Orte unter eigenem Namen: LeLender. — Stiftung Lebendiges Lehre, Lehre (Niedersachsen)
+2. Schafe vorm Fenster hat den NØRD Award 2026 in der Kategorie Smart Community gewonnen, deren Schirmherr der Bitkom e.V. war. — NØRD digital convention, Rostock
+3. Die Volkshochschule veröffentlicht ihr komplettes Kursprogramm im Dorfkalender. — Volkshochschulen in Vorpommern-Greifswald, Pasewalk
+4. „Das Projekt kann einen wertvollen Beitrag zum wirtschaftlichen Wiederaufbau und zur Sichtbarkeit im ländlichen Raum leisten." — Kulturlandbüro Uecker-Randow, Schloss Bröllin
 
 <!-- note: ab hier Autorennotiz, keine Copy — der Abschnitt zitiert verbotene Begriffe, um sie zu verbieten (DEC-0142 §1) -->
 
 Namen, Zahlen, Titel und Jahre stehen so in den Belegen: die 17 Orte, der
 Name „LeLender" und die Trägerschaft der Stiftung aus `lehre-lelender`, der
 Gewinn und die Bitkom-Schirmherrschaft aus
-`noerd-award-2026-smart-community`, das Kursprogramm aus
-`volkshochschule-uecker-randow`, das Zitat des Kulturlandbüros aus
-`kulturlandbuero-broellin`.
+`noerd-award-2026-smart-community` (Fließtext: „Schirmherr der Kategorie war
+der Bitkom e.V."), das Kursprogramm aus `volkshochschule-uecker-randow`, das
+Zitat des Kulturlandbüros aus `kulturlandbuero-broellin`.
+Seit #160 (DEC-0209) ist jede Zeile ein ganzer Satz (CG-027) und je Beleg
+dieselbe wie auf den anderen Seiten. Der NØRD-Satz steht neutral, ohne die
+„stolz"-Fassung aus CG-027: Gewonnen hat Schafe vorm Fenster per öffentlicher
+Abstimmung, deshalb steht dort kein „Jury". Die Volkshochschul-Zeile folgt dem
+Datensatz (das Kursprogramm am Standort Pasewalk); der Nutzen „Kurse auch im
+Dorf" ist gestrichen, weil ihn kein Beleg trägt. Den Namen „Volkshochschulen in
+Vorpommern-Greifswald" führt der Partner-Datensatz
+(`@schafe-vorm-fenster/partners#volkshochschule-vorpommern-greifswald`).
+Deviation: `@schafe-vorm-fenster/proof/lehre-lelender.proof.md#L8` sagt „Eine
+Gemeinde betreibt …"; die Zeile nennt die Stiftung (Review vom 2026-09-22,
+Zeile 103) und „führt" statt „betreibt" (CG-033). DEM-0080.
 Das Zitat steht in der Möglichkeitsform, in der der Beleg es führt — „kann …
-leisten", gekürzt um „zum wirtschaftlichen Wiederaufbau und", Wortlaut aus
-§Evidence und identisch mit dem reservierten Platz auf `/ueber-uns`
+leisten", vollständig und ohne Auslassung, Wortlaut aus §Evidence und
+identisch mit dem reservierten Platz auf `/ueber-uns`
 (`content/pages/ueber-uns/de.md`). Es ist keine Behauptung des Hauses: der
 assertive `claim:` des Belegs ist unsere Zusammenfassung, nicht der Satz des
 Kulturlandbüros, und „wertvoll" kommt allein aus dem Zitat
 (Formulierungsgrenze des Belegs).
 Vier Korrekturen des Reviews vom 2026-09-22 stecken darin: die Stiftung
 verantwortet den LeLender, nicht die Gemeinde; der NØRD Award ist gewonnen
-und nicht nur beschickt; die Volkshochschulen heißen nach dem Landkreis und
-der Nutzen (Kurse auch im Dorf) gehört in den Satz; der Nordkurier-Eintrag
+und nicht nur beschickt; die Volkshochschulen heißen nach dem Landkreis (der
+Nutzen „Kurse auch im Dorf" ist mit DEC-0209 wieder gestrichen, siehe oben);
+der Nordkurier-Eintrag
 zur Nominierung fällt weg, weil der Award dieselbe Sache stärker sagt. Die
 interne Meta-Zeile „Presse- und Auftrittshistorie 2018 bis 2026" ist
 ersatzlos gestrichen (CG-035). Der fünfte Beleg („Seit 2018 in Betrieb",

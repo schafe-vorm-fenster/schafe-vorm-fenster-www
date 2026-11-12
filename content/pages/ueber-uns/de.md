@@ -267,17 +267,20 @@ Slot 3 und 3b).
 
 <!-- id: ueber-uns-3-proof-stream; content_type: proof-card; provenance: sourced; derived_from: ["@schafe-vorm-fenster/proof@0.3.5", "@schafe-vorm-fenster/proof@0.3.5#homeoffice-mobile-anbieter", "@schafe-vorm-fenster/proof@0.3.5#impftermine-landkreis", "@schafe-vorm-fenster/proof@0.3.5#ukraine-integration-dorfleben", "@schafe-vorm-fenster/proof@0.3.5#google-baecker-schlatkow"]; status: draft -->
 
-**Überschrift:** Was andere sagen
-
 Pool: der volle `proof`-Bestand plus `media-echo` (31 Einträge). Seit dem
 Umbau nach dem Entwurf vom 2026-10-12 ist der Strom das Kapitel 03, „Dann
 wurde es mehr als Brötchen." (DEC-0162 §2): vier Geschichten, alle
 `usage_rights: cleared`, jede Zeile der wörtliche `claim:` ihres Datensatzes.
+Alle vier stammen aus dem eigenen eu:react-Abschlussbericht an den
+Fördergeber (`source:` der vier Datensätze). Deshalb steht das Kapitel nicht
+unter dem gemeinsamen Kopf der Beleg-Section „Was andere über uns sagen"
+(DEC-0209 §4), und die frühere Überschrift „Was andere sagen" ist hier
+gestrichen; die Seite hat sie nie gerendert.
 Die NØRD-Auszeichnung steht im eigenen Auszeichnungsblock (Slot 4), der
 Bürgermeister in Kapitel 02 (Slot 2), deshalb stehen beide hier nicht
 mehr:
 
-1. In der Pandemie wurden sämtliche Impfangebote und Testzentren-Öffnungszeiten des Landkreises tagesaktuell und ortsgenau über die Dorfkalender veröffentlicht. — Landkreis Vorpommern-Greifswald, 2022
+1. In der Pandemie wurden sämtliche Impfangebote und Testzentren-Öffnungszeiten des Landkreises tagesaktuell und ortsgenau über die Dorfkalender veröffentlicht. — eu:react-Abschlussbericht, Juli 2022
 2. Der Dorfkalender hat 2022 die Integration ukrainischer Geflüchteter ins Dorfleben unterstützt: Anschluss an Vereinstreffen, Veranstaltungen und mobile Händler. — eu:react-Abschlussbericht, Juli 2022
 3. Wer bei Google nach „Bäcker Schlatkow" sucht, findet das mobile Bäckerauto und seinen Tag — nicht Filialen in Anklam. — eu:react-Abschlussbericht, Juli 2022
 4. In der Corona-Zeit wurden Home-Office-Nutzer über die Dorfkalender erstmals auf mobile Anbieter aufmerksam — und teils zu Stammkunden. — eu:react-Abschlussbericht, Juli 2022
@@ -288,6 +291,11 @@ Relevanz-Maschine (TS-WEB-0005) aus demselben Pool. Der siebte Platz ist für
 den Typ `testimonial` reserviert und wird nie mit einem Element eines
 anderen Typs aufgefüllt (TS-WEB-0027 D5). Solange er leer ist, rendert er
 nichts — keine Karte, kein Platzhalter (DEC-0175 §3).
+
+Zeile 1 nannte bis #160 den „Landkreis Vorpommern-Greifswald" als Absender.
+Der Datensatz `impftermine-landkreis` nennt als Quelle den eigenen
+eu:react-Abschlussbericht (Juli 2022) und den Landkreis nur als Partner der
+Zusammenarbeit; die Zeile nennt deshalb den Bericht (DEC-0209 §4).
 
 Das sechste Element des Stroms ist gestrichen: „Der Dorfkalender ist seit
 2018 in Betrieb" (`in-operation-since-2018`) ist eine „seit …"-Aussage, und
