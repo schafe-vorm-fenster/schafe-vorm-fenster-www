@@ -5,8 +5,11 @@
  */
 
 /*
- * The frame. Google's form is a 640 px card, so the frame stops at that width
- * and is the container's full width below it. Its height is **reserved** —
+ * The frame. Google's form is a card of up to about 770 px that it centres in
+ * whatever width the frame gives it, so the frame is the container's full
+ * width (up to `--measure-page`) and never narrower than the card could be
+ * (issue 169; it was capped at 640 px and left the right of the page empty).
+ * Re-measured at a 1184 px frame: page 2 is 1795 px, inside the 1900 px. Its height is **reserved** —
  * a fixed value in the stylesheet, set before the third party's document
  * arrives — so nothing below it moves when the form paints (no layout shift),
  * and it is tall enough for the tallest of the form's four pages, so the
@@ -30,7 +33,7 @@
   border: 0;
   display: block;
   height: 2300px;
-  max-width: 40rem;
+  max-width: var(--measure-page);
   width: 100%;
 }
 

@@ -75,8 +75,16 @@ test.describe("TS-WEB-0023 D10: the registration route embeds the live site's Go
       const box = await frame.boundingBox();
       expect(box?.width ?? 0).toBeGreaterThan(300);
       expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(390);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
     });
   }
+
+  test("issue 169: on a wide viewport the frame is the container's width, not Google's card width", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(href("register", "de"));
+    const box = await page.locator(FRAME).boundingBox();
+    expect(box?.width ?? 0).toBeGreaterThan(770);
+  });
 
   for (const viewport of [
     { width: 390, height: 844, reserved: 2300 },
