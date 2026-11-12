@@ -336,6 +336,7 @@ export default async function Page({
             dataBlock="zitat"
             focal={founderImage?.focal}
             id="zitat"
+            imageSizes="100vw"
             label={fieldAt(story.blocks, STORY.quoteName) ?? FOUNDER_ALT[locale]}
             locale={locale}
             aiEdited={founderImage?.aiEdited} notDepicting={founderImage?.notDepicting}
@@ -417,6 +418,7 @@ export default async function Page({
                       portraitCredit={imageCredit(portrait, locale)}
                       portraitNotDepicting={portrait?.notDepicting}
                       portraitRatio="feature"
+                      portraitSizes="(min-width: 64rem) 50vw, 100vw"
                       portraitSrc={portrait?.src}
                       role={founder.role}
                     />

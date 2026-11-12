@@ -111,11 +111,9 @@ section.quoteBand {
   align-items: stretch;
   aspect-ratio: auto;
   /* Phone (issue 164): the square photograph is shown whole, at the width of the
-     phone, and the quote stands on the dark ground below it. `cover` on the
-     tall box cut a narrow slice out of it and blew it up. */
+     phone, and the quote stands on the dark ground below it. The photograph is
+     a responsive `<img>` (`imageSizes` on the surface), not a background. */
   background-color: var(--color-neutral-ink);
-  background-position: 0 0, 0 0, 50% 0;
-  background-size: 100% 100%, 100% 100%, 100% auto;
   flex-direction: column;
   justify-content: flex-end;
 }
@@ -126,10 +124,15 @@ section.quoteBand::before {
   height: 100vw;
 }
 
+section.quoteBand [data-photo-picture] {
+  aspect-ratio: 1 / 1;
+  bottom: auto;
+}
+
 @media (min-width: 40rem) {
-  section.quoteBand {
-    background-position: var(--photo-focal, 50% 40%);
-    background-size: cover;
+  section.quoteBand [data-photo-picture] {
+    aspect-ratio: auto;
+    bottom: 0;
   }
 
   section.quoteBand::before {
@@ -141,8 +144,11 @@ section.quoteBand::before {
   /* Width-bound from here: the square photograph is taller than the band, so
      the band's window is set on the upper fifth, where the face sits. */
   section.quoteBand {
-    background-position: 48% 20%;
     min-height: min(90vh, 60vw);
+  }
+
+  section.quoteBand [data-photo-picture] img {
+    object-position: 48% 20%;
   }
 
   section.quoteBand::before {

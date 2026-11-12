@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { AiEditedMark } from "../ai-edited-mark/ai-edited-mark";
 import { isMocked, isPending, type DataStateProps } from "../data-state";
 import { PlaceholderSurface } from "../placeholder-surface/placeholder-surface";
@@ -56,6 +58,16 @@ export interface PhotoSurfaceProps extends DataStateProps {
    */
   readonly focal?: { readonly x: number; readonly y: number };
   readonly ratio?: "hero" | "feature";
+  /**
+   * Render the photograph as a responsive `<img>` (`next/image`, `fill`,
+   * `object-fit: cover`) instead of a CSS background, with this `sizes`
+   * (issue 164). A background carries no `srcset`, so every viewport would
+   * download the one full-size file; the `<img>` lets the browser and the
+   * optimizer pick the width. The scrim ladder is laid over it as its own
+   * element, from the same two gradient variables. Only for a below-the-fold
+   * surface: the `priority` preload links belong to the background mode.
+   */
+  readonly imageSizes?: string;
   /**
    * The photo does not depict what the copy claims. It reaches the markup as
    * `data-provenance="generated"` and nothing else — Jan, 2026-09-18.
@@ -143,6 +155,7 @@ export function PhotoSurface({
   heroSize = "page",
   focal,
   ratio = "hero",
+  imageSizes,
   notDepicting = false,
   aiEdited = false,
   locale,
@@ -156,6 +169,7 @@ export function PhotoSurface({
   credit,
   children,
 }: PhotoSurfaceProps) {
+  const asImage = imageSizes !== undefined;
   const classes = [styles.surface, className].filter(Boolean).join(" ");
 
   if (isPending(state)) {
@@ -230,13 +244,14 @@ export function PhotoSurface({
       data-hero-size={hero && !missingPhoto ? heroSize : undefined}
       data-mock={isMocked(state) ? "true" : undefined}
       data-placeholder={missingPhoto ? "true" : placeholderId}
+      data-picture={asImage && !missingPhoto ? "true" : undefined}
       data-provenance={
         missingPhoto ? undefined : notDepicting ? "generated" : aiEdited ? "ai-edited" : undefined
       }
       id={id}
       style={
         {
-          "--photo-image": missingPhoto ? "none" : photoUrl(src!),
+          "--photo-image": missingPhoto || asImage ? "none" : photoUrl(src!),
           ...(wideSrc && !missingPhoto ? { "--photo-image-wide": photoUrl(wideSrc) } : {}),
           ...(focal ? { "--photo-focal": focalPosition(focal) } : {}),
           "--photo-ratio": `var(--ratio-${ratio})`,
@@ -251,6 +266,14 @@ export function PhotoSurface({
       {/* The text stack stands in the page's container, so it starts on the
           same left edge as the header and every section (DEC-0150, F-4-1). */}
       {photoLayer}
+      {asImage && !missingPhoto ? (
+        <>
+          <div aria-hidden="true" className={styles.picture} data-photo-picture="">
+            <Image alt="" className={styles.pictureImage} fill loading="lazy" sizes={imageSizes} src={src!} />
+          </div>
+          <div aria-hidden="true" className={styles.scrim} />
+        </>
+      ) : null}
       <div className={`container ${styles.content}`}>{children}</div>
       {/* DEC-0165: every photograph edited with an AI tool carries the mark. */}
       {aiEdited && !notDepicting && !missingPhoto ? <AiEditedMark locale={locale} /> : null}

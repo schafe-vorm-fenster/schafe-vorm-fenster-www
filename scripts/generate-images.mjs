@@ -92,17 +92,19 @@ const RATIOS = {
   proof: { request: "1440x576", out: { width: 1400, height: 560 } },
   map: { request: "1440x800", out: { width: 1440, height: 810 } },
   portrait: { request: "1152x1440", out: { width: 1152, height: 1440 } },
-  square: { request: "1024x1024", out: { width: 1024, height: 1024 } },
+  // `out` is the ceiling for a placed photograph (issue 164): 1600 px carries a
+  // full-width band at 2x on a laptop; a smaller source is never scaled up.
+  square: { request: "1024x1024", out: { width: 1600, height: 1600 } },
 };
 
 /**
- * TS-WEB-0003 D1: every image stays under 100 KB. Quality 80 is the start; a busy
- * motif that misses the budget is re-encoded down the ladder rather than
- * shipped over it, because the budget is the promise and the image is a
- * placeholder either way.
+ * TS-WEB-0003 D1: every image stays at or under 200 KB (NFR-WEB-0056, raised
+ * from 100 KB by DEC-0202). Quality 86 is the start; a busy motif that misses
+ * the budget is re-encoded down the ladder rather than shipped over it,
+ * because the budget is the promise and the image is a placeholder either way.
  */
-const QUALITY_LADDER = [80, 74, 68, 62, 56, 50];
-const MAX_BYTES = 100 * 1024;
+const QUALITY_LADDER = [86, 80, 74, 68, 62, 56, 50];
+const MAX_BYTES = 200 * 1024;
 
 /**
  * Pacing. The gateway rate-limits image models on the free tier, and a run of
@@ -330,7 +332,7 @@ async function renderWithRetry(ai, prompt, size, out, file, force = false) {
 
 /**
  * The budget pass. A busy motif — fog, foliage, a wall of detail — can miss
- * TS-WEB-0003 D1's 100 KB even at the bottom of the quality ladder, and the file
+ * TS-WEB-0003 D1's 200 KB even at the bottom of the quality ladder, and the file
  * is already written by then. Rather than pay for the frame again, the file
  * itself is re-encoded and, if that is still not enough, narrowed: a
  * placeholder that is 200 px less wide is a better answer than a placeholder
@@ -378,11 +380,11 @@ async function fitBudget() {
         }
         if (done) break;
       }
-      if (!done) console.warn(`   ${name} stays over the 100 KB budget`);
+      if (!done) console.warn(`   ${name} stays over the 200 KB budget`);
     }
   }
   if (fitted.length > 0) {
-    console.log(`\nre-encoded to fit the 100 KB budget (TS-WEB-0003 D1):`);
+    console.log(`\nre-encoded to fit the 200 KB budget (TS-WEB-0003 D1):`);
     for (const line of fitted) console.log(`  · ${line}`);
   }
 
@@ -562,16 +564,20 @@ async function placeRendition(entry, from, out, file, anchor) {
         `(anchor ${anchor.x}% ${anchor.y}%)${window.anchored ? "" : " — NOT anchored, the original is too small"}`,
     );
   }
+  // Never scaled up: a source narrower than the ceiling keeps its own pixels,
+  // at the ratio of the box (issue 164, a 1018 px source was blown up to 1152).
+  const outWidth = Math.min(out.width, window.width);
+  const target = { width: outWidth, height: Math.round((outWidth * out.height) / out.width) };
   const base = image
     .extract({ left: window.left, top: window.top, width: window.width, height: window.height })
-    .resize({ width: out.width, height: out.height, fit: "cover" });
+    .resize({ width: target.width, height: target.height, fit: "cover" });
 
   for (const quality of QUALITY_LADDER) {
     const buffer = await base.clone().webp({ quality, effort: 5 }).toBuffer();
     if (buffer.length <= MAX_BYTES || quality === QUALITY_LADDER.at(-1)) {
       mkdirSync(dirname(file), { recursive: true });
       writeFileSync(file, buffer);
-      return { width: out.width, height: out.height, bytes: buffer.length, quality };
+      return { width: target.width, height: target.height, bytes: buffer.length, quality };
     }
   }
   throw new Error("unreachable");

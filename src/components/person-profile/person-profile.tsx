@@ -51,6 +51,8 @@ export interface PersonProfileProps {
   readonly kicker?: string;
   /** The portrait's box; the 4:5 `portrait` where nothing else is asked for. */
   readonly portraitRatio?: MediaRatio;
+  /** The portrait's `sizes`; `media-frame`'s own where nothing else is asked for. */
+  readonly portraitSizes?: string;
   readonly className?: string;
 }
 
@@ -85,6 +87,7 @@ export function PersonProfile({
   headingId,
   kicker,
   portraitRatio = "portrait",
+  portraitSizes,
   className,
 }: PersonProfileProps) {
   return (
@@ -96,6 +99,7 @@ export function PersonProfile({
         locale={locale}
         notDepicting={portraitNotDepicting}
         ratio={portraitRatio}
+        sizes={portraitSizes}
         src={portraitSrc}
         state={portraitState}
       />
