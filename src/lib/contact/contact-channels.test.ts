@@ -171,9 +171,15 @@ describe("DEC-0192: copy carries a token, the number comes from the hub record",
     const number = contactChannel("whatsapp").address;
     const node = withChannelLinks("An {whatsapp}. Im Chat.");
     const html = renderToStaticMarkup(createElement(Fragment, null, node));
-    expect(html).toBe(
-      `An <a href="${contactHref("whatsapp")}" data-channel="whatsapp">${number}</a>. Im Chat.`,
-    );
+    // Through `anchor`: a new tab, said in a hidden note (TS-WEB-0016-A24).
+    expect(html).toMatch(/^An <a [^>]*>/u);
+    expect(html).toContain(`href="${contactHref("whatsapp")}"`);
+    expect(html).toContain('data-channel="whatsapp"');
+    expect(html).toContain('target="_blank"');
+    expect(html).toContain('rel="noopener noreferrer"');
+    expect(html).toContain(`>${number}</a>`);
+    expect(html).toMatch(/neue[nm]? Tab/u);
+    expect(html.endsWith(". Im Chat.")).toBe(true);
     expect(withChannelLinks("kein Token")).toBe("kein Token");
   });
 });

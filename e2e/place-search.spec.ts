@@ -412,8 +412,10 @@ test.describe("TS-WEB-0008-A17: the hovered and the active suggestion keep 4.5:1
   for (const route of ["home", "place"] as const) {
     test(`${href(route, "de")} — pointer and keyboard`, async ({ page }) => {
       await page.goto(href(route, "de"));
-      await hydrated(page, FIELD);
-      const field = page.locator(FIELD);
+      // On `/` the search left the stage for the Dorfkalender section (DEC-0194).
+      const selector = route === "home" ? '#dorfkalender input[type="search"]' : FIELD;
+      await hydrated(page, selector);
+      const field = page.locator(selector);
       await field.fill(SEARCH);
       const first = page.getByRole("option").first();
       await expect(first).toBeVisible({ timeout: 10_000 });

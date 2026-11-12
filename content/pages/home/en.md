@@ -74,14 +74,14 @@ images:
       2007, 3008×2000. Fremdaufnahme: CC BY-SA verlangt Namensnennung, sie steht hinter dem ©-Zeichen am Bild.
     alt: >-
       The town hall of Gützkow in Western Pomerania, a white rendered building with a flight of
-      steps onto the street. Over it lies a drawing of an events calendar on a website.
+      steps onto the street.
     licence: CC BY-SA 2.5
     credit: "Erell, CC BY-SA 2.5, via Wikimedia Commons, Bildausschnitt angepasst"
     credit_title: "Rathaus Gützkow"
     credit_url: "https://commons.wikimedia.org/wiki/File:Guetzkow_Ostvorpommern_Rathaus.jpg"
     focal:
       x: 42
-      "y": 50
+      "y": 30
     status: real
     file: /images/real/home-scene-embed.webp
     width: 1400
@@ -231,24 +231,76 @@ three rows; normally the panel shows the reference place's real dates.
 
 <!-- id: home-5-scene-embed; content_type: value-story; provenance: sourced; derived_from: ["@schafe-vorm-fenster/messaging@0.1.0#municipalities--portalize-calendar"]; status: draft -->
 
-**Aha statement:** Your dates on your own website.
+**Aha statement:** A calendar for your municipality.
 
-**Text:** The culture calendar for your municipality: dates from every local group in the area, on culture, tourism and community life. Two lines to embed, done.
+**Text:** You embed it on your website with two lines and have nothing left to maintain afterwards.
 
-**Kicker:** With no system of your own
+**Kicker:** Online calendar with no system of your own
 
-**Transition:** The dates from around here also stand where the municipality shows them:
+**Tick 1:** Your website shows the dates from every village in the municipality and from the surrounding area.
+
+**Tick 2:** Clubs and organisers enter their own dates.
+
+**Tick 3:** You decide which dates appear, for example only culture and tourism without the waste collection.
 
 **CTA label (secondary):** Order the calendar
 
-Source: "municipalities--portalize-calendar" value proposition,
-`gains`/`relievers` fields — "our own design and our own selection,
-without our own system". The aha line is the review's wording of
-2026-09-22 ("Deine Termine auf deiner Webseite"), as are the example
-("the culture calendar for your municipality … from every local group in
-the municipal area, on culture, tourism and community life") and "two
-lines to embed, done". The CTA label is the target page's own primary
-label (`content/pages/dein-kalender/en.md`, slot 1).
+Source: the owner's German wording from issue #145 (2026-11-12), value proposition
+"municipalities--portalize-calendar", `gains`/`relievers` fields. **English draft**,
+a faithful translation of the German, not yet reviewed by the owner. The German
+address (headline "deine Gemeinde", text "ihr/eure") is an open point (issue #145,
+"Offen"; DEC-0193); the English draft follows it with "your" and "you". The CTA
+label is the target page's own primary label (`content/pages/dein-kalender/en.md`,
+slot 1).
+
+### Slot 5a — The calendar graphic of the embed scene (placeholder)
+
+<!-- id: home-5a-scene-embed-calendar-demo; content_type: value-story; provenance: generated; derived_from: []; status: draft; demo: true -->
+
+**Label address bar:** municipality-example.com/events
+
+**Label graphic title:** Events in the municipality
+
+**Label filter bar (screen reader):** Filter by category
+
+**Label graphic (screen reader):** Example: calendar on a municipality's website
+
+**Label community life:** Community life
+
+**Label education and health:** Education & health
+
+**Label everyday supply:** Supplies
+
+**Label culture and tourism:** Culture & tourism
+
+**Event community life 1:** 04 | Wed | Municipal council meeting | Community hall · 19:00
+
+**Event community life 2:** 11 | Wed | Fire brigade lantern parade | Fire station · 17:30
+
+**Event community life 3:** 18 | Wed | Sports club annual meeting | Clubhouse · 19:00
+
+**Event education and health 1:** 05 | Thu | County mobile library | Village square · 14:00
+
+**Event education and health 2:** 12 | Thu | First-aid course | Community hall · 10:00
+
+**Event education and health 3:** 19 | Thu | Blood donation | Fire station · 15:00
+
+**Event everyday supply 1:** 06 | Fri | Bakery van | Village street · 07:30
+
+**Event everyday supply 2:** 13 | Fri | Weekly market | Market square · 08:00
+
+**Event everyday supply 3:** 20 | Fri | Farm shop open | Manor farm · 10:00
+
+**Event culture and tourism 1:** 07 | Sat | Concert in the village church | Village church · 17:00
+
+**Event culture and tourism 2:** 14 | Sat | Reading in the fireside room | Manor house · 19:30
+
+**Event culture and tourism 3:** 21 | Sat | Guided tour of the castle park | Castle · 11:00
+
+English draft of the German graphic: the same twelve invented, neutral
+example dates, `provenance: generated`, `demo: true`, `data-demo="true"` in the
+markup (DEC-0068, DEC-0193). Event format: `day | weekday | title | place · time`,
+exactly three per category.
 
 ## Scene 3 — Provenance (mechanism: provenance)
 

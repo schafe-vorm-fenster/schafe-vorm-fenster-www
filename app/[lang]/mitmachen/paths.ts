@@ -30,6 +30,7 @@ import { withChannelLinks } from "@/src/lib/contact/contact-channels";
 import type { ExplainStep } from "@/src/components/content-fragments";
 import type { ThreeOf } from "@/src/components/explain-module/explain-module";
 import type { ContentBlock } from "@/src/lib/content/types";
+import type { Locale } from "@/src/lib/i18n/locales";
 
 /** Core and detail of one authored line. */
 export const CORE_DETAIL = " — ";
@@ -158,10 +159,10 @@ export function threeSampleRows(
  * WhatsApp number in step 2 (DEC-0192 amendment 2026-11-12). Call it on the
  * raw lines, before any `withChannelTokens` substitution.
  */
-export function withStepLinks(steps: ThreeOf<ExplainStep>): ThreeOf<ExplainStep> {
+export function withStepLinks(steps: ThreeOf<ExplainStep>, locale: Locale): ThreeOf<ExplainStep> {
   const [one, two, three] = steps.map((step) => ({
     ...step,
-    detail: typeof step.detail === "string" ? withChannelLinks(step.detail) : step.detail,
+    detail: typeof step.detail === "string" ? withChannelLinks(step.detail, locale) : step.detail,
   })) as [ExplainStep, ExplainStep, ExplainStep];
   return [one, two, three];
 }

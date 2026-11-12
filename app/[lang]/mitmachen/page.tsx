@@ -392,6 +392,7 @@ export default async function Page({
           ]}
           steps={withStepLinks(
             threeSteps(listAt(whatsappSteps.blocks, 0), "mitmachen-3a-path-whatsapp-steps-demo"),
+            locale,
           )}
           title={fieldAt(pathWhatsapp.blocks, 3) ?? ""}
         />

@@ -233,15 +233,20 @@ test("TS-WEB-0022-A19: below lg the stage box keeps one height across all three 
 async function truncatedStepText(page: Page): Promise<string[]> {
   return page.evaluate(() =>
     [...document.querySelectorAll<HTMLElement>("[data-explain-row]")]
-      .flatMap((line) => [...line.querySelectorAll<HTMLElement>("span:not([aria-hidden])")])
+      // The new-tab note of a link in a detail (`anchor`) is visually hidden
+      // on purpose, so it is not step text.
+      .flatMap((line) => [...line.querySelectorAll<HTMLElement>('span:not([aria-hidden]):not([id^="new-tab-"])')])
       .filter((span) => {
         const style = getComputedStyle(span);
         const clamp = style.getPropertyValue("-webkit-line-clamp");
+        // 1 px of tolerance: a line that wraps to two at a fractional line
+        // height rounds its scroll height up by one pixel without hiding any
+        // text (the span's overflow is visible).
         return (
           style.textOverflow === "ellipsis" ||
           (clamp !== "" && clamp !== "none") ||
-          span.scrollHeight > span.clientHeight ||
-          span.scrollWidth > span.clientWidth
+          span.scrollHeight > span.clientHeight + 1 ||
+          span.scrollWidth > span.clientWidth + 1
         );
       })
       .map((span) => span.textContent ?? ""),
