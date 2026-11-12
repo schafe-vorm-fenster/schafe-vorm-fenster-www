@@ -27,7 +27,7 @@ lifetimes, and CI enforcement.
 
 LCP < 2.5s · INP < 200ms · CLS < 0.1 · FCP < 800ms · TTFB < 200ms.
 Compressed: HTML ≤ 50KB · JS ≤ 100KB · CSS ≤ 30KB · fonts ≤ 50KB ·
-images ≤ 100KB each. Lighthouse: 100 target / 98 floor (Performance),
+images ≤ 200KB each (DEC-0202). Lighthouse: 100 target / 98 floor (Performance),
 100 the rest — mobile and desktop.
 
 ### D2 — LCP elements per page [FIXED: DEC-0068, DEC-0069]
@@ -127,7 +127,7 @@ module renders as list.
 
 - [FREE] Code-splitting strategy, component-level lazy boundaries —
   within D4 budgets.
-- [FREE] Image formats/sizes pipeline, as long as ≤ 100KB and AVIF/WebP
+- [FREE] Image formats/sizes pipeline, as long as ≤ 200KB and AVIF/WebP
   preferred.
 
 ## Acceptance criteria
@@ -178,7 +178,7 @@ determination produces rather than hopes for.
 | NFR-WEB-0053 (Compressed size of the JavaScript < 100 KB) | D1, D4 · A2, A3 |
 | NFR-WEB-0054 (Compressed size of the CSS < 30 KB) | D1, D4 · A2, A3 |
 | NFR-WEB-0055 (Compressed size of the web fonts <= 50 KB) | D1, D4 · A2, A3 |
-| NFR-WEB-0056 (Size of every image the website serves < 100 KB) | D1, D4 · A2, A3 |
+| NFR-WEB-0056 (Size of every image the website serves <= 200 KB) | D1, D4 · A2, A3 |
 | FUN-WEB-0107 (inline the critical CSS) | D4 · A5 |
 | FUN-WEB-0108 (defer its execution) | D4 · A5 |
 | FUN-WEB-0109 (serve the brand kit's woff2 file from its own …) | D3 · A3 |

@@ -336,6 +336,7 @@ export default async function Page({
             dataBlock="zitat"
             focal={founderImage?.focal}
             id="zitat"
+            imageSizes="100vw"
             label={fieldAt(story.blocks, STORY.quoteName) ?? FOUNDER_ALT[locale]}
             locale={locale}
             aiEdited={founderImage?.aiEdited} notDepicting={founderImage?.notDepicting}
@@ -391,7 +392,8 @@ export default async function Page({
         </SectionShell>
 
         {/* 6 — who is behind it (D7): the person the artifact names, with the
-            cleared 4:5 portrait. The portrait runs to the viewport edge. */}
+            cleared photograph in the 7:5 `feature` box (issue 164). The photograph
+            runs to the viewport edge and to the section's top and bottom. */}
         {founder ? (
           <SectionShell
             className={styles.personSection}
@@ -415,6 +417,8 @@ export default async function Page({
                       portraitAlt={portrait?.alt ?? founder.name}
                       portraitCredit={imageCredit(portrait, locale)}
                       portraitNotDepicting={portrait?.notDepicting}
+                      portraitRatio="feature"
+                      portraitSizes="(min-width: 64rem) 50vw, 100vw"
                       portraitSrc={portrait?.src}
                       role={founder.role}
                     />

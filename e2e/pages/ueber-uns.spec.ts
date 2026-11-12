@@ -283,7 +283,7 @@ test.describe("/ueber-uns", () => {
     await expect(block.locator("img, li")).toHaveCount(0);
   });
 
-  test("TS-WEB-0027-A9: every person the artifact names renders once, in a 4:5 media box", async ({
+  test("TS-WEB-0027-A9: every person the artifact names renders once, in a 7:5 media box", async ({
     page,
   }) => {
     await page.goto("/ueber-uns");
@@ -295,14 +295,15 @@ test.describe("/ueber-uns", () => {
     // Christian Sauer is off the block (review R-ueber-10); his record is
     // `status: draft`, `press_clearance: unverified`.
     expect(teamText).not.toContain("Christian Sauer");
-    // A cleared portrait, in the 4:5 box the criterion asks for — never a
-    // blank box, never omitted.
+    // A cleared portrait, in the `feature` 7:5 box (issue 164: landscape instead
+    // of the 4:5 portrait, so the section is less tall) — never a blank box,
+    // never omitted.
     const portrait = profiles.locator("img");
     await expect(portrait).toHaveCount(1);
     const box = await portrait.first().boundingBox();
     expect(box).not.toBeNull();
-    // `ratio-portrait` is 4 / 5 (`app/styles/components.css`).
-    expect(box!.width / box!.height).toBeCloseTo(0.8, 1);
+    // `ratio-feature` is 7 / 5 (`app/styles/components.css`).
+    expect(box!.width / box!.height).toBeCloseTo(1.4, 1);
   });
 
   test("DEC-0162 §1: the chapters carry the sourced story, and the founder quote is a quote card on the photo band", async ({

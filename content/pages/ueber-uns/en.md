@@ -65,9 +65,9 @@ images:
       The sheep barn and the municipal yard in Schlatkow, a whitewashed shed at the edge of a
       meadow.
     licence: CC BY-SA 4.0
-    credit: "Schafe vorm Fenster, CC BY-SA 4.0, via Wikimedia Commons"
-    credit_title: "Bauhof und Schafstall in Schlatkow"
-    credit_url: "https://commons.wikimedia.org/wiki/File:Bauhof_und_Schafstall_in_Schlatkow.jpeg"
+    credit: Schafe vorm Fenster, CC BY-SA 4.0, via Wikimedia Commons
+    credit_title: Bauhof und Schafstall in Schlatkow
+    credit_url: https://commons.wikimedia.org/wiki/File:Bauhof_und_Schafstall_in_Schlatkow.jpeg
     focal:
       x: 38
       "y": 58
@@ -80,31 +80,32 @@ images:
     wide_height: 420
   - id: ueber-uns-founder-portrait
     slot: ueber-uns-1-origin
-    ratio: portrait
+    ratio: square
     provenance: real
     source: >-
       @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2026-04-otcamp-neustrelitz-outdoor-session.jpeg
       — `license: free use, credit advised`, `credit: openTransfer.de`, Fotograf: openTransfer.de
       (Stiftung Bürgermut), openTransfer CAMP Zusammenhalt, Neustrelitz, April 2026, 1717×1717.
       `press_clearance: cleared` steht im Personenprofil für alle vierzehn Assets. Binärdatei liegt
-      im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor.
+      im go-to-market-os-Repository, das npm-Paket liefert nur den .asset.md-Deskriptor. Rendition
+      seit #164: die ganze Quelle als Quadrat, 1600×1600 (zuvor ein 4:5-Ausschnitt, hochskaliert).
     alt: >-
       Jan-Henrik Hempel sitting outdoors in a circle of chairs, a programme booklet in one hand, a
       pen in the other, two vans parked behind him.
     credit: openTransfer.de
-    credit_title: "openTransfer CAMP Zusammenhalt, Neustrelitz"
-    credit_url: "https://opentransfer.de/dokumentation-camp-neustrelitz/"
+    credit_title: openTransfer CAMP Zusammenhalt, Neustrelitz
+    credit_url: https://opentransfer.de/dokumentation-camp-neustrelitz/
     licence: "Freie Nutzung, Namensnennung erbeten (Rechteinhaber: openTransfer.de / Stiftung Bürgermut)"
     focal:
       x: 48
       "y": 45
     status: real
     file: /images/real/ueber-uns-founder-portrait.webp
-    width: 1152
-    height: 1440
+    width: 1600
+    height: 1600
   - id: ueber-uns-team-jan-henrik-hempel
     slot: ueber-uns-5-team
-    ratio: portrait
+    ratio: feature
     provenance: real
     source: >-
       @schafe-vorm-fenster/people@0.3.6#jan-henrik-hempel/assets/2021-workshop-quilow-portrait.jpeg
@@ -112,14 +113,14 @@ images:
       im Herkunftsblock, damit die Seite ein Porträt nicht zweimal zeigt.
     alt: Jan-Henrik Hempel explaining something with both hands raised, timber beams behind him.
     licence: Eigenaufnahme, unbeschränkte Nutzung
-    credit: "Jan-Henrik Hempel"
+    credit: Jan-Henrik Hempel
     focal:
       x: 55
       "y": 38
     status: real
     file: /images/real/ueber-uns-team-jan-henrik-hempel.webp
-    width: 1152
-    height: 1440
+    width: 1018
+    height: 727
   - id: ueber-uns-team-christian-sauer
     slot: ueber-uns-5-team
     ratio: portrait

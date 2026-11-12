@@ -55,7 +55,7 @@ the tactical spec per page type.
 | [NFR-WEB-0053](NFR-WEB-0053.md) | SRC-0007, DEC-0007 | S3 |
 | [NFR-WEB-0054](NFR-WEB-0054.md) | SRC-0007, DEC-0007 | S3 |
 | [NFR-WEB-0055](NFR-WEB-0055.md) | SRC-0007, DEC-0007 | S3 |
-| [NFR-WEB-0056](NFR-WEB-0056.md) | SRC-0007, DEC-0007 | S3 |
+| [NFR-WEB-0056](NFR-WEB-0056.md) | SRC-0007, DEC-0007, DEC-0202 | S3 |
 
 ### Accessibility
 

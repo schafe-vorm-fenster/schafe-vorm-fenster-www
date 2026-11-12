@@ -1,4 +1,4 @@
-import { MediaFrame } from "../media-frame/media-frame";
+import { MediaFrame, type MediaRatio } from "../media-frame/media-frame";
 
 import type { DataState } from "../data-state";
 import type { ReactNode } from "react";
@@ -49,6 +49,10 @@ export interface PersonProfileProps {
    */
   readonly headingId?: string;
   readonly kicker?: string;
+  /** The portrait's box; the 4:5 `portrait` where nothing else is asked for. */
+  readonly portraitRatio?: MediaRatio;
+  /** The portrait's `sizes`; `media-frame`'s own where nothing else is asked for. */
+  readonly portraitSizes?: string;
   readonly className?: string;
 }
 
@@ -82,6 +86,8 @@ export function PersonProfile({
   textOnly = false,
   headingId,
   kicker,
+  portraitRatio = "portrait",
+  portraitSizes,
   className,
 }: PersonProfileProps) {
   return (
@@ -92,7 +98,8 @@ export function PersonProfile({
         credit={portraitCredit}
         locale={locale}
         notDepicting={portraitNotDepicting}
-        ratio="portrait"
+        ratio={portraitRatio}
+        sizes={portraitSizes}
         src={portraitSrc}
         state={portraitState}
       />

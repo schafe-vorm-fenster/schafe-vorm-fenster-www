@@ -110,6 +110,10 @@
 section.quoteBand {
   align-items: stretch;
   aspect-ratio: auto;
+  /* Phone (issue 164): the square photograph is shown whole, at the width of the
+     phone, and the quote stands on the dark ground below it. The photograph is
+     a responsive `<img>` (`imageSizes` on the surface), not a background. */
+  background-color: var(--color-neutral-ink);
   flex-direction: column;
   justify-content: flex-end;
 }
@@ -117,22 +121,34 @@ section.quoteBand {
 section.quoteBand::before {
   content: "";
   flex: none;
-  height: 110vw;
+  height: 100vw;
+}
+
+section.quoteBand [data-photo-picture] {
+  aspect-ratio: 1 / 1;
+  bottom: auto;
 }
 
 @media (min-width: 40rem) {
+  section.quoteBand [data-photo-picture] {
+    aspect-ratio: auto;
+    bottom: 0;
+  }
+
   section.quoteBand::before {
     height: 60vw;
   }
 }
 
 @media (min-width: 64rem) {
-  /* Width-bound from here: the portrait is far taller than the band, and its
-     inventory focal point (`y` 45 %) is the 4:5 box's. The face sits at the
-     upper fifth of the original, so the band's window is set there. */
+  /* Width-bound from here: the square photograph is taller than the band, so
+     the band's window is set on the upper fifth, where the face sits. */
   section.quoteBand {
-    background-position: 48% 15%;
-    min-height: min(85vh, 680px);
+    min-height: min(90vh, 60vw);
+  }
+
+  section.quoteBand [data-photo-picture] img {
+    object-position: 48% 20%;
   }
 
   section.quoteBand::before {
@@ -153,13 +169,21 @@ section.quoteBand::before {
   width: 100%;
 }
 
+/* issue 164: the photograph meets the section's top and bottom edge, so no lime
+   strip stands above and below it; the text carries the section's block
+   padding itself where it stacks under the photograph. */
+section.personSection {
+  padding-block: 0;
+}
+
 .profile {
-  gap: var(--space-6);
+  gap: 0;
 }
 
 .profile > div {
   margin-inline: auto;
   max-width: calc(var(--measure-page) + 2 * var(--gutter));
+  padding-block: var(--section-padding-block);
   padding-inline: var(--gutter);
   width: 100%;
 }
@@ -174,6 +198,7 @@ section.quoteBand::before {
 
   .profile > div {
     margin-inline: 0;
+    padding-block: var(--space-6);
     padding-inline: 0 max(var(--gutter), calc((100vw - var(--measure-page)) / 2));
   }
 }
