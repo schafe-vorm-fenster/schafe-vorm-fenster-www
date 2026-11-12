@@ -24,9 +24,9 @@ describe("TS-WEB-0019: / section rhythm", () => {
    * S1 and S2 — no place, or a place with dates. Block 1 is the one `ink`
    * section; block 2a is the paper · lime-100 · violet-500 run of the three
    * scenes (the module's scene is the light one, DEC-0129 §11); then the proof
-   * stream, `PageFrame`'s context band on `surface` (the unmerged branch, since
-   * `/`'s closing block is a `module` variant), and the closing search block on
-   * the second `ink`, which is the page's last section (DEC-0117).
+   * stream and `PageFrame`'s context band on `surface`, the page's last
+   * section since DEC-0195 removed the closing search block (and with it the
+   * second `ink` of DEC-0117).
    */
   it("has no violations in S1/S2 — without the widened-radius section", () => {
     const sections = [
@@ -36,8 +36,7 @@ describe("TS-WEB-0019: / section rhythm", () => {
       "lime-100", // block 2a scene 2 — embed
       "violet-500", // block 2a scene 3 — provenance, block 2b
       "lime-100", // block 2c — proof stream
-      "surface", // PageFrame: context band
-      "ink", // PageFrame: closing search block, last
+      "surface", // PageFrame: context band, last (DEC-0195: no closing block)
     ] as const;
     expect(checkRhythm(sections, 0)).toEqual([]);
   });
@@ -57,8 +56,7 @@ describe("TS-WEB-0019: / section rhythm", () => {
       "lime-100", // block 2a scene 2 — embed
       "violet-500", // block 2a scene 3 — provenance, block 2b
       "lime-100", // block 2c — proof stream
-      "surface", // PageFrame: context band
-      "ink", // PageFrame: closing search block, last
+      "surface", // PageFrame: context band, last (DEC-0195: no closing block)
     ] as const;
     expect(checkRhythm(sections, 0)).toEqual([]);
   });
@@ -85,14 +83,14 @@ describe("TS-WEB-0019: / section rhythm", () => {
   for (const [trait, scenes] of Object.entries(REORDERED)) {
     it(`has no violations in S1/S2 with the ${trait} order of block 2a`, () => {
       expect(
-        checkRhythm(["photo", "ink", ...scenes, "lime-100", "surface", "ink"], 0),
+        checkRhythm(["photo", "ink", ...scenes, "lime-100", "surface"], 0),
       ).toEqual([]);
     });
 
     it(`has no violations in S3 with the ${trait} order of block 2a`, () => {
       expect(
         checkRhythm(
-          ["photo", "ink", "surface-2", ...scenes, "lime-100", "surface", "ink"],
+          ["photo", "ink", "surface-2", ...scenes, "lime-100", "surface"],
           0,
         ),
       ).toEqual([]);
@@ -117,7 +115,6 @@ describe("TS-WEB-0019: / section rhythm", () => {
       "violet-500",
       "lime-100",
       "surface",
-      "ink",
     ] as const;
     expect(checkRhythm(before, 0)).toEqual([]);
   });

@@ -129,8 +129,8 @@ for (const { path, locale, route } of ROUTES) {
  */
 const FLOW_ROUTES_WITHOUT_BAND: readonly string[] = ["register", "order"];
 
-/** `/ueber-uns` has no closing CTA: the contact section follows the band (DEC-0186). */
-const ROUTES_WITHOUT_CLOSING_CTA: readonly string[] = ["about"];
+/** `/ueber-uns` (DEC-0186) and `/` (DEC-0195) have no closing CTA: the contact section follows the band. */
+const ROUTES_WITHOUT_CLOSING_CTA: readonly string[] = ["about", "home"];
 
 for (const { path, route } of ROUTES) {
   const midFlow = FLOW_ROUTES_WITHOUT_BAND.includes(route);

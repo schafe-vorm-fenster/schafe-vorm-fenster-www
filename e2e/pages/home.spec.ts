@@ -41,7 +41,8 @@ const PASS_MS = DWELL_MS + TRANSITION_MS + DWELL_MS + TRANSITION_MS;
  */
 async function blockOneSettled(page: Page): Promise<void> {
   await expect(page.locator('[data-cta="primary"]')).toHaveCount(1);
-  await expect(page.locator('input[type="search"]')).toHaveCount(2);
+  // One search field since DEC-0195: the closing block's copy is gone.
+  await expect(page.locator('input[type="search"]')).toHaveCount(1);
 }
 
 /**
@@ -210,7 +211,6 @@ async function sceneFacts(page: Page) {
             "place-dates",
             "proof-stream",
             "context-band",
-            "closing-cta",
           ].includes(id),
         ),
       proofElements: document.querySelectorAll("#proof-stream article").length,
@@ -747,7 +747,7 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(page.locator("#proof-stream article")).toHaveCount(4);
   });
 
-  test("TS-WEB-0019-A9: DOM order is block 1 · scenes · provenance · proof · band · closing", async ({
+  test("TS-WEB-0019-A9: DOM order is block 1 · scenes · provenance · proof · band, no closing block (DEC-0195)", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -798,8 +798,8 @@ test.describe("TS-WEB-0019 — home", () => {
       "scene-3",
       "proof-stream",
       "context-band",
-      "closing-cta",
     ]);
+    await expect(page.locator("#closing-cta")).toHaveCount(0);
 
     // Block 2b, where D3 puts it and on the ground D3 gives it. Scoped to
     // `main` for the same reason the id walk above is: block 2a stands inside a
@@ -809,13 +809,13 @@ test.describe("TS-WEB-0019 — home", () => {
     // to two elements and Playwright's strict mode throws.
     await expect(page.locator("main #scene-3")).toHaveAttribute("data-surface", "violet-500");
 
-    // Nothing after the closing CTA inside `main`; the contact section and
+    // Nothing after the context band inside `main`; the contact section and
     // the footer follow it as chrome (TS-WEB-0006 D2 as amended by DEC-0081
-    // §2, TS-WEB-0006-A17).
+    // §2, TS-WEB-0006-A17, DEC-0195).
     const afterClosing = await page.evaluate(() => {
-      const closing = document.querySelector("#closing-cta");
+      const band = document.querySelector("#context-band");
       const nodes: string[] = [];
-      let cursor = closing?.closest("main > *")?.nextElementSibling ?? null;
+      let cursor = band?.closest("main > *")?.nextElementSibling ?? null;
       while (cursor) {
         nodes.push(cursor.tagName);
         cursor = cursor.nextElementSibling;
@@ -830,7 +830,7 @@ test.describe("TS-WEB-0019 — home", () => {
     expect(afterMain).toBe("kontakt");
   });
 
-  test("TS-WEB-0019-A10 / TS-WEB-0006-A6: the context band names the three non-focus jobs, the closing block repeats block 1", async ({
+  test("TS-WEB-0019-A10 / TS-WEB-0006-A6: the context band names the three non-focus jobs, no closing block repeats the search (DEC-0195)", async ({
     page,
   }) => {
     await page.setViewportSize(DESKTOP);
@@ -848,18 +848,11 @@ test.describe("TS-WEB-0019 — home", () => {
     expect(targets).toEqual(["/mitmachen", "/dein-kalender", "/ueber-uns"]);
     expect(targets).not.toContain("/dein-ort");
 
-    // The closing block repeats block 1's primary: same module, same submit
-    // label, same target — and not the `data-cta="primary"` marker.
-    const closing = page.locator('#closing-cta form[role="search"]');
-    await expect(closing).toHaveCount(1);
-    await expect(closing).toHaveAttribute("action", "/dein-ort");
-    await expect(page.locator('#closing-cta [data-cta="primary"]')).toHaveCount(0);
-
-    const heroSubmit = await page
-      .locator('form[role="search"] [data-cta="primary"]')
-      .textContent();
-    const closingSubmit = await closing.locator('button[type="submit"]').textContent();
-    expect(closingSubmit).toBe(heroSubmit);
+    // DEC-0195: the band's heading, and no closing block repeating block 1.
+    await expect(page.locator("#context-band")).toContainText("Erfahre mehr über unsere Kalenderplattform");
+    await expect(page.locator("#closing-cta")).toHaveCount(0);
+    // The page keeps exactly one primary: the hero's search submit.
+    await expect(page.locator('[data-cta="primary"]')).toHaveCount(1);
   });
 
   test("TS-WEB-0019-A11: with JavaScript disabled the page is complete", async ({ browser }) => {
@@ -878,7 +871,7 @@ test.describe("TS-WEB-0019 — home", () => {
           (input) => input.getBoundingClientRect().height > 0,
         ).length,
     );
-    expect(visibleSearchFields).toBe(2); // block 1 and the closing block
+    expect(visibleSearchFields).toBe(1); // block 1 only (DEC-0195)
     await expect(page.locator('main [data-block="scene"]')).toHaveCount(3);
     // The `whatsapp` scene's module is server-rendered at state 1 with all
     // three step lines, so a JavaScript-less load is complete (A11,
@@ -895,7 +888,7 @@ test.describe("TS-WEB-0019 — home", () => {
     await expect(explainModule.locator("[data-explain-step]")).toHaveCount(3);
     await expect(page.locator("#proof-stream article")).toHaveCount(4);
     await expect(page.locator("#context-band nav")).toHaveCount(1);
-    await expect(page.locator("#closing-cta")).toHaveCount(1);
+    await expect(page.locator("#closing-cta")).toHaveCount(0);
     // The live rows (block 1′, the WhatsApp scene's example) load in the
     // browser since DEC-0163, so without JavaScript their frames hold their
     // reserved skeletons — the "no skeleton remains" clause is superseded (§4).
@@ -1131,7 +1124,7 @@ test.describe("TS-WEB-0019 — home", () => {
     await page.setViewportSize(DESKTOP);
     await page.goto("/");
     const sections = await sectionRhythm(page);
-    expect(sections.length).toBeGreaterThan(5);
+    expect(sections.length).toBeGreaterThan(4);
     expect(checkRhythm(sections, 0)).toEqual([]);
   });
 

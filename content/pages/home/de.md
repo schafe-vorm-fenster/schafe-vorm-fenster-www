@@ -328,29 +328,11 @@ drei warten auf ihre Freigabe und laufen mit `clearance: pending`.
 
 <!-- id: home-10-context-band; content_type: context-band; provenance: sourced; derived_from: [ia]; status: draft -->
 
-**Kicker:** Heute mit einem anderen Anliegen hier?
+**Kicker:** Erfahre mehr über unsere Kalenderplattform
 
 - **Termine veröffentlichen:** Per WhatsApp oder über deinen Kalender → `/mitmachen`
 - **Eigenen Kalender betreiben:** Unter eigenem Namen, auf eurer Website → `/dein-kalender`
 - **Wer dahintersteckt:** Wer den Dorfkalender macht → `/ueber-uns`
-
-## Abschluss-CTA
-
-<!-- id: home-11-closing-cta; content_type: closing-cta; provenance: sourced; derived_from: [ia]; status: draft -->
-
-**Überschrift:** Schau nach, was bei dir los ist.
-
-**Zusicherungstext:** Kostenlos, ohne Anmeldung, dauerhaft.
-
-Der Zusicherungssatz ist die Kurzform der Zusage aus `price.note` von
-`community-calendar` („Free for readers without any account … Permanent,
-not an introductory tier"), dieselbe Quelle wie `/dein-ort` Slot 8 — die
-Startseite sagt sie in einer Zeile, weil sie hier unter einem Suchfeld
-steht und nicht unter einem Kalender-Knopf.
-
-Spiegelt die primäre CTA von Block 1 im jeweils aktuellen Zustand (S1
-Suche, S2 Kalender öffnen, S3 ersten Termin veröffentlichen) — kein neuer
-Text, gleiche Ziel-ID (TS-WEB-0006 D6).
 
 ## Slot 12 — UI-Strings, die kein anderer Slot trägt
 

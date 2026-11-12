@@ -56,8 +56,8 @@ import type { Metadata } from "next";
  * Block order is TS-WEB-0019 D3 and is the DOM order below: focus block ·
  * three scenes, the `whatsapp` one wrapping the explain module (D3a,
  * DEC-0110) and the `provenance` one carrying block 2b · proof stream ·
- * context band · closing CTA, with nothing after the closing CTA inside
- * `main`; the contact section and the footer follow it as chrome
+ * context band, with nothing after the band inside `main` (no closing CTA
+ * since DEC-0195); the contact section and the footer follow it as chrome
  * (TS-WEB-0019-A9, DEC-0081 §2, `_chrome.tsx`). Blocks 3 and 4 come from
  * `page.meta.ts` through `PageFrame`; this file writes neither.
  *
@@ -82,14 +82,12 @@ import type { Metadata } from "next";
  * hand and in the home walk's own rhythm test against the DOM): PHOTO hero ·
  * COLOUR ink (the live data anchor) · [surface-2 — S3's widened radius, and
  * only S3's] · paper · lime-100 · violet-500 · lime-100 · surface (the context
- * band) · ink. The three scenes of 2a are the paper · lime-100 · violet-500
+ * band). The three scenes of 2a are the paper · lime-100 · violet-500
  * run: the scene that carries the module is **light**, because the module's
  * active step disc is `lime-500` and "a fill on a light ground means active"
  * (DEC-0129 §11 — it stood on `lime-500` until 2026-09-26, where the disc
- * measured 1.00:1). The second `ink` is the
- * closing search block — the one further ink section a page may carry, and
- * it is the last section (DEC-0117), because a search field has no other
- * legal ground (SRC-0014 §Search field).
+ * measured 1.00:1). The closing search block and its second `ink` section
+ * went with DEC-0195; the context band is the last section.
  */
 
 const ROUTE = "home" as const;
@@ -192,7 +190,6 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
   const stamps = slot(page, "home-7-provenance-stamps");
   const proof = slot(page, "home-8-proof-stream");
   const band = slot(page, "home-10-context-band");
-  const closingCta = slot(page, "home-11-closing-cta");
   const uiStrings = slot(page, "home-12-ui-strings");
   const demo = uiStringsFrom(uiStrings, locale);
 
@@ -282,17 +279,9 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
       {/* TS-WEB-0011 D4 — one JSON-LD graph per page, server-rendered. */}
       <PageJsonLd locale={locale} route={ROUTE} />
     <PageFrame
-      closing={{
-        variant: "module",
-        node: search(false),
-        heading: fieldAt(closingCta.blocks, 0),
-        reassurance: fieldAt(closingCta.blocks, 1),
-        /* The one further `ink` section a page may carry, and it is the
-           page's last (SRC-0014 §Page Rhythm, DEC-0117): a search field has
-           no other legal ground, so the reader meets the same shape here
-           that she met in the hero. */
-        surface: "ink",
-      }}
+      /* DEC-0195: no closing block on `/` — the hero and the focus module
+         already carry the search, and the page's primary stays the hero's. */
+      closing={{ variant: "none" }}
       contextBandHeading={fieldAt(band.blocks, 0)}
       locale={locale}
       meta={HOME_META}

@@ -254,6 +254,11 @@ Two shapes, chosen by the manifest:
 | a goal ID | that goal's CTA, repeated |
 | `null` (`/ueber-uns/archiv`) | one block offering the three jobs that carry conversions |
 
+**Exceptions: no closing block.** `/ueber-uns` (DEC-0186) and `/` (DEC-0195)
+carry none: `PageFrame` takes `closing: { variant: "none" }`. On `/` the search
+the block repeated stands in the hero and in the focus module, and the hero's
+submit stays the page's one primary (D3, TS-WEB-0019 D2).
+
 `/ueber-uns` no longer takes the second row: it declares
 `request-product-briefing` and repeats it like any other page
 (DEC-0081 §6). The `null` shape now has exactly one holder.
