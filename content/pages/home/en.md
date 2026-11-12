@@ -169,9 +169,7 @@ gap in the visitor's own place, not a gap in the system.
 
 **Aha statement:** A photo of the flyer by WhatsApp, and the date is in the calendar.
 
-**Kicker:** How the dates get in
-
-**Transition:** Nobody types these dates in. They come from the clubs and the organisers who put something on around here as volunteers. Usually like this:
+**Intro:** Nobody types anything in on our side. The entries come from the clubs and the organisers who put something on around here as volunteers.
 
 **Explain-module title:** Send a flyer by WhatsApp
 
@@ -183,7 +181,11 @@ The hint and the button label are the owner's wording (DEC-0192, 2026-11-12,
 issue #141, second version): the hint describes the two other ways, path 02
 and path 03 on `/mitmachen` (your own calendar, your website as the source),
 and the label leads to `takePart`. The scene still carries exactly one CTA
-(D3a, DEC-0110 §1).
+(D3a, DEC-0110 §1). Since DEC-0206 (issue #163) two
+levels stand before the module, heading and intro: the former kicker repeated
+the heading's word stem and statement and is gone; the former transition
+above the heading is the intro below it, without the lead-in "Usually like
+this:" and without the heading's word stem.
 
 Source: `relievers[0]` of the "actors--community-calendar" value
 proposition — "send a photo of the printed flyer by WhatsApp and the
@@ -235,7 +237,7 @@ three rows; normally the panel shows the reference place's real dates.
 
 **Text:** You embed it on your website with two lines and have nothing left to maintain afterwards.
 
-**Kicker:** Online calendar with no system of your own
+**Kicker:** No system of your own
 
 **Tick 1:** Your website shows the dates from every village in the municipality and from the surrounding area.
 
@@ -308,9 +310,7 @@ exactly three per category.
 
 **Aha statement:** Shaping our own villages ourselves.
 
-**Text:** Jan-Henrik Hempel was a volunteer mayor, sits on the municipal council and co-founded the culture club. He knows the village from the inside, as someone who joins in. The name Schafe vorm Fenster comes from the sheep pasture outside his own kitchen window.
-
-**Transition:** The village calendar exists because somebody had the problem himself.
+**Text:** Jan-Henrik Hempel was a volunteer mayor, sits on the municipal council and co-founded the culture club. He knows the place from within, as someone who joins in. The name Schafe vorm Fenster comes from the sheep pasture outside his own kitchen window.
 
 Source: `founder-former-volunteer-mayor` (`usage_rights: cleared`) —
 documented via Nordkurier 2019/2022 and the Zukunftswege-Ost portrait
@@ -321,7 +321,10 @@ the review's wording of 2026-09-22, as are "shaping our own villages
 ourselves" and "the name Schafe vorm Fenster". This slot carries **no**
 kicker: "Wo das herkommt" is on the avoid list (CG-017, CG-040) and the
 review names no replacement — the heading carries the scene on its own
-(a deviation from polish brief G-3, as DEC-0120 §5 took for `/ueber-uns`).
+(no deviation any more since DEC-0206). The former transition above the
+heading ("The village calendar exists because somebody had the problem
+himself.") is gone: it says what the intro says with "knows the place
+from within", and shared a word stem with heading and intro (issue #163).
 
 ## Block 2b — Provenance stamps
 

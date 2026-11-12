@@ -81,6 +81,30 @@ describe("pickRows", () => {
     expect(rows[4]).toMatchObject({ source: "real", title: "Dort", place: "Rubkow" });
   });
 
+  it("prefers a one-off over an earlier recurring date of the same slot (DEC-0210)", () => {
+    const rows = pickRows({
+      ...base,
+      own: [
+        event({ id: "w", startsAt: "2026-11-13T09:00:00Z", categoryId: "community-life", occurrence: "recurring", title: "Woechentlich" }),
+        event({ id: "o", startsAt: "2026-11-25T09:00:00Z", categoryId: "community-life", occurrence: "once", title: "Einmalig" }),
+      ],
+      nearby: [],
+    });
+    expect(rows[1]).toMatchObject({ title: "Einmalig" });
+  });
+
+  it("takes a one-off culture date for the neighbours slot over an earlier plain one", () => {
+    const rows = pickRows({
+      ...base,
+      own: [],
+      nearby: [
+        event({ id: "n1", startsAt: "2026-11-13T09:00:00Z", communityId: "geoname.2", placeName: "Rubkow", categoryId: "sports", title: "Sport" }),
+        event({ id: "n2", startsAt: "2026-11-15T09:00:00Z", communityId: "geoname.3", placeName: "Lassan", categoryId: "culture-tourism", title: "Lesung" }),
+      ],
+    });
+    expect(rows[4]).toMatchObject({ title: "Lesung", place: "Lassan" });
+  });
+
   it("reads an all-day date without a time", () => {
     const rows = pickRows({
       ...base,
